@@ -86,9 +86,9 @@ enum source_pcm_resolution {
 };
 
 int
-find_dts_header(const unsigned char *buf,
-                unsigned int size,
-                struct dts_header_s *dts_header) {
+find_dts_header_internal(const unsigned char *buf,
+                         unsigned int size,
+                         struct dts_header_s *dts_header) {
 
   unsigned int size_to_search = size-15;
   if (size_to_search > size) {
@@ -159,24 +159,24 @@ find_dts_header(const unsigned char *buf,
   bc.get_bits(5, t);
   dts_header->transmission_bitrate = transmission_bitrates[t];
 
-  bc.get_bit(dts_header->embedded_down_mix);
-  bc.get_bit(dts_header->embedded_dynamic_range);
-  bc.get_bit(dts_header->embedded_time_stamp);
-  bc.get_bit(dts_header->auxiliary_data);
-  bc.get_bit(dts_header->hdcd_master);
+  dts_header->embedded_down_mix = bc.get_bit();
+  dts_header->embedded_dynamic_range = bc.get_bit();
+  dts_header->embedded_time_stamp = bc.get_bit();
+  dts_header->auxiliary_data = bc.get_bit();
+  dts_header->hdcd_master = bc.get_bit();
 
   bc.get_bits(3, t);
   dts_header->extension_audio_descriptor =
     (dts_header_s::extension_audio_descriptor_e)t;
 
-  bc.get_bit(dts_header->extended_coding);
+  dts_header->extended_coding = bc.get_bit();
 
-  bc.get_bit(dts_header->audio_sync_word_in_sub_sub);
+  dts_header->audio_sync_word_in_sub_sub = bc.get_bit();
 
   bc.get_bits(2, t);
   dts_header->lfe_type = (dts_header_s::lfe_type_e)t;
 
-  bc.get_bit(dts_header->predictor_history_flag);
+  dts_header->predictor_history_flag = bc.get_bit();
 
   if (dts_header->crc_present) {
     bc.get_bits(16, t);
@@ -235,11 +235,11 @@ find_dts_header(const unsigned char *buf,
       return -1;
   }
 
-  bc.get_bit(dts_header->front_sum_difference);
+  dts_header->front_sum_difference = bc.get_bit();
 
-  bc.get_bit(dts_header->surround_sum_difference);
+  dts_header->surround_sum_difference = bc.get_bit();
 
-  bool out_of_data = !bc.get_bits(4, t);
+  bc.get_bits(4, t);
   if (dts_header->encoder_software_revision == 7) {
     dts_header->dialog_normalization_gain = -((int)t);
   } else if (dts_header->encoder_software_revision == 6) {
@@ -248,13 +248,20 @@ find_dts_header(const unsigned char *buf,
     dts_header->dialog_normalization_gain = 0;
   }
 
-  if (out_of_data) {
+  return offset;
+
+}
+
+int
+find_dts_header(const unsigned char *buf,
+                unsigned int size,
+                struct dts_header_s *dts_header) {
+  try {
+    return find_dts_header_internal(buf, size, dts_header);
+  } catch (...) {
     mxwarn("DTS_Header problem: not enough data to read header\n");
     return -1;
   }
-
-  return offset;
-
 }
 
 // ============================================================================

@@ -25,12 +25,11 @@ const int aac_sampling_freq[16] = {96000, 88200, 64000, 48000, 44100, 32000,
                                    24000, 22050, 16000, 12000, 11025,  8000,
                                    0, 0, 0, 0}; // filling
 
-int
-parse_aac_adif_header(unsigned char *buf,
-                      int size,
-                      aac_header_t *aac_header) {
+bool
+parse_aac_adif_header_internal(unsigned char *buf,
+                               int size,
+                               aac_header_t *aac_header) {
   int i, k;
-  bool b, eob;
   unsigned int bits;
   int nprogram_conf_e, bitstream_type, profile, sfreq_index;
   int nfront_c_e, nside_c_e, nback_c_e, nlfe_c_e;
@@ -40,27 +39,22 @@ parse_aac_adif_header(unsigned char *buf,
 
   profile = 0;
   sfreq_index = 0;
-  eob = false;
   comment_field_bytes = 0;
   channels = 0;
   bc.get_bits(32, bits);
   if (bits != FOURCC('A', 'D', 'I', 'F'))
-    return 0;
-  bc.get_bit(b);                // copyright_id_present
-  if (b) {
-    for (i = 0; i < 3; i++)
-      eob = !bc.get_bits(24, bits); // copyright_id
-  }
-  bc.get_bit(b);                // original_copy
-  bc.get_bit(b);                // home
-  bc.get_bits(1, bitstream_type);
-  bc.get_bits(23, bits);        // bitrate
+    return false;
+  if (bc.get_bit())             // copyright_id_present
+    bc.skip_bits(3 * 72);       // copyright_id
+  bc.skip_bits(2);              // original_copy & home
+  bitstream_type = bc.get_bit();
+  bc.skip_bits(23);             // bitrate
   bc.get_bits(4, nprogram_conf_e);
   for (i = 0; i <= nprogram_conf_e; i++) {
     channels = 0;
     if (bitstream_type == 0)
-      bc.get_bits(20, bits);
-    bc.get_bits(4, bits);       // element_instance_tag
+      bc.skip_bits(20);
+    bc.skip_bits(4);            // element_instance_tag
     bc.get_bits(2, profile);
     bc.get_bits(4, sfreq_index);
     bc.get_bits(4, nfront_c_e);
@@ -69,39 +63,26 @@ parse_aac_adif_header(unsigned char *buf,
     bc.get_bits(2, nlfe_c_e);
     bc.get_bits(3, nassoc_data_e);
     bc.get_bits(4, nvalid_cc_e);
-    bc.get_bit(b);              // mono_mixdown_present
-    if (b)
-      bc.get_bits(4, bits);     // mono_mixdown_el_num
-    bc.get_bit(b);              // stereo_mixdown_present
-    if (b)
-      bc.get_bits(4, bits);     // stereo_mixdown_el_num
-    bc.get_bit(b);              // matrix_mixdown_idx_present
-    if (b) {
-      bc.get_bits(2, bits);     // matrix_mixdown_idx
-      eob = !bc.get_bits(1, bits); // pseudo_surround_enable
+    if (bc.get_bit())           // mono_mixdown_present
+      bc.skip_bits(4);          // mono_mixdown_el_num
+    if (bc.get_bit())           // stereo_mixdown_present
+      bc.skip_bits(4);          // stereo_mixdown_el_num
+    if (bc.get_bit()) {         // matrix_mixdown_idx_present
+      bc.skip_bits(2 + 1);      // matrix_mixdown_idx & pseudo_surround_table
     }
     channels = nfront_c_e + nside_c_e + nback_c_e;
     for (k = 0; k < (nfront_c_e + nside_c_e + nback_c_e); k++) {
-      bc.get_bit(b);            // *_element_is_cpe
-      if (b)
+      if (bc.get_bit())         // *_element_is_cpe
         channels++;
-      bc.get_bits(4, bits);     // *_element_tag_select
+      bc.skip_bits(4);          // *_element_tag_select
     }
     channels += nlfe_c_e;
-    for (k = 0; k < (nlfe_c_e + nassoc_data_e); k++)
-      bc.get_bits(4, bits);     // *_element_tag_select
-    for (k = 0; k < nvalid_cc_e; k++) {
-      bc.get_bits(1, bits);     // cc_e_is_ind_sw
-      bc.get_bits(4, bits);     // valid_cc_e_tag_select
-    }
+    bc.skip_bits(4 * (nlfe_c_e + nassoc_data_e)); // *_element_tag_select
+    bc.skip_bits((1 + 4) * nvalid_cc_e); // cc_e_is_ind_sw & valid_cc_e_tag_sel
     bc.byte_align();
-    eob = !bc.get_bits(8, bits);
-    for (k = 0; k < comment_field_bytes; k++)
-      eob = !bc.get_bits(8, bits);
+    bc.skip_bits(8);
+    bc.skip_bits(8 * comment_field_bytes);
   }
-
-  if (eob)
-    return 0;
 
   aac_header->sample_rate = aac_sampling_freq[sfreq_index];
   aac_header->id = 0;           // MPEG-4
@@ -112,47 +93,53 @@ parse_aac_adif_header(unsigned char *buf,
   aac_header->header_bit_size = bc.get_bit_position();
   aac_header->header_byte_size = (aac_header->header_bit_size + 7) / 8;
 
-  return 1;
+  return true;
 }
 
-static int
+bool
+parse_aac_adif_header(unsigned char *buf,
+                      int size,
+                      aac_header_t *aac_header) {
+  try {
+    return parse_aac_adif_header_internal(buf, size, aac_header);
+  } catch (...) {
+    return false;
+  }
+}
+
+static bool
 is_adts_header(unsigned char *buf,
                int size,
                int bpos,
                aac_header_t *aac_header,
                bool emphasis_present) {
   int id, profile, sfreq_index, channels, frame_length;
-  bool eob, protection_absent, b;
+  bool protection_absent;
   unsigned int bits;
   bit_cursor_c bc(buf, size);
 
   bc.get_bits(12, bits);
   if (bits != 0xfff)            // ADTS header
-    return 0;
+    return false;
 
-  bc.get_bits(1, id);           // ID: 0 = MPEG-4, 1 = MPEG-2
+  id = bc.get_bit();            // ID: 0 = MPEG-4, 1 = MPEG-2
   bc.get_bits(2, bits);         // layer: = 0 !!
   if (bits != 0)
-    return 0;
-  bc.get_bit(protection_absent);
+    return false;
+  protection_absent = bc.get_bit();
   bc.get_bits(2, profile);
   bc.get_bits(4, sfreq_index);
-  bc.get_bit(b);                // private
+  bc.skip_bits(1);              // private
   bc.get_bits(3, channels);
-  bc.get_bit(b);                // original/copy
-  bc.get_bit(b);                // home
+  bc.skip_bits(1 + 1);          // original/copy & home
   if ((id == 0) && emphasis_present)
-    bc.get_bits(2, bits);       // emphasis, MPEG-4 only
-  bc.get_bit(b);                // copyright_id_bit
-  bc.get_bit(b);                // copyright_id_start
+    bc.skip_bits(2);            // emphasis, MPEG-4 only
+  bc.skip_bits(1 + 1);          // copyright_id_bit & copyright_id_start
   bc.get_bits(13, frame_length);
-  bc.get_bits(11, bits);        // adts_buffer_fullness
-  eob = !bc.get_bits(2, bits);   // no_raw_blocks_in_frame
+  bc.skip_bits(11);             // adts_buffer_fullness
+  bc.skip_bits(2);              // no_raw_blocks_in_frame
   if (!protection_absent)
-    eob = !bc.get_bits(16, bits);
-
-  if (eob)
-    return 0;
+    bc.skip_bits(16);
 
   aac_header->sample_rate = aac_sampling_freq[sfreq_index];
   aac_header->id = id;
@@ -170,7 +157,7 @@ is_adts_header(unsigned char *buf,
   aac_header->data_byte_size = aac_header->bytes -
     aac_header->header_bit_size / 8;
 
-  return 1;
+  return true;
 }
 
 int
@@ -180,11 +167,14 @@ find_aac_header(unsigned char *buf,
                 bool emphasis_present) {
   int bpos;
 
-  bpos = 0;
-  while (bpos < size) {
-    if (is_adts_header(buf, size, bpos, aac_header, emphasis_present))
-      return bpos;
-    bpos++;
+  try {
+    bpos = 0;
+    while (bpos < size) {
+      if (is_adts_header(buf, size, bpos, aac_header, emphasis_present))
+        return bpos;
+      bpos++;
+    }
+  } catch (...) {
   }
 
   return -1;

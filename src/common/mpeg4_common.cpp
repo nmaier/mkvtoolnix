@@ -25,36 +25,20 @@
 #include "mm_io.h"
 #include "mpeg4_common.h"
 
-/** Extract the pixel aspect ratio from a MPEG4 video frame
-
-   This function searches a buffer containing a MPEG4 video frame
-   for the pixel aspectc ratio. If it is found then the numerator
-   and the denominator are returned.
-
-   \param buffer The buffer containing the MPEG4 video frame.
-   \param buffer_size The size of the buffer in bytes.
-   \param par_num The numerator, if found, is stored in this variable.
-   \param par_den The denominator, if found, is stored in this variable.
-
-   \return \c true if the pixel aspect ratio was found and \c false
-     otherwise.
-*/
 bool
-mpeg4_p2_extract_par(const unsigned char *buffer,
-                     int buffer_size,
-                     uint32_t &par_num,
-                     uint32_t &par_den) {
+mpeg4_p2_extract_par_internal(const unsigned char *buffer,
+                              int buffer_size,
+                              uint32_t &par_num,
+                              uint32_t &par_den) {
   const uint32_t ar_nums[16] = {0, 1, 12, 10, 16, 40, 0, 0,
                                 0, 0,  0,  0,  0,  0, 0, 0};
   const uint32_t ar_dens[16] = {1, 1, 11, 11, 11, 33, 1, 1,
                                 1, 1,  1,  1,  1,  1, 1, 1};
   uint32_t marker, aspect_ratio_info, num, den;
-  bool b;
   bit_cursor_c bits(buffer, buffer_size);
 
   while (!bits.eof()) {
-    if (!bits.peek_bits(32, marker))
-      break;
+    bits.peek_bits(32, marker);
 
     if ((marker & 0xffffff00) != 0x00000100) {
       bits.skip_bits(8);
@@ -74,33 +58,58 @@ mpeg4_p2_extract_par(const unsigned char *buffer,
     // VOL header
     bits.skip_bits(1);          // random access
     bits.skip_bits(8);          // vo_type
-    bits.get_bit(b);
-    if (b != 0) {               // is_old_id
+    if (bits.get_bit()) {       // is_old_id
       bits.skip_bits(4);        // vo_ver_id
       bits.skip_bits(3);        // vo_priority
     }
 
-    if (bits.get_bits(4, aspect_ratio_info)) {
-      mxverb(2, "mpeg4 AR: aspect_ratio_info: %u\n", aspect_ratio_info);
-      if (aspect_ratio_info == 15) { // ASPECT_EXTENDED
-        bits.get_bits(8, num);
-        bits.get_bits(8, den);
-      } else {
-        num = ar_nums[aspect_ratio_info];
-        den = ar_dens[aspect_ratio_info];
-      }
-      mxverb(2, "mpeg4 AR: %u den: %u\n", num, den);
+    bits.get_bits(4, aspect_ratio_info);
+    mxverb(2, "mpeg4 AR: aspect_ratio_info: %u\n", aspect_ratio_info);
+    if (aspect_ratio_info == 15) { // ASPECT_EXTENDED
+      bits.get_bits(8, num);
+      bits.get_bits(8, den);
+    } else {
+      num = ar_nums[aspect_ratio_info];
+      den = ar_dens[aspect_ratio_info];
+    }
+    mxverb(2, "mpeg4 AR: %u den: %u\n", num, den);
 
-      if ((num != 0) && (den != 0) && ((num != 1) || (den != 1)) &&
-          (((float)num / (float)den) != 1.0)) {
-        par_num = num;
-        par_den = den;
-        return true;
-      }
+    if ((num != 0) && (den != 0) && ((num != 1) || (den != 1)) &&
+        (((float)num / (float)den) != 1.0)) {
+      par_num = num;
+      par_den = den;
+      return true;
     }
     return false;
   }
   return false;
+}
+
+/** Extract the pixel aspect ratio from a MPEG4 video frame
+
+   This function searches a buffer containing a MPEG4 video frame
+   for the pixel aspectc ratio. If it is found then the numerator
+   and the denominator are returned.
+
+   \param buffer The buffer containing the MPEG4 video frame.
+   \param buffer_size The size of the buffer in bytes.
+   \param par_num The numerator, if found, is stored in this variable.
+   \param par_den The denominator, if found, is stored in this variable.
+
+   \return \c true if the pixel aspect ratio was found and \c false
+     otherwise.
+*/
+bool
+mpeg4_p2_extract_par(const unsigned char *buffer,
+                     int buffer_size,
+                     uint32_t &par_num,
+                     uint32_t &par_den) {
+  try {
+    return mpeg4_p2_extract_par_internal(buffer, buffer_size, par_num,
+                                         par_den);
+  } catch (...) {
+    return false;
+  }
 }
 
 /** Find frame boundaries and frame types in a packed video frame
@@ -276,16 +285,13 @@ read_golomb_ue(bit_cursor_c &bits) {
 
   i = 0;
   while (i < 64) {
-    bool bit;
-    if (!bits.get_bit(bit))
-      throw false;
+    bool bit = bits.get_bit();
     if (bit)
       break;
     i++;
   }
 
-  if (!bits.get_bits(i, value))
-    throw false;
+  bits.get_bits(i, value);
 
   return ((1 << i) - 1) + value;
 }
@@ -328,21 +334,18 @@ mpeg4_p10_extract_par(const uint8_t *buffer,
 
     for (sps = 0; sps < num_sps; sps++) {
       int length, poc_type, ar_type, nal_unit_type;
-      bool ok, flag;
 
       length = avcc.read_uint16_be();
       bit_cursor_c bits(&buffer[avcc.getFilePointer()],
                         (length + avcc.getFilePointer()) >  buffer_size ?
                         buffer_size - avcc.getFilePointer() : length);
-      ok = bits.get_bits(8, nal_unit_type);
-      if (!ok)
-        throw false;
+      bits.get_bits(8, nal_unit_type);
       nal_unit_type &= 0x1f;
       mxverb(4, "mpeg4_p10_extract_par: nal_unit_type %d\n", nal_unit_type);
       if (nal_unit_type != 7)   // 7 = SPS
         continue;
 
-      ok &= bits.skip_bits(16);
+      bits.skip_bits(16);
       read_golomb_ue(bits);
       read_golomb_ue(bits);
       poc_type = read_golomb_ue(bits);
@@ -366,36 +369,28 @@ mpeg4_p10_extract_par(const uint8_t *buffer,
       }
 
       read_golomb_ue(bits);
-      ok &= bits.skip_bits(1);
+      bits.skip_bits(1);
       read_golomb_ue(bits);
       read_golomb_ue(bits);
-      ok &= bits.get_bit(flag); // MB only
-      if (!flag)
-        ok &= bits.skip_bits(1);
-      ok &= bits.skip_bits(1);
-      ok &= bits.get_bit(flag); // cropping
-      if (flag) {
+      if (!bits.get_bit())      // MB only
+        bits.skip_bits(1);
+      bits.skip_bits(1);
+      if (bits.get_bit()) {     // cropping
         read_golomb_ue(bits);
         read_golomb_ue(bits);
         read_golomb_ue(bits);
         read_golomb_ue(bits);
       }
-      ok &= bits.get_bit(flag); // VUI
-      if (!flag) {
+      if (!bits.get_bit()) {    // VUI
         mxverb(4, "mpeg4_p10_extract_par: !VUI\n");
         throw false;
       }
-      ok &= bits.get_bit(flag); // AR
-      if (!flag) {
+      if (!bits.get_bit()) {    // AR
         mxverb(4, "mpeg4_p10_extract_par: !AR\n");
         throw false;
       }
 
-      ok &= bits.get_bits(8, ar_type);
-      if (!ok) {
-        mxverb(4, "mpeg4_p10_extract_par: no ar_type\n");
-        throw false;
-      }
+      bits.get_bits(8, ar_type);
       if ((ar_type != 0xff) &&  // custom AR
           (ar_type > 13)) {
         mxverb(4, "mpeg4_p10_extract_par: wrong ar_type %d\n", ar_type);
@@ -417,11 +412,11 @@ mpeg4_p10_extract_par(const uint8_t *buffer,
         return true;
       }
 
-      ok &= bits.get_bits(16, par_num);
-      ok &= bits.get_bits(16, par_den);
-      mxverb(4, "mpeg4_p10_extract_par: ar_type %d ok %d num %d den %d\n",
-             ar_type, ok, par_num, par_den);
-      return ok;
+      bits.get_bits(16, par_num);
+      bits.get_bits(16, par_den);
+      mxverb(4, "mpeg4_p10_extract_par: ar_type %d num %d den %d\n",
+             ar_type, par_num, par_den);
+      return true;
     } // for
   } catch(...) {
   }

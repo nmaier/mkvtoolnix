@@ -710,41 +710,41 @@ real_reader_c::get_rv_dimensions(unsigned char *buf,
   uint32_t w, h, c, v;
   bit_cursor_c bc(buf, size);
 
-  bc.skip_bits(13);
-  bc.skip_bits(13);
-  if (!bc.get_bits(3, v))
-    return false;
+  try {
+    bc.skip_bits(13);
+    bc.skip_bits(13);
+    bc.get_bits(3, v);
 
-  w = cw[v];
-  if (w == 0) {
-    do {
-      if (!bc.get_bits(8, c))
-        return false;
-      w += (c << 2);
-    } while (c == 255);
-  }
-
-  if (!bc.get_bits(3, c))
-    return false;
-  h = ch1[c];
-  if (h == 0) {
-    if (!bc.get_bits(1, v))
-      return false;
-    c = ((c << 1) | v) & 3;
-    h = ch2[c];
-    if (h == 0) {
+    w = cw[v];
+    if (w == 0) {
       do {
-        if (!bc.get_bits(8, c))
-          return false;
-        h += (c << 2);
+        bc.get_bits(8, c);
+        w += (c << 2);
       } while (c == 255);
     }
+
+    bc.get_bits(3, c);
+    h = ch1[c];
+    if (h == 0) {
+      bc.get_bits(1, v);
+      c = ((c << 1) | v) & 3;
+      h = ch2[c];
+      if (h == 0) {
+        do {
+          bc.get_bits(8, c);
+          h += (c << 2);
+        } while (c == 255);
+      }
+    }
+
+    width = w;
+    height = h;
+
+    return true;
+
+  } catch (...) {
+    return false;
   }
-
-  width = w;
-  height = h;
-
-  return true;
 }
 
 void

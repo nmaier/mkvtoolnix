@@ -19,7 +19,7 @@
 
 #include "os.h"
 
-#include "error.h"
+#include "mm_io.h"
 
 class MTX_DLL_API bit_cursor_c {
 private:
@@ -42,14 +42,14 @@ public:
     return out_of_data;
   }
 
-  bool get_bits(unsigned int n, uint64_t &r) {
+  void get_bits(unsigned int n, uint64_t &r) {
     // returns false if less bits are available than asked for
     r = 0;
 
     while (n > 0) {
       if (byte_position >= end_of_data) {
         out_of_data = true;
-        return false;
+        throw mm_io_eof_error_c();
       }
 
       unsigned int b = 8; // number of bits to extract from the current byte
@@ -71,39 +71,33 @@ public:
 
       n -= b;
     }
-
-    return true;
   }
 
-  bool get_bits(unsigned int n, int64_t &r) {
+  void get_bits(unsigned int n, int64_t &r) {
     uint64_t t;
-    bool b = get_bits(n, t);
+    get_bits(n, t);
     r = (int64_t)t;
-    return b;
   }
 
-  bool get_bits(unsigned int n, int &r) {
+  void get_bits(unsigned int n, int &r) {
     uint64_t t;
-    bool b = get_bits(n, t);
+    get_bits(n, t);
     r = (int)t;
-    return b;
   }
 
-  bool get_bits(unsigned int n, unsigned int &r) {
+  void get_bits(unsigned int n, unsigned int &r) {
     uint64_t t;
-    bool b = get_bits(n, t);
+    get_bits(n, t);
     r = (unsigned int)t;
-    return b;
   }
 
-  bool get_bit(bool &r) {
+  bool get_bit() {
     uint64_t t;
-    bool b = get_bits(1, t);
-    r = (bool)t;
-    return b;
+    get_bits(1, t);
+    return t;
   }
 
-  bool peek_bits(unsigned int n, uint64_t &r) {
+  void peek_bits(unsigned int n, uint64_t &r) {
     int tmp_bits_valid;
     const unsigned char *tmp_byte_position;
     // returns false if less bits are available than asked for
@@ -113,7 +107,7 @@ public:
 
     while (n > 0) {
       if (tmp_byte_position >= end_of_data)
-        return false;
+        throw mm_io_eof_error_c();
 
       unsigned int b = 8; // number of bits to extract from the current byte
       if (b > n)
@@ -134,67 +128,122 @@ public:
 
       n -= b;
     }
-
-    return true;
   }
 
-  bool peek_bits(unsigned int n, int64_t &r) {
+  void peek_bits(unsigned int n, int64_t &r) {
     uint64_t t;
-    bool b = peek_bits(n, t);
+    peek_bits(n, t);
     r = (int64_t)t;
-    return b;
   }
 
-  bool peek_bits(unsigned int n, int &r) {
+  void peek_bits(unsigned int n, int &r) {
     uint64_t t;
-    bool b = peek_bits(n, t);
+    peek_bits(n, t);
     r = (int)t;
-    return b;
   }
 
-  bool peek_bits(unsigned int n, unsigned int &r) {
+  void peek_bits(unsigned int n, unsigned int &r) {
     uint64_t t;
-    bool b = peek_bits(n, t);
+    peek_bits(n, t);
     r = (unsigned int)t;
-    return b;
   }
 
-  bool peek_bit(bool &r) {
+  bool peek_bit() {
     uint64_t t;
-    bool b = peek_bits(1, t);
-    r = (bool)t;
-    return b;
+    peek_bits(1, t);
+    return t;
   }
 
-  bool byte_align() {
+  void byte_align() {
     if (out_of_data)
-      return false;
+      throw mm_io_eof_error_c();
     if (bits_valid == 8)
-      return true;
+      return;
     bits_valid = 0;
     byte_position += 1;
-    return true;
   }
 
-  bool set_bit_position(unsigned int pos) {
+  void set_bit_position(unsigned int pos) {
     if (pos >= ((end_of_data - start_of_data) * 8)) {
       byte_position = end_of_data;
       out_of_data = true;
-      return false;
+      throw mm_io_seek_error_c();
     }
 
     byte_position = start_of_data + (pos / 8);
     bits_valid = 8 - (pos % 8);
-
-    return true;
   }
 
   int get_bit_position() {
     return (byte_position - start_of_data) * 8 + 8 - bits_valid;
   }
 
-  bool skip_bits(unsigned int num) {
-    return set_bit_position(get_bit_position() + num);
+  void skip_bits(unsigned int num) {
+    set_bit_position(get_bit_position() + num);
+  }
+};
+
+class MTX_DLL_API bit_writer_c {
+private:
+  unsigned char *end_of_data;
+  unsigned char *byte_position;
+  unsigned char *start_of_data;
+  unsigned int mask;
+
+  bool out_of_data;
+
+public:
+  bit_writer_c(unsigned char *data, unsigned int len):
+    end_of_data(data + len), byte_position(data), start_of_data(data),
+    mask(0x80), out_of_data(false) {
+    if (byte_position >= end_of_data)
+      out_of_data = true;
+  }
+
+  uint64_t copy_bits(unsigned int n, bit_cursor_c &src) {
+    uint64_t value;
+    src.get_bits(n, value);
+    put_bits(n, value);
+    return value;
+  }
+
+  void put_bits(unsigned int n, uint64_t value) {
+    while (0 < n) {
+      put_bit(value & (1 << (n - 1)));
+      --n;
+    }
+  }
+
+  void put_bit(int bit) {
+    if (byte_position >= end_of_data) {
+      out_of_data = true;
+      throw mm_io_eof_error_c();
+    }
+
+    *byte_position |= bit ? mask : 0;
+    mask >>= 1;
+    if (0 == mask) {
+      mask = 0x80;
+      ++byte_position;
+      if (byte_position == end_of_data)
+        out_of_data = true;
+    }
+  }
+
+  void byte_align() {
+    while (0x80 != mask)
+      put_bit(0);
+  }
+
+  void set_bit_position(unsigned int pos) {
+    if (pos >= ((end_of_data - start_of_data) * 8)) {
+      byte_position = end_of_data;
+      out_of_data = true;
+      throw mm_io_seek_error_c();
+    }
+
+    byte_position = start_of_data + (pos / 8);
+    mask = 0x80 >> (pos % 8);
   }
 };
 

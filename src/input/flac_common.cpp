@@ -31,8 +31,7 @@ flac_skip_utf8(bit_cursor_c &bits,
   uint32_t value;
   int num;
 
-  if (!bits.get_bits(8, value))
-    return false;
+  bits.get_bits(8, value);
 
   if (!(value & 0x80))          /* 0xxxxxxx */
     num = 0;
@@ -51,35 +50,33 @@ flac_skip_utf8(bit_cursor_c &bits,
   else
     return false;
 
-  return bits.skip_bits(num * 8);
+  bits.skip_bits(num * 8);
+
+  return true;
 }
 
 // See http://flac.sourceforge.net/format.html#frame_header
 int
-flac_get_num_samples(unsigned char *mem,
-                     int size,
-                     FLAC__StreamMetadata_StreamInfo &stream_info) {
+flac_get_num_samples_internal(unsigned char *mem,
+                              int size,
+                              FLAC__StreamMetadata_StreamInfo &stream_info) {
   bit_cursor_c bits(mem, size);
   uint32_t value;
   int free_sample_size;
   int samples;
 
   // Sync word: 11 1111 1111 1110
-  if (!bits.peek_bits(14, value))
-    return -1;
-
+  bits.peek_bits(14, value);
   if (value != 0x3ffe)
     return -1;
 
   bits.skip_bits(14);
 
   // Reserved
-  if (!bits.skip_bits(2))
-    return -1;
+  bits.skip_bits(2);
 
   // Block size
-  if (!bits.get_bits(4, value))
-    return -1;
+  bits.get_bits(4, value);
 
   free_sample_size = 0;
   samples = 0;
@@ -95,16 +92,13 @@ flac_get_num_samples(unsigned char *mem,
     free_sample_size = value;
 
   // Sample rate
-  if (!bits.get_bits(4, value))
-    return -1;
+  bits.skip_bits(4);
 
   // Channel assignment
-  if (!bits.get_bits(4, value))
-    return -1;
+  bits.skip_bits(4);
 
   // Sample size (3 bits) and zero bit padding (1 bit)
-  if (!bits.get_bits(4, value))
-    return -1;
+  bits.get_bits(4, value);
 
   if (stream_info.min_blocksize != stream_info.max_blocksize) {
     if (!flac_skip_utf8(bits, 64))
@@ -113,13 +107,11 @@ flac_get_num_samples(unsigned char *mem,
       return -1;
 
   if ((free_sample_size == 6) || (free_sample_size == 7)) {
-    if (!bits.get_bits(8, value))
-      return -1;
+    bits.get_bits(8, value);
 
     samples = value;
     if (free_sample_size == 7) {
-      if (!bits.get_bits(8, value))
-        return -1;
+      bits.get_bits(8, value);
       samples <<= 8;
       samples |= value;
     }
@@ -127,10 +119,20 @@ flac_get_num_samples(unsigned char *mem,
   }
 
   // CRC
-  if (!bits.skip_bits(8))
-    return -1;
+  bits.skip_bits(8);
 
   return samples;
+}
+
+int
+flac_get_num_samples(unsigned char *mem,
+                     int size,
+                     FLAC__StreamMetadata_StreamInfo &stream_info) {
+  try {
+    return flac_get_num_samples_internal(mem, size, stream_info);
+  } catch(...) {
+    return -1;
+  }
 }
 
 #define FPFX "flac_decode_headers: "

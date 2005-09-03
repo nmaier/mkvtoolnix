@@ -45,11 +45,11 @@ typedef struct {
   int header_bit_size, header_byte_size, data_byte_size;
 } aac_header_t;
 
-int MTX_DLL_API parse_aac_adif_header(unsigned char *buf, int size,
-                                   aac_header_t *aac_header);
+bool MTX_DLL_API parse_aac_adif_header(unsigned char *buf, int size,
+                                       aac_header_t *aac_header);
 int MTX_DLL_API find_aac_header(unsigned char *buf, int size,
-                             aac_header_t *aac_header,
-                             bool emphasis_present);
+                                aac_header_t *aac_header,
+                                bool emphasis_present);
 int MTX_DLL_API get_aac_sampling_freq_idx(int sampling_freq);
 bool MTX_DLL_API parse_aac_data(unsigned char *data, int size,
                                 int &profile, int &channels, int &sample_rate,
