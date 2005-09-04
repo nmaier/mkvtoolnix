@@ -1,3 +1,13 @@
+2005-09-04  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: mkvmerge will remove the aspect ratio
+	information from a AVC/h.264 video track bitstream and put it into
+	the display dimensions (until now the AR information was kept on
+	the bitstream level). The reason is that in Matroska the container
+	AR is supposed to take precedence over bitstream AR, but some
+	decoder programmers ignore the container AR in favour of bitstream
+	AR.
+
 2005-08-31  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvinfo: bug fix: The GUI couldn't open files with non-ASCII

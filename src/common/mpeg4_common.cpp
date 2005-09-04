@@ -278,38 +278,295 @@ mpeg4_p2_parse_config_data(const unsigned char *buffer,
   return mem;
 }
 
-static int64_t
-read_golomb_ue(bit_cursor_c &bits) {
-  int i;
-  int64_t value;
 
-  i = 0;
-  while (i < 64) {
-    bool bit = bits.get_bit();
-    if (bit)
-      break;
-    i++;
+struct bit_reader_t {
+  const vector<unsigned char> &v;
+  unsigned char mask, val;
+  unsigned int vp;
+
+  bit_reader_t(const vector<unsigned char> &nv):
+    v(nv), mask(0), val(0), vp(0) { }
+
+  int bit() {
+    if (0 == mask) {
+      if (vp >= v.size())
+        return -1;
+      val = v[vp++];
+      mask = 0x80;
+    }
+    int	ret = !!(val & mask);
+    mask >>= 1;
+    return ret;
   }
 
-  value = bits.get_bits(i);
+  int num(int l) {
+    int v = 0, b = 0;
+    while (l-- && (b = bit()) >= 0)
+      v = (v << 1) | b;
+    return b < 0 ? b : v;
+  }
+};
 
-  return ((1 << i) - 1) + value;
+struct bit_writer_t {
+  vector<unsigned char> &v;
+  unsigned char mask, val;
+  unsigned int vp;
+
+  bit_writer_t(vector<unsigned char> &nv):
+    v(nv), mask(0x80), val(0), vp(0) { }
+
+  void bit(int bit) {
+    if (bit)
+      val |= mask;
+    if ((mask >>= 1) == 0) {
+      v.push_back(val);
+      val = 0;
+      mask = 0x80;
+      ++vp;
+    }
+  }
+
+  void flush() {
+    while (mask != 0x80)
+      bit(0);
+  }
+
+  void num(unsigned v, int l) {
+    while (l--)
+      bit(v & (1 << l));
+  }
+};
+
+static int
+bitcopy(bit_reader_t &r,
+        bit_writer_t &w,
+        int count) {
+  int	bit, v = 0;
+
+  while (count-- && (bit = r.bit()) >= 0)
+    w.bit(bit), v = (v << 1) | bit;
+
+  return bit < 0 ? bit : v;
 }
 
-static int64_t
-read_golomb_se(bit_cursor_c &bits) {
-  int64_t value;
+static int
+gecopy(bit_reader_t &r,
+       bit_writer_t &w) {
+  int	n = 0, bit;
 
-  value = read_golomb_ue(bits);
+  while ((bit = r.bit()) == 0)
+    w.bit(0), ++n;
 
-  return (value & 0x01) != 0x00 ? (value + 1) / 2 : -(value / 2);
+  if (bit < 0)
+    return bit;
+
+  w.bit(1);
+
+  if ((bit = r.num(n)) >= 0)
+    w.num(bit, n);
+
+  return bit < 0 ? bit : (1 << n) - 1 + bit;
+}
+
+static int
+sgecopy(bit_reader_t &r,
+        bit_writer_t &w) {
+  int v = gecopy(r, w);
+  return v & 1 ? (v + 1)/2 : -(v/2);
+}
+
+static void
+hrdcopy(bit_reader_t &r,
+        bit_writer_t &w) {
+  int ncpb = gecopy(r,w);       // cpb_cnt_minus1
+  bitcopy(r, w, 4);             // bit_rate_scale
+  bitcopy(r, w, 4);             // cpb_size_scale
+  for (int i = 0; i <= ncpb; ++i) {
+    gecopy(r,w);                // bit_rate_value_minus1
+    gecopy(r,w);                // cpb_size_value_minus1
+    bitcopy(r, w, 1);           // cbr_flag
+  }
+  bitcopy(r, w, 5);           // initial_cpb_removal_delay_length_minus1
+  bitcopy(r, w, 5);             // cpb_removal_delay_length_minus1
+  bitcopy(r, w, 5);             // dpb_output_delay_length_minus1
+  bitcopy(r, w, 5);             // time_offset_length
+}
+
+static void
+slcopy(bit_reader_t &r,
+       bit_writer_t &w,
+       int size) {
+  int delta, next = 8, j;
+
+  for (j = 0; j < size && next != 0; ++j) {
+    delta = sgecopy(r, w);
+    next = (next + delta + 256) % 256;
+  }
+}
+
+static void
+nalu_to_rbsp(vector<unsigned char> &b) {
+  for (size_t p = 1; p + 2 < b.size(); ++p)
+    if (b[p] == 0 && b[p+1] == 0 && b[p+2] == 3) {
+      b.erase(b.begin()+p+2);
+      ++p;
+    }
+}
+
+static void
+rbsp_to_nalu(vector<unsigned char> &b) {
+  for (size_t p = 1; p + 2 < b.size(); ++p)
+    if (b[p] == 0 && b[p+1] == 0 && b[p+2] <= 3) {
+      b.insert(b.begin() + p + 2, 3);
+      p += 2;
+    }
+}
+
+static bool
+handle_sps(vector<unsigned char> &sps,
+           uint32_t &par_num,
+           uint32_t &par_den) {
+  vector<unsigned char> newsps;
+  bit_reader_t r(sps);
+  bit_writer_t w(newsps);
+  int profile, i, nref, vuipresent, ar_type;
+  bool ar_found;
+
+  par_num = 1;
+  par_den = 1;
+  ar_found = false;
+
+  bitcopy(r, w, 3);             // forbidden_zero_bit, nal_ref_idc
+  if (bitcopy(r, w, 5) != 7)    // nal_unit_type
+    return false;
+  profile = bitcopy(r, w, 8);   // profile_idc
+  if (profile < 0)
+    return false;
+  bitcopy(r, w, 16);            // constraints, reserved, level
+  gecopy(r, w);                 // sps id
+  if (profile >= 100) {         // high profile
+    if (gecopy(r, w) == 3)      // chroma_format_idc
+      bitcopy(r, w, 1);         // residue_transform_flag
+    gecopy(r, w);               // bit_depth_luma_minus8
+    gecopy(r, w);               // bit_depth_chroma_minus8
+    bitcopy(r, w, 1);          // qpprime_y_zero_transform_bypass_flag
+    if (bitcopy(r, w, 1) == 1)  // seq_scaling_matrix_present_flag
+      for (i = 0; i < 8; ++i)
+        if (bitcopy(r, w, 1) == 1) // seq_scaling_list_present_flag
+          slcopy(r, w, i < 6 ? 16 : 64);
+  }
+  gecopy(r, w);                 // log2_max_frame_num
+  switch (gecopy(r, w)) {       // pic_order_cnt_type
+    default:
+      return false;
+    case 2:
+      break;
+    case 0:
+      gecopy(r, w);             // log2_max_pic_order_cnt_lsb_minus4
+      break;
+    case 1:
+      bitcopy(r, w, 1);         // delta_pic_order_always_zero_flag
+      sgecopy(r, w);            // offset_for_non_ref_pic
+      sgecopy(r, w);            // offset_for_top_to_bottom_field
+      nref = gecopy(r, w);     // num_ref_frams_in_pic_order_cnt_cycle
+      for (i = 0; i < nref; ++i)
+        gecopy(r, w);           // offset_for_ref_frame
+      break;
+  }
+  gecopy(r, w);                 // num_ref_frames
+  bitcopy(r, w, 1);            // gaps_in_frame_num_value_allowed_flag
+  gecopy(r, w);                 // pic_width_in_mbs_minus1
+  gecopy(r, w);                 // pic_height_in_map_units_minus1
+  if (bitcopy(r, w, 1) == 0)    // frame_mbs_only_flag
+    bitcopy(r, w, 1);           // mb_adaptive_frame_field_flag
+  bitcopy(r, w, 1);             // direct_8x8_inference_flag
+  if (bitcopy(r, w, 1) == 1) {
+    gecopy(r, w);               // frame_crop_left_offset
+    gecopy(r, w);               // frame_crop_right_offset
+    gecopy(r, w);               // frame_crop_top_offset
+    gecopy(r, w);               // frame_crop_bottom_offset
+  }
+  vuipresent = bitcopy(r, w, 1);
+  if (vuipresent < 0)
+    return false;
+  if (vuipresent == 1) {
+    if (r.bit() == 1) {
+      ar_type = r.num(8);
+
+      if (13 >= ar_type) {
+        static const int par_nums[14] = {
+          0, 1, 12, 10, 16, 40, 24, 20, 32, 80, 18, 15, 64, 160
+        };
+        static const int par_denoms[14] = {
+          0, 1, 11, 11, 11, 33, 11, 11, 11, 33, 11, 11, 33, 99
+        };
+        par_num = par_nums[ar_type];
+        par_den = par_denoms[ar_type];
+
+      } else {
+        int tx = r.num(16);
+        int ty = r.num(16);
+        if (tx < 0 || ty < 0)
+          return false;
+        par_num = tx;
+        par_den = ty;
+
+      }
+      ar_found = true;
+    }
+    w.bit(0);
+
+    // copy the rest
+    if (bitcopy(r, w, 1) == 1)  // overscan_info_present
+      bitcopy(r, w, 1);         // overscan_appropriate
+    if (bitcopy(r, w, 1) == 1) { // video_signal_type_present
+      bitcopy(r, w, 4);         // video_format, video_full_range
+      if (bitcopy(r, w, 1) == 1) // color_desc_present
+        bitcopy(r, w, 24);
+    }
+    if (bitcopy(r, w, 1) == 1) { // chroma_loc_info_present
+      gecopy(r, w);             // chroma_sample_loc_type_top_field
+      gecopy(r, w);             // chroma_sample_loc_type_bottom_field
+    }
+    if (bitcopy(r, w, 1) == 1) { // timing_info_present
+      bitcopy(r, w, 32);        // num_units_in_tick
+      bitcopy(r, w, 32);        // time_scale
+      bitcopy(r, w, 1);         // fixed_frame_rate
+    }
+    bool f = false;
+    if (bitcopy(r, w, 1) == 1)  // nal_hrd_parameters_present
+      hrdcopy(r, w),  f = true;
+    if (bitcopy(r, w, 1) == 1)  // vcl_hrd_parameters_present
+      hrdcopy(r, w),  f = true;
+    if (f)
+      bitcopy(r, w, 1);         // low_delay_hrd_flag
+    bitcopy(r, w, 1);           // pic_struct_present
+    if (bitcopy(r, w, 1) == 1) { // bitstream_restriction
+      bitcopy(r, w, 1);     // motion_vectors_over_pic_boundaries_flag
+      gecopy(r, w);             // max_bytes_per_pic_denom
+      gecopy(r, w);             // max_bits_per_pic_denom
+      gecopy(r, w);             // log2_max_mv_length_h
+      gecopy(r, w);             // log2_max_mv_length_v
+      gecopy(r, w);             // num_reorder_frames
+      gecopy(r, w);             // max_dec_frame_buffering
+    }
+  }
+
+  w.bit(1);
+  w.flush();
+
+  sps = newsps;
+
+  return ar_found;
 }
 
 /** Extract the pixel aspect ratio from the MPEG4 layer 10 (AVC) codec data
 
    This function searches a buffer containing the MPEG4 layer 10 (AVC) codec
    initialization for the pixel aspectc ratio. If it is found then the
-   numerator and the denominator are returned.
+   numerator and the denominator are returned, and the aspect ratio
+   information is removed from the buffer. The new buffer is returned
+   in the variable \c buffer, and the new size is returned in \c buffer_size.
 
    \param buffer The buffer containing the MPEG4 layer 10 codec data.
    \param buffer_size The size of the buffer in bytes.
@@ -320,107 +577,65 @@ read_golomb_se(bit_cursor_c &bits) {
      otherwise.
 */
 bool
-mpeg4_p10_extract_par(const uint8_t *buffer,
-                      int buffer_size,
+mpeg4_p10_extract_par(uint8_t *&buffer,
+                      int &buffer_size,
                       uint32_t &par_num,
                       uint32_t &par_den) {
   try {
-    mm_mem_io_c avcc(buffer, buffer_size);
-    int num_sps, sps;
+    mm_mem_io_c avcc(buffer, buffer_size), new_avcc(NULL, buffer_size, 1024);
+    vector<unsigned char> nalu;
+    int num_sps, sps, length;
+    bool ar_found;
 
-    avcc.skip(5);
+    par_num = 1;
+    par_den = 1;
+    ar_found = false;
+
+    avcc.read(nalu, 5);
+    new_avcc.write(nalu);
+    nalu.clear();
     num_sps = avcc.read_uint8();
+    new_avcc.write_uint8(num_sps);
     mxverb(4, "mpeg4_p10_extract_par: num_sps %d\n", num_sps);
 
     for (sps = 0; sps < num_sps; sps++) {
-      int length, poc_type, ar_type, nal_unit_type;
+      bool abort;
 
       length = avcc.read_uint16_be();
-      bit_cursor_c bits(&buffer[avcc.getFilePointer()],
-                        (length + avcc.getFilePointer()) >  buffer_size ?
-                        buffer_size - avcc.getFilePointer() : length);
-      nal_unit_type = bits.get_bits(8) & 0x1f;
-      mxverb(4, "mpeg4_p10_extract_par: nal_unit_type %d\n", nal_unit_type);
-      if (nal_unit_type != 7)   // 7 = SPS
-        continue;
+      if ((length + avcc.getFilePointer()) >= buffer_size)
+        length = buffer_size - avcc.getFilePointer();
+      nalu.clear();
+      avcc.read(nalu, length);
 
-      bits.skip_bits(16);
-      read_golomb_ue(bits);
-      read_golomb_ue(bits);
-      poc_type = read_golomb_ue(bits);
-
-      if (poc_type > 1) {
-        mxverb(4, "mpeg4_p10_extract_par: poc_type %d\n", poc_type);
-        throw false;
+      abort = false;
+      if ((0 < length) && ((nalu[0] & 0x1f) == 7)) {
+        nalu_to_rbsp(nalu);
+        ar_found = handle_sps(nalu, par_num, par_den);
+        rbsp_to_nalu(nalu);
+        abort = true;
       }
 
-      if (poc_type == 0)
-        read_golomb_ue(bits);
-      else {
-        int cycles, i;
+      new_avcc.write_uint16_be(nalu.size());
+      new_avcc.write(nalu);
 
-        bits.skip_bits(1);
-        read_golomb_se(bits);
-        read_golomb_se(bits);
-        cycles = read_golomb_ue(bits);
-        for (i = 0; i < cycles; ++i)
-          read_golomb_se(bits);
+      if (abort) {
+        nalu.clear();
+        avcc.read(nalu, buffer_size - avcc.getFilePointer());
+        new_avcc.write(nalu);
+        break;
       }
+    }
 
-      read_golomb_ue(bits);
-      bits.skip_bits(1);
-      read_golomb_ue(bits);
-      read_golomb_ue(bits);
-      if (!bits.get_bit())      // MB only
-        bits.skip_bits(1);
-      bits.skip_bits(1);
-      if (bits.get_bit()) {     // cropping
-        read_golomb_ue(bits);
-        read_golomb_ue(bits);
-        read_golomb_ue(bits);
-        read_golomb_ue(bits);
-      }
-      if (!bits.get_bit()) {    // VUI
-        mxverb(4, "mpeg4_p10_extract_par: !VUI\n");
-        throw false;
-      }
-      if (!bits.get_bit()) {    // AR
-        mxverb(4, "mpeg4_p10_extract_par: !AR\n");
-        throw false;
-      }
+    buffer_size = new_avcc.getFilePointer();
+    buffer = (unsigned char *)safemalloc(buffer_size);
+    new_avcc.setFilePointer(0);
+    new_avcc.read(buffer, buffer_size);
 
-      ar_type = bits.get_bits(8);
-      if ((ar_type != 0xff) &&  // custom AR
-          (ar_type > 13)) {
-        mxverb(4, "mpeg4_p10_extract_par: wrong ar_type %d\n", ar_type);
-        throw false;
-      }
+    return ar_found;
 
-      if (ar_type <= 13) {
-        static const int par_nums[14] = {
-          0, 1, 12, 10, 16, 40, 24, 20, 32, 80, 18, 15, 64, 160
-        };
-        static const int par_denoms[14] = {
-          0, 1, 11, 11, 11, 33, 11, 11, 11, 33, 11, 11, 33, 99
-        };
-
-        par_num = par_nums[ar_type];
-        par_den = par_denoms[ar_type];
-        mxverb(4, "mpeg4_p10_extract_par: ar_type %d num %d den %d\n",
-               ar_type, par_num, par_den);
-        return true;
-      }
-
-      par_num = bits.get_bits(16);
-      par_den = bits.get_bits(16);
-      mxverb(4, "mpeg4_p10_extract_par: ar_type %d num %d den %d\n",
-             ar_type, par_num, par_den);
-      return true;
-    } // for
   } catch(...) {
+    return false;
   }
-
-  return false;
 }
 
 /** \brief Extract the FPS from a MPEG video sequence header

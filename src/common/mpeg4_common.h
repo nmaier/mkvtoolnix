@@ -147,7 +147,7 @@ void MTX_DLL_API mpeg4_p2_find_frame_types(const unsigned char *buffer,
 memory_c * MTX_DLL_API
 mpeg4_p2_parse_config_data(const unsigned char *buffer, int buffer_size);
 
-bool MTX_DLL_API mpeg4_p10_extract_par(const uint8_t *buffer, int buffer_size,
+bool MTX_DLL_API mpeg4_p10_extract_par(uint8_t *&buffer, int &buffer_size,
                                        uint32_t &par_num, uint32_t &par_den);
 
 int MTX_DLL_API mpeg1_2_extract_fps_idx(const unsigned char *buffer,
