@@ -20,6 +20,7 @@
 
 #include <string>
 #include <stack>
+#include <vector>
 
 #include <ebml/IOCallback.h>
 
@@ -67,6 +68,13 @@ public:
   virtual bool setFilePointer2(int64 offset, seek_mode mode = seek_beginning);
   virtual uint32 read(void *buffer, size_t size) = 0;
   virtual uint32_t read(string &buffer, size_t size);
+  virtual uint32_t read(vector<unsigned char> &buffer, size_t size) {
+    int i;
+
+    for (i = 0; i < size; ++i)
+      buffer.push_back(read_uint8());
+    return size;
+  }
   virtual unsigned char read_uint8();
   virtual uint16_t read_uint16_le();
   virtual uint32_t read_uint24_le();
@@ -85,6 +93,13 @@ public:
   virtual int write_uint64_be(uint64_t value);
   virtual void skip(int64 numbytes);
   virtual size_t write(const void *buffer, size_t size) = 0;
+  virtual uint32_t write(const vector<unsigned char> &buffer) {
+    int i;
+
+    for (i = 0; buffer.size() > i; ++i)
+      write_uint8(buffer[i]);
+    return buffer.size();
+  }
   virtual bool eof() = 0;
   virtual void flush() {
   }
@@ -211,7 +226,13 @@ public:
   virtual uint64 getFilePointer();
   virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning);
   virtual uint32 read(void *buffer, size_t size);
+  virtual uint32_t read(vector<unsigned char> &buffer, size_t size) {
+    return mm_io_c::read(buffer, size);
+  }
   virtual size_t write(const void *buffer, size_t size);
+  virtual uint32_t write(const vector<unsigned char> &buffer) {
+    return mm_io_c::write(buffer);
+  }
   virtual void close();
   virtual bool eof();
   virtual string get_file_name() const {
