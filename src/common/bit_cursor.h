@@ -117,10 +117,10 @@ public:
   }
 
   void byte_align() {
-    if (out_of_data)
-      throw mm_io_eof_error_c();
     if (bits_valid == 8)
       return;
+    if (out_of_data)
+      throw mm_io_eof_error_c();
     bits_valid = 0;
     byte_position += 1;
   }
@@ -176,7 +176,7 @@ public:
     }
   }
 
-  void put_bit(int bit) {
+  void put_bit(bool bit) {
     if (byte_position >= end_of_data) {
       out_of_data = true;
       throw mm_io_eof_error_c();
@@ -206,6 +206,18 @@ public:
 
     byte_position = start_of_data + (pos / 8);
     mask = 0x80 >> (pos % 8);
+  }
+
+  int get_bit_position() {
+    int i, pos;
+
+    pos = (byte_position - start_of_data) * 8;
+    for (i = 0; 8 > i; ++i)
+      if ((0x80 >> i) == mask) {
+        pos += i;
+        break;
+      }
+    return pos;
   }
 };
 
