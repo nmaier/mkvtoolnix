@@ -1,5 +1,10 @@
 2005-09-06  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: If the user selected an aspect ratio for a video
+	track, then chose "File -> new", added a file, selected another
+	video track and chose the same aspect ratio as before then it
+	wasn't added to the command line. Fixes Anthill bugs 132 and 146.
+
 	* mkvmerge: bug fix: Support Qt/MP4 files with 64bit offset tables
 	('co64' atom instead of 'stco' atom).
 

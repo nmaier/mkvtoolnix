@@ -41,6 +41,53 @@ wxArrayString sorted_iso_codes;
 wxArrayString sorted_charsets;
 bool title_was_present = false;
 
+static const wxChar *predefined_aspect_ratios[] = {
+  wxT(""),
+  wxT("4/3"),
+  wxT("1.66"),
+  wxT("16/9"),
+  wxT("1.85"),
+  wxT("2.00"),
+  wxT("2.21"),
+  wxT("2.35"),
+  NULL
+};
+
+static const wxChar *predefined_fourccs[] = {
+  wxT(""),
+  wxT("DIVX"),
+  wxT("DIV3"),
+  wxT("DX50"),
+  wxT("MP4V"),
+  wxT("XVID"),
+  NULL
+};
+
+void
+set_combobox_selection(wxComboBox *cb,
+                       const wxChar * const string_list[],
+                       const wxString wanted) {
+  int i;
+  bool found;
+
+  cb->SetValue(wanted);
+  found = false;
+  for (i = 0; NULL != string_list[i]; ++i)
+    if (wanted == string_list[i]) {
+      cb->SetSelection(i);
+      found = true;
+      break;
+    }
+}
+
+wxString
+get_combobox_selection(wxComboBox *cb) {
+  if (wxNOT_FOUND != cb->GetSelection())
+    return cb->GetStringSelection();
+  else
+    return cb->GetValue();
+}
+
 class input_drop_target_c: public wxFileDropTarget {
 private:
   tab_input *owner;
@@ -310,12 +357,10 @@ tab_input::tab_input(wxWindow *parent):
   cob_fourcc =
     new wxComboBox(this, ID_CB_FOURCC, wxT(""), wxDefaultPosition,
                    wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
-  cob_fourcc->Append(wxT(""));
-  cob_fourcc->Append(wxT("DIVX"));
-  cob_fourcc->Append(wxT("DIV3"));
-  cob_fourcc->Append(wxT("DX50"));
-  cob_fourcc->Append(wxT("MP4V"));
-  cob_fourcc->Append(wxT("XVID"));
+
+  for (i = 0; NULL != predefined_fourccs[i]; ++i)
+    cob_fourcc->Append(predefined_fourccs[i]);
+
   cob_fourcc->SetToolTip(TIP("Forces the FourCC of the video track to this "
                              "value. Note that this only works for video "
                              "tracks that use the AVI compatibility mode "
@@ -358,14 +403,10 @@ tab_input::tab_input(wxWindow *parent):
   cob_aspect_ratio =
     new wxComboBox(this, ID_CB_ASPECTRATIO, wxT(""), wxDefaultPosition,
                    wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
-  cob_aspect_ratio->Append(wxT(""));
-  cob_aspect_ratio->Append(wxT("4/3"));
-  cob_aspect_ratio->Append(wxT("1.66"));
-  cob_aspect_ratio->Append(wxT("16/9"));
-  cob_aspect_ratio->Append(wxT("1.85"));
-  cob_aspect_ratio->Append(wxT("2.00"));
-  cob_aspect_ratio->Append(wxT("2.21"));
-  cob_aspect_ratio->Append(wxT("2.35"));
+
+  for (i = 0; NULL != predefined_aspect_ratios[i]; ++i)
+    cob_aspect_ratio->Append(predefined_aspect_ratios[i]);
+
   cob_aspect_ratio->SetToolTip(TIP("Sets the display aspect ratio of the "
                                    "track. The format can be either 'a/b' in "
                                    "which case both numbers must be integer "
@@ -1275,13 +1316,14 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
   tc_tags->SetValue(t->tags);
   cb_default->SetValue(t->default_track);
   cb_aac_is_sbr->SetValue(t->aac_is_sbr);
-  cob_aspect_ratio->SetValue(t->aspect_ratio);
+  set_combobox_selection(cob_aspect_ratio, predefined_aspect_ratios,
+                         t->aspect_ratio);
   tc_display_width->SetValue(t->dwidth);
   tc_display_height->SetValue(t->dheight);
   selected_track = new_sel;
   cob_compression->SetValue(t->compression);
   tc_timecodes->SetValue(t->timecodes);
-  cob_fourcc->SetValue(t->fourcc);
+  set_combobox_selection(cob_fourcc, predefined_fourccs, t->fourcc);
   tc_track_name->SetFocus();
 
   dont_copy_values_now = false;
@@ -1489,8 +1531,8 @@ tab_input::on_value_copy_timer(wxTimerEvent &evt) {
     return;
 
   t = tracks[selected_track];
-  t->aspect_ratio = cob_aspect_ratio->GetValue();
-  t->fourcc = cob_fourcc->GetValue();
+  t->aspect_ratio = get_combobox_selection(cob_aspect_ratio);
+  t->fourcc = get_combobox_selection(cob_fourcc);
 }
 
 void
