@@ -22,6 +22,7 @@
 
 #include "bit_cursor.h"
 #include "common.h"
+#include "hacks.h"
 #include "mm_io.h"
 #include "mpeg4_common.h"
 
@@ -490,9 +491,13 @@ handle_sps(vector<unsigned char> &sps,
   if (vuipresent < 0)
     return false;
   if (vuipresent == 1) {
-    if (r.bit() == 1) {
+    if (r.bit() == 1) {         // ar_info_present
       ar_type = r.num(8);
 
+      if (hack_engaged(ENGAGE_KEEP_BITSTREAM_AR_INFO)) {
+        w.bit(1);
+        w.num(ar_type, 8);
+      }
       if (13 >= ar_type) {
         static const int par_nums[14] = {
           0, 1, 12, 10, 16, 40, 24, 20, 32, 80, 18, 15, 64, 160
@@ -511,10 +516,15 @@ handle_sps(vector<unsigned char> &sps,
         par_num = tx;
         par_den = ty;
 
+        if (hack_engaged(ENGAGE_KEEP_BITSTREAM_AR_INFO)) {
+          w.num(par_num, 16);
+          w.num(par_den, 16);
+        }
       }
       ar_found = true;
     }
-    w.bit(0);
+    if (!hack_engaged(ENGAGE_KEEP_BITSTREAM_AR_INFO))
+      w.bit(0);                 // ar_info_present
 
     // copy the rest
     if (bitcopy(r, w, 1) == 1)  // overscan_info_present
