@@ -342,7 +342,7 @@ static int
 bitcopy(bit_reader_t &r,
         bit_writer_t &w,
         int count) {
-  int	bit, v = 0;
+  int	bit = -1, v = 0;
 
   while (count-- && (bit = r.bit()) >= 0)
     w.bit(bit), v = (v << 1) | bit;
