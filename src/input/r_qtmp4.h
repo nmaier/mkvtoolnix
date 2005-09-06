@@ -235,6 +235,8 @@ protected:
                                 int level);
   virtual void handle_stco_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
                                 int level);
+  virtual void handle_co64_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
+                                int level);
   virtual void handle_stsc_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
                                 int level);
   virtual void handle_stsd_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
@@ -251,6 +253,8 @@ protected:
                                 int level);
   virtual void handle_trak_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
                                 int level);
+
+  virtual void update_tables(qtmp4_demuxer_ptr &dmx);
 };
 
 #endif  // __R_QTMP4_H

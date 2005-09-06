@@ -136,7 +136,7 @@ qtmp4_reader_c::read_atom() {
 
 void
 qtmp4_reader_c::parse_headers() {
-  uint32_t tmp, j, s, pts, last, idx;
+  uint32_t tmp, idx;
   qt_atom_t atom;
   bool headers_parsed;
   int i;
@@ -293,90 +293,97 @@ qtmp4_reader_c::parse_headers() {
 
     dmx->ok = true;
 
-    last = dmx->chunk_table.size();
-
-    // process chunkmap:
-    i = dmx->chunkmap_table.size();
-    while (i > 0) {
-      i--;
-      for (j = dmx->chunkmap_table[i].first_chunk; j < last; j++) {
-        dmx->chunk_table[j].desc =
-          dmx->chunkmap_table[i].sample_description_id;
-        dmx->chunk_table[j].size = dmx->chunkmap_table[i].samples_per_chunk;
-      }
-      last = dmx->chunkmap_table[i].first_chunk;
-      if (dmx->chunk_table.size() <= last)
-        break;
-    }
-
-    // calc pts of chunks:
-    s = 0;
-    for (j = 0; j < dmx->chunk_table.size(); j++) {
-      dmx->chunk_table[j].samples = s;
-      s += dmx->chunk_table[j].size;
-    }
-
-    // workaround for fixed-size video frames (dv and uncompressed)
-    if ((dmx->sample_table.size() == 0) && (dmx->type != 'a')) {
-      for (i = 0; i < s; i++) {
-        qt_sample_t sample;
-
-        sample.size = dmx->sample_size;
-        dmx->sample_table.push_back(sample);
-      }
-      dmx->sample_size = 0;
-    }
-
-    if (dmx->sample_table.size() == 0) {
-      // constant sampesize
-      if ((dmx->durmap_table.size() == 1) ||
-          ((dmx->durmap_table.size() == 2) &&
-           (dmx->durmap_table[1].number == 1)))
-        dmx->duration = dmx->durmap_table[0].duration;
-      else
-        mxerror(PFX "Constant samplesize & variable duration not yet "
-                "supported. Contact the author if you have such a sample "
-                "file.\n");
-      continue;
-    }
-
-    // calc pts:
-    s = 0;
-    pts = 0;
-    for (j = 0; j < dmx->durmap_table.size(); j++) {
-      for (i = 0; i < dmx->durmap_table[j].number; i++) {
-        dmx->sample_table[s].pts = pts;
-        s++;
-        pts += dmx->durmap_table[j].duration;
-      }
-    }
-
-    // calc sample offsets
-    s = 0;
-    for (j = 0; j < dmx->chunk_table.size(); j++) {
-      uint64_t pos = dmx->chunk_table[j].pos;
-
-      for (i = 0; i < dmx->chunk_table[j].size; i++) {
-        dmx->sample_table[s].pos = pos;
-        pos += dmx->sample_table[s].size;
-        s++;
-      }
-    }
-
-    // calc pts/dts offsets
-    for (j = 0; j < dmx->raw_frame_offset_table.size(); j++) {
-      int k;
-
-      for (k = 0; k < dmx->raw_frame_offset_table[j].count; k++)
-        dmx->frame_offset_table.
-          push_back(dmx->raw_frame_offset_table[j].offset);
-    }
-    mxverb(3, PFX "Frame offset table: %u entries\n",
-           (unsigned int)dmx->frame_offset_table.size());
+    update_tables(dmx);
   }
 
   mxverb(2, PFX "Number of valid tracks found: %u\n",
          (unsigned int)demuxers.size());
+}
+
+void
+qtmp4_reader_c::update_tables(qtmp4_demuxer_ptr &dmx) {
+  uint32_t last, i, j, s, pts;
+
+  last = dmx->chunk_table.size();
+
+  // process chunkmap:
+  i = dmx->chunkmap_table.size();
+  while (i > 0) {
+    i--;
+    for (j = dmx->chunkmap_table[i].first_chunk; j < last; j++) {
+      dmx->chunk_table[j].desc =
+        dmx->chunkmap_table[i].sample_description_id;
+      dmx->chunk_table[j].size = dmx->chunkmap_table[i].samples_per_chunk;
+    }
+    last = dmx->chunkmap_table[i].first_chunk;
+    if (dmx->chunk_table.size() <= last)
+      break;
+  }
+
+  // calc pts of chunks:
+  s = 0;
+  for (j = 0; j < dmx->chunk_table.size(); j++) {
+    dmx->chunk_table[j].samples = s;
+    s += dmx->chunk_table[j].size;
+  }
+
+  // workaround for fixed-size video frames (dv and uncompressed)
+  if ((dmx->sample_table.size() == 0) && (dmx->type != 'a')) {
+    for (i = 0; i < s; i++) {
+      qt_sample_t sample;
+
+      sample.size = dmx->sample_size;
+      dmx->sample_table.push_back(sample);
+    }
+    dmx->sample_size = 0;
+  }
+
+  if (dmx->sample_table.size() == 0) {
+    // constant sampesize
+    if ((dmx->durmap_table.size() == 1) ||
+        ((dmx->durmap_table.size() == 2) &&
+         (dmx->durmap_table[1].number == 1)))
+      dmx->duration = dmx->durmap_table[0].duration;
+    else
+      mxerror(PFX "Constant samplesize & variable duration not yet "
+              "supported. Contact the author if you have such a sample "
+              "file.\n");
+    return;
+  }
+
+  // calc pts:
+  s = 0;
+  pts = 0;
+  for (j = 0; j < dmx->durmap_table.size(); j++) {
+    for (i = 0; i < dmx->durmap_table[j].number; i++) {
+      dmx->sample_table[s].pts = pts;
+      s++;
+      pts += dmx->durmap_table[j].duration;
+    }
+  }
+
+  // calc sample offsets
+  s = 0;
+  for (j = 0; j < dmx->chunk_table.size(); j++) {
+    uint64_t pos = dmx->chunk_table[j].pos;
+
+    for (i = 0; i < dmx->chunk_table[j].size; i++) {
+      dmx->sample_table[s].pos = pos;
+      pos += dmx->sample_table[s].size;
+      s++;
+    }
+  }
+
+  // calc pts/dts offsets
+  for (j = 0; j < dmx->raw_frame_offset_table.size(); j++) {
+    int k;
+
+    for (k = 0; k < dmx->raw_frame_offset_table[j].count; k++)
+      dmx->frame_offset_table.
+        push_back(dmx->raw_frame_offset_table[j].offset);
+  }
+  mxverb(3, PFX "Frame offset table: %u entries\n",
+         (unsigned int)dmx->frame_offset_table.size());
 }
 
 void
@@ -724,6 +731,9 @@ qtmp4_reader_c::handle_stbl_atom(qtmp4_demuxer_ptr &new_dmx,
     else if (atom.fourcc == FOURCC('s', 't', 'c', 'o'))
       handle_stco_atom(new_dmx, atom.to_parent(), level + 1);
 
+    else if (atom.fourcc == FOURCC('c', 'o', '6', '4'))
+      handle_co64_atom(new_dmx, atom.to_parent(), level + 1);
+
     else if (atom.fourcc == FOURCC('c', 't', 't', 's'))
       handle_ctts_atom(new_dmx, atom.to_parent(), level + 1);
 
@@ -749,6 +759,26 @@ qtmp4_reader_c::handle_stco_atom(qtmp4_demuxer_ptr &new_dmx,
   }
 
   mxverb(2, PFX "%*sChunk offset table: %u entries\n", level * 2, "", count);
+}
+
+void
+qtmp4_reader_c::handle_co64_atom(qtmp4_demuxer_ptr &new_dmx,
+                                 qt_atom_t atom,
+                                 int level) {
+  uint32_t count, i;
+
+  io->skip(1 + 3);        // version & flags
+  count = io->read_uint32_be();
+
+  for (i = 0; i < count; i++) {
+    qt_chunk_t chunk;
+
+    chunk.pos = io->read_uint64_be();
+    new_dmx->chunk_table.push_back(chunk);
+  }
+
+  mxverb(2, PFX "%*s64bit chunk offset table: %u entries\n", level * 2, "",
+         count);
 }
 
 void

@@ -1,3 +1,8 @@
+2005-09-06  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Support Qt/MP4 files with 64bit offset tables
+	('co64' atom instead of 'stco' atom).
+
 2005-09-04  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: mkvmerge will remove the aspect ratio
