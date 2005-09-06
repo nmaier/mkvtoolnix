@@ -1197,6 +1197,7 @@ mmg_dialog::on_help(wxCommandEvent &evt) {
         break;
       }
 
+    first = true;
     while (!wxFileExists(help_path + wxT("/mkvmerge-gui.hhp"))) {
       if (first) {
         wxMessageBox(wxT("The mkvmerge GUI help file was not found. This "
