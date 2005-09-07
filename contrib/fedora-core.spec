@@ -21,9 +21,10 @@ Matroska video utilities.
 %doc doc/mkvmerge-gui.html
 %{_bindir}/*
 %{_datadir}/man/man1/*
+%{_datadir}/mkvtoolnix
 
 %changelog
-* Sat Jan 2 2004 Ronald Bultje <rbultje@ronald.bitfreak.net
+* Sat Jan 2 2004 Ronald Bultje <rbultje@ronald.bitfreak.net>
 - set this thing up
 
 %prep
