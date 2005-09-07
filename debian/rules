@@ -13,7 +13,7 @@ export DH_COMPAT=4
 DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
-INSTPREFIX=$(CURDIR)/debian/mkvtoolnix/usr
+INSTPREFIX=$(CURDIR)/debian/mkvtoolnix-mb/usr
 
 CFLAGS = -Wall -g
 
@@ -46,7 +46,7 @@ build-stamp:  config.status
 clean:
 	dh_testdir
 	dh_testroot
-	rm -f build-stamp 
+	rm -f build-stamp config.status
 
 	-$(MAKE) distclean
 ifneq "$(wildcard /usr/share/misc/config.sub)" ""
@@ -75,8 +75,9 @@ binary-indep: build install
 	dh_installdocs
 
 # Create HTML files from the man page.
+	mkdir -p $(INSTPREFIX)/share/doc/mkvtoolnix-mb/doc
 	for i in doc/mkvmerge.1; do \
-		groff -man -Thtml $$i > $(INSTPREFIX)/share/doc/mkvtoolnix/doc/`basename $$i .1`.html; \
+		groff -man -Thtml $$i > $(INSTPREFIX)/share/doc/mkvtoolnix-mb/doc/`basename $$i .1`.html; \
 	done
 
 # Build architecture-dependent files here.
