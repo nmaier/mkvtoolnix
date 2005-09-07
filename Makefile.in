@@ -168,14 +168,14 @@ install-trans:
 	done
 
 install-guide:
-	$(mkinstalldirs) $(pkgdatadir)
+	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)
 	@for i in doc/mkvmerge-gui.*; do \
-	  echo " $(INSTALL_DATA) $$i $(pkgdatadir)/"; \
-	  $(INSTALL_DATA) $$i $(pkgdatadir)/; \
+	  echo " $(INSTALL_DATA) $$i $(DESTDIR)$(pkgdatadir)/"; \
+	  $(INSTALL_DATA) $$i $(DESTDIR)$(pkgdatadir)/; \
 	done
 	@for i in doc/images/*gif; do \
-	  echo " $(INSTALL_DATA) $$i $(pkgdatadir)/"; \
-	  $(INSTALL_DATA) $$i $(pkgdatadir)/; \
+	  echo " $(INSTALL_DATA) $$i $(DESTDIR)$(pkgdatadir)/"; \
+	  $(INSTALL_DATA) $$i $(DESTDIR)$(pkgdatadir)/; \
 	done
 
 SYSTEM_INCLUDES = $(AVILIB_INCLUDES) \
