@@ -71,6 +71,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/man/man1/mkvinfo.1.gz
 /usr/share/man/man1/mkvmerge.1.gz
 /usr/share/man/man1/mkvmerge-gui.1.gz
+/usr/share/mkvtoolnix/*
 %doc AUTHORS ChangeLog COPYING README
 
 %changelog -n mkvtoolnix
