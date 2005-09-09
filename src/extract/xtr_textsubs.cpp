@@ -235,8 +235,10 @@ xtr_ssa_c::handle_block(KaxBlock &block,
 
   line = "Dialogue: ";
   for (i = 0; i < ssa_format.size(); i++) {
-    string &format = ssa_format[i];
+    string format = ssa_format[i];
 
+    if (downcase(format) == "actor")
+      format = "name";
     if (0 < i)
       line += ",";
     if (format == "marked")

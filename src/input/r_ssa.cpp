@@ -155,9 +155,9 @@ ssa_reader_c::recode_text(vector<string> &fields) {
 
 void
 ssa_reader_c::parse_file(mm_text_io_c *io) {
-  string line, stime, orig_line, comma;
+  string line, stime, orig_line, comma, name_field;
   string attachment_name, attachment_data_uu;
-  int num;
+  int num, i;
   int64_t start, end;
   vector<string> fields;
   ssa_section_e section, previous_section;
@@ -168,6 +168,7 @@ ssa_reader_c::parse_file(mm_text_io_c *io) {
   section = SSA_SECTION_NONE;
   previous_section = SSA_SECTION_NONE;
   ti.id = 0;                 // ID for this track.
+  name_field = "Name";
   while (!io->eof()) {
     if (!io->getline2(line))
       break;
@@ -204,6 +205,13 @@ ssa_reader_c::parse_file(mm_text_io_c *io) {
         // Analyze the format string.
         m_format = split(&line.c_str()[strlen("Format: ")]);
         strip(m_format);
+
+        // Let's see if "Actor" is used in the format instead of "Name".
+        for (i = 0; m_format.size() > i; ++i)
+          if (downcase(m_format[i]) == "actor") {
+            name_field = "Actor";
+            break;
+          }
 
       } else if (starts_with_case(line, "Dialogue: ")) {
         if (m_format.size() == 0)
@@ -245,7 +253,7 @@ ssa_reader_c::parse_file(mm_text_io_c *io) {
         comma = ",";
         line = to_string(num) + comma + get_element("Layer", fields) + comma +
           get_element("Style", fields) + comma +
-          get_element("Name", fields) + comma +
+          get_element(name_field.c_str(), fields) + comma +
           get_element("MarginL", fields) + comma +
           get_element("MarginR", fields) + comma +
           get_element("MarginV", fields) + comma +

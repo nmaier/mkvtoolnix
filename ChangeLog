@@ -1,3 +1,9 @@
+2005-09-09  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge, mkvextract: bug fix: ASS files sometimes use a column
+	called 'Actor' instead of 'Name', but both should be mapped to the
+	'name' column in a Matroska file.
+
 2005-09-07  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v1.5.6.
