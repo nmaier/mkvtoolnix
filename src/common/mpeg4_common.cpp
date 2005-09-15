@@ -606,6 +606,7 @@ mpeg4_p10_extract_par(uint8_t *&buffer,
     nalu.clear();
     num_sps = avcc.read_uint8();
     new_avcc.write_uint8(num_sps);
+    num_sps &= 0x1f;
     mxverb(4, "mpeg4_p10_extract_par: num_sps %d\n", num_sps);
 
     for (sps = 0; sps < num_sps; sps++) {
