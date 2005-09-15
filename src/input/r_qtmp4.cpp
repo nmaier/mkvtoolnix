@@ -751,14 +751,15 @@ qtmp4_reader_c::handle_stco_atom(qtmp4_demuxer_ptr &new_dmx,
   io->skip(1 + 3);        // version & flags
   count = io->read_uint32_be();
 
+  mxverb(2, PFX "%*sChunk offset table: %u entries\n", level * 2, "", count);
+
   for (i = 0; i < count; i++) {
     qt_chunk_t chunk;
 
     chunk.pos = io->read_uint32_be();
     new_dmx->chunk_table.push_back(chunk);
+    mxverb(3, PFX "%*s  %lld\n", level * 2, "", chunk.pos);
   }
-
-  mxverb(2, PFX "%*sChunk offset table: %u entries\n", level * 2, "", count);
 }
 
 void
@@ -770,15 +771,16 @@ qtmp4_reader_c::handle_co64_atom(qtmp4_demuxer_ptr &new_dmx,
   io->skip(1 + 3);        // version & flags
   count = io->read_uint32_be();
 
+  mxverb(2, PFX "%*s64bit chunk offset table: %u entries\n", level * 2, "",
+         count);
+
   for (i = 0; i < count; i++) {
     qt_chunk_t chunk;
 
     chunk.pos = io->read_uint64_be();
     new_dmx->chunk_table.push_back(chunk);
+    mxverb(3, PFX "%*s  %lld\n", level * 2, "", chunk.pos);
   }
-
-  mxverb(2, PFX "%*s64bit chunk offset table: %u entries\n", level * 2, "",
-         count);
 }
 
 void
@@ -1246,6 +1248,8 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
         frame_size += dmx->esds.decoder_config_len;
       } else {
         buffer = (unsigned char *)safemalloc(frame_size);
+        mxverb(4, "qtmp4_reader_c::read 2: %u bytes from %lld\n", frame_size,
+               dmx->sample_table[frame].pos);
         io->setFilePointer(dmx->sample_table[frame].pos);
         if (io->read(buffer, frame_size) != frame_size) {
           mxwarn(PFX "Could not read chunk number %u/%u with size %u from "
