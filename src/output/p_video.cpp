@@ -131,13 +131,21 @@ video_packetizer_c::set_headers() {
 //           not relative!)
 int
 video_packetizer_c::process(packet_cptr packet) {
+  if ((0.0 == fps) && (-1 == packet->timecode))
+    mxerror(FMT_TID "video_packetizer: The FPS is 0.0 but the reader did "
+            "not provide a timecode for a packet. %s\n",
+            ti.fname.c_str(), (int64_t)ti.id, BUGMSG);
+
   if (packet->timecode == -1)
     packet->timecode = (int64_t)(1000000000.0 * frames_output / fps) +
       duration_shift;
 
-  if (packet->duration == -1)
-    packet->duration = (int64_t)(1000000000.0 / fps);
-  else
+  if (packet->duration == -1) {
+    if (0.0 == fps)
+      packet->duration = 0;
+    else
+      packet->duration = (int64_t)(1000000000.0 / fps);
+  } else if (0.0 != packet->duration)
     duration_shift += packet->duration - (int64_t)(1000000000.0 / fps);
   frames_output++;
 
