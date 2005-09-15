@@ -688,7 +688,7 @@ real_reader_c::assemble_video_packet(real_demuxer_t *dmx,
       set_dimensions(dmx, assembled->data, assembled->size);
     packet_t *packet =
       new packet_t(new memory_c(assembled->data, assembled->size, true),
-                   (int64_t)assembled->timecode * 1000000, -1,
+                   (int64_t)assembled->timecode * 1000000, 0,
                    (assembled->flags & RMFF_FRAME_FLAG_KEYFRAME) ==
                    RMFF_FRAME_FLAG_KEYFRAME ? VFT_IFRAME :
                    VFT_PFRAMEAUTOMATIC, VFT_NOBFRAME);
