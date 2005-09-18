@@ -716,32 +716,32 @@ mpeg4_p10_video_packetizer_c::extract_aspect_ratio() {
   uint32_t num, den;
   unsigned char *priv;
 
-  if (ti.aspect_ratio_given || ti.display_dimensions_given)
-    return;
-
   priv = ti.private_data;
   if (mpeg4_p10_extract_par(ti.private_data, ti.private_size, num, den) &&
       (0 != num) && (0 != den)) {
-    double par = (double)num / (double)den;
+    if (!ti.aspect_ratio_given && !ti.display_dimensions_given) {
+      double par = (double)num / (double)den;
 
-    if (par >= 1) {
-      ti.display_width = irnd(width * par);
-      ti.display_height = height;
+      if (par >= 1) {
+        ti.display_width = irnd(width * par);
+        ti.display_height = height;
 
-    } else {
-      ti.display_width = width;
-      ti.display_height = irnd(height / par);
+      } else {
+        ti.display_width = width;
+        ti.display_height = irnd(height / par);
 
+      }
+
+      ti.display_dimensions_given = true;
+      mxinfo("Track %lld of '%s': Extracted the aspect ratio information "
+             "from the MPEG-4 layer 10 (AVC) video data and set the display "
+             "dimensions to %u/%u.\n", (int64_t)ti.id, ti.fname.c_str(),
+             (uint32_t)ti.display_width, (uint32_t)ti.display_height);
     }
 
     set_codec_private(ti.private_data, ti.private_size);
-
-    ti.display_dimensions_given = true;
-    mxinfo("Track %lld of '%s': Extracted the aspect ratio information "
-           "from the MPEG-4 layer 10 (AVC) video data and set the display "
-           "dimensions to %u/%u.\n", (int64_t)ti.id, ti.fname.c_str(),
-           (uint32_t)ti.display_width, (uint32_t)ti.display_height);
   }
+
   if (priv != ti.private_data)
     safefree(priv);
 }

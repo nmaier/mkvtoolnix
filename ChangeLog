@@ -1,5 +1,9 @@
 2005-09-18  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Appending AVC video tracks was broken if they
+	contained aspect ratio information that the user overwrote on the
+	command line.
+
 	* mmg: bug fix: If a video track was selected that was appended to
 	another track then the aspect ratio drop down box was still
 	active.
