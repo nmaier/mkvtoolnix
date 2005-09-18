@@ -901,8 +901,7 @@ unescape(const string &source) {
 }
 
 string
-escape_xml(const string &source,
-           bool escape_quotes) {
+escape_xml(const string &source) {
   string dst;
   string::const_iterator src;
 
@@ -914,7 +913,7 @@ escape_xml(const string &source,
       dst += "&gt;";
     else if (*src == '<')
       dst += "&lt;";
-    else if (escape_quotes && (*src == '"'))
+    else if (*src == '"')
       dst += "&quot;";
     else
       dst += *src;
@@ -933,7 +932,7 @@ create_xml_node_name(const char *name,
   node_name = string("<") + name;
   for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2)
     node_name += string(" ") + atts[i] + "=\"" +
-      escape_xml(atts[i + 1], true) + "\"";
+      escape_xml(atts[i + 1]) + "\"";
   node_name += ">";
 
   return node_name;

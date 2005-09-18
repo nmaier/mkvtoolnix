@@ -214,14 +214,14 @@ xml_formatter_c::write_header() {
 #endif
   m_out->write_bom(m_encoding);
   m_out->printf("<?xml version=\"1.0\" encoding=\"%s\"?>\n",
-                escape_xml(m_encoding, true).c_str());
+                escape_xml(m_encoding).c_str());
   if ((m_dtd != "") && (m_dtd_file != ""))
     m_out->printf("\n<!-- DOCTYPE %s SYSTEM \"%s\" -->\n", m_dtd.c_str(),
-                  escape_xml(m_dtd_file, true).c_str());
+                  escape_xml(m_dtd_file).c_str());
   if ((m_stylesheet_type != "") && (m_stylesheet_file != ""))
     m_out->printf("\n<?xml-stylesheet type=\"%s\" href=\"%s\"?>\n",
-                  escape_xml(m_stylesheet_type, true).c_str(),
-                  escape_xml(m_stylesheet_file, true).c_str());
+                  escape_xml(m_stylesheet_type).c_str(),
+                  escape_xml(m_stylesheet_file).c_str());
 
   m_header_written = true;
 }
