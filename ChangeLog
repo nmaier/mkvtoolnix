@@ -1,5 +1,9 @@
 2005-09-18  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: If a video track was selected that was appended to
+	another track then the aspect ratio drop down box was still
+	active.
+
 	* mkvmerge: new feature: MPEG-4 part 2 streams are searched for
 	the pixel width/height values. Those are taken if they differ from
 	those values in the source container. This is a work-around for

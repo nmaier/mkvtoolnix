@@ -675,11 +675,11 @@ tab_input::enable_ar_controls(mmg_track_t *track) {
   bool ar_enabled;
 
   ar_enabled = !track->display_dimensions_selected;
-  cob_aspect_ratio->Enable(ar_enabled);
-  tc_display_width->Enable(!ar_enabled);
-  tc_display_height->Enable(!ar_enabled);
-  rb_aspect_ratio->SetValue(ar_enabled);
-  rb_display_dimensions->SetValue(!ar_enabled);
+  cob_aspect_ratio->Enable(ar_enabled && !track->appending);
+  tc_display_width->Enable(!ar_enabled && !track->appending);
+  tc_display_height->Enable(!ar_enabled && !track->appending);
+  rb_aspect_ratio->SetValue(ar_enabled && !track->appending);
+  rb_display_dimensions->SetValue(!ar_enabled && !track->appending);
 }
 
 void
