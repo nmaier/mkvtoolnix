@@ -80,6 +80,7 @@ protected:
   deque<int64_t> available_timecodes, available_durations;
   int64_t timecodes_generated, last_i_p_frame, previous_timecode;
   bool aspect_ratio_extracted, input_is_native, output_is_native;
+  bool size_extracted;
 
 public:
   mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
@@ -95,6 +96,7 @@ protected:
   virtual void flush_frames_maybe(frame_type_e next_frame);
   virtual void flush_frames(bool end_of_file);
   virtual void extract_aspect_ratio(const unsigned char *buffer, int size);
+  virtual void extract_size(const unsigned char *buffer, int size);
   virtual void fix_codec_string();
   virtual void handle_missing_timecodes(bool end_of_file);
 };

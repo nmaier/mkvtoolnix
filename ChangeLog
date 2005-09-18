@@ -1,3 +1,11 @@
+2005-09-18  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: MPEG-4 part 2 streams are searched for
+	the pixel width/height values. Those are taken if they differ from
+	those values in the source container. This is a work-around for
+	buggy muxers, e.g. broken video camera firmwares writing bad MP4
+	files. Fixes bug 149.
+
 2005-09-15  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Appending files with RealVideo was

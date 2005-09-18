@@ -281,6 +281,8 @@ bool MTX_DLL_API parse_double(const char *s, double &value);
 int MTX_DLL_API get_arg_len(const char *fmt, ...);
 int MTX_DLL_API get_varg_len(const char *fmt, va_list ap);
 
+int MTX_DLL_API int_log2(uint32_t value);
+
 extern int MTX_DLL_API verbose;
 
 #define foreach(it, vec) for (it = (vec).begin(); it != (vec).end(); it++)

@@ -358,7 +358,8 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
   video_packetizer_c(_reader, MKV_V_MPEG4_ASP, _fps, _width, _height, _ti),
   timecodes_generated(0), last_i_p_frame(0), previous_timecode(0),
   aspect_ratio_extracted(false), input_is_native(_input_is_native),
-  output_is_native(hack_engaged(ENGAGE_NATIVE_MPEG4)) {
+  output_is_native(hack_engaged(ENGAGE_NATIVE_MPEG4)),
+  size_extracted(false) {
 
   if (input_is_native)
     output_is_native = true;
@@ -381,6 +382,8 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
 
 int
 mpeg4_p2_video_packetizer_c::process(packet_cptr packet) {
+  if (!size_extracted)
+    extract_size(packet->memory->data, packet->memory->size);
   if (!aspect_ratio_extracted)
     extract_aspect_ratio(packet->memory->data, packet->memory->size);
 
@@ -667,6 +670,29 @@ mpeg4_p2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
            "from the MPEG4 layer 2 video data and set the display dimensions "
            "to %u/%u.\n", (int64_t)ti.id, ti.fname.c_str(),
            (uint32_t)ti.display_width, (uint32_t)ti.display_height);
+  } else if (50 <= frames_output)
+    aspect_ratio_extracted = true;
+}
+
+void
+mpeg4_p2_video_packetizer_c::extract_size(const unsigned char *buffer,
+                                          int size) {
+  uint32_t width, height;
+
+  if (mpeg4_p2_extract_size(buffer, size, width, height)) {
+    size_extracted = true;
+    if ((width != hvideo_pixel_width) || (height != hvideo_pixel_height)) {
+      set_video_pixel_width(width);
+      set_video_pixel_height(height);
+      generic_packetizer_c::set_headers();
+      rerender_track_headers();
+      mxinfo("Track %lld of '%s': The extracted values for video width and "
+             "height from the MPEG4 layer 2 video data bitstream differ from "
+             "what the values in the source container. The ones from the "
+             "video data bitstream (%ux%u) will be used.\n",
+             (int64_t)ti.id, ti.fname.c_str(), width, height);
+    }
+
   } else if (50 <= frames_output)
     aspect_ratio_extracted = true;
 }

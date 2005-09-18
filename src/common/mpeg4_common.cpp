@@ -26,17 +26,9 @@
 #include "mm_io.h"
 #include "mpeg4_common.h"
 
-bool
-mpeg4_p2_extract_par_internal(const unsigned char *buffer,
-                              int buffer_size,
-                              uint32_t &par_num,
-                              uint32_t &par_den) {
-  const uint32_t ar_nums[16] = {0, 1, 12, 10, 16, 40, 0, 0,
-                                0, 0,  0,  0,  0,  0, 0, 0};
-  const uint32_t ar_dens[16] = {1, 1, 11, 11, 11, 33, 1, 1,
-                                1, 1,  1,  1,  1,  1, 1, 1};
-  uint32_t marker, aspect_ratio_info, num, den;
-  bit_cursor_c bits(buffer, buffer_size);
+static bool
+mpeg4_p2_find_vol_header(bit_cursor_c &bits) {
+  uint32_t marker;
 
   while (!bits.eof()) {
     marker = bits.peek_bits(32);
@@ -52,36 +44,150 @@ mpeg4_p2_extract_par_internal(const unsigned char *buffer,
       continue;
     }
 
-    mxverb(2, "mpeg4 AR: found VOL header at %u\n",
-           bits.get_bit_position() / 8);
-    bits.skip_bits(32);
+    return true;
+  }
 
-    // VOL header
-    bits.skip_bits(1);          // random access
-    bits.skip_bits(8);          // vo_type
-    if (bits.get_bit()) {       // is_old_id
-      bits.skip_bits(4);        // vo_ver_id
-      bits.skip_bits(3);        // vo_priority
+  return false;
+}
+
+static bool
+mpeg4_p2_extract_size_internal(const unsigned char *buffer,
+                               int buffer_size,
+                               uint32_t &width,
+                               uint32_t &height) {
+  bit_cursor_c bits(buffer, buffer_size);
+  int shape, time_base_den;
+
+  if (!mpeg4_p2_find_vol_header(bits))
+    return false;
+
+  mxverb(2, "mpeg4 size: found VOL header at %u\n",
+         bits.get_bit_position() / 8);
+  bits.skip_bits(32);
+
+  // VOL header
+  bits.skip_bits(1);            // random access
+  bits.skip_bits(8);            // vo_type
+  if (bits.get_bit()) {         // is_old_id
+    bits.skip_bits(4);          // vo_ver_id
+    bits.skip_bits(3);          // vo_priority
+  }
+
+  if (15 == bits.get_bits(4))   // ASPECT_EXTENDED
+    bits.skip_bits(16);
+
+  if (1 == bits.get_bit()) {    // vol control parameter
+    bits.skip_bits(2);          // chroma format
+    bits.skip_bits(1);          // low delay
+    if (1 == bits.get_bit()) {  // vbv parameters
+      bits.skip_bits(15 + 1);   // first half bitrate, marker
+      bits.skip_bits(15 + 1);   // latter half bitrate, marker
+      bits.skip_bits(15 + 1);   // first half vbv buffer size, marker
+      bits.skip_bits(3);        // latter half vbv buffer size
+      bits.skip_bits(11 + 1);   // first half vbv occupancy, marker
+      bits.skip_bits(15 + 1);   // latter half vbv oocupancy, marker
     }
+  }
 
-    aspect_ratio_info = bits.get_bits(4);
-    mxverb(2, "mpeg4 AR: aspect_ratio_info: %u\n", aspect_ratio_info);
-    if (aspect_ratio_info == 15) { // ASPECT_EXTENDED
-      num = bits.get_bits(8);
-      den = bits.get_bits(8);
-    } else {
-      num = ar_nums[aspect_ratio_info];
-      den = ar_dens[aspect_ratio_info];
-    }
-    mxverb(2, "mpeg4 AR: %u den: %u\n", num, den);
+  shape = bits.get_bits(2);
+  if (3 == shape)               // GRAY_SHAPE
+    bits.skip_bits(4);          // video object layer shape extension
 
-    if ((num != 0) && (den != 0) && ((num != 1) || (den != 1)) &&
-        (((float)num / (float)den) != 1.0)) {
-      par_num = num;
-      par_den = den;
+  bits.skip_bits(1);            // marker
+
+  time_base_den = bits.get_bits(16); // time base den
+  bits.skip_bits(1);            // marker
+  if (1 == bits.get_bit()) {    // fixed vop rate
+    int time_increment_bits = int_log2(time_base_den - 1) + 1;
+    bits.skip_bits(time_increment_bits); // time base num
+  }
+
+  if (0 == shape) {             // RECT_SHAPE
+    uint32_t tmp_width, tmp_height;
+
+    bits.skip_bits(1);
+    tmp_width = bits.get_bits(13);
+    bits.skip_bits(1);
+    tmp_height = bits.get_bits(13);
+
+    if ((0 != tmp_width) && (0 != tmp_height)) {
+      width = tmp_width;
+      height = tmp_height;
       return true;
     }
+  }
+
+  return false;
+}
+
+/** Extract the widht and height from a MPEG4 video frame
+
+   This function searches a buffer containing a MPEG4 video frame
+   for the width and height.
+
+   \param buffer The buffer containing the MPEG4 video frame.
+   \param buffer_size The size of the buffer in bytes.
+   \param width The width, if found, is stored in this variable.
+   \param height The height, if found, is stored in this variable.
+
+   \return \c true if width and height were found and \c false
+     otherwise.
+*/
+bool
+mpeg4_p2_extract_size(const unsigned char *buffer,
+                      int buffer_size,
+                      uint32_t &width,
+                      uint32_t &height) {
+  try {
+    return mpeg4_p2_extract_size_internal(buffer, buffer_size, width, height);
+  } catch (...) {
     return false;
+  }
+}
+
+static bool
+mpeg4_p2_extract_par_internal(const unsigned char *buffer,
+                              int buffer_size,
+                              uint32_t &par_num,
+                              uint32_t &par_den) {
+  const uint32_t ar_nums[16] = {0, 1, 12, 10, 16, 40, 0, 0,
+                                0, 0,  0,  0,  0,  0, 0, 0};
+  const uint32_t ar_dens[16] = {1, 1, 11, 11, 11, 33, 1, 1,
+                                1, 1,  1,  1,  1,  1, 1, 1};
+  uint32_t aspect_ratio_info, num, den;
+  bit_cursor_c bits(buffer, buffer_size);
+
+  if (!mpeg4_p2_find_vol_header(bits))
+    return false;
+
+  mxverb(2, "mpeg4 AR: found VOL header at %u\n",
+         bits.get_bit_position() / 8);
+  bits.skip_bits(32);
+
+  // VOL header
+  bits.skip_bits(1);            // random access
+  bits.skip_bits(8);            // vo_type
+  if (bits.get_bit()) {         // is_old_id
+    bits.skip_bits(4);          // vo_ver_id
+    bits.skip_bits(3);          // vo_priority
+  }
+
+  aspect_ratio_info = bits.get_bits(4);
+  mxverb(2, "mpeg4 AR: aspect_ratio_info: %u\n", aspect_ratio_info);
+  if (aspect_ratio_info == 15) { // ASPECT_EXTENDED
+    num = bits.get_bits(8);
+    den = bits.get_bits(8);
+  } else {
+    num = ar_nums[aspect_ratio_info];
+    den = ar_dens[aspect_ratio_info];
+  }
+  mxverb(2, "mpeg4 AR: %u den: %u\n", num, den);
+
+  if ((num != 0) && (den != 0) && ((num != 1) || (den != 1)) &&
+      (((float)num / (float)den) != 1.0)) {
+    par_num = num;
+    par_den = den;
+    return true;
   }
   return false;
 }

@@ -1012,6 +1012,18 @@ round_to_nearest_pow2(uint32_t value) {
   return best_value;
 }
 
+int
+int_log2(uint32_t value) {
+  uint32_t highest, bit, mask;
+
+  highest = 0;
+  for (mask = 1, bit = 0; 31 >= bit; mask <<= 1, ++bit)
+    if (value & mask)
+      highest = bit;
+
+  return highest;
+}
+
 bool
 parse_int(const char *s,
           int64_t &value) {

@@ -141,6 +141,9 @@ struct video_frame_t {
 bool MTX_DLL_API mpeg4_p2_extract_par(const unsigned char *buffer,
                                       int buffer_size,
                                       uint32_t &par_num, uint32_t &par_den);
+bool MTX_DLL_API mpeg4_p2_extract_size(const unsigned char *buffer,
+                                       int buffer_size,
+                                       uint32_t &width, uint32_t &height);
 void MTX_DLL_API mpeg4_p2_find_frame_types(const unsigned char *buffer,
                                            int buffer_size,
                                            vector<video_frame_t> &frames);
