@@ -681,7 +681,8 @@ mpeg4_p2_video_packetizer_c::extract_size(const unsigned char *buffer,
 
   if (mpeg4_p2_extract_size(buffer, size, width, height)) {
     size_extracted = true;
-    if ((width != hvideo_pixel_width) || (height != hvideo_pixel_height)) {
+    if (!reader->appending &&
+        ((width != hvideo_pixel_width) || (height != hvideo_pixel_height))) {
       set_video_pixel_width(width);
       set_video_pixel_height(height);
       if (!output_is_native &&
