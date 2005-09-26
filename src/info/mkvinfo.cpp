@@ -195,11 +195,27 @@ show_error(const char *fmt,
 
 #define show_warning(l, f, args...) _show_element(NULL, NULL, false, l, f, \
                                                   ## args)
-#define show_unknown_element(e, l) \
-  _show_element(e, es, true, l, Y("Unknown element: %s"), \
-                e->Generic().DebugName)
 #define show_element(e, l, s, args...) _show_element(e, es, false, l, s, \
                                                      ## args)
+#define show_unknown_element(e, l) _show_unknown_element(es, e, l)
+
+void _show_element(EbmlElement *l, EbmlStream *es, bool skip, int level,
+                   const char *fmt, ...);
+
+void
+_show_unknown_element(EbmlStream *es,
+                      EbmlElement *e,
+                      int level) {
+  string s;
+  int i;
+
+  s = "(Unknown element: %s; ID: 0x";
+  for (i = e->Generic().GlobalId.Length - 1; 0 <= i; --i)
+    s += mxsprintf("%02x", (e->Generic().GlobalId.Value >> (i * 8)) & 0xff);
+  s += mxsprintf(" size: %lld)", e->GetSize() + e->HeadSize());
+  _show_element(e, es, true, level, s.c_str(), e->Generic().DebugName);
+}
+
 
 void
 _show_element(EbmlElement *l,
