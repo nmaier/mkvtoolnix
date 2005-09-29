@@ -1087,7 +1087,6 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
   mmg_file_t *f;
   mmg_track_t *t;
   vector<mmg_file_t>::iterator eit;
-  vector<mmg_track_t *>::iterator tit;
   uint32_t i;
 
   if (selected_file == -1)
@@ -1115,17 +1114,15 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
   dont_copy_values_now = true;
 
   i = 0;
-  tit = tracks.begin();
   while (i < tracks.size()) {
     t = tracks[i];
     if (t->source == selected_file) {
       clb_tracks->Delete(i);
-      tracks.erase(tit);
+      tracks.erase(tracks.begin() + i);
     } else {
       if (t->source > selected_file)
         t->source--;
       i++;
-      tit++;
     }
   }
 

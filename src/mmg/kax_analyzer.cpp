@@ -323,11 +323,9 @@ kax_analyzer_c::overwrite_elements(EbmlElement *e,
         file->setFilePointer(data[i]->pos);
         evoid.Render(*file);
         data[i]->size = size;
-        while (data[i + 1]->id == EbmlVoid::ClassInfos.GlobalId) {
-          dit = data.begin();
-          dit += i + 1;
-          data.erase(dit);
-        }
+        while (((i + 1) < data.size()) &&
+               (data[i + 1]->id == EbmlVoid::ClassInfos.GlobalId))
+          data.erase(data.begin() + i + 1);
       }
     }
     i++;
@@ -342,7 +340,6 @@ kax_analyzer_c::update_element(EbmlElement *e) {
   int64_t space_here, pos;
   vector<KaxSeekHead *> all_heads;
   vector<int64_t> free_space;
-  vector<analyzer_data_c *>::iterator dit;
   KaxSegment *new_segment;
   KaxSeekHead *new_head;
   EbmlElement *new_e;
@@ -433,13 +430,13 @@ kax_analyzer_c::update_element(EbmlElement *e) {
       overwrite_elements(e, found_where);
 
     // Remove the internal elements. Avoids re-analyzing the file.
-    dit = data.begin();
-    while (dit < data.end()) {
-      if ((*dit)->delete_this) {
-        delete *dit;
-        data.erase(dit);
+    i = 0;
+    while (data.size() > i) {
+      if (data[i]->delete_this) {
+        delete data[i];
+        data.erase(data.begin() + i);
       } else
-        dit++;
+        ++i;
     }
 
 //     mxinfo("INFO:\n%s", info.c_str());

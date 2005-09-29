@@ -559,23 +559,19 @@ job_dialog::on_start_selected(wxCommandEvent &evt) {
 void
 job_dialog::on_delete(wxCommandEvent &evt) {
   int i, j;
-  vector<job_t>::iterator dit;
   vector<bool> selected;
 
   for (i = 0; i < lv_jobs->GetItemCount(); i++)
     selected.push_back(lv_jobs->IsSelected(i));
-  dit = jobs.begin();
   i = 0;
-  j =0;
+  j = 0;
   while (i < jobs.size()) {
     if (selected[j]) {
-      wxRemoveFile(wxString::Format(wxT("jobs/%d.mmg"), dit->id));
-      jobs.erase(dit);
+      wxRemoveFile(wxString::Format(wxT("jobs/%d.mmg"), jobs[i].id));
+      jobs.erase(jobs.begin() + i);
       lv_jobs->DeleteItem(i);
-    } else {
-      dit++;
+    } else
       i++;
-    }
     j++;
   }
 

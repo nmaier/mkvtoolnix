@@ -61,17 +61,13 @@ static vector<chapter_entry_c> chapter_entries;
 static void
 handle_name(int level,
             const string &name) {
-  int i, j;
-  vector<chapter_entry_c>::iterator itr;
+  int i;
 
   for (i = 0; i < chapter_start_times.size(); i++) {
     chapter_entry_c &e = chapter_start_times[i];
     if (e.level == level) {
       chapter_entries.push_back(chapter_entry_c(name, e.start, level));
-      itr = chapter_start_times.begin();
-      for (j = 0; j < i; j++)
-        itr++;
-      chapter_start_times.erase(itr);
+      chapter_start_times.erase(chapter_start_times.begin() + i);
       return;
     }
   }
@@ -82,17 +78,13 @@ handle_name(int level,
 static void
 handle_start_time(int level,
                   int64_t start_time) {
-  int i, j;
-  vector<chapter_entry_c>::iterator itr;
+  int i;
 
   for (i = 0; i < chapter_names.size(); i++) {
     chapter_entry_c &e = chapter_names[i];
     if (e.level == level) {
       chapter_entries.push_back(chapter_entry_c(e.name, start_time, level));
-      itr = chapter_names.begin();
-      for (j = 0; j < i; j++)
-        itr++;
-      chapter_names.erase(itr);
+      chapter_names.erase(chapter_names.begin() + i);
       return;
     }
   }

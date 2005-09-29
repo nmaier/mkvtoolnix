@@ -980,17 +980,14 @@ mmg_dialog::save(wxString file_name,
 void
 mmg_dialog::set_last_settings_in_menu(wxString name) {
   uint32_t i;
-  vector<wxString>::iterator eit;
   wxConfigBase *cfg;
   wxString s;
 
   i = 0;
   while (i < last_settings.size()) {
-    if (last_settings[i] == name) {
-      eit = last_settings.begin();
-      eit += i;
-      last_settings.erase(eit);
-    } else
+    if (last_settings[i] == name)
+      last_settings.erase(last_settings.begin() + i);
+    else
       i++;
   }
   last_settings.insert(last_settings.begin(), name);
@@ -1011,17 +1008,14 @@ mmg_dialog::set_last_settings_in_menu(wxString name) {
 void
 mmg_dialog::set_last_chapters_in_menu(wxString name) {
   uint32_t i;
-  vector<wxString>::iterator eit;
   wxConfigBase *cfg;
   wxString s;
 
   i = 0;
   while (i < last_chapters.size()) {
-    if (last_chapters[i] == name) {
-      eit = last_chapters.begin();
-      eit += i;
-      last_chapters.erase(eit);
-    } else
+    if (last_chapters[i] == name)
+      last_chapters.erase(last_chapters.begin() + i);
+    else
       i++;
   }
   last_chapters.insert(last_chapters.begin(), name);

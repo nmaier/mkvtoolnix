@@ -242,6 +242,7 @@ mpeg4_p2_find_frame_types(const unsigned char *buffer,
   bool frame_found;
   video_frame_t frame;
   vector<video_frame_t>::iterator fit;
+  int i;
 
   frames.clear();
   mxverb(3, "\nmpeg4_frames: start search in %d bytes\n", buffer_size);
@@ -296,12 +297,12 @@ mpeg4_p2_find_frame_types(const unsigned char *buffer,
     mxverb(2, "\n");
   }
 
-  fit = frames.begin();
-  while (fit < frames.end()) {
-    if (fit->size < 10)      // dummy frame
-      frames.erase(fit);
+  i = 0;
+  while (frames.size() > i) {
+    if (frames[i].size < 10)    // dummy frame
+      frames.erase(frames.begin() + i);
     else
-      fit++;
+      ++i;
   }
 }
 
