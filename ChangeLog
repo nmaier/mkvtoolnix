@@ -1,3 +1,10 @@
+2005-09-30  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Changed how AVC video frames are
+	referenced. This is not ideal yet, but at least references are
+	kept intact when reading AVC from Matroska files. Should fix bug
+	154.
+
 2005-09-18  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Appending AVC video tracks was broken if they

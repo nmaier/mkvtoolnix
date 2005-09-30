@@ -829,6 +829,12 @@ generic_packetizer_c::add_packet(packet_cptr pack) {
 
   enqueued_bytes += pack->length;
 
+  if ((0 > pack->bref) && (0 <= pack->fref)) {
+    int64_t tmp = pack->bref;
+    pack->bref = pack->fref;
+    pack->fref = tmp;
+  }
+
   if (connected_to != 1)
     add_packet2(pack);
   else

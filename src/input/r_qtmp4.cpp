@@ -1054,61 +1054,7 @@ qtmp4_reader_c::handle_video_with_bframes(qtmp4_demuxer_ptr &dmx,
   timecode += (int64_t)dmx->frame_offset_table[dmx->pos] *
     1000000000 / dmx->timescale - dmx->v_dts_offset;
 
-  if (!is_keyframe) {
-    if (dmx->references.size() == 0)
-      mxerror(FMT_FN "The video track does not start with a key "
-              "frame but contains B frames. This is not supported.\n",
-              ti.fname.c_str());
-
-    // The current frame is a B frame if the timecode is going
-    // backwards. Otherwise it's a P frame.
-    is_bframe = timecode < dmx->max_timecode;
-
-    if (is_bframe) {
-      // A B frame references the first frame in the queue backwards and
-      // the second one forwards.
-      bref = dmx->references[0];
-      if (dmx->references.size() < 2)
-        mxerror(FMT_FN "The video track does not start with a key "
-                "frame and a P frame but contains B frames. This is not "
-                "supported.\n", ti.fname.c_str());
-      if (dmx->avc_use_bframes)
-        fref = dmx->references[1];
-
-    } else {
-      // This is a P frame. At the moment it references the second stored frame
-      // or the first one if there's only one. Then store it and remove an old
-      // reference if we have more than two references stored.
-      bref = dmx->references.back();
-      dmx->references.push_back(timecode);
-      if (dmx->references.size() > 2)
-        dmx->references.pop_front();
-
-    }
-
-  } else {
-    // This is an I frame. Store it and remove an old reference if we have
-    // more than two references stored.
-    dmx->references.push_back(timecode);
-    if (dmx->references.size() > 2)
-      dmx->references.pop_front();
-
-  }
-
-  mxverb(3, "\n" PFX "frame %u: key %d b %d %lld + %lld = %lld for %lld "
-         "   ;; bref %lld fref %lld\n", dmx->pos, is_keyframe,
-         is_bframe,
-         (old_timecode + dmx->v_dts_offset) / 1000000,
-         (int64_t)dmx->frame_offset_table[dmx->pos] * 1000 /
-         dmx->timescale,
-         (old_timecode + (int64_t)dmx->frame_offset_table[dmx->pos] *
-          1000000000 / dmx->timescale) / 1000000,
-         timecode / 1000000, bref, fref);
-
   PTZR(dmx->ptzr)->process(new packet_t(mem, timecode, duration, bref, fref));
-
-  if (timecode > dmx->max_timecode)
-    dmx->max_timecode = timecode;
 }
 
 file_status_e
