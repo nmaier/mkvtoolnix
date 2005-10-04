@@ -75,9 +75,10 @@ avi_reader_c::probe_file(mm_io_c *io,
 avi_reader_c::avi_reader_c(track_info_c &_ti)
   throw (error_c):
   generic_reader_c(_ti),
+  divx_type(DIVX_TYPE_NONE),
   avi(NULL), vptzr(-1),
   fps(1.0), video_frames_read(0), max_video_frames(0), dropped_video_frames(0),
-  act_wchar(0), is_divx(false), rederive_keyframes(false),
+  act_wchar(0), rederive_keyframes(false),
   bytes_to_process(0), bytes_processed(0) {
 
   int64_t size;
@@ -136,17 +137,15 @@ avi_reader_c::create_packetizer(int64_t tid) {
         !strcasecmp(codec, "AP41") || // Angel Potion
         !strcasecmp(codec, "MPG3") ||
         !strcasecmp(codec, "MP43"))
-      is_divx = RAVI_DIVX3;
+      divx_type = DIVX_TYPE_V3;
     else if (is_mpeg4_p2_fourcc(codec))
-      is_divx = RAVI_MPEG4;
-    else
-      is_divx = 0;
+      divx_type = DIVX_TYPE_MPEG4;
 
     ti.private_data = (unsigned char *)avi->bitmap_info_header;
     if (ti.private_data != NULL)
       ti.private_size = get_uint32_le(&avi->bitmap_info_header->bi_size);
     ti.id = 0;                 // ID for the video track.
-    if (is_divx == RAVI_MPEG4) {
+    if (divx_type == DIVX_TYPE_MPEG4) {
       vptzr =
         add_packetizer(new mpeg4_p2_video_packetizer_c(this,
                                                        AVI_frame_rate(avi),
@@ -320,11 +319,11 @@ avi_reader_c::is_keyframe(unsigned char *data,
   if (!rederive_keyframes)
     return suggestion;
 
-  switch (is_divx) {
-    case RAVI_DIVX3:
+  switch (divx_type) {
+    case DIVX_TYPE_V3:
       i = *((int *)data);
       return ((i & 0x40000000) ? 0 : 1);
-    case RAVI_MPEG4:
+    case DIVX_TYPE_MPEG4:
       for (i = 0; i < size - 5; i++) {
         if ((data[i] == 0x00) && (data[i + 1] == 0x00) &&
             (data[i + 2] == 0x01)) {

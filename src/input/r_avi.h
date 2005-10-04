@@ -31,10 +31,6 @@ extern "C" {
 #include "common.h"
 #include "error.h"
 
-#define RAVI_UNKNOWN 0
-#define RAVI_DIVX3   1
-#define RAVI_MPEG4   2
-
 typedef struct avi_demuxer_t {
   int ptzr;
   int channels, bits_per_sample, samples_per_second, aid;
@@ -43,6 +39,12 @@ typedef struct avi_demuxer_t {
 
 class avi_reader_c: public generic_reader_c {
 private:
+  enum divx_type_e {
+    DIVX_TYPE_NONE,
+    DIVX_TYPE_V3,
+    DIVX_TYPE_MPEG4
+  } divx_type;
+
   avi_t *avi;
   int vptzr;
   vector<avi_demuxer_t> ademuxers;
