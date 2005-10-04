@@ -22,13 +22,12 @@ xtr_avi_c::xtr_avi_c(const string &_codec_id,
                      int64_t _tid,
                      track_spec_t &tspec):
   xtr_base_c(_codec_id, _tid, tspec),
-  avi(NULL), fps(0.0) {
+  avi(NULL), fps(0.0), bih(NULL) {
 }
 
 void
 xtr_avi_c::create_file(xtr_base_c *_master,
                        KaxTrackEntry &track) {
-  const alBITMAPINFOHEADER *bih;
   char ccodec[5];
   string writing_app;
   KaxCodecPrivate *priv;
@@ -60,9 +59,14 @@ xtr_avi_c::create_file(xtr_base_c *_master,
     writing_app += mxsprintf(" %s", VERSION);
   avi->writing_app = safestrdup(writing_app.c_str());
 
-  bih = (const alBITMAPINFOHEADER *)priv->GetBuffer();
+  bih = (alBITMAPINFOHEADER *)safememdup(priv->GetBuffer(), priv->GetSize());
   memcpy(ccodec, &bih->bi_compression, 4);
   ccodec[4] = 0;
+  if (get_uint32_le(&bih->bi_size) != sizeof(alBITMAPINFOHEADER)) {
+    avi->extradata = bih + 1;
+    avi->extradata_size = get_uint32_le(&bih->bi_size) -
+      sizeof(alBITMAPINFOHEADER);
+  }
   AVI_set_video(avi, kt_get_v_pixel_width(track), kt_get_v_pixel_height(track),
                 fps, ccodec);
 }
@@ -97,5 +101,7 @@ xtr_avi_c::handle_block(KaxBlock &block,
 void
 xtr_avi_c::finish_file() {
   AVI_close(avi);
+  safefree(bih);
+  bih = NULL;
 }
 

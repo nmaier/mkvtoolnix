@@ -27,6 +27,7 @@ class xtr_avi_c: public xtr_base_c {
 public:
   avi_t *avi;
   double fps;
+  alBITMAPINFOHEADER *bih;
 
 public:
   xtr_avi_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec);

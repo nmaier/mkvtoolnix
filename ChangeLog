@@ -1,5 +1,9 @@
 2005-10-04  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvextract: bug fix: Extra codec data wasn't written to AVI
+	files if it was present (e.g. for the HuffYuv codec). Fixes bug
+	157.
+
 	* mkvmerge: bug fix: mkvmerge was choking on AVIs with a single
 	frame inside. Fixes bug 156.
 
