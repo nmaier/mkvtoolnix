@@ -42,7 +42,6 @@ extern "C" {
 #include "p_video.h"
 
 #define PFX "avi_reader: "
-#define MIN_CHUNK_SIZE 128000
 
 // }}}
 
@@ -75,15 +74,20 @@ avi_reader_c::probe_file(mm_io_c *io,
 
 avi_reader_c::avi_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(_ti) {
-  long fsize, i;
+  generic_reader_c(_ti),
+  avi(NULL), vptzr(-1),
+  fps(1.0), video_frames_read(0), max_video_frames(0), dropped_video_frames(0),
+  act_wchar(0), is_divx(false), rederive_keyframes(false),
+  bytes_to_process(0), bytes_processed(0) {
+
   int64_t size;
 
   try {
-    io = new mm_file_io_c(ti.fname);
-    size = io->get_size();
-    if (!avi_reader_c::probe_file(io, size))
+    mm_file_io_c io(ti.fname);
+    size = io.get_size();
+    if (!avi_reader_c::probe_file(&io, size))
       throw error_c(PFX "Source is not a valid AVI file.");
+
   } catch (...) {
     throw error_c(PFX "Could not read the source file.");
   }
@@ -93,36 +97,13 @@ avi_reader_c::avi_reader_c(track_info_c &_ti)
            "may take some time depending on the file's size.\n",
            ti.fname.c_str());
 
-  fsize = 0;
-  rederive_keyframes = 0;
-  vptzr = -1;
-
-  frames = 0;
-  delete io;
   if ((avi = AVI_open_input_file(ti.fname.c_str(), 1)) == NULL) {
     const char *msg = PFX "Could not initialize AVI source. Reason: ";
     throw error_c(mxsprintf("%s%s", msg, AVI_strerror()));
   }
 
   fps = AVI_frame_rate(avi);
-  maxframes = AVI_video_frames(avi);
-  for (i = 0; i < maxframes; i++)
-    if (AVI_frame_size(avi, i) > fsize)
-      fsize = AVI_frame_size(avi, i);
-  max_frame_size = fsize;
-
-  if (video_fps < 0)
-    video_fps = fps;
-  chunk_size = max_frame_size < MIN_CHUNK_SIZE ? MIN_CHUNK_SIZE :
-    max_frame_size;
-  chunk = (unsigned char *)safemalloc(chunk_size);
-  act_wchar = 0;
-  old_key = 0;
-  old_chunk = NULL;
-  video_done = 0;
-  dropped_frames = 0;
-  bytes_to_process = 0;
-  bytes_processed = 0;
+  max_video_frames = AVI_video_frames(avi);
 }
 
 // }}}
@@ -133,11 +114,9 @@ avi_reader_c::~avi_reader_c() {
   if (avi != NULL)
     AVI_close(avi);
 
-  safefree(chunk);
-  safefree(old_chunk);
   ti.private_data = NULL;
 
-  mxverb(2, "avi_reader_c: Dropped video frames: %d\n", dropped_frames);
+  mxverb(2, "avi_reader_c: Dropped video frames: %d\n", dropped_video_frames);
 }
 
 // }}}
@@ -147,10 +126,9 @@ avi_reader_c::create_packetizer(int64_t tid) {
   char *codec;
 
   if ((tid == 0) && demuxing_requested('v', 0) && (vptzr == -1)) {
-    int i, maxframes;
+    int i;
 
-    maxframes = AVI_video_frames(avi);
-    for (i = 0; i < maxframes; i++)
+    for (i = 0; i < max_video_frames; i++)
       bytes_to_process += AVI_frame_size(avi, i);
 
     codec = AVI_video_compressor(avi);
@@ -199,22 +177,12 @@ avi_reader_c::create_packetizer(int64_t tid) {
 
 void
 avi_reader_c::create_packetizers() {
-  uint32_t i, bps;
-  vector<avi_demuxer_t>::const_iterator demuxer;
+  int i;
 
   create_packetizer(0);
 
   for (i = 0; i < AVI_audio_tracks(avi); i++)
     create_packetizer(i + 1);
-
-  foreach(demuxer, ademuxers) {
-    bps = demuxer->samples_per_second * demuxer->channels *
-      demuxer->bits_per_sample / 8;
-    if (bps > chunk_size) {
-      chunk_size = bps;
-      chunk = (unsigned char *)saferealloc(chunk, chunk_size);
-    }
-  }
 }
 
 // {{{ FUNCTION avi_reader_c::add_audio_demuxer
@@ -383,160 +351,124 @@ avi_reader_c::is_keyframe(unsigned char *data,
 // {{{ FUNCTION avi_reader_c::read
 
 file_status_e
+avi_reader_c::read_video() {
+  unsigned char *chunk;
+  int size, key, nread, i;
+  bool need_more_data;
+  int64_t timestamp, duration;
+
+  if (video_frames_read >= max_video_frames)
+    return FILE_STATUS_DONE;
+
+  need_more_data = false;
+
+  chunk = NULL;
+  key = 0;
+
+  do {
+    safefree(chunk);
+    size = AVI_frame_size(avi, video_frames_read);
+    chunk = (unsigned char *)safemalloc(size);
+    nread = AVI_read_frame(avi, (char *)chunk, &key);
+
+    ++video_frames_read;
+
+    if (0 > nread) {
+      // Error reading the frame: abort
+      video_frames_read = max_video_frames;
+      safefree(chunk);
+      return FILE_STATUS_DONE;
+
+    } else if (0 == nread)
+      ++dropped_video_frames;
+
+  } while ((0 == nread) && (video_frames_read < max_video_frames));
+
+
+  if (0 == nread) {
+    // This is only the case if the AVI contains dropped frames only.
+    safefree(chunk);
+    return FILE_STATUS_DONE;
+  }
+
+  for (i = video_frames_read; i < max_video_frames; ++i) {
+    int dummy_key;
+
+    if (0 != AVI_frame_size(avi, i))
+      break;
+
+    AVI_read_frame(avi, NULL, &dummy_key);
+  }
+
+  timestamp = (int64_t)(((int64_t)video_frames_read - 1) * 1000000000ll / fps);
+  duration = (int64_t)
+    (((int64_t)i - video_frames_read + 1) * 1000000000ll / fps);
+
+  dropped_video_frames += i - video_frames_read;
+  video_frames_read = i;
+
+  PTZR(vptzr)->process(new packet_t(new memory_c(chunk, nread, true),
+                                    timestamp, duration,
+                                    key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC,
+                                    VFT_NOBFRAME));
+  bytes_processed += nread;
+
+  if (video_frames_read >= max_video_frames) {
+    PTZR(vptzr)->flush();
+    return FILE_STATUS_DONE;
+  }
+
+  return FILE_STATUS_MOREDATA;
+}
+
+file_status_e
+avi_reader_c::read_audio(avi_demuxer_t &demuxer) {
+  unsigned char *chunk;
+  bool need_more_data;
+  int size;
+
+  AVI_set_audio_track(avi, demuxer.aid);
+  size = AVI_read_audio_chunk(avi, NULL);
+
+  if (0 >= size) {
+    PTZR(demuxer.ptzr)->flush();
+    return FILE_STATUS_DONE;
+  }
+
+  chunk = (unsigned char *)safemalloc(size);
+  size = AVI_read_audio_chunk(avi, (char *)chunk);
+
+  if (0 >= size) {
+    safefree(chunk);
+    PTZR(demuxer.ptzr)->flush();
+    return FILE_STATUS_DONE;
+  }
+
+  need_more_data = 0 != AVI_read_audio_chunk(avi, NULL);
+
+  PTZR(demuxer.ptzr)->add_avi_block_size(size);
+  PTZR(demuxer.ptzr)->process(new packet_t(new memory_c(chunk, size, true)));
+  bytes_processed += size;
+
+  if (need_more_data)
+    return FILE_STATUS_MOREDATA;
+  else {
+    PTZR(demuxer.ptzr)->flush();
+    return FILE_STATUS_DONE;
+  }
+}
+
+file_status_e
 avi_reader_c::read(generic_packetizer_c *ptzr,
                    bool force) {
-  vector<avi_demuxer_t>::const_iterator demuxer;
-  int key, last_frame, frames_read, size;
-  long nread;
-  bool need_more_data, done;
-  int64_t duration;
+  vector<avi_demuxer_t>::iterator demuxer;
 
-  key = 0;
-  nread = 0;
-  if ((vptzr != -1) && !video_done && (PTZR(vptzr) == ptzr)) {
-    debug_enter("avi_reader_c::read (video)");
+  if ((vptzr != -1) && (PTZR(vptzr) == ptzr))
+    return read_video();
 
-    need_more_data = false;
-    last_frame = 0;
-    done = false;
-
-    // Make sure we have a frame to work with.
-    while (NULL == old_chunk) {
-      debug_enter("AVI_read_frame");
-      nread = AVI_read_frame(avi, (char *)chunk, &key);
-      debug_leave("AVI_read_frame");
-      if (nread < 0) {
-        frames = maxframes + 1;
-        done = true;
-        break;
-      } else if (nread > 0) {
-        old_chunk = chunk;
-        chunk = (unsigned char *)safemalloc(chunk_size);
-        old_key = key;
-        old_nread = nread;
-        frames++;
-      } else {
-        ++frames;
-        ++dropped_frames;
-      }
-    }
-    if (!done) {
-      frames_read = 1;
-      // Check whether we have identical frames
-      while (!done && (frames <= (maxframes - 1))) {
-        debug_enter("AVI_read_frame");
-        nread = AVI_read_frame(avi, (char *)chunk, &key);
-        debug_leave("AVI_read_frame");
-        if (nread < 0) {
-          PTZR(vptzr)->process(new packet_t(new memory_c(old_chunk, old_nread,
-                                                         true),
-                                            -1, -1,
-                                            old_key ? VFT_IFRAME :
-                                            VFT_PFRAMEAUTOMATIC,
-                                            VFT_NOBFRAME));
-          bytes_processed += old_nread;
-          old_chunk = NULL;
-          mxwarn(PFX "Reading frame number %d resulted in an error. "
-                 "Aborting this track.\n", frames);
-          frames = maxframes + 1;
-          break;
-        }
-        if (frames == (maxframes - 1)) {
-          last_frame = 1;
-          done = true;
-        }
-        if (nread == 0) {
-          frames_read++;
-          dropped_frames++;
-        }
-        else if (nread > 0)
-          done = true;
-        frames++;
-      }
-      duration = (int64_t)(1000000000.0 * frames_read / fps);
-      if (nread > 0) {
-        PTZR(vptzr)->process(new packet_t(new memory_c(old_chunk, old_nread,
-                                                       true),
-                                          -1, duration,
-                                          old_key ? VFT_IFRAME :
-                                          VFT_PFRAMEAUTOMATIC,
-                                          VFT_NOBFRAME));
-        bytes_processed += old_nread;
-        old_chunk = NULL;
-        if (! last_frame) {
-          if (old_chunk != NULL)
-            safefree(old_chunk);
-          old_chunk = chunk;
-          chunk = (unsigned char *)safemalloc(chunk_size);
-          old_key = key;
-          old_nread = nread;
-        } else if (nread > 0) {
-          PTZR(vptzr)->process(new packet_t(new memory_c(chunk, nread, false),
-                                            -1, duration,
-                                            key ? VFT_IFRAME :
-                                            VFT_PFRAMEAUTOMATIC,
-                                            VFT_NOBFRAME));
-          bytes_processed += nread;
-        }
-      }
-    }
-
-    if (last_frame) {
-      frames = maxframes + 1;
-      video_done = 1;
-    } else if (frames != (maxframes + 1))
-      need_more_data = true;
-
-    debug_leave("avi_reader_c::read (video)");
-
-    if (need_more_data)
-      return FILE_STATUS_MOREDATA;
-    else {
-      PTZR(vptzr)->flush();
-      return FILE_STATUS_DONE;
-    }
-  }
-
-  foreach(demuxer, ademuxers) {
-    unsigned char *audio_chunk;
-
-    if (PTZR(demuxer->ptzr) != ptzr)
-      continue;
-
-    debug_enter("avi_reader_c::read (audio)");
-
-    need_more_data = false;
-
-    AVI_set_audio_track(avi, demuxer->aid);
-    size = AVI_read_audio_chunk(avi, NULL);
-    if (size > 0) {
-      audio_chunk = (unsigned char *)safemalloc(size);
-
-      debug_enter("AVI_read_audio");
-      nread = AVI_read_audio_chunk(avi, (char *)audio_chunk);
-      debug_leave("AVI_read_audio");
-
-      if (nread > 0) {
-        size = AVI_read_audio_chunk(avi, NULL);
-        if (size > 0)
-          need_more_data = true;
-        PTZR(demuxer->ptzr)->add_avi_block_size(nread);
-        PTZR(demuxer->ptzr)->process(new packet_t(new memory_c(audio_chunk,
-                                                               nread, true)));
-        bytes_processed += nread;
-      } else
-        safefree(audio_chunk);
-    }
-
-    debug_leave("avi_reader_c::read (audio)");
-
-    if (need_more_data)
-      return FILE_STATUS_MOREDATA;
-    else {
-      PTZR(demuxer->ptzr)->flush();
-      return FILE_STATUS_DONE;
-    }
-  }
+  foreach(demuxer, ademuxers)
+    if (PTZR(demuxer->ptzr) == ptzr)
+      return read_audio(*demuxer);
 
   return FILE_STATUS_DONE;
 }

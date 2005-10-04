@@ -43,14 +43,12 @@ typedef struct avi_demuxer_t {
 
 class avi_reader_c: public generic_reader_c {
 private:
-  unsigned char *chunk, *old_chunk;
   avi_t *avi;
-  mm_io_c *io;
   int vptzr;
   vector<avi_demuxer_t> ademuxers;
   double fps;
-  int frames, max_frame_size, act_wchar, old_key, old_nread, dropped_frames;
-  int video_done, maxframes, is_divx, rederive_keyframes, chunk_size;
+  int video_frames_read, max_video_frames, dropped_video_frames, act_wchar;
+  bool is_divx, rederive_keyframes;
 
   int64_t bytes_to_process, bytes_processed;
 
@@ -70,6 +68,8 @@ public:
 protected:
   virtual void add_audio_demuxer(int aid);
   virtual int is_keyframe(unsigned char *data, long size, int suggestion);
+  virtual file_status_e read_video();
+  virtual file_status_e read_audio(avi_demuxer_t &demuxer);
 };
 
 #endif  // __R_AVI_H

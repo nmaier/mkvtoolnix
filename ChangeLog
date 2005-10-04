@@ -1,3 +1,8 @@
+2005-10-04  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: mkvmerge was choking on AVIs with a single
+	frame inside. Fixes bug 156.
+
 2005-09-30  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Changed how AVC video frames are
