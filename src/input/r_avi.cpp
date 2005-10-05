@@ -129,8 +129,11 @@ avi_reader_c::create_packetizer(int64_t tid) {
   if ((tid == 0) && demuxing_requested('v', 0) && (vptzr == -1)) {
     int i;
 
-    for (i = 0; i < max_video_frames; i++)
+    mxverb(4, FMT_TID "frame sizes:\n", ti.fname.c_str(), (int64_t)0);
+    for (i = 0; i < max_video_frames; i++) {
       bytes_to_process += AVI_frame_size(avi, i);
+      mxverb(4, "  %d: %ld\n", i, AVI_frame_size(avi, i));
+    }
 
     codec = AVI_video_compressor(avi);
     if (!strcasecmp(codec, "DIV3") ||
