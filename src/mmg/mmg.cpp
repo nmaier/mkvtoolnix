@@ -1171,10 +1171,12 @@ mmg_dialog::on_help(wxCommandEvent &evt) {
     potential_help_paths.push_back(wxT("/usr/share/doc/packages/mkvtoolnix"));
     // Fedora Core
     potential_help_paths.push_back(wxT("/usr/share/doc/mkvtoolnix-" VERSION));
+    potential_help_paths.push_back(wxT("/usr/share/doc/mkvtoolnix-gui-" VERSION));
     // (Almost the) same for /usr/local
     potential_help_paths.push_back(wxT("/usr/local/share/doc/mkvtoolnix"));
     potential_help_paths.push_back(wxT("/usr/local/share/doc/packages/mkvtoolnix"));
     potential_help_paths.push_back(wxT("/usr/local/share/doc/mkvtoolnix-" VERSION));
+    potential_help_paths.push_back(wxT("/usr/local/share/doc/mkvtoolnix-gui-" VERSION));
     // New location
     potential_help_paths.push_back(wxT(MTX_PKG_DATA_DIR));
     potential_help_paths.push_back(wxT(MTX_PKG_DATA_DIR "-" VERSION));
