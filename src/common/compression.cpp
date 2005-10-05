@@ -286,6 +286,11 @@ compressor_c::create(const char *method) {
 
 // ------------------------------------------------------------------------
 
+kax_content_encoding_t::kax_content_encoding_t():
+  order(0), type(0), scope(CONTENT_ENCODING_SCOPE_BLOCK), comp_algo(0),
+  enc_algo(0), sig_algo(0), sig_hash_algo(0) {
+}
+
 content_decoder_c::content_decoder_c():
   ok(true) {
 }
@@ -296,15 +301,12 @@ content_decoder_c::content_decoder_c(KaxTrackEntry &ktentry):
 }
 
 content_decoder_c::~content_decoder_c() {
-  int i;
-
-  for (i = 0; i < encodings.size(); i++) {
-    safefree(encodings[i].comp_settings);
-    safefree(encodings[i].enc_keyid);
-    safefree(encodings[i].sig_keyid);
-    safefree(encodings[i].signature);
-  }
 }
+
+#define EBMLBIN_TO_COUNTEDMEM(bin) \
+  counted_mem_ptr((unsigned char *)safememdup(bin->GetBuffer(), \
+                                              bin->GetSize()), \
+                  bin->GetSize())
 
 bool
 content_decoder_c::initialize(KaxTrackEntry &ktentry) {
@@ -359,11 +361,8 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
         enc.comp_algo = uint32(*cc_algo);
 
       cc_settings = FINDFIRST(ce_comp, KaxContentCompSettings);
-      if (cc_settings != NULL) {
-        enc.comp_settings = (unsigned char *)
-          safememdup(cc_settings->GetBuffer(), cc_settings->GetSize());
-        enc.comp_settings_len = cc_settings->GetSize();
-      }
+      if (cc_settings != NULL)
+        enc.comp_settings = EBMLBIN_TO_COUNTEDMEM(cc_settings);
     }
 
     ce_enc = FINDFIRST(kcenc, KaxContentEncryption);
@@ -380,11 +379,8 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
         enc.enc_algo = uint32(*ce_ealgo);
 
       ce_ekeyid = FINDFIRST(ce_enc, KaxContentEncKeyID);
-      if (ce_ekeyid != NULL) {
-        enc.enc_keyid = (unsigned char *)
-          safememdup(ce_ekeyid->GetBuffer(), ce_ekeyid->GetSize());
-        enc.enc_keyid_len = ce_ekeyid->GetSize();
-      }
+      if (ce_ekeyid != NULL)
+        enc.enc_keyid = EBMLBIN_TO_COUNTEDMEM(ce_ekeyid);
 
       ce_salgo = FINDFIRST(ce_enc, KaxContentSigAlgo);
       if (ce_salgo != NULL)
@@ -395,18 +391,12 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
         enc.enc_algo = uint32(*ce_shalgo);
 
       ce_skeyid = FINDFIRST(ce_enc, KaxContentSigKeyID);
-      if (ce_skeyid != NULL) {
-        enc.sig_keyid = (unsigned char *)
-          safememdup(ce_skeyid->GetBuffer(), ce_skeyid->GetSize());
-        enc.sig_keyid_len = ce_skeyid->GetSize();
-      }
+      if (ce_skeyid != NULL)
+        enc.sig_keyid = EBMLBIN_TO_COUNTEDMEM(ce_skeyid);
 
       ce_signature = FINDFIRST(ce_enc, KaxContentSignature);
-      if (ce_signature != NULL) {
-        enc.signature = (unsigned char *)
-          safememdup(ce_signature->GetBuffer(), ce_signature->GetSize());
-        enc.signature_len = ce_signature->GetSize();
-      }
+      if (ce_signature != NULL)
+        enc.signature = EBMLBIN_TO_COUNTEDMEM(ce_signature);
 
     }
 
@@ -431,8 +421,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
       ok = false;
       break;
 #else
-      if (NULL == zlib_compressor.get())
-        zlib_compressor = auto_ptr<compressor_c>(new zlib_compressor_c());
+      enc.compressor = counted_ptr<compressor_c>(new zlib_compressor_c());
 #endif
     } else if (1 == enc.comp_algo) {
 #if !defined(HAVE_BZLIB_H)
@@ -441,8 +430,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
       ok = false;
       break;
 #else
-      if (NULL == bzlib_compressor.get())
-        bzlib_compressor = auto_ptr<compressor_c>(new bzlib_compressor_c());
+      enc.compressor = counted_ptr<compressor_c>(new bzlib_compressor_c());
 #endif
     } else if (enc.comp_algo == 2) {
 #if !defined(HAVE_LZO1X_H)
@@ -451,8 +439,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
       ok = false;
       break;
 #else
-      if (NULL == lzo1x_compressor.get())
-        lzo1x_compressor = auto_ptr<compressor_c>(new lzo_compressor_c());
+      enc.compressor = counted_ptr<compressor_c>(new lzo_compressor_c());
 #endif
     } else {
       mxwarn("Track %d has been compressed with an unknown/unsupported "
@@ -479,7 +466,6 @@ content_decoder_c::reverse(unsigned char *&data,
   unsigned char *new_data, *old_data;
   bool modified;
   vector<kax_content_encoding_t>::const_iterator ce;
-  compressor_c *compressor;
 
   if (!ok)
     return false;
@@ -494,15 +480,8 @@ content_decoder_c::reverse(unsigned char *&data,
     if (0 == (ce->scope & scope))
       continue;
 
-    if (ce->comp_algo == 0)
-      compressor = zlib_compressor.get();
-    else if (ce->comp_algo == 1)
-      compressor = bzlib_compressor.get();
-    else
-      compressor = lzo1x_compressor.get();
-
     old_data = new_data;
-    new_data = compressor->decompress(old_data, new_size);
+    new_data = ce->compressor->decompress(old_data, new_size);
     if (modified)
       safefree(old_data);
     modified = true;

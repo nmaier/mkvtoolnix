@@ -112,25 +112,26 @@ public:
 };
 #endif // HAVE_BZLIB_H
 
-struct kax_content_encoding_t {
-  uint32_t order, type, scope;
-  uint32_t comp_algo;
-  unsigned char *comp_settings;
-  uint32_t comp_settings_len;
-  uint32_t enc_algo, sig_algo, sig_hash_algo;
-  unsigned char *enc_keyid, *sig_keyid, *signature;
-  uint32_t enc_keyid_len, sig_keyid_len, signature_len;
-};
-
 enum content_encoding_scope_e {
   CONTENT_ENCODING_SCOPE_BLOCK = 1,
   CONTENT_ENCODING_SCOPE_CODECPRIVATE = 2
 };
 
+struct kax_content_encoding_t {
+  uint32_t order, type, scope;
+  uint32_t comp_algo;
+  counted_mem_ptr comp_settings;
+  uint32_t enc_algo, sig_algo, sig_hash_algo;
+  counted_mem_ptr enc_keyid, sig_keyid, signature;
+
+  counted_ptr<compressor_c> compressor;
+
+  kax_content_encoding_t();
+};
+
 class MTX_DLL_API content_decoder_c {
 protected:
   vector<kax_content_encoding_t> encodings;
-  auto_ptr<compressor_c> zlib_compressor, bzlib_compressor, lzo1x_compressor;
   bool ok;
 
 public:
