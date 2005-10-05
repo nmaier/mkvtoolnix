@@ -55,7 +55,7 @@ namespace libebml {
 
 using namespace libebml;
 
-#define VERSIONNAME "Breathe me"
+#define VERSIONNAME "Ist das so"
 #define VERSIONINFO "mkvmerge v" VERSION " ('" VERSIONNAME "')"
 #define BUGMSG _("This should not have happened. Please contact the author " \
                  "Moritz Bunkus <moritz@bunkus.org> with this error/warning " \
