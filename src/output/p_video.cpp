@@ -356,7 +356,7 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
                             bool _input_is_native,
                             track_info_c &_ti):
   video_packetizer_c(_reader, MKV_V_MPEG4_ASP, _fps, _width, _height, _ti),
-  timecodes_generated(0), last_i_p_frame(0), previous_timecode(0),
+  timecodes_generated(0), last_i_p_frame(-1), previous_timecode(0),
   aspect_ratio_extracted(false), input_is_native(_input_is_native),
   output_is_native(hack_engaged(ENGAGE_NATIVE_MPEG4)),
   size_extracted(false) {
@@ -608,6 +608,21 @@ mpeg4_p2_video_packetizer_c::flush_frames(bool end_of_file) {
   if ((available_timecodes.size() < queued_frames.size()) ||
       (available_durations.size() < queued_frames.size()))
     handle_missing_timecodes(end_of_file);
+
+  // Very first frame?
+  if (-1 == last_i_p_frame) {
+    video_frame_t &frame = queued_frames.front();
+    last_i_p_frame = available_timecodes[0];
+    add_packet(new packet_t(new memory_c(frame.data, frame.size, true),
+                            last_i_p_frame, available_durations[0], -1, -1));
+    available_timecodes.erase(available_timecodes.begin(),
+                              available_timecodes.begin() + 1);
+    available_durations.erase(available_durations.begin(),
+                              available_durations.begin() + 1);
+    queued_frames.pop_front();
+    flush_frames(end_of_file);
+    return;
+  }
 
   queued_frames[0].timecode = available_timecodes[queued_frames.size() - 1];
   queued_frames[0].duration = available_durations[queued_frames.size() - 1];
