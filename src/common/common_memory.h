@@ -23,56 +23,94 @@
 #include "common.h"
 #include "smart_pointers.h"
 
+class MTX_DLL_API memory_c;
+typedef counted_ptr<memory_c> memory_cptr;
+typedef std::vector<memory_cptr> memories_c;
+
 class MTX_DLL_API memory_c {
 public:
-  unsigned char *data;
-  uint32_t size;
-  bool is_free;
+  typedef unsigned char X;
 
-public:
-  memory_c(unsigned char *ndata, uint32_t nsize, bool nis_free):
-    data(ndata), size(nsize), is_free(nis_free) {
-    if (data == NULL)
-      die("memory_c::memory_c: data = %p, size = %u\n", data, size);
-  }
-
-  memory_c(const memory_c &src) {
-    die("memory_c::memory_c(const memory_c &) called\n");
+  explicit memory_c(X *p = NULL, int s = 0, bool f = false): // allocate a new counter
+    its_counter(NULL) {
+    if (p)
+      its_counter = new counter(p, s, f);
   }
 
   ~memory_c() {
     release();
   }
 
-  int lock() {
-    is_free = false;
-    return 0;
+  memory_c(const memory_c &r) throw() {
+    acquire(r.its_counter);
   }
 
-  unsigned char *grab() {
-    if (is_free) {
-      is_free = false;
-      return data;
+  memory_c &operator=(const memory_c &r) {
+    if (this != &r) {
+      release();
+      acquire(r.its_counter);
     }
-    return (unsigned char *)safememdup(data, size);
+    return *this;
   }
 
-  int release() {
-    if (is_free) {
-      safefree(data);
-      data = NULL;
-      is_free = false;
-    }
-    return 0;
+  X *get() const throw() {
+    return its_counter ? its_counter->ptr : NULL;
+  }
+
+  int get_size() const throw() {
+    return its_counter ? its_counter->size : 0;
+  }
+
+  bool unique() const throw() {
+    return (its_counter ? its_counter->count == 1 : true);
   }
 
   memory_c *clone() const {
-    return new memory_c((unsigned char *)safememdup(data, size), size, true);
+    return new memory_c((unsigned char *)safememdup(get(), get_size()),
+                        get_size(), true);
+  }
+
+  void grab() {
+    if (!its_counter || its_counter->is_free)
+      return;
+
+    its_counter->ptr = (unsigned char *)safememdup(get(), get_size());
+    its_counter->is_free = true;
+  }
+
+  void lock() {
+    if (its_counter)
+      its_counter->is_free = false;
+  }
+
+private:
+  struct counter {
+    counter(X *p = NULL, int s = 0, bool f = false, unsigned c = 1):
+      ptr(p), size(s), is_free(f), count(c) {}
+
+    X *ptr;
+    int size;
+    bool is_free;
+    unsigned count;
+  } *its_counter;
+
+  void acquire(counter *c) throw() { // increment the count
+    its_counter = c;
+    if (c)
+      ++c->count;
+  }
+
+  void release() { // decrement the count, delete if it is 0
+    if (its_counter) {
+      if (--its_counter->count == 0) {
+        if (its_counter->is_free)
+          free(its_counter->ptr);
+        delete its_counter;
+      }
+      its_counter = 0;
+    }
   }
 };
-
-typedef counted_ptr<memory_c> memory_cptr;
-typedef std::vector<memory_cptr> memories_c;
 
 struct buffer_t {
   unsigned char *m_buffer;

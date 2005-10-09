@@ -29,9 +29,11 @@
 #include "pr_generic.h"
 
 typedef struct {
-  unsigned char *data;
-  uint64_t size, flags;
+  memory_cptr data;
+  uint64_t flags;
 } rv_segment_t;
+
+typedef counted_ptr<rv_segment_t> rv_segment_cptr;
 
 typedef struct {
   int ptzr;
@@ -54,13 +56,15 @@ typedef struct {
   int num_packets;
   int64_t last_timecode, ref_timecode;
 
-  vector<rv_segment_t> *segments;
+  vector<rv_segment_cptr> segments;
 } real_demuxer_t;
+
+typedef counted_ptr<real_demuxer_t> real_demuxer_cptr;
 
 class real_reader_c: public generic_reader_c {
 private:
   rmff_file_t *file;
-  vector<real_demuxer_t *> demuxers;
+  vector<counted_ptr<real_demuxer_t> > demuxers;
   int64_t file_size;
   bool done;
 
@@ -79,20 +83,21 @@ public:
 
 protected:
   virtual void parse_headers();
-  virtual real_demuxer_t *find_demuxer(int id);
-  virtual void assemble_video_packet(real_demuxer_t *dmx, rmff_frame_t *frame);
+  virtual real_demuxer_cptr find_demuxer(int id);
+  virtual void assemble_video_packet(real_demuxer_cptr dmx,
+                                     rmff_frame_t *frame);
   virtual file_status_e finish();
   virtual bool get_rv_dimensions(unsigned char *buf, int size, uint32_t &width,
                                  uint32_t &height);
-  virtual void set_dimensions(real_demuxer_t *dmx, unsigned char *buffer,
+  virtual void set_dimensions(real_demuxer_cptr dmx, unsigned char *buffer,
                               int size);
   virtual void get_information_from_data();
-  virtual void deliver_aac_frames(real_demuxer_t *dmx, memory_c &mem);
-  virtual void queue_audio_frames(real_demuxer_t *dmx, memory_c &mem,
+  virtual void deliver_aac_frames(real_demuxer_cptr dmx, memory_c &mem);
+  virtual void queue_audio_frames(real_demuxer_cptr dmx, memory_c &mem,
                                   uint64_t timecode, uint32_t flags);
-  virtual void queue_one_audio_frame(real_demuxer_t *dmx, memory_c &mem,
+  virtual void queue_one_audio_frame(real_demuxer_cptr dmx, memory_c &mem,
                                      uint64_t timecode, uint32_t flags);
-  virtual void deliver_audio_frames(real_demuxer_t *dmx, uint64_t duration);
+  virtual void deliver_audio_frames(real_demuxer_cptr dmx, uint64_t duration);
 };
 
 #endif  // __R_REAL_H

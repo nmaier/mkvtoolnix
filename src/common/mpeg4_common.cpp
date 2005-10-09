@@ -364,14 +364,14 @@ mpeg4_p2_parse_config_data(const unsigned char *buffer,
 
   if (-1 == vos_offset) {
     mem = new memory_c((unsigned char *)safemalloc(size + 5), size + 5, true);
-    dst = mem->data;
+    dst = mem->get();
     put_uint32_be(dst, MPEGVIDEO_VOS_START_CODE);
     dst[4] = 0xf5;
     memcpy(dst + 5, buffer, size);
 
   } else {
     mem = new memory_c((unsigned char *)safemalloc(size), size, true);
-    dst = mem->data;
+    dst = mem->get();
     put_uint32_be(dst, MPEGVIDEO_VOS_START_CODE);
     if (3 >= buffer[vos_offset + 4])
       dst[4] = 0xf5;

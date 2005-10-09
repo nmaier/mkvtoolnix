@@ -23,6 +23,7 @@
 #include <matroska/KaxTracks.h>
 
 #include "common.h"
+#include "common_memory.h"
 #include "smart_pointers.h"
 
 using namespace libmatroska;
@@ -58,12 +59,10 @@ public:
     return method;
   };
 
-  virtual unsigned char *decompress(unsigned char *buffer, int &size) {
-    return (unsigned char *)safememdup(buffer, size);
+  virtual void decompress(memory_cptr &buffer) {
   };
 
-  virtual unsigned char *compress(unsigned char *buffer, int &size) {
-    return (unsigned char *)safememdup(buffer, size);
+  virtual void compress(memory_cptr &buffer) {
   };
 
   static compressor_ptr create(compression_method_e method);
@@ -81,8 +80,8 @@ public:
   lzo_compressor_c();
   virtual ~lzo_compressor_c();
 
-  virtual unsigned char *decompress(unsigned char *buffer, int &size);
-  virtual unsigned char *compress(unsigned char *buffer, int &size);
+  virtual void decompress(memory_cptr &buffer);
+  virtual void compress(memory_cptr &buffer);
 };
 #endif // HAVE_LZO1X_H
 
@@ -94,8 +93,8 @@ public:
   zlib_compressor_c();
   virtual ~zlib_compressor_c();
 
-  virtual unsigned char *decompress(unsigned char *buffer, int &size);
-  virtual unsigned char *compress(unsigned char *buffer, int &size);
+  virtual void decompress(memory_cptr &buffer);
+  virtual void compress(memory_cptr &buffer);
 };
 #endif // HAVE_ZLIB_H
 
@@ -107,8 +106,8 @@ public:
   bzlib_compressor_c();
   virtual ~bzlib_compressor_c();
 
-  virtual unsigned char *decompress(unsigned char *buffer, int &size);
-  virtual unsigned char *compress(unsigned char *buffer, int &size);
+  virtual void decompress(memory_cptr &buffer);
+  virtual void compress(memory_cptr &buffer);
 };
 #endif // HAVE_BZLIB_H
 
@@ -120,9 +119,9 @@ enum content_encoding_scope_e {
 struct kax_content_encoding_t {
   uint32_t order, type, scope;
   uint32_t comp_algo;
-  counted_mem_ptr comp_settings;
+  memory_cptr comp_settings;
   uint32_t enc_algo, sig_algo, sig_hash_algo;
-  counted_mem_ptr enc_keyid, sig_keyid, signature;
+  memory_cptr enc_keyid, sig_keyid, signature;
 
   counted_ptr<compressor_c> compressor;
 
@@ -140,8 +139,7 @@ public:
   ~content_decoder_c();
 
   bool initialize(KaxTrackEntry &ktentry);
-  bool reverse(unsigned char *&data, uint32_t &size,
-               content_encoding_scope_e scope);
+  void reverse(memory_cptr &data, content_encoding_scope_e scope);
   bool is_ok() {
     return ok;
   }

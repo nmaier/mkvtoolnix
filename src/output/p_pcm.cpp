@@ -73,6 +73,7 @@ pcm_packetizer_c::set_headers() {
 int
 pcm_packetizer_c::process(packet_cptr packet) {
   unsigned char *new_buf;
+  int new_size;
 
   debug_enter("pcm_packetizer_c::process");
 
@@ -93,18 +94,19 @@ pcm_packetizer_c::process(packet_cptr packet) {
     initial_displacement = 0;
   }
 
+  new_size = packet->data->get_size();
   if (skip_bytes) {
-    if (skip_bytes > packet->memory->size) {
-      skip_bytes -= packet->memory->size;
+    if (skip_bytes > packet->data->get_size()) {
+      skip_bytes -= packet->data->get_size();
       return FILE_STATUS_MOREDATA;
     }
-    packet->memory->size -= skip_bytes;
-    new_buf = &packet->memory->data[skip_bytes];
+    new_size -= skip_bytes;
+    new_buf = packet->data->get() + skip_bytes;
     skip_bytes = 0;
   } else
-    new_buf = packet->memory->data;
+    new_buf = packet->data->get();
 
-  buffer.add(new_buf, packet->memory->size);
+  buffer.add(new_buf, new_size);
 
   while (buffer.get_size() >= packet_size) {
     add_packet(new packet_t(new memory_c(buffer.get_buffer(), packet_size,

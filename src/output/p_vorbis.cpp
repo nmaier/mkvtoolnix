@@ -175,8 +175,8 @@ vorbis_packetizer_c::process(packet_cptr packet) {
 
   // Update the number of samples we have processed so that we can
   // calculate the timecode on the next call.
-  op.packet = packet->memory->data;
-  op.bytes = packet->memory->size;
+  op.packet = packet->data->get();
+  op.bytes = packet->data->get_size();
   this_bs = vorbis_packet_blocksize(&vi, &op);
   samples_here = (this_bs + last_bs) / 4;
   last_bs = this_bs;

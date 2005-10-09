@@ -63,8 +63,8 @@ int
 vobbtn_packetizer_c::process(packet_cptr packet) {
   int32_t vobu_start, vobu_end;
 
-  vobu_start = get_uint32_be(packet->memory->data + 0x0d);
-  vobu_end = get_uint32_be(packet->memory->data + 0x11);
+  vobu_start = get_uint32_be(packet->data->get() + 0x0d);
+  vobu_end = get_uint32_be(packet->data->get() + 0x11);
 
   packet->duration = (int64_t)(100000.0 * (float)(vobu_end - vobu_start) / 9);
   if (packet->timecode == -1) {

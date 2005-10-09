@@ -88,7 +88,7 @@ textsubs_packetizer_c::process(packet_cptr packet) {
   }
 
   // Count the number of lines.
-  idx1 = (char *)packet->memory->data;
+  idx1 = (char *)packet->data->get();
   subs = NULL;
   num_newlines = 0;
   while (*idx1 != 0) {
@@ -96,11 +96,11 @@ textsubs_packetizer_c::process(packet_cptr packet) {
       num_newlines++;
     idx1++;
   }
-  subs = (char *)safemalloc(strlen((char *)packet->memory->data) +
+  subs = (char *)safemalloc(strlen((char *)packet->data->get()) +
                             num_newlines * 2 + 1);
 
   // Unify the new lines into DOS style newlines.
-  idx1 = (char *)packet->memory->data;
+  idx1 = (char *)packet->data->get();
   idx2 = subs;
   while (*idx1 != 0) {
     if (*idx1 == '\n') {
@@ -128,13 +128,13 @@ textsubs_packetizer_c::process(packet_cptr packet) {
 
     utf8_subs = to_utf8(cc_utf8, subs);
     safefree(subs);
-    packet->memory =
+    packet->data =
       memory_cptr(new memory_c((unsigned char *)utf8_subs.c_str(),
                                utf8_subs.length(), false));
     add_packet(packet);
 
   } else {
-    packet->memory =
+    packet->data =
       memory_cptr(new memory_c((unsigned char *)subs, strlen(subs), true));
     add_packet(packet);
   }

@@ -190,7 +190,7 @@ aac_packetizer_c::process(packet_cptr packet) {
       return FILE_STATUS_MOREDATA;
     }
     while (needs_positive_displacement(duration)) {
-      add_packet(new packet_t(packet->memory->clone(), my_timecode +
+      add_packet(new packet_t(packet->data->clone(), my_timecode +
                               ti.async.displacement, duration));
       displace(duration);
     }
@@ -206,7 +206,7 @@ aac_packetizer_c::process(packet_cptr packet) {
     return FILE_STATUS_MOREDATA;
   }
 
-  byte_buffer.add(packet->memory->data, packet->memory->size);
+  byte_buffer.add(packet->data->get(), packet->data->get_size());
   while ((aac_packet = get_aac_packet(&header, &aacheader)) != NULL) {
     if (timecode == -1)
       my_timecode = (int64_t)(1024 * 1000000000.0 * packetno /

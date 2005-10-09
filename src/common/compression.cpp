@@ -45,25 +45,22 @@ lzo_compressor_c::~lzo_compressor_c() {
   safefree(wrkmem);
 }
 
-unsigned char *
-lzo_compressor_c::decompress(unsigned char *buffer,
-                             int &size) {
+void
+lzo_compressor_c::decompress(memory_cptr &buffer) {
   die("lzo_compressor_c::decompress() not implemented\n");
-
-  return NULL;
 }
 
-unsigned char *
-lzo_compressor_c::compress(unsigned char *buffer,
-                           int &size) {
+void
+lzo_compressor_c::compress(memory_cptr &buffer) {
   unsigned char *dst;
-  int result, dstsize;
+  int result, dstsize, size;
 
+  size = buffer->get_size();
   dst = (unsigned char *)safemalloc(size * 2);
 
   lzo_uint lzo_dstsize = size * 2;
-  if ((result = lzo1x_999_compress(buffer, size, dst, &lzo_dstsize,
-                                   wrkmem)) != LZO_E_OK)
+  if ((result = lzo1x_999_compress(buffer->get(), buffer->get_size(),
+                                   dst, &lzo_dstsize, wrkmem)) != LZO_E_OK)
     mxerror("LZO compression failed. Result: %d\n", result);
   dstsize = lzo_dstsize;
 
@@ -75,9 +72,7 @@ lzo_compressor_c::compress(unsigned char *buffer,
   items++;
 
   dst = (unsigned char *)saferealloc(dst, dstsize);
-  size = dstsize;
-
-  return dst;
+  buffer = memory_cptr(new memory_c(dst, dstsize, true));
 }
 
 #endif // HAVE_LZO1X_H
@@ -90,9 +85,8 @@ zlib_compressor_c::zlib_compressor_c():
 zlib_compressor_c::~zlib_compressor_c() {
 }
 
-unsigned char *
-zlib_compressor_c::decompress(unsigned char *buffer,
-                              int &size) {
+void
+zlib_compressor_c::decompress(memory_cptr &buffer) {
   int result, dstsize, n;
   unsigned char *dst;
   z_stream d_stream;
@@ -104,8 +98,8 @@ zlib_compressor_c::decompress(unsigned char *buffer,
   if (result != Z_OK)
     mxerror("inflateInit() failed. Result: %d\n", result);
 
-  d_stream.next_in = (Bytef *)buffer;
-  d_stream.avail_in = size;
+  d_stream.next_in = (Bytef *)buffer->get();
+  d_stream.avail_in = buffer->get_size();
   n = 0;
   dst = NULL;
   do {
@@ -123,17 +117,14 @@ zlib_compressor_c::decompress(unsigned char *buffer,
   inflateEnd(&d_stream);
 
   mxverb(3, "zlib_compressor_c: Decompression from %d to %d, %d%%\n",
-         size, dstsize, dstsize * 100 / size);
+         buffer->get_size(), dstsize, dstsize * 100 / buffer->get_size());
 
   dst = (unsigned char *)saferealloc(dst, dstsize);
-  size = dstsize;
-
-  return dst;
+  buffer = memory_cptr(new memory_c(dst, dstsize, true));
 }
 
-unsigned char *
-zlib_compressor_c::compress(unsigned char *buffer,
-                            int &size) {
+void
+zlib_compressor_c::compress(memory_cptr &buffer) {
   int result, dstsize, n;
   unsigned char *dst;
   z_stream c_stream;
@@ -145,8 +136,8 @@ zlib_compressor_c::compress(unsigned char *buffer,
   if (result != Z_OK)
     mxerror("deflateInit() failed. Result: %d\n", result);
 
-  c_stream.next_in = (Bytef *)buffer;
-  c_stream.avail_in = size;
+  c_stream.next_in = (Bytef *)buffer->get();
+  c_stream.avail_in = buffer->get_size();
   n = 0;
   dst = NULL;
   do {
@@ -162,12 +153,10 @@ zlib_compressor_c::compress(unsigned char *buffer,
   deflateEnd(&c_stream);
 
   mxverb(3, "zlib_compressor_c: Compression from %d to %d, %d%%\n",
-         size, dstsize, dstsize * 100 / size);
+         buffer->get_size(), dstsize, dstsize * 100 / buffer->get_size());
 
   dst = (unsigned char *)saferealloc(dst, dstsize);
-  size = dstsize;
-
-  return dst;
+  buffer = memory_cptr(new memory_c(dst, dstsize, true));
 }
 
 #endif // HAVE_ZLIB_H
@@ -180,9 +169,8 @@ bzlib_compressor_c::bzlib_compressor_c():
 bzlib_compressor_c::~bzlib_compressor_c() {
 }
 
-unsigned char *
-bzlib_compressor_c::decompress(unsigned char *buffer,
-                               int &size) {
+void
+bzlib_compressor_c::decompress(memory_cptr &buffer) {
   int result;
   bz_stream d_stream;
 
@@ -196,17 +184,15 @@ bzlib_compressor_c::decompress(unsigned char *buffer,
   if (result != BZ_OK)
     mxerror("BZ2_bzCompressInit() failed. Result: %d\n", result);
   BZ2_bzDecompressEnd(&d_stream);
-
-  return NULL;
 }
 
-unsigned char *
-bzlib_compressor_c::compress(unsigned char *buffer,
-                             int &size) {
+void
+bzlib_compressor_c::compress(memory_cptr &buffer) {
   unsigned char *dst;
-  int result, dstsize;
+  int result, dstsize, size;
   bz_stream c_stream;
 
+  size = buffer->get_size();
   dst = (unsigned char *)safemalloc(size * 2);
 
   c_stream.bzalloc = NULL;
@@ -217,13 +203,15 @@ bzlib_compressor_c::compress(unsigned char *buffer,
   if (result != BZ_OK)
     mxerror("BZ2_bzCompressInit() failed. Result: %d\n", result);
 
-  c_stream.next_in = (char *)buffer;
+  c_stream.next_in = (char *)buffer->get();
   c_stream.next_out = (char *)dst;
   c_stream.avail_in = size;
   c_stream.avail_out = 2 * size;
   result = BZ2_bzCompress(&c_stream, BZ_FLUSH);
   if (result != BZ_RUN_OK)
     mxerror("bzip2 compression failed. Result: %d\n", result);
+
+  BZ2_bzCompressEnd(&c_stream);
 
   dstsize = 2 * size - c_stream.avail_out;
 
@@ -235,11 +223,7 @@ bzlib_compressor_c::compress(unsigned char *buffer,
   items++;
 
   dst = (unsigned char *)saferealloc(dst, dstsize);
-  size = dstsize;
-
-  BZ2_bzCompressEnd(&c_stream);
-
-  return dst;
+  buffer = memory_cptr(new memory_c(dst, dstsize, true));
 }
 
 #endif // HAVE_BZLIB_H
@@ -304,9 +288,9 @@ content_decoder_c::~content_decoder_c() {
 }
 
 #define EBMLBIN_TO_COUNTEDMEM(bin) \
-  counted_mem_ptr((unsigned char *)safememdup(bin->GetBuffer(), \
-                                              bin->GetSize()), \
-                  bin->GetSize())
+  memory_cptr(new memory_c((unsigned char *)safememdup(bin->GetBuffer(), \
+                                                       bin->GetSize()), \
+                           bin->GetSize(), true))
 
 bool
 content_decoder_c::initialize(KaxTrackEntry &ktentry) {
@@ -458,37 +442,15 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
   return ok;
 }
 
-bool
-content_decoder_c::reverse(unsigned char *&data,
-                           uint32_t &size,
+void
+content_decoder_c::reverse(memory_cptr &memory,
                            content_encoding_scope_e scope) {
-  int new_size;
-  unsigned char *new_data, *old_data;
-  bool modified;
   vector<kax_content_encoding_t>::const_iterator ce;
 
-  if (!ok)
-    return false;
+  if (!is_ok() || encodings.empty())
+    return;
 
-  if (0 == encodings.size())
-    return false;
-
-  new_data = data;
-  new_size = size;
-  modified = false;
-  foreach(ce, encodings) {
-    if (0 == (ce->scope & scope))
-      continue;
-
-    old_data = new_data;
-    new_data = ce->compressor->decompress(old_data, new_size);
-    if (modified)
-      safefree(old_data);
-    modified = true;
-  }
-
-  data = new_data;
-  size = new_size;
-
-  return modified;
+  foreach(ce, encodings)
+    if (0 != (ce->scope & scope))
+      ce->compressor->decompress(memory);
 }

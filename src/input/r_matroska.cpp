@@ -245,14 +245,13 @@ kax_reader_c::verify_tracks() {
     t->ok = 0;
 
     if (t->private_data != NULL) {
-      c = (unsigned char *)t->private_data;
-      length = t->private_size;
-      if (t->content_decoder.reverse(c, length,
-                                     CONTENT_ENCODING_SCOPE_CODECPRIVATE)) {
-        safefree(t->private_data);
-        t->private_data = c;
-        t->private_size = length;
-      }
+      memory_cptr private_data(new memory_c((unsigned char *)t->private_data,
+                                            t->private_size, true));
+      t->content_decoder.reverse(private_data,
+                                 CONTENT_ENCODING_SCOPE_CODECPRIVATE);
+      private_data->lock();
+      t->private_data = private_data->get();
+      t->private_size = private_data->get_size();
     }
 
     switch (t->type) {
@@ -276,8 +275,8 @@ kax_reader_c::verify_tracks() {
             u = get_uint32_le(&bih->bi_width);
             if (t->v_width != u) {
               if (verbose)
-                mxwarn(PFX "(MS compatibility "
-                       "mode, track %llu) Matrosa says video width is %llu, but "
+                mxwarn(PFX "(MS compatibility mode, track %llu) Matrosa says "
+                       "video width is %llu, but "
                        "the BITMAPINFOHEADER says %u.\n", t->tnum, t->v_width,
                        u);
               if (t->v_width == 0)
@@ -1913,36 +1912,30 @@ kax_reader_c::read(generic_packetizer_c *,
               block_fref += (int64_t)last_timecode;
 
             for (i = 0; i < (int)block->NumberFrames(); i++) {
-              unsigned char *re_buffer;
-              uint32_t re_size;
-              bool re_modified;
+              DataBuffer &data_buffer = block->GetBuffer(i);
+              memory_cptr data(new memory_c(data_buffer.Buffer(),
+                                            data_buffer.Size(), false));
+              block_track->content_decoder.
+                reverse(data, CONTENT_ENCODING_SCOPE_BLOCK);
 
-              DataBuffer &data = block->GetBuffer(i);
-              re_buffer = data.Buffer();
-              re_size = data.Size();
-              re_modified = block_track->content_decoder.
-                reverse(re_buffer, re_size, CONTENT_ENCODING_SCOPE_BLOCK);
               if ((block_track->type == 's') &&
                   (block_track->sub_type == 't')) {
-                if ((re_size > 2) ||
-                    ((re_size > 0) && (*re_buffer != ' ') &&
-                     (*re_buffer != 0) && !iscr(*re_buffer))) {
+                if ((data->get_size() > 2) ||
+                    ((data->get_size() > 0) && (*data->get() != ' ') &&
+                     (*data->get() != 0) && !iscr(*data->get()))) {
                   char *lines;
 
-                  lines = (char *)safemalloc(re_size + 1);
-                  lines[re_size] = 0;
-                  memcpy(lines, re_buffer, re_size);
+                  lines = (char *)safemalloc(data->get_size() + 1);
+                  lines[data->get_size()] = 0;
+                  memcpy(lines, data->get(), data->get_size());
                   PTZR(block_track->ptzr)->
                     process(new packet_t(new memory_c((unsigned char *)lines,
                                                       0, true),
                                          last_timecode, block_duration,
                                          block_bref, block_fref));
-                  if (re_modified)
-                    safefree(re_buffer);
                 }
               } else {
-                memory_c *mem = new memory_c(re_buffer, re_size, re_modified);
-                packet_cptr packet(new packet_t(mem, last_timecode + i *
+                packet_cptr packet(new packet_t(data, last_timecode + i *
                                                 frame_duration, block_duration,
                                                 block_bref, block_fref));
 
@@ -1955,10 +1948,13 @@ kax_reader_c::read(generic_packetizer_c *,
                       uint64(*static_cast<EbmlUInteger *>
                              (&GetChild<KaxBlockAddID>(*blockmore)));
                     blockadd_data = &GetChild<KaxBlockAdditional>(*blockmore);
-                    memory_c *blockadded =
-                      new memory_c(blockadd_data->GetBuffer(),
-                                   blockadd_data->GetSize(), false);
-                    packet->memory_adds.push_back(memory_cptr(blockadded));
+                    memory_cptr
+                      blockadded(new memory_c(blockadd_data->GetBuffer(),
+                                              blockadd_data->GetSize(),
+                                              false));
+                    block_track->content_decoder.
+                      reverse(blockadded, CONTENT_ENCODING_SCOPE_BLOCK);
+                    packet->data_adds.push_back(blockadded);
                   }
 
                   PTZR(block_track->ptzr)->process(packet);

@@ -50,7 +50,7 @@ xtr_vobsub_c::xtr_vobsub_c(const string &_codec_id,
                            int64_t _tid,
                            track_spec_t &tspec):
   xtr_base_c(_codec_id, _tid, tspec),
-  private_size(0), stream_id(0x20) {
+  stream_id(0x20) {
 
   int pos;
 
@@ -64,7 +64,6 @@ void
 xtr_vobsub_c::create_file(xtr_base_c *_master,
                           KaxTrackEntry &track) {
   KaxCodecPrivate *priv;
-  unsigned char *new_priv;
 
   priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
@@ -75,14 +74,10 @@ xtr_vobsub_c::create_file(xtr_base_c *_master,
     mxerror("Tracks with unsupported content encoding schemes (compression "
             "or encryption) cannot be extracted.\n");
 
-  private_size = priv->GetSize();
-
-  new_priv = const_cast<unsigned char *>(priv->GetBuffer());
-  if (!content_decoder.reverse(new_priv, private_size,
-                               CONTENT_ENCODING_SCOPE_CODECPRIVATE))
-    private_data.set(safememdup(priv->GetBuffer(), private_size));
-  else
-    private_data.set(new_priv);
+  private_data = memory_cptr(new memory_c(priv->GetBuffer(), priv->GetSize(),
+                                          false));
+  content_decoder.reverse(private_data, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
+  private_data->grab();
 
   master = _master;
   language = kt_get_language(track);
@@ -105,8 +100,9 @@ xtr_vobsub_c::create_file(xtr_base_c *_master,
               "This was requested for the tracks %lld and %lld.\n", tid,
               master->tid);
 
-    if ((private_size != vmaster->private_size) ||
-        memcmp(priv->GetBuffer(), vmaster->private_data.get(), private_size))
+    if ((private_data->get_size() != vmaster->private_data->get_size()) ||
+        memcmp(priv->GetBuffer(), vmaster->private_data->get(),
+               private_data->get_size()))
       mxerror("Two VobSub tracks can only be extracted into the same file "
               "if their CodecPrivate data matches. This is not the case "
               "for the tracks %lld and %lld.\n", tid, master->tid);
@@ -138,15 +134,15 @@ xtr_vobsub_c::handle_block(KaxBlock &block,
     vmaster = static_cast<xtr_vobsub_c *>(master);
 
   for (i = 0; i < block.NumberFrames(); i++) {
-    autofree_ptr<unsigned char> af_data;
-    unsigned char *data;
     uint32_t size, padding, first;
     DataBuffer &data_buffer = block.GetBuffer(i);
+    memory_cptr data_m(new memory_c(data_buffer.Buffer(), data_buffer.Size(),
+                                    false));
+    unsigned char *data;
 
-    size = data_buffer.Size();
-    data = data_buffer.Buffer();
-    if (content_decoder.reverse(data, size, CONTENT_ENCODING_SCOPE_BLOCK))
-      af_data.set(data);
+    content_decoder.reverse(data_m, CONTENT_ENCODING_SCOPE_BLOCK);
+    data = data_m->get();
+    size = data_m->get_size();
 
     positions.push_back(vmaster->out->getFilePointer());
     timecodes.push_back(timecode);
@@ -255,10 +251,10 @@ xtr_vobsub_c::finish_file() {
 
     mm_file_io_c idx(base_name, MODE_CREATE);
     mxinfo("Writing the VobSub index file '%s'.\n", base_name.c_str());
-    if ((25 > private_size) || strncasecmp((char *)private_data.get(),
-                                           header_line, 25))
+    if ((25 > private_data->get_size()) ||
+        strncasecmp((char *)private_data->get(), header_line, 25))
       idx.printf(header_line);
-    idx.write(private_data.get(), private_size);
+    idx.write(private_data->get(), private_data->get_size());
 
     write_idx(idx, 0);
     for (slave = 0; slave < slaves.size(); slave++)

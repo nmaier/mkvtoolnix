@@ -231,13 +231,13 @@ mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
   int new_bytes, state;
 
   if (fps < 0.0)
-    extract_fps(packet->memory->data, packet->memory->size);
+    extract_fps(packet->data->get(), packet->data->get_size());
 
   if (!aspect_ratio_extracted)
-    extract_aspect_ratio(packet->memory->data, packet->memory->size);
+    extract_aspect_ratio(packet->data->get(), packet->data->get_size());
 
   if (framed) {
-    if (0 != packet->memory->size)
+    if (0 != packet->data->get_size())
       return video_packetizer_c::process(packet);
     else
       return FILE_STATUS_MOREDATA;
@@ -248,9 +248,9 @@ mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
       (state == MPV_PARSER_STATE_ERROR))
     return FILE_STATUS_DONE;
 
-  memory_cptr old_memory = packet->memory;
-  data_ptr = old_memory->data;
-  new_bytes = old_memory->size;
+  memory_cptr old_memory = packet->data;
+  data_ptr = old_memory->get();
+  new_bytes = old_memory->get_size();
 
   do {
     int bytes_to_add;
@@ -383,9 +383,9 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
 int
 mpeg4_p2_video_packetizer_c::process(packet_cptr packet) {
   if (!size_extracted)
-    extract_size(packet->memory->data, packet->memory->size);
+    extract_size(packet->data->get(), packet->data->get_size());
   if (!aspect_ratio_extracted)
-    extract_aspect_ratio(packet->memory->data, packet->memory->size);
+    extract_aspect_ratio(packet->data->get(), packet->data->get_size());
 
   if (input_is_native == output_is_native)
     return video_packetizer_c::process(packet);
@@ -404,11 +404,12 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
   if (NULL == ti.private_data) {
     memory_c *config_data;
 
-    config_data = mpeg4_p2_parse_config_data(packet->memory->data,
-                                             packet->memory->size);
+    config_data = mpeg4_p2_parse_config_data(packet->data->get(),
+                                             packet->data->get_size());
     if (NULL != config_data) {
-      ti.private_data = config_data->grab();
-      ti.private_size = config_data->size;
+      ti.private_data = (unsigned char *)safememdup(config_data->get(),
+                                                    config_data->get_size());
+      ti.private_size = config_data->get_size();
       delete config_data;
       fix_codec_string();
       set_codec_private(ti.private_data, ti.private_size);
@@ -420,7 +421,7 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
               "native mode.\n");
   }
 
-  mpeg4_p2_find_frame_types(packet->memory->data, packet->memory->size,
+  mpeg4_p2_find_frame_types(packet->data->get(), packet->data->get_size(),
                             frames);
 
   // Add a timecode and a duration if they've been given.
@@ -449,13 +450,8 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
     if (-1 == packet->duration)
       available_durations.push_back((int64_t)(1000000000.0 / fps));
 
-    // Copy the data. If there's only one frame in this packet then
-    // we might save a memcpy.
-    if ((1 == frames.size()) && (frame->size == packet->memory->size))
-      frame->data = packet->memory->grab();
-    else
-      frame->data = (unsigned char *)
-        safememdup(&packet->memory->data[frame->pos], frame->size);
+    frame->data = (unsigned char *)
+      safememdup(packet->data->get() + frame->pos, frame->size);
     queued_frames.push_back(*frame);
   }
 

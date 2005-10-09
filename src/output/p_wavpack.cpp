@@ -57,7 +57,7 @@ wavpack_packetizer_c::set_headers() {
 int
 wavpack_packetizer_c::process(packet_cptr packet) {
   debug_enter("wavpack_packetizer_c::process");
-  int64_t samples = get_uint32_le(packet->memory->data);
+  int64_t samples = get_uint32_le(packet->data->get());
 
   if (-1 == packet->duration)
     packet->duration = irnd(samples * 1000000000 / sample_rate);

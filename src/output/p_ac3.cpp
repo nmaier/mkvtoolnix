@@ -151,7 +151,7 @@ ac3_packetizer_c::process(packet_cptr packet) {
 
   debug_enter("ac3_packetizer_c::process");
 
-  add_to_buffer(packet->memory->data, packet->memory->size);
+  add_to_buffer(packet->data->get(), packet->data->get_size());
   while ((ac3_packet = get_ac3_packet(&header, &ac3header)) != NULL) {
     if (packet->timecode == -1)
       my_timecode = (int64_t)(1000000000.0 * packetno * 1536 /

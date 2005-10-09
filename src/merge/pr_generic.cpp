@@ -39,11 +39,6 @@ using namespace std;
 int64_t packet_t::packet_number_counter = 0;
 
 packet_t::~packet_t() {
-  vector<unsigned char *>::iterator i;
-
-  safefree(data);
-  foreach(i, data_adds)
-    safefree(*i);
 }
 
 // ---------------------------------------------------------------------
@@ -793,41 +788,29 @@ generic_packetizer_c::fix_headers() {
 
 void
 generic_packetizer_c::add_packet(packet_cptr pack) {
-  int length, add_length, i;
+  int length, i;
 
   if (reader->ptzr_first_packet == NULL)
     reader->ptzr_first_packet = this;
 
   // strip elements to be removed
   if ((htrack_max_add_block_ids != -1) &&
-      (htrack_max_add_block_ids < pack->memory_adds.size()))
-    pack->memory_adds.resize(htrack_max_add_block_ids);
+      (htrack_max_add_block_ids < pack->data_adds.size()))
+    pack->data_adds.resize(htrack_max_add_block_ids);
 
-  pack->data_adds.resize(pack->memory_adds.size());
-  pack->data_adds_lengths.resize(pack->memory_adds.size());
-
-  length = pack->memory->size;
+  length = pack->data->get_size();
   if (NULL != compressor.get()) {
-    pack->data = compressor->compress(pack->memory->data, length);
-    pack->memory->release();
-    for (i = 0; i < pack->memory_adds.size(); i++) {
-      add_length = pack->memory_adds[i]->size;
-      pack->data_adds[i] = compressor->compress(pack->memory_adds[i]->data,
-                                                add_length);
-      pack->data_adds_lengths[i] = add_length;
-      pack->memory_adds[i]->release();
-    }
+    compressor->compress(pack->data);
+    for (i = 0; i < pack->data_adds.size(); i++)
+      compressor->compress(pack->data_adds[i]);
   } else {
-    pack->data = pack->memory->grab();
-    for (i = 0; i < pack->memory_adds.size(); i++) {
-      pack->data_adds[i] = pack->memory_adds[i]->grab();
-      pack->data_adds_lengths[i] = pack->memory_adds[i]->size;
-    }
+    pack->data->grab();
+    for (i = 0; i < pack->data_adds.size(); i++)
+      pack->data_adds[i]->grab();
   }
-  pack->length = length;
   pack->source = this;
 
-  enqueued_bytes += pack->length;
+  enqueued_bytes += pack->data->get_size();
 
   if ((0 > pack->bref) && (0 <= pack->fref)) {
     int64_t tmp = pack->bref;
@@ -946,7 +929,7 @@ generic_packetizer_c::get_packet() {
   packet_cptr pack = packet_queue.front();
   packet_queue.pop_front();
 
-  enqueued_bytes -= pack->length;
+  enqueued_bytes -= pack->data->get_size();
 
   return pack;
 }

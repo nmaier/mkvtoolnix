@@ -235,9 +235,8 @@ wavpack_reader_c::read(generic_packetizer_c *ptzr,
         databuffer += block_size;
       }
 
-      packet->memory_adds.push_back(memory_cptr(new memory_c(chunk_correc,
-                                                             data_size,
-                                                             true)));
+      packet->data_adds.push_back(memory_cptr(new memory_c(chunk_correc,
+                                                           data_size, true)));
     }
   }
 

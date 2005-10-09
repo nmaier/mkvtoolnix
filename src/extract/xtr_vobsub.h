@@ -25,8 +25,7 @@ class xtr_vobsub_c: public xtr_base_c {
 public:
   vector<int64_t> positions, timecodes;
   vector<xtr_vobsub_c *> slaves;
-  autofree_ptr<unsigned char> private_data;
-  uint32_t private_size;
+  memory_cptr private_data;
   string base_name, language;
   int stream_id;
 

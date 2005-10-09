@@ -170,19 +170,13 @@ real_reader_c::real_reader_c(track_info_c &_ti)
 }
 
 real_reader_c::~real_reader_c() {
-  real_demuxer_t *demuxer;
-  int i, j;
+  int i;
 
   for (i = 0; i < demuxers.size(); i++) {
-    demuxer = demuxers[i];
-    if (demuxer->segments != NULL) {
-      for (j = 0; j < demuxer->segments->size(); j++)
-        safefree((*demuxer->segments)[j].data);
-      delete demuxer->segments;
-    }
+    real_demuxer_cptr &demuxer = demuxers[i];
+
     safefree(demuxer->private_data);
     safefree(demuxer->extra_data);
-    safefree(demuxer);
   }
   demuxers.clear();
   ti.private_data = NULL;
@@ -193,7 +187,6 @@ void
 real_reader_c::parse_headers() {
   uint32_t ts_size, ndx, i;
   unsigned char *ts_data;
-  real_demuxer_t *dmx;
   rmff_track_t *track;
 
   if (rmff_read_headers(file) == RMFF_ERR_OK) {
@@ -216,8 +209,7 @@ real_reader_c::parse_headers() {
       ts_data = track->mdpr_header.type_specific_data;
       ts_size = get_uint32_be(&track->mdpr_header.type_specific_size);
 
-      dmx = (real_demuxer_t *)safemalloc(sizeof(real_demuxer_t));
-      memset(dmx, 0, sizeof(real_demuxer_t));
+      real_demuxer_cptr dmx(new real_demuxer_t);
       dmx->track = track;
       dmx->ptzr = -1;
 
@@ -298,8 +290,7 @@ real_reader_c::parse_headers() {
           dmx->private_size = ts_size;
 
           demuxers.push_back(dmx);
-        } else
-          free(dmx);
+        }
       }
     }
   }
@@ -308,11 +299,11 @@ real_reader_c::parse_headers() {
 void
 real_reader_c::create_packetizer(int64_t tid) {
   int i;
-  real_demuxer_t *dmx;
+  real_demuxer_cptr dmx;
   rmff_track_t *track;
 
   dmx = find_demuxer(tid);
-  if (dmx == NULL)
+  if (dmx.get() == NULL)
     return;
 
   if (dmx->ptzr == -1) {
@@ -428,7 +419,6 @@ real_reader_c::create_packetizer(int64_t tid) {
                                    dmx->private_data, dmx->private_size,
                                    ti);
         dmx->ptzr = add_packetizer(ptzr);
-        dmx->segments = new vector<rv_segment_t>;
 
         mxinfo(FMT_TID "Using the RealAudio output module (FourCC: %s).\n",
                ti.fname.c_str(), (int64_t)track->id, dmx->fourcc);
@@ -445,7 +435,7 @@ real_reader_c::create_packetizers() {
     create_packetizer(demuxers[i]->track->id);
 }
 
-real_demuxer_t *
+real_demuxer_cptr
 real_reader_c::find_demuxer(int id) {
   int i;
 
@@ -453,19 +443,18 @@ real_reader_c::find_demuxer(int id) {
     if (demuxers[i]->track->id == id)
       return demuxers[i];
 
-  return NULL;
+  return real_demuxer_cptr(NULL);
 }
 
 file_status_e
 real_reader_c::finish() {
   int i;
   int64_t dur;
-  real_demuxer_t *dmx;
+  real_demuxer_cptr dmx;
 
   for (i = 0; i < demuxers.size(); i++) {
     dmx = demuxers[i];
-    if ((dmx->track->type == RMFF_TRACK_TYPE_AUDIO) &&
-        (dmx->segments != NULL)) {
+    if (dmx->track->type == RMFF_TRACK_TYPE_AUDIO) {
       dur = dmx->last_timecode / dmx->num_packets;
       deliver_audio_frames(dmx, dur);
     }
@@ -483,7 +472,7 @@ real_reader_c::read(generic_packetizer_c *,
                     bool) {
   int size;
   unsigned char *chunk;
-  real_demuxer_t *dmx;
+  real_demuxer_cptr dmx;
   int64_t timecode;
   rmff_frame_t *frame;
 
@@ -512,7 +501,7 @@ real_reader_c::read(generic_packetizer_c *,
 
   timecode = (int64_t)frame->timecode * 1000000ll;
   dmx = find_demuxer(frame->id);
-  if (dmx == NULL) {
+  if (dmx.get() == NULL) {
     rmff_release_frame(frame);
     return FILE_STATUS_MOREDATA;
   }
@@ -539,79 +528,75 @@ real_reader_c::read(generic_packetizer_c *,
 }
 
 void
-real_reader_c::queue_one_audio_frame(real_demuxer_t *dmx,
+real_reader_c::queue_one_audio_frame(real_demuxer_cptr dmx,
                                      memory_c &mem,
                                      uint64_t timecode,
                                      uint32_t flags) {
-  rv_segment_t segment;
+  rv_segment_cptr segment(new rv_segment_t);
 
-  segment.data = mem.data;
-  segment.size = mem.size;
-  mem.lock();
-  segment.flags = flags;
-  dmx->segments->push_back(segment);
+  segment->data = memory_cptr(new memory_c(mem));
+  segment->flags = flags;
+  dmx->segments.push_back(segment);
   dmx->last_timecode = timecode;
   mxverb(2, "enqueueing one for %u/'%s' length %u timecode %llu flags "
-         "0x%08x\n", dmx->track->id, ti.fname.c_str(), mem.size, timecode,
-         flags);
+         "0x%08x\n", dmx->track->id, ti.fname.c_str(), mem.get_size(),
+         timecode, flags);
 }
 
 void
-real_reader_c::queue_audio_frames(real_demuxer_t *dmx,
+real_reader_c::queue_audio_frames(real_demuxer_cptr dmx,
                                   memory_c &mem,
                                   uint64_t timecode,
                                   uint32_t flags) {
   // Enqueue the packets if no packets are in the queue or if the current
   // packet's timecode is the same as the timecode of those before.
-  if ((dmx->segments->size() == 0) ||
-      (dmx->last_timecode == timecode)) {
+  if (dmx->segments.empty() || (dmx->last_timecode == timecode)) {
     queue_one_audio_frame(dmx, mem, timecode, flags);
     return;
   }
 
   // This timecode is different. So let's push the packets out.
   deliver_audio_frames(dmx, (timecode - dmx->last_timecode) /
-                       dmx->segments->size());
+                       dmx->segments.size());
   // Enqueue this packet.
   queue_one_audio_frame(dmx, mem, timecode, flags);
 }
 
 void
-real_reader_c::deliver_audio_frames(real_demuxer_t *dmx,
+real_reader_c::deliver_audio_frames(real_demuxer_cptr dmx,
                                     uint64_t duration) {
   uint32_t i;
-  rv_segment_t segment;
+  rv_segment_cptr segment;
 
-  if (dmx->segments->size() == 0)
+  if (dmx->segments.empty())
     return;
 
-  for (i = 0; i < dmx->segments->size(); i++) {
-    segment = (*dmx->segments)[i];
-    mxverb(2, "delivering audio for %u/'%s' length %llu timecode %llu flags "
+  for (i = 0; i < dmx->segments.size(); i++) {
+    segment = dmx->segments[i];
+    mxverb(2, "delivering audio for %u/'%s' length %d timecode %llu flags "
            "0x%08x duration %llu\n", dmx->track->id, ti.fname.c_str(),
-           segment.size, dmx->last_timecode, (uint32_t)segment.flags,
-           duration);
-    PTZR(dmx->ptzr)->process(new packet_t(new memory_c(segment.data,
-                                                       segment.size, true),
+           segment->data->get_size(), dmx->last_timecode,
+           (uint32_t)segment->flags, duration);
+    PTZR(dmx->ptzr)->process(new packet_t(segment->data,
                                           dmx->last_timecode, duration,
-                                          (segment.flags & 2) == 2 ? -1 :
+                                          (segment->flags & 2) == 2 ? -1 :
                                           dmx->ref_timecode));
-    if ((segment.flags & 2) == 2)
+    if ((segment->flags & 2) == 2)
       dmx->ref_timecode = dmx->last_timecode;
   }
-  dmx->num_packets += dmx->segments->size();
-  dmx->segments->clear();
+  dmx->num_packets += dmx->segments.size();
+  dmx->segments.clear();
 }
 
 void
-real_reader_c::deliver_aac_frames(real_demuxer_t *dmx,
+real_reader_c::deliver_aac_frames(real_demuxer_cptr dmx,
                                   memory_c &mem) {
   uint32_t num_sub_packets, data_idx, i, sub_length, len_check;
   uint32_t length;
   unsigned char *chunk;
 
-  chunk = mem.data;
-  length = mem.size;
+  chunk = mem.get();
+  length = mem.get_size();
   if (length < 2) {
     mxwarn(PFX "Short AAC audio packet for track ID %u of "
            "'%s' (length: %u < 2)\n", dmx->track->id, ti.fname.c_str(),
@@ -655,7 +640,7 @@ real_reader_c::get_progress() {
 void
 real_reader_c::identify() {
   int i;
-  real_demuxer_t *demuxer;
+  real_demuxer_cptr demuxer;
 
   mxinfo("File '%s': container: RealMedia\n", ti.fname.c_str());
   for (i = 0; i < demuxers.size(); i++) {
@@ -671,7 +656,7 @@ real_reader_c::identify() {
 }
 
 void
-real_reader_c::assemble_video_packet(real_demuxer_t *dmx,
+real_reader_c::assemble_video_packet(real_demuxer_cptr dmx,
                                      rmff_frame_t *frame) {
   int result;
   rmff_frame_t *assembled;
@@ -748,7 +733,7 @@ real_reader_c::get_rv_dimensions(unsigned char *buf,
 }
 
 void
-real_reader_c::set_dimensions(real_demuxer_t *dmx,
+real_reader_c::set_dimensions(real_demuxer_cptr dmx,
                               unsigned char *buffer,
                               int size) {
   uint32_t width, height, disp_width, disp_height;
@@ -815,7 +800,7 @@ real_reader_c::set_dimensions(real_demuxer_t *dmx,
 void
 real_reader_c::get_information_from_data() {
   int i;
-  real_demuxer_t *dmx;
+  real_demuxer_cptr dmx;
   bool information_found;
   rmff_frame_t *frame;
   int64_t old_pos;
@@ -834,7 +819,7 @@ real_reader_c::get_information_from_data() {
     frame = rmff_read_next_frame(file, NULL);
     dmx = find_demuxer(frame->id);
 
-    if (dmx == NULL) {
+    if (dmx.get() == NULL) {
       rmff_release_frame(frame);
       continue;
     }

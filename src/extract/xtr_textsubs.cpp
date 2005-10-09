@@ -298,8 +298,6 @@ xtr_usf_c::create_file(xtr_base_c *_master,
                        KaxTrackEntry &track) {
   KaxCodecPrivate *priv;
   KaxTrackLanguage *language;
-  unsigned char *new_priv;
-  uint32_t private_size;
 
   priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
@@ -310,16 +308,10 @@ xtr_usf_c::create_file(xtr_base_c *_master,
     mxerror("Tracks with unsupported content encoding schemes (compression "
             "or encryption) cannot be extracted.\n");
 
-  private_size = priv->GetSize();
-
-  new_priv = const_cast<unsigned char *>(priv->GetBuffer());
-  if (!content_decoder.reverse(new_priv, private_size,
-                               CONTENT_ENCODING_SCOPE_CODECPRIVATE)) {
-    m_codec_private.append((const char *)new_priv, private_size);
-  } else {
-    m_codec_private.append((const char *)new_priv, private_size);
-    safefree(new_priv);
-  }
+  memory_cptr new_priv(new memory_c(priv->GetBuffer(), priv->GetSize(),
+                                    false));
+  content_decoder.reverse(new_priv, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
+  m_codec_private.append((const char *)new_priv->get(), new_priv->get_size());
 
   language = FINDFIRST(&track, KaxTrackLanguage);
   if (NULL == language)
@@ -387,13 +379,10 @@ xtr_usf_c::handle_block(KaxBlock &block,
 
   DataBuffer &data_buffer = block.GetBuffer(0);
   usf_entry_t entry("", timecode, timecode + duration);
-  uint32_t size = data_buffer.Size();
-  unsigned char *data = data_buffer.Buffer();
-  bool free_mem = content_decoder.reverse(data, size,
-                                          CONTENT_ENCODING_SCOPE_BLOCK);
-  entry.m_text.append((const char *)data, size);
-  if (free_mem)
-    safefree(data);
+  memory_cptr data(new memory_c(data_buffer.Buffer(), data_buffer.Size(),
+                                false));
+  content_decoder.reverse(data, CONTENT_ENCODING_SCOPE_BLOCK);
+  entry.m_text.append((const char *)data->get(), data->get_size());
   m_entries.push_back(entry);
 }
 

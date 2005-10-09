@@ -132,7 +132,7 @@ cluster_helper_c::add_packet(packet_cptr packet) {
         // Add sizes for all frames.
         for (i = 0; i < c->packets.size(); i++) {
           packet_cptr &p = c->packets[i];
-          additional_size += p->length;
+          additional_size += p->data->get_size();
           if (p->bref == -1)
             additional_size += 10;
           else if (p->fref == -1)
@@ -192,7 +192,7 @@ cluster_helper_c::add_packet(packet_cptr packet) {
 
   c = clusters.back();
   c->packets.push_back(packet);
-  cluster_content_size += packet->length;
+  cluster_content_size += packet->data->get_size();
 
   walk_clusters();
 
@@ -398,7 +398,7 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
         (cluster)->set_min_timecode(pack->assigned_timecode - timecode_offset);
     max_cl_timecode = pack->assigned_timecode;
 
-    data_buffer = new DataBuffer((binary *)pack->data, pack->length);
+    data_buffer = new DataBuffer((binary *)pack->data->get(), pack->data->get_size());
 
     KaxTrackEntry &track_entry =
       static_cast<KaxTrackEntry &>(*source->get_track_entry());
@@ -505,8 +505,8 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
         *static_cast<EbmlUInteger *>(&GetChild<KaxBlockAddID>(block_more)) =
           k + 1;
         GetChild<KaxBlockAdditional>(block_more).
-          SetBuffer((binary *)pack->data_adds[k], pack->data_adds_lengths[k]);
-        pack->data_adds[k] = NULL;
+          CopyBuffer((binary *)pack->data_adds[k]->get(),
+                     pack->data_adds[k]->get_size());
       }
     }
 
@@ -558,11 +558,9 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
   } else
     last_cluster_tc = 0;
 
-  for (i = 0; i < clstr->packets.size(); i++) {
-    pack = clstr->packets[i];
-    safefree(pack->data);
-    pack->data = NULL;
-  }
+  for (i = 0; i < clstr->packets.size(); i++)
+    clstr->packets[i]->data = memory_cptr(new memory_c());
+
   for (i = 0; i < render_groups.size(); i++)
     delete render_groups[i];
 

@@ -176,7 +176,7 @@ dts_packetizer_c::process(packet_cptr packet) {
 
   debug_enter("dts_packetizer_c::process");
 
-  add_to_buffer(packet->memory->data, packet->memory->size);
+  add_to_buffer(packet->data->get(), packet->data->get_size());
   while ((dts_packet = get_dts_packet(dtsheader)) != NULL) {
     int64_t packet_len_in_ns =
       (int64_t)get_dts_packet_length_in_nanoseconds(&dtsheader);

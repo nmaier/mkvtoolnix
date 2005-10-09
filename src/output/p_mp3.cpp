@@ -193,7 +193,7 @@ mp3_packetizer_c::process(packet_cptr packet) {
 
   debug_enter("mp3_packetizer_c::process");
 
-  byte_buffer.add(packet->memory->data, packet->memory->size);
+  byte_buffer.add(packet->data->get(), packet->data->get_size());
   while ((mp3_packet = get_mp3_packet(&mp3header)) != NULL) {
     if (packet->timecode == -1)
       my_timecode = (int64_t)(1000000000.0 * packetno * spf / samples_per_sec);
