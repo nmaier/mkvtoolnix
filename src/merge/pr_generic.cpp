@@ -730,7 +730,6 @@ generic_packetizer_c::set_headers() {
       (hcompression != COMPRESSION_NONE)) {
     KaxContentEncodings *c_encodings;
     KaxContentEncoding *c_encoding;
-    KaxContentCompression *c_comp;
 
     c_encodings = &GetChild<KaxContentEncodings>(*track_entry);
     c_encoding = &GetChild<KaxContentEncoding>(*c_encodings);
@@ -744,12 +743,8 @@ generic_packetizer_c::set_headers() {
     *static_cast<EbmlUInteger *>
       (&GetChild<KaxContentEncodingScope>(*c_encoding)) = 1;
 
-    c_comp = &GetChild<KaxContentCompression>(*c_encoding);
-    // Set compression method.
-    *static_cast<EbmlUInteger *>(&GetChild<KaxContentCompAlgo>(*c_comp)) =
-      hcompression - 1;
-
     compressor = compressor_c::create(hcompression);
+    compressor->set_track_headers(*c_encoding);
   }
 
   if (no_lacing)
@@ -800,9 +795,14 @@ generic_packetizer_c::add_packet(packet_cptr pack) {
 
   length = pack->data->get_size();
   if (NULL != compressor.get()) {
-    compressor->compress(pack->data);
-    for (i = 0; i < pack->data_adds.size(); i++)
-      compressor->compress(pack->data_adds[i]);
+    try {
+      compressor->compress(pack->data);
+      for (i = 0; i < pack->data_adds.size(); i++)
+        compressor->compress(pack->data_adds[i]);
+    } catch (compression_error_c &e) {
+      mxerror(FMT_TID "Compression failed: %s\n", ti.fname.c_str(),
+              (int64_t)ti.id, e.get_error().c_str());
+    }
   } else {
     pack->data->grab();
     for (i = 0; i < pack->data_adds.size(); i++)

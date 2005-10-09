@@ -909,6 +909,8 @@ parse_compression(const string &s,
   if ((parts[1] == "bz2") || (parts[1] == "bzlib"))
     ti.compression_list[id] = COMPRESSION_BZ2;
 #endif
+  if ((parts[1] == "mpeg4_p2") || (parts[1] == "mpeg4p2"))
+    ti.compression_list[id] = COMPRESSION_MPEG4_P2;
   if (parts[1] == "none")
     ti.compression_list[id] = COMPRESSION_NONE;
   if (ti.compression_list[id] == COMPRESSION_UNSPECIFIED)

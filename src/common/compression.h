@@ -20,10 +20,12 @@
 
 #include <memory>
 
+#include <matroska/KaxContentEncoding.h>
 #include <matroska/KaxTracks.h>
 
 #include "common.h"
 #include "common_memory.h"
+#include "error.h"
 #include "smart_pointers.h"
 
 using namespace libmatroska;
@@ -34,11 +36,18 @@ enum compression_method_e {
   COMPRESSION_ZLIB,
   COMPRESSION_BZ2,
   COMPRESSION_LZO,
+  COMPRESSION_HEADER_REMOVAL,
+  COMPRESSION_MPEG4_P2,
   COMPRESSION_NONE,
   COMPRESSION_NUM = COMPRESSION_NONE
 };
 
 extern const char *MTX_DLL_API xcompression_methods[];
+
+class MTX_DLL_API compression_error_c: public error_c {
+public:
+  compression_error_c(const string &error): error_c(error) { }
+};
 
 class compressor_c;
 typedef counted_ptr<compressor_c> compressor_ptr;
@@ -64,6 +73,8 @@ public:
 
   virtual void compress(memory_cptr &buffer) {
   };
+
+  virtual void set_track_headers(KaxContentEncoding &c_encoding);
 
   static compressor_ptr create(compression_method_e method);
   static compressor_ptr create(const char *method);
@@ -110,6 +121,35 @@ public:
   virtual void compress(memory_cptr &buffer);
 };
 #endif // HAVE_BZLIB_H
+
+class MTX_DLL_API header_removal_compressor_c: public compressor_c {
+protected:
+  memory_cptr m_bytes;
+
+public:
+  header_removal_compressor_c();
+
+  virtual void set_bytes(memory_cptr &bytes) {
+    m_bytes = bytes;
+    m_bytes->grab();
+  }
+
+  virtual void decompress(memory_cptr &buffer);
+  virtual void compress(memory_cptr &buffer);
+
+  virtual void set_track_headers(KaxContentEncoding &c_encoding);
+};
+
+class MTX_DLL_API mpeg4_p2_compressor_c: public header_removal_compressor_c {
+public:
+  mpeg4_p2_compressor_c() {
+    memory_cptr bytes(new memory_c((unsigned char *)safemalloc(4), 4, true));
+    put_uint32_be(bytes->get(), 0x000001b6);
+    set_bytes(bytes);
+  }
+};
+
+// ------------------------------------------------------------------
 
 enum content_encoding_scope_e {
   CONTENT_ENCODING_SCOPE_BLOCK = 1,

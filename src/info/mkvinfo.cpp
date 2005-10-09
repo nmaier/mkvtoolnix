@@ -851,6 +851,8 @@ def_handle(content_encodings) {
               show_element(l6, 6, "Algorithm: %llu (%s)", c_algo,
                            c_algo == 0 ? "ZLIB" :
                            c_algo == 1 ? "bzLib" :
+                           c_algo == 2 ? "lzo1x" :
+                           c_algo == 3 ? "header removal" :
                            "unknown");
 
             } else if (is_id(l6, KaxContentCompSettings)) {

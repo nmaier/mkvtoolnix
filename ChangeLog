@@ -1,3 +1,9 @@
+2005-10-09  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: Implemented the new header removal
+	compression: compression for native MPEG-4 part 2, decompression
+	for all types (don't use it yet, folks!).
+
 2005-10-04  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract: bug fix: Extra codec data wasn't written to AVI

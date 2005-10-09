@@ -61,6 +61,11 @@ public:
     return its_counter ? its_counter->size : 0;
   }
 
+  void set_size(int new_size) throw() {
+    if (its_counter)
+      its_counter->size = new_size;
+  }
+
   bool unique() const throw() {
     return (its_counter ? its_counter->count == 1 : true);
   }

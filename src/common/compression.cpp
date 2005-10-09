@@ -24,8 +24,20 @@
 using namespace libmatroska;
 
 const char *compression_methods[] = {
-  "unspecified", "zlib", "bz2", "lzo", "none"
+  "unspecified", "zlib", "bz2", "lzo", "header_removal", "mpeg4_p2", "none"
 };
+
+static const int compression_method_map[] = {
+  0,                            // unspecified
+  0,                            // zlib
+  1,                            // bzlib
+  2,                            // lzo1x
+  3,                            // header removal
+  3,                            // mpeg4_p2 is header removal
+  0                             // none
+};
+
+// ---------------------------------------------------------------------
 
 #if defined(HAVE_LZO1X_H)
 #include <lzoutil.h>
@@ -76,6 +88,8 @@ lzo_compressor_c::compress(memory_cptr &buffer) {
 }
 
 #endif // HAVE_LZO1X_H
+
+// ---------------------------------------------------------------------
 
 #if defined(HAVE_ZLIB_H)
 zlib_compressor_c::zlib_compressor_c():
@@ -161,6 +175,8 @@ zlib_compressor_c::compress(memory_cptr &buffer) {
 
 #endif // HAVE_ZLIB_H
 
+// ---------------------------------------------------------------------
+
 #if defined(HAVE_BZLIB_H)
 bzlib_compressor_c::bzlib_compressor_c():
   compressor_c(COMPRESSION_BZ2) {
@@ -228,12 +244,94 @@ bzlib_compressor_c::compress(memory_cptr &buffer) {
 
 #endif // HAVE_BZLIB_H
 
+// ---------------------------------------------------------------------
+
+header_removal_compressor_c::header_removal_compressor_c():
+  compressor_c(COMPRESSION_HEADER_REMOVAL) {
+}
+
+void
+header_removal_compressor_c::decompress(memory_cptr &buffer) {
+  if ((NULL == m_bytes.get()) || (0 == m_bytes->get_size()))
+    return;
+
+  memory_cptr new_buffer(new memory_c((unsigned char *)
+                                      safemalloc(buffer->get_size() +
+                                                 m_bytes->get_size()),
+                                      buffer->get_size() + m_bytes->get_size(),
+                                      true));
+  memcpy(new_buffer->get(), m_bytes->get(), m_bytes->get_size());
+  memcpy(new_buffer->get() + m_bytes->get_size(), buffer->get(),
+         buffer->get_size());
+
+  buffer = new_buffer;
+}
+
+void
+header_removal_compressor_c::compress(memory_cptr &buffer) {
+  if ((NULL == m_bytes.get()) || (0 == m_bytes->get_size()))
+    return;
+
+  if (buffer->get_size() < m_bytes->get_size())
+    throw compression_error_c(mxsprintf("Header removal compression not "
+                                        "possible because "
+                                        "the buffer contained %d bytes which "
+                                        "is less than the size of the headers "
+                                        "that should be removed, %d.",
+                                        buffer->get_size(),
+                                        m_bytes->get_size()));
+
+//   if (memcmp(buffer->get(), m_bytes->get(), m_bytes->get_size())) {
+//     string b_buffer, b_bytes;
+//     int i;
+
+//     for (i = 0; m_bytes->get_size() > i; ++i) {
+//       b_buffer += mxsprintf(" %02x", buffer->get()[i]);
+//       b_bytes += mxsprintf(" %02x", m_bytes->get()[i]);
+//     }
+//     throw compression_error_c(mxsprintf("Header removal compression not "
+//                                         "possible because the buffer did not "
+//                                         "start with the bytes that should be "
+//                                         "removed. Wanted bytes:%s; found:%s.",
+//                                         b_bytes.c_str(), b_buffer.c_str()));
+//   }
+
+  memmove(buffer->get(), buffer->get() + m_bytes->get_size(),
+          buffer->get_size() - m_bytes->get_size());
+  buffer->set_size(buffer->get_size() - m_bytes->get_size());
+}
+
+void
+header_removal_compressor_c::set_track_headers(KaxContentEncoding
+                                               &c_encoding) {
+  KaxContentCompression *c_comp;
+
+  compressor_c::set_track_headers(c_encoding);
+
+  c_comp = &GetChild<KaxContentCompression>(c_encoding);
+  // Set compression parameters.
+  static_cast<EbmlBinary *>(&GetChild<KaxContentCompSettings>(*c_comp))->
+    SetBuffer(m_bytes->get(), m_bytes->get_size());
+}
+
+// ---------------------------------------------------------------------
+
 compressor_c::~compressor_c() {
   if (items != 0)
     mxverb(2, "compression: Overall stats: raw size: %lld, compressed "
            "size: %lld, items: %lld, ratio: %.2f%%, avg bytes per item: "
            "%lld\n", raw_size, compressed_size, items,
            compressed_size * 100.0 / raw_size, compressed_size / items);
+}
+
+void
+compressor_c::set_track_headers(KaxContentEncoding &c_encoding) {
+  KaxContentCompression *c_comp;
+
+  c_comp = &GetChild<KaxContentCompression>(c_encoding);
+  // Set compression method.
+  *static_cast<EbmlUInteger *>(&GetChild<KaxContentCompAlgo>(*c_comp)) =
+    compression_method_map[method];
 }
 
 compressor_ptr
@@ -261,6 +359,9 @@ compressor_c::create(const char *method) {
   if (!strcasecmp(method, compression_methods[COMPRESSION_BZ2]))
     return compressor_ptr(new bzlib_compressor_c());
 #endif // HAVE_BZLIB_H
+
+  if (!strcasecmp(method, compression_methods[COMPRESSION_MPEG4_P2]))
+    return compressor_ptr(new mpeg4_p2_compressor_c());
 
   if (!strcasecmp(method, "none"))
     return compressor_ptr(new compressor_c(COMPRESSION_NONE));
@@ -425,6 +526,11 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
 #else
       enc.compressor = counted_ptr<compressor_c>(new lzo_compressor_c());
 #endif
+    } else if (enc.comp_algo == 3) {
+      header_removal_compressor_c *c = new header_removal_compressor_c();
+      c->set_bytes(enc.comp_settings);
+      enc.compressor = counted_ptr<compressor_c>(c);
+
     } else {
       mxwarn("Track %d has been compressed with an unknown/unsupported "
              "compression algorithm (%d).\n", tid,
