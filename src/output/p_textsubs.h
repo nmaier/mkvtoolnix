@@ -25,8 +25,7 @@
 class textsubs_packetizer_c: public generic_packetizer_c {
 private:
   int packetno, cc_utf8;
-  autofree_ptr<unsigned char> global_data;
-  int global_size;
+  memory_cptr global_data;
   string codec_id;
   bool recode;
 

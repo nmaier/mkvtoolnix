@@ -37,8 +37,10 @@ ra_packetizer_c::ra_packetizer_c(generic_reader_c *_reader,
   bytes_output(0), packetno(0),
   samples_per_sec(_samples_per_sec), channels(_channels),
   bits_per_sample(_bits_per_sample), fourcc(_fourcc),
-  private_data(safememdup(_private_data, _private_size)),
-  private_size(_private_size), skip_to_keyframe(false),
+  private_data(new memory_c((unsigned char *)
+                            safememdup(_private_data, _private_size),
+                            _private_size, true)),
+  skip_to_keyframe(false),
   buffer_until_keyframe(false) {
 
   if (initial_displacement < 0) {
@@ -67,7 +69,7 @@ ra_packetizer_c::set_headers() {
   set_audio_sampling_freq((float)samples_per_sec);
   set_audio_channels(channels);
   set_audio_bit_depth(bits_per_sample);
-  set_codec_private(private_data, private_size);
+  set_codec_private(private_data->get(), private_data->get_size());
 
   generic_packetizer_c::set_headers();
   track_entry->EnableLacing(false);

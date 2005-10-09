@@ -25,8 +25,7 @@
 
 class vobsub_packetizer_c: public generic_packetizer_c {
 private:
-  autofree_ptr<unsigned char> idx_data;
-  int idx_data_size;
+  memory_cptr idx_data;
 
 public:
   vobsub_packetizer_c(generic_reader_c *_reader,

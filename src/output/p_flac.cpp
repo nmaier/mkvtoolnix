@@ -44,16 +44,17 @@ flac_packetizer_c::flac_packetizer_c(generic_reader_c *_reader,
 
   if ((_l_header < 4) || (_header[0] != 'f') || (_header [1] != 'L') ||
       (_header[2] != 'a') || (_header[3] != 'C')) {
-    header.set(safemalloc(_l_header + 4));
-    memcpy(header.get(), "fLaC", 4);
-    memcpy(header.get() + 4, _header, _l_header);
-    l_header = _l_header + 4;
-  } else {
-    header.set(safememdup(_header, _l_header));
-    l_header = _l_header;
-  }
+    header = memory_cptr(new memory_c((unsigned char *)
+                                      safemalloc(_l_header + 4),
+                                      _l_header + 4, true));
+    memcpy(header->get(), "fLaC", 4);
+    memcpy(header->get() + 4, _header, _l_header);
+  } else
+    header = memory_cptr(new memory_c((unsigned char *)
+                                      safememdup(_header, _l_header),
+                                      _l_header, true));
 
-  result = flac_decode_headers(header, l_header, 1,
+  result = flac_decode_headers(header->get(), header->get_size(), 1,
                                FLAC_HEADER_STREAM_INFO, &stream_info);
   if (!(result & FLAC_HEADER_STREAM_INFO))
     mxerror(_(FMT_TID "The FLAC headers could not be parsed: the stream info "
@@ -78,7 +79,7 @@ flac_packetizer_c::~flac_packetizer_c() {
 void
 flac_packetizer_c::set_headers() {
   set_codec_id(MKV_A_FLAC);
-  set_codec_private(header, l_header);
+  set_codec_private(header->get(), header->get_size());
   set_audio_sampling_freq((float)stream_info.sample_rate);
   set_audio_channels(stream_info.channels);
   set_audio_bit_depth(stream_info.bits_per_sample);
@@ -129,12 +130,12 @@ flac_packetizer_c::can_connect_to(generic_packetizer_c *src,
   connect_check_a_bitdepth(stream_info.bits_per_sample,
                            fsrc->stream_info.bits_per_sample);
 
-  if ((l_header != fsrc->l_header) ||
+  if ((header->get_size() != fsrc->header->get_size()) ||
       (NULL == header.get()) || (NULL == fsrc->header.get()) ||
-      memcmp(header.get(), fsrc->header.get(), l_header)) {
+      memcmp(header->get(), fsrc->header->get(), header->get_size())) {
     error_message = mxsprintf("The FLAC header data is different for the "
                               "two tracks (lengths: %d and %d)",
-                              l_header, fsrc->l_header);
+                              header->get_size(), fsrc->header->get_size());
     return CAN_CONNECT_NO_PARAMETERS;
   }
   return CAN_CONNECT_YES;

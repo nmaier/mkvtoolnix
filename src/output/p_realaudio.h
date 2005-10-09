@@ -27,8 +27,7 @@ private:
   int64_t bytes_output, packetno;
   int samples_per_sec, channels, bits_per_sample;
   uint32_t fourcc;
-  autofree_ptr<unsigned char> private_data;
-  int private_size;
+  memory_cptr private_data;
   bool skip_to_keyframe, buffer_until_keyframe;
   vector<memory_c *> buffered_packets;
   vector<int64_t> buffered_timecodes, buffered_durations;

@@ -242,8 +242,8 @@ int
 mpeg_ps_reader_c::probe_file(mm_io_c *io,
                              int64_t size) {
   try {
-    autofree_ptr<unsigned char> af_buf(safemalloc(PS_PROBE_SIZE));
-    unsigned char *buf = af_buf;
+    memory_c af_buf((unsigned char *)safemalloc(PS_PROBE_SIZE), 0, true);
+    unsigned char *buf = af_buf.get();
     int num_read;
 
     io->setFilePointer(0, seek_beginning);
@@ -579,8 +579,8 @@ mpeg_ps_reader_c::found_new_stream(int id) {
     if (track->type == '?')
       return;
 
-    autofree_ptr<unsigned char> af_buf(safemalloc(length));
-    buf = af_buf;
+    memory_c af_buf((unsigned char *)safemalloc(length), 0, true);
+    buf = af_buf.get();
     if (io->read(buf, length) != length)
       throw false;
 
@@ -601,11 +601,11 @@ mpeg_ps_reader_c::found_new_stream(int id) {
 
           if (!parse_packet(id, timecode, length, aid))
             throw false;
-          autofree_ptr<unsigned char> new_buf(safemalloc(length));
-          if (io->read(new_buf, length) != length)
+          memory_c new_buf((unsigned char *)safemalloc(length), 0, true);
+          if (io->read(new_buf.get(), length) != length)
             throw false;
 
-          m2v_parser->WriteData(new_buf, length);
+          m2v_parser->WriteData(new_buf.get(), length);
 
           state = m2v_parser->GetState();
         }

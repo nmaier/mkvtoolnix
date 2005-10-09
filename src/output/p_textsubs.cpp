@@ -34,8 +34,11 @@ textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *_reader,
                                              track_info_c &_ti)
   throw (error_c):
   generic_packetizer_c(_reader, _ti),
-  packetno(0), cc_utf8(0), global_data(safememdup(_global_data, _global_size)),
-  global_size(_global_size), codec_id(_codec_id), recode(_recode) {
+  packetno(0), cc_utf8(0),
+  global_data(new memory_c((unsigned char *)safememdup(_global_data,
+                                                       _global_size),
+                           _global_size, true)),
+  codec_id(_codec_id), recode(_recode) {
 
   if (recode) {
     if ((ti.sub_charset != "") || !is_utf8)
@@ -55,8 +58,9 @@ textsubs_packetizer_c::~textsubs_packetizer_c() {
 void
 textsubs_packetizer_c::set_headers() {
   set_codec_id(codec_id);
-  if (NULL != global_data.get())
-    set_codec_private((unsigned char *)global_data, global_size);
+  if (NULL != global_data->get())
+    set_codec_private((unsigned char *)global_data->get(),
+                      global_data->get_size());
 
   generic_packetizer_c::set_headers();
 

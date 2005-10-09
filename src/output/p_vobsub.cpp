@@ -35,9 +35,9 @@ vobsub_packetizer_c::vobsub_packetizer_c(generic_reader_c *_reader,
                                          int _idx_data_size,
                                          track_info_c &_ti) throw (error_c):
   generic_packetizer_c(_reader, _ti),
-  idx_data(safememdup(_idx_data, _idx_data_size)),
-  idx_data_size(_idx_data_size) {
-
+  idx_data(new memory_c((unsigned char *)safememdup(_idx_data,
+                                                    _idx_data_size),
+                        _idx_data_size, true)) {
   set_track_type(track_subtitle);
   set_default_compression_method(COMPRESSION_ZLIB);
 }
@@ -48,7 +48,7 @@ vobsub_packetizer_c::~vobsub_packetizer_c() {
 void
 vobsub_packetizer_c::set_headers() {
   set_codec_id(MKV_S_VOBSUB);
-  set_codec_private(idx_data, idx_data_size);
+  set_codec_private(idx_data->get(), idx_data->get_size());
 
   generic_packetizer_c::set_headers();
 

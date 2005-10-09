@@ -76,39 +76,4 @@ private:
   }
 };
 
-// -----------------------------------------------------------------
-
-template <class X> class autofree_ptr {
-protected:
-  X *ptr;
-
-public:
-  explicit autofree_ptr(X *p = NULL):
-    ptr(p) {}
-
-  explicit autofree_ptr(void *p):
-    ptr((X *)p) {}
-
-  ~autofree_ptr() {
-    safefree(ptr);
-  }
-
-  operator X *() {
-    return ptr;
-  }
-
-  operator const X *() {
-    return ptr;
-  }
-
-  void set(void *p) {
-    safefree(ptr);
-    ptr = (X *)p;
-  }
-
-  X *get() {
-    return ptr;
-  }
-};
-
 #endif // COUNTED_PTR_H

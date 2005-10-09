@@ -30,8 +30,7 @@
 
 class flac_packetizer_c: public generic_packetizer_c {
 private:
-  autofree_ptr<unsigned char> header;
-  int l_header;
+  memory_cptr header;
   int64_t num_packets;
   FLAC__StreamMetadata_StreamInfo stream_info;
 
