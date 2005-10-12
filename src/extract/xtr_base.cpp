@@ -53,9 +53,9 @@ void
 xtr_base_c::create_file(xtr_base_c *_master,
                         KaxTrackEntry &track) {
   if (NULL != _master)
-    mxerror("Cannot write track %lld with the CodecID '%s' to the file '%s' "
-            "because track %lld with the CodecID '%s' is already being "
-            "written to the same file.\n", tid, codec_id.c_str(),
+    mxerror("Cannot write track " LLD " with the CodecID '%s' to the file "
+            "'%s' because track " LLD " with the CodecID '%s' is already "
+            "being written to the same file.\n", tid, codec_id.c_str(),
             file_name.c_str(), _master->tid, _master->codec_id.c_str());
 
   try {

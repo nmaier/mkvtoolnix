@@ -56,15 +56,15 @@ mp3_packetizer_c::handle_garbage(int64_t bytes) {
     offset = handle_avi_audio_sync(bytes, !(ti.avi_block_align % 384) ||
                                    !(ti.avi_block_align % 576));
     if (offset != -1) {
-      mxinfo("The MPEG audio track %lld from '%s' contained %lld bytes of "
-             "garbage at the beginning. This corresponds to a delay of "
-             "%lldms. This delay will be used instead of the garbage data."
+      mxinfo("The MPEG audio track " LLD " from '%s' contained " LLD " bytes "
+             "of garbage at the beginning. This corresponds to a delay of "
+             "" LLD "ms. This delay will be used instead of the garbage data."
              "\n", ti.id, ti.fname.c_str(), bytes, offset / 1000000);
       warning_printed = true;
     }
   }
   if (!warning_printed)
-    mxwarn("The MPEG audio track %lld from '%s' contained %lld bytes of "
+    mxwarn("The MPEG audio track " LLD " from '%s' contained " LLD " bytes of "
            "garbage at the beginning which were skipped. The audio/video "
            "synchronization may have been lost.\n", ti.id, ti.fname.c_str(),
            bytes);

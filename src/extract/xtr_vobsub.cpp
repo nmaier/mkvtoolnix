@@ -67,8 +67,9 @@ xtr_vobsub_c::create_file(xtr_base_c *_master,
 
   priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
-    mxerror("Track %lld with the CodecID '%s' is missing the \"codec private"
-            "\" element and cannot be extracted.\n", tid, codec_id.c_str());
+    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec "
+            "private\" element and cannot be extracted.\n", tid,
+            codec_id.c_str());
 
   if (!content_decoder.initialize(track))
     mxerror("Tracks with unsupported content encoding schemes (compression "
@@ -97,7 +98,7 @@ xtr_vobsub_c::create_file(xtr_base_c *_master,
 
     if (NULL == vmaster)
       mxerror("Cannot extract tracks of different kinds to the same file. "
-              "This was requested for the tracks %lld and %lld.\n", tid,
+              "This was requested for the tracks " LLD " and " LLD ".\n", tid,
               master->tid);
 
     if ((private_data->get_size() != vmaster->private_data->get_size()) ||
@@ -105,7 +106,7 @@ xtr_vobsub_c::create_file(xtr_base_c *_master,
                private_data->get_size()))
       mxerror("Two VobSub tracks can only be extracted into the same file "
               "if their CodecPrivate data matches. This is not the case "
-              "for the tracks %lld and %lld.\n", tid, master->tid);
+              "for the tracks " LLD " and " LLD ".\n", tid, master->tid);
 
     vmaster->slaves.push_back(this);
     stream_id = vmaster->stream_id + 1;

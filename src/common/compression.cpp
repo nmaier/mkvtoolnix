@@ -318,9 +318,9 @@ header_removal_compressor_c::set_track_headers(KaxContentEncoding
 
 compressor_c::~compressor_c() {
   if (items != 0)
-    mxverb(2, "compression: Overall stats: raw size: %lld, compressed "
-           "size: %lld, items: %lld, ratio: %.2f%%, avg bytes per item: "
-           "%lld\n", raw_size, compressed_size, items,
+    mxverb(2, "compression: Overall stats: raw size: " LLD ", compressed "
+           "size: " LLD ", items: " LLD ", ratio: %.2f%%, avg bytes per item: "
+           "" LLD "\n", raw_size, compressed_size, items,
            compressed_size * 100.0 / raw_size, compressed_size / items);
 }
 

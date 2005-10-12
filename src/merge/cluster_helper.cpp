@@ -97,9 +97,9 @@ cluster_helper_c::add_packet(packet_cptr packet) {
 
   timecode = get_timecode();
 
-  mxverb(4, "cluster_helper_c::add_packet(): new packet { source %lld/%s "
-         "timecode: %lld duration: %lld bref: %lld fref: %lld "
-         "assigned_timecode: %lld }\n",
+  mxverb(4, "cluster_helper_c::add_packet(): new packet { source " LLD "/%s "
+         "timecode: " LLD " duration: " LLD " bref: " LLD " fref: " LLD " "
+         "assigned_timecode: " LLD " }\n",
          packet->source->ti.id, packet->source->ti.fname.c_str(),
          packet->timecode, packet->duration, packet->bref, packet->fref,
          packet->assigned_timecode);
@@ -146,9 +146,9 @@ cluster_helper_c::add_packet(packet_cptr packet) {
         kax_cues->UpdateSize();
         additional_size += kax_cues->ElementSize();
       }
-      mxverb(3, "cluster_helper split decision: header_overhead: %lld, "
-             "additional_size: %lld, bytes_in_file: %lld, sum: %lld\n",
-             header_overhead, additional_size, bytes_in_file,
+      mxverb(3, "cluster_helper split decision: header_overhead: " LLD ", "
+             "additional_size: " LLD ", bytes_in_file: " LLD ", sum: " LLD
+             "\n", header_overhead, additional_size, bytes_in_file,
              header_overhead + additional_size + bytes_in_file);
       if ((header_overhead + additional_size + bytes_in_file) >=
           current_split_point->m_point)
@@ -304,9 +304,9 @@ cluster_helper_c::set_duration(render_groups_t *rg) {
   for (i = 0; i < rg->durations.size(); i++)
     block_duration += rg->durations[i];
   def_duration = rg->source->get_track_default_duration();
-  mxverb(3, "cluster_helper::set_duration: block_duration %lld "
-         "rounded duration %lld def_duration "
-         "%lld use_durations %d rg->duration_mandatory %d\n",
+  mxverb(3, "cluster_helper::set_duration: block_duration " LLD " "
+         "rounded duration " LLD " def_duration "
+         "" LLD " use_durations %d rg->duration_mandatory %d\n",
          block_duration, RND_TIMECODE_SCALE(block_duration), def_duration,
          use_durations ? 1 : 0, rg->duration_mandatory ? 1 : 0);
 
@@ -398,7 +398,8 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
         (cluster)->set_min_timecode(pack->assigned_timecode - timecode_offset);
     max_cl_timecode = pack->assigned_timecode;
 
-    data_buffer = new DataBuffer((binary *)pack->data->get(), pack->data->get_size());
+    data_buffer = new DataBuffer((binary *)pack->data->get(),
+                                 pack->data->get_size());
 
     KaxTrackEntry &track_entry =
       static_cast<KaxTrackEntry &>(*source->get_track_entry());
@@ -626,8 +627,8 @@ cluster_helper_c::check_clusters(int num) {
       clstr = find_packet_cluster(p->bref, p->source);
       if (clstr == NULL)
         die("cluster_helper.cpp/cluster_helper_c::check_clusters(): Error: "
-            "backward refenrece could not be resolved (%lld -> %lld). Called "
-            "from line %d.\n", p->timecode, p->bref, num);
+            "backward refenrece could not be resolved (" LLD " -> " LLD "). "
+            "Called from line %d.\n", p->timecode, p->bref, num);
     }
   }
 }
@@ -669,7 +670,8 @@ cluster_helper_c::free_clusters() {
         clstr = find_packet_cluster(p->bref, p->source);
         if (clstr == NULL)
           die("cluster_helper.cpp/cluster_helper_c::free_clusters(): Error: "
-              "backward refenrece could not be resolved (%lld).\n", p->bref);
+              "backward refenrece could not be resolved (" LLD ").\n",
+              p->bref);
         clstr->is_referenced = true;
       }
     }
@@ -730,7 +732,7 @@ cluster_helper_c::free_ref(int64_t ref_timecode,
 
 int64_t
 cluster_helper_c::get_duration() {
-  mxverb(3, "cluster_helper_c::get_duration(): %lld - %lld = %lld\n",
+  mxverb(3, "cluster_helper_c::get_duration(): " LLD " - " LLD " = " LLD "\n",
          max_timecode_and_duration, first_timecode_in_file,
          max_timecode_and_duration - first_timecode_in_file);
   return max_timecode_and_duration - first_timecode_in_file;

@@ -714,8 +714,8 @@ remove_entries(int64_t min_tc,
         (entries[i].end > min_tc))
       entries[i].spans = true;
 
-    mxverb(3, "remove_chapters: entries[%d]: remove %d spans %d start %lld "
-           "end %lld\n", i, entries[i].remove, entries[i].spans,
+    mxverb(3, "remove_chapters: entries[%d]: remove %d spans %d start " LLD " "
+           "end " LLD "\n", i, entries[i].remove, entries[i].spans,
            entries[i].start, entries[i].end);
 
     // Spanning entries must be kept, and their start timecode must be
@@ -790,8 +790,8 @@ merge_chapter_entries(EbmlMaster &master) {
     start_tc = get_chapter_start(*atom, 0);
     end_tc = get_chapter_end(*atom);
 
-    mxverb(3, "chapters: merge_entries: looking for %lld with %lld, %lld\n",
-           uid, start_tc, end_tc);
+    mxverb(3, "chapters: merge_entries: looking for " LLD " with " LLD ", " LLD
+           "\n", uid, start_tc, end_tc);
 
     // Now iterate over all remaining atoms and find those with the same
     // UID.
@@ -828,8 +828,8 @@ merge_chapter_entries(EbmlMaster &master) {
       if ((-1 == end_tc) || (merge_end_tc > end_tc))
         end_tc = merge_end_tc;
 
-      mxverb(3, "chapters: merge_entries:   found one at %d with %lld, %lld; "
-             "merged to %lld, %lld\n", k, merge_start_tc, merge_end_tc,
+      mxverb(3, "chapters: merge_entries:   found one at %d with " LLD ", " LLD
+             "; merged to " LLD ", " LLD "\n", k, merge_start_tc, merge_end_tc,
              start_tc, end_tc);
 
       // Finally remove the entry itself.

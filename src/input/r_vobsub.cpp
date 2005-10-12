@@ -145,8 +145,8 @@ vobsub_reader_c::~vobsub_reader_c() {
   uint32_t i;
 
   for (i = 0; i < tracks.size(); i++) {
-    mxverb(2, "r_vobsub track %u SPU size: %lld, overall size: %lld, "
-           "overhead: %lld (%.3f%%)\n", i, tracks[i]->spu_size,
+    mxverb(2, "r_vobsub track %u SPU size: " LLD ", overall size: " LLD ", "
+           "overhead: " LLD " (%.3f%%)\n", i, tracks[i]->spu_size,
            tracks[i]->spu_size + tracks[i]->overhead,
            tracks[i]->overhead, (float)(100.0 * tracks[i]->overhead /
                                         (tracks[i]->overhead +
@@ -290,7 +290,7 @@ vobsub_reader_c::parse_headers() {
 
       if ((timestamp < last_timestamp) &&
           demuxing_requested('s', tracks.size())) {
-        mxwarn(PFX "'%s', line %lld: The current timestamp (" FMT_TIMECODE
+        mxwarn(PFX "'%s', line " LLD ": The current timestamp (" FMT_TIMECODE
                ") is smaller than the last one (" FMT_TIMECODE"). mkvmerge "
                "will sort the entries according to their timestamps. This "
                "might result in the wrong order for some subtitle entries. If "
@@ -353,7 +353,7 @@ vobsub_reader_c::deliver_packet(unsigned char *buf,
   duration = spu_extract_duration(buf, size, timecode);
   if (duration == -1) {
     mxverb(2, PFX "Could not extract the duration for a SPU packet in track "
-           "%lld of '%s' (timecode: " FMT_TIMECODE ").\n", ti.id,
+           "" LLD " of '%s' (timecode: " FMT_TIMECODE ").\n", ti.id,
            ti.fname.c_str(), ARG_TIMECODE(timecode));
     duration = default_duration;
   }
@@ -418,8 +418,8 @@ vobsub_reader_c::extract_one_spu_packet(int64_t timecode,
           version = 2;
         else {
           if (!track->mpeg_version_warning_printed) {
-            mxwarn(PFX "Unsupported MPEG version: 0x%02x in packet %lld for "
-                   "track %lld for timecode " FMT_TIMECODE ", assuming "
+            mxwarn(PFX "Unsupported MPEG version: 0x%02x in packet " LLD
+                   "for track " LLD " for timecode " FMT_TIMECODE ", assuming "
                    "MPEG2. No further warnings will be printed for this "
                    "track.\n", c, track->packet_num, track_id,
                    ARG_TIMECODE_NS(timecode));
@@ -499,7 +499,7 @@ vobsub_reader_c::extract_one_spu_packet(int64_t timecode,
           else if (track->aid != packet_aid) {
             // The packet does not belong to the current subtitle stream.
             mxverb(3, PFX "skipping sub packet with aid %d (wanted aid: %d) "
-                   "with size %d at %lld\n", packet_aid, track->aid,
+                   "with size %d at " LLD "\n", packet_aid, track->aid,
                    packet_size, sub_file->getFilePointer() -
                    extraction_start_pos);
             sub_file->skip(packet_size);

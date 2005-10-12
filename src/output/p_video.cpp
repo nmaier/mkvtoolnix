@@ -169,7 +169,7 @@ video_packetizer_c::process(packet_cptr packet) {
 void
 video_packetizer_c::dump_debug_info() {
   mxdebug("video_packetizer_c: queue: %u; frames_output: %d; "
-          "ref_timecode: %lld\n", (unsigned int)packet_queue.size(),
+          "ref_timecode: " LLD "\n", (unsigned int)packet_queue.size(),
           frames_output, ref_timecode);
 }
 
@@ -547,12 +547,12 @@ mpeg4_p2_video_packetizer_c::handle_missing_timecodes(bool end_of_file) {
     while (available_timecodes.size() < queued_frames.size()) {
       previous_timecode = (int64_t)(previous_timecode +  1000000000.0 / fps);
       available_timecodes.push_back(previous_timecode);
-      mxverb(3, "mpeg4_p2::flush_frames(): Needed new timecode %lld\n",
+      mxverb(3, "mpeg4_p2::flush_frames(): Needed new timecode " LLD "\n",
              previous_timecode);
     }
     while (available_durations.size() < queued_frames.size()) {
       available_durations.push_back((int64_t)(1000000000.0 / fps));
-      mxverb(3, "mpeg4_p2::flush_frames(): Needed new duration %lld\n",
+      mxverb(3, "mpeg4_p2::flush_frames(): Needed new duration " LLD "\n",
              available_durations.back());
     }
 
@@ -677,7 +677,7 @@ mpeg4_p2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
       (float)hvideo_pixel_height * (float)num / (float)den;
     generic_packetizer_c::set_headers();
     rerender_track_headers();
-    mxinfo("Track %lld of '%s': Extracted the aspect ratio information "
+    mxinfo("Track " LLD " of '%s': Extracted the aspect ratio information "
            "from the MPEG4 layer 2 video data and set the display dimensions "
            "to %u/%u.\n", (int64_t)ti.id, ti.fname.c_str(),
            (uint32_t)ti.display_width, (uint32_t)ti.display_height);
@@ -705,7 +705,7 @@ mpeg4_p2_video_packetizer_c::extract_size(const unsigned char *buffer,
       }
       generic_packetizer_c::set_headers();
       rerender_track_headers();
-      mxinfo("Track %lld of '%s': The extracted values for video width and "
+      mxinfo("Track " LLD " of '%s': The extracted values for video width and "
              "height from the MPEG4 layer 2 video data bitstream differ from "
              "what the values in the source container. The ones from the "
              "video data bitstream (%ux%u) will be used.\n",
@@ -752,7 +752,7 @@ mpeg4_p10_video_packetizer_c::extract_aspect_ratio() {
       }
 
       ti.display_dimensions_given = true;
-      mxinfo("Track %lld of '%s': Extracted the aspect ratio information "
+      mxinfo("Track " LLD " of '%s': Extracted the aspect ratio information "
              "from the MPEG-4 layer 10 (AVC) video data and set the display "
              "dimensions to %u/%u.\n", (int64_t)ti.id, ti.fname.c_str(),
              (uint32_t)ti.display_width, (uint32_t)ti.display_height);

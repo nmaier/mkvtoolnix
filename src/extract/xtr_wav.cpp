@@ -38,7 +38,7 @@ xtr_wav_c::create_file(xtr_base_c *_master,
   sfreq = (int)kt_get_a_sfreq(track);
   bps = kt_get_a_bps(track);
   if (-1 == bps)
-    mxerror("Track %lld with the CodecID '%s' is missing the \"bits per "
+    mxerror("Track " LLD " with the CodecID '%s' is missing the \"bits per "
             "second (bps)\" element and cannot be extracted.\n",
             tid, codec_id.c_str());
 
@@ -84,8 +84,9 @@ xtr_wavpack4_c::create_file(xtr_base_c *_master,
 
   priv = FINDFIRST(&track, KaxCodecPrivate);
   if ((NULL == priv) || (2 > priv->GetSize()))
-    mxerror("Track %lld with the CodecID '%s' is missing the \"codec private"
-            "\" element and cannot be extracted.\n", tid, codec_id.c_str());
+    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec "
+            "private\" element and cannot be extracted.\n", tid,
+            codec_id.c_str());
   memcpy(version, priv->GetBuffer(), 2);
 
   channels = kt_get_a_channels(track);

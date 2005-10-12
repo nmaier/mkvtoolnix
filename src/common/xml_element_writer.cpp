@@ -135,7 +135,7 @@ write_xml_element_rec(int level,
 
     case EBMLT_UINT:
     case EBMLT_BOOL:
-      out->printf("%llu</%s>\n", uint64(*dynamic_cast<EbmlUInteger *>(e)),
+      out->printf("" LLU "</%s>\n", uint64(*dynamic_cast<EbmlUInteger *>(e)),
                   element_map[elt_idx].name);
       break;
 

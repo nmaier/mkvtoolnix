@@ -289,7 +289,7 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
 
       switch (header) {
         case MPEGVIDEO_PACKET_START_CODE:
-          mxverb(3, "mpeg_ps: packet start at %lld\n",
+          mxverb(3, "mpeg_ps: packet start at " LLD "\n",
                  io->getFilePointer() - 4);
 
           if (version == -1) {
@@ -311,7 +311,7 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
           break;
 
         case MPEGVIDEO_SYSTEM_HEADER_START_CODE:
-          mxverb(3, "mpeg_ps: system header start code at %lld\n",
+          mxverb(3, "mpeg_ps: system header start code at " LLD "\n",
                  io->getFilePointer() - 4);
 
           io->skip(2 * 4);   // system header
@@ -330,7 +330,7 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
 
         default:
           if (!mpeg_is_start_code(header)) {
-            mxverb(3, "mpeg_ps: unknown header 0x%08x at %lld\n",
+            mxverb(3, "mpeg_ps: unknown header 0x%08x at " LLD "\n",
                    header, io->getFilePointer() - 4);
             done = true;
             break;
@@ -341,7 +341,7 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
           found_new_stream(stream_id);
           io->restore_pos();
           pes_packet_length = io->read_uint16_be();
-          mxverb(3, "mpeg_ps: id 0x%02x len %u at %lld\n", stream_id,
+          mxverb(3, "mpeg_ps: id 0x%02x len %u at " LLD "\n", stream_id,
                  pes_packet_length, io->getFilePointer() - 4 - 2);
 
           io->skip(pes_packet_length);
@@ -374,13 +374,14 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
       for (i = 0; i < tracks.size(); i++)
         tracks[i]->timecode_offset -= min_timecode;
 
-      mxverb(2, "mpeg_ps: Timecode offset: min was %lld ", min_timecode);
+      mxverb(2, "mpeg_ps: Timecode offset: min was " LLD " ", min_timecode);
       for (i = 0; i < tracks.size(); i++)
         if (tracks[i]->id > 0xff)
-          mxverb(2, "bd(%02x)=%lld ", tracks[i]->id - 256,
+          mxverb(2, "bd(%02x)=" LLD " ", tracks[i]->id - 256,
                  tracks[i]->timecode_offset);
         else
-          mxverb(2, "%02x=%lld ", tracks[i]->id, tracks[i]->timecode_offset);
+          mxverb(2, "%02x=" LLD " ", tracks[i]->id,
+                 tracks[i]->timecode_offset);
       mxverb(2, "\n");
     }
 
@@ -874,8 +875,8 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
         continue;
       }
 
-      mxverb(3, "mpeg_ps: packet for %d length %d at %lld\n", new_id, length,
-             packet_pos);
+      mxverb(3, "mpeg_ps: packet for %d length %d at " LLD "\n", new_id,
+             length, packet_pos);
 
       buf = (unsigned char *)safemalloc(length);
       if (io->read(buf, length) != length) {

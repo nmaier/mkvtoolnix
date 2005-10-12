@@ -28,7 +28,7 @@ xtr_tta_c::xtr_tta_c(const string &_codec_id,
   xtr_base_c(_codec_id, _tid, tspec),
   last_duration(0), bps(0), channels(0), sfreq(0) {
 
-  temp_file_name = mxsprintf("mkvextract-%lld-temp-tta-%u", tid,
+  temp_file_name = mxsprintf("mkvextract-" LLD "-temp-tta-%u", tid,
                              (uint32_t)time(NULL));
 }
 
@@ -123,7 +123,7 @@ xtr_tta_c::finish_file() {
   out->write_uint32_le(crc);
   safefree(buffer);
 
-  mxinfo("\nThe temporary TTA file for track ID %lld is being "
+  mxinfo("\nThe temporary TTA file for track ID " LLD " is being "
          "copied into the final TTA file. This may take some time.\n", tid);
 
   buffer = (unsigned char *)safemalloc(128000);

@@ -41,7 +41,7 @@ xtr_aac_c::create_file(xtr_base_c *_master,
   else if (codec_id[10] == '2')
     id = 1;
   else
-    mxerror("Track ID %lld has an unknown AAC type.\n", tid);
+    mxerror("Track ID " LLD " has an unknown AAC type.\n", tid);
 
   if (!strcmp(&codec_id[12], "MAIN"))
     profile = 0;
@@ -53,7 +53,7 @@ xtr_aac_c::create_file(xtr_base_c *_master,
   else if (!strcmp(&codec_id[12], "LTP"))
     profile = 3;
   else
-    mxerror("Track ID %lld has an unknown AAC type.\n", tid);
+    mxerror("Track ID " LLD " has an unknown AAC type.\n", tid);
 
   if (92017 <= sfreq)
     srate_idx = 0;

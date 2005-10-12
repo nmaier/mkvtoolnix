@@ -262,7 +262,7 @@ mpeg4_p2_find_frame_types(const unsigned char *buffer,
         continue;
       }
 
-      mxverb(3, "mpeg4_frames:   found start code at %lld: 0x%02x\n",
+      mxverb(3, "mpeg4_frames:   found start code at " LLD ": 0x%02x\n",
              bytes.getFilePointer() - 4, marker & 0xff);
       if (marker == MPEGVIDEO_VOP_START_CODE) {
         if (frame_found) {

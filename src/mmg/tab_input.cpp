@@ -1033,7 +1033,7 @@ tab_input::add_file(const wxString &file_name,
     t->enabled = true;
     t->source = new_file_pos;
 
-    fix_format("%s%s (ID %lld, type: %s) from %s", format);
+    fix_format("%s%s (ID " LLD ", type: %s) from %s", format);
     label.Printf(wxU(format.c_str()), t->appending ? wxT("++> ") : wxT(""),
                  t->ctype.c_str(), t->id,
                  t->type == 'a' ? wxT("audio") :
@@ -1560,7 +1560,7 @@ tab_input::save(wxConfigBase *cfg) {
       cfg->SetPath(s);
       s.Printf(wxT("%c"), t->type);
       cfg->Write(wxT("type"), s);
-      fix_format("%lld", format);
+      fix_format("" LLD, format);
       s.Printf(wxU(format.c_str()), t->id);
       cfg->Write(wxT("id"), s);
       cfg->Write(wxT("enabled"), t->enabled);
@@ -1621,7 +1621,7 @@ tab_input::load(wxConfigBase *cfg,
     return;
   }
 
-  fix_format("%u:%lld", format);
+  fix_format("%u:" LLD, format);
   for (fidx = 0; fidx < num_files; fidx++) {
     mmg_file_t fi;
 
@@ -1742,7 +1742,7 @@ tab_input::load(wxConfigBase *cfg,
       mmg_track_ptr &t = files[fidx].tracks[tidx];
       tracks.push_back(t.get());
 
-      fix_format("%s%s (ID %lld, type: %s) from %s", format);
+      fix_format("%s%s (ID " LLD ", type: %s) from %s", format);
       name = files[fidx].file_name.AfterLast(wxT(PSEP));
       name += wxT(" (") + files[fidx].file_name.BeforeLast(wxT(PSEP)) +
         wxT(")");
@@ -1797,7 +1797,7 @@ tab_input::validate_settings() {
         continue;
 
       tracks_selected = true;
-      fix_format("%lld", format);
+      fix_format("" LLD, format);
       sid.Printf(wxU(format.c_str()), t->id);
 
       s = wxMB(t->delay);

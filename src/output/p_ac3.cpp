@@ -77,16 +77,16 @@ ac3_packetizer_c::get_ac3_packet(unsigned long *header,
 
       offset = handle_avi_audio_sync(pos, false);
       if (offset != -1) {
-        mxinfo("The AC3 track %lld from '%s' contained %d bytes of non-AC3 "
-               "data at the beginning. This corresponds to a delay of %lldms. "
-               "This delay will be used instead of the non-AC3 data.\n",
+        mxinfo("The AC3 track " LLD " from '%s' contained %d bytes of non-AC3 "
+               "data at the beginning. This corresponds to a delay of " LLD
+               "ms. This delay will be used instead of the non-AC3 data.\n",
                ti.id, ti.fname.c_str(), pos, offset / 1000000);
         warning_printed = true;
       }
     }
     if (!warning_printed)
-      mxwarn("The AC3 track %lld from '%s' contained %d bytes of non-AC3 data "
-             "at the beginning which were skipped. The audio/video "
+      mxwarn("The AC3 track " LLD " from '%s' contained %d bytes of non-AC3 "
+             "data at the beginning which were skipped. The audio/video "
              "synchronization may have been lost.\n", ti.id,
              ti.fname.c_str(), pos);
     byte_buffer.remove(pos);

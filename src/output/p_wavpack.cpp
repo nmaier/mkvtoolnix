@@ -62,7 +62,7 @@ wavpack_packetizer_c::process(packet_cptr packet) {
   if (-1 == packet->duration)
     packet->duration = irnd(samples * 1000000000 / sample_rate);
   else
-    mxverb(2, "wavpack_packetizer: incomplete block with duration %lld\n",
+    mxverb(2, "wavpack_packetizer: incomplete block with duration " LLD "\n",
            packet->duration);
   if (-1 == packet->timecode)
     packet->timecode = irnd((double)samples_output * 1000000000 / sample_rate);

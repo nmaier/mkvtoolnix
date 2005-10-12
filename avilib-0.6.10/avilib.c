@@ -461,7 +461,7 @@ static int avi_add_odml_index_entry(avi_t *AVI, unsigned char *tag, long flags, 
     }
     towrite += len + (len&1) + 8;
 
-    //printf("ODML: towrite = 0x%llX = %lld\n", towrite, towrite);
+    //printf("ODML: towrite = 0x%llX = " LLD "\n", towrite, towrite);
 
     if (AVI->video_superindex && 
 	    (int64_t)(AVI->pos+towrite) > (int64_t)((int64_t)NEW_RIFF_THRES*AVI->video_superindex->nEntriesInUse)) {
@@ -475,7 +475,7 @@ static int avi_add_odml_index_entry(avi_t *AVI, unsigned char *tag, long flags, 
 	if (AVI->video_superindex->nEntriesInUse > NR_IXNN_CHUNKS) {
 	    fprintf (stderr, "Internal error in avilib - redefine NR_IXNN_CHUNKS\n");
 	    fprintf (stderr, "[avilib dump] cur_std_idx=%d NR_IXNN_CHUNKS=%d"
-		    "POS=%lld towrite=%lld\n",
+		    "POS=" LLD " towrite=" LLD "\n",
 		    cur_std_idx,NR_IXNN_CHUNKS, AVI->pos, towrite);
 	    return -1;
 	}
@@ -2176,7 +2176,7 @@ int avi_parse_index_from_file(avi_t *AVI, const char *filename)
 
     while (fgets(data, 100, fd)) {
 	// this is very slow
-	// sscanf(data, "%*s %d %*d %*d %lld %lld %d %*f", &type,  &pos, &len, &key);
+	// sscanf(data, "%*s %d %*d %*d " LLD " " LLD " %d %*f", &type,  &pos, &len, &key);
 	c     = strchr (data, ' ');
 	type  = strtol(c+1, &c, 10);
 	//ch    = strtol(c+1, &c, 10);
@@ -2932,7 +2932,7 @@ multiple_riff:
 	     AVI->video_index[nvi].len = n;
 
 	     /*
-	     fprintf(stderr, "Frame %ld pos %lld len %lld key %ld\n",
+	     fprintf(stderr, "Frame %ld pos " LLD " len " LLD " key %ld\n",
 		     nvi, AVI->video_index[nvi].pos,  AVI->video_index[nvi].len, (long)AVI->video_index[nvi].key);
 		     */
 	     nvi++;
@@ -3311,7 +3311,7 @@ long AVI_read_audio(avi_t *AVI, char *audbuf, long bytes)
       xio_lseek(AVI->fdes, pos, SEEK_SET);
       if ( (ret = avi_read(AVI->fdes,audbuf+nr,todo)) != todo)
       {
-/* 	 fprintf(stderr, "XXX pos = %lld, ret = %lld, todo = %ld\n", pos, ret, todo); */
+/* 	 fprintf(stderr, "XXX pos = " LLD ", ret = " LLD ", todo = %ld\n", pos, ret, todo); */
          AVI_errno = AVI_ERR_READ;
          return -1;
       }

@@ -44,7 +44,7 @@ ra_packetizer_c::ra_packetizer_c(generic_reader_c *_reader,
   buffer_until_keyframe(false) {
 
   if (initial_displacement < 0) {
-    mxwarn("Track %lld/'%s': Negative '--sync' is not supported for "
+    mxwarn("Track " LLD "/'%s': Negative '--sync' is not supported for "
            "RealAudio tracks.\n", ti.id, ti.fname.c_str());
     initial_displacement = 0;
   }

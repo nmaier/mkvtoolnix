@@ -198,7 +198,7 @@ aac_packetizer_c::process(packet_cptr packet) {
     packet->duration = duration;
     packet->timecode = (int64_t)((my_timecode + ti.async.displacement) *
                                  ti.async.linear);
-    mxverb(2, "aac: my_tc = %lld\n", packet->timecode);
+    mxverb(2, "aac: my_tc = " LLD "\n", packet->timecode);
     add_packet(packet);
 
     debug_leave("aac_packetizer_c::process");

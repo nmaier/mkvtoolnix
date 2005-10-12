@@ -38,7 +38,7 @@ using namespace libebml;
 
 //   mxinfo("DATA dump:\n");
 //   for (i = 0; i < data.size(); i++)
-//     mxinfo("%03d: 0x%08x at %lld, size %lld\n", i, data[i]->id.Value,
+//     mxinfo("%03d: 0x%08x at " LLD ", size " LLD "\n", i, data[i]->id.Value,
 //            data[i]->pos, data[i]->size);
 // }
 

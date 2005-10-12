@@ -35,8 +35,9 @@ xtr_flac_c::create_file(xtr_base_c *_master,
 
   priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
-    mxerror("Track %lld with the CodecID '%s' is missing the \"codec private"
-            "\" element and cannot be extracted.\n", tid, codec_id.c_str());
+    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec "
+            "private\" element and cannot be extracted.\n", tid,
+            codec_id.c_str());
 
   xtr_base_c::create_file(_master, track);
 
@@ -163,8 +164,9 @@ xtr_oggflac_c::create_file(xtr_base_c *_master,
 
   priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
-    mxerror("Track %lld with the CodecID '%s' is missing the \"codec private"
-            "\" element and cannot be extracted.\n", tid, codec_id.c_str());
+    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec "
+            "private\" element and cannot be extracted.\n", tid,
+            codec_id.c_str());
 
   sfreq = (int)kt_get_a_sfreq(track);
 
@@ -219,13 +221,14 @@ xtr_oggvorbis_c::create_file(xtr_base_c *_master,
 
   priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
-    mxerror("Track %lld with the CodecID '%s' is missing the \"codec private"
-            "\" element and cannot be extracted.\n", tid, codec_id.c_str());
+    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec "
+            "private\" element and cannot be extracted.\n", tid,
+            codec_id.c_str());
 
   c = (const unsigned char *)priv->GetBuffer();
   if ((priv->GetSize() == 0) || (c[0] != 2))
-    mxerror("Track %lld with the CodecID '%s' does not contain valid headers."
-            "\n", tid, codec_id.c_str());
+    mxerror("Track " LLD " with the CodecID '%s' does not contain valid "
+            "headers.\n", tid, codec_id.c_str());
 
   offset = 1;
   for (packetno = 0; packetno < 2; packetno++) {
@@ -236,7 +239,7 @@ xtr_oggvorbis_c::create_file(xtr_base_c *_master,
       offset++;
     }
     if ((priv->GetSize() - 1) <= offset)
-      mxerror("Track %lld with the CodecID '%s' does not contain valid "
+      mxerror("Track " LLD " with the CodecID '%s' does not contain valid "
               "headers.\n", tid, codec_id.c_str());
     length += c[offset];
     offset++;

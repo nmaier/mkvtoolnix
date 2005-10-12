@@ -757,7 +757,7 @@ safefree(void *p) {
 
 void
 dump_malloc_report() {
-  mxinfo("%llu bytes malloced, %llu bytes duplicated\n",
+  mxinfo("" LLU " bytes malloced, " LLU " bytes duplicated\n",
          _safemalloced - _safedupped, _safedupped);
 }
 
@@ -1093,7 +1093,7 @@ string
 to_string(int64_t i) {
   char buf[100];
 
-  sprintf(buf, "%lld", i);
+  sprintf(buf, "" LLD, i);
 
   return string(buf);
 }
@@ -1202,8 +1202,8 @@ debug_c::dump_info() {
   mxprint(stdout, "\nDBG> dumping time info:\n");
   for (i = 0; i < entries.size(); i++) {
     entry = entries[i];
-    mxprint(stdout, "DBG> function: %s, # calls: %llu, elapsed time: %.3fs, "
-            "time/call: %.3fms", entry->label, entry->number_of_calls,
+    mxprint(stdout, "DBG> function: %s, # calls: " LLU ", elapsed time: %.3fs,"
+            " time/call: %.3fms", entry->label, entry->number_of_calls,
             entry->elapsed_time / 1000000.0,
             entry->elapsed_time / (float)entry->number_of_calls / 1000.0);
     diff_calls = entry->number_of_calls - entry->last_number_of_calls;
@@ -1211,7 +1211,7 @@ debug_c::dump_info() {
     if ((entry->last_elapsed_time != 0) &&
         (entry->last_number_of_calls != 0) &&
         (diff_calls > 0)) {
-      mxprint(stdout, ", since the last call: # calls: %llu, elapsed time: "
+      mxprint(stdout, ", since the last call: # calls: " LLU ", elapsed time: "
               "%.3fs, time/call: %.3fms", diff_calls, diff_time / 1000000.0,
               diff_time / (float)diff_calls / 1000.0);
     }

@@ -163,7 +163,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   }
   if (ti.aspect_ratio_given && ti.display_dimensions_given)
     mxerror(_("Both '%s' and '--display-dimensions' were given "
-              "for track %lld of '%s'.\n"), ti.aspect_ratio_is_factor ?
+              "for track " LLD " of '%s'.\n"), ti.aspect_ratio_is_factor ?
             _("Aspect ratio factor") : _("Aspect ratio"), ti.id,
             ti.fname.c_str());
 
@@ -230,7 +230,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
 generic_packetizer_c::~generic_packetizer_c() {
   safefree(hcodec_private);
   if (!packet_queue.empty())
-    mxerror("Packet queue not empty for new track ID %lld (flushed: %d). "
+    mxerror("Packet queue not empty for new track ID " LLD " (flushed: %d). "
             "Frames have been lost during remux. %s\n", ti.id,
             has_been_flushed, BUGMSG);
 }
@@ -483,8 +483,8 @@ generic_packetizer_c::set_as_default_track(int type,
              (default_tracks[type] != hserialno) &&
              !default_track_warning_printed) {
     mxwarn(_("Another default track for %s tracks has already "
-             "been set. The 'default' flag for track %lld of '%s' will not be "
-             "set.\n"),
+             "been set. The 'default' flag for track " LLD " of '%s' will not "
+             "be set.\n"),
            type == 0 ? "audio" : type == 'v' ? "video" : "subtitle",
            ti.id, ti.fname.c_str());
     default_track_warning_printed = true;
@@ -867,7 +867,7 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
              "timecode is smaller than that of the previous packet. This "
              "usually means that the source file is a Matroska file that "
              "has not been created 100%% correctly. The timecodes of all "
-             "packets will be adjusted by %lldms in order not to lose any "
+             "packets will be adjusted by " LLD "ms in order not to lose any "
              "data. This may throw A/V sync off, but that can be corrected "
              "with mkvmerge's \"--sync\" option. If you already use "
              "\"--sync\" and you still get this warning then do NOT worry "
@@ -880,8 +880,8 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
              (needed_timecode_offset + 500000) / 1000000);
     } else
       mxwarn("pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < "
-             "last_timecode (" FMT_TIMECODE " < " FMT_TIMECODE ") for %lld of "
-             "'%s'. %s\n", ARG_TIMECODE_NS(pack->timecode),
+             "last_timecode (" FMT_TIMECODE " < " FMT_TIMECODE ") for " LLD
+             " of '%s'. %s\n", ARG_TIMECODE_NS(pack->timecode),
              ARG_TIMECODE_NS(safety_last_timecode), ti.id, ti.fname.c_str(),
              BUGMSG);
   }
@@ -943,8 +943,8 @@ generic_packetizer_c::apply_factory_once(packet_cptr &packet) {
     packet->gap_following = timecode_factory->get_next(packet);
   packet->factory_applied = true;
 
-  mxverb(4, "apply_factory_once(): source %lld t %lld tbf %lld at %lld\n",
-         packet->source->get_source_track_num(), packet->timecode,
+  mxverb(4, "apply_factory_once(): source " LLD " t " LLD " tbf " LLD " at "
+         LLD "\n", packet->source->get_source_track_num(), packet->timecode,
          packet->timecode_before_factory, packet->assigned_timecode);
 
   if (max_timecode_seen < (packet->assigned_timecode + packet->duration))
@@ -1069,13 +1069,13 @@ generic_packetizer_c::displace(float by_ns) {
   ti.async.displacement += (int64_t)by_ns;
   if (initial_displacement < 0) {
     if (ti.async.displacement < initial_displacement) {
-      mxverb(3, "EODIS 1 by %f dis is now %lld with idis %lld\n",
+      mxverb(3, "EODIS 1 by %f dis is now " LLD " with idis " LLD "\n",
              by_ns, ti.async.displacement, initial_displacement);
       initial_displacement = 0;
     }
   } else if (iabs(initial_displacement - ti.async.displacement) <
              (by_ns / 2)) {
-    mxverb(3, "EODIS 2 by %f dis is now %lld with idis %lld\n",
+    mxverb(3, "EODIS 2 by %f dis is now " LLD " with idis " LLD "\n",
            by_ns, ti.async.displacement, initial_displacement);
     initial_displacement = 0;
   }
@@ -1085,13 +1085,13 @@ void
 generic_packetizer_c::force_duration_on_last_packet() {
   if (packet_queue.empty()) {
     mxverb(2, "force_duration_on_last_packet: packet queue is empty for "
-           "'%s'/%lld\n", ti.fname.c_str(), ti.id);
+           "'%s'/" LLD "\n", ti.fname.c_str(), ti.id);
     return;
   }
   packet_cptr &packet = packet_queue.back();
   packet->duration_mandatory = true;
   mxverb(2, "force_duration_on_last_packet: forcing at " FMT_TIMECODE " with "
-         "%.3fms for '%s'/%lld\n", ARG_TIMECODE_NS(packet->timecode),
+         "%.3fms for '%s'/" LLD "\n", ARG_TIMECODE_NS(packet->timecode),
          packet->duration / 1000.0, ti.fname.c_str(), ti.id);
 }
 
@@ -1326,7 +1326,7 @@ generic_reader_c::check_track_ids_and_packetizers() {
       }
 
     if (!found)
-      mxwarn(FMT_FN "A track with the ID %lld was requested but not found "
+      mxwarn(FMT_FN "A track with the ID " LLD " was requested but not found "
              "in the file. The corresponding option will be ignored.\n",
              ti.fname.c_str(), requested_track_ids[r]);
   }

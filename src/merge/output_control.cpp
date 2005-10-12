@@ -778,20 +778,20 @@ check_append_mapping() {
 
     // 1. Is there a file with the src_file_id?
     if ((amap->src_file_id < 0) || (amap->src_file_id >= files.size()))
-      mxerror("There is no file with the ID '%lld'. The argument for "
+      mxerror("There is no file with the ID '" LLD "'. The argument for "
               "'--append-to' was invalid.\n", amap->src_file_id);
 
     // 2. Is the "source" file in "append mode", meaning does its file name
     // start with a '+'?
     src_file = files.begin() + amap->src_file_id;
     if (!src_file->appending)
-      mxerror("The file no. %lld ('%s') is not being appended. The argument "
-              "for '--append-to' was invalid.\n", amap->src_file_id,
+      mxerror("The file no. " LLD " ('%s') is not being appended. The argument"
+              " for '--append-to' was invalid.\n", amap->src_file_id,
               src_file->name.c_str());
 
     // 3. Is there a file with the dst_file_id?
     if ((amap->dst_file_id < 0) || (amap->dst_file_id >= files.size()))
-      mxerror("There is no file with the ID '%lld'. The argument for "
+      mxerror("There is no file with the ID '" LLD "'. The argument for "
               "'--append-to' was invalid.\n", amap->dst_file_id);
 
     // 4. Files cannot be appended to itself.
@@ -834,7 +834,7 @@ check_append_mapping() {
         if (missing_mappings.size() > 0)
           missing_mappings += ",";
         missing_mappings +=
-          mxsprintf("%lld:%lld:%lld:%lld",
+          mxsprintf("" LLD ":" LLD ":" LLD ":" LLD,
                     new_amap.src_file_id, new_amap.src_track_id,
                     new_amap.dst_file_id, new_amap.dst_track_id);
       }
@@ -854,18 +854,18 @@ check_append_mapping() {
     // 5. Does the "source" file have a track with the src_track_id, and is
     // that track selected for copying?
     if (!mxfind2(id, amap->src_track_id, src_file->reader->used_track_ids))
-      mxerror("The file no. %lld ('%s') does not contain a track with the "
-              "ID %lld, or that track is not to be copied. The argument "
+      mxerror("The file no. " LLD " ('%s') does not contain a track with the "
+              "ID " LLD ", or that track is not to be copied. The argument "
               "for '--append-to' was invalid.\n", amap->src_file_id,
               src_file->name.c_str(), amap->src_track_id);
 
     // 6. Does the "destination" file have a track with the dst_track_id, and
     // that track selected for copying?
     if (!mxfind2(id, amap->dst_track_id, dst_file->reader->used_track_ids))
-      mxerror("The file no. %lld ('%s') does not contain a track with the "
-              "ID %lld, or that track is not to be copied. Therefore no track "
-              "can be appended to it. The argument for '--append-to' was "
-              "invalid.\n", amap->dst_file_id, dst_file->name.c_str(),
+      mxerror("The file no. " LLD " ('%s') does not contain a track with the "
+              "ID " LLD ", or that track is not to be copied. Therefore no "
+              "track can be appended to it. The argument for '--append-to' was"
+              " invalid.\n", amap->dst_file_id, dst_file->name.c_str(),
               amap->dst_track_id);
 
     // 7. Is this track already mapped to somewhere else?
@@ -874,8 +874,8 @@ check_append_mapping() {
         continue;
       if (((*cmp_amap).src_file_id == amap->src_file_id) &&
           ((*cmp_amap).src_track_id == amap->src_track_id))
-        mxerror("The track %lld from file no. %lld ('%s') is to be appended "
-                "more than once. The argument for '--append-to' was "
+        mxerror("The track " LLD " from file no. " LLD " ('%s') is to be "
+                "appended more than once. The argument for '--append-to' was "
                 "invalid.\n", amap->src_track_id, amap->src_file_id,
                 src_file->name.c_str());
     }
@@ -886,8 +886,8 @@ check_append_mapping() {
         continue;
       if (((*cmp_amap).dst_file_id == amap->dst_file_id) &&
           ((*cmp_amap).dst_track_id == amap->dst_track_id))
-        mxerror("More than one track is to be appended to the track %lld "
-                "from file no. %lld ('%s'). The argument for '--append-to' "
+        mxerror("More than one track is to be appended to the track " LLD " "
+                "from file no. " LLD " ('%s'). The argument for '--append-to' "
                 "was invalid.\n", amap->dst_track_id, amap->dst_file_id,
                 dst_file->name.c_str());
     }
@@ -928,8 +928,8 @@ check_append_mapping() {
       if (CAN_CONNECT_NO_PARAMETERS == result)
         reason += mxsprintf(" (%s)", error_message.c_str());
 
-      mxerror("The track number %lld from the file '%s' cannot be appended "
-              "to the track number %lld from the file '%s' because %s.\n",
+      mxerror("The track number " LLD " from the file '%s' cannot be appended "
+              "to the track number " LLD " from the file '%s' because %s.\n",
               amap->src_track_id, files[amap->src_file_id].name.c_str(),
               amap->dst_track_id, files[amap->dst_file_id].name.c_str(),
               reason.c_str());
@@ -1347,7 +1347,7 @@ finish_file(bool last_file) {
   // Now re-render the kax_duration and fill in the biggest timecode
   // as the file's duration.
   out->save_pos(kax_duration->GetElementPosition());
-  mxverb(3, "mkvmerge: kax_duration: gdur %lld tcs %f du %lld\n",
+  mxverb(3, "mkvmerge: kax_duration: gdur " LLD " tcs %f du " LLD "\n",
          cluster_helper->get_duration(), timecode_scale,
          irnd((double)cluster_helper->get_duration() /
               (double)((int64_t)timecode_scale)));
@@ -1484,8 +1484,8 @@ finish_file(bool last_file) {
     kax_sh_main->UpdateSize();
     if (kax_sh_void->ReplaceWith(*kax_sh_main, *out, true) == 0)
       mxwarn(_("This should REALLY not have happened. The space reserved for "
-               "the first meta seek element was too small. Size needed: %lld. "
-               "%s\n"), kax_sh_main->ElementSize(), BUGMSG);
+               "the first meta seek element was too small. Size needed: " LLD
+               ". %s\n"), kax_sh_main->ElementSize(), BUGMSG);
   }
 
   // Set the correct size for the segment.
@@ -1588,8 +1588,8 @@ append_track(packetizer_t &ptzr,
     }
   }
 
-  mxinfo("Appending track %lld from file no. %lld ('%s') to track %lld from "
-         "file no. %lld ('%s').\n",
+  mxinfo("Appending track " LLD " from file no. " LLD " ('%s') to track " LLD
+         " from file no. " LLD " ('%s').\n",
          (*gptzr)->ti.id, amap.src_file_id, (*gptzr)->ti.fname.c_str(),
          ptzr.packetizer->ti.id, amap.dst_file_id,
          ptzr.packetizer->ti.fname.c_str());
@@ -1654,12 +1654,12 @@ append_track(packetizer_t &ptzr,
 
   if (ptzr.packetizer->get_track_type() == track_subtitle) {
     mxverb(2, "append_track: new timecode_adjustment for subtitle track: "
-           "%lld for %lld\n", timecode_adjustment, ptzr.packetizer->ti.id);
+           LLD " for " LLD "\n", timecode_adjustment, ptzr.packetizer->ti.id);
     // The actual connection.
     ptzr.packetizer->connect(old_packetizer, timecode_adjustment);
   } else {
     mxverb(2, "append_track: new timecode_adjustment for NON subtitle track: "
-           "%lld for %lld\n", timecode_adjustment, ptzr.packetizer->ti.id);
+           LLD " for " LLD "\n", timecode_adjustment, ptzr.packetizer->ti.id);
     // The actual connection.
     ptzr.packetizer->connect(old_packetizer);
   }

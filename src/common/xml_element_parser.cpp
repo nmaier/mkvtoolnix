@@ -87,8 +87,8 @@ el_get_uint(parser_data_t *pdata,
     xmlp_error(pdata, "Expected an unsigned integer but found '%s'.",
                pdata->bin->c_str());
   if (value < min_value)
-    xmlp_error(pdata, "Unsigned integer (%lld) is too small. Mininum value is "
-               "%lld.", value, min_value);
+    xmlp_error(pdata, "Unsigned integer (" LLD ") is too small. Mininum value "
+               "is " LLD ".", value, min_value);
   if (is_bool && (value > 0))
     value = 1;
 

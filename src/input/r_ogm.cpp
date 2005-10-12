@@ -122,8 +122,8 @@ fhe_read_cb(const FLAC__StreamDecoder *decoder,
   memcpy(buffer, op.packet, op.bytes);
   *bytes = op.bytes;
   fhe->num_packets++;
-  mxverb(2, FPFX "read packet number %lld with %ld bytes\n", fhe->num_packets,
-         op.bytes);
+  mxverb(2, FPFX "read packet number " LLD " with %ld bytes\n",
+         fhe->num_packets, op.bytes);
 
   return FLAC__STREAM_DECODER_READ_STATUS_CONTINUE;
 }
@@ -229,7 +229,7 @@ flac_header_extractor_c::extract() {
     return false;
   }
   result = (int)FLAC__stream_decoder_process_until_end_of_stream(decoder);
-  mxverb(2, FPFX "extract, result: %d, mdp: %d, num_header_packets: %lld\n",
+  mxverb(2, FPFX "extract, result: %d, mdp: %d, num_header_packets: " LLD "\n",
          result, metadata_parsed, num_header_packets);
 
   return metadata_parsed;
@@ -492,8 +492,8 @@ ogm_reader_c::create_packetizer(int64_t tid) {
           sample_rate = get_uint64_le(&sth->samples_per_unit);
           profile = AAC_PROFILE_LC;
         }
-        mxverb(2, "ogm_reader: %lld/%s: profile %d, channels %d, sample_rate "
-               "%d, sbr %d, output_sample_rate %d, ex %d\n", ti.id,
+        mxverb(2, "ogm_reader: " LLD "/%s: profile %d, channels %d, "
+               "sample_rate %d, sbr %d, output_sample_rate %d, ex %d\n", ti.id,
                ti.fname.c_str(),
                profile, channels, sample_rate, (int)sbr, output_sample_rate,
                (int)aac_info_extracted);

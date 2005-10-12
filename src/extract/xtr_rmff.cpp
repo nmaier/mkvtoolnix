@@ -32,8 +32,9 @@ xtr_rmff_c::create_file(xtr_base_c *_master,
 
   priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
-    mxerror("Track %lld with the CodecID '%s' is missing the \"codec private"
-            "\" element and cannot be extracted.\n", tid, codec_id.c_str());
+    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec "
+            "private\" element and cannot be extracted.\n", tid,
+            codec_id.c_str());
 
   master = _master;
   if (NULL == master) {

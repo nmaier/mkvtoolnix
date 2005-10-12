@@ -1114,7 +1114,7 @@ parse_append_to(const string &s,
   entries = split(s, ",");
   strip(entries);
   foreach(entry, entries) {
-    if ((mxsscanf((*entry).c_str(), "%lld:%lld:%lld:%lld",
+    if ((mxsscanf((*entry).c_str(), "" LLD ":" LLD ":" LLD ":" LLD,
                   &mapping.src_file_id, &mapping.src_track_id,
                   &mapping.dst_file_id, &mapping.dst_track_id) != 4) ||
         (mapping.src_file_id < 0) || (mapping.src_track_id < 0) ||

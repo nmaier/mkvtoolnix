@@ -295,6 +295,7 @@ dnl
 AC_MSG_CHECKING(for PRId64 and PRIu64)
 AC_CACHE_VAL(ac_cv_has_prix64,[
   AC_TRY_COMPILE([
+#define __STDC_FORMAT_MACROS
 #if HAVE_INTTYPES_H
 # include <inttypes.h>
 #endif

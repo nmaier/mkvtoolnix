@@ -212,8 +212,8 @@ vorbis_packetizer_c::process(packet_cptr packet) {
     return FILE_STATUS_MOREDATA;
   }
 
-  mxverb(2, "Vorbis: samples_here at %lld (orig %lld expected %lld): %lld "
-         "(last_samples_sum: %lld)\n",
+  mxverb(2, "Vorbis: samples_here at " LLD " (orig " LLD " expected " LLD "): "
+         LLD " (last_samples_sum: " LLD ")\n",
          chosen_timecode, packet->timecode, expected_timecode,
          samples_here, last_samples_sum);
   packet->timecode = chosen_timecode;

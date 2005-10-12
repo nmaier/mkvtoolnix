@@ -355,7 +355,7 @@ show_element(EbmlElement *l,
   level_buffer[level] = 0;
   mxinfo("(%s) %s+ %s", NAME, level_buffer, args_buffer);
   if (l != NULL)
-    mxinfo(_(" at %llu"), l->GetElementPosition());
+    mxinfo(_(" at " LLU), l->GetElementPosition());
   mxinfo("\n");
 }
 

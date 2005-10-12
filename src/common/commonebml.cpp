@@ -69,9 +69,9 @@ __debug_dump_elements(EbmlElement *e,
   else if ((us = dynamic_cast<EbmlUnicodeString *>(e)) != NULL)
     mxprint(stdout, " (%s)\n", UTFstring_to_cstrutf8(UTFstring(*us)).c_str());
   else if ((si = dynamic_cast<EbmlSInteger *>(e)) != NULL)
-    mxprint(stdout, " (%lld)\n", int64(*si));
+    mxprint(stdout, " (" LLD ")\n", int64(*si));
   else if ((ui = dynamic_cast<EbmlUInteger *>(e)) != NULL)
-    mxprint(stdout, " (%llu)\n", uint64(*ui));
+    mxprint(stdout, " (" LLU ")\n", uint64(*ui));
   else if ((f = dynamic_cast<EbmlFloat *>(e)) != NULL)
     mxprint(stdout, " (%f)\n", double(*f));
   else

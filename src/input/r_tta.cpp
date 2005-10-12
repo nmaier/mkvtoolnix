@@ -81,7 +81,8 @@ tta_reader_c::tta_reader_c(track_info_c &_ti)
       seek_points.push_back(seek_point);
     } while (seek_sum < size);
 
-    mxverb(2, "tta: ch %u bps %u sr %u dl %u seek_sum %lld size %lld num %u\n",
+    mxverb(2, "tta: ch %u bps %u sr %u dl %u seek_sum " LLD " size " LLD
+           " num %u\n",
            get_uint16_le(&header.channels),
            get_uint16_le(&header.bits_per_sample),
            get_uint32_le(&header.sample_rate),

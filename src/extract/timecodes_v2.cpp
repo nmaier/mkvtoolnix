@@ -240,7 +240,7 @@ extract_timecodes(const string &file_name,
             KaxTimecodeScale &ktc_scale = *static_cast<KaxTimecodeScale *>(l2);
             ktc_scale.ReadData(es->I_O());
             tc_scale = uint64(ktc_scale);
-            show_element(l2, 2, _("Timecode scale: %llu"), tc_scale);
+            show_element(l2, 2, _("Timecode scale: " LLU), tc_scale);
           } else
             l2->SkipData(*es, l2->Generic().Context);
 

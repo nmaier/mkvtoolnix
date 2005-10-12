@@ -17,6 +17,9 @@
 
 #include "config.h"
 
+// For PRId64 and PRIu64:
+#define __STDC_FORMAT_MACROS
+
 #if defined(_WIN32) || defined(WIN32) || defined(__CYGWIN__) || defined(__MINGW32__)
 # define SYS_WINDOWS
 # if defined __MINGW32__
@@ -74,25 +77,23 @@ typedef _fsize_t ssize_t;
 #  define MTX_DLL_API
 # endif
 
-# define LLD "%I64d"
-# define LLU "%I64u"
-
 #else  // COMP_MINGW || COMP_MSC
 
 # define MTX_DLL_API
-# define LLD "%lld"
-# define LLU "%llu"
 #endif // COMP_MINGW || COMP_MSC
 
 #if defined(HAVE_SYS_TYPES_H)
-#include <sys/types.h>
+# include <sys/types.h>
 #endif // HAVE_SYS_TYPES_H
 #if defined(HAVE_STDINT_H)
-#include <stdint.h>
+# include <stdint.h>
 #endif // HAVE_STDINT_H
 #if defined(HAVE_INTTYPES_H)
-#include <inttypes.h>
+# include <inttypes.h>
 #endif // HAVE_INTTYPES_H
+
+#define LLD "%" PRId64
+#define LLU "%" PRIu64
 
 #if defined(HAVE_NO_INT64_T)
 typedef INT64_TYPE int64_t;

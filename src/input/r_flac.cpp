@@ -13,7 +13,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "config.h"
+#include "os.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -234,7 +234,7 @@ flac_reader_c::parse_file() {
   block.len = u;
   old_pos = u;
   blocks.push_back(block);
-  mxverb(2, FPFX "headers: block at %lld with size %d\n",
+  mxverb(2, FPFX "headers: block at " LLD " with size %d\n",
          block.filepos, block.len);
 
   old_progress = -5;
@@ -260,7 +260,7 @@ flac_reader_c::parse_file() {
       old_pos = u;
       blocks.push_back(block);
 
-      mxverb(2, FPFX "skip/decode frame, block at %lld with size %d\n",
+      mxverb(2, FPFX "skip/decode frame, block at " LLD " with size %d\n",
              block.filepos, block.len);
     }
 

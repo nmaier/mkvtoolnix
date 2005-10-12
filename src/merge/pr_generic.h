@@ -86,7 +86,7 @@ enum default_track_priority_e {
 };
 
 #define FMT_FN "'%s': "
-#define FMT_TID "'%s' track %lld: "
+#define FMT_TID "'%s' track " LLD ": "
 
 struct display_properties_t {
   float aspect_ratio;

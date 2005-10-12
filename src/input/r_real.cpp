@@ -538,7 +538,7 @@ real_reader_c::queue_one_audio_frame(real_demuxer_cptr dmx,
   segment->flags = flags;
   dmx->segments.push_back(segment);
   dmx->last_timecode = timecode;
-  mxverb(2, "enqueueing one for %u/'%s' length %u timecode %llu flags "
+  mxverb(2, "enqueueing one for %u/'%s' length %u timecode " LLU " flags "
          "0x%08x\n", dmx->track->id, ti.fname.c_str(), mem.get_size(),
          timecode, flags);
 }
@@ -573,8 +573,8 @@ real_reader_c::deliver_audio_frames(real_demuxer_cptr dmx,
 
   for (i = 0; i < dmx->segments.size(); i++) {
     segment = dmx->segments[i];
-    mxverb(2, "delivering audio for %u/'%s' length %d timecode %llu flags "
-           "0x%08x duration %llu\n", dmx->track->id, ti.fname.c_str(),
+    mxverb(2, "delivering audio for %u/'%s' length %d timecode " LLU " flags "
+           "0x%08x duration " LLU "\n", dmx->track->id, ti.fname.c_str(),
            segment->data->get_size(), dmx->last_timecode,
            (uint32_t)segment->flags, duration);
     PTZR(dmx->ptzr)->process(new packet_t(segment->data,

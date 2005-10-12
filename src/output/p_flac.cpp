@@ -95,7 +95,7 @@ flac_packetizer_c::process(packet_cptr packet) {
     flac_get_num_samples(packet->data->get(), packet->data->get_size(),
                          stream_info);
   if (packet->duration == -1) {
-    mxwarn(_(FMT_TID "Packet number %lld contained an invalid FLAC header "
+    mxwarn(_(FMT_TID "Packet number " LLD " contained an invalid FLAC header "
              "and is being skipped.\n"), ti.fname.c_str(), (int64_t)ti.id,
            num_packets + 1);
     debug_leave("flac_packetizer_c::process");

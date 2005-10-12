@@ -127,7 +127,7 @@ handle_attachments(KaxAttachments *atts,
         }
 
       if (found && !tracks[k].done) {
-        mxinfo(_("The attachment #%lld, MIME type %s, size %lld, "
+        mxinfo(_("The attachment #" LLD ", MIME type %s, size " LLD ", "
                  "is written to '%s'.\n"), id, type.c_str(), size,
                tracks[k].out_name);
         try {
@@ -181,6 +181,6 @@ extract_attachments(const char *file_name,
 
   for (i = 0; i < tracks.size(); i++)
     if (!tracks[i].done)
-      mxinfo(_("An attachment with the ID %lld was not found.\n"),
+      mxinfo(_("An attachment with the ID " LLD " was not found.\n"),
              tracks[i].tid);
 }

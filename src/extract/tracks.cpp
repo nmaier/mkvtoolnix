@@ -92,7 +92,7 @@ create_extractors(KaxTracks &kax_tracks,
     extractor = NULL;
     for (k = 0; k < extractors.size(); k++)
       if (extractors[k]->tid == tnum) {
-        mxwarn("More than one track with the track number %lld found.\n",
+        mxwarn("More than one track with the track number " LLD " found.\n",
                tnum);
         extractor = extractors[k];
         break;
@@ -113,11 +113,12 @@ create_extractors(KaxTracks &kax_tracks,
     // Let's find the codec ID and create an extractor for it.
     codec_id = kt_get_codec_id(track);
     if (codec_id.empty())
-      mxerror("The track number %lld does not have a valid CodecID.\n", tnum);
+      mxerror("The track number " LLD " does not have a valid CodecID.\n",
+              tnum);
 
     extractor = xtr_base_c::create_extractor(codec_id, tnum, *tspec);
     if (NULL == extractor)
-      mxerror("Extraction of track number %lld with the CodecID '%s' is "
+      mxerror("Extraction of track number " LLD " with the CodecID '%s' is "
               "not supported.\n", tnum, codec_id.c_str());
 
     // Has there another file been requested with the same name?
@@ -134,8 +135,8 @@ create_extractors(KaxTracks &kax_tracks,
     // We're done.
     extractors.push_back(extractor);
 
-    mxinfo("Extracting track %lld with the CodecID '%s' to the file '%s'.\n",
-           tnum, codec_id.c_str(), tspec->out_name);
+    mxinfo("Extracting track " LLD " with the CodecID '%s' to the file '%s'."
+           "\n", tnum, codec_id.c_str(), tspec->out_name);
   }
 
   // Signal that all headers have been taken care of.
@@ -251,7 +252,7 @@ write_all_cuesheets(KaxChapters &chapters,
         mxerror(_("The file '%s' could not be opened for writing (%s).\n"),
                 cue_file_name.c_str(), strerror(errno));
       }
-      mxinfo(_("The CUE sheet for track %lld will be written to '%s'.\n"),
+      mxinfo(_("The CUE sheet for track " LLD " will be written to '%s'.\n"),
              tspecs[i].tid, cue_file_name.c_str());
       write_cuesheet(file_name.c_str(), chapters, tags, tspecs[i].tuid, *out);
       delete out;
@@ -362,7 +363,7 @@ extract_tracks(const char *file_name,
             KaxTimecodeScale &ktc_scale = *static_cast<KaxTimecodeScale *>(l2);
             ktc_scale.ReadData(es->I_O());
             tc_scale = uint64(ktc_scale);
-            show_element(l2, 2, _("Timecode scale: %llu"), tc_scale);
+            show_element(l2, 2, _("Timecode scale: " LLU), tc_scale);
           } else
             l2->SkipData(*es, l2->Generic().Context);
 

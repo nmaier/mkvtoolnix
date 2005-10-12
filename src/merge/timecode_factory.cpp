@@ -105,8 +105,8 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
     if ((line.length() == 0) || (line[0] == '#'))
       continue;
 
-    if (mxsscanf(line, "%lld,%lld,%lf", &t.start_frame, &t.end_frame, &t.fps)
-        != 3) {
+    if (mxsscanf(line, "" LLD "," LLD ",%lf", &t.start_frame, &t.end_frame,
+                 &t.fps) != 3) {
       mxwarn(_("Line %d of the timecode file '%s' could not be parsed.\n"),
              line_no, m_file_name.c_str());
       continue;
@@ -166,7 +166,7 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
       pit->fps;
 
   for (iit = m_ranges.begin(); iit < m_ranges.end(); iit++)
-    mxverb(3, "ranges: entry %lld -> %lld at %f with %f\n",
+    mxverb(3, "ranges: entry " LLD " -> " LLD " at %f with %f\n",
            iit->start_frame, iit->end_frame, iit->fps, iit->base_timecode);
 }
 
@@ -179,7 +179,7 @@ timecode_factory_v1_c::get_next(packet_cptr &packet) {
       (m_current_range < (m_ranges.size() - 1)))
     m_current_range++;
 
-  mxverb(4, "ext_timecodes v1: tc %lld dur %lld for %lld\n",
+  mxverb(4, "ext_timecodes v1: tc " LLD " dur " LLD " for " LLD "\n",
          packet->assigned_timecode, packet->duration, m_frameno - 1);
   return false;
 }
@@ -250,10 +250,10 @@ timecode_factory_v2_c::parse(mm_io_c &in) {
   foreach(it, dur_map) {
     if ((dur_sum < 0) || (dur_map[dur_sum] < (*it).second))
       dur_sum = (*it).first;
-    mxverb(4, "ext_m_timecodes v2 dur_map %lld = %lld\n", (*it).first,
+    mxverb(4, "ext_m_timecodes v2 dur_map " LLD " = " LLD "\n", (*it).first,
            (*it).second);
   }
-  mxverb(4, "ext_m_timecodes v2 max is %lld = %lld\n", dur_sum,
+  mxverb(4, "ext_m_timecodes v2 max is " LLD " = " LLD "\n", dur_sum,
          dur_map[dur_sum]);
   if (dur_sum > 0)
     m_default_fps = (double)1000000000.0 / dur_sum;
@@ -374,7 +374,7 @@ timecode_factory_v3_c::parse(mm_io_c &in) {
   t.fps = m_default_fps;
   m_durations.push_back(t);
   for (iit = m_durations.begin(); iit < m_durations.end(); iit++)
-    mxverb(4, "durations:%s entry for %lld with %f FPS\n",
+    mxverb(4, "durations:%s entry for " LLD " with %f FPS\n",
            iit->is_gap ? " gap" : "", iit->duration, iit->fps);
 }
 
@@ -409,8 +409,8 @@ timecode_factory_v3_c::get_next(packet_cptr &packet) {
     m_current_duration++;
   }
 
-  mxverb(3, "ext_timecodes v3: tc %lld dur %lld\n", packet->assigned_timecode,
-         packet->duration);
+  mxverb(3, "ext_timecodes v3: tc " LLD " dur " LLD "\n",
+         packet->assigned_timecode, packet->duration);
 
   return result;
 }

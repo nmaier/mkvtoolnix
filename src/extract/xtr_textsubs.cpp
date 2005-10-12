@@ -52,7 +52,7 @@ xtr_srt_c::handle_block(KaxBlock &block,
   string buffer;
 
   if (-1 == duration) {
-    mxwarn("Track %lld: Subtitle entry number %d is missing its duration. "
+    mxwarn("Track " LLD ": Subtitle entry number %d is missing its duration. "
            "Assuming a duration of 1s.\n", tid, num_entries + 1);
     duration = 1000000000;
   }
@@ -107,8 +107,9 @@ xtr_ssa_c::create_file(xtr_base_c *_master,
 
   priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
-    mxerror("Track %lld with the CodecID '%s' is missing the \"codec private"
-            "\" element and cannot be extracted.\n", tid, codec_id.c_str());
+    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec "
+            "private \" element and cannot be extracted.\n", tid,
+            codec_id.c_str());
 
   xtr_base_c::create_file(_master, track);
   out->write_bom(sub_charset);
@@ -187,7 +188,7 @@ xtr_ssa_c::handle_block(KaxBlock &block,
   int64_t start, end;
 
   if (0 > duration) {
-    mxwarn("Subtitle track %lld is missing some duration elements. "
+    mxwarn("Subtitle track " LLD " is missing some duration elements. "
            "Please check the resulting SSA/ASS file for entries that "
            "have the same start and end time.\n", tid);
     warning_printed = true;
@@ -245,11 +246,11 @@ xtr_ssa_c::handle_block(KaxBlock &block,
     if (format == "marked")
       line += "Marked=0";
     else if (format == "start")
-      line += mxsprintf("%lld:%02lld:%02lld.%02lld",
+      line += mxsprintf("" LLD ":%02lld:%02lld.%02lld",
                         start / 1000 / 60 / 60, (start / 1000 / 60) % 60,
                         (start / 1000) % 60, (start % 1000) / 10);
     else if (format == "end")
-      line += mxsprintf("%lld:%02lld:%02lld.%02lld",
+      line += mxsprintf("" LLD ":%02lld:%02lld.%02lld",
                         end / 1000 / 60 / 60, (end / 1000 / 60) % 60,
                         (end / 1000) % 60, (end % 1000) / 10);
     else {
@@ -302,8 +303,9 @@ xtr_usf_c::create_file(xtr_base_c *_master,
 
   priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
-    mxerror("Track %lld with the CodecID '%s' is missing the \"codec private"
-            "\" element and cannot be extracted.\n", tid, codec_id.c_str());
+    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec "
+            "private \" element and cannot be extracted.\n", tid,
+            codec_id.c_str());
 
   if (!content_decoder.initialize(track))
     mxerror("Tracks with unsupported content encoding schemes (compression "
@@ -325,15 +327,15 @@ xtr_usf_c::create_file(xtr_base_c *_master,
 
     usf_master = dynamic_cast<xtr_usf_c *>(_master);
     if (NULL == usf_master)
-      mxerror("Cannot write track %lld with the CodecID '%s' to the file '%s' "
-              "because track %lld with the CodecID '%s' is already being "
-              "written to the same file.\n", tid, codec_id.c_str(),
+      mxerror("Cannot write track " LLD " with the CodecID '%s' to the file "
+              "'%s' because track " LLD " with the CodecID '%s' is already "
+              "being written to the same file.\n", tid, codec_id.c_str(),
               file_name.c_str(), _master->tid, _master->codec_id.c_str());
     if (m_codec_private != usf_master->m_codec_private)
-      mxerror("Cannot write track %lld with the CodecID '%s' to the file '%s' "
-              "because track %lld with the CodecID '%s' is already being "
-              "written to the same file, and their CodecPrivate data (the "
-              "USF styles etc) do not match.\n", tid, codec_id.c_str(),
+      mxerror("Cannot write track " LLD " with the CodecID '%s' to the file "
+              "'%s' because track " LLD " with the CodecID '%s' is already "
+              "being written to the same file, and their CodecPrivate data "
+              "(the USF styles etc) do not match.\n", tid, codec_id.c_str(),
               file_name.c_str(), _master->tid, _master->codec_id.c_str());
 
     m_formatter = usf_master->m_formatter;
@@ -361,7 +363,7 @@ xtr_usf_c::create_file(xtr_base_c *_master,
       mxerror("Failed to create the file '%s': %d (%s)\n", file_name.c_str(),
               errno, strerror(errno));
     } catch (xml_formatter_error_c &error) {
-      mxerror("Failed to parse the USF codec private data for track %lld: "
+      mxerror("Failed to parse the USF codec private data for track " LLD ": "
               "%s\n", tid, error.get_error().c_str());
 
     }
@@ -406,8 +408,8 @@ xtr_usf_c::finish_track() {
     }
     m_formatter->format("</subtitles>\n");
   } catch (xml_formatter_error_c &error) {
-    mxerror("Failed to parse an USF subtitle entry for track %lld: %s\n", tid,
-            error.get_error().c_str());
+    mxerror("Failed to parse an USF subtitle entry for track " LLD ": %s\n",
+            tid, error.get_error().c_str());
   }
 }
 
@@ -419,7 +421,7 @@ xtr_usf_c::finish_file() {
       out->printf("\n");
     }
   } catch (xml_formatter_error_c &error) {
-    mxerror("Failed to parse the USF end tag for track %lld: %s\n", tid,
+    mxerror("Failed to parse the USF end tag for track " LLD ": %s\n", tid,
             error.get_error().c_str());
   }
 }

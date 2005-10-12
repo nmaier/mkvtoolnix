@@ -34,20 +34,21 @@ xtr_avi_c::create_file(xtr_base_c *_master,
 
   priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
-    mxerror("Track %lld with the CodecID '%s' is missing the \"codec private"
-            "\" element and cannot be extracted.\n", tid, codec_id.c_str());
+    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec "
+            "private\" element and cannot be extracted.\n", tid,
+            codec_id.c_str());
 
   default_duration = kt_get_default_duration(track);
   if (0 >= default_duration)
-    mxerror("Track %lld with the CodecID '%s' is missing the \"default "
+    mxerror("Track " LLD " with the CodecID '%s' is missing the \"default "
             "duration\" element and cannot be extracted.\n", tid,
             codec_id.c_str());
   fps = (double)1000000000.0 / (double)default_duration;
 
   if (NULL != _master)
-    mxerror("Cannot write track %lld with the CodecID '%s' to the file '%s' "
-            "because track %lld with the CodecID '%s' is already being "
-            "written to the same file.\n", tid, codec_id.c_str(),
+    mxerror("Cannot write track " LLD " with the CodecID '%s' to the file "
+            "'%s' because track " LLD " with the CodecID '%s' is already being"
+            " written to the same file.\n", tid, codec_id.c_str(),
             file_name.c_str(), _master->tid, _master->codec_id.c_str());
 
   avi = AVI_open_output_file(file_name.c_str());

@@ -248,7 +248,8 @@ ssa_reader_c::parse_file(mm_text_io_c *io) {
         }
 
         // Specs say that the following fields are to put into the block:
-        // ReadOrder, Layer, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+        // ReadOrder, Layer, Style, Name, MarginL, MarginR, MarginV, Effect,
+        //   Text
 
         comma = ",";
         line = to_string(num) + comma + get_element("Layer", fields) + comma +
@@ -334,7 +335,8 @@ ssa_reader_c::add_attachment_maybe(string &name,
 
   p = (const unsigned char *)data_uu.c_str();
   for (pos = 0; data_uu.length() > (pos + 4); pos += 4)
-    decode_chars(p[pos], p[pos + 1], p[pos + 2], p[pos + 3], *buffer, 3, allocated);
+    decode_chars(p[pos], p[pos + 1], p[pos + 2], p[pos + 3], *buffer, 3,
+                 allocated);
   switch (data_uu.length() % 4) {
     case 2:
       decode_chars(p[pos], p[pos + 1], 0, 0, *buffer, 1, allocated);

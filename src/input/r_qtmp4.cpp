@@ -71,7 +71,8 @@ qtmp4_reader_c::probe_file(mm_io_c *in,
     if (atom_size == 1)
       atom_size = in->read_uint64_be();
 
-    mxverb(3, PFX "Atom: '%c%c%c%c'; size: %llu\n", BE2STR(atom), atom_size);
+    mxverb(3, PFX "Atom: '%c%c%c%c'; size: " LLU "\n", BE2STR(atom),
+           atom_size);
 
     if ((atom == FOURCC('m', 'o', 'o', 'v')) ||
         (atom == FOURCC('f', 't', 'y', 'p')) ||
@@ -127,7 +128,7 @@ qtmp4_reader_c::read_atom() {
   } else if (a.size == 0)
     a.size = file_size - io->getFilePointer() + 8;
   if (a.size < a.hsize)
-    mxerror(PFX "Invalid chunk size %llu at %llu.\n", a.size, a.pos);
+    mxerror(PFX "Invalid chunk size " LLU " at " LLU ".\n", a.size, a.pos);
 
   return a;
 }
@@ -147,7 +148,7 @@ qtmp4_reader_c::parse_headers() {
   mdat_pos = -1;
   do {
     atom = read_atom();
-    mxverb(2, PFX "'%c%c%c%c' atom, size %lld, at %lld\n", BE2STR(atom),
+    mxverb(2, PFX "'%c%c%c%c' atom, size " LLD ", at " LLD "\n", BE2STR(atom),
            atom.size, atom.pos);
 
     if (atom.fourcc == FOURCC('f', 't', 'y', 'p')) {
@@ -446,7 +447,7 @@ qtmp4_reader_c::handle_cmov_atom(qt_atom_t parent,
     qt_atom_t atom;
 
     atom = read_atom();
-    mxverb(2, PFX "%*s'%c%c%c%c' atom, size %lld, at %lld\n", 2 * level,
+    mxverb(2, PFX "%*s'%c%c%c%c' atom, size " LLD ", at " LLD "\n", 2 * level,
            "", BE2STR(atom.fourcc), atom.size, atom.pos);
 
     if (atom.fourcc == FOURCC('d', 'c', 'o', 'm'))
@@ -518,7 +519,7 @@ qtmp4_reader_c::handle_cmvd_atom(qt_atom_t atom,
     qt_atom_t next_atom;
 
     next_atom = read_atom();
-    mxverb(2, PFX "%*s'%c%c%c%c' atom at %lld\n", (level + 1) * 2, "",
+    mxverb(2, PFX "%*s'%c%c%c%c' atom at " LLD "\n", (level + 1) * 2, "",
            BE2STR(next_atom.fourcc), next_atom.pos);
 
     if (next_atom.fourcc == FOURCC('m', 'o', 'o', 'v'))
@@ -576,7 +577,7 @@ qtmp4_reader_c::handle_hdlr_atom(qtmp4_demuxer_ptr &new_dmx,
 
   if (atom.size < sizeof(hdlr_atom_t))
     mxerror(PFX "'hdlr' atom is too small. Expected size: >= %u. Actual "
-            "size: %lld.\n", (unsigned int)sizeof(hdlr_atom_t), atom.size);
+            "size: " LLD ".\n", (unsigned int)sizeof(hdlr_atom_t), atom.size);
   if (io->read(&hdlr, sizeof(hdlr_atom_t)) != sizeof(hdlr_atom_t))
     throw error_c("end-of-file");
   mxverb(2, PFX "%*s Component type: %.4s subtype: %.4s\n",
@@ -599,7 +600,7 @@ qtmp4_reader_c::handle_mdhd_atom(qtmp4_demuxer_ptr &new_dmx,
 
   if (atom.size < sizeof(mdhd_atom_t))
     mxerror(PFX "'mdhd' atom is too small. Expected size: >= %u. Actual "
-            "size: %lld.\n", (unsigned int)sizeof(mdhd_atom_t), atom.size);
+            "size: " LLD ".\n", (unsigned int)sizeof(mdhd_atom_t), atom.size);
   if (io->read(&mdhd, sizeof(mdhd_atom_t)) != sizeof(mdhd_atom_t))
     throw error_c("end-of-file");
   mxverb(2, PFX "%*s Time scale: %u, duration: %u\n", level * 2, "",
@@ -617,7 +618,7 @@ qtmp4_reader_c::handle_mdia_atom(qtmp4_demuxer_ptr &new_dmx,
     qt_atom_t atom;
 
     atom = read_atom();
-    mxverb(2, PFX "%*s'%c%c%c%c' atom, size %lld, at %lld\n", 2 * level,
+    mxverb(2, PFX "%*s'%c%c%c%c' atom, size " LLD ", at " LLD "\n", 2 * level,
            "", BE2STR(atom.fourcc), atom.size, atom.pos);
 
     if (atom.fourcc == FOURCC('m', 'd', 'h', 'd'))
@@ -642,7 +643,7 @@ qtmp4_reader_c::handle_minf_atom(qtmp4_demuxer_ptr &new_dmx,
     qt_atom_t atom;
 
     atom = read_atom();
-    mxverb(2, PFX "%*s'%c%c%c%c' atom, size %lld, at %lld\n", 2 * level,
+    mxverb(2, PFX "%*s'%c%c%c%c' atom, size " LLD ", at " LLD "\n", 2 * level,
            "", BE2STR(atom.fourcc), atom.size, atom.pos);
 
     if (atom.fourcc == FOURCC('h', 'd', 'l', 'r'))
@@ -663,7 +664,7 @@ qtmp4_reader_c::handle_moov_atom(qt_atom_t parent,
     qt_atom_t atom;
 
     atom = read_atom();
-    mxverb(2, PFX "%*s'%c%c%c%c' atom, size %lld, at %lld\n", 2 * level,
+    mxverb(2, PFX "%*s'%c%c%c%c' atom, size " LLD ", at " LLD "\n", 2 * level,
            "", BE2STR(atom.fourcc), atom.size, atom.pos);
 
     if (atom.fourcc == FOURCC('c', 'm', 'o', 'v')) {
@@ -695,7 +696,7 @@ qtmp4_reader_c::handle_mvhd_atom(qt_atom_t atom,
 
   if ((atom.size - atom.hsize) < sizeof(mvhd_atom_t))
     mxerror(PFX "'mvhd' atom is too small. Expected size: >= %u. Actual "
-            "size: %lld.\n", (unsigned int)sizeof(mvhd_atom_t), atom.size);
+            "size: " LLD ".\n", (unsigned int)sizeof(mvhd_atom_t), atom.size);
   if (io->read(&mvhd, sizeof(mvhd_atom_t)) != sizeof(mvhd_atom_t))
     throw error_c("end-of-file");
   mxverb(2, PFX "%*s Time scale: %u\n", level * 2, "",
@@ -710,7 +711,7 @@ qtmp4_reader_c::handle_stbl_atom(qtmp4_demuxer_ptr &new_dmx,
     qt_atom_t atom;
 
     atom = read_atom();
-    mxverb(2, PFX "%*s'%c%c%c%c' atom, size %lld, at %lld\n", 2 * level,
+    mxverb(2, PFX "%*s'%c%c%c%c' atom, size " LLD ", at " LLD "\n", 2 * level,
            "", BE2STR(atom.fourcc), atom.size, atom.pos);
 
     if (atom.fourcc == FOURCC('s', 't', 't', 's'))
@@ -758,7 +759,7 @@ qtmp4_reader_c::handle_stco_atom(qtmp4_demuxer_ptr &new_dmx,
 
     chunk.pos = io->read_uint32_be();
     new_dmx->chunk_table.push_back(chunk);
-    mxverb(3, PFX "%*s  %lld\n", level * 2, "", chunk.pos);
+    mxverb(3, PFX "%*s  " LLD "\n", level * 2, "", chunk.pos);
   }
 }
 
@@ -779,7 +780,7 @@ qtmp4_reader_c::handle_co64_atom(qtmp4_demuxer_ptr &new_dmx,
 
     chunk.pos = io->read_uint64_be();
     new_dmx->chunk_table.push_back(chunk);
-    mxverb(3, PFX "%*s  %lld\n", level * 2, "", chunk.pos);
+    mxverb(3, PFX "%*s  " LLD "\n", level * 2, "", chunk.pos);
   }
 }
 
@@ -1003,7 +1004,7 @@ qtmp4_reader_c::handle_tkhd_atom(qtmp4_demuxer_ptr &new_dmx,
 
   if (atom.size < sizeof(tkhd_atom_t))
     mxerror(PFX "'tkhd' atom is too small. Expected size: >= %u. Actual "
-            "size: %lld.\n", (unsigned int)sizeof(tkhd_atom_t), atom.size);
+            "size: " LLD ".\n", (unsigned int)sizeof(tkhd_atom_t), atom.size);
   if (io->read(&tkhd, sizeof(tkhd_atom_t)) != sizeof(tkhd_atom_t))
     throw error_c("end-of-file");
   mxverb(2, PFX "%*s Track ID: %u\n", level * 2, "",
@@ -1019,7 +1020,7 @@ qtmp4_reader_c::handle_trak_atom(qtmp4_demuxer_ptr &new_dmx,
     qt_atom_t atom;
 
     atom = read_atom();
-    mxverb(2, PFX "%*s'%c%c%c%c' atom, size %lld, at %lld\n", 2 * level,
+    mxverb(2, PFX "%*s'%c%c%c%c' atom, size " LLD ", at " LLD "\n", 2 * level,
            "", BE2STR(atom.fourcc), atom.size, atom.pos);
 
     if (atom.fourcc == FOURCC('t', 'k', 'h', 'd'))
@@ -1116,7 +1117,7 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
       buffer = (unsigned char *)safemalloc(frame_size);
       if (io->read(buffer, frame_size) != frame_size) {
         mxwarn(PFX "Could not read chunk number %u/%u with size %u from "
-               "position %lld. Aborting.\n", frame,
+               "position " LLD ". Aborting.\n", frame,
                (unsigned int)dmx->chunk_table.size(), frame_size,
                dmx->chunk_table[dmx->pos].pos);
         safefree(buffer);
@@ -1183,7 +1184,7 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
         if (io->read(buffer + dmx->esds.decoder_config_len, frame_size) !=
             frame_size) {
           mxwarn(PFX "Could not read chunk number %u/%u with size %u from "
-                 "position %lld. Aborting.\n", frame,
+                 "position " LLD ". Aborting.\n", frame,
                  (unsigned int)dmx->chunk_table.size(),
                  frame_size, dmx->chunk_table[dmx->pos].pos);
           safefree(buffer);
@@ -1194,12 +1195,12 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
         frame_size += dmx->esds.decoder_config_len;
       } else {
         buffer = (unsigned char *)safemalloc(frame_size);
-        mxverb(4, "qtmp4_reader_c::read 2: %u bytes from %lld\n", frame_size,
-               dmx->sample_table[frame].pos);
+        mxverb(4, "qtmp4_reader_c::read 2: %u bytes from " LLD "\n",
+               frame_size, dmx->sample_table[frame].pos);
         io->setFilePointer(dmx->sample_table[frame].pos);
         if (io->read(buffer, frame_size) != frame_size) {
           mxwarn(PFX "Could not read chunk number %u/%u with size %u from "
-                 "position %lld. Aborting.\n", frame,
+                 "position " LLD ". Aborting.\n", frame,
                  (unsigned int)dmx->sample_table.size(),
                  frame_size, dmx->sample_table[frame].pos);
           safefree(buffer);
@@ -1600,7 +1601,7 @@ qtmp4_demuxer_t::calculate_fps() {
     if (0 < max_tc)
       fps = (double)sample_table.size() * 1000000000.0 / (double)max_tc;
 
-    mxverb(3, PFX "calculate_fps: case 2: max_tc %lld s_t.s %u fps %f\n",
+    mxverb(3, PFX "calculate_fps: case 2: max_tc " LLD " s_t.s %u fps %f\n",
            max_tc, (unsigned int)sample_table.size(), fps);
     return fps;
   }
@@ -1617,7 +1618,7 @@ qtmp4_demuxer_t::calculate_fps() {
     if (0 < max_tc)
       fps = (double)sample_table.size() * 1000000000.0 / (double)max_tc;
 
-    mxverb(3, PFX "calculate_fps: case 3: max_tc %lld s_t.s %u fps %f\n",
+    mxverb(3, PFX "calculate_fps: case 3: max_tc " LLD " s_t.s %u fps %f\n",
            max_tc, (unsigned int)sample_table.size(), fps);
     return fps;
   }
