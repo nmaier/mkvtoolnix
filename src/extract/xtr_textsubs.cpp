@@ -197,8 +197,8 @@ xtr_ssa_c::handle_block(KaxBlock &block,
   end = start + duration / 1000000;
 
   DataBuffer &data = block.GetBuffer(0);
-  memory_c af_s((unsigned char *)s = (char *)safemalloc(data.Size() + 1), 0,
-                true);
+  s = (char *)safemalloc(data.Size() + 1);
+  memory_c af_s((unsigned char *)s, 0, true);
   memcpy(s, data.Buffer(), data.Size());
   s[data.Size()] = 0;
 
