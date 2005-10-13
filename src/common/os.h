@@ -92,6 +92,12 @@ typedef _fsize_t ssize_t;
 # include <inttypes.h>
 #endif // HAVE_INTTYPES_H
 
+#if defined(COMP_MSC)
+# define PRId64 "I64d"
+# define PRIu64 "I64u"
+# define PRIx64 "I64x"
+#endif
+
 #define LLD "%" PRId64
 #define LLU "%" PRIu64
 
