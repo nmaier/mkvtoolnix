@@ -40,6 +40,9 @@ xtr_srt_c::create_file(xtr_base_c *_master,
   out->write_bom(sub_charset);
 }
 
+#define LLD02 "%02" PRId64
+#define LLD03 "%03" PRId64
+
 void
 xtr_srt_c::handle_block(KaxBlock &block,
                         KaxBlockAdditions *additions,
@@ -67,8 +70,8 @@ xtr_srt_c::handle_block(KaxBlock &block,
   memcpy(text, data.Buffer(), data.Size());
   text[data.Size()] = 0;
   buffer = mxsprintf("%d\n"
-                     "%02lld:%02lld:%02lld,%03lld --> "
-                     "%02lld:%02lld:%02lld,%03lld\n"
+                     LLD02 ":" LLD02 ":" LLD02 "," LLD03 " --> "
+                     LLD02 ":" LLD02 ":" LLD02 "," LLD03 "\n"
                      "%s\n\n",
                      num_entries,
                      start / 1000 / 60 / 60, (start / 1000 / 60) % 60,
@@ -246,11 +249,11 @@ xtr_ssa_c::handle_block(KaxBlock &block,
     if (format == "marked")
       line += "Marked=0";
     else if (format == "start")
-      line += mxsprintf("" LLD ":%02lld:%02lld.%02lld",
+      line += mxsprintf(LLD ":" LLD02 ":" LLD02 "." LLD02,
                         start / 1000 / 60 / 60, (start / 1000 / 60) % 60,
                         (start / 1000) % 60, (start % 1000) / 10);
     else if (format == "end")
-      line += mxsprintf("" LLD ":%02lld:%02lld.%02lld",
+      line += mxsprintf(LLD ":" LLD02 ":" LLD02 "." LLD02,
                         end / 1000 / 60 / 60, (end / 1000 / 60) % 60,
                         (end / 1000) % 60, (end % 1000) / 10);
     else {

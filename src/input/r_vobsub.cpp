@@ -324,8 +324,8 @@ vobsub_reader_c::parse_headers() {
     for (i = 0; i < tsize; i++) {
       mxinfo("vobsub_reader: Track number %u\n", i);
       for (k = 0; k < tracks[i]->entries.size(); k++)
-        mxinfo("vobsub_reader:  %04u position: %12lld (0x%04x%08x), "
-               "timecode: %12lld (" FMT_TIMECODE ")\n", k,
+        mxinfo("vobsub_reader:  %04u position: %12" PRId64 " (0x%04x%08x), "
+               "timecode: %12" PRId64 " (" FMT_TIMECODE ")\n", k,
                tracks[i]->entries[k].position,
                (uint32_t)(tracks[i]->entries[k].position >> 32),
                (uint32_t)(tracks[i]->entries[k].position & 0xffffffff),
