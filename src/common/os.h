@@ -64,6 +64,16 @@ typedef _fsize_t ssize_t;
 #define PACKED_STRUCTURE   __attribute__((__packed__))
 #endif // COMP_MSC
 
+#if defined(HAVE_SYS_TYPES_H)
+# include <sys/types.h>
+#endif // HAVE_SYS_TYPES_H
+#if defined(HAVE_STDINT_H)
+# include <stdint.h>
+#endif // HAVE_STDINT_H
+#if defined(HAVE_INTTYPES_H)
+# include <inttypes.h>
+#endif // HAVE_INTTYPES_H
+
 #if defined(COMP_MINGW) || defined(COMP_MSC)
 
 // For DLL stuff...
@@ -77,26 +87,29 @@ typedef _fsize_t ssize_t;
 #  define MTX_DLL_API
 # endif
 
+# if defined(COMP_MINGW)
+// mingw is a special case. It does have inttypes.h declaring
+// PRId64 to be I64d, but it warns about "int type format, different
+// type argument" if %I64d is used with a int64_t. The mx* functions
+// convert %lld to %I64d on mingw/msvc anyway.
+#  undef PRId64
+#  define PRId64 "lld"
+#  undef PRIu64
+#  define PRIu64 "llu"
+#  undef PRIx64
+#  define PRIx64 "llx"
+# else
+// MSVC doesn't have inttypes, nor the PRI?64 defines.
+#  define PRId64 "I64d"
+#  define PRIu64 "I64u"
+#  define PRIx64 "I64x"
+# endif // defined(COMP_MINGW)
+
 #else  // COMP_MINGW || COMP_MSC
 
 # define MTX_DLL_API
+
 #endif // COMP_MINGW || COMP_MSC
-
-#if defined(HAVE_SYS_TYPES_H)
-# include <sys/types.h>
-#endif // HAVE_SYS_TYPES_H
-#if defined(HAVE_STDINT_H)
-# include <stdint.h>
-#endif // HAVE_STDINT_H
-#if defined(HAVE_INTTYPES_H)
-# include <inttypes.h>
-#endif // HAVE_INTTYPES_H
-
-#if defined(COMP_MSC)
-# define PRId64 "I64d"
-# define PRIu64 "I64u"
-# define PRIx64 "I64x"
-#endif
 
 #define LLD "%" PRId64
 #define LLU "%" PRIu64
