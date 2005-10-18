@@ -281,20 +281,20 @@ header_removal_compressor_c::compress(memory_cptr &buffer) {
                                         buffer->get_size(),
                                         m_bytes->get_size()));
 
-//   if (memcmp(buffer->get(), m_bytes->get(), m_bytes->get_size())) {
-//     string b_buffer, b_bytes;
-//     int i;
+  if (memcmp(buffer->get(), m_bytes->get(), m_bytes->get_size())) {
+    string b_buffer, b_bytes;
+    int i;
 
-//     for (i = 0; m_bytes->get_size() > i; ++i) {
-//       b_buffer += mxsprintf(" %02x", buffer->get()[i]);
-//       b_bytes += mxsprintf(" %02x", m_bytes->get()[i]);
-//     }
-//     throw compression_error_c(mxsprintf("Header removal compression not "
-//                                         "possible because the buffer did not "
-//                                         "start with the bytes that should be "
-//                                         "removed. Wanted bytes:%s; found:%s.",
-//                                         b_bytes.c_str(), b_buffer.c_str()));
-//   }
+    for (i = 0; m_bytes->get_size() > i; ++i) {
+      b_buffer += mxsprintf(" %02x", buffer->get()[i]);
+      b_bytes += mxsprintf(" %02x", m_bytes->get()[i]);
+    }
+    throw compression_error_c(mxsprintf("Header removal compression not "
+                                        "possible because the buffer did not "
+                                        "start with the bytes that should be "
+                                        "removed. Wanted bytes:%s; found:%s.",
+                                        b_bytes.c_str(), b_buffer.c_str()));
+  }
 
   memmove(buffer->get(), buffer->get() + m_bytes->get_size(),
           buffer->get_size() - m_bytes->get_size());
