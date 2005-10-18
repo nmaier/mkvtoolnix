@@ -142,11 +142,7 @@ public:
 
 class MTX_DLL_API mpeg4_p2_compressor_c: public header_removal_compressor_c {
 public:
-  mpeg4_p2_compressor_c() {
-    memory_cptr bytes(new memory_c((unsigned char *)safemalloc(4), 4, true));
-    put_uint32_be(bytes->get(), 0x000001b6);
-    set_bytes(bytes);
-  }
+  mpeg4_p2_compressor_c();
 };
 
 // ------------------------------------------------------------------

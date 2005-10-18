@@ -20,6 +20,7 @@
 
 #include "commonebml.h"
 #include "compression.h"
+#include "hacks.h"
 
 using namespace libmatroska;
 
@@ -312,6 +313,17 @@ header_removal_compressor_c::set_track_headers(KaxContentEncoding
   // Set compression parameters.
   static_cast<EbmlBinary *>(&GetChild<KaxContentCompSettings>(*c_comp))->
     SetBuffer(m_bytes->get(), m_bytes->get_size());
+}
+
+mpeg4_p2_compressor_c::mpeg4_p2_compressor_c() {
+  if (!hack_engaged(ENGAGE_NATIVE_MPEG4))
+    mxerror("The MPEG-4 part 2 compression only works with native MPEG-4. "
+            "However, native MPEG-4 mode has not been selected with "
+            "'--engage native_mpeg4'.\n");
+
+  memory_cptr bytes(new memory_c((unsigned char *)safemalloc(4), 4, true));
+  put_uint32_be(bytes->get(), 0x000001b6);
+  set_bytes(bytes);
 }
 
 // ---------------------------------------------------------------------
