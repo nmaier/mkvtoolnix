@@ -48,20 +48,17 @@ xtr_tta_c::create_file(xtr_base_c *_master,
 }
 
 void
-xtr_tta_c::handle_block(KaxBlock &block,
+xtr_tta_c::handle_frame(memory_cptr &frame,
                         KaxBlockAdditions *additions,
                         int64_t timecode,
                         int64_t duration,
                         int64_t bref,
-                        int64_t fref) {
-  int i;
-
-  for (i = 0; i < block.NumberFrames(); i++) {
-    DataBuffer &data = block.GetBuffer(i);
-
-    frame_sizes.push_back(data.Size());
-    out->write(data.Buffer(), data.Size());
-  }
+                        int64_t fref,
+                        bool keyframe,
+                        bool discardable,
+                        bool references_valid) {
+  frame_sizes.push_back(frame->get_size());
+  out->write(frame->get(), frame->get_size());
 
   if (0 < duration)
     last_duration = duration;

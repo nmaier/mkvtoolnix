@@ -195,8 +195,8 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
   kadditions = FINDFIRST(&blockgroup, KaxBlockAdditions);
 
   // Pass the block to the extractor.
-  extractor->handle_block(*block, kadditions, block->GlobalTimecode(),
-                          duration, bref, fref);
+  extractor->handle_block_v1(*block, kadditions, block->GlobalTimecode(),
+                             duration, bref, fref);
 }
 
 static void

@@ -77,18 +77,19 @@ xtr_avc_c::create_file(xtr_base_c *_master,
 }
 
 void
-xtr_avc_c::handle_block(KaxBlock &block,
+xtr_avc_c::handle_frame(memory_cptr &frame,
                         KaxBlockAdditions *additions,
                         int64_t timecode,
                         int64_t duration,
                         int64_t bref,
-                        int64_t fref) {
-  int i, pos;
+                        int64_t fref,
+                        bool keyframe,
+                        bool discardable,
+                        bool references_valid) {
+  int pos;
+  binary *buf = (binary *)frame->get();
 
-  for (i = pos = 0; block.NumberFrames() > i; i++) {
-    DataBuffer &data = block.GetBuffer(i);
-    binary *buf = data.Buffer();
-    while (data.Size() > pos)
-      write_nal(buf, pos, data.Size(), nal_size_size);
-  }
+  pos = 0;
+  while (frame->get_size() > pos)
+    write_nal(buf, pos, frame->get_size(), nal_size_size);
 }

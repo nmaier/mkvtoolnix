@@ -73,29 +73,26 @@ xtr_avi_c::create_file(xtr_base_c *_master,
 }
 
 void
-xtr_avi_c::handle_block(KaxBlock &block,
+xtr_avi_c::handle_frame(memory_cptr &frame,
                         KaxBlockAdditions *additions,
                         int64_t timecode,
                         int64_t duration,
                         int64_t bref,
-                        int64_t fref) {
-  int i;
+                        int64_t fref,
+                        bool keyframe,
+                        bool discardable,
+                        bool references_valid) {
+  if (references_valid)
+    keyframe = bref == 0;
 
-  if (0 >= duration)
-    duration = default_duration;
+  AVI_write_frame(avi, (char *)frame->get(), frame->get_size(), keyframe);
 
-  for (i = 0; i < block.NumberFrames(); i++) {
-    DataBuffer &data = block.GetBuffer(i);
+  if (((double)duration / 1000000.0 - (1000.0 / fps)) >= 1.5) {
+    int k, nfr;
 
-    AVI_write_frame(avi, (char *)data.Buffer(), data.Size(),
-                    bref != 0 ? 0 : 1);
-    if (((double)duration / 1000000.0 - (1000.0 / fps)) >= 1.5) {
-      int k, nfr;
-
-      nfr = irnd((double)duration / 1000000.0 * fps / 1000.0);
-      for (k = 2; k <= nfr; k++)
-        AVI_write_frame(avi, "", 0, 0);
-    }
+    nfr = irnd((double)duration / 1000000.0 * fps / 1000.0);
+    for (k = 2; k <= nfr; k++)
+      AVI_write_frame(avi, "", 0, 0);
   }
 }
 

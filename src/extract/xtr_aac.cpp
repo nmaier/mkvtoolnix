@@ -82,70 +82,69 @@ xtr_aac_c::create_file(xtr_base_c *_master,
 }
 
 void
-xtr_aac_c::handle_block(KaxBlock &block,
+xtr_aac_c::handle_frame(memory_cptr &frame,
                         KaxBlockAdditions *additions,
                         int64_t timecode,
                         int64_t duration,
                         int64_t bref,
-                        int64_t fref) {
+                        int64_t fref,
+                        bool keyframe,
+                        bool discardable,
+                        bool references_valid) {
   char adts[56 / 8];
-  int i, len;
+  int len;
 
-  for (i = 0; i < block.NumberFrames(); i++) {
-    DataBuffer &data = block.GetBuffer(i);
+  // Recreate the ADTS headers. What a fun. Like runing headlong into
+  // a solid wall. But less painful. Well such is life, you know.
+  // But then again I've just seen a beautiful girl walking by my
+  // window, and suddenly the world is a bright place. Everything's
+  // a matter of perspective. And if I didn't enjoy writing even this
+  // code then I wouldn't do it at all. So let's get to it!
 
-    // Recreate the ADTS headers. What a fun. Like runing headlong into
-    // a solid wall. But less painful. Well such is life, you know.
-    // But then again I've just seen a beautiful girl walking by my
-    // window, and suddenly the world is a bright place. Everything's
-    // a matter of perspective. And if I didn't enjoy writing even this
-    // code then I wouldn't do it at all. So let's get to it!
+  // sync word, 12 bits
+  adts[0] = 0xff;
+  adts[1] = 0xf0;
 
-    // sync word, 12 bits
-    adts[0] = 0xff;
-    adts[1] = 0xf0;
+  // ID, 1 bit
+  adts[1] |= id << 3;
+  // layer: 2 bits = 00
 
-    // ID, 1 bit
-    adts[1] |= id << 3;
-    // layer: 2 bits = 00
+  // protection absent: 1 bit = 1 (ASSUMPTION!)
+  adts[1] |= 1;
 
-    // protection absent: 1 bit = 1 (ASSUMPTION!)
-    adts[1] |= 1;
+  // profile, 2 bits
+  adts[2] = profile << 6;
 
-    // profile, 2 bits
-    adts[2] = profile << 6;
+  // sampling frequency index, 4 bits
+  adts[2] |= srate_idx << 2;
 
-    // sampling frequency index, 4 bits
-    adts[2] |= srate_idx << 2;
+  // private, 1 bit = 0 (ASSUMPTION!)
 
-    // private, 1 bit = 0 (ASSUMPTION!)
+  // channels, 3 bits
+  adts[2] |= (channels & 4) >> 2;
+  adts[3] = (channels & 3) << 6;
 
-    // channels, 3 bits
-    adts[2] |= (channels & 4) >> 2;
-    adts[3] = (channels & 3) << 6;
+  // original/copy, 1 bit = 0(ASSUMPTION!)
 
-    // original/copy, 1 bit = 0(ASSUMPTION!)
+  // home, 1 bit = 0 (ASSUMPTION!)
 
-    // home, 1 bit = 0 (ASSUMPTION!)
+  // copyright id bit, 1 bit = 0 (ASSUMPTION!)
 
-    // copyright id bit, 1 bit = 0 (ASSUMPTION!)
+  // copyright id start, 1 bit = 0 (ASSUMPTION!)
 
-    // copyright id start, 1 bit = 0 (ASSUMPTION!)
+  // frame length, 13 bits
+  len = frame->get_size() + 7;
+  adts[3] |= len >> 11;
+  adts[4] = (len >> 3) & 0xff;
+  adts[5] = (len & 7) << 5;
 
-    // frame length, 13 bits
-    len = data.Size() + 7;
-    adts[3] |= len >> 11;
-    adts[4] = (len >> 3) & 0xff;
-    adts[5] = (len & 7) << 5;
+  // adts buffer fullness, 11 bits, 0x7ff = VBR (ASSUMPTION!)
+  adts[5] |= 0x1f;
+  adts[6] = 0xfc;
 
-    // adts buffer fullness, 11 bits, 0x7ff = VBR (ASSUMPTION!)
-    adts[5] |= 0x1f;
-    adts[6] = 0xfc;
+  // number of raw frames, 2 bits, 0 (meaning 1 frame) (ASSUMPTION!)
 
-    // number of raw frames, 2 bits, 0 (meaning 1 frame) (ASSUMPTION!)
-
-    // Write the ADTS header and the data itself.
-    out->write(adts, 56 / 8);
-    out->write(data.Buffer(), data.Size());
-  }
+  // Write the ADTS header and the data itself.
+  out->write(adts, 56 / 8);
+  out->write(frame->get(), frame->get_size());
 }

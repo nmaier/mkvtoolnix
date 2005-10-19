@@ -115,122 +115,118 @@ xtr_vobsub_c::create_file(xtr_base_c *_master,
 }
 
 void
-xtr_vobsub_c::handle_block(KaxBlock &block,
+xtr_vobsub_c::handle_frame(memory_cptr &frame,
                            KaxBlockAdditions *additions,
                            int64_t timecode,
                            int64_t duration,
                            int64_t bref,
-                           int64_t fref) {
+                           int64_t fref,
+                           bool keyframe,
+                           bool discardable,
+                           bool references_valid) {
   static unsigned char padding_data[8] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
                                           0xff, 0xff};
   mpeg_es_header_t es;
   mpeg_ps_header_t ps;
   uint64_t c;
-  int i;
+  uint32_t size, padding, first;
   xtr_vobsub_c *vmaster;
+  unsigned char *data;
 
   if (NULL == master)
     vmaster = this;
   else
     vmaster = static_cast<xtr_vobsub_c *>(master);
 
-  for (i = 0; i < block.NumberFrames(); i++) {
-    uint32_t size, padding, first;
-    DataBuffer &data_buffer = block.GetBuffer(i);
-    memory_cptr data_m(new memory_c(data_buffer.Buffer(), data_buffer.Size(),
-                                    false));
-    unsigned char *data;
+  content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+  data = frame->get();
+  size = frame->get_size();
 
-    content_decoder.reverse(data_m, CONTENT_ENCODING_SCOPE_BLOCK);
-    data = data_m->get();
-    size = data_m->get_size();
+  positions.push_back(vmaster->out->getFilePointer());
+  timecodes.push_back(timecode);
 
-    positions.push_back(vmaster->out->getFilePointer());
-    timecodes.push_back(timecode);
+  padding = (2048 - (size + sizeof(mpeg_ps_header_t) +
+                     sizeof(mpeg_es_header_t))) & 2047;
+  first = size + sizeof(mpeg_ps_header_t) +
+    sizeof(mpeg_es_header_t) > 2048 ?
+    2048 - sizeof(mpeg_ps_header_t) - sizeof(mpeg_es_header_t) : size;
 
-    padding = (2048 - (size + sizeof(mpeg_ps_header_t) +
-                       sizeof(mpeg_es_header_t))) & 2047;
-    first = size + sizeof(mpeg_ps_header_t) +
-      sizeof(mpeg_es_header_t) > 2048 ?
-      2048 - sizeof(mpeg_ps_header_t) - sizeof(mpeg_es_header_t) : size;
+  memset(&ps, 0, sizeof(mpeg_ps_header_t));
 
-    memset(&ps, 0, sizeof(mpeg_ps_header_t));
+  ps.pfx[2] = 0x01;
+  ps.pfx[3] = 0xba;
+  c = timecode * 9 / 100000;
 
-    ps.pfx[2] = 0x01;
-    ps.pfx[3] = 0xba;
-    c = timecode * 9 / 100000;
+  ps.scr[0] = 0x40 | ((uint8_t)(c >> 27) & 0x38) | 0x04 |
+    ((uint8_t)(c >> 28) & 0x03);
+  ps.scr[1] = (uint8_t)(c >> 20);
+  ps.scr[2] = ((uint8_t)(c >> 12) & 0xf8) | 0x04 |
+    ((uint8_t)(c >> 13) & 0x03);
+  ps.scr[3] = (uint8_t)(c >> 5);
+  ps.scr[4] = ((uint8_t)(c << 3) & 0xf8) | 0x04;
+  ps.scr[5] = 1;
+  ps.muxr[0] = 1;
+  ps.muxr[1] = 0x89;
+  ps.muxr[2] = 0xc3; // just some value
+  ps.stlen = 0xf8;
+  if ((padding < 8) && (first == size))
+    ps.stlen |= (uint8_t)padding;
 
-    ps.scr[0] = 0x40 | ((uint8_t)(c >> 27) & 0x38) | 0x04 |
-      ((uint8_t)(c >> 28) & 0x03);
-    ps.scr[1] = (uint8_t)(c >> 20);
-    ps.scr[2] = ((uint8_t)(c >> 12) & 0xf8) | 0x04 |
-      ((uint8_t)(c >> 13) & 0x03);
-    ps.scr[3] = (uint8_t)(c >> 5);
-    ps.scr[4] = ((uint8_t)(c << 3) & 0xf8) | 0x04;
-    ps.scr[5] = 1;
-    ps.muxr[0] = 1;
-    ps.muxr[1] = 0x89;
-    ps.muxr[2] = 0xc3; // just some value
-    ps.stlen = 0xf8;
+  memset(&es, 0, sizeof(mpeg_es_header_t));
+  es.pfx[2] = 1;
+  es.stream_id = 0xbd;
+  es.len[0] = (uint8_t)((first + 9) >> 8);
+  es.len[1] = (uint8_t)(first + 9);
+  es.flags[0] = 0x81;
+  es.flags[1] = 0x80;
+  es.hlen = 5;
+  es.pts[0] = 0x20 | ((uint8_t)(c >> 29) & 0x0e) | 0x01;
+  es.pts[1] = (uint8_t)(c >> 22);
+  es.pts[2] = ((uint8_t)(c >> 14) & 0xfe) | 0x01;
+  es.pts[3] = (uint8_t)(c >> 7);
+  es.pts[4] = (uint8_t)(c << 1) | 0x01;
+  if (NULL == master)
+    es.lidx = 0x20;
+  else
+    es.lidx = stream_id;
+
+  vmaster->out->write(&ps, sizeof(mpeg_ps_header_t));
+  if ((padding > 0) && (padding < 8) && (first == size))
+    vmaster->out->write(padding_data, padding);
+  vmaster->out->write(&es, sizeof(mpeg_es_header_t));
+  vmaster->out->write(data, first);
+  while (first < size) {
+    size -= first;
+    data += first;
+
+    padding = (2048 - (size + 10 + sizeof(mpeg_ps_header_t))) & 2047;
+    first = size + 10 + sizeof(mpeg_ps_header_t) > 2048 ?
+      2048 - 10 - sizeof(mpeg_ps_header_t) : size;
+
     if ((padding < 8) && (first == size))
       ps.stlen |= (uint8_t)padding;
 
-    memset(&es, 0, sizeof(mpeg_es_header_t));
-    es.pfx[2] = 1;
-    es.stream_id = 0xbd;
-    es.len[0] = (uint8_t)((first + 9) >> 8);
-    es.len[1] = (uint8_t)(first + 9);
-    es.flags[0] = 0x81;
-    es.flags[1] = 0x80;
-    es.hlen = 5;
-    es.pts[0] = 0x20 | ((uint8_t)(c >> 29) & 0x0e) | 0x01;
-    es.pts[1] = (uint8_t)(c >> 22);
-    es.pts[2] = ((uint8_t)(c >> 14) & 0xfe) | 0x01;
-    es.pts[3] = (uint8_t)(c >> 7);
-    es.pts[4] = (uint8_t)(c << 1) | 0x01;
-    if (NULL == master)
-      es.lidx = 0x20;
-    else
-      es.lidx = stream_id;
-
+    es.len[0] = (uint8_t)((first + 4) >> 8);
+    es.len[1] = (uint8_t)(first + 4);
+    es.flags[1] = 0;
+    es.hlen = 0;
+    es.pts[0] = es.lidx;
     vmaster->out->write(&ps, sizeof(mpeg_ps_header_t));
     if ((padding > 0) && (padding < 8) && (first == size))
       vmaster->out->write(padding_data, padding);
-    vmaster->out->write(&es, sizeof(mpeg_es_header_t));
+    vmaster->out->write(&es, 10);
     vmaster->out->write(data, first);
-    while (first < size) {
-      size -= first;
-      data += first;
-
-      padding = (2048 - (size + 10 + sizeof(mpeg_ps_header_t))) & 2047;
-      first = size + 10 + sizeof(mpeg_ps_header_t) > 2048 ?
-        2048 - 10 - sizeof(mpeg_ps_header_t) : size;
-
-      if ((padding < 8) && (first == size))
-        ps.stlen |= (uint8_t)padding;
-
-      es.len[0] = (uint8_t)((first + 4) >> 8);
-      es.len[1] = (uint8_t)(first + 4);
-      es.flags[1] = 0;
-      es.hlen = 0;
-      es.pts[0] = es.lidx;
-      vmaster->out->write(&ps, sizeof(mpeg_ps_header_t));
-      if ((padding > 0) && (padding < 8) && (first == size))
-        vmaster->out->write(padding_data, padding);
-      vmaster->out->write(&es, 10);
-      vmaster->out->write(data, first);
-    }
-    if (8 <= padding) {
-      padding -= 6;
-      es.stream_id = 0xbe;
-      es.len[0] = (uint8_t)(padding >> 8);
-      es.len[1] = (uint8_t)padding;
-      vmaster->out->write(&es, 6); // XXX
-      while (0 < padding) {
-        uint32_t todo = padding > 8 ? 8 : padding;
-        vmaster->out->write(padding_data, todo);
-        padding -= todo;
-      }
+  }
+  if (8 <= padding) {
+    padding -= 6;
+    es.stream_id = 0xbe;
+    es.len[0] = (uint8_t)(padding >> 8);
+    es.len[1] = (uint8_t)padding;
+    vmaster->out->write(&es, 6); // XXX
+    while (0 < padding) {
+      uint32_t todo = padding > 8 ? 8 : padding;
+      vmaster->out->write(padding_data, todo);
+      padding -= todo;
     }
   }
 }

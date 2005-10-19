@@ -61,31 +61,31 @@ xtr_rmff_c::create_file(xtr_base_c *_master,
 }
 
 void
-xtr_rmff_c::handle_block(KaxBlock &block,
+xtr_rmff_c::handle_frame(memory_cptr &frame,
                          KaxBlockAdditions *additions,
                          int64_t timecode,
                          int64_t duration,
                          int64_t bref,
-                         int64_t fref) {
-  int i;
-  rmff_frame_t *frame;
+                         int64_t fref,
+                         bool keyframe,
+                         bool discardable,
+                         bool references_valid) {
+  rmff_frame_t *rmff_frame;
 
-  for (i = 0; i < block.NumberFrames(); i++) {
-    DataBuffer &data = block.GetBuffer(i);
-
-    frame = rmff_allocate_frame(data.Size(), data.Buffer());
-    if (frame == NULL)
-      mxerror("Memory for a RealAudio/RealVideo frame could not be "
-              "allocated.\n");
-    frame->timecode = timecode / 1000000;
-    if (0 == bref)
-      frame->flags = RMFF_FRAME_FLAG_KEYFRAME;
-    if ('V' == codec_id[0])
-      rmff_write_packed_video_frame(rmtrack, frame);
-    else
-      rmff_write_frame(rmtrack, frame);
-    rmff_release_frame(frame);
-  }
+  rmff_frame = rmff_allocate_frame(frame->get_size(), frame->get());
+  if (rmff_frame == NULL)
+    mxerror("Memory for a RealAudio/RealVideo frame could not be "
+            "allocated.\n");
+  rmff_frame->timecode = timecode / 1000000;
+  if (references_valid)
+    keyframe = 0 == bref;
+  if (keyframe)
+    rmff_frame->flags = RMFF_FRAME_FLAG_KEYFRAME;
+  if ('V' == codec_id[0])
+    rmff_write_packed_video_frame(rmtrack, rmff_frame);
+  else
+    rmff_write_frame(rmtrack, rmff_frame);
+  rmff_release_frame(rmff_frame);
 }
 
 void

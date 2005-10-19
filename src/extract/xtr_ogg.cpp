@@ -50,7 +50,7 @@ xtr_oggbase_c::xtr_oggbase_c(const string &_codec_id,
                              int64_t _tid,
                              track_spec_t &tspec):
   xtr_base_c(_codec_id, _tid, tspec),
-  packetno(2), buffered_data(NULL), buffered_size(0), previous_end(0) {
+  packetno(2), previous_end(0) {
 }
 
 void
@@ -67,40 +67,31 @@ xtr_oggbase_c::create_file(xtr_base_c *_master,
 }
 
 void
-xtr_oggbase_c::handle_block(KaxBlock &block,
+xtr_oggbase_c::handle_frame(memory_cptr &frame,
                             KaxBlockAdditions *additions,
                             int64_t timecode,
                             int64_t duration,
                             int64_t bref,
-                            int64_t fref) {
-  int i;
+                            int64_t fref,
+                            bool keyframe,
+                            bool discardable,
+                            bool references_valid) {
+  if (NULL != buffered_data.get()) {
+    ogg_packet op;
 
-  if (-1 == duration)
-    duration = default_duration * block.NumberFrames();
+    op.b_o_s = 0;
+    op.e_o_s = 0;
+    op.packetno = packetno;
+    op.packet = buffered_data->get();
+    op.bytes = buffered_data->get_size();
+    op.granulepos = timecode * sfreq / 1000000000;
+    ogg_stream_packetin(&os, &op);
+    write_pages();
 
-  for (i = 0; i < block.NumberFrames(); i++) {
-    DataBuffer &data = block.GetBuffer(i);
-    if (NULL != buffered_data) {
-      ogg_packet op;
-
-      op.b_o_s = 0;
-      op.e_o_s = 0;
-      op.packetno = packetno;
-      op.packet = buffered_data;
-      op.bytes = buffered_size;
-//       op.granulepos = (timecode / 1000000) * sfreq / 1000;
-      op.granulepos = (timecode + i * duration / block.NumberFrames()) *
-        sfreq / 1000000000;
-      ogg_stream_packetin(&os, &op);
-      write_pages();
-      safefree(buffered_data);
-
-      packetno++;
-    }
-
-    buffered_data = (unsigned char *)safememdup(data.Buffer(), data.Size());
-    buffered_size = data.Size();
+    packetno++;
   }
+
+  buffered_data = memory_cptr(frame->clone());
   previous_end = timecode + duration;
 }
 
@@ -108,7 +99,7 @@ void
 xtr_oggbase_c::finish_file() {
   ogg_packet op;
 
-  if (NULL == buffered_data)
+  if (NULL == buffered_data.get())
     return;
 
   // Set the "end of stream" marker on the last packet, handle it
@@ -116,12 +107,11 @@ xtr_oggbase_c::finish_file() {
   op.b_o_s = 0;
   op.e_o_s = 1;
   op.packetno = packetno;
-  op.packet = buffered_data;
-  op.bytes = buffered_size;
+  op.packet = buffered_data->get();
+  op.bytes = buffered_data->get_size();
 //   op.granulepos = (previous_end / 1000000) * sfreq / 1000;
   op.granulepos = previous_end * sfreq / 1000000000;
   ogg_stream_packetin(&os, &op);
-  safefree(buffered_data);
   flush_pages();
   ogg_stream_clear(&os);
 }

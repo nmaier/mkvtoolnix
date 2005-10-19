@@ -44,12 +44,15 @@ xtr_srt_c::create_file(xtr_base_c *_master,
 #define LLD03 "%03" PRId64
 
 void
-xtr_srt_c::handle_block(KaxBlock &block,
+xtr_srt_c::handle_frame(memory_cptr &frame,
                         KaxBlockAdditions *additions,
                         int64_t timecode,
                         int64_t duration,
                         int64_t bref,
-                        int64_t fref) {
+                        int64_t fref,
+                        bool keyframe,
+                        bool discardable,
+                        bool references_valid) {
   char *text;
   int64_t start, end;
   string buffer;
@@ -60,15 +63,13 @@ xtr_srt_c::handle_block(KaxBlock &block,
     duration = 1000000000;
   }
 
-  DataBuffer &data = block.GetBuffer(0);
-
   start = timecode / 1000000;
   end = start + duration / 1000000;
 
   ++num_entries;
-  text = new char[data.Size() + 1];
-  memcpy(text, data.Buffer(), data.Size());
-  text[data.Size()] = 0;
+  text = new char[frame->get_size() + 1];
+  memcpy(text, frame->get(), frame->get_size());
+  text[frame->get_size()] = 0;
   buffer = mxsprintf("%d\n"
                      LLD02 ":" LLD02 ":" LLD02 "," LLD03 " --> "
                      LLD02 ":" LLD02 ":" LLD02 "," LLD03 "\n"
@@ -177,12 +178,15 @@ xtr_ssa_c::create_file(xtr_base_c *_master,
 }
 
 void
-xtr_ssa_c::handle_block(KaxBlock &block,
+xtr_ssa_c::handle_frame(memory_cptr &frame,
                         KaxBlockAdditions *additions,
                         int64_t timecode,
                         int64_t duration,
                         int64_t bref,
-                        int64_t fref) {
+                        int64_t fref,
+                        bool keyframe,
+                        bool discardable,
+                        bool references_valid) {
   int i, k, num;
   char *s;
   vector<string> fields;
@@ -199,11 +203,10 @@ xtr_ssa_c::handle_block(KaxBlock &block,
   start = timecode / 1000000;
   end = start + duration / 1000000;
 
-  DataBuffer &data = block.GetBuffer(0);
-  s = (char *)safemalloc(data.Size() + 1);
+  s = (char *)safemalloc(frame->get_size() + 1);
   memory_c af_s((unsigned char *)s, 0, true);
-  memcpy(s, data.Buffer(), data.Size());
-  s[data.Size()] = 0;
+  memcpy(s, frame->get(), frame->get_size());
+  s[frame->get_size()] = 0;
 
   // Split the line into the fields.
   // Specs say that the following fields are to put into the block:
@@ -374,21 +377,18 @@ xtr_usf_c::create_file(xtr_base_c *_master,
 }
 
 void
-xtr_usf_c::handle_block(KaxBlock &block,
+xtr_usf_c::handle_frame(memory_cptr &frame,
                         KaxBlockAdditions *additions,
                         int64_t timecode,
                         int64_t duration,
                         int64_t bref,
-                        int64_t fref) {
-  if (0 == block.NumberFrames())
-    return;
-
-  DataBuffer &data_buffer = block.GetBuffer(0);
+                        int64_t fref,
+                        bool keyframe,
+                        bool discardable,
+                        bool references_valid) {
   usf_entry_t entry("", timecode, timecode + duration);
-  memory_cptr data(new memory_c(data_buffer.Buffer(), data_buffer.Size(),
-                                false));
-  content_decoder.reverse(data, CONTENT_ENCODING_SCOPE_BLOCK);
-  entry.m_text.append((const char *)data->get(), data->get_size());
+  content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+  entry.m_text.append((const char *)frame->get(), frame->get_size());
   m_entries.push_back(entry);
 }
 
