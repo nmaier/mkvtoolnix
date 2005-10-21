@@ -1680,6 +1680,54 @@ def_handle2(block_group,
 }
 
 void
+def_handle2(simple_block,
+            KaxCluster *&cluster) {
+  int i;
+  vector<int> frame_sizes;
+  vector<uint32_t> frame_adlers;
+  char adler[100];
+  uint64_t timecode;
+  float bduration;
+  KaxSimpleBlock &block = *static_cast<KaxSimpleBlock *>(l2);
+
+  block.SetParent(*cluster);
+  timecode = block.GlobalTimecode() / 1000000;
+  show_element(l2, 2, "SimpleBlock (track number %u, %d frame(s), "
+               "timecode %.3fs = " FMT_TIMECODEN ")",
+               block.TrackNum(), block.NumberFrames(),
+               (float)timecode / 1000.0,
+               ARG_TIMECODEN(block.GlobalTimecode()));
+  bduration = -1.0;
+  for (i = 0; i < (int)block.NumberFrames(); i++) {
+    DataBuffer &data = block.GetBuffer(i);
+    if (calc_checksums)
+      mxprints(adler, " (adler: 0x%08x)",
+               calc_adler32(data.Buffer(), data.Size()));
+    else
+      adler[0] = 0;
+    show_element(NULL, 4, "Frame with size %u%s", data.Size(), adler);
+    frame_sizes.push_back(data.Size());
+    frame_adlers.push_back(calc_adler32(data.Buffer(),
+                                        data.Size()));
+  }
+
+  if (show_summary) {
+    int fidx;
+
+    for (fidx = 0; fidx < frame_sizes.size(); fidx++)
+      mxinfo(Y("%c frame, track %d, timecode " LLD " (" FMT_TIMECODE
+               "), size %d, adler 0x%08x\n"),
+             block.IsKeyframe() ? 'I' : block.IsDiscardable() ? 'B' : 'P',
+             block.TrackNum(), timecode, ARG_TIMECODE(timecode),
+             frame_sizes[fidx], frame_adlers[fidx]);
+
+  } else if (verbose > 2)
+    show_element(NULL, 2, Y("[%c frame for track %d, timecode " LLD "]"),
+                 block.IsKeyframe() ? 'I' : block.IsDiscardable() ? 'B' : 'P',
+                 block.TrackNum(), timecode);
+}
+
+void
 def_handle2(cluster,
             KaxCluster *&cluster,
             int64_t file_size) {
@@ -1725,6 +1773,9 @@ def_handle2(cluster,
 
     else if (is_id(l2, KaxBlockGroup))
       handle2(block_group, cluster);
+
+    else if (is_id(l2, KaxSimpleBlock))
+      handle2(simple_block, cluster);
 
     else if (!is_global(es, l2, 2))
       show_unknown_element(l2, 2);
