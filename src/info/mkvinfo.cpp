@@ -1688,12 +1688,18 @@ def_handle2(simple_block,
   char adler[100];
   uint64_t timecode;
   float bduration;
+  string info;
   KaxSimpleBlock &block = *static_cast<KaxSimpleBlock *>(l2);
 
   block.SetParent(*cluster);
   timecode = block.GlobalTimecode() / 1000000;
-  show_element(l2, 2, "SimpleBlock (track number %u, %d frame(s), "
+  if (block.IsKeyframe())
+    info = "key, ";
+  if (block.IsDiscardable())
+    info += "discardable, ";
+  show_element(l2, 2, "SimpleBlock (%strack number %u, %d frame(s), "
                "timecode %.3fs = " FMT_TIMECODEN ")",
+               info.c_str(),
                block.TrackNum(), block.NumberFrames(),
                (float)timecode / 1000.0,
                ARG_TIMECODEN(block.GlobalTimecode()));
