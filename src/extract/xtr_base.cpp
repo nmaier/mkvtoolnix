@@ -69,39 +69,6 @@ xtr_base_c::create_file(xtr_base_c *_master,
 }
 
 void
-xtr_base_c::handle_block_v1(KaxBlock &block,
-                            KaxBlockAdditions *additions,
-                            int64_t timecode,
-                            int64_t duration,
-                            int64_t bref,
-                            int64_t fref) {
-  int i;
-
-  if (0 == block.NumberFrames())
-    return;
-
-  if (0 > duration)
-    duration = default_duration * block.NumberFrames();
-
-  for (i = 0; i < block.NumberFrames(); i++) {
-    int64_t this_timecode, this_duration;
-
-    if (0 > duration) {
-      this_timecode = timecode;
-      this_duration = duration;
-    } else {
-      this_timecode = timecode + i * duration / block.NumberFrames();
-      this_duration = duration / block.NumberFrames();
-    }
-
-    DataBuffer &data = block.GetBuffer(i);
-    memory_cptr frame(new memory_c(data.Buffer(), data.Size(), false));
-    handle_frame(frame, additions, this_timecode, this_duration, bref, fref,
-                 false, false, true);
-  }
-}
-
-void
 xtr_base_c::handle_frame(memory_cptr &frame,
                          KaxBlockAdditions *additions,
                          int64_t timecode,

@@ -45,9 +45,6 @@ public:
   virtual ~xtr_base_c();
 
   virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
-  virtual void handle_block_v1(KaxBlock &block, KaxBlockAdditions *additions,
-                               int64_t timecode, int64_t duration, int64_t bref,
-                               int64_t fref);
   virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions,
                             int64_t timecode, int64_t duration, int64_t bref,
                             int64_t fref, bool keyframe, bool discardable,

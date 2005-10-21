@@ -158,8 +158,9 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
 
   // Only continue if this block group actually contains a block.
   block = FINDFIRST(&blockgroup, KaxBlock);
-  if (NULL == block)
+  if ((NULL == block) || (0 == block->NumberFrames()))
     return;
+
   block->SetParent(cluster);
 
   // Do we need this block group?
@@ -194,9 +195,71 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
   // Any block additions present?
   kadditions = FINDFIRST(&blockgroup, KaxBlockAdditions);
 
-  // Pass the block to the extractor.
-  extractor->handle_block_v1(*block, kadditions, block->GlobalTimecode(),
-                             duration, bref, fref);
+  if (0 > duration)
+    duration = extractor->default_duration * block->NumberFrames();
+
+  for (i = 0; i < block->NumberFrames(); i++) {
+    int64_t this_timecode, this_duration;
+
+    if (0 > duration) {
+      this_timecode = block->GlobalTimecode();
+      this_duration = duration;
+    } else {
+      this_timecode = block->GlobalTimecode() + i * duration /
+        block->NumberFrames();
+      this_duration = duration / block->NumberFrames();
+    }
+
+    DataBuffer &data = block->GetBuffer(i);
+    memory_cptr frame(new memory_c(data.Buffer(), data.Size(), false));
+    extractor->handle_frame(frame, kadditions, this_timecode, this_duration,
+                            bref, fref, false, false, true);
+  }
+}
+
+static void
+handle_simpleblock(KaxSimpleBlock &simpleblock,
+                   KaxCluster &cluster) {
+  xtr_base_c *extractor;
+  int64_t duration;
+  size_t i;
+
+  if (0 == simpleblock.NumberFrames())
+    return;
+
+  simpleblock.SetParent(cluster);
+
+  // Do we need this block group?
+  extractor = NULL;
+  for (i = 0; i < extractors.size(); i++)
+    if (simpleblock.TrackNum() == extractors[i]->tid) {
+      extractor = extractors[i];
+      break;
+    }
+
+  if (NULL == extractor)
+    return;
+
+  duration = extractor->default_duration * simpleblock.NumberFrames();
+
+  for (i = 0; i < simpleblock.NumberFrames(); i++) {
+    int64_t this_timecode, this_duration;
+
+    if (0 > duration) {
+      this_timecode = simpleblock.GlobalTimecode();
+      this_duration = duration;
+    } else {
+      this_timecode = simpleblock.GlobalTimecode() + i * duration /
+        simpleblock.NumberFrames();
+      this_duration = duration / simpleblock.NumberFrames();
+    }
+
+    DataBuffer &data = simpleblock.GetBuffer(i);
+    memory_cptr frame(new memory_c(data.Buffer(), data.Size(), false));
+    extractor->handle_frame(frame, NULL, this_timecode, this_duration,
+                            -1, -1, simpleblock.IsKeyframe(),
+                            simpleblock.IsDiscardable(), false);
+  }
 }
 
 static void
@@ -426,6 +489,13 @@ extract_tracks(const char *file_name,
                      true);
             handle_blockgroup(*static_cast<KaxBlockGroup *>(l2), *cluster,
                               tc_scale);
+
+          } else if (EbmlId(*l2) == KaxSimpleBlock::ClassInfos.GlobalId) {
+            show_element(l2, 2, _("SimpleBlock"));
+
+            l2->Read(*es, KaxSimpleBlock::ClassInfos.Context, upper_lvl_el, l3,
+                     true);
+            handle_simpleblock(*static_cast<KaxSimpleBlock *>(l2), *cluster);
 
           } else
             l2->SkipData(*es, l2->Generic().Context);
