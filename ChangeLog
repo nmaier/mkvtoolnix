@@ -1,3 +1,10 @@
+2005-10-21  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge, mmg: new feature: Added support for the new
+	SimpleBlock instead of BlockGroups (only available via "--engage
+	use_simpleblock" for now). Patch by Steve Lhomme (see AUTHORS)
+	with fixes by myself.
+
 2005-10-14  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v1.6.0.

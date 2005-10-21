@@ -37,6 +37,7 @@ using namespace std;
 #define ENGAGE_WRITE_HEADERS_TWICE "write_headers_twice"
 #define ENGAGE_ALLOW_AVC_IN_VFW_MODE "allow_avc_in_vfw_mode"
 #define ENGAGE_KEEP_BITSTREAM_AR_INFO "keep_bitstream_ar_info"
+#define ENGAGE_USE_SIMPLE_BLOCK "use_simpleblock"
 
 void MTX_DLL_API engage_hacks(const string &hacks);
 bool MTX_DLL_API hack_engaged(const string &hack);

@@ -25,7 +25,7 @@
 
 namespace libmatroska {
   class KaxBlock;
-  class KaxBlockGroup;
+  class KaxBlockBlob;
   class KaxCluster;
 };
 
@@ -40,7 +40,7 @@ struct packet_t {
   memory_cptr data;
   vector<memory_cptr> data_adds;
 
-  KaxBlockGroup *group;
+  KaxBlockBlob *group;
   KaxBlock *block;
   KaxCluster *cluster;
   int ref_priority, time_factor;

@@ -134,6 +134,8 @@ wxString cli_options[][2] = {
   { wxT("--engage allow_avc_in_vfw_mode"),
     wxT("Allows storing AVC/h.264 video in Video-for-Windows compatibility "
         "mode, e.g. when it is read from an AVI") },
+  { wxT("--engage use_simpleblock"),
+    wxT("Enable use of SimpleBlock instead of BlockGroup when possible.") },
   { wxT("--engage cow"),
     wxT("No help available.") },
   { wxT(""), wxT("") }

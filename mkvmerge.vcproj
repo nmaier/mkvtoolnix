@@ -20,7 +20,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;.\avilib-0.6.10&quot;;.\librmff;src\common;src\input;src\output;src\merge;src\mpegparser;.;.\src;..\..\work\libebml;..\..\work\libmatroska;..\..\..\zlib;..\..\..\libogg\include;..\..\..\libvorbis\include;..\..\..\expat\lib;..\..\..\flac\include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;FLAC__NO_DLL"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;FLAC__NO_DLL;MATROSKA_VERSION=2"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -460,6 +460,9 @@
 			</File>
 			<File
 				RelativePath=".\src\merge\output_control.h">
+			</File>
+			<File
+				RelativePath=".\src\merge\packet.h">
 			</File>
 			<File
 				RelativePath=".\src\merge\pr_generic.cpp">

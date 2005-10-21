@@ -294,7 +294,7 @@ void
 cluster_helper_c::set_duration(render_groups_t *rg) {
   uint32_t i;
   int64_t block_duration, def_duration;
-  KaxBlockGroup *group;
+  KaxBlockBlob *group;
 
   if (rg->durations.size() == 0)
     return;
@@ -341,7 +341,7 @@ cluster_helper_c::render(bool flush) {
 int
 cluster_helper_c::render_cluster(ch_contents_t *clstr) {
   KaxCluster *cluster;
-  KaxBlockGroup *new_block_group, *last_block_group;
+  KaxBlockBlob *new_block_group, *last_block_group;
   DataBuffer *data_buffer;
   int i, k, elements_in_cluster;
   packet_cptr pack, bref_packet, fref_packet;
@@ -351,6 +351,8 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
   render_groups_t *render_group;
   bool added_to_cues;
   LacingType lacing_type;
+  BlockBlobType use_simpleblock = hack_engaged(ENGAGE_USE_SIMPLE_BLOCK) ?
+    BLOCK_BLOB_ALWAYS_SIMPLE : BLOCK_BLOB_NO_SIMPLE;
 
   assert((clstr != NULL) && !clstr->rendered);
 
@@ -413,7 +415,8 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
       render_group->more_data = false;
     if (!render_group->more_data) {
       set_duration(render_group);
-      new_block_group = &AddNewChild<KaxBlockGroup>(*cluster);
+      new_block_group = new KaxBlockBlob(use_simpleblock);
+      cluster->AddBlockBlob(new_block_group);
       new_block_group->SetParent(*cluster);
       render_group->groups.push_back(new_block_group);
       render_group->durations.clear();
@@ -452,16 +455,17 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
         }
         assert(fref_packet->group != NULL);
         render_group->more_data =
-          new_block_group->AddFrame(track_entry, (pack->assigned_timecode -
-                                                  timecode_offset),
-                                    *data_buffer, *bref_packet->group,
-                                    *fref_packet->group, lacing_type);
+          new_block_group->AddFrameAuto(track_entry,(pack->assigned_timecode -
+                                                      timecode_offset),
+                                        *data_buffer, lacing_type,
+                                        bref_packet->group,
+                                        fref_packet->group);
       } else {
         render_group->more_data =
-          new_block_group->AddFrame(track_entry, (pack->assigned_timecode -
-                                                  timecode_offset),
-                                    *data_buffer, *bref_packet->group,
-                                    lacing_type);
+          new_block_group->AddFrameAuto(track_entry, (pack->assigned_timecode -
+                                                      timecode_offset),
+                                        *data_buffer, lacing_type,
+                                        bref_packet->group);
 
         // All packets with an ID smaller than the referenced packet's ID
         // are not needed anymore. Be happy!
@@ -470,9 +474,9 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
 
     } else {                    // This is a key frame. No references.
       render_group->more_data =
-        new_block_group->AddFrame(track_entry, (pack->assigned_timecode -
-                                                timecode_offset),
-                                  *data_buffer, lacing_type);
+        new_block_group->AddFrameAuto(track_entry, (pack->assigned_timecode -
+                                                    timecode_offset),
+                                      *data_buffer, lacing_type);
       // All packets with an ID smaller than this packet's ID are not
       // needed anymore. Be happy!
       free_ref(pack->timecode, pack->source);
@@ -491,23 +495,27 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
     render_group->durations.push_back(pack->unmodified_duration);
     render_group->duration_mandatory |= pack->duration_mandatory;
 
-    // Set the reference priority if it was wanted.
-    if ((new_block_group != NULL) && (pack->ref_priority > 0))
-      *static_cast<EbmlUInteger *>
-        (&GetChild<KaxReferencePriority>(*new_block_group)) =
-        pack->ref_priority;
+    if (new_block_group != NULL) {
+      // Set the reference priority if it was wanted.
+      if ((pack->ref_priority > 0) &&
+          new_block_group->ReplaceSimpleByGroup())
+        *static_cast<EbmlUInteger *>
+          (&GetChild<KaxReferencePriority>(*new_block_group)) =
+          pack->ref_priority;
 
-    // Handle BlockAdditions if needed
-    if ((new_block_group != NULL) && (pack->data_adds.size() > 0)) {
-      KaxBlockAdditions &additions =
-        AddEmptyChild<KaxBlockAdditions>(*new_block_group);
-      for (k = 0; k < pack->data_adds.size(); k++) {
-        KaxBlockMore &block_more = AddEmptyChild<KaxBlockMore>(additions);
-        *static_cast<EbmlUInteger *>(&GetChild<KaxBlockAddID>(block_more)) =
-          k + 1;
-        GetChild<KaxBlockAdditional>(block_more).
-          CopyBuffer((binary *)pack->data_adds[k]->get(),
-                     pack->data_adds[k]->get_size());
+      // Handle BlockAdditions if needed
+      if (!pack->data_adds.empty() &&
+          new_block_group->ReplaceSimpleByGroup()) {
+        KaxBlockAdditions &additions =
+          AddEmptyChild<KaxBlockAdditions>(*new_block_group);
+        for (k = 0; k < pack->data_adds.size(); k++) {
+          KaxBlockMore &block_more = AddEmptyChild<KaxBlockMore>(additions);
+          *static_cast<EbmlUInteger *>(&GetChild<KaxBlockAddID>(block_more)) =
+            k + 1;
+          GetChild<KaxBlockAdditional>(block_more).
+            CopyBuffer((binary *)pack->data_adds[k]->get(),
+                       pack->data_adds[k]->get_size());
+        }
       }
     }
 
@@ -531,7 +539,7 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
            ((source->get_last_cue_timecode() < 0) ||
             ((pack->assigned_timecode - source->get_last_cue_timecode()) >=
              2000000000)))) {
-        kax_cues->AddBlockGroup(*new_block_group);
+        kax_cues->AddBlockBlob(*new_block_group);
         num_cue_elements++;
         cue_writing_requested = 1;
         source->set_last_cue_timecode(pack->assigned_timecode);

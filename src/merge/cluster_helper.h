@@ -49,7 +49,7 @@ struct ch_contents_t {
 };
 
 struct render_groups_t {
-  vector<KaxBlockGroup *> groups;
+  vector<KaxBlockBlob *> groups;
   vector<int64_t> durations;
   generic_packetizer_c *source;
   bool more_data, duration_mandatory;

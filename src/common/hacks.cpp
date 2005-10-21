@@ -40,6 +40,7 @@ static const char *mosu_hacks[] = {
   ENGAGE_WRITE_HEADERS_TWICE,
   ENGAGE_ALLOW_AVC_IN_VFW_MODE,
   ENGAGE_KEEP_BITSTREAM_AR_INFO,
+  ENGAGE_USE_SIMPLE_BLOCK,
   NULL
 };
 static vector<string> engaged_hacks;

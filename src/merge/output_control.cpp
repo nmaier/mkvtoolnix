@@ -531,6 +531,11 @@ render_headers(mm_io_c *rout) {
       GetChild<EDocTypeReadVersion>(head);
     *(static_cast<EbmlUInteger *>(&doc_type_read_ver)) = 1;
 
+    if (hack_engaged(ENGAGE_USE_SIMPLE_BLOCK)) {
+      *(static_cast<EbmlUInteger *>(&doc_type_ver)) = 2;
+      *(static_cast<EbmlUInteger *>(&doc_type_read_ver)) = 2;
+    }
+
     head.Render(*rout);
 
     kax_infos = &GetChild<KaxInfo>(*kax_segment);
