@@ -1888,6 +1888,50 @@ def_handle(tags) {
     handle_elements_rec(es, 2, 0, (*m1)[i1], tag_elements);
 }
 
+void
+handle_ebml_head(EbmlElement *l0,
+                 mm_io_c *in,
+                 EbmlStream *es) {
+  int upper_lvl_el;
+  EbmlElement *e;
+
+  show_element(l0, 0, "EBML head");
+
+  while (in_parent(l0)) {
+    upper_lvl_el = 0;
+    e = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
+                            true);
+    if (NULL == e)
+      return;
+
+    e->ReadData(*in);
+
+    if (is_id(e, EVersion))
+      show_element(e, 1, "EBML version: " LLU,
+                   uint64(*static_cast<EbmlUInteger *>(e)));
+    else if (is_id(e, EReadVersion))
+      show_element(e, 1, "EBML read version: " LLU,
+                   uint64(*static_cast<EbmlUInteger *>(e)));
+    else if (is_id(e, EMaxIdLength))
+      show_element(e, 1, "EBML maximum ID length: " LLU,
+                   uint64(*static_cast<EbmlUInteger *>(e)));
+    else if (is_id(e, EDocType))
+      show_element(e, 1, "Doc type: %s",
+                   string(*static_cast<EbmlString *>(e)).c_str());
+    else if (is_id(e, EDocTypeVersion))
+      show_element(e, 1, "Doc type version: " LLU,
+                   uint64(*static_cast<EbmlUInteger *>(e)));
+    else if (is_id(e, EDocTypeReadVersion))
+      show_element(e, 1, "Doc type read version: " LLU,
+                   uint64(*static_cast<EbmlUInteger *>(e)));
+    else
+      show_unknown_element(e, 1);
+
+    e->SkipData(*es, e->Generic().Context);
+    delete e;
+  }
+}
+
 bool
 process_file(const string &file_name) {
   int upper_lvl_el;
@@ -1924,9 +1968,8 @@ process_file(const string &file_name) {
 
       return false;
     }
-    show_element(l0, 0, "EBML head");
 
-    // Don't verify its data for now.
+    handle_ebml_head(l0, in, es);
     l0->SkipData(*es, l0->Generic().Context);
     delete l0;
 
