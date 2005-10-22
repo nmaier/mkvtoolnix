@@ -434,7 +434,8 @@ kax_reader_c::verify_tracks() {
                      (t->codec_id == MKV_A_AAC_4SSR) ||
                      (t->codec_id == MKV_A_AAC_4LTP) ||
                      (t->codec_id == MKV_A_AAC_2SBR) ||
-                     (t->codec_id == MKV_A_AAC_4SBR))
+                     (t->codec_id == MKV_A_AAC_4SBR) ||
+                     (t->codec_id == MKV_A_AAC))
             t->a_formattag = FOURCC('M', 'P', '4', 'A');
           else if (starts_with(t->codec_id, MKV_A_REAL_COOK,
                                  strlen("A_REAL/")))
@@ -1559,7 +1560,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
             int channels, sfreq, osfreq;
             bool sbr;
 
-            if ((t->private_data != NULL) && (ti.private_size >= 2)) {
+            if ((t->private_data != NULL) && (t->private_size >= 2)) {
               id = AAC_ID_MPEG4;
               if (!parse_aac_data((unsigned char *)t->private_data,
                                   t->private_size, profile, channels, sfreq,

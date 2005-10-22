@@ -12,8 +12,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "aac_common.h"
 #include "common.h"
 #include "commonebml.h"
+#include "matroska.h"
 
 #include "xtr_aac.h"
 
@@ -34,26 +36,47 @@ xtr_aac_c::create_file(xtr_base_c *_master,
   channels = kt_get_a_channels(track);
   sfreq = (int)kt_get_a_sfreq(track);
 
-  // A_AAC/MPEG4/MAIN
-  // 0123456789012345
-  if (codec_id[10] == '4')
-    id = 0;
-  else if (codec_id[10] == '2')
-    id = 1;
-  else
-    mxerror("Track ID " LLD " has an unknown AAC type.\n", tid);
+  if (codec_id == MKV_A_AAC) {
+    KaxCodecPrivate *priv;
+    int output_sfreq;
+    bool is_sbr;
 
-  if (!strcmp(&codec_id[12], "MAIN"))
-    profile = 0;
-  else if (!strcmp(&codec_id[12], "LC") ||
-           (strstr(&codec_id[12], "SBR") != NULL))
-    profile = 1;
-  else if (!strcmp(&codec_id[12], "SSR"))
-    profile = 2;
-  else if (!strcmp(&codec_id[12], "LTP"))
-    profile = 3;
-  else
-    mxerror("Track ID " LLD " has an unknown AAC type.\n", tid);
+    priv = FINDFIRST(&track, KaxCodecPrivate);
+    if (NULL == priv)
+      mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec "
+              "private\" element and cannot be extracted.\n", tid,
+              codec_id.c_str());
+
+    output_sfreq = 0;
+    is_sbr = false;
+    if (!parse_aac_data(priv->GetBuffer(), priv->GetSize(), profile, channels,
+                        sfreq, output_sfreq, is_sbr))
+      mxerror("Track " LLD " with the CodecID '%s' contains invalid \"codec "
+              "private\" data for AAC.\n", tid, codec_id.c_str());
+    id = 0;
+
+  } else {
+    // A_AAC/MPEG4/MAIN
+    // 0123456789012345
+    if (codec_id[10] == '4')
+      id = 0;
+    else if (codec_id[10] == '2')
+      id = 1;
+    else
+      mxerror("Track ID " LLD " has an unknown AAC type.\n", tid);
+
+    if (!strcmp(&codec_id[12], "MAIN"))
+      profile = 0;
+    else if (!strcmp(&codec_id[12], "LC") ||
+             (strstr(&codec_id[12], "SBR") != NULL))
+      profile = 1;
+    else if (!strcmp(&codec_id[12], "SSR"))
+      profile = 2;
+    else if (!strcmp(&codec_id[12], "LTP"))
+      profile = 3;
+    else
+      mxerror("Track ID " LLD " has an unknown AAC type.\n", tid);
+  }
 
   if (92017 <= sfreq)
     srate_idx = 0;
