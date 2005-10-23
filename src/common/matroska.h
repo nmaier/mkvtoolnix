@@ -59,6 +59,7 @@
 #define MKV_V_REALV3     "V_REAL/RV30"
 #define MKV_V_REALV4     "V_REAL/RV40"
 #define MKV_V_QUICKTIME  "V_QUICKTIME"
+#define MKV_V_THEORA     "V_THEORA"
 
 #define MKV_S_TEXTUTF8   "S_TEXT/UTF8"
 #define MKV_S_TEXTSSA    "S_TEXT/SSA"

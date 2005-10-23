@@ -30,9 +30,9 @@
 class vorbis_packetizer_c: public generic_packetizer_c {
 private:
   int64_t last_bs, samples, last_samples_sum, last_timecode, timecode_offset;
+  vector<memory_cptr> headers;
   vorbis_info vi;
   vorbis_comment vc;
-  ogg_packet headers[3];
 
 public:
   vorbis_packetizer_c(generic_reader_c *_reader,

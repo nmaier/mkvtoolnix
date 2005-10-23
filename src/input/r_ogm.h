@@ -30,6 +30,7 @@
 #include "mm_io.h"
 #include "common.h"
 #include "pr_generic.h"
+#include "theora_common.h"
 
 #define OGM_STREAM_TYPE_UNKNOWN 0
 #define OGM_STREAM_TYPE_VORBIS  1
@@ -40,6 +41,7 @@
 #define OGM_STREAM_TYPE_TEXT    6
 #define OGM_STREAM_TYPE_FLAC    7
 #define OGM_STREAM_TYPE_AAC     8
+#define OGM_STREAM_TYPE_THEORA  9
 
 #if defined(HAVE_FLAC_FORMAT_H)
 class flac_header_extractor_c {
@@ -69,25 +71,22 @@ struct ogm_demuxer_t {
   int units_processed, vorbis_rate;
   bool headers_read, native_mode;
   string language, title;
-  vector<unsigned char *> packet_data, nh_packet_data;
-  vector<int> packet_sizes, nh_packet_sizes;
+  vector<memory_cptr> packet_data, nh_packet_data;
 #if defined(HAVE_FLAC_FORMAT_H)
   flac_header_extractor_c *fhe;
   int flac_header_packets, channels, bits_per_sample;
-  int64_t last_granulepos;
 #endif
+  int64_t last_granulepos, last_keyframe_number;
   bool in_use;
+
+  theora_identification_header_t theora;
 
   ogm_demuxer_t():
     ptzr(-1), stype(0), serialno(0), eos(0), units_processed(0),
     vorbis_rate(0), headers_read(false), native_mode(true),
+    last_granulepos(0), last_keyframe_number(-1),
     in_use(false) {
     memset(&os, 0, sizeof(ogg_stream_state));
-  }
-  ~ogm_demuxer_t() {
-    uint32_t i;
-    for (i = 0; i < packet_data.size(); i++)
-      safefree(packet_data[i]);
   }
 };
 

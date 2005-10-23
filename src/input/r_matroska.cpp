@@ -228,9 +228,7 @@ kax_reader_c::find_track_by_uid(uint64_t uid,
 
 void
 kax_reader_c::verify_tracks() {
-  int tnum, i;
-  unsigned char *c;
-  uint32_t u, offset, length;
+  int tnum, u;
   kax_track_t *t;
   alBITMAPINFOHEADER *bih;
   alWAVEFORMATEX *wfe;
@@ -293,6 +291,13 @@ kax_reader_c::verify_tracks() {
             }
 
             memcpy(t->v_fourcc, &bih->bi_compression, 4);
+          }
+        } else if (t->codec_id == MKV_V_THEORA) {
+          if (NULL == t->private_data) {
+            if (verbose)
+              mxwarn(PFX "CodecID for track " LLU " is '" MKV_V_THEORA
+                     "', but there was no codec private headers.\n", t->tnum);
+            continue;
           }
         }
 
@@ -381,37 +386,25 @@ kax_reader_c::verify_tracks() {
               continue;
             }
 
-            c = (unsigned char *)t->private_data;
-            if (c[0] != 2) {
+            try {
+              memory_cptr temp(new memory_c((unsigned char *)t->private_data,
+                                            t->private_size, false));
+              vector<memory_cptr> blocks = unlace_memory_xiph(temp);
+              if (blocks.size() != 3)
+                throw false;
+
+              t->headers[0] = blocks[0]->get();
+              t->headers[1] = blocks[1]->get();
+              t->headers[2] = blocks[2]->get();
+              t->header_sizes[0] = blocks[0]->get_size();
+              t->header_sizes[1] = blocks[1]->get_size();
+              t->header_sizes[2] = blocks[2]->get_size();
+
+            } catch (...) {
               if (verbose)
                 mxwarn(PFX "Vorbis track does not contain valid headers.\n");
               continue;
             }
-
-            offset = 1;
-            for (i = 0; i < 2; i++) {
-              length = 0;
-              while ((c[offset] == (unsigned char )255) &&
-                     (length < t->private_size)) {
-                length += 255;
-                offset++;
-              }
-              if (offset >= (t->private_size - 1)) {
-                if (verbose)
-                  mxwarn(PFX "Vorbis track does not contain valid headers.\n");
-                continue;
-              }
-              length += c[offset];
-              offset++;
-              t->header_sizes[i] = length;
-            }
-
-            t->headers[0] = &c[offset];
-            t->headers[1] = &c[offset + t->header_sizes[0]];
-            t->headers[2] = &c[offset + t->header_sizes[0] +
-                               t->header_sizes[1]];
-            t->header_sizes[2] = t->private_size - offset -
-              t->header_sizes[0] - t->header_sizes[1];
 
             t->a_formattag = 0xFFFE;
 
@@ -1417,7 +1410,8 @@ kax_reader_c::create_packetizer(int64_t tid) {
             starts_with(t->codec_id, "V_REAL", 6) ||
             (t->codec_id == MKV_V_QUICKTIME) ||
             (t->codec_id == MKV_V_MPEG1) ||
-            (t->codec_id == MKV_V_MPEG2)) {
+            (t->codec_id == MKV_V_MPEG2) ||
+            (t->codec_id == MKV_V_THEORA)) {
           const char *fourcc;
 
           if ((t->codec_id == MKV_V_MSCOMP) &&

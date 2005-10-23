@@ -68,9 +68,8 @@ free_string_array(char **comments) {
 }
 
 static char **
-extract_vorbis_comments(unsigned char *buffer,
-                        int size) {
-  mm_mem_io_c in(buffer, size);
+extract_vorbis_comments(const memory_cptr &mem) {
+  mm_mem_io_c in(mem->get(), mem->get_size());
   char **comments;
   uint32_t i, n, len;
 
@@ -397,6 +396,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
   generic_packetizer_c *ptzr;
   double fps;
   int width, height;
+  memory_cptr codecprivate;
 
   if ((tid < 0) || (tid >= sdemuxers.size()))
     return;
@@ -404,7 +404,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
   if ((dmx->ptzr == -1) && dmx->in_use) {
     memset(&bih, 0, sizeof(alBITMAPINFOHEADER));
-    sth = (stream_header *)&dmx->packet_data[0][1];
+    sth = (stream_header *)&dmx->packet_data[0]->get()[1];
     ti.private_data = NULL;
     ti.private_size = 0;
     ti.id = tid;
@@ -476,9 +476,11 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
       case OGM_STREAM_TYPE_AAC:
         aac_info_extracted = false;
-        if (dmx->packet_sizes[0] >= (sizeof(stream_header) + 5)) {
-          if (parse_aac_data(&dmx->packet_data[0][sizeof(stream_header) + 5],
-                             dmx->packet_sizes[0] - sizeof(stream_header) - 5,
+        if (dmx->packet_data[0]->get_size() >= (sizeof(stream_header) + 5)) {
+          if (parse_aac_data(dmx->packet_data[0]->get() +
+                             sizeof(stream_header) + 5,
+                             dmx->packet_data[0]->get_size() -
+                             sizeof(stream_header) - 5,
                              profile, channels, sample_rate,
                              output_sample_rate, sbr)) {
             aac_info_extracted = true;
@@ -511,8 +513,8 @@ ogm_reader_c::create_packetizer(int64_t tid) {
         vorbis_info_init(&vi);
         vorbis_comment_init(&vc);
         memset(&op, 0, sizeof(ogg_packet));
-        op.packet = dmx->packet_data[0];
-        op.bytes = dmx->packet_sizes[0];
+        op.packet = dmx->packet_data[0]->get();
+        op.bytes = dmx->packet_data[0]->get_size();
         op.b_o_s = 1;
         vorbis_synthesis_headerin(&vi, &vc, &op);
         dmx->vorbis_rate = vi.rate;
@@ -520,9 +522,12 @@ ogm_reader_c::create_packetizer(int64_t tid) {
         vorbis_comment_clear(&vc);
         ptzr =
           new vorbis_packetizer_c(this,
-                                  dmx->packet_data[0], dmx->packet_sizes[0],
-                                  dmx->packet_data[1], dmx->packet_sizes[1],
-                                  dmx->packet_data[2], dmx->packet_sizes[2],
+                                  dmx->packet_data[0]->get(),
+                                  dmx->packet_data[0]->get_size(),
+                                  dmx->packet_data[1]->get(),
+                                  dmx->packet_data[1]->get_size(),
+                                  dmx->packet_data[2]->get(),
+                                  dmx->packet_data[2]->get_size(),
                                   ti);
 
         mxinfo(FMT_TID "Using the Vorbis output module.\n", ti.fname.c_str(),
@@ -544,13 +549,14 @@ ogm_reader_c::create_packetizer(int64_t tid) {
         int size, i;
 
         size = 0;
-        for (i = 1; i < (int)dmx->packet_sizes.size(); i++)
-          size += dmx->packet_sizes[i];
+        for (i = 1; i < (int)dmx->packet_data.size(); i++)
+          size += dmx->packet_data[i]->get_size();
         buf = (unsigned char *)safemalloc(size);
         size = 0;
-        for (i = 1; i < (int)dmx->packet_sizes.size(); i++) {
-          memcpy(&buf[size], dmx->packet_data[i], dmx->packet_sizes[i]);
-          size += dmx->packet_sizes[i];
+        for (i = 1; i < (int)dmx->packet_data.size(); i++) {
+          memcpy(&buf[size], dmx->packet_data[i]->get(),
+                 dmx->packet_data[i]->get_size());
+          size += dmx->packet_data[i]->get_size();
         }
         ptzr = new flac_packetizer_c(this, buf, size, ti);
         safefree(buf);
@@ -560,6 +566,21 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
         break;
 #endif
+      case OGM_STREAM_TYPE_THEORA:
+        codecprivate = lace_memory_xiph(dmx->packet_data);
+        ti.private_data = codecprivate->get();
+        ti.private_size = codecprivate->get_size();
+
+        fps = (double)dmx->theora.frn / (double)dmx->theora.frd;
+        ptzr = new video_packetizer_c(this, MKV_V_THEORA, fps, dmx->theora.fmbw,
+                                      dmx->theora.fmbh, ti);
+        mxinfo(FMT_TID "Using the Theora video output module.\n", ti.fname.c_str(),
+               (int64_t)tid);
+
+        ti.private_data = NULL;
+
+        break;
+
       default:
         die("ogm_reader: Don't know how to create a packetizer for stream "
             "type %d.\n", (int)dmx->stype);
@@ -635,8 +656,10 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
   ogg_stream_pagein(&dmx->os, og);
   ogg_stream_packetout(&dmx->os, &op);
 
-  dmx->packet_data.push_back((unsigned char *)safememdup(op.packet, op.bytes));
-  dmx->packet_sizes.push_back(op.bytes);
+  dmx->packet_data.push_back(memory_cptr(new memory_c((unsigned char *)
+                                                      safememdup(op.packet,
+                                                                 op.bytes),
+                                                      op.bytes, true)));
   dmx->serialno = ogg_page_serialno(og);
 
   /*
@@ -649,6 +672,24 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
 
     dmx->stype = OGM_STREAM_TYPE_VORBIS;
     dmx->in_use = true;
+
+    return;
+  }
+
+  if ((op.bytes >= 7) && !strncmp((char *)&op.packet[1], "theora", 6)) {
+    if (!demuxing_requested('v', sdemuxers.size() - 1))
+      return;
+
+    dmx->stype = OGM_STREAM_TYPE_THEORA;
+    dmx->in_use = true;
+
+    try {
+      theora_parse_identification_header(op.packet, op.bytes, dmx->theora);
+    } catch (error_c &e) {
+      mxerror(FMT_TID "The Theora identifaction header could not be parsed "
+              "(%s).\n", ti.fname.c_str(), (int64_t)sdemuxers.size() - 1,
+              e.get_error().c_str());
+    }
 
     return;
   }
@@ -778,8 +819,7 @@ ogm_reader_c::process_page(ogg_page *og) {
       if (dmx->units_processed <= dmx->flac_header_packets)
         continue;
       for (i = 0; i < (int)dmx->nh_packet_data.size(); i++) {
-        memory_c *mem = new memory_c(dmx->nh_packet_data[i],
-                                     dmx->nh_packet_sizes[i], true);
+        memory_c *mem = dmx->nh_packet_data[i]->clone();
         PTZR(dmx->ptzr)->process(new packet_t(mem, 0));
       }
       dmx->nh_packet_data.clear();
@@ -803,6 +843,42 @@ ogm_reader_c::process_page(ogg_page *og) {
       continue;
     }
 #endif
+
+    if (dmx->stype == OGM_STREAM_TYPE_THEORA) {
+      int frame_number, keyframe_number, non_keyframe_number;
+      int64_t timecode, duration, bref;
+
+      if ((0 == op.bytes) || (0 != (op.packet[0] & 0x80)))
+        continue;
+
+      keyframe_number = ogg_page_granulepos(og) >> dmx->theora.kfgshift;
+      non_keyframe_number = ogg_page_granulepos(og) & dmx->theora.kfgshift;
+      frame_number = keyframe_number + non_keyframe_number;
+
+      timecode = (int64_t)(1000000000.0 * dmx->last_granulepos *
+                           dmx->theora.frd / dmx->theora.frn);
+      duration = (int64_t)(1000000000.0 * dmx->theora.frd / dmx->theora.frn);
+      bref = (keyframe_number != dmx->last_keyframe_number) &&
+        (0 == non_keyframe_number) ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC;
+      PTZR(dmx->ptzr)->process(new packet_t(new memory_c(op.packet, op.bytes,
+                                                         false), timecode,
+                                            duration, bref, VFT_NOBFRAME));
+
+      if (frame_number > dmx->last_granulepos)
+        dmx->last_granulepos = frame_number;
+      else
+        ++dmx->last_granulepos;
+
+      dmx->last_keyframe_number = keyframe_number;
+
+      if (eos) {
+        dmx->eos = 1;
+        debug_leave("ogm_reader_c::process_page");
+        return;
+      }
+
+      continue;
+    }
 
     duration_len = (*op.packet & PACKET_LEN_BITS01) >> 6;
     duration_len |= (*op.packet & PACKET_LEN_BITS2) << 1;
@@ -886,16 +962,18 @@ ogm_reader_c::process_header_packets(ogm_demuxer_t *dmx) {
 #if defined HAVE_FLAC_FORMAT_H
     while ((dmx->packet_data.size() < dmx->flac_header_packets) &&
            (ogg_stream_packetout(&dmx->os, &op) == 1)) {
-      dmx->packet_data.push_back((unsigned char *)
-                                 safememdup(op.packet, op.bytes));
-      dmx->packet_sizes.push_back(op.bytes);
+      memory_c *mem = new memory_c((unsigned char *)
+                                   safememdup(op.packet, op.bytes),
+                                   op.bytes, true);
+      dmx->packet_data.push_back(memory_cptr(mem));
     }
     if (dmx->packet_data.size() >= dmx->flac_header_packets)
       dmx->headers_read = true;
     while (ogg_stream_packetout(&dmx->os, &op) == 1) {
-      dmx->nh_packet_data.push_back((unsigned char *)
-                                    safememdup(op.packet, op.bytes));
-      dmx->nh_packet_sizes.push_back(op.bytes);
+      memory_c *mem = new memory_c((unsigned char *)
+                                   safememdup(op.packet, op.bytes),
+                                   op.bytes, true);
+      dmx->nh_packet_data.push_back(memory_cptr(mem));
     }
 #else
     dmx->headers_read = true;
@@ -914,9 +992,10 @@ ogm_reader_c::process_header_packets(ogm_demuxer_t *dmx) {
       ogg_stream_reset(&dmx->os);
       return;
     }
-    dmx->packet_data.push_back((unsigned char *)
-                               safememdup(op.packet, op.bytes));
-    dmx->packet_sizes.push_back(op.bytes);
+    memory_c *mem = new memory_c((unsigned char *)
+                                 safememdup(op.packet, op.bytes),
+                                 op.bytes, true);
+    dmx->packet_data.push_back(memory_cptr(mem));
   }
 
   if (dmx->stype == OGM_STREAM_TYPE_VORBIS) {
@@ -1030,7 +1109,7 @@ ogm_reader_c::identify() {
   mxinfo("File '%s': container: Ogg/OGM%s\n", ti.fname.c_str(), info.c_str());
   for (i = 0; i < sdemuxers.size(); i++) {
     if (sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO) {
-      sth = (stream_header *)&sdemuxers[i]->packet_data[0][1];
+      sth = (stream_header *)(sdemuxers[i]->packet_data[0]->get() + 1);
       memcpy(fourcc, sth->subtype, 4);
       fourcc[4] = 0;
     }
@@ -1091,8 +1170,7 @@ ogm_reader_c::handle_stream_comments() {
     if ((dmx->stype == OGM_STREAM_TYPE_FLAC) ||
         (dmx->packet_data.size() < 2))
       continue;
-    comments = extract_vorbis_comments(dmx->packet_data[1],
-                                       dmx->packet_sizes[1]);
+    comments = extract_vorbis_comments(dmx->packet_data[1]);
     if (comments == NULL)
       continue;
     chapters.clear();

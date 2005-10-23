@@ -46,21 +46,34 @@ vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *_reader,
   timecode_offset(0) {
 
   int i;
+  ogg_packet ogg_headers[3];
 
-  memset(headers, 0, 3 * sizeof(ogg_packet));
-  headers[0].packet = (unsigned char *)safememdup(d_header, l_header);
-  headers[1].packet = (unsigned char *)safememdup(d_comments, l_comments);
-  headers[2].packet = (unsigned char *)safememdup(d_codecsetup, l_codecsetup);
-  headers[0].bytes = l_header;
-  headers[1].bytes = l_comments;
-  headers[2].bytes = l_codecsetup;
-  headers[0].b_o_s = 1;
-  headers[1].packetno = 1;
-  headers[2].packetno = 2;
+  headers.push_back(memory_cptr(new memory_c((unsigned char *)
+                                             safememdup(d_header, l_header),
+                                             l_header)));
+  headers.push_back(memory_cptr(new memory_c((unsigned char *)
+                                             safememdup(d_comments,
+                                                        l_comments),
+                                             l_comments)));
+  headers.push_back(memory_cptr(new memory_c((unsigned char *)
+                                             safememdup(d_codecsetup,
+                                                        l_codecsetup),
+                                             l_codecsetup)));
+
+  memset(ogg_headers, 0, 3 * sizeof(ogg_packet));
+  ogg_headers[0].packet = headers[0]->get();
+  ogg_headers[1].packet = headers[1]->get();
+  ogg_headers[2].packet = headers[2]->get();
+  ogg_headers[0].bytes = l_header;
+  ogg_headers[1].bytes = l_comments;
+  ogg_headers[2].bytes = l_codecsetup;
+  ogg_headers[0].b_o_s = 1;
+  ogg_headers[1].packetno = 1;
+  ogg_headers[2].packetno = 2;
   vorbis_info_init(&vi);
   vorbis_comment_init(&vc);
   for (i = 0; i < 3; i++)
-    if (vorbis_synthesis_headerin(&vi, &vc, &headers[i]) < 0)
+    if (vorbis_synthesis_headerin(&vi, &vc, &ogg_headers[i]) < 0)
       throw error_c("Error: vorbis_packetizer: Could not extract the "
                     "stream's parameters from the first packets.\n");
 
@@ -72,54 +85,18 @@ vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *_reader,
 }
 
 vorbis_packetizer_c::~vorbis_packetizer_c() {
-  int i;
-
-  for (i = 0; i < 3; i++)
-    if (headers[i].packet != NULL)
-      safefree(headers[i].packet);
   vorbis_info_clear(&vi);
   vorbis_comment_clear(&vc);
 }
 
 void
 vorbis_packetizer_c::set_headers() {
-  unsigned char *buffer;
-  int n, offset, i, lsize;
+  memory_cptr codecprivate;
 
   set_codec_id(MKV_A_VORBIS);
 
-  // We use lacing for the blocks. The first bytes is the number of
-  // packets being laced which is one less than the number of blocks that
-  // are actually stored. For each packet in the lace there's the length
-  // coded like this:
-  // length = 0
-  // while (next byte == 255) { length += 255 }
-  // length += this byte which is < 255
-  // The last packet's length can be calculated by the length of
-  // the KaxCodecPrivate and all prior packets, so there's no length for it -
-  // and that's why the first byte is (num_packets - 1).
-  lsize = 1 + (headers[0].bytes / 255) + 1 + (headers[1].bytes / 255) + 1 +
-    headers[0].bytes + headers[1].bytes + headers[2].bytes;
-  buffer = (unsigned char *)safemalloc(lsize);
-
-  buffer[0] = 2;                // The number of packets less one.
-  offset = 1;
-  for (i = 0; i < 2; i++) {
-    for (n = headers[i].bytes; n >= 255; n -= 255) {
-      buffer[offset] = 255;
-      offset++;
-    }
-    buffer[offset] = n;
-    offset++;
-  }
-  for (i = 0; i <= 2; i++) {
-    memcpy(&buffer[offset], headers[i].packet, headers[i].bytes);
-    offset += headers[i].bytes;
-  }
-
-  set_codec_private(buffer, lsize);
-
-  safefree(buffer);
+  codecprivate = lace_memory_xiph(headers);
+  set_codec_private(codecprivate->get(), codecprivate->get_size());
 
   set_audio_sampling_freq((float)vi.rate);
   set_audio_channels(vi.channels);
@@ -240,10 +217,9 @@ vorbis_packetizer_c::can_connect_to(generic_packetizer_c *src,
     return CAN_CONNECT_NO_FORMAT;
   connect_check_a_samplerate(vi.rate, vsrc->vi.rate);
   connect_check_a_channels(vi.channels, vsrc->vi.channels);
-  if ((headers[2].bytes != vsrc->headers[2].bytes) ||
-      (headers[2].packet == NULL) ||
-      (vsrc->headers[2].packet == NULL) ||
-      memcmp(headers[2].packet, vsrc->headers[2].packet, headers[2].bytes)) {
+  if ((headers[2]->get_size() != vsrc->headers[2]->get_size()) ||
+      memcmp(headers[2]->get(), vsrc->headers[2]->get(),
+             headers[2]->get_size())) {
     error_message = "The Vorbis codebooks are different; such tracks cannot "
       "be concatenated without reencoding";
     return CAN_CONNECT_NO_PARAMETERS;

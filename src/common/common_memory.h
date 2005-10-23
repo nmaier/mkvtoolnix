@@ -126,4 +126,7 @@ struct buffer_t {
   ~buffer_t();
 };
 
+memory_cptr MTX_DLL_API lace_memory_xiph(const vector<memory_cptr> &blocks);
+vector<memory_cptr> MTX_DLL_API unlace_memory_xiph(memory_cptr &buffer);
+
 #endif // __COMMON_MEMORY_H
