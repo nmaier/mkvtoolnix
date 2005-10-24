@@ -14,6 +14,8 @@
 
 #include "os.h"
 
+#include <time.h>
+
 #include "checksums.h"
 #include "commonebml.h"
 #include "tta_common.h"
