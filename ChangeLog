@@ -1,3 +1,9 @@
+2005-11-01  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: Appending tracks was broken because the track
+	numbers in the command line were incorrect. Fixes Anthill bug
+	#160.
+
 2005-10-23  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Added support for Ogg/Theora.

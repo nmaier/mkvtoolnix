@@ -900,8 +900,10 @@ tab_input::add_file(const wxString &file_name,
             dims = split(pair[1], wxU("x"));
             if ((dims.size() == 2) && parse_int(wxMB(dims[0]), width) &&
                 parse_int(wxMB(dims[1]), height)) {
-              track->dwidth.Printf(wxT(LLD), width);
-              track->dheight.Printf(wxT(LLD), height);
+              string format;
+              fix_format(LLD, format);
+              track->dwidth.Printf(wxU(format.c_str()), width);
+              track->dheight.Printf(wxU(format.c_str()), height);
               track->display_dimensions_selected = true;
             }
 

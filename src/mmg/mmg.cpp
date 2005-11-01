@@ -549,8 +549,10 @@ wxString
 create_track_order(bool all) {
   int i;
   wxString s, format;
+  string temp;
 
-  format = wxT("%d:" LLD);
+  fix_format("%d:" LLD, temp);
+  format = wxU(temp.c_str());
   for (i = 0; i < tracks.size(); i++) {
     if (!all && (!tracks[i]->enabled || tracks[i]->appending))
       continue;
@@ -566,8 +568,10 @@ wxString
 create_append_mapping() {
   int i;
   wxString s, format;
+  string temp;
 
-  format = wxT("%d:" LLD ":%d:" LLD);
+  fix_format("%d:" LLD ":%d:" LLD, temp);
+  format = wxU(temp.c_str());
   for (i = 1; i < tracks.size(); i++) {
     if (!tracks[i]->enabled || !tracks[i]->appending)
       continue;
