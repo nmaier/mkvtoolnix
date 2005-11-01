@@ -363,8 +363,12 @@ job_log_dialog::on_save(wxCommandEvent &evt) {
                       wxT(""), wxT("Text files (*.txt)|*.txt|" ALLFILES),
                       wxSAVE | wxOVERWRITE_PROMPT);
   if(dialog.ShowModal() == wxID_OK) {
+    wxString copy = text;
+#if defined(SYS_WINDOWS)
+    copy.Replace(wxT("\n"), wxT("\r\n"));
+#endif
     wxFile file(dialog.GetPath(), wxFile::write);
-    file.Write(text);
+    file.Write(copy);
     last_open_dir = dialog.GetDirectory();
   }
 }

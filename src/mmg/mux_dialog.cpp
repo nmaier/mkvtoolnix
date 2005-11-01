@@ -162,7 +162,9 @@ mux_dialog::mux_dialog(wxWindow *parent):
 #else
       wx_line = from_utf8(cc_local_utf8, line).c_str();
 #endif
-      log += wx_line + wxT("\n");
+      log += wx_line;
+      if (c != '\r')
+        log += wxT("\n");
       if (wx_line.Find(wxT("Warning:")) == 0)
         tc_warnings->AppendText(wx_line + wxT("\n"));
       else if (wx_line.Find(wxT("Error:")) == 0)
@@ -218,6 +220,9 @@ mux_dialog::on_save_log(wxCommandEvent &evt) {
     last_open_dir = dlg.GetDirectory();
     file = new wxFile(dlg.GetPath(), wxFile::write);
     s = log + wxT("\n");
+#if defined(SYS_WINDOWS)
+    s.Replace(wxT("\n"), wxT("\r\n"));
+#endif
     file->Write(s);
     delete file;
   }

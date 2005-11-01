@@ -1,5 +1,9 @@
 2005-11-01  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: When the user saved the muxing output in a log
+	file that file didn't use Windows line endings (CR LF) on
+	Windows.
+
 	* mmg: bug fix: Appending tracks was broken because the track
 	numbers in the command line were incorrect. Fixes Anthill bug
 	#160.
