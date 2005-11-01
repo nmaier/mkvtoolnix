@@ -39,6 +39,11 @@ using namespace std;
 
 #if !defined(SYS_WINDOWS)
 
+static string
+get_errno_msg() {
+  return to_utf8(cc_local_utf8, strerror(errno));
+}
+
 # if HAVE_POSIX_FADVISE
 static const unsigned long read_using_willneed = 16 * 1024 * 1024;
 static const unsigned long write_before_dontneed = 8 * 1024 * 1024;
@@ -104,7 +109,7 @@ mm_file_io_c::mm_file_io_c(const string &path,
   if (use_posix_fadvise && use_posix_fadvise_here &&
       (0 != posix_fadvise(fileno((FILE *)file), 0, read_using_willneed,
                           advise))) {
-    mxverb(2, FADVISE_WARNING, path.c_str(), errno, strerror(errno));
+    mxverb(2, FADVISE_WARNING, path.c_str(), errno, get_errno_msg().c_str());
     use_posix_fadvise_here = false;
   }
 # endif
@@ -140,8 +145,8 @@ mm_file_io_c::write(const void *buffer,
 
   bwritten = fwrite(buffer, 1, size, (FILE *)file);
   if (ferror((FILE *)file) != 0)
-    mxerror("Cound not write to the output file: %d (%s)\n", errno,
-            strerror(errno));
+    mxerror("Could not write to the output file: %d (%s)\n", errno,
+            get_errno_msg().c_str());
 
 # if HAVE_POSIX_FADVISE
   write_count += bwritten;
@@ -151,7 +156,8 @@ mm_file_io_c::write(const void *buffer,
     write_count = 0;
     if (0 != posix_fadvise(fileno((FILE *)file), 0, pos,
                            POSIX_FADV_DONTNEED)) {
-      mxverb(2, FADVISE_WARNING, file_name.c_str(), errno, strerror(errno));
+      mxverb(2, FADVISE_WARNING, file_name.c_str(), errno,
+             get_errno_msg().c_str());
       use_posix_fadvise_here = false;
     }
   }
@@ -177,13 +183,15 @@ mm_file_io_c::read(void *buffer,
       int fd = fileno((FILE *)file);
       read_count = 0;
       if (0 != posix_fadvise(fd, 0, pos, POSIX_FADV_DONTNEED)) {
-        mxverb(2, FADVISE_WARNING, file_name.c_str(), errno, strerror(errno));
+        mxverb(2, FADVISE_WARNING, file_name.c_str(), errno,
+               get_errno_msg().c_str());
         use_posix_fadvise_here = false;
       }
       if (use_posix_fadvise_here &&
           (0 != posix_fadvise(fd, pos, pos + read_using_willneed,
                               POSIX_FADV_WILLNEED))) {
-        mxverb(2, FADVISE_WARNING, file_name.c_str(), errno, strerror(errno));
+        mxverb(2, FADVISE_WARNING, file_name.c_str(), errno,
+               get_errno_msg().c_str());
         use_posix_fadvise_here = false;
       }
     }
@@ -370,6 +378,7 @@ mm_file_io_c::write(const void *buffer,
   if (bytes_written != size) {
     DWORD error;
     char *error_msg;
+    string error_msg_utf8;
 
     error = GetLastError();
     error_msg = NULL;
@@ -388,9 +397,11 @@ mm_file_io_c::write(const void *buffer,
         error_msg[idx] = 0;
         idx--;
       }
-    }
-    mxerror("Cound not write to the output file: %d (%s)\n", (int)error,
-            error_msg != NULL ? error_msg : "unknown");
+      error_msg_utf8 = to_utf8(cc_local_utf8, error_msg);
+    } else
+      error_msg_utf8 = "unknown";
+    mxerror("Could not write to the output file: %d (%s)\n", (int)error,
+            error_msg_utf8.c_str());
     if (error_msg != NULL)
       LocalFree(error_msg);
   }
