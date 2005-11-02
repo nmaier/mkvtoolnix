@@ -772,9 +772,10 @@ mpeg4_p10_video_packetizer_c::process(packet_cptr packet) {
     packet->bref = ref_timecode;
   }
 
-  add_packet(packet);
-
   ref_timecode = packet->timecode;
+
+  add_packet(packet);
 
   return FILE_STATUS_MOREDATA;
 }
+

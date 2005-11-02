@@ -1,3 +1,9 @@
+2005-11-02  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed another bug when appending AVC/h.264
+	tracks that would mkvmerge cause to die with "bref_packet ==
+	NULL". Fixes Anthill bug #160.
+
 2005-11-01  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: When the user saved the muxing output in a log
