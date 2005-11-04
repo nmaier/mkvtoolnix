@@ -95,7 +95,7 @@ struct filelist_t {
 };
 
 struct attachment_t {
-  string name, mime_type, description;
+  string name, stored_name, mime_type, description;
   int64_t id;
   bool to_all_files;
   counted_ptr<buffer_t> data;

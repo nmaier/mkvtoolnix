@@ -87,7 +87,7 @@ struct mmg_file_t {
 typedef counted_ptr<mmg_file_t> mmg_file_ptr;
 
 struct mmg_attachment_t {
-  wxString file_name, description, mime_type;
+  wxString file_name, stored_name, description, mime_type;
   int style;
 
   mmg_attachment_t():

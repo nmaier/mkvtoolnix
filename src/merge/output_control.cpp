@@ -716,7 +716,7 @@ render_attachments(IOCallback *rout) {
   KaxAttached *kax_a;
   KaxFileData *fdata;
   vector<attachment_t>::iterator attch;
-  int name;
+  string name;
 
   if (kax_as != NULL)
     delete kax_as;
@@ -738,15 +738,20 @@ render_attachments(IOCallback *rout) {
         *static_cast<EbmlString *>(&GetChild<KaxMimeType>(*kax_a)) =
           attch->mime_type;
 
-      name = attch->name.length() - 1;
-      while ((name > 0) && (attch->name[name] != PATHSEP))
-        name--;
-      if (attch->name[name] == PATHSEP)
-        name++;
+      if (attch->stored_name == "") {
+        int name_idx;
+
+        name_idx = attch->name.length() - 1;
+        while ((name_idx > 0) && (attch->name[name_idx] != PATHSEP))
+          --name_idx;
+        if (attch->name[name_idx] == PATHSEP)
+          ++name_idx;
+        name = attch->name.substr(name_idx);
+      } else
+        name = attch->stored_name;
 
       *static_cast<EbmlUnicodeString *>
-        (&GetChild<KaxFileName>(*kax_a)) =
-        cstr_to_UTFstring(attch->name.substr(name));
+        (&GetChild<KaxFileName>(*kax_a)) = cstr_to_UTFstring(name);
 
       *static_cast<EbmlUInteger *>
         (&GetChild<KaxFileUID>(*kax_a)) = attch->id;

@@ -1532,6 +1532,8 @@ mmg_dialog::update_command_line() {
       clargs.Add(wxT("--attachment-description"));
       clargs.Add(no_cr(a->description));
     }
+    clargs.Add(wxT("--attachment-name"));
+    clargs.Add(a->stored_name);
     if (a->style == 0)
       clargs.Add(wxT("--attach-file"));
     else

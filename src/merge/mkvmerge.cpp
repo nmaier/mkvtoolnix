@@ -167,6 +167,8 @@ set_usage() {
     "                           Description for the following attachment.\n"
     "  --attachment-mime-type <mime type>\n"
     "                           Mime type for the following attachment.\n"
+    "  --attachment-name <name> The name should be stored for the \n"
+    "                           following attachment.\n"
     "  --attach-file <file>     Creates a file attachment inside the\n"
     "                           Matroska file.\n"
     "  --attach-file-once <file>\n"
@@ -1555,6 +1557,17 @@ parse_args(vector<string> args) {
                  "'%s' will be discarded and '%s' used instead.\n"),
                attachment.mime_type.c_str(), next_arg.c_str());
       attachment.mime_type = next_arg;
+      sit++;
+
+    } else if (this_arg == "--attachment-name") {
+      if (no_next_arg)
+        mxerror(_("'--attachment-name' lacks the name.\n"));
+
+      if (attachment.stored_name != "")
+        mxwarn(_("More than one name was given for a single attachment. "
+                 "'%s' will be discarded and '%s' used instead.\n"),
+               attachment.stored_name.c_str(), next_arg.c_str());
+      attachment.stored_name = next_arg;
       sit++;
 
     } else if ((this_arg == "--attach-file") ||

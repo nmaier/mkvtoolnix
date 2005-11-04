@@ -72,6 +72,15 @@ tab_attachments::tab_attachments(wxWindow *parent):
   sb_options = new wxStaticBox(this, wxID_STATIC, wxT("Attachment options"));
   siz_box_bottom = new wxStaticBoxSizer(sb_options, wxVERTICAL);
 
+  st_name = new wxStaticText(this, wxID_STATIC, wxT("Name:"));
+  siz_box_bottom->Add(st_name, 0, wxALIGN_LEFT | wxLEFT, 5);
+  tc_name = new wxTextCtrl(this, ID_TC_ATTACHMENTNAME, wxT(""));
+  tc_name->SetToolTip(TIP("This is the name that will be stored in the "
+                          "output file for this attachment. It defaults "
+                          "to the file name of the original file but can "
+                          "be changed."));
+  siz_box_bottom->Add(tc_name, 0, wxGROW | wxALL, 5);
+
   st_description = new wxStaticText(this, wxID_STATIC, wxT("Description:"));
   siz_box_bottom->Add(st_description, 0, wxALIGN_LEFT | wxLEFT, 5);
   tc_description =
@@ -128,6 +137,8 @@ tab_attachments::tab_attachments(wxWindow *parent):
 
 void
 tab_attachments::enable(bool e) {
+  st_name->Enable(e);
+  tc_name->Enable(e);
   st_description->Enable(e);
   tc_description->Enable(e);
   st_mimetype->Enable(e);
@@ -166,6 +177,7 @@ tab_attachments::add_attachment(const wxString &file_name) {
   if (ext.Length() > 0)
     attch.mime_type = wxU(guess_mime_type(wxMB(ext)).c_str());
   attch.style = 0;
+  attch.stored_name = derive_stored_name_from_file_name(attch.file_name);
 
   attachments.push_back(attch);
 }
@@ -190,12 +202,21 @@ tab_attachments::on_attachment_selected(wxCommandEvent &evt) {
   selected_attachment = -1;
   new_sel = lb_attachments->GetSelection();
   a = &attachments[new_sel];
+  tc_name->SetValue(a->stored_name);
   tc_description->SetValue(a->description);
   cob_mimetype->SetValue(a->mime_type);
   cob_style->SetSelection(a->style);
   enable(true);
   selected_attachment = new_sel;
   b_remove_attachment->Enable(true);
+}
+
+void
+tab_attachments::on_name_changed(wxCommandEvent &evt) {
+  if (selected_attachment == -1)
+    return;
+
+  attachments[selected_attachment].stored_name = tc_name->GetValue();
 }
 
 void
@@ -235,6 +256,7 @@ tab_attachments::save(wxConfigBase *cfg) {
     a = &attachments[i];
     s.Printf(wxT("attachment %u"), i);
     cfg->SetPath(s);
+    cfg->Write(wxT("stored_name"), a->stored_name);
     cfg->Write(wxT("file_name"), a->file_name);
     s = wxT("");
     for (j = 0; j < a->description.Length(); j++)
@@ -248,6 +270,11 @@ tab_attachments::save(wxConfigBase *cfg) {
 
     cfg->SetPath(wxT(".."));
   }
+}
+
+wxString
+tab_attachments::derive_stored_name_from_file_name(const wxString &file_name) {
+  return file_name.AfterLast(wxT('/')).AfterLast(wxT('\\'));
 }
 
 void
@@ -273,6 +300,9 @@ tab_attachments::load(wxConfigBase *cfg,
     s.Printf(wxT("attachment %d"), i);
     cfg->SetPath(s);
     cfg->Read(wxT("file_name"), &a.file_name);
+    if (!cfg->Read(wxT("stored_name"), &a.stored_name) ||
+        (a.stored_name == wxT("")))
+      a.stored_name = derive_stored_name_from_file_name(a.file_name);
     cfg->Read(wxT("description"), &s);
     cfg->Read(wxT("mime_type"), &a.mime_type);
     cfg->Read(wxT("style"), &a.style);
@@ -319,6 +349,7 @@ BEGIN_EVENT_TABLE(tab_attachments, wxPanel)
   EVT_BUTTON(ID_B_ADDATTACHMENT, tab_attachments::on_add_attachment)
   EVT_BUTTON(ID_B_REMOVEATTACHMENT, tab_attachments::on_remove_attachment)
   EVT_LISTBOX(ID_LB_ATTACHMENTS, tab_attachments::on_attachment_selected)
+  EVT_TEXT(ID_TC_ATTACHMENTNAME, tab_attachments::on_name_changed)
   EVT_TEXT(ID_TC_DESCRIPTION, tab_attachments::on_description_changed)
   EVT_TIMER(ID_T_ATTACHMENTVALUES, tab_attachments::on_mimetype_changed)
   EVT_COMBOBOX(ID_CB_ATTACHMENTSTYLE, tab_attachments::on_style_changed)

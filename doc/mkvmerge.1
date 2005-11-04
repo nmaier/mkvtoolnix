@@ -217,6 +217,12 @@ A list of officially recognized MIME types can be found e.g. at
 <ftp://ftp.isi.edu/in-notes/iana/assignments/media-types/media-types>
 The MIME type is mandatory for an attachment.
 .TP
+\fB\-\-attachment\-name\fR <\fIname\fR>
+Sets the name that will be stored in the output file for this attachment.
+If this option is not given then the name will be derived from the
+file name of the attachment as given with the \fB\-\-attach\-file\fR or
+the \fB\-\-attach\-file\-once\fR option.
+.TP
 \fB\-\-attach\-file\fR <\fIfile name\fR>
 .TP
 \fB\-\-attach\-file\-once\fR <\fIfile name\fR>
