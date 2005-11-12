@@ -802,13 +802,25 @@ ogm_reader_c::process_page(ogg_page *og) {
   ogg_packet op;
   int duration_len, eos, i;
   long duration;
+  bool last_granulepos_set;
 
   duration = 0;
   dmx = find_demuxer(ogg_page_serialno(og));
   if ((NULL == dmx) || (-1 == dmx->ptzr))
     return;
 
+  if ((-1 != ogg_page_granulepos(og)) &&
+      (ogg_page_granulepos(og) < dmx->last_granulepos)) {
+    mxwarn(FMT_TID "The timecodes for this stream have been reset in the "
+           "middle of the file. This is not supported. The current packet "
+           "will be discarded.\n", ti.fname.c_str(),
+           (int64_t)dmx->serialno);
+    return;
+  }
+
   debug_enter("ogm_reader_c::process_page");
+
+  last_granulepos_set = false;
 
   ogg_stream_pagein(&dmx->os, og);
   while (ogg_stream_packetout(&dmx->os, &op) == 1) {
@@ -840,6 +852,8 @@ ogm_reader_c::process_page(ogg_page *og) {
         debug_leave("ogm_reader_c::process_page");
         return;
       }
+
+      last_granulepos_set = true;
 
       continue;
     }
@@ -877,6 +891,8 @@ ogm_reader_c::process_page(ogg_page *og) {
         debug_leave("ogm_reader_c::process_page");
         return;
       }
+
+      last_granulepos_set = true;
 
       continue;
     }
@@ -932,6 +948,9 @@ ogm_reader_c::process_page(ogg_page *og) {
       return;
     }
   }
+
+  if (!last_granulepos_set)
+    dmx->last_granulepos = ogg_page_granulepos(og);
 
   debug_leave("ogm_reader_c::process_page");
 }

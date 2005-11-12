@@ -1,7 +1,11 @@
 2005-11-12  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Fixed a crash If the granulepos (the
+	timecodes) reset in the middle of an Ogg/OGM file. Fixes Anthill
+	bug #166.
+
 	* mkvmerge: bug fix: Fixed a division-by-zero error in the
-	RealMedia demuxer.
+	RealMedia demuxer. Fixes Anthill bug #161.
 
 	* mkvmerge: bug fix: Fixed a couple of potential (and actual)
 	segmentation faults by accessing invalid memory addresses. Initial
