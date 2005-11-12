@@ -120,7 +120,7 @@ aac_packetizer_c::get_aac_packet(unsigned long *header,
 
 void
 aac_packetizer_c::set_headers() {
-  if (!hack_engaged(ENGAGE_OLD_AAC_CODECID))
+  if (hack_engaged(ENGAGE_NEW_AAC_CODECID))
     set_codec_id(MKV_A_AAC);
   else if (id == AAC_ID_MPEG4) {
     if (profile == AAC_PROFILE_MAIN)
@@ -152,7 +152,7 @@ aac_packetizer_c::set_headers() {
 
   if ((ti.private_data != NULL) && (ti.private_size > 0))
     set_codec_private(ti.private_data, ti.private_size);
-  else if (!hack_engaged(ENGAGE_OLD_AAC_CODECID)) {
+  else if (hack_engaged(ENGAGE_NEW_AAC_CODECID)) {
     unsigned char buffer[5];
     int length;
 

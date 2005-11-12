@@ -136,9 +136,9 @@ wxString cli_options[][2] = {
         "mode, e.g. when it is read from an AVI") },
   { wxT("--engage use_simpleblock"),
     wxT("Enable use of SimpleBlock instead of BlockGroup when possible.") },
-  { wxT("--engage old_aac_codecid"),
-    wxT("Use the old AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') instead of the "
-        "new one ('A_AAC').") },
+  { wxT("--engage new_aac_codecid"),
+    wxT("Use the new AAC codec ID ('A_AAC') instead of the "
+        "old ones (e.g. 'A_AAC/MPEG4/SBR').") },
   { wxT("--engage cow"),
     wxT("No help available.") },
   { wxT(""), wxT("") }
