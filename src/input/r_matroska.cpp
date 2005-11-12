@@ -1771,6 +1771,7 @@ kax_reader_c::read(generic_packetizer_c *,
   upper_lvl_el = 0;
   l1 = saved_l1;
   saved_l1 = NULL;
+  duration = NULL;
 
   try {
     while ((l1 != NULL) && (upper_lvl_el <= 0)) {
