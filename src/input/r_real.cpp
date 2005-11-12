@@ -454,7 +454,9 @@ real_reader_c::finish() {
 
   for (i = 0; i < demuxers.size(); i++) {
     dmx = demuxers[i];
-    if (dmx->track->type == RMFF_TRACK_TYPE_AUDIO) {
+    if ((NULL != dmx.get()) && (NULL != dmx->track) &&
+        (dmx->track->type == RMFF_TRACK_TYPE_AUDIO) &&
+        !dmx->segments.empty()) {
       dur = dmx->last_timecode / dmx->num_packets;
       deliver_audio_frames(dmx, dur);
     }

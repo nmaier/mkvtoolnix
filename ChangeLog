@@ -1,5 +1,8 @@
 2005-11-12  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Fixed a division-by-zero error in the
+	RealMedia demuxer.
+
 	* mkvmerge: bug fix: Fixed a couple of potential (and actual)
 	segmentation faults by accessing invalid memory addresses. Initial
 	patch for the VobSub reader by Issa on Doom9's forum.
