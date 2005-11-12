@@ -1,3 +1,9 @@
+2005-11-12  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed a couple of potential (and actual)
+	segmentation faults by accessing invalid memory addresses. Initial
+	patch for the VobSub reader by Issa on Doom9's forum.
+
 2005-11-04  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge, mmg: new feature: The names of attached files can be

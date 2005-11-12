@@ -1071,7 +1071,7 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
   for (i = 0; i < demuxers.size(); i++) {
     qtmp4_demuxer_ptr &dmx = demuxers[i];
 
-    if (PTZR(dmx->ptzr) != ptzr)
+    if ((-1 == dmx->ptzr) || (PTZR(dmx->ptzr) != ptzr))
       continue;
 
     if (dmx->sample_size != 0) {

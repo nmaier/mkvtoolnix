@@ -561,7 +561,7 @@ vobsub_reader_c::read(generic_packetizer_c *ptzr,
 
   track = NULL;
   for (i = 0; i < tracks.size(); i++)
-    if (PTZR(tracks[i]->ptzr) == ptzr) {
+    if ((-1 != tracks[i]->ptzr) && (PTZR(tracks[i]->ptzr) == ptzr)) {
       track = tracks[i];
       break;
     }

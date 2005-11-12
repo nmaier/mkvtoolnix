@@ -469,7 +469,7 @@ avi_reader_c::read(generic_packetizer_c *ptzr,
     return read_video();
 
   foreach(demuxer, ademuxers)
-    if (PTZR(demuxer->ptzr) == ptzr)
+    if ((-1 != demuxer->ptzr) && (PTZR(demuxer->ptzr) == ptzr))
       return read_audio(*demuxer);
 
   return FILE_STATUS_DONE;

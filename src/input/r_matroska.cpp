@@ -173,7 +173,7 @@ kax_reader_c::packets_available() {
   int i;
 
   for (i = 0; i < tracks.size(); i++)
-    if (tracks[i]->ok && (!PTZR(tracks[i]->ptzr)->packet_available()))
+    if ((-1 != tracks[i]->ptzr) && !PTZR(tracks[i]->ptzr)->packet_available())
       return 0;
 
   if (tracks.size() == 0)

@@ -291,7 +291,7 @@ usf_reader_c::read(generic_packetizer_c *ptzr,
 
   track = NULL;
   for (i = 0; m_tracks.size() > i; ++i)
-    if (PTZR(m_tracks[i].m_ptzr) == ptzr) {
+    if ((-1 != m_tracks[i].m_ptzr) && (PTZR(m_tracks[i].m_ptzr) == ptzr)) {
       track = &m_tracks[i];
       break;
     }

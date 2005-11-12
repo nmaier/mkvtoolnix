@@ -613,7 +613,8 @@ ogm_reader_c::packet_available() {
     return 0;
 
   for (i = 0; i < sdemuxers.size(); i++)
-    if (!PTZR(sdemuxers[i]->ptzr)->packet_available())
+    if ((-1 != sdemuxers[i]->ptzr) &&
+        !PTZR(sdemuxers[i]->ptzr)->packet_available())
       return 0;
 
   return 1;
@@ -804,7 +805,7 @@ ogm_reader_c::process_page(ogg_page *og) {
 
   duration = 0;
   dmx = find_demuxer(ogg_page_serialno(og));
-  if (dmx == NULL)
+  if ((NULL == dmx) || (-1 == dmx->ptzr))
     return;
 
   debug_enter("ogm_reader_c::process_page");

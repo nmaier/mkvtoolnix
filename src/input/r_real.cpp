@@ -501,7 +501,7 @@ real_reader_c::read(generic_packetizer_c *,
 
   timecode = (int64_t)frame->timecode * 1000000ll;
   dmx = find_demuxer(frame->id);
-  if (dmx.get() == NULL) {
+  if ((dmx.get() == NULL) || (-1 == dmx->ptzr)) {
     rmff_release_frame(frame);
     return FILE_STATUS_MOREDATA;
   }
@@ -568,7 +568,7 @@ real_reader_c::deliver_audio_frames(real_demuxer_cptr dmx,
   uint32_t i;
   rv_segment_cptr segment;
 
-  if (dmx->segments.empty())
+  if (dmx->segments.empty() || (-1 == dmx->ptzr))
     return;
 
   for (i = 0; i < dmx->segments.size(); i++) {
