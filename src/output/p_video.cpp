@@ -779,3 +779,28 @@ mpeg4_p10_video_packetizer_c::process(packet_cptr packet) {
   return FILE_STATUS_MOREDATA;
 }
 
+connection_result_e
+mpeg4_p10_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
+                                             string &error_message) {
+  connection_result_e result;
+  mpeg4_p10_video_packetizer_c *vsrc;
+
+  vsrc = dynamic_cast<mpeg4_p10_video_packetizer_c *>(src);
+  if (NULL == vsrc)
+    return CAN_CONNECT_NO_FORMAT;
+
+  result = video_packetizer_c::can_connect_to(src, error_message);
+  if (CAN_CONNECT_YES != result)
+    return result;
+
+  if ((NULL != ti.private_data) &&
+      memcmp(ti.private_data, vsrc->ti.private_data, ti.private_size)) {
+    error_message = mxsprintf("The codec's private data does not match."
+                              "Both have the same length (%d) but different "
+                              "content.", ti.private_size);
+    return CAN_CONNECT_NO_PARAMETERS;
+  }
+
+  return CAN_CONNECT_YES;
+}
+

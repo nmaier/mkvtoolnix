@@ -108,6 +108,9 @@ public:
                                track_info_c &_ti);
   virtual int process(packet_cptr packet);
 
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src,
+                                             string &error_message);
+
 protected:
   virtual void extract_aspect_ratio();
 };

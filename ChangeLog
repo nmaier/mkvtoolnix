@@ -1,3 +1,9 @@
+2005-11-16  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: mkvmerge will now refuse to append AVC/h.264
+	video tracks whose codec initialization data blocks do not
+	match. Invalidates Anthill bug #163.
+
 2005-11-12  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed a crash If the granulepos (the
