@@ -1,5 +1,10 @@
 2005-11-18  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: If at least or more attachments were present
+	and the user used --attachment-name for each of them (as mmg does)
+	then mkvmerge was wrongly outputting a warning about multiple uses
+	of --attachment-name for a single attachment.
+
 	* mkvmerge: new feature: Added limited support for edit lists in
 	MP4/QuickTime files. Fixes Anthill bug #151.
 

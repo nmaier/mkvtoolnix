@@ -105,6 +105,7 @@ struct attachment_t {
   }
   void clear() {
     name = "";
+    stored_name = "";
     mime_type = "";
     description = "";
     id = 0;
