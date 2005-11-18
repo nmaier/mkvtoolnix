@@ -60,9 +60,9 @@ struct qt_editlist_t {
   uint32_t pos;
   uint32_t speed;
   uint32_t frames;
-  uint32_t start_sample;
-  uint32_t start_frame;
-  uint32_t pts_offset;
+  uint64_t start_sample;
+  uint64_t start_frame;
+  int64_t pts_offset;
 
   qt_editlist_t():
     duration(0), pos(0), speed(0), frames(0),
@@ -94,7 +94,7 @@ struct qtmp4_demuxer_t {
   char fourcc[4];
   uint32_t pos;
 
-  uint32_t timescale;
+  uint32_t time_scale;
   uint32_t global_duration;
   uint32_t avg_duration;
   uint32_t sample_size;
@@ -109,6 +109,8 @@ struct qtmp4_demuxer_t {
   vector<qt_editlist_t> editlist_table;
   vector<qt_frame_offset_t> raw_frame_offset_table;
   vector<int32_t> frame_offset_table;
+
+  int editlist_pos;
 
   esds_t esds;
   bool esds_parsed;
@@ -133,9 +135,9 @@ struct qtmp4_demuxer_t {
 
   qtmp4_demuxer_t():
     ok(false), type('?'), id(0), pos(0),
-    timescale(1), global_duration(0), avg_duration(0), sample_size(0),
+    time_scale(1), global_duration(0), avg_duration(0), sample_size(0),
     duration(0),
-    esds_parsed(false),
+    editlist_pos(0), esds_parsed(false),
     v_stsd(NULL), v_stsd_size(0),
     v_width(0), v_height(0), v_bitdepth(0), v_dts_offset(0),
     avc_use_bframes(false),
@@ -185,7 +187,7 @@ private:
   mm_io_c *io;
   vector<qtmp4_demuxer_ptr> demuxers;
   int64_t file_size, mdat_pos, mdat_size;
-  uint32_t compression_algorithm;
+  uint32_t time_scale, compression_algorithm;
   int main_dmx;
 
 public:
@@ -203,10 +205,13 @@ public:
 
 protected:
   virtual void parse_headers();
-  virtual qt_atom_t read_atom();
-  virtual void parse_header_priv_atoms(qtmp4_demuxer_ptr &dmx,
-                                       unsigned char *mem, int size,
-                                       int level);
+  virtual qt_atom_t read_atom(mm_io_c *read_from = NULL);
+  virtual void parse_video_header_priv_atoms(qtmp4_demuxer_ptr &dmx,
+                                             unsigned char *mem, int size,
+                                             int level);
+  virtual void parse_audio_header_priv_atoms(qtmp4_demuxer_ptr &dmx,
+                                             unsigned char *mem, int size,
+                                             int level);
   virtual bool parse_esds_atom(mm_mem_io_c &memio, qtmp4_demuxer_ptr &dmx,
                                int level);
   virtual uint32_t read_esds_descr_len(mm_mem_io_c &memio);
@@ -253,8 +258,13 @@ protected:
                                 int level);
   virtual void handle_trak_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
                                 int level);
+  virtual void handle_edts_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
+                                int level);
+  virtual void handle_elst_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
+                                int level);
 
   virtual void update_tables(qtmp4_demuxer_ptr &dmx);
+  virtual void update_editlist_table(qtmp4_demuxer_ptr &dmx);
 };
 
 #endif  // __R_QTMP4_H

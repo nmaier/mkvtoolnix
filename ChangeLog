@@ -1,3 +1,12 @@
+2005-11-18  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: Added limited support for edit lists in
+	MP4/QuickTime files. Fixes Anthill bug #151.
+
+	* mkvmerge: bug fix: MP4/QuickTime files which contain another
+	atom before the 'avcC' atom in the video track headers weren't
+	correctly remuxed.
+
 2005-11-16  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: mkvmerge will now refuse to append AVC/h.264
