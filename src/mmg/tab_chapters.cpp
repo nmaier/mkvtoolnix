@@ -1983,7 +1983,7 @@ tab_chapters::set_display_values(KaxChapterDisplay *display) {
   count = cob_language_code->GetCount();
   found = false;
   for (i = 0; i < count; i++)
-    if (cob_language_code->GetString(i) == language) {
+    if (extract_language_code(cob_language_code->GetString(i)) == language) {
       found = true;
       break;
     }
