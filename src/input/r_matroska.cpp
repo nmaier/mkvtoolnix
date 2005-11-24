@@ -2094,9 +2094,12 @@ kax_reader_c::read(generic_packetizer_c *,
       }
 
       delete l1;
-      saved_l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
-                                     0xFFFFFFFFL, true);
-      break;
+      l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
+                               0xFFFFFFFFL, true);
+      if (found_cluster) {
+        saved_l1 = l1;
+        break;
+      }
 
     } // while (l1 != NULL)
 

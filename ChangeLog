@@ -1,3 +1,10 @@
+2005-11-24  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Don't abort reading a Matroska if the next
+	element is not a cluster. This is the case for e.g. files produced
+	by Haali's muxer which writes the segment tracks element in
+	intervals. Fixes Anthill bug #169.
+
 2005-11-19  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: Fixed a problem with the selection of language
