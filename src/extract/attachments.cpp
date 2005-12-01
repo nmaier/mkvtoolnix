@@ -127,6 +127,12 @@ handle_attachments(KaxAttachments *atts,
         }
 
       if (found && !tracks[k].done) {
+        // check for output name
+        if (strlen(tracks[k].out_name) == 0) {
+          safefree(tracks[k].out_name);
+          tracks[k].out_name = safestrdup(name.c_str());
+        }
+
         mxinfo(_("The attachment #" LLD ", MIME type %s, size " LLD ", "
                  "is written to '%s'.\n"), id, type.c_str(), size,
                tracks[k].out_name);

@@ -27,8 +27,11 @@
 #include <stdlib.h>
 #if defined(SYS_WINDOWS)
 # include <windows.h>
+# include <direct.h>
 #else
-#include <unistd.h>
+# include <unistd.h>
+# include <sys/stat.h>
+# include <sys/types.h>
 #endif // SYS_WINDOWS
 
 #include "error.h"
@@ -99,6 +102,8 @@ mm_file_io_c::mm_file_io_c(const string &path,
       throw mm_io_error_c("Unknown open mode");
   }
 
+  if ((MODE_WRITE == mode) || (MODE_CREATE == mode))
+    prepare_path(path);
   local_path = from_utf8(cc_local_utf8, path);
   file = (FILE *)fopen(local_path.c_str(), cmode);
 
@@ -286,6 +291,8 @@ mm_file_io_c::mm_file_io_c(const string &path,
       throw mm_io_error_c("Unknown open mode");
   }
 
+  if ((MODE_WRITE == mode) || (MODE_CREATE == mode))
+    prepare_path(path);
   file = (void *)CreateFileUtf8(path.c_str(), access_mode, share_mode, NULL,
                                 disposition, 0, NULL);
   _eof = false;
@@ -437,6 +444,33 @@ mm_file_io_c::setup() {
 }
 
 #endif // SYS_UNIX
+
+void
+mm_file_io_c::prepare_path(const string &path) {
+  string local_path = path; // contains copy of given path
+
+#if defined(SYS_WINDOWS)
+  const string SEPARATOR ("\\");
+  // convert separators for current OS
+  std::replace(local_path.begin(), local_path.end(), '/', '\\');
+#else
+  const string SEPARATOR ("/");
+  // convert separators for current OS
+  std::replace(local_path.begin(), local_path.end(), '\\', '/');
+#endif
+
+  // current position:
+  string::size_type position = local_path.find_first_of(SEPARATOR, 0);
+
+  while (position != string::npos) {
+    string subpath = local_path.substr(0, position);
+
+    if ((subpath.size() != 0) && !fs_entry_exists(subpath.c_str()))
+      create_directory(subpath.c_str());
+
+    position = local_path.find_first_of(SEPARATOR, position + 1);
+  }
+}
 
 uint64
 mm_file_io_c::getFilePointer() {

@@ -292,9 +292,13 @@ parse_args(vector<string> args,
                 args[i].c_str());
 
       colon++;
-      if (*colon == 0)
-        mxerror(_("Missing output file name in argument '%s'.\n"),
-                args[i].c_str());
+      if (*colon == 0) {
+        if (MODE_ATTACHMENTS == mode)
+          mxinfo("No output file name specified, will use attachment name.\n");
+        else
+          mxerror(_("Missing output file name in argument '%s'.\n"),
+                  args[i].c_str());
+      }
 
       memset(&track, 0, sizeof(track_spec_t));
       track.tid = tid;

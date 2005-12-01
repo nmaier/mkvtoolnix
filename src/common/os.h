@@ -139,4 +139,7 @@ typedef UINT64_TYPE uint64_t;
 int vsscanf(const char *, const char *, va_list);
 #endif // !HAVE_VSSCANF...
 
+int MTX_DLL_API fs_entry_exists(const char *path);
+void MTX_DLL_API create_directory(const char *path);
+
 #endif

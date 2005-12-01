@@ -142,6 +142,8 @@ public:
   mm_file_io_c(const string &path, const open_mode mode = MODE_READ);
   virtual ~mm_file_io_c();
 
+  static void prepare_path(const string &path);
+
   virtual uint64 getFilePointer();
 #if defined(SYS_WINDOWS)
   virtual uint64 get_real_file_pointer();

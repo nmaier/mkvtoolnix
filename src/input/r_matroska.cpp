@@ -16,6 +16,8 @@
 
 // {{{ includes
 
+#include "os.h"
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>

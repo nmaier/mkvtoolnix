@@ -13,6 +13,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "os.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

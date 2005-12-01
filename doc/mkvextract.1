@@ -13,7 +13,7 @@ tracks <\fIinname\fR> [\fIoptions\fR] [\fITID1\fR:\fIout1\fR [\fITID2\fR:\fIout2
 tags <\fIinname\fR> [\fIoptions\fR]
 .br
 .B mkvextract
-attachments <\fIinname\fR> [\fIoptions\fR] [\fIAID1\fR:\fIout1\fR [\fIAID2\fR:\fIout2\fR ...]]
+attachments <\fIinname\fR> [\fIoptions\fR] [\fIAID1\fR:\fI[out1]\fR [\fIAID2\fR:\fI[out2]\fR ...]]
 .br
 .B mkvextract
 chapters <\fIinname\fR> [\fIoptions\fR]
@@ -101,9 +101,12 @@ Command line syntax for the \fBattachments\fR extraction mode:
 .TP
 \fIAID\fR:\fIoutname\fR
 Causes extraction of the attachment with the ID \fIAID\fR into the file
-\fIoutname\fR if such an attachment exists in the source file. This option can
-be given multiple times. The attachment IDs are the same as the ones output by
-\fBmkvmerge\fR's \fB--identify\fR option.
+\fIoutname\fR if such an attachment exists in the source file.
+If the \fIoutname\fR is left empty then the name of the attachment inside
+the Matroska file is used instead.
+This option can be given multiple times.
+The attachment IDs are the same as the ones output by \fBmkvmerge\fR's
+\fB--identify\fR option.
 .TP
 \fB\-v\fR, \fB\-\-verbose\fR
 Be verbose and show all the important Matroska elements as they're read.

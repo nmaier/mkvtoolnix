@@ -11,14 +11,19 @@
    OS dependant helper functions
 */
 
-#include "common.h"
-#include "config.h"
 #include "os.h"
 
+#include "common.h"
+#include "config.h"
+#include "mm_io.h"
+
+#include <errno.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
+
+using namespace std;
 
 #if defined(SYS_WINDOWS)
 
@@ -157,6 +162,56 @@ CreateFileUtf8(LPCSTR lpFileName,
 
   return ret;
 }
+
+void
+create_directory(const char *path) {
+  int wreqbuf = Utf8ToUtf16(lpFileName, -1, NULL, 0);
+  wchar_t *wbuffer = new wchar_t[wreqbuf];
+  Utf8ToUtf16(lpFileName, -1, wbuffer, wreqbuf);
+
+  if (0 != _wmkdir(wbuffer))
+    throw (error_c(mxsprintf("mkdir(%s) failed; errno = %d (%s)",
+                             path, errno, strerror(errno))));
+
+  delete []wbuffer;
+}
+
+int
+fs_entry_exists(const char *path) {
+  int wreqbuf = Utf8ToUtf16(lpFileName, -1, NULL, 0);
+  wchar_t *wbuffer = new wchar_t[wreqbuf];
+  struct _stat s;
+  int result;
+
+  Utf8ToUtf16(lpFileName, -1, wbuffer, wreqbuf);
+  result = 0 == _wstat(wbuffer, &s);
+
+  delete []wbuffer;
+
+  return result;
+}
+
+#else // SYS_WINDOWS
+
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <unistd.h>
+
+void
+create_directory(const char *path) {
+  string local_path = from_utf8(cc_local_utf8, path);
+  if (0 != mkdir(local_path.c_str(), 0777))
+    throw (error_c(mxsprintf("mkdir(%s) failed; errno = %d (%s)",
+                             path, errno, strerror(errno))));
+}
+
+int
+fs_entry_exists(const char *path) {
+  string local_path = from_utf8(cc_local_utf8, path);
+  struct stat s;
+  return 0 == stat(local_path.c_str(), &s);
+}
+
 #endif // SYS_WINDOWS
 
 // -----------------------------------------------------------------
