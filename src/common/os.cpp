@@ -165,9 +165,9 @@ CreateFileUtf8(LPCSTR lpFileName,
 
 void
 create_directory(const char *path) {
-  int wreqbuf = Utf8ToUtf16(lpFileName, -1, NULL, 0);
+  int wreqbuf = Utf8ToUtf16(path, -1, NULL, 0);
   wchar_t *wbuffer = new wchar_t[wreqbuf];
-  Utf8ToUtf16(lpFileName, -1, wbuffer, wreqbuf);
+  Utf8ToUtf16(path, -1, wbuffer, wreqbuf);
 
   if (0 != _wmkdir(wbuffer))
     throw (error_c(mxsprintf("mkdir(%s) failed; errno = %d (%s)",
@@ -178,12 +178,12 @@ create_directory(const char *path) {
 
 int
 fs_entry_exists(const char *path) {
-  int wreqbuf = Utf8ToUtf16(lpFileName, -1, NULL, 0);
+  int wreqbuf = Utf8ToUtf16(path, -1, NULL, 0);
   wchar_t *wbuffer = new wchar_t[wreqbuf];
   struct _stat s;
   int result;
 
-  Utf8ToUtf16(lpFileName, -1, wbuffer, wreqbuf);
+  Utf8ToUtf16(path, -1, wbuffer, wreqbuf);
   result = 0 == _wstat(wbuffer, &s);
 
   delete []wbuffer;

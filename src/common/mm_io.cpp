@@ -450,14 +450,15 @@ mm_file_io_c::prepare_path(const string &path) {
   string local_path = path; // contains copy of given path
 
 #if defined(SYS_WINDOWS)
+  bool first_part = true;
   const string SEPARATOR ("\\");
   // convert separators for current OS
   std::replace(local_path.begin(), local_path.end(), '/', '\\');
-#else
+#else  // SYS_WINDOWS
   const string SEPARATOR ("/");
   // convert separators for current OS
   std::replace(local_path.begin(), local_path.end(), '\\', '/');
-#endif
+#endif // SYS_WINDOWS
 
   // current position:
   string::size_type position = local_path.find_first_of(SEPARATOR, 0);
@@ -465,10 +466,18 @@ mm_file_io_c::prepare_path(const string &path) {
   while (position != string::npos) {
     string subpath = local_path.substr(0, position);
 
-    if ((subpath.size() != 0) && !fs_entry_exists(subpath.c_str()))
+    if ((subpath.size() != 0) && !fs_entry_exists(subpath.c_str())
+#if defined(SYS_WINDOWS)
+        && (!first_part || (subpath.find_first_of(':') == string::npos))
+#endif // SYS_WINDOWS
+        )
       create_directory(subpath.c_str());
 
     position = local_path.find_first_of(SEPARATOR, position + 1);
+
+#if defined(SYS_WINDOWS)
+    first_part = false;
+#endif // SYS_WINDOWS
   }
 }
 

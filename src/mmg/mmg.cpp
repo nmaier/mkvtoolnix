@@ -1051,13 +1051,6 @@ mmg_dialog::check_before_overwriting() {
 
   dir = file_name.GetPath(wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR);
 
-  if (!wxDir::Exists(dir)) {
-    wxMessageBox(wxT("The output directory '") + dir +
-                 wxT("' does not exist."),
-                 wxT("Directory does not exist"), wxOK | wxICON_ERROR);
-    return false;
-  }
-
   if (!global_page->cb_split->GetValue()) {
     if (wxFile::Exists(tc_output->GetValue()) &&
         (wxMessageBox(wxT("The output file '") + tc_output->GetValue() +
