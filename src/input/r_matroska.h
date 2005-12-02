@@ -144,7 +144,7 @@ private:
 
   vector<int64_t> handled_tags, handled_attachments, handled_chapters;
 
-  string writing_app;
+  string writing_app, muxing_app;
   int64_t writing_app_ver;
 
 public:

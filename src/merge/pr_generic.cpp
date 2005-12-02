@@ -1184,15 +1184,13 @@ generic_packetizer_c::flush() {
     add_requested_track_id(ti.container[i]);
 
 generic_reader_c::generic_reader_c(track_info_c &_ti):
-  ti(_ti) {
-
-  max_timecode_seen = 0;
-  appending = false;
-  chapters = NULL;
-  ptzr_first_packet = NULL;
-  num_video_tracks = 0;
-  num_audio_tracks = 0;
-  num_subtitle_tracks = 0;
+  ti(_ti),
+  ptzr_first_packet(NULL),
+  max_timecode_seen(0),
+  chapters(NULL),
+  appending(false),
+  num_video_tracks(0), num_audio_tracks(0), num_subtitle_tracks(0),
+  reference_timecode_tolerance(0) {
 
   add_all_requested_track_ids2(atracks);
   add_all_requested_track_ids2(vtracks);

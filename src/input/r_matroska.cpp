@@ -784,6 +784,7 @@ kax_reader_c::read_headers() {
         KaxDuration *kduration;
         KaxTitle *ktitle;
         KaxWritingApp *kwriting_app;
+        KaxMuxingApp *kmuxing_app;
 
         // General info about this Matroska file
         if (verbose > 1)
@@ -882,6 +883,19 @@ kax_reader_c::read_headers() {
 
           mxverb(3, PFX "|   (writing_app '%s', writing_app_ver 0x%08x)\n",
                  writing_app.c_str(), (uint32_t)writing_app_ver);
+        }
+
+        kmuxing_app = FINDFIRST(l1, KaxMuxingApp);
+        if (kmuxing_app != NULL) {
+          muxing_app = UTFstring_to_cstrutf8(UTFstring(*kmuxing_app));
+          mxverb(3, PFX "|   (muxing_app '%s')\n", muxing_app.c_str());
+
+          // DirectShow Muxer workaround: Gabest's DirectShow muxer
+          // writes wrong references (off by 1ms). So let the cluster
+          // helper be a bit more imprecise in what it accepts when
+          // looking for referenced packets.
+          if (muxing_app == "DirectShow Matroska Muxer")
+            reference_timecode_tolerance = 1000000;
         }
 
       } else if (EbmlId(*l1) == KaxTracks::ClassInfos.GlobalId) {

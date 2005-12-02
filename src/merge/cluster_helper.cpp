@@ -584,16 +584,21 @@ ch_contents_t *
 cluster_helper_c::find_packet_cluster(int64_t ref_timecode,
                                       generic_packetizer_c *source) {
   int i, k;
+  int64_t tolerance;
 
   if (clusters.size() == 0)
     return NULL;
+
+  tolerance = source->reader->reference_timecode_tolerance;
+  if (0 == tolerance)
+    tolerance = 10000;
 
   // Be a bit fuzzy and allow timecodes that are 10us off.
   for (i = 0; i < clusters.size(); i++)
     for (k = 0; k < clusters[i]->packets.size(); k++) {
       packet_cptr &pack = clusters[i]->packets[k];
       if ((pack->source == source) &&
-          (iabs(pack->timecode - ref_timecode) <= 10000))
+          (iabs(pack->timecode - ref_timecode) <= tolerance))
         return clusters[i];
     }
 
@@ -604,16 +609,21 @@ packet_cptr
 cluster_helper_c::find_packet(int64_t ref_timecode,
                               generic_packetizer_c *source) {
   int i, k;
+  int64_t tolerance;
 
   if (clusters.size() == 0)
     return packet_cptr(NULL);
+
+  tolerance = source->reader->reference_timecode_tolerance;
+  if (0 == tolerance)
+    tolerance = 10000;
 
   // Be a bit fuzzy and allow timecodes that are 10us off.
   for (i = 0; i < clusters.size(); i++)
     for (k = 0; k < clusters[i]->packets.size(); k++) {
       packet_cptr &pack = clusters[i]->packets[k];
       if ((pack->source == source) &&
-          (iabs(pack->timecode - ref_timecode) <= 10000))
+          (iabs(pack->timecode - ref_timecode) <= tolerance))
         return pack;
     }
 

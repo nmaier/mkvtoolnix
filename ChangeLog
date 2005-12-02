@@ -1,5 +1,9 @@
 2005-12-02  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: new feature: Added a workaround for files created by
+	Gabest's DirectShow Matroska muxer with slightly broken frame
+	references. Fixes Anthill bug #172.
+
 	* mkvextract: new feature: attachment extraction mode: Made the
 	output file name optional. If it is missing (e.g. "mkvextract
 	attachments source.mkv 92385: 124981:") then the name of the

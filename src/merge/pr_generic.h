@@ -211,6 +211,8 @@ public:
   bool appending;
   int num_video_tracks, num_audio_tracks, num_subtitle_tracks;
 
+  int64_t reference_timecode_tolerance;
+
 public:
   generic_reader_c(track_info_c &_ti);
   virtual ~generic_reader_c();
