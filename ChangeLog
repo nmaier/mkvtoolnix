@@ -1,3 +1,15 @@
+2005-12-02  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: new feature: attachment extraction mode: Made the
+	output file name optional. If it is missing (e.g. "mkvextract
+	attachments source.mkv 92385: 124981:") then the name of the
+	attachment inside the Matroska file is chosen instead. Patch by
+	Sergey Hakobyan (see AUTHORS).
+
+	* mkvmerge: new feature: If an output file name contains
+	directories that don't exist then they're created. Patch by Sergey
+	Hakobyan (see AUTHORS) with modifications by myself.
+
 2005-11-24  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Don't abort reading a Matroska if the next
