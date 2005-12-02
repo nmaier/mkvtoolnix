@@ -1,5 +1,9 @@
 2005-12-02  Moritz Bunkus  <moritz@bunkus.org>
 
+	* source: new feature: Added support for linking against liblzo2
+	(same compression algorithm, just a new library version). Patch by
+	Diego Pettenò (see AUTHORS).
+
 	* mkvmerge: new feature: Added a workaround for files created by
 	Gabest's DirectShow Matroska muxer with slightly broken frame
 	references. Fixes Anthill bug #172.

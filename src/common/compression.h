@@ -80,8 +80,13 @@ public:
   static compressor_ptr create(const char *method);
 };
 
-#if defined(HAVE_LZO1X_H)
-#include <lzo1x.h>
+#ifdef HAVE_LZO
+
+#ifdef HAVE_LZO_LZO1X_H
+# include <lzo/lzo1x.h>
+#else
+# include <lzo1x.h>
+#endif
 
 class MTX_DLL_API lzo_compressor_c: public compressor_c {
 protected:
@@ -94,7 +99,7 @@ public:
   virtual void decompress(memory_cptr &buffer);
   virtual void compress(memory_cptr &buffer);
 };
-#endif // HAVE_LZO1X_H
+#endif // HAVE_LZO
 
 #if defined(HAVE_ZLIB_H)
 #include <zlib.h>

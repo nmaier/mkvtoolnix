@@ -40,8 +40,13 @@ static const int compression_method_map[] = {
 
 // ---------------------------------------------------------------------
 
-#if defined(HAVE_LZO1X_H)
-#include <lzoutil.h>
+#ifdef HAVE_LZO
+
+#ifdef HAVE_LZO_LZO1X_H
+# include <lzo/lzoutil.h>
+#else
+# include <lzoutil.h>
+#endif
 
 lzo_compressor_c::lzo_compressor_c():
   compressor_c(COMPRESSION_LZO) {
@@ -88,7 +93,7 @@ lzo_compressor_c::compress(memory_cptr &buffer) {
   buffer = memory_cptr(new memory_c(dst, dstsize, true));
 }
 
-#endif // HAVE_LZO1X_H
+#endif // HAVE_LZO
 
 // ---------------------------------------------------------------------
 

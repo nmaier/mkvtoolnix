@@ -277,7 +277,7 @@ print_capabilities() {
 #if defined(HAVE_BZLIB_H)
   mxinfo("BZ2\n");
 #endif
-#if defined(HAVE_LZO1X_H)
+#if defined(HAVE_LZO)
   mxinfo("LZO\n");
 #endif
 #if defined(HAVE_FLAC_FORMAT_H)
@@ -901,7 +901,7 @@ parse_compression(const string &s,
 
   ti.compression_list[id] = COMPRESSION_UNSPECIFIED;
   parts[1] = downcase(parts[1]);
-#ifdef HAVE_LZO1X_H
+#ifdef HAVE_LZO
   if ((parts[1] == "lzo") || (parts[1] == "lzo1x"))
     ti.compression_list[id] = COMPRESSION_LZO;
 #endif
