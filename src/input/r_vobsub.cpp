@@ -375,7 +375,7 @@ vobsub_reader_c::extract_one_spu_packet(int64_t timecode,
   uint32_t len, idx, version, packet_size, dst_size;
   int64_t extraction_start_pos;
   int c, packet_aid, spu_len;
-  float pts;
+  int64_t pts;
   /* Goto start of a packet, it starts with 0x000001?? */
   const unsigned char wanted[] = { 0, 0, 1 };
   unsigned char buf[5];
@@ -384,7 +384,7 @@ vobsub_reader_c::extract_one_spu_packet(int64_t timecode,
   track = tracks[track_id];
   extraction_start_pos = sub_file->getFilePointer();
 
-  pts = 0.0;
+  pts = 0;
   track->packet_num++;
 
   dst_buf = NULL;
@@ -482,8 +482,10 @@ vobsub_reader_c::extract_one_spu_packet(int64_t timecode,
                      buf[0], buf[1], buf[2], buf[3], buf[4]);
               pts = 0;
             } else
-              pts = ((buf[0] & 0x0e) << 29 | buf[1] << 22 |
-                     (buf[2] & 0xfe) << 14 | buf[3] << 7 | (buf[4] >> 1));
+              pts =
+                ((int64_t)((buf[0] & 0x0e) << 29 | buf[1] << 22 |
+                           (buf[2] & 0xfe) << 14 | buf[3] << 7 |
+                           (buf[4] >> 1))) * 100000 / 9;
           }
           sub_file->setFilePointer2(dataidx + extraction_start_pos,
                                     seek_beginning);
@@ -508,8 +510,9 @@ vobsub_reader_c::extract_one_spu_packet(int64_t timecode,
           }
           dst_buf = (unsigned char *)saferealloc(dst_buf, dst_size +
                                                  packet_size);
-          mxverb(3, PFX "sub packet data: aid: %d, pts: %.3fs, packet_size: "
-                 "%u\n", track->aid, pts, packet_size);
+          mxverb(3, PFX "sub packet data: aid: %d, pts: " FMT_TIMECODE
+                 ", packet_size: %u\n", track->aid, ARG_TIMECODE_NS(pts),
+                 packet_size);
           if (sub_file->read(&dst_buf[dst_size], packet_size) != packet_size) {
             mxwarn(PFX "sub_file->read failure");
             return deliver();
