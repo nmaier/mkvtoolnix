@@ -590,7 +590,7 @@ generic_packetizer_c::set_headers() {
       (&GetChild<KaxMaxBlockAdditionID>(*track_entry))) =
       htrack_max_add_block_ids;
 
-  if (NULL != timecode_factory)
+  if (NULL != timecode_factory.get())
     htrack_default_duration =
       (int64_t)timecode_factory->get_default_duration(htrack_default_duration);
   if (htrack_default_duration != -1.0)
@@ -890,7 +890,7 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
   pack->timecode_before_factory = pack->timecode;
 
   packet_queue.push_back(pack);
-  if ((NULL == timecode_factory) ||
+  if ((NULL == timecode_factory.get()) ||
       (TFA_IMMEDIATE == timecode_factory_application_mode))
     apply_factory_once(pack);
   else
@@ -936,7 +936,7 @@ generic_packetizer_c::get_packet() {
 
 void
 generic_packetizer_c::apply_factory_once(packet_cptr &packet) {
-  if (NULL == timecode_factory) {
+  if (NULL == timecode_factory.get()) {
     packet->assigned_timecode = packet->timecode;
     packet->gap_following = false;
   } else
@@ -1141,6 +1141,7 @@ generic_packetizer_c::connect(generic_packetizer_c *src,
   hcompression = src->hcompression;
   compressor = compressor_c::create(hcompression);
   last_cue_timecode = src->last_cue_timecode;
+  timecode_factory = src->timecode_factory;
   correction_timecode_offset = 0;
   if (_append_timecode_offset == -1)
     append_timecode_offset = src->max_timecode_seen;
@@ -1161,7 +1162,7 @@ generic_packetizer_c::set_displacement_maybe(int64_t displacement) {
 
 bool
 generic_packetizer_c::contains_gap() {
-  if (timecode_factory != NULL)
+  if (NULL != timecode_factory.get())
     return timecode_factory->contains_gap();
   else
     return false;

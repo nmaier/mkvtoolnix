@@ -1,3 +1,12 @@
+2005-12-05  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: When appending tracks and using timecodes the
+	timecodes were only used for the first track in a chain of
+	tracks. This has been changed so that you must specify only one
+	timecode file in such cases (e.g. "mkvmerge ... --timecodes
+	0:my_timecodes.txt part1.avi +part2.avi"). mmg has already been
+	working like this. Fixes Anthill bug #162.
+
 2005-12-02  Moritz Bunkus  <moritz@bunkus.org>
 
 	* source: new feature: Added support for linking against liblzo2

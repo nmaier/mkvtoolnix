@@ -23,7 +23,7 @@
 
 using namespace std;
 
-timecode_factory_c *
+timecode_factory_cptr
 timecode_factory_c::create(const string &file_name,
                            const string &source_name,
                            int64_t tid) {
@@ -33,7 +33,7 @@ timecode_factory_c::create(const string &file_name,
   timecode_factory_c *factory;
 
   if (file_name == "")
-    return NULL;
+    return timecode_factory_cptr(NULL);
 
   in = NULL;                    // avoid gcc warning
   try {
@@ -63,7 +63,7 @@ timecode_factory_c::create(const string &file_name,
   factory->parse(*in);
   delete in;
 
-  return factory;
+  return timecode_factory_cptr(factory);
 }
 
 void

@@ -325,7 +325,7 @@ protected:
   compression_method_e hcompression;
   compressor_ptr compressor;
 
-  timecode_factory_c *timecode_factory;
+  timecode_factory_cptr timecode_factory;
   timecode_factory_application_e timecode_factory_application_mode;
 
   int64_t last_cue_timecode;

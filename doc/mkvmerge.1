@@ -1083,6 +1083,13 @@ is exactly one frame, for audio this is one packet of the specific
 audio type. E.g. for AC3 this would be a packet containing 1536
 samples.
 .LP
+Timecode files that are used when tracks are appended to each other must
+only be specified for the first part in a chain of tracks.
+For example if you append two files, v1.avi and v2.avi, and want to use
+timecodes then your command line must look something like this:
+.br
+\fBmkvmerge ... --timecodes 0:my_timecodes.txt v1.avi +v2.avi\fR
+.LP
 There are three formats that are recognized by \fBmkvmerge\fR. The first
 line always contains the version number. Empty lines, lines containing only
 whitespace and lines beginning with '#' are ignored.

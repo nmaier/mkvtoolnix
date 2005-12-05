@@ -21,6 +21,7 @@
 #include <string>
 #include <vector>
 
+#include "smart_pointers.h"
 #include "packet.h"
 
 using namespace std;
@@ -50,6 +51,9 @@ public:
   int64_t duration;
   bool is_gap;
 };
+
+class timecode_factory_c;
+typedef counted_ptr<timecode_factory_c> timecode_factory_cptr;
 
 class timecode_factory_c {
 protected:
@@ -83,9 +87,9 @@ public:
     return false;
   }
 
-  static timecode_factory_c *create(const string &file_name,
-                                    const string &source_name,
-                                    int64_t tid);
+  static timecode_factory_cptr create(const string &file_name,
+                                      const string &source_name,
+                                      int64_t tid);
 };
 
 class timecode_factory_v1_c: public timecode_factory_c {
