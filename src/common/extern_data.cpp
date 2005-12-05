@@ -2619,3 +2619,14 @@ guess_mime_type(string ext) {
 
   return "";
 }
+
+bool
+is_valid_cctld(const string &s) {
+  int i;
+
+  for (i = 0; NULL != cctlds[i]; ++i)
+    if (s == cctlds[i])
+      return true;
+
+  return false;
+}

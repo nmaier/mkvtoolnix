@@ -25,6 +25,7 @@
 #include "chapters.h"
 #include "commonebml.h"
 #include "error.h"
+#include "extern_data.h"
 #include "iso639.h"
 #include "mm_io.h"
 #include "xml_element_mapping.h"
@@ -149,8 +150,8 @@ end_chapter_country(void *pdata) {
   EbmlString *s;
 
   s = static_cast<EbmlString *>(xmlp_pelt);
-  if (!is_valid_iso639_1_code(string(*s).c_str()))
-    xmlp_error(CPDATA, "'%s' is not a valid ISO639-1 country code.",
+  if (!is_valid_cctld(string(*s).c_str()))
+    xmlp_error(CPDATA, "'%s' is not a valid ccTLD country code.",
                string(*s).c_str());
 }
 
