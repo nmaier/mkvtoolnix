@@ -1,5 +1,9 @@
 2005-12-05  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The country code used in XML chapter files
+	was checked against the list of ISO 639-1 codes and not against
+	the list of ccTLDs. Partial bugfix for Anthill bug #171.
+
 	* mkvmerge: bug fix: When appending tracks and using timecodes the
 	timecodes were only used for the first track in a chain of
 	tracks. This has been changed so that you must specify only one
