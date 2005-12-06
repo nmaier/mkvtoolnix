@@ -1,3 +1,13 @@
+2005-12-06  Moritz Bunkus  <moritz@bunkus.org>
+
+	* source: bug fix: Changed the list of ISO 639 languages so that
+	the terminology versions are converted into the bibliography
+	versions of the 639-2 codes (e.g. use "ger" instead of "deu" for
+	the German language). Converted almost all pieces of mkvmerge and
+	mmg to accept ISO 639-1, 639-2 codes (both bibliography and
+	terminology versions) and the languages' English names. Those will
+	always be converted to the 639-2 code. Fixes Anthill bug #171.
+
 2005-12-05  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The country code used in XML chapter files

@@ -131,8 +131,11 @@ usf_reader_c::start_element_cb(const char *name,
   if (node == "USFSubtitles.metadata.language") {
     for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2)
       if (!strcmp(atts[i], "code") && (0 != atts[i + 1][0])) {
-        if (is_valid_iso639_2_code(atts[i + 1]))
-          m_default_language = atts[i + 1];
+        int index;
+
+        index = map_to_iso639_2_code(atts[i + 1]);
+        if (-1 != index)
+          m_default_language = iso639_languages[index].iso639_2_code;
         else if (!identifying)
           mxwarn(FMT_FN "The default language code '%s' is not a valid "
                  "ISO639-2 language code and will be ignored.\n",
@@ -163,8 +166,12 @@ usf_reader_c::start_element_cb(const char *name,
   } else if (node == "USFSubtitles.subtitles.language") {
     for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2)
       if (!strcmp(atts[i], "code") && (0 != atts[i + 1][0])) {
-        if (is_valid_iso639_2_code(atts[i + 1]))
-          m_tracks[m_tracks.size() - 1].m_language = atts[i + 1];
+        int index;
+
+        index = map_to_iso639_2_code(atts[i + 1]);
+        if (-1 != index)
+          m_tracks[m_tracks.size() - 1].m_language =
+            iso639_languages[index].iso639_2_code;
         else if (!identifying)
           mxwarn(FMT_TID "The language code '%s' is not a valid "
                  "ISO639-2 language code and will be ignored.\n",

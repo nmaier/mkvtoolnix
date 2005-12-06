@@ -161,18 +161,17 @@ void
 vobsub_reader_c::create_packetizer(int64_t tid) {
   uint32_t k;
   int64_t avg_duration, duration;
-  char language[4];
-  const char *c;
   vobsub_track_c *track;
+  int index;
 
   if ((tid < tracks.size()) && demuxing_requested('s', tid) &&
       (tracks[tid]->ptzr == -1)) {
     track = tracks[tid];
     ti.id = tid;
-    if ((c = map_iso639_1_to_iso639_2(tracks[tid]->language)) != NULL) {
-      strcpy(language, c);
-      ti.language = language;
-    } else
+    index = map_to_iso639_2_code(tracks[tid]->language.c_str());
+    if (-1 != index)
+      ti.language = iso639_languages[index].iso639_2_code;
+    else
       ti.language = "";
     track->ptzr =
       add_packetizer(new vobsub_packetizer_c(this, idx_data.c_str(),
@@ -195,7 +194,7 @@ vobsub_reader_c::create_packetizer(int64_t tid) {
     num_indices += track->entries.size();
 
     mxinfo(FMT_TID "Using the VobSub subtitle output module (language: %s).\n",
-           ti.fname.c_str(), (int64_t)tid, track->language);
+           ti.fname.c_str(), (int64_t)tid, track->language.c_str());
     ti.language = "";
   }
 }
@@ -595,18 +594,12 @@ void
 vobsub_reader_c::identify() {
   uint32_t i;
   string info;
-  const char *language;
 
   mxinfo("File '%s': container: VobSub\n", ti.fname.c_str());
   for (i = 0; i < tracks.size(); i++) {
-    if (identify_verbose) {
-      language = map_iso639_1_to_iso639_2(tracks[i]->language);
-      if (language != NULL)
-        info = " [language:" + string(language) + "]";
-      else
-        info = "";
-    } else
-      info = "";
+    info = "";
+    if (identify_verbose && (tracks[i]->language != ""))
+      info = string(" [language:") + tracks[i]->language + "]";
     mxinfo("Track ID %u: subtitles (VobSub)%s\n", i, info.c_str());
   }
 }

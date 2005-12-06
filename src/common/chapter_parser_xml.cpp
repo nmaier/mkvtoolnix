@@ -138,11 +138,14 @@ end_chapter_display(void *pdata) {
 void
 end_chapter_language(void *pdata) {
   EbmlString *s;
+  int index;
 
   s = static_cast<EbmlString *>(xmlp_pelt);
-  if (!is_valid_iso639_2_code(string(*s).c_str()))
+  index = map_to_iso639_2_code(string(*s).c_str());
+  if (-1 == index)
     xmlp_error(CPDATA, "'%s' is not a valid ISO639-2 language code.",
                string(*s).c_str());
+  *s = iso639_languages[index].iso639_2_code;
 }
 
 void

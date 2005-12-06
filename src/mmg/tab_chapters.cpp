@@ -1343,6 +1343,7 @@ tab_chapters::on_chapter_name_changed(wxCommandEvent &evt) {
 void
 tab_chapters::on_set_default_values(wxCommandEvent &evt) {
   wxString language;
+  string cctld;
 
   chapter_values_dlg dlg(this, true, wxU(default_chapter_language.c_str()),
                          wxU(default_chapter_country.c_str()));
@@ -1359,7 +1360,15 @@ tab_chapters::on_set_default_values(wxCommandEvent &evt) {
     return;
   }
   default_chapter_language = wxMB(language);
-  default_chapter_country = wxMB(dlg.cob_country->GetValue());
+  cctld = wxMB(dlg.cob_country->GetValue());
+  if (!is_valid_cctld(cctld.c_str())) {
+    wxMessageBox(wxT("The country '") + dlg.cob_country->GetValue() +
+                 wxT("' is not a valid ccTLD and cannot be selected."),
+                 wxT("Invalid country selected"),
+                 wxICON_ERROR | wxOK);
+    return;
+  }
+  default_chapter_country = cctld;
 }
 
 void

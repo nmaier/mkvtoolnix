@@ -36,7 +36,7 @@ public:
 
 class vobsub_track_c {
 public:
-  char *language;
+  string language;
   int ptzr;
   vector<vobsub_entry_c> entries;
   int idx, aid;
@@ -44,18 +44,11 @@ public:
   int64_t packet_num, spu_size, overhead;
 
 public:
-  vobsub_track_c(const char *new_language) {
-    language = safestrdup(new_language);
-    ptzr = -1;
-    idx = 0;
-    mpeg_version_warning_printed = false;
-    packet_num = 0;
-    aid = -1;
-    spu_size = 0;
-    overhead = 0;
-  };
-  ~vobsub_track_c() {
-    safefree(language);
+  vobsub_track_c(const char *new_language):
+    language(new_language),
+    ptzr(-1), idx(0), aid(-1),
+    mpeg_version_warning_printed(false),
+    packet_num(0), spu_size(0), overhead(0) {
   }
 };
 

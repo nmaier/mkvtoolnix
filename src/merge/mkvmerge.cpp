@@ -954,21 +954,20 @@ parse_language(const string &s,
             s.c_str());
 
   if (check) {
+    int index;
+
     if (parts[1].size() == 0)
       mxerror(_("Invalid %s specified in '--%s %s'.\n"), topic, opt.c_str(),
               s.c_str());
 
-    if (!is_valid_iso639_2_code(parts[1].c_str())) {
-      const char *iso639_2;
+    index = map_to_iso639_2_code(parts[1].c_str());
+    if (-1 == index)
+      mxerror(_("'%s' is neither a valid ISO639-2 nor a valid ISO639-1 code."
+                " See 'mkvmerge --list-languages' for a list of all "
+                "languages and their respective ISO639-2 codes.\n"),
+              parts[1].c_str());
 
-      iso639_2 = map_iso639_1_to_iso639_2(parts[1].c_str());
-      if (iso639_2 == NULL)
-        mxerror(_("'%s' is neither a valid ISO639-2 nor a valid ISO639-1 code."
-                  " See 'mkvmerge --list-languages' for a list of all "
-                  "languages and their respective ISO639-2 codes.\n"),
-                parts[1].c_str());
-      parts[1] = iso639_2;
-    }
+    parts[1] = iso639_languages[index].iso639_2_code;
   }
 
   storage[id] = parts[1];
@@ -1621,13 +1620,15 @@ parse_args(vector<string> args) {
         mxerror(_("'--chapter-language' must be given before '--chapters' in "
                   "'--chapter-language %s'.\n"), next_arg.c_str());
 
-      if (!is_valid_iso639_2_code(next_arg.c_str()))
-        mxerror(_("'%s' is not a valid ISO639-2 language code. Run "
-                  "'mkvmerge --list-languages' for a complete list of all "
-                  "languages and their respective ISO639-2 codes.\n"),
-                next_arg.c_str());
+      i = map_to_iso639_2_code(next_arg.c_str());
+      if (-1 == i)
+        mxerror(_("'%s' is neither a valid ISO639-2 nor a valid ISO639-1 code "
+                  "in '--chapter-language %s'. See 'mkvmerge --list-languages'"
+                  "for a list of all languages and their respective ISO639-2 "
+                  "codes.\n"),
+                next_arg.c_str(), next_arg.c_str());
 
-      chapter_language = next_arg;
+      chapter_language = iso639_languages[i].iso639_2_code;
       sit++;
 
     } else if (this_arg == "--chapter-charset") {
@@ -1847,12 +1848,15 @@ parse_args(vector<string> args) {
       if (no_next_arg)
         mxerror(_("'--default-language' lacks its argument.\n"));
 
-      if (!is_valid_iso639_2_code(next_arg.c_str()))
-        mxerror(_("'%s' is not a valid ISO639-2 language code in "
-                  "'--default-language %s'. Run 'mkvmerge --list-languages' "
-                  "for a list of all languages and their respective "
-                  "ISO639-2 codes.\n"), next_arg.c_str(), next_arg.c_str());
-      default_language = next_arg;
+      i = map_to_iso639_2_code(next_arg.c_str());
+      if (-1 == i)
+        mxerror(_("'%s' is neither a valid ISO639-2 nor a valid ISO639-1 code "
+                  "in '--default-language %s'. See 'mkvmerge --list-languages'"
+                  "for a list of all languages and their respective ISO639-2 "
+                  "codes.\n"),
+                next_arg.c_str(), next_arg.c_str());
+
+      default_language = iso639_languages[i].iso639_2_code;
       sit++;
 
     } else if (this_arg == "--sub-charset") {

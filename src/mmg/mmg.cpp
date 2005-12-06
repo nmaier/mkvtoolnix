@@ -38,6 +38,7 @@
 #include "chapters.h"
 #include "common.h"
 #include "commonebml.h"
+#include "extern_data.h"
 #include "jobs.h"
 #include "matroskalogo.xpm"
 #include "mmg.h"
@@ -2029,6 +2030,7 @@ mmg_app::OnInit() {
   wxConfigBase *cfg;
   uint32_t i;
   wxString k, v;
+  int index;
 
   init_stdio();
   mm_file_io_c::setup();
@@ -2050,11 +2052,14 @@ mmg_app::OnInit() {
   cfg->SetPath(wxT("/chapter_editor"));
   cfg->Read(wxT("default_language"), &k, wxT("und"));
   default_chapter_language = to_utf8(k).c_str();
-  if (!is_valid_iso639_2_code(default_chapter_language.c_str()))
+  index = map_to_iso639_2_code(default_chapter_language.c_str());
+  if (-1 == index)
     default_chapter_language = "und";
+  else
+    default_chapter_language = iso639_languages[index].iso639_2_code;
   if (cfg->Read(wxT("default_country"), &k) && (0 < k.length()))
     default_chapter_country = to_utf8(k).c_str();
-  if (!is_valid_iso639_1_code(default_chapter_country.c_str()))
+  if (!is_valid_cctld(default_chapter_country.c_str()))
     default_chapter_country = "";
 
   app = this;

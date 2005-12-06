@@ -1173,7 +1173,6 @@ ogm_reader_c::handle_stream_comments() {
   int i, j, cch;
   ogm_demuxer_t *dmx;
   char **comments;
-  const char *iso639_2;
   vector<string> comment, chapters;
   mm_mem_io_c *out;
   string title;
@@ -1203,12 +1202,12 @@ ogm_reader_c::handle_stream_comments() {
         continue;
 
       if (comment[0] == "LANGUAGE") {
-        iso639_2 = map_english_name_to_iso639_2(comment[1].c_str());
-        if (iso639_2 == NULL)
-          iso639_2 = map_iso639_1_to_iso639_2(comment[1].c_str());
-        if ((iso639_2 == NULL) && (is_valid_iso639_2_code(comment[1].c_str())))
-          iso639_2 = comment[1].c_str();
-        if (iso639_2 == NULL) {
+        int index;
+
+        index = map_to_iso639_2_code(comment[1].c_str());
+        if (-1 != index)
+          dmx->language = iso639_languages[index].iso639_2_code;
+        else {
           string lang;
           int pos1, pos2;
 
@@ -1229,14 +1228,10 @@ ogm_reader_c::handle_stream_comments() {
             lang.erase(pos1, pos2 - pos1 + 1);
             pos1 = lang.find("(");
           }
-          for (pos1 = 0; iso639_languages[pos1].iso639_2_code != NULL; pos1++)
-            if (starts_with_case(lang, iso639_languages[pos1].english_name)) {
-              iso639_2 = iso639_languages[pos1].iso639_2_code;
-              break;
-            }
+          index = map_to_iso639_2_code(lang.c_str());
+          if (-1 != index)
+            dmx->language = iso639_languages[index].iso639_2_code;
         }
-        if (iso639_2 != NULL)
-          dmx->language = iso639_2;
 
       } else if (comment[0] == "TITLE")
         title = comment[1];
