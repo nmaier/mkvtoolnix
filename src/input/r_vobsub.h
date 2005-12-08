@@ -44,7 +44,7 @@ public:
   int64_t packet_num, spu_size, overhead;
 
 public:
-  vobsub_track_c(const char *new_language):
+  vobsub_track_c(const string &new_language):
     language(new_language),
     ptzr(-1), idx(0), aid(-1),
     mpeg_version_warning_printed(false),

@@ -1,3 +1,10 @@
+2005-12-08  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The last change to the ISO 639 language
+	handling broke the VobSub reader so that it reported the wrong
+	language codes. This also caused mmg to not display the correct
+	language after adding a VobSub file.
+
 2005-12-07  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v1.6.5.

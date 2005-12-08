@@ -162,17 +162,12 @@ vobsub_reader_c::create_packetizer(int64_t tid) {
   uint32_t k;
   int64_t avg_duration, duration;
   vobsub_track_c *track;
-  int index;
 
   if ((tid < tracks.size()) && demuxing_requested('s', tid) &&
       (tracks[tid]->ptzr == -1)) {
     track = tracks[tid];
     ti.id = tid;
-    index = map_to_iso639_2_code(tracks[tid]->language.c_str());
-    if (-1 != index)
-      ti.language = iso639_languages[index].iso639_2_code;
-    else
-      ti.language = "";
+    ti.language = tracks[tid]->language;
     track->ptzr =
       add_packetizer(new vobsub_packetizer_c(this, idx_data.c_str(),
                                              idx_data.length(), ti));
@@ -211,10 +206,10 @@ void
 vobsub_reader_c::parse_headers() {
   string line;
   const char *sline;
-  char language[3];
+  string language;
   vobsub_track_c *track;
   int64_t filepos, timestamp, line_no, last_timestamp;
-  int hour, minute, second, msecond, idx;
+  int hour, minute, second, msecond, idx, lang_index;
   uint32_t i, k, tsize;
   vobsub_entry_c entry;
   bool sort_required;
@@ -239,11 +234,16 @@ vobsub_reader_c::parse_headers() {
 
     if (!strncasecmp(sline, "id:", 3)) {
       if (line.length() >= 6) {
-        language[0] = sline[4];
-        language[1] = sline[5];
-        language[2] = 0;
+        language = sline[4];
+        language += sline[5];
+        lang_index = map_to_iso639_2_code(language.c_str());
+        if (-1 != lang_index)
+          language = iso639_languages[lang_index].iso639_2_code;
+        else
+          language = "";
       } else
-        language[0] = 0;
+        language = "";
+
       if (track != NULL) {
         if (track->entries.size() == 0)
           delete track;
