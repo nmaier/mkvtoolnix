@@ -536,7 +536,7 @@ dnl
   ebml_ver_req_minor=7
   ebml_ver_req_micro=5
 
-  AC_CACHE_CHECK([for libebml version >= ${ebml_ver_req_major}.${ebml_ver_req_minor}.${ebml_ver_req_micro}],
+  AC_CACHE_CHECK([for libEBML headers version >= ${ebml_ver_req_major}.${ebml_ver_req_minor}.${ebml_ver_req_micro}],
     [ac_cv_ebml_found],[
 
     EBML_LIBS="-lebml"
@@ -584,7 +584,7 @@ using namespace libebml;
   ])
 
   if test x"${ac_cv_ebml_found}" != "xyes" ; then
-    echo '*** Your Ebml version is too old. Upgrade to at least version'
+    echo '*** Your libEBML version is too old. Upgrade to at least version'
     echo '*** '${ebml_ver_req_major}.${ebml_ver_req_minor}.${ebml_ver_req_micro}' and re-run configure.'
     exit 1
   fi
@@ -592,7 +592,10 @@ using namespace libebml;
 dnl
 dnl Test if libebml has to be compiled with -DEBML_DLL on Windows.
 dnl
-  AC_CACHE_CHECK([if linking against libebml requires -DEBML_DLL],
+  ebml_check_msg_nodll="yes, without -DEBML_DLL"
+  ebml_check_msg_dll="yes, with -DEBML_DLL"
+
+  AC_CACHE_CHECK([if linking against libEBML works and if it requires -DEBML_DLL],
     [ac_cv_ebml_dll],[
       AC_LANG_PUSH(C++)
       ac_save_CXXFLAGS="$CXXFLAGS"
@@ -606,11 +609,11 @@ dnl
 using namespace libebml;
         ],
         [EbmlDummy d;],
-        ac_cv_ebml_dll=no,
+        ac_cv_ebml_dll="${ebml_check_msg_nodll}",
         ac_cv_ebml_dll="not found")
 
       if test x"${ac_cv_mingw32}" = "xyes" ; then
-        if test x"${ac_cv_ebml_dll}" != "xno" ; then
+        if test x"${ac_cv_ebml_dll}" != "x${ebml_check_msg_nodll}" ; then
           CXXFLAGS="$CXXFLAGS -DEBML_DLL"
           AC_TRY_LINK([
 #include <ebml/EbmlVersion.h>
@@ -619,7 +622,7 @@ using namespace libebml;
 using namespace libebml;
             ],
             [EbmlDummy d;],
-            ac_cv_ebml_dll=yes)
+            ac_cv_ebml_dll="${ebml_check_msg_dll}")
         fi
       fi
       AC_LANG_POP
@@ -627,12 +630,12 @@ using namespace libebml;
       LIBS="${ac_save_LIBS}"
     ])
 
-  if test x"${ac_cv_ebml_dll}" != "xyes" -a x"${ac_cv_ebml_dll}" != "xno" ; then
-    echo '*** libebml was not found.'
+  if test x"${ac_cv_ebml_dll}" != "x${ebml_check_msg_dll}" -a x"${ac_cv_ebml_dll}" != "x${ebml_check_msg_nodll}" ; then
+    echo '*** The libEBML library was not found.'
     exit 1
   fi
 
-  if test x"${ac_cv_ebml_dll}" = "xyes" ; then
+  if test x"${ac_cv_ebml_dll}" = "x${ebml_check_msg_dll}" ; then
     EBML_CFLAGS="$EBML_CFLAGS -DEBML_DLL"
   fi
 
@@ -646,7 +649,7 @@ dnl
   kax_ver_req_minor=8
   kax_ver_req_micro=0
 
-  AC_CACHE_CHECK([for libmatroska version >= ${kax_ver_req_major}.${kax_ver_req_minor}.${kax_ver_req_micro}],
+  AC_CACHE_CHECK([for libMatroska headers version >= ${kax_ver_req_major}.${kax_ver_req_minor}.${kax_ver_req_micro}],
     [ac_cv_matroska_found],
     [
 
@@ -699,12 +702,15 @@ using namespace libmatroska;
   ])
 
   if test x"${ac_cv_matroska_found}" != "xyes" ; then
-    echo '*** Your Matroska version is too old. Upgrade to at least version'
+    echo '*** Your libMatroska version is too old. Upgrade to at least version'
     echo '*** '${kax_ver_req_major}.${kax_ver_req_minor}.${kax_ver_req_micro}' and re-run configure.'
     exit 1
   fi
 
-  AC_CACHE_CHECK([if linking against libmatroska requires -DMATROSKA_DLL],
+  matroska_check_msg_nodll="yes, without -MATROSKA_DLL"
+  matroska_check_msg_dll="yes, with -DMATROSKA_DLL"
+
+  AC_CACHE_CHECK([if linking against libMatroska works and if it requires -DMATROSKA_DLL],
     [ac_cv_matroska_dll],[
       AC_LANG_PUSH(C++)
       ac_save_CXXFLAGS="$CXXFLAGS"
@@ -718,11 +724,11 @@ using namespace libmatroska;
 using namespace libmatroska;
         ],
         [KaxSegment s;],
-        ac_cv_matroska_dll=no,
+        ac_cv_matroska_dll="${matroska_check_msg_nodll}",
         ac_cv_matroska_dll="not found")
 
       if test x"${ac_cv_mingw32}" = "xyes" ; then
-        if test x"${ac_cv_matroska_dll}" != "xno" ; then
+        if test x"${ac_cv_matroska_dll}" != "x${matroska_check_msg_nodll}" ; then
           CXXFLAGS="$CXXFLAGS -DMATROSKA_DLL"
           AC_TRY_LINK([
 #include <matroska/KaxVersion.h>
@@ -731,7 +737,7 @@ using namespace libmatroska;
 using namespace libmatroska;
             ],
             [KaxSegment s;],
-            ac_cv_matroska_dll=yes)
+            ac_cv_matroska_dll="${matroska_check_msg_dll}")
         fi
       fi
       AC_LANG_POP
@@ -739,12 +745,12 @@ using namespace libmatroska;
       LIBS="${ac_save_LIBS}"
     ])
 
-  if test x"${ac_cv_matroska_dll}" != "xyes" -a x"${ac_cv_matroska_dll}" != "xno" ; then
-    echo '*** libmatroska was not found.'
+  if test x"${ac_cv_matroska_dll}" != "x${matroska_check_msg_nodll}" -a x"${ac_cv_matroska_dll}" != "x${matroska_check_msg_dll}" ; then
+    echo '*** The libMatroska library was not found.'
     exit 1
   fi
 
-  if test x"${ac_cv_matroska_dll}" = "xyes" ; then
+  if test x"${ac_cv_matroska_dll}" = "x${matroska_check_msg_dll}" ; then
     MATROSKA_CFLAGS="$MATROSKA_CFLAGS -DMATROSKA_DLL"
   fi
 
