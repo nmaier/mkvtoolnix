@@ -201,6 +201,8 @@ tab_attachments::on_attachment_selected(wxCommandEvent &evt) {
 
   selected_attachment = -1;
   new_sel = lb_attachments->GetSelection();
+  if (0 > new_sel)
+    return;
   a = &attachments[new_sel];
   tc_name->SetValue(a->stored_name);
   tc_description->SetValue(a->description);

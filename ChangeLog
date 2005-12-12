@@ -1,3 +1,9 @@
+2005-12-12  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: Fixed a crash that occured if the user removed an
+	attachment and clicked somewhere in the empty space in the
+	attachment list. Occured only on Windows.
+
 2005-12-10  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: Re-added Chinese to the list of popular languages
