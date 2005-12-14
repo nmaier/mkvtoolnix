@@ -1749,6 +1749,12 @@ mmg_dialog::set_output_maybe(const wxString &new_output) {
 }
 
 void
+mmg_dialog::remove_output_filename() {
+  if (settings_page->cb_autoset_output_filename->IsChecked())
+    tc_output->SetValue(wxT(""));
+}
+
+void
 mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
   wxString description, line;
   job_t job;

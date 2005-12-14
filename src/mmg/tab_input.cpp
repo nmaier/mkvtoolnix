@@ -1150,6 +1150,7 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
     st_tracks->Enable(false);
     clb_tracks->Enable(false);
     selected_track = -1;
+    mdlg->remove_output_filename();
   }
 
   dont_copy_values_now = false;
