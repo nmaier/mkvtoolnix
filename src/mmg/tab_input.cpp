@@ -1226,12 +1226,14 @@ tab_input::on_file_selected(wxCommandEvent &evt) {
   mmg_file_t *f;
   wxString label;
 
+  selected_file = -1;
+  new_sel = lb_input_files->GetSelection();
+  if (0 > new_sel)
+    return;
   b_remove_file->Enable(true);
   b_append_file->Enable(true);
-  selected_file = -1;
   old_track = selected_track;
   selected_track = -1;
-  new_sel = lb_input_files->GetSelection();
   f = &files[new_sel];
   if (f->container == FILE_TYPE_MATROSKA) {
     st_file_options->Enable(true);
