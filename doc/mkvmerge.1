@@ -144,6 +144,11 @@ File splitting and linking (more global options):
 .TP
 \fB\-\-split\fR timecodes:\fIA\fR[,\fIB\fR[,\fIC\fR...]]
 Splits the output file after a given size or a given time.
+Please note that tracks can only be split right before a key frame.
+Due to buffering \fBmkvmerge\fR will split right before the next
+key frame after the split point has been reached.
+Therefore the split point may be a bit off from what the user has specified.
+.br
 At the moment \fBmkvmerge\fR supports three different modes.
 .br
 1. Splitting by size.
