@@ -852,6 +852,30 @@ strip(vector<string> &v,
     strip(v[i], newlines);
 }
 
+string &
+shrink_whitespace(string &s) {
+  int i;
+  bool previous_was_whitespace;
+
+  i = 0;
+  previous_was_whitespace = false;
+  while (s.length() > i) {
+    if (!isblanktab(s[i])) {
+      previous_was_whitespace = false;
+      ++i;
+      continue;
+    }
+    if (previous_was_whitespace)
+      s.erase(i, 1);
+    else {
+      previous_was_whitespace = true;
+      ++i;
+    }
+  }
+
+  return s;
+}
+
 string
 escape(const string &source) {
   string dst;
@@ -1592,6 +1616,8 @@ parse_timecode(const string &src,
   //    by the letter 's',
   // 2. HH:MM:SS.nnnnnnnnn  with up to nine digits 'n' for ns precision;
   // HH: is optional; HH, MM and SS can be either one or two digits.
+  // 2. HH:MM:SS:nnnnnnnnn  with up to nine digits 'n' for ns precision;
+  // HH: is optional; HH, MM and SS can be either one or two digits.
   int h, m, s, n, i, values[4], num_values, num_digits, num_colons;
   bool decimal_point_found;
 
@@ -1625,6 +1651,18 @@ parse_timecode(const string &src,
       values[num_values - 1] = values[num_values - 1] * 10 + src[i] - '0';
       ++num_digits;
 
+    } else if (('.' == src[i]) ||
+               ((':' == src[i]) && (2 == num_colons))) {
+      if (decimal_point_found)
+        return set_tcp_error("Invalid format: Second decimal point after "
+                             "first decimal point");
+
+      if (0 == num_digits)
+        return set_tcp_error("Invalid format: No digits before decimal point");
+      ++num_values;
+      num_digits = 0;
+      decimal_point_found = true;
+
     } else if (':' == src[i]) {
       if (decimal_point_found)
         return set_tcp_error("Invalid format: Colon inside nano-second part");
@@ -1635,17 +1673,6 @@ parse_timecode(const string &src,
       ++num_colons;
       ++num_values;
       num_digits = 0;
-
-    } else if ('.' == src[i]) {
-      if (decimal_point_found)
-        return set_tcp_error("Invalid format: Second decimal point after "
-                             "first decimal point");
-
-      if (0 == num_digits)
-        return set_tcp_error("Invalid format: No digits before decimal point");
-      ++num_values;
-      num_digits = 0;
-      decimal_point_found = true;
 
     } else
       return set_tcp_error(mxsprintf("Invalid format: unknown character '%c' "

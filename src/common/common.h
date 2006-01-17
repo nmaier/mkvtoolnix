@@ -236,6 +236,7 @@ split(const string &src,
 string MTX_DLL_API join(const char *pattern, vector<string> &strings);
 void MTX_DLL_API strip(string &s, bool newlines = false);
 void MTX_DLL_API strip(vector<string> &v, bool newlines = false);
+string &MTX_DLL_API shrink_whitespace(string &s);
 string MTX_DLL_API escape(const string &src);
 string MTX_DLL_API unescape(const string &src);
 string MTX_DLL_API escape_xml(const string &src);

@@ -57,7 +57,7 @@ private:
   mm_io_c *sub_file;
   mm_text_io_c *idx_file;
   int version, ifo_data_size;
-  int64_t num_indices, indices_processed;
+  int64_t num_indices, indices_processed, delay;
   string idx_data;
 
   vector<vobsub_track_c *> tracks;

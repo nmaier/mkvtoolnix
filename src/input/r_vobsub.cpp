@@ -35,32 +35,8 @@ using namespace std;
                      tolower(c) == 'c' ? 12 : \
                      tolower(c) == 'd' ? 13 : \
                      tolower(c) == 'e' ? 14 : 15)
-#define istimecodestr(s)       (!strncmp(s, "timecode: ", 10))
-#define istimestampstr(s)      (!strncmp(s, "timestamp: ", 11))
-#define iscommafileposstr(s)   (!strncmp(s, ", filepos: ", 11))
-#define iscolon(s)             (*(s) == ':')
-#define istwodigits(s)         (isdigit(*(s)) && isdigit(*(s + 1)))
-#define isthreedigits(s)       (isdigit(*(s)) && isdigit(*(s + 1)) && \
-                                isdigit(*(s + 2)))
-#define istwodigitscolon(s)    (istwodigits(s) && iscolon(s + 2))
-#define istimecode(s)         (istwodigitscolon(s) && \
-                                istwodigitscolon(s + 3) && \
-                                istwodigitscolon(s + 6) && \
-                                isthreedigits(s + 9))
 #define ishexdigit(s)          (isdigit(s) || \
                                 (strchr("abcdefABCDEF", s) != NULL))
-#define isfilepos(s)           (ishexdigit(*(s)) && ishexdigit(*(s + 1)) && \
-                                ishexdigit(*(s + 2)) && \
-                                ishexdigit(*(s + 3)) && \
-                                ishexdigit(*(s + 4)) && \
-                                ishexdigit(*(s + 5)) && \
-                                ishexdigit(*(s + 6)) && \
-                                ishexdigit(*(s + 7)) && \
-                                ishexdigit(*(s + 8)))
-#define isvobsubline_v7(s)     ((strlen(s) >= 42) && \
-                                istimestampstr(s) && istimecode(s + 11) && \
-                                iscommafileposstr(s + 23) && \
-                                isfilepos(s + 34))
 
 #define PFX "vobsub_reader: "
 
@@ -90,7 +66,9 @@ vobsub_reader_c::probe_file(mm_io_c *io,
 
 vobsub_reader_c::vobsub_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(_ti) {
+  generic_reader_c(_ti),
+  delay(0) {
+
   string sub_name, line;
   int len;
 
@@ -207,9 +185,10 @@ vobsub_reader_c::parse_headers() {
   string line;
   const char *sline;
   string language;
+  vector<string> parts;
   vobsub_track_c *track;
   int64_t filepos, timestamp, line_no, last_timestamp;
-  int hour, minute, second, msecond, idx, lang_index;
+  int factor, idx, lang_index;
   uint32_t i, k, tsize;
   vobsub_entry_c entry;
   bool sort_required;
@@ -265,29 +244,75 @@ vobsub_reader_c::parse_headers() {
         !strncasecmp(sline, "langidx:", 8))
       continue;
 
-    if ((version == 7) && isvobsubline_v7(sline)) {
+    if (starts_with_case(line, "delay:")) {
+      line.erase(0, 6);
+      strip(line);
+
+      if (!parse_timecode(line, timestamp))
+        mxerror(PFX "'%s', line " LLD ": The 'delay' timestamp could not be "
+                "parsed.\n", ti.fname.c_str(), line_no);
+      delay = timestamp;
+    }
+
+    if ((version == 7) && starts_with_case(line, "timestamp:")) {
       if (track == NULL)
         mxerror(PFX ".idx file does not contain an 'id: ...' line to indicate "
                 "the language.\n");
 
-      idx = 34;
+      strip(line);
+      shrink_whitespace(line);
+      parts = split(line.c_str(), " ");
+//       for (int asd = 0; asd < parts.size(); asd++) {
+//         mxinfo("ASD: %s ", parts[asd].c_str());
+//       }
+//       mxinfo("\n");
+//       mxexit(0);
+      if ((4 != parts.size()) ||
+          (13 > parts[1].length()) ||
+          (downcase(parts[2]) != "filepos:")) {
+        mxwarn(PFX "'%s', line " LLD ": The line seems to be a subtitle entry "
+               "but the format couldn't be recognized. This entry will be "
+               "skipped.\n", ti.fname.c_str(), line_no);
+        continue;
+      }
+
+      idx = 0;
+      sline = parts[3].c_str();
       filepos = hexvalue(sline[idx]);
       idx++;
-      while ((idx < line.length()) && ishexdigit(sline[idx])) {
-        filepos = filepos * 16 + hexvalue(sline[idx]);
+      while ((0 != sline[idx]) && ishexdigit(sline[idx])) {
+        filepos = (filepos << 4) + hexvalue(sline[idx]);
         idx++;
       }
       entry.position = filepos;
 
-      sscanf(&sline[11], "%02d:%02d:%02d:%03d", &hour, &minute, &second,
-             &msecond);
-      timestamp = (int64_t)hour * 60 * 60 * 1000 +
-        (int64_t)minute * 60 * 1000 + (int64_t)second * 1000 +
-        (int64_t)msecond;
-      entry.timestamp = timestamp * 1000000;
+      parts[1].erase(parts[1].length() - 1);
+      factor = 1;
+      if ('-' == parts[1][0]) {
+        factor = -1;
+        parts[1].erase(0, 1);
+      }
+
+      if (!parse_timecode(parts[1], timestamp)) {
+        mxwarn(PFX "'%s', line " LLD ": The line seems to be a subtitle entry "
+               "but the format couldn't be recognized. This entry will be "
+               "skipped.\n", ti.fname.c_str(), line_no);
+        continue;
+      }
+
+      entry.timestamp = timestamp * factor + delay;
+
+      if (0 > entry.timestamp) {
+        mxwarn(PFX "'%s', line " LLD ": The line seems to be a subtitle entry "
+               "but the timecode was negative even after adding the track "
+               "delay. Negative timecodes are not supported in Matroska. "
+               "This entry will be skipped.\n", ti.fname.c_str(), line_no);
+        continue;
+      }
+
       track->entries.push_back(entry);
 
-      if ((timestamp < last_timestamp) &&
+      if ((entry.timestamp < last_timestamp) &&
           demuxing_requested('s', tracks.size())) {
         mxwarn(PFX "'%s', line " LLD ": The current timestamp (" FMT_TIMECODE
                ") is smaller than the last one (" FMT_TIMECODE"). mkvmerge "
@@ -295,10 +320,10 @@ vobsub_reader_c::parse_headers() {
                "might result in the wrong order for some subtitle entries. If "
                "this is the case then you have to fix the .idx file "
                "manually.\n", ti.fname.c_str(), line_no,
-               ARG_TIMECODE(timestamp), ARG_TIMECODE(last_timestamp));
+               ARG_TIMECODE(entry.timestamp), ARG_TIMECODE(last_timestamp));
         sort_required = true;
       }
-      last_timestamp = timestamp;
+      last_timestamp = entry.timestamp;
 
       continue;
     }
