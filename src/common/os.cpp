@@ -22,6 +22,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 
 using namespace std;
 
@@ -39,7 +40,8 @@ using namespace std;
    Additional code by Alexander Noé <alexander.noe@s2001.tu-chemnitz.de>
 */
 
-#include <windows.h>
+# include <io.h>
+# include <windows.h>
 
 static unsigned
 Utf8ToUtf16(const char *utf8,
@@ -122,6 +124,35 @@ Utf8ToUtf16(const char *utf8,
   return (unsigned)(d - utf16);
 }
 
+static bool
+win32_is_unicode_possible() {
+  OSVERSIONINFOEX ovi;
+
+  ovi.dwOSVersionInfoSize = sizeof(ovi);
+  GetVersionEx((OSVERSIONINFO *)&ovi);
+  return ovi.dwPlatformId == VER_PLATFORM_WIN32_NT;
+}
+
+static char *
+win32_wide_to_multi(const wchar_t *wbuffer) {
+  int reqbuf = WideCharToMultiByte(CP_ACP, 0, wbuffer, -1, NULL, 0, NULL,
+                                   NULL);
+  char *buffer = new char[reqbuf];
+  WideCharToMultiByte(CP_ACP, 0, wbuffer, -1, buffer, reqbuf, NULL, NULL);
+
+  return buffer;
+}
+
+static wchar_t *
+win32_utf8_to_utf16(const char *s) {
+  int wreqbuf = Utf8ToUtf16(s, -1, NULL, 0);
+  wchar_t *wbuffer = new wchar_t[wreqbuf];
+
+  Utf8ToUtf16(s, -1, wbuffer, wreqbuf);
+
+  return wbuffer;
+}
+
 HANDLE
 CreateFileUtf8(LPCSTR lpFileName,
                DWORD dwDesiredAccess,
@@ -130,27 +161,16 @@ CreateFileUtf8(LPCSTR lpFileName,
                DWORD dwCreationDisposition,
                DWORD dwFlagsAndAttributes,
                HANDLE hTemplateFile) {
-  OSVERSIONINFOEX ovi;
-  bool unicode_possible;
   HANDLE ret;
   // convert the name to wide chars
-  int wreqbuf = Utf8ToUtf16(lpFileName, -1, NULL, 0);
-  wchar_t *wbuffer = new wchar_t[wreqbuf];
-  Utf8ToUtf16(lpFileName, -1, wbuffer, wreqbuf);
+  wchar_t *wbuffer = win32_utf8_to_utf16(lpFileName);
 
-  ovi.dwOSVersionInfoSize = sizeof(ovi);
-  GetVersionEx((OSVERSIONINFO *)&ovi);
-  unicode_possible = ovi.dwPlatformId == VER_PLATFORM_WIN32_NT;
-
-  if (unicode_possible)
+  if (win32_is_unicode_possible())
     ret = CreateFileW(wbuffer, dwDesiredAccess, dwShareMode,
                       lpSecurityAttributes, dwCreationDisposition,
                       dwFlagsAndAttributes, hTemplateFile);
   else {
-    int reqbuf = WideCharToMultiByte(CP_ACP, 0, wbuffer, -1, NULL, 0, NULL,
-                                     NULL);
-    char *buffer = new char[reqbuf];
-    WideCharToMultiByte(CP_ACP, 0, wbuffer, -1, buffer, reqbuf, NULL, NULL);
+    char *buffer = win32_wide_to_multi(wbuffer);
     ret = CreateFileA(buffer, dwDesiredAccess, dwShareMode,
                       lpSecurityAttributes, dwCreationDisposition,
                       dwFlagsAndAttributes, hTemplateFile);
@@ -165,36 +185,50 @@ CreateFileUtf8(LPCSTR lpFileName,
 
 void
 create_directory(const char *path) {
-  int wreqbuf = Utf8ToUtf16(path, -1, NULL, 0);
-  wchar_t *wbuffer = new wchar_t[wreqbuf];
-  Utf8ToUtf16(path, -1, wbuffer, wreqbuf);
+  wchar_t *wbuffer = win32_utf8_to_utf16(path);
+  int result;
 
-  if (0 != _wmkdir(wbuffer))
-    throw (error_c(mxsprintf("mkdir(%s) failed; errno = %d (%s)",
-                             path, errno, strerror(errno))));
+  if (win32_is_unicode_possible())
+    result = _wmkdir(wbuffer);
+
+  else {
+    char *buffer = win32_wide_to_multi(wbuffer);
+    result = _mkdir(buffer);
+
+    delete []buffer;
+  }
 
   delete []wbuffer;
+
+  if (0 != result)
+    throw (error_c(mxsprintf("mkdir(%s) failed; errno = %d (%s)",
+                             path, errno, strerror(errno))));
 }
 
 int
 fs_entry_exists(const char *path) {
-  int wreqbuf = Utf8ToUtf16(path, -1, NULL, 0);
-  wchar_t *wbuffer = new wchar_t[wreqbuf];
+  wchar_t *wbuffer = win32_utf8_to_utf16(path);
   struct _stat s;
   int result;
 
-  Utf8ToUtf16(path, -1, wbuffer, wreqbuf);
-  result = 0 == _wstat(wbuffer, &s);
+  if (win32_is_unicode_possible())
+    result = _wstat(wbuffer, &s);
+
+  else {
+    char *buffer = win32_wide_to_multi(wbuffer);
+
+    result = _stat(buffer, &s);
+    delete []buffer;
+  }
 
   delete []wbuffer;
 
-  return result;
+  return 0 == result;
 }
 
 #else // SYS_WINDOWS
 
 # include <sys/types.h>
-# include <sys/stat.h>
 # include <unistd.h>
 
 void
