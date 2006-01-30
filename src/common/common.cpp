@@ -20,9 +20,7 @@
 #include <ctype.h>
 #include <errno.h>
 #include <iconv.h>
-#if defined(COMP_MSC)
-# include <libcharset.h>
-#elif HAVE_NL_LANGINFO
+#if HAVE_NL_LANGINFO
 # include <langinfo.h>
 #elif HAVE_LOCALE_CHARSET
 # include <libcharset.h>

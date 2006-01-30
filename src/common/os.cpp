@@ -42,6 +42,7 @@ using namespace std;
 
 # include <io.h>
 # include <windows.h>
+# include <direct.h>
 
 static unsigned
 Utf8ToUtf16(const char *utf8,
