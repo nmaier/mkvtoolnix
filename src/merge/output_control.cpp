@@ -90,6 +90,7 @@
 #include "r_vobsub.h"
 #include "r_wav.h"
 #include "r_wavpack.h"
+#include "r_corepicture.h"
 #include "tag_common.h"
 #include "xml_element_mapping.h"
 
@@ -356,6 +357,8 @@ get_file_type(filelist_t &file) {
       type = FILE_TYPE_SSA;
     else if (vobsub_reader_c::probe_file(text_io, size))
       type = FILE_TYPE_VOBSUB;
+    else if (corepicture_reader_c::probe_file(text_io, size))
+      type = FILE_TYPE_COREPICTURE;
     else if (usf_reader_c::probe_file(text_io, size))
       type = FILE_TYPE_USF;
     else
@@ -1096,6 +1099,9 @@ create_readers() {
           break;
         case FILE_TYPE_USF:
           file->reader = new usf_reader_c(*file->ti);
+          break;
+        case FILE_TYPE_COREPICTURE:
+          file->reader = new corepicture_reader_c(*file->ti);
           break;
         case FILE_TYPE_WAV:
           file->reader = new wav_reader_c(*file->ti);
