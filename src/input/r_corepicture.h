@@ -42,14 +42,17 @@ enum corepicture_panorama_type {
   COREPICTURE_PAN_UNKNOWN
 };
 
+const uint32 COREPICTURE_USE_JPEG = (1 << 0);
+const uint32 COREPICTURE_USE_PNG  = (1 << 1);
+
 struct corepicture_pic_t {
-  int64_t m_time;
+  int64_t m_time, m_end_time;
   string m_url;
   corepicture_pic_type m_pic_type;
   corepicture_panorama_type m_pan_type;
 
   corepicture_pic_t():
-    m_time(-1), m_pic_type(COREPICTURE_TYPE_UNKNOWN),
+    m_time(-1), m_end_time(-1), m_pic_type(COREPICTURE_TYPE_UNKNOWN),
     m_pan_type(COREPICTURE_PAN_UNKNOWN)
   {}
 

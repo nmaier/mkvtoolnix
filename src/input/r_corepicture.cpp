@@ -130,6 +130,8 @@ corepicture_reader_c::start_element_cb(const char *name,
     for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2) {
       if (!strcasecmp(atts[i], "time") && (0 != atts[i + 1][0])) {
         new_picture.m_time = try_to_parse_timecode(atts[i + 1]);
+      } else if (!strcasecmp(atts[i], "end") && (0 != atts[i + 1][0])) {
+        new_picture.m_end_time = try_to_parse_timecode(atts[i + 1]);
       } else if (!strcasecmp(atts[i], "type") && (0 != atts[i + 1][0])) {
         if (!strcasecmp(atts[i + 1], "jpeg") || !strcasecmp(atts[i + 1], "jpg"))
           new_picture.m_pic_type = COREPICTURE_TYPE_JPEG;
@@ -176,6 +178,22 @@ corepicture_reader_c::end_element_cb(const char *name) {
 
 void
 corepicture_reader_c::create_packetizer(int64_t tid) {
+  uint8 private_buffer[5];
+  uint32 codec_used = 0;
+  vector<corepicture_pic_t>::const_iterator picture;
+
+  private_buffer[0] = 0; // version 0
+
+  foreach(picture, m_pictures) {
+    if (COREPICTURE_TYPE_JPEG == picture->m_pic_type)
+      codec_used |= COREPICTURE_USE_JPEG;
+    else if (COREPICTURE_TYPE_PNG == picture->m_pic_type)
+      codec_used |= COREPICTURE_USE_PNG;
+  }
+  put_uint32_be(&private_buffer[1], codec_used);
+
+  ti.private_data = (unsigned char *)safememdup(private_buffer, sizeof(private_buffer));
+  ti.private_size = sizeof(private_buffer);
   m_ptzr = add_packetizer(new video_packetizer_c(this, MKV_V_COREPICTURE, 0.0,
                                                  m_width, m_height, ti));
 }
@@ -193,10 +211,18 @@ corepicture_reader_c::read(generic_packetizer_c *ptzr,
       put_uint32_be(&buffer[2], m_current_picture->m_pan_type);
       buffer[6] = m_current_picture->m_pic_type;
       uint32_t bytes_read = io->read(&buffer[7], size);
-      if (bytes_read != 0)
-        PTZR(m_ptzr)->process(new packet_t(new memory_c(buffer, 7 + bytes_read,
-                                                        false),
-                                           m_current_picture->m_time));
+      if (bytes_read != 0) {
+        if (m_current_picture->m_end_time == -1)
+          PTZR(m_ptzr)->process(new packet_t(new memory_c(buffer, 7 + bytes_read,
+                                                          false),
+                                             m_current_picture->m_time));
+        else
+          PTZR(m_ptzr)->process(new packet_t(new memory_c(buffer, 7 + bytes_read,
+                                                          false),
+                                             m_current_picture->m_time,
+                                             m_current_picture->m_end_time -
+                                             m_current_picture->m_time));
+      }
 
     } catch(...) {
       mxerror(FMT_TID "Impossible to use file '%s': The file could not be "
