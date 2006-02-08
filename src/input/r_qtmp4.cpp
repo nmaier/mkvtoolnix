@@ -119,7 +119,8 @@ qtmp4_reader_c::~qtmp4_reader_c() {
 }
 
 qt_atom_t
-qtmp4_reader_c::read_atom(mm_io_c *read_from) {
+qtmp4_reader_c::read_atom(mm_io_c *read_from,
+                          bool exit_on_error) {
   qt_atom_t a;
 
   if (NULL == read_from)
@@ -134,8 +135,12 @@ qtmp4_reader_c::read_atom(mm_io_c *read_from) {
     a.hsize += 8;
   } else if (a.size == 0)
     a.size = file_size - read_from->getFilePointer() + 8;
-  if (a.size < a.hsize)
-    mxerror(PFX "Invalid chunk size " LLU " at " LLU ".\n", a.size, a.pos);
+  if (a.size < a.hsize) {
+    if (exit_on_error)
+      mxerror(PFX "Invalid chunk size " LLU " at " LLU ".\n", a.size, a.pos);
+    else
+      throw false;
+  }
 
   return a;
 }
@@ -455,7 +460,12 @@ qtmp4_reader_c::parse_video_header_priv_atoms(qtmp4_demuxer_ptr &dmx,
     while (!mio.eof() && (mio.getFilePointer() < size)) {
       qt_atom_t atom;
 
-      atom = read_atom(&mio);
+      try {
+        atom = read_atom(&mio);
+      } catch (...) {
+        return;
+      }
+
       mxverb(2, PFX "%*sVideo private data size: %u, type: "
              "'%c%c%c%c'\n", (level + 1) * 2, "", (unsigned int)atom.size,
              BE2STR(atom.fourcc));
@@ -496,7 +506,11 @@ qtmp4_reader_c::parse_audio_header_priv_atoms(qtmp4_demuxer_ptr &dmx,
     while (!mio.eof() && (mio.getFilePointer() < (size - 8))) {
       qt_atom_t atom;
 
-      atom = read_atom(&mio);
+      try {
+        atom = read_atom(&mio, false);
+      } catch (...) {
+        return;
+      }
 
       if (FOURCC('e', 's', 'd', 's') != atom.fourcc) {
         mio.setFilePointer(atom.pos + 4);

@@ -205,7 +205,8 @@ public:
 
 protected:
   virtual void parse_headers();
-  virtual qt_atom_t read_atom(mm_io_c *read_from = NULL);
+  virtual qt_atom_t read_atom(mm_io_c *read_from = NULL,
+                              bool exit_on_error = true);
   virtual void parse_video_header_priv_atoms(qtmp4_demuxer_ptr &dmx,
                                              unsigned char *mem, int size,
                                              int level);
