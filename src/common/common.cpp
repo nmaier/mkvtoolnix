@@ -738,6 +738,9 @@ _saferealloc(void *mem,
              size_t size,
              const char *file,
              int line) {
+  if (0 == size)
+    // Do this so realloc() may not return NULL on success.
+    size = 1;
   mem = realloc(mem, size);
   if (mem == NULL)
     die("common.cpp/saferealloc() called from file %s, line %d: realloc() "
