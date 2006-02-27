@@ -160,6 +160,7 @@ struct qtmp4_demuxer_t {
   }
 
   double calculate_fps();
+  int64_t to_nsecs(int64_t value);
 };
 typedef counted_ptr<qtmp4_demuxer_t> qtmp4_demuxer_ptr;
 

@@ -1236,12 +1236,11 @@ qtmp4_reader_c::handle_video_with_bframes(qtmp4_demuxer_ptr &dmx,
   is_bframe = false;
 
   if (dmx->pos == 0)
-    dmx->v_dts_offset = (int64_t)dmx->frame_offset_table[0] *
-      1000000000 / dmx->time_scale;
+    dmx->v_dts_offset = dmx->to_nsecs(dmx->frame_offset_table[0]);
 
   old_timecode = timecode;
-  timecode += (int64_t)dmx->frame_offset_table[dmx->pos] *
-    1000000000 / dmx->time_scale - dmx->v_dts_offset;
+  timecode += dmx->to_nsecs(dmx->frame_offset_table[dmx->pos]) -
+    dmx->v_dts_offset;
 
   PTZR(dmx->ptzr)->process(new packet_t(mem, timecode, duration, bref, fref));
 }
@@ -1267,9 +1266,9 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
         continue;
 
       io->setFilePointer(dmx->chunk_table[dmx->pos].pos);
-      timecode = 1000000000 *
-        ((uint64_t)dmx->chunk_table[dmx->pos].samples *
-         (uint64_t)dmx->duration) / (uint64_t)dmx->time_scale;
+      timecode =
+        dmx->to_nsecs((uint64_t)dmx->chunk_table[dmx->pos].samples *
+                      (uint64_t)dmx->duration);
 
       if (dmx->sample_size != 1) {
         if (!dmx->warning_printed) {
@@ -1315,10 +1314,9 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
       }
 
       if ((dmx->pos + 1) < dmx->chunk_table.size())
-        duration = 1000000000 *
-          ((uint64_t)dmx->chunk_table[dmx->pos + 1].samples *
-           (uint64_t)dmx->duration) /
-          (uint64_t)dmx->time_scale - timecode;
+        duration =
+          dmx->to_nsecs((uint64_t)dmx->chunk_table[dmx->pos + 1].samples *
+                        (uint64_t)dmx->duration);
       else
         duration = dmx->avg_duration;
       dmx->avg_duration = (dmx->avg_duration * dmx->pos + duration) /
@@ -1360,17 +1358,14 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
 
         // calc pts:
         timecode =
-          (dmx->sample_table[frame].pts +
-           dmx->editlist_table[dmx->editlist_pos].pts_offset) *
-          1000000000ll / dmx->time_scale;
+          dmx->to_nsecs(dmx->sample_table[frame].pts +
+                        dmx->editlist_table[dmx->editlist_pos].pts_offset);
 
       } else
-        timecode = dmx->sample_table[frame].pts * 1000000000llu /
-          dmx->time_scale;
+        timecode = dmx->to_nsecs(dmx->sample_table[frame].pts);
 
       if ((frame + 1) < dmx->sample_table.size())
-        duration = dmx->sample_table[frame + 1].pts * 1000000000llu /
-          dmx->time_scale - timecode;
+        duration = dmx->to_nsecs(dmx->sample_table[frame + 1].pts) - timecode;
       else
         duration = dmx->avg_duration;
       dmx->avg_duration = (dmx->avg_duration * frame + duration) /
@@ -1807,8 +1802,8 @@ qtmp4_demuxer_t::calculate_fps() {
     for (i = 0; i < sample_table.size(); ++i) {
       int64_t timecode;
 
-      timecode = ((int64_t)sample_table[i].pts +
-                  (int64_t)frame_offset_table[pos]) * 1000000000 / time_scale;
+      timecode = to_nsecs((int64_t)sample_table[i].pts +
+                          (int64_t)frame_offset_table[pos]);
       if (timecode > max_tc)
         max_tc = timecode;
     }
@@ -1840,3 +1835,17 @@ qtmp4_demuxer_t::calculate_fps() {
   return 0.0;
 }
 
+int64_t
+qtmp4_demuxer_t::to_nsecs(int64_t value) {
+  int i;
+
+  for (i = 1; i <= 100000000ll; i *= 10) {
+    int64_t factor = 1000000000ll / i;
+    int64_t value_up = value * factor;
+
+    if ((value_up / factor) == value)
+      return value_up / (time_scale / (1000000000ll / factor));
+  }
+
+  return value / (time_scale / 1000000000ll);
+}

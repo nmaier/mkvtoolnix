@@ -2,7 +2,9 @@
 
 	* mkvmerge: bug fix: Quicktime/MP4 reader: Added support for
 	version 1 media headers ('mdhd' atom) with 64bit fields. Fixed the
-	duration of the last packet passed downstream.
+	duration of the last packet passed downstream. Fixed overflow
+	issues during re-scaling from the Quicktime/MP4's time scale to
+	nano seconds used by mkvmerge.
 
 2006-01-18  Moritz Bunkus  <moritz@bunkus.org>
 
