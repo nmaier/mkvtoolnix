@@ -1497,7 +1497,10 @@ tab_chapters::on_adjust_timecodes(wxCommandEvent &evt) {
                           "children by a fixed amount.\nThe amount can be "
                           "positive or negative. The format used can be\n"
                           "either just a number in which case it is inter"
-                          "preted as the number of seconds,\nor it can have "
+                          "preted as the number of seconds,\n"
+                          "it can be followed by the unit like 'ms' or 's' "
+                          "for milliseconds and seconds respectively,\n"
+                          "or it can have "
                           "the usual HH:MM:SS.mmm or HH:MM:SS format.\n"
                           "Example: -00:05:23 would let all the chpaters "
                           "begin\n5minutes and 23seconds earlier than now."),

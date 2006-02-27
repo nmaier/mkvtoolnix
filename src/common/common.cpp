@@ -1613,8 +1613,8 @@ bool
 parse_timecode(const string &src,
                int64_t &timecode) {
   // Recognized format:
-  // 1. XXXXXXXs   with XXXXXX being a number of seconds followed
-  //    by the letter 's',
+  // 1. XXXXXXXu   with XXXXXX being a number followed
+  //    by one of the units 's', 'ms', 'us' or 'ns'
   // 2. HH:MM:SS.nnnnnnnnn  with up to nine digits 'n' for ns precision;
   // HH: is optional; HH, MM and SS can be either one or two digits.
   // 2. HH:MM:SS:nnnnnnnnn  with up to nine digits 'n' for ns precision;
@@ -1625,17 +1625,37 @@ parse_timecode(const string &src,
   if (src.empty())
     return false;
 
-  // Number of seconds postfixed by 's'.
-  if ('s' == src[src.length() - 1]) {
-    string tmp = src;
+  try {
+    if (src.length() < 2)
+      throw false;
 
-    tmp.erase(tmp.length() - 1);
-    if (!parse_int(tmp, timecode))
-      return set_tcp_error("Non-digits found but expected a nunber of seconds "
-                           "before the 's' at the end");
+    string unit = src.substr(src.length() - 2, 2);
 
-    timecode *= 1000000000ll;
+    int64_t multiplier = 1000000000;
+    int unit_length = 2;
+    int64_t value = 0;
+
+    if (unit == "ms")
+      multiplier = 1000000;
+    else if (unit == "us")
+      multiplier = 1000;
+    else if (unit == "ns")
+      multiplier = 1;
+    else if (unit.substr(1, 1) == "s")
+      unit_length = 1;
+    else
+      throw false;
+
+    if (src.length() < (unit_length + 1))
+      throw false;
+
+    if (!parse_int(src.substr(0, src.length() - unit_length), value))
+      throw false;
+
+    timecode = value * multiplier;
+
     return true;
+  } catch (...) {
   }
 
   num_digits = 0;

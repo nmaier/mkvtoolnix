@@ -1,8 +1,12 @@
 2006-02-27  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: mkvmerge will no longer refuse to concatenate files
-	with differing Codec Private contents and only issue a warning in
-	such cases.
+	* mmg: enhancement: The 'adjust timecodes' function accepts
+	timecodes like 'XXXXXunit' with 'unit' being 'ms', 'us', 'ns' or
+	's'.
+
+	* mkvmerge: enhancement: mkvmerge will no longer refuse to
+	concatenate files with differing Codec Private contents and only
+	issue a warning in such cases.
 
 	* mkvmerge: bug fix: Quicktime/MP4 reader: Added support for
 	version 1 media headers ('mdhd' atom) with 64bit fields. Fixed the
