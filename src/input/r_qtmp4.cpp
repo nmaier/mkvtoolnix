@@ -314,7 +314,8 @@ qtmp4_reader_c::parse_headers() {
 
 void
 qtmp4_reader_c::update_tables(qtmp4_demuxer_ptr &dmx) {
-  uint32_t last, i, j, s, pts;
+  uint64_t last, s, pts;
+  int i, j;
 
   last = dmx->chunk_table.size();
 
@@ -397,6 +398,12 @@ qtmp4_reader_c::update_tables(qtmp4_demuxer_ptr &dmx) {
   mxverb(3, PFX "Frame offset table: %u entries\n",
          (unsigned int)dmx->frame_offset_table.size());
 
+  mxverb(4, PFX "Sample table contents: %u entries\n", dmx->sample_table.size());
+  for (i = 0; i < dmx->sample_table.size(); i++) {
+    qt_sample_t &sample = dmx->sample_table[i];
+    mxverb(4, PFX "  %d: pts " LLU " size %u pos " LLU "\n", i,
+           sample.pts, sample.size, sample.pos);
+  }
   update_editlist_table(dmx);
 }
 
@@ -442,7 +449,7 @@ qtmp4_reader_c::update_editlist_table(qtmp4_demuxer_ptr &dmx) {
     el.frames = sample - el.start_sample;
     frame += el.frames;
 
-    mxverb(4, "  %d: pts: %u  1st_sample: " LLU "  frames: %u (%5.3fs)  "
+    mxverb(4, "  %d: pts: " LLU "  1st_sample: " LLU "  frames: %u (%5.3fs)  "
            "pts_offset: " LLD "\n", i,
            el.pos, el.start_sample,  el.frames,
            (float)(el.duration) / (float)time_scale, el.pts_offset);
@@ -689,18 +696,54 @@ void
 qtmp4_reader_c::handle_mdhd_atom(qtmp4_demuxer_ptr &new_dmx,
                                  qt_atom_t atom,
                                  int level) {
-  mdhd_atom_t mdhd;
+  int version;
 
-  if (atom.size < sizeof(mdhd_atom_t))
+  if (atom.size < 1)
     mxerror(PFX "'mdhd' atom is too small. Expected size: >= %u. Actual "
             "size: " LLD ".\n", (unsigned int)sizeof(mdhd_atom_t), atom.size);
-  if (io->read(&mdhd, sizeof(mdhd_atom_t)) != sizeof(mdhd_atom_t))
-    throw error_c("end-of-file");
-  mxverb(2, PFX "%*s Time scale: %u, duration: %u\n", level * 2, "",
-         get_uint32_be(&mdhd.time_scale),
-         get_uint32_be(&mdhd.duration));
-  new_dmx->time_scale = get_uint32_be(&mdhd.time_scale);
-  new_dmx->global_duration = get_uint32_be(&mdhd.duration);
+
+  version = io->read_uint8();
+
+  if (0 == version) {
+    mdhd_atom_t mdhd;
+
+    if (atom.size < sizeof(mdhd_atom_t))
+      mxerror(PFX "'mdhd' atom is too small. Expected size: >= %u. Actual "
+              "size: " LLD ".\n", (unsigned int)sizeof(mdhd_atom_t),
+              atom.size);
+    if (io->read(&mdhd.flags, sizeof(mdhd_atom_t) - 1) !=
+        (sizeof(mdhd_atom_t) - 1))
+      throw error_c("end-of-file");
+
+    mxverb(2, PFX "%*s Time scale: %u, duration: %u\n", level * 2, "",
+           get_uint32_be(&mdhd.time_scale),
+           get_uint32_be(&mdhd.duration));
+    new_dmx->time_scale = get_uint32_be(&mdhd.time_scale);
+    new_dmx->global_duration = get_uint32_be(&mdhd.duration);
+
+  } else if (1 == version) {
+    mdhd64_atom_t mdhd;
+
+    if (atom.size < sizeof(mdhd64_atom_t))
+      mxerror(PFX "'mdhd' atom is too small. Expected size: >= %u. Actual "
+              "size: " LLD ".\n", (unsigned int)sizeof(mdhd64_atom_t),
+              atom.size);
+    if (io->read(&mdhd.flags, sizeof(mdhd64_atom_t) - 1) !=
+        (sizeof(mdhd64_atom_t) - 1))
+      throw error_c("end-of-file");
+
+    mxverb(2, PFX "%*s Time scale: %u, duration: " LLU "\n", level * 2, "",
+           get_uint32_be(&mdhd.time_scale),
+           get_uint64_be(&mdhd.duration));
+    new_dmx->time_scale = get_uint32_be(&mdhd.time_scale);
+    new_dmx->global_duration = get_uint64_be(&mdhd.duration);
+
+  } else
+    mxerror(PFX "The 'media header' atom ('mdhd') uses the unsupported "
+            "version %d.\n", version);
+
+  if (0 == new_dmx->time_scale)
+    mxerror(PFX "The 'time scale' parameter was 0. This is not supported.\n");
 }
 
 void
@@ -793,7 +836,7 @@ qtmp4_reader_c::handle_mvhd_atom(qt_atom_t atom,
   if (io->read(&mvhd, sizeof(mvhd_atom_t)) != sizeof(mvhd_atom_t))
     throw error_c("end-of-file");
   time_scale = get_uint32_be(&mvhd.time_scale);
-  mxverb(2, PFX "%*s Time scale: %u\n", level * 2, "", time_scale);
+  mxverb(2, PFX "%*s Time scale: %un", level * 2, "", time_scale);
 }
 
 void
@@ -1133,8 +1176,8 @@ qtmp4_reader_c::handle_elst_atom(qtmp4_demuxer_ptr &new_dmx,
   mxverb(2, PFX "%*sEdit list table: %u entries\n", level * 2, "",
          count);
   for (i = 0; i < count; ++i)
-    mxverb(4, PFX "%*s%u: duration %u pos %u speed %u\n", (level + 1) * 2, "",
-           i, new_dmx->editlist_table[i].duration,
+    mxverb(4, PFX "%*s%u: duration " LLU " pos " LLU " speed %u\n",
+           (level + 1) * 2, "", i, new_dmx->editlist_table[i].duration,
            new_dmx->editlist_table[i].pos, new_dmx->editlist_table[i].speed);
 }
 
@@ -1322,11 +1365,11 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
           1000000000ll / dmx->time_scale;
 
       } else
-        timecode = (int64_t)dmx->sample_table[frame].pts * 1000000000 /
+        timecode = dmx->sample_table[frame].pts * 1000000000llu /
           dmx->time_scale;
 
       if ((frame + 1) < dmx->sample_table.size())
-        duration = (int64_t)dmx->sample_table[frame + 1].pts * 1000000000 /
+        duration = dmx->sample_table[frame + 1].pts * 1000000000llu /
           dmx->time_scale - timecode;
       else
         duration = dmx->avg_duration;

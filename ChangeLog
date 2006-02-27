@@ -1,3 +1,9 @@
+2006-02-27  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Quicktime/MP4 reader: Added support for
+	version 1 media headers ('mdhd' atom) with 64bit fields. Fixed the
+	duration of the last packet passed downstream.
+
 2006-01-18  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Muxing wasn't working Windows 9x/ME because

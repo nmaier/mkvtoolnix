@@ -61,7 +61,7 @@ typedef struct PACKED_STRUCTURE {
 
 // 'Media header' atom
 typedef struct PACKED_STRUCTURE {
-  uint8_t version;
+  uint8_t version;              // == 0
   uint8_t flags[3];
   uint32_t creation_time;
   uint32_t modification_time;
@@ -70,6 +70,18 @@ typedef struct PACKED_STRUCTURE {
   uint16_t language;
   uint16_t quality;
 } mdhd_atom_t;
+
+// 'Media header' atom, 64bit version
+typedef struct PACKED_STRUCTURE {
+  uint8_t version;              // == 1
+  uint8_t flags[3];
+  uint64_t creation_time;
+  uint64_t modification_time;
+  uint32_t time_scale;
+  uint64_t duration;
+  uint16_t language;
+  uint16_t quality;
+} mdhd64_atom_t;
 
 // 'Handler reference' atom
 typedef struct PACKED_STRUCTURE {

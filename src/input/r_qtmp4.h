@@ -56,8 +56,8 @@ struct qt_chunkmap_t {
 };
 
 struct qt_editlist_t {
-  uint32_t duration;
-  uint32_t pos;
+  uint64_t duration;
+  uint64_t pos;
   uint32_t speed;
   uint32_t frames;
   uint64_t start_sample;
@@ -70,7 +70,7 @@ struct qt_editlist_t {
 };
 
 struct qt_sample_t {
-  uint32_t pts;
+  uint64_t pts;
   uint32_t size;
   uint64_t pos;
 
@@ -95,11 +95,11 @@ struct qtmp4_demuxer_t {
   uint32_t pos;
 
   uint32_t time_scale;
-  uint32_t global_duration;
-  uint32_t avg_duration;
+  uint64_t global_duration;
+  uint64_t avg_duration;
   uint32_t sample_size;
 
-  uint32_t duration;
+  uint64_t duration;
 
   vector<qt_sample_t> sample_table;
   vector<qt_chunk_t> chunk_table;
