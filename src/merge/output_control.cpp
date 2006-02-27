@@ -931,22 +931,31 @@ check_append_mapping() {
 
     // And now try to connect the packetizers.
     result = src_ptzr->can_connect_to(dst_ptzr, error_message);
-    if (CAN_CONNECT_YES != result) {
+    if (CAN_CONNECT_MAYBE_CODECPRIVATE == result)
+      mxwarn("The track number " LLD " from the file '%s' can probably "
+             "not be appended correctly to the track number " LLD
+             " from the file '%s': %s Please make sure that "
+             "the resulting file plays correctly the whole time. "
+             "The author of this program will probably not give support "
+             "for playback issues with the resulting file.\n",
+             amap->src_track_id, files[amap->src_file_id].name.c_str(),
+             amap->dst_track_id, files[amap->dst_file_id].name.c_str(),
+             error_message.c_str());
+
+    else if (CAN_CONNECT_YES != result) {
       string reason(result == CAN_CONNECT_NO_FORMAT ?
                     "the formats do not match" :
                     result == CAN_CONNECT_NO_PARAMETERS ?
                     "the track parameters do not match" :
                     "of unknown reasons");
-
-      if (CAN_CONNECT_NO_PARAMETERS == result)
-        reason += mxsprintf(" (%s)", error_message.c_str());
-
-      mxerror("The track number " LLD " from the file '%s' cannot be appended "
-              "to the track number " LLD " from the file '%s' because %s.\n",
+      mxerror("The track number " LLD " from the file '%s' cannot be "
+              "appended to the track number " LLD " from the file '%s' "
+              "because %s.\n",
               amap->src_track_id, files[amap->src_file_id].name.c_str(),
               amap->dst_track_id, files[amap->dst_file_id].name.c_str(),
               reason.c_str());
     }
+
     src_ptzr->connect(dst_ptzr);
     dst_file->appended_to = true;
   }

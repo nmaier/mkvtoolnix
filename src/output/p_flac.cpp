@@ -136,7 +136,7 @@ flac_packetizer_c::can_connect_to(generic_packetizer_c *src,
     error_message = mxsprintf("The FLAC header data is different for the "
                               "two tracks (lengths: %d and %d)",
                               header->get_size(), fsrc->header->get_size());
-    return CAN_CONNECT_NO_PARAMETERS;
+    return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }
   return CAN_CONNECT_YES;
 }

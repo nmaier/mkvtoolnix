@@ -193,7 +193,7 @@ video_packetizer_c::can_connect_to(generic_packetizer_c *src,
     error_message = mxsprintf("The codec's private data does not match "
                               "(lengths: %d and %d).", ti.private_size,
                               vsrc->ti.private_size);
-    return CAN_CONNECT_NO_PARAMETERS;
+    return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }
   return CAN_CONNECT_YES;
 }
@@ -800,7 +800,7 @@ mpeg4_p10_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
     error_message = mxsprintf("The codec's private data does not match."
                               "Both have the same length (%d) but different "
                               "content.", ti.private_size);
-    return CAN_CONNECT_NO_PARAMETERS;
+    return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }
 
   return CAN_CONNECT_YES;

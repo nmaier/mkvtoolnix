@@ -222,7 +222,7 @@ vorbis_packetizer_c::can_connect_to(generic_packetizer_c *src,
              headers[2]->get_size())) {
     error_message = "The Vorbis codebooks are different; such tracks cannot "
       "be concatenated without reencoding";
-    return CAN_CONNECT_NO_PARAMETERS;
+    return CAN_CONNECT_NO_FORMAT;
   }
   return CAN_CONNECT_YES;
 }

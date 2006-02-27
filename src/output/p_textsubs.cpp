@@ -160,5 +160,15 @@ textsubs_packetizer_c::can_connect_to(generic_packetizer_c *src,
   psrc = dynamic_cast<textsubs_packetizer_c *>(src);
   if (psrc == NULL)
     return CAN_CONNECT_NO_FORMAT;
+
+  if (((ti.private_data == NULL) && (src->ti.private_data != NULL)) ||
+      ((ti.private_data != NULL) && (src->ti.private_data == NULL)) ||
+      (ti.private_size != src->ti.private_size)) {
+    error_message = mxsprintf("The codec's private data does not match "
+                              "(lengths: %d and %d).", ti.private_size,
+                              src->ti.private_size);
+    return CAN_CONNECT_MAYBE_CODECPRIVATE;
+  }
+
   return CAN_CONNECT_YES;
 }

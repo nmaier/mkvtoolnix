@@ -249,7 +249,8 @@ protected:
 enum connection_result_e {
   CAN_CONNECT_YES,
   CAN_CONNECT_NO_FORMAT,
-  CAN_CONNECT_NO_PARAMETERS
+  CAN_CONNECT_NO_PARAMETERS,
+  CAN_CONNECT_MAYBE_CODECPRIVATE
 };
 
 #define connect_check_a_samplerate(a, b) \
