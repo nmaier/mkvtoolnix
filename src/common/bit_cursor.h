@@ -182,7 +182,10 @@ public:
       throw mm_io_eof_error_c();
     }
 
-    *byte_position |= bit ? mask : 0;
+    if (bit)
+      *byte_position |= mask;
+    else
+      *byte_position &= ~mask;
     mask >>= 1;
     if (0 == mask) {
       mask = 0x80;
