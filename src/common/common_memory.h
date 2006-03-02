@@ -88,6 +88,8 @@ public:
       its_counter->is_free = false;
   }
 
+  void resize(int new_size) throw();
+
 private:
   struct counter {
     counter(X *p = NULL, int s = 0, bool f = false, unsigned c = 1):

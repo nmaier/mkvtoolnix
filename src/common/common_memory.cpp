@@ -17,10 +17,27 @@
 
 #include <vector>
 
+#include "common.h"
 #include "common_memory.h"
 #include "error.h"
 
 using namespace std;
+
+void
+memory_c::resize(int new_size) throw() {
+  if (!its_counter)
+    its_counter = new counter(NULL, 0, false);
+
+  if (its_counter->is_free)
+    its_counter->ptr = (X *)saferealloc(its_counter->ptr, new_size);
+  else {
+    X *tmp = (X *)safemalloc(new_size);
+    memcpy(tmp, its_counter->ptr, its_counter->size);
+    its_counter->ptr = tmp;
+    its_counter->is_free = true;
+  }
+  its_counter->size = new_size;
+}
 
 memory_cptr
 lace_memory_xiph(const vector<memory_cptr> &blocks) {
