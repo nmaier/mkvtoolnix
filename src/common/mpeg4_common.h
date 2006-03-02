@@ -18,6 +18,10 @@
 
 #include "common_memory.h"
 
+#include <list>
+
+using namespace std;
+
 /** Start code for a MPEG-4 part 2 (?) video object plain */
 #define MPEGVIDEO_VOP_START_CODE                  0x000001b6
 /** Strt code for a MPEG-4 part 2 group of pictures */
@@ -137,6 +141,39 @@ struct video_frame_t {
     data(NULL), size(0), pos(0), type(FRAME_TYPE_I), priv(NULL),
     timecode(0), duration(0), bref(0), fref(0) {};
 };
+
+struct sps_info_t {
+  unsigned id;
+
+  unsigned max_frame_num;
+  unsigned pic_order_cnt_type;
+  unsigned max_pic_order_cnt_lsb;
+  int offset_for_non_ref_pic;
+  int offset_for_top_to_bottom_field;
+  unsigned num_ref_frames_in_pic_order_cnt_cycle;
+  bool delta_pic_order_always_zero_flag;
+  bool frame_mbs_only;
+
+  bool vui_present;
+  bool ar_found;
+
+  unsigned par_num, par_den;
+
+  sps_info_t() {
+    memset(this, 0, sizeof(*this));
+  }
+};
+typedef list<sps_info_t> sps_list_t;
+
+struct pps_info_t {
+  unsigned id;
+  unsigned sps_id;
+
+  pps_info_t() {
+    memset(this, 0, sizeof(*this));
+  }
+};
+typedef list<pps_info_t> pps_list_t;
 
 bool MTX_DLL_API mpeg4_p2_extract_par(const unsigned char *buffer,
                                       int buffer_size,

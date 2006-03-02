@@ -386,123 +386,50 @@ mpeg4_p2_parse_config_data(const unsigned char *buffer,
   return mem;
 }
 
-
-struct bit_reader_t {
-  const vector<unsigned char> &v;
-  unsigned char mask, val;
-  unsigned int vp;
-
-  bit_reader_t(const vector<unsigned char> &nv):
-    v(nv), mask(0), val(0), vp(0) { }
-
-  int bit() {
-    if (0 == mask) {
-      if (vp >= v.size())
-        return -1;
-      val = v[vp++];
-      mask = 0x80;
-    }
-    int	ret = !!(val & mask);
-    mask >>= 1;
-    return ret;
-  }
-
-  int num(int l) {
-    int v = 0, b = 0;
-    while (l-- && (b = bit()) >= 0)
-      v = (v << 1) | b;
-    return b < 0 ? b : v;
-  }
-};
-
-struct bit_writer_t {
-  vector<unsigned char> &v;
-  unsigned char mask, val;
-  unsigned int vp;
-
-  bit_writer_t(vector<unsigned char> &nv):
-    v(nv), mask(0x80), val(0), vp(0) { }
-
-  void bit(int bit) {
-    if (bit)
-      val |= mask;
-    if ((mask >>= 1) == 0) {
-      v.push_back(val);
-      val = 0;
-      mask = 0x80;
-      ++vp;
-    }
-  }
-
-  void flush() {
-    while (mask != 0x80)
-      bit(0);
-  }
-
-  void num(unsigned v, int l) {
-    while (l--)
-      bit(v & (1 << l));
-  }
-};
-
 static int
-bitcopy(bit_reader_t &r,
-        bit_writer_t &w,
-        int count) {
-  int	bit = -1, v = 0;
-
-  while (count-- && (bit = r.bit()) >= 0)
-    w.bit(bit), v = (v << 1) | bit;
-
-  return bit < 0 ? bit : v;
-}
-
-static int
-gecopy(bit_reader_t &r,
-       bit_writer_t &w) {
+gecopy(bit_cursor_c &r,
+       bit_writer_c &w) {
   int	n = 0, bit;
 
-  while ((bit = r.bit()) == 0)
-    w.bit(0), ++n;
+  while ((bit = r.get_bit()) == 0) {
+    w.put_bit(0);
+    ++n;
+  }
 
-  if (bit < 0)
-    return bit;
+  w.put_bit(1);
 
-  w.bit(1);
+  bit = w.copy_bits(n, r);
 
-  if ((bit = r.num(n)) >= 0)
-    w.num(bit, n);
-
-  return bit < 0 ? bit : (1 << n) - 1 + bit;
+  return (1 << n) - 1 + bit;
 }
 
 static int
-sgecopy(bit_reader_t &r,
-        bit_writer_t &w) {
+sgecopy(bit_cursor_c &r,
+        bit_writer_c &w) {
   int v = gecopy(r, w);
   return v & 1 ? (v + 1)/2 : -(v/2);
 }
 
 static void
-hrdcopy(bit_reader_t &r,
-        bit_writer_t &w) {
+hrdcopy(bit_cursor_c &r,
+        bit_writer_c &w) {
   int ncpb = gecopy(r,w);       // cpb_cnt_minus1
-  bitcopy(r, w, 4);             // bit_rate_scale
-  bitcopy(r, w, 4);             // cpb_size_scale
+  w.copy_bits(4, r);            // bit_rate_scale
+  w.copy_bits(4, r);            // cpb_size_scale
   for (int i = 0; i <= ncpb; ++i) {
     gecopy(r,w);                // bit_rate_value_minus1
     gecopy(r,w);                // cpb_size_value_minus1
-    bitcopy(r, w, 1);           // cbr_flag
+    w.copy_bits(1, r);          // cbr_flag
   }
-  bitcopy(r, w, 5);           // initial_cpb_removal_delay_length_minus1
-  bitcopy(r, w, 5);             // cpb_removal_delay_length_minus1
-  bitcopy(r, w, 5);             // dpb_output_delay_length_minus1
-  bitcopy(r, w, 5);             // time_offset_length
+  w.copy_bits(5, r);        // initial_cpb_removal_delay_length_minus1
+  w.copy_bits(5, r);            // cpb_removal_delay_length_minus1
+  w.copy_bits(5, r);            // dpb_output_delay_length_minus1
+  w.copy_bits(5, r);            // time_offset_length
 }
 
 static void
-slcopy(bit_reader_t &r,
-       bit_writer_t &w,
+slcopy(bit_cursor_c &r,
+       bit_writer_c &w,
        int size) {
   int delta, next = 8, j;
 
@@ -512,55 +439,80 @@ slcopy(bit_reader_t &r,
   }
 }
 
-static void
-nalu_to_rbsp(vector<unsigned char> &b) {
-  for (size_t p = 1; p + 2 < b.size(); ++p)
-    if (b[p] == 0 && b[p+1] == 0 && b[p+2] == 3) {
-      b.erase(b.begin()+p+2);
-      ++p;
-    }
+void
+nalu_to_rbsp(memory_cptr &buffer) {
+  int pos, size = buffer->get_size();
+  mm_mem_io_c d(NULL, size, 100);
+  unsigned char *b = buffer->get();
+
+  for (pos = 0; pos < size; ++pos) {
+    if (((pos + 2) < size) &&
+        (0 == b[pos]) && (0 == b[pos + 1]) && (3 == b[pos + 2])) {
+      d.write_uint8(0);
+      d.write_uint8(0);
+      pos += 2;
+
+    } else
+      d.write_uint8(b[pos]);
+  }
+
+  buffer = memory_cptr(new memory_c(d.get_and_lock_buffer(),
+                                    d.getFilePointer()));
 }
 
-static void
-rbsp_to_nalu(vector<unsigned char> &b) {
-  for (size_t p = 1; p + 2 < b.size(); ++p)
-    if (b[p] == 0 && b[p+1] == 0 && b[p+2] <= 3) {
-      b.insert(b.begin() + p + 2, 3);
-      p += 2;
-    }
+void
+rbsp_to_nalu(memory_cptr &buffer) {
+  int pos, size = buffer->get_size();
+  mm_mem_io_c d(NULL, size, 100);
+  unsigned char *b = buffer->get();
+
+  for (pos = 0; pos < size; ++pos) {
+    if (((pos + 2) < size) &&
+        (0 == b[pos]) && (0 == b[pos + 1]) && (3 >= b[pos + 2])) {
+      d.write_uint8(0);
+      d.write_uint8(0);
+      d.write_uint8(3);
+      ++pos;
+
+    } else
+      d.write_uint8(b[pos]);
+  }
+
+  buffer = memory_cptr(new memory_c(d.get_and_lock_buffer(),
+                                    d.getFilePointer()));
 }
 
-static bool
-handle_sps(vector<unsigned char> &sps,
-           uint32_t &par_num,
-           uint32_t &par_den) {
-  vector<unsigned char> newsps;
-  bit_reader_t r(sps);
-  bit_writer_t w(newsps);
-  int profile, i, nref, vuipresent, ar_type;
-  bool ar_found;
+bool
+parse_sps(memory_cptr &buffer,
+          sps_info_t &sps) {
+  int size = buffer->get_size();
+  unsigned char *newsps = (unsigned char *)safemalloc(size + 100);
+  memory_cptr mcptr_newsps(new memory_c(newsps, size));
+  bit_cursor_c r(buffer->get(), size);
+  bit_writer_c w(newsps, size);
+  int profile, i, nref;
 
-  par_num = 1;
-  par_den = 1;
-  ar_found = false;
+  sps.par_num = 1;
+  sps.par_den = 1;
+  sps.ar_found = false;
 
-  bitcopy(r, w, 3);             // forbidden_zero_bit, nal_ref_idc
-  if (bitcopy(r, w, 5) != 7)    // nal_unit_type
+  w.copy_bits(3, r);            // forbidden_zero_bit, nal_ref_idc
+  if (w.copy_bits(5, r) != 7)   // nal_unit_type
     return false;
-  profile = bitcopy(r, w, 8);   // profile_idc
+  profile = w.copy_bits(8, r);  // profile_idc
   if (profile < 0)
     return false;
-  bitcopy(r, w, 16);            // constraints, reserved, level
+  w.copy_bits(16, r);           // constraints, reserved, level
   gecopy(r, w);                 // sps id
   if (profile >= 100) {         // high profile
     if (gecopy(r, w) == 3)      // chroma_format_idc
-      bitcopy(r, w, 1);         // residue_transform_flag
+      w.copy_bits(1, r);        // residue_transform_flag
     gecopy(r, w);               // bit_depth_luma_minus8
     gecopy(r, w);               // bit_depth_chroma_minus8
-    bitcopy(r, w, 1);          // qpprime_y_zero_transform_bypass_flag
-    if (bitcopy(r, w, 1) == 1)  // seq_scaling_matrix_present_flag
+    w.copy_bits(1, r);         // qpprime_y_zero_transform_bypass_flag
+    if (w.copy_bits(1, r) == 1) // seq_scaling_matrix_present_flag
       for (i = 0; i < 8; ++i)
-        if (bitcopy(r, w, 1) == 1) // seq_scaling_list_present_flag
+        if (w.copy_bits(1, r) == 1) // seq_scaling_list_present_flag
           slcopy(r, w, i < 6 ? 16 : 64);
   }
   gecopy(r, w);                 // log2_max_frame_num
@@ -573,7 +525,7 @@ handle_sps(vector<unsigned char> &sps,
       gecopy(r, w);             // log2_max_pic_order_cnt_lsb_minus4
       break;
     case 1:
-      bitcopy(r, w, 1);         // delta_pic_order_always_zero_flag
+      w.copy_bits(1, r);        // delta_pic_order_always_zero_flag
       sgecopy(r, w);            // offset_for_non_ref_pic
       sgecopy(r, w);            // offset_for_top_to_bottom_field
       nref = gecopy(r, w);     // num_ref_frams_in_pic_order_cnt_cycle
@@ -582,28 +534,26 @@ handle_sps(vector<unsigned char> &sps,
       break;
   }
   gecopy(r, w);                 // num_ref_frames
-  bitcopy(r, w, 1);            // gaps_in_frame_num_value_allowed_flag
+  w.copy_bits(1, r);           // gaps_in_frame_num_value_allowed_flag
   gecopy(r, w);                 // pic_width_in_mbs_minus1
   gecopy(r, w);                 // pic_height_in_map_units_minus1
-  if (bitcopy(r, w, 1) == 0)    // frame_mbs_only_flag
-    bitcopy(r, w, 1);           // mb_adaptive_frame_field_flag
-  bitcopy(r, w, 1);             // direct_8x8_inference_flag
-  if (bitcopy(r, w, 1) == 1) {
+  if (w.copy_bits(1, r) == 0)   // frame_mbs_only_flag
+    w.copy_bits(1, r);          // mb_adaptive_frame_field_flag
+  w.copy_bits(1, r);            // direct_8x8_inference_flag
+  if (w.copy_bits(1, r) == 1) {
     gecopy(r, w);               // frame_crop_left_offset
     gecopy(r, w);               // frame_crop_right_offset
     gecopy(r, w);               // frame_crop_top_offset
     gecopy(r, w);               // frame_crop_bottom_offset
   }
-  vuipresent = bitcopy(r, w, 1);
-  if (vuipresent < 0)
-    return false;
-  if (vuipresent == 1) {
-    if (r.bit() == 1) {         // ar_info_present
-      ar_type = r.num(8);
+  sps.vui_present = w.copy_bits(1, r);
+  if (sps.vui_present == 1) {
+    if (r.get_bit() == 1) {     // ar_info_present
+      int ar_type = r.get_bits(8);
 
       if (hack_engaged(ENGAGE_KEEP_BITSTREAM_AR_INFO)) {
-        w.bit(1);
-        w.num(ar_type, 8);
+        w.put_bit(1);
+        w.put_bits(8, ar_type);
       }
       if (13 >= ar_type) {
         static const int par_nums[14] = {
@@ -612,54 +562,50 @@ handle_sps(vector<unsigned char> &sps,
         static const int par_denoms[14] = {
           0, 1, 11, 11, 11, 33, 11, 11, 11, 33, 11, 11, 33, 99
         };
-        par_num = par_nums[ar_type];
-        par_den = par_denoms[ar_type];
+        sps.par_num = par_nums[ar_type];
+        sps.par_den = par_denoms[ar_type];
 
       } else {
-        int tx = r.num(16);
-        int ty = r.num(16);
-        if (tx < 0 || ty < 0)
-          return false;
-        par_num = tx;
-        par_den = ty;
+        sps.par_num = r.get_bits(16);
+        sps.par_den = r.get_bits(16);
 
         if (hack_engaged(ENGAGE_KEEP_BITSTREAM_AR_INFO)) {
-          w.num(par_num, 16);
-          w.num(par_den, 16);
+          w.put_bits(16, sps.par_num);
+          w.put_bits(16, sps.par_den);
         }
       }
-      ar_found = true;
+      sps.ar_found = true;
     }
     if (!hack_engaged(ENGAGE_KEEP_BITSTREAM_AR_INFO))
-      w.bit(0);                 // ar_info_present
+      w.put_bit(0);             // ar_info_present
 
     // copy the rest
-    if (bitcopy(r, w, 1) == 1)  // overscan_info_present
-      bitcopy(r, w, 1);         // overscan_appropriate
-    if (bitcopy(r, w, 1) == 1) { // video_signal_type_present
-      bitcopy(r, w, 4);         // video_format, video_full_range
-      if (bitcopy(r, w, 1) == 1) // color_desc_present
-        bitcopy(r, w, 24);
+    if (w.copy_bits(1, r) == 1) // overscan_info_present
+      w.copy_bits(1, r);        // overscan_appropriate
+    if (w.copy_bits(1, r) == 1) { // video_signal_type_present
+      w.copy_bits(4, r);        // video_format, video_full_range
+      if (w.copy_bits(1, r) == 1) // color_desc_present
+        w.copy_bits(24, r);
     }
-    if (bitcopy(r, w, 1) == 1) { // chroma_loc_info_present
+    if (w.copy_bits(1, r) == 1) { // chroma_loc_info_present
       gecopy(r, w);             // chroma_sample_loc_type_top_field
       gecopy(r, w);             // chroma_sample_loc_type_bottom_field
     }
-    if (bitcopy(r, w, 1) == 1) { // timing_info_present
-      bitcopy(r, w, 32);        // num_units_in_tick
-      bitcopy(r, w, 32);        // time_scale
-      bitcopy(r, w, 1);         // fixed_frame_rate
+    if (w.copy_bits(1, r) == 1) { // timing_info_present
+      w.copy_bits(32, r);       // num_units_in_tick
+      w.copy_bits(32, r);       // time_scale
+      w.copy_bits(1, r);        // fixed_frame_rate
     }
     bool f = false;
-    if (bitcopy(r, w, 1) == 1)  // nal_hrd_parameters_present
+    if (w.copy_bits(1, r) == 1) // nal_hrd_parameters_present
       hrdcopy(r, w),  f = true;
-    if (bitcopy(r, w, 1) == 1)  // vcl_hrd_parameters_present
+    if (w.copy_bits(1, r) == 1) // vcl_hrd_parameters_present
       hrdcopy(r, w),  f = true;
     if (f)
-      bitcopy(r, w, 1);         // low_delay_hrd_flag
-    bitcopy(r, w, 1);           // pic_struct_present
-    if (bitcopy(r, w, 1) == 1) { // bitstream_restriction
-      bitcopy(r, w, 1);     // motion_vectors_over_pic_boundaries_flag
+      w.copy_bits(1, r);        // low_delay_hrd_flag
+    w.copy_bits(1, r);          // pic_struct_present
+    if (w.copy_bits(1, r) == 1) { // bitstream_restriction
+      w.copy_bits(1, r);    // motion_vectors_over_pic_boundaries_flag
       gecopy(r, w);             // max_bytes_per_pic_denom
       gecopy(r, w);             // max_bits_per_pic_denom
       gecopy(r, w);             // log2_max_mv_length_h
@@ -669,12 +615,13 @@ handle_sps(vector<unsigned char> &sps,
     }
   }
 
-  w.bit(1);
-  w.flush();
+  w.put_bit(1);
+  w.byte_align();
 
-  sps = newsps;
+  buffer = mcptr_newsps;
+  buffer->set_size(w.get_bit_position() / 8);
 
-  return ar_found;
+  return true;
 }
 
 /** Extract the pixel aspect ratio from the MPEG4 layer 10 (AVC) codec data
@@ -700,8 +647,9 @@ mpeg4_p10_extract_par(uint8_t *&buffer,
                       uint32_t &par_den) {
   try {
     mm_mem_io_c avcc(buffer, buffer_size), new_avcc(NULL, buffer_size, 1024);
-    vector<unsigned char> nalu;
+    memory_cptr nalu(new memory_c());
     int num_sps, sps, length;
+    sps_info_t sps_info;
     bool ar_found;
 
     par_num = 1;
@@ -710,7 +658,7 @@ mpeg4_p10_extract_par(uint8_t *&buffer,
 
     avcc.read(nalu, 5);
     new_avcc.write(nalu);
-    nalu.clear();
+
     num_sps = avcc.read_uint8();
     new_avcc.write_uint8(num_sps);
     num_sps &= 0x1f;
@@ -722,22 +670,26 @@ mpeg4_p10_extract_par(uint8_t *&buffer,
       length = avcc.read_uint16_be();
       if ((length + avcc.getFilePointer()) >= buffer_size)
         length = buffer_size - avcc.getFilePointer();
-      nalu.clear();
       avcc.read(nalu, length);
 
       abort = false;
-      if ((0 < length) && ((nalu[0] & 0x1f) == 7)) {
+      if ((0 < length) && ((nalu->get()[0] & 0x1f) == 7)) {
         nalu_to_rbsp(nalu);
-        ar_found = handle_sps(nalu, par_num, par_den);
+        if (parse_sps(nalu, sps_info)) {
+          ar_found = sps_info.ar_found;
+          if (ar_found) {
+            par_num = sps_info.par_num;
+            par_den = sps_info.par_den;
+          }
+        }
         rbsp_to_nalu(nalu);
         abort = true;
       }
 
-      new_avcc.write_uint16_be(nalu.size());
+      new_avcc.write_uint16_be(nalu->get_size());
       new_avcc.write(nalu);
 
       if (abort) {
-        nalu.clear();
         avcc.read(nalu, buffer_size - avcc.getFilePointer());
         new_avcc.write(nalu);
         break;
@@ -745,9 +697,7 @@ mpeg4_p10_extract_par(uint8_t *&buffer,
     }
 
     buffer_size = new_avcc.getFilePointer();
-    buffer = (unsigned char *)safemalloc(buffer_size);
-    new_avcc.setFilePointer(0);
-    new_avcc.read(buffer, buffer_size);
+    buffer = new_avcc.get_and_lock_buffer();
 
     return ar_found;
 
