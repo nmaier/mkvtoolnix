@@ -663,6 +663,20 @@ mm_io_c::read_uint64_be() {
   return get_uint64_be(buffer);
 }
 
+uint32_t
+mm_io_c::read(memory_cptr &buffer,
+              size_t size,
+              int offset) {
+  if (-1 == offset)
+    offset = buffer->get_size();
+  if (buffer->get_size() <= (size + offset))
+    buffer->resize(size + offset);
+  if (read(buffer->get() + offset, size) != size)
+    throw mm_io_eof_error_c();
+  buffer->set_size(size + offset);
+  return size;
+}
+
 int
 mm_io_c::write_uint8(unsigned char value) {
   return write(&value, 1);
@@ -714,6 +728,17 @@ mm_io_c::write_uint64_be(uint64_t value) {
 
   put_uint64_be(&buffer, value);
   return write(&buffer, sizeof(uint64_t));
+}
+
+uint32_t
+mm_io_c::write(const memory_cptr &buffer,
+               int size,
+               int offset) {
+  if (-1 == size)
+    size = buffer->get_size();
+  if (write(buffer->get() + offset, size) != size)
+    throw mm_io_eof_error_c();
+  return size;
 }
 
 void
@@ -1020,6 +1045,12 @@ mm_mem_io_c::close() {
 bool
 mm_mem_io_c::eof() {
   return pos >= mem_size;
+}
+
+unsigned char *
+mm_mem_io_c::get_and_lock_buffer() {
+  free_mem = false;
+  return mem;
 }
 
 /*
