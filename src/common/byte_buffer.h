@@ -58,7 +58,7 @@ public:
     pos = 0;
   }
 
-  void add(unsigned char *new_data, int new_size) {
+  void add(const unsigned char *new_data, int new_size) {
     if ((pos != 0) && ((size + new_size) >= max_size))
       trim();
     data = (unsigned char *)saferealloc(data, size + new_size);
