@@ -860,7 +860,7 @@ ogm_reader_c::process_page(ogg_page *og) {
 #endif
 
     if (dmx->stype == OGM_STREAM_TYPE_THEORA) {
-      int frame_number, keyframe_number, non_keyframe_number;
+      int keyframe_number, non_keyframe_number;
       int64_t timecode, duration, bref;
 
       if ((0 == op.bytes) || (0 != (op.packet[0] & 0x80)))
@@ -868,9 +868,8 @@ ogm_reader_c::process_page(ogg_page *og) {
 
       keyframe_number = ogg_page_granulepos(og) >> dmx->theora.kfgshift;
       non_keyframe_number = ogg_page_granulepos(og) & dmx->theora.kfgshift;
-      frame_number = keyframe_number + non_keyframe_number;
 
-      timecode = (int64_t)(1000000000.0 * dmx->last_granulepos *
+      timecode = (int64_t)(1000000000.0 * dmx->units_processed *
                            dmx->theora.frd / dmx->theora.frn);
       duration = (int64_t)(1000000000.0 * dmx->theora.frd / dmx->theora.frn);
       bref = (keyframe_number != dmx->last_keyframe_number) &&
@@ -879,10 +878,7 @@ ogm_reader_c::process_page(ogg_page *og) {
                                                          false), timecode,
                                             duration, bref, VFT_NOBFRAME));
 
-      if (frame_number > dmx->last_granulepos)
-        dmx->last_granulepos = frame_number;
-      else
-        ++dmx->last_granulepos;
+      dmx->units_processed++;
 
       dmx->last_keyframe_number = keyframe_number;
 
@@ -891,8 +887,6 @@ ogm_reader_c::process_page(ogg_page *og) {
         debug_leave("ogm_reader_c::process_page");
         return;
       }
-
-      last_granulepos_set = true;
 
       continue;
     }
@@ -1152,7 +1146,8 @@ ogm_reader_c::identify() {
             sdemuxers[i]->stype == OGM_STREAM_TYPE_AC3 ||
             sdemuxers[i]->stype == OGM_STREAM_TYPE_AAC ||
             sdemuxers[i]->stype == OGM_STREAM_TYPE_FLAC) ? "audio" :
-           sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO ? "video" :
+           (sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO ||
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_THEORA) ? "video" :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_TEXT ? "subtitles" :
            "unknown",
            sdemuxers[i]->stype == OGM_STREAM_TYPE_VORBIS ? "Vorbis" :
@@ -1161,6 +1156,7 @@ ogm_reader_c::identify() {
            sdemuxers[i]->stype == OGM_STREAM_TYPE_AC3 ? "AC3" :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_AAC ? "AAC" :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO ? fourcc :
+           sdemuxers[i]->stype == OGM_STREAM_TYPE_THEORA ? "Theora" :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_TEXT ? "text" :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_FLAC ? "FLAC" :
            "unknown",

@@ -1,3 +1,9 @@
+2006-03-17  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The Theora timecode handling was broken, and
+	Ogg/Theora files were not identified correctly (they showed up as
+	"unknown" in mmg).
+
 2006-02-27  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: enhancement: The 'adjust timecodes' function accepts
