@@ -1,3 +1,8 @@
+2006-04-03  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The WavPack reader was broken on 64bit
+	systems (e.g. AMD64).
+
 2006-03-17  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The Theora timecode handling was broken, and

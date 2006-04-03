@@ -28,20 +28,20 @@ static void
 little_endian_to_native(void *data,
                         char *format) {
   uint8_t *cp = (uint8_t *)data;
-  int32_t temp;
+  uint32_t temp;
 
   while (*format) {
     switch (*format) {
       case 'L':
-        temp = cp[0] + ((long)cp[1] << 8) + ((long)cp[2] << 16) +
-          ((long)cp[3] << 24);
-        *(long *)cp = temp;
+        temp = cp[0] + ((uint32_t)cp[1] << 8) + ((uint32_t)cp[2] << 16) +
+          ((uint32_t)cp[3] << 24);
+        *(uint32_t *)cp = temp;
         cp += 4;
         break;
 
       case 'S':
         temp = cp[0] + (cp[1] << 8);
-        * (short *)cp = (short)temp;
+        * (uint16_t *)cp = (uint16_t)temp;
         cp += 2;
         break;
 
