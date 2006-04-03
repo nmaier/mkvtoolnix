@@ -815,7 +815,7 @@ dnl
                  ],)
     if test "x$lzo_found" = "xyes"; then
       AC_CHECK_HEADERS([lzo1x.h lzo/lzo1x.h])
-      if test "x$ac_cv_header_lzo1x_h" != "xyes" && "x$ac_cv_header_lzo_lzo1x_h" != "xyes"; then
+      if test "x$ac_cv_header_lzo1x_h" != "xyes" -a "x$ac_cv_header_lzo_lzo1x_h" != "xyes"; then
         lzo_found=no
       fi
     fi
