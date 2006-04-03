@@ -398,7 +398,8 @@ qtmp4_reader_c::update_tables(qtmp4_demuxer_ptr &dmx) {
   mxverb(3, PFX "Frame offset table: %u entries\n",
          (unsigned int)dmx->frame_offset_table.size());
 
-  mxverb(4, PFX "Sample table contents: %u entries\n", dmx->sample_table.size());
+  mxverb(4, PFX "Sample table contents: %u entries\n",
+         (unsigned int)dmx->sample_table.size());
   for (i = 0; i < dmx->sample_table.size(); i++) {
     qt_sample_t &sample = dmx->sample_table[i];
     mxverb(4, PFX "  %d: pts " LLU " size %u pos " LLU "\n", i,

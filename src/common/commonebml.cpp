@@ -59,7 +59,7 @@ __debug_dump_elements(EbmlElement *e,
   mxprint(stdout, "%s", e->Generic().DebugName);
 
   if ((m = dynamic_cast<EbmlMaster *>(e)) != NULL) {
-    mxprint(stdout, " (size: %u)\n", m->ListSize());
+    mxprint(stdout, " (size: %u)\n", (unsigned int)m->ListSize());
     for (i = 0; i < m->ListSize(); i++)
       debug_dump_elements((*m)[i], level + 1);
   } else if ((s = dynamic_cast<EbmlString *>(e)) != NULL)
