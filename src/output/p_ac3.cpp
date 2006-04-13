@@ -32,7 +32,7 @@ ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *_reader,
                                    track_info_c &_ti)
   throw (error_c):
   generic_packetizer_c(_reader, _ti),
-  bytes_output(0), packetno(0),
+  bytes_output(0), packetno(0), bytes_skipped(0),
   samples_per_sec(_samples_per_sec), channels(_channels), bsid(_bsid) {
 
   set_track_type(track_audio);
@@ -63,36 +63,44 @@ ac3_packetizer_c::get_ac3_packet(unsigned long *header,
   if (packet_buffer == NULL)
     return NULL;
   pos = find_ac3_header(packet_buffer, size, ac3header);
-  if (pos < 0)
+  if (pos < 0) {
+    if (7 < size) {
+      bytes_skipped += size - 7;
+      byte_buffer.remove(size - 7);
+    }
     return NULL;
+  }
   if ((pos + ac3header->bytes) > size)
     return NULL;
 
-  if (pos > 0) {
+  bytes_skipped += pos;
+  if (0 < bytes_skipped) {
     bool warning_printed;
 
     warning_printed = false;
     if (packetno == 0) {
       int64_t offset;
 
-      offset = handle_avi_audio_sync(pos, false);
+      offset = handle_avi_audio_sync(bytes_skipped, false);
       if (offset != -1) {
-        mxinfo("The AC3 track " LLD " from '%s' contained %d bytes of non-AC3 "
-               "data at the beginning. This corresponds to a delay of " LLD
-               "ms. This delay will be used instead of the non-AC3 data.\n",
-               ti.id, ti.fname.c_str(), pos, offset / 1000000);
+        mxinfo("The AC3 track " LLD " from '%s' contained " LLD " bytes of "
+               "non-AC3 data at the beginning. This corresponds to a delay "
+               "of " LLD "ms. This delay will be used instead of the non-AC3 "
+               "data.\n",
+               ti.id, ti.fname.c_str(), bytes_skipped, offset / 1000000);
         warning_printed = true;
       }
     }
     if (!warning_printed)
-      mxwarn("The AC3 track " LLD " from '%s' contained %d bytes of non-AC3 "
-             "data at the beginning which were skipped. The audio/video "
-             "synchronization may have been lost.\n", ti.id,
-             ti.fname.c_str(), pos);
+      mxwarn("The AC3 track " LLD " from '%s' contained " LLD " bytes of "
+             "non-AC3 data at the beginning which were skipped. The audio/"
+             "video synchronization may have been lost.\n", ti.id,
+             ti.fname.c_str(), bytes_skipped);
     byte_buffer.remove(pos);
     packet_buffer = byte_buffer.get_buffer();
     size = byte_buffer.get_size();
     pos = 0;
+    bytes_skipped = 0;
   }
 
   pins = 1536000000000.0 / samples_per_sec;

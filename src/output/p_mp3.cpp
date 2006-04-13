@@ -32,6 +32,7 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *_reader,
                                    track_info_c &_ti)
   throw (error_c):
   generic_packetizer_c(_reader, _ti), bytes_output(0), packetno(0),
+  bytes_skipped(0),
   samples_per_sec(_samples_per_sec), channels(_channels), spf(1152),
   byte_buffer(128 * 1024),
   codec_id_set(false), valid_headers_found(source_is_good) {
@@ -108,21 +109,23 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
       // Great, we have found five consecutive identical headers. Be happy
       // with those!
       valid_headers_found = true;
-      if (pos > 0) {
-        handle_garbage(pos);
-        byte_buffer.remove(pos);
-      }
+      bytes_skipped += pos;
+      if (0 < bytes_skipped)
+        handle_garbage(bytes_skipped);
+      byte_buffer.remove(pos);
       pos = 0;
+      bytes_skipped = 0;
       decode_mp3_header(byte_buffer.get_buffer(), mp3header);
     } else
       return NULL;
   }
 
-  if (pos > 0) {
-    handle_garbage(pos);
-    byte_buffer.remove(pos);
-    pos = 0;
-  }
+  bytes_skipped += pos;
+  if (bytes_skipped > 0)
+    handle_garbage(bytes_skipped);
+  byte_buffer.remove(pos);
+  pos = 0;
+  bytes_skipped = 0;
 
   if (packetno == 0) {
     spf = mp3header->samples_per_channel;

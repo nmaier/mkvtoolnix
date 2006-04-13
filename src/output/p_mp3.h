@@ -25,7 +25,7 @@
 
 class mp3_packetizer_c: public generic_packetizer_c {
 private:
-  int64_t bytes_output, packetno;
+  int64_t bytes_output, packetno, bytes_skipped;
   int samples_per_sec, channels, spf;
   byte_buffer_c byte_buffer;
   bool codec_id_set, valid_headers_found;

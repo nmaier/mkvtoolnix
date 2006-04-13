@@ -36,6 +36,7 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *_reader,
   throw (error_c):
   generic_packetizer_c(_reader, _ti),
   bytes_output(0), packetno(0), last_timecode(-1), num_packets_same_tc(0),
+  bytes_skipped(0),
   samples_per_sec(_samples_per_sec), channels(_channels), id(_id),
   profile(_profile), headerless(_headerless),
   emphasis_present(_emphasis_present) {
@@ -58,8 +59,13 @@ aac_packetizer_c::get_aac_packet(unsigned long *header,
   packet_buffer = byte_buffer.get_buffer();
   size = byte_buffer.get_size();
   pos = find_aac_header(packet_buffer, size, aacheader, emphasis_present);
-  if (pos < 0)
+  if (pos < 0) {
+    if (2 < size) {
+      bytes_skipped += size - 2;
+      byte_buffer.remove(size - 2);
+    }
     return NULL;
+  }
   if ((pos + aacheader->bytes) > size)
     return NULL;
 
@@ -76,10 +82,14 @@ aac_packetizer_c::get_aac_packet(unsigned long *header,
     return get_aac_packet(header, aacheader);
   }
 
-  if (verbose && (pos > 0))
-    mxwarn("aac_packetizer: skipping %d bytes (no valid AAC header "
+  bytes_skipped += pos;
+  if (verbose && (0 < bytes_skipped))
+    mxwarn(FMT_TID "skipping %lld bytes (no valid AAC header "
            "found). This might make audio/video go out of sync, but this "
-           "stream is damaged.\n", pos);
+           "stream is damaged.\n", ti.fname.c_str(), (int64_t)0,
+           bytes_skipped);
+  bytes_skipped = 0;
+
   if ((aacheader->header_bit_size % 8) == 0)
     buf = (unsigned char *)safememdup(packet_buffer + pos +
                                       aacheader->header_byte_size,
