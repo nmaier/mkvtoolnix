@@ -7,7 +7,9 @@ class T_218theora < Test
 
   def run
     merge("data/ogg/qt4dance_medium.ogg")
-    return hash_tmp
+    h = hash_tmp
+    merge("data/ogg/small-theora.ogg")
+    return h + "-" + hash_tmp
   end
 end
 
