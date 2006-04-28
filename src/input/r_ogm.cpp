@@ -672,6 +672,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
       return;
 
     dmx->stype = OGM_STREAM_TYPE_VORBIS;
+    dmx->num_header_packets = 3;
     dmx->in_use = true;
 
     return;
@@ -682,6 +683,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
       return;
 
     dmx->stype = OGM_STREAM_TYPE_THEORA;
+    dmx->num_header_packets = 3;
     dmx->in_use = true;
 
     try {
@@ -732,7 +734,6 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
         return;
 
       dmx->stype = OGM_STREAM_TYPE_VIDEO;
-      dmx->native_mode = false;
       if (video_fps < 0)
         video_fps = 10000000.0 / (float)get_uint64_le(&sth->time_unit);
       dmx->in_use = true;
@@ -764,7 +765,6 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
         return;
       }
 
-      dmx->native_mode = false;
       dmx->in_use = true;
 
       return;
@@ -775,7 +775,6 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
         return;
 
       dmx->stype = OGM_STREAM_TYPE_TEXT;
-      dmx->native_mode = false;
       dmx->in_use = true;
 
       return;
@@ -996,8 +995,14 @@ ogm_reader_c::process_header_packets(ogm_demuxer_t *dmx) {
   }
 
   while (ogg_stream_packetout(&dmx->os, &op) == 1) {
-    if (((dmx->stype != OGM_STREAM_TYPE_VORBIS) || !dmx->native_mode) &&
-        ((op.packet[0] & 1) != 1)) {
+    bool is_header_packet;
+
+    if (OGM_STREAM_TYPE_THEORA == dmx->stype)
+      is_header_packet = ((0x80 <= op.packet[0]) && (0x82 >= op.packet[0]));
+    else
+      is_header_packet = op.packet[0] & 1;
+
+    if (!is_header_packet) {
       mxwarn("ogm_reader: Missing header/comment packets for stream %d in "
              "'%s'. This file is broken but should be muxed correctly. If "
              "not please contact the author Moritz Bunkus "
@@ -1012,10 +1017,7 @@ ogm_reader_c::process_header_packets(ogm_demuxer_t *dmx) {
     dmx->packet_data.push_back(memory_cptr(mem));
   }
 
-  if (dmx->stype == OGM_STREAM_TYPE_VORBIS) {
-    if (dmx->packet_data.size() == 3)
-      dmx->headers_read = true;
-  } else if (dmx->packet_data.size() == 2)
+  if (dmx->packet_data.size() == dmx->num_header_packets)
     dmx->headers_read = true;
 }
 
