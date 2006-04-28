@@ -2,7 +2,7 @@ Source: mkvtoolnix
 Section: graphics
 Priority: optional
 Maintainer: Moritz Bunkus <moritz@bunkus.org>
-Build-Depends: debhelper (>> 3.0.0), libebml-dev (>= 0.7.3-1), libmatroska-dev (>= 0.7.5-1), libogg-dev, libvorbis-dev, libwxgtk2.4-dev|libwxgtk2.5-dev|libwxgtk2.6-dev, libexpat1-dev, zlib1g-dev, liblzo-dev, libbz2-dev, libflac-dev, groff
+Build-Depends: debhelper (>> 4.0.0), libebml-dev (>= 0.7.3-1), libmatroska-dev (>= 0.7.5-1), libogg-dev, libvorbis-dev, libwxgtk2.4-dev|libwxgtk2.5-dev|libwxgtk2.6-dev, libexpat1-dev, zlib1g-dev, liblzo-dev, libbz2-dev, libflac-dev, groff, libmagic-dev
 Standards-Version: 3.5.8
 
 Package: mkvtoolnix-mb

@@ -1237,17 +1237,8 @@ set_process_priority(int priority) {
 static string
 guess_mime_type_and_report(string file_name) {
   string mime_type;
-  int i;
 
-  i = file_name.rfind('.');
-  if (i < 0)
-    mxerror(_("No MIME type has been set for the attachment '%s', and "
-              "the file name contains no extension. Therefore the MIME "
-              "type could not be guessed automatically.\n"),
-            file_name.c_str());
-  file_name.erase(0, i + 1);
-
-  mime_type = guess_mime_type(file_name);
+  mime_type = guess_mime_type(file_name, true);
   if (mime_type != "") {
     mxinfo(_("Automatic MIME type recognition for '%s': %s\n"),
            file_name.c_str(), mime_type.c_str());
@@ -1255,7 +1246,7 @@ guess_mime_type_and_report(string file_name) {
   }
 
   mxerror(_("No MIME type has been set for the attachment '%s', and "
-            "it could not be guessed based on its extension.\n"),
+            "it could not be guessed.\n"),
           file_name.c_str());
   return "";
 }

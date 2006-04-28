@@ -328,8 +328,6 @@ ssa_reader_c::add_attachment_maybe(string &name,
   attachment.description = "Imported " + type + " from " + short_name;
   attachment.to_all_files = true;
 
-//   mxinfo("att %s: %s\n", name.c_str(), data_uu.c_str());
-
   allocated = 1024;
   buffer = new buffer_t((unsigned char *)safemalloc(allocated), 0);
 
@@ -348,11 +346,7 @@ ssa_reader_c::add_attachment_maybe(string &name,
 
   attachment.data = counted_ptr<buffer_t>(buffer);
 
-  pos = name.rfind('.');
-  if (0 < pos) {
-    name.erase(0, pos + 1);
-    attachment.mime_type = guess_mime_type(name);
-  }
+  attachment.mime_type = guess_mime_type(name, false);
   if (attachment.mime_type == "")
     attachment.mime_type = "application/octet-stream";
 

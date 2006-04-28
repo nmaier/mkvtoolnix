@@ -11,11 +11,16 @@
    Data for ComboBoxes in mmg and other occurences
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
+   Changes by Robert Millan <rmh@aybabtu.com>.
 */
 
 #include "os.h"
 #include "common.h"
 #include "extern_data.h"
+
+#if HAVE_MAGIC_H
+#include <magic.h>
+#endif
 
 #ifndef NULL
 # define NULL 0
@@ -2600,11 +2605,16 @@ const char *cctlds[] = {
   NULL
 };
 
-string
-guess_mime_type(string ext) {
+static string
+guess_mime_type_by_ext(string ext) {
   vector<string> extensions;
   int i, j;
 
+  /* chop off basename */
+  i = ext.rfind('.');
+  if (i < 0)
+    return "";
+  ext.erase(0, i + 1);
   ext = downcase(ext);
 
   for (i = 0; NULL != mime_types[i].name; i++) {
@@ -2618,6 +2628,34 @@ guess_mime_type(string ext) {
   }
 
   return "";
+}
+
+string
+guess_mime_type(string ext,
+                bool is_file) {
+#if HAVE_MAGIC_H
+  string ret;
+  magic_t m;
+
+  if (!is_file)
+    return guess_mime_type_by_ext(ext);
+
+  m = magic_open(MAGIC_MIME | MAGIC_SYMLINK);
+  magic_load(m, NULL);
+  ret = magic_file(m, ext.c_str());
+  magic_close(m);
+
+  if (ret == "")
+    return guess_mime_type_by_ext(ext);
+  else {
+    int idx = ret.find(';');
+    if (-1 != idx)
+      ret.erase(idx);
+    return ret;
+  }
+#else
+  return guess_mime_type_by_ext(ext);
+#endif
 }
 
 bool

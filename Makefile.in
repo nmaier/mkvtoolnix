@@ -67,6 +67,7 @@ EXTRA_LDFLAGS = @EXTRA_LDFLAGS@
 FLAC_LIBS = @FLAC_LIBS@
 ICONV_LIBS = @ICONV_LIBS@
 LZO_LIBS = @LZO_LIBS@
+MAGIC_LIBS = @MAGIC_LIBS@
 MATROSKA_CFLAGS = @MATROSKA_CFLAGS@
 MATROSKA_LIBS = @MATROSKA_LIBS@
 MINGW_GUIAPP = @MINGW_GUIAPP@
@@ -383,7 +384,7 @@ mkvmerge_DEPENDENCIES += $(DEP_COMMON) \
 		$(DEP_COMP) $(DEP_INPUT) $(DEP_OUTPUT) $(DEP_AVI) $(DEP_RMFF) \
 		$(DEP_MPEGPARSER)
 mkvmerge_LDADD = -lmtxinput -lmtxoutput \
-		-lmtxcommon -lmatroska -lebml \
+		-lmtxcommon $(MAGIC_LIBS) -lmatroska -lebml \
 		-lavi -lrmff -lmpegparser \
 		$(FLAC_LIBS) -lvorbis -logg -lz $(COMPRESSION_LIBRARIES) \
 		-lexpat $(ICONV_LIBS) $(LIBINTL_LIBS) $(LIBRPCRT)
@@ -395,7 +396,7 @@ mkvmerge_LDADD = -lmtxinput -lmtxoutput \
 mkvinfo_SOURCES = $(wildcard src/info/*.cpp)
 mkvinfo_OBJECTS := $(patsubst %.cpp,%.o,$(mkvinfo_SOURCES))
 mkvinfo_DEPENDENCIES += $(DEP_COMMON)
-mkvinfo_LDADD = -lmtxcommon -lmatroska -lebml \
+mkvinfo_LDADD = -lmtxcommon $(MAGIC_LIBS) -lmatroska -lebml \
 		$(WXWINDOWS_LIBS) \
 		-lexpat $(ICONV_LIBS) $(LIBINTL_LIBS) $(LIBRPCRT)
 
@@ -406,7 +407,7 @@ mkvinfo_LDADD = -lmtxcommon -lmatroska -lebml \
 mkvextract_SOURCES = $(wildcard src/extract/*.cpp)
 mkvextract_OBJECTS := $(patsubst %.cpp,%.o,$(mkvextract_SOURCES))
 mkvextract_DEPENDENCIES += $(DEP_COMMON) $(DEP_AVILIB) $(DEP_RMFF)
-mkvextract_LDADD = -lmtxcommon -lvorbis -logg -lavi -lmatroska -lebml -lrmff \
+mkvextract_LDADD = -lmtxcommon $(MAGIC_LIBS) -lvorbis -logg -lavi -lmatroska -lebml -lrmff \
 		$(ICONV_LIBS) $(LIBINTL_LIBS) -lexpat \
 		-lz $(COMPRESSION_LIBRARIES) $(LIBRPCRT)
 
@@ -417,7 +418,7 @@ mkvextract_LDADD = -lmtxcommon -lvorbis -logg -lavi -lmatroska -lebml -lrmff \
 base64tool_SOURCES = src/base64tool.cpp
 base64tool_OBJECTS := $(patsubst %.cpp,%.o,$(base64tool_SOURCES))
 base64tool_DEPENDENCIES += $(DEP_COMMON)
-base64tool_LDADD = -lmtxcommon -lexpat $(ICONV_LIBS) $(LIBINTL_LIBS) \
+base64tool_LDADD = -lmtxcommon $(MAGIC_LIBS) -lexpat $(ICONV_LIBS) $(LIBINTL_LIBS) \
 		$(LIBRPCRT)
 
 #
@@ -428,7 +429,7 @@ mmg_SOURCES = $(wildcard src/mmg/*.cpp)
 mmg_OBJECTS := $(patsubst %.cpp,%.o,$(mmg_SOURCES)) \
 		$(patsubst %.rc,%.o,$(MMG_RESOURCES))
 mmg_DEPENDENCIES += $(DEP_COMMON)
-mmg_LDADD = -lmtxcommon -lmatroska -lebml -lexpat $(ICONV_LIBS) \
+mmg_LDADD = -lmtxcommon $(MAGIC_LIBS) -lmatroska -lebml -lexpat $(ICONV_LIBS) \
 		$(WXWINDOWS_LIBS) $(LIBINTL_LIBS) $(MINGW_GUIAPP) \
 		$(LIBRPCRT)
 
