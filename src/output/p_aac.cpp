@@ -60,9 +60,9 @@ aac_packetizer_c::get_aac_packet(unsigned long *header,
   size = byte_buffer.get_size();
   pos = find_aac_header(packet_buffer, size, aacheader, emphasis_present);
   if (pos < 0) {
-    if (2 < size) {
-      bytes_skipped += size - 2;
-      byte_buffer.remove(size - 2);
+    if (10 < size) {
+      bytes_skipped += size - 10;
+      byte_buffer.remove(size - 10);
     }
     return NULL;
   }
