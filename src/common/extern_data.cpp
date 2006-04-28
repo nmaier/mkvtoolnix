@@ -19,7 +19,9 @@
 #include "extern_data.h"
 
 #if HAVE_MAGIC_H
+extern "C" {
 #include <magic.h>
+};
 #endif
 
 #ifndef NULL
