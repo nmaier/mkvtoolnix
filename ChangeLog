@@ -1,3 +1,9 @@
+2006-05-23  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: mkvmerge will no longer create empty files
+	(meaning neither input files nor things like chapters etc have
+	been added).
+
 2006-04-28  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v1.7.0.

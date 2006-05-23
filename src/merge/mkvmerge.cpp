@@ -1297,10 +1297,12 @@ parse_args(vector<string> args) {
   int i;
   vector<string>::const_iterator sit;
   string this_arg, next_arg;
-  bool no_next_arg;
+  bool no_next_arg, inputs_found;
   int64_t id;
   attachment_t attachment;
   mm_io_c *io;
+
+  inputs_found = false;
 
   ti = new track_info_c;
 
@@ -1592,12 +1594,16 @@ parse_args(vector<string> args) {
 
       sit++;
 
+      inputs_found = true;
+
     } else if (this_arg == "--global-tags") {
       if (no_next_arg)
         mxerror(_("'--global-tags' lacks the file name.\n"));
 
       parse_and_add_tags(next_arg);
       sit++;
+
+      inputs_found = true;
 
     } else if (this_arg == "--chapter-language") {
       if (no_next_arg)
@@ -1665,6 +1671,8 @@ parse_args(vector<string> args) {
                                     NULL, &tags_from_cue_chapters);
       sit++;
 
+      inputs_found = true;
+
     } else if (this_arg == "--segmentinfo") {
       if (no_next_arg)
         mxerror(_("'--segmentinfo' lacks the file name.\n"));
@@ -1678,6 +1686,8 @@ parse_args(vector<string> args) {
       handle_segmentinfo(kax_info_chap);
 
       sit++;
+
+      inputs_found = true;
 
     } else if (this_arg == "--no-chapters") {
       ti->no_chapters = true;
@@ -1993,6 +2003,9 @@ parse_args(vector<string> args) {
     mxwarn(_("'--link' is only useful in combination with '--split'.\n"));
 
   delete ti;
+
+  if (!inputs_found && (0 == files.size()))
+    mxerror("No input files were given. No output will be created.\n");
 }
 
 /** \brief Initialize global variables
