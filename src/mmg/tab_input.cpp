@@ -763,7 +763,6 @@ tab_input::select_file(bool append) {
     wxArrayString files;
     int i;
 
-    last_open_dir = dlg.GetDirectory();
     dlg.GetPaths(files);
     for (i = 0; i < files.Count(); i++)
       add_file(files[i], append);
@@ -1082,6 +1081,9 @@ tab_input::add_file(const wxString &file_name,
   st_tracks->Enable(true);
   clb_tracks->Enable(true);
   b_append_file->Enable(true);
+
+  wxFileName file_name_obj(file_name);
+  last_open_dir = file_name_obj.GetPath();
 }
 
 void
