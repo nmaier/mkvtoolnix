@@ -992,8 +992,16 @@ AC_SUBST(TRANSLATIONS)
 dnl
 dnl Check for libmagic
 dnl
-AC_CHECK_LIB(magic, magic_open, [ MAGIC_LIBS="-lmagic" ])
-AC_CHECK_HEADERS([magic.h])
+AC_CHECK_LIB(magic, magic_open,
+             [ MAGIC_LIBS="-lmagic -lz"
+               magic_found=yes ],
+             [ magic_found=no ],
+             -lz)
+
+if test "x$magic_found" = "xyes" ; then
+  AC_CHECK_HEADERS([magic.h])
+fi
+
 AC_SUBST(MAGIC_LIBS)
 
 CFLAGS="$USER_CPPFLAGS @EXTRA_CFLAGS@ @OPTIMIZATION_CFLAGS@ $USER_CFLAGS -Wall -Wno-sign-compare -Wno-comment -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 @EXTRA_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@"
