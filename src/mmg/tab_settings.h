@@ -27,6 +27,7 @@
 #define ID_CB_NEW_AFTER_ADD_TO_JOBQUEUE    15006
 #define ID_CB_WARN_USAGE                   15007
 #define ID_CB_GUI_DEBUGGING                15008
+#define ID_CB_ALWAYS_USE_SIMPLEBLOCK       15009
 
 class tab_settings: public wxPanel {
   DECLARE_CLASS(tab_settings);
@@ -37,6 +38,7 @@ public:
   wxCheckBox *cb_ask_before_overwriting, *cb_on_top;
   wxCheckBox *cb_filenew_after_add_to_jobqueue;
   wxCheckBox *cb_warn_usage, *cb_gui_debugging;
+  wxCheckBox *cb_always_use_simpleblock;
   wxComboBox *cob_priority;
 
 public:

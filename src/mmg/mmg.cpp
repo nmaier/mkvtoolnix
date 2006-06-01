@@ -1606,6 +1606,11 @@ mmg_dialog::update_command_line() {
       clargs.Add(strip(opts[i]));
   }
 
+  if (settings_page->cb_always_use_simpleblock->IsChecked()) {
+    clargs.Add(wxT("--engage"));
+    clargs.Add(wxT("use_simpleblock"));
+  }
+
   for (i = args_start; i < clargs.Count(); i++) {
     if (clargs[i].Find(wxT(" ")) >= 0)
       cmdline += wxT(" \"") + shell_escape(clargs[i]) + wxT("\"");

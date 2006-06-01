@@ -129,6 +129,17 @@ tab_settings::tab_settings(wxWindow *parent):
   siz_misc->Add(cb_gui_debugging, 0, wxLEFT, 5);
   siz_misc->Add(0, 5, 0, 0, 0);
 
+  cb_always_use_simpleblock =
+    new wxCheckBox(this, ID_CB_ALWAYS_USE_SIMPLEBLOCK,
+                   wxT("Always use simple blocks"));
+  cb_gui_debugging->SetToolTip(TIP("Always adds '--engage use_simpleblock' "
+                                   "to the command line. That way Matroska's "
+                                   "new 'simple blocks' will be used which "
+                                   "save a bit of overhead at the cost of "
+                                   "not being backwards compatible."));
+  siz_misc->Add(cb_always_use_simpleblock, 0, wxLEFT, 5);
+  siz_misc->Add(0, 5, 0, 0, 0);
+
   siz_about = new wxStaticBoxSizer(new wxStaticBox(this, -1, wxT("About")),
                                    wxHORIZONTAL);
   siz_about->Add(new wxStaticBitmap(this, -1, wxBitmap(matroskalogo_big_xpm)),
@@ -238,6 +249,8 @@ tab_settings::load_preferences() {
   cb_warn_usage->SetValue(b);
   cfg->Read(wxT("gui_debugging"), &b, false);
   cb_gui_debugging->SetValue(b);
+  cfg->Read(wxT("always_use_simpleblock"), &b, false);
+  cb_always_use_simpleblock->SetValue(b);
   mdlg->log_window->Show(b);
 }
 
@@ -256,6 +269,8 @@ tab_settings::save_preferences() {
   cfg->Write(wxT("on_top"), cb_on_top->IsChecked());
   cfg->Write(wxT("warn_usage"), cb_warn_usage->IsChecked());
   cfg->Write(wxT("gui_debugging"), cb_gui_debugging->IsChecked());
+  cfg->Write(wxT("always_use_simpleblock"),
+             cb_always_use_simpleblock->IsChecked());
   cfg->Flush();
 }
 
