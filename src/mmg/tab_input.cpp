@@ -24,6 +24,7 @@
 #include "wx/file.h"
 #include "wx/listctrl.h"
 #include "wx/notebook.h"
+#include "wx/regex.h"
 #include "wx/statline.h"
 
 #include "common.h"
@@ -852,6 +853,11 @@ tab_input::add_file(const wxString &file_name,
     return;
   }
 
+  wxString delay_from_file_name;
+  wxRegEx re_delay(wxT("delay[[:blank:]]+(-?[[:digit:]]+)"), wxRE_ICASE);
+  if (re_delay.Matches(file_name))
+    delay_from_file_name = re_delay.GetMatch(file_name, 1);
+
   default_audio_track_found = -1 != default_track_checked('a');
   default_video_track_found = -1 != default_track_checked('v');
   default_subtitle_track_found = -1 != default_track_checked('s');
@@ -877,6 +883,9 @@ tab_input::add_file(const wxString &file_name,
       parse_int(wxMB(id), track->id);
       track->ctype = exact;
       track->enabled = true;
+
+      if ('a' == track->type)
+        track->delay = delay_from_file_name;
 
       if (info.length() > 0) {
         args = split(info, wxU(" "));
