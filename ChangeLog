@@ -1,3 +1,9 @@
+2006-06-02  Moritz Bunkus  <moritz@bunkus.org>
+
+	* Build system: bug fix: Moved some @...@ style variables from
+	configure.in to Makefile.in where they belong (very recent
+	autoconf versions were choking on those).
+
 2006-06-01  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: new feature: Added an option for always using simple
