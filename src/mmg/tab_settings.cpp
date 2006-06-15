@@ -132,11 +132,12 @@ tab_settings::tab_settings(wxWindow *parent):
   cb_always_use_simpleblock =
     new wxCheckBox(this, ID_CB_ALWAYS_USE_SIMPLEBLOCK,
                    wxT("Always use simple blocks"));
-  cb_gui_debugging->SetToolTip(TIP("Always adds '--engage use_simpleblock' "
-                                   "to the command line. That way Matroska's "
-                                   "new 'simple blocks' will be used which "
-                                   "save a bit of overhead at the cost of "
-                                   "not being backwards compatible."));
+  cb_always_use_simpleblock->
+    SetToolTip(TIP("Always adds '--engage use_simpleblock' "
+                   "to the command line. That way Matroska's "
+                   "new 'simple blocks' will be used which "
+                   "save a bit of overhead at the cost of "
+                   "not being backwards compatible."));
   siz_misc->Add(cb_always_use_simpleblock, 0, wxLEFT, 5);
   siz_misc->Add(0, 5, 0, 0, 0);
 
