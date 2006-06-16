@@ -1,5 +1,8 @@
 2006-06-16  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: The "stretch" input box was not accepting the same
+	syntax that mkvmerge's "--sync" parameter accepts.
+
 	* mkvmerge: bug fix: PCM audio data with 4 bits per Sample caused
 	mkvmerge to allocate all available memory. Patch by Robert Millan
 	(see AUTHORS).

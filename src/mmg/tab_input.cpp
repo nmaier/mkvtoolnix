@@ -1826,24 +1826,18 @@ tab_input::validate_settings() {
         return false;
       }
 
-      s = wxMB(t->stretch);
-      strip(s);
-      if (s.length() > 0) {
-        dot_present = false;
-        i = 0;
-        while (i < s.length()) {
-          if (isdigit(s[i]) ||
-              (!dot_present && ((s[i] == '.') || (s[i] == ',')))) {
-            if ((s[i] == '.') || (s[i] == ','))
-              dot_present = true;
-            i++;
-          } else {
-            wxMessageBox(wxT("The stretch setting for track nr. ") + sid +
-                         wxT(" in file '") + f->file_name +
-                         wxT("' is invalid."), wxT("mkvmerge GUI: error"),
-                         wxOK | wxCENTER | wxICON_ERROR);
-            return false;
-          }
+      sid = t->stretch;
+      strip(sid);
+      if (sid.length() > 0) {
+        wxRegEx re_stretch(wxT("^[[:digit:]]+([,\\.][[:digit:]]+)?"
+                               "(/[[:digit:]]+([,\\.][[:digit:]]+)?)?$"),
+                           wxRE_ICASE);
+        if (!re_stretch.Matches(sid)) {
+          wxMessageBox(wxT("The stretch setting for track nr. ") + sid +
+                       wxT(" in file '") + f->file_name +
+                       wxT("' is invalid."), wxT("mkvmerge GUI: error"),
+                       wxOK | wxCENTER | wxICON_ERROR);
+          return false;
         }
       }
 
