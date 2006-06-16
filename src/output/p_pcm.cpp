@@ -11,6 +11,7 @@
    PCM output module
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
+   Patches by Robert Millan <rmh@aybabtu.com>.
 */
 
 #include <stdlib.h>
@@ -51,7 +52,10 @@ pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *_reader,
   set_track_default_duration((int64_t)(1000000000.0 * ti.async.linear *
                                        packet_size / samples_per_sec));
 
-  packet_size *= channels * bits_per_sample / 8;
+  /* It could happen that (channels * bits_per_sample < 8).  Because of this,
+     we mustn't divide by 8 in the same line, or the result would be hosed. */
+  packet_size *= channels * bits_per_sample;
+  packet_size /= 8;
 }
 
 pcm_packetizer_c::~pcm_packetizer_c() {

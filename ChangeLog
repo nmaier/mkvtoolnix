@@ -1,3 +1,9 @@
+2006-06-16  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: PCM audio data with 4 bits per Sample caused
+	mkvmerge to allocate all available memory. Patch by Robert Millan
+	(see AUTHORS).
+
 2006-06-15  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: Mixed up two tool tips on the "settings" tab.
