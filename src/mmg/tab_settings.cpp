@@ -250,9 +250,9 @@ tab_settings::load_preferences() {
   cb_warn_usage->SetValue(b);
   cfg->Read(wxT("gui_debugging"), &b, false);
   cb_gui_debugging->SetValue(b);
+  mdlg->log_window->Show(b);
   cfg->Read(wxT("always_use_simpleblock"), &b, false);
   cb_always_use_simpleblock->SetValue(b);
-  mdlg->log_window->Show(b);
 }
 
 void
