@@ -1176,9 +1176,6 @@ ogm_reader_c::handle_stream_comments() {
   string title;
   bool charset_warning_printed;
 
-  if (identifying)
-    return;
-
   charset_warning_printed = false;
   cch = utf8_init(ti.chapter_charset);
 

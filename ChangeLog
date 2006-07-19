@@ -1,3 +1,10 @@
+2006-07-19  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Comments in OGM files were not handled if
+	mkvmerge was called in identification mode. One obvious result was
+	that neither the track language nor the file title was imported
+	into mmg.
+
 2006-06-16  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: The "stretch" input box was not accepting the same
