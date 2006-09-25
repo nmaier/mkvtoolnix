@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+#include <pcrecpp.h>
 
 #include "pr_generic.h"
 #include "r_srt.h"
@@ -26,18 +27,8 @@
 
 using namespace std;
 
-#define iscolon(s) (*(s) == ':')
-#define iscomma(s) (*(s) == ',')
-#define istwodigits(s) (isdigit(*(s)) && isdigit(*(s + 1)))
-#define isthreedigits(s) (isdigit(*(s)) && isdigit(*(s + 1)) && \
-                          isdigit(*(s + 2)))
-#define isarrow(s) (!strncmp((s), " --> ", 5))
-#define istimecode(s) (istwodigits(s) && iscolon(s + 2) && \
-                        istwodigits(s + 3) && iscolon(s + 5) && \
-                        istwodigits(s + 6) && iscomma(s + 8) && \
-                        isthreedigits(s + 9))
-#define issrttimecode(s) (istimecode(s) && isarrow(s + 12) && \
-                           istimecode(s + 17))
+#define RE_TIMECODE "(\\d{1,2}):(\\d{1,2}):(\\d{1,2}),(\\d+)?"
+#define RE_TIMECODE_LINE "^" RE_TIMECODE "\\s+-+>\\s+" RE_TIMECODE "\\s*"
 
 int
 srt_reader_c::probe_file(mm_text_io_c *io,
@@ -52,7 +43,8 @@ srt_reader_c::probe_file(mm_text_io_c *io,
     if (!parse_int(s, dummy))
       return 0;
     s = io->getline();
-    if ((s.length() < 29) || !issrttimecode(s.c_str()))
+    pcrecpp::RE timecode_re(RE_TIMECODE_LINE);
+    if (!timecode_re.FullMatch(s))
       return 0;
     s = io->getline();
     io->setFilePointer(0, seek_beginning);
@@ -105,10 +97,13 @@ srt_reader_c::create_packetizer(int64_t) {
 void
 srt_reader_c::parse_file() {
   int64_t start, end, previous_start;
-  char *chunk;
   string s, subtitles;
-  int state, i, line_number;
-  bool non_number_found, timecode_warning_printed;
+  int state, line_number;
+  int s_h, s_min, s_sec, e_h, e_min, e_sec;
+  string s_rest, e_rest;
+  bool timecode_warning_printed;
+  pcrecpp::RE timecode_re(RE_TIMECODE_LINE);
+  pcrecpp::RE number_re("^\\d+$");
 
   start = 0;
   end = 0;
@@ -134,51 +129,53 @@ srt_reader_c::parse_file() {
     }
 
     if (state == STATE_INITIAL) {
-      non_number_found = false;
-      for (i = 0; i < s.length(); i++)
-        if (!isdigit(s[i])) {
-          mxwarn(FMT_FN "Error in line %d: expected subtitle number "
-                 "and found some text.\n", ti.fname.c_str(), line_number);
-          non_number_found = true;
-          break;
-        }
-      if (non_number_found)
+      if (!number_re.FullMatch(s)) {
+        mxwarn(FMT_FN "Error in line %d: expected subtitle number "
+               "and found some text.\n", ti.fname.c_str(), line_number);
         break;
+      }
       state = STATE_TIME;
 
     } else if (state == STATE_TIME) {
-      if ((s.length() < 29) || !issrttimecode(s.c_str())) {
+      if (!timecode_re.FullMatch(s,
+                                 &s_h, &s_min, &s_sec, &s_rest,
+                                 &e_h, &e_min, &e_sec, &e_rest)) {
         mxwarn(FMT_FN "Error in line %d: expected a SRT timecode "
                "line but found something else. Aborting this file.\n",
                ti.fname.c_str(), line_number);
         break;
       }
 
+      // The previous entry is done now. Append it to the list of subtitles.
       if (subtitles.length() > 0) {
         strip(subtitles, true);
         subs.add(start, end, subtitles.c_str());
       }
 
-      // 00:00:00,000 --> 00:00:00,000
-      // 01234567890123456789012345678
-      //           1         2
-      chunk = safestrdup(s.c_str());
-      chunk[2] = 0;
-      chunk[5] = 0;
-      chunk[8] = 0;
-      chunk[12] = 0;
-      chunk[19] = 0;
-      chunk[22] = 0;
-      chunk[25] = 0;
-      chunk[29] = 0;
+      // Calculate the start and end time in ns precision for the following
+      // entry.
+      start = (int64_t)s_h * 60 * 60 + s_min * 60 + s_sec;
+      end = (int64_t)e_h * 60 * 60 + e_min * 60 + e_sec;
 
-      start = atol(chunk) * 3600000 + atol(&chunk[3]) * 60000 +
-        atol(&chunk[6]) * 1000 + atol(&chunk[9]);
-      start *= 1000000;
-      end = atol(&chunk[17]) * 3600000 + atol(&chunk[20]) * 60000 +
-        atol(&chunk[23]) * 1000 + atol(&chunk[26]);
-      end *= 1000000;
+      start *= 1000000000ll;
+      end *= 1000000000ll;
 
+      while (s_rest.length() < 9)
+        s_rest += "0";
+      if (s_rest.length() > 9)
+        s_rest.erase(9);
+      start += atol(s_rest.c_str());
+
+      while (e_rest.length() < 9)
+        e_rest += "0";
+      if (e_rest.length() > 9)
+        e_rest.erase(9);
+      end += atol(e_rest.c_str());
+
+      // There are files for which start timecodes overlap. Matroska requires
+      // blocks to be sorted by their timecode. mkvmerge does this at the end
+      // of this function, but warn the user that the original order is being
+      // changed.
       if (!timecode_warning_printed && (start < previous_start)) {
         mxwarn(FMT_FN "Warning in line %d: The start timecode is smaller "
                "than that of the previous entry. All entries from this file "
@@ -188,8 +185,6 @@ srt_reader_c::parse_file() {
       }
       previous_start = start;
 
-      safefree(chunk);
-
       subtitles = "";
       state = STATE_SUBS;
 
@@ -198,21 +193,13 @@ srt_reader_c::parse_file() {
         subtitles += "\n";
       subtitles += s;
 
-    } else {
-      non_number_found = false;
-      for (i = 0; i < s.length(); i++)
-        if (!isdigit(s[i])) {
-          non_number_found = true;
-          break;
-        }
+    } else if (number_re.FullMatch(s))
+      state = STATE_TIME;
 
-      if (!non_number_found)
-        state = STATE_TIME;
-      else {
-        if (subtitles.length() > 0)
-          subtitles += "\n";
-        subtitles += s;
-      }
+    else {
+      if (subtitles.length() > 0)
+        subtitles += "\n";
+      subtitles += s;
     }
   }
 

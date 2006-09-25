@@ -1,3 +1,8 @@
+2006-09-25  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Made the checks for SRT timecodes a bit less
+	strict (e.g. allow fewer than three digits after the comma).
+
 2006-07-19  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Comments in OGM files were not handled if
