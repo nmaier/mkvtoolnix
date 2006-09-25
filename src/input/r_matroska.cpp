@@ -440,7 +440,7 @@ kax_reader_c::verify_tracks() {
             t->a_formattag = FOURCC('f', 'L', 'a', 'C');
 #else
             mxwarn(PFX "mkvmerge was not compiled with FLAC support. "
-                   "Ignoring track %u.\n", t->tnum);
+                   "Ignoring track " LLU ".\n", t->tnum);
             continue;
 #endif
           } else if (t->codec_id == MKV_A_TTA)
