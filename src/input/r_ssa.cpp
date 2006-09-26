@@ -13,11 +13,14 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "os.h"
+
 #include <ctype.h>
+#include <errno.h>
+#include <pcrecpp.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <errno.h>
 
 #include <algorithm>
 
@@ -34,17 +37,36 @@ int
 ssa_reader_c::probe_file(mm_text_io_c *io,
                          int64_t size) {
   string line;
+  int line_number;
+  pcrecpp::RE comment_re("^\\s*;");
 
   try {
+    line_number = 0;
     io->setFilePointer(0, seek_beginning);
-    line = io->getline();
-    if (strcasecmp(line.c_str(), "[script info]"))
+    while (io->getline2(line)) {
+      ++line_number;
+
+      // This is the line mkvmerge is looking for: positive match.
+      if (!strcasecmp(line.c_str(), "[script info]")) {
+        io->setFilePointer(0, seek_beginning);
+        return 1;
+      }
+
+      // Read at most 500 lines.
+      if (line_number > 500)
+        return 0;
+
+      // Allow for empty lines and comments.
+      strip(line, true);
+      if (comment_re.PartialMatch(line) || (line == ""))
+        continue;
+
+      // It's something else: negative match.
       return 0;
-    io->setFilePointer(0, seek_beginning);
+    }
   } catch (...) {
-    return 0;
   }
-  return 1;
+  return 0;
 }
 
 ssa_reader_c::ssa_reader_c(track_info_c &_ti)
