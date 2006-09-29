@@ -29,34 +29,63 @@ bool random_c::m_seeded = false;
 
 #if defined(SYS_WINDOWS)
 
+bool random_c::m_tried_uuidcreate = false;
+bool random_c::m_use_uuidcreate = false;
+
 void
 random_c::generate_bytes(void *destination,
                          int num_bytes) {
-  int i, num_left;
+  int num_written, num_left;
+  UUID uuid;
+  RPC_STATUS status;
 
-  i = 0;
-  while (num_bytes > 0) {
-    UUID uuid;
-    RPC_STATUS status;
+  if (!m_seeded) {
+    srand(GetTickCount());
+    m_seeded = true;
+  }
 
-    status = UuidCreate(&uuid);
-    if ((RPC_S_OK != status) && (RPC_S_UUID_LOCAL_ONLY != status)) {
-      if (!m_seeded) {
-        srand(GetTickCount());
-        m_seeded = true;
+  if (!m_tried_uuidcreate) {
+    // Find out whether UuidCreate returns different
+    // data in Data4 on each call by comparing up to five
+    // results. If not use srand() and rand().
+    UUID first_uuid;
+    int i;
+
+    m_use_uuidcreate = true;
+    status = UuidCreate(&first_uuid);
+    if ((RPC_S_OK == status) || (RPC_S_UUID_LOCAL_ONLY == status)) {
+      for (i = 0; i < 5; ++i) {
+        status = UuidCreate(&uuid);
+        if (((RPC_S_OK != status) && (RPC_S_UUID_LOCAL_ONLY != status)) ||
+            !memcmp(first_uuid.Data4, uuid.Data4, sizeof(uuid.Data4))) {
+          m_use_uuidcreate = false;
+          break;
+        }
+      }
+    } else
+      m_use_uuidcreate = false;
+
+    m_tried_uuidcreate = true;
+  }
+
+  num_written = 0;
+  while (num_written < num_bytes) {
+    if (m_use_uuidcreate) {
+      status = UuidCreate(&uuid);
+      if ((RPC_S_OK != status) && (RPC_S_UUID_LOCAL_ONLY != status)) {
+        m_use_uuidcreate = false;
+        continue;
       }
 
-      while (0 > num_bytes) {
-        ((unsigned char *)destination)[i + num_bytes] =
+      num_left = (num_bytes - num_written) > 8 ? 8 :
+        (num_written - num_bytes);
+      memcpy((unsigned char *)destination + num_written, &uuid.Data4, num_left);
+      num_written += num_left;
+
+    } else
+      for (; num_written < num_bytes; ++num_written)
+        ((unsigned char *)destination)[num_written] =
           (unsigned char)(256.0 * rand() / (RAND_MAX + 1.0));
-        --num_bytes;
-      }
-    }
-
-    num_left = num_bytes > 8 ? 8 : num_bytes;
-    memcpy((unsigned char *)destination + i, &uuid.Data4, num_left);
-    num_bytes -= num_left;
-    i += num_left;
   }
 }
 

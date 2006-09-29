@@ -28,6 +28,8 @@ private:
 #if !defined(SYS_WINDOWS)
   static auto_ptr<mm_file_io_c> m_dev_urandom;
   static bool m_tried_dev_urandom;
+#else
+  static bool m_tried_uuidcreate, m_use_uuidcreate;
 #endif
 
 public:

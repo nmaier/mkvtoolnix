@@ -1,3 +1,10 @@
+2006-09-29  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed the random number generation on
+	Windows. On Windows 9x/ME mkvmerge would simply hang. On newer
+	versions the function was accessing invalid memory and was
+	generally buggy.
+
 2006-09-26  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: SSA/ASS subtitles with comments before the
