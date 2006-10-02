@@ -77,8 +77,9 @@ random_c::generate_bytes(void *destination,
         continue;
       }
 
-      num_left = (num_bytes - num_written) > 8 ? 8 :
-        (num_written - num_bytes);
+      num_left = num_bytes - num_written;
+      if (num_left > 8)
+        num_left = 8;
       memcpy((unsigned char *)destination + num_written, &uuid.Data4, num_left);
       num_written += num_left;
 

@@ -103,7 +103,8 @@ xtr_ssa_c::xtr_ssa_c(const string &_codec_id,
 void
 xtr_ssa_c::create_file(xtr_base_c *_master,
                        KaxTrackEntry &track) {
-  char *s, *p1;
+  char *s;
+  const char *p1;
   const unsigned char *pd;
   int bom_len, pos1, pos2, priv_size;
   string sconv;
