@@ -22,7 +22,12 @@
 #include <ogg/ogg.h>
 #include <vorbis/codec.h>
 #if defined(HAVE_FLAC_FORMAT_H)
-#include <FLAC/stream_decoder.h>
+# include <FLAC/stream_decoder.h>
+# if !defined(FLAC_API_VERSION_CURRENT) || FLAC_API_VERSION_CURRENT < 8
+#  define LEGACY_FLAC
+# else
+#  undef LEGACY_FLAC
+# endif
 #endif
 #if defined(SYS_WINDOWS)
 #include <windows.h>
@@ -102,17 +107,21 @@ extract_vorbis_comments(const memory_cptr &mem) {
 static FLAC__StreamDecoderReadStatus
 fhe_read_cb(const FLAC__StreamDecoder *decoder,
             FLAC__byte buffer[],
+#ifdef LEGACY_FLAC
             unsigned *bytes,
+#else
+            size_t *bytes,
+#endif
             void *client_data) {
   flac_header_extractor_c *fhe;
   ogg_packet op;
 
   fhe = (flac_header_extractor_c *)client_data;
   if (fhe->done)
-    return FLAC__STREAM_DECODER_READ_STATUS_END_OF_STREAM;
+    return FLAC__STREAM_DECODER_READ_STATUS_ABORT;
   if (ogg_stream_packetout(&fhe->os, &op) != 1) {
     if (!fhe->read_page() || (ogg_stream_packetout(&fhe->os, &op) != 1))
-      return FLAC__STREAM_DECODER_READ_STATUS_END_OF_STREAM;
+      return FLAC__STREAM_DECODER_READ_STATUS_ABORT;
   }
 
   if (*bytes < op.bytes)
@@ -193,6 +202,7 @@ flac_header_extractor_c::flac_header_extractor_c(const string &file_name,
   decoder = FLAC__stream_decoder_new();
   if (decoder == NULL)
     mxerror(FPFX "FLAC__stream_decoder_new() failed.\n");
+#ifdef LEGACY_FLAC
   FLAC__stream_decoder_set_client_data(decoder, this);
   if (!FLAC__stream_decoder_set_read_callback(decoder, fhe_read_cb))
     mxerror(FPFX "Could not set the read callback.\n");
@@ -202,10 +212,16 @@ flac_header_extractor_c::flac_header_extractor_c(const string &file_name,
     mxerror(FPFX "Could not set the metadata callback.\n");
   if (!FLAC__stream_decoder_set_error_callback(decoder, fhe_error_cb))
     mxerror(FPFX "Could not set the error callback.\n");
+#endif
   if (!FLAC__stream_decoder_set_metadata_respond_all(decoder))
     mxerror(FPFX "Could not set metadata_respond_all.\n");
+#ifdef LEGACY_FLAC
   if (FLAC__stream_decoder_init(decoder) !=
       FLAC__STREAM_DECODER_SEARCH_FOR_METADATA)
+#else
+  if (FLAC__stream_decoder_init_stream(decoder, fhe_read_cb, NULL, NULL, NULL, NULL, fhe_write_cb, fhe_metadata_cb, fhe_error_cb, this) !=
+      FLAC__STREAM_DECODER_INIT_STATUS_OK)
+#endif
     mxerror(FPFX "Could not initialize the FLAC decoder.\n");
   ogg_sync_init(&oy);
 }

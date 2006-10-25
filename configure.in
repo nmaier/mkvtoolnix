@@ -501,11 +501,11 @@ dnl
               [ with_flac=${withval} ], [ with_flac=yes ])
 
   if test "$with_flac" != "no"; then
-    AC_CHECK_LIB(FLAC, FLAC__seekable_stream_decoder_new,
-                 [ FLAC_LIBS="-lFLAC -lm"
+    AC_CHECK_LIB(FLAC, FLAC__stream_decoder_new,
+                 [ FLAC_LIBS="-lFLAC $OGG_LIBS -lm"
                    flac_found=yes ],
                  [ flac_found=no ],
-                 "-lm")
+                 $OGG_LIBS -lm)
   else
     flac_found=no
   fi
@@ -516,7 +516,7 @@ dnl
                     ])
   fi
   if test x"$flac_found" = xyes ; then
-    AC_CHECK_LIB(FLAC, FLAC__seekable_stream_decoder_skip_single_frame,
+    AC_CHECK_LIB(FLAC, FLAC__stream_decoder_skip_single_frame,
                  [ flac_decoder_skip_found=yes ],
                  [ flac_decoder_skip_found=no ],
                  $FLAC_LIBS)
