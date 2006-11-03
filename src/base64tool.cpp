@@ -78,7 +78,7 @@ main(int argc,
   try {
     in = new mm_file_io_c(argv[2]);
     if (mode != 'e')
-      in = new mm_text_io_c(in);
+      intext = new mm_text_io_c(in);
   } catch(...) {
     mxerror(_("The file '%s' could not be opened for reading (%d, %s).\n"),
             argv[2], errno, strerror(errno));
