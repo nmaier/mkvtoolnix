@@ -31,6 +31,7 @@
 #include "common.h"
 #include "hacks.h"
 #include "matroska.h"
+#include "output_control.h"
 #include "p_aac.h"
 #include "p_mp3.h"
 #include "p_passthrough.h"
@@ -91,7 +92,7 @@ qtmp4_reader_c::qtmp4_reader_c(track_info_c &_ti)
   generic_reader_c(_ti),
   io(NULL), file_size(0), mdat_pos(-1), mdat_size(0),
   time_scale(1), compression_algorithm(0),
-  main_dmx(-1) {
+  main_dmx(-1), global_timecode_offset(0) {
 
   try {
     io = new mm_file_io_c(ti.fname);
@@ -308,6 +309,9 @@ qtmp4_reader_c::parse_headers() {
     update_tables(dmx);
   }
 
+  if (!identifying)
+    calculate_global_timecode_offset();
+
   mxverb(2, PFX "Number of valid tracks found: %u\n",
          (unsigned int)demuxers.size());
 }
@@ -406,6 +410,78 @@ qtmp4_reader_c::update_tables(qtmp4_demuxer_ptr &dmx) {
            sample.pts, sample.size, sample.pos);
   }
   update_editlist_table(dmx);
+}
+
+void
+qtmp4_reader_c::calculate_global_timecode_offset() {
+  vector<qtmp4_demuxer_ptr>::iterator idmx;
+  int64_t timecode;
+  int i;
+
+  foreach(idmx, demuxers) {
+    qtmp4_demuxer_ptr &dmx = *idmx;
+
+    if (dmx->sample_size != 0) {
+      for (i = 0; i < dmx->chunk_table.size(); ++i) {
+        timecode =
+          dmx->to_nsecs((uint64_t)dmx->chunk_table[dmx->pos].samples *
+                        (uint64_t)dmx->duration);
+        if ((0 > timecode) && (timecode < global_timecode_offset))
+          global_timecode_offset = timecode;
+      }
+
+    } else {
+      int editlist_pos = 0;
+      int64_t v_dts_offset = 0;
+
+      for (i = 0; i < dmx->sample_table.size(); ++i) {
+        if (('v' == dmx->type) && !dmx->editlist_table.empty()) {
+          // find the right editlist_table entry:
+          if (i < dmx->editlist_table[editlist_pos].start_frame)
+            editlist_pos = 0;
+
+          while (((dmx->editlist_table.size() - 1) > editlist_pos) &&
+                 (i >= dmx->editlist_table[editlist_pos + 1].start_frame))
+            ++editlist_pos;
+
+          if ((dmx->editlist_table[editlist_pos].start_frame +
+               dmx->editlist_table[editlist_pos].frames) <= i)
+            continue; // EOF
+
+          // calc real frame index:
+          i -= dmx->editlist_table[editlist_pos].start_frame;
+          i += dmx->editlist_table[editlist_pos].start_sample;
+
+          // calc pts:
+          timecode =
+            dmx->to_nsecs(dmx->sample_table[i].pts +
+                          dmx->editlist_table[editlist_pos].pts_offset);
+
+        } else
+          timecode = dmx->to_nsecs(dmx->sample_table[i].pts);
+
+        if ((dmx->type == 'v') && (dmx->pos < dmx->frame_offset_table.size())
+            && !strncasecmp(dmx->fourcc, "avc1", 4)) {
+          if (0 == i)
+            v_dts_offset = dmx->to_nsecs(dmx->frame_offset_table[0]);
+
+          timecode += dmx->to_nsecs(dmx->frame_offset_table[i]) -
+            v_dts_offset;
+        }
+
+        if ((0 > timecode) && (timecode < global_timecode_offset))
+          global_timecode_offset = timecode;
+      }
+    }
+  }
+
+  if (0 != global_timecode_offset) {
+    global_timecode_offset *= -1;
+    mxwarn("This file contains at least one frame with a negative "
+           "timecode. mkvmerge will adjust all timecodes by "
+           FMT_TIMECODEN " so that none is negative anymore.\n",
+           ARG_TIMECODEN(global_timecode_offset));
+  }
 }
 
 // Also taken from mplayer's demux_mov.c file.
@@ -1269,7 +1345,8 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
       io->setFilePointer(dmx->chunk_table[dmx->pos].pos);
       timecode =
         dmx->to_nsecs((uint64_t)dmx->chunk_table[dmx->pos].samples *
-                      (uint64_t)dmx->duration);
+                      (uint64_t)dmx->duration)
+        + global_timecode_offset;
 
       if (dmx->sample_size != 1) {
         if (!dmx->warning_printed) {
@@ -1360,10 +1437,12 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
         // calc pts:
         timecode =
           dmx->to_nsecs(dmx->sample_table[frame].pts +
-                        dmx->editlist_table[dmx->editlist_pos].pts_offset);
+                        dmx->editlist_table[dmx->editlist_pos].pts_offset)
+          + global_timecode_offset;
 
       } else
-        timecode = dmx->to_nsecs(dmx->sample_table[frame].pts);
+        timecode = dmx->to_nsecs(dmx->sample_table[frame].pts)
+          + global_timecode_offset;
 
       if ((frame + 1) < dmx->sample_table.size())
         duration = dmx->to_nsecs(dmx->sample_table[frame + 1].pts) - timecode;
@@ -1795,10 +1874,11 @@ qtmp4_demuxer_t::calculate_fps() {
     // a bit trickier. I have to find the maximum timecode including
     // the frame offsets (for PTS/DTS conversion) and divide that
     // by the number of frames.
-    int64_t max_tc;
+    int64_t max_tc, min_tc;
     int i;
 
     max_tc = 0;
+    min_tc = 0;
 
     for (i = 0; i < sample_table.size(); ++i) {
       int64_t timecode;
@@ -1807,7 +1887,11 @@ qtmp4_demuxer_t::calculate_fps() {
                           (int64_t)frame_offset_table[pos]);
       if (timecode > max_tc)
         max_tc = timecode;
+      if (timecode < min_tc)
+        min_tc = max_tc;
     }
+    if (0 > min_tc)
+      max_tc -= min_tc;
     if (0 < max_tc)
       fps = (double)sample_table.size() * 1000000000.0 / (double)max_tc;
 

@@ -190,6 +190,7 @@ private:
   int64_t file_size, mdat_pos, mdat_size;
   uint32_t time_scale, compression_algorithm;
   int main_dmx;
+  int64_t global_timecode_offset;
 
 public:
   qtmp4_reader_c(track_info_c &_ti) throw (error_c);
@@ -206,6 +207,7 @@ public:
 
 protected:
   virtual void parse_headers();
+  virtual void calculate_global_timecode_offset();
   virtual qt_atom_t read_atom(mm_io_c *read_from = NULL,
                               bool exit_on_error = true);
   virtual void parse_video_header_priv_atoms(qtmp4_demuxer_ptr &dmx,

@@ -1,5 +1,10 @@
 2006-11-03  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: For MP4 files with certain CTTS contents
+	mkvmerge would use negative timecodes for a couple of
+	frames. Those frames were dropped and mkvmerge often ended up
+	eating huge amounts of memory and crashing afterwards.
+
 	* mkvmerge: bug fix: AAC-in-MP4 with the LC profile was sometimes
 	misdetected as having a SBR extension and an output sampling
 	frequency of 96000 Hz. Fixes Anthill bug 210.
