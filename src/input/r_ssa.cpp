@@ -46,6 +46,7 @@ ssa_reader_c::probe_file(mm_text_io_c *io,
     while (io->getline2(line)) {
       ++line_number;
 
+      strip(line, true);
       // This is the line mkvmerge is looking for: positive match.
       if (!strcasecmp(line.c_str(), "[script info]")) {
         io->setFilePointer(0, seek_beginning);
@@ -57,7 +58,6 @@ ssa_reader_c::probe_file(mm_text_io_c *io,
         return 0;
 
       // Allow for empty lines and comments.
-      strip(line, true);
       if (comment_re.PartialMatch(line) || (line == ""))
         continue;
 
@@ -184,6 +184,14 @@ ssa_reader_c::parse_file(mm_text_io_c *io) {
   vector<string> fields;
   ssa_section_e section, previous_section;
   bool add_to_global;
+  pcrecpp::RE_Options opt_caseless;
+  opt_caseless.set_caseless(true);
+  pcrecpp::RE sec_styles_ass_re("^\\s*\\[V4\\+\\s+Styles\\]", opt_caseless);
+  pcrecpp::RE sec_styles_re("^\\s*\\[V4\\s+Styles\\]", opt_caseless);
+  pcrecpp::RE sec_info_re("^\\s*\\[Script\\s+Info\\]", opt_caseless);
+  pcrecpp::RE sec_events_re("^\\s*\\[Events\\]", opt_caseless);
+  pcrecpp::RE sec_graphics_re("^\\s*\\[Graphics\\]", opt_caseless);
+  pcrecpp::RE sec_fonts_re("^\\s*\\[Fonts\\]", opt_caseless);
 
   num = 0;
 
@@ -201,24 +209,24 @@ ssa_reader_c::parse_file(mm_text_io_c *io) {
     if (!strcasecmp(line.c_str(), "ScriptType: v4.00+"))
       m_is_ass = true;
 
-    else if (!strcasecmp(line.c_str(), "[V4+ Styles]")) {
+    else if (sec_styles_ass_re.PartialMatch(line)) {
       m_is_ass = true;
       section = SSA_SECTION_V4STYLES;
 
-    } else if (!strcasecmp(line.c_str(), "[V4 Styles]"))
+    } else if (sec_styles_re.PartialMatch(line))
       section = SSA_SECTION_V4STYLES;
 
-    else if (!strcasecmp(line.c_str(), "[Script Info]"))
+    else if (sec_info_re.PartialMatch(line))
       section = SSA_SECTION_INFO;
 
-    else if (!strcasecmp(line.c_str(), "[Events]"))
+    else if (sec_events_re.PartialMatch(line))
       section = SSA_SECTION_EVENTS;
 
-    else if (!strcasecmp(line.c_str(), "[Graphics]")) {
+    else if (sec_graphics_re.PartialMatch(line)) {
       section = SSA_SECTION_GRAPHICS;
       add_to_global = false;
 
-    } else if (!strcasecmp(line.c_str(), "[Fonts]")) {
+    } else if (sec_fonts_re.PartialMatch(line)) {
       section = SSA_SECTION_FONTS;
       add_to_global = false;
 
