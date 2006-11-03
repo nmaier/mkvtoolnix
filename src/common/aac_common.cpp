@@ -210,7 +210,7 @@ parse_aac_data(unsigned char *data,
   --profile;
   sample_rate = aac_sampling_freq[((data[0] & 0x07) << 1) | (data[1] >> 7)];
   channels = (data[1] & 0x7f) >> 3;
-  if (size == 5) {
+  if ((5 == profile) && (5 <= size)) {
     output_sample_rate = aac_sampling_freq[(data[4] & 0x7f) >> 3];
     sbr = true;
   } else if (sample_rate <= 24000) {

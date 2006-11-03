@@ -1,3 +1,9 @@
+2006-11-03  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: AAC-in-MP4 with the LC profile was sometimes
+	misdetected as having a SBR extension and an output sampling
+	frequency of 96000 Hz. Fixes Anthill bug 210.
+
 2006-10-26  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: Added support for API changes in the upcoming FLAC
