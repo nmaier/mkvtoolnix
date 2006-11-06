@@ -96,7 +96,7 @@ struct qtmp4_demuxer_t {
 
   uint32_t time_scale;
   uint64_t global_duration;
-  uint64_t avg_duration;
+//   uint64_t avg_duration;
   uint32_t sample_size;
 
   uint64_t duration;
@@ -110,7 +110,9 @@ struct qtmp4_demuxer_t {
   vector<qt_frame_offset_t> raw_frame_offset_table;
   vector<int32_t> frame_offset_table;
 
-  int editlist_pos;
+  vector<int64_t> timecodes, durations, frame_indices;
+  int64_t min_timecode, max_timecode;
+  double fps;
 
   esds_t esds;
   bool esds_parsed;
@@ -118,10 +120,8 @@ struct qtmp4_demuxer_t {
   unsigned char *v_stsd;
   uint32_t v_stsd_size;
   uint32_t v_width, v_height, v_bitdepth;
-  int64_t v_dts_offset;
   deque<int64_t> references;
-  bool avc_use_bframes;
-  int64_t max_timecode;
+  bool v_is_avc, avc_use_bframes;
   uint32_t a_channels, a_bitdepth;
   float a_samplerate;
   sound_v1_stsd_atom_t a_stsd;
@@ -135,13 +135,13 @@ struct qtmp4_demuxer_t {
 
   qtmp4_demuxer_t():
     ok(false), type('?'), id(0), pos(0),
-    time_scale(1), global_duration(0), avg_duration(0), sample_size(0),
-    duration(0),
-    editlist_pos(0), esds_parsed(false),
+    time_scale(1), global_duration(0), //avg_duration(0),
+    sample_size(0),
+    duration(0), min_timecode(0), max_timecode(0), fps(0.0),
+    esds_parsed(false),
     v_stsd(NULL), v_stsd_size(0),
-    v_width(0), v_height(0), v_bitdepth(0), v_dts_offset(0),
-    avc_use_bframes(false),
-    max_timecode(0),
+    v_width(0), v_height(0), v_bitdepth(0),
+    v_is_avc(false), avc_use_bframes(false),
     a_channels(0), a_bitdepth(0), a_samplerate(0.0),
     priv(NULL), priv_size(0),
     warning_printed(false),
@@ -159,8 +159,10 @@ struct qtmp4_demuxer_t {
     safefree(esds.sl_config);
   }
 
-  double calculate_fps();
+  void calculate_fps();
   int64_t to_nsecs(int64_t value);
+  void calculate_timecodes();
+  void adjust_timecodes(int64_t delta);
 };
 typedef counted_ptr<qtmp4_demuxer_t> qtmp4_demuxer_ptr;
 
@@ -190,7 +192,6 @@ private:
   int64_t file_size, mdat_pos, mdat_size;
   uint32_t time_scale, compression_algorithm;
   int main_dmx;
-  int64_t global_timecode_offset;
 
 public:
   qtmp4_reader_c(track_info_c &_ti) throw (error_c);
@@ -207,7 +208,7 @@ public:
 
 protected:
   virtual void parse_headers();
-  virtual void calculate_global_timecode_offset();
+  virtual void calculate_timecodes();
   virtual qt_atom_t read_atom(mm_io_c *read_from = NULL,
                               bool exit_on_error = true);
   virtual void parse_video_header_priv_atoms(qtmp4_demuxer_ptr &dmx,
@@ -219,11 +220,6 @@ protected:
   virtual bool parse_esds_atom(mm_mem_io_c &memio, qtmp4_demuxer_ptr &dmx,
                                int level);
   virtual uint32_t read_esds_descr_len(mm_mem_io_c &memio);
-
-  virtual void handle_video_with_bframes(qtmp4_demuxer_ptr &dmx,
-                                         int64_t timecode, int64_t duration,
-                                         bool is_keyframe,
-                                         memory_cptr mem);
 
   virtual void handle_cmov_atom(qt_atom_t parent, int level);
   virtual void handle_cmvd_atom(qt_atom_t parent, int level);

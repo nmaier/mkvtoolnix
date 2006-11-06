@@ -92,7 +92,7 @@ qtmp4_reader_c::qtmp4_reader_c(track_info_c &_ti)
   generic_reader_c(_ti),
   io(NULL), file_size(0), mdat_pos(-1), mdat_size(0),
   time_scale(1), compression_algorithm(0),
-  main_dmx(-1), global_timecode_offset(0) {
+  main_dmx(-1) {
 
   try {
     io = new mm_file_io_c(ti.fname);
@@ -283,7 +283,7 @@ qtmp4_reader_c::parse_headers() {
           }
         }
 
-      } else if (!strncasecmp(dmx->fourcc, "avc1", 4)) {
+      } else if (dmx->v_is_avc) {
         if ((dmx->priv == NULL) || (dmx->priv_size < 4)) {
           mxwarn(PFX "MPEG4 part 10/AVC track %u is missing its decoder "
                  "config. Skipping this track.\n", dmx->id);
@@ -310,7 +310,7 @@ qtmp4_reader_c::parse_headers() {
   }
 
   if (!identifying)
-    calculate_global_timecode_offset();
+    calculate_timecodes();
 
   mxverb(2, PFX "Number of valid tracks found: %u\n",
          (unsigned int)demuxers.size());
@@ -412,75 +412,33 @@ qtmp4_reader_c::update_tables(qtmp4_demuxer_ptr &dmx) {
   update_editlist_table(dmx);
 }
 
+
 void
-qtmp4_reader_c::calculate_global_timecode_offset() {
+qtmp4_reader_c::calculate_timecodes() {
   vector<qtmp4_demuxer_ptr>::iterator idmx;
-  int64_t timecode;
-  int i;
+  int64_t min_timecode;
 
   foreach(idmx, demuxers) {
     qtmp4_demuxer_ptr &dmx = *idmx;
 
-    if (dmx->sample_size != 0) {
-      for (i = 0; i < dmx->chunk_table.size(); ++i) {
-        timecode =
-          dmx->to_nsecs((uint64_t)dmx->chunk_table[dmx->pos].samples *
-                        (uint64_t)dmx->duration);
-        if ((0 > timecode) && (timecode < global_timecode_offset))
-          global_timecode_offset = timecode;
-      }
-
-    } else {
-      int editlist_pos = 0;
-      int64_t v_dts_offset = 0;
-
-      for (i = 0; i < dmx->sample_table.size(); ++i) {
-        if (('v' == dmx->type) && !dmx->editlist_table.empty()) {
-          // find the right editlist_table entry:
-          if (i < dmx->editlist_table[editlist_pos].start_frame)
-            editlist_pos = 0;
-
-          while (((dmx->editlist_table.size() - 1) > editlist_pos) &&
-                 (i >= dmx->editlist_table[editlist_pos + 1].start_frame))
-            ++editlist_pos;
-
-          if ((dmx->editlist_table[editlist_pos].start_frame +
-               dmx->editlist_table[editlist_pos].frames) <= i)
-            continue; // EOF
-
-          // calc real frame index:
-          i -= dmx->editlist_table[editlist_pos].start_frame;
-          i += dmx->editlist_table[editlist_pos].start_sample;
-
-          // calc pts:
-          timecode =
-            dmx->to_nsecs(dmx->sample_table[i].pts +
-                          dmx->editlist_table[editlist_pos].pts_offset);
-
-        } else
-          timecode = dmx->to_nsecs(dmx->sample_table[i].pts);
-
-        if ((dmx->type == 'v') && (dmx->pos < dmx->frame_offset_table.size())
-            && !strncasecmp(dmx->fourcc, "avc1", 4)) {
-          if (0 == i)
-            v_dts_offset = dmx->to_nsecs(dmx->frame_offset_table[0]);
-
-          timecode += dmx->to_nsecs(dmx->frame_offset_table[i]) -
-            v_dts_offset;
-        }
-
-        if ((0 > timecode) && (timecode < global_timecode_offset))
-          global_timecode_offset = timecode;
-      }
-    }
+    dmx->calculate_fps();
+    dmx->calculate_timecodes();
+    if (dmx->min_timecode < min_timecode)
+      min_timecode = dmx->min_timecode;
   }
 
-  if (0 != global_timecode_offset) {
-    global_timecode_offset *= -1;
+  if (0 > min_timecode) {
+    foreach(idmx, demuxers)
+      (*idmx)->adjust_timecodes(-1 * min_timecode);
+  } else
+    min_timecode = 0;
+
+  if (0 != min_timecode) {
+    min_timecode *= -1;
     mxwarn("This file contains at least one frame with a negative "
            "timecode. mkvmerge will adjust all timecodes by "
            FMT_TIMECODEN " so that none is negative anymore.\n",
-           ARG_TIMECODEN(global_timecode_offset));
+           ARG_TIMECODEN(min_timecode));
   }
 }
 
@@ -1102,8 +1060,10 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_ptr &new_dmx,
         mxwarn(PFX "Track ID %u has more than one FourCC. Only using "
                "the first one (%.4s) and not this one (%.4s).\n",
                new_dmx->id, new_dmx->fourcc, v_stsd.base.fourcc);
-      else
+      else {
         memcpy(new_dmx->fourcc, v_stsd.base.fourcc, 4);
+        new_dmx->v_is_avc = !strncasecmp(new_dmx->fourcc, "avc1", 4);
+      }
 
       mxverb(2, PFX "%*sFourCC: %.4s, width: %u, height: %u, depth: %u"
              "\n", level * 2, "", v_stsd.base.fourcc,
@@ -1299,29 +1259,6 @@ qtmp4_reader_c::handle_trak_atom(qtmp4_demuxer_ptr &new_dmx,
   }
 }
 
-void
-qtmp4_reader_c::handle_video_with_bframes(qtmp4_demuxer_ptr &dmx,
-                                          int64_t timecode,
-                                          int64_t duration,
-                                          bool is_keyframe,
-                                          memory_cptr mem) {
-  int64_t bref, fref, old_timecode;
-  bool is_bframe;
-
-  bref = is_keyframe ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC;
-  fref = VFT_NOBFRAME;
-  is_bframe = false;
-
-  if (dmx->pos == 0)
-    dmx->v_dts_offset = dmx->to_nsecs(dmx->frame_offset_table[0]);
-
-  old_timecode = timecode;
-  timecode += dmx->to_nsecs(dmx->frame_offset_table[dmx->pos]) -
-    dmx->v_dts_offset;
-
-  PTZR(dmx->ptzr)->process(new packet_t(mem, timecode, duration, bref, fref));
-}
-
 file_status_e
 qtmp4_reader_c::read(generic_packetizer_c *ptzr,
                      bool force) {
@@ -1343,10 +1280,8 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
         continue;
 
       io->setFilePointer(dmx->chunk_table[dmx->pos].pos);
-      timecode =
-        dmx->to_nsecs((uint64_t)dmx->chunk_table[dmx->pos].samples *
-                      (uint64_t)dmx->duration)
-        + global_timecode_offset;
+      timecode = dmx->timecodes[dmx->pos];
+      duration = dmx->durations[dmx->pos];
 
       if (dmx->sample_size != 1) {
         if (!dmx->warning_printed) {
@@ -1391,15 +1326,6 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
         return FILE_STATUS_DONE;
       }
 
-      if ((dmx->pos + 1) < dmx->chunk_table.size())
-        duration =
-          dmx->to_nsecs((uint64_t)dmx->chunk_table[dmx->pos + 1].samples *
-                        (uint64_t)dmx->duration);
-      else
-        duration = dmx->avg_duration;
-      dmx->avg_duration = (dmx->avg_duration * dmx->pos + duration) /
-        (dmx->pos + 1);
-
       PTZR(dmx->ptzr)->process(new packet_t(new memory_c(buffer, frame_size,
                                                          true),
                                             timecode, duration, is_keyframe ?
@@ -1411,45 +1337,14 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
         chunks_left = true;
 
     } else {
-      if (dmx->pos >= dmx->sample_table.size())
+      if (dmx->pos >= dmx->frame_indices.size())
         continue;
 
       frame = dmx->pos;
+      timecode = dmx->timecodes[frame];
+      duration = dmx->durations[frame];
 
-      if (('v' == dmx->type) && !dmx->editlist_table.empty()) {
-        // find the right editlist_table entry:
-        if (frame < dmx->editlist_table[dmx->editlist_pos].start_frame)
-          dmx->editlist_pos = 0;
-
-        while (((dmx->editlist_table.size() - 1) > dmx->editlist_pos) &&
-               (frame >=
-                dmx->editlist_table[dmx->editlist_pos + 1].start_frame))
-          ++dmx->editlist_pos;
-
-        if ((dmx->editlist_table[dmx->editlist_pos].start_frame +
-             dmx->editlist_table[dmx->editlist_pos].frames) <= frame)
-          continue; // EOF
-
-        // calc real frame index:
-        frame -= dmx->editlist_table[dmx->editlist_pos].start_frame;
-        frame += dmx->editlist_table[dmx->editlist_pos].start_sample;
-
-        // calc pts:
-        timecode =
-          dmx->to_nsecs(dmx->sample_table[frame].pts +
-                        dmx->editlist_table[dmx->editlist_pos].pts_offset)
-          + global_timecode_offset;
-
-      } else
-        timecode = dmx->to_nsecs(dmx->sample_table[frame].pts)
-          + global_timecode_offset;
-
-      if ((frame + 1) < dmx->sample_table.size())
-        duration = dmx->to_nsecs(dmx->sample_table[frame + 1].pts) - timecode;
-      else
-        duration = dmx->avg_duration;
-      dmx->avg_duration = (dmx->avg_duration * frame + duration) /
-        (frame + 1);
+      frame = dmx->frame_indices[frame];
 
       if (dmx->keyframe_table.size() == 0)
         is_keyframe = true;
@@ -1482,6 +1377,7 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
           return FILE_STATUS_DONE;
         }
         frame_size += dmx->esds.decoder_config_len;
+
       } else {
         buffer = (unsigned char *)safemalloc(frame_size);
         mxverb(4, "qtmp4_reader_c::read 2: %u bytes from " LLD "\n",
@@ -1500,18 +1396,13 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
       }
 
       memory_cptr mem(new memory_c(buffer, frame_size, true));
-      if ((dmx->type == 'v') && (dmx->pos < dmx->frame_offset_table.size()) &&
-          !strncasecmp(dmx->fourcc, "avc1", 4))
-        handle_video_with_bframes(dmx, timecode, duration, is_keyframe, mem);
-
-      else
-        PTZR(dmx->ptzr)->process(new packet_t(mem, timecode, duration,
-                                              is_keyframe ? VFT_IFRAME :
-                                              VFT_PFRAMEAUTOMATIC,
-                                              VFT_NOBFRAME));
+      PTZR(dmx->ptzr)->process(new packet_t(mem, timecode, duration,
+                                            is_keyframe ? VFT_IFRAME :
+                                            VFT_PFRAMEAUTOMATIC,
+                                            VFT_NOBFRAME));
 
       dmx->pos++;
-      if (dmx->pos < dmx->sample_table.size())
+      if (dmx->pos < dmx->frame_indices.size())
         chunks_left = true;
     }
 
@@ -1682,9 +1573,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
         mxinfo(FMT_TID "Using the MPEG-%d video output module.\n",
                ti.fname.c_str(), (int64_t)dmx->id, version);
 
-      } else if (!strncasecmp(dmx->fourcc, "avc1", 4)) {
-        double fps;
-
+      } else if (dmx->v_is_avc) {
         if (dmx->frame_offset_table.size() == 0)
           mxwarn(FMT_TID "The AVC video track is missing the 'CTTS' atom for "
                  "frame timecode offsets. However, AVC/h.264 allows frames "
@@ -1697,19 +1586,15 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
                  "that it looks like you expected it to.\n",
                  ti.fname.c_str(), (int64_t)dmx->id);
 
-        fps = dmx->calculate_fps();
         ti.private_size = dmx->priv_size;
         ti.private_data = dmx->priv;
         dmx->ptzr =
-          add_packetizer(new mpeg4_p10_video_packetizer_c(this, fps,
+          add_packetizer(new mpeg4_p10_video_packetizer_c(this, dmx->fps,
                                                           dmx->v_width,
                                                           dmx->v_height, ti));
+        PTZR(dmx->ptzr)->relaxed_timecode_checking = true;
         ti.private_data = NULL;
 
-        if (hack_engaged(ENGAGE_AVC_USE_BFRAMES))
-          dmx->avc_use_bframes = true;
-        else
-          PTZR(dmx->ptzr)->relaxed_timecode_checking = true;
         mxinfo(FMT_TID "Using the MPEG-4 part 10 (AVC) video output "
                "module.\n", ti.fname.c_str(), (int64_t)dmx->id);
 
@@ -1854,10 +1739,8 @@ qtmp4_reader_c::add_available_track_ids() {
     available_track_ids.push_back(demuxers[i]->id);
 }
 
-double
+void
 qtmp4_demuxer_t::calculate_fps() {
-  double fps;
-
   fps = 0.0;
 
   if ((1 == durmap_table.size()) && (0 != durmap_table[0].duration) &&
@@ -1865,59 +1748,30 @@ qtmp4_demuxer_t::calculate_fps() {
     // Constant FPS. Let's set the default duration.
     fps = (double)time_scale / (double)durmap_table[0].duration;
     mxverb(3, PFX "calculate_fps: case 1: %f\n", fps);
-    return fps;
-  }
 
-  if ((0 < sample_table.size()) &&
-      (sample_table.size() == frame_offset_table.size())) {
-    // Constant FPS but the frame offsets are used. This one is
-    // a bit trickier. I have to find the maximum timecode including
-    // the frame offsets (for PTS/DTS conversion) and divide that
-    // by the number of frames.
-    int64_t max_tc, min_tc;
-    int i;
+  } else {
+    map<int64_t, int> durations;
 
-    max_tc = 0;
-    min_tc = 0;
+    for (int i = 0; sample_table.size() > (i + 1); ++i) {
+      int64_t this_duration = sample_table[i + 1].pts - sample_table[i].pts;
 
-    for (i = 0; i < sample_table.size(); ++i) {
-      int64_t timecode;
-
-      timecode = to_nsecs((int64_t)sample_table[i].pts +
-                          (int64_t)frame_offset_table[pos]);
-      if (timecode > max_tc)
-        max_tc = timecode;
-      if (timecode < min_tc)
-        min_tc = max_tc;
+      if (durations.find(this_duration) == durations.end())
+        durations[this_duration] = 0;
+      durations[this_duration]++;
     }
-    if (0 > min_tc)
-      max_tc -= min_tc;
-    if (0 < max_tc)
-      fps = (double)sample_table.size() * 1000000000.0 / (double)max_tc;
 
-    mxverb(3, PFX "calculate_fps: case 2: max_tc " LLD " s_t.s %u fps %f\n",
-           max_tc, (unsigned int)sample_table.size(), fps);
-    return fps;
+    map<int64_t, int>::const_iterator most_common = durations.begin();
+    map<int64_t, int>::const_iterator it;
+    foreach(it, durations)
+      if (it->second > most_common->second)
+        most_common = it;
+
+    if ((most_common != durations.end()) && most_common->first)
+      fps = (double)1000000000.0 / (double)to_nsecs(most_common->first);
+
+    mxverb(3, PFX "calculate_fps: case 2: most_common " LLD " = %d fps %f\n",
+           most_common->first, most_common->second, fps);
   }
-
-  if (0 < sample_table.size()) {
-    int64_t max_tc;
-    int i;
-
-    max_tc = 0;
-
-    for (i = 0; i < sample_table.size(); ++i)
-      if ((int64_t)sample_table[i].pts > max_tc)
-        max_tc = (int64_t)sample_table[i].pts;
-    if (0 < max_tc)
-      fps = (double)sample_table.size() * 1000000000.0 / (double)max_tc;
-
-    mxverb(3, PFX "calculate_fps: case 3: max_tc " LLD " s_t.s %u fps %f\n",
-           max_tc, (unsigned int)sample_table.size(), fps);
-    return fps;
-  }
-
-  return 0.0;
 }
 
 int64_t
@@ -1933,4 +1787,107 @@ qtmp4_demuxer_t::to_nsecs(int64_t value) {
   }
 
   return value / (time_scale / 1000000000ll);
+}
+
+void
+qtmp4_demuxer_t::calculate_timecodes() {
+  int64_t timecode;
+  int frame;
+
+  if (sample_size != 0) {
+    for (frame = 0; chunk_table.size() > frame; ++frame) {
+      timecodes.push_back(to_nsecs((uint64_t)chunk_table[frame].samples *
+                                   (uint64_t)duration));
+      durations.push_back(to_nsecs((uint64_t)chunk_table[frame].size *
+                                   (uint64_t)duration));
+      frame_indices.push_back(frame);
+    }
+    if (!timecodes.empty())
+      min_timecode = max_timecode = timecodes[0];
+    return;
+  }
+
+  int64_t v_dts_offset = 0;
+  vector<int64_t> timecodes_before_offsets;
+
+  if (('v' == type) && v_is_avc)
+    v_dts_offset = to_nsecs(frame_offset_table[0]);
+
+  for (frame = 0; sample_table.size() > frame; ++frame) {
+    if (('v' == type) && !editlist_table.empty()) {
+      int editlist_pos = 0;
+      int real_frame = frame;
+
+      while (((editlist_table.size() - 1) > editlist_pos) &&
+             (frame >= editlist_table[editlist_pos + 1].start_frame))
+        ++editlist_pos;
+
+      if ((editlist_table[editlist_pos].start_frame +
+           editlist_table[editlist_pos].frames) <= frame)
+        continue; // EOF
+
+      // calc real frame index:
+      real_frame -= editlist_table[editlist_pos].start_frame;
+      real_frame += editlist_table[editlist_pos].start_sample;
+
+      // calc pts:
+      timecode =
+        to_nsecs(sample_table[real_frame].pts +
+                 editlist_table[editlist_pos].pts_offset);
+
+      frame_indices.push_back(real_frame);
+
+    } else {
+      timecode = to_nsecs(sample_table[frame].pts);
+      frame_indices.push_back(frame);
+    }
+
+    timecodes_before_offsets.push_back(timecode);
+
+    if (('v' == type) && (frame_offset_table.size() > frame) && v_is_avc)
+      timecode += to_nsecs(frame_offset_table[frame]) - v_dts_offset;
+
+    timecodes.push_back(timecode);
+
+    if (timecode > max_timecode)
+      max_timecode = timecode;
+    if (timecode < min_timecode)
+      min_timecode = timecode;
+  }
+
+  int64_t avg_duration = 0, num_good_frames = 0;
+  int64_t diff;
+
+  for (frame = 0; timecodes_before_offsets.size() > (frame + 1); ++frame) {
+    diff = timecodes_before_offsets[frame + 1] -
+      timecodes_before_offsets[frame];
+
+    if (diff <= 0)
+      durations.push_back(0);
+    else {
+      ++num_good_frames;
+      avg_duration += diff;
+      durations.push_back(diff);
+    }
+  }
+
+  durations.push_back(0);
+
+  if (num_good_frames) {
+    avg_duration /= num_good_frames;
+    for (frame = 0; durations.size() > frame; ++frame)
+      if (!durations[frame])
+        durations[frame] = avg_duration;
+  }
+}
+
+void
+qtmp4_demuxer_t::adjust_timecodes(int64_t delta) {
+  int i;
+
+  for (i = 0; timecodes.size() > i; ++i)
+    timecodes[i] += delta;
+
+  min_timecode += delta;
+  max_timecode += delta;
 }

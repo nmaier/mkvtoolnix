@@ -33,7 +33,6 @@ using namespace std;
 #define ENGAGE_NO_VARIABLE_DATA "no_variable_data"
 #define ENGAGE_NO_DEFAULT_HEADER_VALUES "no_default_header_values"
 #define ENGAGE_FORCE_PASSTHROUGH_PACKETIZER "force_passthrough_packetizer"
-#define ENGAGE_AVC_USE_BFRAMES "avc_use_bframes"
 #define ENGAGE_WRITE_HEADERS_TWICE "write_headers_twice"
 #define ENGAGE_ALLOW_AVC_IN_VFW_MODE "allow_avc_in_vfw_mode"
 #define ENGAGE_KEEP_BITSTREAM_AR_INFO "keep_bitstream_ar_info"
