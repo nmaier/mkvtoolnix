@@ -416,7 +416,7 @@ qtmp4_reader_c::update_tables(qtmp4_demuxer_ptr &dmx) {
 void
 qtmp4_reader_c::calculate_timecodes() {
   vector<qtmp4_demuxer_ptr>::iterator idmx;
-  int64_t min_timecode;
+  int64_t min_timecode = 0;
 
   foreach(idmx, demuxers) {
     qtmp4_demuxer_ptr &dmx = *idmx;
