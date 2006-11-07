@@ -103,6 +103,14 @@ struct pixel_crop_t {
   pixel_crop_t(): left(0), top(0), right(0), bottom(0) {}
 };
 
+enum stereo_mode_e {
+  STEREO_MODE_UNSPECIFIED = -1,
+  STEREO_MODE_NONE = 0,
+  STEREO_MODE_RIGHT = 1,
+  STEREO_MODE_LEFT = 2,
+  STEREO_MODE_BOTH = 3,
+};
+
 class track_info_c {
 protected:
   bool initialized;
@@ -162,6 +170,9 @@ public:
   map<int64_t, pixel_crop_t> pixel_crop_list; // As given on the command line
   pixel_crop_t pixel_cropping;  // For this very track
   bool pixel_cropping_specified;
+
+  map<int64_t, stereo_mode_e> stereo_mode_list; // As given on the command line
+  stereo_mode_e stereo_mode;                    // For this very track
 
   map<int64_t, int64_t> default_durations; // As given on the command line
   map<int64_t, int> max_blockadd_ids; // As given on the command line
@@ -448,6 +459,7 @@ public:
   }
   virtual void set_video_pixel_cropping(int left, int top, int right,
                                         int bottom);
+  virtual void set_stereo_mode(stereo_mode_e stereo_mode);
 
   virtual void set_as_default_track(int type, int priority);
 

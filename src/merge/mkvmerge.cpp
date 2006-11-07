@@ -231,6 +231,10 @@ set_usage() {
     "                           Explicitely set the display dimensions.\n"
     "  --cropping <TID:left,top,right,bottom>\n"
     "                           Sets the cropping parameters.\n"
+    "  --stereo-mode <TID:n|none|left|right|both>\n"
+    "                           Sets the stereo mode parameter. It can\n"
+    "                           either be a numer 0 - 3 or one of the\n"
+    "                           keywords 'none', 'right', 'left' or 'both'.\n"
     "\n Options that only apply to text subtitle tracks:\n"
     "  --sub-charset <TID:charset>\n"
     "                           Sets the charset the text subtitles are\n"
@@ -666,6 +670,45 @@ parse_cropping(const string &s,
               "(argument was '%s').\n"), s.c_str());
 
   ti.pixel_crop_list[id] = crop;
+}
+
+/** \brief Parse the \c --stereo-mode argument
+
+   The argument must either be a number between 0 and 3 or
+   one of the keywords \c 'none', \c 'left', \c 'right' or \c 'both'.
+*/
+static void
+parse_stereo_mode(const string &s,
+                  track_info_c &ti) {
+  static const char * const keywords[] = {
+    "none", "right", "left", "both", NULL
+  };
+  static const char *errmsg =
+    _("Stereo mode parameter: not given in the form "
+      "<TID>:<n|keyword> where n is a number between 0 and 3 "
+      "or one of the keywords 'none', 'right', 'left', 'both' "
+      "(argument was '%s').\n");
+  int64_t i, id;
+  vector<string> v;
+
+  v = split(s, ":");
+  if (v.size() != 2)
+    mxerror(errmsg, s.c_str());
+
+  id = 0;
+  if (!parse_int(v[0], id))
+    mxerror(errmsg, s.c_str());
+
+  for (i = 0; NULL != keywords[i]; ++i)
+    if (v[1] == keywords[i]) {
+      ti.stereo_mode_list[id] = (stereo_mode_e)i;
+      return;
+    }
+
+  if (!parse_int(v[1], i) || (i < 0) || (i > STEREO_MODE_BOTH))
+    mxerror(errmsg, s.c_str());
+
+  ti.stereo_mode_list[id] = (stereo_mode_e)i;
 }
 
 /** \brief Parse the duration formats to \c --split
@@ -1804,6 +1847,13 @@ parse_args(vector<string> args) {
         mxerror(_("'--cropping' lacks the crop parameters.\n"));
 
       parse_cropping(next_arg, *ti);
+      sit++;
+
+    } else if (this_arg == "--stereo-mode") {
+      if (no_next_arg)
+        mxerror(_("'--stereo-mode' lacks the crop parameters.\n"));
+
+      parse_stereo_mode(next_arg, *ti);
       sit++;
 
     } else if ((this_arg == "-y") || (this_arg == "--sync")) {

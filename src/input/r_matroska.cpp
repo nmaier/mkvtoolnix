@@ -1045,6 +1045,7 @@ kax_reader_c::read_headers() {
             KaxVideoPixelCropTop *kv_pctop;
             KaxVideoPixelCropRight *kv_pcright;
             KaxVideoPixelCropBottom *kv_pcbottom;
+            KaxVideoStereoMode *kv_stereo_mode;
 
             kv_pwidth = FINDFIRST(ktvideo, KaxVideoPixelWidth);
             if (kv_pwidth != NULL) {
@@ -1116,6 +1117,13 @@ kax_reader_c::read_headers() {
               if (verbose > 1)
                 mxinfo(PFX "|   + Pixel crop bottom: " LLU "\n",
                        track->v_pcbottom);
+            }
+
+            kv_stereo_mode = FINDFIRST(ktvideo, KaxVideoStereoMode);
+            if (NULL != kv_stereo_mode) {
+              track->v_stereo_mode = (stereo_mode_e)uint64(*kv_stereo_mode);
+              mxverb(2, PFX "|   + Stereo mode: %d\n",
+                     (int)track->v_stereo_mode);
             }
 
           }
@@ -1353,6 +1361,8 @@ kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
          (t->v_pcright > 0) || (t->v_pcbottom > 0)))
       ptzr->set_video_pixel_cropping(t->v_pcleft, t->v_pctop,
                                      t->v_pcright, t->v_pcbottom);
+    if (STEREO_MODE_UNSPECIFIED == ptzr->ti.stereo_mode)
+      ptzr->set_stereo_mode(t->v_stereo_mode);
     if (ptzr->get_cue_creation() == CUE_STRATEGY_UNSPECIFIED)
       ptzr->set_cue_creation( CUE_STRATEGY_IFRAMES);
 
@@ -1505,6 +1515,8 @@ kax_reader_c::create_packetizer(int64_t tid) {
             PTZR(t->ptzr)->set_video_pixel_cropping(t->v_pcleft, t->v_pctop,
                                                     t->v_pcright,
                                                     t->v_pcbottom);
+          if (STEREO_MODE_UNSPECIFIED == PTZR(t->ptzr)->ti.stereo_mode)
+            PTZR(t->ptzr)->set_stereo_mode(t->v_stereo_mode);
         } else
           init_passthrough_packetizer(t);
 

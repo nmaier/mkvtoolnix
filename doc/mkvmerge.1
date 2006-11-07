@@ -452,6 +452,12 @@ exclusive.
 .TP
 \fB\-\-cropping\fR <\fITID\fR:\fIleft\fR,\fItop\fR,\fIright\fR,\fIbottom\fR>
 Sets the pixel cropping parameters of a video track to the given values.
+.TP
+\fB\-\-stereo\-mode\fR <\fITID\fR:\fIn\fR|\fIkeyword\fR>
+Sets the stereo mode for the video track with the track ID \fITID\fR.
+The mode can either be a number \fIn\fR between 0 and 3 or one of the
+keywords \fInone\fR (same as n=0), \fIright\fR (same as n=1), \fIleft\fR
+(same as n=2) or \fIboth\fR (same as n=3).
 .LP
 Options that only apply to text subtitle tracks:
 .TP

@@ -182,6 +182,12 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   else
     ti.pixel_cropping_specified = false;
 
+  // Let's see if the user has specified a stereo mode for this track.
+  if (map_has_key(ti.stereo_mode_list, ti.id))
+    ti.stereo_mode = ti.stereo_mode_list[ti.id];
+  else if (map_has_key(ti.stereo_mode_list, -1))
+    ti.stereo_mode = ti.stereo_mode_list[-1];
+
   // Let's see if the user has specified a default duration for this track.
   htrack_default_duration = -1;
   default_duration_forced = true;
@@ -528,6 +534,19 @@ generic_packetizer_c::set_video_pixel_cropping(int left,
 }
 
 void
+generic_packetizer_c::set_stereo_mode(stereo_mode_e stereo_mode) {
+  ti.stereo_mode = stereo_mode;
+
+  if ((NULL != track_entry) &&
+      (STEREO_MODE_UNSPECIFIED != stereo_mode)) {
+    KaxTrackVideo &video = GetChild<KaxTrackVideo>(*track_entry);
+
+    *(static_cast<EbmlUInteger *>
+      (&GetChild<KaxVideoStereoMode>(video))) = ti.stereo_mode;
+  }
+}
+
+void
 generic_packetizer_c::set_headers() {
   int idx, disp_width, disp_height;
   KaxTag *tag;
@@ -689,6 +708,10 @@ generic_packetizer_c::set_headers() {
           (&GetChild<KaxVideoPixelCropBottom>(video))) =
           ti.pixel_cropping.bottom;
       }
+
+      if (STEREO_MODE_UNSPECIFIED != ti.stereo_mode)
+        *(static_cast<EbmlUInteger *>
+          (&GetChild<KaxVideoStereoMode>(video))) = ti.stereo_mode;
     }
 
   } else if (htrack_type == track_audio) {
@@ -1393,6 +1416,7 @@ track_info_c::track_info_c():
   packet_delay(0),
   compression(COMPRESSION_UNSPECIFIED),
   pixel_cropping_specified(false),
+  stereo_mode(STEREO_MODE_UNSPECIFIED),
   no_chapters(false),
   no_attachments(false),
   no_tags(false),
@@ -1481,6 +1505,9 @@ track_info_c::operator =(const track_info_c &src) {
   pixel_crop_list = src.pixel_crop_list;
   pixel_cropping = src.pixel_cropping;
   pixel_cropping_specified = src.pixel_cropping_specified;
+
+  stereo_mode_list = src.stereo_mode_list;
+  stereo_mode = src.stereo_mode;
 
   no_chapters = src.no_chapters;
   no_attachments = src.no_attachments;

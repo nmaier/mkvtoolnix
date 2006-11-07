@@ -55,6 +55,7 @@ struct kax_track_t {
   // Parameters for video tracks
   uint64_t v_width, v_height, v_dwidth, v_dheight;
   uint64_t v_pcleft, v_pctop, v_pcright, v_pcbottom;
+  stereo_mode_e v_stereo_mode;
   float v_frate;
   char v_fourcc[5];
   bool v_bframes;
@@ -97,6 +98,7 @@ struct kax_track_t {
                  lacing_flag(false),
                  v_width(0), v_height(0), v_dwidth(0), v_dheight(0),
                  v_pcleft(0), v_pctop(0), v_pcright(0), v_pcbottom(0),
+                 v_stereo_mode(STEREO_MODE_UNSPECIFIED),
                  v_frate(0.0),
                  v_bframes(false),
                  a_channels(0), a_bps(0), a_formattag(0),
