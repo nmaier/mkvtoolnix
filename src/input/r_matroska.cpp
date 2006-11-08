@@ -2207,6 +2207,8 @@ kax_reader_c::identify() {
         if ((0 != tracks[i]->v_dwidth) && (0 != tracks[i]->v_dheight))
           info += mxsprintf("display_dimensions:" LLU "x" LLU " ",
                             tracks[i]->v_dwidth, tracks[i]->v_dheight);
+        if (STEREO_MODE_UNSPECIFIED != tracks[i]->v_stereo_mode)
+          info += mxsprintf("stereo_mode:%d ", (int)tracks[i]->v_stereo_mode);
         info += mxsprintf("default_track:%u ",
                           tracks[i]->default_track ? 1 : 0);
         info += "]";
