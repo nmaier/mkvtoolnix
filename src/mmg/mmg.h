@@ -33,14 +33,12 @@
 #ifdef SYS_WINDOWS
 # define ALLFILES "All Files (*.*)|*.*"
 # define PSEP '\\'
-# define GROUPSPACING 10
-# define STDSPACING 8
+# define STDSPACING 3
 # define TOPBOTTOMSPACING 5
 # define LEFTRIGHTSPACING 5
 #else
 # define ALLFILES "All Files (*)|*"
 # define PSEP '/'
-# define GROUPSPACING 5
 # define STDSPACING 3
 # define TOPBOTTOMSPACING 5
 # define LEFTRIGHTSPACING 5
