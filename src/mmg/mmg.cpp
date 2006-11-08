@@ -1459,6 +1459,12 @@ mmg_dialog::update_command_line() {
         clargs.Add(sid + wxT(":") + t->fourcc);
       }
 
+      if (!t->appending && (0 != t->stereo_mode)) {
+        clargs.Add(wxT("--stereo-mode"));
+        clargs.Add(wxString::Format(wxT("%s:%d"), sid.c_str(),
+                                    t->stereo_mode - 1));
+      }
+
       if (!t->appending && (t->compression.Length() > 0)) {
         clargs.Add(wxT("--compression"));
         clargs.Add(sid + wxT(":") + t->compression);

@@ -31,15 +31,19 @@
 #include "wxcommon.h"
 
 #ifdef SYS_WINDOWS
-#define ALLFILES "All Files (*.*)|*.*"
-#define PSEP '\\'
-#define YOFF (-4)
-#define YOFF2 0
+# define ALLFILES "All Files (*.*)|*.*"
+# define PSEP '\\'
+# define GROUPSPACING 10
+# define STDSPACING 8
+# define TOPBOTTOMSPACING 5
+# define LEFTRIGHTSPACING 5
 #else
-#define ALLFILES "All Files (*)|*"
-#define PSEP '/'
-#define YOFF (-2)
-#define YOFF2 (-3)
+# define ALLFILES "All Files (*)|*"
+# define PSEP '/'
+# define GROUPSPACING 5
+# define STDSPACING 3
+# define TOPBOTTOMSPACING 5
+# define LEFTRIGHTSPACING 5
 #endif
 
 #define MMG_CONFIG_FILE_VERSION_MAX 2
@@ -59,6 +63,7 @@ struct mmg_track_t {
   wxString language, track_name, cues, delay, stretch, sub_charset;
   wxString tags, fourcc, aspect_ratio, compression, timecodes;
   wxString dwidth, dheight;
+  int stereo_mode;
 
   bool appending;
 
@@ -67,6 +72,7 @@ struct mmg_track_t {
     enabled(false), display_dimensions_selected(false),
     default_track(false), aac_is_sbr(false), track_name_was_present(false),
     language(wxT("und")), cues(wxT("default")), sub_charset(wxT("default")),
+    stereo_mode(0),
     appending(false) {};
 };
 typedef counted_ptr<mmg_track_t> mmg_track_ptr;
