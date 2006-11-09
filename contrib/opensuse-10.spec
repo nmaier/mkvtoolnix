@@ -1,20 +1,12 @@
 #
 # spec file for package mkvtoolnix
 #
-# Copyright (c) 2004 SUSE LINUX AG, Nuernberg, Germany.
-# This file and all modifications and additions to the pristine
-# package are under the same license as the package itself.
-#
-# Please submit bugfixes or comments via http://www.suse.de/feedback/
-#
 
-# neededforbuild  expat flac flac-devel gcc-c++ gtk2 gtk2-devel libebml libmatroska libmspack libogg libogg-devel libpng libpng-devel libstdc++-devel libtiff libtiff-devel libvorbis libvorbis-devel lzo lzo-devel pkgconfig unixODBC wxGTK wxGTK-compat wxGTK-devel wxGTK-gl
-
-BuildRequires: aaa_base attr bash bind-utils bison bzip2 coreutils cpio cpp cracklib db devs diffutils file filesystem fillup findutils flex gawk glibc glibc-devel glibc-locale gpm grep groff gzip info insserv less libacl libattr libgcc libselinux libstdc++ libxcrypt m4 make man mktemp module-init-tools ncurses ncurses-devel net-tools netcfg openldap2-client openssl pam pam-modules patch permissions popt procinfo procps psmisc pwdutils readline sed strace syslogd sysvinit tar tcpd timezone unzip util-linux vim zlib zlib-devel atk audiofile autoconf automake binutils esound expat flac flac-devel fontconfig fontconfig-devel freetype2 freetype2-devel gcc gcc-c++ gdbm gettext libart_lgpl libebml libjpeg libjpeg-devel libmatroska libogg libogg-devel libpng libpng-devel libstdc++-devel libtiff libtiff-devel libtool libvorbis libvorbis-devel libxml2 linc lzo lzo-devel pango perl rpm unixODBC wxGTK wxGTK-devel
+BuildRequires: expat flac flac-devel gcc-c++ gtk2 gtk2-devel libebml libmatroska libmspack libogg libogg-devel libpng libpng-devel libstdc++-devel libvorbis libvorbis-devel lzo lzo-devel pkgconfig unixODBC wxGTK wxGTK-compat wxGTK-devel wxGTK-gl pcre-devel file-devel
 
 Name:         mkvtoolnix
 URL:          http://www.bunkus.org/videotools/mkvtoolnix/
-Version: 1.5.6
+Version: 1.7.0
 Release: 1
 Summary:      tools to create, alter and inspect Matroska files
 License:      GPL
