@@ -1,16 +1,16 @@
-# SPEC file for (at least) Fedora Core 1, 2 and 3
+# SPEC file for (at least) Fedora Core 5 and 6
 
 Summary: mkvtoolnix
 Name: mkvtoolnix
-Version: 1.5.6
+Version: 1.7.0
 Release: 1
-Copyright: GPL
+License: GPL
 Group: Multimedia
 Source: %{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-tmproot
-BuildRequires: libebml-devel >= 0.7.2
-BuildRequires: libmatroska-devel >= 0.7.4
-BuildRequires: gcc-c++
+BuildRequires: libebml-devel >= 0.7.7
+BuildRequires: libmatroska-devel >= 0.8.0
+BuildRequires: gcc-c++ gcc gcc-c++ make flac-devel libogg-devel libvorbis-devel wxGTK-devel pcre-devel file lzo-devel bzip2-devel zlib-devel
 
 %description
 Matroska video utilities.
