@@ -12,7 +12,7 @@
 
 !define MTX_REGKEY "Software\mkvmergeGUI"
 
-SetCompressor lzma
+SetCompressor /SOLID lzma
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
@@ -403,7 +403,10 @@ Section Uninstall
   Delete "$INSTDIR\*.ico"
   Delete "$INSTDIR\doc\*.html"
   Delete "$INSTDIR\doc\*.txt"
-  Delete "$INSTDIR\doc\images\*.png"
+  Delete "$INSTDIR\doc\mkvmerge-gui.hhc"
+  Delete "$INSTDIR\doc\mkvmerge-gui.hhk"
+  Delete "$INSTDIR\doc\mkvmerge-gui.hhp"
+  Delete "$INSTDIR\doc\images\*.gif"
   Delete "$INSTDIR\examples\*"
 
   Delete "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk"
@@ -429,11 +432,11 @@ Section Uninstall
   RMDir "$INSTDIR\doc\images"
   RMDir "$INSTDIR\doc"
   RMDir "$INSTDIR\examples"
-  
+
   StrCmp $unRemoveJobs "Yes" 0 +3
   Delete "$INSTDIR\jobs\*.mmg"
   RMDir "$INSTDIR\jobs"
-  
+
   RMDir "$INSTDIR"
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
@@ -445,4 +448,3 @@ Section Uninstall
 
   SetAutoClose true
 SectionEnd
-
