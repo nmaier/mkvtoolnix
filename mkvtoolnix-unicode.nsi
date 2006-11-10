@@ -12,7 +12,7 @@
 
 !define MTX_REGKEY "Software\mkvmergeGUI"
 
-SetCompressor /SOLID lzma
+SetCompressor lzma
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
@@ -59,7 +59,7 @@ var ICONS_GROUP
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "mkvtoolnix-unicode-${PRODUCT_VERSION}-setup.exe"
+OutFile "mkvtoolnix-${PRODUCT_VERSION}-setup.exe"
 InstallDir "$PROGRAMFILES\MKVtoolnix"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
@@ -306,17 +306,6 @@ FunctionEnd
 !insertmacro StrStr "un."
 
 Function .onInit
-  ; Check if we're running on a Unicode capable Windows.
-  ; If not, abort.
-  Call IsNT
-  Pop $1
-  StrCmp $1 1 DontBailOut
-
-  ; Don't install on 95, 98, ME
-  MessageBox MB_OK|MB_ICONSTOP "You are trying to install the Unicode enabled version of MKVToolNix on a Windows version that does not support Unicode (95, 98 or ME). Please download the MKVToolNix version for Windows 95, 98 and ME from http://www.bunkus.org/videotools/mkvtoolnix/"
-  Abort
-
- DontBailOut:
 FunctionEnd
 
 Section "Program files" SEC01
@@ -414,10 +403,7 @@ Section Uninstall
   Delete "$INSTDIR\*.ico"
   Delete "$INSTDIR\doc\*.html"
   Delete "$INSTDIR\doc\*.txt"
-  Delete "$INSTDIR\doc\mkvmerge-gui.hhc"
-  Delete "$INSTDIR\doc\mkvmerge-gui.hhk"
-  Delete "$INSTDIR\doc\mkvmerge-gui.hhp"
-  Delete "$INSTDIR\doc\images\*.gif"
+  Delete "$INSTDIR\doc\images\*.png"
   Delete "$INSTDIR\examples\*"
 
   Delete "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk"
@@ -443,11 +429,11 @@ Section Uninstall
   RMDir "$INSTDIR\doc\images"
   RMDir "$INSTDIR\doc"
   RMDir "$INSTDIR\examples"
-
+  
   StrCmp $unRemoveJobs "Yes" 0 +3
   Delete "$INSTDIR\jobs\*.mmg"
   RMDir "$INSTDIR\jobs"
-
+  
   RMDir "$INSTDIR"
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
@@ -459,3 +445,4 @@ Section Uninstall
 
   SetAutoClose true
 SectionEnd
+
