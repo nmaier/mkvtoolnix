@@ -2,6 +2,12 @@
 
 	* Released v1.8.0.
 
+	* mkvmerge: Changed the CodecID for AAC audio tracks to "A_AAC" by
+	default. The CodecPrivate contains the same initialization data
+	that are stored in the ESDS in MP4 files for AAC tracks. The old
+	CodecIDs (e.g. "A_AAC/MPEG4/SBR") can be turned on again with
+	"--engage old_aac_codecid".
+
 2006-11-08  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: Reworked the "input tab" and split track options into two
