@@ -4,7 +4,7 @@
 
 BuildRequires: libebml >= 0.7.7
 BuildRequires: libmatroska >= 0.8.0
-BuildRequires: expat flac flac-devel gcc-c++ gtk2 gtk2-devel libogg libogg-devel libstdc++-devel libvorbis libvorbis-devel lzo lzo-devel pkgconfig wxGTK wxGTK-compat wxGTK-devel wxGTK-gl pcre-devel file-devel
+BuildRequires: expat flac flac-devel gcc-c++ gtk2 gtk2-devel libogg libogg-devel libstdc++-devel libvorbis libvorbis-devel lzo lzo-devel pkgconfig wxGTK >= 2.6 wxGTK-devel >= 2.6 wxGTK-gl pcre-devel file-devel
 
 Name:         mkvtoolnix
 URL:          http://www.bunkus.org/videotools/mkvtoolnix/
