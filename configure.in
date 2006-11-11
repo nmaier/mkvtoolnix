@@ -900,13 +900,13 @@ AC_SUBST(BZ2_LIBS)
 
 
 dnl
-dnl Check for wxWindows
+dnl Check for wxWidgets
 dnl
   AC_ARG_ENABLE([gui],
     [  --enable-gui            compile mkvinfo's GUI and mmg (yes)])
 
   wxw_ver_req_major=2
-  wxw_ver_req_minor=4
+  wxw_ver_req_minor=6
   wxw_ver_req_micro=0
   wxw_min_ver=$wxw_ver_req_major.$wxw_ver_req_minor.$wxw_ver_req_micro
 
@@ -936,15 +936,15 @@ dnl
       fi
 
       if test "$wxwver_ok" = "1" ; then
-        WXWINDOWS_CFLAGS=`$WX_CONFIG --cxxflags`
-        WXWINDOWS_LIBS=`$WX_CONFIG --libs | \
+        WXWIDGETS_CFLAGS=`$WX_CONFIG --cxxflags`
+        WXWIDGETS_LIBS=`$WX_CONFIG --libs | \
           sed -e 's/-Wl,--subsystem,windows//' -e 's/-mwindows//'`
         AC_CACHE_VAL(am_cv_wx_compilation, [
           AC_LANG_PUSH(C++)
           ac_save_CXXFLAGS="$CXXFLAGS"
           ac_save_LIBS="$LIBS"
-          CXXFLAGS="$CXXFLAGS $WXWINDOWS_CFLAGS"
-          LIBS="$LDFLAGS $WXWINDOWS_LIBS"
+          CXXFLAGS="$CXXFLAGS $WXWIDGETS_CFLAGS"
+          LIBS="$LDFLAGS $WXWIDGETS_LIBS"
           AC_TRY_LINK([
 #include <wx/dnd.h>
 #include <wx/treectrl.h>
@@ -958,22 +958,22 @@ wxTreeItemId id;
         ])
         if test x"$am_cv_wx_compilation" = x1; then
           if test "x$MINGW" = "x1" ; then
-            WXWINDOWS_INCLUDES=""
-            set - `echo $WXWINDOWS_CFLAGS`
+            WXWIDGETS_INCLUDES=""
+            set - `echo $WXWIDGETS_CFLAGS`
             while test "x$1" != "x" ; do
               case "$1" in
                 -I*)
-                  WXWINDOWS_INCLUDES="$WXWINDOWS_INCLUDES $1"
+                  WXWIDGETS_INCLUDES="$WXWIDGETS_INCLUDES $1"
                   ;;
               esac
               shift
             done
           fi
-          AC_DEFINE(HAVE_WXWINDOWS, 1, [Define if wxWindows is present])
+          AC_DEFINE(HAVE_WXWIDGETS, 1, [Define if wxWindows is present])
           MMG_SUBDIRS=mmg
           AC_MSG_RESULT($wxwversion ok)
           have_wxwindows=yes
-          USE_WXWINDOWS=yes
+          USE_WXWIDGETS=yes
           opt_features_yes="$opt_features_yes; GUIs"
         else
           AC_MSG_RESULT(no: test program could not be compiled)
@@ -992,11 +992,11 @@ wxTreeItemId id;
     opt_features_no="$opt_features_no; GUIs"
   fi
 
-AC_SUBST(WXWINDOWS_CFLAGS)
-AC_SUBST(WXWINDOWS_INCLUDES)
-AC_SUBST(WXWINDOWS_LIBS)
+AC_SUBST(WXWIDGETS_CFLAGS)
+AC_SUBST(WXWIDGETS_INCLUDES)
+AC_SUBST(WXWIDGETS_LIBS)
 AC_SUBST(MMG_SUBDIRS)
-AC_SUBST(USE_WXWINDOWS)
+AC_SUBST(USE_WXWIDGETS)
 
 dnl
 dnl Which translations should be installed?
