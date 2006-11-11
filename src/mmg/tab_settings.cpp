@@ -141,6 +141,17 @@ tab_settings::tab_settings(wxWindow *parent):
   siz_misc->Add(cb_always_use_simpleblock, 0, wxLEFT, 5);
   siz_misc->Add(0, 5, 0, 0, 0);
 
+  cb_set_delay_from_filename =
+    new wxCheckBox(this, ID_CB_SET_DELAY_FROM_FILENAME,
+                   wxT("Set the delay input field from the file name"));
+  cb_set_delay_from_filename->
+    SetToolTip(TIP("When a file is added its name is scanned. If it contains "
+                   "the word 'DELAY' followed by a number then this number "
+                   "is automatically put into the 'delay' input field for "
+                   "any audio track found in the file."));
+  siz_misc->Add(cb_set_delay_from_filename, 0, wxLEFT, 5);
+  siz_misc->Add(0, 5, 0, 0, 0);
+
   siz_about = new wxStaticBoxSizer(new wxStaticBox(this, -1, wxT("About")),
                                    wxHORIZONTAL);
   siz_about->Add(new wxStaticBitmap(this, -1, wxBitmap(matroskalogo_big_xpm)),
@@ -253,6 +264,8 @@ tab_settings::load_preferences() {
   mdlg->log_window->Show(b);
   cfg->Read(wxT("always_use_simpleblock"), &b, false);
   cb_always_use_simpleblock->SetValue(b);
+  cfg->Read(wxT("set_delay_from_filename"), &b, true);
+  cb_set_delay_from_filename->SetValue(b);
 }
 
 void
@@ -272,6 +285,8 @@ tab_settings::save_preferences() {
   cfg->Write(wxT("gui_debugging"), cb_gui_debugging->IsChecked());
   cfg->Write(wxT("always_use_simpleblock"),
              cb_always_use_simpleblock->IsChecked());
+  cfg->Write(wxT("set_delay_from_filename"),
+             cb_set_delay_from_filename->IsChecked());
   cfg->Flush();
 }
 

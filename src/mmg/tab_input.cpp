@@ -35,6 +35,7 @@
 #include "mmg_dialog.h"
 #include "tab_input.h"
 #include "tab_global.h"
+#include "tab_settings.h"
 
 using namespace std;
 
@@ -399,9 +400,11 @@ tab_input::add_file(const wxString &file_name,
   }
 
   wxString delay_from_file_name;
-  wxRegEx re_delay(wxT("delay[[:blank:]]+(-?[[:digit:]]+)"), wxRE_ICASE);
-  if (re_delay.Matches(file_name))
-    delay_from_file_name = re_delay.GetMatch(file_name, 1);
+  if (mdlg->settings_page->cb_set_delay_from_filename->IsChecked()) {
+    wxRegEx re_delay(wxT("delay[[:blank:]]+(-?[[:digit:]]+)"), wxRE_ICASE);
+    if (re_delay.Matches(file_name))
+      delay_from_file_name = re_delay.GetMatch(file_name, 1);
+  }
 
   default_audio_track_found = -1 != default_track_checked('a');
   default_video_track_found = -1 != default_track_checked('v');
