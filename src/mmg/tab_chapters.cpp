@@ -475,10 +475,10 @@ tab_chapters::enable_buttons(bool enable) {
 void
 tab_chapters::on_new_chapters(wxCommandEvent &evt) {
   file_name = wxT("");
-  if (chapters != NULL)
-    delete chapters;
   tc_chapters->DeleteAllItems();
   tid_root = tc_chapters->AddRoot(wxT("(new chapter file)"));
+  if (chapters != NULL)
+    delete chapters;
   chapters = new KaxChapters;
 
   m_chapters->Enable(ID_M_CHAPTERS_SAVE, true);
@@ -628,6 +628,9 @@ tab_chapters::load(wxString name) {
   wxString s;
   int pos;
 
+  clear_list_of_unique_uint32(UNIQUE_CHAPTER_IDS);
+  clear_list_of_unique_uint32(UNIQUE_EDITION_IDS);
+
   try {
     if (kax_analyzer_c::probe(wxMB(name))) {
       if (analyzer != NULL)
@@ -662,6 +665,8 @@ tab_chapters::load(wxString name) {
       source_is_kax_file = false;
     }
   } catch (error_c ex) {
+    if (analyzer)
+      delete analyzer;
     analyzer = NULL;
     s = wxU(ex.get_error().c_str());
     break_line(s);
@@ -790,9 +795,6 @@ tab_chapters::save() {
 
   try {
     out = new mm_file_io_c(wxMB(file_name), MODE_CREATE);
-#if defined(SYS_WINDOWS)
-    out->use_dos_style_newlines(true);
-#endif
   } catch (...) {
     err.Printf(wxT("Could not open the destination file '%s' for writing."
                    " Error code: %d (%s)."), file_name.c_str(), errno,
@@ -802,6 +804,9 @@ tab_chapters::save() {
     return;
   }
 
+#if defined(SYS_WINDOWS)
+  out->use_dos_style_newlines(true);
+#endif
   out->write_bom("UTF-8");
   out->printf("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
               "\n"
