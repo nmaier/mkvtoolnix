@@ -1,5 +1,9 @@
 2006-11-12  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Quicktime/MP4 files with AVC video tracks and
+	missing CTTS atoms caused mkvmerge to crash after the recent
+	changes to the Quicktime/MP4 timecode handling.
+
 	* mkvmerge: bug fix: Fixed a segfault if the file specified with
 	"--attach-file" does not exist. Bugfix for Anthill bug 213 and
 	Debian bug 393984.

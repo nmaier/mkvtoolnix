@@ -1810,7 +1810,7 @@ qtmp4_demuxer_t::calculate_timecodes() {
   int64_t v_dts_offset = 0;
   vector<int64_t> timecodes_before_offsets;
 
-  if (('v' == type) && v_is_avc)
+  if (('v' == type) && v_is_avc && !frame_offset_table.empty())
     v_dts_offset = to_nsecs(frame_offset_table[0]);
 
   for (frame = 0; sample_table.size() > frame; ++frame) {
