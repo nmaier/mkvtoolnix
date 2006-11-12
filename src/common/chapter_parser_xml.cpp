@@ -185,8 +185,14 @@ parse_xml_chapters(mm_text_io_c *in,
   KaxChapters *chapters;
   EbmlMaster *m;
   string error;
+  int i;
 
   try {
+    for (i = 0; NULL != chapter_elements[i].name; ++i) {
+      chapter_elements[i].start_hook = NULL;
+      chapter_elements[i].end_hook = NULL;
+    }
+
     m = parse_xml_elements("Chapter", chapter_elements, in);
     chapters = dynamic_cast<KaxChapters *>(sort_ebml_master(m));
     assert(chapters != NULL);
