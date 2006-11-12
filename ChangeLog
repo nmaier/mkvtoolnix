@@ -1,5 +1,9 @@
 2006-11-12  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Fixed a segfault if the file specified with
+	"--attach-file" does not exist. Bugfix for Anthill bug 213 and
+	Debian bug 393984.
+
 	* mmg: bug fix: Fixed a crash on loading XML chapters after having
 	saved XML chapters.
 

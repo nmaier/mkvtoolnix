@@ -1610,6 +1610,14 @@ parse_args(vector<string> args) {
       if (no_next_arg)
         mxerror(_("'%s' lacks the file name.\n"), this_arg.c_str());
 
+      try {
+        mm_file_io_c test(next_arg);
+      } catch (...) {
+        mxerror(_("The file '%s' cannot be attached because "
+                  "it does not exist or cannot be read.\n"),
+                next_arg.c_str());
+      }
+
       attachment.name = next_arg;
       if (attachment.mime_type == "")
         attachment.mime_type = guess_mime_type_and_report(next_arg);
