@@ -45,7 +45,6 @@ LD = @LD@
 PROFILING_CFLAGS = @PROFILING_CFLAGS@
 PROFILING_LIBS = @PROFILING_LIBS@
 RANLIB = @RANLIB@
-STRIP = @STRIP@
 INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
@@ -151,7 +150,6 @@ install-programs: $(APPLICATIONS)
 	    f=`echo "$$p1" | sed 's,^.*/,,;s/$$/$(EXEEXT)/'`; \
 	   echo " $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/$$f"; \
 	   $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/$$f; \
-	   $(STRIP) $(DESTDIR)$(bindir)/$$f; \
 	  else :; fi; \
 	done
 
