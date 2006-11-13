@@ -96,7 +96,6 @@ struct qtmp4_demuxer_t {
 
   uint32_t time_scale;
   uint64_t global_duration;
-//   uint64_t avg_duration;
   uint32_t sample_size;
 
   uint64_t duration;
@@ -125,6 +124,8 @@ struct qtmp4_demuxer_t {
   uint32_t a_channels, a_bitdepth;
   float a_samplerate;
   sound_v1_stsd_atom_t a_stsd;
+  int a_aac_profile, a_aac_output_sample_rate;
+  bool a_aac_is_sbr, a_aac_config_parsed;
 
   unsigned char *priv;
   uint32_t priv_size;
@@ -143,6 +144,8 @@ struct qtmp4_demuxer_t {
     v_width(0), v_height(0), v_bitdepth(0),
     v_is_avc(false), avc_use_bframes(false),
     a_channels(0), a_bitdepth(0), a_samplerate(0.0),
+    a_aac_profile(0), a_aac_output_sample_rate(0),
+    a_aac_is_sbr(false), a_aac_config_parsed(false),
     priv(NULL), priv_size(0),
     warning_printed(false),
     ptzr(-1) {

@@ -56,6 +56,12 @@ using namespace libmatroska;
                   ((char *)&a)[3]
 #endif
 
+#define IS_AAC_OBJECT_TYPE_ID(object_type_id) \
+  ((MP4OTI_MPEG4Audio == object_type_id) || \
+   (MP4OTI_MPEG2AudioMain == object_type_id) || \
+   (MP4OTI_MPEG2AudioLowComplexity == object_type_id) || \
+   (MP4OTI_MPEG2AudioScaleableSamplingRate == object_type_id))
+
 int
 qtmp4_reader_c::probe_file(mm_io_c *in,
                            int64_t size) {
@@ -221,11 +227,7 @@ qtmp4_reader_c::parse_headers() {
 
     if ((dmx->type == 'a') &&
         !strncasecmp(dmx->fourcc, "MP4A", 4)) {
-      if ((dmx->esds.object_type_id != MP4OTI_MPEG4Audio) && // AAC..
-          (dmx->esds.object_type_id != MP4OTI_MPEG2AudioMain) &&
-          (dmx->esds.object_type_id != MP4OTI_MPEG2AudioLowComplexity) &&
-          (dmx->esds.object_type_id != MP4OTI_MPEG2AudioScaleableSamplingRate)
-          &&
+      if (!IS_AAC_OBJECT_TYPE_ID(dmx->esds.object_type_id) &&
           (dmx->esds.object_type_id != MP4OTI_MPEG2AudioPart3) && // MP3...
           (dmx->esds.object_type_id != MP4OTI_MPEG1Audio)) {
         mxwarn(PFX "The audio track %u is using an unsupported 'object type "
@@ -234,12 +236,9 @@ qtmp4_reader_c::parse_headers() {
         continue;
       }
 
-      if (((dmx->esds.object_type_id == MP4OTI_MPEG4Audio) || // AAC..
-           (dmx->esds.object_type_id == MP4OTI_MPEG2AudioMain) ||
-           (dmx->esds.object_type_id == MP4OTI_MPEG2AudioLowComplexity) ||
-           (dmx->esds.object_type_id ==
-            MP4OTI_MPEG2AudioScaleableSamplingRate)) &&
-          (dmx->esds.decoder_config == NULL)) {
+      if (IS_AAC_OBJECT_TYPE_ID(dmx->esds.object_type_id) &&
+          ((NULL == dmx->esds.decoder_config) ||
+           !dmx->a_aac_config_parsed)) {
         mxwarn(PFX "The AAC track %u is missing the esds atom/the decoder "
                "config. Skipping this track.\n", dmx->id);
         continue;
@@ -567,6 +566,39 @@ qtmp4_reader_c::parse_audio_header_priv_atoms(qtmp4_demuxer_ptr &dmx,
         mm_mem_io_c memio(mem + atom.pos + atom.hsize,
                           atom.size - atom.hsize);
         dmx->esds_parsed = parse_esds_atom(memio, dmx, level + 1);
+
+        if (dmx->esds_parsed &&
+            !strncasecmp(dmx->fourcc, "MP4A", 4) &&
+            IS_AAC_OBJECT_TYPE_ID(dmx->esds.object_type_id)) {
+          int profile, sample_rate, channels, output_sample_rate;
+          bool aac_is_sbr;
+
+          if (dmx->esds.decoder_config_len < 2)
+            mxwarn("Track " LLD ": AAC found, but decoder config data has "
+                   "length %u.\n", (int64_t)dmx->id,
+                   dmx->esds.decoder_config_len);
+          else if (!parse_aac_data(dmx->esds.decoder_config,
+                                   dmx->esds.decoder_config_len, profile,
+                                   channels, sample_rate, output_sample_rate,
+                                   aac_is_sbr))
+            mxwarn("Track " LLD ": The AAC information could not be parsed.\n",
+                   (int64_t)dmx->id);
+
+          else {
+            mxverb(2, PFX "AAC: profile: %d, sample_rate: %d, channels: "
+                   "%d, output_sample_rate: %d, sbr: %d\n", profile, sample_rate,
+                   channels, output_sample_rate, (int)aac_is_sbr);
+            if (aac_is_sbr)
+              profile = AAC_PROFILE_SBR;
+
+            dmx->a_channels = channels;
+            dmx->a_samplerate = sample_rate;
+            dmx->a_aac_profile = profile;
+            dmx->a_aac_output_sample_rate = output_sample_rate;
+            dmx->a_aac_is_sbr = aac_is_sbr;
+            dmx->a_aac_config_parsed = true;
+          }
+        }
       }
 
       mio.setFilePointer(atom.pos + atom.size);
@@ -1627,45 +1659,22 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
                "\n", ti.fname.c_str(), (int64_t)dmx->id, dmx->fourcc);
 
       } else if (!strncasecmp(dmx->fourcc, "MP4A", 4) &&
-                 ((dmx->esds.object_type_id == MP4OTI_MPEG4Audio) || // AAC..
-                  (dmx->esds.object_type_id == MP4OTI_MPEG2AudioMain) ||
-                  (dmx->esds.object_type_id ==
-                   MP4OTI_MPEG2AudioLowComplexity) ||
-                  (dmx->esds.object_type_id ==
-                   MP4OTI_MPEG2AudioScaleableSamplingRate))) {
-        int profile, sample_rate, channels, output_sample_rate;
-        bool sbraac;
-
-        if (dmx->esds.decoder_config_len >= 2) {
-          if (!parse_aac_data(dmx->esds.decoder_config,
-                              dmx->esds.decoder_config_len, profile, channels,
-                              sample_rate, output_sample_rate, sbraac))
-            mxerror(FMT_TID "This AAC track does not contain valid headers. "
-                    "Could not parse the AAC information.\n", ti.fname.c_str(),
-                    (int64_t)dmx->id);
-          mxverb(2, PFX "AAC: profile: %d, sample_rate: %d, channels: "
-                 "%d, output_sample_rate: %d, sbr: %d\n", profile, sample_rate,
-                 channels, output_sample_rate, (int)sbraac);
-          if (sbraac)
-            profile = AAC_PROFILE_SBR;
-          ti.private_data = dmx->esds.decoder_config;
-          ti.private_size = dmx->esds.decoder_config_len;
-          dmx->ptzr =
-            add_packetizer(new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
-                                                sample_rate, channels, ti,
-                                                false, true));
-          if (sbraac)
-            PTZR(dmx->ptzr)->
-              set_audio_output_sampling_freq(output_sample_rate);
-          mxinfo(FMT_TID "Using the AAC output module.\n", ti.fname.c_str(),
-                 (int64_t)dmx->id);
-          ti.private_data = NULL;
-          ti.private_size = 0;
-
-        } else
-          mxerror(FMT_TID "AAC found, but decoder config data has length %u."
-                  "\n", ti.fname.c_str(), (int64_t)dmx->id,
-                  dmx->esds.decoder_config_len);
+                 IS_AAC_OBJECT_TYPE_ID(dmx->esds.object_type_id)) {
+        ti.private_data = dmx->esds.decoder_config;
+        ti.private_size = dmx->esds.decoder_config_len;
+        dmx->ptzr =
+          add_packetizer(new aac_packetizer_c(this, AAC_ID_MPEG4,
+                                              dmx->a_aac_profile,
+                                              (int)dmx->a_samplerate,
+                                              dmx->a_channels, ti,
+                                              false, true));
+        if (dmx->a_aac_is_sbr)
+          PTZR(dmx->ptzr)->
+            set_audio_output_sampling_freq(dmx->a_aac_output_sample_rate);
+        mxinfo(FMT_TID "Using the AAC output module.\n", ti.fname.c_str(),
+               (int64_t)dmx->id);
+        ti.private_data = NULL;
+        ti.private_size = 0;
 
       } else if (!strncasecmp(dmx->fourcc, "MP4A", 4) &&
                  ((dmx->esds.object_type_id == MP4OTI_MPEG2AudioPart3) ||
