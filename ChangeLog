@@ -1,3 +1,10 @@
+2006-11-14  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge/mmg: new feature: If ATDS AAC tracks are added to mmg
+	and the AAC track's sample rate is <= 24000 Hz then mkvmerge and
+	mmg assume that the AAC is a SBR track and mmg will check the "AAC
+	is SBR" checkbox automatically.
+
 2006-11-12  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Quicktime/MP4 files with AVC video tracks and

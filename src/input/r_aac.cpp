@@ -22,6 +22,7 @@
 #include "error.h"
 #include "r_aac.h"
 #include "p_aac.h"
+#include "output_control.h"
 
 #define PROBESIZE 8192
 
@@ -96,6 +97,10 @@ aac_reader_c::aac_reader_c(track_info_c &_ti)
         aacheader.profile = AAC_PROFILE_SBR;
         break;
       }
+
+    if (24000 >= aacheader.sample_rate)
+      aacheader.profile = AAC_PROFILE_SBR;
+
   } catch (...) {
     throw error_c("aac_reader: Could not open the file.");
   }
@@ -183,6 +188,12 @@ aac_reader_c::get_progress() {
 
 void
 aac_reader_c::identify() {
-  mxinfo("File '%s': container: AAC\nTrack ID 0: audio (AAC)\n",
-         ti.fname.c_str());
+  string info;
+
+  if (identify_verbose) {
+    info = " [aac_is_sbr:" +
+      string(AAC_PROFILE_SBR == aacheader.profile ? "true" : "unknown") + "]";
+  }
+  mxinfo("File '%s': container: AAC\nTrack ID 0: audio (AAC)%s\n",
+         ti.fname.c_str(), info.c_str());
 }

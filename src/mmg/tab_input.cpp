@@ -482,7 +482,8 @@ tab_input::add_file(const wxString &file_name,
             parse_int(wxMB(pair[1]), track->stereo_mode);
             track->stereo_mode += 1;
 
-          }
+          } else if (pair[0] == wxT("aac_is_sbr"))
+            track->aac_is_sbr = pair[1] == wxT("true");
         }
       }
 
