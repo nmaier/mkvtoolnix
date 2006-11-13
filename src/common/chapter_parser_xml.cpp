@@ -38,7 +38,7 @@ using namespace libmatroska;
 
 #define CPDATA (parser_data_t *)pdata
 
-void
+static void
 end_edition_entry(void *pdata) {
   EbmlMaster *m;
   KaxEditionUID *euid;
@@ -63,7 +63,7 @@ end_edition_entry(void *pdata) {
   }
 }
 
-void
+static void
 end_edition_uid(void *pdata) {
   KaxEditionUID *euid;
 
@@ -76,7 +76,7 @@ end_edition_uid(void *pdata) {
   }
 }
 
-void
+static void
 end_chapter_uid(void *pdata) {
   KaxChapterUID *cuid;
 
@@ -89,7 +89,7 @@ end_chapter_uid(void *pdata) {
   }
 }
 
-void
+static void
 end_chapter_atom(void *pdata) {
   EbmlMaster *m;
 
@@ -108,7 +108,7 @@ end_chapter_atom(void *pdata) {
   }
 }
 
-void
+static void
 end_chapter_track(void *pdata) {
   EbmlMaster *m;
 
@@ -118,7 +118,7 @@ end_chapter_track(void *pdata) {
                "child.");
 }
 
-void
+static void
 end_chapter_display(void *pdata) {
   EbmlMaster *m;
 
@@ -135,7 +135,7 @@ end_chapter_display(void *pdata) {
   }
 }
 
-void
+static void
 end_chapter_language(void *pdata) {
   EbmlString *s;
   int index;
@@ -148,7 +148,7 @@ end_chapter_language(void *pdata) {
   *s = iso639_languages[index].iso639_2_code;
 }
 
-void
+static void
 end_chapter_country(void *pdata) {
   EbmlString *s;
 
@@ -156,6 +156,18 @@ end_chapter_country(void *pdata) {
   if (!is_valid_cctld(string(*s).c_str()))
     xmlp_error(CPDATA, "'%s' is not a valid ccTLD country code.",
                string(*s).c_str());
+}
+
+static int
+cet_index(const char *name) {
+  int i;
+
+  for (i = 0; chapter_elements[i].name != NULL; i++)
+    if (!strcmp(name, chapter_elements[i].name))
+      return i;
+
+  mxerror("cet_index: '%s' not found\n", name);
+  return -1;
 }
 
 bool
@@ -192,6 +204,23 @@ parse_xml_chapters(mm_text_io_c *in,
       chapter_elements[i].start_hook = NULL;
       chapter_elements[i].end_hook = NULL;
     }
+
+    chapter_elements[cet_index("EditionEntry")].end_hook =
+      end_edition_entry;
+    chapter_elements[cet_index("EditionUID")].end_hook =
+      end_edition_uid;
+    chapter_elements[cet_index("ChapterAtom")].end_hook =
+      end_chapter_atom;
+    chapter_elements[cet_index("ChapterUID")].end_hook =
+      end_chapter_uid;
+    chapter_elements[cet_index("ChapterTrack")].end_hook =
+      end_chapter_track;
+    chapter_elements[cet_index("ChapterDisplay")].end_hook =
+      end_chapter_display;
+    chapter_elements[cet_index("ChapterCountry")].end_hook =
+      end_chapter_country;
+    chapter_elements[cet_index("ChapterLanguage")].end_hook =
+      end_chapter_language;
 
     m = parse_xml_elements("Chapter", chapter_elements, in);
     chapters = dynamic_cast<KaxChapters *>(sort_ebml_master(m));

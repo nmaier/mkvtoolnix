@@ -120,6 +120,8 @@ typedef struct {
   string *parse_error_msg;
 } parser_data_t;
 
+#define CPDATA (parser_data_t *)pdata
+
 #define xmlp_pelt (*((parser_data_t *)pdata)->parents) \
                      [((parser_data_t *)pdata)->parents->size() - 1]
 #define xmlp_pname xmlp_parent_name((parser_data_t *)pdata, xmlp_pelt)

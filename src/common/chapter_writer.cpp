@@ -213,7 +213,7 @@ cet_index(const char *name) {
     if (!strcmp(name, chapter_elements[i].name))
       return i;
 
-  assert(false);
+  mxerror("cet_index: '%s' not found\n", name);
   return -1;
 }
 

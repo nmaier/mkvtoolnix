@@ -105,14 +105,5 @@ void MTX_DLL_API move_chapters_by_edition(KaxChapters &dst, KaxChapters &src);
 void MTX_DLL_API adjust_chapter_timecodes(EbmlMaster &master, int64_t offset);
 void MTX_DLL_API merge_chapter_entries(EbmlMaster &master);
 
-void end_edition_entry(void *pdata);
-void end_edition_uid(void *pdata);
-void end_chapter_uid(void *pdata);
-void end_chapter_atom(void *pdata);
-void end_chapter_track(void *pdata);
-void end_chapter_display(void *pdata);
-void end_chapter_language(void *pdata);
-void end_chapter_country(void *pdata);
-
 #endif // __CHAPTERS_H
 
