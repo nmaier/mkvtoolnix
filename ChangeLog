@@ -1,5 +1,8 @@
 2006-11-14  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: The "aspect ratio" box was losing its input when
+	the user switched tracks.
+
 	* mkvmerge/mmg: new feature: If ATDS AAC tracks are added to mmg
 	and the AAC track's sample rate is <= 24000 Hz then mkvmerge and
 	mmg assume that the AAC is a SBR track and mmg will check the "AAC

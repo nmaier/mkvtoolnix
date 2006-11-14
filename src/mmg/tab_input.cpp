@@ -82,14 +82,6 @@ set_combobox_selection(wxComboBox *cb,
     }
 }
 
-wxString
-get_combobox_selection(wxComboBox *cb) {
-  if (wxNOT_FOUND != cb->GetSelection())
-    return cb->GetStringSelection();
-  else
-    return cb->GetValue();
-}
-
 class input_drop_target_c: public wxFileDropTarget {
 private:
   tab_input *owner;
@@ -907,8 +899,8 @@ tab_input::on_value_copy_timer(wxTimerEvent &evt) {
     return;
 
   t = tracks[selected_track];
-  t->aspect_ratio = get_combobox_selection(ti_format->cob_aspect_ratio);
-  t->fourcc = get_combobox_selection(ti_format->cob_fourcc);
+  t->aspect_ratio = ti_format->cob_aspect_ratio->GetValue();
+  t->fourcc = ti_format->cob_fourcc->GetValue();
 }
 
 void
