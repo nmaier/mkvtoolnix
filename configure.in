@@ -39,7 +39,7 @@ dnl  We give the user the opportunity to specify
 dnl  --with-words=big or --with-words=little ; otherwise, try to guess
 dnl
 AC_ARG_WITH(words,
-  AC_HELP_STRING([--with-words=endianness],[set endianness (big or little)]),
+  AC_HELP_STRING([--with-words=endianness],[set endianness (big or little)]))
   case "${with_words}" in
     big)
       ac_cv_c_bigendian=yes
