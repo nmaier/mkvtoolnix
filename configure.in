@@ -39,7 +39,7 @@ dnl  We give the user the opportunity to specify
 dnl  --with-words=big or --with-words=little ; otherwise, try to guess
 dnl
 AC_ARG_WITH(words,
-  [  --with-words=endianness       set endianness (big or little)])
+  AC_HELP_STRING([--with-words=endianness],[set endianness (big or little)]),
   case "${with_words}" in
     big)
       ac_cv_c_bigendian=yes
@@ -97,10 +97,10 @@ dnl
 dnl Extra include and library dirs that someone would like to specify.
 dnl
 AC_ARG_WITH(extra-includes,
-  [  --with-extra-includes=DIR     Path to other include directories separated by ';'],,
+  AC_HELP_STRING([--with-extra-includes=DIR],[Path to other include directories separated by ';']),,
   with_extra_include_given=no)
 AC_ARG_WITH(extra-libs,
-  [  --with-extra-libs=DIR         Path to other library directories separated by ';'],,
+  AC_HELP_STRING([--with-extra-libs=DIR],[Path to other library directories separated by ';']),,
   with_extra_libs_given=no)
   EXTRA_CFLAGS=
 
@@ -137,7 +137,7 @@ dnl
 dnl Debugging and profiling options
 dnl
 AC_ARG_ENABLE([debug],
-  [  --enable-debug          compile with debug information (no)])
+  AC_HELP_STRING([--enable-debug],[compile with debug information (no)]))
   if test x"$enable_debug" = x"yes"; then
     dnl debug information
     DEBUG_CFLAGS="-g -DDEBUG"
@@ -147,7 +147,7 @@ AC_ARG_ENABLE([debug],
     OPTIMIZATION_CFLAGS="-O3"
   fi
 AC_ARG_ENABLE([profiling],
-    [  --enable-profiling      compile with profiling information (no)])
+  AC_HELP_STRING([--enable-profiling],[compile with profiling information (no)]))
   if test x"$enable_profiling" = x"yes"; then
     dnl profiling information
     PROFILING_CFLAGS="-pg"
@@ -328,7 +328,7 @@ dnl
 dnl Check for posix_fadvise and its definitions
 dnl
 AC_ARG_ENABLE(posix-fadvise,
-  [  --disable-posix-fadvise do not use posix_fadvise (auto)],,
+  AC_HELP_STRING([--disable-posix-fadvise],[do not use posix_fadvise (auto)]),,
   [enable_posix_fadvise=yes])
 
 if test x"$enable_posix_fadvise" != "xno" ; then 
@@ -846,7 +846,7 @@ dnl
 dnl Check for liblzo
 dnl
   AC_ARG_ENABLE([lzo],
-    [  --enable-lzo            compile in support for LZO compression (auto)])
+    AC_HELP_STRING([--enable-lzo],[compile in support for LZO compression (auto)]))
   if test "x$enable_lzo" != "xno"; then
     AC_CHECK_LIB(lzo2, lzo1x_1_compress,
                  [ LZO_LIBS="-llzo2"
@@ -878,7 +878,7 @@ dnl
 dnl Check for libbz2
 dnl
   AC_ARG_ENABLE([bz2],
-    [  --enable-bz2            compile in support for BZ2 compression (auto)])
+    AC_HELP_STRING([--enable-bz2],[compile in support for BZ2 compression (auto)]))
   if test x"$enable_bz2" = x"yes" -o x"$enable_bz2" = "x"; then
     AC_CHECK_LIB(bz2, BZ2_bzCompress,
                  [ BZ2_LIBS="-lbz2"
@@ -902,7 +902,7 @@ dnl
 dnl Check for wxWidgets
 dnl
   AC_ARG_ENABLE([gui],
-    [  --enable-gui            compile mkvinfo's GUI and mmg (yes)])
+    AC_HELP_STRING([--enable-gui],[compile mkvinfo's GUI and mmg (yes)]))
 
   wxw_ver_req_major=2
   wxw_ver_req_minor=6
