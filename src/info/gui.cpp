@@ -14,7 +14,7 @@
 
 #include "config.h"
 
-#ifdef HAVE_WXWINDOWS
+#ifdef HAVE_WXWIDGETS
 
 #include "wx/wx.h"
 #include "wx/treectrl.h"
@@ -404,4 +404,4 @@ IMPLEMENT_APP(mi_app)
 IMPLEMENT_APP_NO_MAIN(mi_app)
 #endif
 
-#endif // HAVE_WXWINDOWS
+#endif // HAVE_WXWIDGETS

@@ -132,7 +132,7 @@ find_track_by_uid(int tuid) {
 
 void
 set_usage() {
-#ifdef HAVE_WXWINDOWS
+#ifdef HAVE_WXWIDGETS
   usage_text = Y(
     "Usage: mkvinfo [options] inname\n\n"
     " options:\n"
@@ -185,7 +185,7 @@ show_error(const char *fmt,
   vsnprintf(args_buffer, ARGS_BUFFER_LEN - 1, new_fmt.c_str(), ap);
   va_end(ap);
 
-#ifdef HAVE_WXWINDOWS
+#ifdef HAVE_WXWIDGETS
   if (use_gui)
     frame->show_error(wxU(args_buffer));
   else
@@ -251,14 +251,14 @@ _show_element(EbmlElement *l,
     mxinfo("\n");
     delete []level_buffer;
   }
-#ifdef HAVE_WXWINDOWS
+#ifdef HAVE_WXWIDGETS
   else {
     if (l != NULL)
       mxprints(&args_buffer[strlen(args_buffer)], " at " LLU,
                l->GetElementPosition());
     frame->add_item(level, wxU(args_buffer));
   }
-#endif // HAVE_WXWINDOWS
+#endif // HAVE_WXWIDGETS
 
   if ((l != NULL) && skip) {
     // Dump unknown elements recursively.
@@ -289,11 +289,11 @@ parse_args(vector<string> args,
   // Now parse the rest of the arguments.
   for (i = 0; i < args.size(); i++)
     if ((args[i] == "-g") || (args[i] == "--gui")) {
-#ifndef HAVE_WXWINDOWS
+#ifndef HAVE_WXWIDGETS
       mxerror("mkvinfo was compiled without GUI support.\n");
-#else // HAVE_WXWINDOWS
+#else // HAVE_WXWIDGETS
       use_gui = true;
-#endif // HAVE_WXWINDOWS
+#endif // HAVE_WXWIDGETS
     } else if ((args[i] == "-c") || (args[i] == "--checksum"))
       calc_checksums = true;
     else if ((args[i] == "-C") || (args[i] == "--check-mode")) {
@@ -1742,11 +1742,11 @@ def_handle2(cluster,
 
   cluster = (KaxCluster *)l1;
 
-#ifdef HAVE_WXWINDOWS
+#ifdef HAVE_WXWIDGETS
   if (use_gui)
     frame->show_progress(100 * cluster->GetElementPosition() /
                          file_size, wxT("Parsing file"));
-#endif // HAVE_WXWINDOWS
+#endif // HAVE_WXWIDGETS
 
   upper_lvl_el = 0;
   m1 = static_cast<EbmlMaster *>(l1);
@@ -2127,7 +2127,7 @@ console_main(vector<string> args) {
     return 1;
 }
 
-#if !defined HAVE_WXWINDOWS
+#if !defined HAVE_WXWIDGETS
 int
 main(int argc,
      char **argv) {
@@ -2156,4 +2156,4 @@ main(int argc,
     return console_main(args);
 }
 
-#endif // HAVE_WXWINDOWS
+#endif // HAVE_WXWIDGETS

@@ -24,7 +24,7 @@
 
 #include "config.h"
 
-#ifdef HAVE_WXWINDOWS
+#ifdef HAVE_WXWIDGETS
 #include <wx/wx.h>
 #include <wx/dnd.h>
 #include <wx/treectrl.h>
@@ -42,7 +42,7 @@ void cleanup();
 
 extern bool use_gui;
 
-#ifdef HAVE_WXWINDOWS
+#ifdef HAVE_WXWIDGETS
 
 #include "wxcommon.h"
 
@@ -102,6 +102,6 @@ extern mi_frame *frame;
 
 DECLARE_APP(mi_app);
 
-#endif // HAVE_WXWINDOWS
+#endif // HAVE_WXWIDGETS
 
 #endif // __MKVINFO_H
