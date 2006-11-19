@@ -910,6 +910,10 @@ dnl
   wxw_min_ver=$wxw_ver_req_major.$wxw_ver_req_minor.$wxw_ver_req_micro
 
   if test x"$enable_gui" = x"yes" -o x"$enable_gui" = "x"; then
+    AC_ARG_WITH(wx_config,
+      AC_HELP_STRING([--with-wx-config=prog],
+        [use prog instead of looking for wx-config]),
+      [ WX_CONFIG="$with_wx_config" ],)
     AC_PATH_PROG(WX_CONFIG, wx-config, no, $PATH:/usr/local/bin)
     if test x"$WX_CONFIG" != "xno" ; then
       AC_MSG_CHECKING(for wxWidgets $wxw_min_ver or newer)
