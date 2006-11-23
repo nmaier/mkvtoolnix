@@ -286,7 +286,7 @@ int MTX_DLL_API int_log2(uint32_t value);
 
 extern int MTX_DLL_API verbose;
 
-#define foreach(it, vec) for (it = (vec).begin(); it != (vec).end(); it++)
+#define mxforeach(it, vec) for (it = (vec).begin(); it != (vec).end(); it++)
 #define mxfind(value, cont) std::find(cont.begin(), cont.end(), value)
 #define mxfind2(it, value, cont) \
   ((id = std::find((cont).begin(), (cont).end(), value)) != (cont).end())

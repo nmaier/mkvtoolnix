@@ -658,7 +658,7 @@ remove_unique_uint32(uint32_t number,
 
   if (hack_engaged(ENGAGE_NO_VARIABLE_DATA))
     return true;
-  foreach(dit, ru_numbers[category])
+  mxforeach(dit, ru_numbers[category])
     if (*dit == number) {
       ru_numbers[category].erase(dit);
       return true;

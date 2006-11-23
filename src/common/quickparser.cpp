@@ -127,7 +127,7 @@ kax_quickparser_c::kax_quickparser_c(mm_io_c &_in,
           continue;
 
         found = false;
-        foreach(it, children)
+        mxforeach(it, children)
           if ((*it).pos == pos) {
             found = true;
             break;
@@ -155,7 +155,7 @@ kax_quickparser_c::num_elements(const EbmlId &id)
   int num;
 
   num = 0;
-  foreach(it, children)
+  mxforeach(it, children)
     if ((*it).id == id)
       num++;
 

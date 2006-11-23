@@ -924,7 +924,7 @@ void
 generic_packetizer_c::process_deferred_packets() {
   deque<packet_cptr>::iterator packet;
 
-  foreach(packet, deferred_packets)
+  mxforeach(packet, deferred_packets)
     add_packet2(*packet);
   deferred_packets.clear();
 }
@@ -1306,7 +1306,7 @@ generic_reader_c::set_timecode_offset(int64_t offset) {
   vector<generic_packetizer_c *>::const_iterator it;
 
   max_timecode_seen = offset;
-  foreach(it, reader_packetizers)
+  mxforeach(it, reader_packetizers)
     (*it)->correction_timecode_offset = offset;
 }
 
@@ -1314,7 +1314,7 @@ void
 generic_reader_c::set_headers() {
   vector<generic_packetizer_c *>::const_iterator it;
 
-  foreach(it, reader_packetizers)
+  mxforeach(it, reader_packetizers)
     (*it)->set_headers();
 }
 
@@ -1322,7 +1322,7 @@ void
 generic_reader_c::set_headers_for_track(int64_t tid) {
   vector<generic_packetizer_c *>::const_iterator it;
 
-  foreach(it, reader_packetizers)
+  mxforeach(it, reader_packetizers)
     if ((*it)->ti.id == tid) {
       (*it)->set_headers();
       break;
@@ -1378,7 +1378,7 @@ generic_reader_c::get_queued_bytes() {
   int64_t bytes;
 
   bytes = 0;
-  foreach(it, reader_packetizers)
+  mxforeach(it, reader_packetizers)
     bytes += (*it)->get_queued_bytes();
 
   return bytes;
@@ -1388,7 +1388,7 @@ void
 generic_reader_c::flush_packetizers() {
   vector<generic_packetizer_c *>::const_iterator it;
 
-  foreach(it, reader_packetizers)
+  mxforeach(it, reader_packetizers)
     (*it)->flush();
 }
 

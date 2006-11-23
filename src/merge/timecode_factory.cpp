@@ -247,7 +247,7 @@ timecode_factory_v2_c::parse(mm_io_c &in) {
             m_file_name.c_str());
 
   dur_sum = -1;
-  foreach(it, dur_map) {
+  mxforeach(it, dur_map) {
     if ((dur_sum < 0) || (dur_map[dur_sum] < (*it).second))
       dur_sum = (*it).first;
     mxverb(4, "ext_m_timecodes v2 dur_map " LLD " = " LLD "\n", (*it).first,

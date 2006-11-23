@@ -749,7 +749,7 @@ parse_split_timecodes(const string &arg) {
     s.erase(0, 10);
 
   timecodes = split(s, ",");
-  foreach(timecode, timecodes) {
+  mxforeach(timecode, timecodes) {
     if (!parse_timecode(*timecode, split_after))
       mxerror(_("Invalid time for '--split' in '--split %s'. Additional error "
                 "message: %s.\n"), arg.c_str(), timecode_parser_error.c_str());
@@ -1157,7 +1157,7 @@ parse_append_to(const string &s,
   append_mapping.clear();
   entries = split(s, ",");
   strip(entries);
-  foreach(entry, entries) {
+  mxforeach(entry, entries) {
     if ((mxsscanf((*entry).c_str(), "" LLD ":" LLD ":" LLD ":" LLD,
                   &mapping.src_file_id, &mapping.src_track_id,
                   &mapping.dst_file_id, &mapping.dst_track_id) != 4) ||
@@ -1365,7 +1365,7 @@ parse_args(vector<string> args) {
   }
 
   // First parse options that either just print some infos and then exit.
-  foreach(sit, args) {
+  mxforeach(sit, args) {
     this_arg = *sit;
     if ((sit + 1) == args.end())
       next_arg = "";
@@ -1400,7 +1400,7 @@ parse_args(vector<string> args) {
   mxinfo("%s built on %s %s\n", version_info.c_str(), __DATE__, __TIME__);
 
   // Now parse options that are needed right at the beginning.
-  foreach(sit, args) {
+  mxforeach(sit, args) {
     this_arg = *sit;
     if ((sit + 1) == args.end())
       next_arg = "";
@@ -1431,7 +1431,7 @@ parse_args(vector<string> args) {
     usage(2);
   }
 
-  foreach(sit, args) {
+  mxforeach(sit, args) {
     this_arg = *sit;
     if ((sit + 1) == args.end())
       next_arg = "";

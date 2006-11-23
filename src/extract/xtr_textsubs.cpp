@@ -400,7 +400,7 @@ xtr_usf_c::finish_track() {
   try {
     m_formatter->format(mxsprintf("<subtitles>\n<language code=\"%s\"/>\n",
                                   m_language.c_str()));
-    foreach(entry, m_entries) {
+    mxforeach(entry, m_entries) {
       string text = entry->m_text;
       strip(text, true);
       m_formatter->format(mxsprintf("<subtitle start=\"" FMT_TIMECODE

@@ -1194,7 +1194,7 @@ mmg_dialog::on_help(wxCommandEvent &evt) {
     potential_help_paths.push_back(wxGetCwd());
 
     help_path = wxT("");
-    foreach(php, potential_help_paths)
+    mxforeach(php, potential_help_paths)
       if (wxFileExists(*php + wxT("/mkvmerge-gui.hhp"))) {
         help_path = *php;
         break;

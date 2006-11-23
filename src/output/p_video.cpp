@@ -436,7 +436,7 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
   if (-1 != packet->duration)
     available_durations.push_back(packet->duration);
 
-  foreach(frame, frames) {
+  mxforeach(frame, frames) {
     // Maybe we can flush queued frames now. But only if we don't have
     // a B frame.
     if (FRAME_TYPE_B != frame->type)

@@ -417,7 +417,7 @@ qtmp4_reader_c::calculate_timecodes() {
   vector<qtmp4_demuxer_ptr>::iterator idmx;
   int64_t min_timecode = 0;
 
-  foreach(idmx, demuxers) {
+  mxforeach(idmx, demuxers) {
     qtmp4_demuxer_ptr &dmx = *idmx;
 
     dmx->calculate_fps();
@@ -427,7 +427,7 @@ qtmp4_reader_c::calculate_timecodes() {
   }
 
   if (0 > min_timecode) {
-    foreach(idmx, demuxers)
+    mxforeach(idmx, demuxers)
       (*idmx)->adjust_timecodes(-1 * min_timecode);
   } else
     min_timecode = 0;
@@ -1771,7 +1771,7 @@ qtmp4_demuxer_t::calculate_fps() {
 
     map<int64_t, int>::const_iterator most_common = durations.begin();
     map<int64_t, int>::const_iterator it;
-    foreach(it, durations)
+    mxforeach(it, durations)
       if (it->second > most_common->second)
         most_common = it;
 

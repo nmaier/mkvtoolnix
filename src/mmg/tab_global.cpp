@@ -639,7 +639,7 @@ tab_global::is_valid_split_timecode_list() {
   vector<string>::const_iterator i;
 
   parts = split(s, ",");
-  foreach(i, parts)
+  mxforeach(i, parts)
     if (!is_valid_split_timecode(*i, wxT("timecode list")))
       return false;
 

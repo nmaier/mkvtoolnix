@@ -184,7 +184,7 @@ corepicture_reader_c::create_packetizer(int64_t tid) {
 
   private_buffer[0] = 0; // version 0
 
-  foreach(picture, m_pictures) {
+  mxforeach(picture, m_pictures) {
     if (COREPICTURE_TYPE_JPEG == picture->m_pic_type)
       codec_used |= COREPICTURE_USE_JPEG;
     else if (COREPICTURE_TYPE_PNG == picture->m_pic_type)

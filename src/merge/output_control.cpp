@@ -433,7 +433,7 @@ add_attachment(attachment_t attachment) {
   // check if we already have another attachment stored. This can happen
   // if we're concatenating files.
   if (0 != attachment.id) {
-    foreach(i, attachments)
+    mxforeach(i, attachments)
       if (((i->id == attachment.id) && !hack_engaged(ENGAGE_NO_VARIABLE_DATA))
           ||
           ((i->name == attachment.name) &&
@@ -461,7 +461,7 @@ add_packetizer_globally(generic_packetizer_c *packetizer) {
   pack.status = FILE_STATUS_MOREDATA;
   pack.old_status = pack.status;
   pack.file = -1;
-  foreach(file, files)
+  mxforeach(file, files)
     if (file->reader == packetizer->reader) {
       pack.file = distance(files.begin(), file);
       pack.orig_file = pack.file;
@@ -482,7 +482,7 @@ set_timecode_scale() {
   audio_present = false;
   highest_sample_rate = 0;
 
-  foreach(ptzr, packetizers)
+  mxforeach(ptzr, packetizers)
     if ((*ptzr).packetizer->get_track_type() == track_video)
       video_present = true;
     else if ((*ptzr).packetizer->get_track_type() == track_audio) {
@@ -725,7 +725,7 @@ render_attachments(IOCallback *rout) {
     delete kax_as;
   kax_as = new KaxAttachments();
   kax_a = NULL;
-  foreach(attch, attachments) {
+  mxforeach(attch, attachments) {
     if ((file_num == 1) || attch->to_all_files) {
       if (kax_a == NULL)
         kax_a = &GetChild<KaxAttached>(*kax_as);
@@ -786,7 +786,7 @@ check_append_mapping() {
   vector<filelist_t>::iterator src_file, dst_file;
   int count, file_id;
 
-  foreach(amap, append_mapping) {
+  mxforeach(amap, append_mapping) {
     // Check each mapping entry for validity.
 
     // 1. Is there a file with the src_file_id?
@@ -816,13 +816,13 @@ check_append_mapping() {
   // Now let's check each appended file if there are NO append to mappings
   // available (in which case we fill in default ones) or if there are fewer
   // mappings than tracks that are to be copied (which is an error).
-  foreach(src_file, files) {
+  mxforeach(src_file, files) {
     file_id = distance(files.begin(), src_file);
     if (!src_file->appending)
       continue;
 
     count = 0;
-    foreach(amap, append_mapping)
+    mxforeach(amap, append_mapping)
       if (amap->src_file_id == file_id)
         count++;
 
@@ -836,7 +836,7 @@ check_append_mapping() {
       string missing_mappings;
 
       // Default mapping.
-      foreach(id, src_file->reader->used_track_ids) {
+      mxforeach(id, src_file->reader->used_track_ids) {
         append_spec_t new_amap;
 
         new_amap.src_file_id = file_id;
@@ -860,7 +860,7 @@ check_append_mapping() {
   }
 
   // Some more checks.
-  foreach(amap, append_mapping) {
+  mxforeach(amap, append_mapping) {
     src_file = files.begin() + amap->src_file_id;
     dst_file = files.begin() + amap->dst_file_id;
 
@@ -882,7 +882,7 @@ check_append_mapping() {
               amap->dst_track_id);
 
     // 7. Is this track already mapped to somewhere else?
-    foreach(cmp_amap, append_mapping) {
+    mxforeach(cmp_amap, append_mapping) {
       if (cmp_amap == amap)
         continue;
       if (((*cmp_amap).src_file_id == amap->src_file_id) &&
@@ -894,7 +894,7 @@ check_append_mapping() {
     }
 
     // 8. Is there another track that is being appended to the dst_track_id?
-    foreach(cmp_amap, append_mapping) {
+    mxforeach(cmp_amap, append_mapping) {
       if (cmp_amap == amap)
         continue;
       if (((*cmp_amap).dst_file_id == amap->dst_file_id) &&
@@ -908,7 +908,7 @@ check_append_mapping() {
 
   // Finally see if the packetizers can be connected and connect them if they
   // can.
-  foreach(amap, append_mapping) {
+  mxforeach(amap, append_mapping) {
     vector<generic_packetizer_c *>::const_iterator gptzr;
     generic_packetizer_c *src_ptzr, *dst_ptzr;
     string error_message;
@@ -916,13 +916,13 @@ check_append_mapping() {
 
     src_file = files.begin() + amap->src_file_id;
     src_ptzr = NULL;
-    foreach(gptzr, src_file->reader->reader_packetizers)
+    mxforeach(gptzr, src_file->reader->reader_packetizers)
       if ((*gptzr)->ti.id == amap->src_track_id)
         src_ptzr = (*gptzr);
 
     dst_file = files.begin() + amap->dst_file_id;
     dst_ptzr = NULL;
-    foreach(gptzr, dst_file->reader->reader_packetizers)
+    mxforeach(gptzr, dst_file->reader->reader_packetizers)
       if ((*gptzr)->ti.id == amap->dst_track_id)
         dst_ptzr = (*gptzr);
 
@@ -962,11 +962,11 @@ check_append_mapping() {
 
   // Calculate the "longest path" -- meaning the maximum number of
   // concatenated files. This is needed for displaying the progress.
-  foreach(amap, append_mapping) {
+  mxforeach(amap, append_mapping) {
     int path_length;
 
     // Is this the first in a chain?
-    foreach(cmp_amap, append_mapping) {
+    mxforeach(cmp_amap, append_mapping) {
       if (amap == cmp_amap)
         continue;
       if ((amap->dst_file_id == cmp_amap->src_file_id) &&
@@ -980,7 +980,7 @@ check_append_mapping() {
     trav_amap = amap;
     path_length = 2;
     do {
-      foreach(cmp_amap, append_mapping)
+      mxforeach(cmp_amap, append_mapping)
         if ((trav_amap->src_file_id == cmp_amap->dst_file_id) &&
             (trav_amap->src_track_id == cmp_amap->dst_track_id)) {
           trav_amap = cmp_amap;
@@ -1011,7 +1011,7 @@ calc_max_chapter_size() {
   KaxChapters *chapters;
 
   // Step 1: Add all chapters from files that are not being appended.
-  foreach(file, files) {
+  mxforeach(file, files) {
     if (file->appending)
       continue;
     chapters = file->reader->chapters;
@@ -1034,7 +1034,7 @@ calc_max_chapter_size() {
     max_chapter_size += kax_chapters->ElementSize();
   }
 
-  foreach(file, files) {
+  mxforeach(file, files) {
     chapters = file->reader->chapters;
     if (chapters == NULL)
       continue;
@@ -1056,7 +1056,7 @@ void
 create_readers() {
   vector<filelist_t>::iterator file;
 
-  foreach(file, files) {
+  mxforeach(file, files) {
     try {
       switch (file->type) {
         case FILE_TYPE_AAC:
@@ -1139,13 +1139,13 @@ create_readers() {
     vector<attachment_t>::const_iterator att;
 
     // Create the packetizers.
-    foreach(file, files) {
+    mxforeach(file, files) {
       file->reader->appending = file->appending;
       file->reader->create_packetizers();
     }
     // Check if all track IDs given on the command line are actually
     // present.
-    foreach(file, files) {
+    mxforeach(file, files) {
       file->reader->check_track_ids_and_packetizers();
       file->num_unfinished_packetizers =
         file->reader->reader_packetizers.size();
@@ -1156,7 +1156,7 @@ create_readers() {
     check_append_mapping();
 
     // Calculate the size of all attachments for split control.
-    foreach(att, attachments) {
+    mxforeach(att, attachments) {
       attachment_sizes_first += att->data->m_size;
       if (att->to_all_files)
         attachment_sizes_others += att->data->m_size;
@@ -1564,7 +1564,7 @@ append_track(packetizer_t &ptzr,
 
   // Find the generic_packetizer_c that we will be appending to the one
   // stored in ptzr.
-  foreach(gptzr, src_file.reader->reader_packetizers)
+  mxforeach(gptzr, src_file.reader->reader_packetizers)
     if (amap.src_track_id == (*gptzr)->ti.id)
       break;
   if (gptzr == src_file.reader->reader_packetizers.end())
@@ -1590,13 +1590,13 @@ append_track(packetizer_t &ptzr,
       (-1 == src_file.deferred_max_timecode_seen)) {
     vector<filelist_t>::iterator file;
 
-    foreach(file, files) {
+    mxforeach(file, files) {
       vector<generic_packetizer_c *>::const_iterator vptzr;
 
       if (file->done)
         continue;
 
-      foreach(vptzr, file->reader->reader_packetizers) {
+      mxforeach(vptzr, file->reader->reader_packetizers) {
         if ((*vptzr)->get_track_type() == track_video)
           break;
       }
@@ -1661,14 +1661,14 @@ append_track(packetizer_t &ptzr,
     if (src_file.reader->ptzr_first_packet == NULL)
       ptzr.status = ptzr.packetizer->read();
     if (src_file.reader->ptzr_first_packet != NULL) {
-      foreach(cmp_amap, append_mapping)
+      mxforeach(cmp_amap, append_mapping)
         if ((cmp_amap->src_file_id == amap.src_file_id) &&
             (cmp_amap->src_track_id ==
              src_file.reader->ptzr_first_packet->ti.id) &&
             (cmp_amap->dst_file_id == amap.dst_file_id))
           break;
       if (cmp_amap != append_mapping.end()) {
-        foreach(gptzr, dst_file.reader->reader_packetizers)
+        mxforeach(gptzr, dst_file.reader->reader_packetizers)
           if ((*gptzr)->ti.id == cmp_amap->dst_track_id) {
             timecode_adjustment = (*gptzr)->max_timecode_seen;
             break;
@@ -1719,14 +1719,14 @@ append_tracks_maybe() {
   bool appended_a_track;
 
   appended_a_track = false;
-  foreach(ptzr, packetizers) {
+  mxforeach(ptzr, packetizers) {
     if (ptzr->deferred)
       continue;
     if (!files[ptzr->orig_file].appended_to)
       continue;
     if (FILE_STATUS_DONE_AND_DRY != ptzr->status)
       continue;
-    foreach(amap, append_mapping)
+    mxforeach(amap, append_mapping)
       if ((amap->dst_file_id == ptzr->file) &&
           (amap->dst_track_id == ptzr->packetizer->ti.id))
         break;
@@ -1762,7 +1762,7 @@ establish_deferred_connections(filelist_t &file) {
   def_cons = file.deferred_connections;
   file.deferred_connections.clear();
 
-  foreach(def_con, def_cons)
+  mxforeach(def_con, def_cons)
     append_track(*def_con->ptzr, def_con->amap, &file);
 
   // \todo Select a new file that the subs will defer to.
@@ -1784,7 +1784,7 @@ main_loop() {
 
     // Step 1: Make sure a packet is available for each output
     // as long we haven't already processed the last one.
-    foreach(ptzr, packetizers) {
+    mxforeach(ptzr, packetizers) {
       if (ptzr->status == FILE_STATUS_HOLDING)
         ptzr->status = FILE_STATUS_MOREDATA;
       ptzr->old_status = ptzr->status;
@@ -1820,7 +1820,7 @@ main_loop() {
     // Step 2: Pick the packet with the lowest timecode and
     // stuff it into the Matroska file.
     winner = packetizers.end();
-    foreach(ptzr, packetizers) {
+    mxforeach(ptzr, packetizers) {
       if (ptzr->pack.get() != NULL) {
         if ((winner == packetizers.end()) || (winner->pack.get() == NULL))
           winner = ptzr;
@@ -1893,7 +1893,7 @@ static void
 destroy_readers() {
   vector<filelist_t>::const_iterator file;
 
-  foreach(file, files)
+  mxforeach(file, files)
     if ((*file).reader != NULL)
       delete (*file).reader;
 
@@ -1912,7 +1912,7 @@ cleanup() {
 
   destroy_readers();
 
-  foreach(file, files)
+  mxforeach(file, files)
     delete (*file).ti;
   files.clear();
 

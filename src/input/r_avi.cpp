@@ -198,7 +198,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
   uint32_t audio_format;
   int maxchunks, i;
 
-  foreach(it, ademuxers)
+  mxforeach(it, ademuxers)
     if (it->aid == aid) // Demuxer already added?
       return;
 
@@ -468,7 +468,7 @@ avi_reader_c::read(generic_packetizer_c *ptzr,
   if ((vptzr != -1) && (PTZR(vptzr) == ptzr))
     return read_video();
 
-  foreach(demuxer, ademuxers)
+  mxforeach(demuxer, ademuxers)
     if ((-1 != demuxer->ptzr) && (PTZR(demuxer->ptzr) == ptzr))
       return read_audio(*demuxer);
 

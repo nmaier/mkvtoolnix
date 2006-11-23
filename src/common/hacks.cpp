@@ -49,7 +49,7 @@ bool
 hack_engaged(const string &hack) {
   vector<string>::const_iterator hit;
 
-  foreach(hit, engaged_hacks)
+  mxforeach(hit, engaged_hacks)
     if (*hit == hack)
       return true;
 

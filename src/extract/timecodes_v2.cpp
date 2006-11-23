@@ -75,12 +75,12 @@ static void
 close_timecode_files() {
   vector<timecode_extractor_t>::iterator extractor;
 
-  foreach(extractor, timecode_extractors) {
+  mxforeach(extractor, timecode_extractors) {
     vector<int64_t> &timecodes = extractor->m_timecodes;
     vector<int64_t>::const_iterator timecode;
 
     sort(timecodes.begin(), timecodes.end());
-    foreach(timecode, timecodes)
+    mxforeach(timecode, timecodes)
       extractor->m_file->printf("%f\n", ((double)(*timecode)) / 1000000.0);
     delete extractor->m_file;
   }
@@ -95,7 +95,7 @@ create_timecode_files(KaxTracks &kax_tracks,
   int i;
   int64_t default_duration;
 
-  foreach(tspec, tracks) {
+  mxforeach(tspec, tracks) {
     default_duration = 0;
 
     for (i = 0; kax_tracks.ListSize() > i; ++i) {
@@ -142,7 +142,7 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
   block->SetParent(cluster);
 
   // Do we need this block group?
-  foreach(extractor, timecode_extractors)
+  mxforeach(extractor, timecode_extractors)
     if (block->TrackNum() == extractor->m_tid)
       break;
   if (timecode_extractors.end() == extractor)
