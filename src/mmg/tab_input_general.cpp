@@ -212,9 +212,9 @@ tab_input_general::set_track_mode(mmg_track_t *t) {
   st_tags->Enable(enable);
   tc_tags->Enable(enable);
   b_browse_tags->Enable(enable);
-  st_timecodes->Enable(enable);
-  tc_timecodes->Enable(enable);
-  b_browse_timecodes->Enable(enable);
+  st_timecodes->Enable(NULL != t);
+  tc_timecodes->Enable(NULL != t);
+  b_browse_timecodes->Enable(NULL != t);
   cb_default->Enable(enable);
 }
 

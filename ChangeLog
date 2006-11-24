@@ -1,3 +1,9 @@
+2006-11-24  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: Some input controls (like "subtitle charset")
+	where disabled for appended tracks even though the user can and
+	sometimes has to change those settings. Fixes Anthill bug 216.
+
 2006-11-19  Moritz Bunkus  <moritz@bunkus.org>
 
 	* configure: new feature: Allow the user to tell configure which

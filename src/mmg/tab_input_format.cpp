@@ -251,17 +251,18 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   wxString ctype = t ? t->ctype : wxT("");
   bool appending = t ? t->appending : false;
   bool video = ('v' == type) && !appending;
-  bool audio = ('a' == type) && !appending;
+  bool audio_app = ('a' == type);
   bool subs = ('s' == type) && !appending;
+  bool subs_app = ('s' == type);
 
   ctype = ctype.Lower();
 
-  st_delay->Enable(audio || subs);
-  tc_delay->Enable(audio || subs);
-  st_stretch->Enable(audio || subs);
-  tc_stretch->Enable(audio || subs);
-  st_sub_charset->Enable(subs && (ctype.Find(wxT("vobsub")) < 0));
-  cob_sub_charset->Enable(subs && (ctype.Find(wxT("vobsub")) < 0));
+  st_delay->Enable(audio_app || subs);
+  tc_delay->Enable(audio_app || subs);
+  st_stretch->Enable(audio_app || subs);
+  tc_stretch->Enable(audio_app || subs);
+  st_sub_charset->Enable(subs_app && (ctype.Find(wxT("vobsub")) < 0));
+  cob_sub_charset->Enable(subs_app && (ctype.Find(wxT("vobsub")) < 0));
   st_fourcc->Enable(video);
   cob_fourcc->Enable(video);
   st_stereo_mode->Enable(video);
@@ -280,7 +281,7 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   rb_aspect_ratio->SetValue(video && ar_enabled);
   rb_display_dimensions->SetValue(video && !ar_enabled);
 
-  cb_aac_is_sbr->Enable(audio &&
+  cb_aac_is_sbr->Enable(audio_app &&
                         ((ctype.Find(wxT("aac")) >= 0) ||
                          (ctype.Find(wxT("mp4a")) >= 0)));
 }
