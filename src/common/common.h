@@ -226,7 +226,7 @@ void *MTX_DLL_API _saferealloc(void *mem, size_t size, const char *file,
 void MTX_DLL_API dump_malloc_report();
 
 vector<string> MTX_DLL_API split(const char *src, const char *pattern = ",",
-                              int max_num = -1);
+                                 int max_num = -1);
 inline vector<string>
 split(const string &src,
       const string &pattern = string(","),
