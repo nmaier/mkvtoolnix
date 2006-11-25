@@ -4,7 +4,7 @@ diff -ur mkvtoolnix-1.7.0.orig/Makefile.in mkvtoolnix-1.7.0/Makefile.in
 @@ -129,8 +129,8 @@
  		src/mkvextract@EXEEXT@ src/base64tool@EXEEXT@
  MANPAGES = doc/mkvmerge.1 doc/mkvinfo.1 doc/mkvextract.1 doc/base64tool.1
- ifeq (yes,$(USE_WXWINDOWS))
+ ifeq (yes,$(USE_WXWIDGETS))
 -APPLICATIONS += src/mmg/mmg@EXEEXT@
 -MANPAGES += doc/mmg.1
 +APPLICATIONS += src/mmg/mkvmerge-gui@EXEEXT@
