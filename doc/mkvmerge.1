@@ -366,7 +366,7 @@ tracks by selecting different track IDs each time.
 Read tags for the track with the number \fITID\fR from the \fIfile\fR. See
 the section about tags below for details.
 .TP
-\fB\-\-aac\-is\-sbr\fR <\fITID\fR>
+\fB\-\-aac\-is\-sbr\fR <\fITID[:0|1]\fR>
 Tells \fBmkvmerge\fR that the track with the ID \fITID\fR is SBR AAC (also
 known as HE-AAC or AAC+). This options is needed if a) the source file is an
 AAC file (NOT for a Matroska file) and b) the AAC file contains SBR AAC data.
@@ -380,6 +380,9 @@ all if the switch was omitted.
 If the source file is a Matroska file then the CodecID should be enough to
 detect SBR AAC. However, if the CodecID is wrong then this switch can be used
 to correct that.
+.br
+If mkvmerge wrongfully detects that an AAC file is SBR then you can add
+":0" to the track ID.
 .TP
 \fB\-\-timecodes\fR <\fITID\fR:\fIfilename\fR>
 Read the timecodes to be used for the specific track ID from \fIfilename\fR.

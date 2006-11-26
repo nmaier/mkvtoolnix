@@ -205,6 +205,12 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   else if (map_has_key(ti.max_blockadd_ids, -1))
     htrack_max_add_block_ids = ti.max_blockadd_ids[-1];
 
+  // Let's see if the user has specified "AAC is SBR" for this track.
+  if (map_has_key(ti.all_aac_is_sbr, ti.id))
+    ti.aac_is_sbr = ti.all_aac_is_sbr[ti.id] ? 1 : 0;
+  else if (map_has_key(ti.all_aac_is_sbr, -1))
+    ti.aac_is_sbr = ti.all_aac_is_sbr[-1] ? 1 : 0;
+
   // Set default header values to 'unset'.
   if (!reader->appending)
     hserialno = create_track_number(reader, ti.id);
@@ -1228,7 +1234,7 @@ generic_reader_c::generic_reader_c(track_info_c &_ti):
   add_all_requested_track_ids(string, languages);
   add_all_requested_track_ids(string, sub_charsets);
   add_all_requested_track_ids(string, all_tags);
-  add_all_requested_track_ids2(aac_is_sbr);
+  add_all_requested_track_ids(bool, all_aac_is_sbr);
   add_all_requested_track_ids(int64_t, packet_delays);
   add_all_requested_track_ids(compression_method_e, compression_list);
   add_all_requested_track_ids(string, track_names);
@@ -1413,6 +1419,7 @@ track_info_c::track_info_c():
   cues(CUE_STRATEGY_UNSPECIFIED),
   default_track(false),
   tags(NULL),
+  aac_is_sbr(-1),
   packet_delay(0),
   compression(COMPRESSION_UNSPECIFIED),
   pixel_cropping_specified(false),
@@ -1488,6 +1495,7 @@ track_info_c::operator =(const track_info_c &src) {
   else
     tags = NULL;
 
+  all_aac_is_sbr = src.all_aac_is_sbr;
   aac_is_sbr = src.aac_is_sbr;
 
   packet_delay = src.packet_delay;

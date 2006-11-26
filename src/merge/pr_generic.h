@@ -153,7 +153,8 @@ public:
   string tags_file_name;        // For this very track
   KaxTags *tags;                // For this very track
 
-  vector<int64_t> aac_is_sbr;  // For AAC+/HE-AAC/SBR
+  map<int64_t, bool> all_aac_is_sbr;  // For AAC+/HE-AAC/SBR
+  int aac_is_sbr;                     // For this track. -1 = unspecified
 
   map<int64_t, int64_t> packet_delays; // As given on the command line
   int64_t packet_delay;         // For this very track

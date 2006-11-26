@@ -298,7 +298,6 @@ real_reader_c::parse_headers() {
 
 void
 real_reader_c::create_packetizer(int64_t tid) {
-  int i;
   real_demuxer_cptr dmx;
   rmff_track_t *track;
 
@@ -340,6 +339,7 @@ real_reader_c::create_packetizer(int64_t tid) {
       } else if (!strcasecmp(dmx->fourcc, "raac") ||
                  !strcasecmp(dmx->fourcc, "racp")) {
         int profile, channels, sample_rate, output_sample_rate;
+        int detected_profile;
         uint32_t extra_len;
         bool sbr, extra_data_parsed;
 
@@ -377,13 +377,21 @@ real_reader_c::create_packetizer(int64_t tid) {
           dmx->channels = channels;
           dmx->samples_per_second = sample_rate;
         }
+        detected_profile = profile;
         if (sbr)
           profile = AAC_PROFILE_SBR;
-        for (i = 0; i < (int)ti.aac_is_sbr.size(); i++)
-          if ((ti.aac_is_sbr[i] == -1) || (ti.aac_is_sbr[i] == track->id)) {
-            profile = AAC_PROFILE_SBR;
-            break;
-          }
+
+        if ((map_has_key(ti.all_aac_is_sbr, track->id) &&
+             ti.all_aac_is_sbr[track->id]) ||
+            (map_has_key(ti.all_aac_is_sbr, -1) && ti.all_aac_is_sbr[-1]))
+          profile = AAC_PROFILE_SBR;
+
+        if ((-1 != detected_profile) &&
+            ((map_has_key(ti.all_aac_is_sbr, track->id) &&
+              !ti.all_aac_is_sbr[track->id]) ||
+             (map_has_key(ti.all_aac_is_sbr, -1) && !ti.all_aac_is_sbr[-1])))
+          profile = detected_profile;
+
         mxverb(2, PFX "2. profile: %d, channels: %d, sample_rate: "
                "%d, output_sample_rate: %d, sbr: %d\n", profile, channels,
                sample_rate, output_sample_rate, (int)sbr);

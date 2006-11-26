@@ -33,6 +33,7 @@ private:
   int64_t bytes_processed, size;
   bool emphasis_present;
   aac_header_t aacheader;
+  bool sbr_status_set;
 
 public:
   aac_reader_c(track_info_c &_ti) throw (error_c);

@@ -1574,7 +1574,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
                    (t->a_formattag == 0x00ff)) {
           // A_AAC/MPEG2/MAIN
           // 0123456789012345
-          int id, profile, sbridx;
+          int id, profile, detected_profile;
 
           id = 0;
           profile = 0;
@@ -1589,6 +1589,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
                                   osfreq, sbr))
                 mxerror(FMT_TID "Malformed AAC codec initialization data "
                         "found.\n", ti.fname.c_str(), (int64_t)t->tnum);
+              detected_profile = profile;
               if (sbr)
                 profile = AAC_PROFILE_SBR;
             } else if (!parse_aac_codec_id(string(t->codec_id), id, profile))
@@ -1605,16 +1606,20 @@ kax_reader_c::create_packetizer(int64_t tid) {
                                 profile, channels, sfreq, osfreq, sbr))
               mxerror(FMT_TID "Malformed AAC codec initialization data "
                       "found.\n", ti.fname.c_str(), (int64_t)t->tnum);
+            detected_profile = profile;
             if (sbr)
               profile = AAC_PROFILE_SBR;
           }
 
-          for (sbridx = 0; sbridx < ti.aac_is_sbr.size(); sbridx++)
-            if ((ti.aac_is_sbr[sbridx] == t->tnum) ||
-                (ti.aac_is_sbr[sbridx] == -1)) {
-              profile = AAC_PROFILE_SBR;
-              break;
-            }
+          if ((map_has_key(ti.all_aac_is_sbr, t->tnum) &&
+               ti.all_aac_is_sbr[t->tnum]) ||
+              (map_has_key(ti.all_aac_is_sbr, -1) && ti.all_aac_is_sbr[-1]))
+            profile = AAC_PROFILE_SBR;
+
+          if ((map_has_key(ti.all_aac_is_sbr, t->tnum) &&
+               !ti.all_aac_is_sbr[t->tnum]) ||
+              (map_has_key(ti.all_aac_is_sbr, -1) && !ti.all_aac_is_sbr[-1]))
+            profile = detected_profile;
 
           t->ptzr =
             add_packetizer(new aac_packetizer_c(this, id, profile,

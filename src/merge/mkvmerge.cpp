@@ -1223,6 +1223,31 @@ parse_max_blockadd_id(const string &s,
   ti.max_blockadd_ids[id] = max_blockadd_id;
 }
 
+/** \brief Parse the argument for \c --aac-is-sbr
+
+   The argument can either be just a number (the track ID) or a tupel
+   "trackID:number" where the second number is either "0" or "1". If only
+   a track ID is given then "number" is assumed to be "1".
+*/
+static void
+parse_aac_is_sbr(const string &s,
+                 track_info_c &ti) {
+  vector<string> parts;
+  int64_t id;
+
+  parts = split(s, ":", 2);
+
+  if (!parse_int(parts[0], id) || (id < 0))
+    mxerror(_("Invalid track ID specified in '--aac-is-sbr %s'.\n"),
+            s.c_str());
+
+  if ((parts.size() == 2) && (parts[1] != "0") && (parts[1] != "1"))
+    mxerror(_("Invalid boolean specified in '--aac-is-sbr %s'.\n"),
+            s.c_str());
+
+  ti.all_aac_is_sbr[id] = (1 == parts.size()) || (parts[1] == "1");
+}
+
 /** \brief Sets the priority mkvmerge runs with
 
    Depending on the OS different functions are used. On Unix like systems
@@ -1936,11 +1961,7 @@ parse_args(vector<string> args) {
       if (no_next_arg)
         mxerror(_("'%s' lacks the track ID.\n"), this_arg.c_str());
 
-      if (!parse_int(next_arg, id) || (id < 0))
-        mxerror(_("Invalid track ID specified in '%s %s'.\n"),
-                this_arg.c_str(), next_arg.c_str());
-
-      ti->aac_is_sbr.push_back(id);
+      parse_aac_is_sbr(next_arg, *ti);
       sit++;
 
     } else if (this_arg == "--compression") {

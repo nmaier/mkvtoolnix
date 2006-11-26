@@ -68,8 +68,9 @@ aac_reader_c::probe_file(mm_io_c *io,
 
 aac_reader_c::aac_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(_ti) {
-  int adif, i;
+  generic_reader_c(_ti),
+  sbr_status_set(false) {
+  int adif, detected_profile;
 
   try {
     io = new mm_file_io_c(ti.fname);
@@ -92,14 +93,22 @@ aac_reader_c::aac_reader_c(track_info_c &_ti)
     bytes_processed = 0;
     ti.id = 0;                 // ID for this track.
 
-    for (i = 0; i < ti.aac_is_sbr.size(); i++)
-      if ((ti.aac_is_sbr[i] == 0) || (ti.aac_is_sbr[i] == -1)) {
-        aacheader.profile = AAC_PROFILE_SBR;
-        break;
-      }
+    detected_profile = aacheader.profile;
 
     if (24000 >= aacheader.sample_rate)
       aacheader.profile = AAC_PROFILE_SBR;
+
+    if ((map_has_key(ti.all_aac_is_sbr, 0) && ti.all_aac_is_sbr[0]) ||
+        (map_has_key(ti.all_aac_is_sbr, -1) && ti.all_aac_is_sbr[-1]))
+      aacheader.profile = AAC_PROFILE_SBR;
+
+    if ((map_has_key(ti.all_aac_is_sbr, 0) && !ti.all_aac_is_sbr[0]) ||
+        (map_has_key(ti.all_aac_is_sbr, -1) && !ti.all_aac_is_sbr[-1]))
+      aacheader.profile = detected_profile;
+
+    if (map_has_key(ti.all_aac_is_sbr, 0) ||
+        map_has_key(ti.all_aac_is_sbr, -1))
+      sbr_status_set = true;
 
   } catch (...) {
     throw error_c("aac_reader: Could not open the file.");
@@ -119,7 +128,7 @@ aac_reader_c::create_packetizer(int64_t) {
 
   if (NPTZR() != 0)
     return;
-  if (aacheader.profile != AAC_PROFILE_SBR)
+  if (!sbr_status_set)
     mxwarn("AAC files may contain HE-AAC / AAC+ / SBR AAC audio. "
            "This can NOT be detected automatically. Therefore you have to "
            "specifiy '--aac-is-sbr 0' manually for this input file if the "

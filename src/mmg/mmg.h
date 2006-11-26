@@ -56,7 +56,7 @@ struct mmg_track_t {
   wxString ctype;
   bool enabled, display_dimensions_selected;
 
-  bool default_track, aac_is_sbr;
+  bool default_track, aac_is_sbr, aac_is_sbr_detected;
   bool track_name_was_present;
   wxString language, track_name, cues, delay, stretch, sub_charset;
   wxString tags, fourcc, aspect_ratio, compression, timecodes;
@@ -68,7 +68,8 @@ struct mmg_track_t {
   mmg_track_t():
     type(0), id(0), source(0),
     enabled(false), display_dimensions_selected(false),
-    default_track(false), aac_is_sbr(false), track_name_was_present(false),
+    default_track(false), aac_is_sbr(false), aac_is_sbr_detected(false),
+    track_name_was_present(false),
     language(wxT("und")), cues(wxT("default")), sub_charset(wxT("default")),
     stereo_mode(0),
     appending(false) {};
