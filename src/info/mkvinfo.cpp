@@ -132,7 +132,6 @@ find_track_by_uid(int tuid) {
 
 void
 set_usage() {
-#ifdef HAVE_WXWIDGETS
   usage_text = Y(
     "Usage: mkvinfo [options] inname\n\n"
     " options:\n"
@@ -148,22 +147,6 @@ set_usage() {
     "                 Redirect all messages to this file.\n"
     "  -h, --help     Show this help.\n"
     "  -V, --version  Show version information.\n");
-#else
-  usage_text = Y(
-    "Usage: mkvinfo [options] inname\n\n"
-    " options:\n"
-    "  inname         Use 'inname' as the source.\n"
-    "  -v, --verbose  Increase verbosity. See the man page for a detailed\n"
-    "                 description of what mkvinfo outputs.\n"
-    "  -c, --checksum Calculate and display checksums of frame contents.\n"
-    "  -s, --summary  Only show summaries of the contents, not each element.\n"
-    "  --output-charset <charset>\n"
-    "                 Output messages in this charset\n"
-    "  -r, -o, --redirect-output file.ext\n"
-    "                 Redirect all messages to this file.\n"
-    "  -h, --help     Show this help.\n"
-    "  -V, --version  Show version information.\n");
-#endif
 
   version_info = "mkvinfo v" VERSION " ('" VERSIONNAME "')";
 }
@@ -185,12 +168,7 @@ show_error(const char *fmt,
   vsnprintf(args_buffer, ARGS_BUFFER_LEN - 1, new_fmt.c_str(), ap);
   va_end(ap);
 
-#ifdef HAVE_WXWIDGETS
-  if (use_gui)
-    frame->show_error(wxU(args_buffer));
-  else
-#endif
-    mxinfo("(%s) %s\n", NAME, args_buffer);
+  ui_show_error(args_buffer);
 }
 
 #define show_warning(l, f, args...) _show_element(NULL, NULL, false, l, f, \
@@ -238,27 +216,10 @@ _show_element(EbmlElement *l,
   vsnprintf(args_buffer, ARGS_BUFFER_LEN - 1, new_fmt.c_str(), ap);
   va_end(ap);
 
-  if (!use_gui) {
-    char *level_buffer;
-
-    level_buffer = new char[level + 1];
-    memset(&level_buffer[1], ' ', level);
-    level_buffer[0] = '|';
-    level_buffer[level] = 0;
-    mxinfo("%s+ %s", level_buffer, args_buffer);
-    if ((verbose > 1) && (l != NULL))
-      mxinfo(" at " LLU, l->GetElementPosition());
-    mxinfo("\n");
-    delete []level_buffer;
-  }
-#ifdef HAVE_WXWIDGETS
-  else {
-    if (l != NULL)
-      mxprints(&args_buffer[strlen(args_buffer)], " at " LLU,
-               l->GetElementPosition());
-    frame->add_item(level, wxU(args_buffer));
-  }
-#endif // HAVE_WXWIDGETS
+  int64_t pos = -1;
+  if (NULL != l)
+    pos = l->GetElementPosition();
+  ui_show_element(level, args_buffer, pos);
 
   if ((l != NULL) && skip) {
     // Dump unknown elements recursively.
@@ -289,11 +250,9 @@ parse_args(vector<string> args,
   // Now parse the rest of the arguments.
   for (i = 0; i < args.size(); i++)
     if ((args[i] == "-g") || (args[i] == "--gui")) {
-#ifndef HAVE_WXWIDGETS
-      mxerror("mkvinfo was compiled without GUI support.\n");
-#else // HAVE_WXWIDGETS
+      if (!ui_graphical_available())
+        mxerror("mkvinfo was compiled without GUI support.\n");
       use_gui = true;
-#endif // HAVE_WXWIDGETS
     } else if ((args[i] == "-c") || (args[i] == "--checksum"))
       calc_checksums = true;
     else if ((args[i] == "-C") || (args[i] == "--check-mode")) {
@@ -1742,11 +1701,9 @@ def_handle2(cluster,
 
   cluster = (KaxCluster *)l1;
 
-#ifdef HAVE_WXWIDGETS
   if (use_gui)
-    frame->show_progress(100 * cluster->GetElementPosition() /
-                         file_size, wxT("Parsing file"));
-#endif // HAVE_WXWIDGETS
+    ui_show_progress(100 * cluster->GetElementPosition() / file_size,
+                     "Parsing file");
 
   upper_lvl_el = 0;
   m1 = static_cast<EbmlMaster *>(l1);
@@ -2127,17 +2084,6 @@ console_main(vector<string> args) {
     return 1;
 }
 
-#if !defined HAVE_WXWIDGETS
-int
-main(int argc,
-     char **argv) {
-  setup();
-
-  return console_main(command_line_utf8(argc, argv));
-}
-
-#elif defined(SYS_UNIX) || defined(SYS_APPLE)
-
 int
 main(int argc,
      char **argv) {
@@ -2149,11 +2095,8 @@ main(int argc,
   args = command_line_utf8(argc, argv);
   parse_args(args, initial_file);
 
-  if (use_gui) {
-    wxEntry(argc, argv);
-    return 0;
-  } else
+  if (use_gui)
+    return ui_run(argc, argv);
+  else
     return console_main(args);
 }
-
-#endif // HAVE_WXWIDGETS

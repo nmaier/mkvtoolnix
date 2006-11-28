@@ -34,29 +34,32 @@ mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 localedir = $(datadir)/locale
 
 # Common programs
-EXEEXT = @EXEEXT@
-OBJEXT = @OBJEXT@
-PATH_SEPARATOR = @PATH_SEPARATOR@
 AR = @AR@
 CC = @CC@
 CPP = @CPP@
 CXX = @CXX@
-LD = @LD@
-PROFILING_CFLAGS = @PROFILING_CFLAGS@
-PROFILING_LIBS = @PROFILING_LIBS@
-RANLIB = @RANLIB@
+EXEEXT = @EXEEXT@
+GCC_DEP_STYLE = @GCC_DEP_STYLE@
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_HEADER = $(INSTALL_DATA)
 INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
-INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
 install_sh_DATA = $(install_sh) -c -m 644
 install_sh_PROGRAM = $(install_sh) -c
 install_sh_SCRIPT = $(install_sh) -c
-INSTALL_SCRIPT = @INSTALL_SCRIPT@
-INSTALL_HEADER = $(INSTALL_DATA)
-GCC_DEP_STYLE = @GCC_DEP_STYLE@
+LD = @LD@
+MOC = @MOC@
+OBJEXT = @OBJEXT@
+PATH_SEPARATOR = @PATH_SEPARATOR@
+PROFILING_CFLAGS = @PROFILING_CFLAGS@
+PROFILING_LIBS = @PROFILING_LIBS@
+RANLIB = @RANLIB@
+UIC = @UIC@
 
 # Variable stuff as set by configure
 BZ2_LIBS = @BZ2_LIBS@
+CPPFLAGS = @CPPFLAGS@
 DEBUG_CFLAGS = @DEBUG_CFLAGS@
 EBML_CFLAGS = @EBML_CFLAGS@
 EBML_LIBS = @EBML_LIBS@
@@ -66,6 +69,7 @@ EXTRA_CFLAGS = @EXTRA_CFLAGS@
 EXTRA_LDFLAGS = @EXTRA_LDFLAGS@
 FLAC_LIBS = @FLAC_LIBS@
 ICONV_LIBS = @ICONV_LIBS@
+LIBINTL_LIBS = @LIBINTL_LIBS@
 LZO_LIBS = @LZO_LIBS@
 MAGIC_LIBS = @MAGIC_LIBS@
 MATROSKA_CFLAGS = @MATROSKA_CFLAGS@
@@ -74,19 +78,29 @@ MINGW_GUIAPP = @MINGW_GUIAPP@
 MINGW_LIBS = @MINGW_LIBS@
 MINGW = @MINGW@
 OGG_LIBS = @OGG_LIBS@
+OPTIMIZATION_CFLAGS = @OPTIMIZATION_CFLAGS@
+PCRE_CFLAGS = @PCRE_CFLAGS@
+PCRE_LIBS = @PCRE_LIBS@
+PROFILING_CFLAGS = @PROFILING_CFLAGS@
+PROFILING_LIBS = @PROFILING_LIBS@
+QT_CFLAGS = @QT_CFLAGS@
+QT_LIBS = @QT_LIBS@
+USER_CPPFLAGS = @USER_CPPFLAGS@
+USER_CXXFLAGS = @USER_CXXFLAGS@
+USER_CFLAGS = @USER_CFLAGS@
+USER_LDFLAGS = @USER_LDFLAGS@
 VORBIS_LIBS = @VORBIS_LIBS@
 WXWIDGETS_CFLAGS = @WXWIDGETS_CFLAGS@
 WXWIDGETS_INCLUDES = @WXWIDGETS_INCLUDES@
 WXWIDGETS_LIBS = @WXWIDGETS_LIBS@
 ZLIB_LIBS = @ZLIB_LIBS@
-LIBINTL_LIBS = @LIBINTL_LIBS@
-PCRE_CFLAGS = @PCRE_CFLAGS@
-PCRE_LIBS = @PCRE_LIBS@
 
-CFLAGS = @USER_CPPFLAGS@ @EXTRA_CFLAGS@ @OPTIMIZATION_CFLAGS@ @USER_CFLAGS@ -Wall -Wno-sign-compare -Wno-comment -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 @EXTRA_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@
-CXXFLAGS = @USER_CPPFLAGS@ @EXTRA_CFLAGS@ @OPTIMIZATION_CFLAGS@ @USER_CXXFLAGS@ -Wall -Wno-sign-compare -Wno-comment -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 @EXTRA_CFLAGS@ @DEBUG_CFLAGS@ @PROFILING_CFLAGS@ @MATROSKA_CFLAGS@ @EBML_CFLAGS@ @WXWIDGETS_CFLAGS@ @PCRE_CFLAGS@
-CPPFLAGS = @USER_CPPFLAGS@ @CPPFLAGS@
-LDFLAGS = @USER_LDFLAGS@ @EXTRA_LDFLAGS@ @PROFILING_LIBS@
+WARNING_CFLAGS = -Wall -Wno-sign-compare -Wno-comment
+
+CFLAGS = $(USER_CPPFLAGS) $(EXTRA_CFLAGS) $(OPTIMIZATION_CFLAGS) $(USER_CFLAGS) $(WARNING_CFLAGS) -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $(EXTRA_CFLAGS) $(DEBUG_CFLAGS) $(PROFILING_CFLAGS) $(MATROSKA_CFLAGS) $(EBML_CFLAGS)
+CXXFLAGS = $(USER_CPPFLAGS) $(EXTRA_CFLAGS) $(OPTIMIZATION_CFLAGS) $(USER_CXXFLAGS) $(WARNING_CFLAGS) -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 $(EXTRA_CFLAGS) $(DEBUG_CFLAGS) $(PROFILING_CFLAGS) $(MATROSKA_CFLAGS) $(EBML_CFLAGS) $(WXWIDGETS_CFLAGS) $(PCRE_CFLAGS) $(QT_CFLAGS)
+CPPFLAGS = $(USER_CPPFLAGS) $(CPPFLAGS)
+LDFLAGS = $(USER_LDFLAGS) $(EXTRA_LDFLAGS) $(PROFILING_LIBS)
 
 CFLAGS += -DPACKAGE=\"$(PACKAGE)\" -DVERSION=\"$(VERSION)\"
 CXXFLAGS += -DPACKAGE=\"$(PACKAGE)\" -DVERSION=\"$(VERSION)\"
@@ -95,6 +109,7 @@ CXXFLAGS += -DMTX_LOCALE_DIR=\"$(localedir)\" \
 
 # Which additional stuff to compile
 USE_WXWIDGETS = @USE_WXWIDGETS@
+USE_QT = @USE_QT@
 
 AVILIB_INCLUDES = -Iavilib-0.6.10
 AVILIB_LIBDIRS = -Lavilib-0.6.10
@@ -202,7 +217,8 @@ ALL_SOURCES=$(wildcard avilib-0.6.10/*.c) $(wildcard avilib-0.6.10/*.cpp) \
 		$(wildcard src/output/*.cpp) $(wildcard src/common/*.cpp) \
 		$(wildcard src/mmg/*.cpp) $(wildcard src/extract/*.cpp) \
 		$(wildcard src/merge/*cpp) $(wildcard src/info/*.cpp) \
-		$(wildcard src/mpegparser/*.cpp)
+		$(wildcard src/mpegparser/*.cpp) \
+		$(patsubst %.ui,%.h,$(UIFILES))
 
 ifeq ($(V),1)
   Q =
@@ -244,9 +260,19 @@ endif
 	@echo '    GREP ' $<
 	$(Q)grep -v 'name="ID"' $< > $@
 
+# Qt files
+%.h: %.ui
+	@echo '     UIC ' $<
+	$(Q)$(UIC) $< > $@
+
+%.moc.cpp: %.h
+	@echo '     MOC ' $<
+	$(Q)$(MOC) $(QT_CFLAGS) $< > $@
+
 clean:
 	rm -f *.o */*.o */*/*.o */lib*.a */*/lib*.a po/*.mo $(APPLICATIONS) \
-		*/*.exe */*/*.exe */*/*.dll */*/*.dll.a doc/*.hhk
+		*/*.exe */*/*.exe */*/*.dll */*/*.dll.a doc/*.hhk \
+		src/info/ui/*.h src/info/*.moc.cpp
 
 distclean dist-clean: clean
 	rm -f config.h config.log config.cache Makefile */Makefile */*/Makefile
@@ -394,12 +420,28 @@ mkvmerge_LDADD = -lmtxinput -lmtxoutput \
 # src/info
 #
 
-mkvinfo_SOURCES = $(wildcard src/info/*.cpp)
+mkvinfo_SOURCES = src/info/mkvinfo.cpp src/info/console_ui.cpp
+mkvinfo_LDADD = -lmtxcommon $(MAGIC_LIBS) -lmatroska -lebml
+
+ifeq (yes,$(USE_QT))
+mkvinfo_SOURCES += src/info/qt_ui.cpp src/info/qt_ui.moc.cpp \
+		src/info/rightclick_tree_widget.moc.cpp
+mkvinfo_UIFILES = $(patsubst %.ui,%.h,$(wildcard src/info/ui/*.ui))
+mkvinfo_LDADD += $(QT_LIBS)
+
+src/info/qt_ui.o: $(wildcard src/info/ui/*.ui)
+
+else
+ifeq (yes,$(USE_WXWIDGETS))
+mkvinfo_SOURCES += src/info/wxwidgets_ui.cpp
+mkvinfo_LDADD += $(WXWIDGETS_LIBS)
+endif
+endif
+
 mkvinfo_OBJECTS := $(patsubst %.cpp,%.o,$(mkvinfo_SOURCES))
 mkvinfo_DEPENDENCIES += $(DEP_COMMON)
-mkvinfo_LDADD = -lmtxcommon $(MAGIC_LIBS) -lmatroska -lebml \
-		$(WXWIDGETS_LIBS) \
-		-lexpat $(ICONV_LIBS) $(LIBINTL_LIBS) $(LIBRPCRT)
+mkvinfo_LDADD += -lexpat $(ICONV_LIBS) $(LIBINTL_LIBS) $(LIBRPCRT)
+
 
 #
 # src/extract
@@ -442,7 +484,7 @@ src/mkvmerge@EXEEXT@: $(mkvmerge_OBJECTS) $(mkvmerge_DEPENDENCIES)
 
 mkvinfo: src/mkvinfo@EXEEXT@
 
-src/mkvinfo@EXEEXT@: $(mkvinfo_OBJECTS) $(mkvinfo_DEPENDENCIES)
+src/mkvinfo@EXEEXT@: $(mkvinfo_UIFILES) $(mkvinfo_OBJECTS) $(mkvinfo_DEPENDENCIES)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(mkvinfo_OBJECTS) $(mkvinfo_LDADD)
 
@@ -463,6 +505,8 @@ mmg: src/mmg/mmg@EXEEXT@
 src/mmg/mmg@EXEEXT@: $(mmg_OBJECTS) $(mmg_DEPENDENCIES)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(mmg_OBJECTS) $(mmg_LDADD)
+
+.SECONDARY:
 
 #
 # include dependency files if they exist

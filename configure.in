@@ -31,6 +31,37 @@ dnl Optional features that are built and those that aren't
 opt_features_yes=""
 opt_features_no=""
 
+
+function check_version {
+  check_ver_req="$1"
+  check_ver_real="$2"
+
+  set - `echo $check_ver_req 0 0 0 | sed 's/\./\ /g'`
+  check_ver_major=$1
+  check_ver_minor=$2
+  check_ver_micro=$3
+
+  set - `echo $check_ver_real 0 0 0 | sed 's/\./\ /g'`
+  check_ver_ok=0
+
+  if test "x$1" = "x" -o $1 -lt ${check_ver_major} ; then
+    check_ver_ok=0
+  elif test $1 -gt ${check_ver_major} ; then
+    check_ver_ok=1
+  elif test "x$2" = "x" -o $2 -lt ${check_ver_minor} ; then
+    check_ver_ok=0
+  elif test $2 -gt ${check_ver_minor} ; then
+    check_ver_ok=1
+  elif test "x$3" = "x" -o $3 -lt ${check_ver_micro} ; then
+    check_ver_ok=0
+  else
+    check_ver_ok=1
+  fi
+
+  test $check_ver_ok = 1
+}
+
+
 dnl Stolen from VideoLAN Client, http://www.videolan.org/
 dnl
 dnl  Endianness check, AC_C_BIGENDIAN doesn't work if we are cross-compiling
@@ -520,15 +551,15 @@ dnl
                  [ flac_decoder_skip_found=no ],
                  $FLAC_LIBS)
     if test x"$flac_decoder_skip_found" = xyes; then
-      opt_features_yes="$opt_features_yes; FLAC audio (1.1.1 or newer)"
+      opt_features_yes="$opt_features_yes\n   * FLAC audio (1.1.1 or newer)"
       AC_DEFINE(HAVE_FLAC_DECODER_SKIP, [1], [Define if FLAC__stream_decoder_skip_single_frame exists])
     else
-      opt_features_yes="$opt_features_yes; FLAC audio (1.1.0 or older)"
+      opt_features_yes="$opt_features_yes\n   * FLAC audio (1.1.0 or older)"
     fi
     AC_DEFINE(HAVE_FLAC_FORMAT_H, [1], [Define if the FLAC headers are present])
   else
     FLAC_LIBS=""
-    opt_features_no="$opt_features_no; FLAC audio"
+    opt_features_no="$opt_features_no\n   * FLAC audio"
   fi
 
 AC_SUBST(FLAC_LIBS)
@@ -864,10 +895,10 @@ dnl
     fi
   fi
   if test x"$lzo_found" = xyes ; then
-    opt_features_yes="$opt_features_yes; LZO compression"
+    opt_features_yes="$opt_features_yes\n   * LZO compression"
     AC_DEFINE([HAVE_LZO], [1], [Define this if LZO compression is present])
   else
-    opt_features_no="$opt_features_no; LZO compression"
+    opt_features_no="$opt_features_no\n   * LZO compression"
   fi
 
 AC_SUBST(LZO_LIBS)
@@ -889,9 +920,9 @@ dnl
     fi
   fi
   if test x"$bz2_found" = xyes ; then
-    opt_features_yes="$opt_features_yes; BZ2 compression"
+    opt_features_yes="$opt_features_yes\n   * BZ2 compression"
   else
-    opt_features_no="$opt_features_no; BZ2 compression"
+    opt_features_no="$opt_features_no\n   * BZ2 compression"
   fi
 
 AC_SUBST(BZ2_LIBS)
@@ -904,10 +935,7 @@ dnl
   AC_ARG_ENABLE([gui],
     AC_HELP_STRING([--enable-gui],[compile mkvinfo's GUI and mmg (yes)]))
 
-  wxw_ver_req_major=2
-  wxw_ver_req_minor=6
-  wxw_ver_req_micro=0
-  wxw_min_ver=$wxw_ver_req_major.$wxw_ver_req_minor.$wxw_ver_req_micro
+  wxw_min_ver=2.6.0
 
   if test x"$enable_gui" = x"yes" -o x"$enable_gui" = "x"; then
     AC_ARG_WITH(wx_config,
@@ -919,26 +947,7 @@ dnl
       AC_MSG_CHECKING(for wxWidgets $wxw_min_ver or newer)
 
       wxwversion=`$WX_CONFIG --version`
-      set - `echo $wxwversion | sed 's/\./\ /g'`
-      if test "x$1" = "x" -o $1 -lt ${wxw_ver_req_major} ; then
-        wxwver_ok=0
-      elif test $1 -gt ${wxw_ver_req_major} ; then
-        wxwver_ok=1
-      else
-        if test "x$2" = "x" -o $2 -lt ${wxw_ver_req_minor} ; then
-          wxwver_ok=0
-        elif test $2 -gt ${wxw_ver_req_minor} ; then
-          wxwver_ok=1
-        else
-          if test "x$3" = "x" -o $3 -lt ${wxw_ver_req_micro} ; then
-            wxwver_ok=0
-          else
-            wxwver_ok=1
-          fi
-        fi
-      fi
-
-      if test "$wxwver_ok" = "1" ; then
+      if check_version $wxw_min_ver $wxwversion ; then
         WXWIDGETS_CFLAGS=`$WX_CONFIG --cxxflags`
         WXWIDGETS_LIBS=`$WX_CONFIG --libs | \
           sed -e 's/-Wl,--subsystem,windows//' -e 's/-mwindows//'`
@@ -973,11 +982,10 @@ wxTreeItemId id;
             done
           fi
           AC_DEFINE(HAVE_WXWIDGETS, 1, [Define if wxWindows is present])
-          MMG_SUBDIRS=mmg
           AC_MSG_RESULT($wxwversion ok)
           have_wxwindows=yes
           USE_WXWIDGETS=yes
-          opt_features_yes="$opt_features_yes; GUIs"
+          opt_features_yes="$opt_features_yes\n   * GUIs"
         else
           AC_MSG_RESULT(no: test program could not be compiled)
         fi
@@ -992,14 +1000,178 @@ wxTreeItemId id;
   fi
 
   if test x"$have_wxwindows" != "xyes" ; then
-    opt_features_no="$opt_features_no; GUIs"
+    opt_features_no="$opt_features_no\n   * GUIs"
   fi
 
 AC_SUBST(WXWIDGETS_CFLAGS)
 AC_SUBST(WXWIDGETS_INCLUDES)
 AC_SUBST(WXWIDGETS_LIBS)
-AC_SUBST(MMG_SUBDIRS)
 AC_SUBST(USE_WXWIDGETS)
+
+
+dnl
+dnl Check for Qt 4 or newer
+dnl
+
+AC_ARG_ENABLE([qt],
+  AC_HELP_STRING([--enable-qt],[compile the Qt version of the GUIs]))
+
+qt_min_ver=4.0.0
+
+if test x"$enable_qt" = "xyes" -a \
+  '(' x"$enable_gui" = x"yes" -o x"$enable_gui" = "x" ')'; then
+  dnl Find moc.
+  AC_ARG_WITH(moc,
+    AC_HELP_STRING([--with-moc=prog],[use prog instead of looking for moc]),
+    [ MOC="$with_moc" ],)
+  if ! test -z "$MOC"; then
+    AC_MSG_CHECKING(for moc)
+    AC_MSG_RESULT(using supplied $MOC)
+  else
+    AC_PATH_PROG(MOC, moc-qt4,, $PATH)
+    if test -z "$MOC"; then
+      AC_PATH_PROG(MOC, moc,, $PATH)
+    fi
+  fi
+  if test -z "$MOC" -o ! -x "$MOC"; then
+    echo "*** The 'moc' binary was not found or is not executable."
+    exit 1
+  fi
+
+  dnl Check its version.
+  AC_MSG_CHECKING(for the Qt version $MOC uses)
+  moc_ver=`"$MOC" -v 2>&1 | sed -e 's:.*Qt ::' -e 's:[[^0-9\.]]::g'`
+  if test -z "moc_ver"; then
+    AC_MSG_RESULT(unknown; please contact the author)
+  elif ! check_version $qt_min_ver $moc_ver; then
+    AC_MSG_RESULT(too old: $moc_ver)
+  else
+    AC_MSG_RESULT($moc_ver)
+    moc_found=1
+  fi
+
+  AC_ARG_WITH(uic,
+    AC_HELP_STRING([--with-uic=prog],[use prog instead of looking for uic]),
+    [ UIC="$with_uic" ],)
+
+  if test x"$moc_found" = "x1"; then
+    if ! test -z "$UIC"; then
+      AC_MSG_CHECKING(for uic)
+      AC_MSG_RESULT(using supplied $UIC)
+    else
+      AC_PATH_PROG(UIC, uic-qt4,, $PATH)
+      if test -z "$UIC"; then
+        AC_PATH_PROG(UIC, uic,, $PATH)
+      fi
+    fi
+    if test -z "$UIC" -o ! -x "$UIC"; then
+      echo "*** The 'uic' binary was not found or is not executable."
+      exit 1
+    fi
+
+    dnl Check its version.
+    AC_MSG_CHECKING(for the Qt version $UIC uses)
+    uic_ver=`"$UIC" -v 2>&1 | sed -e 's:.*Qt ::' -e 's:[[^0-9\.]]::g'`
+    if test -z "uic_ver"; then
+      AC_MSG_RESULT(unknown; please contact the author)
+    elif ! check_version $qt_min_ver $uic_ver; then
+      AC_MSG_RESULT(too old: $uic_ver)
+    else
+      AC_MSG_RESULT($uic_ver)
+      uic_found=1
+    fi
+  fi
+
+  AC_MSG_CHECKING(for Qt $qt_min_ver or newer)
+  if test x"$moc_found" != "x1"; then
+    AC_MSG_RESULT(no: moc not found)
+  elif test x"$uic_found" != "x1"; then
+    AC_MSG_RESULT(no: uic not found)
+  elif ! pkg-config QtGui --atleast-version=$qt_min_ver || \
+     ! pkg-config QtCore --atleast-version=$qt_min_ver ; then
+    AC_MSG_RESULT(no: pkg-config says "too old")
+  else
+    dnl Try compiling and linking an application.
+    QT_CFLAGS="`pkg-config QtCore --cflags` `pkg-config QtGui --cflags`"
+    QT_LIBS="`pkg-config QtGui --libs`"
+
+    AC_LANG_PUSH(C++)
+    AC_CACHE_VAL(am_cv_qt_compilation, [
+      run_qt_test=1
+      while true; do
+        ac_save_CXXFLAGS="$CXXFLAGS"
+        ac_save_LIBS="$LIBS"
+        CXXFLAGS="$CXXFLAGS $QT_CFLAGS"
+        LIBS="$LDFLAGS $QT_LIBS"
+        unset ac_cv_qt_compilation
+
+        AC_TRY_LINK([
+#include <QtCore>
+class Config : public QCoreApplication {
+public:
+Config(int &argc, char **argv);
+};
+Config::Config(int &argc, char **argv)
+: QCoreApplication(argc,argv) {setApplicationName("config");}
+          ], [
+int ai = 0;
+char **ac = 0;
+Config app(ai,ac);
+qWarning(qPrintable(app.applicationName()));
+return 0;
+          ], [ am_cv_qt_compilation=1 ], [ am_cv_qt_compilation=0 ])
+
+        CXXFLAGS="$ac_save_CXXFLAGS"
+        LIBS="$ac_save_LIBS"
+
+        if test x"$am_cv_qt_compilation" = x1; then
+          break
+
+        elif test x"$run_qt_test" = "x1"; then
+          dnl On some systems (notably OpenSuSE 10.0) the pkg-config for the
+          dnl --cflags don't include the QtCore and QtGui subdirectories.
+          dnl Add them now.
+          set - $QT_CFLAGS
+          while test ! -z "$1" ; do
+            case "$1" in
+              -I*)
+                QT_CFLAGS="$QT_CFLAGS $1/QtCore $1/QtGui"
+                ;;
+            esac
+            shift
+          done
+          run_qt_test=2
+
+        elif test x"$run_qt_test" = "x2"; then
+          QT_CFLAGS="$QT_CFLAGS -I/usr/include/QtCore -I/usr/include/QtGui -I/usr/local/include/QtCore -I/usr/local/include/QtGui"
+          run_qt_test=3
+
+        else
+          break
+
+        fi
+      done
+      ])
+    AC_LANG_POP()
+
+    if test x"$am_cv_qt_compilation" = x1; then
+     AC_DEFINE(HAVE_QT, 1, [Define if Qt is present])
+     have_qt=yes
+     USE_QT=yes
+     opt_features_yes="$opt_features_yes (Qt version)"
+     AC_MSG_RESULT(yes)
+    else
+      AC_MSG_RESULT(no: test program could not be compiled)
+    fi
+  fi
+fi
+
+AC_SUBST(MOC)
+AC_SUBST(UIC)
+AC_SUBST(QT_CFLAGS)
+AC_SUBST(QT_LIBS)
+AC_SUBST(USE_QT)
+
 
 dnl
 dnl Which translations should be installed?
@@ -1027,9 +1199,9 @@ dnl       TRANSLATIONS="`echo "$TRANSLATIONS_POS" | \
 dnl         sed -e 's/po\///g' -e 's/\.po//g'`"
 dnl       AC_MSG_RESULT($TRANSLATIONS)
 dnl     fi
-dnl     opt_features_yes="$opt_features_yes; translations (gettext)"
+dnl     opt_features_yes="$opt_features_yes\n   * translations (gettext)"
 dnl   else
-dnl     opt_features_no="$opt_features_yes; translations (gettext)"
+dnl     opt_features_no="$opt_features_yes\n   * translations (gettext)"
 dnl   fi
 
 AC_SUBST(LIBINTL_LIBS)
@@ -1047,15 +1219,18 @@ AC_CHECK_LIB(magic, magic_open,
 
 if test "x$magic_found" = "xyes" ; then
   AC_CHECK_HEADERS([magic.h])
+  if test "x$ac_cv_header_magic_h" = "xyes" ; then
+    opt_features_yes="$opt_features_yes\n   * libMagic file type detection"
+  else
+    opt_features_no="$opt_features_no\n   * libMagic file type detection"
+  fi
 fi
 
 AC_SUBST(MAGIC_LIBS)
 
 AC_OUTPUT(Makefile avilib-0.6.10/Makefile librmff/Makefile src/Makefile src/common/Makefile src/input/Makefile src/output/Makefile src/mpegparser/Makefile src/mmg/Makefile src/extract/Makefile src/merge/Makefile src/info/Makefile)
 
-opt_features_yes="`echo "$opt_features_yes" | sed 's/^\;//'`"
-opt_features_no="`echo "$opt_features_no" | sed 's/^\;//'`"
 echo ''
-echo '*** The mkvtoolnix configuration is complete.'
-echo '***   Optional features that are built: '"$opt_features_yes"
-echo '***   Optional features that are NOT built: '"$opt_features_no"
+echo 'The mkvtoolnix configuration is complete.'
+echo -e 'Optional features that are built: '"$opt_features_yes"
+echo -e 'Optional features that are NOT built: '"$opt_features_no"
