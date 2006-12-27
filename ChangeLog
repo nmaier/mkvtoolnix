@@ -1,3 +1,12 @@
+2006-12-27  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: Fixed the behaviour of a couple of ComboBoxes on
+	Windows after selecting "File -> New". E.g. if the user selected
+	"700M" in the "split after this size" ComboBox, selected "File ->
+	New" and selected "700M" again, then it would not show up in the
+	command line window until he selected another option and returned
+	to the "700M" afterwards.
+
 2006-11-25  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v1.8.1.
