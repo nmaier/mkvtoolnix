@@ -470,9 +470,9 @@ tab_global::load(wxConfigBase *cfg,
     }
   }
   cfg->Read(wxT("split_after_bytes"), &s);
-  cob_split_by_size->SetValue(s);
+  set_combobox_selection(cob_split_by_size, s);
   cfg->Read(wxT("split_after_time"), &s);
-  cob_split_by_time->SetValue(s);
+  set_combobox_selection(cob_split_by_time, s);
   cfg->Read(wxT("split_after_timecodes"), &s);
   tc_split_after_timecodes->SetValue(s);
   cfg->Read(wxT("split_max_files"), &s);
@@ -496,9 +496,9 @@ tab_global::load(wxConfigBase *cfg,
   cfg->Read(wxT("chapters"), &s);
   tc_chapters->SetValue(s);
   cfg->Read(wxT("chapter_language"), &s);
-  cob_chap_language->SetValue(s);
+  set_combobox_selection(cob_chap_language, s);
   cfg->Read(wxT("chapter_charset"), &s);
-  cob_chap_charset->SetValue(s);
+  set_combobox_selection(cob_chap_charset, s);
   cfg->Read(wxT("cue_name_format"), &s);
   tc_cue_name_format->SetValue(s);
 

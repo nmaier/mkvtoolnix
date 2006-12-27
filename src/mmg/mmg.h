@@ -23,6 +23,7 @@
 
 #include "wx/string.h"
 #include "wx/app.h"
+#include "wx/combobox.h"
 
 #include "ebml/EbmlUnicodeString.h"
 
@@ -130,6 +131,8 @@ wxString get_temp_dir();
 wxString create_track_order(bool all);
 
 int default_track_checked(char type);
+
+void set_combobox_selection(wxComboBox *cb, const wxString wanted);
 
 void wxdie(const wxString &errmsg);
 

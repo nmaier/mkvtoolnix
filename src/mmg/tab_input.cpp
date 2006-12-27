@@ -65,23 +65,6 @@ const wxChar *predefined_fourccs[] = {
   NULL
 };
 
-void
-set_combobox_selection(wxComboBox *cb,
-                       const wxChar * const string_list[],
-                       const wxString wanted) {
-  int i;
-  bool found;
-
-  cb->SetValue(wanted);
-  found = false;
-  for (i = 0; NULL != string_list[i]; ++i)
-    if (wanted == string_list[i]) {
-      cb->SetSelection(i);
-      found = true;
-      break;
-    }
-}
-
 class input_drop_target_c: public wxFileDropTarget {
 private:
   tab_input *owner;
@@ -871,14 +854,13 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
   ti_general->tc_tags->SetValue(t->tags);
   ti_general->cb_default->SetValue(t->default_track);
   ti_format->cb_aac_is_sbr->SetValue(t->aac_is_sbr);
-  set_combobox_selection(ti_format->cob_aspect_ratio, predefined_aspect_ratios,
-                         t->aspect_ratio);
+  set_combobox_selection(ti_format->cob_aspect_ratio, t->aspect_ratio);
   ti_format->tc_display_width->SetValue(t->dwidth);
   ti_format->tc_display_height->SetValue(t->dheight);
   selected_track = new_sel;
   ti_format->cob_compression->SetValue(t->compression);
   ti_general->tc_timecodes->SetValue(t->timecodes);
-  set_combobox_selection(ti_format->cob_fourcc, predefined_fourccs, t->fourcc);
+  set_combobox_selection(ti_format->cob_fourcc, t->fourcc);
   ti_general->tc_track_name->SetFocus();
   ti_format->cob_stereo_mode->SetSelection(t->stereo_mode);
 
