@@ -1,5 +1,9 @@
 2006-12-27  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: Fixed a segfault that occured if the user had a
+	track selected and its the file the track was read from is
+	removed.
+
 	* mmg: bug fix: Fixed the behaviour of a couple of ComboBoxes on
 	Windows after selecting "File -> New". E.g. if the user selected
 	"700M" in the "split after this size" ComboBox, selected "File ->

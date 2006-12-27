@@ -678,20 +678,21 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
 
   files.erase(files.begin() + selected_file);
   lb_input_files->Delete(selected_file);
-  selected_file = -1;
-  st_file_options->Enable(false);
-  cb_no_chapters->Enable(false);
-  cb_no_attachments->Enable(false);
-  cb_no_tags->Enable(false);
-  b_remove_file->Enable(false);
+  selected_file = lb_input_files->GetSelection();
+  st_file_options->Enable(-1 != selected_file);
+  cb_no_chapters->Enable(-1 != selected_file);
+  cb_no_attachments->Enable(-1 != selected_file);
+  cb_no_tags->Enable(-1 != selected_file);
+  b_remove_file->Enable(-1 != selected_file);
   b_append_file->Enable(tracks.size() > 0);
-  b_track_up->Enable(false);
-  b_track_down->Enable(false);
-  set_track_mode(NULL);
+  b_track_up->Enable(-1 != selected_file);
+  b_track_down->Enable(-1 != selected_file);
+
+  selected_track = clb_tracks->GetSelection();
+  set_track_mode(-1 == selected_track ? NULL : tracks[selected_track]);
   if (tracks.size() == 0) {
     st_tracks->Enable(false);
     clb_tracks->Enable(false);
-    selected_track = -1;
     mdlg->remove_output_filename();
   }
 
