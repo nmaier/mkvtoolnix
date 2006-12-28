@@ -44,6 +44,8 @@ typedef struct {
   char fourcc[5];
   bool is_aac;
   bool rv_dimensions;
+  bool force_keyframe_flag;
+  bool cook_audio_fix;
   float fps;
 
   real_video_props_t *rvp;
@@ -53,6 +55,7 @@ typedef struct {
   unsigned char *private_data, *extra_data;
   int private_size, extra_data_size;
 
+  bool first_frame;
   int num_packets;
   int64_t last_timecode, ref_timecode;
 

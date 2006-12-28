@@ -212,6 +212,7 @@ real_reader_c::parse_headers() {
       real_demuxer_cptr dmx(new real_demuxer_t);
       dmx->track = track;
       dmx->ptzr = -1;
+      dmx->first_frame = true;
 
       if (track->type == RMFF_TRACK_TYPE_VIDEO) {
         dmx->rvp = (real_video_props_t *)track->mdpr_header.type_specific_data;
@@ -419,6 +420,9 @@ real_reader_c::create_packetizer(int64_t tid) {
         dmx->ref_timecode = -1;
 
       } else {
+        if (!strcasecmp(dmx->fourcc, "COOK"))
+          dmx->cook_audio_fix = true;
+
         ptzr = new ra_packetizer_c(this, dmx->samples_per_second,
                                    dmx->channels, dmx->bits_per_sample,
                                    (dmx->fourcc[0] << 24) |
@@ -516,13 +520,26 @@ real_reader_c::read(generic_packetizer_c *,
     return FILE_STATUS_MOREDATA;
   }
 
+  if (dmx->cook_audio_fix && dmx->first_frame &&
+      ((frame->flags & RMFF_FRAME_FLAG_KEYFRAME) !=
+       RMFF_FRAME_FLAG_KEYFRAME))
+    dmx->force_keyframe_flag = true;
+
+  if (dmx->force_keyframe_flag &&
+      ((frame->flags & RMFF_FRAME_FLAG_KEYFRAME) ==
+       RMFF_FRAME_FLAG_KEYFRAME))
+    dmx->force_keyframe_flag = false;
+
+  if (dmx->force_keyframe_flag)
+    frame->flags |= RMFF_FRAME_FLAG_KEYFRAME;
+
   if (dmx->track->type == RMFF_TRACK_TYPE_VIDEO)
     assemble_video_packet(dmx, frame);
 
   else if (dmx->is_aac) {
     // If the first AAC packet does not start at 0 then let the AAC
     // packetizer adjust its data accordingly.
-    if (dmx->ref_timecode == -1) {
+    if (dmx->first_frame) {
       dmx->ref_timecode = timecode;
       PTZR(dmx->ptzr)->set_displacement_maybe(timecode);
     }
@@ -533,6 +550,8 @@ real_reader_c::read(generic_packetizer_c *,
     queue_audio_frames(dmx, mem, timecode, frame->flags);
 
   rmff_release_frame(frame);
+
+  dmx->first_frame = false;
 
   return FILE_STATUS_MOREDATA;
 }
@@ -589,7 +608,9 @@ real_reader_c::deliver_audio_frames(real_demuxer_cptr dmx,
            (uint32_t)segment->flags, duration);
     PTZR(dmx->ptzr)->process(new packet_t(segment->data,
                                           dmx->last_timecode, duration,
-                                          (segment->flags & 2) == 2 ? -1 :
+                                          (segment->flags &
+                                           RMFF_FRAME_FLAG_KEYFRAME) ==
+                                          RMFF_FRAME_FLAG_KEYFRAME ? -1 :
                                           dmx->ref_timecode));
     if ((segment->flags & 2) == 2)
       dmx->ref_timecode = dmx->last_timecode;

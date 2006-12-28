@@ -1,3 +1,8 @@
+2006-12-28  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Added a workaround for RealAudio tracks for
+	which the key frame flag is never set.
+
 2006-12-27  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: Fixed a segfault that occured if the user had a
