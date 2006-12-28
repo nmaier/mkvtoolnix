@@ -93,7 +93,7 @@ ac3_packetizer_c::get_ac3_packet(unsigned long *header,
     }
     if (!warning_printed)
       mxwarn("The AC3 track " LLD " from '%s' contained " LLD " bytes of "
-             "non-AC3 data at the beginning which were skipped. The audio/"
+             "non-AC3 data which were skipped. The audio/"
              "video synchronization may have been lost.\n", ti.id,
              ti.fname.c_str(), bytes_skipped);
     byte_buffer.remove(pos);
