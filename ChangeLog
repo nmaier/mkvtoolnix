@@ -1,3 +1,9 @@
+2006-12-29  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: mkvmerge would not write frame durations if
+	"--engage use_simpleblock" was used resulting in unplayable and
+	unextractable subtitle tracks.
+
 2006-12-28  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Added a workaround for RealAudio tracks for

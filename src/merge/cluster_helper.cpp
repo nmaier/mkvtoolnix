@@ -322,6 +322,32 @@ cluster_helper_c::set_duration(render_groups_t *rg) {
     group->SetBlockDuration(RND_TIMECODE_SCALE(block_duration));
 }
 
+bool
+cluster_helper_c::must_duration_be_set(render_groups_t *rg,
+                                       packet_cptr &new_packet) {
+  uint32_t i;
+  int64_t block_duration, def_duration;
+
+  block_duration = 0;
+  for (i = 0; i < rg->durations.size(); i++)
+    block_duration += rg->durations[i];
+  block_duration += new_packet->duration;
+  def_duration = rg->source->get_track_default_duration();
+
+  if (rg->duration_mandatory || new_packet->duration_mandatory) {
+    if ((block_duration == 0) ||
+        ((block_duration > 0) &&
+         (block_duration != ((rg->durations.size() + 1) * def_duration))))
+      return true;
+  } else if ((use_durations || (def_duration > 0)) &&
+             (block_duration > 0) &&
+             (RND_TIMECODE_SCALE(block_duration) !=
+              RND_TIMECODE_SCALE((rg->durations.size() + 1) * def_duration)))
+    return true;
+
+  return false;
+}
+
 /*
   <+Asylum> The chicken and the egg are lying in bed next to each
             other after a good hard shag, the chicken is smoking a
@@ -351,7 +377,8 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
   render_groups_t *render_group;
   bool added_to_cues;
   LacingType lacing_type;
-  BlockBlobType use_simpleblock = hack_engaged(ENGAGE_USE_SIMPLE_BLOCK) ?
+  bool use_simpleblock = hack_engaged(ENGAGE_USE_SIMPLE_BLOCK);
+  BlockBlobType this_block_blob_type, std_block_blob_type = use_simpleblock ?
     BLOCK_BLOB_ALWAYS_SIMPLE : BLOCK_BLOB_NO_SIMPLE;
 
   assert((clstr != NULL) && !clstr->rendered);
@@ -413,14 +440,20 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
 
     if (pack->bref != -1)
       render_group->more_data = false;
+
     if (!render_group->more_data) {
       set_duration(render_group);
-      new_block_group = new KaxBlockBlob(use_simpleblock);
+      render_group->durations.clear();
+      render_group->duration_mandatory = false;
+
+      this_block_blob_type = !use_simpleblock ? std_block_blob_type :
+        must_duration_be_set(render_group, pack) ?
+        BLOCK_BLOB_NO_SIMPLE : BLOCK_BLOB_ALWAYS_SIMPLE;
+
+      new_block_group = new KaxBlockBlob(this_block_blob_type);
       cluster->AddBlockBlob(new_block_group);
       new_block_group->SetParent(*cluster);
       render_group->groups.push_back(new_block_group);
-      render_group->durations.clear();
-      render_group->duration_mandatory = false;
       added_to_cues = false;
     } else
       new_block_group = last_block_group;

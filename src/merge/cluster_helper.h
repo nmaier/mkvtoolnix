@@ -119,6 +119,7 @@ private:
   void check_clusters(int num);
   bool all_references_resolved(ch_contents_t *cluster);
   void set_duration(render_groups_t *rg);
+  bool must_duration_be_set(render_groups_t *rg, packet_cptr &new_packet);
   int render_cluster(ch_contents_t *clstr);
 };
 
