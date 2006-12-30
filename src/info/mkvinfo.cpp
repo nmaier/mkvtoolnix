@@ -1941,8 +1941,7 @@ process_file(const string &file_name) {
         if (l0->GetSize() == -1)
           show_element(l0, 0, "Segment, size unknown");
         else
-          show_element(l0, 0, "Segment, size " LLD, l0->GetSize() -
-                       l0->HeadSize());
+          show_element(l0, 0, "Segment, size " LLD, l0->GetSize());
         break;
       }
 
