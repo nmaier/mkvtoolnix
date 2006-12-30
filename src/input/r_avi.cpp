@@ -540,12 +540,6 @@ avi_reader_c::identify() {
       case 0x0001:
         type = "PCM";
         break;
-      case 0x0002:
-        type = "ADPCM";
-        break;
-      case 0x0006:
-        type = "ALAW";
-        break;
       case 0x0050:
         type = "MP2";
         break;
@@ -562,7 +556,7 @@ avi_reader_c::identify() {
         type = "AAC";
         break;
       default:
-        type = "unknown";
+        type = "unsupported";
     }
     mxinfo("Track ID %d: audio (%s)\n", i + 1, type);
   }
