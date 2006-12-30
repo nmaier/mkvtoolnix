@@ -216,13 +216,27 @@ tab_input_general::set_track_mode(mmg_track_t *t) {
   tc_timecodes->Enable(NULL != t);
   b_browse_timecodes->Enable(NULL != t);
   cb_default->Enable(enable);
+
+  if (NULL == t) {
+    bool saved_dcvn = input->dont_copy_values_now;
+    input->dont_copy_values_now = true;
+
+    set_combobox_selection(cob_language, sorted_iso_codes[0]);
+    tc_track_name->SetValue(wxT(""));
+    set_combobox_selection(cob_cues, wxT("default"));
+    cb_default->SetValue(false);
+    tc_tags->SetValue(wxT(""));
+    tc_timecodes->SetValue(wxT(""));
+
+    input->dont_copy_values_now = saved_dcvn;
+  }
 }
 
 void
 tab_input_general::on_default_track_clicked(wxCommandEvent &evt) {
   mmg_track_t *t;
 
-  if (input->selected_track == -1)
+  if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
   t = tracks[input->selected_track];
@@ -239,7 +253,7 @@ tab_input_general::on_default_track_clicked(wxCommandEvent &evt) {
 
 void
 tab_input_general::on_language_selected(wxCommandEvent &evt) {
-  if (input->selected_track == -1)
+  if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
   tracks[input->selected_track]->language =
@@ -248,7 +262,7 @@ tab_input_general::on_language_selected(wxCommandEvent &evt) {
 
 void
 tab_input_general::on_cues_selected(wxCommandEvent &evt) {
-  if (input->selected_track == -1)
+  if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
   tracks[input->selected_track]->cues = cob_cues->GetStringSelection();
@@ -286,7 +300,7 @@ tab_input_general::on_browse_timecodes_clicked(wxCommandEvent &evt) {
 
 void
 tab_input_general::on_tags_changed(wxCommandEvent &evt) {
-  if (input->selected_track == -1)
+  if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
   tracks[input->selected_track]->tags = tc_tags->GetValue();
@@ -294,7 +308,7 @@ tab_input_general::on_tags_changed(wxCommandEvent &evt) {
 
 void
 tab_input_general::on_timecodes_changed(wxCommandEvent &evt) {
-  if (input->selected_track == -1)
+  if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
   tracks[input->selected_track]->timecodes = tc_timecodes->GetValue();
@@ -302,7 +316,7 @@ tab_input_general::on_timecodes_changed(wxCommandEvent &evt) {
 
 void
 tab_input_general::on_track_name_changed(wxCommandEvent &evt) {
-  if (input->selected_track == -1)
+  if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
   tracks[input->selected_track]->track_name = tc_track_name->GetValue();

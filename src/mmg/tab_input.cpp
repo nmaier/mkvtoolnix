@@ -800,19 +800,19 @@ tab_input::on_file_selected(wxCommandEvent &evt) {
 
 void
 tab_input::on_nochapters_clicked(wxCommandEvent &evt) {
-  if (selected_file != -1)
+  if (dont_copy_values_now || (selected_file != -1))
     files[selected_file].no_chapters = cb_no_chapters->GetValue();
 }
 
 void
 tab_input::on_noattachments_clicked(wxCommandEvent &evt) {
-  if (selected_file != -1)
+  if (dont_copy_values_now || (selected_file != -1))
     files[selected_file].no_attachments = cb_no_attachments->GetValue();
 }
 
 void
 tab_input::on_notags_clicked(wxCommandEvent &evt) {
-  if (selected_file != -1)
+  if (dont_copy_values_now || (selected_file != -1))
     files[selected_file].no_tags = cb_no_tags->GetValue();
 }
 
@@ -885,6 +885,21 @@ tab_input::on_value_copy_timer(wxTimerEvent &evt) {
   t = tracks[selected_track];
   t->aspect_ratio = ti_format->cob_aspect_ratio->GetValue();
   t->fourcc = ti_format->cob_fourcc->GetValue();
+}
+
+void
+tab_input::on_file_new(wxCommandEvent &evt) {
+  b_append_file->Enable(false);
+  b_remove_file->Enable(false);
+  st_file_options->Enable(false);
+  cb_no_chapters->Enable(false);
+  cb_no_attachments->Enable(false);
+  cb_no_tags->Enable(false);
+  cb_no_chapters->SetValue(false);
+  cb_no_attachments->SetValue(false);
+  cb_no_tags->SetValue(false);
+  b_track_up->Enable(false);
+  b_track_down->Enable(false);
 }
 
 void

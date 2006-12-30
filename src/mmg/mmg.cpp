@@ -901,6 +901,7 @@ mmg_dialog::on_file_new(wxCommandEvent &evt) {
   tc_output->SetValue(wxT(""));
 
   input_page->load(cfg, MMG_CONFIG_FILE_VERSION_MAX);
+  input_page->on_file_new(evt);
   attachments_page->load(cfg, MMG_CONFIG_FILE_VERSION_MAX);
   global_page->load(cfg, MMG_CONFIG_FILE_VERSION_MAX);
   settings_page->load(cfg, MMG_CONFIG_FILE_VERSION_MAX);

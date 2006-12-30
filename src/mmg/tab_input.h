@@ -162,6 +162,7 @@ public:
   void on_noattachments_clicked(wxCommandEvent &evt);
   void on_notags_clicked(wxCommandEvent &evt);
   void on_value_copy_timer(wxTimerEvent &evt);
+  void on_file_new(wxCommandEvent &evt);
 
   void set_track_mode(mmg_track_t *t);
 

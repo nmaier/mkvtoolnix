@@ -252,15 +252,14 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   bool appending = t ? t->appending : false;
   bool video = ('v' == type) && !appending;
   bool audio_app = ('a' == type);
-  bool subs = ('s' == type) && !appending;
   bool subs_app = ('s' == type);
 
   ctype = ctype.Lower();
 
-  st_delay->Enable(audio_app || subs);
-  tc_delay->Enable(audio_app || subs);
-  st_stretch->Enable(audio_app || subs);
-  tc_stretch->Enable(audio_app || subs);
+  st_delay->Enable(audio_app || subs_app);
+  tc_delay->Enable(audio_app || subs_app);
+  st_stretch->Enable(audio_app || subs_app);
+  tc_stretch->Enable(audio_app || subs_app);
   st_sub_charset->Enable(subs_app && (ctype.Find(wxT("vobsub")) < 0));
   cob_sub_charset->Enable(subs_app && (ctype.Find(wxT("vobsub")) < 0));
   st_fourcc->Enable(video);
@@ -284,11 +283,29 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   cb_aac_is_sbr->Enable(audio_app &&
                         ((ctype.Find(wxT("aac")) >= 0) ||
                          (ctype.Find(wxT("mp4a")) >= 0)));
+
+  if (NULL == t) {
+    bool saved_dcvn = input->dont_copy_values_now;
+    input->dont_copy_values_now = true;
+
+    set_combobox_selection(cob_aspect_ratio, wxT(""));
+    tc_display_width->SetValue(wxT(""));
+    tc_display_height->SetValue(wxT(""));
+    set_combobox_selection(cob_fourcc, wxT(""));
+    set_combobox_selection(cob_stereo_mode, wxT(""));
+    tc_delay->SetValue(wxT(""));
+    tc_stretch->SetValue(wxT(""));
+    set_combobox_selection(cob_sub_charset, wxU(""));
+    set_combobox_selection(cob_compression, wxT(""));
+    cb_aac_is_sbr->SetValue(false);
+
+    input->dont_copy_values_now = saved_dcvn;
+  }
 }
 
 void
 tab_input_format::on_aac_is_sbr_clicked(wxCommandEvent &evt) {
-  if (input->selected_track == -1)
+  if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
   tracks[input->selected_track]->aac_is_sbr = cb_aac_is_sbr->GetValue();
@@ -296,7 +313,7 @@ tab_input_format::on_aac_is_sbr_clicked(wxCommandEvent &evt) {
 
 void
 tab_input_format::on_subcharset_selected(wxCommandEvent &evt) {
-  if (input->selected_track == -1)
+  if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
   tracks[input->selected_track]->sub_charset =
@@ -305,7 +322,7 @@ tab_input_format::on_subcharset_selected(wxCommandEvent &evt) {
 
 void
 tab_input_format::on_delay_changed(wxCommandEvent &evt) {
-  if (input->selected_track == -1)
+  if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
   tracks[input->selected_track]->delay = tc_delay->GetValue();
@@ -313,7 +330,7 @@ tab_input_format::on_delay_changed(wxCommandEvent &evt) {
 
 void
 tab_input_format::on_stretch_changed(wxCommandEvent &evt) {
-  if (input->selected_track == -1)
+  if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
   tracks[input->selected_track]->stretch = tc_stretch->GetValue();
@@ -321,7 +338,7 @@ tab_input_format::on_stretch_changed(wxCommandEvent &evt) {
 
 void
 tab_input_format::on_aspect_ratio_changed(wxCommandEvent &evt) {
-  if (input->selected_track == -1)
+  if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
   tracks[input->selected_track]->aspect_ratio =
@@ -330,7 +347,7 @@ tab_input_format::on_aspect_ratio_changed(wxCommandEvent &evt) {
 
 void
 tab_input_format::on_fourcc_changed(wxCommandEvent &evt) {
-  if (input->selected_track == -1)
+  if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
   tracks[input->selected_track]->fourcc =
@@ -339,7 +356,7 @@ tab_input_format::on_fourcc_changed(wxCommandEvent &evt) {
 
 void
 tab_input_format::on_stereo_mode_changed(wxCommandEvent &evt) {
-  if (input->selected_track == -1)
+  if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
   tracks[input->selected_track]->stereo_mode =
@@ -348,7 +365,7 @@ tab_input_format::on_stereo_mode_changed(wxCommandEvent &evt) {
 
 void
 tab_input_format::on_compression_selected(wxCommandEvent &evt) {
-  if (input->selected_track == -1)
+  if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
   tracks[input->selected_track]->compression =
@@ -357,7 +374,7 @@ tab_input_format::on_compression_selected(wxCommandEvent &evt) {
 
 void
 tab_input_format::on_display_width_changed(wxCommandEvent &evt) {
-  if (input->selected_track == -1)
+  if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
   tracks[input->selected_track]->dwidth = tc_display_width->GetValue();
@@ -365,7 +382,7 @@ tab_input_format::on_display_width_changed(wxCommandEvent &evt) {
 
 void
 tab_input_format::on_display_height_changed(wxCommandEvent &evt) {
-  if (input->selected_track == -1)
+  if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
   tracks[input->selected_track]->dheight = tc_display_height->GetValue();
@@ -375,7 +392,7 @@ void
 tab_input_format::on_aspect_ratio_selected(wxCommandEvent &evt) {
   mmg_track_t *track;
 
-  if (input->selected_track == -1)
+  if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
   track = tracks[input->selected_track];
@@ -387,7 +404,7 @@ void
 tab_input_format::on_display_dimensions_selected(wxCommandEvent &evt) {
   mmg_track_t *track;
 
-  if (input->selected_track == -1)
+  if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
   track = tracks[input->selected_track];
