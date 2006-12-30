@@ -1,3 +1,11 @@
+2006-12-30  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: enhancement: All inputs and controls are cleared and
+	deactivated if the user select "File -> New".
+
+	* mmg: enhancement: The user can switch between the "generic" and
+	"format specific options" pages even if no track is selected.
+
 2006-12-29  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: mkvmerge would not write frame durations if
