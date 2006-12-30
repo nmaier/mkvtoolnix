@@ -35,7 +35,7 @@ typedef struct {
 
 typedef counted_ptr<rv_segment_t> rv_segment_cptr;
 
-typedef struct {
+struct real_demuxer_t {
   int ptzr;
   rmff_track_t *track;
 
@@ -60,7 +60,22 @@ typedef struct {
   int64_t last_timecode, ref_timecode;
 
   vector<rv_segment_cptr> segments;
-} real_demuxer_t;
+
+  real_demuxer_t(rmff_track_t *n_track):
+    ptzr(-1), track(n_track),
+    bsid(0), channels(0), samples_per_second(0), bits_per_sample(0),
+    width(0), height(0),
+    is_aac(false), rv_dimensions(false),
+    force_keyframe_flag(false), cook_audio_fix(false),
+    fps(0.0),
+    rvp(NULL), ra4p(NULL), ra5p(NULL),
+    private_data(NULL), extra_data(NULL),
+    private_size(0), extra_data_size(0),
+    first_frame(true), num_packets(0),
+    last_timecode(0), ref_timecode(0) {
+    memset(fourcc, 0, 5);
+  };
+};
 
 typedef counted_ptr<real_demuxer_t> real_demuxer_cptr;
 

@@ -209,10 +209,7 @@ real_reader_c::parse_headers() {
       ts_data = track->mdpr_header.type_specific_data;
       ts_size = get_uint32_be(&track->mdpr_header.type_specific_size);
 
-      real_demuxer_cptr dmx(new real_demuxer_t);
-      dmx->track = track;
-      dmx->ptzr = -1;
-      dmx->first_frame = true;
+      real_demuxer_cptr dmx(new real_demuxer_t(track));
 
       if (track->type == RMFF_TRACK_TYPE_VIDEO) {
         dmx->rvp = (real_video_props_t *)track->mdpr_header.type_specific_data;
