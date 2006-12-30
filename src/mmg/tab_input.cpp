@@ -199,7 +199,6 @@ tab_input::tab_input(wxWindow *parent):
 
 void
 tab_input::set_track_mode(mmg_track_t *t) {
-  nb_options->Enable(NULL != t);
   ti_general->set_track_mode(t);
   ti_format->set_track_mode(t);
 }
