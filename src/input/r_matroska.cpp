@@ -1574,7 +1574,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
                    (t->a_formattag == 0x00ff)) {
           // A_AAC/MPEG2/MAIN
           // 0123456789012345
-          int id, profile, detected_profile;
+          int id, profile, detected_profile = AAC_PROFILE_MAIN;
 
           id = 0;
           profile = 0;
