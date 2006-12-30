@@ -54,16 +54,22 @@ public:
   }
 
   X *get() const throw() {
-    return its_counter ? its_counter->ptr : NULL;
+    return its_counter ? its_counter->ptr + its_counter->offset : NULL;
   }
 
   int get_size() const throw() {
-    return its_counter ? its_counter->size : 0;
+    return its_counter ? its_counter->size - its_counter->offset: 0;
   }
 
   void set_size(int new_size) throw() {
     if (its_counter)
       its_counter->size = new_size;
+  }
+
+  void set_offset(unsigned new_offset) throw() {
+    if (!its_counter || (new_offset > its_counter->size))
+      throw false;
+    its_counter->offset = new_offset;
   }
 
   bool unique() const throw() {
@@ -81,6 +87,8 @@ public:
 
     its_counter->ptr = (unsigned char *)safememdup(get(), get_size());
     its_counter->is_free = true;
+    its_counter->size -= its_counter->offset;
+    its_counter->offset = 0;
   }
 
   void lock() {
@@ -93,12 +101,12 @@ public:
 private:
   struct counter {
     counter(X *p = NULL, int s = 0, bool f = false, unsigned c = 1):
-      ptr(p), size(s), is_free(f), count(c) {}
+      ptr(p), size(s), is_free(f), count(c), offset(0) {}
 
     X *ptr;
     int size;
     bool is_free;
-    unsigned count;
+    unsigned count, offset;
   } *its_counter;
 
   void acquire(counter *c) throw() { // increment the count
