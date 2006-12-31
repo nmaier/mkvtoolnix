@@ -71,6 +71,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
                                    "which case both numbers must be integer "
                                    "(e.g. 16/9) or just a single floting "
                                    "point number 'f' (e.g. 2.35)."));
+  cob_aspect_ratio->SetSizeHints(0, -1);
   siz_fg->Add(cob_aspect_ratio, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL,
               STDSPACING);
 
@@ -86,6 +87,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   tc_display_width->SetToolTip(TIP("Sets the display width of the track."
                                    "The height must be set as well, or this "
                                    "field will be ignored."));
+  tc_display_width->SetSizeHints(0, -1);
   siz_line->Add(tc_display_width, 1, wxGROW | wxALL, STDSPACING);
 
   st_x = new wxStaticText(this, wxID_STATIC, wxT("x"));
@@ -96,6 +98,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   tc_display_height->SetToolTip(TIP("Sets the display height of the track."
                                     "The width must be set as well, or this "
                                     "field will be ignored."));
+  tc_display_height->SetSizeHints(0, -1);
   siz_line->Add(tc_display_height, 1, wxGROW | wxALL, STDSPACING);
   siz_fg->Add(siz_line, 1, wxGROW, 0);
 
