@@ -147,6 +147,16 @@ avi_reader_c::create_packetizer(int64_t tid) {
     ti.private_data = (unsigned char *)avi->bitmap_info_header;
     if (ti.private_data != NULL)
       ti.private_size = get_uint32_le(&avi->bitmap_info_header->bi_size);
+
+    mxverb(4, "track extra data size: %d\n",
+           ti.private_size - sizeof(alBITMAPINFOHEADER));
+    if (sizeof(alBITMAPINFOHEADER) < ti.private_size) {
+      mxverb(4, "  ");
+      for (i = sizeof(alBITMAPINFOHEADER); i < ti.private_size; ++i)
+        mxverb(4, "%02x ", ti.private_data[i]);
+      mxverb(4, "\n");
+    }
+
     ti.id = 0;                 // ID for the video track.
     if (divx_type == DIVX_TYPE_MPEG4) {
       vptzr =
