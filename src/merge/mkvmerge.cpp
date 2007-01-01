@@ -395,7 +395,7 @@ parse_number_with_unit(const string &s,
   string unit, s_n, s_d;
   int64_t n, d, multiplier;
   double d_value = 0.0;
-  bool is_fraction;
+  bool is_fraction = false;
 
   if (display_s == "")
     display_s = s;
@@ -403,7 +403,6 @@ parse_number_with_unit(const string &s,
   if (re1.FullMatch(s, &s_n, &unit)) {
     parse_double(s_n, d_value);
     d = 1;
-    is_fraction = false;
 
   } else if (re2.FullMatch(s, &s_n, &s_d, &unit)) {
     parse_int(s_n, n);
