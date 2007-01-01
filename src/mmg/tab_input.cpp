@@ -1221,7 +1221,7 @@ tab_input::validate_settings() {
 
       str = t->stretch;
       strip(str);
-      if (s.length() > 0) {
+      if (str.length() > 0) {
         wxRegEx re_stretch(wxT("^[[:digit:]]+([,\\.][[:digit:]]+)?"
                                "(/[[:digit:]]+([,\\.][[:digit:]]+)?)?$"),
                            wxRE_ICASE);
