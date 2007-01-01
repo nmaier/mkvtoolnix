@@ -18,10 +18,6 @@
 
 #include "common_memory.h"
 
-#include <list>
-
-using namespace std;
-
 /** Start code for a MPEG-4 part 2 (?) video object plain */
 #define MPEGVIDEO_VOP_START_CODE                  0x000001b6
 /** Strt code for a MPEG-4 part 2 group of pictures */
@@ -142,60 +138,269 @@ struct video_frame_t {
     timecode(0), duration(0), bref(0), fref(0) {};
 };
 
-struct sps_info_t {
-  unsigned id;
-
-  unsigned max_frame_num;
-  unsigned pic_order_cnt_type;
-  unsigned max_pic_order_cnt_lsb;
-  int offset_for_non_ref_pic;
-  int offset_for_top_to_bottom_field;
-  unsigned num_ref_frames_in_pic_order_cnt_cycle;
-  bool delta_pic_order_always_zero_flag;
-  bool frame_mbs_only;
-
-  bool vui_present;
-  bool ar_found;
-
-  unsigned par_num, par_den;
-
-  sps_info_t() {
-    memset(this, 0, sizeof(*this));
-  }
+namespace mpeg1_2 {
+  int MTX_DLL_API extract_fps_idx(const unsigned char *buffer,
+                                  int buffer_size);
+  double MTX_DLL_API get_fps(int idx);
+  bool MTX_DLL_API extract_ar(const unsigned char *buffer,
+                              int buffer_size, float &ar);
 };
-typedef list<sps_info_t> sps_list_t;
 
-struct pps_info_t {
-  unsigned id;
-  unsigned sps_id;
+namespace mpeg4 {
+  namespace p2 {
+    bool MTX_DLL_API is_fourcc(const void *fourcc);
 
-  pps_info_t() {
-    memset(this, 0, sizeof(*this));
-  }
-};
-typedef list<pps_info_t> pps_list_t;
-
-bool MTX_DLL_API mpeg4_p2_extract_par(const unsigned char *buffer,
+    bool MTX_DLL_API extract_par(const unsigned char *buffer,
+                                 int buffer_size,
+                                 uint32_t &par_num, uint32_t &par_den);
+    bool MTX_DLL_API extract_size(const unsigned char *buffer,
+                                  int buffer_size,
+                                  uint32_t &width, uint32_t &height);
+    void MTX_DLL_API find_frame_types(const unsigned char *buffer,
                                       int buffer_size,
-                                      uint32_t &par_num, uint32_t &par_den);
-bool MTX_DLL_API mpeg4_p2_extract_size(const unsigned char *buffer,
-                                       int buffer_size,
-                                       uint32_t &width, uint32_t &height);
-void MTX_DLL_API mpeg4_p2_find_frame_types(const unsigned char *buffer,
-                                           int buffer_size,
-                                           vector<video_frame_t> &frames);
-memory_c * MTX_DLL_API
-mpeg4_p2_parse_config_data(const unsigned char *buffer, int buffer_size);
+                                      vector<video_frame_t> &frames);
+    memory_c * MTX_DLL_API parse_config_data(const unsigned char *buffer,
+                                             int buffer_size);
+  };
 
-bool MTX_DLL_API mpeg4_p10_extract_par(uint8_t *&buffer, int &buffer_size,
-                                       uint32_t &par_num, uint32_t &par_den);
+  namespace p10 {
 
-int MTX_DLL_API mpeg1_2_extract_fps_idx(const unsigned char *buffer,
-                                        int buffer_size);
-double MTX_DLL_API mpeg1_2_get_fps(int idx);
-bool MTX_DLL_API mpeg1_2_extract_ar(const unsigned char *buffer,
-                                    int buffer_size, float &ar);
+#define NALU_TYPE_NON_IDR_SLICE  0x01
+#define NALU_TYPE_DP_A_SLICE     0x02
+#define NALU_TYPE_DP_B_SLICE     0x03
+#define NALU_TYPE_DP_C_SLICE     0x04
+#define NALU_TYPE_IDR_SLICE      0x05
+#define NALU_TYPE_SEI            0x06
+#define NALU_TYPE_SEQ_PARAM      0x07
+#define NALU_TYPE_PIC_PARAM      0x08
+#define NALU_TYPE_ACCESS_UNIT    0x09
+#define NALU_TYPE_END_OF_SEQ     0x0a
+#define NALU_TYPE_END_OF_STREAM  0x0b
+#define NALU_TYPE_FILLER_DATA    0x0c
 
-bool MTX_DLL_API is_mpeg4_p2_fourcc(const void *fourcc);
+#define AVC_SLICE_TYPE_P   0
+#define AVC_SLICE_TYPE_B   1
+#define AVC_SLICE_TYPE_I   2
+#define AVC_SLICE_TYPE_SP  3
+#define AVC_SLICE_TYPE_SI  4
+#define AVC_SLICE_TYPE2_P  5
+#define AVC_SLICE_TYPE2_B  6
+#define AVC_SLICE_TYPE2_I  7
+#define AVC_SLICE_TYPE2_SP 8
+#define AVC_SLICE_TYPE2_SI 9
+
+    struct sps_info_t {
+      unsigned id;
+
+      unsigned profile_idc;
+      unsigned profile_compat;
+      unsigned level_idc;
+      unsigned log2_max_frame_num;
+      unsigned pic_order_cnt_type;
+      unsigned log2_max_pic_order_cnt_lsb;
+      int offset_for_non_ref_pic;
+      int offset_for_top_to_bottom_field;
+      unsigned num_ref_frames_in_pic_order_cnt_cycle;
+      bool delta_pic_order_always_zero_flag;
+      bool frame_mbs_only;
+
+      // vui:
+      bool vui_present, ar_found;
+      unsigned par_num, par_den;
+
+      // timing_info:
+      bool timing_info_present;
+      unsigned num_units_in_tick, time_scale;
+      bool fixed_frame_rate;
+
+      unsigned crop_left, crop_top, crop_right, crop_bottom;
+      unsigned width, height;
+
+      sps_info_t() {
+        memset(this, 0, sizeof(*this));
+      }
+    };
+
+    struct pps_info_t {
+      unsigned id;
+      unsigned sps_id;
+
+      bool pic_order_present;
+
+      pps_info_t() {
+        memset(this, 0, sizeof(*this));
+      }
+    };
+
+    struct slice_info_t {
+      unsigned char nalu_type;
+      unsigned char nal_ref_idc;
+      unsigned char type;
+      unsigned char pps_id;
+      unsigned frame_num;
+      bool field_pic_flag, bottom_field_flag;
+      unsigned idr_pic_id;
+      unsigned pic_order_cnt_lsb;
+      int delta_pic_order_cnt_bottom;
+      int delta_pic_order_cnt[2];
+
+      sps_info_t *sps;
+      pps_info_t *pps;
+
+      slice_info_t() {
+        memset(this, 0, sizeof(*this));
+      }
+    };
+
+    void MTX_DLL_API nalu_to_rbsp(memory_cptr &buffer);
+    void MTX_DLL_API rbsp_to_nalu(memory_cptr &buffer);
+
+    bool MTX_DLL_API parse_sps(memory_cptr &buffer, sps_info_t &sps);
+    bool MTX_DLL_API parse_pps(memory_cptr &buffer, pps_info_t &pps);
+    bool MTX_DLL_API parse_slice(memory_cptr &buffer, slice_info_t &si,
+                                 vector<sps_info_t> &sps_info_list,
+                                 vector<pps_info_t> &pps_info_list);
+
+    bool MTX_DLL_API extract_par(uint8_t *&buffer, int &buffer_size,
+                                 uint32_t &par_num, uint32_t &par_den);
+
+    struct avc_frame_t {
+      memory_cptr m_data;
+      int64_t m_start, m_end, m_ref1, m_ref2;
+      bool m_keyframe;
+      slice_info_t m_si;
+
+      avc_frame_t() {
+        clear();
+      };
+
+      avc_frame_t(const avc_frame_t &f) {
+        *this = f;
+      };
+
+      avc_frame_t &operator =(const avc_frame_t &f) {
+        m_data = f.m_data;
+        m_start = f.m_start;
+        m_end = f.m_end;
+        m_ref1 = f.m_ref1;
+        m_ref2 = f.m_ref2;
+        m_keyframe = f.m_keyframe;
+        m_si = f.m_si;
+
+        return *this;
+      };
+
+      void clear() {
+        m_start = 0;
+        m_end = 0;
+        m_ref1 = 0;
+        m_ref2 = 0;
+        m_keyframe = false;
+        memset(&m_si, 0, sizeof(m_si));
+        m_data = memory_cptr(NULL);
+      };
+    };
+
+    struct poc_t {
+      int poc, dec;
+      int64_t timecode;
+
+      poc_t(int p, int d):
+        poc(p), dec(d) {
+      };
+    };
+
+    class MTX_DLL_API avc_es_parser_c {
+    protected:
+      int m_nalu_size_size;
+
+      bool m_avcc_ready;
+      memory_cptr m_avcc;
+
+      int64_t m_default_duration;
+      int m_frame_number;
+
+      deque<avc_frame_t> m_frames, m_frames_out;
+      deque<int64_t> m_timecodes;
+
+      bool m_generate_timecodes;
+
+      deque<memory_cptr> m_sps_list, m_pps_list, m_extra_data;
+      vector<sps_info_t> m_sps_info_list;
+      vector<pps_info_t> m_pps_info_list;
+
+      memory_cptr m_unparsed_buffer;
+
+      avc_frame_t m_incomplete_frame;
+      bool m_have_incomplete_frame;
+
+    public:
+      avc_es_parser_c();
+
+      void enable_timecode_generation(int64_t default_duration) {
+        m_default_duration = default_duration;
+        m_generate_timecodes = true;
+      };
+
+      void add_bytes(unsigned char *buf, int size);
+      void add_bytes(memory_cptr &buf) {
+        add_bytes(buf->get(), buf->get_size());
+      };
+
+      void flush();
+
+      bool frame_available() {
+        return !m_frames_out.empty();
+      };
+
+      avc_frame_t get_frame() {
+        assert(!m_frames_out.empty());
+
+        avc_frame_t frame(*m_frames_out.begin());
+        m_frames_out.erase(m_frames_out.begin(), m_frames_out.begin() + 1);
+
+        return frame;
+      };
+
+      memory_cptr get_avcc() {
+        if (NULL == m_avcc.get())
+          create_avcc();
+        return m_avcc;
+      };
+
+      int get_width() {
+        assert(!m_sps_info_list.empty());
+        return m_sps_info_list.begin()->width;
+      };
+
+      int get_height() {
+        assert(!m_sps_info_list.empty());
+        return m_sps_info_list.begin()->height;
+      };
+
+      void handle_nalu(memory_cptr nalu);
+
+      void add_timecode(int64_t timecode);
+
+      bool headers_parsed() {
+        return m_avcc_ready;
+      };
+
+      void dump_info();
+
+    protected:
+      void handle_sps_nalu(memory_cptr &nalu);
+      void handle_pps_nalu(memory_cptr &nalu);
+      void handle_slice_nalu(memory_cptr &nalu);
+      void cleanup();
+      void default_cleanup();
+      void write_nalu_size(unsigned char *buffer, int size,
+                           int nalu_size_size = -1);
+      memory_cptr create_nalu_with_size(const memory_cptr &src,
+                                        bool add_extra_data = false);
+      void create_avcc();
+    };
+  };
+};
 
 #endif /* __MPEG4_COMMON_H */

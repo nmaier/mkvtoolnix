@@ -1475,6 +1475,11 @@ mmg_dialog::update_command_line() {
         clargs.Add(sid + wxT(":") + t->fourcc);
       }
 
+      if (t->fps.Length() > 0) {
+        clargs.Add(wxT("--default-duration"));
+        clargs.Add(sid + wxT(":") + t->fps + wxT("fps"));
+      }
+
       if (!t->appending && (0 != t->stereo_mode)) {
         clargs.Add(wxT("--stereo-mode"));
         clargs.Add(wxString::Format(wxT("%s:%d"), sid.c_str(),

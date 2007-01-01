@@ -21,13 +21,31 @@
 #include "os.h"
 
 #include "bit_cursor.h"
+#include "checksums.h"
 #include "common.h"
 #include "hacks.h"
 #include "mm_io.h"
 #include "mpeg4_common.h"
 
+namespace mpeg4 {
+  namespace p2 {
+    static bool find_vol_header(bit_cursor_c &bits);
+    static bool extract_size_internal(const unsigned char *buffer,
+                                      int buffer_size,
+                                      uint32_t &width, uint32_t &height);
+    static bool extract_par_internal(const unsigned char *buffer,
+                                     int buffer_size,
+                                     uint32_t &par_num, uint32_t &par_den);
+  };
+
+  namespace p10 {
+    static bool compare_poc_by_poc(const poc_t &poc1, const poc_t &poc2);
+    static bool compare_poc_by_dec(const poc_t &poc1, const poc_t &poc2);
+  };
+};
+
 static bool
-mpeg4_p2_find_vol_header(bit_cursor_c &bits) {
+mpeg4::p2::find_vol_header(bit_cursor_c &bits) {
   uint32_t marker;
 
   while (!bits.eof()) {
@@ -51,14 +69,14 @@ mpeg4_p2_find_vol_header(bit_cursor_c &bits) {
 }
 
 static bool
-mpeg4_p2_extract_size_internal(const unsigned char *buffer,
-                               int buffer_size,
-                               uint32_t &width,
-                               uint32_t &height) {
+mpeg4::p2::extract_size_internal(const unsigned char *buffer,
+                                 int buffer_size,
+                                 uint32_t &width,
+                                 uint32_t &height) {
   bit_cursor_c bits(buffer, buffer_size);
   int shape, time_base_den;
 
-  if (!mpeg4_p2_find_vol_header(bits))
+  if (!find_vol_header(bits))
     return false;
 
   mxverb(2, "mpeg4 size: found VOL header at %u\n",
@@ -134,22 +152,22 @@ mpeg4_p2_extract_size_internal(const unsigned char *buffer,
      otherwise.
 */
 bool
-mpeg4_p2_extract_size(const unsigned char *buffer,
-                      int buffer_size,
-                      uint32_t &width,
-                      uint32_t &height) {
+mpeg4::p2::extract_size(const unsigned char *buffer,
+                        int buffer_size,
+                        uint32_t &width,
+                        uint32_t &height) {
   try {
-    return mpeg4_p2_extract_size_internal(buffer, buffer_size, width, height);
+    return extract_size_internal(buffer, buffer_size, width, height);
   } catch (...) {
     return false;
   }
 }
 
 static bool
-mpeg4_p2_extract_par_internal(const unsigned char *buffer,
-                              int buffer_size,
-                              uint32_t &par_num,
-                              uint32_t &par_den) {
+mpeg4::p2::extract_par_internal(const unsigned char *buffer,
+                                int buffer_size,
+                                uint32_t &par_num,
+                                uint32_t &par_den) {
   const uint32_t ar_nums[16] = {0, 1, 12, 10, 16, 40, 0, 0,
                                 0, 0,  0,  0,  0,  0, 0, 0};
   const uint32_t ar_dens[16] = {1, 1, 11, 11, 11, 33, 1, 1,
@@ -157,7 +175,7 @@ mpeg4_p2_extract_par_internal(const unsigned char *buffer,
   uint32_t aspect_ratio_info, num, den;
   bit_cursor_c bits(buffer, buffer_size);
 
-  if (!mpeg4_p2_find_vol_header(bits))
+  if (!find_vol_header(bits))
     return false;
 
   mxverb(2, "mpeg4 AR: found VOL header at %u\n",
@@ -207,13 +225,12 @@ mpeg4_p2_extract_par_internal(const unsigned char *buffer,
      otherwise.
 */
 bool
-mpeg4_p2_extract_par(const unsigned char *buffer,
-                     int buffer_size,
-                     uint32_t &par_num,
-                     uint32_t &par_den) {
+mpeg4::p2::extract_par(const unsigned char *buffer,
+                       int buffer_size,
+                       uint32_t &par_num,
+                       uint32_t &par_den) {
   try {
-    return mpeg4_p2_extract_par_internal(buffer, buffer_size, par_num,
-                                         par_den);
+    return extract_par_internal(buffer, buffer_size, par_num, par_den);
   } catch (...) {
     return false;
   }
@@ -234,9 +251,9 @@ mpeg4_p2_extract_par(const unsigned char *buffer,
      a dummy frame) then \a frames will contain no elements.
 */
 void
-mpeg4_p2_find_frame_types(const unsigned char *buffer,
-                          int buffer_size,
-                          vector<video_frame_t> &frames) {
+mpeg4::p2::find_frame_types(const unsigned char *buffer,
+                            int buffer_size,
+                            vector<video_frame_t> &frames) {
   mm_mem_io_c bytes(buffer, buffer_size);
   uint32_t marker, frame_type;
   bool frame_found;
@@ -323,8 +340,8 @@ mpeg4_p2_find_frame_types(const unsigned char *buffer,
      a memory_c object otherwise. This object has to be deleted manually.
 */
 memory_c *
-mpeg4_p2_parse_config_data(const unsigned char *buffer,
-                           int buffer_size) {
+mpeg4::p2::parse_config_data(const unsigned char *buffer,
+                             int buffer_size) {
   memory_c *mem;
   const unsigned char *p, *end;
   unsigned char *dst;
@@ -404,10 +421,28 @@ gecopy(bit_cursor_c &r,
 }
 
 static int
+geread(bit_cursor_c &r) {
+  int	n = 0, bit;
+
+  while ((bit = r.get_bit()) == 0)
+    ++n;
+
+  bit = r.get_bits(n);
+
+  return (1 << n) - 1 + bit;
+}
+
+static int
+sgeread(bit_cursor_c &r) {
+  int v = geread(r);
+  return v & 1 ? (v + 1) / 2 : -(v / 2);
+}
+
+static int
 sgecopy(bit_cursor_c &r,
         bit_writer_c &w) {
   int v = gecopy(r, w);
-  return v & 1 ? (v + 1)/2 : -(v/2);
+  return v & 1 ? (v + 1) / 2 : -(v / 2);
 }
 
 static void
@@ -440,7 +475,7 @@ slcopy(bit_cursor_c &r,
 }
 
 void
-nalu_to_rbsp(memory_cptr &buffer) {
+mpeg4::p10::nalu_to_rbsp(memory_cptr &buffer) {
   int pos, size = buffer->get_size();
   mm_mem_io_c d(NULL, size, 100);
   unsigned char *b = buffer->get();
@@ -461,7 +496,7 @@ nalu_to_rbsp(memory_cptr &buffer) {
 }
 
 void
-rbsp_to_nalu(memory_cptr &buffer) {
+mpeg4::p10::rbsp_to_nalu(memory_cptr &buffer) {
   int pos, size = buffer->get_size();
   mm_mem_io_c d(NULL, size, 100);
   unsigned char *b = buffer->get();
@@ -483,14 +518,16 @@ rbsp_to_nalu(memory_cptr &buffer) {
 }
 
 bool
-parse_sps(memory_cptr &buffer,
-          sps_info_t &sps) {
+mpeg4::p10::parse_sps(memory_cptr &buffer,
+                      sps_info_t &sps) {
   int size = buffer->get_size();
   unsigned char *newsps = (unsigned char *)safemalloc(size + 100);
   memory_cptr mcptr_newsps(new memory_c(newsps, size));
   bit_cursor_c r(buffer->get(), size);
   bit_writer_c w(newsps, size);
-  int profile, i, nref;
+  int i, nref, mb_width, mb_height;
+
+  memset(&sps, 0, sizeof(sps));
 
   sps.par_num = 1;
   sps.par_den = 1;
@@ -499,12 +536,13 @@ parse_sps(memory_cptr &buffer,
   w.copy_bits(3, r);            // forbidden_zero_bit, nal_ref_idc
   if (w.copy_bits(5, r) != 7)   // nal_unit_type
     return false;
-  profile = w.copy_bits(8, r);  // profile_idc
-  if (profile < 0)
+  sps.profile_idc = w.copy_bits(8, r); // profile_idc
+  if (sps.profile_idc < 0)
     return false;
-  w.copy_bits(16, r);           // constraints, reserved, level
-  gecopy(r, w);                 // sps id
-  if (profile >= 100) {         // high profile
+  sps.profile_compat = w.copy_bits(8, r); // constraints
+  sps.level_idc = w.copy_bits(8, r); // level_idc
+  sps.id = gecopy(r, w);        // sps id
+  if (sps.profile_idc >= 100) { // high profile
     if (gecopy(r, w) == 3)      // chroma_format_idc
       w.copy_bits(1, r);        // residue_transform_flag
     gecopy(r, w);               // bit_depth_luma_minus8
@@ -515,36 +553,60 @@ parse_sps(memory_cptr &buffer,
         if (w.copy_bits(1, r) == 1) // seq_scaling_list_present_flag
           slcopy(r, w, i < 6 ? 16 : 64);
   }
-  gecopy(r, w);                 // log2_max_frame_num
+                                // log2_max_frame_num_minus4
+  sps.log2_max_frame_num = gecopy(r, w) + 4;
   switch (gecopy(r, w)) {       // pic_order_cnt_type
-    default:
-      return false;
-    case 2:
-      break;
     case 0:
-      gecopy(r, w);             // log2_max_pic_order_cnt_lsb_minus4
+      sps.pic_order_cnt_type = 0;
+                                // log2_max_pic_order_cnt_lsb_minus4
+      sps.log2_max_pic_order_cnt_lsb = gecopy(r, w) + 4;
       break;
+
     case 1:
-      w.copy_bits(1, r);        // delta_pic_order_always_zero_flag
-      sgecopy(r, w);            // offset_for_non_ref_pic
-      sgecopy(r, w);            // offset_for_top_to_bottom_field
-      nref = gecopy(r, w);     // num_ref_frams_in_pic_order_cnt_cycle
+      sps.pic_order_cnt_type = 2;
+                                // delta_pic_order_always_zero_flag
+      sps.delta_pic_order_always_zero_flag = w.copy_bits(1, r);
+                                // offset_for_non_ref_pic
+      sps.offset_for_non_ref_pic = sgecopy(r, w);
+                                // offset_for_top_to_bottom_field
+      sps.offset_for_top_to_bottom_field = sgecopy(r, w);
+      nref = gecopy(r, w);     // num_ref_frames_in_pic_order_cnt_cycle
+      sps.num_ref_frames_in_pic_order_cnt_cycle = nref;
       for (i = 0; i < nref; ++i)
         gecopy(r, w);           // offset_for_ref_frame
       break;
+
+    case 2:
+      sps.pic_order_cnt_type = 2;
+      break;
+
+    default:
+      return false;
   }
+
   gecopy(r, w);                 // num_ref_frames
   w.copy_bits(1, r);           // gaps_in_frame_num_value_allowed_flag
-  gecopy(r, w);                 // pic_width_in_mbs_minus1
-  gecopy(r, w);                 // pic_height_in_map_units_minus1
-  if (w.copy_bits(1, r) == 0)   // frame_mbs_only_flag
+  mb_width = gecopy(r, w) + 1;  // pic_width_in_mbs_minus1
+  mb_height = gecopy(r, w) + 1; // pic_height_in_map_units_minus1
+  if (w.copy_bits(1, r) == 0) { // frame_mbs_only_flag
+    sps.frame_mbs_only = false;
     w.copy_bits(1, r);          // mb_adaptive_frame_field_flag
+  } else
+    sps.frame_mbs_only = true;
+
+  sps.width = mb_width * 16;
+  sps.height = (2 - sps.frame_mbs_only) * mb_height * 16;
+
   w.copy_bits(1, r);            // direct_8x8_inference_flag
   if (w.copy_bits(1, r) == 1) {
-    gecopy(r, w);               // frame_crop_left_offset
-    gecopy(r, w);               // frame_crop_right_offset
-    gecopy(r, w);               // frame_crop_top_offset
-    gecopy(r, w);               // frame_crop_bottom_offset
+    sps.crop_left = gecopy(r, w); // frame_crop_left_offset
+    sps.crop_right = gecopy(r, w); // frame_crop_right_offset
+    sps.crop_top = gecopy(r, w);   // frame_crop_top_offset
+    sps.crop_bottom = gecopy(r, w); // frame_crop_bottom_offset
+
+    sps.width = 16 * mb_width - 2 * (sps.crop_left + sps.crop_right);
+    sps.height -= (2 - sps.frame_mbs_only) * 2 *
+      (sps.crop_top + sps.crop_bottom);
   }
   sps.vui_present = w.copy_bits(1, r);
   if (sps.vui_present == 1) {
@@ -591,11 +653,13 @@ parse_sps(memory_cptr &buffer,
       gecopy(r, w);             // chroma_sample_loc_type_top_field
       gecopy(r, w);             // chroma_sample_loc_type_bottom_field
     }
-    if (w.copy_bits(1, r) == 1) { // timing_info_present
-      w.copy_bits(32, r);       // num_units_in_tick
-      w.copy_bits(32, r);       // time_scale
-      w.copy_bits(1, r);        // fixed_frame_rate
+    sps.timing_info_present = w.copy_bits(1, r);
+    if (sps.timing_info_present) {
+      sps.num_units_in_tick = w.copy_bits(32, r);
+      sps.time_scale = w.copy_bits(32, r);
+      sps.fixed_frame_rate = w.copy_bits(1, r);
     }
+
     bool f = false;
     if (w.copy_bits(1, r) == 1) // nal_hrd_parameters_present
       hrdcopy(r, w),  f = true;
@@ -604,6 +668,7 @@ parse_sps(memory_cptr &buffer,
     if (f)
       w.copy_bits(1, r);        // low_delay_hrd_flag
     w.copy_bits(1, r);          // pic_struct_present
+
     if (w.copy_bits(1, r) == 1) { // bitstream_restriction
       w.copy_bits(1, r);    // motion_vectors_over_pic_boundaries_flag
       gecopy(r, w);             // max_bytes_per_pic_denom
@@ -624,6 +689,97 @@ parse_sps(memory_cptr &buffer,
   return true;
 }
 
+bool
+mpeg4::p10::parse_pps(memory_cptr &buffer,
+                      pps_info_t &pps) {
+  try {
+    bit_cursor_c r(buffer->get(), buffer->get_size());
+
+    memset(&pps, 0, sizeof(pps));
+
+    r.skip_bits(3);             // forbidden_zero_bit, nal_ref_idc
+    if (r.get_bits(5) != 8)     // nal_unit_type
+      return false;
+    pps.id = geread(r);
+    pps.sps_id = geread(r);
+
+    r.skip_bits(1);             // entropy_coding_mode_flag
+    pps.pic_order_present = r.get_bit();
+
+    return true;
+  } catch (...) {
+    return false;
+  }
+}
+
+bool
+mpeg4::p10::parse_slice(memory_cptr &buffer,
+                        slice_info_t &si,
+                        vector<sps_info_t> &sps_info_list,
+                        vector<pps_info_t> &pps_info_list) {
+  try {
+    bit_cursor_c r(buffer->get(), buffer->get_size());
+    vector<sps_info_t>::iterator sps;
+    vector<pps_info_t>::iterator pps;
+
+    memset(&si, 0, sizeof(si));
+
+    si.nal_ref_idc = r.get_bits(3); // forbidden_zero_bit, nal_ref_idc
+    si.nalu_type = r.get_bits(5);   // si.nalu_type
+    if ((NALU_TYPE_NON_IDR_SLICE != si.nalu_type) &&
+        (NALU_TYPE_DP_A_SLICE != si.nalu_type) &&
+        (NALU_TYPE_IDR_SLICE != si.nalu_type))
+      return false;
+
+    geread(r);                  // first_mb_in_slice
+    si.type = geread(r);        // slice_type
+    si.pps_id = geread(r);      // pps_id
+
+    mxforeach(pps, pps_info_list)
+      if (pps->id == si.pps_id)
+        break;
+    if (pps_info_list.end() == pps)
+      return false;
+
+    mxforeach(sps, sps_info_list)
+      if (sps->id == pps->sps_id)
+        break;
+    if (sps_info_list.end() == sps)
+      return false;
+
+    si.sps = &(*sps);
+    si.pps = &(*pps);
+
+    si.frame_num = r.get_bits(sps->log2_max_frame_num);
+
+    if (!sps->frame_mbs_only) {
+      si.field_pic_flag = r.get_bit();
+      if (si.field_pic_flag)
+        si.bottom_field_flag = r.get_bit();
+    }
+
+    if (NALU_TYPE_IDR_SLICE == si.nalu_type)
+      si.idr_pic_id = geread(r);
+
+    if (0 == sps->pic_order_cnt_type) {
+      si.pic_order_cnt_lsb = r.get_bits(sps->log2_max_pic_order_cnt_lsb);
+      if (pps->pic_order_present && !si.field_pic_flag)
+        si.delta_pic_order_cnt_bottom = sgeread(r);
+    }
+
+    if ((1 == sps->pic_order_cnt_type) &&
+        !sps->delta_pic_order_always_zero_flag) {
+      si.delta_pic_order_cnt[0] = sgeread(r);
+      if (pps->pic_order_present && !si.field_pic_flag)
+        si.delta_pic_order_cnt[1] = sgeread(r);
+    }
+
+    return true;
+  } catch (...) {
+    return false;
+  }
+}
+
 /** Extract the pixel aspect ratio from the MPEG4 layer 10 (AVC) codec data
 
    This function searches a buffer containing the MPEG4 layer 10 (AVC) codec
@@ -641,10 +797,10 @@ parse_sps(memory_cptr &buffer,
      otherwise.
 */
 bool
-mpeg4_p10_extract_par(uint8_t *&buffer,
-                      int &buffer_size,
-                      uint32_t &par_num,
-                      uint32_t &par_den) {
+mpeg4::p10::extract_par(uint8_t *&buffer,
+                        int &buffer_size,
+                        uint32_t &par_num,
+                        uint32_t &par_den) {
   try {
     mm_mem_io_c avcc(buffer, buffer_size), new_avcc(NULL, buffer_size, 1024);
     memory_cptr nalu(new memory_c());
@@ -675,7 +831,7 @@ mpeg4_p10_extract_par(uint8_t *&buffer,
       abort = false;
       if ((0 < length) && ((nalu->get()[0] & 0x1f) == 7)) {
         nalu_to_rbsp(nalu);
-        if (parse_sps(nalu, sps_info)) {
+        if (mpeg4::p10::parse_sps(nalu, sps_info)) {
           ar_found = sps_info.ar_found;
           if (ar_found) {
             par_num = sps_info.par_num;
@@ -721,8 +877,8 @@ mpeg4_p10_extract_par(uint8_t *&buffer,
      if the buffer was too small.
 */
 int
-mpeg1_2_extract_fps_idx(const unsigned char *buffer,
-                        int buffer_size) {
+mpeg1_2::extract_fps_idx(const unsigned char *buffer,
+                         int buffer_size) {
   uint32_t marker;
   int idx;
 
@@ -765,9 +921,9 @@ mpeg1_2_extract_fps_idx(const unsigned char *buffer,
    \return \c true if a MPEG sequence header was found and \c false otherwise.
 */
 bool
-mpeg1_2_extract_ar(const unsigned char *buffer,
-                   int buffer_size,
-                   float &ar) {
+mpeg1_2::extract_ar(const unsigned char *buffer,
+                    int buffer_size,
+                    float &ar) {
   uint32_t marker;
   int idx;
 
@@ -825,7 +981,7 @@ mpeg1_2_extract_ar(const unsigned char *buffer,
      invalid.
 */
 double
-mpeg1_2_get_fps(int idx) {
+mpeg1_2::get_fps(int idx) {
   static const int fps[8] = {0, 24, 25, 0, 30, 50, 0, 60};
 
   if ((idx < 1) || (idx > 8))
@@ -849,7 +1005,7 @@ mpeg1_2_get_fps(int idx) {
    \return true if the FourCC refers to a MPEG-4 part 2 video codec.
 */
 bool
-is_mpeg4_p2_fourcc(const void *fourcc) {
+mpeg4::p2::is_fourcc(const void *fourcc) {
   static const char *mpeg4_p2_fourccs[] = {
     "MP42", "DIV2", "DIVX", "XVID", "DX50", "FMP4", "DXGM",
     NULL
@@ -860,4 +1016,476 @@ is_mpeg4_p2_fourcc(const void *fourcc) {
     if (!strncasecmp((const char *)fourcc, mpeg4_p2_fourccs[i], 4))
       return true;
   return false;
+}
+
+// -------------------------------------------------------------------
+
+static bool
+mpeg4::p10::compare_poc_by_poc(const poc_t &poc1,
+                               const poc_t &poc2) {
+  return poc1.poc < poc2.poc;
+}
+
+static bool
+mpeg4::p10::compare_poc_by_dec(const poc_t &poc1,
+                               const poc_t &poc2) {
+  return poc1.dec < poc2.dec;
+}
+
+mpeg4::p10::avc_es_parser_c::avc_es_parser_c():
+  m_nalu_size_size(2),
+  m_avcc_ready(false),
+  m_default_duration(40000000), m_frame_number(0),
+  m_generate_timecodes(false),
+  m_have_incomplete_frame(false) {
+}
+
+void
+mpeg4::p10::avc_es_parser_c::add_bytes(unsigned char *buffer,
+                                       int size) {
+  memory_slice_cursor_c cursor;
+  unsigned char *new_buffer;
+  uint32_t marker;
+  int previous_pos, new_size;
+
+  if ((NULL != m_unparsed_buffer.get()) &&
+      (0 != m_unparsed_buffer->get_size()))
+    cursor.add_slice(m_unparsed_buffer);
+  cursor.add_slice(buffer, size);
+
+  if (4 <= cursor.get_remaining_size()) {
+    marker = (unsigned int)cursor.get_char() << 24 |
+      (unsigned int)cursor.get_char() << 16 |
+      (unsigned int)cursor.get_char() << 8 |
+      (unsigned int)cursor.get_char();
+    previous_pos = -1;
+
+    while (1) {
+      if (0x00000001 == marker) {
+        if (-1 != previous_pos) {
+          new_size = cursor.get_position() - previous_pos - 8;
+          new_buffer = (unsigned char *)safemalloc(new_size);
+          cursor.copy(new_buffer, previous_pos + 4, new_size);
+          memory_cptr nalu(new memory_c(new_buffer, new_size, true));
+          handle_nalu(nalu);
+        }
+        previous_pos = cursor.get_position() - 4;
+      }
+
+      if (!cursor.char_available())
+        break;
+      marker <<= 8;
+      marker |= (unsigned int)cursor.get_char();
+    }
+  }
+
+  if (-1 == previous_pos)
+    previous_pos = 0;
+
+  new_size = cursor.get_size() - previous_pos;
+  if (0 != new_size) {
+    new_buffer = (unsigned char *)safemalloc(new_size);
+    cursor.copy(new_buffer, previous_pos, new_size);
+    m_unparsed_buffer = memory_cptr(new memory_c(new_buffer, new_size,
+                                                 true));
+  } else
+    m_unparsed_buffer = memory_cptr(NULL);
+}
+
+void
+mpeg4::p10::avc_es_parser_c::flush() {
+  if ((NULL != m_unparsed_buffer.get()) ||
+      (5 <= m_unparsed_buffer->get_size()))
+    handle_nalu(clone_memory(m_unparsed_buffer->get() + 4,
+                             m_unparsed_buffer->get_size() - 4));
+  m_unparsed_buffer = memory_cptr(NULL);
+  if (m_have_incomplete_frame) {
+    m_frames.push_back(m_incomplete_frame);
+    m_have_incomplete_frame = false;
+  }
+  cleanup();
+}
+
+void
+mpeg4::p10::avc_es_parser_c::add_timecode(int64_t timecode) {
+  deque<int64_t>::iterator i = m_timecodes.end();
+  while (i != m_timecodes.begin()) {
+    if (timecode >= *(i - 1))
+      break;
+    --i;
+  }
+  m_timecodes.insert(i, timecode);
+}
+
+void
+mpeg4::p10::avc_es_parser_c::write_nalu_size(unsigned char *buffer,
+                                             int size,
+                                             int nalu_size_size) {
+  int i;
+
+  if (-1 == nalu_size_size)
+    nalu_size_size = m_nalu_size_size;
+
+  for (i = 0; i < nalu_size_size; i++)
+    buffer[i] = (size >> (8 * (nalu_size_size - 1 - i))) & 0xff;
+}
+
+
+void
+mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
+  slice_info_t si;
+
+  if (!parse_slice(nalu, si, m_sps_info_list, m_pps_info_list))
+    throw error_c("Parsing a slice NALU failed");
+
+//   mxinfo("frame_num %u: ", si.frame_num);
+
+  if (m_have_incomplete_frame) {
+//     if (0) {
+    if ((si.frame_num == m_incomplete_frame.m_si.frame_num) &&
+        (si.nalu_type == m_incomplete_frame.m_si.nalu_type) &&
+        (si.type == m_incomplete_frame.m_si.type) &&
+        (si.pps_id == m_incomplete_frame.m_si.pps_id) &&
+        (si.field_pic_flag == m_incomplete_frame.m_si.field_pic_flag) &&
+        (si.nal_ref_idc == m_incomplete_frame.m_si.nal_ref_idc)) {
+//       mxinfo("appending\n");
+      memory_c &mem = *(m_incomplete_frame.m_data.get());
+      int offset = mem.get_size();
+      mem.resize(offset + m_nalu_size_size + nalu->get_size());
+      write_nalu_size(mem.get() + offset, nalu->get_size());
+      memcpy(mem.get() + offset + m_nalu_size_size, nalu->get(),
+             nalu->get_size());
+      return;
+
+    } else
+      m_frames.push_back(m_incomplete_frame);
+  }
+
+//   mxinfo("new one\n");
+  m_incomplete_frame.clear();
+  m_incomplete_frame.m_si = si;
+  m_incomplete_frame.m_keyframe =
+    (NALU_TYPE_IDR_SLICE == m_incomplete_frame.m_si.nalu_type) &&
+    ((AVC_SLICE_TYPE_I == m_incomplete_frame.m_si.type) ||
+     (AVC_SLICE_TYPE2_I == m_incomplete_frame.m_si.type) ||
+     (AVC_SLICE_TYPE_SI == m_incomplete_frame.m_si.type) ||
+     (AVC_SLICE_TYPE2_SI == m_incomplete_frame.m_si.type));
+
+  if (m_incomplete_frame.m_keyframe)
+    cleanup();
+
+
+  m_incomplete_frame.m_data = create_nalu_with_size(nalu, 0 == m_frame_number);
+
+  if (m_generate_timecodes)
+    add_timecode(m_frame_number * m_default_duration);
+  ++m_frame_number;
+
+  m_have_incomplete_frame = true;
+}
+
+void
+mpeg4::p10::avc_es_parser_c::handle_sps_nalu(memory_cptr &nalu) {
+  sps_info_t sps_info;
+
+  nalu_to_rbsp(nalu);
+  if (!parse_sps(nalu, sps_info))
+    throw error_c("Parsing a SPS NALU failed");
+  rbsp_to_nalu(nalu);
+  m_sps_list.push_back(nalu);
+  m_sps_info_list.push_back(sps_info);
+}
+
+void
+mpeg4::p10::avc_es_parser_c::handle_pps_nalu(memory_cptr &nalu) {
+  pps_info_t pps_info;
+
+  nalu_to_rbsp(nalu);
+  if (!parse_pps(nalu, pps_info))
+    throw error_c("Parsing a PPS NALU failed");
+  rbsp_to_nalu(nalu);
+  m_pps_list.push_back(nalu);
+  m_pps_info_list.push_back(pps_info);
+}
+
+void
+mpeg4::p10::avc_es_parser_c::handle_nalu(memory_cptr nalu) {
+  int type;
+//   int i;
+
+//   mxinfo("NALU! size = %d; ", nalu->get_size());
+
+//   for (i = 0; (8 > i) && (nalu->get_size() > i); ++i)
+//     mxinfo("%02x ", *(nalu->get() + i));
+
+//   if (6 <= nalu->get_size()) {
+//     mxinfo(" ... ");
+//     for (i = nalu->get_size() - 6; nalu->get_size() > i; ++i)
+//       mxinfo("%02x ", *(nalu->get() + i));
+//   }
+
+//   if (1 <= nalu->get_size()) {
+//     type = *(nalu->get()) & 0x1f;
+//     mxinfo("type %d", type);
+//   }
+//   mxinfo("\n");
+
+  if (1 > nalu->get_size())
+    return;
+
+  type = *(nalu->get()) & 0x1f;
+
+  switch (type) {
+    case NALU_TYPE_SEQ_PARAM:
+      handle_sps_nalu(nalu);
+      break;
+
+    case NALU_TYPE_PIC_PARAM:
+      handle_pps_nalu(nalu);
+      break;
+
+    case NALU_TYPE_END_OF_SEQ:
+    case NALU_TYPE_END_OF_STREAM:
+      // Skip these.
+      break;
+
+    case NALU_TYPE_NON_IDR_SLICE:
+    case NALU_TYPE_DP_A_SLICE:
+    case NALU_TYPE_DP_B_SLICE:
+    case NALU_TYPE_DP_C_SLICE:
+    case NALU_TYPE_IDR_SLICE:
+      m_avcc_ready = true;
+      handle_slice_nalu(nalu);
+      break;
+
+    default:
+      m_avcc_ready = true;
+      m_extra_data.push_back(create_nalu_with_size(nalu));
+      break;
+  }
+}
+
+void
+mpeg4::p10::avc_es_parser_c::default_cleanup() {
+  deque<avc_frame_t>::iterator i(m_frames.begin());
+  deque<int64_t>::iterator t(m_timecodes.begin());
+
+//   mxinfo("default cleanup\n");
+
+  int64_t r = i->m_start = i->m_end = *t;
+
+  ++i;
+  ++t;
+
+  while ((m_frames.end() != i) && (m_timecodes.end() != t)) {
+    i->m_ref1 = r - *t;
+    r = i->m_start = i->m_end = *t;
+    ++i;
+    ++t;
+  }
+
+  m_frames_out.insert(m_frames_out.end(), m_frames.begin(), m_frames.end());
+  m_timecodes.erase(m_timecodes.begin(),
+                    m_timecodes.begin() + m_frames.size());
+  m_frames.clear();
+}
+
+void
+mpeg4::p10::avc_es_parser_c::cleanup() {
+  deque<avc_frame_t>::iterator i(m_frames.begin());
+  deque<int64_t>::iterator t(m_timecodes.begin());
+  unsigned j;
+
+//   mxinfo("cleanup! dumping timecodes:\n");
+//   mxforeach(t, m_timecodes) {
+//     mxinfo("  " FMT_TIMECODEN "\n", ARG_TIMECODEN(*t));
+//   }
+  t = m_timecodes.begin();
+
+  if (m_frames.empty() || (m_timecodes.size() < m_frames.size())) {
+//     mxinfo("woopsi 1 for numfr %d sti %d\n", m_frames.size(),
+//            m_timecodes.size());
+    m_timecodes.erase(m_timecodes.begin(),
+                      m_timecodes.begin() + m_frames.size());
+    m_frames.clear();
+    return;
+  }
+
+  slice_info_t &idr = i->m_si;
+  if ((NALU_TYPE_IDR_SLICE != idr.nalu_type) ||
+      ((AVC_SLICE_TYPE_I != idr.type) &&
+       (AVC_SLICE_TYPE_SI != idr.type) &&
+       (AVC_SLICE_TYPE2_I != idr.type) &&
+       (AVC_SLICE_TYPE2_SI != idr.type)) ||
+      (0 == idr.nal_ref_idc) ||
+      (2 == idr.sps->pic_order_cnt_type)) {
+    default_cleanup();
+    return;
+  }
+
+  ++i;
+
+  vector<poc_t> poc;
+
+  if (0 == idr.sps->pic_order_cnt_type) {
+    poc.push_back(poc_t(0, 0));
+    j = 1;
+
+    int prev_pic_order_cnt_msb = 0, prev_pic_order_cnt_lsb = 0;
+    int pic_order_cnt_msb;
+
+    while (m_frames.end() != i) {
+      slice_info_t &si = i->m_si;
+
+      if (si.sps != idr.sps) {
+//         mxinfo("WUFF!!!!!!!\n");
+        default_cleanup();
+        return;
+      }
+
+      if ((si.pic_order_cnt_lsb < prev_pic_order_cnt_lsb) &&
+          ((prev_pic_order_cnt_lsb - si.pic_order_cnt_lsb) >=
+           (1 << (idr.sps->log2_max_pic_order_cnt_lsb - 1))))
+        pic_order_cnt_msb = prev_pic_order_cnt_msb +
+          (1 << idr.sps->log2_max_pic_order_cnt_lsb);
+      else if ((si.pic_order_cnt_lsb > prev_pic_order_cnt_lsb) &&
+               ((si.pic_order_cnt_lsb - prev_pic_order_cnt_lsb) >
+                (1 << (idr.sps->log2_max_pic_order_cnt_lsb - 1))))
+        pic_order_cnt_msb = prev_pic_order_cnt_msb -
+          (1 << idr.sps->log2_max_pic_order_cnt_lsb);
+      else
+        pic_order_cnt_msb = prev_pic_order_cnt_msb;
+
+      poc.push_back(poc_t(pic_order_cnt_msb + si.pic_order_cnt_lsb, j));
+
+      if (0 != si.nal_ref_idc) {
+        prev_pic_order_cnt_lsb = si.pic_order_cnt_lsb;
+        prev_pic_order_cnt_msb = pic_order_cnt_msb;
+      }
+
+      ++i;
+      ++j;
+    }
+
+  } else {
+    default_cleanup();
+    return;
+  }
+
+//   mxinfo("dumping POC\n");
+//   for (j = 0; poc.size() > j; ++j)
+//     mxinfo("  %d: poc %d dec %d\n", j, poc[j].poc, poc[j].dec);
+
+  sort(poc.begin(), poc.end(), compare_poc_by_poc);
+
+  for (j = 0; poc.size() > j; ++j, ++t)
+    poc[j].timecode = *t;
+
+  sort(poc.begin(), poc.end(), compare_poc_by_dec);
+
+  i = m_frames.begin();
+  i->m_start = i->m_end = poc[0].timecode;
+  ++i;
+
+  for (j = 1; poc.size() > j; ++j) {
+    i->m_ref1 = poc[j-1].timecode - poc[j].timecode;
+    i->m_start = i->m_end = poc[j].timecode;
+    ++i;
+  }
+
+  m_frames_out.insert(m_frames_out.end(), m_frames.begin(), m_frames.end());
+  m_timecodes.erase(m_timecodes.begin(),
+                    m_timecodes.begin() + m_frames.size());
+  m_frames.clear();
+}
+
+memory_cptr
+mpeg4::p10::avc_es_parser_c::create_nalu_with_size(const memory_cptr &src,
+                                                   bool add_extra_data) {
+  int final_size = m_nalu_size_size + src->get_size(), offset = 0, size;
+  unsigned char *buffer;
+
+  if (add_extra_data) {
+    deque<memory_cptr>::iterator it;
+
+    mxforeach(it, m_extra_data)
+      final_size += (*it)->get_size();
+    buffer = (unsigned char *)safemalloc(final_size);
+
+    mxforeach(it, m_extra_data) {
+      memcpy(buffer + offset, (*it)->get(), (*it)->get_size());
+      offset += (*it)->get_size();
+    }
+
+    m_extra_data.clear();
+  } else
+    buffer = (unsigned char *)safemalloc(final_size);
+
+  size = src->get_size();
+  write_nalu_size(buffer + offset, size);
+  memcpy(buffer + offset + m_nalu_size_size, src->get(), size);
+
+  return memory_cptr(new memory_c(buffer, final_size, true));
+}
+
+void
+mpeg4::p10::avc_es_parser_c::create_avcc() {
+  deque<memory_cptr>::iterator it;
+  unsigned char *buffer;
+  int final_size = 6 + 1, offset = 6, size;
+
+  mxforeach(it, m_sps_list)
+    final_size += (*it)->get_size() + 2;
+  mxforeach(it, m_pps_list)
+    final_size += (*it)->get_size() + 2;
+
+  buffer = (unsigned char *)safemalloc(final_size);
+
+  assert(!m_sps_list.empty());
+  sps_info_t &sps = *m_sps_info_list.begin();
+
+  buffer[0] = 1;
+  buffer[1] = sps.profile_idc;
+  buffer[2] = sps.profile_compat;
+  buffer[3] = sps.level_idc;
+  buffer[4] = 0xfc | (m_nalu_size_size - 1);
+  buffer[5] = 0xe0 | m_sps_list.size();
+
+  mxforeach(it, m_sps_list) {
+    size = (*it)->get_size();
+
+    write_nalu_size(buffer + offset, size, 2);
+    memcpy(&buffer[offset + 2], (*it)->get(), size);
+    offset += 2 + size;
+  }
+
+  buffer[offset] = m_pps_list.size();
+  ++offset;
+
+  mxforeach(it, m_pps_list) {
+    size = (*it)->get_size();
+
+    write_nalu_size(buffer + offset, size, 2);
+    memcpy(&buffer[offset + 2], (*it)->get(), size);
+    offset += 2 + size;
+  }
+
+  m_avcc = memory_cptr(new memory_c(buffer, final_size, true));
+
+//   mxinfo("CREATED avcc size %d adler32 0x%08x\n", final_size,
+//          calc_adler32(buffer, final_size));
+}
+
+void
+mpeg4::p10::avc_es_parser_c::dump_info() {
+  mxinfo("Dumping m_frames_out:\n");
+  deque<avc_frame_t>::iterator i;
+
+  mxforeach(i, m_frames_out) {
+    mxinfo("size %d key %d start " FMT_TIMECODEN " end " FMT_TIMECODEN
+           " ref1 " FMT_TIMECODEN " adler32 0x%08x\n",
+           i->m_data->get_size(), i->m_keyframe, ARG_TIMECODEN(i->m_start),
+           ARG_TIMECODEN(i->m_end), ARG_TIMECODEN(i->m_ref1),
+           calc_adler32(i->m_data->get(), i->m_data->get_size()));
+  }
 }

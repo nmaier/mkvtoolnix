@@ -18,6 +18,7 @@
 
 #include <errno.h>
 #include <ctype.h>
+#include <pcrecpp.h>
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
 #include <signal.h>
 #endif
@@ -75,6 +76,7 @@ file_type_t file_types[] =
    {"ac3 ", FILE_TYPE_AC3, "A/52 (aka AC3)"},
    {"avi ", FILE_TYPE_AVI, "AVI (Audio/Video Interleaved)"},
    {"dts ", FILE_TYPE_DTS, "DTS (Digital Theater System)"},
+   {"h264", FILE_TYPE_AVC_ES, "AVC/h.264 elementary streams"},
    {"mp2 ", FILE_TYPE_MP3, "MPEG-1 layer II audio (CBR and VBR/ABR)"},
    {"mp3 ", FILE_TYPE_MP3, "MPEG-1 layer III audio (CBR and VBR/ABR)"},
    {"mkv ", FILE_TYPE_MATROSKA, "general Matroska files"},
@@ -102,10 +104,15 @@ file_type_t file_types[] =
    {"    ", -1,      "FLAC"},
 #endif
    {"    ", -1,      "MP3 audio"},
+   {"    ", -1,      "RealAudio and RealVideo"},
    {"    ", -1,      "simple text subtitles"},
+   {"    ", -1,      "text subtitles (SRT, SSA/ASS)"},
+   {"    ", -1,      "TTA lossless audio"},
    {"    ", -1,      "uncompressed PCM audio"},
-   {"    ", -1,      "Video (not MPEG1/2)"},
+   {"    ", -1,      "video (MPEG 1, MPEG 2, MPEG 4 part 2 and 10)"},
+   {"    ", -1,      "VobSub subtitles"},
    {"    ", -1,      "Vorbis audio"},
+   {"    ", -1,      "WAVPACK lossless audio"},
    {NULL,  -1,      NULL}};
 
 /** \brief Outputs usage information
@@ -214,8 +221,10 @@ set_usage() {
     "  -t, --tags <TID:file>    Read tags for the track from a XML file.\n"
     "  --aac-is-sbr <TID>       Track with the ID is HE-AAC/AAC+/SBR-AAC.\n"
     "  --timecodes <TID:file>   Read the timecodes to be used from a file.\n"
-    "  --default-duration <TID:Xms|us|ns>\n"
+    "  --default-duration <TID:Xs|ms|us|ns|fps>\n"
     "                           Force the default duration of a track to X.\n"
+    "                           X can be a floating point number or a fration."
+    "\n"
     "\n Options that only apply to video tracks:\n"
     "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
     "                           Works only for video tracks.\n"
@@ -370,51 +379,69 @@ identify(const string &filename) {
 
 /** \brief Parse a number postfixed with a time-based unit
 
-   This function parsers a number that is postfixed with one of the four
-   units 's', 'ms', 'us' or 'ns'. It returns a number of nanoseconds.
+   This function parsers a number that is postfixed with one of the
+   four units 's', 'ms', 'us' or 'ns'. If the postfix is 'fps' then
+   this means 'frames per second'. It returns a number of nanoseconds.
 */
 int64_t
 parse_number_with_unit(const string &s,
                        const string &subject,
                        const string &argument,
                        string display_s = "") {
-  string unit;
-  int64_t value, multiplier, unit_length;
+  pcrecpp::RE_Options opt_caseless;
+  opt_caseless.set_caseless(true);
+  pcrecpp::RE re1("(-?\\d+\\.?\\d*)(s|ms|us|ns|fps)?", opt_caseless);
+  pcrecpp::RE re2("(-?\\d+)/(-?\\d+)(s|ms|us|ns|fps)?", opt_caseless);
+  string unit, s_n, s_d;
+  int64_t n, d, multiplier;
+  double d_value = 0.0;
+  bool is_fraction;
 
   if (display_s == "")
     display_s = s;
 
-  if (s.length() < 2)
+  if (re1.FullMatch(s, &s_n, &unit)) {
+    parse_double(s_n, d_value);
+    d = 1;
+    is_fraction = false;
+
+  } else if (re2.FullMatch(s, &s_n, &s_d, &unit)) {
+    parse_int(s_n, n);
+    parse_int(s_d, d);
+    is_fraction = true;
+
+  } else
     mxerror(_("'%s' is not a valid %s in '%s %s'.\n"),
             s.c_str(), subject.c_str(), argument.c_str(), display_s.c_str());
 
-  unit = s.substr(s.length() - 2, 2);
-
   multiplier = 1000000000;
-  unit_length = 2;
+
+  unit = downcase(unit);
+
   if (unit == "ms")
     multiplier = 1000000;
   else if (unit == "us")
     multiplier = 1000;
   else if (unit == "ns")
     multiplier = 1;
-  else if (unit.substr(1, 1) == "s")
-    unit_length = 1;
-  else
+  else if (unit == "fps") {
+    if (is_fraction)
+      return 1000000000ll * d / n;
+    else if (29.97 == d_value)
+      return (int64_t)(100100000.0 / 3.0);
+    else if (23.976 == d_value)
+      return 40040000;
+    else
+      return (int64_t)(1000000000.0 / d_value);
+  } else if (unit != "s")
     mxerror(_("'%s' does not contain a valid unit ('s', 'ms', 'us' or 'ns') "
               "in '%s %s'.\n"), s.c_str(), argument.c_str(),
             display_s.c_str());
 
-  if (s.length() < (unit_length + 1))
-    mxerror(_("'%s' is not a valid %s in '%s %s'.\n"),
-            s.c_str(), subject.c_str(), argument.c_str(), display_s.c_str());
-
-  if (!parse_int(s.substr(0, s.length() - unit_length), value))
-    mxerror(_("'%s' does not contain a valid number in front of the unit in "
-              "'%s %s'.\n"), s.c_str(), argument.c_str(), display_s.c_str());
-  value *= multiplier;
-
-  return value;
+  if (is_fraction)
+    return multiplier * n / d;
+  else
+    return (int64_t)(multiplier * d_value);
 }
 
 /** \brief Parse tags and add them to the list of all tags
@@ -1173,7 +1200,7 @@ parse_append_to(const string &s,
 
    The argument must be a tupel consisting of a track ID and the default
    duration separated by a colon. The duration must be postfixed by 'ms',
-   'us' or 'ns'.
+   'us', 'ns' or 'fps' (see \c parse_number_with_unit).
 */
 static void
 parse_default_duration(const string &s,

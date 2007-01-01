@@ -134,6 +134,27 @@ tab_input_format::tab_input_format(wxWindow *parent,
   siz_fg->Add(cob_stereo_mode, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL,
               STDSPACING);
 
+  st_fps = new wxStaticText(this, -1, wxT("FPS:"));
+  st_fps->Enable(false);
+  siz_fg->Add(st_fps, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
+
+  cob_fps =
+    new wxComboBox(this, ID_CB_FPS, wxT(""), wxDefaultPosition,
+                   wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
+  cob_fps->SetToolTip(TIP("Sets the default duration or number of frames "
+                          "per second for a track. This is only possible "
+                          "for input formats from which mkvmerge cannot "
+                          "get this information itself. At the moment this "
+                          "only includes AVC/h.264 elementary streams. "
+                          "This can either be a floating point number or "
+                          "a fraction."));
+  cob_fps->SetSizeHints(0, -1);
+  siz_fg->Add(cob_fps, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL,
+              STDSPACING);
+
+  siz_fg->Add(0, 0, 0, 0, 0);
+  siz_fg->Add(0, 0, 0, 0, 0);
+
   st_delay = new wxStaticText(this, wxID_STATIC, wxT("Delay (in ms):"));
   st_delay->Enable(false);
   siz_fg->Add(st_delay, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
@@ -230,6 +251,13 @@ tab_input_format::setup_control_contents() {
   cob_stereo_mode->Append(wxT("Right eye"));
   cob_stereo_mode->Append(wxT("Both eyes"));
 
+  cob_fps->Append(wxT(""));
+  cob_fps->Append(wxT("24"));
+  cob_fps->Append(wxT("25"));
+  cob_fps->Append(wxT("30"));
+  cob_fps->Append(wxT("30000/1001"));
+  cob_fps->Append(wxT("24000/1001"));
+
   if (sorted_charsets.Count() == 0) {
     for (i = 0; sub_charsets[i] != NULL; i++)
       sorted_charsets.Add(wxU(sub_charsets[i]));
@@ -256,6 +284,8 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   bool video = ('v' == type) && !appending;
   bool audio_app = ('a' == type);
   bool subs_app = ('s' == type);
+  bool avc_es = video && (ctype.Find(wxT("MPEG-4 part 10 ES")) >= 0) &&
+    (FILE_TYPE_AVC_ES == files[t->source].container);
 
   ctype = ctype.Lower();
 
@@ -269,6 +299,8 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   cob_fourcc->Enable(video);
   st_stereo_mode->Enable(video);
   cob_stereo_mode->Enable(video);
+  st_fps->Enable(avc_es);
+  cob_fps->Enable(avc_es);
   st_compression->Enable((ctype.Find(wxT("vobsub")) >= 0) && !appending);
   cob_compression->Enable((ctype.Find(wxT("vobsub")) >= 0) && !appending);
 
@@ -295,6 +327,7 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
     tc_display_width->SetValue(wxT(""));
     tc_display_height->SetValue(wxT(""));
     set_combobox_selection(cob_fourcc, wxT(""));
+    set_combobox_selection(cob_fps, wxT(""));
     set_combobox_selection(cob_stereo_mode, wxT(""));
     tc_delay->SetValue(wxT(""));
     tc_stretch->SetValue(wxT(""));
@@ -355,6 +388,14 @@ tab_input_format::on_fourcc_changed(wxCommandEvent &evt) {
 
   tracks[input->selected_track]->fourcc =
     cob_fourcc->GetStringSelection();
+}
+
+void
+tab_input_format::on_fps_changed(wxCommandEvent &evt) {
+  if (input->dont_copy_values_now || (input->selected_track == -1))
+    return;
+
+  tracks[input->selected_track]->fps = cob_fps->GetStringSelection();
 }
 
 void
@@ -421,6 +462,7 @@ BEGIN_EVENT_TABLE(tab_input_format, wxPanel)
   EVT_COMBOBOX(ID_CB_SUBTITLECHARSET, tab_input_format::on_subcharset_selected)
   EVT_COMBOBOX(ID_CB_ASPECTRATIO, tab_input_format::on_aspect_ratio_changed)
   EVT_COMBOBOX(ID_CB_FOURCC, tab_input_format::on_fourcc_changed)
+  EVT_COMBOBOX(ID_CB_FPS, tab_input_format::on_fps_changed)
   EVT_COMBOBOX(ID_CB_STEREO_MODE, tab_input_format::on_stereo_mode_changed)
   EVT_TEXT(ID_CB_SUBTITLECHARSET, tab_input_format::on_subcharset_selected)
   EVT_TEXT(ID_TC_DELAY, tab_input_format::on_delay_changed)

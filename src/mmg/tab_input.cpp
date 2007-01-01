@@ -195,6 +195,11 @@ tab_input::tab_input(wxWindow *parent):
   value_copy_timer.Start(333);
 
   SetDropTarget(new input_drop_target_c(this));
+
+  wxConfig *cfg = (wxConfig *)wxConfigBase::Get();
+
+  cfg->SetPath(wxT("/GUI"));
+  cfg->Read(wxT("avc_es_fps_warning_shown"), &avc_es_fps_warning_shown, false);
 }
 
 void
@@ -206,8 +211,9 @@ tab_input::set_track_mode(mmg_track_t *t) {
 void
 tab_input::select_file(bool append) {
   static struct { wxChar *title, *extensions; } file_types[] = {
-    { wxT("AAC (Advanced Audio Coding)"), wxT("aac m4a mp4") },
     { wxT("A/52 (aka AC3)"), wxT("ac3") },
+    { wxT("AAC (Advanced Audio Coding)"), wxT("aac m4a mp4") },
+    { wxT("AVC/h.264 elementary streams"), wxT("avc h264") },
     { wxT("AVI (Audio/Video Interleaved)"), wxT("avi") },
     { wxT("DTS (Digital Theater System)"), wxT("dts") },
     { wxT("FLAC (Free Lossless Audio Codec)"), wxT("flac ogg") },
@@ -470,6 +476,31 @@ tab_input::add_file(const wxString &file_name,
 
       file.tracks.push_back(track);
 
+      if ((FILE_TYPE_AVC_ES == file.container) &&
+          ('v' == track->type) &&
+          (track->ctype.Find(wxT("MPEG-4 part 10 ES")) >= 0) &&
+          (!avc_es_fps_warning_shown ||
+           mdlg->settings_page->cb_warn_usage->GetValue())) {
+        wxMessageBox(wxT("You're adding an AVC/h.264 elementary stream to "
+                         "the output file. "
+                         "mkvmerge cannot determine the number of frames "
+                         "per second for such files itself. "
+                         "Therefore you have to set this parameter "
+                         "yourself on the 'format specific options' page."
+                         "\n\n"
+                         "If you don't do this then mkvmerge will assume "
+                         "25 fps.\n\n"
+                         "This message will only be shown once unless you "
+                         "have enabled mmg's warnings on its 'settings' "
+                         "page."));
+        avc_es_fps_warning_shown = true;
+
+        wxConfig *cfg = (wxConfig *)wxConfigBase::Get();
+        cfg->SetPath(wxT("/GUI"));
+        cfg->Write(wxT("avc_es_fps_warning_shown"), true);
+        cfg->Flush();
+      }
+
     } else if ((pos = output[i].Find(wxT("container:"))) > 0) {
       wxString container, info;
 
@@ -502,6 +533,8 @@ tab_input::add_file(const wxString &file_name,
         file.container = FILE_TYPE_VOBSUB;
       else if (container == wxT("WAV"))
         file.container = FILE_TYPE_WAV;
+      else if (container == wxT("AVC/h.264"))
+        file.container = FILE_TYPE_AVC_ES;
       else
         file.container = FILE_TYPE_IS_UNKNOWN;
 
@@ -861,6 +894,7 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
   ti_format->cob_compression->SetValue(t->compression);
   ti_general->tc_timecodes->SetValue(t->timecodes);
   set_combobox_selection(ti_format->cob_fourcc, t->fourcc);
+  set_combobox_selection(ti_format->cob_fps, t->fps);
   ti_general->tc_track_name->SetFocus();
   ti_format->cob_stereo_mode->SetSelection(t->stereo_mode);
 
@@ -885,6 +919,7 @@ tab_input::on_value_copy_timer(wxTimerEvent &evt) {
   t = tracks[selected_track];
   t->aspect_ratio = ti_format->cob_aspect_ratio->GetValue();
   t->fourcc = ti_format->cob_fourcc->GetValue();
+  t->fps = ti_format->cob_fps->GetValue();
 }
 
 void
@@ -951,6 +986,7 @@ tab_input::save(wxConfigBase *cfg) {
       cfg->Write(wxT("display_width"), t->dwidth);
       cfg->Write(wxT("display_height"), t->dheight);
       cfg->Write(wxT("fourcc"), t->fourcc);
+      cfg->Write(wxT("fps"), t->fps);
       cfg->Write(wxT("stereo_mode"), t->stereo_mode);
       cfg->Write(wxT("compression"), t->compression);
       cfg->Write(wxT("track_name_was_present"), t->track_name_was_present);
@@ -1046,6 +1082,7 @@ tab_input::load(wxConfigBase *cfg,
       cfg->Read(wxT("display_width"), &tr->dwidth);
       cfg->Read(wxT("display_height"), &tr->dheight);
       cfg->Read(wxT("fourcc"), &tr->fourcc);
+      cfg->Read(wxT("fps"), &tr->fps);
       cfg->Read(wxT("stereo_mode"), &tr->stereo_mode, 0);
       cfg->Read(wxT("compression"), &tr->compression);
       cfg->Read(wxT("timecodes"), &tr->timecodes);
@@ -1142,7 +1179,7 @@ tab_input::validate_settings() {
   bool tracks_selected, dot_present, ok;
   int64_t dummy_i;
   string format, s;
-  wxString sid;
+  wxString sid, str;
 
   // Appending a file to itself is not allowed.
   for (tidx = 2; tidx < tracks.size(); tidx++)
@@ -1182,13 +1219,13 @@ tab_input::validate_settings() {
         return false;
       }
 
-      sid = t->stretch;
-      strip(sid);
-      if (sid.length() > 0) {
+      str = t->stretch;
+      strip(str);
+      if (s.length() > 0) {
         wxRegEx re_stretch(wxT("^[[:digit:]]+([,\\.][[:digit:]]+)?"
                                "(/[[:digit:]]+([,\\.][[:digit:]]+)?)?$"),
                            wxRE_ICASE);
-        if (!re_stretch.Matches(sid)) {
+        if (!re_stretch.Matches(str)) {
           wxMessageBox(wxT("The stretch setting for track nr. ") + sid +
                        wxT(" in file '") + f->file_name +
                        wxT("' is invalid."), wxT("mkvmerge GUI: error"),
@@ -1206,6 +1243,40 @@ tab_input::validate_settings() {
                      wxT("mkvmerge GUI: error"),
                      wxOK | wxCENTER | wxICON_ERROR);
         return false;
+      }
+
+      str = t->fps;
+      strip(str);
+      if (str.length() > 0) {
+        wxRegEx re_fps1(wxT("^[[:digit:]]+\\.?[[:digit:]]*$"));
+        wxRegEx re_fps2(wxT("^[[:digit:]]+/[[:digit:]]+$"));
+        if (!re_fps1.Matches(str) && !re_fps2.Matches(str)) {
+          wxMessageBox(wxT("The FPS setting for track nr. ") + sid +
+                       wxT(" in file '") + f->file_name +
+                       wxT("' is invalid."), wxT("mkvmerge GUI: error"),
+                       wxOK | wxCENTER | wxICON_ERROR);
+          return false;
+        }
+      } else if ((FILE_TYPE_AVC_ES == f->container) &&
+                 ('v' == t->type) &&
+                 (t->ctype.Find(wxT("MPEG-4 part 10 ES")) >= 0) &&
+                 mdlg->settings_page->cb_warn_usage->GetValue()) {
+        wxString message =
+          wxString::Format(wxT("You haven't selected a number of frames for "
+                               "track " LLD " of file '%s'. "
+                               "mkvmerge cannot determine the number of "
+                               "frames per second for such files itself. "
+                               "Therefore you have to set this parameter "
+                               "yourself on the 'format specific options' "
+                               "page."
+                               "\n\n"
+                               "If you don't do this then mkvmerge will "
+                               "assume 25 fps.\n\n"
+                               "Do you still want to continue?"),
+                           t->id, f->file_name.c_str());
+        if (wxMessageBox(message, wxT("No FPS selected for AVC/h.264 track"),
+                         wxYES | wxNO, mdlg) == wxNO)
+          return false;
       }
 
       s = wxMB(t->aspect_ratio);

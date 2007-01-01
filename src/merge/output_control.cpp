@@ -73,6 +73,7 @@
 #include "output_control.h"
 #include "r_aac.h"
 #include "r_ac3.h"
+#include "r_avc.h"
 #include "r_avi.h"
 #include "r_dts.h"
 #include "r_flac.h"
@@ -320,6 +321,8 @@ get_file_type(filelist_t &file) {
     type = FILE_TYPE_WAVPACK4;
   else if (mpeg_ps_reader_c::probe_file(io, size))
     type = FILE_TYPE_MPEG_PS;
+  else if (avc_es_reader_c::probe_file(io, size))
+    type = FILE_TYPE_AVC_ES;
   else {
     for (i = 0; (probe_sizes[i] != 0) && (type == FILE_TYPE_IS_UNKNOWN); i++)
       if (mp3_reader_c::probe_file(io, size, probe_sizes[i], 5))
@@ -1064,6 +1067,9 @@ create_readers() {
           break;
         case FILE_TYPE_AC3:
           file->reader = new ac3_reader_c(*file->ti);
+          break;
+        case FILE_TYPE_AVC_ES:
+          file->reader = new avc_es_reader_c(*file->ti);
           break;
         case FILE_TYPE_AVI:
           file->reader = new avi_reader_c(*file->ti);

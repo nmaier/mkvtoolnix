@@ -278,6 +278,11 @@ parse_int(const string &s,
 }
 string MTX_DLL_API to_string(int64_t i);
 bool MTX_DLL_API parse_double(const char *s, double &value);
+inline bool
+parse_double(const string &s,
+             double &value) {
+  return parse_double(s.c_str(), value);
+}
 
 int MTX_DLL_API get_arg_len(const char *fmt, ...);
 int MTX_DLL_API get_varg_len(const char *fmt, va_list ap);

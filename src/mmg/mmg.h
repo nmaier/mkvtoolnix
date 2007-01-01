@@ -60,7 +60,7 @@ struct mmg_track_t {
   bool default_track, aac_is_sbr, aac_is_sbr_detected;
   bool track_name_was_present;
   wxString language, track_name, cues, delay, stretch, sub_charset;
-  wxString tags, fourcc, aspect_ratio, compression, timecodes;
+  wxString tags, fourcc, aspect_ratio, compression, timecodes, fps;
   wxString dwidth, dheight;
   int stereo_mode;
 

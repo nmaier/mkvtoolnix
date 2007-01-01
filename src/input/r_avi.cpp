@@ -141,7 +141,7 @@ avi_reader_c::create_packetizer(int64_t tid) {
         !strcasecmp(codec, "MPG3") ||
         !strcasecmp(codec, "MP43"))
       divx_type = DIVX_TYPE_V3;
-    else if (is_mpeg4_p2_fourcc(codec))
+    else if (mpeg4::p2::is_fourcc(codec))
       divx_type = DIVX_TYPE_MPEG4;
 
     ti.private_data = (unsigned char *)avi->bitmap_info_header;
@@ -511,7 +511,7 @@ avi_reader_c::identify() {
     if (size > 0) {
       buffer = (unsigned char *)safemalloc(size);
       AVI_read_frame(avi, (char *)buffer, &key);
-      if (mpeg4_p2_extract_par(buffer, size, par_num, par_den)) {
+      if (mpeg4::p2::extract_par(buffer, size, par_num, par_den)) {
         width = AVI_video_width(avi);
         height = AVI_video_height(avi);
         aspect_ratio = (float)width / (float)height * (float)par_num /

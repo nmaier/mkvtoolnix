@@ -51,6 +51,7 @@
 #define ID_T_INPUTVALUES                  11030
 #define ID_B_APPENDFILE                   11031
 #define ID_CB_STEREO_MODE                 11032
+#define ID_CB_FPS                         11033
 #define ID_NB_OPTIONS                     11999
 
 extern const wxChar *predefined_aspect_ratios[];
@@ -95,13 +96,14 @@ class tab_input_format: public wxPanel {
 public:
   wxCheckBox *cb_aac_is_sbr;
   wxComboBox *cob_sub_charset, *cob_aspect_ratio, *cob_fourcc, *cob_compression;
-  wxComboBox *cob_stereo_mode;
+  wxComboBox *cob_stereo_mode, *cob_fps;
   wxTextCtrl *tc_delay, *tc_stretch;
   wxRadioButton *rb_aspect_ratio, *rb_display_dimensions;
   wxTextCtrl *tc_display_width, *tc_display_height;
 
   wxStaticText *st_delay, *st_stretch, *st_stereo_mode;
   wxStaticText *st_x, *st_sub_charset, *st_fourcc, *st_compression;
+  wxStaticText *st_fps;
 
   tab_input *input;
 
@@ -121,6 +123,7 @@ public:
   void on_display_width_changed(wxCommandEvent &evt);
   void on_display_height_changed(wxCommandEvent &evt);
   void on_fourcc_changed(wxCommandEvent &evt);
+  void on_fps_changed(wxCommandEvent &evt);
   void on_stereo_mode_changed(wxCommandEvent &evt);
   void on_compression_selected(wxCommandEvent &evt);
 };
@@ -142,6 +145,7 @@ public:
 
   wxTimer value_copy_timer;
   bool dont_copy_values_now;
+  bool avc_es_fps_warning_shown;
 
   int selected_file, selected_track;
 

@@ -1488,7 +1488,6 @@ kax_reader_c::create_packetizer(int64_t tid) {
                                                               t->v_width,
                                                               t->v_height,
                                                               nti));
-            PTZR(t->ptzr)->relaxed_timecode_checking = true;
 
           } else {
             mxinfo(FMT_TID "Using the video output module.\n",

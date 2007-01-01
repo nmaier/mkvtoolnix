@@ -446,7 +446,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
         fps = (double)10000000.0 / get_uint64_le(&sth->time_unit);
         width = get_uint32_le(&sth->sh.video.width);
         height = get_uint32_le(&sth->sh.video.height);
-        if (is_mpeg4_p2_fourcc(sth->subtype)) {
+        if (mpeg4::p2::is_fourcc(sth->subtype)) {
           ptzr = new mpeg4_p2_video_packetizer_c(this, fps, width, height,
                                                  false, ti);
           mxinfo(FMT_TID "Using the MPEG-4 part 2 video output module.\n",

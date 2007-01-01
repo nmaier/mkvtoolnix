@@ -1624,7 +1624,6 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
           add_packetizer(new mpeg4_p10_video_packetizer_c(this, dmx->fps,
                                                           dmx->v_width,
                                                           dmx->v_height, ti));
-        PTZR(dmx->ptzr)->relaxed_timecode_checking = true;
         ti.private_data = NULL;
 
         mxinfo(FMT_TID "Using the MPEG-4 part 10 (AVC) video output "

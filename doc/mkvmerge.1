@@ -391,14 +391,20 @@ normally calculates. Read the section about \fBEXTERNAL TIMECODE FILES\fR.
 .TP
 \fB\-\-default\-duration\fR <\fITID\fR:\fIx\fR>
 Forces the default duration of a given track to the specified value.
-The argument \fIx\fR must be postfixed with \fBs\fR, \fBms\fR, \fBus\fR or
-\fBns\fR to specify the default duration in seconds, milliseconds,
-microseconds and nanoseconds respectively.
+The argument \fIx\fR must be postfixed with \fBs\fR, \fBms\fR, \fBus\fR,
+\fBns\fR or \fBfps\fR to specify the default duration in seconds, milliseconds,
+microseconds, nanoseconds or "frames per second" respectively.
+The number \fIx\fR itself can be a floating point number or a fraction.
 .br
 This argument is mainly useful for debugging purposes and should normally
 not be used.
 If the default duration is not forced then mkvmerge will try to derive the
 track's default duration from the container and/or codec used.
+The only case in which this option is of use is when adding AVC/h.264
+elementary streams because these do not contain information about their
+number of frames or a default duration for each frame.
+For such files \fBmkvmerge\fR will assume a default duration of 25fps
+unless overridden.
 .TP
 \fB\-\-append\-to\fR <\fISFID1:STID1:DFID1:DTID1\fR[,...]>
 This option controls to which track another track is appended.

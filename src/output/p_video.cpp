@@ -306,9 +306,9 @@ mpeg1_2_video_packetizer_c::extract_fps(const unsigned char *buffer,
                                         int size) {
   int idx;
 
-  idx = mpeg1_2_extract_fps_idx(buffer, size);
+  idx = mpeg1_2::extract_fps_idx(buffer, size);
   if (idx >= 0) {
-    fps = mpeg1_2_get_fps(idx);
+    fps = mpeg1_2::get_fps(idx);
     if (fps > 0) {
       set_track_default_duration((int64_t)(1000000000.0 / fps));
       rerender_track_headers();
@@ -325,7 +325,7 @@ mpeg1_2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
   if (ti.aspect_ratio_given || ti.display_dimensions_given)
     return;
 
-  if (mpeg1_2_extract_ar(buffer, size, ar)) {
+  if (mpeg1_2::extract_ar(buffer, size, ar)) {
     ti.display_dimensions_given = true;
     if ((ar <= 0) || (ar == 1))
       set_video_display_width(width);
@@ -406,8 +406,8 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
   if (NULL == ti.private_data) {
     memory_c *config_data;
 
-    config_data = mpeg4_p2_parse_config_data(packet->data->get(),
-                                             packet->data->get_size());
+    config_data = mpeg4::p2::parse_config_data(packet->data->get(),
+                                               packet->data->get_size());
     if (NULL != config_data) {
       ti.private_data = (unsigned char *)safememdup(config_data->get(),
                                                     config_data->get_size());
@@ -423,8 +423,8 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
               "native mode.\n");
   }
 
-  mpeg4_p2_find_frame_types(packet->data->get(), packet->data->get_size(),
-                            frames);
+  mpeg4::p2::find_frame_types(packet->data->get(), packet->data->get_size(),
+                              frames);
 
   // Add a timecode and a duration if they've been given.
   if (-1 != packet->timecode)
@@ -672,7 +672,7 @@ mpeg4_p2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
     return;
   }
 
-  if (mpeg4_p2_extract_par(buffer, size, num, den)) {
+  if (mpeg4::p2::extract_par(buffer, size, num, den)) {
     aspect_ratio_extracted = true;
     ti.aspect_ratio_given = true;
     ti.aspect_ratio = (float)hvideo_pixel_width /
@@ -692,7 +692,7 @@ mpeg4_p2_video_packetizer_c::extract_size(const unsigned char *buffer,
                                           int size) {
   uint32_t width, height;
 
-  if (mpeg4_p2_extract_size(buffer, size, width, height)) {
+  if (mpeg4::p2::extract_size(buffer, size, width, height)) {
     size_extracted = true;
     if (!reader->appending &&
         ((width != hvideo_pixel_width) || (height != hvideo_pixel_height))) {
@@ -728,6 +728,8 @@ mpeg4_p10_video_packetizer_c(generic_reader_c *_reader,
                              track_info_c &_ti):
   video_packetizer_c(_reader, MKV_V_MPEG4_AVC, _fps, _width, _height, _ti) {
 
+  relaxed_timecode_checking = true;
+
   if ((ti.private_data != NULL) && (ti.private_size > 0))
     extract_aspect_ratio();
 }
@@ -738,7 +740,7 @@ mpeg4_p10_video_packetizer_c::extract_aspect_ratio() {
   unsigned char *priv;
 
   priv = ti.private_data;
-  if (mpeg4_p10_extract_par(ti.private_data, ti.private_size, num, den) &&
+  if (mpeg4::p10::extract_par(ti.private_data, ti.private_size, num, den) &&
       (0 != num) && (0 != den)) {
     if (!ti.aspect_ratio_given && !ti.display_dimensions_given) {
       double par = (double)num / (double)den;

@@ -18,6 +18,7 @@
 
 #include "os.h"
 
+#include <deque>
 #include <vector>
 
 #include "common.h"
@@ -126,6 +127,116 @@ private:
     }
   }
 };
+
+class MTX_DLL_API memory_slice_cursor_c {
+protected:
+  int m_pos, m_pos_in_slice, m_size;
+  deque<memory_cptr> m_slices;
+  deque<memory_cptr>::iterator m_slice;
+
+public:
+  memory_slice_cursor_c():
+    m_pos(0),
+    m_pos_in_slice(0),
+    m_size(0),
+    m_slice(m_slices.end()) {
+  };
+
+  memory_slice_cursor_c(const memory_slice_cursor_c &) {
+    die("memory_slice_cursor_c copy c'tor: Must not be used!");
+  };
+
+  ~memory_slice_cursor_c() {
+  };
+
+  void add_slice(memory_cptr slice) {
+    m_slices.push_back(slice);
+    m_size += slice->get_size();
+    if (m_slice == m_slices.end())
+      m_slice = m_slices.begin();
+  };
+
+  void add_slice(unsigned char *buffer, int size) {
+    add_slice(memory_cptr(new memory_c(buffer, size, false)));
+  };
+
+  unsigned char get_char() {
+    assert(m_pos < m_size);
+
+    unsigned char c = *((*m_slice)->get() + m_pos_in_slice);
+
+    ++m_pos_in_slice;
+    ++m_pos;
+
+    while ((m_slices.end() != m_slice) &&
+           (m_pos_in_slice >= (*m_slice)->get_size())) {
+      m_slice++;
+      m_pos_in_slice = 0;
+    }
+    return c;
+  };
+
+  bool char_available() {
+    return m_pos < m_size;
+  };
+
+  int get_remaining_size() {
+    return m_size - m_pos;
+  };
+
+  int get_size() {
+    return m_size;
+  };
+
+  int get_position() {
+    return m_pos;
+  };
+
+  void reset(bool clear_slices = false) {
+    if (clear_slices) {
+      m_slices.clear();
+      m_size = 0;
+    }
+    m_pos = 0;
+    m_pos_in_slice = 0;
+    m_slice = m_slices.begin();
+  };
+
+  void copy(unsigned char *dest, int start, int size) {
+    assert((start + size) <= m_size);
+
+    deque<memory_cptr>::iterator curr = m_slices.begin();
+    int offset = 0;
+
+    while (start > ((*curr)->get_size() + offset)) {
+      offset += (*curr)->get_size();
+      curr++;
+      assert(m_slices.end() != curr);
+    }
+    offset = start - offset;
+
+    while (0 < size) {
+      int num_bytes = (*curr)->get_size() - offset;
+      if (num_bytes > size)
+        num_bytes = size;
+
+      memcpy(dest, (*curr)->get() + offset, num_bytes);
+
+      size -= num_bytes;
+      dest += num_bytes;
+      curr++;
+      offset = 0;
+    }
+  };
+
+};
+
+inline memory_cptr
+clone_memory(void *buffer,
+             int size) {
+  return memory_cptr(new memory_c((unsigned char *)safememdup(buffer, size),
+                                  size));
+}
 
 struct buffer_t {
   unsigned char *m_buffer;
