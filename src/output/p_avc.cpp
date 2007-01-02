@@ -13,6 +13,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "os.h"
+
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -57,10 +59,11 @@ mpeg4_p10_es_video_packetizer_c(generic_reader_c *n_reader,
 
 void
 mpeg4_p10_es_video_packetizer_c::set_headers() {
-  if (-1 == htrack_default_duration)
-    htrack_default_duration = 40000000;
-  if (m_allow_timecode_generation)
+  if (m_allow_timecode_generation) {
+    if (-1 == htrack_default_duration)
+      htrack_default_duration = 40000000;
     m_parser.enable_timecode_generation(htrack_default_duration);
+  }
 
   set_video_pixel_width(m_width);
   set_video_pixel_height(m_height);
@@ -73,6 +76,8 @@ mpeg4_p10_es_video_packetizer_c::set_headers() {
 int
 mpeg4_p10_es_video_packetizer_c::process(packet_cptr packet) {
   try {
+    if (!m_allow_timecode_generation)
+      m_parser.add_timecode(packet->timecode);
     m_parser.add_bytes(packet->data->get(), packet->data->get_size());
     flush_frames();
 
@@ -139,10 +144,6 @@ mpeg4_p10_es_video_packetizer_c::flush_frames() {
       mxerror(FMT_TID "This AVC/h.264 track does not start with a key frame. "
               "Such files are not supported by mkvmerge.\n",
               ti.fname.c_str(), (int64_t)ti.id);
-//     mxinfo("frame: tc " FMT_TIMECODEN " ref1 " FMT_TIMECODEN " %s\n",
-//            ARG_TIMECODEN(frame.m_start), ARG_TIMECODEN(frame.m_ref1),
-//            frame.m_keyframe ? "key" : "");
-//     mxexit();
     add_packet(new packet_t(frame.m_data, frame.m_start,
                             frame.m_end > frame.m_start ?
                             frame.m_end - frame.m_start :

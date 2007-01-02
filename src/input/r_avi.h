@@ -72,6 +72,7 @@ protected:
   virtual int is_keyframe(unsigned char *data, long size, int suggestion);
   virtual file_status_e read_video();
   virtual file_status_e read_audio(avi_demuxer_t &demuxer);
+  virtual memory_cptr extract_avcc();
 };
 
 #endif  // __R_AVI_H

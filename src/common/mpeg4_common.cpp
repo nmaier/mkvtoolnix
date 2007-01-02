@@ -1302,9 +1302,12 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
 //   }
   t = m_timecodes.begin();
 
-  if (m_frames.empty() || (m_timecodes.size() < m_frames.size())) {
-//     mxinfo("woopsi 1 for numfr %d sti %d\n", m_frames.size(),
-//            m_timecodes.size());
+  if (m_frames.empty())
+    return;
+
+  if (m_timecodes.size() < m_frames.size()) {
+    mxverb(4, "mpeg4::p10::avc_es_parser_c::cleanup() numfr %d sti %d\n",
+           m_frames.size(), m_timecodes.size());
     m_timecodes.erase(m_timecodes.begin(),
                       m_timecodes.begin() + m_frames.size());
     m_frames.clear();

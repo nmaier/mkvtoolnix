@@ -36,6 +36,7 @@ extern "C" {
 #include "r_avi.h"
 #include "p_aac.h"
 #include "p_ac3.h"
+#include "p_avc.h"
 #include "p_dts.h"
 #include "p_mp3.h"
 #include "p_pcm.h"
@@ -169,6 +170,26 @@ avi_reader_c::create_packetizer(int64_t tid) {
       if (verbose)
         mxinfo(FMT_TID "Using the MPEG-4 part 2 video output module.\n",
                ti.fname.c_str(), (int64_t)0);
+    } else if (!strcasecmp(codec, "H264") ||
+               !strncasecmp(codec, "AVC", 3)) {
+      try {
+        memory_cptr avcc = extract_avcc();
+        mpeg4_p10_es_video_packetizer_c *ptzr =
+          new mpeg4_p10_es_video_packetizer_c(this, avcc, AVI_video_width(avi),
+                                              AVI_video_height(avi), ti);
+        vptzr = add_packetizer(ptzr);
+        ptzr->enable_timecode_generation(false);
+        ptzr->set_track_default_duration((int64_t)(1000000000 /
+                                                   AVI_frame_rate(avi)));
+        if (verbose)
+          mxinfo(FMT_TID "Using the MPEG-4 part 10 ES video output module.\n",
+                 ti.fname.c_str(), (int64_t)0);
+
+      } catch (...) {
+        mxerror(FMT_TID "Could not extract the decoder specific config data "
+                "(AVCC) from this AVC/h.264 track.\n",
+                ti.fname.c_str(), (int64_t)0);
+      }
     } else {
       vptzr = add_packetizer(new video_packetizer_c(this, NULL,
                                                     AVI_frame_rate(avi),
@@ -195,6 +216,34 @@ avi_reader_c::create_packetizers() {
 
   for (i = 0; i < AVI_audio_tracks(avi); i++)
     create_packetizer(i + 1);
+}
+
+memory_cptr
+avi_reader_c::extract_avcc() {
+  avc_es_parser_c parser;
+  int i, size, key;
+
+  for (i = 0; i < max_video_frames; ++i) {
+    size = AVI_frame_size(avi, i);
+    if (0 == size)
+      continue;
+
+    memory_cptr buffer(new memory_c((unsigned char *)safemalloc(size),
+                                    size, true));
+    AVI_set_video_position(avi, i);
+    size = AVI_read_frame(avi, (char *)buffer->get(), &key);
+    if (0 < size) {
+      parser.add_bytes(buffer->get(), size);
+      if (parser.headers_parsed()) {
+        AVI_set_video_position(avi, 0);
+        return parser.get_avcc();
+      }
+    }
+  }
+
+  AVI_set_video_position(avi, 0);
+
+  throw false;
 }
 
 // {{{ FUNCTION avi_reader_c::add_audio_demuxer
