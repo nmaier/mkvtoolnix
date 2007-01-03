@@ -170,8 +170,7 @@ avi_reader_c::create_packetizer(int64_t tid) {
       if (verbose)
         mxinfo(FMT_TID "Using the MPEG-4 part 2 video output module.\n",
                ti.fname.c_str(), (int64_t)0);
-    } else if (!strcasecmp(codec, "H264") ||
-               !strncasecmp(codec, "AVC", 3)) {
+    } else if (mpeg4::p10::is_avc_fourcc(codec)) {
       try {
         memory_cptr avcc = extract_avcc();
         mpeg4_p10_es_video_packetizer_c *ptzr =

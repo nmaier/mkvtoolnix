@@ -865,6 +865,14 @@ mpeg4::p10::extract_par(uint8_t *&buffer,
   }
 }
 
+bool
+mpeg4::p10::is_avc_fourcc(const char *fourcc) {
+  return
+    !strncasecmp(fourcc, "avc", 3) ||
+    !strncasecmp(fourcc, "h264", 4) ||
+    !strncasecmp(fourcc, "x264", 4);
+}
+
 /** \brief Extract the FPS from a MPEG video sequence header
 
    This function looks for a MPEG sequence header in a buffer containing

@@ -263,6 +263,7 @@ namespace mpeg4 {
 
     bool MTX_DLL_API extract_par(uint8_t *&buffer, int &buffer_size,
                                  uint32_t &par_num, uint32_t &par_den);
+    bool MTX_DLL_API is_avc_fourcc(const char *fourcc);
 
     struct avc_frame_t {
       memory_cptr m_data;

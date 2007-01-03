@@ -1,5 +1,8 @@
 2007-01-03  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: enhancement: Added "x264" to the list of recognized
+	FourCCs for AVC/h.264 video in AVI and Matroska files.
+
 	* mkvmerge: new feature: Added support for proper muxing of
 	AVC/h.264 tracks in Matroska files that were stored in the MS
 	compatibility mode (CodecID V_MS/VFW/FOURCC instead of
