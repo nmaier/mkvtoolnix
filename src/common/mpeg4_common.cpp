@@ -1056,7 +1056,7 @@ mpeg4::p10::avc_es_parser_c::add_bytes(unsigned char *buffer,
                                        int size) {
   memory_slice_cursor_c cursor;
   unsigned char *new_buffer;
-  uint32_t marker;
+  uint32_t marker, marker_size = 0, previous_marker_size = 0;
   int previous_pos = -1, new_size;
 
   if ((NULL != m_unparsed_buffer.get()) &&
@@ -1064,23 +1064,31 @@ mpeg4::p10::avc_es_parser_c::add_bytes(unsigned char *buffer,
     cursor.add_slice(m_unparsed_buffer);
   cursor.add_slice(buffer, size);
 
-  if (4 <= cursor.get_remaining_size()) {
-    marker = (unsigned int)cursor.get_char() << 24 |
+  if (3 <= cursor.get_remaining_size()) {
+    marker = 1 << 24 |
       (unsigned int)cursor.get_char() << 16 |
       (unsigned int)cursor.get_char() << 8 |
       (unsigned int)cursor.get_char();
-    previous_pos = -1;
 
     while (1) {
-      if (0x00000001 == marker) {
+      if (0x00000001 == marker)
+        marker_size = 4;
+      else if (0x00000001 == (marker & 0x00ffffff))
+        marker_size = 3;
+
+      if (0 != marker_size) {
         if (-1 != previous_pos) {
-          new_size = cursor.get_position() - previous_pos - 8;
+          new_size = cursor.get_position() - previous_pos -
+            previous_marker_size - marker_size;
           new_buffer = (unsigned char *)safemalloc(new_size);
-          cursor.copy(new_buffer, previous_pos + 4, new_size);
+          cursor.copy(new_buffer, previous_pos + previous_marker_size,
+                      new_size);
           memory_cptr nalu(new memory_c(new_buffer, new_size, true));
           handle_nalu(nalu);
         }
-        previous_pos = cursor.get_position() - 4;
+        previous_pos = cursor.get_position() - marker_size;
+        previous_marker_size = marker_size;
+        marker_size = 0;
       }
 
       if (!cursor.char_available())
@@ -1106,9 +1114,12 @@ mpeg4::p10::avc_es_parser_c::add_bytes(unsigned char *buffer,
 void
 mpeg4::p10::avc_es_parser_c::flush() {
   if ((NULL != m_unparsed_buffer.get()) ||
-      (5 <= m_unparsed_buffer->get_size()))
-    handle_nalu(clone_memory(m_unparsed_buffer->get() + 4,
-                             m_unparsed_buffer->get_size() - 4));
+      (5 <= m_unparsed_buffer->get_size())) {
+    int marker_size = get_uint32_be(m_unparsed_buffer->get()) == 0x0000001 ?
+      4 : 3;
+    handle_nalu(clone_memory(m_unparsed_buffer->get() + marker_size,
+                             m_unparsed_buffer->get_size() - marker_size));
+  }
   m_unparsed_buffer = memory_cptr(NULL);
   if (m_have_incomplete_frame) {
     m_frames.push_back(m_incomplete_frame);
