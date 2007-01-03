@@ -331,34 +331,39 @@
 
   <h3><a name="trackoptions">3.3. Options for each track</a></h3>
 
-  <p>Depending on the type of the currently selected track (audio, video,
-   subtitles) and even depending on the contents of the track only a subset of
-   all the track specific options are available. <b>Note:</b> Unless
-   overridden by the user <i>mkvmerge</i> will either copy track settings from
-   the input file if the source format supports such information, or it will
-   use sensitive default values.</p>
+  <p>Depending on the type of the currently selected track (audio,
+   video, subtitles) and even depending on the contents of the track
+   only a subset of all the track specific options are
+   available. These options span over two sub-pages. There
+   are <em>general track options</em> and <em>format specific
+   options</em>.</p>
 
   <div align="center">
    <p>
-    <img src="images/videotrackoptions.gif"
+    <img src="images/generaltrackoptions.gif"
          alt="typical options for a video track">
     <br>
-    <font size="-1">Figure 4: Typical options for a video track</font>
+    <font size="-1">Figure 4: Options common for all kinds of tracks</font>
    </p>
   </div>
 
-  <p>The available options are:</p>
+  <p><b>Note:</b> Unless overridden by the user <i>mkvmerge</i> will
+   either copy track settings from the input file if the source format
+   supports such information, or it will use sensitive default
+   values.</p>
+
+  <p>The available general options are:</p>
 
   <ul>
-   <li><code>Language:</code> The user can select the language for each track
-    regardless of its type. This language is coded in the ISO639-2 language
-    code. The drop-down box contains all ISO639-2 codes so the user does not
-    have to worry about selecting the wrong language code.</li>
-
    <li><code>Track name:</code> The user can set a name for the current
     track. This name is a free-form string. Practical examples could be
     'director's comments' or 'great view of Seattle'. Note that these names
     are not meant to contain the movie title!</li>
+
+   <li><code>Language:</code> The user can select the language for each track
+    regardless of its type. This language is coded in the ISO639-2 language
+    code. The drop-down box contains all ISO639-2 codes so the user does not
+    have to worry about selecting the wrong language code.</li>
 
    <li><code>Cues:</code> The <i>cues</i> are for Matroska what the index is
     for AVI files. They contain links to the key frames. Usually this option
@@ -367,24 +372,39 @@
     tracks can be found in <a href="mkvmerge.html"><i>mkvmerge</i>'s
      documentation</a>.</li>
 
-   <li><code>FourCC:</code> Matroska does not normally store the Four-CC
-    which is used in other containers to identify the codec used. Matroska
-    has its own format, called <i>CodecID</i>, but it also has an AVI
-    compatibility mode. In this mode the FourCC is also stored. With this
-    option the FourCC can be forced to a different value. However, you
-    cannot change the <i>CodecID</i> used by <i>mkvmerge</i>.
-    <br>
-    This option is only available for video tracks.</li>
+   <li><code>Make default track:</code> Matroska knows a flag which tells the
+    player that a specific track should be preferred upon playback if the user
+    does not chose another one. Of course each track <i>type</i> has its own
+    default track - e.g. the default audio track is the English one, and the
+    default subtitle track is the French one. If no track is set to be the
+    default track then <i>mkvmerge</i> will promote the first track of each
+    type that it finds to be the default track. This is consistent with the
+    behavior of various media players.</li>
+
+   <li><code>Tags:</code> For each track you can create a XML tags file. For a
+    full explanation of all tags please refer to the example file and <a
+    href="mkvmerge.html"><i>mkvmerge</i>'s own documentation</a>. In probably
+    99% of all cases you want to use THIS option and associate tags with a
+    specific track. The tags option on the global tab is probably not what you
+    need.</li>
+
+   <li><code>Tags:</code> Normally <i>mkvmerge</i> will derive the
+    timecodes for each frame from the source file, but it can also
+    read and use timecodes from an external text file whose name you
+    can specify here. This feature is a very advanced feature. Almost
+    all users should leave this entry empty.</li>
   </ul>
 
   <div align="center">
    <p>
-    <img src="images/audiotrackoptions.gif"
-         alt="typical options for an audio track">
+    <img src="images/videotrackoptions.gif"
+         alt="typical options for a video track">
     <br>
-    <font size="-1">Figure 5: Typical options for an audio track</font>
+    <font size="-1">Figure 5: Typical options for a video track</font>
    </p>
   </div>
+
+  <p>The format specific options include:</p>
 
   <ul>
    <li><code>Aspect ratio:</code> With this option the user can set the aspect
@@ -401,6 +421,47 @@
     <br>
     This option is only available for video tracks.</li>
 
+   <li><code>FourCC:</code> Matroska does not normally store the Four-CC
+    which is used in other containers to identify the codec used. Matroska
+    has its own format, called <i>CodecID</i>, but it also has an AVI
+    compatibility mode. In this mode the FourCC is also stored. With this
+    option the FourCC can be forced to a different value. However, you
+    cannot change the <i>CodecID</i> used by <i>mkvmerge</i>.
+    <br>
+    This option is only available for video tracks.</li>
+
+   <li><code>Stereo mode:</code> There's a technology of providing
+    pseudo three dimensional images by playing back two video tracks
+    that have been filmed from slightly different positions
+    simultaneously. Each eye only sees one of those tracks. This is
+    called <i>stereo mode</i>. Most users should leave this empty.
+    <br>
+    This option is only available for video tracks.</li>
+
+   <li><code>FPS:</code> Number of <i>frames per second</i> for
+    AVC/h.264 video tracks. When you add AVC/h.264 elementary streams
+    then <i>mkvmerge</i> must be told which how many frames per second
+    this video was recorded with because that piece of information is
+    not available in elementary streams. If you don't select anything
+    then <i>mkvmerge</i> defaults to 25. You can either enter a
+    floating point number (e.g. 29.97) or a fraction
+    (e.g. 30000/1001).
+    <br>
+    This option is only available for AVC/h.264 video tracks read from
+    AVC/h.264 elementary streams.</li>
+
+  </ul>
+
+  <div align="center">
+   <p>
+    <img src="images/audiotrackoptions.gif"
+         alt="typical options for an audio track">
+    <br>
+    <font size="-1">Figure 6: Typical options for an audio track</font>
+   </p>
+  </div>
+
+  <ul>
    <li><code>Delay (in ms):</code> In some cases audio and video are not
     synchronized properly. With this option the user can offset the audio
     track by a given amount, either positive or negative. <i>mkvmerge</i> will
@@ -425,7 +486,18 @@
     this is not true the user can select the correct charset.
     <br>
     This option is only available for text subtitle tracks.</li>
+  </ul>
 
+  <div align="center">
+   <p>
+    <img src="images/textsubtitlestrackoptions.gif"
+         alt="typical options for a text subtitle track">
+    <br>
+    <font size="-1">Figure 7: Typical options for a text subtitle track</font>
+   </p>
+  </div>
+
+  <ul>
    <li><code>Compression:</code> Matroska features a powerful system for
     compressing tracks with lossless compression algorithms. Those
     compressions can be applied to any given track, but some players only
@@ -436,26 +508,6 @@
     compression. That's why it is the default for VobSub tracks.
     <br>
     You should just leave this setting at <i>default</i>.</li>
-  </ul>
-
-  <div align="center">
-   <p>
-    <img src="images/textsubtitlestrackoptions.gif"
-         alt="typical options for a text subtitle track">
-    <br>
-    <font size="-1">Figure 6: Typical options for a text subtitle track</font>
-   </p>
-  </div>
-
-  <ul>
-   <li><code>Make default track:</code> Matroska knows a flag which tells the
-    player that a specific track should be preferred upon playback if the user
-    does not chose another one. Of course each track <i>type</i> has its own
-    default track - e.g. the default audio track is the English one, and the
-    default subtitle track is the French one. If no track is set to be the
-    default track then <i>mkvmerge</i> will promote the first track of each
-    type that it finds to be the default track. This is consistent with the
-    behavior of various media players.</li>
 
    <li><code>AAC is SBR/HE-AAC/AAC+:</code> The new technology called 'high
     efficiency AAC' has some drawbacks when it is being stored in
@@ -463,13 +515,6 @@
     for these files. Therefore the user has to check this option manually
     if it applies. Please note that this problem does not exist for HE-AAC
     stored in <code>.MP4</code> files.</li>
-
-   <li><code>Tags:</code> For each track you can create a XML tags file. For a
-    full explanation of all tags please refer to the example file and <a
-    href="mkvmerge.html"><i>mkvmerge</i>'s own documentation</a>. In probably
-    99% of all cases you want to use THIS option and associate tags with a
-    specific track. The tags option on the global tab is probably not what you
-    need.</li>
   </ul>
 
   <h3><a name="attachments">3.4. Attachments</a></h3>
@@ -490,7 +535,7 @@
     <img src="images/addingremovingattachments.gif"
          alt="adding and removing attachments">
     <br>
-    <font size="-1">Figure 7: Add and remove attachments with these
+    <font size="-1">Figure 8: Add and remove attachments with these
      buttons.</font>
    </p>
   </div>
@@ -508,7 +553,7 @@
     <img src="images/attachmentoptions.gif"
          alt="typical options for an attachment">
     <br>
-    <font size="-1">Figure 8: Typical options for an attachment</font>
+    <font size="-1">Figure 9: Typical options for an attachment</font>
    </p>
   </div>
 
@@ -532,7 +577,7 @@
     <img src="images/movietitle.gif"
          alt="selecting a movie title">
     <br>
-    <font size="-1">Figure 9: Selecting a title for the movie</font>
+    <font size="-1">Figure 10: Selecting a title for the movie</font>
    </p>
   </div>
 
@@ -567,7 +612,7 @@
     <img src="images/splitting.gif"
          alt="typical options for splitting">
     <br>
-    <font size="-1">Figure 10: Typical options for splitting. Create two files
+    <font size="-1">Figure 11: Typical options for splitting. Create two files
      which will be approx. 700megs big.</font>
    </p>
   </div>
@@ -652,7 +697,7 @@
     <img src="images/muxingwindow.gif"
          alt="the muxing window">
     <br>
-    <font size="-1">Figure 11: The muxing window</font>
+    <font size="-1">Figure 12: The muxing window</font>
    </p>
   </div>
 
@@ -715,7 +760,7 @@
    <p>
     <img src="images/jobmanager.gif" alt="the job management dialog">
     <br>
-    <font size="-1">Figure 12: The job management dialog</font>
+    <font size="-1">Figure 13: The job management dialog</font>
    </p>
   </div>
 
@@ -894,7 +939,7 @@
     <img src="images/chaptereditor.gif"
          alt="the chapter editor">
     <br>
-    <font size="-1">Figure 13: The chapter editor showing the example from
+    <font size="-1">Figure 14: The chapter editor showing the example from
      above</font>
    </p>
   </div>
