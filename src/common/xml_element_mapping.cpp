@@ -35,6 +35,7 @@ parser_element_t *segmentinfo_elements = NULL;
 static void
 init_mapping_table(parser_element_t *table) {
   const char *debug_name;
+  const EbmlCallbacks *result;
   int i;
 
   for (i = 0; table[i].name != NULL; i++) {
@@ -42,14 +43,12 @@ init_mapping_table(parser_element_t *table) {
       continue;
     debug_name = table[i].debug_name != NULL ? table[i].debug_name :
       table[i].name;
-    try {
-      table[i].id =
-        find_ebml_callbacks(KaxSegment::ClassInfos, debug_name).GlobalId;
-    } catch (...) {
+    result = find_ebml_callbacks(KaxSegment::ClassInfos, debug_name);
+    if (NULL == result)
       mxerror("Error initializing the tables for the chapter, tag and segment "
               "info elements: Could not find the element with the debug name "
               "'%s'. %s\n", debug_name, BUGMSG);
-    }
+    table[i].id = result->GlobalId;
   }
 }
 

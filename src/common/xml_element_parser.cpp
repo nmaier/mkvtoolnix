@@ -300,25 +300,28 @@ add_new_element(parser_data_t *pdata,
                pdata->mapping[parent_idx].name);
 
   if (pdata->depth > 0) {
-    const EbmlSemanticContext &context =
+    const EbmlCallbacks *callbacks =
       find_ebml_callbacks(KaxSegment::ClassInfos,
-                          pdata->mapping[parent_idx].id).Context;
+                          pdata->mapping[parent_idx].id);
     found = false;
-    for (i = 0; i < context.Size; i++)
-      if (pdata->mapping[elt_idx].id ==
-          context.MyTable[i].GetCallbacks.GlobalId) {
-        found = true;
-        break;
-      }
+    if (NULL != callbacks) {
+      const EbmlSemanticContext &context = callbacks->Context;
+      for (i = 0; i < context.Size; i++)
+        if (pdata->mapping[elt_idx].id ==
+            context.MyTable[i].GetCallbacks.GlobalId) {
+          found = true;
+          break;
+        }
+    }
 
     if (!found)
       xmlp_error(pdata, "<%s> is not a valid child element of <%s>.", name,
                  pdata->mapping[parent_idx].name);
 
-    const EbmlSemantic &semantic =
+    const EbmlSemantic *semantic =
       find_ebml_semantic(KaxSegment::ClassInfos,
                          pdata->mapping[elt_idx].id);
-    if (semantic.Unique) {
+    if ((NULL != semantic) && semantic->Unique) {
       m = dynamic_cast<EbmlMaster *>(xmlp_pelt);
       assert(m != NULL);
       for (i = 0; i < m->ListSize(); i++)

@@ -378,98 +378,98 @@ create_ebml_element(const EbmlCallbacks &callbacks,
   return NULL;
 }
 
-const EbmlCallbacks &
+const EbmlCallbacks *
 find_ebml_callbacks(const EbmlCallbacks &base,
                     const EbmlId &id) {
   const EbmlSemanticContext &context = base.Context;
+  const EbmlCallbacks *result;
   int i;
 
   if (base.GlobalId == id)
-    return base;
+    return &base;
 
   for (i = 0; i < context.Size; i++)
     if (id == context.MyTable[i].GetCallbacks.GlobalId)
-      return context.MyTable[i].GetCallbacks;
+      return &context.MyTable[i].GetCallbacks;
 
   for (i = 0; i < context.Size; i++) {
     if (!(context != context.MyTable[i].GetCallbacks.Context))
       continue;
-    try {
-      return find_ebml_callbacks(context.MyTable[i].GetCallbacks, id);
-    } catch (...) {
-    }
+    result = find_ebml_callbacks(context.MyTable[i].GetCallbacks, id);
+    if (NULL != result)
+      return result;
   }
 
-  throw "";
+  return NULL;
 }
 
-const EbmlCallbacks &
+const EbmlCallbacks *
 find_ebml_callbacks(const EbmlCallbacks &base,
                     const char *debug_name) {
   const EbmlSemanticContext &context = base.Context;
+  const EbmlCallbacks *result;
   int i;
 
   if (!strcmp(debug_name, base.DebugName))
-    return base;
+    return &base;
 
   for (i = 0; i < context.Size; i++)
     if (!strcmp(debug_name, context.MyTable[i].GetCallbacks.DebugName))
-      return context.MyTable[i].GetCallbacks;
+      return &context.MyTable[i].GetCallbacks;
 
   for (i = 0; i < context.Size; i++) {
     if (!(context != context.MyTable[i].GetCallbacks.Context))
       continue;
-    try {
-      return find_ebml_callbacks(context.MyTable[i].GetCallbacks, debug_name);
-    } catch (...) {
-    }
+    result = find_ebml_callbacks(context.MyTable[i].GetCallbacks, debug_name);
+    if (NULL != result)
+      return result;
   }
 
-  throw "";
+  return NULL;
 }
 
-const EbmlCallbacks &
+const EbmlCallbacks *
 find_ebml_parent_callbacks(const EbmlCallbacks &base,
                            const EbmlId &id) {
   const EbmlSemanticContext &context = base.Context;
+  const EbmlCallbacks *result;
   int i;
 
   for (i = 0; i < context.Size; i++)
     if (id == context.MyTable[i].GetCallbacks.GlobalId)
-      return base;
+      return &base;
 
   for (i = 0; i < context.Size; i++) {
     if (!(context != context.MyTable[i].GetCallbacks.Context))
       continue;
-    try {
-      return find_ebml_parent_callbacks(context.MyTable[i].GetCallbacks, id);
-    } catch (...) {
-    }
+    result = find_ebml_parent_callbacks(context.MyTable[i].GetCallbacks, id);
+    if (NULL != result)
+      return result;
   }
 
-  throw "";
+  return NULL;
 }
 
-const EbmlSemantic &
+const EbmlSemantic *
 find_ebml_semantic(const EbmlCallbacks &base,
                    const EbmlId &id) {
   const EbmlSemanticContext &context = base.Context;
+  const EbmlSemantic *result;
   int i;
 
   for (i = 0; i < context.Size; i++)
     if (id == context.MyTable[i].GetCallbacks.GlobalId)
-      return context.MyTable[i];
+      return &context.MyTable[i];
 
   for (i = 0; i < context.Size; i++) {
     if (!(context != context.MyTable[i].GetCallbacks.Context))
       continue;
-    try {
-      return find_ebml_semantic(context.MyTable[i].GetCallbacks, id);
-    } catch (...) {
-    }
+    result = find_ebml_semantic(context.MyTable[i].GetCallbacks, id);
+    if (NULL != result)
+      return result;
   }
 
-  throw "";
+  return NULL;
 }
 
 EbmlMaster *
