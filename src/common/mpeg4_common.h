@@ -244,8 +244,8 @@ namespace mpeg4 {
       int delta_pic_order_cnt_bottom;
       int delta_pic_order_cnt[2];
 
-      sps_info_t *sps;
-      pps_info_t *pps;
+      int sps;
+      int pps;
 
       slice_info_t() {
         memset(this, 0, sizeof(*this));

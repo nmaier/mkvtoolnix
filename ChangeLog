@@ -1,3 +1,8 @@
+2007-01-03  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed invalid memory access in the AVC ES
+	parser.
+
 2007-01-02  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Added support for proper muxing of

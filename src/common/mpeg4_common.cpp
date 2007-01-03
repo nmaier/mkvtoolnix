@@ -719,8 +719,7 @@ mpeg4::p10::parse_slice(memory_cptr &buffer,
                         vector<pps_info_t> &pps_info_list) {
   try {
     bit_cursor_c r(buffer->get(), buffer->get_size());
-    vector<sps_info_t>::iterator sps;
-    vector<pps_info_t>::iterator pps;
+    int sps_idx, pps_idx;
 
     memset(&si, 0, sizeof(si));
 
@@ -735,24 +734,28 @@ mpeg4::p10::parse_slice(memory_cptr &buffer,
     si.type = geread(r);        // slice_type
     si.pps_id = geread(r);      // pps_id
 
-    mxforeach(pps, pps_info_list)
-      if (pps->id == si.pps_id)
+    for (pps_idx = 0; pps_info_list.size() > pps_idx; ++pps_idx)
+      if (pps_info_list[pps_idx].id == si.pps_id)
         break;
-    if (pps_info_list.end() == pps)
+    if (pps_info_list.size() == pps_idx)
       return false;
 
-    mxforeach(sps, sps_info_list)
-      if (sps->id == pps->sps_id)
+    pps_info_t &pps = pps_info_list[pps_idx];
+
+    for (sps_idx = 0; sps_info_list.size() > sps_idx; ++sps_idx)
+      if (sps_info_list[sps_idx].id == pps.sps_id)
         break;
-    if (sps_info_list.end() == sps)
+    if (sps_info_list.size() == sps_idx)
       return false;
 
-    si.sps = &(*sps);
-    si.pps = &(*pps);
+    si.sps = sps_idx;
+    si.pps = pps_idx;
 
-    si.frame_num = r.get_bits(sps->log2_max_frame_num);
+    sps_info_t &sps = sps_info_list[sps_idx];
 
-    if (!sps->frame_mbs_only) {
+    si.frame_num = r.get_bits(sps.log2_max_frame_num);
+
+    if (!sps.frame_mbs_only) {
       si.field_pic_flag = r.get_bit();
       if (si.field_pic_flag)
         si.bottom_field_flag = r.get_bit();
@@ -761,16 +764,16 @@ mpeg4::p10::parse_slice(memory_cptr &buffer,
     if (NALU_TYPE_IDR_SLICE == si.nalu_type)
       si.idr_pic_id = geread(r);
 
-    if (0 == sps->pic_order_cnt_type) {
-      si.pic_order_cnt_lsb = r.get_bits(sps->log2_max_pic_order_cnt_lsb);
-      if (pps->pic_order_present && !si.field_pic_flag)
+    if (0 == sps.pic_order_cnt_type) {
+      si.pic_order_cnt_lsb = r.get_bits(sps.log2_max_pic_order_cnt_lsb);
+      if (pps.pic_order_present && !si.field_pic_flag)
         si.delta_pic_order_cnt_bottom = sgeread(r);
     }
 
-    if ((1 == sps->pic_order_cnt_type) &&
-        !sps->delta_pic_order_always_zero_flag) {
+    if ((1 == sps.pic_order_cnt_type) &&
+        !sps.delta_pic_order_always_zero_flag) {
       si.delta_pic_order_cnt[0] = sgeread(r);
-      if (pps->pic_order_present && !si.field_pic_flag)
+      if (pps.pic_order_present && !si.field_pic_flag)
         si.delta_pic_order_cnt[1] = sgeread(r);
     }
 
@@ -1279,10 +1282,13 @@ mpeg4::p10::avc_es_parser_c::default_cleanup() {
 
   while ((m_frames.end() != i) && (m_timecodes.end() != t)) {
     i->m_ref1 = r - *t;
-    r = i->m_start = i->m_end = *t;
+    r = i->m_start = (i - 1)->m_end = *t;
     ++i;
     ++t;
   }
+
+  if ((m_frames.size() >= 2) && (m_timecodes.end() != t))
+    (i - 1)->m_end = *t;
 
   m_frames_out.insert(m_frames_out.end(), m_frames.begin(), m_frames.end());
   m_timecodes.erase(m_timecodes.begin(),
@@ -1300,7 +1306,7 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
 //   mxforeach(t, m_timecodes) {
 //     mxinfo("  " FMT_TIMECODEN "\n", ARG_TIMECODEN(*t));
 //   }
-  t = m_timecodes.begin();
+//   t = m_timecodes.begin();
 
   if (m_frames.empty())
     return;
@@ -1315,13 +1321,14 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
   }
 
   slice_info_t &idr = i->m_si;
+  sps_info_t &sps = m_sps_info_list[idr.sps];
   if ((NALU_TYPE_IDR_SLICE != idr.nalu_type) ||
       ((AVC_SLICE_TYPE_I != idr.type) &&
        (AVC_SLICE_TYPE_SI != idr.type) &&
        (AVC_SLICE_TYPE2_I != idr.type) &&
        (AVC_SLICE_TYPE2_SI != idr.type)) ||
       (0 == idr.nal_ref_idc) ||
-      (2 == idr.sps->pic_order_cnt_type)) {
+      (2 == sps.pic_order_cnt_type)) {
     default_cleanup();
     return;
   }
@@ -1330,7 +1337,7 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
 
   vector<poc_t> poc;
 
-  if (0 == idr.sps->pic_order_cnt_type) {
+  if (0 == sps.pic_order_cnt_type) {
     poc.push_back(poc_t(0, 0));
     j = 1;
 
@@ -1348,14 +1355,14 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
 
       if ((si.pic_order_cnt_lsb < prev_pic_order_cnt_lsb) &&
           ((prev_pic_order_cnt_lsb - si.pic_order_cnt_lsb) >=
-           (1 << (idr.sps->log2_max_pic_order_cnt_lsb - 1))))
+           (1 << (sps.log2_max_pic_order_cnt_lsb - 1))))
         pic_order_cnt_msb = prev_pic_order_cnt_msb +
-          (1 << idr.sps->log2_max_pic_order_cnt_lsb);
+          (1 << sps.log2_max_pic_order_cnt_lsb);
       else if ((si.pic_order_cnt_lsb > prev_pic_order_cnt_lsb) &&
                ((si.pic_order_cnt_lsb - prev_pic_order_cnt_lsb) >
-                (1 << (idr.sps->log2_max_pic_order_cnt_lsb - 1))))
+                (1 << (sps.log2_max_pic_order_cnt_lsb - 1))))
         pic_order_cnt_msb = prev_pic_order_cnt_msb -
-          (1 << idr.sps->log2_max_pic_order_cnt_lsb);
+          (1 << sps.log2_max_pic_order_cnt_lsb);
       else
         pic_order_cnt_msb = prev_pic_order_cnt_msb;
 
@@ -1375,6 +1382,8 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
     return;
   }
 
+//   mxinfo("normal cleanup\n");
+
 //   mxinfo("dumping POC\n");
 //   for (j = 0; poc.size() > j; ++j)
 //     mxinfo("  %d: poc %d dec %d\n", j, poc[j].poc, poc[j].dec);
@@ -1392,9 +1401,12 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
 
   for (j = 1; poc.size() > j; ++j) {
     i->m_ref1 = poc[j-1].timecode - poc[j].timecode;
-    i->m_start = i->m_end = poc[j].timecode;
+    i->m_start = (i - 1)->m_end = poc[j].timecode;
     ++i;
   }
+
+  if ((m_frames.size() >= 2) && (m_timecodes.size() >= 3))
+    (i - 1)->m_end = m_timecodes[m_frames.size()];
 
   m_frames_out.insert(m_frames_out.end(), m_frames.begin(), m_frames.end());
   m_timecodes.erase(m_timecodes.begin(),
