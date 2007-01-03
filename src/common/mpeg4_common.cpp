@@ -1049,7 +1049,7 @@ mpeg4::p10::avc_es_parser_c::add_bytes(unsigned char *buffer,
   memory_slice_cursor_c cursor;
   unsigned char *new_buffer;
   uint32_t marker;
-  int previous_pos, new_size;
+  int previous_pos = -1, new_size;
 
   if ((NULL != m_unparsed_buffer.get()) &&
       (0 != m_unparsed_buffer->get_size()))
