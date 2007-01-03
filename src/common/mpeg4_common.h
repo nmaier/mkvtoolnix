@@ -313,7 +313,7 @@ namespace mpeg4 {
 
     class MTX_DLL_API avc_es_parser_c {
     protected:
-      int m_nalu_size_size;
+      int m_nalu_size_length;
 
       bool m_avcc_ready;
       memory_cptr m_avcc;
@@ -396,7 +396,7 @@ namespace mpeg4 {
       void cleanup();
       void default_cleanup();
       void write_nalu_size(unsigned char *buffer, int size,
-                           int nalu_size_size = -1);
+                           int nalu_size_length = -1);
       memory_cptr create_nalu_with_size(const memory_cptr &src,
                                         bool add_extra_data = false);
       void create_avcc();

@@ -1044,7 +1044,7 @@ mpeg4::p10::compare_poc_by_dec(const poc_t &poc1,
 }
 
 mpeg4::p10::avc_es_parser_c::avc_es_parser_c():
-  m_nalu_size_size(2),
+  m_nalu_size_length(2),
   m_avcc_ready(false),
   m_default_duration(40000000), m_frame_number(0),
   m_generate_timecodes(false),
@@ -1142,14 +1142,14 @@ mpeg4::p10::avc_es_parser_c::add_timecode(int64_t timecode) {
 void
 mpeg4::p10::avc_es_parser_c::write_nalu_size(unsigned char *buffer,
                                              int size,
-                                             int nalu_size_size) {
+                                             int nalu_size_length) {
   int i;
 
-  if (-1 == nalu_size_size)
-    nalu_size_size = m_nalu_size_size;
+  if (-1 == nalu_size_length)
+    nalu_size_length = m_nalu_size_length;
 
-  for (i = 0; i < nalu_size_size; i++)
-    buffer[i] = (size >> (8 * (nalu_size_size - 1 - i))) & 0xff;
+  for (i = 0; i < nalu_size_length; i++)
+    buffer[i] = (size >> (8 * (nalu_size_length - 1 - i))) & 0xff;
 }
 
 
@@ -1173,9 +1173,9 @@ mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
 //       mxinfo("appending\n");
       memory_c &mem = *(m_incomplete_frame.m_data.get());
       int offset = mem.get_size();
-      mem.resize(offset + m_nalu_size_size + nalu->get_size());
+      mem.resize(offset + m_nalu_size_length + nalu->get_size());
       write_nalu_size(mem.get() + offset, nalu->get_size());
-      memcpy(mem.get() + offset + m_nalu_size_size, nalu->get(),
+      memcpy(mem.get() + offset + m_nalu_size_length, nalu->get(),
              nalu->get_size());
       return;
 
@@ -1436,7 +1436,7 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
 memory_cptr
 mpeg4::p10::avc_es_parser_c::create_nalu_with_size(const memory_cptr &src,
                                                    bool add_extra_data) {
-  int final_size = m_nalu_size_size + src->get_size(), offset = 0, size;
+  int final_size = m_nalu_size_length + src->get_size(), offset = 0, size;
   unsigned char *buffer;
 
   if (add_extra_data) {
@@ -1457,7 +1457,7 @@ mpeg4::p10::avc_es_parser_c::create_nalu_with_size(const memory_cptr &src,
 
   size = src->get_size();
   write_nalu_size(buffer + offset, size);
-  memcpy(buffer + offset + m_nalu_size_size, src->get(), size);
+  memcpy(buffer + offset + m_nalu_size_length, src->get(), size);
 
   return memory_cptr(new memory_c(buffer, final_size, true));
 }
@@ -1482,7 +1482,7 @@ mpeg4::p10::avc_es_parser_c::create_avcc() {
   buffer[1] = sps.profile_idc;
   buffer[2] = sps.profile_compat;
   buffer[3] = sps.level_idc;
-  buffer[4] = 0xfc | (m_nalu_size_size - 1);
+  buffer[4] = 0xfc | (m_nalu_size_length - 1);
   buffer[5] = 0xe0 | m_sps_list.size();
 
   mxforeach(it, m_sps_list) {
