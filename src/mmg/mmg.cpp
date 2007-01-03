@@ -132,9 +132,6 @@ wxString cli_options[][2] = {
   { wxT("--engage force_passthrough_packetizer"),
     wxT("Forces the Matroska reader to use the generic passthrough "
         "packetizer even for known and supported track types.") },
-  { wxT("--engage allow_avc_in_vfw_mode"),
-    wxT("Allows storing AVC/h.264 video in Video-for-Windows compatibility "
-        "mode, e.g. when it is read from an AVI") },
   { wxT("--engage use_simpleblock"),
     wxT("Enable use of SimpleBlock instead of BlockGroup when possible.") },
   { wxT("--engage old_aac_codecid"),
