@@ -1,5 +1,10 @@
 2007-01-03  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: new feature: Added support for proper muxing of
+	AVC/h.264 tracks in Matroska files that were stored in the MS
+	compatibility mode (CodecID V_MS/VFW/FOURCC instead of
+	V_MPEG4/ISO/AVC).
+
 	* mkvmerge: bug fix: Fixed invalid memory access in the AVC ES
 	parser.
 

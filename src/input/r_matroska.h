@@ -51,6 +51,7 @@ struct kax_track_t {
 
   uint32_t min_cache, max_cache, max_blockadd_id;
   bool lacing_flag;
+  uint64_t default_duration;
 
   // Parameters for video tracks
   uint64_t v_width, v_height, v_dwidth, v_dheight;
@@ -90,12 +91,15 @@ struct kax_track_t {
 
   bool ignore_duration_hack;
 
+  memory_cptr first_frame_data;
+
   kax_track_t(): tnum(0), tuid(0),
                  ms_compat(false),
                  type(' '), sub_type(' '),
                  passthrough(false),
                  min_cache(0), max_cache(0),
                  lacing_flag(false),
+                 default_duration(0),
                  v_width(0), v_height(0), v_dwidth(0), v_dheight(0),
                  v_pcleft(0), v_pctop(0), v_pcright(0), v_pcbottom(0),
                  v_stereo_mode(STEREO_MODE_UNSPECIFIED),
@@ -168,6 +172,7 @@ protected:
   virtual int read_headers();
   virtual void init_passthrough_packetizer(kax_track_t *t);
   virtual void set_packetizer_headers(kax_track_t *t);
+  virtual void read_first_frame(kax_track_t *t);
   virtual kax_track_t *new_kax_track();
   virtual kax_track_t *find_track_by_num(uint64_t num, kax_track_t *c = NULL);
   virtual kax_track_t *find_track_by_uid(uint64_t uid, kax_track_t *c = NULL);
@@ -176,6 +181,8 @@ protected:
   virtual void handle_attachments(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void handle_chapters(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void handle_tags(mm_io_c *io, EbmlElement *l0, int64_t pos);
+
+  virtual void create_mpeg4_p10_es_video_packetizer(kax_track_t *t);
 };
 
 

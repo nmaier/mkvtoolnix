@@ -65,6 +65,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 
 #include "p_aac.h"
 #include "p_ac3.h"
+#include "p_avc.h"
 #include "p_dts.h"
 #if defined(HAVE_FLAC_FORMAT_H)
 #include "p_flac.h"
@@ -958,6 +959,7 @@ kax_reader_c::read_headers() {
           kdefdur = FINDFIRST(ktentry, KaxTrackDefaultDuration);
           if (kdefdur != NULL) {
             track->v_frate = 1000000000.0 / (float)uint64(*kdefdur);
+            track->default_duration = uint64(*kdefdur);
             if (verbose > 1)
               mxinfo(PFX "|  + Default duration: %.3fms ( = %.3f fps)\n",
                      (float)uint64(*kdefdur) / 1000000.0, track->v_frate);
@@ -1431,23 +1433,18 @@ kax_reader_c::create_packetizer(int64_t tid) {
 
     switch (t->type) {
       case 'v':
-        if (starts_with(t->codec_id, "V_MPEG4", 7) ||
-            (t->codec_id == MKV_V_MSCOMP) ||
-            starts_with(t->codec_id, "V_REAL", 6) ||
-            (t->codec_id == MKV_V_QUICKTIME) ||
-            (t->codec_id == MKV_V_MPEG1) ||
-            (t->codec_id == MKV_V_MPEG2) ||
-            (t->codec_id == MKV_V_THEORA)) {
-          const char *fourcc;
+        if ((t->codec_id == MKV_V_MSCOMP) &&
+            (!strcasecmp(t->v_fourcc, "h264") ||
+             !strncasecmp(t->v_fourcc, "avc", 3)))
+          create_mpeg4_p10_es_video_packetizer(t);
 
-          if ((t->codec_id == MKV_V_MSCOMP) &&
-              (t->private_data != NULL) &&
-              (t->private_size >= sizeof(alBITMAPINFOHEADER)))
-            fourcc = (const char *)
-              &((alBITMAPINFOHEADER *)t->private_data)->bi_compression;
-          else
-            fourcc = NULL;
-
+        else if (starts_with(t->codec_id, "V_MPEG4", 7) ||
+                 (t->codec_id == MKV_V_MSCOMP) ||
+                 starts_with(t->codec_id, "V_REAL", 6) ||
+                 (t->codec_id == MKV_V_QUICKTIME) ||
+                 (t->codec_id == MKV_V_MPEG1) ||
+                 (t->codec_id == MKV_V_MPEG2) ||
+                 (t->codec_id == MKV_V_THEORA)) {
           if ((t->codec_id == MKV_V_MPEG1) || (t->codec_id == MKV_V_MPEG2)) {
             int version;
 
@@ -1465,7 +1462,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
                                                             true, nti));
 
           } else if (IS_MPEG4_L2_CODECID(t->codec_id) ||
-                     ((fourcc != NULL) && IS_MPEG4_L2_FOURCC(fourcc))) {
+                     IS_MPEG4_L2_FOURCC(t->v_fourcc)) {
             bool is_native;
 
             mxinfo(FMT_TID "Using the MPEG-4 part 2 video output module.\n",
@@ -1760,7 +1757,180 @@ kax_reader_c::create_packetizers() {
   }
 }
 
+void
+kax_reader_c::create_mpeg4_p10_es_video_packetizer(kax_track_t *t) {
+  try {
+    read_first_frame(t);
+    if (NULL == t->first_frame_data.get())
+      throw false;
+
+    avc_es_parser_c parser;
+
+    if (sizeof(alBITMAPINFOHEADER) < t->private_size)
+      parser.add_bytes((unsigned char *)t->private_data +
+                       sizeof(alBITMAPINFOHEADER),
+                       t->private_size - sizeof(alBITMAPINFOHEADER));
+    parser.add_bytes(t->first_frame_data->get(),
+                     t->first_frame_data->get_size());
+    parser.flush();
+
+    if (!parser.headers_parsed())
+      throw false;
+
+    memory_cptr avcc = parser.get_avcc();
+
+    mpeg4_p10_es_video_packetizer_c *ptzr =
+      new mpeg4_p10_es_video_packetizer_c(this, avcc, t->v_width, t->v_height,
+                                          ti);
+    t->ptzr = add_packetizer(ptzr);
+    ptzr->enable_timecode_generation(false);
+    if (t->default_duration)
+      ptzr->set_track_default_duration(t->default_duration);
+    if (verbose)
+      mxinfo(FMT_TID "Using the MPEG-4 part 10 ES video output module.\n",
+             ti.fname.c_str(), (int64_t)t->tnum);
+
+  } catch (...) {
+    mxerror(FMT_TID "Could not extract the decoder specific config data "
+            "(AVCC) from this AVC/h.264 track.\n",
+            ti.fname.c_str(), (int64_t)t->tnum);
+  }
+}
+
 // }}}
+
+void
+kax_reader_c::read_first_frame(kax_track_t *t) {
+  if ((NULL != t->first_frame_data.get()) ||
+      (NULL == saved_l1))
+    return;
+
+  int upper_lvl_el, bgidx;
+  // Elements for different levels
+  EbmlElement *l1 = NULL, *l2 = NULL;
+  KaxSimpleBlock *block_simple;
+  KaxBlockGroup *block_group;
+  KaxBlock *block;
+  KaxClusterTimecode *ctc;
+  kax_track_t *block_track;
+
+  in->save_pos(saved_l1->GetElementPosition());
+
+  upper_lvl_el = 0;
+
+  try {
+    l1 = es->FindNextElement(segment->Generic().Context, upper_lvl_el,
+                             0xFFFFFFFFL, true);
+
+    while ((l1 != NULL) && (upper_lvl_el <= 0)) {
+      if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
+        cluster = (KaxCluster *)l1;
+        cluster->Read(*es, KaxCluster::ClassInfos.Context, upper_lvl_el, l2,
+                      true);
+
+        ctc = static_cast<KaxClusterTimecode *>
+          (cluster->FindFirstElt(KaxClusterTimecode::ClassInfos, false));
+        if (NULL != ctc) {
+          cluster_tc = uint64(*ctc);
+          cluster->InitTimecode(cluster_tc, tc_scale);
+        }
+
+        for (bgidx = 0; bgidx < cluster->ListSize(); bgidx++) {
+          if ((EbmlId(*(*cluster)[bgidx]) ==
+               KaxSimpleBlock::ClassInfos.GlobalId)) {
+            block_simple = static_cast<KaxSimpleBlock *>((*cluster)[bgidx]);
+
+            block_simple->SetParent(*cluster);
+            block_track = find_track_by_num(block_simple->TrackNum());
+
+            if ((NULL == block_track) ||
+                (0 == block_simple->NumberFrames()))
+              continue;
+
+            if (NULL == block_track->first_frame_data.get()) {
+              DataBuffer &data_buffer = block_simple->GetBuffer(0);
+              block_track->first_frame_data =
+                memory_cptr(new memory_c(data_buffer.Buffer(),
+                                         data_buffer.Size()));
+              block_track->content_decoder.
+                reverse(block_track->first_frame_data,
+                        CONTENT_ENCODING_SCOPE_BLOCK);
+              block_track->first_frame_data->grab();
+
+              if (t == block_track) {
+                in->restore_pos();
+                delete l1;
+                return;
+              }
+            }
+
+          } else if ((EbmlId(*(*cluster)[bgidx]) ==
+                      KaxBlockGroup::ClassInfos.GlobalId)) {
+            block_group = static_cast<KaxBlockGroup *>((*cluster)[bgidx]);
+            block = static_cast<KaxBlock *>
+              (block_group->FindFirstElt(KaxBlock::ClassInfos, false));
+            if (NULL == block)
+              continue;
+
+            block->SetParent(*cluster);
+            block_track = find_track_by_num(block->TrackNum());
+
+            if ((NULL == block_track) ||
+                (0 == block->NumberFrames()))
+              continue;
+
+            if (NULL == block_track->first_frame_data.get()) {
+              DataBuffer &data_buffer = block->GetBuffer(0);
+              block_track->first_frame_data =
+                memory_cptr(new memory_c(data_buffer.Buffer(),
+                                         data_buffer.Size()));
+              block_track->content_decoder.
+                reverse(block_track->first_frame_data,
+                        CONTENT_ENCODING_SCOPE_BLOCK);
+              block_track->first_frame_data->grab();
+
+              if (t == block_track) {
+                in->restore_pos();
+                delete l1;
+                return;
+              }
+            }
+          }
+        }
+      }
+
+      l1->SkipData(*es, l1->Generic().Context);
+
+      if (!in_parent(segment)) {
+        delete l1;
+        break;
+      }
+
+      if (upper_lvl_el > 0) {
+        upper_lvl_el--;
+        if (upper_lvl_el > 0)
+          break;
+        delete l1;
+        l1 = l2;
+        break;
+
+      } else if (upper_lvl_el < 0) {
+        upper_lvl_el++;
+
+      }
+
+      delete l1;
+      l1 = es->FindNextElement(segment->Generic().Context, upper_lvl_el,
+                               0xFFFFFFFFL, true);
+    } // while (l1 != NULL)
+
+
+  } catch (...) {
+  }
+
+  in->restore_pos();
+}
+
 
 // {{{ FUNCTION kax_reader_c::read()
 
