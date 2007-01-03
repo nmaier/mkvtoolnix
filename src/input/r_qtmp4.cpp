@@ -678,7 +678,7 @@ qtmp4_reader_c::handle_cmvd_atom(qt_atom_t atom,
   if (moov_size != zs.total_out)
     mxwarn(PFX "This file uses compressed headers, but the expected "
            "uncompressed size (%u) was not what is available after "
-           "uncompressing (%lu).\n", moov_size, zs.total_out);
+           "uncompressing (%lu).\n", moov_size, (unsigned long)zs.total_out);
   zret = inflateEnd(&zs);
 
   io = new mm_mem_io_c(moov_buf, zs.total_out);

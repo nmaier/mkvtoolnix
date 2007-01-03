@@ -2151,7 +2151,7 @@ main(int argc,
   finish_file(true);
 
   end = time(NULL);
-  mxinfo(_("Muxing took %ld second%s.\n"), end - start,
+  mxinfo(_("Muxing took %ld second%s.\n"), (long)(end - start),
          (end - start) == 1 ? "" : "s");
 
   cleanup();

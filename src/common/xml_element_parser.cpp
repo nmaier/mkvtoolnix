@@ -523,8 +523,8 @@ parse_xml_elements(const char *parser_name,
       if (XML_Parse(parser, buffer.c_str(), buffer.length(), done) == 0) {
         xerror = XML_GetErrorCode(parser);
         error = mxsprintf("XML parser error at line %d of '%s': %s. ",
-                          XML_GetCurrentLineNumber(parser), pdata->file_name,
-                          XML_ErrorString(xerror));
+                          (int)XML_GetCurrentLineNumber(parser),
+                          pdata->file_name, XML_ErrorString(xerror));
         if (xerror == XML_ERROR_INVALID_TOKEN)
           error += "Remember that special characters like &, <, > and \" "
             "must be escaped in the usual HTML way: &amp; for '&', "
