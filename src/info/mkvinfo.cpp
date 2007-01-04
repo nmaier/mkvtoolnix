@@ -98,6 +98,7 @@ int num_tracks = 0;
 bool use_gui = false;
 bool calc_checksums = false;
 bool show_summary = false;
+bool show_hexdump = false;
 uint64_t tc_scale = TIMECODE_SCALE;
 
 void
@@ -141,6 +142,7 @@ set_usage() {
     "                 description of what mkvinfo outputs.\n"
     "  -c, --checksum Calculate and display checksums of frame contents.\n"
     "  -s, --summary  Only show summaries of the contents, not each element.\n"
+    "  -x, --hexdump  Show the first 16 bytes of each frame as a hex dump.\n"
     "  --output-charset <charset>\n"
     "                 Output messages in this charset\n"
     "  -r, -o, --redirect-output file.ext\n"
@@ -231,6 +233,18 @@ _show_element(EbmlElement *l,
   }
 }
 
+string
+create_hexdump(DataBuffer &data) {
+  string hex(" hexdump");
+  int bmax = data.Size() >= 16 ? 16 : data.Size(), b;
+  const unsigned char *buf = data.Buffer();
+
+  for (b = 0; b < bmax; ++b)
+    hex += mxsprintf(" %02x", buf[b]);
+
+  return hex;
+}
+
 // }}}
 
 // {{{ FUNCTION parse_args
@@ -261,7 +275,9 @@ parse_args(vector<string> args,
     } else if ((args[i] == "-s") || (args[i] == "--summary")) {
       calc_checksums = true;
       show_summary = true;
-    } else if (file_name != "")
+    } else if ((args[i] == "-x") || (args[i] == "--hexdump"))
+      show_hexdump = true;
+    else if (file_name != "")
       mxerror("Only one input file is allowed.\n");
     else
       file_name = args[i];
@@ -1422,6 +1438,7 @@ def_handle2(block_group,
   int i2, i3, i4, i;
   vector<int> frame_sizes;
   vector<uint32_t> frame_adlers;
+  vector<string> frame_hexdumps;
   bool fref_found, bref_found;
   uint64_t lf_tnum, lf_timecode;
   float bduration;
@@ -1454,16 +1471,20 @@ def_handle2(block_group,
       bduration = -1.0;
       for (i = 0; i < (int)block.NumberFrames(); i++) {
         DataBuffer &data = block.GetBuffer(i);
+        string hex;
         if (calc_checksums)
           mxprints(adler, " (adler: 0x%08x)",
                    calc_adler32(data.Buffer(), data.Size()));
         else
           adler[0] = 0;
-        show_element(NULL, 4, "Frame with size %u%s", data.Size(),
-                     adler);
+        if (show_hexdump)
+          hex = create_hexdump(data);
+        show_element(NULL, 4, "Frame with size %u%s%s", data.Size(),
+                     adler, hex.c_str());
         frame_sizes.push_back(data.Size());
         frame_adlers.push_back(calc_adler32(data.Buffer(),
                                             data.Size()));
+        frame_hexdumps.push_back(hex);
       }
 
     } else if (is_id(l3, KaxBlockDuration)) {
@@ -1618,18 +1639,20 @@ def_handle2(block_group,
     for (fidx = 0; fidx < frame_sizes.size(); fidx++) {
       if (bduration != -1.0)
         mxinfo(Y("%c frame, track " LLU ", timecode " LLD " (" FMT_TIMECODE
-                 "), duration %.3f, size %d, adler 0x%08x\n"),
+                 "), duration %.3f, size %d, adler 0x%08x%s\n"),
                bref_found && fref_found ? 'B' :
                bref_found ? 'P' : !fref_found ? 'I' : 'P',
                lf_tnum, lf_timecode, ARG_TIMECODE(lf_timecode),
-               bduration, frame_sizes[fidx], frame_adlers[fidx]);
+               bduration, frame_sizes[fidx], frame_adlers[fidx],
+               frame_hexdumps[fidx].c_str());
       else
         mxinfo(Y("%c frame, track " LLU ", timecode " LLD " (" FMT_TIMECODE
-                 "), size %d, adler 0x%08x\n"),
+                 "), size %d, adler 0x%08x%s\n"),
                bref_found && fref_found ? 'B' :
                bref_found ? 'P' : !fref_found ? 'I' : 'P',
                lf_tnum, lf_timecode, ARG_TIMECODE(lf_timecode),
-               frame_sizes[fidx], frame_adlers[fidx]);
+               frame_sizes[fidx], frame_adlers[fidx],
+               frame_hexdumps[fidx].c_str());
     }
   } else if (verbose > 2)
     show_element(NULL, 2, Y("[%c frame for track " LLU ", timecode " LLD "]"),
@@ -1665,12 +1688,16 @@ def_handle2(simple_block,
   bduration = -1.0;
   for (i = 0; i < (int)block.NumberFrames(); i++) {
     DataBuffer &data = block.GetBuffer(i);
+    string hex;
     if (calc_checksums)
       mxprints(adler, " (adler: 0x%08x)",
                calc_adler32(data.Buffer(), data.Size()));
     else
       adler[0] = 0;
-    show_element(NULL, 4, "Frame with size %u%s", data.Size(), adler);
+    if (show_hexdump)
+      hex = create_hexdump(data);
+    show_element(NULL, 4, "Frame with size %u%s%s", data.Size(), adler,
+                 hex.c_str());
     frame_sizes.push_back(data.Size());
     frame_adlers.push_back(calc_adler32(data.Buffer(),
                                         data.Size()));
