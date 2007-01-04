@@ -39,6 +39,15 @@ namespace mpeg4 {
   };
 
   namespace p10 {
+    struct poc_t {
+      int poc, dec;
+      int64_t timecode, duration;
+
+      poc_t(int p, int d):
+        poc(p), dec(d), timecode(0), duration(0) {
+      };
+    };
+
     static bool compare_poc_by_poc(const poc_t &poc1, const poc_t &poc2);
     static bool compare_poc_by_dec(const poc_t &poc1, const poc_t &poc2);
   };
@@ -1417,23 +1426,30 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
 
   sort(poc.begin(), poc.end(), compare_poc_by_poc);
 
-  for (j = 0; poc.size() > j; ++j, ++t)
+  int num_frames = m_frames.size(), num_timecodes = m_timecodes.size();
+
+  for (j = 0; num_frames > j; ++j, ++t) {
     poc[j].timecode = *t;
+    poc[j].duration =
+      (j + 1) < num_frames ? *(t + 1) - poc[j].timecode :
+      num_timecodes > num_frames ?
+      m_timecodes[num_frames] - poc[j].timecode :
+      0;
+  }
 
   sort(poc.begin(), poc.end(), compare_poc_by_dec);
 
   i = m_frames.begin();
-  i->m_start = i->m_end = poc[0].timecode;
+  i->m_start = poc[0].timecode;
+  i->m_end = poc[0].timecode + poc[0].duration;
   ++i;
 
   for (j = 1; poc.size() > j; ++j) {
     i->m_ref1 = poc[j-1].timecode - poc[j].timecode;
-    i->m_start = (i - 1)->m_end = poc[j].timecode;
+    i->m_start = poc[j].timecode;
+    i->m_end = poc[j].timecode + poc[j].duration;
     ++i;
   }
-
-  if ((m_frames.size() >= 2) && (m_timecodes.size() >= 3))
-    (i - 1)->m_end = m_timecodes[m_frames.size()];
 
   m_frames_out.insert(m_frames_out.end(), m_frames.begin(), m_frames.end());
   m_timecodes.erase(m_timecodes.begin(),

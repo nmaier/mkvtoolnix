@@ -302,15 +302,6 @@ namespace mpeg4 {
       };
     };
 
-    struct poc_t {
-      int poc, dec;
-      int64_t timecode;
-
-      poc_t(int p, int d):
-        poc(p), dec(d) {
-      };
-    };
-
     class MTX_DLL_API nalu_size_length_error_c {
     protected:
       int m_required_length;
