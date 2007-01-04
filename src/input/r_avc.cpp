@@ -41,25 +41,24 @@ using namespace mpeg4::p10;
 int
 avc_es_reader_c::probe_file(mm_io_c *io,
                             int64_t size) {
-  unsigned char *buf;
-  int num_read;
-
-  if (size < PROBESIZE)
-    return 0;
   try {
-    buf = (unsigned char *)safemalloc(READ_SIZE);
-    io->setFilePointer(0, seek_beginning);
-    num_read = io->read(buf, READ_SIZE);
-    if (num_read < 4) {
-      safefree(buf);
+    if (size < PROBESIZE)
       return 0;
-    }
+
+    memory_cptr buf(new memory_c((unsigned char *)safemalloc(READ_SIZE),
+                                 READ_SIZE));
+    int num_read;
+
     io->setFilePointer(0, seek_beginning);
+    num_read = io->read(buf->get(), READ_SIZE);
+    io->setFilePointer(0, seek_beginning);
+    if (num_read < 4)
+      return 0;
 
     avc_es_parser_c parser;
     parser.set_nalu_size_length(4);
     parser.enable_timecode_generation(40000000);
-    parser.add_bytes(buf, num_read);
+    parser.add_bytes(buf->get(), num_read);
 
     return parser.headers_parsed();
 
