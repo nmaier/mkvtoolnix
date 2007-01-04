@@ -1064,7 +1064,6 @@ void
 mpeg4::p10::avc_es_parser_c::add_bytes(unsigned char *buffer,
                                        int size) {
   memory_slice_cursor_c cursor;
-  unsigned char *new_buffer;
   uint32_t marker, marker_size = 0, previous_marker_size = 0;
   int previous_pos = -1, new_size;
 
@@ -1087,12 +1086,11 @@ mpeg4::p10::avc_es_parser_c::add_bytes(unsigned char *buffer,
 
       if (0 != marker_size) {
         if (-1 != previous_pos) {
-          new_size = cursor.get_position() - previous_pos -
-            previous_marker_size - marker_size;
-          new_buffer = (unsigned char *)safemalloc(new_size);
-          cursor.copy(new_buffer, previous_pos + previous_marker_size,
+          new_size = cursor.get_position() - marker_size - previous_pos -
+            previous_marker_size;
+          memory_cptr nalu(new memory_c(safemalloc(new_size), new_size, true));
+          cursor.copy(nalu->get(), previous_pos + previous_marker_size,
                       new_size);
-          memory_cptr nalu(new memory_c(new_buffer, new_size, true));
           handle_nalu(nalu);
         }
         previous_pos = cursor.get_position() - marker_size;
@@ -1112,10 +1110,9 @@ mpeg4::p10::avc_es_parser_c::add_bytes(unsigned char *buffer,
 
   new_size = cursor.get_size() - previous_pos;
   if (0 != new_size) {
-    new_buffer = (unsigned char *)safemalloc(new_size);
-    cursor.copy(new_buffer, previous_pos, new_size);
-    m_unparsed_buffer = memory_cptr(new memory_c(new_buffer, new_size,
-                                                 true));
+    m_unparsed_buffer = memory_cptr(new memory_c(safemalloc(new_size),
+                                                 new_size, true));
+    cursor.copy(m_unparsed_buffer->get(), previous_pos, new_size);
   } else
     m_unparsed_buffer = memory_cptr(NULL);
 }
@@ -1214,7 +1211,7 @@ mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
     cleanup();
 
 
-  m_incomplete_frame.m_data = create_nalu_with_size(nalu, 0 == m_frame_number);
+  m_incomplete_frame.m_data = create_nalu_with_size(nalu, true);
 
   if (m_generate_timecodes)
     add_timecode(m_frame_number * m_default_duration);
@@ -1285,6 +1282,8 @@ mpeg4::p10::avc_es_parser_c::handle_nalu(memory_cptr nalu) {
 
     case NALU_TYPE_END_OF_SEQ:
     case NALU_TYPE_END_OF_STREAM:
+    case NALU_TYPE_ACCESS_UNIT:
+    case NALU_TYPE_FILLER_DATA:
       // Skip these.
       break;
 
