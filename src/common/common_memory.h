@@ -32,10 +32,10 @@ class MTX_DLL_API memory_c {
 public:
   typedef unsigned char X;
 
-  explicit memory_c(X *p = NULL, int s = 0, bool f = false): // allocate a new counter
+  explicit memory_c(void *p = NULL, int s = 0, bool f = false): // allocate a new counter
     its_counter(NULL) {
     if (p)
-      its_counter = new counter(p, s, f);
+      its_counter = new counter((unsigned char *)p, s, f);
   }
 
   ~memory_c() {
