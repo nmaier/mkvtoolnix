@@ -895,6 +895,7 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
   ti_general->tc_timecodes->SetValue(t->timecodes);
   set_combobox_selection(ti_format->cob_fourcc, t->fourcc);
   set_combobox_selection(ti_format->cob_fps, t->fps);
+  ti_format->cob_nalu_size_length->SetSelection(t->nalu_size_length - 2);
   ti_general->tc_track_name->SetFocus();
   ti_format->cob_stereo_mode->SetSelection(t->stereo_mode);
 
@@ -987,6 +988,7 @@ tab_input::save(wxConfigBase *cfg) {
       cfg->Write(wxT("display_height"), t->dheight);
       cfg->Write(wxT("fourcc"), t->fourcc);
       cfg->Write(wxT("fps"), t->fps);
+      cfg->Write(wxT("nalu_size_length"), t->nalu_size_length);
       cfg->Write(wxT("stereo_mode"), t->stereo_mode);
       cfg->Write(wxT("compression"), t->compression);
       cfg->Write(wxT("track_name_was_present"), t->track_name_was_present);
@@ -1083,6 +1085,7 @@ tab_input::load(wxConfigBase *cfg,
       cfg->Read(wxT("display_height"), &tr->dheight);
       cfg->Read(wxT("fourcc"), &tr->fourcc);
       cfg->Read(wxT("fps"), &tr->fps);
+      cfg->Read(wxT("nalu_size_length"), &tr->nalu_size_length, 2);
       cfg->Read(wxT("stereo_mode"), &tr->stereo_mode, 0);
       cfg->Read(wxT("compression"), &tr->compression);
       cfg->Read(wxT("timecodes"), &tr->timecodes);

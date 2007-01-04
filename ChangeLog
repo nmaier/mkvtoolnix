@@ -1,5 +1,8 @@
 2007-01-04  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: enhancement: Added an input for the new "NALU size length"
+	parameter.
+
 	* mkvmerge: bug fix: The NALU size length can be overridden for
 	AVC/h.264 elementary streams. It defaults to 2 which might not be
 	enough for larger frames/slices.

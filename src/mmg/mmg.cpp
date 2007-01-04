@@ -40,6 +40,7 @@
 #include "commonebml.h"
 #include "extern_data.h"
 #include "jobs.h"
+#include "mkvmerge.h"
 #include "matroskalogo.xpm"
 #include "mmg.h"
 #include "mmg_dialog.h"
@@ -1475,6 +1476,15 @@ mmg_dialog::update_command_line() {
       if (t->fps.Length() > 0) {
         clargs.Add(wxT("--default-duration"));
         clargs.Add(sid + wxT(":") + t->fps + wxT("fps"));
+      }
+
+      if ((FILE_TYPE_AVC_ES == f->container) &&
+          ('v' == t->type) &&
+          (t->ctype.Find(wxT("MPEG-4 part 10 ES")) >= 0) &&
+          (2 != t->nalu_size_length)) {
+        clargs.Add(wxT("--nalu-size-length"));
+        clargs.Add(wxString::Format(wxT("%s:%d"), sid.c_str(),
+                                    t->nalu_size_length));
       }
 
       if (!t->appending && (0 != t->stereo_mode)) {

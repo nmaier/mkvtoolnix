@@ -152,8 +152,27 @@ tab_input_format::tab_input_format(wxWindow *parent,
   siz_fg->Add(cob_fps, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL,
               STDSPACING);
 
-  siz_fg->Add(0, 0, 0, 0, 0);
-  siz_fg->Add(0, 0, 0, 0, 0);
+  st_nalu_size_length = new wxStaticText(this, -1, wxT("NALU size length:"));
+  st_nalu_size_length->Enable(false);
+  siz_fg->Add(st_nalu_size_length, 0, wxALIGN_CENTER_VERTICAL | wxALL,
+              STDSPACING);
+
+  cob_nalu_size_length =
+    new wxComboBox(this, ID_CB_NALU_SIZE_LENGTH, wxT(""), wxDefaultPosition,
+                   wxDefaultSize, 0, NULL, wxCB_READONLY);
+  cob_nalu_size_length->
+    SetToolTip(TIP("Forces the NALU size length to a certain number of bytes. "
+                   "This parameter is only available for AVC/h.264 elementary "
+                   "streams read from AVC/h.264 ES files, AVIs or Matroska "
+                   "files created with '--engage allow_avc_in_vwf_mode'. "
+                   "It defaults to 2 bytes, but there are files that contain "
+                   "frames or slices that are bigger than 65535 bytes. "
+                   "For such files you have to use this parameter and "
+                   "increase the size to 3 or mkvmerge will abort with an "
+                   "error."));
+  cob_nalu_size_length->SetSizeHints(0, -1);
+  siz_fg->Add(cob_nalu_size_length, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL,
+              STDSPACING);
 
   st_delay = new wxStaticText(this, wxID_STATIC, wxT("Delay (in ms):"));
   st_delay->Enable(false);
@@ -258,6 +277,10 @@ tab_input_format::setup_control_contents() {
   cob_fps->Append(wxT("30000/1001"));
   cob_fps->Append(wxT("24000/1001"));
 
+  cob_nalu_size_length->Append(wxT("2"));
+  cob_nalu_size_length->Append(wxT("3"));
+  cob_nalu_size_length->Append(wxT("4"));
+
   if (sorted_charsets.Count() == 0) {
     for (i = 0; sub_charsets[i] != NULL; i++)
       sorted_charsets.Add(wxU(sub_charsets[i]));
@@ -301,6 +324,8 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   cob_stereo_mode->Enable(video);
   st_fps->Enable(avc_es);
   cob_fps->Enable(avc_es);
+  st_nalu_size_length->Enable(avc_es);
+  cob_nalu_size_length->Enable(avc_es);
   st_compression->Enable((ctype.Find(wxT("vobsub")) >= 0) && !appending);
   cob_compression->Enable((ctype.Find(wxT("vobsub")) >= 0) && !appending);
 
@@ -328,6 +353,7 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
     tc_display_height->SetValue(wxT(""));
     set_combobox_selection(cob_fourcc, wxT(""));
     set_combobox_selection(cob_fps, wxT(""));
+    cob_nalu_size_length->SetSelection(0);
     set_combobox_selection(cob_stereo_mode, wxT(""));
     tc_delay->SetValue(wxT(""));
     tc_stretch->SetValue(wxT(""));
@@ -399,6 +425,15 @@ tab_input_format::on_fps_changed(wxCommandEvent &evt) {
 }
 
 void
+tab_input_format::on_nalu_size_length_changed(wxCommandEvent &evt) {
+  if (input->dont_copy_values_now || (input->selected_track == -1))
+    return;
+
+  tracks[input->selected_track]->nalu_size_length =
+    cob_nalu_size_length->GetSelection() + 2;
+}
+
+void
 tab_input_format::on_stereo_mode_changed(wxCommandEvent &evt) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
@@ -463,6 +498,8 @@ BEGIN_EVENT_TABLE(tab_input_format, wxPanel)
   EVT_COMBOBOX(ID_CB_ASPECTRATIO, tab_input_format::on_aspect_ratio_changed)
   EVT_COMBOBOX(ID_CB_FOURCC, tab_input_format::on_fourcc_changed)
   EVT_COMBOBOX(ID_CB_FPS, tab_input_format::on_fps_changed)
+  EVT_COMBOBOX(ID_CB_NALU_SIZE_LENGTH,
+               tab_input_format::on_nalu_size_length_changed)
   EVT_COMBOBOX(ID_CB_STEREO_MODE, tab_input_format::on_stereo_mode_changed)
   EVT_TEXT(ID_CB_SUBTITLECHARSET, tab_input_format::on_subcharset_selected)
   EVT_TEXT(ID_TC_DELAY, tab_input_format::on_delay_changed)

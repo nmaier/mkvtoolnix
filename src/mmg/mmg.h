@@ -61,6 +61,7 @@ struct mmg_track_t {
   bool track_name_was_present;
   wxString language, track_name, cues, delay, stretch, sub_charset;
   wxString tags, fourcc, aspect_ratio, compression, timecodes, fps;
+  int nalu_size_length;
   wxString dwidth, dheight;
   int stereo_mode;
 
@@ -72,6 +73,7 @@ struct mmg_track_t {
     default_track(false), aac_is_sbr(false), aac_is_sbr_detected(false),
     track_name_was_present(false),
     language(wxT("und")), cues(wxT("default")), sub_charset(wxT("default")),
+    nalu_size_length(2),
     stereo_mode(0),
     appending(false) {};
 };

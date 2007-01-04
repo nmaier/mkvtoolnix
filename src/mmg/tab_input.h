@@ -52,6 +52,7 @@
 #define ID_B_APPENDFILE                   11031
 #define ID_CB_STEREO_MODE                 11032
 #define ID_CB_FPS                         11033
+#define ID_CB_NALU_SIZE_LENGTH            11034
 #define ID_NB_OPTIONS                     11999
 
 extern const wxChar *predefined_aspect_ratios[];
@@ -96,14 +97,14 @@ class tab_input_format: public wxPanel {
 public:
   wxCheckBox *cb_aac_is_sbr;
   wxComboBox *cob_sub_charset, *cob_aspect_ratio, *cob_fourcc, *cob_compression;
-  wxComboBox *cob_stereo_mode, *cob_fps;
+  wxComboBox *cob_stereo_mode, *cob_fps, *cob_nalu_size_length;
   wxTextCtrl *tc_delay, *tc_stretch;
   wxRadioButton *rb_aspect_ratio, *rb_display_dimensions;
   wxTextCtrl *tc_display_width, *tc_display_height;
 
   wxStaticText *st_delay, *st_stretch, *st_stereo_mode;
   wxStaticText *st_x, *st_sub_charset, *st_fourcc, *st_compression;
-  wxStaticText *st_fps;
+  wxStaticText *st_fps, *st_nalu_size_length;
 
   tab_input *input;
 
@@ -124,6 +125,7 @@ public:
   void on_display_height_changed(wxCommandEvent &evt);
   void on_fourcc_changed(wxCommandEvent &evt);
   void on_fps_changed(wxCommandEvent &evt);
+  void on_nalu_size_length_changed(wxCommandEvent &evt);
   void on_stereo_mode_changed(wxCommandEvent &evt);
   void on_compression_selected(wxCommandEvent &evt);
 };
