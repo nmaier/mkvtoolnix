@@ -1764,6 +1764,7 @@ kax_reader_c::create_mpeg4_p10_es_video_packetizer(kax_track_t *t) {
       throw false;
 
     avc_es_parser_c parser;
+    parser.set_nalu_size_length(4);
 
     if (sizeof(alBITMAPINFOHEADER) < t->private_size)
       parser.add_bytes((unsigned char *)t->private_data +

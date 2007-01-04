@@ -211,6 +211,12 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   else if (map_has_key(ti.all_aac_is_sbr, -1))
     ti.aac_is_sbr = ti.all_aac_is_sbr[-1] ? 1 : 0;
 
+  // Let's see if the user has specified a NALU size length for this track.
+  if (map_has_key(ti.nalu_size_lengths, ti.id))
+    ti.nalu_size_length = ti.nalu_size_lengths[ti.id];
+  else if (map_has_key(ti.nalu_size_lengths, -1))
+    ti.nalu_size_length = ti.nalu_size_lengths[-1];
+
   // Set default header values to 'unset'.
   if (!reader->appending)
     hserialno = create_track_number(reader, ti.id);
@@ -1424,6 +1430,7 @@ track_info_c::track_info_c():
   compression(COMPRESSION_UNSPECIFIED),
   pixel_cropping_specified(false),
   stereo_mode(STEREO_MODE_UNSPECIFIED),
+  nalu_size_length(0),
   no_chapters(false),
   no_attachments(false),
   no_tags(false),
@@ -1516,6 +1523,9 @@ track_info_c::operator =(const track_info_c &src) {
 
   stereo_mode_list = src.stereo_mode_list;
   stereo_mode = src.stereo_mode;
+
+  nalu_size_lengths = src.nalu_size_lengths;
+  nalu_size_length = src.nalu_size_length;
 
   no_chapters = src.no_chapters;
   no_attachments = src.no_attachments;

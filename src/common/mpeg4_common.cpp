@@ -1148,6 +1148,14 @@ mpeg4::p10::avc_es_parser_c::write_nalu_size(unsigned char *buffer,
   if (-1 == nalu_size_length)
     nalu_size_length = m_nalu_size_length;
 
+  if (size >= ((uint64_t)1 << (nalu_size_length * 8))) {
+    int required_bytes;
+    for (required_bytes = nalu_size_length + 1;
+         size >= (1 << (required_bytes * 8)); ++required_bytes)
+      ;
+    throw nalu_size_length_error_c(required_bytes);
+  }
+
   for (i = 0; i < nalu_size_length; i++)
     buffer[i] = (size >> (8 * (nalu_size_length - 1 - i))) & 0xff;
 }

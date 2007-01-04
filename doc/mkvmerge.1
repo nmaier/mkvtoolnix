@@ -406,6 +406,15 @@ number of frames or a default duration for each frame.
 For such files \fBmkvmerge\fR will assume a default duration of 25fps
 unless overridden.
 .TP
+\fB\-\-nalu\-size\-length\fR <\fITID\fR:\fIn\fR>
+Forces the NALU size length to \fIn\fR bytes.
+This parameter is only used if the AVC/h.264 elementary stream packetizer
+is used.
+If left out it defaults to 2 bytes, but there are files that contain frames or
+slices that are bigger than 65535 bytes.
+For such files you have to use this parameter and increase the size to 3 or
+\fBmkvmerge\fR will abort with an error.
+.TP
 \fB\-\-append\-to\fR <\fISFID1:STID1:DFID1:DTID1\fR[,...]>
 This option controls to which track another track is appended.
 Each spec contains four IDs: a file ID, a track ID, another file ID and

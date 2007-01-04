@@ -225,6 +225,9 @@ set_usage() {
     "                           Force the default duration of a track to X.\n"
     "                           X can be a floating point number or a fration."
     "\n"
+    "  --nalu-size-length <TID:n>\n"
+    "                           Force the NALU size length to n bytes with\n"
+    "                           2 <= n <= 4.\n"
     "\n Options that only apply to video tracks:\n"
     "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
     "                           Works only for video tracks.\n"
@@ -1197,7 +1200,7 @@ parse_append_to(const string &s,
 
 /** \brief Parse the argument for \c --default-duration
 
-   The argument must be a tupel consisting of a track ID and the default
+   The argument must be a tuple consisting of a track ID and the default
    duration separated by a colon. The duration must be postfixed by 'ms',
    'us', 'ns' or 'fps' (see \c parse_number_with_unit).
 */
@@ -1209,7 +1212,7 @@ parse_default_duration(const string &s,
 
   parts = split(s, ":");
   if (parts.size() != 2)
-    mxerror(_("'%s' is not a valid parts of track ID and default duration in "
+    mxerror(_("'%s' is not a valid tuple of track ID and default duration in "
               "'--default-duration %s'.\n"), s.c_str(), s.c_str());
 
   id = 0;
@@ -1219,6 +1222,34 @@ parse_default_duration(const string &s,
 
   ti.default_durations[id] =
     parse_number_with_unit(parts[1], "default duration", "--default-duration");
+}
+
+/** \brief Parse the argument for \c --nalu-size-length
+
+   The argument must be a tuple consisting of a track ID and the NALU size
+   length, an integer between 2 and 4 inclusively.
+*/
+static void
+parse_nalu_size_length(const string &s,
+                       track_info_c &ti) {
+  vector<string> parts;
+  int64_t id, nalu_size_length;
+
+  parts = split(s, ":");
+  if (parts.size() != 2)
+    mxerror(_("'%s' is not a valid tuple of track ID and NALU size length in "
+              "'--nalu-size-length %s'.\n"), s.c_str(), s.c_str());
+
+  id = 0;
+  if (!parse_int(parts[0], id))
+    mxerror(_("'%s' is not a valid track ID in '--nalu-size-length %s'.\n"),
+            parts[0].c_str(), s.c_str());
+
+  if (!parse_int(parts[1], nalu_size_length) ||
+      (2 > nalu_size_length) || (4 < nalu_size_length))
+    mxerror(_("The NALU size length must be a number between 2 and 4 "
+              "inclusively in '--nalu-size-length %s'.\n"), s.c_str());
+  ti.nalu_size_lengths[id] = nalu_size_length;
 }
 
 /** \brief Parse the argument for \c --blockadd
@@ -2041,6 +2072,13 @@ parse_args(vector<string> args) {
         mxerror(_("'--default-duration' lacks its argument.\n"));
 
       parse_default_duration(next_arg, *ti);
+      sit++;
+
+    } else if (this_arg == "--nalu-size-length") {
+      if (no_next_arg)
+        mxerror(_("'--nalu-size-length' lacks its argument.\n"));
+
+      parse_nalu_size_length(next_arg, *ti);
       sit++;
 
     } else if (this_arg == "--print-malloc-report")

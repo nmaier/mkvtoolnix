@@ -46,6 +46,9 @@ mpeg4_p10_es_video_packetizer_c(generic_reader_c *n_reader,
 
   relaxed_timecode_checking = true;
 
+  if (0 != ti.nalu_size_length)
+    m_parser.set_nalu_size_length(ti.nalu_size_length);
+
   if (get_cue_creation() == CUE_STRATEGY_UNSPECIFIED)
     set_cue_creation(CUE_STRATEGY_IFRAMES);
 
@@ -80,6 +83,14 @@ mpeg4_p10_es_video_packetizer_c::process(packet_cptr packet) {
       m_parser.add_timecode(packet->timecode);
     m_parser.add_bytes(packet->data->get(), packet->data->get_size());
     flush_frames();
+
+  } catch (nalu_size_length_error_c &error) {
+    mxerror(FMT_TID "This AVC/h.264 contains frames that are too big for "
+            "the current maximum NALU size. You have to re-run mkvmerge "
+            "and set the maximum NALU size to %d for this track (command "
+            "line parameter '--nalu-size-length " LLD ":%d').\n",
+            ti.fname.c_str(), (int64_t)ti.id, error.get_required_length(),
+            (int64_t)ti.id, error.get_required_length());
 
   } catch (error_c &error) {
     mxerror(FMT_TID "mkvmerge encountered broken or unparsable data in  "

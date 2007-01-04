@@ -311,6 +311,20 @@ namespace mpeg4 {
       };
     };
 
+    class MTX_DLL_API nalu_size_length_error_c {
+    protected:
+      int m_required_length;
+
+    public:
+      nalu_size_length_error_c(int required_length):
+        m_required_length(required_length) {
+      };
+
+      int get_required_length() {
+        return m_required_length;
+      };
+    };
+
     class MTX_DLL_API avc_es_parser_c {
     protected:
       int m_nalu_size_length;
@@ -334,6 +348,8 @@ namespace mpeg4 {
 
       avc_frame_t m_incomplete_frame;
       bool m_have_incomplete_frame;
+
+      bool m_ignore_nalu_size_length_errors;
 
     public:
       avc_es_parser_c();
@@ -385,6 +401,10 @@ namespace mpeg4 {
 
       bool headers_parsed() {
         return m_avcc_ready;
+      };
+
+      void set_nalu_size_length(int nalu_size_length) {
+        m_nalu_size_length = nalu_size_length;
       };
 
       void dump_info();

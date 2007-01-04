@@ -178,6 +178,9 @@ public:
   map<int64_t, int64_t> default_durations; // As given on the command line
   map<int64_t, int> max_blockadd_ids; // As given on the command line
 
+  map<int64_t, int> nalu_size_lengths;
+  int nalu_size_length;
+
   bool no_chapters, no_attachments, no_tags;
 
   // Some file formats can contain chapters, but for some the charset
