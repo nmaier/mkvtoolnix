@@ -50,6 +50,10 @@ public:
   bool unique() const throw() {
     return (its_counter ? its_counter->count == 1 : true);
   }
+  void clear() throw() {
+    release();
+    its_counter = NULL;
+  }
 
 private:
   struct counter {
