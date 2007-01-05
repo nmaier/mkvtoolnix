@@ -1,5 +1,8 @@
 2007-01-05  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: AVC/h.264 ES parser: Fixed wrong NALU size
+	length information in the AVCC.
+
 	* mkvmerge: bug fix: AVC/h.264 ES parser: Fixed the decision if a
 	NALU belongs to a previous frame or starts a new one.
 
