@@ -222,7 +222,11 @@ avi_reader_c::extract_avcc() {
   avc_es_parser_c parser;
   int i, size, key;
 
-  parser.set_nalu_size_length(4);
+  parser.ignore_nalu_size_length_errors();
+  if (map_has_key(ti.nalu_size_lengths, 0))
+    parser.set_nalu_size_length(ti.nalu_size_lengths[0]);
+  else if (map_has_key(ti.nalu_size_lengths, -1))
+    parser.set_nalu_size_length(ti.nalu_size_lengths[-1]);
 
   for (i = 0; i < max_video_frames; ++i) {
     size = AVI_frame_size(avi, i);

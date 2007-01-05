@@ -1081,7 +1081,8 @@ mpeg4::p10::avc_es_parser_c::write_nalu_size(unsigned char *buffer,
   if (-1 == nalu_size_length)
     nalu_size_length = m_nalu_size_length;
 
-  if (size >= ((uint64_t)1 << (nalu_size_length * 8))) {
+  if (!m_ignore_nalu_size_length_errors &&
+      (size >= ((uint64_t)1 << (nalu_size_length * 8)))) {
     int required_bytes;
     for (required_bytes = nalu_size_length + 1;
          size >= (1 << (required_bytes * 8)); ++required_bytes)
@@ -1186,25 +1187,39 @@ mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
 void
 mpeg4::p10::avc_es_parser_c::handle_sps_nalu(memory_cptr &nalu) {
   sps_info_t sps_info;
+  vector<sps_info_t>::iterator i;
 
   nalu_to_rbsp(nalu);
   if (!parse_sps(nalu, sps_info))
     throw error_c("Parsing a SPS NALU failed");
   rbsp_to_nalu(nalu);
-  m_sps_list.push_back(nalu);
-  m_sps_info_list.push_back(sps_info);
+
+  mxforeach(i, m_sps_info_list)
+    if (i->id == sps_info.id)
+      break;
+  if (m_sps_info_list.end() == i) {
+    m_sps_list.push_back(nalu);
+    m_sps_info_list.push_back(sps_info);
+  }
 }
 
 void
 mpeg4::p10::avc_es_parser_c::handle_pps_nalu(memory_cptr &nalu) {
   pps_info_t pps_info;
+  vector<pps_info_t>::iterator i;
 
   nalu_to_rbsp(nalu);
   if (!parse_pps(nalu, pps_info))
     throw error_c("Parsing a PPS NALU failed");
   rbsp_to_nalu(nalu);
-  m_pps_list.push_back(nalu);
-  m_pps_info_list.push_back(pps_info);
+
+  mxforeach(i, m_pps_info_list)
+    if (i->id == pps_info.id)
+      break;
+  if (m_pps_info_list.end() == i) {
+    m_pps_list.push_back(nalu);
+    m_pps_info_list.push_back(pps_info);
+  }
 }
 
 void

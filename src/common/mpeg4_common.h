@@ -395,6 +395,10 @@ namespace mpeg4 {
         m_nalu_size_length = nalu_size_length;
       };
 
+      void ignore_nalu_size_length_errors() {
+        m_ignore_nalu_size_length_errors = true;
+      };
+
       void dump_info();
 
     protected:

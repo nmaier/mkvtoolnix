@@ -56,6 +56,7 @@ avc_es_reader_c::probe_file(mm_io_c *io,
       return 0;
 
     avc_es_parser_c parser;
+    parser.ignore_nalu_size_length_errors();
     parser.set_nalu_size_length(4);
     parser.enable_timecode_generation(40000000);
     parser.add_bytes(buf->get(), num_read);
@@ -82,9 +83,10 @@ avc_es_reader_c::avc_es_reader_c(track_info_c &n_ti)
     int num_read = m_io->read(m_buffer->get(), READ_SIZE);
 
     avc_es_parser_c parser;
-    parser.set_nalu_size_length(4);
+    parser.ignore_nalu_size_length_errors();
     parser.enable_timecode_generation(40000000);
     parser.add_bytes(m_buffer->get(), num_read);
+    parser.flush();
     m_avcc = parser.get_avcc();
     m_width = parser.get_width();
     m_height = parser.get_height();
