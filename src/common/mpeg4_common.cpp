@@ -564,15 +564,14 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
   }
                                 // log2_max_frame_num_minus4
   sps.log2_max_frame_num = gecopy(r, w) + 4;
-  switch (gecopy(r, w)) {       // pic_order_cnt_type
+  sps.pic_order_cnt_type = gecopy(r, w); // pic_order_cnt_type
+  switch (sps.pic_order_cnt_type) {
     case 0:
-      sps.pic_order_cnt_type = 0;
                                 // log2_max_pic_order_cnt_lsb_minus4
       sps.log2_max_pic_order_cnt_lsb = gecopy(r, w) + 4;
       break;
 
     case 1:
-      sps.pic_order_cnt_type = 2;
                                 // delta_pic_order_always_zero_flag
       sps.delta_pic_order_always_zero_flag = w.copy_bits(1, r);
                                 // offset_for_non_ref_pic
@@ -586,7 +585,6 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
       break;
 
     case 2:
-      sps.pic_order_cnt_type = 2;
       break;
 
     default:
@@ -714,77 +712,6 @@ mpeg4::p10::parse_pps(memory_cptr &buffer,
 
     r.skip_bits(1);             // entropy_coding_mode_flag
     pps.pic_order_present = r.get_bit();
-
-    return true;
-  } catch (...) {
-    return false;
-  }
-}
-
-bool
-mpeg4::p10::parse_slice(memory_cptr &buffer,
-                        slice_info_t &si,
-                        vector<sps_info_t> &sps_info_list,
-                        vector<pps_info_t> &pps_info_list) {
-  try {
-    bit_cursor_c r(buffer->get(), buffer->get_size());
-    int sps_idx, pps_idx;
-
-    memset(&si, 0, sizeof(si));
-
-    si.nal_ref_idc = r.get_bits(3); // forbidden_zero_bit, nal_ref_idc
-    si.nalu_type = r.get_bits(5);   // si.nalu_type
-    if ((NALU_TYPE_NON_IDR_SLICE != si.nalu_type) &&
-        (NALU_TYPE_DP_A_SLICE != si.nalu_type) &&
-        (NALU_TYPE_IDR_SLICE != si.nalu_type))
-      return false;
-
-    geread(r);                  // first_mb_in_slice
-    si.type = geread(r);        // slice_type
-    si.pps_id = geread(r);      // pps_id
-
-    for (pps_idx = 0; pps_info_list.size() > pps_idx; ++pps_idx)
-      if (pps_info_list[pps_idx].id == si.pps_id)
-        break;
-    if (pps_info_list.size() == pps_idx)
-      return false;
-
-    pps_info_t &pps = pps_info_list[pps_idx];
-
-    for (sps_idx = 0; sps_info_list.size() > sps_idx; ++sps_idx)
-      if (sps_info_list[sps_idx].id == pps.sps_id)
-        break;
-    if (sps_info_list.size() == sps_idx)
-      return false;
-
-    si.sps = sps_idx;
-    si.pps = pps_idx;
-
-    sps_info_t &sps = sps_info_list[sps_idx];
-
-    si.frame_num = r.get_bits(sps.log2_max_frame_num);
-
-    if (!sps.frame_mbs_only) {
-      si.field_pic_flag = r.get_bit();
-      if (si.field_pic_flag)
-        si.bottom_field_flag = r.get_bit();
-    }
-
-    if (NALU_TYPE_IDR_SLICE == si.nalu_type)
-      si.idr_pic_id = geread(r);
-
-    if (0 == sps.pic_order_cnt_type) {
-      si.pic_order_cnt_lsb = r.get_bits(sps.log2_max_pic_order_cnt_lsb);
-      if (pps.pic_order_present && !si.field_pic_flag)
-        si.delta_pic_order_cnt_bottom = sgeread(r);
-    }
-
-    if ((1 == sps.pic_order_cnt_type) &&
-        !sps.delta_pic_order_always_zero_flag) {
-      si.delta_pic_order_cnt[0] = sgeread(r);
-      if (pps.pic_order_present && !si.field_pic_flag)
-        si.delta_pic_order_cnt[1] = sgeread(r);
-    }
 
     return true;
   } catch (...) {
@@ -1166,39 +1093,76 @@ mpeg4::p10::avc_es_parser_c::write_nalu_size(unsigned char *buffer,
     buffer[i] = (size >> (8 * (nalu_size_length - 1 - i))) & 0xff;
 }
 
+bool
+mpeg4::p10::avc_es_parser_c::flush_decision(slice_info_t &si,
+                                            slice_info_t &ref) {
+  if (si.frame_num != ref.frame_num)
+    return true;
+  if (si.field_pic_flag != ref.field_pic_flag)
+    return true;
+  if ((si.nal_ref_idc != ref.nal_ref_idc) &&
+      (!si.nal_ref_idc || !ref.nal_ref_idc))
+    return true;
+
+  if (m_sps_info_list[si.sps].pic_order_cnt_type ==
+      m_sps_info_list[ref.sps].pic_order_cnt_type) {
+    if (!m_sps_info_list[ref.sps].pic_order_cnt_type) {
+      if (si.pic_order_cnt_lsb != ref.pic_order_cnt_lsb)
+        return true;
+      if (si.delta_pic_order_cnt_bottom != ref.delta_pic_order_cnt_bottom)
+        return true;
+
+    } else if (1 == m_sps_info_list[ref.sps].pic_order_cnt_type) {
+      if ((si.delta_pic_order_cnt[0] != ref.delta_pic_order_cnt[0]) ||
+          (si.delta_pic_order_cnt[1] != ref.delta_pic_order_cnt[1]))
+        return true;
+    }
+  }
+
+  if ((NALU_TYPE_IDR_SLICE == si.nalu_type) &&
+      (NALU_TYPE_IDR_SLICE == ref.nalu_type) &&
+      (si.idr_pic_id != ref.idr_pic_id))
+    return true;
+
+  return false;
+}
+
+void
+mpeg4::p10::avc_es_parser_c::flush_incomplete_frame() {
+  if (!m_have_incomplete_frame)
+    return;
+
+  m_frames.push_back(m_incomplete_frame);
+  m_incomplete_frame.clear();
+  m_have_incomplete_frame = false;
+}
 
 void
 mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
   slice_info_t si;
 
-  if (!parse_slice(nalu, si, m_sps_info_list, m_pps_info_list))
+//   mxinfo("slice size %d\n", nalu->get_size());
+
+  if (!parse_slice(nalu, si))
     throw error_c("Parsing a slice NALU failed");
 
 //   mxinfo("frame_num %u: ", si.frame_num);
 
-  if (m_have_incomplete_frame) {
-//     if (0) {
-    if ((si.frame_num == m_incomplete_frame.m_si.frame_num) &&
-        (si.nalu_type == m_incomplete_frame.m_si.nalu_type) &&
-        (si.type == m_incomplete_frame.m_si.type) &&
-        (si.pps_id == m_incomplete_frame.m_si.pps_id) &&
-        (si.field_pic_flag == m_incomplete_frame.m_si.field_pic_flag) &&
-        (si.nal_ref_idc == m_incomplete_frame.m_si.nal_ref_idc)) {
-//       mxinfo("appending\n");
-      memory_c &mem = *(m_incomplete_frame.m_data.get());
-      int offset = mem.get_size();
-      mem.resize(offset + m_nalu_size_length + nalu->get_size());
-      write_nalu_size(mem.get() + offset, nalu->get_size());
-      memcpy(mem.get() + offset + m_nalu_size_length, nalu->get(),
-             nalu->get_size());
-      return;
+  if (m_have_incomplete_frame &&
+      flush_decision(si, m_incomplete_frame.m_si))
+    flush_incomplete_frame();
 
-    } else
-      m_frames.push_back(m_incomplete_frame);
+  if (m_have_incomplete_frame) {
+    memory_c &mem = *(m_incomplete_frame.m_data.get());
+    int offset = mem.get_size();
+    mem.resize(offset + m_nalu_size_length + nalu->get_size());
+    write_nalu_size(mem.get() + offset, nalu->get_size());
+    memcpy(mem.get() + offset + m_nalu_size_length, nalu->get(),
+           nalu->get_size());
+    return;
   }
 
 //   mxinfo("new one\n");
-  m_incomplete_frame.clear();
   m_incomplete_frame.m_si = si;
   m_incomplete_frame.m_keyframe =
     (NALU_TYPE_IDR_SLICE == m_incomplete_frame.m_si.nalu_type) &&
@@ -1209,7 +1173,6 @@ mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
 
   if (m_incomplete_frame.m_keyframe)
     cleanup();
-
 
   m_incomplete_frame.m_data = create_nalu_with_size(nalu, true);
 
@@ -1273,16 +1236,21 @@ mpeg4::p10::avc_es_parser_c::handle_nalu(memory_cptr nalu) {
 
   switch (type) {
     case NALU_TYPE_SEQ_PARAM:
+      flush_incomplete_frame();
       handle_sps_nalu(nalu);
       break;
 
     case NALU_TYPE_PIC_PARAM:
+      flush_incomplete_frame();
       handle_pps_nalu(nalu);
       break;
 
     case NALU_TYPE_END_OF_SEQ:
     case NALU_TYPE_END_OF_STREAM:
     case NALU_TYPE_ACCESS_UNIT:
+      flush_incomplete_frame();
+      break;
+
     case NALU_TYPE_FILLER_DATA:
       // Skip these.
       break;
@@ -1297,9 +1265,79 @@ mpeg4::p10::avc_es_parser_c::handle_nalu(memory_cptr nalu) {
       break;
 
     default:
+      flush_incomplete_frame();
       m_avcc_ready = true;
       m_extra_data.push_back(create_nalu_with_size(nalu));
       break;
+  }
+}
+
+bool
+mpeg4::p10::avc_es_parser_c::parse_slice(memory_cptr &buffer,
+                                         slice_info_t &si) {
+  try {
+    bit_cursor_c r(buffer->get(), buffer->get_size());
+    int sps_idx, pps_idx;
+
+    memset(&si, 0, sizeof(si));
+
+    si.nal_ref_idc = r.get_bits(3); // forbidden_zero_bit, nal_ref_idc
+    si.nalu_type = r.get_bits(5);   // si.nalu_type
+    if ((NALU_TYPE_NON_IDR_SLICE != si.nalu_type) &&
+        (NALU_TYPE_DP_A_SLICE != si.nalu_type) &&
+        (NALU_TYPE_IDR_SLICE != si.nalu_type))
+      return false;
+
+    geread(r);                  // first_mb_in_slice
+    si.type = geread(r);        // slice_type
+    si.pps_id = geread(r);      // pps_id
+
+    for (pps_idx = 0; m_pps_info_list.size() > pps_idx; ++pps_idx)
+      if (m_pps_info_list[pps_idx].id == si.pps_id)
+        break;
+    if (m_pps_info_list.size() == pps_idx)
+      return false;
+
+    pps_info_t &pps = m_pps_info_list[pps_idx];
+
+    for (sps_idx = 0; m_sps_info_list.size() > sps_idx; ++sps_idx)
+      if (m_sps_info_list[sps_idx].id == pps.sps_id)
+        break;
+    if (m_sps_info_list.size() == sps_idx)
+      return false;
+
+    si.sps = sps_idx;
+    si.pps = pps_idx;
+
+    sps_info_t &sps = m_sps_info_list[sps_idx];
+
+    si.frame_num = r.get_bits(sps.log2_max_frame_num);
+
+    if (!sps.frame_mbs_only) {
+      si.field_pic_flag = r.get_bit();
+      if (si.field_pic_flag)
+        si.bottom_field_flag = r.get_bit();
+    }
+
+    if (NALU_TYPE_IDR_SLICE == si.nalu_type)
+      si.idr_pic_id = geread(r);
+
+    if (0 == sps.pic_order_cnt_type) {
+      si.pic_order_cnt_lsb = r.get_bits(sps.log2_max_pic_order_cnt_lsb);
+      if (pps.pic_order_present && !si.field_pic_flag)
+        si.delta_pic_order_cnt_bottom = sgeread(r);
+    }
+
+    if ((1 == sps.pic_order_cnt_type) &&
+        !sps.delta_pic_order_always_zero_flag) {
+      si.delta_pic_order_cnt[0] = sgeread(r);
+      if (pps.pic_order_present && !si.field_pic_flag)
+        si.delta_pic_order_cnt[1] = sgeread(r);
+    }
+
+    return true;
+  } catch (...) {
+    return false;
   }
 }
 

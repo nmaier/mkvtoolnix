@@ -257,9 +257,6 @@ namespace mpeg4 {
 
     bool MTX_DLL_API parse_sps(memory_cptr &buffer, sps_info_t &sps);
     bool MTX_DLL_API parse_pps(memory_cptr &buffer, pps_info_t &pps);
-    bool MTX_DLL_API parse_slice(memory_cptr &buffer, slice_info_t &si,
-                                 vector<sps_info_t> &sps_info_list,
-                                 vector<pps_info_t> &pps_info_list);
 
     bool MTX_DLL_API extract_par(uint8_t *&buffer, int &buffer_size,
                                  uint32_t &par_num, uint32_t &par_den);
@@ -401,11 +398,14 @@ namespace mpeg4 {
       void dump_info();
 
     protected:
+      bool parse_slice(memory_cptr &buffer, slice_info_t &si);
       void handle_sps_nalu(memory_cptr &nalu);
       void handle_pps_nalu(memory_cptr &nalu);
       void handle_slice_nalu(memory_cptr &nalu);
       void cleanup();
       void default_cleanup();
+      bool flush_decision(slice_info_t &si, slice_info_t &ref);
+      void flush_incomplete_frame();
       void write_nalu_size(unsigned char *buffer, int size,
                            int nalu_size_length = -1);
       memory_cptr create_nalu_with_size(const memory_cptr &src,
