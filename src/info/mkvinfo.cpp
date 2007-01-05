@@ -234,10 +234,10 @@ _show_element(EbmlElement *l,
 }
 
 string
-create_hexdump(DataBuffer &data) {
+create_hexdump(const unsigned char *buf,
+               int size) {
   string hex(" hexdump");
-  int bmax = data.Size() >= 16 ? 16 : data.Size(), b;
-  const unsigned char *buf = data.Buffer();
+  int bmax = size >= 16 ? 16 : size, b;
 
   for (b = 0; b < bmax; ++b)
     hex += mxsprintf(" %02x", buf[b]);
@@ -1046,6 +1046,9 @@ def_handle(tracks) {
             fourcc_buffer +=
               mxsprintf(" (adler: 0x%08x)",
                         calc_adler32(c_priv.GetBuffer(), c_priv.GetSize()));
+          if (show_hexdump)
+            fourcc_buffer += create_hexdump(c_priv.GetBuffer(),
+                                            c_priv.GetSize());
           show_element(l3, 3, "CodecPrivate, length %d%s",
                        (int)c_priv.GetSize(), fourcc_buffer.c_str());
 
@@ -1478,7 +1481,7 @@ def_handle2(block_group,
         else
           adler[0] = 0;
         if (show_hexdump)
-          hex = create_hexdump(data);
+          hex = create_hexdump(data.Buffer(), data.Size());
         show_element(NULL, 4, "Frame with size %u%s%s", data.Size(),
                      adler, hex.c_str());
         frame_sizes.push_back(data.Size());
@@ -1695,7 +1698,7 @@ def_handle2(simple_block,
     else
       adler[0] = 0;
     if (show_hexdump)
-      hex = create_hexdump(data);
+      hex = create_hexdump(data.Buffer(), data.Size());
     show_element(NULL, 4, "Frame with size %u%s%s", data.Size(), adler,
                  hex.c_str());
     frame_sizes.push_back(data.Size());
