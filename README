@@ -115,7 +115,7 @@ with mencoder in order to rip a DVD:
 
 a) Extract the audio to PCM audio:
 
-mplayer -ao pcm -aofile audio.wav -vo null -vc dummy dvd://1
+mplayer -ao pcm:file=audio.wav -vo null -vc dummy dvd://1
 
 b) Normalize the sound (optional)
 
@@ -138,15 +138,15 @@ video_bitrate will be in kbit/s
 
 e) Use the two-pass encoding for the video:
 
-mencoder -dvd 1 -oac copy -ovc lavc \
+mencoder -oac copy -ovc lavc \
   -lavcopts vcodec=mpeg4:vbitrate=1000:vhq:vqmin=2:vpass=1 \
   -vop scale=....,crop=..... \
-  -o /dev/null
+  -o /dev/null dvd://1
 
-mencoder -dvd 1 -oac copy -ovc lavc \
+mencoder -oac copy -ovc lavc \
   -lavcopts vcodec=mpeg4:vbitrate=1000:vhq:vqmin=2:vpass=2 \
   -vop scale=....,crop=..... \
-  -o movie.avi
+  -o movie.avi dvd://1
 
 f) Merge:
 
@@ -161,7 +161,7 @@ If you're sure you've found a bug - e.g. if one of my programs crashes
 with an obscur error message, or if the resulting file is missing part
 of the original data, then by all means submit a bug report.
 
-I use Anthill (http://www.bunkus.org/anthill/index.php) as my bug
+I use Bugzilla (https://www.bunkus.org/bugzilla/) as my bug
 database. You can submit your bug reports there. Please be as verbose
 as possible - e.g. include the command line, if you use Windows or
 Linux etc.pp. If at all possible please include sample files as well
