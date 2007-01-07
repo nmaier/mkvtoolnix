@@ -1,5 +1,8 @@
 2007-01-07  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Fixed the aspect ratio extraction for raw
+	AVC/h.264 ES tracks.
+
 	* mkvmerge: bug fix: If a raw AVC/h.264 ES file does not start
 	with a key frame then all the frames before the first key frame
 	are skipped, and mkvmerge does not abort anymore.

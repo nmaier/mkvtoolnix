@@ -110,9 +110,9 @@ mpeg4_p10_es_video_packetizer_c::extract_aspect_ratio() {
   uint32_t num, den;
   unsigned char *priv;
 
-  priv = ti.private_data;
-  if (mpeg4::p10::extract_par(ti.private_data, ti.private_size, num, den) &&
-      (0 != num) && (0 != den)) {
+  priv = hcodec_private;
+  if (mpeg4::p10::extract_par(hcodec_private, hcodec_private_length, num,
+                              den) && (0 != num) && (0 != den)) {
     if (!ti.aspect_ratio_given && !ti.display_dimensions_given) {
       double par = (double)num / (double)den;
 
@@ -132,8 +132,6 @@ mpeg4_p10_es_video_packetizer_c::extract_aspect_ratio() {
              "dimensions to %u/%u.\n", (int64_t)ti.id, ti.fname.c_str(),
              (uint32_t)ti.display_width, (uint32_t)ti.display_height);
     }
-
-    set_codec_private(ti.private_data, ti.private_size);
   }
 
   if (priv != ti.private_data)

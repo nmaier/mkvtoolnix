@@ -528,13 +528,16 @@ mpeg4::p10::rbsp_to_nalu(memory_cptr &buffer) {
 
 bool
 mpeg4::p10::parse_sps(memory_cptr &buffer,
-                      sps_info_t &sps) {
+                      sps_info_t &sps,
+                      bool keep_ar_info) {
   int size = buffer->get_size();
   unsigned char *newsps = (unsigned char *)safemalloc(size + 100);
   memory_cptr mcptr_newsps(new memory_c(newsps, size));
   bit_cursor_c r(buffer->get(), size);
   bit_writer_c w(newsps, size);
   int i, nref, mb_width, mb_height;
+
+  keep_ar_info |= hack_engaged(ENGAGE_KEEP_BITSTREAM_AR_INFO);
 
   memset(&sps, 0, sizeof(sps));
 
@@ -620,7 +623,7 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
     if (r.get_bit() == 1) {     // ar_info_present
       int ar_type = r.get_bits(8);
 
-      if (hack_engaged(ENGAGE_KEEP_BITSTREAM_AR_INFO)) {
+      if (keep_ar_info) {
         w.put_bit(1);
         w.put_bits(8, ar_type);
       }
@@ -638,14 +641,14 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
         sps.par_num = r.get_bits(16);
         sps.par_den = r.get_bits(16);
 
-        if (hack_engaged(ENGAGE_KEEP_BITSTREAM_AR_INFO)) {
+        if (keep_ar_info) {
           w.put_bits(16, sps.par_num);
           w.put_bits(16, sps.par_den);
         }
       }
       sps.ar_found = true;
     }
-    if (!hack_engaged(ENGAGE_KEEP_BITSTREAM_AR_INFO))
+    if (!keep_ar_info)
       w.put_bit(0);             // ar_info_present
 
     // copy the rest
@@ -1197,7 +1200,7 @@ mpeg4::p10::avc_es_parser_c::handle_sps_nalu(memory_cptr &nalu) {
   vector<sps_info_t>::iterator i;
 
   nalu_to_rbsp(nalu);
-  if (!parse_sps(nalu, sps_info))
+  if (!parse_sps(nalu, sps_info, true))
     throw error_c("Parsing a SPS NALU failed");
   rbsp_to_nalu(nalu);
 

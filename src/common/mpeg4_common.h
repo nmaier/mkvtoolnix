@@ -255,7 +255,8 @@ namespace mpeg4 {
     void MTX_DLL_API nalu_to_rbsp(memory_cptr &buffer);
     void MTX_DLL_API rbsp_to_nalu(memory_cptr &buffer);
 
-    bool MTX_DLL_API parse_sps(memory_cptr &buffer, sps_info_t &sps);
+    bool MTX_DLL_API parse_sps(memory_cptr &buffer, sps_info_t &sps,
+                               bool keep_ar_info = false);
     bool MTX_DLL_API parse_pps(memory_cptr &buffer, pps_info_t &pps);
 
     bool MTX_DLL_API extract_par(uint8_t *&buffer, int &buffer_size,
