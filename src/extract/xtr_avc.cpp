@@ -64,21 +64,16 @@ xtr_avc_c::create_file(xtr_base_c *_master,
 
   int i, pos = 6, numsps = buf[5] & 0x1f, numpps;
 
-  mxinfo("NUMsps %d\n", numsps);
-  for (i = 0; (i < numsps) && (priv->GetSize() > pos); ++i) {
-    mxinfo("WRITE NAL type %d\n", buf[pos + 2] & 0x1f);
+  for (i = 0; (i < numsps) && (priv->GetSize() > pos); ++i)
     write_nal(buf, pos, priv->GetSize(), 2);
-  }
 
   if (priv->GetSize() <= pos)
     return;
 
   numpps = buf[pos++];
 
-  for (i = 0; (i < numpps) && (priv->GetSize() > pos); ++i) {
-    mxinfo("WRITE NAL type %d\n", buf[pos + 2] & 0x1f);
+  for (i = 0; (i < numpps) && (priv->GetSize() > pos); ++i)
     write_nal(buf, pos, priv->GetSize(), 2);
-  }
 }
 
 void
@@ -95,9 +90,6 @@ xtr_avc_c::handle_frame(memory_cptr &frame,
   binary *buf = (binary *)frame->get();
 
   pos = 0;
-  mxinfo("gosh, a FRAME\n");
-  while (frame->get_size() > pos) {
-    mxinfo("  NAL type %d\n", buf[pos + nal_size_size] & 0x1f);
+  while (frame->get_size() > pos)
     write_nal(buf, pos, frame->get_size(), nal_size_size);
-  }
 }
