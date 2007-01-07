@@ -14,7 +14,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "os.h"
+
 #include <assert.h>
+#include <limits.h>
 
 #include <vector>
 
@@ -47,6 +50,7 @@ public:
 #define walk_clusters()
 
 cluster_helper_c::cluster_helper_c():
+  min_timecode_in_cluster(-1), max_timecode_in_cluster(-1),
   current_split_point(split_points.begin()) {
 
   cluster_content_size = 0;
@@ -79,7 +83,7 @@ cluster_helper_c::get_cluster() {
 void
 cluster_helper_c::add_packet(packet_cptr packet) {
   ch_contents_t *c;
-  int64_t timecode, additional_size;
+  int64_t timecode, timecode_delay, additional_size;
   int i;
   bool split;
 
@@ -97,17 +101,27 @@ cluster_helper_c::add_packet(packet_cptr packet) {
 
   timecode = get_timecode();
 
+  timecode_delay =
+    (packet->assigned_timecode > max_timecode_in_cluster) ||
+    (-1 == max_timecode_in_cluster) ?
+    packet->assigned_timecode : max_timecode_in_cluster;
+  timecode_delay -=
+    (-1 == min_timecode_in_cluster) ||
+    (packet->assigned_timecode < min_timecode_in_cluster) ?
+    packet->assigned_timecode : min_timecode_in_cluster;
+  timecode_delay = (int64_t)(timecode_delay / timecode_scale);
+
   mxverb(4, "cluster_helper_c::add_packet(): new packet { source " LLD "/%s "
          "timecode: " LLD " duration: " LLD " bref: " LLD " fref: " LLD " "
-         "assigned_timecode: " LLD " }\n",
+         "assigned_timecode: " LLD " timecode_delay: " FMT_TIMECODEN " }\n",
          packet->source->ti.id, packet->source->ti.fname.c_str(),
          packet->timecode, packet->duration, packet->bref, packet->fref,
-         packet->assigned_timecode);
+         packet->assigned_timecode, ARG_TIMECODEN(timecode_delay));
 
   if (clusters.size() == 0)
     add_cluster(new kax_cluster_c());
-  else if ((packet->gap_following && (clusters.back()->packets.size() != 0))
-           ||
+  else if ((SHRT_MAX < timecode_delay) || (SHRT_MIN > timecode_delay) ||
+           (packet->gap_following && (clusters.back()->packets.size() != 0)) ||
            (((packet->assigned_timecode - timecode) > max_ns_per_cluster) &&
             all_references_resolved(clusters.back()))) {
     render();
@@ -195,6 +209,12 @@ cluster_helper_c::add_packet(packet_cptr packet) {
   cluster_content_size += packet->data->get_size();
 
   walk_clusters();
+
+  if (packet->assigned_timecode > max_timecode_in_cluster)
+    max_timecode_in_cluster = packet->assigned_timecode;
+  if ((-1 == min_timecode_in_cluster) ||
+      (packet->assigned_timecode < min_timecode_in_cluster))
+    min_timecode_in_cluster = packet->assigned_timecode;
 
   // Render the cluster if it is full (according to my many criteria).
   timecode = get_timecode();
@@ -609,6 +629,9 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
   clstr->rendered = true;
 
   free_clusters();
+
+  min_timecode_in_cluster = -1;
+  max_timecode_in_cluster = -1;
 
   return 1;
 }

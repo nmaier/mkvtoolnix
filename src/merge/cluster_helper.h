@@ -79,6 +79,7 @@ private:
   int64_t last_cluster_tc, num_cue_elements, header_overhead;
   int64_t packet_num, timecode_offset, *last_packets;
   int64_t bytes_in_file, first_timecode_in_file;
+  int64_t min_timecode_in_cluster, max_timecode_in_cluster;
   mm_io_c *out;
 
   vector<split_point_t> split_points;
