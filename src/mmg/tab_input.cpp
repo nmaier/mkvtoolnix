@@ -320,6 +320,9 @@ tab_input::add_file(const wxString &file_name,
   bool default_video_track_found, default_audio_track_found;
   bool default_subtitle_track_found;
 
+  wxFileName file_name_obj(file_name);
+  last_open_dir = file_name_obj.GetPath();
+
   opt_file_name.Printf(wxT("%smmg-mkvmerge-options-%d-%d"),
                        get_temp_dir().c_str(),
                        (int)wxGetProcessId(), (int)time(NULL));
@@ -653,9 +656,6 @@ tab_input::add_file(const wxString &file_name,
   st_tracks->Enable(true);
   clb_tracks->Enable(true);
   b_append_file->Enable(true);
-
-  wxFileName file_name_obj(file_name);
-  last_open_dir = file_name_obj.GetPath();
 }
 
 void
