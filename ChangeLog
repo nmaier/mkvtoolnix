@@ -1,5 +1,12 @@
 2007-01-07  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: enhancements: The job manager can be opened with
+	"Ctrl-J". The last directory from which a file is added is saved
+	even if the file identification failed. The automatically
+	generated output file name uses the extension ".mka" if no video
+	track is found and ".mks" if neither a video nor an audio track is
+	found in the first file.
+
 	* mkvmerge: bug fix: Fixed the aspect ratio extraction for raw
 	AVC/h.264 ES tracks.
 
