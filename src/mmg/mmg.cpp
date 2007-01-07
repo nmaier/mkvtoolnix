@@ -1776,13 +1776,21 @@ mmg_dialog::set_title_maybe(const wxString &new_title) {
 
 void
 mmg_dialog::set_output_maybe(const wxString &new_output) {
-  wxString output;
-
   if (settings_page->cb_autoset_output_filename->IsChecked() &&
       (new_output.length() > 0) &&
       (tc_output->GetValue().length() == 0)) {
-    output = new_output.BeforeLast('.');
-    output += wxT(".mkv");
+    wxString output(new_output.BeforeLast('.'));
+    bool has_video = false, has_audio = false;
+    vector<mmg_track_t *>::iterator t;
+
+    mxforeach(t, tracks) {
+      if ('v' == (*t)->type) {
+        has_video = true;
+        break;
+      } else if ('a' == (*t)->type)
+        has_audio = true;
+    }
+    output += has_video ? wxT(".mkv") : has_audio ? wxT(".mka") : wxT(".mks");
     tc_output->SetValue(output);
   }
 }

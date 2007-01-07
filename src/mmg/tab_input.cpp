@@ -587,7 +587,6 @@ tab_input::add_file(const wxString &file_name,
   mdlg->set_title_maybe(file.title);
   if ((file.container == FILE_TYPE_OGM) && (video_track_name.Length() > 0))
     mdlg->set_title_maybe(video_track_name);
-  mdlg->set_output_maybe(file.file_name);
   file.appending = append;
   files.insert(files.begin() + new_file_pos, file);
 
@@ -652,6 +651,8 @@ tab_input::add_file(const wxString &file_name,
     clb_tracks->Insert(label, new_track_pos);
     clb_tracks->Check(new_track_pos, true);
   }
+
+  mdlg->set_output_maybe(file.file_name);
 
   st_tracks->Enable(true);
   clb_tracks->Enable(true);
