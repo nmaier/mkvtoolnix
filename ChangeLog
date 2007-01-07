@@ -1,3 +1,9 @@
+2007-01-07  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: If a raw AVC/h.264 ES file does not start
+	with a key frame then all the frames before the first key frame
+	are skipped, and mkvmerge does not abort anymore.
+
 2007-01-05  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: AVC/h.264 ES parser: Fixed wrong NALU size

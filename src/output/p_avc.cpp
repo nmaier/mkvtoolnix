@@ -151,10 +151,11 @@ void
 mpeg4_p10_es_video_packetizer_c::flush_frames() {
   while (m_parser.frame_available()) {
     avc_frame_t frame(m_parser.get_frame());
-    if (m_first_frame && !frame.m_keyframe)
-      mxerror(FMT_TID "This AVC/h.264 track does not start with a key frame. "
-              "Such files are not supported by mkvmerge.\n",
-              ti.fname.c_str(), (int64_t)ti.id);
+    if (m_first_frame && (0 < m_parser.get_num_skipped_frames()))
+      mxwarn(FMT_TID "This AVC/h.264 track does not start with a key frame. "
+             "The first %d frames have been skipped.\n",
+             ti.fname.c_str(), (int64_t)ti.id,
+             m_parser.get_num_skipped_frames());
     add_packet(new packet_t(frame.m_data, frame.m_start,
                             frame.m_end > frame.m_start ?
                             frame.m_end - frame.m_start :

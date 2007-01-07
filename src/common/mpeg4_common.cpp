@@ -982,7 +982,8 @@ mpeg4::p10::compare_poc_by_dec(const poc_t &poc1,
 mpeg4::p10::avc_es_parser_c::avc_es_parser_c():
   m_nalu_size_length(2),
   m_avcc_ready(false),
-  m_default_duration(40000000), m_frame_number(0),
+  m_default_duration(40000000), m_frame_number(0), m_num_skipped_frames(0),
+  m_first_keyframe_found(false),
   m_generate_timecodes(false),
   m_have_incomplete_frame(false) {
 }
@@ -1133,7 +1134,10 @@ mpeg4::p10::avc_es_parser_c::flush_incomplete_frame() {
   if (!m_have_incomplete_frame)
     return;
 
-  m_frames.push_back(m_incomplete_frame);
+  if (m_first_keyframe_found)
+    m_frames.push_back(m_incomplete_frame);
+  else
+    ++m_num_skipped_frames;
   m_incomplete_frame.clear();
   m_have_incomplete_frame = false;
 }
@@ -1172,16 +1176,19 @@ mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
      (AVC_SLICE_TYPE_SI == m_incomplete_frame.m_si.type) ||
      (AVC_SLICE_TYPE2_SI == m_incomplete_frame.m_si.type));
 
-  if (m_incomplete_frame.m_keyframe)
+  if (m_incomplete_frame.m_keyframe) {
+    m_first_keyframe_found = true;
     cleanup();
+  }
 
   m_incomplete_frame.m_data = create_nalu_with_size(nalu, true);
-
-  if (m_generate_timecodes)
-    add_timecode(m_frame_number * m_default_duration);
-  ++m_frame_number;
-
   m_have_incomplete_frame = true;
+
+  if (m_first_keyframe_found) {
+    if (m_generate_timecodes)
+      add_timecode(m_frame_number * m_default_duration);
+    ++m_frame_number;
+  }
 }
 
 void

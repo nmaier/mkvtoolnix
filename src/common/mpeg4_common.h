@@ -321,7 +321,8 @@ namespace mpeg4 {
       memory_cptr m_avcc;
 
       int64_t m_default_duration;
-      int m_frame_number;
+      int m_frame_number, m_num_skipped_frames;
+      bool m_first_keyframe_found;
 
       deque<avc_frame_t> m_frames, m_frames_out;
       deque<int64_t> m_timecodes;
@@ -397,6 +398,10 @@ namespace mpeg4 {
 
       void ignore_nalu_size_length_errors() {
         m_ignore_nalu_size_length_errors = true;
+      };
+
+      int get_num_skipped_frames() {
+        return m_num_skipped_frames;
       };
 
       void dump_info();
