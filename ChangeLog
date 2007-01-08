@@ -1,3 +1,13 @@
+2007-01-08  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: enhancements to the job management dialog: There's a
+	minimum width for the columns. The "up" and "down" buttons are
+	disabled if all entries are selected. Pressing "Ctrl-A" selects
+	all entries.
+
+	* mmg: enhancements: "File -> New" will also focus the "input"
+	tab.
+
 2007-01-07  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: enhancements: The job manager can be opened with
