@@ -736,6 +736,17 @@ job_dialog::on_item_selected(wxListEvent &evt) {
 }
 
 void
+job_dialog::on_key_pressed(wxListEvent &evt) {
+  if (1 == evt.GetKeyCode()) {  // Ctrl-A
+    int i;
+
+    for (i = 0; lv_jobs->GetItemCount() > i; ++i)
+      lv_jobs->Select(i, true);
+    on_item_selected(evt);
+  }
+}
+
+void
 job_dialog::start_jobs(vector<int> &jobs_to_start) {
   wxString temp_settings;
   job_run_dialog *jrdlg;
@@ -785,4 +796,5 @@ BEGIN_EVENT_TABLE(job_dialog, wxDialog)
   EVT_BUTTON(ID_JOBS_B_VIEW_LOG, job_dialog::on_view_log)
   EVT_LIST_ITEM_SELECTED(ID_JOBS_LV_JOBS, job_dialog::on_item_selected)
   EVT_LIST_ITEM_DESELECTED(ID_JOBS_LV_JOBS, job_dialog::on_item_selected)
+  EVT_LIST_KEY_DOWN(ID_JOBS_LV_JOBS, job_dialog::on_key_pressed)
 END_EVENT_TABLE();

@@ -114,6 +114,7 @@ public:
   void on_delete(wxCommandEvent &evt);
   void on_view_log(wxCommandEvent &evt);
   void on_item_selected(wxListEvent &evt);
+  void on_key_pressed(wxListEvent &evt);
 
   void enable_buttons(bool enable, bool enable_up_down = true);
   void swap_rows(int lower, int higher, bool up);
