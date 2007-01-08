@@ -387,9 +387,7 @@ job_dialog::job_dialog(wxWindow *parent):
   siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->Add(new wxStaticText(this, -1, wxT("Current and past jobs:")),
                0, wxALIGN_LEFT | wxALL, 10);
-  lv_jobs =
-    new wxListView(this, ID_JOBS_LV_JOBS, wxDefaultPosition, wxSize(400, -1),
-                   wxLC_REPORT | wxSUNKEN_BORDER);
+  lv_jobs = new jobdlg_list_view(this, ID_JOBS_LV_JOBS);
 
   item.m_mask = wxLIST_MASK_TEXT;
   item.m_text = wxT("ID");
@@ -736,17 +734,6 @@ job_dialog::on_item_selected(wxListEvent &evt) {
 }
 
 void
-job_dialog::on_key_pressed(wxListEvent &evt) {
-  if (1 == evt.GetKeyCode()) {  // Ctrl-A
-    int i;
-
-    for (i = 0; lv_jobs->GetItemCount() > i; ++i)
-      lv_jobs->Select(i, true);
-    on_item_selected(evt);
-  }
-}
-
-void
 job_dialog::start_jobs(vector<int> &jobs_to_start) {
   wxString temp_settings;
   job_run_dialog *jrdlg;
@@ -770,6 +757,33 @@ job_dialog::start_jobs(vector<int> &jobs_to_start) {
     create_list_item(jobs_to_start[i]);
   }
 }
+
+void
+job_dialog::on_key_pressed(wxKeyEvent &evt) {
+  if (1 == evt.GetKeyCode()) {  // Ctrl-A
+    int i;
+
+    for (i = 0; lv_jobs->GetItemCount() > i; ++i)
+      lv_jobs->Select(i, true);
+    enable_buttons(lv_jobs->GetSelectedItemCount() > 0, false);
+  } else
+    evt.Skip(true);
+}
+
+jobdlg_list_view::jobdlg_list_view(wxWindow *parent,
+                                   wxWindowID id):
+  wxListView(parent, id, wxDefaultPosition, wxSize(400, -1),
+             wxLC_REPORT | wxSUNKEN_BORDER) {
+}
+
+void
+jobdlg_list_view::on_key_pressed(wxKeyEvent &evt) {
+  if (1 == evt.GetKeyCode())    // Ctrl-A
+    ((job_dialog *)GetParent())->on_key_pressed(evt);
+  else
+    evt.Skip(true);
+}
+
 
 IMPLEMENT_CLASS(job_run_dialog, wxDialog);
 BEGIN_EVENT_TABLE(job_run_dialog, wxDialog)
@@ -796,5 +810,9 @@ BEGIN_EVENT_TABLE(job_dialog, wxDialog)
   EVT_BUTTON(ID_JOBS_B_VIEW_LOG, job_dialog::on_view_log)
   EVT_LIST_ITEM_SELECTED(ID_JOBS_LV_JOBS, job_dialog::on_item_selected)
   EVT_LIST_ITEM_DESELECTED(ID_JOBS_LV_JOBS, job_dialog::on_item_selected)
-  EVT_LIST_KEY_DOWN(ID_JOBS_LV_JOBS, job_dialog::on_key_pressed)
+END_EVENT_TABLE();
+
+IMPLEMENT_CLASS(jobdlg_list_view, wxListView);
+BEGIN_EVENT_TABLE(jobdlg_list_view, wxListView)
+  EVT_CHAR(jobdlg_list_view::on_key_pressed)
 END_EVENT_TABLE();

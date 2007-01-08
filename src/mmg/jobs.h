@@ -94,11 +94,20 @@ public:
   void add_to_log(wxString text);
 };
 
+class jobdlg_list_view: public wxListView {
+  DECLARE_CLASS(jobdlg_list_view);
+  DECLARE_EVENT_TABLE();
+public:
+  jobdlg_list_view(wxWindow *parent, wxWindowID id);
+
+  void on_key_pressed(wxKeyEvent &evt);
+};
+
 class job_dialog: public wxDialog {
   DECLARE_CLASS(job_dialog);
   DECLARE_EVENT_TABLE();
 protected:
-  wxListView *lv_jobs;
+  jobdlg_list_view *lv_jobs;
   wxButton *b_ok, *b_up, *b_down, *b_abort, *b_abort_after_current, *b_delete;
   wxButton *b_start, *b_start_selected, *b_reenable, *b_view_log, *b_disable;
 
@@ -114,7 +123,7 @@ public:
   void on_delete(wxCommandEvent &evt);
   void on_view_log(wxCommandEvent &evt);
   void on_item_selected(wxListEvent &evt);
-  void on_key_pressed(wxListEvent &evt);
+  void on_key_pressed(wxKeyEvent &evt);
 
   void enable_buttons(bool enable, bool enable_up_down = true);
   void swap_rows(int lower, int higher, bool up);
