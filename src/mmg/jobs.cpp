@@ -406,23 +406,21 @@ job_dialog::job_dialog(wxWindow *parent):
   item.m_text = wxT("Finished on");
   lv_jobs->InsertColumn(5, item);
 
-  if (jobs.size() == 0) {
-    dummy = lv_jobs->InsertItem(0, wxT("12345"));
-    lv_jobs->SetItem(dummy, 1, wxT("aborted"));
-    lv_jobs->SetItem(dummy, 2, wxT("2004-05-06 07:08:09"));
-    lv_jobs->SetItem(dummy, 3, wxT("2004-05-06 07:08:09"));
-    lv_jobs->SetItem(dummy, 4, wxT("2004-05-06 07:08:09"));
-    lv_jobs->SetItem(dummy, 5, wxT("2004-05-06 07:08:09"));
+  for (i = 0; i < jobs.size(); i++)
+    create_list_item(i);
 
-  } else
-    for (i = 0; i < jobs.size(); i++)
-      create_list_item(i);
+  dummy = lv_jobs->InsertItem(0, wxT("12345"));
+  lv_jobs->SetItem(dummy, 1, wxT("aborted"));
+  lv_jobs->SetItem(dummy, 2, wxT("2004-05-06 07:08:09"));
+  lv_jobs->SetItem(dummy, 3, wxT("2004-05-06 07:08:09"));
+  lv_jobs->SetItem(dummy, 4, wxT("2004-05-06 07:08:09"));
+  lv_jobs->SetItem(dummy, 5, wxT("2004-05-06 07:08:09"));
 
   for (i = 0; i < 6; i++)
     lv_jobs->SetColumnWidth(i, wxLIST_AUTOSIZE);
 
-  if (jobs.size() == 0)
-    lv_jobs->DeleteItem(0);
+  lv_jobs->DeleteItem(0);
+
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->Add(lv_jobs, 1, wxGROW | wxRIGHT, 10);
 
