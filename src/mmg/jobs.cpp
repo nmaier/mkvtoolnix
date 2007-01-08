@@ -520,9 +520,10 @@ job_dialog::create_list_item(int i) {
 }
 
 void
-job_dialog::enable_buttons(bool enable) {
-  b_up->Enable(enable);
-  b_down->Enable(enable);
+job_dialog::enable_buttons(bool enable,
+                           bool enable_up_down) {
+  b_up->Enable(enable && enable_up_down);
+  b_down->Enable(enable && enable_up_down);
   b_reenable->Enable(enable);
   b_disable->Enable(enable);
   b_delete->Enable(enable);
@@ -730,7 +731,8 @@ job_dialog::on_view_log(wxCommandEvent &evt) {
 
 void
 job_dialog::on_item_selected(wxListEvent &evt) {
-  enable_buttons(lv_jobs->GetSelectedItemCount() > 0);
+  enable_buttons(lv_jobs->GetSelectedItemCount() > 0,
+                 lv_jobs->GetSelectedItemCount() < lv_jobs->GetItemCount());
 }
 
 void

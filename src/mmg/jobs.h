@@ -115,7 +115,7 @@ public:
   void on_view_log(wxCommandEvent &evt);
   void on_item_selected(wxListEvent &evt);
 
-  void enable_buttons(bool enable);
+  void enable_buttons(bool enable, bool enable_up_down = true);
   void swap_rows(int lower, int higher, bool up);
   void create_list_item(int i);
   void start_jobs(vector<int> &jobs_to_start);
