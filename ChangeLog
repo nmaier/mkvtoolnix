@@ -1,5 +1,8 @@
 2007-01-08  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: enhancement: Improved the detection of AVC/h.264 ES
+	streams with garbage at the beginning.
+
 	* mmg: enhancements to the job management dialog: There's a
 	minimum width for the columns. The "up" and "down" buttons are
 	disabled if all entries are selected. Pressing "Ctrl-A" selects

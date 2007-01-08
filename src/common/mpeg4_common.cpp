@@ -1152,7 +1152,7 @@ mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
 //   mxinfo("slice size %d\n", nalu->get_size());
 
   if (!parse_slice(nalu, si))
-    throw error_c("Parsing a slice NALU failed");
+    return;
 
 //   mxinfo("frame_num %u: ", si.frame_num);
 
@@ -1201,7 +1201,7 @@ mpeg4::p10::avc_es_parser_c::handle_sps_nalu(memory_cptr &nalu) {
 
   nalu_to_rbsp(nalu);
   if (!parse_sps(nalu, sps_info, true))
-    throw error_c("Parsing a SPS NALU failed");
+    return;
   rbsp_to_nalu(nalu);
 
   mxforeach(i, m_sps_info_list)
@@ -1220,7 +1220,7 @@ mpeg4::p10::avc_es_parser_c::handle_pps_nalu(memory_cptr &nalu) {
 
   nalu_to_rbsp(nalu);
   if (!parse_pps(nalu, pps_info))
-    throw error_c("Parsing a PPS NALU failed");
+    return;
   rbsp_to_nalu(nalu);
 
   mxforeach(i, m_pps_info_list)
@@ -1285,13 +1285,15 @@ mpeg4::p10::avc_es_parser_c::handle_nalu(memory_cptr nalu) {
     case NALU_TYPE_DP_B_SLICE:
     case NALU_TYPE_DP_C_SLICE:
     case NALU_TYPE_IDR_SLICE:
-      m_avcc_ready = true;
+      if (!m_sps_info_list.empty() && !m_pps_info_list.empty())
+        m_avcc_ready = true;
       handle_slice_nalu(nalu);
       break;
 
     default:
       flush_incomplete_frame();
-      m_avcc_ready = true;
+      if (!m_sps_info_list.empty() && !m_pps_info_list.empty())
+        m_avcc_ready = true;
       m_extra_data.push_back(create_nalu_with_size(nalu));
       break;
   }

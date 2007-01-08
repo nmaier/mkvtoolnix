@@ -35,6 +35,7 @@ using namespace std;
 
 #define PROBESIZE 4
 #define READ_SIZE 1024 * 1024
+#define MAX_PROBE_BUFFERS 50
 
 using namespace mpeg4::p10;
 
@@ -47,27 +48,32 @@ avc_es_reader_c::probe_file(mm_io_c *io,
 
     memory_cptr buf(new memory_c((unsigned char *)safemalloc(READ_SIZE),
                                  READ_SIZE));
-    int num_read;
-
-    io->setFilePointer(0, seek_beginning);
-    num_read = io->read(buf->get(), READ_SIZE);
-    io->setFilePointer(0, seek_beginning);
-    if (num_read < 4)
-      return 0;
+    int num_read, i;
 
     avc_es_parser_c parser;
     parser.ignore_nalu_size_length_errors();
     parser.set_nalu_size_length(4);
     parser.enable_timecode_generation(40000000);
-    parser.add_bytes(buf->get(), num_read);
 
-    return parser.headers_parsed();
+    io->setFilePointer(0, seek_beginning);
+    for (i = 0; MAX_PROBE_BUFFERS > i; ++i) {
+      num_read = io->read(buf->get(), READ_SIZE);
+      if (num_read < 4)
+        return 0;
 
+      parser.add_bytes(buf->get(), num_read);
+
+      if (parser.headers_parsed())
+        return 1;
+    }
+
+  } catch (error_c &err) {
+    mxinfo("err %s\n", err.get_error().c_str());
   } catch (...) {
-    return 0;
+    mxinfo("have an xcptn\n");
   }
 
-  return 1;
+  return 0;
 }
 
 avc_es_reader_c::avc_es_reader_c(track_info_c &n_ti)
@@ -80,13 +86,22 @@ avc_es_reader_c::avc_es_reader_c(track_info_c &n_ti)
     m_io = counted_ptr<mm_io_c>(new mm_file_io_c(ti.fname));
     m_size = m_io->get_size();
 
-    int num_read = m_io->read(m_buffer->get(), READ_SIZE);
-
     avc_es_parser_c parser;
     parser.ignore_nalu_size_length_errors();
     parser.enable_timecode_generation(40000000);
-    parser.add_bytes(m_buffer->get(), num_read);
-    parser.flush();
+
+    int num_read, i;
+
+    for (i = 0; MAX_PROBE_BUFFERS > i; ++i) {
+      num_read = m_io->read(m_buffer->get(), READ_SIZE);
+      if (0 == num_read)
+        throw error_c("avc_es_reader: Should not have happened.");
+      parser.add_bytes(m_buffer->get(), num_read);
+      if (parser.headers_parsed())
+        break;
+    }
+    if (parser.headers_parsed())
+      parser.flush();
     m_avcc = parser.get_avcc();
     m_width = parser.get_width();
     m_height = parser.get_height();
