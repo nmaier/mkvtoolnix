@@ -1426,7 +1426,7 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
 
   slice_info_t &idr = i->m_si;
   sps_info_t &sps = m_sps_info_list[idr.sps];
-  if ((NALU_TYPE_IDR_SLICE != idr.nalu_type) ||
+  if (//(NALU_TYPE_IDR_SLICE != idr.nalu_type) ||
       ((AVC_SLICE_TYPE_I != idr.type) &&
        (AVC_SLICE_TYPE_SI != idr.type) &&
        (AVC_SLICE_TYPE2_I != idr.type) &&
@@ -1437,16 +1437,17 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
     return;
   }
 
-  ++i;
+//   ++i;
 
   vector<poc_t> poc;
 
   if (0 == sps.pic_order_cnt_type) {
-    poc.push_back(poc_t(0, 0));
-    j = 1;
+//     poc.push_back(poc_t(0, 0));
+//     j = 1;
+    j = 0;
 
     int prev_pic_order_cnt_msb = 0, prev_pic_order_cnt_lsb = 0;
-    int pic_order_cnt_msb;
+    int pic_order_cnt_msb = -1;
 
     while (m_frames.end() != i) {
       slice_info_t &si = i->m_si;
@@ -1457,9 +1458,11 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
         return;
       }
 
-      if ((si.pic_order_cnt_lsb < prev_pic_order_cnt_lsb) &&
-          ((prev_pic_order_cnt_lsb - si.pic_order_cnt_lsb) >=
-           (1 << (sps.log2_max_pic_order_cnt_lsb - 1))))
+      if (-1 == pic_order_cnt_msb)
+        pic_order_cnt_msb = 0;
+      else if ((si.pic_order_cnt_lsb < prev_pic_order_cnt_lsb) &&
+               ((prev_pic_order_cnt_lsb - si.pic_order_cnt_lsb) >=
+                (1 << (sps.log2_max_pic_order_cnt_lsb - 1))))
         pic_order_cnt_msb = prev_pic_order_cnt_msb +
           (1 << sps.log2_max_pic_order_cnt_lsb);
       else if ((si.pic_order_cnt_lsb > prev_pic_order_cnt_lsb) &&
