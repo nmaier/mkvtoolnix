@@ -1137,7 +1137,7 @@ mpeg4::p10::avc_es_parser_c::flush_incomplete_frame() {
   if (!m_have_incomplete_frame)
     return;
 
-  if (m_first_keyframe_found)
+  if (1) //m_first_keyframe_found)
     m_frames.push_back(m_incomplete_frame);
   else
     ++m_num_skipped_frames;
@@ -1187,7 +1187,7 @@ mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
   m_incomplete_frame.m_data = create_nalu_with_size(nalu, true);
   m_have_incomplete_frame = true;
 
-  if (m_first_keyframe_found) {
+  if (1) { //m_first_keyframe_found) {
     if (m_generate_timecodes)
       add_timecode(m_frame_number * m_default_duration);
     ++m_frame_number;
@@ -1410,6 +1410,10 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
 
   if (m_frames.empty())
     return;
+
+  // This may be wrong but is needed for mkvmerge to work correctly
+  // (cluster_helper etc).
+  i->m_keyframe = true;
 
   if (m_timecodes.size() < m_frames.size()) {
     mxverb(4, "mpeg4::p10::avc_es_parser_c::cleanup() numfr %d sti %d\n",
