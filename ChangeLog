@@ -1,3 +1,9 @@
+2007-01-09  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: enhancement: mkvmerge now handles the first frames in
+	AVC/h.264 ES streams properly, especially for files for which it
+	did not find a key frame at the beginning in earlier versions.
+
 2007-01-08  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: Improved the detection of AVC/h.264 ES
