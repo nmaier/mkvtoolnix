@@ -986,7 +986,7 @@ mpeg4::p10::avc_es_parser_c::avc_es_parser_c():
   m_nalu_size_length(2),
   m_avcc_ready(false),
   m_default_duration(40000000), m_frame_number(0), m_num_skipped_frames(0),
-  m_first_keyframe_found(false),
+  m_first_keyframe_found(false), m_recovery_point_valid(false),
   m_generate_timecodes(false),
   m_have_incomplete_frame(false) {
 }
@@ -1173,11 +1173,14 @@ mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
 //   mxinfo("new one\n");
   m_incomplete_frame.m_si = si;
   m_incomplete_frame.m_keyframe =
-    (NALU_TYPE_IDR_SLICE == m_incomplete_frame.m_si.nalu_type) &&
-    ((AVC_SLICE_TYPE_I == m_incomplete_frame.m_si.type) ||
-     (AVC_SLICE_TYPE2_I == m_incomplete_frame.m_si.type) ||
-     (AVC_SLICE_TYPE_SI == m_incomplete_frame.m_si.type) ||
-     (AVC_SLICE_TYPE2_SI == m_incomplete_frame.m_si.type));
+    m_recovery_point_valid ||
+    ((NALU_TYPE_IDR_SLICE == m_incomplete_frame.m_si.nalu_type) &&
+     ((AVC_SLICE_TYPE_I == m_incomplete_frame.m_si.type) ||
+      (AVC_SLICE_TYPE2_I == m_incomplete_frame.m_si.type) ||
+      (AVC_SLICE_TYPE_SI == m_incomplete_frame.m_si.type) ||
+      (AVC_SLICE_TYPE2_SI == m_incomplete_frame.m_si.type)));
+
+  m_recovery_point_valid = false;
 
   if (m_incomplete_frame.m_keyframe) {
     m_first_keyframe_found = true;
@@ -1229,6 +1232,39 @@ mpeg4::p10::avc_es_parser_c::handle_pps_nalu(memory_cptr &nalu) {
   if (m_pps_info_list.end() == i) {
     m_pps_list.push_back(nalu);
     m_pps_info_list.push_back(pps_info);
+  }
+}
+
+void
+mpeg4::p10::avc_es_parser_c::handle_sei_nalu(memory_cptr &nalu) {
+  try {
+    nalu_to_rbsp(nalu);
+
+    bit_cursor_c r(nalu->get(), nalu->get_size());
+    int ptype, psize, value;
+
+    r.skip_bits(8);
+
+    while (1) {
+      ptype = 0;
+      while ((value = r.get_bits(8)) == 0xff)
+        ptype += value;
+      ptype += value;
+
+      psize = 0;
+      while ((value = r.get_bits(8)) == 0xff)
+        psize += value;
+      psize += value;
+
+      if (6 == ptype) {         // recovery point
+        m_recovery_point_valid = true;
+        return;
+      } else if (0x80 == ptype)
+        return;
+
+      r.skip_bits(psize * 8);
+    }
+  } catch (...) {
   }
 }
 
@@ -1295,6 +1331,8 @@ mpeg4::p10::avc_es_parser_c::handle_nalu(memory_cptr nalu) {
       if (!m_sps_info_list.empty() && !m_pps_info_list.empty())
         m_avcc_ready = true;
       m_extra_data.push_back(create_nalu_with_size(nalu));
+//       if (NALU_TYPE_SEI == type)
+//         handle_sei_nalu(nalu);
       break;
   }
 }

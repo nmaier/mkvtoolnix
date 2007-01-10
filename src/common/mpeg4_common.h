@@ -323,7 +323,7 @@ namespace mpeg4 {
 
       int64_t m_default_duration;
       int m_frame_number, m_num_skipped_frames;
-      bool m_first_keyframe_found;
+      bool m_first_keyframe_found, m_recovery_point_valid;
 
       deque<avc_frame_t> m_frames, m_frames_out;
       deque<int64_t> m_timecodes;
@@ -411,6 +411,7 @@ namespace mpeg4 {
       bool parse_slice(memory_cptr &buffer, slice_info_t &si);
       void handle_sps_nalu(memory_cptr &nalu);
       void handle_pps_nalu(memory_cptr &nalu);
+      void handle_sei_nalu(memory_cptr &nalu);
       void handle_slice_nalu(memory_cptr &nalu);
       void cleanup();
       void default_cleanup();
