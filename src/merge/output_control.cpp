@@ -321,8 +321,6 @@ get_file_type(filelist_t &file) {
     type = FILE_TYPE_WAVPACK4;
   else if (mpeg_ps_reader_c::probe_file(io, size))
     type = FILE_TYPE_MPEG_PS;
-  else if (avc_es_reader_c::probe_file(io, size))
-    type = FILE_TYPE_AVC_ES;
   else {
     for (i = 0; (probe_sizes[i] != 0) && (type == FILE_TYPE_IS_UNKNOWN); i++)
       if (mp3_reader_c::probe_file(io, size, probe_sizes[i], 5))
@@ -342,6 +340,8 @@ get_file_type(filelist_t &file) {
     type = FILE_TYPE_VOBBTN;
   else if (mpeg_es_reader_c::probe_file(io, size))
     type = FILE_TYPE_MPEG_ES;
+  else if (avc_es_reader_c::probe_file(io, size))
+    type = FILE_TYPE_AVC_ES;
   else {
     try {
       text_io = new mm_text_io_c(new mm_file_io_c(file.name));
