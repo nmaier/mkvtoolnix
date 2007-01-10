@@ -16,7 +16,7 @@
 
 #include "os.h"
 
-#include <assert.h>
+#include <cassert>
 #include <ctype.h>
 #include <errno.h>
 #include <iconv.h>

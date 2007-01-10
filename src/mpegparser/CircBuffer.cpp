@@ -22,7 +22,7 @@
 
 #include "CircBuffer.h"
 #include <string.h>
-#include <assert.h>
+#include <cassert>
 
 CircBuffer::CircBuffer(uint32_t size){
   m_buf = new binary[size];

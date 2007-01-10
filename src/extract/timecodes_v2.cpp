@@ -21,7 +21,7 @@
 #include <time.h>
 
 #if defined(COMP_MSC)
-#include <assert.h>
+#include <cassert>
 #else
 #include <unistd.h>
 #endif

@@ -18,7 +18,7 @@
 
 #include "os.h"
 
-#include <assert.h>
+#include <cassert>
 
 #include <deque>
 #include <vector>

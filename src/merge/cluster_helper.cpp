@@ -16,7 +16,7 @@
 
 #include "os.h"
 
-#include <assert.h>
+#include <cassert>
 #include <limits.h>
 
 #include <vector>
