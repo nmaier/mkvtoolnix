@@ -18,6 +18,8 @@
 
 #include "os.h"
 
+#include <assert.h>
+
 #include <deque>
 #include <vector>
 
