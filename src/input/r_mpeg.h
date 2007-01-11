@@ -46,7 +46,7 @@ public:
   virtual void create_packetizer(int64_t id);
 
   static bool read_frame(M2VParser &parser, mm_io_c &in,
-                         int64_t max_size = -1);
+                         int64_t max_size = -1, bool flush_parser = false);
 
   static int probe_file(mm_io_c *io, int64_t size);
 };

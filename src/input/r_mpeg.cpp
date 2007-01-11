@@ -82,7 +82,7 @@ mpeg_es_reader_c::probe_file(mm_io_c *io,
       return 0;
 
     // Let's try to read one frame.
-    if (!read_frame(parser, *io, READ_SIZE))
+    if (!read_frame(parser, *io, READ_SIZE, true))
       return 0;
 
   } catch (...) {
@@ -183,7 +183,8 @@ mpeg_es_reader_c::read(generic_packetizer_c *,
 bool
 mpeg_es_reader_c::read_frame(M2VParser &parser,
                              mm_io_c &in,
-                             int64_t max_size) {
+                             int64_t max_size,
+                             bool flush) {
   int bytes_probed;
 
   bytes_probed = 0;
@@ -210,6 +211,7 @@ mpeg_es_reader_c::read_frame(M2VParser &parser,
       bytes_probed += bytes_read;
 
       parser.WriteData(buffer, bytes_read);
+      parser.SetEOS();
       delete [] buffer;
 
     } else if (state == MPV_PARSER_STATE_FRAME)

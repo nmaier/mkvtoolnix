@@ -1,3 +1,8 @@
+2007-01-12  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed the file type detection for MPEG-1/2 ES
+	files with a single frame inside.
+
 2007-01-11  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: MPEG-1/2 video: The sequence and GOP headers
