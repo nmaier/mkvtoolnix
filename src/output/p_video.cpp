@@ -231,8 +231,8 @@ mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
       if (frame == NULL)
         break;
 
-      if (hcodec_private == NULL)
-        create_private_data();
+//       if (hcodec_private == NULL)
+//         create_private_data();
 
       packet_t *new_packet =
         new packet_t(new memory_c(frame->data, frame->size, true),

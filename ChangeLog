@@ -1,3 +1,10 @@
+2007-01-11  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: MPEG-1/2 video: The sequence and GOP headers
+	are not removed from the bitstream anymore. This should fix the
+	blockiness if the sequence headers change mid-stream. Fix for
+	Bugzilla bug #167.
+
 2007-01-09  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: mkvmerge now handles the first frames in

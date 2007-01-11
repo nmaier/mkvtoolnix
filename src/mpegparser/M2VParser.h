@@ -59,7 +59,7 @@ private:
   std::queue<MPEGFrame*> buffers; //Holds stamped buffers until they are requested.
   MediaTime position;
   //Added to allow reading the header's raw data, contains first found seq hdr.
-  MPEGChunk* seqHdrChunk;
+  MPEGChunk* seqHdrChunk, *gopChunk;
   MPEG2SequenceHeader m_seqHdr; //current sequence header
   MediaTime currentStampingTime;
   MediaTime firstRef;
@@ -79,7 +79,7 @@ private:
   MediaTime CountBFrames();
   void ShoveRef(MediaTime ref);
   MediaTime GetFrameDuration(MPEG2PictureHeader picHdr);
-  int32_t QueueFrame(MPEGChunk* seqHdr, MPEGChunk* chunk, MediaTime timecode, MPEG2PictureHeader picHdr);
+  int32_t QueueFrame(MPEGChunk* chunk, MediaTime timecode, MPEG2PictureHeader picHdr);
 public:
   M2VParser();
   virtual ~M2VParser();
