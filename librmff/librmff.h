@@ -35,7 +35,7 @@
   files. It does not contain any codecs for audio/video handling.
 
   You can find a description of the RealMedia file format at
-  http://www.pcisys.net/~melanson/codecs/rmff.htm
+  http://wiki.multimedia.cx/index.php?title=RealMedia
 
   \section License
 
