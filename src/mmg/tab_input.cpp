@@ -213,7 +213,7 @@ tab_input::select_file(bool append) {
   static struct { wxChar *title, *extensions; } file_types[] = {
     { wxT("A/52 (aka AC3)"), wxT("ac3") },
     { wxT("AAC (Advanced Audio Coding)"), wxT("aac m4a mp4") },
-    { wxT("AVC/h.264 elementary streams"), wxT("avc h264") },
+    { wxT("AVC/h.264 elementary streams"), wxT("264 avc h264 x264") },
     { wxT("AVI (Audio/Video Interleaved)"), wxT("avi") },
     { wxT("DTS (Digital Theater System)"), wxT("dts") },
     { wxT("FLAC (Free Lossless Audio Codec)"), wxT("flac ogg") },
