@@ -28,6 +28,7 @@
 #include "xtr_avi.h"
 #include "xtr_base.h"
 #include "xtr_cpic.h"
+#include "xtr_mpeg1_2.h"
 #include "xtr_ogg.h"
 #include "xtr_rmff.h"
 #include "xtr_textsubs.h"
@@ -134,6 +135,9 @@ xtr_base_c::create_extractor(const string &new_codec_id,
     return new xtr_avc_c(new_codec_id, new_tid, tspec);
   else if (starts_with_case(new_codec_id, "V_REAL/"))
     return new xtr_rmff_c(new_codec_id, new_tid, tspec);
+  else if ((new_codec_id == MKV_V_MPEG1) ||
+           (new_codec_id == MKV_V_MPEG2))
+    return new xtr_mpeg1_2_video_c(new_codec_id, new_tid, tspec);
 
   // Subtitle formats
   else if ((new_codec_id == MKV_S_TEXTUTF8) ||
