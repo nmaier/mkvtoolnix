@@ -176,9 +176,11 @@ tab_input::tab_input(wxWindow *parent):
 
   ti_general = new tab_input_general(nb_options, this);
   ti_format = new tab_input_format(nb_options, this);
+  ti_extra = new tab_input_extra(nb_options, this);
 
   nb_options->AddPage(ti_general, wxT("General track options"));
   nb_options->AddPage(ti_format, wxT("Format specific options"));
+  nb_options->AddPage(ti_extra, wxT("Extra options"));
 
   siz_all->Add(nb_options, 0, wxGROW | wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
 
@@ -206,6 +208,7 @@ void
 tab_input::set_track_mode(mmg_track_t *t) {
   ti_general->set_track_mode(t);
   ti_format->set_track_mode(t);
+  ti_extra->set_track_mode(t);
 }
 
 void
@@ -899,6 +902,7 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
   ti_format->cob_nalu_size_length->SetSelection(t->nalu_size_length - 2);
   ti_general->tc_track_name->SetFocus();
   ti_format->cob_stereo_mode->SetSelection(t->stereo_mode);
+  ti_extra->tc_user_defined->SetValue(t->user_defined);
 
   dont_copy_values_now = false;
 }
@@ -994,6 +998,7 @@ tab_input::save(wxConfigBase *cfg) {
       cfg->Write(wxT("compression"), t->compression);
       cfg->Write(wxT("track_name_was_present"), t->track_name_was_present);
       cfg->Write(wxT("appending"), t->appending);
+      cfg->Write(wxT("user_defined"), t->user_defined);
 
       cfg->SetPath(wxT(".."));
     }
@@ -1093,6 +1098,7 @@ tab_input::load(wxConfigBase *cfg,
       cfg->Read(wxT("track_name_was_present"), &tr->track_name_was_present,
                 false);
       cfg->Read(wxT("appending"), &tr->appending, false);
+      cfg->Read(wxT("user_defined"), &tr->user_defined);
       tr->source = files.size();
       if (track_order.Length() > 0)
         track_order += wxT(",");

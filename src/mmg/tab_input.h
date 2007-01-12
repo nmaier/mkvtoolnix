@@ -53,6 +53,7 @@
 #define ID_CB_STEREO_MODE                 11032
 #define ID_CB_FPS                         11033
 #define ID_CB_NALU_SIZE_LENGTH            11034
+#define ID_TC_USER_DEFINED                11035
 #define ID_NB_OPTIONS                     11999
 
 extern const wxChar *predefined_aspect_ratios[];
@@ -130,12 +131,31 @@ public:
   void on_compression_selected(wxCommandEvent &evt);
 };
 
+class tab_input_extra: public wxPanel {
+  DECLARE_CLASS(tab_input_extra);
+  DECLARE_EVENT_TABLE();
+public:
+  wxTextCtrl *tc_user_defined;
+
+  wxStaticText *st_user_defined;
+
+  tab_input *input;
+
+public:
+  tab_input_extra(wxWindow *parent, tab_input *ti);
+
+  void set_track_mode(mmg_track_t *t);
+
+  void on_user_defined_changed(wxCommandEvent &evt);
+};
+
 class tab_input: public wxPanel {
   DECLARE_CLASS(tab_input);
   DECLARE_EVENT_TABLE();
 public:
   tab_input_general *ti_general;
   tab_input_format *ti_format;
+  tab_input_extra *ti_extra;
 
   wxListBox *lb_input_files;
   wxButton *b_add_file, *b_remove_file;

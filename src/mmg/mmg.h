@@ -65,6 +65,8 @@ struct mmg_track_t {
   wxString dwidth, dheight;
   int stereo_mode;
 
+  wxString user_defined;
+
   bool appending;
 
   mmg_track_t():

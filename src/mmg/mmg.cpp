@@ -1503,6 +1503,18 @@ mmg_dialog::update_command_line() {
         clargs.Add(wxT("--timecodes"));
         clargs.Add(sid + wxT(":") + t->timecodes);
       }
+
+      if (t->user_defined.Length() > 0) {
+        vector<wxString> opts;
+        int i;
+
+        opts = split(t->user_defined, wxString(wxT(" ")));
+        for (i = 0; i < opts.size(); i++) {
+          wxString opt = strip(opts[i]);
+          opt.Replace(wxT("<TID>"), sid, true);
+          clargs.Add(opt);
+        }
+      }
     }
 
     if (aids.length() > 0) {
