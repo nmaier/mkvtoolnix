@@ -38,6 +38,10 @@ public:
                             int64_t fref, bool keyframe, bool discardable,
                             bool references_valid);
   virtual void finish_file();
+
+  virtual const char *get_container_name() {
+    return "AVI (Microsoft Audio/Video Interleaved)";
+  };
 };
 
 #endif

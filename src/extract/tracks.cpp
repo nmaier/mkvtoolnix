@@ -135,8 +135,9 @@ create_extractors(KaxTracks &kax_tracks,
     // We're done.
     extractors.push_back(extractor);
 
-    mxinfo("Extracting track " LLD " with the CodecID '%s' to the file '%s'."
-           "\n", tnum, codec_id.c_str(), tspec->out_name);
+    mxinfo("Extracting track " LLD " with the CodecID '%s' to the file '%s'. "
+           "Container format: %s\n", tnum, codec_id.c_str(), tspec->out_name,
+           extractor->get_container_name());
   }
 
   // Signal that all headers have been taken care of.

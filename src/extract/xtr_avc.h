@@ -33,6 +33,10 @@ public:
                             bool references_valid);
   void write_nal(const binary *data, int &pos, int data_size,
                  int nal_size_size);
+
+  virtual const char *get_container_name() {
+    return "AVC/h.264 elementary stream";
+  };
 };
 
 #endif

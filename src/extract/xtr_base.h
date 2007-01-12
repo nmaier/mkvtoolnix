@@ -30,7 +30,7 @@ using namespace libmatroska;
 
 class xtr_base_c {
 public:
-  string codec_id, file_name;
+  string codec_id, file_name, container_name;
   xtr_base_c *master;
   mm_io_c *out;
   int64_t tid;
@@ -41,7 +41,8 @@ public:
   content_decoder_c content_decoder;
 
 public:
-  xtr_base_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec);
+  xtr_base_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec,
+             const char *_container_name = NULL);
   virtual ~xtr_base_c();
 
   virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
@@ -53,6 +54,10 @@ public:
   virtual void finish_file();
 
   virtual void headers_done();
+
+  virtual const char *get_container_name() {
+    return container_name.c_str();
+  };
 
   static xtr_base_c *create_extractor(const string &new_codec_id,
                                       int64_t new_tid, track_spec_t &tspec);

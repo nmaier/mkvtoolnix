@@ -41,9 +41,11 @@ using namespace libmatroska;
 
 xtr_base_c::xtr_base_c(const string &_codec_id,
                        int64_t _tid,
-                       track_spec_t &tspec):
-  codec_id(_codec_id), file_name(tspec.out_name), master(NULL), out(NULL),
-  tid(_tid), default_duration(0), bytes_written(0) {
+                       track_spec_t &tspec,
+                       const char *_container_name):
+  codec_id(_codec_id), file_name(tspec.out_name),
+  container_name(NULL == _container_name ? "raw data" : _container_name),
+  master(NULL), out(NULL), tid(_tid), default_duration(0), bytes_written(0) {
 }
 
 xtr_base_c::~xtr_base_c() {
@@ -106,10 +108,14 @@ xtr_base_c::create_extractor(const string &new_codec_id,
   else if (2 == tspec.extract_raw)
     return new xtr_fullraw_c(new_codec_id, new_tid, tspec);
   // Audio formats
-  else if ((new_codec_id == MKV_A_AC3) ||
-           starts_with_case(new_codec_id, "A_MPEG/L") ||
-           (new_codec_id == MKV_A_DTS))
-    return new xtr_base_c(new_codec_id, new_tid, tspec);
+  else if (new_codec_id == MKV_A_AC3)
+    return new xtr_base_c(new_codec_id, new_tid, tspec, "Dolby Digital (AC3)");
+  else if (starts_with_case(new_codec_id, "A_MPEG/L"))
+    return new xtr_base_c(new_codec_id, new_tid, tspec,
+                          "MPEG-1 Audio Layer 2/3");
+  else if (new_codec_id == MKV_A_DTS)
+    return new xtr_base_c(new_codec_id, new_tid, tspec,
+                          "Digital Theater System (DTS)");
   else if (new_codec_id == MKV_A_PCM)
     return new xtr_wav_c(new_codec_id, new_tid, tspec);
   else if (new_codec_id == MKV_A_FLAC) {

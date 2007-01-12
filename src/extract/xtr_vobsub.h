@@ -39,6 +39,10 @@ public:
                             bool references_valid);
   virtual void finish_file();
   virtual void write_idx(mm_io_c &idx, int index);
+
+  virtual const char *get_container_name() {
+    return "VobSubs";
+  };
 };
 
 #endif

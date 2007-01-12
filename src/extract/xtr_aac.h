@@ -31,6 +31,10 @@ public:
                             int64_t timecode, int64_t duration, int64_t bref,
                             int64_t fref, bool keyframe, bool discardable,
                             bool references_valid);
+
+  virtual const char *get_container_name() {
+    return "raw AAC file with ADTS headers";
+  };
 };
 
 #endif

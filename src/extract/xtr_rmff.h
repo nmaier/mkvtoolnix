@@ -36,6 +36,10 @@ public:
                             bool references_valid);
   virtual void finish_file();
   virtual void headers_done();
+
+  virtual const char *get_container_name() {
+    return "RMFF (RealMedia File Format)";
+  };
 };
 
 #endif

@@ -55,6 +55,10 @@ public:
   xtr_oggflac_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec);
 
   virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
+
+  virtual const char *get_container_name() {
+    return "Ogg (FLAC in Ogg)";
+  };
 };
 
 class xtr_oggvorbis_c: public xtr_oggbase_c {
@@ -62,6 +66,10 @@ public:
   xtr_oggvorbis_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec);
 
   virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
+
+  virtual const char *get_container_name() {
+    return "Ogg (Vorbis in Ogg)";
+  };
 };
 
 #endif
