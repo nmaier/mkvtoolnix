@@ -1455,7 +1455,7 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
 
   if (m_timecodes.size() < m_frames.size()) {
     mxverb(4, "mpeg4::p10::avc_es_parser_c::cleanup() numfr %d sti %d\n",
-           m_frames.size(), m_timecodes.size());
+           (int)m_frames.size(), (int)m_timecodes.size());
     m_timecodes.erase(m_timecodes.begin(),
                       m_timecodes.begin() + m_frames.size());
     m_frames.clear();

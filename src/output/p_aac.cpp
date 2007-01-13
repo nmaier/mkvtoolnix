@@ -84,7 +84,7 @@ aac_packetizer_c::get_aac_packet(unsigned long *header,
 
   bytes_skipped += pos;
   if (verbose && (0 < bytes_skipped))
-    mxwarn(FMT_TID "skipping %lld bytes (no valid AAC header "
+    mxwarn(FMT_TID "skipping " LLD " bytes (no valid AAC header "
            "found). This might make audio/video go out of sync, but this "
            "stream is damaged.\n", ti.fname.c_str(), (int64_t)0,
            bytes_skipped);

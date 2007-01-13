@@ -150,7 +150,7 @@ avi_reader_c::create_packetizer(int64_t tid) {
       ti.private_size = get_uint32_le(&avi->bitmap_info_header->bi_size);
 
     mxverb(4, "track extra data size: %d\n",
-           ti.private_size - sizeof(alBITMAPINFOHEADER));
+           (int)(ti.private_size - sizeof(alBITMAPINFOHEADER)));
     if (sizeof(alBITMAPINFOHEADER) < ti.private_size) {
       mxverb(4, "  ");
       for (i = sizeof(alBITMAPINFOHEADER); i < ti.private_size; ++i)
