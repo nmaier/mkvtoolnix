@@ -21,6 +21,7 @@
 
 #include <vector>
 
+#include <matroska/KaxBlock.h>
 #include <matroska/KaxBlockData.h>
 #include <matroska/KaxSeekHead.h>
 
@@ -395,7 +396,7 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
   generic_packetizer_c *source;
   vector<render_groups_t *> render_groups;
   render_groups_t *render_group;
-  bool added_to_cues;
+  bool added_to_cues, has_codec_state;
   LacingType lacing_type;
   bool use_simpleblock = hack_engaged(ENGAGE_USE_SIMPLE_BLOCK);
   BlockBlobType this_block_blob_type, std_block_blob_type = use_simpleblock ?
@@ -425,6 +426,8 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
     pack = clstr->packets[i];
     source = pack->source;
 
+    has_codec_state = NULL != pack->codec_state.get();
+
     if (source->contains_gap())
       cluster->SetSilentTrackUsed();
 
@@ -434,7 +437,7 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
         render_group = render_groups[k];
         break;
       }
-    if (render_group == NULL) {
+    if (NULL == render_group) {
       render_group = new render_groups_t;
       render_group->source = source;
       render_group->more_data = false;
@@ -458,7 +461,7 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
     else
       last_block_group = NULL;
 
-    if (pack->bref != -1)
+    if ((pack->bref != -1) || has_codec_state)
       render_group->more_data = false;
 
     if (!render_group->more_data) {
@@ -469,6 +472,9 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
       this_block_blob_type = !use_simpleblock ? std_block_blob_type :
         must_duration_be_set(render_group, pack) ?
         BLOCK_BLOB_NO_SIMPLE : BLOCK_BLOB_ALWAYS_SIMPLE;
+
+      if (has_codec_state)
+        this_block_blob_type = BLOCK_BLOB_NO_SIMPLE;
 
       new_block_group = new KaxBlockBlob(this_block_blob_type);
       cluster->AddBlockBlob(new_block_group);
@@ -535,6 +541,14 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
       free_ref(pack->timecode, pack->source);
     }
 
+    if (has_codec_state) {
+      KaxBlockGroup &bgroup((KaxBlockGroup &)*new_block_group);
+      KaxCodecState *cstate = new KaxCodecState;
+      bgroup.PushElement(*cstate);
+      cstate->CopyBuffer(pack->codec_state->get(),
+                         pack->codec_state->get_size());
+    }
+
     if (first_timecode_in_file == -1)
       first_timecode_in_file = pack->assigned_timecode;
 
@@ -576,12 +590,13 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
 
     if (new_block_group == NULL)
       new_block_group = last_block_group;
-    else if (write_cues && !added_to_cues) {
+    else if (write_cues && (!added_to_cues || has_codec_state)) {
       // Update the cues (index table) either if cue entries for
       // I frames were requested and this is an I frame...
       if (((source->get_cue_creation() == CUE_STRATEGY_IFRAMES) &&
-           (pack->bref == -1))
-          ||
+           (pack->bref == -1)) ||
+          // ... or if a codec state change is present ...
+          has_codec_state ||
           // ... or if the user requested entries for all frames ...
           (source->get_cue_creation() == CUE_STRATEGY_ALL) ||
           // ... or if this is an audio track, there is no video track and the
@@ -597,6 +612,9 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
         cue_writing_requested = 1;
         source->set_last_cue_timecode(pack->assigned_timecode);
         added_to_cues = true;
+
+        if (has_codec_state) {
+        }
       }
     }
 
@@ -621,7 +639,7 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
     last_cluster_tc = 0;
 
   for (i = 0; i < clstr->packets.size(); i++)
-    clstr->packets[i]->data = memory_cptr(new memory_c());
+    clstr->packets[i]->data = memory_cptr(NULL);
 
   for (i = 0; i < render_groups.size(); i++)
     delete render_groups[i];

@@ -176,3 +176,8 @@ xtr_fullraw_c::create_file(xtr_base_c *_master,
   if ((NULL != priv) && (0 != priv->GetSize()))
     out->write(priv->GetBuffer(), priv->GetSize());
 }
+
+void
+xtr_fullraw_c::handle_codec_state(memory_cptr &codec_state) {
+  out->write(codec_state->get(), codec_state->get_size());
+}

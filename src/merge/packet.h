@@ -39,6 +39,7 @@ struct packet_t {
 
   memory_cptr data;
   vector<memory_cptr> data_adds;
+  memory_cptr codec_state;
 
   KaxBlockBlob *group;
   KaxBlock *block;

@@ -183,6 +183,62 @@ mpeg1_2_video_packetizer_c(generic_reader_c *_reader,
     aspect_ratio_extracted = true;
 
   timecode_factory_application_mode = TFA_SHORT_QUEUEING;
+  if (hack_engaged(ENGAGE_USE_CODEC_STATE))
+      parser.SeparateSequenceHeaders();
+}
+
+int
+mpeg1_2_video_packetizer_c::process_framed(packet_cptr packet) {
+  if (0 == packet->data->get_size())
+    return FILE_STATUS_MOREDATA;
+
+  if (!hack_engaged(ENGAGE_USE_CODEC_STATE) ||
+      (4 > packet->data->get_size()))
+    return video_packetizer_c::process(packet);
+
+  unsigned char *buf = packet->data->get();
+  int pos = 4, marker, size = packet->data->get_size();
+
+  marker = get_uint32_be(buf);
+  while ((pos < size) && (MPEGVIDEO_SEQUENCE_START_CODE != marker)) {
+    marker <<= 8;
+    marker |= buf[pos];
+    ++pos;
+  }
+
+  if ((MPEGVIDEO_SEQUENCE_START_CODE != marker) ||
+      ((pos + 4) >= size))
+    return video_packetizer_c::process(packet);
+
+  int start = pos - 4;
+  marker = get_uint32_be(&buf[pos]);
+  pos += 4;
+
+  while ((pos < size) &&
+         ((MPEGVIDEO_EXT_START_CODE == marker) ||
+          (0x00000100 != (marker & 0xffffff00)))) {
+    marker <<= 8;
+    marker |= buf[pos];
+    ++pos;
+  }
+
+  if (pos >= size)
+    return video_packetizer_c::process(packet);
+
+  pos -= 4;
+  int sh_size = pos - start;
+
+  if ((NULL == seq_hdr.get()) ||
+      (sh_size != seq_hdr->get_size()) ||
+      memcmp(&buf[start], seq_hdr->get(), sh_size)) {
+    seq_hdr = clone_memory(&buf[start], sh_size);
+    packet->codec_state = clone_memory(&buf[start], sh_size);
+  }
+
+  memmove(&buf[start], &buf[pos], size - pos);
+  packet->data->set_size(size - sh_size);
+
+  return video_packetizer_c::process(packet);
 }
 
 int
@@ -196,12 +252,8 @@ mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
   if (!aspect_ratio_extracted)
     extract_aspect_ratio(packet->data->get(), packet->data->get_size());
 
-  if (framed) {
-    if (0 != packet->data->get_size())
-      return video_packetizer_c::process(packet);
-    else
-      return FILE_STATUS_MOREDATA;
-  }
+  if (framed)
+    return process_framed(packet);
 
   state = parser.GetState();
   if ((state == MPV_PARSER_STATE_EOS) ||
@@ -231,15 +283,23 @@ mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
       if (frame == NULL)
         break;
 
-//       if (hcodec_private == NULL)
-//         create_private_data();
-
       packet_t *new_packet =
         new packet_t(new memory_c(frame->data, frame->size, true),
                      frame->timecode, frame->duration,
                      frame->firstRef, frame->secondRef);
       new_packet->time_factor =
         MPEG2_PICTURE_TYPE_FRAME == frame->pictureStructure ? 1 : 2;
+
+      if ((NULL != frame->seqHdrData) &&
+          ((NULL == seq_hdr.get()) ||
+           (frame->seqHdrDataSize != seq_hdr->get_size()) ||
+           memcmp(frame->seqHdrData, seq_hdr->get(), frame->seqHdrDataSize))) {
+        seq_hdr = memory_cptr(new memory_c(frame->seqHdrData,
+                                           frame->seqHdrDataSize, true));
+        frame->seqHdrData = NULL;
+        new_packet->codec_state = clone_memory(seq_hdr);
+      }
+
       video_packetizer_c::process(packet_cptr(new_packet));
       frame->data = NULL;
       delete frame;

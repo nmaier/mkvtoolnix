@@ -68,3 +68,8 @@ xtr_mpeg1_2_video_c::handle_frame(memory_cptr &frame,
 
   out->write(buf, frame->get_size());
 }
+
+void
+xtr_mpeg1_2_video_c::handle_codec_state(memory_cptr &codec_state) {
+  m_seq_hdr = clone_memory(codec_state);
+}

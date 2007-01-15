@@ -38,6 +38,8 @@ class MPEGFrame {
 public:
   binary *data;
   uint32_t size;
+  binary *seqHdrData;
+  uint32_t seqHdrDataSize;
   MediaTime duration;
   char frameType;
   MediaTime timecode;
@@ -66,6 +68,7 @@ private:
   bool needInit;
   bool m_eos;
   bool notReachedFirstGOP;
+  bool keepSeqHdrsInBitstream;
   MediaTime nextSkip;
   MediaTime nextSkipDuration;
   MediaTime secondRef;
@@ -117,6 +120,10 @@ public:
   //Sets "end of stream" status on the buffer, forces timestamping of frames waiting.
   //Do not call this without good reason.
   void SetEOS();
+
+  void SeparateSequenceHeaders() {
+    keepSeqHdrsInBitstream = false;
+  }
 };
 
 

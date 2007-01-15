@@ -1953,6 +1953,7 @@ kax_reader_c::read(generic_packetizer_c *,
   KaxReferenceBlock *ref_block;
   KaxBlockDuration *duration;
   KaxClusterTimecode *ctc;
+  KaxCodecState *codec_state;
   int64_t block_fref, block_bref, block_duration, frame_duration;
   uint64_t blockadd_id;
   kax_track_t *block_track;
@@ -2186,6 +2187,15 @@ kax_reader_c::read(generic_packetizer_c *,
             if (appending)
               last_timecode -= first_timecode;
 
+            codec_state = static_cast<KaxCodecState *>
+              (block_group->FindFirstElt(KaxCodecState::ClassInfos));
+            if ((NULL != codec_state) && !hack_engaged(ENGAGE_USE_CODEC_STATE))
+              mxerror(FMT_TID "This track uses a Matroska feature called "
+                      "'Codec state elements'. mkvmerge supports these but "
+                      "this feature has not been turned on with the option "
+                      "'--engage use_codec_state'.\n", ti.fname.c_str(),
+                      (int64_t)block_track->tnum);
+
             if ((block_track->ptzr != -1) && block_track->passthrough) {
               // The handling for passthrough is a bit different. We don't have
               // any special cases, e.g. 0 terminating a string for the subs
@@ -2203,6 +2213,9 @@ kax_reader_c::read(generic_packetizer_c *,
                                last_timecode + i * frame_duration,
                                block_duration, block_bref, block_fref);
                 packet->duration_mandatory = duration != NULL;
+                if (NULL != codec_state)
+                  packet->codec_state = clone_memory(codec_state->GetBuffer(),
+                                                     codec_state->GetSize());
                 ((passthrough_packetizer_c *)PTZR(block_track->ptzr))->
                   process(packet_cptr(packet));
               }
@@ -2234,11 +2247,17 @@ kax_reader_c::read(generic_packetizer_c *,
                     lines = (char *)safemalloc(data->get_size() + 1);
                     lines[data->get_size()] = 0;
                     memcpy(lines, data->get(), data->get_size());
-                    PTZR(block_track->ptzr)->
-                      process(new packet_t(new memory_c((unsigned char *)lines,
-                                                        0, true),
-                                           last_timecode, block_duration,
-                                           block_bref, block_fref));
+
+                    packet_t *packet =
+                      new packet_t(new memory_c((unsigned char *)lines, 0,
+                                                true),
+                                   last_timecode, block_duration,
+                                   block_bref, block_fref);
+                    if (NULL != codec_state)
+                      packet->codec_state =
+                        clone_memory(codec_state->GetBuffer(),
+                                     codec_state->GetSize());
+                    PTZR(block_track->ptzr)->process(packet);
                   }
                 } else {
                   packet_cptr packet(new packet_t(data, last_timecode + i *
@@ -2246,6 +2265,10 @@ kax_reader_c::read(generic_packetizer_c *,
                                                   block_duration, block_bref,
                                                   block_fref));
 
+                  if (NULL != codec_state)
+                    packet->codec_state =
+                      clone_memory(codec_state->GetBuffer(),
+                                   codec_state->GetSize());
                   if (blockadd) {
                     for (i = 0; i < blockadd->ListSize(); i++) {
                       if (!(is_id((*blockadd)[i], KaxBlockMore)))
@@ -2264,11 +2287,9 @@ kax_reader_c::read(generic_packetizer_c *,
                         reverse(blockadded, CONTENT_ENCODING_SCOPE_BLOCK);
                       packet->data_adds.push_back(blockadded);
                     }
+                  }
 
-                    PTZR(block_track->ptzr)->process(packet);
-
-                  } else
-                    PTZR(block_track->ptzr)->process(packet);
+                  PTZR(block_track->ptzr)->process(packet);
                 }
               }
 

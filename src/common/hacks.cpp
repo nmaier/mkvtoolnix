@@ -40,6 +40,7 @@ static const char *mosu_hacks[] = {
   ENGAGE_KEEP_BITSTREAM_AR_INFO,
   ENGAGE_USE_SIMPLE_BLOCK,
   ENGAGE_OLD_AAC_CODECID,
+  ENGAGE_USE_CODEC_STATE,
   NULL
 };
 static vector<string> engaged_hacks;

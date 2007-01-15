@@ -37,10 +37,13 @@ MPEGFrame::MPEGFrame(binary* data, uint32_t size, bool bCopy){
   this->size = size;
   firstRef = -1;
   secondRef = -1;
+  seqHdrData = NULL;
+  seqHdrDataSize = 0;
 }
 
 MPEGFrame::~MPEGFrame(){
   safefree(data);
+  safefree(seqHdrData);
 }
 
 void M2VParser::SetEOS(){
@@ -123,6 +126,7 @@ M2VParser::M2VParser(){
   nextSkipDuration = -1;
   seqHdrChunk = NULL;
   gopChunk = NULL;
+  keepSeqHdrsInBitstream = true;
 }
 
 int32_t M2VParser::InitParser(){
@@ -220,15 +224,20 @@ int32_t M2VParser::QueueFrame(MPEGChunk* chunk, MediaTime timecode, MPEG2Picture
   binary* pData = chunk->GetPointer();
   uint32_t dataLen = chunk->GetSize();
 
-  if ((seqHdrChunk && (MPEG2_I_FRAME == picHdr.frameType)) || gopChunk) {
+  if ((seqHdrChunk && keepSeqHdrsInBitstream &&
+       (MPEG2_I_FRAME == picHdr.frameType)) || gopChunk) {
     uint32_t pos = 0;
     bCopy = false;
-    dataLen += (seqHdrChunk ? seqHdrChunk->GetSize() : 0) +
+    dataLen +=
+      (seqHdrChunk && keepSeqHdrsInBitstream ? seqHdrChunk->GetSize() : 0) +
       (gopChunk ? gopChunk->GetSize() : 0);
     pData = (binary *)safemalloc(dataLen);
-    if (seqHdrChunk && (MPEG2_I_FRAME == picHdr.frameType)) {
+    if (seqHdrChunk && keepSeqHdrsInBitstream &&
+        (MPEG2_I_FRAME == picHdr.frameType)) {
       memcpy(pData, seqHdrChunk->GetPointer(), seqHdrChunk->GetSize());
       pos += seqHdrChunk->GetSize();
+      delete seqHdrChunk;
+      seqHdrChunk = NULL;
     }
     if (gopChunk) {
       memcpy(pData + pos, gopChunk->GetPointer(), gopChunk->GetSize());
@@ -242,6 +251,16 @@ int32_t M2VParser::QueueFrame(MPEGChunk* chunk, MediaTime timecode, MPEG2Picture
   MediaTime duration = GetFrameDuration(picHdr);
 
   outBuf = new MPEGFrame(pData, dataLen, bCopy);
+
+  if (seqHdrChunk && !keepSeqHdrsInBitstream &&
+      (MPEG2_I_FRAME == picHdr.frameType)) {
+    outBuf->seqHdrData = (binary *)safemalloc(seqHdrChunk->GetSize());
+    outBuf->seqHdrDataSize = seqHdrChunk->GetSize();
+    memcpy(outBuf->seqHdrData, seqHdrChunk->GetPointer(),
+           outBuf->seqHdrDataSize);
+    delete seqHdrChunk;
+    seqHdrChunk = NULL;
+  }
 
   if(picHdr.frameType == MPEG2_I_FRAME){
     outBuf->frameType = 'I';

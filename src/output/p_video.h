@@ -57,6 +57,7 @@ protected:
 class mpeg1_2_video_packetizer_c: public video_packetizer_c {
 protected:
   M2VParser parser;
+  memory_cptr seq_hdr;
   bool framed, aspect_ratio_extracted;
 
 public:
@@ -72,6 +73,7 @@ protected:
   virtual void extract_fps(const unsigned char *buffer, int size);
   virtual void extract_aspect_ratio(const unsigned char *buffer, int size);
   virtual void create_private_data();
+  virtual int process_framed(packet_cptr packet);
 };
 
 class mpeg4_p2_video_packetizer_c: public video_packetizer_c {

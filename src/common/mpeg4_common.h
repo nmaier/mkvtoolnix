@@ -28,6 +28,7 @@
 #define MPEGVIDEO_PACKET_START_CODE               0x000001ba
 #define MPEGVIDEO_SYSTEM_HEADER_START_CODE        0x000001bb
 #define MPEGVIDEO_MPEG_PROGRAM_END_CODE           0x000001b9
+#define MPEGVIDEO_EXT_START_CODE                  0x000001b5
 
 /** Start code for a MPEG-4 part 2 visual object sequence start marker */
 #define MPEGVIDEO_VOS_START_CODE                  0x000001b0

@@ -153,6 +153,7 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
   KaxBlockDuration *kduration;
   KaxReferenceBlock *kreference;
   KaxBlockAdditions *kadditions;
+  KaxCodecState *kcstate;
   xtr_base_c *extractor;
   int64_t duration, fref, bref;
   int i;
@@ -198,6 +199,13 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
 
   if (0 > duration)
     duration = extractor->default_duration * block->NumberFrames();
+
+  kcstate = FINDFIRST(&blockgroup, KaxCodecState);
+  if (NULL != kcstate) {
+    memory_cptr codec_state(new memory_c(kcstate->GetBuffer(),
+                                         kcstate->GetSize(), false));
+    extractor->handle_codec_state(codec_state);
+  }
 
   for (i = 0; i < block->NumberFrames(); i++) {
     int64_t this_timecode, this_duration;

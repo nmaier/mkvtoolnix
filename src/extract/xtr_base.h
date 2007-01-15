@@ -50,6 +50,8 @@ public:
                             int64_t timecode, int64_t duration, int64_t bref,
                             int64_t fref, bool keyframe, bool discardable,
                             bool references_valid);
+  virtual void handle_codec_state(memory_cptr &codec_state) {
+  };
   virtual void finish_track();
   virtual void finish_file();
 
@@ -68,6 +70,7 @@ public:
   xtr_fullraw_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec):
     xtr_base_c(_codec_id, _tid, tspec) {}
   virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
+  virtual void handle_codec_state(memory_cptr &codec_state);
 };
 
 #endif

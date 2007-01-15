@@ -37,6 +37,7 @@ using namespace std;
 #define ENGAGE_KEEP_BITSTREAM_AR_INFO "keep_bitstream_ar_info"
 #define ENGAGE_USE_SIMPLE_BLOCK "use_simpleblock"
 #define ENGAGE_OLD_AAC_CODECID "old_aac_codecid"
+#define ENGAGE_USE_CODEC_STATE "use_codec_state"
 
 void MTX_DLL_API engage_hacks(const string &hacks);
 bool MTX_DLL_API hack_engaged(const string &hack);

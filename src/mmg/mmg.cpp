@@ -138,6 +138,9 @@ wxString cli_options[][2] = {
   { wxT("--engage old_aac_codecid"),
     wxT("Use the old AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') instead of the "
         "new one ('A_AAC').") },
+  { wxT("--engage use_codec_state"),
+    wxT("Allows the use of the CodecState element. This is used for e.g. "
+        "MPEG-1/-2 video tracks for storing the sequence headers.") },
   { wxT("--engage cow"),
     wxT("No help available.") },
   { wxT(""), wxT("") }

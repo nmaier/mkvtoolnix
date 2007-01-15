@@ -1,3 +1,10 @@
+2007-01-15  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge, mkvextract, mkvinfo: new feature: Added support for
+	using CodecState for signaling changes to CodecPrivate. It is used
+	for MPEG-1/-2 video if it is turned on with "--engage
+	use_codec_state".
+
 2007-01-13  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v2.0.0.
