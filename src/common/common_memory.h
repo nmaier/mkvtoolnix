@@ -69,7 +69,7 @@ public:
       its_counter->size = new_size;
   }
 
-  void set_offset(unsigned new_offset) throw() {
+  void set_offset(unsigned new_offset) {
     if (!its_counter || (new_offset > its_counter->size))
       throw false;
     its_counter->offset = new_offset;
@@ -238,6 +238,11 @@ clone_memory(void *buffer,
              int size) {
   return memory_cptr(new memory_c((unsigned char *)safememdup(buffer, size),
                                   size));
+}
+
+inline memory_cptr
+clone_memory(memory_cptr data) {
+  return clone_memory(data->get(), data->get_size());
 }
 
 struct buffer_t {
