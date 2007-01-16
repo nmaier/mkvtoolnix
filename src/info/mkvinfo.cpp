@@ -18,6 +18,7 @@
 
 #include <errno.h>
 #include <ctype.h>
+#include <limits.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -99,6 +100,7 @@ bool use_gui = false;
 bool calc_checksums = false;
 bool show_summary = false;
 bool show_hexdump = false;
+int hexdump_max_size = 16;
 uint64_t tc_scale = TIMECODE_SCALE;
 
 void
@@ -237,7 +239,7 @@ string
 create_hexdump(const unsigned char *buf,
                int size) {
   string hex(" hexdump");
-  int bmax = size >= 16 ? 16 : size, b;
+  int bmax = size >= hexdump_max_size ? hexdump_max_size : size, b;
 
   for (b = 0; b < bmax; ++b)
     hex += mxsprintf(" %02x", buf[b]);
@@ -277,7 +279,10 @@ parse_args(vector<string> args,
       show_summary = true;
     } else if ((args[i] == "-x") || (args[i] == "--hexdump"))
       show_hexdump = true;
-    else if (file_name != "")
+    else if ((args[i] == "-X") || (args[i] == "--full-hexdump")) {
+      show_hexdump = true;
+      hexdump_max_size = INT_MAX;
+    } else if (file_name != "")
       mxerror("Only one input file is allowed.\n");
     else
       file_name = args[i];
