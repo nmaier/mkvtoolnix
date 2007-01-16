@@ -1435,7 +1435,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
       case 'v':
         if ((t->codec_id == MKV_V_MSCOMP) &&
             mpeg4::p10::is_avc_fourcc(t->v_fourcc))
-          create_mpeg4_p10_es_video_packetizer(t);
+          create_mpeg4_p10_es_video_packetizer(t, nti);
 
         else if (starts_with(t->codec_id, "V_MPEG4", 7) ||
                  (t->codec_id == MKV_V_MSCOMP) ||
@@ -1757,7 +1757,8 @@ kax_reader_c::create_packetizers() {
 }
 
 void
-kax_reader_c::create_mpeg4_p10_es_video_packetizer(kax_track_t *t) {
+kax_reader_c::create_mpeg4_p10_es_video_packetizer(kax_track_t *t,
+                                                   track_info_c &nti) {
   try {
     read_first_frame(t);
     if (NULL == t->first_frame_data.get())
@@ -1785,7 +1786,7 @@ kax_reader_c::create_mpeg4_p10_es_video_packetizer(kax_track_t *t) {
 
     mpeg4_p10_es_video_packetizer_c *ptzr =
       new mpeg4_p10_es_video_packetizer_c(this, avcc, t->v_width, t->v_height,
-                                          ti);
+                                          nti);
     t->ptzr = add_packetizer(ptzr);
     ptzr->enable_timecode_generation(false);
     if (t->default_duration)

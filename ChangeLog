@@ -1,3 +1,12 @@
+2007-01-16  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The Matroska reader passes the correct track
+	number down to the AVC/h.264 ES packetizer in the case of "AVC
+	in Matroska stored in VfW mode".
+
+	* mkvmerge: bug fix: Fixed a crash (segmentation fault) in the
+	AVC/h.264 ES handling code.
+
 2007-01-15  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge, mkvextract, mkvinfo: new feature: Added support for

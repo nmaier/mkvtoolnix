@@ -182,7 +182,8 @@ protected:
   virtual void handle_chapters(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void handle_tags(mm_io_c *io, EbmlElement *l0, int64_t pos);
 
-  virtual void create_mpeg4_p10_es_video_packetizer(kax_track_t *t);
+  virtual void create_mpeg4_p10_es_video_packetizer(kax_track_t *t,
+                                                    track_info_c &nti);
 };
 
 
