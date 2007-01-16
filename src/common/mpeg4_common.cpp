@@ -988,7 +988,7 @@ mpeg4::p10::avc_es_parser_c::avc_es_parser_c():
   m_default_duration(40000000), m_frame_number(0), m_num_skipped_frames(0),
   m_first_keyframe_found(false), m_recovery_point_valid(false),
   m_generate_timecodes(false),
-  m_have_incomplete_frame(false) {
+  m_have_incomplete_frame(false), m_ignore_nalu_size_length_errors(false) {
 }
 
 void
