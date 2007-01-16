@@ -1,5 +1,12 @@
 2007-01-16  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The AVC/h.264 ES reader was losing frames if
+	the file size was an exact multiple of 1048576 bytes.
+
+	* mkvmerge: bug fix: The AVC/h.264 ES packetizer produced invalid
+	CodecPrivate data if the AVCC did not contain the aspect ratio
+	information. Fix for Bugzilla bug #225.
+
 	* mkvmerge: bug fix: The Matroska reader passes the correct track
 	number down to the AVC/h.264 ES packetizer in the case of "AVC
 	in Matroska stored in VfW mode".
