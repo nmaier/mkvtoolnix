@@ -89,6 +89,10 @@ avc_es_reader_c::avc_es_reader_c(track_info_c &n_ti)
     avc_es_parser_c parser;
     parser.ignore_nalu_size_length_errors();
     parser.enable_timecode_generation(40000000);
+    if (map_has_key(ti.nalu_size_lengths, 0))
+      parser.set_nalu_size_length(ti.nalu_size_lengths[0]);
+    else if (map_has_key(ti.nalu_size_lengths, -1))
+      parser.set_nalu_size_length(ti.nalu_size_lengths[-1]);
 
     int num_read, i;
 
