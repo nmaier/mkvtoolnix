@@ -319,8 +319,8 @@ namespace mpeg4 {
     protected:
       int m_nalu_size_length;
 
-      bool m_avcc_ready;
-      memory_cptr m_avcc;
+      bool m_keep_ar_info;
+      bool m_avcc_ready, m_avcc_changed;
 
       int64_t m_default_duration;
       int m_frame_number, m_num_skipped_frames;
@@ -350,6 +350,10 @@ namespace mpeg4 {
         m_generate_timecodes = true;
       };
 
+      void set_keep_ar_info(bool keep) {
+        m_keep_ar_info = keep;
+      };
+
       void add_bytes(unsigned char *buf, int size);
       void add_bytes(memory_cptr &buf) {
         add_bytes(buf->get(), buf->get_size());
@@ -370,10 +374,10 @@ namespace mpeg4 {
         return frame;
       };
 
-      memory_cptr get_avcc() {
-        if (NULL == m_avcc.get())
-          create_avcc();
-        return m_avcc;
+      memory_cptr get_avcc();
+
+      bool avcc_changed() {
+        return m_avcc_changed;
       };
 
       int get_width() {
@@ -422,7 +426,6 @@ namespace mpeg4 {
                            int nalu_size_length = -1);
       memory_cptr create_nalu_with_size(const memory_cptr &src,
                                         bool add_extra_data = false);
-      void create_avcc();
     };
   };
 };

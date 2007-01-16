@@ -58,6 +58,7 @@ mpeg4_p10_es_video_packetizer_c(generic_reader_c *n_reader,
 
   set_codec_private(m_avcc->get(), m_avcc->get_size());
   extract_aspect_ratio();
+  m_parser.set_keep_ar_info(false);
 }
 
 void
@@ -134,7 +135,7 @@ mpeg4_p10_es_video_packetizer_c::extract_aspect_ratio() {
     }
   }
 
-  if (priv != ti.private_data)
+  if (priv != hcodec_private)
     safefree(priv);
 }
 

@@ -626,7 +626,9 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
       if (keep_ar_info) {
         w.put_bit(1);
         w.put_bits(8, ar_type);
-      }
+      } else
+        w.put_bit(0);
+
       if (13 >= ar_type) {
         static const int par_nums[14] = {
           0, 1, 12, 10, 16, 40, 24, 20, 32, 80, 18, 15, 64, 160
@@ -647,8 +649,7 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
         }
       }
       sps.ar_found = true;
-    }
-    if (!keep_ar_info)
+    } else
       w.put_bit(0);             // ar_info_present
 
     // copy the rest
@@ -984,7 +985,8 @@ mpeg4::p10::compare_poc_by_dec(const poc_t &poc1,
 
 mpeg4::p10::avc_es_parser_c::avc_es_parser_c():
   m_nalu_size_length(2),
-  m_avcc_ready(false),
+  m_keep_ar_info(true),
+  m_avcc_ready(false), m_avcc_changed(false),
   m_default_duration(40000000), m_frame_number(0), m_num_skipped_frames(0),
   m_first_keyframe_found(false), m_recovery_point_valid(false),
   m_generate_timecodes(false),
@@ -1203,7 +1205,7 @@ mpeg4::p10::avc_es_parser_c::handle_sps_nalu(memory_cptr &nalu) {
   vector<sps_info_t>::iterator i;
 
   nalu_to_rbsp(nalu);
-  if (!parse_sps(nalu, sps_info, true))
+  if (!parse_sps(nalu, sps_info, m_keep_ar_info))
     return;
   rbsp_to_nalu(nalu);
 
@@ -1213,6 +1215,7 @@ mpeg4::p10::avc_es_parser_c::handle_sps_nalu(memory_cptr &nalu) {
   if (m_sps_info_list.end() == i) {
     m_sps_list.push_back(nalu);
     m_sps_info_list.push_back(sps_info);
+    m_avcc_changed = true;
   }
 }
 
@@ -1232,6 +1235,7 @@ mpeg4::p10::avc_es_parser_c::handle_pps_nalu(memory_cptr &nalu) {
   if (m_pps_info_list.end() == i) {
     m_pps_list.push_back(nalu);
     m_pps_info_list.push_back(pps_info);
+    m_avcc_changed = true;
   }
 }
 
@@ -1595,8 +1599,8 @@ mpeg4::p10::avc_es_parser_c::create_nalu_with_size(const memory_cptr &src,
   return memory_cptr(new memory_c(buffer, final_size, true));
 }
 
-void
-mpeg4::p10::avc_es_parser_c::create_avcc() {
+memory_cptr
+mpeg4::p10::avc_es_parser_c::get_avcc() {
   deque<memory_cptr>::iterator it;
   unsigned char *buffer;
   int final_size = 6 + 1, offset = 6, size;
@@ -1637,10 +1641,7 @@ mpeg4::p10::avc_es_parser_c::create_avcc() {
     offset += 2 + size;
   }
 
-  m_avcc = memory_cptr(new memory_c(buffer, final_size, true));
-
-//   mxinfo("CREATED avcc size %d adler32 0x%08x\n", final_size,
-//          calc_adler32(buffer, final_size));
+  return memory_cptr(new memory_c(buffer, final_size, true));
 }
 
 void
