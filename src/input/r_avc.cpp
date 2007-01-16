@@ -149,7 +149,7 @@ avc_es_reader_c::read(generic_packetizer_c *,
 
   m_bytes_processed += num_read;
 
-  if (READ_SIZE != num_read)
+  if ((READ_SIZE != num_read) || (m_bytes_processed >= m_size))
     PTZR0->flush();
 
   return READ_SIZE == num_read ? FILE_STATUS_MOREDATA : FILE_STATUS_DONE;
