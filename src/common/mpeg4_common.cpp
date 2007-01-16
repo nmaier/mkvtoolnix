@@ -1050,7 +1050,7 @@ mpeg4::p10::avc_es_parser_c::add_bytes(unsigned char *buffer,
 
 void
 mpeg4::p10::avc_es_parser_c::flush() {
-  if ((NULL != m_unparsed_buffer.get()) ||
+  if ((NULL != m_unparsed_buffer.get()) &&
       (5 <= m_unparsed_buffer->get_size())) {
     int marker_size = get_uint32_be(m_unparsed_buffer->get()) == 0x0000001 ?
       4 : 3;
