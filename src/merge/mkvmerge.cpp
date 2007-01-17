@@ -432,7 +432,7 @@ parse_number_with_unit(const string &s,
     else if (29.97 == d_value)
       return (int64_t)(100100000.0 / 3.0);
     else if (23.976 == d_value)
-      return 40040000;
+      return (int64_t)(1001000000.0 / 24.0);
     else
       return (int64_t)(1000000000.0 / d_value);
   } else if (unit != "s")
