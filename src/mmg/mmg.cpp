@@ -666,7 +666,7 @@ mmg_dialog::mmg_dialog():
                       wxT("Adds the current settings as a new job entry to "
                           "the job queue"));
   muxing_menu->Append(ID_M_MUXING_MANAGE_JOBS,
-                      wxT("&Manage jobs\tCtrl-j"),
+                      wxT("&Manage jobs\tCtrl-J"),
                       wxT("Brings up the job queue editor"));
   muxing_menu->AppendSeparator();
   muxing_menu->Append(ID_M_MUXING_ADD_CLI_OPTIONS,
