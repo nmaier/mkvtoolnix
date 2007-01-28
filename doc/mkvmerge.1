@@ -334,11 +334,14 @@ entries regardless of the \fB\-\-cues\fR options used.
 This option can be used multiple times for an input file applying to several
 tracks by selecting different track IDs each time.
 .TP
-\fB\-\-default\-track\fR <\fITID\fR>
-Sets the 'default' flag for the given track (see section \fBTRACK IDS\fR).
+\fB\-\-default\-track\fR <\fITID[:bool]\fR>
+Sets the 'default' flag for the given track (see section \fBTRACK IDS\fR)
+if the optional argument \fIbool\fR is not present.
 If the user does not explicitly select a track himself then the player should
 prefer the track that has his 'default' flag set. Only one track of each kind
 (audio, video, subtitles, buttons) can have his 'default' flag set.
+If the user wants no track to have the default track flag set then he has to
+set \fIbool\fR to \fI0\fR for all tracks.
 .br
 This option can be used multiple times for an input file applying to several
 tracks by selecting different track IDs each time.

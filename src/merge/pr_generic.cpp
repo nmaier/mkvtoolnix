@@ -95,12 +95,13 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
     ti.cues = ti.cue_creations[-1];
 
   // Let's see if the user has given a default track flag for this track.
-  for (i = 0; ti.default_track_flags.size() > i; ++i)
-    if ((-1 == ti.default_track_flags[i]) ||
-        (ti.id == ti.default_track_flags[i])) {
-      ti.default_track = true;
-      break;
-    }
+  if (map_has_key(ti.default_track_flags, ti.id)) {
+    ti.default_track = ti.default_track_flags[ti.id];
+    ti.default_track_flag_present = true;
+  } else if (map_has_key(ti.default_track_flags, -1)) {
+    ti.default_track = ti.default_track_flags[-1];
+    ti.default_track_flag_present = true;
+  }
 
   // Let's see if the user has specified a language for this track.
   if (map_has_key(ti.languages, ti.id))
@@ -636,10 +637,10 @@ generic_packetizer_c::set_headers() {
   else
     idx = DEFTRACK_TYPE_SUBS;
 
-  if (ti.default_track)
-    set_as_default_track(idx, DEFAULT_TRACK_PRIORITY_CMDLINE);
-  else
+  if (!ti.default_track_flag_present)
     set_as_default_track(idx, DEFAULT_TRACK_PRIORITY_FROM_TYPE);
+  else if (ti.default_track)
+    set_as_default_track(idx, DEFAULT_TRACK_PRIORITY_CMDLINE);
 
   if (ti.language != "")
     *(static_cast<EbmlString *>
@@ -1236,7 +1237,7 @@ generic_reader_c::generic_reader_c(track_info_c &_ti):
   add_all_requested_track_ids(display_properties_t, display_properties);
   add_all_requested_track_ids(audio_sync_t, audio_syncs);
   add_all_requested_track_ids(cue_strategy_e, cue_creations);
-  add_all_requested_track_ids2(default_track_flags);
+  add_all_requested_track_ids(bool, default_track_flags);
   add_all_requested_track_ids(string, languages);
   add_all_requested_track_ids(string, sub_charsets);
   add_all_requested_track_ids(string, all_tags);
@@ -1424,6 +1425,7 @@ track_info_c::track_info_c():
   display_dimensions_given(false),
   cues(CUE_STRATEGY_UNSPECIFIED),
   default_track(false),
+  default_track_flag_present(false),
   tags(NULL),
   aac_is_sbr(-1),
   packet_delay(0),
@@ -1488,6 +1490,7 @@ track_info_c::operator =(const track_info_c &src) {
 
   default_track_flags = src.default_track_flags;
   default_track = src.default_track;
+  default_track_flag_present = src.default_track_flag_present;
 
   languages = src.languages;
   language = src.language;

@@ -209,7 +209,9 @@ set_usage() {
     "  --delay <TID:Xs|ms|us|ns>\n"
     "                           Delay to apply to the packets of the track\n"
     "                           by simply adjusting the timecodes.\n"
-    "  --default-track <TID>    Sets the 'default' flag for this track.\n"
+    "  --default-track <TID[:bool]>\n"
+    "                           Sets the 'default' flag for this track or\n"
+    "                           forces it not to be present if bool is 0.\n"
     "  --blockadd <TID:x>       Sets the max number of block additional\n"
     "                           levels for this track.\n"
     "  --track-name <TID:name>  Sets the name for a track.\n"
@@ -444,6 +446,23 @@ parse_number_with_unit(const string &s,
     return multiplier * n / d;
   else
     return (int64_t)(multiplier * d_value);
+}
+
+/** \brief Parse a string for a boolean value
+
+   Interpretes the string \c orig as a boolean value. Accepted
+   is "true", "yes", "1" as boolean true and "false", "no", "0"
+   as boolean false.
+*/
+bool
+parse_bool(const string &orig) {
+  string s(downcase(orig));
+
+  if ((s == "yes") || (s == "true") || (s == "1"))
+    return true;
+  if ((s == "no") || (s == "false") || (s == "0"))
+    return false;
+  throw false;
 }
 
 /** \brief Parse tags and add them to the list of all tags
@@ -908,6 +927,36 @@ parse_delay(const string &s,
 
   ti.packet_delays[id] = parse_number_with_unit(parts[1], "delay", "--delay",
                                                 s);
+}
+
+/** \brief Parse the \c --default-track argument
+
+   The argument must have the form \c TID or \c TID:boolean. The former
+   is equivalent to \c TID:1.
+*/
+static void
+parse_default_track(const string &s,
+                    track_info_c &ti) {
+  vector<string> parts;
+  int64_t id;
+  bool is_default = true;
+
+  // Extract the track number.
+  parts = split(s, ":", 2);
+  strip(parts);
+  id = 0;
+  if (!parse_int(parts[0], id))
+    mxerror(_("Invalid track ID specified in '--default-track %s'.\n"),
+            s.c_str());
+
+  try {
+    if (2 == parts.size())
+      is_default = parse_bool(parts[1]);
+  } catch (...) {
+    mxerror(_("Invalid boolean option specified in '--default-track %s'.\n"),
+            s.c_str());
+  }
+  ti.default_track_flags[id] = is_default;
 }
 
 /** \brief Parse the \c --cues argument
@@ -1423,7 +1472,6 @@ parse_args(vector<string> args) {
   vector<string>::const_iterator sit;
   string this_arg, next_arg;
   bool no_next_arg, inputs_found;
-  int64_t id;
   attachment_t attachment;
   mm_io_c *io;
 
@@ -1969,13 +2017,9 @@ parse_args(vector<string> args) {
 
     } else if (this_arg == "--default-track") {
       if (no_next_arg)
-        mxerror(_("'--default-track' lacks the track ID.\n"));
+        mxerror(_("'--default-track' lacks its argument.\n"));
 
-      if (!parse_int(next_arg, id))
-        mxerror(_("Invalid track ID specified in '%s %s'.\n"),
-                this_arg.c_str(), next_arg.c_str());
-
-      ti->default_track_flags.push_back(id);
+      parse_default_track(next_arg, *ti);
       sit++;
 
     } else if (this_arg == "--language") {

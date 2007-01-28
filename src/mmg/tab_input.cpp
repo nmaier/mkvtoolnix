@@ -889,7 +889,7 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
   ti_format->tc_stretch->SetValue(t->stretch);
   ti_format->cob_sub_charset->SetValue(t->sub_charset);
   ti_general->tc_tags->SetValue(t->tags);
-  ti_general->cb_default->SetValue(t->default_track);
+  ti_general->cob_default->SetSelection(t->default_track);
   ti_format->cb_aac_is_sbr->SetValue(t->aac_is_sbr);
   set_combobox_selection(ti_format->cob_aspect_ratio, t->aspect_ratio);
   ti_format->tc_display_width->SetValue(t->dwidth);
@@ -976,7 +976,7 @@ tab_input::save(wxConfigBase *cfg) {
       cfg->Write(wxT("id"), s);
       cfg->Write(wxT("enabled"), t->enabled);
       cfg->Write(wxT("content_type"), t->ctype);
-      cfg->Write(wxT("default_track"), t->default_track);
+      cfg->Write(wxT("default_track_2"), t->default_track);
       cfg->Write(wxT("aac_is_sbr"), t->aac_is_sbr);
       cfg->Write(wxT("language"), t->language);
       cfg->Write(wxT("track_name"), t->track_name);
@@ -1059,6 +1059,7 @@ tab_input::load(wxConfigBase *cfg,
 
     for (tidx = 0; tidx < (uint32_t)num_tracks; tidx++) {
       mmg_track_ptr tr(new mmg_track_t);
+      bool dummy = false;
 
       s.Printf(wxT("track %ld"), tidx);
       cfg->SetPath(s);
@@ -1075,7 +1076,10 @@ tab_input::load(wxConfigBase *cfg,
       }
       cfg->Read(wxT("enabled"), &tr->enabled);
       cfg->Read(wxT("content_type"), &tr->ctype);
-      cfg->Read(wxT("default_track"), &tr->default_track, false);
+      if (cfg->Read(wxT("default_track"), &dummy)) {
+        tr->default_track = dummy ? 1 : 0;
+      } else
+        cfg->Read(wxT("default_track_2"), &tr->default_track, 0);
       cfg->Read(wxT("aac_is_sbr"), &tr->aac_is_sbr, false);
       cfg->Read(wxT("language"), &tr->language);
       cfg->Read(wxT("track_name"), &tr->track_name);

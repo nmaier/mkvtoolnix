@@ -591,7 +591,7 @@ default_track_checked(char type) {
   int i;
 
   for (i = 0; i < tracks.size(); i++)
-    if ((tracks[i]->type == type) && tracks[i]->default_track)
+    if ((tracks[i]->type == type) && (1 == tracks[i]->default_track))
       return i;
   return -1;
 }
@@ -1452,9 +1452,10 @@ mmg_dialog::update_command_line() {
         clargs.Add(sid + wxT(":") + t->track_name);
       }
 
-      if (!t->appending && t->default_track) {
+      if (!t->appending && (0 != t->default_track)) {
         clargs.Add(wxT("--default-track"));
-        clargs.Add(sid);
+        clargs.Add(sid + wxT(":") + (1 == t->default_track ? wxT("yes") :
+                                     wxT("no")));
       }
 
       if (!t->appending && (t->tags.Length() > 0)) {

@@ -1,3 +1,10 @@
+2007-01-28  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge, mmg: new feature: Extended the option
+	"--default-track" so that it can be forced to "off" allowing the
+	user to create a file for which no track has its "default" flag
+	set. Fix for bug #224.
+
 2007-01-17  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed the wrong "default duration" if the

@@ -65,12 +65,11 @@ class tab_input_general: public wxPanel {
   DECLARE_CLASS(tab_input_general);
   DECLARE_EVENT_TABLE();
 public:
-  wxCheckBox *cb_default;
-  wxComboBox *cob_language, *cob_cues;
+  wxComboBox *cob_default, *cob_language, *cob_cues;
   wxTextCtrl *tc_track_name, *tc_tags, *tc_timecodes;
   wxButton *b_browse_tags, *b_browse_timecodes;
 
-  wxStaticText *st_language, *st_track_name;
+  wxStaticText *st_language, *st_track_name, *st_default;
   wxStaticText *st_cues, *st_tags, *st_timecodes;
 
   tab_input *input;
@@ -80,9 +79,10 @@ public:
 
   void setup_languages();
   void setup_cues();
+  void setup_default_track();
   void set_track_mode(mmg_track_t *t);
 
-  void on_default_track_clicked(wxCommandEvent &evt);
+  void on_default_track_selected(wxCommandEvent &evt);
   void on_language_selected(wxCommandEvent &evt);
   void on_cues_selected(wxCommandEvent &evt);
   void on_browse_tags(wxCommandEvent &evt);

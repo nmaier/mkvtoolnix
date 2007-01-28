@@ -140,8 +140,9 @@ public:
   map<int64_t, cue_strategy_e> cue_creations; // As given on the command line
   cue_strategy_e cues;          // For this very track
 
-  vector<int64_t> default_track_flags; // As given on the command line
+  map<int64_t, bool> default_track_flags; // As given on the command line
   bool default_track;           // For this very track
+  bool default_track_flag_present;
 
   map<int64_t, string> languages; // As given on the command line
   string language;              // For this very track

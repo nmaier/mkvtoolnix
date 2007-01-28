@@ -43,10 +43,7 @@ tab_input_general::tab_input_general(wxWindow *parent,
   input(ti) {
 
   wxFlexGridSizer *siz_fg;
-  wxBoxSizer *siz_all, *siz_line;
-
-  siz_all = new wxBoxSizer(wxVERTICAL);
-  siz_all->AddSpacer(TOPBOTTOMSPACING);
+  wxBoxSizer *siz_line;
 
   siz_fg = new wxFlexGridSizer(2);
   siz_fg->AddGrowableCol(1);
@@ -86,42 +83,44 @@ tab_input_general::tab_input_general(wxWindow *parent,
   siz_fg->Add(cob_cues, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL,
               STDSPACING);
 
-  siz_all->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
+  st_default = new wxStaticText(this, wxID_STATIC, wxT("Default track flag:"));
+  siz_fg->Add(st_default, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cb_default =
-    new wxCheckBox(this, ID_CB_MAKEDEFAULT, wxT("Make default track"));
-  cb_default->SetValue(false);
-  cb_default->SetToolTip(TIP("Make this track the default track for its type "
-                             "(audio, video, subtitles). Players should "
-                             "prefer tracks with the default track flag "
-                             "set."));
-
-  siz_line = new wxBoxSizer(wxHORIZONTAL);
-  siz_line->Add(cb_default, 0, wxALL | STDSPACING);
-  siz_all->Add(siz_line, 0, wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
-
-  siz_fg = new wxFlexGridSizer(3);
-  siz_fg->AddGrowableCol(1);
+  cob_default =
+    new wxComboBox(this, ID_CB_MAKEDEFAULT, wxT(""), wxDefaultPosition,
+                   wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_default->SetToolTip(TIP("Make this track the default track for its type "
+                              "(audio, video, subtitles). Players should "
+                              "prefer tracks with the default track flag "
+                              "set."));
+  siz_fg->Add(cob_default, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL,
+              STDSPACING);
 
   st_tags = new wxStaticText(this, wxID_STATIC, wxT("Tags:"));
   st_tags->Enable(false);
   siz_fg->Add(st_tags, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+
   tc_tags = new wxTextCtrl(this, ID_TC_TAGS, wxT(""));
-  siz_fg->Add(tc_tags, 1, wxGROW | wxALL, STDSPACING);
+  siz_line->Add(tc_tags, 1, wxGROW | wxALL, STDSPACING);
   b_browse_tags = new wxButton(this, ID_B_BROWSETAGS, wxT("Browse"));
-  siz_fg->Add(b_browse_tags, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
+  siz_line->Add(b_browse_tags, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
+
+  siz_fg->Add(siz_line, 1, wxGROW | wxALIGN_CENTER_VERTICAL, 0);
 
   st_timecodes = new wxStaticText(this, wxID_STATIC, wxT("Timecodes:"));
   st_timecodes->Enable(false);
   siz_fg->Add(st_timecodes, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
+
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
 
   tc_timecodes = new wxTextCtrl(this, ID_TC_TIMECODES, wxT(""));
   tc_timecodes->SetToolTip(TIP("mkvmerge can read and use timecodes from an "
                                "external text file. This feature is a very "
                                "advanced feature. Almost all users should "
                                "leave this entry empty."));
-  siz_fg->Add(tc_timecodes, 1, wxGROW | wxALL, STDSPACING);
+  siz_line->Add(tc_timecodes, 1, wxGROW | wxALL, STDSPACING);
   b_browse_timecodes = new wxButton(this, ID_B_BROWSE_TIMECODES,
                                     wxT("Browse"));
   b_browse_timecodes->SetToolTip(TIP("mkvmerge can read and use timecodes "
@@ -129,17 +128,16 @@ tab_input_general::tab_input_general(wxWindow *parent,
                                      "feature is a very advanced feature. "
                                      "Almost all users should leave this "
                                      "entry empty."));
-  siz_fg->Add(b_browse_timecodes, 0, wxALIGN_CENTER_VERTICAL | wxALL,
-              STDSPACING);
+  siz_line->Add(b_browse_timecodes, 0, wxALIGN_CENTER_VERTICAL | wxALL,
+                STDSPACING);
 
-  siz_all->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
-
-//   siz_all->AddSpacer(TOPBOTTOMSPACING);
+  siz_fg->Add(siz_line, 1, wxGROW | wxALIGN_CENTER_VERTICAL, 0);
 
   setup_languages();
   setup_cues();
+  setup_default_track();
 
-  SetSizer(siz_all);
+  SetSizer(siz_fg);
 }
 
 void
@@ -148,6 +146,13 @@ tab_input_general::setup_cues() {
   cob_cues->Append(wxT("only for I frames"));
   cob_cues->Append(wxT("for all frames"));
   cob_cues->Append(wxT("none"));
+}
+
+void
+tab_input_general::setup_default_track() {
+  cob_default->Append(wxT("default"));
+  cob_default->Append(wxT("yes"));
+  cob_default->Append(wxT("no"));
 }
 
 void
@@ -215,7 +220,8 @@ tab_input_general::set_track_mode(mmg_track_t *t) {
   st_timecodes->Enable(NULL != t);
   tc_timecodes->Enable(NULL != t);
   b_browse_timecodes->Enable(NULL != t);
-  cb_default->Enable(enable);
+  st_default->Enable(enable);
+  cob_default->Enable(enable);
 
   if (NULL == t) {
     bool saved_dcvn = input->dont_copy_values_now;
@@ -224,7 +230,7 @@ tab_input_general::set_track_mode(mmg_track_t *t) {
     set_combobox_selection(cob_language, sorted_iso_codes[0]);
     tc_track_name->SetValue(wxT(""));
     set_combobox_selection(cob_cues, wxT("default"));
-    cb_default->SetValue(false);
+    cob_default->SetSelection(0);
     tc_tags->SetValue(wxT(""));
     tc_timecodes->SetValue(wxT(""));
 
@@ -233,22 +239,22 @@ tab_input_general::set_track_mode(mmg_track_t *t) {
 }
 
 void
-tab_input_general::on_default_track_clicked(wxCommandEvent &evt) {
+tab_input_general::on_default_track_selected(wxCommandEvent &evt) {
   mmg_track_t *t;
 
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
   t = tracks[input->selected_track];
-  if (cb_default->GetValue()) {
+  if (cob_default->GetSelection() == 1) {
     int idx;
 
     idx = default_track_checked(t->type);
     if (-1 != idx)
-      tracks[idx]->default_track = false;
+      tracks[idx]->default_track = 0;
   }
 
-  t->default_track = cb_default->GetValue();
+  t->default_track = cob_default->GetSelection();
 }
 
 void
@@ -329,7 +335,7 @@ BEGIN_EVENT_TABLE(tab_input_general, wxPanel)
              tab_input_general::on_browse_timecodes_clicked)
   EVT_TEXT(ID_TC_TAGS, tab_input_general::on_tags_changed)
   EVT_TEXT(ID_TC_TIMECODES, tab_input_general::on_timecodes_changed)
-  EVT_CHECKBOX(ID_CB_MAKEDEFAULT, tab_input_general::on_default_track_clicked)
+  EVT_COMBOBOX(ID_CB_MAKEDEFAULT, tab_input_general::on_default_track_selected)
   EVT_COMBOBOX(ID_CB_LANGUAGE, tab_input_general::on_language_selected)
   EVT_COMBOBOX(ID_CB_CUES, tab_input_general::on_cues_selected)
   EVT_TEXT(ID_TC_TRACKNAME, tab_input_general::on_track_name_changed)
