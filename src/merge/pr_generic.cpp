@@ -385,7 +385,7 @@ generic_packetizer_c::set_track_max_cache(int max_cache) {
   htrack_max_cache = max_cache;
   if (track_entry != NULL)
     *(static_cast<EbmlUInteger *>
-      (&GetChild<KaxTrackMinCache>(*track_entry))) = max_cache;
+      (&GetChild<KaxTrackMaxCache>(*track_entry))) = max_cache;
 }
 
 void
