@@ -68,24 +68,29 @@ qtmp4_reader_c::probe_file(mm_io_c *in,
   uint32_t atom;
   uint64_t atom_size;
 
-  if (size < 20)
-    return 0;
   try {
     in->setFilePointer(0, seek_beginning);
 
-    atom_size = in->read_uint32_be();
-    atom = in->read_uint32_be();
-    if (atom_size == 1)
-      atom_size = in->read_uint64_be();
+    while (1) {
+      atom_size = in->read_uint32_be();
+      atom = in->read_uint32_be();
+      if (atom_size == 1)
+        atom_size = in->read_uint64_be();
 
-    mxverb(3, PFX "Atom: '%c%c%c%c'; size: " LLU "\n", BE2STR(atom),
-           atom_size);
+      mxverb(3, PFX "Atom: '%c%c%c%c'; size: " LLU "\n", BE2STR(atom),
+             atom_size);
 
-    if ((atom == FOURCC('m', 'o', 'o', 'v')) ||
-        (atom == FOURCC('f', 't', 'y', 'p')) ||
-        (atom == FOURCC('m', 'd', 'a', 't')) ||
-        (atom == FOURCC('p', 'n', 'o', 't')))
+      if ((atom == FOURCC('m', 'o', 'o', 'v')) ||
+          (atom == FOURCC('f', 't', 'y', 'p')) ||
+          (atom == FOURCC('m', 'd', 'a', 't')) ||
+          (atom == FOURCC('p', 'n', 'o', 't')))
         return 1;
+
+      if (atom == FOURCC('w', 'i', 'd', 'e'))
+        continue;
+
+      return 0;
+    }
 
   } catch (...) {
   }

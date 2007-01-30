@@ -1,5 +1,8 @@
 2007-01-30  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: File type detection for Qt/MP4 files which
+	start with a "wide" atom has been fixed.
+
 	* mmg: bug fix: The "NALU size length" drop down box is now also
 	enabled for h.264 tracks read from AVIs and for h.264 tracks
 	stored in "VfW compatibility mode" in Matroska files.
