@@ -28,6 +28,7 @@
 #include "byte_buffer.h"
 #include "common.h"
 #include "error.h"
+#include "output_control.h"
 #include "r_avc.h"
 #include "p_avc.h"
 
@@ -162,7 +163,12 @@ avc_es_reader_c::get_progress() {
 
 void
 avc_es_reader_c::identify() {
+  string info;
+
+  if (identify_verbose)
+    info = " [uses_avc_es_packetizer]";
   mxinfo("File '%s': container: AVC/h.264 elementary stream (ES)\n"
-         "Track ID 0: video (MPEG-4 part 10 ES)\n", ti.fname.c_str());
+         "Track ID 0: video (MPEG-4 part 10 ES)%s\n", ti.fname.c_str(),
+         info.c_str());
 }
 

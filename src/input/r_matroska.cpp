@@ -2411,6 +2411,11 @@ kax_reader_c::identify() {
           info += mxsprintf("stereo_mode:%d ", (int)tracks[i]->v_stereo_mode);
         info += mxsprintf("default_track:%u ",
                           tracks[i]->default_track ? 1 : 0);
+
+        if ((tracks[i]->codec_id == MKV_V_MSCOMP) &&
+            mpeg4::p10::is_avc_fourcc(tracks[i]->v_fourcc))
+          info += "uses_avc_es_packetizer ";
+
         info += "]";
       } else
         info = "";

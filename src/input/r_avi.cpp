@@ -596,8 +596,15 @@ avi_reader_c::identify() {
       safefree(buffer);
     }
   }
-  if (!extended_info_shown)
-    mxinfo("Track ID 0: video (%s)\n", AVI_video_compressor(avi));
+  if (!extended_info_shown) {
+    string info;
+
+    if (identify_verbose && mpeg4::p10::is_avc_fourcc(type))
+      info = " [uses_avc_es_packetizer]";
+
+    mxinfo("Track ID 0: video (%s)%s\n", AVI_video_compressor(avi),
+           info.c_str());
+  }
   for (i = 0; i < AVI_audio_tracks(avi); i++) {
     AVI_set_audio_track(avi, i);
     switch (AVI_audio_format(avi)) {
