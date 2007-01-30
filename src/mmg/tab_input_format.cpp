@@ -307,8 +307,7 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   bool video = ('v' == type) && !appending;
   bool audio_app = ('a' == type);
   bool subs_app = ('s' == type);
-  bool avc_es = video && (ctype.Find(wxT("MPEG-4 part 10 ES")) >= 0) &&
-    (FILE_TYPE_AVC_ES == files[t->source].container);
+  bool avc_es = video && t->uses_avc_es_packetizer;
 
   ctype = ctype.Lower();
 

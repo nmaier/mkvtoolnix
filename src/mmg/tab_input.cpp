@@ -424,6 +424,11 @@ tab_input::add_file(const wxString &file_name,
       if (info.length() > 0) {
         args = split(info, wxU(" "));
         for (k = 0; k < args.size(); k++) {
+          if (args[k] == wxT("uses_avc_es_packetizer")) {
+            track->uses_avc_es_packetizer = true;
+            continue;
+          }
+
           pair = split(args[k], wxU(":"), 2);
           if (pair.size() != 2)
             continue;
@@ -1276,8 +1281,8 @@ tab_input::validate_settings() {
                  (t->ctype.Find(wxT("MPEG-4 part 10 ES")) >= 0) &&
                  mdlg->settings_page->cb_warn_usage->GetValue()) {
         wxString message =
-          wxString::Format(wxT("You haven't selected a number of frames for "
-                               "track " LLD " of file '%s'. "
+          wxString::Format(wxT("You haven't selected a number of frames "
+                               "per second for track " LLD " of file '%s'. "
                                "mkvmerge cannot determine the number of "
                                "frames per second for such files itself. "
                                "Therefore you have to set this parameter "
