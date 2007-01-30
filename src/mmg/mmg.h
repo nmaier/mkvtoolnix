@@ -78,7 +78,7 @@ struct mmg_track_t {
     uses_avc_es_packetizer(false),
     track_name_was_present(false),
     language(wxT("und")), cues(wxT("default")), sub_charset(wxT("default")),
-    nalu_size_length(2),
+    nalu_size_length(4),
     stereo_mode(0),
     appending(false) {};
 };

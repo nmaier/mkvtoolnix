@@ -1,5 +1,8 @@
 2007-01-30  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge, mmg: Changed the default for the "NALU size length" to
+	"4" and added a warning if "3" is used.
+
 	* mkvmerge: bug fix: File type detection for Qt/MP4 files which
 	start with a "wide" atom has been fixed.
 

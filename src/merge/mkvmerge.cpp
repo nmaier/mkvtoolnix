@@ -229,7 +229,7 @@ set_usage() {
     "\n"
     "  --nalu-size-length <TID:n>\n"
     "                           Force the NALU size length to n bytes with\n"
-    "                           2 <= n <= 4.\n"
+    "                           2 <= n <= 4 with 4 being the default.\n"
     "\n Options that only apply to video tracks:\n"
     "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
     "                           Works only for video tracks.\n"
@@ -1281,6 +1281,7 @@ parse_default_duration(const string &s,
 static void
 parse_nalu_size_length(const string &s,
                        track_info_c &ti) {
+  static bool nalu_size_length_3_warning_printed = false;
   vector<string> parts;
   int64_t id, nalu_size_length;
 
@@ -1298,6 +1299,13 @@ parse_nalu_size_length(const string &s,
       (2 > nalu_size_length) || (4 < nalu_size_length))
     mxerror(_("The NALU size length must be a number between 2 and 4 "
               "inclusively in '--nalu-size-length %s'.\n"), s.c_str());
+
+  if ((3 == nalu_size_length) && !nalu_size_length_3_warning_printed) {
+    nalu_size_length_3_warning_printed = true;
+    mxwarn("Using a NALU size length of 3 bytes might result in tracks "
+           "that won't be decodable with certain AVC/h.264 codecs.\n");
+  }
+
   ti.nalu_size_lengths[id] = nalu_size_length;
 }
 

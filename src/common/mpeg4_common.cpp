@@ -984,7 +984,7 @@ mpeg4::p10::compare_poc_by_dec(const poc_t &poc1,
 }
 
 mpeg4::p10::avc_es_parser_c::avc_es_parser_c():
-  m_nalu_size_length(2),
+  m_nalu_size_length(4),
   m_keep_ar_info(true),
   m_avcc_ready(false), m_avcc_changed(false),
   m_default_duration(40000000), m_frame_number(0), m_num_skipped_frames(0),

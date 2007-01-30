@@ -1483,7 +1483,7 @@ mmg_dialog::update_command_line() {
         clargs.Add(sid + wxT(":") + t->fps + wxT("fps"));
       }
 
-      if (t->uses_avc_es_packetizer && (2 != t->nalu_size_length)) {
+      if (t->uses_avc_es_packetizer && (4 != t->nalu_size_length)) {
         clargs.Add(wxT("--nalu-size-length"));
         clargs.Add(wxString::Format(wxT("%s:%d"), sid.c_str(),
                                     t->nalu_size_length));

@@ -165,11 +165,12 @@ tab_input_format::tab_input_format(wxWindow *parent,
                    "This parameter is only available for AVC/h.264 elementary "
                    "streams read from AVC/h.264 ES files, AVIs or Matroska "
                    "files created with '--engage allow_avc_in_vwf_mode'. "
-                   "It defaults to 2 bytes, but there are files that contain "
-                   "frames or slices that are bigger than 65535 bytes. "
-                   "For such files you have to use this parameter and "
-                   "increase the size to 3 or mkvmerge will abort with an "
-                   "error."));
+                   "It defaults to 4 bytes, but there are files which do not "
+                   "contain a frame or slice that is bigger than 65535 bytes. "
+                   "For such files you can use this parameter and decrease "
+                   "the size to 2. You can also try 3 which results in "
+                   "smaller files but might not be decodable by all AVC/h.264 "
+                   "codecs."));
   cob_nalu_size_length->SetSizeHints(0, -1);
   siz_fg->Add(cob_nalu_size_length, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL,
               STDSPACING);
@@ -352,7 +353,7 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
     tc_display_height->SetValue(wxT(""));
     set_combobox_selection(cob_fourcc, wxT(""));
     set_combobox_selection(cob_fps, wxT(""));
-    cob_nalu_size_length->SetSelection(0);
+    cob_nalu_size_length->SetSelection(2);
     set_combobox_selection(cob_stereo_mode, wxT(""));
     tc_delay->SetValue(wxT(""));
     tc_stretch->SetValue(wxT(""));
