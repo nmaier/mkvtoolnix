@@ -1346,7 +1346,7 @@ mmg_dialog::update_command_line() {
   mmg_file_t *f;
   mmg_attachment_t *a;
   wxString sid, old_cmdline, arg, aids, sids, dids, track_order;
-  wxString append_mapping, format;
+  wxString append_mapping;
 
   old_cmdline = cmdline;
   cmdline = wxT("\"") + mkvmerge_path + wxT("\" -o \"") +
@@ -1365,7 +1365,6 @@ mmg_dialog::update_command_line() {
     clargs.Add(settings_page->cob_priority->GetValue());
   }
 
-  format = wxT(LLD);
   for (fidx = 0; fidx < files.size(); fidx++) {
     f = &files[fidx];
     tracks_selected_here = false;
@@ -1381,9 +1380,7 @@ mmg_dialog::update_command_line() {
         continue;
 
       tracks_selected_here = true;
-      // Avoid compiler warnings about mismatching format and arguments
-      // because mingw does not know about the %I64d syntax.
-      sid.Printf(format, t->id);
+      sid = wxLongLong(t->id).ToString();
 
       if (t->type == wxT('a')) {
         no_audio = false;
