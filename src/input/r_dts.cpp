@@ -116,7 +116,8 @@ dts_reader_c::create_packetizer(int64_t) {
   add_packetizer(new dts_packetizer_c(this, dtsheader, ti));
   mxinfo(FMT_TID "Using the DTS output module.\n", ti.fname.c_str(),
          (int64_t)0);
-  print_dts_header(&dtsheader);
+  if (1 < verbose)
+    print_dts_header(&dtsheader);
 }
 
 file_status_e

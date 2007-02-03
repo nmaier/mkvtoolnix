@@ -174,7 +174,7 @@ wav_reader_c::create_packetizer(int64_t) {
     mxinfo(FMT_TID "Using the DTS output module. %s %s\n",
            ti.fname.c_str(), (int64_t)0, (dts_swap_bytes)? "(bytes swapped)" :
            "", (dts_14_16)? "(DTS14 encoded)" : "(DTS16 encoded)");
-    if (verbose > 1)
+    if (1 < verbose)
       print_dts_header(&dtsheader);
   }
 }
