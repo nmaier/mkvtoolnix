@@ -174,6 +174,9 @@ void MTX_DLL_API dts_14_to_dts_16(const unsigned short *src,
                                   unsigned long srcwords,
                                   unsigned short *dst);
 
+bool MTX_DLL_API detect_dts(const void *src_buf, int len,
+                            bool &dts14_to_16, bool &swap_bytes);
+
 bool MTX_DLL_API operator!=(const dts_header_t &l, const dts_header_t &r);
 
 #endif // __DTSCOMMON_H

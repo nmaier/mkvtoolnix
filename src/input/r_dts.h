@@ -29,10 +29,12 @@
 
 class dts_reader_c: public generic_reader_c {
 private:
-  unsigned char *chunk;
+  unsigned short *buf[2];
+  int cur_buf;
   mm_io_c *io;
   int64_t bytes_processed, size;
   dts_header_t dtsheader;
+  bool dts14_to_16, swap_bytes;
 
 public:
   dts_reader_c(track_info_c &_ti) throw (error_c);
@@ -44,6 +46,9 @@ public:
   virtual void create_packetizer(int64_t id);
 
   static int probe_file(mm_io_c *io, int64_t size);
+
+protected:
+  virtual int decode_buffer(int len);
 };
 
 #endif // __R_DTS_H

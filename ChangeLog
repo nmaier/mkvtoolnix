@@ -1,3 +1,9 @@
+2007-02-03  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: enhancement: Added support for DTS files which use
+	only 14 out of every 16 bits and which are not stored inside a WAV
+	file.
+
 2007-01-30  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge, mmg: Changed the default for the "NALU size length" to

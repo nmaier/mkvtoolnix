@@ -423,6 +423,55 @@ dts_14_to_dts_16(const unsigned short *src,
 }
 
 bool
+detect_dts(const void *src_buf,
+           int len,
+           bool &dts14_to_16,
+           bool &swap_bytes) {
+  int dts_swap_bytes, dts_14_16, cur_buf;
+  unsigned short *buf[2];
+  dts_header_t dtsheader;
+  bool is_dts = false;
+
+  cur_buf = 0;
+
+  buf[0] = (unsigned short *)safemalloc(len);
+  buf[1] = (unsigned short *)safemalloc(len);
+
+  for (dts_swap_bytes = 0; dts_swap_bytes < 2; dts_swap_bytes++) {
+    memcpy(buf[cur_buf], src_buf, len);
+
+    if (dts_swap_bytes) {
+      swab((unsigned char *)buf[cur_buf], (unsigned char *)buf[cur_buf^1], len);
+      cur_buf ^= 1;
+    }
+
+    for (dts_14_16 = 0; dts_14_16 < 2; dts_14_16++) {
+      if (dts_14_16) {
+        dts_14_to_dts_16(buf[cur_buf], len / 2, buf[cur_buf^1]);
+        cur_buf ^= 1;
+      }
+
+      if (find_dts_header((const unsigned char *)buf[cur_buf], len,
+                          &dtsheader) >= 0) {
+        is_dts = true;
+        break;
+      }
+    }
+
+    if (is_dts)
+      break;
+  }
+
+  safefree(buf[0]);
+  safefree(buf[1]);
+
+  dts14_to_16 = dts_14_16 != 0;
+  swap_bytes = dts_swap_bytes != 0;
+
+  return is_dts;
+}
+
+bool
 operator!=(const dts_header_t &l,
            const dts_header_t &r) {
   //if (l.frametype != r.frametype) return true;
