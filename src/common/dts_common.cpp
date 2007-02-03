@@ -441,7 +441,7 @@ detect_dts(const void *src_buf,
     memcpy(buf[cur_buf], src_buf, len);
 
     if (dts_swap_bytes) {
-      swab((unsigned char *)buf[cur_buf], (unsigned char *)buf[cur_buf^1], len);
+      swab((char *)buf[cur_buf], (char *)buf[cur_buf^1], len);
       cur_buf ^= 1;
     }
 

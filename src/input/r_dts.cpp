@@ -96,7 +96,7 @@ dts_reader_c::~dts_reader_c() {
 int
 dts_reader_c::decode_buffer(int len) {
   if (swap_bytes) {
-    swab((unsigned char *)buf[cur_buf], (unsigned char *)buf[cur_buf^1], len);
+    swab((char *)buf[cur_buf], (char *)buf[cur_buf^1], len);
     cur_buf ^= 1;
   }
 
