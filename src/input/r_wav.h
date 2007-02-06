@@ -35,12 +35,14 @@ class wav_reader_c: public generic_reader_c {
 private:
   unsigned char *chunk;
   mm_io_c *io;
-  int dts_swap_bytes, dts_14_16;
   int bps;
   struct wave_header wheader;
   int64_t bytes_processed;
-  bool is_dts;
+
+  bool is_dts, dts_swap_bytes, dts_14_16;
   dts_header_t dtsheader;
+  unsigned short *buf[2];
+  int cur_buf;
 
 public:
   wav_reader_c(track_info_c &_ti) throw (error_c);
@@ -54,6 +56,9 @@ public:
   virtual int get_progress();
 
   static int probe_file(mm_io_c *io, int64_t size);
+
+protected:
+  virtual int decode_buffer(int len);
 };
 
 #endif // __R_WAV_H

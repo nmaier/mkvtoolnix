@@ -432,6 +432,8 @@ detect_dts(const void *src_buf,
   dts_header_t dtsheader;
   bool is_dts = false;
 
+  len &= ~0xf;
+
   cur_buf = 0;
 
   buf[0] = (unsigned short *)safemalloc(len);

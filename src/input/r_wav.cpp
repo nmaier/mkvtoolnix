@@ -42,6 +42,8 @@ extern "C" {
 #include <avilib.h> // for wave_header
 }
 
+#define DTS_READ_SIZE 16384
+
 int
 wav_reader_c::probe_file(mm_io_c *io,
                          int64_t size) {
@@ -66,8 +68,12 @@ wav_reader_c::probe_file(mm_io_c *io,
 
 wav_reader_c::wav_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(_ti) {
+  generic_reader_c(_ti),
+  is_dts(false), dts_swap_bytes(false), dts_14_16(false), cur_buf(0) {
   int64_t size;
+
+  buf[0] = NULL;
+  buf[1] = NULL;
 
   try {
     io = new mm_file_io_c(ti.fname);
@@ -97,7 +103,6 @@ wav_reader_c::wav_reader_c(track_info_c &_ti)
   chunk = (unsigned char *)safemalloc(bps + 1);
   bytes_processed = 0;
   ti.id = 0;                   // ID for this track.
-  is_dts = false;
 
   if (!skip_to_chunk("data"))
     throw error_c("wav_reader: No data chunk was found.");
@@ -105,49 +110,58 @@ wav_reader_c::wav_reader_c(track_info_c &_ti)
   if (io->read(&wheader.data, sizeof(wheader.data)) != sizeof(wheader.data))
     throw error_c("wav_reader: Could not read the data chunk header.");
 
-  if (verbose)
-    mxinfo(FMT_FN "Using the WAV demultiplexer.\n", ti.fname.c_str());
+  // check wether .wav file contains DTS data...
+  buf[0] = (unsigned short *)safemalloc(DTS_READ_SIZE);
+  buf[1] = (unsigned short *)safemalloc(DTS_READ_SIZE);
 
-  {
-    // check wether .wav file contains DTS data...
-    unsigned short obuf[max_dts_packet_size/2];
-    unsigned short buf[2][max_dts_packet_size/2];
-    int cur_buf = 0;
-
+  try {
     io->save_pos();
-    long rlen = io->read(obuf, max_dts_packet_size);
+    int len = io->read(buf[0], DTS_READ_SIZE);
     io->restore_pos();
 
-    for (dts_swap_bytes = 0; dts_swap_bytes < 2; dts_swap_bytes++) {
-      memcpy(buf[cur_buf], obuf, rlen);
-
-      if (dts_swap_bytes) {
-        swab((char *)buf[cur_buf], (char *)buf[cur_buf^1], rlen);
-        cur_buf ^= 1;
+    if (detect_dts(buf[0], len, dts_14_16, dts_swap_bytes)) {
+      len = decode_buffer(len);
+      if (find_dts_header((const unsigned char *)buf[cur_buf], len,
+                          &dtsheader) >= 0) {
+        is_dts = true;
+        mxverb(3, "DTSinWAV: 14->16 %d swap %d\n", dts_14_16, dts_swap_bytes);
       }
-
-      for (dts_14_16 = 0; dts_14_16 < 2; dts_14_16++) {
-        long erlen = rlen;
-        if (dts_14_16) {
-          unsigned long words = rlen / (8*sizeof(short));
-          dts_14_to_dts_16(buf[cur_buf], words*8, buf[cur_buf^1]);
-          cur_buf ^= 1;
-        }
-
-        if (find_dts_header((const unsigned char *)buf[cur_buf], erlen,
-                            &dtsheader) >= 0)
-          is_dts = true;
-      }
-
-      if (is_dts)
-        break;
     }
+  } catch(...) {
   }
+
+  if (!is_dts) {
+    safefree(buf[0]);
+    safefree(buf[1]);
+    buf[0] = NULL;
+    buf[1] = NULL;
+  }
+
+  if (verbose)
+    mxinfo(FMT_FN "Using the WAV demultiplexer.\n", ti.fname.c_str());
 }
 
 wav_reader_c::~wav_reader_c() {
   delete io;
   safefree(chunk);
+  safefree(buf[0]);
+  safefree(buf[1]);
+}
+
+int
+wav_reader_c::decode_buffer(int len) {
+  if (dts_swap_bytes) {
+    swab((char *)buf[cur_buf], (char *)buf[cur_buf^1], len);
+    cur_buf ^= 1;
+  }
+
+  if (dts_14_16) {
+    dts_14_to_dts_16(buf[cur_buf], len / 2, buf[cur_buf^1]);
+    cur_buf ^= 1;
+    len = len * 7 / 8;
+  }
+
+  return len;
 }
 
 void
@@ -171,9 +185,8 @@ wav_reader_c::create_packetizer(int64_t) {
     // .wav's with DTS are always filled up with other stuff to match
     // the bitrate...
     ((dts_packetizer_c *)PTZR0)->skipping_is_normal = true;
-    mxinfo(FMT_TID "Using the DTS output module. %s %s\n",
-           ti.fname.c_str(), (int64_t)0, (dts_swap_bytes)? "(bytes swapped)" :
-           "", (dts_14_16)? "(DTS14 encoded)" : "(DTS16 encoded)");
+    mxinfo(FMT_TID "Using the DTS output module.\n",
+           ti.fname.c_str(), (int64_t)0);
     if (1 < verbose)
       print_dts_header(&dtsheader);
   }
@@ -203,37 +216,20 @@ wav_reader_c::read(generic_packetizer_c *,
   }
 
   if (is_dts) {
-    unsigned short buf[2][max_dts_packet_size/2];
-    int cur_buf = 0;
-    long rlen = io->read(buf[cur_buf], max_dts_packet_size);
+    long rlen = io->read(buf[cur_buf], DTS_READ_SIZE);
 
     if (rlen <= 0) {
       PTZR0->flush();
       return FILE_STATUS_DONE;
     }
 
-    if (dts_swap_bytes) {
-      swab((char *)buf[cur_buf], (char *)buf[cur_buf^1], rlen);
-      cur_buf ^= 1;
-    }
-
-    long erlen = rlen;
-    if (dts_14_16) {
-      unsigned long words = rlen / (8*sizeof(short));
-      //if (words*8*sizeof(short) != rlen) {
-      // unaligned problem, should not happen...
-      //}
-      dts_14_to_dts_16(buf[cur_buf], words*8, buf[cur_buf^1]);
-      cur_buf ^= 1;
-      erlen = words * 7 * sizeof(short);
-    }
-
+    long dec_len = decode_buffer(rlen);
     PTZR0->process(new packet_t(new memory_c((unsigned char *)buf[cur_buf],
-                                             erlen, false)));
+                                             dec_len, false)));
 
     bytes_processed += rlen;
 
-    if (rlen != max_dts_packet_size) {
+    if (rlen != DTS_READ_SIZE) {
       PTZR0->flush();
       return FILE_STATUS_DONE;
     } else
