@@ -31,6 +31,7 @@ extern "C" {
 #include "aac_common.h"
 #include "common.h"
 #include "error.h"
+#include "hacks.h"
 #include "mpeg4_common.h"
 #include "output_control.h"
 #include "r_avi.h"
@@ -170,7 +171,8 @@ avi_reader_c::create_packetizer(int64_t tid) {
       if (verbose)
         mxinfo(FMT_TID "Using the MPEG-4 part 2 video output module.\n",
                ti.fname.c_str(), (int64_t)0);
-    } else if (mpeg4::p10::is_avc_fourcc(codec)) {
+    } else if (mpeg4::p10::is_avc_fourcc(codec) &&
+               !hack_engaged(ENGAGE_ALLOW_AVC_IN_VFW_MODE)) {
       try {
         memory_cptr avcc = extract_avcc();
         mpeg4_p10_es_video_packetizer_c *ptzr =

@@ -1434,7 +1434,8 @@ kax_reader_c::create_packetizer(int64_t tid) {
     switch (t->type) {
       case 'v':
         if ((t->codec_id == MKV_V_MSCOMP) &&
-            mpeg4::p10::is_avc_fourcc(t->v_fourcc))
+            mpeg4::p10::is_avc_fourcc(t->v_fourcc) &&
+            !hack_engaged(ENGAGE_ALLOW_AVC_IN_VFW_MODE))
           create_mpeg4_p10_es_video_packetizer(t, nti);
 
         else if (starts_with(t->codec_id, "V_MPEG4", 7) ||
