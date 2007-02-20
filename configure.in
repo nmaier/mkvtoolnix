@@ -32,7 +32,7 @@ opt_features_yes=""
 opt_features_no=""
 
 
-function check_version {
+check_version() {
   check_ver_req="$1"
   check_ver_real="$2"
 
