@@ -50,6 +50,7 @@ avc_es_reader_c::probe_file(mm_io_c *io,
     memory_cptr buf(new memory_c((unsigned char *)safemalloc(READ_SIZE),
                                  READ_SIZE));
     int num_read, i;
+    bool first = true;
 
     avc_es_parser_c parser;
     parser.ignore_nalu_size_length_errors();
@@ -61,6 +62,11 @@ avc_es_reader_c::probe_file(mm_io_c *io,
       num_read = io->read(buf->get(), READ_SIZE);
       if (num_read < 4)
         return 0;
+
+      // MPEG TS starts with 0x47.
+      if (first && (0x47 == buf->get()[0]))
+        return 0;
+      first = false;
 
       parser.add_bytes(buf->get(), num_read);
 
