@@ -942,21 +942,6 @@ generic_packetizer_c::process_deferred_packets() {
   deferred_packets.clear();
 }
 
-bool
-generic_packetizer_c::has_enough_packets() const {
-  if (packet_queue.size() < 2)
-    return false;
-
-  const packet_cptr &pack = packet_queue.front();
-  deque<packet_cptr>::const_iterator packet = packet_queue.begin();
-
-  ++packet;
-  while ((packet_queue.end() != packet) &&
-         ((*packet)->timecode_before_factory <= pack->timecode_before_factory))
-    ++packet;
-  return (packet_queue.end() != packet);
-}
-
 packet_cptr
 generic_packetizer_c::get_packet() {
   if ((packet_queue.size() == 0) || !packet_queue.front()->factory_applied)

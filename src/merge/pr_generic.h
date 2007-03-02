@@ -510,9 +510,6 @@ public:
   virtual void apply_factory_once(packet_cptr &packet);
   virtual void apply_factory_short_queueing(packet_cptr_di &p_start);
   virtual void apply_factory_full_queueing(packet_cptr_di &p_start);
-
-protected:
-  inline bool has_enough_packets() const;
 };
 
 extern vector<generic_packetizer_c *> ptzrs_in_header_order;
