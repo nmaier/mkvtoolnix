@@ -18,10 +18,11 @@
 #include <string.h>
 #include <errno.h>
 
-#include "pr_generic.h"
 #include "ac3_common.h"
-#include "p_ac3.h"
 #include "matroska.h"
+#include "output_control.h"
+#include "pr_generic.h"
+#include "p_ac3.h"
 
 using namespace libmatroska;
 
@@ -33,7 +34,8 @@ ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *_reader,
   throw (error_c):
   generic_packetizer_c(_reader, _ti),
   bytes_output(0), packetno(0), bytes_skipped(0),
-  samples_per_sec(_samples_per_sec), channels(_channels), bsid(_bsid) {
+  samples_per_sec(_samples_per_sec), channels(_channels), bsid(_bsid),
+  first_packet(true) {
 
   set_track_type(track_audio);
   set_track_default_duration((int64_t)(1536000000000.0 *ti.async.linear /
@@ -103,7 +105,7 @@ ac3_packetizer_c::get_ac3_packet(unsigned long *header,
     bytes_skipped = 0;
   }
 
-  pins = 1536000000000.0 / samples_per_sec;
+  pins = ac3header->samples * 1000000000.0 / samples_per_sec;
 
   if (needs_negative_displacement(pins)) {
     /*
@@ -143,6 +145,8 @@ ac3_packetizer_c::set_headers() {
     id += "/BSID9";
   else if (bsid == 10)
     id += "/BSID10";
+  else if (bsid == 16)
+    id = MKV_A_EAC3;
   set_codec_id(id.c_str());
   set_audio_sampling_freq((float)samples_per_sec);
   set_audio_channels(channels);
@@ -161,21 +165,41 @@ ac3_packetizer_c::process(packet_cptr packet) {
 
   add_to_buffer(packet->data->get(), packet->data->get_size());
   while ((ac3_packet = get_ac3_packet(&header, &ac3header)) != NULL) {
+    adjust_header_values(ac3header);
+
     if (packet->timecode == -1)
-      my_timecode = (int64_t)(1000000000.0 * packetno * 1536 /
+      my_timecode = (int64_t)(1000000000.0 * packetno * ac3header.samples /
                               samples_per_sec);
     else
       my_timecode = packet->timecode + ti.async.displacement;
     add_packet(new packet_t(new memory_c(ac3_packet, ac3header.bytes, true),
                             (int64_t)(my_timecode * ti.async.linear),
-                            (int64_t)(1000000000.0 * 1536 * ti.async.linear /
-                                      samples_per_sec)));
+                            (int64_t)(1000000000.0 * ac3header.samples *
+                                      ti.async.linear / samples_per_sec)));
     packetno++;
   }
 
   debug_leave("ac3_packetizer_c::process");
 
   return FILE_STATUS_MOREDATA;
+}
+
+void
+ac3_packetizer_c::adjust_header_values(ac3_header_t &ac3header) {
+  if (!first_packet)
+    return;
+
+  first_packet = false;
+
+  bsid = ac3header.bsid;
+  if (16 == bsid)
+    set_codec_id(MKV_A_EAC3);
+
+  if (1536 != ac3header.samples)
+    set_track_default_duration((int64_t)(1000000000.0 * ac3header.samples *
+                                         ti.async.linear / samples_per_sec));
+
+  rerender_track_headers();
 }
 
 void

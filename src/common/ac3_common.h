@@ -40,6 +40,7 @@ typedef struct {
   int flags;
   int bytes;
   int bsid;
+  int samples;
 } ac3_header_t;
 
 int MTX_DLL_API find_ac3_header(const unsigned char *buf, int size,

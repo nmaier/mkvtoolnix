@@ -28,6 +28,7 @@ protected:
   int64_t bytes_output, packetno, bytes_skipped;
   int samples_per_sec, channels, bsid;
   byte_buffer_c byte_buffer;
+  bool first_packet;
 
 public:
   ac3_packetizer_c(generic_reader_c *_reader, int _samples_per_sec,
@@ -48,6 +49,7 @@ protected:
   virtual unsigned char *get_ac3_packet(unsigned long *header,
                                         ac3_header_t *ac3header);
   virtual void add_to_buffer(unsigned char *buf, int size);
+  virtual void adjust_header_values(ac3_header_t &ac3header);
 
   virtual void dump_debug_info();
 };

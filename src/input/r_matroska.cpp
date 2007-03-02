@@ -374,7 +374,8 @@ kax_reader_c::verify_tracks() {
         } else {
           if (starts_with(t->codec_id, MKV_A_MP3, strlen(MKV_A_MP3) - 1))
             t->a_formattag = 0x0055;
-          else if (starts_with(t->codec_id, MKV_A_AC3, strlen(MKV_A_AC3)))
+          else if (starts_with(t->codec_id, MKV_A_AC3, strlen(MKV_A_AC3)) ||
+                   (t->codec_id == MKV_A_EAC3))
             t->a_formattag = 0x2000;
           else if (t->codec_id == MKV_A_DTS)
             t->a_formattag = 0x2001;
@@ -1525,12 +1526,14 @@ kax_reader_c::create_packetizer(int64_t tid) {
                                                 t->a_channels, t->a_bps, nti));
           mxinfo(FMT_TID "Using the PCM output module.\n", ti.fname.c_str(),
                  (int64_t)t->tnum);
+
         } else if (t->a_formattag == 0x0055) {
           t->ptzr =
             add_packetizer(new mp3_packetizer_c(this, (int32_t)t->a_sfreq,
                                                 t->a_channels, true, nti));
           mxinfo(FMT_TID "Using the MPEG audio output module.\n",
                  ti.fname.c_str(), (int64_t)t->tnum);
+
         } else if (t->a_formattag == 0x2000) {
           int bsid;
 
@@ -1538,13 +1541,16 @@ kax_reader_c::create_packetizer(int64_t tid) {
             bsid = 9;
           else if (t->codec_id == "A_AC3/BSID10")
             bsid = 10;
+          else if (t->codec_id == MKV_A_EAC3)
+            bsid = 16;
           else
             bsid = 0;
           t->ptzr =
             add_packetizer(new ac3_packetizer_c(this, (int32_t)t->a_sfreq,
                                                 t->a_channels, bsid, nti));
-          mxinfo(FMT_TID "Using the AC3 output module.\n", ti.fname.c_str(),
-                 (int64_t)t->tnum);
+          mxinfo(FMT_TID "Using the %sAC3 output module.\n", ti.fname.c_str(),
+                 (int64_t)t->tnum, 16 == bsid ? "E" : "");
+
         } else if (t->a_formattag == 0x2001) {
           dts_header_t dtsheader;
 

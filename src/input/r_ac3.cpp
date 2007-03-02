@@ -73,8 +73,8 @@ ac3_reader_c::create_packetizer(int64_t) {
     return;
   add_packetizer(new ac3_packetizer_c(this, ac3header.sample_rate,
                                       ac3header.channels, ac3header.bsid, ti));
-  mxinfo(FMT_TID "Using the AC3 output module.\n", ti.fname.c_str(),
-         (int64_t)0);
+  mxinfo(FMT_TID "Using the %sAC3 output module.\n", ti.fname.c_str(),
+         (int64_t)0, 16 == ac3header.bsid ? "E" : "");
 }
 
 file_status_e
@@ -101,8 +101,8 @@ ac3_reader_c::get_progress() {
 
 void
 ac3_reader_c::identify() {
-  mxinfo("File '%s': container: AC3\nTrack ID 0: audio (AC3)\n",
-         ti.fname.c_str());
+  mxinfo("File '%s': container: AC3\nTrack ID 0: audio (%sAC3)\n",
+         ti.fname.c_str(), 16 == ac3header.bsid ? "E" : "");
 }
 
 int
