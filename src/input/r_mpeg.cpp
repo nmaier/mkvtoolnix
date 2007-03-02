@@ -238,7 +238,7 @@ mpeg_es_reader_c::identify() {
 
 // ------------------------------------------------------------------------
 
-#define PS_PROBE_SIZE 1024 * 1024
+#define PS_PROBE_SIZE 20 * 1024 * 1024
 
 int
 mpeg_ps_reader_c::probe_file(mm_io_c *io,
@@ -267,15 +267,22 @@ mpeg_ps_reader_c::probe_file(mm_io_c *io,
 mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
   throw (error_c):
   generic_reader_c(_ti) {
+
+  int i;
+
+  try {
+    io = new mm_file_io_c(ti.fname);
+    size = io->get_size();
+    file_done = false;
+
+  } catch (...) {
+    throw error_c("mpeg_ps_reader: Could not open the file.");
+  }
+
   try {
     uint32_t header;
     uint8_t byte;
     bool done;
-    int i;
-
-    io = new mm_file_io_c(ti.fname);
-    size = io->get_size();
-    file_done = false;
 
     bytes_processed = 0;
 
@@ -356,42 +363,42 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
       done |= io->eof() || (io->getFilePointer() >= PS_PROBE_SIZE);
     } // while (!done)
 
-    mxverb(2, "mpeg_ps: Streams found: ");
-    for (i = 0; i < 256; i++)
-      if (id2idx[i] != -1)
-        mxverb(2, "%02x ", i);
-    for (i = 256 ; i < 512; i++)
-      if (id2idx[i] != -1)
-        mxverb(2, "bd(%02x) ", i - 256);
-    mxverb(2, "\n");
-
-    // Calculate by how much the timecodes have to be offset
-    if (tracks.size() > 0) {
-      int64_t min_timecode;
-
-      min_timecode = tracks[0]->timecode_offset;
-      for (i = 1; i < tracks.size(); i++)
-        if (tracks[i]->timecode_offset < min_timecode)
-          min_timecode = tracks[i]->timecode_offset;
-      for (i = 0; i < tracks.size(); i++)
-        tracks[i]->timecode_offset -= min_timecode;
-
-      mxverb(2, "mpeg_ps: Timecode offset: min was " LLD " ", min_timecode);
-      for (i = 0; i < tracks.size(); i++)
-        if (tracks[i]->id > 0xff)
-          mxverb(2, "bd(%02x)=" LLD " ", tracks[i]->id - 256,
-                 tracks[i]->timecode_offset);
-        else
-          mxverb(2, "%02x=" LLD " ", tracks[i]->id,
-                 tracks[i]->timecode_offset);
-      mxverb(2, "\n");
-    }
-
-    io->setFilePointer(0, seek_beginning);
-
   } catch (...) {
-    throw error_c("mpeg_ps_reader: Could not open the file.");
   }
+
+  mxverb(2, "mpeg_ps: Streams found: ");
+  for (i = 0; i < 256; i++)
+    if (id2idx[i] != -1)
+      mxverb(2, "%02x ", i);
+  for (i = 256 ; i < 512; i++)
+    if (id2idx[i] != -1)
+      mxverb(2, "bd(%02x) ", i - 256);
+  mxverb(2, "\n");
+
+  // Calculate by how much the timecodes have to be offset
+  if (tracks.size() > 0) {
+    int64_t min_timecode;
+
+    min_timecode = tracks[0]->timecode_offset;
+    for (i = 1; i < tracks.size(); i++)
+      if (tracks[i]->timecode_offset < min_timecode)
+        min_timecode = tracks[i]->timecode_offset;
+    for (i = 0; i < tracks.size(); i++)
+      tracks[i]->timecode_offset -= min_timecode;
+
+    mxverb(2, "mpeg_ps: Timecode offset: min was " LLD " ", min_timecode);
+    for (i = 0; i < tracks.size(); i++)
+      if (tracks[i]->id > 0xff)
+        mxverb(2, "bd(%02x)=" LLD " ", tracks[i]->id - 256,
+               tracks[i]->timecode_offset);
+      else
+        mxverb(2, "%02x=" LLD " ", tracks[i]->id,
+               tracks[i]->timecode_offset);
+    mxverb(2, "\n");
+  }
+
+  io->setFilePointer(0, seek_beginning);
+
   if (verbose)
     mxinfo(FMT_FN "Using the MPEG PS demultiplexer.\n", ti.fname.c_str());
 }
@@ -557,23 +564,30 @@ mpeg_ps_reader_c::found_new_stream(int id) {
     mpeg_ps_track_ptr track(new mpeg_ps_track_t);
     track->timecode_offset = timecode;
 
+    track->type = '?';
     if (id > 0xff) {
+      track->type = 'a';
+      track->skip_bytes = 3;
+
       if ((aid >= 0x20) && (aid <= 0x3f)) {
         track->type = 's';
         track->fourcc = FOURCC('V', 'S', 'U', 'B');
-      } else if ((aid >= 0x80) && (aid <= 0x87)) {
-        track->type = 'a';
+        track->skip_bytes = 0;
+
+      } else if (((aid >= 0x80) && (aid <= 0x87)) ||
+                 ((aid >= 0xc0) && (aid <= 0xc7)))
         track->fourcc = FOURCC('A', 'C', '3', ' ');
-      } else if ((aid >= 0x88) && (aid <= 0x90)) {
-        track->type = 'a';
+      else if ((aid >= 0x88) && (aid <= 0x8f))
         track->fourcc = FOURCC('D', 'T', 'S', ' ');
-      } else if ((aid >= 0xa0) && (aid <= 0xa8)) {
-        track->type = 'a';
+      else if ((aid >= 0xa0) && (aid <= 0xa7))
         track->fourcc = FOURCC('P', 'C', 'M', ' ');
-      }
+      else
+        track->type = '?';
+
     } else if (id < 0xe0) {
       track->type = 'a';
       track->fourcc = FOURCC('M', 'P', '2', ' ');
+
     } else {
       track->type = 'v';
       track->fourcc = FOURCC('m', 'p', 'g', '0' + version);
@@ -644,8 +658,8 @@ mpeg_ps_reader_c::found_new_stream(int id) {
       if (track->fourcc == FOURCC('M', 'P', '2', ' ')) {
         mp3_header_t header;
 
-        if (find_mp3_header(buf, length) != 0)
-          throw "Error parsing the first MP2/MP3 audio frame.";
+        if (-1 == find_mp3_header(buf, length))
+          return;
         decode_mp3_header(buf, &header);
         track->a_channels = header.channels;
         track->a_sample_rate = header.sampling_frequency;
@@ -654,15 +668,21 @@ mpeg_ps_reader_c::found_new_stream(int id) {
       } else if (track->fourcc == FOURCC('A', 'C', '3', ' ')) {
         ac3_header_t header;
 
-        if (find_ac3_header(buf, length, &header) != 0)
-          throw "Error parsing the first AC3 audio frame.";
+        if (-1 == find_ac3_header(buf, length, &header))
+          return;
+
+        mxverb(2, "first ac3 header bsid %d channels %d sample_rate %d "
+               "bytes %d samples %d\n",
+               header.bsid, header.channels, header.sample_rate, header.bytes,
+               header.samples);
+
         track->a_channels = header.channels;
         track->a_sample_rate = header.sample_rate;
         track->a_bsid = header.bsid;
 
       } else if (track->fourcc == FOURCC('D', 'T', 'S', ' ')) {
-        if (find_dts_header(buf, length, &track->dts_header) != 0)
-          throw "Error parsing the first DTS audio frame.";
+        if (-1 == find_dts_header(buf, length, &track->dts_header))
+          return;
 
 //       } else if (track->fourcc == FOURCC('P', 'C', 'M', ' ')) {
 
@@ -786,8 +806,8 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
                                             track->a_channels,
                                             track->a_bsid, ti));
       if (verbose)
-        mxinfo(FMT_TID "Using the AC3 output module.\n", ti.fname.c_str(),
-               id);
+        mxinfo(FMT_TID "Using the %sAC3 output module.\n", ti.fname.c_str(),
+               id, 16 == track->a_bsid ? "E" : "");
 
     } else if (track->fourcc == FOURCC('D', 'T', 'S', ' ')) {
       track->ptzr =
@@ -845,7 +865,7 @@ file_status_e
 mpeg_ps_reader_c::read(generic_packetizer_c *,
                        bool) {
   int64_t timecode, packet_pos;
-  int new_id, length, aid;
+  int new_id, length, aid, skip_bytes;
   unsigned char *buf;
 
   if (file_done)
@@ -864,7 +884,8 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
       if (!parse_packet(new_id, timecode, length, aid)) {
         file_done = true;
         flush_packetizers();
-        mxverb(2, "mpeg_ps: file_done: !parse_packet\n");
+        mxverb(2, "mpeg_ps: file_done: !parse_packet @ " LLD "\n",
+               packet_pos);
         return FILE_STATUS_DONE;
       }
 
@@ -876,6 +897,18 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
         io->skip(length);
         continue;
       }
+
+      mpeg_ps_track_t *track = tracks[id2idx[new_id]].get();
+
+      skip_bytes = track->skip_bytes;
+
+      if (length < skip_bytes) {
+        io->skip(length);
+        continue;
+      }
+
+      length -= skip_bytes;
+      io->skip(skip_bytes);
 
       mxverb(3, "mpeg_ps: packet for %d length %d at " LLD "\n", new_id,
              length, packet_pos);
@@ -889,16 +922,17 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
         return FILE_STATUS_DONE;
       }
 
-      PTZR(tracks[id2idx[new_id]]->ptzr)->
-        process(new packet_t(new memory_c(buf, length, true)));
+      PTZR(track->ptzr)->process(new packet_t(new memory_c(buf, length,
+                                                           true)));
 
       return FILE_STATUS_MOREDATA;
     }
+    mxverb(2, "mpeg_ps: file_done: !find_next_packet\n");
   } catch(...) {
+    mxverb(2, "mpeg_ps: file_done: exception\n");
   }
   file_done = true;
   flush_packetizers();
-  mxverb(2, "mpeg_ps: file_done: exception\n");
   return FILE_STATUS_DONE;
 }
 
@@ -922,7 +956,8 @@ mpeg_ps_reader_c::identify() {
            track->fourcc == FOURCC('M', 'P', '1', ' ') ? "MPEG-1 layer 1" :
            track->fourcc == FOURCC('M', 'P', '2', ' ') ? "MPEG-1 layer 2" :
            track->fourcc == FOURCC('M', 'P', '3', ' ') ? "MPEG-1 layer 3" :
-           track->fourcc == FOURCC('A', 'C', '3', ' ') ? "AC3" :
+           track->fourcc == FOURCC('A', 'C', '3', ' ') ?
+           (16 == track->a_bsid ? "EAC3" : "AC3") :
            track->fourcc == FOURCC('D', 'T', 'S', ' ') ? "DTS" :
            track->fourcc == FOURCC('P', 'C', 'M', ' ') ? "PCM" :
            track->fourcc == FOURCC('L', 'P', 'C', 'M') ? "LPCM" :
