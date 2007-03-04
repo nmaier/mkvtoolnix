@@ -616,6 +616,113 @@ mpeg_ps_reader_c::parse_packet(int id,
 }
 
 void
+mpeg_ps_reader_c::new_stream_v_mpeg_1_2(int id,
+                                        int aid,
+                                        unsigned char *buf,
+                                        int length,
+                                        mpeg_ps_track_ptr &track) {
+  int64_t timecode;
+  int state;
+  auto_ptr<M2VParser> m2v_parser(new M2VParser);
+  MPEG2SequenceHeader seq_hdr;
+  MPEGChunk *raw_seq_hdr;
+
+  m2v_parser->WriteData(buf, length);
+
+  state = m2v_parser->GetState();
+  while ((MPV_PARSER_STATE_FRAME != state) &&
+         (PS_PROBE_SIZE >= io->getFilePointer())) {
+    if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
+      break;
+
+    if (!parse_packet(id, timecode, length, aid))
+      break;
+    memory_c new_buf((unsigned char *)safemalloc(length), 0, true);
+    if (io->read(new_buf.get(), length) != length)
+      break;
+
+    m2v_parser->WriteData(new_buf.get(), length);
+
+    state = m2v_parser->GetState();
+  }
+
+  if (MPV_PARSER_STATE_FRAME != state) {
+    mxverb(3, "MPEG PS: blacklisting id %d for supposed type MPEG1/2\n",
+           id);
+    blacklisted_ids[id] = true;
+    return;
+  }
+
+  seq_hdr = m2v_parser->GetSequenceHeader();
+  auto_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
+  if (frame.get() == NULL)
+    throw false;
+
+  track->v_version = m2v_parser->GetMPEGVersion();
+  track->v_width = seq_hdr.width;
+  track->v_height = seq_hdr.height;
+  track->v_frame_rate = seq_hdr.frameRate;
+  track->v_aspect_ratio = seq_hdr.aspectRatio;
+  if ((track->v_aspect_ratio <= 0) || (track->v_aspect_ratio == 1))
+    track->v_dwidth = track->v_width;
+  else
+    track->v_dwidth = (int)(track->v_height * track->v_aspect_ratio);
+  track->v_dheight = track->v_height;
+  raw_seq_hdr = m2v_parser->GetRealSequenceHeader();
+  if (raw_seq_hdr != NULL) {
+    track->raw_seq_hdr = (unsigned char *)
+      safememdup(raw_seq_hdr->GetPointer(), raw_seq_hdr->GetSize());
+    track->raw_seq_hdr_size = raw_seq_hdr->GetSize();
+  }
+  track->fourcc = FOURCC('M', 'P', 'G', '0' + track->v_version);
+}
+
+void
+mpeg_ps_reader_c::new_stream_a_mpeg(int id,
+                                    unsigned char *buf,
+                                    int length,
+                                    mpeg_ps_track_ptr &track) {
+  mp3_header_t header;
+
+  if (-1 == find_mp3_header(buf, length))
+    throw false;
+
+  decode_mp3_header(buf, &header);
+  track->a_channels = header.channels;
+  track->a_sample_rate = header.sampling_frequency;
+  track->fourcc = FOURCC('M', 'P', '0' + header.layer, ' ');
+}
+
+void
+mpeg_ps_reader_c::new_stream_a_ac3(int id,
+                                   unsigned char *buf,
+                                   int length,
+                                   mpeg_ps_track_ptr &track) {
+  ac3_header_t header;
+
+  if (-1 == find_ac3_header(buf, length, &header))
+    throw false;
+
+  mxverb(2, "first ac3 header bsid %d channels %d sample_rate %d "
+         "bytes %d samples %d\n",
+         header.bsid, header.channels, header.sample_rate, header.bytes,
+         header.samples);
+
+  track->a_channels = header.channels;
+  track->a_sample_rate = header.sample_rate;
+  track->a_bsid = header.bsid;
+}
+
+void
+mpeg_ps_reader_c::new_stream_a_dts(int id,
+                                   unsigned char *buf,
+                                   int length,
+                                   mpeg_ps_track_ptr &track) {
+  if (-1 == find_dts_header(buf, length, &track->dts_header))
+    throw false;
+}
+
+void
 mpeg_ps_reader_c::found_new_stream(int id) {
   if (((id < 0xc0) || (id > 0xef)) && (id != 0xbd))
     return;
@@ -693,112 +800,22 @@ mpeg_ps_reader_c::found_new_stream(int id) {
         throw false;
     }
 
-    if (track->type == 'v') {
-      if ((track->fourcc == FOURCC('M', 'P', 'G', '1')) ||
-          (track->fourcc == FOURCC('M', 'P', 'G', '2'))) {
+    if ((track->fourcc == FOURCC('M', 'P', 'G', '1')) ||
+        (track->fourcc == FOURCC('M', 'P', 'G', '2')))
+      new_stream_v_mpeg_1_2(id, aid, buf, length, track);
 
-        if ((3 <= length) &&
-            ((0x00 != buf[0]) || (0x00 != buf[1]) || (0x01 != buf[2]))) {
-          blacklisted_ids[id] = true;
-          return;
-        }
+    else if (track->fourcc == FOURCC('M', 'P', '2', ' '))
+      new_stream_a_mpeg(id, buf, length, track);
 
-        int state;
-        auto_ptr<M2VParser> m2v_parser(new M2VParser);
-        MPEG2SequenceHeader seq_hdr;
-        MPEGChunk *raw_seq_hdr;
+    else if (track->fourcc == FOURCC('A', 'C', '3', ' '))
+      new_stream_a_ac3(id, buf, length, track);
 
-        m2v_parser->WriteData(buf, length);
+    else if (track->fourcc == FOURCC('D', 'T', 'S', ' '))
+      new_stream_a_dts(id, buf, length, track);
 
-        state = m2v_parser->GetState();
-        while ((MPV_PARSER_STATE_FRAME != state) &&
-               (PS_PROBE_SIZE >= io->getFilePointer())) {
-          if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
-            break;
-
-          if (!parse_packet(id, timecode, length, aid))
-            break;
-          memory_c new_buf((unsigned char *)safemalloc(length), 0, true);
-          if (io->read(new_buf.get(), length) != length)
-            break;
-
-          m2v_parser->WriteData(new_buf.get(), length);
-
-          state = m2v_parser->GetState();
-        }
-
-        if (MPV_PARSER_STATE_FRAME != state) {
-          mxverb(3, "MPEG PS: blacklisting id %d for supposed type MPEG1/2\n",
-                 id);
-          blacklisted_ids[id] = true;
-          return;
-        }
-
-        seq_hdr = m2v_parser->GetSequenceHeader();
-        auto_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
-        if (frame.get() == NULL)
-          throw false;
-
-        track->v_version = m2v_parser->GetMPEGVersion();
-        track->v_width = seq_hdr.width;
-        track->v_height = seq_hdr.height;
-        track->v_frame_rate = seq_hdr.frameRate;
-        track->v_aspect_ratio = seq_hdr.aspectRatio;
-        if ((track->v_aspect_ratio <= 0) || (track->v_aspect_ratio == 1))
-          track->v_dwidth = track->v_width;
-        else
-          track->v_dwidth = (int)(track->v_height * track->v_aspect_ratio);
-        track->v_dheight = track->v_height;
-        raw_seq_hdr = m2v_parser->GetRealSequenceHeader();
-        if (raw_seq_hdr != NULL) {
-          track->raw_seq_hdr = (unsigned char *)
-            safememdup(raw_seq_hdr->GetPointer(), raw_seq_hdr->GetSize());
-          track->raw_seq_hdr_size = raw_seq_hdr->GetSize();
-        }
-        track->fourcc = FOURCC('M', 'P', 'G', '0' + track->v_version);
-
-      } else                    // if (track->fourcc == ...)
-        // Unsupported video track type
-        return;
-
-    } else if (track->type == 'a') { // if (track->type == 'v')
-      if (track->fourcc == FOURCC('M', 'P', '2', ' ')) {
-        mp3_header_t header;
-
-        if (-1 == find_mp3_header(buf, length))
-          return;
-        decode_mp3_header(buf, &header);
-        track->a_channels = header.channels;
-        track->a_sample_rate = header.sampling_frequency;
-        track->fourcc = FOURCC('M', 'P', '0' + header.layer, ' ');
-
-      } else if (track->fourcc == FOURCC('A', 'C', '3', ' ')) {
-        ac3_header_t header;
-
-        if (-1 == find_ac3_header(buf, length, &header))
-          return;
-
-        mxverb(2, "first ac3 header bsid %d channels %d sample_rate %d "
-               "bytes %d samples %d\n",
-               header.bsid, header.channels, header.sample_rate, header.bytes,
-               header.samples);
-
-        track->a_channels = header.channels;
-        track->a_sample_rate = header.sample_rate;
-        track->a_bsid = header.bsid;
-
-      } else if (track->fourcc == FOURCC('D', 'T', 'S', ' ')) {
-        if (-1 == find_dts_header(buf, length, &track->dts_header))
-          return;
-
-//       } else if (track->fourcc == FOURCC('P', 'C', 'M', ' ')) {
-
-      } else
-        // Unsupported audio track type
-        return;
-    } else
+    else
       // Unsupported track type
-      return;
+      throw false;
 
     track->id = id;
     id2idx[id] = tracks.size();

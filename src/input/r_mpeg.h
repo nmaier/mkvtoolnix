@@ -121,6 +121,16 @@ public:
   virtual void parse_program_stream_map();
 
   static int probe_file(mm_io_c *io, int64_t size);
+
+private:
+  virtual void new_stream_v_mpeg_1_2(int id, int aid, unsigned char *buf,
+                                     int length, mpeg_ps_track_ptr &track);
+  virtual void new_stream_a_mpeg(int id, unsigned char *buf,
+                                 int length, mpeg_ps_track_ptr &track);
+  virtual void new_stream_a_ac3(int id, unsigned char *buf,
+                                int length, mpeg_ps_track_ptr &track);
+  virtual void new_stream_a_dts(int id, unsigned char *buf,
+                                int length, mpeg_ps_track_ptr &track);
 };
 
 #endif // __R_MPEG_H
