@@ -85,12 +85,16 @@ struct mpeg_ps_track_t {
 
 typedef counted_ptr<mpeg_ps_track_t> mpeg_ps_track_ptr;
 
+#define NUM_ES_MAP_ENTRIES 0x40
+
 class mpeg_ps_reader_c: public generic_reader_c {
 private:
   mm_io_c *io;
   int64_t bytes_processed, size, duration;
 
   int id2idx[512];
+  bool blacklisted_ids[512];
+  uint32_t es_map[NUM_ES_MAP_ENTRIES];
   int version;
   bool file_done;
 
@@ -111,8 +115,10 @@ public:
 
   virtual bool read_timestamp(int c, int64_t &timestamp);
   virtual bool parse_packet(int id, int64_t &timestamp, int &size, int &aid);
-  virtual bool find_next_packet(int &id);
-  virtual bool find_next_packet_for_id(int id);
+  virtual bool find_next_packet(int &id, int64_t max_file_pos = -1);
+  virtual bool find_next_packet_for_id(int id, int64_t max_file_pos = -1);
+
+  virtual void parse_program_stream_map();
 
   static int probe_file(mm_io_c *io, int64_t size);
 };

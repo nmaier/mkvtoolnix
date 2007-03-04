@@ -70,6 +70,9 @@ using namespace std;
 #define MXMSG_INFO    15
 #define MXMSG_DEBUG   20
 
+#define MXMIN(a, b) ((a) < (b) ? (a) : (b))
+#define MXMAX(a, b) ((a) > (b) ? (a) : (b))
+
 #define FOURCC(a, b, c, d) (uint32_t)((((unsigned char)a) << 24) + \
                            (((unsigned char)b) << 16) + \
                            (((unsigned char)c) << 8) + \

@@ -27,6 +27,7 @@
 /** Start code for a MPEG-1 and -2 packet */
 #define MPEGVIDEO_PACKET_START_CODE               0x000001ba
 #define MPEGVIDEO_SYSTEM_HEADER_START_CODE        0x000001bb
+#define MPEGVIDEO_PROGRAM_STREAM_MAP_START_CODE   0x000001bc
 #define MPEGVIDEO_MPEG_PROGRAM_END_CODE           0x000001b9
 #define MPEGVIDEO_EXT_START_CODE                  0x000001b5
 

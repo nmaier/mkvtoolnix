@@ -238,7 +238,7 @@ mpeg_es_reader_c::identify() {
 
 // ------------------------------------------------------------------------
 
-#define PS_PROBE_SIZE 20 * 1024 * 1024
+#define PS_PROBE_SIZE 1 * 1024 * 1024
 
 int
 mpeg_ps_reader_c::probe_file(mm_io_c *io,
@@ -288,6 +288,9 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
 
     for (i = 0; i < 512; i++)
       id2idx[i] = -1;
+    memset(es_map, 0, sizeof(uint32_t) * NUM_ES_MAP_ENTRIES);
+    memset(blacklisted_ids, 0, sizeof(bool) * 512);
+
     header = io->read_uint32_be();
     done = io->eof();
     version = -1;
@@ -335,6 +338,10 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
 
         case MPEGVIDEO_MPEG_PROGRAM_END_CODE:
           done = true;
+          break;
+
+        case MPEGVIDEO_PROGRAM_STREAM_MAP_START_CODE:
+          parse_program_stream_map();
           break;
 
         default:
@@ -422,6 +429,75 @@ mpeg_ps_reader_c::read_timestamp(int c,
   timestamp = timestamp * 100000 / 9;
 
   return true;
+}
+
+void
+mpeg_ps_reader_c::parse_program_stream_map() {
+  int64_t pos;
+  int len = 0, prog_len, es_map_len, type, id, id_offset, plen;
+
+  pos = io->getFilePointer();
+  try {
+    len = io->read_uint16_be();
+
+    if (!len || (1018 < len))
+      throw false;
+
+    if (0x00 == (io->read_uint8() & 0x80))
+      throw false;
+
+    io->skip(1);
+
+    prog_len = io->read_uint16_be();
+    io->skip(prog_len);
+
+    es_map_len = io->read_uint16_be();
+    es_map_len = MXMIN(es_map_len, len - prog_len - 8);
+
+    while (0 < es_map_len) {
+      type = io->read_uint8();
+      id = io->read_uint8();
+
+      if ((0xb0 <= id) && (0xef >= id)) {
+        id_offset = id - 0xb0;
+
+        switch(type) {
+          case 0x01:
+            es_map[id_offset] = FOURCC('M', 'P', 'G', '1');
+          break;
+          case 0x02:
+            es_map[id_offset] = FOURCC('M', 'P', 'G', '2');
+            break;
+          case 0x03:
+          case 0x04:
+            es_map[id_offset] = FOURCC('M', 'P', '2', ' ');
+            break;
+          case 0x0f:
+          case 0x11:
+            es_map[id_offset] = FOURCC('A', 'A', 'C', ' ');
+            break;
+          case 0x10:
+            es_map[id_offset] = FOURCC('M', 'P', 'G', '4');
+            break;
+          case 0x1b:
+            es_map[id_offset] = FOURCC('A', 'V', 'C', '1');
+            break;
+          case 0x81:
+            es_map[id_offset] = FOURCC('A', 'C', '3', ' ');
+            break;
+        }
+      }
+
+      plen = io->read_uint16_be();
+      plen = MXMIN(plen, es_map_len);
+      io->skip(plen);
+      es_map_len -= 4 + plen;
+    }
+
+  } catch (...) {
+  }
+
+  io->setFilePointer(pos + len);
 }
 
 bool
@@ -558,7 +634,7 @@ mpeg_ps_reader_c::found_new_stream(int id) {
     if (id == 0xbd)             // DVD audio substream
       id = 256 + aid;
 
-    if (id2idx[id] != -1)
+    if ((-1 != id2idx[id]) || blacklisted_ids[id])
       return;
 
     mpeg_ps_track_ptr track(new mpeg_ps_track_t);
@@ -588,9 +664,9 @@ mpeg_ps_reader_c::found_new_stream(int id) {
       track->type = 'a';
       track->fourcc = FOURCC('M', 'P', '2', ' ');
 
-    } else {
+    } else if ((0xe0 <= id) && (0xef >= id)) {
       track->type = 'v';
-      track->fourcc = FOURCC('m', 'p', 'g', '0' + version);
+      track->fourcc = FOURCC('M', 'P', 'G', '0' + version);
     }
 
     if (track->type == '?')
@@ -601,9 +677,32 @@ mpeg_ps_reader_c::found_new_stream(int id) {
     if (io->read(buf, length) != length)
       throw false;
 
+    if ((track->fourcc == FOURCC('M', 'P', 'G', '1')) ||
+        (track->fourcc == FOURCC('M', 'P', 'G', '2'))) {
+      if (4 > length)
+        throw false;
+
+      uint32_t code = get_uint32_be(buf);
+
+      if (0x00000001 != code)
+        track->fourcc = FOURCC('A', 'V', 'C', '1');
+
+      else if ((MPEGVIDEO_SEQUENCE_START_CODE != code) &&
+               (MPEGVIDEO_PACKET_START_CODE != code) &&
+               (MPEGVIDEO_SYSTEM_HEADER_START_CODE != code))
+        throw false;
+    }
+
     if (track->type == 'v') {
-      if ((track->fourcc == FOURCC('m', 'p', 'g', '1')) ||
-          (track->fourcc == FOURCC('m', 'p', 'g', '2'))) {
+      if ((track->fourcc == FOURCC('M', 'P', 'G', '1')) ||
+          (track->fourcc == FOURCC('M', 'P', 'G', '2'))) {
+
+        if ((3 <= length) &&
+            ((0x00 != buf[0]) || (0x00 != buf[1]) || (0x01 != buf[2]))) {
+          blacklisted_ids[id] = true;
+          return;
+        }
+
         int state;
         auto_ptr<M2VParser> m2v_parser(new M2VParser);
         MPEG2SequenceHeader seq_hdr;
@@ -612,19 +711,27 @@ mpeg_ps_reader_c::found_new_stream(int id) {
         m2v_parser->WriteData(buf, length);
 
         state = m2v_parser->GetState();
-        while (state != MPV_PARSER_STATE_FRAME) {
-          if (!find_next_packet_for_id(id))
-            throw false;
+        while ((MPV_PARSER_STATE_FRAME != state) &&
+               (PS_PROBE_SIZE >= io->getFilePointer())) {
+          if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
+            break;
 
           if (!parse_packet(id, timecode, length, aid))
-            throw false;
+            break;
           memory_c new_buf((unsigned char *)safemalloc(length), 0, true);
           if (io->read(new_buf.get(), length) != length)
-            throw false;
+            break;
 
           m2v_parser->WriteData(new_buf.get(), length);
 
           state = m2v_parser->GetState();
+        }
+
+        if (MPV_PARSER_STATE_FRAME != state) {
+          mxverb(3, "MPEG PS: blacklisting id %d for supposed type MPEG1/2\n",
+                 id);
+          blacklisted_ids[id] = true;
+          return;
         }
 
         seq_hdr = m2v_parser->GetSequenceHeader();
@@ -648,7 +755,7 @@ mpeg_ps_reader_c::found_new_stream(int id) {
             safememdup(raw_seq_hdr->GetPointer(), raw_seq_hdr->GetSize());
           track->raw_seq_hdr_size = raw_seq_hdr->GetSize();
         }
-        track->fourcc = FOURCC('m', 'p', 'g', '0' + track->v_version);
+        track->fourcc = FOURCC('M', 'P', 'G', '0' + track->v_version);
 
       } else                    // if (track->fourcc == ...)
         // Unsupported video track type
@@ -696,9 +803,14 @@ mpeg_ps_reader_c::found_new_stream(int id) {
     track->id = id;
     id2idx[id] = tracks.size();
     tracks.push_back(track);
-  } catch(const char *msg) {
+
+  } catch (bool err) {
+    blacklisted_ids[id] = true;
+
+  } catch (const char *msg) {
     mxerror(FMT_FN "%s\n", ti.fname.c_str(), msg);
-  } catch(...) {
+
+  } catch (...) {
     mxerror(FMT_FN "Error parsing a MPEG PS packet during the "
             "header reading phase. This stream seems to be badly damaged.\n",
             ti.fname.c_str());
@@ -706,13 +818,17 @@ mpeg_ps_reader_c::found_new_stream(int id) {
 }
 
 bool
-mpeg_ps_reader_c::find_next_packet(int &id) {
+mpeg_ps_reader_c::find_next_packet(int &id,
+                                   int64_t max_file_pos) {
   try {
     uint32_t header;
 
     header = io->read_uint32_be();
     while (1) {
       uint8_t byte;
+
+      if ((-1 != max_file_pos) && (io->getFilePointer() > max_file_pos))
+        return false;
 
       switch (header) {
         case MPEGVIDEO_PACKET_START_CODE:
@@ -748,6 +864,10 @@ mpeg_ps_reader_c::find_next_packet(int &id) {
         case MPEGVIDEO_MPEG_PROGRAM_END_CODE:
           return false;
 
+        case MPEGVIDEO_PROGRAM_STREAM_MAP_START_CODE:
+          parse_program_stream_map();
+          break;
+
         default:
           if (!mpeg_is_start_code(header))
             return false;
@@ -764,11 +884,12 @@ mpeg_ps_reader_c::find_next_packet(int &id) {
 }
 
 bool
-mpeg_ps_reader_c::find_next_packet_for_id(int id) {
+mpeg_ps_reader_c::find_next_packet_for_id(int id,
+                                          int64_t max_file_pos) {
   int new_id;
 
   try {
-    while (find_next_packet(new_id)) {
+    while (find_next_packet(new_id, max_file_pos)) {
       if (id == new_id)
         return true;
       io->skip(io->read_uint16_be());
@@ -820,8 +941,8 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
       mxerror("mpeg_ps_reader: Should not have happened #1. %s", BUGMSG);
 
   } else {                      // if (track->type == 'a')
-    if ((track->fourcc == FOURCC('m', 'p', 'g', '1')) ||
-        (track->fourcc == FOURCC('m', 'p', 'g', '2'))) {
+    if ((track->fourcc == FOURCC('M', 'P', 'G', '1')) ||
+        (track->fourcc == FOURCC('M', 'P', 'G', '2'))) {
       mpeg1_2_video_packetizer_c *ptzr;
 
       ti.private_data = track->raw_seq_hdr;
@@ -951,8 +1072,8 @@ mpeg_ps_reader_c::identify() {
     mpeg_ps_track_ptr &track = tracks[i];
     mxinfo("Track ID %d: %s (%s)\n", i,
            track->type == 'a' ? "audio" : "video",
-           track->fourcc == FOURCC('m', 'p', 'g', '1') ? "MPEG-1" :
-           track->fourcc == FOURCC('m', 'p', 'g', '2') ? "MPEG-2" :
+           track->fourcc == FOURCC('M', 'P', 'G', '1') ? "MPEG-1" :
+           track->fourcc == FOURCC('M', 'P', 'G', '2') ? "MPEG-2" :
            track->fourcc == FOURCC('M', 'P', '1', ' ') ? "MPEG-1 layer 1" :
            track->fourcc == FOURCC('M', 'P', '2', ' ') ? "MPEG-1 layer 2" :
            track->fourcc == FOURCC('M', 'P', '3', ' ') ? "MPEG-1 layer 3" :
