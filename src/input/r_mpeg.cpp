@@ -27,7 +27,9 @@
 #include "mp3_common.h"
 #include "r_mpeg.h"
 #include "smart_pointers.h"
+#include "output_control.h"
 #include "p_ac3.h"
+#include "p_avc.h"
 #include "p_dts.h"
 #include "p_mp3.h"
 #include "p_video.h"
@@ -617,12 +619,11 @@ mpeg_ps_reader_c::parse_packet(int id,
 
 void
 mpeg_ps_reader_c::new_stream_v_mpeg_1_2(int id,
-                                        int aid,
                                         unsigned char *buf,
                                         int length,
                                         mpeg_ps_track_ptr &track) {
   int64_t timecode;
-  int state;
+  int state, aid;
   auto_ptr<M2VParser> m2v_parser(new M2VParser);
   MPEG2SequenceHeader seq_hdr;
   MPEGChunk *raw_seq_hdr;
@@ -675,6 +676,110 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(int id,
     track->raw_seq_hdr_size = raw_seq_hdr->GetSize();
   }
   track->fourcc = FOURCC('M', 'P', 'G', '0' + track->v_version);
+}
+
+void
+mpeg_ps_reader_c::new_stream_v_avc(int id,
+                                   unsigned char *buf,
+                                   int length,
+                                   mpeg_ps_track_ptr &track) {
+  mpeg4::p10::avc_es_parser_c parser;
+  int aid;
+  int64_t timecode;
+
+  parser.ignore_nalu_size_length_errors();
+  if (map_has_key(ti.nalu_size_lengths, tracks.size()))
+    parser.set_nalu_size_length(ti.nalu_size_lengths[0]);
+  else if (map_has_key(ti.nalu_size_lengths, -1))
+    parser.set_nalu_size_length(ti.nalu_size_lengths[-1]);
+
+  parser.add_bytes(buf, length);
+
+  while (!parser.headers_parsed() &&
+         (PS_PROBE_SIZE >= io->getFilePointer())) {
+    if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
+      break;
+
+    if (!parse_packet(id, timecode, length, aid))
+      break;
+    memory_c new_buf((unsigned char *)safemalloc(length), 0, true);
+    if (io->read(new_buf.get(), length) != length)
+      break;
+
+    parser.add_bytes(new_buf.get(), length);
+  }
+
+  if (!parser.headers_parsed())
+    throw false;
+
+  track->v_avcc = parser.get_avcc();
+
+  try {
+    mm_mem_io_c avcc(track->v_avcc->get(), track->v_avcc->get_size());
+    mm_mem_io_c new_avcc(NULL, track->v_avcc->get_size(), 1024);
+    memory_cptr nalu(new memory_c());
+    int num_sps, sps, length;
+    sps_info_t sps_info;
+
+    avcc.read(nalu, 5);
+    new_avcc.write(nalu);
+
+    num_sps = avcc.read_uint8();
+    new_avcc.write_uint8(num_sps);
+    num_sps &= 0x1f;
+
+    for (sps = 0; sps < num_sps; sps++) {
+      bool abort;
+
+      length = avcc.read_uint16_be();
+      if ((length + avcc.getFilePointer()) >= track->v_avcc->get_size())
+        length = track->v_avcc->get_size() - avcc.getFilePointer();
+      avcc.read(nalu, length);
+
+      abort = false;
+      if ((0 < length) && ((nalu->get()[0] & 0x1f) == 7)) {
+        nalu_to_rbsp(nalu);
+        if (!mpeg4::p10::parse_sps(nalu, sps_info, true))
+          throw false;
+        rbsp_to_nalu(nalu);
+        abort = true;
+      }
+
+      new_avcc.write_uint16_be(nalu->get_size());
+      new_avcc.write(nalu);
+
+      if (abort) {
+        avcc.read(nalu, track->v_avcc->get_size() - avcc.getFilePointer());
+        new_avcc.write(nalu);
+        break;
+      }
+    }
+
+    track->v_avcc =
+      memory_cptr(new memory_c(new_avcc.get_and_lock_buffer(),
+                               new_avcc.getFilePointer(), true));
+    track->v_width = sps_info.width;
+    track->v_height = sps_info.height;
+    track->fourcc = FOURCC('A', 'V', 'C', '1');
+
+    if (sps_info.ar_found) {
+      float aspect_ratio = (float)sps_info.width / (float)sps_info.height *
+        (float)sps_info.par_num / (float)sps_info.par_den;
+      track->v_aspect_ratio = aspect_ratio;
+
+      if (aspect_ratio > ((float)track->v_width / (float)track->v_height)) {
+        track->v_dwidth = irnd(track->v_height * aspect_ratio);
+        track->v_dheight = track->v_height;
+
+      } else {
+        track->v_dwidth = track->v_width;
+        track->v_dheight = irnd(track->v_width / aspect_ratio);
+      }
+    }
+
+  } catch (...) {
+    throw false;
+  }
 }
 
 void
@@ -791,20 +896,18 @@ mpeg_ps_reader_c::found_new_stream(int id) {
 
       uint32_t code = get_uint32_be(buf);
 
-      if (0x00000001 != code)
-        track->fourcc = FOURCC('A', 'V', 'C', '1');
+      if (0x00000001 == code)
+        new_stream_v_avc(id, buf, length, track);
 
-      else if ((MPEGVIDEO_SEQUENCE_START_CODE != code) &&
-               (MPEGVIDEO_PACKET_START_CODE != code) &&
-               (MPEGVIDEO_SYSTEM_HEADER_START_CODE != code))
+      else if ((MPEGVIDEO_SEQUENCE_START_CODE == code) ||
+               (MPEGVIDEO_PACKET_START_CODE == code) ||
+               (MPEGVIDEO_SYSTEM_HEADER_START_CODE == code))
+        new_stream_v_mpeg_1_2(id, buf, length, track);
+
+      else
         throw false;
-    }
 
-    if ((track->fourcc == FOURCC('M', 'P', 'G', '1')) ||
-        (track->fourcc == FOURCC('M', 'P', 'G', '2')))
-      new_stream_v_mpeg_1_2(id, aid, buf, length, track);
-
-    else if (track->fourcc == FOURCC('M', 'P', '2', ' '))
+    } else if (track->fourcc == FOURCC('M', 'P', '2', ' '))
       new_stream_a_mpeg(id, buf, length, track);
 
     else if (track->fourcc == FOURCC('A', 'C', '3', ' '))
@@ -978,6 +1081,17 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
         mxinfo(FMT_TID "Using the MPEG-1/2 video output module.\n",
                ti.fname.c_str(), id);
 
+    } else if (track->fourcc == FOURCC('A', 'V', 'C', '1')) {
+      mpeg4_p10_es_video_packetizer_c *ptzr =
+        new mpeg4_p10_es_video_packetizer_c(this, track->v_avcc,
+                                            track->v_width, track->v_height,
+                                            ti);
+      track->ptzr = add_packetizer(ptzr);
+
+      if (verbose)
+        mxinfo(FMT_TID "Using the MPEG-4 part 10 ES video output module.\n",
+               ti.fname.c_str(), id);
+
     } else
       mxerror("mpeg_ps_reader: Should not have happened #2. %s", BUGMSG);
   }
@@ -1087,10 +1201,25 @@ mpeg_ps_reader_c::identify() {
          ti.fname.c_str(), version);
   for (i = 0; i < tracks.size(); i++) {
     mpeg_ps_track_ptr &track = tracks[i];
-    mxinfo("Track ID %d: %s (%s)\n", i,
+    string info;
+
+    if (identify_verbose) {
+      if (FOURCC('A', 'V', 'C', '1') == track->fourcc) {
+        if (0 != track->v_aspect_ratio)
+          info += mxsprintf("display_dimensions:%dx%d ",
+                            track->v_dwidth, track->v_dheight);
+      }
+    }
+
+    if (!info.empty()) {
+      info = mxsprintf(" [%s]", info.c_str());
+    }
+
+    mxinfo("Track ID %d: %s (%s)%s\n", i,
            track->type == 'a' ? "audio" : "video",
            track->fourcc == FOURCC('M', 'P', 'G', '1') ? "MPEG-1" :
            track->fourcc == FOURCC('M', 'P', 'G', '2') ? "MPEG-2" :
+           track->fourcc == FOURCC('A', 'V', 'C', '1') ? "AVC/h.264" :
            track->fourcc == FOURCC('M', 'P', '1', ' ') ? "MPEG-1 layer 1" :
            track->fourcc == FOURCC('M', 'P', '2', ' ') ? "MPEG-1 layer 2" :
            track->fourcc == FOURCC('M', 'P', '3', ' ') ? "MPEG-1 layer 3" :
@@ -1099,7 +1228,8 @@ mpeg_ps_reader_c::identify() {
            track->fourcc == FOURCC('D', 'T', 'S', ' ') ? "DTS" :
            track->fourcc == FOURCC('P', 'C', 'M', ' ') ? "PCM" :
            track->fourcc == FOURCC('L', 'P', 'C', 'M') ? "LPCM" :
-           "unknown");
+           "unknown",
+           info.c_str());
   }
 }
 

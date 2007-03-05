@@ -19,8 +19,9 @@
 #include "os.h"
 
 #include "dts_common.h"
-#include "smart_pointers.h"
+#include "mpeg4_common.h"
 #include "pr_generic.h"
+#include "smart_pointers.h"
 #include "M2VParser.h"
 
 class error_c;
@@ -64,6 +65,7 @@ struct mpeg_ps_track_t {
 
   int v_version, v_width, v_height, v_dwidth, v_dheight;
   double v_frame_rate, v_aspect_ratio;
+  memory_cptr v_avcc;
   unsigned char *raw_seq_hdr;
   int raw_seq_hdr_size;
 
@@ -123,8 +125,10 @@ public:
   static int probe_file(mm_io_c *io, int64_t size);
 
 private:
-  virtual void new_stream_v_mpeg_1_2(int id, int aid, unsigned char *buf,
+  virtual void new_stream_v_mpeg_1_2(int id, unsigned char *buf,
                                      int length, mpeg_ps_track_ptr &track);
+  virtual void new_stream_v_avc(int id, unsigned char *buf,
+                                int length, mpeg_ps_track_ptr &track);
   virtual void new_stream_a_mpeg(int id, unsigned char *buf,
                                  int length, mpeg_ps_track_ptr &track);
   virtual void new_stream_a_ac3(int id, unsigned char *buf,
