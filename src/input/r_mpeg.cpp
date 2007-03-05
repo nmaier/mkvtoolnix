@@ -851,6 +851,8 @@ mpeg_ps_reader_c::found_new_stream(int id) {
     if ((-1 != id2idx[id]) || blacklisted_ids[id])
       return;
 
+    mxverb(2, "MPEG PS: new stream id 0x%04x\n", id);
+
     mpeg_ps_track_ptr track(new mpeg_ps_track_t);
     track->timecode_offset = timecode;
 
