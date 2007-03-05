@@ -1,5 +1,9 @@
 2007-03-05  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: enhancement: Fixed the MPEG PS reader so that it will
+	just skip blocks whose headers it cannot parse instead of
+	aborting.
+
 	* mkvmerge: new feature: Added support for handling AVC/h.264
 	tracks in MPEG program streams.
 

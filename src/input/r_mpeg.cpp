@@ -506,10 +506,12 @@ bool
 mpeg_ps_reader_c::parse_packet(int id,
                                int64_t &timestamp,
                                int &length,
+                               int &full_length,
                                int &aid) {
   uint8_t c;
 
   length = io->read_uint16_be();
+  full_length = length;
   if ((id < 0xbc) || (id >= 0xf0) ||
       (id == 0xbe) ||           // padding stream
       (id == 0xbf)) {           // private 2 stream
@@ -623,7 +625,7 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(int id,
                                         int length,
                                         mpeg_ps_track_ptr &track) {
   int64_t timecode;
-  int state, aid;
+  int state, aid, full_length;
   auto_ptr<M2VParser> m2v_parser(new M2VParser);
   MPEG2SequenceHeader seq_hdr;
   MPEGChunk *raw_seq_hdr;
@@ -636,7 +638,7 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(int id,
     if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
       break;
 
-    if (!parse_packet(id, timecode, length, aid))
+    if (!parse_packet(id, timecode, length, full_length, aid))
       break;
     memory_c new_buf((unsigned char *)safemalloc(length), 0, true);
     if (io->read(new_buf.get(), length) != length)
@@ -684,7 +686,7 @@ mpeg_ps_reader_c::new_stream_v_avc(int id,
                                    int length,
                                    mpeg_ps_track_ptr &track) {
   mpeg4::p10::avc_es_parser_c parser;
-  int aid;
+  int aid, full_length;
   int64_t timecode;
 
   parser.ignore_nalu_size_length_errors();
@@ -700,7 +702,7 @@ mpeg_ps_reader_c::new_stream_v_avc(int id,
     if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
       break;
 
-    if (!parse_packet(id, timecode, length, aid))
+    if (!parse_packet(id, timecode, length, full_length, aid))
       break;
     memory_c new_buf((unsigned char *)safemalloc(length), 0, true);
     if (io->read(new_buf.get(), length) != length)
@@ -834,10 +836,10 @@ mpeg_ps_reader_c::found_new_stream(int id) {
 
   try {
     int64_t timecode;
-    int length, aid;
+    int length, aid, full_length;
     unsigned char *buf;
 
-    if (!parse_packet(id, timecode, length, aid))
+    if (!parse_packet(id, timecode, length, full_length, aid))
       throw false;
 
     if ((id == 0xbd) && (aid == -1))
@@ -989,7 +991,7 @@ mpeg_ps_reader_c::find_next_packet(int &id,
           break;
 
         default:
-          if (!mpeg_is_start_code(header))
+          if (!mpeg_is_start_code(header) && !resync_stream(header))
             return false;
 
           id = header & 0xff;
@@ -1017,6 +1019,29 @@ mpeg_ps_reader_c::find_next_packet_for_id(int id,
   } catch(...) {
   }
   return false;
+}
+
+bool
+mpeg_ps_reader_c::resync_stream(uint32_t &header) {
+  mxverb(2, "MPEG PS: synchronisation lost at " LLD
+         "; looking for start code\n", io->getFilePointer());
+
+  try {
+    while (1) {
+      header <<= 8;
+      header |= io->read_uint8();
+      if (mpeg_is_start_code(header))
+        break;
+    }
+
+    mxverb(2, "resync succeeded at " LLD ", header 0x%08x\n",
+           io->getFilePointer() - 4, header);
+    return true;
+
+  } catch (...) {
+    mxverb(2, "resync failed: exception caught\n");
+    return false;
+  }
 }
 
 void
@@ -1117,7 +1142,7 @@ file_status_e
 mpeg_ps_reader_c::read(generic_packetizer_c *,
                        bool) {
   int64_t timecode, packet_pos;
-  int new_id, length, aid, skip_bytes;
+  int new_id, length, aid, skip_bytes, full_length;
   unsigned char *buf;
 
   if (file_done)
@@ -1133,12 +1158,11 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
       }
 
       packet_pos = io->getFilePointer() - 4;
-      if (!parse_packet(new_id, timecode, length, aid)) {
-        file_done = true;
-        flush_packetizers();
-        mxverb(2, "mpeg_ps: file_done: !parse_packet @ " LLD "\n",
-               packet_pos);
-        return FILE_STATUS_DONE;
+      if (!parse_packet(new_id, timecode, length, full_length, aid)) {
+        mxverb(2, "mpeg_ps: packet_parse failed @ " LLD ", skipping %d\n",
+               packet_pos, full_length);
+        io->setFilePointer(packet_pos + 4 + 2 + full_length);
+        continue;
       }
 
       if (new_id == 0xbd)

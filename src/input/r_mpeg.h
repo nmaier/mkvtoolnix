@@ -116,7 +116,8 @@ public:
   virtual void found_new_stream(int id);
 
   virtual bool read_timestamp(int c, int64_t &timestamp);
-  virtual bool parse_packet(int id, int64_t &timestamp, int &size, int &aid);
+  virtual bool parse_packet(int id, int64_t &timestamp, int &length,
+                            int &full_size, int &aid);
   virtual bool find_next_packet(int &id, int64_t max_file_pos = -1);
   virtual bool find_next_packet_for_id(int id, int64_t max_file_pos = -1);
 
@@ -135,6 +136,7 @@ private:
                                 int length, mpeg_ps_track_ptr &track);
   virtual void new_stream_a_dts(int id, unsigned char *buf,
                                 int length, mpeg_ps_track_ptr &track);
+  virtual bool resync_stream(uint32_t &header);
 };
 
 #endif // __R_MPEG_H
