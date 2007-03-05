@@ -28,6 +28,7 @@
 #include "common.h"
 #include "commonebml.h"
 #include "compression.h"
+#include "hacks.h"
 #include "mkvmerge.h"
 #include "output_control.h"
 #include "pr_generic.h"
@@ -914,13 +915,12 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
              "contains a bug. In this case you should contact the author "
              "Moritz Bunkus <moritz@bunkus.org>.\n", ti.fname.c_str(), ti.id,
              (needed_timecode_offset + 500000) / 1000000);
-    }
-//     } else
-//       mxwarn("pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < "
-//              "last_timecode (" FMT_TIMECODE " < " FMT_TIMECODE ") for " LLD
-//              " of '%s'. %s\n", ARG_TIMECODE_NS(pack->timecode),
-//              ARG_TIMECODE_NS(safety_last_timecode), ti.id, ti.fname.c_str(),
-//              BUGMSG);
+    } else if (hack_engaged(ENGAGE_ENABLE_TIMECODE_WARNING))
+      mxwarn("pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < "
+             "last_timecode (" FMT_TIMECODE " < " FMT_TIMECODE ") for " LLD
+             " of '%s'. %s\n", ARG_TIMECODE_NS(pack->timecode),
+             ARG_TIMECODE_NS(safety_last_timecode), ti.id, ti.fname.c_str(),
+             BUGMSG);
   }
   safety_last_timecode = pack->timecode;
   safety_last_duration = pack->duration;

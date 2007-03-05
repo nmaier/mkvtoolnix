@@ -42,6 +42,7 @@ static const char *mosu_hacks[] = {
   ENGAGE_USE_SIMPLE_BLOCK,
   ENGAGE_OLD_AAC_CODECID,
   ENGAGE_USE_CODEC_STATE,
+  ENGAGE_ENABLE_TIMECODE_WARNING,
   NULL
 };
 static vector<string> engaged_hacks;
