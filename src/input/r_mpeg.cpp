@@ -242,6 +242,12 @@ mpeg_es_reader_c::identify() {
 
 #define PS_PROBE_SIZE 1 * 1024 * 1024
 
+static bool
+operator <(const mpeg_ps_track_ptr &a,
+           const mpeg_ps_track_ptr &b) {
+  return a->sort_key < b->sort_key;
+}
+
 int
 mpeg_ps_reader_c::probe_file(mm_io_c *io,
                              int64_t size) {
@@ -375,36 +381,8 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
   } catch (...) {
   }
 
-  mxverb(2, "mpeg_ps: Streams found: ");
-  for (i = 0; i < 256; i++)
-    if (id2idx[i] != -1)
-      mxverb(2, "%02x ", i);
-  for (i = 256 ; i < 512; i++)
-    if (id2idx[i] != -1)
-      mxverb(2, "bd(%02x) ", i - 256);
-  mxverb(2, "\n");
-
-  // Calculate by how much the timecodes have to be offset
-  if (tracks.size() > 0) {
-    int64_t min_timecode;
-
-    min_timecode = tracks[0]->timecode_offset;
-    for (i = 1; i < tracks.size(); i++)
-      if (tracks[i]->timecode_offset < min_timecode)
-        min_timecode = tracks[i]->timecode_offset;
-    for (i = 0; i < tracks.size(); i++)
-      tracks[i]->timecode_offset -= min_timecode;
-
-    mxverb(2, "mpeg_ps: Timecode offset: min was " LLD " ", min_timecode);
-    for (i = 0; i < tracks.size(); i++)
-      if (tracks[i]->id > 0xff)
-        mxverb(2, "bd(%02x)=" LLD " ", tracks[i]->id - 256,
-               tracks[i]->timecode_offset);
-      else
-        mxverb(2, "%02x=" LLD " ", tracks[i]->id,
-               tracks[i]->timecode_offset);
-    mxverb(2, "\n");
-  }
+  sort_tracks();
+  calculate_global_timecode_offset();
 
   io->setFilePointer(0, seek_beginning);
 
@@ -414,6 +392,56 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
 
 mpeg_ps_reader_c::~mpeg_ps_reader_c() {
   delete io;
+}
+
+void
+mpeg_ps_reader_c::sort_tracks() {
+  int i;
+
+  for (i = 0; tracks.size() > i; ++i)
+    tracks[i]->sort_key =
+      ('v' == tracks[i]->type ? 0x00000 :
+       'a' == tracks[i]->type ? 0x10000 :
+       's' == tracks[i]->type ? 0x20000 : 0x30000) +
+      (256 > tracks[i]->id ? tracks[i]->id + 256 : tracks[i]->id);
+  sort(tracks.begin(), tracks.end());
+  for (i = 0; tracks.size() > i; ++i)
+    id2idx[tracks[i]->id] = i;
+
+  mxverb(2, "mpeg_ps: Supported streams, sorted by ID: ");
+  for (i = 0; tracks.size() > i; ++i)
+    if (256 > tracks[i]->id)
+      mxverb(2, "%02x ", tracks[i]->id);
+    else
+      mxverb(2, "bd(%02x) ", tracks[i]->id - 256);
+  mxverb(2, "\n");
+}
+
+void
+mpeg_ps_reader_c::calculate_global_timecode_offset() {
+  // Calculate by how much the timecodes have to be offset
+  if (tracks.empty())
+    return;
+
+  int64_t min_timecode;
+  int i;
+
+  min_timecode = tracks[0]->timecode_offset;
+  for (i = 1; i < tracks.size(); i++)
+    if (tracks[i]->timecode_offset < min_timecode)
+      min_timecode = tracks[i]->timecode_offset;
+  for (i = 0; i < tracks.size(); i++)
+    tracks[i]->timecode_offset -= min_timecode;
+
+  mxverb(2, "mpeg_ps: Timecode offset: min was " LLD " ", min_timecode);
+  for (i = 0; i < tracks.size(); i++)
+    if (tracks[i]->id > 0xff)
+      mxverb(2, "bd(%02x)=" LLD " ", tracks[i]->id - 256,
+             tracks[i]->timecode_offset);
+    else
+      mxverb(2, "%02x=" LLD " ", tracks[i]->id,
+             tracks[i]->timecode_offset);
+  mxverb(2, "\n");
 }
 
 bool
@@ -920,8 +948,8 @@ mpeg_ps_reader_c::found_new_stream(int id) {
     else if (track->fourcc == FOURCC('A', 'C', '3', ' '))
       new_stream_a_ac3(id, buf, length, track);
 
-    else if (track->fourcc == FOURCC('D', 'T', 'S', ' '))
-      new_stream_a_dts(id, buf, length, track);
+//     else if (track->fourcc == FOURCC('D', 'T', 'S', ' '))
+//       new_stream_a_dts(id, buf, length, track);
 
     else
       // Unsupported track type

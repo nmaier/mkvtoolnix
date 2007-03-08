@@ -56,7 +56,7 @@ struct mpeg_ps_track_t {
   int ptzr;
 
   char type;                    // 'v' for video, 'a' for audio, 's' for subs
-  int id;
+  int id, sort_key;
   uint32_t fourcc;
 
   int64_t timecode_offset;
@@ -76,7 +76,7 @@ struct mpeg_ps_track_t {
   int buffer_usage, buffer_size;
 
   mpeg_ps_track_t():
-    ptzr(-1), type(0), fourcc(0), timecode_offset(-1),
+    ptzr(-1), type(0), id(0), sort_key(0), fourcc(0), timecode_offset(-1),
     skip_bytes(0),
     v_version(0), v_width(0), v_height(0), v_dwidth(0), v_dheight(0),
     v_frame_rate(0), v_aspect_ratio(0),
@@ -160,6 +160,8 @@ private:
                                 int length, mpeg_ps_track_ptr &track);
   virtual bool resync_stream(uint32_t &header);
   virtual file_status_e finish();
+  void sort_tracks();
+  void calculate_global_timecode_offset();
 };
 
 #endif // __R_MPEG_H
