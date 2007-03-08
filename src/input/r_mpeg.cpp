@@ -678,6 +678,7 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(int id,
     track->raw_seq_hdr_size = raw_seq_hdr->GetSize();
   }
   track->fourcc = FOURCC('M', 'P', 'G', '0' + track->v_version);
+  track->use_buffer(128000);
 }
 
 void
@@ -778,6 +779,8 @@ mpeg_ps_reader_c::new_stream_v_avc(int id,
         track->v_dheight = irnd(track->v_width / aspect_ratio);
       }
     }
+
+    track->use_buffer(256000);
 
   } catch (...) {
     throw false;
@@ -1191,28 +1194,67 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
       mxverb(3, "mpeg_ps: packet for %d length %d at " LLD "\n", new_id,
              length, packet_pos);
 
-      buf = (unsigned char *)safemalloc(length);
-      if (io->read(buf, length) != length) {
-        safefree(buf);
-        file_done = true;
-        flush_packetizers();
-        mxverb(2, "mpeg_ps: file_done: io->read\n");
-        return FILE_STATUS_DONE;
-      }
+      if (0 < track->buffer_size) {
+        if ((track->buffer_usage + length) > track->buffer_size) {
+          PTZR(track->ptzr)->
+            process(new packet_t(new memory_c(track->buffer,
+                                              track->buffer_usage, false)));
+          track->buffer_usage = 0;
+        }
 
-      PTZR(track->ptzr)->process(new packet_t(new memory_c(buf, length,
-                                                           true)));
+        track->assert_buffer_size(length);
+
+        if (io->read(&track->buffer[track->buffer_usage], length) != length) {
+          mxverb(2, "mpeg_ps: file_done: io->read\n");
+          return finish();
+        }
+
+        track->buffer_usage += length;
+
+      } else {
+        buf = (unsigned char *)safemalloc(length);
+
+        if (io->read(buf, length) != length) {
+          safefree(buf);
+          mxverb(2, "mpeg_ps: file_done: io->read\n");
+          return finish();
+        }
+
+        PTZR(track->ptzr)->process(new packet_t(new memory_c(buf, length,
+                                                             true)));
+      }
 
       return FILE_STATUS_MOREDATA;
     }
     mxverb(2, "mpeg_ps: file_done: !find_next_packet\n");
+
   } catch(...) {
     mxverb(2, "mpeg_ps: file_done: exception\n");
   }
+
+  return finish();
+}
+
+file_status_e
+mpeg_ps_reader_c::finish() {
+  if (file_done)
+    return FILE_STATUS_DONE;
+
+  vector<mpeg_ps_track_ptr>::iterator track;
+
+  mxforeach(track, tracks) {
+    if (0 < (*track)->buffer_usage) {
+      memory_c *mem = new memory_c((*track)->buffer, (*track)->buffer_usage);
+      PTZR((*track)->ptzr)->process(new packet_t(mem));
+    }
+  }
+
   file_done = true;
   flush_packetizers();
+
   return FILE_STATUS_DONE;
 }
+
 
 int
 mpeg_ps_reader_c::get_progress() {

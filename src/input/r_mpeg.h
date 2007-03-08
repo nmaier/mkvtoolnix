@@ -72,16 +72,38 @@ struct mpeg_ps_track_t {
   int a_channels, a_sample_rate, a_bits_per_sample, a_bsid;
   dts_header_t dts_header;
 
+  unsigned char *buffer;
+  int buffer_usage, buffer_size;
+
   mpeg_ps_track_t():
     ptzr(-1), type(0), fourcc(0), timecode_offset(-1),
     skip_bytes(0),
     v_version(0), v_width(0), v_height(0), v_dwidth(0), v_dheight(0),
     v_frame_rate(0), v_aspect_ratio(0),
     raw_seq_hdr(NULL), raw_seq_hdr_size(0),
-    a_channels(0), a_sample_rate(0), a_bits_per_sample(0), a_bsid(0) {
+    a_channels(0), a_sample_rate(0), a_bits_per_sample(0), a_bsid(0),
+    buffer(NULL), buffer_usage(0), buffer_size(0) {
   };
+
+  void use_buffer(int size) {
+    safefree(buffer);
+    buffer = (unsigned char *)safemalloc(size);
+    buffer_size = size;
+    buffer_usage = 0;
+  }
+
+  void assert_buffer_size(int size) {
+    if (!buffer)
+      use_buffer(size);
+    else if (size > buffer_size) {
+      buffer = (unsigned char *)saferealloc(buffer, size);
+      buffer_size = size;
+    }
+  }
+
   ~mpeg_ps_track_t() {
     safefree(raw_seq_hdr);
+    safefree(buffer);
   }
 };
 
@@ -137,6 +159,7 @@ private:
   virtual void new_stream_a_dts(int id, unsigned char *buf,
                                 int length, mpeg_ps_track_ptr &track);
   virtual bool resync_stream(uint32_t &header);
+  virtual file_status_e finish();
 };
 
 #endif // __R_MPEG_H
