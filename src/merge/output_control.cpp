@@ -1817,8 +1817,10 @@ main_loop() {
         // If all packetizers for a file have finished then establish the
         // deferred connections.
         if ((file.num_unfinished_packetizers <= 0) &&
-            (file.old_num_unfinished_packetizers > 0))
+            (file.old_num_unfinished_packetizers > 0)) {
           establish_deferred_connections(file);
+          file.done = true;
+        }
         file.old_num_unfinished_packetizers = file.num_unfinished_packetizers;
       }
     }
