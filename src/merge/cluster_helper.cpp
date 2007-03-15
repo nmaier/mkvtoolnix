@@ -34,10 +34,8 @@
 #include "p_video.h"
 #include "p_vorbis.h"
 
-// #define walk_clusters() check_clusters(__LINE__)
-#define walk_clusters()
-
 cluster_helper_c::cluster_helper_c():
+  cluster(NULL),
   min_timecode_in_cluster(-1), max_timecode_in_cluster(-1),
   current_split_point(split_points.begin()) {
 
@@ -55,25 +53,17 @@ cluster_helper_c::cluster_helper_c():
 }
 
 cluster_helper_c::~cluster_helper_c() {
-  int i;
-
-  for (i = 0; i < clusters.size(); i++)
-    delete clusters[i];
-}
-
-KaxCluster *
-cluster_helper_c::get_cluster() {
-  if (clusters.size() > 0)
-    return clusters.back()->cluster;
-  return NULL;
+  delete cluster;
 }
 
 void
 cluster_helper_c::add_packet(packet_cptr packet) {
-  ch_contents_t *c;
   int64_t timecode, timecode_delay, additional_size;
   int i;
   bool split;
+
+  if (!cluster)
+    prepare_new_cluster();
 
   // Normalize the timecodes according to the timecode scale.
   packet->unmodified_assigned_timecode = packet->assigned_timecode;
@@ -106,14 +96,11 @@ cluster_helper_c::add_packet(packet_cptr packet) {
          packet->timecode, packet->duration, packet->bref, packet->fref,
          packet->assigned_timecode, ARG_TIMECODEN(timecode_delay));
 
-  if (clusters.size() == 0)
-    add_cluster(new kax_cluster_c());
-  else if ((SHRT_MAX < timecode_delay) || (SHRT_MIN > timecode_delay) ||
-           (packet->gap_following && (clusters.back()->packets.size() != 0)) ||
-           (((packet->assigned_timecode - timecode) > max_ns_per_cluster) &&
-            all_references_resolved(clusters.back()))) {
+  if ((SHRT_MAX < timecode_delay) || (SHRT_MIN > timecode_delay) ||
+      (packet->gap_following && !packets.empty()) ||
+      ((packet->assigned_timecode - timecode) > max_ns_per_cluster)) {
     render();
-    add_cluster(new kax_cluster_c());
+    prepare_new_cluster();
   }
 
   if (splitting() &&
@@ -123,17 +110,16 @@ cluster_helper_c::add_packet(packet_cptr packet) {
       ((packet->source->get_track_type() == track_video) ||
        (video_packetizer == NULL))) {
     split = false;
-    c = clusters[clusters.size() - 1];
 
     // Maybe we want to start a new file now.
     if (split_point_t::SPT_SIZE == current_split_point->m_type) {
 
-      if (c->packets.size() > 0) {
+      if (!packets.empty()) {
         // Cluster + Cluster timecode (roughly)
         additional_size = 21;
         // Add sizes for all frames.
-        for (i = 0; i < c->packets.size(); i++) {
-          packet_cptr &p = c->packets[i];
+        for (i = 0; i < packets.size(); i++) {
+          packet_cptr &p = packets[i];
           additional_size += p->data->get_size();
           if (p->bref == -1)
             additional_size += 10;
@@ -176,7 +162,6 @@ cluster_helper_c::add_packet(packet_cptr packet) {
       create_next_output_file();
       if (no_linking)
         last_cluster_tc = 0;
-      add_cluster(new kax_cluster_c());
 
       bytes_in_file = 0;
       first_timecode_in_file = -1;
@@ -186,17 +171,16 @@ cluster_helper_c::add_packet(packet_cptr packet) {
 
       if (current_split_point->m_use_once)
         ++current_split_point;
+
+      prepare_new_cluster();
     }
   }
 
   packet->packet_num = packet_num;
   packet_num++;
 
-  c = clusters.back();
-  c->packets.push_back(packet);
+  packets.push_back(packet);
   cluster_content_size += packet->data->get_size();
-
-  walk_clusters();
 
   if (packet->assigned_timecode > max_timecode_in_cluster)
     max_timecode_in_cluster = packet->assigned_timecode;
@@ -206,86 +190,28 @@ cluster_helper_c::add_packet(packet_cptr packet) {
 
   // Render the cluster if it is full (according to my many criteria).
   timecode = get_timecode();
-  if ((((packet->assigned_timecode - timecode) > max_ns_per_cluster) ||
-       (get_packet_count() > max_blocks_per_cluster) ||
-       (get_cluster_content_size() > 1500000)) &&
-      all_references_resolved(c)) {
+  if (((packet->assigned_timecode - timecode) > max_ns_per_cluster) ||
+      (packets.size() > max_blocks_per_cluster) ||
+      (get_cluster_content_size() > 1500000)) {
     render();
-    add_cluster(new kax_cluster_c());
+    prepare_new_cluster();
   }
-}
-
-bool
-cluster_helper_c::all_references_resolved(ch_contents_t *cluster) {
-  int i;
-
-  for (i = 0; i < cluster->packets.size(); i++) {
-    packet_cptr &pack = cluster->packets[i];
-    if ((pack->bref != -1) &&
-        (find_packet(pack->bref, pack->source).get() == NULL))
-      return false;
-    if ((pack->fref != -1) &&
-        (find_packet(pack->fref, pack->source).get() == NULL))
-      return false;
-  }
-
-  return true;
 }
 
 int64_t
 cluster_helper_c::get_timecode() {
-  if (clusters.size() == 0)
-    return 0;
-  if (clusters.back()->packets.size() == 0)
-    return 0;
-  return clusters.back()->packets[0]->assigned_timecode;
-}
-
-packet_cptr
-cluster_helper_c::get_packet(int num) {
-  ch_contents_t *c;
-
-  if (clusters.size() == 0)
-    return packet_cptr(NULL);
-  c = clusters.back();
-  if (c->packets.size())
-    return packet_cptr(NULL);
-  if ((num < 0) || (num > c->packets.size()))
-    return packet_cptr(NULL);
-  return c->packets[num];
-}
-
-int
-cluster_helper_c::get_packet_count() {
-  if (clusters.size() == 0)
-    return -1;
-  return clusters.back()->packets.size();
-}
-
-int
-cluster_helper_c::find_cluster(KaxCluster *cluster) {
-  int i;
-
-  if (clusters.size() == 0)
-    return -1;
-  for (i = 0; i < clusters.size(); i++)
-    if (clusters[i]->cluster == cluster)
-      return i;
-  return -1;
+  return packets.empty() ? 0 : packets.front()->assigned_timecode;
 }
 
 void
-cluster_helper_c::add_cluster(KaxCluster *cluster) {
-  ch_contents_t *c;
-
-  if (find_cluster(cluster) != -1)
-    return;
-  c = new ch_contents_t;
-  clusters.push_back(c);
-  c->cluster = cluster;
+cluster_helper_c::prepare_new_cluster() {
+  if (cluster)
+    delete cluster;
+  cluster = new kax_cluster_c;
   cluster_content_size = 0;
   cluster->SetParent(*kax_segment);
   cluster->SetPreviousTimecode(last_cluster_tc, (int64_t)timecode_scale);
+  packets.clear();
 }
 
 int
@@ -364,17 +290,7 @@ cluster_helper_c::must_duration_be_set(render_groups_t *rg,
 */
 
 int
-cluster_helper_c::render(bool flush) {
-  if (clusters.size() == 0)
-    return 0;
-
-  walk_clusters();
-  return render_cluster(clusters.back());
-}
-
-int
-cluster_helper_c::render_cluster(ch_contents_t *clstr) {
-  KaxCluster *cluster;
+cluster_helper_c::render() {
   kax_block_blob_c *new_block_group, *last_block_group;
   DataBuffer *data_buffer;
   int i, k, elements_in_cluster;
@@ -389,10 +305,7 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
   BlockBlobType this_block_blob_type, std_block_blob_type = use_simpleblock ?
     BLOCK_BLOB_ALWAYS_SIMPLE : BLOCK_BLOB_NO_SIMPLE;
 
-  assert((clstr != NULL) && !clstr->rendered);
-
   max_cl_timecode = 0;
-  cluster = clstr->cluster;
 
   // Splitpoint stuff
   if ((header_overhead == -1) && splitting())
@@ -409,8 +322,8 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
   else
     lacing_type = LACING_AUTO;
 
-  for (i = 0; i < clstr->packets.size(); i++) {
-    pack = clstr->packets[i];
+  for (i = 0; i < packets.size(); i++) {
+    pack = packets[i];
     source = pack->source;
 
     has_codec_state = NULL != pack->codec_state.get();
@@ -433,8 +346,7 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
     }
 
     if (i == 0)
-      static_cast<kax_cluster_c *>
-        (cluster)->set_min_timecode(pack->assigned_timecode - timecode_offset);
+      cluster->set_min_timecode(pack->assigned_timecode - timecode_offset);
     max_cl_timecode = pack->assigned_timecode;
 
     data_buffer = new DataBuffer((binary *)pack->data->get(),
@@ -479,9 +391,6 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
                                       *data_buffer, lacing_type,
                                       pack->bref - timecode_offset,
                                       pack->fref - timecode_offset);
-
-    if ((-1 == pack->bref) && (-1 == pack->fref))
-      free_ref(pack->timecode, pack->source);
 
     if (has_codec_state) {
       KaxBlockGroup &bgroup((KaxBlockGroup &)*new_block_group);
@@ -568,8 +477,7 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
   if (elements_in_cluster > 0) {
     for (i = 0; i < render_groups.size(); i++)
       set_duration(render_groups[i]);
-    static_cast<kax_cluster_c *>(cluster)->
-      set_max_timecode(max_cl_timecode - timecode_offset);
+    cluster->set_max_timecode(max_cl_timecode - timecode_offset);
     cluster->Render(*out, *kax_cues);
     bytes_in_file += cluster->ElementSize();
 
@@ -580,186 +488,11 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
   } else
     last_cluster_tc = 0;
 
-  for (i = 0; i < clstr->packets.size(); i++)
-    clstr->packets[i]->data = memory_cptr(NULL);
-
   for (i = 0; i < render_groups.size(); i++)
     delete render_groups[i];
 
-  clstr->rendered = true;
-
-  free_clusters();
-
   min_timecode_in_cluster = -1;
   max_timecode_in_cluster = -1;
-
-  return 1;
-}
-
-ch_contents_t *
-cluster_helper_c::find_packet_cluster(int64_t ref_timecode,
-                                      generic_packetizer_c *source) {
-  int i, k;
-  int64_t tolerance;
-
-  if (clusters.size() == 0)
-    return NULL;
-
-  tolerance = source->reader->reference_timecode_tolerance;
-  if (0 == tolerance)
-    tolerance = 10000;
-
-  // Be a bit fuzzy and allow timecodes that are 10us off.
-  for (i = 0; i < clusters.size(); i++)
-    for (k = 0; k < clusters[i]->packets.size(); k++) {
-      packet_cptr &pack = clusters[i]->packets[k];
-      if ((pack->source == source) &&
-          (iabs(pack->timecode - ref_timecode) <= tolerance))
-        return clusters[i];
-    }
-
-  return NULL;
-}
-
-packet_cptr
-cluster_helper_c::find_packet(int64_t ref_timecode,
-                              generic_packetizer_c *source) {
-  int i, k;
-  int64_t tolerance;
-
-  if (clusters.size() == 0)
-    return packet_cptr(NULL);
-
-  tolerance = source->reader->reference_timecode_tolerance;
-  if (0 == tolerance)
-    tolerance = 10000;
-
-  // Be a bit fuzzy and allow timecodes that are 10us off.
-  for (i = 0; i < clusters.size(); i++)
-    for (k = 0; k < clusters[i]->packets.size(); k++) {
-      packet_cptr &pack = clusters[i]->packets[k];
-      if ((pack->source == source) &&
-          (iabs(pack->timecode - ref_timecode) <= tolerance))
-        return pack;
-    }
-
-  return packet_cptr(NULL);
-}
-
-void
-cluster_helper_c::check_clusters(int num) {
-  int i, k;
-  ch_contents_t *clstr;
-
-  for (i = 0; i < clusters.size(); i++) {
-    for (k = 0; k < clusters[i]->packets.size(); k++) {
-      packet_cptr &p = clusters[i]->packets[k];
-      if (clusters[i]->rendered && p->superseeded)
-        continue;
-      if (p->bref == -1)
-        continue;
-      clstr = find_packet_cluster(p->bref, p->source);
-      if (clstr == NULL)
-        die("cluster_helper.cpp/cluster_helper_c::check_clusters(): Error: "
-            "backward refenrece could not be resolved (" LLD " -> " LLD "). "
-            "Called from line %d.\n", p->timecode, p->bref, num);
-    }
-  }
-}
-
-// #define PRINT_CLUSTERS
-
-int
-cluster_helper_c::free_clusters() {
-  int i, k;
-  ch_contents_t *clstr;
-#ifdef PRINT_CLUSTERS
-  int num_freed = 0;
-#endif
-
-  if (clusters.size() == 0)
-    return 0;
-
-  for (i = 0; i < clusters.size(); i++)
-    clusters[i]->is_referenced = false;
-
-  // Part 1 - Mark all packets superseeded for which their source has
-  // an appropriate free_refs entry.
-  for (i = 0; i < clusters.size(); i++) {
-    for (k = 0; k < clusters[i]->packets.size(); k++) {
-      packet_cptr &p = clusters[i]->packets[k];
-      if (p->source->get_free_refs() > p->timecode)
-        p->superseeded = true;
-    }
-  }
-
-  // Part 2 - Mark all clusters that are still referenced.
-  for (i = 0; i < clusters.size(); i++) {
-    for (k = 0; k < clusters[i]->packets.size(); k++) {
-      packet_cptr &p = clusters[i]->packets[k];
-      if (!p->superseeded) {
-        clusters[i]->is_referenced = true;
-        if (p->bref == -1)
-          continue;
-        clstr = find_packet_cluster(p->bref, p->source);
-        if (clstr == NULL)
-          die("cluster_helper.cpp/cluster_helper_c::free_clusters(): Error: "
-              "backward refenrece could not be resolved (" LLD ").\n",
-              p->bref);
-        clstr->is_referenced = true;
-      }
-    }
-  }
-
-  // Part 3 - remove all clusters and the data belonging to them that
-  // are not referenced anymore and that have already been rendered.
-  // Also count the number of clusters that are still referenced.
-  k = 0;
-  for (i = 0; i < clusters.size(); i++) {
-    if (!clusters[i]->rendered) {
-      k++;
-      continue;
-    }
-
-    if (!clusters[i]->is_referenced) {
-      delete clusters[i];
-      clusters[i] = NULL;
-#ifdef PRINT_CLUSTERS
-      num_freed++;
-#endif
-    } else
-      k++;
-  }
-
-  // Part 4 - prune the cluster list and remove all the entries freed in
-  // part 3.
-  if (k == 0) {
-    clusters.clear();
-    add_cluster(new kax_cluster_c());
-  } else if (k != clusters.size()) {
-    vector<ch_contents_t *> new_clusters;
-
-    for (i = 0; i < clusters.size(); i++)
-      if (clusters[i] != NULL)
-        new_clusters.push_back(clusters[i]);
-
-    clusters = new_clusters;
-  }
-
-#ifdef PRINT_CLUSTERS
-  mxdebug("numcl: %8d freed: %3d ", clusters.size(), num_freed);
-  for (i = 0; i < clusters.size(); i++)
-    mxinfo("#");
-  mxinfo("\n");
-#endif
-
-  return 1;
-}
-
-int
-cluster_helper_c::free_ref(int64_t ref_timecode,
-                           generic_packetizer_c *source) {
-  source->set_free_refs(ref_timecode);
 
   return 1;
 }

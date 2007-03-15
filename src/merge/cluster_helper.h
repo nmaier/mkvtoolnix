@@ -33,22 +33,6 @@ using namespace std;
                                     (double)((int64_t)timecode_scale)) * \
                                (int64_t)timecode_scale)
 
-struct ch_contents_t {
-  KaxCluster *cluster;
-  vector<packet_cptr> packets;
-  bool is_referenced, rendered;
-
-  ch_contents_t():
-    cluster(NULL),
-    is_referenced(false),
-    rendered(false) {
-  }
-
-  ~ch_contents_t() {
-    delete cluster;
-  }
-};
-
 struct render_groups_t {
   vector<kax_block_blob_c *> groups;
   vector<int64_t> durations;
@@ -74,7 +58,8 @@ struct split_point_t {
 
 class cluster_helper_c {
 private:
-  vector<ch_contents_t *> clusters;
+  kax_cluster_c *cluster;
+  vector<packet_cptr> packets;
   int cluster_content_size;
   int64_t max_timecode_and_duration;
   int64_t last_cluster_tc, num_cue_elements, header_overhead;
@@ -91,15 +76,13 @@ public:
   virtual ~cluster_helper_c();
 
   void set_output(mm_io_c *nout);
-  void add_cluster(KaxCluster *cluster);
-  KaxCluster *get_cluster();
+  void prepare_new_cluster();
+  KaxCluster *get_cluster() {
+    return cluster;
+  }
   void add_packet(packet_cptr packet);
   int64_t get_timecode();
-  packet_cptr get_packet(int num);
-  int get_packet_count();
-  int render(bool flush = false);
-  int free_ref(int64_t ref_timecode, generic_packetizer_c *source);
-  int free_clusters();
+  int render();
   int get_cluster_content_size();
   int64_t get_duration();
   int64_t get_first_timecode_in_file() {
@@ -111,18 +94,13 @@ public:
     return !split_points.empty();
   }
 
+  int get_packet_count() {
+    return packets.size();
+  }
+
 private:
-  int find_cluster(KaxCluster *cluster);
-  ch_contents_t *find_packet_cluster(int64_t ref_timecode,
-                                     generic_packetizer_c *source);
-  packet_cptr find_packet(int64_t ref_timecode,
-                          generic_packetizer_c *source);
-  void free_contents(ch_contents_t *clstr);
-  void check_clusters(int num);
-  bool all_references_resolved(ch_contents_t *cluster);
   void set_duration(render_groups_t *rg);
   bool must_duration_be_set(render_groups_t *rg, packet_cptr &new_packet);
-  int render_cluster(ch_contents_t *clstr);
 };
 
 extern cluster_helper_c *cluster_helper;
