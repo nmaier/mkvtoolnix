@@ -29,23 +29,10 @@
 #include "common.h"
 #include "commonebml.h"
 #include "hacks.h"
+#include "libmatroska_extensions.h"
 #include "output_control.h"
 #include "p_video.h"
 #include "p_vorbis.h"
-
-class kax_cluster_c: public KaxCluster {
-public:
-  kax_cluster_c(): KaxCluster() {
-    PreviousTimecode = 0;
-  }
-
-  void set_min_timecode(int64_t min_timecode) {
-    MinTimecode = min_timecode;
-  }
-  void set_max_timecode(int64_t max_timecode) {
-    MaxTimecode = max_timecode;
-  }
-};
 
 // #define walk_clusters() check_clusters(__LINE__)
 #define walk_clusters()
@@ -315,7 +302,7 @@ void
 cluster_helper_c::set_duration(render_groups_t *rg) {
   uint32_t i;
   int64_t block_duration, def_duration;
-  KaxBlockBlob *group;
+  kax_block_blob_c *group;
 
   if (rg->durations.size() == 0)
     return;
@@ -335,12 +322,12 @@ cluster_helper_c::set_duration(render_groups_t *rg) {
     if ((block_duration == 0) ||
         ((block_duration > 0) &&
          (block_duration != (rg->durations.size() * def_duration))))
-      group->SetBlockDuration(RND_TIMECODE_SCALE(block_duration));
+      group->set_block_duration(RND_TIMECODE_SCALE(block_duration));
   } else if ((use_durations || (def_duration > 0)) &&
              (block_duration > 0) &&
              (RND_TIMECODE_SCALE(block_duration) !=
               RND_TIMECODE_SCALE(rg->durations.size() * def_duration)))
-    group->SetBlockDuration(RND_TIMECODE_SCALE(block_duration));
+    group->set_block_duration(RND_TIMECODE_SCALE(block_duration));
 }
 
 bool
@@ -388,10 +375,10 @@ cluster_helper_c::render(bool flush) {
 int
 cluster_helper_c::render_cluster(ch_contents_t *clstr) {
   KaxCluster *cluster;
-  KaxBlockBlob *new_block_group, *last_block_group;
+  kax_block_blob_c *new_block_group, *last_block_group;
   DataBuffer *data_buffer;
   int i, k, elements_in_cluster;
-  packet_cptr pack, bref_packet, fref_packet;
+  packet_cptr pack;
   int64_t max_cl_timecode;
   generic_packetizer_c *source;
   vector<render_groups_t *> render_groups;
@@ -476,7 +463,7 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
       if (has_codec_state)
         this_block_blob_type = BLOCK_BLOB_NO_SIMPLE;
 
-      new_block_group = new KaxBlockBlob(this_block_blob_type);
+      new_block_group = new kax_block_blob_c(this_block_blob_type);
       cluster->AddBlockBlob(new_block_group);
       new_block_group->SetParent(*cluster);
       render_group->groups.push_back(new_block_group);
@@ -485,61 +472,16 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
       new_block_group = last_block_group;
 
     // Now put the packet into the cluster.
-    if (pack->bref != -1) { // P and B frames: add backward reference.
-      bref_packet = find_packet(pack->bref, pack->source);
-      if (bref_packet.get() == NULL) {
-        string err = "bref_packet == NULL. Wanted bref: " +
-          to_string(pack->bref) + ". Contents of the queue:\n";
-        for (k = 0; k < clstr->packets.size(); k++) {
-          pack = clstr->packets[k];
-          err += "Packet " + to_string(k) + ", timecode " +
-            to_string(pack->timecode) + ", bref " + to_string(pack->bref) +
-            ", fref " + to_string(pack->fref) + "\n";
-        }
-        die(err.c_str());
-      }
-      assert(bref_packet->group != NULL);
-      if (pack->fref != -1) { // It's even a B frame: add forward ref
-        fref_packet = find_packet(pack->fref, pack->source);
-        if (fref_packet.get() == NULL) {
-          string err = "fref_packet == NULL. Wanted fref: " +
-            to_string(pack->fref) + ". Contents of the queue:\n";
-          for (k = 0; k < clstr->packets.size(); k++) {
-            pack = clstr->packets[k];
-            err += "Packet " + to_string(k) + ", timecode " +
-              to_string(pack->timecode) + ", bref " + to_string(pack->bref) +
-              ", fref " + to_string(pack->fref) + "\n";
-          }
-          die(err.c_str());
-        }
-        assert(fref_packet->group != NULL);
-        render_group->more_data =
-          new_block_group->AddFrameAuto(track_entry,(pack->assigned_timecode -
-                                                      timecode_offset),
-                                        *data_buffer, lacing_type,
-                                        bref_packet->group,
-                                        fref_packet->group);
-      } else {
-        render_group->more_data =
-          new_block_group->AddFrameAuto(track_entry, (pack->assigned_timecode -
-                                                      timecode_offset),
-                                        *data_buffer, lacing_type,
-                                        bref_packet->group);
+    render_group->more_data =
+      new_block_group->add_frame_auto(track_entry,
+                                      pack->assigned_timecode -
+                                      timecode_offset,
+                                      *data_buffer, lacing_type,
+                                      pack->bref - timecode_offset,
+                                      pack->fref - timecode_offset);
 
-        // All packets with an ID smaller than the referenced packet's ID
-        // are not needed anymore. Be happy!
-        free_ref(pack->bref, pack->source);
-      }
-
-    } else {                    // This is a key frame. No references.
-      render_group->more_data =
-        new_block_group->AddFrameAuto(track_entry, (pack->assigned_timecode -
-                                                    timecode_offset),
-                                      *data_buffer, lacing_type);
-      // All packets with an ID smaller than this packet's ID are not
-      // needed anymore. Be happy!
+    if ((-1 == pack->bref) && (-1 == pack->fref))
       free_ref(pack->timecode, pack->source);
-    }
 
     if (has_codec_state) {
       KaxBlockGroup &bgroup((KaxBlockGroup &)*new_block_group);
@@ -565,7 +507,7 @@ cluster_helper_c::render_cluster(ch_contents_t *clstr) {
     if (new_block_group != NULL) {
       // Set the reference priority if it was wanted.
       if ((pack->ref_priority > 0) &&
-          new_block_group->ReplaceSimpleByGroup())
+          new_block_group->replace_simple_by_group())
         *static_cast<EbmlUInteger *>
           (&GetChild<KaxReferencePriority>(*new_block_group)) =
           pack->ref_priority;

@@ -23,6 +23,7 @@
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxCluster.h>
 
+#include "libmatroska_extensions.h"
 #include "mm_io.h"
 #include "pr_generic.h"
 
@@ -49,7 +50,7 @@ struct ch_contents_t {
 };
 
 struct render_groups_t {
-  vector<KaxBlockBlob *> groups;
+  vector<kax_block_blob_c *> groups;
   vector<int64_t> durations;
   generic_packetizer_c *source;
   bool more_data, duration_mandatory;
