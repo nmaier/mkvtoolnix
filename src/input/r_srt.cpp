@@ -27,7 +27,7 @@
 
 using namespace std;
 
-#define RE_TIMECODE "(\\d{1,2}):(\\d{1,2}):(\\d{1,2}),(\\d+)?"
+#define RE_TIMECODE "(\\d{1,2}):(\\d{1,2}):(\\d{1,2})[,\\.](\\d+)?"
 #define RE_TIMECODE_LINE "^" RE_TIMECODE "\\s+-+>\\s+" RE_TIMECODE "\\s*"
 
 int
