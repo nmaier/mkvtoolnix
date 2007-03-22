@@ -61,7 +61,7 @@ private:
   kax_cluster_c *cluster;
   vector<packet_cptr> packets;
   int cluster_content_size;
-  int64_t max_timecode_and_duration;
+  int64_t max_timecode_and_duration, max_video_timecode_rendered;
   int64_t last_cluster_tc, num_cue_elements, header_overhead;
   int64_t packet_num, timecode_offset, *last_packets;
   int64_t bytes_in_file, first_timecode_in_file;

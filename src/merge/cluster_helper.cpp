@@ -36,6 +36,7 @@
 
 cluster_helper_c::cluster_helper_c():
   cluster(NULL),
+  max_video_timecode_rendered(0),
   min_timecode_in_cluster(-1), max_timecode_in_cluster(-1),
   current_split_point(split_points.begin()) {
 
@@ -167,7 +168,8 @@ cluster_helper_c::add_packet(packet_cptr packet) {
       first_timecode_in_file = -1;
 
       if (no_linking)
-        timecode_offset = packet->assigned_timecode;
+        timecode_offset = video_packetizer ? max_video_timecode_rendered :
+          packet->assigned_timecode;
 
       if (current_split_point->m_use_once)
         ++current_split_point;
@@ -471,6 +473,12 @@ cluster_helper_c::render() {
 
     pack->group = new_block_group;
     last_block_group = new_block_group;
+
+    if (video_packetizer && (video_packetizer == source) &&
+        ((pack->assigned_timecode + pack->duration) >
+         max_video_timecode_rendered))
+      max_video_timecode_rendered = pack->assigned_timecode +
+        pack->duration;
 
   }
 

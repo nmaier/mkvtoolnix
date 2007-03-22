@@ -1,3 +1,8 @@
+2007-03-22  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed an issue with negative/huge timecodes
+	after splitting AVC/h.264 video.
+
 2007-03-16  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: The SRT reader allows "." as the decimal
