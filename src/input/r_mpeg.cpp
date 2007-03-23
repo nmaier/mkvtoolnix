@@ -890,12 +890,10 @@ mpeg_ps_reader_c::found_new_stream(int id) {
     track->type = '?';
     if (id > 0xff) {
       track->type = 'a';
-      track->skip_bytes = 3;
 
       if ((aid >= 0x20) && (aid <= 0x3f)) {
         track->type = 's';
         track->fourcc = FOURCC('V', 'S', 'U', 'B');
-        track->skip_bytes = 0;
 
       } else if (((aid >= 0x80) && (aid <= 0x87)) ||
                  ((aid >= 0xc0) && (aid <= 0xc7)))
@@ -1100,6 +1098,8 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
                ti.fname.c_str(), id);
 
     } else if (track->fourcc == FOURCC('A', 'C', '3', ' ')) {
+      if (16 == track->a_bsid)
+        track->skip_bytes = 3;
       track->ptzr =
         add_packetizer(new ac3_packetizer_c(this, track->a_sample_rate,
                                             track->a_channels,
