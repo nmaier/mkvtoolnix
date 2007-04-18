@@ -319,6 +319,8 @@ get_file_type(filelist_t &file) {
     type = FILE_TYPE_TTA;
   else if (wavpack_reader_c::probe_file(io, size))
     type = FILE_TYPE_WAVPACK4;
+  else if (mpeg_ts_reader_c::probe_file(io, size))
+    type = FILE_TYPE_MPEG_TS;
   else if (mpeg_ps_reader_c::probe_file(io, size))
     type = FILE_TYPE_MPEG_PS;
   else {

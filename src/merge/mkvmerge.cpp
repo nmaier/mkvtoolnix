@@ -363,6 +363,11 @@ identify(const string &filename) {
   get_file_type(file);
   ti.fname = file.name;
 
+  if (FILE_TYPE_MPEG_TS == file.type)
+    mxerror(_("The file '%s' has been detected as a MPEG transport stream. "
+              "This file format is not supported by mkvmerge.\n"),
+            file.name.c_str());
+
   if (file.type == FILE_TYPE_IS_UNKNOWN)
     mxerror(_("File %s has unknown type. Please have a look "
               "at the supported file types ('mkvmerge --list-types') and "
@@ -2175,6 +2180,11 @@ parse_args(vector<string> args) {
       file.name = this_arg;
       get_file_type(file);
       ti->fname = this_arg;
+
+      if (FILE_TYPE_MPEG_TS == file.type)
+        mxerror(_("The file '%s' has been detected as a MPEG transport stream. "
+                  "This file format is not supported by mkvmerge.\n"),
+                file.name.c_str());
 
       if (file.type == FILE_TYPE_IS_UNKNOWN)
         mxerror(_("The file '%s' has unknown type. Please have a look "

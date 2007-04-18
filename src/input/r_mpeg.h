@@ -164,4 +164,12 @@ private:
   void calculate_global_timecode_offset();
 };
 
+class mpeg_ts_reader_c {
+protected:
+  static int potential_packet_sizes[];
+
+public:
+  static bool probe_file(mm_io_c *io, int64_t size);
+};
+
 #endif // __R_MPEG_H
