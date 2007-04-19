@@ -248,7 +248,7 @@ vobsub_reader_c::parse_headers() {
       line.erase(0, 6);
       strip(line);
 
-      if (!parse_timecode(line, timestamp))
+      if (!parse_timecode(line, timestamp, true))
         mxerror(PFX "'%s', line " LLD ": The 'delay' timestamp could not be "
                 "parsed.\n", ti.fname.c_str(), line_no);
       delay = timestamp;

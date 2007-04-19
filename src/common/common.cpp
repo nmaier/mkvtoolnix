@@ -1611,7 +1611,8 @@ set_tcp_error(const string &error) {
 
 bool
 parse_timecode(const string &src,
-               int64_t &timecode) {
+               int64_t &timecode,
+               bool allow_negative) {
   // Recognized format:
   // 1. XXXXXXXu   with XXXXXX being a number followed
   //    by one of the units 's', 'ms', 'us' or 'ns'
@@ -1620,13 +1621,21 @@ parse_timecode(const string &src,
   // 2. HH:MM:SS:nnnnnnnnn  with up to nine digits 'n' for ns precision;
   // HH: is optional; HH, MM and SS can be either one or two digits.
   int h, m, s, n, i, values[4], num_values, num_digits, num_colons;
+  int offset = 0, negative = 1;
   bool decimal_point_found;
 
   if (src.empty())
     return false;
 
+  if ('-' == src[0]) {
+    if (!allow_negative)
+      return false;
+    negative = -1;
+    offset = 1;
+  }
+
   try {
-    if (src.length() < 2)
+    if (src.length() < (2 + offset))
       throw false;
 
     string unit = src.substr(src.length() - 2, 2);
@@ -1646,13 +1655,13 @@ parse_timecode(const string &src,
     else
       throw false;
 
-    if (src.length() < (unit_length + 1))
+    if (src.length() < (unit_length + 1 + offset))
       throw false;
 
-    if (!parse_int(src.substr(0, src.length() - unit_length), value))
+    if (!parse_int(src.substr(offset, src.length() - unit_length - offset), value))
       throw false;
 
-    timecode = value * multiplier;
+    timecode = value * multiplier * negative;
 
     return true;
   } catch (...) {
@@ -1664,7 +1673,7 @@ parse_timecode(const string &src,
   decimal_point_found = false;
   memset(&values, 0, sizeof(int) * 4);
 
-  for (i = 0; src.length() > i; ++i) {
+  for (i = offset; src.length() > i; ++i) {
     if (isdigit(src[i])) {
       if (decimal_point_found && (9 == num_digits))
         return set_tcp_error("Invalid format: More than nine nano-second "
@@ -1748,6 +1757,8 @@ parse_timecode(const string &src,
 
   timecode = ((int64_t)h * 60 * 60 + (int64_t)m * 60 + (int64_t)s) *
     1000000000ll + n;
+
+  timecode *= negative;
 
   timecode_parser_error = "no error";
   return true;

@@ -1,3 +1,8 @@
+2007-04-19  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed the VobSub reader so that "delay:"
+	lines with negative timecodes are accepted. Fix for bug 241.
+
 2007-04-18  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Improved the file type detection code for
