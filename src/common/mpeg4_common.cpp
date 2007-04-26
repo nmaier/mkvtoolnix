@@ -1136,7 +1136,7 @@ mpeg4::p10::avc_es_parser_c::flush_decision(slice_info_t &si,
 
 void
 mpeg4::p10::avc_es_parser_c::flush_incomplete_frame() {
-  if (!m_have_incomplete_frame)
+  if (!m_have_incomplete_frame || !m_avcc_ready)
     return;
 
   if (1) //m_first_keyframe_found)
@@ -1148,13 +1148,36 @@ mpeg4::p10::avc_es_parser_c::flush_incomplete_frame() {
 }
 
 void
+mpeg4::p10::avc_es_parser_c::flush_unhandled_nalus() {
+  deque<memory_cptr>::iterator nalu = m_unhandled_nalus.begin();
+
+  while (m_unhandled_nalus.end() != nalu) {
+    handle_nalu(*nalu);
+    nalu++;
+  }
+
+  m_unhandled_nalus.clear();
+}
+
+static int klaus = 0;
+
+void
 mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
   slice_info_t si;
 
-//   mxinfo("slice size %d\n", nalu->get_size());
+//   if (klaus >= 161)
+//     mxinfo("slice size %d\n", nalu->get_size());
 
-  if (!parse_slice(nalu, si))
+  if (!m_avcc_ready) {
+    m_unhandled_nalus.push_back(nalu);
     return;
+  }
+
+  if (!parse_slice(nalu, si)) {
+    mxwarn("Slice parser error %d.\n", klaus);
+    ++klaus;
+    return;
+  }
 
 //   mxinfo("frame_num %u: ", si.frame_num);
 
@@ -1172,7 +1195,7 @@ mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
     return;
   }
 
-//   mxinfo("new one\n");
+//   mxinfo("SEI type %d\n", (int)m_incomplete_frame.m_si.type);
   m_incomplete_frame.m_si = si;
   m_incomplete_frame.m_keyframe =
     m_recovery_point_valid ||
@@ -1325,18 +1348,24 @@ mpeg4::p10::avc_es_parser_c::handle_nalu(memory_cptr nalu) {
     case NALU_TYPE_DP_B_SLICE:
     case NALU_TYPE_DP_C_SLICE:
     case NALU_TYPE_IDR_SLICE:
-      if (!m_sps_info_list.empty() && !m_pps_info_list.empty())
+      if (!m_avcc_ready && !m_sps_info_list.empty() && !m_pps_info_list.empty()) {
         m_avcc_ready = true;
+        flush_unhandled_nalus();
+      }
       handle_slice_nalu(nalu);
       break;
 
     default:
       flush_incomplete_frame();
-      if (!m_sps_info_list.empty() && !m_pps_info_list.empty())
+      if (!m_avcc_ready && !m_sps_info_list.empty() && !m_pps_info_list.empty()) {
         m_avcc_ready = true;
+        flush_unhandled_nalus();
+      }
       m_extra_data.push_back(create_nalu_with_size(nalu));
-//       if (NALU_TYPE_SEI == type)
-//         handle_sei_nalu(nalu);
+
+      if (NALU_TYPE_SEI == type)
+        handle_sei_nalu(nalu);
+
       break;
   }
 }
@@ -1359,13 +1388,21 @@ mpeg4::p10::avc_es_parser_c::parse_slice(memory_cptr &buffer,
 
     geread(r);                  // first_mb_in_slice
     si.type = geread(r);        // slice_type
+
+    if (9 < si.type) {
+      mxverb(3, "slice parser error: 9 < si.type: %u\n", si.type);
+      return false;
+    }
+
     si.pps_id = geread(r);      // pps_id
 
     for (pps_idx = 0; m_pps_info_list.size() > pps_idx; ++pps_idx)
       if (m_pps_info_list[pps_idx].id == si.pps_id)
         break;
-    if (m_pps_info_list.size() == pps_idx)
+    if (m_pps_info_list.size() == pps_idx) {
+      mxverb(3, "slice parser error: PPS not found: %u\n", si.pps_id);
       return false;
+    }
 
     pps_info_t &pps = m_pps_info_list[pps_idx];
 

@@ -340,6 +340,7 @@ namespace mpeg4 {
 
       avc_frame_t m_incomplete_frame;
       bool m_have_incomplete_frame;
+      deque<memory_cptr> m_unhandled_nalus;
 
       bool m_ignore_nalu_size_length_errors;
 
@@ -423,6 +424,7 @@ namespace mpeg4 {
       void default_cleanup();
       bool flush_decision(slice_info_t &si, slice_info_t &ref);
       void flush_incomplete_frame();
+      void flush_unhandled_nalus();
       void write_nalu_size(unsigned char *buffer, int size,
                            int nalu_size_length = -1);
       memory_cptr create_nalu_with_size(const memory_cptr &src,

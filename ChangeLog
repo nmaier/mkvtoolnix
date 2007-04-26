@@ -1,3 +1,9 @@
+2007-04-26  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Added support for handling SEI NALUs in
+	AVC/h.264 elementary streams so that "key frames" can be detected
+	even if no IDR slices are present.
+
 2007-04-19  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed the VobSub reader so that "delay:"
