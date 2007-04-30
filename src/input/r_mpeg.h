@@ -61,8 +61,6 @@ struct mpeg_ps_track_t {
 
   int64_t timecode_offset;
 
-  int skip_bytes;
-
   int v_version, v_width, v_height, v_dwidth, v_dheight;
   double v_frame_rate, v_aspect_ratio;
   memory_cptr v_avcc;
@@ -77,7 +75,6 @@ struct mpeg_ps_track_t {
 
   mpeg_ps_track_t():
     ptzr(-1), type(0), id(0), sort_key(0), fourcc(0), timecode_offset(-1),
-    skip_bytes(0),
     v_version(0), v_width(0), v_height(0), v_dwidth(0), v_dheight(0),
     v_frame_rate(0), v_aspect_ratio(0),
     raw_seq_hdr(NULL), raw_seq_hdr_size(0),

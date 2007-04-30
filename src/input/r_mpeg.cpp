@@ -596,7 +596,7 @@ mpeg_ps_reader_c::parse_packet(int id,
     if (hdrlen > length)
       return false;
 
-    if ((pts_flags & 2) == 2) {
+    if (2 == pts_flags) {
       if (hdrlen < 5)
         return false;
       c = io->read_uint8();
@@ -605,8 +605,7 @@ mpeg_ps_reader_c::parse_packet(int id,
       length -= 5;
       hdrlen -= 5;
 
-    }
-    if (pts_flags == 3) {
+    } else if (3 == pts_flags) {
       if (hdrlen < 5)
         return false;
       io->skip(5);
@@ -625,13 +624,17 @@ mpeg_ps_reader_c::parse_packet(int id,
       aid = io->read_uint8();
       length--;
 
-      if ((aid >= 0x80) && (aid <= 0xbf)) {
+      if ((aid & 0xe0) == 0x20) {
+        // Subtitles, not supported yet.
+        return false;
+
+      } else if ((0x80 == (aid & 0xc0)) ||
+                 (0x00 == (aid & 0xe0)) ||
+                 (0xc0 == (aid & 0xc0))) {
         io->skip(3);         // number of frames, startpos
         length -= 3;
 
-        if (aid >= 0xa0) {      // LPCM
-          if (length < 3)
-            return false;
+        if ((0xa0 == (aid & 0xe0)) && (3 <= length)) { // LPCM
           io->skip(3);
           length -= 3;
         }
@@ -1098,8 +1101,6 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
                ti.fname.c_str(), id);
 
     } else if (track->fourcc == FOURCC('A', 'C', '3', ' ')) {
-      if (16 == track->a_bsid)
-        track->skip_bytes = 3;
       track->ptzr =
         add_packetizer(new ac3_packetizer_c(this, track->a_sample_rate,
                                             track->a_channels,
@@ -1175,7 +1176,7 @@ file_status_e
 mpeg_ps_reader_c::read(generic_packetizer_c *,
                        bool) {
   int64_t timecode, packet_pos;
-  int new_id, length, aid, skip_bytes, full_length;
+  int new_id, length, aid, full_length;
   unsigned char *buf;
 
   if (file_done)
@@ -1209,21 +1210,12 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
 
       mpeg_ps_track_t *track = tracks[id2idx[new_id]].get();
 
-      skip_bytes = track->skip_bytes;
-
-      if (length < skip_bytes) {
-        io->skip(length);
-        continue;
-      }
-
-      length -= skip_bytes;
-      io->skip(skip_bytes);
-
-      mxverb(3, "mpeg_ps: packet for %d length %d at " LLD "\n", new_id,
-             length, packet_pos);
+      mxverb(3, "mpeg_ps: packet for %d length %d at " LLD " timecode " LLD "\n", new_id,
+             length, packet_pos, timecode);
 
       if (0 < track->buffer_size) {
-        if ((track->buffer_usage + length) > track->buffer_size) {
+        if (//(-1 != timecode)
+             ((track->buffer_usage + length) > track->buffer_size)) {
           PTZR(track->ptzr)->
             process(new packet_t(new memory_c(track->buffer,
                                               track->buffer_usage, false)));
