@@ -144,7 +144,7 @@ mi_frame::mi_frame(const wxString &title,
   CreateStatusBar(1);
   SetStatusText(wxT("ready"));
 
-  last_dir = wxGetWorkingDirectory();
+  last_dir = wxGetCwd();
 }
 
 void
