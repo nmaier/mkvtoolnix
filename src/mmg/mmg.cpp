@@ -830,11 +830,11 @@ mmg_dialog::mmg_dialog():
   bs_main->Add(bs_buttons, 0, wxALIGN_CENTER_HORIZONTAL);
 
 #ifdef SYS_WINDOWS
-  SetSizeHints(600, 710);
-  SetSize(600, 710);
+  SetSizeHints(600, 680);
+  SetSize(600, 680);
 #else
-  SetSizeHints(600, 688);
-  SetSize(600, 688);
+  SetSizeHints(600, 660);
+  SetSize(600, 660);
 #endif
 
   muxing_in_progress = false;
