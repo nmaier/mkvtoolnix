@@ -262,6 +262,44 @@ cli_options_dlg::go(wxString &options) {
   return false;
 }
 
+class show_text_dlg: public wxDialog {
+  DECLARE_CLASS(show_text_dlg);
+  DECLARE_EVENT_TABLE();
+public:
+  show_text_dlg(wxWindow *parent, const wxString &title, const wxString &text);
+};
+
+
+show_text_dlg::show_text_dlg(wxWindow *parent,
+                             const wxString &title,
+                             const wxString &text):
+  wxDialog(parent, 0, title, wxDefaultPosition, wxSize(400, 350)) {
+
+  wxBoxSizer *siz_all, *siz_line;
+  wxTextCtrl *tc_message;
+  wxButton *b_ok;
+
+  siz_all = new wxBoxSizer(wxVERTICAL);
+
+  tc_message = new wxTextCtrl(this, 0, text, wxDefaultPosition, wxDefaultSize,
+                              wxTE_MULTILINE | wxTE_READONLY);
+
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_line->Add(tc_message, 1, wxALL | wxGROW, 10);
+
+  siz_all->Add(siz_line, 1, wxGROW, 0);
+
+  b_ok = new wxButton(this, wxID_OK, wxT("Ok"));
+
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_line->AddStretchSpacer();
+  siz_line->Add(b_ok, 0, wxRIGHT | wxBOTTOM, 10);
+
+  siz_all->Add(siz_line, 0, wxGROW, 0);
+
+  SetSizer(siz_all);
+}
+
 #if WXUNICODE
 wxString
 UTFstring_to_wxString(const UTFstring &u) {
@@ -653,6 +691,10 @@ mmg_dialog::mmg_dialog():
   muxing_menu->Append(ID_M_MUXING_START,
                       wxT("Sta&rt muxing (run mkvmerge)\tCtrl-R"),
                       wxT("Run mkvmerge and start the muxing process"));
+  muxing_menu->AppendSeparator();
+  muxing_menu->Append(ID_M_MUXING_SHOW_CMDLINE,
+                      wxT("S&how the command line"),
+                      wxT("Show the command line mmg creates for mkvmerge"));
   muxing_menu->Append(ID_M_MUXING_COPY_CMDLINE,
                       wxT("&Copy command line to clipboard"),
                       wxT("Copy the command line to the clipboard"));
@@ -765,17 +807,6 @@ mmg_dialog::mmg_dialog():
   b_browse_output = new wxButton(panel, ID_B_BROWSEOUTPUT, wxT("Browse"));
   sbs_low->Add(b_browse_output, 0, wxALIGN_CENTER_VERTICAL | wxALL, 3);
 
-  sb_commandline = new wxStaticBox(panel, -1, wxT("Command line"));
-  wxStaticBoxSizer *sbs_low2 =
-    new wxStaticBoxSizer(sb_commandline, wxHORIZONTAL);
-  bs_main->Add(sbs_low2, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT |
-               wxGROW, 5);
-
-  tc_cmdline =
-    new wxTextCtrl(panel, ID_TC_CMDLINE, wxT(""), wxDefaultPosition,
-                   wxSize(490, 50), wxTE_READONLY | wxTE_LINEWRAP |
-                   wxTE_MULTILINE);
-  sbs_low2->Add(tc_cmdline, 1, wxALIGN_CENTER_VERTICAL | wxALL, 3);
 
   wxBoxSizer *bs_buttons = new wxBoxSizer(wxHORIZONTAL);
 
@@ -799,11 +830,11 @@ mmg_dialog::mmg_dialog():
   bs_main->Add(bs_buttons, 0, wxALIGN_CENTER_HORIZONTAL);
 
 #ifdef SYS_WINDOWS
-  SetSizeHints(600, 740);
-  SetSize(600, 740);
+  SetSizeHints(600, 710);
+  SetSize(600, 710);
 #else
-  SetSizeHints(600, 718);
-  SetSize(600, 718);
+  SetSizeHints(600, 688);
+  SetSize(600, 688);
 #endif
 
   muxing_in_progress = false;
@@ -821,9 +852,6 @@ mmg_dialog::mmg_dialog():
   last_open_dir = wxT("");
   cmdline = wxT("\"") + mkvmerge_path + wxT("\" -o \"") +
     tc_output->GetValue() + wxT("\" ");
-  tc_cmdline->SetValue(cmdline);
-  cmdline_timer.SetOwner(this, ID_T_UPDATECMDLINE);
-  cmdline_timer.Start(1000);
 
   load_job_queue();
 
@@ -1266,6 +1294,14 @@ mmg_dialog::on_about(wxCommandEvent &evt) {
 }
 
 void
+mmg_dialog::on_show_cmdline(wxCommandEvent &evt) {
+  update_command_line();
+
+  show_text_dlg dlg(this, wxT("Current command line"), cmdline);
+  dlg.ShowModal();
+}
+
+void
 mmg_dialog::on_save_cmdline(wxCommandEvent &evt) {
   wxFile *file;
   wxString s;
@@ -1665,9 +1701,6 @@ mmg_dialog::update_command_line() {
     else
       cmdline += wxT(" ") + shell_escape(clargs[i]);
   }
-
-  if (old_cmdline != cmdline)
-    tc_cmdline->SetValue(cmdline);
 }
 
 void
@@ -2046,6 +2079,10 @@ BEGIN_EVENT_TABLE(cli_options_dlg, wxDialog)
   EVT_BUTTON(ID_CLIOPTIONS_ADD, cli_options_dlg::on_add_clicked)
 END_EVENT_TABLE();
 
+IMPLEMENT_CLASS(show_text_dlg, wxDialog);
+BEGIN_EVENT_TABLE(show_text_dlg, wxDialog)
+END_EVENT_TABLE();
+
 IMPLEMENT_CLASS(mmg_dialog, wxFrame);
 BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_BUTTON(ID_B_BROWSEOUTPUT, mmg_dialog::on_browse_output)
@@ -2060,6 +2097,7 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_FILE_SAVE, mmg_dialog::on_file_save)
   EVT_MENU(ID_M_FILE_SETOUTPUT, mmg_dialog::on_browse_output)
   EVT_MENU(ID_M_MUXING_START, mmg_dialog::on_run)
+  EVT_MENU(ID_M_MUXING_SHOW_CMDLINE, mmg_dialog::on_show_cmdline)
   EVT_MENU(ID_M_MUXING_COPY_CMDLINE, mmg_dialog::on_copy_to_clipboard)
   EVT_MENU(ID_M_MUXING_SAVE_CMDLINE, mmg_dialog::on_save_cmdline)
   EVT_MENU(ID_M_MUXING_CREATE_OPTIONFILE, mmg_dialog::on_create_optionfile)

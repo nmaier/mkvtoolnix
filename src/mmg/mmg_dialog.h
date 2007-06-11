@@ -21,7 +21,6 @@
 #define ID_TC_OUTPUT                      10000
 #define ID_B_BROWSEOUTPUT                 10001
 #define ID_NOTEBOOK                       10002
-#define ID_TC_CMDLINE                     10003
 #define ID_T_UPDATECMDLINE                10004
 #define ID_T_STATUSBAR                    10005
 #define ID_B_STARTMUXING                  10006
@@ -46,6 +45,7 @@
 #define ID_M_MUXING_ADD_TO_JOBQUEUE       60104
 #define ID_M_MUXING_MANAGE_JOBS           60105
 #define ID_M_MUXING_ADD_CLI_OPTIONS       60106
+#define ID_M_MUXING_SHOW_CMDLINE          60107
 
 #define ID_M_CHAPTERS_NEW                 60200
 #define ID_M_CHAPTERS_LOAD                60201
@@ -82,13 +82,11 @@ class mmg_dialog: public wxFrame {
   DECLARE_EVENT_TABLE();
 public:
   wxButton *b_browse_output;
-  wxStaticBox *sb_commandline;
-  wxTextCtrl *tc_output, *tc_cmdline;
+  wxTextCtrl *tc_output;
 
   wxString cmdline, cli_options;
   wxArrayString clargs;
 
-  wxTimer cmdline_timer;
   wxTimer status_bar_timer;
 
   wxStatusBar *status_bar;
@@ -122,6 +120,7 @@ public:
   void on_browse_output(wxCommandEvent &evt);
   void on_run(wxCommandEvent &evt);
   void on_save_cmdline(wxCommandEvent &evt);
+  void on_show_cmdline(wxCommandEvent &evt);
   void on_copy_to_clipboard(wxCommandEvent &evt);
   void on_create_optionfile(wxCommandEvent &evt);
 
