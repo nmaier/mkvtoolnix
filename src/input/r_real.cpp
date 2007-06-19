@@ -228,6 +228,7 @@ real_reader_c::parse_headers() {
 
       } else if (track->type == RMFF_TRACK_TYPE_AUDIO) {
         bool ok;
+        int version;
 
         ok = true;
 
@@ -236,7 +237,16 @@ real_reader_c::parse_headers() {
         dmx->ra5p = (real_audio_v5_props_t *)
           track->mdpr_header.type_specific_data;
 
-        if (get_uint16_be(&dmx->ra4p->version1) == 4) {
+        version = get_uint16_be(&dmx->ra4p->version1);
+
+        if (3 == version) {
+          dmx->samples_per_second = 8000;
+          dmx->channels           = 1;
+          dmx->bits_per_sample    = 16;
+          dmx->extra_data_size    = 0;
+          strcpy(dmx->fourcc, "14_4");
+
+        } else if (4 == version) {
           int slen;
           unsigned char *p;
 
@@ -265,7 +275,7 @@ real_reader_c::parse_headers() {
             }
           }
 
-        } else {
+        } else if (5 == version) {
 
           dmx->samples_per_second = get_uint16_be(&dmx->ra5p->sample_rate);
           dmx->channels = get_uint16_be(&dmx->ra5p->channels);
@@ -280,7 +290,12 @@ real_reader_c::parse_headers() {
                                           sizeof(real_audio_v5_props_t),
                                           dmx->extra_data_size);
           }
+
+        } else {
+          mxwarn(PFX "Only audio header versions 3, 4 and 5 are supported. Track ID %u uses version %d and will be skipped.\n", track->id, version);
+          ok = false;
         }
+
         mxverb(2, PFX "extra_data_size: %d\n", dmx->extra_data_size);
 
         if (ok) {
