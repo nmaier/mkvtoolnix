@@ -744,12 +744,15 @@ mpeg4_p10_video_packetizer_c(generic_reader_c *_reader,
                              int _width,
                              int _height,
                              track_info_c &_ti):
-  video_packetizer_c(_reader, MKV_V_MPEG4_AVC, _fps, _width, _height, _ti) {
+  video_packetizer_c(_reader, MKV_V_MPEG4_AVC, _fps, _width, _height, _ti),
+  m_nalu_size_len_src(0), m_nalu_size_len_dst(0), m_max_nalu_size(0) {
 
   relaxed_timecode_checking = true;
 
-  if ((ti.private_data != NULL) && (ti.private_size > 0))
+  if ((ti.private_data != NULL) && (ti.private_size > 0)) {
     extract_aspect_ratio();
+    setup_nalu_size_len_change();
+  }
 }
 
 void
@@ -796,6 +799,9 @@ mpeg4_p10_video_packetizer_c::process(packet_cptr packet) {
 
   ref_timecode = packet->timecode;
 
+  if (m_nalu_size_len_dst)
+    change_nalu_size_len(packet);
+
   add_packet(packet);
 
   return FILE_STATUS_MOREDATA;
@@ -824,5 +830,86 @@ mpeg4_p10_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
   }
 
   return CAN_CONNECT_YES;
+}
+
+void
+mpeg4_p10_video_packetizer_c::setup_nalu_size_len_change() {
+  if (!ti.private_data || (5 > ti.private_size))
+    return;
+
+  m_nalu_size_len_src = (ti.private_data[4] & 0x03) + 1;
+
+  if (!ti.nalu_size_length || (ti.nalu_size_length == m_nalu_size_len_src))
+    return;
+
+  m_nalu_size_len_dst = ti.nalu_size_length;
+  ti.private_data[4]  = (ti.private_data[4] & 0xfc) | (m_nalu_size_len_dst - 1);
+  m_max_nalu_size     = 1ll << (8 * m_nalu_size_len_dst);
+
+  set_codec_private(ti.private_data, ti.private_size);
+
+  mxverb(2, "mpeg4_p10: Adjusting NALU size length from %d to %d\n",
+         m_nalu_size_len_src, m_nalu_size_len_dst);
+}
+
+void
+mpeg4_p10_video_packetizer_c::change_nalu_size_len(packet_cptr packet) {
+  unsigned char *src = packet->data->get(), *dst;
+  int size           = packet->data->get_size();
+  int src_pos, dst_pos, nalu_size, i, shift;
+
+  if (!src || !size)
+    return;
+
+  vector<int> nalu_sizes;
+
+  src_pos = 0;
+
+  // Find all NALU sizes in this packet.
+  while (src_pos < size) {
+    if ((size - src_pos) < m_nalu_size_len_src)
+      break;
+
+    nalu_size = 0;
+    for (i = 0; i < m_nalu_size_len_src; ++i)
+      nalu_size = (nalu_size << 8) + src[src_pos + i];
+
+    if ((size - src_pos - m_nalu_size_len_src) < nalu_size)
+      nalu_size = size - src_pos - m_nalu_size_len_src;
+
+    if (nalu_size > m_max_nalu_size)
+      mxerror(FMT_TID "The chosen NALU size length of %d is too small. Try using '4'.\n",
+              ti.fname.c_str(), (int64_t)ti.id, m_nalu_size_len_dst);
+
+    src_pos += m_nalu_size_len_src + nalu_size;
+
+    nalu_sizes.push_back(nalu_size);
+  }
+
+  // Allocate memory if the new NALU size length is greater
+  // than the previous one. Otherwise reuse the existing memory.
+  if (m_nalu_size_len_dst > m_nalu_size_len_src) {
+    int new_size = size + nalu_sizes.size() * (m_nalu_size_len_dst - m_nalu_size_len_src);
+    packet->data = memory_cptr(new memory_c((unsigned char *)safemalloc(new_size), new_size));
+  }
+
+  // Copy the NALUs and write the new sized length field.
+  dst     = packet->data->get();
+  src_pos = 0;
+  dst_pos = 0;
+
+  for (i = 0; nalu_sizes.size() > i; ++i) {
+    nalu_size = nalu_sizes[i];
+
+    for (shift = 0; shift < m_nalu_size_len_dst; ++shift)
+      dst[dst_pos + shift] = (nalu_size >> (8 * (m_nalu_size_len_dst - 1 - shift))) & 0xff;
+
+    memmove(&dst[dst_pos + m_nalu_size_len_dst], &src[src_pos + m_nalu_size_len_src], nalu_size);
+
+    src_pos += m_nalu_size_len_src + nalu_size;
+    dst_pos += m_nalu_size_len_dst + nalu_size;
+  }
+
+  packet->data->set_size(dst_pos);
 }
 
