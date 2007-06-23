@@ -642,6 +642,8 @@ generic_packetizer_c::set_headers() {
     set_as_default_track(idx, DEFAULT_TRACK_PRIORITY_FROM_TYPE);
   else if (ti.default_track)
     set_as_default_track(idx, DEFAULT_TRACK_PRIORITY_CMDLINE);
+  else if (default_tracks[idx] == hserialno)
+    default_tracks[idx] = 0;
 
   if (ti.language != "")
     *(static_cast<EbmlString *>

@@ -1,5 +1,9 @@
 2007-06-23  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The 'default track' flag was set to 'yes' for
+	tracks read from Matroska files even if 'no' was specified on the
+	command line.
+
 	* mkvextract: new feature: Added support for the 'header removal'
 	encoding scheme.
 
