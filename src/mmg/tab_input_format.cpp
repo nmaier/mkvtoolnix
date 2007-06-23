@@ -168,9 +168,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
                    "It defaults to 4 bytes, but there are files which do not "
                    "contain a frame or slice that is bigger than 65535 bytes. "
                    "For such files you can use this parameter and decrease "
-                   "the size to 2. You can also try 3 which results in "
-                   "smaller files but might not be decodable by all AVC/h.264 "
-                   "codecs."));
+                   "the size to 2."));
   cob_nalu_size_length->SetSizeHints(0, -1);
   siz_fg->Add(cob_nalu_size_length, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL,
               STDSPACING);
@@ -278,9 +276,9 @@ tab_input_format::setup_control_contents() {
   cob_fps->Append(wxT("30000/1001"));
   cob_fps->Append(wxT("24000/1001"));
 
-  cob_nalu_size_length->Append(wxT("2"));
-  cob_nalu_size_length->Append(wxT("3"));
-  cob_nalu_size_length->Append(wxT("4"));
+  cob_nalu_size_length->Append(wxT("Default"));
+  cob_nalu_size_length->Append(wxT("2 bytes"));
+  cob_nalu_size_length->Append(wxT("4 bytes"));
 
   if (sorted_charsets.Count() == 0) {
     for (i = 0; sub_charsets[i] != NULL; i++)
@@ -308,7 +306,8 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   bool video = ('v' == type) && !appending;
   bool audio_app = ('a' == type);
   bool subs_app = ('s' == type);
-  bool avc_es = video && t->uses_avc_es_packetizer;
+  bool avc_es = video && (t->packetizer == wxT("mpeg4_p10_es_video"));
+  bool avc    = video && (t->packetizer == wxT("mpeg4_p10_video"));
 
   ctype = ctype.Lower();
 
@@ -324,8 +323,8 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   cob_stereo_mode->Enable(video);
   st_fps->Enable(avc_es);
   cob_fps->Enable(avc_es);
-  st_nalu_size_length->Enable(avc_es);
-  cob_nalu_size_length->Enable(avc_es);
+  st_nalu_size_length->Enable(avc || avc_es);
+  cob_nalu_size_length->Enable(avc || avc_es);
   st_compression->Enable((ctype.Find(wxT("vobsub")) >= 0) && !appending);
   cob_compression->Enable((ctype.Find(wxT("vobsub")) >= 0) && !appending);
 
@@ -353,7 +352,7 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
     tc_display_height->SetValue(wxT(""));
     set_combobox_selection(cob_fourcc, wxT(""));
     set_combobox_selection(cob_fps, wxT(""));
-    cob_nalu_size_length->SetSelection(2);
+    cob_nalu_size_length->SetSelection(0);
     set_combobox_selection(cob_stereo_mode, wxT(""));
     tc_delay->SetValue(wxT(""));
     tc_stretch->SetValue(wxT(""));
@@ -430,7 +429,7 @@ tab_input_format::on_nalu_size_length_changed(wxCommandEvent &evt) {
     return;
 
   tracks[input->selected_track]->nalu_size_length =
-    cob_nalu_size_length->GetSelection() + 2;
+    cob_nalu_size_length->GetSelection() * 2;
 }
 
 void

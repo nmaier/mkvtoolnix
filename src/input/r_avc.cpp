@@ -172,7 +172,7 @@ avc_es_reader_c::identify() {
   string info;
 
   if (identify_verbose)
-    info = " [uses_avc_es_packetizer]";
+    info = " [packetizer:mpeg4_p10_es_video]";
   mxinfo("File '%s': container: AVC/h.264 elementary stream (ES)\n"
          "Track ID 0: video (MPEG-4 part 10 ES)%s\n", ti.fname.c_str(),
          info.c_str());

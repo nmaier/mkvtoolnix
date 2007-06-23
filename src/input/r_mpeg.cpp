@@ -1297,6 +1297,7 @@ mpeg_ps_reader_c::identify() {
           info += mxsprintf("display_dimensions:%dx%d ",
                             track->v_dwidth, track->v_dheight);
       }
+      info += "packetizer:mpeg4_p10_es_video ";
     }
 
     if (!info.empty()) {

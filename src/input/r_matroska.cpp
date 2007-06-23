@@ -2421,7 +2421,9 @@ kax_reader_c::identify() {
 
         if ((tracks[i]->codec_id == MKV_V_MSCOMP) &&
             mpeg4::p10::is_avc_fourcc(tracks[i]->v_fourcc))
-          info += "uses_avc_es_packetizer ";
+          info += "packetizer:mpeg4_p10_es_video ";
+        else if (tracks[i]->codec_id == MKV_V_MPEG4_AVC)
+          info += "packetizer:mpeg4_p10_video ";
 
         info += "]";
       } else

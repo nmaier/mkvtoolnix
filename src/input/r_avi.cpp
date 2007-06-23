@@ -557,56 +557,63 @@ avi_reader_c::identify() {
   int i;
   const char *type;
   uint32_t par_num, par_den;
-  bool extended_info_shown;
+  vector<string> extended_info;
 
   mxinfo("File '%s': container: AVI\n", ti.fname.c_str());
-  extended_info_shown = false;
   type = AVI_video_compressor(avi);
-  if (!strncasecmp(type, "MP42", 4) ||
-      !strncasecmp(type, "DIV2", 4) ||
-      !strncasecmp(type, "DIVX", 4) ||
-      !strncasecmp(type, "XVID", 4) ||
-      !strncasecmp(type, "DX50", 4)) {
+
+  if (identify_verbose &&
+      (!strncasecmp(type, "MP42", 4) ||
+       !strncasecmp(type, "DIV2", 4) ||
+       !strncasecmp(type, "DIVX", 4) ||
+       !strncasecmp(type, "XVID", 4) ||
+       !strncasecmp(type, "DX50", 4))) {
     unsigned char *buffer;
     uint32_t width, height, disp_width, disp_height;
     float aspect_ratio;
     int size, key;
-    string extended_info;
 
     size = AVI_frame_size(avi, 0);
     if (size > 0) {
       buffer = (unsigned char *)safemalloc(size);
       AVI_read_frame(avi, (char *)buffer, &key);
+
       if (mpeg4::p2::extract_par(buffer, size, par_num, par_den)) {
-        width = AVI_video_width(avi);
-        height = AVI_video_height(avi);
-        aspect_ratio = (float)width / (float)height * (float)par_num /
-          (float)par_den;
+        width        = AVI_video_width(avi);
+        height       = AVI_video_height(avi);
+        aspect_ratio = (float)width / (float)height * (float)par_num / (float)par_den;
+
         if (aspect_ratio > ((float)width / (float)height)) {
-          disp_width = irnd(height * aspect_ratio);
+          disp_width  = irnd(height * aspect_ratio);
           disp_height = height;
+
         } else {
-          disp_width = width;
+          disp_width  = width;
           disp_height = irnd(width / aspect_ratio);
         }
-        if (identify_verbose)
-          extended_info = mxsprintf(" [display_dimensions:%ux%u ]",
-                                    disp_width, disp_height);
-        mxinfo("Track ID 0: video (%s)%s\n", type, extended_info.c_str());
-        extended_info_shown = true;
+
+        extended_info.push_back(mxsprintf("display_dimensions:%ux%u", disp_width, disp_height));
       }
       safefree(buffer);
     }
   }
-  if (!extended_info_shown) {
-    string info;
 
-    if (identify_verbose && mpeg4::p10::is_avc_fourcc(type))
-      info = " [uses_avc_es_packetizer]";
+  if (mpeg4::p10::is_avc_fourcc(type))
+    extended_info.push_back("packetizer:mpeg4_p10_es_video");
 
-    mxinfo("Track ID 0: video (%s)%s\n", AVI_video_compressor(avi),
-           info.c_str());
+  mxinfo("Track ID 0: video (%s)", type);
+
+  if (identify_verbose && !extended_info.empty()) {
+    vector<string>::iterator ei;
+
+    mxinfo("[");
+    mxforeach (ei, extended_info)
+      mxinfo("%s ", ei->c_str());
+    mxinfo("]");
   }
+
+  mxinfo("\n");
+
   for (i = 0; i < AVI_audio_tracks(avi); i++) {
     AVI_set_audio_track(avi, i);
     switch (AVI_audio_format(avi)) {

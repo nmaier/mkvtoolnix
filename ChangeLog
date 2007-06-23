@@ -1,5 +1,8 @@
 2007-06-23  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: The NALU size length can now be chosen for all AVC tracks,
+	not only for those that are handled by the 'AVC ES packetizer'.
+
 	* mkvmerge: bug fix: The 'default track' flag was set to 'yes' for
 	tracks read from Matroska files even if 'no' was specified on the
 	command line.

@@ -424,11 +424,6 @@ tab_input::add_file(const wxString &file_name,
       if (info.length() > 0) {
         args = split(info, wxU(" "));
         for (k = 0; k < args.size(); k++) {
-          if (args[k] == wxT("uses_avc_es_packetizer")) {
-            track->uses_avc_es_packetizer = true;
-            continue;
-          }
-
           pair = split(args[k], wxU(":"), 2);
           if (pair.size() != 2)
             continue;
@@ -476,6 +471,9 @@ tab_input::add_file(const wxString &file_name,
           } else if (pair[0] == wxT("aac_is_sbr"))
             track->aac_is_sbr = track->aac_is_sbr_detected =
               pair[1] == wxT("true");
+
+          else if (pair[0] == wxT("packetizer"))
+            track->packetizer = pair[1];
 
         }
       }
@@ -904,7 +902,7 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
   ti_general->tc_timecodes->SetValue(t->timecodes);
   set_combobox_selection(ti_format->cob_fourcc, t->fourcc);
   set_combobox_selection(ti_format->cob_fps, t->fps);
-  ti_format->cob_nalu_size_length->SetSelection(t->nalu_size_length - 2);
+  ti_format->cob_nalu_size_length->SetSelection(t->nalu_size_length / 2);
   ti_general->tc_track_name->SetFocus();
   ti_format->cob_stereo_mode->SetSelection(t->stereo_mode);
   ti_extra->tc_user_defined->SetValue(t->user_defined);
@@ -1004,6 +1002,7 @@ tab_input::save(wxConfigBase *cfg) {
       cfg->Write(wxT("track_name_was_present"), t->track_name_was_present);
       cfg->Write(wxT("appending"), t->appending);
       cfg->Write(wxT("user_defined"), t->user_defined);
+      cfg->Write(wxT("packetizer"), t->packetizer);
 
       cfg->SetPath(wxT(".."));
     }
@@ -1100,7 +1099,7 @@ tab_input::load(wxConfigBase *cfg,
       cfg->Read(wxT("display_height"), &tr->dheight);
       cfg->Read(wxT("fourcc"), &tr->fourcc);
       cfg->Read(wxT("fps"), &tr->fps);
-      cfg->Read(wxT("nalu_size_length"), &tr->nalu_size_length, 2);
+      cfg->Read(wxT("nalu_size_length"), &tr->nalu_size_length, 4);
       cfg->Read(wxT("stereo_mode"), &tr->stereo_mode, 0);
       cfg->Read(wxT("compression"), &tr->compression);
       cfg->Read(wxT("timecodes"), &tr->timecodes);
@@ -1108,6 +1107,7 @@ tab_input::load(wxConfigBase *cfg,
                 false);
       cfg->Read(wxT("appending"), &tr->appending, false);
       cfg->Read(wxT("user_defined"), &tr->user_defined);
+      cfg->Read(wxT("packetizer"), &tr->packetizer);
       tr->source = files.size();
       if (track_order.Length() > 0)
         track_order += wxT(",");

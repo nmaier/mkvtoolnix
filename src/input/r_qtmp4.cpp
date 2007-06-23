@@ -1737,10 +1737,17 @@ qtmp4_reader_c::identify() {
   mxinfo("File '%s': container: Quicktime/MP4\n", ti.fname.c_str());
   for (i = 0; i < demuxers.size(); i++) {
     qtmp4_demuxer_ptr &dmx = demuxers[i];
-    mxinfo("Track ID %u: %s (%.4s)\n", dmx->id,
+    string extended_info;
+
+    if (dmx->v_is_avc)
+      extended_info = "packetizer:mpeg4_p10_video ";
+    if (!extended_info.empty())
+      extended_info = " [" + extended_info + "]";
+
+    mxinfo("Track ID %u: %s (%.4s)%s\n", dmx->id,
            dmx->type == 'v' ? "video" :
            dmx->type == 'a' ? "audio" : "unknown",
-           dmx->fourcc);
+           dmx->fourcc, extended_info.c_str());
   }
 }
 
