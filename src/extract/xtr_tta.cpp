@@ -59,6 +59,8 @@ xtr_tta_c::handle_frame(memory_cptr &frame,
                         bool keyframe,
                         bool discardable,
                         bool references_valid) {
+  content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+
   frame_sizes.push_back(frame->get_size());
   out->write(frame->get(), frame->get_size());
 

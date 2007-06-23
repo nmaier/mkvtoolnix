@@ -43,6 +43,8 @@ xtr_cpic_c::handle_frame(memory_cptr &frame,
   int data_size, header_size;
   string file_name;
 
+  content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+
   mybuffer = frame->get();
   data_size = frame->get_size();
   if (data_size < 2) {
@@ -78,4 +80,5 @@ xtr_cpic_c::handle_frame(memory_cptr &frame,
 void
 xtr_cpic_c::create_file(xtr_base_c *_master,
                         KaxTrackEntry &track) {
+  init_content_decoder(track);
 }

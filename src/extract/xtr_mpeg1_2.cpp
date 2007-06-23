@@ -33,8 +33,10 @@ xtr_mpeg1_2_video_c::create_file(xtr_base_c *_master,
   xtr_base_c::create_file(_master, track);
 
   KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
-  if (NULL != priv)
-    m_seq_hdr = clone_memory(priv->GetBuffer(), priv->GetSize());
+  if (NULL != priv) {
+    memory_cptr mpriv = decode_codec_private(priv);
+    m_seq_hdr = clone_memory(mpriv->get(), mpriv->get_size());
+  }
 }
 
 void
@@ -47,6 +49,8 @@ xtr_mpeg1_2_video_c::handle_frame(memory_cptr &frame,
                                   bool keyframe,
                                   bool discardable,
                                   bool references_valid) {
+  content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+
   binary *buf = (binary *)frame->get();
 
   if (references_valid)
@@ -71,5 +75,6 @@ xtr_mpeg1_2_video_c::handle_frame(memory_cptr &frame,
 
 void
 xtr_mpeg1_2_video_c::handle_codec_state(memory_cptr &codec_state) {
+  content_decoder.reverse(codec_state, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
   m_seq_hdr = clone_memory(codec_state);
 }

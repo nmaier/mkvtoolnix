@@ -41,7 +41,8 @@ xtr_flac_c::create_file(xtr_base_c *_master,
 
   xtr_base_c::create_file(_master, track);
 
-  out->write(priv->GetBuffer(), priv->GetSize());
+  memory_cptr mpriv = decode_codec_private(priv);
+  out->write(mpriv->get(), mpriv->get_size());
 }
 
 // ------------------------------------------------------------------------
@@ -76,6 +77,8 @@ xtr_oggbase_c::handle_frame(memory_cptr &frame,
                             bool keyframe,
                             bool discardable,
                             bool references_valid) {
+  content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+
   if (NULL != buffered_data.get()) {
     ogg_packet op;
 
@@ -162,6 +165,8 @@ xtr_oggflac_c::create_file(xtr_base_c *_master,
 
   xtr_base_c::create_file(_master, track);
 
+  memory_cptr mpriv = decode_codec_private(priv);
+
   if (no_variable_data)
     ogg_stream_init(&os, 1804289383);
   else
@@ -179,13 +184,13 @@ xtr_oggflac_c::create_file(xtr_base_c *_master,
   flush_pages();
   op.b_o_s = 0;
   op.packetno = 1;
-  ptr = priv->GetBuffer();
-  if ((priv->GetSize() >= 4) && (ptr[0] == 'f') &&
+  ptr = mpriv->get();
+  if ((mpriv->get_size() >= 4) && (ptr[0] == 'f') &&
       (ptr[1] == 'L') && (ptr[2] == 'a') && (ptr[3] == 'C')) {
     ptr += 4;
-    op.bytes = priv->GetSize() - 4;
+    op.bytes = mpriv->get_size() - 4;
   } else
-    op.bytes = priv->GetSize();
+    op.bytes = mpriv->get_size();
   op.packet = (unsigned char *)safememdup(ptr, op.bytes);
   ogg_stream_packetin(&os, &op);
   safefree(op.packet);
@@ -215,8 +220,11 @@ xtr_oggvorbis_c::create_file(xtr_base_c *_master,
             "private\" element and cannot be extracted.\n", tid,
             codec_id.c_str());
 
-  c = (const unsigned char *)priv->GetBuffer();
-  if ((priv->GetSize() == 0) || (c[0] != 2))
+  init_content_decoder(track);
+  memory_cptr mpriv = decode_codec_private(priv);
+
+  c = (const unsigned char *)mpriv->get();
+  if ((mpriv->get_size() == 0) || (c[0] != 2))
     mxerror("Track " LLD " with the CodecID '%s' does not contain valid "
             "headers.\n", tid, codec_id.c_str());
 
@@ -224,11 +232,11 @@ xtr_oggvorbis_c::create_file(xtr_base_c *_master,
   for (packetno = 0; packetno < 2; packetno++) {
     int length = 0;
 
-    while ((offset < priv->GetSize()) && ((unsigned char)255 == c[offset])) {
+    while ((offset < mpriv->get_size()) && ((unsigned char)255 == c[offset])) {
       length += 255;
       offset++;
     }
-    if ((priv->GetSize() - 1) <= offset)
+    if ((mpriv->get_size() - 1) <= offset)
       mxerror("Track " LLD " with the CodecID '%s' does not contain valid "
               "headers.\n", tid, codec_id.c_str());
     length += c[offset];
@@ -239,7 +247,7 @@ xtr_oggvorbis_c::create_file(xtr_base_c *_master,
   headers[0] = &c[offset];
   headers[1] = &c[offset + header_sizes[0]];
   headers[2] = &c[offset + header_sizes[0] + header_sizes[1]];
-  header_sizes[2] = priv->GetSize() - offset - header_sizes[0] -
+  header_sizes[2] = mpriv->get_size() - offset - header_sizes[0] -
     header_sizes[1];
 
   xtr_oggbase_c::create_file(_master, track);

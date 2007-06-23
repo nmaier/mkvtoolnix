@@ -34,6 +34,8 @@ xtr_wav_c::create_file(xtr_base_c *_master,
                        KaxTrackEntry &track) {
   int channels, sfreq, bps;
 
+  init_content_decoder(track);
+
   channels = kt_get_a_channels(track);
   sfreq = (int)kt_get_a_sfreq(track);
   bps = kt_get_a_bps(track);
@@ -81,17 +83,23 @@ void
 xtr_wavpack4_c::create_file(xtr_base_c *_master,
                             KaxTrackEntry &track) {
   KaxCodecPrivate *priv;
+  memory_cptr mpriv;
+
+  init_content_decoder(track);
 
   priv = FINDFIRST(&track, KaxCodecPrivate);
-  if ((NULL == priv) || (2 > priv->GetSize()))
+  if (priv)
+    mpriv = decode_codec_private(priv);
+
+  if ((NULL == priv) || (2 > mpriv->get_size()))
     mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec "
             "private\" element and cannot be extracted.\n", tid,
             codec_id.c_str());
-  memcpy(version, priv->GetBuffer(), 2);
-
-  channels = kt_get_a_channels(track);
+  memcpy(version, mpriv->get(), 2);
 
   xtr_base_c::create_file(_master, track);
+
+  channels = kt_get_a_channels(track);
 
   if ((0 != kt_get_max_blockadd_id(track)) && (0 != extract_blockadd_level)) {
     string corr_name = file_name;
@@ -122,6 +130,8 @@ xtr_wavpack4_c::handle_frame(memory_cptr &frame,
   binary wv_header[32], *mybuffer;
   int data_size;
   vector<uint32_t> flags;
+
+  content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   // build the main header
 

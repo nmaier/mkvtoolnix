@@ -56,24 +56,26 @@ xtr_avc_c::create_file(xtr_base_c *_master,
             "private\" element and cannot be extracted.\n", tid,
             codec_id.c_str());
 
-  if (priv->GetSize() < 6)
+  memory_cptr mpriv = decode_codec_private(priv);
+
+  if (mpriv->get_size() < 6)
     mxerror("Track " LLD " CodecPrivate is too small.\n", tid);
 
-  binary *buf = priv->GetBuffer();
+  binary *buf = mpriv->get();
   nal_size_size = 1 + (buf[4] & 3);
 
   int i, pos = 6, numsps = buf[5] & 0x1f, numpps;
 
-  for (i = 0; (i < numsps) && (priv->GetSize() > pos); ++i)
-    write_nal(buf, pos, priv->GetSize(), 2);
+  for (i = 0; (i < numsps) && (mpriv->get_size() > pos); ++i)
+    write_nal(buf, pos, mpriv->get_size(), 2);
 
-  if (priv->GetSize() <= pos)
+  if (mpriv->get_size() <= pos)
     return;
 
   numpps = buf[pos++];
 
-  for (i = 0; (i < numpps) && (priv->GetSize() > pos); ++i)
-    write_nal(buf, pos, priv->GetSize(), 2);
+  for (i = 0; (i < numpps) && (mpriv->get_size() > pos); ++i)
+    write_nal(buf, pos, mpriv->get_size(), 2);
 }
 
 void
@@ -86,10 +88,11 @@ xtr_avc_c::handle_frame(memory_cptr &frame,
                         bool keyframe,
                         bool discardable,
                         bool references_valid) {
-  int pos;
+  content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+
+  int pos     = 0;
   binary *buf = (binary *)frame->get();
 
-  pos = 0;
   while (frame->get_size() > pos)
     write_nal(buf, pos, frame->get_size(), nal_size_size);
 }

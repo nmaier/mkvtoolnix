@@ -36,6 +36,9 @@ xtr_rmff_c::create_file(xtr_base_c *_master,
             "private\" element and cannot be extracted.\n", tid,
             codec_id.c_str());
 
+  init_content_decoder(track);
+  memory_cptr mpriv = decode_codec_private(priv);
+
   master = _master;
   if (NULL == master) {
     file = rmff_open_file(file_name.c_str(), RMFF_OPEN_MODE_WRITING);
@@ -50,9 +53,7 @@ xtr_rmff_c::create_file(xtr_base_c *_master,
     mxerror("Memory allocation error: %d (%s).\n",
             rmff_last_error, rmff_last_error_msg);
 
-  rmff_set_type_specific_data(rmtrack,
-                              (const unsigned char *)priv->GetBuffer(),
-                              priv->GetSize());
+  rmff_set_type_specific_data(rmtrack, mpriv->get(), mpriv->get_size());
 
   if ('V' == codec_id[0])
     rmff_set_track_data(rmtrack, "Video", "video/x-pn-realvideo");
@@ -71,6 +72,8 @@ xtr_rmff_c::handle_frame(memory_cptr &frame,
                          bool discardable,
                          bool references_valid) {
   rmff_frame_t *rmff_frame;
+
+  content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   rmff_frame = rmff_allocate_frame(frame->get_size(), frame->get());
   if (rmff_frame == NULL)

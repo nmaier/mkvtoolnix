@@ -49,7 +49,9 @@ xtr_aac_c::create_file(xtr_base_c *_master,
 
     output_sfreq = 0;
     is_sbr = false;
-    if (!parse_aac_data(priv->GetBuffer(), priv->GetSize(), profile, channels,
+    memory_cptr mem(new memory_c(priv->GetBuffer(), priv->GetSize(), false));
+    content_decoder.reverse(mem, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
+    if (!parse_aac_data(mem->get(), mem->get_size(), profile, channels,
                         sfreq, output_sfreq, is_sbr))
       mxerror("Track " LLD " with the CodecID '%s' contains invalid \"codec "
               "private\" data for AAC.\n", tid, codec_id.c_str());
@@ -116,6 +118,8 @@ xtr_aac_c::handle_frame(memory_cptr &frame,
                         bool references_valid) {
   char adts[56 / 8];
   int len;
+
+  content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   // Recreate the ADTS headers. What a fun. Like runing headlong into
   // a solid wall. But less painful. Well such is life, you know.

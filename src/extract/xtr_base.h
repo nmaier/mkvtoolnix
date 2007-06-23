@@ -39,6 +39,7 @@ public:
   int64_t bytes_written;
 
   content_decoder_c content_decoder;
+  bool content_decoder_initialized;
 
 public:
   xtr_base_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec,
@@ -60,6 +61,9 @@ public:
   virtual const char *get_container_name() {
     return container_name.c_str();
   };
+
+  virtual void init_content_decoder(KaxTrackEntry &track);
+  virtual memory_cptr decode_codec_private(KaxCodecPrivate *priv);
 
   static xtr_base_c *create_extractor(const string &new_codec_id,
                                       int64_t new_tid, track_spec_t &tspec);

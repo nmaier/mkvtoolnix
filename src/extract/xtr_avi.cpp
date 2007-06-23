@@ -32,6 +32,8 @@ xtr_avi_c::create_file(xtr_base_c *_master,
   string writing_app;
   KaxCodecPrivate *priv;
 
+  init_content_decoder(track);
+
   priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
     mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec "
@@ -60,7 +62,8 @@ xtr_avi_c::create_file(xtr_base_c *_master,
     writing_app += mxsprintf(" %s", VERSION);
   avi->writing_app = safestrdup(writing_app.c_str());
 
-  bih = (alBITMAPINFOHEADER *)safememdup(priv->GetBuffer(), priv->GetSize());
+  memory_cptr mpriv = decode_codec_private(priv);
+  bih = (alBITMAPINFOHEADER *)safememdup(mpriv->get(), mpriv->get_size());
   memcpy(ccodec, &bih->bi_compression, 4);
   ccodec[4] = 0;
   if (get_uint32_le(&bih->bi_size) != sizeof(alBITMAPINFOHEADER)) {
@@ -85,6 +88,7 @@ xtr_avi_c::handle_frame(memory_cptr &frame,
   if (references_valid)
     keyframe = bref == 0;
 
+  content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
   AVI_write_frame(avi, (char *)frame->get(), frame->get_size(), keyframe);
 
   if (((double)duration / 1000000.0 - (1000.0 / fps)) >= 1.5) {

@@ -57,6 +57,8 @@ xtr_srt_c::handle_frame(memory_cptr &frame,
   int64_t start, end;
   string buffer;
 
+  content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+
   if (-1 == duration) {
     mxwarn("Track " LLD ": Subtitle entry number %d is missing its duration. "
            "Assuming a duration of 1s.\n", tid, num_entries + 1);
@@ -119,8 +121,10 @@ xtr_ssa_c::create_file(xtr_base_c *_master,
   xtr_base_c::create_file(_master, track);
   out->write_bom(sub_charset);
 
-  pd = (const unsigned char *)priv->GetBuffer();
-  priv_size = priv->GetSize();
+  memory_cptr mpriv = decode_codec_private(priv);
+
+  pd = mpriv->get();
+  priv_size = mpriv->get_size();
   bom_len = 0;
   // Skip any BOM that might be present.
   if ((priv_size > 3) &&
@@ -194,6 +198,8 @@ xtr_ssa_c::handle_frame(memory_cptr &frame,
   ssa_line_c ssa_line;
   string line;
   int64_t start, end;
+
+  content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   if (0 > duration) {
     mxwarn("Subtitle track " LLD " is missing some duration elements. "
@@ -314,13 +320,9 @@ xtr_usf_c::create_file(xtr_base_c *_master,
             "private \" element and cannot be extracted.\n", tid,
             codec_id.c_str());
 
-  if (!content_decoder.initialize(track))
-    mxerror("Tracks with unsupported content encoding schemes (compression "
-            "or encryption) cannot be extracted.\n");
+  init_content_decoder(track);
 
-  memory_cptr new_priv(new memory_c(priv->GetBuffer(), priv->GetSize(),
-                                    false));
-  content_decoder.reverse(new_priv, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
+  memory_cptr new_priv = decode_codec_private(priv);
   m_codec_private.append((const char *)new_priv->get(), new_priv->get_size());
 
   language = FINDFIRST(&track, KaxTrackLanguage);

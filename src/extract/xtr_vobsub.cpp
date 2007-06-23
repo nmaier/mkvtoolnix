@@ -71,13 +71,9 @@ xtr_vobsub_c::create_file(xtr_base_c *_master,
             "private\" element and cannot be extracted.\n", tid,
             codec_id.c_str());
 
-  if (!content_decoder.initialize(track))
-    mxerror("Tracks with unsupported content encoding schemes (compression "
-            "or encryption) cannot be extracted.\n");
+  init_content_decoder(track);
 
-  private_data = memory_cptr(new memory_c(priv->GetBuffer(), priv->GetSize(),
-                                          false));
-  content_decoder.reverse(private_data, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
+  private_data = decode_codec_private(priv);
   private_data->grab();
 
   master = _master;

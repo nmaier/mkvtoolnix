@@ -45,7 +45,8 @@ xtr_base_c::xtr_base_c(const string &_codec_id,
                        const char *_container_name):
   codec_id(_codec_id), file_name(tspec.out_name),
   container_name(NULL == _container_name ? "raw data" : _container_name),
-  master(NULL), out(NULL), tid(_tid), default_duration(0), bytes_written(0) {
+  master(NULL), out(NULL), tid(_tid), default_duration(0), bytes_written(0),
+  content_decoder_initialized(false) {
 }
 
 xtr_base_c::~xtr_base_c() {
@@ -63,6 +64,7 @@ xtr_base_c::create_file(xtr_base_c *_master,
             file_name.c_str(), _master->tid, _master->codec_id.c_str());
 
   try {
+    init_content_decoder(track);
     out = new mm_file_io_c(file_name, MODE_CREATE);
   } catch(...) {
     mxerror("Failed to create the file '%s': %d (%s)\n", file_name.c_str(),
@@ -82,6 +84,7 @@ xtr_base_c::handle_frame(memory_cptr &frame,
                          bool keyframe,
                          bool discardable,
                          bool references_valid) {
+  content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
   out->write(frame->get(), frame->get_size());
   bytes_written += frame->get_size();
 }
@@ -96,6 +99,26 @@ xtr_base_c::finish_file() {
 
 void
 xtr_base_c::headers_done() {
+}
+
+memory_cptr
+xtr_base_c::decode_codec_private(KaxCodecPrivate *priv) {
+  memory_cptr mpriv(new memory_c(priv->GetBuffer(), priv->GetSize()));
+  content_decoder.reverse(mpriv, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
+
+  return mpriv;
+}
+
+void
+xtr_base_c::init_content_decoder(KaxTrackEntry &track) {
+  if (content_decoder_initialized)
+    return;
+
+  if (!content_decoder.initialize(track))
+    mxerror("Tracks with unsupported content encoding schemes (compression "
+            "or encryption) cannot be extracted.\n");
+
+  content_decoder_initialized = true;
 }
 
 xtr_base_c *
@@ -173,11 +196,15 @@ xtr_fullraw_c::create_file(xtr_base_c *_master,
 
   priv = FINDFIRST(&track, KaxCodecPrivate);
 
-  if ((NULL != priv) && (0 != priv->GetSize()))
-    out->write(priv->GetBuffer(), priv->GetSize());
+  if ((NULL != priv) && (0 != priv->GetSize())) {
+    memory_cptr mem(new memory_c(priv->GetBuffer(), priv->GetSize(), false));
+    content_decoder.reverse(mem, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
+    out->write(mem->get(), mem->get_size());
+  }
 }
 
 void
 xtr_fullraw_c::handle_codec_state(memory_cptr &codec_state) {
+  content_decoder.reverse(codec_state, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
   out->write(codec_state->get(), codec_state->get_size());
 }
