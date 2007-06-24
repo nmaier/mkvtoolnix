@@ -301,6 +301,18 @@ enum connection_result_e {
                               "different: %d and %d", (int)(a), (int)(b)); \
     return CAN_CONNECT_NO_PARAMETERS; \
   }
+#define connect_check_v_dwidth(a, b) \
+  if ((a) != (b)) { \
+    error_message = mxsprintf("The display width of the two  tracks is " \
+                              "different: %d and %d", (int)(a), (int)(b)); \
+    return CAN_CONNECT_NO_PARAMETERS; \
+  }
+#define connect_check_v_dheight(a, b) \
+  if ((a) != (b)) { \
+    error_message = mxsprintf("The display height of the two tracks is " \
+                              "different: %d and %d", (int)(a), (int)(b)); \
+    return CAN_CONNECT_NO_PARAMETERS; \
+  }
 #define connect_check_codec_id(a, b) \
   if ((a) != (b)) { \
     error_message = mxsprintf("The CodecID of the two tracks is different: " \

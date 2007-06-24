@@ -1,3 +1,10 @@
+2007-06-24  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: Added better checks if two tracks can be
+	appended to the passthrough packetizer so that tracks that are
+	otherwise not known to mkvmerge can still be appended
+	(e.g. V_VC1). Fix for bug 244.
+
 2007-06-23  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: The NALU size length can now be chosen for all AVC tracks,
