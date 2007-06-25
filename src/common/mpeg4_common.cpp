@@ -500,8 +500,7 @@ mpeg4::p10::nalu_to_rbsp(memory_cptr &buffer) {
       d.write_uint8(b[pos]);
   }
 
-  buffer = memory_cptr(new memory_c(d.get_and_lock_buffer(),
-                                    d.getFilePointer()));
+  buffer = memory_cptr(new memory_c(d.get_and_lock_buffer(), d.getFilePointer(), true));
 }
 
 void
@@ -522,8 +521,7 @@ mpeg4::p10::rbsp_to_nalu(memory_cptr &buffer) {
       d.write_uint8(b[pos]);
   }
 
-  buffer = memory_cptr(new memory_c(d.get_and_lock_buffer(),
-                                    d.getFilePointer()));
+  buffer = memory_cptr(new memory_c(d.get_and_lock_buffer(), d.getFilePointer(), true));
 }
 
 bool
@@ -532,7 +530,7 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
                       bool keep_ar_info) {
   int size = buffer->get_size();
   unsigned char *newsps = (unsigned char *)safemalloc(size + 100);
-  memory_cptr mcptr_newsps(new memory_c(newsps, size));
+  memory_cptr mcptr_newsps(new memory_c(newsps, size, true));
   bit_cursor_c r(buffer->get(), size);
   bit_writer_c w(newsps, size);
   int i, nref, mb_width, mb_height;

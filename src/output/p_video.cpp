@@ -890,7 +890,7 @@ mpeg4_p10_video_packetizer_c::change_nalu_size_len(packet_cptr packet) {
   // than the previous one. Otherwise reuse the existing memory.
   if (m_nalu_size_len_dst > m_nalu_size_len_src) {
     int new_size = size + nalu_sizes.size() * (m_nalu_size_len_dst - m_nalu_size_len_src);
-    packet->data = memory_cptr(new memory_c((unsigned char *)safemalloc(new_size), new_size));
+    packet->data = memory_cptr(new memory_c((unsigned char *)safemalloc(new_size), new_size, true));
   }
 
   // Copy the NALUs and write the new sized length field.
