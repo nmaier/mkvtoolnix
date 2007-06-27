@@ -42,6 +42,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "chapters.h"
 #include "common.h"
 #include "commonebml.h"
+#include "hacks.h"
 #include "iso639.h"
 #include "matroska.h"
 #include "ogmstreams.h"
@@ -49,6 +50,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "pr_generic.h"
 #include "p_aac.h"
 #include "p_ac3.h"
+#include "p_avc.h"
 #if defined(HAVE_FLAC_FORMAT_H)
 #include "p_flac.h"
 #endif
@@ -446,15 +448,37 @@ ogm_reader_c::create_packetizer(int64_t tid) {
         fps = (double)10000000.0 / get_uint64_le(&sth->time_unit);
         width = get_uint32_le(&sth->sh.video.width);
         height = get_uint32_le(&sth->sh.video.height);
+
         if (mpeg4::p2::is_fourcc(sth->subtype)) {
           ptzr = new mpeg4_p2_video_packetizer_c(this, fps, width, height,
                                                  false, ti);
           mxinfo(FMT_TID "Using the MPEG-4 part 2 video output module.\n",
                  ti.fname.c_str(), (int64_t)tid);
+
+        } else if (dmx->is_avc && !hack_engaged(ENGAGE_ALLOW_AVC_IN_VFW_MODE)) {
+          try {
+            ti.private_data       = NULL;
+            ti.private_size       = 0;
+            dmx->default_duration = 100 * get_uint64_le(&sth->time_unit);
+            memory_cptr avcc      = extract_avcc(dmx, tid);
+
+            mpeg4_p10_es_video_packetizer_c *vptzr = new mpeg4_p10_es_video_packetizer_c(this, avcc, width, height, ti);
+
+            vptzr->enable_timecode_generation(false);
+            vptzr->set_track_default_duration(dmx->default_duration);
+
+            if (verbose)
+              mxinfo(FMT_TID "Using the MPEG-4 part 10 ES video output module.\n", ti.fname.c_str(), (int64_t)tid);
+
+            ptzr = vptzr;
+
+          } catch (...) {
+            mxerror(FMT_TID "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n", ti.fname.c_str(), (int64_t)tid);
+          }
+
         } else {
           ptzr = new video_packetizer_c(this, NULL, fps, width, height, ti);
-          mxinfo(FMT_TID "Using the video output module.\n", ti.fname.c_str(),
-                 (int64_t)tid);
+          mxinfo(FMT_TID "Using the video output module.\n", ti.fname.c_str(), (int64_t)tid);
         }
 
         ti.private_data = NULL;
@@ -754,6 +778,15 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
         video_fps = 10000000.0 / (float)get_uint64_le(&sth->time_unit);
       dmx->in_use = true;
 
+      sth = (stream_header *)&op.packet[1];
+      memcpy(buf, (char *)sth->subtype, 4);
+      buf[4] = 0;
+
+      if (mpeg4::p10::is_avc_fourcc(buf)) {
+        dmx->is_avc                 = true;
+        dmx->num_non_header_packets = 3;
+      }
+
       return;
     }
 
@@ -918,13 +951,18 @@ ogm_reader_c::process_page(ogg_page *og) {
         ((*op.packet & 3) != PACKET_TYPE_COMMENT)) {
 
       if (dmx->stype == OGM_STREAM_TYPE_VIDEO) {
-        memory_c *mem = new memory_c(&op.packet[duration_len + 1],
-                                     op.bytes - 1 - duration_len, false);
-        PTZR(dmx->ptzr)->
-          process(new packet_t(mem, -1, -1,
-                               (*op.packet & PACKET_IS_SYNCPOINT ?
-                                VFT_IFRAME : VFT_PFRAMEAUTOMATIC)));
-        dmx->units_processed += (duration_len > 0 ? duration : 1);
+        if (!duration_len || !duration)
+          duration = 1;
+
+        int64_t pos = ogg_page_granulepos(og);
+
+        if (!dmx->units_processed && (1 == pos))
+          dmx->first_granulepos = 1;
+        pos -= dmx->first_granulepos;
+
+        memory_c *mem = new memory_c(&op.packet[duration_len + 1], op.bytes - 1 - duration_len, false);
+        PTZR(dmx->ptzr)->process(new packet_t(mem, pos * dmx->default_duration, (int64_t)duration * dmx->default_duration));
+        dmx->units_processed += duration;
 
       } else if (dmx->stype == OGM_STREAM_TYPE_TEXT) {
         dmx->units_processed++;
@@ -1019,21 +1057,28 @@ ogm_reader_c::process_header_packets(ogm_demuxer_t *dmx) {
       is_header_packet = op.packet[0] & 1;
 
     if (!is_header_packet) {
+      if (dmx->nh_packet_data.size() != dmx->num_non_header_packets) {
+        memory_c *mem = new memory_c(safememdup(op.packet, op.bytes), op.bytes, true);
+        dmx->nh_packet_data.push_back(memory_cptr(mem));
+
+        continue;
+      }
+
       mxwarn("ogm_reader: Missing header/comment packets for stream %d in "
              "'%s'. This file is broken but should be muxed correctly. If "
-             "not please contact the author Moritz Bunkus "
-             "<moritz@bunkus.org>.\n", dmx->serialno, ti.fname.c_str());
+             "not please contact the author Moritz Bunkus <moritz@bunkus.org>.\n",
+             dmx->serialno, ti.fname.c_str());
       dmx->headers_read = true;
       ogg_stream_reset(&dmx->os);
       return;
     }
-    memory_c *mem = new memory_c((unsigned char *)
-                                 safememdup(op.packet, op.bytes),
-                                 op.bytes, true);
+
+    memory_c *mem = new memory_c(safememdup(op.packet, op.bytes), op.bytes, true);
     dmx->packet_data.push_back(memory_cptr(mem));
   }
 
-  if (dmx->packet_data.size() == dmx->num_header_packets)
+  if (   (dmx->packet_data.size()    == dmx->num_header_packets)
+      && (dmx->nh_packet_data.size() >= dmx->num_non_header_packets))
     dmx->headers_read = true;
 }
 
@@ -1297,5 +1342,44 @@ ogm_reader_c::add_available_track_ids() {
 
   for (i = 0; i < sdemuxers.size(); i++)
     available_track_ids.push_back(i);
+}
+
+memory_cptr
+ogm_reader_c::extract_avcc(ogm_demuxer_t *dmx,
+                           int64_t tid) {
+  avc_es_parser_c parser;
+
+  parser.ignore_nalu_size_length_errors();
+  if (map_has_key(ti.nalu_size_lengths, tid))
+    parser.set_nalu_size_length(ti.nalu_size_lengths[tid]);
+  else if (map_has_key(ti.nalu_size_lengths, -1))
+    parser.set_nalu_size_length(ti.nalu_size_lengths[-1]);
+
+  unsigned char *private_data = dmx->packet_data[0]->get() + 1 + sizeof(stream_header);
+  int private_size            = dmx->packet_data[0]->get_size() - 1 - sizeof(stream_header);
+
+  while (4 < private_size) {
+    if (get_uint32_be(private_data) == 0x00000001) {
+      parser.add_bytes(private_data, private_size);
+      break;
+    }
+
+    ++private_data;
+    --private_size;
+  }
+
+  vector<memory_cptr>::iterator packet(dmx->nh_packet_data.begin());
+
+  while (packet != dmx->nh_packet_data.end()) {
+    if ((*packet)->get_size()) {
+      parser.add_bytes((*packet)->get(), (*packet)->get_size());
+      if (parser.headers_parsed())
+        return parser.get_avcc();
+    }
+
+    ++packet;
+  }
+
+  throw false;
 }
 

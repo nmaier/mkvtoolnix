@@ -1,3 +1,13 @@
+2007-06-27  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The OGM reader uses the OGM's timestamps for
+	video tracks. Before it would just use the current frame number
+	multiplied by the FPS.
+
+	* mkvmerge: enhancement: The OGM reader now uses the AVC/h.264
+	video packetizer for AVC/h.264 tracks so that the aspect ratio can
+	be extracted from it.
+
 2007-06-25  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fixes: Fixed a couple of memory leaks.

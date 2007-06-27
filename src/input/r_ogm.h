@@ -32,16 +32,17 @@
 #include "pr_generic.h"
 #include "theora_common.h"
 
-#define OGM_STREAM_TYPE_UNKNOWN 0
-#define OGM_STREAM_TYPE_VORBIS  1
-#define OGM_STREAM_TYPE_VIDEO   2
-#define OGM_STREAM_TYPE_PCM     3
-#define OGM_STREAM_TYPE_MP3     4
-#define OGM_STREAM_TYPE_AC3     5
-#define OGM_STREAM_TYPE_TEXT    6
-#define OGM_STREAM_TYPE_FLAC    7
-#define OGM_STREAM_TYPE_AAC     8
-#define OGM_STREAM_TYPE_THEORA  9
+#define OGM_STREAM_TYPE_UNKNOWN    0
+#define OGM_STREAM_TYPE_VORBIS     1
+#define OGM_STREAM_TYPE_VIDEO      2
+#define OGM_STREAM_TYPE_PCM        3
+#define OGM_STREAM_TYPE_MP3        4
+#define OGM_STREAM_TYPE_AC3        5
+#define OGM_STREAM_TYPE_TEXT       6
+#define OGM_STREAM_TYPE_FLAC       7
+#define OGM_STREAM_TYPE_AAC        8
+#define OGM_STREAM_TYPE_THEORA     9
+#define OGM_STREAM_TYPE_VIDEO_AVC 10
 
 #if defined(HAVE_FLAC_FORMAT_H)
 class flac_header_extractor_c {
@@ -69,7 +70,7 @@ struct ogm_demuxer_t {
   int ptzr;
   int stype, serialno, eos;
   int units_processed, vorbis_rate;
-  int num_header_packets;
+  int num_header_packets, num_non_header_packets;
   bool headers_read;
   string language, title;
   vector<memory_cptr> packet_data, nh_packet_data;
@@ -77,16 +78,18 @@ struct ogm_demuxer_t {
   flac_header_extractor_c *fhe;
   int flac_header_packets, channels, bits_per_sample;
 #endif
-  int64_t last_granulepos, last_keyframe_number;
+  int64_t first_granulepos, last_granulepos, last_keyframe_number, default_duration;
   bool in_use;
 
   theora_identification_header_t theora;
 
+  bool is_avc;
+
   ogm_demuxer_t():
     ptzr(-1), stype(0), serialno(0), eos(0), units_processed(0),
-    vorbis_rate(0), num_header_packets(2), headers_read(false),
-    last_granulepos(0), last_keyframe_number(-1),
-    in_use(false) {
+    vorbis_rate(0), num_header_packets(2), num_non_header_packets(0), headers_read(false),
+    first_granulepos(0), last_granulepos(0), last_keyframe_number(-1), default_duration(0),
+    in_use(false), is_avc(false) {
     memset(&os, 0, sizeof(ogg_stream_state));
   }
 };
@@ -124,6 +127,7 @@ private:
   virtual void process_header_page(ogg_page *pg);
   virtual void process_header_packets(ogm_demuxer_t *dmx);
   virtual void handle_stream_comments();
+  virtual memory_cptr extract_avcc(ogm_demuxer_t *dmx, int64_t tid);
 };
 
 
