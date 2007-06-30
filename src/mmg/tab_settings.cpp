@@ -32,7 +32,7 @@ tab_settings::tab_settings(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400),
           wxTAB_TRAVERSAL) {
   wxStaticBoxSizer *siz_mmg_exe, *siz_misc, *siz_about;
-  wxBoxSizer *siz_all, *siz_proc_prio;
+  wxBoxSizer *siz_all, *siz_line;
   wxButton *b_browse;
 
   siz_mmg_exe =
@@ -53,8 +53,8 @@ tab_settings::tab_settings(wxWindow *parent):
                                          wxT("Miscellaneous options")),
                          wxVERTICAL);
   siz_misc->Add(0, 5, 0, 0, 0);
-  siz_proc_prio = new wxBoxSizer(wxHORIZONTAL);
-  siz_proc_prio->Add(new wxStaticText(this, -1, wxT("Process priority:")),
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_line->Add(new wxStaticText(this, -1, wxT("Process priority:")),
                      0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
   cob_priority =
     new wxComboBox(this, ID_COB_PRIORITY, wxT(""), wxDefaultPosition,
@@ -68,8 +68,8 @@ tab_settings::tab_settings(wxWindow *parent):
   cob_priority->Append(wxT("normal"));
   cob_priority->Append(wxT("lower"));
   cob_priority->Append(wxT("lowest"));
-  siz_proc_prio->Add(cob_priority, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
-  siz_misc->Add(siz_proc_prio);
+  siz_line->Add(cob_priority, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
+  siz_misc->Add(siz_line);
   siz_misc->Add(0, 5, 0, 0, 0);
 
   cb_autoset_output_filename =
@@ -83,6 +83,22 @@ tab_settings::tab_settings(wxWindow *parent):
                    "will not touch the output filename."));
   siz_misc->Add(cb_autoset_output_filename, 0, wxLEFT, 5);
   siz_misc->Add(0, 5, 0, 0, 0);
+
+  st_output_directory       = new wxStaticText(this, 0, wxT("Output directory:"));
+  tc_output_directory       = new wxTextCtrl(this, ID_TC_OUTPUT_DIRECTORY);
+  b_browse_output_directory = new wxButton(this, ID_B_BROWSE_OUTPUT_DIRECTORY, wxT("Browse"));
+
+  tc_output_directory->SetToolTip(TIP("If left empty then mmg will set the output file name to be in the same directory as the first file added to this job. "
+                                      "Otherwise this directory will be used."));
+
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_line->AddSpacer(32);
+  siz_line->Add(st_output_directory, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+  siz_line->Add(tc_output_directory, 1, wxALIGN_CENTER_VERTICAL | wxGROW | wxRIGHT, 10);
+  siz_line->Add(b_browse_output_directory, 0, wxALIGN_CENTER_VERTICAL);
+
+  siz_misc->Add(siz_line, 1, wxGROW | wxLEFT | wxRIGHT, 5);
+  siz_misc->AddSpacer(5);
 
   cb_ask_before_overwriting =
     new wxCheckBox(this, ID_CB_ASK_BEFORE_OVERWRITING,
@@ -194,7 +210,7 @@ tab_settings::on_browse(wxCommandEvent &evt) {
                    wxT("All files (*)|*"),
 #endif
                    wxOPEN);
-  if(dlg.ShowModal() == wxID_OK) {
+  if (dlg.ShowModal() == wxID_OK) {
     wxString file_name;
 
     file_name = dlg.GetPath().AfterLast('/').AfterLast('\\').Lower();
@@ -212,7 +228,24 @@ tab_settings::on_browse(wxCommandEvent &evt) {
 }
 
 void
+tab_settings::on_browse_output_directory(wxCommandEvent &evt) {
+  wxDirDialog dlg(this, wxT("Choose the output directory"), tc_output_directory->GetValue());
+
+  if (dlg.ShowModal() != wxID_OK)
+    return;
+
+  tc_output_directory->SetValue(dlg.GetPath());
+  save_preferences();
+}
+
+void
 tab_settings::on_xyz_selected(wxCommandEvent &evt) {
+  save_preferences();
+}
+
+void
+tab_settings::on_autoset_output_filename_selected(wxCommandEvent &evt) {
+  enable_output_directory_controls(cb_autoset_output_filename->IsChecked());
   save_preferences();
 }
 
@@ -231,7 +264,7 @@ tab_settings::on_gui_debugging_selected(wxCommandEvent &evt) {
 void
 tab_settings::load_preferences() {
   wxConfig *cfg = (wxConfig *)wxConfigBase::Get();
-  wxString priority;
+  wxString s;
   bool b;
   int i;
 
@@ -240,30 +273,41 @@ tab_settings::load_preferences() {
   tc_mkvmerge->SetValue(mkvmerge_path);
   query_mkvmerge_capabilities();
 
-  cfg->Read(wxT("process_priority"), &priority, wxT("normal"));
+  cfg->Read(wxT("process_priority"), &s, wxT("normal"));
   cob_priority->SetValue(wxT("normal"));
   for (i = 0; i < cob_priority->GetCount(); i++)
-    if (priority == cob_priority->GetString(i)) {
-      cob_priority->SetValue(priority);
+    if (s == cob_priority->GetString(i)) {
+      cob_priority->SetValue(s);
       break;
     }
 
   cfg->Read(wxT("autoset_output_filename"), &b, true);
   cb_autoset_output_filename->SetValue(b);
+  enable_output_directory_controls(b);
+
+  cfg->Read(wxT("output_directory"), &s, wxT(""));
+  tc_output_directory->SetValue(s);
+
   cfg->Read(wxT("ask_before_overwriting"), &b, true);
   cb_ask_before_overwriting->SetValue(b);
+
   cfg->Read(wxT("filenew_after_add_to_jobqueue"), &b, false);
   cb_filenew_after_add_to_jobqueue->SetValue(b);
+
   cfg->Read(wxT("on_top"), &b, false);
   cb_on_top->SetValue(b);
   mdlg->set_on_top(b);
+
   cfg->Read(wxT("warn_usage"), &b, true);
   cb_warn_usage->SetValue(b);
+
   cfg->Read(wxT("gui_debugging"), &b, false);
   cb_gui_debugging->SetValue(b);
   mdlg->log_window->Show(b);
+
   cfg->Read(wxT("always_use_simpleblock"), &b, false);
   cb_always_use_simpleblock->SetValue(b);
+
   cfg->Read(wxT("set_delay_from_filename"), &b, true);
   cb_set_delay_from_filename->SetValue(b);
 }
@@ -274,19 +318,15 @@ tab_settings::save_preferences() {
   cfg->SetPath(wxT("/GUI"));
   cfg->Write(wxT("mkvmerge_executable"), tc_mkvmerge->GetValue());
   cfg->Write(wxT("process_priority"), cob_priority->GetValue());
-  cfg->Write(wxT("autoset_output_filename"),
-             cb_autoset_output_filename->IsChecked());
-  cfg->Write(wxT("ask_before_overwriting"),
-             cb_ask_before_overwriting->IsChecked());
-  cfg->Write(wxT("filenew_after_add_to_jobqueue"),
-             cb_filenew_after_add_to_jobqueue->IsChecked());
+  cfg->Write(wxT("autoset_output_filename"), cb_autoset_output_filename->IsChecked());
+  cfg->Write(wxT("output_directory"), tc_output_directory->GetValue());
+  cfg->Write(wxT("ask_before_overwriting"), cb_ask_before_overwriting->IsChecked());
+  cfg->Write(wxT("filenew_after_add_to_jobqueue"), cb_filenew_after_add_to_jobqueue->IsChecked());
   cfg->Write(wxT("on_top"), cb_on_top->IsChecked());
   cfg->Write(wxT("warn_usage"), cb_warn_usage->IsChecked());
   cfg->Write(wxT("gui_debugging"), cb_gui_debugging->IsChecked());
-  cfg->Write(wxT("always_use_simpleblock"),
-             cb_always_use_simpleblock->IsChecked());
-  cfg->Write(wxT("set_delay_from_filename"),
-             cb_set_delay_from_filename->IsChecked());
+  cfg->Write(wxT("always_use_simpleblock"), cb_always_use_simpleblock->IsChecked());
+  cfg->Write(wxT("set_delay_from_filename"), cb_set_delay_from_filename->IsChecked());
   cfg->Flush();
 }
 
@@ -363,11 +403,20 @@ tab_settings::query_mkvmerge_capabilities() {
   }
 }
 
+void
+tab_settings::enable_output_directory_controls(bool enable) {
+  st_output_directory->Enable(enable);
+  tc_output_directory->Enable(enable);
+  b_browse_output_directory->Enable(enable);
+}
+
 IMPLEMENT_CLASS(tab_settings, wxPanel);
 BEGIN_EVENT_TABLE(tab_settings, wxPanel)
   EVT_BUTTON(ID_B_BROWSEMKVMERGE, tab_settings::on_browse)
   EVT_COMBOBOX(ID_COB_PRIORITY, tab_settings::on_xyz_selected)
-  EVT_CHECKBOX(ID_CB_AUTOSET_OUTPUT_FILENAME, tab_settings::on_xyz_selected)
+  EVT_CHECKBOX(ID_CB_AUTOSET_OUTPUT_FILENAME, tab_settings::on_autoset_output_filename_selected)
+  EVT_TEXT(ID_TC_OUTPUT_DIRECTORY, tab_settings::on_xyz_selected)
+  EVT_BUTTON(ID_B_BROWSE_OUTPUT_DIRECTORY, tab_settings::on_browse_output_directory)
   EVT_CHECKBOX(ID_CB_NEW_AFTER_ADD_TO_JOBQUEUE, tab_settings::on_xyz_selected)
   EVT_CHECKBOX(ID_CB_ON_TOP, tab_settings::on_on_top_selected)
   EVT_CHECKBOX(ID_CB_WARN_USAGE, tab_settings::on_xyz_selected)

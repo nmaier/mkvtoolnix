@@ -1,5 +1,9 @@
 2007-06-30  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: new feature: Added an option for setting the default output
+	directory if the automatic setting of the output file name is
+	turned on. Fix for bug 248.
+
 	* mkvmerge: enhancement: DTS code: Some tools (e.g. Surcode) can
 	create DTS files which are padded with zero bytes after each DTS
 	frame. These zero bytes are now skipped without printing a

@@ -1830,7 +1830,8 @@ mmg_dialog::set_output_maybe(const wxString &new_output) {
   if (settings_page->cb_autoset_output_filename->IsChecked() &&
       (new_output.length() > 0) &&
       (tc_output->GetValue().length() == 0)) {
-    wxString output(new_output.BeforeLast('.'));
+    wxString output = settings_page->tc_output_directory->GetValue();
+    wxFileName filename(new_output);
     bool has_video = false, has_audio = false;
     vector<mmg_track_t *>::iterator t;
 
@@ -1841,7 +1842,13 @@ mmg_dialog::set_output_maybe(const wxString &new_output) {
       } else if ('a' == (*t)->type)
         has_audio = true;
     }
-    output += has_video ? wxT(".mkv") : has_audio ? wxT(".mka") : wxT(".mks");
+
+    if (output.IsEmpty())
+      output = filename.GetPath();
+
+    output += wxFileName::GetPathSeparator() + filename.GetName()
+      + (has_video ? wxU(".mkv") : has_audio ? wxU(".mka") : wxU(".mks"));
+
     tc_output->SetValue(output);
   }
 }

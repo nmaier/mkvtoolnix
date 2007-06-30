@@ -29,18 +29,22 @@
 #define ID_CB_GUI_DEBUGGING                15008
 #define ID_CB_ALWAYS_USE_SIMPLEBLOCK       15009
 #define ID_CB_SET_DELAY_FROM_FILENAME      15010
+#define ID_TC_OUTPUT_DIRECTORY             15011
+#define ID_B_BROWSE_OUTPUT_DIRECTORY       15012
 
 class tab_settings: public wxPanel {
   DECLARE_CLASS(tab_settings);
   DECLARE_EVENT_TABLE();
 public:
-  wxTextCtrl *tc_mkvmerge;
+  wxTextCtrl *tc_mkvmerge, *tc_output_directory;
   wxCheckBox *cb_show_commandline, *cb_autoset_output_filename;
   wxCheckBox *cb_ask_before_overwriting, *cb_on_top;
   wxCheckBox *cb_filenew_after_add_to_jobqueue;
   wxCheckBox *cb_warn_usage, *cb_gui_debugging;
   wxCheckBox *cb_always_use_simpleblock, *cb_set_delay_from_filename;
   wxComboBox *cob_priority;
+  wxStaticText *st_output_directory;
+  wxButton *b_browse_output_directory;
 
 public:
   tab_settings(wxWindow *parent);
@@ -50,6 +54,8 @@ public:
   void on_xyz_selected(wxCommandEvent &evt);
   void on_on_top_selected(wxCommandEvent &evt);
   void on_gui_debugging_selected(wxCommandEvent &evt);
+  void on_autoset_output_filename_selected(wxCommandEvent &evt);
+  void on_browse_output_directory(wxCommandEvent &evt);
 
   void load_preferences();
   void save_preferences();
@@ -59,6 +65,8 @@ public:
   bool validate_settings();
 
   void query_mkvmerge_capabilities();
+
+  void enable_output_directory_controls(bool enable);
 };
 
 #endif // __TAB_SETTINGS_H
