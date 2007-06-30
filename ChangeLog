@@ -1,3 +1,9 @@
+2007-06-30  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: enhancement: mmg can now be called iwth any file name as an
+	argument. If it ends with 'mmg' then the file will be loaded as a
+	'mmg settings file'. Otherwise mmg will 'add' it. Fix for bug 243.
+
 2007-06-27  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The OGM reader uses the OGM's timestamps for

@@ -878,7 +878,11 @@ mmg_dialog::mmg_dialog():
       if ((file.Length() > 0) && (file.c_str()[0] != wxT('/')))
         file = wxGetCwd() + wxT("/") + file;
 #endif
-      load(file);
+
+      if (wxFileName(file).GetExt() == wxU("mmg"))
+        load(file);
+      else
+        input_page->add_file(file, false);
     }
   }
 }
