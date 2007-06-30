@@ -2132,7 +2132,7 @@ const mime_type_t mime_types[] = {
   {"application/x-troff-man", "man"},
   {"application/x-troff-me", "me"},
   {"application/x-troff-ms", "ms"},
-  {"application/x-truetype-font", "ttf"},
+  {"application/x-truetype-font", "ttf otf"},
   {"application/x-ustar", "ustar"},
   {"application/x-wais-source", "src"},
   {"application/x-wingz", "wz"},
@@ -2653,6 +2653,13 @@ guess_mime_type(string ext,
     int idx = ret.find(';');
     if (-1 != idx)
       ret.erase(idx);
+
+    if (ret == "application/octet-stream")
+      ret = guess_mime_type_by_ext(ext);
+
+    if (ret == "")
+      ret = "application/octet-stream";
+
     return ret;
   }
 #else
