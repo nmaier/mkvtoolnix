@@ -118,7 +118,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   siz_fg->Add(cob_fourcc, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL,
               STDSPACING);
 
-  st_stereo_mode = new wxStaticText(this, -1, wxT("Stereo mode:"));
+  st_stereo_mode = new wxStaticText(this, -1, wxT("Stereoscopy:"));
   st_stereo_mode->Enable(false);
   siz_fg->Add(st_stereo_mode, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
