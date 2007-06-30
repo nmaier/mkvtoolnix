@@ -1,5 +1,10 @@
 2007-06-30  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: enhancement: DTS code: Some tools (e.g. Surcode) can
+	create DTS files which are padded with zero bytes after each DTS
+	frame. These zero bytes are now skipped without printing a
+	warning.
+
 	* mmg: enhancement: mmg can now be called iwth any file name as an
 	argument. If it ends with 'mmg' then the file will be loaded as a
 	'mmg settings file'. Otherwise mmg will 'add' it. Fix for bug 243.
