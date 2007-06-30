@@ -54,6 +54,7 @@
 #define ID_CB_FPS                         11033
 #define ID_CB_NALU_SIZE_LENGTH            11034
 #define ID_TC_USER_DEFINED                11035
+#define ID_B_REMOVE_ALL_FILES             11036
 #define ID_NB_OPTIONS                     11999
 
 extern const wxChar *predefined_aspect_ratios[];
@@ -158,7 +159,7 @@ public:
   tab_input_extra *ti_extra;
 
   wxListBox *lb_input_files;
-  wxButton *b_add_file, *b_remove_file;
+  wxButton *b_add_file, *b_remove_file, *b_remove_all_files;
   wxButton *b_track_up, *b_track_down, *b_append_file;
   wxCheckBox *cb_no_chapters, *cb_no_attachments, *cb_no_tags;
   wxCheckListBox *clb_tracks;
@@ -178,6 +179,7 @@ public:
   void add_file(const wxString &file_name, bool append);
   void select_file(bool append);
   void on_remove_file(wxCommandEvent &evt);
+  void on_remove_all_files(wxCommandEvent &evt);
   void on_append_file(wxCommandEvent &evt);
   void on_file_selected(wxCommandEvent &evt);
   void on_move_track_up(wxCommandEvent &evt);

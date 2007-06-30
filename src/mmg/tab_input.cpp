@@ -108,12 +108,16 @@ tab_input::tab_input(wxWindow *parent):
                                wxDefaultPosition, wxSize(60, -1));
   b_append_file->Enable(false);
 
+  b_remove_all_files = new wxButton(this, ID_B_REMOVE_ALL_FILES, wxT("rem all"), wxDefaultPosition, wxSize(60, -1));
+  b_remove_all_files->Enable(false);
+
   siz_column->Add(b_add_file, 0, wxALL, STDSPACING);
   siz_column->Add(b_remove_file, 0, wxALL, STDSPACING);
   siz_line->Add(siz_column);
 
   siz_column = new wxBoxSizer(wxVERTICAL);
   siz_column->Add(b_append_file, 0, wxALL, STDSPACING);
+  siz_column->Add(b_remove_all_files, 0, wxALL, STDSPACING);
   siz_line->Add(siz_column);
 
   siz_all->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
@@ -663,6 +667,7 @@ tab_input::add_file(const wxString &file_name,
   st_tracks->Enable(true);
   clb_tracks->Enable(true);
   b_append_file->Enable(true);
+  b_remove_all_files->Enable(true);
 }
 
 void
@@ -723,6 +728,7 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
   cb_no_attachments->Enable(-1 != selected_file);
   cb_no_tags->Enable(-1 != selected_file);
   b_remove_file->Enable(-1 != selected_file);
+  b_remove_all_files->Enable(-1 != selected_file);
   b_append_file->Enable(tracks.size() > 0);
   b_track_up->Enable(-1 != selected_file);
   b_track_down->Enable(-1 != selected_file);
@@ -734,6 +740,35 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
     clb_tracks->Enable(false);
     mdlg->remove_output_filename();
   }
+
+  dont_copy_values_now = false;
+}
+
+void
+tab_input::on_remove_all_files(wxCommandEvent &evt) {
+  dont_copy_values_now = true;
+
+  lb_input_files->Clear();
+  clb_tracks->Clear();
+
+  tracks.clear();
+  files.clear();
+
+  selected_file  = -1;
+  selected_track = -1;
+  st_tracks->Enable(false);
+  clb_tracks->Enable(false);
+  st_file_options->Enable(false);
+  cb_no_chapters->Enable(false);
+  cb_no_attachments->Enable(false);
+  cb_no_tags->Enable(false);
+  b_remove_file->Enable(false);
+  b_remove_all_files->Enable(false);
+  b_append_file->Enable(false);
+  b_track_up->Enable(false);
+  b_track_down->Enable(false);
+
+  set_track_mode(NULL);
 
   dont_copy_values_now = false;
 }
@@ -1036,6 +1071,7 @@ tab_input::load(wxConfigBase *cfg,
   selected_file = -1;
   selected_track = -1;
   b_remove_file->Enable(false);
+  b_remove_all_files->Enable(false);
   b_append_file->Enable(false);
 
   files.clear();
@@ -1194,6 +1230,7 @@ tab_input::load(wxConfigBase *cfg,
   st_tracks->Enable(tracks.size() > 0);
   clb_tracks->Enable(tracks.size() > 0);
   b_append_file->Enable(files.size() > 0);
+  b_remove_all_files->Enable(files.size() > 0);
 
   dont_copy_values_now = false;
 }
@@ -1365,6 +1402,7 @@ IMPLEMENT_CLASS(tab_input, wxPanel);
 BEGIN_EVENT_TABLE(tab_input, wxPanel)
   EVT_BUTTON(ID_B_ADDFILE, tab_input::on_add_file)
   EVT_BUTTON(ID_B_REMOVEFILE, tab_input::on_remove_file)
+  EVT_BUTTON(ID_B_REMOVE_ALL_FILES, tab_input::on_remove_all_files)
   EVT_BUTTON(ID_B_APPENDFILE, tab_input::on_append_file)
   EVT_BUTTON(ID_B_TRACKUP, tab_input::on_move_track_up)
   EVT_BUTTON(ID_B_TRACKDOWN, tab_input::on_move_track_down)
