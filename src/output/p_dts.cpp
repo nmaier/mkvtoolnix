@@ -130,10 +130,19 @@ dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
     return get_dts_packet(dtsheader);
   }
 
-  if (verbose && (pos > 0) && !skipping_is_normal)
-    mxwarn("dts_packetizer: skipping %d bytes (no valid DTS header "
-           "found). This might make audio/video go out of sync, but this "
-           "stream is damaged.\n", pos);
+  if (verbose && (0 < pos) && !skipping_is_normal) {
+    int i;
+    bool all_zeroes = true;
+
+    for (i = 0; i < pos; ++i)
+      if (packet_buffer[i]) {
+        all_zeroes = false;
+        break;
+      }
+
+    if (!all_zeroes)
+      mxwarn("dts_packetizer: skipping %d bytes (no valid DTS header found). This might make audio/video go out of sync, but this stream is damaged.\n", pos);
+  }
 
   buf = (unsigned char *)safememdup(packet_buffer + pos,
                                     dtsheader.frame_byte_size);
