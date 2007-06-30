@@ -752,21 +752,24 @@ tab_input::on_move_track_up(wxCommandEvent &evt) {
 
   dont_copy_values_now = true;
 
-  t = tracks[selected_track - 1];
-  tracks[selected_track - 1] = tracks[selected_track];
-  tracks[selected_track] = t;
-  s = clb_tracks->GetString(selected_track - 1);
-  clb_tracks->SetString(selected_track - 1,
-                        clb_tracks->GetString(selected_track));
-  clb_tracks->SetString(selected_track, s);
-  clb_tracks->SetSelection(selected_track - 1);
-  clb_tracks->Check(selected_track - 1,
-                    tracks[selected_track - 1]->enabled);
-  clb_tracks->Check(selected_track, tracks[selected_track]->enabled);
-  selected_track--;
-  b_track_up->Enable(selected_track > 0);
+  int current_track = selected_track;
+
+  t = tracks[current_track - 1];
+  tracks[current_track - 1] = tracks[current_track];
+  tracks[current_track] = t;
+  s = clb_tracks->GetString(current_track - 1);
+  clb_tracks->SetString(current_track - 1,
+                        clb_tracks->GetString(current_track));
+  clb_tracks->SetString(current_track, s);
+  clb_tracks->SetSelection(current_track - 1);
+  clb_tracks->Check(current_track - 1,
+                    tracks[current_track - 1]->enabled);
+  clb_tracks->Check(current_track, tracks[current_track]->enabled);
+  current_track--;
+  b_track_up->Enable(current_track > 0);
   b_track_down->Enable(true);
 
+  selected_track       = current_track;
   dont_copy_values_now = false;
 }
 
@@ -784,21 +787,24 @@ tab_input::on_move_track_down(wxCommandEvent &evt) {
 
   dont_copy_values_now = true;
 
-  t = tracks[selected_track + 1];
-  tracks[selected_track + 1] = tracks[selected_track];
-  tracks[selected_track] = t;
-  s = clb_tracks->GetString(selected_track + 1);
-  clb_tracks->SetString(selected_track + 1,
-                        clb_tracks->GetString(selected_track));
-  clb_tracks->SetString(selected_track, s);
-  clb_tracks->SetSelection(selected_track + 1);
-  clb_tracks->Check(selected_track + 1,
-                    tracks[selected_track + 1]->enabled);
-  clb_tracks->Check(selected_track, tracks[selected_track]->enabled);
-  selected_track++;
-  b_track_up->Enable(true);
-  b_track_down->Enable(selected_track < (tracks.size() - 1));
+  int current_track = selected_track;
 
+  t = tracks[current_track + 1];
+  tracks[current_track + 1] = tracks[current_track];
+  tracks[current_track] = t;
+  s = clb_tracks->GetString(current_track + 1);
+  clb_tracks->SetString(current_track + 1,
+                        clb_tracks->GetString(current_track));
+  clb_tracks->SetString(current_track, s);
+  clb_tracks->SetSelection(current_track + 1);
+  clb_tracks->Check(current_track + 1,
+                    tracks[current_track + 1]->enabled);
+  clb_tracks->Check(current_track, tracks[current_track]->enabled);
+  current_track++;
+  b_track_up->Enable(true);
+  b_track_down->Enable(current_track < (tracks.size() - 1));
+
+  selected_track       = current_track;
   dont_copy_values_now = false;
 }
 
@@ -868,6 +874,7 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
 
   selected_track = -1;
   new_sel = clb_tracks->GetSelection();
+
   if (0 > new_sel)
     return;
 
