@@ -13,7 +13,7 @@
 	frame. These zero bytes are now skipped without printing a
 	warning.
 
-	* mmg: enhancement: mmg can now be called iwth any file name as an
+	* mmg: enhancement: mmg can now be called with any file name as an
 	argument. If it ends with 'mmg' then the file will be loaded as a
 	'mmg settings file'. Otherwise mmg will 'add' it. Fix for bug 243.
 
