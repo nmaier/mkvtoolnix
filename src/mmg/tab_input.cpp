@@ -770,6 +770,8 @@ tab_input::on_remove_all_files(wxCommandEvent &evt) {
 
   set_track_mode(NULL);
 
+  mdlg->remove_output_filename();
+
   dont_copy_values_now = false;
 }
 
