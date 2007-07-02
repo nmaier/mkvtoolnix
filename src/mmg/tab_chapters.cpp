@@ -335,18 +335,18 @@ tab_chapters::tab_chapters(wxWindow *parent,
                           "identifier. This identifier is normally assigned "
                           "automatically by the programs, but it can be "
                           "changed manually if it is really needed."));
-  siz_line->Add(tc_uid, 1, wxGROW | wxRIGHT, 10);
+  siz_line->Add(tc_uid, 1, wxGROW | wxRIGHT | wxALIGN_CENTER_VERTICAL, 10);
   cb_flag_hidden = new wxCheckBox(this, ID_CB_CHAPTERHIDDEN, wxT("hidden"));
   cb_flag_hidden->SetToolTip(TIP("If a chapter is marked 'hidden' then the "
                                  "player should not show this chapter entry "
                                  "to the user. Such entries could still be "
                                  "used by the menu system."));
-  siz_line->Add(cb_flag_hidden, 0, wxRIGHT, 10);
+  siz_line->Add(cb_flag_hidden, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 10);
   cb_flag_enabled = new wxCheckBox(this, ID_CB_CHAPTERENABLED, wxT("enabled"));
   cb_flag_enabled->SetToolTip(TIP("If a chapter is not marked 'enabled' then "
                                   "the player should skip the part of the "
                                   "file that this chapter occupies."));
-  siz_line->Add(cb_flag_enabled, 0, 0, 0);
+  siz_line->Add(cb_flag_enabled, 0, wxALIGN_CENTER_VERTICAL, 0);
 
   siz_fg->Add(siz_line, 0, wxGROW | wxRIGHT, 5);
   siz_fg->Add(1, 0, 0, 0, 0);
