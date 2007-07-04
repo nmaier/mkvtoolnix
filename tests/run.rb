@@ -321,7 +321,7 @@ def main
           if (c =~ />/)
             $stderr.puts(c)
           else
-            $stderr.puts(c + " &> /dev/null")
+            $stderr.puts(c + " >/dev/null 2>/dev/null")
           end
           $stderr.puts("if [ $? -ne 0 -a $? -ne 1 ]; then")
           $stderr.puts("  FAILED=1")
@@ -336,7 +336,7 @@ def main
       $stderr.puts("  echo :passed:#{da} >> new_results.txt")
       $stderr.puts("  echo '  ok'")
       $stderr.puts("fi")
-      $stderr.puts("rm ~/tmp/mkvtoolnix-auto-test-* &> /dev/null\n\n")
+      $stderr.puts("rm ~/tmp/mkvtoolnix-auto-test-* >/dev/null 2>/dev/null\n\n")
     end
 
   end
