@@ -6,12 +6,10 @@ class T_205X_cuesheets < Test
   end
 
   def run
-    merge("#{tmp}-src", "data/simple/v.mp3 --chapters " +
-           "data/text/cuewithtags2.cue")
-    sys("../src/mkvextract cuesheet #{tmp}-src --no-variable-data &> #{tmp}")
+    merge("#{tmp}-src", "data/simple/v.mp3 --chapters data/text/cuewithtags2.cue")
+    sys("../src/mkvextract cuesheet #{tmp}-src --no-variable-data > #{tmp} 2>/dev/null")
     hash = hash_tmp(false)
-    sys("../src/mkvextract tracks #{tmp}-src --no-variable-data " +
-         "--cuesheet 1:#{tmp} > /dev/null")
+    sys("../src/mkvextract tracks #{tmp}-src --no-variable-data --cuesheet 1:#{tmp} > /dev/null 2>/dev/null")
     hash += "-" + hash_tmp("#{tmp}.cue")
     unlink_tmp_files
     return hash

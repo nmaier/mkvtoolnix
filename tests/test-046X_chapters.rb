@@ -6,7 +6,7 @@ class T_046X_chapters < Test
   end
 
   def run
-    sys("../src/mkvextract chapters data/mkv/complex.mkv &> #{tmp}")
+    sys("../src/mkvextract chapters data/mkv/complex.mkv > #{tmp} 2>/dev/null")
     return hash_tmp
   end
 end

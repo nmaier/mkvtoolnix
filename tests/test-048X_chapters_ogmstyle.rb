@@ -6,7 +6,7 @@ class T_048X_chapters_ogmstyle < Test
   end
 
   def run
-    sys("../src/mkvextract chapters data/mkv/complex.mkv -s &> #{tmp}")
+    sys("../src/mkvextract chapters data/mkv/complex.mkv -s > #{tmp} 2>/dev/null")
     return hash_tmp
   end
 end

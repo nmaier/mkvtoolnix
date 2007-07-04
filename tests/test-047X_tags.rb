@@ -6,7 +6,7 @@ class T_047X_tags < Test
   end
 
   def run
-    sys("../src/mkvextract tags data/mkv/complex.mkv &> #{tmp}")
+    sys("../src/mkvextract tags data/mkv/complex.mkv > #{tmp} 2>/dev/null")
     return hash_tmp
   end
 end
