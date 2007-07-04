@@ -47,7 +47,7 @@ class Test
   def sys(command, *arg)
     @commands.push(command)
     @debug_commands.push(command)
-    command += "&> /dev/null" unless (command =~ />/)
+    command += " >/dev/null 2>/dev/null " unless (/>/.match(command))
     if (!system(command))
       if ((arg.size == 0) || ((arg[0] << 8) != $?))
         error("system command failed: #{command} (" + ($? >> 8).to_s + ")")
