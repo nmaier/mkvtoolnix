@@ -96,9 +96,8 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent,
                                        wxString old_def_language,
                                        wxString old_def_country):
   wxDialog(parent, 0, wxT(""), wxDefaultPosition, wxSize(350, 200)) {
-  wxBoxSizer *siz_all, *siz_buttons, *siz_line;
+  wxBoxSizer *siz_all, *siz_buttons;
   wxFlexGridSizer *siz_input;
-  wxButton *b_ok, *b_cancel;
   uint32_t i;
 
   siz_all = new wxBoxSizer(wxVERTICAL);
@@ -115,9 +114,6 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent,
 
     siz_input = new wxFlexGridSizer(2);
     siz_input->AddGrowableCol(1);
-    siz_input->Add(0, 1, 1, wxGROW, 0);
-    siz_input->Add(0, 1, 1, wxGROW, 0);
-    siz_input->AddGrowableRow(0);
 
     siz_input->Add(new wxStaticText(this, wxID_STATIC, wxT("Language:")),
                    0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
@@ -125,10 +121,6 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent,
                                   wxDefaultPosition, wxDefaultSize, 0, NULL,
                                   wxCB_DROPDOWN | wxCB_READONLY);
     siz_input->Add(cob_language, 0, wxGROW, 0);
-
-    siz_input->Add(0, 1, 1, wxGROW, 0);
-    siz_input->Add(0, 1, 1, wxGROW, 0);
-    siz_input->AddGrowableRow(2);
 
     siz_input->Add(new wxStaticText(this, wxID_STATIC, wxT("Country:")),
                    0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
@@ -149,9 +141,6 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent,
 
     siz_input = new wxFlexGridSizer(2);
     siz_input->AddGrowableCol(1);
-    siz_input->Add(0, 1, 1, wxGROW, 0);
-    siz_input->Add(0, 1, 1, wxGROW, 0);
-    siz_input->AddGrowableRow(0);
 
     cb_language =
       new wxCheckBox(this, ID_CVD_CB_LANGUAGE, wxT("Set language to:"));
@@ -162,10 +151,6 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent,
                                   wxCB_DROPDOWN | wxCB_READONLY);
     cob_language->Enable(false);
     siz_input->Add(cob_language, 0, wxGROW, 0);
-
-    siz_input->Add(0, 1, 1, wxGROW, 0);
-    siz_input->Add(0, 1, 1, wxGROW, 0);
-    siz_input->AddGrowableRow(2);
 
     cb_country =
       new wxCheckBox(this, ID_CVD_CB_COUNTRY, wxT("Set country to:"));
@@ -179,7 +164,9 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent,
 
   }
 
-  siz_all->Add(siz_input, 3, wxGROW | wxLEFT | wxRIGHT, 25);
+  siz_all->AddSpacer(10);
+  siz_all->Add(siz_input, 0, wxGROW | wxLEFT | wxRIGHT, 10);
+  siz_all->AddSpacer(10);
 
   for (i = 0; i < sorted_iso_codes.Count(); i++) {
     cob_language->Append(sorted_iso_codes[i]);
@@ -192,21 +179,17 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent,
     cob_country->Append(wxU(cctlds[i]));
   cob_country->SetValue(old_def_country);
 
-  siz_buttons = new wxBoxSizer(wxVERTICAL);
-  siz_buttons->Add(0, 1, 1, wxGROW, 0);
-  siz_line = new wxBoxSizer(wxHORIZONTAL);
-  b_ok = new wxButton(this, wxID_OK, wxT("Ok"));
-  b_ok->SetDefault();
-  b_cancel = new wxButton(this, wxID_CANCEL, wxT("Cancel"));
-  b_ok->SetSize(b_cancel->GetSize());
-  siz_line->Add(1, 0, 1, wxGROW, 0);
-  siz_line->Add(b_ok, 0, 0, 0);
-  siz_line->Add(1, 0, 1, wxGROW, 0);
-  siz_line->Add(b_cancel, 0, 0, 0);
-  siz_line->Add(1, 0, 1, wxGROW, 0);
-  siz_buttons->Add(siz_line, 0, wxGROW, 0);
-  siz_all->Add(siz_buttons, 2, wxGROW | wxBOTTOM, 10);
+  siz_buttons = new wxBoxSizer(wxHORIZONTAL);
+  siz_buttons->AddStretchSpacer();
+  siz_buttons->Add(CreateStdDialogButtonSizer(wxOK | wxCANCEL), 0, 0, 0);
+  siz_buttons->AddSpacer(10);
+
+  siz_all->Add(siz_buttons, 0, wxGROW, 0);
+  siz_all->AddSpacer(10);
+
   SetSizer(siz_all);
+
+  siz_all->SetSizeHints(this);
 }
 
 void
