@@ -180,7 +180,7 @@ tab_global::tab_global(wxWindow *parent):
   cb_link->SetValue(false);
   cb_link->Enable(false);
   siz_line->Add(cb_link, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 10);
-  siz_line->Add(0, 1, 1, wxGROW, 0);
+  siz_line->AddStretchSpacer();
 
   st_split_max_files = new wxStaticText(this, wxID_STATIC,
                                   wxT("max. number of files:"));
@@ -318,10 +318,10 @@ tab_global::tab_global(wxWindow *parent):
                    0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
 
   tc_global_tags = new wxTextCtrl(this, ID_TC_GLOBALTAGS, wxT(""));
-  siz_gl_tags->Add(0, 5, 0, 0, 0);
+  siz_gl_tags->AddSpacer(5);
   siz_gl_tags->Add(tc_global_tags, 1, wxALIGN_CENTER_VERTICAL | wxGROW |
                    wxTOP | wxBOTTOM, 2);
-  siz_gl_tags->Add(0, 5, 0, 0, 0);
+  siz_gl_tags->AddSpacer(5);
   b_browse_global_tags = new wxButton(this, ID_B_BROWSEGLOBALTAGS,
                                       wxT("Browse"));
   b_browse_global_tags->SetToolTip(TIP("The difference between tags associated"

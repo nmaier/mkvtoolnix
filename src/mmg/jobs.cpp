@@ -76,11 +76,11 @@ job_run_dialog::job_run_dialog(wxWindow *parent,
   g_progress = new wxGauge(this, -1, 100);
   siz_fg->Add(g_progress, 1, wxALIGN_CENTER_VERTICAL | wxGROW, 0);
   siz_sb->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 10);
-  siz_sb->Add(0, 10, 0, 0, 0);
+  siz_sb->AddSpacer(10);
 
   siz_sb->Add(new wxStaticText(this, -1, wxT("Log output:")),
               wxALIGN_LEFT, wxLEFT, 10);
-  siz_sb->Add(0, 5, 0, 0, 0);
+  siz_sb->AddSpacer(5);
   tc_log = new wxTextCtrl(this, -1, wxT(""), wxDefaultPosition,
                           wxSize(450, 150), wxTE_MULTILINE | wxTE_READONLY);
   siz_sb->Add(tc_log, 1, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
@@ -334,7 +334,7 @@ job_log_dialog::job_log_dialog(wxWindow *parent,
   siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->Add(new wxStaticText(this, -1, wxT("Output of the selected jobs:")),
                0, wxALIGN_LEFT | wxLEFT | wxTOP, 10);
-  siz_all->Add(0, 5, 0, 0, 0);
+  siz_all->AddSpacer(5);
   siz_all->Add(new wxTextCtrl(this, -1, log, wxDefaultPosition,
                               wxSize(550, 150), wxTE_MULTILINE |
                               wxTE_READONLY),
@@ -429,7 +429,7 @@ job_dialog::job_dialog(wxWindow *parent):
   b_down = new wxButton(this, ID_JOBS_B_DOWN, wxT("&Down"));
   b_down->SetToolTip(TIP("Move the selected job(s) down"));
   siz_b_right->Add(b_down, 0, wxLEFT | wxBOTTOM, 10);
-  siz_b_right->Add(0, 15, 0, 0, 0);
+  siz_b_right->AddSpacer(15);
 
   b_reenable = new wxButton(this, ID_JOBS_B_REENABLE, wxT("&Re-enable"));
   b_reenable->SetToolTip(TIP("Re-enable the selected job(s)"));
@@ -438,12 +438,12 @@ job_dialog::job_dialog(wxWindow *parent):
   b_disable->SetToolTip(TIP("Disable the selected job(s) and sets their "
                             "status to 'done'"));
   siz_b_right->Add(b_disable, 0, wxLEFT | wxBOTTOM, 10);
-  siz_b_right->Add(0, 15, 0, 0, 0);
+  siz_b_right->AddSpacer(15);
 
   b_delete = new wxButton(this, ID_JOBS_B_DELETE, wxT("D&elete"));
   b_delete->SetToolTip(TIP("Delete the selected job(s) from the job queue"));
   siz_b_right->Add(b_delete, 0, wxLEFT | wxBOTTOM, 10);
-  siz_b_right->Add(0, 15, 0, 0, 0);
+  siz_b_right->AddSpacer(15);
 
   b_view_log = new wxButton(this, ID_JOBS_B_VIEW_LOG, wxT("&View log"));
   b_view_log->SetToolTip(TIP("View the output that mkvmerge generated during "

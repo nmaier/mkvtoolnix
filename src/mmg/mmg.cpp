@@ -171,7 +171,7 @@ cli_options_dlg::cli_options_dlg(wxWindow *parent):
   int i;
 
   siz_all = new wxBoxSizer(wxVERTICAL);
-  siz_all->Add(0, 10, 0, 0, 0);
+  siz_all->AddSpacer(10);
   siz_all->Add(new wxStaticText(this, -1, wxT("Here you can add more command "
                                               "line options either by\n"
                                               "entering them below or by "
@@ -179,17 +179,17 @@ cli_options_dlg::cli_options_dlg(wxWindow *parent):
                                               "down box and pressing the "
                                               "'add' button.")),
                0, wxLEFT | wxRIGHT, 10);
-  siz_all->Add(0, 10, 0, 0, 0);
+  siz_all->AddSpacer(10);
   siz_all->Add(new wxStaticText(this, -1, wxT("Command line options:")),
                0, wxLEFT, 10);
-  siz_all->Add(0, 5, 0, 0, 0);
+  siz_all->AddSpacer(5);
   tc_options = new wxTextCtrl(this, -1);
   siz_all->Add(tc_options, 0, wxGROW | wxLEFT | wxRIGHT, 10);
 
-  siz_all->Add(0, 10, 0, 0, 0);
+  siz_all->AddSpacer(10);
   siz_all->Add(new wxStaticText(this, -1, wxT("Available options:")),
                0, wxLEFT, 10);
-  siz_all->Add(0, 5, 0, 0, 0);
+  siz_all->AddSpacer(5);
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   cob_option = new wxComboBox(this, ID_CLIOPTIONS_COB);
   i = 0;
@@ -203,19 +203,19 @@ cli_options_dlg::cli_options_dlg(wxWindow *parent):
   siz_line->Add(button, 0, wxALIGN_CENTER_VERTICAL, 0);
   siz_all->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 10);
 
-  siz_all->Add(0, 10, 0, 0, 0);
+  siz_all->AddSpacer(10);
   siz_all->Add(new wxStaticText(this, -1, wxT("Description:")), 0, wxLEFT, 10);
-  siz_all->Add(0, 5, 0, 0, 0);
+  siz_all->AddSpacer(5);
   tc_description =
     new wxTextCtrl(this, -1, cli_options[0][1], wxDefaultPosition,
                    wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY |
                    wxTE_WORDWRAP);
   siz_all->Add(tc_description, 1, wxGROW | wxLEFT | wxRIGHT, 10);
 
-  siz_all->Add(0, 10, 0, 0, 0);
+  siz_all->AddSpacer(10);
   siz_all->Add(new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT, 10);
 
-  siz_all->Add(0, 10, 0, 0, 0);
+  siz_all->AddSpacer(10);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->AddStretchSpacer();
@@ -223,7 +223,7 @@ cli_options_dlg::cli_options_dlg(wxWindow *parent):
   siz_line->AddSpacer(10);
 
   siz_all->Add(siz_line, 0, wxGROW, 0);
-  siz_all->Add(0, 10, 0, 0, 0);
+  siz_all->AddSpacer(10);
 
   SetSizer(siz_all);
 }
@@ -792,10 +792,10 @@ mmg_dialog::mmg_dialog():
                wxGROW, 5);
 
   tc_output = new wxTextCtrl(panel, ID_TC_OUTPUT, wxT(""));
-  sbs_low->Add(0, 5, 0, 0, 0);
+  sbs_low->AddSpacer(5);
   sbs_low->Add(tc_output, 1, wxALIGN_CENTER_VERTICAL | wxTOP | wxBOTTOM |
                wxGROW, 2);
-  sbs_low->Add(0, 5, 0, 0, 0);
+  sbs_low->AddSpacer(5);
 
   b_browse_output = new wxButton(panel, ID_B_BROWSEOUTPUT, wxT("Browse"));
   sbs_low->Add(b_browse_output, 0, wxALIGN_CENTER_VERTICAL | wxALL, 3);

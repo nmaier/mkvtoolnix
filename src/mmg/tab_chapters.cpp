@@ -235,10 +235,10 @@ tab_chapters::tab_chapters(wxWindow *parent,
 
   siz_all = new wxBoxSizer(wxVERTICAL);
 
-  siz_all->Add(0, 5, 0, 0, 0);
+  siz_all->AddSpacer(5);
   siz_all->Add(new wxStaticText(this, wxID_STATIC, wxT("Chapters:")),
                0, wxLEFT, 10);
-  siz_all->Add(0, 5, 0, 0, 0);
+  siz_all->AddSpacer(5);
 
 #ifdef SYS_WINDOWS
   tc_chapters = new wxTreeCtrl(this, ID_TRC_CHAPTERS);
@@ -307,8 +307,8 @@ tab_chapters::tab_chapters(wxWindow *parent,
   siz_fg->Add(siz_line, 0, wxGROW | wxRIGHT, 5);
   siz_fg->Add(1, 0, 0, 0, 0);
 
-  siz_fg->Add(0, 5, 0, 0, 0);
-  siz_fg->Add(0, 5, 0, 0, 0);
+  siz_fg->AddSpacer(5);
+  siz_fg->AddSpacer(5);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   st_uid = new wxStaticText(this, wxID_STATIC, wxT("UID:"));

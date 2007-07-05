@@ -107,7 +107,7 @@ tab_attachments::tab_attachments(wxWindow *parent):
   for (i = 0; mime_types[i].name != NULL; i++)
     cob_mimetype->Append(wxU(mime_types[i].name));
   siz_ddlists->Add(cob_mimetype, 1, wxGROW | wxLEFT | wxRIGHT, 5);
-  siz_ddlists->Add(0, 0, 0, 0, 0);
+  siz_ddlists->AddSpacer(0);
 
   cob_style =
     new wxComboBox(this, ID_CB_ATTACHMENTSTYLE, wxT(""), wxDefaultPosition,

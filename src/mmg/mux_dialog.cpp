@@ -92,17 +92,17 @@ mux_dialog::mux_dialog(wxWindow *parent):
   siz_output->Add(tc_errors, 1, wxGROW | wxALL, 5);
 
   siz_buttons = new wxBoxSizer(wxHORIZONTAL);
-  siz_buttons->Add(0, 0, 1, wxGROW, 0);
+  siz_buttons->AddStretchSpacer();
   b_ok = new wxButton(this, ID_B_MUX_OK, wxT("Ok"));
   b_ok->Enable(false);
   siz_buttons->Add(b_ok);
-  siz_buttons->Add(0, 0, 1, wxGROW, 0);
+  siz_buttons->AddStretchSpacer();
   b_abort = new wxButton(this, ID_B_MUX_ABORT, wxT("Abort"));
   siz_buttons->Add(b_abort);
-  siz_buttons->Add(0, 0, 1, wxGROW, 0);
+  siz_buttons->AddStretchSpacer();
   b_save_log = new wxButton(this, ID_B_MUX_SAVELOG, wxT("Save log"));
   siz_buttons->Add(b_save_log);
-  siz_buttons->Add(0, 0, 1, wxGROW, 0);
+  siz_buttons->AddStretchSpacer();
 
   siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->Add(siz_status, 0, wxGROW | wxALL, 5);
