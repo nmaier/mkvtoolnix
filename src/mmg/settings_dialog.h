@@ -8,13 +8,13 @@
 
    $Id$
 
-   declarations for the settings tab
+   declarations for the settings dialog
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __TAB_SETTINGS_H
-#define __TAB_SETTINGS_H
+#ifndef __SETTINGS_DIALOG_H
+#define __SETTINGS_DIALOG_H
 
 #include "wx/log.h"
 
@@ -32,12 +32,12 @@
 #define ID_TC_OUTPUT_DIRECTORY             15011
 #define ID_B_BROWSE_OUTPUT_DIRECTORY       15012
 
-class tab_settings: public wxPanel {
-  DECLARE_CLASS(tab_settings);
+class settings_dialog: public wxDialog {
+  DECLARE_CLASS(settings_dialog);
   DECLARE_EVENT_TABLE();
 public:
   wxTextCtrl *tc_mkvmerge, *tc_output_directory;
-  wxCheckBox *cb_show_commandline, *cb_autoset_output_filename;
+  wxCheckBox *cb_autoset_output_filename;
   wxCheckBox *cb_ask_before_overwriting, *cb_on_top;
   wxCheckBox *cb_filenew_after_add_to_jobqueue;
   wxCheckBox *cb_warn_usage, *cb_gui_debugging;
@@ -46,27 +46,17 @@ public:
   wxStaticText *st_output_directory;
   wxButton *b_browse_output_directory;
 
+  mmg_settings_t &m_settings;
+
 public:
-  tab_settings(wxWindow *parent);
-  virtual ~tab_settings();
+  settings_dialog(wxWindow *parent, mmg_settings_t &settings);
 
-  void on_browse(wxCommandEvent &evt);
-  void on_xyz_selected(wxCommandEvent &evt);
-  void on_on_top_selected(wxCommandEvent &evt);
-  void on_gui_debugging_selected(wxCommandEvent &evt);
-  void on_autoset_output_filename_selected(wxCommandEvent &evt);
+  void on_browse_mkvmerge(wxCommandEvent &evt);
   void on_browse_output_directory(wxCommandEvent &evt);
+  void on_autoset_output_filename_selected(wxCommandEvent &evt);
+  void on_ok(wxCommandEvent &evt);
 
-  void load_preferences();
-  void save_preferences();
-
-  void save(wxConfigBase *cfg);
-  void load(wxConfigBase *cfg, int version);
-  bool validate_settings();
-
-  void query_mkvmerge_capabilities();
-
-  void enable_output_directory_controls(bool enable);
+  void enable_output_filename_controls(bool enable);
 };
 
-#endif // __TAB_SETTINGS_H
+#endif // __SETTINGS_DIALOG_H

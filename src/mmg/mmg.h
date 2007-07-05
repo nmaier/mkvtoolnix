@@ -107,8 +107,28 @@ struct mmg_attachment_t {
 };
 typedef counted_ptr<mmg_attachment_t> mmg_attachment_ptr;
 
+struct mmg_settings_t {
+  wxString mkvmerge;
+  wxString output_directory;
+  bool autoset_output_filename;
+  bool ask_before_overwriting;
+  bool on_top;
+  bool filenew_after_add_to_jobqueue;
+  bool warn_usage;
+  bool gui_debugging;
+  bool always_use_simpleblock;
+  bool set_delay_from_filename;
+  wxString priority;
+
+  mmg_settings_t():
+    autoset_output_filename(false), ask_before_overwriting(false),
+    on_top(false), filenew_after_add_to_jobqueue(false),
+    warn_usage(false), gui_debugging(false), always_use_simpleblock(false),
+    set_delay_from_filename(false) {
+  }
+};
+
 extern wxString last_open_dir;
-extern wxString mkvmerge_path;
 extern vector<wxString> last_settings;
 extern vector<wxString> last_chapters;
 extern vector<mmg_file_t> files;

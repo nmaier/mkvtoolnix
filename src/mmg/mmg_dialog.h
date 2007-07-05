@@ -32,6 +32,7 @@
 #define ID_M_FILE_SAVE                    60002
 #define ID_M_FILE_SETOUTPUT               60003
 #define ID_M_FILE_EXIT                    60004
+#define ID_M_FILE_SETTINGS                60005
 #define ID_M_FILE_LOADSEPARATOR           60090
 #define ID_M_FILE_LOADLAST1               60091
 #define ID_M_FILE_LOADLAST2               60092
@@ -63,8 +64,7 @@
 #define ID_M_WINDOW_INPUT                 60300
 #define ID_M_WINDOW_ATTACHMENTS           60301
 #define ID_M_WINDOW_GLOBAL                60302
-#define ID_M_WINDOW_SETTINGS              60303
-#define ID_M_WINDOW_CHAPTEREDITOR         60304
+#define ID_M_WINDOW_CHAPTEREDITOR         60303
 
 #define ID_M_HELP_ABOUT                   65000
 #define ID_M_HELP_HELP                    65001
@@ -74,7 +74,6 @@ class tab_attachments;
 class tab_chapters;
 class tab_global;
 class tab_input;
-class tab_settings;
 class job_dialog;
 
 class mmg_dialog: public wxFrame {
@@ -98,7 +97,6 @@ public:
   tab_input *input_page;
   tab_attachments *attachments_page;
   tab_global *global_page;
-  tab_settings *settings_page;
   tab_chapters *chapter_editor_page;
 
   wxButton *b_start_muxing, *b_copy_to_clipboard, *b_add_to_jobqueue;
@@ -112,6 +110,8 @@ public:
   wxLogWindow *log_window;
 
   bool warned_chapter_editor_not_empty;
+
+  mmg_settings_t settings;
 
 public:
   mmg_dialog();
@@ -128,6 +128,7 @@ public:
   void on_file_new(wxCommandEvent &evt);
   void on_file_load(wxCommandEvent &evt);
   void on_file_save(wxCommandEvent &evt);
+  void on_file_settings(wxCommandEvent &evt);
   void on_help(wxCommandEvent &evt);
   void on_about(wxCommandEvent &evt);
 
@@ -180,6 +181,11 @@ public:
   void muxing_has_finished();
 
   bool check_before_overwriting();
+
+  void load_preferences();
+  void save_preferences();
+
+  void query_mkvmerge_capabilities();
 };
 
 extern mmg_dialog *mdlg;
