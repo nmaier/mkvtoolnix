@@ -216,12 +216,12 @@ cli_options_dlg::cli_options_dlg(wxWindow *parent):
   siz_all->Add(new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT, 10);
 
   siz_all->Add(0, 10, 0, 0, 0);
+
   siz_line = new wxBoxSizer(wxHORIZONTAL);
-  siz_line->Add(1, 0, 1, wxGROW, 0);
-  siz_line->Add(new wxButton(this, wxID_OK, wxT("Ok")), 0, 0, 0);
-  siz_line->Add(1, 0, 1, wxGROW, 0);
-  siz_line->Add(new wxButton(this, wxID_CANCEL, wxT("Cancel")), 0, 0, 0);
-  siz_line->Add(1, 0, 1, wxGROW, 0);
+  siz_line->AddStretchSpacer();
+  siz_line->Add(CreateStdDialogButtonSizer(wxOK | wxCANCEL), 0, 0, 0);
+  siz_line->AddSpacer(10);
+
   siz_all->Add(siz_line, 0, wxGROW, 0);
   siz_all->Add(0, 10, 0, 0, 0);
 
@@ -276,25 +276,23 @@ show_text_dlg::show_text_dlg(wxWindow *parent,
 
   wxBoxSizer *siz_all, *siz_line;
   wxTextCtrl *tc_message;
-  wxButton *b_ok;
 
   siz_all = new wxBoxSizer(wxVERTICAL);
 
-  tc_message = new wxTextCtrl(this, 0, text, wxDefaultPosition, wxDefaultSize,
-                              wxTE_MULTILINE | wxTE_READONLY);
+  tc_message = new wxTextCtrl(this, 0, text, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->Add(tc_message, 1, wxALL | wxGROW, 10);
 
   siz_all->Add(siz_line, 1, wxGROW, 0);
 
-  b_ok = new wxButton(this, wxID_OK, wxT("Ok"));
-
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->AddStretchSpacer();
-  siz_line->Add(b_ok, 0, wxRIGHT | wxBOTTOM, 10);
+  siz_line->Add(CreateStdDialogButtonSizer(wxOK), 0, 0, 0);
+  siz_line->AddSpacer(10);
 
   siz_all->Add(siz_line, 0, wxGROW, 0);
+  siz_all->AddSpacer(10);
 
   SetSizer(siz_all);
 }
