@@ -29,7 +29,7 @@
 
 settings_dialog::settings_dialog(wxWindow *parent,
                                  mmg_settings_t &settings):
-  wxDialog(parent, -1, wxT("Options")),
+  wxDialog(parent, -1, wxT("Options"), wxDefaultPosition, wxDefaultSize),
   m_settings(settings) {
 
   wxStaticBox *sb_mmg, *sb_mkvmerge;
