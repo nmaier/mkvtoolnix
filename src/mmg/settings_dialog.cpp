@@ -29,23 +29,24 @@
 
 settings_dialog::settings_dialog(wxWindow *parent,
                                  mmg_settings_t &settings):
-  wxDialog(parent, -1, wxT("mmg settings")),
+  wxDialog(parent, -1, wxT("Options")),
   m_settings(settings) {
 
-  wxStaticBox *sb_mkvmerge_exe, *sb_mmg, *sb_mkvmerge;
-  wxStaticText *st_priority;
+  wxStaticBox *sb_mmg, *sb_mkvmerge;
+  wxStaticText *st_priority, *st_mkvmerge;
   wxButton *b_browse;
 
   // Create the controls.
 
-  sb_mkvmerge_exe = new wxStaticBox(this, -1, wxT("mkvmerge executable"));
-  tc_mkvmerge     = new wxTextCtrl(this, ID_TC_MKVMERGE, m_settings.mkvmerge, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-  b_browse        = new wxButton(this, ID_B_BROWSEMKVMERGE, wxT("Browse"));
+  sb_mkvmerge = new wxStaticBox(this, -1, wxT("mkvmerge options"));
 
-  sb_mkvmerge     = new wxStaticBox(this, -1, wxT("mkvmerge options"));
+  st_mkvmerge  = new wxStaticText(this, -1, wxT("mkvmerge executable"));
+  tc_mkvmerge  = new wxTextCtrl(this, ID_TC_MKVMERGE, m_settings.mkvmerge, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+  b_browse     = new wxButton(this, ID_B_BROWSEMKVMERGE, wxT("Browse"));
 
   st_priority  = new wxStaticText(this, -1, wxT("Process priority:"));
   cob_priority = new wxComboBox(this, ID_COB_PRIORITY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+
   cob_priority->SetToolTip(TIP("Sets the priority that mkvmerge will run with."));
 
 #if defined(SYS_WINDOWS)
@@ -131,29 +132,25 @@ settings_dialog::settings_dialog(wxWindow *parent,
 
   wxStaticBoxSizer *siz_sb;
   wxBoxSizer *siz_all, *siz_line;
+  wxFlexGridSizer *siz_fg;
 
   siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->AddSpacer(5);
 
 
-  siz_sb = new wxStaticBoxSizer(sb_mkvmerge_exe, wxHORIZONTAL);
-  siz_sb->Add(tc_mkvmerge, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, 5);
-  siz_sb->Add(b_browse, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
-
-  siz_all->Add(siz_sb, 0, wxGROW | wxLEFT | wxRIGHT, 5);
-  siz_all->AddSpacer(5);
-
-
   siz_sb = new wxStaticBoxSizer(sb_mkvmerge, wxVERTICAL);
-  siz_sb->AddSpacer(5);
 
-  siz_line = new wxBoxSizer(wxHORIZONTAL);
-  siz_line->AddSpacer(5);
-  siz_line->Add(st_priority, 0, wxALIGN_CENTER_VERTICAL, 0);
-  siz_line->AddSpacer(5);
-  siz_line->Add(cob_priority, 0, wxALIGN_CENTER_VERTICAL, 0);
+  siz_fg = new wxFlexGridSizer(3);
+  siz_fg->AddGrowableCol(1);
 
-  siz_sb->Add(siz_line);
+  siz_fg->Add(st_mkvmerge, 0, wxALIGN_CENTER_VERTICAL, 0);
+  siz_fg->Add(tc_mkvmerge, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxTOP | wxBOTTOM | wxLEFT, 5);
+  siz_fg->Add(b_browse, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
+
+  siz_fg->Add(st_priority, 0, wxALIGN_CENTER_VERTICAL, 0);
+  siz_fg->Add(cob_priority, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
+
+  siz_sb->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT, 5);
   siz_sb->AddSpacer(5);
 
   siz_sb->Add(cb_always_use_simpleblock, 0, wxLEFT, 5);

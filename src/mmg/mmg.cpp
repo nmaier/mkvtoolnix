@@ -676,7 +676,7 @@ mmg_dialog::mmg_dialog():
   file_menu->Append(ID_M_FILE_SETOUTPUT, wxT("Set &output file"),
                     wxT("Select the file you want to write to"));
   file_menu->AppendSeparator();
-  file_menu->Append(ID_M_FILE_SETTINGS, wxT("Se&ttings"), wxT("Change mmg's preferences and settings"));
+  file_menu->Append(ID_M_FILE_SETTINGS, wxT("Op&tions\tCtrl-P"), wxT("Change mmg's preferences and settings"));
   file_menu->AppendSeparator();
   file_menu->Append(ID_M_FILE_EXIT, wxT("&Quit\tCtrl-Q"),
                     wxT("Quit the application"));
