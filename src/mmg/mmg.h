@@ -107,10 +107,17 @@ struct mmg_attachment_t {
 };
 typedef counted_ptr<mmg_attachment_t> mmg_attachment_ptr;
 
-struct mmg_settings_t {
+typedef enum {
+  ODM_FROM_FIRST_INPUT_FILE = 0,
+  ODM_PREVIOUS              = 1,
+  ODM_FIXED                 = 2,
+} output_directory_mode_e;
+
+struct mmg_options_t {
   wxString mkvmerge;
   wxString output_directory;
   bool autoset_output_filename;
+  output_directory_mode_e output_directory_mode;
   bool ask_before_overwriting;
   bool on_top;
   bool filenew_after_add_to_jobqueue;
@@ -120,12 +127,15 @@ struct mmg_settings_t {
   bool set_delay_from_filename;
   wxString priority;
 
-  mmg_settings_t():
-    autoset_output_filename(false), ask_before_overwriting(false),
+  mmg_options_t():
+    autoset_output_filename(false), output_directory_mode(ODM_FROM_FIRST_INPUT_FILE),
+    ask_before_overwriting(false),
     on_top(false), filenew_after_add_to_jobqueue(false),
     warn_usage(false), gui_debugging(false), always_use_simpleblock(false),
     set_delay_from_filename(false) {
   }
+
+  void validate();
 };
 
 extern wxString last_open_dir;

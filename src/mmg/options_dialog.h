@@ -8,13 +8,13 @@
 
    $Id$
 
-   declarations for the settings dialog
+   declarations for the options dialog
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __SETTINGS_DIALOG_H
-#define __SETTINGS_DIALOG_H
+#ifndef __OPTIONS_DIALOG_H
+#define __OPTIONS_DIALOG_H
 
 #include "wx/log.h"
 
@@ -31,9 +31,12 @@
 #define ID_CB_SET_DELAY_FROM_FILENAME      15010
 #define ID_TC_OUTPUT_DIRECTORY             15011
 #define ID_B_BROWSE_OUTPUT_DIRECTORY       15012
+#define ID_RB_ODM_INPUT_FILE               15013
+#define ID_RB_ODM_PREVIOUS                 15014
+#define ID_RB_ODM_FIXED                    15015
 
-class settings_dialog: public wxDialog {
-  DECLARE_CLASS(settings_dialog);
+class options_dialog: public wxDialog {
+  DECLARE_CLASS(options_dialog);
   DECLARE_EVENT_TABLE();
 public:
   wxTextCtrl *tc_mkvmerge, *tc_output_directory;
@@ -43,20 +46,21 @@ public:
   wxCheckBox *cb_warn_usage, *cb_gui_debugging;
   wxCheckBox *cb_always_use_simpleblock, *cb_set_delay_from_filename;
   wxComboBox *cob_priority;
-  wxStaticText *st_output_directory;
+  wxRadioButton *rb_odm_input_file, *rb_odm_previous, *rb_odm_fixed;
   wxButton *b_browse_output_directory;
 
-  mmg_settings_t &m_settings;
+  mmg_options_t &m_options;
 
 public:
-  settings_dialog(wxWindow *parent, mmg_settings_t &settings);
+  options_dialog(wxWindow *parent, mmg_options_t &options);
 
   void on_browse_mkvmerge(wxCommandEvent &evt);
   void on_browse_output_directory(wxCommandEvent &evt);
   void on_autoset_output_filename_selected(wxCommandEvent &evt);
   void on_ok(wxCommandEvent &evt);
+  void on_output_directory_mode(wxCommandEvent &evt);
 
   void enable_output_filename_controls(bool enable);
 };
 
-#endif // __SETTINGS_DIALOG_H
+#endif // __OPTIONS_DIALOG_H

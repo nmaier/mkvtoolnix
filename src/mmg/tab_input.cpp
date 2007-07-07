@@ -352,7 +352,7 @@ tab_input::add_file(const wxString &file_name,
   opt_file->Write(wxT("\n"));
   delete opt_file;
 
-  command = wxT("\"") + mdlg->settings.mkvmerge + wxT("\" \"@") + opt_file_name + wxT("\"");
+  command = wxT("\"") + mdlg->options.mkvmerge + wxT("\" \"@") + opt_file_name + wxT("\"");
 
   wxLogMessage(wxT("identify 1: command: ``%s''"), command.c_str());
 
@@ -388,7 +388,7 @@ tab_input::add_file(const wxString &file_name,
   }
 
   wxString delay_from_file_name;
-  if (mdlg->settings.set_delay_from_filename) {
+  if (mdlg->options.set_delay_from_filename) {
     wxRegEx re_delay(wxT("delay[[:blank:]]+(-?[[:digit:]]+)"), wxRE_ICASE);
     if (re_delay.Matches(file_name))
       delay_from_file_name = re_delay.GetMatch(file_name, 1);
@@ -491,7 +491,7 @@ tab_input::add_file(const wxString &file_name,
           ('v' == track->type) &&
           (track->ctype.Find(wxT("MPEG-4 part 10 ES")) >= 0) &&
           (!avc_es_fps_warning_shown ||
-           mdlg->settings.warn_usage)) {
+           mdlg->options.warn_usage)) {
         wxMessageBox(wxT("You're adding an AVC/h.264 elementary stream to "
                          "the output file. "
                          "mkvmerge cannot determine the number of frames "
@@ -1323,7 +1323,7 @@ tab_input::validate_settings() {
       } else if ((FILE_TYPE_AVC_ES == f->container) &&
                  ('v' == t->type) &&
                  (t->ctype.Find(wxT("MPEG-4 part 10 ES")) >= 0) &&
-                 mdlg->settings.warn_usage) {
+                 mdlg->options.warn_usage) {
         wxString message =
           wxString::Format(wxT("You haven't selected a number of frames "
                                "per second for track " LLD " of file '%s'. "

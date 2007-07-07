@@ -32,7 +32,7 @@
 #define ID_M_FILE_SAVE                    60002
 #define ID_M_FILE_SETOUTPUT               60003
 #define ID_M_FILE_EXIT                    60004
-#define ID_M_FILE_SETTINGS                60005
+#define ID_M_FILE_OPTIONS                 60005
 #define ID_M_FILE_LOADSEPARATOR           60090
 #define ID_M_FILE_LOADLAST1               60091
 #define ID_M_FILE_LOADLAST2               60092
@@ -82,6 +82,7 @@ class mmg_dialog: public wxFrame {
 public:
   wxButton *b_browse_output;
   wxTextCtrl *tc_output;
+  wxString previous_output_directory;
 
   wxString cmdline, cli_options;
   wxArrayString clargs;
@@ -111,7 +112,7 @@ public:
 
   bool warned_chapter_editor_not_empty;
 
-  mmg_settings_t settings;
+  mmg_options_t options;
 
 public:
   mmg_dialog();
@@ -128,7 +129,7 @@ public:
   void on_file_new(wxCommandEvent &evt);
   void on_file_load(wxCommandEvent &evt);
   void on_file_save(wxCommandEvent &evt);
-  void on_file_settings(wxCommandEvent &evt);
+  void on_file_options(wxCommandEvent &evt);
   void on_help(wxCommandEvent &evt);
   void on_about(wxCommandEvent &evt);
 
@@ -184,6 +185,8 @@ public:
 
   void load_preferences();
   void save_preferences();
+
+  void remember_previous_output_directory();
 
   void query_mkvmerge_capabilities();
 };

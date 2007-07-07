@@ -8,7 +8,7 @@
 
    $Id$
 
-   "settings" tab
+   "options" dialog
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
@@ -25,12 +25,12 @@
 #include "common.h"
 #include "mmg.h"
 #include "mmg_dialog.h"
-#include "settings_dialog.h"
+#include "options_dialog.h"
 
-settings_dialog::settings_dialog(wxWindow *parent,
-                                 mmg_settings_t &settings):
+options_dialog::options_dialog(wxWindow *parent,
+                               mmg_options_t &options):
   wxDialog(parent, -1, wxT("Options"), wxDefaultPosition, wxDefaultSize),
-  m_settings(settings) {
+  m_options(options) {
 
   wxStaticBox *sb_mmg, *sb_mkvmerge;
   wxStaticText *st_priority, *st_mkvmerge;
@@ -41,7 +41,7 @@ settings_dialog::settings_dialog(wxWindow *parent,
   sb_mkvmerge = new wxStaticBox(this, -1, wxT("mkvmerge options"));
 
   st_mkvmerge  = new wxStaticText(this, -1, wxT("mkvmerge executable"));
-  tc_mkvmerge  = new wxTextCtrl(this, ID_TC_MKVMERGE, m_settings.mkvmerge, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+  tc_mkvmerge  = new wxTextCtrl(this, ID_TC_MKVMERGE, m_options.mkvmerge, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
   b_browse     = new wxButton(this, ID_B_BROWSEMKVMERGE, wxT("Browse"));
 
   st_priority  = new wxStaticText(this, -1, wxT("Process priority:"));
@@ -72,12 +72,13 @@ settings_dialog::settings_dialog(wxWindow *parent,
   cb_autoset_output_filename->
     SetToolTip(TIP("If checked mmg will automatically set the output filename "
                    "if it hasn't been set already. This happens when you add "
-                   "a file. It will be set to the same name as the "
-                   "input file but with the extension '.mkv'. If unset mmg "
-                   "will not touch the output filename."));
+                   "the first file. If unset mmg will not touch the output filename."));
 
-  st_output_directory       = new wxStaticText(this, 0, wxT("Output directory:"));
-  tc_output_directory       = new wxTextCtrl(this, ID_TC_OUTPUT_DIRECTORY, m_settings.output_directory);
+  rb_odm_input_file = new wxRadioButton(this, ID_RB_ODM_INPUT_FILE, wxT("Same directory as the first input file's"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
+  rb_odm_previous   = new wxRadioButton(this, ID_RB_ODM_PREVIOUS, wxT("Use the previous output directory"));
+  rb_odm_fixed      = new wxRadioButton(this, ID_RB_ODM_FIXED, wxT("Use this directory:"));
+
+  tc_output_directory       = new wxTextCtrl(this, ID_TC_OUTPUT_DIRECTORY, m_options.output_directory);
   b_browse_output_directory = new wxButton(this, ID_B_BROWSE_OUTPUT_DIRECTORY, wxT("Browse"));
 
   tc_output_directory->SetToolTip(TIP("If left empty then mmg will set the output file name to be in the same directory as the first file added to this job. "
@@ -116,23 +117,28 @@ settings_dialog::settings_dialog(wxWindow *parent,
 
   // Set the defaults.
 
-  cb_autoset_output_filename->SetValue(m_settings.autoset_output_filename);
-  cb_ask_before_overwriting->SetValue(m_settings.ask_before_overwriting);
-  cb_on_top->SetValue(m_settings.on_top);
-  cb_filenew_after_add_to_jobqueue->SetValue(m_settings.filenew_after_add_to_jobqueue);
-  cb_warn_usage->SetValue(m_settings.warn_usage);
-  cb_gui_debugging->SetValue(m_settings.gui_debugging);
-  cb_always_use_simpleblock->SetValue(m_settings.always_use_simpleblock);
-  cb_set_delay_from_filename->SetValue(m_settings.set_delay_from_filename);
-  cob_priority->SetValue(m_settings.priority);
+  cb_autoset_output_filename->SetValue(m_options.autoset_output_filename);
+  cb_ask_before_overwriting->SetValue(m_options.ask_before_overwriting);
+  cb_on_top->SetValue(m_options.on_top);
+  cb_filenew_after_add_to_jobqueue->SetValue(m_options.filenew_after_add_to_jobqueue);
+  cb_warn_usage->SetValue(m_options.warn_usage);
+  cb_gui_debugging->SetValue(m_options.gui_debugging);
+  cb_always_use_simpleblock->SetValue(m_options.always_use_simpleblock);
+  cb_set_delay_from_filename->SetValue(m_options.set_delay_from_filename);
+  cob_priority->SetValue(m_options.priority);
 
-  enable_output_filename_controls(m_settings.autoset_output_filename);
+  rb_odm_input_file->SetValue(m_options.output_directory_mode == ODM_FROM_FIRST_INPUT_FILE);
+  rb_odm_previous->SetValue(m_options.output_directory_mode == ODM_PREVIOUS);
+  rb_odm_fixed->SetValue(m_options.output_directory_mode == ODM_FIXED);
+
+  enable_output_filename_controls(m_options.autoset_output_filename);
 
   // Create the layout.
 
   wxStaticBoxSizer *siz_sb;
   wxBoxSizer *siz_all, *siz_line;
   wxFlexGridSizer *siz_fg;
+  int left_offset;
 
   siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->AddSpacer(5);
@@ -166,13 +172,24 @@ settings_dialog::settings_dialog(wxWindow *parent,
   siz_sb->Add(cb_autoset_output_filename, 0, wxLEFT, 5);
   siz_sb->AddSpacer(5);
 
-  siz_line = new wxBoxSizer(wxHORIZONTAL);
-  siz_line->AddSpacer(32);
-  siz_line->Add(st_output_directory, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
-  siz_line->Add(tc_output_directory, 1, wxALIGN_CENTER_VERTICAL | wxGROW | wxRIGHT, 5);
-  siz_line->Add(b_browse_output_directory, 0, wxALIGN_CENTER_VERTICAL);
+#if defined(SYS_WINDOWS)
+  left_offset = 16;
+#else
+  left_offset = 24;
+#endif
 
-  siz_sb->Add(siz_line, 1, wxGROW | wxLEFT | wxRIGHT, 5);
+  siz_sb->Add(rb_odm_input_file, 0, wxLEFT, left_offset);
+  siz_sb->AddSpacer(5);
+
+  siz_sb->Add(rb_odm_previous, 0, wxLEFT, left_offset);
+  siz_sb->AddSpacer(5);
+
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_line->Add(rb_odm_fixed, 0, wxALIGN_CENTER_VERTICAL, 0);
+  siz_line->Add(tc_output_directory, 1, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
+  siz_line->Add(b_browse_output_directory, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
+
+  siz_sb->Add(siz_line, 0, wxGROW | wxLEFT, left_offset);
   siz_sb->AddSpacer(5);
 
   siz_sb->Add(cb_ask_before_overwriting, 0, wxLEFT, 5);
@@ -215,7 +232,7 @@ settings_dialog::settings_dialog(wxWindow *parent,
 }
 
 void
-settings_dialog::on_browse_mkvmerge(wxCommandEvent &evt) {
+options_dialog::on_browse_mkvmerge(wxCommandEvent &evt) {
   wxFileDialog dlg(this, wxT("Choose the mkvmerge executable"), tc_mkvmerge->GetValue().BeforeLast(PSEP), wxT(""),
 #ifdef SYS_WINDOWS
                    wxT("Executable files (*.exe)|*.exe|" ALLFILES),
@@ -238,7 +255,7 @@ settings_dialog::on_browse_mkvmerge(wxCommandEvent &evt) {
 }
 
 void
-settings_dialog::on_browse_output_directory(wxCommandEvent &evt) {
+options_dialog::on_browse_output_directory(wxCommandEvent &evt) {
   wxDirDialog dlg(this, wxT("Choose the output directory"), tc_output_directory->GetValue());
 
   if (dlg.ShowModal() == wxID_OK)
@@ -246,38 +263,48 @@ settings_dialog::on_browse_output_directory(wxCommandEvent &evt) {
 }
 
 void
-settings_dialog::on_autoset_output_filename_selected(wxCommandEvent &evt) {
+options_dialog::on_autoset_output_filename_selected(wxCommandEvent &evt) {
   enable_output_filename_controls(cb_autoset_output_filename->IsChecked());
 }
 
 void
-settings_dialog::enable_output_filename_controls(bool enable) {
-  st_output_directory->Enable(enable);
-  tc_output_directory->Enable(enable);
-  b_browse_output_directory->Enable(enable);
+options_dialog::enable_output_filename_controls(bool enable) {
+  bool odm_is_fixed = rb_odm_fixed->GetValue();
+
+  rb_odm_input_file->Enable(enable);
+  rb_odm_previous->Enable(enable);
+  rb_odm_fixed->Enable(enable);
+  tc_output_directory->Enable(enable && odm_is_fixed);
+  b_browse_output_directory->Enable(enable && odm_is_fixed);
 }
 
 void
-settings_dialog::on_ok(wxCommandEvent &evt) {
-  m_settings.mkvmerge                      = tc_mkvmerge->GetValue();
-  m_settings.priority                      = cob_priority->GetStringSelection();
-  m_settings.output_directory              = tc_output_directory->GetValue();
-  m_settings.autoset_output_filename       = cb_autoset_output_filename->IsChecked();
-  m_settings.ask_before_overwriting        = cb_ask_before_overwriting->IsChecked();
-  m_settings.on_top                        = cb_on_top->IsChecked();
-  m_settings.filenew_after_add_to_jobqueue = cb_filenew_after_add_to_jobqueue->IsChecked();
-  m_settings.warn_usage                    = cb_warn_usage->IsChecked();
-  m_settings.gui_debugging                 = cb_gui_debugging->IsChecked();
-  m_settings.always_use_simpleblock        = cb_always_use_simpleblock->IsChecked();
-  m_settings.set_delay_from_filename       = cb_set_delay_from_filename->IsChecked();
+options_dialog::on_ok(wxCommandEvent &evt) {
+  m_options.mkvmerge                      = tc_mkvmerge->GetValue();
+  m_options.priority                      = cob_priority->GetStringSelection();
+  m_options.output_directory              = tc_output_directory->GetValue();
+  m_options.autoset_output_filename       = cb_autoset_output_filename->IsChecked();
+  m_options.ask_before_overwriting        = cb_ask_before_overwriting->IsChecked();
+  m_options.on_top                        = cb_on_top->IsChecked();
+  m_options.filenew_after_add_to_jobqueue = cb_filenew_after_add_to_jobqueue->IsChecked();
+  m_options.warn_usage                    = cb_warn_usage->IsChecked();
+  m_options.gui_debugging                 = cb_gui_debugging->IsChecked();
+  m_options.always_use_simpleblock        = cb_always_use_simpleblock->IsChecked();
+  m_options.set_delay_from_filename       = cb_set_delay_from_filename->IsChecked();
+  m_options.output_directory_mode         = rb_odm_input_file->GetValue() ? ODM_FROM_FIRST_INPUT_FILE :
+                                            rb_odm_previous->GetValue()   ? ODM_PREVIOUS :
+                                                                            ODM_FIXED;
 
   EndModal(wxID_OK);
 }
 
-IMPLEMENT_CLASS(settings_dialog, wxDialog);
-BEGIN_EVENT_TABLE(settings_dialog, wxDialog)
-  EVT_BUTTON(ID_B_BROWSEMKVMERGE, settings_dialog::on_browse_mkvmerge)
-  EVT_BUTTON(ID_B_BROWSE_OUTPUT_DIRECTORY, settings_dialog::on_browse_output_directory)
-  EVT_BUTTON(wxID_OK, settings_dialog::on_ok)
-  EVT_CHECKBOX(ID_CB_AUTOSET_OUTPUT_FILENAME, settings_dialog::on_autoset_output_filename_selected)
+IMPLEMENT_CLASS(options_dialog, wxDialog);
+BEGIN_EVENT_TABLE(options_dialog, wxDialog)
+  EVT_BUTTON(ID_B_BROWSEMKVMERGE, options_dialog::on_browse_mkvmerge)
+  EVT_BUTTON(ID_B_BROWSE_OUTPUT_DIRECTORY, options_dialog::on_browse_output_directory)
+  EVT_BUTTON(wxID_OK, options_dialog::on_ok)
+  EVT_CHECKBOX(ID_CB_AUTOSET_OUTPUT_FILENAME, options_dialog::on_autoset_output_filename_selected)
+  EVT_RADIOBUTTON(ID_RB_ODM_INPUT_FILE, options_dialog::on_autoset_output_filename_selected)
+  EVT_RADIOBUTTON(ID_RB_ODM_PREVIOUS, options_dialog::on_autoset_output_filename_selected)
+  EVT_RADIOBUTTON(ID_RB_ODM_FIXED, options_dialog::on_autoset_output_filename_selected)
 END_EVENT_TABLE();

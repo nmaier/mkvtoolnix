@@ -45,7 +45,7 @@
 #include "mmg.h"
 #include "mmg_dialog.h"
 #include "mux_dialog.h"
-#include "settings_dialog.h"
+#include "options_dialog.h"
 #include "tab_attachments.h"
 #include "tab_chapters.h"
 #include "tab_input.h"
@@ -295,6 +295,18 @@ show_text_dlg::show_text_dlg(wxWindow *parent,
   siz_all->AddSpacer(10);
 
   SetSizer(siz_all);
+}
+
+void
+mmg_options_t::validate() {
+  if (   (ODM_FROM_FIRST_INPUT_FILE != output_directory_mode)
+      && (ODM_PREVIOUS              != output_directory_mode)
+      && (ODM_FIXED                 != output_directory_mode))
+    output_directory_mode = ODM_FROM_FIRST_INPUT_FILE;
+
+  if (   (priority != wxU("highest")) && (priority != wxU("higher")) && (priority != wxU("normal"))
+      && (priority != wxU("lower"))   && (priority != wxU("lowest")))
+    priority = wxU("normal");
 }
 
 #if WXUNICODE
@@ -676,7 +688,7 @@ mmg_dialog::mmg_dialog():
   file_menu->Append(ID_M_FILE_SETOUTPUT, wxT("Set &output file"),
                     wxT("Select the file you want to write to"));
   file_menu->AppendSeparator();
-  file_menu->Append(ID_M_FILE_SETTINGS, wxT("Op&tions\tCtrl-P"), wxT("Change mmg's preferences and settings"));
+  file_menu->Append(ID_M_FILE_OPTIONS, wxT("Op&tions\tCtrl-P"), wxT("Change mmg's preferences and options"));
   file_menu->AppendSeparator();
   file_menu->Append(ID_M_FILE_EXIT, wxT("&Quit\tCtrl-Q"),
                     wxT("Quit the application"));
@@ -834,7 +846,7 @@ mmg_dialog::mmg_dialog():
 
   muxing_in_progress = false;
   last_open_dir      = wxT("");
-  cmdline            = wxString::Format(wxU("\"%s\" -o \"%s\""), settings.mkvmerge.c_str(), tc_output->GetValue().c_str());
+  cmdline            = wxString::Format(wxU("\"%s\" -o \"%s\""), options.mkvmerge.c_str(), tc_output->GetValue().c_str());
 
   load_job_queue();
 
@@ -889,6 +901,7 @@ mmg_dialog::on_browse_output(wxCommandEvent &evt) {
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
     tc_output->SetValue(dlg.GetPath());
+    remember_previous_output_directory();
   }
 }
 
@@ -1143,7 +1156,7 @@ mmg_dialog::on_run(wxCommandEvent &evt) {
 
   if (!chapter_editor_page->is_empty() &&
       (global_page->tc_chapters->GetValue() == wxT("")) &&
-      (!warned_chapter_editor_not_empty || settings.warn_usage)) {
+      (!warned_chapter_editor_not_empty || options.warn_usage)) {
     warned_chapter_editor_not_empty = true;
     if (wxMessageBox(wxT("The chapter editor has been used and contains "
                          "data. However, no chapter file has been selected "
@@ -1162,8 +1175,10 @@ mmg_dialog::on_run(wxCommandEvent &evt) {
       return;
   }
 
-  if (settings.ask_before_overwriting && !check_before_overwriting())
+  if (options.ask_before_overwriting && !check_before_overwriting())
     return;
+
+  remember_previous_output_directory();
 
   set_on_top(false);
   muxing_in_progress = true;
@@ -1369,19 +1384,19 @@ mmg_dialog::update_command_line() {
   wxString append_mapping;
 
   old_cmdline = cmdline;
-  cmdline = wxT("\"") + settings.mkvmerge + wxT("\" -o \"") + tc_output->GetValue() + wxT("\" ");
+  cmdline = wxT("\"") + options.mkvmerge + wxT("\" -o \"") + tc_output->GetValue() + wxT("\" ");
 
   clargs.Clear();
-  clargs.Add(settings.mkvmerge);
+  clargs.Add(options.mkvmerge);
   clargs.Add(wxT("--output-charset"));
   clargs.Add(wxT("UTF-8"));
   clargs.Add(wxT("-o"));
   clargs.Add(tc_output->GetValue());
   args_start = clargs.Count();
 
-  if (settings.priority != wxT("normal")) {
+  if (options.priority != wxT("normal")) {
     clargs.Add(wxT("--priority"));
-    clargs.Add(settings.priority);
+    clargs.Add(options.priority);
   }
 
   for (fidx = 0; fidx < files.size(); fidx++) {
@@ -1670,7 +1685,7 @@ mmg_dialog::update_command_line() {
       clargs.Add(strip(opts[i]));
   }
 
-  if (settings.always_use_simpleblock) {
+  if (options.always_use_simpleblock) {
     clargs.Add(wxT("--engage"));
     clargs.Add(wxT("use_simpleblock"));
   }
@@ -1803,35 +1818,42 @@ mmg_dialog::set_title_maybe(const wxString &new_title) {
 
 void
 mmg_dialog::set_output_maybe(const wxString &new_output) {
-  if (settings.autoset_output_filename &&
-      (new_output.length() > 0) &&
-      (tc_output->GetValue().length() == 0)) {
-    wxString output = settings.output_directory;
-    wxFileName filename(new_output);
-    bool has_video = false, has_audio = false;
-    vector<mmg_track_t *>::iterator t;
+  if (!options.autoset_output_filename
+      || new_output.empty()
+      || !tc_output->GetValue().empty())
+    return;
 
-    mxforeach(t, tracks) {
-      if ('v' == (*t)->type) {
-        has_video = true;
-        break;
-      } else if ('a' == (*t)->type)
-        has_audio = true;
-    }
+  bool has_video = false, has_audio = false;
+  vector<mmg_track_t *>::iterator t;
 
-    if (output.IsEmpty())
-      output = filename.GetPath();
-
-    output += wxFileName::GetPathSeparator() + filename.GetName()
-      + (has_video ? wxU(".mkv") : has_audio ? wxU(".mka") : wxU(".mks"));
-
-    tc_output->SetValue(output);
+  mxforeach(t, tracks) {
+    if ('v' == (*t)->type) {
+      has_video = true;
+      break;
+    } else if ('a' == (*t)->type)
+      has_audio = true;
   }
+
+  wxString output;
+  wxFileName filename(new_output);
+
+  if (ODM_PREVIOUS == options.output_directory_mode)
+    output = previous_output_directory;
+  else if (ODM_FIXED == options.output_directory_mode)
+    output = options.output_directory;
+
+  if (output.IsEmpty())
+    output = filename.GetPath();
+
+  output += wxFileName::GetPathSeparator() + filename.GetName()
+    + (has_video ? wxU(".mkv") : has_audio ? wxU(".mka") : wxU(".mks"));
+
+  tc_output->SetValue(output);
 }
 
 void
 mmg_dialog::remove_output_filename() {
-  if (settings.autoset_output_filename)
+  if (options.autoset_output_filename)
     tc_output->SetValue(wxT(""));
 }
 
@@ -1855,7 +1877,7 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
 
   line = wxT("The output file '") + tc_output->GetValue() +
     wxT("' already exists. Do you want to overwrite it?");
-  if (settings.ask_before_overwriting &&
+  if (options.ask_before_overwriting &&
       wxFile::Exists(tc_output->GetValue()) &&
       (wxMessageBox(break_line(line, 60), wxT("Overwrite existing file?"),
                     wxYES_NO) != wxYES))
@@ -1871,7 +1893,7 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
     if (description.length() == 0)
       return;
 
-    if (!settings.ask_before_overwriting)
+    if (!options.ask_before_overwriting)
       break;
     line = wxT("A job with the description '") + description +
       wxT("' already exists. Do you really want to add another one "
@@ -1911,7 +1933,9 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
 
   save_job_queue();
 
-  if (settings.filenew_after_add_to_jobqueue) {
+  remember_previous_output_directory();
+
+  if (options.filenew_after_add_to_jobqueue) {
     wxCommandEvent dummy;
     on_file_new(dummy);
   }
@@ -2022,24 +2046,26 @@ mmg_dialog::save_preferences() {
   wxConfigBase *cfg = (wxConfig *)wxConfigBase::Get();
   int x, y;
 
-  cfg->SetPath(wxT("/GUI"));
+  cfg->SetPath(wxU("/GUI"));
 
   GetPosition(&x, &y);
-  cfg->Write(wxT("window_position_x"), x);
-  cfg->Write(wxT("window_position_y"), y);
-  cfg->Write(wxT("warned_chapter_editor_not_empty"), warned_chapter_editor_not_empty);
+  cfg->Write(wxU("window_position_x"), x);
+  cfg->Write(wxU("window_position_y"), y);
+  cfg->Write(wxU("warned_chapter_editor_not_empty"), warned_chapter_editor_not_empty);
+  cfg->Write(wxU("previous_output_directory"), previous_output_directory);
 
-  cfg->Write(wxT("mkvmerge_executable"), settings.mkvmerge);
-  cfg->Write(wxT("process_priority"), settings.priority);
-  cfg->Write(wxT("autoset_output_filename"), settings.autoset_output_filename);
-  cfg->Write(wxT("output_directory"), settings.output_directory);
-  cfg->Write(wxT("ask_before_overwriting"), settings.ask_before_overwriting);
-  cfg->Write(wxT("filenew_after_add_to_jobqueue"), settings.filenew_after_add_to_jobqueue);
-  cfg->Write(wxT("on_top"), settings.on_top);
-  cfg->Write(wxT("warn_usage"), settings.warn_usage);
-  cfg->Write(wxT("gui_debugging"), settings.gui_debugging);
-  cfg->Write(wxT("always_use_simpleblock"), settings.always_use_simpleblock);
-  cfg->Write(wxT("set_delay_from_filename"), settings.set_delay_from_filename);
+  cfg->Write(wxU("mkvmerge_executable"), options.mkvmerge);
+  cfg->Write(wxU("process_priority"), options.priority);
+  cfg->Write(wxU("autoset_output_filename"), options.autoset_output_filename);
+  cfg->Write(wxU("output_directory_mode"), (long)options.output_directory_mode);
+  cfg->Write(wxU("output_directory"), options.output_directory);
+  cfg->Write(wxU("ask_before_overwriting"), options.ask_before_overwriting);
+  cfg->Write(wxU("filenew_after_add_to_jobqueue"), options.filenew_after_add_to_jobqueue);
+  cfg->Write(wxU("on_top"), options.on_top);
+  cfg->Write(wxU("warn_usage"), options.warn_usage);
+  cfg->Write(wxU("gui_debugging"), options.gui_debugging);
+  cfg->Write(wxU("always_use_simpleblock"), options.always_use_simpleblock);
+  cfg->Write(wxU("set_delay_from_filename"), options.set_delay_from_filename);
 
   cfg->Flush();
 }
@@ -2058,20 +2084,32 @@ mmg_dialog::load_preferences() {
       (0 < window_pos_y) && (0xffff > window_pos_y))
     Move(window_pos_x, window_pos_y);
 
-  cfg->Read(wxT("warned_chapterditor_not_empty"), &warned_chapter_editor_not_empty, false);
+  cfg->Read(wxU("warned_chapterditor_not_empty"), &warned_chapter_editor_not_empty, false);
+  cfg->Read(wxU("previous_output_directory"), &previous_output_directory, wxU(""));
 
+  cfg->Read(wxU("mkvmerge_executable"), &options.mkvmerge, wxU("mkvmerge"));
+  cfg->Read(wxU("process_priority"), &options.priority, wxU("normal"));
+  cfg->Read(wxU("autoset_output_filename"), &options.autoset_output_filename, true);
+  cfg->Read(wxU("output_directory_mode"), (long *)&options.output_directory_mode, ODM_FROM_FIRST_INPUT_FILE);
+  cfg->Read(wxU("output_directory"), &options.output_directory, wxU(""));
+  cfg->Read(wxU("ask_before_overwriting"), &options.ask_before_overwriting, true);
+  cfg->Read(wxU("filenew_after_add_to_jobqueue"), &options.filenew_after_add_to_jobqueue, false);
+  cfg->Read(wxU("on_top"), &options.on_top, false);
+  cfg->Read(wxU("warn_usage"), &options.warn_usage, true);
+  cfg->Read(wxU("gui_debugging"), &options.gui_debugging, false);
+  cfg->Read(wxU("always_use_simpleblock"), &options.always_use_simpleblock, false);
+  cfg->Read(wxU("set_delay_from_filename"), &options.set_delay_from_filename, true);
 
-  cfg->Read(wxT("mkvmerge_executable"), &settings.mkvmerge, wxT("mkvmerge"));
-  cfg->Read(wxT("process_priority"), &settings.priority, wxT("normal"));
-  cfg->Read(wxT("autoset_output_filename"), &settings.autoset_output_filename, true);
-  cfg->Read(wxT("output_directory"), &settings.output_directory, wxT(""));
-  cfg->Read(wxT("ask_before_overwriting"), &settings.ask_before_overwriting, true);
-  cfg->Read(wxT("filenew_after_add_to_jobqueue"), &settings.filenew_after_add_to_jobqueue, false);
-  cfg->Read(wxT("on_top"), &settings.on_top, false);
-  cfg->Read(wxT("warn_usage"), &settings.warn_usage, true);
-  cfg->Read(wxT("gui_debugging"), &settings.gui_debugging, false);
-  cfg->Read(wxT("always_use_simpleblock"), &settings.always_use_simpleblock, false);
-  cfg->Read(wxT("set_delay_from_filename"), &settings.set_delay_from_filename, true);
+  options.validate();
+}
+
+void
+mmg_dialog::remember_previous_output_directory() {
+  wxFileName filename(tc_output->GetValue());
+  wxString path = filename.GetPath();
+
+  if (!path.IsEmpty())
+    previous_output_directory = path;
 }
 
 void
@@ -2102,18 +2140,18 @@ mmg_dialog::set_on_top(bool on_top) {
 
 void
 mmg_dialog::restore_on_top() {
-  set_on_top(settings.on_top);
+  set_on_top(options.on_top);
 }
 
 void
-mmg_dialog::on_file_settings(wxCommandEvent &evt) {
-  settings_dialog dlg(this, settings);
+mmg_dialog::on_file_options(wxCommandEvent &evt) {
+  options_dialog dlg(this, options);
 
   if (dlg.ShowModal() != wxID_OK)
     return;
 
-  log_window->Show(settings.gui_debugging);
-  set_on_top(settings.on_top);
+  log_window->Show(options.gui_debugging);
+  set_on_top(options.on_top);
   query_mkvmerge_capabilities();
 }
 
@@ -2125,7 +2163,7 @@ mmg_dialog::query_mkvmerge_capabilities() {
   int result, i;
 
   wxLogMessage(wxT("Querying mkvmerge's capabilities"));
-  tmp = wxT("\"") + settings.mkvmerge + wxT("\" --capabilities");
+  tmp = wxT("\"") + options.mkvmerge + wxT("\" --capabilities");
 #if defined(SYS_WINDOWS)
   result = wxExecute(tmp, output);
 #else
@@ -2199,7 +2237,7 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_FILE_NEW, mmg_dialog::on_file_new)
   EVT_MENU(ID_M_FILE_LOAD, mmg_dialog::on_file_load)
   EVT_MENU(ID_M_FILE_SAVE, mmg_dialog::on_file_save)
-  EVT_MENU(ID_M_FILE_SETTINGS, mmg_dialog::on_file_settings)
+  EVT_MENU(ID_M_FILE_OPTIONS, mmg_dialog::on_file_options)
   EVT_MENU(ID_M_FILE_SETOUTPUT, mmg_dialog::on_browse_output)
   EVT_MENU(ID_M_MUXING_START, mmg_dialog::on_run)
   EVT_MENU(ID_M_MUXING_SHOW_CMDLINE, mmg_dialog::on_show_cmdline)
