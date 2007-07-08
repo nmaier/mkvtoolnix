@@ -432,18 +432,17 @@ qtmp4_reader_c::calculate_timecodes() {
   }
 
   if (0 > min_timecode) {
-    mxforeach(idmx, demuxers)
-      (*idmx)->adjust_timecodes(-1 * min_timecode);
-  } else
-    min_timecode = 0;
-
-  if (0 != min_timecode) {
     min_timecode *= -1;
+    mxforeach(idmx, demuxers)
+      (*idmx)->adjust_timecodes(min_timecode);
+
     mxwarn("This file contains at least one frame with a negative "
            "timecode. mkvmerge will adjust all timecodes by "
            FMT_TIMECODEN " so that none is negative anymore.\n",
            ARG_TIMECODEN(min_timecode));
-  }
+
+  } else
+    min_timecode = 0;
 }
 
 // Also taken from mplayer's demux_mov.c file.
