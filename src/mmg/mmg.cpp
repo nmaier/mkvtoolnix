@@ -943,8 +943,6 @@ mmg_dialog::on_file_new(wxCommandEvent &evt) {
   wxRemoveFile(tmp_name);
 
   set_status_bar(wxT("Configuration cleared."));
-
-  first_input_directory.Clear();
 }
 
 void
@@ -1842,14 +1840,9 @@ mmg_dialog::set_output_maybe(const wxString &new_output) {
     output = previous_output_directory;
   else if (ODM_FIXED == options.output_directory_mode)
     output = options.output_directory;
-  else
-    output = first_input_directory;
 
   if (output.IsEmpty())
     output = filename.GetPath();
-
-  if (first_input_directory.IsEmpty())
-    first_input_directory = filename.GetPath();
 
   output += wxFileName::GetPathSeparator() + filename.GetName()
     + (has_video ? wxU(".mkv") : has_audio ? wxU(".mka") : wxU(".mks"));

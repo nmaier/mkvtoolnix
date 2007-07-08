@@ -82,7 +82,7 @@ class mmg_dialog: public wxFrame {
 public:
   wxButton *b_browse_output;
   wxTextCtrl *tc_output;
-  wxString previous_output_directory, first_input_directory;
+  wxString previous_output_directory;
 
   wxString cmdline, cli_options;
   wxArrayString clargs;
