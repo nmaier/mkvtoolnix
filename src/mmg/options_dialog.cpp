@@ -281,7 +281,7 @@ options_dialog::enable_output_filename_controls(bool enable) {
 void
 options_dialog::on_ok(wxCommandEvent &evt) {
   m_options.mkvmerge                      = tc_mkvmerge->GetValue();
-  m_options.priority                      = cob_priority->GetStringSelection();
+  m_options.priority                      = cob_priority->GetValue();
   m_options.output_directory              = tc_output_directory->GetValue();
   m_options.autoset_output_filename       = cb_autoset_output_filename->IsChecked();
   m_options.ask_before_overwriting        = cb_ask_before_overwriting->IsChecked();
