@@ -844,6 +844,9 @@ mmg_dialog::mmg_dialog():
 
   load_preferences();
 
+  log_window->Show(options.gui_debugging);
+  set_on_top(options.on_top);
+
   muxing_in_progress = false;
   last_open_dir      = wxT("");
   cmdline            = wxString::Format(wxU("\"%s\" -o \"%s\""), options.mkvmerge.c_str(), tc_output->GetValue().c_str());
