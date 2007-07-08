@@ -846,6 +846,7 @@ mmg_dialog::mmg_dialog():
 
   log_window->Show(options.gui_debugging);
   set_on_top(options.on_top);
+  query_mkvmerge_capabilities();
 
   muxing_in_progress = false;
   last_open_dir      = wxT("");
@@ -927,24 +928,23 @@ mmg_dialog::on_quit(wxCommandEvent &evt) {
 
 void
 mmg_dialog::on_file_new(wxCommandEvent &evt) {
-  wxFileConfig *cfg;
   wxString tmp_name;
 
-  tmp_name.Printf(wxT("%stempsettings-%d.mmg"),
-                  get_temp_dir().c_str(), (int)wxGetProcessId());
-  cfg = new wxFileConfig(wxT("mkvmerge GUI"), wxT("Moritz Bunkus"), tmp_name);
+  tmp_name.Printf(wxT("%stempsettings-%d.mmg"), get_temp_dir().c_str(), (int)wxGetProcessId());
+  wxFileConfig cfg(wxT("mkvmerge GUI"), wxT("Moritz Bunkus"), tmp_name);
   tc_output->SetValue(wxT(""));
 
-  input_page->load(cfg, MMG_CONFIG_FILE_VERSION_MAX);
+  input_page->load(&cfg, MMG_CONFIG_FILE_VERSION_MAX);
   input_page->on_file_new(evt);
-  attachments_page->load(cfg, MMG_CONFIG_FILE_VERSION_MAX);
-  global_page->load(cfg, MMG_CONFIG_FILE_VERSION_MAX);
+  attachments_page->load(&cfg, MMG_CONFIG_FILE_VERSION_MAX);
+  global_page->load(&cfg, MMG_CONFIG_FILE_VERSION_MAX);
   notebook->SetSelection(0);
 
-  delete cfg;
   wxRemoveFile(tmp_name);
 
   set_status_bar(wxT("Configuration cleared."));
+
+  first_input_directory.Clear();
 }
 
 void
@@ -967,13 +967,12 @@ mmg_dialog::on_file_load(wxCommandEvent &evt) {
 void
 mmg_dialog::load(wxString file_name,
                  bool used_for_jobs) {
-  wxFileConfig *cfg;
   wxString s;
   int version;
 
-  cfg = new wxFileConfig(wxT("mkvmerge GUI"), wxT("Moritz Bunkus"), file_name);
-  cfg->SetPath(wxT("/mkvmergeGUI"));
-  if (!cfg->Read(wxT("file_version"), &version) || (1 > version) ||
+  wxFileConfig cfg(wxT("mkvmerge GUI"), wxT("Moritz Bunkus"), file_name);
+  cfg.SetPath(wxT("/mkvmergeGUI"));
+  if (!cfg.Read(wxT("file_version"), &version) || (1 > version) ||
       (MMG_CONFIG_FILE_VERSION_MAX < version)) {
     if (used_for_jobs)
       return;
@@ -982,15 +981,14 @@ mmg_dialog::load(wxString file_name,
                  wxOK | wxCENTER | wxICON_ERROR);
     return;
   }
-  cfg->Read(wxT("output_file_name"), &s);
+
+  cfg.Read(wxT("output_file_name"), &s);
   tc_output->SetValue(s);
-  cfg->Read(wxT("cli_options"), &cli_options, wxT(""));
+  cfg.Read(wxT("cli_options"), &cli_options, wxT(""));
 
-  input_page->load(cfg, version);
-  attachments_page->load(cfg, version);
-  global_page->load(cfg, version);
-
-  delete cfg;
+  input_page->load(&cfg, version);
+  attachments_page->load(&cfg, version);
+  global_page->load(&cfg, version);
 
   if (!used_for_jobs) {
     set_last_settings_in_menu(file_name);
@@ -1844,9 +1842,14 @@ mmg_dialog::set_output_maybe(const wxString &new_output) {
     output = previous_output_directory;
   else if (ODM_FIXED == options.output_directory_mode)
     output = options.output_directory;
+  else
+    output = first_input_directory;
 
   if (output.IsEmpty())
     output = filename.GetPath();
+
+  if (first_input_directory.IsEmpty())
+    first_input_directory = filename.GetPath();
 
   output += wxFileName::GetPathSeparator() + filename.GetName()
     + (has_video ? wxU(".mkv") : has_audio ? wxU(".mka") : wxU(".mks"));
