@@ -1300,6 +1300,8 @@ mpeg_ps_reader_c::identify() {
       info += "packetizer:mpeg4_p10_es_video ";
     }
 
+    info += mxsprintf("stream_id:%#x", track->id);
+
     if (!info.empty()) {
       info = mxsprintf(" [%s]", info.c_str());
     }
