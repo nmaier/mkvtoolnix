@@ -64,6 +64,7 @@ mm_file_io_c::mm_file_io_c(const string &path,
 
   string local_path;
   char *cmode;
+  struct stat st;
 # if HAVE_POSIX_FADVISE
   int advise;
 
@@ -105,6 +106,10 @@ mm_file_io_c::mm_file_io_c(const string &path,
   if ((MODE_WRITE == mode) || (MODE_CREATE == mode))
     prepare_path(path);
   local_path = from_utf8(cc_local_utf8, path);
+
+  if ((-1 == stat(local_path.c_str(), &st)) || S_ISDIR(st.st_mode))
+    throw mm_io_open_error_c();
+
   file = (FILE *)fopen(local_path.c_str(), cmode);
 
   if (file == NULL)
