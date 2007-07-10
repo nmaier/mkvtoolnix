@@ -107,7 +107,7 @@ mm_file_io_c::mm_file_io_c(const string &path,
     prepare_path(path);
   local_path = from_utf8(cc_local_utf8, path);
 
-  if ((-1 == stat(local_path.c_str(), &st)) || S_ISDIR(st.st_mode))
+  if ((0 == stat(local_path.c_str(), &st)) && S_ISDIR(st.st_mode))
     throw mm_io_open_error_c();
 
   file = (FILE *)fopen(local_path.c_str(), cmode);
