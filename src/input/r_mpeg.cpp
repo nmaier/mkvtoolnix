@@ -494,7 +494,7 @@ mpeg_ps_reader_c::parse_program_stream_map() {
         switch(type) {
           case 0x01:
             es_map[id_offset] = FOURCC('M', 'P', 'G', '1');
-          break;
+            break;
           case 0x02:
             es_map[id_offset] = FOURCC('M', 'P', 'G', '2');
             break;
@@ -596,7 +596,7 @@ mpeg_ps_reader_c::parse_packet(int id,
     if (hdrlen > length)
       return false;
 
-    if (2 == pts_flags) {
+    if (2 == (pts_flags & 0x02)) {
       if (hdrlen < 5)
         return false;
       c = io->read_uint8();
@@ -605,7 +605,10 @@ mpeg_ps_reader_c::parse_packet(int id,
       length -= 5;
       hdrlen -= 5;
 
-    } else if (3 == pts_flags) {
+    }
+
+    // DTS
+    if (1 == (pts_flags & 0x01)) {
       if (hdrlen < 5)
         return false;
       io->skip(5);
@@ -628,9 +631,9 @@ mpeg_ps_reader_c::parse_packet(int id,
         // Subtitles, not supported yet.
         return false;
 
-      } else if ((0x80 == (aid & 0xc0)) ||
-                 (0x00 == (aid & 0xe0)) ||
-                 (0xc0 == (aid & 0xc0))) {
+      } else if (   ((0x80 <= aid) && (0x8f >= aid))
+                 || ((0x98 <= aid) && (0xaf >= aid))
+                 || ((0xc0 <= aid) && (0xcf >= aid))) {
         io->skip(3);         // number of frames, startpos
         length -= 3;
 
