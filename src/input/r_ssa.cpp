@@ -38,7 +38,12 @@ ssa_reader_c::probe_file(mm_text_io_c *io,
                          int64_t size) {
   string line;
   int line_number;
+
+  pcrecpp::RE_Options opt_caseless;
+  opt_caseless.set_caseless(true);
   pcrecpp::RE comment_re("^\\s*;");
+  pcrecpp::RE script_info_re("^\\s*\\[script\\s+info\\]", opt_caseless);
+  pcrecpp::RE styles_re("^\\s*\\[V4\\+?\\s+Styles\\]", opt_caseless);
 
   try {
     line_number = 0;
@@ -46,26 +51,19 @@ ssa_reader_c::probe_file(mm_text_io_c *io,
     while (io->getline2(line)) {
       ++line_number;
 
-      strip(line, true);
+      // Read at most 100 lines.
+      if (100 < line_number)
+        return 0;
+
       // This is the line mkvmerge is looking for: positive match.
-      if (!strcasecmp(line.c_str(), "[script info]")) {
+      if (script_info_re.PartialMatch(line) || styles_re.PartialMatch(line)) {
         io->setFilePointer(0, seek_beginning);
         return 1;
       }
-
-      // Read at most 500 lines.
-      if (line_number > 500)
-        return 0;
-
-      // Allow for empty lines and comments.
-      if (comment_re.PartialMatch(line) || (line == ""))
-        continue;
-
-      // It's something else: negative match.
-      return 0;
     }
   } catch (...) {
   }
+
   return 0;
 }
 
