@@ -133,6 +133,8 @@ xtr_base_c::create_extractor(const string &new_codec_id,
   // Audio formats
   else if (new_codec_id == MKV_A_AC3)
     return new xtr_base_c(new_codec_id, new_tid, tspec, "Dolby Digital (AC3)");
+  else if (new_codec_id == MKV_A_EAC3)
+    return new xtr_base_c(new_codec_id, new_tid, tspec, "Dolby Digital Plus (EAC3)");
   else if (starts_with_case(new_codec_id, "A_MPEG/L"))
     return new xtr_base_c(new_codec_id, new_tid, tspec,
                           "MPEG-1 Audio Layer 2/3");
