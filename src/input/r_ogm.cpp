@@ -431,7 +431,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
     ptzr = NULL;
     switch (dmx->stype) {
-      case OGM_STREAM_TYPE_VIDEO:
+      case OGM_STREAM_TYPE_V_MSCOMP:
         // AVI compatibility mode. Fill in the values we've got and guess
         // the others.
         put_uint32_le(&bih.bi_size, sizeof(alBITMAPINFOHEADER));
@@ -485,7 +485,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
         break;
 
-      case OGM_STREAM_TYPE_PCM:
+      case OGM_STREAM_TYPE_A_PCM:
         ptzr = new pcm_packetizer_c(this,
                                     get_uint64_le(&sth->samples_per_unit),
                                     get_uint16_le(&sth->sh.audio.channels),
@@ -495,7 +495,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
                (int64_t)tid);
         break;
 
-      case OGM_STREAM_TYPE_MP3:
+      case OGM_STREAM_TYPE_A_MP3:
         ptzr = new mp3_packetizer_c(this,
                                     get_uint64_le(&sth->samples_per_unit),
                                     get_uint16_le(&sth->sh.audio.channels),
@@ -504,7 +504,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
                (int64_t)tid);
         break;
 
-      case OGM_STREAM_TYPE_AC3:
+      case OGM_STREAM_TYPE_A_AC3:
         ptzr = new ac3_packetizer_c(this,
                                     get_uint64_le(&sth->samples_per_unit),
                                     get_uint16_le(&sth->sh.audio.channels), 0,
@@ -514,7 +514,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
         break;
 
-      case OGM_STREAM_TYPE_AAC:
+      case OGM_STREAM_TYPE_A_AAC:
         aac_info_extracted = false;
         if (dmx->packet_data[0]->get_size() >= (sizeof(stream_header) + 5)) {
           if (parse_aac_data(dmx->packet_data[0]->get() +
@@ -549,7 +549,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
         break;
 
-      case OGM_STREAM_TYPE_VORBIS:
+      case OGM_STREAM_TYPE_A_VORBIS:
         vorbis_info_init(&vi);
         vorbis_comment_init(&vc);
         memset(&op, 0, sizeof(ogg_packet));
@@ -575,7 +575,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
         break;
 
-      case OGM_STREAM_TYPE_TEXT:
+      case OGM_STREAM_TYPE_S_TEXT:
         ptzr = new textsubs_packetizer_c(this, MKV_S_TEXTUTF8, NULL, 0, true,
                                          false, ti);
         mxinfo(FMT_TID "Using the text subtitle output module.\n",
@@ -584,7 +584,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
         break;
 
 #if defined(HAVE_FLAC_FORMAT_H)
-      case OGM_STREAM_TYPE_FLAC:
+      case OGM_STREAM_TYPE_A_FLAC:
         unsigned char *buf;
         int size, i;
 
@@ -606,7 +606,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
         break;
 #endif
-      case OGM_STREAM_TYPE_THEORA:
+      case OGM_STREAM_TYPE_V_THEORA:
         codecprivate = lace_memory_xiph(dmx->packet_data);
         ti.private_data = codecprivate->get();
         ti.private_size = codecprivate->get_size();
@@ -711,7 +711,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
     if (!demuxing_requested('a', sdemuxers.size() - 1))
       return;
 
-    dmx->stype = OGM_STREAM_TYPE_VORBIS;
+    dmx->stype = OGM_STREAM_TYPE_A_VORBIS;
     dmx->num_header_packets = 3;
     dmx->in_use = true;
 
@@ -722,7 +722,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
     if (!demuxing_requested('v', sdemuxers.size() - 1))
       return;
 
-    dmx->stype = OGM_STREAM_TYPE_THEORA;
+    dmx->stype = OGM_STREAM_TYPE_V_THEORA;
     dmx->num_header_packets = 3;
     dmx->in_use = true;
 
@@ -742,7 +742,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
     if (!demuxing_requested('a', sdemuxers.size() - 1))
       return;
 
-    dmx->stype = OGM_STREAM_TYPE_FLAC;
+    dmx->stype = OGM_STREAM_TYPE_A_FLAC;
     dmx->in_use = true;
 
 #if !defined(HAVE_FLAC_FORMAT_H)
@@ -773,7 +773,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
       if (!demuxing_requested('v', sdemuxers.size() - 1))
         return;
 
-      dmx->stype = OGM_STREAM_TYPE_VIDEO;
+      dmx->stype = OGM_STREAM_TYPE_V_MSCOMP;
       if (video_fps < 0)
         video_fps = 10000000.0 / (float)get_uint64_le(&sth->time_unit);
       dmx->in_use = true;
@@ -800,13 +800,13 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
       codec_id = strtol(buf, (char **)NULL, 16);
 
       if (codec_id == 0x0001)
-        dmx->stype = OGM_STREAM_TYPE_PCM;
+        dmx->stype = OGM_STREAM_TYPE_A_PCM;
       else if (codec_id == 0x0055)
-        dmx->stype = OGM_STREAM_TYPE_MP3;
+        dmx->stype = OGM_STREAM_TYPE_A_MP3;
       else if (codec_id == 0x2000)
-        dmx->stype = OGM_STREAM_TYPE_AC3;
+        dmx->stype = OGM_STREAM_TYPE_A_AC3;
       else if (codec_id == 0x00ff)
-        dmx->stype = OGM_STREAM_TYPE_AAC;
+        dmx->stype = OGM_STREAM_TYPE_A_AAC;
       else {
         mxwarn("ogm_reader: Unknown audio stream type %u. "
                "Ignoring stream id %u.\n", codec_id,
@@ -823,7 +823,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
       if (!demuxing_requested('s', sdemuxers.size() - 1))
         return;
 
-      dmx->stype = OGM_STREAM_TYPE_TEXT;
+      dmx->stype = OGM_STREAM_TYPE_S_TEXT;
       dmx->in_use = true;
 
       return;
@@ -875,7 +875,7 @@ ogm_reader_c::process_page(ogg_page *og) {
     eos = op.e_o_s;
 
 #if defined(HAVE_FLAC_FORMAT_H)
-    if (dmx->stype == OGM_STREAM_TYPE_FLAC) {
+    if (dmx->stype == OGM_STREAM_TYPE_A_FLAC) {
       dmx->units_processed++;
       if (dmx->units_processed <= dmx->flac_header_packets)
         continue;
@@ -907,7 +907,7 @@ ogm_reader_c::process_page(ogg_page *og) {
     }
 #endif
 
-    if (dmx->stype == OGM_STREAM_TYPE_THEORA) {
+    if (dmx->stype == OGM_STREAM_TYPE_V_THEORA) {
       int keyframe_number, non_keyframe_number;
       int64_t timecode, duration, bref;
 
@@ -950,7 +950,7 @@ ogm_reader_c::process_page(ogg_page *og) {
     if (((*op.packet & 3) != PACKET_TYPE_HEADER) &&
         ((*op.packet & 3) != PACKET_TYPE_COMMENT)) {
 
-      if (dmx->stype == OGM_STREAM_TYPE_VIDEO) {
+      if (dmx->stype == OGM_STREAM_TYPE_V_MSCOMP) {
         if (!duration_len || !duration)
           duration = 1;
 
@@ -964,7 +964,7 @@ ogm_reader_c::process_page(ogg_page *og) {
         PTZR(dmx->ptzr)->process(new packet_t(mem, pos * dmx->default_duration, (int64_t)duration * dmx->default_duration));
         dmx->units_processed += duration;
 
-      } else if (dmx->stype == OGM_STREAM_TYPE_TEXT) {
+      } else if (dmx->stype == OGM_STREAM_TYPE_S_TEXT) {
         dmx->units_processed++;
         if (((op.bytes - 1 - duration_len) > 2) ||
             ((op.packet[duration_len + 1] != ' ') &&
@@ -977,7 +977,7 @@ ogm_reader_c::process_page(ogg_page *og) {
                                  (int64_t)duration * 1000000));
         }
 
-      } else if (dmx->stype == OGM_STREAM_TYPE_VORBIS)
+      } else if (dmx->stype == OGM_STREAM_TYPE_A_VORBIS)
         PTZR(dmx->ptzr)->process(new packet_t(new memory_c(op.packet, op.bytes,
                                                            false)));
 
@@ -1025,7 +1025,7 @@ ogm_reader_c::process_header_packets(ogm_demuxer_t *dmx) {
   if (dmx->headers_read)
     return;
 
-  if (dmx->stype == OGM_STREAM_TYPE_FLAC) {
+  if (dmx->stype == OGM_STREAM_TYPE_A_FLAC) {
 #if defined HAVE_FLAC_FORMAT_H
     while ((dmx->packet_data.size() < dmx->flac_header_packets) &&
            (ogg_stream_packetout(&dmx->os, &op) == 1)) {
@@ -1051,7 +1051,7 @@ ogm_reader_c::process_header_packets(ogm_demuxer_t *dmx) {
   while (ogg_stream_packetout(&dmx->os, &op) == 1) {
     bool is_header_packet;
 
-    if (OGM_STREAM_TYPE_THEORA == dmx->stype)
+    if (OGM_STREAM_TYPE_V_THEORA == dmx->stype)
       is_header_packet = ((0x80 <= op.packet[0]) && (0x82 >= op.packet[0]));
     else
       is_header_packet = op.packet[0] & 1;
@@ -1178,14 +1178,14 @@ ogm_reader_c::identify() {
   if (identify_verbose)
     for (i = 0; i < sdemuxers.size(); i++)
       if ((sdemuxers[i]->title != "") &&
-          (sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO)) {
+          (sdemuxers[i]->stype == OGM_STREAM_TYPE_V_MSCOMP)) {
         info = string(" [title:") + escape(sdemuxers[i]->title) + string("]");
         break;
       }
 
   mxinfo("File '%s': container: Ogg/OGM%s\n", ti.fname.c_str(), info.c_str());
   for (i = 0; i < sdemuxers.size(); i++) {
-    if (sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO) {
+    if (sdemuxers[i]->stype == OGM_STREAM_TYPE_V_MSCOMP) {
       sth = (stream_header *)(sdemuxers[i]->packet_data[0]->get() + 1);
       memcpy(fourcc, sth->subtype, 4);
       fourcc[4] = 0;
@@ -1196,32 +1196,32 @@ ogm_reader_c::identify() {
         info += string("language:") + escape(sdemuxers[i]->language) +
           string(" ");
       if ((sdemuxers[i]->title != "") &&
-          (sdemuxers[i]->stype != OGM_STREAM_TYPE_VIDEO))
+          (sdemuxers[i]->stype != OGM_STREAM_TYPE_V_MSCOMP))
         info += string("track_name:") + escape(sdemuxers[i]->title) +
           string(" ");
       info += "]";
     } else
       info = "";
     mxinfo("Track ID %d: %s (%s)%s\n", i,
-           (sdemuxers[i]->stype == OGM_STREAM_TYPE_VORBIS ||
-            sdemuxers[i]->stype == OGM_STREAM_TYPE_PCM ||
-            sdemuxers[i]->stype == OGM_STREAM_TYPE_MP3 ||
-            sdemuxers[i]->stype == OGM_STREAM_TYPE_AC3 ||
-            sdemuxers[i]->stype == OGM_STREAM_TYPE_AAC ||
-            sdemuxers[i]->stype == OGM_STREAM_TYPE_FLAC) ? "audio" :
-           (sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO ||
-            sdemuxers[i]->stype == OGM_STREAM_TYPE_THEORA) ? "video" :
-           sdemuxers[i]->stype == OGM_STREAM_TYPE_TEXT ? "subtitles" :
+           (sdemuxers[i]->stype == OGM_STREAM_TYPE_A_AAC    ||
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_A_AC3    ||
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_A_FLAC   ||
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_A_MP3    ||
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_A_PCM    ||
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_A_VORBIS) ? "audio"     :
+           (sdemuxers[i]->stype == OGM_STREAM_TYPE_V_MSCOMP ||
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_V_THEORA) ? "video"     :
+           (sdemuxers[i]->stype == OGM_STREAM_TYPE_S_TEXT)   ? "subtitles" :
            "unknown",
-           sdemuxers[i]->stype == OGM_STREAM_TYPE_VORBIS ? "Vorbis" :
-           sdemuxers[i]->stype == OGM_STREAM_TYPE_PCM ? "PCM" :
-           sdemuxers[i]->stype == OGM_STREAM_TYPE_MP3 ? "MP3" :
-           sdemuxers[i]->stype == OGM_STREAM_TYPE_AC3 ? "AC3" :
-           sdemuxers[i]->stype == OGM_STREAM_TYPE_AAC ? "AAC" :
-           sdemuxers[i]->stype == OGM_STREAM_TYPE_VIDEO ? fourcc :
-           sdemuxers[i]->stype == OGM_STREAM_TYPE_THEORA ? "Theora" :
-           sdemuxers[i]->stype == OGM_STREAM_TYPE_TEXT ? "text" :
-           sdemuxers[i]->stype == OGM_STREAM_TYPE_FLAC ? "FLAC" :
+           sdemuxers[i]->stype == OGM_STREAM_TYPE_A_AAC    ? "AAC"    :
+           sdemuxers[i]->stype == OGM_STREAM_TYPE_A_AC3    ? "AC3"    :
+           sdemuxers[i]->stype == OGM_STREAM_TYPE_A_FLAC   ? "FLAC"   :
+           sdemuxers[i]->stype == OGM_STREAM_TYPE_A_MP3    ? "MP3"    :
+           sdemuxers[i]->stype == OGM_STREAM_TYPE_A_PCM    ? "PCM"    :
+           sdemuxers[i]->stype == OGM_STREAM_TYPE_A_VORBIS ? "Vorbis" :
+           sdemuxers[i]->stype == OGM_STREAM_TYPE_S_TEXT   ? "text"   :
+           sdemuxers[i]->stype == OGM_STREAM_TYPE_V_MSCOMP ? fourcc   :
+           sdemuxers[i]->stype == OGM_STREAM_TYPE_V_THEORA ? "Theora" :
            "unknown",
            info.c_str());
   }
@@ -1242,7 +1242,7 @@ ogm_reader_c::handle_stream_comments() {
 
   for (i = 0; i < sdemuxers.size(); i++) {
     dmx = sdemuxers[i];
-    if ((dmx->stype == OGM_STREAM_TYPE_FLAC) ||
+    if ((dmx->stype == OGM_STREAM_TYPE_A_FLAC) ||
         (dmx->packet_data.size() < 2))
       continue;
     comments = extract_vorbis_comments(dmx->packet_data[1]);
@@ -1310,7 +1310,7 @@ ogm_reader_c::handle_stream_comments() {
     if (title != "") {
       title = to_utf8(cch, title);
       if (!segment_title_set && (segment_title.length() == 0) &&
-          (dmx->stype == OGM_STREAM_TYPE_VIDEO)) {
+          (dmx->stype == OGM_STREAM_TYPE_V_MSCOMP)) {
         segment_title = title;
         segment_title_set = true;
       }

@@ -32,17 +32,19 @@
 #include "pr_generic.h"
 #include "theora_common.h"
 
-#define OGM_STREAM_TYPE_UNKNOWN    0
-#define OGM_STREAM_TYPE_VORBIS     1
-#define OGM_STREAM_TYPE_VIDEO      2
-#define OGM_STREAM_TYPE_PCM        3
-#define OGM_STREAM_TYPE_MP3        4
-#define OGM_STREAM_TYPE_AC3        5
-#define OGM_STREAM_TYPE_TEXT       6
-#define OGM_STREAM_TYPE_FLAC       7
-#define OGM_STREAM_TYPE_AAC        8
-#define OGM_STREAM_TYPE_THEORA     9
-#define OGM_STREAM_TYPE_VIDEO_AVC 10
+enum ogm_stream_type_e {
+  OGM_STREAM_TYPE_UNKNOWN,
+  OGM_STREAM_TYPE_A_AAC,
+  OGM_STREAM_TYPE_A_AC3,
+  OGM_STREAM_TYPE_A_FLAC,
+  OGM_STREAM_TYPE_A_MP3,
+  OGM_STREAM_TYPE_A_PCM,
+  OGM_STREAM_TYPE_A_VORBIS,
+  OGM_STREAM_TYPE_S_TEXT,
+  OGM_STREAM_TYPE_V_AVC,
+  OGM_STREAM_TYPE_V_MSCOMP,
+  OGM_STREAM_TYPE_V_THEORA,
+};
 
 #if defined(HAVE_FLAC_FORMAT_H)
 class flac_header_extractor_c {
@@ -68,7 +70,8 @@ public:
 struct ogm_demuxer_t {
   ogg_stream_state os;
   int ptzr;
-  int stype, serialno, eos;
+  ogm_stream_type_e stype;
+  int serialno, eos;
   int units_processed, vorbis_rate;
   int num_header_packets, num_non_header_packets;
   bool headers_read;
@@ -86,7 +89,7 @@ struct ogm_demuxer_t {
   bool is_avc;
 
   ogm_demuxer_t():
-    ptzr(-1), stype(0), serialno(0), eos(0), units_processed(0),
+    ptzr(-1), stype(OGM_STREAM_TYPE_UNKNOWN), serialno(0), eos(0), units_processed(0),
     vorbis_rate(0), num_header_packets(2), num_non_header_packets(0), headers_read(false),
     first_granulepos(0), last_granulepos(0), last_keyframe_number(-1), default_duration(0),
     in_use(false), is_avc(false) {
