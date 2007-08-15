@@ -695,6 +695,8 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
   buffer = mcptr_newsps;
   buffer->set_size(w.get_bit_position() / 8);
 
+  sps.checksum = calc_adler32(buffer->get(), buffer->get_size());
+
   return true;
 }
 
@@ -714,6 +716,8 @@ mpeg4::p10::parse_pps(memory_cptr &buffer,
 
     r.skip_bits(1);             // entropy_coding_mode_flag
     pps.pic_order_present = r.get_bit();
+
+    pps.checksum = calc_adler32(buffer->get(), buffer->get_size());
 
     return true;
   } catch (...) {
@@ -1223,41 +1227,61 @@ mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
 void
 mpeg4::p10::avc_es_parser_c::handle_sps_nalu(memory_cptr &nalu) {
   sps_info_t sps_info;
-  vector<sps_info_t>::iterator i;
+  int i;
 
   nalu_to_rbsp(nalu);
   if (!parse_sps(nalu, sps_info, m_keep_ar_info))
     return;
   rbsp_to_nalu(nalu);
 
-  mxforeach(i, m_sps_info_list)
-    if (i->id == sps_info.id)
+  for (i = 0; m_sps_info_list.size() > i; ++i)
+    if (m_sps_info_list[i].id == sps_info.id)
       break;
-  if (m_sps_info_list.end() == i) {
+
+  if (m_sps_info_list.size() == i) {
     m_sps_list.push_back(nalu);
     m_sps_info_list.push_back(sps_info);
     m_avcc_changed = true;
+
+  } else if (m_sps_info_list[i].checksum != sps_info.checksum) {
+    mxverb(2, "mpeg4::p10: SPS ID %04x changed; checksum old %04x new %04x\n", sps_info.id, m_sps_info_list[i].checksum, sps_info.checksum);
+
+    m_sps_info_list[i] = sps_info;
+    m_sps_list[i]      = nalu;
+    m_avcc_changed     = true;
   }
+
+  m_extra_data.push_back(create_nalu_with_size(nalu));
 }
 
 void
 mpeg4::p10::avc_es_parser_c::handle_pps_nalu(memory_cptr &nalu) {
   pps_info_t pps_info;
-  vector<pps_info_t>::iterator i;
+  int i;
 
   nalu_to_rbsp(nalu);
   if (!parse_pps(nalu, pps_info))
     return;
   rbsp_to_nalu(nalu);
 
-  mxforeach(i, m_pps_info_list)
-    if (i->id == pps_info.id)
+  for (i = 0; m_pps_info_list.size() > i; ++i)
+    if (m_pps_info_list[i].id == pps_info.id)
       break;
-  if (m_pps_info_list.end() == i) {
+
+  if (m_pps_info_list.size() == i) {
     m_pps_list.push_back(nalu);
     m_pps_info_list.push_back(pps_info);
     m_avcc_changed = true;
+
+  } else if (m_pps_info_list[i].checksum != pps_info.checksum) {
+    mxverb(2, "mpeg4::p10: PPS ID %04x changed; checksum old %04x new %04x\n", pps_info.id, m_pps_info_list[i].checksum, pps_info.checksum);
+
+    m_pps_info_list[i] = pps_info;
+    m_pps_list[i]      = nalu;
+    m_avcc_changed     = true;
   }
+
+  m_extra_data.push_back(create_nalu_with_size(nalu));
 }
 
 void

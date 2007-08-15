@@ -218,6 +218,8 @@ namespace mpeg4 {
       unsigned crop_left, crop_top, crop_right, crop_bottom;
       unsigned width, height;
 
+      uint32_t checksum;
+
       sps_info_t() {
         memset(this, 0, sizeof(*this));
       }
@@ -228,6 +230,8 @@ namespace mpeg4 {
       unsigned sps_id;
 
       bool pic_order_present;
+
+      uint32_t checksum;
 
       pps_info_t() {
         memset(this, 0, sizeof(*this));
