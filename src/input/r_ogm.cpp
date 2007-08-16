@@ -495,12 +495,13 @@ ogm_reader_c::create_packetizer(int64_t tid) {
                (int64_t)tid);
         break;
 
+      case OGM_STREAM_TYPE_A_MP2:
       case OGM_STREAM_TYPE_A_MP3:
         ptzr = new mp3_packetizer_c(this,
                                     get_uint64_le(&sth->samples_per_unit),
                                     get_uint16_le(&sth->sh.audio.channels),
                                     true, ti);
-        mxinfo(FMT_TID "Using the MP3 output module.\n", ti.fname.c_str(),
+        mxinfo(FMT_TID "Using the MPEG audio output module.\n", ti.fname.c_str(),
                (int64_t)tid);
         break;
 
@@ -801,6 +802,8 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
 
       if (codec_id == 0x0001)
         dmx->stype = OGM_STREAM_TYPE_A_PCM;
+      else if (codec_id == 0x0050)
+        dmx->stype = OGM_STREAM_TYPE_A_MP2;
       else if (codec_id == 0x0055)
         dmx->stype = OGM_STREAM_TYPE_A_MP3;
       else if (codec_id == 0x2000)
@@ -1206,6 +1209,7 @@ ogm_reader_c::identify() {
            (sdemuxers[i]->stype == OGM_STREAM_TYPE_A_AAC    ||
             sdemuxers[i]->stype == OGM_STREAM_TYPE_A_AC3    ||
             sdemuxers[i]->stype == OGM_STREAM_TYPE_A_FLAC   ||
+            sdemuxers[i]->stype == OGM_STREAM_TYPE_A_MP2    ||
             sdemuxers[i]->stype == OGM_STREAM_TYPE_A_MP3    ||
             sdemuxers[i]->stype == OGM_STREAM_TYPE_A_PCM    ||
             sdemuxers[i]->stype == OGM_STREAM_TYPE_A_VORBIS) ? "audio"     :
@@ -1216,6 +1220,7 @@ ogm_reader_c::identify() {
            sdemuxers[i]->stype == OGM_STREAM_TYPE_A_AAC    ? "AAC"    :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_A_AC3    ? "AC3"    :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_A_FLAC   ? "FLAC"   :
+           sdemuxers[i]->stype == OGM_STREAM_TYPE_A_MP2    ? "MP2"    :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_A_MP3    ? "MP3"    :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_A_PCM    ? "PCM"    :
            sdemuxers[i]->stype == OGM_STREAM_TYPE_A_VORBIS ? "Vorbis" :
