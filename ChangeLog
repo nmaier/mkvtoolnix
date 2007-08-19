@@ -1,5 +1,10 @@
 2007-08-19  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: enhancement: SRT files that contain coordinates in the
+	timecode line are supported. The coordinates are discarded
+	automatically (as S_TEXT/SRT doesn't support them), and a warning
+	is shown.
+
 	* Released v2.1.0.
 
 2007-08-16  Moritz Bunkus  <moritz@bunkus.org>

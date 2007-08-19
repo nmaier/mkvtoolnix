@@ -29,6 +29,7 @@ class srt_reader_c: public generic_reader_c {
 private:
   mm_text_io_c *io;
   subtitles_c subs;
+  bool m_coordinates_warning_shown;
 
 public:
   srt_reader_c(track_info_c &_ti) throw (error_c);

@@ -29,6 +29,7 @@ using namespace std;
 
 #define RE_TIMECODE "(\\d{1,2}):(\\d{1,2}):(\\d{1,2})[,\\.](\\d+)?"
 #define RE_TIMECODE_LINE "^" RE_TIMECODE "\\s+-+>\\s+" RE_TIMECODE "\\s*"
+#define RE_COORDINATES "([XY]\\d+:\\d+\\s*){4}\\s*$"
 
 int
 srt_reader_c::probe_file(mm_text_io_c *io,
@@ -44,7 +45,7 @@ srt_reader_c::probe_file(mm_text_io_c *io,
       return 0;
     s = io->getline();
     pcrecpp::RE timecode_re(RE_TIMECODE_LINE);
-    if (!timecode_re.FullMatch(s))
+    if (!timecode_re.PartialMatch(s))
       return 0;
     s = io->getline();
     io->setFilePointer(0, seek_beginning);
@@ -56,7 +57,8 @@ srt_reader_c::probe_file(mm_text_io_c *io,
 
 srt_reader_c::srt_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(_ti) {
+  generic_reader_c(_ti),
+  m_coordinates_warning_shown(false) {
 
   try {
     io = new mm_text_io_c(new mm_file_io_c(ti.fname));
@@ -104,6 +106,7 @@ srt_reader_c::parse_file() {
   bool timecode_warning_printed;
   pcrecpp::RE timecode_re(RE_TIMECODE_LINE);
   pcrecpp::RE number_re("^\\d+$");
+  pcrecpp::RE coordinates_re(RE_COORDINATES);
 
   start = 0;
   end = 0;
@@ -137,13 +140,17 @@ srt_reader_c::parse_file() {
       state = STATE_TIME;
 
     } else if (state == STATE_TIME) {
-      if (!timecode_re.FullMatch(s,
-                                 &s_h, &s_min, &s_sec, &s_rest,
-                                 &e_h, &e_min, &e_sec, &e_rest)) {
+      if (!timecode_re.PartialMatch(s, &s_h, &s_min, &s_sec, &s_rest, &e_h, &e_min, &e_sec, &e_rest)) {
         mxwarn(FMT_FN "Error in line %d: expected a SRT timecode "
                "line but found something else. Aborting this file.\n",
                ti.fname.c_str(), line_number);
         break;
+      }
+
+      if (coordinates_re.PartialMatch(s) && !m_coordinates_warning_shown) {
+        mxwarn(FMT_FN "This file contains coordinates in the timecode lines. Such coordinates are not supported by the Matroska SRT subtitle format. "
+               "mkvmerge will remove them automatically.\n", ti.fname.c_str());
+        m_coordinates_warning_shown = true;
       }
 
       // The previous entry is done now. Append it to the list of subtitles.
