@@ -1452,15 +1452,15 @@ handle_segmentinfo(KaxInfo *kax_info_chap) {
 
   uid = FINDFIRST(kax_info_chap, KaxSegmentUID);
   if (NULL != uid)
-    seguid_forced = new bitvalue_c(*uid);
+    forced_seguids.push_back(bitvalue_cptr(new bitvalue_c(*uid)));
 
   uid = FINDFIRST(kax_info_chap, KaxNextUID);
   if (NULL != uid)
-    seguid_link_next = new bitvalue_c(*uid);
+    seguid_link_next = bitvalue_cptr(new bitvalue_c(*uid));
 
   uid = FINDFIRST(kax_info_chap, KaxPrevUID);
   if (NULL != uid)
-    seguid_link_previous = new bitvalue_c(*uid);
+    seguid_link_previous = bitvalue_cptr(new bitvalue_c(*uid));
 }
 
 /** \brief Parses and handles command line arguments
@@ -1645,12 +1645,12 @@ parse_args(vector<string> args) {
       if ((no_next_arg) || (next_arg[0] == 0))
         mxerror(_("'--link-to-previous' lacks the next UID.\n"));
 
-      if (seguid_link_previous != NULL)
+      if (NULL != seguid_link_previous.get())
         mxerror(_("The previous UID was already given in '%s %s'.\n"),
                 this_arg.c_str(), next_arg.c_str());
 
       try {
-        seguid_link_previous = new bitvalue_c(next_arg, 128);
+        seguid_link_previous = bitvalue_cptr(new bitvalue_c(next_arg, 128));
       } catch (...) {
         mxerror(_("Unknown format for the previous UID in '%s %s'.\n"),
                 this_arg.c_str(), next_arg.c_str());
@@ -1662,12 +1662,12 @@ parse_args(vector<string> args) {
       if ((no_next_arg) || (next_arg[0] == 0))
         mxerror(_("'--link-to-next' lacks the previous UID.\n"));
 
-      if (seguid_link_next != NULL)
+      if (NULL != seguid_link_next.get())
         mxerror(_("The next UID was already given in '%s %s'.\n"),
                 this_arg.c_str(), next_arg.c_str());
 
       try {
-        seguid_link_next = new bitvalue_c(next_arg, 128);
+        seguid_link_next = bitvalue_cptr(new bitvalue_c(next_arg, 128));
       } catch (...) {
         mxerror(_("Unknown format for the next UID in '%s %s'.\n"),
                 this_arg.c_str(), next_arg.c_str());

@@ -79,19 +79,18 @@ parse_xml_segmentinfo(mm_text_io_c *in,
 
   for (i = 0; segmentinfo_elements[i].name != NULL; i++) {
     segmentinfo_elements[i].start_hook = NULL;
-    segmentinfo_elements[i].end_hook = NULL;
+    segmentinfo_elements[i].end_hook   = NULL;
   }
-  segmentinfo_elements[chapter_element_map_index("Info")].end_hook =
-    end_segmentinfo_data;
-  segmentinfo_elements[chapter_element_map_index("FamilyUID")].end_hook =
-    end_segmentinfo_family;
-  segmentinfo_elements[chapter_element_map_index("Links")].end_hook =
-    end_segmentinfo_links;
+
+  segmentinfo_elements[chapter_element_map_index("Info")].end_hook      = end_segmentinfo_data;
+  segmentinfo_elements[chapter_element_map_index("FamilyUID")].end_hook = end_segmentinfo_family;
+  segmentinfo_elements[chapter_element_map_index("Links")].end_hook     = end_segmentinfo_links;
 
   try {
     m = parse_xml_elements("Info", segmentinfo_elements, in);
     info = dynamic_cast<KaxInfo *>(sort_ebml_master(m));
     assert(info != NULL);
+
   } catch (error_c e) {
     if (!exception_on_error)
       mxerror("%s", e.get_error().c_str());

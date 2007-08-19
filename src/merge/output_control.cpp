@@ -180,9 +180,8 @@ string default_language = "und";
 static mm_io_c *out = NULL;
 
 static bitvalue_c seguid_prev(128), seguid_current(128), seguid_next(128);
-bitvalue_c *seguid_link_previous = NULL;
-bitvalue_c *seguid_link_next = NULL;
-bitvalue_c *seguid_forced = NULL;
+counted_ptr<bitvalue_c> seguid_link_previous, seguid_link_next;
+vector<counted_ptr<bitvalue_c> > forced_seguids;
 
 /** \brief Add a segment family UID to the list if it doesn't exist already.
 
@@ -579,19 +578,25 @@ render_headers(mm_io_c *rout) {
     // Generate the segment UIDs.
     if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
       if (file_num == 1) {
-        if (NULL == seguid_forced)
+        if (forced_seguids.empty())
           seguid_current.generate_random();
-        else
-          seguid_current = *seguid_forced;
+        else {
+          seguid_current = *forced_seguids.back();
+          forced_seguids.pop_back();
+        }
         seguid_next.generate_random();
+
       } else {
         seguid_prev = seguid_current;
-        if (NULL == seguid_forced)
+        if (forced_seguids.empty())
           seguid_current = seguid_next;
-        else
-          seguid_current = *seguid_forced;
+        else {
+          seguid_current = *forced_seguids.back();
+          forced_seguids.pop_back();
+        }
         seguid_next.generate_random();
       }
+
     } else {
       memset(seguid_current.data(), 0, 128 / 8);
       memset(seguid_prev.data(), 0, 128 / 8);
@@ -621,7 +626,7 @@ render_headers(mm_io_c *rout) {
       }
     }
 
-    if (first_file && (NULL != seguid_link_previous)) {
+    if (first_file && (NULL != seguid_link_previous.get())) {
       KaxPrevUID &kax_prevuid = GetChild<KaxPrevUID>(*kax_infos);
       kax_prevuid.CopyBuffer(seguid_link_previous->data(), 128 / 8);
     }
@@ -629,7 +634,7 @@ render_headers(mm_io_c *rout) {
     // redundant! It is set here as well in order to reserve enough space
     // for the KaxInfo structure in the file. If it is removed later then
     // an EbmlVoid element will be used for the freed space.
-    if (NULL != seguid_link_next) {
+    if (NULL != seguid_link_next.get()) {
       KaxNextUID &kax_nextuid = GetChild<KaxNextUID>(*kax_infos);
       kax_nextuid.CopyBuffer(seguid_link_next->data(), 128 / 8);
     }
@@ -1396,7 +1401,7 @@ finish_file(bool last_file) {
   changed = 0;
   kax_infos->UpdateSize(true);
   info_size = kax_infos->ElementSize();
-  if (last_file && (NULL != seguid_link_next)) {
+  if (last_file && (NULL != seguid_link_next.get())) {
     KaxNextUID &kax_nextuid = GetChild<KaxNextUID>(*kax_infos);
     kax_nextuid.CopyBuffer(seguid_link_next->data(), 128 / 8);
     changed = 1;
@@ -1939,12 +1944,7 @@ cleanup() {
   delete kax_info_chap;
   kax_info_chap = NULL;
 
-  delete seguid_link_previous;
-  seguid_link_previous = NULL;
-  delete seguid_link_next;
-  seguid_link_next = NULL;
-  delete seguid_forced;
-  seguid_forced = NULL;
+  forced_seguids.clear();
 
   utf8_done();
 }
