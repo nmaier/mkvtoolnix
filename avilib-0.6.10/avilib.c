@@ -574,7 +574,7 @@ static int avi_add_index_entry(avi_t *AVI, unsigned char *tag, long flags, unsig
 {
    void *ptr;
 
-   if(AVI->n_idx>=AVI->max_idx) {
+   if(!AVI->idx || (AVI->n_idx>=AVI->max_idx)) {
      ptr = realloc((void *)AVI->idx,(AVI->max_idx+4096)*16);
      
      if(ptr == 0) {

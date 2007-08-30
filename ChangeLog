@@ -1,3 +1,9 @@
+2007-08-30  Moritz Bunkus  <moritz@bunkus.org>
+
+	* avilib: bug fix: Fixed a segmentation fault if reading the first
+	part of an index failed but a second/other index part is
+	present. Fix for bug 256.
+
 2007-08-19  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: SRT files that contain coordinates in the
