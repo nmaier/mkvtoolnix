@@ -499,6 +499,13 @@ qtmp4_reader_c::parse_video_header_priv_atoms(qtmp4_demuxer_ptr &dmx,
                                               unsigned char *mem,
                                               int size,
                                               int level) {
+  if (!dmx->v_is_avc && (0 != size)) {
+    dmx->priv_size = size;
+    dmx->priv      = (unsigned char *)safememdup(mem, size);
+
+    return;
+  }
+
   mm_mem_io_c mio(mem, size);
 
   try {
@@ -1553,6 +1560,43 @@ qtmp4_reader_c::parse_esds_atom(mm_mem_io_c &memio,
   return true;
 }
 
+memory_cptr
+qtmp4_reader_c::create_bitmap_info_header(qtmp4_demuxer_ptr &dmx,
+                                          const char *fourcc,
+                                          int extra_size,
+                                          const void *extra_data) {
+  int full_size = sizeof(alBITMAPINFOHEADER) + extra_size;
+  memory_cptr bih_p(new memory_c(safemalloc(full_size), full_size, true));
+  alBITMAPINFOHEADER *bih = (alBITMAPINFOHEADER *)bih_p->get();
+
+  memset(bih, 0, full_size);
+  put_uint32_le(&bih->bi_size, full_size);
+  put_uint32_le(&bih->bi_width, dmx->v_width);
+  put_uint32_le(&bih->bi_height, dmx->v_height);
+  put_uint16_le(&bih->bi_planes, 1);
+  put_uint16_le(&bih->bi_bit_count, dmx->v_bitdepth);
+  memcpy(&bih->bi_compression, fourcc, 4);
+  put_uint32_le(&bih->bi_size_image, dmx->v_width * dmx->v_height * 3);
+
+  if (0 != extra_size)
+    memcpy(bih + 1, extra_data, extra_size);
+
+  return bih_p;
+}
+
+void
+qtmp4_reader_c::create_video_packetizer_svq1(qtmp4_demuxer_ptr &dmx) {
+  memory_cptr bih(create_bitmap_info_header(dmx, "SVQ1"));
+
+  ti.private_size = bih->get_size();
+  ti.private_data = (unsigned char *)bih->get();
+
+  dmx->ptzr = add_packetizer(new video_packetizer_c(this, MKV_V_MSCOMP, 0.0, dmx->v_width, dmx->v_height, ti));
+  ti.private_data = NULL;
+
+  mxinfo(FMT_TID "Using the video output module (FourCC: %.4s).\n", ti.fname.c_str(), (int64_t)dmx->id, dmx->fourcc);
+}
+
 void
 qtmp4_reader_c::create_packetizer(int64_t tid) {
   uint32_t i;
@@ -1571,27 +1615,15 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
     ti.id = dmx->id;
     if (dmx->type == 'v') {
       if (!strncasecmp(dmx->fourcc, "mp4v", 4)) {
-        alBITMAPINFOHEADER *bih;
+        memory_cptr bih(create_bitmap_info_header(dmx, "DIVX"));
 
-        bih = (alBITMAPINFOHEADER *)
-          safemalloc(sizeof(alBITMAPINFOHEADER));
-        memset(bih, 0, sizeof(alBITMAPINFOHEADER));
-        put_uint32_le(&bih->bi_size, sizeof(alBITMAPINFOHEADER));
-        put_uint32_le(&bih->bi_width, dmx->v_width);
-        put_uint32_le(&bih->bi_height, dmx->v_height);
-        put_uint16_le(&bih->bi_planes, 1);
-        put_uint16_le(&bih->bi_bit_count, dmx->v_bitdepth);
-        memcpy(&bih->bi_compression, "DIVX", 4);
-        put_uint32_le(&bih->bi_size_image, get_uint32_le(&bih->bi_width) *
-                   get_uint32_le(&bih->bi_height) * 3);
-        ti.private_size = sizeof(alBITMAPINFOHEADER);
-        ti.private_data = (unsigned char *)bih;
+        ti.private_size = bih->get_size();
+        ti.private_data = (unsigned char *)bih->get();
         dmx->ptzr =
           add_packetizer(new mpeg4_p2_video_packetizer_c(this, 0.0,
                                                          dmx->v_width,
                                                          dmx->v_height, false,
                                                          ti));
-        safefree(bih);
         ti.private_data = NULL;
         mxinfo(FMT_TID "Using the MPEG-4 part 2 video output module.\n",
                ti.fname.c_str(), (int64_t)dmx->id);
@@ -1633,7 +1665,10 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
         mxinfo(FMT_TID "Using the MPEG-4 part 10 (AVC) video output "
                "module.\n", ti.fname.c_str(), (int64_t)dmx->id);
 
-      } else {
+      } else if (!strncasecmp(dmx->fourcc, "svq1", 4))
+        create_video_packetizer_svq1(dmx);
+
+      else {
         ti.private_size = dmx->v_stsd_size;
         ti.private_data = (unsigned char *)dmx->v_stsd;
         dmx->ptzr =

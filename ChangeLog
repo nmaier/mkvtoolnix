@@ -1,3 +1,9 @@
+2007-08-31  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: SVQ1 video tracks read from QuickTime files are output
+	as V_MS/VFW/FOURCC tracks and not as V_QUICKTIME tracks. Fix for
+	bug 257.
+
 2007-08-30  Moritz Bunkus  <moritz@bunkus.org>
 
 	* avilib: bug fix: Fixed a segmentation fault if reading the first

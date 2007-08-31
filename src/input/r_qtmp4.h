@@ -268,6 +268,10 @@ protected:
 
   virtual void update_tables(qtmp4_demuxer_ptr &dmx);
   virtual void update_editlist_table(qtmp4_demuxer_ptr &dmx);
+
+  virtual memory_cptr create_bitmap_info_header(qtmp4_demuxer_ptr &dmx, const char *fourcc, int extra_size = 0, const void *extra_data = NULL);
+
+  virtual void create_video_packetizer_svq1(qtmp4_demuxer_ptr &dmx);
 };
 
 #endif  // __R_QTMP4_H
