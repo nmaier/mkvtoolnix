@@ -5,10 +5,10 @@ template <class X> class counted_ptr {
 public:
   typedef X element_type;
 
-  explicit counted_ptr(X *p = 0): // allocate a new counter
+  explicit counted_ptr(X *p = 0, bool use_free = false): // allocate a new counter
     its_counter(0) {
     if (p)
-      its_counter = new counter(p);
+      its_counter = new counter(p, 1, use_free);
   }
 
   ~counted_ptr() {
@@ -57,10 +57,11 @@ public:
 
 private:
   struct counter {
-    counter(X *p = 0, unsigned c = 1):
-      ptr(p), count(c) {}
+    counter(X *p = 0, unsigned c = 1, bool f = false):
+      ptr(p), count(c), use_free(f) {}
     X *ptr;
     unsigned count;
+    bool use_free;
   }* its_counter;
 
   void acquire(counter* c) throw() { // increment the count
@@ -72,7 +73,10 @@ private:
   void release() { // decrement the count, delete if it is 0
     if (its_counter) {
       if (--its_counter->count == 0) {
-        delete its_counter->ptr;
+        if (its_counter->use_free)
+          free(its_counter->ptr);
+        else
+          delete its_counter->ptr;
         delete its_counter;
       }
       its_counter = 0;
