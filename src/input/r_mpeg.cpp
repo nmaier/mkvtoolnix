@@ -1026,15 +1026,19 @@ mpeg_ps_reader_c::find_next_packet(int &id,
           break;
 
         case MPEGVIDEO_MPEG_PROGRAM_END_CODE:
-          return false;
+          if (!resync_stream(header))
+            return false;
 
         case MPEGVIDEO_PROGRAM_STREAM_MAP_START_CODE:
           parse_program_stream_map();
           break;
 
         default:
-          if (!mpeg_is_start_code(header) && !resync_stream(header))
-            return false;
+          if (!mpeg_is_start_code(header)) {
+            if (!resync_stream(header))
+              return false;
+            continue;
+          }
 
           id = header & 0xff;
           return true;
