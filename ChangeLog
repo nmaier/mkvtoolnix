@@ -1,3 +1,9 @@
+2007-09-02  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: mkvmerge tries to resyncto the next MPEG
+	start code in case of error during stream detection. Fix for bug
+	259.
+
 2007-08-31  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: SVQ1 video tracks read from QuickTime files are output

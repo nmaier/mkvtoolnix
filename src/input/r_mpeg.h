@@ -159,6 +159,8 @@ private:
   virtual file_status_e finish();
   void sort_tracks();
   void calculate_global_timecode_offset();
+
+  void init_reader();
 };
 
 class mpeg_ts_reader_c {

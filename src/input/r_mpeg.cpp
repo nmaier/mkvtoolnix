@@ -276,6 +276,11 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
   throw (error_c):
   generic_reader_c(_ti) {
 
+  init_reader();
+}
+
+void
+mpeg_ps_reader_c::init_reader() {
   int i;
 
   try {
@@ -345,7 +350,7 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
           break;
 
         case MPEGVIDEO_MPEG_PROGRAM_END_CODE:
-          done = true;
+          done = !resync_stream(header);
           break;
 
         case MPEGVIDEO_PROGRAM_STREAM_MAP_START_CODE:
@@ -356,7 +361,7 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
           if (!mpeg_is_start_code(header)) {
             mxverb(3, "mpeg_ps: unknown header 0x%08x at " LLD "\n",
                    header, io->getFilePointer() - 4);
-            done = true;
+            done = !resync_stream(header);
             break;
           }
 
