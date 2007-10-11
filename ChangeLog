@@ -1,3 +1,9 @@
+2007-10-11  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Accept other Theora header versions than
+	3.2.0 as long as the major version is 3 and the minor 2. Fix for
+	bug 262.
+
 2007-09-02  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: MPEG PS reader: Fixed the resyncing mechanism

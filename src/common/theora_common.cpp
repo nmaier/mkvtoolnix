@@ -48,8 +48,8 @@ theora_parse_identification_header(unsigned char *buffer,
   header.vmin = bc.get_bits(8);
   header.vrev = bc.get_bits(8);
 
-  if ((3 != header.vmaj) || (2 != header.vmin) || (0 != header.vrev))
-    throw error_c(mxsprintf("Wrong Theora version: %d.%d.%d != 3.2.0",
+  if ((3 != header.vmaj) || (2 != header.vmin))
+    throw error_c(mxsprintf("Wrong Theora version: %d.%d.%d != 3.2.x",
                             header.vmaj, header.vmin, header.vrev));
 
   header.fmbw = bc.get_bits(16) * 16;
