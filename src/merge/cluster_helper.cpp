@@ -297,7 +297,7 @@ cluster_helper_c::render() {
   DataBuffer *data_buffer;
   int i, k, elements_in_cluster;
   packet_cptr pack;
-  int64_t max_cl_timecode;
+  int64_t min_cl_timecode, max_cl_timecode;
   generic_packetizer_c *source;
   vector<render_groups_t *> render_groups;
   render_groups_t *render_group;
@@ -307,6 +307,7 @@ cluster_helper_c::render() {
   BlockBlobType this_block_blob_type, std_block_blob_type = use_simpleblock ?
     BLOCK_BLOB_ALWAYS_SIMPLE : BLOCK_BLOB_NO_SIMPLE;
 
+  min_cl_timecode = 9223372036854775807LL;
   max_cl_timecode = 0;
 
   // Splitpoint stuff
@@ -347,9 +348,8 @@ cluster_helper_c::render() {
       render_groups.push_back(render_group);
     }
 
-    if (i == 0)
-      cluster->set_min_timecode(pack->assigned_timecode - timecode_offset);
-    max_cl_timecode = pack->assigned_timecode;
+    min_cl_timecode = MXMIN(pack->assigned_timecode, min_cl_timecode);
+    max_cl_timecode = MXMAX(pack->assigned_timecode, max_cl_timecode);
 
     data_buffer = new DataBuffer((binary *)pack->data->get(),
                                  pack->data->get_size());
@@ -485,6 +485,8 @@ cluster_helper_c::render() {
   if (elements_in_cluster > 0) {
     for (i = 0; i < render_groups.size(); i++)
       set_duration(render_groups[i]);
+
+    cluster->set_min_timecode(min_cl_timecode - timecode_offset);
     cluster->set_max_timecode(max_cl_timecode - timecode_offset);
     cluster->Render(*out, *kax_cues);
     bytes_in_file += cluster->ElementSize();
