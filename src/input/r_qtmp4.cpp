@@ -499,7 +499,7 @@ qtmp4_reader_c::parse_video_header_priv_atoms(qtmp4_demuxer_ptr &dmx,
                                               unsigned char *mem,
                                               int size,
                                               int level) {
-  if (!dmx->v_is_avc && (0 != size)) {
+  if (!dmx->v_is_avc && strncasecmp(dmx->fourcc, "mp4v", 4) && (0 != size)) {
     dmx->priv_size = size;
     dmx->priv      = (unsigned char *)safememdup(mem, size);
 
