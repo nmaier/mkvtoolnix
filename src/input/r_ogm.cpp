@@ -459,9 +459,9 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
         } else if (dmx->is_avc && !hack_engaged(ENGAGE_ALLOW_AVC_IN_VFW_MODE)) {
           try {
-            ti.private_data       = NULL;
-            ti.private_size       = 0;
-            memory_cptr avcc      = extract_avcc(dmx, tid);
+            ti.private_data  = NULL;
+            ti.private_size  = 0;
+            memory_cptr avcc = extract_avcc(dmx, tid);
 
             mpeg4_p10_es_video_packetizer_c *vptzr = new mpeg4_p10_es_video_packetizer_c(this, avcc, width, height, ti);
 
