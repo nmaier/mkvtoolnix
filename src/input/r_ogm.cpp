@@ -440,14 +440,14 @@ ogm_reader_c::create_packetizer(int64_t tid) {
         put_uint16_le(&bih.bi_planes, 1);
         put_uint16_le(&bih.bi_bit_count, 24);
         memcpy(&bih.bi_compression, sth->subtype, 4);
-        put_uint32_le(&bih.bi_size_image, get_uint32_le(&bih.bi_width) *
-                   get_uint32_le(&bih.bi_height) * 3);
-        ti.private_data = (unsigned char *)&bih;
-        ti.private_size = sizeof(alBITMAPINFOHEADER);
+        put_uint32_le(&bih.bi_size_image, get_uint32_le(&bih.bi_width) * get_uint32_le(&bih.bi_height) * 3);
 
-        fps = (double)10000000.0 / get_uint64_le(&sth->time_unit);
-        width = get_uint32_le(&sth->sh.video.width);
-        height = get_uint32_le(&sth->sh.video.height);
+        ti.private_data       = (unsigned char *)&bih;
+        ti.private_size       = sizeof(alBITMAPINFOHEADER);
+
+        fps                   = (double)10000000.0 / get_uint64_le(&sth->time_unit);
+        width                 = get_uint32_le(&sth->sh.video.width);
+        height                = get_uint32_le(&sth->sh.video.height);
 
         dmx->default_duration = 100 * get_uint64_le(&sth->time_unit);
 
