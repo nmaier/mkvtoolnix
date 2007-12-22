@@ -1,3 +1,9 @@
+2007-12-22  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: OGM files with non-Theora video tracks caused
+	mkvmerge to fail since 2.1.0, or the resulting file was
+	unplayable. Fix for bug 267.
+
 2007-10-11  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Accept other Theora header versions than
