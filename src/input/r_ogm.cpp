@@ -449,6 +449,8 @@ ogm_reader_c::create_packetizer(int64_t tid) {
         width = get_uint32_le(&sth->sh.video.width);
         height = get_uint32_le(&sth->sh.video.height);
 
+        dmx->default_duration = 100 * get_uint64_le(&sth->time_unit);
+
         if (mpeg4::p2::is_fourcc(sth->subtype)) {
           ptzr = new mpeg4_p2_video_packetizer_c(this, fps, width, height,
                                                  false, ti);
@@ -459,7 +461,6 @@ ogm_reader_c::create_packetizer(int64_t tid) {
           try {
             ti.private_data       = NULL;
             ti.private_size       = 0;
-            dmx->default_duration = 100 * get_uint64_le(&sth->time_unit);
             memory_cptr avcc      = extract_avcc(dmx, tid);
 
             mpeg4_p10_es_video_packetizer_c *vptzr = new mpeg4_p10_es_video_packetizer_c(this, avcc, width, height, ti);
