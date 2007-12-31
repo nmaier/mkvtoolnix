@@ -1977,8 +1977,8 @@ kax_reader_c::read(generic_packetizer_c *,
     return FILE_STATUS_DONE;
   }
 
-  if (!force && (get_queued_bytes() > 20 * 1024 * 1024))
-    return FILE_STATUS_HOLDING;
+//   if (!force && (get_queued_bytes() > 20 * 1024 * 1024))
+//     return FILE_STATUS_HOLDING;
 
   debug_enter("kax_reader_c::read");
 

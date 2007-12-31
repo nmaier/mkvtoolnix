@@ -325,6 +325,7 @@ typedef deque<packet_cptr>::iterator packet_cptr_di;
 class generic_packetizer_c {
 protected:
   deque<packet_cptr> packet_queue, deferred_packets;
+  int next_packet_wo_assigned_timecode;
 
   int64_t initial_displacement;
   int64_t m_free_refs, m_next_free_refs, enqueued_bytes;

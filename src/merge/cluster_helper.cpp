@@ -60,7 +60,6 @@ cluster_helper_c::~cluster_helper_c() {
 void
 cluster_helper_c::add_packet(packet_cptr packet) {
   int64_t timecode, timecode_delay, additional_size;
-  int i;
   bool split;
 
   if (!cluster)
@@ -116,11 +115,12 @@ cluster_helper_c::add_packet(packet_cptr packet) {
     if (split_point_t::SPT_SIZE == current_split_point->m_type) {
 
       if (!packets.empty()) {
+        vector<packet_cptr>::iterator p_it;
         // Cluster + Cluster timecode (roughly)
         additional_size = 21;
         // Add sizes for all frames.
-        for (i = 0; i < packets.size(); i++) {
-          packet_cptr &p = packets[i];
+        for (p_it = packets.begin(); packets.end() != p_it; p_it++) {
+          packet_cptr &p = *p_it;
           additional_size += p->data->get_size();
           if (p->bref == -1)
             additional_size += 10;
@@ -296,7 +296,6 @@ cluster_helper_c::render() {
   kax_block_blob_c *new_block_group, *last_block_group;
   DataBuffer *data_buffer;
   int i, k, elements_in_cluster;
-  packet_cptr pack;
   int64_t min_cl_timecode, max_cl_timecode;
   generic_packetizer_c *source;
   vector<render_groups_t *> render_groups;
@@ -325,8 +324,8 @@ cluster_helper_c::render() {
   else
     lacing_type = LACING_AUTO;
 
-  for (i = 0; i < packets.size(); i++) {
-    pack = packets[i];
+  for (vector<packet_cptr>::iterator pack_it = packets.begin(); packets.end() != pack_it; pack_it++) {
+    packet_cptr &pack = *pack_it;
     source = pack->source;
 
     has_codec_state = NULL != pack->codec_state.get();
@@ -486,8 +485,10 @@ cluster_helper_c::render() {
     for (i = 0; i < render_groups.size(); i++)
       set_duration(render_groups[i]);
 
+    cluster->SetPreviousTimecode(min_cl_timecode - timecode_offset - 1, (int64_t)timecode_scale);
     cluster->set_min_timecode(min_cl_timecode - timecode_offset);
     cluster->set_max_timecode(max_cl_timecode - timecode_offset);
+
     cluster->Render(*out, *kax_cues);
     bytes_in_file += cluster->ElementSize();
 

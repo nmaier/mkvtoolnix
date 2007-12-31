@@ -1,3 +1,12 @@
+2007-12-31  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Rewrote the timecode application
+	code. Additionally force the "previous cluster timecodes" that
+	libmatroska uses to the current timecode. This seems to get rid of
+	libmatroska's assertions about the local timecode being to
+	small/big to fit into an int16. It also seems to get rid of some
+	of mkvmerge's errors about the packet queue not being empty.
+
 2007-12-22  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: OGM files with non-Theora video tracks caused

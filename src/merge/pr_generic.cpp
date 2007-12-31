@@ -48,7 +48,8 @@ vector<generic_packetizer_c *> ptzrs_in_header_order;
 
 generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
                                            track_info_c &_ti)
-  throw(error_c): ti(_ti) {
+  throw(error_c):
+  next_packet_wo_assigned_timecode(0), ti(_ti) {
   int i;
 
 #ifdef DEBUG
@@ -955,6 +956,10 @@ generic_packetizer_c::get_packet() {
 
   enqueued_bytes -= pack->data->get_size();
 
+  --next_packet_wo_assigned_timecode;
+  if (next_packet_wo_assigned_timecode < 0)
+    next_packet_wo_assigned_timecode = 0;
+
   return pack;
 }
 
@@ -975,6 +980,8 @@ generic_packetizer_c::apply_factory_once(packet_cptr &packet) {
     max_timecode_seen = packet->assigned_timecode + packet->duration;
   if (reader->max_timecode_seen < max_timecode_seen)
     reader->max_timecode_seen = max_timecode_seen;
+
+  ++next_packet_wo_assigned_timecode;
 }
 
 void
@@ -985,7 +992,7 @@ generic_packetizer_c::apply_factory() {
     return;
 
   // Find the first packet to which the factory hasn't been applied yet.
-  p_start = packet_queue.begin();
+  p_start = packet_queue.begin() + next_packet_wo_assigned_timecode;
   while ((packet_queue.end() != p_start) && (*p_start)->factory_applied)
     ++p_start;
 
