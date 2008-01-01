@@ -526,16 +526,23 @@ AC_SUBST(VORBIS_LIBS)
 dnl
 dnl Check for libFLAC
 dnl
+
+  dnl FLAC 1.2.1 with mingw needs the winsock library.
+  flac_winsock=
+  if test "x$MINGW" = "x1" ; then
+    flac_winsock="-lwsock32"
+  fi
+
   AC_ARG_WITH([flac],
               AC_HELP_STRING([--without-flac], [do not build with flac support]),
               [ with_flac=${withval} ], [ with_flac=yes ])
 
   if test "$with_flac" != "no"; then
     AC_CHECK_LIB(FLAC, FLAC__stream_decoder_new,
-                 [ FLAC_LIBS="-lFLAC $OGG_LIBS -lm"
+                 [ FLAC_LIBS="-lFLAC $OGG_LIBS -lm $flac_winsock"
                    flac_found=yes ],
                  [ flac_found=no ],
-                 $OGG_LIBS -lm)
+                 $OGG_LIBS -lm $flac_winsock)
   else
     flac_found=no
   fi
