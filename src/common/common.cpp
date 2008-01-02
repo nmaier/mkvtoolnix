@@ -1347,7 +1347,7 @@ mxmsg(int level,
       va_list ap) {
   string new_fmt, output;
   bool nl;
-  char *prefix;
+  const char *prefix;
 
   fix_format(fmt, new_fmt);
 

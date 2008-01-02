@@ -26,7 +26,7 @@ const uint32_t sample_rates [] = {
 
 static void
 little_endian_to_native(void *data,
-                        char *format) {
+                        const char *format) {
   uint8_t *cp = (uint8_t *)data;
   uint32_t temp;
 

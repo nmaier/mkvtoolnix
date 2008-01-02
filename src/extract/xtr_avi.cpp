@@ -96,7 +96,7 @@ xtr_avi_c::handle_frame(memory_cptr &frame,
 
     nfr = irnd((double)duration / 1000000.0 * fps / 1000.0);
     for (k = 2; k <= nfr; k++)
-      AVI_write_frame(avi, "", 0, 0);
+      AVI_write_frame(avi, NULL, 0, 0);
   }
 }
 

@@ -63,7 +63,7 @@ mm_file_io_c::mm_file_io_c(const string &path,
   file_name(path) {
 
   string local_path;
-  char *cmode;
+  const char *cmode;
   struct stat st;
 # if HAVE_POSIX_FADVISE
   int advise;
