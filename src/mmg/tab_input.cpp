@@ -217,29 +217,29 @@ tab_input::set_track_mode(mmg_track_t *t) {
 void
 tab_input::select_file(bool append) {
   static struct { const wxChar *title, *extensions; } file_types[] = {
-    { wxT("A/52 (aka AC3)"), wxT("ac3") },
-    { wxT("AAC (Advanced Audio Coding)"), wxT("aac m4a mp4") },
-    { wxT("AVC/h.264 elementary streams"), wxT("264 avc h264 x264") },
-    { wxT("AVI (Audio/Video Interleaved)"), wxT("avi") },
-    { wxT("DTS (Digital Theater System)"), wxT("dts") },
-    { wxT("FLAC (Free Lossless Audio Codec)"), wxT("flac ogg") },
-    { wxT("MP4 audio/video files"), wxT("mp4") },
-    { wxT("MPEG audio files"), wxT("mp2 mp3") },
-    { wxT("MPEG program streams"), wxT("mpg mpeg m2v") },
-    { wxT("MPEG video elementary streams"), wxT("m1v m2v") },
-    { wxT("Matroska audio/video files"), wxT("mka mks mkv") },
-    { wxT("QuickTime audio/video files"), wxT("mov") },
-    { wxT("Ogg/OGM audio/video files"), wxT("ogg ogm") },
-    { wxT("RealMedia audio/video files"), wxT("ra ram rm rmvb rv") },
-    { wxT("SRT text subtitles"), wxT("srt") },
-    { wxT("SSA/ASS text subtitles"), wxT("ass ssa") },
+    { wxT("A/52 (aka AC3)"),                      wxT("ac3") },
+    { wxT("AAC (Advanced Audio Coding)"),         wxT("aac m4a mp4") },
+    { wxT("AVC/h.264 elementary streams"),        wxT("264 avc h264 x264") },
+    { wxT("AVI (Audio/Video Interleaved)"),       wxT("avi") },
+    { wxT("DTS (Digital Theater System)"),        wxT("dts") },
+    { wxT("FLAC (Free Lossless Audio Codec)"),    wxT("flac ogg") },
+    { wxT("MP4 audio/video files"),               wxT("mp4") },
+    { wxT("MPEG audio files"),                    wxT("mp2 mp3") },
+    { wxT("MPEG program streams"),                wxT("mpg mpeg m2v") },
+    { wxT("MPEG video elementary streams"),       wxT("m1v m2v") },
+    { wxT("Matroska audio/video files"),          wxT("mka mks mkv") },
+    { wxT("QuickTime audio/video files"),         wxT("mov") },
+    { wxT("Ogg/OGM audio/video files"),           wxT("ogg ogm") },
+    { wxT("RealMedia audio/video files"),         wxT("ra ram rm rmvb rv") },
+    { wxT("SRT text subtitles"),                  wxT("srt") },
+    { wxT("SSA/ASS text subtitles"),              wxT("ass ssa") },
     { wxT("TTA (The lossless True Audio codec)"), wxT("tta") },
-    { wxT("USF text subtitles"), wxT("usf xml") },
-    { wxT("VobSub subtitles"), wxT("idx") },
-    { wxT("WAVE (uncompressed PCM audio)"), wxT("wav") },
-    { wxT("WAVPACK v4 audio"), wxT("wv") },
-    { wxT("VobButtons"), wxT("btn") },
-    { NULL, NULL}
+    { wxT("USF text subtitles"),                  wxT("usf xml") },
+    { wxT("VobSub subtitles"),                    wxT("idx") },
+    { wxT("WAVE (uncompressed PCM audio)"),       wxT("wav") },
+    { wxT("WAVPACK v4 audio"),                    wxT("wv") },
+    { wxT("VobButtons"),                          wxT("btn") },
+    { NULL,                                       NULL }
   };
   wxString media_files, rest, a_exts;
   vector<wxString> all_extensions;
@@ -1000,12 +1000,12 @@ tab_input::save(wxConfigBase *cfg) {
     f = &files[fidx];
     s.Printf(wxT("file %u"), fidx);
     cfg->SetPath(s);
-    cfg->Write(wxT("file_name"), f->file_name);
-    cfg->Write(wxT("container"), f->container);
-    cfg->Write(wxT("no_chapters"), f->no_chapters);
-    cfg->Write(wxT("no_attachments"), f->no_attachments);
-    cfg->Write(wxT("no_tags"), f->no_tags);
-    cfg->Write(wxT("appending"), f->appending);
+    cfg->Write(wxT("file_name"),        f->file_name);
+    cfg->Write(wxT("container"),        f->container);
+    cfg->Write(wxT("no_chapters"),      f->no_chapters);
+    cfg->Write(wxT("no_attachments"),   f->no_attachments);
+    cfg->Write(wxT("no_tags"),          f->no_tags);
+    cfg->Write(wxT("appending"),        f->appending);
 
     cfg->Write(wxT("number_of_tracks"), (int)f->tracks.size());
     for (tidx = 0; tidx < f->tracks.size(); tidx++) {
@@ -1014,37 +1014,37 @@ tab_input::save(wxConfigBase *cfg) {
       mmg_track_ptr &t = f->tracks[tidx];
       s.Printf(wxT("track %u"), tidx);
       cfg->SetPath(s);
-      s.Printf(wxT("%c"), t->type);
-      cfg->Write(wxT("type"), s);
-      fix_format("" LLD, format);
-      s.Printf(wxU(format.c_str()), t->id);
-      cfg->Write(wxT("id"), s);
-      cfg->Write(wxT("enabled"), t->enabled);
-      cfg->Write(wxT("content_type"), t->ctype);
-      cfg->Write(wxT("default_track_2"), t->default_track);
-      cfg->Write(wxT("aac_is_sbr"), t->aac_is_sbr);
-      cfg->Write(wxT("language"), t->language);
-      cfg->Write(wxT("track_name"), t->track_name);
-      cfg->Write(wxT("cues"), t->cues);
-      cfg->Write(wxT("delay"), t->delay);
-      cfg->Write(wxT("stretch"), t->stretch);
-      cfg->Write(wxT("sub_charset"), t->sub_charset);
-      cfg->Write(wxT("tags"), t->tags);
-      cfg->Write(wxT("timecodes"), t->timecodes);
-      cfg->Write(wxT("display_dimensions_selected"),
-                 t->display_dimensions_selected);
-      cfg->Write(wxT("aspect_ratio"), t->aspect_ratio);
-      cfg->Write(wxT("display_width"), t->dwidth);
-      cfg->Write(wxT("display_height"), t->dheight);
-      cfg->Write(wxT("fourcc"), t->fourcc);
-      cfg->Write(wxT("fps"), t->fps);
-      cfg->Write(wxT("nalu_size_length"), t->nalu_size_length);
-      cfg->Write(wxT("stereo_mode"), t->stereo_mode);
-      cfg->Write(wxT("compression"), t->compression);
-      cfg->Write(wxT("track_name_was_present"), t->track_name_was_present);
-      cfg->Write(wxT("appending"), t->appending);
-      cfg->Write(wxT("user_defined"), t->user_defined);
-      cfg->Write(wxT("packetizer"), t->packetizer);
+
+      s.Printf(wxT("%c"),                            t->type);
+      cfg->Write(wxT("type"),                        s);
+      fix_format("" LLD,                             format);
+      s.Printf(wxU(format.c_str()),                  t->id);
+      cfg->Write(wxT("id"),                          s);
+      cfg->Write(wxT("enabled"),                     t->enabled);
+      cfg->Write(wxT("content_type"),                t->ctype);
+      cfg->Write(wxT("default_track_2"),             t->default_track);
+      cfg->Write(wxT("aac_is_sbr"),                  t->aac_is_sbr);
+      cfg->Write(wxT("language"),                    t->language);
+      cfg->Write(wxT("track_name"),                  t->track_name);
+      cfg->Write(wxT("cues"),                        t->cues);
+      cfg->Write(wxT("delay"),                       t->delay);
+      cfg->Write(wxT("stretch"),                     t->stretch);
+      cfg->Write(wxT("sub_charset"),                 t->sub_charset);
+      cfg->Write(wxT("tags"),                        t->tags);
+      cfg->Write(wxT("timecodes"),                   t->timecodes);
+      cfg->Write(wxT("display_dimensions_selected"), t->display_dimensions_selected);
+      cfg->Write(wxT("aspect_ratio"),                t->aspect_ratio);
+      cfg->Write(wxT("display_width"),               t->dwidth);
+      cfg->Write(wxT("display_height"),              t->dheight);
+      cfg->Write(wxT("fourcc"),                      t->fourcc);
+      cfg->Write(wxT("fps"),                         t->fps);
+      cfg->Write(wxT("nalu_size_length"),            t->nalu_size_length);
+      cfg->Write(wxT("stereo_mode"),                 t->stereo_mode);
+      cfg->Write(wxT("compression"),                 t->compression);
+      cfg->Write(wxT("track_name_was_present"),      t->track_name_was_present);
+      cfg->Write(wxT("appending"),                   t->appending);
+      cfg->Write(wxT("user_defined"),                t->user_defined);
+      cfg->Write(wxT("packetizer"),                  t->packetizer);
 
       cfg->SetPath(wxT(".."));
     }
@@ -1109,53 +1109,52 @@ tab_input::load(wxConfigBase *cfg,
       bool dummy = false;
 
       s.Printf(wxT("track %ld"), tidx);
+
       cfg->SetPath(s);
-      if (!cfg->Read(wxT("type"), &c) || (c.Length() != 1) ||
-          !cfg->Read(wxT("id"), &id)) {
+      if (!cfg->Read(wxT("type"), &c) || (c.Length() != 1) || !cfg->Read(wxT("id"), &id)) {
         cfg->SetPath(wxT(".."));
         continue;
       }
+
       tr->type = c.c_str()[0];
-      if (((tr->type != 'a') && (tr->type != 'v') && (tr->type != 's')) ||
-          !parse_int(wxMB(id), tr->id)) {
+      if (((tr->type != 'a') && (tr->type != 'v') && (tr->type != 's')) || !parse_int(wxMB(id), tr->id)) {
         cfg->SetPath(wxT(".."));
         continue;
       }
-      cfg->Read(wxT("enabled"), &tr->enabled);
-      cfg->Read(wxT("content_type"), &tr->ctype);
-      if (cfg->Read(wxT("default_track"), &dummy)) {
+
+      cfg->Read(wxT("enabled"),                     &tr->enabled);
+      cfg->Read(wxT("content_type"),                &tr->ctype);
+      if (cfg->Read(wxT("default_track"),           &dummy)) {
         tr->default_track = dummy ? 1 : 0;
       } else
-        cfg->Read(wxT("default_track_2"), &tr->default_track, 0);
-      cfg->Read(wxT("aac_is_sbr"), &tr->aac_is_sbr, false);
-      cfg->Read(wxT("language"), &tr->language);
-      cfg->Read(wxT("track_name"), &tr->track_name);
-      cfg->Read(wxT("cues"), &tr->cues);
-      cfg->Read(wxT("delay"), &tr->delay);
-      cfg->Read(wxT("stretch"), &tr->stretch);
-      cfg->Read(wxT("sub_charset"), &tr->sub_charset);
-      cfg->Read(wxT("tags"), &tr->tags);
-      cfg->Read(wxT("display_dimensions_selected"),
-                &tr->display_dimensions_selected, false);
-      cfg->Read(wxT("aspect_ratio"), &tr->aspect_ratio);
-      cfg->Read(wxT("display_width"), &tr->dwidth);
-      cfg->Read(wxT("display_height"), &tr->dheight);
-      cfg->Read(wxT("fourcc"), &tr->fourcc);
-      cfg->Read(wxT("fps"), &tr->fps);
-      cfg->Read(wxT("nalu_size_length"), &tr->nalu_size_length, 4);
-      cfg->Read(wxT("stereo_mode"), &tr->stereo_mode, 0);
-      cfg->Read(wxT("compression"), &tr->compression);
-      cfg->Read(wxT("timecodes"), &tr->timecodes);
-      cfg->Read(wxT("track_name_was_present"), &tr->track_name_was_present,
-                false);
-      cfg->Read(wxT("appending"), &tr->appending, false);
-      cfg->Read(wxT("user_defined"), &tr->user_defined);
-      cfg->Read(wxT("packetizer"), &tr->packetizer);
+        cfg->Read(wxT("default_track_2"),           &tr->default_track,               0);
+      cfg->Read(wxT("aac_is_sbr"),                  &tr->aac_is_sbr,                  false);
+      cfg->Read(wxT("language"),                    &tr->language);
+      cfg->Read(wxT("track_name"),                  &tr->track_name);
+      cfg->Read(wxT("cues"),                        &tr->cues);
+      cfg->Read(wxT("delay"),                       &tr->delay);
+      cfg->Read(wxT("stretch"),                     &tr->stretch);
+      cfg->Read(wxT("sub_charset"),                 &tr->sub_charset);
+      cfg->Read(wxT("tags"),                        &tr->tags);
+      cfg->Read(wxT("display_dimensions_selected"), &tr->display_dimensions_selected, false);
+      cfg->Read(wxT("aspect_ratio"),                &tr->aspect_ratio);
+      cfg->Read(wxT("display_width"),               &tr->dwidth);
+      cfg->Read(wxT("display_height"),              &tr->dheight);
+      cfg->Read(wxT("fourcc"),                      &tr->fourcc);
+      cfg->Read(wxT("fps"),                         &tr->fps);
+      cfg->Read(wxT("nalu_size_length"),            &tr->nalu_size_length,            4);
+      cfg->Read(wxT("stereo_mode"),                 &tr->stereo_mode,                 0);
+      cfg->Read(wxT("compression"),                 &tr->compression);
+      cfg->Read(wxT("timecodes"),                   &tr->timecodes);
+      cfg->Read(wxT("track_name_was_present"),      &tr->track_name_was_present,      false);
+      cfg->Read(wxT("appending"),                   &tr->appending,                   false);
+      cfg->Read(wxT("user_defined"),                &tr->user_defined);
+      cfg->Read(wxT("packetizer"),                  &tr->packetizer);
+
       tr->source = files.size();
       if (track_order.Length() > 0)
         track_order += wxT(",");
-      track_order += wxString::Format(wxUCS(format.c_str()), files.size(),
-                                      tr->id);
+      track_order += wxString::Format(wxUCS(format.c_str()), files.size(), tr->id);
 
       fi.tracks.push_back(tr);
       cfg->SetPath(wxT(".."));
@@ -1164,9 +1163,7 @@ tab_input::load(wxConfigBase *cfg,
     if (fi.tracks.size() != 0) {
       s = fi.file_name.BeforeLast(PSEP);
       c = fi.file_name.AfterLast(PSEP);
-      lb_input_files->Append(wxString::Format(wxT("%s%s (%s)"),
-                                              fi.appending ? wxT("++> ") :
-                                              wxT(""), c.c_str(), s.c_str()));
+      lb_input_files->Append(wxString::Format(wxT("%s%s (%s)"), fi.appending ? wxT("++> ") : wxT(""), c.c_str(), s.c_str()));
       files.push_back(fi);
     }
 
