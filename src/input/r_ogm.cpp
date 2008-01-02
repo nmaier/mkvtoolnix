@@ -965,7 +965,9 @@ ogm_reader_c::process_page(ogg_page *og) {
         pos -= dmx->first_granulepos;
 
         memory_c *mem = new memory_c(&op.packet[duration_len + 1], op.bytes - 1 - duration_len, false);
-        PTZR(dmx->ptzr)->process(new packet_t(mem, pos * dmx->default_duration, (int64_t)duration * dmx->default_duration));
+        PTZR(dmx->ptzr)->process(new packet_t(mem, pos * dmx->default_duration, (int64_t)duration * dmx->default_duration,
+                                              *op.packet & PACKET_IS_SYNCPOINT ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC));
+
         dmx->units_processed += duration;
 
       } else if (dmx->stype == OGM_STREAM_TYPE_S_TEXT) {
