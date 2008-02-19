@@ -32,6 +32,7 @@
 #include "p_flac.h"
 #include "matroska.h"
 
+#include "checksums.h"
 using namespace libmatroska;
 
 flac_packetizer_c::flac_packetizer_c(generic_reader_c *_reader,

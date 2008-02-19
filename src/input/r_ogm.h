@@ -21,9 +21,6 @@
 #include <stdio.h>
 
 #include <ogg/ogg.h>
-#if defined(HAVE_FLAC_FORMAT_H)
-#include <FLAC/stream_decoder.h>
-#endif
 
 #include <vector>
 
@@ -47,62 +44,59 @@ enum ogm_stream_type_e {
   OGM_STREAM_TYPE_V_THEORA,
 };
 
-#if defined(HAVE_FLAC_FORMAT_H)
-class flac_header_extractor_c {
-public:
-  FLAC__StreamDecoder *decoder;
-  bool metadata_parsed;
-  int channels, sample_rate, bits_per_sample;
-  mm_io_c *file;
-  ogg_stream_state os;
-  ogg_sync_state oy;
-  ogg_page og;
-  int64_t sid, num_packets, num_header_packets;
-  bool done;
+class ogm_reader_c;
 
+class ogm_demuxer_c {
 public:
-  flac_header_extractor_c(const string &file_name, int64_t _sid);
-  ~flac_header_extractor_c();
-  bool extract();
-  bool read_page();
-};
-#endif
+  ogm_reader_c *reader;
 
-struct ogm_demuxer_t {
   ogg_stream_state os;
   int ptzr;
+  int64_t track_id;
+
   ogm_stream_type_e stype;
   int serialno, eos;
-  int units_processed, vorbis_rate;
+  int units_processed;
   int num_header_packets, num_non_header_packets;
   bool headers_read;
   string language, title;
   vector<memory_cptr> packet_data, nh_packet_data;
-#if defined(HAVE_FLAC_FORMAT_H)
-  flac_header_extractor_c *fhe;
-  int flac_header_packets, channels, bits_per_sample;
-#endif
   int64_t first_granulepos, last_granulepos, last_keyframe_number, default_duration;
   bool in_use;
 
-  theora_identification_header_t theora;
+public:
+  ogm_demuxer_c(ogm_reader_c *p_reader);
 
-  bool is_avc;
+  virtual ~ogm_demuxer_c();
 
-  ogm_demuxer_t():
-    ptzr(-1), stype(OGM_STREAM_TYPE_UNKNOWN), serialno(0), eos(0), units_processed(0),
-    vorbis_rate(0), num_header_packets(2), num_non_header_packets(0), headers_read(false),
-    first_granulepos(0), last_granulepos(0), last_keyframe_number(-1), default_duration(0),
-    in_use(false), is_avc(false) {
-    memset(&os, 0, sizeof(ogg_stream_state));
-  }
+  virtual const char *get_type() {
+    return "unknown";
+  };
+  virtual string get_codec() {
+    return "unknown";
+  };
+
+  virtual void initialize() {
+  };
+  virtual generic_packetizer_c *create_packetizer(track_info_c &ti) {
+    return NULL;
+  };
+  virtual void process_page(int64_t granulepos);
+  virtual void process_header_page();
+
+  virtual void get_duration_and_len(ogg_packet &op, int64_t &duration, int &duration_len);
+  virtual bool is_header_packet(ogg_packet &op) {
+    return op.packet[0] & 1;
+  };
 };
+
+typedef counted_ptr<ogm_demuxer_c> ogm_demuxer_cptr;
 
 class ogm_reader_c: public generic_reader_c {
 private:
   ogg_sync_state oy;
   mm_io_c *io;
-  vector<ogm_demuxer_t *> sdemuxers;
+  vector<ogm_demuxer_cptr> sdemuxers;
   int bos_pages_read;
   int64_t file_size;
 
@@ -121,7 +115,7 @@ public:
   static int probe_file(mm_io_c *io, int64_t size);
 
 private:
-  virtual ogm_demuxer_t *find_demuxer(int serialno);
+  virtual ogm_demuxer_cptr find_demuxer(int serialno);
   virtual int read_page(ogg_page *);
   virtual void handle_new_stream(ogg_page *);
   virtual void handle_new_stream_and_packets(ogg_page *);
@@ -129,9 +123,8 @@ private:
   virtual int packet_available();
   virtual int read_headers();
   virtual void process_header_page(ogg_page *pg);
-  virtual void process_header_packets(ogm_demuxer_t *dmx);
+  virtual void process_header_packets(ogm_demuxer_cptr dmx);
   virtual void handle_stream_comments();
-  virtual memory_cptr extract_avcc(ogm_demuxer_t *dmx, int64_t tid);
 };
 
 
