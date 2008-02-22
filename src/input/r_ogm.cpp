@@ -845,8 +845,10 @@ ogm_demuxer_c::get_duration_and_len(ogg_packet &op,
   duration_len  = (*op.packet & PACKET_LEN_BITS01) >> 6;
   duration_len |= (*op.packet & PACKET_LEN_BITS2)  << 1;
 
+  duration      = 0;
+
   if ((0 < duration_len) && (op.bytes >= (duration_len + 1))) {
-    for (int i = 0, duration = 0; i < duration_len; i++) {
+    for (int i = 0; i < duration_len; i++) {
       duration <<= 8;
       duration  += *((unsigned char *)op.packet + duration_len - i);
     }
