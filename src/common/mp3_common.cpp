@@ -213,7 +213,7 @@ decode_mp3_header(const unsigned char *buf,
   else if (h->version == 3)
     h->version = 1;
 
-  h->layer = 4 - (header >> 17) & 3;
+  h->layer = 4 - ((header >> 17) & 3);
   if (h->layer == 4)
     mxerror("Invalid MP3 header value for the layer.\n");
 
