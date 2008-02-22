@@ -1173,7 +1173,6 @@ ogm_v_mscomp_demuxer_c::get_codec() {
 
 void
 ogm_v_mscomp_demuxer_c::initialize() {
-  mxinfo("intizing\n");
   stream_header *sth = (stream_header *)(packet_data[0]->get() + 1);
 
   if (video_fps < 0)
