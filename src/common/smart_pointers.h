@@ -1,6 +1,8 @@
 #ifndef COUNTED_PTR_H
 #define COUNTED_PTR_H
 
+#include <memory>
+
 template <class X> class counted_ptr {
 public:
   typedef X element_type;

@@ -18,9 +18,11 @@
 
 #include "os.h"
 
-#include <cassert>
+#include <stdlib.h>
 
+#include <cassert>
 #include <deque>
+#include <memory>
 #include <vector>
 
 #include "common.h"
