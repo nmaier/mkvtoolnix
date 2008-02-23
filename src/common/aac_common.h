@@ -33,6 +33,8 @@ using namespace std;
 
 #define AAC_SYNC_EXTENSION_TYPE 0x02b7
 
+#define AAC_MAX_PRIVATE_DATA_SIZE 5
+
 extern const int MTX_DLL_API aac_sampling_freq[16];
 
 typedef struct {

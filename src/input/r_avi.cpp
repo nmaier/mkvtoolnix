@@ -334,32 +334,56 @@ avi_reader_c::add_audio_demuxer(int aid) {
       packetizer = new dts_packetizer_c(this, dtsheader, ti, true);
       break;
     }
-    case 0x00ff: { // AAC
+    case 0x00ff:
+    case 0x706d: { // AAC
       int profile, channels, sample_rate, output_sample_rate;
       bool is_sbr;
+      bool aac_data_created = false;
+      bool headerless       = (audio_format != 0x706d);
+      unsigned char created_aac_data[AAC_MAX_PRIVATE_DATA_SIZE];
 
-      if ((ti.private_size != 2) && (ti.private_size != 5))
-        mxerror(FMT_TID "This AAC track does not contain valid headers. The "
-                "extra header size is %d bytes, expected were 2 or 5 bytes.\n",
-                ti.fname.c_str(), (int64_t)aid + 1, ti.private_size);
-      if (!parse_aac_data(ti.private_data, ti.private_size, profile,
-                          channels, sample_rate, output_sample_rate,
-                          is_sbr))
-        mxerror(FMT_TID "This AAC track does not contain valid headers. Could "
-                "not parse the AAC information.\n", ti.fname.c_str(),
-                (int64_t)aid + 1);
-      if (is_sbr)
-        profile = AAC_PROFILE_SBR;
+      if (0 == ti.private_size) {
+        aac_data_created     = true;
+        channels             = AVI_audio_channels(avi);
+        sample_rate          = AVI_audio_rate(avi);
+        if (sample_rate < 44100) {
+          profile            = AAC_PROFILE_SBR;
+          output_sample_rate = sample_rate * 2;
+          is_sbr             = true;
+        } else {
+          profile            = AAC_PROFILE_MAIN;
+          output_sample_rate = sample_rate;
+          is_sbr             = false;
+        }
+
+        ti.private_size      = create_aac_data(created_aac_data, profile, channels, sample_rate, output_sample_rate, is_sbr);
+        ti.private_data      = created_aac_data;
+
+      } else {
+        if ((2 != ti.private_size) && (5 != ti.private_size))
+          mxerror(FMT_TID "This AAC track does not contain valid headers. The extra header size is %d bytes, expected were 2 or 5 bytes.\n",
+                  ti.fname.c_str(), (int64_t)aid + 1, ti.private_size);
+        if (!parse_aac_data(ti.private_data, ti.private_size, profile, channels, sample_rate, output_sample_rate, is_sbr))
+          mxerror(FMT_TID "This AAC track does not contain valid headers. Could not parse the AAC information.\n", ti.fname.c_str(), (int64_t)aid + 1);
+        if (is_sbr)
+          profile = AAC_PROFILE_SBR;
+      }
+
       demuxer.samples_per_second = sample_rate;
       demuxer.channels = channels;
+
       if (verbose)
-        mxinfo(FMT_TID "Using the AAC audio output module.\n",
-               ti.fname.c_str(), (int64_t)aid + 1);
-      packetizer = new aac_packetizer_c(this, AAC_ID_MPEG4, profile,
-                                        demuxer.samples_per_second,
-                                        demuxer.channels, ti, false, true);
+        mxinfo(FMT_TID "Using the AAC audio output module.\n", ti.fname.c_str(), (int64_t)aid + 1);
+
+      packetizer = new aac_packetizer_c(this, AAC_ID_MPEG4, profile, demuxer.samples_per_second, demuxer.channels, ti, false, headerless);
       if (is_sbr)
         packetizer->set_audio_output_sampling_freq(output_sample_rate);
+
+      if (aac_data_created) {
+        ti.private_size = 0;
+        ti.private_data = NULL;
+      }
+
       break;
     }
     default:
@@ -555,7 +579,7 @@ avi_reader_c::get_progress() {
 void
 avi_reader_c::identify() {
   int i;
-  const char *type;
+  string type;
   uint32_t par_num, par_den;
   vector<string> extended_info;
 
@@ -563,11 +587,11 @@ avi_reader_c::identify() {
   type = AVI_video_compressor(avi);
 
   if (identify_verbose &&
-      (!strncasecmp(type, "MP42", 4) ||
-       !strncasecmp(type, "DIV2", 4) ||
-       !strncasecmp(type, "DIVX", 4) ||
-       !strncasecmp(type, "XVID", 4) ||
-       !strncasecmp(type, "DX50", 4))) {
+      (starts_with_case(type, "MP42", 4) ||
+       starts_with_case(type, "DIV2", 4) ||
+       starts_with_case(type, "DIVX", 4) ||
+       starts_with_case(type, "XVID", 4) ||
+       starts_with_case(type, "DX50", 4))) {
     unsigned char *buffer;
     uint32_t width, height, disp_width, disp_height;
     float aspect_ratio;
@@ -598,10 +622,10 @@ avi_reader_c::identify() {
     }
   }
 
-  if (mpeg4::p10::is_avc_fourcc(type))
+  if (mpeg4::p10::is_avc_fourcc(type.c_str()))
     extended_info.push_back("packetizer:mpeg4_p10_es_video");
 
-  mxinfo("Track ID 0: video (%s)", type);
+  mxinfo("Track ID 0: video (%s)", type.c_str());
 
   if (identify_verbose && !extended_info.empty()) {
     vector<string>::iterator ei;
@@ -616,7 +640,9 @@ avi_reader_c::identify() {
 
   for (i = 0; i < AVI_audio_tracks(avi); i++) {
     AVI_set_audio_track(avi, i);
-    switch (AVI_audio_format(avi)) {
+    unsigned int audio_format = AVI_audio_format(avi);
+
+    switch (audio_format) {
       case 0x0001:
         type = "PCM";
         break;
@@ -633,12 +659,14 @@ avi_reader_c::identify() {
         type = "DTS";
         break;
       case 0x00ff:
+      case 0x706d:
         type = "AAC";
         break;
       default:
-        type = "unsupported";
+        type = mxsprintf("unsupported (0x%04x)", audio_format);
     }
-    mxinfo("Track ID %d: audio (%s)\n", i + 1, type);
+
+    mxinfo("Track ID %d: audio (%s)\n", i + 1, type.c_str());
   }
 }
 

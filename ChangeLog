@@ -1,3 +1,8 @@
+2008-02-23  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: Added support for AAC-in-AVI with CodecID
+	0x706d as created by mencoder. Fix for bug 266.
+
 2008-02-20  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Rewrote the OGM reader code. Another part of
