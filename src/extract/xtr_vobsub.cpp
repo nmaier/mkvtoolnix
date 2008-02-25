@@ -80,13 +80,13 @@ xtr_vobsub_c::create_file(xtr_base_c *_master,
   language = kt_get_language(track);
 
   if (NULL == master) {
-    string file_name = base_name + ".sub";
+    string sub_file_name = base_name + ".sub";
 
     try {
-      out = new mm_file_io_c(file_name, MODE_CREATE);
+      out = new mm_file_io_c(sub_file_name, MODE_CREATE);
     } catch (...) {
       mxerror("Failed to create the VobSub data file '%s': %d (%s)\n",
-              file_name.c_str(), errno, strerror(errno));
+              sub_file_name.c_str(), errno, strerror(errno));
     }
 
   } else {

@@ -708,28 +708,27 @@ mpeg4_p2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
 void
 mpeg4_p2_video_packetizer_c::extract_size(const unsigned char *buffer,
                                           int size) {
-  uint32_t width, height;
+  uint32_t xtr_width, xtr_height;
 
-  if (mpeg4::p2::extract_size(buffer, size, width, height)) {
+  if (mpeg4::p2::extract_size(buffer, size, xtr_width, xtr_height)) {
     size_extracted = true;
-    if (!reader->appending &&
-        ((width != hvideo_pixel_width) || (height != hvideo_pixel_height))) {
-      set_video_pixel_width(width);
-      set_video_pixel_height(height);
-      if (!output_is_native &&
-          (ti.private_size >= sizeof(alBITMAPINFOHEADER))) {
+    if (!reader->appending && ((xtr_width != hvideo_pixel_width) || (xtr_height != hvideo_pixel_height))) {
+      set_video_pixel_width(xtr_width);
+      set_video_pixel_height(xtr_height);
+
+      if (!output_is_native && (ti.private_size >= sizeof(alBITMAPINFOHEADER))) {
         alBITMAPINFOHEADER *bih = (alBITMAPINFOHEADER *)ti.private_data;
-        put_uint32_le(&bih->bi_width, width);
-        put_uint32_le(&bih->bi_height, height);
+        put_uint32_le(&bih->bi_width,  xtr_width);
+        put_uint32_le(&bih->bi_height, xtr_height);
         set_codec_private(ti.private_data, ti.private_size);
       }
+
       generic_packetizer_c::set_headers();
       rerender_track_headers();
-      mxinfo("Track " LLD " of '%s': The extracted values for video width and "
-             "height from the MPEG4 layer 2 video data bitstream differ from "
-             "what the values in the source container. The ones from the "
-             "video data bitstream (%ux%u) will be used.\n",
-             (int64_t)ti.id, ti.fname.c_str(), width, height);
+
+      mxinfo("Track " LLD " of '%s': The extracted values for video width and height from the MPEG4 layer 2 video data bitstream differ "
+             "from what the values in the source container. The ones from the video data bitstream (%ux%u) will be used.\n",
+             (int64_t)ti.id, ti.fname.c_str(), xtr_width, xtr_height);
     }
 
   } else if (50 <= frames_output)

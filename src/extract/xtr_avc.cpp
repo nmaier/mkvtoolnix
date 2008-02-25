@@ -29,11 +29,11 @@ void
 xtr_avc_c::write_nal(const binary *data,
                      int &pos,
                      int data_size,
-                     int nal_size_size) {
+                     int write_nal_size_size) {
   int i;
   int nal_size = 0;
 
-  for (i = 0; i < nal_size_size; ++i)
+  for (i = 0; i < write_nal_size_size; ++i)
     nal_size = (nal_size << 8) | data[pos++];
 
   if ((pos + nal_size) > data_size)

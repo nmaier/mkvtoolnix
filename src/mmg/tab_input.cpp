@@ -70,11 +70,11 @@ private:
 public:
   input_drop_target_c(tab_input *n_owner):
     owner(n_owner) {}
-  virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString &files) {
+  virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString &dropped_files) {
     int i;
 
-    for (i = 0; i < files.Count(); i++)
-      owner->add_file(files[i], false);
+    for (i = 0; i < dropped_files.Count(); i++)
+      owner->add_file(dropped_files[i], false);
 
     return true;
   }
@@ -293,12 +293,12 @@ tab_input::select_file(bool append) {
                    last_open_dir, wxT(""), media_files, wxOPEN | wxMULTIPLE);
 
   if(dlg.ShowModal() == wxID_OK) {
-    wxArrayString files;
+    wxArrayString selected_files;
     int i;
 
-    dlg.GetPaths(files);
-    for (i = 0; i < files.Count(); i++)
-      add_file(files[i], append);
+    dlg.GetPaths(selected_files);
+    for (i = 0; i < selected_files.Count(); i++)
+      add_file(selected_files[i], append);
   }
 }
 

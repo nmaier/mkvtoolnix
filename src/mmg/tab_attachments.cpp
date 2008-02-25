@@ -34,11 +34,11 @@ private:
 public:
   attachments_drop_target_c(tab_attachments *n_owner):
     owner(n_owner) {};
-  virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString &files) {
+  virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString &dropped_files) {
     int i;
 
-    for (i = 0; i < files.Count(); i++)
-      owner->add_attachment(files[i]);
+    for (i = 0; i < dropped_files.Count(); i++)
+      owner->add_attachment(dropped_files[i]);
 
     return true;
   }
@@ -154,13 +154,13 @@ tab_attachments::on_add_attachment(wxCommandEvent &evt) {
                    wxT(""), wxT(ALLFILES), wxOPEN | wxMULTIPLE);
 
   if(dlg.ShowModal() == wxID_OK) {
-    wxArrayString files;
+    wxArrayString selected_files;
     int i;
 
     last_open_dir = dlg.GetDirectory();
-    dlg.GetPaths(files);
-    for (i = 0; i < files.Count(); i++)
-      add_attachment(files[i]);
+    dlg.GetPaths(selected_files);
+    for (i = 0; i < selected_files.Count(); i++)
+      add_attachment(selected_files[i]);
   }
 }
 

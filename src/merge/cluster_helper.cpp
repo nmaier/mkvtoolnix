@@ -105,7 +105,7 @@ cluster_helper_c::add_packet(packet_cptr packet) {
 
   if (splitting() &&
       (split_points.end() != current_split_point) &&
-      (file_num <= split_max_num_files) &&
+      (g_file_num <= split_max_num_files) &&
       (packet->bref == -1) &&
       ((packet->source->get_track_type() == track_video) ||
        (video_packetizer == NULL))) {

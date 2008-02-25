@@ -241,18 +241,18 @@ wav_reader_c::read(generic_packetizer_c *,
 
 bool
 wav_reader_c::skip_to_chunk(const char *id) {
-  chunk_struct chunk;
+  chunk_struct next_chunk;
 
   while (true) {
-    if (io->read(&chunk, sizeof(chunk)) != sizeof(chunk))
+    if (io->read(&next_chunk, sizeof(next_chunk)) != sizeof(next_chunk))
       return false;
 
-    if (!memcmp(&chunk.id, id, 4)) {
-      io->setFilePointer(-(int)sizeof(chunk), seek_current);
+    if (!memcmp(&next_chunk.id, id, 4)) {
+      io->setFilePointer(-(int)sizeof(next_chunk), seek_current);
       break;
     }
 
-    if (!io->setFilePointer2(get_uint32_le(&chunk.len), seek_current))
+    if (!io->setFilePointer2(get_uint32_le(&next_chunk.len), seek_current))
       return false;
   }
 

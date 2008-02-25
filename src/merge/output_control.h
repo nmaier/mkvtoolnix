@@ -178,7 +178,7 @@ extern bool no_lacing, no_linking, use_durations;
 
 extern bool identifying, identify_verbose;
 
-extern int file_num;
+extern int g_file_num;
 
 extern int64_t max_ns_per_cluster;
 extern int max_blocks_per_cluster;

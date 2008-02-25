@@ -1091,7 +1091,7 @@ bool
 mmg_dialog::check_before_overwriting() {
   wxFileName file_name(tc_output->GetValue());
   wxString dir, name, ext;
-  wxArrayString files;
+  wxArrayString files_in_output_dir;
   int i;
 
   dir = file_name.GetPath(wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR);
@@ -1108,9 +1108,9 @@ mmg_dialog::check_before_overwriting() {
   name = file_name.GetName() + wxT("-");
   ext = file_name.GetExt();
 
-  wxDir::GetAllFiles(dir, &files, wxEmptyString, wxDIR_FILES);
-  for (i = 0; i < files.Count(); i++) {
-    wxFileName test_name(files[i]);
+  wxDir::GetAllFiles(dir, &files_in_output_dir, wxEmptyString, wxDIR_FILES);
+  for (i = 0; i < files_in_output_dir.Count(); i++) {
+    wxFileName test_name(files_in_output_dir[i]);
 
     if (test_name.GetName().StartsWith(name) &&
         (test_name.HasExt() == file_name.HasExt()) &&
@@ -1381,6 +1381,7 @@ mmg_dialog::update_command_line() {
   mmg_attachment_t *a;
   wxString sid, old_cmdline, arg, aids, sids, dids, track_order;
   wxString append_mapping;
+  vector<wxString> opts;
 
   old_cmdline = cmdline;
   cmdline = wxT("\"") + options.mkvmerge + wxT("\" -o \"") + tc_output->GetValue() + wxT("\" ");
@@ -1536,9 +1537,6 @@ mmg_dialog::update_command_line() {
       }
 
       if (t->user_defined.Length() > 0) {
-        vector<wxString> opts;
-        int i;
-
         opts = split(t->user_defined, wxString(wxT(" ")));
         for (i = 0; i < opts.size(); i++) {
           wxString opt = strip(opts[i]);
@@ -1676,9 +1674,6 @@ mmg_dialog::update_command_line() {
 
   cli_options = strip(cli_options);
   if (cli_options.length() > 0) {
-    vector<wxString> opts;
-    int i;
-
     opts = split(cli_options, wxString(wxT(" ")));
     for (i = 0; i < opts.size(); i++)
       clargs.Add(strip(opts[i]));

@@ -105,7 +105,6 @@ public:
   int32_t last_job_id;
 
   bool muxing_in_progress;
-  job_dialog *jdlg;
 
   wxHtmlHelpController *help;
   wxLogWindow *log_window;

@@ -49,8 +49,8 @@ private:
 public:
   chapters_drop_target_c(tab_chapters *n_owner):
     owner(n_owner) {};
-  virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString &files) {
-    owner->load(files[0]);
+  virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString &dropped_files) {
+    owner->load(dropped_files[0]);
 
     return true;
   }

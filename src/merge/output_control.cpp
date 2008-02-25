@@ -171,7 +171,7 @@ bool segment_title_set = false;
 int64_t tags_size = 0;
 static bool accept_tags = true;
 
-int file_num = 1;
+int g_file_num = 1;
 
 int split_max_num_files = 65535;
 
@@ -528,7 +528,7 @@ render_headers(mm_io_c *rout) {
   bool first_file;
   int i;
 
-  first_file = (file_num == 1);
+  first_file = (g_file_num == 1);
   try {
     EDocType &doc_type = GetChild<EDocType>(head);
     *static_cast<EbmlString *>(&doc_type) = "matroska";
@@ -577,7 +577,7 @@ render_headers(mm_io_c *rout) {
 
     // Generate the segment UIDs.
     if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
-      if (file_num == 1) {
+      if (g_file_num == 1) {
         if (forced_seguids.empty())
           seguid_current.generate_random();
         else {
@@ -736,7 +736,7 @@ render_attachments(IOCallback *rout) {
   kax_as = new KaxAttachments();
   kax_a = NULL;
   mxforeach(attch, attachments) {
-    if ((file_num == 1) || attch->to_all_files) {
+    if ((g_file_num == 1) || attch->to_all_files) {
       if (kax_a == NULL)
         kax_a = &GetChild<KaxAttached>(*kax_as);
       else
@@ -1199,7 +1199,7 @@ create_output_name() {
   // First possibility: %d
   p = s.find("%d");
   if (p >= 0) {
-    mxprints(buffer, "%d", file_num);
+    mxprints(buffer, "%d", g_file_num);
     s.replace(p, 2, buffer);
 
     return s;
@@ -1223,14 +1223,14 @@ create_output_name() {
     len.erase(0, 1);
     len.erase(p2 - p - 1);
     char *buffer2 = new char[strtol(len.c_str(), NULL, 10) + 1];
-    mxprints(buffer2, format.c_str(), file_num);
+    mxprints(buffer2, format.c_str(), g_file_num);
     s.replace(p, format.size(), buffer2);
     delete [] buffer2;
 
     return s;
   }
 
-  mxprints(buffer, "-%03d", file_num);
+  mxprints(buffer, "-%03d", g_file_num);
 
   // See if we can find a '.'.
   p = s.rfind(".");
@@ -1344,7 +1344,7 @@ create_next_output_file() {
     tags_size = kax_tags->ElementSize();
   }
 
-  file_num++;
+  g_file_num++;
 }
 
 /** \brief Finishes and closes the current file

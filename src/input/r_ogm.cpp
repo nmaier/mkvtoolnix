@@ -712,8 +712,7 @@ ogm_reader_c::handle_stream_comments() {
   int i, j, cch;
   ogm_demuxer_cptr dmx;
   counted_ptr<vector<string> > comments;
-  vector<string> comment, chapters;
-  mm_mem_io_c *out;
+  vector<string> comment, chapter_strings;
   string title;
   bool charset_warning_printed;
 
@@ -729,7 +728,7 @@ ogm_reader_c::handle_stream_comments() {
     if (comments->empty())
       continue;
 
-    chapters.clear();
+    chapter_strings.clear();
 
     for (j = 0; comments->size() > j; j++) {
       mxverb(2, "ogm_reader: commment for #%d for %d: %s\n", j, i, (*comments)[j].c_str());
@@ -773,10 +772,10 @@ ogm_reader_c::handle_stream_comments() {
         title = comment[1];
 
       else if (starts_with(comment[0], "CHAPTER"))
-        chapters.push_back((*comments)[j]);
+        chapter_strings.push_back((*comments)[j]);
     }
 
-    if (((title != "") || (chapters.size() > 0)) &&
+    if (((title != "") || (chapter_strings.size() > 0)) &&
         !charset_warning_printed && (ti.chapter_charset == "")) {
       mxwarn("The Ogg/OGM file '%s' contains chapter or title information. "
              "Unfortunately the charset used to store this information in "
@@ -798,18 +797,19 @@ ogm_reader_c::handle_stream_comments() {
       title = "";
     }
 
-    if ((chapters.size() > 0) && !ti.no_chapters && (kax_chapters == NULL)) {
-      out = NULL;
+    if (!chapter_strings.empty() && !ti.no_chapters && (kax_chapters == NULL)) {
       try {
-        out = new mm_mem_io_c(NULL, 0, 1000);
+        auto_ptr<mm_mem_io_c> out(new mm_mem_io_c(NULL, 0, 1000));
+
         out->write_bom("UTF-8");
-        for (j = 0; j < chapters.size(); j++)
-          out->puts(to_utf8(cch, chapters[j]) + string("\n"));
+        for (j = 0; j < chapter_strings.size(); j++)
+          out->puts(to_utf8(cch, chapter_strings[j]) + string("\n"));
         out->set_file_name(ti.fname);
-        kax_chapters = parse_chapters(new mm_text_io_c(out));
+
+        auto_ptr<mm_text_io_c> text_out;
+
+        kax_chapters = parse_chapters(text_out.get());
       } catch (...) {
-        if (out != NULL)
-          delete out;
       }
     }
   }
@@ -936,13 +936,13 @@ ogm_a_aac_demuxer_c::create_packetizer(track_info_c &ti) {
   mxverb(2, "ogm_reader: " LLD "/%s: profile %d, channels %d, sample_rate %d, sbr %d, output_sample_rate %d\n",
          ti.id, ti.fname.c_str(), profile, channels, sample_rate, (int)sbr, output_sample_rate);
 
-  generic_packetizer_c *ptzr = new aac_packetizer_c(reader, AAC_ID_MPEG4, profile, sample_rate, channels, ti, false, true);
+  generic_packetizer_c *ptzr_obj = new aac_packetizer_c(reader, AAC_ID_MPEG4, profile, sample_rate, channels, ti, false, true);
   if (sbr)
-    ptzr->set_audio_output_sampling_freq(output_sample_rate);
+    ptzr_obj->set_audio_output_sampling_freq(output_sample_rate);
 
   mxinfo(FMT_TID "Using the AAC output module.\n", ti.fname.c_str(), (int64_t)ti.id);
 
-  return ptzr;
+  return ptzr_obj;
 }
 
 // -----------------------------------------------------------
@@ -955,12 +955,12 @@ ogm_a_ac3_demuxer_c::ogm_a_ac3_demuxer_c(ogm_reader_c *p_reader):
 
 generic_packetizer_c *
 ogm_a_ac3_demuxer_c::create_packetizer(track_info_c &ti) {
-  stream_header        *sth  = (stream_header *)(packet_data[0]->get() + 1);
-  generic_packetizer_c *ptzr = new ac3_packetizer_c(reader, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels), 0, ti);
+  stream_header        *sth      = (stream_header *)(packet_data[0]->get() + 1);
+  generic_packetizer_c *ptzr_obj = new ac3_packetizer_c(reader, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels), 0, ti);
 
   mxinfo(FMT_TID "Using the AC3 output module.\n", ti.fname.c_str(), (int64_t)ti.id);
 
-  return ptzr;
+  return ptzr_obj;
 }
 
 // -----------------------------------------------------------
@@ -973,12 +973,12 @@ ogm_a_mp3_demuxer_c::ogm_a_mp3_demuxer_c(ogm_reader_c *p_reader):
 
 generic_packetizer_c *
 ogm_a_mp3_demuxer_c::create_packetizer(track_info_c &ti) {
-  stream_header        *sth  = (stream_header *)(packet_data[0]->get() + 1);
-  generic_packetizer_c *ptzr = new mp3_packetizer_c(reader, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels), true, ti);
+  stream_header        *sth      = (stream_header *)(packet_data[0]->get() + 1);
+  generic_packetizer_c *ptzr_obj = new mp3_packetizer_c(reader, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels), true, ti);
 
   mxinfo(FMT_TID "Using the MPEG audio output module.\n", ti.fname.c_str(), (int64_t)ti.id);
 
-  return ptzr;
+  return ptzr_obj;
 }
 
 // -----------------------------------------------------------
@@ -991,13 +991,13 @@ ogm_a_pcm_demuxer_c::ogm_a_pcm_demuxer_c(ogm_reader_c *p_reader):
 
 generic_packetizer_c *
 ogm_a_pcm_demuxer_c::create_packetizer(track_info_c &ti) {
-  stream_header        *sth  = (stream_header *)(packet_data[0]->get() + 1);
-  generic_packetizer_c *ptzr = new pcm_packetizer_c(reader, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels),
+  stream_header        *sth      = (stream_header *)(packet_data[0]->get() + 1);
+  generic_packetizer_c *ptzr_obj = new pcm_packetizer_c(reader, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels),
                                                     get_uint16_le(&sth->bits_per_sample), ti);
 
   mxinfo(FMT_TID "Using the PCM output module.\n", ti.fname.c_str(), (int64_t)ti.id);
 
-  return ptzr;
+  return ptzr_obj;
 }
 
 // -----------------------------------------------------------
@@ -1011,12 +1011,12 @@ ogm_a_vorbis_demuxer_c::ogm_a_vorbis_demuxer_c(ogm_reader_c *p_reader):
 
 generic_packetizer_c *
 ogm_a_vorbis_demuxer_c::create_packetizer(track_info_c &ti) {
-  generic_packetizer_c *ptzr = new vorbis_packetizer_c(reader, packet_data[0]->get(), packet_data[0]->get_size(), packet_data[1]->get(), packet_data[1]->get_size(),
-                                                       packet_data[2]->get(), packet_data[2]->get_size(), ti);
+  generic_packetizer_c *ptzr_obj = new vorbis_packetizer_c(reader, packet_data[0]->get(), packet_data[0]->get_size(), packet_data[1]->get(), packet_data[1]->get_size(),
+                                                           packet_data[2]->get(), packet_data[2]->get_size(), ti);
 
   mxinfo(FMT_TID "Using the Vorbis output module.\n", ti.fname.c_str(), (int64_t)ti.id);
 
-  return ptzr;
+  return ptzr_obj;
 }
 
 void
@@ -1043,11 +1043,11 @@ ogm_s_text_demuxer_c::ogm_s_text_demuxer_c(ogm_reader_c *p_reader):
 
 generic_packetizer_c *
 ogm_s_text_demuxer_c::create_packetizer(track_info_c &ti) {
-  generic_packetizer_c *ptzr = new textsubs_packetizer_c(reader, MKV_S_TEXTUTF8, NULL, 0, true, false, ti);
+  generic_packetizer_c *ptzr_obj = new textsubs_packetizer_c(reader, MKV_S_TEXTUTF8, NULL, 0, true, false, ti);
 
   mxinfo(FMT_TID "Using the text subtitle output module.\n", ti.fname.c_str(), (int64_t)ti.id);
 
-  return ptzr;
+  return ptzr_obj;
 }
 
 void
@@ -1185,7 +1185,7 @@ ogm_v_mscomp_demuxer_c::initialize() {
 
 generic_packetizer_c *
 ogm_v_mscomp_demuxer_c::create_packetizer(track_info_c &ti) {
-  generic_packetizer_c *ptzr;
+  generic_packetizer_c *ptzr_obj;
   alBITMAPINFOHEADER bih;
   stream_header *sth = (stream_header *)&packet_data[0]->get()[1];
 
@@ -1208,19 +1208,19 @@ ogm_v_mscomp_demuxer_c::create_packetizer(track_info_c &ti) {
   int height       = get_uint32_le(&sth->sh.video.height);
 
   if (mpeg4::p2::is_fourcc(sth->subtype)) {
-    ptzr = new mpeg4_p2_video_packetizer_c(reader, fps, width, height, false, ti);
+    ptzr_obj = new mpeg4_p2_video_packetizer_c(reader, fps, width, height, false, ti);
 
     mxinfo(FMT_TID "Using the MPEG-4 part 2 video output module.\n", ti.fname.c_str(), (int64_t)ti.id);
 
   } else {
-    ptzr = new video_packetizer_c(reader, NULL, fps, width, height, ti);
+    ptzr_obj = new video_packetizer_c(reader, NULL, fps, width, height, ti);
 
     mxinfo(FMT_TID "Using the video output module.\n", ti.fname.c_str(), (int64_t)ti.id);
   }
 
   ti.private_data = NULL;
 
-  return ptzr;
+  return ptzr_obj;
 }
 
 void
@@ -1292,18 +1292,18 @@ ogm_v_theora_demuxer_c::initialize() {
 
 generic_packetizer_c *
 ogm_v_theora_demuxer_c::create_packetizer(track_info_c &ti) {
-  memory_cptr codecprivate   = lace_memory_xiph(packet_data);
-  ti.private_data            = codecprivate->get();
-  ti.private_size            = codecprivate->get_size();
+  memory_cptr codecprivate       = lace_memory_xiph(packet_data);
+  ti.private_data                = codecprivate->get();
+  ti.private_size                = codecprivate->get_size();
 
-  double                fps  = (double)theora.frn / (double)theora.frd;
-  generic_packetizer_c *ptzr = new video_packetizer_c(reader, MKV_V_THEORA, fps, theora.fmbw, theora.fmbh, ti);
+  double                fps      = (double)theora.frn / (double)theora.frd;
+  generic_packetizer_c *ptzr_obj = new video_packetizer_c(reader, MKV_V_THEORA, fps, theora.fmbw, theora.fmbh, ti);
 
   mxinfo(FMT_TID "Using the Theora video output module.\n", ti.fname.c_str(), (int64_t)ti.id);
 
   ti.private_data = NULL;
 
-  return ptzr;
+  return ptzr_obj;
 }
 
 void

@@ -26,18 +26,18 @@
 
 #define BUFF_SIZE 2*1024*1024
 
-MPEGFrame::MPEGFrame(binary* data, uint32_t size, bool bCopy){
-  if(bCopy){
-    this->data  = (binary *)safemalloc(size);
-    memcpy(this->data, data, size);
-  }else{
-    this->data = data;
+MPEGFrame::MPEGFrame(binary *n_data, uint32_t n_size, bool n_bCopy):
+  size(n_size), bCopy(n_bCopy) {
+
+  if(bCopy) {
+    data = (binary *)safemalloc(size);
+    memcpy(data, n_data, size);
+  } else {
+    data = n_data;
   }
-  this->bCopy = bCopy;
-  this->size = size;
-  firstRef = -1;
-  secondRef = -1;
-  seqHdrData = NULL;
+  firstRef       = -1;
+  secondRef      = -1;
+  seqHdrData     = NULL;
   seqHdrDataSize = 0;
 }
 

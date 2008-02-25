@@ -46,7 +46,7 @@ extern const char *MTX_DLL_API xcompression_methods[];
 
 class MTX_DLL_API compression_error_c: public error_c {
 public:
-  compression_error_c(const string &error): error_c(error) { }
+  compression_error_c(const string &n_error): error_c(n_error) { }
 };
 
 class compressor_c;
@@ -58,8 +58,8 @@ protected:
   int64_t raw_size, compressed_size, items;
 
 public:
-  compressor_c(compression_method_e _method):
-    method(_method), raw_size(0), compressed_size(0), items(0) {
+  compressor_c(compression_method_e n_method):
+    method(n_method), raw_size(0), compressed_size(0), items(0) {
   };
 
   virtual ~compressor_c();

@@ -295,12 +295,12 @@ ogm_a_flac_demuxer_c::create_packetizer(track_info_c &ti) {
     size += packet_data[i]->get_size();
   }
 
-  generic_packetizer_c *ptzr = new flac_packetizer_c(reader, buf, size, ti);
+  generic_packetizer_c *ptzr_obj = new flac_packetizer_c(reader, buf, size, ti);
   safefree(buf);
 
   mxinfo(FMT_TID "Using the FLAC output module.\n", ti.fname.c_str(), (int64_t)ti.id);
 
-  return ptzr;
+  return ptzr_obj;
 }
 
 #endif // HAVE_FLAC_FORMAT_H

@@ -1439,7 +1439,7 @@ guess_mime_type_and_report(string file_name) {
 }
 
 static void
-handle_segmentinfo(KaxInfo *kax_info_chap) {
+handle_segmentinfo() {
   KaxSegmentFamily *family;
   EbmlBinary *uid;
 
@@ -1877,7 +1877,7 @@ parse_args(vector<string> args) {
 
       segmentinfo_file_name = next_arg;
       kax_info_chap = parse_segmentinfo(segmentinfo_file_name, false);
-      handle_segmentinfo(kax_info_chap);
+      handle_segmentinfo();
 
       sit++;
 

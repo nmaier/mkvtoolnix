@@ -1804,23 +1804,23 @@ qtmp4_demuxer_t::calculate_fps() {
     mxverb(3, PFX "calculate_fps: case 1: %f\n", fps);
 
   } else {
-    map<int64_t, int> durations;
+    map<int64_t, int> duration_map;
 
     for (int i = 0; sample_table.size() > (i + 1); ++i) {
       int64_t this_duration = sample_table[i + 1].pts - sample_table[i].pts;
 
-      if (durations.find(this_duration) == durations.end())
-        durations[this_duration] = 0;
-      durations[this_duration]++;
+      if (duration_map.find(this_duration) == duration_map.end())
+        duration_map[this_duration] = 0;
+      duration_map[this_duration]++;
     }
 
-    map<int64_t, int>::const_iterator most_common = durations.begin();
+    map<int64_t, int>::const_iterator most_common = duration_map.begin();
     map<int64_t, int>::const_iterator it;
-    mxforeach(it, durations)
+    mxforeach(it, duration_map)
       if (it->second > most_common->second)
         most_common = it;
 
-    if ((most_common != durations.end()) && most_common->first)
+    if ((most_common != duration_map.end()) && most_common->first)
       fps = (double)1000000000.0 / (double)to_nsecs(most_common->first);
 
     mxverb(3, PFX "calculate_fps: case 2: most_common " LLD " = %d fps %f\n",

@@ -760,7 +760,7 @@ mpeg_ps_reader_c::new_stream_v_avc(int id,
     mm_mem_io_c avcc(track->v_avcc->get(), track->v_avcc->get_size());
     mm_mem_io_c new_avcc(NULL, track->v_avcc->get_size(), 1024);
     memory_cptr nalu(new memory_c());
-    int num_sps, sps, length;
+    int num_sps, sps, sps_length;
     sps_info_t sps_info;
 
     avcc.read(nalu, 5);
@@ -773,13 +773,13 @@ mpeg_ps_reader_c::new_stream_v_avc(int id,
     for (sps = 0; sps < num_sps; sps++) {
       bool abort;
 
-      length = avcc.read_uint16_be();
-      if ((length + avcc.getFilePointer()) >= track->v_avcc->get_size())
-        length = track->v_avcc->get_size() - avcc.getFilePointer();
-      avcc.read(nalu, length);
+      sps_length = avcc.read_uint16_be();
+      if ((sps_length + avcc.getFilePointer()) >= track->v_avcc->get_size())
+        sps_length = track->v_avcc->get_size() - avcc.getFilePointer();
+      avcc.read(nalu, sps_length);
 
       abort = false;
-      if ((0 < length) && ((nalu->get()[0] & 0x1f) == 7)) {
+      if ((0 < sps_length) && ((nalu->get()[0] & 0x1f) == 7)) {
         nalu_to_rbsp(nalu);
         if (!mpeg4::p10::parse_sps(nalu, sps_info, true))
           throw false;

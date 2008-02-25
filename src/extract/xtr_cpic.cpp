@@ -41,7 +41,7 @@ xtr_cpic_c::handle_frame(memory_cptr &frame,
 
   binary *mybuffer;
   int data_size, header_size;
-  string file_name;
+  string frame_file_name;
 
   content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
@@ -60,16 +60,16 @@ xtr_cpic_c::handle_frame(memory_cptr &frame,
     return;
   }
 
-  file_name = file_name_root + "_" + to_string(frame_counter);
+  frame_file_name = file_name_root + "_" + to_string(frame_counter);
   if (7 == header_size) {
     uint8 picture_type = mybuffer[6];
     if (COREPICTURE_TYPE_JPEG == picture_type)
-      file_name += ".jpeg";
+      frame_file_name += ".jpeg";
     else if (COREPICTURE_TYPE_PNG == picture_type)
-      file_name += ".png";
+      frame_file_name += ".png";
   }
 
- out = new mm_file_io_c(file_name, MODE_CREATE);
+ out = new mm_file_io_c(frame_file_name, MODE_CREATE);
  out->write(&mybuffer[header_size], data_size - header_size);
  delete out;
  out = NULL;

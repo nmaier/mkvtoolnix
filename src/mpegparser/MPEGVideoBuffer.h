@@ -79,11 +79,12 @@ private:
   uint32_t size;
   uint8_t type;
 public:
-  MPEGChunk(binary* data, uint32_t dataSize){
+  MPEGChunk(binary* n_data, uint32_t n_size):
+    data(n_data), size(n_size) {
+
     assert(data);
-    this->data = data;
-    assert(dataSize > 4);
-    this->size = dataSize;
+    assert(size > 4);
+
     type = data[3];
   }
 

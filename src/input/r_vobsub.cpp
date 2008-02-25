@@ -396,7 +396,7 @@ vobsub_reader_c::extract_one_spu_packet(int64_t timecode,
                                         int64_t duration,
                                         int64_t track_id) {
   unsigned char *dst_buf;
-  uint32_t len, idx, version, packet_size, dst_size;
+  uint32_t len, idx, mpeg_version, packet_size, dst_size;
   int64_t extraction_start_pos;
   int c, packet_aid, spu_len;
   int64_t pts;
@@ -437,25 +437,25 @@ vobsub_reader_c::extract_one_spu_packet(int64_t timecode,
         if (c < 0)
           return deliver();
         if ((c & 0xc0) == 0x40)
-          version = 4;
+          mpeg_version = 4;
         else if ((c & 0xf0) == 0x20)
-          version = 2;
+          mpeg_version = 2;
         else {
           if (!track->mpeg_version_warning_printed) {
-            mxwarn(PFX "Unsupported MPEG version: 0x%02x in packet " LLD
+            mxwarn(PFX "Unsupported MPEG mpeg_version: 0x%02x in packet " LLD
                    "for track " LLD " for timecode " FMT_TIMECODE ", assuming "
                    "MPEG2. No further warnings will be printed for this "
                    "track.\n", c, track->packet_num, track_id,
                    ARG_TIMECODE_NS(timecode));
             track->mpeg_version_warning_printed = true;
           }
-          version = 2;
+          mpeg_version = 2;
         }
 
-        if (version == 4) {
+        if (4 == mpeg_version) {
           if (!sub_file->setFilePointer2(9, seek_current))
             return deliver();
-        } else if (version == 2) {
+        } else if (2 == mpeg_version) {
           if (!sub_file->setFilePointer2(7, seek_current))
             return deliver();
         } else

@@ -2465,7 +2465,6 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
       }
       else if(strncasecmp((char *)(hdrl_data+i),"indx",4) == 0) {
 	 char *a;
-	 int j;
 
 	 if(lasttag == 1) // V I D E O
 	 { 
@@ -2599,14 +2598,14 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
    if(!AVI->track[0].a_chans) AVI->track[0].audio_strn = 99;
 
    { 
-     int i=0;
+     int track_idx=0;
      for(j=0; j<AVI->anum+1; ++j) {
        if (j == AVI->video_strn) continue;
-       AVI->track[i].audio_tag[0] = j/10 + '0';
-       AVI->track[i].audio_tag[1] = j%10 + '0';
-       AVI->track[i].audio_tag[2] = 'w';
-       AVI->track[i].audio_tag[3] = 'b';
-       ++i;
+       AVI->track[track_idx].audio_tag[0] = j/10 + '0';
+       AVI->track[track_idx].audio_tag[1] = j%10 + '0';
+       AVI->track[track_idx].audio_tag[2] = 'w';
+       AVI->track[track_idx].audio_tag[3] = 'b';
+       ++track_idx;
      }
    }
 
@@ -2709,7 +2708,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
    // read extended index chunks
    if (AVI->is_opendml) {
       uint64_t offset = 0;
-      int hdrl_len = 4+4+2+1+1+4+4+8+4;
+      int odml_hrdl_len = 4+4+2+1+1+4+4+8+4;
       char *en, *chunk_start;
       int k = 0, audtr = 0;
       uint32_t nrEntries = 0;
@@ -2726,7 +2725,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
       for (j=0; j<AVI->video_superindex->nEntriesInUse; j++) {
 
 	 // read from file
-	 chunk_start = en = malloc (AVI->video_superindex->aIndex[j].dwSize+hdrl_len);
+	 chunk_start = en = malloc (AVI->video_superindex->aIndex[j].dwSize+odml_hrdl_len);
 
 	 if (xio_lseek(AVI->fdes, AVI->video_superindex->aIndex[j].qwOffset, SEEK_SET) == (int64_t)-1) {
 	    fprintf(stderr, "(%s) cannot seek to 0x%llx\n", __FILE__, 
@@ -2735,10 +2734,10 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	    continue;
 	 }
 
-	 if (avi_read(AVI->fdes, en, AVI->video_superindex->aIndex[j].dwSize+hdrl_len) <= 0) {
+	 if (avi_read(AVI->fdes, en, AVI->video_superindex->aIndex[j].dwSize+odml_hrdl_len) <= 0) {
 	    fprintf(stderr, "(%s) cannot read from offset 0x%llx %ld bytes; broken (incomplete) file?\n", 
 		  __FILE__, (unsigned long long)AVI->video_superindex->aIndex[j].qwOffset,
-		  (unsigned long)AVI->video_superindex->aIndex[j].dwSize+hdrl_len);
+		  (unsigned long)AVI->video_superindex->aIndex[j].dwSize+odml_hrdl_len);
 	    free(chunk_start);
 	    continue;
 	 }
@@ -2750,7 +2749,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	 offset = str2ullong(en + 20);
 
 	 // skip header
-	 en += hdrl_len;
+	 en += odml_hrdl_len;
 	 nvi += nrEntries;
 	 AVI->video_index = (video_index_entry *) realloc (AVI->video_index, nvi * sizeof (video_index_entry));
 	 if (!AVI->video_index) {
@@ -2807,7 +2806,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	 for (j=0; j<AVI->track[audtr].audio_superindex->nEntriesInUse; j++) {
 
 	    // read from file
-	    chunk_start = en = malloc (AVI->track[audtr].audio_superindex->aIndex[j].dwSize+hdrl_len);
+	    chunk_start = en = malloc (AVI->track[audtr].audio_superindex->aIndex[j].dwSize+odml_hrdl_len);
 
 	    if (xio_lseek(AVI->fdes, AVI->track[audtr].audio_superindex->aIndex[j].qwOffset, SEEK_SET) == (int64_t)-1) {
 	       fprintf(stderr, "(%s) cannot seek to 0x%llx\n", __FILE__, (unsigned long long)AVI->track[audtr].audio_superindex->aIndex[j].qwOffset);
@@ -2815,7 +2814,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	       continue;
 	    }
 
-	    if (avi_read(AVI->fdes, en, AVI->track[audtr].audio_superindex->aIndex[j].dwSize+hdrl_len) <= 0) {
+	    if (avi_read(AVI->fdes, en, AVI->track[audtr].audio_superindex->aIndex[j].dwSize+odml_hrdl_len) <= 0) {
 	       fprintf(stderr, "(%s) cannot read from offset 0x%llx; broken (incomplete) file?\n", 
 		     __FILE__,(unsigned long long) AVI->track[audtr].audio_superindex->aIndex[j].qwOffset);
 	       free(chunk_start);
@@ -2830,7 +2829,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	    offset = str2ullong(en + 20);
 
 	    // skip header
-	    en += hdrl_len;
+	    en += odml_hrdl_len;
 	    nai[audtr] += nrEntries;
 	    AVI->track[audtr].audio_index = (audio_index_entry *) realloc (AVI->track[audtr].audio_index, nai[audtr] * sizeof (audio_index_entry));
 

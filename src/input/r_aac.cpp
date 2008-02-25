@@ -149,25 +149,24 @@ aac_reader_c::create_packetizer(int64_t) {
 // Try to guess if the MPEG4 header contains the emphasis field (2 bits)
 void
 aac_reader_c::guess_adts_version() {
+  aac_header_t tmp_aacheader;
   int pos;
-  aac_header_t aacheader;
 
   emphasis_present = false;
 
   // Due to the checks we do have an ADTS header at 0.
-  find_aac_header(chunk, INITCHUNKSIZE, &aacheader, emphasis_present);
-  if (aacheader.id != 0)        // MPEG2
+  find_aac_header(chunk, INITCHUNKSIZE, &tmp_aacheader, emphasis_present);
+  if (tmp_aacheader.id != 0)        // MPEG2
     return;
 
   // Now make some sanity checks on the size field.
-  if (aacheader.bytes > 8192) {
+  if (tmp_aacheader.bytes > 8192) {
     emphasis_present = true;    // Looks like it's borked.
     return;
   }
 
   // Looks ok so far. See if the next ADTS is right behind this packet.
-  pos = find_aac_header(&chunk[aacheader.bytes], INITCHUNKSIZE -
-                        aacheader.bytes, &aacheader, emphasis_present);
+  pos = find_aac_header(&chunk[tmp_aacheader.bytes], INITCHUNKSIZE - tmp_aacheader.bytes, &tmp_aacheader, emphasis_present);
   if (pos != 0) {               // Not ok - what do we do now?
     emphasis_present = true;
     return;
