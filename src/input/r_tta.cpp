@@ -172,6 +172,6 @@ tta_reader_c::get_progress() {
 
 void
 tta_reader_c::identify() {
-  mxinfo("File '%s': container: TTA\nTrack ID 0: audio (TTA)\n",
-         ti.fname.c_str());
+  id_result_container("TTA");
+  id_result_track(0, ID_RESULT_TRACK_AUDIO, "TTA");
 }

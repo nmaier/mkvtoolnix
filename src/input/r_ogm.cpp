@@ -68,7 +68,7 @@ public:
   virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
 
   virtual const char *get_type() {
-    return "audio";
+    return ID_RESULT_TRACK_AUDIO;
   };
   virtual string get_codec() {
     return "AAC";
@@ -84,7 +84,7 @@ public:
   virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
 
   virtual const char *get_type() {
-    return "audio";
+    return ID_RESULT_TRACK_AUDIO;
   };
   virtual string get_codec() {
     return "AC3";
@@ -100,7 +100,7 @@ public:
   virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
 
   virtual const char *get_type() {
-    return "audio";
+    return ID_RESULT_TRACK_AUDIO;
   };
   virtual string get_codec() {
     return "MP2/MP3";
@@ -116,7 +116,7 @@ public:
   virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
 
   virtual const char *get_type() {
-    return "audio";
+    return ID_RESULT_TRACK_AUDIO;
   };
   virtual string get_codec() {
     return "PCM";
@@ -134,7 +134,7 @@ public:
   virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
 
   virtual const char *get_type() {
-    return "audio";
+    return ID_RESULT_TRACK_AUDIO;
   };
   virtual string get_codec() {
     return "Vorbis";
@@ -152,7 +152,7 @@ public:
   virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
 
   virtual const char *get_type() {
-    return "subtitle";
+    return ID_RESULT_TRACK_SUBTITLES;
   };
   virtual string get_codec() {
     return "Text";
@@ -166,7 +166,7 @@ public:
   ogm_v_avc_demuxer_c(ogm_reader_c *p_reader);
 
   virtual const char *get_type() {
-    return "video";
+    return ID_RESULT_TRACK_VIDEO;
   };
 
   virtual string get_codec() {
@@ -188,7 +188,7 @@ public:
   ogm_v_mscomp_demuxer_c(ogm_reader_c *p_reader);
 
   virtual const char *get_type() {
-    return "video";
+    return ID_RESULT_TRACK_VIDEO;
   };
 
   virtual string get_codec();
@@ -206,7 +206,7 @@ public:
   ogm_v_theora_demuxer_c(ogm_reader_c *p_reader);
 
   virtual const char *get_type() {
-    return "video";
+    return ID_RESULT_TRACK_VIDEO;
   };
 
   virtual string get_codec() {
@@ -673,37 +673,30 @@ ogm_reader_c::get_progress() {
 
 void
 ogm_reader_c::identify() {
-  string info, codec;
+  string codec;
+  vector<string> verbose_info;
   int i;
 
   // Check if a video track has a TITLE comment. If yes we use this as the
   // new segment title / global file title.
-  if (identify_verbose)
-    for (i = 0; i < sdemuxers.size(); i++)
-      if ((sdemuxers[i]->title != "") &&
-          (sdemuxers[i]->stype == OGM_STREAM_TYPE_V_MSCOMP)) {
-        info = string(" [title:") + escape(sdemuxers[i]->title) + string("]");
-        break;
-      }
+  for (i = 0; i < sdemuxers.size(); i++)
+    if ((sdemuxers[i]->title != "") && (sdemuxers[i]->stype == OGM_STREAM_TYPE_V_MSCOMP)) {
+      verbose_info.push_back(string("title:") + escape(sdemuxers[i]->title));
+      break;
+    }
 
-  mxinfo("File '%s': container: Ogg/OGM%s\n", ti.fname.c_str(), info.c_str());
+  id_result_container("Ogg/OGM", join(" ", verbose_info));
+
   for (i = 0; i < sdemuxers.size(); i++) {
-    if (identify_verbose) {
-      info = " [";
-      if (sdemuxers[i]->language != "")
-        info += string("language:") + escape(sdemuxers[i]->language) +
-          string(" ");
-      if ((sdemuxers[i]->title != "") &&
-          (sdemuxers[i]->stype != OGM_STREAM_TYPE_V_MSCOMP))
-        info += string("track_name:") + escape(sdemuxers[i]->title) +
-          string(" ");
-      info += "]";
-    } else
-      info = "";
+    verbose_info.clear();
 
-    codec = sdemuxers[i]->get_codec();
+    if (sdemuxers[i]->language != "")
+      verbose_info.push_back(string("language:") + escape(sdemuxers[i]->language));
 
-    mxinfo("Track ID %d: %s (%s)%s\n", i, sdemuxers[i]->get_type(), codec.c_str(), info.c_str());
+    if ((sdemuxers[i]->title != "") && (sdemuxers[i]->stype != OGM_STREAM_TYPE_V_MSCOMP))
+      verbose_info.push_back(string("track_name:") + escape(sdemuxers[i]->title));
+
+    id_result_track(i, sdemuxers[i]->get_type(), sdemuxers[i]->get_codec(), verbose_info);
   }
 }
 

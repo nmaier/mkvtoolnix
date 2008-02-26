@@ -252,6 +252,6 @@ wavpack_reader_c::get_progress() {
 
 void
 wavpack_reader_c::identify() {
-  mxinfo("File '%s': container: WAVPACK\nTrack ID 0: audio (WAVPACK)\n",
-         ti.fname.c_str());
+  id_result_container("WAVPACK");
+  id_result_track(0, ID_RESULT_TRACK_AUDIO, "WAVPACK");
 }

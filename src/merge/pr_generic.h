@@ -61,6 +61,30 @@ enum cue_strategy_e {
 #define DEFTRACK_TYPE_VIDEO 1
 #define DEFTRACK_TYPE_SUBS  2
 
+#define ID_RESULT_TRACK_AUDIO     "audio"
+#define ID_RESULT_TRACK_VIDEO     "video"
+#define ID_RESULT_TRACK_SUBTITLES "subtitles"
+#define ID_RESULT_TRACK_BUTTONS   "buttons"
+#define ID_RESULT_TRACK_UNKNOWN   "unknown"
+
+struct id_result_t {
+  int64_t id;
+  string type, info, description;
+  vector<string> verbose_info;
+  int64_t size;
+
+  id_result_t() {
+  };
+
+  id_result_t(int64_t n_id, const string &n_type, const string &n_info, const string &n_description, int64_t n_size):
+    id(n_id), type(n_type), info(n_info), description(n_description), size(n_size) {
+  };
+
+  id_result_t(const id_result_t &src):
+    id(src.id), type(src.type), info(src.info), description(src.description), verbose_info(src.verbose_info), size(src.size) {
+  };
+};
+
 class generic_packetizer_c;
 class generic_reader_c;
 
@@ -229,6 +253,10 @@ public:
 
   int64_t reference_timecode_tolerance;
 
+private:
+  id_result_t id_results_container;
+  vector<id_result_t> id_results_tracks, id_results_attachments;
+
 public:
   generic_reader_c(track_info_c &_ti);
   virtual ~generic_reader_c();
@@ -258,8 +286,16 @@ public:
 
   virtual void flush_packetizers();
 
+  virtual void display_identification_results();
+
 protected:
   virtual bool demuxing_requested(char type, int64_t id);
+
+  virtual void id_result_container(const string &info, const string &verbose_info = empty_string);
+  virtual void id_result_container(const string &info, const vector<string> &verbose_info);
+  virtual void id_result_track(int64_t track_id, const string &type, const string &info, const string &verbose_info = empty_string);
+  virtual void id_result_track(int64_t track_id, const string &type, const string &info, const vector<string> &verbose_info);
+  virtual void id_result_attachment(int64_t attachment_id, const string &type, int size, const string &file_name = empty_string, const string &description = empty_string);
 };
 
 enum connection_result_e {

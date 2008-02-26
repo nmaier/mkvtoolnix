@@ -62,7 +62,8 @@ using namespace libebml;
 #include "random.h"
 #include "smart_pointers.h"
 
-int verbose = 1;
+const string empty_string("");
+int verbose            = 1;
 bool suppress_warnings = false;
 
 bitvalue_c::bitvalue_c(int nbitsize) {
@@ -796,11 +797,11 @@ split(const char *src,
 
 string
 join(const char *pattern,
-     vector<string> &strings) {
+     const vector<string> &strings) {
   string dst;
-  uint32_t i;
+  int i;
 
-  if (strings.size() == 0)
+  if (strings.empty())
     return "";
   dst = strings[0];
   for (i = 1; i < strings.size(); i++) {

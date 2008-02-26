@@ -437,6 +437,6 @@ ssa_reader_c::get_progress() {
 
 void
 ssa_reader_c::identify() {
-  mxinfo("File '%s': container: SSA/ASS\nTrack ID 0: subtitles "
-         "(SSA/ASS)\n", ti.fname.c_str());
+  id_result_container("SSA/ASS");
+  id_result_track(0, ID_RESULT_TRACK_SUBTITLES, "SSA/ASS");
 }

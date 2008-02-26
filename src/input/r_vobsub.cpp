@@ -617,15 +617,18 @@ vobsub_reader_c::get_progress() {
 
 void
 vobsub_reader_c::identify() {
-  uint32_t i;
-  string info;
+  vector<string> verbose_info;
+  int i;
 
-  mxinfo("File '%s': container: VobSub\n", ti.fname.c_str());
+  id_result_container("VobSub");
+
   for (i = 0; i < tracks.size(); i++) {
-    info = "";
-    if (identify_verbose && (tracks[i]->language != ""))
-      info = string(" [language:") + tracks[i]->language + "]";
-    mxinfo("Track ID %u: subtitles (VobSub)%s\n", i, info.c_str());
+    verbose_info.clear();
+
+    if (!tracks[i]->language.empty())
+      verbose_info.push_back(string("language:") + tracks[i]->language);
+
+    id_result_track(i, ID_RESULT_TRACK_SUBTITLES, "VobSub", verbose_info);
   }
 }
 

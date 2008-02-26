@@ -101,8 +101,8 @@ ac3_reader_c::get_progress() {
 
 void
 ac3_reader_c::identify() {
-  mxinfo("File '%s': container: AC3\nTrack ID 0: audio (%sAC3)\n",
-         ti.fname.c_str(), 16 == ac3header.bsid ? "E" : "");
+  id_result_container("AC3");
+  id_result_track(0, ID_RESULT_TRACK_AUDIO, 16 == ac3header.bsid ? "EAC3" : "AC3");
 }
 
 int

@@ -100,10 +100,8 @@ mp3_reader_c::get_progress() {
 
 void
 mp3_reader_c::identify() {
-  mxinfo("File '%s': container: MP2/MP3\nTrack ID 0: audio (MPEG-%s layer "
-         "%d)\n", ti.fname.c_str(),
-         mp3header.version == 1 ? "1" : mp3header.version == 2 ? "2" : "2.5",
-         mp3header.layer);
+  id_result_container("MP2/MP3");
+  id_result_track(0, ID_RESULT_TRACK_AUDIO, mxsprintf("MPEG-%s layer %d",  mp3header.version == 1 ? "1" : mp3header.version == 2 ? "2" : "2.5", mp3header.layer));
 }
 
 int

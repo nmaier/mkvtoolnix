@@ -1400,6 +1400,91 @@ generic_reader_c::flush_packetizers() {
     (*it)->flush();
 }
 
+void
+generic_reader_c::id_result_container(const string &info,
+                                      const string &verbose_info) {
+  id_results_container.info = info;
+  id_results_container.verbose_info.clear();
+  if (!verbose_info.empty())
+    id_results_container.verbose_info.push_back(verbose_info);
+}
+
+void
+generic_reader_c::id_result_container(const string &info,
+                                      const vector<string> &verbose_info) {
+  id_results_container.info         = info;
+  id_results_container.verbose_info = verbose_info;
+}
+
+void
+generic_reader_c::id_result_track(int64_t track_id,
+                                  const string &type,
+                                  const string &info,
+                                  const string &verbose_info) {
+  id_result_t result(track_id, type, info, empty_string, 0);
+  if (!verbose_info.empty())
+    result.verbose_info.push_back(verbose_info);
+  id_results_tracks.push_back(result);
+}
+
+void
+generic_reader_c::id_result_track(int64_t track_id,
+                                  const string &type,
+                                  const string &info,
+                                  const vector<string> &verbose_info) {
+  id_result_t result(track_id, type, info, empty_string, 0);
+  result.verbose_info = verbose_info;
+  id_results_tracks.push_back(result);
+}
+
+void
+generic_reader_c::id_result_attachment(int64_t attachment_id,
+                                       const string &type,
+                                       int size,
+                                       const string &file_name,
+                                       const string &description) {
+  id_result_t result(attachment_id, type, file_name, description, size);
+  id_results_attachments.push_back(result);
+}
+
+void
+generic_reader_c::display_identification_results() {
+  int i;
+
+  mxinfo("File '%s': container: %s", ti.fname.c_str(), id_results_container.info.c_str());
+
+  if (identify_verbose && !id_results_container.verbose_info.empty())
+    mxinfo(" [%s]", join(" ", id_results_container.verbose_info).c_str());
+
+  mxinfo("\n");
+
+
+  for (i = 0; i < id_results_tracks.size(); ++i) {
+    id_result_t &result = id_results_tracks[i];
+
+    mxinfo("Track ID " LLD ": %s (%s)", result.id, result.type.c_str(), result.info.c_str());
+
+    if (identify_verbose && !result.verbose_info.empty())
+      mxinfo(" [%s]", join(" ", result.verbose_info).c_str());
+
+    mxinfo("\n");
+  }
+
+  for (i = 0; i < id_results_attachments.size(); ++i) {
+    id_result_t &result = id_results_attachments[i];
+
+    mxinfo("Attachment ID " LLD ": type '%s', size " LLD " bytes", result.id, result.type.c_str(), result.size);
+
+    if (!result.description.empty())
+      mxinfo(", description '%s'", result.description.c_str());
+
+    if (!result.info.empty())
+      mxinfo(", file name '%s'", result.info.c_str());
+
+    mxinfo("\n");
+  }
+}
+
 //
 //--------------------------------------------------------------------
 

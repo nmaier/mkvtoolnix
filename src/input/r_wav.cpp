@@ -267,6 +267,6 @@ wav_reader_c::get_progress() {
 
 void
 wav_reader_c::identify() {
-  mxinfo("File '%s': container: WAV\nTrack ID 0: audio (%s)\n",
-         ti.fname.c_str(), is_dts ? "DTS" : "PCM");
+  id_result_container("WAV");
+  id_result_track(0, ID_RESULT_TRACK_AUDIO, is_dts ? "DTS" : "PCM");
 }

@@ -583,15 +583,11 @@ avi_reader_c::identify() {
   uint32_t par_num, par_den;
   vector<string> extended_info;
 
-  mxinfo("File '%s': container: AVI\n", ti.fname.c_str());
+  id_result_container("AVI");
+
   type = AVI_video_compressor(avi);
 
-  if (identify_verbose &&
-      (starts_with_case(type, "MP42", 4) ||
-       starts_with_case(type, "DIV2", 4) ||
-       starts_with_case(type, "DIVX", 4) ||
-       starts_with_case(type, "XVID", 4) ||
-       starts_with_case(type, "DX50", 4))) {
+  if (IS_MPEG4_L2_FOURCC(type.c_str())) {
     unsigned char *buffer;
     uint32_t width, height, disp_width, disp_height;
     float aspect_ratio;
@@ -625,18 +621,7 @@ avi_reader_c::identify() {
   if (mpeg4::p10::is_avc_fourcc(type.c_str()))
     extended_info.push_back("packetizer:mpeg4_p10_es_video");
 
-  mxinfo("Track ID 0: video (%s)", type.c_str());
-
-  if (identify_verbose && !extended_info.empty()) {
-    vector<string>::iterator ei;
-
-    mxinfo("[");
-    mxforeach (ei, extended_info)
-      mxinfo("%s ", ei->c_str());
-    mxinfo("]");
-  }
-
-  mxinfo("\n");
+  id_result_track(0, ID_RESULT_TRACK_VIDEO, type, join(" ", extended_info));
 
   for (i = 0; i < AVI_audio_tracks(avi); i++) {
     AVI_set_audio_track(avi, i);
@@ -666,7 +651,7 @@ avi_reader_c::identify() {
         type = mxsprintf("unsupported (0x%04x)", audio_format);
     }
 
-    mxinfo("Track ID %d: audio (%s)\n", i + 1, type.c_str());
+    id_result_track(i + 1, ID_RESULT_TRACK_AUDIO, type);
   }
 }
 

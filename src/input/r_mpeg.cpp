@@ -234,8 +234,8 @@ mpeg_es_reader_c::get_progress() {
 
 void
 mpeg_es_reader_c::identify() {
-  mxinfo("File '%s': container: MPEG elementary stream (ES)\n"
-         "Track ID 0: video (MPEG %d)\n", ti.fname.c_str(), version);
+  id_result_container("MPEG elementary stream (ES)");
+  id_result_track(0, ID_RESULT_TRACK_VIDEO, mxsprintf("MPEG %d", version));
 }
 
 // ------------------------------------------------------------------------
@@ -1295,44 +1295,37 @@ mpeg_ps_reader_c::get_progress() {
 
 void
 mpeg_ps_reader_c::identify() {
+  vector<string> verbose_info;
   int i;
 
-  mxinfo("File '%s': container: MPEG %d program stream (PS)\n",
-         ti.fname.c_str(), version);
+  id_result_container(mxsprintf("MPEG %d program stream (PS)", version));
+
   for (i = 0; i < tracks.size(); i++) {
     mpeg_ps_track_ptr &track = tracks[i];
-    string info;
 
-    if (identify_verbose) {
-      if (FOURCC('A', 'V', 'C', '1') == track->fourcc) {
-        if (0 != track->v_aspect_ratio)
-          info += mxsprintf("display_dimensions:%dx%d ",
-                            track->v_dwidth, track->v_dheight);
-      }
-      info += "packetizer:mpeg4_p10_es_video ";
+    verbose_info.clear();
+
+    if (FOURCC('A', 'V', 'C', '1') == track->fourcc) {
+      if (0 != track->v_aspect_ratio)
+        verbose_info.push_back(mxsprintf("display_dimensions:%dx%d", track->v_dwidth, track->v_dheight));
+      verbose_info.push_back("packetizer:mpeg4_p10_es_video");
     }
 
-    info += mxsprintf("stream_id:%#x", track->id);
+    verbose_info.push_back(mxsprintf("stream_id:%#x", track->id));
 
-    if (!info.empty()) {
-      info = mxsprintf(" [%s]", info.c_str());
-    }
-
-    mxinfo("Track ID %d: %s (%s)%s\n", i,
-           track->type == 'a' ? "audio" : "video",
-           track->fourcc == FOURCC('M', 'P', 'G', '1') ? "MPEG-1" :
-           track->fourcc == FOURCC('M', 'P', 'G', '2') ? "MPEG-2" :
-           track->fourcc == FOURCC('A', 'V', 'C', '1') ? "AVC/h.264" :
-           track->fourcc == FOURCC('M', 'P', '1', ' ') ? "MPEG-1 layer 1" :
-           track->fourcc == FOURCC('M', 'P', '2', ' ') ? "MPEG-1 layer 2" :
-           track->fourcc == FOURCC('M', 'P', '3', ' ') ? "MPEG-1 layer 3" :
-           track->fourcc == FOURCC('A', 'C', '3', ' ') ?
-           (16 == track->a_bsid ? "EAC3" : "AC3") :
-           track->fourcc == FOURCC('D', 'T', 'S', ' ') ? "DTS" :
-           track->fourcc == FOURCC('P', 'C', 'M', ' ') ? "PCM" :
-           track->fourcc == FOURCC('L', 'P', 'C', 'M') ? "LPCM" :
-           "unknown",
-           info.c_str());
+    id_result_track(i, track->type == 'a' ? ID_RESULT_TRACK_AUDIO : ID_RESULT_TRACK_VIDEO,
+                    track->fourcc == FOURCC('M', 'P', 'G', '1') ? "MPEG-1"         :
+                    track->fourcc == FOURCC('M', 'P', 'G', '2') ? "MPEG-2"         :
+                    track->fourcc == FOURCC('A', 'V', 'C', '1') ? "AVC/h.264"      :
+                    track->fourcc == FOURCC('M', 'P', '1', ' ') ? "MPEG-1 layer 1" :
+                    track->fourcc == FOURCC('M', 'P', '2', ' ') ? "MPEG-1 layer 2" :
+                    track->fourcc == FOURCC('M', 'P', '3', ' ') ? "MPEG-1 layer 3" :
+                    track->fourcc == FOURCC('A', 'C', '3', ' ') ? (16 == track->a_bsid ? "EAC3" : "AC3") :
+                    track->fourcc == FOURCC('D', 'T', 'S', ' ') ? "DTS"            :
+                    track->fourcc == FOURCC('P', 'C', 'M', ' ') ? "PCM"            :
+                    track->fourcc == FOURCC('L', 'P', 'C', 'M') ? "LPCM"           :
+                    "unknown",
+                    verbose_info);
   }
 }
 

@@ -122,7 +122,6 @@ vobbtn_reader_c::get_progress() {
 
 void
 vobbtn_reader_c::identify() {
-  mxinfo("File '%s': container: VobBtn\n", ti.fname.c_str());
-  mxinfo("Track ID 0: MPEG PCI buttons (width %d / height %d)\n", width,
-         height);
+  id_result_container("VobBtn");
+  id_result_track(0, ID_RESULT_TRACK_BUTTONS, mxsprintf("MPEG PCI, width %d / height %d", width, height));
 }

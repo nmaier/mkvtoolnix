@@ -147,6 +147,6 @@ dts_reader_c::get_progress() {
 
 void
 dts_reader_c::identify() {
-  mxinfo("File '%s': container: DTS\nTrack ID 0: audio (DTS)\n",
-         ti.fname.c_str());
+  id_result_container("DTS");
+  id_result_track(0, ID_RESULT_TRACK_AUDIO, "DTS");
 }

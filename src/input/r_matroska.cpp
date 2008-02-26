@@ -2385,75 +2385,61 @@ kax_reader_c::set_headers() {
 
 void
 kax_reader_c::identify() {
+  vector<string> verbose_info;
   int i;
   string info;
 
-  if (identify_verbose) {
-    if (!title.empty())
-      info = mxsprintf("title:%s", escape(title).c_str());
-    if (0 != segment_duration) {
-      if (!info.empty())
-        info += " ";
-      info += mxsprintf("duration:" LLD, segment_duration);
-    }
-    if (!info.empty())
-      info = mxsprintf(" [%s]", info.c_str());
+  if (!title.empty())
+    verbose_info.push_back(mxsprintf("title:%s", escape(title).c_str()));
+  if (0 != segment_duration)
+    verbose_info.push_back(mxsprintf("duration:" LLD, segment_duration));
+
+  id_result_container("Matroska", verbose_info);
+
+  for (i = 0; i < tracks.size(); i++) {
+    if (!tracks[i]->ok)
+      continue;
+
+    verbose_info.clear();
+
+    if (tracks[i]->language != "")
+      verbose_info.push_back(mxsprintf("language:%s", escape(tracks[i]->language).c_str()));
+
+    if (tracks[i]->track_name != "")
+      verbose_info.push_back(mxsprintf("track_name:%s", escape(tracks[i]->track_name).c_str()));
+
+    if ((0 != tracks[i]->v_dwidth) && (0 != tracks[i]->v_dheight))
+      verbose_info.push_back(mxsprintf("display_dimensions:" LLU "x" LLU, tracks[i]->v_dwidth, tracks[i]->v_dheight));
+
+    if (STEREO_MODE_UNSPECIFIED != tracks[i]->v_stereo_mode)
+      verbose_info.push_back(mxsprintf("stereo_mode:%d", (int)tracks[i]->v_stereo_mode));
+
+    verbose_info.push_back(mxsprintf("default_track:%u", tracks[i]->default_track ? 1 : 0));
+
+    if ((tracks[i]->codec_id == MKV_V_MSCOMP) && mpeg4::p10::is_avc_fourcc(tracks[i]->v_fourcc))
+      verbose_info.push_back("packetizer:mpeg4_p10_es_video");
+    else if (tracks[i]->codec_id == MKV_V_MPEG4_AVC)
+      verbose_info.push_back("packetizer:mpeg4_p10_video");
+
+    info = tracks[i]->codec_id;
+
+    if (tracks[i]->ms_compat)
+      info += string(", ") +
+        (tracks[i]->type        == 'v'    ? tracks[i]->v_fourcc :
+         tracks[i]->a_formattag == 0x0001 ? "PCM"               :
+         tracks[i]->a_formattag == 0x0055 ? "MP3"               :
+         tracks[i]->a_formattag == 0x2000 ? "AC3"               : "unknown");
+
+    id_result_track(tracks[i]->tnum,
+                    tracks[i]->type == 'v' ? ID_RESULT_TRACK_VIDEO     :
+                    tracks[i]->type == 'a' ? ID_RESULT_TRACK_AUDIO     :
+                    tracks[i]->type == 'b' ? ID_RESULT_TRACK_BUTTONS   :
+                    tracks[i]->type == 's' ? ID_RESULT_TRACK_SUBTITLES : "unknown",
+                    info, verbose_info);
   }
-  mxinfo("File '%s': container: Matroska%s\n", ti.fname.c_str(),
-         info.c_str());
-  for (i = 0; i < tracks.size(); i++)
-    if (tracks[i]->ok) {
-      if (identify_verbose) {
-        info = " [";
-        if (tracks[i]->language != "")
-          info += mxsprintf("language:%s ",
-                            escape(tracks[i]->language).c_str());
-        if (tracks[i]->track_name != "")
-          info += mxsprintf("track_name:%s ",
-                            escape(tracks[i]->track_name).c_str());
-        if ((0 != tracks[i]->v_dwidth) && (0 != tracks[i]->v_dheight))
-          info += mxsprintf("display_dimensions:" LLU "x" LLU " ",
-                            tracks[i]->v_dwidth, tracks[i]->v_dheight);
-        if (STEREO_MODE_UNSPECIFIED != tracks[i]->v_stereo_mode)
-          info += mxsprintf("stereo_mode:%d ", (int)tracks[i]->v_stereo_mode);
-        info += mxsprintf("default_track:%u ",
-                          tracks[i]->default_track ? 1 : 0);
 
-        if ((tracks[i]->codec_id == MKV_V_MSCOMP) &&
-            mpeg4::p10::is_avc_fourcc(tracks[i]->v_fourcc))
-          info += "packetizer:mpeg4_p10_es_video ";
-        else if (tracks[i]->codec_id == MKV_V_MPEG4_AVC)
-          info += "packetizer:mpeg4_p10_video ";
-
-        info += "]";
-      } else
-        info = "";
-      mxinfo("Track ID " LLU ": %s (%s%s%s)%s\n", tracks[i]->tnum,
-             tracks[i]->type == 'v' ? "video" :
-             tracks[i]->type == 'a' ? "audio" :
-             tracks[i]->type == 'b' ? "buttons" :
-             tracks[i]->type == 's' ? "subtitles" : "unknown",
-             tracks[i]->codec_id.c_str(),
-             tracks[i]->ms_compat ? ", " : "",
-             tracks[i]->ms_compat ?
-             (tracks[i]->type == 'v' ? tracks[i]->v_fourcc :
-              tracks[i]->a_formattag == 0x0001 ? "PCM" :
-              tracks[i]->a_formattag == 0x0055 ? "MP3" :
-              tracks[i]->a_formattag == 0x2000 ? "AC3" : "unknown") : "",
-             info.c_str());
-    }
-
-  for (i = 0; i < attachments.size(); i++) {
-    mxinfo("Attachment ID " LLD ": type '%s', size %d bytes, ",
-           attachments[i].id, attachments[i].mime_type.c_str(),
-           attachments[i].data->m_size);
-    if (attachments[i].description.length() > 0)
-      mxinfo("description '%s', ", attachments[i].description.c_str());
-    if (attachments[i].name.length() == 0)
-      mxinfo("no file name given\n");
-    else
-      mxinfo("file name '%s'\n", attachments[i].name.c_str());
-  }
+  for (i = 0; i < attachments.size(); i++)
+    id_result_attachment(attachments[i].id, attachments[i].mime_type, attachments[i].data->m_size, attachments[i].name, attachments[i].description);
 }
 
 // }}}

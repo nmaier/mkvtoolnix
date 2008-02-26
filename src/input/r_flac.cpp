@@ -566,8 +566,8 @@ flac_reader_c::get_progress() {
 
 void
 flac_reader_c::identify() {
-  mxinfo("File '%s': container: FLAC\nTrack ID 0: audio (FLAC)\n",
-         ti.fname.c_str());
+  id_result_container("FLAC");
+  id_result_track(0, ID_RESULT_TRACK_AUDIO, "FLAC");
 }
 
 #else  // HAVE_FLAC_FORMAT_H

@@ -262,5 +262,6 @@ corepicture_reader_c::try_to_parse_timecode(const char *s) {
 
 void
 corepicture_reader_c::identify() {
-  mxinfo("File '%s': container: CorePanorama\n", ti.fname.c_str());
+  id_result_container("CorePanorama");
+  id_result_track(0, ID_RESULT_TRACK_VIDEO, "CorePicture");
 }

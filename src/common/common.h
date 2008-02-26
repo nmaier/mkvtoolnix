@@ -238,7 +238,7 @@ split(const string &src,
       int max_num = -1) {
   return split(src.c_str(), pattern.c_str(), max_num);
 }
-string MTX_DLL_API join(const char *pattern, vector<string> &strings);
+string MTX_DLL_API join(const char *pattern, const vector<string> &strings);
 void MTX_DLL_API strip(string &s, bool newlines = false);
 void MTX_DLL_API strip(vector<string> &v, bool newlines = false);
 string &MTX_DLL_API shrink_whitespace(string &s);
@@ -264,6 +264,8 @@ starts_with_case(const string &s,
 }
 string MTX_DLL_API upcase(const string &s);
 string MTX_DLL_API downcase(const string &s);
+
+extern const string MTX_DLL_API empty_string;
 
 #define irnd(a) ((int64_t)((double)(a) + 0.5))
 #define iabs(a) ((a) < 0 ? (a) * -1 : (a))

@@ -245,6 +245,6 @@ srt_reader_c::get_progress() {
 
 void
 srt_reader_c::identify() {
-  mxinfo("File '%s': container: SRT\nTrack ID 0: subtitles (SRT)\n",
-         ti.fname.c_str());
+  id_result_container("SRT");
+  id_result_track(0, ID_RESULT_TRACK_SUBTITLES, "SRT");
 }

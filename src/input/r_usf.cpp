@@ -351,20 +351,19 @@ usf_reader_c::try_to_parse_timecode(const char *s) {
 
 void
 usf_reader_c::identify() {
+  vector<string> verbose_info;
   int i;
 
-  mxinfo("File '%s': container: USF\n", ti.fname.c_str());
+  id_result_container("USF");
+
   for (i = 0; m_tracks.size() > i; ++i) {
     usf_track_t &track = m_tracks[i];
-    string info;
 
-    mxinfo("Track ID %d: subtitles (USF)", i);
-    if (identify_verbose) {
-      info = " [";
-      if (track.m_language != "")
-        info += "language:" + escape(track.m_language) + " ";
-      mxinfo("%s]", info.c_str());
-    }
-    mxinfo("\n");
+    verbose_info.clear();
+
+    if (!track.m_language.empty())
+      verbose_info.push_back(string("language:") + escape(track.m_language));
+
+    id_result_track(i, ID_RESULT_TRACK_SUBTITLES, "USF", verbose_info);
   }
 }

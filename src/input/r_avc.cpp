@@ -169,12 +169,7 @@ avc_es_reader_c::get_progress() {
 
 void
 avc_es_reader_c::identify() {
-  string info;
-
-  if (identify_verbose)
-    info = " [packetizer:mpeg4_p10_es_video]";
-  mxinfo("File '%s': container: AVC/h.264 elementary stream (ES)\n"
-         "Track ID 0: video (MPEG-4 part 10 ES)%s\n", ti.fname.c_str(),
-         info.c_str());
+  id_result_container("AVC/h.264 elementary stream (ES)");
+  id_result_track(0, ID_RESULT_TRACK_VIDEO, "MPEG-4 part 10 ES", "packetizer:mpeg4_p10_es_video");
 }
 

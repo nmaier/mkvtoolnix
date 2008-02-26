@@ -385,6 +385,7 @@ identify(const string &filename) {
   create_readers();
 
   files[0].reader->identify();
+  files[0].reader->display_identification_results();
 }
 
 /** \brief Parse a number postfixed with a time-based unit

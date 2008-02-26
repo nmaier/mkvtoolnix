@@ -684,17 +684,22 @@ void
 real_reader_c::identify() {
   int i;
   real_demuxer_cptr demuxer;
+  string type, codec;
 
-  mxinfo("File '%s': container: RealMedia\n", ti.fname.c_str());
+  id_result_container("RealMedia");
+
   for (i = 0; i < demuxers.size(); i++) {
     demuxer = demuxers[i];
-    if (!strcasecmp(demuxer->fourcc, "raac") ||
-        !strcasecmp(demuxer->fourcc, "racp"))
-      mxinfo("Track ID %d: audio (AAC)\n", demuxer->track->id);
-    else
-      mxinfo("Track ID %d: %s (%s)\n", demuxer->track->id,
-             demuxer->track->type == RMFF_TRACK_TYPE_AUDIO ? "audio" : "video",
-             demuxer->fourcc);
+
+    if (!strcasecmp(demuxer->fourcc, "raac") || !strcasecmp(demuxer->fourcc, "racp")) {
+      type  = ID_RESULT_TRACK_AUDIO;
+      codec = "AAC";
+    } else {
+      type  = demuxer->track->type == RMFF_TRACK_TYPE_AUDIO ? ID_RESULT_TRACK_AUDIO : ID_RESULT_TRACK_VIDEO;
+      codec = demuxer->fourcc;
+    }
+
+    id_result_track(demuxer->track->id, type, codec);
   }
 }
 

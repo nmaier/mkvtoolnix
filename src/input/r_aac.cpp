@@ -196,12 +196,8 @@ aac_reader_c::get_progress() {
 
 void
 aac_reader_c::identify() {
-  string info;
+  string verbose_info = string("aac_is_sbr:") + string(AAC_PROFILE_SBR == aacheader.profile ? "true" : "unknown");
 
-  if (identify_verbose) {
-    info = " [aac_is_sbr:" +
-      string(AAC_PROFILE_SBR == aacheader.profile ? "true" : "unknown") + "]";
-  }
-  mxinfo("File '%s': container: AAC\nTrack ID 0: audio (AAC)%s\n",
-         ti.fname.c_str(), info.c_str());
+  id_result_container("AAC");
+  id_result_track(0, ID_RESULT_TRACK_AUDIO, "AAC", verbose_info);
 }

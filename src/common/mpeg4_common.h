@@ -79,7 +79,8 @@
 #define MPEGVIDEO_AR_2_21       0x40
 
 #define IS_MPEG4_L2_FOURCC(s) \
-  (!strncasecmp((s), "DIVX", 4) || !strncasecmp((s), "XVID", 4) || \
+  (!strncasecmp((s), "MP42", 4) || !strncasecmp((s), "DIV2", 4) || \
+   !strncasecmp((s), "DIVX", 4) || !strncasecmp((s), "XVID", 4) || \
    !strncasecmp((s), "DX5", 3))
 #define IS_MPEG4_L2_CODECID(s) \
   (((s) == MKV_V_MPEG4_SP) || ((s) == MKV_V_MPEG4_AP) || \
