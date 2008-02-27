@@ -32,15 +32,67 @@
 #include <errno.h>
 
 #include "common.h"
+#include "ac3_common.h"
+#include "dts_common.h"
 #include "error.h"
 #include "r_wav.h"
-#include "p_pcm.h"
+#include "p_ac3.h"
 #include "p_dts.h"
-#include "dts_common.h"
+#include "p_pcm.h"
 
 extern "C" {
 #include <avilib.h> // for wave_header
 }
+
+#define AC3WAV_BLOCK_SIZE   6144
+#define AC3WAV_SYNC_WORD1 0xf872
+#define AC3WAV_SYNC_WORD2 0x4e1f
+
+// Structure of AC3-in-WAV:
+//
+// AA BB C D EE F..F 0..0
+//
+// Index | Size       | Meaning
+// ------+------------+---------------------------
+// A     | 2          | AC3WAV_SYNC_WORD1
+// B     | 2          | AC3WAV_SYNC_WORD2
+// C     | 1          | BSMOD
+// D     | 1          | data type; 0x01 = AC3
+// E     | 2          | number of bits in payload
+// F     | E/8        | one AC3 packet
+// 0     | 6144-E/8-8 | zero padding
+
+class wav_ac3_demuxer_c: public wav_demuxer_c {
+private:
+  ac3_header_t ac3header;
+  memory_cptr buf[2];
+  int cur_buf;
+  bool swap_bytes;
+
+public:
+  wav_ac3_demuxer_c(wav_reader_c *n_reader, wave_header *n_wheader);
+
+  virtual ~wav_ac3_demuxer_c();
+
+  virtual bool probe(mm_io_cptr &io);
+
+  virtual int64_t get_preferred_input_size() {
+    return AC3WAV_BLOCK_SIZE;
+  };
+
+  virtual unsigned char *get_buffer() {
+    return buf[cur_buf]->get();
+  };
+
+  virtual void process(int64_t len);
+  virtual generic_packetizer_c *create_packetizer();
+  virtual string get_codec() {
+    return 16 == ac3header.bsid ? "EAC3" : "AC3";
+  };
+
+private:
+  virtual int decode_buffer(int len);
+};
 
 #define DTS_READ_SIZE 16384
 
@@ -104,6 +156,78 @@ public:
     return true;
   };
 };
+
+// ----------------------------------------------------------
+
+wav_ac3_demuxer_c::wav_ac3_demuxer_c(wav_reader_c *n_reader,
+                                     wave_header  *n_wheader):
+  wav_demuxer_c(n_reader, n_wheader),
+  cur_buf(0), swap_bytes(false) {
+
+  buf[0] = memory_c::alloc(AC3WAV_BLOCK_SIZE);
+  buf[1] = memory_c::alloc(AC3WAV_BLOCK_SIZE);
+}
+
+wav_ac3_demuxer_c::~wav_ac3_demuxer_c() {
+}
+
+bool
+wav_ac3_demuxer_c::probe(mm_io_cptr &io) {
+  io->save_pos();
+  int len = io->read(buf[cur_buf]->get(), AC3WAV_BLOCK_SIZE);
+  io->restore_pos();
+
+  if (decode_buffer(len) > 0)
+    return true;
+
+  swap_bytes = true;
+  return decode_buffer(len) > 0;
+}
+
+int
+wav_ac3_demuxer_c::decode_buffer(int len) {
+  if (len < 8)
+    return -1;
+
+  if (swap_bytes) {
+    memcpy(buf[cur_buf ^ 1]->get(), buf[cur_buf]->get(),         8);
+    swab(buf[cur_buf]->get() + 8,   buf[cur_buf ^ 1]->get() + 8, len - 8);
+    cur_buf ^= 1;
+  }
+
+  unsigned char *base = buf[cur_buf]->get();
+
+  if ((get_uint16_le(&base[0]) != AC3WAV_SYNC_WORD1) || (get_uint16_le(&base[2]) != AC3WAV_SYNC_WORD2) || (base[4] != 0x01))
+    return -1;
+
+  int payload_len = get_uint16_le(&base[6]) / 8;
+
+  if (len < (payload_len + 8))
+    return -1;
+
+  int pos = find_ac3_header(&base[8], payload_len, &ac3header);
+
+  return pos == 0 ? payload_len : -1;
+}
+
+generic_packetizer_c *
+wav_ac3_demuxer_c::create_packetizer() {
+  ptzr = new ac3_packetizer_c(reader, ac3header.sample_rate, ac3header.channels, ac3header.bsid, reader->ti);
+
+  mxinfo(FMT_TID "Using the AC3 output module.\n", reader->ti.fname.c_str(), (int64_t)0);
+
+  return ptzr;
+}
+
+void
+wav_ac3_demuxer_c::process(int64_t size) {
+  if (size <= 0)
+    return;
+
+  long dec_len = decode_buffer(size);
+  if (dec_len > 0)
+    ptzr->process(new packet_t(new memory_c(buf[cur_buf]->get() + 8, dec_len, false)));
+}
 
 // ----------------------------------------------------------
 
@@ -302,6 +426,12 @@ wav_reader_c::create_demuxer() {
   demuxer = wav_demuxer_cptr(new wav_dts_demuxer_c(this, &wheader));
   if (!demuxer->probe(io))
     demuxer.clear();
+
+  if (!demuxer.get()) {
+    demuxer = wav_demuxer_cptr(new wav_ac3_demuxer_c(this, &wheader));
+    if (!demuxer->probe(io))
+      demuxer.clear();
+  }
 
   if (!demuxer.get())
     demuxer = wav_demuxer_cptr(new wav_pcm_demuxer_c(this, &wheader));
