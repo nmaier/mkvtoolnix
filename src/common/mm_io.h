@@ -26,6 +26,7 @@
 
 #include "common_memory.h"
 #include "error.h"
+#include "smart_pointers.h"
 
 using namespace std;
 using namespace libebml;
@@ -114,6 +115,8 @@ public:
   }
 };
 
+typedef counted_ptr<mm_io_c> mm_io_cptr;
+
 class MTX_DLL_API mm_file_io_c: public mm_io_c {
 protected:
 #if defined(SYS_WINDOWS)
@@ -152,6 +155,8 @@ public:
   static void setup();
 };
 
+typedef counted_ptr<mm_file_io_c> mm_file_io_cptr;
+
 class MTX_DLL_API mm_proxy_io_c: public mm_io_c {
 protected:
   mm_io_c *proxy_io;
@@ -187,6 +192,8 @@ public:
   }
 };
 
+typedef counted_ptr<mm_proxy_io_c> mm_proxy_io_cptr;
+
 class MTX_DLL_API mm_null_io_c: public mm_io_c {
 protected:
   int64_t pos;
@@ -200,6 +207,8 @@ public:
   virtual size_t write(const void *buffer, size_t size);
   virtual void close();
 };
+
+typedef counted_ptr<mm_null_io_c> mm_null_io_cptr;
 
 class MTX_DLL_API mm_mem_io_c: public mm_io_c {
 protected:
@@ -236,8 +245,9 @@ public:
   virtual unsigned char *get_and_lock_buffer();
 };
 
-enum byte_order_e {BO_UTF8, BO_UTF16_LE, BO_UTF16_BE, BO_UTF32_LE, BO_UTF32_BE,
-                   BO_NONE};
+typedef counted_ptr<mm_mem_io_c> mm_mem_io_cptr;
+
+enum byte_order_e {BO_UTF8, BO_UTF16_LE, BO_UTF16_BE, BO_UTF32_LE, BO_UTF32_BE, BO_NONE};
 
 class MTX_DLL_API mm_text_io_c: public mm_proxy_io_c {
 protected:
@@ -256,6 +266,8 @@ public:
   }
 };
 
+typedef counted_ptr<mm_text_io_c> mm_text_io_cptr;
+
 class MTX_DLL_API mm_stdio_c: public mm_io_c {
 public:
   mm_stdio_c();
@@ -273,5 +285,7 @@ public:
   }
   virtual void flush();
 };
+
+typedef counted_ptr<mm_stdio_c> mm_stdio_cptr;
 
 #endif // __MM_IO_H

@@ -1,3 +1,11 @@
+2008-02-27  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: Added support for WAV files with multiple
+	data chunks.
+
+	* mkvmerge: bug fix: Fixed a cause for the error message "no data
+	chunk found" by fixing the skipping of 'fmt ' chunks.
+
 2008-02-23  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Added support for AAC-in-AVI with CodecID

@@ -103,6 +103,11 @@ public:
 
   void resize(int new_size) throw();
 
+ public:
+  static memory_cptr alloc(int size) {
+    return memory_cptr(new memory_c((unsigned char *)safemalloc(size), size, true));
+  };
+
 private:
   struct counter {
     counter(X *p = NULL, int s = 0, bool f = false, unsigned c = 1):
@@ -238,8 +243,7 @@ public:
 inline memory_cptr
 clone_memory(void *buffer,
              int size) {
-  return memory_cptr(new memory_c((unsigned char *)safememdup(buffer, size),
-                                  size));
+  return memory_cptr(new memory_c((unsigned char *)safememdup(buffer, size), size, true));
 }
 
 inline memory_cptr
