@@ -453,8 +453,9 @@ detect_dts(const void *src_buf,
         cur_buf ^= 1;
       }
 
-      if (find_dts_header((const unsigned char *)buf[cur_buf], len,
-                          &dtsheader) >= 0) {
+      int dst_buf_len = dts_14_16 ? (len * 7 / 8) : len;
+
+      if (find_dts_header((const unsigned char *)buf[cur_buf], dst_buf_len, &dtsheader) >= 0) {
         is_dts = true;
         break;
       }
