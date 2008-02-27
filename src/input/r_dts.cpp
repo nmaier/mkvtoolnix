@@ -137,6 +137,11 @@ dts_reader_c::read(generic_packetizer_c *,
   PTZR0->process(new packet_t(new memory_c(buf[cur_buf], nread, false)));
   bytes_processed += nread;
 
+  if ((nread < READ_SIZE) || io->eof()) {
+    PTZR0->flush();
+    return FILE_STATUS_DONE;
+  }
+
   return FILE_STATUS_MOREDATA;
 }
 

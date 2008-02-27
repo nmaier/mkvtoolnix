@@ -55,12 +55,12 @@ class MTX_DLL_API mm_io_c: public IOCallback {
 protected:
   bool dos_style_newlines;
   stack<int64_t> positions;
-  int64_t m_current_position;
+  int64_t m_current_position, cached_size;
 
 public:
   mm_io_c():
     dos_style_newlines(false),
-    m_current_position(0) {
+    m_current_position(0), cached_size(-1) {
   }
   virtual ~mm_io_c() { }
 

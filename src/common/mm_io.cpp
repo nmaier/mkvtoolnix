@@ -174,6 +174,7 @@ mm_file_io_c::write(const void *buffer,
 # endif
 
   m_current_position += bwritten;
+  cached_size         = -1;
 
   return bwritten;
 }
@@ -223,11 +224,12 @@ mm_file_io_c::close() {
 
 bool
 mm_file_io_c::eof() {
-  return feof((FILE *)file) != 0 ? true : false;
+  return feof((FILE *)file) != 0;
 }
 
 int
 mm_file_io_c::truncate(int64_t pos) {
+  cached_size = -1;
   return ftruncate(fileno((FILE *)file), pos);
 }
 
@@ -419,6 +421,7 @@ mm_file_io_c::write(const void *buffer,
   }
 
   m_current_position += bytes_written;
+  cached_size         = -1;
 
   return bytes_written;
 }
@@ -431,6 +434,8 @@ mm_file_io_c::eof() {
 int
 mm_file_io_c::truncate(int64_t pos) {
   bool result;
+
+  cached_size = -1;
 
   save_pos();
   if (setFilePointer2(pos)) {
@@ -813,14 +818,14 @@ mm_io_c::write_bom(const string &charset) {
 
 int64_t
 mm_io_c::get_size() {
-  int64_t size;
+  if (-1 == cached_size) {
+    save_pos();
+    setFilePointer(0, seek_end);
+    cached_size = getFilePointer();
+    restore_pos();
+  }
 
-  save_pos();
-  setFilePointer(0, seek_end);
-  size = getFilePointer();
-  restore_pos();
-
-  return size;
+  return cached_size;
 }
 
 int
@@ -1030,6 +1035,8 @@ mm_mem_io_c::write(const void *buffer,
     mem_size = pos + size;
   memcpy(&mem[pos], buffer, wbytes);
   pos += wbytes;
+
+  cached_size = -1;
 
   return wbytes;
 }
@@ -1262,9 +1269,13 @@ mm_stdio_c::write(const void *buffer,
 
   fflush(stdout);
 
+  cached_size = -1;
+
   return bytes_written;
 
 #else  // defined(SYS_WINDOWS)
+
+  cached_size = -1;
 
   return fwrite(buffer, 1, size, stdout);
 #endif // defined(SYS_WINDOWS)
