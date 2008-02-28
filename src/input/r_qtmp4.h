@@ -186,10 +186,13 @@ struct qtmp4_demuxer_t {
 
   bool is_keyframe(int frame);
 
-  void update_tables();
+  void update_tables(int64_t global_time_scale);
   void update_editlist_table(int64_t global_time_scale);
 
   void build_index();
+
+  bool read_first_bytes(memory_cptr &buf, int num_bytes, mm_io_c *io);
+
 private:
   void build_index_chunk_mode();
   void build_index_constant_sample_size_mode();
@@ -296,6 +299,7 @@ protected:
   virtual memory_cptr create_bitmap_info_header(qtmp4_demuxer_ptr &dmx, const char *fourcc, int extra_size = 0, const void *extra_data = NULL);
 
   virtual void create_video_packetizer_svq1(qtmp4_demuxer_ptr &dmx);
+  virtual bool create_audio_packetizer_ac3(qtmp4_demuxer_ptr &dmx);
 };
 
 #endif  // __R_QTMP4_H

@@ -33,6 +33,7 @@
 #include "matroska.h"
 #include "output_control.h"
 #include "p_aac.h"
+#include "p_ac3.h"
 #include "p_mp3.h"
 #include "p_passthrough.h"
 #include "p_pcm.h"
@@ -223,7 +224,8 @@ qtmp4_reader_c::parse_headers() {
          strncasecmp(dmx->fourcc, "QDM", 3) &&
          strncasecmp(dmx->fourcc, "MP4A", 4) &&
          strncasecmp(dmx->fourcc, "twos", 4) &&
-         strncasecmp(dmx->fourcc, "swot", 4))) {
+         strncasecmp(dmx->fourcc, "swot", 4) &&
+         strncasecmp(dmx->fourcc, "ac-3", 4))) {
       mxwarn(PFX "Unknown/unsupported FourCC '%.4s' for track %u.\n",
              dmx->fourcc, dmx->id);
 
@@ -308,8 +310,7 @@ qtmp4_reader_c::parse_headers() {
       continue;
     }
 
-    dmx->update_tables();
-    dmx->update_editlist_table(time_scale);
+    dmx->update_tables(time_scale);
 
     dmx->ok = true;
   }
@@ -1338,6 +1339,23 @@ qtmp4_reader_c::create_bitmap_info_header(qtmp4_demuxer_ptr &dmx,
   return bih_p;
 }
 
+bool
+qtmp4_reader_c::create_audio_packetizer_ac3(qtmp4_demuxer_ptr &dmx) {
+  memory_cptr buf = memory_c::alloc(64);
+
+  if (!dmx->read_first_bytes(buf, 64, io) || (-1 == find_ac3_header(buf->get(), buf->get_size(), &dmx->m_ac3_header))) {
+    mxwarn(FMT_TID "No AC3 header found in first frame; track will be skipped.\n", ti.fname.c_str(), (int64_t)dmx->id);
+    dmx->ok = false;
+
+    return false;
+  }
+
+  dmx->ptzr = add_packetizer(new ac3_packetizer_c(this, dmx->m_ac3_header.sample_rate, dmx->m_ac3_header.channels, dmx->m_ac3_header.bsid, ti));
+  mxinfo(FMT_TID "Using the AC3 output module.\n", ti.fname.c_str(), (int64_t)dmx->id);
+
+  return true;
+}
+
 void
 qtmp4_reader_c::create_video_packetizer_svq1(qtmp4_demuxer_ptr &dmx) {
   memory_cptr bih(create_bitmap_info_header(dmx, "SVQ1"));
@@ -1365,135 +1383,141 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
   if (dmx.get() == NULL)
     return;
 
-  if (dmx->ok && demuxing_requested(dmx->type, dmx->id) && (dmx->ptzr == -1)) {
-    ti.id = dmx->id;
-    if (dmx->type == 'v') {
-      if (!strncasecmp(dmx->fourcc, "mp4v", 4)) {
-        memory_cptr bih(create_bitmap_info_header(dmx, "DIVX"));
+  if (!dmx->ok || !demuxing_requested(dmx->type, dmx->id) || (-1 != dmx->ptzr))
+    return;
 
-        ti.private_size = bih->get_size();
-        ti.private_data = (unsigned char *)bih->get();
-        dmx->ptzr =
-          add_packetizer(new mpeg4_p2_video_packetizer_c(this, 0.0,
-                                                         dmx->v_width,
-                                                         dmx->v_height, false,
-                                                         ti));
-        ti.private_data = NULL;
-        mxinfo(FMT_TID "Using the MPEG-4 part 2 video output module.\n",
+  ti.id = dmx->id;
+
+  if (dmx->type == 'v') {
+    if (!strncasecmp(dmx->fourcc, "mp4v", 4)) {
+      memory_cptr bih(create_bitmap_info_header(dmx, "DIVX"));
+
+      ti.private_size = bih->get_size();
+      ti.private_data = (unsigned char *)bih->get();
+      dmx->ptzr =
+        add_packetizer(new mpeg4_p2_video_packetizer_c(this, 0.0,
+                                                       dmx->v_width,
+                                                       dmx->v_height, false,
+                                                       ti));
+      ti.private_data = NULL;
+      mxinfo(FMT_TID "Using the MPEG-4 part 2 video output module.\n",
+             ti.fname.c_str(), (int64_t)dmx->id);
+
+    } else if (!strncasecmp(dmx->fourcc, "mpg1", 4) ||
+               !strncasecmp(dmx->fourcc, "mpg2", 4)) {
+      int version;
+
+      version = dmx->fourcc[3] - '0';
+      dmx->ptzr =
+        add_packetizer(new mpeg1_2_video_packetizer_c(this, version,
+                                                      -1.0, dmx->v_width,
+                                                      dmx->v_height, 0, 0,
+                                                      false, ti));
+      mxinfo(FMT_TID "Using the MPEG-%d video output module.\n",
+             ti.fname.c_str(), (int64_t)dmx->id, version);
+
+    } else if (dmx->v_is_avc) {
+      if (dmx->frame_offset_table.size() == 0)
+        mxwarn(FMT_TID "The AVC video track is missing the 'CTTS' atom for "
+               "frame timecode offsets. However, AVC/h.264 allows frames "
+               "to have more than the traditional one (for P frames) or "
+               "two (for B frames) references to other frames. The "
+               "timecodes for such frames will be out-of-order, and the "
+               "'CTTS' atom is needed for getting the timecodes right. "
+               "As it is missing the timecodes for this track might be "
+               "wrong. You should watch the resulting file and make sure "
+               "that it looks like you expected it to.\n",
                ti.fname.c_str(), (int64_t)dmx->id);
 
-      } else if (!strncasecmp(dmx->fourcc, "mpg1", 4) ||
-                 !strncasecmp(dmx->fourcc, "mpg2", 4)) {
-        int version;
+      ti.private_size = dmx->priv_size;
+      ti.private_data = dmx->priv;
+      dmx->ptzr =
+        add_packetizer(new mpeg4_p10_video_packetizer_c(this, dmx->fps,
+                                                        dmx->v_width,
+                                                        dmx->v_height, ti));
+      ti.private_data = NULL;
 
-        version = dmx->fourcc[3] - '0';
-        dmx->ptzr =
-          add_packetizer(new mpeg1_2_video_packetizer_c(this, version,
-                                                        -1.0, dmx->v_width,
-                                                        dmx->v_height, 0, 0,
-                                                        false, ti));
-        mxinfo(FMT_TID "Using the MPEG-%d video output module.\n",
-               ti.fname.c_str(), (int64_t)dmx->id, version);
+      mxinfo(FMT_TID "Using the MPEG-4 part 10 (AVC) video output "
+             "module.\n", ti.fname.c_str(), (int64_t)dmx->id);
 
-      } else if (dmx->v_is_avc) {
-        if (dmx->frame_offset_table.size() == 0)
-          mxwarn(FMT_TID "The AVC video track is missing the 'CTTS' atom for "
-                 "frame timecode offsets. However, AVC/h.264 allows frames "
-                 "to have more than the traditional one (for P frames) or "
-                 "two (for B frames) references to other frames. The "
-                 "timecodes for such frames will be out-of-order, and the "
-                 "'CTTS' atom is needed for getting the timecodes right. "
-                 "As it is missing the timecodes for this track might be "
-                 "wrong. You should watch the resulting file and make sure "
-                 "that it looks like you expected it to.\n",
-                 ti.fname.c_str(), (int64_t)dmx->id);
+    } else if (!strncasecmp(dmx->fourcc, "svq1", 4))
+      create_video_packetizer_svq1(dmx);
 
-        ti.private_size = dmx->priv_size;
-        ti.private_data = dmx->priv;
-        dmx->ptzr =
-          add_packetizer(new mpeg4_p10_video_packetizer_c(this, dmx->fps,
-                                                          dmx->v_width,
-                                                          dmx->v_height, ti));
-        ti.private_data = NULL;
-
-        mxinfo(FMT_TID "Using the MPEG-4 part 10 (AVC) video output "
-               "module.\n", ti.fname.c_str(), (int64_t)dmx->id);
-
-      } else if (!strncasecmp(dmx->fourcc, "svq1", 4))
-        create_video_packetizer_svq1(dmx);
-
-      else {
-        ti.private_size = dmx->v_stsd_size;
-        ti.private_data = (unsigned char *)dmx->v_stsd;
-        dmx->ptzr =
-          add_packetizer(new video_packetizer_c(this, MKV_V_QUICKTIME, 0.0,
-                                                dmx->v_width, dmx->v_height,
-                                                ti));
-        ti.private_data = NULL;
-        mxinfo(FMT_TID "Using the video output module (FourCC: %.4s).\n",
-               ti.fname.c_str(), (int64_t)dmx->id, dmx->fourcc);
-      }
-
-    } else {
-      if (!strncasecmp(dmx->fourcc, "QDMC", 4) ||
-          !strncasecmp(dmx->fourcc, "QDM2", 4)) {
-        ptzr = new passthrough_packetizer_c(this, ti);
-        dmx->ptzr = add_packetizer(ptzr);
-
-        ptzr->set_track_type(track_audio);
-        ptzr->set_codec_id(dmx->fourcc[3] == '2' ? MKV_A_QDMC2 : MKV_A_QDMC);
-        ptzr->set_codec_private(dmx->priv, dmx->priv_size);
-        ptzr->set_audio_sampling_freq(dmx->a_samplerate);
-        ptzr->set_audio_channels(dmx->a_channels);
-        ptzr->set_audio_bit_depth(dmx->a_bitdepth);
-
-        mxinfo(FMT_TID "Using the generic audio output module (FourCC: %.4s)."
-               "\n", ti.fname.c_str(), (int64_t)dmx->id, dmx->fourcc);
-
-      } else if (!strncasecmp(dmx->fourcc, "MP4A", 4) &&
-                 IS_AAC_OBJECT_TYPE_ID(dmx->esds.object_type_id)) {
-        ti.private_data = dmx->esds.decoder_config;
-        ti.private_size = dmx->esds.decoder_config_len;
-        dmx->ptzr =
-          add_packetizer(new aac_packetizer_c(this, AAC_ID_MPEG4,
-                                              dmx->a_aac_profile,
-                                              (int)dmx->a_samplerate,
-                                              dmx->a_channels, ti,
-                                              false, true));
-        if (dmx->a_aac_is_sbr)
-          PTZR(dmx->ptzr)->
-            set_audio_output_sampling_freq(dmx->a_aac_output_sample_rate);
-        mxinfo(FMT_TID "Using the AAC output module.\n", ti.fname.c_str(),
-               (int64_t)dmx->id);
-        ti.private_data = NULL;
-        ti.private_size = 0;
-
-      } else if (!strncasecmp(dmx->fourcc, "MP4A", 4) &&
-                 ((dmx->esds.object_type_id == MP4OTI_MPEG2AudioPart3) ||
-                  (dmx->esds.object_type_id == MP4OTI_MPEG1Audio))) {
-        dmx->ptzr =
-          add_packetizer(new mp3_packetizer_c(this, (int32_t)dmx->a_samplerate,
-                                              dmx->a_channels, true, ti));
-        mxinfo(FMT_TID "Using the MPEG audio output module.\n",
-               ti.fname.c_str(), (int64_t)dmx->id);
-
-      } else if (!strncasecmp(dmx->fourcc, "twos", 4) ||
-                 !strncasecmp(dmx->fourcc, "swot", 4)) {
-        dmx->ptzr =
-          add_packetizer(new pcm_packetizer_c(this, (int32_t)dmx->a_samplerate,
-                                              dmx->a_channels, dmx->a_bitdepth,
-                                              ti, (dmx->a_bitdepth > 8) &&
-                                              (dmx->fourcc[0] == 't')));
-        mxinfo(FMT_TID "Using the PCM output module.\n", ti.fname.c_str(),
-               (int64_t)dmx->id);
-
-      } else
-        die(PFX "Should not have happened #1.");
+    else {
+      ti.private_size = dmx->v_stsd_size;
+      ti.private_data = (unsigned char *)dmx->v_stsd;
+      dmx->ptzr =
+        add_packetizer(new video_packetizer_c(this, MKV_V_QUICKTIME, 0.0,
+                                              dmx->v_width, dmx->v_height,
+                                              ti));
+      ti.private_data = NULL;
+      mxinfo(FMT_TID "Using the video output module (FourCC: %.4s).\n",
+             ti.fname.c_str(), (int64_t)dmx->id, dmx->fourcc);
     }
 
-    if (main_dmx == -1)
-      main_dmx = i;
+  } else {
+    if (!strncasecmp(dmx->fourcc, "QDMC", 4) ||
+        !strncasecmp(dmx->fourcc, "QDM2", 4)) {
+      ptzr = new passthrough_packetizer_c(this, ti);
+      dmx->ptzr = add_packetizer(ptzr);
+
+      ptzr->set_track_type(track_audio);
+      ptzr->set_codec_id(dmx->fourcc[3] == '2' ? MKV_A_QDMC2 : MKV_A_QDMC);
+      ptzr->set_codec_private(dmx->priv, dmx->priv_size);
+      ptzr->set_audio_sampling_freq(dmx->a_samplerate);
+      ptzr->set_audio_channels(dmx->a_channels);
+      ptzr->set_audio_bit_depth(dmx->a_bitdepth);
+
+      mxinfo(FMT_TID "Using the generic audio output module (FourCC: %.4s)."
+             "\n", ti.fname.c_str(), (int64_t)dmx->id, dmx->fourcc);
+
+    } else if (!strncasecmp(dmx->fourcc, "MP4A", 4) &&
+               IS_AAC_OBJECT_TYPE_ID(dmx->esds.object_type_id)) {
+      ti.private_data = dmx->esds.decoder_config;
+      ti.private_size = dmx->esds.decoder_config_len;
+      dmx->ptzr =
+        add_packetizer(new aac_packetizer_c(this, AAC_ID_MPEG4,
+                                            dmx->a_aac_profile,
+                                            (int)dmx->a_samplerate,
+                                            dmx->a_channels, ti,
+                                            false, true));
+      if (dmx->a_aac_is_sbr)
+        PTZR(dmx->ptzr)->
+          set_audio_output_sampling_freq(dmx->a_aac_output_sample_rate);
+      mxinfo(FMT_TID "Using the AAC output module.\n", ti.fname.c_str(),
+             (int64_t)dmx->id);
+      ti.private_data = NULL;
+      ti.private_size = 0;
+
+    } else if (!strncasecmp(dmx->fourcc, "MP4A", 4) &&
+               ((dmx->esds.object_type_id == MP4OTI_MPEG2AudioPart3) ||
+                (dmx->esds.object_type_id == MP4OTI_MPEG1Audio))) {
+      dmx->ptzr =
+        add_packetizer(new mp3_packetizer_c(this, (int32_t)dmx->a_samplerate,
+                                            dmx->a_channels, true, ti));
+      mxinfo(FMT_TID "Using the MPEG audio output module.\n",
+             ti.fname.c_str(), (int64_t)dmx->id);
+
+    } else if (!strncasecmp(dmx->fourcc, "twos", 4) ||
+               !strncasecmp(dmx->fourcc, "swot", 4)) {
+      dmx->ptzr =
+        add_packetizer(new pcm_packetizer_c(this, (int32_t)dmx->a_samplerate,
+                                            dmx->a_channels, dmx->a_bitdepth,
+                                            ti, (dmx->a_bitdepth > 8) &&
+                                            (dmx->fourcc[0] == 't')));
+      mxinfo(FMT_TID "Using the PCM output module.\n", ti.fname.c_str(),
+             (int64_t)dmx->id);
+
+    } else if (!strncasecmp(dmx->fourcc, "ac-3", 4)) {
+      if (!create_audio_packetizer_ac3(dmx))
+        return;
+
+    } else
+      die(PFX "Should not have happened #1.");
   }
+
+  if (main_dmx == -1)
+    main_dmx = i;
 }
 
 void
@@ -1700,7 +1724,7 @@ qtmp4_demuxer_t::adjust_timecodes(int64_t delta) {
 }
 
 void
-qtmp4_demuxer_t::update_tables() {
+qtmp4_demuxer_t::update_tables(int64_t global_time_scale) {
   uint64_t last, s, pts;
   int i, j;
 
@@ -1788,6 +1812,8 @@ qtmp4_demuxer_t::update_tables() {
     qt_sample_t &sample = sample_table[i];
     mxverb(4, PFX "  %d: pts " LLU " size %u pos " LLU "\n", i, sample.pts, sample.size, sample.pos);
   }
+
+  update_editlist_table(global_time_scale);
 }
 
 // Also taken from mplayer's demux_mov.c file.
@@ -1889,5 +1915,28 @@ qtmp4_demuxer_t::build_index_chunk_mode() {
     int act_frame_idx = frame_indices[frame_idx];
     m_index.push_back(qt_index_t(sample_table[act_frame_idx].pos, sample_table[act_frame_idx].size, timecodes[frame_idx], durations[frame_idx], is_keyframe(frame_idx)));
   }
+}
+
+bool
+qtmp4_demuxer_t::read_first_bytes(memory_cptr &buf,
+                                  int num_bytes,
+                                  mm_io_c *io) {
+  int buf_pos = 0;
+  int idx_pos = 0;
+
+  while ((0 < num_bytes) && (idx_pos < m_index.size())) {
+    qt_index_t &index     = m_index[idx_pos];
+    int num_bytes_to_read = MXMIN(num_bytes, index.m_size);
+
+    io->setFilePointer(index.m_file_pos);
+    if (io->read(buf->get() + buf_pos, num_bytes_to_read) < num_bytes_to_read)
+      return false;
+
+    num_bytes -= num_bytes_to_read;
+    buf_pos   += num_bytes_to_read;
+    ++idx_pos;
+  }
+
+  return 0 == num_bytes;
 }
 
