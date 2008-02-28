@@ -308,114 +308,17 @@ qtmp4_reader_c::parse_headers() {
       continue;
     }
 
-    dmx->ok = true;
+    dmx->update_tables();
+    dmx->update_editlist_table(time_scale);
 
-    update_tables(dmx);
+    dmx->ok = true;
   }
 
   if (!identifying)
     calculate_timecodes();
 
-  mxverb(2, PFX "Number of valid tracks found: %u\n",
-         (unsigned int)demuxers.size());
+  mxverb(2, PFX "Number of valid tracks found: %u\n", (unsigned int)demuxers.size());
 }
-
-void
-qtmp4_reader_c::update_tables(qtmp4_demuxer_ptr &dmx) {
-  uint64_t last, s, pts;
-  int i, j;
-
-  last = dmx->chunk_table.size();
-
-  // process chunkmap:
-  i = dmx->chunkmap_table.size();
-  while (i > 0) {
-    i--;
-    for (j = dmx->chunkmap_table[i].first_chunk; j < last; j++) {
-      dmx->chunk_table[j].desc =
-        dmx->chunkmap_table[i].sample_description_id;
-      dmx->chunk_table[j].size = dmx->chunkmap_table[i].samples_per_chunk;
-    }
-    last = dmx->chunkmap_table[i].first_chunk;
-    if (dmx->chunk_table.size() <= last)
-      break;
-  }
-
-  // calc pts of chunks:
-  s = 0;
-  for (j = 0; j < dmx->chunk_table.size(); j++) {
-    dmx->chunk_table[j].samples = s;
-    s += dmx->chunk_table[j].size;
-  }
-
-  // workaround for fixed-size video frames (dv and uncompressed)
-  if ((dmx->sample_table.size() == 0) && (dmx->type != 'a')) {
-    for (i = 0; i < s; i++) {
-      qt_sample_t sample;
-
-      sample.size = dmx->sample_size;
-      dmx->sample_table.push_back(sample);
-    }
-    dmx->sample_size = 0;
-  }
-
-  if (dmx->sample_table.size() == 0) {
-    // constant sampesize
-    if ((dmx->durmap_table.size() == 1) ||
-        ((dmx->durmap_table.size() == 2) &&
-         (dmx->durmap_table[1].number == 1)))
-      dmx->duration = dmx->durmap_table[0].duration;
-    else
-      mxerror(PFX "Constant samplesize & variable duration not yet "
-              "supported. Contact the author if you have such a sample "
-              "file.\n");
-    return;
-  }
-
-  // calc pts:
-  s = 0;
-  pts = 0;
-  for (j = 0; j < dmx->durmap_table.size(); j++) {
-    for (i = 0; i < dmx->durmap_table[j].number; i++) {
-      dmx->sample_table[s].pts = pts;
-      s++;
-      pts += dmx->durmap_table[j].duration;
-    }
-  }
-
-  // calc sample offsets
-  s = 0;
-  for (j = 0; j < dmx->chunk_table.size(); j++) {
-    uint64_t pos = dmx->chunk_table[j].pos;
-
-    for (i = 0; i < dmx->chunk_table[j].size; i++) {
-      dmx->sample_table[s].pos = pos;
-      pos += dmx->sample_table[s].size;
-      s++;
-    }
-  }
-
-  // calc pts/dts offsets
-  for (j = 0; j < dmx->raw_frame_offset_table.size(); j++) {
-    int k;
-
-    for (k = 0; k < dmx->raw_frame_offset_table[j].count; k++)
-      dmx->frame_offset_table.
-        push_back(dmx->raw_frame_offset_table[j].offset);
-  }
-  mxverb(3, PFX "Frame offset table: %u entries\n",
-         (unsigned int)dmx->frame_offset_table.size());
-
-  mxverb(4, PFX "Sample table contents: %u entries\n",
-         (unsigned int)dmx->sample_table.size());
-  for (i = 0; i < dmx->sample_table.size(); i++) {
-    qt_sample_t &sample = dmx->sample_table[i];
-    mxverb(4, PFX "  %d: pts " LLU " size %u pos " LLU "\n", i,
-           sample.pts, sample.size, sample.pos);
-  }
-  update_editlist_table(dmx);
-}
-
 
 void
 qtmp4_reader_c::calculate_timecodes() {
@@ -443,55 +346,9 @@ qtmp4_reader_c::calculate_timecodes() {
 
   } else
     min_timecode = 0;
-}
 
-// Also taken from mplayer's demux_mov.c file.
-void
-qtmp4_reader_c::update_editlist_table(qtmp4_demuxer_ptr &dmx) {
-  if (dmx->editlist_table.empty())
-    return;
-
-  int frame = 0, e_pts = 0, i;
-
-  mxverb(4, "qtmp4: Updating edit list table for track %u\n", dmx->id);
-
-  for (i = 0; dmx->editlist_table.size() > i; ++i) {
-    qt_editlist_t &el = dmx->editlist_table[i];
-    int sample = 0, pts = el.pos;
-
-    el.start_frame = frame;
-
-    if (pts < 0) {
-      // skip!
-      el.frames = 0;
-      continue;
-    }
-
-    // find start sample
-    for (; dmx->sample_table.size() > sample; ++sample)
-      if (pts <= dmx->sample_table[sample].pts)
-        break;
-    el.start_sample = sample;
-
-    el.pts_offset = ((int64_t)e_pts * (int64_t)dmx->time_scale) /
-      (int64_t)time_scale - (int64_t)dmx->sample_table[sample].pts;
-    pts += ((int64_t)el.duration * (int64_t)dmx->time_scale) /
-      (int64_t)time_scale;
-    e_pts += el.duration;
-
-    // find end sample
-    for (; dmx->sample_table.size() > sample; ++sample)
-      if (pts <= dmx->sample_table[sample].pts)
-        break;
-
-    el.frames = sample - el.start_sample;
-    frame += el.frames;
-
-    mxverb(4, "  %d: pts: " LLU "  1st_sample: " LLU "  frames: %u (%5.3fs)  "
-           "pts_offset: " LLD "\n", i,
-           el.pos, el.start_sample,  el.frames,
-           (float)(el.duration) / (float)time_scale, el.pts_offset);
-  }
+  mxforeach(idmx, demuxers)
+    (*idmx)->build_index();
 }
 
 void
@@ -1305,160 +1162,57 @@ qtmp4_reader_c::handle_trak_atom(qtmp4_demuxer_ptr &new_dmx,
 file_status_e
 qtmp4_reader_c::read(generic_packetizer_c *ptzr,
                      bool force) {
-  uint32_t i, k, frame, frame_size;
-  bool chunks_left, is_keyframe;
-  int64_t timecode, duration;
-  unsigned char *buffer;
+  int dmx_idx;
 
-  frame = 0;
-  chunks_left = false;
-  for (i = 0; i < demuxers.size(); i++) {
-    qtmp4_demuxer_ptr &dmx = demuxers[i];
+  for (dmx_idx = 0; dmx_idx < demuxers.size(); ++dmx_idx) {
+    qtmp4_demuxer_ptr &dmx = demuxers[dmx_idx];
 
     if ((-1 == dmx->ptzr) || (PTZR(dmx->ptzr) != ptzr))
       continue;
 
-    if (dmx->sample_size != 0) {
-      if (dmx->pos >= dmx->chunk_table.size())
-        continue;
-
-      io->setFilePointer(dmx->chunk_table[dmx->pos].pos);
-      timecode = dmx->timecodes[dmx->pos];
-      duration = dmx->durations[dmx->pos];
-
-      if (dmx->sample_size != 1) {
-        if (!dmx->warning_printed) {
-          mxwarn(PFX "Track %u: sample_size (%u) != 1.\n", dmx->id,
-                 dmx->sample_size);
-          dmx->warning_printed = true;
-        }
-        frame_size = dmx->chunk_table[dmx->pos].size * dmx->sample_size;
-      } else
-        frame_size = dmx->chunk_table[dmx->pos].size;
-
-      if (dmx->type == 'a') {
-        if (get_uint16_be(&dmx->a_stsd.v0.version) == 1) {
-          frame_size *= get_uint32_be(&dmx->a_stsd.v1.bytes_per_frame);
-          frame_size /= get_uint32_be(&dmx->a_stsd.v1.samples_per_packet);
-        } else
-          frame_size = frame_size * dmx->a_channels *
-            get_uint16_be(&dmx->a_stsd.v0.sample_size) / 8;
-
-      }
-
-      if (dmx->keyframe_table.size() == 0)
-        is_keyframe = true;
-      else {
-        is_keyframe = false;
-        for (k = 0; k < dmx->keyframe_table.size(); k++)
-          if (dmx->keyframe_table[k] == (frame + 1)) {
-            is_keyframe = true;
-            break;
-          }
-      }
-
-      buffer = (unsigned char *)safemalloc(frame_size);
-      if (io->read(buffer, frame_size) != frame_size) {
-        mxwarn(PFX "Could not read chunk number %u/%u with size %u from "
-               "position " LLD ". Aborting.\n", frame,
-               (unsigned int)dmx->chunk_table.size(), frame_size,
-               dmx->chunk_table[dmx->pos].pos);
-        safefree(buffer);
-        flush_packetizers();
-
-        return FILE_STATUS_DONE;
-      }
-
-      PTZR(dmx->ptzr)->process(new packet_t(new memory_c(buffer, frame_size,
-                                                         true),
-                                            timecode, duration, is_keyframe ?
-                                            VFT_IFRAME : VFT_PFRAMEAUTOMATIC,
-                                            VFT_NOBFRAME));
-      dmx->pos++;
-
-      if (dmx->pos < dmx->chunk_table.size())
-        chunks_left = true;
-
-    } else {
-      if (dmx->pos >= dmx->frame_indices.size())
-        continue;
-
-      frame = dmx->pos;
-      timecode = dmx->timecodes[frame];
-      duration = dmx->durations[frame];
-
-      frame = dmx->frame_indices[frame];
-
-      if (dmx->keyframe_table.size() == 0)
-        is_keyframe = true;
-      else {
-        is_keyframe = false;
-        for (k = 0; k < dmx->keyframe_table.size(); k++)
-          if (dmx->keyframe_table[k] == (dmx->pos + 1)) {
-            is_keyframe = true;
-            break;
-          }
-      }
-
-      frame_size = dmx->sample_table[frame].size;
-      if ((dmx->type == 'v') && (dmx->pos == 0) &&
-          !strncasecmp(dmx->fourcc, "mp4v", 4) &&
-          dmx->esds_parsed && (dmx->esds.decoder_config != NULL)) {
-        buffer = (unsigned char *)
-          safemalloc(frame_size + dmx->esds.decoder_config_len);
-        memcpy(buffer, dmx->esds.decoder_config, dmx->esds.decoder_config_len);
-        io->setFilePointer(dmx->sample_table[frame].pos);
-        if (io->read(buffer + dmx->esds.decoder_config_len, frame_size) !=
-            frame_size) {
-          mxwarn(PFX "Could not read chunk number %u/%u with size %u from "
-                 "position " LLD ". Aborting.\n", frame,
-                 (unsigned int)dmx->chunk_table.size(),
-                 frame_size, dmx->chunk_table[dmx->pos].pos);
-          safefree(buffer);
-          flush_packetizers();
-
-          return FILE_STATUS_DONE;
-        }
-        frame_size += dmx->esds.decoder_config_len;
-
-      } else {
-        buffer = (unsigned char *)safemalloc(frame_size);
-        mxverb(4, "qtmp4_reader_c::read 2: %u bytes from " LLD "\n",
-               frame_size, dmx->sample_table[frame].pos);
-        io->setFilePointer(dmx->sample_table[frame].pos);
-        if (io->read(buffer, frame_size) != frame_size) {
-          mxwarn(PFX "Could not read chunk number %u/%u with size %u from "
-                 "position " LLD ". Aborting.\n", frame,
-                 (unsigned int)dmx->sample_table.size(),
-                 frame_size, dmx->sample_table[frame].pos);
-          safefree(buffer);
-          flush_packetizers();
-
-          return FILE_STATUS_DONE;
-        }
-      }
-
-      memory_cptr mem(new memory_c(buffer, frame_size, true));
-      PTZR(dmx->ptzr)->process(new packet_t(mem, timecode, duration,
-                                            is_keyframe ? VFT_IFRAME :
-                                            VFT_PFRAMEAUTOMATIC,
-                                            VFT_NOBFRAME));
-
-      dmx->pos++;
-      if (dmx->pos < dmx->frame_indices.size())
-        chunks_left = true;
-    }
-
-    if (chunks_left)
-      return FILE_STATUS_MOREDATA;
-    else {
-      flush_packetizers();
-      return FILE_STATUS_DONE;
-    }
+    if (dmx->pos < dmx->m_index.size())
+      break;
   }
 
-  flush_packetizers();
+  if (dmx_idx == demuxers.size()) {
+    flush_packetizers();
+    return FILE_STATUS_DONE;
+  }
 
+  qtmp4_demuxer_ptr &dmx = demuxers[dmx_idx];
+
+  qt_index_t &index = dmx->m_index[dmx->pos];
+
+  io->setFilePointer(index.m_file_pos);
+
+  int buffer_offset = 0;
+  unsigned char *buffer;
+
+  if (('v' == dmx->type) && (0 == dmx->pos) && !strncasecmp(dmx->fourcc, "mp4v", 4) && dmx->esds_parsed && (NULL != dmx->esds.decoder_config)) {
+    buffer = (unsigned char *)safemalloc(index.m_size + dmx->esds.decoder_config_len);
+    memcpy(buffer, dmx->esds.decoder_config, dmx->esds.decoder_config_len);
+    buffer_offset = dmx->esds.decoder_config_len;
+
+  } else {
+    buffer = (unsigned char *)safemalloc(index.m_size);
+  }
+
+  if (io->read(buffer + buffer_offset, index.m_size) != index.m_size) {
+    mxwarn(PFX "Could not read chunk number %u/%u with size " LLD " from position " LLD ". Aborting.\n",
+           dmx->pos, (unsigned int)dmx->m_index.size(), index.m_size, index.m_file_pos);
+    safefree(buffer);
+    flush_packetizers();
+    return FILE_STATUS_DONE;
+  }
+
+  PTZR(dmx->ptzr)->process(new packet_t(new memory_c(buffer, index.m_size + buffer_offset, true), index.m_timecode, index.m_duration,
+                                        index.m_is_keyframe ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC, VFT_NOBFRAME));
+  ++dmx->pos;
+
+  if (dmx->pos < dmx->m_index.size())
+    return FILE_STATUS_MOREDATA;
+
+  flush_packetizers();
   return FILE_STATUS_DONE;
 }
 
@@ -1944,3 +1698,196 @@ qtmp4_demuxer_t::adjust_timecodes(int64_t delta) {
   min_timecode += delta;
   max_timecode += delta;
 }
+
+void
+qtmp4_demuxer_t::update_tables() {
+  uint64_t last, s, pts;
+  int i, j;
+
+  last = chunk_table.size();
+
+  // process chunkmap:
+  i = chunkmap_table.size();
+  while (i > 0) {
+    --i;
+    for (j = chunkmap_table[i].first_chunk; j < last; ++j) {
+      chunk_table[j].desc = chunkmap_table[i].sample_description_id;
+      chunk_table[j].size = chunkmap_table[i].samples_per_chunk;
+    }
+
+    last = chunkmap_table[i].first_chunk;
+
+    if (chunk_table.size() <= last)
+      break;
+  }
+
+  // calc pts of chunks:
+  s = 0;
+  for (j = 0; j < chunk_table.size(); ++j) {
+    chunk_table[j].samples  = s;
+    s                      += chunk_table[j].size;
+  }
+
+  // workaround for fixed-size video frames (dv and uncompressed)
+  if (sample_table.empty() && ('a' != type)) {
+    for (i = 0; i < s; ++i) {
+      qt_sample_t sample;
+
+      sample.size = sample_size;
+      sample_table.push_back(sample);
+    }
+
+    sample_size = 0;
+  }
+
+  if (sample_table.empty()) {
+    // constant sampesize
+    if ((durmap_table.size() == 1) || ((durmap_table.size() == 2) && (durmap_table[1].number == 1)))
+      duration = durmap_table[0].duration;
+    else
+      mxerror(PFX "Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n");
+
+    return;
+  }
+
+  // calc pts:
+  s   = 0;
+  pts = 0;
+
+  for (j = 0; j < durmap_table.size(); ++j) {
+    for (i = 0; i < durmap_table[j].number; ++i) {
+      sample_table[s].pts  = pts;
+      pts                 += durmap_table[j].duration;
+      ++s;
+    }
+  }
+
+  // calc sample offsets
+  s = 0;
+  for (j = 0; j < chunk_table.size(); ++j) {
+    uint64_t chunk_pos = chunk_table[j].pos;
+
+    for (i = 0; i < chunk_table[j].size; ++i) {
+      sample_table[s].pos  = chunk_pos;
+      chunk_pos           += sample_table[s].size;
+      ++s;
+    }
+  }
+
+  // calc pts/dts offsets
+  for (j = 0; j < raw_frame_offset_table.size(); ++j) {
+    int k;
+
+    for (k = 0; k < raw_frame_offset_table[j].count; ++k)
+      frame_offset_table.push_back(raw_frame_offset_table[j].offset);
+  }
+
+  mxverb(3, PFX "Frame offset table: %u entries\n",    (unsigned int)frame_offset_table.size());
+  mxverb(4, PFX "Sample table contents: %u entries\n", (unsigned int)sample_table.size());
+  for (i = 0; i < sample_table.size(); ++i) {
+    qt_sample_t &sample = sample_table[i];
+    mxverb(4, PFX "  %d: pts " LLU " size %u pos " LLU "\n", i, sample.pts, sample.size, sample.pos);
+  }
+}
+
+// Also taken from mplayer's demux_mov.c file.
+void
+qtmp4_demuxer_t::update_editlist_table(int64_t global_time_scale) {
+  if (editlist_table.empty())
+    return;
+
+  int frame = 0, e_pts = 0, i;
+
+  mxverb(4, "qtmp4: Updating edit list table for track %u\n", id);
+
+  for (i = 0; editlist_table.size() > i; ++i) {
+    qt_editlist_t &el = editlist_table[i];
+    int sample = 0, pts = el.pos;
+
+    el.start_frame = frame;
+
+    if (pts < 0) {
+      // skip!
+      el.frames = 0;
+      continue;
+    }
+
+    // find start sample
+    for (; sample_table.size() > sample; ++sample)
+      if (pts <= sample_table[sample].pts)
+        break;
+
+    el.start_sample  = sample;
+    el.pts_offset    = ((int64_t)e_pts       * (int64_t)time_scale) / (int64_t)global_time_scale - (int64_t)sample_table[sample].pts;
+    pts             += ((int64_t)el.duration * (int64_t)time_scale) / (int64_t)global_time_scale;
+    e_pts           += el.duration;
+
+    // find end sample
+    for (; sample_table.size() > sample; ++sample)
+      if (pts <= sample_table[sample].pts)
+        break;
+
+    el.frames  = sample - el.start_sample;
+    frame     += el.frames;
+
+    mxverb(4, "  %d: pts: " LLU "  1st_sample: " LLU "  frames: %u (%5.3fs)  pts_offset: " LLD "\n",
+           i, el.pos, el.start_sample,  el.frames, (float)(el.duration) / (float)time_scale, el.pts_offset);
+  }
+}
+
+bool
+qtmp4_demuxer_t::is_keyframe(int frame) {
+  if (keyframe_table.empty())
+    return true;
+
+  for (int kf_idx = 0; kf_idx < keyframe_table.size(); ++kf_idx)
+    if (keyframe_table[kf_idx] == (frame + 1))
+      return true;
+
+  return false;
+}
+
+void
+qtmp4_demuxer_t::build_index() {
+  if (sample_size != 0)
+    build_index_constant_sample_size_mode();
+  else
+    build_index_chunk_mode();
+}
+
+void
+qtmp4_demuxer_t::build_index_constant_sample_size_mode() {
+  int frame_idx;
+
+  for (frame_idx = 0; frame_idx < chunk_table.size(); ++frame_idx) {
+    int64_t frame_size;
+
+    if (sample_size != 1) {
+      frame_size = chunk_table[frame_idx].size * sample_size;
+
+    } else {
+      frame_size = chunk_table[frame_idx].size;
+
+      if (type == 'a') {
+        if (get_uint16_be(&a_stsd.v0.version) == 1) {
+          frame_size *= get_uint32_be(&a_stsd.v1.bytes_per_frame);
+          frame_size /= get_uint32_be(&a_stsd.v1.samples_per_packet);
+        } else
+          frame_size  = frame_size * a_channels * get_uint16_be(&a_stsd.v0.sample_size) / 8;
+      }
+    }
+
+    m_index.push_back(qt_index_t(chunk_table[frame_idx].pos, frame_size, timecodes[frame_idx], durations[frame_idx], is_keyframe(frame_idx)));
+  }
+}
+
+void
+qtmp4_demuxer_t::build_index_chunk_mode() {
+  int frame_idx;
+
+  for (frame_idx = 0; frame_idx < frame_indices.size(); ++frame_idx) {
+    int act_frame_idx = frame_indices[frame_idx];
+    m_index.push_back(qt_index_t(sample_table[act_frame_idx].pos, sample_table[act_frame_idx].size, timecodes[frame_idx], durations[frame_idx], is_keyframe(frame_idx)));
+  }
+}
+

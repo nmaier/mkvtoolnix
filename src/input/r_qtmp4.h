@@ -22,6 +22,7 @@
 
 #include <vector>
 
+#include "ac3_common.h"
 #include "common.h"
 #include "mm_io.h"
 #include "p_video.h"
@@ -86,6 +87,18 @@ struct qt_frame_offset_t {
     count(0), offset(0) {}
 };
 
+struct qt_index_t {
+  int64_t m_file_pos, m_size;
+  int64_t m_timecode, m_duration;
+  bool    m_is_keyframe;
+
+  qt_index_t(int64_t file_pos, int64_t size, int64_t timecode, int64_t duration, bool is_keyframe):
+    m_file_pos(file_pos), m_size(size),
+    m_timecode(timecode), m_duration(duration),
+    m_is_keyframe(is_keyframe) {
+  };
+};
+
 struct qtmp4_demuxer_t {
   bool ok;
 
@@ -110,6 +123,9 @@ struct qtmp4_demuxer_t {
   vector<int32_t> frame_offset_table;
 
   vector<int64_t> timecodes, durations, frame_indices;
+
+  vector<qt_index_t> m_index;
+
   int64_t min_timecode, max_timecode;
   double fps;
 
@@ -126,6 +142,7 @@ struct qtmp4_demuxer_t {
   sound_v1_stsd_atom_t a_stsd;
   int a_aac_profile, a_aac_output_sample_rate;
   bool a_aac_is_sbr, a_aac_config_parsed;
+  ac3_header_t m_ac3_header;
 
   unsigned char *priv;
   uint32_t priv_size;
@@ -166,6 +183,16 @@ struct qtmp4_demuxer_t {
   int64_t to_nsecs(int64_t value);
   void calculate_timecodes();
   void adjust_timecodes(int64_t delta);
+
+  bool is_keyframe(int frame);
+
+  void update_tables();
+  void update_editlist_table(int64_t global_time_scale);
+
+  void build_index();
+private:
+  void build_index_chunk_mode();
+  void build_index_constant_sample_size_mode();
 };
 typedef counted_ptr<qtmp4_demuxer_t> qtmp4_demuxer_ptr;
 
@@ -265,9 +292,6 @@ protected:
                                 int level);
   virtual void handle_elst_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
                                 int level);
-
-  virtual void update_tables(qtmp4_demuxer_ptr &dmx);
-  virtual void update_editlist_table(qtmp4_demuxer_ptr &dmx);
 
   virtual memory_cptr create_bitmap_info_header(qtmp4_demuxer_ptr &dmx, const char *fourcc, int extra_size = 0, const void *extra_data = NULL);
 
