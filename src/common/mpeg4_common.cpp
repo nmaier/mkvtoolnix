@@ -1161,7 +1161,7 @@ mpeg4::p10::avc_es_parser_c::flush_unhandled_nalus() {
   m_unhandled_nalus.clear();
 }
 
-static int klaus = 0;
+// static int klaus = 0;
 
 void
 mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
@@ -1176,8 +1176,8 @@ mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
   }
 
   if (!parse_slice(nalu, si)) {
-    mxwarn("Slice parser error %d.\n", klaus);
-    ++klaus;
+//     mxwarn("Slice parser error %d.\n", klaus);
+//     ++klaus;
     return;
   }
 
