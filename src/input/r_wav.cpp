@@ -217,7 +217,7 @@ wav_ac3acm_demuxer_c::probe(mm_io_cptr &io) {
 int
 wav_ac3acm_demuxer_c::decode_buffer(int len) {
   if ((2 < len) && m_swap_bytes) {
-    swab(m_buf[m_cur_buf]->get(), m_buf[m_cur_buf ^ 1]->get(), len);
+    swab((char *)m_buf[m_cur_buf]->get(), (char *)m_buf[m_cur_buf ^ 1]->get(), len);
     m_cur_buf ^= 1;
   }
 
@@ -271,8 +271,8 @@ wav_ac3wav_demuxer_c::decode_buffer(int len) {
     return -1;
 
   if (m_swap_bytes) {
-    memcpy(m_buf[m_cur_buf ^ 1]->get(), m_buf[m_cur_buf]->get(),         8);
-    swab(m_buf[m_cur_buf]->get() + 8,   m_buf[m_cur_buf ^ 1]->get() + 8, len - 8);
+    memcpy(      m_buf[m_cur_buf ^ 1]->get(),           m_buf[m_cur_buf]->get(),         8);
+    swab((char *)m_buf[m_cur_buf]->get() + 8,   (char *)m_buf[m_cur_buf ^ 1]->get() + 8, len - 8);
     m_cur_buf ^= 1;
   }
 
