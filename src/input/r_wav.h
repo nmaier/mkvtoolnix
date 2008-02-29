@@ -35,13 +35,13 @@ class wav_reader_c;
 
 class wav_demuxer_c {
 public:
-  wav_reader_c         *reader;
-  wave_header          *wheader;
-  generic_packetizer_c *ptzr;
+  wav_reader_c         *m_reader;
+  wave_header          *m_wheader;
+  generic_packetizer_c *m_ptzr;
 
 public:
-  wav_demuxer_c(wav_reader_c *n_reader, wave_header *n_wheader):
-    reader(n_reader), wheader(n_wheader), ptzr(NULL) {
+  wav_demuxer_c(wav_reader_c *reader, wave_header *wheader):
+    m_reader(reader), m_wheader(wheader), m_ptzr(NULL) {
   };
   virtual ~wav_demuxer_c() {};
 
@@ -66,14 +66,14 @@ struct wav_chunk_t {
 
 class wav_reader_c: public generic_reader_c {
 private:
-  mm_io_cptr io;
-  struct wave_header wheader;
-  int64_t bytes_processed, bytes_in_data_chunks, remaining_bytes_in_current_data_chunk;
+  mm_io_cptr m_io;
+  struct wave_header m_wheader;
+  int64_t m_bytes_processed, m_bytes_in_data_chunks, m_remaining_bytes_in_current_data_chunk;
 
-  vector<wav_chunk_t> chunks;
-  int cur_data_chunk_idx;
+  vector<wav_chunk_t> m_chunks;
+  int m_cur_data_chunk_idx;
 
-  wav_demuxer_cptr demuxer;
+  wav_demuxer_cptr m_demuxer;
 
 public:
   wav_reader_c(track_info_c &_ti) throw (error_c);
