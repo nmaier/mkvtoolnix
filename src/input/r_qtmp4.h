@@ -88,18 +88,20 @@ struct qt_frame_offset_t {
 };
 
 struct qt_index_t {
-  int64_t m_file_pos, m_size;
-  int64_t m_timecode, m_duration;
-  bool    m_is_keyframe;
+  int64_t file_pos, size;
+  int64_t timecode, duration;
+  bool    is_keyframe;
 
-  qt_index_t(int64_t file_pos, int64_t size, int64_t timecode, int64_t duration, bool is_keyframe):
-    m_file_pos(file_pos), m_size(size),
-    m_timecode(timecode), m_duration(duration),
-    m_is_keyframe(is_keyframe) {
+  qt_index_t(int64_t file_pos_, int64_t size_, int64_t timecode_, int64_t duration_, bool is_keyframe_):
+    file_pos(file_pos_),
+    size(size_),
+    timecode(timecode_),
+    duration(duration_),
+    is_keyframe(is_keyframe_) {
   };
 };
 
-struct qtmp4_demuxer_t {
+struct qtmp4_demuxer_c {
   bool ok;
 
   char type;
@@ -151,7 +153,7 @@ struct qtmp4_demuxer_t {
 
   int ptzr;
 
-  qtmp4_demuxer_t():
+  qtmp4_demuxer_c():
     ok(false), type('?'), id(0), pos(0),
     time_scale(1), global_duration(0), //avg_duration(0),
     sample_size(0),
@@ -172,7 +174,7 @@ struct qtmp4_demuxer_t {
     memset(&a_stsd, 0, sizeof(sound_v1_stsd_atom_t));
   }
 
-  ~qtmp4_demuxer_t() {
+  ~qtmp4_demuxer_c() {
     safefree(v_stsd);
     safefree(priv);
     safefree(esds.decoder_config);
@@ -197,7 +199,7 @@ private:
   void build_index_chunk_mode();
   void build_index_constant_sample_size_mode();
 };
-typedef counted_ptr<qtmp4_demuxer_t> qtmp4_demuxer_ptr;
+typedef counted_ptr<qtmp4_demuxer_c> qtmp4_demuxer_cptr;
 
 struct qt_atom_t {
   uint32_t fourcc;
@@ -221,7 +223,7 @@ struct qt_atom_t {
 class qtmp4_reader_c: public generic_reader_c {
 private:
   mm_io_c *io;
-  vector<qtmp4_demuxer_ptr> demuxers;
+  vector<qtmp4_demuxer_cptr> demuxers;
   int64_t file_size, mdat_pos, mdat_size;
   uint32_t time_scale, compression_algorithm;
   int main_dmx;
@@ -242,64 +244,40 @@ public:
 protected:
   virtual void parse_headers();
   virtual void calculate_timecodes();
-  virtual qt_atom_t read_atom(mm_io_c *read_from = NULL,
-                              bool exit_on_error = true);
-  virtual void parse_video_header_priv_atoms(qtmp4_demuxer_ptr &dmx,
-                                             unsigned char *mem, int size,
-                                             int level);
-  virtual void parse_audio_header_priv_atoms(qtmp4_demuxer_ptr &dmx,
-                                             unsigned char *mem, int size,
-                                             int level);
-  virtual bool parse_esds_atom(mm_mem_io_c &memio, qtmp4_demuxer_ptr &dmx,
-                               int level);
+  virtual qt_atom_t read_atom(mm_io_c *read_from = NULL, bool exit_on_error = true);
+  virtual void parse_video_header_priv_atoms(qtmp4_demuxer_cptr &dmx, unsigned char *mem, int size, int level);
+  virtual void parse_audio_header_priv_atoms(qtmp4_demuxer_cptr &dmx, unsigned char *mem, int size, int level);
+  virtual bool parse_esds_atom(mm_mem_io_c &memio, qtmp4_demuxer_cptr &dmx, int level);
   virtual uint32_t read_esds_descr_len(mm_mem_io_c &memio);
 
   virtual void handle_cmov_atom(qt_atom_t parent, int level);
   virtual void handle_cmvd_atom(qt_atom_t parent, int level);
-  virtual void handle_ctts_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
-                                int level);
+  virtual void handle_ctts_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
   virtual void handle_dcom_atom(qt_atom_t parent, int level);
-  virtual void handle_hdlr_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
-                                int level);
-  virtual void handle_mdhd_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
-                                int level);
-  virtual void handle_mdia_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
-                                int level);
-  virtual void handle_minf_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
-                                int level);
+  virtual void handle_hdlr_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
+  virtual void handle_mdhd_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
+  virtual void handle_mdia_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
+  virtual void handle_minf_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
   virtual void handle_moov_atom(qt_atom_t parent, int level);
   virtual void handle_mvhd_atom(qt_atom_t parent, int level);
-  virtual void handle_stbl_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
-                                int level);
-  virtual void handle_stco_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
-                                int level);
-  virtual void handle_co64_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
-                                int level);
-  virtual void handle_stsc_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
-                                int level);
-  virtual void handle_stsd_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
-                                int level);
-  virtual void handle_stss_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
-                                int level);
-  virtual void handle_stsz_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
-                                int level);
-  virtual void handle_sttd_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
-                                int level);
-  virtual void handle_stts_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
-                                int level);
-  virtual void handle_tkhd_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
-                                int level);
-  virtual void handle_trak_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
-                                int level);
-  virtual void handle_edts_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
-                                int level);
-  virtual void handle_elst_atom(qtmp4_demuxer_ptr &new_dmx, qt_atom_t parent,
-                                int level);
+  virtual void handle_stbl_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
+  virtual void handle_stco_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
+  virtual void handle_co64_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
+  virtual void handle_stsc_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
+  virtual void handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
+  virtual void handle_stss_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
+  virtual void handle_stsz_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
+  virtual void handle_sttd_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
+  virtual void handle_stts_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
+  virtual void handle_tkhd_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
+  virtual void handle_trak_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
+  virtual void handle_edts_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
+  virtual void handle_elst_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
 
-  virtual memory_cptr create_bitmap_info_header(qtmp4_demuxer_ptr &dmx, const char *fourcc, int extra_size = 0, const void *extra_data = NULL);
+  virtual memory_cptr create_bitmap_info_header(qtmp4_demuxer_cptr &dmx, const char *fourcc, int extra_size = 0, const void *extra_data = NULL);
 
-  virtual void create_video_packetizer_svq1(qtmp4_demuxer_ptr &dmx);
-  virtual bool create_audio_packetizer_ac3(qtmp4_demuxer_ptr &dmx);
+  virtual void create_video_packetizer_svq1(qtmp4_demuxer_cptr &dmx);
+  virtual bool create_audio_packetizer_ac3(qtmp4_demuxer_cptr &dmx);
 };
 
 #endif  // __R_QTMP4_H
