@@ -1,0 +1,11 @@
+#! /bin/sh
+
+set -e
+
+[ "$1" = "remove" ] || [ "$1" = "deconfigure" ] && \
+        update-alternatives --remove mkvinfo /usr/bin/mkvinfo-gui
+
+#DEBHELPER#
+
+exit 0
+

@@ -1,0 +1,18 @@
+#! /bin/sh
+
+set -e
+
+if test -e /usr/bin/mkvinfo && ! test -L /usr/bin/mkvinfo; then
+   echo "Error. /usr/bin/mkvinfo is not a symlink. This is a bug in "
+   echo "the mkvtoolnix package or you installed a binary in /usr/bin/mkvinfo."
+   echo "Aborting."
+   exit 1
+fi
+
+update-alternatives --install /usr/bin/mkvinfo mkvinfo /usr/bin/mkvinfo-text 30
+
+#test -e /usr/bin/mkvinfo || ln -s /etc/alternatives/mkvinfo /usr/bin
+
+#DEBHELPER#
+
+exit 0
