@@ -324,7 +324,13 @@ cluster_helper_c::render() {
   else
     lacing_type = LACING_AUTO;
 
-  for (vector<packet_cptr>::iterator pack_it = packets.begin(); packets.end() != pack_it; pack_it++) {
+  // Make sure that we don't have negative/wrapped around timecodes in the output file.
+  // Can happend when we're splitting; so adjust timecode_offset accordingly.
+  vector<packet_cptr>::iterator pack_it;
+  mxforeach(pack_it, packets)
+    timecode_offset = MXMIN(timecode_offset, (*pack_it)->assigned_timecode);
+
+  mxforeach(pack_it, packets) {
     packet_cptr &pack = *pack_it;
     source = pack->source;
 
