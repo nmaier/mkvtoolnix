@@ -36,7 +36,8 @@
 	libmatroska uses to the current timecode. This seems to get rid of
 	libmatroska's assertions about the local timecode being to
 	small/big to fit into an int16. It also seems to get rid of some
-	of mkvmerge's errors about the packet queue not being empty.
+	of mkvmerge's errors about the packet queue not being empty, and
+	it fixes a couple of crashes with file splitting.
 
 2007-12-22  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -55,7 +56,7 @@
 	* mkvmerge: bug fix: MPEG PS reader: Fixed the resyncing mechanism
 	during normal reads. Another fix for bug 259.
 
-	* mkvmerge: bug fix: MPEG PS reader: mkvmerge tries to resyncto
+	* mkvmerge: bug fix: MPEG PS reader: mkvmerge tries to resync to
 	the next MPEG start code in case of error during stream
 	detection. Fix for bug 259.
 
