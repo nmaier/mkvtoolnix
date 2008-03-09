@@ -21,6 +21,9 @@
 #include "common.h"
 #include "dts_common.h"
 
+#define DTS_HEADER_MAGIC    0x7ffe8001
+#define DTS_HD_HEADER_MAGIC 0x64582025
+
 // ---------------------------------------------------------------------------
 
 struct channel_arrangement {
@@ -37,21 +40,14 @@ static const channel_arrangement channel_arrangements[16] = {
   { 3, "C, L, R (center, left, right)" },
   { 3, "L, R, S (left, right, surround)" },
   { 4, "C, L, R, S (center, left, right, surround)" },
-  { 4, "L, R, SL, SR (left, right, surround-left, surround-right)"},
-  { 5, "C, L, R, SL, SR (center, left, right, surround-left, surround-right)"},
-  { 6, "CL, CR, L, R, SL, SR (center-left, center-right, left, right, "
-    "surround-left, surround-right)"},
-  { 6, "C, L, R, LR, RR, OV (center, left, right, left-rear, right-rear, "
-    "overhead)"},
-  { 6, "CF, CR, LF, RF, LR, RR  (center-front, center-rear, left-front, "
-    "right-front, left-rear, right-rear)"},
-  { 7, "CL, C, CR, L, R, SL, SR  (center-left, center, center-right, left, "
-    "right, surround-left, surround-right)"},
-  { 8, "CL, CR, L, R, SL1, SL2, SR1, SR2 (center-left, center-right, left, "
-    "right, surround-left1, surround-left2, surround-right1, "
-    "surround-right2)"},
-  { 8, "CL, C, CR, L, R, SL, S, SR (center-left, center, center-right, left, "
-    "right, surround-left, surround, surround-right)"}
+  { 4, "L, R, SL, SR (left, right, surround-left, surround-right)" },
+  { 5, "C, L, R, SL, SR (center, left, right, surround-left, surround-right)" },
+  { 6, "CL, CR, L, R, SL, SR (center-left, center-right, left, right, surround-left, surround-right)" },
+  { 6, "C, L, R, LR, RR, OV (center, left, right, left-rear, right-rear, overhead)" },
+  { 6, "CF, CR, LF, RF, LR, RR  (center-front, center-rear, left-front, right-front, left-rear, right-rear)" },
+  { 7, "CL, C, CR, L, R, SL, SR  (center-left, center, center-right, left, right, surround-left, surround-right)" },
+  { 8, "CL, CR, L, R, SL1, SL2, SR1, SR2 (center-left, center-right, left, right, surround-left1, surround-left2, surround-right1, surround-right2)" },
+  { 8, "CL, C, CR, L, R, SL, S, SR (center-left, center, center-right, left, right, surround-left, surround, surround-right)" },
   // other modes are not defined as of yet
 };
 
@@ -88,36 +84,31 @@ enum source_pcm_resolution {
 int
 find_dts_header_internal(const unsigned char *buf,
                          unsigned int size,
-                         struct dts_header_s *dts_header) {
+                         struct dts_header_s *dts_header,
+                         bool allow_no_hd_search) {
 
-  unsigned int size_to_search = size-15;
+  unsigned int size_to_search = size - 15;
   if (size_to_search > size) {
     // not enough data for one header
     return -1;
   }
 
   unsigned int offset;
-  for (offset = 0; offset < size_to_search; offset++) {
+  for (offset = 0; offset < size_to_search; ++offset)
      // sync words appear aligned in the bit stream
-    if (buf[offset]     == 0x7f &&
-        buf[offset + 1] == 0xfe &&
-        buf[offset + 2] == 0x80 &&
-        buf[offset + 3] == 0x01) {
+    if (get_uint32_be(buf + offset) == DTS_HEADER_MAGIC)
       break;
-    }
-  }
-  if (offset >= size_to_search) {
+
+  if (offset >= size_to_search)
     // no header found
     return -1;
-  }
 
-  bit_cursor_c bc(buf+offset+4, size-offset-4);
+  bit_cursor_c bc(buf + offset + 4, size - offset - 4);
 
   unsigned int t;
 
   t = bc.get_bit();
-  dts_header->frametype = (t)? dts_header_s::FRAMETYPE_NORMAL :
-    dts_header_s::FRAMETYPE_TERMINATION;
+  dts_header->frametype = (t)? dts_header_s::FRAMETYPE_NORMAL : dts_header_s::FRAMETYPE_TERMINATION;
 
   t = bc.get_bits(5);
   dts_header->deficit_sample_count = (t+1) % 32;
@@ -166,8 +157,7 @@ find_dts_header_internal(const unsigned char *buf,
   dts_header->hdcd_master = bc.get_bit();
 
   t = bc.get_bits(3);
-  dts_header->extension_audio_descriptor =
-    (dts_header_s::extension_audio_descriptor_e)t;
+  dts_header->extension_audio_descriptor = (dts_header_s::extension_audio_descriptor_e)t;
 
   dts_header->extended_coding = bc.get_bit();
 
@@ -184,14 +174,12 @@ find_dts_header_internal(const unsigned char *buf,
   }
 
   t = bc.get_bit();
-  dts_header->multirate_interpolator =
-    (dts_header_s::multirate_interpolator_e)t;
+  dts_header->multirate_interpolator = (dts_header_s::multirate_interpolator_e)t;
 
   t = bc.get_bits(4);
   dts_header->encoder_software_revision = t;
   if (t > 7) {
-    mxwarn("DTS_Header problem: encoded with an incompatible new "
-           "encoder version\n");
+    mxwarn("DTS_Header problem: encoded with an incompatible new encoder version\n");
     return -1;
   }
 
@@ -248,16 +236,34 @@ find_dts_header_internal(const unsigned char *buf,
     dts_header->dialog_normalization_gain = 0;
   }
 
-  return offset;
+  // Detect DTS HD master audio / high resolution part
+  dts_header->dts_hd       = false;
+  dts_header->hd_type      = dts_header_t::DTSHD_NONE;
+  dts_header->hd_part_size = 0;
 
+  int hd_offset            = offset + dts_header->frame_byte_size;
+
+  if ((hd_offset + 9) > size)
+    return allow_no_hd_search ? offset : -1;
+
+  if (get_uint32_be(buf + hd_offset) != DTS_HD_HEADER_MAGIC)
+    return offset;
+
+  dts_header->dts_hd           = true;
+  dts_header->hd_type          = (buf[hd_offset + 5] & 0x80) ? dts_header_t::DTSHD_MASTER_AUDIO : dts_header_t::DTSHD_HIGH_RESOLUTION;
+  dts_header->hd_part_size     = ((unsigned int)(buf[hd_offset + 6] & 0x0f) << 11) + ((unsigned int)buf[hd_offset + 7] << 3) + ((buf[hd_offset + 8] >> 5) & 0x07) + 1;
+  dts_header->frame_byte_size += dts_header->hd_part_size;
+
+  return offset;
 }
 
 int
 find_dts_header(const unsigned char *buf,
                 unsigned int size,
-                struct dts_header_s *dts_header) {
+                struct dts_header_s *dts_header,
+                bool allow_no_hd_search) {
   try {
-    return find_dts_header_internal(buf, size, dts_header);
+    return find_dts_header_internal(buf, size, dts_header, allow_no_hd_search);
   } catch (...) {
     mxwarn("DTS_Header problem: not enough data to read header\n");
     return -1;
@@ -375,6 +381,11 @@ print_dts_header(const struct dts_header_s *h) {
 
   mxinfo("Dialog Normaliz. Gain  : %d\n",
          h->dialog_normalization_gain);
+
+  if (!h->dts_hd)
+    mxinfo("DTS HD                 : no\n");
+  else
+    mxinfo("DTS HD                 : %s, size %d\n", h->hd_type == dts_header_t::DTSHD_MASTER_AUDIO ? "master audio" : "high resolution", h->hd_part_size);
 }
 
 void
@@ -479,53 +490,31 @@ operator!=(const dts_header_t &l,
            const dts_header_t &r) {
   //if (l.frametype != r.frametype) return true;
   //if (l.deficit_sample_count != r.deficit_sample_count) return true;
-  if (l.crc_present != r.crc_present)
+  if ((   l.crc_present                        != r.crc_present)
+      || (l.num_pcm_sample_blocks              != r.num_pcm_sample_blocks)
+      || ((l.frame_byte_size - l.hd_part_size) != (r.frame_byte_size - r.hd_part_size))
+      || (l.audio_channels                     != r.audio_channels)
+      || (l.core_sampling_frequency            != r.core_sampling_frequency)
+      || (l.transmission_bitrate               != r.transmission_bitrate)
+      || (l.embedded_down_mix                  != r.embedded_down_mix)
+      || (l.embedded_dynamic_range             != r.embedded_dynamic_range)
+      || (l.embedded_time_stamp                != r.embedded_time_stamp)
+      || (l.auxiliary_data                     != r.auxiliary_data)
+      || (l.hdcd_master                        != r.hdcd_master)
+      || (l.extension_audio_descriptor         != r.extension_audio_descriptor)
+      || (l.extended_coding                    != r.extended_coding)
+      || (l.audio_sync_word_in_sub_sub         != r.audio_sync_word_in_sub_sub)
+      || (l.lfe_type                           != r.lfe_type)
+      || (l.predictor_history_flag             != r.predictor_history_flag)
+      || (l.multirate_interpolator             != r.multirate_interpolator)
+      || (l.encoder_software_revision          != r.encoder_software_revision)
+      || (l.copy_history                       != r.copy_history)
+      || (l.source_pcm_resolution              != r.source_pcm_resolution)
+      || (l.source_surround_in_es              != r.source_surround_in_es)
+      || (l.front_sum_difference               != r.front_sum_difference)
+      || (l.surround_sum_difference            != r.surround_sum_difference)
+      || (l.dialog_normalization_gain          != r.dialog_normalization_gain))
     return true;
-  if (l.num_pcm_sample_blocks != r.num_pcm_sample_blocks)
-    return true;
-  if (l.frame_byte_size != r.frame_byte_size)
-    return true;
-  if (l.audio_channels != r.audio_channels)
-    return true;
-  if (l.core_sampling_frequency != r.core_sampling_frequency)
-    return true;
-  if (l.transmission_bitrate != r.transmission_bitrate)
-    return true;
-  if (l.embedded_down_mix != r.embedded_down_mix)
-    return true;
-  if (l.embedded_dynamic_range != r.embedded_dynamic_range)
-    return true;
-  if (l.embedded_time_stamp != r.embedded_time_stamp)
-    return true;
-  if (l.auxiliary_data != r.auxiliary_data)
-    return true;
-  if (l.hdcd_master != r.hdcd_master)
-    return true;
-  if (l.extension_audio_descriptor != r.extension_audio_descriptor)
-    return true;
-  if (l.extended_coding != r.extended_coding)
-    return true;
-  if (l.audio_sync_word_in_sub_sub != r.audio_sync_word_in_sub_sub)
-    return true;
-  if (l.lfe_type != r.lfe_type)
-    return true;
-  if (l.predictor_history_flag != r.predictor_history_flag)
-    return true;
-  if (l.multirate_interpolator != r.multirate_interpolator)
-    return true;
-  if (l.encoder_software_revision != r.encoder_software_revision)
-    return true;
-  if (l.copy_history != r.copy_history)
-    return true;
-  if (l.source_pcm_resolution != r.source_pcm_resolution)
-    return true;
-  if (l.source_surround_in_es != r.source_surround_in_es)
-    return true;
-  if (l.front_sum_difference != r.front_sum_difference)
-    return true;
-  if (l.surround_sum_difference != r.surround_sum_difference)
-    return true;
-  if (l.dialog_normalization_gain != r.dialog_normalization_gain)
-    return true;
+
   return false;
 }

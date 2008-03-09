@@ -867,7 +867,7 @@ mpeg_ps_reader_c::new_stream_a_dts(int id,
                                    unsigned char *buf,
                                    int length,
                                    mpeg_ps_track_ptr &track) {
-  if (-1 == find_dts_header(buf, length, &track->dts_header))
+  if (-1 == find_dts_header(buf, length, &track->dts_header, false))
     throw false;
 }
 
@@ -957,8 +957,8 @@ mpeg_ps_reader_c::found_new_stream(int id) {
     else if (track->fourcc == FOURCC('A', 'C', '3', ' '))
       new_stream_a_ac3(id, buf, length, track);
 
-//     else if (track->fourcc == FOURCC('D', 'T', 'S', ' '))
-//       new_stream_a_dts(id, buf, length, track);
+    else if (track->fourcc == FOURCC('D', 'T', 'S', ' '))
+      new_stream_a_dts(id, buf, length, track);
 
     else
       // Unsupported track type
@@ -1122,11 +1122,9 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
                id, 16 == track->a_bsid ? "E" : "");
 
     } else if (track->fourcc == FOURCC('D', 'T', 'S', ' ')) {
-      track->ptzr =
-        add_packetizer(new dts_packetizer_c(this, track->dts_header, ti));
+      track->ptzr = add_packetizer(new dts_packetizer_c(this, track->dts_header, ti, true));
       if (verbose)
-        mxinfo(FMT_TID "Using the DTS output module.\n", ti.fname.c_str(),
-               id);
+        mxinfo(FMT_TID "Using the DTS output module.\n", ti.fname.c_str(), id);
 
     } else
       mxerror("mpeg_ps_reader: Should not have happened #1. %s", BUGMSG);

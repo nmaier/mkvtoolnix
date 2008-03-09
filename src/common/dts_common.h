@@ -140,11 +140,19 @@ typedef struct dts_header_s {
 
   // gain in dB to apply for dialog normalization
   int dialog_normalization_gain;
+
+  bool dts_hd;
+  enum dts_hd_type_e {
+    DTSHD_NONE,
+    DTSHD_HIGH_RESOLUTION,
+    DTSHD_MASTER_AUDIO,
+  } hd_type;
+  int hd_part_size;
+
 } dts_header_t;
 
 
-int MTX_DLL_API find_dts_header(const unsigned char *buf, unsigned int size,
-                                struct dts_header_s *dts_header);
+int MTX_DLL_API find_dts_header(const unsigned char *buf, unsigned int size, struct dts_header_s *dts_header, bool allow_no_hd_search = false);
 void MTX_DLL_API print_dts_header(const struct dts_header_s *dts_header);
 
 inline int get_dts_packet_length_in_core_samples(const struct dts_header_s

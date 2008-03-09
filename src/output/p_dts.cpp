@@ -64,7 +64,7 @@ dts_packetizer_c::dts_packet_available() {
   if (packet_buffer == NULL)
     return 0;
 
-  pos = find_dts_header(packet_buffer, buffer_size, &dtsheader);
+  pos = find_dts_header(packet_buffer, buffer_size, &dtsheader, get_first_header_later ? false : !first_header.dts_hd);
   if (pos < 0)
     return 0;
 
@@ -96,7 +96,7 @@ dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
 
   if (packet_buffer == NULL)
     return 0;
-  pos = find_dts_header(packet_buffer, buffer_size, &dtsheader);
+  pos = find_dts_header(packet_buffer, buffer_size, &dtsheader, get_first_header_later ? false : !first_header.dts_hd);
   if (pos < 0)
     return 0;
   if ((pos + dtsheader.frame_byte_size) > buffer_size)
@@ -115,7 +115,6 @@ dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
     print_dts_header(&dtsheader);
     last_header = dtsheader;
   }
-
 
   pins = get_dts_packet_length_in_nanoseconds(&dtsheader);
 
