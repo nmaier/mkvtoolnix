@@ -26,77 +26,100 @@ extern "C" {
 
 #include "common.h"
 #include "error.h"
+#include "id3_common.h"
 #include "r_ac3.h"
 #include "p_ac3.h"
+
+#define AC3_READ_SIZE 16384
 
 int
 ac3_reader_c::probe_file(mm_io_c *io,
                          int64_t size,
                          int64_t probe_size,
                          int num_headers) {
-  return (find_valid_headers(io, probe_size, num_headers) != -1) ? 1 : 0;
+  try {
+    io->setFilePointer(0, seek_beginning);
+    skip_id3v2_tag(*io);
+    return (find_valid_headers(io, probe_size, num_headers) != -1) ? 1 : 0;
+
+  } catch (...) {
+    return 0;
+  }
 }
 
 ac3_reader_c::ac3_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(_ti) {
-  int pos;
+  generic_reader_c(_ti),
+  chunk(memory_c::alloc(AC3_READ_SIZE)) {
 
   try {
-    io = new mm_file_io_c(ti.fname);
-    size = io->get_size();
-    chunk = (unsigned char *)safemalloc(4096);
-    if (io->read(chunk, 4096) != 4096)
-      throw error_c("ac3_reader: Could not read 4096 bytes.");
-    io->setFilePointer(0, seek_beginning);
+    io                 = new mm_file_io_c(ti.fname);
+    size               = io->get_size();
+
+    int tag_size_start = skip_id3v2_tag(*io);
+    int tag_size_end   = id3_tag_present_at_end(*io);
+
+    if (0 > tag_size_start)
+      tag_size_start = 0;
+    if (0 < tag_size_end)
+      size -= tag_size_end;
+
+    int init_read_len = MXMIN(size - tag_size_start, AC3_READ_SIZE);
+
+    if (io->read(chunk->get(), init_read_len) != init_read_len)
+      throw error_c(mxsprintf("ac3_reader: Could not read %d bytes.", AC3_READ_SIZE));
+
+    io->setFilePointer(tag_size_start, seek_beginning);
+
   } catch (...) {
     throw error_c("ac3_reader: Could not open the source file.");
   }
-  pos = find_ac3_header(chunk, 4096, &ac3header);
+
+  int pos = find_ac3_header(chunk->get(), AC3_READ_SIZE, &ac3header);
   if (pos < 0)
-    throw error_c("ac3_reader: No valid AC3 packet found in the first "
-                  "4096 bytes.\n");
+    throw error_c(mxsprintf("ac3_reader: No valid AC3 packet found in the first %d bytes.\n", AC3_READ_SIZE));
+
   bytes_processed = 0;
-  ti.id = 0;                   // ID for this track.
+  ti.id           = 0;          // ID for this track.
+
   if (verbose)
     mxinfo(FMT_FN "Using the AC3 demultiplexer.\n", ti.fname.c_str());
 }
 
 ac3_reader_c::~ac3_reader_c() {
   delete io;
-  safefree(chunk);
 }
 
 void
 ac3_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
-  add_packetizer(new ac3_packetizer_c(this, ac3header.sample_rate,
-                                      ac3header.channels, ac3header.bsid, ti));
-  mxinfo(FMT_TID "Using the %sAC3 output module.\n", ti.fname.c_str(),
-         (int64_t)0, 16 == ac3header.bsid ? "E" : "");
+
+  add_packetizer(new ac3_packetizer_c(this, ac3header.sample_rate, ac3header.channels, ac3header.bsid, ti));
+  mxinfo(FMT_TID "Using the %sAC3 output module.\n", ti.fname.c_str(), (int64_t)0, 16 == ac3header.bsid ? "E" : "");
 }
 
 file_status_e
 ac3_reader_c::read(generic_packetizer_c *,
                    bool) {
-  int nread;
+  int remaining_bytes = size - io->getFilePointer();
+  int read_len        = MXMIN(AC3_READ_SIZE, remaining_bytes);
+  int num_read        = io->read(chunk->get(), read_len);
 
-  nread = io->read(chunk, 4096);
-  if (nread <= 0) {
+  if (num_read < 0) {
     PTZR0->flush();
     return FILE_STATUS_DONE;
   }
 
-  PTZR0->process(new packet_t(new memory_c(chunk, nread, false)));
-  bytes_processed += nread;
+  PTZR0->process(new packet_t(new memory_c(chunk->get(), num_read, false)));
+  bytes_processed += num_read;
 
-  if ((nread < 4096) || io->eof()) {
-    PTZR0->flush();
-    return FILE_STATUS_DONE;
-  }
+  if ((remaining_bytes - num_read) > 0)
+    return FILE_STATUS_MOREDATA;
 
-  return FILE_STATUS_MOREDATA;
+  PTZR0->flush();
+
+  return FILE_STATUS_DONE;
 }
 
 int
@@ -114,17 +137,19 @@ int
 ac3_reader_c::find_valid_headers(mm_io_c *io,
                                  int64_t probe_range,
                                  int num_headers) {
-  unsigned char *buf;
-  int pos, nread;
-
   try {
+    memory_cptr buf(memory_c::alloc(probe_range));
+
     io->setFilePointer(0, seek_beginning);
-    buf = (unsigned char *)safemalloc(probe_range);
-    nread = io->read(buf, probe_range);
-    pos = find_consecutive_ac3_headers(buf, nread, num_headers);
-    safefree(buf);
+    skip_id3v2_tag(*io);
+
+    int num_read = io->read(buf->get(), probe_range);
+    int pos      = find_consecutive_ac3_headers(buf->get(), num_read, num_headers);
+
     io->setFilePointer(0, seek_beginning);
+
     return pos;
+
   } catch (...) {
     return -1;
   }

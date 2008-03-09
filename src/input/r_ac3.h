@@ -28,7 +28,7 @@
 
 class ac3_reader_c: public generic_reader_c {
 private:
-  unsigned char *chunk;
+  memory_cptr chunk;
   mm_io_c *io;
   int64_t bytes_processed, size;
   ac3_header_t ac3header;
