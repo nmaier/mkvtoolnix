@@ -20,6 +20,7 @@
 
 #include "common.h"
 #include "error.h"
+#include "id3_common.h"
 #include "r_aac.h"
 #include "p_aac.h"
 #include "output_control.h"
@@ -37,26 +38,28 @@ aac_reader_c::probe_file(mm_io_c *io,
     return 0;
   try {
     io->setFilePointer(0, seek_beginning);
+    skip_id3v2_tag(*io);
     if (io->read(buf, PROBESIZE) != PROBESIZE)
       io->setFilePointer(0, seek_beginning);
     io->setFilePointer(0, seek_beginning);
   } catch (...) {
     return 0;
   }
+
   if (parse_aac_adif_header(buf, PROBESIZE, &aacheader))
     return 1;
+
   pos = find_aac_header(buf, PROBESIZE, &aacheader, false);
   if ((pos < 0) || ((pos + aacheader.bytes) >= PROBESIZE)) {
     pos = find_aac_header(buf, PROBESIZE, &aacheader, true);
     if ((pos < 0) || ((pos + aacheader.bytes) >= PROBESIZE))
       return 0;
-    pos = find_aac_header(&buf[pos + aacheader.bytes], PROBESIZE - pos -
-                          aacheader.bytes, &aacheader, true);
+    pos = find_aac_header(&buf[pos + aacheader.bytes], PROBESIZE - pos - aacheader.bytes, &aacheader, true);
     if (pos != 0)
       return 0;
   }
-  pos = find_aac_header(&buf[pos + aacheader.bytes], PROBESIZE - pos -
-                        aacheader.bytes, &aacheader, false);
+
+  pos = find_aac_header(&buf[pos + aacheader.bytes], PROBESIZE - pos - aacheader.bytes, &aacheader, false);
   if (pos != 0)
     return 0;
 
@@ -73,26 +76,38 @@ aac_reader_c::aac_reader_c(track_info_c &_ti)
   int adif, detected_profile;
 
   try {
-    io = new mm_file_io_c(ti.fname);
-    size = io->get_size();
-    chunk = (unsigned char *)safemalloc(INITCHUNKSIZE);
-    if (io->read(chunk, INITCHUNKSIZE) != INITCHUNKSIZE)
-      throw error_c("aac_reader: Could not read " SINITCHUNKSIZE " bytes.");
-    io->setFilePointer(0, seek_beginning);
-    if (parse_aac_adif_header(chunk, INITCHUNKSIZE, &aacheader)) {
+    io                 = new mm_file_io_c(ti.fname);
+    size               = io->get_size();
+
+    int tag_size_start = skip_id3v2_tag(*io);
+    int tag_size_end   = id3_tag_present_at_end(*io);
+
+    if (0 > tag_size_start)
+      tag_size_start = 0;
+    if (0 < tag_size_end)
+      size -= tag_size_end;
+
+    int init_read_len = MXMIN(size - tag_size_start, INITCHUNKSIZE);
+    chunk             = (unsigned char *)safemalloc(INITCHUNKSIZE);
+
+    if (io->read(chunk, init_read_len) != init_read_len)
+      throw error_c(mxsprintf("aac_reader: Could not read %d bytes.", init_read_len));
+
+    io->setFilePointer(tag_size_start, seek_beginning);
+
+    if (parse_aac_adif_header(chunk, init_read_len, &aacheader)) {
       throw error_c("aac_reader: ADIF header files are not supported.");
       adif = 1;
+
     } else {
-      if (find_aac_header(chunk, INITCHUNKSIZE, &aacheader, emphasis_present)
-          != 0)
-        throw error_c("aac_reader: No valid AAC packet found in the first "
-                      SINITCHUNKSIZE " bytes.\n");
+      if (find_aac_header(chunk, init_read_len, &aacheader, emphasis_present) != 0)
+        throw error_c(mxsprintf("aac_reader: No valid AAC packet found in the first %d bytes.\n", init_read_len));
       guess_adts_version();
       adif = 0;
     }
-    bytes_processed = 0;
-    ti.id = 0;                 // ID for this track.
 
+    ti.id            = 0;       // ID for this track.
+    bytes_processed  = 0;
     detected_profile = aacheader.profile;
 
     if (24000 >= aacheader.sample_rate)
@@ -113,6 +128,7 @@ aac_reader_c::aac_reader_c(track_info_c &_ti)
   } catch (...) {
     throw error_c("aac_reader: Could not open the file.");
   }
+
   if (verbose)
     mxinfo(FMT_FN "Using the AAC demultiplexer.\n", ti.fname.c_str());
 }
@@ -176,17 +192,24 @@ aac_reader_c::guess_adts_version() {
 file_status_e
 aac_reader_c::read(generic_packetizer_c *,
                    bool) {
-  int nread;
+  int remaining_bytes = size - io->getFilePointer();
+  int read_len        = MXMIN(INITCHUNKSIZE, remaining_bytes);
+  int num_read        = io->read(chunk, read_len);
 
-  nread = io->read(chunk, 4096);
-  if (nread <= 0) {
+  if (num_read < 0) {
     PTZR0->flush();
     return FILE_STATUS_DONE;
   }
-  PTZR0->process(new packet_t(new memory_c(chunk, nread, false)));
-  bytes_processed += nread;
 
-  return FILE_STATUS_MOREDATA;
+  PTZR0->process(new packet_t(new memory_c(chunk, num_read, false)));
+  bytes_processed += num_read;
+
+  if ((remaining_bytes - num_read) > 0)
+    return FILE_STATUS_MOREDATA;
+
+  PTZR0->flush();
+
+  return FILE_STATUS_DONE;
 }
 
 int
