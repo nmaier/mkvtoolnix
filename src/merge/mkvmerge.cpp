@@ -1608,7 +1608,7 @@ parse_args(vector<string> args) {
         mxerror(_("'%s' is not a valid priority class.\n"), next_arg.c_str());
       sit++;
 
-    } else if (this_arg == "-q")
+    } else if ((this_arg == "-q") || (this_arg == "--quiet"))
       verbose = 0;
 
     else if ((this_arg == "-v") || (this_arg == "--verbose"))
