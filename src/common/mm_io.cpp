@@ -458,36 +458,58 @@ mm_file_io_c::setup() {
 void
 mm_file_io_c::prepare_path(const string &path) {
   string local_path = path; // contains copy of given path
+  string cur_path;
 
 #if defined(SYS_WINDOWS)
-  bool first_part = true;
   const string SEPARATOR ("\\");
   // convert separators for current OS
   std::replace(local_path.begin(), local_path.end(), '/', '\\');
+
+  if (local_path.substr(0, 2) == "\\\\") {
+    // UNC paths -- don't try to create the host name as a directory.
+
+    // Fint the host name
+    string::size_type position = local_path.find(SEPARATOR, 2);
+    if (string::npos == position)
+      return;
+
+    // Find the share name
+    position = local_path.find(SEPARATOR, position + 1);
+    if (string::npos == position)
+      return;
+
+    cur_path = local_path.substr(0, position);
+    local_path.erase(0, position + 1);
+
+  } else if ((local_path.size() > 1) && (local_path[1] == ':')) {
+    // Skip drive letters.
+    cur_path = local_path.substr(0, 2);
+    local_path.erase(0, 3);
+
+  }
+
 #else  // SYS_WINDOWS
   const string SEPARATOR ("/");
   // convert separators for current OS
   std::replace(local_path.begin(), local_path.end(), '\\', '/');
 #endif // SYS_WINDOWS
 
-  // current position:
-  string::size_type position = local_path.find_first_of(SEPARATOR, 0);
+  vector<string> parts = split(local_path, SEPARATOR);
 
-  while (position != string::npos) {
-    string subpath = local_path.substr(0, position);
+  // The file name is the last element -- remove it.
+  parts.pop_back();
 
-    if ((subpath.size() != 0) && !fs_entry_exists(subpath.c_str())
-#if defined(SYS_WINDOWS)
-        && (!first_part || (subpath.find_first_of(':') == string::npos))
-#endif // SYS_WINDOWS
-        )
-      create_directory(subpath.c_str());
+  for (int i = 0; i < parts.size(); ++i) {
+    // Ignore empty path components.
+    if (parts[i].empty())
+      continue;
 
-    position = local_path.find_first_of(SEPARATOR, position + 1);
+    if (!cur_path.empty())
+      cur_path += SEPARATOR;
+    cur_path   += parts[i];
 
-#if defined(SYS_WINDOWS)
-    first_part = false;
-#endif // SYS_WINDOWS
+    if (!fs_entry_exists(cur_path.c_str()))
+      create_directory(cur_path.c_str());
   }
 }
 
