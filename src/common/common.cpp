@@ -813,13 +813,29 @@ join(const char *pattern,
 }
 
 void
+strip_back(string &s,
+           bool newlines) {
+  const char *c = s.c_str();
+  int len       = s.length();
+  int i         = 0;
+
+  if (newlines)
+    while ((i < len) && (isblanktab(c[len - i - 1]) || iscr(c[len - i - 1])))
+      ++i;
+  else
+    while ((i < len) && isblanktab(c[len - i - 1]))
+      ++i;
+
+  if (i > 0)
+    s.erase(len - i, i);
+}
+
+void
 strip(string &s,
       bool newlines) {
-  int i, len;
-  const char *c;
+  const char *c = s.c_str();
+  int i         = 0;
 
-  c = s.c_str();
-  i = 0;
   if (newlines)
     while ((c[i] != 0) && (isblanktab(c[i]) || iscr(c[i])))
       i++;
@@ -830,19 +846,7 @@ strip(string &s,
   if (i > 0)
     s.erase(0, i);
 
-  c = s.c_str();
-  len = s.length();
-  i = 0;
-
-  if (newlines)
-    while ((i < len) && (isblanktab(c[len - i - 1]) || iscr(c[len - i - 1])))
-      i++;
-  else
-    while ((i < len) && isblanktab(c[len - i - 1]))
-      i++;
-
-  if (i > 0)
-    s.erase(len - i, i);
+  strip_back(s, newlines);
 }
 
 void

@@ -119,7 +119,7 @@ srt_reader_c::parse_file() {
     if (!io->getline2(s))
       break;
     line_number++;
-    strip(s);
+    strip_back(s);
 
     if (s.length() == 0) {
       if ((state == STATE_INITIAL) || (state == STATE_TIME))
@@ -155,7 +155,7 @@ srt_reader_c::parse_file() {
 
       // The previous entry is done now. Append it to the list of subtitles.
       if (subtitles.length() > 0) {
-        strip(subtitles, true);
+        strip_back(subtitles, true);
         subs.add(start, end, subtitles.c_str());
       }
 
@@ -211,7 +211,7 @@ srt_reader_c::parse_file() {
   }
 
   if (subtitles.length() > 0) {
-    strip(subtitles, true);
+    strip_back(subtitles, true);
     subs.add(start, end, subtitles.c_str());
   }
 
