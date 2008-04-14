@@ -20,8 +20,10 @@
 
 /** Start code for a MPEG-4 part 2 (?) video object plain */
 #define MPEGVIDEO_VOP_START_CODE                  0x000001b6
-/** Strt code for a MPEG-4 part 2 group of pictures */
+/** Start code for a MPEG-4 part 2 group of pictures */
 #define MPEGVIDEO_GOP_START_CODE                  0x000001b3
+/** Start code for a MPEG-1/-2 group of pictures */
+#define MPEGVIDEO_GOP12_START_CODE                0x000001b8
 /** Start code for a MPEG-1/-2 sequence header */
 #define MPEGVIDEO_SEQUENCE_START_CODE             0x000001b3
 /** Start code for a MPEG-1 and -2 packet */
@@ -30,6 +32,7 @@
 #define MPEGVIDEO_PROGRAM_STREAM_MAP_START_CODE   0x000001bc
 #define MPEGVIDEO_MPEG_PROGRAM_END_CODE           0x000001b9
 #define MPEGVIDEO_EXT_START_CODE                  0x000001b5
+#define MPEGVIDEO_PICTURE_START_CODE              0x00000100
 
 /** Start code for a MPEG-4 part 2 visual object sequence start marker */
 #define MPEGVIDEO_VOS_START_CODE                  0x000001b0

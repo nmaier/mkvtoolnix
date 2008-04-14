@@ -70,17 +70,34 @@ mpeg_es_reader_c::probe_file(mm_io_c *io,
       return 0;
     }
 
+    // Due to type detection woes mkvmerge requires
+    // the stream to start with a MPEG start code.
+    if (!mpeg_is_start_code(value))
+      return 0;
+
+    bool sequence_start_code_found = false;
+    bool picture_start_code_found  = false;
+    bool gop_start_code_found      = false;
+
     // Let's look for a MPEG ES start code inside the first 1 MB.
-    for (i = 4; i <= num_read; i++) {
-      if (value == MPEGVIDEO_SEQUENCE_START_CODE)
+    for (i = 4; i < num_read - 1; i++) {
+      if (MPEGVIDEO_SEQUENCE_START_CODE == value)
+        sequence_start_code_found = true;
+      else if (MPEGVIDEO_PICTURE_START_CODE == value)
+        picture_start_code_found  = true;
+      else if (MPEGVIDEO_GOP12_START_CODE == value)
+        gop_start_code_found      = true;
+
+      if (sequence_start_code_found && picture_start_code_found && gop_start_code_found)
         break;
-      if (i < num_read) {
-        value <<= 8;
-        value |= buf[i];
-      }
+
+      value <<= 8;
+      value  |= buf[i];
     }
+
     safefree(buf);
-    if (value != MPEGVIDEO_SEQUENCE_START_CODE)
+
+    if (!(sequence_start_code_found && picture_start_code_found && gop_start_code_found))
       return 0;
 
     // Let's try to read one frame.

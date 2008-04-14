@@ -1,3 +1,8 @@
+2008-04-14  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Tuned the file type detection for MPEG ES
+	streams. Fix for bug 265.
+
 2008-04-03  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed writing to UNC paths on Windows. Fix
