@@ -1,3 +1,9 @@
+2008-04-16  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed wrong timecodes for MP4 files that
+	contain video tracks with B frames and edit lists. Fix for bug
+	277. Patch by Damiano Galassi (see AUTHORS).
+
 2008-04-14  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: mkvmerge will not strip leading spaces in

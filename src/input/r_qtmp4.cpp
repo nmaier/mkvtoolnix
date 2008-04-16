@@ -1566,15 +1566,20 @@ qtmp4_demuxer_c::calculate_timecodes() {
 
       frame_indices.push_back(real_frame);
 
+      timecodes_before_offsets.push_back(timecode);
+
+      if (('v' == type) && (frame_offset_table.size() > real_frame) && v_is_avc)
+         timecode += to_nsecs(frame_offset_table[real_frame]) - v_dts_offset;
+
     } else {
       timecode = to_nsecs(sample_table[frame].pts);
       frame_indices.push_back(frame);
+
+      timecodes_before_offsets.push_back(timecode);
+
+      if (('v' == type) && (frame_offset_table.size() > frame) && v_is_avc)
+         timecode += to_nsecs(frame_offset_table[frame]) - v_dts_offset;
     }
-
-    timecodes_before_offsets.push_back(timecode);
-
-    if (('v' == type) && (frame_offset_table.size() > frame) && v_is_avc)
-      timecode += to_nsecs(frame_offset_table[frame]) - v_dts_offset;
 
     timecodes.push_back(timecode);
 
@@ -1726,6 +1731,8 @@ qtmp4_demuxer_c::update_editlist_table(int64_t global_time_scale) {
   for (i = 0; editlist_table.size() > i; ++i) {
     qt_editlist_t &el = editlist_table[i];
     int sample = 0, pts = el.pos;
+    if (('v' == type) && v_is_avc && !frame_offset_table.empty())
+        pts -= frame_offset_table[0];
 
     el.start_frame = frame;
 
