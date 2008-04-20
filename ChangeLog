@@ -1,3 +1,9 @@
+2008-04-20  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: all: On Unix/Linux rpath linker flags are added for
+	library paths given in LDFLAGS and configure's "--with-extra-libs"
+	options.
+
 2008-04-16  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed wrong timecodes for MP4 files that
