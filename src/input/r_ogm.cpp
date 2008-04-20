@@ -799,7 +799,7 @@ ogm_reader_c::handle_stream_comments() {
           out->puts(to_utf8(cch, chapter_strings[j]) + string("\n"));
         out->set_file_name(ti.fname);
 
-        auto_ptr<mm_text_io_c> text_out;
+        auto_ptr<mm_text_io_c> text_out(new mm_text_io_c(out.get(), false));
 
         kax_chapters = parse_chapters(text_out.get());
       } catch (...) {
