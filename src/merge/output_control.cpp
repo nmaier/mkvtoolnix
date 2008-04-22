@@ -73,6 +73,7 @@
 #include "output_control.h"
 #include "r_aac.h"
 #include "r_ac3.h"
+#include "r_asf.h"
 #include "r_avc.h"
 #include "r_avi.h"
 #include "r_dts.h"
@@ -300,7 +301,9 @@ get_file_type(filelist_t &file) {
   }
 
   type = FILE_TYPE_IS_UNKNOWN;
-  if (avi_reader_c::probe_file(io, size))
+  if (asf_reader_c::probe_file(io, size))
+    type = FILE_TYPE_ASF;
+  else if (avi_reader_c::probe_file(io, size))
     type = FILE_TYPE_AVI;
   else if (kax_reader_c::probe_file(io, size))
     type = FILE_TYPE_MATROSKA;

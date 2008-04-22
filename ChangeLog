@@ -1,3 +1,9 @@
+2008-04-22  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: mkvmerge will output a proper error message
+	if it is called with ASF/WMV files instead of detecting other
+	kinds of streams (e.g. AVC ES streams). Fix for bug 280.
+
 2008-04-20  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed an assertion in the OGM reader occuring
