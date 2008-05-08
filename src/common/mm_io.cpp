@@ -494,6 +494,9 @@ mm_file_io_c::prepare_path(const string &path) {
   std::replace(local_path.begin(), local_path.end(), '\\', '/');
 #endif // SYS_WINDOWS
 
+  if (local_path.substr(0, SEPARATOR.length()) == SEPARATOR)
+    cur_path = SEPARATOR;
+
   vector<string> parts = split(local_path, SEPARATOR);
 
   // The file name is the last element -- remove it.
@@ -504,7 +507,7 @@ mm_file_io_c::prepare_path(const string &path) {
     if (parts[i].empty())
       continue;
 
-    if (!cur_path.empty())
+    if (!cur_path.empty() && (cur_path != SEPARATOR))
       cur_path += SEPARATOR;
     cur_path   += parts[i];
 
