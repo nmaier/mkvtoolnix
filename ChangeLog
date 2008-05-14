@@ -1,3 +1,9 @@
+2008-05-14  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Certain Matroska files with dis-continuous
+	streams (e.g. subtitles) caused huge memory consumption. Fix for
+	bug 281.
+
 2008-04-22  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: mkvmerge will output a proper error message

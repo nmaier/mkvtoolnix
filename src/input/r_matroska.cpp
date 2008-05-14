@@ -1335,9 +1335,10 @@ kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
   nti.language = t->language;
   nti.track_name = t->track_name;
 
-  ptzr = new passthrough_packetizer_c(this, nti);
-  t->ptzr = add_packetizer(ptzr);
-  t->passthrough = true;
+  ptzr                    = new passthrough_packetizer_c(this, nti);
+  t->ptzr                 = add_packetizer(ptzr);
+  t->passthrough          = true;
+  ptzr_to_track_map[ptzr] = t;
 
   ptzr->set_track_type(MAP_TRACK_TYPE(t->type));
   ptzr->set_codec_id(t->codec_id);
@@ -1748,6 +1749,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
         break;
     }
     set_packetizer_headers(t);
+    ptzr_to_track_map[reader_packetizers[t->ptzr]] = t;
   }
 }
 
@@ -1947,7 +1949,7 @@ kax_reader_c::read_first_frame(kax_track_t *t) {
 // {{{ FUNCTION kax_reader_c::read()
 
 file_status_e
-kax_reader_c::read(generic_packetizer_c *,
+kax_reader_c::read(generic_packetizer_c *requested_ptzr,
                    bool force) {
   int upper_lvl_el, i, bgidx;
   // Elements for different levels
@@ -1977,10 +1979,12 @@ kax_reader_c::read(generic_packetizer_c *,
     return FILE_STATUS_DONE;
   }
 
-//   if (!force && (get_queued_bytes() > 20 * 1024 * 1024))
-//     return FILE_STATUS_HOLDING;
-
-  debug_enter("kax_reader_c::read");
+  int64_t num_queued_bytes = get_queued_bytes();
+  if (!force && (20 * 1024 * 1024 < num_queued_bytes)) {
+    kax_track_t *requested_ptzr_track = ptzr_to_track_map[requested_ptzr];
+    if (!requested_ptzr_track || (('a' != requested_ptzr_track->type) && ('v' != requested_ptzr_track->type)) || (512 * 1024 * 1024 < num_queued_bytes))
+      return FILE_STATUS_HOLDING;
+  }
 
   found_cluster = false;
   upper_lvl_el = 0;
@@ -2344,8 +2348,6 @@ kax_reader_c::read(generic_packetizer_c *,
     flush_packetizers();
     return FILE_STATUS_DONE;
   }
-
-  debug_leave("kax_reader_c::read");
 
   if (found_cluster)
     return FILE_STATUS_MOREDATA;

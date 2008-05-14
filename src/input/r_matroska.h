@@ -21,6 +21,7 @@
 
 #include <stdio.h>
 
+#include <map>
 #include <vector>
 
 #include "common.h"
@@ -133,6 +134,7 @@ private:
   int act_wchar;
 
   vector<kax_track_t *> tracks;
+  map<generic_packetizer_c *, kax_track_t *> ptzr_to_track_map;
 
   int64_t tc_scale;
   int64_t cluster_tc;
