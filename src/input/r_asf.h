@@ -24,6 +24,9 @@
 class asf_reader_c: public generic_reader_c {
 public:
   static int probe_file(mm_io_c *io, int64_t size);
+
+public:
+  asf_reader_c(track_info_c &n_ti): generic_reader_c(n_ti) { };
 };
 
 #endif // __R_ASF_H
