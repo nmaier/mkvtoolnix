@@ -1029,7 +1029,7 @@ get_displayable_string(const char *src,
   int    len = (-1 == max_len) ? strlen(src) : max_len;
 
   for (int i = 0; i < len; ++i)
-    result += ((' ' > src[i]) || (128 < src[i])) ? '?' : src[i];
+    result += (' ' > src[i]) ? '?' : src[i];
 
   return result;
 }
