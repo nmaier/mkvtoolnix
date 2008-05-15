@@ -61,7 +61,7 @@ typedef counted_ptr<wav_demuxer_c> wav_demuxer_cptr;
 struct wav_chunk_t {
   int64_t pos;
   char id[4];
-  uint32_t len;
+  int64_t len;
 };
 
 class wav_reader_c: public generic_reader_c {

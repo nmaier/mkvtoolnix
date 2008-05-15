@@ -1,3 +1,9 @@
+2008-05-15  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: Improved support for WAV files bigger
+	than 4 GB which only contain a single DATA chunk and a wrong
+	length field for this DATA chunk (e.g. eac3to creates such files).
+
 2008-05-14  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Certain Matroska files with dis-continuous

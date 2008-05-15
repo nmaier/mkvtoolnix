@@ -568,6 +568,8 @@ wav_reader_c::scan_chunks() {
   wav_chunk_t new_chunk;
 
   try {
+    int64_t file_size = m_io->get_size();
+
     while (true) {
       new_chunk.pos = m_io->getFilePointer();
 
@@ -576,11 +578,26 @@ wav_reader_c::scan_chunks() {
 
       new_chunk.len = m_io->read_uint32_le();
 
-      m_chunks.push_back(new_chunk);
+      mxverb(2, "wav_reader_c::scan_chunks() new chunk at " LLD " type %s length " LLD "\n",
+             new_chunk.pos, get_displayable_string(new_chunk.id, 4).c_str(), new_chunk.len);
 
       if (!strncasecmp(new_chunk.id, "data", 4))
         m_bytes_in_data_chunks += new_chunk.len;
 
+      else if (!m_chunks.empty() && !strncasecmp(m_chunks.back().id, "data", 4) && (file_size > 0x100000000ll)) {
+        wav_chunk_t &previous_chunk  = m_chunks.back();
+        int64_t this_chunk_len       = file_size - previous_chunk.pos - sizeof(struct chunk_struct);
+        m_bytes_in_data_chunks      -= previous_chunk.len;
+        m_bytes_in_data_chunks      += this_chunk_len;
+        previous_chunk.len           = this_chunk_len;
+
+        mxverb(2, "wav_reader_c::scan_chunks() hugh data chunk with wrong length at " LLD "; re-calculated from file size; new length " LLD "\n",
+               previous_chunk.pos, previous_chunk.len);
+
+        break;
+      }
+
+      m_chunks.push_back(new_chunk);
       m_io->setFilePointer(new_chunk.len, seek_current);
 
     }
