@@ -1022,6 +1022,18 @@ downcase(const string &s) {
   return dst;
 }
 
+string
+get_displayable_string(const char *src,
+                       int max_len) {
+  string result;
+  int    len = (-1 == max_len) ? strlen(src) : max_len;
+
+  for (int i = 0; i < len; ++i)
+    result += ((' ' > src[i]) || (128 < src[i])) ? '?' : src[i];
+
+  return result;
+}
+
 /*
    Integer parsing
 */

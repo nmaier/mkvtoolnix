@@ -249,6 +249,8 @@ string MTX_DLL_API escape_xml(const string &src);
 string MTX_DLL_API create_xml_node_name(const char *name, const char **atts);
 bool MTX_DLL_API starts_with(const string &s, const char *start,
                              int maxlen = -1);
+string MTX_DLL_API get_displayable_string(const char *src, int max_len = -1);
+
 inline bool
 starts_with(const string &s,
             const string &start,
