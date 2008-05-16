@@ -1,3 +1,8 @@
+2008-05-16  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Using BZIP2 compression resulted in broken
+	streams. Patch by Aurelien Jacobs (see AUTHORS).
+
 2008-05-15  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Improved support for WAV files bigger

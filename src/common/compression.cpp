@@ -229,8 +229,8 @@ bzlib_compressor_c::compress(memory_cptr &buffer) {
   c_stream.next_out = (char *)dst;
   c_stream.avail_in = size;
   c_stream.avail_out = 2 * size;
-  result = BZ2_bzCompress(&c_stream, BZ_FLUSH);
-  if (result != BZ_RUN_OK)
+  result = BZ2_bzCompress(&c_stream, BZ_FINISH);
+  if (result != BZ_STREAM_END)
     mxerror("bzip2 compression failed. Result: %d\n", result);
 
   BZ2_bzCompressEnd(&c_stream);
