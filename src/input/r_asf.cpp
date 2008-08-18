@@ -6,7 +6,7 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id: r_aac.cpp 3780 2008-03-09 16:02:08Z mosu $
+   $Id$
 
    ASF demultiplexer module
 

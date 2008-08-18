@@ -6,7 +6,7 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id: r_aac.h 3385 2006-11-26 13:07:52Z mosu $
+   $Id$
 
    class definitions for the ASF demultiplexer module
 
