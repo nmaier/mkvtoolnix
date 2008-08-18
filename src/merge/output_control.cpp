@@ -78,6 +78,7 @@
 #include "r_avi.h"
 #include "r_dts.h"
 #include "r_flac.h"
+#include "r_flv.h"
 #include "r_matroska.h"
 #include "r_mp3.h"
 #include "r_mpeg.h"
@@ -303,6 +304,8 @@ get_file_type(filelist_t &file) {
   type = FILE_TYPE_IS_UNKNOWN;
   if (asf_reader_c::probe_file(io, size))
     type = FILE_TYPE_ASF;
+  else if (flv_reader_c::probe_file(io, size))
+    type = FILE_TYPE_FLV;
   else if (avi_reader_c::probe_file(io, size))
     type = FILE_TYPE_AVI;
   else if (kax_reader_c::probe_file(io, size))
