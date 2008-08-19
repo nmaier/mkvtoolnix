@@ -392,32 +392,34 @@ vobsub_reader_c::deliver_packet(unsigned char *buf,
 
 // Adopted from mplayer's vobsub.c
 int
-vobsub_reader_c::extract_one_spu_packet(int64_t timecode,
-                                        int64_t duration,
-                                        int64_t track_id) {
-  unsigned char *dst_buf;
-  uint32_t len, idx, mpeg_version, packet_size, dst_size;
-  int64_t extraction_start_pos;
-  int c, packet_aid, spu_len;
-  int64_t pts;
+vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
+  uint32_t len, idx, mpeg_version;
+  int c, packet_aid;
   /* Goto start of a packet, it starts with 0x000001?? */
   const unsigned char wanted[] = { 0, 0, 1 };
   unsigned char buf[5];
-  vobsub_track_c *track;
 
-  track = tracks[track_id];
-  extraction_start_pos = sub_file->getFilePointer();
+  vobsub_track_c *track        = tracks[track_id];
+  int64_t timecode             = track->entries[track->idx].timestamp;
+  int64_t duration             = track->entries[track->idx].duration;
+  int64_t extraction_start_pos = track->entries[track->idx].position;
+  int64_t extraction_end_pos   = track->idx >= track->entries.size() ? sub_file->get_size() : track->entries[track->idx + 1].position;
 
-  pts = 0;
+  int64_t pts                  = 0;
+  unsigned char *dst_buf       = NULL;
+  uint32_t dst_size            = 0;
+  uint32_t packet_size         = 0;
+  int spu_len                  = -1;
+
+  sub_file->setFilePointer(extraction_start_pos);
   track->packet_num++;
 
-  dst_buf = NULL;
-  dst_size = 0;
-  packet_size = 0;
-  spu_len = -1;
   while (1) {
-    if ((spu_len >= 0) && (dst_size >= spu_len))
+    if ((spu_len >= 0) && ((dst_size >= spu_len) || (sub_file->getFilePointer() >= extraction_end_pos))) {
+      if (dst_size != spu_len)
+        mxverb(3, "r_vobsub.cpp: stddeliver spu_len %d dst_size %u curpos " LLD " endpos " LLD "\n", spu_len, dst_size, sub_file->getFilePointer(), extraction_end_pos);
       return deliver();
+    }
     if (sub_file->read(buf, 4) != 4)
       return deliver();
     while (memcmp(buf, wanted, sizeof(wanted)) != 0) {
@@ -583,31 +585,28 @@ vobsub_reader_c::extract_one_spu_packet(int64_t timecode,
 file_status_e
 vobsub_reader_c::read(generic_packetizer_c *ptzr,
                       bool force) {
-  vobsub_track_c *track;
-  uint32_t i, id;
+  vobsub_track_c *track = NULL;
+  uint32_t id;
 
-  track = NULL;
-  for (i = 0; i < tracks.size(); i++)
-    if ((-1 != tracks[i]->ptzr) && (PTZR(tracks[i]->ptzr) == ptzr)) {
-      track = tracks[i];
+  for (id = 0; id < tracks.size(); ++id)
+    if ((-1 != tracks[id]->ptzr) && (PTZR(tracks[id]->ptzr) == ptzr)) {
+      track = tracks[id];
       break;
     }
 
-  if ((track == NULL) || (track->idx >= track->entries.size()))
+  if (!track || (track->idx >= track->entries.size()))
     return FILE_STATUS_DONE;
 
-  id = i;
-  sub_file->setFilePointer(track->entries[track->idx].position);
-  extract_one_spu_packet(track->entries[track->idx].timestamp,
-                         track->entries[track->idx].duration, id);
+  extract_one_spu_packet(id);
   track->idx++;
   indices_processed++;
 
   if (track->idx >= track->entries.size()) {
     flush_packetizers();
     return FILE_STATUS_DONE;
-  } else
-    return FILE_STATUS_MOREDATA;
+  }
+
+  return FILE_STATUS_MOREDATA;
 }
 
 int

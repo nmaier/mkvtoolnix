@@ -82,8 +82,7 @@ protected:
                              int64_t timecode, int64_t default_duration,
                              generic_packetizer_c *ptzr);
 
-  virtual int extract_one_spu_packet(int64_t timecode, int64_t duration,
-                                     int64_t track_id);
+  virtual int extract_one_spu_packet(int64_t track_id);
 };
 
 #endif  // __R_VOBSUB_H

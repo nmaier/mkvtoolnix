@@ -1,3 +1,8 @@
+2008-08-19  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The VobSub reader would sometimes read too
+	many bytes for a single SPU packet. Part of a fix for bug 245.
+
 2008-05-16  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Using BZIP2 compression resulted in broken
