@@ -33,7 +33,7 @@ flv_reader_c::probe_file(mm_io_c *io,
     io->setFilePointer(0, seek_beginning);
 
     if (!memcmp(buf, "FLV", 3)) {
-      mxerror(mxsprintf("The file '%s' is a Macromedia Flash Video (FLV) container which is not supported by mkvmerge.\n", io->get_file_name().c_str()).c_str());
+      id_result_container_unsupported(io->get_file_name(), "Macromedia Flash Video (FLV)");
       // Never reached:
       return 1;
     }

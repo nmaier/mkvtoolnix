@@ -33,7 +33,7 @@ asf_reader_c::probe_file(mm_io_c *io,
     io->setFilePointer(0, seek_beginning);
 
     if (get_uint32_be(buf) == 0x3026b275) {
-      mxerror(mxsprintf("The file '%s' is an ASF/WMV container which is not supported by mkvmerge.\n", io->get_file_name().c_str()).c_str());
+      id_result_container_unsupported(io->get_file_name(), "Windows Media (ASF/WMV)");
       // Never reached:
       return 1;
     }

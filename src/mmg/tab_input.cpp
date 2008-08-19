@@ -365,7 +365,21 @@ tab_input::add_file(const wxString &file_name,
     wxLogMessage(wxT("identify 1: errors[%d]: ``%s''"), i, errors[i].c_str());
 
   wxRemoveFile(opt_file_name);
-  if ((result < 0) || (result > 1)) {
+
+  if (3 == result) {
+    wxString container = wxT("unknown");
+
+    if (output.Count() && (0 <= (pos = output[0].Find(wxT("container:")))))
+      container = output[0].Mid(pos + 11);
+
+    wxString info;
+    info.Printf(wxT("The file is an unsupported container format (%s)."), container.c_str());
+    break_line(info, 60);
+
+    wxMessageBox(info, wxT("Unsupported format"), wxOK | wxCENTER | wxICON_ERROR);
+    return;
+
+  } else if ((0 > result) || (1 < result)) {
     name.Printf(wxT("File identification failed for '%s'. Return code: "
                     "%d\n\n"), file_name.c_str(), result);
     for (i = 0; i < output.Count(); i++)
@@ -376,7 +390,8 @@ tab_input::add_file(const wxString &file_name,
     wxMessageBox(name, wxT("File identification failed"), wxOK | wxCENTER |
                  wxICON_ERROR);
     return;
-  } else if (result > 0) {
+
+  } else if (0 < result) {
     name.Printf(wxT("File identification failed. Return code: %d. Errno: %d "
                     "(%s). Make sure that you've selected a mkvmerge "
                     "executable on the 'settings' tab."), result, errno,

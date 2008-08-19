@@ -102,9 +102,12 @@ protected:
 
 #else  // HAVE_FLAC_FORMAT_H
 
-class flac_reader_c {
+class flac_reader_c: public generic_reader_c {
 public:
   static int probe_file(mm_io_c *file, int64_t size);
+
+public:
+  flac_reader_c(track_info_c &n_ti): generic_reader_c(n_ti) { };
 };
 
 #endif // HAVE_FLAC_FORMAT_H

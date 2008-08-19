@@ -1380,8 +1380,11 @@ mpeg_ts_reader_c::probe_file(mm_io_c *io,
           ++num_startcodes;
         }
 
-        if (TS_CONSECUTIVE_PACKETS <= num_startcodes)
+        if (TS_CONSECUTIVE_PACKETS <= num_startcodes) {
+          id_result_container_unsupported(io->get_file_name(), "MPEG Transport Stream (TS)");
+          // Never reached:
           return true;
+        }
       }
     }
 

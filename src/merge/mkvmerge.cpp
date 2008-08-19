@@ -359,14 +359,14 @@ identify(const string &filename) {
   track_info_c ti;
   filelist_t file;
 
-  file.name = filename;
-  get_file_type(file);
-  ti.fname = file.name;
+  verbose           = 0;
+  suppress_warnings = true;
+  identifying       = true;
+  file.name         = filename;
 
-  if (FILE_TYPE_MPEG_TS == file.type)
-    mxerror(_("The file '%s' has been detected as a MPEG transport stream. "
-              "This file format is not supported by mkvmerge.\n"),
-            file.name.c_str());
+  get_file_type(file);
+
+  ti.fname = file.name;
 
   if (file.type == FILE_TYPE_IS_UNKNOWN)
     mxerror(_("File %s has unknown type. Please have a look "
@@ -379,9 +379,6 @@ identify(const string &filename) {
 
   files.push_back(file);
 
-  verbose = 0;
-  identifying = true;
-  suppress_warnings = true;
   create_readers();
 
   files[0].reader->identify();

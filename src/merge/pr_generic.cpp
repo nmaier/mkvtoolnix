@@ -1401,6 +1401,16 @@ generic_reader_c::flush_packetizers() {
 }
 
 void
+generic_reader_c::id_result_container_unsupported(const string &filename,
+                                                  const string &info) {
+  if (identifying) {
+    mxinfo("File '%s': unsupported container: %s\n", filename.c_str(), info.c_str());
+    mxexit(3);
+  } else
+    mxerror("The file '%s' is a non-supported file type (%s).\n", filename.c_str(), info.c_str());
+}
+
+void
 generic_reader_c::id_result_container(const string &info,
                                       const string &verbose_info) {
   id_results_container.info = info;

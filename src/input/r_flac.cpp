@@ -589,7 +589,7 @@ flac_reader_c::probe_file(mm_io_c *io,
   }
   if (strncmp((char *)data, "fLaC", 4))
     return 0;
-  mxerror("mkvmerge has not been compiled with FLAC support.\n");
+  id_result_container_unsupported(io->get_file_name(), "FLAC");
   return 1;
 }
 

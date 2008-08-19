@@ -163,12 +163,15 @@ private:
   void init_reader();
 };
 
-class mpeg_ts_reader_c {
+class mpeg_ts_reader_c: public generic_reader_c {
 protected:
   static int potential_packet_sizes[];
 
 public:
   static bool probe_file(mm_io_c *io, int64_t size);
+
+public:
+  mpeg_ts_reader_c(track_info_c &n_ti): generic_reader_c(n_ti) { };
 };
 
 #endif // __R_MPEG_H

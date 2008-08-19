@@ -296,6 +296,8 @@ protected:
   virtual void id_result_track(int64_t track_id, const string &type, const string &info, const string &verbose_info = empty_string);
   virtual void id_result_track(int64_t track_id, const string &type, const string &info, const vector<string> &verbose_info);
   virtual void id_result_attachment(int64_t attachment_id, const string &type, int size, const string &file_name = empty_string, const string &description = empty_string);
+
+  static void id_result_container_unsupported(const string &filename, const string &info);
 };
 
 enum connection_result_e {

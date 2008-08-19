@@ -1,5 +1,9 @@
 2008-08-19  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: enhancement: mmg outputs a more informative error
+	message for known but unsupported input file types (e.g. ASF, FLV,
+	MPEG TS) instead of the cryptic "file identification failed".
+
 	* mkvmerge: bug fix: The VobSub reader would sometimes read too
 	many bytes for a single SPU packet. Part of a fix for bug 245.
 
