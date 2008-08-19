@@ -302,10 +302,12 @@ get_file_type(filelist_t &file) {
   }
 
   type = FILE_TYPE_IS_UNKNOWN;
+  // File types that can be detected unambiguously but are not supported
   if (asf_reader_c::probe_file(io, size))
     type = FILE_TYPE_ASF;
   else if (flv_reader_c::probe_file(io, size))
     type = FILE_TYPE_FLV;
+  // File types that can be detected unambiguously
   else if (avi_reader_c::probe_file(io, size))
     type = FILE_TYPE_AVI;
   else if (kax_reader_c::probe_file(io, size))
@@ -324,6 +326,7 @@ get_file_type(filelist_t &file) {
     type = FILE_TYPE_TTA;
   else if (wavpack_reader_c::probe_file(io, size))
     type = FILE_TYPE_WAVPACK4;
+  // File types that are misdetected sometimes
   else if (mpeg_ts_reader_c::probe_file(io, size))
     type = FILE_TYPE_MPEG_TS;
   else if (mpeg_ps_reader_c::probe_file(io, size))
@@ -331,12 +334,15 @@ get_file_type(filelist_t &file) {
   else if (mpeg_es_reader_c::probe_file(io, size))
     type = FILE_TYPE_MPEG_ES;
   else {
+    // File types which are the same in raw format and in other container formats.
+    // Detection requires five or more consecutive packets. 
     for (i = 0; (probe_sizes[i] != 0) && (type == FILE_TYPE_IS_UNKNOWN); i++)
       if (mp3_reader_c::probe_file(io, size, probe_sizes[i], 5))
         type = FILE_TYPE_MP3;
       else if (ac3_reader_c::probe_file(io, size, probe_sizes[i], 5))
         type = FILE_TYPE_AC3;
   }
+  // More file types with detection issues.
   if (type != FILE_TYPE_IS_UNKNOWN)
     ;
   else if (mp3_reader_c::probe_file(io, size, 2 * 1024 * 1024, 10))
@@ -350,6 +356,7 @@ get_file_type(filelist_t &file) {
   else if (avc_es_reader_c::probe_file(io, size))
     type = FILE_TYPE_AVC_ES;
   else {
+    // All text file types (subtitles).
     try {
       text_io = new mm_text_io_c(new mm_file_io_c(file.name));
       text_io->setFilePointer(0, seek_end);
