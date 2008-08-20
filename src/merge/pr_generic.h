@@ -95,11 +95,15 @@ enum file_status_e {
   FILE_STATUS_MOREDATA
 };
 
-struct audio_sync_t {
+struct timecode_sync_t {
   int64_t displacement;
-  double linear;
+  double numerator, denominator;
 
-  audio_sync_t(): displacement(0), linear(0.0) {}
+  timecode_sync_t(): displacement(0), numerator(1.0), denominator(1.0) {}
+
+  double factor() {
+    return numerator / denominator;
+  }
 };
 
 enum default_track_priority_e {
@@ -158,8 +162,8 @@ public:
   int display_width, display_height;
   bool aspect_ratio_given, aspect_ratio_is_factor, display_dimensions_given;
 
-  map<int64_t, audio_sync_t> audio_syncs; // As given on the command line
-  audio_sync_t async;           // For this very track
+  map<int64_t, timecode_sync_t> timecode_syncs; // As given on the command line
+  timecode_sync_t tcsync;                       // For this very track
 
   map<int64_t, cue_strategy_e> cue_creations; // As given on the command line
   cue_strategy_e cues;          // For this very track
@@ -180,9 +184,6 @@ public:
 
   map<int64_t, bool> all_aac_is_sbr;  // For AAC+/HE-AAC/SBR
   int aac_is_sbr;                     // For this track. -1 = unspecified
-
-  map<int64_t, int64_t> packet_delays; // As given on the command line
-  int64_t packet_delay;         // For this very track
 
   map<int64_t, compression_method_e> compression_list; // As given on the cmd line
   compression_method_e compression; // For this very track
@@ -365,7 +366,6 @@ protected:
   deque<packet_cptr> packet_queue, deferred_packets;
   int next_packet_wo_assigned_timecode;
 
-  int64_t initial_displacement;
   int64_t m_free_refs, m_next_free_refs, enqueued_bytes;
   int64_t safety_last_timecode, safety_last_duration;
 
@@ -526,17 +526,6 @@ public:
   virtual void set_default_compression_method(compression_method_e method) {
     hcompression = method;
   }
-
-  inline bool needs_negative_displacement(float) {
-    return ((initial_displacement < 0) &&
-            (ti.async.displacement > initial_displacement));
-  }
-  inline bool needs_positive_displacement(float duration) {
-    return ((initial_displacement > 0) &&
-            (iabs(ti.async.displacement - initial_displacement) >
-             (duration / 2)));
-  }
-  virtual void displace(float by_ns);
 
   virtual void force_duration_on_last_packet();
 

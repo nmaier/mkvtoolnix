@@ -57,11 +57,6 @@ vobsub_packetizer_c::set_headers() {
 
 int
 vobsub_packetizer_c::process(packet_cptr packet) {
-  packet->timecode += initial_displacement;
-  if (packet->timecode < 0)
-    return FILE_STATUS_MOREDATA;
-
-  packet->timecode = (int64_t)((float)packet->timecode * ti.async.linear);
   packet->duration_mandatory = true;
   add_packet(packet);
 

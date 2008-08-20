@@ -29,7 +29,7 @@ passthrough_packetizer_c::passthrough_packetizer_c(generic_reader_c *_reader,
                                                    track_info_c &_ti)
   throw (error_c):
   generic_packetizer_c(_reader, _ti),
-  packets_processed(0), bytes_processed(0), sync_to_keyframe(false) {
+  packets_processed(0), bytes_processed(0) {
 
   timecode_factory_application_mode = TFA_FULL_QUEUEING;
 }
@@ -41,57 +41,15 @@ passthrough_packetizer_c::set_headers() {
 
 int
 passthrough_packetizer_c::process(packet_cptr packet) {
-  int64_t timecode;
-
   debug_enter("passthrough_packetizer_c::process");
 
-  timecode = packet->timecode;
   packets_processed++;
   bytes_processed += packet->data->get_size();
-  if ((packet->duration > 0) &&
-      needs_negative_displacement(packet->duration)) {
-    displace(-packet->duration);
-    sync_to_keyframe = true;
-    return FILE_STATUS_MOREDATA;
-  }
-  if ((packet->duration > 0) &&
-      needs_positive_displacement(packet->duration) &&
-      sync_complete_group) {
-    // Not implemented yet.
-  }
-  while ((packet->duration > 0) &&
-         needs_positive_displacement(packet->duration)) {
-    packet_t *new_packet =
-      new packet_t(packet->data->clone(),
-                   (int64_t)((timecode + ti.async.displacement) *
-                             ti.async.linear),
-                   packet->duration, packet->bref, packet->fref);
-    new_packet->duration_mandatory = packet->duration_mandatory;
-    add_packet(new_packet);
-    displace(packet->duration);
-  }
 
-  if (sync_to_keyframe && (packet->bref != -1))
-    return FILE_STATUS_MOREDATA;
-  sync_to_keyframe = false;
-  packet->timecode = (int64_t)((timecode + ti.async.displacement) *
-                               ti.async.linear);
-  packet->duration = (int64_t)(packet->duration * ti.async.linear);
-  if (packet->bref >= 0)
-    packet->bref = (int64_t)((packet->bref + ti.async.displacement) *
-                             ti.async.linear);
-  if (packet->fref >= 0)
-    packet->fref = (int64_t)((packet->fref + ti.async.displacement) *
-                             ti.async.linear);
   add_packet(packet);
 
   debug_leave("passthrough_packetizer_c::process");
   return FILE_STATUS_MOREDATA;
-}
-
-void
-passthrough_packetizer_c::always_sync_complete_group(bool sync) {
-  sync_complete_group = sync;
 }
 
 void

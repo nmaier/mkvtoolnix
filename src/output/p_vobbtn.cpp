@@ -64,16 +64,14 @@ vobbtn_packetizer_c::process(packet_cptr packet) {
   int32_t vobu_start, vobu_end;
 
   vobu_start = get_uint32_be(packet->data->get() + 0x0d);
-  vobu_end = get_uint32_be(packet->data->get() + 0x11);
+  vobu_end   = get_uint32_be(packet->data->get() + 0x11);
 
   packet->duration = (int64_t)(100000.0 * (float)(vobu_end - vobu_start) / 9);
-  if (packet->timecode == -1) {
-    packet->timecode = previous_timecode;
+  if (-1 == packet->timecode) {
+    packet->timecode   = previous_timecode;
     previous_timecode += packet->duration;
-  } else
-    packet->timecode += ti.async.displacement;
+  }
 
-  packet->timecode = (int64_t)(packet->timecode * ti.async.linear);
   packet->duration_mandatory = true;
   add_packet(packet);
 

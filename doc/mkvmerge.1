@@ -294,16 +294,12 @@ If the source is a Matroska file then don't copy attachments from it.
 If the source is a Matroska file then don't copy tags from it.
 .TP
 \fB\-y\fR, \fB\-\-sync\fR <\fITID\fR:\fId\fR[,\fIo\fR[/\fIp\fR]]>
-Synchronize manually, delay the audio track with the id \fITID\fR by \fId\fR
+Adjust the timecodes of the track with the id \fITID\fR by \fId\fR
 ms. The track IDs are the same as the ones given with \fB\-\-identify\fR (see
 section \fBTRACK IDS\fR).
 .br
-\fId\fR > 0: Pad with silent samples.
-.br
-\fId\fR < 0: Remove samples from the beginning.
-.br
 \fIo\fR/\fIp\fR: adjust the timestamps by \fIo\fR/\fIp\fR to fix
-linear drifts. \fIp\fR defaults to 1000 if omitted. Both \fIo\fR and
+linear drifts. \fIp\fR defaults to 1 if omitted. Both \fIo\fR and
 \fIp\fR can be floating point numbers.
 .br
 Defaults: no manual sync correction (which is the same as \fId\fR = 0 and
@@ -311,14 +307,6 @@ Defaults: no manual sync correction (which is the same as \fId\fR = 0 and
 .br
 This option can be used multiple times for an input file applying to several
 tracks by selecting different track IDs each time.
-.TP
-\fB\-\-delay\fR <\fITID\fR:\fIx\fR>
-The delay to apply to the packets of the track by simply adjusting the
-timecodes.
-The argument \fIx\fR must be postfixed with \fBs\fR, \fBms\fR, \fBus\fR or
-\fBns\fR to specify seconds, milliseconds, microseconds and nanoseconds
-respectively.
-.TP
 \fB\-\-cues\fR <\fITID\fR:\fInone\fR|\fIiframes\fR|\fIall\fR>
 Controls for which tracks cue (index) entries are created for the given track
 (see section \fBTRACK IDS\fR). \fInone\fR inhibits the creation of cue entries.

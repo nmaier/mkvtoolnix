@@ -38,8 +38,7 @@ ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *_reader,
   first_packet(true) {
 
   set_track_type(track_audio);
-  set_track_default_duration((int64_t)(1536000000000.0 *ti.async.linear /
-                                       samples_per_sec));
+  set_track_default_duration((int64_t)(1536000000000.0 / samples_per_sec));
   enable_avi_audio_sync(true);
 }
 
@@ -57,7 +56,6 @@ ac3_packetizer_c::get_ac3_packet(unsigned long *header,
                                  ac3_header_t *ac3header) {
   int pos, size;
   unsigned char *buf, *packet_buffer;
-  double pins;
 
   packet_buffer = byte_buffer.get_buffer();
   size = byte_buffer.get_size();
@@ -105,32 +103,7 @@ ac3_packetizer_c::get_ac3_packet(unsigned long *header,
     bytes_skipped = 0;
   }
 
-  pins = ac3header->samples * 1000000000.0 / samples_per_sec;
-
-  if (needs_negative_displacement(pins)) {
-    /*
-     * AC3 audio synchronization. displacement < 0 means skipping an
-     * appropriate number of packets at the beginning.
-     */
-    displace(-pins);
-    byte_buffer.remove(ac3header->bytes);
-
-    return get_ac3_packet(header, ac3header);
-  }
-
   buf = (unsigned char *)safememdup(packet_buffer, ac3header->bytes);
-
-  if (needs_positive_displacement(pins)) {
-    /*
-     * AC3 audio synchronization. displacement > 0 is solved by duplicating
-     * the very first AC3 packet as often as necessary. I cannot create
-     * a packet with total silence because I don't know how, and simply
-     * settings the packet's values to 0 does not work as the AC3 header
-     * contains a CRC of its data.
-     */
-    displace(pins);
-    return buf;
-  }
 
   byte_buffer.remove(ac3header->bytes);
 
@@ -159,7 +132,6 @@ ac3_packetizer_c::process(packet_cptr packet) {
   unsigned char *ac3_packet;
   unsigned long header;
   ac3_header_t ac3header;
-  int64_t my_timecode;
 
   debug_enter("ac3_packetizer_c::process");
 
@@ -167,15 +139,9 @@ ac3_packetizer_c::process(packet_cptr packet) {
   while ((ac3_packet = get_ac3_packet(&header, &ac3header)) != NULL) {
     adjust_header_values(ac3header);
 
-    if (packet->timecode == -1)
-      my_timecode = (int64_t)(1000000000.0 * packetno * ac3header.samples /
-                              samples_per_sec);
-    else
-      my_timecode = packet->timecode + ti.async.displacement;
-    add_packet(new packet_t(new memory_c(ac3_packet, ac3header.bytes, true),
-                            (int64_t)(my_timecode * ti.async.linear),
-                            (int64_t)(1000000000.0 * ac3header.samples *
-                                      ti.async.linear / samples_per_sec)));
+    int64_t new_timecode = -1 == packet->timecode ? (int64_t)(1000000000.0 * packetno * ac3header.samples / samples_per_sec) : packet->timecode;
+
+    add_packet(new packet_t(new memory_c(ac3_packet, ac3header.bytes, true), new_timecode, (int64_t)(1000000000.0 * ac3header.samples / samples_per_sec)));
     packetno++;
   }
 
@@ -196,8 +162,7 @@ ac3_packetizer_c::adjust_header_values(ac3_header_t &ac3header) {
     set_codec_id(MKV_A_EAC3);
 
   if (1536 != ac3header.samples)
-    set_track_default_duration((int64_t)(1000000000.0 * ac3header.samples *
-                                         ti.async.linear / samples_per_sec));
+    set_track_default_duration((int64_t)(1000000000.0 * ac3header.samples / samples_per_sec));
 
   rerender_track_headers();
 }

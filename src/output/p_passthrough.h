@@ -24,7 +24,6 @@
 class passthrough_packetizer_c: public generic_packetizer_c {
 private:
   int64_t packets_processed, bytes_processed;
-  bool sync_to_keyframe, sync_complete_group;
 
 public:
   passthrough_packetizer_c(generic_reader_c *_reader, track_info_c &_ti)
@@ -32,7 +31,6 @@ public:
 
   virtual int process(packet_cptr packet);
   virtual void set_headers();
-  virtual void always_sync_complete_group(bool sync);
 
   virtual void dump_debug_info();
 

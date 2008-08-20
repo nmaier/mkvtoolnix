@@ -38,8 +38,7 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *_reader,
   codec_id_set(false), valid_headers_found(source_is_good) {
 
   set_track_type(track_audio);
-  set_track_default_duration((int64_t)(1152000000000.0 * ti.async.linear /
-                                       samples_per_sec));
+  set_track_default_duration((int64_t)(1152000000000.0 / samples_per_sec));
   enable_avi_audio_sync(true);
 }
 
@@ -75,7 +74,6 @@ unsigned char *
 mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
   int pos, size;
   unsigned char *buf;
-  double pins;
   string codec_id;
 
   if (byte_buffer.get_size() == 0)
@@ -133,43 +131,14 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     codec_id[codec_id.length() - 1] = (char)(mp3header->layer + '0');
     set_codec_id(codec_id.c_str());
     if (spf != 1152)
-      set_track_default_duration((int64_t)(1000000000.0 * spf *
-                                           ti.async.linear /
-                                           samples_per_sec));
+      set_track_default_duration((int64_t)(1000000000.0 * spf / samples_per_sec));
     rerender_track_headers();
   }
 
   if (mp3header->framesize > byte_buffer.get_size())
     return NULL;
 
-  pins = 1000000000.0 * (double)spf / mp3header->sampling_frequency;
-
-  if (needs_negative_displacement(pins)) {
-    /*
-     * MP3 audio synchronization. displacement < 0 means skipping an
-     * appropriate number of packets at the beginning.
-     */
-    displace(-pins);
-    byte_buffer.remove(mp3header->framesize);
-
-    return get_mp3_packet(mp3header);
-  }
-
-  buf = (unsigned char *)safememdup(byte_buffer.get_buffer(),
-                                    mp3header->framesize);
-
-  if (needs_positive_displacement(pins)) {
-    /*
-     * MP3 audio synchronization. displacement > 0 is solved by creating
-     * silent MP3 packets and repeating it over and over again (well only as
-     * often as necessary of course. Wouldn't want to spoil your movie by
-     * providing a silent MP3 stream ;)).
-     */
-    displace(pins);
-    memset(buf + 4, 0, mp3header->framesize - 4);
-
-    return buf;
-  }
+  buf = (unsigned char *)safememdup(byte_buffer.get_buffer(), mp3header->framesize);
 
   byte_buffer.remove(mp3header->framesize);
 
@@ -192,21 +161,13 @@ int
 mp3_packetizer_c::process(packet_cptr packet) {
   unsigned char *mp3_packet;
   mp3_header_t mp3header;
-  int64_t my_timecode;
 
   debug_enter("mp3_packetizer_c::process");
 
   byte_buffer.add(packet->data->get(), packet->data->get_size());
   while ((mp3_packet = get_mp3_packet(&mp3header)) != NULL) {
-    if (packet->timecode == -1)
-      my_timecode = (int64_t)(1000000000.0 * packetno * spf / samples_per_sec);
-    else
-      my_timecode = packet->timecode + ti.async.displacement;
-    add_packet(new packet_t(new memory_c(mp3_packet, mp3header.framesize,
-                                         true),
-                            (int64_t)(my_timecode * ti.async.linear),
-                            (int64_t)(1000000000.0 * spf * ti.async.linear /
-                                      samples_per_sec)));
+    int64_t new_timecode = -1 == packet->timecode ? (int64_t)(1000000000.0 * packetno * spf / samples_per_sec) : packet->timecode;
+    add_packet(new packet_t(new memory_c(mp3_packet, mp3header.framesize, true), new_timecode, (int64_t)(1000000000.0 * spf / samples_per_sec)));
     packetno++;
   }
 

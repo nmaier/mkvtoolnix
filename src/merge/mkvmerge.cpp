@@ -197,18 +197,13 @@ set_usage() {
     "  --no-chapters            Don't keep chapters from a Matroska file.\n"
     "  --no-attachments         Don't keep attachments from a Matroska file.\n"
     "  --no-tags                Don't keep tags from a Matroska file.\n"
-    "  -y, --sync <TID:d[,o[/p]]>\n"
-    "                           Synchronize, delay the audio track with the\n"
-    "                           id TID by d ms. \n"
-    "                           d > 0: Pad with silent samples.\n"
-    "                           d < 0: Remove samples from the beginning.\n"
-    "                           o/p: Adjust the timecodes by o/p to fix\n"
-    "                           linear drifts. p defaults to 1000 if\n"
-    "                           omitted. Both o and p can be floating point\n"
-    "                           numbers.\n"
-    "  --delay <TID:Xs|ms|us|ns>\n"
-    "                           Delay to apply to the packets of the track\n"
-    "                           by simply adjusting the timecodes.\n"
+    "  -y, --sync, --delay <TID:d[,o[/p]]>\n"
+    "                           Synchronize, adjust the track's timecodes with\n"
+    "                           the id TID by 'd' ms.\n"
+    "                           'o/p': Adjust the timecodes by multiplying with\n"
+    "                           'o/p' to fix linear drifts. 'p' defaults to\n"
+    "                           1000 if omitted. Both 'o' and 'p' can be\n"
+    "                           floating point numbers.\n"
     "  --default-track <TID[:bool]>\n"
     "                           Sets the 'default' flag for this track or\n"
     "                           forces it not to be present if bool is 0.\n"
@@ -524,14 +519,15 @@ parse_tracks(string s,
 
    The argument must have the form <tt>TID:d</tt> or
    <tt>TID:d,l1/l2</tt>, e.g. <tt>0:200</tt>.  The part before the
-   comma is the displacement in ms. The optional part after comma is
-   the linear factor which defaults to 1 if not given.
+   comma is the displacement in ms.
+   The optional part after comma is the linear factor which defaults
+   to 1 if not given.
 */
 static void
 parse_sync(string s,
            const string &opt,
            track_info_c &ti) {
-  audio_sync_t async;
+  timecode_sync_t tcsync;
   vector<string> parts;
   string orig, linear, div;
   int idx;
@@ -542,18 +538,15 @@ parse_sync(string s,
   orig = s;
   parts = split(s, ":", 2);
   if (parts.size() != 2)
-    mxerror(_("Invalid sync option. No track ID specified in '%s %s'.\n"),
-            opt.c_str(), s.c_str());
+    mxerror(_("Invalid sync option. No track ID specified in '%s %s'.\n"), opt.c_str(), s.c_str());
 
   id = 0;
   if (!parse_int(parts[0], id))
-    mxerror(_("Invalid track ID specified in '%s %s'.\n"), opt.c_str(),
-            s.c_str());
+    mxerror(_("Invalid track ID specified in '%s %s'.\n"), opt.c_str(), s.c_str());
 
   s = parts[1];
   if (s.size() == 0)
-    mxerror(_("Invalid sync option specified in '%s %s'.\n"), opt.c_str(),
-            orig.c_str());
+    mxerror(_("Invalid sync option specified in '%s %s'.\n"), opt.c_str(), orig.c_str());
 
   // Now parse the actual sync values.
   idx = s.find(',');
@@ -561,29 +554,29 @@ parse_sync(string s,
     linear = s.substr(idx + 1);
     s.erase(idx);
     idx = linear.find('/');
-    if (idx < 0)
-      async.linear = strtod(linear.c_str(), NULL) / 1000.0;
-    else {
+    if (idx < 0) {
+      tcsync.numerator   = strtod(linear.c_str(), NULL);
+      tcsync.denominator = 1.0;
+
+    } else {
       div = linear.substr(idx + 1);
       linear.erase(idx);
       d1 = strtod(linear.c_str(), NULL);
       d2 = strtod(div.c_str(), NULL);
       if (d2 == 0.0)
-        mxerror(_("Invalid sync option specified in '%s %s'. The divisor is "
-                  "zero.\n"), opt.c_str(), orig.c_str());
+        mxerror(_("Invalid sync option specified in '%s %s'. The divisor is zero.\n"), opt.c_str(), orig.c_str());
 
-      async.linear = d1 / d2;
+      tcsync.numerator   = d1;
+      tcsync.denominator = d2;
     }
-    if (async.linear <= 0.0)
-      mxerror(_("Invalid sync option specified in '%s %s'. The linear sync "
-                "value may not be smaller than zero.\n"), opt.c_str(),
-              orig.c_str());
+    if ((tcsync.numerator * tcsync.denominator) <= 0.0)
+      mxerror(_("Invalid sync option specified in '%s %s'. The linear sync value may not be equal to or smaller than zero.\n"), opt.c_str(), orig.c_str());
 
-  } else
-    async.linear = 1.0;
-  async.displacement = atoi(s.c_str());
+  }
 
-  ti.audio_syncs[id] = async;
+  tcsync.displacement   = (int64_t)atoi(s.c_str()) * 1000000ll;
+
+  ti.timecode_syncs[id] = tcsync;
 }
 
 /** \brief Parse the \c --aspect-ratio argument
@@ -902,34 +895,6 @@ parse_split(const string &arg) {
       mxerror(_("Invalid format for '--split' in '--split %s'.\n"),
               arg.c_str());
   }
-}
-
-/** \brief Parse the \c --delay argument
-
-   time based: A number that must be postfixed with <tt>s</tt>,
-   <tt>ms</tt>, <tt>us</tt> or <tt>ns</tt> to specify seconds,
-   milliseconds, microseconds and nanoseconds respectively.
-*/
-static void
-parse_delay(const string &s,
-            track_info_c &ti) {
-  string unit;
-  vector<string> parts;
-  int64_t id;
-
-  // Extract the track number.
-  parts = split(s, ":", 2);
-  strip(parts);
-  if (parts.size() != 2)
-    mxerror(_("Invalid delay option. No track ID specified in "
-              "'--delay %s'.\n"), s.c_str());
-
-  id = 0;
-  if (!parse_int(parts[0], id))
-    mxerror(_("Invalid track ID specified in '--delay %s'.\n"), s.c_str());
-
-  ti.packet_delays[id] = parse_number_with_unit(parts[1], "delay", "--delay",
-                                                s);
 }
 
 /** \brief Parse the \c --default-track argument
@@ -2007,7 +1972,7 @@ parse_args(vector<string> args) {
 
     } else if ((this_arg == "-y") || (this_arg == "--sync")) {
       if (no_next_arg)
-        mxerror(_("'%s' lacks the audio delay.\n"), this_arg.c_str());
+        mxerror(_("'%s' lacks the delay.\n"), this_arg.c_str());
 
       parse_sync(next_arg, this_arg, *ti);
       sit++;
@@ -2017,13 +1982,6 @@ parse_args(vector<string> args) {
         mxerror(_("'--cues' lacks its argument.\n"));
 
       parse_cues(next_arg, *ti);
-      sit++;
-
-    } else if (this_arg == "--delay") {
-      if (no_next_arg)
-        mxerror(_("'--delay' lacks the delay to apply.\n"));
-
-      parse_delay(next_arg, *ti);
       sit++;
 
     } else if (this_arg == "--default-track") {

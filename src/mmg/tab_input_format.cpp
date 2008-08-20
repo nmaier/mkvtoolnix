@@ -178,10 +178,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   siz_fg->Add(st_delay, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   tc_delay = new wxTextCtrl(this, ID_TC_DELAY, wxT(""));
-  tc_delay->SetToolTip(TIP("Delay this track by a couple of ms. Can be "
-                           "negative. Only applies to audio and subtitle "
-                           "tracks. Some audio formats cannot be delayed at "
-                           "the moment."));
+  tc_delay->SetToolTip(TIP("Delay this track's timecodes by a couple of ms. Can be negative. Works best on video and subtitle tracks."));
   tc_delay->SetSizeHints(0, -1);
   siz_fg->Add(tc_delay, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL,
               STDSPACING);
@@ -191,11 +188,9 @@ tab_input_format::tab_input_format(wxWindow *parent,
   siz_fg->Add(st_stretch, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   tc_stretch = new wxTextCtrl(this, ID_TC_STRETCH, wxT(""));
-  tc_stretch->SetToolTip(TIP("Stretch the audio or subtitle track by a "
-                             "factor. This entry can have two formats. It is "
-                             "either a positive floating point number, or a "
-                             "fraction like e.g. 1200/1253. Not all formats "
-                             "can be stretched at the moment."));
+  tc_stretch->SetToolTip(TIP("Stretch this track's timecodes a. This entry can have two formats. "
+                             "It is either a positive floating point number, or a fraction like e.g. 1200/1253. "
+                             "Works best on video and subtitle tracks."));
   tc_stretch->SetSizeHints(0, -1);
   siz_fg->Add(tc_stretch, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL,
               STDSPACING);
@@ -311,10 +306,10 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
 
   ctype = ctype.Lower();
 
-  st_delay->Enable(audio_app || subs_app);
-  tc_delay->Enable(audio_app || subs_app);
-  st_stretch->Enable(audio_app || subs_app);
-  tc_stretch->Enable(audio_app || subs_app);
+  st_delay->Enable(NULL != t);
+  tc_delay->Enable(NULL != t);
+  st_stretch->Enable(NULL != t);
+  tc_stretch->Enable(NULL != t);
   st_sub_charset->Enable(subs_app && (ctype.Find(wxT("vobsub")) < 0));
   cob_sub_charset->Enable(subs_app && (ctype.Find(wxT("vobsub")) < 0));
   st_fourcc->Enable(video);

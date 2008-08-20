@@ -36,8 +36,7 @@ tta_packetizer_c::tta_packetizer_c(generic_reader_c *_reader,
   sample_rate(_sample_rate), samples_output(0) {
 
   set_track_type(track_audio);
-  set_track_default_duration((int64_t)(1000000000.0 * ti.async.linear *
-                                       TTA_FRAME_TIME));
+  set_track_default_duration((int64_t)(1000000000.0 * TTA_FRAME_TIME));
 }
 
 tta_packetizer_c::~tta_packetizer_c() {
@@ -59,8 +58,8 @@ tta_packetizer_c::process(packet_cptr packet) {
 
   packet->timecode = irnd((double)samples_output * 1000000000 / sample_rate);
   if (-1 == packet->duration) {
-    packet->duration = irnd(1000000000.0 * ti.async.linear * TTA_FRAME_TIME);
-    samples_output += irnd(TTA_FRAME_TIME * sample_rate);
+    packet->duration  = irnd(1000000000.0 * TTA_FRAME_TIME);
+    samples_output   += irnd(TTA_FRAME_TIME * sample_rate);
 
   } else {
     mxverb(2, "tta_packetizer: incomplete block with duration " LLD "\n",

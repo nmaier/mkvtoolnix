@@ -64,14 +64,7 @@ flac_packetizer_c::flac_packetizer_c(generic_reader_c *_reader,
 
   set_track_type(track_audio);
   if (stream_info.min_blocksize == stream_info.max_blocksize)
-    set_track_default_duration((int64_t)(1000000000ll *
-                                         stream_info.min_blocksize *
-                                         ti.async.linear /
-                                         stream_info.sample_rate));
-
-  if ((ti.async.displacement != 0) || (ti.async.linear != 1.0))
-    mxwarn("FLAC packetizer: Audio synchronization has not been "
-           "implemented for FLAC yet.\n");
+    set_track_default_duration((int64_t)(1000000000ll * stream_info.min_blocksize / stream_info.sample_rate));
 }
 
 flac_packetizer_c::~flac_packetizer_c() {

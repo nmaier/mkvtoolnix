@@ -1,3 +1,13 @@
+2008-08-20  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge, mmg: The option "--delay" was removed. The option
+	"--sync" now only modifies the timecodes of a given
+	track. mkvmerge does not pad audio tracks with silence. "--sync"
+	works with all track types now, but using a stretch factor other
+	than 1 with audio tracks might not work too well during
+	playback. mmg's inputs for "Delay" and "Stretch by" can be used
+	with all track types. Fix for bug 287.
+
 2008-08-19  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: mmg outputs a more informative error

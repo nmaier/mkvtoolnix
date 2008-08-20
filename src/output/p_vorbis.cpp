@@ -79,9 +79,7 @@ vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *_reader,
 
   set_track_type(track_audio);
   if (use_durations)
-    set_track_default_duration((int64_t)(1024000000000.0 *
-                                            ti.async.linear / vi.rate));
-  ti.async.displacement = initial_displacement;
+    set_track_default_duration((int64_t)(1024000000000.0 / vi.rate));
 }
 
 vorbis_packetizer_c::~vorbis_packetizer_c() {
@@ -114,9 +112,8 @@ vorbis_packetizer_c::set_headers() {
 */
 int
 vorbis_packetizer_c::process(packet_cptr packet) {
-  unsigned char zero[2];
   ogg_packet op;
-  int64_t this_bs, samples_here, samples_needed, expected_timecode;
+  int64_t this_bs, samples_here, expected_timecode;
   int64_t chosen_timecode;
 
   debug_enter("vorbis_packetizer_c::process");
@@ -125,74 +122,31 @@ vorbis_packetizer_c::process(packet_cptr packet) {
   if ((samples == 0) && (packet->timecode > 0))
     timecode_offset = packet->timecode;
 
-  // Positive displacement, first packet? Well then lets create silence.
-  if ((samples == 0) && (initial_displacement > 0)) {
-    // Create a fake packet so we can use vorbis_packet_blocksize().
-    zero[0] = 0;
-    zero[1] = 0;
-    memset(&op, 0, sizeof(ogg_packet));
-    op.packet = zero;
-    op.bytes = 2;
-
-    // Calculate how many samples we have to create.
-    samples_needed = vi.rate * initial_displacement / 1000000000;
-
-    this_bs = vorbis_packet_blocksize(&vi, &op);
-    samples_here = (this_bs + last_bs) / 4;
-    while ((samples + samples_here) < samples_needed) {
-      samples += samples_here;
-      last_bs = this_bs;
-      samples_here = (this_bs + last_bs) / 4;
-      add_packet(new packet_t(new memory_c(zero, 2, false),
-                              samples * 1000000000 / vi.rate,
-                              samples_here * 1000000000 / vi.rate));
-    }
-    last_samples_sum = samples;
-  }
-
   // Update the number of samples we have processed so that we can
   // calculate the timecode on the next call.
-  op.packet = packet->data->get();
-  op.bytes = packet->data->get_size();
-  this_bs = vorbis_packet_blocksize(&vi, &op);
-  samples_here = (this_bs + last_bs) / 4;
-  last_bs = this_bs;
-  samples += samples_here;
+  op.packet          = packet->data->get();
+  op.bytes           = packet->data->get_size();
+  this_bs            = vorbis_packet_blocksize(&vi, &op);
+  samples_here       = (this_bs + last_bs) / 4;
+  last_bs            = this_bs;
+  samples           += samples_here;
 
-  expected_timecode = last_timecode + last_samples_sum * 1000000000 / vi.rate +
-    timecode_offset;
-  packet->timecode += initial_displacement;
-  if (initial_displacement < 0)
-    expected_timecode += initial_displacement;
+  expected_timecode  = last_timecode + last_samples_sum * 1000000000 / vi.rate + timecode_offset;
 
   if (packet->timecode > (expected_timecode + 100000000)) {
-    chosen_timecode = packet->timecode;
-    packet->duration = packet->timecode -
-      (last_timecode + last_samples_sum * 1000000000 / vi.rate +
-       timecode_offset);
-    last_timecode = packet->timecode;
+    chosen_timecode  = packet->timecode;
+    packet->duration = packet->timecode - (last_timecode + last_samples_sum * 1000000000 / vi.rate + timecode_offset);
+    last_timecode    = packet->timecode;
     last_samples_sum = 0;
   } else {
-    chosen_timecode = expected_timecode;
-    packet->duration = (int64_t)(samples_here * 1000000000 * ti.async.linear /
-                                 vi.rate);
+    chosen_timecode  = expected_timecode;
+    packet->duration = (int64_t)(samples_here * 1000000000 / vi.rate);
   }
 
   last_samples_sum += samples_here;
 
-  // Handle the linear sync - simply multiply with the given factor.
-  chosen_timecode = (int64_t)((double)chosen_timecode * ti.async.linear);
-
-  // If a negative sync value was used we may have to skip this packet.
-  if (chosen_timecode < 0) {
-    debug_leave("vorbis_packetizer_c::process");
-    return FILE_STATUS_MOREDATA;
-  }
-
-  mxverb(2, "Vorbis: samples_here at " LLD " (orig " LLD " expected " LLD "): "
-         LLD " (last_samples_sum: " LLD ")\n",
-         chosen_timecode, packet->timecode, expected_timecode,
-         samples_here, last_samples_sum);
+  mxverb(2, "Vorbis: samples_here at " LLD " (orig " LLD " expected " LLD "): " LLD " (last_samples_sum: " LLD ")\n",
+         chosen_timecode, packet->timecode, expected_timecode, samples_here, last_samples_sum);
   packet->timecode = chosen_timecode;
   add_packet(packet);
 

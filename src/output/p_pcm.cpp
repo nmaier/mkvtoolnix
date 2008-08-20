@@ -37,7 +37,7 @@ pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *_reader,
   packetno(0), bps(_channels * _bits_per_sample * _samples_per_sec / 8),
   samples_per_sec(_samples_per_sec), channels(_channels),
   bits_per_sample(_bits_per_sample), packet_size(0),
-  bytes_output(0), skip_bytes(0), big_endian(_big_endian) {
+  bytes_output(0), big_endian(_big_endian) {
 
   int i;
 
@@ -49,8 +49,7 @@ pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *_reader,
   packet_size = samples_per_sec / i;
 
   set_track_type(track_audio);
-  set_track_default_duration((int64_t)(1000000000.0 * ti.async.linear *
-                                       packet_size / samples_per_sec));
+  set_track_default_duration((int64_t)(1000000000.0 * packet_size / samples_per_sec));
 
   /* It could happen that (channels * bits_per_sample < 8).  Because of this,
      we mustn't divide by 8 in the same line, or the result would be hosed. */
@@ -76,47 +75,12 @@ pcm_packetizer_c::set_headers() {
 
 int
 pcm_packetizer_c::process(packet_cptr packet) {
-  unsigned char *new_buf;
-  int new_size;
-
   debug_enter("pcm_packetizer_c::process");
 
-  if (initial_displacement != 0) {
-    if (initial_displacement > 0) {
-      // Add silence.
-      int64_t pad_size;
-
-      pad_size = (int64_t)bps * (int64_t)initial_displacement / 1000000000ll;
-      new_buf = (unsigned char *)safemalloc(pad_size);
-      memset(new_buf, 0, pad_size);
-      buffer.add(new_buf, pad_size);
-      safefree(new_buf);
-    } else
-      // Skip bytes.
-      skip_bytes = -1 * (int64_t)bps * (int64_t)initial_displacement /
-        1000000000ll;
-    initial_displacement = 0;
-  }
-
-  new_size = packet->data->get_size();
-  if (skip_bytes) {
-    if (skip_bytes > packet->data->get_size()) {
-      skip_bytes -= packet->data->get_size();
-      return FILE_STATUS_MOREDATA;
-    }
-    new_size -= skip_bytes;
-    new_buf = packet->data->get() + skip_bytes;
-    skip_bytes = 0;
-  } else
-    new_buf = packet->data->get();
-
-  buffer.add(new_buf, new_size);
+  buffer.add(packet->data->get(), packet->data->get_size());
 
   while (buffer.get_size() >= packet_size) {
-    add_packet(new packet_t(new memory_c(buffer.get_buffer(), packet_size,
-                                         false),
-                            (int64_t)bytes_output * 1000000000ll / bps,
-                            (int64_t)packet_size * 1000000000ll / bps));
+    add_packet(new packet_t(new memory_c(buffer.get_buffer(), packet_size, false), (int64_t)bytes_output * 1000000000ll / bps, (int64_t)packet_size * 1000000000ll / bps));
     buffer.remove(packet_size);
     bytes_output += packet_size;
   }

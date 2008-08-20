@@ -43,12 +43,6 @@ ra_packetizer_c::ra_packetizer_c(generic_reader_c *_reader,
   skip_to_keyframe(false),
   buffer_until_keyframe(false) {
 
-  if (initial_displacement < 0) {
-    mxwarn("Track " LLD "/'%s': Negative '--sync' is not supported for "
-           "RealAudio tracks.\n", ti.id, ti.fname.c_str());
-    initial_displacement = 0;
-  }
-
   set_track_type(track_audio, TFA_SHORT_QUEUEING);
 }
 
@@ -77,66 +71,8 @@ ra_packetizer_c::set_headers() {
 
 int
 ra_packetizer_c::process(packet_cptr packet) {
-//   bool buffer_this;
-//   int64_t buffered_duration;
-//   int i;
-
   debug_enter("ra_packetizer_c::process");
 
-//   if ((duration <= 0) && (initial_displacement != 0))
-//     mxerror("RealAudio sync wanted, but duration == 0. Not yet "
-//             "implemented.\n");
-
-//   if (skip_to_keyframe) {
-//     if (bref == -1)
-//       skip_to_keyframe = false;
-//     else {
-//       displace(-duration);
-//       return FILE_STATUS_MOREDATA;
-//     }
-//   }
-
-//   if (needs_negative_displacement(duration)) {
-//     skip_to_keyframe = true;
-//     displace(-duration);
-//     return FILE_STATUS_MOREDATA;
-//   } else if (needs_positive_displacement(duration)) {
-//     if (!buffer_until_keyframe) {
-//       buffer_until_keyframe = true;
-//       buffer_this = true;
-//     } else if (bref != -1)
-//       buffer_this = true;
-//     else {
-//       buffered_duration = 0;
-//       for (i = 0; i < buffered_durations.size(); i++)
-//         buffered_duration += buffered_durations[i];
-//       displace(buffered_duration);
-//       add_packet(*buffered_packets[0], buffered_timecodes[0],
-//                  buffered_durations[0]);
-//       delete buffered_packets[0];
-//       for (i = 1; i < buffered_durations.size(); i++) {
-//         add_packet(*buffered_packets[i], buffered_timecodes[i],
-//                    buffered_durations[i], buffered_durations[i - 1]);
-//         delete buffered_packets[i];
-//       }
-//       buffered_packets.clear();
-//       buffered_timecodes.clear();
-//       buffered_durations.clear();
-//       if (needs_positive_displacement(duration))
-//       buffer_until_keyframe = false;
-//       buffer_until_keyframe = false;
-//     }
-//     if (buffer_this) {
-//       buffered_packets.push_back(mem.grab());
-//       buffered_timecodes.push_back(timecode);
-//       buffered_durations.push_back(duration);
-//       return FILE_STATUS_MOREDATA;
-//     }
-//   }
-
-  packet->timecode += initial_displacement;
-  if (-1 != packet->bref)
-    packet->bref += initial_displacement;
   add_packet(packet);
 
   debug_leave("ra_packetizer_c::process");

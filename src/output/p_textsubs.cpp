@@ -71,23 +71,9 @@ int
 textsubs_packetizer_c::process(packet_cptr packet) {
   int num_newlines;
   char *subs, *idx1, *idx2;
-  int64_t end;
-
-  end = packet->timecode + packet->duration;
-  // Adjust the start and end values according to the audio adjustment.
-  packet->timecode += initial_displacement;
-  packet->timecode = (int64_t)(ti.async.linear * packet->timecode);
-  end += initial_displacement;
-  end = (int64_t)(ti.async.linear * end);
-
-  if (end < 0)
-    return FILE_STATUS_MOREDATA;
-  else if (packet->timecode < 0)
-    packet->timecode = 0;
 
   if (packet->duration < 0) {
-    mxwarn("textsubs_packetizer: Ignoring an entry which starts after it ends."
-           "\n");
+    mxwarn("textsubs_packetizer: Ignoring an entry which starts after it ends.\n");
     return FILE_STATUS_MOREDATA;
   }
 

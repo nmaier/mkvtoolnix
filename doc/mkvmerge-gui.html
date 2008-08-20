@@ -462,21 +462,30 @@
   </div>
 
   <ul>
-   <li><code>Delay (in ms):</code> In some cases audio and video are not
-    synchronized properly. With this option the user can offset the audio
-    track by a given amount, either positive or negative. <i>mkvmerge</i> will
-    either remove samples at the beginning or insert silence at the beginning
-    to adjust the track.
+   <li><code>Delay (in ms):</code> In some cases audio and video are
+    not synchronized properly. With this option the user can offset
+    the timecodes of any track by a given amount, either positive or
+    negative. The number you enter here is the amount in milliseconds
+    that is added to each timecode after the <code>Stretch by</code>
+    factor has been applied (see below).
     <br>
-    This option is available for audio and text subtitle tracks.</li>
+    This option is available for all track types. However, timecode
+    adjustments work best for video and subtitle tracks during
+    playback.</li>
 
-   <li><code>Stretch by:</code> In some cases audio and video slowly drift
-    apart during playback. This can be fixed by supplying a factor of how much
-    the time codes should be stretched by <i>mkvmerge</i>. If nothing is given
-    then '1.0' is assumed which does not alter the time codes. Please note
-    that this option has not been implemented for all audio track types yet.
+   <li><code>Stretch by:</code> In some cases audio and video slowly
+    drift apart during playback. This can be fixed by supplying a
+    factor of how much the time codes should be stretched
+    by <i>mkvmerge</i>. If nothing is entered then '1.0' is assumed
+    which does not alter the time codes.
     <br>
-    This option is available for audio and text subtitle tracks.</li>
+    The value you enter can either be a floating point number or a
+    fraction, e.g. &quot;1/2&quot;. The factor is applied before
+    the <code>Delay</code> is added (see above).
+    <br>
+    This option is available for all track types. However, timecode
+    adjustments work best for video and subtitle tracks during
+    playback.</li>
 
    <li><code>Subtitle charset:</code> Some text subtitle formats do not store
     the charset that they were created with. This is important because text

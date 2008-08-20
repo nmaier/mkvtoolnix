@@ -73,22 +73,15 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   has_been_flushed = false;
   timecode_factory_application_mode = TFA_AUTOMATIC;
 
-  // Let's see if the user specified audio sync for this track.
-  if (map_has_key(ti.audio_syncs, ti.id))
-    ti.async = ti.audio_syncs[ti.id];
-  else if (map_has_key(ti.audio_syncs, -1))
-    ti.async = ti.audio_syncs[-1];
-  if (0.0 == ti.async.linear)
-    ti.async.linear = 1.0;
-  ti.async.displacement *= (int64_t)1000000; // ms to ns
-  initial_displacement = ti.async.displacement;
-  ti.async.displacement = 0;
-
-  // Let's see if the user has specified a delay for this track.
-  if (map_has_key(ti.packet_delays, ti.id))
-    ti.packet_delay = ti.packet_delays[ti.id];
-  else if (map_has_key(ti.packet_delays, -1))
-    ti.packet_delay = ti.packet_delays[-1];
+  // Let's see if the user specified timecode sync for this track.
+  if (map_has_key(ti.timecode_syncs, ti.id))
+    ti.tcsync = ti.timecode_syncs[ti.id];
+  else if (map_has_key(ti.timecode_syncs, -1))
+    ti.tcsync = ti.timecode_syncs[-1];
+  if (0 == ti.tcsync.numerator)
+    ti.tcsync.numerator = 1;
+  if (0 == ti.tcsync.denominator)
+    ti.tcsync.denominator = 1;
 
   // Let's see if the user has specified which cues he wants for this track.
   if (map_has_key(ti.cue_creations, ti.id))
@@ -394,7 +387,7 @@ void
 generic_packetizer_c::set_track_default_duration(int64_t def_dur) {
   if (default_duration_forced)
     return;
-  htrack_default_duration = def_dur;
+  htrack_default_duration = (int64_t)(def_dur * ti.tcsync.numerator / ti.tcsync.denominator);
   if (track_entry != NULL)
     *(static_cast<EbmlUInteger *>
       (&GetChild<KaxTrackDefaultDuration>(*track_entry))) =
@@ -864,16 +857,17 @@ generic_packetizer_c::add_packet(packet_cptr pack) {
     deferred_packets.push_back(pack);
 }
 
+#define ADJUST_TIMECODE(x) (int64_t)((x + correction_timecode_offset + append_timecode_offset) * ti.tcsync.numerator / ti.tcsync.denominator) + ti.tcsync.displacement
+
 void
 generic_packetizer_c::add_packet2(packet_cptr pack) {
-  pack->timecode += correction_timecode_offset + append_timecode_offset +
-    ti.packet_delay;
+  pack->timecode   = ADJUST_TIMECODE(pack->timecode);
   if (pack->bref >= 0)
-    pack->bref += correction_timecode_offset + append_timecode_offset +
-      ti.packet_delay;
+    pack->bref     = ADJUST_TIMECODE(pack->bref);
   if (pack->fref >= 0)
-    pack->fref += correction_timecode_offset + append_timecode_offset +
-      ti.packet_delay;
+    pack->fref     = ADJUST_TIMECODE(pack->fref);
+  if (pack->duration > 0)
+    pack->duration = (int64_t)(pack->duration * ti.tcsync.numerator / ti.tcsync.denominator);
 
   if ((htrack_min_cache < 2) && (pack->fref >= 0)) {
     set_track_min_cache(2);
@@ -1096,23 +1090,6 @@ generic_packetizer_c::apply_factory_full_queueing(packet_cptr_di &p_start) {
 }
 
 void
-generic_packetizer_c::displace(float by_ns) {
-  ti.async.displacement += (int64_t)by_ns;
-  if (initial_displacement < 0) {
-    if (ti.async.displacement < initial_displacement) {
-      mxverb(3, "EODIS 1 by %f dis is now " LLD " with idis " LLD "\n",
-             by_ns, ti.async.displacement, initial_displacement);
-      initial_displacement = 0;
-    }
-  } else if (iabs(initial_displacement - ti.async.displacement) <
-             (by_ns / 2)) {
-    mxverb(3, "EODIS 2 by %f dis is now " LLD " with idis " LLD "\n",
-           by_ns, ti.async.displacement, initial_displacement);
-    initial_displacement = 0;
-  }
-}
-
-void
 generic_packetizer_c::force_duration_on_last_packet() {
   if (packet_queue.empty()) {
     mxverb(2, "force_duration_on_last_packet: packet queue is empty for "
@@ -1154,7 +1131,6 @@ generic_packetizer_c::handle_avi_audio_sync(int64_t num_bytes,
   }
 
   enable_avi_audio_sync(false);
-  initial_displacement += duration;
 
   return duration;
 }
@@ -1185,10 +1161,8 @@ generic_packetizer_c::connect(generic_packetizer_c *src,
 
 void
 generic_packetizer_c::set_displacement_maybe(int64_t displacement) {
-  if ((ti.async.linear != 1.0) || (ti.async.displacement != 0) ||
-      (initial_displacement != 0))
-    return;
-  initial_displacement = displacement;
+  if ((1 == ti.tcsync.numerator) && (1 == ti.tcsync.denominator) && (0 == ti.tcsync.displacement))
+    ti.tcsync.displacement = displacement;
 }
 
 bool
@@ -1230,14 +1204,13 @@ generic_reader_c::generic_reader_c(track_info_c &_ti):
   add_all_requested_track_ids2(btracks);
   add_all_requested_track_ids(string, all_fourccs);
   add_all_requested_track_ids(display_properties_t, display_properties);
-  add_all_requested_track_ids(audio_sync_t, audio_syncs);
+  add_all_requested_track_ids(timecode_sync_t, timecode_syncs);
   add_all_requested_track_ids(cue_strategy_e, cue_creations);
   add_all_requested_track_ids(bool, default_track_flags);
   add_all_requested_track_ids(string, languages);
   add_all_requested_track_ids(string, sub_charsets);
   add_all_requested_track_ids(string, all_tags);
   add_all_requested_track_ids(bool, all_aac_is_sbr);
-  add_all_requested_track_ids(int64_t, packet_delays);
   add_all_requested_track_ids(compression_method_e, compression_list);
   add_all_requested_track_ids(string, track_names);
   add_all_requested_track_ids(string, all_ext_timecodes);
@@ -1518,7 +1491,6 @@ track_info_c::track_info_c():
   default_track_flag_present(false),
   tags(NULL),
   aac_is_sbr(-1),
-  packet_delay(0),
   compression(COMPRESSION_UNSPECIFIED),
   pixel_cropping_specified(false),
   stereo_mode(STEREO_MODE_UNSPECIFIED),
@@ -1528,8 +1500,6 @@ track_info_c::track_info_c():
   no_tags(false),
   avi_audio_sync_enabled(false) {
 
-  async.linear = 1.0;
-  async.displacement = 0;
   memset(&pixel_cropping, 0, sizeof(pixel_crop_t));
 }
 
@@ -1572,8 +1542,8 @@ track_info_c::operator =(const track_info_c &src) {
   aspect_ratio_is_factor = false;
   display_dimensions_given = false;
 
-  audio_syncs = src.audio_syncs;
-  memcpy(&async, &src.async, sizeof(audio_sync_t));
+  timecode_syncs = src.timecode_syncs;
+  memcpy(&tcsync, &src.tcsync, sizeof(timecode_sync_t));
 
   cue_creations = src.cue_creations;
   cues = src.cues;
@@ -1597,9 +1567,6 @@ track_info_c::operator =(const track_info_c &src) {
 
   all_aac_is_sbr = src.all_aac_is_sbr;
   aac_is_sbr = src.aac_is_sbr;
-
-  packet_delay = src.packet_delay;
-  packet_delays = src.packet_delays;
 
   compression_list = src.compression_list;
   compression = src.compression;
