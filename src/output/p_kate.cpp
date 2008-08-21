@@ -90,13 +90,13 @@ kate_packetizer_c::process(packet_cptr packet) {
   int64_t duration           = get_uint64_le(packet->data->get() + 1 + sizeof(int64_t));
   int64_t backlink           = get_uint64_le(packet->data->get() + 1 + sizeof(int64_t) * 2);
 
-  float t                    = start_time * (float)kate_id.gden / kate_id.gnum;
-  float backlink_t           = (int64_t)((start_time - backlink) * (float)kate_id.gden / kate_id.gnum);
-  float dt                   = duration * (float)kate_id.gden / kate_id.gnum;
+  double scaled_timecode     = start_time              * (double)kate_id.gden / (double)kate_id.gnum;
+  double scaled_duration     = duration                * (double)kate_id.gden / (double)kate_id.gnum;
+  double scaled_backlink     = (start_time - backlink) * (double)kate_id.gden / (double)kate_id.gnum;
 
-  packet->timecode           = (int64_t)(t          * 1000000000ll);
-  packet->bref               = (int64_t)(backlink_t * 1000000000ll);
-  packet->duration           = (int64_t)(dt         * 1000000000ll);
+  packet->timecode           =            (int64_t)(scaled_timecode * 1000000000ll);
+  packet->duration           =            (int64_t)(scaled_duration * 1000000000ll);
+  packet->bref               = backlink ? (int64_t)(scaled_backlink * 1000000000ll) : -1;
   packet->duration_mandatory = true;
   packet->gap_following      = true;
 
@@ -116,7 +116,7 @@ kate_packetizer_c::dump_debug_info() {
 
 connection_result_e
 kate_packetizer_c::can_connect_to(generic_packetizer_c *src,
-                                      string &error_message) {
+                                  string &error_message) {
   kate_packetizer_c *psrc;
 
   psrc = dynamic_cast<kate_packetizer_c *>(src);
