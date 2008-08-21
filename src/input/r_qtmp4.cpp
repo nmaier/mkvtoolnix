@@ -723,7 +723,7 @@ qtmp4_reader_c::handle_mvhd_atom(qt_atom_t atom,
 
   time_scale = get_uint32_be(&mvhd.time_scale);
 
-  mxverb(2, PFX "%*s Time scale: %un", level * 2, "", time_scale);
+  mxverb(2, PFX "%*s Time scale: %u\n", level * 2, "", time_scale);
 }
 
 void
