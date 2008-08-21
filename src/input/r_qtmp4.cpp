@@ -1726,13 +1726,22 @@ qtmp4_demuxer_c::update_editlist_table(int64_t global_time_scale) {
 
   int frame = 0, e_pts = 0, i;
 
-  mxverb(4, "qtmp4: Updating edit list table for track %u\n", id);
+  int min_editlist_pts = -1;
+  for (i = 0; editlist_table.size() > i; ++i)
+    if ((-1 == min_editlist_pts) || (editlist_table[i].pos < min_editlist_pts))
+      min_editlist_pts = editlist_table[i].pos;
+
+  int pts_offset = 0;
+  if (('v' == type) && v_is_avc && !frame_offset_table.empty() && (frame_offset_table[0] <= min_editlist_pts))
+    pts_offset = frame_offset_table[0];
+
+  mxverb(4, "qtmp4: Updating edit list table for track %u; pts_offset = %d\n", id, pts_offset);
 
   for (i = 0; editlist_table.size() > i; ++i) {
     qt_editlist_t &el = editlist_table[i];
     int sample = 0, pts = el.pos;
-    if (('v' == type) && v_is_avc && !frame_offset_table.empty())
-        pts -= frame_offset_table[0];
+
+    pts -= pts_offset;
 
     el.start_frame = frame;
 

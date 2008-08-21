@@ -1,5 +1,10 @@
 2008-08-21  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The fix to the timecode handling for AVC
+	tracks in MP4 files from 2008-04-16 caused certain other MP4 files
+	to not be read correctly. The video tracks were found, but no
+	frames were read. Fix for bug 294.
+
 	* mkvmerge: new feature: Added support for Ogg Kate
 	subtitles. Patch by ogg.k.ogg.k@googlemail.com.
 
