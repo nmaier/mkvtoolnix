@@ -54,8 +54,6 @@ tta_packetizer_c::set_headers() {
 
 int
 tta_packetizer_c::process(packet_cptr packet) {
-  debug_enter("tta_packetizer_c::process");
-
   packet->timecode = irnd((double)samples_output * 1000000000 / sample_rate);
   if (-1 == packet->duration) {
     packet->duration  = irnd(1000000000.0 * TTA_FRAME_TIME);
@@ -68,14 +66,7 @@ tta_packetizer_c::process(packet_cptr packet) {
   }
   add_packet(packet);
 
-  debug_leave("tta_packetizer_c::process");
-
   return FILE_STATUS_MOREDATA;
-}
-
-void
-tta_packetizer_c::dump_debug_info() {
-  mxdebug("tta_packetizer_c: queue: %u\n", (unsigned int)packet_queue.size());
 }
 
 connection_result_e

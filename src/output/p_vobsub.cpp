@@ -63,12 +63,6 @@ vobsub_packetizer_c::process(packet_cptr packet) {
   return FILE_STATUS_MOREDATA;
 }
 
-void
-vobsub_packetizer_c::dump_debug_info() {
-  mxdebug("vobsub_packetizer_c: queue: %u\n",
-          (unsigned int)packet_queue.size());
-}
-
 connection_result_e
 vobsub_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                     string &error_message) {

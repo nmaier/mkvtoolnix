@@ -51,8 +51,6 @@ private:
   virtual unsigned char *get_aac_packet(unsigned long *header,
                                         aac_header_t *aacheader);
   virtual int process_headerless(packet_cptr packet);
-
-  virtual void dump_debug_info();
 };
 
 #endif // __P_AAC_H

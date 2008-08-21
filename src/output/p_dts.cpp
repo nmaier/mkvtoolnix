@@ -154,8 +154,6 @@ dts_packetizer_c::process(packet_cptr packet) {
   dts_header_t dtsheader;
   unsigned char *dts_packet;
 
-  debug_enter("dts_packetizer_c::process");
-
   add_to_buffer(packet->data->get(), packet->data->get_size());
   while ((dts_packet = get_dts_packet(dtsheader)) != NULL) {
     int64_t new_timecode = -1 == packet->timecode ? (int64_t)(((double)samples_written * 1000000000.0) / ((double)dtsheader.core_sampling_frequency)) : packet->timecode;
@@ -166,14 +164,7 @@ dts_packetizer_c::process(packet_cptr packet) {
     samples_written += get_dts_packet_length_in_core_samples(&dtsheader);
   }
 
-  debug_leave("dts_packetizer_c::process");
-
   return FILE_STATUS_MOREDATA;
-}
-
-void
-dts_packetizer_c::dump_debug_info() {
-  mxdebug("dts_packetizer_c: queue: %u\n", (unsigned int)packet_queue.size());
 }
 
 connection_result_e

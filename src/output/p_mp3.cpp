@@ -162,8 +162,6 @@ mp3_packetizer_c::process(packet_cptr packet) {
   unsigned char *mp3_packet;
   mp3_header_t mp3header;
 
-  debug_enter("mp3_packetizer_c::process");
-
   byte_buffer.add(packet->data->get(), packet->data->get_size());
   while ((mp3_packet = get_mp3_packet(&mp3header)) != NULL) {
     int64_t new_timecode = -1 == packet->timecode ? (int64_t)(1000000000.0 * packetno * spf / samples_per_sec) : packet->timecode;
@@ -171,15 +169,7 @@ mp3_packetizer_c::process(packet_cptr packet) {
     packetno++;
   }
 
-  debug_leave("mp3_packetizer_c::process");
-
   return FILE_STATUS_MOREDATA;
-}
-
-void
-mp3_packetizer_c::dump_debug_info() {
-  mxdebug("mp3_packetizer_c: queue: %u; buffer_size: %d\n",
-          (unsigned int)packet_queue.size(), byte_buffer.get_size());
 }
 
 connection_result_e

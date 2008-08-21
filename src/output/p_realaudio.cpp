@@ -71,17 +71,9 @@ ra_packetizer_c::set_headers() {
 
 int
 ra_packetizer_c::process(packet_cptr packet) {
-  debug_enter("ra_packetizer_c::process");
-
   add_packet(packet);
 
-  debug_leave("ra_packetizer_c::process");
-
   return FILE_STATUS_MOREDATA;
-}
-
-void
-ra_packetizer_c::dump_debug_info() {
 }
 
 connection_result_e

@@ -218,11 +218,6 @@ family_uids_c::add_family_uid(const KaxSegmentFamily &family) {
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
 void
 sighandler(int signum) {
-#ifdef DEBUG
-  if (signum == SIGUSR1)
-    debug_facility.dump_info();
-#endif // DEBUG
-
   if (out == NULL)
     mxerror(_("mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"));
 

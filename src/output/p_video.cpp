@@ -126,13 +126,6 @@ video_packetizer_c::process(packet_cptr packet) {
   return FILE_STATUS_MOREDATA;
 }
 
-void
-video_packetizer_c::dump_debug_info() {
-  mxdebug("video_packetizer_c: queue: %u; frames_output: %d; "
-          "ref_timecode: " LLD "\n", (unsigned int)packet_queue.size(),
-          frames_output, ref_timecode);
-}
-
 connection_result_e
 video_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                    string &error_message) {

@@ -133,8 +133,6 @@ ac3_packetizer_c::process(packet_cptr packet) {
   unsigned long header;
   ac3_header_t ac3header;
 
-  debug_enter("ac3_packetizer_c::process");
-
   add_to_buffer(packet->data->get(), packet->data->get_size());
   while ((ac3_packet = get_ac3_packet(&header, &ac3header)) != NULL) {
     adjust_header_values(ac3header);
@@ -144,8 +142,6 @@ ac3_packetizer_c::process(packet_cptr packet) {
     add_packet(new packet_t(new memory_c(ac3_packet, ac3header.bytes, true), new_timecode, (int64_t)(1000000000.0 * ac3header.samples / samples_per_sec)));
     packetno++;
   }
-
-  debug_leave("ac3_packetizer_c::process");
 
   return FILE_STATUS_MOREDATA;
 }
@@ -165,12 +161,6 @@ ac3_packetizer_c::adjust_header_values(ac3_header_t &ac3header) {
     set_track_default_duration((int64_t)(1000000000.0 * ac3header.samples / samples_per_sec));
 
   rerender_track_headers();
-}
-
-void
-ac3_packetizer_c::dump_debug_info() {
-  mxdebug("ac3_packetizer_c: queue: %u; buffer size: %d\n",
-          (unsigned int)packet_queue.size(), byte_buffer.get_size());
 }
 
 connection_result_e

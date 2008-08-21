@@ -452,8 +452,6 @@ public:
   }
   virtual int process(packet_cptr packet) = 0;
 
-  virtual void dump_debug_info() = 0;
-
   virtual void set_cue_creation(cue_strategy_e create_cue_data) {
     ti.cues = create_cue_data;
   }

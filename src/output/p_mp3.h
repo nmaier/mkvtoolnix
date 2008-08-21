@@ -48,7 +48,6 @@ public:
 private:
   virtual unsigned char *get_mp3_packet(mp3_header_t *mp3header);
 
-  virtual void dump_debug_info();
   virtual void handle_garbage(int64_t bytes);
 };
 

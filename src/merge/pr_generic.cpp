@@ -52,9 +52,6 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
   next_packet_wo_assigned_timecode(0), ti(_ti) {
   int i;
 
-#ifdef DEBUG
-  debug_facility.add_packetizer(this);
-#endif
   reader = nreader;
 
   track_entry = NULL;

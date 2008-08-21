@@ -116,8 +116,6 @@ vorbis_packetizer_c::process(packet_cptr packet) {
   int64_t this_bs, samples_here, expected_timecode;
   int64_t chosen_timecode;
 
-  debug_enter("vorbis_packetizer_c::process");
-
   // Remember the very first timecode we received.
   if ((samples == 0) && (packet->timecode > 0))
     timecode_offset = packet->timecode;
@@ -150,15 +148,7 @@ vorbis_packetizer_c::process(packet_cptr packet) {
   packet->timecode = chosen_timecode;
   add_packet(packet);
 
-  debug_leave("vorbis_packetizer_c::process");
-
   return FILE_STATUS_MOREDATA;
-}
-
-void
-vorbis_packetizer_c::dump_debug_info() {
-  mxdebug("vorbis_packetizer_c: queue: %u\n",
-          (unsigned int)packet_queue.size());
 }
 
 connection_result_e

@@ -46,8 +46,6 @@ public:
                                           int64_t default_duration = -1);
   virtual void extract_aspect_ratio();
 
-  virtual void dump_debug_info();
-
   virtual const char *get_format_name() {
     return "video";
   };

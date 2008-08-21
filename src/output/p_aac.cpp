@@ -194,12 +194,6 @@ aac_packetizer_c::process(packet_cptr packet) {
   return FILE_STATUS_MOREDATA;
 }
 
-void
-aac_packetizer_c::dump_debug_info() {
-  mxdebug("aac_packetizer_c: queue: %u; buffer size: %d\n",
-          (unsigned int)packet_queue.size(), byte_buffer.get_size());
-}
-
 connection_result_e
 aac_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                  string &error_message) {

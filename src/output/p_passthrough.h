@@ -32,8 +32,6 @@ public:
   virtual int process(packet_cptr packet);
   virtual void set_headers();
 
-  virtual void dump_debug_info();
-
   virtual const char *get_format_name() {
     return "passthrough";
   }

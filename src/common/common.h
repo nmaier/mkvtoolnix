@@ -327,42 +327,4 @@ public:
   unsigned char *data() const;
 };
 
-#ifdef DEBUG
-
-class generic_packetizer_c;
-
-typedef struct {
-  uint64_t entered_at, elapsed_time, number_of_calls;
-  uint64_t last_elapsed_time, last_number_of_calls;
-
-  const char *label;
-} debug_data_t;
-
-class MTX_DLL_API debug_c {
-private:
-  vector<generic_packetizer_c *> packetizers;
-  vector<debug_data_t *> entries;
-
-public:
-  debug_c();
-  ~debug_c();
-
-  void enter(const char *label);
-  void leave(const char *label);
-  void add_packetizer(void *ptzr);
-  void dump_info();
-};
-
-extern debug_c MTX_DLL_API debug_facility;
-
-#define debug_enter(func) debug_facility.enter(func)
-#define debug_leave(func) debug_facility.leave(func)
-
-#else // DEBUG
-
-#define debug_enter(func)
-#define debug_leave(func)
-
-#endif // DEBUG
-
 #endif // __COMMON_H

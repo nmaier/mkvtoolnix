@@ -56,7 +56,6 @@ wavpack_packetizer_c::set_headers() {
 
 int
 wavpack_packetizer_c::process(packet_cptr packet) {
-  debug_enter("wavpack_packetizer_c::process");
   int64_t samples = get_uint32_le(packet->data->get());
 
   if (-1 == packet->duration)
@@ -69,15 +68,7 @@ wavpack_packetizer_c::process(packet_cptr packet) {
   samples_output += samples;
   add_packet(packet);
 
-  debug_leave("wavpack_packetizer_c::process");
-
   return FILE_STATUS_MOREDATA;
-}
-
-void
-wavpack_packetizer_c::dump_debug_info() {
-  mxdebug("wavpack_packetizer_c: queue: %u\n",
-          (unsigned int)packet_queue.size());
 }
 
 connection_result_e

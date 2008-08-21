@@ -55,8 +55,6 @@ private:
   virtual unsigned char *get_dts_packet(dts_header_t &dts_header);
   virtual int dts_packet_available();
   virtual void remove_dts_packet(int pos, int framesize);
-
-  virtual void dump_debug_info();
 };
 
 #endif // __P_DTS_H

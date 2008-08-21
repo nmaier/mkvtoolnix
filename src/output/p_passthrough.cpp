@@ -41,23 +41,12 @@ passthrough_packetizer_c::set_headers() {
 
 int
 passthrough_packetizer_c::process(packet_cptr packet) {
-  debug_enter("passthrough_packetizer_c::process");
-
   packets_processed++;
   bytes_processed += packet->data->get_size();
 
   add_packet(packet);
 
-  debug_leave("passthrough_packetizer_c::process");
   return FILE_STATUS_MOREDATA;
-}
-
-void
-passthrough_packetizer_c::dump_debug_info() {
-  mxdebug("passthrough_packetizer_c: packets processed: " LLD ", "
-          "bytes processed: " LLD ", packets in queue: %u\n",
-          packets_processed, bytes_processed,
-          (unsigned int)packet_queue.size());
 }
 
 #define CMP(member) (member != psrc->member)

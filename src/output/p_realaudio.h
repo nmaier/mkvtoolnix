@@ -48,9 +48,6 @@ public:
   }
   virtual connection_result_e can_connect_to(generic_packetizer_c *src,
                                              string &error_message);
-
-protected:
-  virtual void dump_debug_info();
 };
 
 #endif // __P_REALAUDIO_H

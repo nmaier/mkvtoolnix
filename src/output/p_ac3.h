@@ -50,8 +50,6 @@ protected:
                                         ac3_header_t *ac3header);
   virtual void add_to_buffer(unsigned char *buf, int size);
   virtual void adjust_header_values(ac3_header_t &ac3header);
-
-  virtual void dump_debug_info();
 };
 
 class ac3_bs_packetizer_c: public ac3_packetizer_c {

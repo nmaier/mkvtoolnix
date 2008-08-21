@@ -75,8 +75,6 @@ pcm_packetizer_c::set_headers() {
 
 int
 pcm_packetizer_c::process(packet_cptr packet) {
-  debug_enter("pcm_packetizer_c::process");
-
   buffer.add(packet->data->get(), packet->data->get_size());
 
   while (buffer.get_size() >= packet_size) {
@@ -84,8 +82,6 @@ pcm_packetizer_c::process(packet_cptr packet) {
     buffer.remove(packet_size);
     bytes_output += packet_size;
   }
-
-  debug_leave("pcm_packetizer_c::process");
 
   return FILE_STATUS_MOREDATA;
 }
@@ -104,11 +100,6 @@ pcm_packetizer_c::flush() {
   }
 
   generic_packetizer_c::flush();
-}
-
-void
-pcm_packetizer_c::dump_debug_info() {
-  mxdebug("pcm_packetizer_c: queue: %u\n", (unsigned int)packet_queue.size());
 }
 
 connection_result_e
