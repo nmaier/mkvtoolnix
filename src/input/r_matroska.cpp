@@ -80,6 +80,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "p_vobbtn.h"
 #include "p_vorbis.h"
 #include "p_wavpack.h"
+#include "p_kate.h"
 
 using namespace std;
 using namespace libmatroska;
@@ -468,6 +469,13 @@ kax_reader_c::verify_tracks() {
             if (verbose)
               mxwarn(PFX "CodecID for track " LLU " is '%s', but there was no "
                      "private data found.\n", t->tnum, t->codec_id.c_str());
+            continue;
+          }
+        }
+        else if (t->codec_id == MKV_S_KATE) {
+          if (t->private_data == NULL) {
+            if (verbose)
+              mxwarn(PFX "CodecID for track " LLU " is '%s', but there was no private data found.\n", t->tnum, t->codec_id.c_str());
             continue;
           }
         }
@@ -1720,6 +1728,13 @@ kax_reader_c::create_packetizer(int64_t tid) {
                  ti.fname.c_str(), (int64_t)t->tnum);
 
           t->sub_type = 't';
+
+        } else if (t->codec_id == MKV_S_KATE) {
+          t->ptzr     = add_packetizer(new kate_packetizer_c(this, t->private_data, t->private_size, nti));
+          t->sub_type = 'k';
+
+          mxinfo(FMT_TID "Using the Kate output module.\n", ti.fname.c_str(), (int64_t)t->tnum);
+
         } else
           init_passthrough_packetizer(t);
 

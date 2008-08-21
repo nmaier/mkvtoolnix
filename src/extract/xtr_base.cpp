@@ -185,6 +185,8 @@ xtr_base_c::create_extractor(const string &new_codec_id,
     return new xtr_usf_c(new_codec_id, new_tid, tspec);
   else if (new_codec_id == MKV_V_COREPICTURE)
     return new xtr_cpic_c(new_codec_id, new_tid, tspec);
+  else if (new_codec_id == MKV_S_KATE)
+    return new xtr_oggkate_c(new_codec_id, new_tid, tspec);
 
   return NULL;
 }

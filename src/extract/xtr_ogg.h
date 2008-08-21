@@ -19,6 +19,7 @@
 
 #include <ogg/ogg.h>
 
+#include "kate_common.h"
 #include "xtr_base.h"
 
 class xtr_flac_c: public xtr_base_c {
@@ -70,6 +71,22 @@ public:
   virtual const char *get_container_name() {
     return "Ogg (Vorbis in Ogg)";
   };
+};
+
+class xtr_oggkate_c: public xtr_oggbase_c {
+public:
+  xtr_oggkate_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec);
+
+  virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
+  virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions, int64_t timecode, int64_t duration, int64_t bref,
+                            int64_t fref, bool keyframe, bool discardable, bool references_valid);
+
+  virtual const char *get_container_name() {
+    return "Ogg (Kate in Ogg)";
+  };
+
+private:
+  kate_identification_header_t kate_id_header;
 };
 
 #endif

@@ -474,7 +474,7 @@ Options that only apply to text subtitle tracks:
 Sets the charset for the conversion to UTF-8 for UTF-8 subtitles for the given
 track ID. If not specified the charset will be derived from the current locale
 settings. Note that a charset is not needed for subtitles read from Matroska
-files as these are always stored in UTF-8.
+files or from Kate streams, as these are always stored in UTF-8.
 .br
 This option can be used multiple times for an input file applying to several
 tracks by selecting different track IDs each time.
@@ -728,10 +728,11 @@ The following options use track IDs as well: \fB\-\-atracks\fR,
 
 .SH SUBTITLES
 .LP
-There are several text subtitle formats that can be embedded into Matroska.
-At the moment \fBmkvmerge\fR supports only text subtitle formats.
-These subtitles must be recoded to UTF-8 so that they can be displayed
-correctly by a player.
+There are several text subtitle formats that can be embedded into
+Matroska.  At the moment \fBmkvmerge\fR supports only text, VobSub and
+Kate subtitle formats. Text subtitles must be recoded to UTF-8 so that
+they can be displayed correctly by a player. Kate subtitles are
+already in UTF-8 format.
 .LP
 \fBmkvmerge\fR does this conversion automatically based on the system's current
 locale. If the subtitle charset is not the same as
@@ -746,6 +747,9 @@ Subtitle Ripper (SRT) files
 .TP
 *
 Substation Alpha (SSA) / Advanced Substation Alpha scripts (ASS)
+.TP
+*
+Kate streams in Ogg
 
 
 .SH FILE LINKING
@@ -1217,8 +1221,8 @@ AVI as the video and audio source (only raw PCM, MP3 and AC3 audio tracks at
 the moment)
 .TP
 *
-OGG as the source for video, audio (Vorbis, raw PCM, MP3 and AC3 audio) and
-text streams (subtitles).
+OGG as the source for video, audio (Vorbis, raw PCM, MP3 and AC3 audio)
+and subtitle streams (Kate and simple text formats).
 .TP
 *
 WAV as the audio source
@@ -1253,8 +1257,8 @@ Manual audio synchronization for AAC, AC3, DTS and MP3 audio by duplicating
 or removing packets at the beginning.
 .TP
 *
-Text subtitles can be read from SRT (SubRipper / subrip) files or
-taken from other OGM files.
+Subtitles can be read as text from SRT (SubRipper / subrip) files,
+taken from other OGM files, or from Kate streams in Ogg files.
 .TP
 *
 SSA/ASS subtitles from SSA/ASS files

@@ -48,6 +48,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "p_textsubs.h"
 #include "p_video.h"
 #include "p_vorbis.h"
+#include "p_kate.h"
 #include "r_ogm.h"
 #include "r_ogm_flac.h"
 
@@ -211,6 +212,27 @@ public:
 
   virtual string get_codec() {
     return "Theora";
+  };
+
+  virtual void initialize();
+  virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
+  virtual void process_page(int64_t granulepos);
+  virtual bool is_header_packet(ogg_packet &op);
+};
+
+class ogm_s_kate_demuxer_c: public ogm_demuxer_c {
+public:
+  kate_identification_header_t kate;
+
+public:
+  ogm_s_kate_demuxer_c(ogm_reader_c *p_reader);
+
+  virtual const char *get_type() {
+    return ID_RESULT_TRACK_SUBTITLES;
+  };
+
+  virtual string get_codec() {
+    return "Kate";
   };
 
   virtual void initialize();
@@ -453,6 +475,9 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
 
   else if ((op.bytes >= 7) && !strncmp((char *)&op.packet[1], "theora", 6))
     dmx = new ogm_v_theora_demuxer_c(this);
+
+  else if ((op.bytes >= 8) && !memcmp(&op.packet[1], "kate\0\0\0", 7))
+    dmx = new ogm_s_kate_demuxer_c(this);
 
   // FLAC
   else if ((op.bytes >= 4) && !strncmp((char *)op.packet, "fLaC", 4)) {
@@ -1312,7 +1337,8 @@ ogm_v_theora_demuxer_c::process_page(int64_t granulepos) {
       continue;
 
     keyframe_number     = granulepos >> theora.kfgshift;
-    non_keyframe_number = granulepos &  theora.kfgshift;
+    non_keyframe_number = granulepos &  theora.kfgshift; // TODO: seems wrong
+    // should probably be: // non_keyframe_number = granulepos - (keyframe_number << theora.kfgshift);
 
     timecode = (int64_t)(1000000000.0 * units_processed * theora.frd / theora.frn);
     duration = (int64_t)(1000000000.0 *                   theora.frd / theora.frn);
@@ -1334,4 +1360,70 @@ ogm_v_theora_demuxer_c::process_page(int64_t granulepos) {
 bool
 ogm_v_theora_demuxer_c::is_header_packet(ogg_packet &op) {
   return ((0x80 <= op.packet[0]) && (0x82 >= op.packet[0]));
+}
+
+// -----------------------------------------------------------
+
+ogm_s_kate_demuxer_c::ogm_s_kate_demuxer_c(ogm_reader_c *p_reader):
+  ogm_demuxer_c(p_reader) {
+
+  stype              = OGM_STREAM_TYPE_S_KATE;
+  num_header_packets = 1; /* at least 1, will be updated upon reading the ID header */
+
+  memset(&kate, 0, sizeof(kate_identification_header_t));
+}
+
+void
+ogm_s_kate_demuxer_c::initialize() {
+  try {
+    memory_cptr &mem = packet_data[0];
+    kate_parse_identification_header(mem->get(), mem->get_size(), kate);
+    num_header_packets = kate.nheaders;
+  } catch (error_c &e) {
+    mxerror(FMT_TID "The Kate identifaction header could not be parsed (%s).\n", reader->ti.fname.c_str(), track_id, e.get_error().c_str());
+  }
+}
+
+generic_packetizer_c *
+ogm_s_kate_demuxer_c::create_packetizer(track_info_c &ti) {
+  memory_cptr codecprivate       = lace_memory_xiph(packet_data);
+  ti.private_data                = codecprivate->get();
+  ti.private_size                = codecprivate->get_size();
+
+  generic_packetizer_c *ptzr_obj = new kate_packetizer_c(reader, ti.private_data, ti.private_size, ti);
+
+  mxinfo(FMT_TID "Using the Kate subtitle output module.\n", ti.fname.c_str(), (int64_t)ti.id);
+
+  ti.private_data = NULL;
+
+  return ptzr_obj;
+}
+
+void
+ogm_s_kate_demuxer_c::process_page(int64_t granulepos) {
+  ogg_packet op;
+
+  while (ogg_stream_packetout(&os, &op) == 1) {
+    eos |= op.e_o_s;
+
+    if ((0 == op.bytes) || (0 != (op.packet[0] & 0x80)))
+      continue;
+
+//     int base   = granulepos >> kate.kfgshift;
+//     int offset = granulepos - (base << kate.kfgshift);
+
+    reader->reader_packetizers[ptzr]->process(new packet_t(new memory_c(op.packet, op.bytes, false)));
+
+    ++units_processed;
+
+    if (op.e_o_s) {
+      eos = 1;
+      return;
+    }
+  }
+}
+
+bool
+ogm_s_kate_demuxer_c::is_header_packet(ogg_packet &op) {
+  return (0x80 & op.packet[0]);
 }

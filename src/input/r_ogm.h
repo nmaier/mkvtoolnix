@@ -28,6 +28,7 @@
 #include "common.h"
 #include "pr_generic.h"
 #include "theora_common.h"
+#include "kate_common.h"
 
 enum ogm_stream_type_e {
   OGM_STREAM_TYPE_UNKNOWN,
@@ -38,6 +39,7 @@ enum ogm_stream_type_e {
   OGM_STREAM_TYPE_A_MP3,
   OGM_STREAM_TYPE_A_PCM,
   OGM_STREAM_TYPE_A_VORBIS,
+  OGM_STREAM_TYPE_S_KATE,
   OGM_STREAM_TYPE_S_TEXT,
   OGM_STREAM_TYPE_V_AVC,
   OGM_STREAM_TYPE_V_MSCOMP,
