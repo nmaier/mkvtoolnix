@@ -88,15 +88,12 @@ kate_packetizer_c::process(packet_cptr packet) {
 
   int64_t start_time         = get_uint64_le(packet->data->get() + 1);
   int64_t duration           = get_uint64_le(packet->data->get() + 1 + sizeof(int64_t));
-  int64_t backlink           = get_uint64_le(packet->data->get() + 1 + sizeof(int64_t) * 2);
 
-  double scaled_timecode     = start_time              * (double)kate_id.gden / (double)kate_id.gnum;
-  double scaled_duration     = duration                * (double)kate_id.gden / (double)kate_id.gnum;
-  double scaled_backlink     = (start_time - backlink) * (double)kate_id.gden / (double)kate_id.gnum;
+  double scaled_timecode     = start_time * (double)kate_id.gden / (double)kate_id.gnum;
+  double scaled_duration     = duration   * (double)kate_id.gden / (double)kate_id.gnum;
 
-  packet->timecode           =            (int64_t)(scaled_timecode * 1000000000ll);
-  packet->duration           =            (int64_t)(scaled_duration * 1000000000ll);
-  packet->bref               = backlink ? (int64_t)(scaled_backlink * 1000000000ll) : -1;
+  packet->timecode           = (int64_t)(scaled_timecode * 1000000000ll);
+  packet->duration           = (int64_t)(scaled_duration * 1000000000ll);
   packet->duration_mandatory = true;
   packet->gap_following      = true;
 
