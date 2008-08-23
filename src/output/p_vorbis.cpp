@@ -102,14 +102,6 @@ vorbis_packetizer_c::set_headers() {
   generic_packetizer_c::set_headers();
 }
 
-/*
-   Some notes - processing is straight-forward if no AV synchronization
-   is needed - the packet is simply stored in the Matroska file.
-   Unfortunately things are not that easy if AV sync is done. For a
-   negative displacement packets are simply discarded if their timecode
-   is set before the displacement. For positive displacements the packetizer
-   has to generate silence packets and put them into the Matroska file first.
-*/
 int
 vorbis_packetizer_c::process(packet_cptr packet) {
   ogg_packet op;
