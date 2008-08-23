@@ -42,6 +42,7 @@ extern "C" {
 #include "p_mp3.h"
 #include "p_pcm.h"
 #include "p_video.h"
+#include "p_vorbis.h"
 
 #define PFX "avi_reader: "
 
@@ -388,6 +389,11 @@ avi_reader_c::add_audio_demuxer(int aid) {
 
       break;
     }
+
+    case 0x566f:
+      packetizer = create_vorbis_packetizer(aid);
+      break;
+
     default:
       mxerror(FMT_TID "Unknown/unsupported audio format 0x%04x for this audio "
               "track.\n", ti.fname.c_str(), (int64_t)aid + 1, audio_format);
@@ -402,6 +408,62 @@ avi_reader_c::add_audio_demuxer(int aid) {
 }
 
 // }}}
+
+generic_packetizer_c *
+avi_reader_c::create_vorbis_packetizer(int aid) {
+  try {
+    if (!ti.private_data || !ti.private_size)
+      throw error_c("Invalid Vorbis headers in AVI audio track.");
+
+    unsigned char *c = (unsigned char *)ti.private_data;
+
+    if (2 != c[0])
+      throw error_c("Invalid Vorbis headers in AVI audio track.");
+
+    int offset           = 1;
+    const int laced_size = ti.private_size;
+    int i;
+
+    int header_sizes[3];
+    unsigned char *headers[3];
+
+    for (i = 0; 2 > i; ++i) {
+      int size = 0;
+
+      while ((offset < laced_size) && ((unsigned char)255 == c[offset])) {
+        size += 255;
+        ++offset;
+      }
+      if ((laced_size - 1) <= offset)
+        throw error_c("Invalid Vorbis headers in AVI audio track.");
+
+      size            += c[offset];
+      header_sizes[i]  = size;
+      ++offset;
+    }
+
+    headers[0]      = &c[offset];
+    headers[1]      = &c[offset + header_sizes[0]];
+    headers[2]      = &c[offset + header_sizes[0] + header_sizes[1]];
+    header_sizes[2] = laced_size - offset - header_sizes[0] - header_sizes[1];
+
+    ti.private_data = NULL;
+    ti.private_size = 0;
+
+    vorbis_packetizer_c *ptzr = new vorbis_packetizer_c(this, headers[0], header_sizes[0], headers[1], header_sizes[1], headers[2], header_sizes[2], ti);
+
+    if (verbose)
+      mxinfo(FMT_TID "Using the Vorbis output module.\n", ti.fname.c_str(), (int64_t)aid + 1);
+
+    return ptzr;
+
+  } catch (error_c &e) {
+    mxerror(FMT_TID "%s\n", ti.fname.c_str(), (int64_t)aid + 1, e.get_error().c_str());
+
+    // Never reached, but make the compiler happy:
+    return NULL;
+  }
+}
 
 // {{{ FUNCTION avi_reader_c::is_keyframe
 
@@ -649,6 +711,9 @@ avi_reader_c::identify() {
       case 0x00ff:
       case 0x706d:
         type = "AAC";
+        break;
+      case 0x566f:
+        type = "Vorbis";
         break;
       default:
         type = mxsprintf("unsupported (0x%04x)", audio_format);

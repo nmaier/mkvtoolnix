@@ -73,6 +73,8 @@ protected:
   virtual file_status_e read_video();
   virtual file_status_e read_audio(avi_demuxer_t &demuxer);
   virtual memory_cptr extract_avcc();
+
+  virtual generic_packetizer_c *create_vorbis_packetizer(int aid);
 };
 
 #endif  // __R_AVI_H
