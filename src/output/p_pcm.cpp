@@ -31,13 +31,14 @@ pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *_reader,
                                    int _channels,
                                    int _bits_per_sample,
                                    track_info_c &_ti,
-                                   bool _big_endian)
+                                   bool _big_endian,
+                                   bool _float)
   throw (error_c):
   generic_packetizer_c(_reader, _ti),
   packetno(0), bps(_channels * _bits_per_sample * _samples_per_sec / 8),
   samples_per_sec(_samples_per_sec), channels(_channels),
   bits_per_sample(_bits_per_sample), packet_size(0),
-  bytes_output(0), big_endian(_big_endian) {
+  bytes_output(0), big_endian(_big_endian), ieee_float(_float) {
 
   int i;
 
@@ -62,7 +63,9 @@ pcm_packetizer_c::~pcm_packetizer_c() {
 
 void
 pcm_packetizer_c::set_headers() {
-  if (big_endian)
+  if (ieee_float)
+    set_codec_id(MKV_A_PCM_FLOAT);
+  else if (big_endian)
     set_codec_id(MKV_A_PCM_BE);
   else
     set_codec_id(MKV_A_PCM);

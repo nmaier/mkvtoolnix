@@ -152,9 +152,10 @@ class wav_pcm_demuxer_c: public wav_demuxer_c {
 private:
   int m_bps;
   memory_cptr m_buffer;
+  bool ieee_float;
 
 public:
-  wav_pcm_demuxer_c(wav_reader_c *reader, wave_header *wheader);
+  wav_pcm_demuxer_c(wav_reader_c *reader, wave_header *wheader, bool _float);
 
   virtual ~wav_pcm_demuxer_c();
 
@@ -377,9 +378,11 @@ wav_dts_demuxer_c::process(int64_t size) {
 // ----------------------------------------------------------
 
 wav_pcm_demuxer_c::wav_pcm_demuxer_c(wav_reader_c *reader,
-                                     wave_header  *wheader):
+                                     wave_header  *wheader,
+                                     bool _float):
   wav_demuxer_c(reader, wheader),
-  m_bps(0) {
+  m_bps(0),
+  ieee_float(_float) {
 
   m_bps    = get_uint16_le(&m_wheader->common.wChannels) * get_uint16_le(&m_wheader->common.wBitsPerSample) * get_uint32_le(&m_wheader->common.dwSamplesPerSec) / 8;
   m_buffer = memory_c::alloc(m_bps);
@@ -394,7 +397,7 @@ wav_pcm_demuxer_c::create_packetizer() {
                                 get_uint32_le(&m_wheader->common.dwSamplesPerSec),
                                 get_uint16_le(&m_wheader->common.wChannels),
                                 get_uint16_le(&m_wheader->common.wBitsPerSample),
-                                m_reader->ti);
+                                m_reader->ti, false, ieee_float);
 
   mxinfo(FMT_TID "Using the PCM output module.\n", m_reader->ti.fname.c_str(), (int64_t)0);
 
@@ -494,6 +497,7 @@ wav_reader_c::create_demuxer() {
   ti.id = 0;                    // ID for this track.
 
   uint16_t format_tag = get_uint16_le(&m_wheader.common.wFormatTag);
+  bool ieee_float = format_tag == 0x0003;
 
   if (0x2000 == format_tag) {
     m_demuxer = wav_demuxer_cptr(new wav_ac3acm_demuxer_c(this, &m_wheader));
@@ -514,7 +518,7 @@ wav_reader_c::create_demuxer() {
   }
 
   if (!m_demuxer.get())
-    m_demuxer = wav_demuxer_cptr(new wav_pcm_demuxer_c(this, &m_wheader));
+    m_demuxer = wav_demuxer_cptr(new wav_pcm_demuxer_c(this, &m_wheader, ieee_float));
 
   if (verbose)
     mxinfo(FMT_FN "Using the WAV demultiplexer.\n", ti.fname.c_str());

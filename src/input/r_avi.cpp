@@ -301,12 +301,14 @@ avi_reader_c::add_audio_demuxer(int aid) {
 
   switch(audio_format) {
     case 0x0001: // raw PCM audio
+    case 0x0003: // raw PCM audio (float)
       if (verbose)
         mxinfo(FMT_TID "Using the PCM output module.\n", ti.fname.c_str(),
                (int64_t)aid + 1);
       packetizer = new pcm_packetizer_c(this, demuxer.samples_per_second,
                                         demuxer.channels,
-                                        demuxer.bits_per_sample, ti);
+                                        demuxer.bits_per_sample, ti, false,
+                                        audio_format == 0x0003);
       break;
     case 0x0050: // MP2
     case 0x0055: // MP3
@@ -629,6 +631,7 @@ avi_reader_c::identify() {
 
     switch (audio_format) {
       case 0x0001:
+      case 0x0003:
         type = "PCM";
         break;
       case 0x0050:

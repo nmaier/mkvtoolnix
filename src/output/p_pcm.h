@@ -26,13 +26,13 @@ class pcm_packetizer_c: public generic_packetizer_c {
 private:
   int packetno, bps, samples_per_sec, channels, bits_per_sample, packet_size;
   int64_t bytes_output;
-  bool big_endian;
+  bool big_endian, ieee_float;
   byte_buffer_c buffer;
 
 public:
   pcm_packetizer_c(generic_reader_c *_reader, int _samples_per_sec,
                    int _channels, int _bits_per_sample, track_info_c &_ti,
-                   bool _big_endian = false)
+                   bool _big_endian = false, bool _float = false)
     throw (error_c);
   virtual ~pcm_packetizer_c();
 

@@ -363,7 +363,7 @@ kax_reader_c::verify_tracks() {
 
             u = get_uint16_le(&wfe->w_bits_per_sample);
             if (t->a_bps != u) {
-              if (verbose && (t->a_formattag == 0x0001))
+              if (verbose && (t->a_formattag == 0x0001 || t->a_formattag == 0x0003))
                 mxwarn(PFX "(MS compatibility mode for track " LLU
                        ") Matroska says that there are " LLU " bits per"
                        " sample, but the WAVEFORMATEX says that there are %u."
@@ -382,6 +382,8 @@ kax_reader_c::verify_tracks() {
             t->a_formattag = 0x2001;
           else if (t->codec_id == MKV_A_PCM)
             t->a_formattag = 0x0001;
+          else if (t->codec_id == MKV_A_PCM_FLOAT)
+            t->a_formattag = 0x0003;
           else if (t->codec_id == MKV_A_VORBIS) {
             if (t->private_data == NULL) {
               if (verbose)
@@ -1529,10 +1531,11 @@ kax_reader_c::create_packetizer(int64_t tid) {
         break;
 
       case 'a':
-        if (t->a_formattag == 0x0001) {
+        if (t->a_formattag == 0x0001 || t->a_formattag == 0x0003) {
           t->ptzr =
             add_packetizer(new pcm_packetizer_c(this, (int32_t)t->a_sfreq,
-                                                t->a_channels, t->a_bps, nti));
+                                                t->a_channels, t->a_bps, nti,
+                                                false, t->a_formattag==0x0003));
           mxinfo(FMT_TID "Using the PCM output module.\n", ti.fname.c_str(),
                  (int64_t)t->tnum);
 
@@ -2444,6 +2447,7 @@ kax_reader_c::identify() {
       info += string(", ") +
         (tracks[i]->type        == 'v'    ? tracks[i]->v_fourcc :
          tracks[i]->a_formattag == 0x0001 ? "PCM"               :
+         tracks[i]->a_formattag == 0x0003 ? "PCM"               :
          tracks[i]->a_formattag == 0x0055 ? "MP3"               :
          tracks[i]->a_formattag == 0x2000 ? "AC3"               : "unknown");
 

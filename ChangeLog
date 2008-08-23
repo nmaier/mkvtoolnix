@@ -1,3 +1,9 @@
+2008-08-23  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: Added support for PCM tracks with
+	floating point numbers (CodecID A_PCM/FLOAT/IEEE). Patch by
+	Aurelien Jacobs (see AUTHORS).
+
 2008-08-21  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The fix to the timecode handling for AVC
