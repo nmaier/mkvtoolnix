@@ -425,7 +425,7 @@ dts_14_to_dts_16(const unsigned short *src,
     dst[5] = (dst_5>>8) | (dst_5<<8);
     // 2  + 14
     unsigned short src_7 = (src[7]>>8) | (src[7]<<8);
-    unsigned short dst_6 = (src_6 << 14) | ((src_7 & 0x3fff) >> 2);
+    unsigned short dst_6 = (src_6 << 14) | (src_7 & 0x3fff);
     dst[6] = (dst_6>>8) | (dst_6<<8);
 
     dst += 7;

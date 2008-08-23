@@ -1,5 +1,8 @@
 2008-08-23  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: DTS-in-WAV handling (14 to 16 bit expansion)
+	was flawed. Fix for bug 288.
+
 	* mkvmerge: new feature: Added support for Vorbis in AVI (format
 	tag 0x566f). Fix for bug 271.
 
