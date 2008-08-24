@@ -57,9 +57,7 @@ struct corepicture_pic_t {
   {}
 
   bool is_valid() const {
-    return (COREPICTURE_TYPE_UNKNOWN != m_pic_type) &&
-      (COREPICTURE_PAN_UNKNOWN != m_pan_type) && (m_url != "") &&
-      (0 <= m_time);
+    return (COREPICTURE_TYPE_UNKNOWN != m_pic_type) && (COREPICTURE_PAN_UNKNOWN != m_pan_type) && (m_url != "") && (0 <= m_time);
   }
 
   bool operator <(const corepicture_pic_t &cmp) const {

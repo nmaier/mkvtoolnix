@@ -41,8 +41,7 @@ public:
     xml_parser_c(io) {
   }
 
-  virtual void start_element_cb(const char *name,
-                                const char **atts) {
+  virtual void start_element_cb(const char *name, const char **atts) {
     if (m_root_element == "")
       m_root_element = name;
   }
@@ -55,8 +54,7 @@ corepicture_reader_c::probe_file(mm_text_io_c *io,
     corepicture_xml_find_root_c root_finder(io);
 
     io->setFilePointer(0);
-    while (root_finder.parse_one_xml_line() &&
-           (root_finder.m_root_element == ""))
+    while (root_finder.parse_one_xml_line() && (root_finder.m_root_element == ""))
       ;
 
     return (root_finder.m_root_element == "CorePanorama" ? 1 : 0);
@@ -76,8 +74,7 @@ corepicture_reader_c::corepicture_reader_c(track_info_c &_ti)
     m_xml_source = new mm_text_io_c(new mm_file_io_c(ti.fname));
 
     if (!corepicture_reader_c::probe_file(m_xml_source, 0))
-      throw error_c("corepicture_reader: Source is not a valid CorePanorama "
-                    "file.");
+      throw error_c("corepicture_reader: Source is not a valid CorePanorama file.");
 
     parse_xml_file();
 
@@ -102,7 +99,7 @@ corepicture_reader_c::~corepicture_reader_c() {
 
 void
 corepicture_reader_c::start_element_cb(const char *name,
-                               const char **atts) {
+                                       const char **atts) {
   size_t i;
   string node;
 
@@ -125,37 +122,46 @@ corepicture_reader_c::start_element_cb(const char *name,
           m_height = -1;
       }
     }
+
   } else if (node == "CorePanorama.Picture") {
     corepicture_pic_t new_picture;
     for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2) {
-      if (!strcasecmp(atts[i], "time") && (0 != atts[i + 1][0])) {
+      if (!strcasecmp(atts[i], "time") && (0 != atts[i + 1][0]))
         new_picture.m_time = try_to_parse_timecode(atts[i + 1]);
-      } else if (!strcasecmp(atts[i], "end") && (0 != atts[i + 1][0])) {
+
+      else if (!strcasecmp(atts[i], "end") && (0 != atts[i + 1][0]))
         new_picture.m_end_time = try_to_parse_timecode(atts[i + 1]);
-      } else if (!strcasecmp(atts[i], "type") && (0 != atts[i + 1][0])) {
+
+      else if (!strcasecmp(atts[i], "type") && (0 != atts[i + 1][0])) {
         if (!strcasecmp(atts[i + 1], "jpeg") || !strcasecmp(atts[i + 1], "jpg"))
           new_picture.m_pic_type = COREPICTURE_TYPE_JPEG;
+
         else if (!strcasecmp(atts[i + 1], "png"))
           new_picture.m_pic_type = COREPICTURE_TYPE_PNG;
+
         else
-          mxwarn(FMT_TID "The picture type '%s' is not recognized.\n",
-                 ti.fname.c_str(), (int64_t)0, atts[i + 1]);
+          mxwarn(FMT_TID "The picture type '%s' is not recognized.\n", ti.fname.c_str(), (int64_t)0, atts[i + 1]);
+
       } else if (!strcasecmp(atts[i], "panorama") && (0 != atts[i + 1][0])) {
         if (!strcasecmp(atts[i + 1], "flat"))
           new_picture.m_pan_type = COREPICTURE_PAN_FLAT;
+
         else if (!strcasecmp(atts[i + 1], "pan"))
           new_picture.m_pan_type = COREPICTURE_PAN_BASIC;
+
         else if (!strcasecmp(atts[i + 1], "wraparound"))
           new_picture.m_pan_type = COREPICTURE_PAN_WRAPAROUND;
+
         else if (!strcasecmp(atts[i + 1], "spherical"))
           new_picture.m_pan_type = COREPICTURE_PAN_SPHERICAL;
+
         else
-          mxwarn(FMT_TID "The panoramic mode '%s' is not recognized.\n",
-                 ti.fname.c_str(), (int64_t)0, atts[i + 1]);
-      } else if (!strcasecmp(atts[i], "url") && (0 != atts[i + 1][0])) {
+          mxwarn(FMT_TID "The panoramic mode '%s' is not recognized.\n", ti.fname.c_str(), (int64_t)0, atts[i + 1]);
+
+      } else if (!strcasecmp(atts[i], "url") && (0 != atts[i + 1][0]))
         new_picture.m_url = escape_xml(atts[i + 1]);
-      }
     }
+
     if (new_picture.is_valid())
       m_pictures.push_back(new_picture);
   }
@@ -194,8 +200,7 @@ corepicture_reader_c::create_packetizer(int64_t tid) {
 
   ti.private_data = (unsigned char *)safememdup(private_buffer, sizeof(private_buffer));
   ti.private_size = sizeof(private_buffer);
-  m_ptzr = add_packetizer(new video_packetizer_c(this, MKV_V_COREPICTURE, 0.0,
-                                                 m_width, m_height, ti));
+  m_ptzr          = add_packetizer(new video_packetizer_c(this, MKV_V_COREPICTURE, 0.0, m_width, m_height, ti));
 }
 
 file_status_e
@@ -205,29 +210,22 @@ corepicture_reader_c::read(generic_packetizer_c *ptzr,
   if (m_current_picture != m_pictures.end()) {
     try {
       auto_ptr<mm_io_c> io(new mm_file_io_c(m_current_picture->m_url));
-      uint64_t size = io->get_size();
+      uint64_t size  = io->get_size();
       binary *buffer = (binary *)safemalloc(7 + size);
+
       put_uint16_be(&buffer[0], 7);
       put_uint32_be(&buffer[2], m_current_picture->m_pan_type);
-      buffer[6] = m_current_picture->m_pic_type;
+
+      buffer[6]           = m_current_picture->m_pic_type;
       uint32_t bytes_read = io->read(&buffer[7], size);
-      if (bytes_read != 0) {
-        if (m_current_picture->m_end_time == -1)
-          PTZR(m_ptzr)->process(new packet_t(new memory_c(buffer, 7 + bytes_read,
-                                                          false),
-                                             m_current_picture->m_time));
-        else
-          PTZR(m_ptzr)->process(new packet_t(new memory_c(buffer, 7 + bytes_read,
-                                                          false),
-                                             m_current_picture->m_time,
-                                             m_current_picture->m_end_time -
-                                             m_current_picture->m_time));
+
+      if (0 != bytes_read) {
+        int64_t duration = m_current_picture->m_end_time == -1 ? -1 : m_current_picture->m_end_time - m_current_picture->m_time;
+        PTZR(m_ptzr)->process(new packet_t(new memory_c(buffer, 7 + bytes_read, false), m_current_picture->m_time, duration));
       }
 
     } catch(...) {
-      mxerror(FMT_TID "Impossible to use file '%s': The file could not be "
-              "opened for reading.\n",
-              ti.fname.c_str(), (int64_t)0, m_current_picture->m_url.c_str());
+      mxerror(FMT_TID "Impossible to use file '%s': The file could not be opened for reading.\n", ti.fname.c_str(), (int64_t)0, m_current_picture->m_url.c_str());
     }
     m_current_picture++;
   }
@@ -244,10 +242,7 @@ int
 corepicture_reader_c::get_progress() {
   if (m_pictures.size() == 0)
     return 0;
-  return 100 -
-    distance(m_current_picture,
-             (vector<corepicture_pic_t>::const_iterator)m_pictures.end()) *
-    100 / m_pictures.size();
+  return 100 - distance(m_current_picture, (vector<corepicture_pic_t>::const_iterator)m_pictures.end()) * 100 / m_pictures.size();
 }
 
 int64_t
