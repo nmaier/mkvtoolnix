@@ -155,6 +155,7 @@ namespace mpeg1_2 {
 namespace mpeg4 {
   namespace p2 {
     bool MTX_DLL_API is_fourcc(const void *fourcc);
+    bool MTX_DLL_API is_v3_fourcc(const void *fourcc);
 
     bool MTX_DLL_API extract_par(const unsigned char *buffer,
                                  int buffer_size,

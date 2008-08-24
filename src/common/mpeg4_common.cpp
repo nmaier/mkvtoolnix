@@ -971,6 +971,28 @@ mpeg4::p2::is_fourcc(const void *fourcc) {
   return false;
 }
 
+/** \brief Check whether or not a FourCC refers to MPEG-4 part 2
+    version 3 video
+
+   \param fourcc A pointer to a string with four characters
+
+   \return true if the FourCC refers to a MPEG-4 part 2 video codec.
+*/
+bool
+mpeg4::p2::is_v3_fourcc(const void *fourcc) {
+  static const char *mpeg4_p2_v3_fourccs[] = {
+    "DIV3", "MPG3", "MP43",
+    "AP41", // Angel Potion
+    NULL
+  };
+  int i;
+
+  for (i = 0; NULL != mpeg4_p2_v3_fourccs[i]; ++i)
+    if (!strncasecmp((const char *)fourcc, mpeg4_p2_v3_fourccs[i], 4))
+      return true;
+  return false;
+}
+
 // -------------------------------------------------------------------
 
 static bool
