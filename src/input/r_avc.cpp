@@ -44,11 +44,10 @@ int
 avc_es_reader_c::probe_file(mm_io_c *io,
                             int64_t size) {
   try {
-    if (size < PROBESIZE)
+    if (PROBESIZE > size)
       return 0;
 
-    memory_cptr buf(new memory_c((unsigned char *)safemalloc(READ_SIZE),
-                                 READ_SIZE));
+    memory_cptr buf(new memory_c((unsigned char *)safemalloc(READ_SIZE), READ_SIZE));
     int num_read, i;
     bool first = true;
 
@@ -60,7 +59,7 @@ avc_es_reader_c::probe_file(mm_io_c *io,
     io->setFilePointer(0, seek_beginning);
     for (i = 0; MAX_PROBE_BUFFERS > i; ++i) {
       num_read = io->read(buf->get(), READ_SIZE);
-      if (num_read < 4)
+      if (4 > num_read)
         return 0;
 
       // MPEG TS starts with 0x47.
@@ -76,6 +75,7 @@ avc_es_reader_c::probe_file(mm_io_c *io,
 
   } catch (error_c &err) {
     mxinfo("err %s\n", err.get_error().c_str());
+
   } catch (...) {
     mxinfo("have an xcptn\n");
   }
@@ -90,12 +90,13 @@ avc_es_reader_c::avc_es_reader_c(track_info_c &n_ti)
   m_buffer(new memory_c((unsigned char *)safemalloc(READ_SIZE), READ_SIZE)) {
 
   try {
-    m_io = counted_ptr<mm_io_c>(new mm_file_io_c(ti.fname));
+    m_io   = counted_ptr<mm_io_c>(new mm_file_io_c(ti.fname));
     m_size = m_io->get_size();
 
     avc_es_parser_c parser;
     parser.ignore_nalu_size_length_errors();
     parser.enable_timecode_generation(40000000);
+
     if (map_has_key(ti.nalu_size_lengths, 0))
       parser.set_nalu_size_length(ti.nalu_size_lengths[0]);
     else if (map_has_key(ti.nalu_size_lengths, -1))
@@ -111,13 +112,16 @@ avc_es_reader_c::avc_es_reader_c(track_info_c &n_ti)
       if (parser.headers_parsed())
         break;
     }
+
     if (parser.headers_parsed())
       parser.flush();
-    m_avcc = parser.get_avcc();
-    m_width = parser.get_width();
+
+    m_avcc   = parser.get_avcc();
+    m_width  = parser.get_width();
     m_height = parser.get_height();
 
     m_io->setFilePointer(0, seek_beginning);
+
   } catch (...) {
     throw error_c("avc_es_reader: Could not open the source file.");
   }
@@ -131,11 +135,9 @@ avc_es_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, m_avcc, m_width,
-                                                     m_height, ti));
+  add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, m_avcc, m_width, m_height, ti));
 
-  mxinfo(FMT_TID "Using the MPEG-4 part 10 ES video output module.\n",
-         ti.fname.c_str(), (int64_t)0);
+  mxinfo(FMT_TID "Using the MPEG-4 part 10 ES video output module.\n", ti.fname.c_str(), (int64_t)0);
 }
 
 file_status_e
