@@ -21,16 +21,16 @@
 #pragma pack(push,1)
 #endif
 typedef struct PACKED_STRUCTURE {
-  uint8_t version;
-  uint8_t flags[3];
+  uint8_t  version;
+  uint8_t  flags[3];
   uint32_t creation_time;
   uint32_t modification_time;
   uint32_t time_scale;
   uint32_t duration;
   uint32_t preferred_rate;
   uint16_t preferred_volume;
-  uint8_t reserved[10];
-  uint8_t matrix_structure[36];
+  uint8_t  reserved[10];
+  uint8_t  matrix_structure[36];
   uint32_t preview_time;
   uint32_t preview_duration;
   uint32_t poster_time;
@@ -42,27 +42,27 @@ typedef struct PACKED_STRUCTURE {
 
 // 'Track header' atom
 typedef struct PACKED_STRUCTURE {
-  uint8_t version;
-  uint8_t flags[3];
+  uint8_t  version;
+  uint8_t  flags[3];
   uint32_t creation_time;
   uint32_t modification_time;
   uint32_t track_id;
-  uint8_t reserved1[4];
+  uint8_t  reserved1[4];
   uint32_t duration;
-  uint8_t reserved2[8];
+  uint8_t  reserved2[8];
   uint16_t layer;
   uint16_t alternate_group;
   uint16_t volume;
-  uint8_t reserved3[2];
-  uint8_t matrix_structure[36];
+  uint8_t  reserved3[2];
+  uint8_t  matrix_structure[36];
   uint32_t track_width;
   uint32_t track_height;
 } tkhd_atom_t;
 
 // 'Media header' atom
 typedef struct PACKED_STRUCTURE {
-  uint8_t version;              // == 0
-  uint8_t flags[3];
+  uint8_t  version;              // == 0
+  uint8_t  flags[3];
   uint32_t creation_time;
   uint32_t modification_time;
   uint32_t time_scale;
@@ -73,8 +73,8 @@ typedef struct PACKED_STRUCTURE {
 
 // 'Media header' atom, 64bit version
 typedef struct PACKED_STRUCTURE {
-  uint8_t version;              // == 1
-  uint8_t flags[3];
+  uint8_t  version;              // == 1
+  uint8_t  flags[3];
   uint64_t creation_time;
   uint64_t modification_time;
   uint32_t time_scale;
@@ -85,8 +85,8 @@ typedef struct PACKED_STRUCTURE {
 
 // 'Handler reference' atom
 typedef struct PACKED_STRUCTURE {
-  uint8_t version;
-  uint8_t flags[3];
+  uint8_t  version;
+  uint8_t  flags[3];
   uint32_t type;
   uint32_t subtype;
   uint32_t manufacturer;
@@ -104,14 +104,14 @@ typedef struct PACKED_STRUCTURE {
 // 'sound sample description' atom
 typedef struct PACKED_STRUCTURE {
   base_stsd_atom_t base;
-  uint16_t version;
-  uint16_t revision;
-  uint32_t vendor;
-  uint16_t channels;
-  uint16_t sample_size;
-  int16_t compression_id;
-  uint16_t packet_size;
-  uint32_t sample_rate;         // 32bit fixed-point number
+  uint16_t         version;
+  uint16_t         revision;
+  uint32_t         vendor;
+  uint16_t         channels;
+  uint16_t         sample_size;
+  int16_t          compression_id;
+  uint16_t         packet_size;
+  uint32_t         sample_rate;         // 32bit fixed-point number
 } sound_v0_stsd_atom_t;
 
 // 'sound sample description' atom v2
@@ -128,20 +128,20 @@ typedef struct PACKED_STRUCTURE {
 // 'video sample description' atom
 typedef struct PACKED_STRUCTURE {
   base_stsd_atom_t base;
-  uint16_t version;
-  uint16_t revision;
-  uint32_t vendor;
-  uint32_t temporal_quality;
-  uint32_t spatial_quality;
-  uint16_t width;
-  uint16_t height;
-  uint32_t horizontal_resolution; // 32bit fixed-point number
-  uint32_t vertical_resolution; // 32bit fixed-point number
-  uint32_t data_size;
-  uint16_t frame_count;
-  char compressor_name[32];
-  uint16_t depth;
-  uint16_t color_table_id;
+  uint16_t         version;
+  uint16_t         revision;
+  uint32_t         vendor;
+  uint32_t         temporal_quality;
+  uint32_t         spatial_quality;
+  uint16_t         width;
+  uint16_t         height;
+  uint32_t         horizontal_resolution; // 32bit fixed-point number
+  uint32_t         vertical_resolution;   // 32bit fixed-point number
+  uint32_t         data_size;
+  uint16_t         frame_count;
+  char             compressor_name[32];
+  uint16_t         depth;
+  uint16_t         color_table_id;
 } video_stsd_atom_t;
 
 typedef struct PACKED_STRUCTURE {
@@ -172,18 +172,18 @@ typedef struct PACKED_STRUCTURE {
 
 // MPEG4 esds structure
 typedef struct PACKED_STRUCTURE {
-  uint8_t version;
-  uint32_t flags;
-  uint16_t esid;
-  uint8_t stream_priority;
-  uint8_t object_type_id;
-  uint8_t stream_type;
-  uint32_t buffer_size_db;
-  uint32_t max_bitrate;
-  uint32_t avg_bitrate;
-  uint8_t decoder_config_len;
+  uint8_t        version;
+  uint32_t       flags;
+  uint16_t       esid;
+  uint8_t        stream_priority;
+  uint8_t        object_type_id;
+  uint8_t        stream_type;
+  uint32_t       buffer_size_db;
+  uint32_t       max_bitrate;
+  uint32_t       avg_bitrate;
+  uint8_t        decoder_config_len;
   unsigned char *decoder_config;
-  uint8_t sl_config_len;
+  uint8_t        sl_config_len;
   unsigned char *sl_config;
 } esds_t;
 #if defined(COMP_MSC)
@@ -192,22 +192,22 @@ typedef struct PACKED_STRUCTURE {
 
 // Object type identifications.
 // See http://gpac.sourceforge.net/tutorial/mediatypes.htm
-#define MP4OTI_MPEG4Systems1                                0x01
-#define MP4OTI_MPEG4Systems2                                0x02
-#define MP4OTI_MPEG4Visual                                  0x20
-#define MP4OTI_MPEG4Audio                                   0x40
-#define MP4OTI_MPEG2VisualSimple                            0x60
-#define MP4OTI_MPEG2VisualMain                              0x61
-#define MP4OTI_MPEG2VisualSNR                               0x62
-#define MP4OTI_MPEG2VisualSpatial                           0x63
-#define MP4OTI_MPEG2VisualHigh                              0x64
-#define MP4OTI_MPEG2Visual422                               0x65
-#define MP4OTI_MPEG2AudioMain                               0x66
-#define MP4OTI_MPEG2AudioLowComplexity                      0x67
-#define MP4OTI_MPEG2AudioScaleableSamplingRate              0x68
-#define MP4OTI_MPEG2AudioPart3                              0x69
-#define MP4OTI_MPEG1Visual                                  0x6A
-#define MP4OTI_MPEG1Audio                                   0x6B
-#define MP4OTI_JPEG                                         0x6C
+#define MP4OTI_MPEG4Systems1                   0x01
+#define MP4OTI_MPEG4Systems2                   0x02
+#define MP4OTI_MPEG4Visual                     0x20
+#define MP4OTI_MPEG4Audio                      0x40
+#define MP4OTI_MPEG2VisualSimple               0x60
+#define MP4OTI_MPEG2VisualMain                 0x61
+#define MP4OTI_MPEG2VisualSNR                  0x62
+#define MP4OTI_MPEG2VisualSpatial              0x63
+#define MP4OTI_MPEG2VisualHigh                 0x64
+#define MP4OTI_MPEG2Visual422                  0x65
+#define MP4OTI_MPEG2AudioMain                  0x66
+#define MP4OTI_MPEG2AudioLowComplexity         0x67
+#define MP4OTI_MPEG2AudioScaleableSamplingRate 0x68
+#define MP4OTI_MPEG2AudioPart3                 0x69
+#define MP4OTI_MPEG1Visual                     0x6A
+#define MP4OTI_MPEG1Audio                      0x6B
+#define MP4OTI_JPEG                            0x6C
 
 #endif // __QTMP4_ATOMS_H
