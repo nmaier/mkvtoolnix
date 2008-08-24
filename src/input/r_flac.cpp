@@ -168,7 +168,7 @@ flac_reader_c::probe_file(mm_io_c *io,
                           int64_t size) {
   unsigned char data[4];
 
-  if (size < 4)
+  if (4 > size)
     return 0;
   try {
     io->setFilePointer(0, seek_beginning);
@@ -178,51 +178,53 @@ flac_reader_c::probe_file(mm_io_c *io,
   } catch (...) {
     return 0;
   }
+
   if (strncmp((char *)data, "fLaC", 4))
     return 0;
+
   return 1;
 }
 
 flac_reader_c::flac_reader_c(track_info_c &_ti)
   throw (error_c):
-  generic_reader_c(_ti) {
-  unsigned char *buf;
-  uint32_t block_size;
+  generic_reader_c(_ti),
+  samples(0),
+  header(NULL) {
 
-  samples = 0;
   try {
-    file = new mm_file_io_c(ti.fname);
+    file      = new mm_file_io_c(ti.fname);
     file_size = file->get_size();
   } catch (...) {
     throw error_c(FPFX "Could not open the source file.");
   }
+
   if (identifying)
     return;
+
   mxverb(1, FMT_FN "Using the FLAC demultiplexer.\n", ti.fname.c_str());
 
   if (!parse_file())
     throw error_c(FPFX "Could not read all header packets.");
 
-  header = NULL;
   try {
-    block_size = 0;
-    for (current_block = blocks.begin();
-         (current_block != blocks.end()) &&
-           (current_block->type == FLAC_BLOCK_TYPE_HEADERS); current_block++)
+    uint32_t block_size = 0;
+
+    for (current_block = blocks.begin(); (current_block != blocks.end()) && (FLAC_BLOCK_TYPE_HEADERS == current_block->type); current_block++)
       block_size += current_block->len;
-    buf = (unsigned char *)safemalloc(block_size);
-    block_size = 0;
-    for (current_block = blocks.begin();
-         (current_block != blocks.end()) &&
-           (current_block->type == FLAC_BLOCK_TYPE_HEADERS); current_block++) {
+
+    unsigned char *buf = (unsigned char *)safemalloc(block_size);
+
+    block_size         = 0;
+    for (current_block = blocks.begin(); (current_block != blocks.end()) && (FLAC_BLOCK_TYPE_HEADERS == current_block->type); current_block++) {
       file->setFilePointer(current_block->filepos);
-      if (file->read(&buf[block_size], current_block->len) !=
-          current_block->len)
+      if (file->read(&buf[block_size], current_block->len) != current_block->len)
         mxerror(FPFX "Could not read a header packet.\n");
       block_size += current_block->len;
     }
-    header = buf;
+
+    header      = buf;
     header_size = block_size;
+
   } catch (error_c &error) {
     mxerror(FPFX "could not initialize the FLAC packetizer.\n");
   }
@@ -239,8 +241,7 @@ flac_reader_c::create_packetizer(int64_t) {
     return;
 
   add_packetizer(new flac_packetizer_c(this, header, header_size, ti));
-  mxinfo(FMT_TID "Using the FLAC output module.\n", ti.fname.c_str(),
-         (int64_t)0);
+  mxinfo(FMT_TID "Using the FLAC output module.\n", ti.fname.c_str(), (int64_t)0);
 }
 
 bool
@@ -272,68 +273,57 @@ flac_reader_c::parse_file() {
   FLAC__seekable_stream_decoder_set_client_data(decoder, this);
   if (!FLAC__seekable_stream_decoder_set_read_callback(decoder, flac_read_cb))
     mxerror(FPFX "Could not set the read callback.\n");
-  if (!FLAC__seekable_stream_decoder_set_write_callback(decoder,
-                                                        flac_write_cb))
+  if (!FLAC__seekable_stream_decoder_set_write_callback(decoder, flac_write_cb))
     mxerror(FPFX "Could not set the write callback.\n");
-  if (!FLAC__seekable_stream_decoder_set_metadata_callback(decoder,
-                                                           flac_metadata_cb))
+  if (!FLAC__seekable_stream_decoder_set_metadata_callback(decoder, flac_metadata_cb))
     mxerror(FPFX "Could not set the metadata callback.\n");
-  if (!FLAC__seekable_stream_decoder_set_error_callback(decoder,
-                                                        flac_error_cb))
+  if (!FLAC__seekable_stream_decoder_set_error_callback(decoder, flac_error_cb))
     mxerror(FPFX "Could not set the error callback.\n");
   if (!FLAC__seekable_stream_decoder_set_metadata_respond_all(decoder))
     mxerror(FPFX "Could not set metadata_respond_all.\n");
-  if (!FLAC__seekable_stream_decoder_set_seek_callback(decoder,
-                                                       flac_seek_cb))
+  if (!FLAC__seekable_stream_decoder_set_seek_callback(decoder, flac_seek_cb))
     mxerror(FPFX "Could not set the seek callback.\n");
-  if (!FLAC__seekable_stream_decoder_set_tell_callback(decoder,
-                                                       flac_tell_cb))
+  if (!FLAC__seekable_stream_decoder_set_tell_callback(decoder, flac_tell_cb))
     mxerror(FPFX "Could not set the tell callback.\n");
-  if (!FLAC__seekable_stream_decoder_set_length_callback(decoder,
-                                                         flac_length_cb))
+  if (!FLAC__seekable_stream_decoder_set_length_callback(decoder, flac_length_cb))
     mxerror(FPFX "Could not set the length callback.\n");
-  if (!FLAC__seekable_stream_decoder_set_eof_callback(decoder,
-                                                      flac_eof_cb))
+  if (!FLAC__seekable_stream_decoder_set_eof_callback(decoder, flac_eof_cb))
     mxerror(FPFX "Could not set the eof callback.\n");
-  if (FLAC__seekable_stream_decoder_init(decoder) !=
-      FLAC__SEEKABLE_STREAM_DECODER_OK)
-  mxerror(FPFX "Could not initialize the FLAC decoder.\n");
+  if (FLAC__seekable_stream_decoder_init(decoder) != FLAC__SEEKABLE_STREAM_DECODER_OK)
+    mxerror(FPFX "Could not initialize the FLAC decoder.\n");
 #else  // LEGACY_FLAC
   if (!FLAC__stream_decoder_set_metadata_respond_all(decoder))
     mxerror(FPFX "Could not set metadata_respond_all.\n");
-  if (FLAC__stream_decoder_init_stream(decoder, flac_read_cb, flac_seek_cb,
-                                       flac_tell_cb, flac_length_cb,
-                                       flac_eof_cb, flac_write_cb,
-                                       flac_metadata_cb, flac_error_cb, this)
-      != FLAC__STREAM_DECODER_INIT_STATUS_OK)
-  mxerror(FPFX "Could not initialize the FLAC decoder.\n");
+  if (FLAC__stream_decoder_init_stream(decoder, flac_read_cb, flac_seek_cb, flac_tell_cb, flac_length_cb, flac_eof_cb, flac_write_cb,
+                                       flac_metadata_cb, flac_error_cb, this) != FLAC__STREAM_DECODER_INIT_STATUS_OK)
+    mxerror(FPFX "Could not initialize the FLAC decoder.\n");
 #endif  // LEGACY_FLAC
 
-  result =
 #ifdef LEGACY_FLAC
-    (int)FLAC__seekable_stream_decoder_process_until_end_of_metadata(decoder);
+  result = (int)FLAC__seekable_stream_decoder_process_until_end_of_metadata(decoder);
 #else
-    (int)FLAC__stream_decoder_process_until_end_of_metadata(decoder);
+  result = (int)FLAC__stream_decoder_process_until_end_of_metadata(decoder);
 #endif
-  mxverb(2, FPFX "extract->metadata, result: %d, mdp: %d, num blocks: %u\n",
-         result, metadata_parsed, (unsigned int)blocks.size());
+
+  mxverb(2, FPFX "extract->metadata, result: %d, mdp: %d, num blocks: %u\n", result, metadata_parsed, (unsigned int)blocks.size());
 
   if (!metadata_parsed)
-    mxerror(FMT_FN "No metadata block found. This file is broken.\n",
-            ti.fname.c_str());
+    mxerror(FMT_FN "No metadata block found. This file is broken.\n", ti.fname.c_str());
 
-  block.type = FLAC_BLOCK_TYPE_HEADERS;
 #ifdef LEGACY_FLAC
   FLAC__seekable_stream_decoder_get_decode_position(decoder, &u);
 #else
   FLAC__stream_decoder_get_decode_position(decoder, &u);
 #endif
+
+  block.type    = FLAC_BLOCK_TYPE_HEADERS;
   block.filepos = 0;
-  block.len = u;
-  old_pos = u;
+  block.len     = u;
+  old_pos       = u;
+
   blocks.push_back(block);
-  mxverb(2, FPFX "headers: block at " LLD " with size %d\n",
-         block.filepos, block.len);
+
+  mxverb(2, FPFX "headers: block at " LLD " with size %d\n", block.filepos, block.len);
 
   old_progress = -5;
 #if defined(HAVE_FLAC_DECODER_SKIP)
@@ -365,22 +355,21 @@ flac_reader_c::parse_file() {
         FLAC__stream_decoder_get_decode_position(decoder, &u) &&
 #endif
         (u != old_pos)) {
-      block.type = FLAC_BLOCK_TYPE_DATA;
+      block.type    = FLAC_BLOCK_TYPE_DATA;
       block.filepos = old_pos;
-      block.len = u - old_pos;
-      old_pos = u;
+      block.len     = u - old_pos;
+      old_pos       = u;
       blocks.push_back(block);
 
-      mxverb(2, FPFX "skip/decode frame, block at " LLD " with size %d\n",
-             block.filepos, block.len);
+      mxverb(2, FPFX "skip/decode frame, block at " LLD " with size %d\n", block.filepos, block.len);
     }
 
 #ifdef LEGACY_FLAC
-    if ((state == FLAC__SEEKABLE_STREAM_DECODER_END_OF_STREAM) ||
-        (state == FLAC__SEEKABLE_STREAM_DECODER_STREAM_DECODER_ERROR) ||
-        (state == FLAC__SEEKABLE_STREAM_DECODER_MEMORY_ALLOCATION_ERROR) ||
-        (state == FLAC__SEEKABLE_STREAM_DECODER_READ_ERROR) ||
-        (state == FLAC__SEEKABLE_STREAM_DECODER_SEEK_ERROR))
+    if (   (state == FLAC__SEEKABLE_STREAM_DECODER_END_OF_STREAM)
+        || (state == FLAC__SEEKABLE_STREAM_DECODER_STREAM_DECODER_ERROR)
+        || (state == FLAC__SEEKABLE_STREAM_DECODER_MEMORY_ALLOCATION_ERROR)
+        || (state == FLAC__SEEKABLE_STREAM_DECODER_READ_ERROR)
+        || (state == FLAC__SEEKABLE_STREAM_DECODER_SEEK_ERROR))
       break;
 #else
     if (state > FLAC__STREAM_DECODER_READ_FRAME)
@@ -412,8 +401,8 @@ flac_reader_c::parse_file() {
 #endif
 
   file->setFilePointer(0);
-  blocks[0].len -= 4;
-  blocks[0].filepos = 4;
+  blocks[0].len     -= 4;
+  blocks[0].filepos  = 4;
 
   return metadata_parsed;
 }
@@ -426,6 +415,7 @@ flac_reader_c::read(generic_packetizer_c *,
 
   if (current_block == blocks.end())
     return FILE_STATUS_DONE;
+
   buf = (unsigned char *)safemalloc(current_block->len);
   file->setFilePointer(current_block->filepos);
   if (file->read(buf, current_block->len) != current_block->len) {
@@ -433,9 +423,10 @@ flac_reader_c::read(generic_packetizer_c *,
     PTZR0->flush();
     return FILE_STATUS_DONE;
   }
+
   samples_here = flac_get_num_samples(buf, current_block->len, stream_info);
-  PTZR0->process(new packet_t(new memory_c(buf, current_block->len, true),
-                              samples * 1000000000 / sample_rate));
+  PTZR0->process(new packet_t(new memory_c(buf, current_block->len, true), samples * 1000000000 / sample_rate));
+
   samples += samples_here;
   current_block++;
 
@@ -459,14 +450,13 @@ flac_reader_c::read_cb(FLAC__byte buffer[],
   unsigned bytes_read, wanted_bytes;
 
   wanted_bytes = *bytes;
-  bytes_read = file->read((unsigned char *)buffer, wanted_bytes);
-  *bytes = bytes_read;
+  bytes_read   = file->read((unsigned char *)buffer, wanted_bytes);
+  *bytes       = bytes_read;
+
 #ifdef LEGACY_FLAC
   return FLAC__SEEKABLE_STREAM_DECODER_READ_STATUS_OK;
 #else
-  return bytes_read == wanted_bytes ?
-    FLAC__STREAM_DECODER_READ_STATUS_CONTINUE :
-    FLAC__STREAM_DECODER_READ_STATUS_END_OF_STREAM;
+  return bytes_read == wanted_bytes ? FLAC__STREAM_DECODER_READ_STATUS_CONTINUE : FLAC__STREAM_DECODER_READ_STATUS_END_OF_STREAM;
 #endif
 }
 
@@ -480,27 +470,25 @@ void
 flac_reader_c::metadata_cb(const FLAC__StreamMetadata *metadata) {
   switch (metadata->type) {
     case FLAC__METADATA_TYPE_STREAMINFO:
-      mxverb(2, FPFX "STREAMINFO block (%u bytes):\n", metadata->length);
-      mxverb(2, FPFX "  sample_rate: %u Hz\n",
-             metadata->data.stream_info.sample_rate);
-      sample_rate = metadata->data.stream_info.sample_rate;
-      mxverb(2, FPFX "  channels: %u\n", metadata->data.stream_info.channels);
-      mxverb(2, FPFX "  bits_per_sample: %u\n",
-             metadata->data.stream_info.bits_per_sample);
-      memcpy(&stream_info, &metadata->data.stream_info,
-             sizeof(FLAC__StreamMetadata_StreamInfo));
+      memcpy(&stream_info, &metadata->data.stream_info, sizeof(FLAC__StreamMetadata_StreamInfo));
+      sample_rate     = metadata->data.stream_info.sample_rate;
       metadata_parsed = true;
+
+      mxverb(2, FPFX "STREAMINFO block (%u bytes):\n", metadata->length);
+      mxverb(2, FPFX "  sample_rate: %u Hz\n",         metadata->data.stream_info.sample_rate);
+      mxverb(2, FPFX "  channels: %u\n",               metadata->data.stream_info.channels);
+      mxverb(2, FPFX "  bits_per_sample: %u\n",        metadata->data.stream_info.bits_per_sample);
+
       break;
     default:
       mxverb(2, "%s (%u) block (%u bytes)\n",
-             metadata->type == FLAC__METADATA_TYPE_PADDING ? "PADDING" :
-             metadata->type == FLAC__METADATA_TYPE_APPLICATION ?
-             "APPLICATION" :
-             metadata->type == FLAC__METADATA_TYPE_SEEKTABLE ? "SEEKTABLE" :
-             metadata->type == FLAC__METADATA_TYPE_VORBIS_COMMENT ?
-             "VORBIS COMMENT" :
-             metadata->type == FLAC__METADATA_TYPE_CUESHEET ? "CUESHEET" :
-             "UNDEFINED", metadata->type, metadata->length);
+               metadata->type == FLAC__METADATA_TYPE_PADDING        ? "PADDING"
+             : metadata->type == FLAC__METADATA_TYPE_APPLICATION    ? "APPLICATION"
+             : metadata->type == FLAC__METADATA_TYPE_SEEKTABLE      ? "SEEKTABLE"
+             : metadata->type == FLAC__METADATA_TYPE_VORBIS_COMMENT ? "VORBIS COMMENT"
+             : metadata->type == FLAC__METADATA_TYPE_CUESHEET       ? "CUESHEET"
+             :                                                        "UNDEFINED",
+             metadata->type, metadata->length);
       break;
   }
 }
@@ -577,11 +565,11 @@ flac_reader_c::probe_file(mm_io_c *io,
                           int64_t size) {
   unsigned char data[4];
 
-  if (size < 4)
+  if (4 > size)
     return 0;
   try {
     io->setFilePointer(0, seek_beginning);
-    if (io->read(data, 4) != 4)
+    if (4 != io->read(data, 4) != 4)
       return 0;
     io->setFilePointer(0, seek_beginning);
   } catch (...) {
