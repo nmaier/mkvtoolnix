@@ -450,19 +450,19 @@ mpeg_ps_reader_c::calculate_global_timecode_offset() {
 
   min_timecode = tracks[0]->timecode_offset;
   for (i = 1; i < tracks.size(); i++)
-    if (tracks[i]->timecode_offset < min_timecode)
+    if ((-1 == min_timecode) || (tracks[i]->timecode_offset < min_timecode))
       min_timecode = tracks[i]->timecode_offset;
-  for (i = 0; i < tracks.size(); i++)
-    tracks[i]->timecode_offset -= min_timecode;
+
+  if (-1 != min_timecode)
+    for (i = 0; i < tracks.size(); i++)
+      tracks[i]->timecode_offset -= min_timecode;
 
   mxverb(2, "mpeg_ps: Timecode offset: min was " LLD " ", min_timecode);
   for (i = 0; i < tracks.size(); i++)
     if (tracks[i]->id > 0xff)
-      mxverb(2, "bd(%02x)=" LLD " ", tracks[i]->id - 256,
-             tracks[i]->timecode_offset);
+      mxverb(2, "bd(%02x)=" LLD " ", tracks[i]->id - 256, tracks[i]->timecode_offset);
     else
-      mxverb(2, "%02x=" LLD " ", tracks[i]->id,
-             tracks[i]->timecode_offset);
+      mxverb(2, "%02x=" LLD " ", tracks[i]->id, tracks[i]->timecode_offset);
   mxverb(2, "\n");
 }
 
@@ -558,8 +558,6 @@ mpeg_ps_reader_c::parse_packet(int id,
                                int &length,
                                int &full_length,
                                int &aid) {
-  uint8_t c;
-
   length = io->read_uint16_be();
   full_length = length;
   if ((id < 0xbc) || (id >= 0xf0) ||
@@ -572,9 +570,10 @@ mpeg_ps_reader_c::parse_packet(int id,
   if (length == 0)
     return false;
 
-  aid = -1;
+  aid       = -1;
+  timestamp = -1;
 
-  c = 0;
+  uint8_t c = 0;
   // Skip stuFFing bytes
   while (length > 0) {
     c = io->read_uint8();
@@ -907,8 +906,15 @@ mpeg_ps_reader_c::found_new_stream(int id) {
     if (id == 0xbd)             // DVD audio substream
       id = 256 + aid;
 
-    if ((-1 != id2idx[id]) || blacklisted_ids[id])
+    if (blacklisted_ids[id])
       return;
+
+    if (-1 != id2idx[id]) {
+      mpeg_ps_track_ptr &track = tracks[id2idx[id]];
+      if ((-1 != timecode) && ((-1 == track->timecode_offset) || (timecode < track->timecode_offset)))
+        track->timecode_offset = timecode;
+      return;
+    }
 
     mxverb(2, "MPEG PS: new stream id 0x%04x\n", id);
 
