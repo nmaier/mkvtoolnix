@@ -54,8 +54,7 @@ fhe_read_cb(const FLAC__StreamDecoder *decoder,
   }
 
   if (*bytes < op.bytes)
-    mxerror(FPFX "bytes (%u) < op.bytes (%ld). Could not read the FLAC "
-            "headers.\n", *bytes, op.bytes);
+    mxerror(FPFX "bytes (%u) < op.bytes (%ld). Could not read the FLAC headers.\n", (unsigned int)*bytes, (long)op.bytes);
   memcpy(buffer, op.packet, op.bytes);
   *bytes = op.bytes;
   fhe->num_packets++;
