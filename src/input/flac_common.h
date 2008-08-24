@@ -30,11 +30,8 @@
 #define FLAC_HEADER_APPLICATION      8
 #define FLAC_HEADER_SEEKTABLE       16
 
-int
-flac_get_num_samples(unsigned char *buf, int size,
-                     FLAC__StreamMetadata_StreamInfo &stream_info);
-int
-flac_decode_headers(unsigned char *mem, int size, int num_elements, ...);
+int flac_get_num_samples(unsigned char *buf, int size, FLAC__StreamMetadata_StreamInfo &stream_info);
+int flac_decode_headers(unsigned char *mem, int size, int num_elements, ...);
 
 #endif /* HAVE_FLAC_FORMAT_H */
 

@@ -33,11 +33,10 @@
 static bool
 flac_skip_utf8(bit_cursor_c &bits,
                int size) {
-  uint32_t value;
+
+  uint32_t value = bits.get_bits(8);
+
   int num;
-
-  value = bits.get_bits(8);
-
   if (!(value & 0x80))          /* 0xxxxxxx */
     num = 0;
   else if ((value & 0xC0) && !(value & 0x20)) /* 110xxxxx */
@@ -66,9 +65,6 @@ flac_get_num_samples_internal(unsigned char *mem,
                               int size,
                               FLAC__StreamMetadata_StreamInfo &stream_info) {
   bit_cursor_c bits(mem, size);
-  uint32_t value;
-  int free_sample_size;
-  int samples;
 
   // Sync word: 11 1111 1111 1110
   if (bits.peek_bits(14) != 0x3ffe)
@@ -80,17 +76,17 @@ flac_get_num_samples_internal(unsigned char *mem,
   bits.skip_bits(2);
 
   // Block size
-  value = bits.get_bits(4);
+  uint32_t value       = bits.get_bits(4);
+  int free_sample_size = 0;
+  int samples          = 0;
 
-  free_sample_size = 0;
-  samples = 0;
-  if (value == 0)
+  if (0 == value)
     samples = stream_info.min_blocksize;
-  else if (value == 1)
+  else if (1 == value)
     samples = 192;
-  else if ((value >= 2) && (value <= 5))
+  else if ((2 <= value) && (5 >= value))
     samples = 576 << (value - 2);
-  else if (value >= 8)
+  else if (8 <= value)
     samples = 256 << (value - 8);
   else
     free_sample_size = value;
@@ -107,14 +103,15 @@ flac_get_num_samples_internal(unsigned char *mem,
   if (stream_info.min_blocksize != stream_info.max_blocksize) {
     if (!flac_skip_utf8(bits, 64))
       return -1;
+
   } else if (!flac_skip_utf8(bits, 32))
       return -1;
 
-  if ((free_sample_size == 6) || (free_sample_size == 7)) {
+  if ((6 == free_sample_size == 6) || (7 == free_sample_size)) {
     samples = bits.get_bits(8);
-    if (free_sample_size == 7) {
+    if (7 == free_sample_size) {
       samples <<= 8;
-      samples |= bits.get_bits(8);
+      samples  |= bits.get_bits(8);
     }
     samples++;
   }
@@ -156,17 +153,15 @@ flac_read_cb(const FLAC__StreamDecoder *,
              size_t *bytes,
 #endif
              void *client_data) {
-  flac_header_extractor_t *fhe;
-  int num_bytes;
+  flac_header_extractor_t *fhe = (flac_header_extractor_t *)client_data;
 
-  fhe = (flac_header_extractor_t *)client_data;
   if (fhe->nread == fhe->size)
     return FLAC__STREAM_DECODER_READ_STATUS_ABORT;
-  num_bytes = *bytes > (fhe->size - fhe->nread) ? (fhe->size - fhe->nread) :
-    *bytes;
+
+  int num_bytes = *bytes > (fhe->size - fhe->nread) ? (fhe->size - fhe->nread) : *bytes;
   memcpy(buffer, &fhe->mem[fhe->nread], num_bytes);
   fhe->nread += num_bytes;
-  *bytes = num_bytes;
+  *bytes      = num_bytes;
 
   return FLAC__STREAM_DECODER_READ_STATUS_CONTINUE;
 }
@@ -179,8 +174,7 @@ flac_metadata_cb(const FLAC__StreamDecoder *,
 
   fhe = (flac_header_extractor_t *)client_data;
   if (metadata->type == FLAC__METADATA_TYPE_STREAMINFO) {
-    memcpy(&fhe->stream_info, &metadata->data.stream_info,
-           sizeof(FLAC__StreamMetadata_StreamInfo));
+    memcpy(&fhe->stream_info, &metadata->data.stream_info, sizeof(FLAC__StreamMetadata_StreamInfo));
     fhe->stream_info_found = true;
   }
 }
@@ -209,15 +203,16 @@ flac_decode_headers(unsigned char *mem,
   int result, i;
   va_list ap;
 
-  if ((mem == NULL) || (size <= 0))
+  if ((NULL == mem) || (0 >= size))
     return -1;
 
   memset(&fhe, 0, sizeof(flac_header_extractor_t));
-  fhe.mem = mem;
+  fhe.mem  = mem;
   fhe.size = size;
 
-  decoder = FLAC__stream_decoder_new();
-  if (decoder == NULL)
+  decoder  = FLAC__stream_decoder_new();
+
+  if (NULL == decoder)
     mxerror(FPFX "FLAC__stream_decoder_new() failed.\n");
 #ifdef LEGACY_FLAC
   FLAC__stream_decoder_set_client_data(decoder, &fhe);
@@ -230,8 +225,10 @@ flac_decode_headers(unsigned char *mem,
   if (!FLAC__stream_decoder_set_error_callback(decoder, flac_error_cb))
     mxerror(FPFX "Could not set the error callback.\n");
 #endif
+
   if (!FLAC__stream_decoder_set_metadata_respond_all(decoder))
     mxerror(FPFX "Could not set metadata_respond_all.\n");
+
 #ifdef LEGACY_FLAC
   if (FLAC__stream_decoder_init(decoder) !=
       FLAC__STREAM_DECODER_SEARCH_FOR_METADATA)
@@ -243,6 +240,7 @@ flac_decode_headers(unsigned char *mem,
       != FLAC__STREAM_DECODER_INIT_STATUS_OK)
     mxerror(FPFX "Could not initialize the FLAC decoder.\n");
 #endif
+
   FLAC__stream_decoder_process_until_end_of_stream(decoder);
 
   result = 0;
@@ -250,7 +248,7 @@ flac_decode_headers(unsigned char *mem,
     result |= FLAC_HEADER_STREAM_INFO;
 
   va_start(ap, num_elements);
-  for (i = 0; i < num_elements; i++) {
+  for (i = 0; i < num_elements; ++i) {
     int type;
 
     type = va_arg(ap, int);
@@ -260,8 +258,8 @@ flac_decode_headers(unsigned char *mem,
 
         stream_info = va_arg(ap, FLAC__StreamMetadata_StreamInfo *);
         if (result & FLAC_HEADER_STREAM_INFO)
-          memcpy(stream_info, &fhe.stream_info,
-                 sizeof(FLAC__StreamMetadata_StreamInfo));
+          memcpy(stream_info, &fhe.stream_info, sizeof(FLAC__StreamMetadata_StreamInfo));
+
         break;
       }
 
