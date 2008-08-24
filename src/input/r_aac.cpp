@@ -50,23 +50,23 @@ aac_reader_c::probe_file(mm_io_c *io,
     return 1;
 
   pos = find_aac_header(buf, PROBESIZE, &aacheader, false);
-  if ((pos < 0) || ((pos + aacheader.bytes) >= PROBESIZE)) {
+  if ((0 > pos) || ((pos + aacheader.bytes) >= PROBESIZE)) {
     pos = find_aac_header(buf, PROBESIZE, &aacheader, true);
-    if ((pos < 0) || ((pos + aacheader.bytes) >= PROBESIZE))
+    if ((0 > pos) || ((pos + aacheader.bytes) >= PROBESIZE))
       return 0;
     pos = find_aac_header(&buf[pos + aacheader.bytes], PROBESIZE - pos - aacheader.bytes, &aacheader, true);
-    if (pos != 0)
+    if (0 != pos)
       return 0;
   }
 
   pos = find_aac_header(&buf[pos + aacheader.bytes], PROBESIZE - pos - aacheader.bytes, &aacheader, false);
-  if (pos != 0)
+  if (0 != pos)
     return 0;
 
   return 1;
 }
 
-#define INITCHUNKSIZE 16384
+#define INITCHUNKSIZE   16384
 #define SINITCHUNKSIZE "16384"
 
 aac_reader_c::aac_reader_c(track_info_c &_ti)
@@ -113,16 +113,16 @@ aac_reader_c::aac_reader_c(track_info_c &_ti)
     if (24000 >= aacheader.sample_rate)
       aacheader.profile = AAC_PROFILE_SBR;
 
-    if ((map_has_key(ti.all_aac_is_sbr, 0) && ti.all_aac_is_sbr[0]) ||
-        (map_has_key(ti.all_aac_is_sbr, -1) && ti.all_aac_is_sbr[-1]))
+    if (   (map_has_key(ti.all_aac_is_sbr,  0) && ti.all_aac_is_sbr[ 0])
+        || (map_has_key(ti.all_aac_is_sbr, -1) && ti.all_aac_is_sbr[-1]))
       aacheader.profile = AAC_PROFILE_SBR;
 
-    if ((map_has_key(ti.all_aac_is_sbr, 0) && !ti.all_aac_is_sbr[0]) ||
-        (map_has_key(ti.all_aac_is_sbr, -1) && !ti.all_aac_is_sbr[-1]))
+    if (   (map_has_key(ti.all_aac_is_sbr,  0) && !ti.all_aac_is_sbr[ 0])
+        || (map_has_key(ti.all_aac_is_sbr, -1) && !ti.all_aac_is_sbr[-1]))
       aacheader.profile = detected_profile;
 
-    if (map_has_key(ti.all_aac_is_sbr, 0) ||
-        map_has_key(ti.all_aac_is_sbr, -1))
+    if (   map_has_key(ti.all_aac_is_sbr,  0)
+        || map_has_key(ti.all_aac_is_sbr, -1))
       sbr_status_set = true;
 
   } catch (...) {
@@ -151,22 +151,19 @@ aac_reader_c::create_packetizer(int64_t) {
            "file actually contains SBR AAC. The file will be muxed in the "
            "WRONG way otherwise. Also read mkvmerge's documentation.\n");
 
-  aacpacketizer = new aac_packetizer_c(this, aacheader.id, aacheader.profile,
-                                       aacheader.sample_rate,
-                                       aacheader.channels, ti,
-                                       emphasis_present);
+  aacpacketizer = new aac_packetizer_c(this, aacheader.id, aacheader.profile, aacheader.sample_rate, aacheader.channels, ti, emphasis_present);
   add_packetizer(aacpacketizer);
-  if (aacheader.profile == AAC_PROFILE_SBR)
+
+  if (AAC_PROFILE_SBR == aacheader.profile)
     aacpacketizer->set_audio_output_sampling_freq(aacheader.sample_rate * 2);
-  mxinfo(FMT_TID "Using the AAC output module.\n", ti.fname.c_str(),
-         (int64_t)0);
+
+  mxinfo(FMT_TID "Using the AAC output module.\n", ti.fname.c_str(), (int64_t)0);
 }
 
 // Try to guess if the MPEG4 header contains the emphasis field (2 bits)
 void
 aac_reader_c::guess_adts_version() {
   aac_header_t tmp_aacheader;
-  int pos;
 
   emphasis_present = false;
 
@@ -182,8 +179,8 @@ aac_reader_c::guess_adts_version() {
   }
 
   // Looks ok so far. See if the next ADTS is right behind this packet.
-  pos = find_aac_header(&chunk[tmp_aacheader.bytes], INITCHUNKSIZE - tmp_aacheader.bytes, &tmp_aacheader, emphasis_present);
-  if (pos != 0) {               // Not ok - what do we do now?
+  int pos = find_aac_header(&chunk[tmp_aacheader.bytes], INITCHUNKSIZE - tmp_aacheader.bytes, &tmp_aacheader, emphasis_present);
+  if (0 != pos) {               // Not ok - what do we do now?
     emphasis_present = true;
     return;
   }
@@ -196,7 +193,7 @@ aac_reader_c::read(generic_packetizer_c *,
   int read_len        = MXMIN(INITCHUNKSIZE, remaining_bytes);
   int num_read        = io->read(chunk, read_len);
 
-  if (num_read < 0) {
+  if (0 > num_read) {
     PTZR0->flush();
     return FILE_STATUS_DONE;
   }
@@ -204,7 +201,7 @@ aac_reader_c::read(generic_packetizer_c *,
   PTZR0->process(new packet_t(new memory_c(chunk, num_read, false)));
   bytes_processed += num_read;
 
-  if ((remaining_bytes - num_read) > 0)
+  if (0 < (remaining_bytes - num_read))
     return FILE_STATUS_MOREDATA;
 
   PTZR0->flush();
