@@ -75,8 +75,7 @@ ac3_reader_c::ac3_reader_c(track_info_c &_ti)
     throw error_c("ac3_reader: Could not open the source file.");
   }
 
-  int pos = find_ac3_header(chunk->get(), AC3_READ_SIZE, &ac3header);
-  if (pos < 0)
+  if (0 > find_ac3_header(chunk->get(), AC3_READ_SIZE, &ac3header))
     throw error_c(mxsprintf("ac3_reader: No valid AC3 packet found in the first %d bytes.\n", AC3_READ_SIZE));
 
   bytes_processed = 0;
@@ -106,7 +105,7 @@ ac3_reader_c::read(generic_packetizer_c *,
   int read_len        = MXMIN(AC3_READ_SIZE, remaining_bytes);
   int num_read        = io->read(chunk->get(), read_len);
 
-  if (num_read < 0) {
+  if (0 > num_read) {
     PTZR0->flush();
     return FILE_STATUS_DONE;
   }
@@ -114,7 +113,7 @@ ac3_reader_c::read(generic_packetizer_c *,
   PTZR0->process(new packet_t(new memory_c(chunk->get(), num_read, false)));
   bytes_processed += num_read;
 
-  if ((remaining_bytes - num_read) > 0)
+  if (0 < (remaining_bytes - num_read))
     return FILE_STATUS_MOREDATA;
 
   PTZR0->flush();
