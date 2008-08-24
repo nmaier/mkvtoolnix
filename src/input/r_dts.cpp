@@ -32,6 +32,7 @@ dts_reader_c::probe_file(mm_io_c *io,
                          int64_t size) {
   if (size < READ_SIZE)
     return 0;
+
   try {
     unsigned char buf[READ_SIZE];
     bool dts14_to_16 = false, swap_bytes = false;
@@ -58,13 +59,15 @@ dts_reader_c::dts_reader_c(track_info_c &_ti)
   int pos;
 
   try {
-    io = new mm_file_io_c(ti.fname);
-    size = io->get_size();
+    io     = new mm_file_io_c(ti.fname);
+    size   = io->get_size();
     buf[0] = (unsigned short *)safemalloc(READ_SIZE);
     buf[1] = (unsigned short *)safemalloc(READ_SIZE);
+
     if (io->read(buf[cur_buf], READ_SIZE) != READ_SIZE)
       throw error_c("dts_reader: Could not read READ_SIZE bytes.");
     io->setFilePointer(0, seek_beginning);
+
   } catch (...) {
     throw error_c("dts_reader: Could not open the source file.");
   }
@@ -74,14 +77,13 @@ dts_reader_c::dts_reader_c(track_info_c &_ti)
   mxverb(3, "DTS: 14->16 %d swap %d\n", dts14_to_16, swap_bytes);
 
   decode_buffer(READ_SIZE);
-  pos = find_dts_header((const unsigned char *)buf[cur_buf],
-                        READ_SIZE, &dtsheader);
+  pos = find_dts_header((const unsigned char *)buf[cur_buf], READ_SIZE, &dtsheader);
 
   if (pos < 0)
-    throw error_c("dts_reader: No valid DTS packet found in the first "
-                  "READ_SIZE bytes.\n");
+    throw error_c("dts_reader: No valid DTS packet found in the first READ_SIZE bytes.\n");
+
   bytes_processed = 0;
-  ti.id = 0;                   // ID for this track.
+  ti.id           = 0;          // ID for this track.
 
   if (verbose)
     mxinfo(FMT_FN "Using the DTS demultiplexer.\n", ti.fname.c_str());
@@ -103,7 +105,7 @@ dts_reader_c::decode_buffer(int len) {
   if (dts14_to_16) {
     dts_14_to_dts_16(buf[cur_buf], len / 2, buf[cur_buf^1]);
     cur_buf ^= 1;
-    len = len * 7 / 8;
+    len      = len * 7 / 8;
   }
 
   return len;
@@ -113,9 +115,10 @@ void
 dts_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
+
   add_packetizer(new dts_packetizer_c(this, dtsheader, ti));
-  mxinfo(FMT_TID "Using the DTS output module.\n", ti.fname.c_str(),
-         (int64_t)0);
+  mxinfo(FMT_TID "Using the DTS output module.\n", ti.fname.c_str(), (int64_t)0);
+
   if (1 < verbose)
     print_dts_header(&dtsheader);
 }
@@ -123,11 +126,10 @@ dts_reader_c::create_packetizer(int64_t) {
 file_status_e
 dts_reader_c::read(generic_packetizer_c *,
                    bool) {
-  int nread;
+  int nread  = io->read(buf[cur_buf], READ_SIZE);
+  nread     &= ~0xf;
 
-  nread = io->read(buf[cur_buf], READ_SIZE);
-  nread &= ~0xf;
-  if (nread <= 0) {
+  if (0 >= nread) {
     PTZR0->flush();
     return FILE_STATUS_DONE;
   }
