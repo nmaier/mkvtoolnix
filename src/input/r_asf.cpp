@@ -18,6 +18,8 @@
 #include "common.h"
 #include "r_asf.h"
 
+#define MAGIC_ASF_WMV 0x3026b275
+
 int
 asf_reader_c::probe_file(mm_io_c *io,
                          int64_t size) {
@@ -32,7 +34,7 @@ asf_reader_c::probe_file(mm_io_c *io,
       return 0;
     io->setFilePointer(0, seek_beginning);
 
-    if (get_uint32_be(buf) == 0x3026b275) {
+    if (MAGIC_ASF_WMV == get_uint32_be(buf)) {
       id_result_container_unsupported(io->get_file_name(), "Windows Media (ASF/WMV)");
       // Never reached:
       return 1;
