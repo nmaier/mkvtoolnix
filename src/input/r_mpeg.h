@@ -46,8 +46,7 @@ public:
   virtual void identify();
   virtual void create_packetizer(int64_t id);
 
-  static bool read_frame(M2VParser &parser, mm_io_c &in,
-                         int64_t max_size = -1, bool flush_parser = false);
+  static bool read_frame(M2VParser &parser, mm_io_c &in, int64_t max_size = -1, bool flush_parser = false);
 
   static int probe_file(mm_io_c *io, int64_t size);
 };
@@ -84,8 +83,8 @@ struct mpeg_ps_track_t {
 
   void use_buffer(int size) {
     safefree(buffer);
-    buffer = (unsigned char *)safemalloc(size);
-    buffer_size = size;
+    buffer       = (unsigned char *)safemalloc(size);
+    buffer_size  = size;
     buffer_usage = 0;
   }
 
@@ -93,7 +92,7 @@ struct mpeg_ps_track_t {
     if (!buffer)
       use_buffer(size);
     else if (size > buffer_size) {
-      buffer = (unsigned char *)saferealloc(buffer, size);
+      buffer      = (unsigned char *)saferealloc(buffer, size);
       buffer_size = size;
     }
   }
@@ -135,8 +134,7 @@ public:
   virtual void found_new_stream(int id);
 
   virtual bool read_timestamp(int c, int64_t &timestamp);
-  virtual bool parse_packet(int id, int64_t &timestamp, int &length,
-                            int &full_size, int &aid);
+  virtual bool parse_packet(int id, int64_t &timestamp, int &length, int &full_size, int &aid);
   virtual bool find_next_packet(int &id, int64_t max_file_pos = -1);
   virtual bool find_next_packet_for_id(int id, int64_t max_file_pos = -1);
 
@@ -145,16 +143,11 @@ public:
   static int probe_file(mm_io_c *io, int64_t size);
 
 private:
-  virtual void new_stream_v_mpeg_1_2(int id, unsigned char *buf,
-                                     int length, mpeg_ps_track_ptr &track);
-  virtual void new_stream_v_avc(int id, unsigned char *buf,
-                                int length, mpeg_ps_track_ptr &track);
-  virtual void new_stream_a_mpeg(int id, unsigned char *buf,
-                                 int length, mpeg_ps_track_ptr &track);
-  virtual void new_stream_a_ac3(int id, unsigned char *buf,
-                                int length, mpeg_ps_track_ptr &track);
-  virtual void new_stream_a_dts(int id, unsigned char *buf,
-                                int length, mpeg_ps_track_ptr &track);
+  virtual void new_stream_v_mpeg_1_2(int id, unsigned char *buf, int length, mpeg_ps_track_ptr &track);
+  virtual void new_stream_v_avc(int id, unsigned char *buf, int length, mpeg_ps_track_ptr &track);
+  virtual void new_stream_a_mpeg(int id, unsigned char *buf, int length, mpeg_ps_track_ptr &track);
+  virtual void new_stream_a_ac3(int id, unsigned char *buf, int length, mpeg_ps_track_ptr &track);
+  virtual void new_stream_a_dts(int id, unsigned char *buf, int length, mpeg_ps_track_ptr &track);
   virtual bool resync_stream(uint32_t &header);
   virtual file_status_e finish();
   void sort_tracks();
