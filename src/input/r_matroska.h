@@ -47,7 +47,7 @@ struct kax_track_t {
   bool ms_compat;
 
   char type; // 'v' = video, 'a' = audio, 't' = text subs, 'b' = buttons
-  char sub_type; // 't' = text, 'v' = VobSub
+  char sub_type;                // 't' = text, 'v' = VobSub
   bool passthrough;             // No special packetizer available.
 
   uint32_t min_cache, max_cache, max_blockadd_id;
@@ -124,7 +124,7 @@ struct kax_track_t {
   }
   ~kax_track_t() {
     safefree(private_data);
-    if (tags != NULL)
+    if (NULL != tags)
       delete tags;
   }
 };
@@ -171,7 +171,6 @@ public:
   static int probe_file(mm_io_c *io, int64_t size);
 
 protected:
-  virtual int read_headers();
   virtual void init_passthrough_packetizer(kax_track_t *t);
   virtual void set_packetizer_headers(kax_track_t *t);
   virtual void read_first_frame(kax_track_t *t);
@@ -184,8 +183,20 @@ protected:
   virtual void handle_chapters(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void handle_tags(mm_io_c *io, EbmlElement *l0, int64_t pos);
 
-  virtual void create_mpeg4_p10_es_video_packetizer(kax_track_t *t,
-                                                    track_info_c &nti);
+  virtual void create_video_packetizer(kax_track_t *t, track_info_c &nti);
+  virtual void create_audio_packetizer(kax_track_t *t, track_info_c &nti);
+  virtual void create_subtitle_packetizer(kax_track_t *t, track_info_c &nti);
+  virtual void create_button_packetizer(kax_track_t *t, track_info_c &nti);
+  virtual void create_mpeg4_p10_es_video_packetizer(kax_track_t *t, track_info_c &nti);
+
+  virtual void read_headers_info(EbmlElement *&l1, EbmlElement *&l2, int &upper_lvl_el);
+  virtual void read_headers_info_writing_app(KaxWritingApp *&kwriting_app);
+  virtual void read_headers_track_audio(kax_track_t *&track, KaxTrackAudio *&ktaudio);
+  virtual void read_headers_track_video(kax_track_t *&track, KaxTrackVideo *&ktvideo);
+  virtual void read_headers_tracks(EbmlElement *&l1, EbmlElement *&l2, int &upper_lvl_el);
+  virtual void read_headers_seek_head(EbmlElement *&l0, EbmlElement *&l1,
+                                      vector<int64_t> &deferred_tags, vector<int64_t> &deferred_chapters, vector<int64_t> &deferred_attachments);
+  virtual int  read_headers();
 };
 
 
