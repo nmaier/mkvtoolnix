@@ -125,6 +125,11 @@ protected:
   virtual void queue_audio_frames(real_demuxer_cptr dmx, memory_c &mem, uint64_t timecode, uint32_t flags);
   virtual void queue_one_audio_frame(real_demuxer_cptr dmx, memory_c &mem, uint64_t timecode, uint32_t flags);
   virtual void deliver_audio_frames(real_demuxer_cptr dmx, uint64_t duration);
+
+  virtual void create_audio_packetizer(real_demuxer_cptr dmx);
+  virtual void create_aac_audio_packetizer(real_demuxer_cptr dmx);
+  virtual void create_dnet_audio_packetizer(real_demuxer_cptr dmx);
+  virtual void create_video_packetizer(real_demuxer_cptr dmx);
 };
 
 #endif  // __R_REAL_H
