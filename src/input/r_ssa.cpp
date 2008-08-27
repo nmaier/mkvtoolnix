@@ -36,9 +36,6 @@ using namespace std;
 int
 ssa_reader_c::probe_file(mm_text_io_c *io,
                          int64_t size) {
-  string line;
-  int line_number;
-
   pcrecpp::RE_Options opt_caseless;
   opt_caseless.set_caseless(true);
   pcrecpp::RE comment_re("^\\s*;");
@@ -46,8 +43,9 @@ ssa_reader_c::probe_file(mm_text_io_c *io,
   pcrecpp::RE styles_re("^\\s*\\[V4\\+?\\s+Styles\\]", opt_caseless);
 
   try {
-    line_number = 0;
+    int line_number = 0;
     io->setFilePointer(0, seek_beginning);
+    string line;
     while (io->getline2(line)) {
       ++line_number;
 
@@ -107,12 +105,8 @@ ssa_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  add_packetizer(new textsubs_packetizer_c(this, m_is_ass ?  MKV_S_TEXTASS :
-                                           MKV_S_TEXTSSA, m_global.c_str(),
-                                           m_global.length(), false, false,
-                                           ti));
-  mxinfo(FMT_TID "Using the text subtitle output module.\n", ti.fname.c_str(),
-         (int64_t)0);
+  add_packetizer(new textsubs_packetizer_c(this, m_is_ass ?  MKV_S_TEXTASS : MKV_S_TEXTSSA, m_global.c_str(), m_global.length(), false, false, ti));
+  mxinfo(FMT_TID "Using the text subtitle output module.\n", ti.fname.c_str(), (int64_t)0);
 }
 
 string
@@ -130,20 +124,18 @@ ssa_reader_c::get_element(const char *index,
 int64_t
 ssa_reader_c::parse_time(string &stime) {
   int64_t th, tm, ts, tds;
-  int pos;
-  string s;
 
-  pos = stime.find(':');
-  if (pos < 0)
+  int pos = stime.find(':');
+  if (0 > pos)
     return -1;
 
-  s = stime.substr(0, pos);
+  string s = stime.substr(0, pos);
   if (!parse_int(s, th))
     return -1;
   stime.erase(0, pos + 1);
 
   pos = stime.find(':');
-  if (pos < 0)
+  if (0 > pos)
     return -1;
 
   s = stime.substr(0, pos);
@@ -152,7 +144,7 @@ ssa_reader_c::parse_time(string &stime) {
   stime.erase(0, pos + 1);
 
   pos = stime.find('.');
-  if (pos < 0)
+  if (0 > pos)
     return -1;
 
   s = stime.substr(0, pos);
@@ -163,8 +155,7 @@ ssa_reader_c::parse_time(string &stime) {
   if (!parse_int(stime, tds))
     return -1;
 
-  return (tds * 10 + ts * 1000 + tm * 60 * 1000 + th * 60 * 60 * 1000) *
-    1000000;
+  return (tds * 10 + ts * 1000 + tm * 60 * 1000 + th * 60 * 60 * 1000) * 1000000;
 }
 
 string
@@ -175,13 +166,6 @@ ssa_reader_c::recode_text(vector<string> &fields) {
 
 void
 ssa_reader_c::parse_file(mm_text_io_c *io) {
-  string line, stime, orig_line, comma, name_field;
-  string attachment_name, attachment_data_uu;
-  int num, i;
-  int64_t start, end;
-  vector<string> fields;
-  ssa_section_e section, previous_section;
-  bool add_to_global;
   pcrecpp::RE_Options opt_caseless;
   opt_caseless.set_caseless(true);
   pcrecpp::RE sec_styles_ass_re("^\\s*\\[V4\\+\\s+Styles\\]", opt_caseless);
@@ -191,17 +175,20 @@ ssa_reader_c::parse_file(mm_text_io_c *io) {
   pcrecpp::RE sec_graphics_re("^\\s*\\[Graphics\\]", opt_caseless);
   pcrecpp::RE sec_fonts_re("^\\s*\\[Fonts\\]", opt_caseless);
 
-  num = 0;
+  int num                        = 0;
+  ssa_section_e section          = SSA_SECTION_NONE;
+  ssa_section_e previous_section = SSA_SECTION_NONE;
+  string name_field              = "Name";
+  ti.id                          = 0;
 
-  section = SSA_SECTION_NONE;
-  previous_section = SSA_SECTION_NONE;
-  ti.id = 0;                 // ID for this track.
-  name_field = "Name";
+  string attachment_name, attachment_data_uu;
+
   while (!io->eof()) {
+    string line;
     if (!io->getline2(line))
       break;
 
-    add_to_global = true;
+    bool add_to_global = true;
 
     // A normal line. Let's see if this file is ASS and not SSA.
     if (!strcasecmp(line.c_str(), "ScriptType: v4.00+"))
@@ -209,7 +196,7 @@ ssa_reader_c::parse_file(mm_text_io_c *io) {
 
     else if (sec_styles_ass_re.PartialMatch(line)) {
       m_is_ass = true;
-      section = SSA_SECTION_V4STYLES;
+      section  = SSA_SECTION_V4STYLES;
 
     } else if (sec_styles_re.PartialMatch(line))
       section = SSA_SECTION_V4STYLES;
@@ -221,11 +208,11 @@ ssa_reader_c::parse_file(mm_text_io_c *io) {
       section = SSA_SECTION_EVENTS;
 
     else if (sec_graphics_re.PartialMatch(line)) {
-      section = SSA_SECTION_GRAPHICS;
+      section       = SSA_SECTION_GRAPHICS;
       add_to_global = false;
 
     } else if (sec_fonts_re.PartialMatch(line)) {
-      section = SSA_SECTION_FONTS;
+      section       = SSA_SECTION_FONTS;
       add_to_global = false;
 
     } else if (SSA_SECTION_EVENTS == section) {
@@ -235,6 +222,7 @@ ssa_reader_c::parse_file(mm_text_io_c *io) {
         strip(m_format);
 
         // Let's see if "Actor" is used in the format instead of "Name".
+        int i;
         for (i = 0; m_format.size() > i; ++i)
           if (downcase(m_format[i]) == "actor") {
             name_field = "Actor";
@@ -242,31 +230,30 @@ ssa_reader_c::parse_file(mm_text_io_c *io) {
           }
 
       } else if (starts_with_case(line, "Dialogue: ")) {
-        if (m_format.size() == 0)
-          throw error_c("ssa_reader: Invalid format. Could not find the "
-                        "\"Format\" line in the \"[Events]\" section.");
+        if (m_format.empty())
+          throw error_c("ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section.");
 
-        orig_line = line;
+        string orig_line = line;
 
         line.erase(0, strlen("Dialogue: ")); // Trim the start.
 
         // Split the line into fields.
-        fields = split(line.c_str(), ",", m_format.size());
+        vector<string> fields = split(line.c_str(), ",", m_format.size());
         while (fields.size() < m_format.size())
           fields.push_back(string(""));
 
         // Parse the start time.
-        stime = get_element("Start", fields);
-        start = parse_time(stime);
-        if (start < 0) {
+        string stime  = get_element("Start", fields);
+        int64_t start = parse_time(stime);
+        if (0 > start) {
           mxwarn("ssa_reader: Malformed line? (%s)\n", orig_line.c_str());
           continue;
         }
 
         // Parse the end time.
-        stime = get_element("End", fields);
-        end = parse_time(stime);
-        if (end < 0) {
+        stime       = get_element("End", fields);
+        int64_t end = parse_time(stime);
+        if (0 > end) {
           mxwarn("ssa_reader: Malformed line? (%s)\n", orig_line.c_str());
           continue;
         }
@@ -279,15 +266,17 @@ ssa_reader_c::parse_file(mm_text_io_c *io) {
         // ReadOrder, Layer, Style, Name, MarginL, MarginR, MarginV, Effect,
         //   Text
 
-        comma = ",";
-        line = to_string(num) + comma + get_element("Layer", fields) + comma +
-          get_element("Style", fields) + comma +
-          get_element(name_field.c_str(), fields) + comma +
-          get_element("MarginL", fields) + comma +
-          get_element("MarginR", fields) + comma +
-          get_element("MarginV", fields) + comma +
-          get_element("Effect", fields) + comma +
-          recode_text(fields);
+        string comma = ",";
+        line         =
+            to_string(num)                          + comma
+          + get_element("Layer", fields)            + comma
+          + get_element("Style", fields)            + comma
+          + get_element(name_field.c_str(), fields) + comma
+          + get_element("MarginL", fields)          + comma
+          + get_element("MarginR", fields)          + comma
+          + get_element("MarginV", fields)          + comma
+          + get_element("Effect", fields)           + comma
+          + recode_text(fields);
 
         m_subs.add(start, end, line);
         num++;
@@ -295,11 +284,9 @@ ssa_reader_c::parse_file(mm_text_io_c *io) {
         add_to_global = false;
       }
 
-    } else if ((SSA_SECTION_FONTS == section) ||
-               (SSA_SECTION_GRAPHICS == section)) {
+    } else if ((SSA_SECTION_FONTS == section) || (SSA_SECTION_GRAPHICS == section)) {
       if (starts_with_case(line, "fontname:")) {
-        add_attachment_maybe(attachment_name, attachment_data_uu,
-                             section);
+        add_attachment_maybe(attachment_name, attachment_data_uu, section);
 
         line.erase(0, strlen("fontname:"));
         strip(line, true);
@@ -319,8 +306,8 @@ ssa_reader_c::parse_file(mm_text_io_c *io) {
     }
 
     if (previous_section != section)
-      add_attachment_maybe(attachment_name, attachment_data_uu,
-                           previous_section);
+      add_attachment_maybe(attachment_name, attachment_data_uu, previous_section);
+
     previous_section = section;
   }
 
@@ -331,38 +318,36 @@ void
 ssa_reader_c::add_attachment_maybe(string &name,
                                    string &data_uu,
                                    ssa_section_e section) {
-  if (ti.no_attachments || (name == "") || (data_uu == "") ||
-      ((SSA_SECTION_FONTS != section) && (SSA_SECTION_GRAPHICS != section))) {
-    name = "";
+  if (ti.no_attachments || (name == "") || (data_uu == "") || ((SSA_SECTION_FONTS != section) && (SSA_SECTION_GRAPHICS != section))) {
+    name    = "";
     data_uu = "";
     return;
   }
 
   attachment_t attachment;
-  string type = SSA_SECTION_FONTS == section ? "font" : "picture";
-  string short_name;
-  buffer_t *buffer = new buffer_t;
-  const unsigned char *p;
-  int pos, allocated;
 
-  short_name = ti.fname;
-  pos = short_name.rfind('/');
+  buffer_t *buffer  = new buffer_t;
+  string type       = SSA_SECTION_FONTS == section ? "font" : "picture";
+  string short_name = ti.fname;
+  int pos           = short_name.rfind('/');
+
   if (0 < pos)
     short_name.erase(0, pos + 1);
   pos = short_name.rfind('\\');
   if (0 < pos)
     short_name.erase(0, pos + 1);
-  attachment.name = to_utf8(m_cc_utf8, name);
-  attachment.description = "Imported " + type + " from " + short_name;
+
+  attachment.name         = to_utf8(m_cc_utf8, name);
+  attachment.description  = "Imported " + type + " from " + short_name;
   attachment.to_all_files = true;
 
-  allocated = 1024;
-  buffer = new buffer_t((unsigned char *)safemalloc(allocated), 0);
+  int allocated           = 1024;
+  buffer                  = new buffer_t((unsigned char *)safemalloc(allocated), 0);
 
-  p = (const unsigned char *)data_uu.c_str();
+  const unsigned char *p  = (const unsigned char *)data_uu.c_str();
   for (pos = 0; data_uu.length() > (pos + 4); pos += 4)
-    decode_chars(p[pos], p[pos + 1], p[pos + 2], p[pos + 3], *buffer, 3,
-                 allocated);
+    decode_chars(p[pos], p[pos + 1], p[pos + 2], p[pos + 3], *buffer, 3, allocated);
+
   switch (data_uu.length() % 4) {
     case 2:
       decode_chars(p[pos], p[pos + 1], 0, 0, *buffer, 1, allocated);
@@ -372,15 +357,15 @@ ssa_reader_c::add_attachment_maybe(string &name,
       break;
   }
 
-  attachment.data = counted_ptr<buffer_t>(buffer);
-
+  attachment.data       = counted_ptr<buffer_t>(buffer);
   attachment.mime_type = guess_mime_type(name, false);
+
   if (attachment.mime_type == "")
     attachment.mime_type = "application/octet-stream";
 
   add_attachment(attachment);
 
-  name = "";
+  name    = "";
   data_uu = "";
 }
 
@@ -392,19 +377,19 @@ ssa_reader_c::decode_chars(unsigned char c1,
                            buffer_t &buffer,
                            int bytes_to_add,
                            int &allocated) {
-  uint32_t value, i;
   unsigned char bytes[3];
 
-  value = ((c1 - 33) << 18) + ((c2 - 33) << 12) + ((c3 - 33) << 6) + (c4 - 33);
-  bytes[2] = value & 0xff;
-  bytes[1] = (value & 0xff00) >> 8;
-  bytes[0] = (value & 0xff0000) >> 16;
+  uint32_t value = ((c1 - 33) << 18) + ((c2 - 33) << 12) + ((c3 - 33) << 6) + (c4 - 33);
+  bytes[2]       =  value & 0x0000ff;
+  bytes[1]       = (value & 0x00ff00) >>  8;
+  bytes[0]       = (value & 0xff0000) >> 16;
 
   if ((buffer.m_size + bytes_to_add) > allocated) {
     allocated += 1024;
     buffer.m_buffer = (unsigned char *)realloc(buffer.m_buffer, allocated);
   }
 
+  int i;
   for (i = 0; i < bytes_to_add; ++i)
     buffer.m_buffer[buffer.m_size + i] = bytes[i];
   buffer.m_size += bytes_to_add;
@@ -430,7 +415,7 @@ ssa_reader_c::get_progress() {
   int num_entries;
 
   num_entries = m_subs.get_num_entries();
-  if (num_entries == 0)
+  if (0 == num_entries)
     return 100;
   return 100 * m_subs.get_num_processed() / num_entries;
 }
