@@ -27,20 +27,18 @@
 
 using namespace std;
 
-#define RE_TIMECODE "(\\d{1,2}):(\\d{1,2}):(\\d{1,2})[,\\.](\\d+)?"
+#define RE_TIMECODE      "(\\d{1,2}):(\\d{1,2}):(\\d{1,2})[,\\.](\\d+)?"
 #define RE_TIMECODE_LINE "^" RE_TIMECODE "\\s+-+>\\s+" RE_TIMECODE "\\s*"
-#define RE_COORDINATES "([XY]\\d+:\\d+\\s*){4}\\s*$"
+#define RE_COORDINATES   "([XY]\\d+:\\d+\\s*){4}\\s*$"
 
 int
 srt_reader_c::probe_file(mm_text_io_c *io,
                          int64_t) {
-  string s;
-  int64_t dummy;
-
   try {
     io->setFilePointer(0, seek_beginning);
-    s = io->getline();
+    string s = io->getline();
     strip(s);
+    int64_t dummy;
     if (!parse_int(s, dummy))
       return 0;
     s = io->getline();
@@ -79,16 +77,13 @@ srt_reader_c::~srt_reader_c() {
 
 void
 srt_reader_c::create_packetizer(int64_t) {
-  bool is_utf8;
-
   if (NPTZR() != 0)
     return;
 
-  is_utf8 = io->get_byte_order() != BO_NONE;
-  add_packetizer(new textsubs_packetizer_c(this, MKV_S_TEXTUTF8, NULL, 0,
-                                           true, is_utf8, ti));
-  mxinfo(FMT_TID "Using the text subtitle output module.\n", ti.fname.c_str(),
-         (int64_t)0);
+  bool is_utf8 = io->get_byte_order() != BO_NONE;
+  add_packetizer(new textsubs_packetizer_c(this, MKV_S_TEXTUTF8, NULL, 0, true, is_utf8, ti));
+
+  mxinfo(FMT_TID "Using the text subtitle output module.\n", ti.fname.c_str(), (int64_t)0);
 }
 
 #define STATE_INITIAL         0
@@ -98,52 +93,47 @@ srt_reader_c::create_packetizer(int64_t) {
 
 void
 srt_reader_c::parse_file() {
-  int64_t start, end, previous_start;
-  string s, subtitles;
-  int state, line_number;
-  int s_h, s_min, s_sec, e_h, e_min, e_sec;
-  string s_rest, e_rest;
-  bool timecode_warning_printed;
   pcrecpp::RE timecode_re(RE_TIMECODE_LINE);
   pcrecpp::RE number_re("^\\d+$");
   pcrecpp::RE coordinates_re(RE_COORDINATES);
 
-  start = 0;
-  end = 0;
-  previous_start = 0;
-  timecode_warning_printed = false;
-  state = STATE_INITIAL;
-  line_number = 0;
-  subtitles = "";
+  int64_t start                 = 0;
+  int64_t end                   = 0;
+  int64_t previous_start        = 0;
+  bool timecode_warning_printed = false;
+  int state                     = STATE_INITIAL;
+  int line_number               = 0;
+  string subtitles;
+
   while (1) {
+    string s;
     if (!io->getline2(s))
       break;
     line_number++;
     strip_back(s);
 
-    if (s.length() == 0) {
-      if ((state == STATE_INITIAL) || (state == STATE_TIME))
+    if (s.empty()) {
+      if ((STATE_INITIAL == state) || (STATE_TIME == state))
         continue;
       state = STATE_SUBS_OR_NUMBER;
-      if (subtitles.length() > 0)
+      if (!subtitles.empty())
         subtitles += "\n";
       subtitles += "\n";
       continue;
     }
 
-    if (state == STATE_INITIAL) {
+    if (STATE_INITIAL == state) {
       if (!number_re.FullMatch(s)) {
-        mxwarn(FMT_FN "Error in line %d: expected subtitle number "
-               "and found some text.\n", ti.fname.c_str(), line_number);
+        mxwarn(FMT_FN "Error in line %d: expected subtitle number and found some text.\n", ti.fname.c_str(), line_number);
         break;
       }
       state = STATE_TIME;
 
-    } else if (state == STATE_TIME) {
+    } else if (STATE_TIME == state) {
+      int s_h, s_min, s_sec, e_h, e_min, e_sec;
+      string s_rest, e_rest;
       if (!timecode_re.PartialMatch(s, &s_h, &s_min, &s_sec, &s_rest, &e_h, &e_min, &e_sec, &e_rest)) {
-        mxwarn(FMT_FN "Error in line %d: expected a SRT timecode "
-               "line but found something else. Aborting this file.\n",
-               ti.fname.c_str(), line_number);
+        mxwarn(FMT_FN "Error in line %d: expected a SRT timecode line but found something else. Aborting this file.\n", ti.fname.c_str(), line_number);
         break;
       }
 
@@ -154,18 +144,18 @@ srt_reader_c::parse_file() {
       }
 
       // The previous entry is done now. Append it to the list of subtitles.
-      if (subtitles.length() > 0) {
+      if (!subtitles.empty()) {
         strip_back(subtitles, true);
         subs.add(start, end, subtitles.c_str());
       }
 
       // Calculate the start and end time in ns precision for the following
       // entry.
-      start = (int64_t)s_h * 60 * 60 + s_min * 60 + s_sec;
-      end = (int64_t)e_h * 60 * 60 + e_min * 60 + e_sec;
+      start  = (int64_t)s_h * 60 * 60 + s_min * 60 + s_sec;
+      end    = (int64_t)e_h * 60 * 60 + e_min * 60 + e_sec;
 
       start *= 1000000000ll;
-      end *= 1000000000ll;
+      end   *= 1000000000ll;
 
       while (s_rest.length() < 9)
         s_rest += "0";
@@ -184,19 +174,17 @@ srt_reader_c::parse_file() {
       // of this function, but warn the user that the original order is being
       // changed.
       if (!timecode_warning_printed && (start < previous_start)) {
-        mxwarn(FMT_FN "Warning in line %d: The start timecode is smaller "
-               "than that of the previous entry. All entries from this file "
-               "will be sorted by their start time.\n", ti.fname.c_str(),
-               line_number);
+        mxwarn(FMT_FN "Warning in line %d: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n",
+               ti.fname.c_str(), line_number);
         timecode_warning_printed = true;
       }
+
       previous_start = start;
+      subtitles      = "";
+      state          = STATE_SUBS;
 
-      subtitles = "";
-      state = STATE_SUBS;
-
-    } else if (state == STATE_SUBS) {
-      if (subtitles.length() > 0)
+    } else if (STATE_SUBS == state) {
+      if (!subtitles.empty())
         subtitles += "\n";
       subtitles += s;
 
@@ -204,13 +192,13 @@ srt_reader_c::parse_file() {
       state = STATE_TIME;
 
     else {
-      if (subtitles.length() > 0)
+      if (!subtitles.empty())
         subtitles += "\n";
       subtitles += s;
     }
   }
 
-  if (subtitles.length() > 0) {
+  if (!subtitles.empty()) {
     strip_back(subtitles, true);
     subs.add(start, end, subtitles.c_str());
   }
@@ -238,7 +226,7 @@ srt_reader_c::get_progress() {
   int num_entries;
 
   num_entries = subs.get_num_entries();
-  if (num_entries == 0)
+  if (0 == num_entries)
     return 100;
   return 100 * subs.get_num_processed() / num_entries;
 }
