@@ -63,12 +63,8 @@ protected:
   virtual int64_t parse_time(string &time);
   virtual string get_element(const char *index, vector<string> &fields);
   virtual string recode_text(vector<string> &fields);
-  virtual void add_attachment_maybe(string &name, string &data_uu,
-                                    ssa_section_e section);
-  virtual void decode_chars(unsigned char c1, unsigned char c2,
-                            unsigned char c3, unsigned char c4,
-                            buffer_t &buffer, int bytes_to_add,
-                            int &allocated);
+  virtual void add_attachment_maybe(string &name, string &data_uu, ssa_section_e section);
+  virtual void decode_chars(unsigned char c1, unsigned char c2, unsigned char c3, unsigned char c4, buffer_t &buffer, int bytes_to_add, int &allocated);
 };
 
 #endif  // __R_SSA_H

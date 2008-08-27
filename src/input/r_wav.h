@@ -41,7 +41,9 @@ public:
 
 public:
   wav_demuxer_c(wav_reader_c *reader, wave_header *wheader):
-    m_reader(reader), m_wheader(wheader), m_ptzr(NULL) {
+    m_reader(reader),
+    m_wheader(wheader),
+    m_ptzr(NULL) {
   };
   virtual ~wav_demuxer_c() {};
 

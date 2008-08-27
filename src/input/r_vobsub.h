@@ -46,9 +46,13 @@ public:
 public:
   vobsub_track_c(const string &new_language):
     language(new_language),
-    ptzr(-1), idx(0), aid(-1),
+    ptzr(-1),
+    idx(0),
+    aid(-1),
     mpeg_version_warning_printed(false),
-    packet_num(0), spu_size(0), overhead(0) {
+    packet_num(0),
+    spu_size(0),
+    overhead(0) {
   }
 };
 
@@ -78,9 +82,7 @@ public:
 protected:
   virtual void parse_headers();
   virtual void flush_packetizers();
-  virtual int deliver_packet(unsigned char *buf, int size,
-                             int64_t timecode, int64_t default_duration,
-                             generic_packetizer_c *ptzr);
+  virtual int deliver_packet(unsigned char *buf, int size, int64_t timecode, int64_t default_duration, generic_packetizer_c *ptzr);
 
   virtual int extract_one_spu_packet(int64_t track_id);
 };

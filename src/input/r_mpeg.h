@@ -73,12 +73,28 @@ struct mpeg_ps_track_t {
   int buffer_usage, buffer_size;
 
   mpeg_ps_track_t():
-    ptzr(-1), type(0), id(0), sort_key(0), fourcc(0), timecode_offset(-1),
-    v_version(0), v_width(0), v_height(0), v_dwidth(0), v_dheight(0),
-    v_frame_rate(0), v_aspect_ratio(0),
-    raw_seq_hdr(NULL), raw_seq_hdr_size(0),
-    a_channels(0), a_sample_rate(0), a_bits_per_sample(0), a_bsid(0),
-    buffer(NULL), buffer_usage(0), buffer_size(0) {
+    ptzr(-1),
+    type(0),
+    id(0),
+    sort_key(0),
+    fourcc(0),
+    timecode_offset(-1),
+    v_version(0),
+    v_width(0),
+    v_height(0),
+    v_dwidth(0),
+    v_dheight(0),
+    v_frame_rate(0),
+    v_aspect_ratio(0),
+    raw_seq_hdr(NULL),
+    raw_seq_hdr_size(0),
+    a_channels(0),
+    a_sample_rate(0),
+    a_bits_per_sample(0),
+    a_bsid(0),
+    buffer(NULL),
+    buffer_usage(0),
+    buffer_size(0) {
   };
 
   void use_buffer(int size) {

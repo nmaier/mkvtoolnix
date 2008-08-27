@@ -281,7 +281,7 @@ ogm_reader_c::probe_file(mm_io_c *io,
                          int64_t size) {
   unsigned char data[4];
 
-  if (size < 4)
+  if (4 > size)
     return 0;
   try {
     io->setFilePointer(0, seek_beginning);
@@ -305,10 +305,8 @@ ogm_reader_c::ogm_reader_c(track_info_c &_ti)
   generic_reader_c(_ti) {
 
   try {
-    io = new mm_file_io_c(ti.fname);
-    io->setFilePointer(0, seek_end);
-    file_size = io->getFilePointer();
-    io->setFilePointer(0, seek_beginning);
+    io        = new mm_file_io_c(ti.fname);
+    file_size = io->get_size();
   } catch (...) {
     throw error_c("ogm_reader: Could not open the source file.");
   }
@@ -358,18 +356,16 @@ ogm_reader_c::read_page(ogg_page *og) {
     np = ogg_sync_pageseek(&oy, og);
 
     // np == 0 means that there is not enough data for a complete page.
-    if (np <= 0) {
+    if (0 >= np) {
       // np < 0 is the error case. Should not happen with local OGG files.
-      if (np < 0)
-        mxwarn("ogm_reader: Could not find the next Ogg "
-               "page. This indicates a damaged Ogg/Ogm file. Will try to "
-               "continue.\n");
+      if (0 > np)
+        mxwarn("ogm_reader: Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n");
 
       buf = (unsigned char *)ogg_sync_buffer(&oy, BUFFER_SIZE);
       if (!buf)
         mxerror("ogm_reader: ogg_sync_buffer failed\n");
 
-      if ((nread = io->read(buf, BUFFER_SIZE)) <= 0)
+      if (0 >= (nread = io->read(buf, BUFFER_SIZE)))
         return 0;
 
       ogg_sync_wrote(&oy, nread);
@@ -387,7 +383,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
   ogm_demuxer_cptr dmx;
   generic_packetizer_c *ptzr;
 
-  if ((tid < 0) || (tid >= sdemuxers.size()))
+  if ((0 > tid) || (sdemuxers.size() <= tid))
     return;
   dmx = sdemuxers[tid];
 
@@ -402,8 +398,8 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
   ptzr            = dmx->create_packetizer(ti);
 
-  if (ptzr != NULL)
-    dmx->ptzr = add_packetizer(ptzr);
+  if (NULL != ptzr)
+    dmx->ptzr     = add_packetizer(ptzr);
 
   ti.language.clear();
   ti.track_name.clear();
@@ -428,8 +424,7 @@ ogm_reader_c::packet_available() {
     return 0;
 
   for (i = 0; i < sdemuxers.size(); i++)
-    if ((-1 != sdemuxers[i]->ptzr) &&
-        !PTZR(sdemuxers[i]->ptzr)->packet_available())
+    if ((-1 != sdemuxers[i]->ptzr) && !PTZR(sdemuxers[i]->ptzr)->packet_available())
       return 0;
 
   return 1;
@@ -455,7 +450,6 @@ void
 ogm_reader_c::handle_new_stream(ogg_page *og) {
   ogg_stream_state os;
   ogg_packet op;
-  ogm_demuxer_c *dmx = NULL;
 
   if (ogg_stream_init(&os, ogg_page_serialno(og))) {
     mxwarn("ogm_reader: ogg_stream_init for stream number %u failed. Will try to continue and ignore this stream.", (unsigned int)sdemuxers.size());
@@ -466,28 +460,30 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
   ogg_stream_pagein(&os, og);
   ogg_stream_packetout(&os, &op);
 
+  ogm_demuxer_c *dmx = NULL;
+
   /*
    * Check the contents for known stream headers. This one is the
    * standard Vorbis header.
    */
-  if ((op.bytes >= 7) && !strncmp((char *)&op.packet[1], "vorbis", 6))
+  if ((7 <= op.bytes) && !strncmp((char *)&op.packet[1], "vorbis", 6))
     dmx = new ogm_a_vorbis_demuxer_c(this);
 
-  else if ((op.bytes >= 7) && !strncmp((char *)&op.packet[1], "theora", 6))
+  else if ((7 <= op.bytes) && !strncmp((char *)&op.packet[1], "theora", 6))
     dmx = new ogm_v_theora_demuxer_c(this);
 
-  else if ((op.bytes >= 8) && !memcmp(&op.packet[1], "kate\0\0\0", 7))
+  else if ((8 <= op.bytes) && !memcmp(&op.packet[1], "kate\0\0\0", 7))
     dmx = new ogm_s_kate_demuxer_c(this);
 
   // FLAC
-  else if ((op.bytes >= 4) && !strncmp((char *)op.packet, "fLaC", 4)) {
+  else if ((4 <= op.bytes) && !strncmp((char *)op.packet, "fLaC", 4)) {
 #if !defined(HAVE_FLAC_FORMAT_H)
     if (demuxing_requested('a', sdemuxers.size()))
       mxerror("mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n");
 
     else {
-      dmx = new ogm_demuxer_c(this);
-      dmx->stype = OGM_STREAM_TYPE_A_FLAC;
+      dmx         = new ogm_demuxer_c(this);
+      dmx->stype  = OGM_STREAM_TYPE_A_FLAC;
       dmx->in_use = true;
     }
 
@@ -618,12 +614,9 @@ ogm_reader_c::process_header_packets(ogm_demuxer_cptr dmx) {
 */
 int
 ogm_reader_c::read_headers() {
-  int i;
-  bool done;
-  ogm_demuxer_cptr dmx;
   ogg_page og;
 
-  done = false;
+  bool done = false;
   while (!done) {
     // Make sure we have a page that we can work with.
     if (read_page(&og) == FILE_STATUS_DONE)
@@ -638,8 +631,9 @@ ogm_reader_c::read_headers() {
 
       done = true;
 
+      int i;
       for (i = 0; i < sdemuxers.size(); i++) {
-        dmx = sdemuxers[i];
+        ogm_demuxer_cptr &dmx = sdemuxers[i];
         if (!dmx->headers_read && dmx->in_use) {
           done = false;
           break;
@@ -661,13 +655,12 @@ ogm_reader_c::read_headers() {
 file_status_e
 ogm_reader_c::read(generic_packetizer_c *,
                    bool) {
-  int i;
-  ogg_page og;
-
   // Some tracks may contain huge gaps. We don't want to suck in the complete
   // file.
   if (get_queued_bytes() > 20 * 1024 * 1024)
     return FILE_STATUS_HOLDING;
+
+  ogg_page og;
 
   do {
     // Make sure we have a page that we can work with.
@@ -681,6 +674,7 @@ ogm_reader_c::read(generic_packetizer_c *,
       process_page(&og);
   } while (ogg_page_bos(&og));
 
+  int i;
   // Are there streams that have not finished yet?
   for (i = 0; i < sdemuxers.size(); i++)
     if (!sdemuxers[i]->eos && sdemuxers[i]->in_use)
@@ -698,7 +692,6 @@ ogm_reader_c::get_progress() {
 
 void
 ogm_reader_c::identify() {
-  string codec;
   vector<string> verbose_info;
   int i;
 
@@ -727,30 +720,28 @@ ogm_reader_c::identify() {
 
 void
 ogm_reader_c::handle_stream_comments() {
-  int i, j, cch;
-  ogm_demuxer_cptr dmx;
   counted_ptr<vector<string> > comments;
-  vector<string> comment, chapter_strings;
   string title;
-  bool charset_warning_printed;
 
-  charset_warning_printed = false;
-  cch = utf8_init(ti.chapter_charset);
+  bool charset_warning_printed = false;
+  int cch                      = utf8_init(ti.chapter_charset);
+  int i;
 
   for (i = 0; i < sdemuxers.size(); i++) {
-    dmx = sdemuxers[i];
-    if ((dmx->stype == OGM_STREAM_TYPE_A_FLAC) ||
-        (dmx->packet_data.size() < 2))
+    ogm_demuxer_cptr &dmx = sdemuxers[i];
+    if ((OGM_STREAM_TYPE_A_FLAC == dmx->stype) || (2 > dmx->packet_data.size()))
       continue;
+
     comments = extract_vorbis_comments(dmx->packet_data[1]);
     if (comments->empty())
       continue;
 
-    chapter_strings.clear();
+    vector<string> chapter_strings;
 
+    int j;
     for (j = 0; comments->size() > j; j++) {
       mxverb(2, "ogm_reader: commment for #%d for %d: %s\n", j, i, (*comments)[j].c_str());
-      comment = split((*comments)[j], "=", 2);
+      vector<string> comment = split((*comments)[j], "=", 2);
       if (comment.size() != 2)
         continue;
 
@@ -761,26 +752,26 @@ ogm_reader_c::handle_stream_comments() {
         if (-1 != index)
           dmx->language = iso639_languages[index].iso639_2_code;
         else {
-          string lang;
-          int pos1, pos2;
 
-          lang = comment[1];
-          pos1 = lang.find("[");
-          while (pos1 >= 0) {
-            pos2 = lang.find("]", pos1);
-            if (pos2 == -1)
+          string lang = comment[1];
+          int pos1    = lang.find("[");
+          while (0 <= pos1) {
+            int pos2 = lang.find("]", pos1);
+            if (-1 == pos2)
               pos2 = lang.length() - 1;
             lang.erase(pos1, pos2 - pos1 + 1);
             pos1 = lang.find("[");
           }
+
           pos1 = lang.find("(");
-          while (pos1 >= 0) {
-            pos2 = lang.find(")", pos1);
-            if (pos2 == -1)
+          while (0 <= pos1) {
+            int pos2 = lang.find(")", pos1);
+            if (-1 == pos2)
               pos2 = lang.length() - 1;
             lang.erase(pos1, pos2 - pos1 + 1);
             pos1 = lang.find("(");
           }
+
           index = map_to_iso639_2_code(lang.c_str());
           if (-1 != index)
             dmx->language = iso639_languages[index].iso639_2_code;
@@ -793,29 +784,24 @@ ogm_reader_c::handle_stream_comments() {
         chapter_strings.push_back((*comments)[j]);
     }
 
-    if (((title != "") || (chapter_strings.size() > 0)) &&
-        !charset_warning_printed && (ti.chapter_charset == "")) {
-      mxwarn("The Ogg/OGM file '%s' contains chapter or title information. "
-             "Unfortunately the charset used to store this information in "
-             "the file cannot be identified unambiguously. mkvmerge assumes "
-             "that your system's current charset is appropriate. This can "
-             "be overridden with the '--chapter-charset <charset>' "
-             "switch.\n", ti.fname.c_str());
+    if (((title != "") || (chapter_strings.size() > 0)) && !charset_warning_printed && (ti.chapter_charset == "")) {
+      mxwarn("The Ogg/OGM file '%s' contains chapter or title information. Unfortunately the charset used to store this information in "
+             "the file cannot be identified unambiguously. mkvmerge assumes that your system's current charset is appropriate. This can "
+             "be overridden with the '--chapter-charset <charset>' switch.\n", ti.fname.c_str());
       charset_warning_printed = true;
     }
 
     if (title != "") {
       title = to_utf8(cch, title);
-      if (!segment_title_set && (segment_title.length() == 0) &&
-          (dmx->stype == OGM_STREAM_TYPE_V_MSCOMP)) {
-        segment_title = title;
+      if (!segment_title_set && segment_title.empty() && (OGM_STREAM_TYPE_V_MSCOMP == dmx->stype)) {
+        segment_title     = title;
         segment_title_set = true;
       }
       dmx->title = title.c_str();
-      title = "";
+      title      = "";
     }
 
-    if (!chapter_strings.empty() && !ti.no_chapters && (kax_chapters == NULL)) {
+    if (!chapter_strings.empty() && !ti.no_chapters && (NULL == kax_chapters)) {
       try {
         auto_ptr<mm_mem_io_c> out(new mm_mem_io_c(NULL, 0, 1000));
 
@@ -845,10 +831,20 @@ ogm_reader_c::add_available_track_ids() {
 
 ogm_demuxer_c::ogm_demuxer_c(ogm_reader_c *p_reader):
   reader(p_reader),
-  ptzr(-1), stype(OGM_STREAM_TYPE_UNKNOWN), serialno(0), eos(0), units_processed(0),
-  num_header_packets(2), num_non_header_packets(0), headers_read(false),
-  first_granulepos(0), last_granulepos(0), last_keyframe_number(-1), default_duration(0),
+  ptzr(-1),
+  stype(OGM_STREAM_TYPE_UNKNOWN),
+  serialno(0),
+  eos(0),
+  units_processed(0),
+  num_header_packets(2),
+  num_non_header_packets(0),
+  headers_read(false),
+  first_granulepos(0),
+  last_granulepos(0),
+  last_keyframe_number(-1),
+  default_duration(0),
   in_use(false) {
+
   memset(&os, 0, sizeof(ogg_stream_state));
 }
 
@@ -876,8 +872,6 @@ ogm_demuxer_c::get_duration_and_len(ogg_packet &op,
 
 void ogm_demuxer_c::process_page(int64_t granulepos) {
   ogg_packet op;
-  int64_t duration;
-  int duration_len;
 
   while (ogg_stream_packetout(&os, &op) == 1) {
     eos |= op.e_o_s;
@@ -885,6 +879,8 @@ void ogm_demuxer_c::process_page(int64_t granulepos) {
     if (((*op.packet & 3) == PACKET_TYPE_HEADER) || ((*op.packet & 3) == PACKET_TYPE_COMMENT))
       continue;
 
+    int64_t duration;
+    int duration_len;
     get_duration_and_len(op, duration, duration_len);
 
     memory_c *mem = new memory_c(&op.packet[duration_len + 1], op.bytes - 1 - duration_len, false);
@@ -1104,7 +1100,7 @@ void
 ogm_v_avc_demuxer_c::initialize() {
   stream_header *sth = (stream_header *)(packet_data[0]->get() + 1);
 
-  if (video_fps < 0)
+  if (0 > video_fps)
     video_fps = 10000000.0 / (float)get_uint64_le(&sth->time_unit);
 }
 
@@ -1195,7 +1191,7 @@ void
 ogm_v_mscomp_demuxer_c::initialize() {
   stream_header *sth = (stream_header *)(packet_data[0]->get() + 1);
 
-  if (video_fps < 0)
+  if (0 > video_fps)
     video_fps = 10000000.0 / (float)get_uint64_le(&sth->time_unit);
 
   default_duration = 100 * get_uint64_le(&sth->time_unit);
@@ -1203,7 +1199,6 @@ ogm_v_mscomp_demuxer_c::initialize() {
 
 generic_packetizer_c *
 ogm_v_mscomp_demuxer_c::create_packetizer(track_info_c &ti) {
-  generic_packetizer_c *ptzr_obj;
   alBITMAPINFOHEADER bih;
   stream_header *sth = (stream_header *)&packet_data[0]->get()[1];
 
@@ -1225,6 +1220,7 @@ ogm_v_mscomp_demuxer_c::create_packetizer(track_info_c &ti) {
   int width        = get_uint32_le(&sth->sh.video.width);
   int height       = get_uint32_le(&sth->sh.video.height);
 
+  generic_packetizer_c *ptzr_obj;
   if (mpeg4::p2::is_fourcc(sth->subtype)) {
     ptzr_obj = new mpeg4_p2_video_packetizer_c(reader, fps, width, height, false, ti);
 
@@ -1246,7 +1242,6 @@ ogm_v_mscomp_demuxer_c::process_page(int64_t granulepos) {
   vector<ogm_frame_t> frames;
   ogg_packet op;
   int64_t duration;
-  int duration_len, i;
 
   while (ogg_stream_packetout(&os, &op) == 1) {
     eos |= op.e_o_s;
@@ -1254,6 +1249,7 @@ ogm_v_mscomp_demuxer_c::process_page(int64_t granulepos) {
     if (((*op.packet & 3) == PACKET_TYPE_HEADER) || ((*op.packet & 3) == PACKET_TYPE_COMMENT))
       continue;
 
+    int duration_len;
     get_duration_and_len(op, duration, duration_len);
 
     if (!duration_len || !duration)
@@ -1272,6 +1268,7 @@ ogm_v_mscomp_demuxer_c::process_page(int64_t granulepos) {
   if ((granulepos - last_granulepos) > frames.size())
     last_granulepos = granulepos - frames.size();
 
+  int i;
   for (i = 0; i < frames.size(); ++i) {
     ogm_frame_t &frame = frames[i];
 
@@ -1326,8 +1323,6 @@ ogm_v_theora_demuxer_c::create_packetizer(track_info_c &ti) {
 
 void
 ogm_v_theora_demuxer_c::process_page(int64_t granulepos) {
-  int keyframe_number, non_keyframe_number;
-  int64_t timecode, duration, bref;
   ogg_packet op;
 
   while (ogg_stream_packetout(&os, &op) == 1) {
@@ -1336,13 +1331,13 @@ ogm_v_theora_demuxer_c::process_page(int64_t granulepos) {
     if ((0 == op.bytes) || (0 != (op.packet[0] & 0x80)))
       continue;
 
-    keyframe_number     = granulepos >> theora.kfgshift;
-    non_keyframe_number = granulepos &  theora.kfgshift; // TODO: seems wrong
+    int keyframe_number     = granulepos >> theora.kfgshift;
+    int non_keyframe_number = granulepos &  theora.kfgshift; // TODO: seems wrong
     // should probably be: // non_keyframe_number = granulepos - (keyframe_number << theora.kfgshift);
 
-    timecode = (int64_t)(1000000000.0 * units_processed * theora.frd / theora.frn);
-    duration = (int64_t)(1000000000.0 *                   theora.frd / theora.frn);
-    bref     = (keyframe_number != last_keyframe_number) && (0 == non_keyframe_number) ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC;
+    int64_t timecode        = (int64_t)(1000000000.0 * units_processed * theora.frd / theora.frn);
+    int64_t duration        = (int64_t)(1000000000.0 *                   theora.frd / theora.frn);
+    int64_t bref            = (keyframe_number != last_keyframe_number) && (0 == non_keyframe_number) ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC;
 
     reader->reader_packetizers[ptzr]->process(new packet_t(new memory_c(op.packet, op.bytes, false), timecode, duration, bref, VFT_NOBFRAME));
 
@@ -1408,9 +1403,6 @@ ogm_s_kate_demuxer_c::process_page(int64_t granulepos) {
 
     if ((0 == op.bytes) || (0 != (op.packet[0] & 0x80)))
       continue;
-
-//     int base   = granulepos >> kate.kfgshift;
-//     int offset = granulepos - (base << kate.kfgshift);
 
     reader->reader_packetizers[ptzr]->process(new packet_t(new memory_c(op.packet, op.bytes, false)));
 

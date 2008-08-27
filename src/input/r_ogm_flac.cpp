@@ -42,10 +42,9 @@ fhe_read_cb(const FLAC__StreamDecoder *decoder,
             size_t *bytes,
 #endif
             void *client_data) {
-  flac_header_extractor_c *fhe;
   ogg_packet op;
 
-  fhe = (flac_header_extractor_c *)client_data;
+  flac_header_extractor_c *fhe = (flac_header_extractor_c *)client_data;
   if (fhe->done)
     return FLAC__STREAM_DECODER_READ_STATUS_ABORT;
 
@@ -220,7 +219,10 @@ flac_header_extractor_c::read_page() {
 
 ogm_a_flac_demuxer_c::ogm_a_flac_demuxer_c(ogm_reader_c *p_reader):
   ogm_demuxer_c(p_reader),
-  flac_header_packets(0), sample_rate(0), channels(0), bits_per_sample(0) {
+  flac_header_packets(0),
+  sample_rate(0),
+  channels(0),
+  bits_per_sample(0) {
 
   stype = OGM_STREAM_TYPE_A_FLAC;
 }

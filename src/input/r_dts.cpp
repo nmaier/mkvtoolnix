@@ -55,8 +55,8 @@ dts_reader_c::dts_reader_c(track_info_c &_ti)
   throw (error_c):
   generic_reader_c(_ti),
   cur_buf(0),
-  dts14_to_16(false), swap_bytes(false) {
-  int pos;
+  dts14_to_16(false),
+  swap_bytes(false) {
 
   try {
     io     = new mm_file_io_c(ti.fname);
@@ -77,9 +77,9 @@ dts_reader_c::dts_reader_c(track_info_c &_ti)
   mxverb(3, "DTS: 14->16 %d swap %d\n", dts14_to_16, swap_bytes);
 
   decode_buffer(READ_SIZE);
-  pos = find_dts_header((const unsigned char *)buf[cur_buf], READ_SIZE, &dtsheader);
+  int pos = find_dts_header((const unsigned char *)buf[cur_buf], READ_SIZE, &dtsheader);
 
-  if (pos < 0)
+  if (0 > pos)
     throw error_c("dts_reader: No valid DTS packet found in the first READ_SIZE bytes.\n");
 
   bytes_processed = 0;
@@ -98,12 +98,12 @@ dts_reader_c::~dts_reader_c() {
 int
 dts_reader_c::decode_buffer(int len) {
   if (swap_bytes) {
-    swab((char *)buf[cur_buf], (char *)buf[cur_buf^1], len);
+    swab((char *)buf[cur_buf], (char *)buf[cur_buf ^ 1], len);
     cur_buf ^= 1;
   }
 
   if (dts14_to_16) {
-    dts_14_to_dts_16(buf[cur_buf], len / 2, buf[cur_buf^1]);
+    dts_14_to_dts_16(buf[cur_buf], len / 2, buf[cur_buf ^ 1]);
     cur_buf ^= 1;
     len      = len * 7 / 8;
   }

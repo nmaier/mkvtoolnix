@@ -49,7 +49,7 @@ public:
 
 int
 corepicture_reader_c::probe_file(mm_text_io_c *io,
-                         int64_t) {
+                                 int64_t) {
   try {
     corepicture_xml_find_root_c root_finder(io);
 
@@ -68,7 +68,8 @@ corepicture_reader_c::probe_file(mm_text_io_c *io,
 corepicture_reader_c::corepicture_reader_c(track_info_c &_ti)
   throw (error_c):
   generic_reader_c(_ti),
-  m_width(-1), m_height(-1) {
+  m_width(-1),
+  m_height(-1) {
 
   try {
     m_xml_source = new mm_text_io_c(new mm_file_io_c(ti.fname));

@@ -52,9 +52,11 @@ struct corepicture_pic_t {
   corepicture_panorama_type m_pan_type;
 
   corepicture_pic_t():
-    m_time(-1), m_end_time(-1), m_pic_type(COREPICTURE_TYPE_UNKNOWN),
-    m_pan_type(COREPICTURE_PAN_UNKNOWN)
-  {}
+    m_time(-1),
+    m_end_time(-1),
+    m_pic_type(COREPICTURE_TYPE_UNKNOWN),
+    m_pan_type(COREPICTURE_PAN_UNKNOWN) {
+  }
 
   bool is_valid() const {
     return (COREPICTURE_TYPE_UNKNOWN != m_pic_type) && (COREPICTURE_PAN_UNKNOWN != m_pan_type) && (m_url != "") && (0 <= m_time);

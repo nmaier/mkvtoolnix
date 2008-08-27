@@ -80,10 +80,16 @@ avi_reader_c::avi_reader_c(track_info_c &_ti)
   throw (error_c):
   generic_reader_c(_ti),
   divx_type(DIVX_TYPE_NONE),
-  avi(NULL), vptzr(-1),
-  fps(1.0), video_frames_read(0), max_video_frames(0), dropped_video_frames(0),
-  act_wchar(0), rederive_keyframes(false),
-  bytes_to_process(0), bytes_processed(0) {
+  avi(NULL),
+  vptzr(-1),
+  fps(1.0),
+  video_frames_read(0),
+  max_video_frames(0),
+  dropped_video_frames(0),
+  act_wchar(0),
+  rederive_keyframes(false),
+  bytes_to_process(0),
+  bytes_processed(0) {
 
   int64_t size;
 

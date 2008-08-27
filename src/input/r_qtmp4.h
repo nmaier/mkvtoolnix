@@ -34,7 +34,9 @@ struct qt_durmap_t {
   uint32_t duration;
 
   qt_durmap_t():
-    number(0), duration(0) {}
+    number(0),
+    duration(0) {
+  }
 };
 
 struct qt_chunk_t {
@@ -44,7 +46,11 @@ struct qt_chunk_t {
   uint64_t pos;
 
   qt_chunk_t():
-    samples(0), size(0), desc(0), pos(0) {}
+    samples(0),
+    size(0),
+    desc(0),
+    pos(0) {
+  }
 };
 
 struct qt_chunkmap_t {
@@ -53,7 +59,10 @@ struct qt_chunkmap_t {
   uint32_t sample_description_id;
 
   qt_chunkmap_t():
-    first_chunk(0), samples_per_chunk(0), sample_description_id(0) {}
+    first_chunk(0),
+    samples_per_chunk(0),
+    sample_description_id(0) {
+  }
 };
 
 struct qt_editlist_t {
@@ -63,11 +72,17 @@ struct qt_editlist_t {
   uint32_t frames;
   uint64_t start_sample;
   uint64_t start_frame;
-  int64_t pts_offset;
+  int64_t  pts_offset;
 
   qt_editlist_t():
-    duration(0), pos(0), speed(0), frames(0),
-    start_sample(0), start_frame(0), pts_offset(0) {}
+    duration(0),
+    pos(0),
+    speed(0),
+    frames(0),
+    start_sample(0),
+    start_frame(0),
+    pts_offset(0) {
+  }
 };
 
 struct qt_sample_t {
@@ -76,7 +91,10 @@ struct qt_sample_t {
   uint64_t pos;
 
   qt_sample_t():
-    pts(0), size(0), pos(0) {}
+    pts(0),
+    size(0),
+    pos(0) {
+  }
 };
 
 struct qt_frame_offset_t {
@@ -84,7 +102,9 @@ struct qt_frame_offset_t {
   uint32_t offset;
 
   qt_frame_offset_t():
-    count(0), offset(0) {}
+    count(0),
+    offset(0) {
+  }
 };
 
 struct qt_index_t {
@@ -154,18 +174,34 @@ struct qtmp4_demuxer_c {
   int ptzr;
 
   qtmp4_demuxer_c():
-    ok(false), type('?'), id(0), pos(0),
-    time_scale(1), global_duration(0), //avg_duration(0),
+    ok(false),
+    type('?'),
+    id(0),
+    pos(0),
+    time_scale(1),
+    global_duration(0), //avg_duration(0),
     sample_size(0),
-    duration(0), min_timecode(0), max_timecode(0), fps(0.0),
+    duration(0),
+    min_timecode(0),
+    max_timecode(0),
+    fps(0.0),
     esds_parsed(false),
-    v_stsd(NULL), v_stsd_size(0),
-    v_width(0), v_height(0), v_bitdepth(0),
-    v_is_avc(false), avc_use_bframes(false),
-    a_channels(0), a_bitdepth(0), a_samplerate(0.0),
-    a_aac_profile(0), a_aac_output_sample_rate(0),
-    a_aac_is_sbr(false), a_aac_config_parsed(false),
-    priv(NULL), priv_size(0),
+    v_stsd(NULL),
+    v_stsd_size(0),
+    v_width(0),
+    v_height(0),
+    v_bitdepth(0),
+    v_is_avc(false),
+    avc_use_bframes(false),
+    a_channels(0),
+    a_bitdepth(0),
+    a_samplerate(0.0),
+    a_aac_profile(0),
+    a_aac_output_sample_rate(0),
+    a_aac_is_sbr(false),
+    a_aac_config_parsed(false),
+    priv(NULL),
+    priv_size(0),
     warning_printed(false),
     ptzr(-1) {
 
@@ -208,14 +244,17 @@ struct qt_atom_t {
   uint32_t hsize;
 
   qt_atom_t():
-    fourcc(0), size(0), pos(0), hsize(0) {}
+    fourcc(0),
+    size(0),
+    pos(0),
+    hsize(0) {}
 
   qt_atom_t to_parent() {
     qt_atom_t parent;
 
     parent.fourcc = fourcc;
-    parent.size = size - hsize;
-    parent.pos = pos + hsize;
+    parent.size   = size - hsize;
+    parent.pos    = pos  + hsize;
     return parent;
   }
 };

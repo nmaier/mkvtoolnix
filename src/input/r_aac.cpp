@@ -73,6 +73,7 @@ aac_reader_c::aac_reader_c(track_info_c &_ti)
   throw (error_c):
   generic_reader_c(_ti),
   sbr_status_set(false) {
+
   int adif, detected_profile;
 
   try {

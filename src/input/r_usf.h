@@ -33,10 +33,15 @@ struct usf_entry_t {
   string m_text;
 
   usf_entry_t():
-    m_start(-1), m_end(-1) { }
+    m_start(-1),
+    m_end(-1) {
+  }
 
   usf_entry_t(int64_t start, int64_t end, const string &text):
-    m_start(start), m_end(end), m_text(text) { }
+    m_start(start),
+    m_end(end),
+    m_text(text) {
+  }
 
   bool operator <(const usf_entry_t &cmp) const {
     return m_start < cmp.m_start;
@@ -51,7 +56,8 @@ struct usf_track_t {
   vector<usf_entry_t>::const_iterator m_current_entry;
 
   usf_track_t():
-    m_ptzr(-1) { }
+    m_ptzr(-1) {
+  }
 };
 
 class usf_reader_c: public generic_reader_c, public xml_parser_c {

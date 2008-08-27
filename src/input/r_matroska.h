@@ -94,34 +94,50 @@ struct kax_track_t {
 
   memory_cptr first_frame_data;
 
-  kax_track_t(): tnum(0), tuid(0),
-                 ms_compat(false),
-                 type(' '), sub_type(' '),
-                 passthrough(false),
-                 min_cache(0), max_cache(0),
-                 lacing_flag(false),
-                 default_duration(0),
-                 v_width(0), v_height(0), v_dwidth(0), v_dheight(0),
-                 v_pcleft(0), v_pctop(0), v_pcright(0), v_pcbottom(0),
-                 v_stereo_mode(STEREO_MODE_UNSPECIFIED),
-                 v_frate(0.0),
-                 v_bframes(false),
-                 a_channels(0), a_bps(0), a_formattag(0),
-                 a_sfreq(0.0), a_osfreq(0.0),
-                 private_data(NULL), private_size(0),
-                 default_track(false),
-                 language("eng"),
-                 units_processed(0),
-                 ok(false),
-                 previous_timecode(0),
-                 tags(NULL),
-                 ptzr(0),
-                 headers_set(false),
-                 ignore_duration_hack(false) {
+  kax_track_t():
+    tnum(0),
+    tuid(0),
+    ms_compat(false),
+    type(' '),
+    sub_type(' '),
+    passthrough(false),
+    min_cache(0),
+    max_cache(0),
+    lacing_flag(false),
+    default_duration(0),
+    v_width(0),
+    v_height(0),
+    v_dwidth(0),
+    v_dheight(0),
+    v_pcleft(0),
+    v_pctop(0),
+    v_pcright(0),
+    v_pcbottom(0),
+    v_stereo_mode(STEREO_MODE_UNSPECIFIED),
+    v_frate(0.0),
+    v_bframes(false),
+    a_channels(0),
+    a_bps(0),
+    a_formattag(0),
+    a_sfreq(0.0),
+    a_osfreq(0.0),
+    private_data(NULL),
+    private_size(0),
+    default_track(false),
+    language("eng"),
+    units_processed(0),
+    ok(false),
+    previous_timecode(0),
+    tags(NULL),
+    ptzr(0),
+    headers_set(false),
+    ignore_duration_hack(false) {
+
     memset(v_fourcc, 0, 5);
     memset(headers, 0, 3 * sizeof(unsigned char *));
     memset(header_sizes, 0, 3 * sizeof(uint32_t));
   }
+
   ~kax_track_t() {
     safefree(private_data);
     if (NULL != tags)
