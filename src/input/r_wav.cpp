@@ -236,7 +236,7 @@ wav_ac3acm_demuxer_c::create_packetizer() {
 
 void
 wav_ac3acm_demuxer_c::process(int64_t size) {
-  if (size <= 0)
+  if (0 >= size)
     return;
 
   decode_buffer(size);
@@ -272,33 +272,33 @@ wav_ac3wav_demuxer_c::decode_buffer(int len) {
     return -1;
 
   if (m_swap_bytes) {
-    memcpy(      m_buf[m_cur_buf ^ 1]->get(),           m_buf[m_cur_buf]->get(),         8);
-    swab((char *)m_buf[m_cur_buf]->get() + 8,   (char *)m_buf[m_cur_buf ^ 1]->get() + 8, len - 8);
+    memcpy(      m_buf[m_cur_buf ^ 1]->get(),         m_buf[m_cur_buf]->get(),         8);
+    swab((char *)m_buf[m_cur_buf]->get() + 8, (char *)m_buf[m_cur_buf ^ 1]->get() + 8, len - 8);
     m_cur_buf ^= 1;
   }
 
   unsigned char *base = m_buf[m_cur_buf]->get();
 
-  if ((get_uint16_le(&base[0]) != AC3WAV_SYNC_WORD1) || (get_uint16_le(&base[2]) != AC3WAV_SYNC_WORD2) || (base[4] != 0x01))
+  if ((get_uint16_le(&base[0]) != AC3WAV_SYNC_WORD1) || (get_uint16_le(&base[2]) != AC3WAV_SYNC_WORD2) || (0x01 != base[4]))
     return -1;
 
   int payload_len = get_uint16_le(&base[6]) / 8;
 
-  if (len < (payload_len + 8))
+  if ((payload_len + 8) > len)
     return -1;
 
   int pos = find_ac3_header(&base[8], payload_len, &m_ac3header);
 
-  return pos == 0 ? payload_len : -1;
+  return 0 == pos ? payload_len : -1;
 }
 
 void
 wav_ac3wav_demuxer_c::process(int64_t size) {
-  if (size <= 0)
+  if (0 >= size)
     return;
 
   long dec_len = decode_buffer(size);
-  if (dec_len > 0)
+  if (0 < dec_len)
     m_ptzr->process(new packet_t(new memory_c(m_buf[m_cur_buf]->get() + 8, dec_len, false)));
 }
 
@@ -368,7 +368,7 @@ wav_dts_demuxer_c::create_packetizer() {
 
 void
 wav_dts_demuxer_c::process(int64_t size) {
-  if (size <= 0)
+  if (0 >= size)
     return;
 
   long dec_len = decode_buffer(size);
@@ -406,7 +406,7 @@ wav_pcm_demuxer_c::create_packetizer() {
 
 void
 wav_pcm_demuxer_c::process(int64_t len) {
-  if (len <= 0)
+  if (0 >= len)
     return;
 
   m_ptzr->process(new packet_t(new memory_c(m_buffer->get(), len, false)));
@@ -419,7 +419,7 @@ wav_reader_c::probe_file(mm_io_c *io,
                          int64_t size) {
   wave_header wheader;
 
-  if (size < sizeof(wave_header))
+  if (sizeof(wave_header) > size)
     return 0;
   try {
     io->setFilePointer(0, seek_beginning);
@@ -497,7 +497,7 @@ wav_reader_c::create_demuxer() {
   ti.id = 0;                    // ID for this track.
 
   uint16_t format_tag = get_uint16_le(&m_wheader.common.wFormatTag);
-  bool ieee_float = format_tag == 0x0003;
+  bool ieee_float     = 0x0003 == format_tag;
 
   if (0x2000 == format_tag) {
     m_demuxer = wav_demuxer_cptr(new wav_ac3acm_demuxer_c(this, &m_wheader));
@@ -541,7 +541,7 @@ wav_reader_c::read(generic_packetizer_c *,
 
   num_read = m_io->read(buffer, requested_bytes);
 
-  if (num_read <= 0) {
+  if (0 >= num_read) {
     PTZR0->flush();
     return FILE_STATUS_DONE;
   }

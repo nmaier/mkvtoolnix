@@ -56,8 +56,7 @@ usf_reader_c::probe_file(mm_text_io_c *io,
     usf_xml_find_root_c root_finder(io);
 
     io->setFilePointer(0);
-    while (root_finder.parse_one_xml_line() &&
-           (root_finder.m_root_element == ""))
+    while (root_finder.parse_one_xml_line() && (root_finder.m_root_element == ""))
       ;
 
     return (root_finder.m_root_element == "USFSubtitles" ? 1 : 0);
@@ -71,11 +70,12 @@ usf_reader_c::probe_file(mm_text_io_c *io,
 usf_reader_c::usf_reader_c(track_info_c &_ti)
   throw (error_c):
   generic_reader_c(_ti),
-  m_copy_depth(0), m_longest_track(-1), m_strip(false) {
+  m_copy_depth(0),
+  m_longest_track(-1),
+  m_strip(false) {
 
   try {
     m_xml_source = new mm_text_io_c(new mm_file_io_c(ti.fname));
-    string line;
     int i;
 
     if (!usf_reader_c::probe_file(m_xml_source, 0))
@@ -89,9 +89,7 @@ usf_reader_c::usf_reader_c(track_info_c &_ti)
     for (i = 0; m_tracks.size() > i; ++i) {
       stable_sort(m_tracks[i].m_entries.begin(), m_tracks[i].m_entries.end());
       m_tracks[i].m_current_entry = m_tracks[i].m_entries.begin();
-      if ((-1 == m_longest_track) ||
-          (m_tracks[m_longest_track].m_entries.size() <
-           m_tracks[i].m_entries.size()))
+      if ((-1 == m_longest_track) || (m_tracks[m_longest_track].m_entries.size() < m_tracks[i].m_entries.size()))
         m_longest_track = i;
 
       if ((m_default_language != "") && (m_tracks[i].m_language == ""))
@@ -131,15 +129,11 @@ usf_reader_c::start_element_cb(const char *name,
   if (node == "USFSubtitles.metadata.language") {
     for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2)
       if (!strcmp(atts[i], "code") && (0 != atts[i + 1][0])) {
-        int index;
-
-        index = map_to_iso639_2_code(atts[i + 1]);
+        int index = map_to_iso639_2_code(atts[i + 1]);
         if (-1 != index)
           m_default_language = iso639_languages[index].iso639_2_code;
         else if (!identifying)
-          mxwarn(FMT_FN "The default language code '%s' is not a valid "
-                 "ISO639-2 language code and will be ignored.\n",
-                 ti.fname.c_str(), atts[i + 1]);
+          mxwarn(FMT_FN "The default language code '%s' is not a valid ISO639-2 language code and will be ignored.\n", ti.fname.c_str(), atts[i + 1]);
         break;
       }
   }
@@ -166,24 +160,19 @@ usf_reader_c::start_element_cb(const char *name,
   } else if (node == "USFSubtitles.subtitles.language") {
     for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2)
       if (!strcmp(atts[i], "code") && (0 != atts[i + 1][0])) {
-        int index;
-
-        index = map_to_iso639_2_code(atts[i + 1]);
+        int index = map_to_iso639_2_code(atts[i + 1]);
         if (-1 != index)
           m_tracks[m_tracks.size() - 1].m_language =
             iso639_languages[index].iso639_2_code;
         else if (!identifying)
-          mxwarn(FMT_TID "The language code '%s' is not a valid "
-                 "ISO639-2 language code and will be ignored.\n",
-                 ti.fname.c_str(), (int64_t)m_tracks.size(), atts[i + 1]);
+          mxwarn(FMT_TID "The language code '%s' is not a valid ISO639-2 language code and will be ignored.\n", ti.fname.c_str(), (int64_t)m_tracks.size(), atts[i + 1]);
         break;
       }
 
   } else if (node == "USFSubtitles.subtitles.subtitle") {
     usf_entry_t entry;
-    int64_t duration;
+    int64_t duration = -1;
 
-    duration = -1;
     for (i = 0; (NULL != atts[i]) && (NULL != atts[i + 1]); i += 2)
       if (!strcmp(atts[i], "start"))
         entry.m_start = try_to_parse_timecode(atts[i + 1]);
@@ -191,19 +180,20 @@ usf_reader_c::start_element_cb(const char *name,
         entry.m_end = try_to_parse_timecode(atts[i + 1]);
       else if (!strcmp(atts[i], "duration"))
         duration = try_to_parse_timecode(atts[i + 1]);
+
     if ((-1 == entry.m_end) && (-1 != entry.m_start) && (-1 != duration))
       entry.m_end = entry.m_start + duration;
+
     m_copy_buffer = "";
-    m_copy_depth = 1;
+    m_copy_depth  = 1;
 
     m_tracks[m_tracks.size() - 1].m_entries.push_back(entry);
 
   } else if (m_parents.size() == 2) {
-    m_copy_depth = 1;
     strip(m_data_buffer);
-    m_copy_buffer = escape_xml(m_data_buffer) +
-      create_xml_node_name(name, atts);
-    m_strip = true;
+    m_copy_depth  = 1;
+    m_copy_buffer = escape_xml(m_data_buffer) + create_xml_node_name(name, atts);
+    m_strip       = true;
 
   }
 
@@ -228,8 +218,7 @@ usf_reader_c::end_element_cb(const char *name) {
     strip(m_data_buffer);
 
   if (0 != m_copy_depth) {
-    if ((m_data_buffer == "") && !m_copy_buffer.empty() &&
-        (m_previous_start == name)) {
+    if ((m_data_buffer == "") && !m_copy_buffer.empty() && (m_previous_start == name)) {
       m_copy_buffer.erase(m_copy_buffer.length() - 1);
       m_copy_buffer += "/>";
     } else
@@ -248,11 +237,11 @@ usf_reader_c::end_element_cb(const char *name) {
         m_private_data += m_copy_buffer;
 
       m_copy_buffer = "";
-      m_strip = false;
+      m_strip       = false;
     }
   }
 
-  m_data_buffer = "";
+  m_data_buffer    = "";
   m_previous_start = "";
 }
 
@@ -272,14 +261,9 @@ usf_reader_c::create_packetizer(int64_t tid) {
   if (!demuxing_requested('s', tid) || (-1 != track.m_ptzr))
     return;
 
-  ti.language = track.m_language;
-  track.m_ptzr =
-    add_packetizer(new textsubs_packetizer_c(this, MKV_S_TEXTUSF,
-                                             m_private_data.c_str(),
-                                             m_private_data.length(), false,
-                                             true, ti));
-  mxinfo(FMT_TID "Using the text subtitle output module.\n", ti.fname.c_str(),
-         tid);
+  ti.language  = track.m_language;
+  track.m_ptzr = add_packetizer(new textsubs_packetizer_c(this, MKV_S_TEXTUSF, m_private_data.c_str(), m_private_data.length(), false, true, ti));
+  mxinfo(FMT_TID "Using the text subtitle output module.\n", ti.fname.c_str(), tid);
 }
 
 void
@@ -312,10 +296,8 @@ usf_reader_c::read(generic_packetizer_c *ptzr,
   const usf_entry_t &entry = *(track->m_current_entry);
   // A length of 0 here is OK because the text subtitle packetizer assumes
   // that the data is a zero-terminated string.
-  memory_cptr mem(new memory_c((unsigned char *)entry.m_text.c_str(), 0,
-                               false));
-  PTZR(track->m_ptzr)->process(new packet_t(mem, entry.m_start, entry.m_end -
-                                            entry.m_start));
+  memory_cptr mem(new memory_c((unsigned char *)entry.m_text.c_str(), 0, false));
+  PTZR(track->m_ptzr)->process(new packet_t(mem, entry.m_start, entry.m_end - entry.m_start));
   ++(track->m_current_entry);
 
   if (track->m_entries.end() == track->m_current_entry) {
@@ -333,10 +315,7 @@ usf_reader_c::get_progress() {
   usf_track_t &track = m_tracks[m_longest_track];
   if (track.m_entries.size() == 0)
     return 0;
-  return 100 -
-    distance(track.m_current_entry,
-             (vector<usf_entry_t>::const_iterator)track.m_entries.end()) *
-    100 / track.m_entries.size();
+  return 100 - distance(track.m_current_entry, (vector<usf_entry_t>::const_iterator)track.m_entries.end()) * 100 / track.m_entries.size();
 }
 
 int64_t

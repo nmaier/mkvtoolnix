@@ -66,6 +66,9 @@ private:
 
   vector<vobsub_track_c *> tracks;
 
+private:
+  static const string id_string;
+
 public:
   vobsub_reader_c(track_info_c &_ti) throw (error_c);
   virtual ~vobsub_reader_c();
