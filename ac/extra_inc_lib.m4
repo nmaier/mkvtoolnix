@@ -30,9 +30,10 @@ AC_ARG_WITH(extra-libs,
   fi
 
   LDFLAGS_RPATHS=
-  if test "$MINGW" != "1"; then
-    LDFLAGS_RPATHS=`echo " $LDFLAGS" | sed 's: -L: -Wl,--rpath :g'`
-  fi
+dnl  # Don't use rpaths. Most users and distros consider them evil.
+dnl  if test "$MINGW" != "1"; then
+dnl    LDFLAGS_RPATHS=`echo " $LDFLAGS" | sed 's: -L: -Wl,--rpath :g'`
+dnl  fi
 
 AC_SUBST(EXTRA_CFLAGS)
 AC_SUBST(EXTRA_LDFLAGS)
