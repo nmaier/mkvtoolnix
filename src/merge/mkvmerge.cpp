@@ -16,9 +16,9 @@
 
 #include "os.h"
 
+#include <boost/regex.hpp>
 #include <errno.h>
 #include <ctype.h>
-#include <pcrecpp.h>
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
 #include <signal.h>
 #endif
@@ -393,34 +393,36 @@ parse_number_with_unit(const string &s,
                        const string &subject,
                        const string &argument,
                        string display_s = "") {
-  pcrecpp::RE_Options opt_caseless;
-  opt_caseless.set_caseless(true);
-  pcrecpp::RE re1("(-?\\d+\\.?\\d*)(s|ms|us|ns|fps)?", opt_caseless);
-  pcrecpp::RE re2("(-?\\d+)/(-?\\d+)(s|ms|us|ns|fps)?", opt_caseless);
+  boost::regex re1("(-?\\d+\\.?\\d*)(s|ms|us|ns|fps)?", boost::regex::perl | boost::regbase::icase);
+  boost::regex re2("(-?\\d+)/(-?\\d+)(s|ms|us|ns|fps)?", boost::regex::perl | boost::regbase::icase);
+
   string unit, s_n, s_d;
-  int64_t n, d, multiplier;
+  int64_t n, d;
   double d_value = 0.0;
   bool is_fraction = false;
 
-  if (display_s == "")
+  if (display_s.empty())
     display_s = s;
 
-  if (re1.FullMatch(s, &s_n, &unit)) {
-    parse_double(s_n, d_value);
+  boost::match_results<std::string::const_iterator> matches;
+  if (boost::regex_match(s, matches, re1, boost::match_default)) {
+    parse_double(matches[1], d_value);
+    if (matches.size() > 2)
+      unit = matches[2];
     d = 1;
 
-  } else if (re2.FullMatch(s, &s_n, &s_d, &unit)) {
-    parse_int(s_n, n);
-    parse_int(s_d, d);
+  } else if (boost::regex_match(s, matches, re2, boost::match_default)) {
+    parse_int(matches[1], n);
+    parse_int(matches[2], d);
+    if (matches.size() > 3)
+      unit = matches[3];
     is_fraction = true;
 
   } else
-    mxerror(_("'%s' is not a valid %s in '%s %s'.\n"),
-            s.c_str(), subject.c_str(), argument.c_str(), display_s.c_str());
+    mxerror(_("'%s' is not a valid %s in '%s %s'.\n"), s.c_str(), subject.c_str(), argument.c_str(), display_s.c_str());
 
-  multiplier = 1000000000;
-
-  unit = downcase(unit);
+  int64_t multiplier = 1000000000;
+  unit               = downcase(unit);
 
   if (unit == "ms")
     multiplier = 1000000;
@@ -437,10 +439,9 @@ parse_number_with_unit(const string &s,
       return (int64_t)(1001000000.0 / 24.0);
     else
       return (int64_t)(1000000000.0 / d_value);
+
   } else if (unit != "s")
-    mxerror(_("'%s' does not contain a valid unit ('s', 'ms', 'us' or 'ns') "
-              "in '%s %s'.\n"), s.c_str(), argument.c_str(),
-            display_s.c_str());
+    mxerror(_("'%s' does not contain a valid unit ('s', 'ms', 'us' or 'ns') in '%s %s'.\n"), s.c_str(), argument.c_str(), display_s.c_str());
 
   if (is_fraction)
     return multiplier * n / d;

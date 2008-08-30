@@ -27,7 +27,6 @@ m4_include(ac/nl_langinfo.m4)
 m4_include(ac/ogg.m4)
 m4_include(ac/vorbis.m4)
 m4_include(ac/flac.m4)
-m4_include(ac/pcrecpp.m4)
 m4_include(ac/ebml.m4)
 m4_include(ac/matroska.m4)
 m4_include(ac/expat.m4)
@@ -38,7 +37,9 @@ m4_include(ac/wxwidgets.m4)
 m4_include(ac/qt4.m4)
 m4_include(ac/translations.m4)
 m4_include(ac/magic.m4)
-
+m4_include(ac/ax_boost_base.m4)
+m4_include(ac/ax_boost_regex.m4)
+m4_include(ac/boost.m4)
 
 AC_OUTPUT(Makefile avilib-0.6.10/Makefile librmff/Makefile src/Makefile src/common/Makefile src/input/Makefile src/output/Makefile src/mpegparser/Makefile src/mmg/Makefile src/extract/Makefile src/merge/Makefile src/info/Makefile)
 

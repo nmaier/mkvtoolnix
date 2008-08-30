@@ -1,3 +1,8 @@
+2008-08-30  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: Switched from the PCRE regular expression library to
+	Boost's RegEx library.
+
 2008-08-23  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: DTS-in-WAV handling (14 to 16 bit expansion)

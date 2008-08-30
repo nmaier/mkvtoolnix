@@ -15,9 +15,9 @@
 
 #include "os.h"
 
+#include <boost/regex.hpp>
 #include <ctype.h>
 #include <errno.h>
-#include <pcrecpp.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -36,11 +36,8 @@ using namespace std;
 int
 ssa_reader_c::probe_file(mm_text_io_c *io,
                          int64_t size) {
-  pcrecpp::RE_Options opt_caseless;
-  opt_caseless.set_caseless(true);
-  pcrecpp::RE comment_re("^\\s*;");
-  pcrecpp::RE script_info_re("^\\s*\\[script\\s+info\\]", opt_caseless);
-  pcrecpp::RE styles_re("^\\s*\\[V4\\+?\\s+Styles\\]", opt_caseless);
+  boost::regex script_info_re("^\\s*\\[script\\s+info\\]", boost::regex::perl | boost::regbase::icase);
+  boost::regex styles_re("^\\s*\\[V4\\+?\\s+Styles\\]", boost::regex::perl | boost::regbase::icase);
 
   try {
     int line_number = 0;
@@ -54,7 +51,7 @@ ssa_reader_c::probe_file(mm_text_io_c *io,
         return 0;
 
       // This is the line mkvmerge is looking for: positive match.
-      if (script_info_re.PartialMatch(line) || styles_re.PartialMatch(line)) {
+      if (boost::regex_search(line, script_info_re) || boost::regex_search(line, styles_re)) {
         io->setFilePointer(0, seek_beginning);
         return 1;
       }
@@ -166,14 +163,12 @@ ssa_reader_c::recode_text(vector<string> &fields) {
 
 void
 ssa_reader_c::parse_file(mm_text_io_c *io) {
-  pcrecpp::RE_Options opt_caseless;
-  opt_caseless.set_caseless(true);
-  pcrecpp::RE sec_styles_ass_re("^\\s*\\[V4\\+\\s+Styles\\]", opt_caseless);
-  pcrecpp::RE sec_styles_re("^\\s*\\[V4\\s+Styles\\]", opt_caseless);
-  pcrecpp::RE sec_info_re("^\\s*\\[Script\\s+Info\\]", opt_caseless);
-  pcrecpp::RE sec_events_re("^\\s*\\[Events\\]", opt_caseless);
-  pcrecpp::RE sec_graphics_re("^\\s*\\[Graphics\\]", opt_caseless);
-  pcrecpp::RE sec_fonts_re("^\\s*\\[Fonts\\]", opt_caseless);
+  boost::regex sec_styles_ass_re("^\\s*\\[V4\\+\\s+Styles\\]", boost::regex::perl | boost::regbase::icase);
+  boost::regex sec_styles_re(    "^\\s*\\[V4\\s+Styles\\]",    boost::regex::perl | boost::regbase::icase);
+  boost::regex sec_info_re(      "^\\s*\\[Script\\s+Info\\]",  boost::regex::perl | boost::regbase::icase);
+  boost::regex sec_events_re(    "^\\s*\\[Events\\]",          boost::regex::perl | boost::regbase::icase);
+  boost::regex sec_graphics_re(  "^\\s*\\[Graphics\\]",        boost::regex::perl | boost::regbase::icase);
+  boost::regex sec_fonts_re(     "^\\s*\\[Fonts\\]",           boost::regex::perl | boost::regbase::icase);
 
   int num                        = 0;
   ssa_section_e section          = SSA_SECTION_NONE;
@@ -194,24 +189,24 @@ ssa_reader_c::parse_file(mm_text_io_c *io) {
     if (!strcasecmp(line.c_str(), "ScriptType: v4.00+"))
       m_is_ass = true;
 
-    else if (sec_styles_ass_re.PartialMatch(line)) {
+    else if (boost::regex_search(line, sec_styles_ass_re)) {
       m_is_ass = true;
       section  = SSA_SECTION_V4STYLES;
 
-    } else if (sec_styles_re.PartialMatch(line))
+    } else if (boost::regex_search(line, sec_styles_re))
       section = SSA_SECTION_V4STYLES;
 
-    else if (sec_info_re.PartialMatch(line))
+    else if (boost::regex_search(line, sec_info_re))
       section = SSA_SECTION_INFO;
 
-    else if (sec_events_re.PartialMatch(line))
+    else if (boost::regex_search(line, sec_events_re))
       section = SSA_SECTION_EVENTS;
 
-    else if (sec_graphics_re.PartialMatch(line)) {
+    else if (boost::regex_search(line, sec_graphics_re)) {
       section       = SSA_SECTION_GRAPHICS;
       add_to_global = false;
 
-    } else if (sec_fonts_re.PartialMatch(line)) {
+    } else if (boost::regex_search(line, sec_fonts_re)) {
       section       = SSA_SECTION_FONTS;
       add_to_global = false;
 

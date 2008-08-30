@@ -13,12 +13,14 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "os.h"
+
+#include <boost/regex.hpp>
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
-#include <pcrecpp.h>
 
 #include "pr_generic.h"
 #include "r_srt.h"
@@ -42,8 +44,10 @@ srt_reader_c::probe_file(mm_text_io_c *io,
     if (!parse_int(s, dummy))
       return 0;
     s = io->getline();
-    pcrecpp::RE timecode_re(RE_TIMECODE_LINE);
-    if (!timecode_re.PartialMatch(s))
+
+    boost::regex timecode_re(RE_TIMECODE_LINE, boost::regex::perl);
+    boost::match_results<string::const_iterator> matches;
+    if (!boost::regex_search(s, timecode_re))
       return 0;
     s = io->getline();
     io->setFilePointer(0, seek_beginning);
@@ -93,9 +97,9 @@ srt_reader_c::create_packetizer(int64_t) {
 
 void
 srt_reader_c::parse_file() {
-  pcrecpp::RE timecode_re(RE_TIMECODE_LINE);
-  pcrecpp::RE number_re("^\\d+$");
-  pcrecpp::RE coordinates_re(RE_COORDINATES);
+  boost::regex timecode_re(RE_TIMECODE_LINE, boost::regex::perl);
+  boost::regex number_re("^\\d+$", boost::regex::perl);
+  boost::regex coordinates_re(RE_COORDINATES, boost::regex::perl);
 
   int64_t start                 = 0;
   int64_t end                   = 0;
@@ -123,21 +127,32 @@ srt_reader_c::parse_file() {
     }
 
     if (STATE_INITIAL == state) {
-      if (!number_re.FullMatch(s)) {
+      if (!boost::regex_match(s, number_re)) {
         mxwarn(FMT_FN "Error in line %d: expected subtitle number and found some text.\n", ti.fname.c_str(), line_number);
         break;
       }
       state = STATE_TIME;
 
     } else if (STATE_TIME == state) {
-      int s_h, s_min, s_sec, e_h, e_min, e_sec;
-      string s_rest, e_rest;
-      if (!timecode_re.PartialMatch(s, &s_h, &s_min, &s_sec, &s_rest, &e_h, &e_min, &e_sec, &e_rest)) {
+      boost::match_results<string::const_iterator> matches;
+      if (!boost::regex_search(s, matches, timecode_re)) {
         mxwarn(FMT_FN "Error in line %d: expected a SRT timecode line but found something else. Aborting this file.\n", ti.fname.c_str(), line_number);
         break;
       }
 
-      if (coordinates_re.PartialMatch(s) && !m_coordinates_warning_shown) {
+      int s_h, s_min, s_sec, e_h, e_min, e_sec;
+
+      parse_int(matches[1].str(), s_h);
+      parse_int(matches[2].str(), s_min);
+      parse_int(matches[3].str(), s_sec);
+      parse_int(matches[5].str(), e_h);
+      parse_int(matches[6].str(), e_min);
+      parse_int(matches[7].str(), e_sec);
+
+      string s_rest = matches[4].str();
+      string e_rest = matches[8].str();
+
+      if (boost::regex_search(s, coordinates_re) && !m_coordinates_warning_shown) {
         mxwarn(FMT_FN "This file contains coordinates in the timecode lines. Such coordinates are not supported by the Matroska SRT subtitle format. "
                "mkvmerge will remove them automatically.\n", ti.fname.c_str());
         m_coordinates_warning_shown = true;
@@ -188,7 +203,7 @@ srt_reader_c::parse_file() {
         subtitles += "\n";
       subtitles += s;
 
-    } else if (number_re.FullMatch(s))
+    } else if (boost::regex_match(s, number_re))
       state = STATE_TIME;
 
     else {
