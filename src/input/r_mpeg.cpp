@@ -1136,6 +1136,9 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
     } else
       mxerror("mpeg_ps_reader: Should not have happened #2. %s", BUGMSG);
   }
+
+  if (-1 != track->timecode_offset)
+    PTZR(track->ptzr)->ti.tcsync.displacement += track->timecode_offset;
 }
 
 void

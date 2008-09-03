@@ -1,3 +1,9 @@
+2008-09-03  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: mkvmerge honors the timecode offsets of all
+	streams in a MPEG program stream (e.g. VOB file) fixing
+	audio/video desynchronization. Fix for bug 295.
+
 2008-08-30  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: Switched from the PCRE regular expression library to
