@@ -29,11 +29,10 @@ private:
   int samples_per_sec, channels, spf;
   byte_buffer_c byte_buffer;
   bool codec_id_set, valid_headers_found;
+  int64_t previous_timecode, num_packets_with_same_timecode;
 
 public:
-  mp3_packetizer_c(generic_reader_c *_reader, int _samples_per_sec,
-                   int _channels, bool source_is_good, track_info_c &_ti)
-    throw (error_c);
+  mp3_packetizer_c(generic_reader_c *_reader, int _samples_per_sec, int _channels, bool source_is_good, track_info_c &_ti) throw (error_c);
   virtual ~mp3_packetizer_c();
 
   virtual int process(packet_cptr packet);
@@ -42,8 +41,7 @@ public:
   virtual const char *get_format_name() {
     return "MP3";
   }
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src,
-                                             string &error_message);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
 
 private:
   virtual unsigned char *get_mp3_packet(mp3_header_t *mp3header);

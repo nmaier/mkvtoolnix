@@ -35,7 +35,8 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *_reader,
   bytes_skipped(0),
   samples_per_sec(_samples_per_sec), channels(_channels), spf(1152),
   byte_buffer(128 * 1024),
-  codec_id_set(false), valid_headers_found(source_is_good) {
+  codec_id_set(false), valid_headers_found(source_is_good),
+  previous_timecode(-1), num_packets_with_same_timecode(0) {
 
   set_track_type(track_audio);
   set_track_default_duration((int64_t)(1152000000000.0 / samples_per_sec));
@@ -164,7 +165,21 @@ mp3_packetizer_c::process(packet_cptr packet) {
 
   byte_buffer.add(packet->data->get(), packet->data->get_size());
   while ((mp3_packet = get_mp3_packet(&mp3header)) != NULL) {
-    int64_t new_timecode = -1 == packet->timecode ? (int64_t)(1000000000.0 * packetno * spf / samples_per_sec) : packet->timecode;
+    int64_t new_timecode;
+    if (-1 == packet->timecode)
+      new_timecode = (int64_t)(1000000000.0 * packetno * spf / samples_per_sec);
+    else {
+      if ((-1 != previous_timecode) && (packet->timecode == previous_timecode)) {
+        new_timecode = previous_timecode + num_packets_with_same_timecode * 1000000000ll * spf / samples_per_sec;
+        ++num_packets_with_same_timecode;
+      } else {
+        new_timecode                   = packet->timecode;
+        num_packets_with_same_timecode = 0;
+      }
+
+      previous_timecode = packet->timecode;
+    }
+
     add_packet(new packet_t(new memory_c(mp3_packet, mp3header.framesize, true), new_timecode, (int64_t)(1000000000.0 * spf / samples_per_sec)));
     packetno++;
   }

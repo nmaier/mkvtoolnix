@@ -1,3 +1,8 @@
+2008-09-06  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: improved the timecode calculation for MP3
+	tracks read from MP4 files. Another part of the fix for bug 165.
+
 2008-09-03  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: mkvmerge honors the timecode offsets of all
