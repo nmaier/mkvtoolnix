@@ -107,7 +107,7 @@ flac_get_num_samples_internal(unsigned char *mem,
   } else if (!flac_skip_utf8(bits, 32))
       return -1;
 
-  if ((6 == free_sample_size == 6) || (7 == free_sample_size)) {
+  if ((6 == free_sample_size) || (7 == free_sample_size)) {
     samples = bits.get_bits(8);
     if (7 == free_sample_size) {
       samples <<= 8;

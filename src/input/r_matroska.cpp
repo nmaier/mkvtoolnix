@@ -1286,7 +1286,7 @@ kax_reader_c::set_packetizer_headers(kax_track_t *t) {
   if (t->default_track)
     PTZR(t->ptzr)->set_as_default_track(t->type == 'v' ? DEFTRACK_TYPE_VIDEO : t->type == 'a' ? DEFTRACK_TYPE_AUDIO : DEFTRACK_TYPE_SUBS,
                                         DEFAULT_TRACK_PRIORITY_FROM_SOURCE);
-  if ((0 != t->tuid != 0) && !PTZR(t->ptzr)->set_uid(t->tuid))
+  if ((0 != t->tuid) && !PTZR(t->ptzr)->set_uid(t->tuid))
     mxwarn(PFX "Could not keep the track UID " LLU " because it is already allocated for the new file.\n", t->tuid);
 }
 
