@@ -10,7 +10,7 @@ Source: %{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-tmproot
 BuildRequires: libebml-devel >= 0.7.7
 BuildRequires: libmatroska-devel >= 0.8.1
-BuildRequires: gcc-c++ gcc gcc-c++ make flac-devel libogg-devel libvorbis-devel wxGTK-devel >= 2.6 pcre-devel file lzo-devel bzip2-devel zlib-devel
+BuildRequires: gcc-c++ gcc gcc-c++ make flac-devel libogg-devel libvorbis-devel wxGTK-devel >= 2.6 boost-devel file lzo-devel bzip2-devel zlib-devel
 
 %description
 Matroska video utilities.
