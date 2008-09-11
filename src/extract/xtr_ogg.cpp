@@ -353,16 +353,6 @@ xtr_oggkate_c::create_file(xtr_base_c *_master,
   flush_pages();
 }
 
-// static int64_t read64(const unsigned char *c)
-// {
-//   int64_t gpos=0;
-//   for (int n=0;n<sizeof(int64_t);++n) {
-//     uint64_t byte=*c++;
-//     gpos|=byte<<(n*8);
-//   }
-//   return gpos;
-// }
-
 void
 xtr_oggkate_c::handle_frame(memory_cptr &frame,
                             KaxBlockAdditions *additions,
