@@ -1318,6 +1318,10 @@ kax_reader_c::create_video_packetizer(kax_track_t *t,
       mxinfo(FMT_TID "Using the MPEG-4 part 10 (AVC) video output module.\n", ti.fname.c_str(), (int64_t)t->tnum);
       t->ptzr = add_packetizer(new mpeg4_p10_video_packetizer_c(this, t->v_frate, t->v_width, t->v_height, nti));
 
+    } else if (t->codec_id == MKV_V_THEORA) {
+      mxinfo(FMT_TID "Using the Theora video output module.\n", ti.fname.c_str(), (int64_t)t->tnum);
+      t->ptzr = add_packetizer(new theora_video_packetizer_c(this, t->v_frate, t->v_width, t->v_height, nti));
+
     } else {
       mxinfo(FMT_TID "Using the video output module.\n", ti.fname.c_str(), (int64_t)t->tnum);
       t->ptzr = add_packetizer(new video_packetizer_c(this, t->codec_id.c_str(), t->v_frate, t->v_width, t->v_height, nti));

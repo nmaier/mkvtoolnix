@@ -850,3 +850,27 @@ mpeg4_p10_video_packetizer_c::change_nalu_size_len(packet_cptr packet) {
   packet->data->set_size(dst_pos);
 }
 
+// ----------------------------------------------------------------
+
+theora_video_packetizer_c::
+theora_video_packetizer_c(generic_reader_c *p_reader,
+                          double fps,
+                          int width,
+                          int height,
+                          track_info_c &p_ti)
+  : video_packetizer_c(p_reader, MKV_V_THEORA, fps, width, height, p_ti)
+{
+}
+
+int
+theora_video_packetizer_c::process(packet_cptr packet) {
+  if (packet->data->get_size() && (0x00 == (packet->data->get()[0] & 0x40)))
+    packet->bref = VFT_IFRAME;
+  else
+    packet->bref = VFT_PFRAMEAUTOMATIC;
+
+  packet->fref   = VFT_NOBFRAME;
+
+  return video_packetizer_c::process(packet);
+}
+

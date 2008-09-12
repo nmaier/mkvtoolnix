@@ -1312,7 +1312,7 @@ ogm_v_theora_demuxer_c::create_packetizer(track_info_c &ti) {
   ti.private_size                = codecprivate->get_size();
 
   double                fps      = (double)theora.frn / (double)theora.frd;
-  generic_packetizer_c *ptzr_obj = new video_packetizer_c(reader, MKV_V_THEORA, fps, theora.fmbw, theora.fmbh, ti);
+  generic_packetizer_c *ptzr_obj = new theora_video_packetizer_c(reader, fps, theora.fmbw, theora.fmbh, ti);
 
   mxinfo(FMT_TID "Using the Theora video output module.\n", ti.fname.c_str(), (int64_t)ti.id);
 

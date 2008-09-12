@@ -110,4 +110,10 @@ protected:
   virtual void change_nalu_size_len(packet_cptr packet);
 };
 
+class theora_video_packetizer_c: public video_packetizer_c {
+public:
+  theora_video_packetizer_c(generic_reader_c *p_reader, double fps, int width, int height, track_info_c &p_ti);
+  virtual int process(packet_cptr packet);
+};
+
 #endif // __P_VIDEO_H
