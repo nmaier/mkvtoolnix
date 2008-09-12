@@ -1,5 +1,8 @@
 2008-09-12  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvextract: new feature: Added support for extracting Theora
+	video tracks into Ogg files.
+
 	* mkvmerge: bug fix: Fixed the frame type (key or non-key frame)
 	detection for Theora tracks.
 

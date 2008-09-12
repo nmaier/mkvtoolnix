@@ -99,6 +99,10 @@ xtr_oggbase_c::handle_frame(memory_cptr &frame,
   previous_end = timecode + duration;
 }
 
+xtr_oggbase_c::~xtr_oggbase_c() {
+  ogg_stream_clear(&os);
+}
+
 void
 xtr_oggbase_c::finish_file() {
   ogg_packet op;
@@ -117,7 +121,6 @@ xtr_oggbase_c::finish_file() {
   op.granulepos = previous_end * sfreq / 1000000000;
   ogg_stream_packetin(&os, &op);
   flush_pages();
-  ogg_stream_clear(&os);
 }
 
 void
@@ -391,4 +394,103 @@ xtr_oggkate_c::handle_frame(memory_cptr &frame,
   flush_pages(); /* Kate is a data packet per page */
 
   packetno++;
+}
+
+// ------------------------------------------------------------------------
+
+xtr_oggtheora_c::xtr_oggtheora_c(const string &_codec_id,
+                                 int64_t _tid,
+                                 track_spec_t &tspec)
+  : xtr_oggbase_c(_codec_id, _tid, tspec)
+  , keyframe_number(0)
+  , non_keyframe_number(-1)
+{
+}
+
+void
+xtr_oggtheora_c::create_file(xtr_base_c *_master,
+                             KaxTrackEntry &track) {
+  KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
+  if (NULL == priv)
+    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec private\" element and cannot be extracted.\n", tid, codec_id.c_str());
+
+  init_content_decoder(track);
+  memory_cptr mpriv = decode_codec_private(priv);
+
+  vector<memory_cptr> header_packets;
+  try {
+    header_packets = unlace_memory_xiph(mpriv);
+
+    if (header_packets.empty())
+      throw false;
+
+    theora_parse_identification_header(header_packets[0]->get(), header_packets[0]->get_size(), theora);
+
+  } catch (...) {
+    mxerror("Track " LLD " with the CodecID '%s' does not contain valid headers.\n", tid, codec_id.c_str());
+  }
+
+  xtr_oggbase_c::create_file(_master, track);
+
+  ogg_packet op;
+  for (packetno = 0; packetno < header_packets.size(); packetno++) {
+    // Handle all the header packets: ID header, comments, etc
+    op.b_o_s      = (0 == packetno ? 1 : 0);
+    op.e_o_s      = 0;
+    op.packetno   = packetno;
+    op.packet     = header_packets[packetno]->get();
+    op.bytes      = header_packets[packetno]->get_size();
+    op.granulepos = 0;
+    ogg_stream_packetin(&os, &op);
+
+    if (0 == packetno) /* ID header must be alone on a separate page */
+      flush_pages();
+  }
+
+  /* flush at last header, data must start on a new page */
+  flush_pages();
+}
+
+void
+xtr_oggtheora_c::handle_frame(memory_cptr &frame,
+                              KaxBlockAdditions *additions,
+                              int64_t timecode,
+                              int64_t duration,
+                              int64_t bref,
+                              int64_t fref,
+                              bool keyframe,
+                              bool discardable,
+                              bool references_valid) {
+  content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+
+  if (frame->get_size() && (0x00 == (frame->get()[0] & 0x40))) {
+    keyframe             = true;
+    keyframe_number     += non_keyframe_number + 1;
+    non_keyframe_number  = 0;
+
+  } else
+    non_keyframe_number += 1;
+
+  ogg_packet op;
+
+  op.b_o_s      = 0;
+  op.e_o_s      = 0;
+  op.packetno   = packetno;
+  op.packet     = frame->get();
+  op.bytes      = frame->get_size();
+  op.granulepos = (keyframe_number << theora.kfgshift) | (non_keyframe_number & ((1 << theora.kfgshift) - 1));
+
+  ogg_stream_packetin(&os, &op);
+  write_pages();
+
+  packetno++;
+
+//   mxinfo("Theora kfgshift %d granulepos 0x%08x %08x keyframe_number " LLD " non_keyframe_number " LLD "%s size %d\n",
+//          theora.kfgshift, (uint32_t)(op.granulepos >> 32), (uint32_t)(op.granulepos & 0xffffffff), keyframe_number, non_keyframe_number, keyframe ? " key" : "",
+//          frame->get_size());
+}
+
+void
+xtr_oggtheora_c::finish_file() {
+  flush_pages();
 }
