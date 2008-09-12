@@ -23,21 +23,19 @@
 #include "pr_generic.h"
 #include "M2VParser.h"
 
-#define VFT_IFRAME -1
+#define VFT_IFRAME          -1
 #define VFT_PFRAMEAUTOMATIC -2
-#define VFT_NOBFRAME -1
+#define VFT_NOBFRAME        -1
 
 class video_packetizer_c: public generic_packetizer_c {
 protected:
-  double fps;
-  int width, height, frames_output;
-  int64_t ref_timecode, duration_shift;
-  bool pass_through;
+  double m_fps;
+  int m_width, m_height, m_frames_output;
+  int64_t m_ref_timecode, m_duration_shift;
+  bool m_pass_through;
 
 public:
-  video_packetizer_c(generic_reader_c *_reader, const char *_codec_id,
-                     double _fps, int _width, int _height,
-                     track_info_c &_ti);
+  video_packetizer_c(generic_reader_c *p_reader, const char *codec_id, double fps, int width, int height, track_info_c &p_ti);
 
   virtual int process(packet_cptr packet);
   virtual void set_headers();
@@ -45,8 +43,7 @@ public:
   virtual const char *get_format_name() {
     return "video";
   }
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src,
-                                             string &error_message);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
 
 protected:
   virtual void check_fourcc();
@@ -54,15 +51,12 @@ protected:
 
 class mpeg1_2_video_packetizer_c: public video_packetizer_c {
 protected:
-  M2VParser parser;
-  memory_cptr seq_hdr;
-  bool framed, aspect_ratio_extracted;
+  M2VParser m_parser;
+  memory_cptr m_seq_hdr;
+  bool m_framed, m_aspect_ratio_extracted;
 
 public:
-  mpeg1_2_video_packetizer_c(generic_reader_c *_reader, int _version,
-                             double _fps, int _width, int _height,
-                             int _dwidth, int _dheight, bool _framed,
-                             track_info_c &_ti);
+  mpeg1_2_video_packetizer_c(generic_reader_c *p_reader, int version, double fps, int width, int height, int dwidth, int dheight, bool framed, track_info_c &p_ti);
 
   virtual int process(packet_cptr packet);
   virtual void flush();
@@ -76,16 +70,14 @@ protected:
 
 class mpeg4_p2_video_packetizer_c: public video_packetizer_c {
 protected:
-  deque<video_frame_t> queued_frames;
-  deque<int64_t> available_timecodes, available_durations;
-  int64_t timecodes_generated, last_i_p_frame, previous_timecode;
-  bool aspect_ratio_extracted, input_is_native, output_is_native;
-  bool size_extracted;
+  deque<video_frame_t> m_queued_frames;
+  deque<int64_t> m_available_timecodes, m_available_durations;
+  int64_t m_timecodes_generated, m_last_i_p_frame, m_previous_timecode;
+  bool m_aspect_ratio_extracted, m_input_is_native, m_output_is_native;
+  bool m_size_extracted;
 
 public:
-  mpeg4_p2_video_packetizer_c(generic_reader_c *_reader,
-                              double _fps, int _width, int _height,
-                              bool _input_is_native, track_info_c &_ti);
+  mpeg4_p2_video_packetizer_c(generic_reader_c *p_reader, double fps, int width, int height, bool input_is_native, track_info_c &p_ti);
 
   virtual int process(packet_cptr packet);
   virtual void flush();
@@ -107,13 +99,10 @@ protected:
   int64_t m_max_nalu_size;
 
 public:
-  mpeg4_p10_video_packetizer_c(generic_reader_c *_reader,
-                               double _fps, int _width, int _height,
-                               track_info_c &_ti);
+  mpeg4_p10_video_packetizer_c(generic_reader_c *p_reader, double fps, int width, int height, track_info_c &p_ti);
   virtual int process(packet_cptr packet);
 
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src,
-                                             string &error_message);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
 
 protected:
   virtual void extract_aspect_ratio();
