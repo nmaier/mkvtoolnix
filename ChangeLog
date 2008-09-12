@@ -1,3 +1,8 @@
+2008-09-12  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed the frame type (key or non-key frame)
+	detection for Theora tracks in Ogg files.
+
 2008-09-08  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: all: On Unix/Linux rpath linker flags have been

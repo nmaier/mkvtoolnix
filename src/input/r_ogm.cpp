@@ -203,6 +203,9 @@ class ogm_v_theora_demuxer_c: public ogm_demuxer_c {
 public:
   theora_identification_header_t theora;
 
+private:
+  int64_t last_keyframe_number, last_non_keyframe_number;
+
 public:
   ogm_v_theora_demuxer_c(ogm_reader_c *p_reader);
 
@@ -841,7 +844,6 @@ ogm_demuxer_c::ogm_demuxer_c(ogm_reader_c *p_reader):
   headers_read(false),
   first_granulepos(0),
   last_granulepos(0),
-  last_keyframe_number(-1),
   default_duration(0),
   in_use(false) {
 
@@ -1286,8 +1288,11 @@ ogm_v_mscomp_demuxer_c::process_page(int64_t granulepos) {
 
 // -----------------------------------------------------------
 
-ogm_v_theora_demuxer_c::ogm_v_theora_demuxer_c(ogm_reader_c *p_reader):
-  ogm_demuxer_c(p_reader) {
+ogm_v_theora_demuxer_c::ogm_v_theora_demuxer_c(ogm_reader_c *p_reader)
+  : ogm_demuxer_c(p_reader)
+  , last_keyframe_number(-1)
+  , last_non_keyframe_number(-1)
+{
 
   stype              = OGM_STREAM_TYPE_V_THEORA;
   num_header_packets = 3;
@@ -1323,6 +1328,7 @@ ogm_v_theora_demuxer_c::create_packetizer(track_info_c &ti) {
 
 void
 ogm_v_theora_demuxer_c::process_page(int64_t granulepos) {
+  vector<memory_cptr> frames;
   ogg_packet op;
 
   while (ogg_stream_packetout(&os, &op) == 1) {
@@ -1331,24 +1337,48 @@ ogm_v_theora_demuxer_c::process_page(int64_t granulepos) {
     if ((0 == op.bytes) || (0 != (op.packet[0] & 0x80)))
       continue;
 
-    int keyframe_number     = granulepos >> theora.kfgshift;
-    int non_keyframe_number = granulepos &  theora.kfgshift; // TODO: seems wrong
-    // should probably be: // non_keyframe_number = granulepos - (keyframe_number << theora.kfgshift);
+    frames.push_back(memory_cptr(new memory_c(safememdup(op.packet, op.bytes), op.bytes, true)));
+  }
 
-    int64_t timecode        = (int64_t)(1000000000.0 * units_processed * theora.frd / theora.frn);
-    int64_t duration        = (int64_t)(1000000000.0 *                   theora.frd / theora.frn);
-    int64_t bref            = (keyframe_number != last_keyframe_number) && (0 == non_keyframe_number) ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC;
+  int frame_num;
 
-    reader->reader_packetizers[ptzr]->process(new packet_t(new memory_c(op.packet, op.bytes, false), timecode, duration, bref, VFT_NOBFRAME));
+  int64_t page_keyframe_number     = granulepos >> theora.kfgshift;
+  int64_t page_non_keyframe_number = granulepos &  ((1 << theora.kfgshift) - 1);
+  vector<int64_t> keyframe_numbers, non_keyframe_numbers;
+
+  for (frame_num = 0; frames.size() > frame_num; ++frame_num) {
+    int64_t keyframe_number     = page_keyframe_number;
+    int64_t non_keyframe_number = page_non_keyframe_number - (frames.size() - 1) + frame_num;
+
+    if (0 > non_keyframe_number) {
+      keyframe_number           = -1 == last_keyframe_number     ? 0 : last_keyframe_number;
+      non_keyframe_number       = -1 == last_non_keyframe_number ? 0 : last_non_keyframe_number;
+      non_keyframe_number      += frame_num + 1;
+    }
+
+    keyframe_numbers.push_back(keyframe_number);
+    non_keyframe_numbers.push_back(non_keyframe_number);
+  }
+
+  for (frame_num = 0; frames.size() > frame_num; ++frame_num) {
+    int64_t keyframe_number     = keyframe_numbers[frame_num];
+    int64_t non_keyframe_number = non_keyframe_numbers[frame_num];
+    bool is_keyframe            = (keyframe_number != last_keyframe_number) && (non_keyframe_number == non_keyframe_number);
+
+    last_keyframe_number        = keyframe_number;
+    last_non_keyframe_number    = non_keyframe_number;
+
+    int64_t timecode            = (int64_t)(1000000000.0 * units_processed * theora.frd / theora.frn);
+    int64_t duration            = (int64_t)(1000000000.0 *                   theora.frd / theora.frn);
+    int64_t bref                = is_keyframe ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC;
 
     ++units_processed;
 
-    last_keyframe_number = keyframe_number;
+    reader->reader_packetizers[ptzr]->process(new packet_t(frames[frame_num], timecode, duration, bref, VFT_NOBFRAME));
 
-    if (op.e_o_s) {
-      eos = 1;
-      return;
-    }
+    mxverb(3, "Theora track " LLD " kfgshift %d granulepos 0x%08x %08x keyframe_number " LLD " non_keyframe_number " LLD "%s\n",
+           (int64_t)track_id, theora.kfgshift, (uint32_t)(granulepos >> 32), (uint32_t)(granulepos & 0xffffffff), keyframe_number, non_keyframe_number,
+           is_keyframe ? " key" : "");
   }
 }
 

@@ -63,7 +63,7 @@ public:
   bool headers_read;
   string language, title;
   vector<memory_cptr> packet_data, nh_packet_data;
-  int64_t first_granulepos, last_granulepos, last_keyframe_number, default_duration;
+  int64_t first_granulepos, last_granulepos, default_duration;
   bool in_use;
 
 public:
