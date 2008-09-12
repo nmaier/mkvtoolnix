@@ -1,5 +1,9 @@
 2008-09-12  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Unknown stream types in Ogg files
+	(e.g. skeleton tracks) don't cause mkvmerge to abort
+	anymore. They're simply ignored. Fix for bug 299.
+
 	* mkvextract: new feature: Added support for extracting Theora
 	video tracks into Ogg files.
 

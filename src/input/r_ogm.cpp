@@ -542,7 +542,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
 
   dmx->serialno = ogg_page_serialno(og);
   dmx->track_id = sdemuxers.size();
-  dmx->in_use   = demuxing_requested(type[0], dmx->track_id);
+  dmx->in_use   = (type != "unknown") && demuxing_requested(type[0], dmx->track_id);
 
   dmx->packet_data.push_back(memory_cptr(new memory_c((unsigned char *)safememdup(op.packet, op.bytes), op.bytes, true)));
 
