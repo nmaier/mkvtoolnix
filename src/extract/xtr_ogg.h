@@ -74,6 +74,9 @@ public:
 };
 
 class xtr_oggkate_c: public xtr_oggbase_c {
+private:
+  kate_identification_header_t kate_id_header;
+
 public:
   xtr_oggkate_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec);
 
@@ -84,12 +87,14 @@ public:
   virtual const char *get_container_name() {
     return "Ogg (Kate in Ogg)";
   };
-
-private:
-  kate_identification_header_t kate_id_header;
 };
 
 class xtr_oggtheora_c: public xtr_oggbase_c {
+private:
+  theora_identification_header_t theora;
+  int64_t keyframe_number, non_keyframe_number, m_queued_granulepos;
+  memory_cptr m_queued_frame;
+
 public:
   xtr_oggtheora_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec);
 
@@ -102,9 +107,9 @@ public:
     return "Ogg (Theora in Ogg)";
   };
 
-private:
-  theora_identification_header_t theora;
-  int64_t keyframe_number, non_keyframe_number;
+protected:
+  virtual void queue_frame(memory_cptr &frame, int64_t granulepos);
+  virtual void write_queued_frame(bool eos);
 };
 
 #endif

@@ -404,6 +404,7 @@ xtr_oggtheora_c::xtr_oggtheora_c(const string &_codec_id,
   : xtr_oggbase_c(_codec_id, _tid, tspec)
   , keyframe_number(0)
   , non_keyframe_number(-1)
+  , m_queued_granulepos(-1)
 {
 }
 
@@ -471,19 +472,7 @@ xtr_oggtheora_c::handle_frame(memory_cptr &frame,
   } else
     non_keyframe_number += 1;
 
-  ogg_packet op;
-
-  op.b_o_s      = 0;
-  op.e_o_s      = 0;
-  op.packetno   = packetno;
-  op.packet     = frame->get();
-  op.bytes      = frame->get_size();
-  op.granulepos = (keyframe_number << theora.kfgshift) | (non_keyframe_number & ((1 << theora.kfgshift) - 1));
-
-  ogg_stream_packetin(&os, &op);
-  write_pages();
-
-  packetno++;
+  queue_frame(frame, (keyframe_number << theora.kfgshift) | (non_keyframe_number & ((1 << theora.kfgshift) - 1)));
 
 //   mxinfo("Theora kfgshift %d granulepos 0x%08x %08x keyframe_number " LLD " non_keyframe_number " LLD "%s size %d\n",
 //          theora.kfgshift, (uint32_t)(op.granulepos >> 32), (uint32_t)(op.granulepos & 0xffffffff), keyframe_number, non_keyframe_number, keyframe ? " key" : "",
@@ -492,5 +481,41 @@ xtr_oggtheora_c::handle_frame(memory_cptr &frame,
 
 void
 xtr_oggtheora_c::finish_file() {
+  write_queued_frame(true);
   flush_pages();
+}
+
+
+void
+xtr_oggtheora_c::queue_frame(memory_cptr &frame,
+                             int64_t granulepos) {
+  if (-1 != m_queued_granulepos)
+    write_queued_frame(false);
+
+  m_queued_granulepos = granulepos;
+  m_queued_frame      = frame;
+  m_queued_frame->grab();
+}
+
+void
+xtr_oggtheora_c::write_queued_frame(bool eos) {
+  if (-1 == m_queued_granulepos)
+    return;
+
+  ogg_packet op;
+
+  op.b_o_s      = 0;
+  op.e_o_s      = eos ? 1 : 0;
+  op.packetno   = packetno;
+  op.packet     = m_queued_frame->get();
+  op.bytes      = m_queued_frame->get_size();
+  op.granulepos = m_queued_granulepos;
+
+  packetno++;
+
+  ogg_stream_packetin(&os, &op);
+  write_pages();
+
+  m_queued_granulepos = -1;
+  m_queued_frame.clear();
 }
