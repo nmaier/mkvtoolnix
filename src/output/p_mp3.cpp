@@ -62,6 +62,7 @@ mp3_packetizer_c::handle_garbage(int64_t bytes) {
              " " LLD "ms. This delay will be used instead of the garbage data."
              "\n", ti.id, ti.fname.c_str(), bytes, offset / 1000000);
       warning_printed = true;
+      ti.tcsync.displacement += offset;
     }
   }
   if (!warning_printed)

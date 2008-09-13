@@ -1,3 +1,11 @@
+2008-09-13  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Revision 3831 (the change to the "--delay"
+	and "--sync" options) caused mkvmerge to no longer respect the
+	delay caused by garbage at the beginning of MP3 and AC3 audio
+	tracks in AVI files. The timecodes of such tracks are now delayed
+	appropriately again. Fix for bug 300.
+
 2008-09-12  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Unknown stream types in Ogg files

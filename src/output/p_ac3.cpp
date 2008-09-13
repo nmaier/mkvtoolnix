@@ -89,6 +89,7 @@ ac3_packetizer_c::get_ac3_packet(unsigned long *header,
                "data.\n",
                ti.id, ti.fname.c_str(), bytes_skipped, offset / 1000000);
         warning_printed = true;
+        ti.tcsync.displacement += offset;
       }
     }
     if (!warning_printed)
