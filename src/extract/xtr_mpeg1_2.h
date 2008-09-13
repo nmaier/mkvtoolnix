@@ -24,14 +24,11 @@ public:
   memory_cptr m_seq_hdr;
 
 public:
-  xtr_mpeg1_2_video_c(const string &_codec_id, int64_t _tid,
-                      track_spec_t &tspec);
+  xtr_mpeg1_2_video_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
 
-  virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
-  virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions,
-                            int64_t timecode, int64_t duration, int64_t bref,
-                            int64_t fref, bool keyframe, bool discardable,
-                            bool references_valid);
+  virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
+  virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions, int64_t timecode, int64_t duration, int64_t bref, int64_t fref,
+                            bool keyframe, bool discardable, bool references_valid);
   virtual void handle_codec_state(memory_cptr &codec_state);
 
   virtual const char *get_container_name() {

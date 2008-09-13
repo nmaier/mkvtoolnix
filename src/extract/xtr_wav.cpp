@@ -21,98 +21,96 @@
 #include "commonebml.h"
 #include "xtr_wav.h"
 
-xtr_wav_c::xtr_wav_c(const string &_codec_id,
-                     int64_t _tid,
-                     track_spec_t &tspec):
-  xtr_base_c(_codec_id, _tid, tspec) {
+xtr_wav_c::xtr_wav_c(const string &codec_id,
+                     int64_t tid,
+                     track_spec_t &tspec)
+  : xtr_base_c(codec_id, tid, tspec) {
 
-  memset(&wh, 0, sizeof(wave_header));
+  memset(&m_wh, 0, sizeof(wave_header));
 }
 
 void
-xtr_wav_c::create_file(xtr_base_c *_master,
+xtr_wav_c::create_file(xtr_base_c *master,
                        KaxTrackEntry &track) {
-  int channels, sfreq, bps;
-
   init_content_decoder(track);
 
-  channels = kt_get_a_channels(track);
-  sfreq = (int)kt_get_a_sfreq(track);
-  bps = kt_get_a_bps(track);
+  int channels = kt_get_a_channels(track);
+  int sfreq    = (int)kt_get_a_sfreq(track);
+  int bps      = kt_get_a_bps(track);
+
   if (-1 == bps)
-    mxerror("Track " LLD " with the CodecID '%s' is missing the \"bits per "
-            "second (bps)\" element and cannot be extracted.\n",
-            tid, codec_id.c_str());
+    mxerror("Track " LLD " with the CodecID '%s' is missing the \"bits per second (bps)\" element and cannot be extracted.\n", m_tid, m_codec_id.c_str());
 
-  xtr_base_c::create_file(_master, track);
+  xtr_base_c::create_file(master, track);
 
-  memcpy(&wh.riff.id, "RIFF", 4);
-  memcpy(&wh.riff.wave_id, "WAVE", 4);
-  memcpy(&wh.format.id, "fmt ", 4);
-  put_uint32_le(&wh.format.len, 16);
-  put_uint16_le(&wh.common.wFormatTag, 1);
-  put_uint16_le(&wh.common.wChannels, channels);
-  put_uint32_le(&wh.common.dwSamplesPerSec, sfreq);
-  put_uint32_le(&wh.common.dwAvgBytesPerSec, channels * sfreq * bps / 8);
-  put_uint16_le(&wh.common.wBlockAlign, 4);
-  put_uint16_le(&wh.common.wBitsPerSample, bps);
-  memcpy(&wh.data.id, "data", 4);
+  memcpy(&m_wh.riff.id,      "RIFF", 4);
+  memcpy(&m_wh.riff.wave_id, "WAVE", 4);
+  memcpy(&m_wh.format.id,    "fmt ", 4);
+  memcpy(&m_wh.data.id,      "data", 4);
 
-  out->write(&wh, sizeof(wave_header));
+  put_uint32_le(&m_wh.format.len,              16);
+  put_uint16_le(&m_wh.common.wFormatTag,        1);
+  put_uint16_le(&m_wh.common.wChannels,        channels);
+  put_uint32_le(&m_wh.common.dwSamplesPerSec,  sfreq);
+  put_uint32_le(&m_wh.common.dwAvgBytesPerSec, channels * sfreq * bps / 8);
+  put_uint16_le(&m_wh.common.wBlockAlign,       4);
+  put_uint16_le(&m_wh.common.wBitsPerSample,   bps);
+
+  m_out->write(&m_wh, sizeof(wave_header));
 }
 
 void
 xtr_wav_c::finish_file() {
-  out->setFilePointer(0);
-  put_uint32_le(&wh.riff.len, bytes_written + 36);
-  put_uint32_le(&wh.data.len, bytes_written);
-  out->write(&wh, sizeof(wave_header));
+  m_out->setFilePointer(0);
+
+  put_uint32_le(&m_wh.riff.len, m_bytes_written + 36);
+  put_uint32_le(&m_wh.data.len, m_bytes_written);
+
+  m_out->write(&m_wh, sizeof(wave_header));
 }
 
 // ------------------------------------------------------------------------
 
-xtr_wavpack4_c::xtr_wavpack4_c(const string &_codec_id,
-                               int64_t _tid,
-                               track_spec_t &tspec):
-  xtr_base_c(_codec_id, _tid, tspec),
-  number_of_samples(0), extract_blockadd_level(tspec.extract_blockadd_level),
-  corr_out(NULL) {
+xtr_wavpack4_c::xtr_wavpack4_c(const string &codec_id,
+                               int64_t tid,
+                               track_spec_t &tspec)
+  : xtr_base_c(codec_id, tid, tspec)
+  , m_number_of_samples(0)
+  , m_extract_blockadd_level(tspec.extract_blockadd_level)
+  , m_corr_out(NULL) {
 }
 
 void
-xtr_wavpack4_c::create_file(xtr_base_c *_master,
+xtr_wavpack4_c::create_file(xtr_base_c *master,
                             KaxTrackEntry &track) {
-  KaxCodecPrivate *priv;
   memory_cptr mpriv;
 
   init_content_decoder(track);
 
-  priv = FINDFIRST(&track, KaxCodecPrivate);
+  KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
   if (priv)
     mpriv = decode_codec_private(priv);
 
   if ((NULL == priv) || (2 > mpriv->get_size()))
-    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec "
-            "private\" element and cannot be extracted.\n", tid,
-            codec_id.c_str());
-  memcpy(version, mpriv->get(), 2);
+    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec private\" element and cannot be extracted.\n", m_tid, m_codec_id.c_str());
+  memcpy(m_version, mpriv->get(), 2);
 
-  xtr_base_c::create_file(_master, track);
+  xtr_base_c::create_file(master, track);
 
-  channels = kt_get_a_channels(track);
+  m_channels = kt_get_a_channels(track);
 
-  if ((0 != kt_get_max_blockadd_id(track)) && (0 != extract_blockadd_level)) {
-    string corr_name = file_name;
-    size_t pos = corr_name.rfind('.');
+  if ((0 != kt_get_max_blockadd_id(track)) && (0 != m_extract_blockadd_level)) {
+    string corr_name = m_file_name;
+    size_t pos       = corr_name.rfind('.');
 
     if ((string::npos != pos) && (0 != pos))
       corr_name.erase(pos + 1);
     corr_name += "wvc";
+
     try {
-      corr_out = new mm_file_io_c(corr_name, MODE_CREATE);
+      m_corr_out = new mm_file_io_c(corr_name, MODE_CREATE);
     } catch (...) {
-      mxerror(" The file '%s' could not be opened for writing (%s).\n",
-              corr_name.c_str(), strerror(errno));
+      mxerror(" The file '%s' could not be opened for writing (%s).\n", corr_name.c_str(), strerror(errno));
     }
   }
 }
@@ -127,106 +125,107 @@ xtr_wavpack4_c::handle_frame(memory_cptr &frame,
                              bool keyframe,
                              bool discardable,
                              bool references_valid) {
-  binary wv_header[32], *mybuffer;
-  int data_size;
-  vector<uint32_t> flags;
-
-  content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   // build the main header
 
-  wv_header[0] = 'w';
-  wv_header[1] = 'v';
-  wv_header[2] = 'p';
-  wv_header[3] = 'k';
-  memcpy(&wv_header[8], version, 2); // version
-  wv_header[10] = 0; // track_no
-  wv_header[11] = 0; // index_no
-  wv_header[12] = 0xFF; // total_samples is unknown
+  binary wv_header[32];
+  memcpy(wv_header, "wvpk", 4);
+  memcpy(&wv_header[8], m_version, 2); // version
+  wv_header[10] = 0;                   // track_no
+  wv_header[11] = 0;                   // index_no
+  wv_header[12] = 0xFF;                // total_samples is unknown
   wv_header[13] = 0xFF;
   wv_header[14] = 0xFF;
   wv_header[15] = 0xFF;
-  put_uint32_le(&wv_header[16], number_of_samples); // block_index
-  mybuffer = frame->get();
-  data_size = frame->get_size();
-  number_of_samples += get_uint32_le(mybuffer);
+  put_uint32_le(&wv_header[16], m_number_of_samples); // block_index
+
+  binary *mybuffer     = frame->get();
+  int data_size        = frame->get_size();
+  m_number_of_samples += get_uint32_le(mybuffer);
 
   // rest of the header:
   memcpy(&wv_header[20], mybuffer, 3 * sizeof(uint32_t));
+
+  vector<uint32_t> flags;
+
   // support multi-track files
-  if (channels > 2) {
+  if (2 < m_channels) {
     uint32_t block_size = get_uint32_le(&mybuffer[12]);
 
-    flags.clear();
     put_uint32_le(&wv_header[4], block_size + 24);  // ck_size
-    out->write(wv_header, 32);
+    m_out->write(wv_header, 32);
     flags.push_back(*(uint32_t *)&mybuffer[4]);
     mybuffer += 16;
-    out->write(mybuffer, block_size);
-    mybuffer += block_size;
+    m_out->write(mybuffer, block_size);
+    mybuffer  += block_size;
     data_size -= block_size + 16;
-    while (data_size > 0) {
+    while (0 < data_size) {
       block_size = get_uint32_le(&mybuffer[8]);
       memcpy(&wv_header[24], mybuffer, 8);
       put_uint32_le(&wv_header[4], block_size + 24);
-      out->write(wv_header, 32);
+      m_out->write(wv_header, 32);
+
       flags.push_back(*(uint32_t *)mybuffer);
       mybuffer += 12;
-      out->write(mybuffer, block_size);
-      mybuffer += block_size;
+      m_out->write(mybuffer, block_size);
+
+      mybuffer  += block_size;
       data_size -= block_size + 12;
     }
+
   } else {
     put_uint32_le(&wv_header[4], data_size + 12); // ck_size
-    out->write(wv_header, 32);
-    out->write(&mybuffer[12], data_size - 12); // the rest of the
+    m_out->write(wv_header, 32);
+    m_out->write(&mybuffer[12], data_size - 12); // the rest of the
   }
 
   // support hybrid mode data
-  if ((NULL != corr_out) && (NULL != additions)) {
+  if ((NULL != m_corr_out) && (NULL != additions)) {
     KaxBlockMore *block_more = FINDFIRST(additions, KaxBlockMore);
 
-    if (block_more == NULL)
+    if (NULL == block_more)
       return;
-    KaxBlockAdditional *block_addition =
-      FINDFIRST(block_more, KaxBlockAdditional);
-    if (block_addition == NULL)
+
+    KaxBlockAdditional *block_addition = FINDFIRST(block_more, KaxBlockAdditional);
+    if (NULL == block_addition)
       return;
 
     data_size = block_addition->GetSize();
-    mybuffer = block_addition->GetBuffer();
-    if (channels > 2) {
+    mybuffer  = block_addition->GetBuffer();
+
+    if (2 < m_channels) {
       size_t flags_index = 0;
 
-      while (data_size > 0) {
+      while (0 < data_size) {
         uint32_t block_size = get_uint32_le(&mybuffer[4]);
 
         put_uint32_le(&wv_header[4], block_size + 24); // ck_size
         memcpy(&wv_header[24], &flags[flags_index++], 4); // flags
         memcpy(&wv_header[28], mybuffer, 4); // crc
-        corr_out->write(wv_header, 32);
+        m_corr_out->write(wv_header, 32);
         mybuffer += 8;
-        corr_out->write(mybuffer, block_size);
+        m_corr_out->write(mybuffer, block_size);
         mybuffer += block_size;
         data_size -= 8 + block_size;
       }
     } else {
       put_uint32_le(&wv_header[4], data_size + 20); // ck_size
       memcpy(&wv_header[28], mybuffer, 4); // crc
-      corr_out->write(wv_header, 32);
-      corr_out->write(&mybuffer[4], data_size - 4);
+      m_corr_out->write(wv_header, 32);
+      m_corr_out->write(&mybuffer[4], data_size - 4);
     }
   }
 }
 
 void
 xtr_wavpack4_c::finish_file() {
-  out->setFilePointer(12);
-  out->write_uint32_le(number_of_samples);
+  m_out->setFilePointer(12);
+  m_out->write_uint32_le(m_number_of_samples);
 
-  if (NULL != corr_out) {
-    corr_out->setFilePointer(12);
-    corr_out->write_uint32_le(number_of_samples);
-    delete corr_out;
+  if (NULL != m_corr_out) {
+    m_corr_out->setFilePointer(12);
+    m_corr_out->write_uint32_le(m_number_of_samples);
+    delete m_corr_out;
   }
 }

@@ -21,11 +21,13 @@
 #include "xtr_cpic.h"
 #include "r_corepicture.h"
 
-xtr_cpic_c::xtr_cpic_c(const string &_codec_id,
-                     int64_t _tid,
-                     track_spec_t &tspec):
-  xtr_base_c(_codec_id, _tid, tspec),
-  file_name_root(tspec.out_name), frame_counter(0) {
+xtr_cpic_c::xtr_cpic_c(const string &codec_id,
+                     int64_t tid,
+                     track_spec_t &tspec)
+  : xtr_base_c(codec_id, tid, tspec)
+  , m_file_name_root(tspec.out_name)
+  , m_frame_counter(0)
+{
 }
 
 void
@@ -38,29 +40,24 @@ xtr_cpic_c::handle_frame(memory_cptr &frame,
                          bool keyframe,
                          bool discardable,
                          bool references_valid) {
+  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
-  binary *mybuffer;
-  int data_size, header_size;
-  string frame_file_name;
-
-  content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
-
-  mybuffer = frame->get();
-  data_size = frame->get_size();
-  if (data_size < 2) {
-    mxinfo("CorePicture frame %d not supported.\n", frame_counter);
-    frame_counter++;
+  binary *mybuffer = frame->get();
+  int data_size    = frame->get_size();
+  if (2 > data_size) {
+    mxinfo("CorePicture frame %d not supported.\n", m_frame_counter);
+    ++m_frame_counter;
     return;
   }
 
-  header_size = get_uint16_be(mybuffer);
+  int header_size = get_uint16_be(mybuffer);
   if (header_size >= data_size) {
-    mxinfo("CorePicture frame %d has an invalid header size %d.\n", frame_counter, header_size);
-    frame_counter++;
+    mxinfo("CorePicture frame %d has an invalid header size %d.\n", m_frame_counter, header_size);
+    ++m_frame_counter;
     return;
   }
 
-  frame_file_name = file_name_root + "_" + to_string(frame_counter);
+  string frame_file_name = m_file_name_root + "_" + to_string(m_frame_counter);
   if (7 == header_size) {
     uint8 picture_type = mybuffer[6];
     if (COREPICTURE_TYPE_JPEG == picture_type)
@@ -69,16 +66,16 @@ xtr_cpic_c::handle_frame(memory_cptr &frame,
       frame_file_name += ".png";
   }
 
- out = new mm_file_io_c(frame_file_name, MODE_CREATE);
- out->write(&mybuffer[header_size], data_size - header_size);
- delete out;
- out = NULL;
+  m_out = new mm_file_io_c(frame_file_name, MODE_CREATE);
+  m_out->write(&mybuffer[header_size], data_size - header_size);
+  delete m_out;
+  m_out = NULL;
 
- frame_counter++;
+  ++m_frame_counter;
 }
 
 void
-xtr_cpic_c::create_file(xtr_base_c *_master,
+xtr_cpic_c::create_file(xtr_base_c *master,
                         KaxTrackEntry &track) {
   init_content_decoder(track);
 }

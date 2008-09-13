@@ -28,18 +28,16 @@ using namespace std;
 
 class xtr_srt_c: public xtr_base_c {
 public:
-  int num_entries;
-  string sub_charset;
-  int conv;
+  int m_num_entries;
+  string m_sub_charset;
+  int m_conv;
 
 public:
-  xtr_srt_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec);
+  xtr_srt_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
 
-  virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
-  virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions,
-                            int64_t timecode, int64_t duration, int64_t bref,
-                            int64_t fref, bool keyframe, bool discardable,
-                            bool references_valid);
+  virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
+  virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions, int64_t timecode, int64_t duration, int64_t bref, int64_t fref,
+                            bool keyframe, bool discardable, bool references_valid);
 
   virtual const char *get_container_name() {
     return "SRT text subtitles";
@@ -50,30 +48,33 @@ class xtr_ssa_c: public xtr_base_c {
 public:
   class ssa_line_c {
   public:
-    string line;
-    int num;
+    string m_line;
+    int m_num;
 
     bool operator < (const ssa_line_c &cmp) const {
-      return num < cmp.num;
+      return m_num < cmp.m_num;
     }
+
+    ssa_line_c(string line, int num)
+      : m_line(line)
+      , m_num(num)
+    { }
   };
 
-  vector<string> ssa_format;
-  vector<ssa_line_c> lines;
-  string sub_charset;
-  int conv;
-  bool warning_printed;
+  vector<string> m_ssa_format;
+  vector<ssa_line_c> m_lines;
+  string m_sub_charset;
+  int m_conv;
+  bool m_warning_printed;
 
-  static const char *kax_ssa_fields[10];
+  static const char *ms_kax_ssa_fields[10];
 
 public:
-  xtr_ssa_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec);
+  xtr_ssa_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
 
-  virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
-  virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions,
-                            int64_t timecode, int64_t duration, int64_t bref,
-                            int64_t fref, bool keyframe, bool discardable,
-                            bool references_valid);
+  virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
+  virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions, int64_t timecode, int64_t duration, int64_t bref, int64_t fref,
+                            bool keyframe, bool discardable, bool references_valid);
   virtual void finish_file();
 
   virtual const char *get_container_name() {
@@ -96,13 +97,11 @@ private:
   vector<usf_entry_t> m_entries;
 
 public:
-  xtr_usf_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec);
+  xtr_usf_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
 
-  virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
-  virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions,
-                            int64_t timecode, int64_t duration, int64_t bref,
-                            int64_t fref, bool keyframe, bool discardable,
-                            bool references_valid);
+  virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
+  virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions, int64_t timecode, int64_t duration, int64_t bref, int64_t fref,
+                            bool keyframe, bool discardable, bool references_valid);
   virtual void finish_track();
   virtual void finish_file();
 

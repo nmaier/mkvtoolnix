@@ -46,67 +46,55 @@ struct PACKED_STRUCTURE mpeg_ps_header_t {
 #pragma pack(pop)
 #endif
 
-xtr_vobsub_c::xtr_vobsub_c(const string &_codec_id,
-                           int64_t _tid,
-                           track_spec_t &tspec):
-  xtr_base_c(_codec_id, _tid, tspec),
-  stream_id(0x20) {
-
-  int pos;
-
-  base_name = tspec.out_name;
-  pos = base_name.rfind('.');
-  if (pos >= 0)
-    base_name.erase(pos);
+xtr_vobsub_c::xtr_vobsub_c(const string &codec_id,
+                           int64_t tid,
+                           track_spec_t &tspec)
+  : xtr_base_c(codec_id, tid, tspec)
+  , m_base_name(tspec.out_name)
+  , m_stream_id(0x20)
+{
+  int pos = m_base_name.rfind('.');
+  if (0 <= pos)
+    m_base_name.erase(pos);
 }
 
 void
-xtr_vobsub_c::create_file(xtr_base_c *_master,
+xtr_vobsub_c::create_file(xtr_base_c *master,
                           KaxTrackEntry &track) {
-  KaxCodecPrivate *priv;
-
-  priv = FINDFIRST(&track, KaxCodecPrivate);
+  KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
-    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec "
-            "private\" element and cannot be extracted.\n", tid,
-            codec_id.c_str());
+    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec private\" element and cannot be extracted.\n", m_tid, m_codec_id.c_str());
 
   init_content_decoder(track);
 
-  private_data = decode_codec_private(priv);
-  private_data->grab();
+  m_private_data = decode_codec_private(priv);
+  m_private_data->grab();
 
-  master = _master;
-  language = kt_get_language(track);
+  m_master   = master;
+  m_language = kt_get_language(track);
 
   if (NULL == master) {
-    string sub_file_name = base_name + ".sub";
+    string sub_file_name = m_base_name + ".sub";
 
     try {
-      out = new mm_file_io_c(sub_file_name, MODE_CREATE);
+      m_out = new mm_file_io_c(sub_file_name, MODE_CREATE);
     } catch (...) {
-      mxerror("Failed to create the VobSub data file '%s': %d (%s)\n",
-              sub_file_name.c_str(), errno, strerror(errno));
+      mxerror("Failed to create the VobSub data file '%s': %d (%s)\n", sub_file_name.c_str(), errno, strerror(errno));
     }
 
   } else {
-    xtr_vobsub_c *vmaster = dynamic_cast<xtr_vobsub_c *>(master);
+    xtr_vobsub_c *vmaster = dynamic_cast<xtr_vobsub_c *>(m_master);
 
     if (NULL == vmaster)
-      mxerror("Cannot extract tracks of different kinds to the same file. "
-              "This was requested for the tracks " LLD " and " LLD ".\n", tid,
-              master->tid);
+      mxerror("Cannot extract tracks of different kinds to the same file. This was requested for the tracks " LLD " and " LLD ".\n", m_tid, m_master->m_tid);
 
-    if ((private_data->get_size() != vmaster->private_data->get_size()) ||
-        memcmp(priv->GetBuffer(), vmaster->private_data->get(),
-               private_data->get_size()))
-      mxerror("Two VobSub tracks can only be extracted into the same file "
-              "if their CodecPrivate data matches. This is not the case "
-              "for the tracks " LLD " and " LLD ".\n", tid, master->tid);
+    if ((m_private_data->get_size() != vmaster->m_private_data->get_size()) || memcmp(priv->GetBuffer(), vmaster->m_private_data->get(), m_private_data->get_size()))
+      mxerror("Two VobSub tracks can only be extracted into the same file if their CodecPrivate data matches. This is not the case for the tracks " LLD " and " LLD ".\n",
+              m_tid, m_master->m_tid);
 
-    vmaster->slaves.push_back(this);
-    stream_id = vmaster->stream_id + 1;
-    vmaster->stream_id++;
+    vmaster->m_slaves.push_back(this);
+    m_stream_id = vmaster->m_stream_id + 1;
+    vmaster->m_stream_id++;
   }
 }
 
@@ -120,37 +108,25 @@ xtr_vobsub_c::handle_frame(memory_cptr &frame,
                            bool keyframe,
                            bool discardable,
                            bool references_valid) {
-  static unsigned char padding_data[8] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-                                          0xff, 0xff};
-  mpeg_es_header_t es;
+  static unsigned char padding_data[8] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+
+  xtr_vobsub_c *vmaster = (NULL == m_master) ? this : static_cast<xtr_vobsub_c *>(m_master);
+
+  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+
+  unsigned char *data = frame->get();
+  int size            = frame->get_size();
+
+  m_positions.push_back(vmaster->m_out->getFilePointer());
+  m_timecodes.push_back(timecode);
+
+  uint32_t padding = (2048 - (size + sizeof(mpeg_ps_header_t) + sizeof(mpeg_es_header_t))) & 2047;
+  uint32_t first   = size + sizeof(mpeg_ps_header_t) + sizeof(mpeg_es_header_t) > 2048 ? 2048 - sizeof(mpeg_ps_header_t) - sizeof(mpeg_es_header_t) : size;
+
+  uint64_t c       = timecode * 9 / 100000;
+
   mpeg_ps_header_t ps;
-  uint64_t c;
-  uint32_t size, padding, first;
-  xtr_vobsub_c *vmaster;
-  unsigned char *data;
-
-  if (NULL == master)
-    vmaster = this;
-  else
-    vmaster = static_cast<xtr_vobsub_c *>(master);
-
-  content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
-  data = frame->get();
-  size = frame->get_size();
-
-  positions.push_back(vmaster->out->getFilePointer());
-  timecodes.push_back(timecode);
-
-  padding = (2048 - (size + sizeof(mpeg_ps_header_t) +
-                     sizeof(mpeg_es_header_t))) & 2047;
-  first = size + sizeof(mpeg_ps_header_t) +
-    sizeof(mpeg_es_header_t) > 2048 ?
-    2048 - sizeof(mpeg_ps_header_t) - sizeof(mpeg_es_header_t) : size;
-
   memset(&ps, 0, sizeof(mpeg_ps_header_t));
-
-  c = timecode * 9 / 100000;
-
   ps.pfx[2]  = 0x01;
   ps.pfx[3]  = 0xba;
   ps.scr[0]  = 0x40 | ((uint8_t)(c >> 27) & 0x38) | 0x04 | ((uint8_t)(c >> 28) & 0x03);
@@ -166,6 +142,7 @@ xtr_vobsub_c::handle_frame(memory_cptr &frame,
   if ((padding < 8) && (first == size))
     ps.stlen |= (uint8_t)padding;
 
+  mpeg_es_header_t es;
   memset(&es, 0, sizeof(mpeg_es_header_t));
   es.pfx[2]    = 1;
   es.stream_id = 0xbd;
@@ -179,44 +156,46 @@ xtr_vobsub_c::handle_frame(memory_cptr &frame,
   es.pts[2]    = ((uint8_t)(c >> 14) & 0xfe) | 0x01;
   es.pts[3]    = (uint8_t)(c >> 7);
   es.pts[4]    = (uint8_t)(c << 1) | 0x01;
-  es.lidx      = NULL == master ? 0x20 : stream_id;
+  es.lidx      = (NULL == m_master) ? 0x20 : m_stream_id;
 
-  vmaster->out->write(&ps, sizeof(mpeg_ps_header_t));
-  if ((padding > 0) && (padding < 8) && (first == size))
-    vmaster->out->write(padding_data, padding);
-  vmaster->out->write(&es, sizeof(mpeg_es_header_t));
-  vmaster->out->write(data, first);
+  vmaster->m_out->write(&ps, sizeof(mpeg_ps_header_t));
+  if ((0 < padding) && (8 > padding) && (first == size))
+    vmaster->m_out->write(padding_data, padding);
+  vmaster->m_out->write(&es, sizeof(mpeg_es_header_t));
+  vmaster->m_out->write(data, first);
   while (first < size) {
-    size -= first;
-    data += first;
+    size    -= first;
+    data    += first;
 
-    padding = (2048 - (size + 10 + sizeof(mpeg_ps_header_t))) & 2047;
-    first = size + 10 + sizeof(mpeg_ps_header_t) > 2048 ?
-      2048 - 10 - sizeof(mpeg_ps_header_t) : size;
+    padding  = (2048 - (size + 10 + sizeof(mpeg_ps_header_t))) & 2047;
+    first    = size + 10 + sizeof(mpeg_ps_header_t) > 2048 ? 2048 - 10 - sizeof(mpeg_ps_header_t) : size;
 
-    if ((padding < 8) && (first == size))
+    if ((8  >padding) && (first == size))
       ps.stlen |= (uint8_t)padding;
 
-    es.len[0] = (uint8_t)((first + 4) >> 8);
-    es.len[1] = (uint8_t)(first + 4);
+    es.len[0]   = (uint8_t)((first + 4) >> 8);
+    es.len[1]   = (uint8_t)(first + 4);
     es.flags[1] = 0;
-    es.hlen = 0;
-    es.pts[0] = es.lidx;
-    vmaster->out->write(&ps, sizeof(mpeg_ps_header_t));
-    if ((padding > 0) && (padding < 8) && (first == size))
-      vmaster->out->write(padding_data, padding);
-    vmaster->out->write(&es, 10);
-    vmaster->out->write(data, first);
+    es.hlen     = 0;
+    es.pts[0]   = es.lidx;
+
+    vmaster->m_out->write(&ps, sizeof(mpeg_ps_header_t));
+    if ((0 < padding) && (8 > padding) && (first == size))
+      vmaster->m_out->write(padding_data, padding);
+    vmaster->m_out->write(&es, 10);
+    vmaster->m_out->write(data, first);
   }
   if (8 <= padding) {
-    padding -= 6;
-    es.stream_id = 0xbe;
-    es.len[0] = (uint8_t)(padding >> 8);
-    es.len[1] = (uint8_t)padding;
-    vmaster->out->write(&es, 6); // XXX
+    padding      -= 6;
+    es.stream_id  = 0xbe;
+    es.len[0]     = (uint8_t)(padding >> 8);
+    es.len[1]     = (uint8_t)padding;
+
+    vmaster->m_out->write(&es, 6); // XXX
+
     while (0 < padding) {
-      uint32_t todo = padding > 8 ? 8 : padding;
-      vmaster->out->write(padding_data, todo);
+      uint32_t todo = 8 < padding ? 8 : padding;
+      vmaster->m_out->write(padding_data, todo);
       padding -= todo;
     }
   }
@@ -224,56 +203,47 @@ xtr_vobsub_c::handle_frame(memory_cptr &frame,
 
 void
 xtr_vobsub_c::finish_file() {
-  if (NULL != master)
+  if (NULL != m_master)
     return;
 
   try {
-    int slave;
-    const char *header_line =
-      "# VobSub index file, v7 (do not modify this line!)\n";
+    static const char *header_line = "# VobSub index file, v7 (do not modify this line!)\n";
 
-    base_name += ".idx";
+    m_base_name += ".idx";
 
-    delete out;
-    out = NULL;
+    delete m_out;
+    m_out = NULL;
 
-    mm_file_io_c idx(base_name, MODE_CREATE);
-    mxinfo("Writing the VobSub index file '%s'.\n", base_name.c_str());
-    if ((25 > private_data->get_size()) ||
-        strncasecmp((char *)private_data->get(), header_line, 25))
+    mm_file_io_c idx(m_base_name, MODE_CREATE);
+    mxinfo("Writing the VobSub index file '%s'.\n", m_base_name.c_str());
+
+    if ((25 > m_private_data->get_size()) || strncasecmp((char *)m_private_data->get(), header_line, 25))
       idx.printf(header_line);
-    idx.write(private_data->get(), private_data->get_size());
+    idx.write(m_private_data->get(), m_private_data->get_size());
 
     write_idx(idx, 0);
-    for (slave = 0; slave < slaves.size(); slave++)
-      slaves[slave]->write_idx(idx, slave + 1);
+    int slave;
+    for (slave = 0; slave < m_slaves.size(); slave++)
+      m_slaves[slave]->write_idx(idx, slave + 1);
 
   } catch (...) {
-    mxerror("Failed to create the file '%s': %d (%s)\n", base_name.c_str(),
-            errno, strerror(errno));
+    mxerror("Failed to create the file '%s': %d (%s)\n", m_base_name.c_str(), errno, strerror(errno));
   }
 }
 
 void
 xtr_vobsub_c::write_idx(mm_io_c &idx,
                         int index) {
-  const char *iso639_1;
+  const char *iso639_1 = map_iso639_2_to_iso639_1(m_language.c_str());
+  idx.printf("\nid: %s, index: %d\n", (NULL == iso639_1 ? "en" : iso639_1), index);
+
   int i;
+  for (i = 0; i < m_positions.size(); i++) {
+    int64_t timecode = m_timecodes[i] / 1000000;
 
-  iso639_1 = map_iso639_2_to_iso639_1(language.c_str());
-  idx.printf("\nid: %s, index: %d\n", (NULL == iso639_1 ? "en" : iso639_1),
-             index);
-
-  for (i = 0; i < positions.size(); i++) {
-    int64_t timecode;
-
-    timecode = timecodes[i] / 1000000;
     idx.printf("timestamp: %02d:%02d:%02d:%03d, filepos: %1x%08x\n",
-               (int)((timecode / 60 / 60 / 1000) % 60),
-               (int)((timecode / 60 / 1000) % 60),
-               (int)((timecode / 1000) % 60),
-               (int)(timecode % 1000),
-               (uint32_t)(positions[i] >> 32),
-               (uint32_t)(positions[i] & 0xffffffff));
+               (int)((timecode / 60 / 60 / 1000) % 60), (int)((timecode / 60 / 1000) % 60),
+               (int)((timecode / 1000) % 60),           (int)(timecode % 1000),
+               (uint32_t)(m_positions[i] >> 32),        (uint32_t)(m_positions[i] & 0xffffffff));
   }
 }

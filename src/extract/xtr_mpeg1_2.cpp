@@ -20,22 +20,22 @@
 
 #include "xtr_mpeg1_2.h"
 
-xtr_mpeg1_2_video_c::xtr_mpeg1_2_video_c(const string &_codec_id,
-                                         int64_t _tid,
-                                         track_spec_t &tspec):
-  xtr_base_c(_codec_id, _tid, tspec) {
+xtr_mpeg1_2_video_c::xtr_mpeg1_2_video_c(const string &codec_id,
+                                         int64_t tid,
+                                         track_spec_t &tspec)
+  : xtr_base_c(codec_id, tid, tspec) {
 }
 
 void
-xtr_mpeg1_2_video_c::create_file(xtr_base_c *_master,
+xtr_mpeg1_2_video_c::create_file(xtr_base_c *master,
                                  KaxTrackEntry &track) {
 
-  xtr_base_c::create_file(_master, track);
+  xtr_base_c::create_file(master, track);
 
   KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL != priv) {
     memory_cptr mpriv = decode_codec_private(priv);
-    m_seq_hdr = clone_memory(mpriv->get(), mpriv->get_size());
+    m_seq_hdr         = clone_memory(mpriv->get(), mpriv->get_size());
   }
 }
 
@@ -49,32 +49,31 @@ xtr_mpeg1_2_video_c::handle_frame(memory_cptr &frame,
                                   bool keyframe,
                                   bool discardable,
                                   bool references_valid) {
-  content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   binary *buf = (binary *)frame->get();
 
   if (references_valid)
-    keyframe = bref == 0;
+    keyframe = (bref == 0);
 
   if (keyframe && (NULL != m_seq_hdr.get())) {
-    uint32_t marker;
     bool seq_hdr_found = false;
 
     if (frame->get_size() >= 4) {
-      marker = get_uint32_be(buf);
+      uint32_t marker = get_uint32_be(buf);
       if (MPEGVIDEO_SEQUENCE_START_CODE == marker)
         seq_hdr_found = true;
     }
 
     if (!seq_hdr_found)
-      out->write(m_seq_hdr->get(), m_seq_hdr->get_size());
+      m_out->write(m_seq_hdr->get(), m_seq_hdr->get_size());
   }
 
-  out->write(buf, frame->get_size());
+  m_out->write(buf, frame->get_size());
 }
 
 void
 xtr_mpeg1_2_video_c::handle_codec_state(memory_cptr &codec_state) {
-  content_decoder.reverse(codec_state, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
+  m_content_decoder.reverse(codec_state, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
   m_seq_hdr = clone_memory(codec_state);
 }

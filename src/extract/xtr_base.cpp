@@ -39,39 +39,41 @@
 using namespace std;
 using namespace libmatroska;
 
-xtr_base_c::xtr_base_c(const string &_codec_id,
-                       int64_t _tid,
+xtr_base_c::xtr_base_c(const string &codec_id,
+                       int64_t tid,
                        track_spec_t &tspec,
-                       const char *_container_name):
-  codec_id(_codec_id), file_name(tspec.out_name),
-  container_name(NULL == _container_name ? "raw data" : _container_name),
-  master(NULL), out(NULL), tid(_tid), default_duration(0), bytes_written(0),
-  content_decoder_initialized(false) {
+                       const char *container_name)
+  : m_codec_id(codec_id)
+  , m_file_name(tspec.out_name)
+  , m_container_name(NULL == container_name ? "raw data" : container_name)
+  , m_master(NULL)
+  , m_out(NULL)
+  , m_tid(tid)
+  , m_default_duration(0)
+  , m_bytes_written(0)
+  , m_content_decoder_initialized(false)
+{
 }
 
 xtr_base_c::~xtr_base_c() {
-  if (NULL == master)
-    delete out;
+  delete m_out;
 }
 
 void
-xtr_base_c::create_file(xtr_base_c *_master,
+xtr_base_c::create_file(xtr_base_c *master,
                         KaxTrackEntry &track) {
-  if (NULL != _master)
-    mxerror("Cannot write track " LLD " with the CodecID '%s' to the file "
-            "'%s' because track " LLD " with the CodecID '%s' is already "
-            "being written to the same file.\n", tid, codec_id.c_str(),
-            file_name.c_str(), _master->tid, _master->codec_id.c_str());
+  if (NULL != master)
+    mxerror("Cannot write track " LLD " with the CodecID '%s' to the file '%s' because track " LLD " with the CodecID '%s' is already being written to the same file.\n",
+            m_tid, m_codec_id.c_str(), m_file_name.c_str(), master->m_tid, master->m_codec_id.c_str());
 
   try {
     init_content_decoder(track);
-    out = new mm_file_io_c(file_name, MODE_CREATE);
+    m_out = new mm_file_io_c(m_file_name, MODE_CREATE);
   } catch(...) {
-    mxerror("Failed to create the file '%s': %d (%s)\n", file_name.c_str(),
-            errno, strerror(errno));
+    mxerror("Failed to create the file '%s': %d (%s)\n", m_file_name.c_str(), errno, strerror(errno));
   }
 
-  default_duration = kt_get_default_duration(track);
+  m_default_duration = kt_get_default_duration(track);
 }
 
 void
@@ -84,9 +86,9 @@ xtr_base_c::handle_frame(memory_cptr &frame,
                          bool keyframe,
                          bool discardable,
                          bool references_valid) {
-  content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
-  out->write(frame->get(), frame->get_size());
-  bytes_written += frame->get_size();
+  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+  m_out->write(frame->get(), frame->get_size());
+  m_bytes_written += frame->get_size();
 }
 
 void
@@ -104,21 +106,20 @@ xtr_base_c::headers_done() {
 memory_cptr
 xtr_base_c::decode_codec_private(KaxCodecPrivate *priv) {
   memory_cptr mpriv(new memory_c(priv->GetBuffer(), priv->GetSize()));
-  content_decoder.reverse(mpriv, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
+  m_content_decoder.reverse(mpriv, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
 
   return mpriv;
 }
 
 void
 xtr_base_c::init_content_decoder(KaxTrackEntry &track) {
-  if (content_decoder_initialized)
+  if (m_content_decoder_initialized)
     return;
 
-  if (!content_decoder.initialize(track))
-    mxerror("Tracks with unsupported content encoding schemes (compression "
-            "or encryption) cannot be extracted.\n");
+  if (!m_content_decoder.initialize(track))
+    mxerror("Tracks with unsupported content encoding schemes (compression or encryption) cannot be extracted.\n");
 
-  content_decoder_initialized = true;
+  m_content_decoder_initialized = true;
 }
 
 xtr_base_c *
@@ -136,11 +137,9 @@ xtr_base_c::create_extractor(const string &new_codec_id,
   else if (new_codec_id == MKV_A_EAC3)
     return new xtr_base_c(new_codec_id, new_tid, tspec, "Dolby Digital Plus (EAC3)");
   else if (starts_with_case(new_codec_id, "A_MPEG/L"))
-    return new xtr_base_c(new_codec_id, new_tid, tspec,
-                          "MPEG-1 Audio Layer 2/3");
+    return new xtr_base_c(new_codec_id, new_tid, tspec, "MPEG-1 Audio Layer 2/3");
   else if (new_codec_id == MKV_A_DTS)
-    return new xtr_base_c(new_codec_id, new_tid, tspec,
-                          "Digital Theater System (DTS)");
+    return new xtr_base_c(new_codec_id, new_tid, tspec, "Digital Theater System (DTS)");
   else if (new_codec_id == MKV_A_PCM)
     return new xtr_wav_c(new_codec_id, new_tid, tspec);
   else if (new_codec_id == MKV_A_FLAC) {
@@ -166,20 +165,15 @@ xtr_base_c::create_extractor(const string &new_codec_id,
     return new xtr_avc_c(new_codec_id, new_tid, tspec);
   else if (starts_with_case(new_codec_id, "V_REAL/"))
     return new xtr_rmff_c(new_codec_id, new_tid, tspec);
-  else if ((new_codec_id == MKV_V_MPEG1) ||
-           (new_codec_id == MKV_V_MPEG2))
+  else if ((new_codec_id == MKV_V_MPEG1) || (new_codec_id == MKV_V_MPEG2))
     return new xtr_mpeg1_2_video_c(new_codec_id, new_tid, tspec);
   else if (new_codec_id == MKV_V_THEORA)
     return new xtr_oggtheora_c(new_codec_id, new_tid, tspec);
 
   // Subtitle formats
-  else if ((new_codec_id == MKV_S_TEXTUTF8) ||
-           (new_codec_id == MKV_S_TEXTASCII))
+  else if ((new_codec_id == MKV_S_TEXTUTF8) || (new_codec_id == MKV_S_TEXTASCII))
     return new xtr_srt_c(new_codec_id, new_tid, tspec);
-  else if ((new_codec_id == MKV_S_TEXTSSA) ||
-           (new_codec_id == MKV_S_TEXTASS) ||
-           (new_codec_id == "S_SSA") ||
-           (new_codec_id == "S_ASS"))
+  else if ((new_codec_id == MKV_S_TEXTSSA) || (new_codec_id == MKV_S_TEXTASS) || (new_codec_id == "S_SSA") || (new_codec_id == "S_ASS"))
     return new xtr_ssa_c(new_codec_id, new_tid, tspec);
   else if (new_codec_id == MKV_S_VOBSUB)
     return new xtr_vobsub_c(new_codec_id, new_tid, tspec);
@@ -194,23 +188,21 @@ xtr_base_c::create_extractor(const string &new_codec_id,
 }
 
 void
-xtr_fullraw_c::create_file(xtr_base_c *_master,
+xtr_fullraw_c::create_file(xtr_base_c *master,
                            KaxTrackEntry &track) {
-  KaxCodecPrivate *priv;
+  xtr_base_c::create_file(master, track);
 
-  xtr_base_c::create_file(_master, track);
-
-  priv = FINDFIRST(&track, KaxCodecPrivate);
+  KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
 
   if ((NULL != priv) && (0 != priv->GetSize())) {
     memory_cptr mem(new memory_c(priv->GetBuffer(), priv->GetSize(), false));
-    content_decoder.reverse(mem, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
-    out->write(mem->get(), mem->get_size());
+    m_content_decoder.reverse(mem, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
+    m_out->write(mem->get(), mem->get_size());
   }
 }
 
 void
 xtr_fullraw_c::handle_codec_state(memory_cptr &codec_state) {
-  content_decoder.reverse(codec_state, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
-  out->write(codec_state->get(), codec_state->get_size());
+  m_content_decoder.reverse(codec_state, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
+  m_out->write(codec_state->get(), codec_state->get_size());
 }

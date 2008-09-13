@@ -25,37 +25,45 @@
 
 class xtr_flac_c: public xtr_base_c {
 public:
-  xtr_flac_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec);
+  xtr_flac_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
 
-  virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
+  virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
 };
 
 class xtr_oggbase_c: public xtr_base_c {
 public:
-  ogg_stream_state os;
-  int packetno;
-  memory_cptr buffered_data;
-  int sfreq;
-  int64_t previous_end;
+  ogg_stream_state m_os;
+  int m_packetno;
+  memory_cptr m_queued_frame;
+  int64_t m_queued_granulepos;
+  int m_sfreq;
+  int64_t m_previous_end;
 
 public:
-  xtr_oggbase_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec);
+  xtr_oggbase_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
   virtual ~xtr_oggbase_c();
 
-  virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
+  virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
   virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions, int64_t timecode, int64_t duration, int64_t bref,
                             int64_t fref, bool keyframe, bool discardable, bool references_valid);
   virtual void finish_file();
 
   virtual void write_pages();
   virtual void flush_pages();
+
+protected:
+  virtual void create_standard_file(xtr_base_c *master, KaxTrackEntry &track);
+  virtual void header_packets_unlaced(vector<memory_cptr> &header_packets);
+
+  virtual void queue_frame(memory_cptr &frame, int64_t granulepos);
+  virtual void write_queued_frame(bool eos);
 };
 
 class xtr_oggflac_c: public xtr_oggbase_c {
 public:
-  xtr_oggflac_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec);
+  xtr_oggflac_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
 
-  virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
+  virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
 
   virtual const char *get_container_name() {
     return "Ogg (FLAC in Ogg)";
@@ -64,9 +72,9 @@ public:
 
 class xtr_oggvorbis_c: public xtr_oggbase_c {
 public:
-  xtr_oggvorbis_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec);
+  xtr_oggvorbis_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
 
-  virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
+  virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
 
   virtual const char *get_container_name() {
     return "Ogg (Vorbis in Ogg)";
@@ -75,30 +83,32 @@ public:
 
 class xtr_oggkate_c: public xtr_oggbase_c {
 private:
-  kate_identification_header_t kate_id_header;
+  kate_identification_header_t m_kate_id_header;
 
 public:
-  xtr_oggkate_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec);
+  xtr_oggkate_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
 
-  virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
+  virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
   virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions, int64_t timecode, int64_t duration, int64_t bref,
                             int64_t fref, bool keyframe, bool discardable, bool references_valid);
 
   virtual const char *get_container_name() {
     return "Ogg (Kate in Ogg)";
   };
+
+protected:
+  virtual void header_packets_unlaced(vector<memory_cptr> &header_packets);
 };
 
 class xtr_oggtheora_c: public xtr_oggbase_c {
 private:
-  theora_identification_header_t theora;
-  int64_t keyframe_number, non_keyframe_number, m_queued_granulepos;
-  memory_cptr m_queued_frame;
+  theora_identification_header_t m_theora_header;
+  int64_t m_keyframe_number, m_non_keyframe_number;
 
 public:
-  xtr_oggtheora_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec);
+  xtr_oggtheora_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
 
-  virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
+  virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
   virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions, int64_t timecode, int64_t duration, int64_t bref,
                             int64_t fref, bool keyframe, bool discardable, bool references_valid);
   virtual void finish_file();
@@ -108,8 +118,7 @@ public:
   };
 
 protected:
-  virtual void queue_frame(memory_cptr &frame, int64_t granulepos);
-  virtual void write_queued_frame(bool eos);
+  virtual void header_packets_unlaced(vector<memory_cptr> &header_packets);
 };
 
 #endif

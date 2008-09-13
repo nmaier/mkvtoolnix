@@ -91,9 +91,8 @@ create_extractors(KaxTracks &kax_tracks,
     // Is there more than one track with the same track number?
     extractor = NULL;
     for (k = 0; k < extractors.size(); k++)
-      if (extractors[k]->tid == tnum) {
-        mxwarn("More than one track with the track number " LLD " found.\n",
-               tnum);
+      if (extractors[k]->m_tid == tnum) {
+        mxwarn("More than one track with the track number " LLD " found.\n", tnum);
         extractor = extractors[k];
         break;
       }
@@ -124,7 +123,7 @@ create_extractors(KaxTracks &kax_tracks,
     // Has there another file been requested with the same name?
     master = NULL;
     for (k = 0; k < extractors.size(); k++)
-      if (extractors[k]->file_name == tspec->out_name) {
+      if (extractors[k]->m_file_name == tspec->out_name) {
         master = extractors[k];
         break;
       }
@@ -168,7 +167,7 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
   // Do we need this block group?
   extractor = NULL;
   for (i = 0; i < extractors.size(); i++)
-    if (block->TrackNum() == extractors[i]->tid) {
+    if (block->TrackNum() == extractors[i]->m_tid) {
       extractor = extractors[i];
       break;
     }
@@ -198,7 +197,7 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
   kadditions = FINDFIRST(&blockgroup, KaxBlockAdditions);
 
   if (0 > duration)
-    duration = extractor->default_duration * block->NumberFrames();
+    duration = extractor->m_default_duration * block->NumberFrames();
 
   kcstate = FINDFIRST(&blockgroup, KaxCodecState);
   if (NULL != kcstate) {
@@ -241,7 +240,7 @@ handle_simpleblock(KaxSimpleBlock &simpleblock,
   // Do we need this block group?
   extractor = NULL;
   for (i = 0; i < extractors.size(); i++)
-    if (simpleblock.TrackNum() == extractors[i]->tid) {
+    if (simpleblock.TrackNum() == extractors[i]->m_tid) {
       extractor = extractors[i];
       break;
     }
@@ -249,7 +248,7 @@ handle_simpleblock(KaxSimpleBlock &simpleblock,
   if (NULL == extractor)
     return;
 
-  duration = extractor->default_duration * simpleblock.NumberFrames();
+  duration = extractor->m_default_duration * simpleblock.NumberFrames();
 
   for (i = 0; i < simpleblock.NumberFrames(); i++) {
     int64_t this_timecode, this_duration;
@@ -278,10 +277,10 @@ close_extractors() {
   for (i = 0; i < extractors.size(); i++)
     extractors[i]->finish_track();
   for (i = 0; i < extractors.size(); i++)
-    if (NULL != extractors[i]->master)
+    if (NULL != extractors[i]->m_master)
       extractors[i]->finish_file();
   for (i = 0; i < extractors.size(); i++) {
-    if (NULL == extractors[i]->master)
+    if (NULL == extractors[i]->m_master)
       extractors[i]->finish_file();
     delete extractors[i];
   }

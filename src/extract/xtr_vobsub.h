@@ -23,20 +23,18 @@
 
 class xtr_vobsub_c: public xtr_base_c {
 public:
-  vector<int64_t> positions, timecodes;
-  vector<xtr_vobsub_c *> slaves;
-  memory_cptr private_data;
-  string base_name, language;
-  int stream_id;
+  vector<int64_t> m_positions, m_timecodes;
+  vector<xtr_vobsub_c *> m_slaves;
+  memory_cptr m_private_data;
+  string m_base_name, m_language;
+  int m_stream_id;
 
 public:
-  xtr_vobsub_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec);
+  xtr_vobsub_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
 
-  virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
-  virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions,
-                            int64_t timecode, int64_t duration, int64_t bref,
-                            int64_t fref, bool keyframe, bool discardable,
-                            bool references_valid);
+  virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
+  virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions, int64_t timecode, int64_t duration, int64_t bref, int64_t fref,
+                            bool keyframe, bool discardable, bool references_valid);
   virtual void finish_file();
   virtual void write_idx(mm_io_c &idx, int index);
 

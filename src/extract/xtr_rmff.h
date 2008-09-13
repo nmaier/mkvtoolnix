@@ -23,17 +23,15 @@
 
 class xtr_rmff_c: public xtr_base_c {
 public:
-  rmff_file_t *file;
-  rmff_track_t *rmtrack;
+  rmff_file_t *m_file;
+  rmff_track_t *m_rmtrack;
 
 public:
-  xtr_rmff_c(const string &_codec_id, int64_t _tid, track_spec_t &tspec);
+  xtr_rmff_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
 
-  virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
-  virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions,
-                            int64_t timecode, int64_t duration, int64_t bref,
-                            int64_t fref, bool keyframe, bool discardable,
-                            bool references_valid);
+  virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
+  virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions, int64_t timecode, int64_t duration, int64_t bref, int64_t fref,
+                            bool keyframe, bool discardable, bool references_valid);
   virtual void finish_file();
   virtual void headers_done();
 

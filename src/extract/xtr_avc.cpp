@@ -17,12 +17,12 @@
 
 #include "xtr_avc.h"
 
-static const binary start_code[4] = { 0x00, 0x00, 0x00, 0x01 };
+static const binary s_start_code[4] = { 0x00, 0x00, 0x00, 0x01 };
 
-xtr_avc_c::xtr_avc_c(const string &_codec_id,
-                     int64_t _tid,
-                     track_spec_t &tspec):
-  xtr_base_c(_codec_id, _tid, tspec) {
+xtr_avc_c::xtr_avc_c(const string &codec_id,
+                     int64_t tid,
+                     track_spec_t &tspec)
+  : xtr_base_c(codec_id, tid, tspec) {
 }
 
 void
@@ -37,42 +37,42 @@ xtr_avc_c::write_nal(const binary *data,
     nal_size = (nal_size << 8) | data[pos++];
 
   if ((pos + nal_size) > data_size)
-    mxerror("Track " LLD ": nal too big\n", tid);
+    mxerror("Track " LLD ": nal too big\n", m_tid);
 
-  out->write(start_code, 4);
-  out->write(data+pos, nal_size);
+  m_out->write(s_start_code, 4);
+  m_out->write(data + pos, nal_size);
+
   pos += nal_size;
 }
 
 void
-xtr_avc_c::create_file(xtr_base_c *_master,
+xtr_avc_c::create_file(xtr_base_c *master,
                        KaxTrackEntry &track) {
-
-  xtr_base_c::create_file(_master, track);
+  xtr_base_c::create_file(master, track);
 
   KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
-    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec "
-            "private\" element and cannot be extracted.\n", tid,
-            codec_id.c_str());
+    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec private\" element and cannot be extracted.\n", m_tid, m_codec_id.c_str());
 
   memory_cptr mpriv = decode_codec_private(priv);
 
   if (mpriv->get_size() < 6)
-    mxerror("Track " LLD " CodecPrivate is too small.\n", tid);
+    mxerror("Track " LLD " CodecPrivate is too small.\n", m_tid);
 
   binary *buf = mpriv->get();
-  nal_size_size = 1 + (buf[4] & 3);
+  m_nal_size_size = 1 + (buf[4] & 3);
 
-  int i, pos = 6, numsps = buf[5] & 0x1f, numpps;
-
+  int pos    = 6;
+  int numsps = buf[5] & 0x1f;
+  int i;
   for (i = 0; (i < numsps) && (mpriv->get_size() > pos); ++i)
+
     write_nal(buf, pos, mpriv->get_size(), 2);
 
   if (mpriv->get_size() <= pos)
     return;
 
-  numpps = buf[pos++];
+  int numpps = buf[pos++];
 
   for (i = 0; (i < numpps) && (mpriv->get_size() > pos); ++i)
     write_nal(buf, pos, mpriv->get_size(), 2);
@@ -88,11 +88,11 @@ xtr_avc_c::handle_frame(memory_cptr &frame,
                         bool keyframe,
                         bool discardable,
                         bool references_valid) {
-  content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   int pos     = 0;
   binary *buf = (binary *)frame->get();
 
   while (frame->get_size() > pos)
-    write_nal(buf, pos, frame->get_size(), nal_size_size);
+    write_nal(buf, pos, frame->get_size(), m_nal_size_size);
 }
