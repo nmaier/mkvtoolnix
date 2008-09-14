@@ -31,11 +31,16 @@ private:
   bool out_of_data;
 
 public:
-  bit_cursor_c(const unsigned char *data, unsigned int len):
-    end_of_data(data + len), byte_position(data), start_of_data(data),
-    bits_valid(8), out_of_data(false) {
-    if (byte_position >= end_of_data)
-      out_of_data = true;
+  bit_cursor_c(const unsigned char *data, unsigned int len) {
+    init(data, len);
+  }
+
+  void init(const unsigned char *data, unsigned int len) {
+    end_of_data   = data + len;
+    byte_position = data;
+    start_of_data = data;
+    bits_valid    = 8;
+    out_of_data   = byte_position >= end_of_data;
   }
 
   bool eof() {
