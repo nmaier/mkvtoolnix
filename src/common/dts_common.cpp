@@ -249,9 +249,21 @@ find_dts_header_internal(const unsigned char *buf,
   if (get_uint32_be(buf + hd_offset) != DTS_HD_HEADER_MAGIC)
     return offset;
 
-  dts_header->dts_hd           = true;
-  dts_header->hd_type          = (buf[hd_offset + 5] & 0x80) ? dts_header_t::DTSHD_MASTER_AUDIO : dts_header_t::DTSHD_HIGH_RESOLUTION;
-  dts_header->hd_part_size     = ((unsigned int)(buf[hd_offset + 6] & 0x0f) << 11) + ((unsigned int)buf[hd_offset + 7] << 3) + ((buf[hd_offset + 8] >> 5) & 0x07) + 1;
+  dts_header->dts_hd  = true;
+
+  bc.init(buf + hd_offset, size - hd_offset);
+
+  bc.skip_bits(32);             // DTS_HD_HEADER_MAGIC
+  bc.skip_bits(8 + 2);          // ??
+  if (bc.get_bit()) {           // Blown-up header bit
+    bc.skip_bits(12);
+    dts_header->hd_part_size = bc.get_bits(20) + 1;
+
+  } else {
+    bc.skip_bits(8);
+    dts_header->hd_part_size = bc.get_bits(16) + 1;
+  }
+
   dts_header->frame_byte_size += dts_header->hd_part_size;
 
   return offset;
