@@ -35,34 +35,23 @@
 static bool
 parse_eac3_header(const unsigned char *buf,
                   ac3_header_t &header) {
-  static int sample_rates[] =
-    { 48000, 44100, 32000, 24000, 22050, 16000 };
-  static int channels[] = { 2, 1, 2, 3, 3, 4, 4, 5 };
-  static int samples[] = { 256, 512, 768, 1536 };
+  static const int sample_rates[] = { 48000, 44100, 32000, 24000, 22050, 16000 };
+  static const int channels[]     = {     2,     1,     2,     3,     3,     4,     4,     5 };
+  static const int samples[]      = {   256,   512,   768,  1536 };
 
-  int fscod, fscod2, acmod, lfeon;
-
-  fscod = buf[4] >> 6;
-  fscod2 = (buf[4] >> 4) & 0x03;
+  int fscod  =  buf[4] >> 6;
+  int fscod2 = (buf[4] >> 4) & 0x03;
 
   if ((0x03 == fscod) && (0x03 == fscod2))
     return false;
 
+  int acmod          = (buf[4] >> 1) & 0x07;
+  int lfeon          =  buf[4]       & 0x01;
+
   header.sample_rate = sample_rates[0x03 == fscod ? 3 + fscod2 : fscod];
-
-  header.bytes = (((buf[2] & 0x03) << 8) + buf[3] + 1) * 2;
-
-  acmod = (buf[4] >> 1) & 0x07;
-  lfeon = buf[4] & 0x01;
-
-  header.channels = channels[acmod];
-  if (lfeon)
-    header.channels++;
-
-  if (0x03 == fscod)
-    header.samples = 1536;
-  else
-    header.samples = samples[fscod2];
+  header.bytes       = (((buf[2] & 0x03) << 8) + buf[3] + 1) * 2;
+  header.channels    = channels[acmod] + lfeon;
+  header.samples     = (0x03 == fscod) ? 1536 : samples[fscod2];
 
   return true;
 }
@@ -85,64 +74,66 @@ parse_eac3_header(const unsigned char *buf,
 static bool
 parse_ac3_header(const unsigned char *buf,
                  ac3_header_t &header) {
-  static int rate[] = { 32,  40,  48,  56,  64,  80,  96, 112, 128, 160,
-                       192, 224, 256, 320, 384, 448, 512, 576, 640};
-  static unsigned char lfeon[8] = {0x10, 0x10, 0x04, 0x04, 0x04, 0x01,
-                                   0x04, 0x01};
-  static unsigned char halfrate[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3};
+  static const int rate[]                 = {   32,   40,   48,   56,   64,   80,   96,  112,  128,  160,  192,  224,  256,  320,  384,  448,  512,  576,  640 };
+  static const unsigned char lfeon[8]     = { 0x10, 0x10, 0x04, 0x04, 0x04, 0x01, 0x04, 0x01 };
+  static const unsigned char halfrate[12] = {    0,    0,    0,    0,    0,    0,    0,    0,    0,    1,    2,    3 };
 
-  int frmsizecod, bitrate, half, acmod;
-
-  frmsizecod = buf[4] & 63;
-  if (frmsizecod >= 38)
+  int frmsizecod = buf[4] & 63;
+  if (38 <= frmsizecod)
     return false;
 
-  half = halfrate[buf[5] >> 3];
-  bitrate = rate[frmsizecod >> 1];
+  int half        = halfrate[buf[5] >> 3];
+  int bitrate     = rate[frmsizecod >> 1];
   header.bit_rate = (bitrate * 1000) >> half;
 
   switch (buf[4] & 0xc0) {
     case 0:
       header.sample_rate = 48000 >> half;
-      header.bytes = 4 * bitrate;
+      header.bytes       = 4 * bitrate;
       break;
+
     case 0x40:
       header.sample_rate = 44100 >> half;
-      header.bytes = 2 * (320 * bitrate / 147 + (frmsizecod & 1));
+      header.bytes       = 2 * (320 * bitrate / 147 + (frmsizecod & 1));
       break;
+
     case 0x80:
       header.sample_rate = 32000 >> half;
-      header.bytes = 6 * bitrate;
+      header.bytes       = 6 * bitrate;
       break;
+
     default:
       return false;
   }
 
-  acmod = buf[6] >> 5;
-  header.flags = ((((buf[6] & 0xf8) == 0x50) ? A52_DOLBY : acmod) |
-                  ((buf[6] & lfeon[acmod]) ? A52_LFE : 0));
+  int acmod    = buf[6] >> 5;
+  header.flags = ((((buf[6] & 0xf8) == 0x50) ? A52_DOLBY : acmod) | ((buf[6] & lfeon[acmod]) ? A52_LFE : 0));
 
   switch (header.flags & A52_CHANNEL_MASK) {
     case A52_MONO:
-      header.channels=1;
+      header.channels = 1;
       break;
+
     case A52_CHANNEL:
     case A52_STEREO:
     case A52_CHANNEL1:
     case A52_CHANNEL2:
     case A52_DOLBY:
-      header.channels=2;
+      header.channels = 2;
       break;
+
     case A52_2F1R:
     case A52_3F:
-      header.channels=3;
+      header.channels = 3;
       break;
+
     case A52_3F1R:
     case A52_2F2R:
-      header.channels=4;
+      header.channels = 4;
       break;
+
     case A52_3F2R:
-      header.channels=5;
+      header.channels = 5;
       break;
   }
 
@@ -160,19 +151,20 @@ find_ac3_header(const unsigned char *buf,
                 ac3_header_t *ac3_header) {
   ac3_header_t header;
   int i;
-  bool found;
 
-  for (i = 0; i < (size - 7); i++) {
-    if ((buf[i] != 0x0b) || (buf[i + 1] != 0x77))
+  for (i = 0; (size - 7) > i; ++i) {
+    if ((0x0b != buf[i]) || (0x77 != buf[i + 1]))
       continue;
 
     header.bsid = (buf[i + 5] >> 3);
+    bool found  = false;
 
-    found = false;
     if (0x10 == header.bsid)
       found = parse_eac3_header(&buf[i], header);
+
     else if (0x0c <= header.bsid)
       continue;
+
     else
       found = parse_ac3_header(&buf[i], header);
 
@@ -189,47 +181,56 @@ int
 find_consecutive_ac3_headers(const unsigned char *buf,
                              int size,
                              int num) {
-  int i, pos, base, offset;
   ac3_header_t ac3header, new_header;
 
-  pos = find_ac3_header(buf, size, &ac3header);
-  if (pos < 0)
+  int pos = find_ac3_header(buf, size, &ac3header);
+  if (0 > pos)
     return -1;
+
   mxverb(2, "ac3_reader: Found tag at %d size %d\n", pos, ac3header.bytes);
 
-  if (num == 1)
+  if (1 == num)
     return pos;
 
-  base = pos;
+  int base = pos;
   do {
     mxverb(2, "find_cons_ac3_h: starting with base at %d\n", base);
-    offset = ac3header.bytes;
-    for (i = 0; i < (num - 1); i++) {
+
+    int offset = ac3header.bytes;
+    int i;
+    for (i = 0; (num - 1) > i; ++i) {
       if ((size - base - offset) < 4)
         break;
-      pos = find_ac3_header(&buf[base + offset], size - base - offset,
-                            &new_header);
-      if (pos == 0) {
-        if ((new_header.bsid == ac3header.bsid) &&
-            (new_header.channels == ac3header.channels) &&
-            (new_header.sample_rate == ac3header.sample_rate)) {
+
+      pos = find_ac3_header(&buf[base + offset], size - base - offset, &new_header);
+
+      if (0 == pos) {
+        if (   (new_header.bsid        == ac3header.bsid)
+            && (new_header.channels    == ac3header.channels)
+            && (new_header.sample_rate == ac3header.sample_rate)) {
           mxverb(2, "find_cons_ac3_h: found good header %d\n", i);
           offset += new_header.bytes;
           continue;
         } else
           break;
+
       } else
         break;
     }
+
     if (i == (num - 1))
       return base;
-    base++;
+
+    ++base;
     offset = 0;
-    pos = find_ac3_header(&buf[base], size - base, &ac3header);
-    if (pos == -1)
+    pos    = find_ac3_header(&buf[base], size - base, &ac3header);
+
+    if (-1 == pos)
       return -1;
+
     base += pos;
-  } while (base < (size - 5));
+
+  } while ((size - 5) > base);
 
   return -1;
 }
