@@ -102,6 +102,15 @@ namespace vc1 {
     frame_header_t();
   };
 
+  struct frame_t {
+    memory_cptr  data;
+    int64_t      timecode;
+    int64_t      duration;
+    frame_type_e type;
+
+    frame_t();
+  };
+
   inline bool is_marker(uint32_t value) {
     return (value & 0xffffff00) == 0x00000100;
   }
@@ -115,9 +124,25 @@ namespace vc1 {
     int64_t m_stream_pos;
 
     bool m_seqhdr_found;
+    bool m_seqhdr_changed;
     sequence_header_t m_seqhdr;
+    memory_cptr m_raw_seqhdr;
+    memory_cptr m_raw_entrypoint;
 
     memory_cptr m_unparsed_buffer;
+
+    deque<memory_cptr> m_extra_data;
+
+    deque<frame_t> m_frames;
+
+    int64_t m_previous_timecode;
+    int64_t m_num_timecodes;
+
+    bool m_default_duration_forced;
+    int64_t m_default_duration;
+
+    bool m_keep_markers_in_frames;
+    bool m_keep_stream_headers_in_frames;
 
   public:
     es_parser_c();
@@ -134,12 +159,66 @@ namespace vc1 {
       return m_seqhdr_found;
     }
 
+    virtual bool has_sequence_header_changed() {
+      return m_seqhdr_changed;
+    }
+
+    virtual bool are_headers_available() {
+      return m_seqhdr_found && (NULL != m_raw_entrypoint.get());
+    }
+
     virtual void get_sequence_header(sequence_header_t &seqhdr) {
       if (m_seqhdr_found)
         memcpy(&seqhdr, &m_seqhdr, sizeof(sequence_header_t));
     }
 
+    virtual memory_cptr get_raw_sequence_header() {
+      if (m_seqhdr_found)
+        return memory_cptr(m_raw_seqhdr->clone());
+      else
+        return memory_cptr(NULL);
+    }
+
+    virtual memory_cptr get_raw_entrypoint() {
+      if (NULL != m_raw_entrypoint.get())
+        return memory_cptr(m_raw_entrypoint->clone());
+      else
+        return memory_cptr(NULL);
+    }
+
     virtual void handle_packet(memory_cptr packet);
+
+    virtual bool is_frame_available() {
+      return !m_frames.empty();
+    }
+
+    virtual frame_t get_frame() {
+      frame_t frame;
+
+      if (!m_frames.empty()) {
+        frame = m_frames.front();
+        m_frames.pop_front();
+      }
+
+      return frame;
+    }
+
+    virtual void set_default_duration(int64_t default_duration) {
+      m_default_duration        = default_duration;
+      m_default_duration_forced = true;
+    }
+
+    virtual int64_t get_default_duration() {
+      return m_default_duration;
+    }
+
+    virtual void set_keep_markers_in_frames(bool keep) {
+      m_keep_markers_in_frames = keep;
+    }
+
+    virtual void set_keep_stream_headers_in_frames(bool keep) {
+      m_keep_stream_headers_in_frames = keep;
+    }
 
   protected:
     virtual void handle_entrypoint_packet(memory_cptr packet);
@@ -148,6 +227,8 @@ namespace vc1 {
     virtual void handle_sequence_header_packet(memory_cptr packet);
     virtual void handle_slice_packet(memory_cptr packet);
     virtual void handle_unknown_packet(uint32_t marker, memory_cptr packet);
+    virtual int64_t get_next_timecode();
+    virtual memory_cptr combine_extra_data_with_packet(memory_cptr packet);
   };
 };
 

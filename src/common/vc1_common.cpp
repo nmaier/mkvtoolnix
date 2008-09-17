@@ -32,6 +32,12 @@ vc1::frame_header_t::frame_header_t() {
   memset(this, 0, sizeof(vc1::frame_header_t));
 }
 
+vc1::frame_t::frame_t()
+  : timecode(-1)
+  , type(vc1::FRAME_TYPE_I)
+{
+}
+
 bool
 vc1::parse_sequence_header(const unsigned char *buf,
                            int size,
@@ -106,16 +112,16 @@ vc1::parse_sequence_header(const unsigned char *buf,
       hdr.framerate_flag = bc.get_bit();
       if (hdr.framerate_flag) {
         if (bc.get_bit()) {
-          hdr.framerate_num = bc.get_bits(16) + 1;
-          hdr.framerate_den = 32;
+          hdr.framerate_num = 32;
+          hdr.framerate_den = bc.get_bits(16) + 1;
 
         } else {
           int nr = bc.get_bits(8);
           int dr = bc.get_bits(4);
 
           if ((0 != nr) && (8 > nr) && (0 != dr) && (3 > dr)) {
-            hdr.framerate_num = s_framerate_nr[nr - 1] * 1000;
-            hdr.framerate_den = s_framerate_dr[dr - 1];
+            hdr.framerate_num = s_framerate_dr[dr - 1];
+            hdr.framerate_den = s_framerate_nr[nr - 1] * 1000;
 
           } else
             hdr.framerate_flag = false;
@@ -245,6 +251,10 @@ vc1::parse_frame_header(const unsigned char *buf,
 vc1::es_parser_c::es_parser_c()
   : m_stream_pos(0)
   , m_seqhdr_found(false)
+  , m_previous_timecode(0)
+  , m_num_timecodes(0)
+  , m_default_duration_forced(false)
+  , m_default_duration(1000000000ll / 25)
 {
 }
 
@@ -345,26 +355,110 @@ vc1::es_parser_c::handle_packet(memory_cptr packet) {
 
 void
 vc1::es_parser_c::handle_entrypoint_packet(memory_cptr packet) {
+  if (m_keep_stream_headers_in_frames) {
+    m_extra_data.push_back(packet);
+    m_extra_data.back()->grab();
+  }
+
+  if (NULL == m_raw_entrypoint.get())
+    m_raw_entrypoint = memory_cptr(packet->clone());
 }
 
 void
 vc1::es_parser_c::handle_field_packet(memory_cptr packet) {
+  mxerror("VC1 field units are not supported yet. Please provide a sample file to the author, Moritz Bunkus <moritz@bunkus.org>.\n");
 }
 
 void
 vc1::es_parser_c::handle_frame_packet(memory_cptr packet) {
+  vc1::frame_header_t frame_header;
+
+  if (!m_seqhdr_found || !vc1::parse_frame_header(packet->get(), packet->get_size(), frame_header, m_seqhdr)) {
+    m_extra_data.push_back(packet);
+    m_extra_data.back()->grab();
+    return;
+  }
+
+  vc1::frame_t frame;
+
+  frame.type     = frame_header.frame_type;
+  frame.timecode = get_next_timecode();
+  frame.duration = get_default_duration();
+
+  if (!m_extra_data.empty())
+    frame.data   = combine_extra_data_with_packet(packet);
+  else if (m_keep_markers_in_frames)
+    frame.data   = packet;
+  else
+    frame.data   = memory_cptr(new memory_c(safememdup(packet->get() + 4, packet->get_size() - 4), packet->get_size() - 4, true));
+
+  frame.data->grab();
+
+  m_frames.push_back(frame);
 }
 
 void
 vc1::es_parser_c::handle_sequence_header_packet(memory_cptr packet) {
+  if (m_keep_stream_headers_in_frames) {
+    m_extra_data.push_back(packet);
+    m_extra_data.back()->grab();
+  }
+
+  vc1::sequence_header_t seqhdr;
+  if (!vc1::parse_sequence_header(packet->get(), packet->get_size(), seqhdr))
+    return;
+
+  m_seqhdr_changed = !m_seqhdr_found || (packet->get_size() != m_raw_seqhdr->get_size()) || memcmp(packet->get(), m_raw_seqhdr->get(), packet->get_size());
+
+  memcpy(&m_seqhdr, &seqhdr, sizeof(vc1::sequence_header_t));
+  m_raw_seqhdr   = memory_cptr(packet->clone());
+  m_seqhdr_found = true;
+
+  if (!m_default_duration_forced && m_seqhdr.framerate_flag && (0 != m_seqhdr.framerate_num) && (0 != m_seqhdr.framerate_den))
+    m_default_duration = 1000000000ll * m_seqhdr.framerate_num / m_seqhdr.framerate_den;
 }
 
 void
 vc1::es_parser_c::handle_slice_packet(memory_cptr packet) {
+  mxerror("VC1 slices are not supported yet. Please provide a sample file to the author, Moritz Bunkus <moritz@bunkus.org>.\n");
 }
 
 void
 vc1::es_parser_c::handle_unknown_packet(uint32_t marker,
                                         memory_cptr packet) {
+  if (m_keep_stream_headers_in_frames) {
+    m_extra_data.push_back(packet);
+    m_extra_data.back()->grab();
+  }
 }
 
+memory_cptr
+vc1::es_parser_c::combine_extra_data_with_packet(memory_cptr packet) {
+  int extra_size = 0;
+  deque<memory_cptr>::iterator it;
+
+  mxforeach(it, m_extra_data)
+    extra_size += (*it)->get_size();
+
+  int offset             = m_keep_markers_in_frames ? 0 : 4;
+  memory_cptr new_packet = memory_c::alloc(extra_size + packet->get_size() - offset);
+  unsigned char *ptr     = new_packet->get();
+
+  mxforeach(it, m_extra_data) {
+    memcpy(ptr, (*it)->get(), (*it)->get_size());
+    ptr += (*it)->get_size();
+  }
+
+  memcpy(ptr, packet->get() + offset, packet->get_size() - offset);
+
+  m_extra_data.clear();
+
+  return new_packet;
+}
+
+int64_t
+vc1::es_parser_c::get_next_timecode() {
+  ++m_num_timecodes;
+
+  return m_previous_timecode + (m_num_timecodes - 1) * m_default_duration;
+}
