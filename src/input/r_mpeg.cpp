@@ -841,7 +841,7 @@ mpeg_ps_reader_c::new_stream_a_ac3(int id,
                                    mpeg_ps_track_ptr &track) {
   ac3_header_t header;
 
-  if (-1 == find_ac3_header(buf, length, &header))
+  if (-1 == find_ac3_header(buf, length, &header, false))
     throw false;
 
   mxverb(2, "first ac3 header bsid %d channels %d sample_rate %d bytes %d samples %d\n", header.bsid, header.channels, header.sample_rate, header.bytes, header.samples);

@@ -210,7 +210,7 @@ wav_ac3acm_demuxer_c::probe(mm_io_cptr &io) {
   if (-1 == pos)
     return false;
 
-  find_ac3_header(m_buf[m_cur_buf]->get() + pos, len - pos, &m_ac3header);
+  find_ac3_header(m_buf[m_cur_buf]->get() + pos, len - pos, &m_ac3header, true);
 
   return true;
 }
@@ -287,7 +287,7 @@ wav_ac3wav_demuxer_c::decode_buffer(int len) {
   if ((payload_len + 8) > len)
     return -1;
 
-  int pos = find_ac3_header(&base[8], payload_len, &m_ac3header);
+  int pos = find_ac3_header(&base[8], payload_len, &m_ac3header, true);
 
   return 0 == pos ? payload_len : -1;
 }

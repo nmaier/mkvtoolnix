@@ -75,7 +75,7 @@ ac3_reader_c::ac3_reader_c(track_info_c &_ti)
     throw error_c("ac3_reader: Could not open the source file.");
   }
 
-  if (0 > find_ac3_header(chunk->get(), AC3_READ_SIZE, &ac3header))
+  if (0 > find_ac3_header(chunk->get(), AC3_READ_SIZE, &ac3header, true))
     throw error_c(mxsprintf("ac3_reader: No valid AC3 packet found in the first %d bytes.\n", AC3_READ_SIZE));
 
   bytes_processed = 0;

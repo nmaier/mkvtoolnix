@@ -26,9 +26,10 @@
 class ac3_packetizer_c: public generic_packetizer_c {
 protected:
   int64_t bytes_output, packetno, bytes_skipped;
-  int samples_per_sec, channels, bsid;
+  int samples_per_sec;
   byte_buffer_c byte_buffer;
   bool first_packet;
+  ac3_header_t first_ac3_header;
 
 public:
   ac3_packetizer_c(generic_reader_c *_reader, int _samples_per_sec,
@@ -49,7 +50,7 @@ protected:
   virtual unsigned char *get_ac3_packet(unsigned long *header,
                                         ac3_header_t *ac3header);
   virtual void add_to_buffer(unsigned char *buf, int size);
-  virtual void adjust_header_values(ac3_header_t &ac3header);
+  virtual void adjust_header_values(ac3_header_t &ac3_header);
 };
 
 class ac3_bs_packetizer_c: public ac3_packetizer_c {

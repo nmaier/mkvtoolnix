@@ -1239,7 +1239,7 @@ bool
 qtmp4_reader_c::create_audio_packetizer_ac3(qtmp4_demuxer_cptr &dmx) {
   memory_cptr buf = memory_c::alloc(64);
 
-  if (!dmx->read_first_bytes(buf, 64, io) || (-1 == find_ac3_header(buf->get(), buf->get_size(), &dmx->m_ac3_header))) {
+  if (!dmx->read_first_bytes(buf, 64, io) || (-1 == find_ac3_header(buf->get(), buf->get_size(), &dmx->m_ac3_header, false))) {
     mxwarn(FMT_TID "No AC3 header found in first frame; track will be skipped.\n", ti.fname.c_str(), (int64_t)dmx->id);
     dmx->ok = false;
 

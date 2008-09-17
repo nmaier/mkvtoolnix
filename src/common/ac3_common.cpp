@@ -22,7 +22,7 @@
   EAC3 Header:
   AAAAAAAA AAAAAAAA BBCCCDDD DDDDDDDD EEFFGGGH IIIII...
   A = sync, always 0x0B77
-  B = stream type
+  B = frame type
   C = sub stream id
   D = frame size - 1 in words
   E = fscod
@@ -45,13 +45,47 @@ parse_eac3_header(const unsigned char *buf,
   if ((0x03 == fscod) && (0x03 == fscod2))
     return false;
 
-  int acmod          = (buf[4] >> 1) & 0x07;
-  int lfeon          =  buf[4]       & 0x01;
+  int acmod                   = (buf[4] >> 1) & 0x07;
+  int lfeon                   =  buf[4]       & 0x01;
 
-  header.sample_rate = sample_rates[0x03 == fscod ? 3 + fscod2 : fscod];
-  header.bytes       = (((buf[2] & 0x03) << 8) + buf[3] + 1) * 2;
-  header.channels    = channels[acmod] + lfeon;
-  header.samples     = (0x03 == fscod) ? 1536 : samples[fscod2];
+  header.frame_type           = (buf[2] >> 6) & 0x03;
+  header.sub_stream_id        = (buf[2] >> 3) & 0x07;
+  header.sample_rate          = sample_rates[0x03 == fscod ? 3 + fscod2 : fscod];
+  header.bytes                = (((buf[2] & 0x03) << 8) + buf[3] + 1) * 2;
+  header.channels             = channels[acmod] + lfeon;
+  header.samples              = (0x03 == fscod) ? 1536 : samples[fscod2];
+
+  header.has_dependent_frames = false;
+
+  if (EAC3_FRAME_TYPE_RESERVED == header.frame_type)
+    return false;
+
+  return true;
+}
+
+static bool
+parse_eac3_header_full(const unsigned char *buf,
+                       int size,
+                       ac3_header_t &header,
+                       bool look_for_second_header) {
+  if (!parse_eac3_header(buf, header))
+    return false;
+
+  if (!look_for_second_header)
+    return true;
+
+  if (((header.bytes + 5) > size) || (0x0b != buf[header.bytes]) || (0x77 != buf[header.bytes + 1]))
+    return false;
+
+  ac3_header_t second_header;
+  if (!parse_eac3_header(buf + header.bytes, second_header))
+    return false;
+
+  if (EAC3_FRAME_TYPE_DEPENDENT == second_header.frame_type) {
+    header.has_dependent_frames  = true;
+    header.channels              = 8; // TODO: Don't hardcode 7.1, but get the values from the frames
+    header.bytes                += second_header.bytes;
+  }
 
   return true;
 }
@@ -107,40 +141,41 @@ parse_ac3_header(const unsigned char *buf,
   }
 
   int acmod    = buf[6] >> 5;
-  header.flags = ((((buf[6] & 0xf8) == 0x50) ? A52_DOLBY : acmod) | ((buf[6] & lfeon[acmod]) ? A52_LFE : 0));
+  header.flags = ((((buf[6] & 0xf8) == 0x50) ? AC3_DOLBY : acmod) | ((buf[6] & lfeon[acmod]) ? AC3_LFE : 0));
 
-  switch (header.flags & A52_CHANNEL_MASK) {
-    case A52_MONO:
+  switch (header.flags & AC3_CHANNEL_MASK) {
+    case AC3_MONO:
       header.channels = 1;
       break;
 
-    case A52_CHANNEL:
-    case A52_STEREO:
-    case A52_CHANNEL1:
-    case A52_CHANNEL2:
-    case A52_DOLBY:
+    case AC3_CHANNEL:
+    case AC3_STEREO:
+    case AC3_CHANNEL1:
+    case AC3_CHANNEL2:
+    case AC3_DOLBY:
       header.channels = 2;
       break;
 
-    case A52_2F1R:
-    case A52_3F:
+    case AC3_2F1R:
+    case AC3_3F:
       header.channels = 3;
       break;
 
-    case A52_3F1R:
-    case A52_2F2R:
+    case AC3_3F1R:
+    case AC3_2F2R:
       header.channels = 4;
       break;
 
-    case A52_3F2R:
+    case AC3_3F2R:
       header.channels = 5;
       break;
   }
 
-  if (header.flags & A52_LFE)
+  if (header.flags & AC3_LFE)
     header.channels++;
 
-  header.samples = 1536;
+  header.samples              = 1536;
+  header.has_dependent_frames = false;
 
   return true;
 }
@@ -148,7 +183,8 @@ parse_ac3_header(const unsigned char *buf,
 int
 find_ac3_header(const unsigned char *buf,
                 int size,
-                ac3_header_t *ac3_header) {
+                ac3_header_t *ac3_header,
+                bool look_for_second_header) {
   ac3_header_t header;
   int i;
 
@@ -160,7 +196,7 @@ find_ac3_header(const unsigned char *buf,
     bool found  = false;
 
     if (0x10 == header.bsid)
-      found = parse_eac3_header(&buf[i], header);
+      found = parse_eac3_header_full(&buf[i], size, header, look_for_second_header);
 
     else if (0x0c <= header.bsid)
       continue;
@@ -183,7 +219,7 @@ find_consecutive_ac3_headers(const unsigned char *buf,
                              int num) {
   ac3_header_t ac3header, new_header;
 
-  int pos = find_ac3_header(buf, size, &ac3header);
+  int pos = find_ac3_header(buf, size, &ac3header, true);
   if (0 > pos)
     return -1;
 
@@ -202,7 +238,7 @@ find_consecutive_ac3_headers(const unsigned char *buf,
       if ((size - base - offset) < 4)
         break;
 
-      pos = find_ac3_header(&buf[base + offset], size - base - offset, &new_header);
+      pos = find_ac3_header(&buf[base + offset], size - base - offset, &new_header, ac3header.has_dependent_frames);
 
       if (0 == pos) {
         if (   (new_header.bsid        == ac3header.bsid)
@@ -223,7 +259,7 @@ find_consecutive_ac3_headers(const unsigned char *buf,
 
     ++base;
     offset = 0;
-    pos    = find_ac3_header(&buf[base], size - base, &ac3header);
+    pos    = find_ac3_header(&buf[base], size - base, &ac3header, true);
 
     if (-1 == pos)
       return -1;

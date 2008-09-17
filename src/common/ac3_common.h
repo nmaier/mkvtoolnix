@@ -18,20 +18,25 @@
 
 #include "os.h"
 
-#define A52_CHANNEL       0
-#define A52_MONO          1
-#define A52_STEREO        2
-#define A52_3F            3
-#define A52_2F1R          4
-#define A52_3F1R          5
-#define A52_2F2R          6
-#define A52_3F2R          7
-#define A52_CHANNEL1      8
-#define A52_CHANNEL2      9
-#define A52_DOLBY        10
-#define A52_CHANNEL_MASK 15
+#define AC3_CHANNEL                  0
+#define AC3_MONO                     1
+#define AC3_STEREO                   2
+#define AC3_3F                       3
+#define AC3_2F1R                     4
+#define AC3_3F1R                     5
+#define AC3_2F2R                     6
+#define AC3_3F2R                     7
+#define AC3_CHANNEL1                 8
+#define AC3_CHANNEL2                 9
+#define AC3_DOLBY                   10
+#define AC3_CHANNEL_MASK            15
 
-#define A52_LFE 16
+#define AC3_LFE                     16
+
+#define EAC3_FRAME_TYPE_INDEPENDENT  0
+#define EAC3_FRAME_TYPE_DEPENDENT    1
+#define EAC3_FRAME_TYPE_AC3_CONVERT  2
+#define EAC3_FRAME_TYPE_RESERVED     3
 
 typedef struct {
   int sample_rate;
@@ -41,9 +46,14 @@ typedef struct {
   int bytes;
   int bsid;
   int samples;
+
+  int frame_type;
+  int sub_stream_id;
+
+  bool has_dependent_frames;
 } ac3_header_t;
 
-int MTX_DLL_API find_ac3_header(const unsigned char *buf, int size, ac3_header_t *ac3_header);
+int MTX_DLL_API find_ac3_header(const unsigned char *buf, int size, ac3_header_t *ac3_header, bool look_for_second_header);
 int MTX_DLL_API find_consecutive_ac3_headers(const unsigned char *buf, int size, int num);
 
 #endif // __AC3COMMON_H
