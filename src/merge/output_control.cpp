@@ -89,6 +89,7 @@
 #include "r_ssa.h"
 #include "r_tta.h"
 #include "r_usf.h"
+#include "r_vc1.h"
 #include "r_vobbtn.h"
 #include "r_vobsub.h"
 #include "r_wav.h"
@@ -319,6 +320,8 @@ get_file_type(filelist_t &file) {
     type = FILE_TYPE_QTMP4;
   else if (tta_reader_c::probe_file(io, size))
     type = FILE_TYPE_TTA;
+  else if (vc1_es_reader_c::probe_file(io, size))
+    type = FILE_TYPE_VC1;
   else if (wavpack_reader_c::probe_file(io, size))
     type = FILE_TYPE_WAVPACK4;
   // File types that are misdetected sometimes
@@ -407,7 +410,7 @@ display_progress() {
 
     display_reader = winner->reader;
   }
-  if ((display_counter % 500) == 0) {
+  if ((display_counter % 50) == 0) {
     display_counter = 0;
     mxinfo("progress: %d%%\r",
            (display_reader->get_progress() + display_files_done * 100) /
@@ -1133,14 +1136,17 @@ create_readers() {
         case FILE_TYPE_COREPICTURE:
           file->reader = new corepicture_reader_c(*file->ti);
           break;
-        case FILE_TYPE_WAV:
-          file->reader = new wav_reader_c(*file->ti);
+        case FILE_TYPE_VC1:
+          file->reader = new vc1_es_reader_c(*file->ti);
           break;
         case FILE_TYPE_VOBBTN:
           file->reader = new vobbtn_reader_c(*file->ti);
           break;
         case FILE_TYPE_VOBSUB:
           file->reader = new vobsub_reader_c(*file->ti);
+          break;
+        case FILE_TYPE_WAV:
+          file->reader = new wav_reader_c(*file->ti);
           break;
         case FILE_TYPE_WAVPACK4:
           file->reader = new wavpack_reader_c(*file->ti);
