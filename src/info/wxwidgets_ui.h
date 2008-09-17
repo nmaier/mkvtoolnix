@@ -6,7 +6,7 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id: mkvinfo.h 3373 2006-11-19 17:41:46Z mosu $
+   $Id$
 
    definition of global variables and functions
 

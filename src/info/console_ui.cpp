@@ -5,7 +5,7 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id: gui.cpp 3373 2006-11-19 17:41:46Z mosu $
+   $Id$
 
    A console UI for mkvinfo
 

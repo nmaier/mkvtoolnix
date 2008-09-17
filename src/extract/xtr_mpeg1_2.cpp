@@ -5,7 +5,7 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id: xtr_avc.cpp 3436 2007-01-07 20:13:06Z mosu $
+   $Id$
 
    extracts tracks from Matroska files into other files
 

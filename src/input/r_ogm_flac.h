@@ -6,7 +6,7 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id: r_ogm.h 3578 2007-08-16 16:30:05Z mosu $
+   $Id$
 
    class definitions for the OGG media stream reader
 

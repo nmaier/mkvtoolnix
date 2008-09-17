@@ -6,7 +6,7 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id: p_tta.cpp 1657 2004-04-09 17:37:25Z mosu $
+   $Id$
 
    TTA output module
 

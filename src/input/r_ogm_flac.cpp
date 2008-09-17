@@ -6,7 +6,7 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id: r_ogm.cpp 3743 2008-01-02 12:09:14Z mosu $
+   $Id$
 
    OGG media stream reader -- FLAC support
 

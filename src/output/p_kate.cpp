@@ -6,7 +6,7 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id: p_kate.cpp 3194 2006-02-27 17:06:55Z mosu $
+   $Id$
 
    Kate packetizer
 

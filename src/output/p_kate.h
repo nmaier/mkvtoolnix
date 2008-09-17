@@ -6,7 +6,7 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id: p_kate.h 3112 2005-10-09 09:55:53Z mosu $
+   $Id$
 
    class definition for the Kate packetizer
 

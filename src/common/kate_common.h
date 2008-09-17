@@ -6,7 +6,7 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id: kate_common.h 3134 2005-10-23 18:21:13Z mosu $
+   $Id$
 
    Kate helper functions
 

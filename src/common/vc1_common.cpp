@@ -8,7 +8,7 @@
    or visit http://www.gnu.org/copyleft/gpl.html
 
    \file
-   \version $Id: vc1_common.cpp 3855 2008-08-24 19:44:49Z mosu $
+   \version $Id$
 
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
