@@ -81,8 +81,24 @@ public:
     return r;
   }
 
-  int get_bit() {
+  inline int get_bit() {
     return get_bits(1);
+  }
+
+  inline int get_unary(bool stop,
+                       int len) {
+    int i;
+
+    for (i = 0; (i < len) && get_bit() != stop; ++i)
+      ;
+
+    return i;
+  }
+
+  inline int get_012() {
+    if (!get_bit())
+      return 0;
+    return get_bits(1) + 1;
   }
 
   uint64_t peek_bits(unsigned int n) {

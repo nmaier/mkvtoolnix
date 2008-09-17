@@ -162,6 +162,40 @@ TRANSLATIONS_MOS = $(patsubst %.po,%.mo,$(TRANSLATIONS_POS))
 
 HTMLHELPBOOKS = mkvmerge-gui-book
 
+SYSTEM_INCLUDES = $(AVILIB_INCLUDES) \
+		-I. -Ilibrmff -Isrc/merge -Isrc/info -Isrc/common -Isrc/input \
+		-Isrc/output -Isrc/mpegparser
+SYSTEM_LIBDIRS = $(AVILIB_LIBDIRS) \
+		-Llibrmff -Lsrc/common -Lsrc/input -Lsrc/output \
+		-Lsrc/mpegparser
+
+RUNAR = $(AR) rcu
+LINK = $(CXX) $(LDFLAGS) $(LIBDIRS) $(SYSTEM_LIBDIRS)
+LINKSHARED = $(CXX) $(LDFLAGS) $(LIBDIRS) $(SYSTEM_LIBDIRS) \
+		-shared -Wl,--export-all
+CXXCOMPILE = $(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES)
+CCOMPILE = $(CC) $(CFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES)
+RCCOMPILE = windres $(WXWIDGETS_INCLUDES) -Isrc/mmg
+
+ALL_SOURCES=$(wildcard avilib-0.6.10/*.c) $(wildcard avilib-0.6.10/*.cpp) \
+		$(wildcard librmff/*.c) \
+		$(wildcard src/*.cpp) $(wildcard src/input/*.cpp) \
+		$(wildcard src/output/*.cpp) $(wildcard src/common/*.cpp) \
+		$(wildcard src/mmg/*.cpp) $(wildcard src/extract/*.cpp) \
+		$(wildcard src/merge/*cpp) $(wildcard src/info/*.cpp) \
+		$(wildcard src/mpegparser/*.cpp) \
+		$(patsubst %.ui,%.h,$(UIFILES))
+
+ifeq ($(V),1)
+  Q =
+else
+  Q = @
+endif
+
+ifeq (1,$(TOOLS))
+include src/tools/Makefile
+endif
+
 all: $(APPLICATIONS) $(TRANSLATIONS_MOS) $(HTMLHELPBOOKS)
 
 install: install-programs install-mans install-trans install-guide
@@ -204,36 +238,6 @@ install-guide:
 	  echo " $(INSTALL_DATA) $$i $(DESTDIR)$(pkgdatadir)/images/"; \
 	  $(INSTALL_DATA) $$i $(DESTDIR)$(pkgdatadir)/images/; \
 	done
-
-SYSTEM_INCLUDES = $(AVILIB_INCLUDES) \
-		-I. -Ilibrmff -Isrc/merge -Isrc/info -Isrc/common -Isrc/input \
-		-Isrc/output -Isrc/mpegparser
-SYSTEM_LIBDIRS = $(AVILIB_LIBDIRS) \
-		-Llibrmff -Lsrc/common -Lsrc/input -Lsrc/output \
-		-Lsrc/mpegparser
-
-RUNAR = $(AR) rcu
-LINK = $(CXX) $(LDFLAGS) $(LIBDIRS) $(SYSTEM_LIBDIRS)
-LINKSHARED = $(CXX) $(LDFLAGS) $(LIBDIRS) $(SYSTEM_LIBDIRS) \
-		-shared -Wl,--export-all
-CXXCOMPILE = $(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES)
-CCOMPILE = $(CC) $(CFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES)
-RCCOMPILE = windres $(WXWIDGETS_INCLUDES) -Isrc/mmg
-
-ALL_SOURCES=$(wildcard avilib-0.6.10/*.c) $(wildcard avilib-0.6.10/*.cpp) \
-		$(wildcard librmff/*.c) \
-		$(wildcard src/*.cpp) $(wildcard src/input/*.cpp) \
-		$(wildcard src/output/*.cpp) $(wildcard src/common/*.cpp) \
-		$(wildcard src/mmg/*.cpp) $(wildcard src/extract/*.cpp) \
-		$(wildcard src/merge/*cpp) $(wildcard src/info/*.cpp) \
-		$(wildcard src/mpegparser/*.cpp) \
-		$(patsubst %.ui,%.h,$(UIFILES))
-
-ifeq ($(V),1)
-  Q =
-else
-  Q = @
-endif
 
 # Some general rules
 ifeq (1,$(LIBMTXCOMMONDLL))
