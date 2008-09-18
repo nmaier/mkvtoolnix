@@ -458,7 +458,21 @@ vc1::es_parser_c::combine_extra_data_with_packet(memory_cptr packet) {
 
 int64_t
 vc1::es_parser_c::get_next_timecode() {
+  if (!m_timecodes.empty()) {
+    m_previous_timecode = m_timecodes.front();
+    m_num_timecodes     = 0;
+    m_timecodes.pop_front();
+  }
+
   ++m_num_timecodes;
 
   return m_previous_timecode + (m_num_timecodes - 1) * m_default_duration;
+}
+
+int64_t
+vc1::es_parser_c::peek_next_timecode() {
+  if (!m_timecodes.empty())
+    return m_timecodes.front();
+
+  return m_previous_timecode + m_num_timecodes * m_default_duration;
 }

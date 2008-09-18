@@ -32,6 +32,7 @@
 #include "p_avc.h"
 #include "p_dts.h"
 #include "p_mp3.h"
+#include "p_vc1.h"
 #include "p_video.h"
 
 #define PROBESIZE 4
@@ -431,16 +432,16 @@ mpeg_ps_reader_c::calculate_global_timecode_offset() {
     return;
 
   int i;
-  int64_t min_timecode = tracks[0]->timecode_offset;
+  global_timecode_offset = tracks[0]->timecode_offset;
   for (i = 1; i < tracks.size(); i++)
-    if ((-1 == min_timecode) || (tracks[i]->timecode_offset < min_timecode))
-      min_timecode = tracks[i]->timecode_offset;
+    if ((-1 == global_timecode_offset) || (tracks[i]->timecode_offset < global_timecode_offset))
+      global_timecode_offset = tracks[i]->timecode_offset;
 
-  if (-1 != min_timecode)
+  if (-1 != global_timecode_offset)
     for (i = 0; i < tracks.size(); i++)
-      tracks[i]->timecode_offset -= min_timecode;
+      tracks[i]->timecode_offset -= global_timecode_offset;
 
-  mxverb(2, "mpeg_ps: Timecode offset: min was " LLD " ", min_timecode);
+  mxverb(2, "mpeg_ps: Timecode offset: min was " LLD " ", global_timecode_offset);
   for (i = 0; i < tracks.size(); i++)
     if (tracks[i]->id > 0xff)
       mxverb(2, "bd(%02x)=" LLD " ", tracks[i]->id - 256, tracks[i]->timecode_offset);
@@ -542,7 +543,8 @@ mpeg_ps_reader_c::parse_packet(int id,
   length      = io->read_uint16_be();
   full_length = length;
 
-  if (   (0xbc > id) || (0xf0 <= id)
+  if (   (0xbc > id)
+      || ((0xf0 <= id) && (0xfd != id))
       || (id == 0xbe)           // padding stream
       || (id == 0xbf)) {        // private 2 stream
     io->skip(length);
@@ -819,6 +821,45 @@ mpeg_ps_reader_c::new_stream_v_avc(int id,
 }
 
 void
+mpeg_ps_reader_c::new_stream_v_vc1(int id,
+                                   unsigned char *buf,
+                                   int length,
+                                   mpeg_ps_track_ptr &track) {
+  vc1::es_parser_c parser;
+
+  parser.add_bytes(buf, length);
+
+  while (!parser.is_sequence_header_available() && (PS_PROBE_SIZE >= io->getFilePointer())) {
+    if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
+      break;
+
+    int aid, full_length;
+    int64_t timecode;
+    if (!parse_packet(id, timecode, length, full_length, aid))
+      break;
+
+    memory_cptr new_buf = memory_c::alloc(length);
+    if (io->read(new_buf->get(), length) != length)
+      break;
+
+    parser.add_bytes(new_buf->get(), length);
+  }
+
+  if (!parser.is_sequence_header_available())
+    throw false;
+
+  vc1::sequence_header_t seqhdr;
+  parser.get_sequence_header(seqhdr);
+
+  track->fourcc            = FOURCC('W', 'V', 'C', '1');
+  track->v_width           = seqhdr.pixel_width;
+  track->v_height          = seqhdr.pixel_height;
+  track->provide_timecodes = true;
+
+  track->use_buffer(512000);
+}
+
+void
 mpeg_ps_reader_c::new_stream_a_mpeg(int id,
                                     unsigned char *buf,
                                     int length,
@@ -862,7 +903,7 @@ mpeg_ps_reader_c::new_stream_a_dts(int id,
 
 void
 mpeg_ps_reader_c::found_new_stream(int id) {
-  if (((0xc0 > id) || (0xef < id)) && (0xbd != id))
+  if (((0xc0 > id) || (0xef < id)) && (0xbd != id) && (0xfd != id))
     return;
 
   try {
@@ -920,6 +961,10 @@ mpeg_ps_reader_c::found_new_stream(int id) {
     } else if ((0xe0 <= id) && (0xef >= id)) {
       track->type   = 'v';
       track->fourcc = FOURCC('M', 'P', 'G', '0' + version);
+
+    } else if (0xfd == id) {
+      track->type   = 'v';
+      track->fourcc = FOURCC('W', 'V', 'C', '1');
     }
 
     if ('?' == track->type)
@@ -955,6 +1000,9 @@ mpeg_ps_reader_c::found_new_stream(int id) {
 
     else if (FOURCC('D', 'T', 'S', ' ') == track->fourcc)
       new_stream_a_dts(id, buf, length, track);
+
+    else if (FOURCC('W', 'V', 'C', '1') == track->fourcc)
+      new_stream_v_vc1(id, buf, length, track);
 
     else
       // Unsupported track type
@@ -1133,6 +1181,11 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
         mxinfo(FMT_TID "Using the MPEG-4 part 10 ES video output module.\n", ti.fname.c_str(), id);
       track->ptzr = add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, track->v_avcc, track->v_width, track->v_height, ti));
 
+    } else if (FOURCC('W', 'V', 'C', '1') == track->fourcc) {
+      if (verbose)
+        mxinfo(FMT_TID "Using the VC1 video output module.\n", ti.fname.c_str(), id);
+      track->ptzr = add_packetizer(new vc1_video_packetizer_c(this, ti));
+
     } else
       mxerror("mpeg_ps_reader: Should not have happened #2. %s", BUGMSG);
   }
@@ -1193,9 +1246,17 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
 
       mxverb(3, "mpeg_ps: packet for %d length %d at " LLD " timecode " LLD "\n", new_id, length, packet_pos, timecode);
 
+      if ((-1 != timecode) && track->provide_timecodes) {
+        timecode -= global_timecode_offset;
+        if (0 > timecode)
+          timecode = -1;
+
+      } else
+        timecode = -1;
+
       if (0 < track->buffer_size) {
         if (((track->buffer_usage + length) > track->buffer_size)) {
-          PTZR(track->ptzr)-> process(new packet_t(new memory_c(track->buffer, track->buffer_usage, false)));
+          PTZR(track->ptzr)-> process(new packet_t(new memory_c(track->buffer, track->buffer_usage, false), timecode));
           track->buffer_usage = 0;
         }
 
@@ -1217,7 +1278,7 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
           return finish();
         }
 
-        PTZR(track->ptzr)->process(new packet_t(new memory_c(buf, length, true)));
+        PTZR(track->ptzr)->process(new packet_t(new memory_c(buf, length, true), timecode));
       }
 
       return FILE_STATUS_MOREDATA;
@@ -1280,6 +1341,7 @@ mpeg_ps_reader_c::identify() {
                       FOURCC('M', 'P', 'G', '1') == track->fourcc ? "MPEG-1"
                     : FOURCC('M', 'P', 'G', '2') == track->fourcc ? "MPEG-2"
                     : FOURCC('A', 'V', 'C', '1') == track->fourcc ? "AVC/h.264"
+                    : FOURCC('W', 'V', 'C', '1') == track->fourcc ? "VC1"
                     : FOURCC('M', 'P', '1', ' ') == track->fourcc ? "MPEG-1 layer 1"
                     : FOURCC('M', 'P', '2', ' ') == track->fourcc ? "MPEG-1 layer 2"
                     : FOURCC('M', 'P', '3', ' ') == track->fourcc ? "MPEG-1 layer 3"

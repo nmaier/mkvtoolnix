@@ -58,6 +58,7 @@ struct mpeg_ps_track_t {
   int id, sort_key;
   uint32_t fourcc;
 
+  bool provide_timecodes;
   int64_t timecode_offset;
 
   int v_version, v_width, v_height, v_dwidth, v_dheight;
@@ -78,6 +79,7 @@ struct mpeg_ps_track_t {
     id(0),
     sort_key(0),
     fourcc(0),
+    provide_timecodes(false),
     timecode_offset(-1),
     v_version(0),
     v_width(0),
@@ -126,7 +128,7 @@ typedef counted_ptr<mpeg_ps_track_t> mpeg_ps_track_ptr;
 class mpeg_ps_reader_c: public generic_reader_c {
 private:
   mm_io_c *io;
-  int64_t bytes_processed, size, duration;
+  int64_t bytes_processed, size, duration, global_timecode_offset;
 
   int id2idx[512];
   bool blacklisted_ids[512];
@@ -161,6 +163,7 @@ public:
 private:
   virtual void new_stream_v_mpeg_1_2(int id, unsigned char *buf, int length, mpeg_ps_track_ptr &track);
   virtual void new_stream_v_avc(int id, unsigned char *buf, int length, mpeg_ps_track_ptr &track);
+  virtual void new_stream_v_vc1(int id, unsigned char *buf, int length, mpeg_ps_track_ptr &track);
   virtual void new_stream_a_mpeg(int id, unsigned char *buf, int length, mpeg_ps_track_ptr &track);
   virtual void new_stream_a_ac3(int id, unsigned char *buf, int length, mpeg_ps_track_ptr &track);
   virtual void new_stream_a_dts(int id, unsigned char *buf, int length, mpeg_ps_track_ptr &track);

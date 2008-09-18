@@ -135,6 +135,7 @@ namespace vc1 {
 
     deque<frame_t> m_frames;
 
+    deque<int64_t> m_timecodes;
     int64_t m_previous_timecode;
     int64_t m_num_timecodes;
 
@@ -203,6 +204,13 @@ namespace vc1 {
       return frame;
     }
 
+    virtual void add_timecode(int64_t timecode) {
+      m_timecodes.push_back(timecode);
+    }
+
+    virtual int64_t get_next_timecode();
+    virtual int64_t peek_next_timecode();
+
     virtual void set_default_duration(int64_t default_duration) {
       m_default_duration        = default_duration;
       m_default_duration_forced = true;
@@ -227,7 +235,6 @@ namespace vc1 {
     virtual void handle_sequence_header_packet(memory_cptr packet);
     virtual void handle_slice_packet(memory_cptr packet);
     virtual void handle_unknown_packet(uint32_t marker, memory_cptr packet);
-    virtual int64_t get_next_timecode();
     virtual memory_cptr combine_extra_data_with_packet(memory_cptr packet);
   };
 };

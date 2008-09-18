@@ -105,6 +105,9 @@ vc1_video_packetizer_c::set_headers() {
 
 int
 vc1_video_packetizer_c::process(packet_cptr packet) {
+  if (-1 != packet->timecode)
+    m_parser.add_timecode(packet->timecode);
+
   m_parser.add_bytes(packet->data->get(), packet->data->get_size());
 
   if ((NULL == m_raw_headers.get()) && m_parser.are_headers_available())

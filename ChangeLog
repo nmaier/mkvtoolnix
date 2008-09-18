@@ -1,3 +1,9 @@
+2008-09-18  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: Added support for muxing VC1 video tracks
+	read from MPEG program streams (EVOBs) or raw VC1 elementary
+	streams (e.g. as produced by EVODemux).
+
 2008-09-17  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Added support for 7.1 channel EAC3
