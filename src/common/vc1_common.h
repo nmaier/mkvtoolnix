@@ -48,7 +48,7 @@ namespace vc1 {
     bool postproc_flag;
     int  pixel_width;
     int  pixel_height;
-    bool broadcast_flag;
+    bool pulldown_flag;
     bool interlace_flag;
     bool tf_counter_flag;
     bool f_inter_p_flag;
@@ -98,6 +98,10 @@ namespace vc1 {
   struct frame_header_t {
     int          fcm;
     frame_type_e frame_type;
+    int          tf_counter;
+    int          repeat_frame;
+    bool         top_field_first_flag;
+    bool         repeat_first_field_flag;
 
     frame_header_t();
   };
@@ -138,6 +142,7 @@ namespace vc1 {
     deque<int64_t> m_timecodes;
     int64_t m_previous_timecode;
     int64_t m_num_timecodes;
+    int64_t m_num_repeated_fields;
 
     bool m_default_duration_forced;
     int64_t m_default_duration;
@@ -208,9 +213,6 @@ namespace vc1 {
       m_timecodes.push_back(timecode);
     }
 
-    virtual int64_t get_next_timecode();
-    virtual int64_t peek_next_timecode();
-
     virtual void set_default_duration(int64_t default_duration) {
       m_default_duration        = default_duration;
       m_default_duration_forced = true;
@@ -236,6 +238,9 @@ namespace vc1 {
     virtual void handle_slice_packet(memory_cptr packet);
     virtual void handle_unknown_packet(uint32_t marker, memory_cptr packet);
     virtual memory_cptr combine_extra_data_with_packet(memory_cptr packet);
+
+    virtual int64_t get_next_timecode(frame_header_t &frame_header);
+    virtual int64_t peek_next_calculated_timecode(frame_header_t &frame_header);
   };
 };
 

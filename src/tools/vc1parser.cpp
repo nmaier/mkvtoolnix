@@ -125,7 +125,7 @@ vc1_info_c::dump_sequence_header(vc1::sequence_header_t &seqhdr) {
          "    postproc_flag:         %d\n"
          "    pixel_width:           %d\n"
          "    pixel_height:          %d\n"
-         "    broadcast_flag:        %d\n"
+         "    pulldown_flag:         %d\n"
          "    interlace_flag:        %d\n"
          "    tf_counter_flag:       %d\n"
          "    f_inter_p_flag:        %d\n"
@@ -149,7 +149,7 @@ vc1_info_c::dump_sequence_header(vc1::sequence_header_t &seqhdr) {
          seqhdr.postproc_flag,
          seqhdr.pixel_width,
          seqhdr.pixel_height,
-         seqhdr.broadcast_flag,
+         seqhdr.pulldown_flag,
          seqhdr.interlace_flag,
          seqhdr.tf_counter_flag,
          seqhdr.f_inter_p_flag,
@@ -213,15 +213,23 @@ vc1_info_c::dump_entrypoint(vc1::entrypoint_t &entrypoint) {
 void
 vc1_info_c::dump_frame_header(vc1::frame_header_t &frame_header) {
   mxinfo("  Frame header dump:\n"
-         "    fcm:        %d\n"
-         "    frame_type: %s\n",
+         "    fcm:                     %d\n"
+         "    frame_type:              %s\n"
+         "    tf_counter:              %d\n"
+         "    repeat_frame:            %d\n"
+         "    top_field_first_flag:    %d\n"
+         "    repeat_first_field_flag: %d\n",
          frame_header.fcm,
            frame_header.frame_type == vc1::FRAME_TYPE_I         ? "I"
          : frame_header.frame_type == vc1::FRAME_TYPE_P         ? "P"
          : frame_header.frame_type == vc1::FRAME_TYPE_B         ? "B"
          : frame_header.frame_type == vc1::FRAME_TYPE_BI        ? "BI"
          : frame_header.frame_type == vc1::FRAME_TYPE_P_SKIPPED ? "P (skipped)"
-         :                                                        "unknown");
+         :                                                        "unknown",
+         frame_header.tf_counter,
+         frame_header.repeat_frame,
+         frame_header.top_field_first_flag,
+         frame_header.repeat_first_field_flag);
 }
 
 static void

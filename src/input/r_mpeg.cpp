@@ -854,7 +854,8 @@ mpeg_ps_reader_c::new_stream_v_vc1(int id,
   track->fourcc            = FOURCC('W', 'V', 'C', '1');
   track->v_width           = seqhdr.pixel_width;
   track->v_height          = seqhdr.pixel_height;
-  track->provide_timecodes = true;
+  // Does not work correctly for tracks that use reader buffering (!)
+//   track->provide_timecodes = true;
 
   track->use_buffer(512000);
 }

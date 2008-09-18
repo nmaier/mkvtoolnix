@@ -78,7 +78,7 @@ vc1::parse_sequence_header(const unsigned char *buf,
     hdr.postproc_flag      = bc.get_bit();
     hdr.pixel_width        = (bc.get_bits(12) + 1) << 1;
     hdr.pixel_height       = (bc.get_bits(12) + 1) << 1;
-    hdr.broadcast_flag     = bc.get_bit();
+    hdr.pulldown_flag      = bc.get_bit();
     hdr.interlace_flag     = bc.get_bit();
     hdr.tf_counter_flag    = bc.get_bit();
     hdr.f_inter_p_flag     = bc.get_bit();
@@ -236,6 +236,18 @@ vc1::parse_frame_header(const unsigned char *buf,
         break;
     }
 
+    if (seqhdr.tf_counter_flag)
+      fh.tf_counter = bc.get_bits(8);
+
+    if (seqhdr.pulldown_flag) {
+      if (!seqhdr.interlace_flag || seqhdr.psf_mode_flag)
+        fh.repeat_frame            = bc.get_bits(2);
+      else {
+        fh.top_field_first_flag    = bc.get_bit();
+        fh.repeat_first_field_flag = bc.get_bit();
+      }
+    }
+
     memcpy(&frame_header, &fh, sizeof(vc1::frame_header_t));
 
     return true;
@@ -253,6 +265,7 @@ vc1::es_parser_c::es_parser_c()
   , m_seqhdr_found(false)
   , m_previous_timecode(0)
   , m_num_timecodes(0)
+  , m_num_repeated_fields(0)
   , m_default_duration_forced(false)
   , m_default_duration(1000000000ll / 25)
 {
@@ -379,10 +392,14 @@ vc1::es_parser_c::handle_frame_packet(memory_cptr packet) {
     return;
   }
 
+  if (!m_timecodes.empty())
+    mxverb(2, "vc1::es_parser_c::handle_frame_packet: next provided timecode " FMT_TIMECODEN " next calculated timecode " FMT_TIMECODEN "\n",
+           ARG_TIMECODEN(m_timecodes.front()), ARG_TIMECODEN(peek_next_calculated_timecode(frame_header)));
+
   vc1::frame_t frame;
 
   frame.type     = frame_header.frame_type;
-  frame.timecode = get_next_timecode();
+  frame.timecode = get_next_timecode(frame_header);
   frame.duration = get_default_duration();
 
   if (!m_extra_data.empty())
@@ -457,22 +474,23 @@ vc1::es_parser_c::combine_extra_data_with_packet(memory_cptr packet) {
 }
 
 int64_t
-vc1::es_parser_c::get_next_timecode() {
+vc1::es_parser_c::get_next_timecode(vc1::frame_header_t &frame_header) {
   if (!m_timecodes.empty()) {
-    m_previous_timecode = m_timecodes.front();
-    m_num_timecodes     = 0;
+    m_previous_timecode   = m_timecodes.front();
+    m_num_timecodes       = 0;
+    m_num_repeated_fields = 0;
     m_timecodes.pop_front();
   }
 
-  ++m_num_timecodes;
+  int64_t next_timecode = m_previous_timecode + (m_num_timecodes + m_num_repeated_fields) * m_default_duration - m_num_repeated_fields * m_default_duration / 2;
 
-  return m_previous_timecode + (m_num_timecodes - 1) * m_default_duration;
+  m_num_timecodes       += 1 + frame_header.repeat_frame;
+  m_num_repeated_fields += frame_header.repeat_first_field_flag ? 1 : 0;
+
+  return next_timecode;
 }
 
 int64_t
-vc1::es_parser_c::peek_next_timecode() {
-  if (!m_timecodes.empty())
-    return m_timecodes.front();
-
-  return m_previous_timecode + m_num_timecodes * m_default_duration;
+vc1::es_parser_c::peek_next_calculated_timecode(vc1::frame_header_t &frame_header) {
+  return m_previous_timecode + (m_num_timecodes + m_num_repeated_fields) * m_default_duration - m_num_repeated_fields * m_default_duration / 2;
 }
