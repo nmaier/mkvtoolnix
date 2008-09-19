@@ -56,7 +56,8 @@ vc1_info_c::handle_entrypoint_packet(memory_cptr packet) {
 
 void
 vc1_info_c::handle_field_packet(memory_cptr packet) {
-  handle_unknown_packet(VC1_MARKER_FIELD, packet);
+  string checksum = create_checksum_info(packet);
+  mxinfo("Field at " LLD " size %d%s\n", m_stream_pos, packet->get_size(), checksum.c_str());
 }
 
 void
@@ -94,7 +95,8 @@ vc1_info_c::handle_sequence_header_packet(memory_cptr packet) {
 
 void
 vc1_info_c::handle_slice_packet(memory_cptr packet) {
-  handle_unknown_packet(VC1_MARKER_SLICE, packet);
+  string checksum = create_checksum_info(packet);
+  mxinfo("Slice at " LLD " size %d%s\n", m_stream_pos, packet->get_size(), checksum.c_str());
 }
 
 void
