@@ -562,6 +562,8 @@ tab_input::add_file(const wxString &file_name,
         file.container = FILE_TYPE_WAV;
       else if (container == wxT("AVC/h.264"))
         file.container = FILE_TYPE_AVC_ES;
+      else if (container == wxT("VC1 elementary stream"))
+        file.container = FILE_TYPE_VC1;
       else
         file.container = FILE_TYPE_IS_UNKNOWN;
 
