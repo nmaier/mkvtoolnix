@@ -1,7 +1,5 @@
-ifeq (,$(TOOLS))
-all:
+all_with_tools:
 	make -C .. TOOLS=1
-endif
 
 APPLICATIONS += src/tools/vc1parser
 ALL_SOURCES  += $(wildcard src/tools/*.cpp)
