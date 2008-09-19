@@ -76,7 +76,12 @@ vc1_video_packetizer_c::set_headers() {
       mxverb(2, "vc1: display width %d height %d aspect_ratio_flag %d ar_num %d ar_den %d\n",
              m_seqhdr.display_width, m_seqhdr.display_height, m_seqhdr.aspect_ratio_flag, m_seqhdr.aspect_ratio_width, m_seqhdr.aspect_ratio_height);
 
-      if (m_seqhdr.aspect_ratio_flag) {
+      if (m_seqhdr.aspect_ratio_flag && ((1 != m_seqhdr.aspect_ratio_width) || (1 != m_seqhdr.aspect_ratio_height))) {
+        mxwarn(FMT_TID "VC1 sample/pixel aspect ratio information is not supported yet. Please provide the author Moritz Bunkus <moritz@bunkus.org> "
+               "with a sample of the file you're muxing, or at least send him the following pieces of information: "
+               "pixel_width=%d pixel_height=%d display_width=%d display_height=%d aspect_ratio_width=%d aspect_ratio_height=%d\n",
+               ti.fname.c_str(), (int64_t)ti.id, m_seqhdr.pixel_width, m_seqhdr.pixel_height, m_seqhdr.display_width, m_seqhdr.display_height,
+               m_seqhdr.aspect_ratio_width, m_seqhdr.aspect_ratio_height);
         // TODO!
       }
 
