@@ -76,6 +76,8 @@ protected:
 
   virtual generic_packetizer_c *create_aac_packetizer(int aid, avi_demuxer_t &demuxer);
   virtual generic_packetizer_c *create_vorbis_packetizer(int aid);
+
+  void extended_identify_mpeg4_l2(vector<string> &extended_info);
 };
 
 #endif  // __R_AVI_H

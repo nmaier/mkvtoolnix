@@ -625,6 +625,38 @@ avi_reader_c::get_progress() {
 // {{{ FUNCTION avi_reader_c::identify
 
 void
+avi_reader_c::extended_identify_mpeg4_l2(vector<string> &extended_info) {
+  int size = AVI_frame_size(avi, 0);
+  if (0 >= size)
+    return;
+
+  memory_cptr af_buffer(new memory_c(safemalloc(size), 0), true);
+  unsigned char *buffer = af_buffer->get();
+  int dummy_key;
+
+  AVI_read_frame(avi, (char *)buffer, &dummy_key);
+
+  uint32_t par_num, par_den;
+  if (mpeg4::p2::extract_par(buffer, size, par_num, par_den)) {
+    int width          = AVI_video_width(avi);
+    int height         = AVI_video_height(avi);
+    float aspect_ratio = (float)width / (float)height * (float)par_num / (float)par_den;
+
+    int disp_width, disp_height;
+    if (aspect_ratio > ((float)width / (float)height)) {
+      disp_width  = irnd(height * aspect_ratio);
+      disp_height = height;
+
+    } else {
+      disp_width  = width;
+      disp_height = irnd(width / aspect_ratio);
+    }
+
+    extended_info.push_back(mxsprintf("display_dimensions:%ux%u", disp_width, disp_height));
+  }
+}
+
+void
 avi_reader_c::identify() {
   vector<string> extended_info;
 
@@ -632,38 +664,10 @@ avi_reader_c::identify() {
 
   string type = AVI_video_compressor(avi);
 
-  if (IS_MPEG4_L2_FOURCC(type.c_str())) {
+  if (IS_MPEG4_L2_FOURCC(type.c_str()))
+    extended_identify_mpeg4_l2(extended_info);
 
-    int size = AVI_frame_size(avi, 0);
-    if (0 < size) {
-      memory_cptr af_buffer(new memory_c(safemalloc(size), 0), true);
-      unsigned char *buffer = af_buffer->get();
-      int dummy_key;
-
-      AVI_read_frame(avi, (char *)buffer, &dummy_key);
-
-      uint32_t par_num, par_den;
-      if (mpeg4::p2::extract_par(buffer, size, par_num, par_den)) {
-        int width          = AVI_video_width(avi);
-        int height         = AVI_video_height(avi);
-        float aspect_ratio = (float)width / (float)height * (float)par_num / (float)par_den;
-
-        int disp_width, disp_height;
-        if (aspect_ratio > ((float)width / (float)height)) {
-          disp_width  = irnd(height * aspect_ratio);
-          disp_height = height;
-
-        } else {
-          disp_width  = width;
-          disp_height = irnd(width / aspect_ratio);
-        }
-
-        extended_info.push_back(mxsprintf("display_dimensions:%ux%u", disp_width, disp_height));
-      }
-    }
-  }
-
-  if (mpeg4::p10::is_avc_fourcc(type.c_str()))
+  else if (mpeg4::p10::is_avc_fourcc(type.c_str()))
     extended_info.push_back("packetizer:mpeg4_p10_es_video");
 
   id_result_track(0, ID_RESULT_TRACK_VIDEO, type, join(" ", extended_info));
