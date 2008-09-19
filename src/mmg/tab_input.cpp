@@ -225,7 +225,7 @@ tab_input::select_file(bool append) {
     { wxT("FLAC (Free Lossless Audio Codec)"),    wxT("flac ogg") },
     { wxT("MP4 audio/video files"),               wxT("mp4") },
     { wxT("MPEG audio files"),                    wxT("mp2 mp3") },
-    { wxT("MPEG program streams"),                wxT("mpg mpeg m2v") },
+    { wxT("MPEG program streams"),                wxT("mpg mpeg m2v evo evob vob") },
     { wxT("MPEG video elementary streams"),       wxT("m1v m2v") },
     { wxT("Matroska audio/video files"),          wxT("mka mks mkv") },
     { wxT("QuickTime audio/video files"),         wxT("mov") },
