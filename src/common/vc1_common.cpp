@@ -29,13 +29,31 @@ vc1::entrypoint_t::entrypoint_t() {
 }
 
 vc1::frame_header_t::frame_header_t() {
+  init();
+}
+
+void
+vc1::frame_header_t::init() {
   memset(this, 0, sizeof(vc1::frame_header_t));
 }
 
 vc1::frame_t::frame_t()
   : timecode(-1)
-  , type(vc1::FRAME_TYPE_I)
+  , duration(0)
+  , contains_sequence_header(false)
+  , contains_field(false)
 {
+  header.init();
+  data                     = memory_cptr(NULL);
+  timecode                 = -1;
+  duration                 = 0;
+  contains_sequence_header = false;
+  contains_field           = false;
+}
+
+void
+vc1::frame_t::init() {
+  
 }
 
 bool
@@ -333,6 +351,8 @@ vc1::es_parser_c::flush() {
   }
 
   m_unparsed_buffer = memory_cptr(NULL);
+
+  flush_frame();
 }
 
 void
@@ -360,6 +380,10 @@ vc1::es_parser_c::handle_packet(memory_cptr packet) {
       handle_field_packet(packet);
       break;
 
+    case VC1_MARKER_ENDOFSEQ:
+      handle_end_of_sequence_packet(packet);
+      break;
+
     default:
       handle_unknown_packet(marker, packet);
       break;
@@ -367,11 +391,12 @@ vc1::es_parser_c::handle_packet(memory_cptr packet) {
 }
 
 void
+vc1::es_parser_c::handle_end_of_sequence_packet(memory_cptr packet) {
+}
+
+void
 vc1::es_parser_c::handle_entrypoint_packet(memory_cptr packet) {
-  if (m_keep_stream_headers_in_frames) {
-    m_extra_data.push_back(packet);
-    m_extra_data.back()->grab();
-  }
+  add_pre_frame_extra_data(packet);
 
   if (NULL == m_raw_entrypoint.get())
     m_raw_entrypoint = memory_cptr(packet->clone());
@@ -379,47 +404,34 @@ vc1::es_parser_c::handle_entrypoint_packet(memory_cptr packet) {
 
 void
 vc1::es_parser_c::handle_field_packet(memory_cptr packet) {
-  mxerror("VC1 field units are not supported yet. Please provide a sample file to the author, Moritz Bunkus <moritz@bunkus.org>.\n");
+  add_post_frame_extra_data(packet);
 }
 
 void
 vc1::es_parser_c::handle_frame_packet(memory_cptr packet) {
-  vc1::frame_header_t frame_header;
+  flush_frame();
 
-  if (!m_seqhdr_found || !vc1::parse_frame_header(packet->get(), packet->get_size(), frame_header, m_seqhdr)) {
-    m_extra_data.push_back(packet);
-    m_extra_data.back()->grab();
+  vc1::frame_header_t frame_header;
+  if (!m_seqhdr_found || !vc1::parse_frame_header(packet->get(), packet->get_size(), frame_header, m_seqhdr))
     return;
-  }
+
+  m_current_frame        = frame_cptr(new frame_t);
+  m_current_frame->data  = packet;
+  m_current_frame->data->grab();
+
+  memcpy(&m_current_frame->header, &frame_header, sizeof(frame_header_t));
 
   if (!m_timecodes.empty())
     mxverb(2, "vc1::es_parser_c::handle_frame_packet: next provided timecode " FMT_TIMECODEN " next calculated timecode " FMT_TIMECODEN "\n",
-           ARG_TIMECODEN(m_timecodes.front()), ARG_TIMECODEN(peek_next_calculated_timecode(frame_header)));
+           ARG_TIMECODEN(m_timecodes.front()), ARG_TIMECODEN(peek_next_calculated_timecode()));
 
-  vc1::frame_t frame;
-
-  frame.type     = frame_header.frame_type;
-  frame.timecode = get_next_timecode(frame_header);
-  frame.duration = get_default_duration();
-
-  if (!m_extra_data.empty())
-    frame.data   = combine_extra_data_with_packet(packet);
-  else if (m_keep_markers_in_frames)
-    frame.data   = packet;
-  else
-    frame.data   = memory_cptr(new memory_c(safememdup(packet->get() + 4, packet->get_size() - 4), packet->get_size() - 4, true));
-
-  frame.data->grab();
-
-  m_frames.push_back(frame);
 }
 
 void
 vc1::es_parser_c::handle_sequence_header_packet(memory_cptr packet) {
-  if (m_keep_stream_headers_in_frames) {
-    m_extra_data.push_back(packet);
-    m_extra_data.back()->grab();
-  }
+  flush_frame();
+
+  add_pre_frame_extra_data(packet);
 
   vc1::sequence_header_t seqhdr;
   if (!vc1::parse_sequence_header(packet->get(), packet->get_size(), seqhdr))
@@ -437,44 +449,71 @@ vc1::es_parser_c::handle_sequence_header_packet(memory_cptr packet) {
 
 void
 vc1::es_parser_c::handle_slice_packet(memory_cptr packet) {
-  mxerror("VC1 slices are not supported yet. Please provide a sample file to the author, Moritz Bunkus <moritz@bunkus.org>.\n");
+  add_post_frame_extra_data(packet);
 }
 
 void
 vc1::es_parser_c::handle_unknown_packet(uint32_t marker,
                                         memory_cptr packet) {
-  if (m_keep_stream_headers_in_frames) {
-    m_extra_data.push_back(packet);
-    m_extra_data.back()->grab();
-  }
+  add_post_frame_extra_data(packet);
 }
 
-memory_cptr
-vc1::es_parser_c::combine_extra_data_with_packet(memory_cptr packet) {
+void
+vc1::es_parser_c::flush_frame() {
+  if (!m_current_frame.get())
+    return;
+
+  if (!m_pre_frame_extra_data.empty() || !m_post_frame_extra_data.empty())
+    combine_extra_data_with_packet();
+
+  m_current_frame->timecode = get_next_timecode();
+  m_current_frame->duration = get_default_duration();
+
+  m_frames.push_back(m_current_frame);
+
+  m_current_frame = frame_cptr(NULL);
+}
+
+void
+vc1::es_parser_c::combine_extra_data_with_packet() {
   int extra_size = 0;
   deque<memory_cptr>::iterator it;
 
-  mxforeach(it, m_extra_data)
+  mxforeach(it, m_pre_frame_extra_data)
+    extra_size += (*it)->get_size();
+  mxforeach(it, m_post_frame_extra_data)
     extra_size += (*it)->get_size();
 
-  int offset             = m_keep_markers_in_frames ? 0 : 4;
-  memory_cptr new_packet = memory_c::alloc(extra_size + packet->get_size() - offset);
+  memory_cptr new_packet = memory_c::alloc(extra_size + m_current_frame->data->get_size());
   unsigned char *ptr     = new_packet->get();
 
-  mxforeach(it, m_extra_data) {
+  mxforeach(it, m_pre_frame_extra_data) {
     memcpy(ptr, (*it)->get(), (*it)->get_size());
     ptr += (*it)->get_size();
+
+    if (VC1_MARKER_SEQHDR == get_uint32_be((*it)->get()))
+      m_current_frame->contains_sequence_header = true;
   }
 
-  memcpy(ptr, packet->get() + offset, packet->get_size() - offset);
+  memcpy(ptr, m_current_frame->data->get(), m_current_frame->data->get_size());
+  ptr += m_current_frame->data->get_size();
 
-  m_extra_data.clear();
+  mxforeach(it, m_post_frame_extra_data) {
+    memcpy(ptr, (*it)->get(), (*it)->get_size());
+    ptr += (*it)->get_size();
 
-  return new_packet;
+    if (VC1_MARKER_FIELD == get_uint32_be((*it)->get()))
+      m_current_frame->contains_field = true;
+  }
+
+  m_pre_frame_extra_data.clear();
+  m_post_frame_extra_data.clear();
+
+  m_current_frame->data = new_packet;
 }
 
 int64_t
-vc1::es_parser_c::get_next_timecode(vc1::frame_header_t &frame_header) {
+vc1::es_parser_c::get_next_timecode() {
   if (!m_timecodes.empty()) {
     m_previous_timecode   = m_timecodes.front();
     m_num_timecodes       = 0;
@@ -484,13 +523,25 @@ vc1::es_parser_c::get_next_timecode(vc1::frame_header_t &frame_header) {
 
   int64_t next_timecode = m_previous_timecode + (m_num_timecodes + m_num_repeated_fields) * m_default_duration - m_num_repeated_fields * m_default_duration / 2;
 
-  m_num_timecodes       += 1 + frame_header.repeat_frame;
-  m_num_repeated_fields += frame_header.repeat_first_field_flag ? 1 : 0;
+  m_num_timecodes += 1 + m_current_frame->header.repeat_frame;
+  if (m_seqhdr.interlace_flag && m_current_frame->header.repeat_first_field_flag && !m_current_frame->contains_field)
+    ++m_num_repeated_fields;
 
   return next_timecode;
 }
 
 int64_t
-vc1::es_parser_c::peek_next_calculated_timecode(vc1::frame_header_t &frame_header) {
+vc1::es_parser_c::peek_next_calculated_timecode() {
   return m_previous_timecode + (m_num_timecodes + m_num_repeated_fields) * m_default_duration - m_num_repeated_fields * m_default_duration / 2;
 }
+
+void
+vc1::es_parser_c::add_pre_frame_extra_data(memory_cptr packet) {
+  m_pre_frame_extra_data.push_back(memory_cptr(packet->clone()));
+}
+
+void
+vc1::es_parser_c::add_post_frame_extra_data(memory_cptr packet) {
+  m_post_frame_extra_data.push_back(memory_cptr(packet->clone()));
+}
+

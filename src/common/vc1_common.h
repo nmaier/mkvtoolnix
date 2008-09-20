@@ -18,6 +18,8 @@
 
 #include "os.h"
 
+#include "smart_pointers.h"
+
 #define VC1_PROFILE_SIMPLE    0x00000000
 #define VC1_PROFILE_MAIN      0x00000001
 #define VC1_PROFILE_COMPLEX   0x00000002
@@ -104,16 +106,21 @@ namespace vc1 {
     bool         repeat_first_field_flag;
 
     frame_header_t();
+    void init();
   };
 
   struct frame_t {
-    memory_cptr  data;
-    int64_t      timecode;
-    int64_t      duration;
-    frame_type_e type;
+    frame_header_t header;
+    memory_cptr    data;
+    int64_t        timecode;
+    int64_t        duration;
+    bool           contains_sequence_header;
+    bool           contains_field;
 
     frame_t();
+    void init();
   };
+  typedef counted_ptr<frame_t> frame_cptr;
 
   inline bool is_marker(uint32_t value) {
     return (value & 0xffffff00) == 0x00000100;
@@ -135,9 +142,11 @@ namespace vc1 {
 
     memory_cptr m_unparsed_buffer;
 
-    deque<memory_cptr> m_extra_data;
+    deque<memory_cptr> m_pre_frame_extra_data;
+    deque<memory_cptr> m_post_frame_extra_data;
 
-    deque<frame_t> m_frames;
+    deque<frame_cptr> m_frames;
+    frame_cptr m_current_frame;
 
     deque<int64_t> m_timecodes;
     int64_t m_previous_timecode;
@@ -146,9 +155,6 @@ namespace vc1 {
 
     bool m_default_duration_forced;
     int64_t m_default_duration;
-
-    bool m_keep_markers_in_frames;
-    bool m_keep_stream_headers_in_frames;
 
   public:
     es_parser_c();
@@ -198,8 +204,8 @@ namespace vc1 {
       return !m_frames.empty();
     }
 
-    virtual frame_t get_frame() {
-      frame_t frame;
+    virtual frame_cptr get_frame() {
+      frame_cptr frame;
 
       if (!m_frames.empty()) {
         frame = m_frames.front();
@@ -222,25 +228,23 @@ namespace vc1 {
       return m_default_duration;
     }
 
-    virtual void set_keep_markers_in_frames(bool keep) {
-      m_keep_markers_in_frames = keep;
-    }
-
-    virtual void set_keep_stream_headers_in_frames(bool keep) {
-      m_keep_stream_headers_in_frames = keep;
-    }
-
   protected:
+    virtual void handle_end_of_sequence_packet(memory_cptr packet);
     virtual void handle_entrypoint_packet(memory_cptr packet);
     virtual void handle_field_packet(memory_cptr packet);
     virtual void handle_frame_packet(memory_cptr packet);
     virtual void handle_sequence_header_packet(memory_cptr packet);
     virtual void handle_slice_packet(memory_cptr packet);
     virtual void handle_unknown_packet(uint32_t marker, memory_cptr packet);
-    virtual memory_cptr combine_extra_data_with_packet(memory_cptr packet);
 
-    virtual int64_t get_next_timecode(frame_header_t &frame_header);
-    virtual int64_t peek_next_calculated_timecode(frame_header_t &frame_header);
+    virtual int64_t get_next_timecode();
+    virtual int64_t peek_next_calculated_timecode();
+
+    virtual void add_pre_frame_extra_data(memory_cptr packet);
+    virtual void add_post_frame_extra_data(memory_cptr packet);
+    virtual void combine_extra_data_with_packet();
+
+    virtual void flush_frame();
   };
 };
 

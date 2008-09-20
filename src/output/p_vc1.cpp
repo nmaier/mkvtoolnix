@@ -42,9 +42,6 @@ vc1_video_packetizer_c::vc1_video_packetizer_c(generic_reader_c *n_reader, track
   // Dummy values
   m_seqhdr.pixel_width  = 123;
   m_seqhdr.pixel_height = 123;
-
-  m_parser.set_keep_stream_headers_in_frames(false);
-  m_parser.set_keep_markers_in_frames(false);
 }
 
 void
@@ -76,15 +73,6 @@ vc1_video_packetizer_c::set_headers() {
       mxverb(2, "vc1: display width %d height %d aspect_ratio_flag %d ar_num %d ar_den %d\n",
              m_seqhdr.display_width, m_seqhdr.display_height, m_seqhdr.aspect_ratio_flag, m_seqhdr.aspect_ratio_width, m_seqhdr.aspect_ratio_height);
 
-      if (m_seqhdr.aspect_ratio_flag && ((1 != m_seqhdr.aspect_ratio_width) || (1 != m_seqhdr.aspect_ratio_height))) {
-        mxwarn(FMT_TID "VC1 sample/pixel aspect ratio information is not supported yet. Please provide the author Moritz Bunkus <moritz@bunkus.org> "
-               "with a sample of the file you're muxing, or at least send him the following pieces of information: "
-               "pixel_width=%d pixel_height=%d display_width=%d display_height=%d aspect_ratio_width=%d aspect_ratio_height=%d\n",
-               ti.fname.c_str(), (int64_t)ti.id, m_seqhdr.pixel_width, m_seqhdr.pixel_height, m_seqhdr.display_width, m_seqhdr.display_height,
-               m_seqhdr.aspect_ratio_width, m_seqhdr.aspect_ratio_height);
-        // TODO!
-      }
-
       set_video_display_width(display_width);
       set_video_display_height(display_height);
 
@@ -98,11 +86,10 @@ vc1_video_packetizer_c::set_headers() {
     else
       set_track_default_duration(m_parser.get_default_duration());
 
-    *(unsigned char *)(bih + 1) = m_raw_headers->get_size();
     memcpy(((unsigned char *)bih) + sizeof(alBITMAPINFOHEADER) + 1, m_raw_headers->get(), m_raw_headers->get_size());
 
   } else
-    set_track_default_duration(1000000000ll / 25);
+    set_track_default_duration(1000000000ll * 1001 / 30000);
 
   set_codec_private(buf->get(), buf->get_size());
 
@@ -151,11 +138,12 @@ vc1_video_packetizer_c::flush() {
 void
 vc1_video_packetizer_c::flush_frames() {
   while (m_parser.is_frame_available()) {
-    vc1::frame_t frame(m_parser.get_frame());
+    vc1::frame_cptr frame = m_parser.get_frame();
 
-    add_packet(new packet_t(frame.data->clone(), frame.timecode, frame.duration, frame.type == vc1::FRAME_TYPE_I ? -1 : m_previous_timecode));
+    add_packet(new packet_t(frame->data->clone(), frame->timecode, frame->duration,
+                            (frame->header.frame_type == vc1::FRAME_TYPE_I) || frame->contains_sequence_header ? -1 : m_previous_timecode));
 
-    m_previous_timecode = frame.timecode;
+    m_previous_timecode = frame->timecode;
   }
 }
 
