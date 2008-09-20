@@ -686,9 +686,47 @@ mpeg_ps_reader_c::new_stream_a_dts(int id,
                                    unsigned char *buf,
                                    int length,
                                    mpeg_ps_track_ptr &track) {
-  if (-1 == find_dts_header(buf, length, &track->dts_header, false))
-    throw false;
+  byte_buffer_c buffer;
+
+  buffer.add(buf, length);
+
+  while ((-1 == find_dts_header(buffer.get_buffer(), buffer.get_size(), &track->dts_header, false)) && (PS_PROBE_SIZE >= io->getFilePointer())) {
+    if (!find_next_packet_for_id(0xbd, PS_PROBE_SIZE))
+      throw false;
+
+    int aid, full_length;
+    int64_t timecode;
+    if (!parse_packet(0xbd, timecode, length, full_length, aid))
+      continue;
+
+    if ((id & 0xff) != aid)
+      continue;
+
+    memory_cptr new_buf = memory_c::alloc(length);
+    if (io->read(new_buf->get(), length) != length)
+      throw false;
+
+    buffer.add(new_buf->get(), length);
+  }
 }
+
+
+/*
+  MPEG PS ids and their meaning:
+
+  0xbd         audio substream; type determined by audio id in packet
+  . 0x20..0x3f VobSub subtitles
+  . 0x80..0x87 (E)AC3
+  . 0x88..0x8f DTS
+  . 0x98..0x9f DTS
+  . 0xa0..0xaf PCM
+  . 0xb0..0xbf LPCM
+  . 0xc0..0xc7 (E)AC3
+  0xc0..0xdf   MP2 audio
+  0xe0..0xef   MPEG-1/-2 video
+  0xfd         VC-1 video
+
+ */
 
 void
 mpeg_ps_reader_c::found_new_stream(int id) {
@@ -734,7 +772,7 @@ mpeg_ps_reader_c::found_new_stream(int id) {
       } else if (((0x80 <= aid) && (0x87 >= aid)) || ((0xc0 <= aid) && (0xc7 >= aid)))
         track->fourcc = FOURCC('A', 'C', '3', ' ');
 
-      else if ((0x88 <= aid) && (0x8f >= aid))
+      else if ((0x88 <= aid) && (0x9f >= aid))
         track->fourcc = FOURCC('D', 'T', 'S', ' ');
 
       else if ((0xa0 <= aid) && (0xa7 >= aid))
@@ -743,7 +781,7 @@ mpeg_ps_reader_c::found_new_stream(int id) {
       else
         track->type = '?';
 
-    } else if (0xe0 > id) {
+    } else if ((0xc0 <= id) && (0xdf >= id)) {
       track->type   = 'a';
       track->fourcc = FOURCC('M', 'P', '2', ' ');
 
