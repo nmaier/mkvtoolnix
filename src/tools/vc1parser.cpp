@@ -22,6 +22,7 @@ public:
   }
 
 protected:
+  virtual void handle_end_of_sequence_packet(memory_cptr packet);
   virtual void handle_entrypoint_packet(memory_cptr packet);
   virtual void handle_field_packet(memory_cptr packet);
   virtual void handle_frame_packet(memory_cptr packet);
@@ -35,6 +36,12 @@ protected:
 
   virtual string create_checksum_info(memory_cptr packet);
 };
+
+void
+vc1_info_c::handle_end_of_sequence_packet(memory_cptr packet) {
+  string checksum = create_checksum_info(packet);
+  mxinfo("End of sequence at " LLD " size %d%s\n", m_stream_pos, packet->get_size(), checksum.c_str());
+}
 
 void
 vc1_info_c::handle_entrypoint_packet(memory_cptr packet) {
