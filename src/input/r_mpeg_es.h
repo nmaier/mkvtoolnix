@@ -13,8 +13,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __R_MPEG_H
-#define __R_MPEG_H
+#ifndef __R_MPEG_ES_H
+#define __R_MPEG_ES_H
 
 #include "os.h"
 
@@ -51,4 +51,4 @@ public:
   static int probe_file(mm_io_c *io, int64_t size);
 };
 
-#endif // __R_MPEG_H
+#endif // __R_MPEG_ES_H

@@ -21,7 +21,7 @@
 #include "common.h"
 #include "error.h"
 #include "M2VParser.h"
-#include "r_mpeg.h"
+#include "r_mpeg_es.h"
 #include "smart_pointers.h"
 #include "output_control.h"
 #include "p_video.h"
