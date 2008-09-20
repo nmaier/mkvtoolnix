@@ -82,6 +82,8 @@
 #include "r_matroska.h"
 #include "r_mp3.h"
 #include "r_mpeg.h"
+#include "r_mpeg_ps.h"
+#include "r_mpeg_ts.h"
 #include "r_ogm.h"
 #include "r_qtmp4.h"
 #include "r_real.h"
