@@ -55,12 +55,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr (-,root,root)
-/usr/bin/base64tool
 /usr/bin/mkvextract
 /usr/bin/mkvinfo
 /usr/bin/mkvmerge
 /usr/bin/mkvmerge-gui
-/usr/share/man/man1/base64tool.1.gz
 /usr/share/man/man1/mkvextract.1.gz
 /usr/share/man/man1/mkvinfo.1.gz
 /usr/share/man/man1/mkvmerge.1.gz

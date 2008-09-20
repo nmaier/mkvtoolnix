@@ -148,9 +148,8 @@ DEP_RMFF = librmff/librmff.a
 DEP_MPEGPARSER = src/mpegparser/libmpegparser.a
 COMPRESSION_LIBRARIES = $(LZO_LIBS) $(BZ2_LIBS)
 
-APPLICATIONS = src/mkvmerge@EXEEXT@ src/mkvinfo@EXEEXT@ \
-		src/mkvextract@EXEEXT@ src/base64tool@EXEEXT@
-MANPAGES = doc/mkvmerge.1 doc/mkvinfo.1 doc/mkvextract.1 doc/base64tool.1
+APPLICATIONS = src/mkvmerge@EXEEXT@ src/mkvinfo@EXEEXT@ src/mkvextract@EXEEXT@
+MANPAGES = doc/mkvmerge.1 doc/mkvinfo.1 doc/mkvextract.1
 ifeq (yes,$(USE_WXWIDGETS))
 APPLICATIONS += src/mmg/mmg@EXEEXT@
 MANPAGES += doc/mmg.1
@@ -469,16 +468,6 @@ mkvextract_LDADD = -lmtxcommon $(MAGIC_LIBS) -lvorbis -logg -lavi -lmatroska -le
 		-lz $(COMPRESSION_LIBRARIES) $(LIBRPCRT)
 
 #
-# src
-#
-
-base64tool_SOURCES = src/base64tool.cpp
-base64tool_OBJECTS := $(patsubst %.cpp,%.o,$(base64tool_SOURCES))
-base64tool_DEPENDENCIES += $(DEP_COMMON)
-base64tool_LDADD = -lmtxcommon $(MAGIC_LIBS) -lexpat $(ICONV_LIBS) $(LIBINTL_LIBS) \
-		$(LIBRPCRT)
-
-#
 # src/mmg
 #
 
@@ -507,12 +496,6 @@ mkvextract: src/mkvextract@EXEEXT@
 src/mkvextract@EXEEXT@: $(mkvextract_OBJECTS) $(mkvextract_DEPENDENCIES)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(mkvextract_OBJECTS) $(mkvextract_LDADD)
-
-base64tool: src/base64tool@EXEEXT@
-
-src/base64tool@EXEEXT@: $(base64tool_OBJECTS) $(base64tool_DEPENDENCIES)
-	@echo '    LINK ' $@
-	$(Q)$(LINK) -o $@ $(base64tool_OBJECTS) $(base64tool_LDADD)
 
 mmg: src/mmg/mmg@EXEEXT@
 
