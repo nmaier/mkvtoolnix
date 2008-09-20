@@ -22,6 +22,7 @@
 #include "error.h"
 #include "M2VParser.h"
 #include "mp3_common.h"
+#include "mpeg4_common.h"
 #include "r_mpeg_ps.h"
 #include "smart_pointers.h"
 #include "output_control.h"
@@ -446,6 +447,106 @@ mpeg_ps_reader_c::parse_packet(int id,
 }
 
 void
+mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(int id,
+                                               unsigned char *buf,
+                                               int length,
+                                               mpeg_ps_track_ptr &track) {
+  try {
+    io->save_pos();
+
+    byte_buffer_c buffer;
+    buffer.add(buf, length);
+
+    bool mpeg_12_seqhdr_found  = false;
+    bool mpeg_12_picture_found = false;
+
+    bool avc_seq_param_found   = false;
+    bool avc_pic_param_found   = false;
+    bool avc_slice_found       = false;
+
+    uint64_t marker            = 0;
+    int pos                    = 0;
+
+    while (1) {
+      unsigned char *ptr = buffer.get_buffer();
+      int buffer_size    = buffer.get_size();
+
+      while (buffer_size > pos) {
+        marker <<= 8;
+        marker  |= ptr[pos];
+        ++pos;
+
+        if (((marker >> 8) & 0xffffffff) == 0x00000001) {
+          // AVC
+          int type = marker & 0x1f;
+
+          switch (type) {
+            case NALU_TYPE_SEQ_PARAM:
+              avc_seq_param_found = true;
+              break;
+
+            case NALU_TYPE_PIC_PARAM:
+              avc_pic_param_found = true;
+              break;
+
+            case NALU_TYPE_NON_IDR_SLICE:
+            case NALU_TYPE_DP_A_SLICE:
+            case NALU_TYPE_DP_B_SLICE:
+            case NALU_TYPE_DP_C_SLICE:
+            case NALU_TYPE_IDR_SLICE:
+              avc_slice_found     = true;
+              break;
+          }
+
+          if (avc_seq_param_found && avc_pic_param_found && avc_slice_found) {
+            io->restore_pos();
+            new_stream_v_avc(id, buf, length, track);
+            return;
+          }
+
+        } else if (mpeg_is_start_code(marker)) {
+          // MPEG-1 or -2
+          switch (marker & 0xffffffff) {
+            case MPEGVIDEO_SEQUENCE_START_CODE:
+              mpeg_12_seqhdr_found  = true;
+              break;
+
+            case MPEGVIDEO_PICTURE_START_CODE:
+              mpeg_12_picture_found = true;
+              break;
+          }
+
+          if (mpeg_12_seqhdr_found && mpeg_12_picture_found) {
+            io->restore_pos();
+            new_stream_v_mpeg_1_2(id, buf, length, track);
+            return;
+          }
+        }
+      }
+
+      if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
+        throw false;
+
+      int64_t timecode;
+      int aid, full_length, new_length;
+      if (!parse_packet(id, timecode, new_length, full_length, aid))
+        continue;
+
+      memory_c new_buf((unsigned char *)safemalloc(length), 0, true);
+      if (io->read(new_buf.get(), new_length) != new_length)
+        throw false;
+
+      buffer.add(new_buf.get(), new_length);
+    }
+
+  } catch (...) {
+  }
+
+  io->restore_pos();
+  throw false;
+}
+
+void
 mpeg_ps_reader_c::new_stream_v_mpeg_1_2(int id,
                                         unsigned char *buf,
                                         int length,
@@ -720,7 +821,7 @@ mpeg_ps_reader_c::new_stream_a_dts(int id,
   . 0x88..0x8f DTS
   . 0x98..0x9f DTS
   . 0xa0..0xaf PCM
-  . 0xb0..0xbf LPCM
+  . 0xb0..0xbf LPCM (without 0xbd)
   . 0xc0..0xc7 (E)AC3
   0xc0..0xdf   MP2 audio
   0xe0..0xef   MPEG-1/-2 video
@@ -730,6 +831,8 @@ mpeg_ps_reader_c::new_stream_a_dts(int id,
 
 void
 mpeg_ps_reader_c::found_new_stream(int id) {
+  mxverb(2, "MPEG PS: new stream id 0x%02x\n", id);
+
   if (((0xc0 > id) || (0xef < id)) && (0xbd != id) && (0xfd != id))
     return;
 
@@ -739,6 +842,9 @@ mpeg_ps_reader_c::found_new_stream(int id) {
 
     if (!parse_packet(id, timecode, length, full_length, aid))
       throw false;
+
+    if (0xbd == id)             // DVD audio substream
+      mxverb(2, "MPEG PS:   audio substream id 0x%02x\n", aid);
 
     if ((0xbd == id) && (-1 == aid))
       return;
@@ -755,8 +861,6 @@ mpeg_ps_reader_c::found_new_stream(int id) {
         track->timecode_offset = timecode;
       return;
     }
-
-    mxverb(2, "MPEG PS: new stream id 0x%04x\n", id);
 
     mpeg_ps_track_ptr track(new mpeg_ps_track_t);
     track->timecode_offset = timecode;
@@ -802,24 +906,10 @@ mpeg_ps_reader_c::found_new_stream(int id) {
     if (io->read(buf, length) != length)
       throw false;
 
-    if ((FOURCC('M', 'P', 'G', '1') == track->fourcc) || (FOURCC('M', 'P', 'G', '2') == track->fourcc)) {
-      if (4 > length)
-        throw false;
+    if ((FOURCC('M', 'P', 'G', '1') == track->fourcc) || (FOURCC('M', 'P', 'G', '2') == track->fourcc))
+      new_stream_v_avc_or_mpeg_1_2(id, buf, length, track);
 
-      uint32_t code = get_uint32_be(buf);
-
-      if (0x00000001 == code)
-        new_stream_v_avc(id, buf, length, track);
-
-      else if (   (MPEGVIDEO_SEQUENCE_START_CODE      == code)
-               || (MPEGVIDEO_PACKET_START_CODE        == code)
-               || (MPEGVIDEO_SYSTEM_HEADER_START_CODE == code))
-        new_stream_v_mpeg_1_2(id, buf, length, track);
-
-      else
-        throw false;
-
-    } else if (FOURCC('M', 'P', '2', ' ') == track->fourcc)
+    else if (FOURCC('M', 'P', '2', ' ') == track->fourcc)
       new_stream_a_mpeg(id, buf, length, track);
 
     else if (FOURCC('A', 'C', '3', ' ') == track->fourcc)

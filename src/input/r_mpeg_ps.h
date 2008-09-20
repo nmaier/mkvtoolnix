@@ -133,6 +133,7 @@ public:
   static int probe_file(mm_io_c *io, int64_t size);
 
 private:
+  virtual void new_stream_v_avc_or_mpeg_1_2(int id, unsigned char *buf, int length, mpeg_ps_track_ptr &track);
   virtual void new_stream_v_mpeg_1_2(int id, unsigned char *buf, int length, mpeg_ps_track_ptr &track);
   virtual void new_stream_v_avc(int id, unsigned char *buf, int length, mpeg_ps_track_ptr &track);
   virtual void new_stream_v_vc1(int id, unsigned char *buf, int length, mpeg_ps_track_ptr &track);

@@ -1,5 +1,8 @@
 2008-09-20  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Improved the detection of MPEG-1/-2 and
+	AVC/h.264 video tracks in MPEG program streams (VOBs/EVOBs).
+
 	* mkvmerge: bug fix: Fixed reading DTS audio tracks from MPEG
 	program streams (VOBs/EVOBs).
 
