@@ -8,7 +8,7 @@
 
    $Id$
 
-   MPEG 4 part 10 ES video output module
+   VC1 ES video output module
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
