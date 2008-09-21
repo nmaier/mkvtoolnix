@@ -33,7 +33,7 @@
 #include "p_vc1.h"
 #include "p_video.h"
 
-#define PS_PROBE_SIZE 1 * 1024 * 1024
+#define PS_PROBE_SIZE 10 * 1024 * 1024
 
 static bool
 operator <(const mpeg_ps_track_ptr &a,
@@ -463,6 +463,7 @@ mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(int id,
     bool avc_seq_param_found   = false;
     bool avc_pic_param_found   = false;
     bool avc_slice_found       = false;
+    bool avc_access_unit_found = false;
 
     uint64_t marker            = 0;
     int pos                    = 0;
@@ -482,11 +483,11 @@ mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(int id,
 
           switch (type) {
             case NALU_TYPE_SEQ_PARAM:
-              avc_seq_param_found = true;
+              avc_seq_param_found   = true;
               break;
 
             case NALU_TYPE_PIC_PARAM:
-              avc_pic_param_found = true;
+              avc_pic_param_found   = true;
               break;
 
             case NALU_TYPE_NON_IDR_SLICE:
@@ -494,17 +495,23 @@ mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(int id,
             case NALU_TYPE_DP_B_SLICE:
             case NALU_TYPE_DP_C_SLICE:
             case NALU_TYPE_IDR_SLICE:
-              avc_slice_found     = true;
+              avc_slice_found       = true;
+              break;
+
+            case NALU_TYPE_ACCESS_UNIT:
+              avc_access_unit_found = true;
               break;
           }
 
-          if (avc_seq_param_found && avc_pic_param_found && avc_slice_found) {
+          if (avc_seq_param_found && avc_pic_param_found && (avc_access_unit_found || avc_slice_found)) {
             io->restore_pos();
             new_stream_v_avc(id, buf, length, track);
             return;
           }
 
-        } else if (mpeg_is_start_code(marker)) {
+        }
+
+        if (mpeg_is_start_code(marker)) {
           // MPEG-1 or -2
           switch (marker & 0xffffffff) {
             case MPEGVIDEO_SEQUENCE_START_CODE:
@@ -538,7 +545,6 @@ mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(int id,
 
       buffer.add(new_buf->get(), new_length);
     }
-
   } catch (...) {
   }
 
