@@ -532,11 +532,11 @@ mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(int id,
       if (!parse_packet(id, timecode, new_length, full_length, aid))
         continue;
 
-      memory_c new_buf((unsigned char *)safemalloc(length), 0, true);
-      if (io->read(new_buf.get(), new_length) != new_length)
+      memory_cptr new_buf = memory_c::alloc(new_length);
+      if (io->read(new_buf->get(), new_length) != new_length)
         throw false;
 
-      buffer.add(new_buf.get(), new_length);
+      buffer.add(new_buf->get(), new_length);
     }
 
   } catch (...) {
