@@ -43,17 +43,16 @@ vc1::frame_t::frame_t()
   , contains_sequence_header(false)
   , contains_field(false)
 {
+}
+
+void
+vc1::frame_t::init() {
   header.init();
   data                     = memory_cptr(NULL);
   timecode                 = -1;
   duration                 = 0;
   contains_sequence_header = false;
   contains_field           = false;
-}
-
-void
-vc1::frame_t::init() {
-  
 }
 
 bool
