@@ -221,6 +221,7 @@ tab_input::select_file(bool append) {
     { wxT("AAC (Advanced Audio Coding)"),         wxT("aac m4a mp4") },
     { wxT("AVC/h.264 elementary streams"),        wxT("264 avc h264 x264") },
     { wxT("AVI (Audio/Video Interleaved)"),       wxT("avi") },
+    { wxT("Dirac"),                               wxT("drc") },
     { wxT("DTS (Digital Theater System)"),        wxT("dts") },
     { wxT("FLAC (Free Lossless Audio Codec)"),    wxT("flac ogg") },
     { wxT("MP4 audio/video files"),               wxT("mp4") },
@@ -538,8 +539,12 @@ tab_input::add_file(const wxString &file_name,
         file.container = FILE_TYPE_AAC;
       else if (container == wxT("AC3"))
         file.container = FILE_TYPE_AC3;
+      else if (container == wxT("AVC/h.264"))
+        file.container = FILE_TYPE_AVC_ES;
       else if (container == wxT("AVI"))
         file.container = FILE_TYPE_AVI;
+      else if (container == wxT("Dirac elementary stream"))
+        file.container = FILE_TYPE_DIRAC;
       else if (container == wxT("DTS"))
         file.container = FILE_TYPE_DTS;
       else if (container == wxT("Matroska"))
@@ -556,14 +561,12 @@ tab_input::add_file(const wxString &file_name,
         file.container = FILE_TYPE_SRT;
       else if (container == wxT("SSA/ASS"))
         file.container = FILE_TYPE_SSA;
+      else if (container == wxT("VC1 elementary stream"))
+        file.container = FILE_TYPE_VC1;
       else if (container == wxT("VobSub"))
         file.container = FILE_TYPE_VOBSUB;
       else if (container == wxT("WAV"))
         file.container = FILE_TYPE_WAV;
-      else if (container == wxT("AVC/h.264"))
-        file.container = FILE_TYPE_AVC_ES;
-      else if (container == wxT("VC1 elementary stream"))
-        file.container = FILE_TYPE_VC1;
       else
         file.container = FILE_TYPE_IS_UNKNOWN;
 

@@ -76,6 +76,7 @@
 #include "r_asf.h"
 #include "r_avc.h"
 #include "r_avi.h"
+#include "r_dirac.h"
 #include "r_dts.h"
 #include "r_flac.h"
 #include "r_flv.h"
@@ -326,6 +327,8 @@ get_file_type(filelist_t &file) {
     type = FILE_TYPE_VC1;
   else if (wavpack_reader_c::probe_file(io, size))
     type = FILE_TYPE_WAVPACK4;
+  else if (dirac_es_reader_c::probe_file(io, size))
+    type = FILE_TYPE_DIRAC;
   // File types that are misdetected sometimes
   else if (mpeg_ts_reader_c::probe_file(io, size))
     type = FILE_TYPE_MPEG_TS;
@@ -1093,6 +1096,9 @@ create_readers() {
           break;
         case FILE_TYPE_AVI:
           file->reader = new avi_reader_c(*file->ti);
+          break;
+        case FILE_TYPE_DIRAC:
+          file->reader = new dirac_es_reader_c(*file->ti);
           break;
         case FILE_TYPE_DTS:
           file->reader = new dts_reader_c(*file->ti);

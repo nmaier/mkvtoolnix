@@ -66,6 +66,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "p_aac.h"
 #include "p_ac3.h"
 #include "p_avc.h"
+#include "p_dirac.h"
 #include "p_dts.h"
 #if defined(HAVE_FLAC_FORMAT_H)
 #include "p_flac.h"
@@ -1302,7 +1303,8 @@ kax_reader_c::create_video_packetizer(kax_track_t *t,
            || (t->codec_id == MKV_V_QUICKTIME)
            || (t->codec_id == MKV_V_MPEG1)
            || (t->codec_id == MKV_V_MPEG2)
-           || (t->codec_id == MKV_V_THEORA)) {
+           || (t->codec_id == MKV_V_THEORA)
+           || (t->codec_id == MKV_V_DIRAC)) {
     if ((t->codec_id == MKV_V_MPEG1) || (t->codec_id == MKV_V_MPEG2)) {
       int version = t->codec_id[6] - '0';
       mxinfo(FMT_TID "Using the MPEG-%d video output module.\n", ti.fname.c_str(), (int64_t)t->tnum, version);
@@ -1321,6 +1323,10 @@ kax_reader_c::create_video_packetizer(kax_track_t *t,
     } else if (t->codec_id == MKV_V_THEORA) {
       mxinfo(FMT_TID "Using the Theora video output module.\n", ti.fname.c_str(), (int64_t)t->tnum);
       t->ptzr = add_packetizer(new theora_video_packetizer_c(this, t->v_frate, t->v_width, t->v_height, nti));
+
+    } else if (t->codec_id == MKV_V_DIRAC) {
+      mxinfo(FMT_TID "Using the Dirac video output module.\n", ti.fname.c_str(), (int64_t)t->tnum);
+      t->ptzr = add_packetizer(new dirac_video_packetizer_c(this, nti));
 
     } else {
       mxinfo(FMT_TID "Using the video output module.\n", ti.fname.c_str(), (int64_t)t->tnum);
