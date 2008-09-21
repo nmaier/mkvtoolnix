@@ -1,5 +1,8 @@
 2008-09-21  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Reading raw (E)AC3 files bigger than 2 GB was
+	broken.
+
 	* mkvmerge: new feature: Added support for Dirac video tracks.
 
 2008-09-20  Moritz Bunkus  <moritz@bunkus.org>
