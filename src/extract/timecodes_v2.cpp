@@ -162,6 +162,28 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
                                                block->NumberFrames()));
 }
 
+static void
+handle_simpleblock(KaxSimpleBlock &simpleblock,
+                   KaxCluster &cluster) {
+  if (0 == simpleblock.NumberFrames())
+    return;
+
+  simpleblock.SetParent(cluster);
+
+  vector<timecode_extractor_t>::iterator extractor;
+  // Do we need this simple block?
+  mxforeach(extractor, timecode_extractors)
+    if (simpleblock.TrackNum() == extractor->m_tid)
+      break;
+  if (timecode_extractors.end() == extractor)
+    return;
+
+  // Pass the block to the extractor.
+  int i;
+  for (i = 0; simpleblock.NumberFrames() > i; ++i)
+    extractor->m_timecodes.push_back((int64_t)(simpleblock.GlobalTimecode() + i * (double)extractor->m_default_duration));
+}
+
 void
 extract_timecodes(const string &file_name,
                   vector<track_spec_t> &tspecs,
@@ -302,6 +324,12 @@ extract_timecodes(const string &file_name,
                      true);
             handle_blockgroup(*static_cast<KaxBlockGroup *>(l2), *cluster,
                               tc_scale);
+
+          } else if (EbmlId(*l2) == KaxSimpleBlock::ClassInfos.GlobalId) {
+            show_element(l2, 2, _("Simple block"));
+
+            l2->Read(*es, KaxSimpleBlock::ClassInfos.Context, upper_lvl_el, l3, true);
+            handle_simpleblock(*static_cast<KaxSimpleBlock *>(l2), *cluster);
 
           } else
             l2->SkipData(*es, l2->Generic().Context);
