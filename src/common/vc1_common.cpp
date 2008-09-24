@@ -295,7 +295,7 @@ vc1::es_parser_c::~es_parser_c() {
 
 void
 vc1::es_parser_c::add_bytes(unsigned char *buffer,
-                             int size) {
+                            int size) {
   memory_slice_cursor_c cursor;
 
   int previous_pos            = -1;

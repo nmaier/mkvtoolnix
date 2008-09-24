@@ -364,6 +364,7 @@ dirac::es_parser_c::handle_sequence_header_unit(memory_cptr packet) {
 
 void
 dirac::es_parser_c::handle_padding_unit(memory_cptr packet) {
+  // Intentionally do nothing.
 }
 
 void
