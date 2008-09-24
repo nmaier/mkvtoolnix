@@ -20,6 +20,7 @@
 
 #include <map>
 
+#include "bit_cursor.h"
 #include "dts_common.h"
 #include "mpeg4_common.h"
 #include "pr_generic.h"
@@ -140,6 +141,7 @@ public:
 
   virtual void found_new_stream(mpeg_ps_id_t id);
 
+  virtual bool read_timestamp(bit_cursor_c &bc, int64_t &timestamp);
   virtual bool read_timestamp(int c, int64_t &timestamp);
   virtual bool parse_packet(mpeg_ps_id_t &id, int64_t &timestamp, int &length, int &full_length);
   virtual bool find_next_packet(mpeg_ps_id_t &id, int64_t max_file_pos = -1);

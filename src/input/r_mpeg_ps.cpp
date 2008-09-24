@@ -231,10 +231,23 @@ mpeg_ps_reader_c::calculate_global_timecode_offset() {
 bool
 mpeg_ps_reader_c::read_timestamp(int c,
                                  int64_t &timestamp) {
-  int d, e;
+  int d = io->read_uint16_be();
+  int e = io->read_uint16_be();
 
-  d = io->read_uint16_be();
-  e = io->read_uint16_be();
+  if (((c & 1) != 1) || ((d & 1) != 1) || ((e & 1) != 1))
+    return false;
+
+  timestamp = (int64_t)((((c >> 1) & 7) << 30) | ((d >> 1) << 15) | (e >> 1)) * 100000ll / 9;
+
+  return true;
+}
+
+bool
+mpeg_ps_reader_c::read_timestamp(bit_cursor_c &bc,
+                                 int64_t &timestamp) {
+  int c = bc.get_bits(8);
+  int d = bc.get_bits(16);
+  int e = bc.get_bits(16);
 
   if (((c & 1) != 1) || ((d & 1) != 1) || ((e & 1) != 1))
     return false;
@@ -368,35 +381,70 @@ mpeg_ps_reader_c::parse_packet(mpeg_ps_id_t &id,
     if ((c & 0x30) != 0x00)
       mxerror(FMT_FN "Reading encrypted VOBs is not supported.\n", ti.fname.c_str());
 
-    int pts_flags  = io->read_uint8() >> 6;
-    int hdrlen     = io->read_uint8();
-    length        -= 2;
+    int flags   = io->read_uint8();
+    int hdrlen  = io->read_uint8();
+    length     -= 2;
 
     if (hdrlen > length)
       return false;
 
-    if (2 == (pts_flags & 0x02)) {
-      if (hdrlen < 5)
-        return false;
-      c = io->read_uint8();
-      if (!read_timestamp(c, timestamp))
-        return false;
-      length -= 5;
-      hdrlen -= 5;
+    length -= hdrlen;
+
+    memory_c af_header(safemalloc(hdrlen), hdrlen, true);
+    if (io->read(af_header.get(), hdrlen) != hdrlen)
+      return false;
+
+    bit_cursor_c bc(af_header.get(), hdrlen);
+
+    try {
+      if (0x80 == (flags & 0x80)) {
+        // PTS
+        if (!read_timestamp(bc, timestamp))
+          return false;
+
+        // DTS
+        if (0x40 == (flags & 0x40))
+          bc.skip_bits(5 * 8);
+      }
+    } catch (...) {
+      return false;
     }
 
-    // DTS
-    if (1 == (pts_flags & 0x01)) {
-      if (hdrlen < 5)
-        return false;
-      io->skip(5);
-      length -= 5;
-      hdrlen -= 5;
-    }
+    try {
+      // PES extension?
+      if (0x01 == (flags & 0x01)) {
+        int pes_ext_flags = bc.get_bits(8);
 
-    if (0 < hdrlen) {
-      length -= hdrlen;
-      io->skip(hdrlen);
+        if (0x80 == (pes_ext_flags & 0x80)) {
+          // PES private data
+          bc.skip_bits(128);
+        }
+
+        if (0x40 == (pes_ext_flags & 0x40)) {
+          // pack header field
+          int pack_header_field_len = bc.get_bits(8);
+          bc.skip_bits(8 * pack_header_field_len);
+        }
+
+        if (0x20 == (pes_ext_flags & 0x20)) {
+          // program packet sequence counter
+          bc.skip_bits(16);
+        }
+
+        if (0x10 == (pes_ext_flags & 0x10)) {
+          // P-STD buffer
+          bc.skip_bits(16);
+        }
+
+        if (0x01 == (pes_ext_flags & 0x01)) {
+          bc.skip_bits(1);
+          int pes_ext2_len = bc.get_bits(7);
+
+          if (0 < pes_ext2_len)
+            id.sub_id = bc.get_bits(8);
+        }
+      }
+    } catch (...) {
     }
 
     if (0xbd == id.id) {        // DVD audio substream
