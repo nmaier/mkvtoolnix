@@ -334,8 +334,9 @@ vc1::es_parser_c::add_bytes(unsigned char *buffer,
 
   int new_size = cursor.get_size() - previous_pos;
   if (0 != new_size) {
-    m_unparsed_buffer = memory_c::alloc(new_size);
-    cursor.copy(m_unparsed_buffer->get(), previous_pos, new_size);
+    memory_cptr new_unparsed_buffer = memory_c::alloc(new_size);
+    cursor.copy(new_unparsed_buffer->get(), previous_pos, new_size);
+    m_unparsed_buffer = new_unparsed_buffer;
 
   } else
     m_unparsed_buffer = memory_cptr(NULL);
