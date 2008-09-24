@@ -250,7 +250,9 @@ vc1::parse_frame_header(const unsigned char *buf,
 
       default:
         fh.frame_type = vc1::FRAME_TYPE_P_SKIPPED;
-        break;
+        memcpy(&frame_header, &fh, sizeof(vc1::frame_header_t));
+
+        return true;
     }
 
     if (seqhdr.tf_counter_flag)
