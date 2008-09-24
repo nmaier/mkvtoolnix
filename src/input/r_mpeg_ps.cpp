@@ -365,15 +365,12 @@ mpeg_ps_reader_c::parse_packet(mpeg_ps_id_t &id,
     length -= 4 + 5;
 
   } else if ((c & 0xc0) == 0x80) {
-    int pts_flags;
-    int hdrlen;
-
     if ((c & 0x30) != 0x00)
       mxerror(FMT_FN "Reading encrypted VOBs is not supported.\n", ti.fname.c_str());
 
-    pts_flags  = io->read_uint8() >> 6;
-    hdrlen     = io->read_uint8();
-    length    -= 2;
+    int pts_flags  = io->read_uint8() >> 6;
+    int hdrlen     = io->read_uint8();
+    length        -= 2;
 
     if (hdrlen > length)
       return false;
