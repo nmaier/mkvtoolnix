@@ -74,8 +74,6 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
 
 void
 mpeg_ps_reader_c::init_reader() {
-  int i;
-
   try {
     io        = new mm_file_io_c(ti.fname);
     size      = io->get_size();
@@ -92,10 +90,7 @@ mpeg_ps_reader_c::init_reader() {
 
     bytes_processed = 0;
 
-    for (i = 0; i < 512; i++)
-      id2idx[i] = -1;
     memset(es_map, 0, sizeof(uint32_t) * NUM_ES_MAP_ENTRIES);
-    memset(blacklisted_ids, 0, sizeof(bool) * 512);
 
     header  = io->read_uint32_be();
     done    = io->eof();
@@ -198,19 +193,16 @@ mpeg_ps_reader_c::sort_tracks() {
                            : 'a' == tracks[i]->type ? 0x10000
                            : 's' == tracks[i]->type ? 0x20000
                            :                          0x30000)
-      + (256 > tracks[i]->id ? tracks[i]->id + 256 : tracks[i]->id);
+      + tracks[i]->id.idx();
 
   sort(tracks.begin(), tracks.end());
 
   for (i = 0; tracks.size() > i; ++i)
-    id2idx[tracks[i]->id] = i;
+    id2idx[tracks[i]->id.idx()] = i;
 
   mxverb(2, "mpeg_ps: Supported streams, sorted by ID: ");
   for (i = 0; tracks.size() > i; ++i)
-    if (256 > tracks[i]->id)
-      mxverb(2, "%02x ", tracks[i]->id);
-    else
-      mxverb(2, "bd(%02x) ", tracks[i]->id - 256);
+    mxverb(2, "0x%02x(0x%02x) ", tracks[i]->id.id, tracks[i]->id.sub_id);
   mxverb(2, "\n");
 }
 
@@ -232,10 +224,7 @@ mpeg_ps_reader_c::calculate_global_timecode_offset() {
 
   mxverb(2, "mpeg_ps: Timecode offset: min was " LLD " ", global_timecode_offset);
   for (i = 0; i < tracks.size(); i++)
-    if (tracks[i]->id > 0xff)
-      mxverb(2, "bd(%02x)=" LLD " ", tracks[i]->id - 256, tracks[i]->timecode_offset);
-    else
-      mxverb(2, "%02x=" LLD " ", tracks[i]->id, tracks[i]->timecode_offset);
+    mxverb(2, "0x%02x(0x%02x)=" LLD " ", tracks[i]->id.id, tracks[i]->id.sub_id, tracks[i]->timecode_offset);
   mxverb(2, "\n");
 }
 
@@ -324,18 +313,17 @@ mpeg_ps_reader_c::parse_program_stream_map() {
 }
 
 bool
-mpeg_ps_reader_c::parse_packet(int id,
+mpeg_ps_reader_c::parse_packet(mpeg_ps_id_t &id,
                                int64_t &timestamp,
                                int &length,
-                               int &full_length,
-                               int &aid) {
+                               int &full_length) {
   length      = io->read_uint16_be();
   full_length = length;
 
-  if (   (0xbc > id)
-      || ((0xf0 <= id) && (0xfd != id))
-      || (id == 0xbe)           // padding stream
-      || (id == 0xbf)) {        // private 2 stream
+  if (   (0xbc > id.id)
+      || ((0xf0 <= id.id) && (0xfd != id.id))
+      || (0xbe == id.id)           // padding stream
+      || (0xbf == id.id)) {        // private 2 stream
     io->skip(length);
     return false;
   }
@@ -343,7 +331,7 @@ mpeg_ps_reader_c::parse_packet(int id,
   if (0 == length)
     return false;
 
-  aid       = -1;
+  id.sub_id = 0;
   timestamp = -1;
 
   uint8_t c = 0;
@@ -414,23 +402,23 @@ mpeg_ps_reader_c::parse_packet(int id,
       io->skip(hdrlen);
     }
 
-    if (0xbd == id) {           // DVD audio substream
+    if (0xbd == id.id) {        // DVD audio substream
       if (4 > length)
         return false;
-      aid = io->read_uint8();
+      id.sub_id = io->read_uint8();
       length--;
 
-      if ((aid & 0xe0) == 0x20) {
+      if ((id.sub_id & 0xe0) == 0x20) {
         // Subtitles, not supported yet.
         return false;
 
-      } else if (   ((0x80 <= aid) && (0x8f >= aid))
-                 || ((0x98 <= aid) && (0xaf >= aid))
-                 || ((0xc0 <= aid) && (0xcf >= aid))) {
+      } else if (   ((0x80 <= id.sub_id) && (0x8f >= id.sub_id))
+                 || ((0x98 <= id.sub_id) && (0xaf >= id.sub_id))
+                 || ((0xc0 <= id.sub_id) && (0xcf >= id.sub_id))) {
         io->skip(3);         // number of frames, startpos
         length -= 3;
 
-        if ((0xa0 == (aid & 0xe0)) && (3 <= length)) { // LPCM
+        if ((0xa0 == (id.sub_id & 0xe0)) && (3 <= length)) { // LPCM
           io->skip(3);
           length -= 3;
         }
@@ -447,7 +435,7 @@ mpeg_ps_reader_c::parse_packet(int id,
 }
 
 void
-mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(int id,
+mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(mpeg_ps_id_t id,
                                                unsigned char *buf,
                                                int length,
                                                mpeg_ps_track_ptr &track) {
@@ -535,8 +523,8 @@ mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(int id,
         throw false;
 
       int64_t timecode;
-      int aid, full_length, new_length;
-      if (!parse_packet(id, timecode, new_length, full_length, aid))
+      int full_length, new_length;
+      if (!parse_packet(id, timecode, new_length, full_length))
         continue;
 
       memory_cptr new_buf = memory_c::alloc(new_length);
@@ -553,7 +541,7 @@ mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(int id,
 }
 
 void
-mpeg_ps_reader_c::new_stream_v_mpeg_1_2(int id,
+mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
                                         unsigned char *buf,
                                         int length,
                                         mpeg_ps_track_ptr &track) {
@@ -567,8 +555,8 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(int id,
       break;
 
     int64_t timecode;
-    int aid, full_length;
-    if (!parse_packet(id, timecode, length, full_length, aid))
+    int full_length;
+    if (!parse_packet(id, timecode, length, full_length))
       break;
 
     memory_c new_buf((unsigned char *)safemalloc(length), 0, true);
@@ -581,8 +569,8 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(int id,
   }
 
   if (MPV_PARSER_STATE_FRAME != state) {
-    mxverb(3, "MPEG PS: blacklisting id %d for supposed type MPEG1/2\n", id);
-    blacklisted_ids[id] = true;
+    mxverb(3, "MPEG PS: blacklisting id 0x%02x(0x%02x) for supposed type MPEG1/2\n", id.id, id.sub_id);
+    blacklisted_ids[id.idx()] = true;
     return;
   }
 
@@ -614,7 +602,7 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(int id,
 }
 
 void
-mpeg_ps_reader_c::new_stream_v_avc(int id,
+mpeg_ps_reader_c::new_stream_v_avc(mpeg_ps_id_t id,
                                    unsigned char *buf,
                                    int length,
                                    mpeg_ps_track_ptr &track) {
@@ -632,9 +620,9 @@ mpeg_ps_reader_c::new_stream_v_avc(int id,
     if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
       break;
 
-    int aid, full_length;
+    int full_length;
     int64_t timecode;
-    if (!parse_packet(id, timecode, length, full_length, aid))
+    if (!parse_packet(id, timecode, length, full_length))
       break;
     memory_c new_buf((unsigned char *)safemalloc(length), 0, true);
     if (io->read(new_buf.get(), length) != length)
@@ -716,7 +704,7 @@ mpeg_ps_reader_c::new_stream_v_avc(int id,
 }
 
 void
-mpeg_ps_reader_c::new_stream_v_vc1(int id,
+mpeg_ps_reader_c::new_stream_v_vc1(mpeg_ps_id_t id,
                                    unsigned char *buf,
                                    int length,
                                    mpeg_ps_track_ptr &track) {
@@ -728,9 +716,9 @@ mpeg_ps_reader_c::new_stream_v_vc1(int id,
     if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
       break;
 
-    int aid, full_length;
+    int full_length;
     int64_t timecode;
-    if (!parse_packet(id, timecode, length, full_length, aid))
+    if (!parse_packet(id, timecode, length, full_length))
       break;
 
     memory_cptr new_buf = memory_c::alloc(length);
@@ -756,7 +744,7 @@ mpeg_ps_reader_c::new_stream_v_vc1(int id,
 }
 
 void
-mpeg_ps_reader_c::new_stream_a_mpeg(int id,
+mpeg_ps_reader_c::new_stream_a_mpeg(mpeg_ps_id_t id,
                                     unsigned char *buf,
                                     int length,
                                     mpeg_ps_track_ptr &track) {
@@ -772,7 +760,7 @@ mpeg_ps_reader_c::new_stream_a_mpeg(int id,
 }
 
 void
-mpeg_ps_reader_c::new_stream_a_ac3(int id,
+mpeg_ps_reader_c::new_stream_a_ac3(mpeg_ps_id_t id,
                                    unsigned char *buf,
                                    int length,
                                    mpeg_ps_track_ptr &track) {
@@ -789,7 +777,7 @@ mpeg_ps_reader_c::new_stream_a_ac3(int id,
 }
 
 void
-mpeg_ps_reader_c::new_stream_a_dts(int id,
+mpeg_ps_reader_c::new_stream_a_dts(mpeg_ps_id_t id,
                                    unsigned char *buf,
                                    int length,
                                    mpeg_ps_track_ptr &track) {
@@ -798,15 +786,16 @@ mpeg_ps_reader_c::new_stream_a_dts(int id,
   buffer.add(buf, length);
 
   while ((-1 == find_dts_header(buffer.get_buffer(), buffer.get_size(), &track->dts_header, false)) && (PS_PROBE_SIZE >= io->getFilePointer())) {
-    if (!find_next_packet_for_id(0xbd, PS_PROBE_SIZE))
+    if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
       throw false;
 
-    int aid, full_length;
+    int full_length;
     int64_t timecode;
-    if (!parse_packet(0xbd, timecode, length, full_length, aid))
+    mpeg_ps_id_t new_id(id.id);
+    if (!parse_packet(new_id, timecode, length, full_length))
       continue;
 
-    if ((id & 0xff) != aid)
+    if (id.sub_id != new_id.sub_id)
       continue;
 
     memory_cptr new_buf = memory_c::alloc(length);
@@ -836,33 +825,30 @@ mpeg_ps_reader_c::new_stream_a_dts(int id,
  */
 
 void
-mpeg_ps_reader_c::found_new_stream(int id) {
-  mxverb(2, "MPEG PS: new stream id 0x%02x\n", id);
+mpeg_ps_reader_c::found_new_stream(mpeg_ps_id_t id) {
+  mxverb(2, "MPEG PS: new stream id 0x%02x\n", id.id);
 
-  if (((0xc0 > id) || (0xef < id)) && (0xbd != id) && (0xfd != id))
+  if (((0xc0 > id.id) || (0xef < id.id)) && (0xbd != id.id) && (0xfd != id.id))
     return;
 
   try {
     int64_t timecode;
-    int length, aid, full_length;
+    int length, full_length;
 
-    if (!parse_packet(id, timecode, length, full_length, aid))
+    if (!parse_packet(id, timecode, length, full_length))
       throw false;
 
-    if (0xbd == id)             // DVD audio substream
-      mxverb(2, "MPEG PS:   audio substream id 0x%02x\n", aid);
+    if (0xbd == id.id) {        // DVD audio substream
+      mxverb(2, "MPEG PS:   audio substream id 0x%02x\n", id.sub_id);
+      if (0 == id.sub_id)
+        return;
+    }
 
-    if ((0xbd == id) && (-1 == aid))
+    if (map_has_key(blacklisted_ids, id.idx()))
       return;
 
-    if (0xbd == id)             // DVD audio substream
-      id = 256 + aid;
-
-    if (blacklisted_ids[id])
-      return;
-
-    if (-1 != id2idx[id]) {
-      mpeg_ps_track_ptr &track = tracks[id2idx[id]];
+    if (map_has_key(id2idx, id.idx())) {
+      mpeg_ps_track_ptr &track = tracks[id2idx[id.idx()]];
       if ((-1 != timecode) && ((-1 == track->timecode_offset) || (timecode < track->timecode_offset)))
         track->timecode_offset = timecode;
       return;
@@ -872,34 +858,34 @@ mpeg_ps_reader_c::found_new_stream(int id) {
     track->timecode_offset = timecode;
     track->type            = '?';
 
-    if (0xff < id) {
+    if (0xbd == id.id) {
       track->type = 'a';
 
-      if ((0x20 <= aid) && (0x3f >= aid)) {
+      if ((0x20 <= id.sub_id) && (0x3f >= id.sub_id)) {
         track->type   = 's';
         track->fourcc = FOURCC('V', 'S', 'U', 'B');
 
-      } else if (((0x80 <= aid) && (0x87 >= aid)) || ((0xc0 <= aid) && (0xc7 >= aid)))
+      } else if (((0x80 <= id.sub_id) && (0x87 >= id.sub_id)) || ((0xc0 <= id.sub_id) && (0xc7 >= id.sub_id)))
         track->fourcc = FOURCC('A', 'C', '3', ' ');
 
-      else if ((0x88 <= aid) && (0x9f >= aid))
+      else if ((0x88 <= id.sub_id) && (0x9f >= id.sub_id))
         track->fourcc = FOURCC('D', 'T', 'S', ' ');
 
-      else if ((0xa0 <= aid) && (0xa7 >= aid))
+      else if ((0xa0 <= id.sub_id) && (0xa7 >= id.sub_id))
         track->fourcc = FOURCC('P', 'C', 'M', ' ');
 
       else
         track->type = '?';
 
-    } else if ((0xc0 <= id) && (0xdf >= id)) {
+    } else if ((0xc0 <= id.id) && (0xdf >= id.id)) {
       track->type   = 'a';
       track->fourcc = FOURCC('M', 'P', '2', ' ');
 
-    } else if ((0xe0 <= id) && (0xef >= id)) {
+    } else if ((0xe0 <= id.id) && (0xef >= id.id)) {
       track->type   = 'v';
       track->fourcc = FOURCC('M', 'P', 'G', '0' + version);
 
-    } else if (0xfd == id) {
+    } else if (0xfd == id.id) {
       track->type   = 'v';
       track->fourcc = FOURCC('W', 'V', 'C', '1');
     }
@@ -931,12 +917,12 @@ mpeg_ps_reader_c::found_new_stream(int id) {
       // Unsupported track type
       throw false;
 
-    track->id  = id;
-    id2idx[id] = tracks.size();
+    track->id        = id;
+    id2idx[id.idx()] = tracks.size();
     tracks.push_back(track);
 
   } catch (bool err) {
-    blacklisted_ids[id] = true;
+    blacklisted_ids[id.idx()] = true;
 
   } catch (const char *msg) {
     mxerror(FMT_FN "%s\n", ti.fname.c_str(), msg);
@@ -947,7 +933,7 @@ mpeg_ps_reader_c::found_new_stream(int id) {
 }
 
 bool
-mpeg_ps_reader_c::find_next_packet(int &id,
+mpeg_ps_reader_c::find_next_packet(mpeg_ps_id_t &id,
                                    int64_t max_file_pos) {
   try {
     uint32_t header;
@@ -1005,7 +991,7 @@ mpeg_ps_reader_c::find_next_packet(int &id,
             continue;
           }
 
-          id = header & 0xff;
+          id.id = header & 0xff;
           return true;
 
           break;
@@ -1017,13 +1003,12 @@ mpeg_ps_reader_c::find_next_packet(int &id,
 }
 
 bool
-mpeg_ps_reader_c::find_next_packet_for_id(int id,
+mpeg_ps_reader_c::find_next_packet_for_id(mpeg_ps_id_t id,
                                           int64_t max_file_pos) {
-  int new_id;
-
   try {
+    mpeg_ps_id_t new_id;
     while (find_next_packet(new_id, max_file_pos)) {
-      if (id == new_id)
+      if (id.id == new_id.id)
         return true;
       io->skip(io->read_uint16_be());
     }
@@ -1137,37 +1122,30 @@ file_status_e
 mpeg_ps_reader_c::read(generic_packetizer_c *,
                        bool) {
   int64_t timecode, packet_pos;
-  int new_id, length, aid, full_length;
+  int length, full_length;
   unsigned char *buf;
 
   if (file_done)
     return FILE_STATUS_DONE;
 
   try {
+    mpeg_ps_id_t new_id;
     while (find_next_packet(new_id)) {
-      if ((0xbd != new_id) && ((-1 == id2idx[new_id]) || (-1 == tracks[id2idx[new_id]]->ptzr))) {
-        io->skip(io->read_uint16_be());
-        continue;
-      }
-
       packet_pos = io->getFilePointer() - 4;
-      if (!parse_packet(new_id, timecode, length, full_length, aid)) {
-        mxverb(2, "mpeg_ps: packet_parse failed @ " LLD ", skipping %d\n", packet_pos, full_length);
+      if (!parse_packet(new_id, timecode, length, full_length)) {
+        mxverb(2, "mpeg_ps: packet_parse failed at " LLD ", skipping %d\n", packet_pos, full_length);
         io->setFilePointer(packet_pos + 4 + 2 + full_length);
         continue;
       }
 
-      if (0xbd == new_id)
-        new_id = 256 + aid;
-
-      if ((-1 == id2idx[new_id]) || (-1 == tracks[id2idx[new_id]]->ptzr)) {
-        io->skip(length);
+      if (!map_has_key(id2idx, new_id.idx()) || (-1 == tracks[id2idx[new_id.idx()]]->ptzr)) {
+        io->setFilePointer(packet_pos + 4 + 2 + full_length);
         continue;
       }
 
-      mpeg_ps_track_t *track = tracks[id2idx[new_id]].get();
+      mpeg_ps_track_t *track = tracks[id2idx[new_id.idx()]].get();
 
-      mxverb(3, "mpeg_ps: packet for %d length %d at " LLD " timecode " LLD "\n", new_id, length, packet_pos, timecode);
+      mxverb(3, "mpeg_ps: packet for 0x%02x(0x%02x) length %d at " LLD " timecode " LLD "\n", new_id.id, new_id.sub_id, length, packet_pos, timecode);
 
       if ((-1 != timecode) && track->provide_timecodes) {
         timecode -= global_timecode_offset;
@@ -1258,7 +1236,7 @@ mpeg_ps_reader_c::identify() {
       verbose_info.push_back("packetizer:mpeg4_p10_es_video");
     }
 
-    verbose_info.push_back(mxsprintf("stream_id:%#x", track->id));
+    verbose_info.push_back(mxsprintf("stream_id:%#x", track->id.id));
 
     id_result_track(i, 'a' == track->type ? ID_RESULT_TRACK_AUDIO : ID_RESULT_TRACK_VIDEO,
                       FOURCC('M', 'P', 'G', '1') == track->fourcc ? "MPEG-1"
