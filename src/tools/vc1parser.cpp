@@ -222,13 +222,17 @@ vc1_info_c::dump_entrypoint(vc1::entrypoint_t &entrypoint) {
 void
 vc1_info_c::dump_frame_header(vc1::frame_header_t &frame_header) {
   mxinfo("  Frame header dump:\n"
-         "    fcm:                     %d\n"
+         "    fcm:                     %d (%s)\n"
          "    frame_type:              %s\n"
          "    tf_counter:              %d\n"
          "    repeat_frame:            %d\n"
          "    top_field_first_flag:    %d\n"
          "    repeat_first_field_flag: %d\n",
          frame_header.fcm,
+           frame_header.fcm        == 0x00                      ? "progressive"
+         : frame_header.fcm        == 0x10                      ? "frame-interlace"
+         : frame_header.fcm        == 0x11                      ? "field-interlace"
+         :                                                        "unknown",
            frame_header.frame_type == vc1::FRAME_TYPE_I         ? "I"
          : frame_header.frame_type == vc1::FRAME_TYPE_P         ? "P"
          : frame_header.frame_type == vc1::FRAME_TYPE_B         ? "B"
