@@ -516,14 +516,20 @@ vc1::es_parser_c::combine_extra_data_with_packet() {
 
 int64_t
 vc1::es_parser_c::get_next_timecode() {
-  if (!m_timecodes.empty()) {
+  int64_t next_timecode = m_previous_timecode + (m_num_timecodes + m_num_repeated_fields) * m_default_duration - m_num_repeated_fields * m_default_duration / 2;
+
+  if (is_timecode_available()) {
+    mxverb(3, "\nvc1::es_parser_c::get_next_timecode(): provided timecode available; original next " FMT_TIMECODEN ", provided " FMT_TIMECODEN "\n",
+           ARG_TIMECODEN(next_timecode), ARG_TIMECODEN(m_timecodes.front()));
+
+    next_timecode         = m_timecodes.front();
     m_previous_timecode   = m_timecodes.front();
     m_num_timecodes       = 0;
     m_num_repeated_fields = 0;
-    m_timecodes.pop_front();
-  }
 
-  int64_t next_timecode = m_previous_timecode + (m_num_timecodes + m_num_repeated_fields) * m_default_duration - m_num_repeated_fields * m_default_duration / 2;
+    m_timecodes.pop_front();
+    m_timecode_positions.pop_front();
+  }
 
   m_num_timecodes += 1 + m_current_frame->header.repeat_frame;
   if (m_seqhdr.interlace_flag && m_current_frame->header.repeat_first_field_flag && !m_current_frame->contains_field)
@@ -547,3 +553,18 @@ vc1::es_parser_c::add_post_frame_extra_data(memory_cptr packet) {
   m_post_frame_extra_data.push_back(memory_cptr(packet->clone()));
 }
 
+void
+vc1::es_parser_c::add_timecode(int64_t timecode,
+                               int64_t position) {
+  position += m_stream_pos;
+  if (NULL != m_unparsed_buffer.get())
+    position += m_unparsed_buffer->get_size();
+
+  m_timecodes.push_back(timecode);
+  m_timecode_positions.push_back(position);
+}
+
+bool
+vc1::es_parser_c::is_timecode_available() {
+  return !m_timecodes.empty() && (m_timecode_positions.front() <= m_stream_pos);
+}

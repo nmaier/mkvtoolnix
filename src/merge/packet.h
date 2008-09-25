@@ -34,6 +34,23 @@ using namespace std;
 
 class generic_packetizer_c;
 
+class packet_extension_c {
+public:
+  enum packet_extension_type_e {
+    MULTIPLE_TIMECODES,
+  };
+
+public:
+  packet_extension_c() {
+  }
+
+  virtual ~packet_extension_c() {
+  }
+
+  virtual packet_extension_type_e get_type() = 0;
+};
+typedef counted_ptr<packet_extension_c> packet_extension_cptr;
+
 struct packet_t {
   static int64_t packet_number_counter;
 
@@ -50,6 +67,8 @@ struct packet_t {
   int64_t unmodified_assigned_timecode, unmodified_duration;
   bool duration_mandatory, superseeded, gap_following, factory_applied;
   generic_packetizer_c *source;
+
+  vector<packet_extension_cptr> extensions;
 
   packet_t():
     group(NULL), block(NULL), cluster(NULL),

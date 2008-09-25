@@ -48,6 +48,7 @@ public:
 protected:
   virtual void flush_frames();
   virtual void headers_found();
+  virtual void add_timecodes_to_parser(packet_cptr &packet);
 };
 
 #endif // __P_VC1_H

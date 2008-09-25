@@ -782,8 +782,7 @@ mpeg_ps_reader_c::new_stream_v_vc1(mpeg_ps_id_t id,
   track->fourcc            = FOURCC('W', 'V', 'C', '1');
   track->v_width           = seqhdr.pixel_width;
   track->v_height          = seqhdr.pixel_height;
-  // Does not work correctly for tracks that use reader buffering (!)
-//   track->provide_timecodes = true;
+  track->provide_timecodes = true;
 
   track->use_buffer(512000);
 }
@@ -1202,7 +1201,14 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
 
       if (0 < track->buffer_size) {
         if (((track->buffer_usage + length) > track->buffer_size)) {
-          PTZR(track->ptzr)-> process(new packet_t(new memory_c(track->buffer, track->buffer_usage, false), timecode));
+          packet_t *new_packet = new packet_t(new memory_c(track->buffer, track->buffer_usage, false));
+
+          if (!track->multiple_timecodes_packet_extension->empty()) {
+            new_packet->extensions.push_back(packet_extension_cptr(track->multiple_timecodes_packet_extension));
+            track->multiple_timecodes_packet_extension = new multiple_timecodes_packet_extension_c;
+          }
+
+          PTZR(track->ptzr)->process(new_packet);
           track->buffer_usage = 0;
         }
 
@@ -1212,6 +1218,9 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
           mxverb(2, "mpeg_ps: file_done: io->read\n");
           return finish();
         }
+
+        if (-1 != timecode)
+          track->multiple_timecodes_packet_extension->add(timecode, track->buffer_usage);
 
         track->buffer_usage += length;
 

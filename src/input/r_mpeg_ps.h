@@ -23,6 +23,7 @@
 #include "bit_cursor.h"
 #include "dts_common.h"
 #include "mpeg4_common.h"
+#include "packet_extensions.h"
 #include "pr_generic.h"
 #include "smart_pointers.h"
 
@@ -63,6 +64,8 @@ struct mpeg_ps_track_t {
   unsigned char *buffer;
   int buffer_usage, buffer_size;
 
+  multiple_timecodes_packet_extension_c *multiple_timecodes_packet_extension;
+
   mpeg_ps_track_t():
     ptzr(-1),
     type(0),
@@ -85,7 +88,9 @@ struct mpeg_ps_track_t {
     a_bsid(0),
     buffer(NULL),
     buffer_usage(0),
-    buffer_size(0) {
+    buffer_size(0),
+    multiple_timecodes_packet_extension(new multiple_timecodes_packet_extension_c)
+  {
   };
 
   void use_buffer(int size) {
@@ -107,6 +112,7 @@ struct mpeg_ps_track_t {
   ~mpeg_ps_track_t() {
     safefree(raw_seq_hdr);
     safefree(buffer);
+    delete multiple_timecodes_packet_extension;
   }
 };
 

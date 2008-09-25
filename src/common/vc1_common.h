@@ -149,6 +149,7 @@ namespace vc1 {
     frame_cptr m_current_frame;
 
     deque<int64_t> m_timecodes;
+    deque<int64_t> m_timecode_positions;
     int64_t m_previous_timecode;
     int64_t m_num_timecodes;
     int64_t m_num_repeated_fields;
@@ -215,9 +216,7 @@ namespace vc1 {
       return frame;
     }
 
-    virtual void add_timecode(int64_t timecode) {
-      m_timecodes.push_back(timecode);
-    }
+    virtual void add_timecode(int64_t timecode, int64_t position);
 
     virtual void set_default_duration(int64_t default_duration) {
       m_default_duration        = default_duration;
@@ -245,6 +244,8 @@ namespace vc1 {
     virtual void combine_extra_data_with_packet();
 
     virtual void flush_frame();
+
+    virtual bool is_timecode_available();
   };
 };
 

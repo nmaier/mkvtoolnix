@@ -23,6 +23,7 @@
 #include "matroska.h"
 #include "mpeg4_common.h"
 #include "output_control.h"
+#include "packet_extensions.h"
 #include "p_vc1.h"
 
 using namespace libmatroska;
@@ -98,10 +99,26 @@ vc1_video_packetizer_c::set_headers() {
   track_entry->EnableLacing(false);
 }
 
+void
+vc1_video_packetizer_c::add_timecodes_to_parser(packet_cptr &packet) {
+  if (-1 != packet->timecode)
+    m_parser.add_timecode(packet->timecode, 0);
+
+  vector<packet_extension_cptr>::iterator extensions_it;
+  mxforeach(extensions_it, packet->extensions) {
+    if ((*extensions_it)->get_type() == packet_extension_c::MULTIPLE_TIMECODES) {
+      multiple_timecodes_packet_extension_c *extension = static_cast<multiple_timecodes_packet_extension_c *>((*extensions_it).get());
+      int64_t timecode, position;
+
+      while (extension->get_next(timecode, position))
+        m_parser.add_timecode(timecode, position);
+    }
+  }
+}
+
 int
 vc1_video_packetizer_c::process(packet_cptr packet) {
-  if (-1 != packet->timecode)
-    m_parser.add_timecode(packet->timecode);
+  add_timecodes_to_parser(packet);
 
   m_parser.add_bytes(packet->data->get(), packet->data->get_size());
 
