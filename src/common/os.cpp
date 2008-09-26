@@ -23,6 +23,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <sys/time.h>
+#include <time.h>
 
 using namespace std;
 
@@ -43,6 +45,7 @@ using namespace std;
 # include <io.h>
 # include <windows.h>
 # include <direct.h>
+# include <sys/timeb.h>
 
 static unsigned
 Utf8ToUtf16(const char *utf8,
@@ -227,6 +230,14 @@ fs_entry_exists(const char *path) {
   return 0 == result;
 }
 
+int64_t
+get_current_time_millis() {
+  struct _timeb tb;
+  _ftime(&tb);
+
+  return (int64_t)tb.time * 1000 + tb.millitm;
+}
+
 #else // SYS_WINDOWS
 
 # include <sys/types.h>
@@ -245,6 +256,15 @@ fs_entry_exists(const char *path) {
   string local_path = from_utf8(cc_local_utf8, path);
   struct stat s;
   return 0 == stat(local_path.c_str(), &s);
+}
+
+int64_t
+get_current_time_millis() {
+  struct timeval tv;
+  if (0 != gettimeofday(&tv, NULL))
+    return -1;
+
+  return (int64_t)tv.tv_sec * 1000 + (int64_t)tv.tv_usec / 1000;
 }
 
 #endif // SYS_WINDOWS

@@ -395,33 +395,44 @@ get_file_type(filelist_t &file) {
   file.type = type;
 }
 
-static int display_counter = 0;
-static int display_files_done = 0;
-static int display_path_length = 1;
-static generic_reader_c *display_reader = NULL;
+static int s_display_files_done           = 0;
+static int s_display_path_length          = 1;
+static generic_reader_c *s_display_reader = NULL;
 
 /** \brief Selects a reader for displaying its progress information
 */
 static void
 display_progress() {
-  if (display_reader == NULL) {
-    vector<filelist_t>::const_iterator i;
-    const filelist_t *winner;
+  static int64_t s_previous_progress_on = 0;
+  static int s_previous_percentage      = -1;
 
-    winner = &files[0];
+  if (NULL == s_display_reader) {
+    vector<filelist_t>::const_iterator i;
+
+    const filelist_t *winner = &files[0];
     for (i = files.begin() + 1; i != files.end(); ++i)
       if (!i->appending && (i->size > winner->size))
         winner = &(*i);
 
-    display_reader = winner->reader;
+    s_display_reader = winner->reader;
   }
-  if ((display_counter % 50) == 0) {
-    display_counter = 0;
-    mxinfo("progress: %d%%\r",
-           (display_reader->get_progress() + display_files_done * 100) /
-           display_path_length);
-  }
-  display_counter++;
+
+  bool display_progress  = false;
+  int current_percentage = (s_display_reader->get_progress() + s_display_files_done * 100) / s_display_path_length;
+  int64_t current_time   = get_current_time_millis();
+
+  if (   (-1 == s_previous_percentage)
+      || ((100 == current_percentage) && (100 > s_previous_percentage))
+      || ((current_percentage != s_previous_percentage) && ((current_time - s_previous_progress_on) >= 500)))
+    display_progress = true;
+
+  if (!display_progress)
+    return;
+
+  mxinfo("progress: %d%%\r", current_percentage);
+
+  s_previous_percentage  = current_percentage;
+  s_previous_progress_on = current_time;
 }
 
 /** \brief Add some tags to the list of all tags
@@ -1015,8 +1026,8 @@ check_append_mapping() {
         }
     } while (cmp_amap != append_mapping.end());
 
-    if (path_length > display_path_length)
-      display_path_length = path_length;
+    if (path_length > s_display_path_length)
+      s_display_path_length = path_length;
   }
 }
 
@@ -1656,9 +1667,9 @@ append_track(packetizer_t &ptzr,
 
   // Is the current file currently used for displaying the progress? If yes
   // then replace it with the next one.
-  if (display_reader == dst_file.reader) {
-    display_files_done++;
-    display_reader = src_file.reader;
+  if (s_display_reader == dst_file.reader) {
+    s_display_files_done++;
+    s_display_reader = src_file.reader;
   }
 
   // Also fix the ptzr structure and reset the ptzr's state to "I want more".
