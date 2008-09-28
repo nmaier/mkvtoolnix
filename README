@@ -46,6 +46,7 @@ libraries you absolutely need are:
   ( http://downloads.xiph.org/releases/vorbis/ ) for access to Ogg/OGM
   files and Vorbis support
 - zlib ( http://www.zlib.net/ ) -- a compression library
+- Boost's "format" and "RegEx" libraries ( http://www.boost.org/ )
 
 Other libraries are optional and only limit the features that are
 built. These include:
@@ -60,6 +61,8 @@ built. These include:
   least important libraries as almost no application supports Matroska
   content that is compressed with either of these libs. The
   aforementioned zlib is what every program supports.
+- libMagic from the "file" package ( http://www.darwinsys.com/file/ )
+  for automatic content type detection
 
 * Building libmatroska and libebml
 
