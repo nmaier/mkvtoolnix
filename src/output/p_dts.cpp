@@ -109,8 +109,8 @@ dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
     rerender_track_headers();
   }
 
-  if (dtsheader != last_header) {
-    mxinfo("DTS header information changed! - New format:\n");
+  if ((1 < verbose) && (dtsheader != last_header)) {
+    mxinfo(Y("DTS header information changed! - New format:\n"));
     print_dts_header(&dtsheader);
     last_header = dtsheader;
   }
@@ -126,7 +126,7 @@ dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
       }
 
     if (!all_zeroes)
-      mxwarn("dts_packetizer: skipping %d bytes (no valid DTS header found). This might make audio/video go out of sync, but this stream is damaged.\n", pos);
+      mxwarn_tid(ti.fname, ti.id, boost::format(Y("Skipping %1% bytes (no valid DTS header found). This might cause audio/video desynchronisation.\n")) % pos);
   }
 
   buf = (unsigned char *)safememdup(packet_buffer + pos, dtsheader.frame_byte_size);

@@ -53,10 +53,10 @@ static const unsigned long write_before_dontneed = 8 * 1024 * 1024;
 bool mm_file_io_c::use_posix_fadvise = false;
 # endif
 
-#define FADVISE_WARNING "mm_file_io_c: Could not posix_fadvise() file '%s' " \
-  "(errno = %d, %s). " \
-  "This only means that access to this file might be slower than it could " \
-  "be. Data integrity is not in danger."
+#define FADVISE_WARNING                                                           \
+  Y("mm_file_io_c: Could not posix_fadvise() file '%1%' (errno = %2%, %3%). "     \
+    "This only means that access to this file might be slower than it could be. " \
+    "Data integrity is not in danger.")
 
 mm_file_io_c::mm_file_io_c(const string &path,
                            const open_mode mode):
@@ -100,7 +100,7 @@ mm_file_io_c::mm_file_io_c(const string &path,
 # endif
       break;
     default:
-      throw mm_io_error_c("Unknown open mode");
+      throw mm_io_error_c(Y("Unknown open mode"));
   }
 
   if ((MODE_WRITE == mode) || (MODE_CREATE == mode))
@@ -119,7 +119,7 @@ mm_file_io_c::mm_file_io_c(const string &path,
   if (use_posix_fadvise && use_posix_fadvise_here &&
       (0 != posix_fadvise(fileno((FILE *)file), 0, read_using_willneed,
                           advise))) {
-    mxverb(2, FADVISE_WARNING, path.c_str(), errno, get_errno_msg().c_str());
+    mxverb(2, boost::format(FADVISE_WARNING) % path % errno % get_errno_msg());
     use_posix_fadvise_here = false;
   }
 # endif
@@ -155,8 +155,7 @@ mm_file_io_c::write(const void *buffer,
 
   bwritten = fwrite(buffer, 1, size, (FILE *)file);
   if (ferror((FILE *)file) != 0)
-    mxerror("Could not write to the output file: %d (%s)\n", errno,
-            get_errno_msg().c_str());
+    mxerror(boost::format(Y("Could not write to the output file: %1% (%2%)\n")) % errno % get_errno_msg());
 
 # if HAVE_POSIX_FADVISE
   write_count += bwritten;
@@ -166,8 +165,7 @@ mm_file_io_c::write(const void *buffer,
     write_count = 0;
     if (0 != posix_fadvise(fileno((FILE *)file), 0, pos,
                            POSIX_FADV_DONTNEED)) {
-      mxverb(2, FADVISE_WARNING, file_name.c_str(), errno,
-             get_errno_msg().c_str());
+      mxverb(2, boost::format(FADVISE_WARNING) % file_name % errno % get_errno_msg());
       use_posix_fadvise_here = false;
     }
   }
@@ -194,15 +192,13 @@ mm_file_io_c::read(void *buffer,
       int fd = fileno((FILE *)file);
       read_count = 0;
       if (0 != posix_fadvise(fd, 0, pos, POSIX_FADV_DONTNEED)) {
-        mxverb(2, FADVISE_WARNING, file_name.c_str(), errno,
-               get_errno_msg().c_str());
+        mxverb(2, boost::format(FADVISE_WARNING) % file_name % errno % get_errno_msg());
         use_posix_fadvise_here = false;
       }
       if (use_posix_fadvise_here &&
           (0 != posix_fadvise(fd, pos, pos + read_using_willneed,
                               POSIX_FADV_WILLNEED))) {
-        mxverb(2, FADVISE_WARNING, file_name.c_str(), errno,
-               get_errno_msg().c_str());
+        mxverb(2, boost::format(FADVISE_WARNING) % file_name % errno % get_errno_msg());
         use_posix_fadvise_here = false;
       }
     }
@@ -295,7 +291,7 @@ mm_file_io_c::mm_file_io_c(const string &path,
       disposition = CREATE_ALWAYS;
       break;
     default:
-      throw mm_io_error_c("Unknown open mode");
+      throw mm_io_error_c(Y("Unknown open mode"));
   }
 
   if ((MODE_WRITE == mode) || (MODE_CREATE == mode))
@@ -413,9 +409,8 @@ mm_file_io_c::write(const void *buffer,
       }
       error_msg_utf8 = to_utf8(cc_local_utf8, error_msg);
     } else
-      error_msg_utf8 = "unknown";
-    mxerror("Could not write to the output file: %d (%s)\n", (int)error,
-            error_msg_utf8.c_str());
+      error_msg_utf8 = Y("unknown");
+    mxerror(boost::format(Y("Could not write to the output file: %1% (%2%)\n")) % error % error_msg_utf8);
     if (error_msg != NULL)
       LocalFree(error_msg);
   }
@@ -613,7 +608,7 @@ mm_io_c::read_uint8() {
   unsigned char value;
 
   if (read(&value, 1) != 1)
-    throw error_c("end-of-file");
+    throw error_c(Y("end-of-file"));
 
   return value;
 }
@@ -623,7 +618,7 @@ mm_io_c::read_uint16_le() {
   unsigned char buffer[2];
 
   if (read(buffer, 2) != 2)
-    throw error_c("end-of-file");
+    throw error_c(Y("end-of-file"));
 
   return get_uint16_le(buffer);
 }
@@ -633,7 +628,7 @@ mm_io_c::read_uint24_le() {
   unsigned char buffer[3];
 
   if (read(buffer, 3) != 3)
-    throw error_c("end-of-file");
+    throw error_c(Y("end-of-file"));
 
   return get_uint24_le(buffer);
 }
@@ -643,7 +638,7 @@ mm_io_c::read_uint32_le() {
   unsigned char buffer[4];
 
   if (read(buffer, 4) != 4)
-    throw error_c("end-of-file");
+    throw error_c(Y("end-of-file"));
 
   return get_uint32_le(buffer);
 }
@@ -653,7 +648,7 @@ mm_io_c::read_uint64_le() {
   unsigned char buffer[8];
 
   if (read(buffer, 8) != 8)
-    throw error_c("end-of-file");
+    throw error_c(Y("end-of-file"));
 
   return get_uint64_le(buffer);
 }
@@ -663,7 +658,7 @@ mm_io_c::read_uint16_be() {
   unsigned char buffer[2];
 
   if (read(buffer, 2) != 2)
-    throw error_c("end-of-file");
+    throw error_c(Y("end-of-file"));
 
   return get_uint16_be(buffer);
 }
@@ -673,7 +668,7 @@ mm_io_c::read_uint24_be() {
   unsigned char buffer[3];
 
   if (read(buffer, 3) != 3)
-    throw error_c("end-of-file");
+    throw error_c(Y("end-of-file"));
 
   return get_uint24_be(buffer);
 }
@@ -683,7 +678,7 @@ mm_io_c::read_uint32_be() {
   unsigned char buffer[4];
 
   if (read(buffer, 4) != 4)
-    throw error_c("end-of-file");
+    throw error_c(Y("end-of-file"));
 
   return get_uint32_be(buffer);
 }
@@ -693,7 +688,7 @@ mm_io_c::read_uint64_be() {
   unsigned char buffer[8];
 
   if (read(buffer, 8) != 8)
-    throw error_c("end-of-file");
+    throw error_c(Y("end-of-file"));
 
   return get_uint64_be(buffer);
 }
@@ -783,7 +778,7 @@ mm_io_c::skip(int64 num_bytes) {
   pos = getFilePointer();
   setFilePointer(pos + num_bytes);
   if ((pos + num_bytes) != getFilePointer())
-    throw error_c("end-of-file");
+    throw error_c(Y("end-of-file"));
 }
 
 void
@@ -863,33 +858,6 @@ mm_io_c::getch() {
   return c;
 }
 
-int
-mm_io_c::printf(const char *fmt,
-                ...) {
-  va_list ap;
-  string new_fmt, s;
-  char *new_string;
-  int len, pos;
-
-  fix_format(fmt, new_fmt);
-  va_start(ap, fmt);
-  len = get_varg_len(new_fmt.c_str(), ap);
-  new_string = (char *)safemalloc(len + 1);
-  vsprintf(new_string, new_fmt.c_str(), ap);
-  va_end(ap);
-  s = new_string;
-  safefree(new_string);
-  if (dos_style_newlines) {
-    pos = 0;
-    while ((pos = s.find('\n', pos)) >= 0) {
-      s.replace(pos, 1, "\r\n");
-      pos += 2;
-    }
-  }
-
-  return write(s.c_str(), s.length());
-}
-
 /*
    Proxy class that does I/O on a mm_io_c handed over in the ctor.
    Useful for e.g. doing text I/O on other I/Os (file, mem).
@@ -964,7 +932,7 @@ mm_mem_io_c::mm_mem_io_c(unsigned char *_mem,
   read_only(false) {
 
   if (increase <= 0)
-    throw error_c("wrong usage: increate < 0");
+    throw error_c(Y("wrong usage: increate < 0"));
 
   if ((mem == NULL) && (increase > 0)) {
     mem = (unsigned char *)safemalloc(mem_size);
@@ -985,7 +953,7 @@ mm_mem_io_c::mm_mem_io_c(const unsigned char *_mem,
   read_only(true) {
 
   if (ro_mem == NULL)
-    throw error_c("wrong usage: read-only with NULL memory");
+    throw error_c(Y("wrong usage: read-only with NULL memory"));
 }
 
 mm_mem_io_c::~mm_mem_io_c() {
@@ -1003,7 +971,7 @@ mm_mem_io_c::setFilePointer(int64 offset,
   int64_t npos;
 
   if (((mem == NULL) && (ro_mem == NULL)) || (mem_size == 0))
-    throw error_c("wrong usage: read-only with NULL memory");
+    throw error_c(Y("wrong usage: read-only with NULL memory"));
 
   if (mode == seek_beginning)
     npos = offset;
@@ -1041,7 +1009,7 @@ mm_mem_io_c::write(const void *buffer,
   int64_t wbytes;
 
   if (read_only)
-    throw error_c("wrong usage: writing to read-only memory");
+    throw error_c(Y("wrong usage: writing to read-only memory"));
 
   if ((pos + size) >= allocated) {
     if (increase) {
@@ -1163,8 +1131,7 @@ mm_text_io_c::read_next_char(char *buffer) {
     else if ((stream[0] & 0xfe) == 0xfc)
       size = 6;
     else
-      die("mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: "
-          "0x%02x", stream[0]);
+      mxerror(boost::format(Y("mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|")) % stream[0]);
 
     if ((size > 1) && (read(&stream[1], size - 1) != (size - 1)))
       return 0;
@@ -1211,7 +1178,7 @@ mm_text_io_c::read_next_char(char *buffer) {
     return 3;
   }
 
-  die("mm_text_io_c: UTF32_* is not supported at the moment.");
+  mxerror(Y("mm_text_io_c: UTF32_* is not supported at the moment."));
 
   return 0;
 }
@@ -1223,7 +1190,7 @@ mm_text_io_c::getline() {
   char utf8char[8];
 
   if (eof())
-    throw error_c("end-of-file");
+    throw error_c(Y("end-of-file"));
 
   while (1) {
     memset(utf8char, 0, 8);

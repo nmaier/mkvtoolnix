@@ -93,13 +93,10 @@ parse_xml_segmentinfo(mm_text_io_c *in,
 
   } catch (error_c e) {
     if (!exception_on_error)
-      mxerror("%s", e.get_error().c_str());
+      mxerror(e.get_error());
     error = e.get_error();
     info = NULL;
   }
-
-  if ((info != NULL) && (verbose > 1))
-    debug_dump_elements(info, 0);
 
   if (error.length() > 0)
     throw error_c(error);

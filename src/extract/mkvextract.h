@@ -55,8 +55,19 @@ extern bool no_variable_data;
     (p->GetElementPosition() + p->HeadSize() + p->GetSize())))
 
 // Helper functions in mkvextract.cpp
-void show_element(EbmlElement *l, int level, const char *fmt, ...);
-void show_error(const char *fmt, ...);
+void show_element(EbmlElement *l, int level, const std::string &message);
+inline void
+show_element(EbmlElement *l,
+             int level,
+             const boost::format &format) {
+  show_element(l, level, format.str());
+}
+
+void show_error(const std::string &error);
+inline void
+show_error(const boost::format &format) {
+  show_error(format.str());
+}
 
 bool extract_tracks(const char *file_name, vector<track_spec_t> &tspecs);
 void extract_tags(const char *file_name, bool parse_fully);

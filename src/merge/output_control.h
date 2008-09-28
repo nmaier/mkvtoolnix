@@ -176,7 +176,7 @@ extern generic_packetizer_c *video_packetizer;
 extern bool write_cues, cue_writing_requested;
 extern bool no_lacing, no_linking, use_durations;
 
-extern bool identifying, identify_verbose;
+extern bool g_identifying, g_identify_verbose, g_identify_for_mmg;
 
 extern int g_file_num;
 

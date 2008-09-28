@@ -223,14 +223,14 @@ find_consecutive_ac3_headers(const unsigned char *buf,
   if (0 > pos)
     return -1;
 
-  mxverb(2, "ac3_reader: Found tag at %d size %d\n", pos, ac3header.bytes);
+  mxverb(2, boost::format(Y("ac3_reader: Found tag at %1% size %2%\n")) % pos % ac3header.bytes);
 
   if (1 == num)
     return pos;
 
   int base = pos;
   do {
-    mxverb(2, "find_cons_ac3_h: starting with base at %d\n", base);
+    mxverb(2, boost::format(Y("find_cons_ac3_h: starting with base at %1%\n")) % base);
 
     int offset = ac3header.bytes;
     int i;
@@ -244,7 +244,7 @@ find_consecutive_ac3_headers(const unsigned char *buf,
         if (   (new_header.bsid        == ac3header.bsid)
             && (new_header.channels    == ac3header.channels)
             && (new_header.sample_rate == ac3header.sample_rate)) {
-          mxverb(2, "find_cons_ac3_h: found good header %d\n", i);
+          mxverb(2, boost::format(Y("find_cons_ac3_h: found good header %1%\n")) % i);
           offset += new_header.bytes;
           continue;
         } else

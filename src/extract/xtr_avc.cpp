@@ -37,7 +37,7 @@ xtr_avc_c::write_nal(const binary *data,
     nal_size = (nal_size << 8) | data[pos++];
 
   if ((pos + nal_size) > data_size)
-    mxerror("Track " LLD ": nal too big\n", m_tid);
+    mxerror(boost::format(Y("Track %1%: NAL too big\n")) % m_tid);
 
   m_out->write(s_start_code, 4);
   m_out->write(data + pos, nal_size);
@@ -52,12 +52,12 @@ xtr_avc_c::create_file(xtr_base_c *master,
 
   KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
-    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec private\" element and cannot be extracted.\n", m_tid, m_codec_id.c_str());
+    mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
   memory_cptr mpriv = decode_codec_private(priv);
 
   if (mpriv->get_size() < 6)
-    mxerror("Track " LLD " CodecPrivate is too small.\n", m_tid);
+    mxerror(boost::format(Y("Track %1% CodecPrivate is too small.\n")) % m_tid);
 
   binary *buf = mpriv->get();
   m_nal_size_size = 1 + (buf[4] & 3);

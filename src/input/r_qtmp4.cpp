@@ -43,14 +43,12 @@
 using namespace std;
 using namespace libmatroska;
 
-#define PFX "Quicktime/MP4 reader: "
-
 #if defined(ARCH_BIGENDIAN)
-#define BE2STR(a) ((char *)&a)[0], ((char *)&a)[1], ((char *)&a)[2], ((char *)&a)[3]
-#define LE2STR(a) ((char *)&a)[3], ((char *)&a)[2], ((char *)&a)[1], ((char *)&a)[0]
+#define BE2STR(a) ((char *)&a)[0] % ((char *)&a)[1] % ((char *)&a)[2] % ((char *)&a)[3]
+#define LE2STR(a) ((char *)&a)[3] % ((char *)&a)[2] % ((char *)&a)[1] % ((char *)&a)[0]
 #else
-#define BE2STR(a) ((char *)&a)[3], ((char *)&a)[2], ((char *)&a)[1], ((char *)&a)[0]
-#define LE2STR(a) ((char *)&a)[0], ((char *)&a)[1], ((char *)&a)[2], ((char *)&a)[3]
+#define BE2STR(a) ((char *)&a)[3] % ((char *)&a)[2] % ((char *)&a)[1] % ((char *)&a)[0]
+#define LE2STR(a) ((char *)&a)[0] % ((char *)&a)[1] % ((char *)&a)[2] % ((char *)&a)[3]
 #endif
 
 #define IS_AAC_OBJECT_TYPE_ID(object_type_id)                    \
@@ -58,6 +56,15 @@ using namespace libmatroska;
    || (MP4OTI_MPEG2AudioMain                  == object_type_id) \
    || (MP4OTI_MPEG2AudioLowComplexity         == object_type_id) \
    || (MP4OTI_MPEG2AudioScaleableSamplingRate == object_type_id))
+
+static std::string
+space(int num) {
+  char s[num + 1];
+  memset(s, ' ', num);
+  s[num] = 0;
+
+  return string(s);
+}
 
 int
 qtmp4_reader_c::probe_file(mm_io_c *in,
@@ -74,7 +81,7 @@ qtmp4_reader_c::probe_file(mm_io_c *in,
       if (atom_size == 1)
         atom_size = in->read_uint64_be();
 
-      mxverb(3, PFX "Atom: '%c%c%c%c'; size: " LLU "\n", BE2STR(atom), atom_size);
+      mxverb(3, boost::format(Y("Quicktime/MP4 reader: Atom: '%1%%2%%3%%4%'; size: %5%\n")) % BE2STR(atom) % atom_size);
 
       if (   (FOURCC('m', 'o', 'o', 'v') == atom)
           || (FOURCC('f', 't', 'y', 'p') == atom)
@@ -111,15 +118,15 @@ qtmp4_reader_c::qtmp4_reader_c(track_info_c &_ti)
     file_size = io->getFilePointer();
     io->setFilePointer(0, seek_beginning);
     if (!qtmp4_reader_c::probe_file(io, file_size))
-      throw error_c(PFX "Source is not a valid Quicktime/MP4 file.");
+      throw error_c(Y("Quicktime/MP4 reader: Source is not a valid Quicktime/MP4 file."));
 
     if (verbose)
-      mxinfo(FMT_FN "Using the Quicktime/MP4 demultiplexer.\n", ti.fname.c_str());
+      mxinfo_fn(ti.fname, Y("Using the Quicktime/MP4 demultiplexer.\n"));
 
     parse_headers();
 
   } catch (...) {
-    throw error_c(PFX "Could not read the source file.");
+    throw error_c(Y("Quicktime/MP4 reader: Could not read the source file."));
   }
 }
 
@@ -151,7 +158,7 @@ qtmp4_reader_c::read_atom(mm_io_c *read_from,
 
   if (a.size < a.hsize) {
     if (exit_on_error)
-      mxerror(PFX "Invalid chunk size " LLU " at " LLU ".\n", a.size, a.pos);
+      mxerror(boost::format(Y("Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n")) % a.size % a.pos);
     else
       throw false;
   }
@@ -171,16 +178,16 @@ qtmp4_reader_c::parse_headers() {
   bool headers_parsed = false;
   do {
     qt_atom_t atom = read_atom();
-    mxverb(2, PFX "'%c%c%c%c' atom, size " LLD ", at " LLD "\n", BE2STR(atom), atom.size, atom.pos);
+    mxverb(2, boost::format(Y("Quicktime/MP4 reader: '%1%%2%%3%%4%' atom, size %5%, at %6%\n")) % BE2STR(atom) % atom.size % atom.pos);
 
     if (FOURCC('f', 't', 'y', 'p') == atom.fourcc) {
       tmp = io->read_uint32_be();
-      mxverb(2, PFX "  File type major brand: %c%c%c%c\n", BE2STR(tmp));
+      mxverb(2, boost::format(Y("Quicktime/MP4 reader:   File type major brand: %1%%2%%3%%4%\n")) % BE2STR(tmp));
       tmp = io->read_uint32_be();
-      mxverb(2, PFX "  File type minor brand: 0x%08x\n", tmp);
+      mxverb(2, boost::format(Y("Quicktime/MP4 reader:   File type minor brand: 0x%|1$08x|\n")) % tmp);
       for (i = 0; i < ((atom.size - 16) / 4); ++i) {
         tmp = io->read_uint32_be();
-        mxverb(2, PFX "  File type compatible brands #%d: %c%c%c%c\n", i, BE2STR(tmp));
+        mxverb(2, boost::format(Y("Quicktime/MP4 reader:   File type compatible brands #%1%: %2%%3%%4%%5%\n")) % i % BE2STR(tmp));
       }
 
     } else if (FOURCC('m', 'o', 'o', 'v') == atom.fourcc) {
@@ -201,9 +208,9 @@ qtmp4_reader_c::parse_headers() {
   } while (!io->eof() && (!headers_parsed || (-1 == mdat_pos)));
 
   if (!headers_parsed)
-    mxerror(PFX "Have not found any header atoms.\n");
+    mxerror(Y("Quicktime/MP4 reader: Have not found any header atoms.\n"));
   if (-1 == mdat_pos)
-    mxerror(PFX "Have not found the 'mdat' atom. No movie data found.\n");
+    mxerror(Y("Quicktime/MP4 reader: Have not found the 'mdat' atom. No movie data found.\n"));
 
   io->setFilePointer(mdat_pos);
 
@@ -223,7 +230,7 @@ qtmp4_reader_c::parse_headers() {
          && strncasecmp(dmx->fourcc, "twos", 4)
          && strncasecmp(dmx->fourcc, "swot", 4)
          && strncasecmp(dmx->fourcc, "ac-3", 4))) {
-      mxwarn(PFX "Unknown/unsupported FourCC '%.4s' for track %u.\n", dmx->fourcc, dmx->id);
+      mxwarn(boost::format(Y("Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n")) % dmx->fourcc % dmx->id);
       continue;
     }
 
@@ -231,24 +238,25 @@ qtmp4_reader_c::parse_headers() {
       if (   !IS_AAC_OBJECT_TYPE_ID(dmx->esds.object_type_id)
           && (MP4OTI_MPEG2AudioPart3 != dmx->esds.object_type_id) // MP3...
           && (MP4OTI_MPEG1Audio      != dmx->esds.object_type_id)) {
-        mxwarn(PFX "The audio track %u is using an unsupported 'object type id' of %u in the 'esds' atom. Skipping this track.\n", dmx->id, dmx->esds.object_type_id);
+        mxwarn(boost::format(Y("Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"))
+               % dmx->id % dmx->esds.object_type_id);
         continue;
       }
 
       if (IS_AAC_OBJECT_TYPE_ID(dmx->esds.object_type_id) && ((NULL == dmx->esds.decoder_config) || !dmx->a_aac_config_parsed)) {
-        mxwarn(PFX "The AAC track %u is missing the esds atom/the decoder config. Skipping this track.\n", dmx->id);
+        mxwarn(boost::format(Y("Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n")) % dmx->id);
         continue;
       }
     }
 
     if ('v' == dmx->type) {
       if ((0 == dmx->v_width) || (0 == dmx->v_height) || (0 == get_uint32_le(dmx->fourcc))) {
-        mxwarn(PFX "Track %u is missing some data. Broken header atoms?\n", dmx->id);
+        mxwarn(boost::format(Y("Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n")) % dmx->id);
         continue;
       }
       if (!strncasecmp(dmx->fourcc, "mp4v", 4)) {
         if (!dmx->esds_parsed) {
-          mxwarn(PFX "The video track %u is missing the ESDS atom. Skipping this track.\n", dmx->id);
+          mxwarn(boost::format(Y("Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n")) % dmx->id);
           continue;
         }
 
@@ -268,26 +276,26 @@ qtmp4_reader_c::parse_headers() {
         else {
           // This is MPEG4 video, and we need header data for it.
           if (NULL == dmx->esds.decoder_config) {
-            mxwarn(PFX "MPEG4 track %u is missing the esds atom/the decoder config. Skipping this track.\n", dmx->id);
+            mxwarn(boost::format(Y("Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n")) % dmx->id);
             continue;
           }
         }
 
       } else if (dmx->v_is_avc) {
         if ((NULL == dmx->priv) || (4 > dmx->priv_size)) {
-          mxwarn(PFX "MPEG4 part 10/AVC track %u is missing its decoder config. Skipping this track.\n", dmx->id);
+          mxwarn(boost::format(Y("Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n")) % dmx->id);
           continue;
         }
       }
     }
 
     if (('a' == dmx->type) && ((0 == dmx->a_channels) || (0.0 == dmx->a_samplerate))) {
-      mxwarn(PFX "Track %u is missing some data. Broken header atoms?\n", dmx->id);
+      mxwarn(boost::format(Y("Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n")) % dmx->id);
       continue;
     }
 
     if ('?' == dmx->type) {
-      mxwarn(PFX "Track %u has an unknown type.\n", dmx->id);
+      mxwarn(boost::format(Y("Quicktime/MP4 reader: Track %1% has an unknown type.\n")) % dmx->id);
       continue;
     }
 
@@ -296,10 +304,10 @@ qtmp4_reader_c::parse_headers() {
     dmx->ok = true;
   }
 
-  if (!identifying)
+  if (!g_identifying)
     calculate_timecodes();
 
-  mxverb(2, PFX "Number of valid tracks found: %u\n", (unsigned int)demuxers.size());
+  mxverb(2, boost::format(Y("Quicktime/MP4 reader: Number of valid tracks found: %1%\n")) % demuxers.size());
 }
 
 void
@@ -321,8 +329,10 @@ qtmp4_reader_c::calculate_timecodes() {
     mxforeach(idmx, demuxers)
       (*idmx)->adjust_timecodes(min_timecode);
 
-    mxwarn("This file contains at least one frame with a negative timecode. mkvmerge will adjust all timecodes by " FMT_TIMECODEN " so that none is negative anymore.\n",
-           ARG_TIMECODEN(min_timecode));
+    mxwarn_fn(ti.fname,
+              boost::format(Y("This file contains at least one frame with a negative timecode. "
+                              "mkvmerge will adjust all timecodes by %1% so that none is negative anymore.\n"))
+              % format_timecode(min_timecode, 3));
 
   } else
     min_timecode = 0;
@@ -355,7 +365,9 @@ qtmp4_reader_c::parse_video_header_priv_atoms(qtmp4_demuxer_cptr &dmx,
         return;
       }
 
-      mxverb(2, PFX "%*sVideo private data size: %u, type: '%c%c%c%c'\n", (level + 1) * 2, "", (unsigned int)atom.size, BE2STR(atom.fourcc));
+      mxverb(2,
+             boost::format(Y("Quicktime/MP4 reader:%1%Video private data size: %2%, type: '%3%%4%%5%%6%'\n"))
+             % space((level + 1) * 2 + 1) % atom.size % BE2STR(atom.fourcc));
 
       if ((FOURCC('e', 's', 'd', 's') == atom.fourcc) ||
           (FOURCC('a', 'v', 'c', 'C') == atom.fourcc)) {
@@ -405,7 +417,9 @@ qtmp4_reader_c::parse_audio_header_priv_atoms(qtmp4_demuxer_cptr &dmx,
         continue;
       }
 
-      mxverb(2, PFX "%*sAudio private data size: %u, type: '%c%c%c%c'\n", (level + 1) * 2, "", (unsigned int)atom.size, BE2STR(atom.fourcc));
+      mxverb(2,
+             boost::format(Y("Quicktime/MP4 reader:%1%Audio private data size: %2%, type: '%3%%4%%5%%6%'\n"))
+             % space((level + 1) * 2 + 1) % atom.size % BE2STR(atom.fourcc));
 
       if (!dmx->esds_parsed) {
         mm_mem_io_c memio(mem + atom.pos + atom.hsize, atom.size - atom.hsize);
@@ -416,14 +430,15 @@ qtmp4_reader_c::parse_audio_header_priv_atoms(qtmp4_demuxer_cptr &dmx,
           bool aac_is_sbr;
 
           if (dmx->esds.decoder_config_len < 2)
-            mxwarn("Track " LLD ": AAC found, but decoder config data has length %u.\n", (int64_t)dmx->id, dmx->esds.decoder_config_len);
+            mxwarn(boost::format(Y("Track %1%: AAC found, but decoder config data has length %2%.\n")) % dmx->id % dmx->esds.decoder_config_len);
 
           else if (!parse_aac_data(dmx->esds.decoder_config, dmx->esds.decoder_config_len, profile, channels, sample_rate, output_sample_rate, aac_is_sbr))
-            mxwarn("Track " LLD ": The AAC information could not be parsed.\n", (int64_t)dmx->id);
+            mxwarn(boost::format(Y("Track %1%: The AAC information could not be parsed.\n")) % dmx->id);
 
           else {
-            mxverb(2, PFX "AAC: profile: %d, sample_rate: %d, channels: %d, output_sample_rate: %d, sbr: %d\n",
-                   profile, sample_rate, channels, output_sample_rate, (int)aac_is_sbr);
+            mxverb(2,
+                   boost::format(Y("Quicktime/MP4 reader: AAC: profile: %1%, sample_rate: %2%, channels: %3%, output_sample_rate: %4%, sbr: %5%\n"))
+                   % profile % sample_rate % channels % output_sample_rate % aac_is_sbr);
             if (aac_is_sbr)
               profile = AAC_PROFILE_SBR;
 
@@ -443,6 +458,15 @@ qtmp4_reader_c::parse_audio_header_priv_atoms(qtmp4_demuxer_cptr &dmx,
   }
 }
 
+#define print_basic_atom_info()                                                                     \
+  mxverb(2,                                                                                         \
+         boost::format(Y("Quicktime/MP4 reader:%1%'%2%%3%%4%%5%' atom, size %6%, at %7%\n")) \
+         % space(2 * level + 1) % BE2STR(atom.fourcc) % atom.size % atom.pos);
+
+#define print_atom_too_small_error(name, type)                                                                             \
+  mxerror(boost::format(Y("Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n")) \
+          % name % sizeof(type) % atom.size);
+
 void
 qtmp4_reader_c::handle_cmov_atom(qt_atom_t parent,
                                  int level) {
@@ -450,7 +474,7 @@ qtmp4_reader_c::handle_cmov_atom(qt_atom_t parent,
     qt_atom_t atom;
 
     atom = read_atom();
-    mxverb(2, PFX "%*s'%c%c%c%c' atom, size " LLD ", at " LLD "\n", 2 * level, "", BE2STR(atom.fourcc), atom.size, atom.pos);
+    print_basic_atom_info();
 
     if (FOURCC('d', 'c', 'o', 'm') == atom.fourcc)
       handle_dcom_atom(atom.to_parent(), level + 1);
@@ -469,10 +493,11 @@ qtmp4_reader_c::handle_cmvd_atom(qt_atom_t atom,
 #if defined(HAVE_ZLIB_H)
 
   uint32_t moov_size = io->read_uint32_be();
-  mxverb(2, PFX "%*sUncompressed size: %u\n", (level + 1) * 2, "", moov_size);
+  mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%Uncompressed size: %2%\n")) % space((level + 1) * 2 + 1) % moov_size);
 
   if (compression_algorithm != FOURCC('z', 'l', 'i', 'b'))
-    mxerror(PFX "This file uses compressed headers with an unknown or unsupported compression algorithm '%c%c%c%c'. Aborting.\n", BE2STR(compression_algorithm));
+    mxerror(boost::format(Y("Quicktime/MP4 reader: This file uses compressed headers with an unknown "
+                            "or unsupported compression algorithm '%1%%2%%3%%4%'. Aborting.\n")) % BE2STR(compression_algorithm));
 
   mm_io_c *old_io         = io;
   uint32_t cmov_size      = atom.size - atom.hsize;
@@ -482,7 +507,7 @@ qtmp4_reader_c::handle_cmvd_atom(qt_atom_t atom,
   unsigned char *moov_buf = af_moov_buf->get();
 
   if (io->read(cmov_buf, cmov_size) != cmov_size)
-    throw error_c("end-of-file");
+    throw error_c(Y("end-of-file"));
 
   z_stream zs;
   zs.zalloc    = (alloc_func)NULL;
@@ -495,22 +520,24 @@ qtmp4_reader_c::handle_cmvd_atom(qt_atom_t atom,
 
   int zret = inflateInit(&zs);
   if (Z_OK != zret)
-    mxerror(PFX "This file uses compressed headers, but the zlib library could not be initialized. Error code from zlib: %d. Aborting.\n", zret);
+    mxerror(boost::format(Y("Quicktime/MP4 reader: This file uses compressed headers, but the zlib library could not be initialized. "
+                            "Error code from zlib: %1%. Aborting.\n")) % zret);
 
   zret = inflate(&zs, Z_NO_FLUSH);
   if ((Z_OK != zret) && (Z_STREAM_END != zret))
-    mxerror(PFX "This file uses compressed headers, but they could not be uncompressed. Error code from zlib: %d. Aborting.\n", zret);
+    mxerror(boost::format(Y("Quicktime/MP4 reader: This file uses compressed headers, but they could not be uncompressed. "
+                            "Error code from zlib: %1%. Aborting.\n")) % zret);
 
   if (moov_size != zs.total_out)
-    mxwarn(PFX "This file uses compressed headers, but the expected uncompressed size (%u) was not what is available after uncompressing (%lu).\n",
-           moov_size, (unsigned long)zs.total_out);
+    mxwarn(boost::format(Y("Quicktime/MP4 reader: This file uses compressed headers, but the expected uncompressed size (%1%) "
+                           "was not what is available after uncompressing (%2%).\n")) % moov_size % zs.total_out);
 
   zret = inflateEnd(&zs);
 
   io   = new mm_mem_io_c(moov_buf, zs.total_out);
   while (!io->eof()) {
     qt_atom_t next_atom = read_atom();
-    mxverb(2, PFX "%*s'%c%c%c%c' atom at " LLD "\n", (level + 1) * 2, "", BE2STR(next_atom.fourcc), next_atom.pos);
+    mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%'%2%%3%%4%%5%' atom at %6%\n")) % space((level + 1) * 2 + 1) % BE2STR(next_atom.fourcc) % next_atom.pos);
 
     if (FOURCC('m', 'o', 'o', 'v') == next_atom.fourcc)
       handle_moov_atom(next_atom.to_parent(), level + 1);
@@ -521,7 +548,7 @@ qtmp4_reader_c::handle_cmvd_atom(qt_atom_t atom,
   io = old_io;
 
 #else // HAVE_ZLIB_H
-  mxerror("mkvmerge was not compiled with zlib. Compressed headers in QuickTime/MP4 files are therefore not supported.\n");
+  mxerror(Y("mkvmerge was not compiled with zlib. Compressed headers in QuickTime/MP4 files are therefore not supported.\n"));
 #endif // HAVE_ZLIB_H
 }
 
@@ -531,7 +558,7 @@ qtmp4_reader_c::handle_ctts_atom(qtmp4_demuxer_cptr &new_dmx,
                                  int level) {
   io->skip(1 + 3);        // version & flags
   uint32_t count = io->read_uint32_be();
-  mxverb(2, PFX "%*sFrame offset table: %u raw entries\n", level * 2, "", count);
+  mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%Frame offset table: %2% raw entries\n")) % space(level * 2 + 1) % count);
 
   int i;
   for (i = 0; i < count; ++i) {
@@ -541,7 +568,7 @@ qtmp4_reader_c::handle_ctts_atom(qtmp4_demuxer_cptr &new_dmx,
     frame_offset.offset = io->read_uint32_be();
     new_dmx->raw_frame_offset_table.push_back(frame_offset);
 
-    mxverb(3, PFX "%*s%u: count %u offset %u\n", (level + 1) * 2, "", i, frame_offset.count, frame_offset.offset);
+    mxverb(3, boost::format(Y("Quicktime/MP4 reader:%1%%2%: count %3% offset %4%\n")) % space((level + 1) * 2 + 1) % i % frame_offset.count % frame_offset.offset);
   }
 }
 
@@ -549,7 +576,7 @@ void
 qtmp4_reader_c::handle_dcom_atom(qt_atom_t atom,
                                  int level) {
   compression_algorithm = io->read_uint32_be();
-  mxverb(2, PFX "%*sCompression algorithm: %c%c%c%c\n", level * 2, "", BE2STR(compression_algorithm));
+  mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%Compression algorithm: %2%%3%%4%%5%\n")) % space(level * 2 + 1) % BE2STR(compression_algorithm));
 }
 
 void
@@ -559,12 +586,12 @@ qtmp4_reader_c::handle_hdlr_atom(qtmp4_demuxer_cptr &new_dmx,
   hdlr_atom_t hdlr;
 
   if (sizeof(hdlr_atom_t) > atom.size)
-    mxerror(PFX "'hdlr' atom is too small. Expected size: >= %u. Actual size: " LLD ".\n", (unsigned int)sizeof(hdlr_atom_t), atom.size);
+    print_atom_too_small_error('hdlr', hdlr_atom_t);
 
   if (io->read(&hdlr, sizeof(hdlr_atom_t)) != sizeof(hdlr_atom_t))
-    throw error_c("end-of-file");
+    throw error_c(Y("end-of-file"));
 
-  mxverb(2, PFX "%*s Component type: %.4s subtype: %.4s\n", level * 2, "", (char *)&hdlr.type, (char *)&hdlr.subtype);
+  mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%Component type: %|2$.4s| subtype: %|3$.4s|\n")) % space(level * 2 + 1) % (char *)&hdlr.type % (char *)&hdlr.subtype);
 
   switch (get_uint32_be(&hdlr.subtype)) {
     case FOURCC('s', 'o', 'u', 'n'):
@@ -582,7 +609,7 @@ qtmp4_reader_c::handle_mdhd_atom(qtmp4_demuxer_cptr &new_dmx,
                                  qt_atom_t atom,
                                  int level) {
   if (1 > atom.size)
-    mxerror(PFX "'mdhd' atom is too small. Expected size: >= %u. Actual size: " LLD ".\n", (unsigned int)sizeof(mdhd_atom_t), atom.size);
+    print_atom_too_small_error('mdhd', mdhd_atom_t);
 
   int version = io->read_uint8();
 
@@ -590,33 +617,33 @@ qtmp4_reader_c::handle_mdhd_atom(qtmp4_demuxer_cptr &new_dmx,
     mdhd_atom_t mdhd;
 
     if (sizeof(mdhd_atom_t) > atom.size)
-      mxerror(PFX "'mdhd' atom is too small. Expected size: >= %u. Actual size: " LLD ".\n", (unsigned int)sizeof(mdhd_atom_t), atom.size);
+      print_atom_too_small_error('mdhd', mdhd_atom_t);
     if (io->read(&mdhd.flags, sizeof(mdhd_atom_t) - 1) != (sizeof(mdhd_atom_t) - 1))
-      throw error_c("end-of-file");
+      throw error_c(Y("end-of-file"));
 
     new_dmx->time_scale      = get_uint32_be(&mdhd.time_scale);
     new_dmx->global_duration = get_uint32_be(&mdhd.duration);
 
-    mxverb(2, PFX "%*s Time scale: %u, duration: " LLU "\n", level * 2, "", new_dmx->time_scale, new_dmx->global_duration);
+    mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%Time scale: %2%, duration: %3%\n")) % space(level * 2 + 1) % new_dmx->time_scale % new_dmx->global_duration);
 
   } else if (1 == version) {
     mdhd64_atom_t mdhd;
 
     if (sizeof(mdhd64_atom_t) > atom.size)
-      mxerror(PFX "'mdhd' atom is too small. Expected size: >= %u. Actual size: " LLD ".\n", (unsigned int)sizeof(mdhd64_atom_t), atom.size);
+      print_atom_too_small_error('mdhd', mdhd64_atom_t);
     if (io->read(&mdhd.flags, sizeof(mdhd64_atom_t) - 1) != (sizeof(mdhd64_atom_t) - 1))
-      throw error_c("end-of-file");
+      throw error_c(Y("end-of-file"));
 
     new_dmx->time_scale      = get_uint32_be(&mdhd.time_scale);
     new_dmx->global_duration = get_uint64_be(&mdhd.duration);
 
-    mxverb(2, PFX "%*s Time scale: %u, duration: " LLU "\n", level * 2, "", new_dmx->time_scale, new_dmx->global_duration);
+    mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%Time scale: %2%, duration: %3%\n")) % space(level * 2 + 1) % new_dmx->time_scale % new_dmx->global_duration);
 
   } else
-    mxerror(PFX "The 'media header' atom ('mdhd') uses the unsupported version %d.\n", version);
+    mxerror(boost::format(Y("Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n")) % version);
 
   if (0 == new_dmx->time_scale)
-    mxerror(PFX "The 'time scale' parameter was 0. This is not supported.\n");
+    mxerror(Y("Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"));
 }
 
 void
@@ -625,7 +652,7 @@ qtmp4_reader_c::handle_mdia_atom(qtmp4_demuxer_cptr &new_dmx,
                                  int level) {
   while (parent.size > 0) {
     qt_atom_t atom = read_atom();
-    mxverb(2, PFX "%*s'%c%c%c%c' atom, size " LLD ", at " LLD "\n", 2 * level, "", BE2STR(atom.fourcc), atom.size, atom.pos);
+    print_basic_atom_info();
 
     if (FOURCC('m', 'd', 'h', 'd') == atom.fourcc)
       handle_mdhd_atom(new_dmx, atom.to_parent(), level + 1);
@@ -647,7 +674,7 @@ qtmp4_reader_c::handle_minf_atom(qtmp4_demuxer_cptr &new_dmx,
                                  int level) {
   while (0 < parent.size) {
     qt_atom_t atom = read_atom();
-    mxverb(2, PFX "%*s'%c%c%c%c' atom, size " LLD ", at " LLD "\n", 2 * level, "", BE2STR(atom.fourcc), atom.size, atom.pos);
+    print_basic_atom_info();
 
     if (FOURCC('h', 'd', 'l', 'r') == atom.fourcc)
       handle_hdlr_atom(new_dmx, atom.to_parent(), level + 1);
@@ -665,7 +692,7 @@ qtmp4_reader_c::handle_moov_atom(qt_atom_t parent,
                                  int level) {
   while (parent.size > 0) {
     qt_atom_t atom = read_atom();
-    mxverb(2, PFX "%*s'%c%c%c%c' atom, size " LLD ", at " LLD "\n", 2 * level, "", BE2STR(atom.fourcc), atom.size, atom.pos);
+    print_basic_atom_info();
 
     if (FOURCC('c', 'm', 'o', 'v') == atom.fourcc) {
       compression_algorithm = 0;
@@ -693,13 +720,13 @@ qtmp4_reader_c::handle_mvhd_atom(qt_atom_t atom,
   mvhd_atom_t mvhd;
 
   if (sizeof(mvhd_atom_t) > (atom.size - atom.hsize))
-    mxerror(PFX "'mvhd' atom is too small. Expected size: >= %u. Actual size: " LLD ".\n", (unsigned int)sizeof(mvhd_atom_t), atom.size);
+    print_atom_too_small_error('mvhd', mvhd_atom_t);
   if (io->read(&mvhd, sizeof(mvhd_atom_t)) != sizeof(mvhd_atom_t))
-    throw error_c("end-of-file");
+    throw error_c(Y("end-of-file"));
 
   time_scale = get_uint32_be(&mvhd.time_scale);
 
-  mxverb(2, PFX "%*s Time scale: %u\n", level * 2, "", time_scale);
+  mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%Time scale: %2%\n")) % space(level * 2 + 1) % time_scale);
 }
 
 void
@@ -708,7 +735,7 @@ qtmp4_reader_c::handle_stbl_atom(qtmp4_demuxer_cptr &new_dmx,
                                  int level) {
   while (0 < parent.size) {
     qt_atom_t atom = read_atom();
-    mxverb(2, PFX "%*s'%c%c%c%c' atom, size " LLD ", at " LLD "\n", 2 * level, "", BE2STR(atom.fourcc), atom.size, atom.pos);
+    print_basic_atom_info();
 
     if (FOURCC('s', 't', 't', 's') == atom.fourcc)
       handle_stts_atom(new_dmx, atom.to_parent(), level + 1);
@@ -746,7 +773,7 @@ qtmp4_reader_c::handle_stco_atom(qtmp4_demuxer_cptr &new_dmx,
   io->skip(1 + 3);        // version & flags
   uint32_t count = io->read_uint32_be();
 
-  mxverb(2, PFX "%*sChunk offset table: %u entries\n", level * 2, "", count);
+  mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%Chunk offset table: %2% entries\n")) % space(level * 2 + 1) % count);
 
   int i;
   for (i = 0; i < count; ++i) {
@@ -754,7 +781,7 @@ qtmp4_reader_c::handle_stco_atom(qtmp4_demuxer_cptr &new_dmx,
 
     chunk.pos = io->read_uint32_be();
     new_dmx->chunk_table.push_back(chunk);
-    mxverb(3, PFX "%*s  " LLD "\n", level * 2, "", chunk.pos);
+    mxverb(3, boost::format(Y("Quicktime/MP4 reader:%1%  %2%\n")) % space(level * 2 + 1) % chunk.pos);
   }
 }
 
@@ -765,7 +792,7 @@ qtmp4_reader_c::handle_co64_atom(qtmp4_demuxer_cptr &new_dmx,
   io->skip(1 + 3);        // version & flags
   uint32_t count = io->read_uint32_be();
 
-  mxverb(2, PFX "%*s64bit chunk offset table: %u entries\n", level * 2, "", count);
+  mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%64bit chunk offset table: %2% entries\n")) % space(level * 2 + 1) % count);
 
   int i;
   for (i = 0; i < count; ++i) {
@@ -773,7 +800,7 @@ qtmp4_reader_c::handle_co64_atom(qtmp4_demuxer_cptr &new_dmx,
 
     chunk.pos = io->read_uint64_be();
     new_dmx->chunk_table.push_back(chunk);
-    mxverb(3, PFX "%*s  " LLD "\n", level * 2, "", chunk.pos);
+    mxverb(3, boost::format(Y("Quicktime/MP4 reader:%1%  %2%n")) % space(level * 2 + 1) % chunk.pos);
   }
 }
 
@@ -793,7 +820,7 @@ qtmp4_reader_c::handle_stsc_atom(qtmp4_demuxer_cptr &new_dmx,
     new_dmx->chunkmap_table.push_back(chunkmap);
   }
 
-  mxverb(2, PFX "%*sSample to chunk/chunkmap table: %u entries\n", level * 2, "", count);
+  mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%Sample to chunk/chunkmap table: %2% entries\n")) % space(level * 2 + 1) % count);
 }
 
 void
@@ -812,37 +839,40 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
     unsigned char *priv = af_priv->get();
 
     if (io->read(priv, size) != size)
-      mxerror(PFX "Could not read the stream description atom for track ID %u.\n", new_dmx->id);
+      mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n")) % new_dmx->id);
 
     if ('a' == new_dmx->type) {
       if (sizeof(sound_v0_stsd_atom_t) > size)
-        mxerror(PFX "Could not read the sound description atom for track ID %u.\n", new_dmx->id);
+        mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n")) % new_dmx->id);
 
       sound_v1_stsd_atom_t sv1_stsd;
       memcpy(&sv1_stsd, priv, sizeof(sound_v0_stsd_atom_t));
       if (0 != new_dmx->fourcc[0])
-        mxwarn(PFX "Track ID %u has more than one FourCC. Only using the first one (%.4s) and not this one (%.4s).\n", new_dmx->id, new_dmx->fourcc, sv1_stsd.v0.base.fourcc);
+        mxwarn(boost::format(Y("Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"))
+               % new_dmx->id % new_dmx->fourcc % sv1_stsd.v0.base.fourcc);
       else
         memcpy(new_dmx->fourcc, sv1_stsd.v0.base.fourcc, 4);
 
-      mxverb(2, PFX "%*sFourCC: %.4s, channels: %d, sample size: %d, compression id: %d, sample rate: 0x%08x, version: %u",
-             level * 2, "",
-             sv1_stsd.v0.base.fourcc,
-             get_uint16_be(&sv1_stsd.v0.channels),
-             get_uint16_be(&sv1_stsd.v0.sample_size),
-             get_uint16_be(&sv1_stsd.v0.compression_id),
-             get_uint32_be(&sv1_stsd.v0.sample_rate),
-             get_uint16_be(&sv1_stsd.v0.version));
+      mxverb(2,
+             boost::format(Y("Quicktime/MP4 reader:%1%FourCC: %|2$.4s|, channels: %3%, sample size: %4%, compression id: %5%, sample rate: 0x%|6$08x|, version: %7%"))
+             % space(level * 2 + 1)
+             % sv1_stsd.v0.base.fourcc
+             % get_uint16_be(&sv1_stsd.v0.channels)
+             % get_uint16_be(&sv1_stsd.v0.sample_size)
+             % get_uint16_be(&sv1_stsd.v0.compression_id)
+             % get_uint32_be(&sv1_stsd.v0.sample_rate)
+             % get_uint16_be(&sv1_stsd.v0.version));
 
       if (get_uint16_be(&sv1_stsd.v0.version) == 1) {
         if ((sizeof(sound_v1_stsd_atom_t) > size) || (io->read(&sv1_stsd.v1, sizeof(sv1_stsd.v1)) != sizeof(sv1_stsd.v1)))
-          mxerror(PFX "Could not read the extended sound description atom for track ID %u.\n", new_dmx->id);
+          mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n")) % new_dmx->id);
 
-        mxverb(2, ", samples per packet: %u, bytes per packet: %u, bytes per frame: %u, bytes_per_sample: %u",
-               get_uint32_be(&sv1_stsd.v1.samples_per_packet),
-               get_uint32_be(&sv1_stsd.v1.bytes_per_packet),
-               get_uint32_be(&sv1_stsd.v1.bytes_per_frame),
-               get_uint32_be(&sv1_stsd.v1.bytes_per_sample));
+        mxverb(2,
+               boost::format(Y(" samples per packet: %1% bytes per packet: %2% bytes per frame: %3% bytes_per_sample: %4%"))
+               % get_uint32_be(&sv1_stsd.v1.samples_per_packet)
+               % get_uint32_be(&sv1_stsd.v1.bytes_per_packet)
+               % get_uint32_be(&sv1_stsd.v1.bytes_per_frame)
+               % get_uint32_be(&sv1_stsd.v1.bytes_per_sample));
       }
       mxverb(2, "\n");
 
@@ -864,25 +894,28 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
 
     } else if ('v' == new_dmx->type) {
       if (size < sizeof(video_stsd_atom_t))
-        mxerror(PFX "Could not read the video description atom for track ID %u.\n", new_dmx->id);
+        mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n")) % new_dmx->id);
 
       video_stsd_atom_t v_stsd;
       memcpy(&v_stsd, priv, sizeof(video_stsd_atom_t));
       new_dmx->v_stsd      = (unsigned char *)safememdup(priv, size);
       new_dmx->v_stsd_size = size;
       if (0 != new_dmx->fourcc[0])
-        mxwarn(PFX "Track ID %u has more than one FourCC. Only using the first one (%.4s) and not this one (%.4s).\n", new_dmx->id, new_dmx->fourcc, v_stsd.base.fourcc);
+        mxwarn(boost::format(Y("Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"))
+               % new_dmx->id % new_dmx->fourcc % v_stsd.base.fourcc);
 
       else {
         memcpy(new_dmx->fourcc, v_stsd.base.fourcc, 4);
         new_dmx->v_is_avc = !strncasecmp(new_dmx->fourcc, "avc1", 4);
       }
 
-      mxverb(2, PFX "%*sFourCC: %.4s, width: %u, height: %u, depth: %u\n", level * 2, "",
-             v_stsd.base.fourcc,
-             get_uint16_be(&v_stsd.width),
-             get_uint16_be(&v_stsd.height),
-             get_uint16_be(&v_stsd.depth));
+      mxverb(2,
+             boost::format(Y("Quicktime/MP4 reader:%1%FourCC: %|2$.4s|, width: %3%, height: %4%, depth: %5%\n"))
+             % space(level * 2 + 1)
+             % v_stsd.base.fourcc
+             % get_uint16_be(&v_stsd.width)
+             % get_uint16_be(&v_stsd.height)
+             % get_uint16_be(&v_stsd.depth));
 
       new_dmx->v_width    = get_uint16_be(&v_stsd.width);
       new_dmx->v_height   = get_uint16_be(&v_stsd.height);
@@ -912,9 +945,9 @@ qtmp4_reader_c::handle_stss_atom(qtmp4_demuxer_cptr &new_dmx,
   for (i = 0; i < count; ++i)
     new_dmx->keyframe_table.push_back(io->read_uint32_be());
 
-  mxverb(2, PFX "%*sSync/keyframe table: %u entries\n", level * 2, "", count);
+  mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%Sync/keyframe table: %2% entries\n")) % space(level * 2 + 1) % count);
   for (i = 0; i < count; ++i)
-    mxverb(4, PFX "%*skeyframe at %u\n", (level + 1) * 2, "", new_dmx->keyframe_table[i]);
+    mxverb(4, boost::format(Y("Quicktime/MP4 reader:%1%keyframe at %2%\n")) % space((level + 1) * 2 + 1) % new_dmx->keyframe_table[i]);
 }
 
 void
@@ -934,11 +967,11 @@ qtmp4_reader_c::handle_stsz_atom(qtmp4_demuxer_cptr &new_dmx,
       new_dmx->sample_table.push_back(sample);
     }
 
-    mxverb(2, PFX "%*sSample size table: %u entries\n", level * 2, "", count);
+    mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%Sample size table: %2% entries\n")) % space(level * 2 + 1) % count);
 
   } else {
     new_dmx->sample_size = sample_size;
-    mxverb(2, PFX "%*sSample size table; global sample size: %u\n", level * 2, "", sample_size);
+    mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%Sample size table; global sample size: %2%\n")) % space(level * 2 + 1) % sample_size);
   }
 }
 
@@ -958,7 +991,7 @@ qtmp4_reader_c::handle_sttd_atom(qtmp4_demuxer_cptr &new_dmx,
     new_dmx->durmap_table.push_back(durmap);
   }
 
-  mxverb(2, PFX "%*sSample duration table: %u entries\n", level * 2, "", count);
+  mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%Sample duration table: %2% entries\n")) % space(level * 2 + 1) % count);
 }
 
 void
@@ -977,7 +1010,7 @@ qtmp4_reader_c::handle_stts_atom(qtmp4_demuxer_cptr &new_dmx,
     new_dmx->durmap_table.push_back(durmap);
   }
 
-  mxverb(2, PFX "%*sSample duration table: %u entries\n", level * 2, "", count);
+  mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%Sample duration table: %2% entries\n")) % space(level * 2 + 1) % count);
 }
 
 void
@@ -986,7 +1019,7 @@ qtmp4_reader_c::handle_edts_atom(qtmp4_demuxer_cptr &new_dmx,
                                  int level) {
   while (0 < parent.size) {
     qt_atom_t atom = read_atom();
-    mxverb(2, PFX "%*s'%c%c%c%c' atom, size " LLD ", at " LLD "\n", 2 * level, "", BE2STR(atom.fourcc), atom.size, atom.pos);
+    print_basic_atom_info();
 
     if (FOURCC('e', 'l', 's', 't') == atom.fourcc)
       handle_elst_atom(new_dmx, atom.to_parent(), level + 1);
@@ -1013,13 +1046,15 @@ qtmp4_reader_c::handle_elst_atom(qtmp4_demuxer_cptr &new_dmx,
     editlist.speed    = io->read_uint32_be();
   }
 
-  mxverb(2, PFX "%*sEdit list table: %u entries\n", level * 2, "", count);
+  mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%Edit list table: %2% entries\n")) % space(level * 2 + 1) % count);
   for (i = 0; i < count; ++i)
-    mxverb(4, PFX "%*s%u: duration " LLU " pos " LLU " speed %u\n",
-           (level + 1) * 2, "", i,
-           new_dmx->editlist_table[i].duration,
-           new_dmx->editlist_table[i].pos,
-           new_dmx->editlist_table[i].speed);
+    mxverb(4,
+           boost::format(Y("Quicktime/MP4 reader:%1%%2%: duration %3% pos %4% speed %5%\n"))
+           % space((level + 1) * 2 + 1)
+           % i
+           % new_dmx->editlist_table[i].duration
+           % new_dmx->editlist_table[i].pos
+           % new_dmx->editlist_table[i].speed);
 }
 
 void
@@ -1029,12 +1064,12 @@ qtmp4_reader_c::handle_tkhd_atom(qtmp4_demuxer_cptr &new_dmx,
   tkhd_atom_t tkhd;
 
   if (sizeof(tkhd_atom_t) > atom.size)
-    mxerror(PFX "'tkhd' atom is too small. Expected size: >= %u. Actual size: " LLD ".\n", (unsigned int)sizeof(tkhd_atom_t), atom.size);
+    print_atom_too_small_error('tkhd', tkhd_atom_t);
 
   if (io->read(&tkhd, sizeof(tkhd_atom_t)) != sizeof(tkhd_atom_t))
-    throw error_c("end-of-file");
+    throw error_c(Y("end-of-file"));
 
-  mxverb(2, PFX "%*s Track ID: %u\n", level * 2, "", get_uint32_be(&tkhd.track_id));
+  mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%Track ID: %2%\n")) % space(level * 2 + 1) % get_uint32_be(&tkhd.track_id));
 
   new_dmx->id = get_uint32_be(&tkhd.track_id);
 }
@@ -1045,7 +1080,7 @@ qtmp4_reader_c::handle_trak_atom(qtmp4_demuxer_cptr &new_dmx,
                                  int level) {
   while (parent.size > 0) {
     qt_atom_t atom = read_atom();
-    mxverb(2, PFX "%*s'%c%c%c%c' atom, size " LLD ", at " LLD "\n", 2 * level, "", BE2STR(atom.fourcc), atom.size, atom.pos);
+    print_basic_atom_info();
 
     if (FOURCC('t', 'k', 'h', 'd') == atom.fourcc)
       handle_tkhd_atom(new_dmx, atom.to_parent(), level + 1);
@@ -1100,8 +1135,8 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
   }
 
   if (io->read(buffer + buffer_offset, index.size) != index.size) {
-    mxwarn(PFX "Could not read chunk number %u/%u with size " LLD " from position " LLD ". Aborting.\n",
-           dmx->pos, (unsigned int)dmx->m_index.size(), index.size, index.file_pos);
+    mxwarn(boost::format(Y("Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"))
+           % dmx->pos % dmx->m_index.size() % index.size % index.file_pos);
     safefree(buffer);
     flush_packetizers();
     return FILE_STATUS_DONE;
@@ -1142,23 +1177,25 @@ qtmp4_reader_c::parse_esds_atom(mm_mem_io_c &memio,
   esds_t *e  = &dmx->esds;
   e->version = memio.read_uint8();
   e->flags   = memio.read_uint24_be();
-  mxverb(2, PFX "%*sesds: version: %u, flags: %u\n", lsp, "", e->version, e->flags);
+  mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%esds: version: %2%, flags: %3%\n")) % space(lsp + 1) % (int)e->version % (int)e->flags);
 
   uint8_t tag = memio.read_uint8();
   if (MP4DT_ES == tag) {
     uint32_t len       = read_esds_descr_len(memio);
     e->esid            = memio.read_uint16_be();
     e->stream_priority = memio.read_uint8();
-    mxverb(2, PFX "%*sesds: id: %u, stream priority: %u, len: %u\n", lsp, "", e->esid, (uint32_t)e->stream_priority, len);
+    mxverb(2,
+           boost::format(Y("Quicktime/MP4 reader:%1%esds: id: %2%, stream priority: %3%, len: %4%\n"))
+           % space(lsp + 1) % (int)e->esid % (int)e->stream_priority % len);
 
   } else {
     e->esid = memio.read_uint16_be();
-    mxverb(2, PFX "%*sesds: id: %u\n", lsp, "", e->esid);
+    mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%esds: id: %2%\n")) % space(lsp + 1) % (int)e->esid);
   }
 
   tag = memio.read_uint8();
   if (MP4DT_DEC_CONFIG != tag) {
-    mxverb(2, PFX "%*stag is not DEC_CONFIG (0x%02x) but 0x%02x.\n", lsp, "", MP4DT_DEC_CONFIG, (uint32_t)tag);
+    mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%tag is not DEC_CONFIG (0x%|2$02x|) but 0x%|3$02x|.\n")) % space(lsp + 1) % MP4DT_DEC_CONFIG % tag);
     return false;
   }
 
@@ -1171,13 +1208,16 @@ qtmp4_reader_c::parse_esds_atom(mm_mem_io_c &memio,
   e->avg_bitrate        = memio.read_uint32_be();
   e->decoder_config_len = 0;
 
-  mxverb(2, PFX "%*sesds: decoder config descriptor, len: %u, object_type_id: %u, stream_type: 0x%2x, buffer_size_db: %u, max_bitrate: %.3fkbit/s, avg_bitrate: %.3fkbit/s\n",
-         lsp, "", len,
-         e->object_type_id,
-         e->stream_type,
-         e->buffer_size_db,
-         e->max_bitrate / 1000.0,
-         e->avg_bitrate / 1000.0);
+  mxverb(2,
+         boost::format(Y("Quicktime/MP4 reader:%1%esds: decoder config descriptor, len: %2%, object_type_id: %3%, "
+                         "stream_type: 0x%|4$2x|, buffer_size_db: %5%, max_bitrate: %|6$.3f|kbit/s, avg_bitrate: %|7$.3f|kbit/s\n"))
+         % space(lsp + 1)
+         % len
+         % e->object_type_id
+         % e->stream_type
+         % (int)e->buffer_size_db
+         % (e->max_bitrate / 1000.0)
+         % (e->avg_bitrate / 1000.0));
 
   tag = memio.read_uint8();
   if (MP4DT_DEC_SPECIFIC == tag) {
@@ -1185,28 +1225,28 @@ qtmp4_reader_c::parse_esds_atom(mm_mem_io_c &memio,
     e->decoder_config_len = len;
     e->decoder_config     = (uint8_t *)safemalloc(len);
     if (memio.read(e->decoder_config, len) != len)
-      throw error_c("end-of-file");
+      throw error_c(Y("end-of-file"));
 
     tag = memio.read_uint8();
 
-    mxverb(2, PFX "%*sesds: decoder specific descriptor, len: %u\n", lsp,     "", len);
-    mxverb(3, PFX "%*sesds: dumping decoder specific descriptor\n",  lsp + 2, "");
+    mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%esds: decoder specific descriptor, len: %2%\n")) % space(lsp + 1) % len);
+    mxverb(3, boost::format(Y("Quicktime/MP4 reader:%1%esds: dumping decoder specific descriptor\n")) % space(lsp + 3));
     mxhexdump(3, e->decoder_config, e->decoder_config_len);
 
   } else
-    mxverb(2, PFX "%*stag is not DEC_SPECIFIC (0x%02x) but 0x%02x.\n", lsp, "", MP4DT_DEC_SPECIFIC, (uint32_t)tag);
+    mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%tag is not DEC_SPECIFIC (0x%|2$02x|) but 0x%|3$02x|.\n")) % space(lsp + 1) % MP4DT_DEC_SPECIFIC % tag);
 
   if (MP4DT_SL_CONFIG == tag) {
     len              = read_esds_descr_len(memio);
     e->sl_config_len = len;
     e->sl_config     = (uint8_t *)safemalloc(len);
     if (memio.read(e->sl_config, len) != len)
-      throw error_c("end-of-file");
+      throw error_c(Y("end-of-file"));
 
-    mxverb(2, PFX "%*sesds: sync layer config descriptor, len: %u\n", lsp, "", len);
+    mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%esds: sync layer config descriptor, len: %2%\n")) % space(lsp + 1) % len);
 
   } else
-    mxverb(2, PFX "%*stag is not SL_CONFIG (0x%02x) but 0x%02x.\n", lsp, "", MP4DT_SL_CONFIG, (uint32_t)tag);
+    mxverb(2, boost::format(Y("Quicktime/MP4 reader:%1%tag is not SL_CONFIG (0x%|2$02x|) but 0x%|3$02x|.\n")) % space(lsp + 1) % MP4DT_SL_CONFIG % tag);
 
   return true;
 }
@@ -1240,14 +1280,14 @@ qtmp4_reader_c::create_audio_packetizer_ac3(qtmp4_demuxer_cptr &dmx) {
   memory_cptr buf = memory_c::alloc(64);
 
   if (!dmx->read_first_bytes(buf, 64, io) || (-1 == find_ac3_header(buf->get(), buf->get_size(), &dmx->m_ac3_header, false))) {
-    mxwarn(FMT_TID "No AC3 header found in first frame; track will be skipped.\n", ti.fname.c_str(), (int64_t)dmx->id);
+    mxwarn_tid(ti.fname, dmx->id, Y("No AC3 header found in first frame; track will be skipped.\n"));
     dmx->ok = false;
 
     return false;
   }
 
   dmx->ptzr = add_packetizer(new ac3_packetizer_c(this, dmx->m_ac3_header.sample_rate, dmx->m_ac3_header.channels, dmx->m_ac3_header.bsid, ti));
-  mxinfo(FMT_TID "Using the AC3 output module.\n", ti.fname.c_str(), (int64_t)dmx->id);
+  mxinfo_tid(ti.fname, dmx->id, Y("Using the AC3 output module.\n"));
 
   return true;
 }
@@ -1262,7 +1302,7 @@ qtmp4_reader_c::create_video_packetizer_svq1(qtmp4_demuxer_cptr &dmx) {
   dmx->ptzr       = add_packetizer(new video_packetizer_c(this, MKV_V_MSCOMP, 0.0, dmx->v_width, dmx->v_height, ti));
   ti.private_data = NULL;
 
-  mxinfo(FMT_TID "Using the video output module (FourCC: %.4s).\n", ti.fname.c_str(), (int64_t)dmx->id, dmx->fourcc);
+  mxinfo_tid(ti.fname, dmx->id, boost::format(Y("Using the video output module (FourCC: %|1$.4s|).\n")) % dmx->fourcc);
 }
 
 void
@@ -1292,28 +1332,29 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
       dmx->ptzr       = add_packetizer(new mpeg4_p2_video_packetizer_c(this, 0.0, dmx->v_width, dmx->v_height, false, ti));
       ti.private_data = NULL;
 
-      mxinfo(FMT_TID "Using the MPEG-4 part 2 video output module.\n", ti.fname.c_str(), (int64_t)dmx->id);
+      mxinfo_tid(ti.fname, dmx->id, Y("Using the MPEG-4 part 2 video output module.\n"));
 
     } else if (!strncasecmp(dmx->fourcc, "mpg1", 4) || !strncasecmp(dmx->fourcc, "mpg2", 4)) {
       int version = dmx->fourcc[3] - '0';
       dmx->ptzr   = add_packetizer(new mpeg1_2_video_packetizer_c(this, version, -1.0, dmx->v_width, dmx->v_height, 0, 0, false, ti));
 
-      mxinfo(FMT_TID "Using the MPEG-%d video output module.\n", ti.fname.c_str(), (int64_t)dmx->id, version);
+      mxinfo_tid(ti.fname, dmx->id, boost::format(Y("Using the MPEG-%1% video output module.\n")) % version);
 
     } else if (dmx->v_is_avc) {
       if (dmx->frame_offset_table.empty())
-        mxwarn(FMT_TID "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one "
-               "(for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for "
-               "getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure "
-               "that it looks like you expected it to.\n",
-               ti.fname.c_str(), (int64_t)dmx->id);
+        mxwarn_tid(ti.fname, dmx->id,
+                   Y("The AVC video track is missing the 'CTTS' atom for frame timecode offsets. "
+                     "However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. "
+                     "The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. "
+                     "As it is missing the timecodes for this track might be wrong. "
+                     "You should watch the resulting file and make sure that it looks like you expected it to.\n"));
 
       ti.private_size = dmx->priv_size;
       ti.private_data = dmx->priv;
       dmx->ptzr       = add_packetizer(new mpeg4_p10_video_packetizer_c(this, dmx->fps, dmx->v_width, dmx->v_height, ti));
       ti.private_data = NULL;
 
-      mxinfo(FMT_TID "Using the MPEG-4 part 10 (AVC) video output module.\n", ti.fname.c_str(), (int64_t)dmx->id);
+      mxinfo_tid(ti.fname, dmx->id, Y("Using the MPEG-4 part 10 (AVC) video output module.\n"));
 
     } else if (!strncasecmp(dmx->fourcc, "svq1", 4))
       create_video_packetizer_svq1(dmx);
@@ -1324,7 +1365,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
       dmx->ptzr       = add_packetizer(new video_packetizer_c(this, MKV_V_QUICKTIME, 0.0, dmx->v_width, dmx->v_height, ti));
       ti.private_data = NULL;
 
-      mxinfo(FMT_TID "Using the video output module (FourCC: %.4s).\n", ti.fname.c_str(), (int64_t)dmx->id, dmx->fourcc);
+      mxinfo_tid(ti.fname, dmx->id, boost::format(Y("Using the video output module (FourCC: %|1$.4s|).\n")) % dmx->fourcc);
     }
 
   } else {
@@ -1339,7 +1380,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
       ptzr->set_audio_channels(dmx->a_channels);
       ptzr->set_audio_bit_depth(dmx->a_bitdepth);
 
-      mxinfo(FMT_TID "Using the generic audio output module (FourCC: %.4s).\n", ti.fname.c_str(), (int64_t)dmx->id, dmx->fourcc);
+      mxinfo_tid(ti.fname, dmx->id, boost::format(Y("Using the generic audio output module (FourCC: %|1$.4s|).\n")) % dmx->fourcc);
 
     } else if (!strncasecmp(dmx->fourcc, "MP4A", 4) && IS_AAC_OBJECT_TYPE_ID(dmx->esds.object_type_id)) {
       ti.private_data = dmx->esds.decoder_config;
@@ -1351,23 +1392,23 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
       if (dmx->a_aac_is_sbr)
         PTZR(dmx->ptzr)->set_audio_output_sampling_freq(dmx->a_aac_output_sample_rate);
 
-      mxinfo(FMT_TID "Using the AAC output module.\n", ti.fname.c_str(), (int64_t)dmx->id);
+      mxinfo_tid(ti.fname, dmx->id, Y("Using the AAC output module.\n"));
 
     } else if (!strncasecmp(dmx->fourcc, "MP4A", 4) && ((MP4OTI_MPEG2AudioPart3 == dmx->esds.object_type_id) || (MP4OTI_MPEG1Audio == dmx->esds.object_type_id))) {
       dmx->ptzr = add_packetizer(new mp3_packetizer_c(this, (int32_t)dmx->a_samplerate, dmx->a_channels, true, ti));
-      mxinfo(FMT_TID "Using the MPEG audio output module.\n", ti.fname.c_str(), (int64_t)dmx->id);
+      mxinfo_tid(ti.fname, dmx->id, Y("Using the MPEG audio output module.\n"));
 
     } else if (!strncasecmp(dmx->fourcc, "twos", 4) || !strncasecmp(dmx->fourcc, "swot", 4)) {
       dmx->ptzr = add_packetizer(new pcm_packetizer_c(this, (int32_t)dmx->a_samplerate, dmx->a_channels, dmx->a_bitdepth, ti,
                                                       (8 < dmx->a_bitdepth) && ('t' == dmx->fourcc[0])));
-      mxinfo(FMT_TID "Using the PCM output module.\n", ti.fname.c_str(), (int64_t)dmx->id);
+      mxinfo_tid(ti.fname, dmx->id, Y("Using the PCM output module.\n"));
 
     } else if (!strncasecmp(dmx->fourcc, "ac-3", 4)) {
       if (!create_audio_packetizer_ac3(dmx))
         return;
 
     } else
-      die(PFX "Should not have happened #1.");
+      mxerror(Y("Quicktime/MP4 reader: Should not have happened #1."));
   }
 
   if (-1 == main_dmx)
@@ -1413,7 +1454,7 @@ qtmp4_reader_c::identify() {
       verbose_info.push_back("packetizer:mpeg4_p10_video");
 
     id_result_track(dmx->id, dmx->type == 'v' ? ID_RESULT_TRACK_VIDEO : dmx->type == 'a' ? ID_RESULT_TRACK_AUDIO : ID_RESULT_TRACK_UNKNOWN,
-                    mxsprintf("%.4s", dmx->fourcc), verbose_info);
+                    (boost::format("%|1$.4s|") %  dmx->fourcc).str(), verbose_info);
   }
 }
 
@@ -1432,7 +1473,7 @@ qtmp4_demuxer_c::calculate_fps() {
   if ((1 == durmap_table.size()) && (0 != durmap_table[0].duration) && ((0 != sample_size) || (0 == frame_offset_table.size()))) {
     // Constant FPS. Let's set the default duration.
     fps = (double)time_scale / (double)durmap_table[0].duration;
-    mxverb(3, PFX "calculate_fps: case 1: %f\n", fps);
+    mxverb(3, boost::format(Y("Quicktime/MP4 reader: calculate_fps: case 1: %1%\n")) % fps);
 
   } else {
     map<int64_t, int> duration_map;
@@ -1454,7 +1495,7 @@ qtmp4_demuxer_c::calculate_fps() {
     if ((most_common != duration_map.end()) && most_common->first)
       fps = (double)1000000000.0 / (double)to_nsecs(most_common->first);
 
-    mxverb(3, PFX "calculate_fps: case 2: most_common " LLD " = %d fps %f\n", most_common->first, most_common->second, fps);
+    mxverb(3, boost::format(Y("Quicktime/MP4 reader: calculate_fps: case 2: most_common %1% = %2%, fps %3%\n")) % most_common->first % most_common->second % fps);
   }
 }
 
@@ -1619,7 +1660,7 @@ qtmp4_demuxer_c::update_tables(int64_t global_time_scale) {
     if ((1 == durmap_table.size()) || ((2 == durmap_table.size()) && (1 == durmap_table[1].number)))
       duration = durmap_table[0].duration;
     else
-      mxerror(PFX "Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n");
+      mxerror(Y("Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"));
 
     return;
   }
@@ -1656,11 +1697,11 @@ qtmp4_demuxer_c::update_tables(int64_t global_time_scale) {
       frame_offset_table.push_back(raw_frame_offset_table[j].offset);
   }
 
-  mxverb(3, PFX "Frame offset table: %u entries\n",    (unsigned int)frame_offset_table.size());
-  mxverb(4, PFX "Sample table contents: %u entries\n", (unsigned int)sample_table.size());
+  mxverb(3, boost::format(Y("Quicktime/MP4 reader: Frame offset table: %1% entries\n"))    % frame_offset_table.size());
+  mxverb(4, boost::format(Y("Quicktime/MP4 reader: Sample table contents: %1% entries\n")) % sample_table.size());
   for (i = 0; i < sample_table.size(); ++i) {
     qt_sample_t &sample = sample_table[i];
-    mxverb(4, PFX "  %d: pts " LLU " size %u pos " LLU "\n", i, sample.pts, sample.size, sample.pos);
+    mxverb(4, boost::format(Y("Quicktime/MP4 reader:   %1%: pts %2% size %3% pos %4%\n")) % i % sample.pts % sample.size % sample.pos);
   }
 
   update_editlist_table(global_time_scale);
@@ -1683,7 +1724,7 @@ qtmp4_demuxer_c::update_editlist_table(int64_t global_time_scale) {
   if (('v' == type) && v_is_avc && !frame_offset_table.empty() && (frame_offset_table[0] <= min_editlist_pts))
     pts_offset = frame_offset_table[0];
 
-  mxverb(4, "qtmp4: Updating edit list table for track %u; pts_offset = %d\n", id, pts_offset);
+  mxverb(4, boost::format(Y("qtmp4: Updating edit list table for track %1%; pts_offset = %2%\n")) % id % pts_offset);
 
   for (i = 0; editlist_table.size() > i; ++i) {
     qt_editlist_t &el = editlist_table[i];
@@ -1717,8 +1758,9 @@ qtmp4_demuxer_c::update_editlist_table(int64_t global_time_scale) {
     el.frames  = sample - el.start_sample;
     frame     += el.frames;
 
-    mxverb(4, "  %d: pts: " LLU "  1st_sample: " LLU "  frames: %u (%5.3fs)  pts_offset: " LLD "\n",
-           i, el.pos, el.start_sample,  el.frames, (float)(el.duration) / (float)time_scale, el.pts_offset);
+    mxverb(4,
+           boost::format(Y("  %1%: pts: %2%  1st_sample: %3%  frames: %4% (%|5$5.3f|s)  pts_offset: %6%\n"))
+           % i % el.pos % el.start_sample % el.frames % ((float)(el.duration) / (float)time_scale) % el.pts_offset);
   }
 }
 

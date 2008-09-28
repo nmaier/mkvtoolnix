@@ -43,35 +43,16 @@ xmlp_parent_name(parser_data_t *pdata,
     if (pdata->mapping[i].id == e->Generic().GlobalId)
       return pdata->mapping[i].name;
 
-  return "(none)";
+  return Y("(none)");
 }
 
 void
 xmlp_error(parser_data_t *pdata,
-           const char *fmt,
-           ...) {
-  va_list ap;
-  string new_fmt, msg_fmt;
-  char *new_string;
-  int len;
+           const std::string &message) {
+  *pdata->parse_error_msg =
+    (boost::format(Y("Error: %1% parser failed for '%2%', line %3%, column %4%: %5%\n"))
+     % pdata->parser_name % pdata->file_name % XML_GetCurrentLineNumber(pdata->parser) % XML_GetCurrentColumnNumber(pdata->parser) % message).str();
 
-  msg_fmt = string("Error: ") + pdata->parser_name +
-    string(" parser failed for '%s', line %d, " "column %d: ");
-  len = get_arg_len(msg_fmt.c_str(), pdata->file_name,
-                    XML_GetCurrentLineNumber(pdata->parser),
-                    XML_GetCurrentColumnNumber(pdata->parser));
-  fix_format(fmt, new_fmt);
-  va_start(ap, fmt);
-  len += get_varg_len(new_fmt.c_str(), ap);
-  new_string = (char *)safemalloc(len + 2);
-  sprintf(new_string, msg_fmt.c_str(), pdata->file_name,
-          XML_GetCurrentLineNumber(pdata->parser),
-          XML_GetCurrentColumnNumber(pdata->parser));
-  vsprintf(&new_string[strlen(new_string)], new_fmt.c_str(), ap);
-  va_end(ap);
-  strcat(new_string, "\n");
-  *pdata->parse_error_msg = new_string;
-  safefree(new_string);
   longjmp(pdata->parse_error_jmp, 1);
 }
 
@@ -84,11 +65,9 @@ el_get_uint(parser_data_t *pdata,
 
   strip(*pdata->bin);
   if (!parse_int(pdata->bin->c_str(), value))
-    xmlp_error(pdata, "Expected an unsigned integer but found '%s'.",
-               pdata->bin->c_str());
+    xmlp_error(pdata, boost::format(Y("Expected an unsigned integer but found '%1%'.")) % *pdata->bin);
   if (value < min_value)
-    xmlp_error(pdata, "Unsigned integer (" LLD ") is too small. Mininum value "
-               "is " LLD ".", value, min_value);
+    xmlp_error(pdata, boost::format(Y("Unsigned integer (%1%) is too small. Mininum value is %2%.")) % value % min_value);
   if (is_bool && (value > 0))
     value = 1;
 
@@ -113,17 +92,16 @@ el_get_utf8string(parser_data_t *pdata,
 static void
 el_get_time(parser_data_t *pdata,
             EbmlElement *el) {
-  const char *errmsg = "Expected a time in the following format: HH:MM:SS.nnn"
-    " (HH = hour, MM = minute, SS = second, nnn = millisecond up to "
-    "nanosecond. You may use up to nine digits for 'n' which would mean "
-    "nanosecond precision). You may omit the hour as well. "
-    "Found '%s' instead. Additional error message: %s";
   int64_t usec;
 
   strip(*pdata->bin);
   if (!parse_timecode(*pdata->bin, usec))
-    xmlp_error(pdata, errmsg, pdata->bin->c_str(),
-               timecode_parser_error.c_str());
+    xmlp_error(pdata,
+               boost::format(Y("Expected a time in the following format: HH:MM:SS.nnn "
+                               "(HH = hour, MM = minute, SS = second, nnn = millisecond up to nanosecond. "
+                               "You may use up to nine digits for 'n' which would mean nanosecond precision). "
+                               "You may omit the hour as well. Found '%1%' instead. Additional error message: %2%"))
+               % pdata->bin->c_str() % timecode_parser_error.c_str());
 
   *(static_cast<EbmlUInteger *>(el)) = usec;
 }
@@ -141,34 +119,30 @@ el_get_binary(parser_data_t *pdata,
   buffer = NULL;
   strip(*pdata->bin, true);
   if (pdata->bin->length() == 0)
-    xmlp_error(pdata, "Found no encoded data nor '@file' to read "
-               "binary data from.");
+    xmlp_error(pdata, Y("Found no encoded data nor '@file' to read binary data from."));
 
   if ((*pdata->bin)[0] == '@') {
     if (pdata->bin->length() == 1)
-      xmlp_error(pdata, "No filename found after the '@'.");
+      xmlp_error(pdata, Y("No filename found after the '@'."));
     try {
       io = new mm_file_io_c(&(pdata->bin->c_str())[1]);
       io->setFilePointer(0, seek_end);
       length = io->getFilePointer();
       io->setFilePointer(0, seek_beginning);
       if (length <= 0)
-        xmlp_error(pdata, "The file '%s' is empty.",
-                   &(pdata->bin->c_str())[1]);
+        xmlp_error(pdata, boost::format(Y("The file '%1%' is empty.")) % pdata->bin->substr(1));
       buffer = new binary[length];
       io->read(buffer, length);
       delete io;
     } catch(...) {
-      xmlp_error(pdata, "Could not open/read the file '%s'.",
-                 &(pdata->bin->c_str())[1]);
+      xmlp_error(pdata, boost::format(Y("Could not open/read the file '%1%'.")) % pdata->bin->substr(1));
     }
 
   } else if ((pdata->format == NULL) || !strcasecmp(pdata->format, "base64")) {
     buffer = new binary[pdata->bin->length() / 4 * 3 + 1];
     length = base64_decode(*pdata->bin, (unsigned char *)buffer);
     if (length < 0)
-      xmlp_error(pdata, "Could not decode the Base64 encoded data - it seems "
-                 "to be broken.");
+      xmlp_error(pdata, Y("Could not decode the Base64 encoded data - it seems to be malformed."));
   } else if (!strcasecmp(pdata->format, "hex")) {
     const char *p;
     bool upper;
@@ -184,13 +158,11 @@ el_get_binary(parser_data_t *pdata,
         ++length;
       else if (!isblanktab(*p) && !iscr(*p) && (*p != '-') && (*p != '{') &&
                (*p != '}'))
-        xmlp_error(pdata, "Invalid hexadecimal data encountered: '%c' is "
-                   "neither white space nor a hexadecimal number.", *p);
+        xmlp_error(pdata, boost::format(Y("Invalid hexadecimal data encountered: '%1%' is neither white space nor a hexadecimal number.")) % *p);
       ++p;
     }
     if (((length % 2) != 0) || (length == 0))
-      xmlp_error(pdata, "Too few hexadecimal digits found. The number of "
-                 "digits must be > 0 and divisable by 2.");
+      xmlp_error(pdata, Y("Too few hexadecimal digits found. The number of digits must be > 0 and divisable by 2."));
 
     buffer = new binary[length / 2];
     p = pdata->bin->c_str();
@@ -225,18 +197,14 @@ el_get_binary(parser_data_t *pdata,
     memcpy(buffer, pdata->bin->c_str(), pdata->bin->length());
 
   } else
-    xmlp_error(pdata, "Invalid binary data format '%s' specified. Supported "
-               "are 'Base64', 'ASCII' and 'hex'.");
+    xmlp_error(pdata, boost::format(Y("Invalid binary data format '%1%' specified. Supported are 'Base64', 'ASCII' and 'hex'.")) % pdata->format);
 
   if ((0 < min_length) && (min_length == max_length) && (length != min_length))
-    xmlp_error(pdata, "The binary data must be exactly %d bytes long.",
-               min_length);
+    xmlp_error(pdata, boost::format(Y("The binary data must be exactly %1% bytes long.")) % min_length);
   else if ((0 < min_length) && (length < min_length))
-    xmlp_error(pdata, "The binary data must be at least %d bytes long.",
-               min_length);
+    xmlp_error(pdata, boost::format(Y("The binary data must be at least %1% bytes long.")) % min_length);
   else if ((0 < max_length) && (length > max_length))
-    xmlp_error(pdata, "The binary data must be at most %d bytes long.",
-               max_length);
+    xmlp_error(pdata, boost::format(Y("The binary data must be at most %1% bytes long.")) % max_length);
 
   (static_cast<EbmlBinary *>(el))->SetBuffer(buffer, length);
 }
@@ -256,7 +224,7 @@ add_data(void *user_data,
   if (!pdata->data_allowed) {
     for (i = 0; i < len; i++)
       if (!isblanktab(s[i]) && !iscr(s[i]))
-        xmlp_error(pdata, "Data is not allowed inside <%s>.", xmlp_pname);
+        xmlp_error(pdata, boost::format(Y("Data is not allowed inside <%1%>.")) % xmlp_pname);
     return;
   }
 
@@ -296,8 +264,7 @@ add_new_element(parser_data_t *pdata,
 
   elt_idx = find_element_index(pdata, name, parent_idx);
   if (-1 == elt_idx)
-    xmlp_error(pdata, "<%s> is not a valid child element of <%s>.", name,
-               pdata->mapping[parent_idx].name);
+    xmlp_error(pdata, boost::format(Y("<%1%> is not a valid child element of <%2%>.")) % name % pdata->mapping[parent_idx].name);
 
   if (pdata->depth > 0) {
     const EbmlCallbacks *callbacks =
@@ -315,8 +282,7 @@ add_new_element(parser_data_t *pdata,
     }
 
     if (!found)
-      xmlp_error(pdata, "<%s> is not a valid child element of <%s>.", name,
-                 pdata->mapping[parent_idx].name);
+      xmlp_error(pdata, boost::format(Y("<%1%> is not a valid child element of <%2%>.")) % name % pdata->mapping[parent_idx].name);
 
     const EbmlSemantic *semantic =
       find_ebml_semantic(KaxSegment::ClassInfos,
@@ -326,8 +292,7 @@ add_new_element(parser_data_t *pdata,
       assert(m != NULL);
       for (i = 0; i < m->ListSize(); i++)
         if ((*m)[i]->Generic().GlobalId == pdata->mapping[elt_idx].id)
-          xmlp_error(pdata, "Only one instance of <%s> is allowed beneath "
-                     "<%s>.", name, pdata->mapping[parent_idx].name);
+          xmlp_error(pdata, boost::format(Y("Only one instance of <%1%> is allowed beneath <%2%>.")) % name % pdata->mapping[parent_idx].name);
     }
   }
 
@@ -366,10 +331,9 @@ start_element(void *user_data,
 
   if (pdata->depth == 0) {
     if (pdata->done_reading)
-      xmlp_error(pdata, "More than one root element found.");
+      xmlp_error(pdata, Y("More than one root element found."));
     if (strcmp(name, pdata->mapping[0].name))
-      xmlp_error(pdata, "The root element must be <%s>.",
-                 pdata->mapping[0].name);
+      xmlp_error(pdata, boost::format(Y("The root element must be <%1%>.")) % pdata->mapping[0].name);
     parent_idx = 0;
 
   } else
@@ -383,14 +347,13 @@ start_element(void *user_data,
   }
 
   if (pdata->data_allowed)
-    xmlp_error(pdata, "<%s> is not a valid child element of <%s>.", name,
-               xmlp_pname);
+    xmlp_error(pdata, boost::format(Y("<%1%> is not a valid child element of <%2%>.")) % name % xmlp_pname);
 
   pdata->data_allowed = false;
   pdata->format = NULL;
 
   if (pdata->bin != NULL)
-    die("start_element: pdata->bin != NULL");
+    mxerror(Y("start_element: pdata->bin != NULL"));
 
   add_new_element(pdata, name, parent_idx);
 
@@ -425,7 +388,7 @@ end_element(void *user_data,
   if (pdata->depth == 1) {
     m = static_cast<EbmlMaster *>(xmlp_pelt);
     if (m->ListSize() == 0)
-      xmlp_error(pdata, "At least one <EditionEntry> element is needed.");
+      xmlp_error(pdata, Y("At least one <EditionEntry> element is needed."));
 
   } else {
     int elt_idx;
@@ -488,8 +451,7 @@ parse_xml_elements(const char *parser_name,
   bool done;
   parser_data_t *pdata;
   XML_Parser parser;
-  XML_Error xerror;
-  string buffer, error;
+  string buffer;
   EbmlMaster *root_element;
 
   done = false;
@@ -512,7 +474,7 @@ parse_xml_elements(const char *parser_name,
 
   in->setFilePointer(0);
 
-  error = "";
+  string error = "";
 
   try {
     if (setjmp(pdata->parse_error_jmp) == 1)
@@ -521,16 +483,17 @@ parse_xml_elements(const char *parser_name,
     while (!done) {
       buffer += "\n";
       if (XML_Parse(parser, buffer.c_str(), buffer.length(), done) == 0) {
-        xerror = XML_GetErrorCode(parser);
-        error = mxsprintf("XML parser error at line %d of '%s': %s. ",
-                          (int)XML_GetCurrentLineNumber(parser),
-                          pdata->file_name, XML_ErrorString(xerror));
-        if (xerror == XML_ERROR_INVALID_TOKEN)
-          error += "Remember that special characters like &, <, > and \" "
-            "must be escaped in the usual HTML way: &amp; for '&', "
-            "&lt; for '<', &gt; for '>' and &quot; for '\"'. ";
-        error += "Aborting.\n";
-        throw error_c(error);
+        XML_Error xerror = XML_GetErrorCode(parser);
+        string message   = (boost::format(Y("XML parser error at line %1% of '%2%': %3%.%4%%5%"))
+                            % XML_GetCurrentLineNumber(parser) % pdata->file_name % XML_ErrorString(xerror)
+                            % ((xerror == XML_ERROR_INVALID_TOKEN)
+                               ? Y(" Remember that special characters like &, <, > and \" "
+                                   "must be escaped in the usual HTML way: &amp; for '&', "
+                                   "&lt; for '<', &gt; for '>' and &quot; for '\"'.")
+                               : "")
+                            % Y(" Aborting.\n")
+                            ).str();
+        throw error_c(message);
       }
 
       done = !in->getline2(buffer);
@@ -655,9 +618,9 @@ xml_parser_c::parse_one_xml_line() {
     xerror = XML_GetErrorCode(m_xml_parser);
     error = XML_ErrorString(xerror);
     if (xerror == XML_ERROR_INVALID_TOKEN)
-      error += "Remember that special characters like &, <, > and \" "
-        "must be escaped in the usual HTML way: &amp; for '&', "
-        "&lt; for '<', &gt; for '>' and &quot; for '\"'.";
+      error += Y("Remember that special characters like &, <, > and \" "
+                 "must be escaped in the usual HTML way: &amp; for '&', "
+                 "&lt; for '<', &gt; for '>' and &quot; for '\"'.");
     throw xml_parser_error_c(error, m_xml_parser);
   }
 

@@ -63,7 +63,7 @@ xtr_vobsub_c::create_file(xtr_base_c *master,
                           KaxTrackEntry &track) {
   KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
-    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec private\" element and cannot be extracted.\n", m_tid, m_codec_id.c_str());
+    mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
   init_content_decoder(track);
 
@@ -79,18 +79,19 @@ xtr_vobsub_c::create_file(xtr_base_c *master,
     try {
       m_out = new mm_file_io_c(sub_file_name, MODE_CREATE);
     } catch (...) {
-      mxerror("Failed to create the VobSub data file '%s': %d (%s)\n", sub_file_name.c_str(), errno, strerror(errno));
+      mxerror(boost::format(Y("Failed to create the VobSub data file '%1%': %2% (%3%)\n")) % sub_file_name % errno % strerror(errno));
     }
 
   } else {
     xtr_vobsub_c *vmaster = dynamic_cast<xtr_vobsub_c *>(m_master);
 
     if (NULL == vmaster)
-      mxerror("Cannot extract tracks of different kinds to the same file. This was requested for the tracks " LLD " and " LLD ".\n", m_tid, m_master->m_tid);
+      mxerror(boost::format(Y("Cannot extract tracks of different kinds to the same file. This was requested for the tracks %1% and %2%.\n"))
+              % m_tid % m_master->m_tid);
 
     if ((m_private_data->get_size() != vmaster->m_private_data->get_size()) || memcmp(priv->GetBuffer(), vmaster->m_private_data->get(), m_private_data->get_size()))
-      mxerror("Two VobSub tracks can only be extracted into the same file if their CodecPrivate data matches. This is not the case for the tracks " LLD " and " LLD ".\n",
-              m_tid, m_master->m_tid);
+      mxerror(boost::format(Y("Two VobSub tracks can only be extracted into the same file if their CodecPrivate data matches. "
+                              "This is not the case for the tracks %1% and %2%.\n")) % m_tid % m_master->m_tid);
 
     vmaster->m_slaves.push_back(this);
     m_stream_id = vmaster->m_stream_id + 1;
@@ -215,10 +216,10 @@ xtr_vobsub_c::finish_file() {
     m_out = NULL;
 
     mm_file_io_c idx(m_base_name, MODE_CREATE);
-    mxinfo("Writing the VobSub index file '%s'.\n", m_base_name.c_str());
+    mxinfo(boost::format(Y("Writing the VobSub index file '%1%'.\n")) % m_base_name);
 
     if ((25 > m_private_data->get_size()) || strncasecmp((char *)m_private_data->get(), header_line, 25))
-      idx.printf(header_line);
+      idx.puts(header_line);
     idx.write(m_private_data->get(), m_private_data->get_size());
 
     write_idx(idx, 0);
@@ -227,7 +228,7 @@ xtr_vobsub_c::finish_file() {
       m_slaves[slave]->write_idx(idx, slave + 1);
 
   } catch (...) {
-    mxerror("Failed to create the file '%s': %d (%s)\n", m_base_name.c_str(), errno, strerror(errno));
+    mxerror(boost::format(Y("Failed to create the file '%1%': %2% (%3%)\n")) % m_base_name % errno % strerror(errno));
   }
 }
 
@@ -235,15 +236,18 @@ void
 xtr_vobsub_c::write_idx(mm_io_c &idx,
                         int index) {
   const char *iso639_1 = map_iso639_2_to_iso639_1(m_language.c_str());
-  idx.printf("\nid: %s, index: %d\n", (NULL == iso639_1 ? "en" : iso639_1), index);
+  idx.puts(boost::format("\nid: %1%, index: %2%\n") % (NULL == iso639_1 ? "en" : iso639_1) %index);
 
   int i;
   for (i = 0; i < m_positions.size(); i++) {
     int64_t timecode = m_timecodes[i] / 1000000;
 
-    idx.printf("timestamp: %02d:%02d:%02d:%03d, filepos: %1x%08x\n",
-               (int)((timecode / 60 / 60 / 1000) % 60), (int)((timecode / 60 / 1000) % 60),
-               (int)((timecode / 1000) % 60),           (int)(timecode % 1000),
-               (uint32_t)(m_positions[i] >> 32),        (uint32_t)(m_positions[i] & 0xffffffff));
+    idx.puts(boost::format("timestamp: %|1$02d|:%|2$02d|:%|3$02d|:%|4$03d|, filepos: %|5$1x|%|6$08x|\n")
+             % ((timecode / 60 / 60 / 1000) % 60)
+             % ((timecode / 60 / 1000) % 60)
+             % ((timecode / 1000) % 60)
+             % (timecode % 1000)
+             % (m_positions[i] >> 32)
+             % (m_positions[i] & 0xffffffff));
   }
 }

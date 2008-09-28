@@ -87,11 +87,11 @@ dirac_es_reader_c::dirac_es_reader_c(track_info_c &n_ti)
     m_io->setFilePointer(0, seek_beginning);
 
   } catch (...) {
-    throw error_c("dirac_es_reader: Could not open the source file.");
+    throw error_c(Y("dirac_es_reader: Could not open the source file."));
   }
 
   if (verbose)
-    mxinfo(FMT_FN "Using the Dirac demultiplexer.\n", ti.fname.c_str());
+    mxinfo_fn(ti.fname, Y("Using the Dirac demultiplexer.\n"));
 }
 
 void
@@ -101,12 +101,12 @@ dirac_es_reader_c::create_packetizer(int64_t) {
 
   add_packetizer(new dirac_video_packetizer_c(this, ti));
 
-  mxinfo(FMT_TID "Using the Dirac video output module.\n", ti.fname.c_str(), (int64_t)0);
+  mxinfo_tid(ti.fname, 0, Y("Using the Dirac video output module.\n"));
 }
 
 file_status_e
 dirac_es_reader_c::read(generic_packetizer_c *,
-                      bool) {
+                        bool) {
   if (m_bytes_processed >= m_size)
     return FILE_STATUS_DONE;
 

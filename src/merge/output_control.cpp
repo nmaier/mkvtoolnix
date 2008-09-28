@@ -141,7 +141,9 @@ timecode_scale_mode_e timecode_scale_mode = TIMECODE_SCALE_MODE_NORMAL;
 float video_fps = -1.0;
 int default_tracks[3], default_tracks_priority[3];
 
-bool identifying = false, identify_verbose = false;
+bool g_identifying      = false;
+bool g_identify_verbose = false;
+bool g_identify_for_mmg = false;
 
 cluster_helper_c *cluster_helper = NULL;
 KaxSegment *kax_segment;
@@ -223,19 +225,19 @@ family_uids_c::add_family_uid(const KaxSegmentFamily &family) {
 void
 sighandler(int signum) {
   if (out == NULL)
-    mxerror(_("mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"));
+    mxerror(Y("mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"));
 
-  mxwarn(_("\nmkvmerge received a SIGINT (probably because the user pressed "
+  mxwarn(Y("\nmkvmerge received a SIGINT (probably because the user pressed "
            "Ctrl+C). Trying to sanitize the file. If mkvmerge hangs during "
            "this process you'll have to kill it manually.\n"));
 
-  mxinfo(_("The file is being fixed, part 1/4..."));
+  mxinfo(Y("The file is being fixed, part 1/4..."));
   // Render the cues.
   if (write_cues && cue_writing_requested)
     kax_cues->Render(*out);
-  mxinfo(_(" done\n"));
+  mxinfo(Y(" done\n"));
 
-  mxinfo(_("The file is being fixed, part 2/4..."));
+  mxinfo(Y("The file is being fixed, part 2/4..."));
   // Now re-render the kax_duration and fill in the biggest timecode
   // as the file's duration.
   out->save_pos(kax_duration->GetElementPosition());
@@ -244,9 +246,9 @@ sighandler(int signum) {
          (double)((int64_t)timecode_scale));
   kax_duration->Render(*out);
   out->restore_pos();
-  mxinfo(_(" done\n"));
+  mxinfo(Y(" done\n"));
 
-  mxinfo(_("The file is being fixed, part 3/4..."));
+  mxinfo(Y("The file is being fixed, part 3/4..."));
   // Write meta seek information if it is not disabled.
   if (cue_writing_requested)
     kax_sh_main->IndexThis(*kax_cues, *kax_segment);
@@ -254,20 +256,19 @@ sighandler(int signum) {
   if ((kax_sh_main->ListSize() > 0) && !hack_engaged(ENGAGE_NO_META_SEEK)) {
     kax_sh_main->UpdateSize();
     if (kax_sh_void->ReplaceWith(*kax_sh_main, *out, true) == 0)
-      mxwarn(_("This should REALLY not have happened. The space reserved for "
-               "the first meta seek element was too small. %s\n"), BUGMSG);
+      mxwarn(boost::format(Y("This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n")) % BUGMSG);
   }
-  mxinfo(_(" done\n"));
+  mxinfo(Y(" done\n"));
 
-  mxinfo(_("The file is being fixed, part 4/4..."));
+  mxinfo(Y("The file is being fixed, part 4/4..."));
   // Set the correct size for the segment.
   if (kax_segment->ForceSize(out->getFilePointer() -
                              kax_segment->GetElementPosition() -
                              kax_segment->HeadSize()))
     kax_segment->OverwriteHead(*out);
-  mxinfo(_(" done\n"));
+  mxinfo(Y(" done\n"));
 
-  mxerror(_("mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"));
+  mxerror(Y("mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"));
 }
 #endif
 
@@ -295,9 +296,7 @@ get_file_type(filelist_t &file) {
     size = io->getFilePointer();
     io->setFilePointer(0, seek_current);
   } catch (...) {
-    mxerror(_("The source file '%s' could not be opened successfully, or "
-              "retrieving its size by seeking to the end did not work.\n"),
-            file.name.c_str());
+    mxerror(boost::format(Y("The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n")) % file.name);
   }
 
   type = FILE_TYPE_IS_UNKNOWN;
@@ -366,9 +365,7 @@ get_file_type(filelist_t &file) {
       size = text_io->getFilePointer();
       text_io->setFilePointer(0, seek_current);
     } catch (...) {
-      mxerror(_("The source file '%s' could not be opened successfully, or "
-                "retrieving its size by seeking to the end did not work.\n"),
-              file.name.c_str());
+      mxerror(boost::format(Y("The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n")) % file.name);
     }
 
     if (srt_reader_c::probe_file(text_io, size))
@@ -429,7 +426,7 @@ display_progress() {
   if (!display_progress)
     return;
 
-  mxinfo("progress: %d%%\r", current_percentage);
+  mxinfo(boost::format(Y("Progress: %1%%%\r")) % current_percentage);
 
   s_previous_percentage  = current_percentage;
   s_previous_progress_on = current_time;
@@ -499,7 +496,7 @@ add_packetizer_globally(generic_packetizer_c *packetizer) {
       break;
     }
   if (pack.file == -1)
-    die("filelist_t not found for generic_packetizer_c. %s\n", BUGMSG);
+    mxerror(boost::format(Y("filelist_t not found for generic_packetizer_c. %1%\n")) % BUGMSG);
   packetizers.push_back(pack);
 }
 
@@ -719,8 +716,7 @@ render_headers(mm_io_c *rout) {
     }
 
   } catch (...) {
-    mxerror(_("The track headers could not be rendered correctly. %s.\n"),
-            BUGMSG);
+    mxerror(boost::format(Y("The track headers could not be rendered correctly. %1%\n")) % BUGMSG);
   }
 }
 
@@ -828,26 +824,21 @@ check_append_mapping() {
 
     // 1. Is there a file with the src_file_id?
     if ((amap->src_file_id < 0) || (amap->src_file_id >= files.size()))
-      mxerror("There is no file with the ID '" LLD "'. The argument for "
-              "'--append-to' was invalid.\n", amap->src_file_id);
+      mxerror(boost::format(Y("There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n")) % amap->src_file_id);
 
     // 2. Is the "source" file in "append mode", meaning does its file name
     // start with a '+'?
     src_file = files.begin() + amap->src_file_id;
     if (!src_file->appending)
-      mxerror("The file no. " LLD " ('%s') is not being appended. The argument"
-              " for '--append-to' was invalid.\n", amap->src_file_id,
-              src_file->name.c_str());
+      mxerror(boost::format(Y("The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n")) % amap->src_file_id % src_file->name);
 
     // 3. Is there a file with the dst_file_id?
     if ((amap->dst_file_id < 0) || (amap->dst_file_id >= files.size()))
-      mxerror("There is no file with the ID '" LLD "'. The argument for "
-              "'--append-to' was invalid.\n", amap->dst_file_id);
+      mxerror(boost::format(Y("There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n")) % amap->dst_file_id);
 
     // 4. Files cannot be appended to itself.
     if (amap->src_file_id == amap->dst_file_id)
-      mxerror("Files cannot be appended to themselves. The argument for "
-              "'--append-to' was invalid.\n");
+      mxerror(Y("Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"));
   }
 
   // Now let's check each appended file if there are NO append to mappings
@@ -864,11 +855,8 @@ check_append_mapping() {
         count++;
 
     if ((count > 0) && (count < src_file->reader->used_track_ids.size()))
-      mxerror("Only partial append mappings were given for the file no. %d "
-              "('%s'). Either don't specify any mapping (in which case the "
-              "default mapping will be used) or specify a mapping for all "
-              "tracks that are to be copied.\n", file_id,
-              src_file->name.c_str());
+      mxerror(boost::format(Y("Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the "
+                              "default mapping will be used) or specify a mapping for all tracks that are to be copied.\n")) % file_id % src_file->name);
     else if (count == 0) {
       string missing_mappings;
 
@@ -883,16 +871,10 @@ check_append_mapping() {
         append_mapping.push_back(new_amap);
         if (missing_mappings.size() > 0)
           missing_mappings += ",";
-        missing_mappings +=
-          mxsprintf("" LLD ":" LLD ":" LLD ":" LLD,
-                    new_amap.src_file_id, new_amap.src_track_id,
-                    new_amap.dst_file_id, new_amap.dst_track_id);
+        missing_mappings += (boost::format("%1%:%2%:%3%:%4%") % new_amap.src_file_id % new_amap.src_track_id % new_amap.dst_file_id % new_amap.dst_track_id).str();
       }
-      mxinfo("No append mapping was given for the file no. %d ('%s'). "
-             "A default mapping of %s will be used instead. Please keep "
-             "that in mind if mkvmerge aborts complaining about invalid "
-             "'--append-to' options.\n", file_id, src_file->name.c_str(),
-             missing_mappings.c_str());
+      mxinfo(boost::format(Y("No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep "
+                             "that in mind if mkvmerge aborts complaining about invalid '--append-to' options.\n")) % file_id % src_file->name % missing_mappings);
     }
   }
 
@@ -904,19 +886,14 @@ check_append_mapping() {
     // 5. Does the "source" file have a track with the src_track_id, and is
     // that track selected for copying?
     if (!mxfind2(id, amap->src_track_id, src_file->reader->used_track_ids))
-      mxerror("The file no. " LLD " ('%s') does not contain a track with the "
-              "ID " LLD ", or that track is not to be copied. The argument "
-              "for '--append-to' was invalid.\n", amap->src_file_id,
-              src_file->name.c_str(), amap->src_track_id);
+      mxerror(boost::format(Y("The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. "
+                              "The argument for '--append-to' was invalid.\n")) % amap->src_file_id % src_file->name % amap->src_track_id);
 
     // 6. Does the "destination" file have a track with the dst_track_id, and
     // that track selected for copying?
     if (!mxfind2(id, amap->dst_track_id, dst_file->reader->used_track_ids))
-      mxerror("The file no. " LLD " ('%s') does not contain a track with the "
-              "ID " LLD ", or that track is not to be copied. Therefore no "
-              "track can be appended to it. The argument for '--append-to' was"
-              " invalid.\n", amap->dst_file_id, dst_file->name.c_str(),
-              amap->dst_track_id);
+      mxerror(boost::format(Y("The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. Therefore no "
+                              "track can be appended to it. The argument for '--append-to' was invalid.\n")) % amap->dst_file_id % dst_file->name % amap->dst_track_id);
 
     // 7. Is this track already mapped to somewhere else?
     mxforeach(cmp_amap, append_mapping) {
@@ -924,10 +901,8 @@ check_append_mapping() {
         continue;
       if (((*cmp_amap).src_file_id == amap->src_file_id) &&
           ((*cmp_amap).src_track_id == amap->src_track_id))
-        mxerror("The track " LLD " from file no. " LLD " ('%s') is to be "
-                "appended more than once. The argument for '--append-to' was "
-                "invalid.\n", amap->src_track_id, amap->src_file_id,
-                src_file->name.c_str());
+        mxerror(boost::format(Y("The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"))
+                % amap->src_track_id % amap->src_file_id % src_file->name);
     }
 
     // 8. Is there another track that is being appended to the dst_track_id?
@@ -936,10 +911,8 @@ check_append_mapping() {
         continue;
       if (((*cmp_amap).dst_file_id == amap->dst_file_id) &&
           ((*cmp_amap).dst_track_id == amap->dst_track_id))
-        mxerror("More than one track is to be appended to the track " LLD " "
-                "from file no. " LLD " ('%s'). The argument for '--append-to' "
-                "was invalid.\n", amap->dst_track_id, amap->dst_file_id,
-                dst_file->name.c_str());
+        mxerror(boost::format(Y("More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"))
+                % amap->dst_track_id % amap->dst_file_id % dst_file->name);
     }
   }
 
@@ -964,33 +937,26 @@ check_append_mapping() {
         dst_ptzr = (*gptzr);
 
     if ((src_ptzr == NULL) || (dst_ptzr == NULL))
-      die("((src_ptzr == NULL) || (dst_ptzr == NULL)). %s\n", BUGMSG);
+      mxerror(boost::format("((src_ptzr == NULL) || (dst_ptzr == NULL)). %1%\n") % BUGMSG);
 
     // And now try to connect the packetizers.
     result = src_ptzr->can_connect_to(dst_ptzr, error_message);
     if (CAN_CONNECT_MAYBE_CODECPRIVATE == result)
-      mxwarn("The track number " LLD " from the file '%s' can probably "
-             "not be appended correctly to the track number " LLD
-             " from the file '%s': %s Please make sure that "
-             "the resulting file plays correctly the whole time. "
-             "The author of this program will probably not give support "
-             "for playback issues with the resulting file.\n",
-             amap->src_track_id, files[amap->src_file_id].name.c_str(),
-             amap->dst_track_id, files[amap->dst_file_id].name.c_str(),
-             error_message.c_str());
+      mxwarn(boost::format(Y("The track number %1% from the file '%2%' can probably not be appended correctly to the track number %3% from the file '%4%': %5% "
+                             "Please make sure that the resulting file plays correctly the whole time. "
+                             "The author of this program will probably not give support for playback issues with the resulting file.\n"))
+             % amap->src_track_id % files[amap->src_file_id].name
+             % amap->dst_track_id % files[amap->dst_file_id].name
+             % error_message);
 
     else if (CAN_CONNECT_YES != result) {
-      string reason(result == CAN_CONNECT_NO_FORMAT ?
-                    "the formats do not match" :
-                    result == CAN_CONNECT_NO_PARAMETERS ?
-                    "the track parameters do not match" :
-                    "of unknown reasons");
-      mxerror("The track number " LLD " from the file '%s' cannot be "
-              "appended to the track number " LLD " from the file '%s' "
-              "because %s.\n",
-              amap->src_track_id, files[amap->src_file_id].name.c_str(),
-              amap->dst_track_id, files[amap->dst_file_id].name.c_str(),
-              reason.c_str());
+      string reason(  result == CAN_CONNECT_NO_FORMAT     ? Y("The formats do not match.")
+                    : result == CAN_CONNECT_NO_PARAMETERS ? Y("The track parameters do not match.")
+                    :                                       Y("The reason is unknown."));
+      mxerror(boost::format(Y("The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"))
+              % amap->src_track_id % files[amap->src_file_id].name
+              % amap->dst_track_id % files[amap->dst_file_id].name
+              % reason);
     }
 
     src_ptzr->connect(dst_ptzr);
@@ -1171,17 +1137,15 @@ create_readers() {
           file->reader = new wavpack_reader_c(*file->ti);
           break;
         default:
-          mxerror(_("EVIL internal bug! (unknown file type). %s\n"), BUGMSG);
+          mxerror(boost::format(Y("EVIL internal bug! (unknown file type). %1%\n")) % BUGMSG);
           break;
       }
     } catch (error_c &error) {
-      mxerror(_("The demultiplexer for the file '%s' failed to initialize:"
-                "\n%s\n"),
-              file->ti->fname.c_str(), error.get_error().c_str());
+      mxerror(boost::format(Y("The demultiplexer for the file '%1%' failed to initialize:\n%2%\n")) % file->ti->fname % error.get_error());
     }
   }
 
-  if (!identifying) {
+  if (!g_identifying) {
     vector<attachment_t>::const_iterator att;
 
     // Create the packetizers.
@@ -1224,7 +1188,6 @@ string
 create_output_name() {
   int p, p2, i;
   bool ok;
-  char buffer[20];
   string s;
 
   s = outfile;
@@ -1232,8 +1195,7 @@ create_output_name() {
   // First possibility: %d
   p = s.find("%d");
   if (p >= 0) {
-    mxprints(buffer, "%d", g_file_num);
-    s.replace(p, 2, buffer);
+    s.replace(p, 2, to_string(g_file_num));
 
     return s;
   }
@@ -1251,19 +1213,14 @@ create_output_name() {
   }
 
   if (ok) {                     // We've found e.g. %02d
-    string format(&s.c_str()[p]), len = format;
+    string format(&s.c_str()[p]);
     format.erase(p2 - p + 1);
-    len.erase(0, 1);
-    len.erase(p2 - p - 1);
-    char *buffer2 = new char[strtol(len.c_str(), NULL, 10) + 1];
-    mxprints(buffer2, format.c_str(), g_file_num);
-    s.replace(p, format.size(), buffer2);
-    delete [] buffer2;
+    s.replace(p, format.size(), (boost::format(format) % g_file_num).str());
 
     return s;
   }
 
-  mxprints(buffer, "-%03d", g_file_num);
+  string buffer = (boost::format("-%|1$03d|") % g_file_num).str();
 
   // See if we can find a '.'.
   p = s.rfind(".");
@@ -1346,12 +1303,10 @@ create_next_output_file() {
   try {
     out = new mm_file_io_c(this_outfile, MODE_CREATE);
   } catch (...) {
-    mxerror(_("The output file '%s' could not be opened for writing (%s).\n"),
-            this_outfile.c_str(), strerror(errno));
+    mxerror(boost::format(Y("The output file '%1%' could not be opened for writing (%2%).\n")) % this_outfile % strerror(errno));
   }
   if (verbose)
-    mxinfo(_("The file '%s\' has been opened for writing.\n"),
-           this_outfile.c_str());
+    mxinfo(boost::format(Y("The file '%1%' has been opened for writing.\n")) % this_outfile);
 
   cluster_helper->set_output(out);
   render_headers(out);
@@ -1369,9 +1324,7 @@ create_next_output_file() {
     fix_mandatory_tag_elements(kax_tags);
     sort_ebml_master(kax_tags);
     if (!kax_tags->CheckMandatory())
-      mxerror(_("Some tag elements are missing (this error "
-                "should not have occured - another similar error should have "
-                "occured earlier). %s\n"), BUGMSG);
+      mxerror(boost::format(Y("Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n")) % BUGMSG);
 
     kax_tags->UpdateSize();
     tags_size = kax_tags->ElementSize();
@@ -1409,7 +1362,7 @@ finish_file(bool last_file) {
   // Render the cues.
   if (write_cues && cue_writing_requested) {
     if (verbose >= 1)
-      mxinfo(_("The cue entries (the index) are being written..."));
+      mxinfo(Y("The cue entries (the index) are being written..."));
     kax_cues->Render(*out);
     if (verbose >= 1)
       mxinfo("\n");
@@ -1418,10 +1371,10 @@ finish_file(bool last_file) {
   // Now re-render the kax_duration and fill in the biggest timecode
   // as the file's duration.
   out->save_pos(kax_duration->GetElementPosition());
-  mxverb(3, "mkvmerge: kax_duration: gdur " LLD " tcs %f du " LLD "\n",
-         cluster_helper->get_duration(), timecode_scale,
-         irnd((double)cluster_helper->get_duration() /
-              (double)((int64_t)timecode_scale)));
+  mxverb(3,
+         boost::format("mkvmerge: kax_duration: gdur %1% tcs %2% du %3%\n")
+         % cluster_helper->get_duration() % timecode_scale
+         % irnd((double)cluster_helper->get_duration() / (double)((int64_t)timecode_scale)));
   *(static_cast<EbmlFloat *>(kax_duration)) =
     irnd((double)cluster_helper->get_duration() /
          (double)((int64_t)timecode_scale));
@@ -1554,9 +1507,8 @@ finish_file(bool last_file) {
   if ((kax_sh_main->ListSize() > 0) && !hack_engaged(ENGAGE_NO_META_SEEK)) {
     kax_sh_main->UpdateSize();
     if (kax_sh_void->ReplaceWith(*kax_sh_main, *out, true) == 0)
-      mxwarn(_("This should REALLY not have happened. The space reserved for "
-               "the first meta seek element was too small. Size needed: " LLD
-               ". %s\n"), kax_sh_main->ElementSize(), BUGMSG);
+      mxwarn(boost::format(Y("This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"))
+             % kax_sh_main->ElementSize() % BUGMSG);
   }
 
   // Set the correct size for the segment.
@@ -1614,7 +1566,7 @@ append_track(packetizer_t &ptzr,
     if (amap.src_track_id == (*gptzr)->ti.id)
       break;
   if (gptzr == src_file.reader->reader_packetizers.end())
-    die("Could not find gptzr when appending. %s\n", BUGMSG);
+    mxerror(boost::format(Y("Could not find gptzr when appending. %1%\n")) % BUGMSG);
 
   // If we're dealing with a subtitle track or if the appending file contains
   // chapters then we have to suck the previous file dry. See below for the
@@ -1659,11 +1611,8 @@ append_track(packetizer_t &ptzr,
     }
   }
 
-  mxinfo("Appending track " LLD " from file no. " LLD " ('%s') to track " LLD
-         " from file no. " LLD " ('%s').\n",
-         (*gptzr)->ti.id, amap.src_file_id, (*gptzr)->ti.fname.c_str(),
-         ptzr.packetizer->ti.id, amap.dst_file_id,
-         ptzr.packetizer->ti.fname.c_str());
+  mxinfo(boost::format(Y("Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"))
+         % (*gptzr)->ti.id % amap.src_file_id % (*gptzr)->ti.fname % ptzr.packetizer->ti.id % amap.dst_file_id % ptzr.packetizer->ti.fname);
 
   // Is the current file currently used for displaying the progress? If yes
   // then replace it with the next one.
@@ -1724,13 +1673,11 @@ append_track(packetizer_t &ptzr,
   }
 
   if (ptzr.packetizer->get_track_type() == track_subtitle) {
-    mxverb(2, "append_track: new timecode_adjustment for subtitle track: "
-           LLD " for " LLD "\n", timecode_adjustment, ptzr.packetizer->ti.id);
+    mxverb(2, boost::format(Y("append_track: new timecode_adjustment for subtitle track: %1% for %2%\n")) % timecode_adjustment % ptzr.packetizer->ti.id);
     // The actual connection.
     ptzr.packetizer->connect(old_packetizer, timecode_adjustment);
   } else {
-    mxverb(2, "append_track: new timecode_adjustment for NON subtitle track: "
-           LLD " for " LLD "\n", timecode_adjustment, ptzr.packetizer->ti.id);
+    mxverb(2, boost::format(Y("append_track: new timecode_adjustment for NON subtitle track: %1% for %2%\n")) % timecode_adjustment % ptzr.packetizer->ti.id);
     // The actual connection.
     ptzr.packetizer->connect(old_packetizer);
   }
@@ -1903,7 +1850,7 @@ main_loop() {
     cluster_helper->render();
 
   if (verbose >= 1)
-    mxinfo("progress: 100%%\r");
+    mxinfo(Y("Progress: 100%\r"));
 }
 
 /** \brief Global program initialization
@@ -1917,8 +1864,7 @@ setup() {
   init_stdio();
 #if ! defined(SYS_WINDOWS) && defined(HAVE_LIBINTL_H)
   if (setlocale(LC_MESSAGES, "") == NULL)
-    mxerror("The locale could not be set properly. Check the "
-            "LANG, LC_ALL and LC_MESSAGES environment variables.\n");
+    mxerror("The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n");
 #endif
 
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)

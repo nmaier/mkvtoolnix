@@ -53,10 +53,10 @@ lzo_compressor_c::lzo_compressor_c():
   int result;
 
   if ((result = lzo_init()) != LZO_E_OK)
-    mxerror("lzo_init() failed. Result: %d\n", result);
+    mxerror(boost::format(Y("lzo_init() failed. Result: %1%\n")) % result);
   wrkmem = (lzo_bytep)lzo_malloc(LZO1X_999_MEM_COMPRESS);
   if (wrkmem == NULL)
-    mxerror("lzo_malloc(LZO1X_999_MEM_COMPRESS) failed.\n");
+    mxerror(Y("lzo_malloc(LZO1X_999_MEM_COMPRESS) failed.\n"));
 }
 
 lzo_compressor_c::~lzo_compressor_c() {
@@ -65,7 +65,7 @@ lzo_compressor_c::~lzo_compressor_c() {
 
 void
 lzo_compressor_c::decompress(memory_cptr &buffer) {
-  die("lzo_compressor_c::decompress() not implemented\n");
+  mxerror(Y("lzo_compressor_c::decompress() not implemented\n"));
 }
 
 void
@@ -79,11 +79,10 @@ lzo_compressor_c::compress(memory_cptr &buffer) {
   lzo_uint lzo_dstsize = size * 2;
   if ((result = lzo1x_999_compress(buffer->get(), buffer->get_size(),
                                    dst, &lzo_dstsize, wrkmem)) != LZO_E_OK)
-    mxerror("LZO compression failed. Result: %d\n", result);
+    mxerror(boost::format(Y("LZO compression failed. Result: %1%\n")) % result);
   dstsize = lzo_dstsize;
 
-  mxverb(3, "lzo_compressor_c: Compression from %d to %d, %d%%\n",
-         size, dstsize, dstsize * 100 / size);
+  mxverb(3, boost::format("lzo_compressor_c: Compression from %1% to %2%, %3%%%\n") % size % dstsize % (dstsize * 100 / size));
 
   raw_size += size;
   compressed_size += dstsize;
@@ -116,7 +115,7 @@ zlib_compressor_c::decompress(memory_cptr &buffer) {
   d_stream.opaque = (voidpf)0;
   result = inflateInit(&d_stream);
   if (result != Z_OK)
-    mxerror("inflateInit() failed. Result: %d\n", result);
+    mxerror(boost::format(Y("inflateInit() failed. Result: %1%\n")) % result);
 
   d_stream.next_in = (Bytef *)buffer->get();
   d_stream.avail_in = buffer->get_size();
@@ -129,15 +128,14 @@ zlib_compressor_c::decompress(memory_cptr &buffer) {
     d_stream.avail_out = 4000;
     result = inflate(&d_stream, Z_NO_FLUSH);
     if ((result != Z_OK) && (result != Z_STREAM_END))
-      mxerror("Zlib decompression failed. Result: %d\n", result);
+      mxerror(boost::format(Y("Zlib decompression failed. Result: %1%\n")) % result);
   } while ((d_stream.avail_out == 0) && (d_stream.avail_in != 0) &&
            (result != Z_STREAM_END));
 
   dstsize = d_stream.total_out;
   inflateEnd(&d_stream);
 
-  mxverb(3, "zlib_compressor_c: Decompression from %d to %d, %d%%\n",
-         buffer->get_size(), dstsize, dstsize * 100 / buffer->get_size());
+  mxverb(3, boost::format("zlib_compressor_c: Decompression from %1% to %2%, %3%%%\n") % buffer->get_size() % dstsize % (dstsize * 100 / buffer->get_size()));
 
   dst = (unsigned char *)saferealloc(dst, dstsize);
   buffer = memory_cptr(new memory_c(dst, dstsize, true));
@@ -154,7 +152,7 @@ zlib_compressor_c::compress(memory_cptr &buffer) {
   c_stream.opaque = (voidpf)0;
   result = deflateInit(&c_stream, 9);
   if (result != Z_OK)
-    mxerror("deflateInit() failed. Result: %d\n", result);
+    mxerror(boost::format(Y("deflateInit() failed. Result: %1%\n")) % result);
 
   c_stream.next_in = (Bytef *)buffer->get();
   c_stream.avail_in = buffer->get_size();
@@ -167,13 +165,12 @@ zlib_compressor_c::compress(memory_cptr &buffer) {
     c_stream.avail_out = 4000;
     result = deflate(&c_stream, Z_FINISH);
     if ((result != Z_OK) && (result != Z_STREAM_END))
-      mxerror("Zlib decompression failed. Result: %d\n", result);
+      mxerror(boost::format(Y("Zlib decompression failed. Result: %1%\n")) % result);
   } while ((c_stream.avail_out == 0) && (result != Z_STREAM_END));
   dstsize = c_stream.total_out;
   deflateEnd(&c_stream);
 
-  mxverb(3, "zlib_compressor_c: Compression from %d to %d, %d%%\n",
-         buffer->get_size(), dstsize, dstsize * 100 / buffer->get_size());
+  mxverb(3, boost::format("zlib_compressor_c: Compression from %1% to %2%, %3%%%\n") % buffer->get_size() % dstsize % (dstsize * 100 / buffer->get_size()));
 
   dst = (unsigned char *)saferealloc(dst, dstsize);
   buffer = memory_cptr(new memory_c(dst, dstsize, true));
@@ -196,7 +193,7 @@ bzlib_compressor_c::decompress(memory_cptr &buffer) {
   int result;
   bz_stream d_stream;
 
-  die("bzlib_compressor_c::decompress() not implemented\n");
+  mxerror(Y("bzlib_compressor_c::decompress() not implemented\n"));
 
   d_stream.bzalloc = NULL;
   d_stream.bzfree = NULL;
@@ -204,7 +201,7 @@ bzlib_compressor_c::decompress(memory_cptr &buffer) {
 
   result = BZ2_bzDecompressInit(&d_stream, 0, 0);
   if (result != BZ_OK)
-    mxerror("BZ2_bzCompressInit() failed. Result: %d\n", result);
+    mxerror(boost::format(Y("BZ2_bzCompressInit() failed. Result: %1%\n")) % result);
   BZ2_bzDecompressEnd(&d_stream);
 }
 
@@ -223,7 +220,7 @@ bzlib_compressor_c::compress(memory_cptr &buffer) {
 
   result = BZ2_bzCompressInit(&c_stream, 9, 0, 30);
   if (result != BZ_OK)
-    mxerror("BZ2_bzCompressInit() failed. Result: %d\n", result);
+    mxerror(boost::format(Y("BZ2_bzCompressInit() failed. Result: %1%\n")) % result);
 
   c_stream.next_in = (char *)buffer->get();
   c_stream.next_out = (char *)dst;
@@ -231,14 +228,13 @@ bzlib_compressor_c::compress(memory_cptr &buffer) {
   c_stream.avail_out = 2 * size;
   result = BZ2_bzCompress(&c_stream, BZ_FINISH);
   if (result != BZ_STREAM_END)
-    mxerror("bzip2 compression failed. Result: %d\n", result);
+    mxerror(boost::format(Y("bzip2 compression failed. Result: %1%\n")) % result);
 
   BZ2_bzCompressEnd(&c_stream);
 
   dstsize = 2 * size - c_stream.avail_out;
 
-  mxverb(3, "bzlib_compressor_c: Compression from %d to %d, %d%%\n",
-         size, dstsize, dstsize * 100 / size);
+  mxverb(3, boost::format("bzlib_compressor_c: Compression from %1% to %2%, %3%%%\n") % size % dstsize % (dstsize * 100 / size));
 
   raw_size += size;
   compressed_size += dstsize;
@@ -279,27 +275,19 @@ header_removal_compressor_c::compress(memory_cptr &buffer) {
     return;
 
   if (buffer->get_size() < m_bytes->get_size())
-    throw compression_error_c(mxsprintf("Header removal compression not "
-                                        "possible because "
-                                        "the buffer contained %d bytes which "
-                                        "is less than the size of the headers "
-                                        "that should be removed, %d.",
-                                        buffer->get_size(),
-                                        m_bytes->get_size()));
+    throw compression_error_c(boost::format(Y("Header removal compression not possible because the buffer contained %1% bytes "
+                                              "which is less than the size of the headers that should be removed, %2%.")) % buffer->get_size() % m_bytes->get_size());
 
   if (memcmp(buffer->get(), m_bytes->get(), m_bytes->get_size())) {
     string b_buffer, b_bytes;
     int i;
 
     for (i = 0; m_bytes->get_size() > i; ++i) {
-      b_buffer += mxsprintf(" %02x", buffer->get()[i]);
-      b_bytes += mxsprintf(" %02x", m_bytes->get()[i]);
+      b_buffer += (boost::format(" %|1$02x|") % buffer->get()[i]).str();
+      b_bytes  += (boost::format(" %|1$02x|") % m_bytes->get()[i]).str();
     }
-    throw compression_error_c(mxsprintf("Header removal compression not "
-                                        "possible because the buffer did not "
-                                        "start with the bytes that should be "
-                                        "removed. Wanted bytes:%s; found:%s.",
-                                        b_bytes.c_str(), b_buffer.c_str()));
+    throw compression_error_c(boost::format(Y("Header removal compression not possible because the buffer did not start with the bytes that should be removed. "
+                                              "Wanted bytes:%1%; found:%2%.")) % b_bytes % b_buffer);
   }
 
   memmove(buffer->get(), buffer->get() + m_bytes->get_size(),
@@ -322,9 +310,7 @@ header_removal_compressor_c::set_track_headers(KaxContentEncoding
 
 mpeg4_p2_compressor_c::mpeg4_p2_compressor_c() {
   if (!hack_engaged(ENGAGE_NATIVE_MPEG4))
-    mxerror("The MPEG-4 part 2 compression only works with native MPEG-4. "
-            "However, native MPEG-4 mode has not been selected with "
-            "'--engage native_mpeg4'.\n");
+    mxerror(Y("The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"));
 
   memory_cptr bytes(new memory_c((unsigned char *)safemalloc(4), 4, true));
   put_uint32_be(bytes->get(), 0x000001b6);
@@ -335,10 +321,9 @@ mpeg4_p2_compressor_c::mpeg4_p2_compressor_c() {
 
 compressor_c::~compressor_c() {
   if (items != 0)
-    mxverb(2, "compression: Overall stats: raw size: " LLD ", compressed "
-           "size: " LLD ", items: " LLD ", ratio: %.2f%%, avg bytes per item: "
-           "" LLD "\n", raw_size, compressed_size, items,
-           compressed_size * 100.0 / raw_size, compressed_size / items);
+    mxverb(2,
+           boost::format(Y("compression: Overall stats: raw size: %1%, compressed size: %2%, items: %3%, ratio: %|4$.2f|%%, avg bytes per item: %5%\n"))
+           % raw_size % compressed_size % items % (compressed_size * 100.0 / raw_size) % (compressed_size / items));
 }
 
 void
@@ -503,23 +488,20 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
     }
 
     if (1 == enc.type) {
-      mxwarn("Track number %d has been encrypted and decryption has "
-             "not yet been implemented.\n", tid);
+      mxwarn(boost::format(Y("Track number %1% has been encrypted and decryption has not yet been implemented.\n")) % tid);
       ok = false;
       break;
     }
 
     if (0 != enc.type) {
-      mxerror("Unknown content encoding type %u for track %d.\n", enc.type,
-              tid);
+      mxerror(boost::format(Y("Unknown content encoding type %1% for track %2%.\n")) % enc.type % tid);
       ok = false;
       break;
     }
 
     if (0 == enc.comp_algo) {
 #if !defined(HAVE_ZLIB_H)
-      mxwarn("Track %d was compressed with zlib but mkvmerge has not "
-             "been compiled with support for zlib compression.\n", tid);
+      mxwarn(boost::format(Y("Track %1% was compressed with zlib but mkvmerge has not been compiled with support for zlib compression.\n")) % tid);
       ok = false;
       break;
 #else
@@ -527,8 +509,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
 #endif
     } else if (1 == enc.comp_algo) {
 #if !defined(HAVE_BZLIB_H)
-      mxwarn("Track %d was compressed with bzlib but mkvmerge has not "
-             "been compiled with support for bzlib compression.\n", tid);
+      mxwarn(boost::format(Y("Track %1% was compressed with bzlib but mkvmerge has not been compiled with support for bzlib compression.\n")) % tid);
       ok = false;
       break;
 #else
@@ -536,8 +517,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
 #endif
     } else if (enc.comp_algo == 2) {
 #if !defined(HAVE_LZO1X_H)
-      mxwarn("Track %d was compressed with lzo1x but mkvmerge has not "
-             "been compiled with support for lzo1x compression.\n", tid);
+      mxwarn(boost::format(Y("Track %1% was compressed with lzo1x but mkvmerge has not been compiled with support for lzo1x compression.\n")) % tid);
       ok = false;
       break;
 #else
@@ -549,9 +529,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
       enc.compressor = counted_ptr<compressor_c>(c);
 
     } else {
-      mxwarn("Track %d has been compressed with an unknown/unsupported "
-             "compression algorithm (%d).\n", tid,
-             enc.comp_algo);
+      mxwarn(boost::format(Y("Track %1% has been compressed with an unknown/unsupported compression algorithm (%2%).\n")) % tid % enc.comp_algo);
       ok = false;
       break;
     }

@@ -791,13 +791,13 @@ tab_chapters::save() {
   out->use_dos_style_newlines(true);
 #endif
   out->write_bom("UTF-8");
-  out->printf("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-              "\n"
-              "<!-- <!DOCTYPE Tags SYSTEM \"matroskatags.dtd\"> -->\n"
-              "\n"
-              "<Chapters>\n");
+  out->puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+            "\n"
+            "<!-- <!DOCTYPE Tags SYSTEM \"matroskatags.dtd\"> -->\n"
+            "\n"
+            "<Chapters>\n");
   write_chapters_xml(chapters, out);
-  out->printf("</Chapters>\n");
+  out->puts("</Chapters>\n");
   delete out;
 
   source_is_kax_file = false;

@@ -42,24 +42,7 @@ extern "C" {
 #include <ebml/EbmlVoid.h>
 #include <matroska/FileKax.h>
 
-#include <matroska/KaxAttached.h>
-#include <matroska/KaxAttachments.h>
-#include <matroska/KaxBlock.h>
-#include <matroska/KaxBlockData.h>
-#include <matroska/KaxChapters.h>
-#include <matroska/KaxCluster.h>
-#include <matroska/KaxClusterData.h>
-#include <matroska/KaxCues.h>
-#include <matroska/KaxCuesData.h>
-#include <matroska/KaxInfo.h>
-#include <matroska/KaxInfoData.h>
-#include <matroska/KaxSeekHead.h>
-#include <matroska/KaxSegment.h>
 #include <matroska/KaxTags.h>
-#include <matroska/KaxTracks.h>
-#include <matroska/KaxTrackEntryData.h>
-#include <matroska/KaxTrackAudio.h>
-#include <matroska/KaxTrackVideo.h>
 
 #include "chapters.h"
 #include "common.h"
@@ -76,36 +59,30 @@ using namespace std;
 void
 extract_tags(const char *file_name,
              bool parse_fully) {
-  EbmlMaster *m;
   mm_io_c *in;
-  mm_stdio_c out;
   kax_quickparser_c *qp;
-  KaxTags *tags;
 
   // open input file
   try {
     in = new mm_file_io_c(file_name);
     qp = new kax_quickparser_c(*in, parse_fully);
   } catch (...) {
-    show_error(_("The file '%s' could not be opened for reading (%s)."),
-               file_name, strerror(errno));
+    show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).")) % file_name % strerror(errno));
     return;
   }
 
-  m = qp->read_all(KaxTags::ClassInfos);
-  if (m != NULL) {
-    tags = dynamic_cast<KaxTags *>(m);
+  EbmlMaster *m = qp->read_all(KaxTags::ClassInfos);
+  if (NULL != m) {
+    KaxTags *tags = dynamic_cast<KaxTags *>(m);
     assert(tags != NULL);
 
-    if (verbose > 0)
-      debug_dump_elements(tags, 0);
-
+    mm_stdio_c out;
     out.write_bom("UTF-8");
-    out.printf("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n"
-               "<!DOCTYPE Tags SYSTEM \"matroskatags.dtd\">\n\n"
-               "<Tags>\n");
+    out.puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n"
+             "<!DOCTYPE Tags SYSTEM \"matroskatags.dtd\">\n\n"
+             "<Tags>\n");
     write_tags_xml(*tags, &out);
-    out.printf("</Tags>\n");
+    out.puts("</Tags>\n");
 
     delete tags;
   }

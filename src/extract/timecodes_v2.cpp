@@ -81,7 +81,7 @@ close_timecode_files() {
 
     sort(timecodes.begin(), timecodes.end());
     mxforeach(timecode, timecodes)
-      extractor->m_file->printf("%f\n", ((double)(*timecode)) / 1000000.0);
+      extractor->m_file->puts(boost::format("%1%\n") % (((double)(*timecode)) / 1000000.0));
     delete extractor->m_file;
   }
   timecode_extractors.clear();
@@ -116,11 +116,10 @@ create_timecode_files(KaxTracks &kax_tracks,
       mm_io_c *file = new mm_file_io_c(tspec->out_name, MODE_CREATE);
       timecode_extractors.push_back(timecode_extractor_t(tspec->tid, file,
                                                          default_duration));
-      file->printf("# timecode format v%d\n", version);
+      file->puts(boost::format("# timecode format v%1%\n") % version);
     } catch(...) {
       close_timecode_files();
-      mxerror("Could not open the timecode file '%s' for writing (%s).\n",
-              tspec->out_name, strerror(errno));
+      mxerror(boost::format(Y("Could not open the timecode file '%1%' for writing (%2%).\n")) % tspec->out_name % strerror(errno));
     }
   }
 }
@@ -201,8 +200,7 @@ extract_timecodes(const string &file_name,
   try {
     in = new mm_file_io_c(file_name);
   } catch (...) {
-    show_error(_("The file '%s' could not be opened for reading (%s).\n"),
-               file_name.c_str(), strerror(errno));
+    show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).\n")) % file_name % strerror(errno));
     return;
   }
 
@@ -216,7 +214,7 @@ extract_timecodes(const string &file_name,
     // Find the EbmlHead element. Must be the first one.
     l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
     if (l0 == NULL) {
-      show_error(_("Error: No EBML head found."));
+      show_error(Y("Error: No EBML head found."));
       delete es;
 
       return;
@@ -230,11 +228,11 @@ extract_timecodes(const string &file_name,
       // Next element must be a segment
       l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFFFFFFFFFLL);
       if (l0 == NULL) {
-        show_error(_("No segment/level 0 element found."));
+        show_error(Y("No segment/level 0 element found."));
         return;
       }
       if (EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId) {
-        show_element(l0, 0, _("Segment"));
+        show_element(l0, 0, Y("Segment"));
         break;
       }
 
@@ -251,7 +249,7 @@ extract_timecodes(const string &file_name,
     while ((l1 != NULL) && (upper_lvl_el <= 0)) {
       if (EbmlId(*l1) == KaxInfo::ClassInfos.GlobalId) {
         // General info about this Matroska file
-        show_element(l1, 1, _("Segment information"));
+        show_element(l1, 1, Y("Segment information"));
 
         upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
@@ -262,7 +260,7 @@ extract_timecodes(const string &file_name,
             KaxTimecodeScale &ktc_scale = *static_cast<KaxTimecodeScale *>(l2);
             ktc_scale.ReadData(es->I_O());
             tc_scale = uint64(ktc_scale);
-            show_element(l2, 2, _("Timecode scale: " LLU), tc_scale);
+            show_element(l2, 2, boost::format(Y("Timecode scale: %1%")) % tc_scale);
           } else
             l2->SkipData(*es, l2->Generic().Context);
 
@@ -290,19 +288,18 @@ extract_timecodes(const string &file_name,
 
         // Yep, we've found our KaxTracks element. Now find all tracks
         // contained in this segment.
-        show_element(l1, 1, _("Segment tracks"));
+        show_element(l1, 1, Y("Segment tracks"));
 
         tracks_found = true;
         l1->Read(*es, KaxTracks::ClassInfos.Context, upper_lvl_el, l2, true);
         create_timecode_files(*dynamic_cast<KaxTracks *>(l1), tspecs, version);
 
       } else if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
-        show_element(l1, 1, _("Cluster"));
+        show_element(l1, 1, Y("Cluster"));
         cluster = (KaxCluster *)l1;
 
         if (verbose == 0)
-          mxinfo("%s: %d%%\r", _("progress"),
-                 (int)(in->getFilePointer() * 100 / file_size));
+          mxinfo(boost::format(Y("Progress: %1%%%\r")) % (int)(in->getFilePointer() * 100 / file_size));
 
         upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
@@ -313,12 +310,11 @@ extract_timecodes(const string &file_name,
             KaxClusterTimecode &ctc = *static_cast<KaxClusterTimecode *>(l2);
             ctc.ReadData(es->I_O());
             cluster_tc = uint64(ctc);
-            show_element(l2, 2, _("Cluster timecode: %.3fs"),
-                         (float)cluster_tc * (float)tc_scale / 1000000000.0);
+            show_element(l2, 2, boost::format(Y("Cluster timecode: %|1$.3f|s")) % ((float)cluster_tc * (float)tc_scale / 1000000000.0));
             cluster->InitTimecode(cluster_tc, tc_scale);
 
           } else if (EbmlId(*l2) == KaxBlockGroup::ClassInfos.GlobalId) {
-            show_element(l2, 2, _("Block group"));
+            show_element(l2, 2, Y("Block group"));
 
             l2->Read(*es, KaxBlockGroup::ClassInfos.Context, upper_lvl_el, l3,
                      true);
@@ -326,7 +322,7 @@ extract_timecodes(const string &file_name,
                               tc_scale);
 
           } else if (EbmlId(*l2) == KaxSimpleBlock::ClassInfos.GlobalId) {
-            show_element(l2, 2, _("Simple block"));
+            show_element(l2, 2, Y("Simple block"));
 
             l2->Read(*es, KaxSimpleBlock::ClassInfos.Context, upper_lvl_el, l3, true);
             handle_simpleblock(*static_cast<KaxSimpleBlock *>(l2), *cluster);
@@ -398,9 +394,9 @@ extract_timecodes(const string &file_name,
     close_timecode_files();
 
     if (0 == verbose)
-      mxinfo("progress: 100%%\n");
+      mxinfo(Y("Progress: 100%%\n"));
   } catch (...) {
-    show_error("Caught exception");
+    show_error(Y("Caught exception"));
     delete in;
 
     close_timecode_files();

@@ -41,18 +41,7 @@ extern "C" {
 #include <ebml/EbmlVoid.h>
 #include <matroska/FileKax.h>
 
-#include <matroska/KaxAttachments.h>
 #include <matroska/KaxChapters.h>
-#include <matroska/KaxCluster.h>
-#include <matroska/KaxClusterData.h>
-#include <matroska/KaxCues.h>
-#include <matroska/KaxCuesData.h>
-#include <matroska/KaxInfo.h>
-#include <matroska/KaxInfoData.h>
-#include <matroska/KaxSeekHead.h>
-#include <matroska/KaxSegment.h>
-#include <matroska/KaxTags.h>
-#include <matroska/KaxTracks.h>
 
 #include "chapters.h"
 #include "common.h"
@@ -69,39 +58,34 @@ void
 extract_chapters(const char *file_name,
                  bool chapter_format_simple,
                  bool parse_fully) {
-  EbmlMaster *m;
   mm_io_c *in;
-  mm_stdio_c out;
   kax_quickparser_c *qp;
-  KaxChapters *chapters;
 
   // open input file
   try {
     in = new mm_file_io_c(file_name);
     qp = new kax_quickparser_c(*in, parse_fully);
   } catch (...) {
-    show_error(_("The file '%s' could not be opened for reading (%s)."),
-               file_name, strerror(errno));
+    show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).")) % file_name % strerror(errno));
     return;
   }
 
-  m = qp->read_all(KaxChapters::ClassInfos);
-  if (m != NULL) {
-    chapters = dynamic_cast<KaxChapters *>(m);
+  EbmlMaster *m = qp->read_all(KaxChapters::ClassInfos);
+  if (NULL != m) {
+    KaxChapters *chapters = dynamic_cast<KaxChapters *>(m);
     assert(chapters != NULL);
 
-    if (verbose > 0)
-      debug_dump_elements(chapters, 0);
-
+    mm_stdio_c out;
     if (!chapter_format_simple) {
       out.write_bom("UTF-8");
-      out.printf("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                 "\n"
-                 "<!-- <!DOCTYPE Tags SYSTEM \"matroskatags.dtd\"> -->\n"
-                 "\n"
-                 "<Chapters>\n");
+      out.puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+               "\n"
+               "<!-- <!DOCTYPE Tags SYSTEM \"matroskatags.dtd\"> -->\n"
+               "\n"
+               "<Chapters>\n");
       write_chapters_xml(chapters, &out);
-      out.printf("</Chapters>\n");
+      out.puts("</Chapters>\n");
+
     } else {
       int dummy = 1;
       write_chapters_simple(dummy, chapters, &out);

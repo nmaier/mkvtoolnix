@@ -68,8 +68,7 @@ public:
 
   void remove(int num) {
     if ((pos + num) > size)
-      mxerror("byte_buffer_c: (pos + num) > size. Should not have happened. "
-              "Please file a bug report.\n");
+      mxerror(Y("byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"));
     pos += num;
     if (pos == size) {
       safefree(data);

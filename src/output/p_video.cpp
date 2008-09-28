@@ -96,7 +96,7 @@ video_packetizer_c::set_headers() {
 int
 video_packetizer_c::process(packet_cptr packet) {
   if ((0.0 == m_fps) && (-1 == packet->timecode))
-    mxerror(FMT_TID "video_packetizer: The FPS is 0.0 but the reader did not provide a timecode for a packet. %s\n", ti.fname.c_str(), (int64_t)ti.id, BUGMSG);
+    mxerror_tid(ti.fname, ti.id, boost::format(Y("The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n")) % BUGMSG);
 
   if (-1 == packet->timecode)
     packet->timecode = (int64_t)(1000000000.0 * m_frames_output / m_fps) + m_duration_shift;
@@ -144,7 +144,7 @@ video_packetizer_c::can_connect_to(generic_packetizer_c *src,
   if (   ((NULL == ti.private_data) && (NULL != vsrc->ti.private_data))
       || ((NULL != ti.private_data) && (NULL == vsrc->ti.private_data))
       || (ti.private_size != vsrc->ti.private_size)) {
-    error_message = mxsprintf("The codec's private data does not match (lengths: %d and %d).", ti.private_size, vsrc->ti.private_size);
+    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % ti.private_size % vsrc->ti.private_size).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }
 
@@ -168,7 +168,7 @@ mpeg1_2_video_packetizer_c(generic_reader_c *p_reader,
   , m_aspect_ratio_extracted(false)
 {
 
-  set_codec_id(mxsprintf("V_MPEG%d", version));
+  set_codec_id((boost::format("V_MPEG%1%") % version).str());
   if (!ti.aspect_ratio_given && !ti.display_dimensions_given) {
     if ((0 < dwidth) && (0 < dheight)) {
       m_aspect_ratio_extracted    = true;
@@ -409,7 +409,7 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
       rerender_track_headers();
 
     } else
-      mxerror("Could not find the codec configuration data in the first MPEG-4 part 2 video frame. This track cannot be stored in native mode.\n");
+      mxerror_tid(ti.fname, ti.id, Y("Could not find the codec configuration data in the first MPEG-4 part 2 video frame. This track cannot be stored in native mode.\n"));
   }
 
   vector<video_frame_t> frames;
@@ -420,7 +420,8 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
     m_available_timecodes.push_back(packet->timecode);
 
   else if (0.0 == m_fps)
-    mxerror("Cannot convert non-native MPEG4 video frames into native ones if the source container provides neither timecodes nor a number of frames per second.\n");
+    mxerror_tid(ti.fname, ti.id, Y("Cannot convert non-native MPEG4 video frames into native ones if the source container "
+                                   "provides neither timecodes nor a number of frames per second.\n"));
 
   if (-1 != packet->duration)
     m_available_durations.push_back(packet->duration);
@@ -534,12 +535,12 @@ mpeg4_p2_video_packetizer_c::handle_missing_timecodes(bool end_of_file) {
     while (m_available_timecodes.size() < m_queued_frames.size()) {
       m_previous_timecode = (int64_t)(m_previous_timecode +  1000000000.0 / m_fps);
       m_available_timecodes.push_back(m_previous_timecode);
-      mxverb(3, "mpeg4_p2::flush_frames(): Needed new timecode " LLD "\n", m_previous_timecode);
+      mxverb(3, boost::format(Y("mpeg4_p2::flush_frames(): Needed new timecode %1%\n")) % m_previous_timecode);
     }
 
     while (m_available_durations.size() < m_queued_frames.size()) {
       m_available_durations.push_back((int64_t)(1000000000.0 / m_fps));
-      mxverb(3, "mpeg4_p2::flush_frames(): Needed new duration " LLD "\n", m_available_durations.back());
+      mxverb(3, boost::format(Y("mpeg4_p2::flush_frames(): Needed new duration %1%\n")) % m_available_durations.back());
     }
 
     return;
@@ -562,10 +563,12 @@ mpeg4_p2_video_packetizer_c::handle_missing_timecodes(bool end_of_file) {
 
   int64_t timecode = m_available_timecodes.empty() ? 0 : m_available_timecodes.front();
 
-  mxwarn(FMT_TID "During MPEG-4 part 2 B frame handling: The frame queue contains more frames than timecodes are available that "
-         "can be assigned to them because %s. Therefore %d frame%s to be dropped. The video might be broken around timecode " FMT_TIMECODE ".\n",
-         ti.fname.c_str(), (int64_t)ti.id, end_of_file ? "the end of the source file was encountered" : "an unsupported sequence of frames was encountered",
-         num_dropped, 1 == num_dropped ? " has" : "s have", ARG_TIMECODE_NS(timecode));
+  mxwarn_tid(ti.fname, ti.id,
+             boost::format(Y("During MPEG-4 part 2 B frame handling: The frame queue contains more frames than timecodes are available that "
+                             "can be assigned to them (reason: %1%). Therefore %2% frame(s) had to be dropped. "
+                             "The video might be broken around timecode %3%.\n"))
+             % (end_of_file ? "The end of the source file was encountered." : "An unsupported sequence of frames was encountered.")
+             % num_dropped % format_timecode(timecode, 3));
 }
 
 void
@@ -642,8 +645,9 @@ mpeg4_p2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
 
     generic_packetizer_c::set_headers();
     rerender_track_headers();
-    mxinfo("Track " LLD " of '%s': Extracted the aspect ratio information from the MPEG4 layer 2 video data and set the display dimensions to %u/%u.\n",
-           (int64_t)ti.id, ti.fname.c_str(), (uint32_t)ti.display_width, (uint32_t)ti.display_height);
+    mxinfo_tid(ti.fname, ti.id,
+               boost::format(Y("Extracted the aspect ratio information from the MPEG4 layer 2 video data and set the display dimensions to %1%/%2%.\n"))
+               % ti.display_width % ti.display_height);
 
   } else if (50 <= m_frames_output)
     m_aspect_ratio_extracted = true;
@@ -671,9 +675,9 @@ mpeg4_p2_video_packetizer_c::extract_size(const unsigned char *buffer,
       generic_packetizer_c::set_headers();
       rerender_track_headers();
 
-      mxinfo("Track " LLD " of '%s': The extracted values for video width and height from the MPEG4 layer 2 video data bitstream differ "
-             "from what the values in the source container. The ones from the video data bitstream (%ux%u) will be used.\n",
-             (int64_t)ti.id, ti.fname.c_str(), xtr_width, xtr_height);
+      mxinfo_tid(ti.fname, ti.id,
+                 boost::format(Y("The extracted values for video width and height from the MPEG4 layer 2 video data bitstream differ from what the values "
+                                 "in the source container. The ones from the video data bitstream (%1%x%2%) will be used.\n")) % xtr_width % xtr_height);
     }
 
   } else if (50 <= m_frames_output)
@@ -722,8 +726,9 @@ mpeg4_p10_video_packetizer_c::extract_aspect_ratio() {
       }
 
       ti.display_dimensions_given = true;
-      mxinfo("Track " LLD " of '%s': Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %u/%u.\n",
-             (int64_t)ti.id, ti.fname.c_str(), (uint32_t)ti.display_width, (uint32_t)ti.display_height);
+      mxinfo_tid(ti.fname, ti.id,
+                 boost::format(Y("Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"))
+                 % ti.display_width % ti.display_height);
     }
 
     set_codec_private(ti.private_data, ti.private_size);
@@ -762,7 +767,7 @@ mpeg4_p10_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
     return result;
 
   if ((NULL != ti.private_data) && memcmp(ti.private_data, vsrc->ti.private_data, ti.private_size)) {
-    error_message = mxsprintf("The codec's private data does not match. Both have the same length (%d) but different content.", ti.private_size);
+    error_message = (boost::format(Y("The codec's private data does not match. Both have the same length (%1%) but different content.")) % ti.private_size).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }
 
@@ -785,7 +790,7 @@ mpeg4_p10_video_packetizer_c::setup_nalu_size_len_change() {
 
   set_codec_private(ti.private_data, ti.private_size);
 
-  mxverb(2, "mpeg4_p10: Adjusting NALU size length from %d to %d\n", m_nalu_size_len_src, m_nalu_size_len_dst);
+  mxverb(2, boost::format(Y("mpeg4_p10: Adjusting NALU size length from %1% to %2%\n")) % m_nalu_size_len_src % m_nalu_size_len_dst);
 }
 
 void
@@ -814,7 +819,7 @@ mpeg4_p10_video_packetizer_c::change_nalu_size_len(packet_cptr packet) {
       nalu_size = size - src_pos - m_nalu_size_len_src;
 
     if (nalu_size > m_max_nalu_size)
-      mxerror(FMT_TID "The chosen NALU size length of %d is too small. Try using '4'.\n", ti.fname.c_str(), (int64_t)ti.id, m_nalu_size_len_dst);
+      mxerror_tid(ti.fname, ti.id, boost::format(Y("The chosen NALU size length of %1% is too small. Try using '4'.\n")) % m_nalu_size_len_dst);
 
     src_pos += m_nalu_size_len_src + nalu_size;
 

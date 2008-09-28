@@ -60,8 +60,7 @@ tta_packetizer_c::process(packet_cptr packet) {
     samples_output   += irnd(TTA_FRAME_TIME * sample_rate);
 
   } else {
-    mxverb(2, "tta_packetizer: incomplete block with duration " LLD "\n",
-           packet->duration);
+    mxverb(2, boost::format(Y("tta_packetizer: incomplete block with duration %1%\n")) % packet->duration);
     samples_output += irnd(packet->duration * sample_rate / 1000000000ll);
   }
   add_packet(packet);

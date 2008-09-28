@@ -34,23 +34,19 @@ theora_parse_identification_header(unsigned char *buffer,
 
   header.headertype = bc.get_bits(8);
   if (THEORA_HEADERTYPE_IDENTIFICATION != header.headertype)
-    throw error_c(mxsprintf("Wrong header type: 0x%02x != 0x%02x",
-                            header.headertype,
-                            THEORA_HEADERTYPE_IDENTIFICATION));
+    throw error_c(boost::format(Y("Wrong header type: 0x%|1$02x| != 0x%|2$02x|")) % header.headertype % THEORA_HEADERTYPE_IDENTIFICATION);
 
   for (i = 0; 6 > i; ++i)
     header.theora_string[i] = bc.get_bits(8);
   if (strncmp(header.theora_string, "theora", 6))
-    throw error_c(mxsprintf("Wrong identifaction string: '%6s' != 'theora'",
-                            header.theora_string));
+    throw error_c(boost::format(Y("Wrong identifaction string: '%|1$6s|' != 'theora'")) % header.theora_string);
 
   header.vmaj = bc.get_bits(8);
   header.vmin = bc.get_bits(8);
   header.vrev = bc.get_bits(8);
 
   if ((3 != header.vmaj) || (2 != header.vmin))
-    throw error_c(mxsprintf("Wrong Theora version: %d.%d.%d != 3.2.x",
-                            header.vmaj, header.vmin, header.vrev));
+    throw error_c(boost::format(Y("Wrong Theora version: %1%.%2%.%3% != 3.2.x")) % header.vmaj % header.vmin % header.vrev);
 
   header.fmbw = bc.get_bits(16) * 16;
   header.fmbh = bc.get_bits(16) * 16;
@@ -72,7 +68,4 @@ theora_parse_identification_header(unsigned char *buffer,
   header.kfgshift = bc.get_bits(5);
 
   header.pf = bc.get_bits(2);
-
-  if (0 != bc.get_bits(3))
-    throw error_c("Reserved bits are not 0");
 }

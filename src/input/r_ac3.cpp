@@ -67,22 +67,22 @@ ac3_reader_c::ac3_reader_c(track_info_c &_ti)
     int init_read_len = MXMIN(size - tag_size_start, AC3_READ_SIZE);
 
     if (io->read(chunk->get(), init_read_len) != init_read_len)
-      throw error_c(mxsprintf("ac3_reader: Could not read %d bytes.", AC3_READ_SIZE));
+      throw error_c(boost::format(Y("ac3_reader: Could not read %1% bytes.")) % AC3_READ_SIZE);
 
     io->setFilePointer(tag_size_start, seek_beginning);
 
   } catch (...) {
-    throw error_c("ac3_reader: Could not open the source file.");
+    throw error_c(Y("ac3_reader: Could not open the source file."));
   }
 
   if (0 > find_ac3_header(chunk->get(), AC3_READ_SIZE, &ac3header, true))
-    throw error_c(mxsprintf("ac3_reader: No valid AC3 packet found in the first %d bytes.\n", AC3_READ_SIZE));
+    throw error_c(boost::format(Y("ac3_reader: No valid AC3 packet found in the first %1% bytes.\n")) % AC3_READ_SIZE);
 
   bytes_processed = 0;
   ti.id           = 0;          // ID for this track.
 
   if (verbose)
-    mxinfo(FMT_FN "Using the AC3 demultiplexer.\n", ti.fname.c_str());
+    mxinfo_fn(ti.fname, Y("Using the AC3 demultiplexer.\n"));
 }
 
 ac3_reader_c::~ac3_reader_c() {
@@ -95,7 +95,7 @@ ac3_reader_c::create_packetizer(int64_t) {
     return;
 
   add_packetizer(new ac3_packetizer_c(this, ac3header.sample_rate, ac3header.channels, ac3header.bsid, ti));
-  mxinfo(FMT_TID "Using the %sAC3 output module.\n", ti.fname.c_str(), (int64_t)0, 16 == ac3header.bsid ? "E" : "");
+  mxinfo_tid(ti.fname, 0, boost::format(Y("Using the %1%AC3 output module.\n")) % (16 == ac3header.bsid ? "E" : ""));
 }
 
 file_status_e

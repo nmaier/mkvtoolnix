@@ -31,7 +31,7 @@ xtr_rmff_c::create_file(xtr_base_c *master,
                         KaxTrackEntry &track) {
   KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
-    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec private\" element and cannot be extracted.\n", m_tid, m_codec_id.c_str());
+    mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
   init_content_decoder(track);
   memory_cptr mpriv = decode_codec_private(priv);
@@ -40,13 +40,13 @@ xtr_rmff_c::create_file(xtr_base_c *master,
   if (NULL == m_master) {
     m_file = rmff_open_file(m_file_name.c_str(), RMFF_OPEN_MODE_WRITING);
     if (NULL == m_file)
-      mxerror("The file '%s' could not be opened for writing (%d, %s).\n", m_file_name.c_str(), errno, strerror(errno));
+      mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%, %3%).\n")) % m_file_name % errno % strerror(errno));
   } else
     m_file = static_cast<xtr_rmff_c *>(m_master)->m_file;
 
   m_rmtrack = rmff_add_track(m_file, 1);
   if (NULL == m_rmtrack)
-    mxerror("Memory allocation error: %d (%s).\n", rmff_last_error, rmff_last_error_msg);
+    mxerror(boost::format(Y("Memory allocation error: %1% (%2%).\n")) % rmff_last_error % rmff_last_error_msg);
 
   rmff_set_type_specific_data(m_rmtrack, mpriv->get(), mpriv->get_size());
 
@@ -73,7 +73,7 @@ xtr_rmff_c::handle_frame(memory_cptr &frame,
 
   rmff_frame_t *rmff_frame = rmff_allocate_frame(frame->get_size(), frame->get());
   if (NULL == rmff_frame)
-    mxerror("Memory for a RealAudio/RealVideo frame could not be allocated.\n");
+    mxerror(Y("Memory for a RealAudio/RealVideo frame could not be allocated.\n"));
 
   rmff_frame->timecode = timecode / 1000000;
   if (keyframe)

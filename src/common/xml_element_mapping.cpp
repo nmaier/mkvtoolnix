@@ -45,9 +45,8 @@ init_mapping_table(parser_element_t *table) {
       table[i].name;
     result = find_ebml_callbacks(KaxSegment::ClassInfos, debug_name);
     if (NULL == result)
-      mxerror("Error initializing the tables for the chapter, tag and segment "
-              "info elements: Could not find the element with the debug name "
-              "'%s'. %s\n", debug_name, BUGMSG);
+      mxerror(boost::format(Y("Error initializing the tables for the chapter, tag and segment info elements: "
+                              "Could not find the element with the debug name '%1%'. %2%\n")) % debug_name % BUGMSG);
     table[i].id = result->GlobalId;
   }
 }

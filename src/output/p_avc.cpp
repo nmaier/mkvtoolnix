@@ -86,21 +86,17 @@ mpeg4_p10_es_video_packetizer_c::process(packet_cptr packet) {
     flush_frames();
 
   } catch (nalu_size_length_error_c &error) {
-    mxerror(FMT_TID "This AVC/h.264 contains frames that are too big for "
-            "the current maximum NALU size. You have to re-run mkvmerge "
-            "and set the maximum NALU size to %d for this track (command "
-            "line parameter '--nalu-size-length " LLD ":%d').\n",
-            ti.fname.c_str(), (int64_t)ti.id, error.get_required_length(),
-            (int64_t)ti.id, error.get_required_length());
+    mxerror_tid(ti.fname, ti.id,
+                boost::format(Y("This AVC/h.264 contains frames that are too big for the current maximum NALU size. "
+                                "You have to re-run mkvmerge and set the maximum NALU size to %1% for this track "
+                                "(command line parameter '--nalu-size-length %2%:%1%').\n"))
+                % error.get_required_length() % ti.id);
 
   } catch (error_c &error) {
-    mxerror(FMT_TID "mkvmerge encountered broken or unparsable data in  "
-            "this AVC/h.264 video track.\n"
-            "Either your file is damaged (which mkvmerge cannot cope with "
-            "yet)\n"
-            "or this is a bug in mkvmerge itself. The error message was:\n"
-            "%s\n",
-            ti.fname.c_str(), (int64_t)ti.id, error.get_error().c_str());
+    mxerror_tid(ti.fname, ti.id,
+                boost::format(Y("mkvmerge encountered broken or unparsable data in this AVC/h.264 video track. "
+                                "Either your file is damaged (which mkvmerge cannot cope with yet) or this is a bug in mkvmerge itself. "
+                                "The error message was:\n")) % error.get_error());
   }
 
   return FILE_STATUS_MOREDATA;
@@ -128,10 +124,9 @@ mpeg4_p10_es_video_packetizer_c::extract_aspect_ratio() {
       }
 
       ti.display_dimensions_given = true;
-      mxinfo("Track " LLD " of '%s': Extracted the aspect ratio information "
-             "from the MPEG-4 layer 10 (AVC) video data and set the display "
-             "dimensions to %u/%u.\n", (int64_t)ti.id, ti.fname.c_str(),
-             (uint32_t)ti.display_width, (uint32_t)ti.display_height);
+      mxinfo_tid(ti.fname, ti.id,
+                 boost::format(Y("Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data "
+                                 "and set the display dimensions to %1%/%2%.\n")) % ti.display_width % ti.display_height);
     }
   }
 
@@ -151,10 +146,8 @@ mpeg4_p10_es_video_packetizer_c::flush_frames() {
   while (m_parser.frame_available()) {
     avc_frame_t frame(m_parser.get_frame());
     if (m_first_frame && (0 < m_parser.get_num_skipped_frames()))
-      mxwarn(FMT_TID "This AVC/h.264 track does not start with a key frame. "
-             "The first %d frames have been skipped.\n",
-             ti.fname.c_str(), (int64_t)ti.id,
-             m_parser.get_num_skipped_frames());
+      mxwarn_tid(ti.fname, ti.id,
+                 boost::format(Y("This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n")) % m_parser.get_num_skipped_frames());
     add_packet(new packet_t(frame.m_data, frame.m_start,
                             frame.m_end > frame.m_start ?
                             frame.m_end - frame.m_start :
@@ -191,9 +184,7 @@ mpeg4_p10_es_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
   if (((ti.private_data == NULL) && (vsrc->ti.private_data != NULL)) ||
       ((ti.private_data != NULL) && (vsrc->ti.private_data == NULL)) ||
       (ti.private_size != vsrc->ti.private_size)) {
-    error_message = mxsprintf("The codec's private data does not match "
-                              "(lengths: %d and %d).", ti.private_size,
-                              vsrc->ti.private_size);
+    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % ti.private_size % vsrc->ti.private_size).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }
   return CAN_CONNECT_YES;

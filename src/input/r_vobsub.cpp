@@ -38,8 +38,6 @@ using namespace std;
                      :                     15)
 #define ishexdigit(s) (isdigit(s) || (strchr("abcdefABCDEF", s) != NULL))
 
-#define PFX "vobsub_reader: "
-
 const string vobsub_reader_c::id_string("# VobSub index file, v");
 
 bool
@@ -73,7 +71,7 @@ vobsub_reader_c::vobsub_reader_c(track_info_c &_ti)
   try {
     idx_file = new mm_text_io_c(new mm_file_io_c(ti.fname));
   } catch (...) {
-    throw error_c(PFX "Cound not open the source file.");
+    throw error_c(Y("vobsub_reader: Cound not open the source file."));
   }
 
   string sub_name = ti.fname;
@@ -85,10 +83,7 @@ vobsub_reader_c::vobsub_reader_c(track_info_c &_ti)
   try {
     sub_file = new mm_file_io_c(sub_name.c_str());
   } catch (...) {
-    string emsg = PFX "Could not open the sub file '";
-    emsg += sub_name;
-    emsg += "'.";
-    throw error_c(emsg.c_str());
+    throw error_c(Y("vobsub_reader: Could not open the sub file"));
   }
 
   idx_data = "";
@@ -96,7 +91,7 @@ vobsub_reader_c::vobsub_reader_c(track_info_c &_ti)
 
   string line;
   if (!idx_file->getline2(line) || !starts_with_case(line, id_string.c_str(), len) || (line.length() < (len + 1)))
-    mxerror(PFX "%s: No version number found.\n", ti.fname.c_str());
+    mxerror_fn(ti.fname, Y("No version number found.\n"));
 
   version = line[len] - '0';
   len++;
@@ -105,20 +100,22 @@ vobsub_reader_c::vobsub_reader_c(track_info_c &_ti)
     len++;
   }
   if (version < 7)
-    mxerror(PFX "%s: Only v7 and newer VobSub files are supported. If you have an older version then use the VSConv utility from "
-            "http://sourceforge.net/projects/guliverkli/ to convert these files to v7 files.\n", ti.fname.c_str());
+    mxerror_fn(ti.fname, Y("Only v7 and newer VobSub files are supported. If you have an older version then use the VSConv utility from "
+                           "http://sourceforge.net/projects/guliverkli/ to convert these files to v7 files.\n"));
 
   parse_headers();
   if (verbose)
-    mxinfo(FMT_FN "Using the VobSub subtitle reader (SUB file '%s').\n", ti.fname.c_str(), sub_name.c_str());
+    mxinfo_fn(ti.fname, boost::format(Y("Using the VobSub subtitle reader (SUB file '%1%').\n")) % sub_name.c_str());
 }
 
 vobsub_reader_c::~vobsub_reader_c() {
   uint32_t i;
 
   for (i = 0; i < tracks.size(); i++) {
-    mxverb(2, "r_vobsub track %u SPU size: " LLD ", overall size: " LLD ", overhead: " LLD " (%.3f%%)\n", i, tracks[i]->spu_size,
-           tracks[i]->spu_size + tracks[i]->overhead, tracks[i]->overhead, (float)(100.0 * tracks[i]->overhead / (tracks[i]->overhead + tracks[i]->spu_size)));
+    mxverb(2,
+           boost::format(Y("r_vobsub track %1% SPU size: %2%, overall size: %3%, overhead: %4% (%|5$.3f|%%)\n"))
+           % i % tracks[i]->spu_size % (tracks[i]->spu_size + tracks[i]->overhead) % tracks[i]->overhead
+           % (float)(100.0 * tracks[i]->overhead / (tracks[i]->overhead + tracks[i]->spu_size)));
     delete tracks[i];
   }
   delete sub_file;
@@ -153,7 +150,7 @@ vobsub_reader_c::create_packetizer(int64_t tid) {
 
   num_indices += track->entries.size();
 
-  mxinfo(FMT_TID "Using the VobSub subtitle output module (language: %s).\n", ti.fname.c_str(), (int64_t)tid, track->language.c_str());
+  mxinfo_tid(ti.fname, tid, boost::format(Y("Using the VobSub subtitle output module (language: %1%).\n")) % track->language);
   ti.language = "";
 }
 
@@ -203,7 +200,7 @@ vobsub_reader_c::parse_headers() {
         else {
           tracks.push_back(track);
           if (sort_required) {
-            mxverb(2, PFX "Sorting track %u\n", (unsigned int)tracks.size());
+            mxverb(2, boost::format(Y("vobsub_reader: Sorting track %1%\n"))  % tracks.size());
             stable_sort(track->entries.begin(), track->entries.end());
           }
         }
@@ -223,21 +220,20 @@ vobsub_reader_c::parse_headers() {
 
       int64_t timestamp;
       if (!parse_timecode(line, timestamp, true))
-        mxerror(PFX "'%s', line " LLD ": The 'delay' timestamp could not be parsed.\n", ti.fname.c_str(), line_no);
+        mxerror_fn(ti.fname, boost::format(Y("line %1%: The 'delay' timestamp could not be parsed.\n")) % line_no);
       delay = timestamp;
     }
 
     if ((7 == version) && starts_with_case(line, "timestamp:")) {
       if (NULL == track)
-        mxerror(PFX ".idx file does not contain an 'id: ...' line to indicate the language.\n");
+        mxerror_fn(ti.fname, Y("The .idx file does not contain an 'id: ...' line to indicate the language.\n"));
 
       strip(line);
       shrink_whitespace(line);
       vector<string> parts = split(line.c_str(), " ");
 
       if ((4 != parts.size()) || (13 > parts[1].length()) || (downcase(parts[2]) != "filepos:")) {
-        mxwarn(PFX "'%s', line " LLD ": The line seems to be a subtitle entry but the format couldn't be recognized. This entry will be skipped.\n",
-               ti.fname.c_str(), line_no);
+        mxwarn_fn(ti.fname, boost::format(Y("Line %1%: The line seems to be a subtitle entry but the format couldn't be recognized. This entry will be skipped.\n")) % line_no);
         continue;
       }
 
@@ -259,8 +255,8 @@ vobsub_reader_c::parse_headers() {
 
       int64_t timestamp;
       if (!parse_timecode(parts[1], timestamp)) {
-        mxwarn(PFX "'%s', line " LLD ": The line seems to be a subtitle entry but the format couldn't be recognized. This entry will be skipped.\n",
-               ti.fname.c_str(), line_no);
+        mxwarn_fn(ti.fname,
+                  boost::format(Y("Line %1%: The line seems to be a subtitle entry but the format couldn't be recognized. This entry will be skipped.\n")) % line_no);
         continue;
       }
 
@@ -269,8 +265,9 @@ vobsub_reader_c::parse_headers() {
       entry.timestamp = timestamp * factor + delay;
 
       if (0 > entry.timestamp) {
-        mxwarn(PFX "'%s', line " LLD ": The line seems to be a subtitle entry but the timecode was negative even after adding the track "
-               "delay. Negative timecodes are not supported in Matroska. This entry will be skipped.\n", ti.fname.c_str(), line_no);
+        mxwarn_fn(ti.fname,
+                  boost::format(Y("Line %1%: The line seems to be a subtitle entry but the timecode was negative even after adding the track "
+                                  "delay. Negative timecodes are not supported in Matroska. This entry will be skipped.\n")) % line_no);
         continue;
       }
 
@@ -278,10 +275,12 @@ vobsub_reader_c::parse_headers() {
 
       if ((entry.timestamp < last_timestamp) &&
           demuxing_requested('s', tracks.size())) {
-        mxwarn(PFX "'%s', line " LLD ": The current timestamp (" FMT_TIMECODE ") is smaller than the last one (" FMT_TIMECODE"). mkvmerge "
-               "will sort the entries according to their timestamps. This might result in the wrong order for some subtitle entries. If "
-               "this is the case then you have to fix the .idx file manually.\n",
-               ti.fname.c_str(), line_no, ARG_TIMECODE(entry.timestamp), ARG_TIMECODE(last_timestamp));
+        mxwarn_fn(ti.fname,
+                  boost::format(Y("Line %1%: The current timestamp (%2%) is smaller than the previous one (%3%). "
+                                  "mkvmerge will sort the entries according to their timestamps. "
+                                  "This might result in the wrong order for some subtitle entries. "
+                                  "If this is the case then you have to fix the .idx file manually.\n"))
+                  % line_no % format_timecode(entry.timestamp * 1000000, 3) % format_timecode(last_timestamp * 1000000, 3));
         sort_required = true;
       }
       last_timestamp = entry.timestamp;
@@ -299,20 +298,20 @@ vobsub_reader_c::parse_headers() {
     else {
       tracks.push_back(track);
       if (sort_required) {
-        mxverb(2, PFX "Sorting track %u\n", (unsigned int)tracks.size());
+        mxverb(2, boost::format(Y("vobsub_reader: Sorting track %1%\n")) % tracks.size());
         stable_sort(track->entries.begin(), track->entries.end());
       }
     }
   }
 
-  if (!identifying && (1 < verbose)) {
+  if (!g_identifying && (1 < verbose)) {
     int i, k, tsize = tracks.size();
     for (i = 0; i < tsize; i++) {
-      mxinfo("vobsub_reader: Track number %u\n", i);
+      mxinfo(boost::format(Y("vobsub_reader: Track number %1%\n")) % i);
       for (k = 0; k < tracks[i]->entries.size(); k++)
-        mxinfo("vobsub_reader:  %04u position: %12" PRId64 " (0x%04x%08x), timecode: %12" PRId64 " (" FMT_TIMECODE ")\n",
-               k, tracks[i]->entries[k].position, (uint32_t)(tracks[i]->entries[k].position >> 32), (uint32_t)(tracks[i]->entries[k].position & 0xffffffff),
-               tracks[i]->entries[k].timestamp / 1000000, ARG_TIMECODE_NS(tracks[i]->entries[k].timestamp));
+        mxinfo(boost::format(Y("vobsub_reader:  %|1$04u| position: %|2$12d| (0x%|3$04x|%|4$08x|), timecode: %|5$12d| (%6%)\n"))
+               % k % tracks[i]->entries[k].position % (tracks[i]->entries[k].position >> 32) % (tracks[i]->entries[k].position & 0xffffffff)
+               % (tracks[i]->entries[k].timestamp / 1000000) % format_timecode(tracks[i]->entries[k].timestamp, 3));
     }
   }
 }
@@ -333,7 +332,7 @@ vobsub_reader_c::deliver_packet(unsigned char *buf,
 
   duration = spu_extract_duration(buf, size, timecode);
   if (1 == -duration) {
-    mxverb(2, PFX "Could not extract the duration for a SPU packet in track " LLD " of '%s' (timecode: " FMT_TIMECODE ").\n", ti.id, ti.fname.c_str(), ARG_TIMECODE(timecode));
+    mxverb_tid(2, ti.fname, ti.id, boost::format(Y("vobsub_reader: Could not extract the duration for a SPU packet (timecode: %1%.\n")) % format_timecode(timecode, 3));
     duration = default_duration;
   }
 
@@ -372,7 +371,9 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
   while (1) {
     if ((spu_len >= 0) && ((dst_size >= spu_len) || (sub_file->getFilePointer() >= extraction_end_pos))) {
       if (dst_size != spu_len)
-        mxverb(3, "r_vobsub.cpp: stddeliver spu_len %d dst_size %u curpos " LLD " endpos " LLD "\n", spu_len, dst_size, sub_file->getFilePointer(), extraction_end_pos);
+        mxverb(3,
+               boost::format(Y("r_vobsub.cpp: stddeliver spu_len %1% dst_size %2% curpos %3% endpos %4%\n"))
+               % spu_len % dst_size % sub_file->getFilePointer() % extraction_end_pos);
       return deliver();
     }
     if (sub_file->read(buf, 4) != 4)
@@ -399,8 +400,10 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
           mpeg_version = 2;
         else {
           if (!track->mpeg_version_warning_printed) {
-            mxwarn(PFX "Unsupported MPEG mpeg_version: 0x%02x in packet " LLD "for track " LLD " for timecode " FMT_TIMECODE ", assuming "
-                   "MPEG2. No further warnings will be printed for this track.\n", c, track->packet_num, track_id, ARG_TIMECODE_NS(timecode));
+            mxwarn_tid(ti.fname, track_id,
+                       boost::format(Y("Unsupported MPEG mpeg_version: 0x%|1$02x| in packet %2% for timecode %3%, assuming MPEG2. "
+                                       "No further warnings will be printed for this track.\n"))
+                       % c % track->packet_num % format_timecode(timecode, 3));
             track->mpeg_version_warning_printed = true;
           }
           mpeg_version = 2;
@@ -451,7 +454,7 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
           hdrlen  = c;
           dataidx = sub_file->getFilePointer() - extraction_start_pos + hdrlen;
           if (dataidx > idx + len) {
-            mxwarn(PFX "Invalid header length: %d (total length: %d, idx: %d, dataidx: %d)\n", hdrlen, len, idx, dataidx);
+            mxwarn_fn(ti.fname, boost::format(Y("Invalid header length: %1% (total length: %2%, idx: %3%, dataidx: %4%)\n")) % hdrlen % len % idx % dataidx);
             return deliver();
           }
 
@@ -459,7 +462,7 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
             if (sub_file->read(buf, 5) != 5)
               return deliver();
             if (!(((buf[0] & 0xf0) == 0x20) && (buf[0] & 1) && (buf[2] & 1) && (buf[4] & 1))) {
-              mxwarn(PFX "PTS error: 0x%02x %02x%02x %02x%02x \n", buf[0], buf[1], buf[2], buf[3], buf[4]);
+              mxwarn_fn(ti.fname, boost::format(Y("PTS error: 0x%|1$02x| %|2$02x|%|3$02x| %|4$02x|%|5$02x|\n")) % buf[0] % buf[1] % buf[2] % buf[3] % buf[4]);
               pts = 0;
             } else
               pts = ((int64_t)((buf[0] & 0x0e) << 29 | buf[1] << 22 | (buf[2] & 0xfe) << 14 | buf[3] << 7 | (buf[4] >> 1))) * 100000 / 9;
@@ -468,7 +471,7 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
           sub_file->setFilePointer2(dataidx + extraction_start_pos, seek_beginning);
           packet_aid = sub_file->getch();
           if (0 > packet_aid) {
-            mxwarn(PFX "Bogus aid %d\n", packet_aid);
+            mxwarn_fn(ti.fname, boost::format(Y("Bogus aid %1%\n")) % packet_aid);
             return deliver();
           }
 
@@ -477,16 +480,17 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
             track->aid = packet_aid;
           else if (track->aid != packet_aid) {
             // The packet does not belong to the current subtitle stream.
-            mxverb(3, PFX "skipping sub packet with aid %d (wanted aid: %d) with size %d at " LLD "\n", packet_aid, track->aid,
-                   packet_size, sub_file->getFilePointer() - extraction_start_pos);
+            mxverb(3,
+                   boost::format(Y("vobsub_reader: skipping sub packet with aid %1% (wanted aid: %2%) with size %3% at %4%\n"))
+                   % packet_aid % track->aid % packet_size % (sub_file->getFilePointer() - extraction_start_pos));
             sub_file->skip(packet_size);
             idx = len;
             break;
           }
           dst_buf = (unsigned char *)saferealloc(dst_buf, dst_size + packet_size);
-          mxverb(3, PFX "sub packet data: aid: %d, pts: " FMT_TIMECODE ", packet_size: %u\n", track->aid, ARG_TIMECODE_NS(pts), packet_size);
+          mxverb(3, boost::format(Y("vobsub_reader: sub packet data: aid: %1%, pts: %2%, packet_size: %3%\n")) % track->aid % format_timecode(pts, 3) % packet_size);
           if (sub_file->read(&dst_buf[dst_size], packet_size) != packet_size) {
-            mxwarn(PFX "sub_file->read failure");
+            mxwarn(Y("vobsub_reader: sub_file->read failure"));
             return deliver();
           }
           if (-1 == spu_len)
@@ -518,7 +522,7 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
             return deliver();
 
         } else {
-          mxwarn(PFX "unknown header 0x%02X%02X%02X%02X\n", buf[0], buf[1], buf[2], buf[3]);
+          mxwarn_fn(ti.fname, boost::format(Y("Unknown header 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n")) % buf[0] % buf[1] % buf[2] % buf[3]);
           return deliver();
         }
     }

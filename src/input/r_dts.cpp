@@ -65,28 +65,28 @@ dts_reader_c::dts_reader_c(track_info_c &_ti)
     buf[1] = (unsigned short *)safemalloc(READ_SIZE);
 
     if (io->read(buf[cur_buf], READ_SIZE) != READ_SIZE)
-      throw error_c("dts_reader: Could not read READ_SIZE bytes.");
+      throw error_c(Y("dts_reader: Could not read READ_SIZE bytes."));
     io->setFilePointer(0, seek_beginning);
 
   } catch (...) {
-    throw error_c("dts_reader: Could not open the source file.");
+    throw error_c(Y("dts_reader: Could not open the source file."));
   }
 
   detect_dts(buf[cur_buf], READ_SIZE, dts14_to_16, swap_bytes);
 
-  mxverb(3, "DTS: 14->16 %d swap %d\n", dts14_to_16, swap_bytes);
+  mxverb(3, boost::format(Y("DTS: 14->16 %1% swap %2%\n")) % dts14_to_16 % swap_bytes);
 
   decode_buffer(READ_SIZE);
   int pos = find_dts_header((const unsigned char *)buf[cur_buf], READ_SIZE, &dtsheader);
 
   if (0 > pos)
-    throw error_c("dts_reader: No valid DTS packet found in the first READ_SIZE bytes.\n");
+    throw error_c(Y("dts_reader: No valid DTS packet found in the first READ_SIZE bytes.\n"));
 
   bytes_processed = 0;
   ti.id           = 0;          // ID for this track.
 
   if (verbose)
-    mxinfo(FMT_FN "Using the DTS demultiplexer.\n", ti.fname.c_str());
+    mxinfo_fn(ti.fname, Y("Using the DTS demultiplexer.\n"));
 }
 
 dts_reader_c::~dts_reader_c() {
@@ -117,7 +117,7 @@ dts_reader_c::create_packetizer(int64_t) {
     return;
 
   add_packetizer(new dts_packetizer_c(this, dtsheader, ti));
-  mxinfo(FMT_TID "Using the DTS output module.\n", ti.fname.c_str(), (int64_t)0);
+  mxinfo_tid(ti.fname, 0, Y("Using the DTS output module.\n"));
 
   if (1 < verbose)
     print_dts_header(&dtsheader);

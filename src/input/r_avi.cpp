@@ -44,8 +44,6 @@ extern "C" {
 #include "p_video.h"
 #include "p_vorbis.h"
 
-#define PFX "avi_reader: "
-
 // }}}
 
 // {{{ FUNCTION avi_reader_c::probe_file
@@ -97,18 +95,17 @@ avi_reader_c::avi_reader_c(track_info_c &_ti)
     mm_file_io_c io(ti.fname);
     size = io.get_size();
     if (!avi_reader_c::probe_file(&io, size))
-      throw error_c(PFX "Source is not a valid AVI file.");
+      throw error_c(Y("avi_reader: Source is not a valid AVI file."));
 
   } catch (...) {
-    throw error_c(PFX "Could not read the source file.");
+    throw error_c(Y("avi_reader: Could not read the source file."));
   }
 
   if (verbose)
-    mxinfo(FMT_FN "Using the AVI demultiplexer. Opening file. This may take some time depending on the file's size.\n", ti.fname.c_str());
+    mxinfo_fn(ti.fname, Y("Using the AVI demultiplexer. Opening file. This may take some time depending on the file's size.\n"));
 
-  if (NULL == (avi = AVI_open_input_file(ti.fname.c_str(), 1))) {
-    throw error_c(mxsprintf(PFX "Could not initialize AVI source. Reason: %s", AVI_strerror()));
-  }
+  if (NULL == (avi = AVI_open_input_file(ti.fname.c_str(), 1)))
+    throw error_c(boost::format(Y("avi_reader: Could not initialize AVI source. Reason: %1%")) % AVI_strerror());
 
   fps              = AVI_frame_rate(avi);
   max_video_frames = AVI_video_frames(avi);
@@ -124,7 +121,7 @@ avi_reader_c::~avi_reader_c() {
 
   ti.private_data = NULL;
 
-  mxverb(2, "avi_reader_c: Dropped video frames: %d\n", dropped_video_frames);
+  mxverb(2, boost::format(Y("avi_reader_c: Dropped video frames: %1%\n")) % dropped_video_frames);
 }
 
 // }}}
@@ -136,11 +133,11 @@ avi_reader_c::create_packetizer(int64_t tid) {
   if ((0 == tid) && demuxing_requested('v', 0) && (-1 == vptzr)) {
     int i;
 
-    mxverb(4, FMT_TID "frame sizes:\n", ti.fname.c_str(), (int64_t)0);
+    mxverb_tid(4, ti.fname, 0, Y("frame sizes:\n"));
 
     for (i = 0; i < max_video_frames; i++) {
       bytes_to_process += AVI_frame_size(avi, i);
-      mxverb(4, "  %d: %ld\n", i, AVI_frame_size(avi, i));
+      mxverb(4, boost::format("  %1%: %2%\n") % i % AVI_frame_size(avi, i));
     }
 
     codec = AVI_video_compressor(avi);
@@ -153,11 +150,11 @@ avi_reader_c::create_packetizer(int64_t tid) {
     if (NULL != ti.private_data)
       ti.private_size = get_uint32_le(&avi->bitmap_info_header->bi_size);
 
-    mxverb(4, "track extra data size: %d\n", (int)(ti.private_size - sizeof(alBITMAPINFOHEADER)));
+    mxverb(4, boost::format(Y("track extra data size: %1%\n")) % (ti.private_size - sizeof(alBITMAPINFOHEADER)));
     if (sizeof(alBITMAPINFOHEADER) < ti.private_size) {
       mxverb(4, "  ");
       for (i = sizeof(alBITMAPINFOHEADER); i < ti.private_size; ++i)
-        mxverb(4, "%02x ", ti.private_data[i]);
+        mxverb(4, boost::format("%|1$02x| ") % ti.private_data[i]);
       mxverb(4, "\n");
     }
 
@@ -165,7 +162,7 @@ avi_reader_c::create_packetizer(int64_t tid) {
     if (DIVX_TYPE_MPEG4 == divx_type) {
       vptzr = add_packetizer(new mpeg4_p2_video_packetizer_c(this, AVI_frame_rate(avi), AVI_video_width(avi), AVI_video_height(avi), false, ti));
       if (verbose)
-        mxinfo(FMT_TID "Using the MPEG-4 part 2 video output module.\n", ti.fname.c_str(), (int64_t)0);
+        mxinfo_tid(ti.fname, 0, Y("Using the MPEG-4 part 2 video output module.\n"));
 
     } else if (mpeg4::p10::is_avc_fourcc(codec) && !hack_engaged(ENGAGE_ALLOW_AVC_IN_VFW_MODE)) {
       try {
@@ -177,17 +174,16 @@ avi_reader_c::create_packetizer(int64_t tid) {
         ptzr->set_track_default_duration((int64_t)(1000000000 / AVI_frame_rate(avi)));
 
         if (verbose)
-          mxinfo(FMT_TID "Using the MPEG-4 part 10 ES video output module.\n", ti.fname.c_str(), (int64_t)0);
+          mxinfo_tid(ti.fname, 0, Y("Using the MPEG-4 part 10 ES video output module.\n"));
 
       } catch (...) {
-        mxerror(FMT_TID "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n", ti.fname.c_str(), (int64_t)0);
+        mxerror_tid(ti.fname, 0, Y("Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"));
       }
     } else {
-      vptzr = add_packetizer(new video_packetizer_c(this, NULL, AVI_frame_rate(avi), AVI_video_width(avi), AVI_video_height(avi),
-                                                    ti));
+      vptzr = add_packetizer(new video_packetizer_c(this, NULL, AVI_frame_rate(avi), AVI_video_width(avi), AVI_video_height(avi), ti));
 
       if (verbose)
-        mxinfo(FMT_TID "Using the video output module.\n", ti.fname.c_str(), (int64_t)0);
+        mxinfo_tid(ti.fname, 0, Y("Using the video output module.\n"));
     }
   }
 
@@ -256,7 +252,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
 
   AVI_set_audio_track(avi, aid);
   if (AVI_read_audio_chunk(avi, NULL) < 0) {
-    mxwarn("Could not find an index for audio track %d (avilib error message: %s). Skipping track.\n", aid + 1, AVI_strerror());
+    mxwarn(boost::format(Y("Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n")) % (aid + 1) % AVI_strerror());
     return;
   }
 
@@ -292,7 +288,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
       packetizer = new pcm_packetizer_c(this, demuxer.samples_per_second, demuxer.channels, demuxer.bits_per_sample, ti, false, audio_format == 0x0003);
 
       if (verbose)
-        mxinfo(FMT_TID "Using the PCM output module.\n", ti.fname.c_str(), (int64_t)aid + 1);
+        mxinfo_tid(ti.fname, aid + 1, Y("Using the PCM output module.\n"));
       break;
 
     case 0x0050:                // MP2
@@ -300,14 +296,14 @@ avi_reader_c::add_audio_demuxer(int aid) {
       packetizer = new mp3_packetizer_c(this, demuxer.samples_per_second, demuxer.channels, false, ti);
 
       if (verbose)
-        mxinfo(FMT_TID "Using the MPEG audio output module.\n", ti.fname.c_str(), (int64_t)aid + 1);
+        mxinfo_tid(ti.fname, aid + 1, Y("Using the MPEG audio output module.\n"));
       break;
 
     case 0x2000:                // AC3
       packetizer = new ac3_packetizer_c(this, demuxer.samples_per_second, demuxer.channels, 0, ti);
 
       if (verbose)
-        mxinfo(FMT_TID "Using the AC3 output module.\n", ti.fname.c_str(), (int64_t)aid + 1);
+        mxinfo_tid(ti.fname, aid + 1, Y("Using the AC3 output module.\n"));
       break;
 
     case 0x2001: {              // DTS
@@ -318,7 +314,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
       packetizer                        = new dts_packetizer_c(this, dtsheader, ti, true);
 
       if (verbose)
-        mxinfo(FMT_TID "Using the DTS output module.\n", ti.fname.c_str(), (int64_t)aid + 1);
+        mxinfo_tid(ti.fname, aid + 1, Y("Using the DTS output module.\n"));
       break;
     }
 
@@ -332,7 +328,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
       break;
 
     default:
-      mxerror(FMT_TID "Unknown/unsupported audio format 0x%04x for this audio " "track.\n", ti.fname.c_str(), (int64_t)aid + 1, audio_format);
+      mxerror_tid(ti.fname, aid + 1, boost::format(Y("Unknown/unsupported audio format 0x%|1$04x| for this audio rack.\n")) % audio_format);
   }
 
   demuxer.ptzr = add_packetizer(packetizer);
@@ -376,11 +372,11 @@ avi_reader_c::create_aac_packetizer(int aid,
 
   } else {
     if ((2 != ti.private_size) && (5 != ti.private_size))
-      mxerror(FMT_TID "This AAC track does not contain valid headers. The extra header size is %d bytes, expected were 2 or 5 bytes.\n",
-              ti.fname.c_str(), (int64_t)aid + 1, ti.private_size);
+      mxerror_tid(ti.fname, aid + 1,
+                  boost::format(Y("This AAC track does not contain valid headers. The extra header size is %1% bytes, expected were 2 or 5 bytes.\n")) % ti.private_size);
 
     if (!parse_aac_data(ti.private_data, ti.private_size, profile, channels, sample_rate, output_sample_rate, is_sbr))
-      mxerror(FMT_TID "This AAC track does not contain valid headers. Could not parse the AAC information.\n", ti.fname.c_str(), (int64_t)aid + 1);
+      mxerror_tid(ti.fname, aid + 1, Y("This AAC track does not contain valid headers. Could not parse the AAC information.\n"));
 
     if (is_sbr)
       profile = AAC_PROFILE_SBR;
@@ -400,7 +396,7 @@ avi_reader_c::create_aac_packetizer(int aid,
   }
 
   if (verbose)
-    mxinfo(FMT_TID "Using the AAC audio output module.\n", ti.fname.c_str(), (int64_t)aid + 1);
+    mxinfo_tid(ti.fname, aid + 1, Y("Using the AAC audio output module.\n"));
 
   return packetizer;
 }
@@ -409,12 +405,12 @@ generic_packetizer_c *
 avi_reader_c::create_vorbis_packetizer(int aid) {
   try {
     if (!ti.private_data || !ti.private_size)
-      throw error_c("Invalid Vorbis headers in AVI audio track.");
+      throw error_c(Y("Invalid Vorbis headers in AVI audio track."));
 
     unsigned char *c = (unsigned char *)ti.private_data;
 
     if (2 != c[0])
-      throw error_c("Invalid Vorbis headers in AVI audio track.");
+      throw error_c(Y("Invalid Vorbis headers in AVI audio track."));
 
     int offset           = 1;
     const int laced_size = ti.private_size;
@@ -431,7 +427,7 @@ avi_reader_c::create_vorbis_packetizer(int aid) {
         ++offset;
       }
       if ((laced_size - 1) <= offset)
-        throw error_c("Invalid Vorbis headers in AVI audio track.");
+        throw error_c(Y("Invalid Vorbis headers in AVI audio track."));
 
       size            += c[offset];
       header_sizes[i]  = size;
@@ -449,12 +445,12 @@ avi_reader_c::create_vorbis_packetizer(int aid) {
     vorbis_packetizer_c *ptzr = new vorbis_packetizer_c(this, headers[0], header_sizes[0], headers[1], header_sizes[1], headers[2], header_sizes[2], ti);
 
     if (verbose)
-      mxinfo(FMT_TID "Using the Vorbis output module.\n", ti.fname.c_str(), (int64_t)aid + 1);
+      mxinfo_tid(ti.fname, aid + 1, Y("Using the Vorbis output module.\n"));
 
     return ptzr;
 
   } catch (error_c &e) {
-    mxerror(FMT_TID "%s\n", ti.fname.c_str(), (int64_t)aid + 1, e.get_error().c_str());
+    mxerror_tid(ti.fname, aid + 1, boost::format("%1%\n") % e.get_error());
 
     // Never reached, but make the compiler happy:
     return NULL;
@@ -652,7 +648,7 @@ avi_reader_c::extended_identify_mpeg4_l2(vector<string> &extended_info) {
       disp_height = irnd(width / aspect_ratio);
     }
 
-    extended_info.push_back(mxsprintf("display_dimensions:%ux%u", disp_width, disp_height));
+    extended_info.push_back((boost::format("display_dimensions:%1%x%2%") % disp_width % disp_height).str());
   }
 }
 
@@ -702,7 +698,7 @@ avi_reader_c::identify() {
         type = "Vorbis";
         break;
       default:
-        type = mxsprintf("unsupported (0x%04x)", audio_format);
+        type = (boost::format("unsupported (0x%|1$04x|)") % audio_format).str();
     }
 
     id_result_track(i + 1, ID_RESULT_TRACK_AUDIO, type);

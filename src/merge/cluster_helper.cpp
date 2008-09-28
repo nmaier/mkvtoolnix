@@ -89,12 +89,11 @@ cluster_helper_c::add_packet(packet_cptr packet) {
     packet->assigned_timecode : min_timecode_in_cluster;
   timecode_delay = (int64_t)(timecode_delay / timecode_scale);
 
-  mxverb(4, "cluster_helper_c::add_packet(): new packet { source " LLD "/%s "
-         "timecode: " LLD " duration: " LLD " bref: " LLD " fref: " LLD " "
-         "assigned_timecode: " LLD " timecode_delay: " FMT_TIMECODEN " }\n",
-         packet->source->ti.id, packet->source->ti.fname.c_str(),
-         packet->timecode, packet->duration, packet->bref, packet->fref,
-         packet->assigned_timecode, ARG_TIMECODEN(timecode_delay));
+  mxverb(4,
+         boost::format("cluster_helper_c::add_packet(): new packet { source %1%/%2% "
+                       "timecode: %3% duration: %4% bref: %5% fref: %6% assigned_timecode: %7% timecode_delay: %8% }\n")
+         % packet->source->ti.id     % packet->source->ti.fname % packet->timecode          % packet->duration
+         % packet->bref              % packet->fref             % packet->assigned_timecode % format_timecode(timecode_delay));
 
   if ((SHRT_MAX < timecode_delay) || (SHRT_MIN > timecode_delay) ||
       (packet->gap_following && !packets.empty()) ||
@@ -135,10 +134,9 @@ cluster_helper_c::add_packet(packet_cptr packet) {
         kax_cues->UpdateSize();
         additional_size += kax_cues->ElementSize();
       }
-      mxverb(3, "cluster_helper split decision: header_overhead: " LLD ", "
-             "additional_size: " LLD ", bytes_in_file: " LLD ", sum: " LLD
-             "\n", header_overhead, additional_size, bytes_in_file,
-             header_overhead + additional_size + bytes_in_file);
+      mxverb(3,
+             boost::format("cluster_helper split decision: header_overhead: %1%, additional_size: %2%, bytes_in_file: %3%, sum: %4%\n")
+             % header_overhead % additional_size % bytes_in_file % (header_overhead + additional_size + bytes_in_file));
       if ((header_overhead + additional_size + bytes_in_file) >=
           current_split_point->m_point)
         split = true;
@@ -240,11 +238,9 @@ cluster_helper_c::set_duration(render_groups_t *rg) {
   for (i = 0; i < rg->durations.size(); i++)
     block_duration += rg->durations[i];
   def_duration = rg->source->get_track_default_duration();
-  mxverb(3, "cluster_helper::set_duration: block_duration " LLD " "
-         "rounded duration " LLD " def_duration "
-         "" LLD " use_durations %d rg->duration_mandatory %d\n",
-         block_duration, RND_TIMECODE_SCALE(block_duration), def_duration,
-         use_durations ? 1 : 0, rg->duration_mandatory ? 1 : 0);
+  mxverb(3,
+         boost::format("cluster_helper::set_duration: block_duration %1% rounded duration %2% def_duration %3% use_durations %4% rg->duration_mandatory %5%\n")
+         % block_duration % RND_TIMECODE_SCALE(block_duration) % def_duration % (use_durations ? 1 : 0) % (rg->duration_mandatory ? 1 : 0));
 
   if (rg->duration_mandatory) {
     if ((block_duration == 0) ||
@@ -516,9 +512,10 @@ cluster_helper_c::render() {
 
 int64_t
 cluster_helper_c::get_duration() {
-  mxverb(3, "cluster_helper_c::get_duration(): " LLD " - " LLD " = " LLD "\n",
-         max_timecode_and_duration, first_timecode_in_file,
-         max_timecode_and_duration - first_timecode_in_file);
+  mxverb(3,
+         boost::format("cluster_helper_c::get_duration(): %1% - %2% = %3%\n")
+         % max_timecode_and_duration % first_timecode_in_file % (max_timecode_and_duration - first_timecode_in_file));
+
   return max_timecode_and_duration - first_timecode_in_file;
 }
 

@@ -308,18 +308,18 @@ ogm_reader_c::ogm_reader_c(track_info_c &_ti)
     io        = new mm_file_io_c(ti.fname);
     file_size = io->get_size();
   } catch (...) {
-    throw error_c("ogm_reader: Could not open the source file.");
+    throw error_c(Y("ogm_reader: Could not open the source file."));
   }
   if (!ogm_reader_c::probe_file(io, file_size))
-    throw error_c("ogm_reader: Source is not a valid OGG media file.");
+    throw error_c(Y("ogm_reader: Source is not a valid OGG media file."));
 
   ogg_sync_init(&oy);
 
   if (verbose)
-    mxinfo(FMT_FN "Using the OGG/OGM demultiplexer.\n", ti.fname.c_str());
+    mxinfo_fn(ti.fname, Y("Using the OGG/OGM demultiplexer.\n"));
 
   if (read_headers() <= 0)
-    throw error_c("ogm_reader: Could not read all header packets.");
+    throw error_c(Y("ogm_reader: Could not read all header packets."));
   handle_stream_comments();
 }
 
@@ -359,11 +359,11 @@ ogm_reader_c::read_page(ogg_page *og) {
     if (0 >= np) {
       // np < 0 is the error case. Should not happen with local OGG files.
       if (0 > np)
-        mxwarn("ogm_reader: Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n");
+        mxwarn_fn(ti.fname, Y("Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n"));
 
       buf = (unsigned char *)ogg_sync_buffer(&oy, BUFFER_SIZE);
       if (!buf)
-        mxerror("ogm_reader: ogg_sync_buffer failed\n");
+        mxerror_fn(ti.fname, Y("ogg_sync_buffer failed\n"));
 
       if (0 >= (nread = io->read(buf, BUFFER_SIZE)))
         return 0;
@@ -452,7 +452,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
   ogg_packet op;
 
   if (ogg_stream_init(&os, ogg_page_serialno(og))) {
-    mxwarn("ogm_reader: ogg_stream_init for stream number %u failed. Will try to continue and ignore this stream.", (unsigned int)sdemuxers.size());
+    mxwarn_fn(ti.fname, boost::format(Y("ogg_stream_init for stream number %1% failed. Will try to continue and ignore this stream.\n")) % sdemuxers.size());
     return;
   }
 
@@ -479,7 +479,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
   else if ((4 <= op.bytes) && !strncmp((char *)op.packet, "fLaC", 4)) {
 #if !defined(HAVE_FLAC_FORMAT_H)
     if (demuxing_requested('a', sdemuxers.size()))
-      mxerror("mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n");
+      mxerror_fn(ti.fname, Y("mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"));
 
     else {
       dmx         = new ogm_demuxer_c(this);
@@ -524,7 +524,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
         dmx = new ogm_a_aac_demuxer_c(this);
 
       else
-        mxwarn("ogm_reader: Unknown audio stream type 0x%04x. Ignoring stream id %u.\n", codec_id, (unsigned int)sdemuxers.size());
+        mxwarn_fn(ti.fname, boost::format(Y("Unknown audio stream type 0x%|1$04x|. Ignoring stream id %2%.\n")) % codec_id % sdemuxers.size());
 
     } else if (!strncmp(sth->streamtype, "text", 4))
       dmx = new ogm_s_text_demuxer_c(this);
@@ -573,8 +573,8 @@ ogm_reader_c::process_page(ogg_page *og) {
   granulepos = ogg_page_granulepos(og);
 
   if ((-1 != granulepos) && (granulepos < dmx->last_granulepos)) {
-    mxwarn(FMT_TID "The timecodes for this stream have been reset in the middle of the file. This is not supported. The current packet will be discarded.\n",
-           ti.fname.c_str(), (int64_t)dmx->track_id);
+    mxwarn_tid(ti.fname, dmx->track_id,
+               Y("The timecodes for this stream have been reset in the middle of the file. This is not supported. The current packet will be discarded.\n"));
     return;
   }
 
@@ -740,7 +740,7 @@ ogm_reader_c::handle_stream_comments() {
 
     int j;
     for (j = 0; comments->size() > j; j++) {
-      mxverb(2, "ogm_reader: commment for #%d for %d: %s\n", j, i, (*comments)[j].c_str());
+      mxverb(2, boost::format(Y("ogm_reader: commment for #%1% for %2%: %3%\n")) % j % i % (*comments)[j]);
       vector<string> comment = split((*comments)[j], "=", 2);
       if (comment.size() != 2)
         continue;
@@ -785,9 +785,10 @@ ogm_reader_c::handle_stream_comments() {
     }
 
     if (((title != "") || (chapter_strings.size() > 0)) && !charset_warning_printed && (ti.chapter_charset == "")) {
-      mxwarn("The Ogg/OGM file '%s' contains chapter or title information. Unfortunately the charset used to store this information in "
-             "the file cannot be identified unambiguously. mkvmerge assumes that your system's current charset is appropriate. This can "
-             "be overridden with the '--chapter-charset <charset>' switch.\n", ti.fname.c_str());
+      mxwarn_fn(ti.fname,
+                Y("This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in "
+                  "the file cannot be identified unambiguously. mkvmerge assumes that your system's current charset is appropriate. This can "
+                  "be overridden with the '--chapter-charset <charset>' switch.\n"));
       charset_warning_printed = true;
     }
 
@@ -901,8 +902,9 @@ ogm_demuxer_c::process_header_page() {
         continue;
       }
 
-      mxwarn("ogm_reader: Missing header/comment packets for stream " LLD " in '%s'. This file is broken but should be muxed correctly. "
-             "If not please contact the author Moritz Bunkus <moritz@bunkus.org>.\n", (int64_t)track_id, reader->ti.fname.c_str());
+      mxwarn_tid(reader->ti.fname, track_id,
+                 Y("Missing header/comment packets for stream. This file is broken but should be muxed correctly. "
+                   "If not please contact the author Moritz Bunkus <moritz@bunkus.org>.\n"));
       headers_read = true;
       ogg_stream_reset(&os);
       return;
@@ -946,14 +948,15 @@ ogm_a_aac_demuxer_c::create_packetizer(track_info_c &ti) {
     profile     = AAC_PROFILE_LC;
   }
 
-  mxverb(2, "ogm_reader: " LLD "/%s: profile %d, channels %d, sample_rate %d, sbr %d, output_sample_rate %d\n",
-         ti.id, ti.fname.c_str(), profile, channels, sample_rate, (int)sbr, output_sample_rate);
+  mxverb(2,
+         boost::format(Y("ogm_reader: %1%/%2%: profile %3%, channels %4%, sample_rate %5%, sbr %6%, output_sample_rate %7%\n"))
+         % ti.id % ti.fname % profile % channels % sample_rate % sbr % output_sample_rate);
 
   generic_packetizer_c *ptzr_obj = new aac_packetizer_c(reader, AAC_ID_MPEG4, profile, sample_rate, channels, ti, false, true);
   if (sbr)
     ptzr_obj->set_audio_output_sampling_freq(output_sample_rate);
 
-  mxinfo(FMT_TID "Using the AAC output module.\n", ti.fname.c_str(), (int64_t)ti.id);
+  mxinfo_tid(ti.fname, ti.id,  Y("Using the AAC output module.\n"));
 
   return ptzr_obj;
 }
@@ -971,7 +974,7 @@ ogm_a_ac3_demuxer_c::create_packetizer(track_info_c &ti) {
   stream_header        *sth      = (stream_header *)(packet_data[0]->get() + 1);
   generic_packetizer_c *ptzr_obj = new ac3_packetizer_c(reader, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels), 0, ti);
 
-  mxinfo(FMT_TID "Using the AC3 output module.\n", ti.fname.c_str(), (int64_t)ti.id);
+  mxinfo_tid(ti.fname, ti.id, Y("Using the AC3 output module.\n"));
 
   return ptzr_obj;
 }
@@ -989,7 +992,7 @@ ogm_a_mp3_demuxer_c::create_packetizer(track_info_c &ti) {
   stream_header        *sth      = (stream_header *)(packet_data[0]->get() + 1);
   generic_packetizer_c *ptzr_obj = new mp3_packetizer_c(reader, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels), true, ti);
 
-  mxinfo(FMT_TID "Using the MPEG audio output module.\n", ti.fname.c_str(), (int64_t)ti.id);
+  mxinfo_tid(ti.fname, ti.id, Y("Using the MPEG audio output module.\n"));
 
   return ptzr_obj;
 }
@@ -1008,7 +1011,7 @@ ogm_a_pcm_demuxer_c::create_packetizer(track_info_c &ti) {
   generic_packetizer_c *ptzr_obj = new pcm_packetizer_c(reader, get_uint64_le(&sth->samples_per_unit), get_uint16_le(&sth->sh.audio.channels),
                                                     get_uint16_le(&sth->bits_per_sample), ti);
 
-  mxinfo(FMT_TID "Using the PCM output module.\n", ti.fname.c_str(), (int64_t)ti.id);
+  mxinfo_tid(ti.fname, ti.id, Y("Using the PCM output module.\n"));
 
   return ptzr_obj;
 }
@@ -1027,7 +1030,7 @@ ogm_a_vorbis_demuxer_c::create_packetizer(track_info_c &ti) {
   generic_packetizer_c *ptzr_obj = new vorbis_packetizer_c(reader, packet_data[0]->get(), packet_data[0]->get_size(), packet_data[1]->get(), packet_data[1]->get_size(),
                                                            packet_data[2]->get(), packet_data[2]->get_size(), ti);
 
-  mxinfo(FMT_TID "Using the Vorbis output module.\n", ti.fname.c_str(), (int64_t)ti.id);
+  mxinfo_tid(ti.fname, ti.id, Y("Using the Vorbis output module.\n"));
 
   return ptzr_obj;
 }
@@ -1058,7 +1061,7 @@ generic_packetizer_c *
 ogm_s_text_demuxer_c::create_packetizer(track_info_c &ti) {
   generic_packetizer_c *ptzr_obj = new textsubs_packetizer_c(reader, MKV_S_TEXTUTF8, NULL, 0, true, false, ti);
 
-  mxinfo(FMT_TID "Using the text subtitle output module.\n", ti.fname.c_str(), (int64_t)ti.id);
+  mxinfo_tid(ti.fname, ti.id, Y("Using the text subtitle output module.\n"));
 
   return ptzr_obj;
 }
@@ -1119,10 +1122,10 @@ ogm_v_avc_demuxer_c::create_packetizer(track_info_c &ti) {
     vptzr->enable_timecode_generation(false);
     vptzr->set_track_default_duration(default_duration);
 
-    mxinfo(FMT_TID "Using the MPEG-4 part 10 ES video output module.\n", ti.fname.c_str(), (int64_t)ti.id);
+    mxinfo_tid(ti.fname, ti.id, Y("Using the MPEG-4 part 10 ES video output module.\n"));
 
   } catch (...) {
-    mxerror(FMT_TID "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n", ti.fname.c_str(), (int64_t)ti.id);
+    mxerror_tid(ti.fname, ti.id, Y("Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"));
   }
 
   return vptzr;
@@ -1223,12 +1226,12 @@ ogm_v_mscomp_demuxer_c::create_packetizer(track_info_c &ti) {
   if (mpeg4::p2::is_fourcc(sth->subtype)) {
     ptzr_obj = new mpeg4_p2_video_packetizer_c(reader, fps, width, height, false, ti);
 
-    mxinfo(FMT_TID "Using the MPEG-4 part 2 video output module.\n", ti.fname.c_str(), (int64_t)ti.id);
+    mxinfo_tid(ti.fname, ti.id, Y("Using the MPEG-4 part 2 video output module.\n"));
 
   } else {
     ptzr_obj = new video_packetizer_c(reader, NULL, fps, width, height, ti);
 
-    mxinfo(FMT_TID "Using the video output module.\n", ti.fname.c_str(), (int64_t)ti.id);
+    mxinfo_tid(ti.fname, ti.id, Y("Using the video output module.\n"));
   }
 
   ti.private_data = NULL;
@@ -1301,7 +1304,7 @@ ogm_v_theora_demuxer_c::initialize() {
     memory_cptr &mem = packet_data[0];
     theora_parse_identification_header(mem->get(), mem->get_size(), theora);
   } catch (error_c &e) {
-    mxerror(FMT_TID "The Theora identifaction header could not be parsed (%s).\n", reader->ti.fname.c_str(), track_id, e.get_error().c_str());
+    mxerror_tid(reader->ti.fname, track_id, boost::format(Y("The Theora identifaction header could not be parsed (%1%).\n")) % e.get_error());
   }
 }
 
@@ -1314,7 +1317,7 @@ ogm_v_theora_demuxer_c::create_packetizer(track_info_c &ti) {
   double                fps      = (double)theora.frn / (double)theora.frd;
   generic_packetizer_c *ptzr_obj = new theora_video_packetizer_c(reader, fps, theora.fmbw, theora.fmbh, ti);
 
-  mxinfo(FMT_TID "Using the Theora video output module.\n", ti.fname.c_str(), (int64_t)ti.id);
+  mxinfo_tid(ti.fname, ti.id, Y("Using the Theora video output module.\n"));
 
   ti.private_data = NULL;
 
@@ -1340,8 +1343,9 @@ ogm_v_theora_demuxer_c::process_page(int64_t granulepos) {
 
     reader->reader_packetizers[ptzr]->process(new packet_t(new memory_c(op.packet, op.bytes, false), timecode, duration, bref, VFT_NOBFRAME));
 
-    mxverb(3, "Theora track " LLD " kfgshift %d granulepos 0x%08x %08x%s\n",
-           (int64_t)track_id, theora.kfgshift, (uint32_t)(granulepos >> 32), (uint32_t)(granulepos & 0xffffffff), is_keyframe ? " key" : "");
+    mxverb(3,
+           boost::format(Y("Theora track %1% kfgshift %2% granulepos 0x%|3$08x| %|4$08x|%5%\n"))
+           % track_id % theora.kfgshift % (granulepos >> 32) % (granulepos & 0xffffffff) % (is_keyframe ? " key" : ""));
   }
 }
 
@@ -1368,7 +1372,7 @@ ogm_s_kate_demuxer_c::initialize() {
     kate_parse_identification_header(mem->get(), mem->get_size(), kate);
     num_header_packets = kate.nheaders;
   } catch (error_c &e) {
-    mxerror(FMT_TID "The Kate identifaction header could not be parsed (%s).\n", reader->ti.fname.c_str(), track_id, e.get_error().c_str());
+    mxerror_tid(reader->ti.fname, track_id, boost::format(Y("The Kate identifaction header could not be parsed (%1%).\n")) % e.get_error());
   }
 }
 
@@ -1380,7 +1384,7 @@ ogm_s_kate_demuxer_c::create_packetizer(track_info_c &ti) {
 
   generic_packetizer_c *ptzr_obj = new kate_packetizer_c(reader, ti.private_data, ti.private_size, ti);
 
-  mxinfo(FMT_TID "Using the Kate subtitle output module.\n", ti.fname.c_str(), (int64_t)ti.id);
+  mxinfo_tid(ti.fname, ti.id, Y("Using the Kate subtitle output module.\n"));
 
   ti.private_data = NULL;
 

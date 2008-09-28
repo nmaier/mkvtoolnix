@@ -424,8 +424,9 @@ vc1::es_parser_c::handle_frame_packet(memory_cptr packet) {
   memcpy(&m_current_frame->header, &frame_header, sizeof(frame_header_t));
 
   if (!m_timecodes.empty())
-    mxverb(2, "vc1::es_parser_c::handle_frame_packet: next provided timecode " FMT_TIMECODEN " next calculated timecode " FMT_TIMECODEN "\n",
-           ARG_TIMECODEN(m_timecodes.front()), ARG_TIMECODEN(peek_next_calculated_timecode()));
+    mxverb(2,
+           boost::format(Y("vc1::es_parser_c::handle_frame_packet: next provided timecode %1% next calculated timecode %2%\n"))
+           % format_timecode(m_timecodes.front()) % format_timecode(peek_next_calculated_timecode()));
 
 }
 
@@ -519,8 +520,9 @@ vc1::es_parser_c::get_next_timecode() {
   int64_t next_timecode = m_previous_timecode + (m_num_timecodes + m_num_repeated_fields) * m_default_duration - m_num_repeated_fields * m_default_duration / 2;
 
   if (is_timecode_available()) {
-    mxverb(3, "\nvc1::es_parser_c::get_next_timecode(): provided timecode available; original next " FMT_TIMECODEN ", provided " FMT_TIMECODEN "\n",
-           ARG_TIMECODEN(next_timecode), ARG_TIMECODEN(m_timecodes.front()));
+    mxverb(3,
+           boost::format("\nvc1::es_parser_c::get_next_timecode(): provided timecode available; original next %1%, provided %2%\n")
+           % format_timecode(next_timecode) % format_timecode(m_timecodes.front()));
 
     next_timecode         = m_timecodes.front();
     m_previous_timecode   = m_timecodes.front();

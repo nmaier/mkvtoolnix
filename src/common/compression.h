@@ -47,6 +47,7 @@ extern const char *MTX_DLL_API xcompression_methods[];
 class MTX_DLL_API compression_error_c: public error_c {
 public:
   compression_error_c(const string &n_error): error_c(n_error) { }
+  compression_error_c(const boost::format &n_error): error_c(n_error.str()) { }
 };
 
 class compressor_c;

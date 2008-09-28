@@ -120,158 +120,159 @@ file_type_t file_types[] =
 */
 static void
 set_usage() {
-  usage_text = _(
-    "mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]"
-    "\n\n Global options:\n"
-    "  -v, --verbose            verbose status\n"
-    "  -q, --quiet              suppress status output\n"
-    "  -o, --output out         Write to the file 'out'.\n"
-    "  --title <title>          Title for this output file.\n"
-    "  --global-tags <file>     Read global tags from a XML file.\n"
-    "\n Chapter handling:\n"
-    "  --chapters <file>        Read chapter information from the file.\n"
-    "  --chapter-language <lng> Set the 'language' element in chapter entries."
-    "\n  --chapter-charset <cset> Charset for a simple chapter file.\n"
-    "  --cue-chapter-name-format\n"
-    "                           Pattern for the conversion from CUE sheet\n"
-    "                           entries to chapter names.\n"
-    "  --default-language <lng> Use this language for all tracks unless\n"
-    "                           overridden with the --language option.\n"
-    "\n Segment info handling:\n"
-    "  --segmentinfo <file>     Read segment information from the file.\n"
-    "\n General output control (advanced global options):\n"
-    "  --track-order <FileID1:TID1,FileID2:TID2,FileID3:TID3,...>\n"
-    "                           A comma separated list of both file IDs\n"
-    "                           and track IDs that controls the order of the\n"
-    "                           tracks in the output file.\n"
-    "  --cluster-length <n[ms]> Put at most n data blocks into each cluster.\n"
-    "                           If the number is postfixed with 'ms' then\n"
-    "                           put at most n milliseconds of data into each\n"
-    "                           cluster.\n"
-    "  --no-cues                Do not write the cue data (the index).\n"
-    "  --no-clusters-in-meta-seek\n"
-    "                           Do not write meta seek data for clusters.\n"
-    "  --disable-lacing         Do not Use lacing.\n"
-    "  --enable-durations       Enable block durations for all blocks.\n"
-    "  --append-to <SFID1:STID1:DFID1:DTID1,SFID2:STID2:DFID2:DTID2,...>\n"
-    "                           A comma separated list of file and track IDs\n"
-    "                           that controls which track of a file is\n"
-    "                           appended to another track of the preceding\n"
-    "                           file.\n"
-    "  --timecode-scale <n>     Force the timecode scale factor to n.\n"
-    "\n File splitting and linking (more global options):\n"
-    "  --split <d[K,M,G]|HH:MM:SS|s>\n"
-    "                           Create a new file after d bytes (KB, MB, GB)\n"
-    "                           or after a specific time.\n"
-    "  --split timecodes:A[,B...]\n"
-    "                           Create a new file after each timecode A, B\n"
-    "                           etc.\n"
-    "  --split-max-files <n>    Create at most n files.\n"
-    "  --link                   Link splitted files.\n"
-    "  --link-to-previous <SID> Link the first file to the given SID.\n"
-    "  --link-to-next <SID>     Link the last file to the given SID.\n"
-    "\n Attachment support (more global options):\n"
-    "  --attachment-description <desc>\n"
-    "                           Description for the following attachment.\n"
-    "  --attachment-mime-type <mime type>\n"
-    "                           Mime type for the following attachment.\n"
-    "  --attachment-name <name> The name should be stored for the \n"
-    "                           following attachment.\n"
-    "  --attach-file <file>     Creates a file attachment inside the\n"
-    "                           Matroska file.\n"
-    "  --attach-file-once <file>\n"
-    "                           Creates a file attachment inside the\n"
-    "                           firsts Matroska file written.\n"
-    "\n Options for each input file:\n"
-    "  -a, --atracks <n,m,...>  Copy audio tracks n,m etc. Default: copy all\n"
-    "                           audio tracks.\n"
-    "  -d, --vtracks <n,m,...>  Copy video tracks n,m etc. Default: copy all\n"
-    "                           video tracks.\n"
-    "  -s, --stracks <n,m,...>  Copy subtitle tracks n,m etc. Default: copy\n"
-    "                           all subtitle tracks.\n"
-    "  -b, --btracks <n,m,...>  Copy buttons tracks n,m etc. Default: copy\n"
-    "                           all buttons tracks.\n"
-    "  -A, --noaudio            Don't copy any audio track from this file.\n"
-    "  -D, --novideo            Don't copy any video track from this file.\n"
-    "  -S, --nosubs             Don't copy any text track from this file.\n"
-    "  -B, --nobuttons          Don't copy any buttons track from this file.\n"
-    "  --no-chapters            Don't keep chapters from a Matroska file.\n"
-    "  --no-attachments         Don't keep attachments from a Matroska file.\n"
-    "  --no-tags                Don't keep tags from a Matroska file.\n"
-    "  -y, --sync, --delay <TID:d[,o[/p]]>\n"
-    "                           Synchronize, adjust the track's timecodes with\n"
-    "                           the id TID by 'd' ms.\n"
-    "                           'o/p': Adjust the timecodes by multiplying with\n"
-    "                           'o/p' to fix linear drifts. 'p' defaults to\n"
-    "                           1000 if omitted. Both 'o' and 'p' can be\n"
-    "                           floating point numbers.\n"
-    "  --default-track <TID[:bool]>\n"
-    "                           Sets the 'default' flag for this track or\n"
-    "                           forces it not to be present if bool is 0.\n"
-    "  --blockadd <TID:x>       Sets the max number of block additional\n"
-    "                           levels for this track.\n"
-    "  --track-name <TID:name>  Sets the name for a track.\n"
-    "  --cues <TID:none|iframes|all>\n"
-    "                           Create cue (index) entries for this track:\n"
-    "                           None at all, only for I frames, for all.\n"
-    "  --language <TID:lang>    Sets the language for the track (ISO639-2\n"
-    "                           code, see --list-languages).\n"
-    "  -t, --tags <TID:file>    Read tags for the track from a XML file.\n"
-    "  --aac-is-sbr <TID[:0|1]> The track with the ID is HE-AAC/AAC+/SBR-AAC\n"
-    "                           or not. The value ':1' can be omitted.\n"
-    "  --timecodes <TID:file>   Read the timecodes to be used from a file.\n"
-    "  --default-duration <TID:Xs|ms|us|ns|fps>\n"
-    "                           Force the default duration of a track to X.\n"
-    "                           X can be a floating point number or a fration."
-    "\n"
-    "  --nalu-size-length <TID:n>\n"
-    "                           Force the NALU size length to n bytes with\n"
-    "                           2 <= n <= 4 with 4 being the default.\n"
-    "\n Options that only apply to video tracks:\n"
-    "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
-    "                           Works only for video tracks.\n"
-    "  --aspect-ratio <TID:f|a/b>\n"
-    "                           Sets the display dimensions by calculating\n"
-    "                           width and height for this aspect ratio.\n"
-    "  --aspect-ratio-factor <TID:f|a/b>\n"
-    "                           First calculates the aspect ratio by multi-\n"
-    "                           plying the video's original aspect ratio\n"
-    "                           with this factor and calculates the display\n"
-    "                           dimensions from this factor.\n"
-    "  --display-dimensions <TID:width>x<height>\n"
-    "                           Explicitely set the display dimensions.\n"
-    "  --cropping <TID:left,top,right,bottom>\n"
-    "                           Sets the cropping parameters.\n"
-    "  --stereo-mode <TID:n|none|left|right|both>\n"
-    "                           Sets the stereo mode parameter. It can\n"
-    "                           either be a numer 0 - 3 or one of the\n"
-    "                           keywords 'none', 'right', 'left' or 'both'.\n"
-    "\n Options that only apply to text subtitle tracks:\n"
-    "  --sub-charset <TID:charset>\n"
-    "                           Sets the charset the text subtitles are\n"
-    "                           written in for the conversion to UTF-8.\n"
-    "\n Options that only apply to VobSub subtitle tracks:\n"
-    "  --compression <TID:method>\n"
-    "                           Sets the compression method used for the\n"
-    "                           specified track ('none' or 'zlib').\n"
-    "\n\n Other options:\n"
-    "  -i, --identify <file>    Print information about the source file.\n"
-    "  -l, --list-types         Lists supported input file types.\n"
-    "  --list-languages         Lists all ISO639 languages and their\n"
-    "                           ISO639-2 codes.\n"
-    "  --priority <priority>    Set the priority mkvmerge runs with.\n"
-    "  --command-line-charset   Charset for strings on the command line\n"
-    "  --output-charset <cset>  Output messages in this charset\n"
-    "  -r, --redirect-output <file>\n"
-    "                           Redirects all messages into this file.\n"
-    "  @optionsfile             Reads additional command line options from\n"
-    "                           the specified file (see man page).\n"
-    "  -h, --help               Show this help.\n"
-    "  -V, --version            Show version information.\n"
-    "\n\nPlease read the man page/the HTML documentation to mkvmerge. It\n"
-    "explains several details in great length which are not obvious from\n"
-    "this listing.\n"
-  );
+  usage_text =
+    Y("mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]\n\n"
+      " Global options:\n"
+      "  -v, --verbose            verbose status\n"
+      "  -q, --quiet              suppress status output\n"
+      "  -o, --output out         Write to the file 'out'.\n"
+      "  --title <title>          Title for this output file.\n"
+      "  --global-tags <file>     Read global tags from a XML file.\n"
+      "\n Chapter handling:\n"
+      "  --chapters <file>        Read chapter information from the file.\n"
+      "  --chapter-language <lng> Set the 'language' element in chapter entries."
+      "\n  --chapter-charset <cset> Charset for a simple chapter file.\n"
+      "  --cue-chapter-name-format\n"
+      "                           Pattern for the conversion from CUE sheet\n"
+      "                           entries to chapter names.\n"
+      "  --default-language <lng> Use this language for all tracks unless\n"
+      "                           overridden with the --language option.\n"
+      "\n Segment info handling:\n"
+      "  --segmentinfo <file>     Read segment information from the file.\n"
+      "\n General output control (advanced global options):\n"
+      "  --track-order <FileID1:TID1,FileID2:TID2,FileID3:TID3,...>\n"
+      "                           A comma separated list of both file IDs\n"
+      "                           and track IDs that controls the order of the\n"
+      "                           tracks in the output file.\n"
+      "  --cluster-length <n[ms]> Put at most n data blocks into each cluster.\n"
+      "                           If the number is postfixed with 'ms' then\n"
+      "                           put at most n milliseconds of data into each\n"
+      "                           cluster.\n"
+      "  --no-cues                Do not write the cue data (the index).\n"
+      "  --no-clusters-in-meta-seek\n"
+      "                           Do not write meta seek data for clusters.\n"
+      "  --disable-lacing         Do not Use lacing.\n"
+      "  --enable-durations       Enable block durations for all blocks.\n"
+      "  --append-to <SFID1:STID1:DFID1:DTID1,SFID2:STID2:DFID2:DTID2,...>\n"
+      "                           A comma separated list of file and track IDs\n"
+      "                           that controls which track of a file is\n"
+      "                           appended to another track of the preceding\n"
+      "                           file.\n"
+      "  --timecode-scale <n>     Force the timecode scale factor to n.\n"
+      "\n File splitting and linking (more global options):\n"
+      "  --split <d[K,M,G]|HH:MM:SS|s>\n"
+      "                           Create a new file after d bytes (KB, MB, GB)\n"
+      "                           or after a specific time.\n"
+      "  --split timecodes:A[,B...]\n"
+      "                           Create a new file after each timecode A, B\n"
+      "                           etc.\n"
+      "  --split-max-files <n>    Create at most n files.\n"
+      "  --link                   Link splitted files.\n"
+      "  --link-to-previous <SID> Link the first file to the given SID.\n"
+      "  --link-to-next <SID>     Link the last file to the given SID.\n"
+      "\n Attachment support (more global options):\n"
+      "  --attachment-description <desc>\n"
+      "                           Description for the following attachment.\n"
+      "  --attachment-mime-type <mime type>\n"
+      "                           Mime type for the following attachment.\n"
+      "  --attachment-name <name> The name should be stored for the \n"
+      "                           following attachment.\n"
+      "  --attach-file <file>     Creates a file attachment inside the\n"
+      "                           Matroska file.\n"
+      "  --attach-file-once <file>\n"
+      "                           Creates a file attachment inside the\n"
+      "                           firsts Matroska file written.\n"
+      "\n Options for each input file:\n"
+      "  -a, --atracks <n,m,...>  Copy audio tracks n,m etc. Default: copy all\n"
+      "                           audio tracks.\n"
+      "  -d, --vtracks <n,m,...>  Copy video tracks n,m etc. Default: copy all\n"
+      "                           video tracks.\n"
+      "  -s, --stracks <n,m,...>  Copy subtitle tracks n,m etc. Default: copy\n"
+      "                           all subtitle tracks.\n"
+      "  -b, --btracks <n,m,...>  Copy buttons tracks n,m etc. Default: copy\n"
+      "                           all buttons tracks.\n"
+      "  -A, --noaudio            Don't copy any audio track from this file.\n"
+      "  -D, --novideo            Don't copy any video track from this file.\n"
+      "  -S, --nosubs             Don't copy any text track from this file.\n"
+      "  -B, --nobuttons          Don't copy any buttons track from this file.\n"
+      "  --no-chapters            Don't keep chapters from a Matroska file.\n"
+      "  --no-attachments         Don't keep attachments from a Matroska file.\n"
+      "  --no-tags                Don't keep tags from a Matroska file.\n"
+      "  -y, --sync, --delay <TID:d[,o[/p]]>\n"
+      "                           Synchronize, adjust the track's timecodes with\n"
+      "                           the id TID by 'd' ms.\n"
+      "                           'o/p': Adjust the timecodes by multiplying with\n"
+      "                           'o/p' to fix linear drifts. 'p' defaults to\n"
+      "                           1000 if omitted. Both 'o' and 'p' can be\n"
+      "                           floating point numbers.\n"
+      "  --default-track <TID[:bool]>\n"
+      "                           Sets the 'default' flag for this track or\n"
+      "                           forces it not to be present if bool is 0.\n"
+      "  --blockadd <TID:x>       Sets the max number of block additional\n"
+      "                           levels for this track.\n"
+      "  --track-name <TID:name>  Sets the name for a track.\n"
+      "  --cues <TID:none|iframes|all>\n"
+      "                           Create cue (index) entries for this track:\n"
+      "                           None at all, only for I frames, for all.\n"
+      "  --language <TID:lang>    Sets the language for the track (ISO639-2\n"
+      "                           code, see --list-languages).\n"
+      "  -t, --tags <TID:file>    Read tags for the track from a XML file.\n"
+      "  --aac-is-sbr <TID[:0|1]> The track with the ID is HE-AAC/AAC+/SBR-AAC\n"
+      "                           or not. The value ':1' can be omitted.\n"
+      "  --timecodes <TID:file>   Read the timecodes to be used from a file.\n"
+      "  --default-duration <TID:Xs|ms|us|ns|fps>\n"
+      "                           Force the default duration of a track to X.\n"
+      "                           X can be a floating point number or a fration."
+      "\n"
+      "  --nalu-size-length <TID:n>\n"
+      "                           Force the NALU size length to n bytes with\n"
+      "                           2 <= n <= 4 with 4 being the default.\n"
+      "\n Options that only apply to video tracks:\n"
+      "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
+      "                           Works only for video tracks.\n"
+      "  --aspect-ratio <TID:f|a/b>\n"
+      "                           Sets the display dimensions by calculating\n"
+      "                           width and height for this aspect ratio.\n"
+      "  --aspect-ratio-factor <TID:f|a/b>\n"
+      "                           First calculates the aspect ratio by multi-\n"
+      "                           plying the video's original aspect ratio\n"
+      "                           with this factor and calculates the display\n"
+      "                           dimensions from this factor.\n"
+      "  --display-dimensions <TID:width>x<height>\n"
+      "                           Explicitely set the display dimensions.\n"
+      "  --cropping <TID:left,top,right,bottom>\n"
+      "                           Sets the cropping parameters.\n"
+      "  --stereo-mode <TID:n|none|left|right|both>\n"
+      "                           Sets the stereo mode parameter. It can\n"
+      "                           either be a numer 0 - 3 or one of the\n"
+      "                           keywords 'none', 'right', 'left' or 'both'.\n"
+      "\n Options that only apply to text subtitle tracks:\n"
+      "  --sub-charset <TID:charset>\n"
+      "                           Sets the charset the text subtitles are\n"
+      "                           written in for the conversion to UTF-8.\n"
+      "\n Options that only apply to VobSub subtitle tracks:\n"
+      "  --compression <TID:method>\n"
+      "                           Sets the compression method used for the\n"
+      "                           specified track ('none' or 'zlib').\n"
+      "\n\n Other options:\n"
+      "  -i, --identify <file>    Print information about the source file.\n"
+      "  -l, --list-types         Lists supported input file types.\n"
+      "  --list-languages         Lists all ISO639 languages and their\n"
+      "                           ISO639-2 codes.\n"
+      "  --priority <priority>    Set the priority mkvmerge runs with.\n"
+      "  --command-line-charset   Charset for strings on the command line\n"
+      "  --output-charset <cset>  Output messages in this charset\n"
+      "  -r, --redirect-output <file>\n"
+      "                           Redirects all messages into this file.\n"
+      "  @optionsfile             Reads additional command line options from\n"
+      "                           the specified file (see man page).\n"
+      "  -h, --help               Show this help.\n"
+      "  -V, --version            Show version information.\n"
+      "\n\n"
+      "Please read the man page/the HTML documentation to mkvmerge. It\n"
+      "explains several details in great length which are not obvious from\n"
+      "this listing.\n"
+      );
 
   version_info = "mkvmerge v" VERSION " ('" VERSIONNAME "')";
 }
@@ -282,7 +283,7 @@ static bool print_malloc_report = false;
 */
 static void
 print_capabilities() {
-  mxinfo("VERSION=%s\n", version_info.c_str());
+  mxinfo(boost::format("VERSION=%1%\n") % version_info);
 #if defined(HAVE_AVICLASSES)
   mxinfo("AVICLASSES\n");
 #endif
@@ -317,7 +318,7 @@ create_track_number(generic_reader_c *reader,
     }
 
   if (!found)
-    die(_("create_track_number: file_num not found. %s\n"), BUGMSG);
+    mxerror(boost::format(Y("create_track_number: file_num not found. %1%\n")) % BUGMSG);
 
   tnum = -1;
   found = false;
@@ -356,21 +357,19 @@ identify(const string &filename) {
   track_info_c ti;
   filelist_t file;
 
-  verbose           = 0;
-  suppress_warnings = true;
-  identifying       = true;
-  file.name         = filename;
+  verbose             = 0;
+  g_suppress_warnings = true;
+  g_identifying       = true;
+  file.name           = filename;
 
   get_file_type(file);
 
   ti.fname = file.name;
 
   if (file.type == FILE_TYPE_IS_UNKNOWN)
-    mxerror(_("File %s has unknown type. Please have a look "
-              "at the supported file types ('mkvmerge --list-types') and "
-              "contact the author Moritz Bunkus <moritz@bunkus.org> if your "
-              "file type is supported but not recognized properly.\n"),
-            file.name.c_str());
+    mxerror(boost::format(Y("File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and "
+                            "contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"))
+            % file.name);
 
   file.ti = new track_info_c(ti);
 
@@ -419,7 +418,7 @@ parse_number_with_unit(const string &s,
     is_fraction = true;
 
   } else
-    mxerror(_("'%s' is not a valid %s in '%s %s'.\n"), s.c_str(), subject.c_str(), argument.c_str(), display_s.c_str());
+    mxerror(boost::format(Y("'%1%' is not a valid %2% in '%3% %4%'.\n")) % s % subject % argument % display_s);
 
   int64_t multiplier = 1000000000;
   unit               = downcase(unit);
@@ -441,7 +440,7 @@ parse_number_with_unit(const string &s,
       return (int64_t)(1000000000.0 / d_value);
 
   } else if (unit != "s")
-    mxerror(_("'%s' does not contain a valid unit ('s', 'ms', 'us' or 'ns') in '%s %s'.\n"), s.c_str(), argument.c_str(), display_s.c_str());
+    mxerror(boost::format(Y("'%1%' does not contain a valid unit ('s', 'ms', 'us' or 'ns') in '%2% %3%'.\n")) % s % argument % display_s);
 
   if (is_fraction)
     return multiplier * n / d;
@@ -484,8 +483,7 @@ parse_and_add_tags(const string &file_name) {
     if (NULL != tag) {
       fix_mandatory_tag_elements(tag);
       if (!tag->CheckMandatory())
-        mxerror(_("Error parsing the tags in '%s': some mandatory "
-                  "elements are missing.\n"), file_name.c_str());
+        mxerror(boost::format(Y("Error parsing the tags in '%1%': some mandatory elements are missing.\n")) % file_name);
       add_tags(tag);
     }
 
@@ -513,7 +511,7 @@ parse_tracks(string s,
   strip(elements);
   for (i = 0; i < elements.size(); i++) {
     if (!parse_int(elements[i], tid))
-      mxerror(_("Invalid track ID in '%s %s'.\n"), opt.c_str(), s.c_str());
+      mxerror(boost::format(Y("Invalid track ID in '%1% %2%'.\n")) % opt % s);
     tracks.push_back(tid);
   }
 }
@@ -541,15 +539,15 @@ parse_sync(string s,
   orig = s;
   parts = split(s, ":", 2);
   if (parts.size() != 2)
-    mxerror(_("Invalid sync option. No track ID specified in '%s %s'.\n"), opt.c_str(), s.c_str());
+    mxerror(boost::format(Y("Invalid sync option. No track ID specified in '%1% %2%'.\n")) % opt % s);
 
   id = 0;
   if (!parse_int(parts[0], id))
-    mxerror(_("Invalid track ID specified in '%s %s'.\n"), opt.c_str(), s.c_str());
+    mxerror(boost::format(Y("Invalid track ID specified in '%1% %2%'.\n")) % opt % s);
 
   s = parts[1];
   if (s.size() == 0)
-    mxerror(_("Invalid sync option specified in '%s %s'.\n"), opt.c_str(), orig.c_str());
+    mxerror(boost::format(Y("Invalid sync option specified in '%1% %2%'.\n")) % opt % orig);
 
   // Now parse the actual sync values.
   idx = s.find(',');
@@ -567,13 +565,13 @@ parse_sync(string s,
       d1 = strtod(linear.c_str(), NULL);
       d2 = strtod(div.c_str(), NULL);
       if (d2 == 0.0)
-        mxerror(_("Invalid sync option specified in '%s %s'. The divisor is zero.\n"), opt.c_str(), orig.c_str());
+        mxerror(boost::format(Y("Invalid sync option specified in '%1% %2%'. The divisor is zero.\n")) % opt % orig);
 
       tcsync.numerator   = d1;
       tcsync.denominator = d2;
     }
     if ((tcsync.numerator * tcsync.denominator) <= 0.0)
-      mxerror(_("Invalid sync option specified in '%s %s'. The linear sync value may not be equal to or smaller than zero.\n"), opt.c_str(), orig.c_str());
+      mxerror(boost::format(Y("Invalid sync option specified in '%1% %2%'. The linear sync value may not be equal to or smaller than zero.\n")) % opt % orig);
 
   }
 
@@ -600,19 +598,17 @@ parse_aspect_ratio(const string &s,
   int64_t id;
 
   if (is_factor)
-    msg = _("Aspect ratio factor");
+    msg = Y("Aspect ratio factor");
   else
-    msg = _("Aspect ratio");
+    msg = Y("Aspect ratio");
   dprop.ar_factor = is_factor;
 
   parts = split(s, ":", 2);
   if (parts.size() != 2)
-    mxerror(_("%s: missing track ID in '%s %s'.\n"), msg, opt.c_str(),
-            s.c_str());
+    mxerror(boost::format(Y("%1%: missing track ID in '%2% %3%'.\n")) % msg % opt % s);
   id = 0;
   if (!parse_int(parts[0], id))
-    mxerror(_("%s: invalid track ID in '%s %s'.\n"), msg, opt.c_str(),
-            s.c_str());
+    mxerror(boost::format(Y("%1%: invalid track ID in '%2% %3%'.\n")) % msg % opt % s);
   dprop.width = -1;
   dprop.height = -1;
 
@@ -628,18 +624,15 @@ parse_aspect_ratio(const string &s,
   div = parts[1].substr(idx + 1);
   parts[1].erase(idx);
   if (parts[1].size() == 0)
-    mxerror(_("%s: missing dividend in '%s %s'.\n"), msg, opt.c_str(),
-            s.c_str());
+    mxerror(boost::format(Y("%1%: missing dividend in '%2% %3%'.\n")) % msg % opt %s);
 
   if (div.size() == 0)
-    mxerror(_("%s: missing divisor in '%s %s'.\n"), msg, opt.c_str(),
-            s.c_str());
+    mxerror(boost::format(Y("%1%: missing divisor in '%2% %3%'.\n")) % msg % opt % s);
 
   w = strtod(parts[1].c_str(), NULL);
   h = strtod(div.c_str(), NULL);
   if (h == 0.0)
-    mxerror(_("%s: divisor is 0 in '%s %s'.\n"), msg, opt.c_str(),
-            s.c_str());
+    mxerror(boost::format(Y("%1%: divisor is 0 in '%2% %3%'.\n")) % msg % opt % s);
 
   dprop.aspect_ratio = w / h;
   ti.display_properties[id] = dprop;
@@ -660,18 +653,14 @@ parse_display_dimensions(const string s,
   parts = split(s, ":", 2);
   strip(parts);
   if (parts.size() != 2)
-    mxerror(_("Display dimensions: not given in the form "
-              "<TID>:<width>x<height>, e.g. 1:640x480 (argument was '%s').\n"),
-            s.c_str());
+    mxerror(boost::format(Y("Display dimensions: not given in the form <TID>:<width>x<height>, e.g. 1:640x480 (argument was '%1%').\n")) % s);
 
   dims = split(parts[1], "x", 2);
   id = 0;
   if ((dims.size() != 2) || !parse_int(parts[0], id) ||
       !parse_int(dims[0], w) || !parse_int(dims[1], h) ||
       (w <= 0) || (h <= 0))
-    mxerror(_("Display dimensions: not given in the form "
-              "<TID>:<width>x<height>, e.g. 1:640x480 (argument was '%s').\n"),
-            s.c_str());
+    mxerror(boost::format(Y("Display dimensions: not given in the form <TID>:<width>x<height>, e.g. 1:640x480 (argument was '%1%').\n")) % s);
 
   dprop.aspect_ratio = -1.0;
   dprop.width = w;
@@ -692,29 +681,23 @@ parse_cropping(const string &s,
   vector<string> v;
   int64_t id;
 
+  const char *err_msg = Y("Cropping parameters: not given in the form <TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 (argument was '%1%').\n");
+
   v = split(s, ":");
   if (v.size() != 2)
-    mxerror(_("Cropping parameters: not given in the form "
-              "<TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 "
-              "(argument was '%s').\n"), s.c_str());
+    mxerror(boost::format(err_msg) % s);
   id = 0;
   if (!parse_int(v[0], id))
-    mxerror(_("Cropping parameters: not given in the form "
-              "<TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 "
-              "(argument was '%s').\n"), s.c_str());
+    mxerror(boost::format(err_msg) % s);
 
   v = split(v[1], ",");
   if (v.size() != 4)
-    mxerror(_("Cropping parameters: not given in the form "
-              "<TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 "
-              "(argument was '%s').\n"), s.c_str());
+    mxerror(boost::format(err_msg) % s);
   if (!parse_int(v[0], crop.left) ||
       !parse_int(v[1], crop.top) ||
       !parse_int(v[2], crop.right) ||
       !parse_int(v[3], crop.bottom))
-    mxerror(_("Cropping parameters: not given in the form "
-              "<TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 "
-              "(argument was '%s').\n"), s.c_str());
+    mxerror(boost::format(err_msg) % s);
 
   ti.pixel_crop_list[id] = crop;
 }
@@ -731,20 +714,18 @@ parse_stereo_mode(const string &s,
     "none", "right", "left", "both", NULL
   };
   static const char *errmsg =
-    _("Stereo mode parameter: not given in the form "
-      "<TID>:<n|keyword> where n is a number between 0 and 3 "
-      "or one of the keywords 'none', 'right', 'left', 'both' "
-      "(argument was '%s').\n");
+    Y("Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and 3 "
+      "or one of the keywords 'none', 'right', 'left', 'both' (argument was '%1%').\n");
   int64_t i, id;
   vector<string> v;
 
   v = split(s, ":");
   if (v.size() != 2)
-    mxerror(errmsg, s.c_str());
+    mxerror(boost::format(errmsg) % s);
 
   id = 0;
   if (!parse_int(v[0], id))
-    mxerror(errmsg, s.c_str());
+    mxerror(boost::format(errmsg) % s);
 
   for (i = 0; NULL != keywords[i]; ++i)
     if (v[1] == keywords[i]) {
@@ -753,7 +734,7 @@ parse_stereo_mode(const string &s,
     }
 
   if (!parse_int(v[1], i) || (i < 0) || (i > STEREO_MODE_BOTH))
-    mxerror(errmsg, s.c_str());
+    mxerror(boost::format(errmsg) % s);
 
   ti.stereo_mode_list[id] = (stereo_mode_e)i;
 }
@@ -772,8 +753,7 @@ parse_split_duration(const string &arg) {
     s.erase(0, strlen("duration:"));
 
   if (!parse_timecode(s, split_after))
-      mxerror(_("Invalid time for '--split' in '--split %s'. Additional error "
-                "message: %s\n"), arg.c_str(), timecode_parser_error.c_str());
+    mxerror(boost::format(Y("Invalid time for '--split' in '--split %1%'. Additional error message: %2%\n")) % arg % timecode_parser_error);
 
   cluster_helper->add_split_point(split_point_t(split_after,
                                                 split_point_t::SPT_DURATION,
@@ -798,8 +778,7 @@ parse_split_timecodes(const string &arg) {
   timecodes = split(s, ",");
   mxforeach(timecode, timecodes) {
     if (!parse_timecode(*timecode, split_after))
-      mxerror(_("Invalid time for '--split' in '--split %s'. Additional error "
-                "message: %s.\n"), arg.c_str(), timecode_parser_error.c_str());
+      mxerror(boost::format(Y("Invalid time for '--split' in '--split %1%'. Additional error message: %2%.\n")) % arg % timecode_parser_error);
     cluster_helper->add_split_point(split_point_t(split_after,
                                                   split_point_t::SPT_TIMECODE,
                                                   true));
@@ -817,11 +796,13 @@ parse_split_size(const string &arg) {
   string s = arg;
   char mod;
 
+  const char *err_msg = Y("Invalid split size in '--split %1%'.\n");
+
   if (starts_with_case(s, "size:"))
     s.erase(0, strlen("size:"));
 
   if (s.empty())
-    mxerror(_("Invalid split size in '--split %s'.\n"), arg.c_str());
+    mxerror(boost::format(err_msg) % arg);
 
   // Size in bytes/KB/MB/GB
   mod = tolower(s[s.length() - 1]);
@@ -833,12 +814,12 @@ parse_split_size(const string &arg) {
   else if (mod == 'g')
     modifier = 1024 * 1024 * 1024;
   else if (!isdigit(mod))
-    mxerror(_("Invalid split size in '--split %s'.\n"), arg.c_str());
+    mxerror(boost::format(err_msg) % arg);
 
   if (modifier != 1)
     s.erase(s.size() - 1);
   if (!parse_int(s, split_after))
-    mxerror(_("Invalid split size in '--split %s'.\n"), arg.c_str());
+    mxerror(boost::format(err_msg) % arg);
 
   cluster_helper->add_split_point(split_point_t(split_after * modifier,
                                                 split_point_t::SPT_SIZE,
@@ -861,12 +842,12 @@ parse_split_size(const string &arg) {
 */
 static void
 parse_split(const string &arg) {
-  string s;
+  const char *err_msg = Y("Invalid format for '--split' in '--split %1%'.\n");
 
   if (arg.size() < 2)
-    mxerror(_("Invalid format for '--split' in '--split %s'.\n"), arg.c_str());
+    mxerror(boost::format(err_msg) % arg);
 
-  s = arg;
+  string s = arg;
 
   // HH:MM:SS
   if (starts_with_case(s, "duration:"))
@@ -895,8 +876,7 @@ parse_split(const string &arg) {
       parse_split_size(arg);
 
     else
-      mxerror(_("Invalid format for '--split' in '--split %s'.\n"),
-              arg.c_str());
+      mxerror(boost::format(err_msg) % arg);
   }
 }
 
@@ -917,15 +897,13 @@ parse_default_track(const string &s,
   strip(parts);
   id = 0;
   if (!parse_int(parts[0], id))
-    mxerror(_("Invalid track ID specified in '--default-track %s'.\n"),
-            s.c_str());
+    mxerror(boost::format(Y("Invalid track ID specified in '--default-track %1%'.\n")) % s);
 
   try {
     if (2 == parts.size())
       is_default = parse_bool(parts[1]);
   } catch (...) {
-    mxerror(_("Invalid boolean option specified in '--default-track %s'.\n"),
-            s.c_str());
+    mxerror(boost::format(Y("Invalid boolean option specified in '--default-track %1%'.\n")) % s);
   }
   ti.default_track_flags[id] = is_default;
 }
@@ -944,16 +922,14 @@ parse_cues(const string &s,
   parts = split(s, ":", 2);
   strip(parts);
   if (parts.size() != 2)
-    mxerror(_("Invalid cues option. No track ID specified in '--cues %s'.\n"),
-            s.c_str());
+    mxerror(boost::format(Y("Invalid cues option. No track ID specified in '--cues %1%'.\n")) % s);
 
   id = 0;
   if (!parse_int(parts[0], id))
-    mxerror(_("Invalid track ID specified in '--cues %s'.\n"), s.c_str());
+    mxerror(boost::format(Y("Invalid track ID specified in '--cues %1%'.\n")) % s);
 
   if (parts[1].size() == 0)
-    mxerror(_("Invalid cues option specified in '--cues %s'.\n"),
-            s.c_str());
+    mxerror(boost::format(Y("Invalid cues option specified in '--cues %1%'.\n")) % s);
 
   if (parts[1] == "all")
     ti.cue_creations[id] = CUE_STRATEGY_ALL;
@@ -962,7 +938,7 @@ parse_cues(const string &s,
   else if (parts[1] == "none")
     ti.cue_creations[id] = CUE_STRATEGY_NONE;
   else
-    mxerror(_("'%s' is an unsupported argument for --cues.\n"), s.c_str());
+    mxerror(boost::format(Y("'%1%' is an unsupported argument for --cues.\n")) % s);
 }
 
 /** \brief Parse the \c --compression argument
@@ -979,17 +955,14 @@ parse_compression(const string &s,
   parts = split(s, ":", 2);
   strip(parts);
   if (parts.size() != 2)
-    mxerror(_("Invalid compression option. No track ID specified in "
-              "'--compression %s'.\n"), s.c_str());
+    mxerror(boost::format(Y("Invalid compression option. No track ID specified in '--compression %1%'.\n")) % s);
 
   id = 0;
   if (!parse_int(parts[0], id))
-    mxerror(_("Invalid track ID specified in '--compression %s'.\n"),
-            s.c_str());
+    mxerror(boost::format(Y("Invalid track ID specified in '--compression %1%'.\n")) % s);
 
   if (parts[1].size() == 0)
-    mxerror(_("Invalid compression option specified in '--compression %s'.\n"),
-            s.c_str());
+    mxerror(boost::format(Y("Invalid compression option specified in '--compression %1%'.\n")) % s);
 
   ti.compression_list[id] = COMPRESSION_UNSPECIFIED;
   parts[1] = downcase(parts[1]);
@@ -1008,8 +981,7 @@ parse_compression(const string &s,
   if (parts[1] == "none")
     ti.compression_list[id] = COMPRESSION_NONE;
   if (ti.compression_list[id] == COMPRESSION_UNSPECIFIED)
-    mxerror(_("'%s' is an unsupported argument for --compression. Available "
-              "compression methods are 'none' and 'zlib'.\n"), s.c_str());
+    mxerror(boost::format(Y("'%1%' is an unsupported argument for --compression. Available compression methods are 'none' and 'zlib'.\n")) % s);
 }
 
 /** \brief Parse the argument for a couple of options
@@ -1031,33 +1003,27 @@ parse_language(const string &s,
   parts = split(s, ":", 2);
   strip(parts);
   if (0 == parts.size())
-    mxerror(_("No track ID specified in '--%s %s'.\n"), opt.c_str(),
-            s.c_str());
+    mxerror(boost::format(Y("No track ID specified in '--%1% %2%'.\n")) % opt % s);
   if (1 == parts.size()) {
     if (!empty_ok)
-      mxerror("No %s specified in '--%s %s'.\n", topic, opt.c_str(),
-              s.c_str());
+      mxerror(boost::format(Y("No %1% specified in '--%2% %3%'.\n")) % topic % opt % s);
     parts.push_back("");
   }
 
   id = 0;
   if (!parse_int(parts[0], id))
-    mxerror(_("Invalid track ID specified in '--%s %s'.\n"), opt.c_str(),
-            s.c_str());
+    mxerror(boost::format(Y("Invalid track ID specified in '--%1% %2%'.\n")) % opt % s);
 
   if (check) {
     int index;
 
     if (parts[1].size() == 0)
-      mxerror(_("Invalid %s specified in '--%s %s'.\n"), topic, opt.c_str(),
-              s.c_str());
+      mxerror(boost::format(Y("Invalid %1% specified in '--%2% %3%'.\n")) % topic % opt % s);
 
     index = map_to_iso639_2_code(parts[1].c_str());
     if (-1 == index)
-      mxerror(_("'%s' is neither a valid ISO639-2 nor a valid ISO639-1 code."
-                " See 'mkvmerge --list-languages' for a list of all "
-                "languages and their respective ISO639-2 codes.\n"),
-              parts[1].c_str());
+      mxerror(boost::format(Y("'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code. "
+                              "See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n")) % parts[1]);
 
     parts[1] = iso639_languages[index].iso639_2_code;
   }
@@ -1079,17 +1045,14 @@ parse_sub_charset(const string &s,
   parts = split(s, ":", 2);
   strip(parts);
   if (parts.size() != 2)
-    mxerror(_("Invalid sub charset option. No track ID specified in "
-              "'--sub-charset %s'.\n"), s.c_str());
+    mxerror(boost::format(Y("Invalid sub charset option. No track ID specified in '--sub-charset %1%'.\n")) % s);
 
   id = 0;
   if (!parse_int(parts[0], id))
-    mxerror(_("Invalid track ID specified in '--sub-charset %s'.\n"),
-            s.c_str());
+    mxerror(boost::format(Y("Invalid track ID specified in '--sub-charset %1%'.\n")) % s);
 
   if (parts[1].size() == 0)
-    mxerror(_("Invalid sub charset specified in '--sub-charset %s'.\n"),
-            s.c_str());
+    mxerror(boost::format(Y("Invalid sub charset specified in '--sub-charset %1%'.\n")) % s);
 
   ti.sub_charsets[id] = parts[1];
 }
@@ -1109,17 +1072,14 @@ parse_tags(const string &s,
   parts = split(s, ":", 2);
   strip(parts);
   if (parts.size() != 2)
-    mxerror(_("Invalid tags option. No track ID specified in '%s %s'.\n"),
-            opt.c_str(), s.c_str());
+    mxerror(boost::format(Y("Invalid tags option. No track ID specified in '%1% %2%'.\n")) % opt % s);
 
   id = 0;
   if (!parse_int(parts[0], id))
-    mxerror(_("Invalid track ID specified in '%s %s'.\n"), opt.c_str(),
-            s.c_str());
+    mxerror(boost::format(Y("Invalid track ID specified in '%1% %2%'.\n")) % opt % s);
 
   if (parts[1].size() == 0)
-    mxerror(_("Invalid tags file name specified in '%s %s'.\n"), opt.c_str(),
-            s.c_str());
+    mxerror(boost::format(Y("Invalid tags file name specified in '%1% %2%'.\n")) % opt % s);
 
   ti.all_tags[id] = parts[1];
 }
@@ -1139,15 +1099,12 @@ parse_fourcc(const string &s,
   parts = split(s, ":", 2);
   strip(parts);
   if (parts.size() != 2)
-    mxerror(_("FourCC: Missing track ID in '%s %s'.\n"), opt.c_str(),
-            orig.c_str());
+    mxerror(boost::format(Y("FourCC: Missing track ID in '%1% %2%'.\n")) % opt % orig);
   id = 0;
   if (!parse_int(parts[0], id))
-    mxerror(_("FourCC: Invalid track ID in '%s %s'.\n"), opt.c_str(),
-            orig.c_str());
+    mxerror(boost::format(Y("FourCC: Invalid track ID in '%1% %2%'.\n")) % opt % orig);
   if (parts[1].size() != 4)
-    mxerror(_("The FourCC must be exactly four characters long in '%s %s'."
-              "\n"), opt.c_str(), orig.c_str());
+    mxerror(boost::format(Y("The FourCC must be exactly four characters long in '%1% %2%'.\n")) % opt % orig);
 
   ti.all_fourccs[id] = parts[1];
 }
@@ -1167,14 +1124,11 @@ parse_track_order(const string &s) {
   for (i = 0; i < parts.size(); i++) {
     pair = split(parts[i].c_str(), ":");
     if (pair.size() != 2)
-      mxerror(_("'%s' is not a valid pair of file ID and track ID in "
-                "'--track-order %s'.\n"), parts[i].c_str(), s.c_str());
+      mxerror(boost::format(Y("'%1%' is not a valid pair of file ID and track ID in '--track-order %2%'.\n")) % parts[i] % s);
     if (!parse_int(pair[0], to.file_id))
-      mxerror(_("'%s' is not a valid file ID in '--track-order %s'.\n"),
-              pair[0].c_str(), s.c_str());
+      mxerror(boost::format(Y("'%1%' is not a valid file ID in '--track-order %2%'.\n")) % pair[0] % s);
     if (!parse_int(pair[1], to.track_id))
-      mxerror(_("'%s' is not a valid file ID in '--track-order %s'.\n"),
-              pair[1].c_str(), s.c_str());
+      mxerror(boost::format(Y("'%1%' is not a valid file ID in '--track-order %2%'.\n")) % pair[1] % s);
     track_order.push_back(to);
   }
 }
@@ -1212,8 +1166,7 @@ parse_append_to(const string &s,
                   &mapping.dst_file_id, &mapping.dst_track_id) != 4) ||
         (mapping.src_file_id < 0) || (mapping.src_track_id < 0) ||
         (mapping.dst_file_id < 0) || (mapping.dst_track_id < 0))
-      mxerror(_("'%s' is not a valid mapping of file and track IDs in "
-                "'--append-to %s'.\n"), (*entry).c_str(), s.c_str());
+      mxerror(boost::format(Y("'%1%' is not a valid mapping of file and track IDs in '--append-to %2%'.\n")) % (*entry) % s);
     append_mapping.push_back(mapping);
   }
 }
@@ -1232,13 +1185,11 @@ parse_default_duration(const string &s,
 
   parts = split(s, ":");
   if (parts.size() != 2)
-    mxerror(_("'%s' is not a valid tuple of track ID and default duration in "
-              "'--default-duration %s'.\n"), s.c_str(), s.c_str());
+    mxerror(boost::format(Y("'%1%' is not a valid tuple of track ID and default duration in '--default-duration %1%'.\n")) % s);
 
   id = 0;
   if (!parse_int(parts[0], id))
-    mxerror(_("'%s' is not a valid track ID in '--default-duration %s'.\n"),
-            parts[0].c_str(), s.c_str());
+    mxerror(boost::format(Y("'%1%' is not a valid track ID in '--default-duration %2%'.\n")) % parts[0] % s);
 
   ti.default_durations[id] =
     parse_number_with_unit(parts[1], "default duration", "--default-duration");
@@ -1258,23 +1209,19 @@ parse_nalu_size_length(const string &s,
 
   parts = split(s, ":");
   if (parts.size() != 2)
-    mxerror(_("'%s' is not a valid tuple of track ID and NALU size length in "
-              "'--nalu-size-length %s'.\n"), s.c_str(), s.c_str());
+    mxerror(boost::format(Y("'%1%' is not a valid tuple of track ID and NALU size length in '--nalu-size-length %1%'.\n")) % s);
 
   id = 0;
   if (!parse_int(parts[0], id))
-    mxerror(_("'%s' is not a valid track ID in '--nalu-size-length %s'.\n"),
-            parts[0].c_str(), s.c_str());
+    mxerror(boost::format(Y("'%1%' is not a valid track ID in '--nalu-size-length %2%'.\n")) % parts[0] % s);
 
   if (!parse_int(parts[1], nalu_size_length) ||
       (2 > nalu_size_length) || (4 < nalu_size_length))
-    mxerror(_("The NALU size length must be a number between 2 and 4 "
-              "inclusively in '--nalu-size-length %s'.\n"), s.c_str());
+    mxerror(boost::format(Y("The NALU size length must be a number between 2 and 4 inclusively in '--nalu-size-length %1%'.\n")) % s);
 
   if ((3 == nalu_size_length) && !nalu_size_length_3_warning_printed) {
     nalu_size_length_3_warning_printed = true;
-    mxwarn("Using a NALU size length of 3 bytes might result in tracks "
-           "that won't be decodable with certain AVC/h.264 codecs.\n");
+    mxwarn(Y("Using a NALU size length of 3 bytes might result in tracks that won't be decodable with certain AVC/h.264 codecs.\n"));
   }
 
   ti.nalu_size_lengths[id] = nalu_size_length;
@@ -1293,18 +1240,14 @@ parse_max_blockadd_id(const string &s,
 
   parts = split(s, ":");
   if (parts.size() != 2)
-    mxerror(_("'%s' is not a valid parts of track ID and block additional in "
-              "'--blockadd %s'.\n"), s.c_str(), s.c_str());
+    mxerror(boost::format(Y("'%1%' is not a valid parts of track ID and block additional in '--blockadd %1%'.\n")) % s);
 
   id = 0;
   if (!parse_int(parts[0], id))
-    mxerror(_("'%s' is not a valid track ID in '--blockadd %s'.\n"),
-            parts[0].c_str(), s.c_str());
+    mxerror(boost::format(Y("'%1%' is not a valid track ID in '--blockadd %2%'.\n")) % parts[0] % s);
   max_blockadd_id = 0;
   if (!parse_int(parts[1], max_blockadd_id) || (max_blockadd_id < 0))
-    mxerror(_("'%s' is not a valid block additional max in '--blockadd %s'."
-              "\n"),
-            parts[1].c_str(), s.c_str());
+    mxerror(boost::format(Y("'%1%' is not a valid block additional max in '--blockadd %2%'.\n")) % parts[1] % s);
   ti.max_blockadd_ids[id] = max_blockadd_id;
 }
 
@@ -1323,12 +1266,10 @@ parse_aac_is_sbr(const string &s,
   parts = split(s, ":", 2);
 
   if (!parse_int(parts[0], id) || (id < 0))
-    mxerror(_("Invalid track ID specified in '--aac-is-sbr %s'.\n"),
-            s.c_str());
+    mxerror(boost::format(Y("Invalid track ID specified in '--aac-is-sbr %1%'.\n")) % s);
 
   if ((parts.size() == 2) && (parts[1] != "0") && (parts[1] != "1"))
-    mxerror(_("Invalid boolean specified in '--aac-is-sbr %s'.\n"),
-            s.c_str());
+    mxerror(boost::format(Y("Invalid boolean specified in '--aac-is-sbr %1%'.\n")) % s);
 
   ti.all_aac_is_sbr[id] = (1 == parts.size()) || (parts[1] == "1");
 }
@@ -1393,14 +1334,11 @@ guess_mime_type_and_report(string file_name) {
 
   mime_type = guess_mime_type(file_name, true);
   if (mime_type != "") {
-    mxinfo(_("Automatic MIME type recognition for '%s': %s\n"),
-           file_name.c_str(), mime_type.c_str());
+    mxinfo(boost::format(Y("Automatic MIME type recognition for '%1%': %2%\n")) % file_name % mime_type);
     return mime_type;
   }
 
-  mxerror(_("No MIME type has been set for the attachment '%s', and "
-            "it could not be guessed.\n"),
-          file_name.c_str());
+  mxerror(boost::format(Y("No MIME type has been set for the attachment '%1%', and it could not be guessed.\n")) % file_name);
   return "";
 }
 
@@ -1464,9 +1402,13 @@ parse_args(vector<string> args) {
   // two parameters are allowed: the --identify switch and the file.
   if (((args.size() == 2) || (args.size() == 3)) &&
       ((args[0] == "-i") || (args[0] == "--identify") ||
-       (args[0] == "--identify-verbose") || (args[0] == "-I"))) {
+       (args[0] == "--identify-verbose") || (args[0] == "-I") || (args[0] == "--identify-for-mmg"))) {
     if ((args[0] == "--identify-verbose") || (args[0] == "-I"))
-      identify_verbose = true;
+      g_identify_verbose = true;
+    if (args[0] == "--identify-for-mmg") {
+      g_identify_verbose = true;
+      g_identify_for_mmg = true;
+    }
     if (args.size() == 3)
       verbose = 3;
     identify(args[1]);
@@ -1483,20 +1425,19 @@ parse_args(vector<string> args) {
     no_next_arg = (sit + 1) == args.end();
 
     if ((this_arg == "-l") || (this_arg == "--list-types")) {
-      mxinfo(_("Known file types:\n  ext  description\n"
+      mxinfo(Y("Known file types:\n"
+               "  ext  description\n"
                "  ---  --------------------------\n"));
       for (i = 1; file_types[i].ext; i++)
-        mxinfo("  %s  %s\n", file_types[i].ext, file_types[i].desc);
+        mxinfo(boost::format("  %1%  %2%\n") % file_types[i].ext % file_types[i].desc);
       mxexit(0);
 
     } else if (this_arg == "--list-languages") {
       list_iso639_languages();
       mxexit(0);
 
-    } else if ((this_arg == "-i") || (this_arg == "--identify"))
-      mxerror(_("'%s' can only be used with a file name. "
-                "No other options are allowed if '%s' is used.\n"),
-              this_arg.c_str(), this_arg.c_str());
+    } else if ((this_arg == "-i") || (this_arg == "--identify") || (this_arg == "-I") || (this_arg == "--identify-verbose") || (this_arg == "--identify-for-mmg"))
+      mxerror(boost::format(Y("'%1%' can only be used with a file name. No further options are allowed if this option is used.\n")) % this_arg);
 
     else if (this_arg == "--capabilities") {
       print_capabilities();
@@ -1506,7 +1447,7 @@ parse_args(vector<string> args) {
 
   }
 
-  mxinfo("%s built on %s %s\n", version_info.c_str(), __DATE__, __TIME__);
+  mxinfo(boost::format(Y("%1% built on %2% %3%\n")) % version_info % __DATE__ % __TIME__);
 
   // Now parse options that are needed right at the beginning.
   mxforeach(sit, args) {
@@ -1519,24 +1460,24 @@ parse_args(vector<string> args) {
 
     if ((this_arg == "-o") || (this_arg == "--output")) {
       if (no_next_arg)
-        mxerror(_("'%s' lacks a file name.\n"), this_arg.c_str());
+        mxerror(boost::format(Y("'%1%' lacks a file name.\n")) % this_arg);
 
       if (outfile != "")
-        mxerror(_("Only one output file allowed.\n"));
+        mxerror(Y("Only one output file allowed.\n"));
 
       outfile = next_arg;
       sit++;
 
     } else if (this_arg == "--engage") {
       if (no_next_arg)
-        mxerror(_("'--engage' lacks its argument.\n"));
+        mxerror(Y("'--engage' lacks its argument.\n"));
       engage_hacks(next_arg);
       sit++;
     }
   }
 
   if (outfile == "") {
-    mxinfo(_("Error: no output file name was given.\n\n"));
+    mxinfo(Y("Error: no output file name was given.\n\n"));
     usage(2);
   }
 
@@ -1561,7 +1502,7 @@ parse_args(vector<string> args) {
       bool found;
 
       if (no_next_arg)
-        mxerror(_("'--priority' lacks its argument.\n"));
+        mxerror(Y("'--priority' lacks its argument.\n"));
       found = false;
       for (i = 0; i < 5; i++)
         if ((next_arg == process_priorities[i])) {
@@ -1570,7 +1511,7 @@ parse_args(vector<string> args) {
           break;
         }
       if (!found)
-        mxerror(_("'%s' is not a valid priority class.\n"), next_arg.c_str());
+        mxerror(boost::format(Y("'%1%' is not a valid priority class.\n")) % next_arg);
       sit++;
 
     } else if ((this_arg == "-q") || (this_arg == "--quiet"))
@@ -1581,7 +1522,7 @@ parse_args(vector<string> args) {
 
     else if (this_arg == "--title") {
       if (no_next_arg)
-        mxerror(_("'--title' lacks the title.\n"));
+        mxerror(Y("'--title' lacks the title.\n"));
 
       segment_title = next_arg;
       segment_title_set = true;
@@ -1589,18 +1530,18 @@ parse_args(vector<string> args) {
 
     } else if (this_arg == "--split") {
       if ((no_next_arg) || (next_arg[0] == 0))
-        mxerror(_("'--split' lacks the size.\n"));
+        mxerror(Y("'--split' lacks the size.\n"));
 
       parse_split(next_arg);
       sit++;
 
     } else if (this_arg == "--split-max-files") {
       if ((no_next_arg) || (next_arg[0] == 0))
-        mxerror(_("'--split-max-files' lacks the number of files.\n"));
+        mxerror(Y("'--split-max-files' lacks the number of files.\n"));
 
       if (!parse_int(next_arg, split_max_num_files) ||
           (split_max_num_files < 2))
-        mxerror(_("Wrong argument to '--split-max-files'.\n"));
+        mxerror(Y("Wrong argument to '--split-max-files'.\n"));
 
       sit++;
 
@@ -1609,34 +1550,30 @@ parse_args(vector<string> args) {
 
     } else if (this_arg == "--link-to-previous") {
       if ((no_next_arg) || (next_arg[0] == 0))
-        mxerror(_("'--link-to-previous' lacks the next UID.\n"));
+        mxerror(Y("'--link-to-previous' lacks the next UID.\n"));
 
       if (NULL != seguid_link_previous.get())
-        mxerror(_("The previous UID was already given in '%s %s'.\n"),
-                this_arg.c_str(), next_arg.c_str());
+        mxerror(boost::format(Y("The previous UID was already given in '%1% %2%'.\n")) % this_arg % next_arg);
 
       try {
         seguid_link_previous = bitvalue_cptr(new bitvalue_c(next_arg, 128));
       } catch (...) {
-        mxerror(_("Unknown format for the previous UID in '%s %s'.\n"),
-                this_arg.c_str(), next_arg.c_str());
+        mxerror(boost::format(Y("Unknown format for the previous UID in '%1% %2%'.\n")) % this_arg % next_arg);
       }
 
       sit++;
 
     } else if (this_arg == "--link-to-next") {
       if ((no_next_arg) || (next_arg[0] == 0))
-        mxerror(_("'--link-to-next' lacks the previous UID.\n"));
+        mxerror(Y("'--link-to-next' lacks the previous UID.\n"));
 
       if (NULL != seguid_link_next.get())
-        mxerror(_("The next UID was already given in '%s %s'.\n"),
-                this_arg.c_str(), next_arg.c_str());
+        mxerror(boost::format(Y("The next UID was already given in '%1% %2%'.\n")) % this_arg % next_arg);
 
       try {
         seguid_link_next = bitvalue_cptr(new bitvalue_c(next_arg, 128));
       } catch (...) {
-        mxerror(_("Unknown format for the next UID in '%s %s'.\n"),
-                this_arg.c_str(), next_arg.c_str());
+        mxerror(boost::format(Y("Unknown format for the next UID in '%1% %2%'.\n")) % this_arg % next_arg);
       }
 
       sit++;
@@ -1645,7 +1582,7 @@ parse_args(vector<string> args) {
       int idx;
 
       if (no_next_arg)
-        mxerror(_("'--cluster-length' lacks the length.\n"));
+        mxerror(Y("'--cluster-length' lacks the length.\n"));
 
       idx = next_arg.find("ms");
       if (idx >= 0) {
@@ -1653,8 +1590,7 @@ parse_args(vector<string> args) {
         if (!parse_int(next_arg, max_ns_per_cluster) ||
             (max_ns_per_cluster < 100) ||
             (max_ns_per_cluster > 32000))
-          mxerror(_("Cluster length '%s' out of range (100..32000).\n"),
-                  next_arg.c_str());
+          mxerror(boost::format(Y("Cluster length '%1%' out of range (100..32000).\n")) % next_arg);
         max_ns_per_cluster *= 1000000;
 
         max_blocks_per_cluster = 65535;
@@ -1662,8 +1598,7 @@ parse_args(vector<string> args) {
         if (!parse_int(next_arg, max_blocks_per_cluster) ||
             (max_blocks_per_cluster < 0) ||
             (max_blocks_per_cluster > 60000))
-          mxerror(_("Cluster length '%s' out of range (0..60000).\n"),
-                  next_arg.c_str());
+          mxerror(boost::format(Y("Cluster length '%1%' out of range (0..60000).\n")) % next_arg);
 
         max_ns_per_cluster = 32000000000ull;
       }
@@ -1684,47 +1619,42 @@ parse_args(vector<string> args) {
 
     else if (this_arg == "--attachment-description") {
       if (no_next_arg)
-        mxerror(_("'--attachment-description' lacks the description.\n"));
+        mxerror(Y("'--attachment-description' lacks the description.\n"));
 
       if (attachment.description != "")
-        mxwarn(_("More than one description was given for a single attachment."
-                 "\n"));
+        mxwarn(Y("More than one description was given for a single attachment.\n"));
       attachment.description = next_arg;
       sit++;
 
     } else if (this_arg == "--attachment-mime-type") {
       if (no_next_arg)
-        mxerror(_("'--attachment-mime-type' lacks the MIME type.\n"));
+        mxerror(Y("'--attachment-mime-type' lacks the MIME type.\n"));
 
       if (attachment.mime_type != "")
-        mxwarn(_("More than one MIME type was given for a single attachment. "
-                 "'%s' will be discarded and '%s' used instead.\n"),
-               attachment.mime_type.c_str(), next_arg.c_str());
+        mxwarn(boost::format(Y("More than one MIME type was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"))
+               % attachment.mime_type % next_arg);
       attachment.mime_type = next_arg;
       sit++;
 
     } else if (this_arg == "--attachment-name") {
       if (no_next_arg)
-        mxerror(_("'--attachment-name' lacks the name.\n"));
+        mxerror(Y("'--attachment-name' lacks the name.\n"));
 
       if (attachment.stored_name != "")
-        mxwarn(_("More than one name was given for a single attachment. "
-                 "'%s' will be discarded and '%s' used instead.\n"),
-               attachment.stored_name.c_str(), next_arg.c_str());
+        mxwarn(boost::format(Y("More than one name was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"))
+               % attachment.stored_name % next_arg);
       attachment.stored_name = next_arg;
       sit++;
 
     } else if ((this_arg == "--attach-file") ||
                (this_arg == "--attach-file-once")) {
       if (no_next_arg)
-        mxerror(_("'%s' lacks the file name.\n"), this_arg.c_str());
+        mxerror(boost::format(Y("'%1%' lacks the file name.\n")) % this_arg);
 
       try {
         mm_file_io_c test(next_arg);
       } catch (...) {
-        mxerror(_("The file '%s' cannot be attached because "
-                  "it does not exist or cannot be read.\n"),
-                next_arg.c_str());
+        mxerror(boost::format(Y("The file '%1%' cannot be attached because it does not exist or cannot be read.\n")) % next_arg);
       }
 
       attachment.name = next_arg;
@@ -1738,15 +1668,13 @@ parse_args(vector<string> args) {
         io = new mm_file_io_c(attachment.name);
         attachment.data->m_size = io->get_size();
         if (0 == attachment.data->m_size)
-          mxerror("The size of attachment '%s' is 0.\n",
-                  attachment.name.c_str());
+          mxerror(boost::format(Y("The size of attachment '%1%' is 0.\n")) % attachment.name);
         attachment.data->m_buffer = (unsigned char *)
           safemalloc(attachment.data->m_size);
         io->read(attachment.data->m_buffer, attachment.data->m_size);
         delete io;
       } catch (...) {
-        mxerror(_("The attachment '%s' could not be read.\n"),
-                attachment.name.c_str());
+        mxerror(boost::format(Y("The attachment '%1%' could not be read.\n")) % attachment.name);
       }
 
       add_attachment(attachment);
@@ -1758,7 +1686,7 @@ parse_args(vector<string> args) {
 
     } else if (this_arg == "--global-tags") {
       if (no_next_arg)
-        mxerror(_("'--global-tags' lacks the file name.\n"));
+        mxerror(Y("'--global-tags' lacks the file name.\n"));
 
       parse_and_add_tags(next_arg);
       sit++;
@@ -1767,38 +1695,31 @@ parse_args(vector<string> args) {
 
     } else if (this_arg == "--chapter-language") {
       if (no_next_arg)
-        mxerror(_("'--chapter-language' lacks the language.\n"));
+        mxerror(Y("'--chapter-language' lacks the language.\n"));
 
       if (chapter_language != "")
-        mxerror(_("'--chapter-language' may only be given once in '"
-                  "--chapter-language %s'.\n"), next_arg.c_str());
+        mxerror(boost::format(Y("'--chapter-language' may only be given once in '--chapter-language %1%'.\n")) % next_arg);
 
       if (chapter_file_name != "")
-        mxerror(_("'--chapter-language' must be given before '--chapters' in "
-                  "'--chapter-language %s'.\n"), next_arg.c_str());
+        mxerror(boost::format(Y("'--chapter-language' must be given before '--chapters' in '--chapter-language %1%'.\n")) % next_arg);
 
       i = map_to_iso639_2_code(next_arg.c_str());
       if (-1 == i)
-        mxerror(_("'%s' is neither a valid ISO639-2 nor a valid ISO639-1 code "
-                  "in '--chapter-language %s'. See 'mkvmerge --list-languages'"
-                  "for a list of all languages and their respective ISO639-2 "
-                  "codes.\n"),
-                next_arg.c_str(), next_arg.c_str());
+        mxerror(boost::format(Y("'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code in '--chapter-language %1%'. "
+                                "See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n")) % next_arg);
 
       chapter_language = iso639_languages[i].iso639_2_code;
       sit++;
 
     } else if (this_arg == "--chapter-charset") {
       if (no_next_arg)
-        mxerror(_("'--chapter-charset' lacks the charset.\n"));
+        mxerror(Y("'--chapter-charset' lacks the charset.\n"));
 
       if (chapter_charset != "")
-        mxerror(_("'--chapter-charset' may only be given once in '"
-                  "--chapter-charset %s'.\n"), next_arg.c_str());
+        mxerror(boost::format(Y("'--chapter-charset' may only be given once in '--chapter-charset %1%'.\n")) % next_arg);
 
       if (chapter_file_name != "")
-        mxerror(_("'--chapter-charset' must be given before '--chapters' in "
-                  "'--chapter-charset %s'.\n"), next_arg.c_str());
+        mxerror(boost::format(Y("'--chapter-charset' must be given before '--chapters' in '--chapter-charset %1%'.\n")) % next_arg);
 
       chapter_charset = next_arg;
       ti->chapter_charset = next_arg;
@@ -1806,21 +1727,19 @@ parse_args(vector<string> args) {
 
     } else if (this_arg == "--cue-chapter-name-format") {
       if (no_next_arg)
-        mxerror(_("'--cue-chapter-name-format' lacks the format.\n"));
+        mxerror(Y("'--cue-chapter-name-format' lacks the format.\n"));
       if (chapter_file_name != "")
-        mxerror(_("'--cue-chapter-name-format' must be given before "
-                  "'--chapters'.\n"));
+        mxerror(Y("'--cue-chapter-name-format' must be given before '--chapters'.\n"));
 
       cue_to_chapter_name_format = next_arg;
       sit++;
 
     } else if (this_arg == "--chapters") {
       if (no_next_arg)
-        mxerror(_("'--chapters' lacks the file name.\n"));
+        mxerror(Y("'--chapters' lacks the file name.\n"));
 
       if (chapter_file_name != "")
-        mxerror(_("Only one chapter file allowed in '%s %s'.\n"),
-                this_arg.c_str(), next_arg.c_str());
+        mxerror(boost::format(Y("Only one chapter file allowed in '%1% %2%'.\n")) % this_arg % next_arg);
 
       chapter_file_name = next_arg;
       if (kax_chapters != NULL)
@@ -1835,11 +1754,10 @@ parse_args(vector<string> args) {
 
     } else if (this_arg == "--segmentinfo") {
       if (no_next_arg)
-        mxerror(_("'--segmentinfo' lacks the file name.\n"));
+        mxerror(Y("'--segmentinfo' lacks the file name.\n"));
 
       if (segmentinfo_file_name != "")
-        mxerror(_("Only one segment info file allowed in '%s %s'.\n"),
-                this_arg.c_str(), next_arg.c_str());
+        mxerror(boost::format(Y("Only one segment info file allowed in '%1% %2%'.\n")) % this_arg % next_arg);
 
       segmentinfo_file_name = next_arg;
       kax_info_chap = parse_segmentinfo(segmentinfo_file_name, false);
@@ -1859,29 +1777,25 @@ parse_args(vector<string> args) {
       ti->no_tags = true;
 
     } else if (this_arg == "--meta-seek-size") {
-      mxwarn(_("The option '--meta-seek-size' is no longer supported. Please "
-               "read mkvmerge's documentation, especially the section about "
-               "the MATROSKA FILE LAYOUT."));
+      mxwarn(Y("The option '--meta-seek-size' is no longer supported. Please read mkvmerge's documentation, especially the section about the MATROSKA FILE LAYOUT."));
       sit++;
 
     } else if (this_arg == "--timecode-scale") {
       int64_t temp;
 
       if (no_next_arg)
-        mxerror(_("'--timecode-scale' lacks its argument.\n"));
+        mxerror(Y("'--timecode-scale' lacks its argument.\n"));
       if (timecode_scale_mode != TIMECODE_SCALE_MODE_NORMAL)
-        mxerror(_("'--timecode-scale' was used more than once.\n"));
+        mxerror(Y("'--timecode-scale' was used more than once.\n"));
 
       if (!parse_int(next_arg, temp))
-        mxerror(_("The argument to '--timecode-scale' must be a number.\n"));
+        mxerror(Y("The argument to '--timecode-scale' must be a number.\n"));
 
       if (temp == -1)
         timecode_scale_mode = TIMECODE_SCALE_MODE_AUTO;
       else {
         if ((temp > 10000000) || (temp < 1))
-          mxerror(_("The given timecode scale factor is outside the valid "
-                    "range (1...10000000 or -1 for 'sample precision "
-                    "even if a video track is present').\n"));
+          mxerror(Y("The given timecode scale factor is outside the valid range (1...10000000 or -1 for 'sample precision even if a video track is present').\n"));
 
         timecode_scale = temp;
         timecode_scale_mode = TIMECODE_SCALE_MODE_FIXED;
@@ -1905,155 +1819,152 @@ parse_args(vector<string> args) {
 
     else if ((this_arg == "-a") || (this_arg == "--atracks")) {
       if (no_next_arg)
-        mxerror(_("'%s' lacks the stream number(s).\n"), this_arg.c_str());
+        mxerror(boost::format(Y("'%1%' lacks the stream number(s).\n")) % this_arg);
 
       parse_tracks(next_arg, ti->atracks, this_arg);
       sit++;
 
     } else if ((this_arg == "-d") || (this_arg == "--vtracks")) {
       if (no_next_arg)
-        mxerror(_("'%s' lacks the stream number(s).\n"), this_arg.c_str());
+        mxerror(boost::format(Y("'%1%' lacks the stream number(s).\n")) % this_arg);
 
       parse_tracks(next_arg, ti->vtracks, this_arg);
       sit++;
 
     } else if ((this_arg == "-s") || (this_arg == "--stracks")) {
       if (no_next_arg)
-        mxerror(_("'%s' lacks the stream number(s).\n"), this_arg.c_str());
+        mxerror(boost::format(Y("'%1%' lacks the stream number(s).\n")) % this_arg);
 
       parse_tracks(next_arg, ti->stracks, this_arg);
       sit++;
 
     } else if ((this_arg == "-b") || (this_arg == "--btracks")) {
       if (no_next_arg)
-        mxerror(_("'%s' lacks the stream number(s).\n"), this_arg.c_str());
+        mxerror(boost::format(Y("'%1%' lacks the stream number(s).\n")) % this_arg);
 
       parse_tracks(next_arg, ti->btracks, this_arg);
       sit++;
 
     } else if ((this_arg == "-f") || (this_arg == "--fourcc")) {
       if (no_next_arg)
-        mxerror(_("'%s' lacks the FourCC.\n"), this_arg.c_str());
+        mxerror(boost::format(Y("'%1%' lacks the FourCC.\n")) % this_arg);
 
       parse_fourcc(next_arg, this_arg, *ti);
       sit++;
 
     } else if (this_arg == "--aspect-ratio") {
       if (no_next_arg)
-        mxerror(_("'--aspect-ratio' lacks the aspect ratio.\n"));
+        mxerror(Y("'--aspect-ratio' lacks the aspect ratio.\n"));
 
       parse_aspect_ratio(next_arg, this_arg, false, *ti);
       sit++;
 
     } else if (this_arg == "--aspect-ratio-factor") {
       if (no_next_arg)
-        mxerror(_("'--aspect-ratio-factor' lacks the aspect ratio factor.\n"));
+        mxerror(Y("'--aspect-ratio-factor' lacks the aspect ratio factor.\n"));
 
       parse_aspect_ratio(next_arg, this_arg, true, *ti);
       sit++;
 
     } else if (this_arg == "--display-dimensions") {
       if (no_next_arg)
-        mxerror(_("'--display-dimensions' lacks the dimensions.\n"));
+        mxerror(Y("'--display-dimensions' lacks the dimensions.\n"));
 
       parse_display_dimensions(next_arg, *ti);
       sit++;
 
     } else if (this_arg == "--cropping") {
       if (no_next_arg)
-        mxerror(_("'--cropping' lacks the crop parameters.\n"));
+        mxerror(Y("'--cropping' lacks the crop parameters.\n"));
 
       parse_cropping(next_arg, *ti);
       sit++;
 
     } else if (this_arg == "--stereo-mode") {
       if (no_next_arg)
-        mxerror(_("'--stereo-mode' lacks the crop parameters.\n"));
+        mxerror(Y("'--stereo-mode' lacks the crop parameters.\n"));
 
       parse_stereo_mode(next_arg, *ti);
       sit++;
 
     } else if ((this_arg == "-y") || (this_arg == "--sync")) {
       if (no_next_arg)
-        mxerror(_("'%s' lacks the delay.\n"), this_arg.c_str());
+        mxerror(boost::format(Y("'%1%' lacks the delay.\n")) % this_arg);
 
       parse_sync(next_arg, this_arg, *ti);
       sit++;
 
     } else if (this_arg == "--cues") {
       if (no_next_arg)
-        mxerror(_("'--cues' lacks its argument.\n"));
+        mxerror(Y("'--cues' lacks its argument.\n"));
 
       parse_cues(next_arg, *ti);
       sit++;
 
     } else if (this_arg == "--default-track") {
       if (no_next_arg)
-        mxerror(_("'--default-track' lacks its argument.\n"));
+        mxerror(Y("'--default-track' lacks its argument.\n"));
 
       parse_default_track(next_arg, *ti);
       sit++;
 
     } else if (this_arg == "--language") {
       if (no_next_arg)
-        mxerror(_("'--language' lacks its argument.\n"));
+        mxerror(Y("'--language' lacks its argument.\n"));
 
       parse_language(next_arg, ti->languages, "language", "language", true);
       sit++;
 
     } else if (this_arg == "--default-language") {
       if (no_next_arg)
-        mxerror(_("'--default-language' lacks its argument.\n"));
+        mxerror(Y("'--default-language' lacks its argument.\n"));
 
       i = map_to_iso639_2_code(next_arg.c_str());
       if (-1 == i)
-        mxerror(_("'%s' is neither a valid ISO639-2 nor a valid ISO639-1 code "
-                  "in '--default-language %s'. See 'mkvmerge --list-languages'"
-                  "for a list of all languages and their respective ISO639-2 "
-                  "codes.\n"),
-                next_arg.c_str(), next_arg.c_str());
+        mxerror(boost::format(Y("'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code in '--default-language %1%'. "
+                                "See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n")) % next_arg);
 
       default_language = iso639_languages[i].iso639_2_code;
       sit++;
 
     } else if (this_arg == "--sub-charset") {
       if (no_next_arg)
-        mxerror(_("'--sub-charset' lacks its argument.\n"));
+        mxerror(Y("'--sub-charset' lacks its argument.\n"));
 
       parse_sub_charset(next_arg, *ti);
       sit++;
 
     } else if ((this_arg == "-t") || (this_arg == "--tags")) {
       if (no_next_arg)
-        mxerror(_("'%s' lacks its argument.\n"), this_arg.c_str());
+        mxerror(boost::format(Y("'%1%' lacks its argument.\n")) % this_arg);
 
       parse_tags(next_arg, this_arg, *ti);
       sit++;
 
     } else if (this_arg == "--aac-is-sbr") {
       if (no_next_arg)
-        mxerror(_("'%s' lacks the track ID.\n"), this_arg.c_str());
+        mxerror(boost::format(Y("'%1%' lacks the track ID.\n")) % this_arg);
 
       parse_aac_is_sbr(next_arg, *ti);
       sit++;
 
     } else if (this_arg == "--compression") {
       if (no_next_arg)
-        mxerror(_("'--compression' lacks its argument.\n"));
+        mxerror(Y("'--compression' lacks its argument.\n"));
 
       parse_compression(next_arg, *ti);
       sit++;
 
     } else if (this_arg == "--blockadd") {
       if (no_next_arg)
-        mxerror(_("'--blockadd' lacks its argument.\n"));
+        mxerror(Y("'--blockadd' lacks its argument.\n"));
 
       parse_max_blockadd_id(next_arg, *ti);
       sit++;
 
     } else if (this_arg == "--track-name") {
       if (no_next_arg)
-        mxerror(_("'--track-name' lacks its argument.\n"));
+        mxerror(Y("'--track-name' lacks its argument.\n"));
 
       parse_language(next_arg, ti->track_names, "track-name", "track name",
                      false, true);
@@ -2061,7 +1972,7 @@ parse_args(vector<string> args) {
 
     } else if (this_arg == "--timecodes") {
       if (no_next_arg)
-        mxerror(_("'--timecodes' lacks its argument.\n"));
+        mxerror(Y("'--timecodes' lacks its argument.\n"));
 
       parse_language(next_arg, ti->all_ext_timecodes, "timecodes",
                      "timecodes", false);
@@ -2069,30 +1980,30 @@ parse_args(vector<string> args) {
 
     } else if (this_arg == "--track-order") {
       if (no_next_arg)
-        mxerror(_("'--track-order' lacks its argument.\n"));
+        mxerror(Y("'--track-order' lacks its argument.\n"));
       if (track_order.size() > 0)
-        mxerror(_("'--track-order' may only be given once.\n"));
+        mxerror(Y("'--track-order' may only be given once.\n"));
 
       parse_track_order(next_arg);
       sit++;
 
     } else if (this_arg == "--append-to") {
       if (no_next_arg)
-        mxerror(_("'--append-to' lacks its argument.\n"));
+        mxerror(Y("'--append-to' lacks its argument.\n"));
 
       parse_append_to(next_arg, *ti);
       sit++;
 
     } else if (this_arg == "--default-duration") {
       if (no_next_arg)
-        mxerror(_("'--default-duration' lacks its argument.\n"));
+        mxerror(Y("'--default-duration' lacks its argument.\n"));
 
       parse_default_duration(next_arg, *ti);
       sit++;
 
     } else if (this_arg == "--nalu-size-length") {
       if (no_next_arg)
-        mxerror(_("'--nalu-size-length' lacks its argument.\n"));
+        mxerror(Y("'--nalu-size-length' lacks its argument.\n"));
 
       parse_nalu_size_length(next_arg, *ti);
       sit++;
@@ -2101,56 +2012,44 @@ parse_args(vector<string> args) {
       print_malloc_report = true;
 
     else if (this_arg.length() == 0)
-      mxerror("An empty file name is not valid.\n");
+      mxerror(Y("An empty file name is not valid.\n"));
 
     // The argument is an input file.
     else {
       filelist_t file;
 
       if (outfile == this_arg)
-        mxerror(_("The name of the output file '%s' and of one of the input "
-                  "files is the same. This would cause mkvmerge to overwrite "
-                  "one of your input files. This is most likely not what you "
-                  "want.\n"), outfile.c_str());
+        mxerror(boost::format(Y("The name of the output file '%1%' and of one of the input files is the same. This would cause mkvmerge to overwrite "
+                                "one of your input files. This is most likely not what you want.\n")) % outfile);
 
       if ((ti->atracks.size() != 0) && ti->no_audio)
-        mxerror(_("'-A' and '-a' used on the same source file.\n"));
+        mxerror(Y("'-A' and '-a' used on the same source file.\n"));
 
       if ((ti->vtracks.size() != 0) && ti->no_video)
-        mxerror(_("'-D' and '-d' used on the same source file.\n"));
+        mxerror(Y("'-D' and '-d' used on the same source file.\n"));
 
       if ((ti->stracks.size() != 0) && ti->no_subs)
-        mxerror(_("'-S' and '-s' used on the same source file.\n"));
+        mxerror(Y("'-S' and '-s' used on the same source file.\n"));
 
       if ((ti->btracks.size() != 0) && ti->no_buttons)
-        mxerror(_("'-B' and '-b' used on the same source file.\n"));
+        mxerror(Y("'-B' and '-b' used on the same source file.\n"));
 
       if (this_arg[0] == '+') {
         this_arg.erase(0, 1);
         if (this_arg.size() == 0)
-          mxerror(_("A single '+' is not a valid command line option. If you "
-                    "want to append a file use '+' directly followed by the "
-                    "file name, e.g. '+movie_part_2.avi'."));
+          mxerror(Y("A single '+' is not a valid command line option. If you want to append a file "
+                    "use '+' directly followed by the file name, e.g. '+movie_part_2.avi'."));
         if (files.size() == 0)
-          mxerror("The first file cannot be appended because there are no "
-                  "files to append to.\n");
+          mxerror(Y("The first file cannot be appended because there are no files to append to.\n"));
         file.appending = true;
       }
       file.name = this_arg;
       get_file_type(file);
       ti->fname = this_arg;
 
-      if (FILE_TYPE_MPEG_TS == file.type)
-        mxerror(_("The file '%s' has been detected as a MPEG transport stream. "
-                  "This file format is not supported by mkvmerge.\n"),
-                file.name.c_str());
-
       if (file.type == FILE_TYPE_IS_UNKNOWN)
-        mxerror(_("The file '%s' has unknown type. Please have a look "
-                  "at the supported file types ('mkvmerge --list-types') and "
-                  "contact the author Moritz Bunkus <moritz@bunkus.org> if "
-                  "your file type is supported but not recognized "
-                  "properly.\n"), file.name.c_str());
+        mxerror(boost::format(Y("The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and "
+                                "contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n")) % file.name);
 
       if (file.type != FILE_TYPE_CHAPTERS) {
         file.ti = ti;
@@ -2164,12 +2063,12 @@ parse_args(vector<string> args) {
   }
 
   if (!cluster_helper->splitting() && !no_linking)
-    mxwarn(_("'--link' is only useful in combination with '--split'.\n"));
+    mxwarn(Y("'--link' is only useful in combination with '--split'.\n"));
 
   delete ti;
 
   if (!inputs_found && (0 == files.size()))
-    mxerror("No input files were given. No output will be created.\n");
+    mxerror(Y("No input files were given. No output will be created.\n"));
 }
 
 /** \brief Initialize global variables
@@ -2190,28 +2089,29 @@ init_globals() {
 int
 main(int argc,
      char **argv) {
-  time_t start, end;
-
   init_globals();
   set_usage();
   setup();
 
   parse_args(command_line_utf8(argc, argv));
 
-  start = time(NULL);
+  int64_t start = get_current_time_millis();
 
   create_readers();
 
   if ((packetizers.size() == 0) && (files.size() != 0))
-    mxerror(_("No streams to output were found. Aborting.\n"));
+    mxerror(Y("No streams to output were found. Aborting.\n"));
 
   create_next_output_file();
   main_loop();
   finish_file(true);
 
-  end = time(NULL);
-  mxinfo(_("Muxing took %ld second%s.\n"), (long)(end - start),
-         (end - start) == 1 ? "" : "s");
+  int64_t duration = (get_current_time_millis() - start + 500) / 1000;
+
+  if (1 != duration)
+    mxinfo(boost::format(Y("Muxing took %1% seconds.\n")) % duration);
+  else
+    mxinfo(Y("Muxing took 1 second."));
 
   cleanup();
 

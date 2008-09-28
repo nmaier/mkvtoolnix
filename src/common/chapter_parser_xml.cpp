@@ -54,7 +54,7 @@ end_edition_entry(void *pdata) {
       num++;
   }
   if (num == 0)
-    xmlp_error(CPDATA, "At least one <ChapterAtom> element is needed.");
+    xmlp_error(CPDATA, Y("At least one <ChapterAtom> element is needed."));
   if (euid == NULL) {
     euid = new KaxEditionUID;
     *static_cast<EbmlUInteger *>(euid) =
@@ -69,8 +69,7 @@ end_edition_uid(void *pdata) {
 
   euid = static_cast<KaxEditionUID *>(xmlp_pelt);
   if (!is_unique_uint32(uint32(*euid), UNIQUE_EDITION_IDS)) {
-    mxwarn("Chapter parser: The EditionUID %u is not unique and could "
-           "not be reused. A new one will be created.\n", uint32(*euid));
+    mxwarn(boost::format(Y("Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n")) % uint32(*euid));
     *static_cast<EbmlUInteger *>(euid) =
       create_unique_uint32(UNIQUE_EDITION_IDS);
   }
@@ -82,8 +81,7 @@ end_chapter_uid(void *pdata) {
 
   cuid = static_cast<KaxChapterUID *>(xmlp_pelt);
   if (!is_unique_uint32(uint32(*cuid), UNIQUE_CHAPTER_IDS)) {
-    mxwarn("Chapter parser: The ChapterUID %u is not unique and could "
-           "not be reused. A new one will be created.\n", uint32(*cuid));
+    mxwarn(boost::format(Y("Chapter parser: The ChapterUID %1% is not unique and could not be reused. A new one will be created.\n")) % uint32(*cuid));
     *static_cast<EbmlUInteger *>(cuid) =
       create_unique_uint32(UNIQUE_CHAPTER_IDS);
   }
@@ -95,8 +93,7 @@ end_chapter_atom(void *pdata) {
 
   m = static_cast<EbmlMaster *>(xmlp_pelt);
   if (m->FindFirstElt(KaxChapterTimeStart::ClassInfos, false) == NULL)
-    xmlp_error(CPDATA, "<ChapterAtom> is missing the <ChapterTimeStart> "
-               "child.");
+    xmlp_error(CPDATA, Y("<ChapterAtom> is missing the <ChapterTimeStart> child."));
 
   if (m->FindFirstElt(KaxChapterUID::ClassInfos, false) == NULL) {
     KaxChapterUID *cuid;
@@ -114,8 +111,7 @@ end_chapter_track(void *pdata) {
 
   m = static_cast<EbmlMaster *>(xmlp_pelt);
   if (m->FindFirstElt(KaxChapterTrackNumber::ClassInfos, false) == NULL)
-    xmlp_error(CPDATA, "<ChapterTrack> is missing the <ChapterTrackNumber> "
-               "child.");
+    xmlp_error(CPDATA, Y("<ChapterTrack> is missing the <ChapterTrackNumber> child."));
 }
 
 static void
@@ -124,8 +120,7 @@ end_chapter_display(void *pdata) {
 
   m = static_cast<EbmlMaster *>(xmlp_pelt);
   if (m->FindFirstElt(KaxChapterString::ClassInfos, false) == NULL)
-    xmlp_error(CPDATA, "<ChapterDisplay> is missing the <ChapterString> "
-               "child.");
+    xmlp_error(CPDATA, Y("<ChapterDisplay> is missing the <ChapterString> child."));
   if (m->FindFirstElt(KaxChapterLanguage::ClassInfos, false) == NULL) {
     KaxChapterLanguage *cl;
 
@@ -143,8 +138,7 @@ end_chapter_language(void *pdata) {
   s = static_cast<EbmlString *>(xmlp_pelt);
   index = map_to_iso639_2_code(string(*s).c_str());
   if (-1 == index)
-    xmlp_error(CPDATA, "'%s' is not a valid ISO639-2 language code.",
-               string(*s).c_str());
+    xmlp_error(CPDATA, boost::format(Y("'%1%' is not a valid ISO639-2 language code.")) % string(*s));
   *s = iso639_languages[index].iso639_2_code;
 }
 
@@ -154,8 +148,7 @@ end_chapter_country(void *pdata) {
 
   s = static_cast<EbmlString *>(xmlp_pelt);
   if (!is_valid_cctld(string(*s).c_str()))
-    xmlp_error(CPDATA, "'%s' is not a valid ccTLD country code.",
-               string(*s).c_str());
+    xmlp_error(CPDATA, boost::format(Y("'%1%' is not a valid ccTLD country code.")) % string(*s));
 }
 
 static int
@@ -166,7 +159,7 @@ cet_index(const char *name) {
     if (!strcmp(name, chapter_elements[i].name))
       return i;
 
-  mxerror("cet_index: '%s' not found\n", name);
+  mxerror(boost::format(Y("cet_index: '%1%' not found\n")) % name);
   return -1;
 }
 
@@ -229,13 +222,10 @@ parse_xml_chapters(mm_text_io_c *in,
                                             offset);
   } catch (error_c e) {
     if (!exception_on_error)
-      mxerror("%s", e.get_error().c_str());
+      mxerror(e.get_error());
     error = e.get_error();
     chapters = NULL;
   }
-
-  if ((chapters != NULL) && (verbose > 1))
-    debug_dump_elements(chapters, 0);
 
   if (error.length() > 0)
     throw error_c(error);

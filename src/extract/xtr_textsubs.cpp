@@ -40,9 +40,6 @@ xtr_srt_c::create_file(xtr_base_c *master,
   m_out->write_bom(m_sub_charset);
 }
 
-#define LLD02 "%02" PRId64
-#define LLD03 "%03" PRId64
-
 void
 xtr_srt_c::handle_frame(memory_cptr &frame,
                         KaxBlockAdditions *additions,
@@ -56,7 +53,7 @@ xtr_srt_c::handle_frame(memory_cptr &frame,
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   if (-1 == duration) {
-    mxwarn("Track " LLD ": Subtitle entry number %d is missing its duration. Assuming a duration of 1s.\n", m_tid, m_num_entries + 1);
+    mxwarn(boost::format(Y("Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n")) % m_tid % (m_num_entries + 1));
     duration = 1000000000;
   }
 
@@ -68,13 +65,16 @@ xtr_srt_c::handle_frame(memory_cptr &frame,
   memcpy(text, frame->get(), frame->get_size());
   text[frame->get_size()] = 0;
 
-  string buffer = mxsprintf("%d\n"
-                            LLD02 ":" LLD02 ":" LLD02 "," LLD03 " --> " LLD02 ":" LLD02 ":" LLD02 "," LLD03 "\n"
-                            "%s\n\n",
-                            m_num_entries,
-                            start / 1000 / 60 / 60, (start / 1000 / 60) % 60, (start / 1000) % 60, start % 1000,
-                            end   / 1000 / 60 / 60, (end   / 1000 / 60) % 60, (end   / 1000) % 60, end   % 1000,
-                            from_utf8(m_conv, text).c_str());
+  string buffer =
+    (boost::format("%1%\n"
+                   "%|2$02d|:%|3$02d|:%|4$02d|,%|5$03d| --> %|6$02d|:%|7$02d|:%|8$02d|,%|9$03d|\n"
+                   "%10%\n\n")
+     % m_num_entries
+     % (start / 1000 / 60 / 60) % ((start / 1000 / 60) % 60) % ((start / 1000) % 60) % (start % 1000)
+     % (end   / 1000 / 60 / 60) % ((end   / 1000 / 60) % 60) % ((end   / 1000) % 60) % (end   % 1000)
+     % from_utf8(m_conv, text)
+     ).str();
+
   m_out->puts(buffer);
   delete []text;
 }
@@ -102,7 +102,7 @@ xtr_ssa_c::create_file(xtr_base_c *master,
                        KaxTrackEntry &track) {
   KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
-    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec private \" element and cannot be extracted.\n", m_tid, m_codec_id.c_str());
+    mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private \" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
   xtr_base_c::create_file(master, track);
   m_out->write_bom(m_sub_charset);
@@ -148,7 +148,7 @@ xtr_ssa_c::create_file(xtr_base_c *master,
   // correct field order.
   int pos1 = sconv.find("Format:", sconv.find("[Events]"));
   if (0 > pos1)
-    mxerror("Internal bug: tracks.cpp SSA #1. %s", BUGMSG);
+    mxerror(boost::format(Y("Internal bug: tracks.cpp SSA #1. %1%")) % BUGMSG);
 
   int pos2 = sconv.find("\n", pos1);
   if (0 > pos2)
@@ -177,8 +177,9 @@ xtr_ssa_c::handle_frame(memory_cptr &frame,
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   if (0 > duration) {
-    mxwarn("Subtitle track " LLD " is missing some duration elements. Please check the resulting SSA/ASS file for entries that have the same start and end time.\n",
-           m_tid);
+    mxwarn(boost::format(Y("Subtitle track %1% is missing some duration elements. "
+                           "Please check the resulting SSA/ASS file for entries that have the same start and end time.\n"))
+           % m_tid);
     m_warning_printed = true;
   }
 
@@ -196,8 +197,8 @@ xtr_ssa_c::handle_frame(memory_cptr &frame,
   // 6: MarginV, 7: Effect, 8: Text
   vector<string> fields = split(s, ",", 9);
   if (9 < fields.size()) {
-    mxwarn("Invalid format for a SSA line ('%s') at timecode " FMT_TIMECODE ": Too many fields found (%u instead of 9). This entry will be skipped.\n",
-           s, ARG_TIMECODE_NS(timecode), (unsigned int)fields.size());
+    mxwarn(boost::format(Y("Invalid format for a SSA line ('%1%') at timecode %2%: Too many fields found (%3% instead of 9). This entry will be skipped.\n"))
+           % s % format_timecode(timecode * 1000000, 3) % fields.size());
     return;
   }
 
@@ -207,8 +208,8 @@ xtr_ssa_c::handle_frame(memory_cptr &frame,
   // Convert the ReadOrder entry so that we can re-order the entries later.
   int num;
   if (!parse_int(fields[0], num)) {
-    mxwarn("Invalid format for a SSA line ('%s') at timecode " FMT_TIMECODE ": The first field is not an integer. This entry will be skipped.\n",
-           s, ARG_TIMECODE_NS(timecode));
+    mxwarn(boost::format(Y("Invalid format for a SSA line ('%1%') at timecode %2%: The first field is not an integer. This entry will be skipped.\n"))
+           % s % format_timecode(timecode * 1000000, 3));
     return;
   }
 
@@ -235,10 +236,12 @@ xtr_ssa_c::handle_frame(memory_cptr &frame,
       line += "Marked=0";
 
     else if (format == "start")
-      line += mxsprintf(LLD ":" LLD02 ":" LLD02 "." LLD02, start / 1000 / 60 / 60, (start / 1000 / 60) % 60, (start / 1000) % 60, (start % 1000) / 10);
+      line += (boost::format("%1%:%|2$02d|:%|3$02d|.%|4$02d|")
+               % (start / 1000 / 60 / 60) % ((start / 1000 / 60) % 60) % ((start / 1000) % 60) % ((start % 1000) / 10)).str();
 
     else if (format == "end")
-      line += mxsprintf(LLD ":" LLD02 ":" LLD02 "." LLD02, end   / 1000 / 60 / 60, (end   / 1000 / 60) % 60, (end   / 1000) % 60, (end   % 1000) / 10);
+      line += (boost::format("%1%:%|2$02d|:%|3$02d|.%|4$02d|")
+               % (end   / 1000 / 60 / 60) % ((end   / 1000 / 60) % 60) % ((end   / 1000) % 60) % ((end   % 1000) / 10)).str();
 
     else {
       int k;
@@ -286,7 +289,7 @@ xtr_usf_c::create_file(xtr_base_c *master,
                        KaxTrackEntry &track) {
   KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
-    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec private \" element and cannot be extracted.\n", m_tid, m_codec_id.c_str());
+    mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private \" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
   init_content_decoder(track);
 
@@ -302,14 +305,14 @@ xtr_usf_c::create_file(xtr_base_c *master,
   if (NULL != master) {
     xtr_usf_c *usf_master = dynamic_cast<xtr_usf_c *>(master);
     if (NULL == usf_master)
-      mxerror("Cannot write track " LLD " with the CodecID '%s' to the file '%s' because track " LLD " with the CodecID '%s' is already being "
-              "written to the same file.\n",
-              m_tid, m_codec_id.c_str(), m_file_name.c_str(), master->m_tid, master->m_codec_id.c_str());
+      mxerror(boost::format(Y("Cannot write track %1% with the CodecID '%2%' to the file '%3%' because "
+                              "track %4% with the CodecID '%5%' is already being written to the same file.\n"))
+              % m_tid % m_codec_id % m_file_name % master->m_tid % master->m_codec_id);
 
     if (m_codec_private != usf_master->m_codec_private)
-      mxerror("Cannot write track " LLD " with the CodecID '%s' to the file '%s' because track " LLD " with the CodecID '%s' is already "
-              "being written to the same file, and their CodecPrivate data (the USF styles etc) do not match.\n",
-              m_tid, m_codec_id.c_str(), m_file_name.c_str(), master->m_tid, master->m_codec_id.c_str());
+      mxerror(boost::format(Y("Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already "
+                              "being written to the same file, and their CodecPrivate data (the USF styles etc) do not match.\n"))
+              % m_tid % m_codec_id % m_file_name % master->m_tid % master->m_codec_id);
 
     m_formatter = usf_master->m_formatter;
     m_master    = usf_master;
@@ -331,10 +334,10 @@ xtr_usf_c::create_file(xtr_base_c *master,
       m_formatter->format(codec_private_mod + "\n");
 
     } catch (mm_io_error_c &error) {
-      mxerror("Failed to create the file '%s': %d (%s)\n", m_file_name.c_str(), errno, strerror(errno));
+      mxerror(boost::format(Y("Failed to create the file '%1%': %2% (%3%)\n")) % m_file_name % errno % strerror(errno));
 
     } catch (xml_formatter_error_c &error) {
-      mxerror("Failed to parse the USF codec private data for track " LLD ": " "%s\n", m_tid, error.get_error().c_str());
+      mxerror(boost::format(Y("Failed to parse the USF codec private data for track %1%: %2%\n")) % m_tid % error.get_error());
     }
   }
 }
@@ -359,20 +362,21 @@ xtr_usf_c::handle_frame(memory_cptr &frame,
 void
 xtr_usf_c::finish_track() {
   try {
-    m_formatter->format(mxsprintf("<subtitles>\n<language code=\"%s\"/>\n", m_language.c_str()));
+    m_formatter->format((boost::format("<subtitles>\n<language code=\"%1%\"/>\n") % m_language).str());
 
     vector<usf_entry_t>::const_iterator entry;
     mxforeach(entry, m_entries) {
       string text = entry->m_text;
       strip(text, true);
-      m_formatter->format(mxsprintf("<subtitle start=\"" FMT_TIMECODE "\" stop=\"" FMT_TIMECODE "\">", ARG_TIMECODE_NS(entry->m_start), ARG_TIMECODE_NS(entry->m_end)));
+      m_formatter->format((boost::format("<subtitle start=\"%1%\" stop=\"%2%\">")
+                           % format_timecode(entry->m_start * 1000000, 3) % format_timecode(entry->m_end * 1000000, 3)).str());
       m_formatter->format_fixed(text);
       m_formatter->format("</subtitle>\n");
     }
     m_formatter->format("</subtitles>\n");
 
   } catch (xml_formatter_error_c &error) {
-    mxerror("Failed to parse an USF subtitle entry for track " LLD ": %s\n", m_tid, error.get_error().c_str());
+    mxerror(boost::format(Y("Failed to parse an USF subtitle entry for track %1%: %2%\n")) % m_tid % error.get_error());
   }
 }
 
@@ -381,9 +385,9 @@ xtr_usf_c::finish_file() {
   try {
     if (NULL == m_master) {
       m_formatter->format("</USFSubtitles>");
-      m_out->printf("\n");
+      m_out->puts("\n");
     }
   } catch (xml_formatter_error_c &error) {
-    mxerror("Failed to parse the USF end tag for track " LLD ": %s\n", m_tid, error.get_error().c_str());
+    mxerror(boost::format(Y("Failed to parse the USF end tag for track %1%: %2%\n")) % m_tid % error.get_error());
   }
 }

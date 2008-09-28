@@ -38,45 +38,6 @@
 
 using namespace libebml;
 
-#if defined(DEBUG)
-void
-__debug_dump_elements(EbmlElement *e,
-                      int level) {
-  int i;
-  EbmlMaster *m;
-  EbmlString *s;
-  EbmlUnicodeString *us;
-  EbmlSInteger *si;
-  EbmlUInteger *ui;
-  EbmlFloat *f;
-
-  for (i = 0; i < level; i++)
-    mxprint(stdout, " ");
-  if (e == NULL) {
-    mxprint(stdout, "NULL!\n");
-    return;
-  }
-  mxprint(stdout, "%s", e->Generic().DebugName);
-
-  if ((m = dynamic_cast<EbmlMaster *>(e)) != NULL) {
-    mxprint(stdout, " (size: %u)\n", (unsigned int)m->ListSize());
-    for (i = 0; i < m->ListSize(); i++)
-      debug_dump_elements((*m)[i], level + 1);
-  } else if ((s = dynamic_cast<EbmlString *>(e)) != NULL)
-    mxprint(stdout, " (%s)\n", string(*s).c_str());
-  else if ((us = dynamic_cast<EbmlUnicodeString *>(e)) != NULL)
-    mxprint(stdout, " (%s)\n", UTFstring_to_cstrutf8(UTFstring(*us)).c_str());
-  else if ((si = dynamic_cast<EbmlSInteger *>(e)) != NULL)
-    mxprint(stdout, " (" LLD ")\n", int64(*si));
-  else if ((ui = dynamic_cast<EbmlUInteger *>(e)) != NULL)
-    mxprint(stdout, " (" LLU ")\n", uint64(*ui));
-  else if ((f = dynamic_cast<EbmlFloat *>(e)) != NULL)
-    mxprint(stdout, " (%f)\n", double(*f));
-  else
-    mxprint(stdout, "\n");
-}
-#endif
-
 /*
    UTFstring <-> C string conversion
 */
@@ -144,8 +105,7 @@ wchar_to_utf8_byte_length(uint32_t w) {
   else if (w < 0x80000000)
     return 6;
   else
-    die("UTFstring_to_cstrutf8: Invalid wide character. Please contact "
-        "moritz@bunkus.org if you think that this is not true.");
+    mxerror(Y("UTFstring_to_cstrutf8: Invalid wide character. Please contact moritz@bunkus.org if you think that this is not true."));
 
   return 0;
 }
@@ -161,9 +121,7 @@ cstrutf8_to_UTFstring(const string &c) {
   for (src = 0; src < slen; dlen++) {
     clen = utf8_byte_length(c[src]);
     if (clen < 0)
-      die("cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please "
-          "contact moritz@bunkus.org and request that he implements a better "
-          "UTF-8 parser.");
+      mxerror(Y("cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."));
     src += clen;
   }
 
@@ -172,9 +130,7 @@ cstrutf8_to_UTFstring(const string &c) {
   for (src = 0, dst = 0; src < slen; dst++) {
     clen = utf8_byte_length(c[src]);
     if ((src + clen) > slen)
-      die("cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please "
-          "contact moritz@bunkus.org and request that he implements a better "
-          "UTF-8 parser.");
+      mxerror(Y("cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."));
 
     if (clen == 1)
       new_string[dst] = c[src];

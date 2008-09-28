@@ -29,13 +29,6 @@ using namespace std;
 using namespace libebml;
 using namespace libmatroska;
 
-#if defined(DEBUG)
-void MTX_DLL_API __debug_dump_elements(EbmlElement *e, int level);
-#define debug_dump_elements(e, l) __debug_dump_elements(e, l)
-#else
-#define debug_dump_elements(e, l) ;
-#endif
-
 #define can_be_cast(c, e) (dynamic_cast<c *>(e) != NULL)
 
 bool MTX_DLL_API is_valid_utf8_string(const string &c);

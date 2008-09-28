@@ -69,10 +69,7 @@ aac_packetizer_c::get_aac_packet(unsigned long *header,
 
   bytes_skipped += pos;
   if (verbose && (0 < bytes_skipped))
-    mxwarn(FMT_TID "skipping " LLD " bytes (no valid AAC header "
-           "found). This might make audio/video go out of sync, but this "
-           "stream is damaged.\n", ti.fname.c_str(), (int64_t)0,
-           bytes_skipped);
+    mxwarn_tid(ti.fname, ti.id, boost::format(Y("Skipping %1% bytes (no valid AAC header found). This might cause audio/video desynchronisation.\n")) % bytes_skipped);
   bytes_skipped = 0;
 
   if ((aacheader->header_bit_size % 8) == 0)
@@ -104,6 +101,7 @@ void
 aac_packetizer_c::set_headers() {
   if (!hack_engaged(ENGAGE_OLD_AAC_CODECID))
     set_codec_id(MKV_A_AAC);
+
   else if (id == AAC_ID_MPEG4) {
     if (profile == AAC_PROFILE_MAIN)
       set_codec_id(MKV_A_AAC_4MAIN);
@@ -116,7 +114,8 @@ aac_packetizer_c::set_headers() {
     else if (profile == AAC_PROFILE_SBR)
       set_codec_id(MKV_A_AAC_4SBR);
     else
-      die("aac_packetizer: Unknown AAC MPEG-4 object type %d.", profile);
+      mxerror_tid(ti.fname, ti.id, boost::format(Y("Unknown AAC MPEG-4 object type %1%.")) % profile);
+
   } else {
     if (profile == AAC_PROFILE_MAIN)
       set_codec_id(MKV_A_AAC_2MAIN);
@@ -127,8 +126,9 @@ aac_packetizer_c::set_headers() {
     else if (profile == AAC_PROFILE_SBR)
       set_codec_id(MKV_A_AAC_2SBR);
     else
-      die("aac_packetizer: Unknown AAC MPEG-2 profile %d.", profile);
+      mxerror_tid(ti.fname, ti.id, boost::format(Y("Unknown AAC MPEG-2 profile %1%.")) % profile);
   }
+
   set_audio_sampling_freq((float)samples_per_sec);
   set_audio_channels(channels);
 
@@ -206,8 +206,7 @@ aac_packetizer_c::can_connect_to(generic_packetizer_c *src,
   connect_check_a_samplerate(samples_per_sec, asrc->samples_per_sec);
   connect_check_a_channels(channels, asrc->channels);
   if (profile != asrc->profile) {
-    error_message = mxsprintf("The AAC profiles are different: %d and %d",
-                              (int)profile, (int)asrc->profile);
+    error_message = (boost::format(Y("The AAC profiles are different: %1% and %2%")) % profile % asrc->profile).str();
     return CAN_CONNECT_NO_PARAMETERS;
   }
   return CAN_CONNECT_YES;

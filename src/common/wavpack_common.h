@@ -18,7 +18,7 @@
 #define __WAVPACK_COMMON_H
 
 #include "os.h"
-#include "pr_generic.h"
+#include "mm_io.h"
 
 /* All integers are little endian. */
 

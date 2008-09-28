@@ -74,8 +74,7 @@ vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *_reader,
   vorbis_comment_init(&vc);
   for (i = 0; i < 3; i++)
     if (vorbis_synthesis_headerin(&vi, &vc, &ogg_headers[i]) < 0)
-      throw error_c("Error: vorbis_packetizer: Could not extract the "
-                    "stream's parameters from the first packets.\n");
+      throw error_c(Y("Error: vorbis_packetizer: Could not extract the stream's parameters from the first packets.\n"));
 
   set_track_type(track_audio);
   if (use_durations)
@@ -135,8 +134,9 @@ vorbis_packetizer_c::process(packet_cptr packet) {
 
   last_samples_sum += samples_here;
 
-  mxverb(2, "Vorbis: samples_here at " LLD " (orig " LLD " expected " LLD "): " LLD " (last_samples_sum: " LLD ")\n",
-         chosen_timecode, packet->timecode, expected_timecode, samples_here, last_samples_sum);
+  mxverb(2,
+         boost::format(Y("Vorbis: samples_here at %1% (orig %2% expected %3%): %4% (last_samples_sum: %5%)\n"))
+         % chosen_timecode % packet->timecode % expected_timecode % samples_here % last_samples_sum);
   packet->timecode = chosen_timecode;
   add_packet(packet);
 
@@ -156,8 +156,7 @@ vorbis_packetizer_c::can_connect_to(generic_packetizer_c *src,
   if ((headers[2]->get_size() != vsrc->headers[2]->get_size()) ||
       memcmp(headers[2]->get(), vsrc->headers[2]->get(),
              headers[2]->get_size())) {
-    error_message = "The Vorbis codebooks are different; such tracks cannot "
-      "be concatenated without reencoding";
+    error_message = Y("The Vorbis codebooks are different; such tracks cannot be concatenated without reencoding");
     return CAN_CONNECT_NO_FORMAT;
   }
   return CAN_CONNECT_YES;

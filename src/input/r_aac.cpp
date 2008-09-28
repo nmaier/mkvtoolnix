@@ -92,17 +92,17 @@ aac_reader_c::aac_reader_c(track_info_c &_ti)
     chunk             = (unsigned char *)safemalloc(INITCHUNKSIZE);
 
     if (io->read(chunk, init_read_len) != init_read_len)
-      throw error_c(mxsprintf("aac_reader: Could not read %d bytes.", init_read_len));
+      throw error_c(boost::format(Y("aac_reader: Could not read %1% bytes.")) % init_read_len);
 
     io->setFilePointer(tag_size_start, seek_beginning);
 
     if (parse_aac_adif_header(chunk, init_read_len, &aacheader)) {
-      throw error_c("aac_reader: ADIF header files are not supported.");
+      throw error_c(Y("aac_reader: ADIF header files are not supported."));
       adif = 1;
 
     } else {
       if (find_aac_header(chunk, init_read_len, &aacheader, emphasis_present) != 0)
-        throw error_c(mxsprintf("aac_reader: No valid AAC packet found in the first %d bytes.\n", init_read_len));
+        throw error_c(boost::format(Y("aac_reader: No valid AAC packet found in the first %1% bytes.\n")) % init_read_len);
       guess_adts_version();
       adif = 0;
     }
@@ -127,11 +127,11 @@ aac_reader_c::aac_reader_c(track_info_c &_ti)
       sbr_status_set = true;
 
   } catch (...) {
-    throw error_c("aac_reader: Could not open the file.");
+    throw error_c(Y("aac_reader: Could not open the file."));
   }
 
   if (verbose)
-    mxinfo(FMT_FN "Using the AAC demultiplexer.\n", ti.fname.c_str());
+    mxinfo_fn(ti.fname, Y("Using the AAC demultiplexer.\n"));
 }
 
 aac_reader_c::~aac_reader_c() {
@@ -146,11 +146,11 @@ aac_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
   if (!sbr_status_set)
-    mxwarn("AAC files may contain HE-AAC / AAC+ / SBR AAC audio. "
-           "This can NOT be detected automatically. Therefore you have to "
-           "specifiy '--aac-is-sbr 0' manually for this input file if the "
-           "file actually contains SBR AAC. The file will be muxed in the "
-           "WRONG way otherwise. Also read mkvmerge's documentation.\n");
+    mxwarn(Y("AAC files may contain HE-AAC / AAC+ / SBR AAC audio. "
+             "This can NOT be detected automatically. Therefore you have to "
+             "specifiy '--aac-is-sbr 0' manually for this input file if the "
+             "file actually contains SBR AAC. The file will be muxed in the "
+             "WRONG way otherwise. Also read mkvmerge's documentation.\n"));
 
   aacpacketizer = new aac_packetizer_c(this, aacheader.id, aacheader.profile, aacheader.sample_rate, aacheader.channels, ti, emphasis_present);
   add_packetizer(aacpacketizer);
@@ -158,7 +158,7 @@ aac_reader_c::create_packetizer(int64_t) {
   if (AAC_PROFILE_SBR == aacheader.profile)
     aacpacketizer->set_audio_output_sampling_freq(aacheader.sample_rate * 2);
 
-  mxinfo(FMT_TID "Using the AAC output module.\n", ti.fname.c_str(), (int64_t)0);
+  mxinfo_tid(ti.fname, 0, Y("Using the AAC output module.\n"));
 }
 
 // Try to guess if the MPEG4 header contains the emphasis field (2 bits)

@@ -88,8 +88,7 @@ mpeg4::p2::extract_size_internal(const unsigned char *buffer,
   if (!find_vol_header(bits))
     return false;
 
-  mxverb(2, "mpeg4 size: found VOL header at %u\n",
-         bits.get_bit_position() / 8);
+  mxverb(2, boost::format(Y("mpeg4 size: found VOL header at %1%\n")) % (bits.get_bit_position() / 8));
   bits.skip_bits(32);
 
   // VOL header
@@ -187,8 +186,7 @@ mpeg4::p2::extract_par_internal(const unsigned char *buffer,
   if (!find_vol_header(bits))
     return false;
 
-  mxverb(2, "mpeg4 AR: found VOL header at %u\n",
-         bits.get_bit_position() / 8);
+  mxverb(2, boost::format(Y("mpeg4 AR: found VOL header at %1%\n")) % (bits.get_bit_position() / 8));
   bits.skip_bits(32);
 
   // VOL header
@@ -200,7 +198,7 @@ mpeg4::p2::extract_par_internal(const unsigned char *buffer,
   }
 
   aspect_ratio_info = bits.get_bits(4);
-  mxverb(2, "mpeg4 AR: aspect_ratio_info: %u\n", aspect_ratio_info);
+  mxverb(2, boost::format(Y("mpeg4 AR: aspect_ratio_info: %1%\n")) % aspect_ratio_info);
   if (aspect_ratio_info == 15) { // ASPECT_EXTENDED
     num = bits.get_bits(8);
     den = bits.get_bits(8);
@@ -208,7 +206,7 @@ mpeg4::p2::extract_par_internal(const unsigned char *buffer,
     num = ar_nums[aspect_ratio_info];
     den = ar_dens[aspect_ratio_info];
   }
-  mxverb(2, "mpeg4 AR: %u den: %u\n", num, den);
+  mxverb(2, boost::format(Y("mpeg4 AR: %1% den: %2%\n")) % num % den);
 
   if ((num != 0) && (den != 0) && ((num != 1) || (den != 1)) &&
       (((float)num / (float)den) != 1.0)) {
@@ -271,7 +269,7 @@ mpeg4::p2::find_frame_types(const unsigned char *buffer,
   int i;
 
   frames.clear();
-  mxverb(3, "\nmpeg4_frames: start search in %d bytes\n", buffer_size);
+  mxverb(3, boost::format("\nmpeg4_frames: start search in %1% bytes\n") % buffer_size);
 
   if (4 > buffer_size)
     return;
@@ -288,8 +286,7 @@ mpeg4::p2::find_frame_types(const unsigned char *buffer,
         continue;
       }
 
-      mxverb(3, "mpeg4_frames:   found start code at " LLD ": 0x%02x\n",
-             bytes.getFilePointer() - 4, marker & 0xff);
+      mxverb(3, boost::format("mpeg4_frames:   found start code at %1%: 0x%|2$02x|\n") % (bytes.getFilePointer() - 4) % (marker & 0xff));
       if (marker == MPEGVIDEO_VOP_START_CODE) {
         if (frame_found) {
           frame.size = bytes.getFilePointer() - 4 - frame.pos;
@@ -315,11 +312,9 @@ mpeg4::p2::find_frame_types(const unsigned char *buffer,
   }
 
   if (2 <= verbose) {
-    mxverb(2, "mpeg4_frames:   summary: found %u frames ",
-           (unsigned int)frames.size());
+    mxverb(2, boost::format(Y("mpeg4_frames:   summary: found %1% frames ")) % frames.size());
     for (fit = frames.begin(); fit < frames.end(); fit++)
-      mxverb(2, "'%c' (%d at %d) ", FRAME_TYPE_TO_CHAR(fit->type), fit->size,
-             fit->pos);
+      mxverb(2, boost::format(Y("'%1%' (%2% at %3%) ")) % FRAME_TYPE_TO_CHAR(fit->type) %  fit->size % fit->pos);
     mxverb(2, "\n");
   }
 
@@ -360,7 +355,7 @@ mpeg4::p2::parse_config_data(const unsigned char *buffer,
   if (buffer_size < 5)
     return NULL;
 
-  mxverb(3, "\nmpeg4_config_data: start search in %d bytes\n", buffer_size);
+  mxverb(3, boost::format("\nmpeg4_config_data: start search in %1% bytes\n") % buffer_size);
 
   marker = get_uint32_be(buffer) >> 8;
   p = buffer + 3;
@@ -374,8 +369,7 @@ mpeg4::p2::parse_config_data(const unsigned char *buffer,
     if (!mpeg_is_start_code(marker))
       continue;
 
-    mxverb(3, "mpeg4_config_data:   found start code at %u: 0x%02x\n",
-           (unsigned int)(p - buffer - 4), marker & 0xff);
+    mxverb(3, boost::format("mpeg4_config_data:   found start code at %1%: 0x%|2$02x|\n") % (unsigned int)(p - buffer - 4) % (marker & 0xff));
     if (MPEGVIDEO_VOS_START_CODE == marker)
       vos_offset = p - 4 - buffer;
     else if ((MPEGVIDEO_VOP_START_CODE == marker) ||
@@ -408,7 +402,7 @@ mpeg4::p2::parse_config_data(const unsigned char *buffer,
            size - vos_offset - 5);
   }
 
-  mxverb(3, "mpeg4_config_data:   found GOOD config with size %u\n", size);
+  mxverb(3, boost::format("mpeg4_config_data:   found GOOD config with size %1%\n") % size);
   return mem;
 }
 
@@ -763,7 +757,7 @@ mpeg4::p10::extract_par(uint8_t *&buffer,
     num_sps = avcc.read_uint8();
     new_avcc.write_uint8(num_sps);
     num_sps &= 0x1f;
-    mxverb(4, "mpeg4_p10_extract_par: num_sps %d\n", num_sps);
+    mxverb(4, boost::format("mpeg4_p10_extract_par: num_sps %1%\n") % num_sps);
 
     for (sps = 0; sps < num_sps; sps++) {
       bool abort;
@@ -835,7 +829,7 @@ mpeg1_2::extract_fps_idx(const unsigned char *buffer,
   uint32_t marker;
   int idx;
 
-  mxverb(3, "mpeg_video_fps: start search in %d bytes\n", buffer_size);
+  mxverb(3, boost::format("mpeg_video_fps: start search in %1% bytes\n") % buffer_size);
   if (buffer_size < 8) {
     mxverb(3, "mpeg_video_fps: sequence header too small\n");
     return -1;
@@ -852,8 +846,7 @@ mpeg1_2::extract_fps_idx(const unsigned char *buffer,
     return -1;
   }
 
-  mxverb(3, "mpeg_video_fps: found sequence header start code at %d\n",
-         idx - 4);
+  mxverb(3, boost::format("mpeg_video_fps: found sequence header start code at %1%\n") % (idx - 4));
   idx += 3;                     // width and height
   if (idx >= buffer_size) {
     mxverb(3, "mpeg_video_fps: sequence header too small\n");
@@ -880,7 +873,7 @@ mpeg1_2::extract_ar(const unsigned char *buffer,
   uint32_t marker;
   int idx;
 
-  mxverb(3, "mpeg_video_ar: start search in %d bytes\n", buffer_size);
+  mxverb(3, boost::format("mpeg_video_ar: start search in %1% bytes\n") % buffer_size);
   if (buffer_size < 8) {
     mxverb(3, "mpeg_video_ar: sequence header too small\n");
     return -1;
@@ -897,8 +890,7 @@ mpeg1_2::extract_ar(const unsigned char *buffer,
     return -1;
   }
 
-  mxverb(3, "mpeg_video_ar: found sequence header start code at %d\n",
-         idx - 4);
+  mxverb(3, boost::format("mpeg_video_ar: found sequence header start code at %1%\n") % (idx - 4));
   idx += 3;                     // width and height
   if (idx >= buffer_size) {
     mxverb(3, "mpeg_video_ar: sequence header too small\n");
@@ -1183,27 +1175,17 @@ mpeg4::p10::avc_es_parser_c::flush_unhandled_nalus() {
   m_unhandled_nalus.clear();
 }
 
-// static int klaus = 0;
-
 void
 mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
   slice_info_t si;
-
-//   if (klaus >= 161)
-//     mxinfo("slice size %d\n", nalu->get_size());
 
   if (!m_avcc_ready) {
     m_unhandled_nalus.push_back(nalu);
     return;
   }
 
-  if (!parse_slice(nalu, si)) {
-//     mxwarn("Slice parser error %d.\n", klaus);
-//     ++klaus;
+  if (!parse_slice(nalu, si))
     return;
-  }
-
-//   mxinfo("frame_num %u: ", si.frame_num);
 
   if (m_have_incomplete_frame &&
       flush_decision(si, m_incomplete_frame.m_si))
@@ -1219,7 +1201,6 @@ mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
     return;
   }
 
-//   mxinfo("SEI type %d\n", (int)m_incomplete_frame.m_si.type);
   m_incomplete_frame.m_si = si;
   m_incomplete_frame.m_keyframe =
     m_recovery_point_valid ||
@@ -1239,11 +1220,9 @@ mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
   m_incomplete_frame.m_data = create_nalu_with_size(nalu, true);
   m_have_incomplete_frame = true;
 
-  if (1) { //m_first_keyframe_found) {
-    if (m_generate_timecodes)
-      add_timecode(m_frame_number * m_default_duration);
-    ++m_frame_number;
-  }
+  if (m_generate_timecodes)
+    add_timecode(m_frame_number * m_default_duration);
+  ++m_frame_number;
 }
 
 void
@@ -1266,7 +1245,9 @@ mpeg4::p10::avc_es_parser_c::handle_sps_nalu(memory_cptr &nalu) {
     m_avcc_changed = true;
 
   } else if (m_sps_info_list[i].checksum != sps_info.checksum) {
-    mxverb(2, "mpeg4::p10: SPS ID %04x changed; checksum old %04x new %04x\n", sps_info.id, m_sps_info_list[i].checksum, sps_info.checksum);
+    mxverb(2,
+           boost::format(Y("mpeg4::p10: SPS ID %|1$04x| changed; checksum old %|2$04x| new %|3$04x|\n"))
+           % sps_info.id % m_sps_info_list[i].checksum % sps_info.checksum);
 
     m_sps_info_list[i] = sps_info;
     m_sps_list[i]      = nalu;
@@ -1296,7 +1277,9 @@ mpeg4::p10::avc_es_parser_c::handle_pps_nalu(memory_cptr &nalu) {
     m_avcc_changed = true;
 
   } else if (m_pps_info_list[i].checksum != pps_info.checksum) {
-    mxverb(2, "mpeg4::p10: PPS ID %04x changed; checksum old %04x new %04x\n", pps_info.id, m_pps_info_list[i].checksum, pps_info.checksum);
+    mxverb(2,
+           boost::format(Y("mpeg4::p10: PPS ID %|1$04x| changed; checksum old %|2$04x| new %|3$04x|\n"))
+           % pps_info.id % m_pps_info_list[i].checksum % pps_info.checksum);
 
     m_pps_info_list[i] = pps_info;
     m_pps_list[i]      = nalu;
@@ -1341,30 +1324,10 @@ mpeg4::p10::avc_es_parser_c::handle_sei_nalu(memory_cptr &nalu) {
 
 void
 mpeg4::p10::avc_es_parser_c::handle_nalu(memory_cptr nalu) {
-  int type;
-//   int i;
-
-//   mxinfo("NALU! size = %d; ", nalu->get_size());
-
-//   for (i = 0; (8 > i) && (nalu->get_size() > i); ++i)
-//     mxinfo("%02x ", *(nalu->get() + i));
-
-//   if (6 <= nalu->get_size()) {
-//     mxinfo(" ... ");
-//     for (i = nalu->get_size() - 6; nalu->get_size() > i; ++i)
-//       mxinfo("%02x ", *(nalu->get() + i));
-//   }
-
-//   if (1 <= nalu->get_size()) {
-//     type = *(nalu->get()) & 0x1f;
-//     mxinfo("type %d", type);
-//   }
-//   mxinfo("\n");
-
   if (1 > nalu->get_size())
     return;
 
-  type = *(nalu->get()) & 0x1f;
+  int type = *(nalu->get()) & 0x1f;
 
   switch (type) {
     case NALU_TYPE_SEQ_PARAM:
@@ -1434,7 +1397,7 @@ mpeg4::p10::avc_es_parser_c::parse_slice(memory_cptr &buffer,
     si.type = geread(r);        // slice_type
 
     if (9 < si.type) {
-      mxverb(3, "slice parser error: 9 < si.type: %u\n", si.type);
+      mxverb(3, boost::format("slice parser error: 9 < si.type: %1%\n") % si.type);
       return false;
     }
 
@@ -1444,7 +1407,7 @@ mpeg4::p10::avc_es_parser_c::parse_slice(memory_cptr &buffer,
       if (m_pps_info_list[pps_idx].id == si.pps_id)
         break;
     if (m_pps_info_list.size() == pps_idx) {
-      mxverb(3, "slice parser error: PPS not found: %u\n", si.pps_id);
+      mxverb(3, boost::format("slice parser error: PPS not found: %1%\n") % si.pps_id);
       return false;
     }
 
@@ -1496,8 +1459,6 @@ mpeg4::p10::avc_es_parser_c::default_cleanup() {
   deque<avc_frame_t>::iterator i(m_frames.begin());
   deque<int64_t>::iterator t(m_timecodes.begin());
 
-//   mxinfo("default cleanup\n");
-
   int64_t r = i->m_start = i->m_end = *t;
 
   ++i;
@@ -1525,12 +1486,6 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
   deque<int64_t>::iterator t(m_timecodes.begin());
   unsigned j;
 
-//   mxinfo("cleanup! dumping timecodes:\n");
-//   mxforeach(t, m_timecodes) {
-//     mxinfo("  " FMT_TIMECODEN "\n", ARG_TIMECODEN(*t));
-//   }
-//   t = m_timecodes.begin();
-
   if (m_frames.empty())
     return;
 
@@ -1539,8 +1494,7 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
   i->m_keyframe = true;
 
   if (m_timecodes.size() < m_frames.size()) {
-    mxverb(4, "mpeg4::p10::avc_es_parser_c::cleanup() numfr %d sti %d\n",
-           (int)m_frames.size(), (int)m_timecodes.size());
+    mxverb(4, boost::format("mpeg4::p10::avc_es_parser_c::cleanup() numfr %1% sti %2%\n") % m_frames.size() % m_timecodes.size());
     m_timecodes.erase(m_timecodes.begin(),
                       m_timecodes.begin() + m_frames.size());
     m_frames.clear();
@@ -1549,8 +1503,7 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
 
   slice_info_t &idr = i->m_si;
   sps_info_t &sps = m_sps_info_list[idr.sps];
-  if (//(NALU_TYPE_IDR_SLICE != idr.nalu_type) ||
-      ((AVC_SLICE_TYPE_I != idr.type) &&
+  if (((AVC_SLICE_TYPE_I != idr.type) &&
        (AVC_SLICE_TYPE_SI != idr.type) &&
        (AVC_SLICE_TYPE2_I != idr.type) &&
        (AVC_SLICE_TYPE2_SI != idr.type)) ||
@@ -1560,13 +1513,9 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
     return;
   }
 
-//   ++i;
-
   vector<poc_t> poc;
 
   if (0 == sps.pic_order_cnt_type) {
-//     poc.push_back(poc_t(0, 0));
-//     j = 1;
     j = 0;
 
     int prev_pic_order_cnt_msb = 0, prev_pic_order_cnt_lsb = 0;
@@ -1576,7 +1525,6 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
       slice_info_t &si = i->m_si;
 
       if (si.sps != idr.sps) {
-//         mxinfo("WUFF!!!!!!!\n");
         default_cleanup();
         return;
       }
@@ -1611,12 +1559,6 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
     default_cleanup();
     return;
   }
-
-//   mxinfo("normal cleanup\n");
-
-//   mxinfo("dumping POC\n");
-//   for (j = 0; poc.size() > j; ++j)
-//     mxinfo("  %d: poc %d dec %d\n", j, poc[j].poc, poc[j].dec);
 
   sort(poc.begin(), poc.end(), compare_poc_by_poc);
 
@@ -1727,14 +1669,12 @@ mpeg4::p10::avc_es_parser_c::get_avcc() {
 
 void
 mpeg4::p10::avc_es_parser_c::dump_info() {
-  mxinfo("Dumping m_frames_out:\n");
+  mxinfo(Y("Dumping m_frames_out:\n"));
   deque<avc_frame_t>::iterator i;
 
   mxforeach(i, m_frames_out) {
-    mxinfo("size %d key %d start " FMT_TIMECODEN " end " FMT_TIMECODEN
-           " ref1 " FMT_TIMECODEN " adler32 0x%08x\n",
-           i->m_data->get_size(), i->m_keyframe, ARG_TIMECODEN(i->m_start),
-           ARG_TIMECODEN(i->m_end), ARG_TIMECODEN(i->m_ref1),
-           calc_adler32(i->m_data->get(), i->m_data->get_size()));
+    mxinfo(boost::format(Y("size %1% key %2% start %3% end %4% ref1 %5% adler32 0x%|6$08x|\n"))
+           % i->m_data->get_size() % i->m_keyframe % format_timecode(i->m_start) % format_timecode(i->m_end) % format_timecode(i->m_ref1)
+           % calc_adler32(i->m_data->get(), i->m_data->get_size()));
   }
 }

@@ -32,9 +32,6 @@ subtitles_c::process(generic_packetizer_c *p) {
   current++;
 }
 
-#undef PFX
-#define PFX "spu_extract_duration: "
-
 int64_t
 spu_extract_duration(unsigned char *data,
                      int buf_size,
@@ -54,15 +51,14 @@ spu_extract_duration(unsigned char *data,
     date = get_uint16_be(data + start_off) * 1024;
     next_off = get_uint16_be(data + start_off + 2);
     if (next_off < start_off) {
-      mxwarn(PFX "Encountered broken SPU packet (next_off < start_off) at "
-             "timecode " FMT_TIMECODE ". This packet might be displayed "
-             "incorrectly or not at all.\n", ARG_TIMECODE_NS(timecode));
+      mxwarn(boost::format(Y("spu_extraction_duration: Encountered broken SPU packet (next_off < start_off) at timecode %1%. "
+                             "This packet might be displayed incorrectly or not at all.\n")) % format_timecode(timecode, 3));
       return -1;
     }
-    mxverb(4, PFX "date = %u\n", date);
+    mxverb(4, boost::format("spu_extraction_duration: date = %1%\n") % date);
     off = start_off + 4;
     for (type = data[off++]; type != 0xff; type = data[off++]) {
-      mxverb(4, PFX "cmd = %d ", type);
+      mxverb(4, boost::format("spu_extraction_duration: cmd = %1% ") % type);
       unknown = false;
       switch(type) {
         case 0x00:
@@ -75,7 +71,7 @@ spu_extract_duration(unsigned char *data,
           break;
         case 0x02:
           /* Stop display */
-          mxverb(4, "stop display: %u", date / 90);
+          mxverb(4, boost::format("stop display: %1%") % (date / 90));
           return (int64_t)date * 1000000 / 90;
           break;
         case 0x03:
@@ -101,8 +97,7 @@ spu_extract_duration(unsigned char *data,
           mxverb(4, "done");
           return duration;
         default:
-          mxverb(4, "unknown (0x%02x), skipping %d bytes.", type,
-                 next_off - off);
+          mxverb(4, boost::format("unknown (0x%|1$02x|), skipping %2% bytes.") % type % (next_off - off));
           unknown = true;
       }
       mxverb(4, "\n");

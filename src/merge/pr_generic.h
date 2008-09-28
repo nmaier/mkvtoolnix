@@ -310,52 +310,42 @@ enum connection_result_e {
 
 #define connect_check_a_samplerate(a, b) \
   if ((a) != (b)) { \
-    error_message = mxsprintf("The sample rate of the two audio tracks is " \
-                              "different: %d and %d", (int)(a), (int)(b)); \
+    error_message = (boost::format(Y("The sample rate of the two audio tracks is different: %1% and %2%")) % (a) % (b)).str(); \
     return CAN_CONNECT_NO_PARAMETERS; \
   }
 #define connect_check_a_channels(a, b) \
   if ((a) != (b)) { \
-    error_message = mxsprintf("The number of channels of the two audio " \
-                              "tracks is different: %d and %d", (int)(a), \
-                              (int)(b)); \
+    error_message = (boost::format(Y("The number of channels of the two audio tracks is different: %1% and %2%")) % (a) % (b)).str(); \
     return CAN_CONNECT_NO_PARAMETERS; \
   }
 #define connect_check_a_bitdepth(a, b) \
   if ((a) != (b)) { \
-    error_message = mxsprintf("The number of bits per sample of the two " \
-                              "audio tracks is different: %d and %d", \
-                              (int)(a), (int)(b)); \
+    error_message = (boost::format(Y("The number of bits per sample of the two audio tracks is different: %1% and %2%")) % (a) % (b)).str(); \
     return CAN_CONNECT_NO_PARAMETERS; \
   }
 #define connect_check_v_width(a, b) \
   if ((a) != (b)) { \
-    error_message = mxsprintf("The width of the two  tracks is " \
-                              "different: %d and %d", (int)(a), (int)(b)); \
+    error_message = (boost::format(Y("The width of the two  tracks is different: %1% and %2%")) % (a) % (b)).str(); \
     return CAN_CONNECT_NO_PARAMETERS; \
   }
 #define connect_check_v_height(a, b) \
   if ((a) != (b)) { \
-    error_message = mxsprintf("The height of the two tracks is " \
-                              "different: %d and %d", (int)(a), (int)(b)); \
+    error_message = (boost::format(Y("The height of the two tracks is different: %1% and %2%")) % (a) % (b)).str(); \
     return CAN_CONNECT_NO_PARAMETERS; \
   }
 #define connect_check_v_dwidth(a, b) \
   if ((a) != (b)) { \
-    error_message = mxsprintf("The display width of the two  tracks is " \
-                              "different: %d and %d", (int)(a), (int)(b)); \
+    error_message = (boost::format(Y("The display width of the two  tracks is different: %1% and %2%")) % (a) % (b)).str(); \
     return CAN_CONNECT_NO_PARAMETERS; \
   }
 #define connect_check_v_dheight(a, b) \
   if ((a) != (b)) { \
-    error_message = mxsprintf("The display height of the two tracks is " \
-                              "different: %d and %d", (int)(a), (int)(b)); \
+    error_message = (boost::format(Y("The display height of the two tracks is different: %1% and %2%")) % (a) % (b)).str(); \
     return CAN_CONNECT_NO_PARAMETERS; \
   }
 #define connect_check_codec_id(a, b) \
   if ((a) != (b)) { \
-    error_message = mxsprintf("The CodecID of the two tracks is different: " \
-                              "%s and %s", (a).c_str(), (b).c_str()); \
+    error_message = (boost::format(Y("The CodecID of the two tracks is different: %1% and %2%")) % (a) % (b)).str(); \
     return CAN_CONNECT_NO_PARAMETERS; \
   }
 

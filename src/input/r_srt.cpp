@@ -65,13 +65,13 @@ srt_reader_c::srt_reader_c(track_info_c &_ti)
   try {
     io = new mm_text_io_c(new mm_file_io_c(ti.fname));
     if (!srt_reader_c::probe_file(io, 0))
-      throw error_c("srt_reader: Source is not a valid SRT file.");
+      throw error_c(Y("srt_reader: Source is not a valid SRT file."));
     ti.id = 0;                 // ID for this track.
   } catch (...) {
-    throw error_c("srt_reader: Could not open the source file.");
+    throw error_c(Y("srt_reader: Could not open the source file."));
   }
   if (verbose)
-    mxinfo(FMT_FN "Using the SRT subtitle reader.\n", ti.fname.c_str());
+    mxinfo_fn(ti.fname, Y("Using the SRT subtitle reader.\n"));
   parse_file();
 }
 
@@ -87,7 +87,7 @@ srt_reader_c::create_packetizer(int64_t) {
   bool is_utf8 = io->get_byte_order() != BO_NONE;
   add_packetizer(new textsubs_packetizer_c(this, MKV_S_TEXTUTF8, NULL, 0, true, is_utf8, ti));
 
-  mxinfo(FMT_TID "Using the text subtitle output module.\n", ti.fname.c_str(), (int64_t)0);
+  mxinfo_tid(ti.fname, 0, Y("Using the text subtitle output module.\n"));
 }
 
 #define STATE_INITIAL         0
@@ -128,7 +128,7 @@ srt_reader_c::parse_file() {
 
     if (STATE_INITIAL == state) {
       if (!boost::regex_match(s, number_re)) {
-        mxwarn(FMT_FN "Error in line %d: expected subtitle number and found some text.\n", ti.fname.c_str(), line_number);
+        mxwarn_fn(ti.fname, boost::format(Y("Error in line %1%: expected subtitle number and found some text.\n")) % line_number);
         break;
       }
       state = STATE_TIME;
@@ -136,7 +136,7 @@ srt_reader_c::parse_file() {
     } else if (STATE_TIME == state) {
       boost::match_results<string::const_iterator> matches;
       if (!boost::regex_search(s, matches, timecode_re)) {
-        mxwarn(FMT_FN "Error in line %d: expected a SRT timecode line but found something else. Aborting this file.\n", ti.fname.c_str(), line_number);
+        mxwarn_fn(ti.fname, boost::format(Y("Error in line %1%: expected a SRT timecode line but found something else. Aborting this file.\n")) % line_number);
         break;
       }
 
@@ -153,8 +153,10 @@ srt_reader_c::parse_file() {
       string e_rest = matches[8].str();
 
       if (boost::regex_search(s, coordinates_re) && !m_coordinates_warning_shown) {
-        mxwarn(FMT_FN "This file contains coordinates in the timecode lines. Such coordinates are not supported by the Matroska SRT subtitle format. "
-               "mkvmerge will remove them automatically.\n", ti.fname.c_str());
+        mxwarn_fn(ti.fname,
+                  Y("This file contains coordinates in the timecode lines. "
+                    "Such coordinates are not supported by the Matroska SRT subtitle format. "
+                    "mkvmerge will remove them automatically.\n"));
         m_coordinates_warning_shown = true;
       }
 
@@ -189,8 +191,8 @@ srt_reader_c::parse_file() {
       // of this function, but warn the user that the original order is being
       // changed.
       if (!timecode_warning_printed && (start < previous_start)) {
-        mxwarn(FMT_FN "Warning in line %d: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n",
-               ti.fname.c_str(), line_number);
+        mxwarn_fn(ti.fname, boost::format(Y("Warning in line %1%: The start timecode is smaller than that of the previous entry. "
+                                            "All entries from this file will be sorted by their start time.\n")) % line_number);
         timecode_warning_printed = true;
       }
 

@@ -275,8 +275,7 @@ find_consecutive_mp3_headers(const unsigned char *buf,
     decode_mp3_header(&buf[base + pos], &mp3header);
     if (!mp3header.is_tag)
       break;
-    mxverb(2, "mp3_reader: Found tag at %d size %d\n", base + pos,
-           mp3header.framesize);
+    mxverb(2, boost::format(Y("mp3_reader: Found tag at %1% size %2%\n")) % (base + pos) % mp3header.framesize);
     base += pos + 1;
   } while (true);
 
@@ -285,7 +284,7 @@ find_consecutive_mp3_headers(const unsigned char *buf,
   base += pos;
 
   do {
-    mxverb(4, "find_cons_mp3_h: starting with base at %d\n", base);
+    mxverb(4, boost::format("find_cons_mp3_h: starting with base at %1%\n") % base);
     offset = mp3header.framesize;
     for (i = 0; i < (num - 1); i++) {
       if ((size - base - offset) < 4)
@@ -297,7 +296,7 @@ find_consecutive_mp3_headers(const unsigned char *buf,
             (new_header.layer == mp3header.layer) &&
             (new_header.channels == mp3header.channels) &&
             (new_header.sampling_frequency == mp3header.sampling_frequency)) {
-          mxverb(4, "find_cons_mp3_h: found good header %d\n", i);
+          mxverb(4, boost::format("find_cons_mp3_h: found good header %1%\n") % i);
           offset += new_header.framesize;
           continue;
         } else

@@ -28,8 +28,6 @@
 
 using namespace std;
 
-#define PFX "vobbtn_reader: "
-
 int
 vobbtn_reader_c::probe_file(mm_io_c *io,
                             int64_t size) {
@@ -60,10 +58,7 @@ vobbtn_reader_c::vobbtn_reader_c(track_info_c &_ti)
     btn_file = new mm_file_io_c(ti.fname);
     size     = btn_file->get_size();
   } catch (...) {
-    string emsg = PFX "Could not open the button file '";
-    emsg += ti.fname;
-    emsg += "'.";
-    throw error_c(emsg.c_str());
+    throw error_c(Y("vobbtn_reader: Could not open the file."));
   }
 
   // read the width & height
@@ -74,7 +69,7 @@ vobbtn_reader_c::vobbtn_reader_c(track_info_c &_ti)
   btn_file->setFilePointer(16, seek_beginning);
 
   if (verbose)
-    mxinfo(FMT_FN "Using the VobBtn button reader.\n", ti.fname.c_str());
+    mxinfo_fn(ti.fname, Y("Using the VobBtn button reader.\n"));
 }
 
 vobbtn_reader_c::~vobbtn_reader_c() {
@@ -119,5 +114,5 @@ vobbtn_reader_c::get_progress() {
 void
 vobbtn_reader_c::identify() {
   id_result_container("VobBtn");
-  id_result_track(0, ID_RESULT_TRACK_BUTTONS, mxsprintf("MPEG PCI, width %d / height %d", width, height));
+  id_result_track(0, ID_RESULT_TRACK_BUTTONS, (boost::format("MPEG PCI, width %1% / height %2%") % width % height).str());
 }

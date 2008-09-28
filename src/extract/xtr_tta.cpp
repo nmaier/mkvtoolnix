@@ -32,7 +32,7 @@ xtr_tta_c::xtr_tta_c(const string &codec_id,
   , m_bps(0)
   , m_channels(0)
   , m_sfreq(0)
-  , m_temp_file_name(mxsprintf("mkvextract-" LLD "-temp-tta-%u", tid, (uint32_t)time(NULL)))
+  , m_temp_file_name((boost::format("mkvextract-%1%-temp-tta-%2%") % tid % time(NULL)).str())
 {
 }
 
@@ -42,7 +42,7 @@ xtr_tta_c::create_file(xtr_base_c *master,
   try {
     m_out = new mm_file_io_c(m_temp_file_name.c_str(), MODE_CREATE);
   } catch (...) {
-    mxerror("Failed to create the temporary file '%s': %d (%s)\n", m_temp_file_name.c_str(), errno, strerror(errno));
+    mxerror(boost::format(Y("Failed to create the temporary file '%1%': %2% (%3%)\n")) % m_temp_file_name % errno % strerror(errno));
   }
 
   m_bps      = kt_get_a_bps(track);
@@ -78,14 +78,14 @@ xtr_tta_c::finish_file() {
   try {
     in = new mm_file_io_c(m_temp_file_name);
   } catch (...) {
-    mxerror(" The temporary file '%s' could not be opened for reading (%s).\n", m_temp_file_name.c_str(), strerror(errno));
+    mxerror(boost::format(Y("The temporary file '%1%' could not be opened for reading (%2%).\n")) % m_temp_file_name % strerror(errno));
   }
 
   try {
     m_out = new mm_file_io_c(m_file_name, MODE_CREATE);
   } catch (...) {
     delete in;
-    mxerror(" The file '%s' could not be opened for writing (%s).\n", m_file_name.c_str(), strerror(errno));
+    mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % m_file_name % strerror(errno));
   }
 
   tta_file_header_t tta_header;
@@ -117,7 +117,7 @@ xtr_tta_c::finish_file() {
 
   safefree(buffer);
 
-  mxinfo("\nThe temporary TTA file for track ID " LLD " is being copied into the final TTA file. This may take some time.\n", m_tid);
+  mxinfo(boost::format(Y("\nThe temporary TTA file for track ID %1% is being copied into the final TTA file. This may take some time.\n")) % m_tid);
 
   buffer = (unsigned char *)safemalloc(128000);
   int nread;

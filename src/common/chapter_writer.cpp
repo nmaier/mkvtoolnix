@@ -178,11 +178,9 @@ write_chapters_simple(int &chapter_num,
 
   for (i = 0; i < chapter_entries.size(); i++) {
     v = chapter_entries[i].start;
-    out->printf("CHAPTER%02d=%02lld:%02lld:%02lld.%03lld\n", chapter_num,
-                (v / 1000 / 60 / 60), (v / 1000 / 60) % 60,
-                (v / 1000) % 60, v % 1000);
-    out->printf("CHAPTER%02dNAME=%s\n", chapter_num,
-                chapter_entries[i].name.c_str());
+    out->puts(boost::format("CHAPTER%|1$02d|=%|2$02d|:%|3$02d|:%|4$02d|.%|5$03d|\n")
+              % chapter_num % (v / 1000 / 60 / 60) % ((v / 1000 / 60) % 60) % ((v / 1000) % 60) % (v % 1000));
+    out->puts(boost::format("CHAPTER%|1$02d|NAME=%2%\n") % chapter_num % chapter_entries[i].name);
     chapter_num++;
   }
 
@@ -201,8 +199,8 @@ pt(xml_writer_cb_t *cb,
   int i;
 
   for (i = 0; i < cb->level; i++)
-    cb->out->printf("  ");
-  cb->out->printf("%s", tag);
+    cb->out->puts("  ");
+  cb->out->puts(tag);
 }
 
 static int
@@ -213,7 +211,7 @@ cet_index(const char *name) {
     if (!strcmp(name, chapter_elements[i].name))
       return i;
 
-  mxerror("cet_index: '%s' not found\n", name);
+  mxerror(boost::format(Y("cet_index: '%1%' not found\n")) % name);
   return -1;
 }
 

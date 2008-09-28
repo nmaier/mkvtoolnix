@@ -73,11 +73,11 @@ ssa_reader_c::ssa_reader_c(track_info_c &_ti)
   try {
     io = auto_ptr<mm_text_io_c>(new mm_text_io_c(new mm_file_io_c(ti.fname)));
   } catch (...) {
-    throw error_c("ssa_reader: Could not open the source file.");
+    throw error_c(Y("ssa_reader: Could not open the source file."));
   }
 
   if (!ssa_reader_c::probe_file(io.get(), 0))
-    throw error_c("ssa_reader: Source is not a valid SSA/ASS file.");
+    throw error_c(Y("ssa_reader: Source is not a valid SSA/ASS file."));
 
   if (map_has_key(ti.sub_charsets, 0))
     m_cc_utf8 = utf8_init(ti.sub_charsets[0]);
@@ -91,7 +91,7 @@ ssa_reader_c::ssa_reader_c(track_info_c &_ti)
   parse_file(io.get());
 
   if (verbose)
-    mxinfo(FMT_FN "Using the SSA/ASS subtitle reader.\n", ti.fname.c_str());
+    mxinfo_fn(ti.fname, Y("Using the SSA/ASS subtitle reader.\n"));
 }
 
 ssa_reader_c::~ssa_reader_c() {
@@ -103,7 +103,7 @@ ssa_reader_c::create_packetizer(int64_t) {
     return;
 
   add_packetizer(new textsubs_packetizer_c(this, m_is_ass ?  MKV_S_TEXTASS : MKV_S_TEXTSSA, m_global.c_str(), m_global.length(), false, false, ti));
-  mxinfo(FMT_TID "Using the text subtitle output module.\n", ti.fname.c_str(), (int64_t)0);
+  mxinfo_tid(ti.fname, 0, Y("Using the text subtitle output module.\n"));
 }
 
 string
@@ -226,7 +226,7 @@ ssa_reader_c::parse_file(mm_text_io_c *io) {
 
       } else if (starts_with_case(line, "Dialogue: ")) {
         if (m_format.empty())
-          throw error_c("ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section.");
+          throw error_c(Y("ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."));
 
         string orig_line = line;
 
@@ -241,7 +241,7 @@ ssa_reader_c::parse_file(mm_text_io_c *io) {
         string stime  = get_element("Start", fields);
         int64_t start = parse_time(stime);
         if (0 > start) {
-          mxwarn("ssa_reader: Malformed line? (%s)\n", orig_line.c_str());
+          mxwarn_fn(ti.fname, boost::format(Y("Malformed line? (%1%)\n")) % orig_line);
           continue;
         }
 
@@ -249,11 +249,11 @@ ssa_reader_c::parse_file(mm_text_io_c *io) {
         stime       = get_element("End", fields);
         int64_t end = parse_time(stime);
         if (0 > end) {
-          mxwarn("ssa_reader: Malformed line? (%s)\n", orig_line.c_str());
+          mxwarn_fn(ti.fname, boost::format(Y("Malformed line? (%1%)\n")) % orig_line);
           continue;
         }
         if (end < start) {
-          mxwarn("ssa_reader: Malformed line? (%s)\n", orig_line.c_str());
+          mxwarn_fn(ti.fname, boost::format(Y("Malformed line? (%1%)\n")) % orig_line);
           continue;
         }
 
@@ -322,7 +322,6 @@ ssa_reader_c::add_attachment_maybe(string &name,
   attachment_t attachment;
 
   buffer_t *buffer  = new buffer_t;
-  string type       = SSA_SECTION_FONTS == section ? "font" : "picture";
   string short_name = ti.fname;
   int pos           = short_name.rfind('/');
 
@@ -333,7 +332,7 @@ ssa_reader_c::add_attachment_maybe(string &name,
     short_name.erase(0, pos + 1);
 
   attachment.name         = to_utf8(m_cc_utf8, name);
-  attachment.description  = "Imported " + type + " from " + short_name;
+  attachment.description  = (boost::format(SSA_SECTION_FONTS == section ? Y("Imported font from %1%") : Y("Imported picture from %1%")) % short_name).str();
   attachment.to_all_files = true;
 
   int allocated           = 1024;
@@ -352,7 +351,7 @@ ssa_reader_c::add_attachment_maybe(string &name,
       break;
   }
 
-  attachment.data       = counted_ptr<buffer_t>(buffer);
+  attachment.data      = counted_ptr<buffer_t>(buffer);
   attachment.mime_type = guess_mime_type(name, false);
 
   if (attachment.mime_type == "")

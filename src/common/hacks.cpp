@@ -26,7 +26,7 @@ using namespace std;
 #include "common.h"
 #include "hacks.h"
 
-static const char *mosu_hacks[] = {
+static const char *mkvtoolnix_hacks[] = {
   ENGAGE_SPACE_AFTER_CHAPTERS,
   ENGAGE_NO_CHAPTERS_IN_META_SEEK,
   ENGAGE_NO_META_SEEK,
@@ -67,10 +67,11 @@ engage_hacks(const string &hacks) {
   engage_args = split(hacks, ",");
   for (aidx = 0; aidx < engage_args.size(); aidx++)
     if (engage_args[aidx] == "list") {
-      mxinfo("Valid hacks are:\n");
-      for (hidx = 0; mosu_hacks[hidx] != NULL; hidx++)
-        mxinfo("%s\n", mosu_hacks[hidx]);
+      mxinfo(Y("Valid hacks are:\n"));
+      for (hidx = 0; mkvtoolnix_hacks[hidx] != NULL; hidx++)
+        mxinfo(boost::format("%1%\n") % mkvtoolnix_hacks[hidx]);
       mxexit(0);
+
     } else if (engage_args[aidx] == "cow") {
       const string initial = "ICAgICAgICAgIChfXykKICAgICAgICAgICgqKikg"
         "IE9oIGhvbmV5LCB0aGF0J3Mgc28gc3dlZXQhCiAgIC8tLS0tLS0tXC8gICBPZiB"
@@ -79,18 +80,19 @@ engage_hacks(const string &hacks) {
       char correction[200];
       memset(correction, 0, 200);
       base64_decode(initial, (unsigned char *)correction);
-      mxinfo("%s", correction);
+      mxinfo(correction);
       mxexit(0);
     }
+
   for (aidx = 0; aidx < engage_args.size(); aidx++) {
     valid_hack = false;
-    for (hidx = 0; mosu_hacks[hidx] != NULL; hidx++)
-      if (engage_args[aidx] == mosu_hacks[hidx]) {
+    for (hidx = 0; mkvtoolnix_hacks[hidx] != NULL; hidx++)
+      if (engage_args[aidx] == mkvtoolnix_hacks[hidx]) {
         valid_hack = true;
-        engaged_hacks.push_back(mosu_hacks[hidx]);
+        engaged_hacks.push_back(mkvtoolnix_hacks[hidx]);
         break;
       }
     if (!valid_hack)
-      mxerror("'%s' is not a valid hack.\n", engage_args[aidx].c_str());
+      mxerror(boost::format(Y("'%1%' is not a valid hack.\n")) % engage_args[aidx]);
   }
 }

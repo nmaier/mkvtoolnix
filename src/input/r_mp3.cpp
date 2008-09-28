@@ -43,7 +43,7 @@ mp3_reader_c::mp3_reader_c(track_info_c &_ti)
 
     int pos = find_valid_headers(io, 2 * 1024 * 1024, 5);
     if (0 > pos)
-      throw error_c("Could not find a valid MP3 packet.");
+      throw error_c(Y("Could not find a valid MP3 packet."));
 
     io->setFilePointer(pos, seek_beginning);
     io->read(buf, 4);
@@ -53,15 +53,15 @@ mp3_reader_c::mp3_reader_c(track_info_c &_ti)
     io->setFilePointer(pos, seek_beginning);
 
     if (verbose)
-      mxinfo(FMT_FN "Using the MP2/MP3 demultiplexer.\n", ti.fname.c_str());
+      mxinfo_fn(ti.fname, Y("Using the MP2/MP3 demultiplexer.\n"));
 
     if ((0 < pos) && verbose)
-      mxwarn("mp3_reader: skipping %d bytes at the beginning of '%s' (no valid MP3 header found).\n", pos, ti.fname.c_str());
+      mxwarn_fn(ti.fname, boost::format(Y("Skipping %1% bytes at the beginning (no valid MP3 header found).\n")) % pos);
 
     bytes_processed = 0;
     ti.id           = 0;        // ID for this track.
   } catch (...) {
-    throw error_c("mp3_reader: Could not open the source file.");
+    throw error_c(Y("mp3_reader: Could not open the source file."));
   }
 }
 
@@ -74,7 +74,7 @@ mp3_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  mxinfo(FMT_TID "Using the MPEG audio output module.\n", ti.fname.c_str(), (int64_t)0);
+  mxinfo_tid(ti.fname, 0, Y("Using the MPEG audio output module.\n"));
   add_packetizer(new mp3_packetizer_c(this, mp3header.sampling_frequency, mp3header.channels, false, ti));
 }
 
@@ -101,7 +101,9 @@ mp3_reader_c::get_progress() {
 void
 mp3_reader_c::identify() {
   id_result_container("MP2/MP3");
-  id_result_track(0, ID_RESULT_TRACK_AUDIO, mxsprintf("MPEG-%s layer %d",  mp3header.version == 1 ? "1" : mp3header.version == 2 ? "2" : "2.5", mp3header.layer));
+  id_result_track(0, ID_RESULT_TRACK_AUDIO, (boost::format("MPEG-%1% layer %2%")
+                                             % (mp3header.version == 1 ? "1" : mp3header.version == 2 ? "2" : "2.5")
+                                             % mp3header.layer).str());
 }
 
 int

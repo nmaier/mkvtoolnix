@@ -81,7 +81,7 @@ kate_packetizer_c::process(packet_cptr packet) {
       packet->duration_mandatory = true;
       add_packet(packet);
     } else
-      mxwarn(_(FMT_TID "Kate packet is too small and is being skipped.\n"), ti.fname.c_str(), (int64_t)ti.id);
+      mxwarn_tid(ti.fname, ti.id, Y("Kate packet is too small and is being skipped.\n"));
 
     return FILE_STATUS_MOREDATA;
   }
@@ -118,7 +118,7 @@ kate_packetizer_c::can_connect_to(generic_packetizer_c *src,
   if (((ti.private_data == NULL) && (src->ti.private_data != NULL)) ||
       ((ti.private_data != NULL) && (src->ti.private_data == NULL)) ||
       (ti.private_size != src->ti.private_size)) {
-    error_message = mxsprintf("The codec's private data does not match (lengths: %d and %d).", ti.private_size, src->ti.private_size);
+    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % ti.private_size % src->ti.private_size).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }
 

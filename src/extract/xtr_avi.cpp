@@ -35,25 +35,26 @@ xtr_avi_c::create_file(xtr_base_c *master,
 
   KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
-    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec private\" element and cannot be extracted.\n", m_tid, m_codec_id.c_str());
+    mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
   m_default_duration = kt_get_default_duration(track);
   if (0 >= m_default_duration)
-    mxerror("Track " LLD " with the CodecID '%s' is missing the \"default duration\" element and cannot be extracted.\n", m_tid, m_codec_id.c_str());
+    mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"default duration\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
   m_fps = (double)1000000000.0 / (double)m_default_duration;
 
   if (NULL != master)
-    mxerror("Cannot write track " LLD " with the CodecID '%s' to the file '%s' because track " LLD " with the CodecID '%s' is already being"
-            " written to the same file.\n", m_tid, m_codec_id.c_str(), m_file_name.c_str(), master->m_tid, master->m_codec_id.c_str());
+    mxerror(boost::format(Y("Cannot write track %1% with the CodecID '%2%' to the file '%3%' because "
+                            "track %4% with the CodecID '%5%' is already being written to the same file.\n"))
+            % m_tid % m_codec_id % m_file_name % master->m_tid % master->m_codec_id);
 
   m_avi = AVI_open_output_file(m_file_name.c_str());
   if (NULL == m_avi)
-    mxerror("The file '%s' could not be opened for writing (%s).\n", m_file_name.c_str(), AVI_strerror());
+    mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % m_file_name % AVI_strerror());
 
   string writing_app = "mkvextract";
   if (!no_variable_data)
-    writing_app += mxsprintf(" %s", VERSION);
+    writing_app += (boost::format(" %1%") % VERSION).str();
   m_avi->writing_app = safestrdup(writing_app.c_str());
 
   char ccodec[5];

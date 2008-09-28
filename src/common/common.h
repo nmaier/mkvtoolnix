@@ -20,6 +20,7 @@
 
 #include <stdarg.h>
 
+#include <boost/format.hpp>
 #include <cstring>
 #include <string>
 #include <vector>
@@ -29,26 +30,16 @@
 /* i18n stuff */
 #if defined(HAVE_LIBINTL_H)
 # include <libintl.h>
-# if !defined _
-#  define _(s) gettext(s)
-# endif
-# if !defined N_
-#  define N_(s) s
-# endif
 # if !defined Y
 #  define Y(s) gettext(s)
 # endif
 #else /* HAVE_LIBINTL_H */
-# if !defined _
-#  define _(s) (s)
-# endif
-# if !defined N_
-#  define N_(s) s
-# endif
 # if !defined Y
-#  define Y(s) s
+#  define Y(s) (s)
 # endif
 #endif
+
+#include "common_output.h"
 
 namespace libebml {
   class EbmlBinary;
@@ -58,7 +49,7 @@ using namespace libebml;
 
 #define VERSIONNAME "Freak U"
 #define VERSIONINFO "mkvmerge v" VERSION " ('" VERSIONNAME "')"
-#define BUGMSG _("This should not have happened. Please contact the author " \
+#define BUGMSG Y("This should not have happened. Please contact the author " \
                  "Moritz Bunkus <moritz@bunkus.org> with this error/warning " \
                  "message, a description of what you were trying to do, " \
                  "the command line used and which operating system you are " \
@@ -101,46 +92,17 @@ extern string MTX_DLL_API timecode_parser_error;
 extern bool MTX_DLL_API parse_timecode(const string &s, int64_t &timecode,
                                        bool allow_negative = false);
 
-extern bool MTX_DLL_API suppress_warnings;
+std::string MTX_DLL_API format_timecode(int64_t timecode, unsigned int precision = 9);
+
 void MTX_DLL_API fix_format(const char *fmt, string &new_fmt);
+
 #if defined(__GNUC__)
-void MTX_DLL_API die(const char *fmt, ...)
-  __attribute__ ((format (printf, 1, 2)));
-void MTX_DLL_API mxprint(void *stream, const char *fmt, ...)
-  __attribute__ ((format (printf, 2, 3)));
-void MTX_DLL_API mxprints(char *dst, const char *fmt, ...)
-  __attribute__ ((format (printf, 2, 3)));
-string MTX_DLL_API mxsprintf(const char *fmt, ...)
-  __attribute__ ((format (printf, 1, 2)));
-void MTX_DLL_API mxwarn(const char *fmt, ...)
-  __attribute__ ((format (printf, 1, 2)));
-void MTX_DLL_API mxerror(const char *fmt, ...)
-  __attribute__ ((format (printf, 1, 2)));
-void MTX_DLL_API mxinfo(const char *fmt, ...)
-  __attribute__ ((format (printf, 1, 2)));
-void MTX_DLL_API mxverb(int level, const char *fmt, ...)
-  __attribute__ ((format (printf, 2, 3)));
-void MTX_DLL_API mxdebug(const char *fmt, ...)
-  __attribute__ ((format (printf, 1, 2)));
-int MTX_DLL_API mxsscanf(const string &str, const char *fmt, ...)
-  __attribute__ ((format (scanf, 2, 3)));
+int MTX_DLL_API mxsscanf(const string &str, const char *fmt, ...) __attribute__ ((format (scanf, 2, 3)));
 #else
-void MTX_DLL_API die(const char *fmt, ...);
-void MTX_DLL_API mxprint(void *stream, const char *fmt, ...);
-void MTX_DLL_API mxprints(char *dst, const char *fmt, ...);
-string MTX_DLL_API mxsprintf(const char *fmt, ...);
-void MTX_DLL_API mxwarn(const char *fmt, ...);
-void MTX_DLL_API mxerror(const char *fmt, ...);
-void MTX_DLL_API mxinfo(const char *fmt, ...);
-void MTX_DLL_API mxverb(int level, const char *fmt, ...);
-void MTX_DLL_API mxdebug(const char *fmt, ...);
 int MTX_DLL_API mxsscanf(const string &str, const char *fmt, ...);
 #endif
-string MTX_DLL_API mxvsprintf(const char *fmt, va_list ap);
-void MTX_DLL_API mxexit(int code = -1);
 
-#define trace() _trace(__func__, __FILE__, __LINE__)
-void MTX_DLL_API _trace(const char *func, const char *file, int line);
+void MTX_DLL_API mxexit(int code = -1);
 
 void MTX_DLL_API mxhexdump(int level, const unsigned char *buffer, int lenth);
 
@@ -167,9 +129,6 @@ void MTX_DLL_API put_uint32_be(void *buf, uint32_t value);
 void MTX_DLL_API put_uint64_be(void *buf, uint64_t value);
 
 extern int MTX_DLL_API cc_local_utf8;
-void MTX_DLL_API init_cc_stdio();
-void MTX_DLL_API set_cc_stdio(const string &charset);
-extern string MTX_DLL_API stdio_charset;
 string MTX_DLL_API get_local_charset();
 int MTX_DLL_API utf8_init(const string &charset);
 void MTX_DLL_API utf8_done();

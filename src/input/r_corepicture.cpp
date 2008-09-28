@@ -75,7 +75,7 @@ corepicture_reader_c::corepicture_reader_c(track_info_c &_ti)
     m_xml_source = new mm_text_io_c(new mm_file_io_c(ti.fname));
 
     if (!corepicture_reader_c::probe_file(m_xml_source, 0))
-      throw error_c("corepicture_reader: Source is not a valid CorePanorama file.");
+      throw error_c(Y("corepicture_reader: Source is not a valid CorePanorama file."));
 
     parse_xml_file();
 
@@ -88,11 +88,11 @@ corepicture_reader_c::corepicture_reader_c(track_info_c &_ti)
     throw error_c(error.get_error());
 
   } catch (mm_io_error_c &error) {
-    throw error_c("corepicture_reader: Could not open the source file.");
+    throw error_c(Y("corepicture_reader: Could not open the source file."));
   }
 
   if (verbose)
-    mxinfo(FMT_FN "Using the CorePanorama subtitle reader.\n", ti.fname.c_str());
+    mxinfo_fn(ti.fname, Y("Using the CorePanorama subtitle reader.\n"));
 }
 
 corepicture_reader_c::~corepicture_reader_c() {
@@ -141,7 +141,7 @@ corepicture_reader_c::start_element_cb(const char *name,
           new_picture.m_pic_type = COREPICTURE_TYPE_PNG;
 
         else
-          mxwarn(FMT_TID "The picture type '%s' is not recognized.\n", ti.fname.c_str(), (int64_t)0, atts[i + 1]);
+          mxwarn_tid(ti.fname, 0, boost::format(Y("The picture type '%1%' is not recognized.\n")) % atts[i + 1]);
 
       } else if (!strcasecmp(atts[i], "panorama") && (0 != atts[i + 1][0])) {
         if (!strcasecmp(atts[i + 1], "flat"))
@@ -157,7 +157,7 @@ corepicture_reader_c::start_element_cb(const char *name,
           new_picture.m_pan_type = COREPICTURE_PAN_SPHERICAL;
 
         else
-          mxwarn(FMT_TID "The panoramic mode '%s' is not recognized.\n", ti.fname.c_str(), (int64_t)0, atts[i + 1]);
+          mxwarn_tid(ti.fname, 0, boost::format(Y("The panoramic mode '%1%' is not recognized.\n")) % atts[i + 1]);
 
       } else if (!strcasecmp(atts[i], "url") && (0 != atts[i + 1][0]))
         new_picture.m_url = escape_xml(atts[i + 1]);
@@ -226,7 +226,7 @@ corepicture_reader_c::read(generic_packetizer_c *ptzr,
       }
 
     } catch(...) {
-      mxerror(FMT_TID "Impossible to use file '%s': The file could not be opened for reading.\n", ti.fname.c_str(), (int64_t)0, m_current_picture->m_url.c_str());
+      mxerror_tid(ti.fname, 0, boost::format(Y("Impossible to use file '%1%': The file could not be opened for reading.\n")) % m_current_picture->m_url);
     }
     m_current_picture++;
   }
@@ -251,7 +251,7 @@ corepicture_reader_c::try_to_parse_timecode(const char *s) {
   int64_t timecode;
 
   if (!parse_timecode(s, timecode))
-    throw xml_parser_error_c("Invalid start timecode", m_xml_parser);
+    throw xml_parser_error_c(Y("Invalid start timecode"), m_xml_parser);
 
   return timecode;
 }

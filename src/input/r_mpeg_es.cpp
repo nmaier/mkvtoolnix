@@ -140,13 +140,13 @@ mpeg_es_reader_c::mpeg_es_reader_c(track_info_c &_ti)
       ti.private_size = raw_seq_hdr->GetSize();
     }
 
-    mxverb(2, "mpeg_es_reader: v %d width %d height %d FPS %e AR %e\n", version, width, height, frame_rate, aspect_ratio);
+    mxverb(2, boost::format(Y("mpeg_es_reader: version %1% width %2% height %3% FPS %4% AR %5%\n")) % version % width % height % frame_rate % aspect_ratio);
 
   } catch (...) {
-    throw error_c("mpeg_es_reader: Could not open the file.");
+    throw error_c(Y("mpeg_es_reader: Could not open the file."));
   }
   if (verbose)
-    mxinfo(FMT_FN "Using the MPEG ES demultiplexer.\n", ti.fname.c_str());
+    mxinfo_fn(ti.fname, Y("Using the MPEG ES demultiplexer.\n"));
 }
 
 mpeg_es_reader_c::~mpeg_es_reader_c() {
@@ -158,7 +158,7 @@ mpeg_es_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  mxinfo(FMT_TID "Using the MPEG-1/2 video output module.\n", ti.fname.c_str(), (int64_t)0);
+  mxinfo_tid(ti.fname, 0, Y("Using the MPEG-1/2 video output module.\n"));
   add_packetizer(new mpeg1_2_video_packetizer_c(this, version, frame_rate, width, height, dwidth, dheight, false, ti));
 }
 
@@ -230,5 +230,5 @@ mpeg_es_reader_c::get_progress() {
 void
 mpeg_es_reader_c::identify() {
   id_result_container("MPEG elementary stream (ES)");
-  id_result_track(0, ID_RESULT_TRACK_VIDEO, mxsprintf("MPEG %d", version));
+  id_result_track(0, ID_RESULT_TRACK_VIDEO, (boost::format("MPEG %1%") % version).str());
 }

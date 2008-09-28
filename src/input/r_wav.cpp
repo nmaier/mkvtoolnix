@@ -229,7 +229,7 @@ generic_packetizer_c *
 wav_ac3acm_demuxer_c::create_packetizer() {
   m_ptzr = new ac3_packetizer_c(m_reader, m_ac3header.sample_rate, m_ac3header.channels, m_ac3header.bsid, m_reader->ti);
 
-  mxinfo(FMT_TID "Using the AC3 output module.\n", m_reader->ti.fname.c_str(), (int64_t)0);
+  mxinfo_tid(m_reader->ti.fname, 0, Y("Using the AC3 output module.\n"));
 
   return m_ptzr;
 }
@@ -327,7 +327,7 @@ wav_dts_demuxer_c::probe(mm_io_cptr &io) {
   if (detect_dts(m_buf[m_cur_buf]->get(), len, m_pack_14_16, m_swap_bytes)) {
     len = decode_buffer(len);
     if (find_dts_header(m_buf[m_cur_buf]->get(), len, &m_dtsheader) >= 0) {
-      mxverb(3, "DTSinWAV: 14->16 %d swap %d\n", m_pack_14_16, m_swap_bytes);
+      mxverb(3, boost::format(Y("DTSinWAV: 14->16 %1% swap %2%\n")) % m_pack_14_16 % m_swap_bytes);
       return true;
     }
   }
@@ -358,7 +358,7 @@ wav_dts_demuxer_c::create_packetizer() {
   // .wav with DTS are always filled up with other stuff to match the bitrate.
   ((dts_packetizer_c *)m_ptzr)->skipping_is_normal = true;
 
-  mxinfo(FMT_TID "Using the DTS output module.\n", m_reader->ti.fname.c_str(), (int64_t)0);
+  mxinfo_tid(m_reader->ti.fname, 0, Y("Using the DTS output module.\n"));
 
   if (1 < verbose)
     print_dts_header(&m_dtsheader);
@@ -399,7 +399,7 @@ wav_pcm_demuxer_c::create_packetizer() {
                                 get_uint16_le(&m_wheader->common.wBitsPerSample),
                                 m_reader->ti, false, ieee_float);
 
-  mxinfo(FMT_TID "Using the PCM output module.\n", m_reader->ti.fname.c_str(), (int64_t)0);
+  mxinfo_tid(m_reader->ti.fname, 0, Y("Using the PCM output module.\n"));
 
   return m_ptzr;
 }
@@ -453,11 +453,11 @@ wav_reader_c::wav_reader_c(track_info_c &ti_)
     size = m_io->getFilePointer();
     m_io->setFilePointer(0, seek_beginning);
   } catch (...) {
-    throw error_c("wav_reader: Could not open the source file.");
+    throw error_c(Y("wav_reader: Could not open the source file."));
   }
 
   if (!wav_reader_c::probe_file(m_io.get(), size))
-    throw error_c("wav_reader: Source is not a valid WAVE file.");
+    throw error_c(Y("wav_reader: Source is not a valid WAVE file."));
 
   parse_file();
   create_demuxer();
@@ -471,21 +471,21 @@ wav_reader_c::parse_file() {
   int chunk_idx;
 
   if (m_io->read(&m_wheader.riff, sizeof(m_wheader.riff)) != sizeof(m_wheader.riff))
-    throw error_c("wav_reader: could not read WAVE header.");
+    throw error_c(Y("wav_reader: could not read WAVE header."));
 
   scan_chunks();
 
   if ((chunk_idx = find_chunk("fmt ")) == -1)
-    throw error_c("wav_reader: No format chunk found.");
+    throw error_c(Y("wav_reader: No format chunk found."));
 
   m_io->setFilePointer(m_chunks[chunk_idx].pos, seek_beginning);
 
   if ((m_io->read(&m_wheader.format, sizeof(m_wheader.format)) != sizeof(m_wheader.format)) ||
       (m_io->read(&m_wheader.common, sizeof(m_wheader.common)) != sizeof(m_wheader.common)))
-    throw error_c("wav_reader: The format chunk could not be read.");
+    throw error_c(Y("wav_reader: The format chunk could not be read."));
 
   if ((m_cur_data_chunk_idx = find_chunk("data", 0, false)) == -1)
-    throw error_c("wav_reader: No data chunk was found.");
+    throw error_c(Y("wav_reader: No data chunk was found."));
 
   m_io->setFilePointer(m_chunks[m_cur_data_chunk_idx].pos + sizeof(struct chunk_struct), seek_beginning);
 
@@ -521,7 +521,7 @@ wav_reader_c::create_demuxer() {
     m_demuxer = wav_demuxer_cptr(new wav_pcm_demuxer_c(this, &m_wheader, ieee_float));
 
   if (verbose)
-    mxinfo(FMT_FN "Using the WAV demultiplexer.\n", ti.fname.c_str());
+    mxinfo_fn(ti.fname, Y("Using the WAV demultiplexer.\n"));
 }
 
 void
@@ -582,8 +582,9 @@ wav_reader_c::scan_chunks() {
 
       new_chunk.len = m_io->read_uint32_le();
 
-      mxverb(2, "wav_reader_c::scan_chunks() new chunk at " LLD " type %s length " LLD "\n",
-             new_chunk.pos, get_displayable_string(new_chunk.id, 4).c_str(), new_chunk.len);
+      mxverb(2,
+             boost::format(Y("wav_reader_c::scan_chunks() new chunk at %1% type %2% length %3%\n"))
+             % new_chunk.pos % get_displayable_string(new_chunk.id, 4) % new_chunk.len);
 
       if (!strncasecmp(new_chunk.id, "data", 4))
         m_bytes_in_data_chunks += new_chunk.len;
@@ -595,8 +596,9 @@ wav_reader_c::scan_chunks() {
         m_bytes_in_data_chunks      += this_chunk_len;
         previous_chunk.len           = this_chunk_len;
 
-        mxverb(2, "wav_reader_c::scan_chunks() hugh data chunk with wrong length at " LLD "; re-calculated from file size; new length " LLD "\n",
-               previous_chunk.pos, previous_chunk.len);
+        mxverb(2,
+               boost::format(Y("wav_reader_c::scan_chunks() hugh data chunk with wrong length at %1%; re-calculated from file size; new length %2%\n"))
+               % previous_chunk.pos % previous_chunk.len);
 
         break;
       }

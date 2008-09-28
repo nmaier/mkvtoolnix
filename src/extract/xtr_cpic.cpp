@@ -45,14 +45,14 @@ xtr_cpic_c::handle_frame(memory_cptr &frame,
   binary *mybuffer = frame->get();
   int data_size    = frame->get_size();
   if (2 > data_size) {
-    mxinfo("CorePicture frame %d not supported.\n", m_frame_counter);
+    mxinfo(boost::format(Y("CorePicture frame %1% not supported.\n")) % m_frame_counter);
     ++m_frame_counter;
     return;
   }
 
   int header_size = get_uint16_be(mybuffer);
   if (header_size >= data_size) {
-    mxinfo("CorePicture frame %d has an invalid header size %d.\n", m_frame_counter, header_size);
+    mxinfo(boost::format(Y("CorePicture frame %1% has an invalid header size %2%.\n")) % m_frame_counter % header_size);
     ++m_frame_counter;
     return;
   }

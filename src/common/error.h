@@ -17,6 +17,7 @@
 #define __ERROR_H
 
 #include <string>
+#include <boost/format.hpp>
 
 using namespace std;
 
@@ -35,6 +36,10 @@ public:
 
   error_c(const string &_error):
     error(_error) {
+  }
+
+  error_c(const boost::format &format)
+    : error(format.str()) {
   }
 
   virtual ~error_c() {

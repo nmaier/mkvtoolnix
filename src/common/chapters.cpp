@@ -64,38 +64,18 @@ string default_chapter_country;
                           isname(s + 9) && \
                           isequal(s + 13))
 
-/** \brief Format an error message and throw an exception.
+/** \brief Throw a special chapter parser exception.
 
-   A \c printf like function that throws an ::error_c exception with
-   the formatted message.
-
-   The parameters are checked for validity.
-
-   \param fmt The \c printf like format.
-   \param ... Optional arguments for the format.
+   \param error The error message.
 */
-static void
-chapter_error(const char *fmt,
-              ...) {
-  va_list ap;
-  string new_fmt;
-  char *new_error;
-  int len;
+inline void
+chapter_error(const std::string &error) {
+  throw error_c(boost::format(Y("Error: Simple chapter parser: %1%")) % error);
+}
 
-  assert(fmt != NULL);
-
-  len = strlen("Error: Simple chapter parser: ");
-  va_start(ap, fmt);
-  fix_format(fmt, new_fmt);
-  len += get_varg_len(new_fmt.c_str(), ap);
-  new_error = (char *)safemalloc(len + 2);
-  strcpy(new_error, "Error: Simple chapter parser: ");
-  vsprintf(&new_error[strlen(new_error)], new_fmt.c_str(), ap);
-  strcat(new_error, "\n");
-  va_end(ap);
-  new_fmt = new_error;
-  safefree(new_error);
-  throw error_c(new_fmt);
+inline void
+chapter_error(const boost::format &format) {
+  chapter_error(format.str());
 }
 
 /** \brief Reads the start of a file and checks for OGM style comments.
@@ -234,15 +214,15 @@ parse_simple_chapters(mm_text_io_c *in,
 
       if (mode == 0) {
         if (!ischapterline(line.c_str()))
-          chapter_error("'%s' is not a CHAPTERxx=... line.", line.c_str());
+          chapter_error(boost::format(Y("'%1%' is not a CHAPTERxx=... line.")) % line);
         parse_int(line.substr(10, 2), hour);
         parse_int(line.substr(13, 2), minute);
         parse_int(line.substr(16, 2), second);
         parse_int(line.substr(19, 3), msecs);
         if (minute > 59)
-          chapter_error("Invalid minute: %d", minute);
+          chapter_error(boost::format(Y("Invalid minute: %1%")) % minute);
         if (second > 59)
-          chapter_error("Invalid second: %d", second);
+          chapter_error(boost::format(Y("Invalid second: %1%")) % second);
         start = msecs + second * 1000 + minute * 1000 * 60 +
           hour * 1000 * 60 * 60;
         mode = 1;
@@ -250,7 +230,7 @@ parse_simple_chapters(mm_text_io_c *in,
 
       } else {
         if (!ischapternameline(line.c_str()))
-          chapter_error("'%s' is not a CHAPTERxxNAME=... line.", line.c_str());
+          chapter_error(boost::format(Y("'%1%' is not a CHAPTERxxNAME=... line.")) % line);
         name = line.substr(14);
         if (name == "")
           name = s_timecode;
@@ -364,16 +344,14 @@ parse_chapters(const string &file_name,
       delete in;
     if (exception_on_error)
       throw;
-    mxerror("Could not parse the chapters in '%s': %s\n", file_name.c_str(),
-            e.get_error().c_str());
+    mxerror(boost::format(Y("Could not parse the chapters in '%1%': %2%\n")) % file_name % e.get_error());
   } catch (...) {
     if (in != NULL)
       delete in;
     if (exception_on_error)
-      throw error_c(mxsprintf("Could not open '%s' for reading.\n",
-                              file_name.c_str()));
+      throw error_c(boost::format(Y("Could not open '%1%' for reading.\n")) % file_name);
     else
-      mxerror("Could not open '%s' for reading.\n", file_name.c_str());
+      mxerror(boost::format(Y("Could not open '%1%' for reading.\n")) % file_name);
   }
   return result;
 }
@@ -442,13 +420,11 @@ parse_chapters(mm_text_io_c *in,
       return parse_xml_chapters(in, min_tc, max_tc, offset,
                                 exception_on_error);
 
-    throw error_c(mxsprintf("Unknown chapter file format in '%s'. It does not "
-                            "contain a supported chapter format.\n",
-                            in->get_file_name().c_str()));
+    throw error_c(boost::format(Y("Unknown chapter file format in '%1%'. It does not contain a supported chapter format.\n")) % in->get_file_name());
   } catch (error_c e) {
     if (exception_on_error)
       throw e;
-    mxerror("%s", e.get_error().c_str());
+    mxerror(e.get_error());
   }
 
   return NULL;
@@ -714,9 +690,9 @@ remove_entries(int64_t min_tc,
         (entries[i].end > min_tc))
       entries[i].spans = true;
 
-    mxverb(3, "remove_chapters: entries[%d]: remove %d spans %d start " LLD " "
-           "end " LLD "\n", i, entries[i].remove, entries[i].spans,
-           entries[i].start, entries[i].end);
+    mxverb(3,
+           boost::format("remove_chapters: entries[%1%]: remove %2% spans %3% start %4% end %5%\n")
+           % i % entries[i].remove % entries[i].spans % entries[i].start % entries[i].end);
 
     // Spanning entries must be kept, and their start timecode must be
     // adjusted. Entries that are to be deleted will be deleted later and
@@ -790,8 +766,7 @@ merge_chapter_entries(EbmlMaster &master) {
     start_tc = get_chapter_start(*atom, 0);
     end_tc = get_chapter_end(*atom);
 
-    mxverb(3, "chapters: merge_entries: looking for " LLD " with " LLD ", " LLD
-           "\n", uid, start_tc, end_tc);
+    mxverb(3, boost::format("chapters: merge_entries: looking for %1% with %2%, %3%\n") % uid % start_tc % end_tc);
 
     // Now iterate over all remaining atoms and find those with the same
     // UID.
@@ -828,9 +803,7 @@ merge_chapter_entries(EbmlMaster &master) {
       if ((-1 == end_tc) || (merge_end_tc > end_tc))
         end_tc = merge_end_tc;
 
-      mxverb(3, "chapters: merge_entries:   found one at %d with " LLD ", " LLD
-             "; merged to " LLD ", " LLD "\n", k, merge_start_tc, merge_end_tc,
-             start_tc, end_tc);
+      mxverb(3, boost::format("chapters: merge_entries:   found one at %1% with %2%, %3%; merged to %4%, %5%\n") % k % merge_start_tc % merge_end_tc % start_tc % end_tc);
 
       // Finally remove the entry itself.
       delete master[k];

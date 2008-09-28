@@ -71,8 +71,9 @@ vc1_video_packetizer_c::set_headers() {
       int display_width  = m_seqhdr.display_width;
       int display_height = m_seqhdr.display_height;
 
-      mxverb(2, "vc1: display width %d height %d aspect_ratio_flag %d ar_num %d ar_den %d\n",
-             m_seqhdr.display_width, m_seqhdr.display_height, m_seqhdr.aspect_ratio_flag, m_seqhdr.aspect_ratio_width, m_seqhdr.aspect_ratio_height);
+      mxverb(2,
+             boost::format(Y("vc1: display width %1% height %2% aspect_ratio_flag %3% ar_num %4% ar_den %5%\n"))
+             % m_seqhdr.display_width % m_seqhdr.display_height % m_seqhdr.aspect_ratio_flag % m_seqhdr.aspect_ratio_width % m_seqhdr.aspect_ratio_height);
 
       set_video_display_width(display_width);
       set_video_display_height(display_height);

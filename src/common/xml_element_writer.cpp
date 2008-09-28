@@ -29,6 +29,15 @@
 
 using namespace libebml;
 
+static std::string
+space(int num) {
+  char s[num + 1];
+  memset(s, ' ', num);
+  s[num] = 0;
+
+  return string(s);
+}
+
 static void
 print_binary(int level,
              const char *name,
@@ -53,28 +62,24 @@ print_binary(int level,
 
   if (ascii_only) {
     s.append((const char *)p, size);
-    out->printf("<%s format=\"ascii\">%s</%s>\n", name, escape_xml(s).c_str(),
-                name);
+    out->puts(boost::format("<%1% format=\"ascii\">%2%</%1%>\n") % name % escape_xml(s));
 
   } else {
-    string prefix;
-
-    prefix = mxsprintf("<%s format=\"hex\">", name);
+    string prefix = (boost::format("<%1% format=\"hex\">") % name).str();
 
     for (i = 0; i < size; i++) {
       if ((i % 16) != 0)
         s += " ";
-      s += mxsprintf("%02x", *p);
+      s += (boost::format("%|1$02x|") % *p).str();
       ++p;
       if ((((i + 1) % 16) == 0) && ((i + 1) < size))
-        s += mxsprintf("\n%*s", (level + 1) * 2, "");
+        s += (boost::format("\n%1%") % space((level + 1) * 2)).str();
     }
 
     if ((level * 2 + 2 * strlen(name) + 2 + 3 + s.length()) <= 78)
-      out->printf("%s%s</%s>\n", prefix.c_str(), s.c_str(), name);
+      out->puts(boost::format("%1%%2%</%3%>\n") % prefix % s % name);
     else
-      out->printf("%s\n%*s%s\n%*s</%s>\n", prefix.c_str(), (level + 1) * 2, "",
-                  s.c_str(), level * 2, "", name);
+      out->puts(boost::format("%1%\n%2%%3%\n%4%</%5%>\n") % prefix % space((level + 1) * 2) % s % space(level * 2) % name);
   }
 }
 
@@ -101,18 +106,18 @@ write_xml_element_rec(int level,
     elt_idx++;
   }
 
-  out->printf("%*s", level * 2, "");
+  out->puts(space(level * 2));
 
   if (!found) {
-    out->printf("<!-- Unknown element '%s' -->\n", e->Generic().DebugName);
+    out->puts(boost::format(Y("<!-- Unknown element '%1%' -->\n")) % e->Generic().DebugName);
     return;
   }
 
   if (element_map[elt_idx].type != EBMLT_BINARY)
-    out->printf("<%s>", element_map[elt_idx].name);
+    out->puts(boost::format("<%1%>") % element_map[elt_idx].name);
   switch (element_map[elt_idx].type) {
     case EBMLT_MASTER:
-      out->printf("\n");
+      out->puts("\n");
       m = dynamic_cast<EbmlMaster *>(e);
       assert(m != NULL);
       for (i = 0; i < m->ListSize(); i++)
@@ -130,31 +135,25 @@ write_xml_element_rec(int level,
         element_map[elt_idx].end_hook(&cb);
       }
 
-      out->printf("%*s</%s>\n", level * 2, "", element_map[elt_idx].name);
+      out->puts(boost::format("%1%</%2%>\n") % space(level * 2) % element_map[elt_idx].name);
       break;
 
     case EBMLT_UINT:
     case EBMLT_BOOL:
-      out->printf("" LLU "</%s>\n", uint64(*dynamic_cast<EbmlUInteger *>(e)),
-                  element_map[elt_idx].name);
+      out->puts(boost::format("%1%</%2%>\n") % uint64(*dynamic_cast<EbmlUInteger *>(e)) % element_map[elt_idx].name);
       break;
 
     case EBMLT_STRING:
-      s = escape_xml(string(*dynamic_cast<EbmlString *>(e)));
-      out->printf("%s</%s>\n", s.c_str(), element_map[elt_idx].name);
+      out->puts(boost::format("%1%</%2%>\n") % escape_xml(string(*dynamic_cast<EbmlString *>(e))) % element_map[elt_idx].name);
       break;
 
     case EBMLT_USTRING:
-      s = UTFstring_to_cstrutf8(UTFstring(*static_cast
-                                          <EbmlUnicodeString *>(e)).c_str());
-      s = escape_xml(s);
-      out->printf("%s</%s>\n", s.c_str(), element_map[elt_idx].name);
+      s = escape_xml(UTFstring_to_cstrutf8(UTFstring(*static_cast<EbmlUnicodeString *>(e)).c_str()));
+      out->puts(boost::format("%1%</%2%>\n") % s % element_map[elt_idx].name);
       break;
 
     case EBMLT_TIME:
-      out->printf(FMT_TIMECODEN "</%s>\n",
-                  ARG_TIMECODEN(uint64(*dynamic_cast<EbmlUInteger *>(e))),
-                  element_map[elt_idx].name);
+      out->puts(boost::format("%1%</%2%>\n") % format_timecode(uint64(*dynamic_cast<EbmlUInteger *>(e))) % element_map[elt_idx].name);
       break;
 
     case EBMLT_BINARY:
@@ -188,7 +187,7 @@ void
 xml_formatter_c::set_doctype(const string &dtd,
                              const string &file) {
   if (m_header_written)
-    throw xml_formatter_error_c("The header has already been written.");
+    throw xml_formatter_error_c(Y("The header has already been written."));
 
   m_dtd = dtd;
   m_dtd_file = file;
@@ -198,7 +197,7 @@ void
 xml_formatter_c::set_stylesheet(const string &type,
                                 const string &file) {
   if (m_header_written)
-    throw xml_formatter_error_c("The header has already been written.");
+    throw xml_formatter_error_c(Y("The header has already been written."));
 
   m_stylesheet_type = type;
   m_stylesheet_file = file;
@@ -207,21 +206,17 @@ xml_formatter_c::set_stylesheet(const string &type,
 void
 xml_formatter_c::write_header() {
   if (m_header_written)
-    throw xml_formatter_error_c("The header has already been written.");
+    throw xml_formatter_error_c(Y("The header has already been written."));
 
 #if defined(SYS_WINDOWS)
   m_out->use_dos_style_newlines(true);
 #endif
   m_out->write_bom(m_encoding);
-  m_out->printf("<?xml version=\"1.0\" encoding=\"%s\"?>\n",
-                escape_xml(m_encoding).c_str());
+  m_out->puts(boost::format("<?xml version=\"1.0\" encoding=\"%1%\"?>\n") % escape_xml(m_encoding));
   if ((m_dtd != "") && (m_dtd_file != ""))
-    m_out->printf("\n<!-- DOCTYPE %s SYSTEM \"%s\" -->\n", m_dtd.c_str(),
-                  escape_xml(m_dtd_file).c_str());
+    m_out->puts(boost::format("\n<!-- DOCTYPE %1% SYSTEM \"%2%\" -->\n") % m_dtd % escape_xml(m_dtd_file));
   if ((m_stylesheet_type != "") && (m_stylesheet_file != ""))
-    m_out->printf("\n<?xml-stylesheet type=\"%s\" href=\"%s\"?>\n",
-                  escape_xml(m_stylesheet_type).c_str(),
-                  escape_xml(m_stylesheet_file).c_str());
+    m_out->puts(boost::format("\n<?xml-stylesheet type=\"%1%\" href=\"%2%\"?>\n") % escape_xml(m_stylesheet_type) % escape_xml(m_stylesheet_file));
 
   m_header_written = true;
 }
@@ -237,9 +232,7 @@ xml_formatter_c::format(const string &text) {
       ;
 
   } catch (xml_parser_error_c &error) {
-    throw xml_formatter_error_c(mxsprintf("XML parser error at line %d: %s.",
-                                          error.m_line,
-                                          error.get_error().c_str()));
+    throw xml_formatter_error_c(boost::format(Y("XML parser error at line %1%: %2%.")) % error.m_line % error.get_error());
   }
 }
 
@@ -256,13 +249,13 @@ xml_formatter_c::start_element_cb(const char *name,
   m_data_buffer = escape_xml(from_utf8(m_cc_utf8, m_data_buffer));
 
   if (XMLF_STATE_START == m_state)
-    m_out->printf(">");
+    m_out->puts(">");
   else if (XMLF_STATE_DATA == m_state)
-    m_out->printf("%s", m_data_buffer.c_str());
+    m_out->puts(m_data_buffer);
 
   element = create_xml_node_name(name, atts);
   element.erase(element.length() - 1);
-  m_out->printf("\n%*s%s", m_depth * 2, "", element.c_str());
+  m_out->puts(boost::format("\n%1%%2%") % space(m_depth * 2) % element);
 
   ++m_depth;
   m_data_buffer = "";
@@ -277,16 +270,14 @@ xml_formatter_c::end_element_cb(const char *name) {
   --m_depth;
 
   if (XMLF_STATE_END == m_state)
-    m_out->printf("\n%*s</%s>", m_depth * 2, "", name);
+    m_out->puts(boost::format("\n%1%</%2%>") % space(m_depth * 2) % name);
   else if (XMLF_STATE_START == m_state) {
     if (m_data_buffer == "")
-      m_out->printf("/>");
+      m_out->puts("/>");
     else
-      m_out->printf(">\n%*s%s\n%*s</%s>", (m_depth + 1) * 2, "",
-                    m_data_buffer.c_str(), m_depth * 2, "");
+      m_out->puts(boost::format(">\n%1%%2%\n%3%</%4%>") % space((m_depth + 1) * 2) % m_data_buffer % space(m_depth * 2));
   } else if (XMLF_STATE_DATA == m_state)
-    m_out->printf("%s\n%*s</%s>", m_data_buffer.c_str(), m_depth * 2, "",
-                  name);
+    m_out->puts(boost::format("%1%\n%2%</%3%>") % m_data_buffer % space(m_depth * 2) % name);
 
   m_data_buffer = "";
   m_state = XMLF_STATE_END;
@@ -304,18 +295,18 @@ xml_formatter_c::add_data_cb(const XML_Char *s,
     return;
 
   if ((XMLF_STATE_START == m_state) && (test_data_buffer != ""))
-    m_out->printf(">\n%*s", m_depth * 2, "");
+    m_out->puts(boost::format(">\n%1%") % space(m_depth * 2));
   else if (XMLF_STATE_END == m_state)
-    m_out->printf("\n%*s", m_depth * 2, "");
+    m_out->puts(boost::format("\n%1%") % space(m_depth * 2));
   m_state = XMLF_STATE_DATA;
 }
 
 void
 xml_formatter_c::format_fixed(const string &text) {
   if (XMLF_STATE_START == m_state)
-    m_out->printf(">\n%*s", m_depth * 2, "");
+    m_out->puts(boost::format(">\n%1%") % space(m_depth * 2));
   else if (XMLF_STATE_END == m_state)
-    m_out->printf("\n%*s", m_depth * 2, "");
+    m_out->puts(boost::format("\n%1%") % space(m_depth * 2));
   m_state = XMLF_STATE_DATA;
-  m_out->printf("%s", text.c_str());
+  m_out->puts(text);
 }

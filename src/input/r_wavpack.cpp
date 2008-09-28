@@ -58,9 +58,9 @@ wavpack_reader_c::wavpack_reader_c(track_info_c &_ti)
 
     int packet_size = wv_parse_frame(io, header, meta, true, true);
     if (0 > packet_size)
-      mxerror(FMT_FN "The file header was not read correctly.\n", ti.fname.c_str());
+      mxerror_fn(ti.fname, Y("The file header was not read correctly.\n"));
   } catch (...) {
-    throw error_c("wavpack_reader: Could not open the file.");
+    throw error_c(Y("wavpack_reader: Could not open the file."));
   }
 
   io->setFilePointer(io->getFilePointer() - sizeof(wavpack_header_t), seek_beginning);
@@ -74,18 +74,21 @@ wavpack_reader_c::wavpack_reader_c(track_info_c &_ti)
       io_correc       = new mm_file_io_c(ti.fname + "c");
       int packet_size = wv_parse_frame(io_correc, header_correc, meta_correc, true, true);
       if (0 > packet_size)
-        mxerror(FMT_FN "The correction file header was not read correctly.\n", ti.fname.c_str());
+        mxerror_fn(ti.fname, Y("The correction file header was not read correctly.\n"));
 
       io_correc->setFilePointer(io_correc->getFilePointer() - sizeof(wavpack_header_t), seek_beginning);
       meta.has_correction = true;
     }
   } catch (...) {
     if (verbose)
-      mxinfo(FMT_FN "Could not open the corresponding correction file '%s'.\n", ti.fname.c_str(), (ti.fname + "c").c_str());
+      mxinfo_fn(ti.fname, boost::format(Y("Could not open the corresponding correction file '%1%c'.\n")) % ti.fname);
   }
 
   if (verbose)
-    mxinfo(FMT_FN "Using the WAVPACK demultiplexer%s.\n", ti.fname.c_str(), meta.has_correction ? " with a correction file" : "");
+    if (meta.has_correction)
+      mxinfo_fn(ti.fname, Y("Using the WAVPACK demultiplexer with a correction file."));
+    else
+      mxinfo_fn(ti.fname, Y("Using the WAVPACK demultiplexer."));
 }
 
 wavpack_reader_c::~wavpack_reader_c() {
@@ -106,7 +109,7 @@ wavpack_reader_c::create_packetizer(int64_t) {
   add_packetizer(new wavpack_packetizer_c(this, meta, ti));
   ti.private_data = NULL;
 
-  mxinfo(FMT_TID "Using the WAVPACK output module.\n", ti.fname.c_str(), (int64_t)0);
+  mxinfo_tid(ti.fname, 0, Y("Using the WAVPACK output module.\n"));
 }
 
 file_status_e

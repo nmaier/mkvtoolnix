@@ -19,6 +19,7 @@
 
 #include "common.h"
 #include "mkvinfo.h"
+#include "qtcommon.h"
 
 #include "qt_ui.h"
 
@@ -52,35 +53,29 @@ main_window_c::main_window_c():
   action_Expand_important->setCheckable(true);
   action_Expand_important->setChecked(true);
 
-  tree->setHeaderLabels(QStringList(tr("Elements")));
+  tree->setHeaderLabels(QStringList(Q(Y("Elements"))));
   tree->setRootIsDecorated(true);
 
   root = new QTreeWidgetItem(tree);
-  root->setText(0, tr("no file loaded"));
+  root->setText(0, Q(Y("no file loaded")));
 }
 
 void
 main_window_c::open() {
-  QString file_name =
-    QFileDialog::getOpenFileName(this, tr("Open File"), "",
-                                 tr("Matroska files (*.mkv *.mka *.mks)"
-                                    ";;All files (*.*)"));
+  QString file_name = QFileDialog::getOpenFileName(this, Q(Y("Open File")), "", Q(Y("Matroska files (*.mkv *.mka *.mks);;All files (*.*)")));
   if (!file_name.isEmpty())
     parse_file(file_name);
 }
 
 void
 main_window_c::save_text_file() {
-  QString file_name =
-    QFileDialog::getSaveFileName(this, tr("Save information as"), "",
-                                 tr("Text files (*.txt);;All files (*.*)"));
+  QString file_name = QFileDialog::getSaveFileName(this, Q(Y("Save information as")), "", Q(Y("Text files (*.txt);;All files (*.*)")));
   if (file_name.isEmpty())
     return;
 
   QFile file(file_name);
   if (!file.open(QIODevice::WriteOnly)) {
-    QMessageBox::critical(this, tr("Error saving the information"),
-                          tr("The file could not be opened for writing."));
+    QMessageBox::critical(this, Q(Y("Error saving the information")), Q(Y("The file could not be opened for writing.")));
     return;
   }
 
@@ -119,20 +114,21 @@ main_window_c::show_all() {
 void
 main_window_c::about() {
   QString msg =
-    QString(VERSIONINFO ".\n"
-            "Compiled with libebml %1 + libmatroska %2.\n\n"
-            "This program is licensed under the GPL v2 (see COPYING).\n"
-            "It was written by Moritz Bunkus <moritz@bunkus.org>.\n"
-            "Sources and the latest binaries are always available at\n"
-            "http://www.bunkus.org/videotools/mkvtoolnix/")
-    .arg(QString::fromUtf8(EbmlCodeVersion.c_str()))
-    .arg(QString::fromUtf8(KaxCodeVersion.c_str()));
-  QMessageBox::about(this, tr("About " NAME), msg);
+    Q(Y("%1.\n"
+        "Compiled with libebml %2 + libmatroska %3.\n\n"
+        "This program is licensed under the GPL v2 (see COPYING).\n"
+        "It was written by Moritz Bunkus <moritz@bunkus.org>.\n"
+        "Sources and the latest binaries are always available at\n"
+        "http://www.bunkus.org/videotools/mkvtoolnix/"))
+    .arg(Q(VERSIONINFO))
+    .arg(Q(EbmlCodeVersion.c_str()))
+    .arg(Q(KaxCodeVersion.c_str()));
+  QMessageBox::about(this, Q(Y("About mkvinfo")), msg);
 }
 
 void
 main_window_c::show_error(const QString &msg) {
-  QMessageBox::critical(this, tr("Error"), msg);
+  QMessageBox::critical(this, Q(Y("Error")), msg);
 }
 
 void
@@ -157,7 +153,7 @@ main_window_c::parse_file(const QString &file_name) {
       expand_elements();
   }
 
-  statusBar()->showMessage(tr("Ready"), 5000);
+  statusBar()->showMessage(Q(Y("Ready")), 5000);
 
   tree->setEnabled(true);
 }
@@ -179,9 +175,9 @@ void
 main_window_c::expand_elements() {
   int l0, l1, c0, c1;
   QTreeWidgetItem *i0, *i1;
-  const QString s_segment(tr("Segment"));
-  const QString s_info(tr("Segment information"));
-  const QString s_tracks(tr("Segment tracks"));
+  const QString s_segment(Q(Y("Segment")));
+  const QString s_info(Q(Y("Segment information")));
+  const QString s_tracks(Q(Y("Segment tracks")));
 
   setUpdatesEnabled(false);
 
@@ -252,32 +248,31 @@ rightclick_tree_widget::mousePressEvent(QMouseEvent *event) {
 }
 
 void
-ui_show_error(const char *text) {
+ui_show_error(const std::string &error) {
   if (use_gui)
-    gui->show_error(QString::fromUtf8(text));
+    gui->show_error(Q(error.c_str()));
   else
-    console_show_error(text);
+    console_show_error(error);
 }
 
 void
 ui_show_element(int level,
-                const char *text,
+                const std::string &text,
                 int64_t position) {
   if (!use_gui)
     console_show_element(level, text, position);
 
-  else if (0 <= position) {
-    string buffer = mxsprintf("%s at " LLD, text, position);
-    gui->add_item(level, QString::fromUtf8(buffer.c_str()));
+  else if (0 <= position)
+    gui->add_item(level, Q((boost::format(Y("%1% at %2%")) % text % position).str().c_str()));
 
-  } else
-    gui->add_item(level, QString::fromUtf8(text));
+  else
+    gui->add_item(level, Q(text.c_str()));
 }
 
 void
 ui_show_progress(int percentage,
-                 const char *text) {
-  gui->show_progress(percentage, QString::fromUtf8(text));
+                 const std::string &text) {
+  gui->show_progress(percentage, Q(text.c_str()));
 }
 
 int
@@ -295,7 +290,7 @@ ui_run(int argc,
   parse_args(args, initial_file);
 
   if (initial_file != "")
-    gui->parse_file(QString::fromUtf8(initial_file.c_str()));
+    gui->parse_file(Q(initial_file.c_str()));
 
   return app.exec();
 }

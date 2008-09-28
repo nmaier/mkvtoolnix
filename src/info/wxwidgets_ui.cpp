@@ -402,32 +402,31 @@ END_EVENT_TABLE()
 IMPLEMENT_APP_NO_MAIN(mi_app)
 
 void
-ui_show_error(const char *text) {
+ui_show_error(const std::string &error) {
   if (use_gui)
-    frame->show_error(wxU(text));
+    frame->show_error(wxU(error.c_str()));
   else
-    console_show_error(text);
+    console_show_error(error);
 }
 
 void
 ui_show_element(int level,
-                const char *text,
+                const std::string &text,
                 int64_t position) {
   if (!use_gui)
     console_show_element(level, text, position);
 
-  else if (0 <= position) {
-    string buffer = mxsprintf("%s at " LLD, text, position);
-    frame->add_item(level, wxU(buffer.c_str()));
+  else if (0 <= position)
+    frame->add_item(level, wxU((boost::format(Y("%1% at %2%")) % text % position).str().c_str()));
 
-  } else
-    frame->add_item(level, wxU(text));
+  else
+    frame->add_item(level, wxU(text.c_str()));
 }
 
 void
 ui_show_progress(int percentage,
-                 const char *text) {
-  frame->show_progress(percentage, wxU(text));
+                 const std::string &text) {
+  frame->show_progress(percentage, wxU(text.c_str()));
 }
 
 int

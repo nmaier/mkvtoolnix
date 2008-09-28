@@ -82,20 +82,19 @@ ac3_packetizer_c::get_ac3_packet(unsigned long *header,
 
       offset = handle_avi_audio_sync(bytes_skipped, false);
       if (offset != -1) {
-        mxinfo("The AC3 track " LLD " from '%s' contained " LLD " bytes of "
-               "non-AC3 data at the beginning. This corresponds to a delay "
-               "of " LLD "ms. This delay will be used instead of the non-AC3 "
-               "data.\n",
-               ti.id, ti.fname.c_str(), bytes_skipped, offset / 1000000);
+        mxinfo_tid(ti.fname, ti.id,
+                   boost::format(Y("This AC3 track contains %1% bytes of non-AC3 data at the beginning. "
+                                   "This corresponds to a delay of %2%ms. "
+                                   "This delay will be used instead of the non-AC3 data.\n"))
+                   % bytes_skipped % (offset / 1000000));
         warning_printed = true;
         ti.tcsync.displacement += offset;
       }
     }
     if (!warning_printed)
-      mxwarn("The AC3 track " LLD " from '%s' contained " LLD " bytes of "
-             "non-AC3 data which were skipped. The audio/"
-             "video synchronization may have been lost.\n", ti.id,
-             ti.fname.c_str(), bytes_skipped);
+      mxwarn_tid(ti.fname, ti.id,
+                 boost::format(Y("This AC3 track contains %1% bytes of non-AC3 data which were skipped. "
+                                 "The audio/video synchronization may have been lost.\n")) % bytes_skipped);
     byte_buffer.remove(pos);
     packet_buffer = byte_buffer.get_buffer();
     size = byte_buffer.get_size();
@@ -198,10 +197,9 @@ ac3_bs_packetizer_c::add_to_buffer(unsigned char *buf,
   bool new_bsb_present;
 
   if (((size % 2) == 1) && !warning_printed) {
-    mxwarn("Untested code. If mkvmerge crashes, "
-           "or if the resulting file does not contain the complete and "
-           "correct audio track, then please contact the author, Moritz "
-           "Bunkus, at moritz@bunkus.org.\n");
+    mxwarn(Y("ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). "
+             "If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, "
+             "then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"));
     warning_printed = true;
   }
 

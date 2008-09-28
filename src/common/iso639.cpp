@@ -527,17 +527,13 @@ list_iso639_languages() {
   int i;
 
   i = 0;
-  mxinfo("                             English language name | "
-         "ISO639-2 code | ISO639-1 code\n"
-         "---------------------------------------------------+-"
-         "--------------+--------------\n");
+  mxinfo(Y("                             English language name | ISO639-2 code | ISO639-1 code\n"
+           "---------------------------------------------------+---------------+--------------\n"));
   while (iso639_languages[i].iso639_2_code != NULL) {
-    mxinfo("%50s | %13s | %13s\n",
-           iso639_languages[i].english_name != NULL ?
-           iso639_languages[i].english_name : "",
-           iso639_languages[i].iso639_2_code,
-           iso639_languages[i].iso639_1_code != NULL ?
-           iso639_languages[i].iso639_1_code : "");
+    mxinfo(boost::format("%|1$50s| | %|2$13s| | %|3$13s|\n")
+           % (NULL != iso639_languages[i].english_name  ? iso639_languages[i].english_name  : "")
+           % iso639_languages[i].iso639_2_code
+           % (NULL != iso639_languages[i].iso639_1_code ? iso639_languages[i].iso639_1_code : ""));
     i++;
   }
 }

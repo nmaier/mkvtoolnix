@@ -99,6 +99,9 @@ public:
   virtual string getline();
   virtual bool getline2(string &s);
   virtual size_t puts(const string &s);
+  inline size_t puts(const boost::format &format) {
+    return puts(format.str());
+  }
   virtual bool write_bom(const string &charset);
   virtual int getch();
 
@@ -109,7 +112,6 @@ public:
 
   virtual void close() = 0;
 
-  virtual int printf(const char *fmt, ...);
   virtual void use_dos_style_newlines(bool yes) {
     dos_style_newlines = yes;
   }

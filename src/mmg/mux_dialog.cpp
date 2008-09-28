@@ -169,7 +169,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
         tc_warnings->AppendText(wx_line + wxT("\n"));
       else if (wx_line.Find(wxT("Error:")) == 0)
         tc_errors->AppendText(wx_line + wxT("\n"));
-      else if (wx_line.Find(wxT("progress")) == 0) {
+      else if (wx_line.Find(wxT("Progress")) == 0) {
         if (wx_line.Find(wxT("%")) != 0) {
           wx_line.Remove(wx_line.Find(wxT("%")));
           tmp = wx_line.AfterLast(wxT(' '));

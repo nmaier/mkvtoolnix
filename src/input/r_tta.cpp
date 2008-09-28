@@ -56,16 +56,16 @@ tta_reader_c::tta_reader_c(track_info_c &_ti)
     io   = new mm_file_io_c(ti.fname);
     size = io->get_size();
 
-    if (identifying)
+    if (g_identifying)
       return;
 
     int tag_size = skip_id3v2_tag(*io);
     if (0 > tag_size)
-      mxerror(_("tta_reader: tag_size < 0 in the c'tor. %s\n"), BUGMSG);
+      mxerror_fn(ti.fname, boost::format(Y("tta_reader: tag_size < 0 in the c'tor. %1%\n")) % BUGMSG);
     size -= tag_size;
 
     if (io->read(&header, sizeof(tta_file_header_t)) != sizeof(tta_file_header_t))
-      mxerror(FMT_FN "The file header is too short.\n", ti.fname.c_str());
+      mxerror_fn(ti.fname, Y("The file header is too short.\n"));
 
     int64_t seek_sum  = io->getFilePointer() + 4 - tag_size;
     size             -= id3_tag_present_at_end(*io);
@@ -78,15 +78,14 @@ tta_reader_c::tta_reader_c(track_info_c &_ti)
       seek_points.push_back(seek_point);
     } while (seek_sum < size);
 
-    mxverb(2, "tta: ch %u bps %u sr %u dl %u seek_sum " LLD " size " LLD " num %u\n",
-           get_uint16_le(&header.channels),
-           get_uint16_le(&header.bits_per_sample),
-           get_uint32_le(&header.sample_rate),
-           get_uint32_le(&header.data_length),
-           seek_sum, size, (unsigned int)seek_points.size());
+    mxverb(2,
+           boost::format(Y("tta: ch %1% bps %2% sr %3% dl %4% seek_sum %5% size %6% num %7%\n"))
+           % get_uint16_le(&header.channels)    % get_uint16_le(&header.bits_per_sample)
+           % get_uint32_le(&header.sample_rate) % get_uint32_le(&header.data_length)
+           % seek_sum      % size               % seek_points.size());
 
     if (seek_sum != size)
-      mxerror(FMT_FN "The seek table in this TTA file seems to be broken.\n", ti.fname.c_str());
+      mxerror_fn(ti.fname, Y("The seek table in this TTA file seems to be broken.\n"));
 
     io->skip(4);
 
@@ -95,10 +94,10 @@ tta_reader_c::tta_reader_c(track_info_c &_ti)
     ti.id           = 0;        // ID for this track.
 
   } catch (...) {
-    throw error_c("tta_reader: Could not open the file.");
+    throw error_c(Y("tta_reader: Could not open the file."));
   }
   if (verbose)
-    mxinfo(FMT_FN "Using the TTA demultiplexer.\n", ti.fname.c_str());
+    mxinfo_fn(ti.fname, Y("Using the TTA demultiplexer.\n"));
 }
 
 tta_reader_c::~tta_reader_c() {
@@ -111,7 +110,7 @@ tta_reader_c::create_packetizer(int64_t) {
     return;
 
   add_packetizer(new tta_packetizer_c(this, get_uint16_le(&header.channels), get_uint16_le(&header.bits_per_sample), get_uint32_le(&header.sample_rate), ti));
-  mxinfo(FMT_TID "Using the TTA output module.\n", ti.fname.c_str(), (int64_t)0);
+  mxinfo_tid(ti.fname, 0, Y("Using the TTA output module.\n"));
 }
 
 file_status_e
@@ -132,7 +131,7 @@ tta_reader_c::read(generic_packetizer_c *,
   memory_cptr mem(new memory_c(buf, nread, true));
   if (seek_points.size() <= pos) {
     double samples_left = (double)get_uint32_le(&header.data_length) - (seek_points.size() - 1) * TTA_FRAME_TIME * get_uint32_le(&header.sample_rate);
-    mxverb(2, "tta: samples_left %f\n", samples_left);
+    mxverb(2, boost::format(Y("tta: samples_left %1%\n")) % samples_left);
 
     PTZR0->process(new packet_t(mem, -1, irnd(samples_left * 1000000000.0l / get_uint32_le(&header.sample_rate))));
   } else

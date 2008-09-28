@@ -1,4 +1,3 @@
-
 /*
    mkvmerge -- utility for splicing together matroska files
    from component media subtypes
@@ -63,8 +62,9 @@ using namespace libebml;
 #include "smart_pointers.h"
 
 const string empty_string("");
-int verbose            = 1;
-bool suppress_warnings = false;
+int verbose = 1;
+
+extern bool g_warning_issued;
 
 bitvalue_c::bitvalue_c(int nbitsize) {
   assert(nbitsize > 0);
@@ -115,12 +115,11 @@ bitvalue_c::bitvalue_c(string s,
 
     // Invalid character?
     if (!ishexdigit(s[i]))
-      throw error_c(mxsprintf("not a hex digit at position %d", i));
+      throw error_c(boost::format(Y("Not a hex digit at position %1%")) % i);
 
     // Input too long?
     if ((allowed_bitlength > 0) && ((s2.length() * 4) >= allowed_bitlength))
-      throw error_c(mxsprintf("input too long: %d > %d", (int)s2.length() * 4,
-                              allowed_bitlength));
+      throw error_c(boost::format(Y("Input too long: %1% > %2%")) % (s2.length() * 4) % allowed_bitlength);
 
     // Store the value.
     s2 += s[i];
@@ -131,7 +130,7 @@ bitvalue_c::bitvalue_c(string s,
   if (((len % 2) != 0)
       ||
       ((allowed_bitlength != -1) && ((len * 4) < allowed_bitlength)))
-    throw error_c("missing one hex digit");
+    throw error_c(Y("Missing one hex digit"));
 
   value = (unsigned char *)safemalloc(len / 2);
   bitsize = len * 4;
@@ -188,30 +187,6 @@ bitvalue_c::data()
 void
 bitvalue_c::generate_random() {
   random_c::generate_bytes(value, bitsize / 8);
-}
-
-/*
-   Control functions
-*/
-
-void
-die(const char *fmt,
-    ...) {
-  va_list ap;
-
-  mxprint(stdout, "'die' called: ");
-  va_start(ap, fmt);
-  vfprintf(stdout, fmt, ap);
-  va_end(ap);
-  mxprint(stdout, "\n");
-  exit(2);
-}
-
-void
-_trace(const char *func,
-       const char *file,
-       int line) {
-  mxdebug("trace: %s:%s (%d)\n", file, func, line);
 }
 
 /*
@@ -496,19 +471,16 @@ utf8_init(const string &charset) {
 
   ict_to_utf8 = iconv_open("UTF-8", lc_charset.c_str());
   if (ict_to_utf8 == (iconv_t)(-1))
-    mxwarn("Could not initialize the iconv library for "
-           "the conversion from %s to UFT-8. "
-           "Some strings will not be converted to UTF-8 and the resulting "
-           "Matroska file might not comply with the Matroska specs ("
-           "error: %d, %s).\n", lc_charset.c_str(), errno, strerror(errno));
+    mxwarn(boost::format(Y("Could not initialize the iconv library for the conversion from %1% to UFT-8. "
+                           "Some strings will not be converted to UTF-8 and the resulting Matroska file "
+                           "might not comply with the Matroska specs (error: %2%, %3%).\n"))
+           % lc_charset % errno % strerror(errno));
 
   ict_from_utf8 = iconv_open(lc_charset.c_str(), "UTF-8");
   if (ict_from_utf8 == (iconv_t)(-1))
-    mxwarn("Could not initialize the iconv library for "
-           "the conversion from UFT-8 to %s. "
-           "Some strings cannot be converted from UTF-8 and might be "
-           "displayed incorrectly (error: %d, %s).\n", lc_charset.c_str(),
-           errno, strerror(errno));
+    mxwarn(boost::format(Y("Could not initialize the iconv library for the conversion from UFT-8 to %1%. "
+                           "Some strings cannot be converted from UTF-8 and might be displayed incorrectly (error: %2%, %3%).\n"))
+           % lc_charset % errno % strerror(errno));
 
   return add_kax_conv(lc_charset.c_str(), ict_from_utf8, ict_to_utf8);
 }
@@ -564,8 +536,7 @@ to_utf8(int handle,
     return local;
 
   if (handle >= kax_convs.size())
-    die("common.cpp/to_utf8(): Invalid conversion handle %d (num: %u).",
-        handle, (unsigned int)kax_convs.size());
+    mxerror(boost::format(Y("common.cpp/to_utf8(): Invalid conversion handle %1% (num: %2%).\n")) % handle % kax_convs.size());
 
   return convert_charset(kax_convs[handle].ict_to_utf8, local);
 }
@@ -579,24 +550,9 @@ from_utf8(int handle,
     return utf8;
 
   if (handle >= kax_convs.size())
-    die("common.cpp/from_utf8(): Invalid conversion handle %d (num: %u).",
-        handle, (unsigned int)kax_convs.size());
+    mxerror(boost::format(Y("common.cpp/from_utf8(): Invalid conversion handle %1% (num: %2%).\n")) % handle % kax_convs.size());
 
   return convert_charset(kax_convs[handle].ict_from_utf8, utf8);
-}
-
-static int cc_stdio = -1;
-string stdio_charset;
-
-void
-init_cc_stdio() {
-  set_cc_stdio(get_local_charset());
-}
-
-void
-set_cc_stdio(const string &charset) {
-  stdio_charset = charset;
-  cc_stdio = utf8_init(charset);
 }
 
 /*
@@ -706,9 +662,7 @@ _safememdup(const void *s,
 
   copy = malloc(size);
   if (copy == NULL)
-    die("common.cpp/safememdup() called from file %s, line %d: malloc() "
-        "returned NULL for a size of %u bytes.", file, line,
-        (unsigned int)size);
+    mxerror(boost::format(Y("common.cpp/safememdup() called from file %1%, line %2%: malloc() returned NULL for a size of %3% bytes.\n")) % file % line % size);
   memcpy(copy, s, size);
 
   return copy;
@@ -724,9 +678,7 @@ _safemalloc(size_t size,
 
   mem = malloc(size);
   if (mem == NULL)
-    die("common.cpp/safemalloc() called from file %s, line %d: malloc() "
-        "returned NULL for a size of %u bytes.", file, line,
-        (unsigned int)size);
+    mxerror(boost::format(Y("common.cpp/safemalloc() called from file %1%, line %2%: malloc() returned NULL for a size of %3% bytes.")) % file % line % size);
 
   return mem;
 }
@@ -741,9 +693,7 @@ _saferealloc(void *mem,
     size = 1;
   mem = realloc(mem, size);
   if (mem == NULL)
-    die("common.cpp/saferealloc() called from file %s, line %d: realloc() "
-        "returned NULL for a size of %u bytes.", file, line,
-        (unsigned int)size);
+    mxerror(boost::format(Y("common.cpp/saferealloc() called from file %1%, line %2%: realloc() returned NULL for a size of %3% bytes.")) % file % line % size);
 
   return mem;
 }
@@ -756,8 +706,7 @@ safefree(void *p) {
 
 void
 dump_malloc_report() {
-  mxinfo("" LLU " bytes malloced, " LLU " bytes duplicated\n",
-         _safemalloced - _safedupped, _safedupped);
+  mxinfo(boost::format(Y("%1% bytes malloced, %2% bytes duplicated\n")) % (_safemalloced - _safedupped) % _safedupped);
 }
 
 /*
@@ -1130,11 +1079,7 @@ parse_double(const char *s,
 
 string
 to_string(int64_t i) {
-  char buf[100];
-
-  sprintf(buf, "" LLD, i);
-
-  return string(buf);
+  return (boost::format("%1%") % i).str();
 }
 
 /*
@@ -1182,150 +1127,28 @@ fix_format(const char *fmt,
 #endif
 }
 
-void
-mxprint(void *stream,
-        const char *fmt,
-        ...) {
-  va_list ap;
-  string new_fmt;
+std::string
+format_timecode(int64_t timecode,
+                unsigned int precision) {
+  std::string result = (boost::format("%|1$02d|:%|2$02d|:%|3$02d|")
+                        % (int)( timecode / 60 / 60 / 1000000000)
+                        % (int)((timecode      / 60 / 1000000000) % 60)
+                        % (int)((timecode           / 1000000000) % 60)).str();
 
-  fix_format(fmt, new_fmt);
-  va_start(ap, fmt);
-  vfprintf((FILE *)stream, new_fmt.c_str(), ap);
-  fflush((FILE *)stream);
-  va_end(ap);
-}
+  if (9 < precision)
+    precision = 9;
 
-void
-mxprints(char *dst,
-         const char *fmt,
-         ...) {
-  va_list ap;
-  string new_fmt;
+  if (precision) {
+    std::string format   = (boost::format(".%%|1$0%1%d|") % precision).str();
+    std::string decimals = (boost::format(format) % (int)(timecode % 1000000000)).str();
 
-  fix_format(fmt, new_fmt);
-  va_start(ap, fmt);
-  vsprintf(dst, new_fmt.c_str(), ap);
-  va_end(ap);
-}
+    if (decimals.length() > precision)
+      decimals.erase(precision + 1);
 
-counted_ptr<mm_io_c> mm_stdio;
-static bool mm_stdio_redirected = false;
+    result += decimals;
+  }
 
-void
-init_stdio() {
-  mm_stdio = counted_ptr<mm_io_c>(new mm_stdio_c());
-  mm_stdio_redirected = false;
-}
-
-void
-redirect_stdio(mm_io_c *stdio) {
-  mm_stdio = counted_ptr<mm_io_c>(stdio);
-  mm_stdio_redirected = true;
-}
-
-bool
-stdio_redirected() {
-  return mm_stdio_redirected;
-}
-
-static void
-mxmsg(int level,
-      const char *fmt,
-      va_list ap) {
-  string new_fmt, output;
-  bool nl;
-  const char *prefix;
-
-  fix_format(fmt, new_fmt);
-
-  if (new_fmt[0] == '\n') {
-    nl = true;
-    new_fmt.erase(0, 1);
-  } else
-    nl = false;
-
-  prefix = NULL;
-
-  if (level == MXMSG_ERROR)
-    prefix = "Error: ";
-  else if (level == MXMSG_WARNING)
-    prefix = "Warning: ";
-  else if (level == MXMSG_DEBUG)
-    prefix = "DBG> ";
-
-  if (nl)
-    mm_stdio->puts("\n");
-
-  if (prefix != NULL)
-    mm_stdio->puts(prefix);
-
-  output = from_utf8(cc_stdio, mxvsprintf(new_fmt.c_str(), ap));
-  mm_stdio->puts(output);
-  mm_stdio->flush();
-}
-
-void
-mxverb(int level,
-       const char *fmt,
-       ...) {
-  va_list ap;
-
-  if (verbose < level)
-    return;
-
-  va_start(ap, fmt);
-  mxmsg(MXMSG_INFO, fmt, ap);
-  va_end(ap);
-}
-
-void
-mxinfo(const char *fmt,
-       ...) {
-  va_list ap;
-
-  va_start(ap, fmt);
-  mxmsg(MXMSG_INFO, fmt, ap);
-  va_end(ap);
-}
-
-static bool warning_issued = false;
-
-void
-mxwarn(const char *fmt,
-       ...) {
-  va_list ap;
-
-  if (suppress_warnings)
-    return;
-  va_start(ap, fmt);
-  mxmsg(MXMSG_WARNING, fmt, ap);
-  va_end(ap);
-
-  warning_issued = true;
-}
-
-void
-mxerror(const char *fmt,
-        ...) {
-  va_list ap;
-
-  va_start(ap, fmt);
-  mxinfo("\n");
-  mxmsg(MXMSG_ERROR, fmt, ap);
-  va_end(ap);
-
-  exit(2);
-}
-
-void
-mxdebug(const char *fmt,
-        ...) {
-  va_list ap;
-
-  va_start(ap, fmt);
-  mxmsg(MXMSG_DEBUG, fmt, ap);
-  va_end(ap);
+  return result;
 }
 
 void
@@ -1333,92 +1156,10 @@ mxexit(int code) {
   if (code != -1)
     exit(code);
 
-  if (warning_issued)
+  if (g_warning_issued)
     exit(1);
 
   exit(0);
-}
-
-int
-get_arg_len(const char *fmt,
-            ...) {
-  int size;
-  va_list ap;
-
-  va_start(ap, fmt);
-  size = get_varg_len(fmt, ap);
-  va_end(ap);
-
-  return size;
-}
-
-int
-get_varg_len(const char *fmt,
-             va_list ap) {
-  int size, result;
-  char *dst;
-
-  size = 1024;
-  dst = (char *)safemalloc(size);
-  while (1) {
-#if defined(COMP_MSC)
-    result = vsnprintf(dst, size - 1, fmt, ap);
-#else
-    va_list ap2;
-
-    va_copy(ap2, ap);
-    result = vsnprintf(dst, size - 1, fmt, ap2);
-    va_end(ap2);
-#endif // defined(COMP_MSC)
-    if (result >= 0) {
-      safefree(dst);
-      return result;
-    }
-    size += 1024;
-    dst = (char *)saferealloc(dst, size);
-  }
-  safefree(dst);
-
-  return -1;
-}
-
-string
-mxvsprintf(const char *fmt,
-           va_list ap) {
-  string new_fmt, dst;
-  char *new_string;
-  int len;
-#if !defined(COMP_MSC)
-  va_list ap2;
-#endif
-
-  fix_format(fmt, new_fmt);
-  len = get_varg_len(new_fmt.c_str(), ap);
-  new_string = (char *)safemalloc(len + 1);
-#if defined(COMP_MSC)
-  vsprintf(new_string, new_fmt.c_str(), ap);
-#else
-  va_copy(ap2, ap);
-  vsprintf(new_string, new_fmt.c_str(), ap2);
-  va_end(ap2);
-#endif // defined(COMP_MSC)
-  dst = new_string;
-  safefree(new_string);
-
-  return dst;
-}
-
-string
-mxsprintf(const char *fmt,
-          ...) {
-  va_list ap;
-  string result;
-
-  va_start(ap, fmt);
-  result = mxvsprintf(fmt, ap);
-  va_end(ap);
-
-  return result;
 }
 
 /** \brief Platform independant version of sscanf
@@ -1438,7 +1179,7 @@ mxsscanf(const string &str,
   string new_fmt;
   int result;
 
-  mxverb(5, "mxsscanf: str: %s /// fmt: %s\n", str.c_str(), fmt);
+  mxverb(5, boost::format("mxsscanf: str: %1% /// fmt: %2%\n") % str % fmt);
   fix_format(fmt, new_fmt);
   va_start(ap, fmt);
   result = vsscanf(str.c_str(), new_fmt.c_str(), ap);
@@ -1461,10 +1202,10 @@ mxhexdump(int level,
     if ((i % 16) == 0) {
       if (i > 0) {
         output[j] = 0;
-        mxinfo("%s\n", output);
+        mxinfo(boost::format("%1%\n") % output);
         j = 0;
       }
-      mxinfo("%08x  ", i);
+      mxinfo(boost::format("%|1$08x|  ") % i);
 
     } else if ((i % 8) == 0) {
       mxinfo(" ");
@@ -1477,7 +1218,7 @@ mxhexdump(int level,
     else
       output[j] = '.';
     j++;
-    mxinfo("%02x ", buffer[i]);
+    mxinfo(boost::format("%|1$02x| ") % buffer[i]);
   }
   while ((i % 16) != 0) {
     if ((i % 8) == 0)
@@ -1486,14 +1227,20 @@ mxhexdump(int level,
     i++;
   }
   output[j] = 0;
-  mxinfo("%s\n", output);
+  mxinfo(boost::format("%1%\n") % output);
 }
 
 string timecode_parser_error;
 
-static bool
-set_tcp_error(const string &error) {
+inline bool
+set_tcp_error(const std::string &error) {
   timecode_parser_error = error;
+  return false;
+}
+
+inline bool
+set_tcp_error(const boost::format &error) {
+  timecode_parser_error = error.str();
   return false;
 }
 
@@ -1564,46 +1311,41 @@ parse_timecode(const string &src,
   for (i = offset; src.length() > i; ++i) {
     if (isdigit(src[i])) {
       if (decimal_point_found && (9 == num_digits))
-        return set_tcp_error("Invalid format: More than nine nano-second "
-                             "digits");
+        return set_tcp_error(Y("Invalid format: More than nine nano-second digits"));
       values[num_values - 1] = values[num_values - 1] * 10 + src[i] - '0';
       ++num_digits;
 
     } else if (('.' == src[i]) ||
                ((':' == src[i]) && (2 == num_colons))) {
       if (decimal_point_found)
-        return set_tcp_error("Invalid format: Second decimal point after "
-                             "first decimal point");
+        return set_tcp_error(Y("Invalid format: Second decimal point after first decimal point"));
 
       if (0 == num_digits)
-        return set_tcp_error("Invalid format: No digits before decimal point");
+        return set_tcp_error(Y("Invalid format: No digits before decimal point"));
       ++num_values;
       num_digits = 0;
       decimal_point_found = true;
 
     } else if (':' == src[i]) {
       if (decimal_point_found)
-        return set_tcp_error("Invalid format: Colon inside nano-second part");
+        return set_tcp_error(Y("Invalid format: Colon inside nano-second part"));
       if (2 == num_colons)
-        return set_tcp_error("Invalid format: More than two colons");
+        return set_tcp_error(Y("Invalid format: More than two colons"));
       if (0 == num_digits)
-        return set_tcp_error("Invalid format: No digits before colon");
+        return set_tcp_error(Y("Invalid format: No digits before colon"));
       ++num_colons;
       ++num_values;
       num_digits = 0;
 
     } else
-      return set_tcp_error(mxsprintf("Invalid format: unknown character '%c' "
-                                     "found", src[i]));
+      return set_tcp_error(boost::format(Y("Invalid format: unknown character '%1%' found")) % src[i]);
   }
 
   if (1 > num_colons)
-    return set_tcp_error("Invalid format: At least minutes and seconds "
-                         "have to be given, but no colon was found");
+    return set_tcp_error(Y("Invalid format: At least minutes and seconds have to be given, but no colon was found"));
 
   if ((':' == src[src.length() - 1]) || ('.' == src[src.length() - 1]))
-    return set_tcp_error("Invalid format: The last character is a colon or a "
-                         "decimal point instead of a digit");
+    return set_tcp_error(Y("Invalid format: The last character is a colon or a decimal point instead of a digit"));
 
   // No error has been found. Now find out whoich parts have been
   // set and which haven't.
@@ -1639,16 +1381,16 @@ parse_timecode(const string &src,
   }
 
   if (m > 59)
-    return set_tcp_error(mxsprintf("Invalid number of minutes: %d > 59", m));
+    return set_tcp_error(boost::format(Y("Invalid number of minutes: %1% > 59")) % m);
   if (s > 59)
-    return set_tcp_error(mxsprintf("Invalid number of seconds: %d > 59", s));
+    return set_tcp_error(boost::format(Y("Invalid number of seconds: %1% > 59")) % s);
 
   timecode = ((int64_t)h * 60 * 60 + (int64_t)m * 60 + (int64_t)s) *
     1000000000ll + n;
 
   timecode *= negative;
 
-  timecode_parser_error = "no error";
+  timecode_parser_error = Y("no error");
   return true;
 }
 
@@ -1669,8 +1411,7 @@ read_args_from_file(vector<string> &args,
   try {
     mm_io = new mm_text_io_c(new mm_file_io_c(filename));
   } catch (...) {
-    mxerror(_("The file '%s' could not be opened for reading command line "
-              "arguments."), filename.c_str());
+    mxerror(boost::format(Y("The file '%1%' could not be opened for reading command line arguments.")) % filename);
   }
 
   skip_next = false;
@@ -1729,7 +1470,7 @@ command_line_utf8(int argc,
     else {
       if (!strcmp(argv[i], "--command-line-charset")) {
         if ((i + 1) == argc)
-          mxerror(_("'--command-line-charset' is missing its argument.\n"));
+          mxerror(Y("'--command-line-charset' is missing its argument.\n"));
         cc_command_line = utf8_init(argv[i + 1] == NULL ? "" : argv[i + 1]);
         i++;
       } else
@@ -1822,7 +1563,7 @@ handle_common_cli_args(vector<string> &args,
   while (args.size() > i) {
     if (args[i] == "--output-charset") {
       if ((i + 1) == args.size())
-        mxerror("Missing argument for '--output-charset'.\n");
+        mxerror(Y("Missing argument for '--output-charset'.\n"));
       set_cc_stdio(args[i + 1]);
       args.erase(args.begin() + i, args.begin() + i + 2);
     } else
@@ -1836,17 +1577,16 @@ handle_common_cli_args(vector<string> &args,
         ((redirect_output_short != "") &&
          (args[i] == redirect_output_short))) {
       if ((i + 1) == args.size())
-        mxerror("'%s' is missing the file name.\n", args[i].c_str());
+        mxerror(boost::format(Y("'%1%' is missing the file name.\n")) % args[i]);
       try {
         if (!stdio_redirected()) {
           mm_file_io_c *file = new mm_file_io_c(args[i + 1], MODE_CREATE);
-          file->write_bom(stdio_charset);
+          file->write_bom(g_stdio_charset);
           redirect_stdio(file);
         }
         args.erase(args.begin() + i, args.begin() + i + 2);
       } catch(mm_io_open_error_c &e) {
-        mxerror("Could not open the file '%s' for directing the output.\n",
-                args[i + 1].c_str());
+        mxerror(boost::format(Y("Could not open the file '%1%' for directing the output.\n")) % args[i + 1]);
       }
     } else
       ++i;
@@ -1856,7 +1596,7 @@ handle_common_cli_args(vector<string> &args,
   i = 0;
   while (args.size() > i) {
     if ((args[i] == "-V") || (args[i] == "--version")) {
-      mxinfo("%s built on %s %s\n", version_info.c_str(), __DATE__, __TIME__);
+      mxinfo(boost::format(Y("%1% built on %2% %3%\n")) % version_info % __DATE__ % __TIME__);
       mxexit(0);
 
     } else if ((args[i] == "-v") || (args[i] == "--verbose")) {
@@ -1874,7 +1614,7 @@ handle_common_cli_args(vector<string> &args,
 
 void
 usage(int exit_code) {
-  mxinfo("%s\n", usage_text.c_str());
+  mxinfo(boost::format("%1%\n") % usage_text);
   mxexit(exit_code);
 }
 

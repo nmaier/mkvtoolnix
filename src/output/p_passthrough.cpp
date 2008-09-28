@@ -71,9 +71,7 @@ passthrough_packetizer_c::can_connect_to(generic_packetizer_c *src,
       || ((ti.private_data != NULL) && (psrc->ti.private_data != NULL)
           && (ti.private_size == psrc->ti.private_size)
           && memcmp(ti.private_data, psrc->ti.private_data, ti.private_size))) {
-    error_message = mxsprintf("The codec's private data does not match "
-                              "(lengths: %d and %d).", ti.private_size,
-                              psrc->ti.private_size);
+    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % ti.private_size % psrc->ti.private_size).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }
 

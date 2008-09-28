@@ -205,8 +205,7 @@ create_directory(const char *path) {
   delete []wbuffer;
 
   if (0 != result)
-    throw (error_c(mxsprintf("mkdir(%s) failed; errno = %d (%s)",
-                             path, errno, strerror(errno))));
+    throw error_c(boost::format(Y("mkdir(%1%) failed; errno = %2% (%3%)")) % path % errno % strerror(errno));
 }
 
 int
@@ -247,8 +246,7 @@ void
 create_directory(const char *path) {
   string local_path = from_utf8(cc_local_utf8, path);
   if (0 != mkdir(local_path.c_str(), 0777))
-    throw (error_c(mxsprintf("mkdir(%s) failed; errno = %d (%s)",
-                             path, errno, strerror(errno))));
+    throw error_c(boost::format(Y("mkdir(%1%) failed; errno = %2% (%3%)")) % path % errno % strerror(errno));
 }
 
 int

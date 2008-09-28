@@ -44,7 +44,7 @@ kax_quickparser_c::kax_quickparser_c(mm_io_c &_in,
   // Find the EbmlHead element. Must be the first one.
   l0 = es.FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
   if (l0 == NULL)
-    throw error_c(_("Error: No EBML head found."));
+    throw error_c(Y("Error: No EBML head found."));
 
   // Don't verify its data for now.
   l0->SkipData(es, l0->Generic().Context);
@@ -54,7 +54,7 @@ kax_quickparser_c::kax_quickparser_c(mm_io_c &_in,
     // Next element must be a segment
     l0 = es.FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFFFFFFFFFLL);
     if (l0 == NULL)
-      throw error_c(_("No segment/level 0 element found."));
+      throw error_c(Y("No segment/level 0 element found."));
     if (EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId)
       break;
 

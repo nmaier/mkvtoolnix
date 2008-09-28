@@ -45,7 +45,7 @@ xtr_base_c::xtr_base_c(const string &codec_id,
                        const char *container_name)
   : m_codec_id(codec_id)
   , m_file_name(tspec.out_name)
-  , m_container_name(NULL == container_name ? "raw data" : container_name)
+  , m_container_name(NULL == container_name ? Y("raw data") : container_name)
   , m_master(NULL)
   , m_out(NULL)
   , m_tid(tid)
@@ -63,14 +63,15 @@ void
 xtr_base_c::create_file(xtr_base_c *master,
                         KaxTrackEntry &track) {
   if (NULL != master)
-    mxerror("Cannot write track " LLD " with the CodecID '%s' to the file '%s' because track " LLD " with the CodecID '%s' is already being written to the same file.\n",
-            m_tid, m_codec_id.c_str(), m_file_name.c_str(), master->m_tid, master->m_codec_id.c_str());
+    mxerror(boost::format(Y("Cannot write track %1% with the CodecID '%2%' to the file '%3%' because "
+                            "track %4% with the CodecID '%5%' is already being written to the same file.\n"))
+            % m_tid % m_codec_id % m_file_name % master->m_tid % master->m_codec_id);
 
   try {
     init_content_decoder(track);
     m_out = new mm_file_io_c(m_file_name, MODE_CREATE);
   } catch(...) {
-    mxerror("Failed to create the file '%s': %d (%s)\n", m_file_name.c_str(), errno, strerror(errno));
+    mxerror(boost::format(Y("Failed to create the file '%1%': %2% (%3%)\n")) % m_file_name % errno % strerror(errno));
   }
 
   m_default_duration = kt_get_default_duration(track);
@@ -117,7 +118,7 @@ xtr_base_c::init_content_decoder(KaxTrackEntry &track) {
     return;
 
   if (!m_content_decoder.initialize(track))
-    mxerror("Tracks with unsupported content encoding schemes (compression or encryption) cannot be extracted.\n");
+    mxerror(Y("Tracks with unsupported content encoding schemes (compression or encryption) cannot be extracted.\n"));
 
   m_content_decoder_initialized = true;
 }

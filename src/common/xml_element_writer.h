@@ -44,8 +44,8 @@ write_xml_element_rec(int level, int parent_idx,
 
 class xml_formatter_error_c: public error_c {
 public:
-  xml_formatter_error_c(const string &_error):
-    error_c(_error) { }
+  xml_formatter_error_c(const string &_error): error_c(_error) { }
+  xml_formatter_error_c(const boost::format &_error): error_c(_error.str()) { }
 };
 
 class xml_formatter_c: public xml_parser_c {

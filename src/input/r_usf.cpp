@@ -79,7 +79,7 @@ usf_reader_c::usf_reader_c(track_info_c &_ti)
     int i;
 
     if (!usf_reader_c::probe_file(m_xml_source, 0))
-      throw error_c("usf_reader: Source is not a valid USF file.");
+      throw error_c(Y("usf_reader: Source is not a valid USF file."));
 
     parse_xml_file();
     m_private_data += "</USFSubtitles>";
@@ -100,11 +100,11 @@ usf_reader_c::usf_reader_c(track_info_c &_ti)
     throw error_c(error.get_error());
 
   } catch (mm_io_error_c &error) {
-    throw error_c("usf_reader: Could not open the source file.");
+    throw error_c(Y("usf_reader: Could not open the source file."));
   }
 
   if (verbose)
-    mxinfo(FMT_FN "Using the USF subtitle reader.\n", ti.fname.c_str());
+    mxinfo_fn(ti.fname, Y("Using the USF subtitle reader.\n"));
 }
 
 usf_reader_c::~usf_reader_c() {
@@ -132,8 +132,8 @@ usf_reader_c::start_element_cb(const char *name,
         int index = map_to_iso639_2_code(atts[i + 1]);
         if (-1 != index)
           m_default_language = iso639_languages[index].iso639_2_code;
-        else if (!identifying)
-          mxwarn(FMT_FN "The default language code '%s' is not a valid ISO639-2 language code and will be ignored.\n", ti.fname.c_str(), atts[i + 1]);
+        else if (!g_identifying)
+          mxwarn_fn(ti.fname, boost::format(Y("The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n")) % atts[i + 1]);
         break;
       }
   }
@@ -164,8 +164,8 @@ usf_reader_c::start_element_cb(const char *name,
         if (-1 != index)
           m_tracks[m_tracks.size() - 1].m_language =
             iso639_languages[index].iso639_2_code;
-        else if (!identifying)
-          mxwarn(FMT_TID "The language code '%s' is not a valid ISO639-2 language code and will be ignored.\n", ti.fname.c_str(), (int64_t)m_tracks.size(), atts[i + 1]);
+        else if (!g_identifying)
+          mxwarn_tid(ti.fname, m_tracks.size(), boost::format(Y("The language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n")) % atts[i + 1]);
         break;
       }
 
@@ -263,7 +263,7 @@ usf_reader_c::create_packetizer(int64_t tid) {
 
   ti.language  = track.m_language;
   track.m_ptzr = add_packetizer(new textsubs_packetizer_c(this, MKV_S_TEXTUSF, m_private_data.c_str(), m_private_data.length(), false, true, ti));
-  mxinfo(FMT_TID "Using the text subtitle output module.\n", ti.fname.c_str(), tid);
+  mxinfo_tid(ti.fname, tid, Y("Using the text subtitle output module.\n"));
 }
 
 void
@@ -323,7 +323,7 @@ usf_reader_c::try_to_parse_timecode(const char *s) {
   int64_t timecode;
 
   if (!parse_timecode(s, timecode))
-    throw xml_parser_error_c("Invalid start or stop timecode", m_xml_parser);
+    throw xml_parser_error_c(Y("Invalid start or stop timecode"), m_xml_parser);
 
   return timecode;
 }

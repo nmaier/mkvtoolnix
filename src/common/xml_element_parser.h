@@ -48,11 +48,11 @@ public:
   }
 
   xml_parser_error_c():
-    error_c("no error"), m_line(-1), m_column(-1) {
+    error_c(Y("No error")), m_line(-1), m_column(-1) {
   }
 
   virtual string get_error() {
-    return mxsprintf("Line %d, column %d: ", m_line, m_column) + error;
+    return (boost::format(Y("Line %1%, column %2%: %3%")) % m_line % m_column % error).str();
   }
 };
 
@@ -133,8 +133,11 @@ parse_xml_elements(const char *parser_name, const parser_element_t *mapping,
 const char * MTX_DLL_API
 xmlp_parent_name(parser_data_t *pdata, EbmlElement *e);
 
-void MTX_DLL_API
-xmlp_error(parser_data_t *pdata, const char *fmt, ...);
-
+void MTX_DLL_API xmlp_error(parser_data_t *pdata, const std::string &message);
+inline void
+xmlp_error(parser_data_t *pdata,
+           const boost::format &format) {
+  xmlp_error(pdata, format.str());
+}
 
 #endif

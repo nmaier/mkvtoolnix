@@ -45,7 +45,7 @@ tet_index(const char *name) {
     if (!strcmp(name, tag_elements[i].name))
       return i;
 
-  mxerror("tet_index: '%s' not found\n", name);
+  mxerror(boost::format(Y("tet_index: '%1%' not found\n")) % name);
   return -1;
 }
 
@@ -57,8 +57,7 @@ end_simple_tag(void *pdata) {
   assert(simple != NULL);
   if ((FINDFIRST(simple, KaxTagString) != NULL) &&
       (FINDFIRST(simple, KaxTagBinary) != NULL))
-    xmlp_error(CPDATA, "Only one of <String> and <Binary> may be used beneath "
-               "<Simple> but not both at the same time.");
+    xmlp_error(CPDATA, Y("Only one of <String> and <Binary> may be used beneath <Simple> but not both at the same time."));
 }
 
 void
@@ -73,7 +72,7 @@ parse_xml_tags(const string &name,
   try {
     in = new mm_text_io_c(new mm_file_io_c(name));
   } catch(...) {
-    mxerror("Could not open '%s' for reading.\n", name.c_str());
+    mxerror(boost::format(Y("Could not open '%1%' for reading.\n")) % name);
   }
 
   try {
@@ -96,7 +95,7 @@ parse_xml_tags(const string &name,
       delete new_tags;
     }
   } catch (error_c e) {
-    mxerror("%s", e.get_error().c_str());
+    mxerror(e.get_error());
   }
 
   delete in;

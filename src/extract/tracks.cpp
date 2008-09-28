@@ -92,7 +92,7 @@ create_extractors(KaxTracks &kax_tracks,
     extractor = NULL;
     for (k = 0; k < extractors.size(); k++)
       if (extractors[k]->m_tid == tnum) {
-        mxwarn("More than one track with the track number " LLD " found.\n", tnum);
+        mxwarn(boost::format(Y("More than one track with the track number %1% found.\n")) % tnum);
         extractor = extractors[k];
         break;
       }
@@ -112,13 +112,11 @@ create_extractors(KaxTracks &kax_tracks,
     // Let's find the codec ID and create an extractor for it.
     codec_id = kt_get_codec_id(track);
     if (codec_id.empty())
-      mxerror("The track number " LLD " does not have a valid CodecID.\n",
-              tnum);
+      mxerror(boost::format(Y("The track number %1% does not have a valid CodecID.\n")) % tnum);
 
     extractor = xtr_base_c::create_extractor(codec_id, tnum, *tspec);
     if (NULL == extractor)
-      mxerror("Extraction of track number " LLD " with the CodecID '%s' is "
-              "not supported.\n", tnum, codec_id.c_str());
+      mxerror(boost::format(Y("Extraction of track number %1% with the CodecID '%2%' is not supported.\n")) % tnum % codec_id);
 
     // Has there another file been requested with the same name?
     master = NULL;
@@ -134,9 +132,8 @@ create_extractors(KaxTracks &kax_tracks,
     // We're done.
     extractors.push_back(extractor);
 
-    mxinfo("Extracting track " LLD " with the CodecID '%s' to the file '%s'. "
-           "Container format: %s\n", tnum, codec_id.c_str(), tspec->out_name,
-           extractor->get_container_name());
+    mxinfo(boost::format(Y("Extracting track %1% with the CodecID '%2%' to the file '%3%'. Container format: %4%\n"))
+           % tnum % codec_id % tspec->out_name % extractor->get_container_name());
   }
 
   // Signal that all headers have been taken care of.
@@ -320,11 +317,9 @@ write_all_cuesheets(KaxChapters &chapters,
       try {
         out = new mm_file_io_c(cue_file_name.c_str(), MODE_CREATE);
       } catch(...) {
-        mxerror(_("The file '%s' could not be opened for writing (%s).\n"),
-                cue_file_name.c_str(), strerror(errno));
+        mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % cue_file_name % strerror(errno));
       }
-      mxinfo(_("The CUE sheet for track " LLD " will be written to '%s'.\n"),
-             tspecs[i].tid, cue_file_name.c_str());
+      mxinfo(boost::format(Y("The CUE sheet for track %1% will be written to '%2%'.\n")) % tspecs[i].tid % cue_file_name);
       write_cuesheet(file_name.c_str(), chapters, tags, tspecs[i].tuid, *out);
       delete out;
     }
@@ -373,8 +368,7 @@ extract_tracks(const char *file_name,
   try {
     in = new mm_file_io_c(file_name);
   } catch (...) {
-    show_error(_("The file '%s' could not be opened for reading (%s).\n"),
-               file_name, strerror(errno));
+    show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).\n")) % file_name % strerror(errno));
     return false;
   }
 
@@ -388,7 +382,7 @@ extract_tracks(const char *file_name,
     // Find the EbmlHead element. Must be the first one.
     l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
     if (l0 == NULL) {
-      show_error(_("Error: No EBML head found."));
+      show_error(Y("Error: No EBML head found."));
       delete es;
 
       return false;
@@ -402,11 +396,11 @@ extract_tracks(const char *file_name,
       // Next element must be a segment
       l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFFFFFFFFFLL);
       if (l0 == NULL) {
-        show_error(_("No segment/level 0 element found."));
+        show_error(Y("No segment/level 0 element found."));
         return false;
       }
       if (EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId) {
-        show_element(l0, 0, _("Segment"));
+        show_element(l0, 0, Y("Segment"));
         break;
       }
 
@@ -423,7 +417,7 @@ extract_tracks(const char *file_name,
     while ((l1 != NULL) && (upper_lvl_el <= 0)) {
       if (EbmlId(*l1) == KaxInfo::ClassInfos.GlobalId) {
         // General info about this Matroska file
-        show_element(l1, 1, _("Segment information"));
+        show_element(l1, 1, Y("Segment information"));
 
         upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
@@ -434,7 +428,7 @@ extract_tracks(const char *file_name,
             KaxTimecodeScale &ktc_scale = *static_cast<KaxTimecodeScale *>(l2);
             ktc_scale.ReadData(es->I_O());
             tc_scale = uint64(ktc_scale);
-            show_element(l2, 2, _("Timecode scale: " LLU), tc_scale);
+            show_element(l2, 2, boost::format(Y("Timecode scale: %1%")) % tc_scale);
           } else
             l2->SkipData(*es, l2->Generic().Context);
 
@@ -462,7 +456,7 @@ extract_tracks(const char *file_name,
 
         // Yep, we've found our KaxTracks element. Now find all tracks
         // contained in this segment.
-        show_element(l1, 1, _("Segment tracks"));
+        show_element(l1, 1, Y("Segment tracks"));
 
         tracks_found = true;
         l1->Read(*es, KaxTracks::ClassInfos.Context, upper_lvl_el, l2, true);
@@ -470,12 +464,11 @@ extract_tracks(const char *file_name,
         create_extractors(*dynamic_cast<KaxTracks *>(l1), tspecs);
 
       } else if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
-        show_element(l1, 1, _("Cluster"));
+        show_element(l1, 1, Y("Cluster"));
         cluster = (KaxCluster *)l1;
 
         if (verbose == 0)
-          mxinfo("%s: %d%%\r", _("progress"),
-                 (int)(in->getFilePointer() * 100 / file_size));
+          mxinfo(boost::format(Y("Progress: %1%%%\r")) % (int)(in->getFilePointer() * 100 / file_size));
 
         upper_lvl_el = 0;
         l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
@@ -486,12 +479,11 @@ extract_tracks(const char *file_name,
             KaxClusterTimecode &ctc = *static_cast<KaxClusterTimecode *>(l2);
             ctc.ReadData(es->I_O());
             cluster_tc = uint64(ctc);
-            show_element(l2, 2, _("Cluster timecode: %.3fs"),
-                         (float)cluster_tc * (float)tc_scale / 1000000000.0);
+            show_element(l2, 2, boost::format(Y("Cluster timecode: %|1$.3f|s")) % ((float)cluster_tc * (float)tc_scale / 1000000000.0));
             cluster->InitTimecode(cluster_tc, tc_scale);
 
           } else if (EbmlId(*l2) == KaxBlockGroup::ClassInfos.GlobalId) {
-            show_element(l2, 2, _("Block group"));
+            show_element(l2, 2, Y("Block group"));
 
             l2->Read(*es, KaxBlockGroup::ClassInfos.Context, upper_lvl_el, l3,
                      true);
@@ -499,7 +491,7 @@ extract_tracks(const char *file_name,
                               tc_scale);
 
           } else if (EbmlId(*l2) == KaxSimpleBlock::ClassInfos.GlobalId) {
-            show_element(l2, 2, _("SimpleBlock"));
+            show_element(l2, 2, Y("SimpleBlock"));
 
             l2->Read(*es, KaxSimpleBlock::ClassInfos.Context, upper_lvl_el, l3,
                      true);
@@ -604,7 +596,7 @@ extract_tracks(const char *file_name,
 
     return true;
   } catch (...) {
-    show_error("Caught exception");
+    show_error(Y("Caught exception"));
     delete in;
 
     return false;

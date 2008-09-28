@@ -74,10 +74,10 @@ avc_es_reader_c::probe_file(mm_io_c *io,
     }
 
   } catch (error_c &err) {
-    mxinfo("err %s\n", err.get_error().c_str());
+    mxinfo(boost::format(Y("Error %1%\n")) % err.get_error());
 
   } catch (...) {
-    mxinfo("have an xcptn\n");
+    mxinfo(Y("have an xcptn\n"));
   }
 
   return 0;
@@ -107,7 +107,7 @@ avc_es_reader_c::avc_es_reader_c(track_info_c &n_ti)
     for (i = 0; MAX_PROBE_BUFFERS > i; ++i) {
       num_read = m_io->read(m_buffer->get(), READ_SIZE);
       if (0 == num_read)
-        throw error_c("avc_es_reader: Should not have happened.");
+        throw error_c(Y("avc_es_reader: Should not have happened."));
       parser.add_bytes(m_buffer->get(), num_read);
       if (parser.headers_parsed())
         break;
@@ -123,11 +123,11 @@ avc_es_reader_c::avc_es_reader_c(track_info_c &n_ti)
     m_io->setFilePointer(0, seek_beginning);
 
   } catch (...) {
-    throw error_c("avc_es_reader: Could not open the source file.");
+    throw error_c(Y("avc_es_reader: Could not open the source file."));
   }
 
   if (verbose)
-    mxinfo(FMT_FN "Using the AVC/h.264 ES demultiplexer.\n", ti.fname.c_str());
+    mxinfo_fn(ti.fname, Y("Using the AVC/h.264 ES demultiplexer.\n"));
 }
 
 void
@@ -137,15 +137,13 @@ avc_es_reader_c::create_packetizer(int64_t) {
 
   add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, m_avcc, m_width, m_height, ti));
 
-  mxinfo(FMT_TID "Using the MPEG-4 part 10 ES video output module.\n", ti.fname.c_str(), (int64_t)0);
+  mxinfo_tid(ti.fname, 0, Y("Using the MPEG-4 part 10 ES video output module.\n"));
 }
 
 file_status_e
 avc_es_reader_c::read(generic_packetizer_c *,
                       bool) {
   int num_read;
-
-//   mxinfo("read proc " LLD " size " LLD "\n", m_bytes_processed, m_size);
 
   if (m_bytes_processed >= m_size)
     return FILE_STATUS_DONE;

@@ -57,19 +57,17 @@ mp3_packetizer_c::handle_garbage(int64_t bytes) {
     offset = handle_avi_audio_sync(bytes, !(ti.avi_block_align % 384) ||
                                    !(ti.avi_block_align % 576));
     if (offset != -1) {
-      mxinfo("The MPEG audio track " LLD " from '%s' contained " LLD " bytes "
-             "of non-MP3 data at the beginning. This corresponds to a delay of"
-             " " LLD "ms. This delay will be used instead of the garbage data."
-             "\n", ti.id, ti.fname.c_str(), bytes, offset / 1000000);
+      mxinfo_tid(ti.fname, ti.id,
+                 boost::format(Y("This MPEG audio track contains %1% bytes of non-MP3 data at the beginning. "
+                                 "This corresponds to a delay of %2%ms. This delay will be used instead of the garbage data.\n")) % bytes % (offset / 1000000));
       warning_printed = true;
       ti.tcsync.displacement += offset;
     }
   }
   if (!warning_printed)
-    mxwarn("The MPEG audio track " LLD " from '%s' contained " LLD " bytes of "
-           "non-MP3 data which were skipped. The audio/video "
-           "synchronization may have been lost.\n", ti.id, ti.fname.c_str(),
-           bytes);
+    mxwarn_tid(ti.fname, ti.id,
+               boost::format(Y("This MPEG audio track contains %1% bytes of non-MP3 data which were skipped. "
+                               "The audio/video synchronization may have been lost.\n")) % bytes);
 }
 
 unsigned char *
@@ -92,8 +90,7 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     if (!mp3header->is_tag)
       break;
 
-    mxverb(2, "mp3_packetizer: Removing TAG packet with size %d\n",
-           mp3header->framesize);
+    mxverb(2, boost::format(Y("mp3_packetizer: Removing TAG packet with size %1%\n")) % mp3header->framesize);
     byte_buffer.remove(mp3header->framesize + pos);
   }
 

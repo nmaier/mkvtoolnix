@@ -30,7 +30,6 @@
 #include "r_ogm.h"
 #include "r_ogm_flac.h"
 
-#define FPFX        "flac_header_extraction: "
 #define BUFFER_SIZE 4096
 
 static FLAC__StreamDecoderReadStatus
@@ -53,12 +52,12 @@ fhe_read_cb(const FLAC__StreamDecoder *decoder,
       return FLAC__STREAM_DECODER_READ_STATUS_ABORT;
 
   if (*bytes < op.bytes)
-    mxerror(FPFX "bytes (%u) < op.bytes (%ld). Could not read the FLAC headers.\n", (unsigned int)*bytes, (long)op.bytes);
+    mxerror(boost::format(Y("flac_header_extraction: bytes (%1%) < op.bytes (%2%). Could not read the FLAC headers.\n")) % *bytes % op.bytes);
 
   memcpy(buffer, op.packet, op.bytes);
   *bytes = op.bytes;
   fhe->num_packets++;
-  mxverb(2, FPFX "read packet number " LLD " with %ld bytes\n", fhe->num_packets, op.bytes);
+  mxverb(2, boost::format(Y("flac_header_extraction: read packet number %1% with %2% bytes\n")) % fhe->num_packets % op.bytes);
 
   return FLAC__STREAM_DECODER_READ_STATUS_CONTINUE;
 }
@@ -68,7 +67,7 @@ fhe_write_cb(const FLAC__StreamDecoder *,
              const FLAC__Frame *,
              const FLAC__int32 * const [],
              void *client_data) {
-  mxverb(2, FPFX "write cb\n");
+  mxverb(2, Y("flac_header_extraction: write cb\n"));
 
   ((flac_header_extractor_c *)client_data)->done = true;
   return FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;
@@ -82,7 +81,7 @@ fhe_metadata_cb(const FLAC__StreamDecoder *decoder,
   flac_header_extractor_c *fhe = (flac_header_extractor_c *)client_data;
   fhe->num_header_packets      = fhe->num_packets;
 
-  mxverb(2, FPFX "metadata cb\n");
+  mxverb(2, Y("flac_header_extraction: metadata cb\n"));
 
   switch (metadata->type) {
     case FLAC__METADATA_TYPE_STREAMINFO:
@@ -91,21 +90,22 @@ fhe_metadata_cb(const FLAC__StreamDecoder *decoder,
       fhe->bits_per_sample = metadata->data.stream_info.bits_per_sample;
       fhe->metadata_parsed = true;
 
-      mxverb(2, FPFX "STREAMINFO block (%u bytes):\n", metadata->length);
-      mxverb(2, FPFX "  sample_rate: %u Hz\n",         metadata->data.stream_info.sample_rate);
-      mxverb(2, FPFX "  channels: %u\n",               metadata->data.stream_info.channels);
-      mxverb(2, FPFX "  bits_per_sample: %u\n",        metadata->data.stream_info.bits_per_sample);
+      mxverb(2, boost::format(Y("flac_header_extraction: STREAMINFO block (%1% bytes):\n")) % metadata->length);
+      mxverb(2, boost::format(Y("flac_header_extraction:   sample_rate: %1% Hz\n"))         % metadata->data.stream_info.sample_rate);
+      mxverb(2, boost::format(Y("flac_header_extraction:   channels: %1%\n"))               % metadata->data.stream_info.channels);
+      mxverb(2, boost::format(Y("flac_header_extraction:   bits_per_sample: %1%\n"))        % metadata->data.stream_info.bits_per_sample);
       break;
 
     default:
-      mxverb(2, "%s (%u) block (%u bytes)\n",
-               metadata->type == FLAC__METADATA_TYPE_PADDING        ? "PADDING"
-             : metadata->type == FLAC__METADATA_TYPE_APPLICATION    ? "APPLICATION"
-             : metadata->type == FLAC__METADATA_TYPE_SEEKTABLE      ? "SEEKTABLE"
-             : metadata->type == FLAC__METADATA_TYPE_VORBIS_COMMENT ? "VORBIS COMMENT"
-             : metadata->type == FLAC__METADATA_TYPE_CUESHEET       ? "CUESHEET"
-             :                                                        "UNDEFINED",
-             metadata->type, metadata->length);
+      mxverb(2,
+             boost::format(Y("%1% (%2%) block (%3% bytes)\n"))
+             % (  metadata->type == FLAC__METADATA_TYPE_PADDING        ? Y("PADDING")
+               : metadata->type == FLAC__METADATA_TYPE_APPLICATION    ? Y("APPLICATION")
+               : metadata->type == FLAC__METADATA_TYPE_SEEKTABLE      ? Y("SEEKTABLE")
+               : metadata->type == FLAC__METADATA_TYPE_VORBIS_COMMENT ? Y("VORBIS COMMENT")
+               : metadata->type == FLAC__METADATA_TYPE_CUESHEET       ? Y("CUESHEET")
+                  :                                                        Y("UNDEFINED"))
+             % metadata->type % metadata->length);
       break;
   }
 }
@@ -115,7 +115,7 @@ fhe_error_cb(const FLAC__StreamDecoder *,
              FLAC__StreamDecoderErrorStatus status,
              void *client_data) {
   ((flac_header_extractor_c *)client_data)->done = true;
-  mxverb(2, FPFX "error (%d)\n", (int)status);
+  mxverb(2, boost::format(Y("flac_header_extraction: error (%1%)\n")) % (int)status);
 }
 
 flac_header_extractor_c::flac_header_extractor_c(const string &file_name,
@@ -130,31 +130,31 @@ flac_header_extractor_c::flac_header_extractor_c(const string &file_name,
   decoder = FLAC__stream_decoder_new();
 
   if (NULL == decoder)
-    mxerror(FPFX "FLAC__stream_decoder_new() failed.\n");
+    mxerror(Y("flac_header_extraction: FLAC__stream_decoder_new() failed.\n"));
 
 #ifdef LEGACY_FLAC
   FLAC__stream_decoder_set_client_data(decoder, this);
   if (!FLAC__stream_decoder_set_read_callback(decoder, fhe_read_cb))
-    mxerror(FPFX "Could not set the read callback.\n");
+    mxerror(Y("flac_header_extraction: Could not set the read callback.\n"));
   if (!FLAC__stream_decoder_set_write_callback(decoder, fhe_write_cb))
-    mxerror(FPFX "Could not set the write callback.\n");
+    mxerror(Y("flac_header_extraction: Could not set the write callback.\n"));
   if (!FLAC__stream_decoder_set_metadata_callback(decoder, fhe_metadata_cb))
-    mxerror(FPFX "Could not set the metadata callback.\n");
+    mxerror(Y("flac_header_extraction: Could not set the metadata callback.\n"));
   if (!FLAC__stream_decoder_set_error_callback(decoder, fhe_error_cb))
-    mxerror(FPFX "Could not set the error callback.\n");
+    mxerror(Y("flac_header_extraction: Could not set the error callback.\n"));
 #endif
 
   if (!FLAC__stream_decoder_set_metadata_respond_all(decoder))
-    mxerror(FPFX "Could not set metadata_respond_all.\n");
+    mxerror(Y("flac_header_extraction: Could not set metadata_respond_all.\n"));
 
 #ifdef LEGACY_FLAC
   if (FLAC__stream_decoder_init(decoder) !=
       FLAC__STREAM_DECODER_SEARCH_FOR_METADATA)
-    mxerror(FPFX "Could not initialize the FLAC decoder.\n");
+    mxerror(Y("flac_header_extraction: Could not initialize the FLAC decoder.\n"));
 #else
   if (FLAC__stream_decoder_init_stream(decoder, fhe_read_cb, NULL, NULL, NULL, NULL, fhe_write_cb, fhe_metadata_cb, fhe_error_cb, this) !=
       FLAC__STREAM_DECODER_INIT_STATUS_OK)
-    mxerror(FPFX "Could not initialize the FLAC decoder.\n");
+    mxerror(Y("flac_header_extraction: Could not initialize the FLAC decoder.\n"));
 #endif
 
   ogg_sync_init(&oy);
@@ -172,15 +172,15 @@ flac_header_extractor_c::~flac_header_extractor_c() {
 
 bool
 flac_header_extractor_c::extract() {
-  mxverb(2, FPFX "extract\n");
+  mxverb(2, Y("flac_header_extraction: extract\n"));
   if (!read_page()) {
-    mxverb(2, FPFX "read_page() failed.\n");
+    mxverb(2, Y("flac_header_extraction: read_page() failed.\n"));
     return false;
   }
 
   int result = (int)FLAC__stream_decoder_process_until_end_of_stream(decoder);
 
-  mxverb(2, FPFX "extract, result: %d, mdp: %d, num_header_packets: " LLD "\n", result, metadata_parsed, num_header_packets);
+  mxverb(2, boost::format(Y("flac_header_extraction: extract, result: %1%, mdp: %2%, num_header_packets: %3%\n")) % result % metadata_parsed % num_header_packets);
 
   return metadata_parsed;
 }
@@ -276,7 +276,7 @@ ogm_a_flac_demuxer_c::initialize() {
   flac_header_extractor_c fhe(reader->ti.fname, serialno);
 
   if (!fhe.extract())
-    mxerror("ogm_reader: Could not read the FLAC header packets for stream id " LLD ".\n", (int64_t)track_id);
+    mxerror_tid(reader->ti.fname, track_id, Y("Could not read the FLAC header packets.\n"));
 
   flac_header_packets = fhe.num_header_packets;
   sample_rate         = fhe.sample_rate;
@@ -305,7 +305,7 @@ ogm_a_flac_demuxer_c::create_packetizer(track_info_c &ti) {
   generic_packetizer_c *ptzr_obj = new flac_packetizer_c(reader, buf, size, ti);
   safefree(buf);
 
-  mxinfo(FMT_TID "Using the FLAC output module.\n", ti.fname.c_str(), (int64_t)ti.id);
+  mxinfo_tid(ti.fname, ti.id, Y("Using the FLAC output module.\n"));
 
   return ptzr_obj;
 }

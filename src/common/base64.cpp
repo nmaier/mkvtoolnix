@@ -143,7 +143,7 @@ base64_decode(const string &src,
       else if (in[k] == '/')
         values[k] = 63;
       else
-        throw error_c("invalid Base64 character");
+        throw error_c(Y("Invalid Base64 character encountered"));
     }
 
     mid[0] = values[0] << 2;

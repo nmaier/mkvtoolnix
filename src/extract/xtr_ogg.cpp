@@ -34,7 +34,7 @@ xtr_flac_c::create_file(xtr_base_c *_master,
                         KaxTrackEntry &track) {
   KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
-    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec private\" element and cannot be extracted.\n", m_tid, m_codec_id.c_str());
+    mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
   xtr_base_c::create_file(_master, track);
 
@@ -69,7 +69,7 @@ xtr_oggbase_c::create_standard_file(xtr_base_c *master,
                                     KaxTrackEntry &track) {
   KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
-    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec private\" element and cannot be extracted.\n", m_tid, m_codec_id.c_str());
+    mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
   init_content_decoder(track);
   memory_cptr mpriv = decode_codec_private(priv);
@@ -84,7 +84,7 @@ xtr_oggbase_c::create_standard_file(xtr_base_c *master,
     header_packets_unlaced(header_packets);
 
   } catch (...) {
-    mxerror("Track " LLD " with the CodecID '%s' does not contain valid headers.\n", m_tid, m_codec_id.c_str());
+    mxerror(boost::format(Y("Track %1% with the CodecID '%2%' does not contain valid headers.\n")) % m_tid % m_codec_id);
   }
 
   xtr_oggbase_c::create_file(master, track);
@@ -216,7 +216,7 @@ xtr_oggflac_c::create_file(xtr_base_c *master,
                            KaxTrackEntry &track) {
   KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
-    mxerror("Track " LLD " with the CodecID '%s' is missing the \"codec private\" element and cannot be extracted.\n", m_tid, m_codec_id.c_str());
+    mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
   m_sfreq = (int)kt_get_a_sfreq(track);
 

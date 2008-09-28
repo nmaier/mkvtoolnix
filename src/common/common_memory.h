@@ -152,7 +152,7 @@ public:
   };
 
   memory_slice_cursor_c(const memory_slice_cursor_c &) {
-    die("memory_slice_cursor_c copy c'tor: Must not be used!");
+    mxerror(Y("memory_slice_cursor_c copy c'tor: Must not be used!"));
   };
 
   ~memory_slice_cursor_c() {

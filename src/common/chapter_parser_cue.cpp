@@ -193,8 +193,7 @@ add_tag_for_cue_entry(cue_parser_args_t &a,
   *static_cast<EbmlString *>(&GetChild<KaxTagTargetType>(*targets)) = "track";
 
   create_tag1(a.title, "TITLE");
-  tag->PushElement(*create_simple_tag(a, "PART_NUMBER",
-                                      mxsprintf("%d", a.num)));
+  tag->PushElement(*create_simple_tag(a, "PART_NUMBER", to_string(a.num)));
   create_tag2(a.performer, a.global_performer, "ARTIST");
   create_tag2(a.date, a.global_date, "DATE_RELEASED");
   create_tag2(a.genre, a.global_genre, "GENRE");
@@ -274,7 +273,7 @@ add_subchapters_for_index_entries(cue_parser_args_t &a) {
 
     display = &GetChild<KaxChapterDisplay>(*atom);
     *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(*display)) =
-      cstrutf8_to_UTFstring(mxsprintf("INDEX %02d", i + offset).c_str());
+      cstrutf8_to_UTFstring((boost::format("INDEX %|1$02d|") % (i + offset)).str().c_str());
     *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(*display)) =
       "eng";
 
@@ -292,8 +291,8 @@ add_elements_for_cue_entry(cue_parser_args_t &a,
   uint32_t cuid;
 
   if (a.start_indices.empty())
-    mxerror("Cue sheet parser: No INDEX entry found for the previous "
-            "TRACK entry (current line: %d)\n", a.line_num);
+    mxerror(boost::format(Y("Cue sheet parser: No INDEX entry found for the previous TRACK entry (current line: %1%)\n")) % a.line_num);
+
   if (!((a.start_indices[0] >= a.min_tc) &&
         ((a.start_indices[0] <= a.max_tc) || (a.max_tc == -1))))
     return;
@@ -431,8 +430,7 @@ parse_cue_chapters(mm_text_io_c *in,
         strip(line);
         if (sscanf(line.c_str(), "%d %d:%d:%d", &index, &min, &sec, &frames) <
             4)
-          mxerror("Cue sheet parser: Invalid INDEX entry in line %d.\n",
-                  a.line_num);
+          mxerror(boost::format(Y("Cue sheet parser: Invalid INDEX entry in line %1%.\n")) % a.line_num);
 
         index_ok = false;
         if ((index >= 0) && (index <= 99)) {
@@ -450,9 +448,7 @@ parse_cue_chapters(mm_text_io_c *in,
         }
 
         if (!index_ok)
-          mxerror("Cue sheet parser: Invalid INDEX number (got %d, "
-                  "expected %u) in line %d,\n",
-                  index, (unsigned int)a.start_indices.size(), a.line_num);
+          mxerror(boost::format(Y("Cue sheet parser: Invalid INDEX number (got %1%, expected %2%) in line %3%,\n")) % index % a.start_indices.size() % a.line_num);
 
       } else if (starts_with_case(line, "track ")) {
         if ((line.length() < 5) ||

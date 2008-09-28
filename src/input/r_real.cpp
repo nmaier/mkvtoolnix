@@ -32,8 +32,6 @@
 #include "output_control.h"
 #include "r_real.h"
 
-#define PFX "real_reader: "
-
 /*
    Description of the RealMedia file format:
    http://www.pcisys.net/~melanson/codecs/rmff.htm
@@ -151,9 +149,9 @@ real_reader_c::real_reader_c(track_info_c &_ti)
   file = rmff_open_file_with_io(ti.fname.c_str(), RMFF_OPEN_MODE_READING, &mm_io_file_io);
   if (NULL == file) {
     if (RMFF_ERR_NOT_RMFF == rmff_last_error)
-      throw error_c(PFX "Source is not a valid RealMedia file.");
+      throw error_c(Y("real_reader: Source is not a valid RealMedia file."));
     else
-      throw error_c(PFX "Could not read the source file.");
+      throw error_c(Y("real_reader: Could not read the source file."));
   }
   file->io->seek(file->handle, 0, SEEK_END);
   file_size = file->io->tell(file->handle);
@@ -162,7 +160,7 @@ real_reader_c::real_reader_c(track_info_c &_ti)
   done = false;
 
   if (verbose)
-    mxinfo(FMT_FN "Using the RealMedia demultiplexer.\n", ti.fname.c_str());
+    mxinfo_fn(ti.fname, Y("Using the RealMedia demultiplexer.\n"));
 
   parse_headers();
   get_information_from_data();
@@ -250,7 +248,7 @@ real_reader_c::parse_headers() {
         p++;
 
         if (4 != slen) {
-          mxwarn(PFX "Couldn't find RealAudio FourCC for id %u (description length: %d) Skipping track.\n", track->id, slen);
+          mxwarn(boost::format(Y("real_reader: Couldn't find RealAudio FourCC for id %1% (description length: %2%) Skipping track.\n")) % track->id % slen);
           ok = false;
 
         } else {
@@ -278,11 +276,12 @@ real_reader_c::parse_headers() {
         }
 
       } else {
-        mxwarn(PFX "Only audio header versions 3, 4 and 5 are supported. Track ID %u uses version %d and will be skipped.\n", track->id, version);
+        mxwarn(boost::format(Y("real_reader: Only audio header versions 3, 4 and 5 are supported. Track ID %1% uses version %2% and will be skipped.\n"))
+               % track->id % version);
         ok = false;
       }
 
-      mxverb(2, PFX "extra_data_size: %d\n", dmx->extra_data_size);
+      mxverb(2, boost::format(Y("real_reader: extra_data_size: %1%\n")) % dmx->extra_data_size);
 
       if (ok) {
         dmx->private_data = (unsigned char *)safememdup(ts_data, ts_size);
@@ -296,21 +295,19 @@ real_reader_c::parse_headers() {
 
 void
 real_reader_c::create_video_packetizer(real_demuxer_cptr dmx) {
-  char buffer[20];
-
-  mxprints(buffer, "V_REAL/%s", dmx->fourcc);
-  dmx->ptzr = add_packetizer(new video_packetizer_c(this, buffer, 0.0, dmx->width, dmx->height, ti));
+  string codec_id = (boost::format("V_REAL/%1%") % dmx->fourcc).str();
+  dmx->ptzr = add_packetizer(new video_packetizer_c(this, codec_id.c_str(), 0.0, dmx->width, dmx->height, ti));
 
   if (strcmp(dmx->fourcc, "RV40"))
     dmx->rv_dimensions = true;
 
-  mxinfo(FMT_TID "Using the video output module (FourCC: %s).\n", ti.fname.c_str(), (int64_t)dmx->track->id, dmx->fourcc);
+  mxinfo_tid(ti.fname, dmx->track->id, boost::format(Y("Using the video output module (FourCC: %1%).\n")) % dmx->fourcc);
 }
 
 void
 real_reader_c::create_dnet_audio_packetizer(real_demuxer_cptr dmx) {
   dmx->ptzr = add_packetizer(new ac3_bs_packetizer_c(this, dmx->samples_per_second, dmx->channels, dmx->bsid, ti));
-  mxinfo(FMT_TID "Using the AC3 output module (FourCC: %s).\n", ti.fname.c_str(), (int64_t)dmx->track->id, dmx->fourcc);
+  mxinfo_tid(ti.fname, dmx->track->id, boost::format(Y("Using the AC3 output module (FourCC: %1%).\n")) % dmx->fourcc);
 }
 
 void
@@ -326,14 +323,15 @@ real_reader_c::create_aac_audio_packetizer(real_demuxer_cptr dmx) {
 
   if (4 < dmx->extra_data_size) {
     uint32_t extra_len = get_uint32_be(dmx->extra_data);
-    mxverb(2, PFX "extra_len: %u\n", extra_len);
+    mxverb(2, boost::format(Y("real_reader: extra_len: %1%\n")) % extra_len);
 
     if ((4 + extra_len) <= dmx->extra_data_size) {
       extra_data_parsed = true;
       if (!parse_aac_data(&dmx->extra_data[4 + 1], extra_len - 1, profile, channels, sample_rate, output_sample_rate, sbr))
-        mxerror(FMT_TID "This AAC track does not contain valid headers. Could not parse the AAC information.\n", ti.fname.c_str(), tid);
-      mxverb(2, PFX "1. profile: %d, channels: %d, sample_rate: %d, output_sample_rate: %d, sbr: %d\n",
-             profile, channels, sample_rate, output_sample_rate, (int)sbr);
+        mxerror_tid(ti.fname, tid, Y("This AAC track does not contain valid headers. Could not parse the AAC information.\n"));
+      mxverb(2,
+             boost::format(Y("real_reader: 1. profile: %1%, channels: %2%, sample_rate: %3%, output_sample_rate: %4%, sbr: %5%\n"))
+             % profile % channels % sample_rate % output_sample_rate % sbr);
       if (sbr)
         profile = AAC_PROFILE_SBR;
     }
@@ -366,22 +364,24 @@ real_reader_c::create_aac_audio_packetizer(real_demuxer_cptr dmx) {
        || (map_has_key(ti.all_aac_is_sbr, -1)  && !ti.all_aac_is_sbr[-1])))
     profile = detected_profile;
 
-  mxverb(2, PFX "2. profile: %d, channels: %d, sample_rate: %d, output_sample_rate: %d, sbr: %d\n", profile, channels, sample_rate, output_sample_rate, (int)sbr);
+  mxverb(2,
+         boost::format(Y("real_reader: 2. profile: %1%, channels: %2%, sample_rate: %3%, output_sample_rate: %4%, sbr: %5%\n"))
+         % profile % channels % sample_rate % output_sample_rate % sbr);
 
   ti.private_data = NULL;
   ti.private_size = 0;
   dmx->is_aac     = true;
   dmx->ptzr       = add_packetizer(new aac_packetizer_c(this, AAC_ID_MPEG4, profile, sample_rate, channels, ti, false, true));
 
-  mxinfo(FMT_TID "Using the AAC output module (FourCC: %s).\n", ti.fname.c_str(), tid, dmx->fourcc);
+  mxinfo_tid(ti.fname, tid, boost::format(Y("Using the AAC output module (FourCC: %1%).\n")) % dmx->fourcc);
 
   if (AAC_PROFILE_SBR == profile)
     PTZR(dmx->ptzr)->set_audio_output_sampling_freq(output_sample_rate);
 
   else if (!extra_data_parsed)
-    mxwarn("RealMedia files may contain HE-AAC / AAC+ / SBR AAC audio. In some cases this can NOT be detected automatically. "
-           "Therefore you have to specifiy '--aac-is-sbr %u' manually for this input file if the file actually contains SBR AAC. "
-           "The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n", (unsigned int)tid);
+    mxwarn(boost::format(Y("RealMedia files may contain HE-AAC / AAC+ / SBR AAC audio. In some cases this can NOT be detected automatically. "
+                           "Therefore you have to specifiy '--aac-is-sbr %1%' manually for this input file if the file actually contains SBR AAC. "
+                           "The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n")) % tid);
 
   // AAC packetizers might need the timecode of the first packet in order
   // to fill in stuff. Let's misuse ref_timecode for that.
@@ -403,7 +403,7 @@ real_reader_c::create_audio_packetizer(real_demuxer_cptr dmx) {
     dmx->ptzr = add_packetizer(new ra_packetizer_c(this, dmx->samples_per_second, dmx->channels, dmx->bits_per_sample, get_uint32_be(dmx->fourcc),
                                                    dmx->private_data, dmx->private_size, ti));
 
-    mxinfo(FMT_TID "Using the RealAudio output module (FourCC: %s).\n", ti.fname.c_str(), (int64_t)dmx->track->id, dmx->fourcc);
+    mxinfo_tid(ti.fname, dmx->track->id, boost::format(Y("Using the RealAudio output module (FourCC: %1%).\n")) % dmx->fourcc);
   }
 }
 
@@ -473,7 +473,7 @@ real_reader_c::read(generic_packetizer_c *,
   int size = rmff_get_next_frame_size(file);
   if (0 >= size) {
     if (file->num_packets_read < file->num_packets_in_chunk)
-      mxwarn(PFX "%s: File contains fewer frames than expected or is corrupt after frame %u.\n", ti.fname.c_str(), file->num_packets_read);
+      mxwarn_fn(ti.fname, boost::format(Y("File contains fewer frames than expected or is corrupt after frame %1%.\n")) % file->num_packets_read);
     return finish();
   }
 
@@ -483,7 +483,7 @@ real_reader_c::read(generic_packetizer_c *,
 
   if (NULL == frame) {
     if (file->num_packets_read < file->num_packets_in_chunk)
-      mxwarn(PFX "%s: File contains fewer frames than expected or is corrupt after frame %u.\n", ti.fname.c_str(), file->num_packets_read);
+      mxwarn_fn(ti.fname, boost::format(Y("File contains fewer frames than expected or is corrupt after frame %1%.\n")) % file->num_packets_read);
     return finish();
   }
 
@@ -540,7 +540,7 @@ real_reader_c::queue_one_audio_frame(real_demuxer_cptr dmx,
 
   dmx->last_timecode = timecode;
 
-  mxverb(2, "enqueueing one for %u/'%s' length %u timecode " LLU " flags 0x%08x\n", dmx->track->id, ti.fname.c_str(), mem.get_size(), timecode, flags);
+  mxverb_tid(2, ti.fname, dmx->track->id, boost::format(Y("enqueueing one length %1% timecode %2% flags 0x%|3$08x|\n")) % mem.get_size() % timecode % flags);
 }
 
 void
@@ -572,8 +572,9 @@ real_reader_c::deliver_audio_frames(real_demuxer_cptr dmx,
 
   for (i = 0; i < dmx->segments.size(); i++) {
     rv_segment_cptr segment = dmx->segments[i];
-    mxverb(2, "delivering audio for %u/'%s' length %d timecode " LLU " flags 0x%08x duration " LLU "\n", dmx->track->id, ti.fname.c_str(),
-           segment->data->get_size(), dmx->last_timecode, (uint32_t)segment->flags, duration);
+    mxverb_tid(2, ti.fname, dmx->track->id,
+               boost::format(Y("delivering audio length %1% timecode %2% flags 0x%|3$08x| duration %4%\n"))
+               % segment->data->get_size() % dmx->last_timecode % segment->flags % duration);
 
     PTZR(dmx->ptzr)->process(new packet_t(segment->data, dmx->last_timecode, duration,
                                           (segment->flags & RMFF_FRAME_FLAG_KEYFRAME) == RMFF_FRAME_FLAG_KEYFRAME ? -1 : dmx->ref_timecode));
@@ -591,14 +592,14 @@ real_reader_c::deliver_aac_frames(real_demuxer_cptr dmx,
   unsigned char *chunk = mem.get();
   int length           = mem.get_size();
   if (2 > length) {
-    mxwarn(PFX "Short AAC audio packet for track ID %u of '%s' (length: %u < 2)\n", dmx->track->id, ti.fname.c_str(), length);
+    mxwarn_tid(ti.fname, dmx->track->id, boost::format(Y("Short AAC audio packet (length: %1% < 2)\n")) % length);
     return;
   }
 
   int num_sub_packets = chunk[1] >> 4;
-  mxverb(2, PFX "num_sub_packets = %u\n", num_sub_packets);
+  mxverb(2, boost::format(Y("real_reader: num_sub_packets = %1%\n")) % num_sub_packets);
   if ((2 + num_sub_packets * 2) > length) {
-    mxwarn(PFX "Short AAC audio packet for track ID %u of '%s' (length: %u < %u)\n", dmx->track->id, ti.fname.c_str(), length, 2 + num_sub_packets * 2);
+    mxwarn_tid(ti.fname, dmx->track->id, boost::format(Y("Short AAC audio packet (length: %1% < %2%)\n")) % length % (2 + num_sub_packets * 2));
     return;
   }
 
@@ -607,11 +608,11 @@ real_reader_c::deliver_aac_frames(real_demuxer_cptr dmx,
     int sub_length  = get_uint16_be(&chunk[2 + i * 2]);
     len_check      += sub_length;
 
-    mxverb(2, PFX "%u: length %u\n", i, sub_length);
+    mxverb(2, boost::format(Y("real_reader: %1%: length %2%\n")) % i % sub_length);
   }
 
   if (len_check != length) {
-    mxwarn(PFX "Inconsistent AAC audio packet for track ID %u of '%s' (length: %u != len_check %u)\n", dmx->track->id, ti.fname.c_str(), length, len_check);
+    mxwarn_tid(ti.fname, dmx->track->id, boost::format(Y("Inconsistent AAC audio packet (length: %1% != len_check %2%)\n")) % length % len_check);
     return;
   }
 
@@ -654,7 +655,7 @@ real_reader_c::assemble_video_packet(real_demuxer_cptr dmx,
                                      rmff_frame_t *frame) {
   int result = rmff_assemble_packed_video_frame(dmx->track, frame);
   if (0 > result) {
-    mxwarn(PFX "Video packet assembly failed. Error code: %d (%s)\n", rmff_last_error, rmff_last_error_msg);
+    mxwarn_tid(ti.fname, dmx->track->id, boost::format(Y("Video packet assembly failed. Error code: %1% (%2%)\n")) % rmff_last_error % rmff_last_error_msg);
     return;
   }
 

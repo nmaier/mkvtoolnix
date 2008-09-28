@@ -58,9 +58,7 @@ flac_packetizer_c::flac_packetizer_c(generic_reader_c *_reader,
   result = flac_decode_headers(header->get(), header->get_size(), 1,
                                FLAC_HEADER_STREAM_INFO, &stream_info);
   if (!(result & FLAC_HEADER_STREAM_INFO))
-    mxerror(_(FMT_TID "The FLAC headers could not be parsed: the stream info "
-              "structure was not found.\n"),
-            ti.fname.c_str(), (int64_t)ti.id);
+    mxerror_tid(ti.fname, ti.id, Y("The FLAC headers could not be parsed: the stream info structure was not found.\n"));
 
   set_track_type(track_audio);
   if (stream_info.min_blocksize == stream_info.max_blocksize)
@@ -87,9 +85,7 @@ flac_packetizer_c::process(packet_cptr packet) {
     flac_get_num_samples(packet->data->get(), packet->data->get_size(),
                          stream_info);
   if (packet->duration == -1) {
-    mxwarn(_(FMT_TID "Packet number " LLD " contained an invalid FLAC header "
-             "and is being skipped.\n"), ti.fname.c_str(), (int64_t)ti.id,
-           num_packets + 1);
+    mxwarn_tid(ti.fname, ti.id, boost::format(Y("Packet number %1% contained an invalid FLAC header and is being skipped.\n")) % (num_packets + 1));
     return FILE_STATUS_MOREDATA;
   }
   packet->duration = packet->duration * 1000000000ll / stream_info.sample_rate;
@@ -118,9 +114,7 @@ flac_packetizer_c::can_connect_to(generic_packetizer_c *src,
   if ((header->get_size() != fsrc->header->get_size()) ||
       (NULL == header.get()) || (NULL == fsrc->header.get()) ||
       memcmp(header->get(), fsrc->header->get(), header->get_size())) {
-    error_message = mxsprintf("The FLAC header data is different for the "
-                              "two tracks (lengths: %d and %d)",
-                              header->get_size(), fsrc->header->get_size());
+    error_message = (boost::format(Y("The FLAC header data is different for the two tracks (lengths: %1% and %2%)")) % header->get_size() % fsrc->header->get_size()).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }
   return CAN_CONNECT_YES;

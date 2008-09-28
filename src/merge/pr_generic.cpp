@@ -155,10 +155,10 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
     }
   }
   if (ti.aspect_ratio_given && ti.display_dimensions_given)
-    mxerror(_("Both '%s' and '--display-dimensions' were given "
-              "for track " LLD " of '%s'.\n"), ti.aspect_ratio_is_factor ?
-            _("Aspect ratio factor") : _("Aspect ratio"), ti.id,
-            ti.fname.c_str());
+    if (ti.aspect_ratio_is_factor)
+      mxerror_tid(ti.fname, ti.id, boost::format(Y("Both the aspect ratio factor and '--display-dimensions' were given.\n")));
+    else
+      mxerror_tid(ti.fname, ti.id, boost::format(Y("Both the aspect ratio and '--display-dimensions' were given.\n")));
 
   // Let's see if the user has specified a FourCC for this track.
   if (map_has_key(ti.all_fourccs, ti.id))
@@ -241,9 +241,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *nreader,
 generic_packetizer_c::~generic_packetizer_c() {
   safefree(hcodec_private);
   if (!packet_queue.empty())
-    mxerror("Packet queue not empty for new track ID " LLD " (flushed: %d). "
-            "Frames have been lost during remux. %s\n", ti.id,
-            has_been_flushed, BUGMSG);
+    mxerror_tid(ti.fname, ti.id, boost::format(Y("Packet queue not empty (flushed: %1%). Frames have been lost during remux. %2%\n")) % has_been_flushed % BUGMSG);
 }
 
 void
@@ -282,10 +280,8 @@ generic_packetizer_c::set_tag_track_uid() {
 
     fix_mandatory_tag_elements(tag);
     if (!tag->CheckMandatory())
-      mxerror(_("The tags in '%s' could not be parsed: some mandatory "
-                "elements are missing.\n"),
-              ti.tags_file_name != "" ? ti.tags_file_name.c_str():
-              ti.fname.c_str());
+      mxerror(boost::format(Y("The tags in '%1%' could not be parsed: some mandatory elements are missing.\n"))
+              % (ti.tags_file_name != "" ? ti.tags_file_name : ti.fname));
   }
 }
 
@@ -493,11 +489,8 @@ generic_packetizer_c::set_as_default_track(int type,
   } else if ((priority == DEFAULT_TRACK_PRIORITY_CMDLINE) &&
              (default_tracks[type] != hserialno) &&
              !default_track_warning_printed) {
-    mxwarn(_("Another default track for %s tracks has already "
-             "been set. The 'default' flag for track " LLD " of '%s' will not "
-             "be set.\n"),
-           type == 0 ? "audio" : type == 'v' ? "video" : "subtitle",
-           ti.id, ti.fname.c_str());
+    mxwarn(boost::format(Y("Another default track for %1% tracks has already been set. The 'default' flag for track %2% of '%3%' will not be set.\n"))
+           % (type == 0 ? "audio" : type == 'v' ? "video" : "subtitle") % ti.id % ti.fname);
     default_track_warning_printed = true;
   }
 }
@@ -830,8 +823,7 @@ generic_packetizer_c::add_packet(packet_cptr pack) {
       for (i = 0; i < pack->data_adds.size(); i++)
         compressor->compress(pack->data_adds[i]);
     } catch (compression_error_c &e) {
-      mxerror(FMT_TID "Compression failed: %s\n", ti.fname.c_str(),
-              (int64_t)ti.id, e.get_error().c_str());
+      mxerror_tid(ti.fname, ti.id, boost::format(Y("Compression failed: %1%\n")) % e.get_error());
     }
   } else {
     pack->data->grab();
@@ -894,27 +886,20 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
         pack->bref += needed_timecode_offset;
       if (pack->fref >= 0)
         pack->fref += needed_timecode_offset;
-      mxwarn(FMT_TID "The current packet's "
-             "timecode is smaller than that of the previous packet. This "
-             "usually means that the source file is a Matroska file that "
-             "has not been created 100%% correctly. The timecodes of all "
-             "packets will be adjusted by " LLD "ms in order not to lose any "
-             "data. This may throw A/V sync off, but that can be corrected "
-             "with mkvmerge's \"--sync\" option. If you already use "
-             "\"--sync\" and you still get this warning then do NOT worry "
-             "-- this is normal. "
-             "If this error happens more than once and you get this message "
-             "more than once for a particular track then "
-             "either is the source file badly mastered, or mkvmerge "
-             "contains a bug. In this case you should contact the author "
-             "Moritz Bunkus <moritz@bunkus.org>.\n", ti.fname.c_str(), ti.id,
-             (needed_timecode_offset + 500000) / 1000000);
+      mxwarn_tid(ti.fname, ti.id,
+                 boost::format(Y("The current packet's timecode is smaller than that of the previous packet. "
+                                 "This usually means that the source file is a Matroska file that has not been created 100%% correctly. "
+                                 "The timecodes of all packets will be adjusted by %1%ms in order not to lose any data. "
+                                 "This may throw audio/video synchronization off, but that can be corrected with mkvmerge's \"--sync\" option. "
+                                 "If you already use \"--sync\" and you still get this warning then do NOT worry -- this is normal. "
+                                 "If this error happens more than once and you get this message more than once for a particular track "
+                                 "then either is the source file badly mastered, or mkvmerge contains a bug. "
+                                 "In this case you should contact the author Moritz Bunkus <moritz@bunkus.org>.\n"))
+                 % ((needed_timecode_offset + 500000) / 1000000));
     } else if (hack_engaged(ENGAGE_ENABLE_TIMECODE_WARNING))
-      mxwarn("pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < "
-             "last_timecode (" FMT_TIMECODE " < " FMT_TIMECODE ") for " LLD
-             " of '%s'. %s\n", ARG_TIMECODE_NS(pack->timecode),
-             ARG_TIMECODE_NS(safety_last_timecode), ti.id, ti.fname.c_str(),
-             BUGMSG);
+      mxwarn_tid(ti.fname, ti.id,
+                 boost::format(Y("pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < last_timecode (%1% < %2%). %3%\n"))
+                 % format_timecode(pack->timecode) % format_timecode(safety_last_timecode) % BUGMSG);
   }
   safety_last_timecode = pack->timecode;
   safety_last_duration = pack->duration;
@@ -963,9 +948,9 @@ generic_packetizer_c::apply_factory_once(packet_cptr &packet) {
     packet->gap_following = timecode_factory->get_next(packet);
   packet->factory_applied = true;
 
-  mxverb(4, "apply_factory_once(): source " LLD " t " LLD " tbf " LLD " at "
-         LLD "\n", packet->source->get_source_track_num(), packet->timecode,
-         packet->timecode_before_factory, packet->assigned_timecode);
+  mxverb(4,
+         boost::format("apply_factory_once(): source %1% t %2% tbf %3% at %4%\n")
+         % packet->source->get_source_track_num() % packet->timecode % packet->timecode_before_factory % packet->assigned_timecode);
 
   if (max_timecode_seen < (packet->assigned_timecode + packet->duration))
     max_timecode_seen = packet->assigned_timecode + packet->duration;
@@ -1089,15 +1074,13 @@ generic_packetizer_c::apply_factory_full_queueing(packet_cptr_di &p_start) {
 void
 generic_packetizer_c::force_duration_on_last_packet() {
   if (packet_queue.empty()) {
-    mxverb(2, "force_duration_on_last_packet: packet queue is empty for "
-           "'%s'/" LLD "\n", ti.fname.c_str(), ti.id);
+    mxverb_tid(2, ti.fname, ti.id, Y("force_duration_on_last_packet: packet queue is empty\n"));
     return;
   }
   packet_cptr &packet = packet_queue.back();
   packet->duration_mandatory = true;
-  mxverb(2, "force_duration_on_last_packet: forcing at " FMT_TIMECODE " with "
-         "%.3fms for '%s'/" LLD "\n", ARG_TIMECODE_NS(packet->timecode),
-         packet->duration / 1000.0, ti.fname.c_str(), ti.id);
+  mxverb_tid(2, ti.fname, ti.id,
+             boost::format(Y("force_duration_on_last_packet: forcing at %1% with %|2$.3f|ms\n")) % format_timecode(packet->timecode) % (packet->duration / 1000.0));
 }
 
 int64_t
@@ -1257,8 +1240,7 @@ generic_reader_c::demuxing_requested(char type,
       return false;
     tracks = &ti.btracks;
   } else
-    die("pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track "
-        "type %c.", type);
+    mxerror(boost::format(Y("pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%.")) % type);
 
   if (tracks->size() == 0)
     return true;
@@ -1314,8 +1296,7 @@ generic_reader_c::check_track_ids_and_packetizers() {
 
   add_available_track_ids();
   if (reader_packetizers.size() == 0)
-    mxwarn(FMT_FN "No tracks will be copied from this file. This usually "
-           "indicates a mistake in the command line.\n", ti.fname.c_str());
+    mxwarn_fn(ti.fname, Y("No tracks will be copied from this file. This usually indicates a mistake in the command line.\n"));
 
   for (r = 0; r < requested_track_ids.size(); r++) {
     found = false;
@@ -1326,9 +1307,9 @@ generic_reader_c::check_track_ids_and_packetizers() {
       }
 
     if (!found)
-      mxwarn(FMT_FN "A track with the ID " LLD " was requested but not found "
-             "in the file. The corresponding option will be ignored.\n",
-             ti.fname.c_str(), requested_track_ids[r]);
+      mxwarn_fn(ti.fname,
+                boost::format(Y("A track with the ID %1% was requested but not found in the file. The corresponding option will be ignored.\n"))
+                % requested_track_ids[r]);
   }
 }
 
@@ -1373,11 +1354,15 @@ generic_reader_c::flush_packetizers() {
 void
 generic_reader_c::id_result_container_unsupported(const string &filename,
                                                   const string &info) {
-  if (identifying) {
-    mxinfo("File '%s': unsupported container: %s\n", filename.c_str(), info.c_str());
+  if (g_identifying) {
+    if (g_identify_for_mmg)
+      mxinfo(boost::format("File '%1%': unsupported container: %2%\n") % filename % info);
+    else
+      mxinfo(boost::format(Y("File '%1%': unsupported container: %2%\n")) % filename % info);
     mxexit(3);
+
   } else
-    mxerror("The file '%s' is a non-supported file type (%s).\n", filename.c_str(), info.c_str());
+    mxerror(boost::format(Y("The file '%1%' is a non-supported file type (%2%).\n")) % filename % info);
 }
 
 void
@@ -1429,23 +1414,38 @@ generic_reader_c::id_result_attachment(int64_t attachment_id,
 
 void
 generic_reader_c::display_identification_results() {
-  int i;
+  string format_file, format_track, format_attachment, format_att_description, format_att_file_name;
 
-  mxinfo("File '%s': container: %s", ti.fname.c_str(), id_results_container.info.c_str());
+  if (g_identify_for_mmg) {
+    format_file            =   "File '%1%': container: %2%";
+    format_track           =   "Track ID %1%: %2% (%3%)";
+    format_attachment      =   "Attachment ID %1%: type '%2%', size %3% bytes";
+    format_att_description =   ", description '%1%'";
+    format_att_file_name   =   ", file name '%1%'";
 
-  if (identify_verbose && !id_results_container.verbose_info.empty())
-    mxinfo(" [%s]", join(" ", id_results_container.verbose_info).c_str());
+  } else {
+    format_file            = Y("File '%1%': container: %2%");
+    format_track           = Y("Track ID %1%: %2% (%3%)");
+    format_attachment      = Y("Attachment ID %1%: type '%2%', size %3% bytes");
+    format_att_description = Y(", description '%1%'");
+    format_att_file_name   = Y(", file name '%1%'");
+  }
+
+  mxinfo(boost::format(format_file) % ti.fname % id_results_container.info);
+
+  if (g_identify_verbose && !id_results_container.verbose_info.empty())
+    mxinfo(boost::format(" [%1%]") % join(" ", id_results_container.verbose_info));
 
   mxinfo("\n");
 
-
+  int i;
   for (i = 0; i < id_results_tracks.size(); ++i) {
     id_result_t &result = id_results_tracks[i];
 
-    mxinfo("Track ID " LLD ": %s (%s)", result.id, result.type.c_str(), result.info.c_str());
+    mxinfo(boost::format(format_track) % result.id % result.type % result.info);
 
-    if (identify_verbose && !result.verbose_info.empty())
-      mxinfo(" [%s]", join(" ", result.verbose_info).c_str());
+    if (g_identify_verbose && !result.verbose_info.empty())
+      mxinfo(boost::format(" [%1%]") % join(" ", result.verbose_info));
 
     mxinfo("\n");
   }
@@ -1453,13 +1453,13 @@ generic_reader_c::display_identification_results() {
   for (i = 0; i < id_results_attachments.size(); ++i) {
     id_result_t &result = id_results_attachments[i];
 
-    mxinfo("Attachment ID " LLD ": type '%s', size " LLD " bytes", result.id, result.type.c_str(), result.size);
+    mxinfo(boost::format(format_attachment) % result.id % result.type % result.size);
 
     if (!result.description.empty())
-      mxinfo(", description '%s'", result.description.c_str());
+      mxinfo(boost::format(format_att_description) % result.description);
 
     if (!result.info.empty())
-      mxinfo(", file name '%s'", result.info.c_str());
+      mxinfo(boost::format(format_att_file_name) % result.info);
 
     mxinfo("\n");
   }

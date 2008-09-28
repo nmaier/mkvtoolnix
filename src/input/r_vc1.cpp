@@ -57,7 +57,7 @@ vc1_es_reader_c::probe_file(mm_io_c *io,
     return parser.is_sequence_header_available();
 
   } catch (...) {
-    mxinfo("have an xcptn\n");
+    mxinfo(Y("have an xcptn\n"));
   }
 
   return 0;
@@ -87,11 +87,11 @@ vc1_es_reader_c::vc1_es_reader_c(track_info_c &n_ti)
     m_io->setFilePointer(0, seek_beginning);
 
   } catch (...) {
-    throw error_c("vc1_es_reader: Could not open the source file.");
+    throw error_c(Y("vc1_es_reader: Could not open the source file."));
   }
 
   if (verbose)
-    mxinfo(FMT_FN "Using the VC1 ES demultiplexer.\n", ti.fname.c_str());
+    mxinfo_fn(ti.fname, Y("Using the VC1 ES demultiplexer.\n"));
 }
 
 void
@@ -101,7 +101,7 @@ vc1_es_reader_c::create_packetizer(int64_t) {
 
   add_packetizer(new vc1_video_packetizer_c(this, ti));
 
-  mxinfo(FMT_TID "Using the VC1 video output module.\n", ti.fname.c_str(), (int64_t)0);
+  mxinfo_tid(ti.fname, 0, Y("Using the VC1 video output module.\n"));
 }
 
 file_status_e
