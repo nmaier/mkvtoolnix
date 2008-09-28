@@ -151,7 +151,7 @@ sub scan_file {
 }
 
 sub parse_files {
-  my @all_files = map { (glob("src/$_/*.cpp"), glob("src/$_/*.h")) } qw(common input output merge);
+  my @all_files = map { (glob("src/$_/*.cpp"), glob("src/$_/*.h")) } qw(common input output merge info);
 
   $| = 1;
   print "0\%\r";
