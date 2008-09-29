@@ -239,7 +239,7 @@ qtmp4_reader_c::parse_headers() {
           && (MP4OTI_MPEG2AudioPart3 != dmx->esds.object_type_id) // MP3...
           && (MP4OTI_MPEG1Audio      != dmx->esds.object_type_id)) {
         mxwarn(boost::format(Y("Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"))
-               % dmx->id % dmx->esds.object_type_id);
+               % dmx->id % (int)dmx->esds.object_type_id);
         continue;
       }
 
@@ -430,7 +430,7 @@ qtmp4_reader_c::parse_audio_header_priv_atoms(qtmp4_demuxer_cptr &dmx,
           bool aac_is_sbr;
 
           if (dmx->esds.decoder_config_len < 2)
-            mxwarn(boost::format(Y("Track %1%: AAC found, but decoder config data has length %2%.\n")) % dmx->id % dmx->esds.decoder_config_len);
+            mxwarn(boost::format(Y("Track %1%: AAC found, but decoder config data has length %2%.\n")) % dmx->id % (int)dmx->esds.decoder_config_len);
 
           else if (!parse_aac_data(dmx->esds.decoder_config, dmx->esds.decoder_config_len, profile, channels, sample_rate, output_sample_rate, aac_is_sbr))
             mxwarn(boost::format(Y("Track %1%: The AAC information could not be parsed.\n")) % dmx->id);
@@ -586,7 +586,7 @@ qtmp4_reader_c::handle_hdlr_atom(qtmp4_demuxer_cptr &new_dmx,
   hdlr_atom_t hdlr;
 
   if (sizeof(hdlr_atom_t) > atom.size)
-    print_atom_too_small_error('hdlr', hdlr_atom_t);
+    print_atom_too_small_error("hdlr", hdlr_atom_t);
 
   if (io->read(&hdlr, sizeof(hdlr_atom_t)) != sizeof(hdlr_atom_t))
     throw error_c(Y("end-of-file"));
@@ -609,7 +609,7 @@ qtmp4_reader_c::handle_mdhd_atom(qtmp4_demuxer_cptr &new_dmx,
                                  qt_atom_t atom,
                                  int level) {
   if (1 > atom.size)
-    print_atom_too_small_error('mdhd', mdhd_atom_t);
+    print_atom_too_small_error("mdhd", mdhd_atom_t);
 
   int version = io->read_uint8();
 
@@ -617,7 +617,7 @@ qtmp4_reader_c::handle_mdhd_atom(qtmp4_demuxer_cptr &new_dmx,
     mdhd_atom_t mdhd;
 
     if (sizeof(mdhd_atom_t) > atom.size)
-      print_atom_too_small_error('mdhd', mdhd_atom_t);
+      print_atom_too_small_error("mdhd", mdhd_atom_t);
     if (io->read(&mdhd.flags, sizeof(mdhd_atom_t) - 1) != (sizeof(mdhd_atom_t) - 1))
       throw error_c(Y("end-of-file"));
 
@@ -630,7 +630,7 @@ qtmp4_reader_c::handle_mdhd_atom(qtmp4_demuxer_cptr &new_dmx,
     mdhd64_atom_t mdhd;
 
     if (sizeof(mdhd64_atom_t) > atom.size)
-      print_atom_too_small_error('mdhd', mdhd64_atom_t);
+      print_atom_too_small_error("mdhd", mdhd64_atom_t);
     if (io->read(&mdhd.flags, sizeof(mdhd64_atom_t) - 1) != (sizeof(mdhd64_atom_t) - 1))
       throw error_c(Y("end-of-file"));
 
@@ -720,7 +720,7 @@ qtmp4_reader_c::handle_mvhd_atom(qt_atom_t atom,
   mvhd_atom_t mvhd;
 
   if (sizeof(mvhd_atom_t) > (atom.size - atom.hsize))
-    print_atom_too_small_error('mvhd', mvhd_atom_t);
+    print_atom_too_small_error("mvhd", mvhd_atom_t);
   if (io->read(&mvhd, sizeof(mvhd_atom_t)) != sizeof(mvhd_atom_t))
     throw error_c(Y("end-of-file"));
 
@@ -849,14 +849,14 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
       memcpy(&sv1_stsd, priv, sizeof(sound_v0_stsd_atom_t));
       if (0 != new_dmx->fourcc[0])
         mxwarn(boost::format(Y("Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"))
-               % new_dmx->id % new_dmx->fourcc % sv1_stsd.v0.base.fourcc);
+               % new_dmx->id % new_dmx->fourcc % (const unsigned char *)sv1_stsd.v0.base.fourcc);
       else
         memcpy(new_dmx->fourcc, sv1_stsd.v0.base.fourcc, 4);
 
       mxverb(2,
              boost::format(Y("Quicktime/MP4 reader:%1%FourCC: %|2$.4s|, channels: %3%, sample size: %4%, compression id: %5%, sample rate: 0x%|6$08x|, version: %7%"))
              % space(level * 2 + 1)
-             % sv1_stsd.v0.base.fourcc
+             % (const unsigned char *)sv1_stsd.v0.base.fourcc
              % get_uint16_be(&sv1_stsd.v0.channels)
              % get_uint16_be(&sv1_stsd.v0.sample_size)
              % get_uint16_be(&sv1_stsd.v0.compression_id)
@@ -902,7 +902,7 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
       new_dmx->v_stsd_size = size;
       if (0 != new_dmx->fourcc[0])
         mxwarn(boost::format(Y("Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"))
-               % new_dmx->id % new_dmx->fourcc % v_stsd.base.fourcc);
+               % new_dmx->id % new_dmx->fourcc % (const unsigned char *)v_stsd.base.fourcc);
 
       else {
         memcpy(new_dmx->fourcc, v_stsd.base.fourcc, 4);
@@ -912,7 +912,7 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
       mxverb(2,
              boost::format(Y("Quicktime/MP4 reader:%1%FourCC: %|2$.4s|, width: %3%, height: %4%, depth: %5%\n"))
              % space(level * 2 + 1)
-             % v_stsd.base.fourcc
+             % (const unsigned char *)v_stsd.base.fourcc
              % get_uint16_be(&v_stsd.width)
              % get_uint16_be(&v_stsd.height)
              % get_uint16_be(&v_stsd.depth));
@@ -1064,7 +1064,7 @@ qtmp4_reader_c::handle_tkhd_atom(qtmp4_demuxer_cptr &new_dmx,
   tkhd_atom_t tkhd;
 
   if (sizeof(tkhd_atom_t) > atom.size)
-    print_atom_too_small_error('tkhd', tkhd_atom_t);
+    print_atom_too_small_error("tkhd", tkhd_atom_t);
 
   if (io->read(&tkhd, sizeof(tkhd_atom_t)) != sizeof(tkhd_atom_t))
     throw error_c(Y("end-of-file"));
@@ -1213,8 +1213,8 @@ qtmp4_reader_c::parse_esds_atom(mm_mem_io_c &memio,
                          "stream_type: 0x%|4$2x|, buffer_size_db: %5%, max_bitrate: %|6$.3f|kbit/s, avg_bitrate: %|7$.3f|kbit/s\n"))
          % space(lsp + 1)
          % len
-         % e->object_type_id
-         % e->stream_type
+         % (int)e->object_type_id
+         % (int)e->stream_type
          % (int)e->buffer_size_db
          % (e->max_bitrate / 1000.0)
          % (e->avg_bitrate / 1000.0));

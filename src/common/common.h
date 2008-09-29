@@ -20,6 +20,12 @@
 
 #include <stdarg.h>
 
+// Compilation with mingw gcc fails with Boost's format library if
+// "min" is defined. The libebml headers define "min", so make sure
+// that it isn't before including boost/format.hpp.
+
+#undef min
+
 #include <boost/format.hpp>
 #include <cstring>
 #include <string>

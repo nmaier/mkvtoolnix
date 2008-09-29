@@ -14,6 +14,8 @@
    \author Steve Lhomme <steve.lhomme@free.fr>.
 */
 
+#include "os.h"
+
 #include <ctype.h>
 #include <stdarg.h>
 
@@ -23,6 +25,7 @@
 #include <matroska/KaxInfo.h>
 #include <matroska/KaxInfoData.h>
 
+#include "common.h"
 #include "commonebml.h"
 #include "error.h"
 #include "segmentinfo.h"

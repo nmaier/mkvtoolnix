@@ -186,7 +186,7 @@ _show_element(EbmlElement *l,
   if (show_summary)
     return;
 
-  ui_show_element(level, info, NULL != l ? l->GetElementPosition() : -1);
+  ui_show_element(level, info, NULL != l ? (int64_t)l->GetElementPosition() : -1);
 
   if ((NULL == l) || !skip)
     return;

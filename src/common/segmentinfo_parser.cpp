@@ -14,6 +14,8 @@
    Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "os.h"
+
 #include <expat.h>
 #include <ctype.h>
 #include <setjmp.h>
@@ -25,6 +27,7 @@
 #include <matroska/KaxInfoData.h>
 #include <matroska/KaxSegment.h>
 
+#include "common.h"
 #include "commonebml.h"
 #include "error.h"
 #include "iso639.h"

@@ -93,7 +93,7 @@ find_dts_header_internal(const unsigned char *buf,
     return -1;
   }
 
-  unsigned int offset;
+  int offset;
   for (offset = 0; offset < size_to_search; ++offset)
      // sync words appear aligned in the bit stream
     if (get_uint32_be(buf + offset) == DTS_HEADER_MAGIC)

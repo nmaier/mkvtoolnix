@@ -18,12 +18,7 @@
 
 #include <cassert>
 #include <limits.h>
-
 #include <vector>
-
-#include <matroska/KaxBlock.h>
-#include <matroska/KaxBlockData.h>
-#include <matroska/KaxSeekHead.h>
 
 #include "cluster_helper.h"
 #include "common.h"
@@ -33,6 +28,10 @@
 #include "output_control.h"
 #include "p_video.h"
 #include "p_vorbis.h"
+
+#include <matroska/KaxBlock.h>
+#include <matroska/KaxBlockData.h>
+#include <matroska/KaxSeekHead.h>
 
 cluster_helper_c::cluster_helper_c():
   cluster(NULL),
