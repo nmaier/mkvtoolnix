@@ -48,7 +48,7 @@ mxwarn(const boost::format &warning) {
 void MTX_DLL_API mxerror(const std::string &error);
 inline void
 mxerror(const boost::format &error) {
-  error.str();
+  mxerror(error.str());
 }
 
 #define mxverb(level, message)        \
