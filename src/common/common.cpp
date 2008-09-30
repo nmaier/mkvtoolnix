@@ -1218,7 +1218,7 @@ mxhexdump(int level,
     else
       output[j] = '.';
     j++;
-    mxinfo(boost::format("%|1$02x| ") % buffer[i]);
+    mxinfo(boost::format("%|1$02x| ") % (int)buffer[i]);
   }
   while ((i % 16) != 0) {
     if ((i % 8) == 0)
