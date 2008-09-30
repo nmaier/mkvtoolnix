@@ -152,7 +152,7 @@ aac_reader_c::create_packetizer(int64_t) {
              "file actually contains SBR AAC. The file will be muxed in the "
              "WRONG way otherwise. Also read mkvmerge's documentation.\n"));
 
-  aacpacketizer = new aac_packetizer_c(this, aacheader.id, aacheader.profile, aacheader.sample_rate, aacheader.channels, ti, emphasis_present);
+  aacpacketizer = new aac_packetizer_c(this, ti, aacheader.id, aacheader.profile, aacheader.sample_rate, aacheader.channels, emphasis_present);
   add_packetizer(aacpacketizer);
 
   if (AAC_PROFILE_SBR == aacheader.profile)

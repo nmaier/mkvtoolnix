@@ -18,21 +18,22 @@
 
 #include "os.h"
 
+#include <boost/regex.hpp>
+#include <string>
+
 #include "common.h"
 #include "pr_generic.h"
 #include "smart_pointers.h"
 
 class textsubs_packetizer_c: public generic_packetizer_c {
 private:
-  int packetno, cc_utf8;
-  memory_cptr global_data;
-  string codec_id;
-  bool recode;
+  int m_packetno, m_cc_utf8;
+  memory_cptr m_global_data;
+  string m_codec_id;
+  bool m_recode;
 
 public:
-  textsubs_packetizer_c(generic_reader_c *_reader, const char *_codec_id,
-                        const void *_global_data, int _global_size,
-                        bool _recode, bool is_utf8, track_info_c &_ti)
+  textsubs_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, const char *codec_id, const void *global_data, int global_size, bool recode, bool is_utf8)
     throw (error_c);
   virtual ~textsubs_packetizer_c();
 
@@ -42,8 +43,10 @@ public:
   virtual const char *get_format_name() {
     return "text subtitle";
   }
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src,
-                                             string &error_message);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
+
+private:
+  static boost::regex s_re_remove_cr, s_re_translate_nl, s_re_remove_trailing_nl;
 };
 
 

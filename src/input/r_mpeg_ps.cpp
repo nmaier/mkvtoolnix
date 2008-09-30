@@ -1102,17 +1102,17 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
         || (FOURCC('M', 'P', '3', ' ') == track->fourcc)) {
       if (verbose)
         mxinfo_tid(ti.fname, id, Y("Using the MPEG audio output module.\n"));
-      track->ptzr = add_packetizer(new mp3_packetizer_c(this, track->a_sample_rate, track->a_channels, true, ti));
+      track->ptzr = add_packetizer(new mp3_packetizer_c(this, ti, track->a_sample_rate, track->a_channels, true));
 
     } else if (FOURCC('A', 'C', '3', ' ') == track->fourcc) {
       if (verbose)
         mxinfo_tid(ti.fname, id, boost::format(Y("Using the %1%AC3 output module.\n")) % (16 == track->a_bsid ? "E" : ""));
-      track->ptzr = add_packetizer(new ac3_packetizer_c(this, track->a_sample_rate, track->a_channels, track->a_bsid, ti));
+      track->ptzr = add_packetizer(new ac3_packetizer_c(this, ti, track->a_sample_rate, track->a_channels, track->a_bsid));
 
     } else if (FOURCC('D', 'T', 'S', ' ') == track->fourcc) {
       if (verbose)
         mxinfo_tid(ti.fname, id, Y("Using the DTS output module.\n"));
-      track->ptzr = add_packetizer(new dts_packetizer_c(this, track->dts_header, ti, true));
+      track->ptzr = add_packetizer(new dts_packetizer_c(this, ti, track->dts_header, true));
 
     } else
       mxerror(boost::format(Y("mpeg_ps_reader: Should not have happened #1. %1%")) % BUGMSG);
@@ -1125,15 +1125,15 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
 
       ti.private_data = track->raw_seq_hdr;
       ti.private_size = track->raw_seq_hdr_size;
-      track->ptzr     = add_packetizer(new mpeg1_2_video_packetizer_c(this, track->v_version, track->v_frame_rate, track->v_width, track->v_height,
-                                                                      track->v_dwidth, track->v_dheight, false, ti));
+      track->ptzr     = add_packetizer(new mpeg1_2_video_packetizer_c(this, ti, track->v_version, track->v_frame_rate, track->v_width, track->v_height,
+                                                                      track->v_dwidth, track->v_dheight, false));
       ti.private_data = NULL;
       ti.private_size = 0;
 
     } else if (track->fourcc == FOURCC('A', 'V', 'C', '1')) {
       if (verbose)
         mxinfo_tid(ti.fname, id, Y("Using the MPEG-4 part 10 ES video output module.\n"));
-      track->ptzr = add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, track->v_avcc, track->v_width, track->v_height, ti));
+      track->ptzr = add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, ti, track->v_avcc, track->v_width, track->v_height));
 
     } else if (FOURCC('W', 'V', 'C', '1') == track->fourcc) {
       if (verbose)

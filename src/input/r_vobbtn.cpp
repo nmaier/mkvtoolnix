@@ -80,7 +80,7 @@ void
 vobbtn_reader_c::create_packetizer(int64_t tid) {
   ti.id = tid;
   if (demuxing_requested('s', tid))
-    add_packetizer(new vobbtn_packetizer_c(this, width, height, ti));
+    add_packetizer(new vobbtn_packetizer_c(this, ti, width, height));
 }
 
 file_status_e

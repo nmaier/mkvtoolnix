@@ -25,21 +25,27 @@
 
 using namespace libmatroska;
 
-mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *_reader,
-                                   int _samples_per_sec,
-                                   int _channels,
-                                   bool source_is_good,
-                                   track_info_c &_ti)
-  throw (error_c):
-  generic_packetizer_c(_reader, _ti), bytes_output(0), packetno(0),
-  bytes_skipped(0),
-  samples_per_sec(_samples_per_sec), channels(_channels), spf(1152),
-  byte_buffer(128 * 1024),
-  codec_id_set(false), valid_headers_found(source_is_good),
-  previous_timecode(-1), num_packets_with_same_timecode(0) {
-
+mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *p_reader,
+                                   track_info_c &p_ti,
+                                   int samples_per_sec,
+                                   int channels,
+                                   bool source_is_good)
+  throw (error_c)
+  : generic_packetizer_c(p_reader, p_ti)
+  , m_bytes_output(0)
+  , m_packetno(0)
+  , m_bytes_skipped(0)
+  , m_samples_per_sec(samples_per_sec)
+  , m_channels(channels)
+  , m_samples_per_frame(1152)
+  , m_byte_buffer(128 * 1024)
+  , m_codec_id_set(false)
+  , m_valid_headers_found(source_is_good)
+  , m_previous_timecode(-1)
+  , m_num_packets_with_same_timecode(0)
+{
   set_track_type(track_audio);
-  set_track_default_duration((int64_t)(1152000000000.0 / samples_per_sec));
+  set_track_default_duration((int64_t)(1152000000000.0 / m_samples_per_sec));
   enable_avi_audio_sync(true);
 }
 
@@ -48,22 +54,19 @@ mp3_packetizer_c::~mp3_packetizer_c() {
 
 void
 mp3_packetizer_c::handle_garbage(int64_t bytes) {
-  bool warning_printed;
+  bool warning_printed = false;
 
-  warning_printed = false;
-  if (packetno == 0) {
-    int64_t offset;
-
-    offset = handle_avi_audio_sync(bytes, !(ti.avi_block_align % 384) ||
-                                   !(ti.avi_block_align % 576));
-    if (offset != -1) {
+  if (0 == m_packetno) {
+    int64_t offset = handle_avi_audio_sync(bytes, !(ti.avi_block_align % 384) || !(ti.avi_block_align % 576));
+    if (-1 != offset) {
       mxinfo_tid(ti.fname, ti.id,
                  boost::format(Y("This MPEG audio track contains %1% bytes of non-MP3 data at the beginning. "
                                  "This corresponds to a delay of %2%ms. This delay will be used instead of the garbage data.\n")) % bytes % (offset / 1000000));
-      warning_printed = true;
+      warning_printed         = true;
       ti.tcsync.displacement += offset;
     }
   }
+
   if (!warning_printed)
     mxwarn_tid(ti.fname, ti.id,
                boost::format(Y("This MPEG audio track contains %1% bytes of non-MP3 data which were skipped. "
@@ -72,26 +75,30 @@ mp3_packetizer_c::handle_garbage(int64_t bytes) {
 
 unsigned char *
 mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
+  if (m_byte_buffer.get_size() == 0)
+    return 0;
+
   int pos, size;
   unsigned char *buf;
-  string codec_id;
 
-  if (byte_buffer.get_size() == 0)
-    return 0;
   while (1) {
-    buf = byte_buffer.get_buffer();
-    size = byte_buffer.get_size();
-    pos = find_mp3_header(buf, size);
-    if (pos < 0)
+    buf  = m_byte_buffer.get_buffer();
+    size = m_byte_buffer.get_size();
+    pos  = find_mp3_header(buf, size);
+
+    if (0 > pos)
       return NULL;
+
     decode_mp3_header(&buf[pos], mp3header);
+
     if ((pos + mp3header->framesize) > size)
       return NULL;
+
     if (!mp3header->is_tag)
       break;
 
     mxverb(2, boost::format(Y("mp3_packetizer: Removing TAG packet with size %1%\n")) % mp3header->framesize);
-    byte_buffer.remove(mp3header->framesize + pos);
+    m_byte_buffer.remove(mp3header->framesize + pos);
   }
 
   // Try to be smart. We might get fed trash before the very first MP3
@@ -99,59 +106,60 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
   // contains valid MP3 headers before the 'real' ones...
   // Screw the guys who program apps that use _random_ _trash_ for filling
   // gaps. Screw those who try to use AVI no matter the 'cost'!
-  if (!valid_headers_found) {
-    pos = find_consecutive_mp3_headers(byte_buffer.get_buffer(),
-                                       byte_buffer.get_size(), 5);
-    if (pos >= 0) {
-      // Great, we have found five consecutive identical headers. Be happy
-      // with those!
-      valid_headers_found = true;
-      bytes_skipped += pos;
-      if (0 < bytes_skipped)
-        handle_garbage(bytes_skipped);
-      byte_buffer.remove(pos);
-      pos = 0;
-      bytes_skipped = 0;
-      decode_mp3_header(byte_buffer.get_buffer(), mp3header);
-    } else
+  if (!m_valid_headers_found) {
+    pos = find_consecutive_mp3_headers(m_byte_buffer.get_buffer(), m_byte_buffer.get_size(), 5);
+    if (0 > pos)
       return NULL;
+
+    // Great, we have found five consecutive identical headers. Be happy
+    // with those!
+    m_valid_headers_found  = true;
+    m_bytes_skipped       += pos;
+    if (0 < m_bytes_skipped)
+      handle_garbage(m_bytes_skipped);
+    m_byte_buffer.remove(pos);
+
+    pos             = 0;
+    m_bytes_skipped = 0;
+    decode_mp3_header(m_byte_buffer.get_buffer(), mp3header);
   }
 
-  bytes_skipped += pos;
-  if (bytes_skipped > 0)
-    handle_garbage(bytes_skipped);
-  byte_buffer.remove(pos);
-  pos = 0;
-  bytes_skipped = 0;
+  m_bytes_skipped += pos;
+  if (0 < m_bytes_skipped)
+    handle_garbage(m_bytes_skipped);
+  m_byte_buffer.remove(pos);
+  pos             = 0;
+  m_bytes_skipped = 0;
 
-  if (packetno == 0) {
-    spf = mp3header->samples_per_channel;
-    codec_id = MKV_A_MP3;
+  if (0 == m_packetno) {
+    m_samples_per_frame = mp3header->samples_per_channel;
+    string codec_id     = MKV_A_MP3;
     codec_id[codec_id.length() - 1] = (char)(mp3header->layer + '0');
     set_codec_id(codec_id.c_str());
-    if (spf != 1152)
-      set_track_default_duration((int64_t)(1000000000.0 * spf / samples_per_sec));
+
+    if (1152 != m_samples_per_frame)
+      set_track_default_duration((int64_t)(1000000000.0 * m_samples_per_frame / m_samples_per_sec));
     rerender_track_headers();
   }
 
-  if (mp3header->framesize > byte_buffer.get_size())
+  if (mp3header->framesize > m_byte_buffer.get_size())
     return NULL;
 
-  buf = (unsigned char *)safememdup(byte_buffer.get_buffer(), mp3header->framesize);
+  buf = (unsigned char *)safememdup(m_byte_buffer.get_buffer(), mp3header->framesize);
 
-  byte_buffer.remove(mp3header->framesize);
+  m_byte_buffer.remove(mp3header->framesize);
 
   return buf;
 }
 
 void
 mp3_packetizer_c::set_headers() {
-  if (!codec_id_set) {
+  if (!m_codec_id_set) {
     set_codec_id(MKV_A_MP3);
-    codec_id_set = true;
+    m_codec_id_set = true;
   }
-  set_audio_sampling_freq((float)samples_per_sec);
-  set_audio_channels(channels);
+  set_audio_sampling_freq((float)m_samples_per_sec);
+  set_audio_channels(m_channels);
 
   generic_packetizer_c::set_headers();
 }
@@ -161,25 +169,27 @@ mp3_packetizer_c::process(packet_cptr packet) {
   unsigned char *mp3_packet;
   mp3_header_t mp3header;
 
-  byte_buffer.add(packet->data->get(), packet->data->get_size());
+  m_byte_buffer.add(packet->data->get(), packet->data->get_size());
   while ((mp3_packet = get_mp3_packet(&mp3header)) != NULL) {
     int64_t new_timecode;
+
     if (-1 == packet->timecode)
-      new_timecode = (int64_t)(1000000000.0 * packetno * spf / samples_per_sec);
+      new_timecode = (int64_t)(1000000000.0 * m_packetno * m_samples_per_frame / m_samples_per_sec);
+
     else {
-      if ((-1 != previous_timecode) && (packet->timecode == previous_timecode)) {
-        new_timecode = previous_timecode + num_packets_with_same_timecode * 1000000000ll * spf / samples_per_sec;
-        ++num_packets_with_same_timecode;
+      if ((-1 != m_previous_timecode) && (packet->timecode == m_previous_timecode)) {
+        new_timecode = m_previous_timecode + m_num_packets_with_same_timecode * 1000000000ll * m_samples_per_frame / m_samples_per_sec;
+        ++m_num_packets_with_same_timecode;
       } else {
-        new_timecode                   = packet->timecode;
-        num_packets_with_same_timecode = 0;
+        new_timecode                     = packet->timecode;
+        m_num_packets_with_same_timecode = 0;
       }
 
-      previous_timecode = packet->timecode;
+      m_previous_timecode = packet->timecode;
     }
 
-    add_packet(new packet_t(new memory_c(mp3_packet, mp3header.framesize, true), new_timecode, (int64_t)(1000000000.0 * spf / samples_per_sec)));
-    packetno++;
+    add_packet(new packet_t(new memory_c(mp3_packet, mp3header.framesize, true), new_timecode, (int64_t)(1000000000.0 * m_samples_per_frame / m_samples_per_sec)));
+    m_packetno++;
   }
 
   return FILE_STATUS_MOREDATA;
@@ -188,12 +198,12 @@ mp3_packetizer_c::process(packet_cptr packet) {
 connection_result_e
 mp3_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                  string &error_message) {
-  mp3_packetizer_c *msrc;
-
-  msrc = dynamic_cast<mp3_packetizer_c *>(src);
-  if (msrc == NULL)
+  mp3_packetizer_c *msrc = dynamic_cast<mp3_packetizer_c *>(src);
+  if (NULL == msrc)
     return CAN_CONNECT_NO_FORMAT;
-  connect_check_a_samplerate(samples_per_sec, msrc->samples_per_sec);
-  connect_check_a_channels(channels, msrc->channels);
+
+  connect_check_a_samplerate(m_samples_per_sec, msrc->m_samples_per_sec);
+  connect_check_a_channels(m_channels, msrc->m_channels);
+
   return CAN_CONNECT_YES;
 }

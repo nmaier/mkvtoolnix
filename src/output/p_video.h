@@ -35,7 +35,7 @@ protected:
   bool m_pass_through;
 
 public:
-  video_packetizer_c(generic_reader_c *p_reader, const char *codec_id, double fps, int width, int height, track_info_c &p_ti);
+  video_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, const char *codec_id, double fps, int width, int height);
 
   virtual int process(packet_cptr packet);
   virtual void set_headers();
@@ -56,7 +56,7 @@ protected:
   bool m_framed, m_aspect_ratio_extracted;
 
 public:
-  mpeg1_2_video_packetizer_c(generic_reader_c *p_reader, int version, double fps, int width, int height, int dwidth, int dheight, bool framed, track_info_c &p_ti);
+  mpeg1_2_video_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int version, double fps, int width, int height, int dwidth, int dheight, bool framed);
 
   virtual int process(packet_cptr packet);
   virtual void flush();
@@ -77,7 +77,7 @@ protected:
   bool m_size_extracted;
 
 public:
-  mpeg4_p2_video_packetizer_c(generic_reader_c *p_reader, double fps, int width, int height, bool input_is_native, track_info_c &p_ti);
+  mpeg4_p2_video_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, double fps, int width, int height, bool input_is_native);
 
   virtual int process(packet_cptr packet);
   virtual void flush();
@@ -99,7 +99,7 @@ protected:
   int64_t m_max_nalu_size;
 
 public:
-  mpeg4_p10_video_packetizer_c(generic_reader_c *p_reader, double fps, int width, int height, track_info_c &p_ti);
+  mpeg4_p10_video_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, double fps, int width, int height);
   virtual int process(packet_cptr packet);
 
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
@@ -112,7 +112,7 @@ protected:
 
 class theora_video_packetizer_c: public video_packetizer_c {
 public:
-  theora_video_packetizer_c(generic_reader_c *p_reader, double fps, int width, int height, track_info_c &p_ti);
+  theora_video_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, double fps, int width, int height);
   virtual int process(packet_cptr packet);
 };
 

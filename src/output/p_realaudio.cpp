@@ -13,6 +13,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "os.h"
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,25 +26,22 @@
 
 using namespace libmatroska;
 
-ra_packetizer_c::ra_packetizer_c(generic_reader_c *_reader,
-                                 int _samples_per_sec,
-                                 int _channels,
-                                 int _bits_per_sample,
-                                 uint32_t _fourcc,
-                                 unsigned char *_private_data,
-                                 int _private_size,
-                                 track_info_c &_ti)
-  throw (error_c):
-  generic_packetizer_c(_reader, _ti),
-  bytes_output(0), packetno(0),
-  samples_per_sec(_samples_per_sec), channels(_channels),
-  bits_per_sample(_bits_per_sample), fourcc(_fourcc),
-  private_data(new memory_c((unsigned char *)
-                            safememdup(_private_data, _private_size),
-                            _private_size, true)),
-  skip_to_keyframe(false),
-  buffer_until_keyframe(false) {
-
+ra_packetizer_c::ra_packetizer_c(generic_reader_c *p_reader,
+                                 track_info_c &p_ti,
+                                 int samples_per_sec,
+                                 int channels,
+                                 int bits_per_sample,
+                                 uint32_t fourcc,
+                                 unsigned char *private_data,
+                                 int private_size)
+  throw (error_c)
+  : generic_packetizer_c(p_reader, p_ti)
+  , m_samples_per_sec(samples_per_sec)
+  , m_channels(channels)
+  , m_bits_per_sample(bits_per_sample)
+  , m_fourcc(fourcc)
+  , m_private_data(new memory_c((unsigned char *)safememdup(private_data, private_size), private_size, true))
+{
   set_track_type(track_audio, TFA_SHORT_QUEUEING);
 }
 
@@ -51,19 +50,13 @@ ra_packetizer_c::~ra_packetizer_c() {
 
 void
 ra_packetizer_c::set_headers() {
-  char codec_id[20];
-  int i;
-
-  sprintf(codec_id, "A_REAL/%c%c%c%c", (char)(fourcc >> 24),
-          (char)((fourcc >> 16) & 0xff), (char)((fourcc >> 8) & 0xff),
-          (char)(fourcc & 0xff));
-  for (i = 0; i < strlen(codec_id); i++)
-    codec_id[i] = toupper(codec_id[i]);
-  set_codec_id(codec_id);
-  set_audio_sampling_freq((float)samples_per_sec);
-  set_audio_channels(channels);
-  set_audio_bit_depth(bits_per_sample);
-  set_codec_private(private_data->get(), private_data->get_size());
+  string codec_id = (boost::format("A_REAL/%1%%2%%3%%4%")
+                     % (char)(m_fourcc >> 24) % (char)((m_fourcc >> 16) & 0xff) % (char)((m_fourcc >> 8) & 0xff) % (char)(m_fourcc & 0xff)).str();
+  set_codec_id(upcase(codec_id));
+  set_audio_sampling_freq((float)m_samples_per_sec);
+  set_audio_channels(m_channels);
+  set_audio_bit_depth(m_bits_per_sample);
+  set_codec_private(m_private_data->get(), m_private_data->get_size());
 
   generic_packetizer_c::set_headers();
   track_entry->EnableLacing(false);
@@ -79,13 +72,13 @@ ra_packetizer_c::process(packet_cptr packet) {
 connection_result_e
 ra_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                 string &error_message) {
-  ra_packetizer_c *psrc;
-
-  psrc = dynamic_cast<ra_packetizer_c *>(src);
-  if (psrc == NULL)
+  ra_packetizer_c *psrc = dynamic_cast<ra_packetizer_c *>(src);
+  if (NULL == psrc)
     return CAN_CONNECT_NO_FORMAT;
-  connect_check_a_samplerate(samples_per_sec, psrc->samples_per_sec);
-  connect_check_a_channels(channels, psrc->channels);
-  connect_check_a_bitdepth(bits_per_sample, psrc->bits_per_sample);
+
+  connect_check_a_samplerate(m_samples_per_sec, psrc->m_samples_per_sec);
+  connect_check_a_channels(m_channels,          psrc->m_channels);
+  connect_check_a_bitdepth(m_bits_per_sample,   psrc->m_bits_per_sample);
+
   return CAN_CONNECT_YES;
 }

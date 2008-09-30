@@ -159,7 +159,7 @@ mpeg_es_reader_c::create_packetizer(int64_t) {
     return;
 
   mxinfo_tid(ti.fname, 0, Y("Using the MPEG-1/2 video output module.\n"));
-  add_packetizer(new mpeg1_2_video_packetizer_c(this, version, frame_rate, width, height, dwidth, dheight, false, ti));
+  add_packetizer(new mpeg1_2_video_packetizer_c(this, ti, version, frame_rate, width, height, dwidth, dheight, false));
 }
 
 file_status_e

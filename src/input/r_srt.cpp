@@ -85,7 +85,7 @@ srt_reader_c::create_packetizer(int64_t) {
     return;
 
   bool is_utf8 = io->get_byte_order() != BO_NONE;
-  add_packetizer(new textsubs_packetizer_c(this, MKV_S_TEXTUTF8, NULL, 0, true, is_utf8, ti));
+  add_packetizer(new textsubs_packetizer_c(this, ti, MKV_S_TEXTUTF8, NULL, 0, true, is_utf8));
 
   mxinfo_tid(ti.fname, 0, Y("Using the text subtitle output module.\n"));
 }

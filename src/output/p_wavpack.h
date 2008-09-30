@@ -24,15 +24,13 @@
 
 class wavpack_packetizer_c: public generic_packetizer_c {
 private:
-  int channels, sample_rate, bits_per_sample;
-  int64_t samples_per_block;
-  int64_t samples_output;
-  bool has_correction;
+  int m_channels, m_sample_rate, m_bits_per_sample;
+  int64_t m_samples_per_block;
+  int64_t m_samples_output;
+  bool m_has_correction;
 
 public:
-  wavpack_packetizer_c(generic_reader_c *_reader, wavpack_meta_t & meta,
-                       track_info_c &_ti)
-    throw (error_c);
+  wavpack_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, wavpack_meta_t &meta) throw (error_c);
 
   virtual int process(packet_cptr packet);
   virtual void set_headers();
@@ -40,8 +38,7 @@ public:
   virtual const char *get_format_name() {
     return "WAVPACK4";
   }
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src,
-                                             string &error_message);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
 };
 
 #endif // __P_WAVPACK_H

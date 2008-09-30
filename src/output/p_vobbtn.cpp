@@ -14,11 +14,7 @@
    Modified by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include <ctype.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
+#include "os.h"
 
 #include <matroska/KaxContentEncoding.h>
 
@@ -30,16 +26,16 @@
 
 using namespace libmatroska;
 
-vobbtn_packetizer_c::vobbtn_packetizer_c(generic_reader_c *_reader,
-                                         int _width,
-                                         int _height,
-                                         track_info_c &_ti)
-  throw (error_c):
-  generic_packetizer_c(_reader, _ti),
-  previous_timecode(0),
-  width(_width),
-  height(_height) {
-
+vobbtn_packetizer_c::vobbtn_packetizer_c(generic_reader_c *p_reader,
+                                         track_info_c &p_ti,
+                                         int width,
+                                         int height)
+  throw (error_c)
+  : generic_packetizer_c(p_reader, p_ti)
+  , m_previous_timecode(0)
+  , m_width(width)
+  , m_height(height)
+{
   set_track_type(track_buttons);
   set_default_compression_method(COMPRESSION_ZLIB);
 }
@@ -51,8 +47,8 @@ void
 vobbtn_packetizer_c::set_headers() {
   set_codec_id(MKV_B_VOBBTN);
 
-  set_video_pixel_width(width);
-  set_video_pixel_height(height);
+  set_video_pixel_width(m_width);
+  set_video_pixel_height(m_height);
 
   generic_packetizer_c::set_headers();
 
@@ -61,15 +57,13 @@ vobbtn_packetizer_c::set_headers() {
 
 int
 vobbtn_packetizer_c::process(packet_cptr packet) {
-  int32_t vobu_start, vobu_end;
-
-  vobu_start = get_uint32_be(packet->data->get() + 0x0d);
-  vobu_end   = get_uint32_be(packet->data->get() + 0x11);
+  uint32_t vobu_start = get_uint32_be(packet->data->get() + 0x0d);
+  uint32_t vobu_end   = get_uint32_be(packet->data->get() + 0x11);
 
   packet->duration = (int64_t)(100000.0 * (float)(vobu_end - vobu_start) / 9);
   if (-1 == packet->timecode) {
-    packet->timecode   = previous_timecode;
-    previous_timecode += packet->duration;
+    packet->timecode     = m_previous_timecode;
+    m_previous_timecode += packet->duration;
   }
 
   packet->duration_mandatory = true;
@@ -81,12 +75,12 @@ vobbtn_packetizer_c::process(packet_cptr packet) {
 connection_result_e
 vobbtn_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                     string &error_message) {
-  vobbtn_packetizer_c *vsrc;
-
-  vsrc = dynamic_cast<vobbtn_packetizer_c *>(src);
-  if (vsrc == NULL)
+  vobbtn_packetizer_c *vsrc = dynamic_cast<vobbtn_packetizer_c *>(src);
+  if (NULL == vsrc)
     return CAN_CONNECT_NO_FORMAT;
-  connect_check_v_width(width, vsrc->width);
-  connect_check_v_height(height, vsrc->height);
+
+  connect_check_v_width(m_width,   vsrc->m_width);
+  connect_check_v_height(m_height, vsrc->m_height);
+
   return CAN_CONNECT_YES;
 }

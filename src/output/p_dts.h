@@ -25,35 +25,36 @@
 
 class dts_packetizer_c: public generic_packetizer_c {
 private:
-  int64_t samples_written, bytes_written;
+  int64_t m_samples_written, m_bytes_written;
 
-  unsigned char *packet_buffer;
-  int buffer_size;
+  unsigned char *m_packet_buffer;
+  int m_buffer_size;
 
-  bool get_first_header_later;
-  dts_header_t first_header;
-  dts_header_t last_header;
+  bool m_get_first_header_later;
+  dts_header_t m_first_header, m_previous_header;
+  bool m_skipping_is_normal;
 
 public:
-  bool skipping_is_normal;
 
-  dts_packetizer_c(generic_reader_c *_reader, const dts_header_t &dts_header,
-                   track_info_c &_ti, bool _get_first_header_later = false)
-    throw (error_c);
+  dts_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, const dts_header_t &dts_header, bool get_first_header_later = false) throw (error_c);
   virtual ~dts_packetizer_c();
 
   virtual int process(packet_cptr packet);
   virtual void set_headers();
+  virtual void set_skipping_is_normal(bool skipping_is_normal) {
+    m_skipping_is_normal = skipping_is_normal;
+  }
+
   virtual const char *get_format_name() {
     return "DTS";
   }
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src,
-                                             string &error_message);
+
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
 
 private:
   virtual void add_to_buffer(unsigned char *buf, int size);
   virtual unsigned char *get_dts_packet(dts_header_t &dts_header);
-  virtual int dts_packet_available();
+  virtual bool dts_packet_available();
   virtual void remove_dts_packet(int pos, int framesize);
 };
 

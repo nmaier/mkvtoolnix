@@ -201,7 +201,7 @@ corepicture_reader_c::create_packetizer(int64_t tid) {
 
   ti.private_data = (unsigned char *)safememdup(private_buffer, sizeof(private_buffer));
   ti.private_size = sizeof(private_buffer);
-  m_ptzr          = add_packetizer(new video_packetizer_c(this, MKV_V_COREPICTURE, 0.0, m_width, m_height, ti));
+  m_ptzr          = add_packetizer(new video_packetizer_c(this, ti, MKV_V_COREPICTURE, 0.0, m_width, m_height));
 }
 
 file_status_e

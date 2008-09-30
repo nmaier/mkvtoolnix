@@ -23,13 +23,11 @@
 
 class tta_packetizer_c: public generic_packetizer_c {
 private:
-  int channels, bits_per_sample, sample_rate;
-  int64_t samples_output;
+  int m_channels, m_bits_per_sample, m_sample_rate;
+  int64_t m_samples_output;
 
 public:
-  tta_packetizer_c(generic_reader_c *_reader, int _channels,
-                   int _bits_per_sample, int _sample_rate, track_info_c &_ti)
-    throw (error_c);
+  tta_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int channels, int bits_per_sample, int sample_rate) throw (error_c);
   virtual ~tta_packetizer_c();
 
   virtual int process(packet_cptr packet);
@@ -38,8 +36,7 @@ public:
   virtual const char *get_format_name() {
     return "TTA";
   }
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src,
-                                             string &error_message);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
 };
 
 #endif // __P_TTA_H

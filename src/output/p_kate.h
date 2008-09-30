@@ -26,15 +26,15 @@
 
 class kate_packetizer_c: public generic_packetizer_c {
 private:
-  vector<memory_cptr> headers;
-  memory_cptr global_data;
+  vector<memory_cptr> m_headers;
+  memory_cptr m_global_data;
 
-  kate_identification_header_t kate_id;
+  kate_identification_header_t m_kate_id;
 
-  int64_t last_timecode;
+  int64_t m_previous_timecode;
 
 public:
-  kate_packetizer_c(generic_reader_c *_reader, const void *_global_data, int _global_size, track_info_c &_ti) throw (error_c);
+  kate_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, const void *global_data, int global_size) throw (error_c);
   virtual ~kate_packetizer_c();
 
   virtual int process(packet_cptr packet);

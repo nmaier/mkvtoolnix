@@ -1310,20 +1310,20 @@ kax_reader_c::create_video_packetizer(kax_track_t *t,
     if ((t->codec_id == MKV_V_MPEG1) || (t->codec_id == MKV_V_MPEG2)) {
       int version = t->codec_id[6] - '0';
       mxinfo_tid(ti.fname, t->tnum, boost::format(Y("Using the MPEG-%1% video output module.\n")) % version);
-      t->ptzr = add_packetizer(new mpeg1_2_video_packetizer_c(this, version, t->v_frate, t->v_width, t->v_height, t->v_dwidth, t->v_dheight, true, nti));
+      t->ptzr = add_packetizer(new mpeg1_2_video_packetizer_c(this, nti, version, t->v_frate, t->v_width, t->v_height, t->v_dwidth, t->v_dheight, true));
 
     } else if (IS_MPEG4_L2_CODECID(t->codec_id) || IS_MPEG4_L2_FOURCC(t->v_fourcc)) {
       mxinfo_tid(ti.fname, t->tnum, Y("Using the MPEG-4 part 2 video output module.\n"));
       bool is_native = IS_MPEG4_L2_CODECID(t->codec_id);
-      t->ptzr = add_packetizer(new mpeg4_p2_video_packetizer_c(this, t->v_frate, t->v_width, t->v_height, is_native, nti));
+      t->ptzr = add_packetizer(new mpeg4_p2_video_packetizer_c(this, nti, t->v_frate, t->v_width, t->v_height, is_native));
 
     } else if (t->codec_id == MKV_V_MPEG4_AVC) {
       mxinfo_tid(ti.fname, t->tnum, Y("Using the MPEG-4 part 10 (AVC) video output module.\n"));
-      t->ptzr = add_packetizer(new mpeg4_p10_video_packetizer_c(this, t->v_frate, t->v_width, t->v_height, nti));
+      t->ptzr = add_packetizer(new mpeg4_p10_video_packetizer_c(this, nti, t->v_frate, t->v_width, t->v_height));
 
     } else if (t->codec_id == MKV_V_THEORA) {
       mxinfo_tid(ti.fname, t->tnum, Y("Using the Theora video output module.\n"));
-      t->ptzr = add_packetizer(new theora_video_packetizer_c(this, t->v_frate, t->v_width, t->v_height, nti));
+      t->ptzr = add_packetizer(new theora_video_packetizer_c(this, nti, t->v_frate, t->v_width, t->v_height));
 
     } else if (t->codec_id == MKV_V_DIRAC) {
       mxinfo_tid(ti.fname, t->tnum, Y("Using the Dirac video output module.\n"));
@@ -1331,7 +1331,7 @@ kax_reader_c::create_video_packetizer(kax_track_t *t,
 
     } else {
       mxinfo_tid(ti.fname, t->tnum, Y("Using the video output module.\n"));
-      t->ptzr = add_packetizer(new video_packetizer_c(this, t->codec_id.c_str(), t->v_frate, t->v_width, t->v_height, nti));
+      t->ptzr = add_packetizer(new video_packetizer_c(this, nti, t->codec_id.c_str(), t->v_frate, t->v_width, t->v_height));
     }
 
     if (!PTZR(t->ptzr)->ti.aspect_ratio_given) {
@@ -1355,11 +1355,11 @@ void
 kax_reader_c::create_audio_packetizer(kax_track_t *t,
                                       track_info_c &nti) {
   if ((0x0001 == t->a_formattag) || (0x0003 == t->a_formattag)) {
-    t->ptzr = add_packetizer(new pcm_packetizer_c(this, (int32_t)t->a_sfreq, t->a_channels, t->a_bps, nti, false, t->a_formattag==0x0003));
+    t->ptzr = add_packetizer(new pcm_packetizer_c(this, nti, (int32_t)t->a_sfreq, t->a_channels, t->a_bps, false, t->a_formattag==0x0003));
     mxinfo_tid(ti.fname, t->tnum, Y("Using the PCM output module.\n"));
 
   } else if (0x0055 == t->a_formattag) {
-    t->ptzr = add_packetizer(new mp3_packetizer_c(this, (int32_t)t->a_sfreq, t->a_channels, true, nti));
+    t->ptzr = add_packetizer(new mp3_packetizer_c(this, nti, (int32_t)t->a_sfreq, t->a_channels, true));
     mxinfo_tid(ti.fname, t->tnum, Y("Using the MPEG audio output module.\n"));
 
   } else if (0x2000 == t->a_formattag) {
@@ -1368,7 +1368,7 @@ kax_reader_c::create_audio_packetizer(kax_track_t *t,
              : t->codec_id == MKV_A_EAC3     ? 16
              :                                  0;
 
-    t->ptzr = add_packetizer(new ac3_packetizer_c(this, (int32_t)t->a_sfreq, t->a_channels, bsid, nti));
+    t->ptzr = add_packetizer(new ac3_packetizer_c(this, nti, (int32_t)t->a_sfreq, t->a_channels, bsid));
     mxinfo_tid(ti.fname, t->tnum, Y("Using the %sAC3 output module.\n"));
 
   } else if (0x2001 == t->a_formattag) {
@@ -1377,11 +1377,11 @@ kax_reader_c::create_audio_packetizer(kax_track_t *t,
     dtsheader.core_sampling_frequency = (unsigned int)t->a_sfreq;
     dtsheader.audio_channels          = t->a_channels;
 
-    t->ptzr = add_packetizer(new dts_packetizer_c(this, dtsheader, nti, true));
+    t->ptzr = add_packetizer(new dts_packetizer_c(this, nti, dtsheader, true));
     mxinfo_tid(ti.fname, t->tnum, Y("Using the DTS output module.\n"));
 
   } else if (0xFFFE == t->a_formattag) {
-    t->ptzr = add_packetizer(new vorbis_packetizer_c(this, t->headers[0], t->header_sizes[0], t->headers[1], t->header_sizes[1], t->headers[2], t->header_sizes[2], nti));
+    t->ptzr = add_packetizer(new vorbis_packetizer_c(this, nti, t->headers[0], t->header_sizes[0], t->headers[1], t->header_sizes[1], t->headers[2], t->header_sizes[2]));
     mxinfo_tid(ti.fname, t->tnum, Y("Using the Vorbis output module.\n"));
 
   } else if ((FOURCC('M', 'P', '4', 'A') == t->a_formattag) || (0x00ff == t->a_formattag)) {
@@ -1426,7 +1426,7 @@ kax_reader_c::create_audio_packetizer(kax_track_t *t,
     if ((map_has_key(ti.all_aac_is_sbr, t->tnum) && !ti.all_aac_is_sbr[t->tnum]) || (map_has_key(ti.all_aac_is_sbr, -1) && !ti.all_aac_is_sbr[-1]))
       profile = detected_profile;
 
-    t->ptzr = add_packetizer(new aac_packetizer_c(this, id, profile, (int32_t)t->a_sfreq, t->a_channels, nti, false, true));
+    t->ptzr = add_packetizer(new aac_packetizer_c(this, nti, id, profile, (int32_t)t->a_sfreq, t->a_channels, false, true));
     mxinfo_tid(ti.fname, t->tnum, Y("Using the AAC output module.\n"));
 
  #if defined(HAVE_FLAC_FORMAT_H)
@@ -1436,9 +1436,9 @@ kax_reader_c::create_audio_packetizer(kax_track_t *t,
     nti.private_size = 0;
 
     if (FOURCC('f', 'L', 'a', 'C') == t->a_formattag)
-      t->ptzr = add_packetizer(new flac_packetizer_c(this, (unsigned char *) t->private_data, t->private_size, nti));
+      t->ptzr = add_packetizer(new flac_packetizer_c(this, nti, (unsigned char *) t->private_data, t->private_size));
     else {
-      flac_packetizer_c * p= new flac_packetizer_c(this, ((unsigned char *)t->private_data) + sizeof(alWAVEFORMATEX), t->private_size - sizeof(alWAVEFORMATEX), nti);
+      flac_packetizer_c * p= new flac_packetizer_c(this, nti, ((unsigned char *)t->private_data) + sizeof(alWAVEFORMATEX), t->private_size - sizeof(alWAVEFORMATEX));
       t->ptzr              = add_packetizer(p);
     }
 
@@ -1450,7 +1450,7 @@ kax_reader_c::create_audio_packetizer(kax_track_t *t,
     nti.private_data = NULL;
     nti.private_size = 0;
 
-    t->ptzr          = add_packetizer(new tta_packetizer_c(this, t->a_channels, t->a_bps, (int32_t)t->a_sfreq, nti));
+    t->ptzr          = add_packetizer(new tta_packetizer_c(this, nti, t->a_channels, t->a_bps, (int32_t)t->a_sfreq));
     mxinfo_tid(ti.fname, t->tnum, Y("Using the TTA output module.\n"));
 
   } else if (FOURCC('W', 'V', 'P', '4') == t->a_formattag) {
@@ -1467,7 +1467,7 @@ kax_reader_c::create_audio_packetizer(kax_track_t *t,
     if (0.0 < t->v_frate)
       meta.samples_per_block = (uint32_t)(t->a_sfreq / t->v_frate);
 
-    t->ptzr          = add_packetizer(new wavpack_packetizer_c(this, meta, nti));
+    t->ptzr          = add_packetizer(new wavpack_packetizer_c(this, nti, meta));
     nti.private_data = NULL;
     nti.private_size = 0;
 
@@ -1492,13 +1492,13 @@ kax_reader_c::create_subtitle_packetizer(kax_track_t *t,
   } else if (starts_with(t->codec_id, "S_TEXT", 6) || (t->codec_id == "S_SSA") || (t->codec_id == "S_ASS")) {
     string new_codec_id = ((t->codec_id == "S_SSA") || (t->codec_id == "S_ASS")) ? string("S_TEXT/") + string(&t->codec_id[2]) : t->codec_id;
 
-    t->ptzr = add_packetizer(new textsubs_packetizer_c(this, new_codec_id.c_str(), t->private_data, t->private_size, false, true, nti));
+    t->ptzr = add_packetizer(new textsubs_packetizer_c(this, nti, new_codec_id.c_str(), t->private_data, t->private_size, false, true));
     mxinfo_tid(ti.fname, t->tnum, Y("Using the text subtitle output module.\n"));
 
     t->sub_type = 't';
 
   } else if (t->codec_id == MKV_S_KATE) {
-    t->ptzr     = add_packetizer(new kate_packetizer_c(this, t->private_data, t->private_size, nti));
+    t->ptzr     = add_packetizer(new kate_packetizer_c(this, nti, t->private_data, t->private_size));
     t->sub_type = 'k';
 
     mxinfo_tid(ti.fname, t->tnum, Y("Using the Kate output module.\n"));
@@ -1518,7 +1518,7 @@ kax_reader_c::create_button_packetizer(kax_track_t *t,
     nti.private_data = NULL;
     nti.private_size = 0;
 
-    t->ptzr          = add_packetizer(new vobbtn_packetizer_c(this, t->v_width, t->v_height, nti));
+    t->ptzr          = add_packetizer(new vobbtn_packetizer_c(this, nti, t->v_width, t->v_height));
     t->sub_type      = 'b';
 
   } else
@@ -1622,7 +1622,7 @@ kax_reader_c::create_mpeg4_p10_es_video_packetizer(kax_track_t *t,
       mxinfo_tid(ti.fname, t->tnum, Y("Using the MPEG-4 part 10 ES video output module.\n"));
 
     memory_cptr avcc                      = parser.get_avcc();
-    mpeg4_p10_es_video_packetizer_c *ptzr = new mpeg4_p10_es_video_packetizer_c(this, avcc, t->v_width, t->v_height, nti);
+    mpeg4_p10_es_video_packetizer_c *ptzr = new mpeg4_p10_es_video_packetizer_c(this, nti, avcc, t->v_width, t->v_height);
     t->ptzr                               = add_packetizer(ptzr);
 
     ptzr->enable_timecode_generation(false);

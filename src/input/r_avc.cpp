@@ -135,7 +135,7 @@ avc_es_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, m_avcc, m_width, m_height, ti));
+  add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, ti, m_avcc, m_width, m_height));
 
   mxinfo_tid(ti.fname, 0, Y("Using the MPEG-4 part 10 ES video output module.\n"));
 }

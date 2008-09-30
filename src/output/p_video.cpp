@@ -33,11 +33,11 @@ extern "C" {
 using namespace libmatroska;
 
 video_packetizer_c::video_packetizer_c(generic_reader_c *p_reader,
+                                       track_info_c &p_ti,
                                        const char *codec_id,
                                        double fps,
                                        int width,
-                                       int height,
-                                       track_info_c &p_ti)
+                                       int height)
   : generic_packetizer_c(p_reader, p_ti)
   , m_fps(fps)
   , m_width(width)
@@ -155,15 +155,15 @@ video_packetizer_c::can_connect_to(generic_packetizer_c *src,
 
 mpeg1_2_video_packetizer_c::
 mpeg1_2_video_packetizer_c(generic_reader_c *p_reader,
+                           track_info_c &p_ti,
                            int version,
                            double fps,
                            int width,
                            int height,
                            int dwidth,
                            int dheight,
-                           bool framed,
-                           track_info_c &p_ti)
-  : video_packetizer_c(p_reader, "V_MPEG1", fps, width, height, p_ti)
+                           bool framed)
+  : video_packetizer_c(p_reader, p_ti, "V_MPEG1", fps, width, height)
   , m_framed(framed)
   , m_aspect_ratio_extracted(false)
 {
@@ -348,12 +348,12 @@ mpeg1_2_video_packetizer_c::create_private_data() {
 
 mpeg4_p2_video_packetizer_c::
 mpeg4_p2_video_packetizer_c(generic_reader_c *p_reader,
+                            track_info_c &p_ti,
                             double fps,
                             int width,
                             int height,
-                            bool input_is_native,
-                            track_info_c &p_ti)
-  : video_packetizer_c(p_reader, MKV_V_MPEG4_ASP, fps, width, height, p_ti)
+                            bool input_is_native)
+  : video_packetizer_c(p_reader, p_ti, MKV_V_MPEG4_ASP, fps, width, height)
   , m_timecodes_generated(0)
   , m_last_i_p_frame(-1)
   , m_previous_timecode(0)
@@ -688,11 +688,11 @@ mpeg4_p2_video_packetizer_c::extract_size(const unsigned char *buffer,
 
 mpeg4_p10_video_packetizer_c::
 mpeg4_p10_video_packetizer_c(generic_reader_c *p_reader,
+                             track_info_c &p_ti,
                              double fps,
                              int width,
-                             int height,
-                             track_info_c &p_ti)
-  : video_packetizer_c(p_reader, MKV_V_MPEG4_AVC, fps, width, height, p_ti)
+                             int height)
+  : video_packetizer_c(p_reader, p_ti, MKV_V_MPEG4_AVC, fps, width, height)
   , m_nalu_size_len_src(0)
   , m_nalu_size_len_dst(0)
   , m_max_nalu_size(0)
@@ -859,11 +859,11 @@ mpeg4_p10_video_packetizer_c::change_nalu_size_len(packet_cptr packet) {
 
 theora_video_packetizer_c::
 theora_video_packetizer_c(generic_reader_c *p_reader,
+                          track_info_c &p_ti,
                           double fps,
                           int width,
-                          int height,
-                          track_info_c &p_ti)
-  : video_packetizer_c(p_reader, MKV_V_THEORA, fps, width, height, p_ti)
+                          int height)
+  : video_packetizer_c(p_reader, p_ti, MKV_V_THEORA, fps, width, height)
 {
 }
 

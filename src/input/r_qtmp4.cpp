@@ -458,12 +458,12 @@ qtmp4_reader_c::parse_audio_header_priv_atoms(qtmp4_demuxer_cptr &dmx,
   }
 }
 
-#define print_basic_atom_info()                                                                     \
-  mxverb(2,                                                                                         \
+#define print_basic_atom_info()                                                              \
+  mxverb(2,                                                                                  \
          boost::format(Y("Quicktime/MP4 reader:%1%'%2%%3%%4%%5%' atom, size %6%, at %7%\n")) \
          % space(2 * level + 1) % BE2STR(atom.fourcc) % atom.size % atom.pos);
 
-#define print_atom_too_small_error(name, type)                                                                             \
+#define print_atom_too_small_error(name, type)                                                                          \
   mxerror(boost::format(Y("Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n")) \
           % name % sizeof(type) % atom.size);
 
@@ -1286,7 +1286,7 @@ qtmp4_reader_c::create_audio_packetizer_ac3(qtmp4_demuxer_cptr &dmx) {
     return false;
   }
 
-  dmx->ptzr = add_packetizer(new ac3_packetizer_c(this, dmx->m_ac3_header.sample_rate, dmx->m_ac3_header.channels, dmx->m_ac3_header.bsid, ti));
+  dmx->ptzr = add_packetizer(new ac3_packetizer_c(this, ti, dmx->m_ac3_header.sample_rate, dmx->m_ac3_header.channels, dmx->m_ac3_header.bsid));
   mxinfo_tid(ti.fname, dmx->id, Y("Using the AC3 output module.\n"));
 
   return true;
@@ -1299,7 +1299,7 @@ qtmp4_reader_c::create_video_packetizer_svq1(qtmp4_demuxer_cptr &dmx) {
   ti.private_size = bih->get_size();
   ti.private_data = (unsigned char *)bih->get();
 
-  dmx->ptzr       = add_packetizer(new video_packetizer_c(this, MKV_V_MSCOMP, 0.0, dmx->v_width, dmx->v_height, ti));
+  dmx->ptzr       = add_packetizer(new video_packetizer_c(this, ti, MKV_V_MSCOMP, 0.0, dmx->v_width, dmx->v_height));
   ti.private_data = NULL;
 
   mxinfo_tid(ti.fname, dmx->id, boost::format(Y("Using the video output module (FourCC: %|1$.4s|).\n")) % dmx->fourcc);
@@ -1329,14 +1329,14 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
 
       ti.private_size = bih->get_size();
       ti.private_data = (unsigned char *)bih->get();
-      dmx->ptzr       = add_packetizer(new mpeg4_p2_video_packetizer_c(this, 0.0, dmx->v_width, dmx->v_height, false, ti));
+      dmx->ptzr       = add_packetizer(new mpeg4_p2_video_packetizer_c(this, ti, 0.0, dmx->v_width, dmx->v_height, false));
       ti.private_data = NULL;
 
       mxinfo_tid(ti.fname, dmx->id, Y("Using the MPEG-4 part 2 video output module.\n"));
 
     } else if (!strncasecmp(dmx->fourcc, "mpg1", 4) || !strncasecmp(dmx->fourcc, "mpg2", 4)) {
       int version = dmx->fourcc[3] - '0';
-      dmx->ptzr   = add_packetizer(new mpeg1_2_video_packetizer_c(this, version, -1.0, dmx->v_width, dmx->v_height, 0, 0, false, ti));
+      dmx->ptzr   = add_packetizer(new mpeg1_2_video_packetizer_c(this, ti, version, -1.0, dmx->v_width, dmx->v_height, 0, 0, false));
 
       mxinfo_tid(ti.fname, dmx->id, boost::format(Y("Using the MPEG-%1% video output module.\n")) % version);
 
@@ -1351,7 +1351,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
 
       ti.private_size = dmx->priv_size;
       ti.private_data = dmx->priv;
-      dmx->ptzr       = add_packetizer(new mpeg4_p10_video_packetizer_c(this, dmx->fps, dmx->v_width, dmx->v_height, ti));
+      dmx->ptzr       = add_packetizer(new mpeg4_p10_video_packetizer_c(this, ti, dmx->fps, dmx->v_width, dmx->v_height));
       ti.private_data = NULL;
 
       mxinfo_tid(ti.fname, dmx->id, Y("Using the MPEG-4 part 10 (AVC) video output module.\n"));
@@ -1362,7 +1362,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
     else {
       ti.private_size = dmx->v_stsd_size;
       ti.private_data = (unsigned char *)dmx->v_stsd;
-      dmx->ptzr       = add_packetizer(new video_packetizer_c(this, MKV_V_QUICKTIME, 0.0, dmx->v_width, dmx->v_height, ti));
+      dmx->ptzr       = add_packetizer(new video_packetizer_c(this, ti, MKV_V_QUICKTIME, 0.0, dmx->v_width, dmx->v_height));
       ti.private_data = NULL;
 
       mxinfo_tid(ti.fname, dmx->id, boost::format(Y("Using the video output module (FourCC: %|1$.4s|).\n")) % dmx->fourcc);
@@ -1385,7 +1385,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
     } else if (!strncasecmp(dmx->fourcc, "MP4A", 4) && IS_AAC_OBJECT_TYPE_ID(dmx->esds.object_type_id)) {
       ti.private_data = dmx->esds.decoder_config;
       ti.private_size = dmx->esds.decoder_config_len;
-      dmx->ptzr       = add_packetizer(new aac_packetizer_c(this, AAC_ID_MPEG4, dmx->a_aac_profile, (int)dmx->a_samplerate, dmx->a_channels, ti, false, true));
+      dmx->ptzr       = add_packetizer(new aac_packetizer_c(this, ti, AAC_ID_MPEG4, dmx->a_aac_profile, (int)dmx->a_samplerate, dmx->a_channels, false, true));
       ti.private_data = NULL;
       ti.private_size = 0;
 
@@ -1395,11 +1395,11 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
       mxinfo_tid(ti.fname, dmx->id, Y("Using the AAC output module.\n"));
 
     } else if (!strncasecmp(dmx->fourcc, "MP4A", 4) && ((MP4OTI_MPEG2AudioPart3 == dmx->esds.object_type_id) || (MP4OTI_MPEG1Audio == dmx->esds.object_type_id))) {
-      dmx->ptzr = add_packetizer(new mp3_packetizer_c(this, (int32_t)dmx->a_samplerate, dmx->a_channels, true, ti));
+      dmx->ptzr = add_packetizer(new mp3_packetizer_c(this, ti, (int32_t)dmx->a_samplerate, dmx->a_channels, true));
       mxinfo_tid(ti.fname, dmx->id, Y("Using the MPEG audio output module.\n"));
 
     } else if (!strncasecmp(dmx->fourcc, "twos", 4) || !strncasecmp(dmx->fourcc, "swot", 4)) {
-      dmx->ptzr = add_packetizer(new pcm_packetizer_c(this, (int32_t)dmx->a_samplerate, dmx->a_channels, dmx->a_bitdepth, ti,
+      dmx->ptzr = add_packetizer(new pcm_packetizer_c(this, ti, (int32_t)dmx->a_samplerate, dmx->a_channels, dmx->a_bitdepth,
                                                       (8 < dmx->a_bitdepth) && ('t' == dmx->fourcc[0])));
       mxinfo_tid(ti.fname, dmx->id, Y("Using the PCM output module.\n"));
 

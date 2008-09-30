@@ -29,31 +29,31 @@
 
 using namespace libmatroska;
 
-kate_packetizer_c::kate_packetizer_c(generic_reader_c *_reader,
-                                     const void *_global_data,
-                                     int _global_size,
-                                     track_info_c &_ti)
-  throw (error_c):
-  generic_packetizer_c(_reader, _ti),
-  global_data(new memory_c((unsigned char *)safememdup(_global_data ? _global_data : ti.private_data, _global_data ? _global_size : ti.private_size),
-                           _global_data ? _global_size : ti.private_size, true)) {
-  int i, nheaders;
-
+kate_packetizer_c::kate_packetizer_c(generic_reader_c *p_reader,
+                                     track_info_c &p_ti,
+                                     const void *global_data,
+                                     int global_size)
+  throw (error_c)
+  : generic_packetizer_c(p_reader, p_ti)
+  , m_global_data(new memory_c((unsigned char *)safememdup(global_data ? global_data : ti.private_data,
+                                                           global_data ? global_size : ti.private_size),
+                               global_data ? global_size : ti.private_size, true))
+  , m_previous_timecode(0)
+{
   set_track_type(track_subtitle);
 
   // the number of headers to expect is stored in the first header
-  memory_cptr temp(new memory_c((unsigned char *)global_data->get(), global_data->get_size(), false));
+  memory_cptr temp(new memory_c((unsigned char *)m_global_data->get(), m_global_data->get_size(), false));
   vector<memory_cptr> blocks = unlace_memory_xiph(temp);
-  kate_parse_identification_header(blocks[0]->get(), blocks[0]->get_size(), kate_id);
-  if (blocks.size() != kate_id.nheaders)
+
+  kate_parse_identification_header(blocks[0]->get(), blocks[0]->get_size(), m_kate_id);
+  if (blocks.size() != m_kate_id.nheaders)
     throw false;
 
-  set_language((const char*)kate_id.language);
-  nheaders = kate_id.nheaders;
-  for (i = 0; i < nheaders; ++i)
-    headers.push_back(memory_cptr(new memory_c((unsigned char *)safememdup(blocks[i]->get(), blocks[i]->get_size()), blocks[i]->get_size(), true)));
-
-  last_timecode = 0;
+  set_language((const char *)m_kate_id.language);
+  int i;
+  for (i = 0; i < m_kate_id.nheaders; ++i)
+    m_headers.push_back(memory_cptr(blocks[i]->clone()));
 }
 
 kate_packetizer_c::~kate_packetizer_c() {
@@ -63,23 +63,22 @@ void
 kate_packetizer_c::set_headers() {
   set_codec_id(MKV_S_KATE);
 
-  memory_cptr codecprivate;
-  codecprivate = lace_memory_xiph(headers);
-  set_codec_private(codecprivate->get(), codecprivate->get_size());
+  memory_cptr codec_private = lace_memory_xiph(m_headers);
+  set_codec_private(codec_private->get(), codec_private->get_size());
 
   generic_packetizer_c::set_headers();
 }
 
 int
 kate_packetizer_c::process(packet_cptr packet) {
-
   if (packet->data->get_size() < (1 + 3 * sizeof(int64_t))) {
     /* end packet is 1 byte long and has type 0x7f */
-    if ((packet->data->get_size() == 1) && (packet->data->get()[0]==0x7f)) {
-      packet->timecode           = last_timecode;
+    if ((packet->data->get_size() == 1) && (packet->data->get()[0] == 0x7f)) {
+      packet->timecode           = m_previous_timecode;
       packet->duration           = 1;
       packet->duration_mandatory = true;
       add_packet(packet);
+
     } else
       mxwarn_tid(ti.fname, ti.id, Y("Kate packet is too small and is being skipped.\n"));
 
@@ -89,8 +88,8 @@ kate_packetizer_c::process(packet_cptr packet) {
   int64_t start_time         = get_uint64_le(packet->data->get() + 1);
   int64_t duration           = get_uint64_le(packet->data->get() + 1 + sizeof(int64_t));
 
-  double scaled_timecode     = start_time * (double)kate_id.gden / (double)kate_id.gnum;
-  double scaled_duration     = duration   * (double)kate_id.gden / (double)kate_id.gnum;
+  double scaled_timecode     = start_time * (double)m_kate_id.gden / (double)m_kate_id.gnum;
+  double scaled_duration     = duration   * (double)m_kate_id.gden / (double)m_kate_id.gnum;
 
   packet->timecode           = (int64_t)(scaled_timecode * 1000000000ll);
   packet->duration           = (int64_t)(scaled_duration * 1000000000ll);
@@ -98,8 +97,8 @@ kate_packetizer_c::process(packet_cptr packet) {
   packet->gap_following      = true;
 
   int64_t end                = packet->timecode + packet->duration;
-  if (end > last_timecode)
-    last_timecode = end;
+  if (end > m_previous_timecode)
+    m_previous_timecode = end;
 
   add_packet(packet);
 
@@ -109,15 +108,13 @@ kate_packetizer_c::process(packet_cptr packet) {
 connection_result_e
 kate_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                   string &error_message) {
-  kate_packetizer_c *psrc;
-
-  psrc = dynamic_cast<kate_packetizer_c *>(src);
-  if (psrc == NULL)
+  kate_packetizer_c *psrc = dynamic_cast<kate_packetizer_c *>(src);
+  if (NULL == psrc)
     return CAN_CONNECT_NO_FORMAT;
 
-  if (((ti.private_data == NULL) && (src->ti.private_data != NULL)) ||
-      ((ti.private_data != NULL) && (src->ti.private_data == NULL)) ||
-      (ti.private_size != src->ti.private_size)) {
+  if (   ((NULL == ti.private_data) && (NULL != src->ti.private_data))
+      || ((NULL != ti.private_data) && (NULL == src->ti.private_data))
+      || (ti.private_size != src->ti.private_size)) {
     error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % ti.private_size % src->ti.private_size).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }

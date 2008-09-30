@@ -116,7 +116,7 @@ dts_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  add_packetizer(new dts_packetizer_c(this, dtsheader, ti));
+  add_packetizer(new dts_packetizer_c(this, ti, dtsheader));
   mxinfo_tid(ti.fname, 0, Y("Using the DTS output module.\n"));
 
   if (1 < verbose)

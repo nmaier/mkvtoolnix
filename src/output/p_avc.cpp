@@ -32,17 +32,18 @@ using namespace libmatroska;
 using namespace mpeg4::p10;
 
 mpeg4_p10_es_video_packetizer_c::
-mpeg4_p10_es_video_packetizer_c(generic_reader_c *n_reader,
+mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader,
+                                track_info_c &p_ti,
                                 memory_cptr avcc,
                                 int width,
-                                int height,
-                                track_info_c &n_ti):
-  generic_packetizer_c(n_reader, n_ti),
-  m_avcc(avcc),
-  m_width(width),
-  m_height(height),
-  m_allow_timecode_generation(true),
-  m_first_frame(true) {
+                                int height)
+  : generic_packetizer_c(p_reader, p_ti)
+  , m_avcc(avcc)
+  , m_width(width)
+  , m_height(height)
+  , m_allow_timecode_generation(true)
+  , m_first_frame(true)
+{
 
   relaxed_timecode_checking = true;
 
@@ -105,20 +106,18 @@ mpeg4_p10_es_video_packetizer_c::process(packet_cptr packet) {
 void
 mpeg4_p10_es_video_packetizer_c::extract_aspect_ratio() {
   uint32_t num, den;
-  unsigned char *priv;
+  unsigned char *priv = hcodec_private;
 
-  priv = hcodec_private;
-  if (mpeg4::p10::extract_par(hcodec_private, hcodec_private_length, num,
-                              den) && (0 != num) && (0 != den)) {
+  if (mpeg4::p10::extract_par(hcodec_private, hcodec_private_length, num, den) && (0 != num) && (0 != den)) {
     if (!ti.aspect_ratio_given && !ti.display_dimensions_given) {
       double par = (double)num / (double)den;
 
-      if (par >= 1) {
-        ti.display_width = irnd(m_width * par);
+      if (1 <= par) {
+        ti.display_width  = irnd(m_width * par);
         ti.display_height = m_height;
 
       } else {
-        ti.display_width = m_width;
+        ti.display_width  = m_width;
         ti.display_height = irnd(m_height / par);
 
       }
@@ -149,11 +148,8 @@ mpeg4_p10_es_video_packetizer_c::flush_frames() {
       mxwarn_tid(ti.fname, ti.id,
                  boost::format(Y("This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n")) % m_parser.get_num_skipped_frames());
     add_packet(new packet_t(frame.m_data, frame.m_start,
-                            frame.m_end > frame.m_start ?
-                            frame.m_end - frame.m_start :
-                            htrack_default_duration,
-                            frame.m_keyframe ? -1 :
-                            frame.m_start + frame.m_ref1));
+                            frame.m_end > frame.m_start ? frame.m_end - frame.m_start : htrack_default_duration,
+                            frame.m_keyframe            ? -1                          : frame.m_start + frame.m_ref1));
     m_first_frame = false;
   }
 }
@@ -172,21 +168,21 @@ enable_timecode_generation(bool enable,
 connection_result_e
 mpeg4_p10_es_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                                 string &error_message) {
-  mpeg4_p10_es_video_packetizer_c *vsrc;
-
-  vsrc = dynamic_cast<mpeg4_p10_es_video_packetizer_c *>(src);
-  if (vsrc == NULL)
+  mpeg4_p10_es_video_packetizer_c *vsrc = dynamic_cast<mpeg4_p10_es_video_packetizer_c *>(src);
+  if (NULL == vsrc)
     return CAN_CONNECT_NO_FORMAT;
+
   connect_check_v_width(m_width, vsrc->m_width);
   connect_check_v_height(m_height, vsrc->m_height);
   connect_check_codec_id(hcodec_id, vsrc->hcodec_id);
 
-  if (((ti.private_data == NULL) && (vsrc->ti.private_data != NULL)) ||
-      ((ti.private_data != NULL) && (vsrc->ti.private_data == NULL)) ||
+  if (((NULL == ti.private_data) && (NULL != vsrc->ti.private_data)) ||
+      ((NULL != ti.private_data) && (NULL == vsrc->ti.private_data)) ||
       (ti.private_size != vsrc->ti.private_size)) {
     error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % ti.private_size % vsrc->ti.private_size).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }
+
   return CAN_CONNECT_YES;
 }
 

@@ -160,14 +160,14 @@ avi_reader_c::create_packetizer(int64_t tid) {
 
     ti.id = 0;                 // ID for the video track.
     if (DIVX_TYPE_MPEG4 == divx_type) {
-      vptzr = add_packetizer(new mpeg4_p2_video_packetizer_c(this, AVI_frame_rate(avi), AVI_video_width(avi), AVI_video_height(avi), false, ti));
+      vptzr = add_packetizer(new mpeg4_p2_video_packetizer_c(this, ti, AVI_frame_rate(avi), AVI_video_width(avi), AVI_video_height(avi), false));
       if (verbose)
         mxinfo_tid(ti.fname, 0, Y("Using the MPEG-4 part 2 video output module.\n"));
 
     } else if (mpeg4::p10::is_avc_fourcc(codec) && !hack_engaged(ENGAGE_ALLOW_AVC_IN_VFW_MODE)) {
       try {
         memory_cptr avcc                      = extract_avcc();
-        mpeg4_p10_es_video_packetizer_c *ptzr = new mpeg4_p10_es_video_packetizer_c(this, avcc, AVI_video_width(avi), AVI_video_height(avi), ti);
+        mpeg4_p10_es_video_packetizer_c *ptzr = new mpeg4_p10_es_video_packetizer_c(this, ti, avcc, AVI_video_width(avi), AVI_video_height(avi));
         vptzr                                 = add_packetizer(ptzr);
 
         ptzr->enable_timecode_generation(false);
@@ -180,7 +180,7 @@ avi_reader_c::create_packetizer(int64_t tid) {
         mxerror_tid(ti.fname, 0, Y("Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"));
       }
     } else {
-      vptzr = add_packetizer(new video_packetizer_c(this, NULL, AVI_frame_rate(avi), AVI_video_width(avi), AVI_video_height(avi), ti));
+      vptzr = add_packetizer(new video_packetizer_c(this, ti, NULL, AVI_frame_rate(avi), AVI_video_width(avi), AVI_video_height(avi)));
 
       if (verbose)
         mxinfo_tid(ti.fname, 0, Y("Using the video output module.\n"));
@@ -285,7 +285,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
   switch(audio_format) {
     case 0x0001:                // raw PCM audio
     case 0x0003:                // raw PCM audio (float)
-      packetizer = new pcm_packetizer_c(this, demuxer.samples_per_second, demuxer.channels, demuxer.bits_per_sample, ti, false, audio_format == 0x0003);
+      packetizer = new pcm_packetizer_c(this, ti, demuxer.samples_per_second, demuxer.channels, demuxer.bits_per_sample, false, audio_format == 0x0003);
 
       if (verbose)
         mxinfo_tid(ti.fname, aid + 1, Y("Using the PCM output module.\n"));
@@ -293,14 +293,14 @@ avi_reader_c::add_audio_demuxer(int aid) {
 
     case 0x0050:                // MP2
     case 0x0055:                // MP3
-      packetizer = new mp3_packetizer_c(this, demuxer.samples_per_second, demuxer.channels, false, ti);
+      packetizer = new mp3_packetizer_c(this, ti, demuxer.samples_per_second, demuxer.channels, false);
 
       if (verbose)
         mxinfo_tid(ti.fname, aid + 1, Y("Using the MPEG audio output module.\n"));
       break;
 
     case 0x2000:                // AC3
-      packetizer = new ac3_packetizer_c(this, demuxer.samples_per_second, demuxer.channels, 0, ti);
+      packetizer = new ac3_packetizer_c(this, ti, demuxer.samples_per_second, demuxer.channels, 0);
 
       if (verbose)
         mxinfo_tid(ti.fname, aid + 1, Y("Using the AC3 output module.\n"));
@@ -311,7 +311,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
 
       dtsheader.core_sampling_frequency = demuxer.samples_per_second;
       dtsheader.audio_channels          = demuxer.channels;
-      packetizer                        = new dts_packetizer_c(this, dtsheader, ti, true);
+      packetizer                        = new dts_packetizer_c(this, ti, dtsheader, true);
 
       if (verbose)
         mxinfo_tid(ti.fname, aid + 1, Y("Using the DTS output module.\n"));
@@ -385,7 +385,7 @@ avi_reader_c::create_aac_packetizer(int aid,
   demuxer.samples_per_second       = sample_rate;
   demuxer.channels                 = channels;
 
-  generic_packetizer_c *packetizer = new aac_packetizer_c(this, AAC_ID_MPEG4, profile, demuxer.samples_per_second, demuxer.channels, ti, false, headerless);
+  generic_packetizer_c *packetizer = new aac_packetizer_c(this, ti, AAC_ID_MPEG4, profile, demuxer.samples_per_second, demuxer.channels, false, headerless);
 
   if (is_sbr)
     packetizer->set_audio_output_sampling_freq(output_sample_rate);
@@ -442,7 +442,7 @@ avi_reader_c::create_vorbis_packetizer(int aid) {
     ti.private_data = NULL;
     ti.private_size = 0;
 
-    vorbis_packetizer_c *ptzr = new vorbis_packetizer_c(this, headers[0], header_sizes[0], headers[1], header_sizes[1], headers[2], header_sizes[2], ti);
+    vorbis_packetizer_c *ptzr = new vorbis_packetizer_c(this, ti, headers[0], header_sizes[0], headers[1], header_sizes[1], headers[2], header_sizes[2]);
 
     if (verbose)
       mxinfo_tid(ti.fname, aid + 1, Y("Using the Vorbis output module.\n"));

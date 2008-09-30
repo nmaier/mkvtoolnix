@@ -24,16 +24,14 @@
 
 class pcm_packetizer_c: public generic_packetizer_c {
 private:
-  int packetno, bps, samples_per_sec, channels, bits_per_sample, packet_size;
-  int64_t bytes_output;
-  bool big_endian, ieee_float;
-  byte_buffer_c buffer;
+  int m_packetno, m_bytes_per_second, m_samples_per_sec, m_channels, m_bits_per_sample, m_packet_size;
+  int64_t m_bytes_output;
+  bool m_big_endian, m_ieee_float;
+  byte_buffer_c m_buffer;
 
 public:
-  pcm_packetizer_c(generic_reader_c *_reader, int _samples_per_sec,
-                   int _channels, int _bits_per_sample, track_info_c &_ti,
-                   bool _big_endian = false, bool _float = false)
-    throw (error_c);
+  pcm_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int p_samples_per_sec, int channels, int bits_per_sample,
+                   bool big_endian = false, bool ieee_float = false) throw (error_c);
   virtual ~pcm_packetizer_c();
 
   virtual int process(packet_cptr packet);
@@ -43,8 +41,7 @@ public:
   virtual const char *get_format_name() {
     return "PCM";
   }
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src,
-                                             string &error_message);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
 };
 
 #endif // __P_PCM_H

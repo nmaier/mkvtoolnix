@@ -262,7 +262,7 @@ usf_reader_c::create_packetizer(int64_t tid) {
     return;
 
   ti.language  = track.m_language;
-  track.m_ptzr = add_packetizer(new textsubs_packetizer_c(this, MKV_S_TEXTUSF, m_private_data.c_str(), m_private_data.length(), false, true, ti));
+  track.m_ptzr = add_packetizer(new textsubs_packetizer_c(this, ti, MKV_S_TEXTUSF, m_private_data.c_str(), m_private_data.length(), false, true));
   mxinfo_tid(ti.fname, tid, Y("Using the text subtitle output module.\n"));
 }
 

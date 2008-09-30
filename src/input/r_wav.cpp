@@ -227,7 +227,7 @@ wav_ac3acm_demuxer_c::decode_buffer(int len) {
 
 generic_packetizer_c *
 wav_ac3acm_demuxer_c::create_packetizer() {
-  m_ptzr = new ac3_packetizer_c(m_reader, m_ac3header.sample_rate, m_ac3header.channels, m_ac3header.bsid, m_reader->ti);
+  m_ptzr = new ac3_packetizer_c(m_reader, m_reader->ti, m_ac3header.sample_rate, m_ac3header.channels, m_ac3header.bsid);
 
   mxinfo_tid(m_reader->ti.fname, 0, Y("Using the AC3 output module.\n"));
 
@@ -353,10 +353,10 @@ wav_dts_demuxer_c::decode_buffer(int len) {
 
 generic_packetizer_c *
 wav_dts_demuxer_c::create_packetizer() {
-  m_ptzr = new dts_packetizer_c(m_reader, m_dtsheader, m_reader->ti);
+  m_ptzr = new dts_packetizer_c(m_reader, m_reader->ti, m_dtsheader);
 
   // .wav with DTS are always filled up with other stuff to match the bitrate.
-  ((dts_packetizer_c *)m_ptzr)->skipping_is_normal = true;
+  ((dts_packetizer_c *)m_ptzr)->set_skipping_is_normal(true);
 
   mxinfo_tid(m_reader->ti.fname, 0, Y("Using the DTS output module.\n"));
 
@@ -393,11 +393,11 @@ wav_pcm_demuxer_c::~wav_pcm_demuxer_c() {
 
 generic_packetizer_c *
 wav_pcm_demuxer_c::create_packetizer() {
-  m_ptzr = new pcm_packetizer_c(m_reader,
+  m_ptzr = new pcm_packetizer_c(m_reader, m_reader->ti,
                                 get_uint32_le(&m_wheader->common.dwSamplesPerSec),
                                 get_uint16_le(&m_wheader->common.wChannels),
                                 get_uint16_le(&m_wheader->common.wBitsPerSample),
-                                m_reader->ti, false, ieee_float);
+                                false, ieee_float);
 
   mxinfo_tid(m_reader->ti.fname, 0, Y("Using the PCM output module.\n"));
 

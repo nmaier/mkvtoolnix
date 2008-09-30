@@ -109,7 +109,7 @@ tta_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  add_packetizer(new tta_packetizer_c(this, get_uint16_le(&header.channels), get_uint16_le(&header.bits_per_sample), get_uint32_le(&header.sample_rate), ti));
+  add_packetizer(new tta_packetizer_c(this, ti, get_uint16_le(&header.channels), get_uint16_le(&header.bits_per_sample), get_uint32_le(&header.sample_rate)));
   mxinfo_tid(ti.fname, 0, Y("Using the TTA output module.\n"));
 }
 

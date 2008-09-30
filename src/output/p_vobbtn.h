@@ -25,12 +25,11 @@
 
 class vobbtn_packetizer_c: public generic_packetizer_c {
 protected:
-  int64_t previous_timecode;
-  int width, height;
+  int64_t m_previous_timecode;
+  int m_width, m_height;
 
 public:
-  vobbtn_packetizer_c(generic_reader_c *_reader, int _width, int _height,
-                      track_info_c &_ti) throw (error_c);
+  vobbtn_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int width, int height) throw (error_c);
   virtual ~vobbtn_packetizer_c();
 
   virtual int process(packet_cptr packet);
@@ -39,8 +38,7 @@ public:
   virtual const char *get_format_name() {
     return "VobBtn";
   }
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src,
-                                             string &error_message);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
 };
 
 #endif // __P_VOBBTN_H

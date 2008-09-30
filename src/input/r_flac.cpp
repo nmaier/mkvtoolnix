@@ -239,7 +239,7 @@ flac_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  add_packetizer(new flac_packetizer_c(this, header, header_size, ti));
+  add_packetizer(new flac_packetizer_c(this, ti, header, header_size));
   mxinfo_tid(ti.fname, 0, Y("Using the FLAC output module.\n"));
 }
 

@@ -302,7 +302,7 @@ ogm_a_flac_demuxer_c::create_packetizer(track_info_c &ti) {
     size += packet_data[i]->get_size();
   }
 
-  generic_packetizer_c *ptzr_obj = new flac_packetizer_c(reader, buf, size, ti);
+  generic_packetizer_c *ptzr_obj = new flac_packetizer_c(reader, ti, buf, size);
   safefree(buf);
 
   mxinfo_tid(ti.fname, ti.id, Y("Using the FLAC output module.\n"));

@@ -24,20 +24,13 @@
 
 class ra_packetizer_c: public generic_packetizer_c {
 private:
-  int64_t bytes_output, packetno;
-  int samples_per_sec, channels, bits_per_sample;
-  uint32_t fourcc;
-  memory_cptr private_data;
-  bool skip_to_keyframe, buffer_until_keyframe;
-  vector<memory_c *> buffered_packets;
-  vector<int64_t> buffered_timecodes, buffered_durations;
+  int m_samples_per_sec, m_channels, m_bits_per_sample;
+  uint32_t m_fourcc;
+  memory_cptr m_private_data;
 
 public:
-  ra_packetizer_c(generic_reader_c *_reader, int _samples_per_sec,
-                  int _channels, int _bits_per_sample, uint32_t _fourcc,
-                  unsigned char *_private_data, int _private_size,
-                  track_info_c &_ti)
-    throw (error_c);
+  ra_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int samples_per_sec, int channels, int bits_per_sample, uint32_t fourcc,
+                  unsigned char *private_data, int private_size) throw (error_c);
   virtual ~ra_packetizer_c();
 
   virtual int process(packet_cptr packet);
@@ -46,8 +39,7 @@ public:
   virtual const char *get_format_name() {
     return "RealAudio";
   }
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src,
-                                             string &error_message);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
 };
 
 #endif // __P_REALAUDIO_H

@@ -32,9 +32,7 @@ protected:
   bool m_allow_timecode_generation, m_first_frame;
 
 public:
-  mpeg4_p10_es_video_packetizer_c(generic_reader_c *n_reader,
-                                  memory_cptr avcc, int width, int height,
-                                  track_info_c &n_ti);
+  mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, memory_cptr avcc, int width, int height);
 
   virtual int process(packet_cptr packet);
   virtual void set_headers();
@@ -42,15 +40,14 @@ public:
   virtual void flush();
   virtual void flush_frames();
 
-  virtual void enable_timecode_generation(bool enable,
-                                          int64_t default_duration = -1);
+  virtual void enable_timecode_generation(bool enable, int64_t default_duration = -1);
   virtual void extract_aspect_ratio();
 
   virtual const char *get_format_name() {
     return "video";
   };
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src,
-                                             string &error_message);
+
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
 };
 
 #endif // __P_AVC_H

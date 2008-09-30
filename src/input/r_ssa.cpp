@@ -102,7 +102,7 @@ ssa_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  add_packetizer(new textsubs_packetizer_c(this, m_is_ass ?  MKV_S_TEXTASS : MKV_S_TEXTSSA, m_global.c_str(), m_global.length(), false, false, ti));
+  add_packetizer(new textsubs_packetizer_c(this, ti, m_is_ass ?  MKV_S_TEXTASS : MKV_S_TEXTSSA, m_global.c_str(), m_global.length(), false, false));
   mxinfo_tid(ti.fname, 0, Y("Using the text subtitle output module.\n"));
 }
 

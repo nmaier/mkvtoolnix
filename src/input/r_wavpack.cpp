@@ -106,7 +106,7 @@ wavpack_reader_c::create_packetizer(int64_t) {
   put_uint16_le(&version_le, header.version);
   ti.private_data = (unsigned char *)&version_le;
   ti.private_size = sizeof(uint16_t);
-  add_packetizer(new wavpack_packetizer_c(this, meta, ti));
+  add_packetizer(new wavpack_packetizer_c(this, ti, meta));
   ti.private_data = NULL;
 
   mxinfo_tid(ti.fname, 0, Y("Using the WAVPACK output module.\n"));

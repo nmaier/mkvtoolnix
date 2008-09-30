@@ -94,7 +94,7 @@ ac3_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  add_packetizer(new ac3_packetizer_c(this, ac3header.sample_rate, ac3header.channels, ac3header.bsid, ti));
+  add_packetizer(new ac3_packetizer_c(this, ti, ac3header.sample_rate, ac3header.channels, ac3header.bsid));
   mxinfo_tid(ti.fname, 0, boost::format(Y("Using the %1%AC3 output module.\n")) % (16 == ac3header.bsid ? "E" : ""));
 }
 

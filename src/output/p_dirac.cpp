@@ -24,8 +24,8 @@
 
 using namespace libmatroska;
 
-dirac_video_packetizer_c::dirac_video_packetizer_c(generic_reader_c *n_reader, track_info_c &n_ti)
-  : generic_packetizer_c(n_reader, n_ti)
+dirac_video_packetizer_c::dirac_video_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti)
+  : generic_packetizer_c(p_reader, p_ti)
   , m_headers_found(false)
   , m_previous_timecode(-1)
 {

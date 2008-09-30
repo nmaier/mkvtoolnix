@@ -13,10 +13,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
+#include "os.h"
+
+#include <boost/regex.hpp>
+#include <string>
 
 #include "common.h"
 #include "pr_generic.h"
@@ -25,30 +25,30 @@
 
 using namespace libmatroska;
 
-textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *_reader,
-                                             const char *_codec_id,
-                                             const void *_global_data,
-                                             int _global_size,
-                                             bool _recode,
-                                             bool is_utf8,
-                                             track_info_c &_ti)
-  throw (error_c):
-  generic_packetizer_c(_reader, _ti),
-  packetno(0), cc_utf8(0),
-  global_data(new memory_c((unsigned char *)safememdup(_global_data,
-                                                       _global_size),
-                           _global_size, true)),
-  codec_id(_codec_id), recode(_recode) {
+boost::regex textsubs_packetizer_c::s_re_remove_cr("\r", boost::regex::perl);
+boost::regex textsubs_packetizer_c::s_re_remove_trailing_nl("\n+$", boost::regex::perl);
+boost::regex textsubs_packetizer_c::s_re_translate_nl("\n", boost::regex::perl);
 
-  if (recode) {
-    if ((ti.sub_charset != "") || !is_utf8)
-      cc_utf8 = utf8_init(ti.sub_charset);
-    else
-      cc_utf8 = utf8_init("UTF-8");
-  }
+textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *p_reader,
+                                             track_info_c &p_ti,
+                                             const char *codec_id,
+                                             const void *global_data,
+                                             int global_size,
+                                             bool recode,
+                                             bool is_utf8)
+  throw (error_c)
+  : generic_packetizer_c(p_reader, p_ti)
+  , m_packetno(0)
+  , m_cc_utf8(0)
+  , m_global_data(new memory_c((unsigned char *)safememdup(global_data, global_size), global_size, true))
+  , m_codec_id(codec_id)
+  , m_recode(recode)
+{
+  if (m_recode)
+    m_cc_utf8 = utf8_init((ti.sub_charset != "") || !is_utf8 ? ti.sub_charset : "UTF-8");
 
   set_track_type(track_subtitle);
-  if (codec_id == MKV_S_TEXTUSF)
+  if (m_codec_id == MKV_S_TEXTUSF)
     set_default_compression_method(COMPRESSION_ZLIB);
 }
 
@@ -57,10 +57,10 @@ textsubs_packetizer_c::~textsubs_packetizer_c() {
 
 void
 textsubs_packetizer_c::set_headers() {
-  set_codec_id(codec_id);
-  if (NULL != global_data->get())
-    set_codec_private((unsigned char *)global_data->get(),
-                      global_data->get_size());
+  set_codec_id(m_codec_id);
+
+  if (NULL != m_global_data->get())
+    set_codec_private((unsigned char *)m_global_data->get(), m_global_data->get_size());
 
   generic_packetizer_c::set_headers();
 
@@ -69,65 +69,39 @@ textsubs_packetizer_c::set_headers() {
 
 int
 textsubs_packetizer_c::process(packet_cptr packet) {
-  int num_newlines;
-  char *subs, *idx1, *idx2;
-
-  if (packet->duration < 0) {
+  if (0 > packet->duration) {
     mxwarn_tid(ti.fname, ti.id, Y("Ignoring an entry which starts after it ends.\n"));
     return FILE_STATUS_MOREDATA;
   }
 
-  // Count the number of lines.
-  idx1 = (char *)packet->data->get();
-  subs = NULL;
-  num_newlines = 0;
-  while (*idx1 != 0) {
-    if (*idx1 == '\n')
-      num_newlines++;
-    idx1++;
-  }
-  subs = (char *)safemalloc(strlen((char *)packet->data->get()) +
-                            num_newlines * 2 + 1);
-
-  // Unify the new lines into DOS style newlines.
-  idx1 = (char *)packet->data->get();
-  idx2 = subs;
-  while (*idx1 != 0) {
-    if (*idx1 == '\n') {
-      *idx2 = '\r';
-      idx2++;
-      *idx2 = '\n';
-      idx2++;
-    } else if (*idx1 != '\r') {
-      *idx2 = *idx1;
-      idx2++;
-    }
-    idx1++;
-  }
-  if (idx2 != subs) {
-    while (((idx2 - 1) != subs) && iscr(*(idx2 - 1))) {
-      *idx2 = 0;
-      idx2--;
-    }
-  }
-  *idx2 = 0;
-
   packet->duration_mandatory = true;
-  if (recode) {
-    string utf8_subs;
 
-    utf8_subs = to_utf8(cc_utf8, subs);
-    safefree(subs);
-    packet->data =
-      memory_cptr(new memory_c((unsigned char *)utf8_subs.c_str(),
-                               utf8_subs.length(), false));
-    add_packet(packet);
+  string subs((char *)packet->data->get());
 
-  } else {
-    packet->data =
-      memory_cptr(new memory_c((unsigned char *)subs, strlen(subs), true));
-    add_packet(packet);
-  }
+  static bool mallow = true;
+  if (mallow)
+    mxhexdump(0, (const unsigned char *)subs.c_str(), subs.length());
+
+  subs = boost::regex_replace(subs, s_re_remove_cr, "", boost::match_default | boost::match_single_line);
+  if (mallow)
+    mxhexdump(0, (const unsigned char *)subs.c_str(), subs.length());
+  subs = boost::regex_replace(subs, s_re_remove_trailing_nl, "", boost::match_default | boost::match_single_line);
+  if (mallow)
+    mxhexdump(0, (const unsigned char *)subs.c_str(), subs.length());
+  subs = boost::regex_replace(subs, s_re_translate_nl, "\r\n", boost::match_default | boost::match_single_line);
+  if (mallow)
+    mxhexdump(0, (const unsigned char *)subs.c_str(), subs.length());
+
+  if (m_recode)
+    subs = to_utf8(m_cc_utf8, subs);
+
+  if (mallow)
+    mxhexdump(0, (const unsigned char *)subs.c_str(), subs.length());
+  mallow = false;
+
+  packet->data = memory_cptr(new memory_c((unsigned char *)subs.c_str(), subs.length(), false));
+
+  add_packet(packet);
 
   return FILE_STATUS_MOREDATA;
 }
@@ -135,15 +109,13 @@ textsubs_packetizer_c::process(packet_cptr packet) {
 connection_result_e
 textsubs_packetizer_c::can_connect_to(generic_packetizer_c *src,
                                       string &error_message) {
-  textsubs_packetizer_c *psrc;
-
-  psrc = dynamic_cast<textsubs_packetizer_c *>(src);
-  if (psrc == NULL)
+  textsubs_packetizer_c *psrc = dynamic_cast<textsubs_packetizer_c *>(src);
+  if (NULL == psrc)
     return CAN_CONNECT_NO_FORMAT;
 
-  if (((ti.private_data == NULL) && (src->ti.private_data != NULL)) ||
-      ((ti.private_data != NULL) && (src->ti.private_data == NULL)) ||
-      (ti.private_size != src->ti.private_size)) {
+  if (   ((NULL == ti.private_data) && (NULL != src->ti.private_data))
+      || ((NULL != ti.private_data) && (NULL == src->ti.private_data))
+      || (ti.private_size != src->ti.private_size)) {
     error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % ti.private_size % src->ti.private_size).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }

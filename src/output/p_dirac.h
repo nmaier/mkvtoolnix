@@ -33,7 +33,7 @@ protected:
   int64_t m_previous_timecode;
 
 public:
-  dirac_video_packetizer_c(generic_reader_c *n_reader, track_info_c &n_ti);
+  dirac_video_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti);
 
   virtual int process(packet_cptr packet);
   virtual void set_headers();

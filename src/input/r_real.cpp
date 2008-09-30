@@ -296,7 +296,7 @@ real_reader_c::parse_headers() {
 void
 real_reader_c::create_video_packetizer(real_demuxer_cptr dmx) {
   string codec_id = (boost::format("V_REAL/%1%") % dmx->fourcc).str();
-  dmx->ptzr = add_packetizer(new video_packetizer_c(this, codec_id.c_str(), 0.0, dmx->width, dmx->height, ti));
+  dmx->ptzr = add_packetizer(new video_packetizer_c(this, ti, codec_id.c_str(), 0.0, dmx->width, dmx->height));
 
   if (strcmp(dmx->fourcc, "RV40"))
     dmx->rv_dimensions = true;
@@ -306,7 +306,7 @@ real_reader_c::create_video_packetizer(real_demuxer_cptr dmx) {
 
 void
 real_reader_c::create_dnet_audio_packetizer(real_demuxer_cptr dmx) {
-  dmx->ptzr = add_packetizer(new ac3_bs_packetizer_c(this, dmx->samples_per_second, dmx->channels, dmx->bsid, ti));
+  dmx->ptzr = add_packetizer(new ac3_bs_packetizer_c(this, ti, dmx->samples_per_second, dmx->channels, dmx->bsid));
   mxinfo_tid(ti.fname, dmx->track->id, boost::format(Y("Using the AC3 output module (FourCC: %1%).\n")) % dmx->fourcc);
 }
 
@@ -371,7 +371,7 @@ real_reader_c::create_aac_audio_packetizer(real_demuxer_cptr dmx) {
   ti.private_data = NULL;
   ti.private_size = 0;
   dmx->is_aac     = true;
-  dmx->ptzr       = add_packetizer(new aac_packetizer_c(this, AAC_ID_MPEG4, profile, sample_rate, channels, ti, false, true));
+  dmx->ptzr       = add_packetizer(new aac_packetizer_c(this, ti, AAC_ID_MPEG4, profile, sample_rate, channels, false, true));
 
   mxinfo_tid(ti.fname, tid, boost::format(Y("Using the AAC output module (FourCC: %1%).\n")) % dmx->fourcc);
 
@@ -400,8 +400,8 @@ real_reader_c::create_audio_packetizer(real_demuxer_cptr dmx) {
     if (!strcasecmp(dmx->fourcc, "COOK"))
       dmx->cook_audio_fix = true;
 
-    dmx->ptzr = add_packetizer(new ra_packetizer_c(this, dmx->samples_per_second, dmx->channels, dmx->bits_per_sample, get_uint32_be(dmx->fourcc),
-                                                   dmx->private_data, dmx->private_size, ti));
+    dmx->ptzr = add_packetizer(new ra_packetizer_c(this, ti, dmx->samples_per_second, dmx->channels, dmx->bits_per_sample, get_uint32_be(dmx->fourcc),
+                                                   dmx->private_data, dmx->private_size));
 
     mxinfo_tid(ti.fname, dmx->track->id, boost::format(Y("Using the RealAudio output module (FourCC: %1%).\n")) % dmx->fourcc);
   }

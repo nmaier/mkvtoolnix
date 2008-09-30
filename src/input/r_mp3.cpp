@@ -75,7 +75,7 @@ mp3_reader_c::create_packetizer(int64_t) {
     return;
 
   mxinfo_tid(ti.fname, 0, Y("Using the MPEG audio output module.\n"));
-  add_packetizer(new mp3_packetizer_c(this, mp3header.sampling_frequency, mp3header.channels, false, ti));
+  add_packetizer(new mp3_packetizer_c(this, ti, mp3header.sampling_frequency, mp3header.channels, false));
 }
 
 file_status_e
