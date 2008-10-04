@@ -1369,7 +1369,7 @@ kax_reader_c::create_audio_packetizer(kax_track_t *t,
              :                                  0;
 
     t->ptzr = add_packetizer(new ac3_packetizer_c(this, nti, (int32_t)t->a_sfreq, t->a_channels, bsid));
-    mxinfo_tid(ti.fname, t->tnum, Y("Using the AC3 output module.\n"));
+    mxinfo_tid(ti.fname, t->tnum, boost::format(Y("Using the %1%AC3 output module.\n")) % (16 == bsid ? "E" : ""));
 
   } else if (0x2001 == t->a_formattag) {
     dts_header_t dtsheader;
