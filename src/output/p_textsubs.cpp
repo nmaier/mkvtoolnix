@@ -78,26 +78,12 @@ textsubs_packetizer_c::process(packet_cptr packet) {
 
   string subs((char *)packet->data->get());
 
-  static bool mallow = true;
-  if (mallow)
-    mxhexdump(0, (const unsigned char *)subs.c_str(), subs.length());
-
-  subs = boost::regex_replace(subs, s_re_remove_cr, "", boost::match_default | boost::match_single_line);
-  if (mallow)
-    mxhexdump(0, (const unsigned char *)subs.c_str(), subs.length());
-  subs = boost::regex_replace(subs, s_re_remove_trailing_nl, "", boost::match_default | boost::match_single_line);
-  if (mallow)
-    mxhexdump(0, (const unsigned char *)subs.c_str(), subs.length());
-  subs = boost::regex_replace(subs, s_re_translate_nl, "\r\n", boost::match_default | boost::match_single_line);
-  if (mallow)
-    mxhexdump(0, (const unsigned char *)subs.c_str(), subs.length());
+  subs = boost::regex_replace(subs, s_re_remove_cr,          "",     boost::match_default | boost::match_single_line);
+  subs = boost::regex_replace(subs, s_re_remove_trailing_nl, "",     boost::match_default | boost::match_single_line);
+  subs = boost::regex_replace(subs, s_re_translate_nl,       "\r\n", boost::match_default | boost::match_single_line);
 
   if (m_recode)
     subs = to_utf8(m_cc_utf8, subs);
-
-  if (mallow)
-    mxhexdump(0, (const unsigned char *)subs.c_str(), subs.length());
-  mallow = false;
 
   packet->data = memory_cptr(new memory_c((unsigned char *)subs.c_str(), subs.length(), false));
 
