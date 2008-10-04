@@ -163,16 +163,17 @@ tab_input_general::setup_languages() {
   int i, j;
 
   if (sorted_iso_codes.Count() == 0) {
-    for (i = 0; iso639_languages[i].iso639_2_code != NULL; i++) {
-      if (iso639_languages[i].english_name == NULL)
-        language = wxU(iso639_languages[i].iso639_2_code);
-      else
-        language.Printf(wxT("%s (%s)"),
-                        wxUCS(iso639_languages[i].iso639_2_code),
-                        wxUCS(iso639_languages[i].english_name));
-      sorted_iso_codes.Add(language);
+    wxArrayString temp;
+
+    for (i = 0; iso639_languages[i].english_name != NULL; i++) {
+      language.Printf(wxT("%s (%s)"), wxUCS(iso639_languages[i].iso639_2_code), wxUCS(iso639_languages[i].english_name));
+      temp.Add(language);
     }
-    sorted_iso_codes.Sort();
+    temp.Sort();
+
+    for (i = 0; temp.Count() > i; ++i)
+      if ((0 == i) || (temp[i - 1].Lower() != temp[i].Lower()))
+        sorted_iso_codes.Add(temp[i]);
 
     for (i = 0; iso639_languages[i].iso639_2_code != NULL; i++) {
       if (!is_popular_language_code(iso639_languages[i].iso639_2_code))

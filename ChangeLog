@@ -1,3 +1,8 @@
+2008-10-05  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: The "language" drop down box contained some
+	entries twice or more. Fix for bug 304.
+
 2008-10-04  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Incorrect usage of the iconv library caused
