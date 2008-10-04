@@ -1,3 +1,10 @@
+2008-10-04  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Incorrect usage of the iconv library caused
+	some conversions to omit the last character of each converted
+	entry (e.g. for the conversion from Hebrew to UTF-8). Fix for bug
+	302.
+
 2008-09-25  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: mkvmerge will use the timecodes provided

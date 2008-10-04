@@ -520,6 +520,7 @@ convert_charset(iconv_t ict,
   psrc = srccopy;
   pdst = dst;
   iconv(ict, (ICONV_CONST char **)&psrc, &lsrc, &pdst, &ldst);
+  iconv(ict, NULL, NULL, &pdst, &ldst);
   safefree(srccopy);
   result = dst;
   safefree(dst);
