@@ -64,30 +64,51 @@ mpeg_es_reader_c::probe_file(mm_io_c *io,
     if (!mpeg_is_start_code(value))
       return 0;
 
-    bool sequence_start_code_found = false;
-    bool picture_start_code_found  = false;
     bool gop_start_code_found      = false;
+    bool sequence_start_code_found = false;
+    bool ext_start_code_found      = false;
+    bool picture_start_code_found  = false;
+    bool slice_start_code_found    = false;
+
+    bool ok                        = false;
 
     // Let's look for a MPEG ES start code inside the first 1 MB.
     int i;
     for (i = 4; i < num_read - 1; i++) {
-      if (MPEGVIDEO_SEQUENCE_START_CODE == value)
-        sequence_start_code_found = true;
-      else if (MPEGVIDEO_PICTURE_START_CODE == value)
-        picture_start_code_found  = true;
-      else if (MPEGVIDEO_GOP12_START_CODE == value)
-        gop_start_code_found      = true;
+      if (mpeg_is_start_code(value)) {
+        mxverb(3, boost::format("mpeg_es_detection: start code found; fourth byte: 0x%|1$02x|\n") % (value & 0xff));
 
-      if (sequence_start_code_found && picture_start_code_found && gop_start_code_found)
-        break;
+        if (MPEGVIDEO_SEQUENCE_START_CODE == value)
+          sequence_start_code_found = true;
+
+        else if (MPEGVIDEO_PICTURE_START_CODE == value)
+          picture_start_code_found  = true;
+
+        else if (MPEGVIDEO_GOP12_START_CODE   == value)
+          gop_start_code_found      = true;
+
+        else if (MPEGVIDEO_EXT_START_CODE     == value)
+          gop_start_code_found      = true;
+
+        else if ((MPEGVIDEO_FIRST_SLICE_START_CODE >= value) && (MPEGVIDEO_LAST_SLICE_START_CODE <= value))
+          slice_start_code_found    = true;
+
+        ok = sequence_start_code_found && picture_start_code_found && (gop_start_code_found || ext_start_code_found || slice_start_code_found);
+        if (ok)
+          break;
+      }
 
       value <<= 8;
       value  |= buf[i];
     }
 
+    mxverb(3,
+           boost::format("mpeg_es_detection: sequence %1% picture %2% gop %3% ext %4% slice %5%\n")
+           % sequence_start_code_found % picture_start_code_found % gop_start_code_found % ext_start_code_found % slice_start_code_found);
+
     safefree(buf);
 
-    if (!(sequence_start_code_found && picture_start_code_found && gop_start_code_found))
+    if (!ok)
       return 0;
 
     // Let's try to read one frame.

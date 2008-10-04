@@ -33,6 +33,8 @@
 #define MPEGVIDEO_MPEG_PROGRAM_END_CODE           0x000001b9
 #define MPEGVIDEO_EXT_START_CODE                  0x000001b5
 #define MPEGVIDEO_PICTURE_START_CODE              0x00000100
+#define MPEGVIDEO_FIRST_SLICE_START_CODE          0x00000101
+#define MPEGVIDEO_LAST_SLICE_START_CODE           0x000001af
 
 /** Start code for a MPEG-4 part 2 visual object sequence start marker */
 #define MPEGVIDEO_VOS_START_CODE                  0x000001b0
