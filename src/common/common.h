@@ -24,6 +24,7 @@
 // "min" is defined. The libebml headers define "min", so make sure
 // that it isn't before including boost/format.hpp.
 
+#include <ebml/EbmlElement.h>
 #undef min
 
 #include <boost/format.hpp>
