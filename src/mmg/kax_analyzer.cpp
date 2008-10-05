@@ -33,14 +33,14 @@
 using namespace std;
 using namespace libebml;
 
-static void
-dump_analyzer_data(vector<analyzer_data_c *> &data) {
-  int i;
+// static void
+// dump_analyzer_data(vector<analyzer_data_c *> &data) {
+//   int i;
 
-  mxinfo("DATA dump:\n");
-  for (i = 0; i < data.size(); i++)
-    mxinfo(boost::format("%|1$04d|: 0x%|2$08x| at %3% size %4%\n") % i % data[i]->id.Value % data[i]->pos % data[i]->size);
-}
+//   mxinfo("DATA dump:\n");
+//   for (i = 0; i < data.size(); i++)
+//     mxinfo(boost::format("%|1$04d|: 0x%|2$08x| at %3% size %4%\n") % i % data[i]->id.Value % data[i]->pos % data[i]->size);
+// }
 
 kax_analyzer_dlg_c::kax_analyzer_dlg_c(wxWindow *_parent,
                                        mm_io_c *_file,
