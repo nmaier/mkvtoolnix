@@ -49,9 +49,10 @@ kax_block_group_c::add_frame(const KaxTrackEntry &track,
 	block.SetParent(*ParentCluster);
 	ParentTrack = &track;
 	bool result = block.AddFrame(track, timecode, buffer, lacing);
+	kax_reference_block_c *past_ref = NULL;
 
   if (0 <= past_block) {
-    kax_reference_block_c *past_ref = FindChild<kax_reference_block_c>(*this);
+    past_ref = FindChild<kax_reference_block_c>(*this);
     if (NULL == past_ref) {
       past_ref = new kax_reference_block_c;
       PushElement(*past_ref);
@@ -62,7 +63,7 @@ kax_block_group_c::add_frame(const KaxTrackEntry &track,
 
   if (0 <= forw_block) {
     kax_reference_block_c *forw_ref = FindChild<kax_reference_block_c>(*this);
-    if (NULL == forw_ref) {
+    if (past_ref == forw_ref) {
       forw_ref = new kax_reference_block_c;
       PushElement(*forw_ref);
     }
