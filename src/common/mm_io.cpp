@@ -82,7 +82,7 @@ mm_file_io_c::mm_file_io_c(const string &path,
 # endif
       break;
     case MODE_WRITE:
-      cmode = "a+b";
+      cmode = "r+b";
 # if HAVE_POSIX_FADVISE
       advise = POSIX_FADV_DONTNEED;
 # endif

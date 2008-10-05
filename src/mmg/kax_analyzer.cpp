@@ -33,14 +33,14 @@
 using namespace std;
 using namespace libebml;
 
-// static void dumpme(vector<analyzer_data_c *> &data) {
-//   uint32_t i;
+static void
+dump_analyzer_data(vector<analyzer_data_c *> &data) {
+  int i;
 
-//   mxinfo("DATA dump:\n");
-//   for (i = 0; i < data.size(); i++)
-//     mxinfo("%03d: 0x%08x at " LLD ", size " LLD "\n", i, data[i]->id.Value,
-//            data[i]->pos, data[i]->size);
-// }
+  mxinfo("DATA dump:\n");
+  for (i = 0; i < data.size(); i++)
+    mxinfo(boost::format("%|1$04d|: 0x%|2$08x| at %3% size %4%\n") % i % data[i]->id.Value % data[i]->pos % data[i]->size);
+}
 
 kax_analyzer_dlg_c::kax_analyzer_dlg_c(wxWindow *_parent,
                                        mm_io_c *_file,
@@ -117,11 +117,9 @@ kax_analyzer_dlg_c::process() {
   upper_lvl_el = 0;
   // We've got our segment, so let's find all level 1 elements.
   l1 = es.FindNextElement(segment->Generic().Context, upper_lvl_el,
-                          0xFFFFFFFFL, true, 1);
+                          0xFFFFFFFFFFFFFFFFLL, true, 1);
   while ((l1 != NULL) && (upper_lvl_el <= 0)) {
-    data.push_back(new analyzer_data_c(l1->Generic().GlobalId,
-                                       l1->GetElementPosition(),
-                                       l1->ElementSize()));
+    data.push_back(new analyzer_data_c(l1->Generic().GlobalId, l1->GetElementPosition(), l1->ElementSize(true)));
     while (app->Pending())
       app->Dispatch();
 
@@ -166,7 +164,7 @@ kax_analyzer_c::kax_analyzer_c(wxWindow *_parent,
   file_name(_name),
   segment(NULL) {
   try {
-    file = new mm_file_io_c(file_name.c_str(), MODE_SAFE);
+    file = new mm_file_io_c(file_name.c_str(), MODE_WRITE);
   } catch (...) {
     throw error_c(string("Could not open the file " + file_name + "."));
   }
@@ -353,6 +351,9 @@ kax_analyzer_c::update_element(EbmlElement *e) {
     data[i]->delete_this = false;
 
   try {
+//     mxinfo(boost::format("INFO 0:\n"));
+//     dump_analyzer_data(data);
+
     found_what = 0;
     for (i = 0; i < data.size(); i++)
       if (data[i]->id == EbmlId(*e)) {
@@ -439,8 +440,8 @@ kax_analyzer_c::update_element(EbmlElement *e) {
         ++i;
     }
 
-//     mxinfo("INFO:\n%s", info.c_str());
-//     dumpme(data);
+//     mxinfo(boost::format("INFO 1:\n%1%\n") % info);
+//     dump_analyzer_data(data);
 
     // 1. Find all seek heads.
     free_space.clear();
@@ -568,8 +569,9 @@ kax_analyzer_c::update_element(EbmlElement *e) {
       all_heads.push_back(all_heads[0]);
       all_heads.erase(all_heads.begin());
       all_heads.insert(all_heads.begin(), new_head);
-//       mxinfo("MORE INFO:\n%s", info.c_str());
-//       dumpme(data);
+
+//       mxinfo(boost::format("INFO 2:\n%1%\n") % info);
+//       dump_analyzer_data(data);
 
       throw true;
     }
@@ -595,7 +597,7 @@ kax_analyzer_c::update_element(EbmlElement *e) {
     if (found_what) {
       all_heads.insert(all_heads.begin(), new_head);
       overwrite_elements(new_head, found_where);
-//       dumpme(data);
+//       dump_analyzer_data(data);
 
       throw true;
     } else
@@ -617,10 +619,10 @@ kax_analyzer_c::update_element(EbmlElement *e) {
     all_heads.clear();
 
 //     mxinfo("DUMP after work:\n");
-//     dumpme(data);
+//     dump_analyzer_data(data);
 //     process();
 //     mxinfo("DUMP after re-process()ing:\n");
-//     dumpme(data);
+//     dump_analyzer_data(data);
 
     return b;
   }
