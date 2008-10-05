@@ -29,11 +29,10 @@ uint64
 kax_reference_block_c::UpdateSize(bool bSaveDefault,
                                   bool bForceRender) {
   if (!bTimecodeSet) {
-    assert(m_value != -1);
-
-    Value = (m_value - int64(ParentBlock->GlobalTimecode())) /
-      int64(ParentBlock->GlobalTimecodeScale());
+    assert(-1 != m_value);
+    Value = (m_value - int64(ParentBlock->GlobalTimecode())) / int64(ParentBlock->GlobalTimecodeScale());
   }
+
   return EbmlSInteger::UpdateSize(bSaveDefault, bForceRender);
 }
 
@@ -44,12 +43,13 @@ kax_block_group_c::add_frame(const KaxTrackEntry &track,
                              int64_t past_block,
                              int64_t forw_block,
                              LacingType lacing) {
-	KaxBlock & block = GetChild<KaxBlock>(*this);
-	assert(ParentCluster != NULL);
-	block.SetParent(*ParentCluster);
-	ParentTrack = &track;
-	bool result = block.AddFrame(track, timecode, buffer, lacing);
-	kax_reference_block_c *past_ref = NULL;
+  KaxBlock & block = GetChild<KaxBlock>(*this);
+  assert(NULL != ParentCluster);
+  block.SetParent(*ParentCluster);
+
+  ParentTrack                     = &track;
+  bool result                     = block.AddFrame(track, timecode, buffer, lacing);
+  kax_reference_block_c *past_ref = NULL;
 
   if (0 <= past_block) {
     past_ref = FindChild<kax_reference_block_c>(*this);
@@ -71,7 +71,7 @@ kax_block_group_c::add_frame(const KaxTrackEntry &track,
     forw_ref->SetParentBlock(*this);
   }
 
-	return result;
+  return result;
 }
 
 bool
@@ -81,13 +81,14 @@ kax_block_blob_c::add_frame_auto(const KaxTrackEntry &track,
                                  LacingType lacing,
                                  int64_t past_block,
                                  int64_t forw_block) {
-	bool result = false;
+  bool result = false;
 
-  if ((SimpleBlockMode == BLOCK_BLOB_ALWAYS_SIMPLE) ||
-      ((SimpleBlockMode == BLOCK_BLOB_SIMPLE_AUTO) &&
-       (-1 == past_block) && (-1 == forw_block))) {
-    assert(bUseSimpleBlock == true);
-    if (Block.simpleblock == NULL) {
+  if (   (BLOCK_BLOB_ALWAYS_SIMPLE == SimpleBlockMode)
+      || (   (BLOCK_BLOB_SIMPLE_AUTO == SimpleBlockMode)
+          && (-1 == past_block)
+          && (-1 == forw_block))) {
+    assert(true == bUseSimpleBlock);
+    if (NULL == Block.simpleblock) {
       Block.simpleblock = new KaxSimpleBlock();
       Block.simpleblock->SetParent(*ParentCluster);
     }
@@ -96,19 +97,19 @@ kax_block_blob_c::add_frame_auto(const KaxTrackEntry &track,
     if ((-1 == past_block) && (-1 == forw_block)) {
       Block.simpleblock->SetKeyframe(true);
       Block.simpleblock->SetDiscardable(false);
+
     } else {
       Block.simpleblock->SetKeyframe(false);
-      if (((-1 == forw_block) || (forw_block <= timecode)) &&
-          ((-1 == past_block) || (past_block <= timecode)))
+      if (   ((-1 == forw_block) || (forw_block <= timecode))
+          && ((-1 == past_block) || (past_block <= timecode)))
         Block.simpleblock->SetDiscardable(false);
       else
         Block.simpleblock->SetDiscardable(true);
     }
+
   } else if (replace_simple_by_group()) {
-    kax_block_group_c *group =
-      static_cast<kax_block_group_c *>(Block.group);
-    result = group->add_frame(track, timecode, buffer, past_block, forw_block,
-                              lacing);
+    kax_block_group_c *group = static_cast<kax_block_group_c *>(Block.group);
+    result = group->add_frame(track, timecode, buffer, past_block, forw_block, lacing);
   }
 
   return result;
@@ -116,19 +117,19 @@ kax_block_blob_c::add_frame_auto(const KaxTrackEntry &track,
 
 bool
 kax_block_blob_c::replace_simple_by_group() {
-  if (SimpleBlockMode== BLOCK_BLOB_ALWAYS_SIMPLE)
+  if (BLOCK_BLOB_ALWAYS_SIMPLE == SimpleBlockMode)
     return false;
 
   if (!bUseSimpleBlock) {
-    if (Block.group == NULL)
+    if (NULL == Block.group)
       Block.group = new kax_block_group_c();
 
-  } else if (Block.simpleblock != NULL)
+  } else if (NULL != Block.simpleblock)
     assert(false);
   else
     Block.group = new kax_block_group_c();
 
-  if (ParentCluster != NULL)
+  if (NULL != ParentCluster)
     Block.group->SetParent(*ParentCluster);
 
   bUseSimpleBlock = false;
@@ -138,6 +139,6 @@ kax_block_blob_c::replace_simple_by_group() {
 
 void
 kax_block_blob_c::set_block_duration(uint64_t time_length) {
-	if (replace_simple_by_group())
-		Block.group->SetBlockDuration(time_length);
+  if (replace_simple_by_group())
+    Block.group->SetBlockDuration(time_length);
 }
