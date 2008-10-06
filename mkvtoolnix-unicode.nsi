@@ -313,7 +313,7 @@ Function .onInit
   StrCmp $1 1 DontBailOut
 
   ; Don't install on 95, 98, ME
-  MessageBox MB_OK|MB_ICONSTOP "You are trying to install the Unicode enabled version of MKVToolNix on a Windows version that does not support Unicode (95, 98 or ME). Please download the MKVToolNix version for Windows 95, 98 and ME from http://www.bunkus.org/videotools/mkvtoolnix/"
+  MessageBox MB_OK|MB_ICONSTOP "You are trying to install MKVToolNix on a Windows version that does not support Unicode (95, 98 or ME). These old Windows versions are not supported anymore. You can still get an older version (v2.2.0) for Windows 95, 98 and ME from http://www.bunkus.org/videotools/mkvtoolnix/"
   Abort
 
  DontBailOut:
