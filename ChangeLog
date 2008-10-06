@@ -1,3 +1,13 @@
+2008-10-06  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: mkvmerge was only writing one reference block
+	for real B frames. Patch by Daniel Glöckner. Fix for bug 306.
+
+	* all: bug fix: The Windows uninstaller was not removing all start
+	menu entries during uninstallation on Windows Vista. The installer
+	now creates the start menu entries for all users instead of the
+	current user only. Fix for bug 305.
+
 2008-10-05  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: The "language" drop down box contained some
