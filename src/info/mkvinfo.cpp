@@ -1440,7 +1440,7 @@ def_handle2(block_group,
                % (bref_found && fref_found ? 'B' : bref_found ? 'P' : !fref_found ? 'I' : 'P')
                % lf_tnum
                % lf_timecode
-               % format_timecode(lf_timecode)
+               % format_timecode(lf_timecode * 1000000, 3)
                % bduration
                % frame_sizes[fidx]
                % frame_adlers[fidx]
@@ -1450,7 +1450,7 @@ def_handle2(block_group,
                % (bref_found && fref_found ? 'B' : bref_found ? 'P' : !fref_found ? 'I' : 'P')
                % lf_tnum
                % lf_timecode
-               % format_timecode(lf_timecode)
+               % format_timecode(lf_timecode * 1000000, 3)
                % frame_sizes[fidx]
                % frame_adlers[fidx]
                % frame_hexdumps[fidx]);
