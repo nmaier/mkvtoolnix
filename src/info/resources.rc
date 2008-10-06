@@ -1,7 +1,3 @@
-MATROSKAICON ICON  matroskalogo_big.ico
-
-#include "wx/msw/wx.rc"
-
 1 VERSIONINFO
  FILEVERSION 2, 3, 0, 0
  PRODUCTVERSION 2, 3, 0, 0
@@ -13,11 +9,11 @@ BEGIN
     BLOCK "040904B0"
     BEGIN
       VALUE "CompanyName", "Moritz Bunkus"
-      VALUE "FileDescription", "mmg"
+      VALUE "FileDescription", "mkvinfo"
       VALUE "FileVersion", "2.3.0"
-      VALUE "InternalName", "mmg"
+      VALUE "InternalName", "mkvinfo"
       VALUE "LegalCopyright", "Released under the GNU Pulic License http://www.gnu.org/licenses/gpl-2.0.html"
-      VALUE "OriginalFilename", "mmg"
+      VALUE "OriginalFilename", "mkvinfo"
       VALUE "ProductName", "MKVToolNix"
       VALUE "ProductVersion", "2.3.0"
     END

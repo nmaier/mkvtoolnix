@@ -134,7 +134,10 @@ LIBMTXCOMMONEXT = a
 endif
 
 ifeq (1,$(MINGW))
-MMG_RESOURCES = src/mmg/mmg-resources.rc
+mmg_RESOURCES = src/mmg/mmg-resources.rc
+mkvmerge_RESOURCES = src/merge/resources.rc
+mkvinfo_RESOURCES = src/info/resources.rc
+mkvextract_RESOURCES = src/extract/resources.rc
 LIBRPCRT = -lrpcrt4
 endif
 
@@ -418,7 +421,8 @@ src/output/libmtxoutput.a: $(libmtxoutput_OBJECTS)
 #
 
 mkvmerge_SOURCES = $(wildcard src/merge/*.cpp)
-mkvmerge_OBJECTS := $(patsubst %.cpp,%.o,$(mkvmerge_SOURCES))
+mkvmerge_OBJECTS := $(patsubst %.cpp,%.o,$(mkvmerge_SOURCES)) \
+		$(patsubst %.rc,%.o,$(mkvmerge_RESOURCES))
 mkvmerge_DEPENDENCIES += $(DEP_COMMON) \
 		$(DEP_COMP) $(DEP_INPUT) $(DEP_OUTPUT) $(DEP_AVI) $(DEP_RMFF) \
 		$(DEP_MPEGPARSER)
@@ -451,7 +455,8 @@ mkvinfo_LDADD += $(WXWIDGETS_LIBS)
 endif
 endif
 
-mkvinfo_OBJECTS := $(patsubst %.cpp,%.o,$(mkvinfo_SOURCES))
+mkvinfo_OBJECTS := $(patsubst %.cpp,%.o,$(mkvinfo_SOURCES)) \
+		$(patsubst %.rc,%.o,$(mkvinfo_RESOURCES))
 mkvinfo_DEPENDENCIES += $(DEP_COMMON)
 mkvinfo_LDADD += -lexpat $(ICONV_LIBS) $(LIBINTL_LIBS) $(LIBRPCRT)
 
@@ -461,7 +466,8 @@ mkvinfo_LDADD += -lexpat $(ICONV_LIBS) $(LIBINTL_LIBS) $(LIBRPCRT)
 #
 
 mkvextract_SOURCES = $(wildcard src/extract/*.cpp)
-mkvextract_OBJECTS := $(patsubst %.cpp,%.o,$(mkvextract_SOURCES))
+mkvextract_OBJECTS := $(patsubst %.cpp,%.o,$(mkvextract_SOURCES)) \
+		$(patsubst %.rc,%.o,$(mkvextract_RESOURCES))
 mkvextract_DEPENDENCIES += $(DEP_COMMON) $(DEP_AVILIB) $(DEP_RMFF)
 mkvextract_LDADD = -lmtxcommon $(MAGIC_LIBS) -lvorbis -logg -lavi -lmatroska -lebml -lrmff \
 		$(ICONV_LIBS) $(LIBINTL_LIBS) -lexpat \
@@ -473,7 +479,7 @@ mkvextract_LDADD = -lmtxcommon $(MAGIC_LIBS) -lvorbis -logg -lavi -lmatroska -le
 
 mmg_SOURCES = $(wildcard src/mmg/*.cpp)
 mmg_OBJECTS := $(patsubst %.cpp,%.o,$(mmg_SOURCES)) \
-		$(patsubst %.rc,%.o,$(MMG_RESOURCES))
+		$(patsubst %.rc,%.o,$(mmg_RESOURCES))
 mmg_DEPENDENCIES += $(DEP_COMMON)
 mmg_LDADD = -lmtxcommon $(MAGIC_LIBS) -lmatroska -lebml -lexpat $(ICONV_LIBS) \
 		$(WXWIDGETS_LIBS) $(LIBINTL_LIBS) $(MINGW_GUIAPP) \
