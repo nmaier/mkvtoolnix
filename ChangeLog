@@ -64,7 +64,7 @@
 2008-09-17  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Added support for 7.1 channel EAC3
-	files.
+	files. Fix for bug 301.
 
 2008-09-13  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -81,7 +81,7 @@
 	anymore. They're simply ignored. Fix for bug 299.
 
 	* mkvextract: new feature: Added support for extracting Theora
-	video tracks into Ogg files.
+	video tracks into Ogg files. Fix for bug 298.
 
 	* mkvmerge: bug fix: Fixed the frame type (key or non-key frame)
 	detection for Theora tracks.
