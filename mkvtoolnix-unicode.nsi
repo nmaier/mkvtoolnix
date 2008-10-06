@@ -320,6 +320,8 @@ Function .onInit
 FunctionEnd
 
 Section "Program files" SEC01
+  SetShellVarContext all
+
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
   File "mkvmerge.exe"
@@ -404,6 +406,8 @@ Function un.onInit
 FunctionEnd
 
 Section Uninstall
+  SetShellVarContext all
+
   !insertmacro MUI_STARTMENU_GETFOLDER "Application" $ICONS_GROUP
   Delete "$INSTDIR\${PRODUCT_NAME}.url"
   Delete "$INSTDIR\uninst.exe"
