@@ -233,7 +233,7 @@ job_run_dialog::process_input() {
 #else
       wx_line = from_utf8(cc_local_utf8, line).c_str();
 #endif
-      if (wx_line.Find(wxT("progress")) == 0) {
+      if (wx_line.Find(wxT("Progress")) == 0) {
         if (wx_line.Find(wxT("%")) != 0) {
           wx_line.Remove(wx_line.Find(wxT("%")));
           tmp = wx_line.AfterLast(wxT(' '));
