@@ -62,12 +62,14 @@ protected:
   int m_version;
 
 public:
-  timecode_factory_c(const string &file_name, const string &source_name,
-                     int64_t tid, int version):
-    m_file_name(file_name),
-    m_source_name(source_name),
-    m_tid(tid),
-    m_version(version) {
+  timecode_factory_c(const string &file_name,
+                     const string &source_name,
+                     int64_t tid, int version)
+    : m_file_name(file_name)
+    , m_source_name(source_name)
+    , m_tid(tid)
+    , m_version(version)
+  {
   }
   virtual ~timecode_factory_c() {
   }
@@ -87,9 +89,7 @@ public:
     return false;
   }
 
-  static timecode_factory_cptr create(const string &file_name,
-                                      const string &source_name,
-                                      int64_t tid);
+  static timecode_factory_cptr create(const string &file_name, const string &source_name, int64_t tid);
 };
 
 class timecode_factory_v1_c: public timecode_factory_c {
@@ -100,12 +100,14 @@ protected:
   double m_default_fps;
 
 public:
-  timecode_factory_v1_c(const string &file_name, const string &source_name,
-                        int64_t tid):
-    timecode_factory_c(file_name, source_name, tid, 1),
-    m_current_range(0),
-    m_frameno(0),
-    m_default_fps(0.0) {
+  timecode_factory_v1_c(const string &file_name,
+                        const string &source_name,
+                        int64_t tid)
+    : timecode_factory_c(file_name, source_name, tid, 1)
+    , m_current_range(0)
+    , m_frameno(0)
+    , m_default_fps(0.0)
+  {
   }
   virtual ~timecode_factory_v1_c() {
   }
@@ -113,8 +115,7 @@ public:
   virtual void parse(mm_io_c &in);
   virtual bool get_next(packet_cptr &packet);
   virtual double get_default_duration(double proposal) {
-    return m_default_fps != 0.0 ? (double)1000000000.0 / m_default_fps :
-      proposal;
+    return 0.0 != m_default_fps ? (double)1000000000.0 / m_default_fps : proposal;
   }
 
 protected:
@@ -129,12 +130,14 @@ protected:
   bool m_warning_printed;
 
 public:
-  timecode_factory_v2_c(const string &file_name, const string &source_name,
-                        int64_t tid, int version):
-    timecode_factory_c(file_name, source_name, tid, version),
-    m_frameno(0),
-    m_default_fps(0.0),
-    m_warning_printed(false) {
+  timecode_factory_v2_c(const string &file_name,
+                        const string &source_name,
+                        int64_t tid, int version)
+    : timecode_factory_c(file_name, source_name, tid, version)
+    , m_frameno(0)
+    , m_default_fps(0.0)
+    , m_warning_printed(false)
+  {
   }
   virtual ~timecode_factory_v2_c() {
   }
@@ -142,8 +145,7 @@ public:
   virtual void parse(mm_io_c &in);
   virtual bool get_next(packet_cptr &packet);
   virtual double get_default_duration(double proposal) {
-    return m_default_fps != 0.0 ? (double)1000000000.0 / m_default_fps :
-      proposal;
+    return m_default_fps != 0.0 ? (double)1000000000.0 / m_default_fps : proposal;
   }
 };
 
@@ -156,13 +158,15 @@ protected:
   double m_default_fps;
 
 public:
-  timecode_factory_v3_c(const string &file_name, const string &source_name,
-                        int64_t tid):
-    timecode_factory_c(file_name, source_name, tid, 3),
-    m_current_duration(0),
-    m_current_timecode(0),
-    m_current_offset(0),
-    m_default_fps(0.0) {
+  timecode_factory_v3_c(const string &file_name,
+                        const string &source_name,
+                        int64_t tid)
+    : timecode_factory_c(file_name, source_name, tid, 3)
+    , m_current_duration(0)
+    , m_current_timecode(0)
+    , m_current_offset(0)
+    , m_default_fps(0.0)
+  {
   }
   virtual void parse(mm_io_c &in);
   virtual bool get_next(packet_cptr &packet);

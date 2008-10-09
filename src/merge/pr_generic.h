@@ -76,20 +76,35 @@ struct id_result_t {
   id_result_t() {
   };
 
-  id_result_t(int64_t n_id, const string &n_type, const string &n_info, const string &n_description, int64_t n_size):
-    id(n_id), type(n_type), info(n_info), description(n_description), size(n_size) {
-  };
+  id_result_t(int64_t p_id,
+              const string &p_type,
+              const string &p_info,
+              const string &p_description,
+              int64_t p_size)
+    : id(p_id)
+    , type(p_type)
+    , info(p_info)
+    , description(p_description)
+    , size(p_size)
+  {
+  }
 
-  id_result_t(const id_result_t &src):
-    id(src.id), type(src.type), info(src.info), description(src.description), verbose_info(src.verbose_info), size(src.size) {
-  };
+  id_result_t(const id_result_t &src)
+    : id(src.id)
+    , type(src.type)
+    , info(src.info)
+    , description(src.description)
+    , verbose_info(src.verbose_info)
+    , size(src.size)
+  {
+  }
 };
 
 class generic_packetizer_c;
 class generic_reader_c;
 
 enum file_status_e {
-  FILE_STATUS_DONE = 0,
+  FILE_STATUS_DONE         = 0,
   FILE_STATUS_DONE_AND_DRY,
   FILE_STATUS_HOLDING,
   FILE_STATUS_MOREDATA
@@ -99,7 +114,12 @@ struct timecode_sync_t {
   int64_t displacement;
   double numerator, denominator;
 
-  timecode_sync_t(): displacement(0), numerator(1.0), denominator(1.0) {}
+  timecode_sync_t()
+  : displacement(0)
+  , numerator(1.0)
+  , denominator(1.0)
+  {
+  }
 
   double factor() {
     return numerator / denominator;
@@ -107,41 +127,50 @@ struct timecode_sync_t {
 };
 
 enum default_track_priority_e {
-  DEFAULT_TRACK_PRIOIRTY_NONE = 0,
-  DEFAULT_TRACK_PRIORITY_FROM_TYPE = 10,
-  DEFAULT_TRACK_PRIORITY_FROM_SOURCE = 50,
-  DEFAULT_TRACK_PRIORITY_CMDLINE = 255
+  DEFAULT_TRACK_PRIOIRTY_NONE        =   0,
+  DEFAULT_TRACK_PRIORITY_FROM_TYPE   =  10,
+  DEFAULT_TRACK_PRIORITY_FROM_SOURCE =  50,
+  DEFAULT_TRACK_PRIORITY_CMDLINE     = 255
 };
-
-#define FMT_FN "'%s': "
-#define FMT_TID "'%s' track " LLD ": "
 
 struct display_properties_t {
   float aspect_ratio;
   bool ar_factor;
   int width, height;
 
-  display_properties_t(): aspect_ratio(0), ar_factor(false), width(0),
-                          height(0) {}
+  display_properties_t()
+  : aspect_ratio(0)
+  , ar_factor(false)
+  , width(0)
+  , height(0)
+  {
+  }
 };
 
 struct pixel_crop_t {
   int left, top, right, bottom;
 
-  pixel_crop_t(): left(0), top(0), right(0), bottom(0) {}
+  pixel_crop_t()
+  : left(0)
+  , top(0)
+  , right(0)
+  , bottom(0)
+  {
+  }
 };
 
 enum stereo_mode_e {
   STEREO_MODE_UNSPECIFIED = -1,
-  STEREO_MODE_NONE = 0,
-  STEREO_MODE_RIGHT = 1,
-  STEREO_MODE_LEFT = 2,
-  STEREO_MODE_BOTH = 3,
+  STEREO_MODE_NONE        =  0,
+  STEREO_MODE_RIGHT       =  1,
+  STEREO_MODE_LEFT        =  2,
+  STEREO_MODE_BOTH        =  3,
 };
 
 class track_info_c {
 protected:
   bool initialized;
+
 public:
   // The track ID.
   int64_t id;
@@ -225,8 +254,9 @@ public:
 
 public:
   track_info_c();
-  track_info_c(const track_info_c &src):
-    initialized(false) {
+  track_info_c(const track_info_c &src)
+    : initialized(false)
+  {
     *this = src;
   }
   virtual ~track_info_c() {
@@ -238,7 +268,7 @@ public:
 };
 
 #define PTZR(i) reader_packetizers[i]
-#define PTZR0 PTZR(0)
+#define PTZR0   PTZR(0)
 #define NPTZR() reader_packetizers.size()
 
 class generic_reader_c {
@@ -259,7 +289,7 @@ private:
   vector<id_result_t> id_results_tracks, id_results_attachments;
 
 public:
-  generic_reader_c(track_info_c &_ti);
+  generic_reader_c(track_info_c &p_ti);
   virtual ~generic_reader_c();
 
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false)
@@ -308,45 +338,45 @@ enum connection_result_e {
   CAN_CONNECT_MAYBE_CODECPRIVATE
 };
 
-#define connect_check_a_samplerate(a, b) \
-  if ((a) != (b)) { \
+#define connect_check_a_samplerate(a, b)                                                                                       \
+  if ((a) != (b)) {                                                                                                            \
     error_message = (boost::format(Y("The sample rate of the two audio tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS; \
+    return CAN_CONNECT_NO_PARAMETERS;                                                                                          \
   }
-#define connect_check_a_channels(a, b) \
-  if ((a) != (b)) { \
+#define connect_check_a_channels(a, b)                                                                                                \
+  if ((a) != (b)) {                                                                                                                   \
     error_message = (boost::format(Y("The number of channels of the two audio tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS; \
+    return CAN_CONNECT_NO_PARAMETERS;                                                                                                 \
   }
-#define connect_check_a_bitdepth(a, b) \
-  if ((a) != (b)) { \
+#define connect_check_a_bitdepth(a, b)                                                                                                       \
+  if ((a) != (b)) {                                                                                                                          \
     error_message = (boost::format(Y("The number of bits per sample of the two audio tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS; \
+    return CAN_CONNECT_NO_PARAMETERS;                                                                                                        \
   }
-#define connect_check_v_width(a, b) \
-  if ((a) != (b)) { \
+#define connect_check_v_width(a, b)                                                                                 \
+  if ((a) != (b)) {                                                                                                 \
     error_message = (boost::format(Y("The width of the two  tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS; \
+    return CAN_CONNECT_NO_PARAMETERS;                                                                               \
   }
-#define connect_check_v_height(a, b) \
-  if ((a) != (b)) { \
+#define connect_check_v_height(a, b)                                                                                \
+  if ((a) != (b)) {                                                                                                 \
     error_message = (boost::format(Y("The height of the two tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS; \
+    return CAN_CONNECT_NO_PARAMETERS;                                                                               \
   }
-#define connect_check_v_dwidth(a, b) \
-  if ((a) != (b)) { \
+#define connect_check_v_dwidth(a, b)                                                                                        \
+  if ((a) != (b)) {                                                                                                         \
     error_message = (boost::format(Y("The display width of the two  tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS; \
+    return CAN_CONNECT_NO_PARAMETERS;                                                                                       \
   }
-#define connect_check_v_dheight(a, b) \
-  if ((a) != (b)) { \
+#define connect_check_v_dheight(a, b)                                                                                       \
+  if ((a) != (b)) {                                                                                                         \
     error_message = (boost::format(Y("The display height of the two tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS; \
+    return CAN_CONNECT_NO_PARAMETERS;                                                                                       \
   }
-#define connect_check_codec_id(a, b) \
-  if ((a) != (b)) { \
+#define connect_check_codec_id(a, b)                                                                                 \
+  if ((a) != (b)) {                                                                                                  \
     error_message = (boost::format(Y("The CodecID of the two tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS; \
+    return CAN_CONNECT_NO_PARAMETERS;                                                                                \
   }
 
 typedef deque<packet_cptr>::iterator packet_cptr_di;
@@ -399,7 +429,7 @@ public:
   bool relaxed_timecode_checking;
 
 public:
-  generic_packetizer_c(generic_reader_c *nreader, track_info_c &_ti)
+  generic_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti)
     throw (error_c);
   virtual ~generic_packetizer_c();
 
@@ -521,7 +551,7 @@ public:
   virtual connection_result_e can_connect_to(generic_packetizer_c *src,
                                              string &error_message) = 0;
   virtual void connect(generic_packetizer_c *src,
-                       int64_t _append_timecode_offset = -1);
+                       int64_t p_append_timecode_offset = -1);
 
   virtual void enable_avi_audio_sync(bool enable) {
     ti.avi_audio_sync_enabled = enable;

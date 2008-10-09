@@ -1589,9 +1589,10 @@ kax_reader_c::create_packetizers() {
 
   for (i = 0; i < tracks.size(); i++)
     create_packetizer(tracks[i]->tnum);
-  if (segment_title_set == false) {
-    segment_title = title;
-    segment_title_set = true;
+
+  if (!g_segment_title_set) {
+    g_segment_title     = title;
+    g_segment_title_set = true;
   }
 }
 
@@ -2152,8 +2153,8 @@ kax_reader_c::identify() {
                     info, verbose_info);
   }
 
-  for (i = 0; i < attachments.size(); i++)
-    id_result_attachment(attachments[i].id, attachments[i].mime_type, attachments[i].data->m_size, attachments[i].name, attachments[i].description);
+  for (i = 0; i < g_attachments.size(); i++)
+    id_result_attachment(g_attachments[i].id, g_attachments[i].mime_type, g_attachments[i].data->m_size, g_attachments[i].name, g_attachments[i].description);
 }
 
 // }}}

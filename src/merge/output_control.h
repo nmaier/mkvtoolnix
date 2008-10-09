@@ -130,64 +130,62 @@ public:
   bool add_family_uid(const KaxSegmentFamily &family);
 };
 
-extern vector<packetizer_t> packetizers;
-extern vector<filelist_t> files;
-extern vector<attachment_t> attachments;
-extern vector<track_order_t> track_order;
-extern vector<append_spec_t> append_mapping;
+extern vector<packetizer_t> g_packetizers;
+extern vector<filelist_t> g_files;
+extern vector<attachment_t> g_attachments;
+extern vector<track_order_t> g_track_order;
+extern vector<append_spec_t> g_append_mapping;
 
-extern string outfile;
+extern string g_outfile;
 
-extern double timecode_scale;
-extern timecode_scale_mode_e timecode_scale_mode;
+extern double g_timecode_scale;
+extern timecode_scale_mode_e g_timecode_scale_mode;
 
-typedef counted_ptr<bitvalue_c> bitvalue_cptr;
+typedef counted_ptr<bitvalue_c> g_bitvalue_cptr;
 
-extern bitvalue_cptr seguid_link_previous, seguid_link_next;
-extern vector<bitvalue_cptr> forced_seguids;
-extern family_uids_c segfamily_uids;
+extern bitvalue_cptr g_seguid_link_previous, g_seguid_link_next;
+extern vector<bitvalue_cptr> g_forced_seguids;
+extern family_uids_c g_segfamily_uids;
 
-extern KaxInfo *kax_info_chap;
+extern KaxInfo *g_kax_info_chap;
 
-extern bool write_meta_seek_for_clusters;
+extern bool g_write_meta_seek_for_clusters;
 
-extern string chapter_file_name;
-extern string chapter_language;
-extern string chapter_charset;
+extern string g_chapter_file_name;
+extern string g_chapter_language;
+extern string g_chapter_charset;
 
-extern string segmentinfo_file_name;
+extern string g_segmentinfo_file_name;
 
-extern KaxTags *tags_from_cue_chapters;
+extern KaxTags *g_tags_from_cue_chapters;
 
-extern KaxSegment *kax_segment;
-extern KaxTracks kax_tracks;
-extern KaxTrackEntry *kax_last_entry;
-extern KaxCues *kax_cues;
-extern KaxSeekHead *kax_sh_main, *kax_sh_cues;
-extern KaxChapters *kax_chapters;
-extern int64_t tags_size;
-extern string segment_title;
-extern bool segment_title_set;
-extern string default_language;
+extern KaxSegment *g_kax_segment;
+extern KaxTracks g_kax_tracks;
+extern KaxTrackEntry *g_kax_last_entry;
+extern KaxCues *g_kax_cues;
+extern KaxSeekHead *g_kax_sh_main, *g_kax_sh_cues;
+extern KaxChapters *g_kax_chapters;
+extern int64_t g_tags_size;
+extern string g_segment_title;
+extern bool g_segment_title_set;
+extern string g_default_language;
 
-extern float video_fps;
+extern float g_video_fps;
+extern generic_packetizer_c *g_video_packetizer;
 
-extern generic_packetizer_c *video_packetizer;
-extern bool write_cues, cue_writing_requested;
-extern bool no_lacing, no_linking, use_durations;
+extern bool g_write_cues, g_cue_writing_requested;
+extern bool g_no_lacing, g_no_linking, g_use_durations;
 
 extern bool g_identifying, g_identify_verbose, g_identify_for_mmg;
 
 extern int g_file_num;
 
-extern int64_t max_ns_per_cluster;
-extern int max_blocks_per_cluster;
-extern int default_tracks[3], default_tracks_priority[3];
+extern int64_t g_max_ns_per_cluster;
+extern int g_max_blocks_per_cluster;
+extern int g_default_tracks[3], g_default_tracks_priority[3];
 
-extern bool splitting;
-extern int split_max_num_files;
-
-extern double timecode_scale;
+extern bool g_splitting;
+extern int g_split_max_num_files;
 
 void get_file_type(filelist_t &file);
 void create_readers();

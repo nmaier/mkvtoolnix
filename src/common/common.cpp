@@ -172,18 +172,6 @@ bitvalue_c::operator [](int index)
   return value[index];
 }
 
-int
-bitvalue_c::size()
-  const {
-  return bitsize;
-}
-
-unsigned char *
-bitvalue_c::data()
-  const {
-  return value;
-}
-
 void
 bitvalue_c::generate_random() {
   random_c::generate_bytes(value, bitsize / 8);
@@ -1140,10 +1128,9 @@ format_timecode(int64_t timecode,
     precision = 9;
 
   if (precision) {
-    std::string format   = (boost::format(".%%|1$0%1%d|") % precision).str();
-    std::string decimals = (boost::format(format) % (int)(timecode % 1000000000)).str();
+    std::string decimals = (boost::format(".%|1$09d|") % (int)(timecode % 1000000000)).str();
 
-    if (decimals.length() > precision)
+    if (decimals.length() > (precision + 1))
       decimals.erase(precision + 1);
 
     result += decimals;

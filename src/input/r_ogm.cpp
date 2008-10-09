@@ -794,15 +794,15 @@ ogm_reader_c::handle_stream_comments() {
 
     if (title != "") {
       title = to_utf8(cch, title);
-      if (!segment_title_set && segment_title.empty() && (OGM_STREAM_TYPE_V_MSCOMP == dmx->stype)) {
-        segment_title     = title;
-        segment_title_set = true;
+      if (!g_segment_title_set && g_segment_title.empty() && (OGM_STREAM_TYPE_V_MSCOMP == dmx->stype)) {
+        g_segment_title     = title;
+        g_segment_title_set = true;
       }
       dmx->title = title.c_str();
       title      = "";
     }
 
-    if (!chapter_strings.empty() && !ti.no_chapters && (NULL == kax_chapters)) {
+    if (!chapter_strings.empty() && !ti.no_chapters && (NULL == g_kax_chapters)) {
       try {
         auto_ptr<mm_mem_io_c> out(new mm_mem_io_c(NULL, 0, 1000));
 
@@ -813,7 +813,7 @@ ogm_reader_c::handle_stream_comments() {
 
         auto_ptr<mm_text_io_c> text_out(new mm_text_io_c(out.get(), false));
 
-        kax_chapters = parse_chapters(text_out.get());
+        g_kax_chapters = parse_chapters(text_out.get());
       } catch (...) {
       }
     }
@@ -1104,8 +1104,8 @@ void
 ogm_v_avc_demuxer_c::initialize() {
   stream_header *sth = (stream_header *)(packet_data[0]->get() + 1);
 
-  if (0 > video_fps)
-    video_fps = 10000000.0 / (float)get_uint64_le(&sth->time_unit);
+  if (0 > g_video_fps)
+    g_video_fps = 10000000.0 / (float)get_uint64_le(&sth->time_unit);
 }
 
 generic_packetizer_c *
@@ -1195,8 +1195,8 @@ void
 ogm_v_mscomp_demuxer_c::initialize() {
   stream_header *sth = (stream_header *)(packet_data[0]->get() + 1);
 
-  if (0 > video_fps)
-    video_fps = 10000000.0 / (float)get_uint64_le(&sth->time_unit);
+  if (0 > g_video_fps)
+    g_video_fps = 10000000.0 / (float)get_uint64_le(&sth->time_unit);
 
   default_duration = 100 * get_uint64_le(&sth->time_unit);
 }

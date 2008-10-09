@@ -25,6 +25,7 @@
 // that it isn't before including boost/format.hpp.
 
 #include <ebml/EbmlElement.h>
+#include <ebml/EbmlMaster.h>
 #undef min
 
 #include <boost/format.hpp>
@@ -47,12 +48,28 @@
 #endif
 
 #include "common_output.h"
+#include "smart_pointers.h"
 
 namespace libebml {
   class EbmlBinary;
 };
 
 using namespace libebml;
+
+template<typename A> A &
+GetChild(EbmlMaster *m) {
+  return GetChild<A>(*m);
+}
+
+template<typename A, typename B> B &
+GetChildAs(EbmlMaster &m) {
+  return GetChild<A>(m);
+}
+
+template<typename A, typename B> B &
+GetChildAs(EbmlMaster *m) {
+  return GetChild<A>(*m);
+}
 
 #define VERSIONNAME "Freak U"
 #define VERSIONINFO "mkvmerge v" VERSION " ('" VERSIONNAME "')"
@@ -288,9 +305,17 @@ public:
   bool operator ==(const bitvalue_c &cmp) const;
   unsigned char operator [](int index) const;
 
-  int size() const;
+  inline bool empty() const {
+    return 0 == bitsize;
+  }
+  inline int size() const {
+    return bitsize;
+  }
   void generate_random();
-  unsigned char *data() const;
+  unsigned char *data() const {
+    return value;
+  }
 };
+typedef counted_ptr<bitvalue_c> bitvalue_cptr;
 
 #endif // __COMMON_H

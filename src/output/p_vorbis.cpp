@@ -68,7 +68,7 @@ vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *p_reader,
       throw error_c(Y("Error: vorbis_packetizer: Could not extract the stream's parameters from the first packets.\n"));
 
   set_track_type(track_audio);
-  if (use_durations)
+  if (g_use_durations)
     set_track_default_duration((int64_t)(1024000000000.0 / m_vi.rate));
 }
 

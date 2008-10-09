@@ -52,7 +52,7 @@ public:
 typedef counted_ptr<packet_extension_c> packet_extension_cptr;
 
 struct packet_t {
-  static int64_t packet_number_counter;
+  static int64_t sm_packet_number_counter;
 
   memory_cptr data;
   vector<memory_cptr> data_adds;
@@ -70,47 +70,84 @@ struct packet_t {
 
   vector<packet_extension_cptr> extensions;
 
-  packet_t():
-    group(NULL), block(NULL), cluster(NULL),
-    ref_priority(0), time_factor(1),
-    timecode(0), bref(0), fref(0), duration(0),
-    packet_num(packet_number_counter++),
-    assigned_timecode(0), timecode_before_factory(0),
-    unmodified_assigned_timecode(0), unmodified_duration(0),
-    duration_mandatory(false), superseeded(false), gap_following(false),
-    factory_applied(false), source(NULL) { }
+  packet_t()
+    : group(NULL)
+    , block(NULL)
+    , cluster(NULL)
+    , ref_priority(0)
+    , time_factor(1)
+    , timecode(0)
+    , bref(0)
+    , fref(0)
+    , duration(0)
+    , packet_num(sm_packet_number_counter++)
+    , assigned_timecode(0)
+    , timecode_before_factory(0)
+    , unmodified_assigned_timecode(0)
+    , unmodified_duration(0)
+    , duration_mandatory(false)
+    , superseeded(false)
+    , gap_following(false)
+    , factory_applied(false)
+    , source(NULL)
+  {
+  }
 
-  packet_t(memory_cptr n_memory,
-           int64_t n_timecode = -1,
-           int64_t n_duration = -1,
-           int64_t n_bref = -1,
-           int64_t n_fref = -1):
-    data(n_memory),
-    group(NULL), block(NULL), cluster(NULL),
-    ref_priority(0), time_factor(1),
-    timecode(n_timecode), bref(n_bref), fref(n_fref),
-    duration(n_duration),
-    packet_num(packet_number_counter++),
-    assigned_timecode(0), timecode_before_factory(0),
-    unmodified_assigned_timecode(0), unmodified_duration(0),
-    duration_mandatory(false), superseeded(false), gap_following(false),
-    factory_applied(false), source(NULL) { }
+  packet_t(memory_cptr p_memory,
+           int64_t p_timecode = -1,
+           int64_t p_duration = -1,
+           int64_t p_bref     = -1,
+           int64_t p_fref     = -1)
+    : data(p_memory)
+    , group(NULL)
+    , block(NULL)
+    , cluster(NULL)
+    , ref_priority(0)
+    , time_factor(1)
+    , timecode(p_timecode)
+    , bref(p_bref)
+    , fref(p_fref)
+    , duration(p_duration)
+    , packet_num(sm_packet_number_counter++)
+    , assigned_timecode(0)
+    , timecode_before_factory(0)
+    , unmodified_assigned_timecode(0)
+    , unmodified_duration(0)
+    , duration_mandatory(false)
+    , superseeded(false)
+    , gap_following(false)
+    , factory_applied(false)
+    , source(NULL)
+  {
+  }
 
   packet_t(memory_c *n_memory,
-           int64_t n_timecode = -1,
-           int64_t n_duration = -1,
-           int64_t n_bref = -1,
-           int64_t n_fref = -1):
-    data(memory_cptr(n_memory)),
-    group(NULL), block(NULL), cluster(NULL),
-    ref_priority(0), time_factor(1),
-    timecode(n_timecode), bref(n_bref), fref(n_fref),
-    duration(n_duration),
-    packet_num(packet_number_counter++),
-    assigned_timecode(0), timecode_before_factory(0),
-    unmodified_assigned_timecode(0), unmodified_duration(0),
-    duration_mandatory(false), superseeded(false), gap_following(false),
-    factory_applied(false), source(NULL) { }
+           int64_t p_timecode = -1,
+           int64_t p_duration = -1,
+           int64_t p_bref     = -1,
+           int64_t p_fref     = -1)
+    : data(memory_cptr(n_memory))
+    , group(NULL)
+    , block(NULL)
+    , cluster(NULL)
+    , ref_priority(0)
+    , time_factor(1)
+    , timecode(p_timecode)
+    , bref(p_bref)
+    , fref(p_fref)
+    , duration(p_duration)
+    , packet_num(sm_packet_number_counter++)
+    , assigned_timecode(0)
+    , timecode_before_factory(0)
+    , unmodified_assigned_timecode(0)
+    , unmodified_duration(0)
+    , duration_mandatory(false)
+    , superseeded(false)
+    , gap_following(false)
+    , factory_applied(false)
+    , source(NULL)
+  {
+  }
 
   ~packet_t();
 };
