@@ -1,7 +1,7 @@
 all_with_tools:
 	make -C .. TOOLS=1
 
-APPLICATIONS += src/tools/base64tool$(EXEEXT) src/tools/diracparser$(EXEEXT) src/tools/vc1parser$(EXEEXT)
+APPLICATIONS += src/tools/base64tool$(EXEEXT) src/tools/diracparser$(EXEEXT) src/tools/vc1parser$(EXEEXT) src/tools/ebml_validator$(EXEEXT)
 ALL_SOURCES  += $(wildcard src/tools/*.cpp)
 MANPAGES     +=  doc/base64tool.1
 
@@ -24,6 +24,13 @@ base64tool_OBJECTS = $(patsubst %.cpp,%.o,$(base64tool_SOURCES))
 base64tool_DEPENDENCIES += $(DEP_COMMON)
 base64tool_LDADD = -lmtxcommon $(MAGIC_LIBS) -lexpat $(ICONV_LIBS) $(LIBINTL_LIBS) $(LIBRPCRT)
 
+ebml_validator_SOURCES = src/tools/ebml_validator.cpp src/tools/element_info.cpp
+ebml_validator_OBJECTS = $(patsubst %.cpp,%.o,$(ebml_validator_SOURCES))
+ebml_validator_DEPENDENCIES = $(DEP_COMMON)
+ebml_validator_LDADD = -lmtxcommon $(MAGIC_LIBS) -lmatroska -lebml \
+		-lz $(COMPRESSION_LIBRARIES) -lexpat $(ICONV_LIBS) \
+		$(LIBINTL_LIBS) $(LIBRPCRT)
+
 
 base64tool: src/tools/base64tool$(EXEEXT)
 
@@ -42,3 +49,9 @@ vc1parser: src/tools/vc1parser$(EXEEXT)
 src/tools/vc1parser$(EXEEXT): $(vc1parser_OBJECTS) $(vc1parser_DEPENDENCIES)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(vc1parser_OBJECTS) $(vc1parser_LDADD)
+
+ebml_validator: src/tools/ebml_validator$(EXEEXT)
+
+src/tools/ebml_validator$(EXEEXT): $(ebml_validator_OBJECTS) $(ebml_validator_DEPENDENCIES)
+	@echo '    LINK ' $@
+	$(Q)$(LINK) -o $@ $(ebml_validator_OBJECTS) $(ebml_validator_LDADD)
