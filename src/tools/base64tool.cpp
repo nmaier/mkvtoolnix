@@ -27,7 +27,7 @@ using namespace std;
 
 void
 set_usage() {
-  usage_text = _(
+  usage_text = Y(
     "base64util <encode|decode> <input> <output> [maxlen]\n"
     "\n"
     "  encode - Read from <input>, encode to Base64 and write to <output>.\n"
@@ -64,12 +64,12 @@ main(int argc,
   else if (!strcmp(argv[1], "decode"))
     mode = 'd';
   else
-    mxerror(_("Invalid mode '%s'.\n"), argv[1]);
+    mxerror(boost::format(Y("Invalid mode '%1%'.\n")) % argv[1]);
 
   maxlen = 72;
   if ((argc == 5) && (mode == 'e')) {
     if (!parse_int(argv[4], maxlen) || (maxlen < 4))
-      mxerror(_("Max line length must be >= 4.\n\n"));
+      mxerror(Y("Max line length must be >= 4.\n\n"));
   } else if ((argc > 5) || ((argc > 4) && (mode == 'd')))
     usage(2);
 
@@ -80,15 +80,13 @@ main(int argc,
     if (mode != 'e')
       intext = new mm_text_io_c(in);
   } catch(...) {
-    mxerror(_("The file '%s' could not be opened for reading (%d, %s).\n"),
-            argv[2], errno, strerror(errno));
+    mxerror(boost::format(Y("The file '%1%' could not be opened for reading (%2%, %3%).\n")) % argv[2] % errno % strerror(errno));
   }
 
   try {
     out = new mm_file_io_c(argv[3], MODE_CREATE);
   } catch(...) {
-    mxerror(_("The file '%s' could not be opened for writing (%d, %s).\n"),
-            argv[3], errno, strerror(errno));
+    mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%, %3%).\n")) % argv[3] % errno % strerror(errno));
   }
 
   in->save_pos();
@@ -121,7 +119,7 @@ main(int argc,
     } catch(...) {
       delete in;
       delete out;
-      mxerror(_("The Base64 encoded data could not be decoded.\n"));
+      mxerror(Y("The Base64 encoded data could not be decoded.\n"));
     }
     out->write(buffer, size);
 
@@ -129,7 +127,7 @@ main(int argc,
     delete out;
   }
 
-  mxinfo(_("Done.\n"));
+  mxinfo(Y("Done.\n"));
 
   return 0;
 }
