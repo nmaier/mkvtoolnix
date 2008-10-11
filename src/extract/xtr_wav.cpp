@@ -24,8 +24,8 @@
 xtr_wav_c::xtr_wav_c(const string &codec_id,
                      int64_t tid,
                      track_spec_t &tspec)
-  : xtr_base_c(codec_id, tid, tspec) {
-
+  : xtr_base_c(codec_id, tid, tspec)
+{
   memset(&m_wh, 0, sizeof(wave_header));
 }
 
@@ -77,7 +77,8 @@ xtr_wavpack4_c::xtr_wavpack4_c(const string &codec_id,
   : xtr_base_c(codec_id, tid, tspec)
   , m_number_of_samples(0)
   , m_extract_blockadd_level(tspec.extract_blockadd_level)
-  , m_corr_out(NULL) {
+  , m_corr_out(NULL)
+{
 }
 
 void
@@ -209,6 +210,7 @@ xtr_wavpack4_c::handle_frame(memory_cptr &frame,
         mybuffer += block_size;
         data_size -= 8 + block_size;
       }
+
     } else {
       put_uint32_le(&wv_header[4], data_size + 20); // ck_size
       memcpy(&wv_header[28], mybuffer, 4); // crc

@@ -156,7 +156,7 @@ xtr_ssa_c::create_file(xtr_base_c *master,
 
   m_ssa_format = split(sconv.substr(pos1 + 7, pos2 - pos1 - 7), ",");
   strip(m_ssa_format, true);
-  for (pos1 = 0; pos1 < m_ssa_format.size(); pos1++)
+  for (pos1 = 0; m_ssa_format.size() > pos1; ++pos1)
     m_ssa_format[pos1] = downcase(m_ssa_format[pos1]);
 
   sconv = from_utf8(m_conv, sconv);
@@ -278,9 +278,9 @@ xtr_usf_c::xtr_usf_c(const string &codec_id,
                      int64_t tid,
                      track_spec_t &tspec)
   : xtr_base_c(codec_id, tid, tspec)
-  , m_sub_charset(tspec.sub_charset) {
-
-  if (m_sub_charset == "")
+  , m_sub_charset(tspec.sub_charset)
+{
+  if (m_sub_charset.empty())
     m_sub_charset = "UTF-8";
 }
 

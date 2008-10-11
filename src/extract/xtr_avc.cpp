@@ -22,7 +22,8 @@ static const binary s_start_code[4] = { 0x00, 0x00, 0x00, 0x01 };
 xtr_avc_c::xtr_avc_c(const string &codec_id,
                      int64_t tid,
                      track_spec_t &tspec)
-  : xtr_base_c(codec_id, tid, tspec) {
+  : xtr_base_c(codec_id, tid, tspec)
+{
 }
 
 void
@@ -66,7 +67,6 @@ xtr_avc_c::create_file(xtr_base_c *master,
   int numsps = buf[5] & 0x1f;
   int i;
   for (i = 0; (i < numsps) && (mpriv->get_size() > pos); ++i)
-
     write_nal(buf, pos, mpriv->get_size(), 2);
 
   if (mpriv->get_size() <= pos)

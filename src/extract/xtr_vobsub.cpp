@@ -140,7 +140,7 @@ xtr_vobsub_c::handle_frame(memory_cptr &frame,
   ps.muxr[1] = 0x89;
   ps.muxr[2] = 0xc3; // just some value
   ps.stlen   = 0xf8;
-  if ((padding < 8) && (first == size))
+  if ((8 > padding) && (first == size))
     ps.stlen |= (uint8_t)padding;
 
   mpeg_es_header_t es;
@@ -171,7 +171,7 @@ xtr_vobsub_c::handle_frame(memory_cptr &frame,
     padding  = (2048 - (size + 10 + sizeof(mpeg_ps_header_t))) & 2047;
     first    = size + 10 + sizeof(mpeg_ps_header_t) > 2048 ? 2048 - 10 - sizeof(mpeg_ps_header_t) : size;
 
-    if ((8  >padding) && (first == size))
+    if ((8 > padding) && (first == size))
       ps.stlen |= (uint8_t)padding;
 
     es.len[0]   = (uint8_t)((first + 4) >> 8);

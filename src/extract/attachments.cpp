@@ -14,20 +14,7 @@
 
 #include "os.h"
 
-#include <errno.h>
-#include <ctype.h>
-#include <stdarg.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-
-#if defined(COMP_MSC)
 #include <cassert>
-#else
-#include <unistd.h>
-#endif
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -46,10 +33,8 @@ extern "C" {
 #include <matroska/KaxAttachments.h>
 #include <matroska/KaxSegment.h>
 
-#include "chapters.h"
 #include "common.h"
 #include "commonebml.h"
-#include "matroska.h"
 #include "mkvextract.h"
 #include "mm_io.h"
 #include "quickparser.h"
@@ -61,9 +46,9 @@ static void
 handle_attachments(KaxAttachments *atts,
                    vector<track_spec_t> &tracks) {
   int i;
-  for (i = 0; i < atts->ListSize(); i++) {
+  for (i = 0; atts->ListSize() > i; ++i) {
     KaxAttached  *att = dynamic_cast<KaxAttached *>((*atts)[i]);
-    assert(att != NULL);
+    assert(NULL != att);
 
     string name, type;
     int64_t size       = -1;

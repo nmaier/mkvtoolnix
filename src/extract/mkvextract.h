@@ -47,12 +47,11 @@ struct track_spec_t {
   bool done;
 };
 
-extern bool no_variable_data;
+extern bool g_no_variable_data;
 
-#define in_parent(p) \
-  (!p->IsFiniteSize() || \
-   (in->getFilePointer() < \
-    (p->GetElementPosition() + p->HeadSize() + p->GetSize())))
+#define in_parent(p)                                                                     \
+  (   !p->IsFiniteSize()                                                                 \
+   || (in->getFilePointer() < (p->GetElementPosition() + p->HeadSize() + p->GetSize())))
 
 // Helper functions in mkvextract.cpp
 void show_element(EbmlElement *l, int level, const std::string &message);
@@ -71,14 +70,10 @@ show_error(const boost::format &format) {
 
 bool extract_tracks(const char *file_name, vector<track_spec_t> &tspecs);
 void extract_tags(const char *file_name, bool parse_fully);
-void extract_chapters(const char *file_name, bool chapter_format_simple,
-                      bool parse_fully);
-void extract_attachments(const char *file_name,
-                         vector<track_spec_t> &tracks, bool parse_fully);
+void extract_chapters(const char *file_name, bool chapter_format_simple, bool parse_fully);
+void extract_attachments(const char *file_name, vector<track_spec_t> &tracks, bool parse_fully);
 void extract_cuesheet(const char *file_name, bool parse_fully);
-void write_cuesheet(const char *file_name, KaxChapters &chapters,
-                    KaxTags &tags, int64_t tuid, mm_io_c &out);
-void extract_timecodes(const string &file_name, vector<track_spec_t> &tspecs,
-                       int version);
+void write_cuesheet(const char *file_name, KaxChapters &chapters, KaxTags &tags, int64_t tuid, mm_io_c &out);
+void extract_timecodes(const string &file_name, vector<track_spec_t> &tspecs, int version);
 
 #endif // __MKVEXTRACT_H

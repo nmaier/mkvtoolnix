@@ -14,20 +14,7 @@
 
 #include "os.h"
 
-#include <errno.h>
-#include <ctype.h>
-#include <stdarg.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-
-#if defined(COMP_MSC)
 #include <cassert>
-#else
-#include <unistd.h>
-#endif
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -44,10 +31,8 @@ extern "C" {
 
 #include <matroska/KaxTags.h>
 
-#include "chapters.h"
 #include "common.h"
 #include "commonebml.h"
-#include "matroska.h"
 #include "mkvextract.h"
 #include "mm_io.h"
 #include "quickparser.h"
@@ -74,7 +59,7 @@ extract_tags(const char *file_name,
   EbmlMaster *m = qp->read_all(KaxTags::ClassInfos);
   if (NULL != m) {
     KaxTags *tags = dynamic_cast<KaxTags *>(m);
-    assert(tags != NULL);
+    assert(NULL != tags);
 
     mm_stdio_c out;
     out.write_bom("UTF-8");

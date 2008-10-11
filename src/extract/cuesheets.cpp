@@ -14,20 +14,7 @@
 
 #include "os.h"
 
-#include <errno.h>
-#include <ctype.h>
-#include <stdarg.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-
-#if defined(COMP_MSC)
 #include <cassert>
-#else
-#include <unistd.h>
-#endif
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -69,7 +56,6 @@ find_tag_for_track(int idx,
   string sidx = to_string(idx);
 
   int i;
-
   for (i = 0; i < m.ListSize(); i++) {
     if (EbmlId(*m[i]) != KaxTag::ClassInfos.GlobalId)
       continue;
@@ -123,7 +109,7 @@ _print_if_global(mm_io_c &out,
                  int64_t tuid,
                  KaxTags &tags) {
   string global = get_global_tag(name, tuid, tags);
-  if (global != "")
+  if (!global.empty())
     out.puts(boost::format(format) % global);
 }
 
@@ -136,10 +122,8 @@ _print_if_available(mm_io_c &out,
                     int64_t tuid,
                     KaxTags &tags,
                     KaxTag &tag) {
-  string value;
-
-  value = get_simple_tag_value(name, tag);
-  if ((value != "") && (value != get_global_tag(name, tuid, tags)))
+  string value = get_simple_tag_value(name, tag);
+  if (!value.empty() && (value != get_global_tag(name, tuid, tags)))
     out.puts(boost::format(format) % value);
 }
 
@@ -162,15 +146,10 @@ write_cuesheet(const char *file_name,
                KaxTags &tags,
                int64_t tuid,
                mm_io_c &out) {
-  KaxTag *tag;
-  string s;
-  int i, j;
-  int64_t temp_index;
-
   if (chapters.ListSize() == 0)
     return;
 
-  if (no_variable_data)
+  if (g_no_variable_data)
     file_name = "no-variable-data";
 
   out.write_bom("UTF-8");
@@ -183,40 +162,44 @@ write_cuesheet(const char *file_name,
   print_if_global("DATE_RELEASED",  "REM DATE \"%1%\"\n"); // 0.9.7 and newer
   print_if_global("DISCID",         "REM DISCID %1%\n");
 
-  tag = find_tag_for_track(-1, tuid, 0, tags);
-  if (tag != NULL)
+  KaxTag *tag = find_tag_for_track(-1, tuid, 0, tags);
+  if (NULL != tag)
     print_comments("", *tag, out);
 
   out.puts(boost::format("FILE \"%1%\" WAVE\n") % file_name);
 
+  int i;
   for (i = 0; i < chapters.ListSize(); i++) {
     KaxChapterAtom &atom =  *static_cast<KaxChapterAtom *>(chapters[i]);
 
     out.puts(boost::format("  TRACK %|1$02d| AUDIO\n") % (i + 1));
     tag = find_tag_for_track(i + 1, tuid, get_chapter_uid(atom), tags);
-    if (tag != NULL) {
-      print_if_available("TITLE",               "    TITLE \"%1%\"\n");
-      print_if_available("ARTIST",              "    PERFORMER \"%1%\"\n");
-      print_if_available("ISRC",                "    ISRC %1%\n");
-      print_if_available("CDAUDIO_TRACK_FLAGS", "    FLAGS %1%\n");
+    if (NULL == tag)
+      continue;
 
-      for (j = 0; j < 100; j++) {
-        temp_index = get_chapter_index(j, atom);
-        if (temp_index == -1)
-          continue;
-        out.puts(boost::format("    INDEX %|1$02d| %|2$02d|:%|3$02d|:%|4$02d|\n")
-                 % j
-                 % (temp_index / 1000000 / 1000 / 60)
-                 % ((temp_index / 1000000 / 1000) % 60)
-                 % irnd((double)(temp_index % 1000000000ll) * 75.0 / 1000000000.0));
-      }
+    print_if_available("TITLE",               "    TITLE \"%1%\"\n");
+    print_if_available("ARTIST",              "    PERFORMER \"%1%\"\n");
+    print_if_available("ISRC",                "    ISRC %1%\n");
+    print_if_available("CDAUDIO_TRACK_FLAGS", "    FLAGS %1%\n");
 
-      print_if_available("DATE",          "    REM DATE \"%1%\"\n"); // until 0.9.6
-      // 0.9.7 and newer:
-      print_if_available("DATE_RELEASED", "    REM DATE \"%1%\"\n");
-      print_if_available("GENRE",         "    REM GENRE \"%1%\"\n");
-      print_comments("    ", *tag, out);
+    int k;
+    for (k = 0; 100 > k; ++k) {
+      int64_t temp_index = get_chapter_index(k, atom);
+      if (-1 == temp_index)
+        continue;
+
+      out.puts(boost::format("    INDEX %|1$02d| %|2$02d|:%|3$02d|:%|4$02d|\n")
+               % k
+               % (temp_index / 1000000 / 1000 / 60)
+               % ((temp_index / 1000000 / 1000) % 60)
+               % irnd((double)(temp_index % 1000000000ll) * 75.0 / 1000000000.0));
     }
+
+    print_if_available("DATE",          "    REM DATE \"%1%\"\n"); // until 0.9.6
+    // 0.9.7 and newer:
+    print_if_available("DATE_RELEASED", "    REM DATE \"%1%\"\n");
+    print_if_available("GENRE",         "    REM GENRE \"%1%\"\n");
+    print_comments("    ", *tag, out);
   }
 }
 

@@ -22,8 +22,12 @@
 xtr_aac_c::xtr_aac_c(const string &codec_id,
                      int64_t tid,
                      track_spec_t &tspec)
-  : xtr_base_c(codec_id, tid, tspec),
-  m_channels(0), m_id(0), m_profile(0), m_srate_idx(0) {
+  : xtr_base_c(codec_id, tid, tspec)
+  , m_channels(0)
+  , m_id(0)
+  , m_profile(0)
+  , m_srate_idx(0)
+{
 }
 
 void
@@ -61,8 +65,8 @@ xtr_aac_c::create_file(xtr_base_c *master,
 
     if (!strcmp(&m_codec_id[12], "MAIN"))
       m_profile = 0;
-    else if (!strcmp(&m_codec_id[12], "LC") ||
-             (strstr(&m_codec_id[12], "SBR") != NULL))
+    else if (   !strcmp(&m_codec_id[12], "LC")
+             || (strstr(&m_codec_id[12], "SBR") != NULL))
       m_profile = 1;
     else if (!strcmp(&m_codec_id[12], "SSR"))
       m_profile = 2;

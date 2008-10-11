@@ -471,7 +471,8 @@ mkvextract_OBJECTS := $(patsubst %.cpp,%.o,$(mkvextract_SOURCES)) \
 mkvextract_DEPENDENCIES += $(DEP_COMMON) $(DEP_AVILIB) $(DEP_RMFF)
 mkvextract_LDADD = -lmtxcommon $(MAGIC_LIBS) -lvorbis -logg -lavi -lmatroska -lebml -lrmff \
 		$(ICONV_LIBS) $(LIBINTL_LIBS) -lexpat \
-		-lz $(COMPRESSION_LIBRARIES) $(LIBRPCRT)
+		-lz $(COMPRESSION_LIBRARIES) $(LIBRPCRT) \
+		$(BOOST_REGEX_LIB)
 
 #
 # src/mmg

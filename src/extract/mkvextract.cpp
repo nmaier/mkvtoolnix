@@ -14,23 +14,12 @@
 
 #include "os.h"
 
-#include <errno.h>
-#include <ctype.h>
-#include <stdarg.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-
-#if defined(COMP_MSC)
 #include <cassert>
-#else
-#include <unistd.h>
-#endif
-
 #include <iostream>
 #include <string>
 #include <vector>
+
+#include <boost/regex.hpp>
 
 #include <ebml/EbmlHead.h>
 #include <ebml/EbmlSubHead.h>
@@ -70,14 +59,16 @@ using namespace std;
 
 #define NAME "mkvextract"
 
-#define MODE_TRACKS       0
-#define MODE_TAGS         1
-#define MODE_ATTACHMENTS  2
-#define MODE_CHAPTERS     3
-#define MODE_CUESHEET     4
-#define MODE_TIMECODES_V2 5
+enum operation_mode_e {
+  MODE_TRACKS,
+  MODE_TAGS,
+  MODE_ATTACHMENTS,
+  MODE_CHAPTERS,
+  MODE_CUESHEET,
+  MODE_TIMECODES_V2,
+};
 
-bool no_variable_data = false;
+bool g_no_variable_data = false;
 
 void
 set_usage() {
@@ -154,33 +145,23 @@ set_usage() {
   version_info = "mkvextract v" VERSION " ('" VERSIONNAME "')";
 }
 
-static bool chapter_format_simple = false;
-static bool parse_fully = false;
+static bool s_chapter_format_simple = false;
+static bool s_parse_fully           = false;
 
 void
 parse_args(vector<string> args,
            string &file_name,
-           int &mode,
+           operation_mode_e &mode,
            vector<track_spec_t> &tracks) {
-  int i;
-  char *colon, *copy;
-  const char *sub_charset;
-  int64_t tid;
-  track_spec_t track;
-  bool embed_in_ogg, extract_cuesheet;
-  int extract_raw;
-  int extract_blockadd_level = -1;
 
-  file_name = "";
-  sub_charset = NULL;
   verbose = 0;
 
   handle_common_cli_args(args, "-o");
 
-  if (args.size() < 1)
+  if (args.empty())
     usage();
 
-  if (args[0] == "tracks")
+  if      (args[0] == "tracks")
     mode = MODE_TRACKS;
   else if (args[0] == "tags")
     mode = MODE_TAGS;
@@ -200,50 +181,55 @@ parse_args(vector<string> args,
     mxexit(0);
   }
 
-  file_name = args[1];
+  file_name                  = args[1];
 
-  sub_charset = "UTF-8";
-  embed_in_ogg = true;
-  extract_cuesheet = false;
-  extract_raw = 0;
+  const char *sub_charset    = "UTF-8";
+  bool embed_in_ogg          = true;
+  bool extract_cuesheet      = false;
+  int extract_raw            = 0;
+  int extract_blockadd_level = -1;
 
+  boost::regex tid_re("^(\\d+)(:(.+))?$", boost::regex::perl);
+
+  int i;
   // Now process all the other options.
-  for (i = 2; i < args.size(); i++)
+  for (i = 2; i < args.size(); i++) {
+    bool next_arg_available = args.size() > (i + 1);
+
     if ((args[i] == "--no-variable-data"))
-      no_variable_data = true;
+      g_no_variable_data = true;
 
     else if ((args[i] == "-f") || (args[i] == "--parse-fully"))
-      parse_fully = true;
+      s_parse_fully = true;
 
     else if ((args[i] == "-c")) {
-      if (mode != MODE_TRACKS)
+      if (MODE_TRACKS != mode)
         mxerror(Y("'-c' is only allowed when extracting tracks.\n"));
 
-      if ((i + 1) >= args.size())
+      if (!next_arg_available)
         mxerror(Y("'-c' lacks a charset.\n"));
 
       sub_charset = args[i + 1].c_str();
       i++;
 
     } else if ((args[i] == "--no-ogg")) {
-      if (mode != MODE_TRACKS)
+      if (MODE_TRACKS != mode)
         mxerror(Y("'--no-ogg' is only allowed when extracting tracks.\n"));
       embed_in_ogg = false;
 
     } else if ((args[i] == "--cuesheet")) {
-      if (mode != MODE_TRACKS)
+      if (MODE_TRACKS != mode)
         mxerror(Y("'--cuesheet' is only allowed when extracting tracks.\n"));
       extract_cuesheet = true;
 
     } else if ((args[i] == "--blockadd")) {
-      if (mode != MODE_TRACKS)
+      if (MODE_TRACKS != mode)
         mxerror(Y("'--blockadd' is only allowed when extracting tracks.\n"));
 
-      if ((i + 1) >= args.size())
+      if (!next_arg_available)
         mxerror(Y("'--blockadd' lacks a level.\n"));
 
-      if (!parse_int(args[i + 1], extract_blockadd_level) ||
-          (extract_blockadd_level < -1))
+      if (!parse_int(args[i + 1], extract_blockadd_level) || (-1 > extract_blockadd_level))
         mxerror(boost::format(Y("Invalid BlockAddition level in argument '%1%'.\n")) % args[i + 1]);
       i++;
 
@@ -264,58 +250,55 @@ parse_args(vector<string> args,
       mxerror(Y("No further options allowed when regenerating the CUE sheet.\n"));
 
     else if ((args[i] == "-s") || (args[i] == "--simple")) {
-      if (mode != MODE_CHAPTERS)
+      if (MODE_CHAPTERS != mode)
         mxerror(boost::format(Y("'%1%' is only allowed for chapter extraction.\n")) % args[i]);
 
-      chapter_format_simple = true;
+      s_chapter_format_simple = true;
 
     } else if ((mode == MODE_TRACKS) || (mode == MODE_ATTACHMENTS) || (MODE_TIMECODES_V2 == mode)) {
-      copy = safestrdup(args[i].c_str());
-      colon = strchr(copy, ':');
-      if (NULL == colon)
+      boost::match_results<string::const_iterator> matches;
+      if (!boost::regex_search(args[i], matches, tid_re))
         if ((MODE_TRACKS == mode) || (MODE_TIMECODES_V2 == mode))
-          mxerror(boost::format(Y("Missing track ID in argument '%1%'.\n")) % args[i]);
+          mxerror(boost::format(Y("Invalid track ID/file name specification in argument '%1%'.\n")) % args[i]);
         else
-          mxerror(boost::format(Y("Missing attachment ID in argument '%1%'.\n")) % args[i]);
+          mxerror(boost::format(Y("Invalid attachment ID/file name specification in argument '%1%'.\n")) % args[i]);
 
-      *colon = 0;
-      if (!parse_int(copy, tid) || (tid < 0))
-        if ((MODE_TRACKS == mode) || (MODE_TIMECODES_V2 == mode))
-          mxerror(boost::format(Y("Invalid track ID in argument '%1%'.\n")) % args[i]);
-        else
-          mxerror(boost::format(Y("Invalid attachment ID in argument '%1%'.\n")) % args[i]);
+      track_spec_t track;
+      memset(&track, 0, sizeof(track_spec_t));
 
-      colon++;
-      if (*colon == 0) {
+      parse_int(matches[1].str(), track.tid);
+
+      string output_file_name;
+      if (matches[3].matched)
+        output_file_name = matches[3].str();
+
+      if (output_file_name.empty())
         if (MODE_ATTACHMENTS == mode)
           mxinfo(Y("No output file name specified, will use attachment name.\n"));
         else
           mxerror(boost::format(Y("Missing output file name in argument '%1%'.\n")) % args[i]);
-      }
 
-      memset(&track, 0, sizeof(track_spec_t));
-      track.tid = tid;
-      track.out_name = safestrdup(colon);
-      track.sub_charset = safestrdup(sub_charset);
-      track.embed_in_ogg = embed_in_ogg;
-      track.extract_cuesheet = extract_cuesheet;
+      track.out_name               = safestrdup(output_file_name.c_str());
+      track.sub_charset            = safestrdup(sub_charset);
+      track.embed_in_ogg           = embed_in_ogg;
+      track.extract_cuesheet       = extract_cuesheet;
       track.extract_blockadd_level = extract_blockadd_level;
-      track.extract_raw = extract_raw;
+      track.extract_raw            = extract_raw;
       tracks.push_back(track);
-      safefree(copy);
-      sub_charset = "UTF-8";
-      embed_in_ogg = true;
-      extract_cuesheet = false;
-      extract_raw = 0;
+
+      sub_charset                  = "UTF-8";
+      embed_in_ogg                 = true;
+      extract_cuesheet             = false;
+      extract_raw                  = 0;
 
     } else
       mxerror(boost::format(Y("Unrecognized command line option '%1%'. Maybe you put a mode specific option before the input file name?\n")) % args[i]);
+  }
 
-  if ((mode == MODE_TAGS) || (mode == MODE_CHAPTERS) ||
-      (mode == MODE_CUESHEET))
+  if ((MODE_TAGS == mode) || (MODE_CHAPTERS == mode) || (MODE_CUESHEET == mode))
     return;
 
-  if (tracks.size() == 0) {
+  if (tracks.empty()) {
     mxinfo(Y("Nothing to do.\n\n"));
     usage();
   }
@@ -325,19 +308,19 @@ void
 show_element(EbmlElement *l,
              int level,
              const std::string &info) {
-  char level_buffer[10];
-
-  if (level > 9)
+  if (9 < level)
     mxerror(boost::format(Y("mkvextract.cpp/show_element(): level > 9: %1%")) % level);
 
-  if (verbose == 0)
+  if (0 == verbose)
     return;
 
+  char level_buffer[10];
   memset(&level_buffer[1], ' ', 9);
-  level_buffer[0] = '|';
+  level_buffer[0]     = '|';
   level_buffer[level] = 0;
+
   mxinfo(boost::format("(%1%) %2%+ %3%") % NAME % level_buffer % info);
-  if (l != NULL)
+  if (NULL != l)
     mxinfo(boost::format(Y(" at %1%")) % l->GetElementPosition());
   mxinfo("\n");
 }
@@ -350,10 +333,6 @@ show_error(const std::string &error) {
 int
 main(int argc,
      char **argv) {
-  string input_file;
-  int mode;
-  vector<track_spec_t> tracks;
-
   init_stdio();
   set_usage();
 
@@ -374,26 +353,30 @@ main(int argc,
 
   xml_element_map_init();
 
+  string input_file;
+  operation_mode_e mode;
+  vector<track_spec_t> tracks;
+
   parse_args(command_line_utf8(argc, argv), input_file, mode, tracks);
-  if (mode == MODE_TRACKS) {
+  if (MODE_TRACKS == mode) {
     extract_tracks(input_file.c_str(), tracks);
 
-    if (verbose == 0)
+    if (0 == verbose)
       mxinfo(Y("Progress: 100%%\n"));
 
-  } else if (mode == MODE_TAGS)
-    extract_tags(input_file.c_str(), parse_fully);
+  } else if (MODE_TAGS == mode)
+    extract_tags(input_file.c_str(), s_parse_fully);
 
-  else if (mode == MODE_ATTACHMENTS)
-    extract_attachments(input_file.c_str(), tracks, parse_fully);
+  else if (MODE_ATTACHMENTS == mode)
+    extract_attachments(input_file.c_str(), tracks, s_parse_fully);
 
-  else if (mode == MODE_CHAPTERS)
-    extract_chapters(input_file.c_str(), chapter_format_simple, parse_fully);
+  else if (MODE_CHAPTERS == mode)
+    extract_chapters(input_file.c_str(), s_chapter_format_simple, s_parse_fully);
 
-  else if (mode == MODE_CUESHEET)
-    extract_cuesheet(input_file.c_str(), parse_fully);
+  else if (MODE_CUESHEET == mode)
+    extract_cuesheet(input_file.c_str(), s_parse_fully);
 
-  else if (mode == MODE_TIMECODES_V2)
+  else if (MODE_TIMECODES_V2 == mode)
     extract_timecodes(input_file, tracks, 2);
 
   else

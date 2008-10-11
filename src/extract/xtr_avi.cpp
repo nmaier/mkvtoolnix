@@ -53,7 +53,7 @@ xtr_avi_c::create_file(xtr_base_c *master,
     mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % m_file_name % AVI_strerror());
 
   string writing_app = "mkvextract";
-  if (!no_variable_data)
+  if (!g_no_variable_data)
     writing_app += (boost::format(" %1%") % VERSION).str();
   m_avi->writing_app = safestrdup(writing_app.c_str());
 
@@ -82,7 +82,7 @@ xtr_avi_c::handle_frame(memory_cptr &frame,
                         bool discardable,
                         bool references_valid) {
   if (references_valid)
-    keyframe = (bref == 0);
+    keyframe = (0 == bref);
 
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
   AVI_write_frame(m_avi, (char *)frame->get(), frame->get_size(), keyframe);

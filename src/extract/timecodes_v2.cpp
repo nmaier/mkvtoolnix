@@ -14,18 +14,7 @@
 
 #include "os.h"
 
-#include <errno.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-
-#if defined(COMP_MSC)
 #include <cassert>
-#else
-#include <unistd.h>
-#endif
-
 #include <algorithm>
 #include <string>
 #include <vector>
@@ -114,9 +103,9 @@ create_timecode_files(KaxTracks &kax_tracks,
 
     try {
       mm_io_c *file = new mm_file_io_c(tspec->out_name, MODE_CREATE);
-      timecode_extractors.push_back(timecode_extractor_t(tspec->tid, file,
-                                                         default_duration));
+      timecode_extractors.push_back(timecode_extractor_t(tspec->tid, file, default_duration));
       file->puts(boost::format("# timecode format v%1%\n") % version);
+
     } catch(...) {
       close_timecode_files();
       mxerror(boost::format(Y("Could not open the timecode file '%1%' for writing (%2%).\n")) % tspec->out_name % strerror(errno));
@@ -128,19 +117,14 @@ static void
 handle_blockgroup(KaxBlockGroup &blockgroup,
                   KaxCluster &cluster,
                   int64_t tc_scale) {
-  KaxBlock *block;
-  KaxBlockDuration *kduration;
-  int64_t duration;
-  vector<timecode_extractor_t>::iterator extractor;
-  int i;
-
   // Only continue if this block group actually contains a block.
-  block = FINDFIRST(&blockgroup, KaxBlock);
+  KaxBlock *block = FINDFIRST(&blockgroup, KaxBlock);
   if (NULL == block)
     return;
   block->SetParent(cluster);
 
   // Do we need this block group?
+  vector<timecode_extractor_t>::iterator extractor;
   mxforeach(extractor, timecode_extractors)
     if (block->TrackNum() == extractor->m_tid)
       break;
@@ -148,17 +132,13 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
     return;
 
   // Next find the block duration if there is one.
-  kduration = FINDFIRST(&blockgroup, KaxBlockDuration);
-  if (NULL == kduration)
-    duration = extractor->m_default_duration * block->NumberFrames();
-  else
-    duration = uint64(*kduration) * tc_scale;
+  KaxBlockDuration *kduration = FINDFIRST(&blockgroup, KaxBlockDuration);
+  int64_t duration            = NULL == kduration ? extractor->m_default_duration * block->NumberFrames() : uint64(*kduration) * tc_scale;
 
   // Pass the block to the extractor.
+  int i;
   for (i = 0; block->NumberFrames() > i; ++i)
-    extractor->m_timecodes.push_back((int64_t)(block->GlobalTimecode() + i *
-                                               (double)duration /
-                                               block->NumberFrames()));
+    extractor->m_timecodes.push_back((int64_t)(block->GlobalTimecode() + i * (double)duration / block->NumberFrames()));
 }
 
 static void
@@ -187,16 +167,8 @@ void
 extract_timecodes(const string &file_name,
                   vector<track_spec_t> &tspecs,
                   int version) {
-  int upper_lvl_el;
-  // Elements for different levels
-  EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL;
-  EbmlStream *es;
-  KaxCluster *cluster;
-  uint64_t cluster_tc, tc_scale = TIMECODE_SCALE, file_size;
-  mm_io_c *in;
-  bool tracks_found;
-
   // open input file
+  mm_io_c *in;
   try {
     in = new mm_file_io_c(file_name);
   } catch (...) {
@@ -204,15 +176,12 @@ extract_timecodes(const string &file_name,
     return;
   }
 
-  in->setFilePointer(0, seek_end);
-  file_size = in->getFilePointer();
-  in->setFilePointer(0, seek_beginning);
-
   try {
-    es = new EbmlStream(*in);
+    int64_t file_size = in->get_size();
+    EbmlStream *es    = new EbmlStream(*in);
 
     // Find the EbmlHead element. Must be the first one.
-    l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
+    EbmlElement *l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
     if (l0 == NULL) {
       show_error(Y("Error: No EBML head found."));
       delete es;
@@ -227,7 +196,7 @@ extract_timecodes(const string &file_name,
     while (1) {
       // Next element must be a segment
       l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFFFFFFFFFLL);
-      if (l0 == NULL) {
+      if (NULL == l0) {
         show_error(Y("No segment/level 0 element found."));
         return;
       }
@@ -240,22 +209,23 @@ extract_timecodes(const string &file_name,
       delete l0;
     }
 
-    tracks_found = false;
+    bool tracks_found = false;
+    int upper_lvl_el  = 0;
+    uint64_t tc_scale = TIMECODE_SCALE;
 
-    upper_lvl_el = 0;
     // We've got our segment, so let's find the tracks
-    l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
-                             true, 1);
-    while ((l1 != NULL) && (upper_lvl_el <= 0)) {
+    EbmlElement *l1   = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true, 1);
+    EbmlElement *l2   = NULL;
+    EbmlElement *l3   = NULL;
+
+    while ((NULL != l1) && (0 >= upper_lvl_el)) {
       if (EbmlId(*l1) == KaxInfo::ClassInfos.GlobalId) {
         // General info about this Matroska file
         show_element(l1, 1, Y("Segment information"));
 
         upper_lvl_el = 0;
-        l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                 0xFFFFFFFFL, true, 1);
-        while ((l2 != NULL) && (upper_lvl_el <= 0)) {
-
+        l2           = es->FindNextElement(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true, 1);
+        while ((NULL != l2) && (0 >= upper_lvl_el)) {
           if (EbmlId(*l2) == KaxTimecodeScale::ClassInfos.GlobalId) {
             KaxTimecodeScale &ktc_scale = *static_cast<KaxTimecodeScale *>(l2);
             ktc_scale.ReadData(es->I_O());
@@ -269,22 +239,19 @@ extract_timecodes(const string &file_name,
             break;
           }
 
-          if (upper_lvl_el < 0) {
+          if (0 > upper_lvl_el) {
             upper_lvl_el++;
-            if (upper_lvl_el < 0)
+            if (0 > upper_lvl_el)
               break;
 
           }
 
           l2->SkipData(*es, l2->Generic().Context);
           delete l2;
-          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                   0xFFFFFFFFL, true);
-
+          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
         }
 
-      } else if ((EbmlId(*l1) == KaxTracks::ClassInfos.GlobalId) &&
-                 !tracks_found) {
+      } else if ((EbmlId(*l1) == KaxTracks::ClassInfos.GlobalId) && !tracks_found) {
 
         // Yep, we've found our KaxTracks element. Now find all tracks
         // contained in this segment.
@@ -296,15 +263,15 @@ extract_timecodes(const string &file_name,
 
       } else if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
         show_element(l1, 1, Y("Cluster"));
-        cluster = (KaxCluster *)l1;
+        KaxCluster *cluster = (KaxCluster *)l1;
+        uint64_t cluster_tc = 0;
 
-        if (verbose == 0)
+        if (0 == verbose)
           mxinfo(boost::format(Y("Progress: %1%%%\r")) % (int)(in->getFilePointer() * 100 / file_size));
 
         upper_lvl_el = 0;
-        l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                 0xFFFFFFFFL, true, 1);
-        while ((l2 != NULL) && (upper_lvl_el <= 0)) {
+        l2           = es->FindNextElement(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true, 1);
+        while ((NULL != l2) && (0 >= upper_lvl_el)) {
 
           if (EbmlId(*l2) == KaxClusterTimecode::ClassInfos.GlobalId) {
             KaxClusterTimecode &ctc = *static_cast<KaxClusterTimecode *>(l2);
@@ -316,10 +283,8 @@ extract_timecodes(const string &file_name,
           } else if (EbmlId(*l2) == KaxBlockGroup::ClassInfos.GlobalId) {
             show_element(l2, 2, Y("Block group"));
 
-            l2->Read(*es, KaxBlockGroup::ClassInfos.Context, upper_lvl_el, l3,
-                     true);
-            handle_blockgroup(*static_cast<KaxBlockGroup *>(l2), *cluster,
-                              tc_scale);
+            l2->Read(*es, KaxBlockGroup::ClassInfos.Context, upper_lvl_el, l3, true);
+            handle_blockgroup(*static_cast<KaxBlockGroup *>(l2), *cluster, tc_scale);
 
           } else if (EbmlId(*l2) == KaxSimpleBlock::ClassInfos.GlobalId) {
             show_element(l2, 2, Y("Simple block"));
@@ -335,25 +300,24 @@ extract_timecodes(const string &file_name,
             break;
           }
 
-          if (upper_lvl_el > 0) {
+          if (0 < upper_lvl_el) {
             upper_lvl_el--;
-            if (upper_lvl_el > 0)
+            if (0 < upper_lvl_el)
               break;
             delete l2;
             l2 = l3;
             continue;
 
-          } else if (upper_lvl_el < 0) {
+          } else if (0 > upper_lvl_el) {
             upper_lvl_el++;
-            if (upper_lvl_el < 0)
+            if (0 > upper_lvl_el)
               break;
 
           }
 
           l2->SkipData(*es, l2->Generic().Context);
           delete l2;
-          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el,
-                                   0xFFFFFFFFL, true);
+          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
 
         } // while (l2 != NULL)
 
@@ -365,25 +329,24 @@ extract_timecodes(const string &file_name,
         break;
       }
 
-      if (upper_lvl_el > 0) {
+      if (0 < upper_lvl_el) {
         upper_lvl_el--;
-        if (upper_lvl_el > 0)
+        if (0 < upper_lvl_el)
           break;
         delete l1;
         l1 = l2;
         continue;
 
-      } else if (upper_lvl_el < 0) {
+      } else if (0 > upper_lvl_el) {
         upper_lvl_el++;
-        if (upper_lvl_el < 0)
+        if (0 > upper_lvl_el)
           break;
 
       }
 
       l1->SkipData(*es, l1->Generic().Context);
       delete l1;
-      l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el,
-                               0xFFFFFFFFL, true);
+      l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
 
     } // while (l1 != NULL)
 
@@ -395,6 +358,7 @@ extract_timecodes(const string &file_name,
 
     if (0 == verbose)
       mxinfo(Y("Progress: 100%%\n"));
+
   } catch (...) {
     show_error(Y("Caught exception"));
     delete in;

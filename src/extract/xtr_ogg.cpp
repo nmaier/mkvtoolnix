@@ -25,8 +25,9 @@
 
 xtr_flac_c::xtr_flac_c(const string &_codec_id,
                        int64_t _tid,
-                       track_spec_t &tspec):
-  xtr_base_c(_codec_id, _tid, tspec) {
+                       track_spec_t &tspec)
+  : xtr_base_c(_codec_id, _tid, tspec)
+{
 }
 
 void
@@ -61,7 +62,7 @@ xtr_oggbase_c::create_file(xtr_base_c *master,
 
   xtr_base_c::create_file(master, track);
 
-  ogg_stream_init(&m_os, no_variable_data ? 1804289383 : random_c::generate_31bits());
+  ogg_stream_init(&m_os, g_no_variable_data ? 1804289383 : random_c::generate_31bits());
 }
 
 void
@@ -224,7 +225,7 @@ xtr_oggflac_c::create_file(xtr_base_c *master,
 
   memory_cptr mpriv = decode_codec_private(priv);
 
-  ogg_stream_init(&m_os, no_variable_data ? 1804289383 : random_c::generate_31bits());
+  ogg_stream_init(&m_os, g_no_variable_data ? 1804289383 : random_c::generate_31bits());
 
   // Handle the three header packets: Headers, comments, codec
   // setup data.
@@ -262,7 +263,8 @@ xtr_oggflac_c::create_file(xtr_base_c *master,
 xtr_oggvorbis_c::xtr_oggvorbis_c(const string &codec_id,
                                  int64_t tid,
                                  track_spec_t &tspec)
-  : xtr_oggbase_c(codec_id, tid, tspec) {
+  : xtr_oggbase_c(codec_id, tid, tspec)
+{
 }
 
 void
@@ -276,7 +278,8 @@ xtr_oggvorbis_c::create_file(xtr_base_c *master,
 xtr_oggkate_c::xtr_oggkate_c(const string &codec_id,
                                  int64_t tid,
                                  track_spec_t &tspec)
-  : xtr_oggbase_c(codec_id, tid, tspec) {
+  : xtr_oggbase_c(codec_id, tid, tspec) 
+{
 }
 
 void
