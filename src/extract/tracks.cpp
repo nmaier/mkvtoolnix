@@ -145,7 +145,7 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
 
   // Next find the block duration if there is one.
   KaxBlockDuration *kduration   = FINDFIRST(&blockgroup, KaxBlockDuration);
-  int64_t duration              = NULL == kduration ? -1 : uint64(*kduration) * tc_scale;
+  int64_t duration              = NULL == kduration ? -1 : (int64_t)uint64(*kduration) * tc_scale;
 
   // Now find backward and forward references.
   int64_t bref                  = 0;
