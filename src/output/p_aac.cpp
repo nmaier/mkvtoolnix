@@ -170,7 +170,7 @@ aac_packetizer_c::process_headerless(packet_cptr packet) {
     }
 
   } else
-    packet->timecode = (int64_t)(1024 * 1000000000.0 * m_packetno / m_samples_per_sec);
+    new_timecode = (int64_t)(1024 * 1000000000.0 * m_packetno / m_samples_per_sec);
 
   m_packetno++;
   packet->duration = (int64_t)(1024 * 1000000000.0 / m_samples_per_sec);
