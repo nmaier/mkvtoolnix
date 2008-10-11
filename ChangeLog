@@ -1,3 +1,9 @@
+2008-10-11  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: The chapter editor's function "save to Matroska
+	file" was corrupting the target file in some cases. Fix for bug
+	307.
+
 2008-10-06  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: mkvmerge was only writing one reference block
