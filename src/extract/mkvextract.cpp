@@ -257,11 +257,12 @@ parse_args(vector<string> args,
 
     } else if ((mode == MODE_TRACKS) || (mode == MODE_ATTACHMENTS) || (MODE_TIMECODES_V2 == mode)) {
       boost::match_results<string::const_iterator> matches;
-      if (!boost::regex_search(args[i], matches, tid_re))
+      if (!boost::regex_search(args[i], matches, tid_re)) {
         if ((MODE_TRACKS == mode) || (MODE_TIMECODES_V2 == mode))
           mxerror(boost::format(Y("Invalid track ID/file name specification in argument '%1%'.\n")) % args[i]);
         else
           mxerror(boost::format(Y("Invalid attachment ID/file name specification in argument '%1%'.\n")) % args[i]);
+      }
 
       track_spec_t track;
       memset(&track, 0, sizeof(track_spec_t));
@@ -272,11 +273,12 @@ parse_args(vector<string> args,
       if (matches[3].matched)
         output_file_name = matches[3].str();
 
-      if (output_file_name.empty())
+      if (output_file_name.empty()) {
         if (MODE_ATTACHMENTS == mode)
           mxinfo(Y("No output file name specified, will use attachment name.\n"));
         else
           mxerror(boost::format(Y("Missing output file name in argument '%1%'.\n")) % args[i]);
+      }
 
       track.out_name               = safestrdup(output_file_name.c_str());
       track.sub_charset            = safestrdup(sub_charset);
