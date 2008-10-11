@@ -180,11 +180,12 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *p_reader,
       ti.aspect_ratio_is_factor   = dprop.ar_factor;
     }
   }
-  if (ti.aspect_ratio_given && ti.display_dimensions_given)
+  if (ti.aspect_ratio_given && ti.display_dimensions_given) {
     if (ti.aspect_ratio_is_factor)
       mxerror_tid(ti.fname, ti.id, boost::format(Y("Both the aspect ratio factor and '--display-dimensions' were given.\n")));
     else
       mxerror_tid(ti.fname, ti.id, boost::format(Y("Both the aspect ratio and '--display-dimensions' were given.\n")));
+  }
 
   // Let's see if the user has specified a FourCC for this track.
   if (map_has_key(ti.all_fourccs, ti.id))
