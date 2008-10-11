@@ -84,11 +84,12 @@ wavpack_reader_c::wavpack_reader_c(track_info_c &_ti)
       mxinfo_fn(ti.fname, boost::format(Y("Could not open the corresponding correction file '%1%c'.\n")) % ti.fname);
   }
 
-  if (verbose)
+  if (verbose) {
     if (meta.has_correction)
       mxinfo_fn(ti.fname, Y("Using the WAVPACK demultiplexer with a correction file."));
     else
       mxinfo_fn(ti.fname, Y("Using the WAVPACK demultiplexer."));
+  }
 }
 
 wavpack_reader_c::~wavpack_reader_c() {
