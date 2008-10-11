@@ -15,10 +15,7 @@
 
 #include "os.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
+#include <algorithm>
 
 extern "C" {
 #include <avilib.h>
@@ -64,7 +61,7 @@ ac3_reader_c::ac3_reader_c(track_info_c &_ti)
     if (0 < tag_size_end)
       size -= tag_size_end;
 
-    int init_read_len = MXMIN(size - tag_size_start, AC3_READ_SIZE);
+    int init_read_len = std::min(size - tag_size_start, (int64_t)AC3_READ_SIZE);
 
     if (io->read(chunk->get(), init_read_len) != init_read_len)
       throw error_c(boost::format(Y("ac3_reader: Could not read %1% bytes.")) % AC3_READ_SIZE);
@@ -102,7 +99,7 @@ file_status_e
 ac3_reader_c::read(generic_packetizer_c *,
                    bool) {
   int64_t remaining_bytes = size - io->getFilePointer();
-  int64_t read_len        = MXMIN(AC3_READ_SIZE, remaining_bytes);
+  int64_t read_len        = std::min((int64_t)AC3_READ_SIZE, remaining_bytes);
   int num_read            = io->read(chunk->get(), read_len);
 
   if (0 > num_read) {

@@ -19,6 +19,8 @@
 
 #include "os.h"
 
+#include <algorithm>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -1830,7 +1832,7 @@ qtmp4_demuxer_c::read_first_bytes(memory_cptr &buf,
 
   while ((0 < num_bytes) && (idx_pos < m_index.size())) {
     qt_index_t &index     = m_index[idx_pos];
-    int num_bytes_to_read = MXMIN(num_bytes, index.size);
+    int num_bytes_to_read = std::min((int64_t)num_bytes, index.size);
 
     io->setFilePointer(index.file_pos);
     if (io->read(buf->get() + buf_pos, num_bytes_to_read) < num_bytes_to_read)

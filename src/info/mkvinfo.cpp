@@ -215,7 +215,7 @@ static string
 create_hexdump(const unsigned char *buf,
                int size) {
   string hex(" hexdump");
-  int bmax = MXMAX(size, hexdump_max_size);
+  int bmax = std::max(size, hexdump_max_size);
   int b;
 
   for (b = 0; b < bmax; ++b)
@@ -374,9 +374,9 @@ read_master(EbmlMaster *m,
 string
 format_binary(EbmlBinary &bin,
               int max_len = 10) {
-  int len         = MXMAX(max_len, bin.GetSize());
+  int len         = std::max(max_len, (int)bin.GetSize());
   const binary *b = bin.GetBuffer();
-  string result   = (boost::format(Y("length %1%, data: %2%")) % bin.GetSize() % to_hex(b, MXMAX(max_len, bin.GetSize()))).str();
+  string result   = (boost::format(Y("length %1%, data: %2%")) % bin.GetSize() % to_hex(b, std::max(max_len, (int)bin.GetSize()))).str();
 
   if (len < bin.GetSize())
     result += "...";

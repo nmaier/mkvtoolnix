@@ -15,6 +15,7 @@
 
 #include "os.h"
 
+#include <algorithm>
 #include <memory>
 
 #include "ac3_common.h"
@@ -278,7 +279,7 @@ mpeg_ps_reader_c::parse_program_stream_map() {
     io->skip(prog_len);
 
     int es_map_len = io->read_uint16_be();
-    es_map_len     = MXMIN(es_map_len, len - prog_len - 8);
+    es_map_len     = std::min(es_map_len, len - prog_len - 8);
 
     while (0 < es_map_len) {
       int type = io->read_uint8();
@@ -315,7 +316,7 @@ mpeg_ps_reader_c::parse_program_stream_map() {
       }
 
       int plen = io->read_uint16_be();
-      plen     = MXMIN(plen, es_map_len);
+      plen     = std::min(plen, es_map_len);
       io->skip(plen);
       es_map_len -= 4 + plen;
     }

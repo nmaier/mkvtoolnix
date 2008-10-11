@@ -17,6 +17,8 @@
 
 #include "os.h"
 
+#include <algorithm>
+
 #if defined(COMP_CYGWIN)
 #include <sys/unistd.h>         // Needed for swab()
 #elif __GNUC__ == 2
@@ -535,7 +537,7 @@ wav_reader_c::create_packetizer(int64_t) {
 file_status_e
 wav_reader_c::read(generic_packetizer_c *,
                    bool) {
-  int64_t        requested_bytes = MXMIN(m_remaining_bytes_in_current_data_chunk, m_demuxer->get_preferred_input_size());
+  int64_t        requested_bytes = std::min(m_remaining_bytes_in_current_data_chunk, m_demuxer->get_preferred_input_size());
   unsigned char *buffer          = m_demuxer->get_buffer();
   int64_t        num_read;
 

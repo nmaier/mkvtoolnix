@@ -13,10 +13,9 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
+#include "os.h"
+
+#include <algorithm>
 
 #include "common.h"
 #include "error.h"
@@ -88,7 +87,7 @@ aac_reader_c::aac_reader_c(track_info_c &_ti)
     if (0 < tag_size_end)
       size -= tag_size_end;
 
-    int init_read_len = MXMIN(size - tag_size_start, INITCHUNKSIZE);
+    int init_read_len = std::min(size - tag_size_start, (int64_t)INITCHUNKSIZE);
     chunk             = (unsigned char *)safemalloc(INITCHUNKSIZE);
 
     if (io->read(chunk, init_read_len) != init_read_len)
@@ -191,7 +190,7 @@ file_status_e
 aac_reader_c::read(generic_packetizer_c *,
                    bool) {
   int remaining_bytes = size - io->getFilePointer();
-  int read_len        = MXMIN(INITCHUNKSIZE, remaining_bytes);
+  int read_len        = std::min(INITCHUNKSIZE, remaining_bytes);
   int num_read        = io->read(chunk, read_len);
 
   if (0 > num_read) {
