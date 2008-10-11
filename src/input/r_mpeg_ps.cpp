@@ -245,14 +245,15 @@ mpeg_ps_reader_c::read_timestamp(int c,
 bool
 mpeg_ps_reader_c::read_timestamp(bit_cursor_c &bc,
                                  int64_t &timestamp) {
-  int c = bc.get_bits(8);
-  int d = bc.get_bits(16);
-  int e = bc.get_bits(16);
+  bc.skip_bits(4);
+  timestamp = bc.get_bits(3);
+  bc.skip_bits(1);
+  timestamp = (timestamp << 15) | bc.get_bits(15);
+  bc.skip_bits(1);
+  timestamp = (timestamp << 15) | bc.get_bits(15);
+  bc.skip_bits(1);
 
-  if (((c & 1) != 1) || ((d & 1) != 1) || ((e & 1) != 1))
-    return false;
-
-  timestamp = (int64_t)((((c >> 1) & 7) << 30) | ((d >> 1) << 15) | (e >> 1)) * 100000ll / 9;
+  timestamp = timestamp * 100000ll / 9;
 
   return true;
 }
@@ -397,22 +398,16 @@ mpeg_ps_reader_c::parse_packet(mpeg_ps_id_t &id,
     bit_cursor_c bc(af_header.get(), hdrlen);
 
     try {
-      if (0x80 == (flags & 0x80)) {
-        // PTS
-        if (!read_timestamp(bc, timestamp))
-          return false;
+      // PTS
+      if (0x80 == (flags & 0x80))
+        read_timestamp(bc, timestamp);
 
-        // DTS
-        if (0x40 == (flags & 0x40))
-          bc.skip_bits(5 * 8);
-      }
-    } catch (...) {
-      return false;
-    }
+      // DTS
+      if (0x40 == (flags & 0x40))
+        bc.skip_bits(5 * 8);
 
-    try {
       // PES extension?
-      if (0x01 == (flags & 0x01)) {
+      if ((0xfd == id.id) && (0x01 == (flags & 0x01))) {
         int pes_ext_flags = bc.get_bits(8);
 
         if (0x80 == (pes_ext_flags & 0x80)) {
