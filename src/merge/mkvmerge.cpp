@@ -35,6 +35,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <list>
 #include <string>
 #include <typeinfo>
 #include <vector>
@@ -60,39 +61,48 @@
 using namespace libmatroska;
 using namespace std;
 
-static struct {
-  const char *ext;
-  char *desc;
-} s_input_file_types[] =
+struct ext_file_type_t {
+  string ext, desc;
+
+  ext_file_type_t(const string &p_ext,
+                  const string &p_desc)
+    : ext(p_ext)
+    , desc(p_desc)
   {
-    { "aac",  Y("AAC (Advanced Audio Coding)") },
-    { "ac3",  Y("A/52 (aka AC3)") },
-    { "avi",  Y("AVI (Audio/Video Interleaved)") },
-    { "btn",  Y("VobBtn buttons") },
-    { "drc",  Y("Dirac elementary stream") },
-    { "dts",  Y("DTS (Digital Theater System)") },
+  }
+};
+
+static list<ext_file_type_t> s_input_file_types;
+
+static void
+init_input_file_type_list() {
+  s_input_file_types.push_back(ext_file_type_t("aac",  Y("AAC (Advanced Audio Coding)")));
+  s_input_file_types.push_back(ext_file_type_t("ac3",  Y("A/52 (aka AC3)")));
+  s_input_file_types.push_back(ext_file_type_t("avi",  Y("AVI (Audio/Video Interleaved)")));
+  s_input_file_types.push_back(ext_file_type_t("btn",  Y("VobBtn buttons")));
+  s_input_file_types.push_back(ext_file_type_t("drc",  Y("Dirac elementary stream")));
+  s_input_file_types.push_back(ext_file_type_t("dts",  Y("DTS (Digital Theater System)")));
 #if defined(HAVE_FLAC_FORMAT_H)
-    { "flac", Y("FLAC lossless audio") },
+  s_input_file_types.push_back(ext_file_type_t("flac", Y("FLAC lossless audio")));
 #endif
-    { "h264", Y("AVC/h.264 elementary streams") },
-    { "idx",  Y("VobSub subtitles") },
-    { "m1v",  Y("MPEG-1 video elementary stream") },
-    { "m2v",  Y("MPEG-2 video elementary stream") },
-    { "mkv",  Y("general Matroska files") },
-    { "mov",  Y("Quicktime/MP4 audio and video") },
-    { "mp2",  Y("MPEG-1 layer II audio (CBR and VBR/ABR)") },
-    { "mp3",  Y("MPEG-1 layer III audio (CBR and VBR/ABR)") },
-    { "mpg",  Y("MPEG program stream") },
-    { "ogg",  Y("audio/video/text subtitles embedded in OGG") },
-    { "rm",   Y("RealMedia audio and video") },
-    { "srt",  Y("SRT text subtitles") },
-    { "ssa",  Y("SSA/ASS text subtitles") },
-    { "tta",  Y("TTA lossless audio") },
-    { "vc1",  Y("VC1 video elementary stream") },
-    { "wav",  Y("WAVE (uncompressed PCM)") },
-    { "wv",   Y("WAVPACK lossless audio") },
-    { NULL,   NULL },
-  };
+  s_input_file_types.push_back(ext_file_type_t("h264", Y("AVC/h.264 elementary streams")));
+  s_input_file_types.push_back(ext_file_type_t("idx",  Y("VobSub subtitles")));
+  s_input_file_types.push_back(ext_file_type_t("m1v",  Y("MPEG-1 video elementary stream")));
+  s_input_file_types.push_back(ext_file_type_t("m2v",  Y("MPEG-2 video elementary stream")));
+  s_input_file_types.push_back(ext_file_type_t("mkv",  Y("general Matroska files")));
+  s_input_file_types.push_back(ext_file_type_t("mov",  Y("Quicktime/MP4 audio and video")));
+  s_input_file_types.push_back(ext_file_type_t("mp2",  Y("MPEG-1 layer II audio (CBR and VBR/ABR)")));
+  s_input_file_types.push_back(ext_file_type_t("mp3",  Y("MPEG-1 layer III audio (CBR and VBR/ABR)")));
+  s_input_file_types.push_back(ext_file_type_t("mpg",  Y("MPEG program stream")));
+  s_input_file_types.push_back(ext_file_type_t("ogg",  Y("audio/video/text subtitles embedded in OGG")));
+  s_input_file_types.push_back(ext_file_type_t("rm",   Y("RealMedia audio and video")));
+  s_input_file_types.push_back(ext_file_type_t("srt",  Y("SRT text subtitles")));
+  s_input_file_types.push_back(ext_file_type_t("ssa",  Y("SSA/ASS text subtitles")));
+  s_input_file_types.push_back(ext_file_type_t("tta",  Y("TTA lossless audio")));
+  s_input_file_types.push_back(ext_file_type_t("vc1",  Y("VC1 video elementary stream")));
+  s_input_file_types.push_back(ext_file_type_t("wav",  Y("WAVE (uncompressed PCM)")));
+  s_input_file_types.push_back(ext_file_type_t("wv",   Y("WAVPACK lossless audio")));
+}
 
 /** \brief Outputs usage information
 */
@@ -411,9 +421,10 @@ list_file_types() {
   mxinfo(Y("Known file types:\n"
            "  ext   description\n"
            "  ----  --------------------------\n"));
-  int i;
-  for (i = 1; s_input_file_types[i].ext; i++)
-    mxinfo(boost::format("  %|1$-4s|  %2%\n") % s_input_file_types[i].ext % s_input_file_types[i].desc);
+
+  list<ext_file_type_t>::const_iterator i;
+  mxforeach(i, s_input_file_types)
+    mxinfo(boost::format("  %|1$-4s|  %2%\n") % i->ext % i->desc);
 }
 
 /** \brief Identify a file type and its contents
@@ -729,7 +740,7 @@ parse_arg_cropping(const string &s,
                    track_info_c &ti) {
   pixel_crop_t crop;
 
-  char *err_msg    = Y("Cropping parameters: not given in the form <TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 (argument was '%1%').\n");
+  string err_msg   = Y("Cropping parameters: not given in the form <TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 (argument was '%1%').\n");
 
   vector<string> v = split(s, ":");
   if (v.size() != 2)
@@ -760,9 +771,8 @@ parse_arg_stereo_mode(const string &s,
   static const char * const keywords[] = {
     "none", "right", "left", "both", NULL
   };
-  char *errmsg =
-    Y("Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and 3 "
-      "or one of the keywords 'none', 'right', 'left', 'both' (argument was '%1%').\n");
+  string errmsg = Y("Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and 3 "
+                    "or one of the keywords 'none', 'right', 'left', 'both' (argument was '%1%').\n");
 
   vector<string> v = split(s, ":");
   if (v.size() != 2)
@@ -833,8 +843,8 @@ parse_arg_split_timecodes(const string &arg) {
 */
 static void
 parse_arg_split_size(const string &arg) {
-  string s      = arg;
-  char *err_msg = Y("Invalid split size in '--split %1%'.\n");
+  string s       = arg;
+  string err_msg = Y("Invalid split size in '--split %1%'.\n");
 
   if (starts_with_case(s, "size:"))
     s.erase(0, strlen("size:"));
@@ -880,7 +890,7 @@ parse_arg_split_size(const string &arg) {
 */
 static void
 parse_arg_split(const string &arg) {
-  char *err_msg = Y("Invalid format for '--split' in '--split %1%'.\n");
+  string err_msg = Y("Invalid format for '--split' in '--split %1%'.\n");
 
   if (arg.size() < 2)
     mxerror(boost::format(err_msg) % arg);
@@ -2051,6 +2061,7 @@ main(int argc,
   init_globals();
   set_usage();
   setup();
+  init_input_file_type_list();
 
   parse_args(command_line_utf8(argc, argv));
 
