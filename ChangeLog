@@ -1,3 +1,8 @@
+2008-10-13  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: bug fix: Matroska elements with binary data were
+	output as garbage in XML files.
+
 2008-10-11  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v2.4.0.

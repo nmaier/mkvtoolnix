@@ -70,7 +70,7 @@ print_binary(int level,
     for (i = 0; i < size; i++) {
       if ((i % 16) != 0)
         s += " ";
-      s += (boost::format("%|1$02x|") % *p).str();
+      s += (boost::format("%|1$02x|") % (int)*p).str();
       ++p;
       if ((((i + 1) % 16) == 0) && ((i + 1) < size))
         s += (boost::format("\n%1%") % space((level + 1) * 2)).str();
