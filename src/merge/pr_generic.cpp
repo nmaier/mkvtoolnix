@@ -1374,6 +1374,10 @@ track_info_c::track_info_c()
   , no_chapters(false)
   , no_attachments(false)
   , no_tags(false)
+  , avi_block_align(0)
+  , avi_samples_per_sec(0)
+  , avi_avg_bytes_per_sec(0)
+  , avi_samples_per_chunk(0)
   , avi_audio_sync_enabled(false)
 {
   memset(&pixel_cropping, 0, sizeof(pixel_crop_t));
