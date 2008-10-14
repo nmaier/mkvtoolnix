@@ -14,7 +14,7 @@
 2008-10-06  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: mkvmerge was only writing one reference block
-	for real B frames. Patch by Daniel Glˆckner. Fix for bug 306.
+	for real B frames. Patch by Daniel Gl√∂ckner. Fix for bug 306.
 
 	* all: bug fix: The Windows uninstaller was not removing all start
 	menu entries during uninstallation on Windows Vista. The installer
@@ -934,7 +934,7 @@
 
 	* source: new feature: Added support for linking against liblzo2
 	(same compression algorithm, just a new library version). Patch by
-	Diego PettenÚ (see AUTHORS).
+	Diego Petten√≤ (see AUTHORS).
 
 	* mkvmerge: new feature: Added a workaround for files created by
 	Gabest's DirectShow Matroska muxer with slightly broken frame
@@ -3245,7 +3245,7 @@
 	timecodes. It does now. Reported by alexnoe.
 
 	* mkvmerge: Proper support for dropped frames when reading AVI
-	files. Reported by alley_cat, Horv·th Istv·n.
+	files. Reported by alley_cat, Horv√°th Istv√°n.
 
 	* mkvmerge: Fixed some missing default values in the Matroska
 	reader (e.g. mono audio files). Reported by Liisachan.
