@@ -2642,7 +2642,14 @@ guess_mime_type(string ext,
   if (!is_file)
     return guess_mime_type_by_ext(ext);
 
-  m = magic_open(MAGIC_MIME | MAGIC_SYMLINK);
+  // In newer versions of libmagic MAGIC_MIME is declared as MAGIC_MIME_TYPE | MAGIC_MIME_ENCODING.
+  // Older versions don't know MAGIC_MIME_TYPE, though -- the old MAGIC_MIME is the new MAGIC_MIME_TYPE,
+  // and the new MAGIC_MIME has been redefined.
+#ifdef MAGIC_MIME_TYPE
+  m = magic_open(MAGIC_MIME_TYPE | MAGIC_SYMLINK);
+#else
+  m = magic_open(MAGIC_MIME      | MAGIC_SYMLINK);
+#endif
   magic_load(m, NULL);
   ret = magic_file(m, ext.c_str());
   magic_close(m);
