@@ -19,12 +19,6 @@
 
 #include "pr_generic.h"
 
-enum display_priority_e {
-  DISPLAYPRIORITY_LOW,
-  DISPLAYPRIORITY_MEDIUM,
-  DISPLAYPRIORITY_HIGH
-};
-
 /* file types */
 enum file_type_e {
   FILE_TYPE_IS_UNKNOWN = 0,
