@@ -1399,7 +1399,7 @@ read_args_from_file(vector<string> &args,
   try {
     mm_io = new mm_text_io_c(new mm_file_io_c(filename));
   } catch (...) {
-    mxerror(boost::format(Y("The file '%1%' could not be opened for reading command line arguments.")) % filename);
+    mxerror(boost::format(Y("The file '%1%' could not be opened for reading command line arguments.\n")) % filename);
   }
 
   skip_next = false;
