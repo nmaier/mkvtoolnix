@@ -829,6 +829,8 @@ escape(const string &source) {
       dst += "\\2";               // Yes, this IS a trick ;)
     else if (*src == ' ')
       dst += "\\s";
+    else if (*src == ':')
+      dst += "\\c";
     else
       dst += *src;
   }
@@ -852,6 +854,8 @@ unescape(const string &source) {
           dst += '"';
         else if (*next_char == 's')
           dst += ' ';
+        else if (*next_char == 'c')
+          dst += ':';
         else
           dst += *next_char;
         src++;
