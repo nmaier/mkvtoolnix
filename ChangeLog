@@ -1,3 +1,9 @@
+2008-10-29  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: SRT subtitle files are also handled correctly
+	if the timecode lines do not have spaces around the arrow between
+	the start and end timecodes.
+
 2008-10-13  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract: bug fix: Matroska elements with binary data were
