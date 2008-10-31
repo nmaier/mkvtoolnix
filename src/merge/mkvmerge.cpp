@@ -1896,7 +1896,7 @@ parse_args(vector<string> args) {
       parse_arg_default_language(next_arg);
       sit++;
 
-    } else if (this_arg == "--sub-charset") {
+    } else if ((this_arg == "--sub-charset") || (this_arg == "--subtitle-charset")) {
       if (no_next_arg)
         mxerror(Y("'--sub-charset' lacks its argument.\n"));
 
