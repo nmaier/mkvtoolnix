@@ -194,6 +194,8 @@ else
   Q = @
 endif
 
+.DEFAULT_GOAL := all
+
 ifeq (1,$(TOOLS))
 include src/tools/Makefile
 endif
