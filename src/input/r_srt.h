@@ -18,8 +18,6 @@
 
 #include "os.h"
 
-#include <stdio.h>
-
 #include "mm_io.h"
 #include "common.h"
 #include "pr_generic.h"
@@ -27,15 +25,13 @@
 
 class srt_reader_c: public generic_reader_c {
 private:
-  mm_text_io_c *io;
-  subtitles_c subs;
-  bool m_coordinates_warning_shown;
+  mm_text_io_cptr m_io;
+  srt_parser_cptr m_subs;
 
 public:
   srt_reader_c(track_info_c &_ti) throw (error_c);
   virtual ~srt_reader_c();
 
-  virtual void parse_file();
   virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false);
   virtual void identify();
   virtual void create_packetizer(int64_t tid);
