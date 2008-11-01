@@ -347,7 +347,7 @@ compressor_c::create(compression_method_e method) {
 
 compressor_ptr
 compressor_c::create(const char *method) {
-#if defined(HAVE_LZO1X_H)
+#if defined(HAVE_LZO)
   if (!strcasecmp(method, compression_methods[COMPRESSION_LZO]))
     return compressor_ptr(new lzo_compressor_c());
 #endif // HAVE_LZO1X_H
