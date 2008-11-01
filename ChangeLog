@@ -1,3 +1,9 @@
+2008-11-01  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: mkvmerge's LZO compressor would segfault if
+	mkvmerge was compiled against v2 of the LZO library and the v1 LZO
+	headers were not present.
+
 2008-10-29  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: SRT subtitle files are also handled correctly
