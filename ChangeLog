@@ -1,5 +1,9 @@
 2008-11-03  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Changed the way mkvmerge calculates the
+	timecodes when appending files. Should result in better
+	audio/video synchronization.
+
 	* mkvmerge: new feature: Added support for reading SRT and SSA/ASS
 	subtitles from AVI files (fix for bug 64).
 

@@ -125,6 +125,11 @@ enum timecode_scale_mode_e {
   TIMECODE_SCALE_MODE_AUTO
 };
 
+enum append_mode_e {
+  APPEND_MODE_TRACK_BASED,
+  APPEND_MODE_FILE_BASED,
+};
+
 class family_uids_c: public vector<bitvalue_c> {
 public:
   bool add_family_uid(const KaxSegmentFamily &family);
@@ -186,6 +191,8 @@ extern int g_default_tracks[3], g_default_tracks_priority[3];
 
 extern bool g_splitting;
 extern int g_split_max_num_files;
+
+extern append_mode_e g_append_mode;
 
 void get_file_type(filelist_t &file);
 void create_readers();

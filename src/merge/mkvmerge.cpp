@@ -146,6 +146,9 @@ set_usage() {
       "                           that controls which track of a file is\n"
       "                           appended to another track of the preceding\n"
       "                           file.\n"
+      "  --append-mode <file|track>\n"
+      "                           Selects how mkvmerge calculates timecodes when\n"
+      "                           appending files.\n"
       "  --timecode-scale <n>     Force the timecode scale factor to n.\n"
       "\n File splitting and linking (more global options):\n"
       "  --split <d[K,M,G]|HH:MM:SS|s>\n"
@@ -1207,6 +1210,19 @@ parse_arg_append_to(const string &s,
   }
 }
 
+static void
+parse_arg_append_mode(const string &s,
+                      track_info_c &ti) {
+  if ((s == "track") || (s == "track-based"))
+    g_append_mode = APPEND_MODE_TRACK_BASED;
+
+  else if ((s == "file") || (s == "file-based"))
+    g_append_mode = APPEND_MODE_FILE_BASED;
+
+  else
+    mxerror(boost::format(Y("'%1%' is not a valid append mode in '--append-mode %1%'.\n")) % s);
+}
+
 /** \brief Parse the argument for \c --default-duration
 
    The argument must be a tuple consisting of a track ID and the default
@@ -1960,6 +1976,13 @@ parse_args(vector<string> args) {
         mxerror(Y("'--append-to' lacks its argument.\n"));
 
       parse_arg_append_to(next_arg, *ti);
+      sit++;
+
+    } else if (this_arg == "--append-mode") {
+      if (no_next_arg)
+        mxerror(Y("'--append-mode' lacks its argument.\n"));
+
+      parse_arg_append_mode(next_arg, *ti);
       sit++;
 
     } else if (this_arg == "--default-duration") {

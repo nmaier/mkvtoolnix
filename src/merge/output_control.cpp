@@ -175,6 +175,8 @@ int g_file_num = 1;
 
 int g_split_max_num_files                   = 65535;
 
+append_mode_e g_append_mode                 = APPEND_MODE_FILE_BASED;
+
 string g_default_language                   = "und";
 
 bitvalue_cptr g_seguid_link_previous;
@@ -1519,8 +1521,9 @@ append_track(packetizer_t &ptzr,
   // chapters then we have to suck the previous file dry. See below for the
   // reason (short version: we need all max_timecode_seen values).
   if (   !dst_file.done
-      && (   ((*gptzr)->get_track_type() == track_subtitle)
-          || (NULL != src_file.reader->chapters))) {
+      && (   (APPEND_MODE_FILE_BASED     == g_append_mode)
+          || ((*gptzr)->get_track_type() == track_subtitle)
+          || (NULL                       != src_file.reader->chapters))) {
     dst_file.reader->read_all();
     dst_file.num_unfinished_packetizers     = 0;
     dst_file.old_num_unfinished_packetizers = 0;
@@ -1588,7 +1591,11 @@ append_track(packetizer_t &ptzr,
   // But then again I don't expect that people will try to concatenate such
   // files if they've been split before.
   int64_t timecode_adjustment = dst_file.reader->max_timecode_seen;
-  if (ptzr.deferred && (NULL != deferred_file))
+  if (APPEND_MODE_FILE_BASED == g_append_mode)
+    // Intentionally left empty.
+    ;
+
+  else if (ptzr.deferred && (NULL != deferred_file))
     timecode_adjustment = src_file.deferred_max_timecode_seen;
 
   else if (   (track_subtitle == ptzr.packetizer->get_track_type())
@@ -1617,13 +1624,15 @@ append_track(packetizer_t &ptzr,
     }
   }
 
-  if (ptzr.packetizer->get_track_type() == track_subtitle) {
-    mxverb(2, boost::format(Y("append_track: new timecode_adjustment for subtitle track: %1% for %2%\n")) % timecode_adjustment % ptzr.packetizer->ti.id);
+  if ((APPEND_MODE_FILE_BASED == g_append_mode) || (ptzr.packetizer->get_track_type() == track_subtitle)) {
+    mxverb(2, boost::format(Y("append_track: new timecode_adjustment for append_mode == FILE_BASED or subtitle track: %1% for %2%\n"))
+           % format_timecode(timecode_adjustment) % ptzr.packetizer->ti.id);
     // The actual connection.
     ptzr.packetizer->connect(old_packetizer, timecode_adjustment);
 
   } else {
-    mxverb(2, boost::format(Y("append_track: new timecode_adjustment for NON subtitle track: %1% for %2%\n")) % timecode_adjustment % ptzr.packetizer->ti.id);
+    mxverb(2, boost::format(Y("append_track: new timecode_adjustment for append_mode == TRACK_BASED and NON subtitle track: %1% for %2%\n"))
+           % format_timecode(timecode_adjustment) % ptzr.packetizer->ti.id);
     // The actual connection.
     ptzr.packetizer->connect(old_packetizer);
   }
