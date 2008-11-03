@@ -223,6 +223,7 @@ typedef struct
   uint32_t max_len;    /* maximum video chunk present */
   
   track_t track[AVI_MAX_TRACKS];  // up to AVI_MAX_TRACKS audio tracks supported
+  track_t ttrack[AVI_MAX_TRACKS];  // up to AVI_MAX_TRACKS text tracks supported
   
   int64_t  pos;               /* position in file */
   long   n_idx;             /* number of index entries actually filled */
@@ -245,6 +246,8 @@ typedef struct
   
   int anum;            // total number of audio tracks 
   int aptr;            // current audio working track 
+  int tnum;            // total number of text tracks
+  int tptr;            // current text working track
   int comment_fd;      // Read avi header comments from this fd
   char *index_file;    // read the avi index from this file
   
@@ -358,12 +361,15 @@ int  AVI_audio_format(avi_t *AVI);
 long AVI_audio_rate(avi_t *AVI);
 long AVI_audio_bytes(avi_t *AVI);
 long AVI_audio_chunks(avi_t *AVI);
+long AVI_text_chunks(avi_t *AVI);
 int  AVI_can_read_audio(avi_t *AVI);
+int  AVI_can_read_text(avi_t *AVI);
 
 long AVI_max_video_chunk(avi_t *AVI);
 
 long AVI_frame_size(avi_t *AVI, long frame);
 long AVI_audio_size(avi_t *AVI, long frame);
+long AVI_text_size(avi_t *AVI, long frame);
 int  AVI_seek_start(avi_t *AVI);
 int  AVI_set_video_position(avi_t *AVI, long frame);
 long AVI_get_video_position(avi_t *AVI, long frame);
@@ -377,6 +383,8 @@ int  AVI_set_audio_position_index(avi_t *AVI, long indexpos);
 
 long AVI_read_audio(avi_t *AVI, char *audbuf, long bytes);
 long AVI_read_audio_chunk(avi_t *AVI, char *audbuf);
+
+long AVI_read_text_chunk(avi_t *AVI, char *audbuf);
 
 long AVI_audio_codech_offset(avi_t *AVI);
 long AVI_audio_codecf_offset(avi_t *AVI);
@@ -402,8 +410,10 @@ uint64_t AVI_max_size(void);
 int avi_update_header(avi_t *AVI);
 
 int AVI_set_audio_track(avi_t *AVI, int track);
+int AVI_set_text_track(avi_t *AVI, int track);
 int AVI_get_audio_track(avi_t *AVI);
 int AVI_audio_tracks(avi_t *AVI);
+int AVI_text_tracks(avi_t *AVI);
 
 void AVI_set_audio_vbr(avi_t *AVI, long is_vbr);
 long AVI_get_audio_vbr(avi_t *AVI);

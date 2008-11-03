@@ -32,6 +32,7 @@ extern "C" {
 #include "common.h"
 #include "error.h"
 #include "hacks.h"
+#include "matroska.h"
 #include "mpeg4_common.h"
 #include "output_control.h"
 #include "r_avi.h"
@@ -43,6 +44,12 @@ extern "C" {
 #include "p_pcm.h"
 #include "p_video.h"
 #include "p_vorbis.h"
+#include "subtitles.h"
+
+#define GAB2_TAG FOURCC('G', 'A', 'B', '2')
+#define GAB2_ID_LANGUAGE         0x0000
+#define GAB2_ID_LANGUAGE_UNICODE 0x0002
+#define GAB2_ID_SUBTITLES        0x0004
 
 // }}}
 
@@ -109,6 +116,8 @@ avi_reader_c::avi_reader_c(track_info_c &_ti)
 
   fps              = AVI_frame_rate(avi);
   max_video_frames = AVI_video_frames(avi);
+
+  parse_subtitle_chunks();
 }
 
 // }}}
@@ -125,6 +134,68 @@ avi_reader_c::~avi_reader_c() {
 }
 
 // }}}
+
+void
+avi_reader_c::parse_subtitle_chunks() {
+  int i;
+
+  for (i = 0; AVI_text_tracks(avi) > i; ++i) {
+    AVI_set_text_track(avi, i);
+
+    if (AVI_text_chunks(avi) == 0)
+      continue;
+
+    int chunk_size = AVI_read_text_chunk(avi, NULL);
+    if (0 >= chunk_size)
+      continue;
+
+    memory_cptr chunk(memory_c::alloc(chunk_size));
+    chunk_size = AVI_read_text_chunk(avi, (char *)chunk->get());
+
+    if (0 >= chunk_size)
+      continue;
+
+    avi_subs_demuxer_t demuxer;
+
+    try {
+      mm_mem_io_c io(chunk->get(), chunk_size);
+      uint32_t tag = io.read_uint32_be();
+
+      if (GAB2_TAG != tag) {
+        mxinfo("muuuuh :(( 1\n");
+        continue;
+      }
+
+      io.skip(1);
+
+      while (!io.eof() && (io.getFilePointer() < chunk_size)) {
+        uint16_t id = io.read_uint16_le();
+        int len     = io.read_uint32_le();
+
+        if (GAB2_ID_SUBTITLES == id) {
+          demuxer.subtitles = memory_c::alloc(len);
+          len               = io.read(demuxer.subtitles->get(), len);
+          demuxer.subtitles->set_size(len);
+
+        } else
+          io.skip(len);
+      }
+
+      if (0 != demuxer.subtitles->get_size()) {
+        mm_text_io_c text_io(new mm_mem_io_c(demuxer.subtitles->get(), demuxer.subtitles->get_size()));
+        demuxer.type
+          = srt_parser_c::probe(&text_io) ? avi_subs_demuxer_t::TYPE_SRT
+          : ssa_parser_c::probe(&text_io) ? avi_subs_demuxer_t::TYPE_SSA
+          :                                 avi_subs_demuxer_t::TYPE_UNKNOWN;
+
+        if (avi_subs_demuxer_t::TYPE_UNKNOWN != demuxer.type)
+          sdemuxers.push_back(demuxer);
+      }
+
+    } catch (...) {
+    }
+  }
+}
 
 void
 avi_reader_c::create_packetizer(int64_t tid) {
@@ -202,6 +273,61 @@ avi_reader_c::create_packetizers() {
 
   for (i = 0; i < AVI_audio_tracks(avi); i++)
     create_packetizer(i + 1);
+
+  for (i = 0; sdemuxers.size() > i; ++i)
+    create_subs_packetizer(i);
+}
+
+void
+avi_reader_c::create_subs_packetizer(int idx) {
+  avi_subs_demuxer_t &demuxer = sdemuxers[idx];
+
+  demuxer.text_io = mm_text_io_cptr(new mm_text_io_c(new mm_mem_io_c(demuxer.subtitles->get(), demuxer.subtitles->get_size())));
+
+  if (avi_subs_demuxer_t::TYPE_SRT == demuxer.type)
+    create_srt_packetizer(idx);
+
+  else if (avi_subs_demuxer_t::TYPE_SSA == demuxer.type)
+    create_ssa_packetizer(idx);
+}
+
+void
+avi_reader_c::create_srt_packetizer(int idx) {
+  avi_subs_demuxer_t &demuxer = sdemuxers[idx];
+  int id                      = idx + 1 + AVI_audio_tracks(avi);
+
+  srt_parser_c *parser        = new srt_parser_c(demuxer.text_io.get(), ti.fname, id);
+  demuxer.subs                = subtitles_cptr(parser);
+
+  parser->parse();
+
+  bool is_utf8 = demuxer.text_io->get_byte_order() != BO_NONE;
+  demuxer.ptzr = add_packetizer(new textsubs_packetizer_c(this, ti, MKV_S_TEXTUTF8, NULL, 0, true, is_utf8));
+
+  mxinfo_tid(ti.fname, id, Y("Using the text subtitle output module.\n"));
+}
+
+void
+avi_reader_c::create_ssa_packetizer(int idx) {
+  avi_subs_demuxer_t &demuxer = sdemuxers[idx];
+  int id                      = idx + 1 + AVI_audio_tracks(avi);
+
+  ssa_parser_c *parser        = new ssa_parser_c(demuxer.text_io.get(), ti.fname, id);
+  demuxer.subs                = subtitles_cptr(parser);
+
+  int cc_utf8                 = map_has_key(ti.sub_charsets, id)             ? utf8_init(ti.sub_charsets[id])
+    :                           map_has_key(ti.sub_charsets, -1)             ? utf8_init(ti.sub_charsets[-1])
+    :                           demuxer.text_io->get_byte_order() != BO_NONE ? utf8_init("UTF-8")
+    :                                                                          cc_local_utf8;
+
+  parser->set_iconv_handle(cc_utf8);
+  parser->set_ignore_attachments(ti.no_attachments);
+  parser->parse();
+
+  std::string global = parser->get_global();
+  demuxer.ptzr = add_packetizer(new textsubs_packetizer_c(this, ti, parser->is_ass() ?  MKV_S_TEXTASS : MKV_S_TEXTSSA, global.c_str(), global.length(), false, false));
+
+  mxinfo_tid(ti.fname, id, Y("Using the SSA/ASS subtitle output module.\n"));
 }
 
 memory_cptr
@@ -595,16 +721,35 @@ avi_reader_c::read_audio(avi_demuxer_t &demuxer) {
 }
 
 file_status_e
+avi_reader_c::read_subtitles(avi_subs_demuxer_t &demuxer) {
+  if (demuxer.subs->empty())
+    return FILE_STATUS_DONE;
+
+  demuxer.subs->process(PTZR(demuxer.ptzr));
+
+  if (demuxer.subs->empty()) {
+    PTZR(demuxer.ptzr)->flush();
+    return FILE_STATUS_DONE;
+  }
+
+  return FILE_STATUS_MOREDATA;
+}
+
+file_status_e
 avi_reader_c::read(generic_packetizer_c *ptzr,
                    bool force) {
-  vector<avi_demuxer_t>::iterator demuxer;
-
   if ((-1 != vptzr) && (PTZR(vptzr) == ptzr))
     return read_video();
 
+  vector<avi_demuxer_t>::iterator demuxer;
   mxforeach(demuxer, ademuxers)
     if ((-1 != demuxer->ptzr) && (PTZR(demuxer->ptzr) == ptzr))
       return read_audio(*demuxer);
+
+  vector<avi_subs_demuxer_t>::iterator subs_demuxer;
+  mxforeach(subs_demuxer, sdemuxers)
+    if ((-1 != subs_demuxer->ptzr) && (PTZR(subs_demuxer->ptzr) == ptzr))
+      return read_subtitles(*subs_demuxer);
 
   return FILE_STATUS_DONE;
 }
@@ -654,6 +799,13 @@ avi_reader_c::extended_identify_mpeg4_l2(vector<string> &extended_info) {
 
 void
 avi_reader_c::identify() {
+  identify_video();
+  identify_audio();
+  identify_subtitles();
+}
+
+void
+avi_reader_c::identify_video() {
   vector<string> extended_info;
 
   id_result_container("AVI");
@@ -667,42 +819,38 @@ avi_reader_c::identify() {
     extended_info.push_back("packetizer:mpeg4_p10_es_video");
 
   id_result_track(0, ID_RESULT_TRACK_VIDEO, type, join(" ", extended_info));
+}
 
+void
+avi_reader_c::identify_audio() {
   int i;
   for (i = 0; i < AVI_audio_tracks(avi); i++) {
     AVI_set_audio_track(avi, i);
     unsigned int audio_format = AVI_audio_format(avi);
 
-    switch (audio_format) {
-      case 0x0001:
-      case 0x0003:
-        type = "PCM";
-        break;
-      case 0x0050:
-        type = "MP2";
-        break;
-      case 0x0055:
-        type = "MP3";
-        break;
-      case 0x2000:
-        type = "AC3";
-        break;
-      case 0x2001:
-        type = "DTS";
-        break;
-      case 0x00ff:
-      case 0x706d:
-        type = "AAC";
-        break;
-      case 0x566f:
-        type = "Vorbis";
-        break;
-      default:
-        type = (boost::format("unsupported (0x%|1$04x|)") % audio_format).str();
-    }
+    string type
+      = (0x0001 == audio_format) || (0x0003 == audio_format) ? "PCM"
+      : (0x0050 == audio_format)                             ? "MP2"
+      : (0x0055 == audio_format)                             ? "MP3"
+      : (0x2000 == audio_format)                             ? "AC3"
+      : (0x2001 == audio_format)                             ? "DTS"
+      : (0x0050 == audio_format)                             ? "MP2"
+      : (0x00ff == audio_format) || (0x706d == audio_format) ? "AAC"
+      : (0x566f == audio_format)                             ? "Vorbis"
+      :                                                        (boost::format("unsupported (0x%|1$04x|)") % audio_format).str();
 
     id_result_track(i + 1, ID_RESULT_TRACK_AUDIO, type);
   }
+}
+
+void
+avi_reader_c::identify_subtitles() {
+  int i;
+  for (i = 0; sdemuxers.size() > i; ++i)
+    id_result_track(1 + AVI_audio_tracks(avi) + i, ID_RESULT_TRACK_SUBTITLES,
+                      avi_subs_demuxer_t::TYPE_SRT == sdemuxers[i].type ? "SRT"
+                    : avi_subs_demuxer_t::TYPE_SSA == sdemuxers[i].type ? "SSA/ASS"
+                    :                                                     "unknown");
 }
 
 void
@@ -712,6 +860,9 @@ avi_reader_c::add_available_track_ids() {
   // Yes, this is correct. Don't forget the video track!
   for (i = 0; i <= AVI_audio_tracks(avi); i++)
     available_track_ids.push_back(i);
+
+  for (i = 0; sdemuxers.size() > i; ++i)
+    available_track_ids.push_back(1 + AVI_audio_tracks(avi) + i);
 }
 
 // }}}

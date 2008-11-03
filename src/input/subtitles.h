@@ -66,6 +66,7 @@ public:
     return current == entries.end();
   }
 };
+typedef counted_ptr<subtitles_c> subtitles_cptr;
 
 class srt_parser_c: public subtitles_c {
 public:

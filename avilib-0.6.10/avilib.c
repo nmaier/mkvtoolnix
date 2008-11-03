@@ -621,6 +621,23 @@ int AVI_can_read_audio(avi_t *AVI)
    if (AVI->track[AVI->aptr].audio_index[AVI->track[AVI->aptr].audio_posc].pos < AVI->video_index[AVI->video_pos].pos) return 1;
    else return 0;
 }
+
+int AVI_can_read_text(avi_t *AVI)
+{
+   if(AVI->mode==AVI_MODE_WRITE) { return -1; }
+   if(!AVI->video_index)         { return -1; }
+   if(!AVI->ttrack[AVI->tptr].audio_index)         { return -1; }
+
+   if (AVI->ttrack[AVI->tptr].audio_posc>=AVI->ttrack[AVI->tptr].audio_chunks) {
+       return 0;
+   }
+
+   if (AVI->video_pos >= AVI->video_frames) return 1;
+   
+   if (AVI->ttrack[AVI->tptr].audio_index[AVI->ttrack[AVI->tptr].audio_posc].pos < AVI->video_index[AVI->video_pos].pos) return 1;
+   else return 0;
+}
+
 /*
    AVI_open_output_file: Open an AVI File and write a bunch
                          of zero bytes as space for the header.
@@ -1862,9 +1879,24 @@ int AVI_set_audio_track(avi_t *AVI, int track)
   return 0;
 }
 
+int AVI_set_text_track(avi_t *AVI, int track)
+{
+
+  if(track < 0 || track + 1 > AVI->tnum) return(-1);
+
+  //this info is not written to file anyway
+  AVI->tptr=track;
+  return 0;
+}
+
 int AVI_get_audio_track(avi_t *AVI)
 {
     return(AVI->aptr);
+}
+
+int AVI_get_text_track(avi_t *AVI)
+{
+    return(AVI->tptr);
 }
 
 void AVI_set_audio_vbr(avi_t *AVI, long is_vbr)
@@ -2223,8 +2255,8 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
   int64_t n;
   unsigned char *hdrl_data;
   long header_offset=0, hdrl_len=0;
-  long nvi, nai[AVI_MAX_TRACKS], ioff;
-  long tot[AVI_MAX_TRACKS];
+  long nvi, nai[AVI_MAX_TRACKS], nti[AVI_MAX_TRACKS], ioff;
+  long tot[AVI_MAX_TRACKS], tott[AVI_MAX_TRACKS];
   int j;
   int lasttag = 0;
   int vids_strh_seen = 0;
@@ -2378,6 +2410,18 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	   AVI->track[AVI->aptr].a_codech_off = header_offset + i;
 	   
          }
+         else if (strncasecmp ((char *)hdrl_data+i,"txts",4) ==0) {
+	   AVI->tptr = AVI->tnum;
+	   ++AVI->tnum;
+
+	   if(AVI->tnum > AVI_MAX_TRACKS) {
+	     fprintf(stderr, "error - only %d text tracks supported\n", AVI_MAX_TRACKS);
+	     return(-1);
+	   }
+
+	   lasttag = 3;
+	 }
+
          else if (strncasecmp ((char *)(hdrl_data+i),"iavs",4) ==0 && ! auds_strh_seen) {
 	     fprintf(stderr, "AVILIB: error - DV AVI Type 1 no supported\n");
 	     return (-1);
@@ -2568,6 +2612,37 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 #endif
 
 	 }
+         else if(lasttag == 3) // Text subtitles
+         {
+
+	    a = (char *)(hdrl_data+i);
+
+	    AVI->ttrack[AVI->tptr].audio_superindex = (avisuperindex_chunk *) malloc (sizeof (avisuperindex_chunk));
+	    memcpy (AVI->ttrack[AVI->tptr].audio_superindex->fcc, a, 4);             a += 4;
+	    AVI->ttrack[AVI->tptr].audio_superindex->dwSize = str2ulong(a);          a += 4;
+	    AVI->ttrack[AVI->tptr].audio_superindex->wLongsPerEntry = str2ushort(a); a += 2;
+	    AVI->ttrack[AVI->tptr].audio_superindex->bIndexSubType = *a;             a += 1;
+	    AVI->ttrack[AVI->tptr].audio_superindex->bIndexType = *a;                a += 1;
+	    AVI->ttrack[AVI->tptr].audio_superindex->nEntriesInUse = str2ulong(a);   a += 4;
+	    memcpy (AVI->ttrack[AVI->tptr].audio_superindex->dwChunkId, a, 4);       a += 4;
+
+	    // 3 * reserved
+	    a += 4; a += 4; a += 4;
+
+	    if (AVI->ttrack[AVI->tptr].audio_superindex->bIndexSubType != 0) {fprintf(stderr, "Invalid Header, bIndexSubType != 0\n"); }
+
+	    AVI->ttrack[AVI->tptr].audio_superindex->aIndex = 
+	       malloc (AVI->ttrack[AVI->tptr].audio_superindex->wLongsPerEntry * 
+		     AVI->ttrack[AVI->tptr].audio_superindex->nEntriesInUse * sizeof (uint32_t));
+
+	    // position of ix## chunks
+	    for (j=0; j<AVI->ttrack[AVI->tptr].audio_superindex->nEntriesInUse; ++j) {
+	       AVI->ttrack[AVI->tptr].audio_superindex->aIndex[j].qwOffset = str2ullong (a);  a += 8;
+	       AVI->ttrack[AVI->tptr].audio_superindex->aIndex[j].dwSize = str2ulong (a);     a += 4;
+	       AVI->ttrack[AVI->tptr].audio_superindex->aIndex[j].dwDuration = str2ulong (a); a += 4;
+	    }
+
+	 }
 	 i += 8;
       }
       else if((strncasecmp((char *)(hdrl_data+i),"JUNK",4) == 0) ||
@@ -2717,6 +2792,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 
       nvi = 0;
       for(audtr=0; audtr<AVI->anum; ++audtr) nai[audtr] = tot[audtr] = 0; 
+      for(audtr=0; audtr<AVI->tnum; ++audtr) nti[audtr] = tott[audtr] = 0;
 
       // ************************
       // VIDEO
@@ -2857,6 +2933,70 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	 
 	 AVI->track[audtr].audio_chunks = nai[audtr];
 	 AVI->track[audtr].audio_bytes = tot[audtr];
+      }
+
+      // ************************
+      // TEXT
+      // ************************
+
+      for(audtr=0; audtr<AVI->tnum; ++audtr) {
+
+	 k = 0;
+	 if (!AVI->ttrack[audtr].audio_superindex) {
+	       fprintf(stderr, "(%s) cannot read text index for track %d\n", __FILE__, audtr);
+	       continue;
+	 }
+	 for (j=0; j<AVI->ttrack[audtr].audio_superindex->nEntriesInUse; j++) {
+
+	    // read from file
+	    chunk_start = en = malloc (AVI->ttrack[audtr].audio_superindex->aIndex[j].dwSize+odml_hrdl_len);
+
+	    if (xio_lseek(AVI->fdes, AVI->ttrack[audtr].audio_superindex->aIndex[j].qwOffset, SEEK_SET) == (int64_t)-1) {
+	       fprintf(stderr, "(%s) cannot seek to 0x%llx\n", __FILE__, (unsigned long long)AVI->ttrack[audtr].audio_superindex->aIndex[j].qwOffset);
+	       free(chunk_start);
+	       continue;
+	    }
+
+	    if (avi_read(AVI->fdes, en, AVI->ttrack[audtr].audio_superindex->aIndex[j].dwSize+odml_hrdl_len) <= 0) {
+	       fprintf(stderr, "(%s) cannot read from offset 0x%llx; broken (incomplete) file?\n", 
+		     __FILE__,(unsigned long long) AVI->ttrack[audtr].audio_superindex->aIndex[j].qwOffset);
+	       free(chunk_start);
+	       continue;
+	    }
+
+	    nrEntries = str2ulong(en + 12);
+	    //if (nrEntries > 50) nrEntries = 2; // XXX
+	    offset = str2ullong(en + 20);
+
+	    // skip header
+	    en += odml_hrdl_len;
+	    nti[audtr] += nrEntries;
+	    AVI->ttrack[audtr].audio_index = (audio_index_entry *) realloc (AVI->ttrack[audtr].audio_index, nti[audtr] * sizeof (audio_index_entry));
+
+	    while (k < nti[audtr]) {
+
+	       AVI->ttrack[audtr].audio_index[k].pos = offset + str2ulong(en); en += 4;
+	       AVI->ttrack[audtr].audio_index[k].len = str2ulong_len(en); en += 4;
+	       AVI->ttrack[audtr].audio_index[k].tot = tott[audtr];
+	       tott[audtr] += AVI->ttrack[audtr].audio_index[k].len;
+
+#ifdef DEBUG_ODML
+	       /*
+		  printf("[%d:%d] POS 0x%llX len=%d offset (%llx) (%ld)\n", k, audtr, 
+		  AVI->ttrack[audtr].audio_index[k].pos, 
+		  (int)AVI->ttrack[audtr].audio_index[k].len, 
+		  offset, AVI->ttrack[audtr].audio_superindex->aIndex[j].dwSize); 
+		  */
+#endif
+
+	       ++k;
+	    }
+
+	    free(chunk_start);
+	 }
+	 
+	 AVI->ttrack[audtr].audio_chunks = nti[audtr];
+	 AVI->ttrack[audtr].audio_bytes = tott[audtr];
       }
    } // is opendml
 
@@ -3080,6 +3220,11 @@ int AVI_audio_tracks(avi_t *AVI)
     return(AVI->anum);
 }
 
+int AVI_text_tracks(avi_t *AVI)
+{
+    return(AVI->tnum);
+}
+
 int AVI_audio_channels(avi_t *AVI)
 {
    return AVI->track[AVI->aptr].a_chans;
@@ -3120,6 +3265,11 @@ long AVI_audio_chunks(avi_t *AVI)
    return AVI->track[AVI->aptr].audio_chunks;
 }
 
+long AVI_text_chunks(avi_t *AVI)
+{
+   return AVI->ttrack[AVI->tptr].audio_chunks;
+}
+
 long AVI_audio_codech_offset(avi_t *AVI)
 {
    return AVI->track[AVI->aptr].a_codech_off;
@@ -3156,6 +3306,15 @@ long AVI_audio_size(avi_t *AVI, long frame)
   
   if(frame < 0 || frame >= AVI->track[AVI->aptr].audio_chunks) return -1;
   return(AVI->track[AVI->aptr].audio_index[frame].len);
+}
+
+long AVI_text_size(avi_t *AVI, long frame)
+{
+  if(AVI->mode==AVI_MODE_WRITE) { AVI_errno = AVI_ERR_NOT_PERM; return -1; }
+  if(!AVI->ttrack[AVI->tptr].audio_index)         { AVI_errno = AVI_ERR_NO_IDX;   return -1; }
+
+  if(frame < 0 || frame >= AVI->ttrack[AVI->tptr].audio_chunks) return -1;
+  return(AVI->ttrack[AVI->tptr].audio_index[frame].len);
 }
 
 long AVI_get_video_position(avi_t *AVI, long frame)
@@ -3350,6 +3509,38 @@ long AVI_read_audio_chunk(avi_t *AVI, char *audbuf)
    }
    AVI->track[AVI->aptr].audio_posc++;
    AVI->track[AVI->aptr].audio_posb = 0;
+
+   return left;
+}
+
+long AVI_read_text_chunk(avi_t *AVI, char *audbuf)
+{
+   int64_t pos, left;
+
+   if(AVI->mode==AVI_MODE_WRITE) { AVI_errno = AVI_ERR_NOT_PERM; return -1; }
+   if(!AVI->ttrack[AVI->tptr].audio_index)         { AVI_errno = AVI_ERR_NO_IDX;   return -1; }
+
+   if (AVI->ttrack[AVI->tptr].audio_posc+1>AVI->ttrack[AVI->tptr].audio_chunks) return -1;
+
+   left = AVI->ttrack[AVI->tptr].audio_index[AVI->ttrack[AVI->tptr].audio_posc].len - AVI->ttrack[AVI->tptr].audio_posb;
+
+   if (audbuf == NULL) return left;
+
+   if(left==0) {
+       AVI->ttrack[AVI->tptr].audio_posc++;
+       AVI->ttrack[AVI->tptr].audio_posb = 0;
+       return 0;
+   }
+
+   pos = AVI->ttrack[AVI->tptr].audio_index[AVI->ttrack[AVI->tptr].audio_posc].pos + AVI->ttrack[AVI->tptr].audio_posb;
+   xio_lseek(AVI->fdes, pos, SEEK_SET);
+   if (avi_read(AVI->fdes,audbuf,left) != left)
+   {
+      AVI_errno = AVI_ERR_READ;
+      return -1;
+   }
+   AVI->ttrack[AVI->tptr].audio_posc++;
+   AVI->ttrack[AVI->tptr].audio_posb = 0;
 
    return left;
 }
