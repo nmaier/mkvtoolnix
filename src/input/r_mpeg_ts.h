@@ -31,4 +31,4 @@ public:
   mpeg_ts_reader_c(track_info_c &n_ti): generic_reader_c(n_ti) { };
 };
 
-#endif  // __T_MPEG_TS_H
+#endif  // __R_MPEG_TS_H
