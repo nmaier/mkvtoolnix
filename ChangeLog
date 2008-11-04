@@ -1,3 +1,9 @@
+2008-11-04  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: Split timecodes with more than three decimals were
+	not allowed even though the docs say that they are. They are now,
+	as mkvmerge supports such timecodes.
+
 2008-11-03  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Changed the way mkvmerge calculates the
