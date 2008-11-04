@@ -97,7 +97,7 @@ mpeg4_p10_es_video_packetizer_c::process(packet_cptr packet) {
     mxerror_tid(ti.fname, ti.id,
                 boost::format(Y("mkvmerge encountered broken or unparsable data in this AVC/h.264 video track. "
                                 "Either your file is damaged (which mkvmerge cannot cope with yet) or this is a bug in mkvmerge itself. "
-                                "The error message was:\n")) % error.get_error());
+                                "The error message was:\n%1%\n")) % error.get_error());
   }
 
   return FILE_STATUS_MOREDATA;
