@@ -76,6 +76,7 @@
 #include "r_asf.h"
 #include "r_avc.h"
 #include "r_avi.h"
+#include "r_cdxa.h"
 #include "r_dirac.h"
 #include "r_dts.h"
 #include "r_flac.h"
@@ -305,6 +306,8 @@ get_file_type(filelist_t &file) {
   // File types that can be detected unambiguously but are not supported
   if (asf_reader_c::probe_file(io, size))
     type = FILE_TYPE_ASF;
+  else if (cdxa_reader_c::probe_file(io, size))
+    type = FILE_TYPE_CDXA;
   else if (flv_reader_c::probe_file(io, size))
     type = FILE_TYPE_FLV;
   // File types that can be detected unambiguously
