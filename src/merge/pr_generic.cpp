@@ -579,12 +579,10 @@ generic_packetizer_c::set_headers() {
     KaxTrackVideo &video = GetChild<KaxTrackVideo>(track_entry);
 
     if ((-1 != hvideo_pixel_height) && (-1 != hvideo_pixel_width)) {
-      int disp_width, disp_height;
-
       if ((-1 == hvideo_display_width) || (-1 == hvideo_display_height) || ti.aspect_ratio_given || ti.display_dimensions_given) {
         if (ti.display_dimensions_given) {
-          disp_width  = ti.display_width;
-          disp_height = ti.display_height;
+          hvideo_display_width  = ti.display_width;
+          hvideo_display_height = ti.display_height;
 
         } else {
           if (!ti.aspect_ratio_given)
@@ -594,25 +592,21 @@ generic_packetizer_c::set_headers() {
             ti.aspect_ratio = (float)hvideo_pixel_width * ti.aspect_ratio / (float)hvideo_pixel_height;
 
           if (ti.aspect_ratio > ((float)hvideo_pixel_width / (float)hvideo_pixel_height)) {
-            disp_width  = irnd(hvideo_pixel_height * ti.aspect_ratio);
-            disp_height = hvideo_pixel_height;
+            hvideo_display_width  = irnd(hvideo_pixel_height * ti.aspect_ratio);
+            hvideo_display_height = hvideo_pixel_height;
 
           } else {
-            disp_width  = hvideo_pixel_width;
-            disp_height = irnd(hvideo_pixel_width / ti.aspect_ratio);
+            hvideo_display_width  = hvideo_pixel_width;
+            hvideo_display_height = irnd(hvideo_pixel_width / ti.aspect_ratio);
           }
         }
-
-      } else {
-        disp_width  = hvideo_display_width;
-        disp_height = hvideo_display_height;
       }
 
       GetChildAs<KaxVideoPixelWidth,    EbmlUInteger>(video) = hvideo_pixel_width;
       GetChildAs<KaxVideoPixelHeight,   EbmlUInteger>(video) = hvideo_pixel_height;
 
-      GetChildAs<KaxVideoDisplayWidth,  EbmlUInteger>(video) = disp_width;
-      GetChildAs<KaxVideoDisplayHeight, EbmlUInteger>(video) = disp_height;
+      GetChildAs<KaxVideoDisplayWidth,  EbmlUInteger>(video) = hvideo_display_width;
+      GetChildAs<KaxVideoDisplayHeight, EbmlUInteger>(video) = hvideo_display_height;
 
       GetChild<KaxVideoDisplayWidth>(video).SetDefaultSize(4);
       GetChild<KaxVideoDisplayHeight>(video).SetDefaultSize(4);

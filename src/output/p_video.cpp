@@ -647,7 +647,7 @@ mpeg4_p2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
     rerender_track_headers();
     mxinfo_tid(ti.fname, ti.id,
                boost::format(Y("Extracted the aspect ratio information from the MPEG4 layer 2 video data and set the display dimensions to %1%/%2%.\n"))
-               % ti.display_width % ti.display_height);
+               % hvideo_display_width % hvideo_display_height);
 
   } else if (50 <= m_frames_output)
     m_aspect_ratio_extracted = true;
@@ -671,6 +671,9 @@ mpeg4_p2_video_packetizer_c::extract_size(const unsigned char *buffer,
         put_uint32_le(&bih->bi_height, xtr_height);
         set_codec_private(ti.private_data, ti.private_size);
       }
+
+      hvideo_display_width  = -1;
+      hvideo_display_height = -1;
 
       generic_packetizer_c::set_headers();
       rerender_track_headers();
