@@ -128,21 +128,15 @@ tab_global::tab_global(wxWindow *parent):
   tc_split_after_timecodes = new wxTextCtrl(this, ID_TC_SPLITAFTERTIMECODES,
                                       wxT(""));
   tc_split_after_timecodes->
-    SetToolTip(TIP("The timecodes after which a new output "
-                   "file is started. The timecodes can be given "
-                   "either in the form HH:MM:SS.nnnnnnnnn "
-                   "or as the number of seconds followed by "
-                   "'s'. You may omit the number of hours "
-                   "'HH' and the number of nanoseconds "
-                   "'nnnnnnnnn'. If given then you may use "
-                   "up to nine digits after the decimal "
-                   "point. If two or more "
-                   "timecodes are used then you have to separate them with "
-                   "commas. The formats can be mixed, too. "
-                   "Examples: 01:00:00,01:30:00 (after one hour and after "
-                   "one hour and thirty minutes) or "
-                   "1800s,3000s,00:10:00 (after three, five and ten "
-                   "minutes)."));
+    SetToolTip(TIP("The timecodes after which a new output file is started. "
+                   "The timecodes refer to the whole stream and not to each individual output file. "
+                   "The timecodes can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. "
+                   "You may omit the number of hours 'HH'. "
+                   "You can specify up to nine digits for the number of nanoseconds 'nnnnnnnnn' or none at all. "
+                   "If given then you may use up to nine digits after the decimal point. "
+                   "If two or more timecodes are used then you have to separate them with commas. "
+                   "The formats can be mixed, too. "
+                   "Examples: 01:00:00,01:30:00 (after one hour and after one hour and thirty minutes) or 1800s,3000s,00:10:00 (after three, five and ten minutes)."));
   tc_split_after_timecodes->Enable(false);
   siz_line2->Add(tc_split_after_timecodes, 1,
                  wxALIGN_CENTER_VERTICAL | wxGROW, 5);

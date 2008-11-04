@@ -592,7 +592,7 @@
 
   <p><code>File/segment title:</code> This title is used for the actual
    movie title, e.g. 'Vanilla Sky'.</p>
-  
+
   <h4><a name="global_split">3.5.2. Automatic splitting and file
     linking </a></h4>
 
@@ -601,7 +601,7 @@
    big file is generated. If splitting is activated then you can tell
    <i>mkvmerge</i> to start a new output file after either a specific
    amount of data has been written to the current file or after a specific
-   amount of time has accumulated. The formats accepted are:
+   timecode has been reached. The accepted formats are:
    <br>
    <ul>
     <li>For the size: A number optionally followed by the letter 'K', 'M'
@@ -609,9 +609,19 @@
      bytes) or gigabytes (1024 * 1024 * 1024 bytes). Examples: '700M' or
      '100000K'.</li>
 
-    <li>For the time: The format is either <code>HH:MM:SS</code> or a
-     number followed by the letter 's' indicating a number of
-     seconds. Examples: '01:20:00' (split after 1 hour, 20 minutes) or
+    <li>For the time: The format is either <code>HH:MM:SS.nnn</code>
+     with up to nine digits for up to nanosecond precision or a number
+     followed by the letter 's' indicating a number of
+     seconds. Several timecodes can be entered separated by
+     commas.<br>
+
+     Please note that the timecodes refer to the unsplit output
+     stream. Therefore entering '00:10:00,00:20:00' will result in
+     three files of which the first two will be roughly ten minutes
+     long. The third piece will contain the rest of the input
+     stream. This is independant of the 'file linking' feature.<br>
+
+     Examples: '01:20:00' (split after 1 hour, 20 minutes) or
      '1800s' (split after 1800 seconds = 30 minutes).</li>
    </ul>
   </p>
