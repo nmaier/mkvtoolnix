@@ -69,7 +69,7 @@ public:
   bool validate_settings();
 
   bool is_valid_split_size();
-  bool is_valid_split_timecode(string s, const wxString &type);
+  bool is_valid_split_timecode(wxString s);
   bool is_valid_split_timecode_list();
 };
 

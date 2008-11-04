@@ -22,6 +22,7 @@
 #include "wx/listctrl.h"
 #include "wx/statline.h"
 #include "wx/config.h"
+#include "wx/regex.h"
 
 #include "common.h"
 #include "mmg.h"
@@ -580,44 +581,20 @@ tab_global::is_valid_split_size() {
 }
 
 bool
-tab_global::is_valid_split_timecode(string s,
-                                    const wxString &type) {
-  int64_t dummy_i;
-  char c;
-
+tab_global::is_valid_split_timecode(wxString s) {
   strip(s);
   if (s.length() == 0) {
-    wxMessageBox(wxT("Splitting by ") + type +
-                 wxT(" was selected, but nothing was entered."),
+    wxMessageBox(wxT("Splitting by timecode/duration was selected, but nothing was entered."),
                  wxT("mkvmerge GUI error"),
                  wxOK | wxCENTER | wxICON_ERROR);
     return false;
   }
-  c = s[s.length() - 1];
-  if (tolower(c) == 's') {
-    s.erase(s.length() - 1);
-    if ((s.length() == 0) || !parse_int(s, dummy_i) ||
-        (dummy_i <= 0)) {
-      wxMessageBox(wxT("The format of the split ") + type +
-                   wxT(" is invalid."),
-                   wxT("mkvmerge GUI error"), wxOK | wxCENTER |
-                   wxICON_ERROR);
-      return false;
-    }
 
-  } else if (((s.length() == 8) &&
-              ((s[2] != ':') || (s[5] != ':') ||
-               !isdigit(s[0]) || !isdigit(s[1]) || !isdigit(s[3]) ||
-               !isdigit(s[4]) || !isdigit(s[6]) || !isdigit(s[7])))
-             ||
-             ((s.length() == 12) &&
-              ((s[2] != ':') || (s[5] != ':') || (s[8] != '.') ||
-               !isdigit(s[0]) || !isdigit(s[1]) || !isdigit(s[3]) ||
-               !isdigit(s[4]) || !isdigit(s[6]) || !isdigit(s[7]) ||
-               !isdigit(s[9]) || !isdigit(s[10]) || !isdigit(s[11])))
-             ||
-             ((s.length() != 8) && (s.length() != 12))) {
-    wxMessageBox(wxT("The format of the split ") + type + wxT(" is invalid."),
+  wxRegEx re_seconds(wxT("^[[:digit:]]+s$"));
+  wxRegEx re_timecodes(wxT("^([[:digit:]]{2}:)?[[:digit:]]{2}:[[:digit:]]{2}(\\.[[:digit:]]{1,9})?$"));
+
+  if (!re_seconds.Matches(s) && !re_timecodes.Matches(s)) {
+    wxMessageBox(wxT("The format of the split timecode/duration is invalid."),
                  wxT("mkvmerge GUI error"),
                  wxOK | wxCENTER | wxICON_ERROR);
     return false;
@@ -628,13 +605,13 @@ tab_global::is_valid_split_timecode(string s,
 
 bool
 tab_global::is_valid_split_timecode_list() {
-  string s = wxMB(tc_split_after_timecodes->GetValue());
-  vector<string> parts;
-  vector<string>::const_iterator i;
+  wxString s = tc_split_after_timecodes->GetValue();
+  vector<wxString> parts;
+  vector<wxString>::const_iterator i;
 
-  parts = split(s, ",");
+  parts = split(s, wxT(","));
   mxforeach(i, parts)
-    if (!is_valid_split_timecode(*i, wxT("timecode list")))
+    if (!is_valid_split_timecode(*i))
       return false;
 
   return true;
@@ -651,8 +628,7 @@ tab_global::validate_settings() {
         return false;
 
     } else if (rb_split_by_time->GetValue()) {
-      if (!is_valid_split_timecode(wxMB(cob_split_by_time->GetValue()),
-                                   wxT("duration")))
+      if (!is_valid_split_timecode(cob_split_by_time->GetValue()))
         return false;
 
     } else if (!is_valid_split_timecode_list())
