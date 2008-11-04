@@ -15,14 +15,7 @@
 
 #include "os.h"
 
-#include <boost/regex.hpp>
-#include <ctype.h>
-#include <errno.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
-#include <algorithm>
+#include <string>
 
 #include "base64.h"
 #include "extern_data.h"
