@@ -34,7 +34,7 @@ subtitles_c::process(generic_packetizer_c *p) {
 
 // ------------------------------------------------------------
 
-#define SRT_RE_TIMECODE      "(\\d{1,2}):(\\d{1,2}):(\\d{1,2})[,\\.](\\d+)?"
+#define SRT_RE_TIMECODE      "\\s*(\\d+):\\s*(\\d+):\\s*(\\d+)[,\\.]\\s*(\\d+)?"
 #define SRT_RE_TIMECODE_LINE "^" SRT_RE_TIMECODE "\\s*-+>\\s*" SRT_RE_TIMECODE "\\s*"
 #define SRT_RE_COORDINATES   "([XY]\\d+:\\d+\\s*){4}\\s*$"
 

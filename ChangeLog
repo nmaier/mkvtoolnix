@@ -1,3 +1,10 @@
+2008-12-02  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: mkvmerge recognizes SRT subtitle files with
+	timecodes that contain spaces between the colons and the digits
+	and timecodes whose numbers are not exactly two or three digits
+	long.
+
 2008-11-28  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: mmg processes window events much more often during
