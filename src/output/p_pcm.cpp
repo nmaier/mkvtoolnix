@@ -43,7 +43,7 @@ pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *p_reader,
   , m_channels(channels)
   , m_bits_per_sample(bits_per_sample)
   , m_packet_size(0)
-  , m_bytes_output(0)
+  , m_samples_output(0)
   , m_big_endian(big_endian)
   , m_ieee_float(ieee_float)
 {
@@ -53,17 +53,17 @@ pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *p_reader,
     if ((m_samples_per_sec % i) == 0)
       break;
 
-  if ((2 == i) && ((m_packet_size % 5) == 0))
+  if ((2 == i) && ((m_samples_per_sec % 5) == 0))
     i = 5;
 
-  m_packet_size = samples_per_sec / i;
+  m_samples_per_packet = samples_per_sec / i;
 
   set_track_type(track_audio);
-  set_track_default_duration((int64_t)(1000000000.0 * m_packet_size / m_samples_per_sec));
+  set_track_default_duration((int64_t)(1000000000.0 * m_samples_per_packet / m_samples_per_sec));
 
   /* It could happen that (channels * bits_per_sample < 8).  Because of this,
      we mustn't divide by 8 in the same line, or the result would be hosed. */
-  m_packet_size *= m_channels * m_bits_per_sample;
+  m_packet_size  = m_samples_per_packet * m_channels * m_bits_per_sample;
   m_packet_size /= 8;
 }
 
@@ -93,11 +93,12 @@ pcm_packetizer_c::process(packet_cptr packet) {
   m_buffer.add(packet->data->get(), packet->data->get_size());
 
   while (m_buffer.get_size() >= m_packet_size) {
-    add_packet(new packet_t(new memory_c(m_buffer.get_buffer(), m_packet_size, false), (int64_t)m_bytes_output * 1000000000ll / m_bytes_per_second,
-                            (int64_t)m_packet_size * 1000000000ll / m_bytes_per_second));
+    add_packet(new packet_t(new memory_c(m_buffer.get_buffer(), m_packet_size, false),
+                            m_samples_output     * 1000000000ll / m_samples_per_sec,
+                            m_samples_per_packet * 1000000000ll / m_samples_per_sec));
 
     m_buffer.remove(m_packet_size);
-    m_bytes_output += m_packet_size;
+    m_samples_output += m_samples_per_packet;
   }
 
   return FILE_STATUS_MOREDATA;
@@ -108,9 +109,9 @@ pcm_packetizer_c::flush() {
   uint32_t size = m_buffer.get_size();
   if (0 < size) {
     add_packet(new packet_t(new memory_c(m_buffer.get_buffer(), size, false),
-                            (int64_t)m_bytes_output * 1000000000ll / m_bytes_per_second,
-                            (int64_t)size * 1000000000ll / m_bytes_per_second));
-    m_bytes_output += size;
+                            m_samples_output * 1000000000ll / m_samples_per_sec,
+                            size             * 1000000000ll / m_bytes_per_second));
+    m_samples_output += size * 8 / m_channels / m_bits_per_sample;
     m_buffer.remove(size);
   }
 

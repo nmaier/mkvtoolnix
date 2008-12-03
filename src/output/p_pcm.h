@@ -24,8 +24,8 @@
 
 class pcm_packetizer_c: public generic_packetizer_c {
 private:
-  int m_packetno, m_bytes_per_second, m_samples_per_sec, m_channels, m_bits_per_sample, m_packet_size;
-  int64_t m_bytes_output;
+  int m_packetno, m_bytes_per_second, m_samples_per_sec, m_channels, m_bits_per_sample, m_samples_per_packet;
+  int64_t m_packet_size, m_samples_output;
   bool m_big_endian, m_ieee_float;
   byte_buffer_c m_buffer;
 
