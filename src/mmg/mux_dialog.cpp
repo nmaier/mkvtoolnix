@@ -154,13 +154,15 @@ mux_dialog::mux_dialog(wxWindow *parent):
     while (app->Pending())
       app->Dispatch();
 
-    if (!out->CanRead()) {
+    if (!out->CanRead() && !out->Eof()) {
       wxMilliSleep(5);
       continue;
     }
 
     if (!out->Eof())
       c = out->GetC();
+    else
+      c = '\n';
 
     if ((c == '\n') || (c == '\r') || out->Eof()) {
 #if WXUNICODE
