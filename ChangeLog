@@ -1,5 +1,7 @@
 2008-12-04  Moritz Bunkus  <moritz@bunkus.org>
 
+	* Released v2.4.1.
+
 	* Build system: bug fix: Configure does not use "uname -m" for the
 	detection of the Boost libraries anymore but configure's "$target"
 	environment variable. This fixes the Boost detection for cross
