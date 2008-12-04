@@ -68,7 +68,10 @@ rm -f config.h config.h.in stamp-h1 &> /dev/null
 echo "  autoheader" && autoheader
 #echo "  libtoolize --automake" && libtoolize --automake
 echo "  autoconf" && autoconf
-#echo "  automake --add-missing --copy" && automake --add-missing --copy
+# Ignore automake errors. We need config.sub and config.guess
+# which are copied by automake, but we don't use automake for
+# managing Makefiles.
+echo "  automake --add-missing --copy" && automake --add-missing --copy 2> /dev/null
 
 echo
 echo "You can run './configure' now. If you need dependencies then"

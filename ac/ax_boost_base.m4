@@ -84,20 +84,18 @@ if test "x$want_boost" = "xyes"; then
     dnl this location ist chosen if boost libraries are installed with the --layout=system option
     dnl or if you install boost with RPM
     if test "$ac_boost_path" != ""; then
-        if test "`uname -m`" = "x86_64" && test -d "$ac_boost_path/lib64" ; then
-            BOOST_LDFLAGS="-L$ac_boost_path/lib64"
-        else
-            BOOST_LDFLAGS="-L$ac_boost_path/lib"
-        fi
+        case $target in
+             ppc64*|sparc64*|x86_64*) BOOST_LDFLAGS="-L$ac_boost_path/lib64" ;;
+             *)                       BOOST_LDFLAGS="-L$ac_boost_path/lib" ;;
+        esac
         BOOST_CPPFLAGS="-I$ac_boost_path/include"
     else
         for ac_boost_path_tmp in /usr /usr/local /opt /opt/local ; do
             if test -d "$ac_boost_path_tmp/include/boost" && test -r "$ac_boost_path_tmp/include/boost"; then
-                if test "`uname -m`" = "x86_64" && test -d "$ac_boost_path_tmp/lib64" ; then
-                    BOOST_LDFLAGS="-L$ac_boost_path_tmp/lib64"
-                else
-                    BOOST_LDFLAGS="-L$ac_boost_path_tmp/lib"
-                fi
+                case $target in
+                     ppc64*|sparc64*|x86_64*) BOOST_LDFLAGS="-L$ac_boost_path_tmp/lib64" ;;
+                     *)                       BOOST_LDFLAGS="-L$ac_boost_path_tmp/lib" ;;
+                esac
                 BOOST_CPPFLAGS="-I$ac_boost_path_tmp/include"
                 break;
             fi
@@ -171,11 +169,10 @@ if test "x$want_boost" = "xyes"; then
             BOOST_CPPFLAGS="-I$best_path/include/boost-$VERSION_UNDERSCORE"
             if test "$ac_boost_lib_path" = ""
             then
-                if test "`uname -m`" = "x86_64" && test -d "$best_path/lib64" ; then
-                    BOOST_LDFLAGS="-L$best_path/lib64"
-                else
-                    BOOST_LDFLAGS="-L$best_path/lib"
-                fi
+                case $target in
+                     ppc64*|sparc64*|x86_64*) BOOST_LDFLAGS="-L$best_path/lib64" ;;
+                     *)                       BOOST_LDFLAGS="-L$best_path/lib" ;;
+                esac
             fi
 
                 if test "x$BOOST_ROOT" != "x"; then
