@@ -1,3 +1,11 @@
+2008-12-04  Moritz Bunkus  <moritz@bunkus.org>
+
+	* Build system: bug fix: Configure does not use "uname -m" for the
+	detection of the Boost libraries anymore but configure's "$target"
+	environment variable. This fixes the Boost detection for cross
+	compilation builds. Fix for bug 311. Patch by Dominik Mierzejewski
+	(see AUTHORS).
+
 2008-12-03  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: PCM audio tracks bigger than approximately 8
