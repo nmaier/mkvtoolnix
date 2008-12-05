@@ -71,11 +71,11 @@ theora_parse_identification_header(unsigned char *buffer,
 
   if ((0 != header.parn) && (0 != header.pard)) {
     if (((float)header.fmbw / (float)header.fmbh) < ((float)header.parn / (float)header.pard)) {
-      header.display_width  = irnd((float)header.fmbh * header.parn / header.pard);
+      header.display_width  = irnd((float)header.fmbw * header.parn / header.pard);
       header.display_height = header.fmbh;
     } else {
       header.display_width  = header.fmbw;
-      header.display_height = irnd((float)header.fmbw * header.pard / header.parn);
+      header.display_height = irnd((float)header.fmbh * header.pard / header.parn);
     }
   }
 }
