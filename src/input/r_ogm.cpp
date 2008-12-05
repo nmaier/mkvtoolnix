@@ -714,6 +714,9 @@ ogm_reader_c::identify() {
     if ((sdemuxers[i]->title != "") && (sdemuxers[i]->stype != OGM_STREAM_TYPE_V_MSCOMP))
       verbose_info.push_back(string("track_name:") + escape(sdemuxers[i]->title));
 
+    if ((0 != sdemuxers[i]->display_width) && (0 != sdemuxers[i]->display_height))
+      verbose_info.push_back((boost::format("display_dimensions:%1%x%2%") % sdemuxers[i]->display_width % sdemuxers[i]->display_height).str());
+
     id_result_track(i, sdemuxers[i]->get_type(), sdemuxers[i]->get_codec(), verbose_info);
   }
 }
@@ -1305,6 +1308,9 @@ ogm_v_theora_demuxer_c::initialize() {
   try {
     memory_cptr &mem = packet_data[0];
     theora_parse_identification_header(mem->get(), mem->get_size(), theora);
+
+    display_width  = theora.display_width;
+    display_height = theora.display_height;
   } catch (error_c &e) {
     mxerror_tid(reader->ti.fname, track_id, boost::format(Y("The Theora identifaction header could not be parsed (%1%).\n")) % e.get_error());
   }

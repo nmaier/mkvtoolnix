@@ -54,6 +54,8 @@ struct MTX_DLL_API theora_identification_header_t {
 
   uint8_t kfgshift;
 
+  int display_width, display_height;
+
   theora_identification_header_t();
 };
 

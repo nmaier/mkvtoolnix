@@ -113,7 +113,11 @@ protected:
 class theora_video_packetizer_c: public video_packetizer_c {
 public:
   theora_video_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, double fps, int width, int height);
+  virtual void set_headers();
   virtual int process(packet_cptr packet);
+
+protected:
+  virtual void extract_aspect_ratio();
 };
 
 #endif // __P_VIDEO_H

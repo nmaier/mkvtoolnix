@@ -66,6 +66,8 @@ public:
   int64_t first_granulepos, last_granulepos, default_duration;
   bool in_use;
 
+  int display_width, display_height;
+
 public:
   ogm_demuxer_c(ogm_reader_c *p_reader);
 
