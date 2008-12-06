@@ -402,8 +402,10 @@ Section "Program files" SEC01
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation\ChangeLog - What is new.lnk" "$INSTDIR\doc\ChangeLog.txt"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation\README.lnk" "$INSTDIR\doc\README.txt"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation\The GNU GPL.lnk" "$INSTDIR\doc\Copying.txt"
-  CreateShortCut "$DESKTOP\mkvmerge GUI.lnk" "$INSTDIR\mmg.exe" "" "$INSTDIR\matroskalogo_big.ico"
   !insertmacro MUI_STARTMENU_WRITE_END
+
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Should a shortcut be placed on the desktop?" IDNO +2
+  CreateShortCut "$DESKTOP\mkvmerge GUI.lnk" "$INSTDIR\mmg.exe" "" "$INSTDIR\matroskalogo_big.ico"
 SectionEnd
 
 Section -AdditionalIcons
