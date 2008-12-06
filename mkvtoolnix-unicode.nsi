@@ -344,6 +344,16 @@ Section "Program files" SEC01
   File "examples\*.xml"
   File "examples\example-*.txt"
 
+  # Delete files that might be present from older installation
+  # if this is just an upgrade.
+  Delete "$INSTDIR\base64tool.exe"
+  Delete "$INSTDIR\doc\base64tool.html"
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\AppMainExe.exe"
+  Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\base64tool CLI reference.lnk"
+  SetShellVarContext current
+  Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\base64tool CLI reference.lnk"
+  SetShellVarContext all
+
   # Shortcuts
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
