@@ -419,6 +419,26 @@ Section Uninstall
   SetShellVarContext all
 
   !insertmacro MUI_STARTMENU_GETFOLDER "Application" $ICONS_GROUP
+  Delete "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk"
+  Delete "$SMPROGRAMS\$ICONS_GROUP\Website.lnk"
+
+  Delete "$SMPROGRAMS\$ICONS_GROUP\mkvmerge GUI.lnk"
+  Delete "$SMPROGRAMS\$ICONS_GROUP\mkvinfo GUI.lnk"
+  Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\mkvmerge GUI guide.lnk"
+  Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\mkvmerge CLI reference.lnk"
+  Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\mkvinfo CLI reference.lnk"
+  Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\mkvextract CLI reference.lnk"
+  Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation\ChangeLog - What is new.lnk"
+  Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation\README.lnk"
+  Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation\The GNU GPL.lnk"
+
+  RMDir "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation"
+  RMDir "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference"
+  RMDir "$SMPROGRAMS\$ICONS_GROUP\Documentation"
+  RMDir "$SMPROGRAMS\$ICONS_GROUP"
+
+  Delete "$DESKTOP\mkvmerge GUI.lnk"
+
   Delete "$INSTDIR\${PRODUCT_NAME}.url"
   Delete "$INSTDIR\uninst.exe"
   Delete "$INSTDIR\*.exe"
@@ -432,25 +452,6 @@ Section Uninstall
   Delete "$INSTDIR\doc\images\*.gif"
   Delete "$INSTDIR\examples\*"
 
-  Delete "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk"
-  Delete "$SMPROGRAMS\$ICONS_GROUP\Website.lnk"
-  Delete "$DESKTOP\mkvmerge GUI.lnk"
-
-  Delete "$SMPROGRAMS\$ICONS_GROUP\mkvmerge GUI.lnk"
-  Delete "$SMPROGRAMS\$ICONS_GROUP\mkvinfo GUI.lnk"
-  Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\mkvmerge GUI guide.lnk"
-  Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\mkvmerge CLI reference.lnk"
-  Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\mkvinfo CLI reference.lnk"
-  Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\mkvextract CLI reference.lnk"
-  Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation\ChangeLog - What is new.lnk"
-  Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation\README.lnk"
-  Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation\The GNU GPL.lnk"
-  Delete "$DESKTOP\mkvmerge GUI.lnk"
-
-  RMDir "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation"
-  RMDir "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference"
-  RMDir "$SMPROGRAMS\$ICONS_GROUP\Documentation"
-  RMDir "$SMPROGRAMS\$ICONS_GROUP"
   RMDir "$INSTDIR\doc\images"
   RMDir "$INSTDIR\doc"
   RMDir "$INSTDIR\examples"
