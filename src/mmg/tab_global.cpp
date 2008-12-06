@@ -609,7 +609,7 @@ tab_global::is_valid_split_timecode_list() {
   vector<wxString> parts;
   vector<wxString>::const_iterator i;
 
-  parts = split(s, wxT(","));
+  parts = split(s, wxString(wxT(",")));
   mxforeach(i, parts)
     if (!is_valid_split_timecode(*i))
       return false;
