@@ -1,3 +1,15 @@
+2008-12-08  Moritz Bunkus  <moritz@bunkus.org>
+
+	* Windows installer: The installer cleans up leftovers from old
+	installations during an upgrade. It doesn't write registry entries
+	for an exe called "AppMainExe.exe" anymore. It asks whether or not
+	the user wants a shortcut on the desktop. It does not install the
+	document for base64tool anymore because base64tool itself isn't
+	installed anymore either. Fixes for bugs 314, 315, 316 and 317.
+
+	* mmg: bug fix: Fixed a compilation problem with non-Unicode
+	enabled wxWidgets. Fix for bug 313.
+
 2008-12-05  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Added support for reading the pixel
