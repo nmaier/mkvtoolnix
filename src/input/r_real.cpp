@@ -281,7 +281,7 @@ real_reader_c::parse_headers() {
         ok = false;
       }
 
-      mxverb(2, boost::format(Y("real_reader: extra_data_size: %1%\n")) % dmx->extra_data_size);
+      mxverb(2, boost::format("real_reader: extra_data_size: %1%\n") % dmx->extra_data_size);
 
       if (ok) {
         dmx->private_data = (unsigned char *)safememdup(ts_data, ts_size);
@@ -323,14 +323,14 @@ real_reader_c::create_aac_audio_packetizer(real_demuxer_cptr dmx) {
 
   if (4 < dmx->extra_data_size) {
     uint32_t extra_len = get_uint32_be(dmx->extra_data);
-    mxverb(2, boost::format(Y("real_reader: extra_len: %1%\n")) % extra_len);
+    mxverb(2, boost::format("real_reader: extra_len: %1%\n") % extra_len);
 
     if ((4 + extra_len) <= dmx->extra_data_size) {
       extra_data_parsed = true;
       if (!parse_aac_data(&dmx->extra_data[4 + 1], extra_len - 1, profile, channels, sample_rate, output_sample_rate, sbr))
         mxerror_tid(ti.fname, tid, Y("This AAC track does not contain valid headers. Could not parse the AAC information.\n"));
       mxverb(2,
-             boost::format(Y("real_reader: 1. profile: %1%, channels: %2%, sample_rate: %3%, output_sample_rate: %4%, sbr: %5%\n"))
+             boost::format("real_reader: 1. profile: %1%, channels: %2%, sample_rate: %3%, output_sample_rate: %4%, sbr: %5%\n")
              % profile % channels % sample_rate % output_sample_rate % sbr);
       if (sbr)
         profile = AAC_PROFILE_SBR;
@@ -365,7 +365,7 @@ real_reader_c::create_aac_audio_packetizer(real_demuxer_cptr dmx) {
     profile = detected_profile;
 
   mxverb(2,
-         boost::format(Y("real_reader: 2. profile: %1%, channels: %2%, sample_rate: %3%, output_sample_rate: %4%, sbr: %5%\n"))
+         boost::format("real_reader: 2. profile: %1%, channels: %2%, sample_rate: %3%, output_sample_rate: %4%, sbr: %5%\n")
          % profile % channels % sample_rate % output_sample_rate % sbr);
 
   ti.private_data = NULL;
@@ -540,7 +540,7 @@ real_reader_c::queue_one_audio_frame(real_demuxer_cptr dmx,
 
   dmx->last_timecode = timecode;
 
-  mxverb_tid(2, ti.fname, dmx->track->id, boost::format(Y("enqueueing one length %1% timecode %2% flags 0x%|3$08x|\n")) % mem.get_size() % timecode % flags);
+  mxverb_tid(2, ti.fname, dmx->track->id, boost::format("enqueueing one length %1% timecode %2% flags 0x%|3$08x|\n") % mem.get_size() % timecode % flags);
 }
 
 void
@@ -573,7 +573,7 @@ real_reader_c::deliver_audio_frames(real_demuxer_cptr dmx,
   for (i = 0; i < dmx->segments.size(); i++) {
     rv_segment_cptr segment = dmx->segments[i];
     mxverb_tid(2, ti.fname, dmx->track->id,
-               boost::format(Y("delivering audio length %1% timecode %2% flags 0x%|3$08x| duration %4%\n"))
+               boost::format("delivering audio length %1% timecode %2% flags 0x%|3$08x| duration %4%\n")
                % segment->data->get_size() % dmx->last_timecode % segment->flags % duration);
 
     PTZR(dmx->ptzr)->process(new packet_t(segment->data, dmx->last_timecode, duration,
@@ -597,7 +597,7 @@ real_reader_c::deliver_aac_frames(real_demuxer_cptr dmx,
   }
 
   int num_sub_packets = chunk[1] >> 4;
-  mxverb(2, boost::format(Y("real_reader: num_sub_packets = %1%\n")) % num_sub_packets);
+  mxverb(2, boost::format("real_reader: num_sub_packets = %1%\n") % num_sub_packets);
   if ((2 + num_sub_packets * 2) > length) {
     mxwarn_tid(ti.fname, dmx->track->id, boost::format(Y("Short AAC audio packet (length: %1% < %2%)\n")) % length % (2 + num_sub_packets * 2));
     return;
@@ -608,7 +608,7 @@ real_reader_c::deliver_aac_frames(real_demuxer_cptr dmx,
     int sub_length  = get_uint16_be(&chunk[2 + i * 2]);
     len_check      += sub_length;
 
-    mxverb(2, boost::format(Y("real_reader: %1%: length %2%\n")) % i % sub_length);
+    mxverb(2, boost::format("real_reader: %1%: length %2%\n") % i % sub_length);
   }
 
   if (len_check != length) {

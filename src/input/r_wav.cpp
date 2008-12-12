@@ -329,7 +329,7 @@ wav_dts_demuxer_c::probe(mm_io_cptr &io) {
   if (detect_dts(m_buf[m_cur_buf]->get(), len, m_pack_14_16, m_swap_bytes)) {
     len = decode_buffer(len);
     if (find_dts_header(m_buf[m_cur_buf]->get(), len, &m_dtsheader) >= 0) {
-      mxverb(3, boost::format(Y("DTSinWAV: 14->16 %1% swap %2%\n")) % m_pack_14_16 % m_swap_bytes);
+      mxverb(3, boost::format("DTSinWAV: 14->16 %1% swap %2%\n") % m_pack_14_16 % m_swap_bytes);
       return true;
     }
   }
@@ -585,7 +585,7 @@ wav_reader_c::scan_chunks() {
       new_chunk.len = m_io->read_uint32_le();
 
       mxverb(2,
-             boost::format(Y("wav_reader_c::scan_chunks() new chunk at %1% type %2% length %3%\n"))
+             boost::format("wav_reader_c::scan_chunks() new chunk at %1% type %2% length %3%\n")
              % new_chunk.pos % get_displayable_string(new_chunk.id, 4) % new_chunk.len);
 
       if (!strncasecmp(new_chunk.id, "data", 4))
@@ -599,7 +599,7 @@ wav_reader_c::scan_chunks() {
         previous_chunk.len           = this_chunk_len;
 
         mxverb(2,
-               boost::format(Y("wav_reader_c::scan_chunks() hugh data chunk with wrong length at %1%; re-calculated from file size; new length %2%\n"))
+               boost::format("wav_reader_c::scan_chunks() hugh data chunk with wrong length at %1%; re-calculated from file size; new length %2%\n")
                % previous_chunk.pos % previous_chunk.len);
 
         break;

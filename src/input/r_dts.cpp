@@ -65,7 +65,7 @@ dts_reader_c::dts_reader_c(track_info_c &_ti)
     buf[1] = (unsigned short *)safemalloc(READ_SIZE);
 
     if (io->read(buf[cur_buf], READ_SIZE) != READ_SIZE)
-      throw error_c(Y("dts_reader: Could not read READ_SIZE bytes."));
+      throw error_c(boost::format(Y("dts_reader: Could not read %1% bytes.")) % READ_SIZE);
     io->setFilePointer(0, seek_beginning);
 
   } catch (...) {
@@ -74,13 +74,13 @@ dts_reader_c::dts_reader_c(track_info_c &_ti)
 
   detect_dts(buf[cur_buf], READ_SIZE, dts14_to_16, swap_bytes);
 
-  mxverb(3, boost::format(Y("DTS: 14->16 %1% swap %2%\n")) % dts14_to_16 % swap_bytes);
+  mxverb(3, boost::format("DTS: 14->16 %1% swap %2%\n") % dts14_to_16 % swap_bytes);
 
   decode_buffer(READ_SIZE);
   int pos = find_dts_header((const unsigned char *)buf[cur_buf], READ_SIZE, &dtsheader);
 
   if (0 > pos)
-    throw error_c(Y("dts_reader: No valid DTS packet found in the first READ_SIZE bytes.\n"));
+    throw error_c(boost::format(Y("dts_reader: No valid DTS packet found in the first %1% bytes.\n")) % READ_SIZE);
 
   bytes_processed = 0;
   ti.id           = 0;          // ID for this track.

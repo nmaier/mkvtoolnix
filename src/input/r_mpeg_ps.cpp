@@ -103,7 +103,7 @@ mpeg_ps_reader_c::init_reader() {
 
       switch (header) {
         case MPEGVIDEO_PACKET_START_CODE:
-          mxverb(3, boost::format(Y("mpeg_ps: packet start at %1%\n")) % (io->getFilePointer() - 4));
+          mxverb(3, boost::format("mpeg_ps: packet start at %1%\n") % (io->getFilePointer() - 4));
 
           if (-1 == version) {
             byte = io->read_uint8();
@@ -124,7 +124,7 @@ mpeg_ps_reader_c::init_reader() {
           break;
 
         case MPEGVIDEO_SYSTEM_HEADER_START_CODE:
-          mxverb(3, boost::format(Y("mpeg_ps: system header start code at %1%\n")) % (io->getFilePointer() - 4));
+          mxverb(3, boost::format("mpeg_ps: system header start code at %1%\n") % (io->getFilePointer() - 4));
 
           io->skip(2 * 4);   // system header
           byte = io->read_uint8();
@@ -146,7 +146,7 @@ mpeg_ps_reader_c::init_reader() {
 
         default:
           if (!mpeg_is_start_code(header)) {
-            mxverb(3, boost::format(Y("mpeg_ps: unknown header 0x%|1$08x| at %2%\n")) % header % (io->getFilePointer() - 4));
+            mxverb(3, boost::format("mpeg_ps: unknown header 0x%|1$08x| at %2%\n") % header % (io->getFilePointer() - 4));
             done = !resync_stream(header);
             break;
           }
@@ -157,7 +157,7 @@ mpeg_ps_reader_c::init_reader() {
           io->restore_pos();
           pes_packet_length = io->read_uint16_be();
 
-          mxverb(3, boost::format(Y("mpeg_ps: id 0x%|1$02x| len %2% at %3%\n")) % stream_id % pes_packet_length % (io->getFilePointer() - 4 - 2));
+          mxverb(3, boost::format("mpeg_ps: id 0x%|1$02x| len %2% at %3%\n") % stream_id % pes_packet_length % (io->getFilePointer() - 4 - 2));
 
           io->skip(pes_packet_length);
 
@@ -201,7 +201,7 @@ mpeg_ps_reader_c::sort_tracks() {
   for (i = 0; tracks.size() > i; ++i)
     id2idx[tracks[i]->id.idx()] = i;
 
-  mxverb(2, Y("mpeg_ps: Supported streams, sorted by ID: "));
+  mxverb(2, "mpeg_ps: Supported streams, sorted by ID: ");
   for (i = 0; tracks.size() > i; ++i)
     mxverb(2, boost::format("0x%|1$02x|(0x%|2$02x|) ") % tracks[i]->id.id % tracks[i]->id.sub_id);
   mxverb(2, "\n");
@@ -223,7 +223,7 @@ mpeg_ps_reader_c::calculate_global_timecode_offset() {
     for (i = 0; i < tracks.size(); i++)
       tracks[i]->timecode_offset -= global_timecode_offset;
 
-  mxverb(2, boost::format(Y("mpeg_ps: Timecode offset: min was %1% ")) % global_timecode_offset);
+  mxverb(2, boost::format("mpeg_ps: Timecode offset: min was %1% ") % global_timecode_offset);
   for (i = 0; i < tracks.size(); i++)
     mxverb(2, boost::format("0x%|1$02x|(0x%|2$02x|)=%3% ") % tracks[i]->id.id % tracks[i]->id.sub_id % tracks[i]->timecode_offset);
   mxverb(2, "\n");
@@ -610,7 +610,7 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
   }
 
   if (MPV_PARSER_STATE_FRAME != state) {
-    mxverb(3, boost::format(Y("MPEG PS: blacklisting id 0x%|1$02x|(%|2$02x|) for supposed type MPEG1/2\n")) % id.id % id.sub_id);
+    mxverb(3, boost::format("MPEG PS: blacklisting id 0x%|1$02x|(%|2$02x|) for supposed type MPEG1/2\n") % id.id % id.sub_id);
     blacklisted_ids[id.idx()] = true;
     return;
   }
@@ -810,7 +810,7 @@ mpeg_ps_reader_c::new_stream_a_ac3(mpeg_ps_id_t id,
     throw false;
 
   mxverb(2,
-         boost::format(Y("first ac3 header bsid %1% channels %2% sample_rate %3% bytes %4% samples %5%\n"))
+         boost::format("first ac3 header bsid %1% channels %2% sample_rate %3% bytes %4% samples %5%\n")
          % header.bsid % header.channels % header.sample_rate % header.bytes % header.samples);
 
   track->a_channels    = header.channels;
@@ -868,7 +868,7 @@ mpeg_ps_reader_c::new_stream_a_dts(mpeg_ps_id_t id,
 
 void
 mpeg_ps_reader_c::found_new_stream(mpeg_ps_id_t id) {
-  mxverb(2, boost::format(Y("MPEG PS: new stream id 0x%|1$02x|\n")) % id.id);
+  mxverb(2, boost::format("MPEG PS: new stream id 0x%|1$02x|\n") % id.id);
 
   if (((0xc0 > id.id) || (0xef < id.id)) && (0xbd != id.id) && (0xfd != id.id))
     return;
@@ -881,7 +881,7 @@ mpeg_ps_reader_c::found_new_stream(mpeg_ps_id_t id) {
       throw false;
 
     if (0xbd == id.id) {        // DVD audio substream
-      mxverb(2, boost::format(Y("MPEG PS:   audio substream id 0x%|1$02x|\n")) % id.sub_id);
+      mxverb(2, boost::format("MPEG PS:   audio substream id 0x%|1$02x|\n") % id.sub_id);
       if (0 == id.sub_id)
         return;
     }
@@ -1061,7 +1061,7 @@ mpeg_ps_reader_c::find_next_packet_for_id(mpeg_ps_id_t id,
 
 bool
 mpeg_ps_reader_c::resync_stream(uint32_t &header) {
-  mxverb(2, boost::format(Y("MPEG PS: synchronisation lost at %1%; looking for start code\n")) % io->getFilePointer());
+  mxverb(2, boost::format("MPEG PS: synchronisation lost at %1%; looking for start code\n") % io->getFilePointer());
 
   try {
     while (1) {
@@ -1071,12 +1071,12 @@ mpeg_ps_reader_c::resync_stream(uint32_t &header) {
         break;
     }
 
-    mxverb(2, boost::format(Y("resync succeeded at %1%, header 0x%|2$08x|\n")) % (io->getFilePointer() - 4) % header);
+    mxverb(2, boost::format("resync succeeded at %1%, header 0x%|2$08x|\n") % (io->getFilePointer() - 4) % header);
 
     return true;
 
   } catch (...) {
-    mxverb(2, Y("resync failed: exception caught\n"));
+    mxverb(2, "resync failed: exception caught\n");
     return false;
   }
 }
@@ -1175,7 +1175,7 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
     while (find_next_packet(new_id)) {
       packet_pos = io->getFilePointer() - 4;
       if (!parse_packet(new_id, timecode, length, full_length)) {
-        mxverb(2, boost::format(Y("mpeg_ps: packet_parse failed at %1%, skipping %2%\n")) % packet_pos % full_length);
+        mxverb(2, boost::format("mpeg_ps: packet_parse failed at %1%, skipping %2%\n") % packet_pos % full_length);
         io->setFilePointer(packet_pos + 4 + 2 + full_length);
         continue;
       }
@@ -1188,7 +1188,7 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
       mpeg_ps_track_t *track = tracks[id2idx[new_id.idx()]].get();
 
       mxverb(3,
-             boost::format(Y("mpeg_ps: packet for 0x%|1$02x|(%|2$02x|) length %3% at %4% timecode %5%\n"))
+             boost::format("mpeg_ps: packet for 0x%|1$02x|(%|2$02x|) length %3% at %4% timecode %5%\n")
              % new_id.id % new_id.sub_id % length % packet_pos % timecode);
 
       if ((-1 != timecode) && track->provide_timecodes) {
@@ -1215,7 +1215,7 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
         track->assert_buffer_size(length);
 
         if (io->read(&track->buffer[track->buffer_usage], length) != length) {
-          mxverb(2, Y("mpeg_ps: file_done: io->read\n"));
+          mxverb(2, "mpeg_ps: file_done: io->read\n");
           return finish();
         }
 
@@ -1229,7 +1229,7 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
 
         if (io->read(buf, length) != length) {
           safefree(buf);
-          mxverb(2, Y("mpeg_ps: file_done: io->read\n"));
+          mxverb(2, "mpeg_ps: file_done: io->read\n");
           return finish();
         }
 
@@ -1238,10 +1238,10 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
 
       return FILE_STATUS_MOREDATA;
     }
-    mxverb(2, Y("mpeg_ps: file_done: !find_next_packet\n"));
+    mxverb(2, "mpeg_ps: file_done: !find_next_packet\n");
 
   } catch(...) {
-    mxverb(2, Y("mpeg_ps: file_done: exception\n"));
+    mxverb(2, "mpeg_ps: file_done: exception\n");
   }
 
   return finish();

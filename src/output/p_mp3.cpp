@@ -97,7 +97,7 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     if (!mp3header->is_tag)
       break;
 
-    mxverb(2, boost::format(Y("mp3_packetizer: Removing TAG packet with size %1%\n")) % mp3header->framesize);
+    mxverb(2, boost::format("mp3_packetizer: Removing TAG packet with size %1%\n") % mp3header->framesize);
     m_byte_buffer.remove(mp3header->framesize + pos);
   }
 

@@ -353,20 +353,20 @@ enum connection_result_e {
     error_message = (boost::format(Y("The number of bits per sample of the two audio tracks is different: %1% and %2%")) % (a) % (b)).str(); \
     return CAN_CONNECT_NO_PARAMETERS;                                                                                                        \
   }
-#define connect_check_v_width(a, b)                                                                                 \
-  if ((a) != (b)) {                                                                                                 \
-    error_message = (boost::format(Y("The width of the two  tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS;                                                                               \
+#define connect_check_v_width(a, b)                                                                                \
+  if ((a) != (b)) {                                                                                                \
+    error_message = (boost::format(Y("The width of the two tracks is different: %1% and %2%")) % (a) % (b)).str(); \
+    return CAN_CONNECT_NO_PARAMETERS;                                                                              \
   }
 #define connect_check_v_height(a, b)                                                                                \
   if ((a) != (b)) {                                                                                                 \
     error_message = (boost::format(Y("The height of the two tracks is different: %1% and %2%")) % (a) % (b)).str(); \
     return CAN_CONNECT_NO_PARAMETERS;                                                                               \
   }
-#define connect_check_v_dwidth(a, b)                                                                                        \
-  if ((a) != (b)) {                                                                                                         \
-    error_message = (boost::format(Y("The display width of the two  tracks is different: %1% and %2%")) % (a) % (b)).str(); \
-    return CAN_CONNECT_NO_PARAMETERS;                                                                                       \
+#define connect_check_v_dwidth(a, b)                                                                                       \
+  if ((a) != (b)) {                                                                                                        \
+    error_message = (boost::format(Y("The display width of the two tracks is different: %1% and %2%")) % (a) % (b)).str(); \
+    return CAN_CONNECT_NO_PARAMETERS;                                                                                      \
   }
 #define connect_check_v_dheight(a, b)                                                                                       \
   if ((a) != (b)) {                                                                                                         \

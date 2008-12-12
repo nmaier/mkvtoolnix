@@ -115,7 +115,7 @@ vobsub_reader_c::~vobsub_reader_c() {
 
   for (i = 0; i < tracks.size(); i++) {
     mxverb(2,
-           boost::format(Y("r_vobsub track %1% SPU size: %2%, overall size: %3%, overhead: %4% (%|5$.3f|%%)\n"))
+           boost::format("r_vobsub track %1% SPU size: %2%, overall size: %3%, overhead: %4% (%|5$.3f|%%)\n")
            % i % tracks[i]->spu_size % (tracks[i]->spu_size + tracks[i]->overhead) % tracks[i]->overhead
            % (float)(100.0 * tracks[i]->overhead / (tracks[i]->overhead + tracks[i]->spu_size)));
     delete tracks[i];
@@ -202,7 +202,7 @@ vobsub_reader_c::parse_headers() {
         else {
           tracks.push_back(track);
           if (sort_required) {
-            mxverb(2, boost::format(Y("vobsub_reader: Sorting track %1%\n"))  % tracks.size());
+            mxverb(2, boost::format("vobsub_reader: Sorting track %1%\n") % tracks.size());
             stable_sort(track->entries.begin(), track->entries.end());
           }
         }
@@ -279,7 +279,7 @@ vobsub_reader_c::parse_headers() {
           demuxing_requested('s', tracks.size())) {
         mxwarn_fn(ti.fname,
                   boost::format(Y("Line %1%: The current timestamp (%2%) is smaller than the previous one (%3%). "
-                                  "mkvmerge will sort the entries according to their timestamps. "
+                                  "The entries will be sorted according to their timestamps. "
                                   "This might result in the wrong order for some subtitle entries. "
                                   "If this is the case then you have to fix the .idx file manually.\n"))
                   % line_no % format_timecode(entry.timestamp * 1000000, 3) % format_timecode(last_timestamp * 1000000, 3));
@@ -300,7 +300,7 @@ vobsub_reader_c::parse_headers() {
     else {
       tracks.push_back(track);
       if (sort_required) {
-        mxverb(2, boost::format(Y("vobsub_reader: Sorting track %1%\n")) % tracks.size());
+        mxverb(2, boost::format("vobsub_reader: Sorting track %1%\n") % tracks.size());
         stable_sort(track->entries.begin(), track->entries.end());
       }
     }
@@ -309,9 +309,9 @@ vobsub_reader_c::parse_headers() {
   if (!g_identifying && (1 < verbose)) {
     int i, k, tsize = tracks.size();
     for (i = 0; i < tsize; i++) {
-      mxinfo(boost::format(Y("vobsub_reader: Track number %1%\n")) % i);
+      mxinfo(boost::format("vobsub_reader: Track number %1%\n") % i);
       for (k = 0; k < tracks[i]->entries.size(); k++)
-        mxinfo(boost::format(Y("vobsub_reader:  %|1$04u| position: %|2$12d| (0x%|3$04x|%|4$08x|), timecode: %|5$12d| (%6%)\n"))
+        mxinfo(boost::format("vobsub_reader:  %|1$04u| position: %|2$12d| (0x%|3$04x|%|4$08x|), timecode: %|5$12d| (%6%)\n")
                % k % tracks[i]->entries[k].position % (tracks[i]->entries[k].position >> 32) % (tracks[i]->entries[k].position & 0xffffffff)
                % (tracks[i]->entries[k].timestamp / 1000000) % format_timecode(tracks[i]->entries[k].timestamp, 3));
     }
@@ -334,7 +334,7 @@ vobsub_reader_c::deliver_packet(unsigned char *buf,
 
   duration = spu_extract_duration(buf, size, timecode);
   if (1 == -duration) {
-    mxverb_tid(2, ti.fname, ti.id, boost::format(Y("vobsub_reader: Could not extract the duration for a SPU packet (timecode: %1%.\n")) % format_timecode(timecode, 3));
+    mxverb_tid(2, ti.fname, ti.id, boost::format("vobsub_reader: Could not extract the duration for a SPU packet (timecode: %1%).\n") % format_timecode(timecode, 3));
     duration = default_duration;
   }
 
@@ -374,7 +374,7 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
     if ((spu_len >= 0) && ((dst_size >= spu_len) || (sub_file->getFilePointer() >= extraction_end_pos))) {
       if (dst_size != spu_len)
         mxverb(3,
-               boost::format(Y("r_vobsub.cpp: stddeliver spu_len %1% dst_size %2% curpos %3% endpos %4%\n"))
+               boost::format("r_vobsub.cpp: stddeliver spu_len %1% dst_size %2% curpos %3% endpos %4%\n")
                % spu_len % dst_size % sub_file->getFilePointer() % extraction_end_pos);
       return deliver();
     }
@@ -483,14 +483,14 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
           else if (track->aid != packet_aid) {
             // The packet does not belong to the current subtitle stream.
             mxverb(3,
-                   boost::format(Y("vobsub_reader: skipping sub packet with aid %1% (wanted aid: %2%) with size %3% at %4%\n"))
+                   boost::format("vobsub_reader: skipping sub packet with aid %1% (wanted aid: %2%) with size %3% at %4%\n")
                    % packet_aid % track->aid % packet_size % (sub_file->getFilePointer() - extraction_start_pos));
             sub_file->skip(packet_size);
             idx = len;
             break;
           }
           dst_buf = (unsigned char *)saferealloc(dst_buf, dst_size + packet_size);
-          mxverb(3, boost::format(Y("vobsub_reader: sub packet data: aid: %1%, pts: %2%, packet_size: %3%\n")) % track->aid % format_timecode(pts, 3) % packet_size);
+          mxverb(3, boost::format("vobsub_reader: sub packet data: aid: %1%, pts: %2%, packet_size: %3%\n") % track->aid % format_timecode(pts, 3) % packet_size);
           if (sub_file->read(&dst_buf[dst_size], packet_size) != packet_size) {
             mxwarn(Y("vobsub_reader: sub_file->read failure"));
             return deliver();

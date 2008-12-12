@@ -1016,7 +1016,7 @@ def_handle(tracks) {
                % (  'a' == kax_track_type ? Y("audio")
                   : 'v' == kax_track_type ? Y("video")
                   : 's' == kax_track_type ? Y("subtitles")
-                  : 'b' == kax_track_type ? Y("butons")
+                  : 'b' == kax_track_type ? Y("buttons")
                   :                         Y("unknown"))
                % kax_codec_id
                % fourcc_buffer
@@ -1845,14 +1845,8 @@ process_file(const string &file_name) {
 void
 setup() {
   init_stdio();
+  init_locales();
   set_usage();
-
-#if defined(HAVE_LIBINTL_H)
-  if (setlocale(LC_MESSAGES, "") == NULL)
-    mxerror("Could not set the locale properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n");
-  bindtextdomain("mkvtoolnix", MTX_LOCALE_DIR);
-  textdomain("mkvtoolnix");
-#endif
 
   mm_file_io_c::setup();
   cc_local_utf8 = utf8_init("");

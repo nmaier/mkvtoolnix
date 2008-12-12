@@ -524,7 +524,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
         dmx = new ogm_a_aac_demuxer_c(this);
 
       else
-        mxwarn_fn(ti.fname, boost::format(Y("Unknown audio stream type 0x%|1$04x|. Ignoring stream id %2%.\n")) % codec_id % sdemuxers.size());
+        mxwarn_fn(ti.fname, boost::format(Y("Unknown audio stream type 0x%|1$04x|. Stream ID %2% will be ignored.\n")) % codec_id % sdemuxers.size());
 
     } else if (!strncmp(sth->streamtype, "text", 4))
       dmx = new ogm_s_text_demuxer_c(this);
@@ -743,7 +743,7 @@ ogm_reader_c::handle_stream_comments() {
 
     int j;
     for (j = 0; comments->size() > j; j++) {
-      mxverb(2, boost::format(Y("ogm_reader: commment for #%1% for %2%: %3%\n")) % j % i % (*comments)[j]);
+      mxverb(2, boost::format("ogm_reader: commment for #%1% for %2%: %3%\n") % j % i % (*comments)[j]);
       vector<string> comment = split((*comments)[j], "=", 2);
       if (comment.size() != 2)
         continue;
@@ -790,7 +790,7 @@ ogm_reader_c::handle_stream_comments() {
     if (((title != "") || (chapter_strings.size() > 0)) && !charset_warning_printed && (ti.chapter_charset == "")) {
       mxwarn_fn(ti.fname,
                 Y("This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in "
-                  "the file cannot be identified unambiguously. mkvmerge assumes that your system's current charset is appropriate. This can "
+                  "the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can "
                   "be overridden with the '--chapter-charset <charset>' switch.\n"));
       charset_warning_printed = true;
     }
@@ -952,7 +952,7 @@ ogm_a_aac_demuxer_c::create_packetizer(track_info_c &ti) {
   }
 
   mxverb(2,
-         boost::format(Y("ogm_reader: %1%/%2%: profile %3%, channels %4%, sample_rate %5%, sbr %6%, output_sample_rate %7%\n"))
+         boost::format("ogm_reader: %1%/%2%: profile %3%, channels %4%, sample_rate %5%, sbr %6%, output_sample_rate %7%\n")
          % ti.id % ti.fname % profile % channels % sample_rate % sbr % output_sample_rate);
 
   generic_packetizer_c *ptzr_obj = new aac_packetizer_c(reader, ti, AAC_ID_MPEG4, profile, sample_rate, channels, false, true);
@@ -1352,7 +1352,7 @@ ogm_v_theora_demuxer_c::process_page(int64_t granulepos) {
     reader->reader_packetizers[ptzr]->process(new packet_t(new memory_c(op.packet, op.bytes, false), timecode, duration, bref, VFT_NOBFRAME));
 
     mxverb(3,
-           boost::format(Y("Theora track %1% kfgshift %2% granulepos 0x%|3$08x| %|4$08x|%5%\n"))
+           boost::format("Theora track %1% kfgshift %2% granulepos 0x%|3$08x| %|4$08x|%5%\n")
            % track_id % theora.kfgshift % (granulepos >> 32) % (granulepos & 0xffffffff) % (is_keyframe ? " key" : ""));
   }
 }

@@ -275,7 +275,7 @@ find_consecutive_mp3_headers(const unsigned char *buf,
     decode_mp3_header(&buf[base + pos], &mp3header);
     if (!mp3header.is_tag)
       break;
-    mxverb(2, boost::format(Y("mp3_reader: Found tag at %1% size %2%\n")) % (base + pos) % mp3header.framesize);
+    mxverb(2, boost::format("mp3_reader: Found tag at %1% size %2%\n") % (base + pos) % mp3header.framesize);
     base += pos + 1;
   } while (true);
 

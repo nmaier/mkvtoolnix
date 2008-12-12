@@ -156,6 +156,8 @@ void MTX_DLL_API utf8_done();
 string MTX_DLL_API to_utf8(int handle, const string &local);
 string MTX_DLL_API from_utf8(int handle, const string &utf8);
 
+void MTX_DLL_API init_locales();
+
 vector<string> MTX_DLL_API command_line_utf8(int argc, char **argv);
 extern string MTX_DLL_API usage_text, version_info;
 void MTX_DLL_API usage(int exit_code = 0);

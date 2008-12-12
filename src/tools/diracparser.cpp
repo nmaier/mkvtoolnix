@@ -151,13 +151,7 @@ show_version() {
 static void
 setup() {
   init_stdio();
-
-#if defined(HAVE_LIBINTL_H)
-  if (setlocale(LC_MESSAGES, "") == NULL)
-    mxerror("Could not set the locale properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n");
-  bindtextdomain("mkvtoolnix", MTX_LOCALE_DIR);
-  textdomain("mkvtoolnix");
-#endif
+  init_locales();
 
   mm_file_io_c::setup();
   cc_local_utf8 = utf8_init("");

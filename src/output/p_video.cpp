@@ -536,12 +536,12 @@ mpeg4_p2_video_packetizer_c::handle_missing_timecodes(bool end_of_file) {
     while (m_available_timecodes.size() < m_queued_frames.size()) {
       m_previous_timecode = (int64_t)(m_previous_timecode +  1000000000.0 / m_fps);
       m_available_timecodes.push_back(m_previous_timecode);
-      mxverb(3, boost::format(Y("mpeg4_p2::flush_frames(): Needed new timecode %1%\n")) % m_previous_timecode);
+      mxverb(3, boost::format("mpeg4_p2::flush_frames(): Needed new timecode %1%\n") % m_previous_timecode);
     }
 
     while (m_available_durations.size() < m_queued_frames.size()) {
       m_available_durations.push_back((int64_t)(1000000000.0 / m_fps));
-      mxverb(3, boost::format(Y("mpeg4_p2::flush_frames(): Needed new duration %1%\n")) % m_available_durations.back());
+      mxverb(3, boost::format("mpeg4_p2::flush_frames(): Needed new duration %1%\n") % m_available_durations.back());
     }
 
     return;
@@ -794,7 +794,7 @@ mpeg4_p10_video_packetizer_c::setup_nalu_size_len_change() {
 
   set_codec_private(ti.private_data, ti.private_size);
 
-  mxverb(2, boost::format(Y("mpeg4_p10: Adjusting NALU size length from %1% to %2%\n")) % m_nalu_size_len_src % m_nalu_size_len_dst);
+  mxverb(2, boost::format("mpeg4_p10: Adjusting NALU size length from %1% to %2%\n") % m_nalu_size_len_src % m_nalu_size_len_dst);
 }
 
 void

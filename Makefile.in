@@ -184,9 +184,16 @@ ALL_SOURCES=$(wildcard avilib-0.6.10/*.c) $(wildcard avilib-0.6.10/*.cpp) \
 		$(wildcard src/*.cpp) $(wildcard src/input/*.cpp) \
 		$(wildcard src/output/*.cpp) $(wildcard src/common/*.cpp) \
 		$(wildcard src/mmg/*.cpp) $(wildcard src/extract/*.cpp) \
-		$(wildcard src/merge/*cpp) $(wildcard src/info/*.cpp) \
+		$(wildcard src/merge/*.cpp) $(wildcard src/info/*.cpp) \
 		$(wildcard src/mpegparser/*.cpp) \
 		$(patsubst %.ui,%.h,$(UIFILES))
+
+ALL_HEADERS=$(wildcard avilib-0.6.10/*.h) $(wildcard librmff/*.h) \
+		$(wildcard src/*.h) $(wildcard src/input/*.h) \
+		$(wildcard src/output/*.h) $(wildcard src/common/*.h) \
+		$(wildcard src/mmg/*.h) $(wildcard src/extract/*.h) \
+		$(wildcard src/merge/*.h) $(wildcard src/info/*.h) \
+		$(wildcard src/mpegparser/*.h)
 
 ifeq ($(V),1)
   Q =
@@ -319,11 +326,12 @@ else
 endif
 
 update-po:
-	xgettext --keyword=_ --keyword=N_ --default-domain=mkvtoolnix \
-		-o po/mkvtoolnix.pot $(ALL_SOURCES)
+	@echo 'XGETTEXT'
+	@xgettext --keyword=Y --default-domain=mkvtoolnix --from-code=UTF-8 -s -o po/mkvtoolnix.pot \
+		$(ALL_SOURCES) $(ALL_HEADERS)
 	@for i in po/*.po ; do \
-		echo msgmerge -s $$i po/mkvtoolnix.pot ; \
-		msgmerge -s $$i po/mkvtoolnix.pot > $$i.new ; \
+		echo 'MSGMERGE ' $$i ; \
+		msgmerge -q -s --no-wrap $$i po/mkvtoolnix.pot > $$i.new ; \
 		mv $$i.new $$i ; \
 	done
 	@rm po/mkvtoolnix.pot

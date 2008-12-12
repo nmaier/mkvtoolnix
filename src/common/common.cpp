@@ -439,6 +439,17 @@ get_local_charset() {
   return lc_charset;
 }
 
+void
+init_locales() {
+#if ! defined(SYS_WINDOWS) && defined(HAVE_LIBINTL_H)
+  if (setlocale(LC_MESSAGES, "") == NULL)
+    mxerror("The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n");
+  bindtextdomain("mkvtoolnix", MTX_LOCALE_DIR);
+  textdomain("mkvtoolnix");
+  bind_textdomain_codeset("mkvtoolnix", "UTF-8");
+#endif
+}
+
 int
 utf8_init(const string &charset) {
   string lc_charset;
@@ -667,7 +678,7 @@ _safemalloc(size_t size,
 
   mem = malloc(size);
   if (mem == NULL)
-    mxerror(boost::format(Y("common.cpp/safemalloc() called from file %1%, line %2%: malloc() returned NULL for a size of %3% bytes.")) % file % line % size);
+    mxerror(boost::format(Y("common.cpp/safemalloc() called from file %1%, line %2%: malloc() returned NULL for a size of %3% bytes.\n")) % file % line % size);
 
   return mem;
 }
@@ -682,7 +693,7 @@ _saferealloc(void *mem,
     size = 1;
   mem = realloc(mem, size);
   if (mem == NULL)
-    mxerror(boost::format(Y("common.cpp/saferealloc() called from file %1%, line %2%: realloc() returned NULL for a size of %3% bytes.")) % file % line % size);
+    mxerror(boost::format(Y("common.cpp/saferealloc() called from file %1%, line %2%: realloc() returned NULL for a size of %3% bytes.\n")) % file % line % size);
 
   return mem;
 }
@@ -695,7 +706,7 @@ safefree(void *p) {
 
 void
 dump_malloc_report() {
-  mxinfo(boost::format(Y("%1% bytes malloced, %2% bytes duplicated\n")) % (_safemalloced - _safedupped) % _safedupped);
+  mxinfo(boost::format("%1% bytes malloced, %2% bytes duplicated\n") % (_safemalloced - _safedupped) % _safedupped);
 }
 
 /*

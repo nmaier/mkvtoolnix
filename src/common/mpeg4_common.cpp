@@ -88,7 +88,7 @@ mpeg4::p2::extract_size_internal(const unsigned char *buffer,
   if (!find_vol_header(bits))
     return false;
 
-  mxverb(2, boost::format(Y("mpeg4 size: found VOL header at %1%\n")) % (bits.get_bit_position() / 8));
+  mxverb(2, boost::format("mpeg4 size: found VOL header at %1%\n") % (bits.get_bit_position() / 8));
   bits.skip_bits(32);
 
   // VOL header
@@ -186,7 +186,7 @@ mpeg4::p2::extract_par_internal(const unsigned char *buffer,
   if (!find_vol_header(bits))
     return false;
 
-  mxverb(2, boost::format(Y("mpeg4 AR: found VOL header at %1%\n")) % (bits.get_bit_position() / 8));
+  mxverb(2, boost::format("mpeg4 AR: found VOL header at %1%\n") % (bits.get_bit_position() / 8));
   bits.skip_bits(32);
 
   // VOL header
@@ -198,7 +198,7 @@ mpeg4::p2::extract_par_internal(const unsigned char *buffer,
   }
 
   aspect_ratio_info = bits.get_bits(4);
-  mxverb(2, boost::format(Y("mpeg4 AR: aspect_ratio_info: %1%\n")) % aspect_ratio_info);
+  mxverb(2, boost::format("mpeg4 AR: aspect_ratio_info: %1%\n") % aspect_ratio_info);
   if (aspect_ratio_info == 15) { // ASPECT_EXTENDED
     num = bits.get_bits(8);
     den = bits.get_bits(8);
@@ -206,7 +206,7 @@ mpeg4::p2::extract_par_internal(const unsigned char *buffer,
     num = ar_nums[aspect_ratio_info];
     den = ar_dens[aspect_ratio_info];
   }
-  mxverb(2, boost::format(Y("mpeg4 AR: %1% den: %2%\n")) % num % den);
+  mxverb(2, boost::format("mpeg4 AR: %1% den: %2%\n") % num % den);
 
   if ((num != 0) && (den != 0) && ((num != 1) || (den != 1)) &&
       (((float)num / (float)den) != 1.0)) {
@@ -312,9 +312,9 @@ mpeg4::p2::find_frame_types(const unsigned char *buffer,
   }
 
   if (2 <= verbose) {
-    mxverb(2, boost::format(Y("mpeg4_frames:   summary: found %1% frames ")) % frames.size());
+    mxverb(2, boost::format("mpeg4_frames:   summary: found %1% frames ") % frames.size());
     for (fit = frames.begin(); fit < frames.end(); fit++)
-      mxverb(2, boost::format(Y("'%1%' (%2% at %3%) ")) % FRAME_TYPE_TO_CHAR(fit->type) %  fit->size % fit->pos);
+      mxverb(2, boost::format("'%1%' (%2% at %3%) ") % FRAME_TYPE_TO_CHAR(fit->type) %  fit->size % fit->pos);
     mxverb(2, "\n");
   }
 
@@ -1245,9 +1245,7 @@ mpeg4::p10::avc_es_parser_c::handle_sps_nalu(memory_cptr &nalu) {
     m_avcc_changed = true;
 
   } else if (m_sps_info_list[i].checksum != sps_info.checksum) {
-    mxverb(2,
-           boost::format(Y("mpeg4::p10: SPS ID %|1$04x| changed; checksum old %|2$04x| new %|3$04x|\n"))
-           % sps_info.id % m_sps_info_list[i].checksum % sps_info.checksum);
+    mxverb(2, boost::format("mpeg4::p10: SPS ID %|1$04x| changed; checksum old %|2$04x| new %|3$04x|\n") % sps_info.id % m_sps_info_list[i].checksum % sps_info.checksum);
 
     m_sps_info_list[i] = sps_info;
     m_sps_list[i]      = nalu;
@@ -1277,9 +1275,7 @@ mpeg4::p10::avc_es_parser_c::handle_pps_nalu(memory_cptr &nalu) {
     m_avcc_changed = true;
 
   } else if (m_pps_info_list[i].checksum != pps_info.checksum) {
-    mxverb(2,
-           boost::format(Y("mpeg4::p10: PPS ID %|1$04x| changed; checksum old %|2$04x| new %|3$04x|\n"))
-           % pps_info.id % m_pps_info_list[i].checksum % pps_info.checksum);
+    mxverb(2, boost::format("mpeg4::p10: PPS ID %|1$04x| changed; checksum old %|2$04x| new %|3$04x|\n") % pps_info.id % m_pps_info_list[i].checksum % pps_info.checksum);
 
     m_pps_info_list[i] = pps_info;
     m_pps_list[i]      = nalu;
@@ -1475,8 +1471,7 @@ mpeg4::p10::avc_es_parser_c::default_cleanup() {
     (i - 1)->m_end = *t;
 
   m_frames_out.insert(m_frames_out.end(), m_frames.begin(), m_frames.end());
-  m_timecodes.erase(m_timecodes.begin(),
-                    m_timecodes.begin() + m_frames.size());
+  m_timecodes.erase(m_timecodes.begin(), m_timecodes.begin() + m_frames.size());
   m_frames.clear();
 }
 
@@ -1495,8 +1490,7 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
 
   if (m_timecodes.size() < m_frames.size()) {
     mxverb(4, boost::format("mpeg4::p10::avc_es_parser_c::cleanup() numfr %1% sti %2%\n") % m_frames.size() % m_timecodes.size());
-    m_timecodes.erase(m_timecodes.begin(),
-                      m_timecodes.begin() + m_frames.size());
+    m_timecodes.erase(m_timecodes.begin(), m_timecodes.begin() + m_frames.size());
     m_frames.clear();
     return;
   }
@@ -1669,11 +1663,11 @@ mpeg4::p10::avc_es_parser_c::get_avcc() {
 
 void
 mpeg4::p10::avc_es_parser_c::dump_info() {
-  mxinfo(Y("Dumping m_frames_out:\n"));
+  mxinfo("Dumping m_frames_out:\n");
   deque<avc_frame_t>::iterator i;
 
   mxforeach(i, m_frames_out) {
-    mxinfo(boost::format(Y("size %1% key %2% start %3% end %4% ref1 %5% adler32 0x%|6$08x|\n"))
+    mxinfo(boost::format("size %1% key %2% start %3% end %4% ref1 %5% adler32 0x%|6$08x|\n")
            % i->m_data->get_size() % i->m_keyframe % format_timecode(i->m_start) % format_timecode(i->m_end) % format_timecode(i->m_ref1)
            % calc_adler32(i->m_data->get(), i->m_data->get_size()));
   }

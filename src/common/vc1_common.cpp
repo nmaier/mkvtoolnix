@@ -425,7 +425,7 @@ vc1::es_parser_c::handle_frame_packet(memory_cptr packet) {
 
   if (!m_timecodes.empty())
     mxverb(2,
-           boost::format(Y("vc1::es_parser_c::handle_frame_packet: next provided timecode %1% next calculated timecode %2%\n"))
+           boost::format("vc1::es_parser_c::handle_frame_packet: next provided timecode %1% next calculated timecode %2%\n")
            % format_timecode(m_timecodes.front()) % format_timecode(peek_next_calculated_timecode()));
 
 }

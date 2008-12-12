@@ -942,13 +942,13 @@ generic_packetizer_c::apply_factory_full_queueing(packet_cptr_di &p_start) {
 void
 generic_packetizer_c::force_duration_on_last_packet() {
   if (packet_queue.empty()) {
-    mxverb_tid(2, ti.fname, ti.id, Y("force_duration_on_last_packet: packet queue is empty\n"));
+    mxverb_tid(2, ti.fname, ti.id, "force_duration_on_last_packet: packet queue is empty\n");
     return;
   }
   packet_cptr &packet        = packet_queue.back();
   packet->duration_mandatory = true;
   mxverb_tid(2, ti.fname, ti.id,
-             boost::format(Y("force_duration_on_last_packet: forcing at %1% with %|2$.3f|ms\n")) % format_timecode(packet->timecode) % (packet->duration / 1000.0));
+             boost::format("force_duration_on_last_packet: forcing at %1% with %|2$.3f|ms\n") % format_timecode(packet->timecode) % (packet->duration / 1000.0));
 }
 
 int64_t

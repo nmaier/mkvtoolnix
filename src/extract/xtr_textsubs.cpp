@@ -289,7 +289,7 @@ xtr_usf_c::create_file(xtr_base_c *master,
                        KaxTrackEntry &track) {
   KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
   if (NULL == priv)
-    mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private \" element and cannot be extracted.\n")) % m_tid % m_codec_id);
+    mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
 
   init_content_decoder(track);
 

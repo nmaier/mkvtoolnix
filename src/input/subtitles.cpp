@@ -141,7 +141,7 @@ srt_parser_c::parse() {
         mxwarn_tid(m_file_name, m_tid,
                    Y("This file contains coordinates in the timecode lines. "
                      "Such coordinates are not supported by the Matroska SRT subtitle format. "
-                     "mkvmerge will remove them automatically.\n"));
+                     "The coordinates will be removed automatically.\n"));
         m_coordinates_warning_shown = true;
       }
 

@@ -130,7 +130,7 @@ avi_reader_c::~avi_reader_c() {
 
   ti.private_data = NULL;
 
-  mxverb(2, boost::format(Y("avi_reader_c: Dropped video frames: %1%\n")) % dropped_video_frames);
+  mxverb(2, boost::format("avi_reader_c: Dropped video frames: %1%\n") % dropped_video_frames);
 }
 
 // }}}
@@ -204,7 +204,7 @@ avi_reader_c::create_packetizer(int64_t tid) {
   if ((0 == tid) && demuxing_requested('v', 0) && (-1 == vptzr)) {
     int i;
 
-    mxverb_tid(4, ti.fname, 0, Y("frame sizes:\n"));
+    mxverb_tid(4, ti.fname, 0, "frame sizes:\n");
 
     for (i = 0; i < max_video_frames; i++) {
       bytes_to_process += AVI_frame_size(avi, i);
@@ -221,7 +221,7 @@ avi_reader_c::create_packetizer(int64_t tid) {
     if (NULL != ti.private_data)
       ti.private_size = get_uint32_le(&avi->bitmap_info_header->bi_size);
 
-    mxverb(4, boost::format(Y("track extra data size: %1%\n")) % (ti.private_size - sizeof(alBITMAPINFOHEADER)));
+    mxverb(4, boost::format("track extra data size: %1%\n") % (ti.private_size - sizeof(alBITMAPINFOHEADER)));
     if (sizeof(alBITMAPINFOHEADER) < ti.private_size) {
       mxverb(4, "  ");
       for (i = sizeof(alBITMAPINFOHEADER); i < ti.private_size; ++i)
@@ -454,7 +454,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
       break;
 
     default:
-      mxerror_tid(ti.fname, aid + 1, boost::format(Y("Unknown/unsupported audio format 0x%|1$04x| for this audio rack.\n")) % audio_format);
+      mxerror_tid(ti.fname, aid + 1, boost::format(Y("Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n")) % audio_format);
   }
 
   demuxer.ptzr = add_packetizer(packetizer);

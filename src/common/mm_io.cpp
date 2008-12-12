@@ -53,10 +53,10 @@ static const unsigned long write_before_dontneed = 8 * 1024 * 1024;
 bool mm_file_io_c::use_posix_fadvise = false;
 # endif
 
-#define FADVISE_WARNING                                                           \
-  Y("mm_file_io_c: Could not posix_fadvise() file '%1%' (errno = %2%, %3%). "     \
-    "This only means that access to this file might be slower than it could be. " \
-    "Data integrity is not in danger.")
+#define FADVISE_WARNING                                                         \
+  "mm_file_io_c: Could not posix_fadvise() file '%1%' (errno = %2%, %3%). "     \
+  "This only means that access to this file might be slower than it could be. " \
+  "Data integrity is not in danger."
 
 mm_file_io_c::mm_file_io_c(const string &path,
                            const open_mode mode):
@@ -932,7 +932,7 @@ mm_mem_io_c::mm_mem_io_c(unsigned char *_mem,
   read_only(false) {
 
   if (increase <= 0)
-    throw error_c(Y("wrong usage: increate < 0"));
+    throw error_c(Y("wrong usage: increase < 0"));
 
   if ((mem == NULL) && (increase > 0)) {
     mem = (unsigned char *)safemalloc(mem_size);
@@ -1131,7 +1131,7 @@ mm_text_io_c::read_next_char(char *buffer) {
     else if ((stream[0] & 0xfe) == 0xfc)
       size = 6;
     else
-      mxerror(boost::format(Y("mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|")) % stream[0]);
+      mxerror(boost::format(Y("mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|")) % (unsigned int)stream[0]);
 
     if ((size > 1) && (read(&stream[1], size - 1) != (size - 1)))
       return 0;
@@ -1178,7 +1178,7 @@ mm_text_io_c::read_next_char(char *buffer) {
     return 3;
   }
 
-  mxerror(Y("mm_text_io_c: UTF32_* is not supported at the moment."));
+  mxerror(Y("mm_text_io_c: UTF32_* is not supported at the moment.\n"));
 
   return 0;
 }

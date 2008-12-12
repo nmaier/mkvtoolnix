@@ -322,7 +322,7 @@ mpeg4_p2_compressor_c::mpeg4_p2_compressor_c() {
 compressor_c::~compressor_c() {
   if (items != 0)
     mxverb(2,
-           boost::format(Y("compression: Overall stats: raw size: %1%, compressed size: %2%, items: %3%, ratio: %|4$.2f|%%, avg bytes per item: %5%\n"))
+           boost::format("compression: Overall stats: raw size: %1%, compressed size: %2%, items: %3%, ratio: %|4$.2f|%%, avg bytes per item: %5%\n")
            % raw_size % compressed_size % items % (compressed_size * 100.0 / raw_size) % (compressed_size / items));
 }
 

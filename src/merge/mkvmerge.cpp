@@ -108,162 +108,172 @@ init_input_file_type_list() {
 */
 static void
 set_usage() {
-  usage_text =
-    Y("mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]\n\n"
-      " Global options:\n"
-      "  -v, --verbose            verbose status\n"
-      "  -q, --quiet              suppress status output\n"
-      "  -o, --output out         Write to the file 'out'.\n"
-      "  --title <title>          Title for this output file.\n"
-      "  --global-tags <file>     Read global tags from a XML file.\n"
-      "\n Chapter handling:\n"
-      "  --chapters <file>        Read chapter information from the file.\n"
-      "  --chapter-language <lng> Set the 'language' element in chapter entries."
-      "\n  --chapter-charset <cset> Charset for a simple chapter file.\n"
-      "  --cue-chapter-name-format\n"
-      "                           Pattern for the conversion from CUE sheet\n"
-      "                           entries to chapter names.\n"
-      "  --default-language <lng> Use this language for all tracks unless\n"
-      "                           overridden with the --language option.\n"
-      "\n Segment info handling:\n"
-      "  --segmentinfo <file>     Read segment information from the file.\n"
-      "\n General output control (advanced global options):\n"
-      "  --track-order <FileID1:TID1,FileID2:TID2,FileID3:TID3,...>\n"
-      "                           A comma separated list of both file IDs\n"
-      "                           and track IDs that controls the order of the\n"
-      "                           tracks in the output file.\n"
-      "  --cluster-length <n[ms]> Put at most n data blocks into each cluster.\n"
-      "                           If the number is postfixed with 'ms' then\n"
-      "                           put at most n milliseconds of data into each\n"
-      "                           cluster.\n"
-      "  --no-cues                Do not write the cue data (the index).\n"
-      "  --no-clusters-in-meta-seek\n"
-      "                           Do not write meta seek data for clusters.\n"
-      "  --disable-lacing         Do not Use lacing.\n"
-      "  --enable-durations       Enable block durations for all blocks.\n"
-      "  --append-to <SFID1:STID1:DFID1:DTID1,SFID2:STID2:DFID2:DTID2,...>\n"
-      "                           A comma separated list of file and track IDs\n"
-      "                           that controls which track of a file is\n"
-      "                           appended to another track of the preceding\n"
-      "                           file.\n"
-      "  --append-mode <file|track>\n"
-      "                           Selects how mkvmerge calculates timecodes when\n"
-      "                           appending files.\n"
-      "  --timecode-scale <n>     Force the timecode scale factor to n.\n"
-      "\n File splitting and linking (more global options):\n"
-      "  --split <d[K,M,G]|HH:MM:SS|s>\n"
-      "                           Create a new file after d bytes (KB, MB, GB)\n"
-      "                           or after a specific time.\n"
-      "  --split timecodes:A[,B...]\n"
-      "                           Create a new file after each timecode A, B\n"
-      "                           etc.\n"
-      "  --split-max-files <n>    Create at most n files.\n"
-      "  --link                   Link splitted files.\n"
-      "  --link-to-previous <SID> Link the first file to the given SID.\n"
-      "  --link-to-next <SID>     Link the last file to the given SID.\n"
-      "\n Attachment support (more global options):\n"
-      "  --attachment-description <desc>\n"
-      "                           Description for the following attachment.\n"
-      "  --attachment-mime-type <mime type>\n"
-      "                           Mime type for the following attachment.\n"
-      "  --attachment-name <name> The name should be stored for the \n"
-      "                           following attachment.\n"
-      "  --attach-file <file>     Creates a file attachment inside the\n"
-      "                           Matroska file.\n"
-      "  --attach-file-once <file>\n"
-      "                           Creates a file attachment inside the\n"
-      "                           firsts Matroska file written.\n"
-      "\n Options for each input file:\n"
-      "  -a, --atracks <n,m,...>  Copy audio tracks n,m etc. Default: copy all\n"
-      "                           audio tracks.\n"
-      "  -d, --vtracks <n,m,...>  Copy video tracks n,m etc. Default: copy all\n"
-      "                           video tracks.\n"
-      "  -s, --stracks <n,m,...>  Copy subtitle tracks n,m etc. Default: copy\n"
-      "                           all subtitle tracks.\n"
-      "  -b, --btracks <n,m,...>  Copy buttons tracks n,m etc. Default: copy\n"
-      "                           all buttons tracks.\n"
-      "  -A, --noaudio            Don't copy any audio track from this file.\n"
-      "  -D, --novideo            Don't copy any video track from this file.\n"
-      "  -S, --nosubs             Don't copy any text track from this file.\n"
-      "  -B, --nobuttons          Don't copy any buttons track from this file.\n"
-      "  --no-chapters            Don't keep chapters from a Matroska file.\n"
-      "  --no-attachments         Don't keep attachments from a Matroska file.\n"
-      "  --no-tags                Don't keep tags from a Matroska file.\n"
-      "  -y, --sync, --delay <TID:d[,o[/p]]>\n"
-      "                           Synchronize, adjust the track's timecodes with\n"
-      "                           the id TID by 'd' ms.\n"
-      "                           'o/p': Adjust the timecodes by multiplying with\n"
-      "                           'o/p' to fix linear drifts. 'p' defaults to\n"
-      "                           1000 if omitted. Both 'o' and 'p' can be\n"
-      "                           floating point numbers.\n"
-      "  --default-track <TID[:bool]>\n"
-      "                           Sets the 'default' flag for this track or\n"
-      "                           forces it not to be present if bool is 0.\n"
-      "  --blockadd <TID:x>       Sets the max number of block additional\n"
-      "                           levels for this track.\n"
-      "  --track-name <TID:name>  Sets the name for a track.\n"
-      "  --cues <TID:none|iframes|all>\n"
-      "                           Create cue (index) entries for this track:\n"
-      "                           None at all, only for I frames, for all.\n"
-      "  --language <TID:lang>    Sets the language for the track (ISO639-2\n"
-      "                           code, see --list-languages).\n"
-      "  -t, --tags <TID:file>    Read tags for the track from a XML file.\n"
-      "  --aac-is-sbr <TID[:0|1]> The track with the ID is HE-AAC/AAC+/SBR-AAC\n"
-      "                           or not. The value ':1' can be omitted.\n"
-      "  --timecodes <TID:file>   Read the timecodes to be used from a file.\n"
-      "  --default-duration <TID:Xs|ms|us|ns|fps>\n"
-      "                           Force the default duration of a track to X.\n"
-      "                           X can be a floating point number or a fration."
-      "\n"
-      "  --nalu-size-length <TID:n>\n"
-      "                           Force the NALU size length to n bytes with\n"
-      "                           2 <= n <= 4 with 4 being the default.\n"
-      "\n Options that only apply to video tracks:\n"
-      "  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
-      "                           Works only for video tracks.\n"
-      "  --aspect-ratio <TID:f|a/b>\n"
-      "                           Sets the display dimensions by calculating\n"
-      "                           width and height for this aspect ratio.\n"
-      "  --aspect-ratio-factor <TID:f|a/b>\n"
-      "                           First calculates the aspect ratio by multi-\n"
-      "                           plying the video's original aspect ratio\n"
-      "                           with this factor and calculates the display\n"
-      "                           dimensions from this factor.\n"
-      "  --display-dimensions <TID:width>x<height>\n"
-      "                           Explicitely set the display dimensions.\n"
-      "  --cropping <TID:left,top,right,bottom>\n"
-      "                           Sets the cropping parameters.\n"
-      "  --stereo-mode <TID:n|none|left|right|both>\n"
-      "                           Sets the stereo mode parameter. It can\n"
-      "                           either be a numer 0 - 3 or one of the\n"
-      "                           keywords 'none', 'right', 'left' or 'both'.\n"
-      "\n Options that only apply to text subtitle tracks:\n"
-      "  --sub-charset <TID:charset>\n"
-      "                           Sets the charset the text subtitles are\n"
-      "                           written in for the conversion to UTF-8.\n"
-      "\n Options that only apply to VobSub subtitle tracks:\n"
-      "  --compression <TID:method>\n"
-      "                           Sets the compression method used for the\n"
-      "                           specified track ('none' or 'zlib').\n"
-      "\n\n Other options:\n"
-      "  -i, --identify <file>    Print information about the source file.\n"
-      "  -l, --list-types         Lists supported input file types.\n"
-      "  --list-languages         Lists all ISO639 languages and their\n"
-      "                           ISO639-2 codes.\n"
-      "  --priority <priority>    Set the priority mkvmerge runs with.\n"
-      "  --command-line-charset   Charset for strings on the command line\n"
-      "  --output-charset <cset>  Output messages in this charset\n"
-      "  -r, --redirect-output <file>\n"
-      "                           Redirects all messages into this file.\n"
-      "  @optionsfile             Reads additional command line options from\n"
-      "                           the specified file (see man page).\n"
-      "  -h, --help               Show this help.\n"
-      "  -V, --version            Show version information.\n"
-      "\n\n"
-      "Please read the man page/the HTML documentation to mkvmerge. It\n"
-      "explains several details in great length which are not obvious from\n"
-      "this listing.\n"
-      );
+  usage_text  =   "";
+  usage_text += Y("mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]\n");
+  usage_text +=   "\n";
+  usage_text += Y(" Global options:\n");
+  usage_text += Y("  -v, --verbose            verbose status\n");
+  usage_text += Y("  -q, --quiet              suppress status output\n");
+  usage_text += Y("  -o, --output out         Write to the file 'out'.\n");
+  usage_text += Y("  --title <title>          Title for this output file.\n");
+  usage_text += Y("  --global-tags <file>     Read global tags from a XML file.\n");
+  usage_text +=   "\n";
+  usage_text += Y(" Chapter handling:\n");
+  usage_text += Y("  --chapters <file>        Read chapter information from the file.\n");
+  usage_text += Y("  --chapter-language <lng> Set the 'language' element in chapter entries.\n");
+  usage_text += Y("  --chapter-charset <cset> Charset for a simple chapter file.\n");
+  usage_text += Y("  --cue-chapter-name-format <format>\n"
+                  "                           Pattern for the conversion from CUE sheet\n"
+                  "                           entries to chapter names.\n");
+  usage_text += Y("  --default-language <lng> Use this language for all tracks unless\n"
+                  "                           overridden with the --language option.\n");
+  usage_text +=   "\n";
+  usage_text += Y(" Segment info handling:\n");
+  usage_text += Y("  --segmentinfo <file>     Read segment information from the file.\n");
+  usage_text +=   "\n";
+  usage_text += Y(" General output control (advanced global options):\n");
+  usage_text += Y("  --track-order <FileID1:TID1,FileID2:TID2,FileID3:TID3,...>\n"
+                  "                           A comma separated list of both file IDs\n"
+                  "                           and track IDs that controls the order of the\n"
+                  "                           tracks in the output file.\n");
+  usage_text += Y("  --cluster-length <n[ms]> Put at most n data blocks into each cluster.\n"
+                  "                           If the number is postfixed with 'ms' then\n"
+                  "                           put at most n milliseconds of data into each\n"
+                  "                           cluster.\n");
+  usage_text += Y("  --no-cues                Do not write the cue data (the index).\n");
+  usage_text += Y("  --no-clusters-in-meta-seek\n"
+                  "                           Do not write meta seek data for clusters.\n");
+  usage_text += Y("  --disable-lacing         Do not Use lacing.\n");
+  usage_text += Y("  --enable-durations       Enable block durations for all blocks.\n");
+  usage_text += Y("  --append-to <SFID1:STID1:DFID1:DTID1,SFID2:STID2:DFID2:DTID2,...>\n"
+                  "                           A comma separated list of file and track IDs\n"
+                  "                           that controls which track of a file is\n"
+                  "                           appended to another track of the preceding\n"
+                  "                           file.\n");
+  usage_text += Y("  --append-mode <file|track>\n"
+                  "                           Selects how mkvmerge calculates timecodes when\n"
+                  "                           appending files.\n");
+  usage_text += Y("  --timecode-scale <n>     Force the timecode scale factor to n.\n");
+  usage_text +=   "\n";
+  usage_text += Y(" File splitting and linking (more global options):\n");
+  usage_text += Y("  --split <d[K,M,G]|HH:MM:SS|s>\n"
+                  "                           Create a new file after d bytes (KB, MB, GB)\n"
+                  "                           or after a specific time.\n");
+  usage_text += Y("  --split timecodes:A[,B...]\n"
+                  "                           Create a new file after each timecode A, B\n"
+                  "                           etc.\n");
+  usage_text += Y("  --split-max-files <n>    Create at most n files.\n");
+  usage_text += Y("  --link                   Link splitted files.\n");
+  usage_text += Y("  --link-to-previous <SID> Link the first file to the given SID.\n");
+  usage_text += Y("  --link-to-next <SID>     Link the last file to the given SID.\n");
+  usage_text +=   "\n";
+  usage_text += Y(" Attachment support (more global options):\n");
+  usage_text += Y("  --attachment-description <desc>\n"
+                  "                           Description for the following attachment.\n");
+  usage_text += Y("  --attachment-mime-type <mime type>\n"
+                  "                           Mime type for the following attachment.\n");
+  usage_text += Y("  --attachment-name <name> The name should be stored for the \n"
+                  "                           following attachment.\n");
+  usage_text += Y("  --attach-file <file>     Creates a file attachment inside the\n"
+                  "                           Matroska file.\n");
+  usage_text += Y("  --attach-file-once <file>\n"
+                  "                           Creates a file attachment inside the\n"
+                  "                           firsts Matroska file written.\n");
+  usage_text +=   "\n";
+  usage_text += Y(" Options for each input file:\n");
+  usage_text += Y("  -a, --atracks <n,m,...>  Copy audio tracks n,m etc. Default: copy all\n"
+                  "                           audio tracks.\n");
+  usage_text += Y("  -d, --vtracks <n,m,...>  Copy video tracks n,m etc. Default: copy all\n"
+                  "                           video tracks.\n");
+  usage_text += Y("  -s, --stracks <n,m,...>  Copy subtitle tracks n,m etc. Default: copy\n"
+                  "                           all subtitle tracks.\n");
+  usage_text += Y("  -b, --btracks <n,m,...>  Copy buttons tracks n,m etc. Default: copy\n"
+                  "                           all buttons tracks.\n");
+  usage_text += Y("  -A, --noaudio            Don't copy any audio track from this file.\n");
+  usage_text += Y("  -D, --novideo            Don't copy any video track from this file.\n");
+  usage_text += Y("  -S, --nosubs             Don't copy any text track from this file.\n");
+  usage_text += Y("  -B, --nobuttons          Don't copy any buttons track from this file.\n");
+  usage_text += Y("  --no-chapters            Don't keep chapters from a Matroska file.\n");
+  usage_text += Y("  --no-attachments         Don't keep attachments from a Matroska file.\n");
+  usage_text += Y("  --no-tags                Don't keep tags from a Matroska file.\n");
+  usage_text += Y("  -y, --sync, --delay <TID:d[,o[/p]]>\n"
+                  "                           Synchronize, adjust the track's timecodes with\n"
+                  "                           the id TID by 'd' ms.\n"
+                  "                           'o/p': Adjust the timecodes by multiplying with\n"
+                  "                           'o/p' to fix linear drifts. 'p' defaults to\n"
+                  "                           1000 if omitted. Both 'o' and 'p' can be\n"
+                  "                           floating point numbers.\n");
+  usage_text += Y("  --default-track <TID[:bool]>\n"
+                  "                           Sets the 'default' flag for this track or\n"
+                  "                           forces it not to be present if bool is 0.\n");
+  usage_text += Y("  --blockadd <TID:x>       Sets the max number of block additional\n"
+                  "                           levels for this track.\n");
+  usage_text += Y("  --track-name <TID:name>  Sets the name for a track.\n");
+  usage_text += Y("  --cues <TID:none|iframes|all>\n"
+                  "                           Create cue (index) entries for this track:\n"
+                  "                           None at all, only for I frames, for all.\n");
+  usage_text += Y("  --language <TID:lang>    Sets the language for the track (ISO639-2\n"
+                  "                           code, see --list-languages).\n");
+  usage_text += Y("  -t, --tags <TID:file>    Read tags for the track from a XML file.\n");
+  usage_text += Y("  --aac-is-sbr <TID[:0|1]> The track with the ID is HE-AAC/AAC+/SBR-AAC\n"
+                  "                           or not. The value ':1' can be omitted.\n");
+  usage_text += Y("  --timecodes <TID:file>   Read the timecodes to be used from a file.\n");
+  usage_text += Y("  --default-duration <TID:Xs|ms|us|ns|fps>\n"
+                  "                           Force the default duration of a track to X.\n"
+                  "                           X can be a floating point number or a fraction.\n");
+  usage_text += Y("  --nalu-size-length <TID:n>\n"
+                  "                           Force the NALU size length to n bytes with\n"
+                  "                           2 <= n <= 4 with 4 being the default.\n");
+  usage_text +=   "\n";
+  usage_text += Y(" Options that only apply to video tracks:\n");
+  usage_text += Y("  -f, --fourcc <FOURCC>    Forces the FourCC to the specified value.\n"
+                  "                           Works only for video tracks.\n");
+  usage_text += Y("  --aspect-ratio <TID:f|a/b>\n"
+                  "                           Sets the display dimensions by calculating\n"
+                  "                           width and height for this aspect ratio.\n");
+  usage_text += Y("  --aspect-ratio-factor <TID:f|a/b>\n"
+                  "                           First calculates the aspect ratio by multi-\n"
+                  "                           plying the video's original aspect ratio\n"
+                  "                           with this factor and calculates the display\n"
+                  "                           dimensions from this factor.\n");
+  usage_text += Y("  --display-dimensions <TID:width>x<height>\n"
+                  "                           Explicitely set the display dimensions.\n");
+  usage_text += Y("  --cropping <TID:left,top,right,bottom>\n"
+                  "                           Sets the cropping parameters.\n");
+  usage_text += Y("  --stereo-mode <TID:n|none|left|right|both>\n"
+                  "                           Sets the stereo mode parameter. It can\n"
+                  "                           either be a numer 0 - 3 or one of the\n"
+                  "                           keywords 'none', 'right', 'left' or 'both'.\n");
+  usage_text +=   "\n";
+  usage_text += Y(" Options that only apply to text subtitle tracks:\n");
+  usage_text += Y("  --sub-charset <TID:charset>\n"
+                  "                           Sets the charset the text subtitles are\n"
+                  "                           written in for the conversion to UTF-8.\n");
+  usage_text +=   "\n";
+  usage_text += Y(" Options that only apply to VobSub subtitle tracks:\n");
+  usage_text += Y("  --compression <TID:method>\n"
+                  "                           Sets the compression method used for the\n"
+                  "                           specified track ('none' or 'zlib').\n");
+  usage_text +=   "\n\n";
+  usage_text += Y(" Other options:\n");
+  usage_text += Y("  -i, --identify <file>    Print information about the source file.\n");
+  usage_text += Y("  -l, --list-types         Lists supported input file types.\n");
+  usage_text += Y("  --list-languages         Lists all ISO639 languages and their\n"
+                  "                           ISO639-2 codes.\n");
+  usage_text += Y("  --priority <priority>    Set the priority mkvmerge runs with.\n");
+  usage_text += Y("  --command-line-charset <charset>\n"
+                  "                           Charset for strings on the command line\n");
+  usage_text += Y("  --output-charset <cset>  Output messages in this charset\n");
+  usage_text += Y("  -r, --redirect-output <file>\n"
+                  "                           Redirects all messages into this file.\n");
+  usage_text += Y("  @optionsfile             Reads additional command line options from\n"
+                  "                           the specified file (see man page).\n");
+  usage_text += Y("  -h, --help               Show this help.\n");
+  usage_text += Y("  -V, --version            Show version information.\n");
+  usage_text +=   "\n\n";
+  usage_text += Y("Please read the man page/the HTML documentation to mkvmerge. It\n"
+                  "explains several details in great length which are not obvious from\n"
+                  "this listing.\n");
 
   version_info = "mkvmerge v" VERSION " ('" VERSIONNAME "')";
 }
@@ -1283,7 +1293,7 @@ parse_arg_max_blockadd_id(const string &s,
                           track_info_c &ti) {
   vector<string> parts = split(s, ":");
   if (parts.size() != 2)
-    mxerror(boost::format(Y("'%1%' is not a valid parts of track ID and block additional in '--blockadd %1%'.\n")) % s);
+    mxerror(boost::format(Y("'%1%' is not a valid pair of track ID and block additional in '--blockadd %1%'.\n")) % s);
 
   int64_t id = 0;
   if (!parse_int(parts[0], id))
@@ -1653,14 +1663,14 @@ parse_args(vector<string> args) {
 
     } else if (this_arg == "--link-to-previous") {
       if (no_next_arg || next_arg.empty())
-        mxerror(Y("'--link-to-previous' lacks the next UID.\n"));
+        mxerror(Y("'--link-to-previous' lacks the previous UID.\n"));
 
       parse_arg_previous_segment_uid(this_arg, next_arg);
       sit++;
 
     } else if (this_arg == "--link-to-next") {
       if (no_next_arg || next_arg.empty())
-        mxerror(Y("'--link-to-next' lacks the previous UID.\n"));
+        mxerror(Y("'--link-to-next' lacks the next UID.\n"));
 
       parse_arg_next_segment_uid(this_arg, next_arg);
       sit++;
@@ -1783,7 +1793,7 @@ parse_args(vector<string> args) {
       ti->no_tags = true;
 
     } else if (this_arg == "--meta-seek-size") {
-      mxwarn(Y("The option '--meta-seek-size' is no longer supported. Please read mkvmerge's documentation, especially the section about the MATROSKA FILE LAYOUT."));
+      mxwarn(Y("The option '--meta-seek-size' is no longer supported. Please read mkvmerge's documentation, especially the section about the MATROSKA FILE LAYOUT.\n"));
       sit++;
 
     } else if (this_arg == "--timecode-scale") {
@@ -1809,28 +1819,28 @@ parse_args(vector<string> args) {
 
     else if ((this_arg == "-a") || (this_arg == "--atracks")) {
       if (no_next_arg)
-        mxerror(boost::format(Y("'%1%' lacks the stream number(s).\n")) % this_arg);
+        mxerror(boost::format(Y("'%1%' lacks the track number(s).\n")) % this_arg);
 
       parse_arg_tracks(next_arg, ti->atracks, this_arg);
       sit++;
 
     } else if ((this_arg == "-d") || (this_arg == "--vtracks")) {
       if (no_next_arg)
-        mxerror(boost::format(Y("'%1%' lacks the stream number(s).\n")) % this_arg);
+        mxerror(boost::format(Y("'%1%' lacks the track number(s).\n")) % this_arg);
 
       parse_arg_tracks(next_arg, ti->vtracks, this_arg);
       sit++;
 
     } else if ((this_arg == "-s") || (this_arg == "--stracks")) {
       if (no_next_arg)
-        mxerror(boost::format(Y("'%1%' lacks the stream number(s).\n")) % this_arg);
+        mxerror(boost::format(Y("'%1%' lacks the track number(s).\n")) % this_arg);
 
       parse_arg_tracks(next_arg, ti->stracks, this_arg);
       sit++;
 
     } else if ((this_arg == "-b") || (this_arg == "--btracks")) {
       if (no_next_arg)
-        mxerror(boost::format(Y("'%1%' lacks the stream number(s).\n")) % this_arg);
+        mxerror(boost::format(Y("'%1%' lacks the track number(s).\n")) % this_arg);
 
       parse_arg_tracks(next_arg, ti->btracks, this_arg);
       sit++;
@@ -1872,7 +1882,7 @@ parse_args(vector<string> args) {
 
     } else if (this_arg == "--stereo-mode") {
       if (no_next_arg)
-        mxerror(Y("'--stereo-mode' lacks the crop parameters.\n"));
+        mxerror(Y("'--stereo-mode' lacks its argument.\n"));
 
       parse_arg_stereo_mode(next_arg, *ti);
       sit++;

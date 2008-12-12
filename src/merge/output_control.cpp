@@ -427,7 +427,7 @@ display_progress() {
   if (!display_progress)
     return;
 
-  mxinfo(boost::format(Y("Progress: %1%%%\r")) % current_percentage);
+  mxinfo(boost::format(Y("Progress: %1%%%%2%")) % current_percentage % "\r");
 
   s_previous_percentage  = current_percentage;
   s_previous_progress_on = current_time;
@@ -806,7 +806,7 @@ check_append_mapping() {
 
     // 4. G_Files cannot be appended to itself.
     if (amap->src_file_id == amap->dst_file_id)
-      mxerror(Y("G_Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"));
+      mxerror(Y("Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"));
   }
 
   // Now let's check each appended file if there are NO append to mappings
@@ -842,8 +842,9 @@ check_append_mapping() {
           missing_mappings += ",";
         missing_mappings += (boost::format("%1%:%2%:%3%:%4%") % new_amap.src_file_id % new_amap.src_track_id % new_amap.dst_file_id % new_amap.dst_track_id).str();
       }
-      mxinfo(boost::format(Y("No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep "
-                             "that in mind if mkvmerge aborts complaining about invalid '--append-to' options.\n")) % file_id % src_file->name % missing_mappings);
+      mxinfo(boost::format(Y("No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. "
+                             "Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"))
+             % file_id % src_file->name % missing_mappings);
     }
   }
 
@@ -1628,13 +1629,13 @@ append_track(packetizer_t &ptzr,
   }
 
   if ((APPEND_MODE_FILE_BASED == g_append_mode) || (ptzr.packetizer->get_track_type() == track_subtitle)) {
-    mxverb(2, boost::format(Y("append_track: new timecode_adjustment for append_mode == FILE_BASED or subtitle track: %1% for %2%\n"))
+    mxverb(2, boost::format("append_track: new timecode_adjustment for append_mode == FILE_BASED or subtitle track: %1% for %2%\n")
            % format_timecode(timecode_adjustment) % ptzr.packetizer->ti.id);
     // The actual connection.
     ptzr.packetizer->connect(old_packetizer, timecode_adjustment);
 
   } else {
-    mxverb(2, boost::format(Y("append_track: new timecode_adjustment for append_mode == TRACK_BASED and NON subtitle track: %1% for %2%\n"))
+    mxverb(2, boost::format("append_track: new timecode_adjustment for append_mode == TRACK_BASED and NON subtitle track: %1% for %2%\n")
            % format_timecode(timecode_adjustment) % ptzr.packetizer->ti.id);
     // The actual connection.
     ptzr.packetizer->connect(old_packetizer);
@@ -1812,7 +1813,7 @@ main_loop() {
     g_cluster_helper->render();
 
   if (1 <= verbose)
-    mxinfo(Y("Progress: 100%\r"));
+    mxinfo(boost::format(Y("Progress: 100%%%1%")) % "\r");
 }
 
 /** \brief Global program initialization
@@ -1824,10 +1825,7 @@ main_loop() {
 void
 setup() {
   init_stdio();
-#if ! defined(SYS_WINDOWS) && defined(HAVE_LIBINTL_H)
-  if (setlocale(LC_MESSAGES, "") == NULL)
-    mxerror("The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n");
-#endif
+  init_locales();
 
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
   signal(SIGUSR1, sighandler);

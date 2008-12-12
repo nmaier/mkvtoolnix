@@ -336,17 +336,11 @@ int
 main(int argc,
      char **argv) {
   init_stdio();
+  init_locales();
   set_usage();
 
 #if defined(SYS_UNIX)
   nice(2);
-#endif
-
-#if defined(HAVE_LIBINTL_H)
-  if (setlocale(LC_MESSAGES, "") == NULL)
-    mxerror("The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n");
-  bindtextdomain("mkvtoolnix", MTX_LOCALE_DIR);
-  textdomain("mkvtoolnix");
 #endif
 
   mm_file_io_c::setup();

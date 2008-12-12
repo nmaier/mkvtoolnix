@@ -79,7 +79,7 @@ tta_reader_c::tta_reader_c(track_info_c &_ti)
     } while (seek_sum < size);
 
     mxverb(2,
-           boost::format(Y("tta: ch %1% bps %2% sr %3% dl %4% seek_sum %5% size %6% num %7%\n"))
+           boost::format("tta: ch %1% bps %2% sr %3% dl %4% seek_sum %5% size %6% num %7%\n")
            % get_uint16_le(&header.channels)    % get_uint16_le(&header.bits_per_sample)
            % get_uint32_le(&header.sample_rate) % get_uint32_le(&header.data_length)
            % seek_sum      % size               % seek_points.size());
@@ -131,7 +131,7 @@ tta_reader_c::read(generic_packetizer_c *,
   memory_cptr mem(new memory_c(buf, nread, true));
   if (seek_points.size() <= pos) {
     double samples_left = (double)get_uint32_le(&header.data_length) - (seek_points.size() - 1) * TTA_FRAME_TIME * get_uint32_le(&header.sample_rate);
-    mxverb(2, boost::format(Y("tta: samples_left %1%\n")) % samples_left);
+    mxverb(2, boost::format("tta: samples_left %1%\n") % samples_left);
 
     PTZR0->process(new packet_t(mem, -1, irnd(samples_left * 1000000000.0l / get_uint32_le(&header.sample_rate))));
   } else

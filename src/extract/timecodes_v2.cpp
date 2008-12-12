@@ -267,7 +267,7 @@ extract_timecodes(const string &file_name,
         uint64_t cluster_tc = 0;
 
         if (0 == verbose)
-          mxinfo(boost::format(Y("Progress: %1%%%\r")) % (int)(in->getFilePointer() * 100 / file_size));
+          mxinfo(boost::format(Y("Progress: %1%%%%2%")) % (int)(in->getFilePointer() * 100 / file_size) % "\r");
 
         upper_lvl_el = 0;
         l2           = es->FindNextElement(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true, 1);
