@@ -1,3 +1,8 @@
+2008-12-13  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed a crash (segfault) with MPEG-4 part 2
+	video if "--engage native_mpeg4" is used. Fix for bug 318.
+
 2008-12-08  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Windows installer: The installer cleans up leftovers from old

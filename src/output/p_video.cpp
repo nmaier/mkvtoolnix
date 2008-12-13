@@ -503,7 +503,7 @@ mpeg4_p2_video_packetizer_c::flush_frames_maybe(frame_type_e next_frame) {
 
   int num_bframes = 0;
   int i;
-  for (i = 0; m_queued_frames.size() > 0; ++i)
+  for (i = 0; m_queued_frames.size() > i; ++i)
     if (FRAME_TYPE_B == m_queued_frames[i].type)
       ++num_bframes;
 
