@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-12 14:23+0100\n"
+"POT-Creation-Date: 2008-12-13 23:17+0100\n"
 "PO-Revision-Date: 2008-12-12 14:43+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
@@ -2361,8 +2361,9 @@ msgid "Muxing took %1% seconds.\n"
 msgstr "Das Muxen dauerte %1% Sekunden.\n"
 
 #: src/merge/mkvmerge.cpp:2117
-msgid "Muxing took 1 second."
-msgstr "Das Muxen dauerte 1 Sekunde."
+#, fuzzy
+msgid "Muxing took 1 second.\n"
+msgstr "Das Muxen dauerte 1 Sekunde.\n"
 
 #: src/info/mkvinfo.cpp:902
 msgid "Name: %1%"
@@ -4837,4 +4838,3 @@ msgstr "Falsche Benutzung: Nur-Lese-Modus mit NULL als Speicherzeiger"
 #: src/common/mm_io.cpp:1012
 msgid "wrong usage: writing to read-only memory"
 msgstr "Falsche Benutzung: Schreibversuch im Nur-Lese-Modus"
-

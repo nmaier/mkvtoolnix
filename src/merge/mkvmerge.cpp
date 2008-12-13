@@ -2114,7 +2114,7 @@ main(int argc,
   if (1 != duration)
     mxinfo(boost::format(Y("Muxing took %1% seconds.\n")) % duration);
   else
-    mxinfo(Y("Muxing took 1 second."));
+    mxinfo(Y("Muxing took 1 second.\n"));
 
   cleanup();
 
