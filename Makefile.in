@@ -449,7 +449,8 @@ mkvmerge_LDADD = -lmtxinput -lmtxoutput \
 #
 
 mkvinfo_SOURCES = src/info/mkvinfo.cpp src/info/console_ui.cpp
-mkvinfo_LDADD = -lmtxcommon $(MAGIC_LIBS) -lmatroska -lebml
+mkvinfo_LDADD = -lmtxcommon $(MAGIC_LIBS) -lmatroska -lebml \
+		$(BOOST_REGEX_LIB)
 
 ifeq (yes,$(USE_QT))
 mkvinfo_SOURCES += src/info/qt_ui.cpp src/info/qt_ui.moc.cpp \
@@ -495,7 +496,7 @@ mmg_OBJECTS := $(patsubst %.cpp,%.o,$(mmg_SOURCES)) \
 mmg_DEPENDENCIES += $(DEP_COMMON)
 mmg_LDADD = -lmtxcommon $(MAGIC_LIBS) -lmatroska -lebml -lexpat $(ICONV_LIBS) \
 		$(WXWIDGETS_LIBS) $(LIBINTL_LIBS) $(MINGW_GUIAPP) \
-		$(LIBRPCRT)
+		$(BOOST_REGEX_LIB) $(LIBRPCRT)
 
 mkvmerge: src/mkvmerge@EXEEXT@
 

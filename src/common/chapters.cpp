@@ -13,11 +13,14 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "os.h"
+
 #include <ctype.h>
 #include <stdarg.h>
 
 #include <cassert>
 #include <string>
+#include <boost/regex.hpp>
 
 #include <matroska/KaxChapters.h>
 
@@ -33,36 +36,9 @@ string default_chapter_language;
 /** The default country for all chapter entries that don't have their own. */
 string default_chapter_country;
 
-/** Is the current char an equal sign? */
-#define isequal(s) (*(s) == '=')
-/** Is the current char a colon, comman or a dot? */
-#define isseparator(s) ((':' == *(s)) || (',' == *(s)) || ('.' == *(s)))
-/** Do we have two consecutive digits? */
-#define istwodigits(s) (isdigit(*(s)) && isdigit(*(s + 1)))
-/** Do we have three consecutive digits? */
-#define isthreedigits(s) (istwodigits(s) && isdigit(*(s + 2)))
-/** Does \c s point to the string "CHAPTER"? */
-#define ischapter(s) (!strncmp("CHAPTER", (s), 7))
-/** Does \c s point to the string "NAME"? */
-#define isname(s) (!strncmp("NAME", (s), 4))
-/** Does \c s point to a valid OGM style chapter timecode entry? */
-#define ischapterline(s) ((strlen(s) == 22) && \
-                          ischapter(s) && \
-                          istwodigits(s + 7) && \
-                          isequal(s + 9) && \
-                          istwodigits(s + 10) && \
-                          isseparator(s + 12) && \
-                          istwodigits(s + 13) && \
-                          isseparator(s + 15) && \
-                          istwodigits(s + 16) && \
-                          isseparator(s + 18) && \
-                          isthreedigits(s + 19))
-/** Does \c s point to a valid OGM style chapter name entry? */
-#define ischapternameline(s) ((strlen(s) >= 14) && \
-                          ischapter(s) && \
-                          istwodigits(s + 7) && \
-                          isname(s + 9) && \
-                          isequal(s + 13))
+#define SIMCHAP_RE_TIMECODE_LINE "^\\s*CHAPTER\\d+\\s*=\\s*(\\d+)\\s*:\\s*(\\d+)\\s*:\\s*(\\d+)\\s*[\\.,]\\s*(\\d+)"
+#define SIMCHAP_RE_TIMECODE      "^\\s*CHAPTER\\d+\\s*=(.*)"
+#define SIMCHAP_RE_NAME_LINE     "^\\s*CHAPTER\\d+NAME\\s*=(.*)"
 
 /** \brief Throw a special chapter parser exception.
 
@@ -93,6 +69,10 @@ chapter_error(const boost::format &format) {
 */
 bool
 probe_simple_chapters(mm_text_io_c *in) {
+  boost::regex timecode_line_re(SIMCHAP_RE_TIMECODE_LINE, boost::regex::perl);
+  boost::regex name_line_re(    SIMCHAP_RE_NAME_LINE,     boost::regex::perl);
+  boost::match_results<string::const_iterator> matches;
+
   string line;
 
   assert(in != NULL);
@@ -100,21 +80,18 @@ probe_simple_chapters(mm_text_io_c *in) {
   in->setFilePointer(0);
   while (in->getline2(line)) {
     strip(line);
-    if (line.length() == 0)
+    if (line.empty())
       continue;
 
-    if (!ischapterline(line.c_str()))
+    if (!boost::regex_search(line, timecode_line_re))
       return false;
 
     while (in->getline2(line)) {
       strip(line);
-      if (line.length() == 0)
+      if (line.empty())
         continue;
 
-      if (!ischapternameline(line.c_str()))
-        return false;
-
-      return true;
+      return boost::regex_search(line, name_line_re);
     }
 
     return false;
@@ -206,6 +183,11 @@ parse_simple_chapters(mm_text_io_c *in,
   } else
     use_language = language;
 
+  boost::regex timecode_line_re(SIMCHAP_RE_TIMECODE_LINE, boost::regex::perl);
+  boost::regex timecode_re(     SIMCHAP_RE_TIMECODE,      boost::regex::perl);
+  boost::regex name_line_re(    SIMCHAP_RE_NAME_LINE,     boost::regex::perl);
+  boost::match_results<string::const_iterator> matches;
+
   try {
     while (in->getline2(line)) {
       strip(line);
@@ -213,12 +195,12 @@ parse_simple_chapters(mm_text_io_c *in,
         continue;
 
       if (mode == 0) {
-        if (!ischapterline(line.c_str()))
+        if (!boost::regex_match(line, matches, timecode_line_re))
           chapter_error(boost::format(Y("'%1%' is not a CHAPTERxx=... line.")) % line);
-        parse_int(line.substr(10, 2), hour);
-        parse_int(line.substr(13, 2), minute);
-        parse_int(line.substr(16, 2), second);
-        parse_int(line.substr(19, 3), msecs);
+        parse_int(matches[1].str(), hour);
+        parse_int(matches[2].str(), minute);
+        parse_int(matches[3].str(), second);
+        parse_int(matches[4].str(), msecs);
         if (minute > 59)
           chapter_error(boost::format(Y("Invalid minute: %1%")) % minute);
         if (second > 59)
@@ -226,13 +208,16 @@ parse_simple_chapters(mm_text_io_c *in,
         start = msecs + second * 1000 + minute * 1000 * 60 +
           hour * 1000 * 60 * 60;
         mode = 1;
-        s_timecode = line.substr(10);
+
+        if (!boost::regex_match(line, matches, timecode_re))
+          chapter_error(boost::format(Y("'%1%' is not a CHAPTERxx=... line.")) % line);
+        s_timecode = matches[1].str();
 
       } else {
-        if (!ischapternameline(line.c_str()))
+        if (!boost::regex_match(line, matches, name_line_re))
           chapter_error(boost::format(Y("'%1%' is not a CHAPTERxxNAME=... line.")) % line);
-        name = line.substr(14);
-        if (name == "")
+        name = matches[1].str();
+        if (name.empty())
           name = s_timecode;
         mode = 0;
 
