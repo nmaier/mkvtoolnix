@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-13 23:17+0100\n"
-"PO-Revision-Date: 2008-12-12 14:43+0100\n"
+"POT-Creation-Date: 2008-12-17 18:35+0100\n"
+"PO-Revision-Date: 2008-12-17 18:35+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -1788,10 +1788,6 @@ msgstr "Fehler: Die Quelldatei %1% konnte nicht geöffnet werden (%2%).\n"
 msgid "Error: No EBML head found."
 msgstr "Fehler: Es wurde kein EBML-Kopf gefunden."
 
-#: src/common/chapters.cpp:73
-msgid "Error: Simple chapter parser: %1%"
-msgstr "Fehler: Parser für einfache Kapiteldateien: %1%"
-
 #: src/merge/mkvmerge.cpp:1600
 msgid ""
 "Error: no output file name was given.\n"
@@ -2361,7 +2357,6 @@ msgid "Muxing took %1% seconds.\n"
 msgstr "Das Muxen dauerte %1% Sekunden.\n"
 
 #: src/merge/mkvmerge.cpp:2117
-#, fuzzy
 msgid "Muxing took 1 second.\n"
 msgstr "Das Muxen dauerte 1 Sekunde.\n"
 
@@ -2844,6 +2839,10 @@ msgstr "Stiller Track Nummer: %1%"
 #: src/extract/timecodes_v2.cpp:290
 msgid "Simple block"
 msgstr "Vereinfachter Block"
+
+#: src/common/chapters.cpp:73
+msgid "Simple chapter parser: %1%\n"
+msgstr "Parser für einfache Kapiteldateien: %1%\n"
 
 #: src/extract/tracks.cpp:445
 msgid "SimpleBlock"

@@ -70,7 +70,7 @@ string default_chapter_country;
 */
 inline void
 chapter_error(const std::string &error) {
-  throw error_c(boost::format(Y("Error: Simple chapter parser: %1%")) % error);
+  throw error_c(boost::format(Y("Simple chapter parser: %1%\n")) % error);
 }
 
 inline void
