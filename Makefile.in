@@ -139,6 +139,7 @@ mkvmerge_RESOURCES = src/merge/resources.rc
 mkvinfo_RESOURCES = src/info/resources.rc
 mkvextract_RESOURCES = src/extract/resources.rc
 LIBRPCRT = -lrpcrt4
+LDFLAGS += -Wl,--enable-auto-import
 endif
 
 DEP_COMMON = src/common/libmtxcommon.$(LIBMTXCOMMONEXT)
