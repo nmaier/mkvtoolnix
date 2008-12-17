@@ -1,3 +1,10 @@
+2008-12-17  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: The commands "Save command line" and "Create
+	option file" did not save mmg's current state but the state it was
+	in when the command "Show command line" was last used or when mmg
+	was started.
+
 2008-12-13  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed a crash (segfault) with MPEG-4 part 2

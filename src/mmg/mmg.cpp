@@ -1303,6 +1303,8 @@ mmg_dialog::on_save_cmdline(wxCommandEvent &evt) {
   wxFileDialog dlg(NULL, wxT("Choose an output file"), last_open_dir, wxT(""),
                    wxT(ALLFILES), wxSAVE | wxOVERWRITE_PROMPT);
   if(dlg.ShowModal() == wxID_OK) {
+    update_command_line();
+
     last_open_dir = dlg.GetDirectory();
     file = new wxFile(dlg.GetPath(), wxFile::write);
     s = cmdline + wxT("\n");
@@ -1323,6 +1325,8 @@ mmg_dialog::on_create_optionfile(wxCommandEvent &evt) {
   wxFileDialog dlg(NULL, wxT("Choose an output file"), last_open_dir, wxT(""),
                    wxT(ALLFILES), wxSAVE | wxOVERWRITE_PROMPT);
   if(dlg.ShowModal() == wxID_OK) {
+    update_command_line();
+
     last_open_dir = dlg.GetDirectory();
     try {
       file = new wxFile(dlg.GetPath(), wxFile::write);
