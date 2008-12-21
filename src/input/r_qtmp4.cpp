@@ -947,6 +947,8 @@ qtmp4_reader_c::handle_stss_atom(qtmp4_demuxer_cptr &new_dmx,
   for (i = 0; i < count; ++i)
     new_dmx->keyframe_table.push_back(io->read_uint32_be());
 
+  sort(new_dmx->keyframe_table.begin(), new_dmx->keyframe_table.end());
+
   mxverb(2, boost::format("Quicktime/MP4 reader:%1%Sync/keyframe table: %2% entries\n") % space(level * 2 + 1) % count);
   for (i = 0; i < count; ++i)
     mxverb(4, boost::format("Quicktime/MP4 reader:%1%keyframe at %2%\n") % space((level + 1) * 2 + 1) % new_dmx->keyframe_table[i]);
@@ -1766,19 +1768,6 @@ qtmp4_demuxer_c::update_editlist_table(int64_t global_time_scale) {
   }
 }
 
-bool
-qtmp4_demuxer_c::is_keyframe(int frame) {
-  if (keyframe_table.empty())
-    return true;
-
-  int kf_idx;
-  for (kf_idx = 0; kf_idx < keyframe_table.size(); ++kf_idx)
-    if (keyframe_table[kf_idx] == (frame + 1))
-      return true;
-
-  return false;
-}
-
 void
 qtmp4_demuxer_c::build_index() {
   if (sample_size != 0)
@@ -1789,8 +1778,10 @@ qtmp4_demuxer_c::build_index() {
 
 void
 qtmp4_demuxer_c::build_index_constant_sample_size_mode() {
-  int frame_idx;
+  int keyframe_table_idx  = 0;
+  int keyframe_table_size = keyframe_table.size();
 
+  int frame_idx;
   for (frame_idx = 0; frame_idx < chunk_table.size(); ++frame_idx) {
     int64_t frame_size;
 
@@ -1809,17 +1800,32 @@ qtmp4_demuxer_c::build_index_constant_sample_size_mode() {
       }
     }
 
-    m_index.push_back(qt_index_t(chunk_table[frame_idx].pos, frame_size, timecodes[frame_idx], durations[frame_idx], is_keyframe(frame_idx)));
+    bool is_keyframe = false;
+    if ((keyframe_table_idx < keyframe_table_size) && ((frame_idx + 1) == keyframe_table[keyframe_table_idx])) {
+      is_keyframe = true;
+      ++keyframe_table_idx;
+    }
+
+    m_index.push_back(qt_index_t(chunk_table[frame_idx].pos, frame_size, timecodes[frame_idx], durations[frame_idx], is_keyframe));
   }
 }
 
 void
 qtmp4_demuxer_c::build_index_chunk_mode() {
-  int frame_idx;
+  int keyframe_table_idx  = 0;
+  int keyframe_table_size = keyframe_table.size();
 
+  int frame_idx;
   for (frame_idx = 0; frame_idx < frame_indices.size(); ++frame_idx) {
     int act_frame_idx = frame_indices[frame_idx];
-    m_index.push_back(qt_index_t(sample_table[act_frame_idx].pos, sample_table[act_frame_idx].size, timecodes[frame_idx], durations[frame_idx], is_keyframe(frame_idx)));
+
+    bool is_keyframe  = false;
+    if ((keyframe_table_idx < keyframe_table_size) && ((frame_idx + 1) == keyframe_table[keyframe_table_idx])) {
+      is_keyframe = true;
+      ++keyframe_table_idx;
+    }
+
+    m_index.push_back(qt_index_t(sample_table[act_frame_idx].pos, sample_table[act_frame_idx].size, timecodes[frame_idx], durations[frame_idx], is_keyframe));
   }
 }
 

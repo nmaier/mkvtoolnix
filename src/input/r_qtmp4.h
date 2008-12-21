@@ -222,8 +222,6 @@ struct qtmp4_demuxer_c {
   void calculate_timecodes();
   void adjust_timecodes(int64_t delta);
 
-  bool is_keyframe(int frame);
-
   void update_tables(int64_t global_time_scale);
   void update_editlist_table(int64_t global_time_scale);
 
