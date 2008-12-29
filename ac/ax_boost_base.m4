@@ -37,37 +37,39 @@
 
 AC_DEFUN([AX_BOOST_BASE],
 [
-AC_ARG_WITH([boost],
-    AS_HELP_STRING([--with-boost@<:@=DIR@:>@], [use boost (default is yes) - it is possible to specify the root directory for boost (optional)]),
-    [
-    if test "$withval" = "no"; then
-        want_boost="no"
-    elif test "$withval" = "yes"; then
-        want_boost="yes"
-        ac_boost_path=""
-    else
-        want_boost="yes"
-        ac_boost_path="$withval"
-    fi
-    ],
-    [want_boost="yes"])
 
-
-AC_ARG_WITH([boost-libdir],
-        AS_HELP_STRING([--with-boost-libdir=LIB_DIR],
-        [Force given directory for boost libraries. Note that this will overwrite library path detection, so use this parameter only if default library detection fails and you know exactly where your boost libraries are located.]),
+    AC_ARG_WITH([boost],
+        AS_HELP_STRING([--with-boost=DIR], [specify the root directory for the mandatory Boost library (default is autodetection)]),
         [
-        if test -d $withval
-        then
-                ac_boost_lib_path="$withval"
+        if test "$withval" = "no"; then
+            want_boost="no"
+        elif test "$withval" = "yes"; then
+            want_boost="yes"
+            ac_boost_path=""
         else
-                AC_MSG_ERROR(--with-boost-libdir expected directory name)
+            want_boost="yes"
+            ac_boost_path="$withval"
         fi
         ],
-        [ac_boost_lib_path=""]
-)
+        [want_boost="yes"])
 
-if test "x$want_boost" = "xyes"; then
+    AC_ARG_WITH([boost-libdir],
+            AS_HELP_STRING([--with-boost-libdir=LIB_DIR],
+            [Force given directory for boost libraries. Note that this will overwrite library path detection, so use this parameter only if default library detection fails and you know exactly where your boost libraries are located.]),
+            [
+            if test -d $withval
+            then
+                    ac_boost_lib_path="$withval"
+            else
+                    AC_MSG_ERROR(--with-boost-libdir expected directory name)
+            fi
+            ],
+            [ac_boost_lib_path=""])
+
+    if test "x$want_boost" != "xyes"; then
+        AC_MSG_ERROR(The Boost library is required for building MKVToolNix)
+    fi
+
     boost_lib_version_req=ifelse([$1], ,1.29.0,$1)
     boost_lib_version_req_shorten=`expr $boost_lib_version_req : '\([[0-9]]*\.[[0-9]]*\)'`
     boost_lib_version_req_major=`expr $boost_lib_version_req : '\([[0-9]]*\)'`
@@ -225,8 +227,7 @@ if test "x$want_boost" = "xyes"; then
         AC_DEFINE(HAVE_BOOST,,[define if the Boost library is available])
     fi
 
-        CPPFLAGS="$CPPFLAGS_SAVED"
-        LDFLAGS="$LDFLAGS_SAVED"
-fi
+    CPPFLAGS="$CPPFLAGS_SAVED"
+    LDFLAGS="$LDFLAGS_SAVED"
 
 ])
