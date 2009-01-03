@@ -1,3 +1,10 @@
+2009-01-03  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: If a Matroska file containing attachments was
+	used as an input file and splitting was enabled then the
+	attachments were only written to the first output file. Now
+	they're written to each output file. Partial fix for bug 324.
+
 2008-12-21  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: Decreased the time mkvmerge needs for

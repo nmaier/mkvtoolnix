@@ -552,6 +552,7 @@ kax_reader_c::handle_attachments(mm_io_c *io,
           matt.mime_type      = mime_type;
           matt.description    = UTFstring_to_cstrutf8(description);
           matt.id             = id;
+          matt.to_all_files   = true;
           matt.data           = counted_ptr<buffer_t>(new buffer_t);
           matt.data->m_size   = size;
           matt.data->m_buffer = (unsigned char *)safememdup(data, size);
