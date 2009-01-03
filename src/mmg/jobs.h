@@ -70,19 +70,20 @@ protected:
   wxStaticText *st_jobs, *st_current;
   wxButton *b_ok, *b_abort;
   wxCheckBox *cb_abort_after_current;
+  wxTextCtrl *tc_log;
+
   wxTimer *t_update;
   wxInputStream *out;
   string line;
   wxProcess *process;
   wxString opt_file_name;
-  wxTextCtrl *tc_log;
   bool abort;
   long pid;
   vector<int> jobs_to_start;
   int current_job;
 
 public:
-  job_run_dialog(wxWindow *parent, vector<int> &njobs_to_start);
+  job_run_dialog(wxWindow *parent, vector<int> &n_jobs_to_start);
 
   void on_abort(wxCommandEvent &evt);
   void on_end_process(wxProcessEvent &evt);
