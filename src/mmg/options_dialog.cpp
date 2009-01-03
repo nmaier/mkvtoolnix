@@ -27,64 +27,72 @@
 #include "mmg_dialog.h"
 #include "options_dialog.h"
 
+std::vector<wxString> options_dialog::ms_priorities;
+
 options_dialog::options_dialog(wxWindow *parent,
-                               mmg_options_t &options):
-  wxDialog(parent, -1, wxT("Options"), wxDefaultPosition, wxDefaultSize),
-  m_options(options) {
+                               mmg_options_t &options)
+  : wxDialog(parent, -1, Z("Options"), wxDefaultPosition, wxDefaultSize)
+  , m_options(options) {
 
   wxStaticBox *sb_mmg, *sb_mkvmerge;
   wxStaticText *st_priority, *st_mkvmerge;
   wxButton *b_browse;
 
+  if (ms_priorities.empty()) {
+#ifdef SYS_WINDOWS
+    ms_priorities.push_back(wxT("highest"));
+    ms_priorities.push_back(wxT("higher"));
+#endif
+    ms_priorities.push_back(wxT("normal"));
+    ms_priorities.push_back(wxT("lower"));
+    ms_priorities.push_back(wxT("lowest"));
+  }
+
   // Create the controls.
 
-  sb_mkvmerge = new wxStaticBox(this, -1, wxT("mkvmerge options"));
+  sb_mkvmerge = new wxStaticBox(this, -1, Z("mkvmerge options"));
 
-  st_mkvmerge  = new wxStaticText(this, -1, wxT("mkvmerge executable"));
+  st_mkvmerge  = new wxStaticText(this, -1, Z("mkvmerge executable"));
   tc_mkvmerge  = new wxTextCtrl(this, ID_TC_MKVMERGE, m_options.mkvmerge, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-  b_browse     = new wxButton(this, ID_B_BROWSEMKVMERGE, wxT("Browse"));
+  b_browse     = new wxButton(this, ID_B_BROWSEMKVMERGE, Z("Browse"));
 
-  st_priority  = new wxStaticText(this, -1, wxT("Process priority:"));
-  cob_priority = new wxComboBox(this, ID_COB_PRIORITY, wxT(""), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  st_priority  = new wxStaticText(this, -1, Z("Process priority:"));
+  cob_priority = new wxComboBox(this, ID_COB_PRIORITY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
 
   cob_priority->SetToolTip(TIP("Sets the priority that mkvmerge will run with."));
 
 #if defined(SYS_WINDOWS)
-  cob_priority->Append(wxT("highest"));
-  cob_priority->Append(wxT("higher"));
+  cob_priority->Append(Z("highest"));
+  cob_priority->Append(Z("higher"));
 #endif
-  cob_priority->Append(wxT("normal"));
-  cob_priority->Append(wxT("lower"));
-  cob_priority->Append(wxT("lowest"));
+  cob_priority->Append(Z("normal"));
+  cob_priority->Append(Z("lower"));
+  cob_priority->Append(Z("lowest"));
 
-  cb_always_use_simpleblock = new wxCheckBox(this, ID_CB_ALWAYS_USE_SIMPLEBLOCK, wxT("Always use simple blocks"));
-  cb_always_use_simpleblock->
-    SetToolTip(TIP("Always adds '--engage use_simpleblock' "
-                   "to the command line. That way Matroska's "
-                   "new 'simple blocks' will be used which "
-                   "save a bit of overhead at the cost of "
-                   "not being backwards compatible."));
+  cb_always_use_simpleblock = new wxCheckBox(this, ID_CB_ALWAYS_USE_SIMPLEBLOCK, Z("Always use simple blocks"));
+  cb_always_use_simpleblock->SetToolTip(TIP("Always adds '--engage use_simpleblock' to the command line. "
+                                            "That way Matroska's new 'simple blocks' will be used which "
+                                            "save a bit of overhead at the cost of not being backwards compatible."));
 
 
-  sb_mmg = new wxStaticBox(this, -1, wxT("mmg options"));
+  sb_mmg = new wxStaticBox(this, -1, Z("mmg options"));
 
-  cb_autoset_output_filename = new wxCheckBox(this, ID_CB_AUTOSET_OUTPUT_FILENAME, wxT("Auto-set output filename"));
-  cb_autoset_output_filename->
-    SetToolTip(TIP("If checked mmg will automatically set the output filename "
-                   "if it hasn't been set already. This happens when you add "
-                   "the first file. If unset mmg will not touch the output filename."));
+  cb_autoset_output_filename = new wxCheckBox(this, ID_CB_AUTOSET_OUTPUT_FILENAME, Z("Auto-set output filename"));
+  cb_autoset_output_filename->SetToolTip(TIP("If checked mmg will automatically set the output filename "
+                                             "if it hasn't been set already. This happens when you add "
+                                             "the first file. If unset mmg will not touch the output filename."));
 
-  rb_odm_input_file = new wxRadioButton(this, ID_RB_ODM_INPUT_FILE, wxT("Same directory as the first input file's"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
-  rb_odm_previous   = new wxRadioButton(this, ID_RB_ODM_PREVIOUS, wxT("Use the previous output directory"));
-  rb_odm_fixed      = new wxRadioButton(this, ID_RB_ODM_FIXED, wxT("Use this directory:"));
+  rb_odm_input_file = new wxRadioButton(this, ID_RB_ODM_INPUT_FILE, Z("Same directory as the first input file's"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
+  rb_odm_previous   = new wxRadioButton(this, ID_RB_ODM_PREVIOUS, Z("Use the previous output directory"));
+  rb_odm_fixed      = new wxRadioButton(this, ID_RB_ODM_FIXED, Z("Use this directory:"));
 
   tc_output_directory       = new wxTextCtrl(this, ID_TC_OUTPUT_DIRECTORY, m_options.output_directory);
-  b_browse_output_directory = new wxButton(this, ID_B_BROWSE_OUTPUT_DIRECTORY, wxT("Browse"));
+  b_browse_output_directory = new wxButton(this, ID_B_BROWSE_OUTPUT_DIRECTORY, Z("Browse"));
 
   tc_output_directory->SetToolTip(TIP("If left empty then mmg will set the output file name to be in the same directory as the first file added to this job. "
                                       "Otherwise this directory will be used."));
 
-  cb_ask_before_overwriting = new wxCheckBox(this, ID_CB_ASK_BEFORE_OVERWRITING, wxT("Ask before overwriting things (files, jobs)"));
+  cb_ask_before_overwriting = new wxCheckBox(this, ID_CB_ASK_BEFORE_OVERWRITING, Z("Ask before overwriting things (files, jobs)"));
   cb_ask_before_overwriting->SetToolTip(TIP("If checked mmg will ask for "
                                             "confirmation before overwriting "
                                             "existing files, or before adding "
@@ -92,28 +100,25 @@ options_dialog::options_dialog(wxWindow *parent,
                                             "whose description matches the "
                                             "new one."));
 
-  cb_set_delay_from_filename = new wxCheckBox(this, ID_CB_SET_DELAY_FROM_FILENAME, wxT("Set the delay input field from the file name"));
-  cb_set_delay_from_filename->
-    SetToolTip(TIP("When a file is added its name is scanned. If it contains "
-                   "the word 'DELAY' followed by a number then this number "
-                   "is automatically put into the 'delay' input field for "
-                   "any audio track found in the file."));
+  cb_set_delay_from_filename = new wxCheckBox(this, ID_CB_SET_DELAY_FROM_FILENAME, Z("Set the delay input field from the file name"));
+  cb_set_delay_from_filename->SetToolTip(TIP("When a file is added its name is scanned. If it contains "
+                                             "the word 'DELAY' followed by a number then this number "
+                                             "is automatically put into the 'delay' input field for "
+                                             "any audio track found in the file."));
 
-  cb_filenew_after_add_to_jobqueue = new wxCheckBox(this, ID_CB_NEW_AFTER_ADD_TO_JOBQUEUE, wxT("Clear inputs after adding a job to the job queue"));
+  cb_filenew_after_add_to_jobqueue = new wxCheckBox(this, ID_CB_NEW_AFTER_ADD_TO_JOBQUEUE, Z("Clear inputs after adding a job to the job queue"));
 
-  cb_on_top = new wxCheckBox(this, ID_CB_ON_TOP, wxT("Always on top"));
+  cb_on_top = new wxCheckBox(this, ID_CB_ON_TOP, Z("Always on top"));
 
-  cb_warn_usage = new wxCheckBox(this, ID_CB_WARN_USAGE, wxT("Warn about possible incorrect usage of mmg"));
+  cb_warn_usage = new wxCheckBox(this, ID_CB_WARN_USAGE, Z("Warn about possible incorrect usage of mmg"));
   cb_warn_usage->SetToolTip(TIP("If checked mmg will warn if it thinks that "
                                 "you're using it incorrectly. Such warnings "
                                 "are shown at least once even if you turn "
                                 "this feature off."));
 
-  cb_gui_debugging = new wxCheckBox(this, ID_CB_GUI_DEBUGGING, wxT("Show mmg's debug window"));
-  cb_gui_debugging->SetToolTip(TIP("Shows mmg's debug window in which "
-                                   "debug messages will appear. This is only "
-                                   "useful if you're helping the author "
-                                   "debug a problem in mmg."));
+  cb_gui_debugging = new wxCheckBox(this, ID_CB_GUI_DEBUGGING, Z("Show mmg's debug window"));
+  cb_gui_debugging->SetToolTip(TIP("Shows mmg's debug window in which debug messages will appear. "
+                                   "This is only useful if you're helping the author debug a problem in mmg."));
 
   // Set the defaults.
 
@@ -125,7 +130,7 @@ options_dialog::options_dialog(wxWindow *parent,
   cb_gui_debugging->SetValue(m_options.gui_debugging);
   cb_always_use_simpleblock->SetValue(m_options.always_use_simpleblock);
   cb_set_delay_from_filename->SetValue(m_options.set_delay_from_filename);
-  cob_priority->SetValue(m_options.priority);
+  select_priority(m_options.priority);
 
   rb_odm_input_file->SetValue(m_options.output_directory_mode == ODM_FROM_FIRST_INPUT_FILE);
   rb_odm_previous->SetValue(m_options.output_directory_mode == ODM_PREVIOUS);
@@ -233,9 +238,9 @@ options_dialog::options_dialog(wxWindow *parent,
 
 void
 options_dialog::on_browse_mkvmerge(wxCommandEvent &evt) {
-  wxFileDialog dlg(this, wxT("Choose the mkvmerge executable"), tc_mkvmerge->GetValue().BeforeLast(PSEP), wxT(""),
+  wxFileDialog dlg(this, Z("Choose the mkvmerge executable"), tc_mkvmerge->GetValue().BeforeLast(PSEP), wxEmptyString,
 #ifdef SYS_WINDOWS
-                   wxT("Executable files (*.exe)|*.exe|" ALLFILES),
+                   wxString::Format(Z("Executable files (*.exe)|*.exe|%s"), ALLFILES.c_str()),
 #else
                    wxT("All files (*)|*"),
 #endif
@@ -247,7 +252,7 @@ options_dialog::on_browse_mkvmerge(wxCommandEvent &evt) {
   wxString file_name(dlg.GetPath().AfterLast('/').AfterLast('\\').Lower());
 
   if ((file_name == wxT("mmg.exe")) || (file_name == wxT("mmg"))) {
-    wxMessageBox(wxT("Please do not select 'mmg' itself as the 'mkvmerge' executable."), wxT("Wrong file chosen"), wxOK | wxCENTER | wxICON_ERROR);
+    wxMessageBox(Z("Please do not select 'mmg' itself as the 'mkvmerge' executable."), Z("Wrong file chosen"), wxOK | wxCENTER | wxICON_ERROR);
     return;
   }
 
@@ -256,7 +261,7 @@ options_dialog::on_browse_mkvmerge(wxCommandEvent &evt) {
 
 void
 options_dialog::on_browse_output_directory(wxCommandEvent &evt) {
-  wxDirDialog dlg(this, wxT("Choose the output directory"), tc_output_directory->GetValue());
+  wxDirDialog dlg(this, Z("Choose the output directory"), tc_output_directory->GetValue());
 
   if (dlg.ShowModal() == wxID_OK)
     tc_output_directory->SetValue(dlg.GetPath());
@@ -281,7 +286,7 @@ options_dialog::enable_output_filename_controls(bool enable) {
 void
 options_dialog::on_ok(wxCommandEvent &evt) {
   m_options.mkvmerge                      = tc_mkvmerge->GetValue();
-  m_options.priority                      = cob_priority->GetValue();
+  m_options.priority                      = get_selected_priority();
   m_options.output_directory              = tc_output_directory->GetValue();
   m_options.autoset_output_filename       = cb_autoset_output_filename->IsChecked();
   m_options.ask_before_overwriting        = cb_ask_before_overwriting->IsChecked();
@@ -296,6 +301,23 @@ options_dialog::on_ok(wxCommandEvent &evt) {
                                                                             ODM_FIXED;
 
   EndModal(wxID_OK);
+}
+
+void
+options_dialog::select_priority(const wxString &priority) {
+  int i;
+
+  for (i = 0; ms_priorities.size() > i; ++i)
+    if (priority == ms_priorities[i]) {
+      if (cob_priority->GetCount() > i)
+        cob_priority->SetValue(cob_priority->GetString(i));
+      return;
+    }
+}
+
+wxString
+options_dialog::get_selected_priority() {
+  return ms_priorities[cob_priority->GetSelection()];
 }
 
 IMPLEMENT_CLASS(options_dialog, wxDialog);

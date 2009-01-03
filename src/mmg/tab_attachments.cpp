@@ -52,71 +52,60 @@ tab_attachments::tab_attachments(wxWindow *parent):
   wxFlexGridSizer *siz_ddlists;
   wxBoxSizer *siz_buttons, *siz_all;
 
-  sb_top = new wxStaticBox(this, wxID_STATIC, wxT("Attachments"));
+  sb_top = new wxStaticBox(this, wxID_STATIC, Z("Attachments"));
   siz_box_top = new wxStaticBoxSizer(sb_top,  wxHORIZONTAL);
 
   lb_attachments = new wxListBox(this, ID_LB_ATTACHMENTS);
   siz_box_top->Add(lb_attachments, 1, wxGROW | wxALL, 5);
 
   siz_buttons = new wxBoxSizer(wxVERTICAL);
-  b_add_attachment = new wxButton(this, ID_B_ADDATTACHMENT, wxT("add"));
+  b_add_attachment = new wxButton(this, ID_B_ADDATTACHMENT, Z("add"));
   siz_buttons->Add(b_add_attachment, 0, wxALL, 5);
-  b_remove_attachment = new wxButton(this, ID_B_REMOVEATTACHMENT,
-                                     wxT("remove"));
+  b_remove_attachment = new wxButton(this, ID_B_REMOVEATTACHMENT, Z("remove"));
   b_remove_attachment->Enable(false);
   siz_buttons->Add(b_remove_attachment, 0, wxALL, 5);
   siz_buttons->Add(5, 5, 0, wxGROW | wxALL, 5);
 
   siz_box_top->Add(siz_buttons);
 
-  sb_options = new wxStaticBox(this, wxID_STATIC, wxT("Attachment options"));
+  sb_options = new wxStaticBox(this, wxID_STATIC, Z("Attachment options"));
   siz_box_bottom = new wxStaticBoxSizer(sb_options, wxVERTICAL);
 
-  st_name = new wxStaticText(this, wxID_STATIC, wxT("Name:"));
+  st_name = new wxStaticText(this, wxID_STATIC, Z("Name:"));
   siz_box_bottom->Add(st_name, 0, wxALIGN_LEFT | wxLEFT, 5);
-  tc_name = new wxTextCtrl(this, ID_TC_ATTACHMENTNAME, wxT(""));
-  tc_name->SetToolTip(TIP("This is the name that will be stored in the "
-                          "output file for this attachment. It defaults "
-                          "to the file name of the original file but can "
-                          "be changed."));
+  tc_name = new wxTextCtrl(this, ID_TC_ATTACHMENTNAME, wxEmptyString);
+  tc_name->SetToolTip(TIP("This is the name that will be stored in the output file for this attachment. "
+                          "It defaults to the file name of the original file but can be changed."));
   siz_box_bottom->Add(tc_name, 0, wxGROW | wxALL, 5);
 
-  st_description = new wxStaticText(this, wxID_STATIC, wxT("Description:"));
+  st_description = new wxStaticText(this, wxID_STATIC, Z("Description:"));
   siz_box_bottom->Add(st_description, 0, wxALIGN_LEFT | wxLEFT, 5);
-  tc_description =
-    new wxTextCtrl(this, ID_TC_DESCRIPTION, wxT(""), wxDefaultPosition,
-                   wxDefaultSize, wxTE_MULTILINE | wxTE_WORDWRAP);
+  tc_description = new wxTextCtrl(this, ID_TC_DESCRIPTION, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_WORDWRAP);
   siz_box_bottom->Add(tc_description, 1, wxGROW | wxALL, 5);
 
   siz_ddlists = new wxFlexGridSizer(2, 3, 0, 0);
   siz_ddlists->AddGrowableCol(0);
   siz_ddlists->AddGrowableCol(2);
-  st_mimetype = new wxStaticText(this, wxID_STATIC, wxT("MIME type:"));
+  st_mimetype = new wxStaticText(this, wxID_STATIC, Z("MIME type:"));
   siz_ddlists->Add(st_mimetype, 1, wxALIGN_LEFT | wxLEFT | wxRIGHT, 5);
   siz_ddlists->Add(5, 5, 0, 0, 0);
-  st_style = new wxStaticText(this, wxID_STATIC, wxT("Attachment style:"));
+  st_style = new wxStaticText(this, wxID_STATIC, Z("Attachment style:"));
   siz_ddlists->Add(st_style, 1, wxALIGN_LEFT | wxRIGHT, 5);
 
-  cob_mimetype =
-    new wxComboBox(this, ID_CB_MIMETYPE, wxT(""), wxDefaultPosition,
-                   wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
-  cob_mimetype->SetToolTip(TIP("MIME type for this track. Select one of the "
-                               "pre-defined MIME types or enter one "
-                               "yourself."));
-  cob_mimetype->Append(wxT(""));
+  cob_mimetype = new wxComboBox(this, ID_CB_MIMETYPE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
+  cob_mimetype->SetToolTip(TIP("MIME type for this track. Select one of the pre-defined MIME types or enter one yourself."));
+  cob_mimetype->Append(wxEmptyString);
   for (i = 0; mime_types[i].name != NULL; i++)
     cob_mimetype->Append(wxU(mime_types[i].name));
   siz_ddlists->Add(cob_mimetype, 1, wxGROW | wxLEFT | wxRIGHT, 5);
   siz_ddlists->AddSpacer(0);
 
   cob_style =
-    new wxComboBox(this, ID_CB_ATTACHMENTSTYLE, wxT(""), wxDefaultPosition,
+    new wxComboBox(this, ID_CB_ATTACHMENTSTYLE, wxEmptyString, wxDefaultPosition,
                    wxDefaultSize, 0, NULL, wxCB_READONLY | wxCB_DROPDOWN);
-  cob_style->Append(wxT("To all files"));
-  cob_style->Append(wxT("Only to the first"));
-  cob_style->SetToolTip(TIP("If splitting is a file can be attached either to "
-                            "all files created or only to the first file. Has "
-                            "no effect if no splitting is used."));
+  cob_style->Append(Z("To all files"));
+  cob_style->Append(Z("Only to the first"));
+  cob_style->SetToolTip(TIP("If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."));
   siz_ddlists->Add(cob_style, 1, wxGROW | wxRIGHT, 5);
 
   siz_box_bottom->Add(siz_ddlists, 0, wxBOTTOM | wxGROW, 5);
@@ -150,8 +139,7 @@ tab_attachments::enable(bool e) {
 
 void
 tab_attachments::on_add_attachment(wxCommandEvent &evt) {
-  wxFileDialog dlg(NULL, wxT("Choose an attachment file"), last_open_dir,
-                   wxT(""), wxT(ALLFILES), wxOPEN | wxMULTIPLE);
+  wxFileDialog dlg(NULL, Z("Choose an attachment file"), last_open_dir, wxEmptyString, ALLFILES, wxOPEN | wxMULTIPLE);
 
   if(dlg.ShowModal() == wxID_OK) {
     wxArrayString selected_files;
@@ -260,7 +248,7 @@ tab_attachments::save(wxConfigBase *cfg) {
     cfg->SetPath(s);
     cfg->Write(wxT("stored_name"), a->stored_name);
     cfg->Write(wxT("file_name"), a->file_name);
-    s = wxT("");
+    s = wxEmptyString;
     for (j = 0; j < a->description.Length(); j++)
       if (a->description[j] == wxT('\n'))
         s += wxT("!\\N!");
@@ -303,7 +291,7 @@ tab_attachments::load(wxConfigBase *cfg,
     cfg->SetPath(s);
     cfg->Read(wxT("file_name"), &a.file_name);
     if (!cfg->Read(wxT("stored_name"), &a.stored_name) ||
-        (a.stored_name == wxT("")))
+        (a.stored_name == wxEmptyString))
       a.stored_name = derive_stored_name_from_file_name(a.file_name);
     cfg->Read(wxT("description"), &s);
     cfg->Read(wxT("mime_type"), &a.mime_type);
@@ -336,9 +324,7 @@ tab_attachments::validate_settings() {
   for (i = 0; i < attachments.size(); i++) {
     a = &attachments[i];
     if (a->mime_type.Length() == 0) {
-      wxMessageBox(wxT("No MIME type has been selected for the attachment '") +
-                       a->file_name + wxT("'."), wxT("Missing input"),
-                   wxOK | wxCENTER | wxICON_ERROR);
+      wxMessageBox(wxString::Format(Z("No MIME type has been selected for the attachment '%s'."), a->file_name.c_str()), Z("Missing input"), wxOK | wxCENTER | wxICON_ERROR);
       return false;
     }
   }

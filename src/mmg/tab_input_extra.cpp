@@ -37,10 +37,9 @@
 using namespace std;
 
 tab_input_extra::tab_input_extra(wxWindow *parent,
-                                 tab_input *ti):
-  wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400),
-          wxTAB_TRAVERSAL),
-  input(ti) {
+                                 tab_input *ti)
+  : wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400), wxTAB_TRAVERSAL)
+  , input(ti) {
 
   wxFlexGridSizer *siz_fg;
   wxBoxSizer *siz_all;
@@ -51,23 +50,17 @@ tab_input_extra::tab_input_extra(wxWindow *parent,
   siz_fg = new wxFlexGridSizer(2);
   siz_fg->AddGrowableCol(1);
 
-  st_user_defined = new wxStaticText(this, -1, wxT("User defined options:"));
+  st_user_defined = new wxStaticText(this, -1, Z("User defined options:"));
   st_user_defined->Enable(false);
   siz_fg->Add(st_user_defined, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  tc_user_defined = new wxTextCtrl(this, ID_TC_USER_DEFINED, wxT(""));
-  tc_user_defined->SetToolTip(TIP("Free-form edit field for user defined "
-                                  "options for this track. What you input "
-                                  "here is added after all the other options "
-                                  "mmg adds so that you could overwrite "
-                                  "any of mmg's options for this track. "
-                                  "All occurences of the string \"<TID>\" "
-                                  "will be replaced by the track's track "
-                                  "ID."));
+  tc_user_defined = new wxTextCtrl(this, ID_TC_USER_DEFINED, wxEmptyString);
+  tc_user_defined->SetToolTip(TIP("Free-form edit field for user defined options for this track. What you input here is added after all the other options "
+                                  "mmg adds so that you could overwrite any of mmg's options for this track. "
+                                  "All occurences of the string \"<TID>\" will be replaced by the track's track ID."));
   tc_user_defined->SetSizeHints(0, -1);
   tc_user_defined->Enable(false);
-  siz_fg->Add(tc_user_defined, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL,
-              STDSPACING);
+  siz_fg->Add(tc_user_defined, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   siz_all->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
 
@@ -85,7 +78,7 @@ tab_input_extra::set_track_mode(mmg_track_t *t) {
     bool saved_dcvn = input->dont_copy_values_now;
     input->dont_copy_values_now = true;
 
-    tc_user_defined->SetValue(wxT(""));
+    tc_user_defined->SetValue(wxEmptyString);
 
     input->dont_copy_values_now = saved_dcvn;
   }

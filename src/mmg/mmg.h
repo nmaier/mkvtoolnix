@@ -32,13 +32,13 @@
 #include "wxcommon.h"
 
 #ifdef SYS_WINDOWS
-# define ALLFILES "All Files (*.*)|*.*"
+# define ALLFILES Z("All Files (*.*)|*.*")
 # define PSEP '\\'
 # define STDSPACING 3
 # define TOPBOTTOMSPACING 5
 # define LEFTRIGHTSPACING 5
 #else
-# define ALLFILES "All Files (*)|*"
+# define ALLFILES Z("All Files (*)|*")
 # define PSEP '/'
 # define STDSPACING 3
 # define TOPBOTTOMSPACING 5
@@ -173,10 +173,10 @@ void set_combobox_selection(wxComboBox *cb, const wxString wanted);
 void wxdie(const wxString &errmsg);
 
 #if defined(SYS_WINDOWS)
-#define TIP(s) format_tooltip(wxT(s))
+#define TIP(s) format_tooltip(wxU(s))
 wxString format_tooltip(const wxString &s);
 #else
-#define TIP(s) wxT(s)
+#define TIP(s) wxU(s)
 #endif
 
 class mmg_app: public wxApp {

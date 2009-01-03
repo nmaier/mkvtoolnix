@@ -16,7 +16,11 @@
 #ifndef __OPTIONS_DIALOG_H
 #define __OPTIONS_DIALOG_H
 
+#include "config.h"
+
 #include "wx/log.h"
+
+#include <vector>
 
 #define ID_TC_MKVMERGE                     15000
 #define ID_B_BROWSEMKVMERGE                15001
@@ -52,6 +56,9 @@ public:
   mmg_options_t &m_options;
 
 public:
+  static std::vector<wxString> ms_priorities;
+
+public:
   options_dialog(wxWindow *parent, mmg_options_t &options);
 
   void on_browse_mkvmerge(wxCommandEvent &evt);
@@ -61,6 +68,9 @@ public:
   void on_output_directory_mode(wxCommandEvent &evt);
 
   void enable_output_filename_controls(bool enable);
+
+  void select_priority(const wxString &priority);
+  wxString get_selected_priority();
 };
 
 #endif // __OPTIONS_DIALOG_H
