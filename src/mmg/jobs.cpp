@@ -744,9 +744,9 @@ jobdlg_list_view::on_key_pressed(wxKeyEvent &evt) {
 IMPLEMENT_CLASS(job_run_dialog, wxDialog);
 BEGIN_EVENT_TABLE(job_run_dialog, wxDialog)
   EVT_BUTTON(ID_JOBS_B_ABORT, job_run_dialog::on_abort)
-  EVT_END_PROCESS(1, job_run_dialog::on_end_process)
+  EVT_END_PROCESS(1,          job_run_dialog::on_end_process)
+  EVT_TIMER(1,                job_run_dialog::on_timer)
   EVT_IDLE(job_run_dialog::on_idle)
-  EVT_TIMER(1, job_run_dialog::on_timer)
 END_EVENT_TABLE();
 
 IMPLEMENT_CLASS(job_log_dialog, wxDialog);
@@ -756,15 +756,15 @@ END_EVENT_TABLE();
 
 IMPLEMENT_CLASS(job_dialog, wxDialog);
 BEGIN_EVENT_TABLE(job_dialog, wxDialog)
-  EVT_BUTTON(ID_JOBS_B_START, job_dialog::on_start)
-  EVT_BUTTON(ID_JOBS_B_START_SELECTED, job_dialog::on_start_selected)
-  EVT_BUTTON(ID_JOBS_B_UP, job_dialog::on_up)
-  EVT_BUTTON(ID_JOBS_B_DOWN, job_dialog::on_down)
-  EVT_BUTTON(ID_JOBS_B_DELETE, job_dialog::on_delete)
-  EVT_BUTTON(ID_JOBS_B_REENABLE, job_dialog::on_reenable)
-  EVT_BUTTON(ID_JOBS_B_DISABLE, job_dialog::on_disable)
-  EVT_BUTTON(ID_JOBS_B_VIEW_LOG, job_dialog::on_view_log)
-  EVT_LIST_ITEM_SELECTED(ID_JOBS_LV_JOBS, job_dialog::on_item_selected)
+  EVT_BUTTON(ID_JOBS_B_START,               job_dialog::on_start)
+  EVT_BUTTON(ID_JOBS_B_START_SELECTED,      job_dialog::on_start_selected)
+  EVT_BUTTON(ID_JOBS_B_UP,                  job_dialog::on_up)
+  EVT_BUTTON(ID_JOBS_B_DOWN,                job_dialog::on_down)
+  EVT_BUTTON(ID_JOBS_B_DELETE,              job_dialog::on_delete)
+  EVT_BUTTON(ID_JOBS_B_REENABLE,            job_dialog::on_reenable)
+  EVT_BUTTON(ID_JOBS_B_DISABLE,             job_dialog::on_disable)
+  EVT_BUTTON(ID_JOBS_B_VIEW_LOG,            job_dialog::on_view_log)
+  EVT_LIST_ITEM_SELECTED(ID_JOBS_LV_JOBS,   job_dialog::on_item_selected)
   EVT_LIST_ITEM_DESELECTED(ID_JOBS_LV_JOBS, job_dialog::on_item_selected)
 END_EVENT_TABLE();
 

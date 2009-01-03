@@ -1926,26 +1926,24 @@ tab_chapters::is_empty() {
 IMPLEMENT_CLASS(chapter_values_dlg, wxDialog);
 BEGIN_EVENT_TABLE(chapter_values_dlg, wxDialog)
   EVT_CHECKBOX(ID_CVD_CB_LANGUAGE, chapter_values_dlg::on_language_clicked)
-  EVT_CHECKBOX(ID_CVD_CB_COUNTRY, chapter_values_dlg::on_country_clicked)
+  EVT_CHECKBOX(ID_CVD_CB_COUNTRY,  chapter_values_dlg::on_country_clicked)
 END_EVENT_TABLE();
 
 IMPLEMENT_CLASS(tab_chapters, wxPanel);
 BEGIN_EVENT_TABLE(tab_chapters, wxPanel)
-  EVT_BUTTON(ID_B_ADDCHAPTER, tab_chapters::on_add_chapter)
-  EVT_BUTTON(ID_B_ADDSUBCHAPTER, tab_chapters::on_add_subchapter)
-  EVT_BUTTON(ID_B_REMOVECHAPTER, tab_chapters::on_remove_chapter)
-  EVT_BUTTON(ID_B_SETVALUES, tab_chapters::on_set_values)
-  EVT_BUTTON(ID_B_ADJUSTTIMECODES, tab_chapters::on_adjust_timecodes)
-  EVT_BUTTON(ID_B_ADD_CHAPTERNAME, tab_chapters::on_add_chapter_name)
-  EVT_BUTTON(ID_B_REMOVE_CHAPTERNAME, tab_chapters::on_remove_chapter_name)
-  EVT_TREE_SEL_CHANGED(ID_TRC_CHAPTERS, tab_chapters::on_entry_selected)
-  EVT_COMBOBOX(ID_CB_CHAPTERSELECTLANGUAGECODE,
-               tab_chapters::on_language_code_selected)
-  EVT_COMBOBOX(ID_CB_CHAPTERSELECTCOUNTRYCODE,
-               tab_chapters::on_country_code_selected)
-  EVT_LISTBOX(ID_LB_CHAPTERNAMES, tab_chapters::on_chapter_name_selected)
-  EVT_TEXT(ID_TC_CHAPTERNAME, tab_chapters::on_chapter_name_changed)
-  EVT_CHECKBOX(ID_CB_CHAPTERHIDDEN, tab_chapters::on_flag_hidden)
-  EVT_CHECKBOX(ID_CB_CHAPTERENABLED, tab_chapters::on_flag_enabled)
-  EVT_TEXT_ENTER(ID_TC_CHAPTERNAME, tab_chapters::on_chapter_name_enter)
+  EVT_BUTTON(ID_B_ADDCHAPTER,                   tab_chapters::on_add_chapter)
+  EVT_BUTTON(ID_B_ADDSUBCHAPTER,                tab_chapters::on_add_subchapter)
+  EVT_BUTTON(ID_B_REMOVECHAPTER,                tab_chapters::on_remove_chapter)
+  EVT_BUTTON(ID_B_SETVALUES,                    tab_chapters::on_set_values)
+  EVT_BUTTON(ID_B_ADJUSTTIMECODES,              tab_chapters::on_adjust_timecodes)
+  EVT_BUTTON(ID_B_ADD_CHAPTERNAME,              tab_chapters::on_add_chapter_name)
+  EVT_BUTTON(ID_B_REMOVE_CHAPTERNAME,           tab_chapters::on_remove_chapter_name)
+  EVT_TREE_SEL_CHANGED(ID_TRC_CHAPTERS,         tab_chapters::on_entry_selected)
+  EVT_COMBOBOX(ID_CB_CHAPTERSELECTLANGUAGECODE, tab_chapters::on_language_code_selected)
+  EVT_COMBOBOX(ID_CB_CHAPTERSELECTCOUNTRYCODE,  tab_chapters::on_country_code_selected)
+  EVT_LISTBOX(ID_LB_CHAPTERNAMES,               tab_chapters::on_chapter_name_selected)
+  EVT_TEXT(ID_TC_CHAPTERNAME,                   tab_chapters::on_chapter_name_changed)
+  EVT_CHECKBOX(ID_CB_CHAPTERHIDDEN,             tab_chapters::on_flag_hidden)
+  EVT_CHECKBOX(ID_CB_CHAPTERENABLED,            tab_chapters::on_flag_enabled)
+  EVT_TEXT_ENTER(ID_TC_CHAPTERNAME,             tab_chapters::on_chapter_name_enter)
 END_EVENT_TABLE();

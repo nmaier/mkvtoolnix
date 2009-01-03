@@ -334,11 +334,11 @@ tab_attachments::validate_settings() {
 
 IMPLEMENT_CLASS(tab_attachments, wxPanel);
 BEGIN_EVENT_TABLE(tab_attachments, wxPanel)
-  EVT_BUTTON(ID_B_ADDATTACHMENT, tab_attachments::on_add_attachment)
-  EVT_BUTTON(ID_B_REMOVEATTACHMENT, tab_attachments::on_remove_attachment)
-  EVT_LISTBOX(ID_LB_ATTACHMENTS, tab_attachments::on_attachment_selected)
-  EVT_TEXT(ID_TC_ATTACHMENTNAME, tab_attachments::on_name_changed)
-  EVT_TEXT(ID_TC_DESCRIPTION, tab_attachments::on_description_changed)
-  EVT_TIMER(ID_T_ATTACHMENTVALUES, tab_attachments::on_mimetype_changed)
+  EVT_BUTTON(ID_B_ADDATTACHMENT,      tab_attachments::on_add_attachment)
+  EVT_BUTTON(ID_B_REMOVEATTACHMENT,   tab_attachments::on_remove_attachment)
+  EVT_LISTBOX(ID_LB_ATTACHMENTS,      tab_attachments::on_attachment_selected)
+  EVT_TEXT(ID_TC_ATTACHMENTNAME,      tab_attachments::on_name_changed)
+  EVT_TEXT(ID_TC_DESCRIPTION,         tab_attachments::on_description_changed)
+  EVT_TIMER(ID_T_ATTACHMENTVALUES,    tab_attachments::on_mimetype_changed)
   EVT_COMBOBOX(ID_CB_ATTACHMENTSTYLE, tab_attachments::on_style_changed)
 END_EVENT_TABLE();

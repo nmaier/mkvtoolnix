@@ -274,8 +274,8 @@ mux_process::OnTerminate(int pid,
 
 IMPLEMENT_CLASS(mux_dialog, wxDialog);
 BEGIN_EVENT_TABLE(mux_dialog, wxDialog)
-  EVT_BUTTON(ID_B_MUX_OK, mux_dialog::on_ok)
+  EVT_BUTTON(ID_B_MUX_OK,      mux_dialog::on_ok)
   EVT_BUTTON(ID_B_MUX_SAVELOG, mux_dialog::on_save_log)
-  EVT_BUTTON(ID_B_MUX_ABORT, mux_dialog::on_abort)
+  EVT_BUTTON(ID_B_MUX_ABORT,   mux_dialog::on_abort)
   EVT_CLOSE(mux_dialog::on_close)
 END_EVENT_TABLE();

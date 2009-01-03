@@ -1337,20 +1337,20 @@ tab_input::validate_settings() {
 
 IMPLEMENT_CLASS(tab_input, wxPanel);
 BEGIN_EVENT_TABLE(tab_input, wxPanel)
-  EVT_BUTTON(ID_B_ADDFILE, tab_input::on_add_file)
-  EVT_BUTTON(ID_B_REMOVEFILE, tab_input::on_remove_file)
+  EVT_BUTTON(ID_B_ADDFILE,          tab_input::on_add_file)
+  EVT_BUTTON(ID_B_REMOVEFILE,       tab_input::on_remove_file)
   EVT_BUTTON(ID_B_REMOVE_ALL_FILES, tab_input::on_remove_all_files)
-  EVT_BUTTON(ID_B_APPENDFILE, tab_input::on_append_file)
-  EVT_BUTTON(ID_B_TRACKUP, tab_input::on_move_track_up)
-  EVT_BUTTON(ID_B_TRACKDOWN, tab_input::on_move_track_down)
+  EVT_BUTTON(ID_B_APPENDFILE,       tab_input::on_append_file)
+  EVT_BUTTON(ID_B_TRACKUP,          tab_input::on_move_track_up)
+  EVT_BUTTON(ID_B_TRACKDOWN,        tab_input::on_move_track_down)
 
-  EVT_LISTBOX(ID_LB_INPUTFILES, tab_input::on_file_selected)
-  EVT_LISTBOX(ID_CLB_TRACKS, tab_input::on_track_selected)
-  EVT_CHECKLISTBOX(ID_CLB_TRACKS, tab_input::on_track_enabled)
+  EVT_LISTBOX(ID_LB_INPUTFILES,     tab_input::on_file_selected)
+  EVT_LISTBOX(ID_CLB_TRACKS,        tab_input::on_track_selected)
+  EVT_CHECKLISTBOX(ID_CLB_TRACKS,   tab_input::on_track_enabled)
 
-  EVT_CHECKBOX(ID_CB_NOCHAPTERS, tab_input::on_nochapters_clicked)
+  EVT_CHECKBOX(ID_CB_NOCHAPTERS,    tab_input::on_nochapters_clicked)
   EVT_CHECKBOX(ID_CB_NOATTACHMENTS, tab_input::on_noattachments_clicked)
-  EVT_CHECKBOX(ID_CB_NOTAGS, tab_input::on_notags_clicked)
+  EVT_CHECKBOX(ID_CB_NOTAGS,        tab_input::on_notags_clicked)
 
-  EVT_TIMER(ID_T_INPUTVALUES, tab_input::on_value_copy_timer)
+  EVT_TIMER(ID_T_INPUTVALUES,       tab_input::on_value_copy_timer)
 END_EVENT_TABLE();

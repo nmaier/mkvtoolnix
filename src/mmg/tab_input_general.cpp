@@ -301,13 +301,12 @@ tab_input_general::on_track_name_changed(wxCommandEvent &evt) {
 
 IMPLEMENT_CLASS(tab_input_general, wxPanel);
 BEGIN_EVENT_TABLE(tab_input_general, wxPanel)
-  EVT_BUTTON(ID_B_BROWSETAGS, tab_input_general::on_browse_tags)
+  EVT_BUTTON(ID_B_BROWSETAGS,       tab_input_general::on_browse_tags)
   EVT_BUTTON(ID_B_BROWSE_TIMECODES, tab_input_general::on_browse_timecodes_clicked)
-  EVT_TEXT(ID_TC_TAGS, tab_input_general::on_tags_changed)
-  EVT_TEXT(ID_TC_TIMECODES, tab_input_general::on_timecodes_changed)
-  EVT_COMBOBOX(ID_CB_MAKEDEFAULT, tab_input_general::on_default_track_selected)
-  EVT_COMBOBOX(ID_CB_LANGUAGE, tab_input_general::on_language_selected)
-  EVT_COMBOBOX(ID_CB_CUES, tab_input_general::on_cues_selected)
-  EVT_TEXT(ID_TC_TRACKNAME, tab_input_general::on_track_name_changed)
+  EVT_TEXT(ID_TC_TAGS,              tab_input_general::on_tags_changed)
+  EVT_TEXT(ID_TC_TIMECODES,         tab_input_general::on_timecodes_changed)
+  EVT_COMBOBOX(ID_CB_MAKEDEFAULT,   tab_input_general::on_default_track_selected)
+  EVT_COMBOBOX(ID_CB_LANGUAGE,      tab_input_general::on_language_selected)
+  EVT_COMBOBOX(ID_CB_CUES,          tab_input_general::on_cues_selected)
+  EVT_TEXT(ID_TC_TRACKNAME,         tab_input_general::on_track_name_changed)
 END_EVENT_TABLE();
-

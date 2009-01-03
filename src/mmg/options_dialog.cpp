@@ -322,11 +322,11 @@ options_dialog::get_selected_priority() {
 
 IMPLEMENT_CLASS(options_dialog, wxDialog);
 BEGIN_EVENT_TABLE(options_dialog, wxDialog)
-  EVT_BUTTON(ID_B_BROWSEMKVMERGE, options_dialog::on_browse_mkvmerge)
-  EVT_BUTTON(ID_B_BROWSE_OUTPUT_DIRECTORY, options_dialog::on_browse_output_directory)
-  EVT_BUTTON(wxID_OK, options_dialog::on_ok)
+  EVT_BUTTON(ID_B_BROWSEMKVMERGE,             options_dialog::on_browse_mkvmerge)
+  EVT_BUTTON(ID_B_BROWSE_OUTPUT_DIRECTORY,    options_dialog::on_browse_output_directory)
+  EVT_BUTTON(wxID_OK,                         options_dialog::on_ok)
   EVT_CHECKBOX(ID_CB_AUTOSET_OUTPUT_FILENAME, options_dialog::on_autoset_output_filename_selected)
-  EVT_RADIOBUTTON(ID_RB_ODM_INPUT_FILE, options_dialog::on_autoset_output_filename_selected)
-  EVT_RADIOBUTTON(ID_RB_ODM_PREVIOUS, options_dialog::on_autoset_output_filename_selected)
-  EVT_RADIOBUTTON(ID_RB_ODM_FIXED, options_dialog::on_autoset_output_filename_selected)
+  EVT_RADIOBUTTON(ID_RB_ODM_INPUT_FILE,       options_dialog::on_autoset_output_filename_selected)
+  EVT_RADIOBUTTON(ID_RB_ODM_PREVIOUS,         options_dialog::on_autoset_output_filename_selected)
+  EVT_RADIOBUTTON(ID_RB_ODM_FIXED,            options_dialog::on_autoset_output_filename_selected)
 END_EVENT_TABLE();
