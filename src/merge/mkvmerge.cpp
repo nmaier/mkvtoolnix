@@ -183,18 +183,18 @@ set_usage() {
   usage_text += Y(" Options for each input file:\n");
   usage_text += Y("  -a, --atracks <n,m,...>  Copy audio tracks n,m etc. Default: copy all\n"
                   "                           audio tracks.\n");
+  usage_text += Y("  -A, --noaudio            Don't copy any audio track from this file.\n");
   usage_text += Y("  -d, --vtracks <n,m,...>  Copy video tracks n,m etc. Default: copy all\n"
                   "                           video tracks.\n");
+  usage_text += Y("  -D, --novideo            Don't copy any video track from this file.\n");
   usage_text += Y("  -s, --stracks <n,m,...>  Copy subtitle tracks n,m etc. Default: copy\n"
                   "                           all subtitle tracks.\n");
+  usage_text += Y("  -S, --nosubs             Don't copy any text track from this file.\n");
   usage_text += Y("  -b, --btracks <n,m,...>  Copy buttons tracks n,m etc. Default: copy\n"
                   "                           all buttons tracks.\n");
-  usage_text += Y("  -A, --noaudio            Don't copy any audio track from this file.\n");
-  usage_text += Y("  -D, --novideo            Don't copy any video track from this file.\n");
-  usage_text += Y("  -S, --nosubs             Don't copy any text track from this file.\n");
   usage_text += Y("  -B, --nobuttons          Don't copy any buttons track from this file.\n");
-  usage_text += Y("  --no-chapters            Don't keep chapters from a Matroska file.\n");
   usage_text += Y("  --no-attachments         Don't keep attachments from a Matroska file.\n");
+  usage_text += Y("  --no-chapters            Don't keep chapters from a Matroska file.\n");
   usage_text += Y("  --no-tags                Don't keep tags from a Matroska file.\n");
   usage_text += Y("  -y, --sync, --delay <TID:d[,o[/p]]>\n"
                   "                           Synchronize, adjust the track's timecodes with\n"
