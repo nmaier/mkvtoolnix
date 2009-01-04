@@ -1801,7 +1801,9 @@ qtmp4_demuxer_c::build_index_constant_sample_size_mode() {
     }
 
     bool is_keyframe = false;
-    if ((keyframe_table_idx < keyframe_table_size) && ((frame_idx + 1) == keyframe_table[keyframe_table_idx])) {
+    if (keyframe_table.empty())
+      is_keyframe = true;
+    else if ((keyframe_table_idx < keyframe_table_size) && ((frame_idx + 1) == keyframe_table[keyframe_table_idx])) {
       is_keyframe = true;
       ++keyframe_table_idx;
     }
@@ -1820,7 +1822,9 @@ qtmp4_demuxer_c::build_index_chunk_mode() {
     int act_frame_idx = frame_indices[frame_idx];
 
     bool is_keyframe  = false;
-    if ((keyframe_table_idx < keyframe_table_size) && ((frame_idx + 1) == keyframe_table[keyframe_table_idx])) {
+    if (keyframe_table.empty())
+      is_keyframe = true;
+    else if ((keyframe_table_idx < keyframe_table_size) && ((frame_idx + 1) == keyframe_table[keyframe_table_idx])) {
       is_keyframe = true;
       ++keyframe_table_idx;
     }
