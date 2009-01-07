@@ -2282,7 +2282,7 @@ const mime_type_t mime_types[] = {
   {"text/iuls", "uls"},
   {"text/mathml", "mml"},
   {"text/parityfec", ""},
-  {"text/plain", "asc txt text diff cue"},
+  {"text/plain", "asc avs txt text diff cue"},
   {"text/prs.lines.tag", ""},
   {"text/rfc822-headers", ""},
   {"text/richtext", "rtx"},
