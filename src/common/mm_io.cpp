@@ -256,6 +256,8 @@ mm_file_io_c::setup() {
 
 #else // SYS_WINDOWS
 
+# include "os_windows.h"
+
 HANDLE
 CreateFileUtf8(LPCSTR lpFileName,
                DWORD dwDesiredAccess,

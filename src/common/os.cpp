@@ -42,8 +42,11 @@ using namespace std;
    Additional code by Alexander Noé <alexander.noe@s2001.tu-chemnitz.de>
 */
 
+# include "os_windows.h"
+
 # include <io.h>
 # include <windows.h>
+# include <winreg.h>
 # include <direct.h>
 # include <sys/timeb.h>
 
@@ -235,6 +238,51 @@ get_current_time_millis() {
   _ftime(&tb);
 
   return (int64_t)tb.time * 1000 + tb.millitm;
+}
+
+bool
+get_registry_key_value(const std::string &key,
+                       const std::string &value_name,
+                       std::string &value) {
+  std::vector<std::string> key_parts = split(key, "\\", 2);
+  HKEY hkey;
+  HKEY hkey_base = key_parts[0] == "HKEY_CURRENT_USER" ? HKEY_CURRENT_USER : HKEY_LOCAL_MACHINE;
+  DWORD error    = RegOpenKeyEx(hkey_base, key_parts[1].c_str(), 0, KEY_READ, &hkey);
+
+  if (ERROR_SUCCESS != error)
+    return false;
+
+  bool ok        = false;
+  DWORD data_len = 0;
+  DWORD dwDisp;
+  if (ERROR_SUCCESS == RegQueryValueEx(hkey, value_name.c_str(), NULL, &dwDisp, NULL, &data_len)) {
+    char *data = new char[data_len + 1];
+    memset(data, 0, data_len + 1);
+
+    if (ERROR_SUCCESS == RegQueryValueEx(hkey, value_name.c_str(), NULL, &dwDisp, (BYTE *)data, &data_len)) {
+      value = data;
+      ok    = true;
+    }
+
+    delete []data;
+  }
+
+  RegCloseKey(hkey);
+
+  return ok;
+}
+
+std::string
+get_installation_path() {
+  std::string path;
+
+  if (get_registry_key_value("HKEY_LOCAL_MACHINE\\Software\\mkvmergeGUI\\GUI", "installation_path", path) && !path.empty())
+    return path;
+
+  if (get_registry_key_value("HKEY_CURRENT_USER\\Software\\mkvmergeGUI\\GUI", "installation_path", path) && !path.empty())
+    return path;
+
+  return "";
 }
 
 #else // SYS_WINDOWS

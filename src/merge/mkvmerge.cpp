@@ -58,6 +58,10 @@
 #include "tagparser.h"
 #include "tag_common.h"
 
+#ifdef SYS_WINDOWS
+# include "os_windows.h"
+#endif
+
 using namespace libmatroska;
 using namespace std;
 

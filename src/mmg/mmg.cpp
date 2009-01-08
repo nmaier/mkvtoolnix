@@ -1142,14 +1142,18 @@ mmg_dialog::on_help(wxCommandEvent &evt) {
     wxConfigBase *cfg;
     bool first;
 
-    cfg = wxConfigBase::Get();
+#if defined(SYS_WINDOWS)
+    cfg = new wxConfig(wxT("mkvmergeGUI"), wxEmptyString, wxEmptyString, wxEmptyString, wxCONFIG_USE_GLOBAL_FILE);
     cfg->SetPath(wxT("/GUI"));
 
     if (cfg->Read(wxT("installation_path"), &help_path)) {
       help_path += wxT("/doc");
       potential_help_paths.push_back(help_path);
     }
-#if !defined(SYS_WINDOWS)
+
+    delete cfg;
+
+#else
     // Debian, probably others
     potential_help_paths.push_back(wxT("/usr/share/doc/mkvtoolnix"));
     potential_help_paths.push_back(wxT("/usr/share/doc/mkvtoolnix/doc"));
@@ -1168,8 +1172,12 @@ mmg_dialog::on_help(wxCommandEvent &evt) {
     potential_help_paths.push_back(wxT(MTX_PKG_DATA_DIR));
     potential_help_paths.push_back(wxT(MTX_PKG_DATA_DIR "-" VERSION));
 #endif
+
+    cfg = wxConfigBase::Get();
+    cfg->SetPath(wxT("/GUI"));
     if (cfg->Read(wxT("help_path"), &help_path))
       potential_help_paths.push_back(help_path);
+
     potential_help_paths.push_back(wxGetCwd() + wxT("/doc"));
     potential_help_paths.push_back(wxGetCwd());
 

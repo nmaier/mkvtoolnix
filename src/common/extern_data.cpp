@@ -18,6 +18,10 @@
 #include "common.h"
 #include "extern_data.h"
 
+#ifdef SYS_WINDOWS
+# include "os_windows.h"
+#endif
+
 #if HAVE_MAGIC_H
 extern "C" {
 #include <magic.h>
@@ -2650,7 +2654,16 @@ guess_mime_type(string ext,
 #else
   m = magic_open(MAGIC_MIME      | MAGIC_SYMLINK);
 #endif
-  magic_load(m, NULL);
+
+#ifdef SYS_WINDOWS
+  std::string magic_filename = get_installation_path() + "\\data\\magic";
+  if (!m || (-1 == magic_load(m, magic_filename.c_str())))
+    return guess_mime_type_by_ext(ext);
+#else
+  if (!m || (-1 == magic_load(m, NULL)))
+    return guess_mime_type_by_ext(ext);
+#endif
+
   ret = magic_file(m, ext.c_str());
   magic_close(m);
 

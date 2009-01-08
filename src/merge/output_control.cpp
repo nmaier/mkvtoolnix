@@ -15,6 +15,9 @@
 */
 
 #include "os.h"
+#ifdef SYS_WINDOWS
+# include "os_windows.h"
+#endif
 
 #include <errno.h>
 #include <ctype.h>

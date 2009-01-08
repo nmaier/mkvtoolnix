@@ -324,11 +324,13 @@ Section "Program files" SEC01
 
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  File "cygz.dll"
   File "libcharset.dll"
   File "libebml.dll"
   File "libiconv.dll"
   File "libmatroska.dll"
+  File "magic1.dll"
+  File "regex2.dll"
+  File "zlib1.dll"
   File "matroskalogo_big.ico"
   File "mkvextract.exe"
   File "mkvinfo.exe"
@@ -337,6 +339,9 @@ Section "Program files" SEC01
   File "wxbase28u_gcc_custom.dll"
   File "wxmsw28u_core_gcc_custom.dll"
   File "wxmsw28u_html_gcc_custom.dll"
+  SetOutPath "$INSTDIR\data"
+  File "data\magic"
+  File "data\magic.mgc"
   SetOutPath "$INSTDIR\doc"
   File "doc\ChangeLog.txt"
   File "doc\COPYING.txt"
@@ -381,6 +386,7 @@ Section "Program files" SEC01
   # if this is just an upgrade.
   Delete "$INSTDIR\base64tool.exe"
   Delete "$INSTDIR\doc\base64tool.html"
+  Delete "$INSTDIR\cygz.dll"
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\AppMainExe.exe"
   Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\base64tool CLI reference.lnk"
   SetShellVarContext current
@@ -428,7 +434,7 @@ Section -Post
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
   WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "${PRODUCT_PUBLISHER}"
-  WriteRegStr HKCU "${MTX_REGKEY}\GUI" "installation_path" "$INSTDIR"
+  WriteRegStr HKLM "${MTX_REGKEY}\GUI" "installation_path" "$INSTDIR"
 
   Push $INSTDIR
   Call AddToPath
@@ -479,7 +485,6 @@ Section Uninstall
 
   Delete "$INSTDIR\${PRODUCT_NAME}.url"
   Delete "$INSTDIR\uninst.exe"
-  Delete "$INSTDIR\cygz.dll"
   Delete "$INSTDIR\libcharset.dll"
   Delete "$INSTDIR\libebml.dll"
   Delete "$INSTDIR\libiconv.dll"
@@ -489,9 +494,15 @@ Section Uninstall
   Delete "$INSTDIR\mkvinfo.exe"
   Delete "$INSTDIR\mkvmerge.exe"
   Delete "$INSTDIR\mmg.exe"
+  Delete "$INSTDIR\magic1.dll"
+  Delete "$INSTDIR\regex2.dll"
   Delete "$INSTDIR\wxbase28u_gcc_custom.dll"
   Delete "$INSTDIR\wxmsw28u_core_gcc_custom.dll"
   Delete "$INSTDIR\wxmsw28u_html_gcc_custom.dll"
+  Delete "$INSTDIR\zlib1.dll"
+
+  Delete "$INSTDIR\data\magic"
+  Delete "$INSTDIR\data\magic.mgc"
 
   Delete "$INSTDIR\doc\ChangeLog.txt"
   Delete "$INSTDIR\doc\COPYING.txt"
@@ -532,6 +543,7 @@ Section Uninstall
   Delete "$INSTDIR\examples\matroskasegmentinfo.dtd"
   Delete "$INSTDIR\examples\matroskatags.dtd"
 
+  RMDir "$INSTDIR\data"
   RMDir "$INSTDIR\doc\images"
   RMDir "$INSTDIR\doc"
   RMDir "$INSTDIR\examples"
@@ -544,6 +556,7 @@ Section Uninstall
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
+  DeleteRegKey HKLM "${MTX_REGKEY}"
   DeleteRegKey HKCU "${MTX_REGKEY}"
 
   Push $INSTDIR
