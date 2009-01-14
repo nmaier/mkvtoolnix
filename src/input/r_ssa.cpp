@@ -51,10 +51,9 @@ ssa_reader_c::ssa_reader_c(track_info_c &_ti)
     :                                              cc_local_utf8;
 
   ti.id  = 0;
-  m_subs = ssa_parser_cptr(new ssa_parser_c(io.get(), ti.fname, 0));
+  m_subs = ssa_parser_cptr(new ssa_parser_c(this, io.get(), ti.fname, 0));
 
   m_subs->set_iconv_handle(cc_utf8);
-  m_subs->set_ignore_attachments(ti.no_attachments);
   m_subs->parse();
 
   if (verbose)
@@ -101,4 +100,8 @@ void
 ssa_reader_c::identify() {
   id_result_container("SSA/ASS");
   id_result_track(0, ID_RESULT_TRACK_SUBTITLES, "SSA/ASS");
+
+  int i;
+  for (i = 0; i < g_attachments.size(); i++)
+    id_result_attachment(g_attachments[i].ui_id, g_attachments[i].mime_type, g_attachments[i].data->get_size(), g_attachments[i].name, g_attachments[i].description);
 }

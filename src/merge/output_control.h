@@ -96,19 +96,21 @@ struct attachment_t {
   string name, stored_name, mime_type, description;
   int64_t id;
   bool to_all_files;
-  counted_ptr<buffer_t> data;
+  memory_cptr data;
+  int64_t ui_id;
 
   attachment_t() {
     clear();
   }
   void clear() {
-    name = "";
-    stored_name = "";
-    mime_type = "";
-    description = "";
-    id = 0;
+    name         = "";
+    stored_name  = "";
+    mime_type    = "";
+    description  = "";
+    id           = 0;
+    ui_id        = 0;
     to_all_files = false;
-    data = counted_ptr<buffer_t>(NULL);
+    data         = memory_cptr(NULL);
   }
 };
 

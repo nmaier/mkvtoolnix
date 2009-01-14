@@ -196,7 +196,11 @@ set_usage() {
   usage_text += Y("  -b, --btracks <n,m,...>  Copy buttons tracks n,m etc. Default: copy\n"
                   "                           all buttons tracks.\n");
   usage_text += Y("  -B, --nobuttons          Don't copy any buttons track from this file.\n");
-  usage_text += Y("  --no-attachments         Don't keep attachments from a Matroska file.\n");
+  usage_text += Y("  -m, --attachments <n[:all|first],m[:all|first],...>\n"
+                  "                           Copy the attachments with the IDs n, m etc to\n"
+                  "                           all or only the first output file. Default: copy\n"
+                  "                           all attachments to all output files.\n");
+  usage_text += Y("  -M, --no-attachments     Don't copy attachments from a Matroska file.\n");
   usage_text += Y("  --no-chapters            Don't keep chapters from a Matroska file.\n");
   usage_text += Y("  --no-tags                Don't keep tags from a Matroska file.\n");
   usage_text += Y("  -y, --sync, --delay <TID:d[,o[/p]]>\n"
@@ -1407,14 +1411,13 @@ parse_arg_attach_file(attachment_t &attachment,
     attachment.mime_type  = guess_mime_type_and_report(arg);
 
   try {
-    attachment.data         = counted_ptr<buffer_t>(new buffer_t);
-    mm_io_cptr io           = mm_io_cptr(new mm_file_io_c(attachment.name));
-    attachment.data->m_size = io->get_size();
+    mm_io_cptr io = mm_io_cptr(new mm_file_io_c(attachment.name));
 
-    if (0 == attachment.data->m_size)
+    if (0 == io->get_size())
       mxerror(boost::format(Y("The size of attachment '%1%' is 0.\n")) % attachment.name);
 
-    attachment.data->m_buffer = (unsigned char *)safemalloc(attachment.data->m_size); io->read(attachment.data->m_buffer, attachment.data->m_size);
+    attachment.data = memory_c::alloc(io->get_size());
+    io->read(attachment.data->get(), attachment.data->get_size());
 
   } catch (...) {
     mxerror(boost::format(Y("The attachment '%1%' could not be read.\n")) % attachment.name);
@@ -1505,6 +1508,37 @@ parse_arg_default_language(const string &arg) {
                             "See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n")) % arg);
 
   g_default_language = iso639_languages[i].iso639_2_code;
+}
+
+static void
+parse_arg_attachments(const string &param,
+                      const string &arg,
+                      track_info_c &ti) {
+  vector<string> elements = split(arg, ",");
+
+  int i;
+  for (i = 0; elements.size() > i; ++i) {
+    vector<string> pair = split(elements[i], ":");
+
+    if (1 == pair.size())
+      pair.push_back("all");
+
+    else if (2 != pair.size())
+      mxerror(boost::format(Y("The argument '%1%' to '%2%' is invalid: too many colons in element '%3%'.\n")) % arg % param % elements[i]);
+
+    int64_t id;
+    if (!parse_int(pair[0], id))
+      mxerror(boost::format(Y("The argument '%1%' to '%2%' is invalid: '%3%' is not a valid track ID.\n")) % arg % param % pair[0]);
+
+    if (pair[1] == "all")
+      ti.attach_mode_list[id] = ATTACH_MODE_TO_ALL_FILES;
+
+    else if (pair[1] == "first")
+      ti.attach_mode_list[id] = ATTACH_MODE_TO_FIRST_FILE;
+
+    else
+      mxerror(boost::format(Y("The argument '%1%' to '%2%' is invalid: '%3%' must be either 'all' or 'first'.\n")) % arg % param % pair[1]);
+  }
 }
 
 /** \brief Parses and handles command line arguments
@@ -1792,8 +1826,15 @@ parse_args(vector<string> args) {
     } else if (this_arg == "--no-chapters") {
       ti->no_chapters = true;
 
-    } else if (this_arg == "--no-attachments") {
+    } else if ((this_arg == "-M") || (this_arg == "--no-attachments")) {
       ti->no_attachments = true;
+
+    } else if ((this_arg == "-m") || (this_arg == "--attachments")) {
+      if (no_next_arg)
+        mxerror(boost::format(Y("'%1%' lacks its argument.")) % this_arg);
+
+      parse_arg_attachments(this_arg, next_arg, *ti);
+      sit++;
 
     } else if (this_arg == "--no-tags") {
       ti->no_tags = true;

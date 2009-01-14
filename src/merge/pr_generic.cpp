@@ -1124,6 +1124,23 @@ generic_reader_c::demuxing_requested(char type,
   return false;
 }
 
+attach_mode_e
+generic_reader_c::attachment_requested(int64_t id) {
+  if (ti.no_attachments)
+    return ATTACH_MODE_SKIP;
+
+  if (ti.attach_mode_list.empty())
+    return ATTACH_MODE_TO_ALL_FILES;
+
+  if (map_has_key(ti.attach_mode_list, id))
+    return ti.attach_mode_list[id];
+
+  if (map_has_key(ti.attach_mode_list, -1))
+    return ti.attach_mode_list[-1];
+
+  return ATTACH_MODE_SKIP;
+}
+
 int
 generic_reader_c::add_packetizer(generic_packetizer_c *ptzr) {
   reader_packetizers.push_back(ptzr);
@@ -1453,6 +1470,8 @@ track_info_c::operator =(const track_info_c &src) {
 
   nalu_size_lengths          = src.nalu_size_lengths;
   nalu_size_length           = src.nalu_size_length;
+
+  attach_mode_list           = src.attach_mode_list;
 
   no_chapters                = src.no_chapters;
   no_attachments             = src.no_attachments;

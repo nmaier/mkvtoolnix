@@ -234,15 +234,17 @@ ssa_parser_c::probe(mm_text_io_c *io) {
   return false;
 }
 
-ssa_parser_c::ssa_parser_c(mm_text_io_c *io,
+ssa_parser_c::ssa_parser_c(generic_reader_c *reader,
+                           mm_text_io_c *io,
                            const std::string &file_name,
                            int64_t tid)
-  : m_io(io)
+  : m_reader(reader)
+  , m_io(io)
   , m_file_name(file_name)
   , m_tid(tid)
   , m_cc_utf8(-1)
   , m_is_ass(false)
-  , m_ignore_attachments(true)
+  , m_attachment_id(0)
 {
 }
 
@@ -454,7 +456,15 @@ void
 ssa_parser_c::add_attachment_maybe(std::string &name,
                                    std::string &data_uu,
                                    ssa_section_e section) {
-  if (m_ignore_attachments || name.empty() || data_uu.empty() || ((SSA_SECTION_FONTS != section) && (SSA_SECTION_GRAPHICS != section))) {
+  if (name.empty() || data_uu.empty() || ((SSA_SECTION_FONTS != section) && (SSA_SECTION_GRAPHICS != section))) {
+    name    = "";
+    data_uu = "";
+    return;
+  }
+
+  ++m_attachment_id;
+
+  if (!m_reader->attachment_requested(m_attachment_id)) {
     name    = "";
     data_uu = "";
     return;
@@ -471,27 +481,28 @@ ssa_parser_c::add_attachment_maybe(std::string &name,
   if (0 < pos)
     short_name.erase(0, pos + 1);
 
+  attachment.ui_id        = m_attachment_id;
   attachment.name         = to_utf8(m_cc_utf8, name);
   attachment.description  = (boost::format(SSA_SECTION_FONTS == section ? Y("Imported font from %1%") : Y("Imported picture from %1%")) % short_name).str();
   attachment.to_all_files = true;
 
   int allocated           = 1024;
-  buffer_t *buffer        = new buffer_t((unsigned char *)safemalloc(allocated), 0);
+  attachment.data         = memory_c::alloc(allocated);
+  attachment.data->set_size(0);
 
   const unsigned char *p  = (const unsigned char *)data_uu.c_str();
   for (pos = 0; data_uu.length() > (pos + 4); pos += 4)
-    decode_chars(p[pos], p[pos + 1], p[pos + 2], p[pos + 3], *buffer, 3, allocated);
+    decode_chars(p[pos], p[pos + 1], p[pos + 2], p[pos + 3], attachment.data, 3, allocated);
 
   switch (data_uu.length() % 4) {
     case 2:
-      decode_chars(p[pos], p[pos + 1], 0, 0, *buffer, 1, allocated);
+      decode_chars(p[pos], p[pos + 1], 0, 0, attachment.data, 1, allocated);
       break;
     case 3:
-      decode_chars(p[pos], p[pos + 1], p[pos + 2], 0, *buffer, 2, allocated);
+      decode_chars(p[pos], p[pos + 1], p[pos + 2], 0, attachment.data, 2, allocated);
       break;
   }
 
-  attachment.data      = counted_ptr<buffer_t>(buffer);
   attachment.mime_type = guess_mime_type(name, false);
 
   if (attachment.mime_type == "")
@@ -508,7 +519,7 @@ ssa_parser_c::decode_chars(unsigned char c1,
                            unsigned char c2,
                            unsigned char c3,
                            unsigned char c4,
-                           buffer_t &buffer,
+                           memory_cptr &buffer,
                            int bytes_to_add,
                            int &allocated) {
   unsigned char bytes[3];
@@ -518,15 +529,15 @@ ssa_parser_c::decode_chars(unsigned char c1,
   bytes[1]       = (value & 0x00ff00) >>  8;
   bytes[0]       = (value & 0xff0000) >> 16;
 
-  if ((buffer.m_size + bytes_to_add) > allocated) {
-    allocated += 1024;
-    buffer.m_buffer = (unsigned char *)realloc(buffer.m_buffer, allocated);
+  if ((buffer->get_size() + bytes_to_add) > allocated) {
+    int old_size  = buffer->get_size();
+    allocated    += 1024;
+    buffer->resize(allocated);
+    buffer->set_size(old_size);
   }
 
-  int i;
-  for (i = 0; i < bytes_to_add; ++i)
-    buffer.m_buffer[buffer.m_size + i] = bytes[i];
-  buffer.m_size += bytes_to_add;
+  memcpy(buffer->get() + buffer->get_size(), bytes, bytes_to_add);
+  buffer->set_size(buffer->get_size() + bytes_to_add);
 }
 
 // ------------------------------------------------------------

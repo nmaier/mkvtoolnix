@@ -169,6 +169,8 @@ private:
   string writing_app, muxing_app;
   int64_t writing_app_ver;
 
+  int64_t m_attachment_id;
+
 public:
   kax_reader_c(track_info_c &_ti) throw (error_c);
   virtual ~kax_reader_c();

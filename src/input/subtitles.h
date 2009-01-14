@@ -19,6 +19,7 @@
 #include <string>
 #include <vector>
 
+#include "output_control.h"
 #include "p_textsubs.h"
 
 typedef struct sub_t {
@@ -102,6 +103,7 @@ public:
   };
 
 protected:
+  generic_reader_c *m_reader;
   mm_text_io_c *m_io;
   const std::string &m_file_name;
   int64_t m_tid;
@@ -109,10 +111,13 @@ protected:
   std::vector<std::string> m_format;
   bool m_is_ass;
   std::string m_global;
-  bool m_ignore_attachments;
+  int64_t m_attachment_id;
 
 public:
-  ssa_parser_c(mm_text_io_c *io, const std::string &file_name, int64_t tid);
+  vector<attachment_t> m_attachments;
+
+public:
+  ssa_parser_c(generic_reader_c *reader, mm_text_io_c *io, const std::string &file_name, int64_t tid);
   void parse();
 
   bool is_ass() {
@@ -123,12 +128,12 @@ public:
     m_cc_utf8 = cc_utf8;
   }
 
-  void set_ignore_attachments(bool ignore_attachments) {
-    m_ignore_attachments = ignore_attachments;
-  }
-
   std::string get_global() {
     return m_global;
+  }
+
+  void set_attachment_id_base(int64_t id) {
+    m_attachment_id = id;
   }
 
 public:
@@ -139,7 +144,7 @@ protected:
   string get_element(const char *index, std::vector<std::string> &fields);
   string recode_text(std::vector<std::string> &fields);
   void add_attachment_maybe(std::string &name, std::string &data_uu, ssa_section_e section);
-  void decode_chars(unsigned char c1, unsigned char c2, unsigned char c3, unsigned char c4, buffer_t &buffer, int bytes_to_add, int &allocated);
+  void decode_chars(unsigned char c1, unsigned char c2, unsigned char c3, unsigned char c4, memory_cptr &buffer, int bytes_to_add, int &allocated);
 };
 typedef counted_ptr<ssa_parser_c> ssa_parser_cptr;
 

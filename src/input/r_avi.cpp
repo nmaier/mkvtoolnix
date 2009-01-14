@@ -136,7 +136,6 @@ avi_reader_c::~avi_reader_c() {
 void
 avi_reader_c::parse_subtitle_chunks() {
   int i;
-
   for (i = 0; AVI_text_tracks(avi) > i; ++i) {
     AVI_set_text_track(avi, i);
 
@@ -159,10 +158,8 @@ avi_reader_c::parse_subtitle_chunks() {
       mm_mem_io_c io(chunk->get(), chunk_size);
       uint32_t tag = io.read_uint32_be();
 
-      if (GAB2_TAG != tag) {
-        mxinfo("muuuuh :(( 1\n");
+      if (GAB2_TAG != tag)
         continue;
-      }
 
       io.skip(1);
 
@@ -310,7 +307,7 @@ avi_reader_c::create_ssa_packetizer(int idx) {
   avi_subs_demuxer_t &demuxer = sdemuxers[idx];
   int id                      = idx + 1 + AVI_audio_tracks(avi);
 
-  ssa_parser_c *parser        = new ssa_parser_c(demuxer.text_io.get(), ti.fname, id);
+  ssa_parser_c *parser        = new ssa_parser_c(this, demuxer.text_io.get(), ti.fname, id);
   demuxer.subs                = subtitles_cptr(parser);
 
   int cc_utf8                 = map_has_key(ti.sub_charsets, id)             ? utf8_init(ti.sub_charsets[id])
@@ -319,7 +316,7 @@ avi_reader_c::create_ssa_packetizer(int idx) {
     :                                                                          cc_local_utf8;
 
   parser->set_iconv_handle(cc_utf8);
-  parser->set_ignore_attachments(ti.no_attachments);
+  parser->set_attachment_id_base(g_attachments.size());
   parser->parse();
 
   std::string global = parser->get_global();
@@ -799,6 +796,7 @@ avi_reader_c::identify() {
   identify_video();
   identify_audio();
   identify_subtitles();
+  identify_attachments();
 }
 
 void
@@ -848,6 +846,27 @@ avi_reader_c::identify_subtitles() {
                       avi_subs_demuxer_t::TYPE_SRT == sdemuxers[i].type ? "SRT"
                     : avi_subs_demuxer_t::TYPE_SSA == sdemuxers[i].type ? "SSA/ASS"
                     :                                                     "unknown");
+}
+
+void
+avi_reader_c::identify_attachments() {
+  int i;
+
+  for (i = 0; sdemuxers.size() > i; ++i) {
+    try {
+      avi_subs_demuxer_t &demuxer = sdemuxers[i];
+      mm_text_io_c text_io(new mm_mem_io_c(demuxer.subtitles->get(), demuxer.subtitles->get_size()));
+      ssa_parser_c parser(this, &text_io, ti.fname, i + 1 + AVI_audio_tracks(avi));
+
+      parser.set_attachment_id_base(g_attachments.size());
+      parser.parse();
+
+    } catch (...) {
+    }
+  }
+
+  for (i = 0; i < g_attachments.size(); i++)
+    id_result_attachment(g_attachments[i].ui_id, g_attachments[i].mime_type, g_attachments[i].data->get_size(), g_attachments[i].name, g_attachments[i].description);
 }
 
 void

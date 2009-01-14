@@ -466,9 +466,9 @@ add_attachment(attachment_t attachment) {
       if ((   (i->id == attachment.id)
            && !hack_engaged(ENGAGE_NO_VARIABLE_DATA))
           ||
-          (   (i->name         == attachment.name)
-           && (i->description  == attachment.description)
-           && (i->data->m_size == attachment.data->m_size)))
+          (   (i->name             == attachment.name)
+           && (i->description      == attachment.description)
+           && (i->data->get_size() == attachment.data->get_size())))
         return attachment.id;
 
     add_unique_uint32(attachment.id, UNIQUE_ATTACHMENT_IDS);
@@ -764,7 +764,7 @@ render_attachments(IOCallback *out) {
       GetChildAs<KaxFileName, EbmlUnicodeString>(kax_a) = cstr_to_UTFstring(name);
       GetChildAs<KaxFileUID, EbmlUInteger>(kax_a)       = attch->id;
 
-      GetChild<KaxFileData>(*kax_a).CopyBuffer(attch->data->m_buffer, attch->data->m_size);
+      GetChild<KaxFileData>(*kax_a).CopyBuffer(attch->data->get(), attch->data->get_size());
     }
   }
 
@@ -1143,9 +1143,9 @@ create_readers() {
 
     // Calculate the size of all attachments for split control.
     mxforeach(att, g_attachments) {
-      g_attachment_sizes_first += att->data->m_size;
+      g_attachment_sizes_first += att->data->get_size();
       if (att->to_all_files)
-        g_attachment_sizes_others += att->data->m_size;
+        g_attachment_sizes_others += att->data->get_size();
     }
 
     calc_max_chapter_size();

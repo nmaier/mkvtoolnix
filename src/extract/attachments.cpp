@@ -43,6 +43,8 @@ using namespace std;
 static void
 handle_attachments(KaxAttachments *atts,
                    vector<track_spec_t> &tracks) {
+  static int64_t attachment_ui_id = 0;
+
   int i;
   for (i = 0; atts->ListSize() > i; ++i) {
     KaxAttached  *att = dynamic_cast<KaxAttached *>((*atts)[i]);
@@ -74,10 +76,12 @@ handle_attachments(KaxAttachments *atts,
     }
 
     if ((-1 != id) && (-1 != size) && !type.empty()) {
+      ++attachment_ui_id;
+
       bool found = false;
 
       for (k = 0; k < tracks.size(); k++)
-        if (tracks[k].tid == id) {
+        if (tracks[k].tid == attachment_ui_id) {
           found = true;
           break;
         }
@@ -89,7 +93,7 @@ handle_attachments(KaxAttachments *atts,
           tracks[k].out_name = safestrdup(name.c_str());
         }
 
-        mxinfo(boost::format(Y("The attachment #%1%, MIME type %2%, size %3%, is written to '%4%'.\n")) % id % type % size % tracks[k].out_name);
+        mxinfo(boost::format(Y("The attachment #%1%, ID %2%, MIME type %3%, size %4%, is written to '%5%'.\n")) % attachment_ui_id % id % type % size % tracks[k].out_name);
         mm_io_c *out = NULL;
         try {
           out = new mm_file_io_c(tracks[k].out_name, MODE_CREATE);

@@ -134,12 +134,13 @@ kax_reader_c::probe_file(mm_io_c *io,
 // {{{ C'TOR
 
 kax_reader_c::kax_reader_c(track_info_c &_ti)
-  throw (error_c):
-  generic_reader_c(_ti),
-  segment_duration(0),
-  first_timecode(-1),
-  writing_app_ver(-1) {
-
+  throw (error_c)
+  : generic_reader_c(_ti)
+  , segment_duration(0)
+  , first_timecode(-1)
+  , writing_app_ver(-1)
+  , m_attachment_id(0)
+{
   if (!read_headers())
     throw error_c(Y("matroska_reader: Failed to read the headers."));
   if (verbose)
@@ -543,17 +544,18 @@ kax_reader_c::handle_attachments(mm_io_c *io,
           }
         }
 
-        if ((-1 != id) && (-1 != size) && !mime_type.empty() && (0 < name.length())) {
-          attachment_t matt;
+        attach_mode_e attach_mode;
+        if ((-1 != id) && (-1 != size) && !mime_type.empty() && (0 != name.length()) && ((attach_mode = attachment_requested(m_attachment_id + 1)) != ATTACH_MODE_SKIP)) {
+          ++m_attachment_id;
 
+          attachment_t matt;
           matt.name           = UTFstring_to_cstrutf8(name);
           matt.mime_type      = mime_type;
           matt.description    = UTFstring_to_cstrutf8(description);
           matt.id             = id;
-          matt.to_all_files   = true;
-          matt.data           = counted_ptr<buffer_t>(new buffer_t);
-          matt.data->m_size   = size;
-          matt.data->m_buffer = (unsigned char *)safememdup(data, size);
+          matt.ui_id          = m_attachment_id;
+          matt.to_all_files   = ATTACH_MODE_TO_ALL_FILES == attach_mode;
+          matt.data           = clone_memory(data, size);
 
           add_attachment(matt);
         }
@@ -570,9 +572,6 @@ void
 kax_reader_c::handle_chapters(mm_io_c *io,
                               EbmlElement *l0,
                               int64_t pos) {
-  if (ti.no_chapters)
-    return;
-
   bool found = false;
   int i;
   for (i = 0; i < handled_chapters.size(); i++)
@@ -615,9 +614,6 @@ void
 kax_reader_c::handle_tags(mm_io_c *io,
                           EbmlElement *l0,
                           int64_t pos) {
-  if (ti.no_tags)
-    return;
-
   bool found = false;
   int i;
   for (i = 0; i < handled_tags.size(); i++)
@@ -1201,10 +1197,14 @@ kax_reader_c::read_headers() {
     if (!ti.no_attachments)
       for (i = 0; i < deferred_attachments.size(); i++)
         handle_attachments(in, l0, deferred_attachments[i]);
-    for (i = 0; i < deferred_chapters.size(); i++)
-      handle_chapters(in, l0, deferred_chapters[i]);
-    for (i = 0; i < deferred_tags.size(); i++)
-      handle_tags(in, l0, deferred_tags[i]);
+
+    if (!ti.no_chapters)
+      for (i = 0; i < deferred_chapters.size(); i++)
+        handle_chapters(in, l0, deferred_chapters[i]);
+
+    if (!ti.no_tags)
+      for (i = 0; i < deferred_tags.size(); i++)
+        handle_tags(in, l0, deferred_tags[i]);
 
   } catch (...) {
     mxerror(Y("matroska_reader: caught exception\n"));
@@ -2149,7 +2149,7 @@ kax_reader_c::identify() {
   }
 
   for (i = 0; i < g_attachments.size(); i++)
-    id_result_attachment(g_attachments[i].id, g_attachments[i].mime_type, g_attachments[i].data->m_size, g_attachments[i].name, g_attachments[i].description);
+    id_result_attachment(g_attachments[i].ui_id, g_attachments[i].mime_type, g_attachments[i].data->get_size(), g_attachments[i].name, g_attachments[i].description);
 }
 
 // }}}

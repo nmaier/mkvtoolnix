@@ -165,6 +165,12 @@ enum stereo_mode_e {
   STEREO_MODE_BOTH        =  3,
 };
 
+enum attach_mode_e {
+  ATTACH_MODE_SKIP,
+  ATTACH_MODE_TO_FIRST_FILE,
+  ATTACH_MODE_TO_ALL_FILES,
+};
+
 class track_info_c {
 protected:
   bool initialized;
@@ -233,6 +239,8 @@ public:
 
   map<int64_t, int> nalu_size_lengths;
   int nalu_size_length;
+
+  map<int64_t, attach_mode_e> attach_mode_list; // As given on the command line
 
   bool no_chapters, no_attachments, no_tags;
 
@@ -314,6 +322,8 @@ public:
   virtual int64_t get_queued_bytes();
 
   virtual void flush_packetizers();
+
+  virtual attach_mode_e attachment_requested(int64_t id);
 
   virtual void display_identification_results();
 
