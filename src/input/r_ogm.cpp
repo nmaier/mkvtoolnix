@@ -847,6 +847,8 @@ ogm_demuxer_c::ogm_demuxer_c(ogm_reader_c *p_reader)
   , last_granulepos(0)
   , default_duration(0)
   , in_use(false)
+  , display_width(0)
+  , display_height(0)
 {
   memset(&os, 0, sizeof(ogg_stream_state));
 }

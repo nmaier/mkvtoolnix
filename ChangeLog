@@ -1,3 +1,9 @@
+2009-01-15  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Due to uninitialized variables mkvmerge would
+	report OGM files as having arbitrary display dimensions. Fix for
+	bug 326.
+
 2009-01-08  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge, mmg: enhancement: Implemented MIME type detection for
