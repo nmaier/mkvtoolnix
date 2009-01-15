@@ -1597,7 +1597,7 @@ append_track(packetizer_t &ptzr,
   // But then again I don't expect that people will try to concatenate such
   // files if they've been split before.
   int64_t timecode_adjustment = dst_file.reader->max_timecode_seen;
-  if (APPEND_MODE_FILE_BASED == g_append_mode)
+  if ((track_subtitle != ptzr.packetizer->get_track_type()) && (APPEND_MODE_FILE_BASED == g_append_mode))
     // Intentionally left empty.
     ;
 

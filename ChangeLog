@@ -1,5 +1,11 @@
 2009-01-15  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: If subtitle files are appended to separate
+	video files (e.g. two AVI and two SRT files) then the subtitle
+	timecodes of the second and all following subtitle files were
+	based on the last timecode in the first subtitle file instead of
+	the last timecode in the first video file. Fix for bug 325.
+
 	* mkvmerge: bug fix: Due to uninitialized variables mkvmerge would
 	report OGM files as having arbitrary display dimensions. Fix for
 	bug 326.
