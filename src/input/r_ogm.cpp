@@ -833,21 +833,21 @@ ogm_reader_c::add_available_track_ids() {
 
 // -----------------------------------------------------------
 
-ogm_demuxer_c::ogm_demuxer_c(ogm_reader_c *p_reader):
-  reader(p_reader),
-  ptzr(-1),
-  stype(OGM_STREAM_TYPE_UNKNOWN),
-  serialno(0),
-  eos(0),
-  units_processed(0),
-  num_header_packets(2),
-  num_non_header_packets(0),
-  headers_read(false),
-  first_granulepos(0),
-  last_granulepos(0),
-  default_duration(0),
-  in_use(false) {
-
+ogm_demuxer_c::ogm_demuxer_c(ogm_reader_c *p_reader)
+  : reader(p_reader)
+  , ptzr(-1)
+  , stype(OGM_STREAM_TYPE_UNKNOWN)
+  , serialno(0)
+  , eos(0)
+  , units_processed(0)
+  , num_header_packets(2)
+  , num_non_header_packets(0)
+  , headers_read(false)
+  , first_granulepos(0)
+  , last_granulepos(0)
+  , default_duration(0)
+  , in_use(false)
+{
   memset(&os, 0, sizeof(ogg_stream_state));
 }
 
@@ -925,9 +925,9 @@ ogm_demuxer_c::process_header_page() {
 
 // -----------------------------------------------------------
 
-ogm_a_aac_demuxer_c::ogm_a_aac_demuxer_c(ogm_reader_c *p_reader):
-  ogm_demuxer_c(p_reader) {
-
+ogm_a_aac_demuxer_c::ogm_a_aac_demuxer_c(ogm_reader_c *p_reader)
+  : ogm_demuxer_c(p_reader)
+{
   stype = OGM_STREAM_TYPE_A_AAC;
 }
 
@@ -966,9 +966,9 @@ ogm_a_aac_demuxer_c::create_packetizer(track_info_c &ti) {
 
 // -----------------------------------------------------------
 
-ogm_a_ac3_demuxer_c::ogm_a_ac3_demuxer_c(ogm_reader_c *p_reader):
-  ogm_demuxer_c(p_reader) {
-
+ogm_a_ac3_demuxer_c::ogm_a_ac3_demuxer_c(ogm_reader_c *p_reader)
+  : ogm_demuxer_c(p_reader)
+{
   stype = OGM_STREAM_TYPE_A_AC3;
 }
 
@@ -984,9 +984,9 @@ ogm_a_ac3_demuxer_c::create_packetizer(track_info_c &ti) {
 
 // -----------------------------------------------------------
 
-ogm_a_mp3_demuxer_c::ogm_a_mp3_demuxer_c(ogm_reader_c *p_reader):
-  ogm_demuxer_c(p_reader) {
-
+ogm_a_mp3_demuxer_c::ogm_a_mp3_demuxer_c(ogm_reader_c *p_reader)
+  : ogm_demuxer_c(p_reader)
+{
   stype = OGM_STREAM_TYPE_A_MP3;
 }
 
@@ -1002,9 +1002,9 @@ ogm_a_mp3_demuxer_c::create_packetizer(track_info_c &ti) {
 
 // -----------------------------------------------------------
 
-ogm_a_pcm_demuxer_c::ogm_a_pcm_demuxer_c(ogm_reader_c *p_reader):
-  ogm_demuxer_c(p_reader) {
-
+ogm_a_pcm_demuxer_c::ogm_a_pcm_demuxer_c(ogm_reader_c *p_reader)
+  : ogm_demuxer_c(p_reader)
+{
   stype = OGM_STREAM_TYPE_A_PCM;
 }
 
@@ -1021,9 +1021,9 @@ ogm_a_pcm_demuxer_c::create_packetizer(track_info_c &ti) {
 
 // -----------------------------------------------------------
 
-ogm_a_vorbis_demuxer_c::ogm_a_vorbis_demuxer_c(ogm_reader_c *p_reader):
-  ogm_demuxer_c(p_reader) {
-
+ogm_a_vorbis_demuxer_c::ogm_a_vorbis_demuxer_c(ogm_reader_c *p_reader)
+  : ogm_demuxer_c(p_reader)
+{
   stype              = OGM_STREAM_TYPE_A_VORBIS;
   num_header_packets = 3;
 }
@@ -1056,9 +1056,9 @@ ogm_a_vorbis_demuxer_c::process_page(int64_t granulepos) {
 
 // -----------------------------------------------------------
 
-ogm_s_text_demuxer_c::ogm_s_text_demuxer_c(ogm_reader_c *p_reader):
-  ogm_demuxer_c(p_reader) {
-
+ogm_s_text_demuxer_c::ogm_s_text_demuxer_c(ogm_reader_c *p_reader)
+  : ogm_demuxer_c(p_reader)
+{
   stype = OGM_STREAM_TYPE_A_AAC;
 }
 
@@ -1096,9 +1096,9 @@ ogm_s_text_demuxer_c::process_page(int64_t granulepos) {
 
 // -----------------------------------------------------------
 
-ogm_v_avc_demuxer_c::ogm_v_avc_demuxer_c(ogm_reader_c *p_reader):
-  ogm_demuxer_c(p_reader) {
-
+ogm_v_avc_demuxer_c::ogm_v_avc_demuxer_c(ogm_reader_c *p_reader)
+  : ogm_demuxer_c(p_reader)
+{
   stype                  = OGM_STREAM_TYPE_V_AVC;
   num_non_header_packets = 3;
 }
@@ -1176,10 +1176,10 @@ ogm_v_avc_demuxer_c::extract_avcc() {
 
 // -----------------------------------------------------------
 
-ogm_v_mscomp_demuxer_c::ogm_v_mscomp_demuxer_c(ogm_reader_c *p_reader):
-  ogm_demuxer_c(p_reader),
-  frames_since_granulepos_change(0) {
-
+ogm_v_mscomp_demuxer_c::ogm_v_mscomp_demuxer_c(ogm_reader_c *p_reader)
+  : ogm_demuxer_c(p_reader)
+  , frames_since_granulepos_change(0)
+{
   stype = OGM_STREAM_TYPE_V_MSCOMP;
 }
 
@@ -1296,7 +1296,6 @@ ogm_v_mscomp_demuxer_c::process_page(int64_t granulepos) {
 ogm_v_theora_demuxer_c::ogm_v_theora_demuxer_c(ogm_reader_c *p_reader)
   : ogm_demuxer_c(p_reader)
 {
-
   stype              = OGM_STREAM_TYPE_V_THEORA;
   num_header_packets = 3;
 
@@ -1364,9 +1363,9 @@ ogm_v_theora_demuxer_c::is_header_packet(ogg_packet &op) {
 
 // -----------------------------------------------------------
 
-ogm_s_kate_demuxer_c::ogm_s_kate_demuxer_c(ogm_reader_c *p_reader):
-  ogm_demuxer_c(p_reader) {
-
+ogm_s_kate_demuxer_c::ogm_s_kate_demuxer_c(ogm_reader_c *p_reader)
+  : ogm_demuxer_c(p_reader)
+{
   stype              = OGM_STREAM_TYPE_S_KATE;
   num_header_packets = 1; /* at least 1, will be updated upon reading the ID header */
 
