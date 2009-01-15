@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    class definition for the DTS output module
 
    Written by Peter Niemayer <niemayer@isg.de>.

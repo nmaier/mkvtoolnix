@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    Helper routines for various compression libs
 
    Written by Moritz Bunkus <moritz@bunkus.org>.

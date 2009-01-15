@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id: packet.h 3469 2007-01-15 19:02:18Z mosu $
-
    class definition for the packet extensions
 
    Written by Moritz Bunkus <moritz@bunkus.org>.

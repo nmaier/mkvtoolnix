@@ -6,13 +6,10 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    definition of global variables and functions
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
-
 
 #ifndef __WXWIDGETS_UI_H
 #define __WXWIDGETS_UI_H

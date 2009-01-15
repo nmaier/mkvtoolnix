@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    definition of global variables and functions for the XML tag parser
 
    Written by Moritz Bunkus <moritz@bunkus.org>.

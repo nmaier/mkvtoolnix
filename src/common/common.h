@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    definitions used in all programs, helper functions
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -92,7 +90,6 @@ using namespace std;
                            ((unsigned char)d))
 #define isblanktab(c) (((c) == ' ') || ((c) == '\t'))
 #define iscr(c) (((c) == '\n') || ((c) == '\r'))
-
 
 #define TIMECODE_SCALE 1000000
 

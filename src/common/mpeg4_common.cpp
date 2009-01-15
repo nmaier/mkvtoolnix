@@ -13,7 +13,6 @@
    licensed under the LGPL.
 
    \file
-   \version $Id$
 
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */

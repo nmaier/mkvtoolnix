@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    class definition for the Dirac video output module
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -21,7 +19,6 @@
 #include "common.h"
 #include "pr_generic.h"
 #include "dirac_common.h"
-
 
 class dirac_video_packetizer_c: public generic_packetizer_c {
 protected:

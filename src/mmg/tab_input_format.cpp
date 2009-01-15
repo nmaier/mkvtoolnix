@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    "input" tab -- "Format specific track options" sub-tab
 
    Written by Moritz Bunkus <moritz@bunkus.org>.

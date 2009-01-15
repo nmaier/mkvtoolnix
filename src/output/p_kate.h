@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    class definition for the Kate packetizer
 
    Written by ogg.k.ogg.k <ogg.k.ogg.k@googlemail.com>.
@@ -45,6 +43,5 @@ public:
   }
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
 };
-
 
 #endif  // __P_KATE_H

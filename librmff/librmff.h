@@ -23,7 +23,6 @@
   \brief The RealMedia file format library
   \author Moritz Bunkus <moritz@bunkus.org>
 
-  $Id$
 */
 
 /** \mainpage
@@ -151,7 +150,6 @@
     free(buffer);
   }
   \endcode
-
 
   \section packed_video_frames Packed video frames
 

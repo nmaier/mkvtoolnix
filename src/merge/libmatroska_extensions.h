@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    The cluster helper groups frames into blocks groups and those
    into clusters, sets the durations, renders the clusters etc.
 

@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    definitions for the OGM file format
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -19,7 +17,6 @@
 /*
    Taken from http://tobias.everwicked.com/packfmt.htm
 
-
  First packet (header)
  ---------------------
 
@@ -29,7 +26,6 @@
  -------+-------------------------+----------------------------------
  0x0001 | stream_header           | the size is indicated in the
         |                         | size member
-
 
  Second packet (comment)
  -----------------------
@@ -60,8 +56,6 @@
  ---------+-------------------------+----------------------------------
  0x0001+  | data                    | packet contents
  lenbytes |                         |
-
-
 
 */
 

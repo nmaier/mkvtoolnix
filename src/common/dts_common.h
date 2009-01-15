@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    definitions and helper functions for DTS data
 
    Written by Peter Niemayer <niemayer@isg.de>.
@@ -150,7 +148,6 @@ typedef struct dts_header_s {
   int hd_part_size;
 
 } dts_header_t;
-
 
 int MTX_DLL_API find_dts_header(const unsigned char *buf, unsigned int size, struct dts_header_s *dts_header, bool allow_no_hd_search = false);
 void MTX_DLL_API print_dts_header(const struct dts_header_s *dts_header);

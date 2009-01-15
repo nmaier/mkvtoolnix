@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    segment info parser/writer functions
 
    Written by Moritz Bunkus <moritz@bunkus.org> and

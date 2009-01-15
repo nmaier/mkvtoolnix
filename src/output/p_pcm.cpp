@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    PCM output module
 
    Written by Moritz Bunkus <moritz@bunkus.org>.

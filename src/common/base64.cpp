@@ -34,8 +34,6 @@
    http://sourceforge.net/projects/base64decoder/ and is licensed under
    the GPL v2 or later. See the file COPYING for details.
 
-   $Id$
-
    base64 encoding and decoding functions
 
    See the above URLs for the original authors.
@@ -102,7 +100,6 @@ base64_encode(const unsigned char *src,
 
   return out;
 }
-
 
 int
 base64_decode(const string &src,

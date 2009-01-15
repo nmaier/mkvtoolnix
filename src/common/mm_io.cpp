@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    IO callback class implementation
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -1160,7 +1158,6 @@ mm_text_io_c::read_next_char(char *buffer) {
       data <<= 8;
       data |= stream[i];
     }
-
 
   if (data < 0x80) {
     buffer[0] = data;

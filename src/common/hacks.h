@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    some hacks that the author might want to use
 
    Written by Moritz Bunkus <moritz@bunkus.org>.

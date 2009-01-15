@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    class definitions for the Matroska reader
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -214,6 +212,5 @@ protected:
                                       vector<int64_t> &deferred_tags, vector<int64_t> &deferred_chapters, vector<int64_t> &deferred_attachments);
   virtual int  read_headers();
 };
-
 
 #endif  // __R_MATROSKA_H

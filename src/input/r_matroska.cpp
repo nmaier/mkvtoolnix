@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    Matroska reader
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -839,7 +837,6 @@ kax_reader_c::read_headers_track_audio(kax_track_t *&track,
   } else
     track->a_channels = 1;
 
-
   KaxAudioBitDepth *ka_bitdepth = FINDFIRST(ktaudio, KaxAudioBitDepth);
   if (NULL != ka_bitdepth) {
     track->a_bps = uint8(*ka_bitdepth);
@@ -1224,7 +1221,6 @@ kax_reader_c::read_headers() {
 // }}}
 
 // {{{ FUNCTION kax_reader_c::create_packetizers()
-
 
 void
 kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
@@ -1742,7 +1738,6 @@ kax_reader_c::read_first_frame(kax_track_t *t) {
   in->restore_pos();
 }
 
-
 // {{{ FUNCTION kax_reader_c::read()
 
 file_status_e
@@ -2056,7 +2051,6 @@ kax_reader_c::read(generic_packetizer_c *requested_ptzr,
       }
 
     } // while (l1 != NULL)
-
 
   } catch (...) {
     mxwarn(Y("matroska_reader: caught exception\n"));

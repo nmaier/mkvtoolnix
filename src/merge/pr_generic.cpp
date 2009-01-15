@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    functions common for all readers/packetizers
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -44,7 +42,6 @@ using namespace std;
   (  track_audio == track_type ? DEFTRACK_TYPE_AUDIO \
    : track_video == track_type ? DEFTRACK_TYPE_VIDEO \
    :                             DEFTRACK_TYPE_SUBS)
-
 
 int64_t packet_t::sm_packet_number_counter = 0;
 

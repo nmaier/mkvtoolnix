@@ -8,7 +8,6 @@
    or visit http://www.gnu.org/copyleft/gpl.html
 
    \file
-   \version $Id$
 
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
    \author Modified by Steve Lhomme <steve.lhomme@free.fr>.

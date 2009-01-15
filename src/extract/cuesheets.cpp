@@ -5,8 +5,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    extracts chapters and tags as CUE sheets from Matroska files
 
    Written by Moritz Bunkus <moritz@bunkus.org>.

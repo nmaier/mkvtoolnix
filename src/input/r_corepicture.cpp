@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    CorePanorama video reader
 
    Written by Steve Lhomme <steve.lhomme@free.fr>.

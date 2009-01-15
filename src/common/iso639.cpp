@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    ISO639 language definitions, lookup functions
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -656,7 +654,6 @@ map_to_iso639_2_code(const char *s,
       if (!strncasecmp(s, names[j].c_str(), len))
         return i;
   }
-
 
   return -1;
 }

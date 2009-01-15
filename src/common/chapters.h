@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    chapter parser/writer functions
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -75,7 +73,6 @@ KaxChapters *MTX_DLL_API parse_cue_chapters(mm_text_io_c *in, int64_t min_tc,
                                             const string &charset,
                                             bool exception_on_error = false,
                                             KaxTags **tags = NULL);
-
 
 void MTX_DLL_API write_chapters_xml(KaxChapters *chapters, mm_io_c *out);
 void MTX_DLL_API write_chapters_simple(int &chapter_num, KaxChapters *chapters,

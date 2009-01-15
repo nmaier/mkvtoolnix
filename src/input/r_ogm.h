@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    class definitions for the OGG media stream reader
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -130,6 +128,5 @@ private:
   virtual void process_header_packets(ogm_demuxer_cptr dmx);
   virtual void handle_stream_comments();
 };
-
 
 #endif  // __R_OGM_H

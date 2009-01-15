@@ -5,8 +5,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    extracts tracks from Matroska files into other files
 
    Written by Steve Lhomme <steve.lhomme@free.fr>.

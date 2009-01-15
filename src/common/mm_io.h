@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    IO callback class definitions
 
    Written by Moritz Bunkus <moritz@bunkus.org>.

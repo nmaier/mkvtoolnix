@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    class definition for the VC1 video output module
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -21,7 +19,6 @@
 #include "common.h"
 #include "pr_generic.h"
 #include "vc1_common.h"
-
 
 class vc1_video_packetizer_c: public generic_packetizer_c {
 protected:

@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    A class for file-like access on the bit level
 
    The bit_cursor_c class was originally written by Peter Niemayer

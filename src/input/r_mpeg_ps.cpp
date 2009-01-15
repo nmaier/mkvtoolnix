@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    MPEG PS (program stream) demultiplexer module
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -847,7 +845,6 @@ mpeg_ps_reader_c::new_stream_a_dts(mpeg_ps_id_t id,
     buffer.add(new_buf->get(), length);
   }
 }
-
 
 /*
   MPEG PS ids and their meaning:

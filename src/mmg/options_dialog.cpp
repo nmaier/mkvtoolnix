@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    "options" dialog
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -73,7 +71,6 @@ options_dialog::options_dialog(wxWindow *parent,
   cb_always_use_simpleblock->SetToolTip(TIP("Always adds '--engage use_simpleblock' to the command line. "
                                             "That way Matroska's new 'simple blocks' will be used which "
                                             "save a bit of overhead at the cost of not being backwards compatible."));
-
 
   sb_mmg = new wxStaticBox(this, -1, Z("mmg options"));
 
@@ -148,7 +145,6 @@ options_dialog::options_dialog(wxWindow *parent,
   siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->AddSpacer(5);
 
-
   siz_sb = new wxStaticBoxSizer(sb_mkvmerge, wxVERTICAL);
 
   siz_fg = new wxFlexGridSizer(3);
@@ -169,7 +165,6 @@ options_dialog::options_dialog(wxWindow *parent,
 
   siz_all->Add(siz_sb, 0, wxGROW | wxLEFT | wxRIGHT, 5);
   siz_all->AddSpacer(5);
-
 
   siz_sb = new wxStaticBoxSizer(sb_mmg, wxVERTICAL);
   siz_sb->AddSpacer(5);

@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    "chapter editor" tab
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -292,7 +290,6 @@ tab_chapters::tab_chapters(wxWindow *parent,
   siz_fg->Add(1, 0, 0, 0, 0);
 
   siz_all->Add(siz_fg, 1, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
-
 
   sb_names = new wxStaticBox(this, wxID_STATIC, Z("Chapter names and languages"));
   siz_sb = new wxStaticBoxSizer(sb_names, wxVERTICAL);
@@ -1580,7 +1577,6 @@ tab_chapters::copy_values(wxTreeItemId id) {
     label = create_chapter_label(*chapter);
     tc_chapters->SetItemText(id, label);
   }
-
 
   return true;
 }

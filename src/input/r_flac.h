@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    class definitions for the raw FLAC stream reader
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -111,6 +109,5 @@ public:
 };
 
 #endif // HAVE_FLAC_FORMAT_H
-
 
 #endif  // __R_FLAC_H

@@ -5,13 +5,10 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    base64 encoding and decoding functions
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
-
 
 #ifndef __BASE64_H
 #define __BASE64_H

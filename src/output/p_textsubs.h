@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    class definition for the simple text subtitle packetizer
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -48,6 +46,5 @@ public:
 private:
   static boost::regex s_re_remove_cr, s_re_translate_nl, s_re_remove_trailing_nl;
 };
-
 
 #endif  // __P_TEXTSUBS_H

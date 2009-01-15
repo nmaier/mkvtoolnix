@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    helper functions that need libebml/libmatroska
 
    Written by Moritz Bunkus <moritz@bunkus.org>.

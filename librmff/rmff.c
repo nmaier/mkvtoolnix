@@ -17,8 +17,6 @@
   along with this library; see the file COPYING.  If not, write to
   the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 
-  $Id$
-
  */
 
 #include "os.h"
@@ -500,7 +498,6 @@ rmff_close_file(rmff_file_t *file) {
   file->io->close(file->handle);
   safefree(file);
 }
-
 
 #define skip(num) \
 { \

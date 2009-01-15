@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    Quicktime and MP4 reader
 
    Written by Moritz Bunkus <moritz@bunkus.org>.

@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    "global" tab
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -129,8 +127,6 @@ tab_global::tab_global(wxWindow *parent):
 //   siz_fg->Add(rb_split_each_chapter, 0, 0, 0);
 
   siz_split->Add(siz_line, 0, wxLEFT | wxRIGHT | wxGROW, 5);
-
-
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   cb_link = new wxCheckBox(this, ID_CB_LINK, Z("link files"));

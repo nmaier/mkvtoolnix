@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    definitions used in all programs, helper functions
 
    Written by Moritz Bunkus <moritz@bunkus.org>.

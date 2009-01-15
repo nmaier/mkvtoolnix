@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    OGG media stream reader
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -242,7 +240,6 @@ public:
 };
 
 // ---------------------------------------------------------------------------------
-
 
 static counted_ptr<vector<string> >
 extract_vorbis_comments(const memory_cptr &mem) {

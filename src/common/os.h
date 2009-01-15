@@ -5,8 +5,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    Cross platform compatibility definitions
 
    Written by Moritz Bunkus <moritz@bunkus.org>.

@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    helper functions that need libebml/libmatroska
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -124,7 +122,6 @@ cstrutf8_to_UTFstring(const string &c) {
       mxerror(Y("cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."));
     src += clen;
   }
-
 
   new_string = (wchar_t *)safemalloc((dlen + 1) * sizeof(wchar_t));
   for (src = 0, dst = 0; src < slen; dst++) {

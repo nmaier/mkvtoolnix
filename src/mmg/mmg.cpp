@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    main stuff
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -274,7 +272,6 @@ class show_text_dlg: public wxDialog {
 public:
   show_text_dlg(wxWindow *parent, const wxString &title, const wxString &text);
 };
-
 
 show_text_dlg::show_text_dlg(wxWindow *parent,
                              const wxString &title,
@@ -780,7 +777,6 @@ mmg_dialog::mmg_dialog():
 
   b_browse_output = new wxButton(panel, ID_B_BROWSEOUTPUT, Z("Browse"));
   sbs_low->Add(b_browse_output, 0, wxALIGN_CENTER_VERTICAL | wxALL, 3);
-
 
   wxBoxSizer *bs_buttons = new wxBoxSizer(wxHORIZONTAL);
 

@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    Kate packetizer
 
    Written by ogg.k.ogg.k <ogg.k.ogg.k@googlemail.com>.

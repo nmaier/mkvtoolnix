@@ -5,8 +5,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    retrieves and displays information about a Matroska file
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -411,7 +409,6 @@ format_binary(EbmlBinary &bin,
                                            EbmlElement *&l5, \
                                            EbmlElement *&l6, \
                                            ##args)
-
 
 void
 def_handle(chaptertranslate) {
@@ -1078,7 +1075,6 @@ def_handle(seek_head) {
           show_unknown_element(l3, 3);
 
       } // while (l3 != NULL)
-
 
     } else if (!is_global(es, l2, 2))
       show_unknown_element(l2, 2);

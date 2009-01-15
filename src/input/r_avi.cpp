@@ -6,8 +6,6 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   $Id$
-
    AVI demultiplexer module
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
@@ -651,7 +649,6 @@ avi_reader_c::read_video() {
       ++dropped_video_frames;
 
   } while ((0 == nread) && (video_frames_read < max_video_frames));
-
 
   if (0 == nread) {
     // This is only the case if the AVI contains dropped frames only.
