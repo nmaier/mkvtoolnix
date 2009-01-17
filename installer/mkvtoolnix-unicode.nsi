@@ -14,7 +14,6 @@
 
 SetCompressor /SOLID lzma
 
-# MUI 1.67 compatible ------
 !include "MUI.nsh"
 
 # MUI Settings
@@ -29,8 +28,6 @@ SetCompressor /SOLID lzma
 
 # Welcome page
 !insertmacro MUI_PAGE_WELCOME
-# License page
-# !insertmacro MUI_PAGE_LICENSE "..\..\..\pfad\zur\lizenz\IhreLizenz.txt"
 # Directory page
 !insertmacro MUI_PAGE_DIRECTORY
 # Start menu page
