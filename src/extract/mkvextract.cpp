@@ -356,7 +356,7 @@ main(int argc,
     extract_tracks(input_file.c_str(), tracks);
 
     if (0 == verbose)
-      mxinfo(Y("Progress: 100%%\n"));
+      mxinfo(Y("Progress: 100%\n"));
 
   } else if (MODE_TAGS == mode)
     extract_tags(input_file.c_str(), s_parse_fully);

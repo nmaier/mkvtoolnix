@@ -355,7 +355,7 @@ extract_timecodes(const string &file_name,
     close_timecode_files();
 
     if (0 == verbose)
-      mxinfo(Y("Progress: 100%%\n"));
+      mxinfo(Y("Progress: 100%\n"));
 
   } catch (...) {
     show_error(Y("Caught exception"));
