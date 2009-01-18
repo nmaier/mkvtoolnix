@@ -1,3 +1,8 @@
+2009-01-18  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: bug fix: During timecode extraction mkvextract wrote
+	large timecodes in scientific notation.
+
 2009-01-17  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v2.4.2.

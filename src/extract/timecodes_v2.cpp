@@ -58,6 +58,24 @@ static vector<timecode_extractor_t> timecode_extractors;
 
 // ------------------------------------------------------------------------
 
+static std::string
+format_timecode_for_timecode_file(int64_t timecode) {
+  std::string output      = (boost::format("%1%") % (int64_t)(timecode / 1000000)).str();
+  int64_t fractional_part = timecode % 1000000;
+
+  if (0 != fractional_part) {
+    output                       += (boost::format(".%06d") % fractional_part).str();
+    std::string::iterator zeroes  = output.end() - 1;
+
+    while (*zeroes == '0')
+      --zeroes;
+
+    output.erase(zeroes + 1, output.end());
+  }
+
+  return output;
+}
+
 static void
 close_timecode_files() {
   vector<timecode_extractor_t>::iterator extractor;
@@ -68,7 +86,7 @@ close_timecode_files() {
 
     sort(timecodes.begin(), timecodes.end());
     mxforeach(timecode, timecodes)
-      extractor->m_file->puts(boost::format("%1%\n") % (((double)(*timecode)) / 1000000.0));
+      extractor->m_file->puts(boost::format("%1%\n") % format_timecode_for_timecode_file(*timecode));
     delete extractor->m_file;
   }
   timecode_extractors.clear();
