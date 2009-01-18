@@ -384,7 +384,7 @@ flac_reader_c::parse_file() {
 #endif  // HAVE_FLAC_DECODER_SKIP
   }
 
-  mxinfo(Y("+-> Pre-parsing FLAC file: 100%%\n"));
+  mxinfo(Y("+-> Pre-parsing FLAC file: 100%\n"));
 
   if ((blocks.size() == 0) || (blocks[0].type != FLAC_BLOCK_TYPE_HEADERS))
     mxerror(Y("flac_reader: Could not read all header packets.\n"));
