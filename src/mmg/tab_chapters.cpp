@@ -1703,7 +1703,7 @@ tab_chapters::on_chapter_name_selected(wxCommandEvent &evt) {
   if (!id.IsOk())
     return;
   t = (chapter_node_data_c *)tc_chapters->GetItemData(id);
-  if (!t->is_atom)
+  if (!t || !t->is_atom)
     return;
   cdisplay = NULL;
   n = 0;
