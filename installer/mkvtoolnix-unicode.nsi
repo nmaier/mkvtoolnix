@@ -17,7 +17,6 @@ SetCompressor /SOLID lzma
 # MUI Settings
 !define MUI_ABORTWARNING
 !define MUI_ICON "matroskalogo_big.ico"
-!define MUI_UNICON "matroskalogo_big.ico"
 
 # Language Selection Dialog Settings
 !define MUI_LANGDLL_REGISTRY_ROOT "${PRODUCT_UNINST_ROOT_KEY}"
