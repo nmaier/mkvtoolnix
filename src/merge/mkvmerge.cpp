@@ -2095,8 +2095,8 @@ int
 main(int argc,
      char **argv) {
   init_globals();
-  set_usage();
   setup();
+  set_usage();
   init_input_file_type_list();
 
   parse_args(command_line_utf8(argc, argv));
