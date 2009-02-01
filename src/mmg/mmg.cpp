@@ -153,84 +153,64 @@ cli_options_dlg::cli_options_dlg(wxWindow *parent):
 
 void
 cli_options_dlg::init_cli_option_list() {
-  all_cli_options.push_back(cli_option_t(Z("### Global output control ###"),
-                                         Z("Several options that control the overall output that mkvmerge creates.")));
-  all_cli_options.push_back(cli_option_t(Z("--cluster-length"),
-                                         Z("This option needs an additional argument 'n'. Tells mkvmerge to put "
-                                           "at most 'n' data blocks into each cluster. If the number is"
-                                           "postfixed with 'ms' then put at most 'n' milliseconds of data into "
-                                           "each cluster. The maximum length for a cluster is 32767ms. Programs "
-                                           "will only be able to seek to clusters, so creating larger clusters "
-                                           "may lead to imprecise seeking and/or processing.")));
-  all_cli_options.push_back(cli_option_t(Z("--no-cues"),
-                                         Z("Tells mkvmerge not to create and write the cue data which can be "
-                                           "compared to an index in an AVI. Matroska files can be played back "
-                                           "without the cue data, but seeking will probably be imprecise and "
-                                           "slower. Use this only for testing purposes.")));
-  all_cli_options.push_back(cli_option_t(Z("--no-clusters-in-meta-seek"),
-                                         Z("Tells mkvmerge not to create a meta seek element at the end of the "
-                                           "file containing all clusters.")));
-  all_cli_options.push_back(cli_option_t(Z("--disable-lacing"),
-                                         Z("Disables lacing for all tracks. This will increase the file's size, "
-                                           "especially if there are many audio tracks. Use only for testing.")));
-  all_cli_options.push_back(cli_option_t(Z("--enable-durations"),
-                                         Z("Write durations for all blocks. This will increase file size and "
-                                           "does not offer any additional value for players at the moment.")));
-  all_cli_options.push_back(cli_option_t(Z("--timecode-scale REPLACEME"),
-                                         Z("Forces the timecode scale factor to REPLACEME. You have to replace "
-                                           "REPLACEME with a value between 1000 and 10000000 or with -1. "
-                                           "Normally mkvmerge "
-                                           "will use a value of 1000000 which means that timecodes and "
-                                           "durations will have a precision of 1ms. For files that will not "
-                                           "contain a video track but at least one audio track mkvmerge "
-                                           "will automatically choose a timecode scale factor so that all "
-                                           "timecodes and durations have a precision of one sample. This "
-                                           "causes bigger overhead but allows precise seeking and extraction. "
-                                           "If the magical value -1 is used then mkvmerge will use sample "
-                                           "precision even if a video track is present.")));
-  all_cli_options.push_back(cli_option_t(Z("### Development hacks ###"),
-                                         Z("Options meant ONLY for developpers. Do not use them. If something "
-                                           "is considered to be an officially supported option then it's NOT "
-                                           "in this list!")));
-  all_cli_options.push_back(cli_option_t(Z("--engage space_after_chapters"),
-                                         Z("Leave additional space (EbmlVoid) in the output file after the "
-                                           "chapters.")));
-  all_cli_options.push_back(cli_option_t(Z("--engage no_chapters_in_meta_seek"),
-                                         Z("Do not add an entry for the chapters in the meta seek element.")));
-  all_cli_options.push_back(cli_option_t(Z("--engage no_meta_seek"),
-                                         Z("Do not write meta seek elements at all.")));
-  all_cli_options.push_back(cli_option_t(Z("--engage lacing_xiph"),
-                                         Z("Force Xiph style lacing.")));
-  all_cli_options.push_back(cli_option_t(Z("--engage lacing_ebml"),
-                                         Z("Force EBML style lacing.")));
-  all_cli_options.push_back(cli_option_t(Z("--engage native_mpeg4"),
-                                         Z("Analyze MPEG4 bitstreams, put each frame into one Matroska block, "
-                                           "use proper timestamping (I P B B = 0 120 40 80), use "
-                                           "V_MPEG4/ISO/... CodecIDs.")));
-  all_cli_options.push_back(cli_option_t(Z("--engage no_variable_data"),
-                                         Z("Use fixed values for the elements that change with each file "
-                                           "otherwise (muxing date, segment UID, track UIDs etc.). Two files "
-                                           "muxed with the same settings and this switch activated will be "
-                                           "identical.")));
-  all_cli_options.push_back(cli_option_t(Z("--engage no_default_header_values"),
-                                         Z("Do not write those header elements whose values are the same "
-                                           "as their default values according to the Matroska specs.")));
-  all_cli_options.push_back(cli_option_t(Z("--engage force_passthrough_packetizer"),
-                                         Z("Forces the Matroska reader to use the generic passthrough "
-                                           "packetizer even for known and supported track types.")));
-  all_cli_options.push_back(cli_option_t(Z("--engage allow_avc_in_vfw_mode"),
-                                         Z("Allows storing AVC/h.264 video in Video-for-Windows compatibility "
-                                           "mode, e.g. when it is read from an AVI")));
-  all_cli_options.push_back(cli_option_t(Z("--engage use_simpleblock"),
-                                         Z("Enable use of SimpleBlock instead of BlockGroup when possible.")));
-  all_cli_options.push_back(cli_option_t(Z("--engage old_aac_codecid"),
-                                         Z("Use the old AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') instead of the "
-                                           "new one ('A_AAC').")));
-  all_cli_options.push_back(cli_option_t(Z("--engage use_codec_state"),
-                                         Z("Allows the use of the CodecState element. This is used for e.g. "
-                                           "MPEG-1/-2 video tracks for storing the sequence headers.")));
-  all_cli_options.push_back(cli_option_t(Z("--engage cow"),
-                                         Z("No help available.")));
+  all_cli_options.push_back(cli_option_t(  Z("### Global output control ###"),
+                                           Z("Several options that control the overall output that mkvmerge creates.")));
+  all_cli_options.push_back(cli_option_t(wxU("--cluster-length"),
+                                           Z("This option needs an additional argument 'n'. Tells mkvmerge to put at most 'n' data blocks into each cluster. "
+                                             "If the number is postfixed with 'ms' then put at most 'n' milliseconds of data into each cluster. "
+                                             "The maximum length for a cluster is 32767ms. Programs will only be able to seek to clusters, so creating larger clusters "
+                                             "may lead to imprecise seeking and/or processing.")));
+  all_cli_options.push_back(cli_option_t(wxU("--no-cues"),
+                                           Z("Tells mkvmerge not to create and write the cue data which can be compared to an index in an AVI. "
+                                             "Matroska files can be played back without the cue data, but seeking will probably be imprecise and slower. "
+                                             "Use this only for testing purposes.")));
+  all_cli_options.push_back(cli_option_t(wxU("--no-clusters-in-meta-seek"),
+                                           Z("Tells mkvmerge not to create a meta seek element at the end of the file containing all clusters.")));
+  all_cli_options.push_back(cli_option_t(wxU("--disable-lacing"),
+                                           Z("Disables lacing for all tracks. This will increase the file's size, especially if there are many audio tracks. Use only for testing.")));
+  all_cli_options.push_back(cli_option_t(wxU("--enable-durations"),
+                                           Z("Write durations for all blocks. This will increase file size and does not offer any additional value for players at the moment.")));
+  all_cli_options.push_back(cli_option_t(  Z("--timecode-scale REPLACEME"),
+                                           Z("Forces the timecode scale factor to REPLACEME. You have to replace REPLACEME with a value between 1000 and 10000000 or with -1. "
+                                             "Normally mkvmerge will use a value of 1000000 which means that timecodes and durations will have a precision of 1ms. "
+                                             "For files that will not contain a video track but at least one audio track mkvmerge will automatically choose a timecode scale factor "
+                                             "so that all timecodes and durations have a precision of one sample. "
+                                             "This causes bigger overhead but allows precise seeking and extraction. "
+                                             "If the magical value -1 is used then mkvmerge will use sample precision even if a video track is present.")));
+  all_cli_options.push_back(cli_option_t(wxU("### Development hacks ###"),
+                                           Z("Options meant ONLY for developpers. Do not use them. If something is considered to be an officially supported option "
+                                             "then it's NOT in this list!")));
+  all_cli_options.push_back(cli_option_t(wxU("--engage space_after_chapters"),
+                                           Z("Leave additional space (EbmlVoid) in the output file after the chapters.")));
+  all_cli_options.push_back(cli_option_t(wxU("--engage no_chapters_in_meta_seek"),
+                                           Z("Do not add an entry for the chapters in the meta seek element.")));
+  all_cli_options.push_back(cli_option_t(wxU("--engage no_meta_seek"),
+                                           Z("Do not write meta seek elements at all.")));
+  all_cli_options.push_back(cli_option_t(wxU("--engage lacing_xiph"),
+                                           Z("Force Xiph style lacing.")));
+  all_cli_options.push_back(cli_option_t(wxU("--engage lacing_ebml"),
+                                           Z("Force EBML style lacing.")));
+  all_cli_options.push_back(cli_option_t(wxU("--engage native_mpeg4"),
+                                           Z("Analyze MPEG4 bitstreams, put each frame into one Matroska block, use proper timestamping (I P B B = 0 120 40 80), "
+                                             "use V_MPEG4/ISO/... CodecIDs.")));
+  all_cli_options.push_back(cli_option_t(wxU("--engage no_variable_data"),
+                                           Z("Use fixed values for the elements that change with each file otherwise (muxing date, segment UID, track UIDs etc.). "
+                                             "Two files muxed with the same settings and this switch activated will be identical.")));
+  all_cli_options.push_back(cli_option_t(wxU("--engage no_default_header_values"),
+                                           Z("Do not write those header elements whose values are the same "
+                                             "as their default values according to the Matroska specs.")));
+  all_cli_options.push_back(cli_option_t(wxU("--engage force_passthrough_packetizer"),
+                                           Z("Forces the Matroska reader to use the generic passthrough packetizer even for known and supported track types.")));
+  all_cli_options.push_back(cli_option_t(wxU("--engage allow_avc_in_vfw_mode"),
+                                           Z("Allows storing AVC/h.264 video in Video-for-Windows compatibility mode, e.g. when it is read from an AVI")));
+  all_cli_options.push_back(cli_option_t(wxU("--engage use_simpleblock"),
+                                           Z("Enable use of SimpleBlock instead of BlockGroup when possible.")));
+  all_cli_options.push_back(cli_option_t(wxU("--engage old_aac_codecid"),
+                                           Z("Use the old AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') instead of the new one ('A_AAC').")));
+  all_cli_options.push_back(cli_option_t(wxU("--engage use_codec_state"),
+                                           Z("Allows the use of the CodecState element. This is used for e.g. MPEG-1/-2 video tracks for storing the sequence headers.")));
+  all_cli_options.push_back(cli_option_t(wxU("--engage cow"),
+                                           Z("No help available.")));
 }
 
 void
@@ -1131,7 +1111,7 @@ mmg_dialog::muxing_has_finished() {
 void
 mmg_dialog::on_help(wxCommandEvent &evt) {
   if (help == NULL) {
-    wxDirDialog dlg(this, Z("Chosoe the location of the mkvmerge GUI help files"));
+    wxDirDialog dlg(this, Z("Choose the location of the mkvmerge GUI help files"));
     vector<wxString> potential_help_paths;
     vector<wxString>::const_iterator php;
     wxString help_path;

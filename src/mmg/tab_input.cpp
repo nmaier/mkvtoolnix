@@ -372,7 +372,7 @@ tab_input::add_file(const wxString &file_name,
     return;
 
   } else if (0 < result) {
-    name.Printf(Z("File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable on the 'settings' tab."),
+    name.Printf(Z("File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable in the settings dialog."),
                 result, errno, wxUCS(strerror(errno)));
     break_line(name, 60);
     wxMessageBox(name, Z("File identification failed"), wxOK | wxCENTER | wxICON_ERROR);

@@ -328,7 +328,7 @@ endif
 
 update-po:
 	@echo 'XGETTEXT'
-	@xgettext --keyword=Y --default-domain=mkvtoolnix --from-code=UTF-8 -s -o po/mkvtoolnix.pot \
+	@xgettext --keyword=Y --keyword=Z --default-domain=mkvtoolnix --from-code=UTF-8 -s -o po/mkvtoolnix.pot \
 		$(ALL_SOURCES) $(ALL_HEADERS)
 	@for i in po/*.po ; do \
 		echo 'MSGMERGE ' $$i ; \
