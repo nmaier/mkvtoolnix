@@ -1,3 +1,8 @@
+2009-02-06  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed the detection of AAC files whose first
+	AAC header does not start on the first byte of the file.
+
 2009-01-19  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: It was possible to crash mmg by clicking onto the

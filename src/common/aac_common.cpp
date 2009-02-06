@@ -106,7 +106,6 @@ parse_aac_adif_header(unsigned char *buf,
 static bool
 is_adts_header(unsigned char *buf,
                int size,
-               int bpos,
                aac_header_t *aac_header,
                bool emphasis_present) {
   int id, profile, sfreq_index, channels, frame_length;
@@ -163,7 +162,7 @@ find_aac_header(unsigned char *buf,
   try {
     bpos = 0;
     while (bpos < size) {
-      if (is_adts_header(buf, size, bpos, aac_header, emphasis_present))
+      if (is_adts_header(buf + bpos, size - bpos, aac_header, emphasis_present))
         return bpos;
       bpos++;
     }

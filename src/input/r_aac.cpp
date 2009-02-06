@@ -98,7 +98,7 @@ aac_reader_c::aac_reader_c(track_info_c &_ti)
       adif = 1;
 
     } else {
-      if (find_aac_header(chunk, init_read_len, &aacheader, emphasis_present) != 0)
+      if (find_aac_header(chunk, init_read_len, &aacheader, emphasis_present) < 0)
         throw error_c(boost::format(Y("aac_reader: No valid AAC packet found in the first %1% bytes.\n")) % init_read_len);
       guess_adts_version();
       adif = 0;
