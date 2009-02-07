@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-01 20:06+0100\n"
-"PO-Revision-Date: 2009-02-04 19:13+0100\n"
+"PO-Revision-Date: 2009-02-07 18:14+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -4391,9 +4391,9 @@ msgid "The binary data must be exactly %1% bytes long."
 msgstr "Die Binärdaten müssen genau %1% Bytes lang sein."
 
 #: src/mmg/tab_chapters.cpp:787
-#, fuzzy, c-format
+#, c-format
 msgid "The chapter '%s' is missing its language."
-msgstr "Der Option '--command-line-charset' fehlt ihr Argument.\n"
+msgstr "Dem Kapitel '%s' fehlt die Sprache."
 
 #: src/mmg/tab_chapters.cpp:781
 #, c-format
@@ -4478,6 +4478,9 @@ msgstr "Die Anzeigebreite der zwei Tracks ist unterschiedlich: %1% und %2%"
 #: src/mmg/kax_analyzer.cpp:379
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr ""
+"Bitte geben Sie die Sprache und das Land ein,\n"
+"die sie dem ausgewählten Kapitel und darunter\n"
+"zuweisen möchten."
 
 #: src/output/p_video.cpp:681
 msgid "The extracted values for video width and height from the MPEG4 layer 2 video data bitstream differ from what the values in the source container. The ones from the video data bitstream (%1%x%2%) will be used.\n"
@@ -4526,22 +4529,21 @@ msgid "The file '%1%' is empty."
 msgstr "Die Datei '%1%' ist leer."
 
 #: src/mmg/mmg.cpp:809
-#, fuzzy, c-format
+#, c-format
 msgid "The file '%s' does not exist."
-msgstr "Die Datei '%1%' ist leer."
+msgstr "Die Datei '%s' existiert nicht."
 
 #: src/info/qt_ui.cpp:76
 msgid "The file could not be opened for writing."
 msgstr "Die Datei konnte nicht zum Schreiben geöffnet werden."
 
 #: src/mmg/mmg.cpp:889
-#, fuzzy
 msgid "The file does not exist."
-msgstr "Der Dateikopf ist zu kurz.\n"
+msgstr "Die Datei existiert nicht."
 
 #: src/mmg/mmg.cpp:909
 msgid "The file does not seem to be a valid mkvmerge GUI settings file."
-msgstr ""
+msgstr "Die Datei scheint keine gültige mkvmerge GUI Optionsdatei zu sein."
 
 #: src/input/r_tta.cpp:66
 msgid "The file header is too short.\n"
@@ -4552,9 +4554,9 @@ msgid "The file header was not read correctly.\n"
 msgstr "Der Dateikopf konnte nicht vollständig gelesen werden.\n"
 
 #: src/mmg/tab_input.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "The file is an unsupported container format (%s)."
-msgstr "Die Datei '%1%' hat einen nicht unterstützten Typ (%2%).\n"
+msgstr "Die Datei enthält ein nicht unterstütztes Containerformat (%s)."
 
 #: src/merge/output_control.cpp:250
 msgid "The file is being fixed, part 1/4..."
@@ -4586,11 +4588,11 @@ msgstr "Die Datei Nummer %1% ('%2%') wurde nicht zum Anhängen ausgewählt.  Das
 
 #: src/mmg/tab_chapters.cpp:653
 msgid "The file you tried to save to is NOT a Matroska file."
-msgstr ""
+msgstr "Die Datei, in die Sie speichern möchten, ist KEINE Matroska-Datei."
 
 #: src/mmg/tab_chapters.cpp:693
 msgid "The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."
-msgstr ""
+msgstr "Die Datei, in die Sie speichern wollten, ist eine Matroska-Datei. Damit das richtig funktioniert, müssen Sie den Menüpunkt 'In Matroska-Datei speichern' auswählen."
 
 #: src/merge/mkvmerge.cpp:2046
 msgid "The first file cannot be appended because there are no files to append to.\n"
@@ -4598,15 +4600,15 @@ msgstr "Die erste Datei kann nicht angehängt werden, weil es keine Dateien gibt
 
 #: src/mmg/tab_global.cpp:460
 msgid "The format of the split size is invalid (size too small)."
-msgstr ""
+msgstr "Das Format der Aufteilungsgröße ist ungültig (Aufteilungsgröße ist zu klein)."
 
 #: src/mmg/tab_global.cpp:452 src/mmg/tab_global.cpp:456
 msgid "The format of the split size is invalid."
-msgstr ""
+msgstr "Das Format der Aufteilungsgröße ist ungültig."
 
 #: src/mmg/tab_global.cpp:479
 msgid "The format of the split timecode/duration is invalid."
-msgstr ""
+msgstr "Das Format des Aufteilungszeitstempels/der Aufteilungsdauer ist ungültig."
 
 #: src/merge/output_control.cpp:931
 msgid "The formats do not match."
@@ -4626,9 +4628,9 @@ msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "Die Höhe der zwei Tracks ist unterschiedlich: %1% und %2%"
 
 #: src/mmg/tab_input.cpp:549
-#, fuzzy, c-format
+#, c-format
 msgid "The input file '%s' does not contain any tracks."
-msgstr "Die Zeitstempeldatei '%1%' enthält nicht einen einzigen gültigen Eintrag.\n"
+msgstr "Die Quelldatei '%s' enthält keine Tracks."
 
 #: src/mmg/tab_input.cpp:1145
 msgid ""
@@ -4639,6 +4641,12 @@ msgid ""
 "\n"
 "(Problem occured in tab_input::load(), #1)"
 msgstr ""
+"Die Jobdatei konnte nicht fehlerfrei geparst werden.\n"
+"Entweder ist sie ungültig/beschädigt, oder Sie haben\n"
+"soeben einen Bug in mmg gefunden. Bitte berichten Sie\n"
+"dem Autor Moritz Bunkus <moritz@bunkus.org> davon.\n"
+"\n"
+"(Problem trat auf in tab_input::load(), #1)"
 
 #: src/mmg/tab_input.cpp:1152
 msgid ""
@@ -4649,6 +4657,12 @@ msgid ""
 "\n"
 "(Problem occured in tab_input::load(), #2)"
 msgstr ""
+"Die Jobdatei konnte nicht fehlerfrei geparst werden.\n"
+"Entweder ist sie ungültig/beschädigt, oder Sie haben\n"
+"soeben einen Bug in mmg gefunden. Bitte berichten Sie\n"
+"dem Autor Moritz Bunkus <moritz@bunkus.org> davon.\n"
+"\n"
+"(Problem trat auf in tab_input::load(), #2)"
 
 #: src/mmg/tab_input.cpp:1165
 msgid ""
@@ -4659,11 +4673,17 @@ msgid ""
 "\n"
 "(Problem occured in tab_input::load(), #3)"
 msgstr ""
+"Die Jobdatei konnte nicht fehlerfrei geparst werden.\n"
+"Entweder ist sie ungültig/beschädigt, oder Sie haben\n"
+"soeben einen Bug in mmg gefunden. Bitte berichten Sie\n"
+"dem Autor Moritz Bunkus <moritz@bunkus.org> davon.\n"
+"\n"
+"(Problem trat auf in tab_input::load(), #3)"
 
 #: src/mmg/tab_chapters.cpp:1257 src/mmg/tab_chapters.cpp:1343
-#, fuzzy, c-format
+#, c-format
 msgid "The language '%s' is not a valid language and cannot be selected."
-msgstr "Das Sprachkürzel '%1%' ist kein gültiges ISO639-2-Sprachkürzel und wird ignoriert.\n"
+msgstr "Die Sprache '%s' ist keine gültige Sprache und kann nicht ausgewählt werden."
 
 #: src/input/r_usf.cpp:166
 msgid "The language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
@@ -4675,11 +4695,11 @@ msgstr "Die Zeile %1% der Zeitstempeldatei '%2%' enthält keine gültige Fließk
 
 #: src/mmg/kax_analyzer.cpp:512
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
-msgstr ""
+msgstr "Das Meta-Index-Element wurde ans Dateiende geschrieben, aber die Segmentgröße konnte nicht aktualisiert werden. Deshalb wird das Element für Abspielprogramme unsichtbar sein. Der Prozess wird beendet. Die Datei wurde verändert!"
 
 #: src/mmg/mmg.cpp:1177
 msgid "The mkvmerge GUI help file was not found in the path you've selected. Please try again, or abort by pressing the 'abort' button."
-msgstr ""
+msgstr "Die mkvmerge GUI Hilfedateien wurden nicht in dem von Ihnen ausgewählten Pfad gefunden. Bitte versuchen Sie es erneut, oder brechen Sie mit 'Abbrechen' ab."
 
 #: src/mmg/mmg.cpp:1170
 msgid ""
@@ -4687,6 +4707,9 @@ msgid ""
 "\n"
 "Please select the location of the 'mkvmerge-gui.hhp' file."
 msgstr ""
+"Die mkvmerge GUI Hilfedateien wurden nicht gefunden. Das deutet darauf hin, dass die Hilfe bisher noch nie gestartet wurde, oder dass sich der Installationsort seitdem verändert hat.\n"
+"\n"
+"Bitte wählen Sie den Ort der Datei 'mkvmerge-gui.hhp' aus."
 
 #: src/merge/mkvmerge.cpp:2024
 msgid "The name of the output file '%1%' and of one of the input files is the same. This would cause mkvmerge to overwrite one of your input files. This is most likely not what you want.\n"
@@ -4719,7 +4742,7 @@ msgstr "Die Zieldatei '%1%' konnte nicht zum Schreiben geöffnet werden (%2%).\n
 #: src/mmg/mmg.cpp:1030 src/mmg/mmg.cpp:1777
 #, c-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
-msgstr ""
+msgstr "Die Zieldatei '%s' existiert bereits. Wollen Sie sie überschreiben?"
 
 #: src/input/r_corepicture.cpp:158
 msgid "The panoramic mode '%1%' is not recognized.\n"
@@ -4750,9 +4773,9 @@ msgid "The seek table in this TTA file seems to be broken.\n"
 msgstr "Die Suchindextabelle in dieser TTA-Datei scheint beschädigt zu sein.\n"
 
 #: src/mmg/tab_chapters.cpp:792
-#, fuzzy, c-format
+#, c-format
 msgid "The selected language '%s' for the chapter '%s'' is not a valid language code. Please select one of the predefined ones."
-msgstr "Das Standardsprachkürzel '%1%' ist kein gültiger ISO639-2-Code und wird ignoriert.\n"
+msgstr "Die ausgewählte Sprache '%s' für Kapitel '%s' ist kein gültiges Sprachkürzel. Bitte wählen Sie eines der vordefinierten Sprachkürzel aus."
 
 #: src/merge/mkvmerge.cpp:1414
 msgid "The size of attachment '%1%' is 0.\n"
@@ -4765,7 +4788,7 @@ msgstr "Die Quelldatei '%1%' konnte nicht geöffnet werden, oder aber die Größ
 #: src/mmg/tab_input.cpp:1243
 #, c-format
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
-msgstr ""
+msgstr "Der Streck-Wert für Track Nummer %s in Datei '%s' ist ungültig."
 
 #: src/merge/pr_generic.cpp:283
 msgid "The tags in '%1%' could not be parsed: some mandatory elements are missing.\n"
@@ -4848,15 +4871,15 @@ msgstr "Es gibt keine Datei mit der Nummer '%1%'. Das Argument für '--append-to
 
 #: src/mmg/mux_dialog.cpp:266
 msgid "There were ERRORs."
-msgstr ""
+msgstr "Es gab FEHLER."
 
 #: src/mmg/mux_dialog.cpp:261
 msgid "There were warnings"
-msgstr ""
+msgstr "Es gab Warnungen"
 
 #: src/mmg/mux_dialog.cpp:259
 msgid "There were warnings, or the process was terminated."
-msgstr ""
+msgstr "Es gab Warnungen, oder mkvmerge wurde unerwartet beendet"
 
 #: src/input/r_avi.cpp:503 src/input/r_real.cpp:329
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
@@ -4903,9 +4926,8 @@ msgid "This file contains coordinates in the timecode lines. Such coordinates ar
 msgstr "Diese Datei enthält Anzeigekoordinaten zusammen in den Zeitstempeln. Solche Koordinaten werden vom Matroska SRT-Untertitelformat nicht unterstützt. Die Koordinaten werden automatisch entfernt.\n"
 
 #: src/mmg/tab_chapters.cpp:569
-#, fuzzy
 msgid "This file does not contain any chapters."
-msgstr "Diese Datei enthält keine gültigen Kapiteleinträge."
+msgstr "Diese Datei enthält keine Kapiteleinträge."
 
 #: src/mmg/tab_chapters.cpp:577
 msgid "This file does not contain valid chapters."
@@ -4913,7 +4935,7 @@ msgstr "Diese Datei enthält keine gültigen Kapiteleinträge."
 
 #: src/mmg/mmg.cpp:159
 msgid "This option needs an additional argument 'n'. Tells mkvmerge to put at most 'n' data blocks into each cluster. If the number is postfixed with 'ms' then put at most 'n' milliseconds of data into each cluster. The maximum length for a cluster is 32767ms. Programs will only be able to seek to clusters, so creating larger clusters may lead to imprecise seeking and/or processing."
-msgstr ""
+msgstr "Diese Option benötigt ein zusäzliches Argument 'n'. Sie sorgt dafür, dass mkvmerge höchstens 'n' Datenblöcke in jeden Cluster schreibt. Falls die Zahl mit 'ms' aufhört, so werden höchstens 'n' Millisekunden an Daten in jeden Cluster geschrieben. Die Maximallänge eines Clusters beträgt 32767ms. Abspielprogramme können nur Clustergrenzen direkt anspringen, sodass das Erstellen großer Cluster zu ungenauem Springen führen kann."
 
 #: src/merge/output_control.cpp:273
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
@@ -4938,7 +4960,7 @@ msgstr "Zeitscheibe"
 #: src/mmg/tab_input_general.cpp:267
 #, c-format
 msgid "Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"
-msgstr ""
+msgstr "Zeitstempeldateien (*.tmc;*.txt)|*.tmc;*.txt|%s"
 
 #: src/extract/timecodes_v2.cpp:249 src/extract/tracks.cpp:386
 #: src/info/mkvinfo.cpp:455 src/info/mkvinfo.cpp:996
@@ -4946,18 +4968,16 @@ msgid "Timecode scale: %1%"
 msgstr "Zeitstempelskalierungsfaktor: %1%"
 
 #: src/mmg/tab_input_general.cpp:93
-#, fuzzy
 msgid "Timecodes:"
-msgstr "Zeitstempel"
+msgstr "Zeitstempel:"
 
 #: src/info/mkvinfo.cpp:519
 msgid "Title: %1%"
 msgstr "Titel: %1%"
 
 #: src/mmg/tab_attachments.cpp:104
-#, fuzzy
 msgid "To all files"
-msgstr "1: alle Frames"
+msgstr "An alle Dateien"
 
 #: src/common/xml_element_parser.cpp:163
 msgid "Too few hexadecimal digits found. The number of digits must be > 0 and divisable by 2."
@@ -5044,9 +5064,8 @@ msgid "Track UID: %1%"
 msgstr "Track UID: %1%"
 
 #: src/mmg/tab_input_general.cpp:48
-#, fuzzy
 msgid "Track name:"
-msgstr "Trackname"
+msgstr "Trackname:"
 
 #: src/common/compression.cpp:489
 msgid "Track number %1% has been encrypted and decryption has not yet been implemented.\n"
@@ -5070,7 +5089,7 @@ msgstr "Tracks mit nicht unterstützten Kodierschemata (Kompression oder Verschl
 
 #: src/mmg/tab_input.cpp:143
 msgid "Tracks:"
-msgstr ""
+msgstr "Tracks:"
 
 #: src/extract/xtr_vobsub.cpp:91
 msgid "Two VobSub tracks can only be extracted into the same file if their CodecPrivate data matches. This is not the case for the tracks %1% and %2%.\n"
@@ -5082,12 +5101,11 @@ msgstr "Typ: %1% (%2%)"
 
 #: src/mmg/tab_chapters.cpp:275
 msgid "UID:"
-msgstr ""
+msgstr "UID:"
 
 #: src/mmg/tab_input.cpp:234
-#, fuzzy
 msgid "USF text subtitles"
-msgstr "SRT Textuntertitel"
+msgstr "USF Textuntertitel"
 
 #: src/common/commonebml.cpp:106
 msgid "UTFstring_to_cstrutf8: Invalid wide character. Please contact moritz@bunkus.org if you think that this is not true."
@@ -5152,6 +5170,9 @@ msgstr "Nicht unterstützte MPEG-Version: 0x%|1$02x| in Paket %2% bei Zeitstempe
 #: src/mmg/tab_input.cpp:361
 msgid "Unsupported format"
 msgstr ""
+"Die Matroska-Datei wurde bereits geändert, aber der Meta-Index konnte nicht aktualisiert werden. Das bedeutet, dass Abspielprogramme das neu geschriebene Element nicht so leicht oder gar nicht finden werden. Bitte benutzen Sie Ihr favorisiertes Abspielprogramm, um zu überprüfen, ob die Datei problemlos abgespielt werden kann.\n"
+"\n"
+"Die beste Lösung für dieses Problem ist, die Kapitel in eine XML-Datei zu speichern und die Matroska-Datei zusammen mit der Kapiteldatei neu zu muxen."
 
 #: src/input/r_matroska.cpp:1575
 msgid "Unsupported track type for this track.\n"
@@ -5350,23 +5371,27 @@ msgstr ""
 #: src/mmg/mmg.cpp:197
 msgid "Use fixed values for the elements that change with each file otherwise (muxing date, segment UID, track UIDs etc.). Two files muxed with the same settings and this switch activated will be identical."
 msgstr ""
+"Der Kapiteleditor wurde benutzt und enthält Daten. Allerdings wurde auf der Seite \"Global\" keine Kapiteldatei ausgewählt. In mmg ist der Kapiteleditor vom Muxvorgang unabhängig. Die Kapiteleinträge im Editor werden NICHT mit in die Zieldatei geschrieben. Nur die verschiedenen \"Speichern\"-Funktionen im Kapiteleditormenü sorgen dafür, dass die Kapitel tatsächlich gespeichert werden.\n"
+"\n"
+"Wollen Sie wirklich den Muxprozess starten?\n"
+"\n"
+"Anmerkung: Diese Warnung kann in den Einstellungen deaktiviert werden, indem die Option \"Warnung bei falscher Benutzung\" deaktiviert wird."
 
 #: src/mmg/mmg.cpp:209
 msgid "Use the old AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') instead of the new one ('A_AAC')."
-msgstr ""
+msgstr "Benutzt die alte Codec-ID für AAC-Tracks (z.B. 'A_AAC/MPEG4/SBR') anstelle der neuen ('A_AAC')."
 
 #: src/mmg/options_dialog.cpp:83
-#, fuzzy
 msgid "Use the previous output directory"
-msgstr "Das Video-Ausgabemodul wird benutzt.\n"
+msgstr "Das vorherige Zielverzeichnis benutzen"
 
 #: src/mmg/options_dialog.cpp:84
 msgid "Use this directory:"
-msgstr ""
+msgstr "Dieses Verzeichnis benutzen:"
 
 #: src/mmg/tab_input_extra.cpp:51
 msgid "User defined options:"
-msgstr ""
+msgstr "Benutzerdefinierte Optionen:"
 
 #: src/merge/mkvmerge.cpp:1283
 msgid "Using a NALU size length of 3 bytes might result in tracks that won't be decodable with certain AVC/h.264 codecs.\n"
@@ -5625,9 +5650,8 @@ msgid "Using the video output module.\n"
 msgstr "Das Video-Ausgabemodul wird benutzt.\n"
 
 #: src/mmg/tab_input.cpp:235
-#, fuzzy
 msgid "VC1 elementary streams"
-msgstr "VC1 Video elementary stream"
+msgstr "VC1 elementary streams"
 
 #: src/merge/mkvmerge.cpp:105
 msgid "VC1 video elementary stream"
@@ -5640,6 +5664,12 @@ msgstr "Gültige Hacks sind:\n"
 #: src/mmg/mmg.cpp:699
 msgid "Verify the current chapter entries to see if there are any errors"
 msgstr ""
+"Die Jobdatei konnte nicht fehlerfrei geparst werden.\n"
+"Entweder ist sie ungültig/beschädigt, oder Sie haben\n"
+"soeben einen Bug in mmg gefunden. Bitte berichten Sie\n"
+"dem Autor Moritz Bunkus <moritz@bunkus.org> davon.\n"
+"\n"
+"(Problem trat auf in tab_input::load(), #1)"
 
 #: src/input/r_real.cpp:656
 msgid "Video packet assembly failed. Error code: %1% (%2%)\n"
@@ -5654,16 +5684,14 @@ msgid "VobBtn buttons"
 msgstr "VobBtn-Buttons"
 
 #: src/mmg/tab_input.cpp:239
-#, fuzzy
 msgid "VobButtons"
-msgstr "VobBtn-Buttons"
+msgstr "VobButtons"
 
 #: src/mmg/tab_input.cpp:236 src/merge/mkvmerge.cpp:92
 msgid "VobSub subtitles"
 msgstr "VobSub-Untertitel"
 
 #: src/mmg/tab_input.cpp:237
-#, fuzzy
 msgid "WAVE (uncompressed PCM audio)"
 msgstr "WAVE (unkomprimiertes PCM)"
 
@@ -5676,22 +5704,26 @@ msgid "WAVPACK lossless audio"
 msgstr "WAVPACK verlustfreies Audio"
 
 #: src/mmg/tab_input.cpp:238
-#, fuzzy
 msgid "WAVPACK v4 audio"
-msgstr "WAVPACK verlustfreies Audio"
+msgstr "WAVPACK v4 Audio"
 
 #: src/mmg/options_dialog.cpp:110
 msgid "Warn about possible incorrect usage of mmg"
 msgstr ""
+"Die Jobdatei konnte nicht fehlerfrei geparst werden.\n"
+"Entweder ist sie ungültig/beschädigt, oder Sie haben\n"
+"soeben einen Bug in mmg gefunden. Bitte berichten Sie\n"
+"dem Autor Moritz Bunkus <moritz@bunkus.org> davon.\n"
+"\n"
+"(Problem trat auf in tab_input::load(), #2)"
 
 #: src/input/subtitles.cpp:176
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
 msgstr "Warnung in Zeile %1%: Der Start-Zeitstempel ist kleiner als der des vorhergehenden Eintrages. Alle Einträge aus dieser Datei werden nach ihrem Start-Zeitstempel sortiert.\n"
 
 #: src/mmg/mux_dialog.cpp:155
-#, fuzzy
 msgid "Warning:"
-msgstr "Warnung: "
+msgstr "Warnung:"
 
 #: src/common/common_output.cpp:62
 msgid "Warning: "
@@ -5706,13 +5738,15 @@ msgid "Warning: There's more than one track with the number %1%."
 msgstr "Warnung: Es gibt mehr als einen Track mit der Nummer %1%."
 
 #: src/mmg/mux_dialog.cpp:72
-#, fuzzy
 msgid "Warnings:"
-msgstr "Warnung: "
+msgstr "Warnungen: "
 
 #: src/mmg/mmg.cpp:172
 msgid "Write durations for all blocks. This will increase file size and does not offer any additional value for players at the moment."
 msgstr ""
+"Die mkvmerge-GUI-Hilfedateien wurden nicht gefunden. Das deutet darauf hin, dass die Hilfe bisher noch nie aufgerufen wurde, oder dass der Installationspfad seitdem geändert wurde.\n"
+"\n"
+"Bitte wählen Sie den Ort der Datei 'mkvmerge-gui.hhp' aus."
 
 #: src/info/mkvinfo.cpp:470
 msgid "Writing application: %1%"
@@ -5736,12 +5770,11 @@ msgstr "Falsches Argument zu '--split-max-files'.\n"
 
 #: src/mmg/options_dialog.cpp:250
 msgid "Wrong file chosen"
-msgstr ""
+msgstr "Falsche Datei ausgewählt"
 
 #: src/mmg/tab_chapters.cpp:653 src/mmg/tab_chapters.cpp:694
-#, fuzzy
 msgid "Wrong file selected"
-msgstr "keine Datei geladen"
+msgstr "Falsche Datei ausgewählt"
 
 #: src/common/kate_common.cpp:47 src/common/theora_common.cpp:35
 msgid "Wrong header type: 0x%|1$02x| != 0x%|2$02x|"
@@ -5771,17 +5804,28 @@ msgid ""
 "either just a number in which case it is interpreted as the number of seconds,\n"
 "it can be followed by the unit like 'ms' or 's' for milliseconds and seconds respectively,\n"
 "or it can have the usual HH:MM:SS.mmm or HH:MM:SS format.\n"
-"Example: -00:05:23 would let all the chpaters begin\n"
+"Example: -00:05:23 would let all the chapters begin\n"
 "5minutes and 23seconds earlier than now."
 msgstr ""
+"Sie können diese Funktion benutzen, um alle Zeitstempel\n"
+"eines Kapitels und aller darunter liegenden Kapitel um\n"
+"einen festen Wert anzupassen. Dieser Wert kann sowohl positiv\n"
+"als auch negativ sein. Das Format, das hier benutzt werden kann,\n"
+"kann entweder eine einfache Zahl sein, die dann als Anzahl\n"
+"Sekunden interpretiert wird; sie kann eine Zahl gefolgt von\n"
+"einer Einheit wie 'ms' oder 's' für Millisekunden und Sekunden\n"
+"sein, oder sie kann das übliche Format HH:MM:SS.mmm oder HH:MM:SS\n"
+"entsprechen.\n"
+"Beispiel: -00:05:23 wüde alle Kapitel fünf Minuten und 23 Sekunde\n"
+"früher als jetzt anfangen lassen."
 
 #: src/mmg/mmg.cpp:1069 src/mmg/mmg.cpp:1768
 msgid "You have not yet selected an output file."
-msgstr ""
+msgstr "Sie haben noch keine Zieldatei ausgewählt."
 
 #: src/mmg/tab_input.cpp:1329
 msgid "You have not yet selected any input file and/or no tracks."
-msgstr ""
+msgstr "Sie haben noch keine Quelldatei und/oder keine Tracka ausgewählt."
 
 #: src/mmg/tab_input.cpp:1274
 #, c-format
@@ -5792,6 +5836,11 @@ msgid ""
 "\n"
 "Do you still want to continue?"
 msgstr ""
+"Sie haben keine Anzahl von Bildern pro Sekunde für Track %lld aus Datei '%s' ausgewählt. mkvmerge kann diese Information aus solchen Dateien nicht automatisch ableiten. Deshalb müssen Sie diesen Parameter auf der Seite 'Formatspezifische Optionen' selber setzen.\n"
+"\n"
+"Wenn Sie das nicht tun, so wird mkvmerge 25 BPS annehmen.\n"
+"\n"
+"Wollen Sie trotzdem fortfahren?"
 
 #: src/mmg/tab_input.cpp:482
 msgid ""
@@ -5801,6 +5850,11 @@ msgid ""
 "\n"
 "This message will only be shown once unless you have enabled mmg's warnings on its 'settings' page."
 msgstr ""
+"Sie fügen der Zieldatei eine AVC/h.264 Elementardatei hinzu. mkvmerge kann aus solchen Dateien nicht die Anzahl der Bilder pro Sekunde ableiten. Deshalb müssen Sie diesen Parameter auf der Seite 'Formatspezifische Optionen' selber setzen.\n"
+"\n"
+"Wenn Sie das nicht tun, so nimmt mkvmerge 25 BPS an.\n"
+"\n"
+"Diese Nachricht wird nur einmal angezeigt, es sei denn, Sie haben die Warnungen bzgl. falscher Benutzung im Einstellungsdialog aktiviert."
 
 #: src/common/compression.cpp:129 src/common/compression.cpp:166
 msgid "Zlib decompression failed. Result: %1%\n"
@@ -5828,7 +5882,7 @@ msgstr "aac_reader: In den ersten %1% Bytes wurde kein gültiges AAC-Paket gefun
 
 #: src/mmg/jobs.cpp:254 src/mmg/jobs.cpp:363 src/mmg/jobs.cpp:441
 msgid "aborted"
-msgstr ""
+msgstr "abgebrochen"
 
 #: src/output/p_ac3.cpp:196
 msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"
@@ -5848,11 +5902,11 @@ msgstr "ac3_reader: In den ersten %1% Bytes wurde kein gültiges AC3-Paket gefun
 
 #: src/mmg/tab_attachments.cpp:60 src/mmg/tab_input.cpp:98
 msgid "add"
-msgstr ""
+msgstr "hinzufügen"
 
 #: src/mmg/tab_input.cpp:101
 msgid "append"
-msgstr ""
+msgstr "anhängen"
 
 #: src/input/r_matroska.cpp:92 src/mmg/tab_input.cpp:598
 #: src/mmg/tab_input.cpp:1176 src/info/mkvinfo.cpp:1013
@@ -5933,11 +5987,11 @@ msgstr "common.cpp/to_utf8(): Ungültiges Konvertierungs-Handle %1% (Anzahl: %2%
 
 #: src/mmg/jobs.cpp:257
 msgid "completed OK"
-msgstr ""
+msgstr "erfolgreich beendet"
 
 #: src/mmg/jobs.cpp:260
 msgid "completed with warnings"
-msgstr ""
+msgstr "mit Warnungen beendet"
 
 #: src/info/mkvinfo.cpp:713
 msgid "compression"
@@ -5963,7 +6017,7 @@ msgstr "cstrutf8_to_UTFstring: Ungültige UTF-8-Sequenz gefunden. Wenden Sie sic
 #: src/mmg/tab_input_general.cpp:118 src/mmg/tab_input_general.cpp:126
 #: src/mmg/tab_input_general.cpp:206
 msgid "default"
-msgstr ""
+msgstr "Standard"
 
 #: src/info/mkvinfo.cpp:972
 msgid "default duration: %|1$.3f|ms (%|2$.3f| fps for a video track)"
@@ -5990,18 +6044,16 @@ msgid "display width: %1%"
 msgstr "Anzeigebreite: %1%"
 
 #: src/mmg/jobs.cpp:439 src/mmg/jobs.cpp:627
-#, fuzzy
 msgid "done"
-msgstr " fertig\n"
+msgstr "fertig"
 
 #: src/mmg/jobs.cpp:440
 msgid "done/warnings"
-msgstr ""
+msgstr "fertig/Warnungen"
 
 #: src/mmg/tab_input.cpp:156
-#, fuzzy
 msgid "down"
-msgstr " fertig\n"
+msgstr "runter"
 
 #: src/input/r_dts.cpp:70
 msgid "dts_reader: Could not open the source file."
@@ -6016,9 +6068,8 @@ msgid "dts_reader: No valid DTS packet found in the first %1% bytes.\n"
 msgstr "dts_reader: In den ersten %1% Bytes wurde kein gültiges DTS-Paket gefunden.\n"
 
 #: src/mmg/tab_chapters.cpp:285
-#, fuzzy
 msgid "enabled"
-msgstr "Aktiv: %1%"
+msgstr "aktiviert"
 
 #: src/info/mkvinfo.cpp:714
 msgid "encryption"
@@ -6037,7 +6088,7 @@ msgstr "Ende-der-Datei"
 
 #: src/mmg/jobs.cpp:263 src/mmg/jobs.cpp:442
 msgid "failed"
-msgstr ""
+msgstr "fehlgeschlagen"
 
 #: src/merge/output_control.cpp:504
 msgid "filelist_t not found for generic_packetizer_c. %1%\n"
@@ -6144,9 +6195,8 @@ msgid "flac_reader: could not initialize the FLAC packetizer.\n"
 msgstr "flac_reader: Das FLAC-Ausgabemodul konnte nicht initialisiert werden.\n"
 
 #: src/mmg/mmg.cpp:1376 src/mmg/tab_input_general.cpp:120
-#, fuzzy
 msgid "for all frames"
-msgstr "1: alle Frames"
+msgstr "für alle Frames"
 
 #: src/mmg/kax_analyzer.cpp:535
 msgid "found_what == 0, 2nd time. Should not have happened. Please file a bug report.\n"
@@ -6170,15 +6220,15 @@ msgstr "Entfernen von Kopfdaten"
 
 #: src/mmg/tab_chapters.cpp:281
 msgid "hidden"
-msgstr ""
+msgstr "versteckt"
 
 #: src/mmg/options_dialog.cpp:64
 msgid "higher"
-msgstr ""
+msgstr "höher"
 
 #: src/mmg/options_dialog.cpp:63
 msgid "highest"
-msgstr ""
+msgstr "höchste"
 
 #: src/common/compression.cpp:116
 msgid "inflateInit() failed. Result: %1%\n"
@@ -6201,17 +6251,16 @@ msgid "line %1%: The 'delay' timestamp could not be parsed.\n"
 msgstr "line %1%: Der 'delay'-Zeitstempel konnte nicht geparst werden.\n"
 
 #: src/mmg/tab_global.cpp:132
-#, fuzzy
 msgid "link files"
-msgstr "Datei wird geparst"
+msgstr "Dateien verknüpfen"
 
 #: src/mmg/options_dialog.cpp:67
 msgid "lower"
-msgstr ""
+msgstr "niedriger"
 
 #: src/mmg/options_dialog.cpp:68
 msgid "lowest"
-msgstr ""
+msgstr "am niedrigsten"
 
 #: src/common/compression.cpp:66
 msgid "lzo_compressor_c::decompress() not implemented\n"
@@ -6347,7 +6396,7 @@ msgstr "matroska_reader: |  + Es gibt mehr als einen Track mit der Nummer %1%.\n
 
 #: src/mmg/tab_global.cpp:139
 msgid "max. number of files:"
-msgstr ""
+msgstr "max. Anzahl von Dateien:"
 
 #: src/common/common_memory.h:153
 msgid "memory_slice_cursor_c copy c'tor: Must not be used!"
@@ -6372,28 +6421,28 @@ msgstr "mkvmerge -o aus [globale Optionen] [Optionen1] <Datei1> [@Optionsdatei .
 #: src/mmg/mux_dialog.cpp:254
 #, c-format
 msgid "mkvmerge FAILED with a return code of %d. %s\n"
-msgstr ""
+msgstr "mkvmerge schlug mit einem Rückgabewert von %d fehl. %s\n"
 
 #: src/mmg/tab_global.cpp:438 src/mmg/tab_global.cpp:452
 #: src/mmg/tab_global.cpp:456 src/mmg/tab_global.cpp:460
 #: src/mmg/tab_global.cpp:471 src/mmg/tab_global.cpp:479
 #: src/mmg/tab_global.cpp:520
 msgid "mkvmerge GUI error"
-msgstr ""
+msgstr "mkvmerge GUI Fehler"
 
 #: src/mmg/mmg.cpp:802
 msgid "mkvmerge GUI ready"
-msgstr ""
+msgstr "mkvmerge GUI bereit"
 
 #: src/mmg/mmg.cpp:884 src/mmg/mmg.cpp:929
 #, c-format
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
-msgstr ""
+msgstr "mkvmerge GUI Optionen (*.mmg)|*.mmg|%s"
 
 #: src/mmg/mmg.cpp:655
 #, c-format
 msgid "mkvmerge GUI v%s ('%s')"
-msgstr ""
+msgstr "mkvmerge GUI v%s ('%s')"
 
 #: src/mmg/mmg.cpp:1196
 #, c-format
@@ -6409,13 +6458,23 @@ msgid ""
 "Help is available in form of tool tips, from the\n"
 "'Help' menu or by pressing the 'F1' key."
 msgstr ""
+"mkvmerge GUI v%s ('%s')\n"
+"erstellt am %s %s\n"
+"\n"
+"Dieses GUI wurde von Moritz Bunkus <moritz@bunkus.org> geschrieben\n"
+"Basierend auf mmg von Florian Wagner <flo.wagner@gmx.de>\n"
+"mkvmerge GUI ist unter der GPL lizensiert.\n"
+"http://www.bunkus.org/videotools/mkvtoolnix/\n"
+"\n"
+"Hilfe gibt es in Form von Tooltiops, über das 'Hilfe'-Menü,\n"
+"oder indem man 'F1' drückt."
 
 #: src/mmg/mmg.cpp:1069 src/mmg/mmg.cpp:1768 src/mmg/tab_input.cpp:1206
 #: src/mmg/tab_input.cpp:1233 src/mmg/tab_input.cpp:1244
 #: src/mmg/tab_input.cpp:1254 src/mmg/tab_input.cpp:1266
 #: src/mmg/tab_input.cpp:1321
 msgid "mkvmerge GUI: error"
-msgstr ""
+msgstr "mkvmerge GUI: Fehler"
 
 #: src/output/p_avc.cpp:96
 msgid ""
@@ -6427,16 +6486,16 @@ msgstr ""
 
 #: src/mmg/options_dialog.cpp:53
 msgid "mkvmerge executable"
-msgstr ""
+msgstr "mkvmerge-Programmdatei"
 
 #: src/mmg/mux_dialog.cpp:256
 #, c-format
 msgid "mkvmerge finished with a return code of %d. %s\n"
-msgstr ""
+msgstr "mkvmerge schloss den Prozess mit einem Rückgabewert von %d ab. %s\n"
 
 #: src/mmg/jobs.cpp:121 src/mmg/mux_dialog.cpp:234
 msgid "mkvmerge has finished"
-msgstr ""
+msgstr "mkvmerge ist fertig"
 
 #: src/input/r_ogm.cpp:479
 msgid "mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"
@@ -6444,16 +6503,15 @@ msgstr "mkvmerge wurden ohne FLAC-Unterstützung compiliert, aber dieser FLAC-St
 
 #: src/mmg/jobs.cpp:47 src/mmg/mux_dialog.cpp:43
 msgid "mkvmerge is running"
-msgstr ""
+msgstr "mkvmerge läuft"
 
 #: src/mmg/options_dialog.cpp:51
-#, fuzzy
 msgid "mkvmerge options"
-msgstr " Weitere Optionen:\n"
+msgstr "mkvmerge-Optionen"
 
 #: src/mmg/mux_dialog.cpp:69
 msgid "mkvmerge output:"
-msgstr ""
+msgstr "mkvmerge-Zieldatei:"
 
 #: src/merge/output_control.cpp:244 src/merge/output_control.cpp:284
 msgid "mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"
@@ -6473,11 +6531,11 @@ msgstr "mm_text_io_c::read_next_char(): Ungültiges UTF-8-Zeichen. Erstes Byte: 
 
 #: src/mmg/mmg.cpp:661
 msgid "mmg debug output"
-msgstr ""
+msgstr "mmg Debugausgaben"
 
 #: src/mmg/options_dialog.cpp:75
 msgid "mmg options"
-msgstr ""
+msgstr "mmg-Optionen"
 
 #: src/input/r_mp3.cpp:62
 msgid "mp3_reader: Could not open the source file."
@@ -6501,7 +6559,7 @@ msgstr "mpeg_ps_reader: Hätte nicht passieren sollen #2. %1%"
 
 #: src/mmg/tab_input_general.cpp:128
 msgid "no"
-msgstr ""
+msgstr "nein"
 
 #: src/info/mkvinfo.cpp:757
 msgid "no encryption"
@@ -6525,13 +6583,12 @@ msgstr "kein Signaturprüfsummenalgorithmus"
 
 #: src/mmg/mmg.cpp:1378 src/mmg/mmg.cpp:1443 src/mmg/tab_input_format.cpp:225
 #: src/mmg/tab_input_general.cpp:121
-#, fuzzy
 msgid "none"
-msgstr "(keine)"
+msgstr "keine"
 
 #: src/mmg/options_dialog.cpp:66
 msgid "normal"
-msgstr ""
+msgstr "normal"
 
 #: src/input/r_ogm.cpp:452
 msgid "ogg_stream_init for stream number %1% failed. Will try to continue and ignore this stream.\n"
@@ -6554,13 +6611,12 @@ msgid "ogm_reader: Source is not a valid OGG media file."
 msgstr "ogm_reader: Die Quelldatei ist keine gültige Ogg Media-Datei."
 
 #: src/mmg/tab_chapters.cpp:1069
-#, fuzzy
 msgid "on_entry_selected: display == NULL. Should not have happened."
-msgstr "avc_es_reader: Hätte nicht passieren sollen."
+msgstr "on_entry_selected: display == NULL. Hätte nicht passieren sollen."
 
 #: src/mmg/mmg.cpp:1374 src/mmg/tab_input_general.cpp:119
 msgid "only for I frames"
-msgstr ""
+msgstr "nur für I-Frames"
 
 #: src/info/mkvinfo.cpp:545
 msgid "output sampling freq: %1%"
@@ -6568,7 +6624,7 @@ msgstr "Ausgabeabtastfrequenz: %1%"
 
 #: src/mmg/jobs.cpp:438 src/mmg/jobs.cpp:612
 msgid "pending"
-msgstr ""
+msgstr "wartend"
 
 #: src/info/mkvinfo.cpp:617
 msgid "pixel crop bottom: %1%"
@@ -6628,11 +6684,11 @@ msgstr "real_reader: Die Quelldatei ist keine gültige RealMedia-Datei."
 
 #: src/mmg/tab_input.cpp:104
 msgid "rem all"
-msgstr ""
+msgstr "alle entf."
 
 #: src/mmg/tab_attachments.cpp:62 src/mmg/tab_input.cpp:99
 msgid "remove"
-msgstr ""
+msgstr "entfernen"
 
 #: src/info/mkvinfo.cpp:703
 msgid "rest: unknown"
@@ -6667,9 +6723,8 @@ msgid "ssa_reader: Source is not a valid SSA/ASS file."
 msgstr "ssa_reader: Die Quelldatei ist keine gültige SSA/ASS-Datei."
 
 #: src/mmg/tab_chapters.cpp:907
-#, fuzzy
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
-msgstr "found_what == 0. Hätte nicht passieren dürfen. Bitte legen SIe einen Fehlerbericht an.\n"
+msgstr "start >= m->ListSize(). Hätte nicht passieren sollen. Bitte erstellen Sie einen Fehlerbericht. Danke."
 
 #: src/common/xml_element_parser.cpp:354
 msgid "start_element: pdata->bin != NULL"
@@ -6706,7 +6761,7 @@ msgstr "tta_reader: tag_size < 0 im Konstruktor. %1%\n"
 
 #: src/mmg/tab_input_general.cpp:169
 msgid "und (Undetermined)"
-msgstr ""
+msgstr "und (nicht festgelegt)"
 
 #: src/input/r_matroska.cpp:91 src/input/r_matroska.cpp:2140
 #: src/input/r_matroska.cpp:2147 src/input/r_mpeg_ps.cpp:1304
@@ -6720,7 +6775,7 @@ msgstr "unbekannt"
 
 #: src/mmg/tab_input.cpp:153
 msgid "up"
-msgstr ""
+msgstr "hoch"
 
 #: src/input/r_usf.cpp:101
 msgid "usf_reader: Could not open the source file."
@@ -6735,9 +6790,8 @@ msgid "vc1_es_reader: Could not open the source file."
 msgstr "vc1_es_reader: Die Quelldatei konnte nicht geöffnet werden."
 
 #: src/mmg/tab_chapters.cpp:833
-#, fuzzy
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
-msgstr "byte_buffer_c: (pos + num) > size. Hätte nicht passieren dürfen. Bitte legen SIe einen Fehlerbericht an.\n"
+msgstr "verify failed: chapters->CheckMandatory() ist false. Das hätte nicht passieren sollen. Bitte erstellen Sie einen Fehlerbericht.\n"
 
 #: src/input/r_matroska.cpp:94 src/mmg/tab_input.cpp:599
 #: src/mmg/tab_input.cpp:1177 src/info/mkvinfo.cpp:1014
@@ -6810,5 +6864,5 @@ msgstr "Falsche Benutzung: Schreibversuch im Nur-Lese-Modus"
 
 #: src/mmg/tab_input_general.cpp:127
 msgid "yes"
-msgstr ""
+msgstr "ja"
 

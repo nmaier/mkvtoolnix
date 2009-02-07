@@ -789,7 +789,7 @@ tab_chapters::verify_atom_recursively(EbmlElement *e) {
   }
   lang = string(*language);
   if ((0 == lang.size()) || !is_valid_iso639_2_code(lang.c_str())) {
-    wxMessageBox(wxString::Format(Z("The selected language '%s' for the chapter '%s'' is not a valid language code. Please select one of the predefined ones."),
+    wxMessageBox(wxString::Format(Z("The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."),
                                   wxU(lang.c_str()).c_str(), label.c_str()),
                  Z("Chapter verification error"), wxCENTER | wxOK | wxICON_ERROR);
     return false;
@@ -1390,7 +1390,7 @@ tab_chapters::on_adjust_timecodes(wxCommandEvent &evt) {
                         "either just a number in which case it is interpreted as the number of seconds,\n"
                         "it can be followed by the unit like 'ms' or 's' for milliseconds and seconds respectively,\n"
                         "or it can have the usual HH:MM:SS.mmm or HH:MM:SS format.\n"
-                        "Example: -00:05:23 would let all the chpaters begin\n"
+                        "Example: -00:05:23 would let all the chapters begin\n"
                         "5minutes and 23seconds earlier than now."),
                       Z("Adjust chapter timecodes"));
   strip(sadjustment);
