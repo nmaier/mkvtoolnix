@@ -95,22 +95,22 @@ tab_input::tab_input(wxWindow *parent):
   siz_line->Add(lb_input_files, 1, wxGROW | wxALL, STDSPACING);
 
   siz_column = new wxBoxSizer(wxVERTICAL);
-  b_add_file = new wxButton(this, ID_B_ADDFILE, Z("add"), wxDefaultPosition, wxSize(50, -1));
-  b_remove_file = new wxButton(this, ID_B_REMOVEFILE, Z("remove"), wxDefaultPosition, wxSize(50, -1));
+  b_add_file = new wxButton(this, ID_B_ADDFILE, Z("add"));
+  b_remove_file = new wxButton(this, ID_B_REMOVEFILE, Z("remove"));
   b_remove_file->Enable(false);
-  b_append_file = new wxButton(this, ID_B_APPENDFILE, Z("append"), wxDefaultPosition, wxSize(60, -1));
+  b_append_file = new wxButton(this, ID_B_APPENDFILE, Z("append"));
   b_append_file->Enable(false);
 
-  b_remove_all_files = new wxButton(this, ID_B_REMOVE_ALL_FILES, Z("rem all"), wxDefaultPosition, wxSize(60, -1));
+  b_remove_all_files = new wxButton(this, ID_B_REMOVE_ALL_FILES, Z("remove all"));
   b_remove_all_files->Enable(false);
 
-  siz_column->Add(b_add_file, 0, wxALL, STDSPACING);
-  siz_column->Add(b_remove_file, 0, wxALL, STDSPACING);
+  siz_column->Add(b_add_file, 0, wxGROW | wxALL, STDSPACING);
+  siz_column->Add(b_remove_file, 0, wxGROW | wxALL, STDSPACING);
   siz_line->Add(siz_column);
 
   siz_column = new wxBoxSizer(wxVERTICAL);
-  siz_column->Add(b_append_file, 0, wxALL, STDSPACING);
-  siz_column->Add(b_remove_all_files, 0, wxALL, STDSPACING);
+  siz_column->Add(b_append_file, 0, wxGROW | wxALL, STDSPACING);
+  siz_column->Add(b_remove_all_files, 0, wxGROW | wxALL, STDSPACING);
   siz_line->Add(siz_column);
 
   siz_all->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
@@ -150,12 +150,12 @@ tab_input::tab_input(wxWindow *parent):
   clb_tracks = new wxCheckListBox(this, ID_CLB_TRACKS);
   clb_tracks->Enable(false);
   siz_line->Add(clb_tracks, 1, wxGROW | wxALIGN_TOP | wxALL, STDSPACING);
-  b_track_up = new wxButton(this, ID_B_TRACKUP, Z("up"), wxDefaultPosition, wxSize(50, -1));
+  b_track_up = new wxButton(this, ID_B_TRACKUP, Z("up"));
   b_track_up->Enable(false);
-  siz_column->Add(b_track_up, 0, wxALL, STDSPACING);
-  b_track_down = new wxButton(this, ID_B_TRACKDOWN, Z("down"), wxDefaultPosition, wxSize(50, -1));
+  siz_column->Add(b_track_up, 0, wxGROW | wxALL, STDSPACING);
+  b_track_down = new wxButton(this, ID_B_TRACKDOWN, Z("down"));
   b_track_down->Enable(false);
-  siz_column->Add(b_track_down, 0, wxALL, STDSPACING);
+  siz_column->Add(b_track_down, 0, wxGROW | wxALL, STDSPACING);
   siz_line->Add(siz_column);
   siz_all->Add(siz_line, 3, wxGROW | wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
 

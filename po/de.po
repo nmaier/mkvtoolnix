@@ -734,7 +734,7 @@ msgstr "Ü&ber"
 
 #: src/mmg/mmg.cpp:686 src/mmg/mmg.cpp:773
 msgid "&Add to job queue"
-msgstr "Zur Jobwarteschlange &hinzufügen"
+msgstr "Zu Jobwarteschlange &hinzufügen"
 
 #: src/mmg/mmg.cpp:707
 msgid "&Attachments\tAlt-2"
@@ -754,7 +754,7 @@ msgstr "&Kommandozeile in Zwischenablage kopieren"
 
 #: src/mmg/mmg.cpp:768
 msgid "&Copy to clipboard"
-msgstr "In Zwischenablage &kopieren"
+msgstr "In &Zwischenablage kopieren"
 
 #: src/mmg/jobs.cpp:389
 msgid "&Disable"
@@ -814,7 +814,7 @@ msgstr "&Ok"
 
 #: src/mmg/mmg.cpp:673
 msgid "&Quit\tCtrl-Q"
-msgstr "&Beende\tCtrl-Q"
+msgstr "&Beenden\tCtrl-Q"
 
 #: src/mmg/jobs.cpp:386
 msgid "&Re-enable"
@@ -1446,7 +1446,7 @@ msgstr "Kommandozeilenoptionen hinzufügen"
 
 #: src/mmg/tab_chapters.cpp:301
 msgid "Add name"
-msgstr "Name hinzufügen"
+msgstr "Namen hinzufügen"
 
 #: src/mmg/tab_chapters.cpp:232
 msgid "Add subchapter"
@@ -5709,13 +5709,7 @@ msgstr "WAVPACK v4 Audio"
 
 #: src/mmg/options_dialog.cpp:110
 msgid "Warn about possible incorrect usage of mmg"
-msgstr ""
-"Die Jobdatei konnte nicht fehlerfrei geparst werden.\n"
-"Entweder ist sie ungültig/beschädigt, oder Sie haben\n"
-"soeben einen Bug in mmg gefunden. Bitte berichten Sie\n"
-"dem Autor Moritz Bunkus <moritz@bunkus.org> davon.\n"
-"\n"
-"(Problem trat auf in tab_input::load(), #2)"
+msgstr "Wegen potenziell falscher Benutzung von mmg warnen"
 
 #: src/input/subtitles.cpp:176
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
@@ -6683,8 +6677,8 @@ msgid "real_reader: Source is not a valid RealMedia file."
 msgstr "real_reader: Die Quelldatei ist keine gültige RealMedia-Datei."
 
 #: src/mmg/tab_input.cpp:104
-msgid "rem all"
-msgstr "alle entf."
+msgid "remove all"
+msgstr "alle entfernen"
 
 #: src/mmg/tab_attachments.cpp:62 src/mmg/tab_input.cpp:99
 msgid "remove"

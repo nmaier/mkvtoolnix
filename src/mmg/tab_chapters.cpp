@@ -227,17 +227,17 @@ tab_chapters::tab_chapters(wxWindow *parent,
   tc_chapters = new wxTreeCtrl(this, ID_TRC_CHAPTERS, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER | wxTR_HAS_BUTTONS);
 #endif
 
-  b_add_chapter = new wxButton(this, ID_B_ADDCHAPTER, Z("Add chapter"), wxDefaultPosition, wxSize(120, -1));
+  b_add_chapter = new wxButton(this, ID_B_ADDCHAPTER, Z("Add chapter"));
 
-  b_add_subchapter = new wxButton(this, ID_B_ADDSUBCHAPTER, Z("Add subchapter"), wxDefaultPosition, wxSize(120, -1));
+  b_add_subchapter = new wxButton(this, ID_B_ADDSUBCHAPTER, Z("Add subchapter"));
 
-  b_remove_chapter = new wxButton(this, ID_B_REMOVECHAPTER, Z("Remove chapter"), wxDefaultPosition, wxSize(120, -1));
+  b_remove_chapter = new wxButton(this, ID_B_REMOVECHAPTER, Z("Remove chapter"));
 
-  b_set_values = new wxButton(this, ID_B_SETVALUES, Z("Set values"), wxDefaultPosition, wxSize(120, -1));
+  b_set_values = new wxButton(this, ID_B_SETVALUES, Z("Set values"));
   b_set_values->SetToolTip(TIP("Here you can set the values for the language and the country that you want to apply to all the "
                                "chapters below and including the currently selected entry."));
 
-  b_adjust_timecodes = new wxButton(this, ID_B_ADJUSTTIMECODES, Z("Adjust timecodes"), wxDefaultPosition, wxSize(120, -1));
+  b_adjust_timecodes = new wxButton(this, ID_B_ADJUSTTIMECODES, Z("Adjust timecodes"));
   b_adjust_timecodes->SetToolTip(TIP("Here you can adjust all the timcdoes of the selected chapter and all its childrend by a specific amount either increasing or decreasing it."));
 
   siz_fg = new wxFlexGridSizer(2);
@@ -247,11 +247,11 @@ tab_chapters::tab_chapters(wxWindow *parent,
   siz_fg->Add(tc_chapters, 1, wxGROW | wxRIGHT | wxBOTTOM, 5);
 
   siz_column = new wxBoxSizer(wxVERTICAL);
-  siz_column->Add(b_add_chapter, 0, wxBOTTOM, 3);
-  siz_column->Add(b_add_subchapter, 0, wxBOTTOM, 3);
-  siz_column->Add(b_remove_chapter, 0, wxBOTTOM, 15);
-  siz_column->Add(b_set_values, 0, wxBOTTOM, 3);
-  siz_column->Add(b_adjust_timecodes, 0, wxBOTTOM, 3);
+  siz_column->Add(b_add_chapter, 0, wxGROW | wxBOTTOM, 3);
+  siz_column->Add(b_add_subchapter, 0, wxGROW | wxBOTTOM, 3);
+  siz_column->Add(b_remove_chapter, 0, wxGROW | wxBOTTOM, 15);
+  siz_column->Add(b_set_values, 0, wxGROW | wxBOTTOM, 3);
+  siz_column->Add(b_adjust_timecodes, 0, wxGROW | wxBOTTOM, 3);
   siz_fg->Add(siz_column, 0, wxLEFT | wxBOTTOM, 5);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
@@ -298,11 +298,11 @@ tab_chapters::tab_chapters(wxWindow *parent,
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->Add(lb_chapter_names, 1, wxGROW | wxRIGHT, 10);
 
-  b_add_chapter_name = new wxButton(this, ID_B_ADD_CHAPTERNAME, Z("Add name"), wxDefaultPosition, wxSize(100, -1));
-  b_remove_chapter_name = new wxButton(this, ID_B_REMOVE_CHAPTERNAME, Z("Remove name"), wxDefaultPosition, wxSize(100, -1));
+  b_add_chapter_name = new wxButton(this, ID_B_ADD_CHAPTERNAME, Z("Add name"));
+  b_remove_chapter_name = new wxButton(this, ID_B_REMOVE_CHAPTERNAME, Z("Remove name"));
   siz_column = new wxBoxSizer(wxVERTICAL);
-  siz_column->Add(b_add_chapter_name, 0, wxBOTTOM, 3);
-  siz_column->Add(b_remove_chapter_name, 0, 0, 0);
+  siz_column->Add(b_add_chapter_name, 0, wxGROW | wxBOTTOM, 3);
+  siz_column->Add(b_remove_chapter_name, 0, wxGROW, 0);
   siz_line->Add(siz_column, 0, 0, 0);
   siz_sb->Add(siz_line, 1, wxGROW | wxALL, 10);
 

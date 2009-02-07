@@ -153,6 +153,7 @@ cli_options_dlg::cli_options_dlg(wxWindow *parent):
 
 void
 cli_options_dlg::init_cli_option_list() {
+  all_cli_options.clear();
   all_cli_options.push_back(cli_option_t(  Z("### Global output control ###"),
                                            Z("Several options that control the overall output that mkvmerge creates.")));
   all_cli_options.push_back(cli_option_t(wxU("--cluster-length"),
@@ -760,27 +761,23 @@ mmg_dialog::mmg_dialog():
 
   wxBoxSizer *bs_buttons = new wxBoxSizer(wxHORIZONTAL);
 
-  b_start_muxing =
-    new wxButton(panel, ID_B_STARTMUXING, Z("Sta&rt muxing"), wxDefaultPosition, wxSize(130, -1));
+  b_start_muxing = new wxButton(panel, ID_B_STARTMUXING, Z("Sta&rt muxing"));
   bs_buttons->Add(b_start_muxing, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 8);
 
-  b_copy_to_clipboard =
-    new wxButton(panel, ID_B_COPYTOCLIPBOARD, Z("&Copy to clipboard"), wxDefaultPosition, wxSize(130, -1));
-  bs_buttons->Add(10, 0);
+  b_copy_to_clipboard = new wxButton(panel, ID_B_COPYTOCLIPBOARD, Z("&Copy to clipboard"));
   bs_buttons->Add(b_copy_to_clipboard, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 8);
 
-  b_add_to_jobqueue =
-    new wxButton(panel, ID_B_ADD_TO_JOBQUEUE, Z("&Add to job queue"), wxDefaultPosition, wxSize(130, -1));
+  b_add_to_jobqueue = new wxButton(panel, ID_B_ADD_TO_JOBQUEUE, Z("&Add to job queue"));
   bs_buttons->Add(b_add_to_jobqueue, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 8);
 
   bs_main->Add(bs_buttons, 0, wxALIGN_CENTER_HORIZONTAL);
 
 #ifdef SYS_WINDOWS
-  SetSizeHints(600, 680);
-  SetSize(600, 680);
+  SetSizeHints(700, 680);
+  SetSize(700, 680);
 #else
-  SetSizeHints(600, 660);
-  SetSize(600, 660);
+  SetSizeHints(700, 660);
+  SetSize(700, 660);
 #endif
 
   load_preferences();
@@ -2170,6 +2167,7 @@ mmg_app::OnInit() {
   int index;
 
   init_stdio();
+  init_locales();
   mm_file_io_c::setup();
   cc_local_utf8 = utf8_init("");
   xml_element_map_init();
