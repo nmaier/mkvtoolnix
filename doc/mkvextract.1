@@ -144,6 +144,27 @@ Show usage information.
 \fB\-V\fR, \fB\-\-version\fR
 Show version information.
 
+.LP
+The following options can always be used no matter which mode has been
+selected:
+.TP
+\fB\-\-output\-charset\fR <\fIcharset\fR>
+Sets the charset to which strings are converted that are to be output.
+It defaults to the charset given by system's current locale.
+.TP
+\fB-r\fR, \fB\-\-redirect\-output\fR <\fIfilename\fR>
+Writes all messages to the file \fIfilename\fR instead of to the console.
+While this can be done easily with output redirection there are cases in which
+this option is needed: when the terminal reinterprets the output before
+writing it to a file.
+The charset set with \fB\-\-output-charset\fR is honored.
+.TP
+\fB\-\-ui\-language\fR <\fIcode\fR>
+Forces the translations for the language \fIcode\fR to be used (e.g.
+\fIde_DE\fR for the German translations). If is preferable to use the
+environment variables LANG, LC_MESSAGES and LC_ALL though. Entering "list" as
+the \fIcode\fR will cause mkextract to output a list of available translations.
+
 
 .SH NOTES
 The decision about the output format is based on the track type, not on the

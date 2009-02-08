@@ -521,6 +521,12 @@ this option is needed: when the terminal reinterprets the output before
 writing it to a file.
 The charset set with \fB\-\-output-charset\fR is honored.
 .TP
+\fB\-\-ui\-language\fR <\fIcode\fR>
+Forces the translations for the language \fIcode\fR to be used (e.g.
+\fIde_DE\fR for the German translations). If is preferable to use the
+environment variables LANG, LC_MESSAGES and LC_ALL though. Entering "list" as
+the \fIcode\fR will cause mkvmerge to output a list of available translations.
+.TP
 \fB@\fR\fIoptionsfile\fR
 Reads additional command line arguments from the file \fIoptionsfile\fR.
 Lines whose first non-whitespace character is a hash mark (#) are treated

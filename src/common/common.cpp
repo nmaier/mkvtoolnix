@@ -58,6 +58,7 @@ using namespace libebml;
 #include "mm_io.h"
 #include "random.h"
 #include "smart_pointers.h"
+#include "translation.h"
 
 const string empty_string("");
 int verbose = 1;
@@ -1542,8 +1543,10 @@ string usage_text, version_info;
    \param redirect_output_short The name of the short option that is
      recognized for --redirect-output. If left empty then no short
      version is accepted.
+   \returns \c true if the locale has changed and the function should be
+     called again and \c false otherwise.
 */
-void
+bool
 handle_common_cli_args(vector<string> &args,
                        const string &redirect_output_short) {
   int i;
@@ -1582,6 +1585,35 @@ handle_common_cli_args(vector<string> &args,
       ++i;
   }
 
+  // Check for the translations to use (if any).
+  i = 0;
+  while (args.size() > i) {
+    if (args[i] == "--ui-language") {
+      if ((i + 1) == args.size())
+        mxerror(Y("Missing argument for '--ui-language'.\n"));
+
+      if (args[i + 1] == "list") {
+        mxinfo(Y("Available translations:\n"));
+        std::vector<translation_c>::iterator translation = translation_c::ms_available_translations.begin();
+        while (translation != translation_c::ms_available_translations.end()) {
+          mxinfo(boost::format("  %1% (%2%)\n") % translation->m_locale % translation->m_english_name);
+          ++translation;
+        }
+        mxexit(0);
+      }
+
+      if (!translation_c::is_translation_available(args[i + 1]))
+        mxerror(boost::format(Y("There is no translation available for '%1%'.\n")) % args[i + 1]);
+
+      init_locales(args[i + 1]);
+
+      args.erase(args.begin() + i, args.begin() + i + 2);
+
+      return true;
+    } else
+      ++i;
+  }
+
   // Last find the --help and --version arguments.
   i = 0;
   while (args.size() > i) {
@@ -1600,6 +1632,8 @@ handle_common_cli_args(vector<string> &args,
     else
       ++i;
   }
+
+  return false;
 }
 
 void

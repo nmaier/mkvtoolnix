@@ -156,7 +156,7 @@ string MTX_DLL_API from_utf8(int handle, const string &utf8);
 vector<string> MTX_DLL_API command_line_utf8(int argc, char **argv);
 extern string MTX_DLL_API usage_text, version_info;
 void MTX_DLL_API usage(int exit_code = 0);
-void MTX_DLL_API handle_common_cli_args(vector<string> &args,
+bool MTX_DLL_API handle_common_cli_args(vector<string> &args,
                                         const string &redirect_output_short);
 
 enum unique_id_category_e {

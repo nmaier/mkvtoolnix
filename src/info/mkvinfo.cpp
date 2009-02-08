@@ -248,7 +248,9 @@ parse_args(vector<string> args,
 
   use_gui = false;
 
-  handle_common_cli_args(args, "-o");
+  set_usage();
+  while (handle_common_cli_args(args, "-o"))
+    set_usage();
 
   // Now parse the rest of the arguments.
   for (i = 0; i < args.size(); i++)
@@ -1843,7 +1845,6 @@ void
 setup() {
   init_stdio();
   init_locales();
-  set_usage();
 
   mm_file_io_c::setup();
   cc_local_utf8 = utf8_init("");

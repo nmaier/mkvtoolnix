@@ -264,6 +264,7 @@ set_usage() {
   usage_text += Y("  --list-languages         Lists all ISO639 languages and their\n"
                   "                           ISO639-2 codes.\n");
   usage_text += Y("  --priority <priority>    Set the priority mkvmerge runs with.\n");
+  usage_text += Y("  --ui-language <code>     Force the translations for 'code' to be used.\n");
   usage_text += Y("  --command-line-charset <charset>\n"
                   "                           Charset for strings on the command line\n");
   usage_text += Y("  --output-charset <cset>  Output messages in this charset\n");
@@ -1521,7 +1522,9 @@ parse_arg_default_language(const string &arg) {
 */
 static void
 parse_args(vector<string> args) {
-  handle_common_cli_args(args, "");
+  set_usage();
+  while (handle_common_cli_args(args, ""))
+    set_usage();
 
   // Check if only information about the file is wanted. In this mode only
   // two parameters are allowed: the --identify switch and the file.
@@ -2096,7 +2099,6 @@ main(int argc,
      char **argv) {
   init_globals();
   setup();
-  set_usage();
   init_input_file_type_list();
 
   parse_args(command_line_utf8(argc, argv));

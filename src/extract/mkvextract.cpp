@@ -155,7 +155,9 @@ parse_args(vector<string> args,
 
   verbose = 0;
 
-  handle_common_cli_args(args, "-o");
+  set_usage();
+  while (handle_common_cli_args(args, "-o"))
+    set_usage();
 
   if (args.empty())
     usage();
@@ -336,7 +338,6 @@ main(int argc,
      char **argv) {
   init_stdio();
   init_locales();
-  set_usage();
 
 #if defined(SYS_UNIX)
   nice(2);

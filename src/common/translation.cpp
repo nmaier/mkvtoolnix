@@ -39,6 +39,7 @@ translation_c::translation_c(const std::string &locale,
 
 void
 translation_c::initialize_available_translations() {
+  ms_available_translations.clear();
   ms_available_translations.push_back(translation_c("en_US", "English", "English"));
   ms_available_translations.push_back(translation_c("de_DE", "German",  "Deutsch"));
 }
@@ -65,6 +66,7 @@ init_locales(std::string locale) {
 
   if (setlocale(LC_MESSAGES, locale.c_str()) == NULL)
     mxerror("The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n");
+
   bindtextdomain("mkvtoolnix", MTX_LOCALE_DIR);
   textdomain("mkvtoolnix");
   bind_textdomain_codeset("mkvtoolnix", "UTF-8");
