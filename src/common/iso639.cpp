@@ -535,9 +535,7 @@ const iso639_language_t iso639_languages[] = {
 
 bool
 is_valid_iso639_2_code(const char *iso639_2_code) {
-  int i;
-
-  i = 0;
+  int i = 0;
   while (iso639_languages[i].iso639_2_code != NULL) {
     if (!strcmp(iso639_languages[i].iso639_2_code, iso639_2_code))
       return true;
@@ -549,9 +547,7 @@ is_valid_iso639_2_code(const char *iso639_2_code) {
 
 void
 list_iso639_languages() {
-  int i;
-
-  i = 0;
+  int i = 0;
   mxinfo(Y("                             English language name | ISO639-2 code | ISO639-1 code\n"
            "---------------------------------------------------+---------------+--------------\n"));
   while (iso639_languages[i].iso639_2_code != NULL) {
