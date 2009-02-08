@@ -153,10 +153,13 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent,
   siz_all->Add(siz_input, 0, wxGROW | wxLEFT | wxRIGHT, 10);
   siz_all->AddSpacer(10);
 
+  bool found = false;
   for (i = 0; i < sorted_iso_codes.Count(); i++) {
     cob_language->Append(sorted_iso_codes[i]);
-    if (extract_language_code(sorted_iso_codes[i]) == old_def_language)
+    if (!found && (extract_language_code(sorted_iso_codes[i]) == old_def_language)) {
       cob_language->SetValue(sorted_iso_codes[i]);
+      found = true;
+    }
   }
 
   cob_country->Append(wxEmptyString);
