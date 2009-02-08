@@ -24,14 +24,17 @@ public:
   static std::vector<translation_c> ms_available_translations;
 
 public:
-  std::string m_locale, m_english_name, m_translated_name;
+  std::string m_unix_locale, m_windows_locale, m_english_name, m_translated_name;
 
-  translation_c(const std::string &locale,
+  translation_c(const std::string &unix_locale,
+                const std::string &win32_locale,
                 const std::string &english_name,
                 const std::string &translated_name);
 
+  std::string get_locale();
+
   static void initialize_available_translations();
-  static bool is_translation_available(const std::string &locale);
+  static int look_up_translation(const std::string &locale);
 };
 
 void MTX_DLL_API init_locales(std::string locale = "");

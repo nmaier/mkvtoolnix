@@ -1596,13 +1596,13 @@ handle_common_cli_args(vector<string> &args,
         mxinfo(Y("Available translations:\n"));
         std::vector<translation_c>::iterator translation = translation_c::ms_available_translations.begin();
         while (translation != translation_c::ms_available_translations.end()) {
-          mxinfo(boost::format("  %1% (%2%)\n") % translation->m_locale % translation->m_english_name);
+          mxinfo(boost::format("  %1% (%2%)\n") % translation->get_locale() % translation->m_english_name);
           ++translation;
         }
         mxexit(0);
       }
 
-      if (!translation_c::is_translation_available(args[i + 1]))
+      if (-1 == translation_c::look_up_translation(args[i + 1]))
         mxerror(boost::format(Y("There is no translation available for '%1%'.\n")) % args[i + 1]);
 
       init_locales(args[i + 1]);
