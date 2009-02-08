@@ -75,9 +75,9 @@ Section "Program files" SEC01
 
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  File "libcharset.dll"
   File "libebml.dll"
-  File "libiconv.dll"
+  File "libiconv-2.dll"
+  File "libintl-8.dll"
   File "libmatroska.dll"
   File "magic1.dll"
   File "regex2.dll"
@@ -132,12 +132,17 @@ Section "Program files" SEC01
   File "examples\matroskachapters.dtd"
   File "examples\matroskasegmentinfo.dtd"
   File "examples\matroskatags.dtd"
+  SetOutPath "$INSTDIR\locale\german\LC_MESSAGES"
+  File "/oname=mkvtoolnix.mo" "po\de.mo"
 
   # Delete files that might be present from older installation
   # if this is just an upgrade.
   Delete "$INSTDIR\base64tool.exe"
   Delete "$INSTDIR\doc\base64tool.html"
   Delete "$INSTDIR\cygz.dll"
+  Delete "$INSTDIR\libcharset.dll"
+  Delete "$INSTDIR\libiconv.dll"
+
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\AppMainExe.exe"
   Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\base64tool CLI reference.lnk"
   SetShellVarContext current
@@ -293,6 +298,11 @@ Section Uninstall
   Delete "$INSTDIR\examples\matroskasegmentinfo.dtd"
   Delete "$INSTDIR\examples\matroskatags.dtd"
 
+  Delete "$INSTDIR\locale\german\LC_MESSAGES\mkvtoolnix.mo"
+
+  RMDir "$INSTDIR\locale\german\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\german"
+  RMDir "$INSTDIR\locale"
   RMDir "$INSTDIR\data"
   RMDir "$INSTDIR\doc\images"
   RMDir "$INSTDIR\doc"
