@@ -48,6 +48,7 @@
 #include "tab_chapters.h"
 #include "tab_input.h"
 #include "tab_global.h"
+#include "translation.h"
 #include "xml_element_mapping.h"
 
 mmg_app *app;

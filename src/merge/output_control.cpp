@@ -102,6 +102,7 @@
 #include "r_wavpack.h"
 #include "r_corepicture.h"
 #include "tag_common.h"
+#include "translation.h"
 #include "xml_element_mapping.h"
 
 using namespace libmatroska;

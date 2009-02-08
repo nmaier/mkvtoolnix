@@ -50,6 +50,7 @@
 #include "mkvextract.h"
 #include "mm_io.h"
 #include "tagwriter.h"
+#include "translation.h"
 #include "xml_element_mapping.h"
 
 using namespace libmatroska;

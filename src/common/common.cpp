@@ -437,17 +437,6 @@ get_local_charset() {
   return lc_charset;
 }
 
-void
-init_locales() {
-#if ! defined(SYS_WINDOWS) && defined(HAVE_LIBINTL_H)
-  if (setlocale(LC_MESSAGES, "") == NULL)
-    mxerror("The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n");
-  bindtextdomain("mkvtoolnix", MTX_LOCALE_DIR);
-  textdomain("mkvtoolnix");
-  bind_textdomain_codeset("mkvtoolnix", "UTF-8");
-#endif
-}
-
 int
 utf8_init(const string &charset) {
   string lc_charset;
