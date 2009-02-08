@@ -1355,7 +1355,7 @@ mmg_dialog::update_command_line() {
           sids += wxT(",");
         sids += sid;
 
-        if ((t->sub_charset.Length() > 0) && (t->sub_charset != Z("default"))) {
+        if ((t->sub_charset.Length() > 0) && (t->sub_charset != wxT("default"))) {
           clargs.Add(wxT("--sub-charset"));
           clargs.Add(sid + wxT(":") + shell_escape(t->sub_charset));
         }
@@ -1366,13 +1366,13 @@ mmg_dialog::update_command_line() {
         clargs.Add(sid + wxT(":") + extract_language_code(t->language));
       }
 
-      if (!t->appending && (t->cues != Z("default"))) {
+      if (!t->appending && (t->cues != wxT("default"))) {
         clargs.Add(wxT("--cues"));
-        if (t->cues == Z("only for I frames"))
+        if (t->cues == wxT("only for I frames"))
           clargs.Add(sid + wxT(":iframes"));
-        else if (t->cues == Z("for all frames"))
+        else if (t->cues == wxT("for all frames"))
           clargs.Add(sid + wxT(":all"));
-        else if (t->cues == Z("none"))
+        else if (t->cues == wxT("none"))
           clargs.Add(sid + wxT(":none"));
       }
 
@@ -1437,7 +1437,7 @@ mmg_dialog::update_command_line() {
 
       if (!t->appending && (t->compression.Length() > 0)) {
         wxString compression = t->compression;
-        if (compression == Z("none"))
+        if (compression == wxT("none"))
           compression = wxT("none");
         clargs.Add(wxT("--compression"));
         clargs.Add(sid + wxT(":") + compression);

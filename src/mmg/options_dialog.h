@@ -54,7 +54,7 @@ public:
   mmg_options_t &m_options;
 
 public:
-  static std::vector<wxString> ms_priorities;
+  translation_table_c cob_priority_translations;
 
 public:
   options_dialog(wxWindow *parent, mmg_options_t &options);

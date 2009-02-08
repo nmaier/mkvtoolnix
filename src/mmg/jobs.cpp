@@ -265,7 +265,8 @@ job_run_dialog::on_end_process(wxProcessEvent &evt) {
 
   jobs[ndx].finished_on = time(NULL);
 
-  add_to_log(wxString::Format(Z("Finished job ID %d on %s: status '%s'"), jobs[ndx].id, format_date_time(jobs[ndx].finished_on).c_str(), status));
+  wxString format = Z("Finished job ID %d on %s: status '%s'");
+  add_to_log(wxString::Format(format, jobs[ndx].id, format_date_time(jobs[ndx].finished_on).c_str(), status));
 
   mdlg->save_job_queue();
   delete process;

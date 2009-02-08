@@ -80,13 +80,13 @@ mux_dialog::mux_dialog(wxWindow *parent):
   siz_buttons->AddStretchSpacer();
   b_ok = new wxButton(this, ID_B_MUX_OK, Z("Ok"));
   b_ok->Enable(false);
-  siz_buttons->Add(b_ok);
+  siz_buttons->Add(b_ok, 0, wxGROW);
   siz_buttons->AddStretchSpacer();
   b_abort = new wxButton(this, ID_B_MUX_ABORT, Z("Abort"));
-  siz_buttons->Add(b_abort);
+  siz_buttons->Add(b_abort, 0, wxGROW);
   siz_buttons->AddStretchSpacer();
   b_save_log = new wxButton(this, ID_B_MUX_SAVELOG, Z("Save log"));
-  siz_buttons->Add(b_save_log);
+  siz_buttons->Add(b_save_log, 0, wxGROW);
   siz_buttons->AddStretchSpacer();
 
   siz_all = new wxBoxSizer(wxVERTICAL);

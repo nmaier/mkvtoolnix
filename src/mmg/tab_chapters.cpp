@@ -11,6 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "os.h"
+
 #include <errno.h>
 #include <stdio.h>
 
@@ -32,6 +34,7 @@
 #include "mmg_dialog.h"
 #include "kax_analyzer.h"
 #include "tab_chapters.h"
+#include "wxcommon.h"
 
 using namespace std;
 using namespace libebml;

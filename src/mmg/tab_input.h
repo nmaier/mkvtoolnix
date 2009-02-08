@@ -73,6 +73,9 @@ public:
 
   tab_input *input;
 
+  translation_table_c cob_cues_translations;
+  translation_table_c cob_default_translations;
+
 public:
   tab_input_general(wxWindow *parent, tab_input *ti);
 
@@ -107,6 +110,9 @@ public:
   wxStaticText *st_fps, *st_nalu_size_length;
 
   tab_input *input;
+
+  translation_table_c cob_sub_charset_translations;
+  translation_table_c cob_compression_translations;
 
 public:
   tab_input_format(wxWindow *parent, tab_input *ti);

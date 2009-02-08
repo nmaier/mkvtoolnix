@@ -115,17 +115,25 @@ tab_input_general::tab_input_general(wxWindow *parent,
 
 void
 tab_input_general::setup_cues() {
-  cob_cues->Append(Z("default"));
-  cob_cues->Append(Z("only for I frames"));
-  cob_cues->Append(Z("for all frames"));
-  cob_cues->Append(Z("none"));
+  cob_cues_translations.add(wxT("default"),           Z("default"));
+  cob_cues_translations.add(wxT("only for I frames"), Z("only for I frames"));
+  cob_cues_translations.add(wxT("for all frames"),    Z("for all frames"));
+  cob_cues_translations.add(wxT("none"),              Z("none"));
+
+  int i;
+  for (i = 0; cob_cues_translations.entries.size() > i; ++i)
+    cob_cues->Append(cob_cues_translations.entries[i].translated);
 }
 
 void
 tab_input_general::setup_default_track() {
-  cob_default->Append(Z("default"));
-  cob_default->Append(Z("yes"));
-  cob_default->Append(Z("no"));
+  cob_default_translations.add(wxT("default"), Z("default"));
+  cob_default_translations.add(wxT("yes"),     Z("yes"));
+  cob_default_translations.add(wxT("no"),      Z("no"));
+
+  int i;
+  for (i = 0; cob_default_translations.entries.size() > i; ++i)
+    cob_default->Append(cob_default_translations.entries[i].translated);
 }
 
 void
@@ -242,7 +250,7 @@ tab_input_general::on_cues_selected(wxCommandEvent &evt) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
-  tracks[input->selected_track]->cues = cob_cues->GetStringSelection();
+  tracks[input->selected_track]->cues = cob_cues_translations.to_english(cob_cues->GetStringSelection());
 }
 
 void

@@ -221,6 +221,8 @@ tab_input_format::setup_control_contents() {
   for (i = 0; i < sorted_charsets.Count(); i++)
     cob_sub_charset->Append(sorted_charsets[i]);
 
+  cob_sub_charset_translations.add(wxT("default"), Z("default"));
+
   cob_compression->Append(wxEmptyString);
   cob_compression->Append(Z("none"));
   cob_compression->Append(wxT("zlib"));
@@ -228,6 +230,8 @@ tab_input_format::setup_control_contents() {
     cob_compression->Append(wxT("bz2"));
   if (capabilities[wxT("LZO")] == wxT("true"))
     cob_compression->Append(wxT("lzo"));
+
+  cob_compression_translations.add(wxT("none"), Z("none"));
 }
 
 void
@@ -309,7 +313,7 @@ tab_input_format::on_subcharset_selected(wxCommandEvent &evt) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
-  tracks[input->selected_track]->sub_charset = cob_sub_charset->GetStringSelection();
+  tracks[input->selected_track]->sub_charset = cob_sub_charset_translations.to_english(cob_sub_charset->GetStringSelection());
 }
 
 void
@@ -373,7 +377,7 @@ tab_input_format::on_compression_selected(wxCommandEvent &evt) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
-  tracks[input->selected_track]->compression = cob_compression->GetStringSelection();
+  tracks[input->selected_track]->compression = cob_compression_translations.to_english(cob_compression->GetStringSelection());
 }
 
 void

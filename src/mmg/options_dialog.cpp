@@ -25,8 +25,6 @@
 #include "mmg_dialog.h"
 #include "options_dialog.h"
 
-std::vector<wxString> options_dialog::ms_priorities;
-
 options_dialog::options_dialog(wxWindow *parent,
                                mmg_options_t &options)
   : wxDialog(parent, -1, Z("Options"), wxDefaultPosition, wxDefaultSize)
@@ -36,14 +34,14 @@ options_dialog::options_dialog(wxWindow *parent,
   wxStaticText *st_priority, *st_mkvmerge;
   wxButton *b_browse;
 
-  if (ms_priorities.empty()) {
+  if (cob_priority_translations.entries.empty()) {
 #ifdef SYS_WINDOWS
-    ms_priorities.push_back(wxT("highest"));
-    ms_priorities.push_back(wxT("higher"));
+    cob_priority_translations.add(wxT("highest"), Z("highest"));
+    cob_priority_translations.add(wxT("higher"),  Z("higher"));
 #endif
-    ms_priorities.push_back(wxT("normal"));
-    ms_priorities.push_back(wxT("lower"));
-    ms_priorities.push_back(wxT("lowest"));
+    cob_priority_translations.add(wxT("normal"),  Z("normal"));
+    cob_priority_translations.add(wxT("lower"),   Z("lower"));
+    cob_priority_translations.add(wxT("lowest"),  Z("lowest"));
   }
 
   // Create the controls.
@@ -59,13 +57,9 @@ options_dialog::options_dialog(wxWindow *parent,
 
   cob_priority->SetToolTip(TIP("Sets the priority that mkvmerge will run with."));
 
-#if defined(SYS_WINDOWS)
-  cob_priority->Append(Z("highest"));
-  cob_priority->Append(Z("higher"));
-#endif
-  cob_priority->Append(Z("normal"));
-  cob_priority->Append(Z("lower"));
-  cob_priority->Append(Z("lowest"));
+  int i;
+  for (i = 0; cob_priority_translations.entries.size() > i; ++i)
+    cob_priority->Append(cob_priority_translations.entries[i].translated);
 
   cb_always_use_simpleblock = new wxCheckBox(this, ID_CB_ALWAYS_USE_SIMPLEBLOCK, Z("Always use simple blocks"));
   cb_always_use_simpleblock->SetToolTip(TIP("Always adds '--engage use_simpleblock' to the command line. "
@@ -300,19 +294,12 @@ options_dialog::on_ok(wxCommandEvent &evt) {
 
 void
 options_dialog::select_priority(const wxString &priority) {
-  int i;
-
-  for (i = 0; ms_priorities.size() > i; ++i)
-    if (priority == ms_priorities[i]) {
-      if (cob_priority->GetCount() > i)
-        cob_priority->SetValue(cob_priority->GetString(i));
-      return;
-    }
+  cob_priority->SetValue(cob_priority_translations.to_translated(priority));
 }
 
 wxString
 options_dialog::get_selected_priority() {
-  return ms_priorities[cob_priority->GetSelection()];
+  return cob_priority_translations.to_english(cob_priority->GetValue());
 }
 
 IMPLEMENT_CLASS(options_dialog, wxDialog);

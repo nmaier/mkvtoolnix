@@ -889,18 +889,17 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
 
   ti_general->cob_language->SetValue(lang);
   ti_general->tc_track_name->SetValue(t->track_name);
-  ti_general->cob_cues->SetValue(t->cues);
+  ti_general->cob_cues->SetValue(ti_general->cob_cues_translations.to_translated(t->cues));
   ti_format->tc_delay->SetValue(t->delay);
   ti_format->tc_stretch->SetValue(t->stretch);
-  ti_format->cob_sub_charset->SetValue(t->sub_charset);
-  ti_general->tc_tags->SetValue(t->tags);
+  ti_format->cob_sub_charset->SetValue(ti_format->cob_sub_charset_translations.to_translated(t->sub_charset));
   ti_general->cob_default->SetSelection(t->default_track);
   ti_format->cb_aac_is_sbr->SetValue(t->aac_is_sbr);
   set_combobox_selection(ti_format->cob_aspect_ratio, t->aspect_ratio);
   ti_format->tc_display_width->SetValue(t->dwidth);
   ti_format->tc_display_height->SetValue(t->dheight);
   selected_track = new_sel;
-  ti_format->cob_compression->SetValue(t->compression);
+  ti_format->cob_compression->SetValue(ti_format->cob_compression_translations.to_translated(t->compression));
   ti_general->tc_timecodes->SetValue(t->timecodes);
   set_combobox_selection(ti_format->cob_fourcc, t->fourcc);
   set_combobox_selection(ti_format->cob_fps, t->fps);
