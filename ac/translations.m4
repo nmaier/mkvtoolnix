@@ -26,7 +26,7 @@ if test x"$gettext_found" = xyes ; then
   fi
   opt_features_yes="$opt_features_yes\n   * translations (gettext)"
 else
-  opt_features_no="$opt_features_yes\n   * translations (gettext)"
+  opt_features_no="$opt_features_no\n   * translations (gettext)"
 fi
 
 AC_SUBST(LIBINTL_LIBS)
