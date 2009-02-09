@@ -172,10 +172,10 @@ void set_combobox_selection(wxComboBox *cb, const wxString wanted);
 void wxdie(const wxString &errmsg);
 
 #if defined(SYS_WINDOWS)
-#define TIP(s) format_tooltip(wxU(s))
+#define TIP(s) format_tooltip(Z(s))
 wxString format_tooltip(const wxString &s);
 #else
-#define TIP(s) wxU(s)
+#define TIP(s) Z(s)
 #endif
 
 class mmg_app: public wxApp {
