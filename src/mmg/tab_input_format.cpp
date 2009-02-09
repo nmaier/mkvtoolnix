@@ -143,7 +143,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   siz_fg->Add(st_stretch, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   tc_stretch = new wxTextCtrl(this, ID_TC_STRETCH, wxEmptyString);
-  tc_stretch->SetToolTip(TIP("Stretch this track's timecodes a. This entry can have two formats. "
+  tc_stretch->SetToolTip(TIP("Stretch this track's timecodes. This entry can have two formats. "
                              "It is either a positive floating point number, or a fraction like e.g. 1200/1253. "
                              "Works best on video and subtitle tracks."));
   tc_stretch->SetSizeHints(0, -1);

@@ -122,19 +122,19 @@ tab_input::tab_input(wxWindow *parent):
 
   cb_no_chapters = new wxCheckBox(this, ID_CB_NOCHAPTERS, Z("No chapters"));
   cb_no_chapters->SetValue(false);
-  cb_no_chapters->SetToolTip(TIP("Do not copy chapters from this file. Only applies to Matroska files."));
+  cb_no_chapters->SetToolTip(TIP("Do not copy chapters from this file. Only applies to a couple of formats (e.g. Matroska files)."));
   cb_no_chapters->Enable(false);
   siz_line->Add(cb_no_chapters, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   cb_no_attachments = new wxCheckBox(this, ID_CB_NOATTACHMENTS, Z("No attachments"));
   cb_no_attachments->SetValue(false);
-  cb_no_attachments->SetToolTip(TIP("Do not copy attachments from this file. Only applies to Matroska files."));
+  cb_no_attachments->SetToolTip(TIP("Do not copy attachments from this file. Only applies to a couple of formats (e.g. Matroska files)."));
   cb_no_attachments->Enable(false);
   siz_line->Add(cb_no_attachments, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   cb_no_tags = new wxCheckBox(this, ID_CB_NOTAGS, Z("No tags"));
   cb_no_tags->SetValue(false);
-  cb_no_tags->SetToolTip(TIP("Do not copy tags from this file. Only applies to Matroska files."));
+  cb_no_tags->SetToolTip(TIP("Do not copy tags from this file. Only applies to a couple of formats (e.g. Matroska files)."));
   cb_no_tags->Enable(false);
   siz_line->Add(cb_no_tags, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
   siz_all->Add(siz_line, 0, wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
