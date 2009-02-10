@@ -19,9 +19,10 @@
 
 #include "os.h"
 
-#include "wx/string.h"
 #include "wx/app.h"
 #include "wx/combobox.h"
+#include "wx/config.h"
+#include "wx/string.h"
 
 #include "ebml/EbmlUnicodeString.h"
 
@@ -180,8 +181,11 @@ wxString format_tooltip(const wxString &s);
 
 class mmg_app: public wxApp {
 public:
+  std::string m_ui_locale;
+public:
   virtual bool OnInit();
   virtual int OnExit();
+  virtual void init_ui_locale(wxConfigBase *cfg);
 };
 
 extern mmg_app *app;

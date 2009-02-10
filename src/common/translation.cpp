@@ -47,8 +47,10 @@ translation_c::translation_c(const std::string &unix_locale,
 void
 translation_c::initialize_available_translations() {
   ms_available_translations.clear();
+#if defined(HAVE_LIBINTL_H)
   ms_available_translations.push_back(translation_c("en_US", "english", "English", "English"));
   ms_available_translations.push_back(translation_c("de_DE", "german",  "German",  "Deutsch"));
+#endif
 }
 
 int
@@ -68,6 +70,47 @@ translation_c::look_up_translation(const std::string &locale) {
 }
 
 std::string
+translation_c::get_default_ui_locale() {
+  std::string locale;
+
+#if defined(HAVE_LIBINTL_H)
+# if defined(SYS_WINDOWS)
+  char *data;
+  int len = GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SENGLANGUAGE, NULL, 0);
+  if (0 < len) {
+    data = (char *)safemalloc(len);
+    memset(data, 0, len);
+    if (0 != GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SENGLANGUAGE, data, len))
+      locale = data;
+    safefree(data);
+  }
+
+# else  // SYS_WINDOWS
+
+  char *data = setlocale(LC_MESSAGES, NULL);
+  if (NULL != data) {
+    std::string previous_locale = data;
+    setlocale(LC_MESSAGES, "");
+    data = setlocale(LC_MESSAGES, NULL);
+
+    if (NULL != data) {
+      std::vector<std::string> parts = split(data, ".");
+      locale                         = parts[0];
+    }
+
+    setlocale(LC_MESSAGES, previous_locale.c_str());
+  }
+
+# endif // SYS_WINDOWS
+#endif  // HAVE_LIBINTL_H
+
+  if (!locale.empty() && (-1 == look_up_translation(locale)))
+    locale = "";
+
+  return locale;
+}
+
+std::string
 translation_c::get_locale() {
 #if defined(SYS_WINDOWS)
   return m_windows_locale;
@@ -84,25 +127,13 @@ init_locales(std::string locale) {
 
   string locale_dir;
 
-  if (!locale.empty()) {
-    int idx = translation_c::look_up_translation(locale);
-    if (-1 == idx)
-      locale = "";
-  }
+  if (-1 == translation_c::look_up_translation(locale))
+    locale = "";
+
+  if (locale.empty())
+    locale = translation_c::get_default_ui_locale();
 
 # if defined(SYS_WINDOWS)
-  if (locale.empty()) {
-    char *data;
-    int len = GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SENGLANGUAGE, NULL, 0);
-    if (0 < len) {
-      data = (char *)safemalloc(len);
-      memset(data, 0, len);
-      if (0 != GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SENGLANGUAGE, data, len))
-        locale = data;
-      safefree(data);
-    }
-  }
-
   if (!locale.empty()) {
     // The Windows system headers define LC_MESSAGES but
     // Windows itself doesn't know it and treats "set_locale(LC_MESSAGES, ...)"

@@ -35,6 +35,7 @@ public:
 
   static void initialize_available_translations();
   static int look_up_translation(const std::string &locale);
+  static std::string get_default_ui_locale();
 };
 
 void MTX_DLL_API init_locales(std::string locale = "");

@@ -2160,6 +2160,25 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_CLOSE(mmg_dialog::on_close)
 END_EVENT_TABLE();
 
+void
+mmg_app::init_ui_locale(wxConfigBase *cfg) {
+  wxString w_locale;
+  std::string locale;
+
+  translation_c::initialize_available_translations();
+
+  cfg->SetPath(wxT("/GUI"));
+  if (cfg->Read(wxT("ui_locale"), &w_locale)) {
+    locale = wxMB(w_locale);
+    if (-1 == translation_c::look_up_translation(locale))
+      locale = "";
+  }
+
+  m_ui_locale = locale;
+
+  init_locales(locale);
+}
+
 bool
 mmg_app::OnInit() {
   wxConfigBase *cfg;
@@ -2167,14 +2186,15 @@ mmg_app::OnInit() {
   wxString k, v;
   int index;
 
+  cfg = new wxConfig(wxT("mkvmergeGUI"));
+  wxConfigBase::Set(cfg);
+
   init_stdio();
-  init_locales();
+  init_ui_locale(cfg);
   mm_file_io_c::setup();
   cc_local_utf8 = utf8_init("");
   xml_element_map_init();
 
-  cfg = new wxConfig(wxT("mkvmergeGUI"));
-  wxConfigBase::Set(cfg);
   cfg->SetPath(wxT("/GUI"));
   cfg->Read(wxT("last_directory"), &last_open_dir, wxEmptyString);
   for (i = 0; i < 4; i++) {
