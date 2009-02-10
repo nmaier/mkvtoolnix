@@ -355,17 +355,18 @@ options_dialog::on_ok(wxCommandEvent &evt) {
                                             rb_odm_previous->GetValue()   ? ODM_PREVIOUS :
                                                                             ODM_FIXED;
 
-  std::string new_ui_locale               = m_sorted_locales[cob_ui_language->GetSelection()];
+#if defined(HAVE_LIBINTL_H)
+  std::string new_ui_locale = m_sorted_locales[cob_ui_language->GetSelection()];
 
-  if (new_ui_locale != app->m_ui_locale) {
-    app->m_ui_locale  = new_ui_locale;
-
-    wxConfigBase *cfg = wxConfigBase::Get();
-    cfg->SetPath(wxT("/GUI"));
-    cfg->Write(wxT("ui_locale"), wxCS2WS(new_ui_locale));
-
+  if (downcase(new_ui_locale) != downcase(app->m_ui_locale))
     wxMessageBox(Z("Changing the interface language requires a restart to take effect."), Z("Restart required"), wxOK | wxCENTER | wxICON_INFORMATION);
-  }
+
+  app->m_ui_locale  = new_ui_locale;
+
+  wxConfigBase *cfg = wxConfigBase::Get();
+  cfg->SetPath(wxT("/GUI"));
+  cfg->Write(wxT("ui_locale"), wxCS2WS(new_ui_locale));
+#endif  // HAVE_LIBINTL_H
 
   EndModal(wxID_OK);
 }

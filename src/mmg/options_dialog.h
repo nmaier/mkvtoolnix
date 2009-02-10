@@ -48,13 +48,16 @@ public:
   wxCheckBox *cb_filenew_after_add_to_jobqueue;
   wxCheckBox *cb_warn_usage, *cb_gui_debugging;
   wxCheckBox *cb_always_use_simpleblock, *cb_set_delay_from_filename;
-  wxComboBox *cob_priority, *cob_ui_language;
+  wxComboBox *cob_priority;
   wxRadioButton *rb_odm_input_file, *rb_odm_previous, *rb_odm_fixed;
   wxButton *b_browse_output_directory;
 
   mmg_options_t &m_options;
 
+#if defined(HAVE_LIBINTL_H)
+  wxComboBox *cob_ui_language;
   std::vector<std::string> m_sorted_locales;
+#endif  // HAVE_LIBINTL_H
 
 public:
   translation_table_c cob_priority_translations;
