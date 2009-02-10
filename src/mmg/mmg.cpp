@@ -1309,6 +1309,14 @@ mmg_dialog::update_command_line() {
   clargs.Add(wxT("UTF-8"));
   clargs.Add(wxT("-o"));
   clargs.Add(tc_output->GetValue());
+
+#if defined(HAVE_LIBINTL_H)
+  if (!app->m_ui_locale.empty()) {
+    clargs.Add(wxT("--ui-language"));
+    clargs.Add(wxCS2WS(app->m_ui_locale));
+  }
+#endif  // HAVE_LIBINTL_H
+
   args_start = clargs.Count();
 
   if (options.priority != wxT("normal")) {
