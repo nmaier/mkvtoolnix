@@ -2170,8 +2170,10 @@ END_EVENT_TABLE();
 
 void
 mmg_app::init_ui_locale(wxConfigBase *cfg) {
-  wxString w_locale;
   std::string locale;
+
+#if defined(HAVE_LIBINTL_H)
+  wxString w_locale;
 
   translation_c::initialize_available_translations();
 
@@ -2182,7 +2184,11 @@ mmg_app::init_ui_locale(wxConfigBase *cfg) {
       locale = "";
   }
 
+  if (locale.empty())
+    locale = translation_c::get_default_ui_locale();
+
   m_ui_locale = locale;
+#endif  // HAVE_LIBINTL_H
 
   init_locales(locale);
 }

@@ -154,6 +154,9 @@ options_dialog::options_dialog(wxWindow *parent,
     ++translation;
   }
 
+  wxLogMessage(wxT("Locale selection logic: select_locale %s uu_locale_lower %s translation_c::get_default_ui_locale() %s app->m_ui_locale %s"),
+               select_locale.c_str(), wxCS2WS(ui_locale_lower), wxCS2WS(translation_c::get_default_ui_locale()), wxCS2WS(app->m_ui_locale));
+
   std::sort(sorted_entries.begin(), sorted_entries.end());
 
   std::vector<locale_sorter_t>::iterator locale_entry = sorted_entries.begin();
