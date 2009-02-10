@@ -36,6 +36,7 @@
 #define ID_RB_ODM_INPUT_FILE               15013
 #define ID_RB_ODM_PREVIOUS                 15014
 #define ID_RB_ODM_FIXED                    15015
+#define ID_COB_UI_LANGUAGE                 15016
 
 class options_dialog: public wxDialog {
   DECLARE_CLASS(options_dialog);
@@ -47,11 +48,13 @@ public:
   wxCheckBox *cb_filenew_after_add_to_jobqueue;
   wxCheckBox *cb_warn_usage, *cb_gui_debugging;
   wxCheckBox *cb_always_use_simpleblock, *cb_set_delay_from_filename;
-  wxComboBox *cob_priority;
+  wxComboBox *cob_priority, *cob_ui_language;
   wxRadioButton *rb_odm_input_file, *rb_odm_previous, *rb_odm_fixed;
   wxButton *b_browse_output_directory;
 
   mmg_options_t &m_options;
+
+  std::vector<std::string> m_sorted_locales;
 
 public:
   translation_table_c cob_priority_translations;

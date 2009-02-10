@@ -11,6 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "os.h"
+
 #include "wx/wxprec.h"
 
 #include "wx/wx.h"
@@ -24,6 +26,28 @@
 #include "mmg.h"
 #include "mmg_dialog.h"
 #include "options_dialog.h"
+#include "translation.h"
+#include "wxcommon.h"
+
+#include <algorithm>
+#include <string>
+#include <vector>
+
+struct locale_sorter_t {
+  wxString display_val;
+  std::string locale;
+
+  locale_sorter_t(const wxString &n_display_val,
+                  const std::string &n_locale)
+    : display_val(n_display_val)
+    , locale(n_locale)
+  {
+  };
+
+  bool operator <(const locale_sorter_t &cmp) const {
+    return display_val < cmp.display_val;
+  };
+};
 
 options_dialog::options_dialog(wxWindow *parent,
                                mmg_options_t &options)
@@ -111,6 +135,35 @@ options_dialog::options_dialog(wxWindow *parent,
   cb_gui_debugging->SetToolTip(TIP("Shows mmg's debug window in which debug messages will appear. "
                                    "This is only useful if you're helping the author debug a problem in mmg."));
 
+#if defined(HAVE_LIBINTL_H)
+  wxStaticText *st_ui_language = new wxStaticText(this, -1, Z("Interface language:"));
+  cob_ui_language = new wxComboBox(this, ID_COB_UI_LANGUAGE,  wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+
+  std::string ui_locale_lower = downcase(app->m_ui_locale);
+  std::vector<translation_c>::iterator translation = translation_c::ms_available_translations.begin();
+  wxString select_locale;
+  std::vector<locale_sorter_t> sorted_entries;
+  while (translation != translation_c::ms_available_translations.end()) {
+    wxString curr_entry = wxCS2WS((boost::format("%1% (%2%)") % translation->m_translated_name % translation->m_english_name).str());
+    sorted_entries.push_back(locale_sorter_t(curr_entry, translation->get_locale()));
+
+    if (   (select_locale.IsEmpty() && (translation->m_english_name == "English"))
+        || (ui_locale_lower == downcase(translation->get_locale())))
+      select_locale = curr_entry;
+
+    ++translation;
+  }
+
+  std::sort(sorted_entries.begin(), sorted_entries.end());
+
+  std::vector<locale_sorter_t>::iterator locale_entry = sorted_entries.begin();
+  while (locale_entry != sorted_entries.end()) {
+    cob_ui_language->Append(locale_entry->display_val);
+    m_sorted_locales.push_back(locale_entry->locale);
+    ++locale_entry;
+  }
+#endif  // HAVE_LIBINTL_H
+
   // Set the defaults.
 
   cb_autoset_output_filename->SetValue(m_options.autoset_output_filename);
@@ -126,6 +179,10 @@ options_dialog::options_dialog(wxWindow *parent,
   rb_odm_input_file->SetValue(m_options.output_directory_mode == ODM_FROM_FIRST_INPUT_FILE);
   rb_odm_previous->SetValue(m_options.output_directory_mode == ODM_PREVIOUS);
   rb_odm_fixed->SetValue(m_options.output_directory_mode == ODM_FIXED);
+
+#if defined(HAVE_LIBINTL_H)
+  set_combobox_selection(cob_ui_language, select_locale);
+#endif  // HAVE_LIBINTL_H
 
   enable_output_filename_controls(m_options.autoset_output_filename);
 
@@ -162,6 +219,15 @@ options_dialog::options_dialog(wxWindow *parent,
 
   siz_sb = new wxStaticBoxSizer(sb_mmg, wxVERTICAL);
   siz_sb->AddSpacer(5);
+
+#if defined(HAVE_LIBINTL_H)
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_line->Add(st_ui_language, 0, wxALIGN_CENTER_VERTICAL);
+  siz_line->Add(cob_ui_language, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
+
+  siz_sb->Add(siz_line, 0, wxGROW | wxLEFT, 5);
+  siz_sb->AddSpacer(5);
+#endif  // HAVE_LIBINTL_H
 
   siz_sb->Add(cb_autoset_output_filename, 0, wxLEFT, 5);
   siz_sb->AddSpacer(5);
@@ -288,6 +354,18 @@ options_dialog::on_ok(wxCommandEvent &evt) {
   m_options.output_directory_mode         = rb_odm_input_file->GetValue() ? ODM_FROM_FIRST_INPUT_FILE :
                                             rb_odm_previous->GetValue()   ? ODM_PREVIOUS :
                                                                             ODM_FIXED;
+
+  std::string new_ui_locale               = m_sorted_locales[cob_ui_language->GetSelection()];
+
+  if (new_ui_locale != app->m_ui_locale) {
+    app->m_ui_locale  = new_ui_locale;
+
+    wxConfigBase *cfg = wxConfigBase::Get();
+    cfg->SetPath(wxT("/GUI"));
+    cfg->Write(wxT("ui_locale"), wxCS2WS(new_ui_locale));
+
+    wxMessageBox(Z("Changing the interface language requires a restart to take effect."), Z("Restart required"), wxOK | wxCENTER | wxICON_INFORMATION);
+  }
 
   EndModal(wxID_OK);
 }

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-09 22:37+0100\n"
-"PO-Revision-Date: 2009-02-09 22:39+0100\n"
+"POT-Creation-Date: 2009-02-10 22:31+0100\n"
+"PO-Revision-Date: 2009-02-10 22:31+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -1500,11 +1500,11 @@ msgstr "Segmentgröße wird angepasst.\n"
 msgid "Algorithm: %1% (%2%)"
 msgstr "Algorithmus: %1% (%2%)"
 
-#: src/mmg/mmg.h:40
+#: src/mmg/mmg.h:41
 msgid "All Files (*)|*"
 msgstr "Alle Dateien (*)|*"
 
-#: src/mmg/mmg.h:34
+#: src/mmg/mmg.h:35
 msgid "All Files (*.*)|*.*"
 msgstr "Alle Dateien (*.*)|*.*"
 
@@ -1521,15 +1521,15 @@ msgstr "Erlaubt, AVC/h.264-Video im Video-for-Windows-Kompatibilitätsmodus zu s
 msgid "Allows the use of the CodecState element. This is used for e.g. MPEG-1/-2 video tracks for storing the sequence headers."
 msgstr "Erlaubt die Benutzung von CodecState-Elementen. Diese werden z.B. bei MPEG-1/-2-Videotracks zum Speichern der Sequenzköpfe benutzt."
 
-#: src/mmg/options_dialog.cpp:65
+#: src/mmg/options_dialog.cpp:89
 msgid "Always adds '--engage use_simpleblock' to the command line. That way Matroska's new 'simple blocks' will be used which save a bit of overhead at the cost of not being backwards compatible."
 msgstr "Fügt immer die Option '--engage use_simpleblock' der Kommandozeile hinzu. Dadurch wird das neue Matroska-Feature der 'vereinfachten Blöcke' benutzt, das für einen etwas geringeren Verschnitt auf Kosten der Rückwärtskompatibilität sorgt."
 
-#: src/mmg/options_dialog.cpp:102
+#: src/mmg/options_dialog.cpp:126
 msgid "Always on top"
 msgstr "Über allen anderen Fenstern"
 
-#: src/mmg/options_dialog.cpp:64
+#: src/mmg/options_dialog.cpp:88
 msgid "Always use simple blocks"
 msgstr "Immer vereinfachte Blockelemente benutzen"
 
@@ -1574,7 +1574,7 @@ msgstr "Neuer Suchkopf wird angehängt.\n"
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "Track %1% aus Datei Nummer %2% ('%3%') wird an Track %4% aus Datei Nummer %5% ('%6%') angefügt.\n"
 
-#: src/mmg/options_dialog.cpp:86
+#: src/mmg/options_dialog.cpp:110
 msgid "Ask before overwriting things (files, jobs)"
 msgstr "Vor dem Überschreiben (z.B. von Dateien oder Jobs) nachfragen"
 
@@ -1623,7 +1623,7 @@ msgstr "Art der Dateianhänge:"
 msgid "Attachments"
 msgstr "Dateianhänge"
 
-#: src/mmg/options_dialog.cpp:71
+#: src/mmg/options_dialog.cpp:95
 msgid "Auto-set output filename"
 msgstr "Zieldateinamen automatisch vorbelegen"
 
@@ -1692,8 +1692,8 @@ msgstr "Sowohl der Faktor für das Seitenverhältnis als auch die Anzeigeabmessu
 msgid "Brings up the job queue editor"
 msgstr "Zeigt den Editor für die Jobwarteschlange an"
 
-#: src/mmg/mmg.cpp:760 src/mmg/options_dialog.cpp:53
-#: src/mmg/options_dialog.cpp:81 src/mmg/tab_global.cpp:173
+#: src/mmg/mmg.cpp:760 src/mmg/options_dialog.cpp:77
+#: src/mmg/options_dialog.cpp:105 src/mmg/tab_global.cpp:173
 #: src/mmg/tab_global.cpp:223 src/mmg/tab_input_general.cpp:88
 #: src/mmg/tab_input_general.cpp:102
 msgid "Browse"
@@ -1736,6 +1736,10 @@ msgstr "Die Voreinstellungen und Optionen von mmg ändern"
 #: src/mmg/tab_chapters.cpp:106
 msgid "Change the default values"
 msgstr "Die Standardwerte ändern"
+
+#: src/mmg/options_dialog.cpp:367
+msgid "Changing the interface language requires a restart to take effect."
+msgstr "Das Ändern der Sprache der Benutzeroberfläche erfordert einen Neustart von mmg, um wirksam zu werden."
 
 #: src/info/mkvinfo.cpp:558
 msgid "Channel positions: %1%"
@@ -1868,11 +1872,11 @@ msgstr "Kapiteldatei auswählen"
 msgid "Choose the location of the mkvmerge GUI help files"
 msgstr "Den Ort der Hilfedateien für mkvmerge-GUI auswählen"
 
-#: src/mmg/options_dialog.cpp:230
+#: src/mmg/options_dialog.cpp:296
 msgid "Choose the mkvmerge executable"
 msgstr "mkvmerge-Programmdatei auswählen"
 
-#: src/mmg/options_dialog.cpp:253
+#: src/mmg/options_dialog.cpp:319
 msgid "Choose the output directory"
 msgstr "Zielverzeichnis auswählen"
 
@@ -1880,7 +1884,7 @@ msgstr "Zielverzeichnis auswählen"
 msgid "Choose the tags file"
 msgstr "Tagdatei auswählen"
 
-#: src/mmg/options_dialog.cpp:100
+#: src/mmg/options_dialog.cpp:124
 msgid "Clear inputs after adding a job to the job queue"
 msgstr "Eingabefelder nach Hinzufügen eines Jobs zur Warteschlange leeren"
 
@@ -2546,7 +2550,7 @@ msgstr "Fehler:"
 msgid "Everything went fine."
 msgstr "Alles lief gut."
 
-#: src/mmg/options_dialog.cpp:232
+#: src/mmg/options_dialog.cpp:298
 #, c-format
 msgid "Executable files (*.exe)|*.exe|%s"
 msgstr "Ausführbare Dateien (*.exe)|*.exe|%s"
@@ -2866,19 +2870,19 @@ msgstr "Ist ein Kapitel als 'versteckt' markiert, so sollte es von Abspielprogra
 msgid "If a chapter is not marked 'enabled' then the player should skip the part of the file that this chapter occupies."
 msgstr "Ist ein Kapitel als nicht 'aktiviert' markiert, so sollte ein Abspielprogramm den Teil der Datei überspringen, den das Kapitel abdeckt."
 
-#: src/mmg/options_dialog.cpp:87
+#: src/mmg/options_dialog.cpp:111
 msgid "If checked mmg will ask for confirmation before overwriting existing files, or before adding a new job if there's an old job whose description matches the new one."
 msgstr "Ist diese Option aktiviert, so fragt mmg nach, bevor es Dateien überschreibt, oder wenn ein Job zur Jobwarteschlange hinzugefügt werden soll und es bereits einen Job in ihr mit derselben Beschreibung gibt."
 
-#: src/mmg/options_dialog.cpp:72
+#: src/mmg/options_dialog.cpp:96
 msgid "If checked mmg will automatically set the output filename if it hasn't been set already. This happens when you add the first file. If unset mmg will not touch the output filename."
 msgstr "Ist diese Option aktiviert, so wird mmg beim Hinzufügen der ersten Quelldatei den Zieldateinamen automatisch vorgeben. Ist die Option nicht aktiviert, so wird der Zieldateiname nie verändert."
 
-#: src/mmg/options_dialog.cpp:105
+#: src/mmg/options_dialog.cpp:129
 msgid "If checked mmg will warn if it thinks that you're using it incorrectly. Such warnings are shown at least once even if you turn this feature off."
 msgstr "Ist diese Option aktiviert, so warn mmg in bestimmten Situationen, in denen es von einer potenziell falschen Bedienung ausgeht. Diese Warnungen werden auch bei deaktivierter Option zumindest einmal angezeigt."
 
-#: src/mmg/options_dialog.cpp:83
+#: src/mmg/options_dialog.cpp:107
 msgid "If left empty then mmg will set the output file name to be in the same directory as the first file added to this job. Otherwise this directory will be used."
 msgstr "Wird hier nichts eingetragen, dann setzt mmg den Zieldateinamen so, dass die Datei im selben Verzeichnis wie die zuerst hinzugefügte Quelldatei liegen wird. Andernfalls wird das hier eingetragene Verzeichnis als Zielverzeichnis benutzt."
 
@@ -2931,6 +2935,10 @@ msgstr "Neues EbmlVoid-Element wird an Position %1% mit Größe %2% eingefügt.\
 #: src/mmg/kax_analyzer.cpp:267
 msgid "Inserting new EbmlVoid not possible, remaining size too small.\n"
 msgstr "Es ist nicht möglich, ein neues EbmlVoid-Element einzufügen, weil der verbleibende Platz zu klein ist.\n"
+
+#: src/mmg/options_dialog.cpp:139
+msgid "Interface language:"
+msgstr "Sprache der Benutzeroberfläche:"
 
 #: src/info/mkvinfo.cpp:639
 msgid "Interlaced: %1%"
@@ -3711,7 +3719,7 @@ msgstr "Datei öffnen"
 msgid "Option file created."
 msgstr "Optionsdatei erstellt."
 
-#: src/mmg/options_dialog.cpp:30
+#: src/mmg/options_dialog.cpp:54
 msgid "Options"
 msgstr "Optionen"
 
@@ -3791,7 +3799,7 @@ msgstr "Pixelhöhe: %1%"
 msgid "Pixel width: %1%"
 msgstr "Pixelbreite: %1%"
 
-#: src/mmg/options_dialog.cpp:244
+#: src/mmg/options_dialog.cpp:310
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "Bitte wählen Sie nicht 'mmg' als Datei für 'mkvmerge' aus, weil es dadurch zu einer Endlosschleife kommt."
 
@@ -3831,7 +3839,7 @@ msgstr "Vorherige Segment-UID:"
 msgid "Previous segment UID:%1%"
 msgstr "Vorherige Segment-UID:%1%"
 
-#: src/mmg/options_dialog.cpp:55
+#: src/mmg/options_dialog.cpp:79
 msgid "Process priority:"
 msgstr "Prozesspriorität:"
 
@@ -4045,6 +4053,10 @@ msgstr "Kapitel entfernen"
 msgid "Remove name"
 msgstr "Namen entfernen"
 
+#: src/mmg/options_dialog.cpp:367
+msgid "Restart required"
+msgstr "Neustart erforderlich"
+
 #: src/mmg/tab_input_format.cpp:201
 msgid "Right eye"
 msgstr "Rechtes Auge"
@@ -4077,7 +4089,7 @@ msgstr "SSA/ASS Textuntertitel"
 msgid "Sa&ve command line"
 msgstr "Ko&mmandozeile speichern"
 
-#: src/mmg/options_dialog.cpp:76
+#: src/mmg/options_dialog.cpp:100
 msgid "Same directory as the first input file's"
 msgstr "Verzeichnis der ersten Quelldatei"
 
@@ -4212,7 +4224,7 @@ msgstr "Land ändern in:"
 msgid "Set language to:"
 msgstr "Sprache ändern in:"
 
-#: src/mmg/options_dialog.cpp:94
+#: src/mmg/options_dialog.cpp:118
 msgid "Set the delay input field from the file name"
 msgstr "Die Verzögerung beim Hinzufügen aus dem Dateinamen ableiten"
 
@@ -4240,7 +4252,7 @@ msgstr "Setzt die Anzeigehöhe des Tracks. Die Anzeigebreite muss ebenfalls gese
 msgid "Sets the display width of the track. The height must be set as well, or this field will be ignored."
 msgstr "Setzt die Anzeigebreite des Tracks. Die Anzeigehöhe muss ebenfalls gesetzt sein. Andernfalls wird dieser Wert ignoriert."
 
-#: src/mmg/options_dialog.cpp:58
+#: src/mmg/options_dialog.cpp:82
 msgid "Sets the priority that mkvmerge will run with."
 msgstr "Legt die Prozesspriorität für mkvmerge fest."
 
@@ -4264,7 +4276,7 @@ msgstr "Zu kurzes AAC-Paket (Länge: %1% < %2%)\n"
 msgid "Short AAC audio packet (length: %1% < 2)\n"
 msgstr "Zu kurzes AAC-Paket (Länge: %1% < 2)\n"
 
-#: src/mmg/options_dialog.cpp:110
+#: src/mmg/options_dialog.cpp:134
 msgid "Show mmg's debug window"
 msgstr "mmgs Debug-Fenster anzeigen"
 
@@ -4280,7 +4292,7 @@ msgstr "Die Kommandozeile anzeigen, die mmg für mkvmerge erstellt"
 msgid "Show the guide to mkvmerge GUI"
 msgstr "Den mkvmerge-GUI-Leitfaden anzeigen"
 
-#: src/mmg/options_dialog.cpp:111
+#: src/mmg/options_dialog.cpp:135
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "Zeigt mmgs Debugfenster an, in dem Debugmeldungen angezeigt werden. Dies ist nur sinnvoll, wenn Sie dem Autor bei der Behebung von Fehlern helfen."
 
@@ -4889,7 +4901,7 @@ msgstr "Das Sprachkürzel '%1%' ist kein gültiges ISO639-2-Sprachkürzel und wi
 msgid "The line %1% of the timecode file '%2%' does not contain a valid floating point number.\n"
 msgstr "Die Zeile %1% der Zeitstempeldatei '%2%' enthält keine gültige Fließkommazahl.\n"
 
-#: src/common/translation.cpp:124
+#: src/common/translation.cpp:155
 msgid "The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"
 msgstr "Die Sprachumgebung konnte nicht erfolgreich gesetzt werden. Bitte überprüfen Sie die Umgebungsvariablen LANG, LC_ALL und LC_MESSAGES.\n"
 
@@ -5613,11 +5625,11 @@ msgstr ""
 msgid "Use the old AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') instead of the new one ('A_AAC')."
 msgstr "Benutzt die alte Codec-ID für AAC-Tracks (z.B. 'A_AAC/MPEG4/SBR') anstelle der neuen ('A_AAC')."
 
-#: src/mmg/options_dialog.cpp:77
+#: src/mmg/options_dialog.cpp:101
 msgid "Use the previous output directory"
 msgstr "Das vorherige Zielverzeichnis benutzen"
 
-#: src/mmg/options_dialog.cpp:78
+#: src/mmg/options_dialog.cpp:102
 msgid "Use this directory:"
 msgstr "Dieses Verzeichnis benutzen:"
 
@@ -5943,7 +5955,7 @@ msgstr "WAVPACK verlustfreies Audio"
 msgid "WAVPACK v4 audio"
 msgstr "WAVPACK v4 Audio"
 
-#: src/mmg/options_dialog.cpp:104
+#: src/mmg/options_dialog.cpp:128
 msgid "Warn about possible incorrect usage of mmg"
 msgstr "Wegen potenziell falscher Benutzung von mmg warnen"
 
@@ -5971,7 +5983,7 @@ msgstr "Warnung: Es gibt mehr als einen Track mit der Nummer %1%."
 msgid "Warnings:"
 msgstr "Warnungen: "
 
-#: src/mmg/options_dialog.cpp:95
+#: src/mmg/options_dialog.cpp:119
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
 msgstr "Wenn eine Quelldatei hinzugefügt wird, wird ihr Dateiname untersucht. Falls er das Wort 'DELAY' gefolgt von einer Nummer enthält, so wird diese Nummer automatisch in das Feld 'Verzögerung' für jeden Audiotrack dieser Quelldatei eingetragen."
 
@@ -6002,7 +6014,7 @@ msgstr "Falsche Theora-Version: %1%.%2%.%3% != 3.2.x"
 msgid "Wrong argument to '--split-max-files'.\n"
 msgstr "Falsches Argument zu '--split-max-files'.\n"
 
-#: src/mmg/options_dialog.cpp:244
+#: src/mmg/options_dialog.cpp:310
 msgid "Wrong file chosen"
 msgstr "Falsche Datei ausgewählt"
 
@@ -6456,11 +6468,11 @@ msgstr "Entfernen von Kopfdaten"
 msgid "hidden"
 msgstr "versteckt"
 
-#: src/mmg/options_dialog.cpp:40
+#: src/mmg/options_dialog.cpp:64
 msgid "higher"
 msgstr "höher"
 
-#: src/mmg/options_dialog.cpp:39
+#: src/mmg/options_dialog.cpp:63
 msgid "highest"
 msgstr "höchste"
 
@@ -6488,11 +6500,11 @@ msgstr "line %1%: Der 'delay'-Zeitstempel konnte nicht geparst werden.\n"
 msgid "link files"
 msgstr "Dateien verknüpfen"
 
-#: src/mmg/options_dialog.cpp:43
+#: src/mmg/options_dialog.cpp:67
 msgid "lower"
 msgstr "niedriger"
 
-#: src/mmg/options_dialog.cpp:44
+#: src/mmg/options_dialog.cpp:68
 msgid "lowest"
 msgstr "am niedrigsten"
 
@@ -6726,7 +6738,7 @@ msgstr ""
 "mkvmerge hat nicht parsbare Daten in diesem AVC/h.264-Video-Track gefunden. Entweder ist die Datei beschädigt, womit mkvmerge noch nicht gut umgehen kann, oder es gibt einen Fehler in mkvmerge. Die Fehlermeldung dazu lautet:\n"
 "%1%\n"
 
-#: src/mmg/options_dialog.cpp:51
+#: src/mmg/options_dialog.cpp:75
 msgid "mkvmerge executable"
 msgstr "mkvmerge-Programmdatei"
 
@@ -6747,7 +6759,7 @@ msgstr "mkvmerge wurden ohne FLAC-Unterstützung compiliert, aber dieser FLAC-St
 msgid "mkvmerge is running"
 msgstr "mkvmerge läuft"
 
-#: src/mmg/options_dialog.cpp:49
+#: src/mmg/options_dialog.cpp:73
 msgid "mkvmerge options"
 msgstr "mkvmerge-Optionen"
 
@@ -6787,7 +6799,7 @@ msgstr "mm_text_io_c::read_next_char(): Ungültiges UTF-8-Zeichen. Erstes Byte: 
 msgid "mmg debug output"
 msgstr "mmg Debugausgaben"
 
-#: src/mmg/options_dialog.cpp:69
+#: src/mmg/options_dialog.cpp:93
 msgid "mmg options"
 msgstr "mmg-Optionen"
 
@@ -6840,7 +6852,7 @@ msgstr "kein Signaturprüfsummenalgorithmus"
 msgid "none"
 msgstr "keine"
 
-#: src/mmg/options_dialog.cpp:42
+#: src/mmg/options_dialog.cpp:66
 msgid "normal"
 msgstr "normal"
 
