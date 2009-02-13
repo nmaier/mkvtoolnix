@@ -242,7 +242,8 @@ Section Uninstall
   Delete "$INSTDIR\uninst.exe"
   Delete "$INSTDIR\libcharset.dll"
   Delete "$INSTDIR\libebml.dll"
-  Delete "$INSTDIR\libiconv.dll"
+  Delete "$INSTDIR\libiconv-2.dll"
+  Delete "$INSTDIR\libintl-8.dll"
   Delete "$INSTDIR\libmatroska.dll"
   Delete "$INSTDIR\matroskalogo_big.ico"
   Delete "$INSTDIR\mkvextract.exe"
@@ -308,7 +309,7 @@ Section Uninstall
   RMDir "$INSTDIR\doc"
   RMDir "$INSTDIR\examples"
 
-  StrCmp $unRemoveJobs "Yes" 0 +3
+  StrCmp $unRemoveJobs "Yes" 0 +2
   Delete "$INSTDIR\jobs\*.mmg"
   RMDir "$INSTDIR\jobs"
 
