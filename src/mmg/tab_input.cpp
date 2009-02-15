@@ -392,7 +392,7 @@ tab_input::add_file(const wxString &file_name,
   for (i = 0; i < output.Count(); i++) {
     if (output[i].Find(wxT("Track")) == 0) {
       wxString info;
-      mmg_track_ptr track(new mmg_track_t);
+      mmg_track_cptr track(new mmg_track_t);
 
       id = output[i].AfterFirst(wxT(' ')).AfterFirst(wxT(' ')).
         BeforeFirst(wxT(':'));
@@ -590,7 +590,7 @@ tab_input::add_file(const wxString &file_name,
     wxString label;
     int new_track_pos;
 
-    mmg_track_ptr &t = file.tracks[i];
+    mmg_track_cptr &t = file.tracks[i];
     t->enabled = true;
     t->source  = new_file_pos;
 
@@ -967,7 +967,7 @@ tab_input::save(wxConfigBase *cfg) {
     for (tidx = 0; tidx < f->tracks.size(); tidx++) {
       string format;
 
-      mmg_track_ptr &t = f->tracks[tidx];
+      mmg_track_cptr &t = f->tracks[tidx];
       s.Printf(wxT("track %u"), tidx);
       cfg->SetPath(s);
 
@@ -1065,7 +1065,7 @@ tab_input::load(wxConfigBase *cfg,
 
     long tidx;
     for (tidx = 0; tidx < (long)num_tracks; tidx++) {
-      mmg_track_ptr tr(new mmg_track_t);
+      mmg_track_cptr tr(new mmg_track_t);
       bool dummy = false;
 
       s.Printf(wxT("track %ld"), tidx);
@@ -1166,7 +1166,7 @@ tab_input::load(wxConfigBase *cfg,
                 "a bug in mmg. Please report this to the author\n"
                 "Moritz Bunkus <moritz@bunkus.org>\n\n"
                 "(Problem occured in tab_input::load(), #3)"));
-      mmg_track_ptr &t = files[fidx].tracks[tidx];
+      mmg_track_cptr &t = files[fidx].tracks[tidx];
       tracks.push_back(t.get());
 
       fix_format(Y("%s%s (ID %lld, type: %s) from %s"), format);
@@ -1213,7 +1213,7 @@ tab_input::validate_settings() {
     mmg_file_t *f = &files[fidx];
 
     for (tidx = 0; tidx < f->tracks.size(); tidx++) {
-      mmg_track_ptr &t = f->tracks[tidx];
+      mmg_track_cptr &t = f->tracks[tidx];
       if (!t->enabled)
         continue;
 

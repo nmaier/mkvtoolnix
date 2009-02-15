@@ -1334,7 +1334,7 @@ mmg_dialog::update_command_line() {
     sids = wxEmptyString;
     dids = wxEmptyString;
     for (tidx = 0; tidx < f->tracks.size(); tidx++) {
-      mmg_track_ptr &t = f->tracks[tidx];
+      mmg_track_cptr &t = f->tracks[tidx];
       if (!t->enabled)
         continue;
 

@@ -81,13 +81,13 @@ struct mmg_track_t {
     stereo_mode(0),
     appending(false) {};
 };
-typedef counted_ptr<mmg_track_t> mmg_track_ptr;
+typedef counted_ptr<mmg_track_t> mmg_track_cptr;
 
 struct mmg_file_t {
   wxString file_name, title;
   bool title_was_present;
   int container;
-  vector<mmg_track_ptr> tracks;
+  vector<mmg_track_cptr> tracks;
   bool no_chapters, no_attachments, no_tags;
   bool appending;
 
@@ -96,7 +96,7 @@ struct mmg_file_t {
     no_chapters(false), no_attachments(false), no_tags(false),
     appending(false) {};
 };
-typedef counted_ptr<mmg_file_t> mmg_file_ptr;
+typedef counted_ptr<mmg_file_t> mmg_file_cptr;
 
 struct mmg_attachment_t {
   wxString file_name, stored_name, description, mime_type;
@@ -105,7 +105,7 @@ struct mmg_attachment_t {
   mmg_attachment_t():
     style(0) {};
 };
-typedef counted_ptr<mmg_attachment_t> mmg_attachment_ptr;
+typedef counted_ptr<mmg_attachment_t> mmg_attachment_cptr;
 
 typedef enum {
   ODM_FROM_FIRST_INPUT_FILE = 0,
