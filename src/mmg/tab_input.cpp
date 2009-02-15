@@ -302,7 +302,6 @@ tab_input::on_append_file(wxCommandEvent &evt) {
 void
 tab_input::add_file(const wxString &file_name,
                     bool append) {
-  mmg_file_t file;
   wxString name, command, id, type, exact, video_track_name, opt_file_name;
   wxArrayString output, errors;
   vector<wxString> args, pair;
@@ -385,6 +384,8 @@ tab_input::add_file(const wxString &file_name,
     if (re_delay.Matches(file_name))
       delay_from_file_name = re_delay.GetMatch(file_name, 1);
   }
+
+  mmg_file_cptr file           = mmg_file_cptr(new mmg_file_t);
 
   default_audio_track_found    = -1 != default_track_checked('a');
   default_video_track_found    = -1 != default_track_checked('v');
@@ -473,13 +474,13 @@ tab_input::add_file(const wxString &file_name,
 
       track->appending = append;
 
-      file.tracks.push_back(track);
+      file->tracks.push_back(track);
 
-      if (   (FILE_TYPE_AVC_ES == file.container)
+      if (   (FILE_TYPE_AVC_ES == file->container)
           && ('v' == track->type)
           && (track->ctype.Find(wxT("MPEG-4 part 10 ES")) >= 0)
           && (!avc_es_fps_warning_shown || mdlg->options.warn_usage)) {
-        wxMessageBox(Z("You're adding an AVC/h.264 elementary stream to the output file. "
+        wxMessageBox(Z("You're adding an AVC/h.264 elementary stream to the output file-> "
                        "mkvmerge cannot determine the number of frames per second for such files itself. "
                        "Therefore you have to set this parameter yourself on the 'format specific options' page.\n\n"
                        "If you don't do this then mkvmerge will assume 25 fps.\n\n"
@@ -497,47 +498,47 @@ tab_input::add_file(const wxString &file_name,
       wxString info      = output[i].Mid(pos + 11).AfterFirst(wxT('[')).BeforeLast(wxT(']'));
 
       if (container == wxT("AAC"))
-        file.container = FILE_TYPE_AAC;
+        file->container = FILE_TYPE_AAC;
       else if (container == wxT("AC3"))
-        file.container = FILE_TYPE_AC3;
+        file->container = FILE_TYPE_AC3;
       else if (container == wxT("AVC/h.264"))
-        file.container = FILE_TYPE_AVC_ES;
+        file->container = FILE_TYPE_AVC_ES;
       else if (container == wxT("AVI"))
-        file.container = FILE_TYPE_AVI;
+        file->container = FILE_TYPE_AVI;
       else if (container == wxT("Dirac elementary stream"))
-        file.container = FILE_TYPE_DIRAC;
+        file->container = FILE_TYPE_DIRAC;
       else if (container == wxT("DTS"))
-        file.container = FILE_TYPE_DTS;
+        file->container = FILE_TYPE_DTS;
       else if (container == wxT("Matroska"))
-        file.container = FILE_TYPE_MATROSKA;
+        file->container = FILE_TYPE_MATROSKA;
       else if (container == wxT("MP2/MP3"))
-        file.container = FILE_TYPE_MP3;
+        file->container = FILE_TYPE_MP3;
       else if (container == wxT("Ogg/OGM"))
-        file.container = FILE_TYPE_OGM;
+        file->container = FILE_TYPE_OGM;
       else if (container == wxT("Quicktime/MP4"))
-        file.container = FILE_TYPE_QTMP4;
+        file->container = FILE_TYPE_QTMP4;
       else if (container == wxT("RealMedia"))
-        file.container = FILE_TYPE_REAL;
+        file->container = FILE_TYPE_REAL;
       else if (container == wxT("SRT"))
-        file.container = FILE_TYPE_SRT;
+        file->container = FILE_TYPE_SRT;
       else if (container == wxT("SSA/ASS"))
-        file.container = FILE_TYPE_SSA;
+        file->container = FILE_TYPE_SSA;
       else if (container == wxT("VC1 elementary stream"))
-        file.container = FILE_TYPE_VC1;
+        file->container = FILE_TYPE_VC1;
       else if (container == wxT("VobSub"))
-        file.container = FILE_TYPE_VOBSUB;
+        file->container = FILE_TYPE_VOBSUB;
       else if (container == wxT("WAV"))
-        file.container = FILE_TYPE_WAV;
+        file->container = FILE_TYPE_WAV;
       else
-        file.container = FILE_TYPE_IS_UNKNOWN;
+        file->container = FILE_TYPE_IS_UNKNOWN;
 
       if (info.length() > 0) {
         args = split(info, wxU(" "));
         for (k = 0; k < args.size(); k++) {
           pair = split(args[k], wxU(":"), 2);
           if ((pair.size() == 2) && (pair[0] == wxT("title"))) {
-            file.title = from_utf8(unescape(pair[1]));
-            file.title_was_present = true;
+            file->title = from_utf8(unescape(pair[1]));
+            file->title_was_present = true;
             title_was_present = true;
           }
         }
@@ -545,14 +546,14 @@ tab_input::add_file(const wxString &file_name,
     }
   }
 
-  if (file.tracks.empty()) {
+  if (file->tracks.empty()) {
     wxMessageBox(wxString::Format(Z("The input file '%s' does not contain any tracks."), file_name.c_str()), Z("No tracks found"));
     return;
   }
 
-  // Look for a place to insert the new file. If the file is only "added",
+  // Look for a place to insert the new file-> If the file is only "added",
   // then it will be added to the back of the list. If it is "appended",
-  // then it should be inserted right after the currently selected file.
+  // then it should be inserted right after the currently selected file->
   if (!append)
     new_file_pos = lb_input_files->GetCount();
   else {
@@ -562,18 +563,18 @@ tab_input::add_file(const wxString &file_name,
     else {
       do {
         ++new_file_pos;
-      } while ((files.size() > new_file_pos) && files[new_file_pos].appending);
+      } while ((files.size() > new_file_pos) && files[new_file_pos]->appending);
     }
   }
 
   name.Printf(wxT("%s%s (%s)"), append ? wxT("++> ") : wxEmptyString, file_name.AfterLast(wxT(PSEP)).c_str(), file_name.BeforeLast(wxT(PSEP)).c_str());
   lb_input_files->Insert(name, new_file_pos);
 
-  file.file_name = file_name;
-  mdlg->set_title_maybe(file.title);
-  if ((file.container == FILE_TYPE_OGM) && (video_track_name.Length() > 0))
+  file->file_name = file_name;
+  mdlg->set_title_maybe(file->title);
+  if ((file->container == FILE_TYPE_OGM) && (video_track_name.Length() > 0))
     mdlg->set_title_maybe(video_track_name);
-  file.appending = append;
+  file->appending = append;
   files.insert(files.begin() + new_file_pos, file);
 
   // After inserting the file the "source" index is wrong for all files
@@ -585,12 +586,12 @@ tab_input::add_file(const wxString &file_name,
   if (name.StartsWith(wxT("++> ")))
     name.Remove(0, 4);
 
-  for (i = 0; i < file.tracks.size(); i++) {
+  for (i = 0; i < file->tracks.size(); i++) {
     string format;
     wxString label;
     int new_track_pos;
 
-    mmg_track_cptr &t = file.tracks[i];
+    mmg_track_cptr &t = file->tracks[i];
     t->enabled = true;
     t->source  = new_file_pos;
 
@@ -607,7 +608,7 @@ tab_input::add_file(const wxString &file_name,
     // If the file is "appended" then it should be put to the end of the
     // chain of tracks being appended. The n'th track from this new file
     // should be appended to the n'th track of the "old" file this new file is
-    // appended to. So first I have to find the n'th track of the "old" file.
+    // appended to. So first I have to find the n'th track of the "old" file->
     // Then I have to skip over all the other tracks that are already appended
     // to that n'th track. The insertion point is right after that.
     if (append) {
@@ -635,7 +636,7 @@ tab_input::add_file(const wxString &file_name,
     clb_tracks->Check(new_track_pos, true);
   }
 
-  mdlg->set_output_maybe(file.file_name);
+  mdlg->set_output_maybe(file->file_name);
 
   st_tracks->Enable(true);
   clb_tracks->Enable(true);
@@ -651,7 +652,7 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
   if (-1 == selected_file)
     return;
 
-  mmg_file_t *f = &files[selected_file];
+  mmg_file_cptr &f = files[selected_file];
 
   // Files may not be removed if something else is still being appended to
   // them.
@@ -817,9 +818,9 @@ tab_input::on_file_selected(wxCommandEvent &evt) {
   b_remove_file->Enable(true);
   b_append_file->Enable(true);
 
-  int old_track  = selected_track;
-  selected_track = -1;
-  mmg_file_t *f  = &files[new_sel];
+  int old_track    = selected_track;
+  selected_track   = -1;
+  mmg_file_cptr &f = files[new_sel];
 
   if (FILE_TYPE_MATROSKA == f->container) {
     st_file_options->Enable(true);
@@ -847,19 +848,19 @@ tab_input::on_file_selected(wxCommandEvent &evt) {
 void
 tab_input::on_nochapters_clicked(wxCommandEvent &evt) {
   if (dont_copy_values_now || (-1 != selected_file))
-    files[selected_file].no_chapters = cb_no_chapters->GetValue();
+    files[selected_file]->no_chapters = cb_no_chapters->GetValue();
 }
 
 void
 tab_input::on_noattachments_clicked(wxCommandEvent &evt) {
   if (dont_copy_values_now || (-1 != selected_file))
-    files[selected_file].no_attachments = cb_no_attachments->GetValue();
+    files[selected_file]->no_attachments = cb_no_attachments->GetValue();
 }
 
 void
 tab_input::on_notags_clicked(wxCommandEvent &evt) {
   if (dont_copy_values_now || (-1 != selected_file))
-    files[selected_file].no_tags = cb_no_tags->GetValue();
+    files[selected_file]->no_tags = cb_no_tags->GetValue();
 }
 
 void
@@ -951,7 +952,7 @@ tab_input::save(wxConfigBase *cfg) {
 
   unsigned int fidx;
   for (fidx = 0; fidx < files.size(); fidx++) {
-    mmg_file_t *f = &files[fidx];
+    mmg_file_cptr &f = files[fidx];
     wxString s;
     s.Printf(wxT("file %u"), fidx);
     cfg->SetPath(s);
@@ -1040,7 +1041,7 @@ tab_input::load(wxConfigBase *cfg,
   wxString c, track_order;
   long fidx;
   for (fidx = 0; fidx < (long)num_files; fidx++) {
-    mmg_file_t fi;
+    mmg_file_cptr fi = mmg_file_cptr(new mmg_file_t);
 
     wxString s;
     s.Printf(wxT("file %u"), fidx);
@@ -1052,16 +1053,16 @@ tab_input::load(wxConfigBase *cfg,
       continue;
     }
 
-    if (!cfg->Read(wxT("file_name"), &fi.file_name)) {
+    if (!cfg->Read(wxT("file_name"), &fi->file_name)) {
       cfg->SetPath(wxT(".."));
       continue;
     }
-    cfg->Read(wxT("title"),          &fi.title);
-    cfg->Read(wxT("container"),      &fi.container);
-    cfg->Read(wxT("no_chapters"),    &fi.no_chapters,    false);
-    cfg->Read(wxT("no_attachments"), &fi.no_attachments, false);
-    cfg->Read(wxT("no_tags"),        &fi.no_tags,        false);
-    cfg->Read(wxT("appending"),      &fi.appending,      false);
+    cfg->Read(wxT("title"),          &fi->title);
+    cfg->Read(wxT("container"),      &fi->container);
+    cfg->Read(wxT("no_chapters"),    &fi->no_chapters,    false);
+    cfg->Read(wxT("no_attachments"), &fi->no_attachments, false);
+    cfg->Read(wxT("no_tags"),        &fi->no_tags,        false);
+    cfg->Read(wxT("appending"),      &fi->appending,      false);
 
     long tidx;
     for (tidx = 0; tidx < (long)num_tracks; tidx++) {
@@ -1117,14 +1118,14 @@ tab_input::load(wxConfigBase *cfg,
         track_order += wxT(",");
       track_order += wxString::Format(wxUCS(format.c_str()), files.size(), tr->id);
 
-      fi.tracks.push_back(tr);
+      fi->tracks.push_back(tr);
       cfg->SetPath(wxT(".."));
     }
 
-    if (!fi.tracks.empty()) {
-      s = fi.file_name.BeforeLast(PSEP);
-      c = fi.file_name.AfterLast(PSEP);
-      lb_input_files->Append(wxString::Format(wxT("%s%s (%s)"), fi.appending ? wxT("++> ") : wxEmptyString, c.c_str(), s.c_str()));
+    if (!fi->tracks.empty()) {
+      s = fi->file_name.BeforeLast(PSEP);
+      c = fi->file_name.AfterLast(PSEP);
+      lb_input_files->Append(wxString::Format(wxT("%s%s (%s)"), fi->appending ? wxT("++> ") : wxEmptyString, c.c_str(), s.c_str()));
       files.push_back(fi);
     }
 
@@ -1155,8 +1156,8 @@ tab_input::load(wxConfigBase *cfg,
                 "(Problem occured in tab_input::load(), #2)"));
       bool found = false;
       int j;
-      for (j = 0; j < files[fidx].tracks.size(); j++)
-        if (files[fidx].tracks[j]->id == tidx) {
+      for (j = 0; j < files[fidx]->tracks.size(); j++)
+        if (files[fidx]->tracks[j]->id == tidx) {
           found = true;
           tidx = j;
         }
@@ -1166,12 +1167,12 @@ tab_input::load(wxConfigBase *cfg,
                 "a bug in mmg. Please report this to the author\n"
                 "Moritz Bunkus <moritz@bunkus.org>\n\n"
                 "(Problem occured in tab_input::load(), #3)"));
-      mmg_track_cptr &t = files[fidx].tracks[tidx];
+      mmg_track_cptr &t = files[fidx]->tracks[tidx];
       tracks.push_back(t.get());
 
       fix_format(Y("%s%s (ID %lld, type: %s) from %s"), format);
-      wxString name  = files[fidx].file_name.AfterLast(wxT(PSEP));
-      name          += wxT(" (") + files[fidx].file_name.BeforeLast(wxT(PSEP)) + wxT(")");
+      wxString name  = files[fidx]->file_name.AfterLast(wxT(PSEP));
+      name          += wxT(" (") + files[fidx]->file_name.BeforeLast(wxT(PSEP)) + wxT(")");
       wxString type  = t->type == 'a' ? Z("audio")
                      : t->type == 'v' ? Z("video")
                      : t->type == 's' ? Z("subtitles")
@@ -1210,7 +1211,7 @@ tab_input::validate_settings() {
   bool tracks_selected = false;
   unsigned int fidx;
   for (fidx = 0; fidx < files.size(); fidx++) {
-    mmg_file_t *f = &files[fidx];
+    mmg_file_cptr &f = files[fidx];
 
     for (tidx = 0; tidx < f->tracks.size(); tidx++) {
       mmg_track_cptr &t = f->tracks[tidx];

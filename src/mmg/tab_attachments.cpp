@@ -24,7 +24,7 @@
 #include "mmg.h"
 #include "tab_attachments.h"
 
-vector<mmg_attachment_t> attachments;
+vector<mmg_attachment_cptr> attachments;
 
 class attachments_drop_target_c: public wxFileDropTarget {
 private:
@@ -156,18 +156,18 @@ tab_attachments::on_add_attachment(wxCommandEvent &evt) {
 
 void
 tab_attachments::add_attachment(const wxString &file_name) {
-  mmg_attachment_t attch;
-  wxString name, ext;
+  mmg_attachment_cptr attch = mmg_attachment_cptr(new mmg_attachment_t);
 
-  attch.file_name = file_name;
-  name = file_name.AfterLast(wxT(PSEP));
-  ext = name.AfterLast(wxT('.'));
-  name += wxString(wxT(" (")) + file_name.BeforeLast(wxT(PSEP)) + wxT(")");
+  attch->file_name  = file_name;
+  wxString name     = file_name.AfterLast(wxT(PSEP));
+  wxString ext      = name.AfterLast(wxT('.'));
+  name             += wxString(wxT(" (")) + file_name.BeforeLast(wxT(PSEP)) + wxT(")");
   lb_attachments->Append(name);
+
   if (ext.Length() > 0)
-    attch.mime_type = wxU(guess_mime_type(wxMB(file_name), true).c_str());
-  attch.style = 0;
-  attch.stored_name = derive_stored_name_from_file_name(attch.file_name);
+    attch->mime_type = wxU(guess_mime_type(wxMB(file_name), true).c_str());
+  attch->style       = 0;
+  attch->stored_name = derive_stored_name_from_file_name(attch->file_name);
 
   attachments.push_back(attch);
 }
@@ -186,14 +186,14 @@ tab_attachments::on_remove_attachment(wxCommandEvent &evt) {
 
 void
 tab_attachments::on_attachment_selected(wxCommandEvent &evt) {
-  mmg_attachment_t *a;
   int new_sel;
 
   selected_attachment = -1;
   new_sel = lb_attachments->GetSelection();
   if (0 > new_sel)
     return;
-  a = &attachments[new_sel];
+
+  mmg_attachment_cptr &a = attachments[new_sel];
   tc_name->SetValue(a->stored_name);
   tc_description->SetValue(a->description);
   cob_mimetype->SetValue(a->mime_type);
@@ -208,7 +208,7 @@ tab_attachments::on_name_changed(wxCommandEvent &evt) {
   if (selected_attachment == -1)
     return;
 
-  attachments[selected_attachment].stored_name = tc_name->GetValue();
+  attachments[selected_attachment]->stored_name = tc_name->GetValue();
 }
 
 void
@@ -216,7 +216,7 @@ tab_attachments::on_description_changed(wxCommandEvent &evt) {
   if (selected_attachment == -1)
     return;
 
-  attachments[selected_attachment].description = tc_description->GetValue();
+  attachments[selected_attachment]->description = tc_description->GetValue();
 }
 
 void
@@ -224,7 +224,7 @@ tab_attachments::on_mimetype_changed(wxTimerEvent &evt) {
   if (selected_attachment == -1)
     return;
 
-  attachments[selected_attachment].mime_type = cob_mimetype->GetValue();
+  attachments[selected_attachment]->mime_type = cob_mimetype->GetValue();
 }
 
 void
@@ -232,20 +232,18 @@ tab_attachments::on_style_changed(wxCommandEvent &evt) {
   if (selected_attachment == -1)
     return;
 
-  attachments[selected_attachment].style =
-    cob_style->GetStringSelection().Find(wxT("Only")) >= 0 ? 1 : 0;
+  attachments[selected_attachment]->style = cob_style->GetStringSelection().Find(wxT("Only")) >= 0 ? 1 : 0;
 }
 
 void
 tab_attachments::save(wxConfigBase *cfg) {
-  mmg_attachment_t *a;
   uint32_t i, j;
   wxString s;
 
   cfg->SetPath(wxT("/attachments"));
   cfg->Write(wxT("number_of_attachments"), (int)attachments.size());
   for (i = 0; i < attachments.size(); i++) {
-    a = &attachments[i];
+    mmg_attachment_cptr &a = attachments[i];
     s.Printf(wxT("attachment %u"), i);
     cfg->SetPath(s);
     cfg->Write(wxT("stored_name"), a->stored_name);
@@ -285,32 +283,32 @@ tab_attachments::load(wxConfigBase *cfg,
     return;
 
   for (i = 0; i < (uint32_t)num; i++) {
-    mmg_attachment_t a;
+    mmg_attachment_cptr a = mmg_attachment_cptr(new mmg_attachment_t);
     wxString s, c;
     int pos;
 
     s.Printf(wxT("attachment %d"), i);
     cfg->SetPath(s);
-    cfg->Read(wxT("file_name"), &a.file_name);
-    if (!cfg->Read(wxT("stored_name"), &a.stored_name) ||
-        (a.stored_name == wxEmptyString))
-      a.stored_name = derive_stored_name_from_file_name(a.file_name);
+    cfg->Read(wxT("file_name"), &a->file_name);
+    if (!cfg->Read(wxT("stored_name"), &a->stored_name) ||
+        (a->stored_name == wxEmptyString))
+      a->stored_name = derive_stored_name_from_file_name(a->file_name);
     cfg->Read(wxT("description"), &s);
-    cfg->Read(wxT("mime_type"), &a.mime_type);
-    cfg->Read(wxT("style"), &a.style);
-    if ((a.style != 0) && (a.style != 1))
-      a.style = 0;
+    cfg->Read(wxT("mime_type"), &a->mime_type);
+    cfg->Read(wxT("style"), &a->style);
+    if ((a->style != 0) && (a->style != 1))
+      a->style = 0;
     pos = s.Find(wxT("!\\N!"));
     while (pos >= 0) {
       c = s.Mid(0, pos);
       s.Remove(0, pos + 4);
-      a.description += c + wxT("\n");
+      a->description += c + wxT("\n");
       pos = s.Find(wxT("!\\N!"));
     }
-    a.description += s;
+    a->description += s;
 
-    s = a.file_name.BeforeLast(PSEP);
-    c = a.file_name.AfterLast(PSEP);
+    s = a->file_name.BeforeLast(PSEP);
+    c = a->file_name.AfterLast(PSEP);
     lb_attachments->Append(c + wxT(" (") + s + wxT(")"));
     attachments.push_back(a);
 
@@ -320,11 +318,9 @@ tab_attachments::load(wxConfigBase *cfg,
 
 bool
 tab_attachments::validate_settings() {
-  uint32_t i;
-  mmg_attachment_t *a;
-
+  unsigned int i;
   for (i = 0; i < attachments.size(); i++) {
-    a = &attachments[i];
+    mmg_attachment_cptr &a = attachments[i];
     if (a->mime_type.Length() == 0) {
       wxMessageBox(wxString::Format(Z("No MIME type has been selected for the attachment '%s'."), a->file_name.c_str()), Z("Missing input"), wxOK | wxCENTER | wxICON_ERROR);
       return false;

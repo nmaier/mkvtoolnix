@@ -56,7 +56,7 @@ mmg_dialog *mdlg;
 wxString last_open_dir;
 vector<wxString> last_settings;
 vector<wxString> last_chapters;
-vector<mmg_file_t> files;
+vector<mmg_file_cptr> files;
 vector<mmg_track_t *> tracks;
 map<wxString, wxString> capabilities;
 vector<job_t> jobs;
@@ -1291,17 +1291,10 @@ mmg_dialog::on_update_command_line(wxTimerEvent &evt) {
 
 void
 mmg_dialog::update_command_line() {
-  uint32_t fidx, tidx, i, args_start;
-  bool tracks_selected_here;
-  bool no_audio, no_video, no_subs;
-  mmg_file_t *f;
-  mmg_attachment_t *a;
-  wxString sid, old_cmdline, arg, aids, sids, dids, track_order;
-  wxString append_mapping;
-  vector<wxString> opts;
+  unsigned int i;
 
-  old_cmdline = cmdline;
-  cmdline = wxT("\"") + options.mkvmerge + wxT("\" -o \"") + tc_output->GetValue() + wxT("\" ");
+  wxString old_cmdline = cmdline;
+  cmdline              = wxT("\"") + options.mkvmerge + wxT("\" -o \"") + tc_output->GetValue() + wxT("\" ");
 
   clargs.Clear();
   clargs.Add(options.mkvmerge);
@@ -1317,29 +1310,32 @@ mmg_dialog::update_command_line() {
   }
 #endif  // HAVE_LIBINTL_H
 
-  args_start = clargs.Count();
+  unsigned int args_start = clargs.Count();
 
   if (options.priority != wxT("normal")) {
     clargs.Add(wxT("--priority"));
     clargs.Add(options.priority);
   }
 
-  for (fidx = 0; fidx < files.size(); fidx++) {
-    f = &files[fidx];
-    tracks_selected_here = false;
-    no_audio = true;
-    no_video = true;
-    no_subs = true;
-    aids = wxEmptyString;
-    sids = wxEmptyString;
-    dids = wxEmptyString;
-    for (tidx = 0; tidx < f->tracks.size(); tidx++) {
+  unsigned int fidx;
+  for (fidx = 0; files.size() > fidx; fidx++) {
+    mmg_file_cptr &f          = files[fidx];
+    bool tracks_selected_here = false;
+    bool no_audio             = true;
+    bool no_video             = true;
+    bool no_subs              = true;
+    wxString aids             = wxEmptyString;
+    wxString sids             = wxEmptyString;
+    wxString dids             = wxEmptyString;
+
+    unsigned int tidx;
+    for (tidx = 0; f->tracks.size() > tidx; tidx++) {
       mmg_track_cptr &t = f->tracks[tidx];
       if (!t->enabled)
         continue;
 
       tracks_selected_here = true;
-      sid = wxLongLong(t->id).ToString();
+      wxString sid         = wxLongLong(t->id).ToString();
 
       if (t->type == wxT('a')) {
         no_audio = false;
@@ -1386,7 +1382,7 @@ mmg_dialog::update_command_line() {
       }
 
       if ((t->delay.Length() > 0) || (t->stretch.Length() > 0)) {
-        arg = sid + wxT(":");
+        wxString arg = sid + wxT(":");
         if (t->delay.Length() > 0)
           arg += t->delay;
         else
@@ -1458,8 +1454,8 @@ mmg_dialog::update_command_line() {
       }
 
       if (t->user_defined.Length() > 0) {
-        opts = split(t->user_defined, wxString(wxT(" ")));
-        for (i = 0; i < opts.size(); i++) {
+        vector<wxString> opts = split(t->user_defined, wxString(wxT(" ")));
+        for (i = 0; opts.size() > i; i++) {
           wxString opt = strip(opts[i]);
           opt.Replace(wxT("<TID>"), sid, true);
           clargs.Add(opt);
@@ -1502,20 +1498,20 @@ mmg_dialog::update_command_line() {
     }
   }
 
-  track_order = create_track_order(false);
+  wxString track_order = create_track_order(false);
   if (track_order.length() > 0) {
     clargs.Add(wxT("--track-order"));
     clargs.Add(track_order);
   }
 
-  append_mapping = create_append_mapping();
+  wxString append_mapping = create_append_mapping();
   if (append_mapping.length() > 0) {
     clargs.Add(wxT("--append-to"));
     clargs.Add(append_mapping);
   }
 
-  for (fidx = 0; fidx < attachments.size(); fidx++) {
-    a = &attachments[fidx];
+  for (fidx = 0; attachments.size() > fidx; fidx++) {
+    mmg_attachment_cptr &a = attachments[fidx];
 
     clargs.Add(wxT("--attachment-mime-type"));
     clargs.Add(a->mime_type);
@@ -1592,7 +1588,7 @@ mmg_dialog::update_command_line() {
 
   cli_options = strip(cli_options);
   if (cli_options.length() > 0) {
-    opts = split(cli_options, wxString(wxT(" ")));
+    vector<wxString> opts = split(cli_options, wxString(wxT(" ")));
     for (i = 0; i < opts.size(); i++)
       clargs.Add(strip(opts[i]));
   }

@@ -141,9 +141,9 @@ struct mmg_options_t {
 extern wxString last_open_dir;
 extern vector<wxString> last_settings;
 extern vector<wxString> last_chapters;
-extern vector<mmg_file_t> files;
+extern vector<mmg_file_cptr> files;
 extern vector<mmg_track_t *> tracks;
-extern vector<mmg_attachment_t> attachments;
+extern vector<mmg_attachment_cptr> attachments;
 extern wxArrayString sorted_charsets;
 extern wxArrayString sorted_iso_codes;
 extern bool title_was_present;
