@@ -2137,7 +2137,7 @@ kax_reader_c::identify() {
          : tracks[i]->a_formattag == 0x0003 ? "PCM"
          : tracks[i]->a_formattag == 0x0055 ? "MP3"
          : tracks[i]->a_formattag == 0x2000 ? "AC3"
-           :                                   Y("unknown"));
+         :                                   Y("unknown"));
 
     id_result_track(tracks[i]->tnum,
                       tracks[i]->type == 'v' ? ID_RESULT_TRACK_VIDEO
