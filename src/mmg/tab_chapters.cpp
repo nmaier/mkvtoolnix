@@ -40,10 +40,6 @@ using namespace std;
 using namespace libebml;
 using namespace libmatroska;
 
-#if ! wxCHECK_VERSION(2,4,2)
-# define wxTreeItemIdValue long
-#endif
-
 class chapters_drop_target_c: public wxFileDropTarget {
 private:
   tab_chapters *owner;
