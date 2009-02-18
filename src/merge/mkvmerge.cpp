@@ -200,7 +200,7 @@ set_usage() {
                   "                           Copy the attachments with the IDs n, m etc to\n"
                   "                           all or only the first output file. Default: copy\n"
                   "                           all attachments to all output files.\n");
-  usage_text += Y("  -M, --no-attachments     Don't copy attachments from a Matroska file.\n");
+  usage_text += Y("  -M, --no-attachments     Don't copy attachments from a source file.\n");
   usage_text += Y("  --no-chapters            Don't keep chapters from a Matroska file.\n");
   usage_text += Y("  --no-tags                Don't keep tags from a Matroska file.\n");
   usage_text += Y("  -y, --sync, --delay <TID:d[,o[/p]]>\n"
@@ -1831,7 +1831,7 @@ parse_args(vector<string> args) {
 
     } else if ((this_arg == "-m") || (this_arg == "--attachments")) {
       if (no_next_arg)
-        mxerror(boost::format(Y("'%1%' lacks its argument.")) % this_arg);
+        mxerror(boost::format(Y("'%1%' lacks its argument.\n")) % this_arg);
 
       parse_arg_attachments(this_arg, next_arg, *ti);
       sit++;

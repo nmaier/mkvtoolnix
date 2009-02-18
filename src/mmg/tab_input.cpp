@@ -31,6 +31,7 @@
 #include "mkvmerge.h"
 #include "mmg.h"
 #include "mmg_dialog.h"
+#include "tab_attachments.h"
 #include "tab_input.h"
 #include "tab_global.h"
 
@@ -125,12 +126,6 @@ tab_input::tab_input(wxWindow *parent):
   cb_no_chapters->SetToolTip(TIP("Do not copy chapters from this file. Only applies to a couple of formats (e.g. Matroska files)."));
   cb_no_chapters->Enable(false);
   siz_line->Add(cb_no_chapters, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
-
-  cb_no_attachments = new wxCheckBox(this, ID_CB_NOATTACHMENTS, Z("No attachments"));
-  cb_no_attachments->SetValue(false);
-  cb_no_attachments->SetToolTip(TIP("Do not copy attachments from this file. Only applies to a couple of formats (e.g. Matroska files)."));
-  cb_no_attachments->Enable(false);
-  siz_line->Add(cb_no_attachments, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   cb_no_tags = new wxCheckBox(this, ID_CB_NOTAGS, Z("No tags"));
   cb_no_tags->SetValue(false);
@@ -480,7 +475,7 @@ tab_input::add_file(const wxString &file_name,
           && ('v' == track->type)
           && (track->ctype.Find(wxT("MPEG-4 part 10 ES")) >= 0)
           && (!avc_es_fps_warning_shown || mdlg->options.warn_usage)) {
-        wxMessageBox(Z("You're adding an AVC/h.264 elementary stream to the output file-> "
+        wxMessageBox(Z("You're adding an AVC/h.264 elementary stream to the output file. "
                        "mkvmerge cannot determine the number of frames per second for such files itself. "
                        "Therefore you have to set this parameter yourself on the 'format specific options' page.\n\n"
                        "If you don't do this then mkvmerge will assume 25 fps.\n\n"
@@ -542,6 +537,31 @@ tab_input::add_file(const wxString &file_name,
             title_was_present = true;
           }
         }
+      }
+
+    } else if (output[i].Find(wxT("Attachment")) == 0) {
+      mmg_attached_file_cptr a = mmg_attached_file_cptr(new mmg_attached_file_t);
+
+      wxRegEx re_att_base(       wxT("^Attachment *ID ([[:digit:]]+): *type *\"([^\"]+)\", *size *([[:digit:]]+)"), wxRE_ICASE);
+      wxRegEx re_att_description(wxT("description *\"([^\"]+)\""),                                                  wxRE_ICASE);
+      wxRegEx re_att_name(       wxT("name *\"([^\"]+)\""),                                                         wxRE_ICASE);
+
+      if (re_att_base.Matches(output[i])) {
+        re_att_base.GetMatch(output[i], 1).ToLong(&a->id);
+        re_att_base.GetMatch(output[i], 3).ToLong(&a->size);
+        a->mime_type = unescape(re_att_base.GetMatch(output[i], 2));
+
+        if (re_att_description.Matches(output[i]))
+          a->description = unescape(re_att_description.GetMatch(output[i], 1));
+        if (re_att_name.Matches(output[i]))
+          a->name = unescape(re_att_name.GetMatch(output[i], 1));
+
+        a->source = file.get();
+
+        file->attached_files.push_back(a);
+
+        wxLogMessage(wxT("Attached file ID %ld MIME type '%s' size %ld description '%s' name '%s'"),
+                     a->id, a->mime_type.c_str(), a->size, a->description.c_str(), a->name.c_str());
       }
     }
   }
@@ -636,6 +656,10 @@ tab_input::add_file(const wxString &file_name,
     clb_tracks->Check(new_track_pos, true);
   }
 
+  if (!file->attached_files.empty())
+    for (i = 0; file->attached_files.size() > i; ++i)
+      mdlg->attachments_page->add_attached_file(file->attached_files[i]);
+
   mdlg->set_output_maybe(file->file_name);
 
   st_tracks->Enable(true);
@@ -689,12 +713,13 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
   if ((f->title != wxEmptyString) && f->title_was_present && (f->title == mdlg->global_page->tc_title->GetValue()))
     mdlg->global_page->tc_title->SetValue(wxEmptyString);
 
+  mdlg->attachments_page->remove_attached_files_for(files[selected_file]);
+
   files.erase(files.begin() + selected_file);
   lb_input_files->Delete(selected_file);
   selected_file = lb_input_files->GetSelection();
   st_file_options->Enable(-1 != selected_file);
   cb_no_chapters->Enable(-1 != selected_file);
-  cb_no_attachments->Enable(-1 != selected_file);
   cb_no_tags->Enable(-1 != selected_file);
   b_remove_file->Enable(-1 != selected_file);
   b_remove_all_files->Enable(-1 != selected_file);
@@ -729,7 +754,6 @@ tab_input::on_remove_all_files(wxCommandEvent &evt) {
   clb_tracks->Enable(false);
   st_file_options->Enable(false);
   cb_no_chapters->Enable(false);
-  cb_no_attachments->Enable(false);
   cb_no_tags->Enable(false);
   b_remove_file->Enable(false);
   b_remove_all_files->Enable(false);
@@ -825,19 +849,15 @@ tab_input::on_file_selected(wxCommandEvent &evt) {
   if (FILE_TYPE_MATROSKA == f->container) {
     st_file_options->Enable(true);
     cb_no_chapters->Enable(true);
-    cb_no_attachments->Enable(true);
     cb_no_tags->Enable(true);
     cb_no_chapters->SetValue(f->no_chapters);
-    cb_no_attachments->SetValue(f->no_attachments);
     cb_no_tags->SetValue(f->no_tags);
 
   } else {
     st_file_options->Enable(false);
     cb_no_chapters->Enable(false);
-    cb_no_attachments->Enable(false);
     cb_no_tags->Enable(false);
     cb_no_chapters->SetValue(false);
-    cb_no_attachments->SetValue(false);
     cb_no_tags->SetValue(false);
   }
 
@@ -849,12 +869,6 @@ void
 tab_input::on_nochapters_clicked(wxCommandEvent &evt) {
   if (dont_copy_values_now || (-1 != selected_file))
     files[selected_file]->no_chapters = cb_no_chapters->GetValue();
-}
-
-void
-tab_input::on_noattachments_clicked(wxCommandEvent &evt) {
-  if (dont_copy_values_now || (-1 != selected_file))
-    files[selected_file]->no_attachments = cb_no_attachments->GetValue();
 }
 
 void
@@ -936,10 +950,8 @@ tab_input::on_file_new(wxCommandEvent &evt) {
   b_remove_file->Enable(false);
   st_file_options->Enable(false);
   cb_no_chapters->Enable(false);
-  cb_no_attachments->Enable(false);
   cb_no_tags->Enable(false);
   cb_no_chapters->SetValue(false);
-  cb_no_attachments->SetValue(false);
   cb_no_tags->SetValue(false);
   b_track_up->Enable(false);
   b_track_down->Enable(false);
@@ -1002,6 +1014,23 @@ tab_input::save(wxConfigBase *cfg) {
       cfg->Write(wxT("appending"),                   t->appending);
       cfg->Write(wxT("user_defined"),                t->user_defined);
       cfg->Write(wxT("packetizer"),                  t->packetizer);
+
+      cfg->SetPath(wxT(".."));
+    }
+
+    cfg->Write(wxT("number_of_attached_files"), (int)f->attached_files.size());
+    unsigned int afidx;
+    for (afidx = 0; f->attached_files.size() > afidx; ++afidx) {
+      mmg_attached_file_cptr &a = f->attached_files[afidx];
+
+      cfg->SetPath(wxString::Format(wxT("attached_file %u"), afidx));
+
+      cfg->Write(wxT("id"),          a->id);
+      cfg->Write(wxT("size"),        a->size);
+      cfg->Write(wxT("name"),        a->name);
+      cfg->Write(wxT("mime_type"),   a->mime_type);
+      cfg->Write(wxT("description"), a->description);
+      cfg->Write(wxT("enabled"),     a->enabled);
 
       cfg->SetPath(wxT(".."));
     }
@@ -1120,6 +1149,30 @@ tab_input::load(wxConfigBase *cfg,
 
       fi->tracks.push_back(tr);
       cfg->SetPath(wxT(".."));
+    }
+
+    int num_attached_files;
+    if (cfg->Read(wxT("number_of_attached_files"), &num_attached_files) && (0 < num_attached_files)) {
+      int i;
+      for (i = 0; num_attached_files > i; ++i) {
+        cfg->SetPath(wxString::Format(wxT("attached_file %u"), i));
+
+        mmg_attached_file_cptr a = mmg_attached_file_cptr(new mmg_attached_file_t);
+
+        cfg->Read(wxT("id"),          &a->id);
+        cfg->Read(wxT("size"),        &a->size);
+        cfg->Read(wxT("name"),        &a->name);
+        cfg->Read(wxT("mime_type"),   &a->mime_type);
+        cfg->Read(wxT("description"), &a->description);
+        cfg->Read(wxT("enabled"),     &a->enabled, false);
+
+        cfg->SetPath(wxT(".."));
+
+        if (0 != a->id) {
+          a->source = fi.get();
+          fi->attached_files.push_back(a);
+        }
+      }
     }
 
     if (!fi->tracks.empty()) {
@@ -1347,7 +1400,6 @@ BEGIN_EVENT_TABLE(tab_input, wxPanel)
   EVT_CHECKLISTBOX(ID_CLB_TRACKS,   tab_input::on_track_enabled)
 
   EVT_CHECKBOX(ID_CB_NOCHAPTERS,    tab_input::on_nochapters_clicked)
-  EVT_CHECKBOX(ID_CB_NOATTACHMENTS, tab_input::on_noattachments_clicked)
   EVT_CHECKBOX(ID_CB_NOTAGS,        tab_input::on_notags_clicked)
 
   EVT_TIMER(ID_T_INPUTVALUES,       tab_input::on_value_copy_timer)

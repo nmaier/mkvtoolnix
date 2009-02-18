@@ -45,7 +45,17 @@
 # define LEFTRIGHTSPACING 5
 #endif
 
-#define MMG_CONFIG_FILE_VERSION_MAX 2
+// Config file versions and their differences
+//
+// Version 1: base settings
+// Version 2: Added in v1.5.0:
+//   Added splitting by timecodes. The old boolean "split_by_size" was
+//   replaced by new string "split_mode".
+// Version 3: Added after v2.4.2:
+//   The per-file boolean "no attachments" was removed and replaced by
+//   the handling of individual attached files.
+
+#define MMG_CONFIG_FILE_VERSION_MAX 3
 
 using namespace std;
 using namespace libebml;
@@ -83,11 +93,29 @@ struct mmg_track_t {
 };
 typedef counted_ptr<mmg_track_t> mmg_track_cptr;
 
+struct mmg_file_t;
+
+struct mmg_attached_file_t {
+  bool enabled;
+  wxString name, description, mime_type;
+  long id, size;
+  mmg_file_t *source;
+
+  mmg_attached_file_t()
+    : enabled(true)
+    , id(0)
+    , size(0)
+    , source(NULL)
+  { };
+};
+typedef counted_ptr<mmg_attached_file_t> mmg_attached_file_cptr;
+
 struct mmg_file_t {
   wxString file_name, title;
   bool title_was_present;
   int container;
   vector<mmg_track_cptr> tracks;
+  vector<mmg_attached_file_cptr> attached_files;
   bool no_chapters, no_attachments, no_tags;
   bool appending;
 
@@ -144,6 +172,7 @@ extern vector<wxString> last_chapters;
 extern vector<mmg_file_cptr> files;
 extern vector<mmg_track_t *> tracks;
 extern vector<mmg_attachment_cptr> attachments;
+extern vector<mmg_attached_file_cptr> attached_files;
 extern wxArrayString sorted_charsets;
 extern wxArrayString sorted_iso_codes;
 extern bool title_was_present;

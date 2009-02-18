@@ -1306,9 +1306,9 @@ generic_reader_c::display_identification_results() {
   if (g_identify_for_mmg) {
     format_file            =   "File '%1%': container: %2%";
     format_track           =   "Track ID %1%: %2% (%3%)";
-    format_attachment      =   "Attachment ID %1%: type '%2%', size %3% bytes";
-    format_att_description =   ", description '%1%'";
-    format_att_file_name   =   ", file name '%1%'";
+    format_attachment      =   "Attachment ID %1%: type \"%2%\", size %3% bytes";
+    format_att_description =   ", description \"%1%\"";
+    format_att_file_name   =   ", file name \"%1%\"";
 
   } else {
     format_file            = Y("File '%1%': container: %2%");
@@ -1340,16 +1340,21 @@ generic_reader_c::display_identification_results() {
   for (i = 0; i < id_results_attachments.size(); ++i) {
     id_result_t &result = id_results_attachments[i];
 
-    mxinfo(boost::format(format_attachment) % result.id % result.type % result.size);
+    mxinfo(boost::format(format_attachment) % result.id % id_escape_string(result.type) % result.size);
 
     if (!result.description.empty())
-      mxinfo(boost::format(format_att_description) % result.description);
+      mxinfo(boost::format(format_att_description) % id_escape_string(result.description));
 
     if (!result.info.empty())
-      mxinfo(boost::format(format_att_file_name) % result.info);
+      mxinfo(boost::format(format_att_file_name) % id_escape_string(result.info));
 
     mxinfo("\n");
   }
+}
+
+std::string
+generic_reader_c::id_escape_string(const std::string &s) {
+  return g_identify_for_mmg ? escape(s) : s;
 }
 
 //

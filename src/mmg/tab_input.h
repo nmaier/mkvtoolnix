@@ -165,7 +165,7 @@ public:
   wxListBox *lb_input_files;
   wxButton *b_add_file, *b_remove_file, *b_remove_all_files;
   wxButton *b_track_up, *b_track_down, *b_append_file;
-  wxCheckBox *cb_no_chapters, *cb_no_attachments, *cb_no_tags;
+  wxCheckBox *cb_no_chapters, *cb_no_tags;
   wxCheckListBox *clb_tracks;
   wxStaticText *st_file_options, *st_tracks;
   wxNotebook *nb_options;
@@ -191,7 +191,6 @@ public:
   void on_track_selected(wxCommandEvent &evt);
   void on_track_enabled(wxCommandEvent &evt);
   void on_nochapters_clicked(wxCommandEvent &evt);
-  void on_noattachments_clicked(wxCommandEvent &evt);
   void on_notags_clicked(wxCommandEvent &evt);
   void on_value_copy_timer(wxTimerEvent &evt);
   void on_file_new(wxCommandEvent &evt);

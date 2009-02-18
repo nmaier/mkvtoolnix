@@ -1,3 +1,10 @@
+2009-02-19  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge, mmg: new feature: Added options ('-m' /
+	'--attachments' and its counterparts '-M' / '--no-attachments')
+	to mkvmerge for selecting which attachments to copy and which to
+	skip and the corresponding controls to mmg.
+
 2009-02-06  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed the detection of AAC files whose first

@@ -900,8 +900,7 @@ mmg_dialog::load(wxString file_name,
 
   wxFileConfig cfg(wxT("mkvmerge GUI"), wxT("Moritz Bunkus"), file_name);
   cfg.SetPath(wxT("/mkvmergeGUI"));
-  if (!cfg.Read(wxT("file_version"), &version) || (1 > version) ||
-      (MMG_CONFIG_FILE_VERSION_MAX < version)) {
+  if (!cfg.Read(wxT("file_version"), &version) || (1 > version) || (MMG_CONFIG_FILE_VERSION_MAX < version)) {
     if (used_for_jobs)
       return;
     wxMessageBox(Z("The file does not seem to be a valid mkvmerge GUI settings file."), Z("Error loading settings"), wxOK | wxCENTER | wxICON_ERROR);
@@ -1479,8 +1478,27 @@ mmg_dialog::update_command_line() {
     if (tracks_selected_here) {
       if (f->no_chapters)
         clargs.Add(wxT("--no-chapters"));
+
       if (f->no_attachments)
         clargs.Add(wxT("--no-attachments"));
+      else {
+        std::vector<mmg_attached_file_cptr>::iterator att_file = f->attached_files.begin();
+        std::vector<wxString> att_file_ids;
+
+        while (att_file != f->attached_files.end()) {
+          if ((*att_file)->enabled)
+            att_file_ids.push_back(wxString::Format(wxT("%ld"), (*att_file)->id));
+          ++att_file;
+        }
+
+        if (!att_file_ids.empty()) {
+          clargs.Add(wxT("--attachments"));
+          clargs.Add(join(wxT(","), att_file_ids));
+
+        } else if (!f->attached_files.empty())
+          clargs.Add(wxT("--no-attachments"));
+      }
+
       if (f->no_tags)
         clargs.Add(wxT("--no-tags"));
 

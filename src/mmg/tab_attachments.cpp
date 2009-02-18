@@ -15,6 +15,7 @@
 
 #include "wx/wx.h"
 #include "wx/dnd.h"
+#include "wx/filename.h"
 #include "wx/listctrl.h"
 #include "wx/notebook.h"
 #include "wx/statline.h"
@@ -25,6 +26,7 @@
 #include "tab_attachments.h"
 
 vector<mmg_attachment_cptr> attachments;
+vector<mmg_attached_file_cptr> attached_files;
 
 class attachments_drop_target_c: public wxFileDropTarget {
 private:
@@ -46,11 +48,14 @@ tab_attachments::tab_attachments(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL) {
 
   // Create all elements
-  wxStaticBox *sb_attachments = new wxStaticBox(this, wxID_STATIC, Z("Attachments"));
-  lb_attachments              = new wxListBox(this, ID_LB_ATTACHMENTS);
+  wxStaticBox *sb_attached_files = new wxStaticBox(this, wxID_STATIC, Z("Attached files"));
+  clb_attached_files             = new wxCheckListBox(this, ID_CLB_ATTACHED_FILES);
 
-  b_add_attachment            = new wxButton(this, ID_B_ADDATTACHMENT, Z("add"));
-  b_remove_attachment         = new wxButton(this, ID_B_REMOVEATTACHMENT, Z("remove"));
+  wxStaticBox *sb_attachments    = new wxStaticBox(this, wxID_STATIC, Z("Attachments"));
+  lb_attachments                 = new wxListBox(this, ID_LB_ATTACHMENTS);
+
+  b_add_attachment               = new wxButton(this, ID_B_ADDATTACHMENT, Z("add"));
+  b_remove_attachment            = new wxButton(this, ID_B_REMOVEATTACHMENT, Z("remove"));
   b_remove_attachment->Enable(false);
 
   wxStaticLine *sl_options = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL);
@@ -83,6 +88,9 @@ tab_attachments::tab_attachments(wxWindow *parent):
   cob_style->SetSizeHints(0, -1);
 
   // Create the layout.
+  wxStaticBoxSizer *siz_box_attached_files = new wxStaticBoxSizer(sb_attached_files, wxVERTICAL);
+  siz_box_attached_files->Add(clb_attached_files, 1, wxGROW | wxALL, 5);
+
   wxBoxSizer *siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->Add(lb_attachments, 1, wxGROW | wxALL, 5);
 
@@ -93,7 +101,7 @@ tab_attachments::tab_attachments(wxWindow *parent):
 
   siz_line->Add(siz_buttons, 0, wxGROW, 0);
 
-  wxStaticBoxSizer *siz_box_attachments = new wxStaticBoxSizer(sb_attachments,  wxVERTICAL);
+  wxStaticBoxSizer *siz_box_attachments = new wxStaticBoxSizer(sb_attachments, wxVERTICAL);
   siz_box_attachments->Add(siz_line, 1, wxGROW, 0);
 
   siz_box_attachments->Add(sl_options, 0, wxGROW | wxALL, 5);
@@ -114,7 +122,8 @@ tab_attachments::tab_attachments(wxWindow *parent):
   siz_box_attachments->Add(siz_fg, 0, wxALL | wxGROW, 5);
 
   wxBoxSizer *siz_all = new wxBoxSizer(wxVERTICAL);
-  siz_all->Add(siz_box_attachments, 1, wxALL | wxGROW, 5);
+  siz_all->Add(siz_box_attached_files, 1, wxALL | wxGROW, 5);
+  siz_all->Add(siz_box_attachments,    1, wxALL | wxGROW, 5);
 
   SetSizer(siz_all);
 
@@ -277,6 +286,7 @@ tab_attachments::load(wxConfigBase *cfg,
   lb_attachments->Clear();
   b_remove_attachment->Enable(false);
   attachments.clear();
+  clb_attached_files->Clear();
 
   cfg->SetPath(wxT("/attachments"));
   if (!cfg->Read(wxT("number_of_attachments"), &num) || (num < 0))
@@ -314,6 +324,15 @@ tab_attachments::load(wxConfigBase *cfg,
 
     cfg->SetPath(wxT(".."));
   }
+
+  unsigned int fidx;
+  for (fidx = 0; files.size() > fidx; ++fidx) {
+    mmg_file_cptr &f = files[fidx];
+
+    unsigned int aidx;
+    for (aidx = 0; f->attached_files.size() > aidx; ++aidx)
+      add_attached_file(f->attached_files[aidx]);
+  }
 }
 
 bool
@@ -330,13 +349,42 @@ tab_attachments::validate_settings() {
   return true;
 }
 
+void
+tab_attachments::add_attached_file(mmg_attached_file_cptr &a,
+                                   bool update_column_widths) {
+  wxFileName file_name(a->source->file_name);
+  clb_attached_files->Append(wxString::Format(Z("%s (MIME type %s, size %ld) from %s (%s)"),
+                                              a->name.c_str(), a->mime_type.c_str(), a->size, file_name.GetFullName().c_str(), file_name.GetPath().c_str()));
+  clb_attached_files->Check(m_attached_files.size(), a->enabled);
+  m_attached_files.push_back(a);
+}
+
+void
+tab_attachments::remove_attached_files_for(mmg_file_cptr &f) {
+  int i;
+  for (i = m_attached_files.size() - 1; 0 <= i; --i) {
+    if (m_attached_files[i]->source == f.get()) {
+      clb_attached_files->Delete(i);
+      m_attached_files.erase(m_attached_files.begin() + i);
+    }
+  }
+}
+
+void
+tab_attachments::on_attached_file_enabled(wxCommandEvent &evt) {
+  int idx = evt.GetSelection();
+  if ((0 <= idx) && (m_attached_files.size() > idx))
+    m_attached_files[idx]->enabled = clb_attached_files->IsChecked(idx);
+}
+
 IMPLEMENT_CLASS(tab_attachments, wxPanel);
 BEGIN_EVENT_TABLE(tab_attachments, wxPanel)
-  EVT_BUTTON(ID_B_ADDATTACHMENT,      tab_attachments::on_add_attachment)
-  EVT_BUTTON(ID_B_REMOVEATTACHMENT,   tab_attachments::on_remove_attachment)
-  EVT_LISTBOX(ID_LB_ATTACHMENTS,      tab_attachments::on_attachment_selected)
-  EVT_TEXT(ID_TC_ATTACHMENTNAME,      tab_attachments::on_name_changed)
-  EVT_TEXT(ID_TC_DESCRIPTION,         tab_attachments::on_description_changed)
-  EVT_TIMER(ID_T_ATTACHMENTVALUES,    tab_attachments::on_mimetype_changed)
-  EVT_COMBOBOX(ID_CB_ATTACHMENTSTYLE, tab_attachments::on_style_changed)
+  EVT_BUTTON(ID_B_ADDATTACHMENT,          tab_attachments::on_add_attachment)
+  EVT_BUTTON(ID_B_REMOVEATTACHMENT,       tab_attachments::on_remove_attachment)
+  EVT_LISTBOX(ID_LB_ATTACHMENTS,          tab_attachments::on_attachment_selected)
+  EVT_TEXT(ID_TC_ATTACHMENTNAME,          tab_attachments::on_name_changed)
+  EVT_TEXT(ID_TC_DESCRIPTION,             tab_attachments::on_description_changed)
+  EVT_TIMER(ID_T_ATTACHMENTVALUES,        tab_attachments::on_mimetype_changed)
+  EVT_COMBOBOX(ID_CB_ATTACHMENTSTYLE,     tab_attachments::on_style_changed)
+  EVT_CHECKLISTBOX(ID_CLB_ATTACHED_FILES, tab_attachments::on_attached_file_enabled)
 END_EVENT_TABLE();
