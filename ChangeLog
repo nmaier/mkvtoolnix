@@ -1,5 +1,10 @@
 2009-02-19  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge, mkvinfo, mkvextract, mmg: Made all those programs
+	nearly completly translatable. Added a German translation for all
+	four programs (only for the programs, not for the static
+	documentation: man pages, the guide to mmg etc).
+
 	* mkvmerge, mmg: new feature: Added options ('-m' /
 	'--attachments' and its counterparts '-M' / '--no-attachments')
 	to mkvmerge for selecting which attachments to copy and which to
