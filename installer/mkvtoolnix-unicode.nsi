@@ -132,7 +132,7 @@ Section "Program files" SEC01
   File "examples\matroskachapters.dtd"
   File "examples\matroskasegmentinfo.dtd"
   File "examples\matroskatags.dtd"
-  SetOutPath "$INSTDIR\locale\german\LC_MESSAGES"
+  SetOutPath "$INSTDIR\locale\de\LC_MESSAGES"
   File "/oname=mkvtoolnix.mo" "po\de.mo"
 
   # Delete files that might be present from older installation

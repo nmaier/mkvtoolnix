@@ -283,6 +283,14 @@ get_installation_path() {
   return "";
 }
 
+void
+set_environment_variable(const std::string &key,
+                         const std::string &value) {
+  SetEnvironmentVariable(key.c_str(), value.c_str());
+  std::string env_buf = (boost::format("%1%=%2%") % key % value).str();
+  _putenv(env_buf.c_str());
+}
+
 #else // SYS_WINDOWS
 
 # include <sys/types.h>
