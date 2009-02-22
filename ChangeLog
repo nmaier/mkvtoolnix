@@ -1,3 +1,10 @@
+2009-02-22  Moritz Bunkus  <moritz@bunkus.org>
+
+	* Released v2.5.1.
+
+	* mmg: bug fix: Fixed the selection of the translation to use if
+	the LC_MESSAGES environment variable has been set on Windows.
+
 2009-02-21  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v2.5.0.
