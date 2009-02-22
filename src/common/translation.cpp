@@ -35,10 +35,12 @@ std::vector<translation_c> translation_c::ms_available_translations;
 
 translation_c::translation_c(const std::string &unix_locale,
                              const std::string &windows_locale,
+                             const std::string &windows_locale_sysname,
                              const std::string &english_name,
                              const std::string &translated_name)
   : m_unix_locale(unix_locale)
   , m_windows_locale(windows_locale)
+  , m_windows_locale_sysname(windows_locale_sysname)
   , m_english_name(english_name)
   , m_translated_name(translated_name)
 {
@@ -48,8 +50,8 @@ void
 translation_c::initialize_available_translations() {
   ms_available_translations.clear();
 #if defined(HAVE_LIBINTL_H)
-  ms_available_translations.push_back(translation_c("en_US", "english", "English", "English"));
-  ms_available_translations.push_back(translation_c("de_DE", "german",  "German",  "Deutsch"));
+  ms_available_translations.push_back(translation_c("en_US", "en", "english", "English", "English"));
+  ms_available_translations.push_back(translation_c("de_DE", "de", "german",  "German",  "Deutsch"));
 #endif
 }
 
@@ -60,7 +62,11 @@ translation_c::look_up_translation(const std::string &locale) {
   int idx                                = 0;
 
   while (i != ms_available_translations.end()) {
-    if (downcase(i->get_locale()) == locale_lower)
+    if (   (downcase(i->get_locale()) == locale_lower)
+#if defined(SYS_WINDOWS)
+        || (downcase(i->m_windows_locale_sysname) == locale_lower)
+#endif
+         )
       return idx;
     ++i;
     ++idx;
@@ -83,6 +89,10 @@ translation_c::get_default_ui_locale() {
     if (0 != GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SENGLANGUAGE, data, len))
       locale = data;
     safefree(data);
+
+    int idx = translation_c::look_up_translation(locale);
+    if (-1 != idx)
+      locale = ms_available_translations[idx].get_locale();
   }
 
 # else  // SYS_WINDOWS
@@ -137,15 +147,14 @@ init_locales(std::string locale) {
   if (!locale.empty()) {
     // The Windows system headers define LC_MESSAGES but
     // Windows itself doesn't know it and treats "set_locale(LC_MESSAGES, ...)"
-    // as an error. gettext uses the LANG environment variable instead.
+    // as an error. gettext uses the LANG and LC_MESSAGE environment variables instead.
 
     // Windows knows two environments: the system environment that's
     // modified by SetEnvironmentVariable() and the C library's cache
     // of said environment which is modified via _putenv().
 
-    SetEnvironmentVariable("LANG", locale.c_str());
-    std::string env_buf = (boost::format("LANG=%1%") % locale).str();
-    _putenv(env_buf.c_str());
+    set_environment_variable("LANG",        locale);
+    set_environment_variable("LC_MESSAGES", locale);
   }
 
   locale_dir = get_installation_path() + "\\locale";
