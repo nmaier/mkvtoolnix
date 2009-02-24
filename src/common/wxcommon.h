@@ -20,13 +20,13 @@
 # define wxCS(s) ((const wchar_t *)(s).c_str())
 # define wxMB(s) ((const char *)(s).mb_str(wxConvUTF8))
 # define wxUCS(s) wxU(s).c_str()
-# define wxCS2WS(s) wxString(s.c_str(), wxConvUTF8)
+# define wxCS2WS(s) wxUCS((s).c_str())
 # define WXUNICODE 1
 #else
 # define wxU(s) wxString(s)
 # define wxCS(s) ((const char *)(s).c_str())
 # define wxMB(s) ((const char *)(s).c_str())
-# define wxCS2WS(s) wxString(s)
+# define wxCS2WS(s) ((const char *)(s).c_str())
 # define wxUCS(s) wxString(s).c_str()
 # define WXUNICODE 0
 #endif
