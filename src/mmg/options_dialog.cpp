@@ -368,7 +368,7 @@ options_dialog::on_ok(wxCommandEvent &evt) {
 
   wxConfigBase *cfg = wxConfigBase::Get();
   cfg->SetPath(wxT("/GUI"));
-  cfg->Write(wxT("ui_locale"), wxCS2WS(new_ui_locale));
+  cfg->Write(wxT("ui_locale"), wxString(new_ui_locale.c_str(), wxConvUTF8));
 #endif  // HAVE_LIBINTL_H
 
   EndModal(wxID_OK);
