@@ -42,9 +42,9 @@
 mux_dialog::mux_dialog(wxWindow *parent):
   wxDialog(parent, -1, Z("mkvmerge is running"), wxDefaultPosition,
 #ifdef SYS_WINDOWS
-           wxSize(500, 560),
+           wxSize(700, 560),
 #else
-           wxSize(500, 520),
+           wxSize(700, 520),
 #endif
            wxDEFAULT_FRAME_STYLE) {
   char c;

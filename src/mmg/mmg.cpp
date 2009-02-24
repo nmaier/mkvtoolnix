@@ -1041,7 +1041,7 @@ mmg_dialog::check_before_overwriting() {
         (test_name.GetExt() == ext)) {
       if (file_name.HasExt())
         ext = wxU(".") + ext;
-      if (wxMessageBox(wxString::Format(Z("Splitting is active, and at least one of the potential output files '%s%s*%s%s' already exists. Do you want to overwrite them?"),
+      if (wxMessageBox(wxString::Format(Z("Splitting is active, and at least one of the potential output files '%s%s*%s' already exists. Do you want to overwrite them?"),
                                         dir.c_str(), name.c_str(), ext.c_str()),
                        Z("Overwrite existing file(s)?"), wxYES_NO) != wxYES)
         return false;

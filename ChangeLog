@@ -1,3 +1,17 @@
+2009-02-22  Moritz Bunkus  <moritz@bunkus.org>
+
+	* Released v2.5.1.
+
+	* mmg: bug fix: Fixed the selection of the translation to use if
+	the LC_MESSAGES environment variable has been set on Windows.
+
+2009-02-21  Moritz Bunkus  <moritz@bunkus.org>
+
+	* Released v2.5.0.
+
+	* mmg: bug fix: Fixed a crash during the check if files could be
+	overwritten by the next mux. Possible fix for bugs 335 and 336.
+
 2009-02-19  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge, mkvinfo, mkvextract, mmg: Made all those programs
