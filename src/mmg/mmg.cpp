@@ -2262,8 +2262,8 @@ mmg_app::OnExit() {
   cfg->SetPath(wxT("/GUI"));
   cfg->Write(wxT("last_directory"), last_open_dir);
   cfg->SetPath(wxT("/chapter_editor"));
-  cfg->Write(wxT("default_language"), wxCS2WS(default_chapter_language));
-  cfg->Write(wxT("default_country"), wxCS2WS(default_chapter_country));
+  cfg->Write(wxT("default_language"), wxString(default_chapter_language.c_str(), wxConvUTF8));
+  cfg->Write(wxT("default_country"), wxString(default_chapter_country.c_str(), wxConvUTF8));
   cfg->Flush();
 
   delete cfg;
