@@ -14,6 +14,8 @@ AC_CACHE_CHECK([if being compiled with mingw32],
     MINGW_GUIAPP=-mwindows
     LIBMTXCOMMONDLL=1
     EXEEXT=.exe
+
+    AC_CHECK_TOOL(WINDRES, windres, :)
   else
     LIBMTXCOMMONDLL=0
   fi
