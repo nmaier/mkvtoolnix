@@ -150,7 +150,7 @@ tab_attachments::enable(bool e) {
 
 void
 tab_attachments::on_add_attachment(wxCommandEvent &evt) {
-  wxFileDialog dlg(NULL, Z("Choose an attachment file"), last_open_dir, wxEmptyString, ALLFILES, wxOPEN | wxMULTIPLE);
+  wxFileDialog dlg(NULL, Z("Choose an attachment file"), last_open_dir, wxEmptyString, ALLFILES, wxFD_OPEN | wxFD_MULTIPLE);
 
   if(dlg.ShowModal() == wxID_OK) {
     wxArrayString selected_files;

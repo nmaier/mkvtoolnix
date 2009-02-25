@@ -236,7 +236,7 @@ tab_global::tab_global(wxWindow *parent):
 
 void
 tab_global::on_browse_global_tags(wxCommandEvent &evt) {
-  wxFileDialog dlg(NULL, Z("Choose the tags file"), last_open_dir, wxEmptyString, wxString::Format(Z("Tag files (*.xml)|*.xml|%s"), ALLFILES.c_str()), wxOPEN);
+  wxFileDialog dlg(NULL, Z("Choose the tags file"), last_open_dir, wxEmptyString, wxString::Format(Z("Tag files (*.xml)|*.xml|%s"), ALLFILES.c_str()), wxFD_OPEN);
   if(dlg.ShowModal() != wxID_OK)
     return;
 
@@ -247,7 +247,7 @@ tab_global::on_browse_global_tags(wxCommandEvent &evt) {
 void
 tab_global::on_browse_chapters(wxCommandEvent &evt) {
   wxFileDialog dlg(NULL, Z("Choose the chapter file"), last_open_dir, wxEmptyString,
-                   wxString::Format(Z("Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"), ALLFILES.c_str()), wxOPEN);
+                   wxString::Format(Z("Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"), ALLFILES.c_str()), wxFD_OPEN);
   if(dlg.ShowModal() != wxID_OK)
     return;
 

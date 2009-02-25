@@ -318,7 +318,7 @@ job_log_dialog::job_log_dialog(wxWindow *parent,
 
 void
 job_log_dialog::on_save(wxCommandEvent &evt) {
-  wxFileDialog dialog(NULL, Z("Choose an output file"), last_open_dir, wxEmptyString, wxString::Format(Z("Text files (*.txt)|*.txt|%s"), ALLFILES.c_str()), wxSAVE | wxOVERWRITE_PROMPT);
+  wxFileDialog dialog(NULL, Z("Choose an output file"), last_open_dir, wxEmptyString, wxString::Format(Z("Text files (*.txt)|*.txt|%s"), ALLFILES.c_str()), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
   if(dialog.ShowModal() != wxID_OK)
     return;
 

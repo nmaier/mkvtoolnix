@@ -538,7 +538,7 @@ tab_chapters::fix_missing_languages(EbmlMaster &master) {
 void
 tab_chapters::on_load_chapters(wxCommandEvent &evt) {
   wxFileDialog dlg(NULL, Z("Choose a chapter file"), last_open_dir, wxEmptyString,
-                   wxString::Format(Z("Chapter files (*.xml;*.txt;*.mka;*.mkv;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.cue|%s"), ALLFILES.c_str()), wxOPEN);
+                   wxString::Format(Z("Chapter files (*.xml;*.txt;*.mka;*.mkv;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.cue|%s"), ALLFILES.c_str()), wxFD_OPEN);
 
   if (dlg.ShowModal() == wxID_OK)
     if (load(dlg.GetPath()))
@@ -647,7 +647,7 @@ tab_chapters::on_save_chapters_to_kax_file(wxCommandEvent &evt) {
     return;
 
   wxFileDialog dlg(this, Z("Choose an output file"), last_open_dir, wxEmptyString,
-                   wxString::Format(Z("Matroska files (*.mkv;*.mka)|*.mkv;*.mka|%s"), ALLFILES.c_str()), wxSAVE);
+                   wxString::Format(Z("Matroska files (*.mkv;*.mka)|*.mkv;*.mka|%s"), ALLFILES.c_str()), wxFD_SAVE);
   if (dlg.ShowModal() != wxID_OK)
     return;
 
@@ -689,7 +689,7 @@ tab_chapters::on_save_chapters_as(wxCommandEvent &evt) {
 bool
 tab_chapters::select_file_name() {
   wxFileDialog dlg(this, Z("Choose an output file"), last_open_dir, wxEmptyString,
-                   wxString::Format(Z("Chapter files (*.xml)|*.xml|%s"), ALLFILES.c_str()), wxSAVE | wxOVERWRITE_PROMPT);
+                   wxString::Format(Z("Chapter files (*.xml)|*.xml|%s"), ALLFILES.c_str()), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
   if(dlg.ShowModal() == wxID_OK) {
     if (kax_analyzer_c::probe(wxMB(dlg.GetPath()))) {
       wxMessageBox(Z("The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."),

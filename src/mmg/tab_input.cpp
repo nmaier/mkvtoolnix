@@ -272,7 +272,7 @@ tab_input::select_file(bool append) {
 
   media_files.Printf(Z("All supported media files|%s%s|%s"), a_exts.c_str(), rest.c_str(), ALLFILES.c_str());
 
-  wxFileDialog dlg(NULL, append ? Z("Choose an input file to append") : Z("Choose an input file to add"), last_open_dir, wxEmptyString, media_files, wxOPEN | wxMULTIPLE);
+  wxFileDialog dlg(NULL, append ? Z("Choose an input file to append") : Z("Choose an input file to add"), last_open_dir, wxEmptyString, media_files, wxFD_OPEN | wxFD_MULTIPLE);
   if(dlg.ShowModal() != wxID_OK)
     return;
 

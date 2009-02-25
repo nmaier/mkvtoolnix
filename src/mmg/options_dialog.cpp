@@ -302,7 +302,7 @@ options_dialog::on_browse_mkvmerge(wxCommandEvent &evt) {
 #else
                    wxT("All files (*)|*"),
 #endif
-                   wxOPEN);
+                   wxFD_OPEN);
 
   if (dlg.ShowModal() != wxID_OK)
     return;

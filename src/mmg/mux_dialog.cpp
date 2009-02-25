@@ -67,13 +67,13 @@ mux_dialog::mux_dialog(wxWindow *parent):
 
   siz_output = new wxStaticBoxSizer(new wxStaticBox(this, -1, Z("Output")), wxVERTICAL);
   siz_output->Add(new wxStaticText(this, -1, Z("mkvmerge output:")), 0, wxALIGN_LEFT | wxALL, 5);
-  tc_output = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY | wxTE_LINEWRAP | wxTE_MULTILINE);
+  tc_output = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY | wxTE_BESTWRAP | wxTE_MULTILINE);
   siz_output->Add(tc_output, 2, wxGROW | wxALL, 5);
   siz_output->Add(new wxStaticText(this, -1, Z("Warnings:")), 0, wxALIGN_LEFT | wxALL, 5);
-  tc_warnings = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY | wxTE_LINEWRAP | wxTE_MULTILINE);
+  tc_warnings = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY | wxTE_BESTWRAP | wxTE_MULTILINE);
   siz_output->Add(tc_warnings, 1, wxGROW | wxALL, 5);
   siz_output->Add(new wxStaticText(this, -1, Z("Errors:")), 0, wxALIGN_LEFT | wxALL, 5);
-  tc_errors = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY | wxTE_LINEWRAP | wxTE_MULTILINE);
+  tc_errors = new wxTextCtrl(this, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY | wxTE_BESTWRAP | wxTE_MULTILINE);
   siz_output->Add(tc_errors, 1, wxGROW | wxALL, 5);
 
   siz_buttons = new wxBoxSizer(wxHORIZONTAL);
@@ -200,7 +200,7 @@ void
 mux_dialog::on_save_log(wxCommandEvent &evt) {
   wxFile *file;
   wxString s;
-  wxFileDialog dlg(NULL, Z("Choose an output file"), last_open_dir, wxEmptyString, wxString::Format(Z("Log files (*.txt)|*.txt|%s"), ALLFILES.c_str()), wxSAVE | wxOVERWRITE_PROMPT);
+  wxFileDialog dlg(NULL, Z("Choose an output file"), last_open_dir, wxEmptyString, wxString::Format(Z("Log files (*.txt)|*.txt|%s"), ALLFILES.c_str()), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
   if(dlg.ShowModal() == wxID_OK) {
     last_open_dir = dlg.GetDirectory();
     file = new wxFile(dlg.GetPath(), wxFile::write);

@@ -258,7 +258,7 @@ tab_input_general::on_browse_tags(wxCommandEvent &evt) {
   if (input->selected_track == -1)
     return;
 
-  wxFileDialog dlg(NULL, Z("Choose a tag file"), last_open_dir, wxEmptyString, wxString(Z("Tag files (*.xml;*.txt)|*.xml;*.txt|%s"), ALLFILES.c_str()), wxOPEN);
+  wxFileDialog dlg(NULL, Z("Choose a tag file"), last_open_dir, wxEmptyString, wxString(Z("Tag files (*.xml;*.txt)|*.xml;*.txt|%s"), ALLFILES.c_str()), wxFD_OPEN);
   if(dlg.ShowModal() != wxID_OK)
     return;
 
@@ -272,7 +272,7 @@ tab_input_general::on_browse_timecodes_clicked(wxCommandEvent &evt) {
   if (input->selected_track == -1)
     return;
 
-  wxFileDialog dlg(NULL, Z("Choose a timecodes file"), last_open_dir, wxEmptyString, wxString::Format(Z("Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"), ALLFILES.c_str()), wxOPEN);
+  wxFileDialog dlg(NULL, Z("Choose a timecodes file"), last_open_dir, wxEmptyString, wxString::Format(Z("Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"), ALLFILES.c_str()), wxFD_OPEN);
   if(dlg.ShowModal() != wxID_OK)
     return;
 

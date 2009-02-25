@@ -832,7 +832,7 @@ mmg_dialog::on_browse_output(wxCommandEvent &evt) {
   wxFileDialog dlg(NULL, Z("Choose an output file"), last_open_dir,
                    tc_output->GetValue().AfterLast(PSEP),
                    wxString::Format(Z("Matroska A/V files (*.mka;*.mkv)|*.mkv;*.mka|%s"), ALLFILES.c_str()),
-                   wxSAVE | wxOVERWRITE_PROMPT);
+                   wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
   if(dlg.ShowModal() != wxID_OK)
     return;
 
@@ -879,7 +879,7 @@ mmg_dialog::on_file_new(wxCommandEvent &evt) {
 
 void
 mmg_dialog::on_file_load(wxCommandEvent &evt) {
-  wxFileDialog dlg(NULL, Z("Choose an input file"), last_open_dir, wxEmptyString, wxString::Format(Z("mkvmerge GUI settings (*.mmg)|*.mmg|%s"), ALLFILES.c_str()), wxOPEN);
+  wxFileDialog dlg(NULL, Z("Choose an input file"), last_open_dir, wxEmptyString, wxString::Format(Z("mkvmerge GUI settings (*.mmg)|*.mmg|%s"), ALLFILES.c_str()), wxFD_OPEN);
   if(dlg.ShowModal() != wxID_OK)
     return;
 
@@ -923,7 +923,7 @@ mmg_dialog::load(wxString file_name,
 
 void
 mmg_dialog::on_file_save(wxCommandEvent &evt) {
-  wxFileDialog dlg(NULL, Z("Choose an output file"), last_open_dir, wxEmptyString, wxString::Format(Z("mkvmerge GUI settings (*.mmg)|*.mmg|%s"), ALLFILES.c_str()), wxSAVE | wxOVERWRITE_PROMPT);
+  wxFileDialog dlg(NULL, Z("Choose an output file"), last_open_dir, wxEmptyString, wxString::Format(Z("mkvmerge GUI settings (*.mmg)|*.mmg|%s"), ALLFILES.c_str()), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
   if(dlg.ShowModal() != wxID_OK)
     return;
 
@@ -1216,7 +1216,7 @@ void
 mmg_dialog::on_save_cmdline(wxCommandEvent &evt) {
   wxFile *file;
   wxString s;
-  wxFileDialog dlg(NULL, Z("Choose an output file"), last_open_dir, wxEmptyString, ALLFILES, wxSAVE | wxOVERWRITE_PROMPT);
+  wxFileDialog dlg(NULL, Z("Choose an output file"), last_open_dir, wxEmptyString, ALLFILES, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
   if(dlg.ShowModal() == wxID_OK) {
     update_command_line();
 
@@ -1237,7 +1237,7 @@ mmg_dialog::on_create_optionfile(wxCommandEvent &evt) {
   string arg_utf8;
   wxFile *file;
 
-  wxFileDialog dlg(NULL, Z("Choose an output file"), last_open_dir, wxEmptyString, ALLFILES, wxSAVE | wxOVERWRITE_PROMPT);
+  wxFileDialog dlg(NULL, Z("Choose an output file"), last_open_dir, wxEmptyString, ALLFILES, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
   if(dlg.ShowModal() == wxID_OK) {
     update_command_line();
 

@@ -291,7 +291,7 @@ mi_frame::on_file_savetext(wxCommandEvent &WXUNUSED(event)) {
 
   wxFileDialog file_dialog(this, wxT("Select output file"), wxT(""), wxT(""),
                            wxT("Text files (*.txt)|*.txt|All files|*.*"),
-                           wxSAVE | wxOVERWRITE_PROMPT);
+                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
   file_dialog.SetDirectory(last_dir);
   if (file_dialog.ShowModal() == wxID_OK) {
     last_dir = file_dialog.GetDirectory();
