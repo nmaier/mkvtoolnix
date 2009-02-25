@@ -13,6 +13,7 @@ AC_CHECK_TOOL(RANLIB, ranlib, :)
 AC_CHECK_TOOL(STRIP, strip, :)
 AC_CHECK_TOOL(AR, ar, :)
 AC_CHECK_TOOL(LD, ld, :)
+AC_CHECK_TOOL(WINDRES, windres, :)
 
 dnl Check for headers
 AC_HEADER_STDC()

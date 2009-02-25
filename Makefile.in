@@ -57,6 +57,7 @@ PROFILING_LIBS = @PROFILING_LIBS@
 RANLIB = @RANLIB@
 STRIP = @STRIP@
 UIC = @UIC@
+WINDRES = @WINDRES@
 
 # Variable stuff as set by configure
 BZ2_LIBS = @BZ2_LIBS@
@@ -178,7 +179,7 @@ LINKSHARED = $(CXX) $(LDFLAGS) $(LIBDIRS) $(SYSTEM_LIBDIRS) \
 		-shared -Wl,--export-all
 CXXCOMPILE = $(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES)
 CCOMPILE = $(CC) $(CFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES)
-RCCOMPILE = windres $(WXWIDGETS_INCLUDES) -Isrc/mmg
+RCCOMPILE = $(WINDRES) $(WXWIDGETS_INCLUDES) -Isrc/mmg
 
 ALL_SOURCES=$(wildcard avilib-0.6.10/*.c) $(wildcard avilib-0.6.10/*.cpp) \
 		$(wildcard librmff/*.c) \
