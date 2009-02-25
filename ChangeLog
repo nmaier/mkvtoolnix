@@ -13,6 +13,12 @@
 
 	* source: various fixes for compilation with wxWidgets 2.9.
 
+2009-02-24  Moritz Bunkus  <moritz@bunkus.org>
+
+	* all programs: bug fix: The locale was not detected properly
+	often resulting in the program aborting with the message that
+	"the locale could not be set properly". Fix for bug 338.
+
 2009-02-22  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v2.5.1.

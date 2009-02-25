@@ -15,6 +15,7 @@
 #ifdef HAVE_WXWIDGETS
 
 #include <wx/wx.h>
+#include <wx/config.h>
 #include <wx/treectrl.h>
 #include <wx/dnd.h>
 
@@ -23,6 +24,7 @@
 
 #include "common.h"
 #include "mkvinfo.h"
+#include "translation.h"
 #include "wxwidgets_ui.h"
 #if !defined(SYS_WINDOWS)
 #include "matroska.xpm"
@@ -47,10 +49,40 @@ enum {
   mi_help_about = wxID_ABOUT
 };
 
+void
+mi_app::init_ui_locale() {
+  std::string locale;
+
+#if defined(HAVE_LIBINTL_H)
+  wxString w_locale;
+
+  translation_c::initialize_available_translations();
+
+  wxConfigBase *cfg = wxConfigBase::Get();
+  cfg->SetPath(wxT("/GUI"));
+  if (cfg->Read(wxT("ui_locale"), &w_locale)) {
+    locale = wxMB(w_locale);
+    if (-1 == translation_c::look_up_translation(locale))
+      locale = "";
+  }
+
+  if (locale.empty())
+    locale = translation_c::get_default_ui_locale();
+
+#endif  // HAVE_LIBINTL_H
+
+  init_locales(locale);
+}
+
 bool
 mi_app::OnInit() {
   string initial_file;
   vector<string> args;
+
+  wxConfigBase *cfg = new wxConfig(wxT("mkvmergeGUI"));
+  wxConfigBase::Set(cfg);
+
+  init_ui_locale();
 
   setup();
 

@@ -27,6 +27,8 @@
 class mi_app: public wxApp {
 public:
   virtual bool OnInit();
+
+  void init_ui_locale();
 };
 
 class mi_dndfile: public wxFileDropTarget {
