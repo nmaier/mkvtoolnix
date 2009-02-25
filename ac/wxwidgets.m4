@@ -74,6 +74,30 @@ wxTreeItemId id;
 
   if test x"$have_wxwindows" != "xyes" ; then
     opt_features_no="$opt_features_no\n   * GUIs (wxWidgets version)"
+  else
+    AC_MSG_CHECKING(for wxWidgets class wxBitmapComboBox)
+    AC_CACHE_VAL(am_cv_wx_bitmapcombobox, [
+      AC_LANG_PUSH(C++)
+      ac_save_CXXFLAGS="$CXXFLAGS"
+      ac_save_LIBS="$LIBS"
+      CXXFLAGS="$CXXFLAGS $WXWIDGETS_CFLAGS"
+      LIBS="$LDFLAGS $WXWIDGETS_LIBS"
+      AC_TRY_COMPILE([
+#include <wx/bmpcbox.h>
+], [
+wxBitmapComboBox bitmap_combobox(NULL, -1);
+], [ am_cv_wx_bitmapcombobox=1 ], [ am_cv_wx_bitmapcombobox=0 ])
+      AC_LANG_POP()
+      CXXFLAGS="$ac_save_CXXFLAGS"
+      LIBS="$ac_save_LIBS"
+    ])
+
+    if test x"$am_cv_wx_bitmapcombobox" = "x1" ; then
+      AC_DEFINE(HAVE_WXBITMAPCOMBOBOX, 1, [Define if the wxWindows class wxBitmapComboBox is present])
+      AC_MSG_RESULT(yes)
+    else
+      AC_MSG_RESULT(no)
+    fi
   fi
 
 AC_SUBST(WXWIDGETS_CFLAGS)

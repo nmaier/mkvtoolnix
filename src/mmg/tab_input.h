@@ -64,7 +64,7 @@ class tab_input_general: public wxPanel {
   DECLARE_CLASS(tab_input_general);
   DECLARE_EVENT_TABLE();
 public:
-  wxComboBox *cob_default, *cob_language, *cob_cues;
+  wxMTX_COMBOBOX_TYPE *cob_default, *cob_language, *cob_cues;
   wxTextCtrl *tc_track_name, *tc_tags, *tc_timecodes;
   wxButton *b_browse_tags, *b_browse_timecodes;
 
@@ -99,8 +99,7 @@ class tab_input_format: public wxPanel {
   DECLARE_EVENT_TABLE();
 public:
   wxCheckBox *cb_aac_is_sbr;
-  wxComboBox *cob_sub_charset, *cob_aspect_ratio, *cob_fourcc, *cob_compression;
-  wxComboBox *cob_stereo_mode, *cob_fps, *cob_nalu_size_length;
+  wxMTX_COMBOBOX_TYPE *cob_sub_charset, *cob_aspect_ratio, *cob_fourcc, *cob_compression, *cob_stereo_mode, *cob_fps, *cob_nalu_size_length;
   wxTextCtrl *tc_delay, *tc_stretch;
   wxRadioButton *rb_aspect_ratio, *rb_display_dimensions;
   wxTextCtrl *tc_display_width, *tc_display_height;

@@ -35,7 +35,7 @@ protected:
   wxCheckListBox *clb_attached_files;
   wxListBox *lb_attachments;
   wxButton *b_add_attachment, *b_remove_attachment;
-  wxComboBox *cob_mimetype, *cob_style;
+  wxMTX_COMBOBOX_TYPE *cob_mimetype, *cob_style;
   wxTextCtrl *tc_description, *tc_name;
   wxStaticText *st_name, *st_description, *st_mimetype, *st_style;
 

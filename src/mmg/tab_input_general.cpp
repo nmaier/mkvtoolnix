@@ -57,7 +57,7 @@ tab_input_general::tab_input_general(wxWindow *parent,
   st_language->Enable(false);
   siz_fg->Add(st_language, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_language = new wxComboBox(this, ID_CB_LANGUAGE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_language = new wxMTX_COMBOBOX_TYPE(this, ID_CB_LANGUAGE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
   cob_language->SetToolTip(TIP("Language for this track. Select one of the ISO639-2 language codes."));
   siz_fg->Add(cob_language, 1, wxGROW | wxALL, STDSPACING);
 
@@ -65,7 +65,7 @@ tab_input_general::tab_input_general(wxWindow *parent,
   st_cues->Enable(false);
   siz_fg->Add(st_cues, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_cues = new wxComboBox(this, ID_CB_CUES, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_cues = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CUES, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
   cob_cues->SetToolTip(TIP("Selects for which blocks mkvmerge will produce index entries ( = cue entries). \"default\" is a good choice for almost all situations."));
   cob_cues->SetSizeHints(0, -1);
   siz_fg->Add(cob_cues, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
@@ -73,7 +73,7 @@ tab_input_general::tab_input_general(wxWindow *parent,
   st_default = new wxStaticText(this, wxID_STATIC, Z("Default track flag:"));
   siz_fg->Add(st_default, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_default = new wxComboBox(this, ID_CB_MAKEDEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_default = new wxMTX_COMBOBOX_TYPE(this, ID_CB_MAKEDEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
   cob_default->SetToolTip(TIP("Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."));
   siz_fg->Add(cob_default, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 

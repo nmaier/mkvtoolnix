@@ -77,7 +77,7 @@ options_dialog::options_dialog(wxWindow *parent,
   b_browse     = new wxButton(this, ID_B_BROWSEMKVMERGE, Z("Browse"));
 
   st_priority  = new wxStaticText(this, -1, Z("Process priority:"));
-  cob_priority = new wxComboBox(this, ID_COB_PRIORITY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_priority = new wxMTX_COMBOBOX_TYPE(this, ID_COB_PRIORITY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
 
   cob_priority->SetToolTip(TIP("Sets the priority that mkvmerge will run with."));
 
@@ -137,7 +137,7 @@ options_dialog::options_dialog(wxWindow *parent,
 
 #if defined(HAVE_LIBINTL_H)
   wxStaticText *st_ui_language = new wxStaticText(this, -1, Z("Interface language:"));
-  cob_ui_language = new wxComboBox(this, ID_COB_UI_LANGUAGE,  wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_ui_language = new wxMTX_COMBOBOX_TYPE(this, ID_COB_UI_LANGUAGE,  wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
 
   std::string ui_locale_lower = downcase(app->m_ui_locale);
   std::vector<translation_c>::iterator translation = translation_c::ms_available_translations.begin();

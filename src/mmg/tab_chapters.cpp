@@ -77,7 +77,7 @@ class chapter_values_dlg: public wxDialog {
   DECLARE_CLASS(chapter_values_dlg);
   DECLARE_EVENT_TABLE();
 public:
-  wxComboBox *cob_language, *cob_country;
+  wxMTX_COMBOBOX_TYPE *cob_language, *cob_country;
   wxCheckBox *cb_language, *cb_country;
 
 public:
@@ -111,11 +111,11 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent,
     siz_input->AddGrowableCol(1);
 
     siz_input->Add(new wxStaticText(this, wxID_STATIC, Z("Language:")), 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
-    cob_language = new wxComboBox(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+    cob_language = new wxMTX_COMBOBOX_TYPE(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
     siz_input->Add(cob_language, 0, wxGROW, 0);
 
     siz_input->Add(new wxStaticText(this, wxID_STATIC, Z("Country:")), 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
-    cob_country = new wxComboBox(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+    cob_country = new wxMTX_COMBOBOX_TYPE(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
     siz_input->Add(cob_country, 0, wxGROW, 0);
 
   } else {
@@ -132,14 +132,14 @@ chapter_values_dlg::chapter_values_dlg(wxWindow *parent,
     cb_language = new wxCheckBox(this, ID_CVD_CB_LANGUAGE, Z("Set language to:"));
     cb_language->SetValue(false);
     siz_input->Add(cb_language, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
-    cob_language = new wxComboBox(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+    cob_language = new wxMTX_COMBOBOX_TYPE(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
     cob_language->Enable(false);
     siz_input->Add(cob_language, 0, wxGROW, 0);
 
     cb_country = new wxCheckBox(this, ID_CVD_CB_COUNTRY, Z("Set country to:"));
     cb_country->SetValue(false);
     siz_input->Add(cb_country, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
-    cob_country = new wxComboBox(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+    cob_country = new wxMTX_COMBOBOX_TYPE(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
     cob_country->Enable(false);
     siz_input->Add(cob_country, 0, wxGROW, 0);
 
@@ -318,7 +318,7 @@ tab_chapters::tab_chapters(wxWindow *parent,
   st_language = new wxStaticText(this, wxID_STATIC, Z("Language:"));
   siz_fg->Add(st_language, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
 
-  cob_language_code = new wxComboBox(this, ID_CB_CHAPTERSELECTLANGUAGECODE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_language_code = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CHAPTERSELECTLANGUAGECODE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
   for (i = 0; i < sorted_iso_codes.Count(); i++)
     cob_language_code->Append(sorted_iso_codes[i]);
   cob_language_code->SetValue(wxEmptyString);
@@ -328,7 +328,7 @@ tab_chapters::tab_chapters(wxWindow *parent,
 
   st_country = new wxStaticText(this, wxID_STATIC, Z("Country:"));
   siz_line->Add(st_country, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
-  cob_country_code = new wxComboBox(this, ID_CB_CHAPTERSELECTCOUNTRYCODE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_country_code = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CHAPTERSELECTCOUNTRYCODE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
   cob_country_code->Append(wxEmptyString);
   for (i = 0; cctlds[i] != NULL; i++)
     cob_country_code->Append(wxU(cctlds[i]));

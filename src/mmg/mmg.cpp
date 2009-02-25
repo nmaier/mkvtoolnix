@@ -50,6 +50,7 @@
 #include "tab_global.h"
 #include "translation.h"
 #include "xml_element_mapping.h"
+#include "wxcommon.h"
 
 mmg_app *app;
 mmg_dialog *mdlg;
@@ -645,6 +646,22 @@ set_combobox_selection(wxComboBox *cb,
       break;
     }
 }
+
+#if defined(USE_WXBITMAPCOMBOBOX)
+void
+set_combobox_selection(wxBitmapComboBox *cb,
+                       const wxString wanted) {
+  int i, count;
+
+  cb->SetValue(wanted);
+  count = cb->GetCount();
+  for (i = 0; count > i; ++i)
+    if (cb->GetString(i) == wanted) {
+      cb->SetSelection(i);
+      break;
+    }
+}
+#endif  // USE_WXBITMAPCOMBOBOX
 
 void
 wxdie(const wxString &errmsg) {

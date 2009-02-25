@@ -71,7 +71,7 @@ tab_attachments::tab_attachments(wxWindow *parent):
   tc_description->SetSizeHints(0, -1);
 
   st_mimetype    = new wxStaticText(this, wxID_STATIC, Z("MIME type:"));
-  cob_mimetype   = new wxComboBox(this, ID_CB_MIMETYPE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
+  cob_mimetype   = new wxMTX_COMBOBOX_TYPE(this, ID_CB_MIMETYPE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
   cob_mimetype->SetToolTip(TIP("MIME type for this track. Select one of the pre-defined MIME types or enter one yourself."));
   cob_mimetype->Append(wxEmptyString);
   int i;
@@ -81,7 +81,7 @@ tab_attachments::tab_attachments(wxWindow *parent):
 
   st_style  = new wxStaticText(this, wxID_STATIC, Z("Attachment style:"));
 
-  cob_style = new wxComboBox(this, ID_CB_ATTACHMENTSTYLE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY | wxCB_DROPDOWN);
+  cob_style = new wxMTX_COMBOBOX_TYPE(this, ID_CB_ATTACHMENTSTYLE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY | wxCB_DROPDOWN);
   cob_style->Append(Z("To all files"));
   cob_style->Append(Z("Only to the first"));
   cob_style->SetToolTip(TIP("If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."));

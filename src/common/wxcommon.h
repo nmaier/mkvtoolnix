@@ -14,8 +14,10 @@
 #define __WXCOMMON_H
 
 #include "config.h"
+#include "os.h"
 
 #include <wx/filedlg.h>
+#include <wx/version.h>
 
 #if defined(wxUSE_UNICODE) && wxUSE_UNICODE
 # define wxU(s) wxString(s, wxConvUTF8)
@@ -62,6 +64,21 @@
 
 #if !defined(wxFD_OVERWRITE_PROMPT)
 # define wxFD_OVERWRITE_PROMPT wxOVERWRITE_PROMPT
+#endif
+
+// Use wxComboBox on non-Windows builds with wxWidgets 2.8.0 and newer
+// because GTK's combo box has serious problems (see bug 339).
+#if !defined(wxMTX_COMBOBOX_TYPE)
+# if !defined(SYS_WINDOWS) && !defined(SYS_APPLE) && wxCHECK_VERSION(2, 8, 0) && defined(HAVE_WXBITMAPCOMBOBOX) && HAVE_WXBITMAPCOMBOBOX
+#  define USE_WXBITMAPCOMBOBOX
+#  define wxMTX_COMBOBOX_TYPE wxBitmapComboBox
+#  include <wx/bmpcbox.h>
+
+# else
+
+#  define wxMTX_COMBOBOX_TYPE wxComboBox
+
+# endif
 #endif
 
 #endif /* __WXCOMMON_H */

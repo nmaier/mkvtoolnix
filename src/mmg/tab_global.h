@@ -14,6 +14,8 @@
 #ifndef __TAB_GLOBAL_H
 #define __TAB_GLOBAL_H
 
+#include "wxcommon.h"
+
 #define ID_B_BROWSEGLOBALTAGS             13000
 #define ID_B_BROWSECHAPTERS               13001
 #define ID_CB_SPLIT                       13002
@@ -48,8 +50,7 @@ public:
   wxCheckBox *cb_split, *cb_link;
   wxRadioButton *rb_split_by_size, *rb_split_by_time, *rb_split_each_chapter;
   wxRadioButton *rb_split_chapters, *rb_split_after_timecodes;
-  wxComboBox *cob_split_by_size, *cob_split_by_time;
-  wxComboBox *cob_chap_language, *cob_chap_charset;
+  wxMTX_COMBOBOX_TYPE *cob_split_by_size, *cob_split_by_time, *cob_chap_language, *cob_chap_charset;
   wxStaticText *st_split_max_files;
 
 public:

@@ -198,6 +198,9 @@ wxString create_track_order(bool all);
 int default_track_checked(char type);
 
 void set_combobox_selection(wxComboBox *cb, const wxString wanted);
+#if defined(USE_WXBITMAPCOMBOBOX)
+void set_combobox_selection(wxBitmapComboBox *cb, const wxString wanted);
+#endif  // USE_WXBITMAPCOMBOBOX
 
 void wxdie(const wxString &errmsg);
 

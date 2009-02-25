@@ -54,7 +54,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   rb_aspect_ratio->SetValue(true);
   siz_fg->Add(rb_aspect_ratio, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_aspect_ratio = new wxComboBox(this, ID_CB_ASPECTRATIO, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
+  cob_aspect_ratio = new wxMTX_COMBOBOX_TYPE(this, ID_CB_ASPECTRATIO, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
 
   for (i = 0; NULL != predefined_aspect_ratios[i]; ++i)
     cob_aspect_ratio->Append(predefined_aspect_ratios[i]);
@@ -88,9 +88,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   st_fourcc->Enable(false);
   siz_fg->Add(st_fourcc, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_fourcc =
-    new wxComboBox(this, ID_CB_FOURCC, wxEmptyString, wxDefaultPosition,
-                   wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
+  cob_fourcc = new wxMTX_COMBOBOX_TYPE(this, ID_CB_FOURCC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
   cob_fourcc->SetToolTip(TIP("Forces the FourCC of the video track to this value. Note that this only works for video "
                              "tracks that use the AVI compatibility mode or for QuickTime video tracks. This option CANNOT be used to change Matroska's CodecID."));
   cob_fourcc->SetSizeHints(0, -1);
@@ -100,7 +98,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   st_stereo_mode->Enable(false);
   siz_fg->Add(st_stereo_mode, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_stereo_mode = new wxComboBox(this, ID_CB_STEREO_MODE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
+  cob_stereo_mode = new wxMTX_COMBOBOX_TYPE(this, ID_CB_STEREO_MODE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
   cob_stereo_mode->SetToolTip(TIP("Sets the stereo mode of the video track to this value. If left empty then the track's original stereo mode will be kept or, if "
                                   "it didn't have one, none will be set at all."));
   cob_stereo_mode->SetSizeHints(0, -1);
@@ -110,7 +108,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   st_fps->Enable(false);
   siz_fg->Add(st_fps, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_fps = new wxComboBox(this, ID_CB_FPS, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
+  cob_fps = new wxMTX_COMBOBOX_TYPE(this, ID_CB_FPS, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
   cob_fps->SetToolTip(TIP("Sets the default duration or number of frames per second for a track. This is only possible "
                           "for input formats from which mkvmerge cannot get this information itself. At the moment this "
                           "only includes AVC/h.264 elementary streams. This can either be a floating point number or a fraction."));
@@ -121,7 +119,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   st_nalu_size_length->Enable(false);
   siz_fg->Add(st_nalu_size_length, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_nalu_size_length = new wxComboBox(this, ID_CB_NALU_SIZE_LENGTH, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
+  cob_nalu_size_length = new wxMTX_COMBOBOX_TYPE(this, ID_CB_NALU_SIZE_LENGTH, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
   cob_nalu_size_length->SetToolTip(TIP("Forces the NALU size length to a certain number of bytes. This parameter is only available for AVC/h.264 elementary "
                                        "streams read from AVC/h.264 ES files, AVIs or Matroska files created with '--engage allow_avc_in_vwf_mode'. "
                                        "It defaults to 4 bytes, but there are files which do not contain a frame or slice that is bigger than 65535 bytes. "
@@ -153,7 +151,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   st_sub_charset->Enable(false);
   siz_fg->Add(st_sub_charset, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_sub_charset = new wxComboBox(this, ID_CB_SUBTITLECHARSET, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_sub_charset = new wxMTX_COMBOBOX_TYPE(this, ID_CB_SUBTITLECHARSET, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
   cob_sub_charset->SetToolTip(TIP("Selects the character set a subtitle file was written with. Only needed for non-UTF "
                                   "files that mkvmerge does not detect correctly."));
   cob_sub_charset->Append(Z("default"));
@@ -164,7 +162,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   st_compression->Enable(false);
   siz_fg->Add(st_compression, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_compression = new wxComboBox(this, ID_CB_COMPRESSION, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_compression = new wxMTX_COMBOBOX_TYPE(this, ID_CB_COMPRESSION, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
   cob_compression->SetToolTip(TIP("Sets the compression used for VobSub subtitles. If nothing is chosen then the "
                                   "VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."));
   cob_compression->SetSizeHints(0, -1);

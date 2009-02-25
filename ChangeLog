@@ -1,5 +1,12 @@
 2009-02-25  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: On Linux wxWidgets 2.8.0 and newer uses the GTK combo boxes
+	which suck. A lot. Therefore mmg uses wxBitmapComboBoxes for
+	wxWidgets >= 2.8.0 on Linux and normal wxComboBoxes in all other
+	cases. wxBitmapComboBoxes are still drawn by wxWidgets itself
+	(just like wxComboBoxes before 2.8.0) and offer much better
+	functionality. Fix for bug 339.
+
 	* mkvmerge, mmg: bug fix: The MIME type autodetection for
 	attachments was broken for paths with non-ASCII characters on
 	non-UTF-8 encoded systems (mostly on Windows). Fix for bug 340.

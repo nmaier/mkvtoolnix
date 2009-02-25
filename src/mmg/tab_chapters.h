@@ -15,13 +15,13 @@
 #define __TAB_CHAPTERS_H
 
 #include "wx/button.h"
-#include "wx/combobox.h"
 #include "wx/panel.h"
 #include "wx/treectrl.h"
 
 #include <matroska/KaxChapters.h>
 
 #include "kax_analyzer.h"
+#include "wxcommon.h"
 
 #define ID_TRC_CHAPTERS                   16000
 #define ID_B_ADDCHAPTER                   16001
@@ -56,7 +56,7 @@ public:
 
   wxTextCtrl *tc_chapter_name, *tc_start_time, *tc_end_time;
   wxTextCtrl *tc_uid;
-  wxComboBox *cob_language_code, *cob_country_code;
+  wxMTX_COMBOBOX_TYPE *cob_language_code, *cob_country_code;
   wxListBox *lb_chapter_names;
   wxButton *b_add_chapter_name, *b_remove_chapter_name;
   wxCheckBox *cb_flag_hidden, *cb_flag_enabled;
