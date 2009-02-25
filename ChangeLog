@@ -1,5 +1,9 @@
 2009-02-25  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge, mmg: bug fix: The MIME type autodetection for
+	attachments was broken for paths with non-ASCII characters on
+	non-UTF-8 encoded systems (mostly on Windows). Fix for bug 340.
+
 	* source: various fixes for compilation with wxWidgets 2.9.
 
 2009-02-22  Moritz Bunkus  <moritz@bunkus.org>
