@@ -13,8 +13,12 @@
 */
 
 #include "os.h"
+
+#include <algorithm>
+
 #include "common.h"
 #include "extern_data.h"
+#include "mm_io.h"
 
 #ifdef SYS_WINDOWS
 # include "os_windows.h"
@@ -2634,6 +2638,41 @@ guess_mime_type_by_ext(string ext) {
   return "";
 }
 
+#if HAVE_MAGIC_H
+static std::string
+guess_mime_type_by_content(magic_t &m,
+                           const std::string &file_name) {
+  try {
+    mm_file_io_c file(file_name);
+    int64_t file_size = file.get_size();
+    int buffer_size   = 0;
+    memory_cptr buf   = memory_c::alloc(1024 * 1024);
+    int i;
+
+    for (i = 1; 3 >= i; ++i) {
+      int64_t bytes_to_read = std::min(file_size - buffer_size, (int64_t)1024 * 1024);
+
+      if (0 == bytes_to_read)
+        break;
+
+      if (buf->get_size() < (buffer_size + bytes_to_read))
+        buf->resize(buffer_size + bytes_to_read);
+
+      int64_t bytes_read     = file.read(buf->get() + buffer_size, bytes_to_read);
+      buffer_size           += bytes_read;
+
+      std::string mime_type  = magic_buffer(m, buf->get(), buffer_size);
+
+      if (!mime_type.empty())
+        return mime_type;
+    }
+  } catch (...) {
+  }
+
+  return "";
+}
+#endif  // HAVE_MAGIC_H
+
 string
 guess_mime_type(string ext,
                 bool is_file) {
@@ -2662,7 +2701,7 @@ guess_mime_type(string ext,
     return guess_mime_type_by_ext(ext);
 #endif
 
-  ret = magic_file(m, ext.c_str());
+  ret = guess_mime_type_by_content(m, ext);
   magic_close(m);
 
   if (ret == "")
