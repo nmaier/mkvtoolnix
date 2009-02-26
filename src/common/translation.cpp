@@ -139,19 +139,19 @@ void
 init_locales(std::string locale) {
   translation_c::initialize_available_translations();
 
-  mxverb(2, boost::format("init_locales start: locale %1%\n") % locale);
+  mxverb(4, boost::format("[init_locales start: locale %1%]\n") % locale);
 
   std::string locale_dir;
   std::string default_locale = translation_c::get_default_ui_locale();
 
   if (-1 == translation_c::look_up_translation(locale)) {
-    mxverb(2, boost::format("init_locales lookup failed; clearing locale\n"));
+    mxverb(4, boost::format("[init_locales lookup failed; clearing locale]\n"));
     locale = "";
   }
 
   if (locale.empty()) {
     locale = default_locale;
-    mxverb(2, boost::format("init_locales setting to default locale %1%\n") % locale);
+    mxverb(4, boost::format("[init_locales setting to default locale %1%]\n") % locale);
   }
 
 # if defined(SYS_WINDOWS)
@@ -190,10 +190,10 @@ init_locales(std::string locale) {
     }
 
   } catch (locale_string_format_error_c &error) {
-    mxverb(2, boost::format("init_locales format error in %1%\n") % error.m_format);
+    mxverb(4, boost::format("[init_locales format error in %1%]\n") % error.m_format);
   }
 
-  mxverb(2, boost::format("init_locales chosen locale %1%\n") % chosen_locale);
+  mxverb(4, boost::format("[init_locales chosen locale %1%]\n") % chosen_locale);
 
   if (chosen_locale.empty())
     mxerror(Y("The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"));
