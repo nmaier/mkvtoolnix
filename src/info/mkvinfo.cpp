@@ -1842,9 +1842,9 @@ process_file(const string &file_name) {
 }
 
 void
-setup() {
+setup(const std::string &locale) {
   init_stdio();
-  init_locales();
+  init_locales(locale);
 
   mm_file_io_c::setup();
   cc_local_utf8 = utf8_init("");

@@ -49,8 +49,8 @@ enum {
   mi_help_about = wxID_ABOUT
 };
 
-void
-mi_app::init_ui_locale() {
+std::string
+mi_app::get_ui_locale() {
   std::string locale;
 
 #if defined(HAVE_LIBINTL_H)
@@ -65,13 +65,9 @@ mi_app::init_ui_locale() {
     if (-1 == translation_c::look_up_translation(locale))
       locale = "";
   }
-
-  if (locale.empty())
-    locale = translation_c::get_default_ui_locale();
-
 #endif  // HAVE_LIBINTL_H
 
-  init_locales(locale);
+  return locale;
 }
 
 bool
@@ -82,9 +78,7 @@ mi_app::OnInit() {
   wxConfigBase *cfg = new wxConfig(wxT("mkvmergeGUI"));
   wxConfigBase::Set(cfg);
 
-  init_ui_locale();
-
-  setup();
+  setup(get_ui_locale());
 
 #if WXUNICODE
   int i;
@@ -139,31 +133,20 @@ mi_frame::mi_frame(const wxString &title,
   menu_help = new wxMenu();
   menu_bar = new wxMenuBar();
 
-  menu_file->Append(mi_file_open, wxT("&Open\tCtrl-O"),
-                    wxT("Open a Matroska file"));
-  menu_file->Append(mi_file_savetext, wxT("&Save info as text\tCtrl-S"),
-                    wxT("Saves the information from the current file to a "
-                       "text file"));
+  menu_file->Append(mi_file_open, Z("&Open\tCtrl-O"), Z("Open a Matroska file"));
+  menu_file->Append(mi_file_savetext, Z("&Save info as text\tCtrl-S"), Z("Saves the information from the current file to a text file"));
   menu_file->Enable(mi_file_savetext, false);
   menu_file->AppendSeparator();
-  menu_file->Append(mi_file_quit, wxT("E&xit\tCtrl-Q"),
-                    wxT("Quits mkvinfo"));
-  menu_options->AppendCheckItem(mi_options_showall,
-                                wxT("Show &all elements\tCtrl-A"),
-                                wxT("Parse the file completely and show all "
-                                   "elements"));
+  menu_file->Append(mi_file_quit, Z("E&xit\tCtrl-Q"), Z("Quits mkvinfo"));
+  menu_options->AppendCheckItem(mi_options_showall, Z("Show &all elements\tCtrl-A"), Z("Parse the file completely and show all elements"));
   menu_options->Check(mi_options_showall, show_all_elements);
-  menu_options->AppendCheckItem(mi_options_expandimportant,
-                                wxT("&Expand important elements\tCtrl-E"),
-                                wxT("After loading a file expand the most "
-                                   "important elements"));
+  menu_options->AppendCheckItem(mi_options_expandimportant, Z("&Expand important elements\tCtrl-E"), Z("After loading a file expand the most important elements"));
   menu_options->Check(mi_options_expandimportant, expand_important_elements);
-  menu_help->Append(mi_help_about, wxT("&About...\tF1"),
-                    wxT("Show about dialog"));
+  menu_help->Append(mi_help_about, Z("&About\tF1"), Z("Show about dialog"));
 
-  menu_bar->Append(menu_file, wxT("&File"));
-  menu_bar->Append(menu_options, wxT("&Options"));
-  menu_bar->Append(menu_help, wxT("&Help"));
+  menu_bar->Append(menu_file, Z("&File"));
+  menu_bar->Append(menu_options, Z("&Options"));
+  menu_bar->Append(menu_help, Z("&Help"));
 
   SetMenuBar(menu_bar);
 
@@ -172,7 +155,7 @@ mi_frame::mi_frame(const wxString &title,
   tree->SetDropTarget(dnd_load);
 
   CreateStatusBar(1);
-  SetStatusText(wxT("ready"));
+  SetStatusText(Z("ready"));
 
   last_dir = wxGetCwd();
 }
@@ -202,7 +185,7 @@ mi_frame::open_file(wxString file_name) {
   }
   menu_file->Enable(mi_file_open, true);
   menu_options->Enable(mi_options_showall, true);
-  SetStatusText(wxT("ready"));
+  SetStatusText(Z("ready"));
   tree->Refresh();
 }
 
@@ -249,11 +232,11 @@ mi_frame::expand_elements() {
   l0 = tree->GetFirstChild(item_ids[0], cl0);
   while (l0 > 0) {
     tree->Expand(l0);
-    if (tree->GetItemText(l0).find(wxT("Segment")) == 0) {
+    if (tree->GetItemText(l0).find(Z("Segment")) == 0) {
       l1 = tree->GetFirstChild(l0, cl1);
       while (l1 > 0) {
-        if ((tree->GetItemText(l1).find(wxT("Segment information")) == 0) ||
-            (tree->GetItemText(l1).find(wxT("Segment tracks")) == 0))
+        if ((tree->GetItemText(l1).find(Z("Segment information")) == 0) ||
+            (tree->GetItemText(l1).find(Z("Segment tracks")) == 0))
           expand_all_elements(l1);
         l1 = tree->GetNextChild(l0, cl1);
       }
@@ -274,7 +257,7 @@ mi_frame::add_item(int level,
 
 void
 mi_frame::show_error(wxString msg) {
-  wxMessageBox(msg, wxT("Error"), wxOK | wxICON_ERROR | wxCENTER, this);
+  wxMessageBox(msg, Z("Error"), wxOK | wxICON_ERROR | wxCENTER, this);
 }
 
 void
@@ -295,7 +278,7 @@ mi_frame::save_elements(wxTreeItemId &root,
     pcnt_before = elements_saved * 100 / num_elements;
     pcnt_now = (elements_saved + 1) * 100 / num_elements;
     if ((pcnt_before / 5) != (pcnt_now / 5))
-      show_progress(pcnt_now, wxT("Writing info"));
+      show_progress(pcnt_now, Z("Writing info"));
     elements_saved++;
   }
   child = tree->GetFirstChild(root, cookie);
@@ -307,9 +290,7 @@ mi_frame::save_elements(wxTreeItemId &root,
 
 void
 mi_frame::on_file_open(wxCommandEvent &WXUNUSED(event)) {
-  wxFileDialog file_dialog(this, wxT("Select Matroska file"), wxT(""), wxT(""),
-                           wxT("Matroska files (*.mkv;*.mka;*.mks)|"
-                               "*.mkv;*.mka;*.mks|All files|*.*"));
+  wxFileDialog file_dialog(this, Z("Select Matroska file"), wxT(""), wxT(""), Z("Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"));
   file_dialog.SetDirectory(last_dir);
   if (file_dialog.ShowModal() == wxID_OK) {
     open_file(file_dialog.GetPath().c_str());
@@ -321,17 +302,14 @@ void
 mi_frame::on_file_savetext(wxCommandEvent &WXUNUSED(event)) {
   FILE *f;
 
-  wxFileDialog file_dialog(this, wxT("Select output file"), wxT(""), wxT(""),
-                           wxT("Text files (*.txt)|*.txt|All files|*.*"),
-                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+  wxFileDialog file_dialog(this, Z("Select output file"), wxT(""), wxT(""), Z("Text files (*.txt)|*.txt|All files|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
   file_dialog.SetDirectory(last_dir);
   if (file_dialog.ShowModal() == wxID_OK) {
     last_dir = file_dialog.GetDirectory();
     f = fopen(wxMB(file_dialog.GetPath()), "w");
     if (f == NULL) {
       wxString s;
-      s.Printf(wxT("Could not create the file '%s'."),
-               file_dialog.GetPath().c_str());
+      s.Printf(Z("Could not create the file '%s'."), file_dialog.GetPath().c_str());
       show_error(s);
       return;
     }
@@ -375,14 +353,14 @@ mi_frame::on_options_expandimportant(wxCommandEvent &WXUNUSED(event)) {
 void
 mi_frame::on_help_about(wxCommandEvent &WXUNUSED(event)) {
   wxString msg;
-  msg.Printf(wxT(VERSIONINFO ".\nCompiled with libebml %s + "
-                 "libmatroska %s.\n\nThis program is licensed under the "
-                 "GPL v2 (see COPYING).\nIt was written by Moritz Bunkus "
-                 "<moritz@bunkus.org>.\nSources and the latest binaries are "
-                 "always available at\nhttp://www.bunkus.org/videotools/"
-                 "mkvtoolnix/"),
-             wxCS2WS(EbmlCodeVersion), wxCS2WS(KaxCodeVersion));
-  wxMessageBox(msg, wxT("About mkvinfo"), wxOK | wxICON_INFORMATION, this);
+  msg.Printf(Z("%s.\nCompiled with libebml %s + "
+               "libmatroska %s.\n\nThis program is licensed under the "
+               "GPL v2 (see COPYING).\nIt was written by Moritz Bunkus "
+               "<moritz@bunkus.org>.\nSources and the latest binaries are "
+               "always available at\nhttp://www.bunkus.org/videotools/"
+               "mkvtoolnix/"),
+             wxUCS(VERSIONINFO), wxCS2WS(EbmlCodeVersion), wxCS2WS(KaxCodeVersion));
+  wxMessageBox(msg, Z("About mkvinfo"), wxOK | wxICON_INFORMATION, this);
 }
 
 void
@@ -410,8 +388,7 @@ mi_dndfile::OnDropFiles(wxCoord x,
       frame->open_file(dnd_file);
     } else {
       wxString msg;
-      msg.Printf(wxT("The dragged file '%s'\nis not a Matroska file."),
-                 dnd_file.c_str());
+      msg.Printf(Z("The dragged file '%s'\nis not a Matroska file."), dnd_file.c_str());
       frame->show_error(msg.c_str());
       break;
     }

@@ -24,7 +24,7 @@
 void parse_args(std::vector<std::string> args, std::string &file_name);
 int console_main(std::vector<std::string> args);
 bool process_file(const std::string &file_name);
-void setup();
+void setup(const std::string &locale = "");
 void cleanup();
 
 extern bool use_gui;
