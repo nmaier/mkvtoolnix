@@ -257,20 +257,22 @@ ifeq (1,$(LIBMTXCOMMONDLL))
 	@echo '     CXX ' $<
 	@if echo $@ | grep src.common > /dev/null 2>&1; then \
 		test x$(V) = "x1" && echo $(CXXCOMPILE) $(CXXFLAGS_SRC_COMMON) -c -o $@ $< ; \
-		$(CXXCOMPILE) $(CXXFLAGS_SRC_COMMON) -c -o $@ $< ; \
+		$(CXXCOMPILE) $(CXXFLAGS_SRC_COMMON) -c -MMD -o $@ $< ; \
+		./handle_deps $@ $$? ; \
 	else \
 		test x$(V) = "x1" && echo $(CXXCOMPILE) $(CXXFLAGS_NO_SRC_COMMON) -c -o $@ $< ; \
-		$(CXXCOMPILE) $(CXXFLAGS_NO_SRC_COMMON) -c -o $@ $< ; \
+		$(CXXCOMPILE) $(CXXFLAGS_NO_SRC_COMMON)-MMD -c -o $@ $< ; \
+		./handle_deps $@ $$? ; \
 	fi
 else
 %.o: %.cpp
 	@echo '     CXX ' $<
-	$(Q)$(CXXCOMPILE) -c -o $@ $<
+	$(Q)$(CXXCOMPILE) -MMD -c -o $@ $< ; ./handle_deps $@ $$?
 endif
 
 %.o: %.c
 	@echo '      CC ' $<
-	$(Q)$(CCOMPILE) -c -o $@ $<
+	$(Q)$(CCOMPILE) -MMD -c -o $@ $< ; ./handle_deps $@ $$?
 
 %.o: %.rc
 	@echo ' WINDRES ' $<
@@ -301,20 +303,10 @@ clean:
 
 distclean dist-clean: clean
 	rm -f config.h config.log config.cache Makefile */Makefile */*/Makefile
+	rm -rf .deps
 
 maintainer-clean: distclean
 	rm -f configure config.h.in
-
-depend:
-	@echo Calculating dependecies:
-	@rm -f .depend
-	@touch .depend
-	@for i in $(ALL_SOURCES); do \
-		o="`echo $$i | sed -e 's/\.c$$/.o/' -e 's/\.cpp$$/.o/'`" ; \
-		echo ' CXX -MM '$$i ; \
-		$(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES) -MM \
-		-MT $$o $$i >> .depend ; \
-	done
 
 update-po:
 	@echo 'XGETTEXT'
@@ -517,6 +509,4 @@ src/mmg/mmg@EXEEXT@: $(mmg_OBJECTS) $(mmg_DEPENDENCIES)
 #
 # include dependency files if they exist
 #
-ifneq ($(wildcard .depend),)
-include .depend
-endif
+-include ./.deps/*.d

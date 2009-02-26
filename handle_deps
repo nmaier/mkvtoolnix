@@ -1,0 +1,18 @@
+#!/bin/sh
+
+obj="$1"
+exitcode="$2"
+
+dep="`echo "$obj" | sed -e 's:\.o$:.d:'`"
+test -f "$dep" || exit $exitcode
+
+test -f .deps && rm -f .deps
+if ! test -d .deps && ! mkdir .deps; then
+  rm -f "$dep"
+  exit 1
+fi
+
+target="`echo "$dep" | sed -e 's:/:_:g'`"
+mv "$dep" ".deps/$target" || rm -f "$dep"
+
+exit $exitcode
