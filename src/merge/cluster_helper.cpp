@@ -26,7 +26,6 @@
 #include "libmatroska_extensions.h"
 #include "output_control.h"
 #include "p_video.h"
-#include "p_vorbis.h"
 
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxBlockData.h>
