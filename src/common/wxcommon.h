@@ -16,7 +16,6 @@
 #include "config.h"
 #include "os.h"
 
-#include <wx/filedlg.h>
 #include <wx/version.h>
 
 #if defined(wxUSE_UNICODE) && wxUSE_UNICODE
@@ -50,19 +49,10 @@
 // Some of these constants are not defined in wxWidgets 2.6,
 // but the old ones are outdated in 2.8 and not present if
 // it was compiled without 2.6 compatibility.
-#if !defined(wxFD_OPEN)
-# define wxFD_OPEN wxOPEN
-#endif
-
-#if !defined(wxFD_SAVE)
-# define wxFD_SAVE wxSAVE
-#endif
-
-#if !defined(wxFD_MULTIPLE)
-# define wxFD_MULTIPLE wxMULTIPLE
-#endif
-
-#if !defined(wxFD_OVERWRITE_PROMPT)
+#if !defined(HAVE_WX_FILEDIALOG_ENUM_WITH_FD_PREFIX)
+# define wxFD_OPEN             wxOPEN
+# define wxFD_SAVE             wxSAVE
+# define wxFD_MULTIPLE         wxMULTIPLE
 # define wxFD_OVERWRITE_PROMPT wxOVERWRITE_PROMPT
 #endif
 

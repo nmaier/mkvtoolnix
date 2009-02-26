@@ -24,7 +24,7 @@ dnl
         WXWIDGETS_CFLAGS=`$WX_CONFIG --cxxflags`
         WXWIDGETS_LIBS=`$WX_CONFIG --libs | \
           sed -e 's/-Wl,--subsystem,windows//' -e 's/-mwindows//'`
-        AC_CACHE_VAL(am_cv_wx_compilation, [
+        AC_CACHE_VAL(ac_cv_wx_compilation, [
           AC_LANG_PUSH(C++)
           ac_save_CXXFLAGS="$CXXFLAGS"
           ac_save_LIBS="$LIBS"
@@ -36,12 +36,12 @@ dnl
 ], [
 wxDragResult result = wxDragError;
 wxTreeItemId id;
-], [ am_cv_wx_compilation=1 ], [ am_cv_wx_compilation=0 ])
+], [ ac_cv_wx_compilation=1 ], [ ac_cv_wx_compilation=0 ])
           AC_LANG_POP()
           CXXFLAGS="$ac_save_CXXFLAGS"
           LIBS="$ac_save_LIBS"
         ])
-        if test x"$am_cv_wx_compilation" = x1; then
+        if test x"$ac_cv_wx_compilation" = x1; then
           if test "x$MINGW" = "x1" ; then
             WXWIDGETS_INCLUDES=""
             set - `echo $WXWIDGETS_CFLAGS`
@@ -75,29 +75,39 @@ wxTreeItemId id;
   if test x"$have_wxwindows" != "xyes" ; then
     opt_features_no="$opt_features_no\n   * GUIs (wxWidgets version)"
   else
-    AC_MSG_CHECKING(for wxWidgets class wxBitmapComboBox)
-    AC_CACHE_VAL(am_cv_wx_bitmapcombobox, [
-      AC_LANG_PUSH(C++)
-      ac_save_CXXFLAGS="$CXXFLAGS"
-      ac_save_LIBS="$LIBS"
-      CXXFLAGS="$CXXFLAGS $WXWIDGETS_CFLAGS"
-      LIBS="$LDFLAGS $WXWIDGETS_LIBS"
+    AC_LANG_PUSH(C++)
+    ac_save_CXXFLAGS="$CXXFLAGS"
+    ac_save_LIBS="$LIBS"
+    CXXFLAGS="$CXXFLAGS $WXWIDGETS_CFLAGS"
+    LIBS="$LDFLAGS $WXWIDGETS_LIBS"
+
+    AC_CACHE_CHECK([for wxWidgets class wxBitmapComboBox], [ac_cv_wx_bitmapcombobox], [
       AC_TRY_COMPILE([
 #include <wx/bmpcbox.h>
 ], [
 wxBitmapComboBox bitmap_combobox(NULL, -1);
-], [ am_cv_wx_bitmapcombobox=1 ], [ am_cv_wx_bitmapcombobox=0 ])
-      AC_LANG_POP()
-      CXXFLAGS="$ac_save_CXXFLAGS"
-      LIBS="$ac_save_LIBS"
+], [ ac_cv_wx_bitmapcombobox=yes ], [ ac_cv_wx_bitmapcombobox=no ])
     ])
 
-    if test x"$am_cv_wx_bitmapcombobox" = "x1" ; then
+    if test x"$ac_cv_wx_bitmapcombobox" = "xyes" ; then
       AC_DEFINE(HAVE_WXBITMAPCOMBOBOX, 1, [Define if the wxWindows class wxBitmapComboBox is present])
-      AC_MSG_RESULT(yes)
-    else
-      AC_MSG_RESULT(no)
     fi
+
+    AC_CACHE_CHECK([for the name of wxWidgets file dialog enums], [ac_cv_wx_fd_enum_prefix], [
+      AC_TRY_COMPILE([
+#include <wx/filedlg.h>
+], [
+int i = (int)wxFD_SAVE;
+], [ ac_cv_wx_fd_enum_prefix=wxFD_xyz ], [ ac_cv_wx_fd_enum_prefix=wx_xyz ])
+    ])
+
+    if test x"$ac_cv_wx_fd_enum_prefix" = "xwxFD_xyz" ; then
+      AC_DEFINE(HAVE_WX_FILEDIALOG_ENUM_WITH_FD_PREFIX, 1, [Define if the wxWindows file dialog enums are named wxFD_xyz instead of wx_xyz])
+    fi
+
+    AC_LANG_POP()
+    CXXFLAGS="$ac_save_CXXFLAGS"
+    LIBS="$ac_save_LIBS"
   fi
 
 AC_SUBST(WXWIDGETS_CFLAGS)
