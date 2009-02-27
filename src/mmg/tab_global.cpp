@@ -177,6 +177,7 @@ tab_global::tab_global(wxWindow *parent):
 
   siz_chap_l1_l2->Add(new wxStaticText(this, -1, Z("Language:")), 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
   cob_chap_language = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CHAPTERLANGUAGE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
+  cob_chap_language->SetMinSize(wxSize(50, -1));
   cob_chap_language->Append(wxEmptyString);
   for (i = 0; i < sorted_iso_codes.Count(); i++)
     cob_chap_language->Append(sorted_iso_codes[i]);
@@ -189,6 +190,7 @@ tab_global::tab_global(wxWindow *parent):
   siz_chap_l2->Add(new wxStaticText(this, -1, Z("Charset:")), 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 10);
 
   cob_chap_charset = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CHAPTERCHARSET, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
+  cob_chap_charset->SetMinSize(wxSize(50, -1));
   cob_chap_charset->Append(wxEmptyString);
   for (i = 0; i < sorted_charsets.Count(); i++)
     cob_chap_charset->Append(sorted_charsets[i]);
