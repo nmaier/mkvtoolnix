@@ -544,9 +544,9 @@ kax_reader_c::handle_attachments(mm_io_c *io,
           }
         }
 
+        ++m_attachment_id;
         attach_mode_e attach_mode;
-        if ((-1 != id) && (-1 != size) && !mime_type.empty() && (0 != name.length()) && ((attach_mode = attachment_requested(m_attachment_id + 1)) != ATTACH_MODE_SKIP)) {
-          ++m_attachment_id;
+        if ((-1 != id) && (-1 != size) && !mime_type.empty() && (0 != name.length()) && ((attach_mode = attachment_requested(m_attachment_id)) != ATTACH_MODE_SKIP)) {
 
           attachment_t matt;
           matt.name           = UTFstring_to_cstrutf8(name);

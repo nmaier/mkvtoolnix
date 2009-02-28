@@ -1,5 +1,10 @@
 2009-02-28  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: When mkvmerge was run with the --attachments
+	option to copy only some of the attachments in a Matroska file
+	then any attachment with an ID larger than the first skipped
+	attachment ID was not copied into the new file. Fix for bug 346.
+
 	* Released v2.5.2.
 
 	* installer: bug fix: If the installer is run in silent mode
