@@ -2,7 +2,7 @@
 
 Summary: mkvtoolnix
 Name: mkvtoolnix
-Version: 2.5.1
+Version: 2.5.2
 Release: 1
 License: GPL
 Group: Multimedia
