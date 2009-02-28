@@ -1,3 +1,12 @@
+2009-02-28  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: The action "File" -> "New" did not clear the
+	internal list of attached files resulting in unexpected behaviour
+	if files with attachments where added afterwards.
+
+	* mmg: bug fix: The button "remove all files" did not clear the
+	list of attached files.
+
 2009-02-26  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvinfo: new feature: Made mkvinfo's GUI translatable. Added a

@@ -287,6 +287,7 @@ tab_attachments::load(wxConfigBase *cfg,
   b_remove_attachment->Enable(false);
   attachments.clear();
   clb_attached_files->Clear();
+  m_attached_files.clear();
 
   cfg->SetPath(wxT("/attachments"));
   if (!cfg->Read(wxT("number_of_attachments"), &num) || (num < 0))
@@ -368,6 +369,12 @@ tab_attachments::remove_attached_files_for(mmg_file_cptr &f) {
       m_attached_files.erase(m_attached_files.begin() + i);
     }
   }
+}
+
+void
+tab_attachments::remove_all_attached_files() {
+  clb_attached_files->Clear();
+  m_attached_files.clear();
 }
 
 void

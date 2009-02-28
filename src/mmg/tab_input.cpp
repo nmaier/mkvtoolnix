@@ -742,6 +742,8 @@ void
 tab_input::on_remove_all_files(wxCommandEvent &evt) {
   dont_copy_values_now = true;
 
+  mdlg->attachments_page->remove_all_attached_files();
+
   lb_input_files->Clear();
   clb_tracks->Clear();
 
