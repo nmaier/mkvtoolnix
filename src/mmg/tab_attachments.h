@@ -26,6 +26,8 @@
 #define ID_LB_ATTACHMENTS                  12006
 #define ID_TC_ATTACHMENTNAME               12007
 #define ID_CLB_ATTACHED_FILES              12008
+#define ID_B_ENABLEALLATTACHED             12009
+#define ID_B_DISABLEALLATTACHED            12010
 #define ID_T_ATTACHMENTVALUES              10058
 
 class tab_attachments: public wxPanel {
@@ -34,7 +36,7 @@ class tab_attachments: public wxPanel {
 protected:
   wxCheckListBox *clb_attached_files;
   wxListBox *lb_attachments;
-  wxButton *b_add_attachment, *b_remove_attachment;
+  wxButton *b_enable_all, *b_disable_all, *b_add_attachment, *b_remove_attachment;
   wxMTX_COMBOBOX_TYPE *cob_mimetype, *cob_style;
   wxTextCtrl *tc_description, *tc_name;
   wxStaticText *st_name, *st_description, *st_mimetype, *st_style;
@@ -57,8 +59,11 @@ public:
   void on_mimetype_changed(wxTimerEvent &evt);
   void on_style_changed(wxCommandEvent &evt);
   void on_attached_file_enabled(wxCommandEvent &evt);
+  void on_enable_all(wxCommandEvent &evt);
+  void on_disable_all(wxCommandEvent &evt);
 
   void enable(bool e);
+  void enable_attached_files_buttons();
 
   wxString derive_stored_name_from_file_name(const wxString &src);
 

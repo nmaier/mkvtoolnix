@@ -51,6 +51,11 @@ tab_attachments::tab_attachments(wxWindow *parent):
   wxStaticBox *sb_attached_files = new wxStaticBox(this, wxID_STATIC, Z("Attached files"));
   clb_attached_files             = new wxCheckListBox(this, ID_CLB_ATTACHED_FILES);
 
+  b_enable_all                   = new wxButton(this, ID_B_ENABLEALLATTACHED, Z("enable all"));
+  b_disable_all                  = new wxButton(this, ID_B_DISABLEALLATTACHED, Z("disable all"));
+  b_enable_all->Enable(false);
+  b_disable_all->Enable(false);
+
   wxStaticBox *sb_attachments    = new wxStaticBox(this, wxID_STATIC, Z("Attachments"));
   lb_attachments                 = new wxListBox(this, ID_LB_ATTACHMENTS);
 
@@ -88,16 +93,26 @@ tab_attachments::tab_attachments(wxWindow *parent):
   cob_style->SetSizeHints(0, -1);
 
   // Create the layout.
-  wxStaticBoxSizer *siz_box_attached_files = new wxStaticBoxSizer(sb_attached_files, wxVERTICAL);
-  siz_box_attached_files->Add(clb_attached_files, 1, wxGROW | wxALL, 5);
-
   wxBoxSizer *siz_line = new wxBoxSizer(wxHORIZONTAL);
-  siz_line->Add(lb_attachments, 1, wxGROW | wxALL, 5);
+  siz_line->Add(clb_attached_files, 1, wxGROW | wxALL, 5);
 
   wxBoxSizer *siz_buttons = new wxBoxSizer(wxVERTICAL);
-  siz_buttons->Add(b_add_attachment, 0, wxALL, 5);
-  siz_buttons->Add(b_remove_attachment, 0, wxALL, 5);
-  siz_buttons->Add(5, 5, 0, wxGROW | wxALL, 5);
+  siz_buttons->Add(b_enable_all,  0, wxGROW | wxALL, 5);
+  siz_buttons->Add(b_disable_all, 0, wxGROW | wxALL, 5);
+  siz_buttons->Add(5, 5,          0, wxGROW | wxALL, 5);
+
+  siz_line->Add(siz_buttons, 0, wxGROW, 0);
+
+  wxStaticBoxSizer *siz_box_attached_files = new wxStaticBoxSizer(sb_attached_files, wxHORIZONTAL);
+  siz_box_attached_files->Add(siz_line, 1, wxGROW, 0);
+
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_line->Add(lb_attachments, 1, wxGROW | wxALL, 5);
+
+  siz_buttons = new wxBoxSizer(wxVERTICAL);
+  siz_buttons->Add(b_add_attachment,    0, wxGROW | wxALL, 5);
+  siz_buttons->Add(b_remove_attachment, 0, wxGROW | wxALL, 5);
+  siz_buttons->Add(5, 5,                0, wxGROW | wxALL, 5);
 
   siz_line->Add(siz_buttons, 0, wxGROW, 0);
 
@@ -146,6 +161,13 @@ tab_attachments::enable(bool e) {
   cob_mimetype->Enable(e);
   st_style->Enable(e);
   cob_style->Enable(e);
+}
+
+void
+tab_attachments::enable_attached_files_buttons() {
+  wxLogMessage(wxT("EAFB size %d"), m_attached_files.size());
+  b_enable_all->Enable(!m_attached_files.empty());
+  b_disable_all->Enable(!m_attached_files.empty());
 }
 
 void
@@ -289,8 +311,19 @@ tab_attachments::load(wxConfigBase *cfg,
   clb_attached_files->Clear();
   m_attached_files.clear();
 
+  unsigned int fidx;
+  for (fidx = 0; files.size() > fidx; ++fidx) {
+    mmg_file_cptr &f = files[fidx];
+
+    unsigned int aidx;
+    for (aidx = 0; f->attached_files.size() > aidx; ++aidx)
+      add_attached_file(f->attached_files[aidx]);
+  }
+
+  enable_attached_files_buttons();
+
   cfg->SetPath(wxT("/attachments"));
-  if (!cfg->Read(wxT("number_of_attachments"), &num) || (num < 0))
+  if (!cfg->Read(wxT("number_of_attachments"), &num) || (num <= 0))
     return;
 
   for (i = 0; i < (uint32_t)num; i++) {
@@ -325,15 +358,6 @@ tab_attachments::load(wxConfigBase *cfg,
 
     cfg->SetPath(wxT(".."));
   }
-
-  unsigned int fidx;
-  for (fidx = 0; files.size() > fidx; ++fidx) {
-    mmg_file_cptr &f = files[fidx];
-
-    unsigned int aidx;
-    for (aidx = 0; f->attached_files.size() > aidx; ++aidx)
-      add_attached_file(f->attached_files[aidx]);
-  }
 }
 
 bool
@@ -358,6 +382,8 @@ tab_attachments::add_attached_file(mmg_attached_file_cptr &a,
                                               a->name.c_str(), a->mime_type.c_str(), a->size, file_name.GetFullName().c_str(), file_name.GetPath().c_str()));
   clb_attached_files->Check(m_attached_files.size(), a->enabled);
   m_attached_files.push_back(a);
+
+  enable_attached_files_buttons();
 }
 
 void
@@ -369,12 +395,16 @@ tab_attachments::remove_attached_files_for(mmg_file_cptr &f) {
       m_attached_files.erase(m_attached_files.begin() + i);
     }
   }
+
+  enable_attached_files_buttons();
 }
 
 void
 tab_attachments::remove_all_attached_files() {
   clb_attached_files->Clear();
   m_attached_files.clear();
+
+  enable_attached_files_buttons();
 }
 
 void
@@ -382,6 +412,24 @@ tab_attachments::on_attached_file_enabled(wxCommandEvent &evt) {
   int idx = evt.GetSelection();
   if ((0 <= idx) && (m_attached_files.size() > idx))
     m_attached_files[idx]->enabled = clb_attached_files->IsChecked(idx);
+}
+
+void
+tab_attachments::on_enable_all(wxCommandEvent &evt) {
+  int idx;
+  for (idx = 0; m_attached_files.size() > idx; ++idx) {
+    clb_attached_files->Check(idx, true);
+    m_attached_files[idx]->enabled = true;
+  }
+}
+
+void
+tab_attachments::on_disable_all(wxCommandEvent &evt) {
+  int idx;
+  for (idx = 0; m_attached_files.size() > idx; ++idx) {
+    clb_attached_files->Check(idx, false);
+    m_attached_files[idx]->enabled = false;
+  }
 }
 
 IMPLEMENT_CLASS(tab_attachments, wxPanel);
@@ -394,4 +442,6 @@ BEGIN_EVENT_TABLE(tab_attachments, wxPanel)
   EVT_TIMER(ID_T_ATTACHMENTVALUES,        tab_attachments::on_mimetype_changed)
   EVT_COMBOBOX(ID_CB_ATTACHMENTSTYLE,     tab_attachments::on_style_changed)
   EVT_CHECKLISTBOX(ID_CLB_ATTACHED_FILES, tab_attachments::on_attached_file_enabled)
+  EVT_BUTTON(ID_B_ENABLEALLATTACHED,      tab_attachments::on_enable_all)
+  EVT_BUTTON(ID_B_DISABLEALLATTACHED,     tab_attachments::on_disable_all)
 END_EVENT_TABLE();

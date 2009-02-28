@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-02-26 01:01+0100\n"
+"PO-Revision-Date: 2009-02-28 14:51+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -735,12 +735,12 @@ msgstr ""
 "unter der folgenden Adresse verfügbar:\n"
 "http://www.bunkus.org/videotools/mkvtoolnix/"
 
-#: src/mmg/tab_attachments.cpp:356
+#: src/mmg/tab_attachments.cpp:381
 #, c-format
 msgid "%s (MIME type %s, size %ld) from %s (%s)"
 msgstr "%s (MIME-Typ %s, Größe %ld) aus %s (%s)"
 
-#: src/mmg/tab_input.cpp:618 src/mmg/tab_input.cpp:1226
+#: src/mmg/tab_input.cpp:618 src/mmg/tab_input.cpp:1228
 #, c-format
 msgid "%s%s (ID %lld, type: %s) from %s"
 msgstr "%s%s (ID %lld, Typ: %s) aus %s"
@@ -1622,7 +1622,7 @@ msgstr "Ein anderer Track für %1% wurde bereits als Standardtrack festgelegt. D
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr "Es wird momentan ein anderer Job ausgeführt. Bitte warten Sie, bis er beendet wurde, oder brechen Sie ihn ab, bevor Sie einen neuen Job starten."
 
-#: src/mmg/tab_input.cpp:1256
+#: src/mmg/tab_input.cpp:1258
 #, c-format
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Das Anhängen eines Tracks aus einer Datei an einen anderen Track aus derselben Datei ist nicht zulässig. Dieses ist für die Tracks Nummer %u und %u der Fall."
@@ -1675,11 +1675,11 @@ msgstr "Angehängte Dateien"
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
 msgstr "Dateianhang ID %1%: Typ '%2%', Größe %3% Bytes"
 
-#: src/mmg/tab_attachments.cpp:82
+#: src/mmg/tab_attachments.cpp:87
 msgid "Attachment style:"
 msgstr "Art der Dateianhänge:"
 
-#: src/mmg/mmg.cpp:762 src/mmg/tab_attachments.cpp:54
+#: src/mmg/mmg.cpp:762 src/mmg/tab_attachments.cpp:59
 #: src/info/mkvinfo.cpp:1190
 msgid "Attachments"
 msgstr "Dateianhänge"
@@ -1755,7 +1755,7 @@ msgstr "Zeigt den Editor für die Jobwarteschlange an"
 
 #: src/mmg/mmg.cpp:777 src/mmg/options_dialog.cpp:77
 #: src/mmg/options_dialog.cpp:105 src/mmg/tab_global.cpp:173
-#: src/mmg/tab_global.cpp:221 src/mmg/tab_input_general.cpp:88
+#: src/mmg/tab_global.cpp:223 src/mmg/tab_input_general.cpp:88
 #: src/mmg/tab_input_general.cpp:102
 msgid "Browse"
 msgstr "Auswählen"
@@ -1843,7 +1843,7 @@ msgstr "Kapiteldatei:"
 msgid "Chapter files (*.xml)|*.xml|%s"
 msgstr "Kapiteldateien (*.xml)|*.xml|%s"
 
-#: src/mmg/tab_global.cpp:248
+#: src/mmg/tab_global.cpp:250
 #, c-format
 msgid "Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 msgstr "Kapiteldateien (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
@@ -1887,7 +1887,7 @@ msgstr "Kapitel geschrieben."
 msgid "Chapters:"
 msgstr "Kapitel:"
 
-#: src/mmg/tab_global.cpp:189
+#: src/mmg/tab_global.cpp:190
 msgid "Charset:"
 msgstr "Zeichensatz:"
 
@@ -1903,7 +1903,7 @@ msgstr "Tagdatei auswählen"
 msgid "Choose a timecodes file"
 msgstr "Zeitstempeldatei auswählen"
 
-#: src/mmg/tab_attachments.cpp:153
+#: src/mmg/tab_attachments.cpp:175
 msgid "Choose an attachment file"
 msgstr "Datei zum Anhängen auswählen"
 
@@ -1925,7 +1925,7 @@ msgstr "Quelldatei zum Anhängen auswählen"
 msgid "Choose an output file"
 msgstr "Zieldatei auswählen"
 
-#: src/mmg/tab_global.cpp:247
+#: src/mmg/tab_global.cpp:249
 msgid "Choose the chapter file"
 msgstr "Kapiteldatei auswählen"
 
@@ -1941,7 +1941,7 @@ msgstr "mkvmerge-Programmdatei auswählen"
 msgid "Choose the output directory"
 msgstr "Zielverzeichnis auswählen"
 
-#: src/mmg/tab_global.cpp:237
+#: src/mmg/tab_global.cpp:239
 msgid "Choose the tags file"
 msgstr "Tagdatei auswählen"
 
@@ -2196,7 +2196,7 @@ msgstr "Index Clusterposition: %1%"
 msgid "Cue codec state: %1%"
 msgstr "Index Codeczustand: %1%"
 
-#: src/mmg/tab_global.cpp:203
+#: src/mmg/tab_global.cpp:205
 msgid "Cue name format:"
 msgstr "Format für Cuenamen:"
 
@@ -2369,7 +2369,7 @@ msgstr "Beschreibung"
 msgid "Description already exists"
 msgstr "Beschreibung existiert bereits"
 
-#: src/mmg/mmg.cpp:135 src/mmg/tab_attachments.cpp:69
+#: src/mmg/mmg.cpp:135 src/mmg/tab_attachments.cpp:74
 msgid "Description:"
 msgstr "Beschreibung:"
 
@@ -2874,7 +2874,7 @@ msgstr "Allgemeine Track-Optionen"
 msgid "Global"
 msgstr "Global"
 
-#: src/mmg/tab_global.cpp:214
+#: src/mmg/tab_global.cpp:216
 msgid "Global tags"
 msgstr "Globale Tags"
 
@@ -2952,7 +2952,7 @@ msgstr "Ist diese Option aktiviert, so warn mmg in bestimmten Situationen, in de
 msgid "If left empty then mmg will set the output file name to be in the same directory as the first file added to this job. Otherwise this directory will be used."
 msgstr "Wird hier nichts eingetragen, dann setzt mmg den Zieldateinamen so, dass die Datei im selben Verzeichnis wie die zuerst hinzugefügte Quelldatei liegen wird. Andernfalls wird das hier eingetragene Verzeichnis als Zielverzeichnis benutzt."
 
-#: src/mmg/tab_attachments.cpp:87
+#: src/mmg/tab_attachments.cpp:92
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
 msgstr "Wenn das Aufteilen der Zieldatei aktiviert ist, so kann ein Dateianhang entweder nur an die erste Datei oder an alle Dateien angehängt werden. Diese Einstellung hat keine Auswirkung, wenn das Aufteilen nicht aktiviert ist."
 
@@ -3156,7 +3156,7 @@ msgstr "Ungültige Sprache ausgewählt"
 msgid "Invalid minute: %1%"
 msgstr "Ungültige Minute: %1%"
 
-#: src/mmg/tab_global.cpp:518
+#: src/mmg/tab_global.cpp:520
 msgid "Invalid number of max. split files given."
 msgstr "Ungültige Maximalanzahl für das Aufteilen der Zieldatei angegeben."
 
@@ -3380,11 +3380,11 @@ msgstr "Logausgabe:"
 msgid "MD5"
 msgstr "MD5"
 
-#: src/mmg/tab_attachments.cpp:75
+#: src/mmg/tab_attachments.cpp:80
 msgid "MIME type for this track. Select one of the pre-defined MIME types or enter one yourself."
 msgstr "MIME-Typ für diesen Track. Wählen Sie einen der vordefinierten MIME-Typen aus, oder geben Sie selber einen ein."
 
-#: src/mmg/tab_attachments.cpp:73
+#: src/mmg/tab_attachments.cpp:78
 msgid "MIME type:"
 msgstr "MIME-Typ:"
 
@@ -3499,7 +3499,7 @@ msgstr "Fehlendes Argument für '--ui-language'.\n"
 msgid "Missing header/comment packets for stream. This file is broken but should be muxed correctly. If not please contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
 msgstr "Fehlende Kopf-/Kommentarpakete für diesen Stream. Diese Datei ist beschödigt, sollte aber trotzdem korrekt gemuxt werden. Falls nicht, so kontaktieren Sie bitte den Autor author Moritz Bunkus <moritz@bunkus.org>.\n"
 
-#: src/mmg/tab_attachments.cpp:344
+#: src/mmg/tab_attachments.cpp:369
 msgid "Missing input"
 msgstr "Fehlende Eingabe"
 
@@ -3571,7 +3571,7 @@ msgstr "NALU-Größenfeldlänge:"
 msgid "Name for this track, e.g. \"director's comments\"."
 msgstr "Name für diesen Track, z.B. \"Kommentare des Regisseurs\"."
 
-#: src/mmg/tab_attachments.cpp:63 src/mmg/tab_chapters.cpp:313
+#: src/mmg/tab_attachments.cpp:68 src/mmg/tab_chapters.cpp:313
 msgid "Name:"
 msgstr "Name:"
 
@@ -3611,11 +3611,11 @@ msgstr "Im ersten Frame wurde kein AC3-Kopf gefunden. Der Track wird ausgelassen
 msgid "No EBML head found."
 msgstr "Es wurde kein EBML-Kopf gefunden."
 
-#: src/mmg/tab_input.cpp:1333
+#: src/mmg/tab_input.cpp:1335
 msgid "No FPS selected for AVC/h.264 track"
 msgstr "Keine BPS für AVC/h.264-Track ausgewählt"
 
-#: src/mmg/tab_attachments.cpp:344
+#: src/mmg/tab_attachments.cpp:369
 #, c-format
 msgid "No MIME type has been selected for the attachment '%s'."
 msgstr "Für den Dateianhang '%s' wurde noch kein MIME-Typ ausgewählt."
@@ -3765,7 +3765,7 @@ msgstr "Es darf nur eine Segmentinformationsdatei angegeben werden (Argument war
 msgid "Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the default mapping will be used) or specify a mapping for all tracks that are to be copied.\n"
 msgstr "Für Datei Nummer %1% ('%2%') wurde eine unvollständige Zuordnung für das Anhängen von Tracks angegeben. Geben Sie entweder eine vollständige Zuordnung für alle zu muxenden Tracks aus dieser Datei an, oder lassen Sie die Zuordnung für die Datei weg, wobei dann die Standardzuordnung benutzt wird.\n"
 
-#: src/mmg/tab_attachments.cpp:86
+#: src/mmg/tab_attachments.cpp:91
 msgid "Only to the first"
 msgstr "Nur an die erste"
 
@@ -4456,11 +4456,11 @@ msgstr "Einie Tag-Elemente fehlen (dieser Fehler hätte nicht auftreten sollen, 
 msgid "Splitting"
 msgstr "Aufteilen"
 
-#: src/mmg/tab_global.cpp:436
+#: src/mmg/tab_global.cpp:438
 msgid "Splitting by size was selected, but no size has been given."
 msgstr "Das Aufteilen nach Dateigröße wurde ausgewählt aber keine Größe angegeben."
 
-#: src/mmg/tab_global.cpp:469
+#: src/mmg/tab_global.cpp:471
 msgid "Splitting by timecode/duration was selected, but nothing was entered."
 msgstr "Aufteilen nach Zeitstempel/Dauer wurde ausgewählt aber kein Wert dafür angegeben."
 
@@ -4546,11 +4546,11 @@ msgstr "TTA (The lossless True Audio codec)"
 msgid "TTA lossless audio"
 msgstr "TTA verlustfreies Audio"
 
-#: src/mmg/tab_global.cpp:215
+#: src/mmg/tab_global.cpp:217
 msgid "Tag file:"
 msgstr "Tagdatei:"
 
-#: src/mmg/tab_global.cpp:237
+#: src/mmg/tab_global.cpp:239
 #, c-format
 msgid "Tag files (*.xml)|*.xml|%s"
 msgstr "Tagdateien (*.xml)|*.xml|%s"
@@ -4621,7 +4621,7 @@ msgstr "Die FLAC-Kopfpakete konnten nicht geparst werden: die Stream-Information
 msgid "The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n"
 msgstr "Die Anzahl der Bilder pro Sekunde ist 0.0, aber der Demuxer hat für ein Paket keinen Zeitstempel angegeben. %1%\n"
 
-#: src/mmg/tab_input.cpp:1318
+#: src/mmg/tab_input.cpp:1320
 #, c-format
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
 msgstr "Der BPS-Wert für Track Nummer %s in Datei '%s' ist ungültig."
@@ -4630,7 +4630,7 @@ msgstr "Der BPS-Wert für Track Nummer %s in Datei '%s' ist ungültig."
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "Der FourCC-Code muss exakt vier Zeichen lang sein (Argument war '%1% %2%').\n"
 
-#: src/mmg/tab_input.cpp:1306
+#: src/mmg/tab_input.cpp:1308
 #, c-format
 msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
 msgstr "Der Wert für FourCC für Track Nummer %s in Datei '%s' ist nicht exakt vier Zeichen lang."
@@ -4681,7 +4681,7 @@ msgstr "Das Argument '%1%\" für '%2%' ist ungültig: Zu viele Kommata in Elemen
 msgid "The argument to '--timecode-scale' must be a number.\n"
 msgstr "Das Argument für '--timecode-scale' muss eine Nummer sein.\n"
 
-#: src/mmg/tab_input.cpp:1373
+#: src/mmg/tab_input.cpp:1375
 #, c-format
 msgid "The aspect ratio setting for track nr. %s in file '%s' is invalid."
 msgstr "Die Werte für das Seitenverhältnis für Track Nummer %s in Datei '%s' ist ungültig."
@@ -4770,7 +4770,7 @@ msgstr "Der Zeitstempel des aktuellen Paketes ist kleiner als der Zeitstempel de
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr "Das Standardsprachkürzel '%1%' ist kein gültiger ISO639-2-Code und wird ignoriert.\n"
 
-#: src/mmg/tab_input.cpp:1285
+#: src/mmg/tab_input.cpp:1287
 #, c-format
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "Der Wert für die Verzögerung für Track Nummer %s in Quelldatei '%s' ist ungültig."
@@ -4783,7 +4783,7 @@ msgstr ""
 "Der Muxer für die Datei '%1%' konnte nicht initialisiert werden:\n"
 "%2%\n"
 
-#: src/mmg/tab_global.cpp:222
+#: src/mmg/tab_global.cpp:224
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr "Der Unterschied zwischen globalen Tags und Tags, die einem Track zugeordnet sind, wird in der Dokumentation zu mkvmerge erläutert. Die Kurzfassung: globale Tags beziehen sich auf die gesamte Datei, wohingegen Tags, die auf der Seite 'Quelldateien' angegeben werden, sich nur auf diesen einen Track beziehen."
 
@@ -4932,15 +4932,15 @@ msgstr "Die Datei, in die Sie speichern wollten, ist eine Matroska-Datei. Damit 
 msgid "The first file cannot be appended because there are no files to append to.\n"
 msgstr "Die erste Datei kann nicht angehängt werden, weil es keine Dateien gibt, an die sie angehängt werden könnte.\n"
 
-#: src/mmg/tab_global.cpp:458
+#: src/mmg/tab_global.cpp:460
 msgid "The format of the split size is invalid (size too small)."
 msgstr "Das Format der Aufteilungsgröße ist ungültig (Aufteilungsgröße ist zu klein)."
 
-#: src/mmg/tab_global.cpp:450 src/mmg/tab_global.cpp:454
+#: src/mmg/tab_global.cpp:452 src/mmg/tab_global.cpp:456
 msgid "The format of the split size is invalid."
 msgstr "Das Format der Aufteilungsgröße ist ungültig."
 
-#: src/mmg/tab_global.cpp:477
+#: src/mmg/tab_global.cpp:479
 msgid "The format of the split timecode/duration is invalid."
 msgstr "Das Format des Aufteilungszeitstempels/der Aufteilungsdauer ist ungültig."
 
@@ -4966,7 +4966,7 @@ msgstr "Die Höhe der zwei Tracks ist unterschiedlich: %1% und %2%"
 msgid "The input file '%s' does not contain any tracks."
 msgstr "Die Quelldatei '%s' enthält keine Tracks."
 
-#: src/mmg/tab_input.cpp:1198
+#: src/mmg/tab_input.cpp:1200
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -4982,7 +4982,7 @@ msgstr ""
 "\n"
 "(Problem trat auf in tab_input::load(), #1)"
 
-#: src/mmg/tab_input.cpp:1205
+#: src/mmg/tab_input.cpp:1207
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -4998,7 +4998,7 @@ msgstr ""
 "\n"
 "(Problem trat auf in tab_input::load(), #2)"
 
-#: src/mmg/tab_input.cpp:1218
+#: src/mmg/tab_input.cpp:1220
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -5131,7 +5131,7 @@ msgstr "Die Größe des Dateianhanges '%1%' ist 0.\n"
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "Die Quelldatei '%1%' konnte nicht geöffnet werden, oder aber die Größenabfrage schlug fehl.\n"
 
-#: src/mmg/tab_input.cpp:1296
+#: src/mmg/tab_input.cpp:1298
 #, c-format
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr "Der Streck-Wert für Track Nummer %s in Datei '%s' ist ungültig."
@@ -5287,7 +5287,7 @@ msgstr "Diese Datei enthält keine Kapiteleinträge."
 msgid "This file does not contain valid chapters."
 msgstr "Diese Datei enthält keine gültigen Kapiteleinträge."
 
-#: src/mmg/tab_attachments.cpp:65
+#: src/mmg/tab_attachments.cpp:70
 msgid "This is the name that will be stored in the output file for this attachment. It defaults to the file name of the original file but can be changed."
 msgstr "Dies ist der Name, der in der Zieldatei als Name des Dateianhanges gespeichert wird. Er wird mit dem tatsächlichen Dateinamen vorbelegt, kann aber beliebig geändert werden."
 
@@ -5341,7 +5341,7 @@ msgstr "Zeitstempel:"
 msgid "Title: %1%"
 msgstr "Titel: %1%"
 
-#: src/mmg/tab_attachments.cpp:85
+#: src/mmg/tab_attachments.cpp:90
 msgid "To all files"
 msgstr "An alle Dateien"
 
@@ -6199,11 +6199,11 @@ msgstr ""
 msgid "You have not yet selected an output file."
 msgstr "Sie haben noch keine Zieldatei ausgewählt."
 
-#: src/mmg/tab_input.cpp:1382
+#: src/mmg/tab_input.cpp:1384
 msgid "You have not yet selected any input file and/or no tracks."
 msgstr "Sie haben noch keine Quelldatei und/oder keine Tracka ausgewählt."
 
-#: src/mmg/tab_input.cpp:1327
+#: src/mmg/tab_input.cpp:1329
 #, c-format
 msgid ""
 "You haven't selected a number of frames per second for track %lld of file '%s'. mkvmerge cannot determine the number of frames per second for such files itself. Therefore you have to set this parameter yourself on the 'format specific options' page.\n"
@@ -6276,7 +6276,7 @@ msgstr "ac3_reader: %1% Bytes konnten nicht gelesen werden."
 msgid "ac3_reader: No valid AC3 packet found in the first %1% bytes.\n"
 msgstr "ac3_reader: In den ersten %1% Bytes wurde kein gültiges AC3-Paket gefunden.\n"
 
-#: src/mmg/tab_attachments.cpp:57 src/mmg/tab_input.cpp:99
+#: src/mmg/tab_attachments.cpp:62 src/mmg/tab_input.cpp:99
 msgid "add"
 msgstr "hinzufügen"
 
@@ -6285,7 +6285,7 @@ msgid "append"
 msgstr "anhängen"
 
 #: src/input/r_matroska.cpp:92 src/mmg/tab_input.cpp:619
-#: src/mmg/tab_input.cpp:1229 src/info/mkvinfo.cpp:1016
+#: src/mmg/tab_input.cpp:1231 src/info/mkvinfo.cpp:1016
 msgid "audio"
 msgstr "Audio"
 
@@ -6407,6 +6407,10 @@ msgstr "deflateInit() schlug fehl. Fehlercode: %1%\n"
 msgid "dirac_es_reader: Could not open the source file."
 msgstr "dirac_es_reader: Die Quelldatei konnte nicht geöffnet werden."
 
+#: src/mmg/tab_attachments.cpp:55
+msgid "disable all"
+msgstr "alle deaktivieren"
+
 #: src/info/mkvinfo.cpp:1481
 msgid "discardable, "
 msgstr "verwerfbar, "
@@ -6442,6 +6446,10 @@ msgstr "dts_reader: %1% Bytes konnten nicht gelesen werden."
 #: src/input/r_dts.cpp:81
 msgid "dts_reader: No valid DTS packet found in the first %1% bytes.\n"
 msgstr "dts_reader: In den ersten %1% Bytes wurde kein gültiges DTS-Paket gefunden.\n"
+
+#: src/mmg/tab_attachments.cpp:54
+msgid "enable all"
+msgstr "alle aktivieren"
 
 #: src/mmg/tab_chapters.cpp:287
 msgid "enabled"
@@ -6799,10 +6807,10 @@ msgstr "mkvmerge -o aus [globale Optionen] [Optionen1] <Datei1> [@Optionsdatei .
 msgid "mkvmerge FAILED with a return code of %d. %s\n"
 msgstr "mkvmerge schlug mit einem Rückgabewert von %d fehl. %s\n"
 
-#: src/mmg/tab_global.cpp:436 src/mmg/tab_global.cpp:450
-#: src/mmg/tab_global.cpp:454 src/mmg/tab_global.cpp:458
-#: src/mmg/tab_global.cpp:469 src/mmg/tab_global.cpp:477
-#: src/mmg/tab_global.cpp:518
+#: src/mmg/tab_global.cpp:438 src/mmg/tab_global.cpp:452
+#: src/mmg/tab_global.cpp:456 src/mmg/tab_global.cpp:460
+#: src/mmg/tab_global.cpp:471 src/mmg/tab_global.cpp:479
+#: src/mmg/tab_global.cpp:520
 msgid "mkvmerge GUI error"
 msgstr "mkvmerge GUI Fehler"
 
@@ -6845,14 +6853,14 @@ msgstr ""
 "Hilfe gibt es in Form von Tooltiops, über das 'Hilfe'-Menü,\n"
 "oder indem man 'F1' drückt."
 
-#: src/mmg/mmg.cpp:1083 src/mmg/mmg.cpp:1805 src/mmg/tab_input.cpp:1259
-#: src/mmg/tab_input.cpp:1286 src/mmg/tab_input.cpp:1297
-#: src/mmg/tab_input.cpp:1307 src/mmg/tab_input.cpp:1319
-#: src/mmg/tab_input.cpp:1374
+#: src/mmg/mmg.cpp:1083 src/mmg/mmg.cpp:1805 src/mmg/tab_input.cpp:1261
+#: src/mmg/tab_input.cpp:1288 src/mmg/tab_input.cpp:1299
+#: src/mmg/tab_input.cpp:1309 src/mmg/tab_input.cpp:1321
+#: src/mmg/tab_input.cpp:1376
 msgid "mkvmerge GUI: error"
 msgstr "mkvmerge GUI: Fehler"
 
-#: src/mmg/tab_global.cpp:206
+#: src/mmg/tab_global.cpp:208
 msgid "mkvmerge can read CUE sheets for audio CDs and automatically convert them to chapters. This option controls how the chapter names are created. The sequence '%p' is replaced by the track's PERFORMER, the sequence '%t' by the track's TITLE, '%n' by the track's number and '%N' by the track's number padded with a leading 0 for track numbers < 10. The rest is copied as is. If nothing is entered then '%p - %t' will be used."
 msgstr "mkvmerge kann CUE-Dateien fü Audio-CDs lesen und automatisch in Matroska-Kapitel umwandeln. Diese Option steuert, wie die Kapitelnamen erzeugt werden. Die Sequenz '%p' wird durch den Eintrag 'PERFORMER' des Tracks ersetzt, die Sequenz '%t' durch den 'TITLE', '%n' durch die Tracknummer und '%N' durch eine zweistellige und mit Nullen aufgefüllte Tracknummer. Der Rest dieser Eingabe wird wortwörtlich übernommen. Falls nichts eingetragen wird, so wird das Muster '%p - %t' benutzt."
 
@@ -6901,11 +6909,11 @@ msgstr "mkvmerge-Zieldatei:"
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format."
 msgstr "mkvmerge unterstützt zwei Kapitelformate: das bei OGM-Dateien verwendete, einfache Format und ein vollwertiges und umfassendes XML-Format."
 
-#: src/mmg/tab_global.cpp:195
+#: src/mmg/tab_global.cpp:197
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format. If the OGM format is used and the file's charset is not recognized correctly then this option can be used to correct that. This option is ignored for XML chapter files."
 msgstr "mkvmerge unterstützt zwei Kapitelformate: das bei OGM-Dateien verwendete, einfache Format und ein vollwertiges und umfassendes XML-Format. Wenn das OGM-Format benutzt wird, so kann es vorkommen, dass der Zeichensatz nicht automatisch erkannt wird, in dem die Datei gespeichert wurde. Mit dieser Option kann der richtige Zeichensatz angegeben werden. Sie wird für XML-Kapiteldateien ignoriert."
 
-#: src/mmg/tab_global.cpp:183
+#: src/mmg/tab_global.cpp:184
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format. This option specifies the language to be associated with chapters if the OGM chapter format is used. It is ignored for XML chapter files."
 msgstr "mkvmerge unterstützt zwei Kapitelformate: das bei OGM-Dateien verwendete, einfache Format und ein vollwertiges und umfassendes XML-Format. Diese Option gibt die Sprache an, die bei Verwendung des OGM-Formates jedem Kapiteleintrag zugewiesen wird. Der Eintrag wird für das XML-Format ignoriert."
 
@@ -7082,7 +7090,7 @@ msgstr "real_reader: Es werden nur die Audiokopfdatenversionen 3, 4 und 5 unters
 msgid "real_reader: Source is not a valid RealMedia file."
 msgstr "real_reader: Die Quelldatei ist keine gültige RealMedia-Datei."
 
-#: src/mmg/tab_attachments.cpp:58 src/mmg/tab_input.cpp:100
+#: src/mmg/tab_attachments.cpp:63 src/mmg/tab_input.cpp:100
 msgid "remove"
 msgstr "entfernen"
 
@@ -7134,7 +7142,7 @@ msgstr "start_element: pdata->bin != NULL"
 msgid "subtitle"
 msgstr "Untertitel"
 
-#: src/mmg/tab_input.cpp:621 src/mmg/tab_input.cpp:1231
+#: src/mmg/tab_input.cpp:621 src/mmg/tab_input.cpp:1233
 #: src/info/mkvinfo.cpp:1018
 msgid "subtitles"
 msgstr "Untertitel"
@@ -7166,7 +7174,7 @@ msgstr "und (nicht festgelegt)"
 #: src/input/r_matroska.cpp:91 src/input/r_matroska.cpp:2140
 #: src/input/r_matroska.cpp:2147 src/input/r_mpeg_ps.cpp:1304
 #: src/common/mm_io.cpp:412 src/mmg/tab_input.cpp:346
-#: src/mmg/tab_input.cpp:622 src/mmg/tab_input.cpp:1232
+#: src/mmg/tab_input.cpp:622 src/mmg/tab_input.cpp:1234
 #: src/info/mkvinfo.cpp:708 src/info/mkvinfo.cpp:718 src/info/mkvinfo.cpp:737
 #: src/info/mkvinfo.cpp:766 src/info/mkvinfo.cpp:779 src/info/mkvinfo.cpp:789
 #: src/info/mkvinfo.cpp:1020
@@ -7194,7 +7202,7 @@ msgid "verify failed: chapters->CheckMandatory() is false. This should not have 
 msgstr "verify failed: chapters->CheckMandatory() ist false. Das hätte nicht passieren sollen. Bitte erstellen Sie einen Fehlerbericht.\n"
 
 #: src/input/r_matroska.cpp:94 src/mmg/tab_input.cpp:620
-#: src/mmg/tab_input.cpp:1230 src/info/mkvinfo.cpp:1017
+#: src/mmg/tab_input.cpp:1232 src/info/mkvinfo.cpp:1017
 msgid "video"
 msgstr "Video"
 

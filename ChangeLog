@@ -1,5 +1,9 @@
 2009-02-28  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: new feature: Added two buttons "enable all" and "disable
+	all" to the list of attached files that enable / disable all
+	attached files.
+
 	* mmg: bug fix: The action "File" -> "New" did not clear the
 	internal list of attached files resulting in unexpected behaviour
 	if files with attachments where added afterwards.
