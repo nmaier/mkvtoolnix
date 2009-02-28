@@ -22,6 +22,7 @@ class Test
   end
 
   def unlink_tmp_files
+    return if (ENV["KEEP_TMPFILES"] == "1")
     n = "mkvtoolnix-auto-test-" + $$.to_s + "-"
     Dir.entries("/tmp").each do |e|
       File.unlink("/tmp/#{e}") if ((e =~ /^#{n}/) and
@@ -74,7 +75,7 @@ class Test
   def hash_tmp(erase = true)
     output = hash_file(@tmp)
     if (erase)
-      File.unlink(@tmp) if (File.exists?(@tmp))
+      File.unlink(@tmp) if (File.exists?(@tmp) && (ENV["KEEP_TMPFILES"] != "1"))
       @debug_commands.push("rm #{@tmp}")
       @tmp = nil
     end
