@@ -169,6 +169,7 @@ Section "Program files" SEC01
   !insertmacro MUI_STARTMENU_WRITE_END
 
   SetOutPath "$INSTDIR"
+  IfSilent +3 0
   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Should a shortcut be placed on the desktop?" IDNO +2
   CreateShortCut "$DESKTOP\mkvmerge GUI.lnk" "$INSTDIR\mmg.exe" "" "$INSTDIR\matroskalogo_big.ico"
 SectionEnd

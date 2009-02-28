@@ -1,5 +1,10 @@
 2009-02-28  Moritz Bunkus  <moritz@bunkus.org>
 
+	* installer: bug fix: If the installer is run in silent mode
+	(switch "/S") then it will not ask the user whether or not to
+	place a shortcut on the desktop, and that shortcut will not be
+	created. Fix for bug 345.
+
 	* mmg: new feature: Added two buttons "enable all" and "disable
 	all" to the list of attached files that enable / disable all
 	attached files.
