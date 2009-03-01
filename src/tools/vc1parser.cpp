@@ -5,6 +5,7 @@
 #include "checksums.h"
 #include "common.h"
 #include "mm_io.h"
+#include "translation.h"
 #include "vc1_common.h"
 
 static bool g_opt_checksum         = false;

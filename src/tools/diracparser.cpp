@@ -6,6 +6,7 @@
 #include "common.h"
 #include "mm_io.h"
 #include "dirac_common.h"
+#include "translation.h"
 
 static bool g_opt_checksum         = false;
 static bool g_opt_sequence_headers = false;

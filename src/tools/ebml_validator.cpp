@@ -13,6 +13,7 @@
 #include "checksums.h"
 #include "common.h"
 #include "mm_io.h"
+#include "translation.h"
 
 #include "element_info.h"
 
