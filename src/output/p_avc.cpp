@@ -153,9 +153,8 @@ mpeg4_p10_es_video_packetizer_c::flush_frames() {
 }
 
 void
-mpeg4_p10_es_video_packetizer_c::
-enable_timecode_generation(bool enable,
-                           int64_t default_duration) {
+mpeg4_p10_es_video_packetizer_c::enable_timecode_generation(bool enable,
+                                                            int64_t default_duration) {
   m_allow_timecode_generation = enable;
   if (enable) {
     m_parser.enable_timecode_generation(default_duration);
