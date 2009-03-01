@@ -87,7 +87,7 @@ AC_DEFUN([AX_BOOST_BASE],
     dnl or if you install boost with RPM
     if test "$ac_boost_path" != ""; then
         case $target in
-             ppc64*|sparc64*|x86_64*) BOOST_LDFLAGS="-L$ac_boost_path/lib64" ;;
+             powerpc64*|ppc64*|sparc64*|x86_64*) BOOST_LDFLAGS="-L$ac_boost_path/lib64" ;;
              *)                       BOOST_LDFLAGS="-L$ac_boost_path/lib" ;;
         esac
         BOOST_CPPFLAGS="-I$ac_boost_path/include"
@@ -95,7 +95,7 @@ AC_DEFUN([AX_BOOST_BASE],
         for ac_boost_path_tmp in /usr /usr/local /opt /opt/local ; do
             if test -d "$ac_boost_path_tmp/include/boost" && test -r "$ac_boost_path_tmp/include/boost"; then
                 case $target in
-                     ppc64*|sparc64*|x86_64*) BOOST_LDFLAGS="-L$ac_boost_path_tmp/lib64" ;;
+                     powerpc64*|ppc64*|sparc64*|x86_64*) BOOST_LDFLAGS="-L$ac_boost_path_tmp/lib64" ;;
                      *)                       BOOST_LDFLAGS="-L$ac_boost_path_tmp/lib" ;;
                 esac
                 BOOST_CPPFLAGS="-I$ac_boost_path_tmp/include"
@@ -172,7 +172,7 @@ AC_DEFUN([AX_BOOST_BASE],
             if test "$ac_boost_lib_path" = ""
             then
                 case $target in
-                     ppc64*|sparc64*|x86_64*) BOOST_LDFLAGS="-L$best_path/lib64" ;;
+                     powerpc64*|ppc64*|sparc64*|x86_64*) BOOST_LDFLAGS="-L$best_path/lib64" ;;
                      *)                       BOOST_LDFLAGS="-L$best_path/lib" ;;
                 esac
             fi
