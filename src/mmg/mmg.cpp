@@ -2215,8 +2215,11 @@ mmg_app::init_ui_locale(wxConfigBase *cfg) {
       locale = "";
   }
 
-  if (locale.empty())
+  if (locale.empty()) {
     locale = translation_c::get_default_ui_locale();
+    if (-1 == translation_c::look_up_translation(locale))
+      locale = "";
+  }
 
   m_ui_locale = locale;
 #endif  // HAVE_LIBINTL_H

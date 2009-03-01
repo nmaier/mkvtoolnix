@@ -1,5 +1,11 @@
 2009-03-01  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge, mkvextract, mmg: bug fix: If the environment variables
+	LANG, LC_ALL, LC_MESSAGES contained a locale that was supported by
+	the system but for which mkvtoolnix did not contain a translation
+	(e.g. fr_FR, it_IT, en_AU) then the programs would abort with an
+	error message. Fix for bug 338.
+
 	* mkvmerge: bug fix: Appending raw AVC/ES files resulted in
 	segmentation faults. Fix for bug 344.
 

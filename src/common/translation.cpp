@@ -106,20 +106,20 @@ translation_c::get_default_ui_locale() {
   char *data = setlocale(LC_MESSAGES, NULL);
   if (NULL != data) {
     std::string previous_locale = data;
+    mxverb(4, boost::format("[get_default_ui_locale previous %1%]\n") % previous_locale);
     setlocale(LC_MESSAGES, "");
     data = setlocale(LC_MESSAGES, NULL);
 
     if (NULL != data)
       locale = data;
+    mxverb(4, boost::format("[get_default_ui_locale new %1%]\n") % locale);
 
     setlocale(LC_MESSAGES, previous_locale.c_str());
-  }
+  } else
+    mxverb(4, boost::format("[get_default_ui_locale get previous failed]\n"));
 
 # endif // SYS_WINDOWS
 #endif  // HAVE_LIBINTL_H
-
-  if (!locale.empty() && (-1 == look_up_translation(locale)))
-    locale = "";
 
   return locale;
 }
