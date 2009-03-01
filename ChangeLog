@@ -1,3 +1,8 @@
+2009-03-01  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Appending raw AVC/ES files resulted in
+	segmentation faults. Fix for bug 344.
+
 2009-02-28  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: When mkvmerge was run with the --attachments
