@@ -45,6 +45,7 @@ public:
     return "video";
   };
 
+  virtual void connect(generic_packetizer_c *src, int64_t p_append_timecode_offset = -1);
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
 };
 

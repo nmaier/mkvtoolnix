@@ -13,11 +13,7 @@
 
 #include "os.h"
 
-#include <ctype.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
+#include <cassert>
 
 #include "common.h"
 #include "hacks.h"
@@ -160,6 +156,24 @@ mpeg4_p10_es_video_packetizer_c::enable_timecode_generation(bool enable,
     m_parser.enable_timecode_generation(default_duration);
     set_track_default_duration(default_duration);
   }
+}
+
+void
+mpeg4_p10_es_video_packetizer_c::connect(generic_packetizer_c *src,
+                                         int64_t p_append_timecode_offset) {
+  generic_packetizer_c::connect(src, p_append_timecode_offset);
+
+  if (2 != connected_to)
+    return;
+
+  mpeg4_p10_es_video_packetizer_c *real_src = dynamic_cast<mpeg4_p10_es_video_packetizer_c *>(src);
+  assert(NULL != real_src);
+
+  m_allow_timecode_generation = real_src->m_allow_timecode_generation;
+  htrack_default_duration     = real_src->htrack_default_duration;
+
+  if (m_allow_timecode_generation)
+    m_parser.enable_timecode_generation(htrack_default_duration);
 }
 
 connection_result_e
