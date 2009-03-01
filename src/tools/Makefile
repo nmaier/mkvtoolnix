@@ -1,5 +1,5 @@
 all_with_tools:
-	make -C .. TOOLS=1
+	+make -C .. TOOLS=1
 
 APPLICATIONS += src/tools/base64tool$(EXEEXT) src/tools/diracparser$(EXEEXT) src/tools/vc1parser$(EXEEXT) src/tools/ebml_validator$(EXEEXT)
 ALL_SOURCES  += $(wildcard src/tools/*.cpp)
