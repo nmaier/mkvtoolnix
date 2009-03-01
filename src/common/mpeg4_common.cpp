@@ -1560,10 +1560,9 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
   for (j = 0; num_frames > j; ++j, ++t) {
     poc[j].timecode = *t;
     poc[j].duration =
-      (j + 1) < num_frames ? *(t + 1) - poc[j].timecode :
-      num_timecodes > num_frames ?
-      m_timecodes[num_frames] - poc[j].timecode :
-      0;
+        num_frames > (j + 1)       ? *(t + 1)                - poc[j].timecode
+      : num_frames < num_timecodes ? m_timecodes[num_frames] - poc[j].timecode
+      :                              0;
   }
 
   sort(poc.begin(), poc.end(), compare_poc_by_dec);
