@@ -31,6 +31,7 @@
 #define ID_M_FILE_SETOUTPUT               60003
 #define ID_M_FILE_EXIT                    60004
 #define ID_M_FILE_OPTIONS                 60005
+#define ID_M_FILE_HEADEREDITOR            60006
 #define ID_M_FILE_LOADSEPARATOR           60090
 #define ID_M_FILE_LOADLAST1               60091
 #define ID_M_FILE_LOADLAST2               60092
@@ -169,6 +170,8 @@ public:
   void on_add_cli_options(wxCommandEvent &evt);
 
   void on_close(wxCloseEvent &evt);
+
+  void on_run_header_editor(wxCommandEvent &evt);
 
   void load_job_queue();
   void save_job_queue();

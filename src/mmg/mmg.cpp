@@ -37,6 +37,7 @@
 #include "common.h"
 #include "commonebml.h"
 #include "extern_data.h"
+#include "header_editor_frame.h"
 #include "jobs.h"
 #include "mkvmerge.h"
 #include "matroskalogo.xpm"
@@ -670,6 +671,8 @@ mmg_dialog::mmg_dialog():
   file_menu->Append(ID_M_FILE_SETOUTPUT, Z("Set &output file"), Z("Select the file you want to write to"));
   file_menu->AppendSeparator();
   file_menu->Append(ID_M_FILE_OPTIONS, Z("Op&tions\tCtrl-P"), Z("Change mmg's preferences and options"));
+  file_menu->AppendSeparator();
+  file_menu->Append(ID_M_FILE_HEADEREDITOR, Z("&Header editor\tCtrl-E"), Z("Run the header field editor"));
   file_menu->AppendSeparator();
   file_menu->Append(ID_M_FILE_EXIT, Z("&Quit\tCtrl-Q"), Z("Quit the application"));
 
@@ -2066,6 +2069,13 @@ mmg_dialog::on_file_options(wxCommandEvent &evt) {
 }
 
 void
+mmg_dialog::on_run_header_editor(wxCommandEvent &evt) {
+  header_editor_frame_c *window  = new header_editor_frame_c(this);
+
+  window->Show();
+}
+
+void
 mmg_dialog::query_mkvmerge_capabilities() {
   wxString tmp;
   wxArrayString output;
@@ -2148,6 +2158,7 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_FILE_LOAD,                mmg_dialog::on_file_load)
   EVT_MENU(ID_M_FILE_SAVE,                mmg_dialog::on_file_save)
   EVT_MENU(ID_M_FILE_OPTIONS,             mmg_dialog::on_file_options)
+  EVT_MENU(ID_M_FILE_HEADEREDITOR,        mmg_dialog::on_run_header_editor)
   EVT_MENU(ID_M_FILE_SETOUTPUT,           mmg_dialog::on_browse_output)
   EVT_MENU(ID_M_MUXING_START,             mmg_dialog::on_run)
   EVT_MENU(ID_M_MUXING_SHOW_CMDLINE,      mmg_dialog::on_show_cmdline)
