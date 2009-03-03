@@ -263,6 +263,18 @@ parse_int(const string &s,
           int &value) {
   return parse_int(s.c_str(), value);
 }
+bool MTX_DLL_API parse_uint(const char *s, uint64_t &value);
+bool MTX_DLL_API parse_uint(const char *s, uint &value);
+inline bool
+parse_uint(const string &s,
+          uint64_t &value) {
+  return parse_uint(s.c_str(), value);
+}
+inline bool
+parse_uint(const string &s,
+          uint &value) {
+  return parse_uint(s.c_str(), value);
+}
 string MTX_DLL_API to_string(int64_t i);
 bool MTX_DLL_API parse_double(const char *s, double &value);
 inline bool

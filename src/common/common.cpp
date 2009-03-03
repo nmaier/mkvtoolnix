@@ -1045,6 +1045,38 @@ parse_int(const char *s,
 }
 
 bool
+parse_uint(const char *s,
+           uint64_t &value) {
+  if (*s == 0)
+    return false;
+
+  value = 0;
+  const char *p = s;
+  while (*p != 0) {
+    if (!isdigit(*p))
+      return false;
+    value *= 10;
+    value += *p - '0';
+    p++;
+  }
+
+  return true;
+}
+
+bool
+parse_uint(const char *s,
+           int &value) {
+  uint64_t tmp;
+  bool result;
+
+  tmp = 0;
+  result = parse_uint(s, tmp);
+  value = tmp;
+
+  return result;
+}
+
+bool
 parse_double(const char *s,
              double &value) {
   char *endptr;
