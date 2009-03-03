@@ -317,6 +317,8 @@ he_unsigned_integer_value_page_c::~he_unsigned_integer_value_page_c() {
 wxControl *
 he_unsigned_integer_value_page_c::create_input_control() {
   m_tc_text = new wxTextCtrl(this, wxID_ANY, get_original_value_as_string());
+  m_tc_text->SetValidator(wxTextValidator(wxFILTER_NUMERIC));
+
   return m_tc_text;
 }
 
@@ -340,7 +342,8 @@ he_unsigned_integer_value_page_c::reset_value() {
 
 bool
 he_unsigned_integer_value_page_c::validate_value() {
-  return true;                  // FIXME
+  uint64_t dummy;
+  return parse_uint(wxMB(m_tc_text->GetValue()), dummy);
 }
 
 // ------------------------------------------------------------
