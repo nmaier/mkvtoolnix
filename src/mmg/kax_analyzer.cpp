@@ -205,13 +205,13 @@ kax_analyzer_c::process() {
 }
 
 EbmlElement *
-kax_analyzer_c::read_element(uint32_t num,
+kax_analyzer_c::read_element(analyzer_data_c *element_data,
                              const EbmlCallbacks &callbacks) {
   EbmlElement *e;
   int upper_lvl_el;
 
   upper_lvl_el = 0;
-  file->setFilePointer(data[num]->pos);
+  file->setFilePointer(element_data->pos);
   EbmlStream es(*file);
   e = es.FindNextElement(segment->Generic().Context, upper_lvl_el, 0xFFFFFFFFL,
                          true, 1);

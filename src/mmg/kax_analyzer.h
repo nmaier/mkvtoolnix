@@ -76,8 +76,10 @@ public:
 
   virtual bool update_element(EbmlElement *e);
   virtual void overwrite_elements(EbmlElement *e, int found_where);
-  virtual EbmlElement *read_element(uint32_t pos,
-                                    const EbmlCallbacks &callbacks);
+  virtual EbmlElement *read_element(analyzer_data_c *element_data, const EbmlCallbacks &callbacks);
+  virtual EbmlElement *read_element(uint32_t pos, const EbmlCallbacks &callbacks) {
+    return read_element(data[pos], callbacks);
+  }
   virtual int find(const EbmlId &id) {
     uint32_t i;
 
