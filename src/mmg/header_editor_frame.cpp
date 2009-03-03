@@ -94,6 +94,9 @@ public:
   virtual wxString get_original_value_as_string() = 0;
   virtual wxString get_current_value_as_string() = 0;
   virtual void reset_value() = 0;
+  virtual bool validate_value() = 0;
+
+  virtual bool validate();
 };
 
 he_value_page_c::he_value_page_c(wxTreebook *parent,
@@ -205,6 +208,13 @@ he_value_page_c::has_been_modified() {
   return m_cb_add_or_remove->IsChecked() || (get_current_value_as_string() != get_original_value_as_string());
 }
 
+bool
+he_value_page_c::validate() {
+  if (!m_input->IsEnabled())
+    return true;
+  return validate_value();
+}
+
 IMPLEMENT_CLASS(he_value_page_c, he_page_base_c);
 BEGIN_EVENT_TABLE(he_value_page_c, he_page_base_c)
   EVT_BUTTON(ID_HE_B_RESET,            he_value_page_c::on_reset_clicked)
@@ -226,7 +236,7 @@ public:
   virtual wxString get_original_value_as_string();
   virtual wxString get_current_value_as_string();
   virtual void reset_value();
-  virtual bool validate();
+  virtual bool validate_value();
 };
 
 he_string_value_page_c::he_string_value_page_c(wxTreebook *parent,
@@ -266,7 +276,7 @@ he_string_value_page_c::reset_value() {
 }
 
 bool
-he_string_value_page_c::validate() {
+he_string_value_page_c::validate_value() {
   return true;
 }
 
@@ -284,7 +294,7 @@ public:
   virtual wxControl *create_input_control();
   virtual wxString get_original_value_as_string();
   virtual wxString get_current_value_as_string();
-  virtual bool validate();
+  virtual bool validate_value();
   virtual void reset_value();
 };
 
@@ -329,7 +339,7 @@ he_unsigned_integer_value_page_c::reset_value() {
 }
 
 bool
-he_unsigned_integer_value_page_c::validate() {
+he_unsigned_integer_value_page_c::validate_value() {
   return true;                  // FIXME
 }
 
