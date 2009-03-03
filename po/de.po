@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-02-28 14:51+0100\n"
+"PO-Revision-Date: 2009-03-03 11:11+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -177,8 +177,8 @@ msgid ""
 "  --command-line-charset <charset>\n"
 "                           Charset for strings on the command line\n"
 msgstr ""
-"  --attachment-description <Beschreibung>\n"
-"                           Beschreibung des folgenden Dateianhangs.\n"
+"  --command-line-charset <Zeichensatz>\n"
+"                           Zeichensatz für die Kommandozeilenargumente.\n"
 
 #: src/merge/mkvmerge.cpp:261
 msgid ""
@@ -204,9 +204,9 @@ msgid ""
 "                           Pattern for the conversion from CUE sheet\n"
 "                           entries to chapter names.\n"
 msgstr ""
-"  --attach-file-once <file>\n"
-"                           Erstellt einen Dateianhang innerhalb der ersten\n"
-"                           erstellten Matroska-Datei.\n"
+"  --cue-chapter-name-format <Muster>\n"
+"                           Muster für die Konviertierung von Einträgen aus\n"
+"                           Cuesheets in Kapitelnamen.\n"
 
 #: src/merge/mkvmerge.cpp:219
 msgid ""
@@ -2633,7 +2633,7 @@ msgstr "Es wurde eine vorzeichenlose Zahl erwartet aber folgendes vorgefunden: '
 msgid "Extra options"
 msgstr "Zusatzoptionen"
 
-#: src/output/p_avc.cpp:125 src/output/p_video.cpp:732
+#: src/output/p_avc.cpp:121 src/output/p_video.cpp:732
 msgid "Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"
 msgstr "Informationen über das Seitenverhältnis wurden aus den MPEG-4 layer 10  (AVC) Videodaten extrahiert. Die Anzeigeabmessungen wurden auf %1%/%2% gesetzt.\n"
 
@@ -4734,7 +4734,7 @@ msgstr ""
 msgid "The chosen NALU size length of %1% is too small. Try using '4'.\n"
 msgstr "Die gewählte Länge des NALU-Längenfeldes '%1%' ist zu klein. Versuchen Sie es mit '4'.\n"
 
-#: src/output/p_avc.cpp:180 src/output/p_kate.cpp:116
+#: src/output/p_avc.cpp:193 src/output/p_kate.cpp:116
 #: src/output/p_passthrough.cpp:69 src/output/p_textsubs.cpp:103
 #: src/output/p_video.cpp:146
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
@@ -5251,11 +5251,11 @@ msgstr "Dieser AC3-Track enthält am Anfang %1% Byte(s) Nicht-AC3-Daten. Dies en
 msgid "This AC3 track contains %1% bytes of non-AC3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr "Dieser AC3-Track enthält %1% Byte(s) Nicht-AC3-Daten, die ausgelassen werden. Die Audio-/Video-Synchronisation könnte dadurch beeinträchtigt werden.\n"
 
-#: src/output/p_avc.cpp:89
+#: src/output/p_avc.cpp:85
 msgid "This AVC/h.264 contains frames that are too big for the current maximum NALU size. You have to re-run mkvmerge and set the maximum NALU size to %1% for this track (command line parameter '--nalu-size-length %2%:%1%').\n"
 msgstr "Dieser AVC/h.264-Videotrack enthält Frames, die für die aktuell gewählte Länge des NALU-Längenfeldes zu groß sind. Sie müssen mkvmerge erneut ausführen und die Länge des NALU-Längenfeldes für diesen Track auf %1% setzen (Kommandozeilenargument dafür '--nalu-size-length %2%:%1%').\n"
 
-#: src/output/p_avc.cpp:147
+#: src/output/p_avc.cpp:143
 msgid "This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n"
 msgstr "Dieser AVC/h.264-Track beginnt nicht mit einem Keyframe. Die ersten %1% Frame(s) wurde(n) ausgelassen.\n"
 
@@ -6868,7 +6868,7 @@ msgstr "mkvmerge kann CUE-Dateien fü Audio-CDs lesen und automatisch in Matrosk
 msgid "mkvmerge can read and use timecodes from an external text file. This feature is a very advanced feature. Almost all users should leave this entry empty."
 msgstr "mkvmerge kann Zeitstempel aus einer externen Textdatei lesen. Hierbei handelt es sich um ein sehr fortgeschrittenes Feature. Nahezu alle Benutzer sollten das Feld leer lassen."
 
-#: src/output/p_avc.cpp:96
+#: src/output/p_avc.cpp:92
 msgid ""
 "mkvmerge encountered broken or unparsable data in this AVC/h.264 video track. Either your file is damaged (which mkvmerge cannot cope with yet) or this is a bug in mkvmerge itself. The error message was:\n"
 "%1%\n"
