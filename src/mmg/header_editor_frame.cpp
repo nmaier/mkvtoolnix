@@ -84,8 +84,9 @@ public:
   he_value_page_c(wxTreebook *parent, EbmlMaster *master, const EbmlId &id, const value_type_e value_type, const wxString &title, const wxString &description);
   virtual ~he_value_page_c();
 
-  virtual void init();
-  virtual void on_reset(wxCommandEvent &evt);
+  void init();
+  void on_reset_clicked(wxCommandEvent &evt);
+  void on_add_or_remove_checked(wxCommandEvent &evt);
 
   virtual bool has_been_modified();
 
@@ -162,6 +163,7 @@ he_value_page_c::init() {
   }
 
   m_input = create_input_control();
+  m_input->Enable(NULL != m_element);
 
   wxBoxSizer *siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->Add(new wxStaticText(this, wxID_ANY, value_label), 0, wxALIGN_CENTER_VERTICAL,          0);
@@ -186,9 +188,16 @@ he_value_page_c::init() {
 }
 
 void
-he_value_page_c::on_reset(wxCommandEvent &evt) {
+he_value_page_c::on_reset_clicked(wxCommandEvent &evt) {
   reset_value();
   m_cb_add_or_remove->SetValue(false);
+  m_input->Enable(NULL != m_element);
+}
+
+void
+he_value_page_c::on_add_or_remove_checked(wxCommandEvent &evt) {
+  m_input->Enable(   ((NULL == m_element) &&  evt.IsChecked())
+                  || ((NULL != m_element) && !evt.IsChecked()));
 }
 
 bool
@@ -198,7 +207,8 @@ he_value_page_c::has_been_modified() {
 
 IMPLEMENT_CLASS(he_value_page_c, he_page_base_c);
 BEGIN_EVENT_TABLE(he_value_page_c, he_page_base_c)
-  EVT_BUTTON(ID_HE_B_RESET, he_value_page_c::on_reset)
+  EVT_BUTTON(ID_HE_B_RESET,            he_value_page_c::on_reset_clicked)
+  EVT_CHECKBOX(ID_HE_CB_ADD_OR_REMOVE, he_value_page_c::on_add_or_remove_checked)
 END_EVENT_TABLE();
 
 // ------------------------------------------------------------
