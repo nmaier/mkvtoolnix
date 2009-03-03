@@ -55,6 +55,8 @@ he_page_base_c::~he_page_base_c() {
 // ------------------------------------------------------------
 
 class he_value_page_c: public he_page_base_c {
+  DECLARE_CLASS(he_value_page_c);
+  DECLARE_EVENT_TABLE();
 public:
   enum value_type_e {
     vt_string,
@@ -185,13 +187,19 @@ he_value_page_c::init() {
 
 void
 he_value_page_c::on_reset(wxCommandEvent &evt) {
-  
+  reset_value();
+  m_cb_add_or_remove->SetValue(false);
 }
 
 bool
 he_value_page_c::has_been_modified() {
   return m_cb_add_or_remove->IsChecked() || (get_current_value_as_string() != get_original_value_as_string());
 }
+
+IMPLEMENT_CLASS(he_value_page_c, he_page_base_c);
+BEGIN_EVENT_TABLE(he_value_page_c, he_page_base_c)
+  EVT_BUTTON(ID_HE_B_RESET, he_value_page_c::on_reset)
+END_EVENT_TABLE();
 
 // ------------------------------------------------------------
 
