@@ -26,7 +26,7 @@ he_unsigned_integer_value_page_c::he_unsigned_integer_value_page_c(wxTreebook *p
                                                                    const EbmlCallbacks &callbacks,
                                                                    const wxString &title,
                                                                    const wxString &description)
-  : he_value_page_c(parent, toplevel_page, master, callbacks, vt_string, title, description)
+  : he_value_page_c(parent, toplevel_page, master, callbacks, vt_unsigned_integer, title, description)
   , m_tc_text(NULL)
   , m_original_value(0)
 {

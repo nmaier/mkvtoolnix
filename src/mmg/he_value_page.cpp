@@ -54,52 +54,60 @@ he_value_page_c::init() {
   siz->Add(new wxStaticLine(this),                    0, wxGROW | wxLEFT | wxRIGHT, 5);
   siz->AddSpacer(5);
 
+  wxFlexGridSizer *siz_fg = new wxFlexGridSizer(2, 5, 5);
+  siz_fg->AddGrowableCol(1, 1);
+
+  siz_fg->AddSpacer(5);
+  siz_fg->AddSpacer(5);
+
+  wxString type
+    = vt_string           == m_value_type ? Z("String")
+    : vt_unsigned_integer == m_value_type ? Z("Unsigned integer")
+    : vt_signed_integer   == m_value_type ? Z("Signed integer")
+    : vt_float            == m_value_type ? Z("Floating point number")
+    : vt_binary           == m_value_type ? Z("Binary (displayed as hex numbers)")
+    : vt_bool             == m_value_type ? Z("Boolean (yes/no, on/off etc)")
+    :                                       Z("unknown");
+
+  siz_fg->Add(new wxStaticText(this, wxID_ANY, Z("Type:")), 0, wxALIGN_TOP,          0);
+  siz_fg->Add(new wxStaticText(this, wxID_ANY, type),       0, wxALIGN_TOP | wxGROW, 0);
+
   if (!m_description.IsEmpty()) {
-    siz->AddSpacer(10);
-    siz->Add(new wxStaticText(this, wxID_ANY, m_description), 0, wxGROW | wxLEFT | wxRIGHT, 5);
-    siz->AddSpacer(15);
+    siz_fg->Add(new wxStaticText(this, wxID_ANY, Z("Description:")), 0, wxALIGN_TOP,          0);
+    siz_fg->Add(new wxStaticText(this, wxID_ANY, m_description),     0, wxALIGN_TOP | wxGROW, 0);
   }
 
   wxString value_label;
   if (NULL == m_element) {
-    m_present = false;
-
-    siz->Add(new wxStaticText(this, wxID_ANY, Z("This element is not currently present in the file.")), 0, wxGROW | wxLEFT | wxRIGHT, 5);
-    siz->AddSpacer(5);
-    m_cb_add_or_remove = new wxCheckBox(this, ID_HE_CB_ADD_OR_REMOVE, Z("Add this element to the file"));
-    siz->Add(m_cb_add_or_remove, 0, wxGROW | wxLEFT | wxRIGHT, 5);
-    siz->AddSpacer(15);
-
-    value_label = Z("New value:");
+    m_present          = false;
+    m_cb_add_or_remove = new wxCheckBox(this, ID_HE_CB_ADD_OR_REMOVE, Z("This element is not currently present in the file. Add the element to the file"));
+    value_label        = Z("New value:");
 
   } else {
-    m_present = true;
+    m_present          = true;
+    m_cb_add_or_remove = new wxCheckBox(this, ID_HE_CB_ADD_OR_REMOVE, Z("This element is currently present in the file. Remove the element from the file"));
+    value_label        = Z("Current value:");
+  }
 
-    siz->Add(new wxStaticText(this, wxID_ANY, Z("This element is currently present in the file.")), 0, wxGROW | wxLEFT | wxRIGHT, 5);
-    siz->AddSpacer(5);
-    m_cb_add_or_remove = new wxCheckBox(this, ID_HE_CB_ADD_OR_REMOVE, Z("Remove this element from the file"));
-    siz->Add(m_cb_add_or_remove, 0, wxGROW | wxLEFT | wxRIGHT, 5);
-    siz->AddSpacer(15);
+  siz_fg->Add(new wxStaticText(this, wxID_ANY, Z("Status:")), 0, wxALIGN_TOP, 0);
+  siz_fg->Add(m_cb_add_or_remove, 1, wxALIGN_TOP | wxGROW, 0);
 
-    siz->Add(new wxStaticText(this, wxID_ANY, wxString::Format(Z("Original value: %s"), get_original_value_as_string().c_str())), 0, 0, 0);
-    siz->AddSpacer(15);
-
-    value_label = Z("Current value:");
+  if (m_present) {
+    siz_fg->Add(new wxStaticText(this, wxID_ANY, Z("Original value:")),           0, wxALIGN_TOP,          0);
+    siz_fg->Add(new wxStaticText(this, wxID_ANY, get_original_value_as_string()), 1, wxALIGN_TOP | wxGROW, 0);
   }
 
   m_input = create_input_control();
-  m_input->Enable(NULL != m_element);
+  m_input->Enable(m_present);
 
-  wxBoxSizer *siz_line = new wxBoxSizer(wxHORIZONTAL);
-  siz_line->Add(new wxStaticText(this, wxID_ANY, value_label), 0, wxALIGN_CENTER_VERTICAL,          0);
-  siz_line->AddSpacer(5);
-  siz_line->Add(m_input,                                       1, wxALIGN_CENTER_VERTICAL | wxGROW, 0);
+  siz_fg->Add(new wxStaticText(this, wxID_ANY, value_label), 0, wxALIGN_CENTER_VERTICAL,          0);
+  siz_fg->Add(m_input,                                       1, wxALIGN_CENTER_VERTICAL | wxGROW, 0);
 
-  siz->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 5);
+  siz->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT, 5);
 
   siz->AddStretchSpacer();
 
-  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  wxBoxSizer *siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->AddStretchSpacer();
   m_b_reset = new wxButton(this, ID_HE_B_RESET, Z("&Reset"));
   siz_line->Add(m_b_reset, 0, wxGROW, 0);
