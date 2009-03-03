@@ -30,6 +30,7 @@
 #define ID_M_HE_FILE_SAVE            100001
 #define ID_M_HE_FILE_QUIT            100002
 #define ID_M_HE_FILE_CLOSE           100003
+#define ID_M_HE_FILE_RELOAD          100004
 #define ID_M_HE_FILE_LOADLAST1       100090
 #define ID_M_HE_FILE_LOADLAST2       100091
 #define ID_M_HE_FILE_LOADLAST3       100092
@@ -51,6 +52,7 @@ public:
   std::vector<he_page_base_c *> m_pages;
 
   wxFileName m_file_name;
+  wxDateTime m_file_mtime;
 
   wxMenu *m_file_menu, *m_headers_menu;
   bool m_file_menu_sep;
@@ -67,8 +69,9 @@ public:
 
   void on_file_open(wxCommandEvent &evt);
   void on_file_save(wxCommandEvent &evt);
-  void on_file_quit(wxCommandEvent &evt);
+  void on_file_reload(wxCommandEvent &evt);
   void on_file_close(wxCommandEvent &evt);
+  void on_file_quit(wxCommandEvent &evt);
 
   void on_close_window(wxCloseEvent &evt);
 
@@ -84,7 +87,7 @@ protected:
   void update_file_menu();
   void enable_menu_entries();
 
-  bool open_file(const wxFileName &file_name);
+  bool open_file(wxFileName file_name);
 
   void clear_pages();
 

@@ -65,8 +65,10 @@ public:
   virtual wxString get_current_value_as_string() = 0;
   virtual void reset_value() = 0;
   virtual bool validate_value() = 0;
+  virtual void copy_value_to_element() = 0;
 
   virtual bool validate();
+  virtual void do_modifications();
 };
 
 #endif // __HE_VALUE_PAGE_H

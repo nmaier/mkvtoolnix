@@ -13,8 +13,8 @@
 
 #include "os.h"
 
-#include <wx/filename.h>
 #include <wx/button.h>
+#include <wx/msgdlg.h>
 #include <wx/statline.h>
 
 #include <matroska/KaxInfo.h>
@@ -51,9 +51,10 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
   clear_pages();
 
   m_file_menu = new wxMenu();
-  m_file_menu->Append(ID_M_HE_FILE_OPEN,  Z("&Open\tCtrl-O"),  Z("Open an existing Matroska file"));
-  m_file_menu->Append(ID_M_HE_FILE_SAVE,  Z("&Save\tCtrl-S"),  Z("Save the header values"));
-  m_file_menu->Append(ID_M_HE_FILE_CLOSE, Z("&Close\tCtrl-W"), Z("Close the current file without saving"));
+  m_file_menu->Append(ID_M_HE_FILE_OPEN,   Z("&Open\tCtrl-O"),   Z("Open an existing Matroska file"));
+  m_file_menu->Append(ID_M_HE_FILE_SAVE,   Z("&Save\tCtrl-S"),   Z("Save the header values"));
+  m_file_menu->Append(ID_M_HE_FILE_RELOAD, Z("&Reload\tCtrl-R"), Z("Reload the current file without saving"));
+  m_file_menu->Append(ID_M_HE_FILE_CLOSE,  Z("&Close\tCtrl-W"),  Z("Close the current file without saving"));
   m_file_menu->AppendSeparator();
   m_file_menu->Append(ID_M_HE_FILE_QUIT,  Z("&Quit\tCtrl-Q"),  Z("Quit the header editor"));
 
@@ -127,6 +128,7 @@ void
 header_editor_frame_c::on_file_open(wxCommandEvent &evt) {
   wxString home;
   wxGetEnv(wxT("HOME"), &home);
+  // open_file(wxFileName(wxString::Format(wxT("%s/prog/video/mkvtoolnix/data/longfile.mkv"), home.c_str())));
   open_file(wxFileName(wxString::Format(wxT("%s/prog/video/mkvtoolnix/data/v.mkv"), home.c_str())));
   return;
 
@@ -141,17 +143,13 @@ header_editor_frame_c::on_file_open(wxCommandEvent &evt) {
 }
 
 bool
-header_editor_frame_c::open_file(const wxFileName &file_name) {
+header_editor_frame_c::open_file(wxFileName file_name) {
   if (!kax_analyzer_c::probe(wxMB(file_name.GetFullPath()))) {
     wxMessageBox(Z("The file you tried to open is not a Matroska file."), Z("Wrong file selected"), wxOK | wxCENTER | wxICON_ERROR);
     return false;
   }
 
-  if (NULL != m_analyzer) {
-    delete m_analyzer;
-    m_analyzer = NULL;
-  }
-
+  delete m_analyzer;
   m_analyzer = new kax_analyzer_c(this, wxMB(file_name.GetFullPath()));
   if (!m_analyzer->process()) {
     delete m_analyzer;
@@ -160,6 +158,7 @@ header_editor_frame_c::open_file(const wxFileName &file_name) {
   }
 
   m_file_name = file_name;
+  m_file_name.GetTimes(NULL, &m_file_mtime, NULL);
 
   SetTitle(wxString::Format(Z("Header editor: %s"), m_file_name.GetFullName().c_str()));
 
@@ -291,6 +290,36 @@ header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
 
 void
 header_editor_frame_c::on_file_save(wxCommandEvent &evt) {
+  wxDateTime curr_mtime;
+  m_file_name.GetTimes(NULL, &curr_mtime, NULL);
+
+  if (curr_mtime != m_file_mtime) {
+    wxMessageBox(Z("The file has been changed by another program since it was read by the header editor. Therefore you have to re-load it. "
+                   "Unfortunately this means that all of your changes will be lost."), Z("File modified"), wxOK | wxICON_ERROR, this);
+    return;
+  }
+
+  if (!have_been_modified(m_pages)) {
+    wxMessageBox(Z("None of the header fields has been modified. Nothing has been saved."), Z("No fields modified"), wxOK | wxICON_INFORMATION, this);
+    return;
+  }
+
+  if (!validate())
+    return;
+
+  // do_modifications(m_pages);
+
+  open_file(m_file_name);
+}
+
+void
+header_editor_frame_c::on_file_reload(wxCommandEvent &evt) {
+  if (   have_been_modified(m_pages)
+      && (wxYES != wxMessageBox(Z("Some header values have been modified. Do you really want to reload without saving the file?"), Z("Headers modified"),
+                                wxYES_NO | wxICON_QUESTION, this)))
+    return;
+
+  open_file(m_file_name);
 }
 
 void
@@ -356,7 +385,7 @@ header_editor_frame_c::validate() {
   }
 
   m_tb_tree->SetSelection(page_id);
-  wxMessageBox(Z("There were errors in the header values. The first error has been selected."), Z("Header validation"), wxOK | wxICON_ERROR, this);
+  wxMessageBox(Z("There were errors in the header values preventing the headers from being saved. The first error has been selected."), Z("Header validation"), wxOK | wxICON_ERROR, this);
 
   return false;
 }
@@ -391,6 +420,7 @@ header_editor_frame_c::update_file_menu() {
 void
 header_editor_frame_c::enable_menu_entries() {
   m_file_menu->Enable(ID_M_HE_FILE_SAVE,               m_file_name.IsOk());
+  m_file_menu->Enable(ID_M_HE_FILE_RELOAD,             m_file_name.IsOk());
   m_file_menu->Enable(ID_M_HE_FILE_CLOSE,              m_file_name.IsOk());
   m_headers_menu->Enable(ID_M_HE_HEADERS_EXPAND_ALL,   m_file_name.IsOk());
   m_headers_menu->Enable(ID_M_HE_HEADERS_COLLAPSE_ALL, m_file_name.IsOk());
@@ -401,6 +431,7 @@ IMPLEMENT_CLASS(header_editor_frame_c, wxFrame);
 BEGIN_EVENT_TABLE(header_editor_frame_c, wxFrame)
   EVT_MENU(ID_M_HE_FILE_OPEN,               header_editor_frame_c::on_file_open)
   EVT_MENU(ID_M_HE_FILE_SAVE,               header_editor_frame_c::on_file_save)
+  EVT_MENU(ID_M_HE_FILE_RELOAD,             header_editor_frame_c::on_file_reload)
   EVT_MENU(ID_M_HE_FILE_CLOSE,              header_editor_frame_c::on_file_close)
   EVT_MENU(ID_M_HE_FILE_QUIT,               header_editor_frame_c::on_file_quit)
   EVT_MENU(ID_M_HE_HEADERS_EXPAND_ALL,      header_editor_frame_c::on_headers_expand_all)

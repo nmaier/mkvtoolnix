@@ -124,13 +124,13 @@ void
 he_value_page_c::on_reset_clicked(wxCommandEvent &evt) {
   reset_value();
   m_cb_add_or_remove->SetValue(false);
-  m_input->Enable(NULL != m_element);
+  m_input->Enable(m_present);
 }
 
 void
 he_value_page_c::on_add_or_remove_checked(wxCommandEvent &evt) {
-  m_input->Enable(   ((NULL == m_element) &&  evt.IsChecked())
-                  || ((NULL != m_element) && !evt.IsChecked()));
+  m_input->Enable(   (!m_present &&  evt.IsChecked())
+                  || ( m_present && !evt.IsChecked()));
 }
 
 bool
@@ -143,6 +143,36 @@ he_value_page_c::validate() {
   if (!m_input->IsEnabled())
     return true;
   return validate_value();
+}
+
+void
+he_value_page_c::do_modifications() {
+  if (!has_been_modified())
+    return;
+
+  if (m_present && m_cb_add_or_remove->IsChecked()) {
+    int i;
+    for (i = 0; m_master->ListSize() > i; ++i) {
+      if ((*m_master)[i]->Generic().GlobalId != m_callbacks.GlobalId)
+        continue;
+
+      EbmlElement *e = (*m_master)[i];
+      delete e;
+
+      m_master->Remove(i);
+
+      break;
+    }
+
+    return;
+  }
+
+  if (!m_present) {
+    m_element = &m_callbacks.Create();
+    m_master->PushElement(*m_element);
+  }
+
+  copy_value_to_element();
 }
 
 IMPLEMENT_CLASS(he_value_page_c, he_page_base_c);

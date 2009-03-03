@@ -32,6 +32,7 @@ public:
   virtual wxString get_current_value_as_string();
   virtual void reset_value();
   virtual bool validate_value();
+  virtual void copy_value_to_element();
 };
 
 #endif // __HE_STRING_VALUE_PAGE_H

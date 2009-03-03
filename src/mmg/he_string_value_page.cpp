@@ -60,3 +60,8 @@ bool
 he_string_value_page_c::validate_value() {
   return true;
 }
+
+void
+he_string_value_page_c::copy_value_to_element() {
+  *static_cast<EbmlUnicodeString *>(m_element) = UTFstring(m_tc_text->GetValue().c_str());
+}
