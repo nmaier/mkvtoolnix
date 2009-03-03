@@ -21,11 +21,12 @@
 using namespace libebml;
 
 he_unsigned_integer_value_page_c::he_unsigned_integer_value_page_c(wxTreebook *parent,
+                                                                   he_page_base_c *toplevel_page,
                                                                    EbmlMaster *master,
                                                                    const EbmlCallbacks &callbacks,
                                                                    const wxString &title,
                                                                    const wxString &description)
-  : he_value_page_c(parent, master, callbacks, vt_string, title, description)
+  : he_value_page_c(parent, toplevel_page, master, callbacks, vt_string, title, description)
   , m_tc_text(NULL)
   , m_original_value(0)
 {

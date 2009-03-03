@@ -20,6 +20,7 @@
 #include "wxcommon.h"
 
 he_value_page_c::he_value_page_c(wxTreebook *parent,
+                                 he_page_base_c *toplevel_page,
                                  EbmlMaster *master,
                                  const EbmlCallbacks &callbacks,
                                  const value_type_e value_type,
@@ -36,6 +37,7 @@ he_value_page_c::he_value_page_c(wxTreebook *parent,
   , m_input(NULL)
   , m_b_reset(NULL)
   , m_element(find_ebml_element_by_id(m_master, m_callbacks.GlobalId))
+  , m_toplevel_page(toplevel_page)
 {
 }
 

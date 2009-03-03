@@ -44,8 +44,11 @@ public:
 
   EbmlElement *m_element;
 
+  he_page_base_c *m_toplevel_page;
+
 public:
-  he_value_page_c(wxTreebook *parent, EbmlMaster *master, const EbmlCallbacks &callbacks, const value_type_e value_type, const wxString &title, const wxString &description);
+  he_value_page_c(wxTreebook *parent, he_page_base_c *toplevel_page, EbmlMaster *master, const EbmlCallbacks &callbacks,
+                  const value_type_e value_type, const wxString &title, const wxString &description);
   virtual ~he_value_page_c();
 
   void init();
