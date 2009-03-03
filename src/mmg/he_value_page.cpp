@@ -21,13 +21,13 @@
 
 he_value_page_c::he_value_page_c(wxTreebook *parent,
                                  EbmlMaster *master,
-                                 const EbmlId &id,
+                                 const EbmlCallbacks &callbacks,
                                  const value_type_e value_type,
                                  const wxString &title,
                                  const wxString &description)
   : he_page_base_c(parent)
   , m_master(master)
-  , m_id(id)
+  , m_callbacks(callbacks)
   , m_title(title)
   , m_description(description)
   , m_value_type(value_type)
@@ -35,7 +35,7 @@ he_value_page_c::he_value_page_c(wxTreebook *parent,
   , m_cb_add_or_remove(NULL)
   , m_input(NULL)
   , m_b_reset(NULL)
-  , m_element(find_ebml_element_by_id(m_master, m_id))
+  , m_element(find_ebml_element_by_id(m_master, m_callbacks.GlobalId))
 {
 }
 

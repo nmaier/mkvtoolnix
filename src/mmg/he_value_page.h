@@ -30,7 +30,7 @@ public:
 
 public:
   EbmlMaster *m_master;
-  EbmlId m_id;
+  const EbmlCallbacks &m_callbacks;
 
   wxString m_title, m_description;
 
@@ -45,7 +45,7 @@ public:
   EbmlElement *m_element;
 
 public:
-  he_value_page_c(wxTreebook *parent, EbmlMaster *master, const EbmlId &id, const value_type_e value_type, const wxString &title, const wxString &description);
+  he_value_page_c(wxTreebook *parent, EbmlMaster *master, const EbmlCallbacks &callbacks, const value_type_e value_type, const wxString &title, const wxString &description);
   virtual ~he_value_page_c();
 
   void init();

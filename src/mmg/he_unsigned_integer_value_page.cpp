@@ -22,10 +22,10 @@ using namespace libebml;
 
 he_unsigned_integer_value_page_c::he_unsigned_integer_value_page_c(wxTreebook *parent,
                                                                    EbmlMaster *master,
-                                                                   const EbmlId &id,
+                                                                   const EbmlCallbacks &callbacks,
                                                                    const wxString &title,
                                                                    const wxString &description)
-  : he_value_page_c(parent, master, id, vt_string, title, description)
+  : he_value_page_c(parent, master, callbacks, vt_string, title, description)
   , m_tc_text(NULL)
   , m_original_value(0)
 {

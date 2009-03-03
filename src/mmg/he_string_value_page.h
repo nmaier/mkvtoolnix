@@ -24,7 +24,7 @@ public:
   wxString m_original_value;
 
 public:
-  he_string_value_page_c(wxTreebook *parent, EbmlMaster *master, const EbmlId &id, const wxString &title, const wxString &description);
+  he_string_value_page_c(wxTreebook *parent, EbmlMaster *master, const EbmlCallbacks &callbacks, const wxString &title, const wxString &description);
   virtual ~he_string_value_page_c();
 
   virtual wxControl *create_input_control();

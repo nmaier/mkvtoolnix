@@ -201,35 +201,35 @@ header_editor_frame_c::handle_segment_info(analyzer_data_c *data) {
   KaxInfo *info = static_cast<KaxInfo *>(e);
   he_value_page_c *child_page;
 
-  child_page = new he_string_value_page_c(m_tb_tree, info, KaxTitle::ClassInfos.GlobalId, Z("Title"), Z("The title for the whole movie."));
+  child_page = new he_string_value_page_c(m_tb_tree, info, KaxTitle::ClassInfos, Z("Title"), Z("The title for the whole movie."));
   child_page->init();
   page->m_children.push_back(child_page);
 
-  child_page = new he_string_value_page_c(m_tb_tree, info, KaxSegmentFilename::ClassInfos.GlobalId, Z("Segment filename"), Z("The file name for this segment."));
+  child_page = new he_string_value_page_c(m_tb_tree, info, KaxSegmentFilename::ClassInfos, Z("Segment filename"), Z("The file name for this segment."));
   child_page->init();
   page->m_children.push_back(child_page);
 
-  child_page = new he_string_value_page_c(m_tb_tree, info, KaxPrevFilename::ClassInfos.GlobalId, Z("Previous filename"), Z("The previous segment's file name."));
+  child_page = new he_string_value_page_c(m_tb_tree, info, KaxPrevFilename::ClassInfos, Z("Previous filename"), Z("The previous segment's file name."));
   child_page->init();
   page->m_children.push_back(child_page);
 
-  child_page = new he_string_value_page_c(m_tb_tree, info, KaxNextFilename::ClassInfos.GlobalId, Z("Next filename"), Z("The next segment's file name."));
+  child_page = new he_string_value_page_c(m_tb_tree, info, KaxNextFilename::ClassInfos, Z("Next filename"), Z("The next segment's file name."));
   child_page->init();
   page->m_children.push_back(child_page);
 
-  // child_page = new he_string_value_page_c(m_tb_tree, info, Kax::ClassInfos.GlobalId, Z(""), Z("."));
+  // child_page = new he_string_value_page_c(m_tb_tree, info, Kax::ClassInfos, Z(""), Z("."));
   // child_page->init();
   // page->m_children.push_back(child_page);
 
-  // child_page = new he_string_value_page_c(m_tb_tree, info, Kax::ClassInfos.GlobalId, Z(""), Z("."));
+  // child_page = new he_string_value_page_c(m_tb_tree, info, Kax::ClassInfos, Z(""), Z("."));
   // child_page->init();
   // page->m_children.push_back(child_page);
 
-  // child_page = new he_string_value_page_c(m_tb_tree, info, Kax::ClassInfos.GlobalId, Z(""), Z("."));
+  // child_page = new he_string_value_page_c(m_tb_tree, info, Kax::ClassInfos, Z(""), Z("."));
   // child_page->init();
   // page->m_children.push_back(child_page);
 
-  // child_page = new he_string_value_page_c(m_tb_tree, info, Kax::ClassInfos.GlobalId, Z(""), Z("."));
+  // child_page = new he_string_value_page_c(m_tb_tree, info, Kax::ClassInfos, Z(""), Z("."));
   // child_page->init();
   // page->m_children.push_back(child_page);
 
@@ -279,7 +279,7 @@ header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
 
     he_value_page_c *child_page;
 
-    child_page = new he_unsigned_integer_value_page_c(m_tb_tree, k_track_entry, KaxTrackUID::ClassInfos.GlobalId, Z("Track UID"), Z("This track's unique identifier."));
+    child_page = new he_unsigned_integer_value_page_c(m_tb_tree, k_track_entry, KaxTrackUID::ClassInfos, Z("Track UID"), Z("This track's unique identifier."));
     child_page->init();
     page->m_children.push_back(child_page);
 
