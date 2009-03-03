@@ -27,15 +27,23 @@
 
 #include "kax_analyzer.h"
 
-#define ID_M_HE_FILE_OPEN      30000
-#define ID_M_HE_FILE_SAVE      30001
-#define ID_M_HE_FILE_QUIT      30002
-#define ID_M_HE_FILE_LOADLAST1 30090
-#define ID_M_HE_FILE_LOADLAST2 30091
-#define ID_M_HE_FILE_LOADLAST3 30092
-#define ID_M_HE_FILE_LOADLAST4 30093
+#define ID_M_HE_FILE_OPEN            100000
+#define ID_M_HE_FILE_SAVE            100001
+#define ID_M_HE_FILE_QUIT            100002
+#define ID_M_HE_FILE_CLOSE           100003
+#define ID_M_HE_FILE_LOADLAST1       100090
+#define ID_M_HE_FILE_LOADLAST2       100091
+#define ID_M_HE_FILE_LOADLAST3       100092
+#define ID_M_HE_FILE_LOADLAST4       100093
 
-#define ID_M_HE_HELP_HELP      30100
+#define ID_M_HE_HEADERS_EXPAND_ALL   100100
+#define ID_M_HE_HEADERS_COLLAPSE_ALL 100101
+#define ID_M_HE_HEADERS_VALIDATE     100102
+
+#define ID_M_HE_HELP_HELP            100900
+
+#define ID_HE_CB_ADD_OR_REMOVE       110000
+#define ID_HE_B_RESET                110001
 
 class he_page_base_c: public wxPanel {
 public:
@@ -47,6 +55,9 @@ public:
 public:
   he_page_base_c(wxTreebook *parent);
   virtual ~he_page_base_c();
+
+  virtual bool has_been_modified() = 0;
+  virtual bool validate() = 0;
 };
 
 class header_editor_frame_c: public wxFrame {
@@ -57,7 +68,7 @@ public:
 
   wxFileName m_file_name;
 
-  wxMenu *m_file_menu;
+  wxMenu *m_file_menu, *m_headers_menu;
   bool m_file_menu_sep;
 
   wxPanel *m_panel;
@@ -70,22 +81,35 @@ public:
   header_editor_frame_c(wxWindow *parent);
   virtual ~header_editor_frame_c();
 
-  bool may_close();
   void on_file_open(wxCommandEvent &evt);
   void on_file_save(wxCommandEvent &evt);
   void on_file_quit(wxCommandEvent &evt);
-  void on_close(wxCloseEvent &evt);
+  void on_file_close(wxCommandEvent &evt);
+
+  void on_close_window(wxCloseEvent &evt);
+
+  void on_headers_expand_all(wxCommandEvent &evt);
+  void on_headers_collapse_all(wxCommandEvent &evt);
+  void on_headers_validate(wxCommandEvent &evt);
+
+  void on_help_help(wxCommandEvent &evt);
 
 protected:
+  bool may_close();
+
   void update_file_menu();
-  void enable_file_save_menu_entry();
+  void enable_menu_entries();
 
   bool open_file(const wxFileName &file_name);
 
-  void add_empty_page(void *some_ptr, const wxString &title, const wxString &text);
+  void clear_pages();
 
   void handle_segment_info(analyzer_data_c *data);
   void handle_tracks(analyzer_data_c *data);
+
+  bool have_been_modified(std::vector<he_page_base_c *> &pages);
+  int validate_pages(std::vector<he_page_base_c *> &pages);
+  bool validate();
 };
 
 #endif // __HEADER_EDITOR_FRAME_H

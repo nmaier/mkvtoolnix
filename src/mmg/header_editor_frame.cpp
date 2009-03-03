@@ -30,13 +30,10 @@
 static EbmlElement *
 find_by_id(EbmlMaster *master,
            const EbmlId &id) {
-  wxLogMessage(wxT("Looking for 0x%08u"), id.Value);
   int i;
-  for (i = 0; master->ListSize() > i; ++i) {
-    wxLogMessage(wxT("  ? 0x%08u"), (*master)[i]->Generic().GlobalId.Value);
+  for (i = 0; master->ListSize() > i; ++i)
     if ((*master)[i]->Generic().GlobalId == id)
       return (*master)[i];
-  }
 
   return NULL;
 }
@@ -59,27 +56,47 @@ he_page_base_c::~he_page_base_c() {
 
 class he_value_page_c: public he_page_base_c {
 public:
+  enum value_type_e {
+    vt_string,
+    vt_integer,
+    vt_float,
+  };
+
+public:
   EbmlMaster *m_master;
   EbmlId m_id;
 
-  wxString m_title, m_description, m_original_value;
+  wxString m_title, m_description;
+
+  value_type_e m_value_type;
 
   bool m_present;
 
   wxCheckBox *m_cb_add_or_remove;
-  wxTextCtrl *m_te_text;
+  wxControl *m_input;
   wxButton *m_b_reset;
 
+  EbmlElement *m_element;
+
 public:
-  he_value_page_c(wxTreebook *parent, EbmlMaster *master, const EbmlId &id, const wxString &title, const wxString &description);
+  he_value_page_c(wxTreebook *parent, EbmlMaster *master, const EbmlId &id, const value_type_e value_type, const wxString &title, const wxString &description);
   virtual ~he_value_page_c();
 
   virtual void init();
+  virtual void on_reset(wxCommandEvent &evt);
+
+  virtual bool has_been_modified();
+
+  virtual wxControl *create_input_control() = 0;
+  virtual wxString get_original_value_as_string() = 0;
+  virtual wxString get_current_value_as_string() = 0;
+  virtual void reset_value() = 0;
 };
 
 he_value_page_c::he_value_page_c(wxTreebook *parent,
                                  EbmlMaster *master,
                                  const EbmlId &id,
+                                 const value_type_e value_type,
                                  const wxString &title,
                                  const wxString &description)
   : he_page_base_c(parent)
@@ -87,11 +104,16 @@ he_value_page_c::he_value_page_c(wxTreebook *parent,
   , m_id(id)
   , m_title(title)
   , m_description(description)
+  , m_value_type(value_type)
   , m_present(false)
   , m_cb_add_or_remove(NULL)
-  , m_te_text(NULL)
+  , m_input(NULL)
   , m_b_reset(NULL)
+  , m_element(find_by_id(m_master, m_id))
 {
+}
+
+he_value_page_c::~he_value_page_c() {
 }
 
 void
@@ -110,35 +132,39 @@ he_value_page_c::init() {
     siz->AddSpacer(15);
   }
 
-  wxBoxSizer *siz_line = new wxBoxSizer(wxHORIZONTAL);
-  m_te_text = new wxTextCtrl(this, wxID_ANY);
-
-  EbmlUnicodeString *element = static_cast<EbmlUnicodeString *>(find_by_id(m_master, m_id));
-  if (NULL == element) {
+  wxString value_label;
+  if (NULL == m_element) {
     m_present = false;
 
     siz->Add(new wxStaticText(this, wxID_ANY, Z("This element is not currently present in the file.")), 0, wxGROW | wxLEFT | wxRIGHT, 5);
     siz->AddSpacer(5);
-    m_cb_add_or_remove = new wxCheckBox(this, wxID_ANY /* FIXME */, Z("Add this element to the file"));
+    m_cb_add_or_remove = new wxCheckBox(this, ID_HE_CB_ADD_OR_REMOVE, Z("Add this element to the file"));
     siz->Add(m_cb_add_or_remove, 0, wxGROW | wxLEFT | wxRIGHT, 5);
     siz->AddSpacer(15);
 
-    siz_line->Add(new wxStaticText(this, wxID_ANY, Z("New value:")), 0, wxALIGN_CENTER_VERTICAL          | wxLEFT | wxRIGHT, 5);
-    siz_line->Add(m_te_text,                                         0, wxALIGN_CENTER_VERTICAL | wxGROW | wxLEFT | wxRIGHT, 5);
+    value_label = Z("New value:");
 
   } else {
-    m_present        = true;
-    m_original_value = ((const UTFstring)(*element)).c_str();
+    m_present = true;
 
     siz->Add(new wxStaticText(this, wxID_ANY, Z("This element is currently present in the file.")), 0, wxGROW | wxLEFT | wxRIGHT, 5);
     siz->AddSpacer(5);
-    m_cb_add_or_remove = new wxCheckBox(this, wxID_ANY /* FIXME */, Z("Remove this element from the file"));
+    m_cb_add_or_remove = new wxCheckBox(this, ID_HE_CB_ADD_OR_REMOVE, Z("Remove this element from the file"));
     siz->Add(m_cb_add_or_remove, 0, wxGROW | wxLEFT | wxRIGHT, 5);
     siz->AddSpacer(15);
 
-    siz_line->Add(new wxStaticText(this, wxID_ANY, Z("Current value:")), 0, wxALIGN_CENTER_VERTICAL          | wxLEFT | wxRIGHT, 5);
-    siz_line->Add(m_te_text,                                             0, wxALIGN_CENTER_VERTICAL | wxGROW | wxLEFT | wxRIGHT, 5);
+    siz->Add(new wxStaticText(this, wxID_ANY, wxString::Format(Z("Original value: %s"), get_original_value_as_string().c_str())), 0, 0, 0);
+    siz->AddSpacer(15);
+
+    value_label = Z("Current value:");
   }
+
+  m_input = create_input_control();
+
+  wxBoxSizer *siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_line->Add(new wxStaticText(this, wxID_ANY, value_label), 0, wxALIGN_CENTER_VERTICAL,          0);
+  siz_line->AddSpacer(5);
+  siz_line->Add(m_input,                                       1, wxALIGN_CENTER_VERTICAL | wxGROW, 0);
 
   siz->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 5);
 
@@ -146,7 +172,7 @@ he_value_page_c::init() {
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->AddStretchSpacer();
-  m_b_reset = new wxButton(this, wxID_ANY /* FIXME */, Z("&Reset"));
+  m_b_reset = new wxButton(this, ID_HE_B_RESET, Z("&Reset"));
   siz_line->Add(m_b_reset, 0, wxGROW, 0);
 
   siz->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 5);
@@ -157,7 +183,136 @@ he_value_page_c::init() {
   m_tree->AddSubPage(this, m_title);
 }
 
-he_value_page_c::~he_value_page_c() {
+void
+he_value_page_c::on_reset(wxCommandEvent &evt) {
+  
+}
+
+bool
+he_value_page_c::has_been_modified() {
+  return m_cb_add_or_remove->IsChecked() || (get_current_value_as_string() != get_original_value_as_string());
+}
+
+// ------------------------------------------------------------
+
+class he_string_value_page_c: public he_value_page_c {
+public:
+  wxTextCtrl *m_tc_text;
+  wxString m_original_value;
+
+public:
+  he_string_value_page_c(wxTreebook *parent, EbmlMaster *master, const EbmlId &id, const wxString &title, const wxString &description);
+  virtual ~he_string_value_page_c();
+
+  virtual wxControl *create_input_control();
+  virtual wxString get_original_value_as_string();
+  virtual wxString get_current_value_as_string();
+  virtual void reset_value();
+  virtual bool validate();
+};
+
+he_string_value_page_c::he_string_value_page_c(wxTreebook *parent,
+                                               EbmlMaster *master,
+                                               const EbmlId &id,
+                                               const wxString &title,
+                                               const wxString &description)
+  : he_value_page_c(parent, master, id, vt_string, title, description)
+  , m_tc_text(NULL)
+{
+  if (NULL != m_element)
+    m_original_value = UTFstring(*static_cast<EbmlUnicodeString *>(m_element)).c_str();
+}
+
+he_string_value_page_c::~he_string_value_page_c() {
+}
+
+wxControl *
+he_string_value_page_c::create_input_control() {
+  m_tc_text = new wxTextCtrl(this, wxID_ANY, m_original_value);
+  return m_tc_text;
+}
+
+wxString
+he_string_value_page_c::get_original_value_as_string() {
+  return m_original_value;
+}
+
+wxString
+he_string_value_page_c::get_current_value_as_string() {
+  return m_tc_text->GetValue();
+}
+
+void
+he_string_value_page_c::reset_value() {
+  m_tc_text->SetValue(m_original_value);
+}
+
+bool
+he_string_value_page_c::validate() {
+  return true;
+}
+
+// ------------------------------------------------------------
+
+class he_unsigned_integer_value_page_c: public he_value_page_c {
+public:
+  wxTextCtrl *m_tc_text;
+  uint64_t m_original_value;
+
+public:
+  he_unsigned_integer_value_page_c(wxTreebook *parent, EbmlMaster *master, const EbmlId &id, const wxString &title, const wxString &description);
+  virtual ~he_unsigned_integer_value_page_c();
+
+  virtual wxControl *create_input_control();
+  virtual wxString get_original_value_as_string();
+  virtual wxString get_current_value_as_string();
+  virtual bool validate();
+  virtual void reset_value();
+};
+
+he_unsigned_integer_value_page_c::he_unsigned_integer_value_page_c(wxTreebook *parent,
+                                                                   EbmlMaster *master,
+                                                                   const EbmlId &id,
+                                                                   const wxString &title,
+                                                                   const wxString &description)
+  : he_value_page_c(parent, master, id, vt_string, title, description)
+  , m_tc_text(NULL)
+  , m_original_value(0)
+{
+  if (NULL != m_element)
+    m_original_value = uint64(*static_cast<EbmlUInteger *>(m_element));
+}
+
+he_unsigned_integer_value_page_c::~he_unsigned_integer_value_page_c() {
+}
+
+wxControl *
+he_unsigned_integer_value_page_c::create_input_control() {
+  m_tc_text = new wxTextCtrl(this, wxID_ANY, get_original_value_as_string());
+  return m_tc_text;
+}
+
+wxString
+he_unsigned_integer_value_page_c::get_original_value_as_string() {
+  if (NULL != m_element)
+    return wxString::Format(_T("%") wxLongLongFmtSpec _T("u"), m_original_value);
+
+  return wxEmptyString;
+}
+
+wxString
+he_unsigned_integer_value_page_c::get_current_value_as_string() {
+  return m_tc_text->GetValue();
+}
+
+void
+he_unsigned_integer_value_page_c::reset_value() {
+  m_tc_text->SetValue(get_original_value_as_string());
+}
+
+bool
+he_unsigned_integer_value_page_c::validate() {
+  return true;                  // FIXME
 }
 
 // ------------------------------------------------------------
@@ -169,6 +324,9 @@ public:
 public:
   he_empty_page_c(wxTreebook *parent, const wxString &title, const wxString &content);
   virtual ~he_empty_page_c();
+
+  virtual bool has_been_modified();
+  virtual bool validate();
 };
 
 he_empty_page_c::he_empty_page_c(wxTreebook *parent,
@@ -194,6 +352,16 @@ he_empty_page_c::he_empty_page_c(wxTreebook *parent,
 he_empty_page_c::~he_empty_page_c() {
 }
 
+bool
+he_empty_page_c::has_been_modified() {
+  return false;
+}
+
+bool
+he_empty_page_c::validate() {
+  return true;
+}
+
 // ------------------------------------------------------------
 
 header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
@@ -214,22 +382,30 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
 
   panel->SetSizer(m_bs_panel);
 
-  add_empty_page(NULL, Z("No file loaded"), Z("No file has been loaded yet. You can do that by selecting 'Open' from the 'File' menu."));
+  clear_pages();
 
   m_file_menu = new wxMenu();
-  m_file_menu->Append(ID_M_HE_FILE_OPEN, Z("&Open\tCtrl-O"), Z("Open an existing Matroska file"));
-  m_file_menu->Append(ID_M_HE_FILE_SAVE, Z("&Save\tCtrl-S"), Z("Save the header values"));
+  m_file_menu->Append(ID_M_HE_FILE_OPEN,  Z("&Open\tCtrl-O"),  Z("Open an existing Matroska file"));
+  m_file_menu->Append(ID_M_HE_FILE_SAVE,  Z("&Save\tCtrl-S"),  Z("Save the header values"));
+  m_file_menu->Append(ID_M_HE_FILE_CLOSE, Z("&Close\tCtrl-W"), Z("Close the current file without saving"));
   m_file_menu->AppendSeparator();
-  m_file_menu->Append(ID_M_HE_FILE_QUIT, Z("&Quit\tCtrl-Q"), Z("Quit the header editor"));
+  m_file_menu->Append(ID_M_HE_FILE_QUIT,  Z("&Quit\tCtrl-Q"),  Z("Quit the header editor"));
 
-  enable_file_save_menu_entry();
+  m_headers_menu = new wxMenu();
+  m_headers_menu->Append(ID_M_HE_HEADERS_EXPAND_ALL,   Z("&Expand all entries\tCtrl-E"),   Z("Epand all entries so that their sub-entries will be shown"));
+  m_headers_menu->Append(ID_M_HE_HEADERS_COLLAPSE_ALL, Z("&Collapse all entries\tCtrl-P"), Z("Collapse all entries so that none of their sub-entries will be shown"));
+  m_headers_menu->AppendSeparator();
+  m_headers_menu->Append(ID_M_HE_HEADERS_VALIDATE,     Z("&Validate\tCtrl-T"),             Z("Validates the content of all changeable headers"));
 
   wxMenu *help_menu = new wxMenu();
   help_menu->Append(ID_M_HE_HELP_HELP, Z("&Help\tF1"), Z("Display usage information"));
 
+  enable_menu_entries();
+
   wxMenuBar *menu_bar = new wxMenuBar();
-  menu_bar->Append(m_file_menu, Z("&File"));
-  menu_bar->Append(help_menu, Z("&Help"));
+  menu_bar->Append(m_file_menu,    Z("&File"));
+  menu_bar->Append(m_headers_menu, Z("H&eaders"));
+  menu_bar->Append(help_menu,      Z("&Help"));
   SetMenuBar(menu_bar);
 }
 
@@ -237,15 +413,45 @@ header_editor_frame_c::~header_editor_frame_c() {
   delete m_analyzer;
 }
 
+bool
+header_editor_frame_c::have_been_modified(std::vector<he_page_base_c *> &pages) {
+  std::vector<he_page_base_c *>::iterator it = pages.begin();
+  while (it != pages.end()) {
+    if ((*it)->has_been_modified() || have_been_modified((*it)->m_children))
+      return true;
+    ++it;
+  }
+
+  return false;
+}
+
+int
+header_editor_frame_c::validate_pages(std::vector<he_page_base_c *> &pages) {
+  std::vector<he_page_base_c *>::iterator it = pages.begin();
+  while (it != pages.end()) {
+    if (!(*it)->validate())
+      return (*it)->m_page_id;
+
+    int result = validate_pages((*it)->m_children);
+    if (-1 != result)
+      return result;
+
+    ++it;
+  }
+
+  return -1;
+}
+
 void
-header_editor_frame_c::add_empty_page(void *some_ptr,
-                                      const wxString &title,
-                                      const wxString &text) {
+header_editor_frame_c::clear_pages() {
   m_bs_panel->Hide(m_tb_tree);
 
-  he_empty_page_c *page = new he_empty_page_c(m_tb_tree, title, text);
+  m_tb_tree->DeleteAllPages();
+  m_pages.clear();
 
-  m_tb_tree->AddPage(page, title);
+  he_empty_page_c *page = new he_empty_page_c(m_tb_tree, Z("No file loaded"), Z("No file has been loaded yet. You can open a file by selecting 'Open' from the 'File' menu."));
+
+  m_tb_tree->AddPage(page, Z("No file loaded"));
 
   m_bs_panel->Show(m_tb_tree);
   m_bs_panel->Layout();
@@ -291,7 +497,7 @@ header_editor_frame_c::open_file(const wxFileName &file_name) {
 
   SetTitle(wxString::Format(Z("Header editor: %s"), m_file_name.GetFullName().c_str()));
 
-  enable_file_save_menu_entry();
+  enable_menu_entries();
 
   m_bs_panel->Hide(m_tb_tree);
 
@@ -329,37 +535,39 @@ header_editor_frame_c::handle_segment_info(analyzer_data_c *data) {
   KaxInfo *info = static_cast<KaxInfo *>(e);
   he_value_page_c *child_page;
 
-  child_page = new he_value_page_c(m_tb_tree, info, KaxTitle::ClassInfos.GlobalId, Z("Title"), Z("The title for the whole movie."));
+  child_page = new he_string_value_page_c(m_tb_tree, info, KaxTitle::ClassInfos.GlobalId, Z("Title"), Z("The title for the whole movie."));
   child_page->init();
   page->m_children.push_back(child_page);
 
-  child_page = new he_value_page_c(m_tb_tree, info, KaxSegmentFilename::ClassInfos.GlobalId, Z("Segment filename"), Z("The file name for this segment."));
+  child_page = new he_string_value_page_c(m_tb_tree, info, KaxSegmentFilename::ClassInfos.GlobalId, Z("Segment filename"), Z("The file name for this segment."));
   child_page->init();
   page->m_children.push_back(child_page);
 
-  child_page = new he_value_page_c(m_tb_tree, info, KaxPrevFilename::ClassInfos.GlobalId, Z("Previous filename"), Z("The previous segment's file name."));
+  child_page = new he_string_value_page_c(m_tb_tree, info, KaxPrevFilename::ClassInfos.GlobalId, Z("Previous filename"), Z("The previous segment's file name."));
   child_page->init();
   page->m_children.push_back(child_page);
 
-  child_page = new he_value_page_c(m_tb_tree, info, KaxNextFilename::ClassInfos.GlobalId, Z("Next filename"), Z("The next segment's file name."));
+  child_page = new he_string_value_page_c(m_tb_tree, info, KaxNextFilename::ClassInfos.GlobalId, Z("Next filename"), Z("The next segment's file name."));
   child_page->init();
   page->m_children.push_back(child_page);
 
-  // child_page = new he_value_page_c(m_tb_tree, info, Kax::ClassInfos.GlobalId, Z(""), Z("."));
+  // child_page = new he_string_value_page_c(m_tb_tree, info, Kax::ClassInfos.GlobalId, Z(""), Z("."));
   // child_page->init();
   // page->m_children.push_back(child_page);
 
-  // child_page = new he_value_page_c(m_tb_tree, info, Kax::ClassInfos.GlobalId, Z(""), Z("."));
+  // child_page = new he_string_value_page_c(m_tb_tree, info, Kax::ClassInfos.GlobalId, Z(""), Z("."));
   // child_page->init();
   // page->m_children.push_back(child_page);
 
-  // child_page = new he_value_page_c(m_tb_tree, info, Kax::ClassInfos.GlobalId, Z(""), Z("."));
+  // child_page = new he_string_value_page_c(m_tb_tree, info, Kax::ClassInfos.GlobalId, Z(""), Z("."));
   // child_page->init();
   // page->m_children.push_back(child_page);
 
-  // child_page = new he_value_page_c(m_tb_tree, info, Kax::ClassInfos.GlobalId, Z(""), Z("."));
+  // child_page = new he_string_value_page_c(m_tb_tree, info, Kax::ClassInfos.GlobalId, Z(""), Z("."));
   // child_page->init();
   // page->m_children.push_back(child_page);
+
+  m_tb_tree->ExpandNode(page->m_page_id);
 }
 
 void
@@ -402,6 +610,14 @@ header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
     he_empty_page_c *page = new he_empty_page_c(m_tb_tree, title, wxEmptyString);
     m_tb_tree->AddPage(page, title);
     m_pages.push_back(page);
+
+    he_value_page_c *child_page;
+
+    child_page = new he_unsigned_integer_value_page_c(m_tb_tree, k_track_entry, KaxTrackUID::ClassInfos.GlobalId, Z("Track UID"), Z("This track's unique identifier."));
+    child_page->init();
+    page->m_children.push_back(child_page);
+
+    m_tb_tree->ExpandNode(page->m_page_id);
   }
 
   delete e;
@@ -412,7 +628,24 @@ header_editor_frame_c::on_file_save(wxCommandEvent &evt) {
 }
 
 void
-header_editor_frame_c::on_close(wxCloseEvent &evt) {
+header_editor_frame_c::on_file_close(wxCommandEvent &evt) {
+  if (   have_been_modified(m_pages)
+      && (wxYES != wxMessageBox(Z("Some header values have been modified. Do you really want to close without saving the file?"), Z("Headers modified"),
+                                wxYES_NO | wxICON_QUESTION, this)))
+    return;
+
+  clear_pages();
+
+  delete m_analyzer;
+  m_analyzer = NULL;
+
+  m_file_name.Clear();
+
+  enable_menu_entries();
+}
+
+void
+header_editor_frame_c::on_close_window(wxCloseEvent &evt) {
   if (!may_close() && evt.CanVeto())
     evt.Veto();
   else
@@ -422,6 +655,48 @@ header_editor_frame_c::on_close(wxCloseEvent &evt) {
 void
 header_editor_frame_c::on_file_quit(wxCommandEvent &evt) {
   Close();
+}
+
+void
+header_editor_frame_c::on_headers_expand_all(wxCommandEvent &evt) {
+  m_tb_tree->Freeze();
+  int i;
+  for (i = 0; m_tb_tree->GetTreeCtrl()->GetCount() > i; ++i)
+    m_tb_tree->ExpandNode(i);
+  m_tb_tree->Thaw();
+}
+
+void
+header_editor_frame_c::on_headers_collapse_all(wxCommandEvent &evt) {
+  m_tb_tree->Freeze();
+  int i;
+  for (i = 0; m_tb_tree->GetTreeCtrl()->GetCount() > i; ++i)
+    m_tb_tree->CollapseNode(i);
+  m_tb_tree->Thaw();
+}
+
+void
+header_editor_frame_c::on_headers_validate(wxCommandEvent &evt) {
+  validate();
+}
+
+bool
+header_editor_frame_c::validate() {
+  int page_id = validate_pages(m_pages);
+
+  if (-1 == page_id) {
+    wxMessageBox(Z("All header values are OK."), Z("Header validation"), wxOK | wxICON_INFORMATION, this);
+    return true;
+  }
+
+  m_tb_tree->SetSelection(page_id);
+  wxMessageBox(Z("There were errors in the header values. The first error has been selected."), Z("Header validation"), wxOK | wxICON_ERROR, this);
+
+  return false;
+}
+
+void
+header_editor_frame_c::on_help_help(wxCommandEvent &evt) {
 }
 
 bool
@@ -448,14 +723,23 @@ header_editor_frame_c::update_file_menu() {
 }
 
 void
-header_editor_frame_c::enable_file_save_menu_entry() {
-  m_file_menu->Enable(ID_M_HE_FILE_SAVE, !m_file_name.IsOk());
+header_editor_frame_c::enable_menu_entries() {
+  m_file_menu->Enable(ID_M_HE_FILE_SAVE,               m_file_name.IsOk());
+  m_file_menu->Enable(ID_M_HE_FILE_CLOSE,              m_file_name.IsOk());
+  m_headers_menu->Enable(ID_M_HE_HEADERS_EXPAND_ALL,   m_file_name.IsOk());
+  m_headers_menu->Enable(ID_M_HE_HEADERS_COLLAPSE_ALL, m_file_name.IsOk());
+  m_headers_menu->Enable(ID_M_HE_HEADERS_VALIDATE,     m_file_name.IsOk());
 }
 
 IMPLEMENT_CLASS(header_editor_frame_c, wxFrame);
 BEGIN_EVENT_TABLE(header_editor_frame_c, wxFrame)
   EVT_MENU(ID_M_HE_FILE_OPEN,               header_editor_frame_c::on_file_open)
   EVT_MENU(ID_M_HE_FILE_SAVE,               header_editor_frame_c::on_file_save)
+  EVT_MENU(ID_M_HE_FILE_CLOSE,              header_editor_frame_c::on_file_close)
   EVT_MENU(ID_M_HE_FILE_QUIT,               header_editor_frame_c::on_file_quit)
-  EVT_CLOSE(header_editor_frame_c::on_close)
+  EVT_MENU(ID_M_HE_HEADERS_EXPAND_ALL,      header_editor_frame_c::on_headers_expand_all)
+  EVT_MENU(ID_M_HE_HEADERS_COLLAPSE_ALL,    header_editor_frame_c::on_headers_collapse_all)
+  EVT_MENU(ID_M_HE_HEADERS_VALIDATE,        header_editor_frame_c::on_headers_validate)
+  EVT_MENU(ID_M_HE_HELP_HELP,               header_editor_frame_c::on_help_help)
+  EVT_CLOSE(header_editor_frame_c::on_close_window)
 END_EVENT_TABLE();
