@@ -116,4 +116,6 @@ find_ebml_parent_callbacks(const EbmlCallbacks &base, const EbmlId &id);
 const EbmlSemantic *MTX_DLL_API
 find_ebml_semantic(const EbmlCallbacks &base, const EbmlId &id);
 
+EbmlElement *MTX_DLL_API find_ebml_element_by_id(EbmlMaster *master, const EbmlId &id);
+
 #endif // __COMMONEBML_H

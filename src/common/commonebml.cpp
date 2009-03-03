@@ -564,3 +564,13 @@ kt_get_v_pixel_height(KaxTrackEntry &track) {
   return uint32(*height);
 }
 
+EbmlElement *
+find_ebml_element_by_id(EbmlMaster *master,
+                        const EbmlId &id) {
+  int i;
+  for (i = 0; master->ListSize() > i; ++i)
+    if ((*master)[i]->Generic().GlobalId == id)
+      return (*master)[i];
+
+  return NULL;
+}

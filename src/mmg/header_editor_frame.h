@@ -16,8 +16,6 @@
 
 #include "os.h"
 
-#include <vector>
-
 #include <wx/filename.h>
 #include <wx/frame.h>
 #include <wx/menu.h>
@@ -25,6 +23,7 @@
 #include <wx/sizer.h>
 #include <wx/treebook.h>
 
+#include "he_page_base.h"
 #include "kax_analyzer.h"
 
 #define ID_M_HE_FILE_OPEN            100000
@@ -44,21 +43,6 @@
 
 #define ID_HE_CB_ADD_OR_REMOVE       110000
 #define ID_HE_B_RESET                110001
-
-class he_page_base_c: public wxPanel {
-public:
-  std::vector<he_page_base_c *> m_children;
-  wxTreebook *m_tree;
-  int m_page_id;
-  EbmlElement *m_storage;
-
-public:
-  he_page_base_c(wxTreebook *parent);
-  virtual ~he_page_base_c();
-
-  virtual bool has_been_modified() = 0;
-  virtual bool validate() = 0;
-};
 
 class header_editor_frame_c: public wxFrame {
   DECLARE_CLASS(header_editor_frame_c);
