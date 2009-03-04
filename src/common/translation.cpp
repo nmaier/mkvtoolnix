@@ -155,6 +155,8 @@ init_locales(std::string locale) {
   }
 
 # if defined(SYS_WINDOWS)
+  set_environment_variable("LANGUAGE", "");
+
   if (!locale.empty()) {
     // The Windows system headers define LC_MESSAGES but
     // Windows itself doesn't know it and treats "set_locale(LC_MESSAGES, ...)"
