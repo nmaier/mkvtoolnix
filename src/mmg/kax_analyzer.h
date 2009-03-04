@@ -45,6 +45,15 @@ public:
 
 class kax_analyzer_c {
 public:
+  enum update_element_result_e {
+    uer_success,
+    uer_error_segment_size_for_element,
+    uer_error_segment_size_for_meta_seek,
+    uer_error_meta_seek,
+    uer_error_unknown,
+  };
+
+public:
   wxWindow *m_parent;
 
   vector<analyzer_data_c *> data;
@@ -56,7 +65,7 @@ public:
   kax_analyzer_c(wxWindow *parent, string name);
   virtual ~kax_analyzer_c();
 
-  virtual bool update_element(EbmlElement *e);
+  virtual update_element_result_e update_element(EbmlElement *e);
   virtual void overwrite_elements(EbmlElement *e, int found_where);
   virtual EbmlElement *read_element(analyzer_data_c *element_data, const EbmlCallbacks &callbacks);
   virtual EbmlElement *read_element(uint32_t pos, const EbmlCallbacks &callbacks) {

@@ -118,6 +118,9 @@ public:
   bool load(wxString name);
   void save();
   bool is_empty();
+
+protected:
+  void display_update_element_result(kax_analyzer_c::update_element_result_e result);
 };
 
 #endif // __TAB_CHAPTERS_H

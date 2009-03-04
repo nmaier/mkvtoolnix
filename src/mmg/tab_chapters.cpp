@@ -630,8 +630,7 @@ tab_chapters::on_save_chapters(wxCommandEvent &evt) {
     return;
 
   if (source_is_kax_file) {
-    if (analyzer->update_element(chapters))
-      mdlg->set_status_bar(Z("Chapters written."));
+    display_update_element_result(analyzer->update_element(chapters));
     return;
   }
 
@@ -671,8 +670,8 @@ tab_chapters::on_save_chapters_to_kax_file(wxCommandEvent &evt) {
     analyzer = NULL;
     return;
   }
-  if (analyzer->update_element(chapters))
-    mdlg->set_status_bar(Z("Chapters written."));
+
+  display_update_element_result(analyzer->update_element(chapters));
   mdlg->set_last_chapters_in_menu(file_name);
 }
 
@@ -1911,6 +1910,37 @@ tab_chapters::is_empty() {
   if (!tid_root.IsOk())
     return true;
   return tc_chapters->GetCount() < 2;
+}
+
+void
+tab_chapters::display_update_element_result(kax_analyzer_c::update_element_result_e result) {
+  switch (result) {
+    case kax_analyzer_c::uer_success:
+      mdlg->set_status_bar(Z("Chapters written."));
+      break;
+
+    case kax_analyzer_c::uer_error_segment_size_for_element:
+      wxMessageBox(Z("The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. "
+                     "The process will be aborted. The file has been changed!"),
+                   Z("Error writing Matroska file"), wxCENTER | wxOK | wxICON_ERROR, this);
+      break;
+
+    case kax_analyzer_c::uer_error_segment_size_for_meta_seek:
+      wxMessageBox(Z("The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. "
+                     "The process will be aborted. The file has been changed!"),
+                   Z("Error writing Matroska file"), wxCENTER | wxOK | wxICON_ERROR, this);
+      break;
+
+    case kax_analyzer_c::uer_error_meta_seek:
+      wxMessageBox(Z("The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. "
+                     "Please use your favorite player to check this file.\n\n"
+                     "The proper solution is to save these chapters into a XML file and then to remux the file with the chapters included."),
+                   Z("File structure warning"), wxOK | wxCENTER | wxICON_EXCLAMATION, this);
+      break;
+
+    default:
+      wxMessageBox(Z("An unknown error occured. The file has not been modified."), Z("Internal program error"), wxOK | wxCENTER | wxICON_ERROR, this);
+  }
 }
 
 IMPLEMENT_CLASS(chapter_values_dlg, wxDialog);

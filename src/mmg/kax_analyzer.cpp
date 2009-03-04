@@ -254,7 +254,7 @@ kax_analyzer_c::overwrite_elements(EbmlElement *e,
 //   mxinfo("overwrite_elements: %s", info.c_str());
 }
 
-bool
+kax_analyzer_c::update_element_result_e
 kax_analyzer_c::update_element(EbmlElement *e) {
   uint32_t i, k, found_where, found_what;
   int64_t space_here, pos;
@@ -266,7 +266,7 @@ kax_analyzer_c::update_element(EbmlElement *e) {
   string info;
 
   if (e == NULL)
-    return false;
+    return uer_error_unknown;
 
   found_where = 0;
   for (i = 0; i < data.size(); i++)
@@ -319,14 +319,8 @@ kax_analyzer_c::update_element(EbmlElement *e) {
                                   segment->HeadSize() -
                                   segment->GetElementPosition())) {
         segment->OverwriteHead(*file);
-        wxMessageBox(Z("The element was written at the end of the file, but the segment size could not be updated. "
-                       "Therefore the element will not be visible. "
-                       "The process will be aborted. "
-                       "The file has been changed!"),
-                     Z("Error writing Matroska file"),
-                     wxCENTER | wxOK | wxICON_ERROR);
         delete new_segment;
-        return false;
+        return uer_error_segment_size_for_element;
       }
       new_segment->OverwriteHead(*file);
       delete segment;
@@ -392,7 +386,7 @@ kax_analyzer_c::update_element(EbmlElement *e) {
           if ((sid != NULL) && (spos != NULL) && (segment->GetGlobalPosition(uint64(*spos)) == data[found_where]->pos)) {
             EbmlId this_id(sid->GetBuffer(), sid->GetSize());
             if (this_id == EbmlId(*e))
-              throw true;
+              throw uer_success;
           }
         }
       }
@@ -424,7 +418,7 @@ kax_analyzer_c::update_element(EbmlElement *e) {
 
     if (found_what) {
       overwrite_elements(all_heads[found_what - 1], found_where);
-      throw true;
+      throw uer_success;
     }
 
     // 4. If none found: Look for the first seek head. Link to a new seek head
@@ -452,14 +446,8 @@ kax_analyzer_c::update_element(EbmlElement *e) {
                                   segment->HeadSize() -
                                   segment->GetElementPosition())) {
         segment->OverwriteHead(*file);
-        wxMessageBox(Z("The meta seek element was written at the end of the file, but the segment size could not be updated. "
-                       "Therefore the element will not be visible. "
-                       "The process will be aborted. "
-                       "The file has been changed!"),
-                     Z("Error writing Matroska file"),
-                     wxCENTER | wxOK | wxICON_ERROR);
         delete new_segment;
-        throw false;
+        throw uer_error_segment_size_for_meta_seek;
       }
       new_segment->OverwriteHead(*file);
       delete segment;
@@ -485,7 +473,7 @@ kax_analyzer_c::update_element(EbmlElement *e) {
 //       mxinfo(boost::format("INFO 2:\n%1%\n") % info);
 //       dump_analyzer_data(data);
 
-      throw true;
+      throw uer_success;
     }
 
     // 5. No seek head found at all: Search for enough space to create a
@@ -509,19 +497,16 @@ kax_analyzer_c::update_element(EbmlElement *e) {
       overwrite_elements(new_head, found_where);
 //       dump_analyzer_data(data);
 
-      throw true;
-    } else
-      delete new_head;
+      throw uer_success;
+    }
+
+    delete new_head;
 
     // 6. If no seek head found at all: Issue a warning that the element might
     //    not be found by players.
-    wxMessageBox(Z("The Matroska file was modified, but the meta seek entry could not be updated. "
-                   "This means that players might have a hard time finding this element. "
-                   "Please use your favorite player to check this file.\n\n"
-                   "The proper solution is to save these chapters into a XML file and then to remux the file with the chapters included."),
-                 Z("File structure warning"),
-                 wxOK | wxCENTER | wxICON_EXCLAMATION);
-  } catch (bool b) {
+    throw uer_error_meta_seek;
+
+  } catch (update_element_result_e result) {
     for (i = 0; i < all_heads.size(); i++)
       delete all_heads[i];
     all_heads.clear();
@@ -532,12 +517,12 @@ kax_analyzer_c::update_element(EbmlElement *e) {
 //     mxinfo("DUMP after re-process()ing:\n");
 //     dump_analyzer_data(data);
 
-    return b;
+    return result;
   }
 
   for (i = 0; i < all_heads.size(); i++)
     delete all_heads[i];
   all_heads.clear();
 
-  return false;
+  return uer_error_unknown;
 }
