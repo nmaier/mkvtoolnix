@@ -58,6 +58,8 @@ mux_dialog::mux_dialog(wxWindow *parent):
   wxBoxSizer *siz_all, *siz_buttons;
   wxStaticBoxSizer *siz_status, *siz_output;
 
+  m_window_disabler = new wxWindowDisabler(this);
+
   c = 0;
   siz_status = new wxStaticBoxSizer(new wxStaticBox(this, -1, Z("Status and progress")), wxVERTICAL);
   st_label = new wxStaticText(this, -1, wxEmptyString);
@@ -226,6 +228,7 @@ mux_dialog::on_abort(wxCommandEvent &evt) {
 void
 mux_dialog::on_close(wxCloseEvent &evt) {
   mdlg->muxing_has_finished();
+  delete m_window_disabler;
   Destroy();
 }
 

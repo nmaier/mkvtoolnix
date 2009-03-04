@@ -34,6 +34,7 @@ protected:
   wxString log, opt_file_name;
   wxButton *b_ok, *b_save_log, *b_abort;
   wxTextCtrl *tc_output, *tc_warnings, *tc_errors;
+  wxWindowDisabler *m_window_disabler;
 public:
 
   mux_dialog(wxWindow *parent);
