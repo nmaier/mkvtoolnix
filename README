@@ -92,19 +92,22 @@ make prefix=/usr install_headers install_staticlib
 
 Either download the current release from
 http://www.bunkus.org/videotools/mkvtoolnix/ and unpack it or get a
-fresh copy from my Subversion repository.  All you need for Subversion
-repository access is to download a Subversion client from the
-Subversion homepage at http://subversion.tigris.org/ . There are
-clients for both Unix/Linux and Windows. It basically works like
-CVS. So the typical way to check out a fresh copy looks like this:
+development snapshot from my Git repository.
 
-svn co https://svn.bunkus.org/mosu/trunk/prog/video/mkvtoolnix
+ - Getting and building a development snapshot (ignore this subsection
+   if you want to build from a release tarball)
 
-    Additional step if you're using the development version from the
-    Subversion respository:
+   All you need for Git repository access is to download a Git client
+   from the Git homepage at http://git-scm.com/ . There are clients
+   for both Unix/Linux and Windows.
 
-    Change to the MKVtoolNix directory and run "./autogen.sh" which
-    will generate the "configure" script.
+   First clone my Git repository with this command:
+
+   git clone git://git.bunkus.org/mkvtoolnix.git
+
+   Now change to the MKVtoolNix directory with "cd mkvtoolnix" and run
+   "./autogen.sh" which will generate the "configure" script. You need
+   the GNU "autoconf" utility for this step.
 
 If you have run "make install" for both libraries then "configure"
 should automatically find the libraries' position. Otherwise you need
