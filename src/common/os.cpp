@@ -291,6 +291,17 @@ set_environment_variable(const std::string &key,
   _putenv(env_buf.c_str());
 }
 
+std::string
+get_environment_variable(const std::string &key) {
+  char buffer[100];
+  memset(buffer, 0, 100);
+
+  if (0 == GetEnvironmentVariable(key.c_str(), buffer, 99))
+    return "";
+
+  return buffer;
+}
+
 #else // SYS_WINDOWS
 
 # include <sys/types.h>

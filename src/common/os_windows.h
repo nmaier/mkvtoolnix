@@ -27,6 +27,7 @@ bool MTX_DLL_API get_registry_key_value(const std::string &key, const std::strin
 std::string MTX_DLL_API get_installation_path();
 
 void MTX_DLL_API set_environment_variable(const std::string &key, const std::string &value);
+std::string MTX_DLL_API get_environment_variable(const std::string &key);
 
 #endif  // SYS_WINDOWS
 

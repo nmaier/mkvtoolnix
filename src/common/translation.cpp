@@ -87,6 +87,14 @@ translation_c::get_default_ui_locale() {
 
 #if defined(HAVE_LIBINTL_H)
 # if defined(SYS_WINDOWS)
+  std::string env_var = get_environment_variable("LC_MESSAGES");
+  if (!env_var.empty() && (-1 != look_up_translation(env_var)))
+    return env_var;
+
+  env_var = get_environment_variable("LANG");
+  if (!env_var.empty() && (-1 != look_up_translation(env_var)))
+    return env_var;
+
   char *data;
   int len = GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SENGLANGUAGE, NULL, 0);
   if (0 < len) {
