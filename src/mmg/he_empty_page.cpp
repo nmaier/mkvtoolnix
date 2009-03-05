@@ -43,11 +43,16 @@ he_empty_page_c::~he_empty_page_c() {
 }
 
 bool
-he_empty_page_c::has_been_modified() {
+he_empty_page_c::has_this_been_modified() {
   return false;
 }
 
 bool
-he_empty_page_c::validate() {
+he_empty_page_c::validate_this() {
   return true;
 }
+
+void
+he_empty_page_c::modify_this() {
+}
+

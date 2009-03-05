@@ -35,8 +35,12 @@ public:
   he_page_base_c(wxTreebook *parent);
   virtual ~he_page_base_c();
 
-  virtual bool has_been_modified() = 0;
-  virtual bool validate() = 0;
+  virtual bool has_been_modified();
+  virtual bool has_this_been_modified() = 0;
+  virtual void do_modifications();
+  virtual void modify_this() = 0;
+  virtual int validate();
+  virtual bool validate_this() = 0;
 };
 
 #endif // __HE_PAGE_BASE_H

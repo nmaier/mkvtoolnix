@@ -134,20 +134,20 @@ he_value_page_c::on_add_or_remove_checked(wxCommandEvent &evt) {
 }
 
 bool
-he_value_page_c::has_been_modified() {
+he_value_page_c::has_this_been_modified() {
   return m_cb_add_or_remove->IsChecked() || (get_current_value_as_string() != get_original_value_as_string());
 }
 
 bool
-he_value_page_c::validate() {
+he_value_page_c::validate_this() {
   if (!m_input->IsEnabled())
     return true;
   return validate_value();
 }
 
 void
-he_value_page_c::do_modifications() {
-  if (!has_been_modified())
+he_value_page_c::modify_this() {
+  if (!has_this_been_modified())
     return;
 
   if (m_present && m_cb_add_or_remove->IsChecked()) {

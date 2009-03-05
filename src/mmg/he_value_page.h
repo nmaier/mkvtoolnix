@@ -58,7 +58,6 @@ public:
   void on_reset_clicked(wxCommandEvent &evt);
   void on_add_or_remove_checked(wxCommandEvent &evt);
 
-  virtual bool has_been_modified();
 
   virtual wxControl *create_input_control() = 0;
   virtual wxString get_original_value_as_string() = 0;
@@ -67,8 +66,9 @@ public:
   virtual bool validate_value() = 0;
   virtual void copy_value_to_element() = 0;
 
-  virtual bool validate();
-  virtual void do_modifications();
+  virtual bool has_this_been_modified();
+  virtual void modify_this();
+  virtual bool validate_this();
 };
 
 #endif // __HE_VALUE_PAGE_H

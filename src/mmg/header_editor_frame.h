@@ -94,9 +94,12 @@ protected:
   void handle_segment_info(analyzer_data_c *data);
   void handle_tracks(analyzer_data_c *data);
 
-  bool have_been_modified(std::vector<he_page_base_c *> &pages);
-  int validate_pages(std::vector<he_page_base_c *> &pages);
+  bool have_been_modified();
+  void do_modifications();
+  int validate_pages();
   bool validate();
+
+  void display_update_element_result(kax_analyzer_c::update_element_result_e result);
 };
 
 #endif // __HEADER_EDITOR_FRAME_H

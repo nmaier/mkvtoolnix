@@ -26,8 +26,9 @@ public:
   he_empty_page_c(wxTreebook *parent, const wxString &title, const wxString &content);
   virtual ~he_empty_page_c();
 
-  virtual bool has_been_modified();
-  virtual bool validate();
+  virtual bool has_this_been_modified();
+  virtual bool validate_this();
+  virtual void modify_this();
 };
 
 #endif // __HE_EMPTY_PAGE_H

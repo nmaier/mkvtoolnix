@@ -81,10 +81,10 @@ header_editor_frame_c::~header_editor_frame_c() {
 }
 
 bool
-header_editor_frame_c::have_been_modified(std::vector<he_page_base_c *> &pages) {
-  std::vector<he_page_base_c *>::iterator it = pages.begin();
-  while (it != pages.end()) {
-    if ((*it)->has_been_modified() || have_been_modified((*it)->m_children))
+header_editor_frame_c::have_been_modified() {
+  std::vector<he_page_base_c *>::iterator it = m_pages.begin();
+  while (it != m_pages.end()) {
+    if ((*it)->has_been_modified())
       return true;
     ++it;
   }
@@ -92,14 +92,20 @@ header_editor_frame_c::have_been_modified(std::vector<he_page_base_c *> &pages) 
   return false;
 }
 
-int
-header_editor_frame_c::validate_pages(std::vector<he_page_base_c *> &pages) {
-  std::vector<he_page_base_c *>::iterator it = pages.begin();
-  while (it != pages.end()) {
-    if (!(*it)->validate())
-      return (*it)->m_page_id;
+void
+header_editor_frame_c::do_modifications() {
+  std::vector<he_page_base_c *>::iterator it = m_pages.begin();
+  while (it != m_pages.end()) {
+    (*it)->do_modifications();
+    ++it;
+  }
+}
 
-    int result = validate_pages((*it)->m_children);
+int
+header_editor_frame_c::validate_pages() {
+  std::vector<he_page_base_c *>::iterator it = m_pages.begin();
+  while (it != m_pages.end()) {
+    int result = (*it)->validate();
     if (-1 != result)
       return result;
 
@@ -299,13 +305,18 @@ header_editor_frame_c::on_file_save(wxCommandEvent &evt) {
     return;
   }
 
-  if (!have_been_modified(m_pages)) {
+  if (!have_been_modified()) {
     wxMessageBox(Z("None of the header fields has been modified. Nothing has been saved."), Z("No fields modified"), wxOK | wxICON_INFORMATION, this);
     return;
   }
 
-  if (!validate())
+  int page_id = validate_pages();
+
+  if (-1 != page_id) {
+    m_tb_tree->SetSelection(page_id);
+    wxMessageBox(Z("There were errors in the header values preventing the headers from being saved. The first error has been selected."), Z("Header validation"), wxOK | wxICON_ERROR, this);
     return;
+  }
 
   // do_modifications(m_pages);
 
@@ -314,7 +325,7 @@ header_editor_frame_c::on_file_save(wxCommandEvent &evt) {
 
 void
 header_editor_frame_c::on_file_reload(wxCommandEvent &evt) {
-  if (   have_been_modified(m_pages)
+  if (   have_been_modified()
       && (wxYES != wxMessageBox(Z("Some header values have been modified. Do you really want to reload without saving the file?"), Z("Headers modified"),
                                 wxYES_NO | wxICON_QUESTION, this)))
     return;
@@ -324,7 +335,7 @@ header_editor_frame_c::on_file_reload(wxCommandEvent &evt) {
 
 void
 header_editor_frame_c::on_file_close(wxCommandEvent &evt) {
-  if (   have_been_modified(m_pages)
+  if (   have_been_modified()
       && (wxYES != wxMessageBox(Z("Some header values have been modified. Do you really want to close without saving the file?"), Z("Headers modified"),
                                 wxYES_NO | wxICON_QUESTION, this)))
     return;
@@ -377,7 +388,7 @@ header_editor_frame_c::on_headers_validate(wxCommandEvent &evt) {
 
 bool
 header_editor_frame_c::validate() {
-  int page_id = validate_pages(m_pages);
+  int page_id = validate_pages();
 
   if (-1 == page_id) {
     wxMessageBox(Z("All header values are OK."), Z("Header validation"), wxOK | wxICON_INFORMATION, this);
@@ -425,6 +436,35 @@ header_editor_frame_c::enable_menu_entries() {
   m_headers_menu->Enable(ID_M_HE_HEADERS_EXPAND_ALL,   m_file_name.IsOk());
   m_headers_menu->Enable(ID_M_HE_HEADERS_COLLAPSE_ALL, m_file_name.IsOk());
   m_headers_menu->Enable(ID_M_HE_HEADERS_VALIDATE,     m_file_name.IsOk());
+}
+
+void
+header_editor_frame_c::display_update_element_result(kax_analyzer_c::update_element_result_e result) {
+  switch (result) {
+    case kax_analyzer_c::uer_success:
+      return;
+
+    case kax_analyzer_c::uer_error_segment_size_for_element:
+      wxMessageBox(Z("The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. "
+                     "The process will be aborted. The file has been changed!"),
+                   Z("Error writing Matroska file"), wxCENTER | wxOK | wxICON_ERROR, this);
+      break;
+
+    case kax_analyzer_c::uer_error_segment_size_for_meta_seek:
+      wxMessageBox(Z("The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. "
+                     "The process will be aborted. The file has been changed!"),
+                   Z("Error writing Matroska file"), wxCENTER | wxOK | wxICON_ERROR, this);
+      break;
+
+    case kax_analyzer_c::uer_error_meta_seek:
+      wxMessageBox(Z("The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. "
+                     "Please use your favorite player to check this file.\n"),
+                   Z("File structure warning"), wxOK | wxCENTER | wxICON_EXCLAMATION, this);
+      break;
+
+    default:
+      wxMessageBox(Z("An unknown error occured. The file has not been modified."), Z("Internal program error"), wxOK | wxCENTER | wxICON_ERROR, this);
+  }
 }
 
 IMPLEMENT_CLASS(header_editor_frame_c, wxFrame);
