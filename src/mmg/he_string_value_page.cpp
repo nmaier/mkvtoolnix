@@ -37,7 +37,7 @@ he_string_value_page_c::~he_string_value_page_c() {
 
 wxControl *
 he_string_value_page_c::create_input_control() {
-  m_tc_text = new wxTextCtrl(this, wxID_ANY, m_original_value);
+  m_tc_text = new wxTextCtrl(this, wxID_ANY, m_original_value.Left(10));
   return m_tc_text;
 }
 

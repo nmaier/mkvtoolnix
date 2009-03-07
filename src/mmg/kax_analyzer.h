@@ -61,12 +61,15 @@ public:
   mm_io_c *file;
   KaxSegment *segment;
 
+public:                         // Static functions
+  static bool probe(string file_name);
+
 public:
   kax_analyzer_c(wxWindow *parent, string name);
   virtual ~kax_analyzer_c();
 
   virtual update_element_result_e update_element(EbmlElement *e, bool write_defaults = false);
-  virtual void overwrite_elements(EbmlElement *e, int found_where, bool write_defaults);
+  virtual update_element_result_e old_update_element(EbmlElement *e, bool write_defaults = false);
   virtual EbmlElement *read_element(analyzer_data_c *element_data, const EbmlCallbacks &callbacks);
   virtual EbmlElement *read_element(uint32_t pos, const EbmlCallbacks &callbacks) {
     return read_element(data[pos], callbacks);
@@ -82,7 +85,17 @@ public:
   };
 
   virtual bool process();
-  static bool probe(string file_name);
+
+protected:
+  virtual void overwrite_elements(EbmlElement *e, int found_where, bool write_defaults);
+
+  virtual void remove_from_meta_seeks(EbmlId id);
+  virtual void overwrite_all_instances(EbmlId id);
+  virtual void merge_void_elements();
+  virtual void write_element(EbmlElement *e, bool write_defaults);
+  virtual void add_to_meta_seek(EbmlElement *e);
+
+  virtual void debug_dump_elements();
 };
 
 #endif // __KAX_ANALYZER_H

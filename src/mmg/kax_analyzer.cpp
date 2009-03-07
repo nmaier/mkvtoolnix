@@ -29,6 +29,7 @@
 #include <matroska/KaxCluster.h>
 #include <matroska/KaxSeekHead.h>
 
+#include "commonebml.h"
 #include "kax_analyzer.h"
 #include "mmg.h"
 
@@ -58,6 +59,27 @@ kax_analyzer_c::~kax_analyzer_c() {
     delete data[i];
   if (segment != NULL)
     delete segment;
+}
+
+void
+kax_analyzer_c::debug_dump_elements() {
+  int i;
+  for (i = 0; i < data.size(); i++) {
+    const EbmlCallbacks *callbacks = find_ebml_callbacks(KaxSegment::ClassInfos, data[i]->id);
+    std::string name;
+
+    if ((NULL == callbacks) && (EbmlVoid::ClassInfos.GlobalId == data[i]->id))
+      callbacks = &EbmlVoid::ClassInfos;
+
+    if (NULL != callbacks)
+      name = callbacks->DebugName;
+    else {
+      std::string format = (boost::format("0x%%|0%1%x|") % (data[i]->id.Length * 2)).str();
+      name               = (boost::format(format)        %  data[i]->id.Value).str();
+    }
+
+    mxinfo(boost::format("%1%: %2% size %3% at %4%\n") % i % name % data[i]->pos % data[i]->size);
+  }
 }
 
 bool
@@ -136,12 +158,8 @@ kax_analyzer_c::process() {
   if (l1 != NULL)
     delete l1;
 
-  if (cont) {
-    // int i;
-    // for (i = 0; i < data.size(); i++)
-      // mxinfo(boost::format("%1%: size %2% at %3% diff %4%\n") % i % data[i]->pos % data[i]->size % (i < data.size() - 1 ? data[i]->size - data[i + 1]->pos + data[i]->pos : 0));
+  if (cont)
     return true;
-  }
 
   delete segment;
   segment = NULL;
@@ -262,6 +280,24 @@ kax_analyzer_c::overwrite_elements(EbmlElement *e,
 kax_analyzer_c::update_element_result_e
 kax_analyzer_c::update_element(EbmlElement *e,
                                bool write_defaults) {
+  try {
+    overwrite_all_instances(e->Generic().GlobalId);
+    merge_void_elements();
+    write_element(e, write_defaults);
+    remove_from_meta_seeks(e->Generic().GlobalId);
+    merge_void_elements();
+    add_to_meta_seek(e);
+
+  } catch (kax_analyzer_c::update_element_result_e result) {
+    return result;
+  }
+
+  return uer_success;
+}
+
+kax_analyzer_c::update_element_result_e
+kax_analyzer_c::old_update_element(EbmlElement *e,
+                                   bool write_defaults) {
   uint32_t i, k, found_where, found_what;
   int64_t space_here, pos;
   vector<KaxSeekHead *> all_heads;
@@ -531,4 +567,262 @@ kax_analyzer_c::update_element(EbmlElement *e,
   all_heads.clear();
 
   return uer_error_unknown;
+}
+
+/** \brief Removes all seek entries for a specific element
+
+    Iterates over the level 1 elements in the file and reads each seek
+    head it finds. All entries for the given \c id are removed from
+    the seek head. If the seek head has been changed then it is
+    rewritten to its original position. The space freed up is filled
+    with a new EbmlVoid element.
+
+    \param id The ID of the elements that should be removed.
+ */
+void
+kax_analyzer_c::remove_from_meta_seeks(EbmlId id) {
+  int data_idx;
+
+  for (data_idx = 0; data.size() > data_idx; ++data_idx) {
+    // We only have to do work on SeekHead elements. Skip the others.
+    if (data[data_idx]->id != KaxSeekHead::ClassInfos.GlobalId)
+      continue;
+
+    // Read the element from the file. Remember its size so that a new
+    // EbmlVoid element can be constructed afterwards.
+    EbmlElement *element   = read_element(data_idx, KaxSeekHead::ClassInfos);
+    KaxSeekHead *seek_head = dynamic_cast<KaxSeekHead *>(element);
+    if (NULL == seek_head)
+      throw uer_error_unknown;
+
+    int64_t old_size = seek_head->ElementSize(true);
+
+    // Iterate over its children and delete the ones we're looking for.
+    bool modified = false;
+    int sh_idx    = 0;
+    while (seek_head->ListSize() > sh_idx) {
+      if ((*seek_head)[sh_idx]->Generic().GlobalId != KaxSeek::ClassInfos.GlobalId) {
+        ++sh_idx;
+        continue;
+      }
+
+      KaxSeek *seek_entry = dynamic_cast<KaxSeek *>((*seek_head)[sh_idx]);
+
+      if (!seek_entry->IsEbmlId(id)) {
+        ++sh_idx;
+        continue;
+      }
+
+      delete (*seek_head)[sh_idx];
+      seek_head->Remove(sh_idx);
+
+      modified = true;
+    }
+
+    // Only rewrite the element to the file if it has been modified.
+    if (!modified) {
+      delete element;
+      continue;
+    }
+
+    // First make sure the new element is smaller than the old one.
+    // The following code cannot deal with the other case.
+    seek_head->UpdateSize(true);
+    int64_t new_size = seek_head->ElementSize(true);
+    if (new_size > old_size)
+      throw uer_error_unknown;
+
+    // Overwrite the element itself and update its internal record.
+    file->setFilePointer(data[data_idx]->pos);
+    seek_head->Render(*file, true);
+
+    data[data_idx]->size = new_size;
+
+    // See if enough space was freed to fit an EbmlVoid element in.
+    file->setFilePointer(data[data_idx]->pos + new_size);
+    int64_t size_difference = old_size - new_size;
+
+    if (5 > size_difference) {
+      // No, so just write zero bytes.
+      static char zero[5] = {0, 0, 0, 0, 0};
+      file->write(zero, size_difference);
+
+    } else {
+      // Yes. Write a new EbmlVoid element and update the internal records.
+      EbmlVoid evoid;
+      evoid.SetSize(size_difference);
+      evoid.UpdateSize();
+      evoid.SetSize(size_difference - evoid.HeadSize());
+      evoid.Render(*file);
+
+      data.insert(data.begin() + data_idx + 1, new analyzer_data_c(evoid.Generic().GlobalId, evoid.GetElementPosition(), size_difference));
+
+      ++data_idx;
+    }
+
+    delete element;
+  }
+}
+
+/** \brief Overwrites all instances of a specific level 1 element
+
+    Iterates over the level 1 elements in the file and overwrites
+    each instance of a specific level 1 element given by \c id.
+    It is replaced with a new EbmlVoid element.
+
+    \param id The ID of the elements that should be overwritten.
+ */
+void
+kax_analyzer_c::overwrite_all_instances(EbmlId id) {
+  int data_idx;
+
+  for (data_idx = 0; data.size() > data_idx; ++data_idx) {
+    // We only have to do work on specific elements. Skip the others.
+    if (data[data_idx]->id != id)
+      continue;
+
+    // Check that there's enough space for an EbmlVoid element.
+    file->setFilePointer(data[data_idx]->pos);
+
+    if (5 > data[data_idx]->size) {
+      // No, so just write zero bytes.
+      static char zero[5] = {0, 0, 0, 0, 0};
+      file->write(zero, data[data_idx]->size);
+
+    } else {
+      // Yes. Write a new EbmlVoid element and update the internal records.
+      EbmlVoid evoid;
+      evoid.SetSize(data[data_idx]->size);
+      evoid.UpdateSize();
+      evoid.SetSize(data[data_idx]->size - evoid.HeadSize());
+      evoid.Render(*file);
+
+      data[data_idx]->id = EbmlVoid::ClassInfos.GlobalId;
+    }
+  }
+}
+
+/** \brief Merges consecutive EbmlVoid elements into a single one
+
+    Iterates over the level 1 elements in the file and merges
+    consecutive EbmlVoid elements into a single one which covers
+    the same space as the smaller ones combined.
+ */
+void
+kax_analyzer_c::merge_void_elements() {
+  int start_idx = 0;
+
+  while (data.size() > start_idx) {
+    // We only have to do work on EbmlVoid elements. Skip the others.
+    if (data[start_idx]->id != EbmlVoid::ClassInfos.GlobalId) {
+      ++start_idx;
+      continue;
+    }
+
+    // Found an EbmlVoid element. See how many consecutive EbmlVoid elements
+    // there are at this position and calculate the combined size.
+    int end_idx  = start_idx + 1;
+    int new_size = data[start_idx]->size;
+    while ((data.size() > end_idx) && (data[end_idx]->id == EbmlVoid::ClassInfos.GlobalId)) {
+      new_size += data[end_idx]->size;
+      ++end_idx;
+    }
+
+    // Is this only a single EbmlVoid element? If yes continue.
+    if (end_idx == (start_idx + 1)) {
+      start_idx += 2;
+      continue;
+    }
+
+    // Write the new EbmlVoid element to the file.
+    file->setFilePointer(data[start_idx]->pos);
+
+    EbmlVoid evoid;
+    evoid.SetSize(new_size);
+    evoid.UpdateSize();
+    evoid.SetSize(new_size - evoid.HeadSize());
+    evoid.Render(*file);
+
+    // Update the internal records to reflect the changes.
+    data[start_idx]->size = new_size;
+    data.erase(data.begin() + start_idx + 1, data.begin() + end_idx);
+
+    start_idx += 2;
+  }
+
+  mxinfo("--[ merge_void_elements ]---------------\n");
+  debug_dump_elements();
+}
+
+/** \brief Finds a suitable spot for an element and writes it to the file
+
+    First, a suitable spot for the element is determined by looking at
+    EbmlVoid elements. If none is found in the middle of the file then
+    the element will be appended at the end.
+
+    Second, the element is written at the location determined in the
+    first step. If EbmlVoid elements are overwritten then a new,
+    smaller one is created which covers the remainder of the
+    overwritten one.
+
+    Third, the internal records are updated to reflect the changes.
+
+    \param e Pointer to the element to write.
+    \param write_defaults Boolean that decides whether or not elements
+      which contain their default value are written to the file.
+ */
+void
+kax_analyzer_c::write_element(EbmlElement *e,
+                              bool write_defaults) {
+  e->UpdateSize(write_defaults);
+  int element_size = e->ElementSize(write_defaults);
+
+  int data_idx;
+  for (data_idx = 0; data.size() > data_idx; ++data_idx) {
+    // We're only interested in EbmlVoid elements. Skip the others.
+    if (data[data_idx]->id != EbmlVoid::ClassInfos.GlobalId)
+      continue;
+
+    // Skip the element if it doesn't provide enough space.
+    if (data[data_idx]->size < element_size)
+      continue;
+
+    // We've found our element. Overwrite it.
+    file->setFilePointer(data[data_idx]->pos);
+    e->Render(*file, write_defaults);
+
+    // Check if there's enough space left to add a new EbmlVoid
+    // element after the element we've just written.
+    file->setFilePointer(data[data_idx]->pos + element_size);
+
+    int remaining_size = data[data_idx]->size - element_size;
+    if (5 > remaining_size) {
+      // No, so just write zero bytes.
+      static char zero[5] = {0, 0, 0, 0, 0};
+      file->write(zero, remaining_size);
+
+    } else {
+      // Yes. Write a new EbmlVoid element and update the internal records.
+      EbmlVoid evoid;
+      evoid.SetSize(remaining_size);
+      evoid.UpdateSize();
+      evoid.SetSize(remaining_size - evoid.HeadSize());
+      evoid.Render(*file);
+
+      data.insert(data.begin() + data_idx + 1, new analyzer_data_c(evoid.Generic().GlobalId, evoid.GetElementPosition(), remaining_size));
+    }
+
+    // Update the internal records.
+    data[data_idx]->id = e->Generic().GlobalId;
+
+    // We're done.
+    return;
+  }
+
+  // We've not found a suitable place. So store the element at the end of the file.
+  mxerror("booooooom!\n");
+}
+
+void
+kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
 }
