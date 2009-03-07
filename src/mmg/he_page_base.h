@@ -29,7 +29,7 @@ public:
   std::vector<he_page_base_c *> m_children;
   wxTreebook *m_tree;
   int m_page_id;
-  EbmlElement *m_storage;
+  EbmlElement *m_l1_element;
 
 public:
   he_page_base_c(wxTreebook *parent);

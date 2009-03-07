@@ -63,6 +63,8 @@ public:
 
   kax_analyzer_c *m_analyzer;
 
+  EbmlElement *m_e_segment_info, *m_e_tracks;
+
 public:
   header_editor_frame_c(wxWindow *parent);
   virtual ~header_editor_frame_c();

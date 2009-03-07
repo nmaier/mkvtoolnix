@@ -136,8 +136,12 @@ kax_analyzer_c::process() {
   if (l1 != NULL)
     delete l1;
 
-  if (cont)
+  if (cont) {
+    // int i;
+    // for (i = 0; i < data.size(); i++)
+      // mxinfo(boost::format("%1%: size %2% at %3% diff %4%\n") % i % data[i]->pos % data[i]->size % (i < data.size() - 1 ? data[i]->size - data[i + 1]->pos + data[i]->pos : 0));
     return true;
+  }
 
   delete segment;
   segment = NULL;
@@ -171,7 +175,8 @@ kax_analyzer_c::read_element(analyzer_data_c *element_data,
 
 void
 kax_analyzer_c::overwrite_elements(EbmlElement *e,
-                                   int found_where) {
+                                   int found_where,
+                                   bool write_defaults) {
   vector<analyzer_data_c *>::iterator dit;
   string info;
   int64_t pos, size;
@@ -180,9 +185,9 @@ kax_analyzer_c::overwrite_elements(EbmlElement *e,
   // 1. Overwrite the original element.
   info += (boost::format(Y("Found a suitable place at %1%.\n")) % data[found_where]->pos).str();
   file->setFilePointer(data[found_where]->pos);
-  e->Render(*file);
+  e->Render(*file, write_defaults);
 
-  if (e->ElementSize() > data[found_where]->size) {
+  if (e->ElementSize(write_defaults) > data[found_where]->size) {
     int64_t new_size;
     EbmlVoid evoid;
 
@@ -202,18 +207,18 @@ kax_analyzer_c::overwrite_elements(EbmlElement *e,
     evoid.SetSize(new_size - evoid.HeadSize());
     evoid.Render(*file);
 
-  } else if (e->ElementSize() < data[found_where]->size) {
+  } else if (e->ElementSize(write_defaults) < data[found_where]->size) {
     // 2b. Insert a new EbmlVoid element.
-    if ((data[found_where]->size - e->ElementSize()) < 5) {
+    if ((data[found_where]->size - e->ElementSize(write_defaults)) < 5) {
       char zero[5] = {0, 0, 0, 0, 0};
-      file->write(zero, data[found_where]->size - e->ElementSize());
+      file->write(zero, data[found_where]->size - e->ElementSize(write_defaults));
       info += Y("Inserting new EbmlVoid not possible, remaining size too small.\n");
     } else {
       EbmlVoid evoid;
-      info += (boost::format(Y("Inserting new EbmlVoid element at %1% with size %2%.\n")) % file->getFilePointer() % (data[found_where]->size - e->ElementSize())).str();
-      evoid.SetSize(data[found_where]->size - e->ElementSize());
+      info += (boost::format(Y("Inserting new EbmlVoid element at %1% with size %2%.\n")) % file->getFilePointer() % (data[found_where]->size - e->ElementSize(write_defaults))).str();
+      evoid.SetSize(data[found_where]->size - e->ElementSize(write_defaults));
       evoid.UpdateSize();
-      evoid.SetSize(data[found_where]->size - e->ElementSize() - evoid.HeadSize());
+      evoid.SetSize(data[found_where]->size - e->ElementSize(write_defaults) - evoid.HeadSize());
       evoid.Render(*file);
       dit = data.begin();
       dit += found_where + 1;
@@ -223,9 +228,9 @@ kax_analyzer_c::overwrite_elements(EbmlElement *e,
   } else {
     info += Y("Great! Exact size. Just overwriting :)\n");
     file->setFilePointer(data[found_where]->pos);
-    e->Render(*file);
+    e->Render(*file, write_defaults);
   }
-  data[found_where]->size = e->ElementSize();
+  data[found_where]->size = e->ElementSize(write_defaults);
   data[found_where]->id = e->Generic().GlobalId;
 
   // Glue EbmlVoid elements.
@@ -255,7 +260,8 @@ kax_analyzer_c::overwrite_elements(EbmlElement *e,
 }
 
 kax_analyzer_c::update_element_result_e
-kax_analyzer_c::update_element(EbmlElement *e) {
+kax_analyzer_c::update_element(EbmlElement *e,
+                               bool write_defaults) {
   uint32_t i, k, found_where, found_what;
   int64_t space_here, pos;
   vector<KaxSeekHead *> all_heads;
@@ -283,7 +289,7 @@ kax_analyzer_c::update_element(EbmlElement *e) {
         for (k = i + 1; ((k < data.size()) &&
                          (data[k]->id == EbmlVoid::ClassInfos.GlobalId)); k++)
           space_here += data[k]->size;
-        if (space_here >= e->ElementSize()) {
+        if (space_here >= e->ElementSize(write_defaults)) {
           found_what = 1;
           found_where = i;
           break;
@@ -296,7 +302,7 @@ kax_analyzer_c::update_element(EbmlElement *e) {
         for (k = i; ((k < data.size()) &&
                      (data[k]->id == EbmlVoid::ClassInfos.GlobalId)); k++)
           space_here += data[k]->size;
-        if (space_here >= e->ElementSize()) {
+        if (space_here >= e->ElementSize(write_defaults)) {
           found_what = 2;
           found_where = i;
           break;
@@ -308,7 +314,7 @@ kax_analyzer_c::update_element(EbmlElement *e) {
       info += Y("No suitable place found. Appending at the end.\n");
       // 1. Append e to the end of the file.
       file->setFilePointer(0, seek_end);
-      e->Render(*file);
+      e->Render(*file, write_defaults);
 
       // 2. Ajust the segment size.
       new_segment = new KaxSegment;
@@ -338,11 +344,11 @@ kax_analyzer_c::update_element(EbmlElement *e) {
           evoid.Render(*file);
           data[i]->id = EbmlVoid::ClassInfos.GlobalId;
         }
-      data.push_back(new analyzer_data_c(e->Generic().GlobalId, e->GetElementPosition(), e->ElementSize()));
+      data.push_back(new analyzer_data_c(e->Generic().GlobalId, e->GetElementPosition(), e->ElementSize(write_defaults)));
       found_where = data.size() - 1;
 
     } else
-      overwrite_elements(e, found_where);
+      overwrite_elements(e, found_where, write_defaults);
 
     // Remove the internal elements. Avoids re-analyzing the file.
     i = 0;
@@ -417,7 +423,7 @@ kax_analyzer_c::update_element(EbmlElement *e) {
     }
 
     if (found_what) {
-      overwrite_elements(all_heads[found_what - 1], found_where);
+      overwrite_elements(all_heads[found_what - 1], found_where, write_defaults);
       throw uer_success;
     }
 
@@ -464,7 +470,7 @@ kax_analyzer_c::update_element(EbmlElement *e) {
         }
       if (!found_what)
         mxerror(Y("found_what == 0, 2nd time. Should not have happened. Please file a bug report.\n"));
-      overwrite_elements(new_head, found_where);
+      overwrite_elements(new_head, found_where, write_defaults);
 
       all_heads.push_back(all_heads[0]);
       all_heads.erase(all_heads.begin());
@@ -494,7 +500,7 @@ kax_analyzer_c::update_element(EbmlElement *e) {
     }
     if (found_what) {
       all_heads.insert(all_heads.begin(), new_head);
-      overwrite_elements(new_head, found_where);
+      overwrite_elements(new_head, found_where, write_defaults);
 //       dump_analyzer_data(data);
 
       throw uer_success;

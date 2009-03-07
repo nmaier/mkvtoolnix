@@ -26,6 +26,7 @@
 #include "header_editor_frame.h"
 #include "he_empty_page.h"
 #include "he_string_value_page.h"
+#include "he_top_level_page.h"
 #include "he_unsigned_integer_value_page.h"
 #include "mmg.h"
 #include "wxcommon.h"
@@ -38,6 +39,8 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
   , m_bs_panel(NULL)
   , m_tb_tree(NULL)
   , m_analyzer(NULL)
+  , m_e_segment_info(NULL)
+  , m_e_tracks(NULL)
 {
   wxPanel *panel = new wxPanel(this);
 
@@ -77,6 +80,8 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
 }
 
 header_editor_frame_c::~header_editor_frame_c() {
+  delete m_e_segment_info;
+  delete m_e_tracks;
   delete m_analyzer;
 }
 
@@ -155,6 +160,11 @@ header_editor_frame_c::open_file(wxFileName file_name) {
     return false;
   }
 
+  delete m_e_segment_info;
+  delete m_e_tracks;
+  m_e_segment_info = NULL;
+  m_e_tracks       = NULL;
+
   delete m_analyzer;
   m_analyzer = new kax_analyzer_c(this, wxMB(file_name.GetFullPath()));
   if (!m_analyzer->process()) {
@@ -198,12 +208,12 @@ header_editor_frame_c::handle_segment_info(analyzer_data_c *data) {
   if (NULL == e)
     return;
 
-  he_empty_page_c *page = new he_empty_page_c(m_tb_tree, Z("Segment information"), wxEmptyString);
+  he_top_level_page_c *page = new he_top_level_page_c(m_tb_tree, Z("Segment information"), e);
   m_tb_tree->AddPage(page, Z("Segment information"));
-  page->m_storage = e;
   m_pages.push_back(page);
 
-  KaxInfo *info = static_cast<KaxInfo *>(e);
+  m_e_segment_info = e;
+  KaxInfo *info    = static_cast<KaxInfo *>(e);
   he_value_page_c *child_page;
 
   child_page = new he_string_value_page_c(m_tb_tree, page, info, KaxTitle::ClassInfos, Z("Title"), Z("The title for the whole movie."));
@@ -247,6 +257,7 @@ header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
   if (NULL == e)
     return;
 
+  m_e_tracks        = e;
   KaxTracks *tracks = static_cast<KaxTracks *>(e);
   int i;
   for (i = 0; tracks->ListSize() > i; ++i) {
@@ -278,7 +289,7 @@ header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
         continue;
     }
 
-    he_empty_page_c *page = new he_empty_page_c(m_tb_tree, title, wxEmptyString);
+    he_top_level_page_c *page = new he_top_level_page_c(m_tb_tree, title, tracks);
     m_tb_tree->AddPage(page, title);
     m_pages.push_back(page);
 
@@ -290,8 +301,6 @@ header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
 
     m_tb_tree->ExpandNode(page->m_page_id);
   }
-
-  delete e;
 }
 
 void
@@ -318,7 +327,24 @@ header_editor_frame_c::on_file_save(wxCommandEvent &evt) {
     return;
   }
 
-  // do_modifications(m_pages);
+  do_modifications();
+
+  std::vector<he_page_base_c *>::iterator it = m_pages.begin();
+  bool tracks_written = false;
+  while (it != m_pages.end()) {
+    if ((*it)->has_been_modified()) {
+      if ((*it)->m_l1_element->Generic().GlobalId == KaxTracks::ClassInfos.GlobalId) {
+        if (tracks_written)
+          continue;
+        tracks_written = true;
+      }
+
+      kax_analyzer_c::update_element_result_e result = m_analyzer->update_element((*it)->m_l1_element, true);
+      if (kax_analyzer_c::uer_success != result)
+        display_update_element_result(result);
+    }
+    ++it;
+  }
 
   open_file(m_file_name);
 }

@@ -65,8 +65,8 @@ public:
   kax_analyzer_c(wxWindow *parent, string name);
   virtual ~kax_analyzer_c();
 
-  virtual update_element_result_e update_element(EbmlElement *e);
-  virtual void overwrite_elements(EbmlElement *e, int found_where);
+  virtual update_element_result_e update_element(EbmlElement *e, bool write_defaults = false);
+  virtual void overwrite_elements(EbmlElement *e, int found_where, bool write_defaults);
   virtual EbmlElement *read_element(analyzer_data_c *element_data, const EbmlCallbacks &callbacks);
   virtual EbmlElement *read_element(uint32_t pos, const EbmlCallbacks &callbacks) {
     return read_element(data[pos], callbacks);

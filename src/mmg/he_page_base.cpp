@@ -19,12 +19,11 @@ he_page_base_c::he_page_base_c(wxTreebook *parent)
   : wxPanel(parent)
   , m_tree(parent)
   , m_page_id(m_tree->GetTreeCtrl()->GetCount())
-  , m_storage(NULL)
+  , m_l1_element(NULL)
 {
 }
 
 he_page_base_c::~he_page_base_c() {
-  delete m_storage;
 }
 
 bool
