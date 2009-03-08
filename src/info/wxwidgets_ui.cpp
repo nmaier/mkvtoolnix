@@ -439,6 +439,10 @@ ui_show_progress(int percentage,
 int
 ui_run(int argc,
        char **argv) {
+#if defined(SYS_WINDOWS)
+  FreeConsole();
+#endif
+
   wxEntry(argc, argv);
   return 0;
 }

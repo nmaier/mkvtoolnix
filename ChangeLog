@@ -1,5 +1,8 @@
 2009-03-08  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvinfo: enhancement: If mkvinfo is started in GUI mode on
+	Windows then the console that was started with it will be closed.
+
 	* mkvinfo: bug fix: Chapter names and tag elements were recoded to
 	the wrong charset resulting in garbled output. Fix for bug 353.
 
