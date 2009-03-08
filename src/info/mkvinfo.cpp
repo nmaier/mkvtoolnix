@@ -1617,7 +1617,7 @@ handle_elements_rec(EbmlStream *es,
       break;
 
     case EBMLT_USTRING:
-      show_element(e, level, boost::format("%1%: %2%") % elt_name % UTFstring_to_cstr(UTFstring(*static_cast<EbmlUnicodeString *>(e)).c_str()));
+      show_element(e, level, boost::format("%1%: %2%") % elt_name % UTF2STR(UTFstring(*static_cast<EbmlUnicodeString *>(e)).c_str()));
       break;
 
     case EBMLT_TIME:

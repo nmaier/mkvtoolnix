@@ -1,3 +1,8 @@
+2009-03-08  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvinfo: bug fix: Chapter names and tag elements were recoded to
+	the wrong charset resulting in garbled output. Fix for bug 353.
+
 2009-03-07  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v2.5.3.
