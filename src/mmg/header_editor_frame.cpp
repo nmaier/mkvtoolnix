@@ -140,7 +140,7 @@ header_editor_frame_c::on_file_open(wxCommandEvent &evt) {
   wxString home;
   wxGetEnv(wxT("HOME"), &home);
   // open_file(wxFileName(wxString::Format(wxT("%s/prog/video/mkvtoolnix/data/longfile.mkv"), home.c_str())));
-  open_file(wxFileName(wxString::Format(wxT("%s/prog/video/mkvtoolnix/data/v.mkv"), home.c_str())));
+  open_file(wxFileName(wxString::Format(wxT("%s/prog/video/mkvtoolnix/data/muh.mkv"), home.c_str())));
   return;
 
   wxFileDialog dlg(this, Z("Open a Matroska file"), last_open_dir, wxEmptyString, wxString::Format(Z("Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|%s"), ALLFILES.c_str()), wxFD_OPEN);
@@ -188,12 +188,18 @@ header_editor_frame_c::open_file(wxFileName file_name) {
   int i;
   for (i = 0; m_analyzer->data.size() > i; ++i) {
     analyzer_data_c *data = m_analyzer->data[i];
-
-    if (data->id == KaxInfo::ClassInfos.GlobalId)
+    if (data->id == KaxInfo::ClassInfos.GlobalId) {
       handle_segment_info(data);
+      break;
+    }
+  }
 
-    else if (data->id == KaxTracks::ClassInfos.GlobalId)
+  for (i = 0; m_analyzer->data.size() > i; ++i) {
+    analyzer_data_c *data = m_analyzer->data[i];
+    if (data->id == KaxTracks::ClassInfos.GlobalId) {
       handle_tracks(data);
+      break;
+    }
   }
 
   m_bs_panel->Show(m_tb_tree);
