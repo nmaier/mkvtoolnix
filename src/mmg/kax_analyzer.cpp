@@ -78,7 +78,7 @@ kax_analyzer_c::debug_dump_elements() {
       name               = (boost::format(format)        %  data[i]->id.Value).str();
     }
 
-    mxinfo(boost::format("%1%: %2% size %3% at %4%\n") % i % name % data[i]->pos % data[i]->size);
+    mxinfo(boost::format("%1%: %2% size %3% at %4%\n") % i % name % data[i]->size % data[i]->pos);
   }
 }
 
@@ -201,6 +201,7 @@ kax_analyzer_c::update_element(EbmlElement *e,
     remove_from_meta_seeks(e->Generic().GlobalId);
     merge_void_elements();
     add_to_meta_seek(e);
+    merge_void_elements();
 
   } catch (kax_analyzer_c::update_element_result_e result) {
     return result;
@@ -484,7 +485,6 @@ kax_analyzer_c::write_element(EbmlElement *e,
 
   int data_idx;
   for (data_idx = 0; data.size() > data_idx; ++data_idx) {
-    break;
     // We're only interested in EbmlVoid elements. Skip the others.
     if (data[data_idx]->id != EbmlVoid::ClassInfos.GlobalId)
       continue;
@@ -507,9 +507,11 @@ kax_analyzer_c::write_element(EbmlElement *e,
     return;
   }
 
-  // We haven't found a suitable place. So store the element at the end of the file.
+  // We haven't found a suitable place. So store the element at the end of the file
+  // and update the internal records.
   file->setFilePointer(0, seek_end);
   e->Render(*file, write_defaults);
+  data.push_back(new analyzer_data_c(e->Generic().GlobalId, file->getFilePointer() - e->ElementSize(write_defaults), e->ElementSize(write_defaults)));
 
   // Adjust the segment's size.
   adjust_segment_size();
@@ -541,7 +543,7 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
     // at the end of the file and that all consecutive EbmlVoid elements
     // have been merged into a single element.
     int available_space = data[data_idx]->size;
-    if (((data_idx + 1) < data.size()) && (data[data_idx]->id == EbmlVoid::ClassInfos.GlobalId))
+    if (((data_idx + 1) < data.size()) && (data[data_idx + 1]->id == EbmlVoid::ClassInfos.GlobalId))
       available_space += data[data_idx + 1]->size;
 
     // Read the seek head, index the element and see how much space it needs.
@@ -574,7 +576,7 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
 
     else
       // Otherwise adjust the following EbmlVoid element: decrease its size.
-      create_void_element(data[data_idx]->size + seek_head->ElementSize(true),
+      create_void_element(data[data_idx]->pos + seek_head->ElementSize(true),
                           data[data_idx]->size + data[data_idx + 1]->size - seek_head->ElementSize(true),
                           data_idx + 1, false);
 
@@ -636,6 +638,40 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
     return;
   }
 
-  // We don't have a seek head to copy. This is not supported at the moment.
+  // We don't have a seek head to copy. Create one before the first chapter if possible.
+  KaxSeekHead *new_seek_head = new KaxSeekHead;
+  new_seek_head->IndexThis(*e, *segment);
+  new_seek_head->UpdateSize(true);
+
+  for (data_idx = 0; data.size() > data_idx; ++data_idx) {
+    // We can only overwrite void elements. Skip the others.
+    if (data[data_idx]->id != EbmlVoid::ClassInfos.GlobalId)
+      continue;
+
+    // Skip the element if it doesn't offer enough space for the seek head.
+    if (data[data_idx]->size < new_seek_head->ElementSize(true))
+      continue;
+
+    // We've found a suitable spot. Write the seek head.
+    file->setFilePointer(data[data_idx]->pos);
+    new_seek_head->Render(*file, true);
+
+    // Write a void element after the newly written seek head in order to
+    // cover the space previously occupied by the old void element.
+    create_void_element(data[data_idx]->pos + new_seek_head->ElementSize(true), data[data_idx]->size - new_seek_head->ElementSize(true), data_idx + 1, true);
+
+    // Adjust the internal records for the new seek head.
+    data[data_idx]->size = new_seek_head->ElementSize(true);
+    data[data_idx]->id   = KaxSeekHead::ClassInfos.GlobalId;
+
+    // We're done.
+    delete new_seek_head;
+
+    return;
+  }
+
+  delete new_seek_head;
+
+  // We cannot write a seek head before the first cluster. This is not supported at the moment.
   throw uer_error_not_indexable;
 }
