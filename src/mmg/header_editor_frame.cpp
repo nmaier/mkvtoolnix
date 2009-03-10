@@ -27,6 +27,7 @@
 #include "he_ascii_string_value_page.h"
 #include "he_bool_value_page.h"
 #include "he_empty_page.h"
+#include "he_float_value_page.h"
 #include "he_string_value_page.h"
 #include "he_top_level_page.h"
 #include "he_unsigned_integer_value_page.h"
@@ -333,10 +334,10 @@ header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
                                                       Z("Number of nanoseconds (not scaled) per frame."));
     child_page->init();
 
-    // child_page = new he_float_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackTimecodeScale::ClassInfos, Z("Timecode scaling"),
-    //                                        Z("The scale to apply on this track to work at normal speed in relation with other tracks "
-    //                                          "(mostly used to adjust video speed when the audio length differs)."));
-    // child_page->init();
+    child_page = new he_float_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackTimecodeScale::ClassInfos, Z("Timecode scaling"),
+                                           Z("The scale to apply on this track to work at normal speed in relation with other tracks "
+                                             "(mostly used to adjust video speed when the audio length differs)."));
+    child_page->init();
 
     child_page = new he_string_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackName::ClassInfos, Z("Name"), Z("A human-readable track name."));
     child_page->init();
