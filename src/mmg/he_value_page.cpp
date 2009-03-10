@@ -118,6 +118,8 @@ he_value_page_c::init() {
   SetSizer(siz);
 
   m_tree->AddSubPage(this, m_title);
+
+  m_toplevel_page->m_children.push_back(this);
 }
 
 void

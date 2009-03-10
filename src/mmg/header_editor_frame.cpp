@@ -224,35 +224,27 @@ header_editor_frame_c::handle_segment_info(analyzer_data_c *data) {
 
   child_page = new he_string_value_page_c(m_tb_tree, page, info, KaxTitle::ClassInfos, Z("Title"), Z("The title for the whole movie."));
   child_page->init();
-  page->m_children.push_back(child_page);
 
   child_page = new he_string_value_page_c(m_tb_tree, page, info, KaxSegmentFilename::ClassInfos, Z("Segment filename"), Z("The file name for this segment."));
   child_page->init();
-  page->m_children.push_back(child_page);
 
   child_page = new he_string_value_page_c(m_tb_tree, page, info, KaxPrevFilename::ClassInfos, Z("Previous filename"), Z("The previous segment's file name."));
   child_page->init();
-  page->m_children.push_back(child_page);
 
   child_page = new he_string_value_page_c(m_tb_tree, page, info, KaxNextFilename::ClassInfos, Z("Next filename"), Z("The next segment's file name."));
   child_page->init();
-  page->m_children.push_back(child_page);
 
   // child_page = new he_string_value_page_c(m_tb_tree, page, info, Kax::ClassInfos, Z(""), Z("."));
   // child_page->init();
-  // page->m_children.push_back(child_page);
 
   // child_page = new he_string_value_page_c(m_tb_tree, page, info, Kax::ClassInfos, Z(""), Z("."));
   // child_page->init();
-  // page->m_children.push_back(child_page);
 
   // child_page = new he_string_value_page_c(m_tb_tree, page, info, Kax::ClassInfos, Z(""), Z("."));
   // child_page->init();
-  // page->m_children.push_back(child_page);
 
   // child_page = new he_string_value_page_c(m_tb_tree, page, info, Kax::ClassInfos, Z(""), Z("."));
   // child_page->init();
-  // page->m_children.push_back(child_page);
 
   m_tb_tree->ExpandNode(page->m_page_id);
 }
@@ -303,7 +295,6 @@ header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
 
     child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackUID::ClassInfos, Z("Track UID"), Z("This track's unique identifier."));
     child_page->init();
-    page->m_children.push_back(child_page);
 
     m_tb_tree->ExpandNode(page->m_page_id);
   }
