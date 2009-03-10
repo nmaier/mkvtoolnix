@@ -23,6 +23,7 @@ class he_value_page_c: public he_page_base_c {
   DECLARE_EVENT_TABLE();
 public:
   enum value_type_e {
+    vt_ascii_string,
     vt_string,
     vt_unsigned_integer,
     vt_signed_integer,

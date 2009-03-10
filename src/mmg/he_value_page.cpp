@@ -61,7 +61,8 @@ he_value_page_c::init() {
   siz_fg->AddSpacer(5);
 
   wxString type
-    = vt_string           == m_value_type ? Z("String")
+    = vt_ascii_string     == m_value_type ? Z("ASCII string (no special chars like Umlaute etc)")
+    : vt_string           == m_value_type ? Z("String")
     : vt_unsigned_integer == m_value_type ? Z("Unsigned integer")
     : vt_signed_integer   == m_value_type ? Z("Signed integer")
     : vt_float            == m_value_type ? Z("Floating point number")

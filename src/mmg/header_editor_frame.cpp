@@ -24,6 +24,8 @@
 
 #include "commonebml.h"
 #include "header_editor_frame.h"
+#include "he_ascii_string_value_page.h"
+#include "he_bool_value_page.h"
 #include "he_empty_page.h"
 #include "he_string_value_page.h"
 #include "he_top_level_page.h"
@@ -296,7 +298,57 @@ header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
 
     he_value_page_c *child_page;
 
-    child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackUID::ClassInfos, Z("Track UID"), Z("This track's unique identifier."));
+    child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackNumber::ClassInfos, Z("Track number"),
+                                                      Z("The track number as used in the Block Header."));
+    child_page->init();
+
+    child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackUID::ClassInfos, Z("Track UID"),
+                                                      Z("A unique ID to identify the Track. This should be kept the same when making a direct stream copy of the Track to another file."));
+    child_page->init();
+
+    child_page = new he_bool_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackFlagDefault::ClassInfos, Z("'Default track' flag"),
+                                          Z("Set if that track (audio, video or subs) SHOULD be used if no language found matches the user preference."));
+    child_page->init();
+
+    child_page = new he_bool_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackFlagEnabled::ClassInfos, Z("'Track enabled' flag"), Z("Set if the track is used."));
+    child_page->init();
+
+    child_page = new he_bool_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackFlagForced::ClassInfos, Z("'Forced display' flag"),
+                                          Z("Set if that track MUST be used during playback. "
+                                            "There can be many forced track for a kind (audio, video or subs). "
+                                            "The player should select the one which language matches the user preference or the default + forced track."));
+    child_page->init();
+
+    child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackMinCache::ClassInfos, Z("Mininum cache"),
+                                                      Z("The minimum number of frames a player should be able to cache during playback. "
+                                                        "If set to 0, the reference pseudo-cache system is not used."));
+    child_page->init();
+
+    child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackMaxCache::ClassInfos, Z("Maxinum cache"),
+                                                      Z("The maximum number of frames a player should be able to cache during playback. "
+                                                        "If set to 0, the reference pseudo-cache system is not used."));
+    child_page->init();
+
+    child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackDefaultDuration::ClassInfos, Z("Default duration"),
+                                                      Z("Number of nanoseconds (not scaled) per frame."));
+    child_page->init();
+
+    // child_page = new he_float_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackTimecodeScale::ClassInfos, Z("Timecode scaling"),
+    //                                        Z("The scale to apply on this track to work at normal speed in relation with other tracks "
+    //                                          "(mostly used to adjust video speed when the audio length differs)."));
+    // child_page->init();
+
+    child_page = new he_string_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackName::ClassInfos, Z("Name"), Z("A human-readable track name."));
+    child_page->init();
+
+    // child_page = new he_language_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackLanguage::ClassInfos, Z("Language"),
+    //                                           Z("Specifies the language of the track in the Matroska languages form."));
+    // child_page->init();
+
+    child_page = new he_ascii_string_value_page_c(m_tb_tree, page, k_track_entry, KaxCodecID::ClassInfos, Z("Codec ID"), Z("An ID corresponding to the codec."));
+    child_page->init();
+
+    child_page = new he_string_value_page_c(m_tb_tree, page, k_track_entry, KaxCodecName::ClassInfos, Z("Codec name"), Z("A human-readable string specifying the codec."));
     child_page->init();
 
     m_tb_tree->ExpandNode(page->m_page_id);
@@ -334,8 +386,10 @@ header_editor_frame_c::on_file_save(wxCommandEvent &evt) {
   while (it != m_pages.end()) {
     if ((*it)->has_been_modified()) {
       if ((*it)->m_l1_element->Generic().GlobalId == KaxTracks::ClassInfos.GlobalId) {
-        if (tracks_written)
+        if (tracks_written) {
+          ++it;
           continue;
+        }
         tracks_written = true;
       }
 
