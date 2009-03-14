@@ -422,7 +422,7 @@ get_local_charset() {
 
   setlocale(LC_CTYPE, "");
 #if defined(COMP_MINGW) || defined(COMP_MSC)
-  lc_charset = "CP" + to_string(GetACP());
+  lc_charset = "CP" + to_string(GetOEMCP());
 #elif defined(SYS_SOLARIS)
   int i;
 
