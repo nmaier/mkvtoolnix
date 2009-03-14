@@ -1,3 +1,10 @@
+2009-03-14  Moritz Bunkus  <moritz@bunkus.org>
+
+	* all: bug fix: The tools use the API call "GetOEMCP()" on Windows
+	instead of "GetACP()". This should make messages output in cmd.exe
+	come out correctly for Windows versions for which cmd.exe uses a
+	different code page than the rest (e.g. on German Windows).
+
 2009-03-08  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvinfo: enhancement: If mkvinfo is started in GUI mode on
