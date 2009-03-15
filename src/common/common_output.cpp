@@ -56,13 +56,13 @@ mxmsg(int level,
   if (level == MXMSG_ERROR) {
     if (s_saw_cr_after_nl)
       s_mm_stdio->puts("\n");
-    s_mm_stdio->puts(Y("Error: "));
+    s_mm_stdio->puts(from_utf8(s_cc_stdio, Y("Error: ")));
 
   } else if (level == MXMSG_WARNING)
-    s_mm_stdio->puts(Y("Warning: "));
+    s_mm_stdio->puts(from_utf8(s_cc_stdio, Y("Warning: ")));
 
   else if (level == MXMSG_DEBUG)
-    s_mm_stdio->puts(Y("Debug> "));
+    s_mm_stdio->puts(from_utf8(s_cc_stdio, Y("Debug> ")));
 
   int idx_cr = message.rfind('\r');
   if ((0 <= idx_cr) && (message.rfind('\n') < idx_cr))

@@ -30,9 +30,7 @@ using namespace libmatroska;
 #define can_be_cast(c, e) (dynamic_cast<c *>(e) != NULL)
 
 bool MTX_DLL_API is_valid_utf8_string(const string &c);
-UTFstring MTX_DLL_API cstr_to_UTFstring(const string &c);
 UTFstring MTX_DLL_API cstrutf8_to_UTFstring(const string &c);
-string MTX_DLL_API UTFstring_to_cstr(const UTFstring &u);
 string MTX_DLL_API UTFstring_to_cstrutf8(const UTFstring &u);
 
 int64_t MTX_DLL_API kt_get_default_duration(KaxTrackEntry &track);

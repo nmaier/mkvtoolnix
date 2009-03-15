@@ -26,12 +26,7 @@
 # define wxCS2WS(s) wxUCS((s).c_str())
 # define WXUNICODE 1
 #else
-# define wxU(s) wxString(s)
-# define wxCS(s) ((const char *)(s).c_str())
-# define wxMB(s) ((const char *)(s).c_str())
-# define wxCS2WS(s) ((const char *)(s).c_str())
-# define wxUCS(s) wxString(s).c_str()
-# define WXUNICODE 0
+# error wxWidgets was not compiled with Unicode support.
 #endif
 
 /* i18n stuff */

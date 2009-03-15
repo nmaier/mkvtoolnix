@@ -296,17 +296,10 @@ mmg_options_t::validate() {
     priority = wxU("normal");
 }
 
-#if WXUNICODE
 wxString
 UTFstring_to_wxString(const UTFstring &u) {
   return wxString(u.c_str());
 }
-#else
-wxString
-UTFstring_to_wxString(const UTFstring &u) {
-  return wxString(UTFstring_to_cstr(u).c_str());
-}
-#endif
 
 wxString &
 break_line(wxString &line,
@@ -479,29 +472,18 @@ string
 to_utf8(const wxString &src) {
   string retval;
 
-#if WXUNICODE
-  char *utf8;
-  int len;
-
-  len = wxConvUTF8.WC2MB(NULL, src.c_str(), 0);
-  utf8 = (char *)safemalloc(len + 1);
+  int len    = wxConvUTF8.WC2MB(NULL, src.c_str(), 0);
+  char *utf8 = (char *)safemalloc(len + 1);
   wxConvUTF8.WC2MB(utf8, src.c_str(), len + 1);
   retval = utf8;
   safefree(utf8);
-#else
-  retval = to_utf8(cc_local_utf8, src.c_str());
-#endif
 
   return retval;
 }
 
 wxString
 from_utf8(const wxString &src) {
-#if WXUNICODE
   return src;
-#else
-  return wxString(from_utf8(cc_local_utf8, src.c_str()).c_str());
-#endif
 }
 
 wxString

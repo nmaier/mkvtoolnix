@@ -40,34 +40,6 @@ using namespace libebml;
    UTFstring <-> C string conversion
 */
 
-UTFstring
-cstr_to_UTFstring(const string &c) {
-  wchar_t *new_string;
-  UTFstring u;
-  int len;
-
-  len = c.length();
-  new_string = (wchar_t *)safemalloc((len + 1) * sizeof(wchar_t));
-#if defined(COMP_MSC) || defined(COMP_MINGW)
-  MultiByteToWideChar(CP_ACP, 0, c.c_str(), -1, new_string, len + 1);
-  u = new_string;
-#else
-  char *old_locale;
-
-  memset(new_string, 0, (len + 1) * sizeof(wchar_t));
-  new_string[len] = L'\0';
-  old_locale = safestrdup(setlocale(LC_CTYPE, NULL));
-  setlocale(LC_CTYPE, "");
-  mbstowcs(new_string, c.c_str(), len);
-  setlocale(LC_CTYPE, old_locale);
-  safefree(old_locale);
-  u = UTFstring(new_string);
-#endif
-  safefree(new_string);
-
-  return u;
-}
-
 static int
 utf8_byte_length(unsigned char c) {
   if (c < 0x80)                 // 0xxxxxxx
@@ -171,40 +143,6 @@ cstrutf8_to_UTFstring(const string &c) {
   safefree(new_string);
 
   return u;
-}
-
-string
-UTFstring_to_cstr(const UTFstring &u) {
-  string retval;
-  char *new_string;
-  int len;
-
-#if defined(COMP_MSC) || defined(COMP_MINGW)
-  BOOL dummy;
-
-  len = u.length();
-  new_string = (char *)safemalloc(len + 1);
-  WideCharToMultiByte(CP_ACP, 0, u.c_str(), -1, new_string, len + 1, " ",
-                      &dummy);
-#else
-  const wchar_t *sptr;
-  char *old_locale;
-
-  len = u.length();
-  new_string = (char *)safemalloc(len * 4 + 1);
-  memset(new_string, 0, len * 4 + 1);
-  sptr = u.c_str();
-  old_locale = safestrdup(setlocale(LC_CTYPE, NULL));
-  setlocale(LC_CTYPE, "");
-  wcstombs(new_string, sptr, len * 4 + 1);
-  new_string[len * 4] = 0;
-  setlocale(LC_CTYPE, old_locale);
-  safefree(old_locale);
-#endif
-  retval = new_string;
-  safefree(new_string);
-
-  return retval;
 }
 
 string

@@ -875,7 +875,7 @@ tab_chapters::on_add_chapter(wxCommandEvent &evt) {
     chapter->Remove(0);
   }
   KaxChapterDisplay &display = GetEmptyChild<KaxChapterDisplay>(*chapter);
-  *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(display)) = cstr_to_UTFstring(Y("(unnamed)"));
+  *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(display)) = cstrutf8_to_UTFstring(Y("(unnamed)"));
   if ((default_chapter_language.length() > 0) ||
       (default_chapter_country.length() > 0)) {
     if (default_chapter_language.length() > 0)
@@ -957,7 +957,7 @@ tab_chapters::on_add_subchapter(wxCommandEvent &evt) {
   }
   KaxChapterDisplay &display = GetEmptyChild<KaxChapterDisplay>(*chapter);
   *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(display)) =
-    cstr_to_UTFstring(Y("(unnamed)"));
+    cstrutf8_to_UTFstring(Y("(unnamed)"));
   if ((default_chapter_language.length() > 0) ||
       (default_chapter_country.length() > 0)) {
     if (default_chapter_language.length() > 0)
@@ -1199,7 +1199,6 @@ tab_chapters::on_country_code_selected(wxCommandEvent &evt) {
 void
 tab_chapters::on_chapter_name_changed(wxCommandEvent &evt) {
   KaxChapterDisplay *cdisplay;
-  KaxChapterString *cstring;
   chapter_node_data_c *t;
   uint32_t i, n;
   wxString label;
@@ -1228,14 +1227,7 @@ tab_chapters::on_chapter_name_changed(wxCommandEvent &evt) {
   if (cdisplay == NULL)
     return;
 
-  cstring = &GetChild<KaxChapterString>(*cdisplay);
-#if WXUNICODE
-  *static_cast<EbmlUnicodeString *>(cstring) =
-    cstrutf8_to_UTFstring(wxMB(tc_chapter_name->GetValue()));
-#else
-  *static_cast<EbmlUnicodeString *>(cstring) =
-    cstr_to_UTFstring(tc_chapter_name->GetValue().c_str());
-#endif
+  *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(*cdisplay)) = cstrutf8_to_UTFstring(wxMB(tc_chapter_name->GetValue()));
 
   label = create_chapter_label(*t->chapter);
   tc_chapters->SetItemText(id, label);
@@ -1612,7 +1604,7 @@ tab_chapters::on_add_chapter_name(wxCommandEvent &evt) {
     return;
 
   cdisplay = new KaxChapterDisplay;
-  *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(*cdisplay)) = cstr_to_UTFstring(Y("(unnamed)"));
+  *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(*cdisplay)) = cstrutf8_to_UTFstring(Y("(unnamed)"));
   if (default_chapter_language.length() > 0)
     s = wxU(default_chapter_language.c_str());
   else

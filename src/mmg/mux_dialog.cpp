@@ -146,11 +146,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
       c = '\n';
 
     if ((c == '\n') || (c == '\r') || out->Eof()) {
-#if WXUNICODE
       wx_line = wxU(line.c_str());
-#else
-      wx_line = from_utf8(cc_local_utf8, line).c_str();
-#endif
       log += wx_line;
       if (c != '\r')
         log += wxT("\n");

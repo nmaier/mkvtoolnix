@@ -60,7 +60,7 @@ handle_attachments(KaxAttachments *atts,
       EbmlElement *e = (*att)[k];
 
       if (EbmlId(*e) == KaxFileName::ClassInfos.GlobalId)
-        name = UTFstring_to_cstr(UTFstring(*static_cast<KaxFileName *>(e)));
+        name = UTFstring_to_cstrutf8(UTFstring(*static_cast<KaxFileName *>(e)));
 
       else if (EbmlId(*e) == KaxMimeType::ClassInfos.GlobalId)
         type = string(*static_cast<KaxMimeType *>(e));

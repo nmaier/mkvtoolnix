@@ -194,11 +194,7 @@ job_run_dialog::process_input() {
     }
 
     if (got_char && ((c == '\n') || (c == '\r') || out->Eof())) {
-#if WXUNICODE
       wxString wx_line = wxU(line.c_str());
-#else
-      wxString wx_line = from_utf8(cc_local_utf8, line).c_str();
-#endif
       if (wx_line.Find(wxT("Progress")) == 0) {
         int percent_pos = wx_line.Find(wxT("%"));
         if (0 < percent_pos) {

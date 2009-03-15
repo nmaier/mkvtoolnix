@@ -573,13 +573,13 @@ render_headers(mm_io_c *out) {
 
     if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
       string version                                            = string("libebml v") + EbmlCodeVersion + string(" + libmatroska v") + KaxCodeVersion;
-      GetChildAs<KaxMuxingApp, EbmlUnicodeString>(s_kax_infos)  = cstr_to_UTFstring(version.c_str());
-      GetChildAs<KaxWritingApp, EbmlUnicodeString>(s_kax_infos) = cstr_to_UTFstring(VERSIONINFO " built on " __DATE__ " " __TIME__);
+      GetChildAs<KaxMuxingApp, EbmlUnicodeString>(s_kax_infos)  = cstrutf8_to_UTFstring(version.c_str());
+      GetChildAs<KaxWritingApp, EbmlUnicodeString>(s_kax_infos) = cstrutf8_to_UTFstring(VERSIONINFO " built on " __DATE__ " " __TIME__);
       GetChild<KaxDateUTC>(*s_kax_infos).SetEpochDate(time(NULL));
 
     } else {
-      GetChildAs<KaxMuxingApp, EbmlUnicodeString>(s_kax_infos)  = cstr_to_UTFstring(ENGAGE_NO_VARIABLE_DATA);
-      GetChildAs<KaxWritingApp, EbmlUnicodeString>(s_kax_infos) = cstr_to_UTFstring(ENGAGE_NO_VARIABLE_DATA);
+      GetChildAs<KaxMuxingApp, EbmlUnicodeString>(s_kax_infos)  = cstrutf8_to_UTFstring(ENGAGE_NO_VARIABLE_DATA);
+      GetChildAs<KaxWritingApp, EbmlUnicodeString>(s_kax_infos) = cstrutf8_to_UTFstring(ENGAGE_NO_VARIABLE_DATA);
       GetChild<KaxDateUTC>(*s_kax_infos).SetEpochDate(0);
     }
 
@@ -761,7 +761,7 @@ render_attachments(IOCallback *out) {
       } else
         name = attch->stored_name;
 
-      GetChildAs<KaxFileName, EbmlUnicodeString>(kax_a) = cstr_to_UTFstring(name);
+      GetChildAs<KaxFileName, EbmlUnicodeString>(kax_a) = cstrutf8_to_UTFstring(name);
       GetChildAs<KaxFileUID, EbmlUInteger>(kax_a)       = attch->id;
 
       GetChild<KaxFileData>(*kax_a).CopyBuffer(attch->data->get(), attch->data->get_size());
