@@ -1,5 +1,8 @@
 2009-03-15  Moritz Bunkus  <moritz@bunkus.org>
 
+	* all: bug fix: A couple of translated strings were converted from
+	the wrong locale when they were displayed.
+
 	* mmg, mkvinfo: The GUIs now require an Unicode-enabled version of
 	wxWidgets.
 
