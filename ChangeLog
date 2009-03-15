@@ -1,3 +1,8 @@
+2009-03-15  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg, mkvinfo: The GUIs now require an Unicode-enabled version of
+	wxWidgets.
+
 2009-03-14  Moritz Bunkus  <moritz@bunkus.org>
 
 	* all: bug fix: The tools use the API call "GetOEMCP()" on Windows
