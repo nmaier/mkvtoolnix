@@ -345,7 +345,8 @@ main(int argc,
 
   mm_file_io_c::setup();
   srand(time(NULL));
-  utf8_init("");
+  cc_local_utf8 = utf8_init("");
+  init_cc_stdio();
 
   xml_element_map_init();
 

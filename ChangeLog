@@ -1,5 +1,9 @@
 2009-03-15  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvextract: bug fix: The charset for text output was not
+	initialized correctly resulting in garbled display of non-ASCII
+	characters in non-UTF-8 locales.
+
 	* all: bug fix: A couple of translated strings were converted from
 	the wrong locale when they were displayed.
 
