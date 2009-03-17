@@ -228,7 +228,7 @@ qtmp4_reader_c::parse_headers() {
          && strncasecmp(dmx->fourcc, "QDM", 3)
          && strncasecmp(dmx->fourcc, "MP4A", 4)
          && strncasecmp(dmx->fourcc, "twos", 4)
-         && strncasecmp(dmx->fourcc, "swot", 4)
+         && strncasecmp(dmx->fourcc, "sowt", 4)
          && strncasecmp(dmx->fourcc, "ac-3", 4))) {
       mxwarn(boost::format(Y("Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n")) % dmx->fourcc % dmx->id);
       continue;
@@ -1400,7 +1400,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
       dmx->ptzr = add_packetizer(new mp3_packetizer_c(this, ti, (int32_t)dmx->a_samplerate, dmx->a_channels, true));
       mxinfo_tid(ti.fname, dmx->id, Y("Using the MPEG audio output module.\n"));
 
-    } else if (!strncasecmp(dmx->fourcc, "twos", 4) || !strncasecmp(dmx->fourcc, "swot", 4)) {
+    } else if (!strncasecmp(dmx->fourcc, "twos", 4) || !strncasecmp(dmx->fourcc, "sowt", 4)) {
       dmx->ptzr = add_packetizer(new pcm_packetizer_c(this, ti, (int32_t)dmx->a_samplerate, dmx->a_channels, dmx->a_bitdepth,
                                                       (8 < dmx->a_bitdepth) && ('t' == dmx->fourcc[0])));
       mxinfo_tid(ti.fname, dmx->id, Y("Using the PCM output module.\n"));
