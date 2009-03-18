@@ -36,6 +36,7 @@
 #define MKV_A_PCM_FLOAT  "A_PCM/FLOAT/IEEE"
 #define MKV_A_VORBIS     "A_VORBIS"
 #define MKV_A_ACM        "A_MS/ACM"
+#define MKV_A_QUICKTIME  "A_QUICKTIME"
 #define MKV_A_QDMC       "A_QUICKTIME/QDMC"
 #define MKV_A_QDMC2      "A_QUICKTIME/QDM2"
 #define MKV_A_REAL_14_4  "A_REAL/14_4"

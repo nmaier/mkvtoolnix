@@ -1,5 +1,13 @@
 2009-03-18  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: QuickTime audio tracks will be stored with
+	the CodecID "A_QUICKTIME". The CodecPrivate element contains the
+	full "STSD" element from the QuickTime file (just like
+	V_QUICKTIME). This method is used for all audio tracks which don't
+	have a well-defined storage spec for Matroska (e.g. AAC, AC3,
+	MP2/3 are still stored as A_AC3, A_AAC etc). Hopefully a fix for
+	bugs 354 and 357.
+
 	* mkvmerge: bug fix: The CodecPrivate element for QuickTime video
 	tracks like Sorenson Video Codecs contained wrong data. Fix for
 	bug 355.

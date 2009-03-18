@@ -1379,20 +1379,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
     }
 
   } else {
-    if (!strncasecmp(dmx->fourcc, "QDMC", 4) || !strncasecmp(dmx->fourcc, "QDM2", 4)) {
-      passthrough_packetizer_c *ptzr = new passthrough_packetizer_c(this, ti);
-      dmx->ptzr                      = add_packetizer(ptzr);
-
-      ptzr->set_track_type(track_audio);
-      ptzr->set_codec_id('2' == dmx->fourcc[3] ? MKV_A_QDMC2 : MKV_A_QDMC);
-      ptzr->set_codec_private(dmx->priv, dmx->priv_size);
-      ptzr->set_audio_sampling_freq(dmx->a_samplerate);
-      ptzr->set_audio_channels(dmx->a_channels);
-      ptzr->set_audio_bit_depth(dmx->a_bitdepth);
-
-      mxinfo_tid(ti.fname, dmx->id, boost::format(Y("Using the generic audio output module (FourCC: %|1$.4s|).\n")) % dmx->fourcc);
-
-    } else if (!strncasecmp(dmx->fourcc, "MP4A", 4) && IS_AAC_OBJECT_TYPE_ID(dmx->esds.object_type_id)) {
+    if (!strncasecmp(dmx->fourcc, "MP4A", 4) && IS_AAC_OBJECT_TYPE_ID(dmx->esds.object_type_id)) {
       ti.private_data = dmx->esds.decoder_config;
       ti.private_size = dmx->esds.decoder_config_len;
       dmx->ptzr       = add_packetizer(new aac_packetizer_c(this, ti, AAC_ID_MPEG4, dmx->a_aac_profile, (int)dmx->a_samplerate, dmx->a_channels, false, true));
@@ -1417,8 +1404,19 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
       if (!create_audio_packetizer_ac3(dmx))
         return;
 
-    } else
-      mxerror(Y("Quicktime/MP4 reader: Should not have happened #1."));
+    } else {
+      passthrough_packetizer_c *ptzr = new passthrough_packetizer_c(this, ti);
+      dmx->ptzr                      = add_packetizer(ptzr);
+
+      ptzr->set_track_type(track_audio);
+      ptzr->set_codec_id(MKV_A_QUICKTIME);
+      ptzr->set_codec_private(dmx->a_stsd->get(), dmx->a_stsd->get_size());
+      ptzr->set_audio_sampling_freq(dmx->a_samplerate);
+      ptzr->set_audio_channels(dmx->a_channels);
+
+      mxinfo_tid(ti.fname, dmx->id, boost::format(Y("Using the generic audio output module (FourCC: %|1$.4s|).\n")) % dmx->fourcc);
+
+    }
   }
 
   if (-1 == main_dmx)
