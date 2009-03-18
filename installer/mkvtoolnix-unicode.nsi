@@ -134,6 +134,8 @@ Section "Program files" SEC01
   File "examples\matroskatags.dtd"
   SetOutPath "$INSTDIR\locale\de\LC_MESSAGES"
   File "/oname=mkvtoolnix.mo" "po\de.mo"
+  SetOutPath "$INSTDIR\locale\ja\LC_MESSAGES"
+  File "/oname=mkvtoolnix.mo" "po\ja.mo"
 
   # Delete files that might be present from older installation
   # if this is just an upgrade.
