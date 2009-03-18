@@ -152,14 +152,14 @@ struct qtmp4_demuxer_c {
   esds_t esds;
   bool esds_parsed;
 
-  unsigned char *v_stsd;
+  memory_cptr v_stsd;
   uint32_t v_stsd_size;
   uint32_t v_width, v_height, v_bitdepth;
   deque<int64_t> references;
   bool v_is_avc, avc_use_bframes;
+  memory_cptr a_stsd;
   uint32_t a_channels, a_bitdepth;
   float a_samplerate;
-  sound_v1_stsd_atom_t a_stsd;
   int a_aac_profile, a_aac_output_sample_rate;
   bool a_aac_is_sbr, a_aac_config_parsed;
   ac3_header_t m_ac3_header;
@@ -184,8 +184,6 @@ struct qtmp4_demuxer_c {
     max_timecode(0),
     fps(0.0),
     esds_parsed(false),
-    v_stsd(NULL),
-    v_stsd_size(0),
     v_width(0),
     v_height(0),
     v_bitdepth(0),
@@ -205,11 +203,9 @@ struct qtmp4_demuxer_c {
 
     memset(fourcc, 0, 4);
     memset(&esds, 0, sizeof(esds_t));
-    memset(&a_stsd, 0, sizeof(sound_v1_stsd_atom_t));
   }
 
   ~qtmp4_demuxer_c() {
-    safefree(v_stsd);
     safefree(priv);
     safefree(esds.decoder_config);
     safefree(esds.sl_config);

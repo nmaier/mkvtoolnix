@@ -847,6 +847,8 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
       mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n")) % new_dmx->id);
 
     if ('a' == new_dmx->type) {
+      new_dmx->a_stsd = clone_memory(priv, size);
+
       if (sizeof(sound_v0_stsd_atom_t) > size)
         mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n")) % new_dmx->id);
 
@@ -872,7 +874,7 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
         if (sizeof(sound_v1_stsd_atom_t) > size)
           mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n")) % new_dmx->id);
 
-        memcpy(&sv1_stsd.v1, priv + sizeof(sound_v0_stsd_atom_t), sizeof(sound_v1_stsd_atom_t));
+        memcpy(&sv1_stsd, priv, sizeof(sound_v1_stsd_atom_t));
 
         mxverb(2,
                boost::format(" samples per packet: %1% bytes per packet: %2% bytes per frame: %3% bytes_per_sample: %4%")
@@ -888,25 +890,24 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
       uint32_t tmp          = get_uint32_be(&sv1_stsd.v0.sample_rate);
       new_dmx->a_samplerate = (float)((tmp & 0xffff0000) >> 16) + (float)(tmp & 0x0000ffff) / 65536.0;
 
-      if (get_uint16_be(&sv1_stsd.v0.version) == 1)
-        stsd_size = sizeof(sound_v1_stsd_atom_t);
-
-      else if (get_uint16_be(&sv1_stsd.v0.version) == 0)
+      if (get_uint16_be(&sv1_stsd.v0.version) == 0)
         stsd_size = sizeof(sound_v0_stsd_atom_t);
+
+      else if (get_uint16_be(&sv1_stsd.v0.version) == 1)
+        stsd_size = sizeof(sound_v1_stsd_atom_t);
 
       else if (get_uint16_be(&sv1_stsd.v0.version) == 2)
         stsd_size = 72;
 
-      memcpy(&new_dmx->a_stsd, &sv1_stsd, sizeof(sound_v1_stsd_atom_t));
-
     } else if ('v' == new_dmx->type) {
+      new_dmx->v_stsd = clone_memory(priv, size);
+
       if (sizeof(video_stsd_atom_t) > size)
         mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n")) % new_dmx->id);
 
       video_stsd_atom_t v_stsd;
       memcpy(&v_stsd, priv, sizeof(video_stsd_atom_t));
-      new_dmx->v_stsd      = (unsigned char *)safememdup(priv, size);
-      new_dmx->v_stsd_size = size;
+
       if (0 != new_dmx->fourcc[0])
         mxwarn(boost::format(Y("Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"))
                % new_dmx->id % new_dmx->fourcc % (const unsigned char *)v_stsd.base.fourcc);
@@ -1369,8 +1370,8 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
       create_video_packetizer_svq1(dmx);
 
     else {
-      ti.private_size = dmx->v_stsd_size;
-      ti.private_data = (unsigned char *)dmx->v_stsd;
+      ti.private_size = dmx->v_stsd->get_size();
+      ti.private_data = dmx->v_stsd->get();
       dmx->ptzr       = add_packetizer(new video_packetizer_c(this, ti, MKV_V_QUICKTIME, 0.0, dmx->v_width, dmx->v_height));
       ti.private_data = NULL;
 
@@ -1797,11 +1798,12 @@ qtmp4_demuxer_c::build_index_constant_sample_size_mode() {
       frame_size = chunk_table[frame_idx].size;
 
       if ('a' == type) {
-        if (get_uint16_be(&a_stsd.v0.version) == 1) {
-          frame_size *= get_uint32_be(&a_stsd.v1.bytes_per_frame);
-          frame_size /= get_uint32_be(&a_stsd.v1.samples_per_packet);
+        sound_v1_stsd_atom_t *sound_stsd_atom = (sound_v1_stsd_atom_t *)a_stsd->get();
+        if (get_uint16_be(&sound_stsd_atom->v0.version) == 1) {
+          frame_size *= get_uint32_be(&sound_stsd_atom->v1.bytes_per_frame);
+          frame_size /= get_uint32_be(&sound_stsd_atom->v1.samples_per_packet);
         } else
-          frame_size  = frame_size * a_channels * get_uint16_be(&a_stsd.v0.sample_size) / 8;
+          frame_size  = frame_size * a_channels * get_uint16_be(&sound_stsd_atom->v0.sample_size) / 8;
       }
     }
 
