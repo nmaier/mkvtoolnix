@@ -833,12 +833,17 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
 
   int i;
   for (i = 0; i < count; ++i) {
-    int64_t pos         = io->getFilePointer();
-    uint32_t size       = io->read_uint32_be();
+    int64_t pos   = io->getFilePointer();
+    uint32_t size = io->read_uint32_be();
+
+    if (4 > size)
+      mxerror(boost::format(Y("Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n")) % new_dmx->id);
+
     memory_cptr af_priv = memory_c::alloc(size);
     unsigned char *priv = af_priv->get();
 
-    if (io->read(priv, size) != size)
+    put_uint32_be(priv, size);
+    if (io->read(priv + sizeof(uint32_t), size - sizeof(uint32_t)) != (size - sizeof(uint32_t)))
       mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n")) % new_dmx->id);
 
     if ('a' == new_dmx->type) {
@@ -864,8 +869,10 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
              % get_uint16_be(&sv1_stsd.v0.version));
 
       if (get_uint16_be(&sv1_stsd.v0.version) == 1) {
-        if ((sizeof(sound_v1_stsd_atom_t) > size) || (io->read(&sv1_stsd.v1, sizeof(sv1_stsd.v1)) != sizeof(sv1_stsd.v1)))
+        if (sizeof(sound_v1_stsd_atom_t) > size)
           mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n")) % new_dmx->id);
+
+        memcpy(&sv1_stsd.v1, priv + sizeof(sound_v0_stsd_atom_t), sizeof(sound_v1_stsd_atom_t));
 
         mxverb(2,
                boost::format(" samples per packet: %1% bytes per packet: %2% bytes per frame: %3% bytes_per_sample: %4%")
@@ -888,12 +895,12 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
         stsd_size = sizeof(sound_v0_stsd_atom_t);
 
       else if (get_uint16_be(&sv1_stsd.v0.version) == 2)
-        stsd_size = 68;
+        stsd_size = 72;
 
       memcpy(&new_dmx->a_stsd, &sv1_stsd, sizeof(sound_v1_stsd_atom_t));
 
     } else if ('v' == new_dmx->type) {
-      if (size < sizeof(video_stsd_atom_t))
+      if (sizeof(video_stsd_atom_t) > size)
         mxerror(boost::format(Y("Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n")) % new_dmx->id);
 
       video_stsd_atom_t v_stsd;

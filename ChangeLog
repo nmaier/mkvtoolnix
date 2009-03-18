@@ -1,5 +1,9 @@
 2009-03-18  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The CodecPrivate element for QuickTime video
+	tracks like Sorenson Video Codecs contained wrong data. Fix for
+	bug 355.
+
 	* all: Added a Japanese translation by Hiroki Taniura (see
 	AUTHORS).
 

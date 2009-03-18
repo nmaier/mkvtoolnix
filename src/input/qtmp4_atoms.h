@@ -94,8 +94,9 @@ typedef struct PACKED_STRUCTURE {
 
 // Base for all 'sample data description' atoms
 typedef struct PACKED_STRUCTURE {
-  char fourcc[4];
-  uint8_t reserved[6];
+  uint32_t size;
+  char     fourcc[4];
+  uint8_t  reserved[6];
   uint16_t data_reference_index;
 } base_stsd_atom_t;
 
