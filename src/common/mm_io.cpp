@@ -272,7 +272,7 @@ mm_file_io_c::mm_file_io_c(const string &path,
   switch (mode) {
     case MODE_READ:
       access_mode = GENERIC_READ;
-      share_mode = FILE_SHARE_READ | FILE_SHARE_WRITE;
+      share_mode  = FILE_SHARE_READ | FILE_SHARE_WRITE;
       disposition = OPEN_EXISTING;
       break;
     case MODE_WRITE:
@@ -282,12 +282,12 @@ mm_file_io_c::mm_file_io_c(const string &path,
       break;
     case MODE_SAFE:
       access_mode = GENERIC_WRITE | GENERIC_READ;
-      share_mode = FILE_SHARE_READ | FILE_SHARE_WRITE;
+      share_mode  = FILE_SHARE_READ | FILE_SHARE_WRITE;
       disposition = OPEN_ALWAYS;
       break;
     case MODE_CREATE:
       access_mode = GENERIC_WRITE;
-      share_mode = 0;
+      share_mode  = 0;
       disposition = CREATE_ALWAYS;
       break;
     default:
