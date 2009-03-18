@@ -1,3 +1,13 @@
+2009-03-18  Moritz Bunkus  <moritz@bunkus.org>
+
+	* all: Added a Japanese translation by Hiroki Taniura (see
+	AUTHORS).
+
+2009-03-17  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed detection of little endian PCM tracks
+	in MOV files. Fix for bug 356.
+
 2009-03-15  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract: bug fix: The charset for text output was not
