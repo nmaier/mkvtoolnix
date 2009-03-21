@@ -319,6 +319,12 @@ update-po:
 	done
 	@rm po/mkvtoolnix.pot
 
+po-stats po-statistics:
+	@for i in po/*.po ; do \
+		echo '  MSGFMT ' $$i ; \
+		msgfmt --statistics -o /dev/null $$i ; \
+	done
+
 mkvmerge-gui-book:	doc/mkvmerge-gui.hhk
 
 #
