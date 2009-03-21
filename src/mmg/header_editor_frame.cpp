@@ -25,6 +25,7 @@
 #include "commonebml.h"
 #include "header_editor_frame.h"
 #include "he_ascii_string_value_page.h"
+#include "he_bit_value_page.h"
 #include "he_bool_value_page.h"
 #include "he_empty_page.h"
 #include "he_float_value_page.h"
@@ -237,20 +238,17 @@ header_editor_frame_c::handle_segment_info(analyzer_data_c *data) {
   child_page = new he_string_value_page_c(m_tb_tree, page, info, KaxNextFilename::ClassInfos, Z("Next filename"), Z("An escaped filename corresponding to the next segment."));
   child_page->init();
 
-  // child_page = new he_uid_value_page_c(m_tb_tree, page, info, KaxSegmentUID::ClassInfos, Z("Segment unique ID"),
-  //                                      Z("A randomly generated unique ID to identify the current segment between many others (128 bits)."));
-  // child_page->init();
+  child_page = new he_bit_value_page_c(m_tb_tree, page, info, KaxSegmentUID::ClassInfos, Z("Segment unique ID"),
+                                       Z("A randomly generated unique ID to identify the current segment between many others (128 bits)."), 128);
+  child_page->init();
 
-  // child_page = new he_uid_value_page_c(m_tb_tree, page, info, KaxPrevUID::ClassInfos, Z("Previous segment's unique ID"),
-  //                                      Z("A unique ID to identify the previous chained segment (128 bits)."));
-  // child_page->init();
+  child_page = new he_bit_value_page_c(m_tb_tree, page, info, KaxPrevUID::ClassInfos, Z("Previous segment's unique ID"),
+                                       Z("A unique ID to identify the previous chained segment (128 bits)."), 128);
+  child_page->init();
 
-  // child_page = new he_uid_value_page_c(m_tb_tree, page, info, KaxNextUID::ClassInfos, Z("Next segment's unique ID"),
-  //                                      Z("A unique ID to identify the next chained segment (128 bits)."));
-  // child_page->init();
-
-  // child_page = new he_string_value_page_c(m_tb_tree, page, info, Kax::ClassInfos, Z(""), Z("."));
-  // child_page->init();
+  child_page = new he_bit_value_page_c(m_tb_tree, page, info, KaxNextUID::ClassInfos, Z("Next segment's unique ID"),
+                                       Z("A unique ID to identify the next chained segment (128 bits)."), 128);
+  child_page->init();
 
   m_tb_tree->ExpandNode(page->m_page_id);
 }
