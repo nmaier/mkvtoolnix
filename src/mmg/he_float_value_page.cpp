@@ -13,6 +13,9 @@
 
 #include "os.h"
 
+#include <wx/string.h>
+#include <wx/regex.h>
+
 #include <ebml/EbmlFloat.h>
 
 #include "he_float_value_page.h"
@@ -48,10 +51,20 @@ he_float_value_page_c::create_input_control() {
 
 wxString
 he_float_value_page_c::get_original_value_as_string() {
-  if (NULL != m_element)
-    return wxString::Format(wxT("%f"), m_original_value);
+  if (NULL == m_element)
+    return wxEmptyString;
 
-  return wxEmptyString;
+  wxString value = wxString::Format(wxT("%f"), m_original_value);
+
+  if ((-1 != value.Find(wxT("."))) || (-1 != value.Find(wxT(",")))) {
+    wxRegEx re_zeroes(wxT("0+$"));
+    wxRegEx re_decimal_point(wxT("[,\\.]$"));
+
+    re_zeroes.Replace(&value, wxEmptyString);
+    re_decimal_point.Replace(&value, wxEmptyString);
+  }
+
+  return value;
 }
 
 wxString
