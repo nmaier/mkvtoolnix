@@ -144,11 +144,10 @@ header_editor_frame_c::clear_pages() {
 
 void
 header_editor_frame_c::on_file_open(wxCommandEvent &evt) {
-  wxString home;
-  wxGetEnv(wxT("HOME"), &home);
-  // open_file(wxFileName(wxString::Format(wxT("%s/prog/video/mkvtoolnix/data/longfile.mkv"), home.c_str())));
-  open_file(wxFileName(wxString::Format(wxT("%s/prog/video/mkvtoolnix/data/muh.mkv"), home.c_str())));
-  return;
+  // wxString home;
+  // wxGetEnv(wxT("HOME"), &home);
+  // open_file(wxFileName(wxString::Format(wxT("%s/prog/video/mkvtoolnix/data/muh.mkv"), home.c_str())));
+  // return;
 
   wxFileDialog dlg(this, Z("Open a Matroska file"), last_open_dir, wxEmptyString, wxString::Format(Z("Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|%s"), ALLFILES.c_str()), wxFD_OPEN);
   if (dlg.ShowModal() != wxID_OK)
