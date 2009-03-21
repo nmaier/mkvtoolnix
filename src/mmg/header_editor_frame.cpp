@@ -36,6 +36,7 @@
 #include "he_top_level_page.h"
 #include "he_unsigned_integer_value_page.h"
 #include "mmg.h"
+#include "mmg_dialog.h"
 #include "wxcommon.h"
 
 header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
@@ -561,6 +562,7 @@ header_editor_frame_c::validate() {
 
 void
 header_editor_frame_c::on_help_help(wxCommandEvent &evt) {
+  mdlg->display_help(HELP_ID_HEADER_EDITOR);
 }
 
 bool

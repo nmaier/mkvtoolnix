@@ -1086,6 +1086,11 @@ mmg_dialog::muxing_has_finished() {
 
 void
 mmg_dialog::on_help(wxCommandEvent &evt) {
+  display_help(notebook->GetCurrentPage() == chapter_editor_page ? HELP_ID_CHAPTER_EDITOR : HELP_ID_CONTENTS);
+}
+
+void
+mmg_dialog::display_help(int id) {
   if (help == NULL) {
     wxDirDialog dlg(this, Z("Choose the location of the mkvmerge GUI help files"));
     vector<wxString> potential_help_paths;
@@ -1164,7 +1169,8 @@ mmg_dialog::on_help(wxCommandEvent &evt) {
     help = new wxHtmlHelpController;
     help->AddBook(wxFileName(help_path + wxT("/mkvmerge-gui.hhp")), false);
   }
-  help->Display(1);
+
+  help->Display(id);
 }
 
 void

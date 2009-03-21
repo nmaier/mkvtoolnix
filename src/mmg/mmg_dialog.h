@@ -68,6 +68,13 @@
 #define ID_M_HELP_ABOUT                   65000
 #define ID_M_HELP_HELP                    65001
 
+#define HELP_ID_CONTENTS                      1
+#define HELP_ID_INTRODUCTION              10000
+#define HELP_ID_SETUP                     20000
+#define HELP_ID_MUXING                    30000
+#define HELP_ID_CHAPTER_EDITOR            40000
+#define HELP_ID_HEADER_EDITOR             50000
+
 /* class tab_advanced; */
 class tab_attachments;
 class tab_chapters;
@@ -189,6 +196,8 @@ public:
   void remember_previous_output_directory();
 
   void query_mkvmerge_capabilities();
+
+  void display_help(int id);
 };
 
 extern mmg_dialog *mdlg;

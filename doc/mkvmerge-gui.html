@@ -143,6 +143,28 @@
       </li>
      </ol>
     </li>
+    <li>
+     <a href="mkvmerge-gui.html#headereditor">The header editor</a>
+     <br>
+     <ol>
+      <li>
+       <a href="mkvmerge-gui.html#he_addingremovingheaderfields">Adding
+        and removing header fields</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#he_analyzingthefile">Opening an existing file</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#he_analyzingthefile">Opening an existing file</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#he_validation">Validation</a>
+      </li>
+      <li>
+       <a href="mkvmerge-gui.html#he_saving">Saving the file</a>
+      </li>
+     </ol>
+    </li>
    </ol>
   </p>
 
@@ -1010,5 +1032,123 @@
    menu. <i>mmg</i> will automatically detect the file type used and read the
    chapters.</p>
 
+  <a name="wxhh_headereditor"></a>
+  <h2><a name="headereditor">5. The header editor</a></h2>
+
+  <p>
+   mmg features an editor for header fields of existing Matroska
+   files. It can be started from mmg's &quot;File&quot; menu by
+   chosing the &quot;Header editor&quot;.
+  </p>
+
+  <p>
+   The header editor allows the user to edit certain fields of the
+   segment information headers and of the headers of each track
+   without having to remux the whole file. Its usage is simple: load a
+   file, select the header fields you want to change, change its
+   value, and save the file.
+  </p>
+
+  <h3><a name="he_addingremovingheaderfields">5.1. Adding and removing header fields</a></h3>
+
+  <p>
+   The Matroska file format allows for most header fields to be
+   present or absent. mmg's header editor will show inputs for all
+   header fields it supports even if they're currently not present in
+   the file. It allows the user to add fields that are currently not
+   present to the file and to remove currently present fields from the
+   file.
+  </p>
+
+  <h3><a name="he_analyzingthefile">5.2. Opening an existing file</a></h3>
+
+  <p>
+   The user can start editing a file by chosing &quot;Open&quot; from
+   the &quot;File&quot; menu. After selecting the appropriate file the
+   header editor will scan the file for all important elements. This
+   can take some time depending on the file's size. This is neccessary
+   due to Matroska's flexible file structure.
+  </p>
+
+  <h3><a name="he_analyzingthefile">5.3. Editing header fields</a></h3>
+
+  <p>
+   After opening the file the left pane will show one element for the
+   segment headers and one element for each track that is found in the
+   file. Each node in the tree contains a number of sub-elements which
+   represent the actual header values. When the user selects such a
+   sub-element the right pane is updated to show a number of facts
+   about the element:
+  </p>
+
+  <p>
+   <ul>
+    <li>its type (a number, a string etc),</li>
+    <li>its name,</li>
+    <li>a short description of its contents,</li>
+    <li>whether or not the element is currently present in the file
+     including an option to remove it if it is or to to add it if it
+     isn't,</li>
+    <li>the element's original value if it was present when the file
+     was opened and</li>
+    <li>a control to modify its content.</li>
+   </ul>
+  </p>
+
+  <p>
+   Most value types are self-explanatory: numbers, strings etc. The
+   binary type however is shown as a sequence of hex digits. The
+   accepted formats are the same as mkvmerge's various options for
+   specifying segment UIDs: either a simple sequence of hex digits
+   (e.g. 1857a7fe7d...) or the hex numbers prefixed with
+   &quot;0x&quot; before each pair (e.g. 0x18 0x57 0xa7 0xfe 0x7d...).
+  </p>
+
+  <h3><a name="he_validation">5.4. Validation</a></h3>
+
+  <p>
+   The user can validate your changes by chosing &quot;Validate&quot;
+   from the &quot;Headers&quot; menu. Validation is also run
+   automatically each time the user wants to save the
+   files. Validation makes sure that the values the user supplied can
+   be stored in the element in question. For example a number element
+   must not contain characters.
+  </p>
+
+  <p>
+   If validation fails then the first element failing validation is
+   selected so that the user can correct the mistake.
+  </p>
+
+  <h3><a name="he_saving">5.5. Saving the file</a></h3>
+
+  <p>
+   The user can save the changes by selecting &quot;Save&quot; from
+   the &quot;File&quot; menu. If no changes have been made then mmg
+   will say so and not modify the file.
+  </p>
+
+  <p>
+   Before modifying the file mmg check if the file has been modified
+   by another application since it has been opened. If this is the
+   case then mmg warns the user, discards all changes and reloads the
+   file in order to ensure that the file will not be corrupted.
+  </p>
+
+  <p>
+   mmg tries very hard to find suitable spots for writing the modified
+   headers. It will overwrite existing header elements at their
+   original position, EbmlVoid elements and all other instances of the
+   headers it finds. It will also update the meta seek heads so that
+   the headers can be found easily by applications reading that file.
+  </p>
+
+  <p>
+   After saving the file the header editor will automatically reload
+   and analyze it again. This is done to ensure that no file
+   corruoption occurs. As it slows down the process of saving the file
+   considerably this safety feature will be removed in a future
+   release of mmg after enough testing has been done.
+  </p>
  </body>
 </html>
