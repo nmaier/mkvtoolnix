@@ -83,13 +83,13 @@ public:
 
   void on_help_help(wxCommandEvent &evt);
 
+  bool open_file(wxFileName file_name);
+
 protected:
   bool may_close();
 
   void update_file_menu();
   void enable_menu_entries();
-
-  bool open_file(wxFileName file_name);
 
   void clear_pages();
 

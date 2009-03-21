@@ -7,7 +7,11 @@ mmg \- a GUI for mkvmerge including a chapter editor
 
 .SH SYNOPSIS
 .B mmg
-[\fIpreferences.mmg\fR]
+[\fIpreferences.mmg\fR|\fIinput_file.ext\fR]
+.br
+.B mmg
+\-\-edit\-headers <\fIfile.mkv\fR>
+.br
 
 
 .SH DESCRIPTION
@@ -19,9 +23,15 @@ chapter editor that can read OGM style and XML style chapter files,
 write XML style chapter files and even read chapters from Matroska
 files and write chapters directly to Matroska files.
 .LP
-The only argument is an optional name of a preferences file that will
-be loaded directly after startup. This way \fBmmg\fR preferences files
-can be associated with \fBmmg\fR itself.
+\fBmmg\fR knows few options. The first possibility is to start it with
+a single file name. If that file name's extenion is '\fI.mmg\fR' then
+it will be treated as a preferences file and \fBmmg\fR will load its
+setting when it starts. Otherwise the name is interpreted as being
+the name of an input file which will be added.
+.LP
+The second operation mode is invoked with the
+option '\-\-edit\-headers' and a file name. This lets \fBmmg\fR run
+its header editor and load the file.
 .LP
 The full documentation is available in HTML form (doc/mkvmerge-gui.html).
 

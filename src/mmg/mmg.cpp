@@ -800,29 +800,6 @@ mmg_dialog::mmg_dialog():
   help = NULL;
 
   set_status_bar(Z("mkvmerge GUI ready"));
-
-  if (app->argc > 1) {
-    wxString file;
-
-    file = app->argv[1];
-    if (!wxFileExists(file) || wxDirExists(file))
-      wxMessageBox(wxString::Format(Z("The file '%s' does not exist."), file.c_str()), Z("Error loading settings"), wxOK | wxCENTER | wxICON_ERROR);
-    else {
-#ifdef SYS_WINDOWS
-      if ((file.Length() > 3) && (file.c_str()[1] != wxT(':')) &&
-          (file.c_str()[0] != wxT('\\')))
-        file = wxGetCwd() + wxT("\\") + file;
-#else
-      if ((file.Length() > 0) && (file.c_str()[0] != wxT('/')))
-        file = wxGetCwd() + wxT("/") + file;
-#endif
-
-      if (wxFileName(file).GetExt() == wxU("mmg"))
-        load(file);
-      else
-        input_page->add_file(file, false);
-    }
-  }
 }
 
 mmg_dialog::~mmg_dialog() {
@@ -2263,7 +2240,45 @@ mmg_app::OnInit() {
   mdlg = new mmg_dialog();
   mdlg->Show(true);
 
+  handle_command_line_arguments();
+
   return true;
+}
+
+void
+mmg_app::handle_command_line_arguments() {
+  if (1 >= app->argc)
+    return;
+
+  if (wxString(app->argv[1]) == wxT("--edit-headers")) {
+    if (2 >= app->argc)
+      wxMessageBox(Z("Missing file name after for the option '--edit-headers'."), Z("Missing file name"), wxOK | wxCENTER | wxICON_ERROR);
+    else {
+      header_editor_frame_c *window  = new header_editor_frame_c(mdlg);
+      window->Show();
+      window->open_file(wxFileName(app->argv[2]));
+    }
+
+    return;
+  }
+
+  wxString file = app->argv[1];
+  if (!wxFileExists(file) || wxDirExists(file))
+    wxMessageBox(wxString::Format(Z("The file '%s' does not exist."), file.c_str()), Z("Error loading settings"), wxOK | wxCENTER | wxICON_ERROR);
+  else {
+#ifdef SYS_WINDOWS
+    if ((file.Length() > 3) && (file.c_str()[1] != wxT(':')) && (file.c_str()[0] != wxT('\\')))
+      file = wxGetCwd() + wxT("\\") + file;
+#else
+    if ((file.Length() > 0) && (file.c_str()[0] != wxT('/')))
+      file = wxGetCwd() + wxT("/") + file;
+#endif
+
+    if (wxFileName(file).GetExt() == wxU("mmg"))
+      mdlg->load(file);
+    else
+      mdlg->input_page->add_file(file, false);
+  }
 }
 
 int
