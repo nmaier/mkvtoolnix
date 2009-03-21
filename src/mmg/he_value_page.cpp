@@ -29,6 +29,7 @@ he_value_page_c::he_value_page_c(wxTreebook *parent,
   : he_page_base_c(parent)
   , m_master(master)
   , m_callbacks(callbacks)
+  , m_sub_master_callbacks(NULL)
   , m_title(title)
   , m_description(description)
   , m_value_type(value_type)
@@ -46,6 +47,8 @@ he_value_page_c::~he_value_page_c() {
 
 void
 he_value_page_c::init() {
+  m_input = create_input_control();
+
   wxBoxSizer *siz = new wxBoxSizer(wxVERTICAL);
 
   siz->AddSpacer(5);
@@ -98,7 +101,6 @@ he_value_page_c::init() {
     siz_fg->Add(new wxStaticText(this, wxID_ANY, get_original_value_as_string()), 1, wxALIGN_TOP | wxGROW, 0);
   }
 
-  m_input = create_input_control();
   m_input->Enable(m_present);
 
   siz_fg->Add(new wxStaticText(this, wxID_ANY, value_label), 0, wxALIGN_CENTER_VERTICAL,          0);
@@ -153,16 +155,29 @@ he_value_page_c::modify_this() {
   if (!has_this_been_modified())
     return;
 
+  EbmlMaster *actual_master = NULL;
+  if (NULL != m_sub_master_callbacks) {
+    actual_master = static_cast<EbmlMaster *>(find_ebml_element_by_id(m_master, m_sub_master_callbacks->GlobalId));
+
+    if (NULL == actual_master) {
+      actual_master = static_cast<EbmlMaster *>(&m_sub_master_callbacks->Create());
+      m_master->PushElement(*actual_master);
+    }
+  }
+
+  if (NULL == actual_master)
+    actual_master = m_master;
+
   if (m_present && m_cb_add_or_remove->IsChecked()) {
     int i;
-    for (i = 0; m_master->ListSize() > i; ++i) {
-      if ((*m_master)[i]->Generic().GlobalId != m_callbacks.GlobalId)
+    for (i = 0; actual_master->ListSize() > i; ++i) {
+      if ((*actual_master)[i]->Generic().GlobalId != m_callbacks.GlobalId)
         continue;
 
-      EbmlElement *e = (*m_master)[i];
+      EbmlElement *e = (*actual_master)[i];
       delete e;
 
-      m_master->Remove(i);
+      actual_master->Remove(i);
 
       break;
     }
@@ -172,10 +187,19 @@ he_value_page_c::modify_this() {
 
   if (!m_present) {
     m_element = &m_callbacks.Create();
-    m_master->PushElement(*m_element);
+    actual_master->PushElement(*m_element);
   }
 
   copy_value_to_element();
+}
+
+void
+he_value_page_c::set_sub_master_callbacks(const EbmlCallbacks &callbacks) {
+  m_sub_master_callbacks = &callbacks;
+
+  EbmlMaster *sub_master = static_cast<EbmlMaster *>(find_ebml_element_by_id(m_master, m_sub_master_callbacks->GlobalId));
+  if (NULL != sub_master)
+    m_element = find_ebml_element_by_id(sub_master, m_callbacks.GlobalId);
 }
 
 IMPLEMENT_CLASS(he_value_page_c, he_page_base_c);

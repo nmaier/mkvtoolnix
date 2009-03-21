@@ -21,6 +21,7 @@
 #include <matroska/KaxInfoData.h>
 #include <matroska/KaxTracks.h>
 #include <matroska/KaxTrackEntryData.h>
+#include <matroska/KaxTrackVideo.h>
 
 #include "commonebml.h"
 #include "header_editor_frame.h"
@@ -262,6 +263,7 @@ header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
 
   m_e_tracks        = e;
   KaxTracks *tracks = static_cast<KaxTracks *>(e);
+  int track_type    = -1;
   int i;
   for (i = 0; tracks->ListSize() > i; ++i) {
     KaxTrackEntry *k_track_entry = dynamic_cast<KaxTrackEntry *>((*tracks)[i]);
@@ -278,7 +280,8 @@ header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
       track_number = uint64(*k_track_number);
 
     wxString title;
-    switch (uint64(*k_track_type)) {
+    track_type = uint64(*k_track_type);
+    switch (track_type) {
       case track_audio:
         title.Printf(Z("Audio track %u"), track_number);
         break;
@@ -350,6 +353,12 @@ header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
 
     child_page = new he_string_value_page_c(m_tb_tree, page, k_track_entry, KaxCodecName::ClassInfos, Z("Codec name"), Z("A human-readable string specifying the codec."));
     child_page->init();
+
+    if (track_video == track_type) {
+      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoDisplayWidth::ClassInfos, Z("Video display width"), Z("Width of the video frames to display."));
+      child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
+      child_page->init();
+    }
 
     m_tb_tree->ExpandNode(page->m_page_id);
   }

@@ -32,8 +32,6 @@ he_bit_value_page_c::he_bit_value_page_c(wxTreebook *parent,
   , m_original_value(128)
   , m_bit_length(bit_length)
 {
-  if (NULL != m_element)
-    m_original_value = bitvalue_c(*static_cast<EbmlBinary *>(m_element));
 }
 
 he_bit_value_page_c::~he_bit_value_page_c() {
@@ -41,6 +39,9 @@ he_bit_value_page_c::~he_bit_value_page_c() {
 
 wxControl *
 he_bit_value_page_c::create_input_control() {
+  if (NULL != m_element)
+    m_original_value = bitvalue_c(*static_cast<EbmlBinary *>(m_element));
+
   m_tc_text = new wxTextCtrl(this, wxID_ANY, get_original_value_as_string());
   return m_tc_text;
 }

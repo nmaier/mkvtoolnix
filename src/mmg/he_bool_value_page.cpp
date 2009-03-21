@@ -30,9 +30,6 @@ he_bool_value_page_c::he_bool_value_page_c(wxTreebook *parent,
   , m_cb_bool(NULL)
   , m_original_value(false)
 {
-  if (NULL != m_element)
-    m_original_value = uint64(*static_cast<EbmlUInteger *>(m_element)) > 0;
-
   m_values.Add(Z("no"));
   m_values.Add(Z("yes"));
 }
@@ -42,6 +39,9 @@ he_bool_value_page_c::~he_bool_value_page_c() {
 
 wxControl *
 he_bool_value_page_c::create_input_control() {
+  if (NULL != m_element)
+    m_original_value = uint64(*static_cast<EbmlUInteger *>(m_element)) > 0;
+
   m_cb_bool = new wxMTX_COMBOBOX_TYPE(this, wxID_ANY, m_values[m_original_value ? 1 : 0], wxDefaultPosition, wxDefaultSize, m_values, wxCB_DROPDOWN | wxCB_READONLY);
 
   return m_cb_bool;

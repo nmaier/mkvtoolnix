@@ -29,8 +29,6 @@ he_ascii_string_value_page_c::he_ascii_string_value_page_c(wxTreebook *parent,
   : he_value_page_c(parent, toplevel_page, master, callbacks, vt_ascii_string, title, description)
   , m_tc_text(NULL)
 {
-  if (NULL != m_element)
-    m_original_value = wxU(std::string(*static_cast<EbmlString *>(m_element)).c_str());
 }
 
 he_ascii_string_value_page_c::~he_ascii_string_value_page_c() {
@@ -38,6 +36,9 @@ he_ascii_string_value_page_c::~he_ascii_string_value_page_c() {
 
 wxControl *
 he_ascii_string_value_page_c::create_input_control() {
+  if (NULL != m_element)
+    m_original_value = wxU(std::string(*static_cast<EbmlString *>(m_element)).c_str());
+
   static const wxString s_valid_chars = wxT(" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
 
   wxArrayString includes;

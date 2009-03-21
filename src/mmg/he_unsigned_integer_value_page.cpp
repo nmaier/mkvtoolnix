@@ -30,8 +30,6 @@ he_unsigned_integer_value_page_c::he_unsigned_integer_value_page_c(wxTreebook *p
   , m_tc_text(NULL)
   , m_original_value(0)
 {
-  if (NULL != m_element)
-    m_original_value = uint64(*static_cast<EbmlUInteger *>(m_element));
 }
 
 he_unsigned_integer_value_page_c::~he_unsigned_integer_value_page_c() {
@@ -39,6 +37,9 @@ he_unsigned_integer_value_page_c::~he_unsigned_integer_value_page_c() {
 
 wxControl *
 he_unsigned_integer_value_page_c::create_input_control() {
+  if (NULL != m_element)
+    m_original_value = uint64(*static_cast<EbmlUInteger *>(m_element));
+
   m_tc_text = new wxTextCtrl(this, wxID_ANY, get_original_value_as_string());
   m_tc_text->SetValidator(wxTextValidator(wxFILTER_NUMERIC));
 

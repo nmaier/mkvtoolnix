@@ -35,6 +35,7 @@ public:
 public:
   EbmlMaster *m_master;
   const EbmlCallbacks &m_callbacks;
+  const EbmlCallbacks *m_sub_master_callbacks;
 
   wxString m_title, m_description;
 
@@ -70,6 +71,7 @@ public:
   virtual bool has_this_been_modified();
   virtual void modify_this();
   virtual bool validate_this();
+  virtual void set_sub_master_callbacks(const EbmlCallbacks &callbacks);
 };
 
 #endif // __HE_VALUE_PAGE_H
