@@ -69,7 +69,7 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
   m_file_menu->Append(ID_M_HE_FILE_QUIT,  Z("&Quit\tCtrl-Q"),  Z("Quit the header editor"));
 
   m_headers_menu = new wxMenu();
-  m_headers_menu->Append(ID_M_HE_HEADERS_EXPAND_ALL,   Z("&Expand all entries\tCtrl-E"),   Z("Epand all entries so that their sub-entries will be shown"));
+  m_headers_menu->Append(ID_M_HE_HEADERS_EXPAND_ALL,   Z("&Expand all entries\tCtrl-E"),   Z("Expand all entries so that their sub-entries will be shown"));
   m_headers_menu->Append(ID_M_HE_HEADERS_COLLAPSE_ALL, Z("&Collapse all entries\tCtrl-P"), Z("Collapse all entries so that none of their sub-entries will be shown"));
   m_headers_menu->AppendSeparator();
   m_headers_menu->Append(ID_M_HE_HEADERS_VALIDATE,     Z("&Validate\tCtrl-T"),             Z("Validates the content of all changeable headers"));
@@ -621,7 +621,7 @@ header_editor_frame_c::display_update_element_result(kax_analyzer_c::update_elem
       break;
 
     default:
-      wxMessageBox(Z("An unknown error occured. The file has not been modified."), Z("Internal program error"), wxOK | wxCENTER | wxICON_ERROR, this);
+      wxMessageBox(Z("An unknown error occured. The file has been modified."), Z("Internal program error"), wxOK | wxCENTER | wxICON_ERROR, this);
   }
 }
 

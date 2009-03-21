@@ -1939,7 +1939,7 @@ tab_chapters::display_update_element_result(kax_analyzer_c::update_element_resul
       break;
 
     default:
-      wxMessageBox(Z("An unknown error occured. The file has not been modified."), Z("Internal program error"), wxOK | wxCENTER | wxICON_ERROR, this);
+      wxMessageBox(Z("An unknown error occured. The file has been modified."), Z("Internal program error"), wxOK | wxCENTER | wxICON_ERROR, this);
   }
 }
 
