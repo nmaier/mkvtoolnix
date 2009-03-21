@@ -38,7 +38,7 @@ he_string_value_page_c::create_input_control() {
   if (NULL != m_element)
     m_original_value = UTFstring(*static_cast<EbmlUnicodeString *>(m_element)).c_str();
 
-  m_tc_text = new wxTextCtrl(this, wxID_ANY, m_original_value.Left(10));
+  m_tc_text = new wxTextCtrl(this, wxID_ANY, m_original_value);
   return m_tc_text;
 }
 
