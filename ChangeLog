@@ -1,3 +1,11 @@
+2009-03-21  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: bug fix: The "simple" chapter extraction mode (OGM
+	style chapter output) outputs strings converted to the system's
+	current charset by default now instead of always converting to
+	UTF-8. This can be overridden with the "--output-charset" command
+	line option. Fix for bug 359.
+
 2009-03-18  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: QuickTime audio tracks will be stored with

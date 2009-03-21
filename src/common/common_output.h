@@ -21,6 +21,7 @@
 
 extern bool MTX_DLL_API g_suppress_warnings;
 extern std::string MTX_DLL_API g_stdio_charset;
+extern int MTX_DLL_API g_cc_stdio;
 
 void MTX_DLL_API init_cc_stdio();
 void MTX_DLL_API set_cc_stdio(const std::string &charset);
