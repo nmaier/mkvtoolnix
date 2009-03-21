@@ -26,24 +26,24 @@
 #include "he_page_base.h"
 #include "kax_analyzer.h"
 
-#define ID_M_HE_FILE_OPEN            100000
-#define ID_M_HE_FILE_SAVE            100001
-#define ID_M_HE_FILE_QUIT            100002
-#define ID_M_HE_FILE_CLOSE           100003
-#define ID_M_HE_FILE_RELOAD          100004
-#define ID_M_HE_FILE_LOADLAST1       100090
-#define ID_M_HE_FILE_LOADLAST2       100091
-#define ID_M_HE_FILE_LOADLAST3       100092
-#define ID_M_HE_FILE_LOADLAST4       100093
+#define ID_M_HE_FILE_OPEN            20000
+#define ID_M_HE_FILE_SAVE            20001
+#define ID_M_HE_FILE_QUIT            20002
+#define ID_M_HE_FILE_CLOSE           20003
+#define ID_M_HE_FILE_RELOAD          20004
+#define ID_M_HE_FILE_LOADLAST1       20090
+#define ID_M_HE_FILE_LOADLAST2       20091
+#define ID_M_HE_FILE_LOADLAST3       20092
+#define ID_M_HE_FILE_LOADLAST4       20093
 
-#define ID_M_HE_HEADERS_EXPAND_ALL   100100
-#define ID_M_HE_HEADERS_COLLAPSE_ALL 100101
-#define ID_M_HE_HEADERS_VALIDATE     100102
+#define ID_M_HE_HEADERS_EXPAND_ALL   20100
+#define ID_M_HE_HEADERS_COLLAPSE_ALL 20101
+#define ID_M_HE_HEADERS_VALIDATE     20102
 
-#define ID_M_HE_HELP_HELP            100900
+#define ID_M_HE_HELP_HELP            20900
 
-#define ID_HE_CB_ADD_OR_REMOVE       110000
-#define ID_HE_B_RESET                110001
+#define ID_HE_CB_ADD_OR_REMOVE       21000
+#define ID_HE_B_RESET                21001
 
 class header_editor_frame_c: public wxFrame {
   DECLARE_CLASS(header_editor_frame_c);
