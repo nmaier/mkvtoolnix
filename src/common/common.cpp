@@ -1065,7 +1065,7 @@ parse_uint(const char *s,
 
 bool
 parse_uint(const char *s,
-           int &value) {
+           uint32_t &value) {
   uint64_t tmp;
   bool result;
 

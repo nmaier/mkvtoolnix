@@ -264,7 +264,7 @@ parse_int(const string &s,
   return parse_int(s.c_str(), value);
 }
 bool MTX_DLL_API parse_uint(const char *s, uint64_t &value);
-bool MTX_DLL_API parse_uint(const char *s, uint &value);
+bool MTX_DLL_API parse_uint(const char *s, uint32_t &value);
 inline bool
 parse_uint(const string &s,
           uint64_t &value) {
@@ -272,7 +272,7 @@ parse_uint(const string &s,
 }
 inline bool
 parse_uint(const string &s,
-          uint &value) {
+          uint32_t &value) {
   return parse_uint(s.c_str(), value);
 }
 string MTX_DLL_API to_string(int64_t i);

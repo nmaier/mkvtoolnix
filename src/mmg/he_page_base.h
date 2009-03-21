@@ -18,6 +18,7 @@
 
 #include <vector>
 
+#include <wx/panel.h>
 #include <wx/treebook.h>
 
 #include <ebml/EbmlElement.h>
