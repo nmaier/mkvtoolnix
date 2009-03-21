@@ -7,7 +7,7 @@ dnl
   AC_ARG_ENABLE([wxwidgets],
     AC_HELP_STRING([--enable-wxwidgets],[compile the wxWidgets version of the GUIs (yes)]))
 
-  wxw_min_ver=2.6.0
+  wxw_min_ver=2.8.0
   continue_wx_check=1
 
   if ! test '(' x"$enable_wxwidgets" = xyes -o x"$enable_wxwidgets" = x ')' -a '(' x"$enable_gui" = xyes -o x"$enable_gui" = x ')'; then
