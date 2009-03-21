@@ -29,6 +29,7 @@
 #include "he_bool_value_page.h"
 #include "he_empty_page.h"
 #include "he_float_value_page.h"
+#include "he_language_value_page.h"
 #include "he_string_value_page.h"
 #include "he_top_level_page.h"
 #include "he_unsigned_integer_value_page.h"
@@ -340,9 +341,9 @@ header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
     child_page = new he_string_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackName::ClassInfos, Z("Name"), Z("A human-readable track name."));
     child_page->init();
 
-    // child_page = new he_language_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackLanguage::ClassInfos, Z("Language"),
-    //                                           Z("Specifies the language of the track in the Matroska languages form."));
-    // child_page->init();
+    child_page = new he_language_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackLanguage::ClassInfos, Z("Language"),
+                                              Z("Specifies the language of the track in the Matroska languages form."));
+    child_page->init();
 
     child_page = new he_ascii_string_value_page_c(m_tb_tree, page, k_track_entry, KaxCodecID::ClassInfos, Z("Codec ID"), Z("An ID corresponding to the codec."));
     child_page->init();
