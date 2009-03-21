@@ -20,6 +20,7 @@
 #include <matroska/KaxInfo.h>
 #include <matroska/KaxInfoData.h>
 #include <matroska/KaxTracks.h>
+#include <matroska/KaxTrackAudio.h>
 #include <matroska/KaxTrackEntryData.h>
 #include <matroska/KaxTrackVideo.h>
 
@@ -355,8 +356,77 @@ header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
     child_page->init();
 
     if (track_video == track_type) {
-      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoDisplayWidth::ClassInfos, Z("Video display width"), Z("Width of the video frames to display."));
+      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoPixelWidth::ClassInfos,
+                                                        Z("Video pixel width"), Z("Width of the encoded video frames in pixels."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
+      child_page->init();
+
+      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoPixelHeight::ClassInfos,
+                                                        Z("Video pixel height"), Z("Height of the encoded video frames in pixels."));
+      child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
+      child_page->init();
+
+      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoDisplayWidth::ClassInfos,
+                                                        Z("Video display width"), Z("Width of the video frames to display."));
+      child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
+      child_page->init();
+
+      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoDisplayHeight::ClassInfos,
+                                                        Z("Video display height"), Z("Height of the video frames to display."));
+      child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
+      child_page->init();
+
+      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoDisplayUnit::ClassInfos,
+                                                        Z("Video display unit"), Z("Type of the unit for DisplayWidth/Height (0: pixels, 1: centimeters, 2: inches)."));
+      child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
+      child_page->init();
+
+      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoPixelCropLeft::ClassInfos,
+                                                        Z("Video crop left"), Z("The number of video pixels to remove on the left of the image."));
+      child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
+      child_page->init();
+
+      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoPixelCropTop::ClassInfos,
+                                                        Z("Video crop top"), Z("The number of video pixels to remove on the top of the image."));
+      child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
+      child_page->init();
+
+      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoPixelCropRight::ClassInfos,
+                                                        Z("Video crop right"), Z("The number of video pixels to remove on the right of the image."));
+      child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
+      child_page->init();
+
+      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoPixelCropBottom::ClassInfos,
+                                                        Z("Video crop bottom"), Z("The number of video pixels to remove on the bottom of the image."));
+      child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
+      child_page->init();
+
+      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoAspectRatio::ClassInfos, Z("Video aspect ratio type"),
+                                                        Z("Specify the possible modifications to the aspect ratio (0: free resizing, 1: keep aspect ratio, 2: fixed)."));
+      child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
+      child_page->init();
+
+      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoStereoMode::ClassInfos,
+                                                        Z("Video stereo mode"), Z("Stereo-3D video mode (0: mono, 1: right eye, 2: left eye, 3: both eyes)."));
+      child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
+      child_page->init();
+
+    } else if (track_audio == track_type) {
+      child_page = new he_float_value_page_c(m_tb_tree, page, k_track_entry, KaxAudioSamplingFreq::ClassInfos, Z("Audio sampling frequency"), Z("Sampling frequency in Hz."));
+      child_page->set_sub_master_callbacks(KaxTrackAudio::ClassInfos);
+      child_page->init();
+
+      child_page = new he_float_value_page_c(m_tb_tree, page, k_track_entry, KaxAudioOutputSamplingFreq::ClassInfos,
+                                             Z("Audio output sampling frequency"), Z("Real output sampling frequency in Hz."));
+      child_page->set_sub_master_callbacks(KaxTrackAudio::ClassInfos);
+      child_page->init();
+
+      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxAudioChannels::ClassInfos, Z("Audio channels"), Z("Numbers of channels in the track."));
+      child_page->set_sub_master_callbacks(KaxTrackAudio::ClassInfos);
+      child_page->init();
+
+      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxAudioBitDepth::ClassInfos, Z("Audio bit depth"), Z("Bits per sample, mostly used for PCM."));
+      child_page->set_sub_master_callbacks(KaxTrackAudio::ClassInfos);
       child_page->init();
     }
 
