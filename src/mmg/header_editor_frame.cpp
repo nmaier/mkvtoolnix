@@ -252,7 +252,7 @@ header_editor_frame_c::handle_segment_info(analyzer_data_c *data) {
                                        Z("A unique ID to identify the next chained segment (128 bits)."), 128);
   child_page->init();
 
-  m_tb_tree->ExpandNode(page->m_page_id);
+  // m_tb_tree->ExpandNode(page->m_page_id);
 }
 
 void
@@ -429,7 +429,7 @@ header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
       child_page->init();
     }
 
-    m_tb_tree->ExpandNode(page->m_page_id);
+    // m_tb_tree->ExpandNode(page->m_page_id);
   }
 }
 
