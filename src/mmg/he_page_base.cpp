@@ -22,6 +22,7 @@ he_page_base_c::he_page_base_c(header_editor_frame_c *parent)
   , m_page_id(0)
   , m_l1_element(NULL)
 {
+  Hide();
 }
 
 he_page_base_c::~he_page_base_c() {
