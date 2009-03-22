@@ -12,7 +12,6 @@
 */
 
 // TODO:
-// 1. Fix crash after removing mandatory elements.
 // 2. Add status bar.
 // 3. Add "recent files" to the file menu.
 // 4. Update translation.
@@ -346,7 +345,7 @@ header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
                                             "The player should select the one which language matches the user preference or the default + forced track."));
     child_page->init();
 
-    child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxTrackMinCache::ClassInfos, Z("Mininum cache"),
+    child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxTrackMinCache::ClassInfos, Z("Minimum cache"),
                                                       Z("The minimum number of frames a player should be able to cache during playback. "
                                                         "If set to 0, the reference pseudo-cache system is not used."));
     child_page->init();
