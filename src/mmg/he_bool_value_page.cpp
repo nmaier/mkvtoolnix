@@ -20,7 +20,7 @@
 
 using namespace libebml;
 
-he_bool_value_page_c::he_bool_value_page_c(wxTreebook *parent,
+he_bool_value_page_c::he_bool_value_page_c(header_editor_frame_c *parent,
                                            he_page_base_c *toplevel_page,
                                            EbmlMaster *master,
                                            const EbmlCallbacks &callbacks,

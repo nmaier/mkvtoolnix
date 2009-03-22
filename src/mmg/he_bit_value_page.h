@@ -25,7 +25,7 @@ public:
   int m_bit_length;
 
 public:
-  he_bit_value_page_c(wxTreebook *parent, he_page_base_c *toplevel_page, EbmlMaster *master, const EbmlCallbacks &callbacks, const wxString &title, const wxString &description, int bit_length);
+  he_bit_value_page_c(header_editor_frame_c *parent, he_page_base_c *toplevel_page, EbmlMaster *master, const EbmlCallbacks &callbacks, const wxString &title, const wxString &description, int bit_length);
   virtual ~he_bit_value_page_c();
 
   virtual wxControl *create_input_control();

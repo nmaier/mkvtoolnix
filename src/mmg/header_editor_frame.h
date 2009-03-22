@@ -21,7 +21,7 @@
 #include <wx/menu.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
-#include <wx/treebook.h>
+#include <wx/treectrl.h>
 
 #include "he_page_base.h"
 #include "kax_analyzer.h"
@@ -44,6 +44,7 @@
 
 #define ID_HE_CB_ADD_OR_REMOVE       21000
 #define ID_HE_B_RESET                21001
+#define ID_HE_TC_TREE                21002
 
 class header_editor_frame_c: public wxFrame {
   DECLARE_CLASS(header_editor_frame_c);
@@ -58,8 +59,10 @@ public:
   bool m_file_menu_sep;
 
   wxPanel *m_panel;
-  wxBoxSizer *m_bs_panel;
-  wxTreebook *m_tb_tree;
+  wxBoxSizer *m_bs_main, *m_bs_page;
+
+  wxTreeCtrl *m_tc_tree;
+  wxTreeItemId m_root_id;
 
   kax_analyzer_c *m_analyzer;
 
@@ -83,7 +86,16 @@ public:
 
   void on_help_help(wxCommandEvent &evt);
 
+  void on_tree_sel_changed(wxTreeEvent &evt);
+
   bool open_file(wxFileName file_name);
+
+  void append_page(he_page_base_c *page, const wxString &title);
+  void append_sub_page(he_page_base_c *page, const wxString &title, wxTreeItemId parent_id);
+
+  wxPanel *get_page_panel() {
+    return m_panel;
+  }
 
 protected:
   bool may_close();
@@ -98,10 +110,12 @@ protected:
 
   bool have_been_modified();
   void do_modifications();
-  int validate_pages();
+  wxTreeItemId validate_pages();
   bool validate();
 
   void display_update_element_result(kax_analyzer_c::update_element_result_e result);
+
+  he_page_base_c *find_page_for_item(wxTreeItemId id);
 };
 
 #endif // __HEADER_EDITOR_FRAME_H

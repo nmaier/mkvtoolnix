@@ -19,7 +19,7 @@
 #include "he_value_page.h"
 #include "wxcommon.h"
 
-he_value_page_c::he_value_page_c(wxTreebook *parent,
+he_value_page_c::he_value_page_c(header_editor_frame_c *parent,
                                  he_page_base_c *toplevel_page,
                                  EbmlMaster *master,
                                  const EbmlCallbacks &callbacks,
@@ -47,7 +47,9 @@ he_value_page_c::~he_value_page_c() {
 
 void
 he_value_page_c::init() {
-  m_input = create_input_control();
+  m_cb_add_or_remove = new wxCheckBox(this, ID_HE_CB_ADD_OR_REMOVE, wxEmptyString);
+  m_input            = create_input_control();
+  m_b_reset          = new wxButton(this, ID_HE_B_RESET, Z("&Reset"));
 
   wxBoxSizer *siz = new wxBoxSizer(wxVERTICAL);
 
@@ -82,18 +84,23 @@ he_value_page_c::init() {
   }
 
   wxString value_label;
+  wxStaticText *st_add_or_remove;
   if (NULL == m_element) {
-    m_present          = false;
-    m_cb_add_or_remove = new wxCheckBox(this, ID_HE_CB_ADD_OR_REMOVE, Z("This element is not currently present in the file. Add the element to the file"));
-    value_label        = Z("New value:");
+    m_present        = false;
+    st_add_or_remove = new wxStaticText(this, wxID_ANY, Z("This element is not currently present in the file. You can let the header editor add the element to the file."));
+    value_label      = Z("New value:");
+    m_cb_add_or_remove->SetLabel(Z("Add element"));
 
   } else {
-    m_present          = true;
-    m_cb_add_or_remove = new wxCheckBox(this, ID_HE_CB_ADD_OR_REMOVE, Z("This element is currently present in the file. Remove the element from the file"));
-    value_label        = Z("Current value:");
+    m_present        = true;
+    st_add_or_remove = new wxStaticText(this, wxID_ANY, Z("This element is currently present in the file. You can let the header editor remove the element from the file."));
+    value_label      = Z("Current value:");
+    m_cb_add_or_remove->SetLabel(Z("Remove element"));
   }
 
   siz_fg->Add(new wxStaticText(this, wxID_ANY, Z("Status:")), 0, wxALIGN_TOP, 0);
+  siz_fg->Add(st_add_or_remove,   1, wxALIGN_TOP | wxGROW, 0);
+  siz_fg->AddSpacer(0);
   siz_fg->Add(m_cb_add_or_remove, 1, wxALIGN_TOP | wxGROW, 0);
 
   if (m_present) {
@@ -112,7 +119,6 @@ he_value_page_c::init() {
 
   wxBoxSizer *siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->AddStretchSpacer();
-  m_b_reset = new wxButton(this, ID_HE_B_RESET, Z("&Reset"));
   siz_line->Add(m_b_reset, 0, wxGROW, 0);
 
   siz->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, 5);
@@ -120,7 +126,10 @@ he_value_page_c::init() {
 
   SetSizer(siz);
 
-  m_tree->AddSubPage(this, m_title);
+  if (NULL == m_toplevel_page)
+    m_parent->append_page(this, m_title);
+  else
+    m_parent->append_sub_page(this, m_title, m_toplevel_page->m_page_id);
 
   m_toplevel_page->m_children.push_back(this);
 }

@@ -13,12 +13,13 @@
 
 #include "os.h"
 
+#include "header_editor_frame.h"
 #include "he_page_base.h"
 
-he_page_base_c::he_page_base_c(wxTreebook *parent)
-  : wxPanel(parent)
-  , m_tree(parent)
-  , m_page_id(m_tree->GetTreeCtrl()->GetCount())
+he_page_base_c::he_page_base_c(header_editor_frame_c *parent)
+  : wxPanel(parent->get_page_panel(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL)
+  , m_parent(parent)
+  , m_page_id(0)
   , m_l1_element(NULL)
 {
 }
@@ -54,7 +55,7 @@ he_page_base_c::do_modifications() {
   }
 }
 
-int
+wxTreeItemId
 he_page_base_c::validate() {
   if (!validate_this())
     return m_page_id;
@@ -62,11 +63,11 @@ he_page_base_c::validate() {
   std::vector<he_page_base_c *>::iterator it = m_children.begin();
 
   while (it != m_children.end()) {
-    int result = (*it)->validate();
-    if (-1 != result)
+    wxTreeItemId result = (*it)->validate();
+    if (result.IsOk())
       return result;
     ++it;
   }
 
-  return -1;
+  return wxTreeItemId();
 }

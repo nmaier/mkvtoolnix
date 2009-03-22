@@ -23,7 +23,7 @@ public:
   wxString m_title, m_content;
 
 public:
-  he_empty_page_c(wxTreebook *parent, const wxString &title, const wxString &content);
+  he_empty_page_c(header_editor_frame_c *parent, const wxString &title, const wxString &content);
   virtual ~he_empty_page_c();
 
   virtual bool has_this_been_modified();

@@ -19,7 +19,7 @@
 
 #include "he_empty_page.h"
 
-he_empty_page_c::he_empty_page_c(wxTreebook *parent,
+he_empty_page_c::he_empty_page_c(header_editor_frame_c *parent,
                                  const wxString &title,
                                  const wxString &content)
   : he_page_base_c(parent)

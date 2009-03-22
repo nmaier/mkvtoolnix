@@ -17,16 +17,19 @@
 #include <wx/statline.h>
 #include <wx/stattext.h>
 
+#include "header_editor_frame.h"
 #include "he_top_level_page.h"
 #include "segmentinfo.h"
 #include "wxcommon.h"
 
-he_top_level_page_c::he_top_level_page_c(wxTreebook *parent,
+he_top_level_page_c::he_top_level_page_c(header_editor_frame_c *parent,
                                          const wxString &title,
                                          EbmlElement *l1_element)
   : he_empty_page_c(parent, title, wxEmptyString)
 {
   m_l1_element = l1_element;
+
+  parent->append_page(this, title);
 }
 
 he_top_level_page_c::~he_top_level_page_c() {

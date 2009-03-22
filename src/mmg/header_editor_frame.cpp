@@ -11,6 +11,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+// TODO:
+// 1. Fix crash after removing mandatory elements.
+// 2. Add status bar.
+// 3. Add "recent files" to the file menu.
+// 4. Update translation.
+
 #include "os.h"
 
 #include <wx/button.h>
@@ -40,24 +46,32 @@
 #include "wxcommon.h"
 
 header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
-  : wxFrame(parent, wxID_ANY, Z("Header editor"), wxDefaultPosition, wxSize(800, 600))
+  : wxFrame(parent, wxID_ANY, Z("Header editor"), wxDefaultPosition, wxSize(800, 600), wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL)
   , m_file_menu(NULL)
   , m_file_menu_sep(false)
   , m_panel(NULL)
-  , m_bs_panel(NULL)
-  , m_tb_tree(NULL)
+  , m_bs_main(NULL)
+  , m_bs_page(NULL)
   , m_analyzer(NULL)
   , m_e_segment_info(NULL)
   , m_e_tracks(NULL)
 {
-  wxPanel *panel = new wxPanel(this);
+  m_tc_tree = new wxTreeCtrl(this, ID_HE_TC_TREE, wxDefaultPosition, wxDefaultSize, wxBORDER_SUNKEN | wxTR_DEFAULT_STYLE | wxTR_HIDE_ROOT | wxTR_SINGLE); //| wxTAB_TRAVERSAL);
+  m_root_id = m_tc_tree->AddRoot(wxEmptyString);
 
-  m_tb_tree = new wxTreebook(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNB_LEFT);
+  m_tc_tree->SetMinSize(wxSize(250, -1));
 
-  m_bs_panel = new wxBoxSizer(wxVERTICAL);
-  m_bs_panel->Add(m_tb_tree, 1, wxGROW | wxALL, 5);
+  m_panel   = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE);
+  m_bs_page = new wxBoxSizer(wxHORIZONTAL);
+  m_panel->SetSizer(m_bs_page);
 
-  panel->SetSizer(m_bs_panel);
+  m_bs_main = new wxBoxSizer(wxHORIZONTAL);
+  m_bs_main->Add(m_tc_tree, 2, wxGROW | wxALL, 5);
+  m_bs_main->Add(m_panel,   3, wxGROW | wxALL, 5);
+
+  SetSizer(m_bs_main);
+
+  SetMinSize(wxSize(600, 400));
 
   clear_pages();
 
@@ -114,41 +128,45 @@ header_editor_frame_c::do_modifications() {
   }
 }
 
-int
+wxTreeItemId
 header_editor_frame_c::validate_pages() {
   std::vector<he_page_base_c *>::iterator it = m_pages.begin();
   while (it != m_pages.end()) {
-    int result = (*it)->validate();
-    if (-1 != result)
+    wxTreeItemId result = (*it)->validate();
+    if (result.IsOk())
       return result;
 
     ++it;
   }
 
-  return -1;
+  return wxTreeItemId();
 }
 
 void
 header_editor_frame_c::clear_pages() {
-  m_bs_panel->Hide(m_tb_tree);
+  for (std::vector<he_page_base_c *>::iterator it = m_pages.begin(); it != m_pages.end(); ++it)
+    (*it)->Hide();
 
-  m_tb_tree->DeleteAllPages();
+  m_bs_main->Hide(m_tc_tree);
+
+  m_tc_tree->DeleteChildren(m_root_id);
   m_pages.clear();
 
-  he_empty_page_c *page = new he_empty_page_c(m_tb_tree, Z("No file loaded"), Z("No file has been loaded yet. You can open a file by selecting 'Open' from the 'File' menu."));
+  he_empty_page_c *page = new he_empty_page_c(this, Z("No file loaded"), Z("No file has been loaded yet. You can open a file by selecting 'Open' from the 'File' menu."));
 
-  m_tb_tree->AddPage(page, Z("No file loaded"));
+  append_page(page, Z("No file loaded"));
+  m_tc_tree->SelectItem(page->m_page_id);
 
-  m_bs_panel->Show(m_tb_tree);
-  m_bs_panel->Layout();
+  m_bs_main->Show(m_tc_tree);
+  m_bs_main->Layout();
 }
 
 void
 header_editor_frame_c::on_file_open(wxCommandEvent &evt) {
-  // wxString home;
-  // wxGetEnv(wxT("HOME"), &home);
-  // open_file(wxFileName(wxString::Format(wxT("%s/prog/video/mkvtoolnix/data/muh.mkv"), home.c_str())));
-  // return;
+  wxString home;
+  wxGetEnv(wxT("HOME"), &home);
+  open_file(wxFileName(wxString::Format(wxT("%s/prog/video/mkvtoolnix/data/muh.mkv"), home.c_str())));
+  return;
 
   wxFileDialog dlg(this, Z("Open a Matroska file"), last_open_dir, wxEmptyString, wxString::Format(Z("Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|%s"), ALLFILES.c_str()), wxFD_OPEN);
   if (dlg.ShowModal() != wxID_OK)
@@ -187,9 +205,12 @@ header_editor_frame_c::open_file(wxFileName file_name) {
 
   enable_menu_entries();
 
-  m_bs_panel->Hide(m_tb_tree);
+  m_bs_main->Hide(m_tc_tree);
 
-  m_tb_tree->DeleteAllPages();
+  for (std::vector<he_page_base_c *>::iterator it = m_pages.begin(); it != m_pages.end(); ++it)
+    (*it)->Hide();
+
+  m_tc_tree->DeleteChildren(m_root_id);
   m_pages.clear();
 
   int i;
@@ -209,8 +230,8 @@ header_editor_frame_c::open_file(wxFileName file_name) {
     }
   }
 
-  m_bs_panel->Show(m_tb_tree);
-  m_bs_panel->Layout();
+  m_bs_main->Show(m_tc_tree);
+  m_bs_main->Layout();
 
   return true;
 }
@@ -221,39 +242,37 @@ header_editor_frame_c::handle_segment_info(analyzer_data_c *data) {
   if (NULL == e)
     return;
 
-  he_top_level_page_c *page = new he_top_level_page_c(m_tb_tree, Z("Segment information"), e);
-  m_tb_tree->AddPage(page, Z("Segment information"));
-  m_pages.push_back(page);
+  he_top_level_page_c *page = new he_top_level_page_c(this, Z("Segment information"), e);
 
   m_e_segment_info = e;
   KaxInfo *info    = static_cast<KaxInfo *>(e);
   he_value_page_c *child_page;
 
-  child_page = new he_string_value_page_c(m_tb_tree, page, info, KaxTitle::ClassInfos, Z("Title"), Z("The title for the whole movie."));
+  child_page = new he_string_value_page_c(this, page, info, KaxTitle::ClassInfos, Z("Title"), Z("The title for the whole movie."));
   child_page->init();
 
-  child_page = new he_string_value_page_c(m_tb_tree, page, info, KaxSegmentFilename::ClassInfos, Z("Segment filename"), Z("The file name for this segment."));
+  child_page = new he_string_value_page_c(this, page, info, KaxSegmentFilename::ClassInfos, Z("Segment filename"), Z("The file name for this segment."));
   child_page->init();
 
-  child_page = new he_string_value_page_c(m_tb_tree, page, info, KaxPrevFilename::ClassInfos, Z("Previous filename"), Z("An escaped filename corresponding to the previous segment."));
+  child_page = new he_string_value_page_c(this, page, info, KaxPrevFilename::ClassInfos, Z("Previous filename"), Z("An escaped filename corresponding to the previous segment."));
   child_page->init();
 
-  child_page = new he_string_value_page_c(m_tb_tree, page, info, KaxNextFilename::ClassInfos, Z("Next filename"), Z("An escaped filename corresponding to the next segment."));
+  child_page = new he_string_value_page_c(this, page, info, KaxNextFilename::ClassInfos, Z("Next filename"), Z("An escaped filename corresponding to the next segment."));
   child_page->init();
 
-  child_page = new he_bit_value_page_c(m_tb_tree, page, info, KaxSegmentUID::ClassInfos, Z("Segment unique ID"),
+  child_page = new he_bit_value_page_c(this, page, info, KaxSegmentUID::ClassInfos, Z("Segment unique ID"),
                                        Z("A randomly generated unique ID to identify the current segment between many others (128 bits)."), 128);
   child_page->init();
 
-  child_page = new he_bit_value_page_c(m_tb_tree, page, info, KaxPrevUID::ClassInfos, Z("Previous segment's unique ID"),
+  child_page = new he_bit_value_page_c(this, page, info, KaxPrevUID::ClassInfos, Z("Previous segment's unique ID"),
                                        Z("A unique ID to identify the previous chained segment (128 bits)."), 128);
   child_page->init();
 
-  child_page = new he_bit_value_page_c(m_tb_tree, page, info, KaxNextUID::ClassInfos, Z("Next segment's unique ID"),
+  child_page = new he_bit_value_page_c(this, page, info, KaxNextUID::ClassInfos, Z("Next segment's unique ID"),
                                        Z("A unique ID to identify the next chained segment (128 bits)."), 128);
   child_page->init();
 
-  // m_tb_tree->ExpandNode(page->m_page_id);
+  // m_tc_tree->ExpandAllChildren(page->m_page_id);
 }
 
 void
@@ -296,141 +315,139 @@ header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
         continue;
     }
 
-    he_top_level_page_c *page = new he_top_level_page_c(m_tb_tree, title, tracks);
-    m_tb_tree->AddPage(page, title);
-    m_pages.push_back(page);
+    he_top_level_page_c *page = new he_top_level_page_c(this, title, tracks);
 
     he_value_page_c *child_page;
 
-    child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackNumber::ClassInfos, Z("Track number"),
+    child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxTrackNumber::ClassInfos, Z("Track number"),
                                                       Z("The track number as used in the Block Header."));
     child_page->init();
 
-    child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackUID::ClassInfos, Z("Track UID"),
+    child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxTrackUID::ClassInfos, Z("Track UID"),
                                                       Z("A unique ID to identify the Track. This should be kept the same when making a direct stream copy of the Track to another file."));
     child_page->init();
 
-    child_page = new he_bool_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackFlagDefault::ClassInfos, Z("'Default track' flag"),
+    child_page = new he_bool_value_page_c(this, page, k_track_entry, KaxTrackFlagDefault::ClassInfos, Z("'Default track' flag"),
                                           Z("Set if that track (audio, video or subs) SHOULD be used if no language found matches the user preference."));
     child_page->init();
 
-    child_page = new he_bool_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackFlagEnabled::ClassInfos, Z("'Track enabled' flag"), Z("Set if the track is used."));
+    child_page = new he_bool_value_page_c(this, page, k_track_entry, KaxTrackFlagEnabled::ClassInfos, Z("'Track enabled' flag"), Z("Set if the track is used."));
     child_page->init();
 
-    child_page = new he_bool_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackFlagForced::ClassInfos, Z("'Forced display' flag"),
+    child_page = new he_bool_value_page_c(this, page, k_track_entry, KaxTrackFlagForced::ClassInfos, Z("'Forced display' flag"),
                                           Z("Set if that track MUST be used during playback. "
                                             "There can be many forced track for a kind (audio, video or subs). "
                                             "The player should select the one which language matches the user preference or the default + forced track."));
     child_page->init();
 
-    child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackMinCache::ClassInfos, Z("Mininum cache"),
+    child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxTrackMinCache::ClassInfos, Z("Mininum cache"),
                                                       Z("The minimum number of frames a player should be able to cache during playback. "
                                                         "If set to 0, the reference pseudo-cache system is not used."));
     child_page->init();
 
-    child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackMaxCache::ClassInfos, Z("Maximum cache"),
+    child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxTrackMaxCache::ClassInfos, Z("Maximum cache"),
                                                       Z("The maximum number of frames a player should be able to cache during playback. "
                                                         "If set to 0, the reference pseudo-cache system is not used."));
     child_page->init();
 
-    child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackDefaultDuration::ClassInfos, Z("Default duration"),
+    child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxTrackDefaultDuration::ClassInfos, Z("Default duration"),
                                                       Z("Number of nanoseconds (not scaled) per frame."));
     child_page->init();
 
-    child_page = new he_float_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackTimecodeScale::ClassInfos, Z("Timecode scaling"),
+    child_page = new he_float_value_page_c(this, page, k_track_entry, KaxTrackTimecodeScale::ClassInfos, Z("Timecode scaling"),
                                            Z("The scale to apply on this track to work at normal speed in relation with other tracks "
                                              "(mostly used to adjust video speed when the audio length differs)."));
     child_page->init();
 
-    child_page = new he_string_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackName::ClassInfos, Z("Name"), Z("A human-readable track name."));
+    child_page = new he_string_value_page_c(this, page, k_track_entry, KaxTrackName::ClassInfos, Z("Name"), Z("A human-readable track name."));
     child_page->init();
 
-    child_page = new he_language_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackLanguage::ClassInfos, Z("Language"),
+    child_page = new he_language_value_page_c(this, page, k_track_entry, KaxTrackLanguage::ClassInfos, Z("Language"),
                                               Z("Specifies the language of the track in the Matroska languages form."));
     child_page->init();
 
-    child_page = new he_ascii_string_value_page_c(m_tb_tree, page, k_track_entry, KaxCodecID::ClassInfos, Z("Codec ID"), Z("An ID corresponding to the codec."));
+    child_page = new he_ascii_string_value_page_c(this, page, k_track_entry, KaxCodecID::ClassInfos, Z("Codec ID"), Z("An ID corresponding to the codec."));
     child_page->init();
 
-    child_page = new he_string_value_page_c(m_tb_tree, page, k_track_entry, KaxCodecName::ClassInfos, Z("Codec name"), Z("A human-readable string specifying the codec."));
+    child_page = new he_string_value_page_c(this, page, k_track_entry, KaxCodecName::ClassInfos, Z("Codec name"), Z("A human-readable string specifying the codec."));
     child_page->init();
 
     if (track_video == track_type) {
-      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoPixelWidth::ClassInfos,
+      child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoPixelWidth::ClassInfos,
                                                         Z("Video pixel width"), Z("Width of the encoded video frames in pixels."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 
-      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoPixelHeight::ClassInfos,
+      child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoPixelHeight::ClassInfos,
                                                         Z("Video pixel height"), Z("Height of the encoded video frames in pixels."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 
-      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoDisplayWidth::ClassInfos,
+      child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoDisplayWidth::ClassInfos,
                                                         Z("Video display width"), Z("Width of the video frames to display."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 
-      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoDisplayHeight::ClassInfos,
+      child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoDisplayHeight::ClassInfos,
                                                         Z("Video display height"), Z("Height of the video frames to display."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 
-      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoDisplayUnit::ClassInfos,
+      child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoDisplayUnit::ClassInfos,
                                                         Z("Video display unit"), Z("Type of the unit for DisplayWidth/Height (0: pixels, 1: centimeters, 2: inches)."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 
-      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoPixelCropLeft::ClassInfos,
+      child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoPixelCropLeft::ClassInfos,
                                                         Z("Video crop left"), Z("The number of video pixels to remove on the left of the image."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 
-      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoPixelCropTop::ClassInfos,
+      child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoPixelCropTop::ClassInfos,
                                                         Z("Video crop top"), Z("The number of video pixels to remove on the top of the image."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 
-      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoPixelCropRight::ClassInfos,
+      child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoPixelCropRight::ClassInfos,
                                                         Z("Video crop right"), Z("The number of video pixels to remove on the right of the image."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 
-      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoPixelCropBottom::ClassInfos,
+      child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoPixelCropBottom::ClassInfos,
                                                         Z("Video crop bottom"), Z("The number of video pixels to remove on the bottom of the image."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 
-      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoAspectRatio::ClassInfos, Z("Video aspect ratio type"),
+      child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoAspectRatio::ClassInfos, Z("Video aspect ratio type"),
                                                         Z("Specify the possible modifications to the aspect ratio (0: free resizing, 1: keep aspect ratio, 2: fixed)."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 
-      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxVideoStereoMode::ClassInfos,
+      child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoStereoMode::ClassInfos,
                                                         Z("Video stereo mode"), Z("Stereo-3D video mode (0: mono, 1: right eye, 2: left eye, 3: both eyes)."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 
     } else if (track_audio == track_type) {
-      child_page = new he_float_value_page_c(m_tb_tree, page, k_track_entry, KaxAudioSamplingFreq::ClassInfos, Z("Audio sampling frequency"), Z("Sampling frequency in Hz."));
+      child_page = new he_float_value_page_c(this, page, k_track_entry, KaxAudioSamplingFreq::ClassInfos, Z("Audio sampling frequency"), Z("Sampling frequency in Hz."));
       child_page->set_sub_master_callbacks(KaxTrackAudio::ClassInfos);
       child_page->init();
 
-      child_page = new he_float_value_page_c(m_tb_tree, page, k_track_entry, KaxAudioOutputSamplingFreq::ClassInfos,
+      child_page = new he_float_value_page_c(this, page, k_track_entry, KaxAudioOutputSamplingFreq::ClassInfos,
                                              Z("Audio output sampling frequency"), Z("Real output sampling frequency in Hz."));
       child_page->set_sub_master_callbacks(KaxTrackAudio::ClassInfos);
       child_page->init();
 
-      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxAudioChannels::ClassInfos, Z("Audio channels"), Z("Numbers of channels in the track."));
+      child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxAudioChannels::ClassInfos, Z("Audio channels"), Z("Numbers of channels in the track."));
       child_page->set_sub_master_callbacks(KaxTrackAudio::ClassInfos);
       child_page->init();
 
-      child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxAudioBitDepth::ClassInfos, Z("Audio bit depth"), Z("Bits per sample, mostly used for PCM."));
+      child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxAudioBitDepth::ClassInfos, Z("Audio bit depth"), Z("Bits per sample, mostly used for PCM."));
       child_page->set_sub_master_callbacks(KaxTrackAudio::ClassInfos);
       child_page->init();
     }
 
-    // m_tb_tree->ExpandNode(page->m_page_id);
+    // m_tc_tree->ExpandAllChildren(page->m_page_id);
   }
 }
 
@@ -450,10 +467,10 @@ header_editor_frame_c::on_file_save(wxCommandEvent &evt) {
     return;
   }
 
-  int page_id = validate_pages();
+  wxTreeItemId page_id = validate_pages();
 
-  if (-1 != page_id) {
-    m_tb_tree->SetSelection(page_id);
+  if (page_id.IsOk()) {
+    m_tc_tree->SelectItem(page_id);
     wxMessageBox(Z("There were errors in the header values preventing the headers from being saved. The first error has been selected."), Z("Header validation"), wxOK | wxICON_ERROR, this);
     return;
   }
@@ -524,20 +541,16 @@ header_editor_frame_c::on_file_quit(wxCommandEvent &evt) {
 
 void
 header_editor_frame_c::on_headers_expand_all(wxCommandEvent &evt) {
-  m_tb_tree->Freeze();
-  int i;
-  for (i = 0; m_tb_tree->GetTreeCtrl()->GetCount() > i; ++i)
-    m_tb_tree->ExpandNode(i);
-  m_tb_tree->Thaw();
+  m_tc_tree->Freeze();
+  m_tc_tree->ExpandAllChildren(m_root_id);
+  m_tc_tree->Thaw();
 }
 
 void
 header_editor_frame_c::on_headers_collapse_all(wxCommandEvent &evt) {
-  m_tb_tree->Freeze();
-  int i;
-  for (i = 0; m_tb_tree->GetTreeCtrl()->GetCount() > i; ++i)
-    m_tb_tree->CollapseNode(i);
-  m_tb_tree->Thaw();
+  m_tc_tree->Freeze();
+  m_tc_tree->CollapseAllChildren(m_root_id);
+  m_tc_tree->Thaw();
 }
 
 void
@@ -547,14 +560,14 @@ header_editor_frame_c::on_headers_validate(wxCommandEvent &evt) {
 
 bool
 header_editor_frame_c::validate() {
-  int page_id = validate_pages();
+  wxTreeItemId page_id = validate_pages();
 
-  if (-1 == page_id) {
+  if (page_id.IsOk()) {
     wxMessageBox(Z("All header values are OK."), Z("Header validation"), wxOK | wxICON_INFORMATION, this);
     return true;
   }
 
-  m_tb_tree->SetSelection(page_id);
+  m_tc_tree->SelectItem(page_id);
   wxMessageBox(Z("There were errors in the header values preventing the headers from being saved. The first error has been selected."), Z("Header validation"), wxOK | wxICON_ERROR, this);
 
   return false;
@@ -627,8 +640,58 @@ header_editor_frame_c::display_update_element_result(kax_analyzer_c::update_elem
   }
 }
 
+void
+header_editor_frame_c::append_sub_page(he_page_base_c *page,
+                                       const wxString &title,
+                                       wxTreeItemId parent_id) {
+  wxTreeItemId id = m_tc_tree->AppendItem(parent_id, title);
+  page->m_page_id = id;
+  m_pages.push_back(page);
+
+  page->Hide();
+}
+
+void
+header_editor_frame_c::append_page(he_page_base_c *page,
+                                   const wxString &title) {
+  append_sub_page(page, title, m_root_id);
+}
+
+he_page_base_c *
+header_editor_frame_c::find_page_for_item(wxTreeItemId id) {
+  for (std::vector<he_page_base_c *>::iterator it = m_pages.begin(); it != m_pages.end(); ++it)
+    if ((*it)->m_page_id == id)
+      return *it;
+
+  return NULL;
+}
+
+void
+header_editor_frame_c::on_tree_sel_changed(wxTreeEvent &evt) {
+  if (evt.GetOldItem().IsOk()) {
+    he_page_base_c *page = find_page_for_item(evt.GetOldItem());
+    if (NULL != page)
+      page->Hide();
+  }
+
+  if (!evt.GetItem().IsOk())
+    return;
+
+  he_page_base_c *page = find_page_for_item(evt.GetItem());
+
+  if (!page)
+    return;
+
+  page->Show();
+
+  m_bs_page->Clear();
+  m_bs_page->Add(page, 1, wxGROW);
+  m_bs_page->Layout();
+}
+
 IMPLEMENT_CLASS(header_editor_frame_c, wxFrame);
 BEGIN_EVENT_TABLE(header_editor_frame_c, wxFrame)
+  EVT_TREE_SEL_CHANGED(ID_HE_TC_TREE,       header_editor_frame_c::on_tree_sel_changed)
   EVT_MENU(ID_M_HE_FILE_OPEN,               header_editor_frame_c::on_file_open)
   EVT_MENU(ID_M_HE_FILE_SAVE,               header_editor_frame_c::on_file_save)
   EVT_MENU(ID_M_HE_FILE_RELOAD,             header_editor_frame_c::on_file_reload)
