@@ -49,29 +49,29 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
   : wxFrame(parent, wxID_ANY, Z("Header editor"), wxDefaultPosition, wxSize(800, 600), wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL)
   , m_file_menu(NULL)
   , m_file_menu_sep(false)
-  , m_panel(NULL)
+  , m_page_panel(NULL)
   , m_bs_main(NULL)
   , m_bs_page(NULL)
   , m_analyzer(NULL)
   , m_e_segment_info(NULL)
   , m_e_tracks(NULL)
 {
-  wxPanel *panel = new wxPanel(this);
+  wxPanel *frame_panel = new wxPanel(this);
 
-  m_tc_tree = new wxTreeCtrl(panel, ID_HE_TC_TREE, wxDefaultPosition, wxDefaultSize, wxBORDER_SUNKEN | wxTR_DEFAULT_STYLE | wxTR_HIDE_ROOT | wxTR_SINGLE); //| wxTAB_TRAVERSAL);
+  m_tc_tree = new wxTreeCtrl(frame_panel, ID_HE_TC_TREE, wxDefaultPosition, wxDefaultSize, wxBORDER_SUNKEN | wxTR_DEFAULT_STYLE | wxTR_HIDE_ROOT | wxTR_SINGLE); //| wxTAB_TRAVERSAL);
   m_root_id = m_tc_tree->AddRoot(wxEmptyString);
 
   m_tc_tree->SetMinSize(wxSize(250, -1));
 
-  m_panel   = new wxPanel(panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE);
-  m_bs_page = new wxBoxSizer(wxHORIZONTAL);
-  m_panel->SetSizer(m_bs_page);
+  m_page_panel = new wxPanel(frame_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE);
+  m_bs_page    = new wxBoxSizer(wxHORIZONTAL);
+  m_page_panel->SetSizer(m_bs_page);
 
   m_bs_main = new wxBoxSizer(wxHORIZONTAL);
-  m_bs_main->Add(m_tc_tree, 2, wxGROW | wxALL, 5);
-  m_bs_main->Add(m_panel,   3, wxGROW | wxALL, 5);
+  m_bs_main->Add(m_tc_tree,   2, wxGROW | wxALL, 5);
+  m_bs_main->Add(m_page_panel,3, wxGROW | wxALL, 5);
 
-  panel->SetSizer(m_bs_main);
+  frame_panel->SetSizer(m_bs_main);
 
   SetMinSize(wxSize(600, 400));
 

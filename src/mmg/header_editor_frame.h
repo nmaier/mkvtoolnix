@@ -58,7 +58,7 @@ public:
   wxMenu *m_file_menu, *m_headers_menu;
   bool m_file_menu_sep;
 
-  wxPanel *m_panel;
+  wxPanel *m_page_panel;
   wxBoxSizer *m_bs_main, *m_bs_page;
 
   wxTreeCtrl *m_tc_tree;
@@ -94,7 +94,7 @@ public:
   void append_sub_page(he_page_base_c *page, const wxString &title, wxTreeItemId parent_id);
 
   wxPanel *get_page_panel() {
-    return m_panel;
+    return m_page_panel;
   }
 
 protected:
