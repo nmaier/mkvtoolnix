@@ -568,7 +568,7 @@ bool
 header_editor_frame_c::validate() {
   wxTreeItemId page_id = validate_pages();
 
-  if (page_id.IsOk()) {
+  if (!page_id.IsOk()) {
     wxMessageBox(Z("All header values are OK."), Z("Header validation"), wxOK | wxICON_INFORMATION, this);
     return true;
   }
