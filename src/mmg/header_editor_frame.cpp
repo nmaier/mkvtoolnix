@@ -672,25 +672,33 @@ header_editor_frame_c::find_page_for_item(wxTreeItemId id) {
 
 void
 header_editor_frame_c::on_tree_sel_changed(wxTreeEvent &evt) {
+  m_page_panel->Freeze();
+
   if (evt.GetOldItem().IsOk()) {
     he_page_base_c *page = find_page_for_item(evt.GetOldItem());
     if (NULL != page)
       page->Hide();
   }
 
-  if (!evt.GetItem().IsOk())
+  if (!evt.GetItem().IsOk()) {
+    m_page_panel->Thaw();
     return;
+  }
 
   he_page_base_c *page = find_page_for_item(evt.GetItem());
 
-  if (!page)
+  if (!page) {
+    m_page_panel->Thaw();
     return;
+  }
 
   page->Show();
 
   m_bs_page->Clear();
   m_bs_page->Add(page, 1, wxGROW);
   m_bs_page->Layout();
+
+  m_page_panel->Thaw();
 }
 
 IMPLEMENT_CLASS(header_editor_frame_c, wxFrame);
