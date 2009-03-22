@@ -21,6 +21,8 @@
 #include <wx/menu.h>
 #include <wx/panel.h>
 #include <wx/sizer.h>
+#include <wx/statusbr.h>
+#include <wx/timer.h>
 #include <wx/treectrl.h>
 
 #include "he_page_base.h"
@@ -45,6 +47,7 @@
 #define ID_HE_CB_ADD_OR_REMOVE       21000
 #define ID_HE_B_RESET                21001
 #define ID_HE_TC_TREE                21002
+#define ID_T_HE_STATUS_BAR           21003
 
 class header_editor_frame_c: public wxFrame {
   DECLARE_CLASS(header_editor_frame_c);
@@ -57,6 +60,8 @@ public:
 
   wxMenu *m_file_menu, *m_headers_menu;
   bool m_file_menu_sep;
+  wxStatusBar *m_status_bar;
+  wxTimer m_status_bar_timer;
 
   wxPanel *m_page_panel;
   wxBoxSizer *m_bs_main, *m_bs_page;
@@ -88,6 +93,8 @@ public:
 
   void on_tree_sel_changed(wxTreeEvent &evt);
 
+  void on_status_bar_timer(wxTimerEvent &evt);
+
   bool open_file(wxFileName file_name);
 
   void append_page(he_page_base_c *page, const wxString &title);
@@ -116,6 +123,8 @@ protected:
   void display_update_element_result(kax_analyzer_c::update_element_result_e result);
 
   he_page_base_c *find_page_for_item(wxTreeItemId id);
+
+  void set_status_bar(const wxString &text);
 };
 
 #endif // __HEADER_EDITOR_FRAME_H

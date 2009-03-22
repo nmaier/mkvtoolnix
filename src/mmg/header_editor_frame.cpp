@@ -12,9 +12,7 @@
 */
 
 // TODO:
-// 2. Add status bar.
-// 3. Add "recent files" to the file menu.
-// 4. Update translation.
+// * Add "recent files" to the file menu.
 
 #include "os.h"
 
@@ -100,6 +98,13 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
   menu_bar->Append(m_headers_menu, Z("H&eaders"));
   menu_bar->Append(help_menu,      Z("&Help"));
   SetMenuBar(menu_bar);
+
+  m_status_bar = new wxStatusBar(this);
+  SetStatusBar(m_status_bar);
+
+  m_status_bar_timer.SetOwner(this, ID_T_HE_STATUS_BAR);
+
+  set_status_bar(Z("Header editor ready."));
 }
 
 header_editor_frame_c::~header_editor_frame_c() {
@@ -703,6 +708,18 @@ header_editor_frame_c::on_tree_sel_changed(wxTreeEvent &evt) {
   m_page_panel->Thaw();
 }
 
+void
+header_editor_frame_c::set_status_bar(const wxString &text) {
+  m_status_bar_timer.Stop();
+  m_status_bar->SetStatusText(text);
+  m_status_bar_timer.Start(4000, true);
+}
+
+void
+header_editor_frame_c::on_status_bar_timer(wxTimerEvent &evt) {
+  m_status_bar->SetStatusText(wxEmptyString);
+}
+
 IMPLEMENT_CLASS(header_editor_frame_c, wxFrame);
 BEGIN_EVENT_TABLE(header_editor_frame_c, wxFrame)
   EVT_TREE_SEL_CHANGED(ID_HE_TC_TREE,       header_editor_frame_c::on_tree_sel_changed)
@@ -715,5 +732,6 @@ BEGIN_EVENT_TABLE(header_editor_frame_c, wxFrame)
   EVT_MENU(ID_M_HE_HEADERS_COLLAPSE_ALL,    header_editor_frame_c::on_headers_collapse_all)
   EVT_MENU(ID_M_HE_HEADERS_VALIDATE,        header_editor_frame_c::on_headers_validate)
   EVT_MENU(ID_M_HE_HELP_HELP,               header_editor_frame_c::on_help_help)
+  EVT_TIMER(ID_T_HE_STATUS_BAR,             header_editor_frame_c::on_status_bar_timer)
   EVT_CLOSE(header_editor_frame_c::on_close_window)
 END_EVENT_TABLE();
