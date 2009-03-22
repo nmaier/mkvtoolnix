@@ -328,7 +328,7 @@ header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
                                                         "If set to 0, the reference pseudo-cache system is not used."));
     child_page->init();
 
-    child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackMaxCache::ClassInfos, Z("Maxinum cache"),
+    child_page = new he_unsigned_integer_value_page_c(m_tb_tree, page, k_track_entry, KaxTrackMaxCache::ClassInfos, Z("Maximum cache"),
                                                       Z("The maximum number of frames a player should be able to cache during playback. "
                                                         "If set to 0, the reference pseudo-cache system is not used."));
     child_page->init();
