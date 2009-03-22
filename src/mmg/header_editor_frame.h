@@ -50,7 +50,7 @@ class header_editor_frame_c: public wxFrame {
   DECLARE_CLASS(header_editor_frame_c);
   DECLARE_EVENT_TABLE();
 public:
-  std::vector<he_page_base_c *> m_pages;
+  std::vector<he_page_base_c *> m_pages, m_top_level_pages;
 
   wxFileName m_file_name;
   wxDateTime m_file_mtime;

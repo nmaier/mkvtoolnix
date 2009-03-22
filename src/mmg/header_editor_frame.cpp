@@ -111,8 +111,8 @@ header_editor_frame_c::~header_editor_frame_c() {
 
 bool
 header_editor_frame_c::have_been_modified() {
-  std::vector<he_page_base_c *>::iterator it = m_pages.begin();
-  while (it != m_pages.end()) {
+  std::vector<he_page_base_c *>::iterator it = m_top_level_pages.begin();
+  while (it != m_top_level_pages.end()) {
     if ((*it)->has_been_modified())
       return true;
     ++it;
@@ -123,8 +123,8 @@ header_editor_frame_c::have_been_modified() {
 
 void
 header_editor_frame_c::do_modifications() {
-  std::vector<he_page_base_c *>::iterator it = m_pages.begin();
-  while (it != m_pages.end()) {
+  std::vector<he_page_base_c *>::iterator it = m_top_level_pages.begin();
+  while (it != m_top_level_pages.end()) {
     (*it)->do_modifications();
     ++it;
   }
@@ -132,8 +132,8 @@ header_editor_frame_c::do_modifications() {
 
 wxTreeItemId
 header_editor_frame_c::validate_pages() {
-  std::vector<he_page_base_c *>::iterator it = m_pages.begin();
-  while (it != m_pages.end()) {
+  std::vector<he_page_base_c *>::iterator it = m_top_level_pages.begin();
+  while (it != m_top_level_pages.end()) {
     wxTreeItemId result = (*it)->validate();
     if (result.IsOk())
       return result;
@@ -153,6 +153,7 @@ header_editor_frame_c::clear_pages() {
 
   m_tc_tree->DeleteChildren(m_root_id);
   m_pages.clear();
+  m_top_level_pages.clear();
 
   he_empty_page_c *page = new he_empty_page_c(this, Z("No file loaded"), Z("No file has been loaded yet. You can open a file by selecting 'Open' from the 'File' menu."));
 
@@ -216,6 +217,7 @@ header_editor_frame_c::open_file(wxFileName file_name) {
 
   m_tc_tree->DeleteChildren(m_root_id);
   m_pages.clear();
+  m_top_level_pages.clear();
 
   int i;
   for (i = 0; m_analyzer->data.size() > i; ++i) {
@@ -481,9 +483,9 @@ header_editor_frame_c::on_file_save(wxCommandEvent &evt) {
 
   do_modifications();
 
-  std::vector<he_page_base_c *>::iterator it = m_pages.begin();
+  std::vector<he_page_base_c *>::iterator it = m_top_level_pages.begin();
   bool tracks_written = false;
-  while (it != m_pages.end()) {
+  while (it != m_top_level_pages.end()) {
     if ((*it)->has_been_modified()) {
       if ((*it)->m_l1_element->Generic().GlobalId == KaxTracks::ClassInfos.GlobalId) {
         if (tracks_written) {
@@ -652,7 +654,8 @@ header_editor_frame_c::append_sub_page(he_page_base_c *page,
   page->m_page_id = id;
   m_pages.push_back(page);
 
-  page->Hide();
+  if (parent_id == m_root_id)
+    m_top_level_pages.push_back(page);
 }
 
 void
