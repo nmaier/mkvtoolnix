@@ -65,7 +65,7 @@ void
 he_language_value_page_c::reset_value() {
   int i;
   for (i = 0; sorted_iso_codes.size() > i; ++i)
-    if (sorted_iso_codes[i] == m_original_value) {
+    if (extract_language_code(sorted_iso_codes[i]) == m_original_value) {
       set_combobox_selection(m_cb_language, sorted_iso_codes[i]);
       return;
     }
