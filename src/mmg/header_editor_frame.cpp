@@ -38,6 +38,7 @@
 #include "he_string_value_page.h"
 #include "he_top_level_page.h"
 #include "he_unsigned_integer_value_page.h"
+#include "matroskalogo.xpm"
 #include "mmg.h"
 #include "mmg_dialog.h"
 #include "wxcommon.h"
@@ -103,6 +104,8 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
   SetStatusBar(m_status_bar);
 
   m_status_bar_timer.SetOwner(this, ID_T_HE_STATUS_BAR);
+
+  SetIcon(wxIcon(matroskalogo_xpm));
 
   set_status_bar(Z("Header editor ready."));
 }
