@@ -96,6 +96,12 @@ he_value_page_c::init() {
     st_add_or_remove = new wxStaticText(this, wxID_ANY, Z("This element is currently present in the file. You can let the header editor remove the element from the file."));
     value_label      = Z("Current value:");
     m_cb_add_or_remove->SetLabel(Z("Remove element"));
+
+    const EbmlSemantic *semantic = find_ebml_semantic(KaxSegment::ClassInfos, m_callbacks.GlobalId);
+    if ((NULL != semantic) && semantic->Mandatory) {
+      m_cb_add_or_remove->Disable();
+      st_add_or_remove->SetLabel(Z("This element is currently present in the file. It cannot be removed because it is a mandatory header field."));
+    }
   }
 
   siz_fg->Add(new wxStaticText(this, wxID_ANY, Z("Status:")), 0, wxALIGN_TOP, 0);
