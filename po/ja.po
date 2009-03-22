@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2009-03-19 20:42+0900\n"
+"PO-Revision-Date: 2009-03-23 01:46+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -215,7 +215,7 @@ msgid ""
 "                           X can be a floating point number or a fraction.\n"
 msgstr ""
 "  --default-duration <TID:Xs|ms|us|ns|fps>\n"
-"                           トラックのデフォルトのフレーム持続時間をXに設定します。\n"
+"                           トラックのデフォルトのフレーム長をXに設定します。\n"
 "                           Xは浮動小数点数や分数を取ることができます。\n"
 
 #: src/merge/mkvmerge.cpp:131
@@ -250,7 +250,7 @@ msgstr ""
 
 #: src/merge/mkvmerge.cpp:150
 msgid "  --enable-durations       Enable block durations for all blocks.\n"
-msgstr "  --enable-durations       全てのブロックの持続時間を記録します。\n"
+msgstr "  --enable-durations       全てのブロックの長さを記録します。\n"
 
 #: src/merge/mkvmerge.cpp:122
 msgid "  --global-tags <file>     Read global tags from a XML file.\n"
@@ -772,15 +772,13 @@ msgstr "チャプタエディタ(&C)"
 msgid "&Chapter editor\tAlt-4"
 msgstr "チャプタエディタ(&C)\tAlt-4"
 
-#: src/mmg/header_editor_frame.cpp:68
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:84
 msgid "&Close\tCtrl-W"
-msgstr "新規作成(&N)\tCtrl-N"
+msgstr "閉じる(&C)\tCtrl-W"
 
-#: src/mmg/header_editor_frame.cpp:74
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:90
 msgid "&Collapse all entries\tCtrl-P"
-msgstr "全ての要素を表示(&A)\tCtrl-A"
+msgstr "全てのエントリを折り畳む(&C)\tCtrl-P"
 
 #: src/mmg/mmg.cpp:686
 msgid "&Copy command line to clipboard"
@@ -798,8 +796,7 @@ msgstr "無効化(&D)"
 msgid "&Down"
 msgstr "下へ(&D)"
 
-#: src/mmg/header_editor_frame.cpp:73
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:89
 msgid "&Expand all entries\tCtrl-E"
 msgstr "重要な要素を展開(&E)\tCtrl-E"
 
@@ -807,7 +804,7 @@ msgstr "重要な要素を展開(&E)\tCtrl-E"
 msgid "&Expand important elements\tCtrl-E"
 msgstr "重要な要素を展開(&E)\tCtrl-E"
 
-#: src/mmg/header_editor_frame.cpp:84 src/mmg/mmg.cpp:721
+#: src/mmg/header_editor_frame.cpp:100 src/mmg/mmg.cpp:721
 #: src/info/wxwidgets_ui.cpp:147
 msgid "&File"
 msgstr "ファイル(&F)"
@@ -817,16 +814,15 @@ msgid "&Global options\tAlt-3"
 msgstr "グローバルオプション(&G)\tAlt-3"
 
 #: src/mmg/mmg.cpp:675
-#, fuzzy
 msgid "&Header editor\tCtrl-E"
-msgstr "チャプタエディタ(&C)\tAlt-4"
+msgstr "ヘッダエディタ(&H)\tCtrl-E"
 
-#: src/mmg/header_editor_frame.cpp:86 src/mmg/mmg.cpp:725
+#: src/mmg/header_editor_frame.cpp:102 src/mmg/mmg.cpp:725
 #: src/info/wxwidgets_ui.cpp:149
 msgid "&Help"
 msgstr "ヘルプ(&H)"
 
-#: src/mmg/header_editor_frame.cpp:79 src/mmg/mmg.cpp:717
+#: src/mmg/header_editor_frame.cpp:95 src/mmg/mmg.cpp:717
 msgid "&Help\tF1"
 msgstr "ヘルプ(&H)\tF1"
 
@@ -862,7 +858,7 @@ msgstr "チャプタを新規作成(&N)"
 msgid "&Ok"
 msgstr "&OK"
 
-#: src/mmg/header_editor_frame.cpp:65 src/info/wxwidgets_ui.cpp:136
+#: src/mmg/header_editor_frame.cpp:81 src/info/wxwidgets_ui.cpp:136
 msgid "&Open\tCtrl-O"
 msgstr "開く(&O)\tCtrl-O"
 
@@ -870,7 +866,7 @@ msgstr "開く(&O)\tCtrl-O"
 msgid "&Options"
 msgstr "オプション(&O)"
 
-#: src/mmg/header_editor_frame.cpp:70 src/mmg/mmg.cpp:677
+#: src/mmg/header_editor_frame.cpp:86 src/mmg/mmg.cpp:677
 msgid "&Quit\tCtrl-Q"
 msgstr "終了(&Q)\tCtrl-Q"
 
@@ -878,24 +874,21 @@ msgstr "終了(&Q)\tCtrl-Q"
 msgid "&Re-enable"
 msgstr "&再有効化(&R)"
 
-#: src/mmg/header_editor_frame.cpp:67
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:83
 msgid "&Reload\tCtrl-R"
-msgstr "新規作成(&N)\tCtrl-N"
+msgstr "&リロード(&R)\tCtrl-R"
 
-#: src/mmg/he_value_page.cpp:115
-#, fuzzy
+#: src/mmg/he_value_page.cpp:52
 msgid "&Reset"
-msgstr "削除(&D)"
+msgstr "リセット(&R)"
 
 #: src/mmg/jobs.cpp:306 src/mmg/mmg.cpp:699
 msgid "&Save"
 msgstr "保存(&S)"
 
-#: src/mmg/header_editor_frame.cpp:66
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:82
 msgid "&Save\tCtrl-S"
-msgstr "設定保存(&S)\tCtrl-S"
+msgstr "保存(&S)\tCtrl-S"
 
 #: src/info/wxwidgets_ui.cpp:137
 msgid "&Save info as text\tCtrl-S"
@@ -913,10 +906,9 @@ msgstr "開始(&S)"
 msgid "&Up"
 msgstr "上へ(&U)"
 
-#: src/mmg/header_editor_frame.cpp:76
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:92
 msgid "&Validate\tCtrl-T"
-msgstr "終了(&Q)\tCtrl-Q"
+msgstr "バリデーション(&V)\tCtrl-T"
 
 #: src/mmg/mmg.cpp:703
 msgid "&Verify"
@@ -1032,7 +1024,7 @@ msgstr "'--nalu-size-length %1%'の'%1%'は正しいトラックIDとNALUサイ�
 
 #: src/merge/mkvmerge.cpp:1255
 msgid "'%1%' is not a valid tuple of track ID and default duration in '--default-duration %1%'.\n"
-msgstr "'--default-duration %1%'の'%1%'は正しいトラックIDとデフォルトのフレーム持続時間の組み合わせではありません。\n"
+msgstr "'--default-duration %1%'の'%1%'は正しいトラックIDとデフォルトのフレーム長の組み合わせではありません。\n"
 
 #: src/extract/mkvextract.cpp:255
 msgid "'%1%' is only allowed for chapter extraction.\n"
@@ -1309,18 +1301,17 @@ msgstr "'-c'はトラック展開時にのみ使用することができます�
 msgid "'-c' lacks a charset.\n"
 msgstr "'-c'に文字セットが指定されていません。\n"
 
-#: src/mmg/header_editor_frame.cpp:313
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:334
 msgid "'Default track' flag"
 msgstr "デフォルトトラックフラグ："
 
-#: src/mmg/header_editor_frame.cpp:320
+#: src/mmg/header_editor_frame.cpp:341
 msgid "'Forced display' flag"
-msgstr ""
+msgstr "強制表示フラグ"
 
-#: src/mmg/header_editor_frame.cpp:317
+#: src/mmg/header_editor_frame.cpp:338
 msgid "'Track enabled' flag"
-msgstr ""
+msgstr "トラック有効化フラグ"
 
 #: src/info/mkvinfo.cpp:1592
 msgid "(Unknown element: %1%)"
@@ -1461,22 +1452,22 @@ msgstr "%1%の位置でブロックグループが見つかりましたが、そ
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr "トラック番号%2%のタイムスタンプ%1%でブロックが見つかりましが、そのトラック番号のヘッダが見つかりませんでした。このブロックはスキップされます。\n"
 
-#: src/mmg/header_editor_frame.cpp:355
+#: src/mmg/header_editor_frame.cpp:376
 msgid "A human-readable string specifying the codec."
-msgstr ""
+msgstr "人間が読むことのできる形式のコーデックを指定する文字列です。"
 
-#: src/mmg/header_editor_frame.cpp:345
+#: src/mmg/header_editor_frame.cpp:366
 msgid "A human-readable track name."
-msgstr ""
+msgstr "人間が読むことのできる形式のトラック名です。"
 
 #: src/mmg/mmg.cpp:1802
 #, c-format
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "説明が'%s'のジョブが既に存在しています。本当に同じ説明のジョブを追加しますか？"
 
-#: src/mmg/header_editor_frame.cpp:245
+#: src/mmg/header_editor_frame.cpp:268
 msgid "A randomly generated unique ID to identify the current segment between many others (128 bits)."
-msgstr ""
+msgstr "多くの他のセグメントから現在のセグメントを識別するためのランダムに生成される固有のIDです（128ビット）。"
 
 #: src/merge/mkvmerge.cpp:2087
 msgid "A single '+' is not a valid command line option. If you want to append a file use '+' directly followed by the file name, e.g. '+movie_part_2.avi'."
@@ -1490,17 +1481,17 @@ msgstr ""
 msgid "A track with the ID %1% was requested but not found in the file. The corresponding option will be ignored.\n"
 msgstr "トラックID %1%が要求されましたが、ファイル中には見つかりませんでした。対応するオプションは無視されます。\n"
 
-#: src/mmg/header_editor_frame.cpp:310
+#: src/mmg/header_editor_frame.cpp:331
 msgid "A unique ID to identify the Track. This should be kept the same when making a direct stream copy of the Track to another file."
-msgstr ""
+msgstr "トラックを識別するための固有のIDです。トラックを他のファイルにダイレクトストリームコピーする場合、これは同じに保たれます。"
 
-#: src/mmg/header_editor_frame.cpp:253
+#: src/mmg/header_editor_frame.cpp:276
 msgid "A unique ID to identify the next chained segment (128 bits)."
-msgstr ""
+msgstr "次に繋がるセグメントを識別するための固有のIDです（128ビット）。"
 
-#: src/mmg/header_editor_frame.cpp:249
+#: src/mmg/header_editor_frame.cpp:272
 msgid "A unique ID to identify the previous chained segment (128 bits)."
-msgstr ""
+msgstr "前に繋がるセグメントを識別するための固有のIDです（128ビット）。"
 
 #: src/mmg/tab_input.cpp:210 src/merge/mkvmerge.cpp:83
 msgid "A/52 (aka AC3)"
@@ -1518,9 +1509,9 @@ msgstr "AACファイルは、HE-AAC/AAC+/SBR AACのどれかを含んでる可�
 msgid "AAC is SBR/HE-AAC/AAC+"
 msgstr "このAACはSBR/HE-AAC/AAC+です"
 
-#: src/mmg/he_value_page.cpp:67
+#: src/mmg/he_value_page.cpp:69
 msgid "ASCII string (no special chars like Umlaute etc)"
-msgstr ""
+msgstr "ASCII文字列（日本語やウムラウトなどの特殊な文字は駄目です）"
 
 #: src/mmg/tab_input.cpp:212 src/merge/mkvmerge.cpp:91
 msgid "AVC/h.264 elementary streams"
@@ -1575,6 +1566,11 @@ msgstr "チャプタを追加"
 msgid "Add command line options"
 msgstr "コマンドラインオプションを追加"
 
+#: src/mmg/he_value_page.cpp:92
+#, fuzzy
+msgid "Add element"
+msgstr "名前を追加"
+
 #: src/mmg/tab_chapters.cpp:303
 msgid "Add name"
 msgstr "名前を追加"
@@ -1623,9 +1619,9 @@ msgstr "全てのファイル(*)|*"
 msgid "All Files (*.*)|*.*"
 msgstr "全てのファイル (*.*)|*.*"
 
-#: src/mmg/header_editor_frame.cpp:553
+#: src/mmg/header_editor_frame.cpp:570
 msgid "All header values are OK."
-msgstr ""
+msgstr "全てのヘッダの値はOKです。"
 
 #: src/mmg/tab_input.cpp:273
 #, c-format
@@ -1652,9 +1648,9 @@ msgstr "常に手前に表示"
 msgid "Always use simple blocks"
 msgstr "常にシンプルブロックを使用する"
 
-#: src/mmg/header_editor_frame.cpp:352
+#: src/mmg/header_editor_frame.cpp:373
 msgid "An ID corresponding to the codec."
-msgstr ""
+msgstr "コーデックに対応するIDです。"
 
 #: src/extract/attachments.cpp:139
 msgid "An attachment with the ID %1% was not found.\n"
@@ -1664,22 +1660,21 @@ msgstr "ID %1%の添付ファイルが見つかりませんでした。\n"
 msgid "An empty file name is not valid.\n"
 msgstr "空のファイル名は無効です。\n"
 
-#: src/mmg/header_editor_frame.cpp:241
+#: src/mmg/header_editor_frame.cpp:264
 msgid "An escaped filename corresponding to the next segment."
-msgstr ""
+msgstr "次のセグメントに対応するエスケープされたファイル名です。"
 
-#: src/mmg/header_editor_frame.cpp:238
+#: src/mmg/header_editor_frame.cpp:261
 msgid "An escaped filename corresponding to the previous segment."
-msgstr ""
+msgstr "前のセグメントに対応するエスケープされたファイル名です。"
 
-#: src/mmg/header_editor_frame.cpp:626 src/mmg/tab_chapters.cpp:1942
+#: src/mmg/header_editor_frame.cpp:643 src/mmg/tab_chapters.cpp:1942
 msgid "An unknown error occured. The file has been modified."
-msgstr ""
+msgstr "未知のエラーが発生しました。ファイルは修正されました。"
 
 #: src/mmg/kax_analyzer.cpp:134
-#, fuzzy
 msgid "Analysis is running"
-msgstr "解析実行中"
+msgstr "解析中"
 
 #: src/mmg/mmg.cpp:198
 msgid "Analyze MPEG4 bitstreams, put each frame into one Matroska block, use proper timestamping (I P B B = 0 120 40 80), use V_MPEG4/ISO/... CodecIDs."
@@ -1751,26 +1746,26 @@ msgstr "添付方式："
 msgid "Attachments"
 msgstr "添付ファイル"
 
-#: src/mmg/header_editor_frame.cpp:428
+#: src/mmg/header_editor_frame.cpp:449
 msgid "Audio bit depth"
-msgstr ""
+msgstr "オーディオのビット深度"
 
-#: src/mmg/header_editor_frame.cpp:424
+#: src/mmg/header_editor_frame.cpp:445
 msgid "Audio channels"
-msgstr ""
+msgstr "オーディオのチャンネル"
 
-#: src/mmg/header_editor_frame.cpp:420
+#: src/mmg/header_editor_frame.cpp:441
 msgid "Audio output sampling frequency"
-msgstr ""
+msgstr "オーディオの出力サンプリング周波数"
 
-#: src/mmg/header_editor_frame.cpp:415
+#: src/mmg/header_editor_frame.cpp:436
 msgid "Audio sampling frequency"
-msgstr ""
+msgstr "オーディオのサンプリング周波数"
 
-#: src/mmg/header_editor_frame.cpp:287
-#, fuzzy, c-format
+#: src/mmg/header_editor_frame.cpp:310
+#, c-format
 msgid "Audio track %u"
-msgstr "トラックが見つかりませんでした"
+msgstr "オーディオトラック%u"
 
 #: src/mmg/options_dialog.cpp:95
 msgid "Auto-set output filename"
@@ -1790,19 +1785,19 @@ msgstr "利用可能な翻訳：\n"
 
 #: src/common/compression.cpp:202 src/common/compression.cpp:221
 msgid "BZ2_bzCompressInit() failed. Result: %1%\n"
-msgstr ""
+msgstr "BZ2_bzCompressInit()が失敗しました。結果：%1%\n"
 
-#: src/mmg/he_value_page.cpp:72
+#: src/mmg/he_value_page.cpp:74
 msgid "Binary (displayed as hex numbers)"
-msgstr ""
+msgstr "バイナリ（16進数で表示されます）"
 
 #: src/info/mkvinfo.cpp:563
 msgid "Bit depth: %1%"
 msgstr ""
 
-#: src/mmg/header_editor_frame.cpp:428
+#: src/mmg/header_editor_frame.cpp:449
 msgid "Bits per sample, mostly used for PCM."
-msgstr ""
+msgstr "サンプル当たりのビット数です。通常はPCMで使われます。"
 
 #: src/info/mkvinfo.cpp:1285
 msgid "Block (track number %1%, %2% frame(s), timecode %|3$.3f|s = %4%)"
@@ -1833,9 +1828,9 @@ msgstr ""
 msgid "Bogus aid %1%\n"
 msgstr "疑わしいオーディオID %1%\n"
 
-#: src/mmg/he_value_page.cpp:73
+#: src/mmg/he_value_page.cpp:75
 msgid "Boolean (yes/no, on/off etc)"
-msgstr ""
+msgstr "ブール型（はい/いいえ、オン/オフ等）"
 
 #: src/mmg/tab_input_format.cpp:200
 msgid "Both eyes"
@@ -2048,10 +2043,9 @@ msgstr "タグファイルを選んでください"
 msgid "Clear inputs after adding a job to the job queue"
 msgstr "ジョブをジョブキューに追加したら入力をクリアする"
 
-#: src/mmg/header_editor_frame.cpp:68
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:84
 msgid "Close the current file without saving"
-msgstr "現在のチャプタを別名のファイルに保存します"
+msgstr "保存せずに現在のファイルを閉じます"
 
 #: src/extract/timecodes_v2.cpp:281 src/extract/tracks.cpp:419
 #: src/info/mkvinfo.cpp:1777
@@ -2079,9 +2073,9 @@ msgstr ""
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr "クラスタのタイムコード：%|1$.3f|s"
 
-#: src/mmg/header_editor_frame.cpp:352
+#: src/mmg/header_editor_frame.cpp:373
 msgid "Codec ID"
-msgstr ""
+msgstr "コーデックID"
 
 #: src/info/mkvinfo.cpp:908
 msgid "Codec ID: %1%"
@@ -2099,10 +2093,9 @@ msgstr ""
 msgid "Codec info URL: %1%"
 msgstr ""
 
-#: src/mmg/header_editor_frame.cpp:355
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:376
 msgid "Codec name"
-msgstr "名前を追加"
+msgstr "コーデック名"
 
 #: src/info/mkvinfo.cpp:936
 msgid "Codec name: %1%"
@@ -2116,9 +2109,9 @@ msgstr ""
 msgid "CodecPrivate, length %1%%2%"
 msgstr ""
 
-#: src/mmg/header_editor_frame.cpp:74
+#: src/mmg/header_editor_frame.cpp:90
 msgid "Collapse all entries so that none of their sub-entries will be shown"
-msgstr ""
+msgstr "全てのエントリを折り畳み、サブエントリを表示しません"
 
 #: src/info/mkvinfo.cpp:664
 msgid "Colour space: %1%"
@@ -2386,10 +2379,9 @@ msgstr "現在のジョブID %d:"
 msgid "Current job ID 1000:"
 msgstr "現在のジョブID 1000:"
 
-#: src/mmg/he_value_page.cpp:93
-#, fuzzy
+#: src/mmg/he_value_page.cpp:97
 msgid "Current value:"
-msgstr "値を設定"
+msgstr "現在の値："
 
 #: src/mmg/jobs.cpp:391
 msgid "D&elete"
@@ -2447,10 +2439,9 @@ msgstr "Debug> "
 msgid "Default"
 msgstr "デフォルト"
 
-#: src/mmg/header_editor_frame.cpp:336
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:357
 msgid "Default duration"
-msgstr "デフォルト"
+msgstr "デフォルトのフレーム長"
 
 #: src/info/mkvinfo.cpp:972
 msgid "Default duration: %|1$.3f|ms (%|2$.3f| fps for a video track)"
@@ -2488,7 +2479,7 @@ msgstr "説明"
 msgid "Description already exists"
 msgstr "説明は既に存在します"
 
-#: src/mmg/he_value_page.cpp:80 src/mmg/mmg.cpp:136
+#: src/mmg/he_value_page.cpp:82 src/mmg/mmg.cpp:136
 #: src/mmg/tab_attachments.cpp:74
 msgid "Description:"
 msgstr "説明："
@@ -2521,10 +2512,9 @@ msgstr ""
 msgid "Display unit: %1%%2%"
 msgstr ""
 
-#: src/mmg/header_editor_frame.cpp:79
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:95
 msgid "Display usage information"
-msgstr "情報を名前をつけて保存します"
+msgstr "使い方の情報を表示します"
 
 #: src/mmg/tab_input_format.cpp:67
 msgid "Display width/height:"
@@ -2696,7 +2686,7 @@ msgstr "'%1%'のタグ解析中にエラーが発生しました：必須要素�
 msgid "Error saving the information"
 msgstr ""
 
-#: src/mmg/header_editor_frame.cpp:610 src/mmg/header_editor_frame.cpp:616
+#: src/mmg/header_editor_frame.cpp:627 src/mmg/header_editor_frame.cpp:633
 #: src/mmg/tab_chapters.cpp:1925 src/mmg/tab_chapters.cpp:1931
 msgid "Error writing Matroska file"
 msgstr "Matroskaファイルの書き込み中にエラーが発生しました"
@@ -2747,9 +2737,9 @@ msgstr "全て正常に終了しました。"
 msgid "Executable files (*.exe)|*.exe|%s"
 msgstr "実行ファイル (*.exe)|*.exe|%s"
 
-#: src/mmg/header_editor_frame.cpp:73
+#: src/mmg/header_editor_frame.cpp:89
 msgid "Expand all entries so that their sub-entries will be shown"
-msgstr ""
+msgstr "全てのエントリを展開し、サブエントリを表示します"
 
 #: src/common/xml_element_parser.cpp:98
 msgid "Expected a time in the following format: HH:MM:SS.nnn (HH = hour, MM = minute, SS = second, nnn = millisecond up to nanosecond. You may use up to nine digits for 'n' which would mean nanosecond precision). You may omit the hour as well. Found '%1%' instead. Additional error message: %2%"
@@ -2874,10 +2864,9 @@ msgstr ""
 msgid "File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable in the settings dialog."
 msgstr "ファイルタイプの判定に失敗しました。リターンコード：%d。エラー%d (%s)。設定ダイアログでmkvmergeのパスを正しく設定したか確認してください。"
 
-#: src/mmg/header_editor_frame.cpp:444
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:465
 msgid "File modified"
-msgstr "ファイル作成に失敗しました"
+msgstr "ファイルは修正されました"
 
 #: src/info/mkvinfo.cpp:1214
 msgid "File name: %1%"
@@ -2891,7 +2880,7 @@ msgstr "ファイルオプション："
 msgid "File removal not possible"
 msgstr "ファイルを削除できません"
 
-#: src/mmg/header_editor_frame.cpp:622 src/mmg/tab_chapters.cpp:1938
+#: src/mmg/header_editor_frame.cpp:639 src/mmg/tab_chapters.cpp:1938
 msgid "File structure warning"
 msgstr "ファイル構造警告"
 
@@ -2925,9 +2914,9 @@ msgstr "完了日時"
 msgid "Finished processing on %s"
 msgstr "%sの処理が終了しました"
 
-#: src/mmg/he_value_page.cpp:71
+#: src/mmg/he_value_page.cpp:73
 msgid "Floating point number"
-msgstr ""
+msgstr "浮動小数点数"
 
 #: src/mmg/tab_global.cpp:156 src/mmg/tab_global.cpp:161
 msgid "For an in-depth explanantion of file/segment linking and this feature please read mkvmerge's documentation."
@@ -2959,7 +2948,7 @@ msgstr "NALUサイズ長を特定の値に強制設定します。このパラ�
 
 #: src/mmg/mmg.cpp:178
 msgid "Forces the timecode scale factor to REPLACEME. You have to replace REPLACEME with a value between 1000 and 10000000 or with -1. Normally mkvmerge will use a value of 1000000 which means that timecodes and durations will have a precision of 1ms. For files that will not contain a video track but at least one audio track mkvmerge will automatically choose a timecode scale factor so that all timecodes and durations have a precision of one sample. This causes bigger overhead but allows precise seeking and extraction. If the magical value -1 is used then mkvmerge will use sample precision even if a video track is present."
-msgstr "タイムコードスケールの係数をこの値に強制設定します。この値は1000～10000000、もしくは-1に設定しなければなりません。通常mkvmergeは1000000を使用します。これはタイムコードとフレーム持続時間が1ミリ秒単位の精度を持つことを意味します。ビデオトラックを含まず、1つ以上のオーディオトラックを含むファイルでは、mkvmergeは全てのタイムコードとフレーム持続時間がサンプリング音1つ分の精度を持つようタイムコードスケールの係数を自動的に選択します。これによってオーバーヘッドは大きくなりますが、正確なシークと展開が可能になります。-1が指定された場合は、たとえビデオトラックが存在していても、mkvmergeはサンプリング音の精度を使用します。"
+msgstr "タイムコードスケールの係数をこの値に強制設定します。この値は1000～10000000、もしくは-1に設定しなければなりません。通常mkvmergeは1000000を使用します。これはタイムコードとフレーム長が1ミリ秒単位の精度を持つことを意味します。ビデオトラックを含まず、1つ以上のオーディオトラックを含むファイルでは、mkvmergeは全てのタイムコードとフレーム持続時間がサンプリング音1つ分の精度を持つようタイムコードスケールの係数を自動的に選択します。これによってオーバーヘッドは大きくなりますが、正確なシークと展開が可能になります。-1が指定された場合は、たとえビデオトラックが存在していても、mkvmergeはサンプリング音の精度を使用します。"
 
 #: src/mmg/tab_input.cpp:164
 msgid "Format specific options"
@@ -3013,19 +3002,18 @@ msgstr "グローバルオプション"
 msgid "Global tags"
 msgstr "グローバルタグ"
 
-#: src/mmg/header_editor_frame.cpp:85
+#: src/mmg/header_editor_frame.cpp:101
 msgid "H&eaders"
-msgstr ""
+msgstr "ヘッダ(&H)"
 
-#: src/mmg/header_editor_frame.cpp:43
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:49
 msgid "Header editor"
-msgstr "チャプタエディタ"
+msgstr "ヘッダエディタ"
 
-#: src/mmg/header_editor_frame.cpp:186
+#: src/mmg/header_editor_frame.cpp:208
 #, c-format
 msgid "Header editor: %s"
-msgstr ""
+msgstr "ヘッダエディタ：%s"
 
 #: src/common/compression.cpp:276
 msgid "Header removal compression not possible because the buffer contained %1% bytes which is less than the size of the headers that should be removed, %2%."
@@ -3035,22 +3023,22 @@ msgstr "バッファが%1%バイトしかなく、除去すべきヘッダサイ
 msgid "Header removal compression not possible because the buffer did not start with the bytes that should be removed. Wanted bytes:%1%; found:%2%."
 msgstr "バッファが除去すべきバイトで始まっていないので、ヘッダ除去による圧縮ができません。%1%であって欲しいのですが、%2%でした。"
 
-#: src/mmg/header_editor_frame.cpp:457 src/mmg/header_editor_frame.cpp:553
-#: src/mmg/header_editor_frame.cpp:558
+#: src/mmg/header_editor_frame.cpp:478 src/mmg/header_editor_frame.cpp:570
+#: src/mmg/header_editor_frame.cpp:575
 msgid "Header validation"
-msgstr ""
+msgstr "ヘッダバリデーション"
 
-#: src/mmg/header_editor_frame.cpp:488 src/mmg/header_editor_frame.cpp:498
+#: src/mmg/header_editor_frame.cpp:509 src/mmg/header_editor_frame.cpp:519
 msgid "Headers modified"
-msgstr ""
+msgstr "ヘッダは修正されました"
 
-#: src/mmg/header_editor_frame.cpp:365
+#: src/mmg/header_editor_frame.cpp:386
 msgid "Height of the encoded video frames in pixels."
-msgstr ""
+msgstr "エンコードされたビデオフレームの縦解像度（ピクセル単位）です。"
 
-#: src/mmg/header_editor_frame.cpp:375
+#: src/mmg/header_editor_frame.cpp:396
 msgid "Height of the video frames to display."
-msgstr ""
+msgstr "ビデオフレームの縦表示解像度です。"
 
 #: src/mmg/mmg.cpp:1154 src/mmg/mmg.cpp:1160
 msgid "Help file not found"
@@ -3169,9 +3157,9 @@ msgstr ""
 msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "内部バグ：tracks.cpp SSA #1. %1%"
 
-#: src/mmg/header_editor_frame.cpp:626 src/mmg/tab_chapters.cpp:1942
+#: src/mmg/header_editor_frame.cpp:643 src/mmg/tab_chapters.cpp:1942
 msgid "Internal program error"
-msgstr ""
+msgstr "内部プログラムエラー"
 
 #: src/merge/mkvmerge.cpp:1079
 msgid "Invalid %1% specified in '--%2% %3%'.\n"
@@ -3461,10 +3449,9 @@ msgstr ""
 msgid "Lacing flag: %1%"
 msgstr ""
 
-#: src/mmg/header_editor_frame.cpp:348
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:369
 msgid "Language"
-msgstr "言語："
+msgstr "言語"
 
 #: src/mmg/tab_input_general.cpp:61
 msgid "Language for this track. Select one of the ISO639-2 language codes."
@@ -3497,7 +3484,7 @@ msgstr "コマンドラインに任意のオプションを追加できます"
 
 #: src/merge/timecode_factory.cpp:327
 msgid "Line %1% of the timecode file '%2%' contains inconsistent data (e.g. the duration or the FPS are smaller than zero).\n"
-msgstr "タイムコードファイル'%2%'の%1%行目が矛盾したデータを含んでいます（例：フレーム持続時間やFPSが負の数）。\n"
+msgstr "タイムコードファイル'%2%'の%1%行目が矛盾したデータを含んでいます（例：フレーム長やFPSが負の数）。\n"
 
 #: src/merge/timecode_factory.cpp:102
 msgid "Line %1% of the timecode file '%2%' contains inconsistent data (e.g. the start frame number is bigger than the end frame number, or some values are smaller than zero).\n"
@@ -3623,10 +3610,10 @@ msgstr ""
 msgid "Matroska files (*.mkv;*.mka)|*.mkv;*.mka|%s"
 msgstr "Matroskaファイル (*.mkv;*.mka)|*.mkv;*.mka|%s"
 
-#: src/mmg/header_editor_frame.cpp:153
-#, fuzzy, c-format
+#: src/mmg/header_editor_frame.cpp:175
+#, c-format
 msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|%s"
-msgstr "Matroskaファイル (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
+msgstr "Matroskaファイル (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|%s"
 
 #: src/info/wxwidgets_ui.cpp:293
 msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
@@ -3640,9 +3627,9 @@ msgstr ""
 msgid "MaxCache: %1%"
 msgstr ""
 
-#: src/mmg/header_editor_frame.cpp:331
+#: src/mmg/header_editor_frame.cpp:352
 msgid "Maximum cache"
-msgstr ""
+msgstr "最大キャッシュ"
 
 #: src/extract/xtr_rmff.cpp:48
 msgid "Memory allocation error: %1% (%2%).\n"
@@ -3660,9 +3647,9 @@ msgstr ""
 msgid "MinCache: %1%"
 msgstr ""
 
-#: src/mmg/header_editor_frame.cpp:326
+#: src/mmg/header_editor_frame.cpp:347
 msgid "Mininum cache"
-msgstr ""
+msgstr "最小キャッシュ"
 
 #: src/common/common.cpp:1591
 msgid "Missing argument for '--output-charset'.\n"
@@ -3673,13 +3660,12 @@ msgid "Missing argument for '--ui-language'.\n"
 msgstr "'--ui-language'に引数がありません。\n"
 
 #: src/mmg/mmg.cpp:2261
-#, fuzzy
 msgid "Missing file name"
-msgstr "入力がありません"
+msgstr "ファイル名がありません"
 
 #: src/mmg/mmg.cpp:2261
 msgid "Missing file name after for the option '--edit-headers'."
-msgstr ""
+msgstr "'--edit-headers'オプションの後ろにファイル名がありません。"
 
 #: src/input/r_ogm.cpp:908
 msgid "Missing header/comment packets for stream. This file is broken but should be muxed correctly. If not please contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
@@ -3753,10 +3739,9 @@ msgstr "MUXに1秒かかりました。\n"
 msgid "NALU size length:"
 msgstr "NALUサイズ長："
 
-#: src/mmg/header_editor_frame.cpp:345
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:366
 msgid "Name"
-msgstr "名前："
+msgstr "名前"
 
 #: src/mmg/tab_input_general.cpp:52
 msgid "Name for this track, e.g. \"director's comments\"."
@@ -3774,15 +3759,13 @@ msgstr ""
 msgid "New chapters created."
 msgstr "新しいチャプタが作成されました。"
 
-#: src/mmg/he_value_page.cpp:88
-#, fuzzy
+#: src/mmg/he_value_page.cpp:91
 msgid "New value:"
-msgstr "値を設定"
+msgstr "新しい値："
 
-#: src/mmg/header_editor_frame.cpp:241
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:264
 msgid "Next filename"
-msgstr "出力ファイル名"
+msgstr "次のファイル名"
 
 #: src/info/mkvinfo.cpp:513
 msgid "Next filename: %1%"
@@ -3800,10 +3783,9 @@ msgstr "次のセグメントUID："
 msgid "Next segment UID:%1%"
 msgstr ""
 
-#: src/mmg/header_editor_frame.cpp:252
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:275
 msgid "Next segment's unique ID"
-msgstr "次のセグメントUID："
+msgstr "次のセグメントの固有ID"
 
 #: src/merge/mkvmerge.cpp:1069
 msgid "No %1% specified in '--%2% %3%'.\n"
@@ -3846,17 +3828,15 @@ msgstr "チャプタが見つかりませんでした"
 msgid "No error"
 msgstr "エラー無し"
 
-#: src/mmg/header_editor_frame.cpp:449
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:470
 msgid "No fields modified"
-msgstr "ファイルがロードされていません"
+msgstr "修正されたフィールドはありません"
 
-#: src/mmg/header_editor_frame.cpp:138
+#: src/mmg/header_editor_frame.cpp:157
 msgid "No file has been loaded yet. You can open a file by selecting 'Open' from the 'File' menu."
-msgstr ""
+msgstr "まだファイルがロードされていません。'ファイル'メニューの'開く'を選んでファイルを開くことができます。"
 
-#: src/mmg/header_editor_frame.cpp:138 src/mmg/header_editor_frame.cpp:140
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:157 src/mmg/header_editor_frame.cpp:159
 msgid "No file loaded"
 msgstr "ファイルがロードされていません"
 
@@ -3921,9 +3901,9 @@ msgstr "バージョン番号が見つかりませんでした。\n"
 msgid "None"
 msgstr "指定なし"
 
-#: src/mmg/header_editor_frame.cpp:449
+#: src/mmg/header_editor_frame.cpp:470
 msgid "None of the header fields has been modified. Nothing has been saved."
-msgstr ""
+msgstr "修正されたヘッダのフィールドはありません。何も保存されませんでした。"
 
 #: src/common/common.cpp:117
 msgid "Not a hex digit at position %1%"
@@ -3945,13 +3925,13 @@ msgstr ""
 "何もすることがありません。\n"
 "\n"
 
-#: src/mmg/header_editor_frame.cpp:337
+#: src/mmg/header_editor_frame.cpp:358
 msgid "Number of nanoseconds (not scaled) per frame."
-msgstr ""
+msgstr "フレーム当たりのナノ秒数です。"
 
-#: src/mmg/header_editor_frame.cpp:424
+#: src/mmg/header_editor_frame.cpp:445
 msgid "Numbers of channels in the track."
-msgstr ""
+msgstr "トラックのチャンネル数"
 
 #: src/mmg/tab_input.cpp:224
 msgid "Ogg/OGM audio/video files"
@@ -4009,14 +3989,13 @@ msgstr "オプション(&P)\tCtrl-P"
 msgid "Open File"
 msgstr "ファイルを開きます"
 
-#: src/mmg/header_editor_frame.cpp:153 src/info/wxwidgets_ui.cpp:136
+#: src/mmg/header_editor_frame.cpp:175 src/info/wxwidgets_ui.cpp:136
 msgid "Open a Matroska file"
 msgstr "Matroskaファイルを開きます"
 
-#: src/mmg/header_editor_frame.cpp:65
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:81
 msgid "Open an existing Matroska file"
-msgstr "Matroskaファイルを開きます"
+msgstr "既存のMatroskaファイルを開きます"
 
 #: src/mmg/mmg.cpp:1246
 msgid "Option file created."
@@ -4034,9 +4013,9 @@ msgstr "これらのオプションは開発者「専用」です。使わない
 msgid "Order: %1%"
 msgstr ""
 
-#: src/mmg/he_value_page.cpp:100
+#: src/mmg/he_value_page.cpp:107
 msgid "Original value:"
-msgstr ""
+msgstr "元の値："
 
 #: src/mmg/mux_dialog.cpp:70
 msgid "Output"
@@ -4132,10 +4111,9 @@ msgstr ""
 "mkvmergeのman pageやHTMLドキュメントも読んでください。\n"
 "このリストでは不明確なものも長く詳細な説明がなされています。\n"
 
-#: src/mmg/header_editor_frame.cpp:238
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:261
 msgid "Previous filename"
-msgstr "前のセグメントUID："
+msgstr "前のファイル名"
 
 #: src/info/mkvinfo.cpp:505
 msgid "Previous filename: %1%"
@@ -4149,10 +4127,9 @@ msgstr "前のセグメントUID："
 msgid "Previous segment UID:%1%"
 msgstr ""
 
-#: src/mmg/header_editor_frame.cpp:248
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:271
 msgid "Previous segment's unique ID"
-msgstr "前のセグメントUID："
+msgstr "前のセグメントの固有ID"
 
 #: src/mmg/options_dialog.cpp:79
 msgid "Process priority:"
@@ -4257,9 +4234,8 @@ msgid "Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupport
 msgstr "Quicktime/MP4リーダ：'media header' atom（'mdhd'）がサポートされていないバージョン%1%を使用しています。\n"
 
 #: src/input/r_qtmp4.cpp:840
-#, fuzzy
 msgid "Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n"
-msgstr "Quicktime/MP4リーダ：トラックID %1%のストリーム説明atomを読み込むことができませんでした。\n"
+msgstr "Quicktime/MP4リーダ：トラックID%1%のストリーム説明atomの'size'のフィールドが小さすぎます。\n"
 
 #: src/input/r_qtmp4.cpp:646
 msgid "Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"
@@ -4313,10 +4289,9 @@ msgstr "Quicktime/MP4リーダ：トラック%2%のFourCC '%|1$.4s|'は未知も
 msgid "Quit the application"
 msgstr "アプリケーションを終了します"
 
-#: src/mmg/header_editor_frame.cpp:70
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:86
 msgid "Quit the header editor"
-msgstr "アプリケーションを終了します"
+msgstr "ヘッダエディタを終了します"
 
 #: src/info/wxwidgets_ui.cpp:140
 msgid "Quits mkvinfo"
@@ -4338,9 +4313,9 @@ msgstr "暗号化されたVOBの読み込みはサポートされていません
 msgid "Ready"
 msgstr "準備完了"
 
-#: src/mmg/header_editor_frame.cpp:420
+#: src/mmg/header_editor_frame.cpp:441
 msgid "Real output sampling frequency in Hz."
-msgstr ""
+msgstr "実際の出力サンプリング周波数（Hz単位）"
 
 #: src/merge/mkvmerge.cpp:101
 msgid "RealMedia audio and video"
@@ -4370,9 +4345,9 @@ msgstr ""
 msgid "Reference virtual: %1%"
 msgstr ""
 
-#: src/mmg/header_editor_frame.cpp:67
+#: src/mmg/header_editor_frame.cpp:83
 msgid "Reload the current file without saving"
-msgstr ""
+msgstr "保存しないで現在のファイルをリロードします"
 
 #: src/common/xml_element_parser.cpp:619
 msgid "Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
@@ -4381,6 +4356,11 @@ msgstr " &、<、>、\"のような特殊な文字は通常のHTMLにおける�
 #: src/mmg/tab_chapters.cpp:236
 msgid "Remove chapter"
 msgstr "チャプタを削除"
+
+#: src/mmg/he_value_page.cpp:98
+#, fuzzy
+msgid "Remove element"
+msgstr "名前を削除"
 
 #: src/mmg/tab_chapters.cpp:304
 msgid "Remove name"
@@ -4400,7 +4380,7 @@ msgstr "mkvmergeを実行し、MUX処理を開始します"
 
 #: src/mmg/mmg.cpp:675
 msgid "Run the header field editor"
-msgstr ""
+msgstr "ヘッダフィールドエディタを起動します"
 
 #: src/mmg/mmg.cpp:685
 msgid "S&how the command line"
@@ -4430,9 +4410,9 @@ msgstr "コマンドラインを保存(&A)"
 msgid "Same directory as the first input file's"
 msgstr "最初の入力ファイルと同じディレクトリ"
 
-#: src/mmg/header_editor_frame.cpp:415
+#: src/mmg/header_editor_frame.cpp:436
 msgid "Sampling frequency in Hz."
-msgstr ""
+msgstr "サンプリング周波数（Hz単位）"
 
 #: src/info/mkvinfo.cpp:542
 msgid "Sampling frequency: %1%"
@@ -4474,10 +4454,9 @@ msgstr "現在のチャプタを別名のファイルに保存します"
 msgid "Save the current chapters to an existing Matroska file"
 msgstr "現在のチャプタを既存のMatroskaファイルに保存します"
 
-#: src/mmg/header_editor_frame.cpp:66
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:82
 msgid "Save the header values"
-msgstr "デフォルト値を変更します"
+msgstr "ヘッダの値を保存します"
 
 #: src/mmg/mmg.cpp:700
 msgid "Save to &Matroska file"
@@ -4520,18 +4499,16 @@ msgstr "セグメント"
 msgid "Segment UID:%1%"
 msgstr ""
 
-#: src/mmg/header_editor_frame.cpp:235
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:258
 msgid "Segment filename"
-msgstr "出力ファイル名"
+msgstr "セグメントファイル名"
 
 #: src/info/mkvinfo.cpp:518
 msgid "Segment filename: %1%"
 msgstr ""
 
-#: src/mmg/header_editor_frame.cpp:224 src/mmg/header_editor_frame.cpp:225
-#: src/extract/timecodes_v2.cpp:240 src/extract/tracks.cpp:375
-#: src/info/mkvinfo.cpp:445 src/info/qt_ui.cpp:177
+#: src/mmg/header_editor_frame.cpp:249 src/extract/timecodes_v2.cpp:240
+#: src/extract/tracks.cpp:375 src/info/mkvinfo.cpp:445 src/info/qt_ui.cpp:177
 #: src/info/wxwidgets_ui.cpp:238
 msgid "Segment information"
 msgstr "セグメント情報"
@@ -4542,9 +4519,9 @@ msgstr "セグメント情報"
 msgid "Segment tracks"
 msgstr "セグメントトラック"
 
-#: src/mmg/header_editor_frame.cpp:244
+#: src/mmg/header_editor_frame.cpp:267
 msgid "Segment unique ID"
-msgstr ""
+msgstr "セグメントの固有ID"
 
 #: src/info/mkvinfo.cpp:1752
 msgid "Segment, size %1%"
@@ -4590,17 +4567,17 @@ msgstr "出力ファイルを設定(&O)"
 msgid "Set country to:"
 msgstr "次の国に設定："
 
-#: src/mmg/header_editor_frame.cpp:314
+#: src/mmg/header_editor_frame.cpp:335
 msgid "Set if that track (audio, video or subs) SHOULD be used if no language found matches the user preference."
-msgstr ""
+msgstr "ユーザー設定と一致する言語が見つからなかった場合にトラック（オーディオ、ビデオ、字幕）が使用されるかどうかを設定します。"
 
-#: src/mmg/header_editor_frame.cpp:321
+#: src/mmg/header_editor_frame.cpp:342
 msgid "Set if that track MUST be used during playback. There can be many forced track for a kind (audio, video or subs). The player should select the one which language matches the user preference or the default + forced track."
-msgstr ""
+msgstr "再生中にトラックが使用されるべきかどうかを設定します。1つの種類（オーディオ、ビデオ、字幕）に複数の強制表示トラックが存在することも可能です。プレーヤはユーザー設定と言語が一致するトラックもしくはデフォルト+強制表示のトラックを選択します。"
 
-#: src/mmg/header_editor_frame.cpp:317
+#: src/mmg/header_editor_frame.cpp:338
 msgid "Set if the track is used."
-msgstr ""
+msgstr "トラックが使用されるかどうかを設定します。"
 
 #: src/mmg/tab_chapters.cpp:132
 msgid "Set language to:"
@@ -4620,7 +4597,7 @@ msgstr "VobSub字幕に使用される圧縮方式を指定します。何も指
 
 #: src/mmg/tab_input_format.cpp:112
 msgid "Sets the default duration or number of frames per second for a track. This is only possible for input formats from which mkvmerge cannot get this information itself. At the moment this only includes AVC/h.264 elementary streams. This can either be a floating point number or a fraction."
-msgstr "トラックのフレーム持続時間もしくはフレームレートのデフォルト値を指定します。これはmkvmergeが自力でその情報を取得できない入力フォーマットでのみ指定できます。現在これはAVC/h.264エレメンタリストリームのみです。この値は浮動小数点数または分数を取ることができます。"
+msgstr "トラックのフレーム長もしくはフレームレートのデフォルト値を指定します。これはmkvmergeが自力でその情報を取得できない入力フォーマットでのみ指定できます。現在これはAVC/h.264エレメンタリストリームのみです。この値は浮動小数点数または分数を取ることができます。"
 
 #: src/mmg/tab_input_format.cpp:62
 msgid "Sets the display aspect ratio of the track. The format can be either 'a/b' in which case both numbers must be integer (e.g. 16/9) or just a single floting point number 'f' (e.g. 2.35)."
@@ -4702,9 +4679,9 @@ msgstr ""
 msgid "Signature: %1%"
 msgstr ""
 
-#: src/mmg/he_value_page.cpp:70
+#: src/mmg/he_value_page.cpp:72
 msgid "Signed integer"
-msgstr ""
+msgstr "符号つき整数"
 
 #: src/info/mkvinfo.cpp:1251
 msgid "Silent Track Number: %1%"
@@ -4742,25 +4719,25 @@ msgstr "開始点で%1%バイトをスキップします（正しいMP3ヘッダ
 msgid "Slices"
 msgstr ""
 
-#: src/mmg/header_editor_frame.cpp:498
+#: src/mmg/header_editor_frame.cpp:519
 msgid "Some header values have been modified. Do you really want to close without saving the file?"
-msgstr ""
+msgstr "修正されたヘッダの値があります。本当にファイルを保存しないで閉じますか？"
 
-#: src/mmg/header_editor_frame.cpp:488
+#: src/mmg/header_editor_frame.cpp:509
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
-msgstr ""
+msgstr "修正されたヘッダの値があります。本当にファイルを保存しないでリロードしますか？"
 
 #: src/merge/output_control.cpp:1287
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "失われているタグ要素があります（このエラーは発生するはずはありません―似たような他のエラーが以前に発生しているはずです）。 %1%\n"
 
-#: src/mmg/header_editor_frame.cpp:349
+#: src/mmg/header_editor_frame.cpp:370
 msgid "Specifies the language of the track in the Matroska languages form."
-msgstr ""
+msgstr "Matroska言語形式でトラックの言語を指定します。"
 
-#: src/mmg/header_editor_frame.cpp:405
+#: src/mmg/header_editor_frame.cpp:426
 msgid "Specify the possible modifications to the aspect ratio (0: free resizing, 1: keep aspect ratio, 2: fixed)."
-msgstr ""
+msgstr "アスペクト比を修正可能かどうかを設定します（0：フリーリサイズ、1：アスペクト比を保持する、2：固定）。"
 
 #: src/mmg/tab_global.cpp:46
 msgid "Splitting"
@@ -4820,10 +4797,9 @@ msgstr "ステータス"
 msgid "Status and progress"
 msgstr "ステータスと進行状況"
 
-#: src/mmg/he_value_page.cpp:96
-#, fuzzy
+#: src/mmg/he_value_page.cpp:101
 msgid "Status:"
-msgstr "ステータス"
+msgstr "ステータス："
 
 #: src/merge/mkvmerge.cpp:795
 msgid "Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and 3 or one of the keywords 'none', 'right', 'left', 'both' (argument was '%1%').\n"
@@ -4833,9 +4809,9 @@ msgstr "ステレオモードパラメータ：\"<TID>:<n|keyword>\"のnが0～3
 msgid "Stereo mode: %1%%2%"
 msgstr ""
 
-#: src/mmg/header_editor_frame.cpp:410
+#: src/mmg/header_editor_frame.cpp:431
 msgid "Stereo-3D video mode (0: mono, 1: right eye, 2: left eye, 3: both eyes)."
-msgstr ""
+msgstr "ステレオ3Dビデオモードです（0：モノラル、1：右目、2：左目、3：両目）。"
 
 #: src/mmg/tab_input_format.cpp:97
 msgid "Stereoscopy:"
@@ -4849,10 +4825,9 @@ msgstr "引き延ばし："
 msgid "Stretch this track's timecodes. This entry can have two formats. It is either a positive floating point number, or a fraction like e.g. 1200/1253. Works best on video and subtitle tracks."
 msgstr "このトラックのタイムコードを引き延ばします。このエントリは2つのフォーマットを取ることができます。正の浮動小数点数、もしくは1200/1253のような分数です。ビデオや字幕トラックで最も役立ちます。"
 
-#: src/mmg/he_value_page.cpp:68
-#, fuzzy
+#: src/mmg/he_value_page.cpp:70
 msgid "String"
-msgstr "ファイル分割"
+msgstr "文字列"
 
 #: src/mmg/tab_input_format.cpp:150
 msgid "Subtitle charset:"
@@ -4862,10 +4837,10 @@ msgstr "字幕の文字セット："
 msgid "Subtitle track %1% is missing some duration elements. Please check the resulting SSA/ASS file for entries that have the same start and end time.\n"
 msgstr "字幕トラック%1%に失われている持続時間要素があります。同じ開始時間と終了時間がないか出力されるSSA/ASSファイルのエントリをチェックしてください。\n"
 
-#: src/mmg/header_editor_frame.cpp:293
+#: src/mmg/header_editor_frame.cpp:316
 #, c-format
 msgid "Subtitle track %u"
-msgstr ""
+msgstr "字幕トラック%u"
 
 #: src/mmg/tab_input.cpp:228
 msgid "TTA (The lossless True Audio codec)"
@@ -4973,17 +4948,12 @@ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, nat
 msgstr "MPEG-4 part 2の圧縮はネイティブMPEG-4でのみ動作します。しかし'--engage native_mpeg4'でネイティブMPEG-4モードが選択されていません。\n"
 
 #: src/mmg/kax_analyzer.cpp:134
-#, fuzzy
 msgid "The Matroska file is analyzed."
-msgstr "通常のMatroskaファイル"
+msgstr "Matroskaファイルを解析中です。"
 
-#: src/mmg/header_editor_frame.cpp:620
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:637
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
-msgstr ""
-"Matroskaファイルは修正されましたが、メタシークエントリを更新することができませんでした。これはプレーヤがこの要素を見つけるのにかなり時間がかかることを意味します。好きなプレーヤでこのファイルをチェックしてください。\n"
-"\n"
-"正しい解決策は、このチャプタをXMLファイルに保存し、そのチャプタを含めてファイルを再MUXすることです。"
+msgstr "Matroskaファイルは修正されましたが、メタシークエントリを更新することができませんでした。これはプレーヤがこの要素を見つけるのにかなり時間がかかることを意味します。好きなプレーヤでこのファイルをチェックしてください。\n"
 
 #: src/mmg/tab_chapters.cpp:1935
 msgid ""
@@ -5151,7 +5121,7 @@ msgstr ""
 msgid "The duration after which a new output file is started. The time can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH' and the number of nanoseconds 'nnnnnnnnn'. If given then you may use up to nine digits after the decimal point. Examples: 01:00:00 (after one hour) or 1800s (after 1800 seconds)."
 msgstr "ここで指定された時間でファイルが分割作成されます。時間はHH:MM:SS.nnnnnnnnnの形または's'を後ろにつけて秒数で指定します。何時間かを指定する'HH'とナノ秒を指定する'nnnnnnnnn'は省略することができます。ナノ秒を指定する場合は小数第9位まで指定することができます。例：01:00:00（1時間で分割）　1800s（1800秒で分割）"
 
-#: src/mmg/header_editor_frame.cpp:608 src/mmg/tab_chapters.cpp:1923
+#: src/mmg/header_editor_frame.cpp:625 src/mmg/tab_chapters.cpp:1923
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "要素はファイルの終端に書き込まれましたが、セグメントサイズを更新できませんでした。そのため要素は不可視となります。処理は中断されます。ファイルは変更されました！"
 
@@ -5218,9 +5188,9 @@ msgstr "ファイルがありません。"
 msgid "The file does not seem to be a valid mkvmerge GUI settings file."
 msgstr "ファイルは正しいmkvmerge GUIの設定ファイルではないようです。"
 
-#: src/mmg/header_editor_frame.cpp:443
+#: src/mmg/header_editor_frame.cpp:464
 msgid "The file has been changed by another program since it was read by the header editor. Therefore you have to re-load it. Unfortunately this means that all of your changes will be lost."
-msgstr ""
+msgstr "ヘッダエディタがファイルを読み込んだ以降に他のプログラムによってファイルは変更されました。よってリロードしなければなりません。残念ながら全ての変更が失われるということを意味します。"
 
 #: src/input/r_tta.cpp:66
 msgid "The file header is too short.\n"
@@ -5251,10 +5221,9 @@ msgstr "ファイルを修正中です、part 3/4..."
 msgid "The file is being fixed, part 4/4..."
 msgstr "ファイルを修正中です、part 4/4..."
 
-#: src/mmg/header_editor_frame.cpp:235
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:258
 msgid "The file name for this segment."
-msgstr "ファイルヘッダが短かすぎます。\n"
+msgstr "このセグメントのファイル名です。"
 
 #: src/merge/output_control.cpp:862
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. The argument for '--append-to' was invalid.\n"
@@ -5268,10 +5237,9 @@ msgstr "ファイル番号%1%（'%2%'）はID %3%のトラックを含んでい�
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr "ファイル番号%1%（'%2%'）は追加結合されていません。'--append-to'の引数は不正です。\n"
 
-#: src/mmg/header_editor_frame.cpp:166
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:188
 msgid "The file you tried to open is not a Matroska file."
-msgstr "チャプタを保存しようとしたファイルはMatroskaファイルではありません。"
+msgstr "開こうとしたファイルはMatroskaファイルではありません。"
 
 #: src/mmg/tab_chapters.cpp:654
 msgid "The file you tried to save to is NOT a Matroska file."
@@ -5385,17 +5353,17 @@ msgstr "ロケールを正しく設定することができませんでした。
 msgid "The maximum number of files that will be created even if the last file might contain more bytes/time than wanted. Useful e.g. when you want exactly two files. If you leave this empty then there is no limit for the number of files mkvmerge might create."
 msgstr "最後のファイルが指定したよりも大きかったり長かったりしたとしても、ここで指定した最大分割数以上のファイルは作成されません。例えばちょうど2つのファイルに分割したい場合などに役立ちます。空白の場合はmkvmergeは最大分割数を設定しません。"
 
-#: src/mmg/header_editor_frame.cpp:332
+#: src/mmg/header_editor_frame.cpp:353
 msgid "The maximum number of frames a player should be able to cache during playback. If set to 0, the reference pseudo-cache system is not used."
-msgstr ""
+msgstr "再生中にプレーヤがキャッシュすることのできる最大フレーム数です。0を指定すると、リファレンスの疑似キャッシュシステムは使用されません。"
 
-#: src/mmg/header_editor_frame.cpp:614 src/mmg/tab_chapters.cpp:1929
+#: src/mmg/header_editor_frame.cpp:631 src/mmg/tab_chapters.cpp:1929
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "メタシーク要素はファイルの終端に書き込まれましたが、セグメントサイズを更新できませんでした。そのため要素は不可視となります。処理は中断されます。ファイルは変更されました！"
 
-#: src/mmg/header_editor_frame.cpp:327
+#: src/mmg/header_editor_frame.cpp:348
 msgid "The minimum number of frames a player should be able to cache during playback. If set to 0, the reference pseudo-cache system is not used."
-msgstr ""
+msgstr "再生中にプレーヤがキャッシュすることのできる最小フレーム数です。0を指定すると、リファレンスの疑似キャッシュシステムは使用されません。"
 
 #: src/mmg/mmg.cpp:1158
 msgid "The mkvmerge GUI help file was not found in the path you've selected. Please try again, or abort by pressing the 'abort' button."
@@ -5431,21 +5399,21 @@ msgstr "2つのオーディオトラック間でチャンネル数が異なっ�
 msgid "The number of external timecodes %1% is smaller than the number of frames in this track. The remaining frames of this track might not be timestamped the way you intended them to be. mkvmerge might even crash.\n"
 msgstr "外部タイムコード%1%の数がこのトラックのフレーム数より小さいです。残りのフレームは意図した通りにタイムスタンプを押されないかもしれません。mkvmergeがクラッシュする可能性さえあります。\n"
 
-#: src/mmg/header_editor_frame.cpp:400
+#: src/mmg/header_editor_frame.cpp:421
 msgid "The number of video pixels to remove on the bottom of the image."
-msgstr ""
+msgstr "イメージの下部で除去するビデオピクセル数です。"
 
-#: src/mmg/header_editor_frame.cpp:385
+#: src/mmg/header_editor_frame.cpp:406
 msgid "The number of video pixels to remove on the left of the image."
-msgstr ""
+msgstr "イメージの左で除去するビデオピクセル数です。"
 
-#: src/mmg/header_editor_frame.cpp:395
+#: src/mmg/header_editor_frame.cpp:416
 msgid "The number of video pixels to remove on the right of the image."
-msgstr ""
+msgstr "イメージの右で除去するビデオピクセル数です。"
 
-#: src/mmg/header_editor_frame.cpp:390
+#: src/mmg/header_editor_frame.cpp:411
 msgid "The number of video pixels to remove on the top of the image."
-msgstr ""
+msgstr "イメージの上部で除去するビデオピクセル数です。"
 
 #: src/merge/mkvmerge.cpp:1843
 msgid "The option '--meta-seek-size' is no longer supported. Please read mkvmerge's documentation, especially the section about the MATROSKA FILE LAYOUT.\n"
@@ -5484,9 +5452,9 @@ msgstr "ルート要素は<%1%>でなければなりません。"
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
 msgstr "2つのオーディオトラック間でサンプリングレートが異なっています：%1%と%2%"
 
-#: src/mmg/header_editor_frame.cpp:341
+#: src/mmg/header_editor_frame.cpp:362
 msgid "The scale to apply on this track to work at normal speed in relation with other tracks (mostly used to adjust video speed when the audio length differs)."
-msgstr ""
+msgstr "このトラックが他のトラックとの関係で普通の速さで再生されるようトラックに適用する倍率です（オーディオトラックと長さが異なるときにビデオのスピードを調整するのに最もよく使われます）。"
 
 #: src/input/r_tta.cpp:86
 msgid "The seek table in this TTA file seems to be broken.\n"
@@ -5565,9 +5533,9 @@ msgstr "ここで指定したタイムコードで出力ファイルが分割さ
 msgid "The timecodes for this stream have been reset in the middle of the file. This is not supported. The current packet will be discarded.\n"
 msgstr "このストリームのタイムコードはファイルの中間でリセットされています。これはサポート外です。現在のパケットは破棄されます。\n"
 
-#: src/mmg/header_editor_frame.cpp:232
+#: src/mmg/header_editor_frame.cpp:255
 msgid "The title for the whole movie."
-msgstr ""
+msgstr "動画全体のタイトルです。"
 
 #: src/merge/output_control.cpp:878
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
@@ -5589,10 +5557,9 @@ msgstr "ファイル'%2%'のトラック番号%1%をファイル'%4%'のトラ�
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
 msgstr "ファイル'%2%'のトラック番号%1%をファイル'%4%'のトラック番号%3%に追加結合することはできません。%5%\n"
 
-#: src/mmg/header_editor_frame.cpp:306
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:327
 msgid "The track number as used in the Block Header."
-msgstr "トラック番号%1%のコーデックIDが不正です。\n"
+msgstr "ブロックヘッダで使われるトラック番号です。"
 
 #: src/merge/output_control.cpp:933
 msgid "The track parameters do not match."
@@ -5614,9 +5581,9 @@ msgstr "'%1%'の翻訳は利用できません。\n"
 msgid "There were ERRORs."
 msgstr "エラーが発生しました。"
 
-#: src/mmg/header_editor_frame.cpp:457 src/mmg/header_editor_frame.cpp:558
+#: src/mmg/header_editor_frame.cpp:478 src/mmg/header_editor_frame.cpp:575
 msgid "There were errors in the header values preventing the headers from being saved. The first error has been selected."
-msgstr ""
+msgstr "ヘッダの値にエラーがあり、ヘッダを保存することができませんでした。最初のエラーが選択されています。"
 
 #: src/mmg/mux_dialog.cpp:260
 msgid "There were warnings"
@@ -5662,13 +5629,15 @@ msgstr "このMPEGオーディオトラックは%1%バイトのMP3ではない�
 msgid "This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can be overridden with the '--chapter-charset <charset>' switch.\n"
 msgstr "このOgg/OGMファイルはチャプタやタイトルの情報を含んでいます。残念ながらこの情報を格納するのに使用された文字セットをはっきりと特定することはできません。このプログラムはシステムの現在の文字セットが適切だと推測します。これは'--chapter-charset <charset>'スイッチで上書きすることができます。\n"
 
-#: src/mmg/he_value_page.cpp:92
-msgid "This element is currently present in the file. Remove the element from the file"
-msgstr ""
+#: src/mmg/he_value_page.cpp:96
+#, fuzzy
+msgid "This element is currently present in the file. You can let the header editor remove the element from the file."
+msgstr "この要素は現在ファイルに存在します。ファイルから要素を除去します"
 
-#: src/mmg/he_value_page.cpp:87
-msgid "This element is not currently present in the file. Add the element to the file"
-msgstr ""
+#: src/mmg/he_value_page.cpp:90
+#, fuzzy
+msgid "This element is not currently present in the file. You can let the header editor add the element to the file."
+msgstr "この要素は現在ファイルには存在しません。ファイルに要素を加えます"
 
 #: src/input/r_qtmp4.cpp:333
 msgid "This file contains at least one frame with a negative timecode. All timecodes will be adjusted by %1% so that none is negative anymore.\n"
@@ -5732,19 +5701,17 @@ msgstr "タイムコードファイル (*.tmc;*.txt)|*.tmc;*.txt|%s"
 msgid "Timecode scale: %1%"
 msgstr "タイムコードスケール：%1%"
 
-#: src/mmg/header_editor_frame.cpp:340
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:361
 msgid "Timecode scaling"
-msgstr "タイムコードスケール：%1%"
+msgstr "タイムコードスケーリング"
 
 #: src/mmg/tab_input_general.cpp:93
 msgid "Timecodes:"
 msgstr "タイムコード："
 
-#: src/mmg/header_editor_frame.cpp:232
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:255
 msgid "Title"
-msgstr "字幕"
+msgstr "タイトル"
 
 #: src/info/mkvinfo.cpp:522
 msgid "Title: %1%"
@@ -5834,10 +5801,9 @@ msgstr "Track ID %1%は未知のAACタイプです。\n"
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "トラックID %1%：%2%（%3%）"
 
-#: src/mmg/header_editor_frame.cpp:309
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:330
 msgid "Track UID"
-msgstr "トラック："
+msgstr "トラックUID"
 
 #: src/info/mkvinfo.cpp:862
 msgid "Track UID: %1%"
@@ -5847,10 +5813,9 @@ msgstr ""
 msgid "Track name:"
 msgstr "トラック名："
 
-#: src/mmg/header_editor_frame.cpp:305
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:326
 msgid "Track number"
-msgstr "トラック名："
+msgstr "トラック番号"
 
 #: src/common/compression.cpp:489
 msgid "Track number %1% has been encrypted and decryption has not yet been implemented.\n"
@@ -5880,13 +5845,13 @@ msgstr "トラック："
 msgid "Two VobSub tracks can only be extracted into the same file if their CodecPrivate data matches. This is not the case for the tracks %1% and %2%.\n"
 msgstr "2つのVobSubトラックを同じファイルに展開できるのは、CodecPrivateデータが一致するときだけです。トラック%1%と%2%はそうではありません。\n"
 
-#: src/mmg/header_editor_frame.cpp:380
+#: src/mmg/header_editor_frame.cpp:401
 msgid "Type of the unit for DisplayWidth/Height (0: pixels, 1: centimeters, 2: inches)."
-msgstr ""
+msgstr "縦解像度・横解像度の単位です（0：ピクセル、1：センチメートル、2：インチ）。"
 
-#: src/mmg/he_value_page.cpp:76
+#: src/mmg/he_value_page.cpp:78
 msgid "Type:"
-msgstr ""
+msgstr "タイプ："
 
 #: src/info/mkvinfo.cpp:714
 msgid "Type: %1% (%2%)"
@@ -5952,13 +5917,13 @@ msgstr "このトラックのオーディオフォーマット 0x%|1$04x|は未�
 msgid "Unrecognized command line option '%1%'. Maybe you put a mode specific option before the input file name?\n"
 msgstr "コマンドラインオプション'%1%'は認識されませんでした。多分モード指定オプションを入力ファイル名の前に指定したのではないですか？\n"
 
-#: src/mmg/he_value_page.cpp:69
+#: src/mmg/he_value_page.cpp:71
 msgid "Unsigned integer"
-msgstr ""
+msgstr "符号無し整数"
 
 #: src/common/xml_element_parser.cpp:68
 msgid "Unsigned integer (%1%) is too small. Mininum value is %2%."
-msgstr "符号なしの整数（%1%）は小さすぎます。最小値は%2%です。"
+msgstr "符号無し整数（%1%）は小さすぎます。最小値は%2%です。"
 
 #: src/input/r_vobsub.cpp:404
 msgid "Unsupported MPEG mpeg_version: 0x%|1$02x| in packet %2% for timecode %3%, assuming MPEG2. No further warnings will be printed for this track.\n"
@@ -6153,7 +6118,7 @@ msgstr "出力ファイルにセグメント結合を使用します。この機
 
 #: src/mmg/mmg.cpp:201
 msgid "Use fixed values for the elements that change with each file otherwise (muxing date, segment UID, track UIDs etc.). Two files muxed with the same settings and this switch activated will be identical."
-msgstr "このオプションを指定しなければ各ファイル間で異なる値を取るパラメータ（MUX日、セグメントUDI、トラックUID等）を同じ値にします。同じ設定かつこのオプションを指定してMUXされたファイルはそっくりなファイルになります。"
+msgstr "このオプションを指定しなければ各ファイル間で異なる値を取るパラメータ（MUX日、セグメントUDI、トラックUID等）を固定値にします。同じ設定かつこのオプションを指定してMUXされたファイルはそっくりなファイルになります。"
 
 #: src/mmg/mmg.cpp:213
 msgid "Use the old AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') instead of the new one ('A_AAC')."
@@ -6439,73 +6404,70 @@ msgstr "VC1ビデオエレメンタリストリーム"
 msgid "Valid hacks are:\n"
 msgstr "有効なハック：\n"
 
-#: src/mmg/header_editor_frame.cpp:76
+#: src/mmg/header_editor_frame.cpp:92
 msgid "Validates the content of all changeable headers"
-msgstr ""
+msgstr "全ての変更可能なヘッダの内容の正当性を検証します"
 
 #: src/mmg/mmg.cpp:703
 msgid "Verify the current chapter entries to see if there are any errors"
 msgstr "エラーチェックのために現在のチャプタをベリファイします"
 
-#: src/mmg/header_editor_frame.cpp:404
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:425
 msgid "Video aspect ratio type"
-msgstr "アスペクト比"
+msgstr "ビデオのアスペクト比のタイプ"
 
-#: src/mmg/header_editor_frame.cpp:400
+#: src/mmg/header_editor_frame.cpp:421
 msgid "Video crop bottom"
-msgstr ""
+msgstr "ビデオクロップ（下）"
 
-#: src/mmg/header_editor_frame.cpp:385
+#: src/mmg/header_editor_frame.cpp:406
 msgid "Video crop left"
-msgstr ""
+msgstr "ビデオクロップ（左）"
 
-#: src/mmg/header_editor_frame.cpp:395
+#: src/mmg/header_editor_frame.cpp:416
 msgid "Video crop right"
-msgstr ""
+msgstr "ビデオクロップ（右）"
 
-#: src/mmg/header_editor_frame.cpp:390
+#: src/mmg/header_editor_frame.cpp:411
 msgid "Video crop top"
-msgstr ""
+msgstr "ビデオクロップ（上）"
 
-#: src/mmg/header_editor_frame.cpp:375
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:396
 msgid "Video display height"
-msgstr "表示解像度（横/縦）："
+msgstr "縦表示解像度"
 
-#: src/mmg/header_editor_frame.cpp:380
+#: src/mmg/header_editor_frame.cpp:401
 msgid "Video display unit"
-msgstr ""
+msgstr "解像度単位"
 
-#: src/mmg/header_editor_frame.cpp:370
-#, fuzzy
+#: src/mmg/header_editor_frame.cpp:391
 msgid "Video display width"
-msgstr "表示解像度（横/縦）："
+msgstr "横表示解像度"
 
 #: src/input/r_real.cpp:656
 msgid "Video packet assembly failed. Error code: %1% (%2%)\n"
 msgstr "ビデオパケットアセンブリが落ちました。エラーコード：%1%（%2%）\n"
 
-#: src/mmg/header_editor_frame.cpp:365
+#: src/mmg/header_editor_frame.cpp:386
 msgid "Video pixel height"
-msgstr ""
+msgstr "縦解像度（ピクセル）"
 
-#: src/mmg/header_editor_frame.cpp:360
+#: src/mmg/header_editor_frame.cpp:381
 msgid "Video pixel width"
-msgstr ""
+msgstr "横解像度（ピクセル）"
 
-#: src/mmg/header_editor_frame.cpp:410
+#: src/mmg/header_editor_frame.cpp:431
 msgid "Video stereo mode"
-msgstr ""
+msgstr "ビデオステレオモード"
 
 #: src/info/mkvinfo.cpp:575
 msgid "Video track"
 msgstr ""
 
-#: src/mmg/header_editor_frame.cpp:290
-#, fuzzy, c-format
+#: src/mmg/header_editor_frame.cpp:313
+#, c-format
 msgid "Video track %u"
-msgstr "トラックが見つかりませんでした"
+msgstr "ビデオトラック%u"
 
 #: src/mmg/jobs.cpp:397
 msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
@@ -6571,17 +6533,17 @@ msgstr "警告： "
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
 msgstr "ファイルが追加された際にファイル名をスキャンします。もし'DELAY'という単語の後ろに数字が続いていたら、その数字がファイルで見つかった全てのオーディオトラックの'ディレイ'の入力フィールドに自動的に入力されます。"
 
-#: src/mmg/header_editor_frame.cpp:360
+#: src/mmg/header_editor_frame.cpp:381
 msgid "Width of the encoded video frames in pixels."
-msgstr ""
+msgstr "エンコードされたビデオフレームの横解像度（ピクセル単位）です。"
 
-#: src/mmg/header_editor_frame.cpp:370
+#: src/mmg/header_editor_frame.cpp:391
 msgid "Width of the video frames to display."
-msgstr ""
+msgstr "ビデオフレームの横表示解像度です。"
 
 #: src/mmg/mmg.cpp:176
 msgid "Write durations for all blocks. This will increase file size and does not offer any additional value for players at the moment."
-msgstr "全てのブロックの持続時間を記録します。これはファイルサイズを増大させますが、現在のところプレーヤには何のメリットももたらしません。"
+msgstr "全てのブロックの長さを記録します。これはファイルサイズを増大させますが、現在のところプレーヤには何のメリットももたらしません。"
 
 #: src/info/mkvinfo.cpp:473
 msgid "Writing application: %1%"
@@ -6611,7 +6573,7 @@ msgstr "'--split-max-files'の引数が間違っています。\n"
 msgid "Wrong file chosen"
 msgstr "間違ったファイルが選択されました"
 
-#: src/mmg/header_editor_frame.cpp:166 src/mmg/tab_chapters.cpp:654
+#: src/mmg/header_editor_frame.cpp:188 src/mmg/tab_chapters.cpp:654
 #: src/mmg/tab_chapters.cpp:695
 msgid "Wrong file selected"
 msgstr "間違ったファイルが選択されました"
@@ -6648,7 +6610,7 @@ msgid ""
 "5minutes and 23seconds earlier than now."
 msgstr ""
 "この機能は選択したチャプタとその全ての子チャプタのタイムコードを\n"
-"指定した値だけ調整することができます。正の数も負の数も指定することができます。\n"
+"一定の値だけ調整することができます。正の数も負の数も指定することができます。\n"
 "指定するフォーマットは、数字のみ（その場合は秒数として解釈されます）、\n"
 "または数字の後に'ms'や's'（その場合はそれぞれミリ秒、秒として解釈されます）をつけるフォーマット、\n"
 "または普通のHH:MM:SS.mmmやHH:MM:SSのフォーマットを取ることができます。\n"
@@ -6782,7 +6744,7 @@ msgstr "ボタン"
 
 #: src/common/byte_buffer.h:69
 msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"
-msgstr ""
+msgstr "byte_buffer_c: (pos + num) > sizeです。発生するべきではありません。バグレポートを提出してください。\n"
 
 #: src/common/compression.cpp:229
 msgid "bzip2 compression failed. Result: %1%\n"
@@ -6860,7 +6822,7 @@ msgstr ""
 
 #: src/common/compression.cpp:153
 msgid "deflateInit() failed. Result: %1%\n"
-msgstr ""
+msgstr "deflateInit()が失敗しました。結果：%1%\n"
 
 #: src/input/r_dirac.cpp:88
 msgid "dirac_es_reader: Could not open the source file."
@@ -7031,7 +6993,7 @@ msgstr "flac_reader：ファイル解析エラー：%1%\n"
 
 #: src/input/r_flac.cpp:268
 msgid "flac_reader: FLAC__stream_decoder_new() failed.\n"
-msgstr ""
+msgstr "flac_reader：FLAC__stream_decoder_new()が失敗しました。\n"
 
 #: src/input/r_flac.cpp:226
 msgid "flac_reader: could not initialize the FLAC packetizer.\n"
@@ -7067,7 +7029,7 @@ msgstr "最高"
 
 #: src/common/compression.cpp:116
 msgid "inflateInit() failed. Result: %1%\n"
-msgstr ""
+msgstr "inflateInit()が失敗しました。結果：%1%\n"
 
 #: src/info/mkvinfo.cpp:1479
 msgid "key, "
@@ -7624,7 +7586,7 @@ msgstr "und (Undetermined)"
 
 #: src/input/r_matroska.cpp:91 src/input/r_matroska.cpp:2140
 #: src/input/r_matroska.cpp:2147 src/input/r_mpeg_ps.cpp:1304
-#: src/common/mm_io.cpp:412 src/mmg/he_value_page.cpp:74
+#: src/common/mm_io.cpp:412 src/mmg/he_value_page.cpp:76
 #: src/mmg/tab_input.cpp:346 src/mmg/tab_input.cpp:622
 #: src/mmg/tab_input.cpp:1234 src/info/mkvinfo.cpp:708
 #: src/info/mkvinfo.cpp:718 src/info/mkvinfo.cpp:737 src/info/mkvinfo.cpp:766

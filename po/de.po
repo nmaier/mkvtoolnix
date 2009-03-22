@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-03-22 15:24+0100\n"
+"PO-Revision-Date: 2009-03-22 20:53+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -793,11 +793,11 @@ msgstr "&Kapiteleditor"
 msgid "&Chapter editor\tAlt-4"
 msgstr "&Kapiteleditor\tAlt-4"
 
-#: src/mmg/header_editor_frame.cpp:68
+#: src/mmg/header_editor_frame.cpp:84
 msgid "&Close\tCtrl-W"
 msgstr "S&chließen\tCtrl-W"
 
-#: src/mmg/header_editor_frame.cpp:74
+#: src/mmg/header_editor_frame.cpp:90
 msgid "&Collapse all entries\tCtrl-P"
 msgstr "Alle Elemente ver&bergen\tCtrl-P"
 
@@ -817,7 +817,7 @@ msgstr "&Deaktivieren"
 msgid "&Down"
 msgstr "&Runter"
 
-#: src/mmg/header_editor_frame.cpp:73
+#: src/mmg/header_editor_frame.cpp:89
 msgid "&Expand all entries\tCtrl-E"
 msgstr "Alle elemente &aufklappen\tCtrl-E"
 
@@ -825,7 +825,7 @@ msgstr "Alle elemente &aufklappen\tCtrl-E"
 msgid "&Expand important elements\tCtrl-E"
 msgstr "Wichtige &Elemente aufklappen\tCtrl-E"
 
-#: src/mmg/header_editor_frame.cpp:84 src/mmg/mmg.cpp:721
+#: src/mmg/header_editor_frame.cpp:100 src/mmg/mmg.cpp:721
 #: src/info/wxwidgets_ui.cpp:147
 msgid "&File"
 msgstr "&Datei"
@@ -838,12 +838,12 @@ msgstr "&Globale Optionen\tAlt-3"
 msgid "&Header editor\tCtrl-E"
 msgstr "&Kopfdateneditor\tCtrl-E"
 
-#: src/mmg/header_editor_frame.cpp:86 src/mmg/mmg.cpp:725
+#: src/mmg/header_editor_frame.cpp:102 src/mmg/mmg.cpp:725
 #: src/info/wxwidgets_ui.cpp:149
 msgid "&Help"
 msgstr "&Hilfe"
 
-#: src/mmg/header_editor_frame.cpp:79 src/mmg/mmg.cpp:717
+#: src/mmg/header_editor_frame.cpp:95 src/mmg/mmg.cpp:717
 msgid "&Help\tF1"
 msgstr "&Hilfe\tF1"
 
@@ -879,7 +879,7 @@ msgstr "&Neue Kapitel"
 msgid "&Ok"
 msgstr "&Ok"
 
-#: src/mmg/header_editor_frame.cpp:65 src/info/wxwidgets_ui.cpp:136
+#: src/mmg/header_editor_frame.cpp:81 src/info/wxwidgets_ui.cpp:136
 msgid "&Open\tCtrl-O"
 msgstr "Ö&ffnen\tCtrl-O"
 
@@ -887,7 +887,7 @@ msgstr "Ö&ffnen\tCtrl-O"
 msgid "&Options"
 msgstr "&Optionen"
 
-#: src/mmg/header_editor_frame.cpp:70 src/mmg/mmg.cpp:677
+#: src/mmg/header_editor_frame.cpp:86 src/mmg/mmg.cpp:677
 msgid "&Quit\tCtrl-Q"
 msgstr "&Beenden\tCtrl-Q"
 
@@ -895,11 +895,11 @@ msgstr "&Beenden\tCtrl-Q"
 msgid "&Re-enable"
 msgstr "&Aktivieren"
 
-#: src/mmg/header_editor_frame.cpp:67
+#: src/mmg/header_editor_frame.cpp:83
 msgid "&Reload\tCtrl-R"
 msgstr "&Neu laden\tCtrl-R"
 
-#: src/mmg/he_value_page.cpp:115
+#: src/mmg/he_value_page.cpp:52
 msgid "&Reset"
 msgstr "&Zurücksetzen"
 
@@ -907,7 +907,7 @@ msgstr "&Zurücksetzen"
 msgid "&Save"
 msgstr "&Speichern"
 
-#: src/mmg/header_editor_frame.cpp:66
+#: src/mmg/header_editor_frame.cpp:82
 msgid "&Save\tCtrl-S"
 msgstr "&Speichern\tCtrl-S"
 
@@ -927,7 +927,7 @@ msgstr "&Starten"
 msgid "&Up"
 msgstr "&Hoch"
 
-#: src/mmg/header_editor_frame.cpp:76
+#: src/mmg/header_editor_frame.cpp:92
 msgid "&Validate\tCtrl-T"
 msgstr "&Validieren\tCtrl-T"
 
@@ -1322,15 +1322,15 @@ msgstr "Die Option '-c' darf nur beim Extrahieren von Tracks benutzt werden.\n"
 msgid "'-c' lacks a charset.\n"
 msgstr "Der Option '-c' fehlt der Zeichensatz.\n"
 
-#: src/mmg/header_editor_frame.cpp:313
+#: src/mmg/header_editor_frame.cpp:334
 msgid "'Default track' flag"
 msgstr "'Standardtrack'-Flag"
 
-#: src/mmg/header_editor_frame.cpp:320
+#: src/mmg/header_editor_frame.cpp:341
 msgid "'Forced display' flag"
 msgstr "'Anzeige Erzwungen'-Flag"
 
-#: src/mmg/header_editor_frame.cpp:317
+#: src/mmg/header_editor_frame.cpp:338
 msgid "'Track enabled' flag"
 msgstr "'Track aktiv'-Flag"
 
@@ -1473,11 +1473,11 @@ msgstr "An Position %1% wurde eine Blockgruppe gefunden, die kein Block-Element 
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr "Es wurde ein Block für Track Nummer %2% bei Zeitstempel %1% gefunden. Allerdings wurden bisher noch keine Track-Header gefunden. Der Block wird ausgelassen.\n"
 
-#: src/mmg/header_editor_frame.cpp:355
+#: src/mmg/header_editor_frame.cpp:376
 msgid "A human-readable string specifying the codec."
 msgstr "Eine menschenlesbare Zeichenkette, die den Namen des Codecs angibt."
 
-#: src/mmg/header_editor_frame.cpp:345
+#: src/mmg/header_editor_frame.cpp:366
 msgid "A human-readable track name."
 msgstr "Ein menschenlesbarer Name des Tracks."
 
@@ -1486,7 +1486,7 @@ msgstr "Ein menschenlesbarer Name des Tracks."
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "Es gibt bereits einen Job mit der Beschreibung '%s'. Wollen Sie wirklich einen weiteren Job mit derselben Beschreibung anlegen?"
 
-#: src/mmg/header_editor_frame.cpp:245
+#: src/mmg/header_editor_frame.cpp:268
 msgid "A randomly generated unique ID to identify the current segment between many others (128 bits)."
 msgstr "Eine zufällig erzeugte, eindeutige ID, mit der das aktuelle Segment unter verschiedenen erkannt werden kann (128 Bits lang)."
 
@@ -1502,15 +1502,15 @@ msgstr "Ein Track"
 msgid "A track with the ID %1% was requested but not found in the file. The corresponding option will be ignored.\n"
 msgstr "Ein Track mit der ID %1% wurde angegeben aber in der Quelldatei nicht gefunden. Die Option, in der diese Track-ID benutzt wurde, wird ignoriert.\n"
 
-#: src/mmg/header_editor_frame.cpp:310
+#: src/mmg/header_editor_frame.cpp:331
 msgid "A unique ID to identify the Track. This should be kept the same when making a direct stream copy of the Track to another file."
 msgstr "Eine eindeutige ID zur Identifikation des Tracks. Diese sollte beim Kopieren des Tracks in eine andere Datei erhalten bleiben."
 
-#: src/mmg/header_editor_frame.cpp:253
+#: src/mmg/header_editor_frame.cpp:276
 msgid "A unique ID to identify the next chained segment (128 bits)."
 msgstr "Eine eindeutige ID zur Kennzeichnung des nächsten verknüpften Segmentes (128 Bits lang)."
 
-#: src/mmg/header_editor_frame.cpp:249
+#: src/mmg/header_editor_frame.cpp:272
 msgid "A unique ID to identify the previous chained segment (128 bits)."
 msgstr "Eine eindeutige ID zur Kennzeichnung des vorherigen verknüpften Segmentes (128 Bits lang)."
 
@@ -1530,7 +1530,7 @@ msgstr "AAC-Dateien können HE-AAC / AAC+ / SBR AAC Tracks enthalten. Solche Tra
 msgid "AAC is SBR/HE-AAC/AAC+"
 msgstr "AAC ist SBR/HE-AAC/AAC+"
 
-#: src/mmg/he_value_page.cpp:67
+#: src/mmg/he_value_page.cpp:69
 msgid "ASCII string (no special chars like Umlaute etc)"
 msgstr "ASCII-Zeichenkette (keine Sonderzeichen wie Umlaute etc)"
 
@@ -1587,6 +1587,10 @@ msgstr "Kapitel hinzufügen"
 msgid "Add command line options"
 msgstr "Kommandozeilenoptionen hinzufügen"
 
+#: src/mmg/he_value_page.cpp:92
+msgid "Add element"
+msgstr "Element hinzufügen"
+
 #: src/mmg/tab_chapters.cpp:303
 msgid "Add name"
 msgstr "Namen hinzufügen"
@@ -1635,7 +1639,7 @@ msgstr "Alle Dateien (*)|*"
 msgid "All Files (*.*)|*.*"
 msgstr "Alle Dateien (*.*)|*.*"
 
-#: src/mmg/header_editor_frame.cpp:553
+#: src/mmg/header_editor_frame.cpp:570
 msgid "All header values are OK."
 msgstr "Alle Kopfdaten sind gültig."
 
@@ -1664,7 +1668,7 @@ msgstr "Über allen anderen Fenstern"
 msgid "Always use simple blocks"
 msgstr "Immer vereinfachte Blockelemente benutzen"
 
-#: src/mmg/header_editor_frame.cpp:352
+#: src/mmg/header_editor_frame.cpp:373
 msgid "An ID corresponding to the codec."
 msgstr "Eine den Codec identifizierende ID."
 
@@ -1676,15 +1680,15 @@ msgstr "Ein Dateianhang mit der ID %1% wurde nicht gefunden.\n"
 msgid "An empty file name is not valid.\n"
 msgstr "Ein leerer Dateiname ist ungültig.\n"
 
-#: src/mmg/header_editor_frame.cpp:241
+#: src/mmg/header_editor_frame.cpp:264
 msgid "An escaped filename corresponding to the next segment."
 msgstr "Ein Dateiname, in dem das nächste Segment zu finden ist."
 
-#: src/mmg/header_editor_frame.cpp:238
+#: src/mmg/header_editor_frame.cpp:261
 msgid "An escaped filename corresponding to the previous segment."
 msgstr "Ein Dateiname, in dem das vorherige Segment zu finden ist."
 
-#: src/mmg/header_editor_frame.cpp:626 src/mmg/tab_chapters.cpp:1942
+#: src/mmg/header_editor_frame.cpp:643 src/mmg/tab_chapters.cpp:1942
 msgid "An unknown error occured. The file has been modified."
 msgstr "Ein unbekannter Fehler ist aufgetreten. Die Datei wurde verändert."
 
@@ -1762,23 +1766,23 @@ msgstr "Art der Dateianhänge:"
 msgid "Attachments"
 msgstr "Dateianhänge"
 
-#: src/mmg/header_editor_frame.cpp:428
+#: src/mmg/header_editor_frame.cpp:449
 msgid "Audio bit depth"
 msgstr "Audio Bittiefe"
 
-#: src/mmg/header_editor_frame.cpp:424
+#: src/mmg/header_editor_frame.cpp:445
 msgid "Audio channels"
 msgstr "Audio Kanäle"
 
-#: src/mmg/header_editor_frame.cpp:420
+#: src/mmg/header_editor_frame.cpp:441
 msgid "Audio output sampling frequency"
 msgstr "Audio Ausgabeabtastrate"
 
-#: src/mmg/header_editor_frame.cpp:415
+#: src/mmg/header_editor_frame.cpp:436
 msgid "Audio sampling frequency"
 msgstr "Audio Abtastrate"
 
-#: src/mmg/header_editor_frame.cpp:287
+#: src/mmg/header_editor_frame.cpp:310
 #, c-format
 msgid "Audio track %u"
 msgstr "Audio-Track %u"
@@ -1803,7 +1807,7 @@ msgstr "Verfügbare Übersetzungen:\n"
 msgid "BZ2_bzCompressInit() failed. Result: %1%\n"
 msgstr "BZ2_bzCompressInit() schlug fehl. Ergebnis: %1%\n"
 
-#: src/mmg/he_value_page.cpp:72
+#: src/mmg/he_value_page.cpp:74
 msgid "Binary (displayed as hex numbers)"
 msgstr "Binärwerte (angezeigt als Hexadezimalzahlen)"
 
@@ -1811,7 +1815,7 @@ msgstr "Binärwerte (angezeigt als Hexadezimalzahlen)"
 msgid "Bit depth: %1%"
 msgstr "Farbtiefe: %1%"
 
-#: src/mmg/header_editor_frame.cpp:428
+#: src/mmg/header_editor_frame.cpp:449
 msgid "Bits per sample, mostly used for PCM."
 msgstr "Bits pro Abtastwert, hauptsächlich für PCM benutzt."
 
@@ -1844,7 +1848,7 @@ msgstr "Block virtuelles Element: %1%"
 msgid "Bogus aid %1%\n"
 msgstr "Ungültige AID %1%\n"
 
-#: src/mmg/he_value_page.cpp:73
+#: src/mmg/he_value_page.cpp:75
 msgid "Boolean (yes/no, on/off etc)"
 msgstr "Boolescher Wert (ja/nein, an/aus etc)"
 
@@ -2059,7 +2063,7 @@ msgstr "Tagdatei auswählen"
 msgid "Clear inputs after adding a job to the job queue"
 msgstr "Eingabefelder nach Hinzufügen eines Jobs zur Warteschlange leeren"
 
-#: src/mmg/header_editor_frame.cpp:68
+#: src/mmg/header_editor_frame.cpp:84
 msgid "Close the current file without saving"
 msgstr "Die aktuelle Datei schließen, ohne zu speichern"
 
@@ -2089,7 +2093,7 @@ msgstr "Größe des vorherigen Clusters: %1%"
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr "Clusterzeitstempel: %|1$.3f|s"
 
-#: src/mmg/header_editor_frame.cpp:352
+#: src/mmg/header_editor_frame.cpp:373
 msgid "Codec ID"
 msgstr "Codec-ID"
 
@@ -2109,7 +2113,7 @@ msgstr "Codec Download-URL: %1%"
 msgid "Codec info URL: %1%"
 msgstr "Codec Info-URL: %1%"
 
-#: src/mmg/header_editor_frame.cpp:355
+#: src/mmg/header_editor_frame.cpp:376
 msgid "Codec name"
 msgstr "Codec-Name"
 
@@ -2125,7 +2129,7 @@ msgstr "Codec-Einstellungen: %1%"
 msgid "CodecPrivate, length %1%%2%"
 msgstr "private Codecdaten, Länge %1%%2%"
 
-#: src/mmg/header_editor_frame.cpp:74
+#: src/mmg/header_editor_frame.cpp:90
 msgid "Collapse all entries so that none of their sub-entries will be shown"
 msgstr "Alle Einträge einklappen, sodass kein Untereintrag angezeigt wird"
 
@@ -2395,7 +2399,7 @@ msgstr "Aktueller Job mit ID %d:"
 msgid "Current job ID 1000:"
 msgstr "Aktueller Job mit ID 1000:"
 
-#: src/mmg/he_value_page.cpp:93
+#: src/mmg/he_value_page.cpp:97
 msgid "Current value:"
 msgstr "Aktueller Wert:"
 
@@ -2455,7 +2459,7 @@ msgstr "Debug> "
 msgid "Default"
 msgstr "Standard"
 
-#: src/mmg/header_editor_frame.cpp:336
+#: src/mmg/header_editor_frame.cpp:357
 msgid "Default duration"
 msgstr "Standarddauer"
 
@@ -2495,7 +2499,7 @@ msgstr "Beschreibung"
 msgid "Description already exists"
 msgstr "Beschreibung existiert bereits"
 
-#: src/mmg/he_value_page.cpp:80 src/mmg/mmg.cpp:136
+#: src/mmg/he_value_page.cpp:82 src/mmg/mmg.cpp:136
 #: src/mmg/tab_attachments.cpp:74
 msgid "Description:"
 msgstr "Beschreibung:"
@@ -2528,7 +2532,7 @@ msgstr "Anzeigehöhe: %1%"
 msgid "Display unit: %1%%2%"
 msgstr "Anzeigeeinheit: %1%%2%"
 
-#: src/mmg/header_editor_frame.cpp:79
+#: src/mmg/header_editor_frame.cpp:95
 msgid "Display usage information"
 msgstr "Hinweise zur Bedienung anzeigen"
 
@@ -2702,7 +2706,7 @@ msgstr "Fehler beim Parsen der Tags in '%1%': Einige notwendige Elemente fehlen.
 msgid "Error saving the information"
 msgstr "Fehler beim Speichern der Informationen"
 
-#: src/mmg/header_editor_frame.cpp:610 src/mmg/header_editor_frame.cpp:616
+#: src/mmg/header_editor_frame.cpp:627 src/mmg/header_editor_frame.cpp:633
 #: src/mmg/tab_chapters.cpp:1925 src/mmg/tab_chapters.cpp:1931
 msgid "Error writing Matroska file"
 msgstr "Fehler beim Schreiben der Matroska-Datei"
@@ -2753,7 +2757,7 @@ msgstr "Alles lief gut."
 msgid "Executable files (*.exe)|*.exe|%s"
 msgstr "Ausführbare Dateien (*.exe)|*.exe|%s"
 
-#: src/mmg/header_editor_frame.cpp:73
+#: src/mmg/header_editor_frame.cpp:89
 msgid "Expand all entries so that their sub-entries will be shown"
 msgstr "Alle Einträge ausklappen, sodass ihre Untereinträge angezeigt werden"
 
@@ -2880,7 +2884,7 @@ msgstr ""
 msgid "File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable in the settings dialog."
 msgstr "Die Dateiidentifikation schlug fehl. Rückgabecode: %d. Fehler: %d (%s). Bite stellen Sie sicher, dass sie den Pfad zur mkvmerge.exe in den Einstellungen richtig gesetzt haben."
 
-#: src/mmg/header_editor_frame.cpp:444
+#: src/mmg/header_editor_frame.cpp:465
 msgid "File modified"
 msgstr "Datei modifiziert"
 
@@ -2896,7 +2900,7 @@ msgstr "Dateioptionen:"
 msgid "File removal not possible"
 msgstr "Entfernen der Datei nicht möglich"
 
-#: src/mmg/header_editor_frame.cpp:622 src/mmg/tab_chapters.cpp:1938
+#: src/mmg/header_editor_frame.cpp:639 src/mmg/tab_chapters.cpp:1938
 msgid "File structure warning"
 msgstr "Warnung bzgl. Dateistruktur"
 
@@ -2930,7 +2934,7 @@ msgstr "Fertiggestellt am"
 msgid "Finished processing on %s"
 msgstr "Verarbeitung am %s fertiggestellt"
 
-#: src/mmg/he_value_page.cpp:71
+#: src/mmg/he_value_page.cpp:73
 msgid "Floating point number"
 msgstr "Fließkommazahl"
 
@@ -3018,15 +3022,15 @@ msgstr "Global"
 msgid "Global tags"
 msgstr "Globale Tags"
 
-#: src/mmg/header_editor_frame.cpp:85
+#: src/mmg/header_editor_frame.cpp:101
 msgid "H&eaders"
 msgstr "Kopfw&erte"
 
-#: src/mmg/header_editor_frame.cpp:43
+#: src/mmg/header_editor_frame.cpp:49
 msgid "Header editor"
 msgstr "Kopfdateneditor"
 
-#: src/mmg/header_editor_frame.cpp:186
+#: src/mmg/header_editor_frame.cpp:208
 #, c-format
 msgid "Header editor: %s"
 msgstr "Kopfdateneditor: %s"
@@ -3039,20 +3043,20 @@ msgstr "Die Komprimierung durch Entfernen gemeinsamer Kopfdaten ist nicht mögli
 msgid "Header removal compression not possible because the buffer did not start with the bytes that should be removed. Wanted bytes:%1%; found:%2%."
 msgstr "Die Komprimierung durch Entfernen gemeinsamer Kopfdaten ist nicht möglich, weil der Puffer nicht mit exakt den Bytes anfängt, die entfernt werden sollen. Erwartet wurden:%1%; gefunden wurden:%2%."
 
-#: src/mmg/header_editor_frame.cpp:457 src/mmg/header_editor_frame.cpp:553
-#: src/mmg/header_editor_frame.cpp:558
+#: src/mmg/header_editor_frame.cpp:478 src/mmg/header_editor_frame.cpp:570
+#: src/mmg/header_editor_frame.cpp:575
 msgid "Header validation"
 msgstr "Kopfdatenvalidierung"
 
-#: src/mmg/header_editor_frame.cpp:488 src/mmg/header_editor_frame.cpp:498
+#: src/mmg/header_editor_frame.cpp:509 src/mmg/header_editor_frame.cpp:519
 msgid "Headers modified"
 msgstr "Kopfdaten modifiziert"
 
-#: src/mmg/header_editor_frame.cpp:365
+#: src/mmg/header_editor_frame.cpp:386
 msgid "Height of the encoded video frames in pixels."
 msgstr "Höhe des encodierten Videobildes in Pixeln."
 
-#: src/mmg/header_editor_frame.cpp:375
+#: src/mmg/header_editor_frame.cpp:396
 msgid "Height of the video frames to display."
 msgstr "Höhe der angezeigten Videobilder."
 
@@ -3172,7 +3176,7 @@ msgstr "Interlaced: %1%"
 msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "Interner Bug: tracks.cpp SSA #1. %1%"
 
-#: src/mmg/header_editor_frame.cpp:626 src/mmg/tab_chapters.cpp:1942
+#: src/mmg/header_editor_frame.cpp:643 src/mmg/tab_chapters.cpp:1942
 msgid "Internal program error"
 msgstr "Interner Programmfehler"
 
@@ -3464,7 +3468,7 @@ msgstr "Lace-Nummer: %1%"
 msgid "Lacing flag: %1%"
 msgstr "Flag für Paketbündelung: %1%"
 
-#: src/mmg/header_editor_frame.cpp:348
+#: src/mmg/header_editor_frame.cpp:369
 msgid "Language"
 msgstr "Sprache"
 
@@ -3625,7 +3629,7 @@ msgstr "Matroska-Dateien (*.mkv *.mka *.mks);;Alle Dateien (*.*)"
 msgid "Matroska files (*.mkv;*.mka)|*.mkv;*.mka|%s"
 msgstr "Matroska-Dateien (*.mkv;*.mka)|*.mkv;*.mka|%s"
 
-#: src/mmg/header_editor_frame.cpp:153
+#: src/mmg/header_editor_frame.cpp:175
 #, c-format
 msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|%s"
 msgstr "Matroska-Dateien (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|%s"
@@ -3642,7 +3646,7 @@ msgstr "Maximale BlockAddition ID: %1%"
 msgid "MaxCache: %1%"
 msgstr "MaxCache: %1%"
 
-#: src/mmg/header_editor_frame.cpp:331
+#: src/mmg/header_editor_frame.cpp:352
 msgid "Maximum cache"
 msgstr "Maximale Cachetiefe"
 
@@ -3662,7 +3666,7 @@ msgstr "MIME-Typ: %1%"
 msgid "MinCache: %1%"
 msgstr "MinCache: %1%"
 
-#: src/mmg/header_editor_frame.cpp:326
+#: src/mmg/header_editor_frame.cpp:347
 msgid "Mininum cache"
 msgstr "Minimale Cachetiefe"
 
@@ -3754,7 +3758,7 @@ msgstr "Das Muxen dauerte 1 Sekunde.\n"
 msgid "NALU size length:"
 msgstr "NALU-Größenfeldlänge:"
 
-#: src/mmg/header_editor_frame.cpp:345
+#: src/mmg/header_editor_frame.cpp:366
 msgid "Name"
 msgstr "Name"
 
@@ -3774,11 +3778,11 @@ msgstr "Name: %1%"
 msgid "New chapters created."
 msgstr "Neue Kapitel angelegt."
 
-#: src/mmg/he_value_page.cpp:88
+#: src/mmg/he_value_page.cpp:91
 msgid "New value:"
 msgstr "Neuer Wert:"
 
-#: src/mmg/header_editor_frame.cpp:241
+#: src/mmg/header_editor_frame.cpp:264
 msgid "Next filename"
 msgstr "Nächster Dateiname"
 
@@ -3798,7 +3802,7 @@ msgstr "Nächste Segment-UID:"
 msgid "Next segment UID:%1%"
 msgstr "Nächste Segment-UID:%1%"
 
-#: src/mmg/header_editor_frame.cpp:252
+#: src/mmg/header_editor_frame.cpp:275
 msgid "Next segment's unique ID"
 msgstr "Eindeutige ID des nächsten Segments"
 
@@ -3843,15 +3847,15 @@ msgstr "Keine Kapitel gefunden"
 msgid "No error"
 msgstr "Kein Fehler"
 
-#: src/mmg/header_editor_frame.cpp:449
+#: src/mmg/header_editor_frame.cpp:470
 msgid "No fields modified"
 msgstr "Keine Kopfdaten verändert"
 
-#: src/mmg/header_editor_frame.cpp:138
+#: src/mmg/header_editor_frame.cpp:157
 msgid "No file has been loaded yet. You can open a file by selecting 'Open' from the 'File' menu."
 msgstr "Es wurde noch keine Datei geladen. Sie können eine Datei öffnen, indem Sie den Punkt 'Öffnen' aus dem Menü 'Datei' auswählen."
 
-#: src/mmg/header_editor_frame.cpp:138 src/mmg/header_editor_frame.cpp:140
+#: src/mmg/header_editor_frame.cpp:157 src/mmg/header_editor_frame.cpp:159
 msgid "No file loaded"
 msgstr "Keine Datei geladen"
 
@@ -3916,7 +3920,7 @@ msgstr "Es wurde keine Versiosnummer gefunden.\n"
 msgid "None"
 msgstr "Kein"
 
-#: src/mmg/header_editor_frame.cpp:449
+#: src/mmg/header_editor_frame.cpp:470
 msgid "None of the header fields has been modified. Nothing has been saved."
 msgstr "Keine der Kopfdaten wurde verändert. Die Datei wurde nicht erneut gespeichert."
 
@@ -3940,11 +3944,11 @@ msgstr ""
 "Nichts zu tun.\n"
 "\n"
 
-#: src/mmg/header_editor_frame.cpp:337
+#: src/mmg/header_editor_frame.cpp:358
 msgid "Number of nanoseconds (not scaled) per frame."
 msgstr "Anzahl Nanosekunden (nicht skaliert) pro Bild."
 
-#: src/mmg/header_editor_frame.cpp:424
+#: src/mmg/header_editor_frame.cpp:445
 msgid "Numbers of channels in the track."
 msgstr "Anzahl Kanäle in diesem Track."
 
@@ -4004,11 +4008,11 @@ msgstr "Op&tionen\tCtrl-P"
 msgid "Open File"
 msgstr "Datei öffnen"
 
-#: src/mmg/header_editor_frame.cpp:153 src/info/wxwidgets_ui.cpp:136
+#: src/mmg/header_editor_frame.cpp:175 src/info/wxwidgets_ui.cpp:136
 msgid "Open a Matroska file"
 msgstr "Matroska-Datei öffnen"
 
-#: src/mmg/header_editor_frame.cpp:65
+#: src/mmg/header_editor_frame.cpp:81
 msgid "Open an existing Matroska file"
 msgstr "Eine bestehende Matroska-Datei öffnen"
 
@@ -4028,7 +4032,7 @@ msgstr "Optionen, die NUR für Entwickler gedacht sind. Benutzen Sie sie nicht. 
 msgid "Order: %1%"
 msgstr "Reihenfolge: %1%"
 
-#: src/mmg/he_value_page.cpp:100
+#: src/mmg/he_value_page.cpp:107
 msgid "Original value:"
 msgstr "Originalwert:"
 
@@ -4128,7 +4132,7 @@ msgstr ""
 "Sie beschreiben viele Details ausführlicher, die aus diesem Hilfetext nicht\n"
 "unbedingt ersichtlich sind.\n"
 
-#: src/mmg/header_editor_frame.cpp:238
+#: src/mmg/header_editor_frame.cpp:261
 msgid "Previous filename"
 msgstr "Vorheriger Dateiname"
 
@@ -4144,7 +4148,7 @@ msgstr "Vorherige Segment-UID:"
 msgid "Previous segment UID:%1%"
 msgstr "Vorherige Segment-UID:%1%"
 
-#: src/mmg/header_editor_frame.cpp:248
+#: src/mmg/header_editor_frame.cpp:271
 msgid "Previous segment's unique ID"
 msgstr "Eindeutige ID des vorherigen Segments"
 
@@ -4306,7 +4310,7 @@ msgstr "Quicktime/MP4-Demuxer: Unbekannte/nicht unterstützte FourCC '%|1$.4s|' 
 msgid "Quit the application"
 msgstr "Die Anwendung beenden"
 
-#: src/mmg/header_editor_frame.cpp:70
+#: src/mmg/header_editor_frame.cpp:86
 msgid "Quit the header editor"
 msgstr "Den Kopfdateneditor beenden"
 
@@ -4330,7 +4334,7 @@ msgstr "Die Verarbeitung von verschlüsselten VOBs wird nicht unterstützt.\n"
 msgid "Ready"
 msgstr "Bereit"
 
-#: src/mmg/header_editor_frame.cpp:420
+#: src/mmg/header_editor_frame.cpp:441
 msgid "Real output sampling frequency in Hz."
 msgstr "Tatsächliche Ausgabeabtastrate in Hz."
 
@@ -4362,7 +4366,7 @@ msgstr "Referenzpriorität: %1%"
 msgid "Reference virtual: %1%"
 msgstr "Referenz virtuell: %1%"
 
-#: src/mmg/header_editor_frame.cpp:67
+#: src/mmg/header_editor_frame.cpp:83
 msgid "Reload the current file without saving"
 msgstr "Die aktuelle Datei neu laden, ohne zu speichern"
 
@@ -4373,6 +4377,10 @@ msgstr "Beachten Sie, dass Sonderzeichen wie &, <, > und \" in der für HTML üb
 #: src/mmg/tab_chapters.cpp:236
 msgid "Remove chapter"
 msgstr "Kapitel entfernen"
+
+#: src/mmg/he_value_page.cpp:98
+msgid "Remove element"
+msgstr "Element entfernen"
 
 #: src/mmg/tab_chapters.cpp:304
 msgid "Remove name"
@@ -4422,7 +4430,7 @@ msgstr "Ko&mmandozeile speichern"
 msgid "Same directory as the first input file's"
 msgstr "Verzeichnis der ersten Quelldatei"
 
-#: src/mmg/header_editor_frame.cpp:415
+#: src/mmg/header_editor_frame.cpp:436
 msgid "Sampling frequency in Hz."
 msgstr "Abtastrate in Hz."
 
@@ -4466,7 +4474,7 @@ msgstr "Die aktuellen Kapitel in einer anderen Datei speichern"
 msgid "Save the current chapters to an existing Matroska file"
 msgstr "Die aktuellen Kapitel in eine Matroska-Datei schreiben"
 
-#: src/mmg/header_editor_frame.cpp:66
+#: src/mmg/header_editor_frame.cpp:82
 msgid "Save the header values"
 msgstr "Die Kopfdaten speichern"
 
@@ -4511,7 +4519,7 @@ msgstr "Segment"
 msgid "Segment UID:%1%"
 msgstr "Segment-UID:%1%"
 
-#: src/mmg/header_editor_frame.cpp:235
+#: src/mmg/header_editor_frame.cpp:258
 msgid "Segment filename"
 msgstr "Segment-Dateiname"
 
@@ -4519,9 +4527,8 @@ msgstr "Segment-Dateiname"
 msgid "Segment filename: %1%"
 msgstr "Segment-Dateiname: %1%"
 
-#: src/mmg/header_editor_frame.cpp:224 src/mmg/header_editor_frame.cpp:225
-#: src/extract/timecodes_v2.cpp:240 src/extract/tracks.cpp:375
-#: src/info/mkvinfo.cpp:445 src/info/qt_ui.cpp:177
+#: src/mmg/header_editor_frame.cpp:249 src/extract/timecodes_v2.cpp:240
+#: src/extract/tracks.cpp:375 src/info/mkvinfo.cpp:445 src/info/qt_ui.cpp:177
 #: src/info/wxwidgets_ui.cpp:238
 msgid "Segment information"
 msgstr "Segment-Information"
@@ -4532,7 +4539,7 @@ msgstr "Segment-Information"
 msgid "Segment tracks"
 msgstr "Segment-Tracks"
 
-#: src/mmg/header_editor_frame.cpp:244
+#: src/mmg/header_editor_frame.cpp:267
 msgid "Segment unique ID"
 msgstr "Eindeutige Segment-ID"
 
@@ -4580,15 +4587,15 @@ msgstr "Z&ieldatei festlegen"
 msgid "Set country to:"
 msgstr "Land ändern in:"
 
-#: src/mmg/header_editor_frame.cpp:314
+#: src/mmg/header_editor_frame.cpp:335
 msgid "Set if that track (audio, video or subs) SHOULD be used if no language found matches the user preference."
 msgstr "Ist gesetzt, sofern der Track (Audio, Video oder Untertitel) benutzt werden SOLLTE, sofern keine der gefundenen Sprachen mit den Benutzereinstellungen übereinstimmt."
 
-#: src/mmg/header_editor_frame.cpp:321
+#: src/mmg/header_editor_frame.cpp:342
 msgid "Set if that track MUST be used during playback. There can be many forced track for a kind (audio, video or subs). The player should select the one which language matches the user preference or the default + forced track."
 msgstr "Gesetzt, falls der Track beim Abspielen benutzt werden MUSS. Für jeden Tracktyp (Audio, Video oder Untertitel) kann es mehrere erzwungene Tracks geben. Das Abspielprogramm sollte denjenigen auswählen, dessen Sprache mit den Benutzereinstellungen übereinstimmt, oder der sowohl das 'Standard' als auch das 'erzwungen'-Flag gesetzt hat."
 
-#: src/mmg/header_editor_frame.cpp:317
+#: src/mmg/header_editor_frame.cpp:338
 msgid "Set if the track is used."
 msgstr "Gesetzt, sofern der Track benutzt wird."
 
@@ -4692,7 +4699,7 @@ msgstr "Signaturschlüssel-ID: %1%"
 msgid "Signature: %1%"
 msgstr "Signatur: %1%"
 
-#: src/mmg/he_value_page.cpp:70
+#: src/mmg/he_value_page.cpp:72
 msgid "Signed integer"
 msgstr "Vorzeichenbehaftete ganze Zahl"
 
@@ -4732,11 +4739,11 @@ msgstr "Es werden %1% Byte(s) am Anfang übersprungen, weil kein gültiger MP3-K
 msgid "Slices"
 msgstr "Slices"
 
-#: src/mmg/header_editor_frame.cpp:498
+#: src/mmg/header_editor_frame.cpp:519
 msgid "Some header values have been modified. Do you really want to close without saving the file?"
 msgstr "Einige Kopfdaten wurden verändert. Wollen Sie die Änderungen wirklich verwerfen und die Datei schließen?"
 
-#: src/mmg/header_editor_frame.cpp:488
+#: src/mmg/header_editor_frame.cpp:509
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "Einige Kopfdaten wurden verändert. Wollen Sie die Änderungen wirklich verwerfen und die Datei neu laden?"
 
@@ -4744,11 +4751,11 @@ msgstr "Einige Kopfdaten wurden verändert. Wollen Sie die Änderungen wirklich 
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "Einie Tag-Elemente fehlen (dieser Fehler hätte nicht auftreten sollen, sondern früher ein ähnlicher). %1%\n"
 
-#: src/mmg/header_editor_frame.cpp:349
+#: src/mmg/header_editor_frame.cpp:370
 msgid "Specifies the language of the track in the Matroska languages form."
 msgstr "Gibt die Sprache des Tracks als dreibuchstabiges Kürzel an."
 
-#: src/mmg/header_editor_frame.cpp:405
+#: src/mmg/header_editor_frame.cpp:426
 msgid "Specify the possible modifications to the aspect ratio (0: free resizing, 1: keep aspect ratio, 2: fixed)."
 msgstr "Gibt an, wie das Seitenverhältnis verändert werden darf (0: freie Größenänderung, 1: Seitenverhältnis beibehalten, 2: feste Größe)."
 
@@ -4810,7 +4817,7 @@ msgstr "Status"
 msgid "Status and progress"
 msgstr "Status und Fortschritt"
 
-#: src/mmg/he_value_page.cpp:96
+#: src/mmg/he_value_page.cpp:101
 msgid "Status:"
 msgstr "Status:"
 
@@ -4822,7 +4829,7 @@ msgstr "Stereomodusparameter: Das Argument folgt nicht dem Muster \"<TID>:<n|key
 msgid "Stereo mode: %1%%2%"
 msgstr "Stereomodus: %1%%2%"
 
-#: src/mmg/header_editor_frame.cpp:410
+#: src/mmg/header_editor_frame.cpp:431
 msgid "Stereo-3D video mode (0: mono, 1: right eye, 2: left eye, 3: both eyes)."
 msgstr "Stereo-3D-Videomodus (0: mono, 1: rechtes Auge, 2: linkes Auge, 3: beide Augen)."
 
@@ -4838,7 +4845,7 @@ msgstr "Strecken um:"
 msgid "Stretch this track's timecodes. This entry can have two formats. It is either a positive floating point number, or a fraction like e.g. 1200/1253. Works best on video and subtitle tracks."
 msgstr "Streckt die Zeitstempel dieses Tracks. Der Eintrag kann zwei Formaten folgen. Entweder enthält er eine positive Fließkommazahl oder aber einen Bruch wie z.B. 1200/1253. Funktioniert am Besten mit Video- und Untertiteltracks."
 
-#: src/mmg/he_value_page.cpp:68
+#: src/mmg/he_value_page.cpp:70
 msgid "String"
 msgstr "Zeichenkette"
 
@@ -4850,7 +4857,7 @@ msgstr "Untertitelzeichensatz:"
 msgid "Subtitle track %1% is missing some duration elements. Please check the resulting SSA/ASS file for entries that have the same start and end time.\n"
 msgstr "Dem Untertiteltrack %1% fehlen einige Elemente für die Framedauer. Bitte überprüfen Sie die extrahierte SSA/ASS-Datei auf Einträge, deren Start-Zeitstempel mit dem End-Zeitstempel übereinstimmt, und korrigieren Sie diese Einträge manuell.\n"
 
-#: src/mmg/header_editor_frame.cpp:293
+#: src/mmg/header_editor_frame.cpp:316
 #, c-format
 msgid "Subtitle track %u"
 msgstr "Untertiteltrack %u"
@@ -4964,7 +4971,7 @@ msgstr "Die MPEG-4 Teil 2-Komprimierung funktioniert nur mit nativ gemuxtem MPEG
 msgid "The Matroska file is analyzed."
 msgstr "Die Matroska-Datei wird analysiert."
 
-#: src/mmg/header_editor_frame.cpp:620
+#: src/mmg/header_editor_frame.cpp:637
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 msgstr "Die Matroska-Datei wurde bereits geändert, aber der Meta-Index konnte nicht aktualisiert werden. Das bedeutet, dass Abspielprogramme das neu geschriebene Element nicht so leicht oder gar nicht finden werden. Bitte benutzen Sie Ihr favorisiertes Abspielprogramm, um zu überprüfen, ob die Datei problemlos abgespielt werden kann.\n"
 
@@ -5134,7 +5141,7 @@ msgstr ""
 msgid "The duration after which a new output file is started. The time can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH' and the number of nanoseconds 'nnnnnnnnn'. If given then you may use up to nine digits after the decimal point. Examples: 01:00:00 (after one hour) or 1800s (after 1800 seconds)."
 msgstr "Die Zeitdauer, nach der eine neue Zieldatei angefangen wird. Die Dauer kann entweder in der Form HH:MM:SS.nnnnnnnnn oder aber als Anzahl Sekunden gefolgt vom Buchstaben 's' angegeben werden. Sie können in der ersten Form die Stunden 'HH' sowie die Nanosekunden 'nnnnnnnnn' weglassen. Wenn Nanosekunden angegeben werden, so können bis zu neun Ziffern nach dem Punkt angegeben werden. Beispiel: 01:00:00 (nach einer Stunde) oder 1800s (nach 1800 Sekunden)."
 
-#: src/mmg/header_editor_frame.cpp:608 src/mmg/tab_chapters.cpp:1923
+#: src/mmg/header_editor_frame.cpp:625 src/mmg/tab_chapters.cpp:1923
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr ""
 "Bitte geben Sie die Sprache und das Land ein,\n"
@@ -5204,7 +5211,7 @@ msgstr "Die Datei existiert nicht."
 msgid "The file does not seem to be a valid mkvmerge GUI settings file."
 msgstr "Die Datei scheint keine gültige mkvmerge GUI Optionsdatei zu sein."
 
-#: src/mmg/header_editor_frame.cpp:443
+#: src/mmg/header_editor_frame.cpp:464
 msgid "The file has been changed by another program since it was read by the header editor. Therefore you have to re-load it. Unfortunately this means that all of your changes will be lost."
 msgstr "Die Daten wurde von einem anderen Programm verändert, seitdem der Kopfdateneditor sie das letzte Mal gelesen hat. Deswegen müssen Sie die Datei neu laden. Leider bedeutet das, dass all Ihre Änderungen verloren gehen."
 
@@ -5237,7 +5244,7 @@ msgstr "Die Datei wird korrigiert, Teil 3/4..."
 msgid "The file is being fixed, part 4/4..."
 msgstr "Die Datei wird korrigiert, Teil 4/4..."
 
-#: src/mmg/header_editor_frame.cpp:235
+#: src/mmg/header_editor_frame.cpp:258
 msgid "The file name for this segment."
 msgstr "Der Dateiname für dieses Segment."
 
@@ -5253,7 +5260,7 @@ msgstr "Die Datei Nummer %1% ('%2%') enthält keinen Track mit der ID %3%, oder 
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr "Die Datei Nummer %1% ('%2%') wurde nicht zum Anhängen ausgewählt.  Das Argument für '--append-to' war ungültig.\n"
 
-#: src/mmg/header_editor_frame.cpp:166
+#: src/mmg/header_editor_frame.cpp:188
 msgid "The file you tried to open is not a Matroska file."
 msgstr "Die Datei, die Sie öffnen möchten, ist keine Matroska-Datei."
 
@@ -5372,15 +5379,15 @@ msgstr "Die Sprachumgebung konnte nicht erfolgreich gesetzt werden. Bitte überp
 msgid "The maximum number of files that will be created even if the last file might contain more bytes/time than wanted. Useful e.g. when you want exactly two files. If you leave this empty then there is no limit for the number of files mkvmerge might create."
 msgstr "Die Maximalanzahl an Zieldateien, die beim Aufteilen erstellt werden, auch wenn die letzte Datei dadurch mehr Bytes/Zeit als eigentlich gewünscht enthält. Nützlich, wenn man z.B. genau zwei Dateien erhalten möchte. Wenn Sie diese Einstellung leer lassen, so gibt es kein Limit für die Anzahl an Zieldateien, die mkvmerge erstellt."
 
-#: src/mmg/header_editor_frame.cpp:332
+#: src/mmg/header_editor_frame.cpp:353
 msgid "The maximum number of frames a player should be able to cache during playback. If set to 0, the reference pseudo-cache system is not used."
 msgstr "Die maximale Anzahl an Frames, die ein Abspielprogramm beim Abspielen cachen können sollte. Falls dieser Wert 0 ist, wird der Referenz-Pseudo-Cache-System nicht benutzt."
 
-#: src/mmg/header_editor_frame.cpp:614 src/mmg/tab_chapters.cpp:1929
+#: src/mmg/header_editor_frame.cpp:631 src/mmg/tab_chapters.cpp:1929
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "Das Meta-Index-Element wurde ans Dateiende geschrieben, aber die Segmentgröße konnte nicht aktualisiert werden. Deshalb wird das Element für Abspielprogramme unsichtbar sein. Der Prozess wird beendet. Die Datei wurde verändert!"
 
-#: src/mmg/header_editor_frame.cpp:327
+#: src/mmg/header_editor_frame.cpp:348
 msgid "The minimum number of frames a player should be able to cache during playback. If set to 0, the reference pseudo-cache system is not used."
 msgstr "Die minimale Anzahl an Bildern, die ein Abspielprogramm beim Abspielen cachen können sollte. Falls dieser Wert 0 ist, wird der Referenz-Pseudo-Cache-System nicht benutzt."
 
@@ -5418,19 +5425,19 @@ msgstr "Die Anzahl der Kanäle der zwei Audiotracks ist unterschiedlich: %1% und
 msgid "The number of external timecodes %1% is smaller than the number of frames in this track. The remaining frames of this track might not be timestamped the way you intended them to be. mkvmerge might even crash.\n"
 msgstr "Die Anzahl der aus einer Zeitstempeldatei gelesenen Zeitstempel %1% ist kleiner als die Anzahl der Frames in diesem Track. Die verbleibenden Frames werden vermutlich mit falschen Zeitstempel versehen. mkvmerge könnte sogar abstürzen.\n"
 
-#: src/mmg/header_editor_frame.cpp:400
+#: src/mmg/header_editor_frame.cpp:421
 msgid "The number of video pixels to remove on the bottom of the image."
 msgstr "Die Anzahl an Videopixeln, die unten vom Bild entfernt werden sollen."
 
-#: src/mmg/header_editor_frame.cpp:385
+#: src/mmg/header_editor_frame.cpp:406
 msgid "The number of video pixels to remove on the left of the image."
 msgstr "Die Anzahl an Videopixeln, die links vom Bild entfernt werden sollen."
 
-#: src/mmg/header_editor_frame.cpp:395
+#: src/mmg/header_editor_frame.cpp:416
 msgid "The number of video pixels to remove on the right of the image."
 msgstr "Die Anzahl an Videopixeln, die rechts vom Bild entfernt werden sollen."
 
-#: src/mmg/header_editor_frame.cpp:390
+#: src/mmg/header_editor_frame.cpp:411
 msgid "The number of video pixels to remove on the top of the image."
 msgstr "Die Anzahl an Videopixeln, die oben vom Bild entfernt werden sollen."
 
@@ -5471,7 +5478,7 @@ msgstr "Das Wurzelelement muss <%1%> sein."
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
 msgstr "Die Abtastraten der zwei Audiotracks sind unterschiedlich: %1% und %2%"
 
-#: src/mmg/header_editor_frame.cpp:341
+#: src/mmg/header_editor_frame.cpp:362
 msgid "The scale to apply on this track to work at normal speed in relation with other tracks (mostly used to adjust video speed when the audio length differs)."
 msgstr "Der Skalierungsfaktor, der auf die Zeitstempel angewandt werden soll, damit dieser Track im Vergleich zu den anderen mit derselben Geschwindigkeit abgespielt wird (wird meist verwendet, um die Videogeschwindigkeit anzupassen, wenn die Länge des Audiotracks nicht dazupasst)."
 
@@ -5552,7 +5559,7 @@ msgstr "Die Zeitstempel, nach denen eine neue Zieldatei angefangen wird. Die Zei
 msgid "The timecodes for this stream have been reset in the middle of the file. This is not supported. The current packet will be discarded.\n"
 msgstr "Die Zeitstempel in diesem Stream wurden mittendrin zurückgesetzt. Das wird nicht unterstützt. Das aktuelle Paket wird ausgelassen.\n"
 
-#: src/mmg/header_editor_frame.cpp:232
+#: src/mmg/header_editor_frame.cpp:255
 msgid "The title for the whole movie."
 msgstr "Der Titel für den kompletten Film."
 
@@ -5576,7 +5583,7 @@ msgstr "Der Track Nummer %1% aus Datei '%2%' kann vermutlich nicht korrekt an Tr
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
 msgstr "Der Track Nummer %1% aus der Datei '%2%' kann nicht an den Track Nummer %3% aus der Datei '%4%' angehängt werden. %5%\n"
 
-#: src/mmg/header_editor_frame.cpp:306
+#: src/mmg/header_editor_frame.cpp:327
 msgid "The track number as used in the Block Header."
 msgstr "Der Track Nummer, die im Blockkopf benutzt wird."
 
@@ -5600,7 +5607,7 @@ msgstr "Für '%1%' ist keine Übersetzung verfübar.\n"
 msgid "There were ERRORs."
 msgstr "Es gab FEHLER."
 
-#: src/mmg/header_editor_frame.cpp:457 src/mmg/header_editor_frame.cpp:558
+#: src/mmg/header_editor_frame.cpp:478 src/mmg/header_editor_frame.cpp:575
 msgid "There were errors in the header values preventing the headers from being saved. The first error has been selected."
 msgstr "Es gibt Fehler in den Kopfdaten, sodass sie nicht gespeichert werden können. Der erste fehlerhafte Eintrag wurde ausgewählt."
 
@@ -5648,13 +5655,13 @@ msgstr "Dieser MPEG-Audio-Track enthält %1% Byte(s) Nictht-MP3-Daten, die ausge
 msgid "This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can be overridden with the '--chapter-charset <charset>' switch.\n"
 msgstr "Diese Ogg/OGM-Datei enthält Kapitelinformationen oder einen Titel. Leider kann der Zeichensatz, in dem diese Informationen gespeichert wurden, nicht automatisch eindeutig erkannt werden. Das Programm geht davon aus, dass der Zeichensatz, der in Ihrem Betriebssystem momentan eingestellt ist, der richtige für die Informationen in der Ogg/OGM-Datei ist. Sollte das nicht der Fall sein, so müssen Sie den Zeichensatz mit dem Kommandozeilenargument '--chapter-charset <Zeichnsatz>' explizit angeben.\n"
 
-#: src/mmg/he_value_page.cpp:92
-msgid "This element is currently present in the file. Remove the element from the file"
-msgstr "Dieses Element ist momentan in der Datei vorhanden. Das Element aus der Datei entfernen"
+#: src/mmg/he_value_page.cpp:96
+msgid "This element is currently present in the file. You can let the header editor remove the element from the file."
+msgstr "Dieses Element ist momentan in der Datei vorhanden. Sie können den Kopfdateneditor das Element aus der Datei entfernen lassen."
 
-#: src/mmg/he_value_page.cpp:87
-msgid "This element is not currently present in the file. Add the element to the file"
-msgstr "Dieses Element ist momentan nicht in der Datei vorhanden. Das Element zur Datei hinzufügen"
+#: src/mmg/he_value_page.cpp:90
+msgid "This element is not currently present in the file. You can let the header editor add the element to the file."
+msgstr "Dieses Element ist momentan nicht in der Datei vorhanden. Sie können den Kopfdateneditor das Element zur Datei hinzufügen lassen."
 
 #: src/input/r_qtmp4.cpp:333
 msgid "This file contains at least one frame with a negative timecode. All timecodes will be adjusted by %1% so that none is negative anymore.\n"
@@ -5718,7 +5725,7 @@ msgstr "Zeitstempeldateien (*.tmc;*.txt)|*.tmc;*.txt|%s"
 msgid "Timecode scale: %1%"
 msgstr "Zeitstempelskalierungsfaktor: %1%"
 
-#: src/mmg/header_editor_frame.cpp:340
+#: src/mmg/header_editor_frame.cpp:361
 msgid "Timecode scaling"
 msgstr "Zeitstempelskalierungsfaktor"
 
@@ -5726,7 +5733,7 @@ msgstr "Zeitstempelskalierungsfaktor"
 msgid "Timecodes:"
 msgstr "Zeitstempel:"
 
-#: src/mmg/header_editor_frame.cpp:232
+#: src/mmg/header_editor_frame.cpp:255
 msgid "Title"
 msgstr "Titel"
 
@@ -5818,7 +5825,7 @@ msgstr "Track ID %1% hat einen unbekannten AAC-Typ.\n"
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "Track ID %1%: %2% (%3%)"
 
-#: src/mmg/header_editor_frame.cpp:309
+#: src/mmg/header_editor_frame.cpp:330
 msgid "Track UID"
 msgstr "Track UID"
 
@@ -5830,7 +5837,7 @@ msgstr "Track UID: %1%"
 msgid "Track name:"
 msgstr "Trackname:"
 
-#: src/mmg/header_editor_frame.cpp:305
+#: src/mmg/header_editor_frame.cpp:326
 msgid "Track number"
 msgstr "Tracknummer"
 
@@ -5862,11 +5869,11 @@ msgstr "Tracks:"
 msgid "Two VobSub tracks can only be extracted into the same file if their CodecPrivate data matches. This is not the case for the tracks %1% and %2%.\n"
 msgstr "Zwei VobSub-Tracks können nur dann in dieselbe Datei extrahiert werden, wenn ihre privaten Codec-Konfigurationsdaten übereinstimmen. Dies ist für die Tracks %1% und %2% nicht der Fall.\n"
 
-#: src/mmg/header_editor_frame.cpp:380
+#: src/mmg/header_editor_frame.cpp:401
 msgid "Type of the unit for DisplayWidth/Height (0: pixels, 1: centimeters, 2: inches)."
 msgstr "Einheit für die Anzeigebreite/-höhe (0: Pixel, 1: Zentimeter, 2: Zoll)"
 
-#: src/mmg/he_value_page.cpp:76
+#: src/mmg/he_value_page.cpp:78
 msgid "Type:"
 msgstr "Typ:"
 
@@ -5934,7 +5941,7 @@ msgstr "Unbekanntes/nicht unterstütztes Audioformat 0x%|1$04x| in diesem Audio-
 msgid "Unrecognized command line option '%1%'. Maybe you put a mode specific option before the input file name?\n"
 msgstr "Nicht erkannte Kommandozeilenoption '%1%'. Haben Sie vielleicht eine Option noch vor den Namen der Quelldatei geschrieben?\n"
 
-#: src/mmg/he_value_page.cpp:69
+#: src/mmg/he_value_page.cpp:71
 msgid "Unsigned integer"
 msgstr "Vorzeichenlose ganze Zahl"
 
@@ -6444,7 +6451,7 @@ msgstr "VC1 Video elementary stream"
 msgid "Valid hacks are:\n"
 msgstr "Gültige Hacks sind:\n"
 
-#: src/mmg/header_editor_frame.cpp:76
+#: src/mmg/header_editor_frame.cpp:92
 msgid "Validates the content of all changeable headers"
 msgstr "Validierung der Werte aller änderbaren Kopfdaten"
 
@@ -6458,35 +6465,35 @@ msgstr ""
 "\n"
 "(Problem trat auf in tab_input::load(), #1)"
 
-#: src/mmg/header_editor_frame.cpp:404
+#: src/mmg/header_editor_frame.cpp:425
 msgid "Video aspect ratio type"
 msgstr "Video Seitenverhältnistyp"
 
-#: src/mmg/header_editor_frame.cpp:400
+#: src/mmg/header_editor_frame.cpp:421
 msgid "Video crop bottom"
 msgstr "Video Pixel unten abschneiden"
 
-#: src/mmg/header_editor_frame.cpp:385
+#: src/mmg/header_editor_frame.cpp:406
 msgid "Video crop left"
 msgstr "Video Pixel links abschneiden"
 
-#: src/mmg/header_editor_frame.cpp:395
+#: src/mmg/header_editor_frame.cpp:416
 msgid "Video crop right"
 msgstr "Video Pixel rechts abschneiden"
 
-#: src/mmg/header_editor_frame.cpp:390
+#: src/mmg/header_editor_frame.cpp:411
 msgid "Video crop top"
 msgstr "Video Pixel oben abschneiden"
 
-#: src/mmg/header_editor_frame.cpp:375
+#: src/mmg/header_editor_frame.cpp:396
 msgid "Video display height"
 msgstr "Video Anzeigehöhe"
 
-#: src/mmg/header_editor_frame.cpp:380
+#: src/mmg/header_editor_frame.cpp:401
 msgid "Video display unit"
 msgstr "Video Anzeigeeinheit"
 
-#: src/mmg/header_editor_frame.cpp:370
+#: src/mmg/header_editor_frame.cpp:391
 msgid "Video display width"
 msgstr "Video Anzeigebreite"
 
@@ -6494,15 +6501,15 @@ msgstr "Video Anzeigebreite"
 msgid "Video packet assembly failed. Error code: %1% (%2%)\n"
 msgstr "Das Zusammensetzen der Videopakete zu einem Frame schlug fehl. Fehlercode: %1% (%2%)\n"
 
-#: src/mmg/header_editor_frame.cpp:365
+#: src/mmg/header_editor_frame.cpp:386
 msgid "Video pixel height"
 msgstr "Video Pixelhöhe"
 
-#: src/mmg/header_editor_frame.cpp:360
+#: src/mmg/header_editor_frame.cpp:381
 msgid "Video pixel width"
 msgstr "Video Pixelbreite"
 
-#: src/mmg/header_editor_frame.cpp:410
+#: src/mmg/header_editor_frame.cpp:431
 msgid "Video stereo mode"
 msgstr "Video Stereomodus"
 
@@ -6510,7 +6517,7 @@ msgstr "Video Stereomodus"
 msgid "Video track"
 msgstr "Video-Track"
 
-#: src/mmg/header_editor_frame.cpp:290
+#: src/mmg/header_editor_frame.cpp:313
 #, c-format
 msgid "Video track %u"
 msgstr "Video-Track %u"
@@ -6579,11 +6586,11 @@ msgstr "Warnungen: "
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
 msgstr "Wenn eine Quelldatei hinzugefügt wird, wird ihr Dateiname untersucht. Falls er das Wort 'DELAY' gefolgt von einer Nummer enthält, so wird diese Nummer automatisch in das Feld 'Verzögerung' für jeden Audiotrack dieser Quelldatei eingetragen."
 
-#: src/mmg/header_editor_frame.cpp:360
+#: src/mmg/header_editor_frame.cpp:381
 msgid "Width of the encoded video frames in pixels."
 msgstr "Encodierte Breite des Videobildes in Pixeln."
 
-#: src/mmg/header_editor_frame.cpp:370
+#: src/mmg/header_editor_frame.cpp:391
 msgid "Width of the video frames to display."
 msgstr "Breite, mit der das Videobild angezeigt werden soll."
 
@@ -6622,7 +6629,7 @@ msgstr "Falsches Argument zu '--split-max-files'.\n"
 msgid "Wrong file chosen"
 msgstr "Falsche Datei ausgewählt"
 
-#: src/mmg/header_editor_frame.cpp:166 src/mmg/tab_chapters.cpp:654
+#: src/mmg/header_editor_frame.cpp:188 src/mmg/tab_chapters.cpp:654
 #: src/mmg/tab_chapters.cpp:695
 msgid "Wrong file selected"
 msgstr "Falsche Datei ausgewählt"
@@ -7640,7 +7647,7 @@ msgstr "und (nicht festgelegt)"
 
 #: src/input/r_matroska.cpp:91 src/input/r_matroska.cpp:2140
 #: src/input/r_matroska.cpp:2147 src/input/r_mpeg_ps.cpp:1304
-#: src/common/mm_io.cpp:412 src/mmg/he_value_page.cpp:74
+#: src/common/mm_io.cpp:412 src/mmg/he_value_page.cpp:76
 #: src/mmg/tab_input.cpp:346 src/mmg/tab_input.cpp:622
 #: src/mmg/tab_input.cpp:1234 src/info/mkvinfo.cpp:708
 #: src/info/mkvinfo.cpp:718 src/info/mkvinfo.cpp:737 src/info/mkvinfo.cpp:766
