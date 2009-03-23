@@ -422,7 +422,7 @@ get_local_charset() {
 
   setlocale(LC_CTYPE, "");
 #if defined(COMP_MINGW) || defined(COMP_MSC)
-  lc_charset = "CP" + to_string(GetOEMCP());
+  lc_charset = "CP" + to_string(GetACP());
 #elif defined(SYS_SOLARIS)
   int i;
 
@@ -436,6 +436,15 @@ get_local_charset() {
 #endif
 
   return lc_charset;
+}
+
+string
+get_local_console_charset() {
+#if defined(SYS_WINDOWS)
+  return string("CP") + to_string(GetOEMCP());
+#else
+  return get_local_charset();
+#endif
 }
 
 int
@@ -1485,7 +1494,7 @@ command_line_utf8(int argc,
   int i, cc_command_line;
   vector<string> args;
 
-  cc_command_line = cc_local_utf8;
+  cc_command_line = g_cc_stdio;
 
   for (i = 1; i < argc; i++)
     if (argv[i][0] == '@')

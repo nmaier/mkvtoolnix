@@ -156,7 +156,7 @@ mxverb_tid(int level,
 
 void
 init_cc_stdio() {
-  set_cc_stdio(get_local_charset());
+  set_cc_stdio(get_local_console_charset());
 }
 
 void
