@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2009-03-23 01:46+0900\n"
+"PO-Revision-Date: 2009-03-23 13:56+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -896,7 +896,7 @@ msgstr "情報をテキストとして保存(&S)\tCtrl-S"
 
 #: src/mmg/mmg.cpp:669
 msgid "&Save settings\tCtrl-S"
-msgstr "設定保存(&S)\tCtrl-S"
+msgstr "設定を保存(&S)\tCtrl-S"
 
 #: src/mmg/jobs.cpp:410
 msgid "&Start"
@@ -1567,9 +1567,8 @@ msgid "Add command line options"
 msgstr "コマンドラインオプションを追加"
 
 #: src/mmg/he_value_page.cpp:92
-#, fuzzy
 msgid "Add element"
-msgstr "名前を追加"
+msgstr "要素を追加"
 
 #: src/mmg/tab_chapters.cpp:303
 msgid "Add name"
@@ -2045,7 +2044,7 @@ msgstr "ジョブをジョブキューに追加したら入力をクリアする
 
 #: src/mmg/header_editor_frame.cpp:81
 msgid "Close the current file without saving"
-msgstr "保存せずに現在のファイルを閉じます"
+msgstr "保存しないで現在のファイルを閉じます"
 
 #: src/extract/timecodes_v2.cpp:281 src/extract/tracks.cpp:419
 #: src/info/mkvinfo.cpp:1777
@@ -3011,9 +3010,8 @@ msgid "Header editor"
 msgstr "ヘッダエディタ"
 
 #: src/mmg/header_editor_frame.cpp:107
-#, fuzzy
 msgid "Header editor ready."
-msgstr "ヘッダエディタ"
+msgstr "ヘッダエディタ準備完了"
 
 #: src/mmg/header_editor_frame.cpp:213
 #, c-format
@@ -3653,7 +3651,6 @@ msgid "MinCache: %1%"
 msgstr ""
 
 #: src/mmg/header_editor_frame.cpp:353
-#, fuzzy
 msgid "Minimum cache"
 msgstr "最小キャッシュ"
 
@@ -4364,9 +4361,8 @@ msgid "Remove chapter"
 msgstr "チャプタを削除"
 
 #: src/mmg/he_value_page.cpp:98
-#, fuzzy
 msgid "Remove element"
-msgstr "名前を削除"
+msgstr "要素を削除"
 
 #: src/mmg/tab_chapters.cpp:304
 msgid "Remove name"
@@ -4547,7 +4543,7 @@ msgstr "出力ファイルを選択してください"
 
 #: src/mmg/mmg.cpp:671
 msgid "Select the file you want to write to"
-msgstr "書き込むファイルを選択してください"
+msgstr "書き込むファイルを選択します"
 
 #: src/mmg/tab_chapters.cpp:122
 msgid "Select values to be applied"
@@ -4567,7 +4563,7 @@ msgstr "デフォルト値を設定(&D)"
 
 #: src/mmg/mmg.cpp:671
 msgid "Set &output file"
-msgstr "出力ファイルを設定(&O)"
+msgstr "出力ファイルを指定(&O)"
 
 #: src/mmg/tab_chapters.cpp:139
 msgid "Set country to:"
@@ -4687,7 +4683,7 @@ msgstr ""
 
 #: src/mmg/he_value_page.cpp:72
 msgid "Signed integer"
-msgstr "符号つき整数"
+msgstr "符号付き整数"
 
 #: src/info/mkvinfo.cpp:1251
 msgid "Silent Track Number: %1%"
@@ -5636,19 +5632,16 @@ msgid "This Ogg/OGM file contains chapter or title information. Unfortunately th
 msgstr "このOgg/OGMファイルはチャプタやタイトルの情報を含んでいます。残念ながらこの情報を格納するのに使用された文字セットをはっきりと特定することはできません。このプログラムはシステムの現在の文字セットが適切だと推測します。これは'--chapter-charset <charset>'スイッチで上書きすることができます。\n"
 
 #: src/mmg/he_value_page.cpp:103
-#, fuzzy
 msgid "This element is currently present in the file. It cannot be removed because it is a mandatory header field."
-msgstr "この要素は現在ファイルには存在しません。ファイルに要素を加えます"
+msgstr "この要素は現在ファイルに存在しています。必須のヘッダフィールドなので削除することはできません。"
 
 #: src/mmg/he_value_page.cpp:96
-#, fuzzy
 msgid "This element is currently present in the file. You can let the header editor remove the element from the file."
-msgstr "この要素は現在ファイルに存在します。ファイルから要素を除去します"
+msgstr "この要素は現在ファイルに存在しています。ヘッダエディタでファイルから要素を削除することができます。"
 
 #: src/mmg/he_value_page.cpp:90
-#, fuzzy
 msgid "This element is not currently present in the file. You can let the header editor add the element to the file."
-msgstr "この要素は現在ファイルには存在しません。ファイルに要素を加えます"
+msgstr "この要素は現在ファイルには存在しません。ヘッダエディタでファイルに要素を追加することができます。"
 
 #: src/input/r_qtmp4.cpp:333
 msgid "This file contains at least one frame with a negative timecode. All timecodes will be adjusted by %1% so that none is negative anymore.\n"
@@ -5858,7 +5851,7 @@ msgstr "2つのVobSubトラックを同じファイルに展開できるのは�
 
 #: src/mmg/header_editor_frame.cpp:407
 msgid "Type of the unit for DisplayWidth/Height (0: pixels, 1: centimeters, 2: inches)."
-msgstr "縦解像度・横解像度の単位です（0：ピクセル、1：センチメートル、2：インチ）。"
+msgstr "縦表示解像度・横表示解像度の単位です（0：ピクセル、1：センチメートル、2：インチ）。"
 
 #: src/mmg/he_value_page.cpp:78
 msgid "Type:"
@@ -6449,7 +6442,7 @@ msgstr "縦表示解像度"
 
 #: src/mmg/header_editor_frame.cpp:407
 msgid "Video display unit"
-msgstr "解像度単位"
+msgstr "表示解像度単位"
 
 #: src/mmg/header_editor_frame.cpp:397
 msgid "Video display width"
