@@ -14,8 +14,8 @@
 #ifndef __MUX_DIALOG_H
 #define __MUX_DIALOG_H
 
-#include "wx/dialog.h"
-#include "wx/process.h"
+#include <wx/dialog.h>
+#include <wx/process.h>
 
 #define ID_B_MUX_OK                       17000
 #define ID_B_MUX_SAVELOG                  17001

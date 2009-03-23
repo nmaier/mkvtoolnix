@@ -20,7 +20,7 @@
 #include <ebml/EbmlElement.h>
 #include <matroska/KaxSegment.h>
 
-#include "wx/wx.h"
+#include <wx/wx.h>
 
 #include "common.h"
 #include "error.h"

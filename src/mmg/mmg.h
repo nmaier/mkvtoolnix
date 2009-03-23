@@ -19,10 +19,10 @@
 
 #include "os.h"
 
-#include "wx/app.h"
-#include "wx/combobox.h"
-#include "wx/config.h"
-#include "wx/string.h"
+#include <wx/app.h>
+#include <wx/combobox.h>
+#include <wx/config.h>
+#include <wx/string.h>
 
 #include "ebml/EbmlUnicodeString.h"
 

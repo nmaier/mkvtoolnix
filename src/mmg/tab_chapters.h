@@ -14,9 +14,9 @@
 #ifndef __TAB_CHAPTERS_H
 #define __TAB_CHAPTERS_H
 
-#include "wx/button.h"
-#include "wx/panel.h"
-#include "wx/treectrl.h"
+#include <wx/button.h>
+#include <wx/panel.h>
+#include <wx/treectrl.h>
 
 #include <matroska/KaxChapters.h>
 

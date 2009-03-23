@@ -18,17 +18,17 @@
 #include <unistd.h>
 #endif
 
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 
-#include "wx/wx.h"
-#include "wx/clipbrd.h"
-#include "wx/confbase.h"
-#include "wx/file.h"
-#include "wx/fileconf.h"
-#include "wx/listctrl.h"
-#include "wx/notebook.h"
-#include "wx/statusbr.h"
-#include "wx/statline.h"
+#include <wx/wx.h>
+#include <wx/clipbrd.h>
+#include <wx/confbase.h>
+#include <wx/file.h>
+#include <wx/fileconf.h>
+#include <wx/listctrl.h>
+#include <wx/notebook.h>
+#include <wx/statusbr.h>
+#include <wx/statline.h>
 
 #if defined(SYS_WINDOWS)
 #include <windows.h>

@@ -13,15 +13,15 @@
 
 #include "os.h"
 
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 
-#include "wx/wx.h"
-#include "wx/dnd.h"
-#include "wx/file.h"
-#include "wx/listctrl.h"
-#include "wx/notebook.h"
-#include "wx/regex.h"
-#include "wx/statline.h"
+#include <wx/wx.h>
+#include <wx/dnd.h>
+#include <wx/file.h>
+#include <wx/listctrl.h>
+#include <wx/notebook.h>
+#include <wx/regex.h>
+#include <wx/statline.h>
 
 #include "common.h"
 #include "extern_data.h"

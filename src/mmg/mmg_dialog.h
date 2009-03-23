@@ -14,7 +14,7 @@
 #ifndef __MMG_DIALOG_H
 #define __MMG_DIALOG_H
 
-#include "wx/html/helpctrl.h"
+#include <wx/html/helpctrl.h>
 
 #define ID_TC_OUTPUT                      10000
 #define ID_B_BROWSEOUTPUT                 10001

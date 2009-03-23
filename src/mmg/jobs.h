@@ -14,9 +14,9 @@
 #ifndef __JOBS_H
 #define __JOBS_H
 
-#include "wx/dialog.h"
-#include "wx/listctrl.h"
-#include "wx/process.h"
+#include <wx/dialog.h>
+#include <wx/listctrl.h>
+#include <wx/process.h>
 
 #define ID_JOBS_B_UP                      17001
 #define ID_JOBS_B_DOWN                    17002

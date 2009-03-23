@@ -16,7 +16,7 @@
 
 #include "os.h"
 
-#include "wx/config.h"
+#include <wx/config.h>
 
 #define ID_LB_INPUTFILES                  11000
 #define ID_B_ADDFILE                      11001

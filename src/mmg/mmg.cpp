@@ -18,20 +18,20 @@
 #include <unistd.h>
 #endif
 
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 
-#include "wx/wx.h"
-#include "wx/clipbrd.h"
-#include "wx/config.h"
-#include "wx/datetime.h"
-#include "wx/dir.h"
-#include "wx/file.h"
-#include "wx/fileconf.h"
-#include "wx/listctrl.h"
-#include "wx/notebook.h"
-#include "wx/statusbr.h"
-#include "wx/statline.h"
-#include "wx/strconv.h"
+#include <wx/wx.h>
+#include <wx/clipbrd.h>
+#include <wx/config.h>
+#include <wx/datetime.h>
+#include <wx/dir.h>
+#include <wx/file.h>
+#include <wx/fileconf.h>
+#include <wx/listctrl.h>
+#include <wx/notebook.h>
+#include <wx/statusbr.h>
+#include <wx/statline.h>
+#include <wx/strconv.h>
 
 #include "chapters.h"
 #include "common.h"

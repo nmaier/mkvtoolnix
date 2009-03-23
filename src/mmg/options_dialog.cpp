@@ -13,14 +13,14 @@
 
 #include "os.h"
 
-#include "wx/wxprec.h"
+#include <wx/wxprec.h>
 
-#include "wx/wx.h"
-#include "wx/config.h"
-#include "wx/listctrl.h"
-#include "wx/notebook.h"
-#include "wx/process.h"
-#include "wx/statline.h"
+#include <wx/wx.h>
+#include <wx/config.h>
+#include <wx/listctrl.h>
+#include <wx/notebook.h>
+#include <wx/process.h>
+#include <wx/statline.h>
 
 #include "common.h"
 #include "mmg.h"

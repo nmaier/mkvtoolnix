@@ -16,11 +16,11 @@
 #include <errno.h>
 #include <stdio.h>
 
-#include "wx/wx.h"
-#include "wx/dnd.h"
-#include "wx/listctrl.h"
-#include "wx/notebook.h"
-#include "wx/statline.h"
+#include <wx/wx.h>
+#include <wx/dnd.h>
+#include <wx/listctrl.h>
+#include <wx/notebook.h>
+#include <wx/statline.h>
 
 #include <ebml/EbmlStream.h>
 

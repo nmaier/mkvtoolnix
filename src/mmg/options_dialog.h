@@ -16,7 +16,7 @@
 
 #include "config.h"
 
-#include "wx/log.h"
+#include <wx/log.h>
 
 #include <vector>
 

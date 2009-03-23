@@ -16,7 +16,7 @@
 
 #include "os.h"
 
-#include "wx/config.h"
+#include <wx/config.h>
 
 #define ID_B_ADDATTACHMENT                 12001
 #define ID_B_REMOVEATTACHMENT              12002
