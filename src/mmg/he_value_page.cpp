@@ -66,7 +66,7 @@ he_value_page_c::init() {
   siz_fg->AddSpacer(5);
 
   wxString type
-    = vt_ascii_string     == m_value_type ? Z("ASCII string (no special chars like Umlaute etc)")
+    = vt_ascii_string     == m_value_type ? Z("ASCII string (no special chars like\nUmlaute etc)")
     : vt_string           == m_value_type ? Z("String")
     : vt_unsigned_integer == m_value_type ? Z("Unsigned integer")
     : vt_signed_integer   == m_value_type ? Z("Signed integer")
@@ -87,20 +87,20 @@ he_value_page_c::init() {
   wxStaticText *st_add_or_remove;
   if (NULL == m_element) {
     m_present        = false;
-    st_add_or_remove = new wxStaticText(this, wxID_ANY, Z("This element is not currently present in the file. You can let the header editor add the element to the file."));
+    st_add_or_remove = new wxStaticText(this, wxID_ANY, Z("This element is not currently present in the file.\nYou can let the header editor add the element\nto the file."));
     value_label      = Z("New value:");
     m_cb_add_or_remove->SetLabel(Z("Add element"));
 
   } else {
     m_present        = true;
-    st_add_or_remove = new wxStaticText(this, wxID_ANY, Z("This element is currently present in the file. You can let the header editor remove the element from the file."));
+    st_add_or_remove = new wxStaticText(this, wxID_ANY, Z("This element is currently present in the file.\nYou can let the header editor remove the element\nfrom the file."));
     value_label      = Z("Current value:");
     m_cb_add_or_remove->SetLabel(Z("Remove element"));
 
     const EbmlSemantic *semantic = find_ebml_semantic(KaxSegment::ClassInfos, m_callbacks.GlobalId);
     if ((NULL != semantic) && semantic->Mandatory) {
       m_cb_add_or_remove->Disable();
-      st_add_or_remove->SetLabel(Z("This element is currently present in the file. It cannot be removed because it is a mandatory header field."));
+      st_add_or_remove->SetLabel(Z("This element is currently present in the file.\nIt cannot be removed because it is a\nmandatory header field."));
     }
   }
 

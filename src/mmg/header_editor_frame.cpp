@@ -72,7 +72,7 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
 
   frame_panel->SetSizer(m_bs_main);
 
-  SetMinSize(wxSize(600, 400));
+  SetMinSize(wxSize(800, 600));
 
   clear_pages();
 
@@ -163,7 +163,7 @@ header_editor_frame_c::clear_pages() {
   m_pages.clear();
   m_top_level_pages.clear();
 
-  he_empty_page_c *page = new he_empty_page_c(this, Z("No file loaded"), Z("No file has been loaded yet. You can open a file by selecting 'Open' from the 'File' menu."));
+  he_empty_page_c *page = new he_empty_page_c(this, Z("No file loaded"), Z("No file has been loaded yet. You can open a file by selecting\n'Open' from the 'File' menu."));
 
   append_page(page, Z("No file loaded"));
   m_tc_tree->SelectItem(page->m_page_id);
@@ -268,22 +268,22 @@ header_editor_frame_c::handle_segment_info(analyzer_data_c *data) {
   child_page = new he_string_value_page_c(this, page, info, KaxSegmentFilename::ClassInfos, Z("Segment filename"), Z("The file name for this segment."));
   child_page->init();
 
-  child_page = new he_string_value_page_c(this, page, info, KaxPrevFilename::ClassInfos, Z("Previous filename"), Z("An escaped filename corresponding to the previous segment."));
+  child_page = new he_string_value_page_c(this, page, info, KaxPrevFilename::ClassInfos, Z("Previous filename"), Z("An escaped filename corresponding to\nthe previous segment."));
   child_page->init();
 
-  child_page = new he_string_value_page_c(this, page, info, KaxNextFilename::ClassInfos, Z("Next filename"), Z("An escaped filename corresponding to the next segment."));
+  child_page = new he_string_value_page_c(this, page, info, KaxNextFilename::ClassInfos, Z("Next filename"), Z("An escaped filename corresponding to\nthe next segment."));
   child_page->init();
 
   child_page = new he_bit_value_page_c(this, page, info, KaxSegmentUID::ClassInfos, Z("Segment unique ID"),
-                                       Z("A randomly generated unique ID to identify the current segment between many others (128 bits)."), 128);
+                                       Z("A randomly generated unique ID to identify the current\nsegment between many others (128 bits)."), 128);
   child_page->init();
 
   child_page = new he_bit_value_page_c(this, page, info, KaxPrevUID::ClassInfos, Z("Previous segment's unique ID"),
-                                       Z("A unique ID to identify the previous chained segment (128 bits)."), 128);
+                                       Z("A unique ID to identify the previous chained\nsegment (128 bits)."), 128);
   child_page->init();
 
   child_page = new he_bit_value_page_c(this, page, info, KaxNextUID::ClassInfos, Z("Next segment's unique ID"),
-                                       Z("A unique ID to identify the next chained segment (128 bits)."), 128);
+                                       Z("A unique ID to identify the next chained\nsegment (128 bits)."), 128);
   child_page->init();
 
   // m_tc_tree->ExpandAllChildren(page->m_page_id);
@@ -338,30 +338,30 @@ header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
     child_page->init();
 
     child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxTrackUID::ClassInfos, Z("Track UID"),
-                                                      Z("A unique ID to identify the Track. This should be kept the same when making a direct stream copy of the Track to another file."));
+                                                      Z("A unique ID to identify the Track. This should be\nkept the same when making a direct stream copy\nof the Track to another file."));
     child_page->init();
 
     child_page = new he_bool_value_page_c(this, page, k_track_entry, KaxTrackFlagDefault::ClassInfos, Z("'Default track' flag"),
-                                          Z("Set if that track (audio, video or subs) SHOULD be used if no language found matches the user preference."));
+                                          Z("Set if that track (audio, video or subs) SHOULD\nbe used if no language found matches the\nuser preference."));
     child_page->init();
 
     child_page = new he_bool_value_page_c(this, page, k_track_entry, KaxTrackFlagEnabled::ClassInfos, Z("'Track enabled' flag"), Z("Set if the track is used."));
     child_page->init();
 
     child_page = new he_bool_value_page_c(this, page, k_track_entry, KaxTrackFlagForced::ClassInfos, Z("'Forced display' flag"),
-                                          Z("Set if that track MUST be used during playback. "
-                                            "There can be many forced track for a kind (audio, video or subs). "
-                                            "The player should select the one which language matches the user preference or the default + forced track."));
+                                          Z("Set if that track MUST be used during playback.\n"
+                                            "There can be many forced track for a kind (audio,\nvideo or subs). "
+                                            "The player should select the one\nwhose language matches the user preference or the\ndefault + forced track."));
     child_page->init();
 
     child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxTrackMinCache::ClassInfos, Z("Minimum cache"),
-                                                      Z("The minimum number of frames a player should be able to cache during playback. "
-                                                        "If set to 0, the reference pseudo-cache system is not used."));
+                                                      Z("The minimum number of frames a player\nshould be able to cache during playback.\n"
+                                                        "If set to 0, the reference pseudo-cache system\nis not used."));
     child_page->init();
 
     child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxTrackMaxCache::ClassInfos, Z("Maximum cache"),
-                                                      Z("The maximum number of frames a player should be able to cache during playback. "
-                                                        "If set to 0, the reference pseudo-cache system is not used."));
+                                                      Z("The maximum number of frames a player\nshould be able to cache during playback.\n"
+                                                        "If set to 0, the reference pseudo-cache system\nis not used."));
     child_page->init();
 
     child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxTrackDefaultDuration::ClassInfos, Z("Default duration"),
@@ -369,15 +369,15 @@ header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
     child_page->init();
 
     child_page = new he_float_value_page_c(this, page, k_track_entry, KaxTrackTimecodeScale::ClassInfos, Z("Timecode scaling"),
-                                           Z("The scale to apply on this track to work at normal speed in relation with other tracks "
-                                             "(mostly used to adjust video speed when the audio length differs)."));
+                                           Z("The scale to apply on this track to work at normal\nspeed in relation with other tracks "
+                                             "(mostly used\nto adjust video speed when the audio length differs)."));
     child_page->init();
 
     child_page = new he_string_value_page_c(this, page, k_track_entry, KaxTrackName::ClassInfos, Z("Name"), Z("A human-readable track name."));
     child_page->init();
 
     child_page = new he_language_value_page_c(this, page, k_track_entry, KaxTrackLanguage::ClassInfos, Z("Language"),
-                                              Z("Specifies the language of the track in the Matroska languages form."));
+                                              Z("Specifies the language of the track in the\nMatroska languages form."));
     child_page->init();
 
     child_page = new he_ascii_string_value_page_c(this, page, k_track_entry, KaxCodecID::ClassInfos, Z("Codec ID"), Z("An ID corresponding to the codec."));
@@ -408,37 +408,37 @@ header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
       child_page->init();
 
       child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoDisplayUnit::ClassInfos,
-                                                        Z("Video display unit"), Z("Type of the unit for DisplayWidth/Height (0: pixels, 1: centimeters, 2: inches)."));
+                                                        Z("Video display unit"), Z("Type of the unit for DisplayWidth/Height\n(0: pixels, 1: centimeters, 2: inches)."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 
       child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoPixelCropLeft::ClassInfos,
-                                                        Z("Video crop left"), Z("The number of video pixels to remove on the left of the image."));
+                                                        Z("Video crop left"), Z("The number of video pixels to remove\non the left of the image."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 
       child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoPixelCropTop::ClassInfos,
-                                                        Z("Video crop top"), Z("The number of video pixels to remove on the top of the image."));
+                                                        Z("Video crop top"), Z("The number of video pixels to remove\non the top of the image."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 
       child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoPixelCropRight::ClassInfos,
-                                                        Z("Video crop right"), Z("The number of video pixels to remove on the right of the image."));
+                                                        Z("Video crop right"), Z("The number of video pixels to remove\non the right of the image."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 
       child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoPixelCropBottom::ClassInfos,
-                                                        Z("Video crop bottom"), Z("The number of video pixels to remove on the bottom of the image."));
+                                                        Z("Video crop bottom"), Z("The number of video pixels to remove\non the bottom of the image."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 
       child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoAspectRatio::ClassInfos, Z("Video aspect ratio type"),
-                                                        Z("Specify the possible modifications to the aspect ratio (0: free resizing, 1: keep aspect ratio, 2: fixed)."));
+                                                        Z("Specify the possible modifications to the aspect ratio\n(0: free resizing, 1: keep aspect ratio, 2: fixed)."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 
       child_page = new he_unsigned_integer_value_page_c(this, page, k_track_entry, KaxVideoStereoMode::ClassInfos,
-                                                        Z("Video stereo mode"), Z("Stereo-3D video mode (0: mono, 1: right eye, 2: left eye, 3: both eyes)."));
+                                                        Z("Video stereo mode"), Z("Stereo-3D video mode (0: mono, 1: right eye,\n2: left eye, 3: both eyes)."));
       child_page->set_sub_master_callbacks(KaxTrackVideo::ClassInfos);
       child_page->init();
 
