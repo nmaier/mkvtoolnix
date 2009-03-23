@@ -20,6 +20,7 @@
 #include <wx/button.h>
 #include <wx/msgdlg.h>
 #include <wx/statline.h>
+#include <wx/textctrl.h>
 
 #include <matroska/KaxInfo.h>
 #include <matroska/KaxInfoData.h>
@@ -101,7 +102,7 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
   menu_bar->Append(help_menu,      Z("&Help"));
   SetMenuBar(menu_bar);
 
-  m_status_bar = new wxStatusBar(this);
+  m_status_bar = new wxStatusBar(this, wxID_ANY);
   SetStatusBar(m_status_bar);
 
   m_status_bar_timer.SetOwner(this, ID_T_HE_STATUS_BAR);
@@ -556,14 +557,18 @@ header_editor_frame_c::on_file_quit(wxCommandEvent &evt) {
 void
 header_editor_frame_c::on_headers_expand_all(wxCommandEvent &evt) {
   m_tc_tree->Freeze();
-  m_tc_tree->ExpandAllChildren(m_root_id);
+  int i;
+  for (i = 0; m_pages.size() > i; ++i)
+    m_tc_tree->Expand(m_pages[i]->m_page_id);
   m_tc_tree->Thaw();
 }
 
 void
 header_editor_frame_c::on_headers_collapse_all(wxCommandEvent &evt) {
   m_tc_tree->Freeze();
-  m_tc_tree->CollapseAllChildren(m_root_id);
+  int i;
+  for (i = 0; m_pages.size() > i; ++i)
+    m_tc_tree->Collapse(m_pages[i]->m_page_id);
   m_tc_tree->Thaw();
 }
 

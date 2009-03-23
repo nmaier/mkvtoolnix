@@ -13,6 +13,8 @@
 
 #include "os.h"
 
+#include <wx/textctrl.h>
+
 #include <ebml/EbmlUnicodeString.h>
 
 #include "he_string_value_page.h"

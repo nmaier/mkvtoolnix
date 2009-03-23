@@ -14,6 +14,7 @@
 #include "os.h"
 
 #include <wx/statline.h>
+#include <wx/textctrl.h>
 
 #include "commonebml.h"
 #include "he_value_page.h"

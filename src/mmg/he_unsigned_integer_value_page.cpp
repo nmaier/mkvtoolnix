@@ -13,6 +13,8 @@
 
 #include "os.h"
 
+#include <wx/textctrl.h>
+
 #include <ebml/EbmlUInteger.h>
 
 #include "he_unsigned_integer_value_page.h"

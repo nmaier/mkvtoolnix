@@ -13,6 +13,8 @@
 
 #include "os.h"
 
+#include <wx/textctrl.h>
+
 #include <ebml/EbmlUInteger.h>
 
 #include "he_bool_value_page.h"

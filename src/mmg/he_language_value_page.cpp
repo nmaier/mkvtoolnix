@@ -13,6 +13,8 @@
 
 #include "os.h"
 
+#include <wx/textctrl.h>
+
 #include <ebml/EbmlString.h>
 
 #include "he_language_value_page.h"

@@ -16,6 +16,7 @@
 #include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
+#include <wx/textctrl.h>
 
 #include "header_editor_frame.h"
 #include "he_top_level_page.h"
