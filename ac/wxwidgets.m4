@@ -134,6 +134,18 @@ wxBitmapComboBox bitmap_combobox(NULL, -1);
       AC_DEFINE(HAVE_WXBITMAPCOMBOBOX, 1, [Define if the wxWindows class wxBitmapComboBox is present])
     fi
 
+    AC_CACHE_CHECK([for the name of wxWidgets file dialog enums], [ac_cv_wx_fd_enum_prefix], [
+      AC_TRY_COMPILE([
+#include <wx/filedlg.h>
+], [
+int i = (int)wxFD_SAVE;
+], [ ac_cv_wx_fd_enum_prefix=wxFD_xyz ], [ ac_cv_wx_fd_enum_prefix=wx_xyz ])
+    ])
+
+    if test x"$ac_cv_wx_fd_enum_prefix" = "xwxFD_xyz" ; then
+      AC_DEFINE(HAVE_WX_FILEDIALOG_ENUM_WITH_FD_PREFIX, 1, [Define if the wxWindows file dialog enums are named wxFD_xyz instead of wx_xyz])
+    fi
+
     AC_LANG_POP()
     CXXFLAGS="$ac_save_CXXFLAGS"
     LIBS="$ac_save_LIBS"
