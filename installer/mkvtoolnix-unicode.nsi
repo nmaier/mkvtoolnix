@@ -145,6 +145,10 @@ Section "Program files" SEC01
   Delete "$INSTDIR\libcharset.dll"
   Delete "$INSTDIR\libiconv.dll"
 
+  Delete "$INSTDIR\locale\german\LC_MESSAGES\mkvtoolnix.mo"
+  RMDir "$INSTDIR\locale\german\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\german"
+
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\AppMainExe.exe"
   Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\base64tool CLI reference.lnk"
   SetShellVarContext current
@@ -302,10 +306,14 @@ Section Uninstall
   Delete "$INSTDIR\examples\matroskasegmentinfo.dtd"
   Delete "$INSTDIR\examples\matroskatags.dtd"
 
-  Delete "$INSTDIR\locale\german\LC_MESSAGES\mkvtoolnix.mo"
+  Delete "$INSTDIR\locale\de\LC_MESSAGES\mkvtoolnix.mo"
+  RMDir "$INSTDIR\locale\de\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\de"
 
-  RMDir "$INSTDIR\locale\german\LC_MESSAGES"
-  RMDir "$INSTDIR\locale\german"
+  Delete "$INSTDIR\locale\ja\LC_MESSAGES\mkvtoolnix.mo"
+  RMDir "$INSTDIR\locale\ja\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\ja"
+
   RMDir "$INSTDIR\locale"
   RMDir "$INSTDIR\data"
   RMDir "$INSTDIR\doc\images"
