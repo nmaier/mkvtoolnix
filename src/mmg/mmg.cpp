@@ -654,11 +654,21 @@ wxdie(const wxString &errmsg) {
 }
 
 mmg_dialog::mmg_dialog():
-  wxFrame(NULL, -1, wxString::Format(Z("mkvmerge GUI v%s ('%s')"), wxU(VERSION).c_str(), wxU(VERSIONNAME).c_str())) {
+  wxFrame(NULL, wxID_ANY, wxEmptyString) {
   wxBoxSizer *bs_main;
   wxPanel *panel;
 
   mdlg = this;
+
+#if defined(__WXGTK__)
+  // GTK seems to call bindtextdomain() after our call to it.
+  // So lets re-initialize the UI locale in case the user has
+  // selected a language in mmg's preferences that doesn't match
+  // his environment variable's language.
+  app->init_ui_locale();
+#endif
+
+  SetTitle(wxString::Format(Z("mkvmerge GUI v%s ('%s')"), wxU(VERSION).c_str(), wxU(VERSIONNAME).c_str()));
 
   log_window = new wxLogWindow(this, Z("mmg debug output"), false);
   wxLog::SetActiveTarget(log_window);
@@ -2176,7 +2186,7 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
 END_EVENT_TABLE();
 
 void
-mmg_app::init_ui_locale(wxConfigBase *cfg) {
+mmg_app::init_ui_locale() {
   std::string locale;
 
 #if defined(HAVE_LIBINTL_H)
@@ -2184,6 +2194,7 @@ mmg_app::init_ui_locale(wxConfigBase *cfg) {
 
   translation_c::initialize_available_translations();
 
+  wxConfigBase *cfg = wxConfigBase::Get();
   cfg->SetPath(wxT("/GUI"));
   if (cfg->Read(wxT("ui_locale"), &w_locale)) {
     locale = wxMB(w_locale);
@@ -2214,7 +2225,7 @@ mmg_app::OnInit() {
   wxConfigBase::Set(cfg);
 
   init_stdio();
-  init_ui_locale(cfg);
+  init_ui_locale();
   mm_file_io_c::setup();
   cc_local_utf8 = utf8_init("");
   xml_element_map_init();

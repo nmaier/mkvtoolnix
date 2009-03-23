@@ -217,7 +217,7 @@ public:
 public:
   virtual bool OnInit();
   virtual int OnExit();
-  virtual void init_ui_locale(wxConfigBase *cfg);
+  virtual void init_ui_locale();
   virtual void handle_command_line_arguments();
 };
 
