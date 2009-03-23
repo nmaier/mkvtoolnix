@@ -12,6 +12,7 @@
 */
 
 // TODO:
+// * wxStaticText is not wrapping on Windows.
 // * Add "recent files" to the file menu.
 
 #include "os.h"
