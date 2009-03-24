@@ -120,34 +120,25 @@ header_editor_frame_c::~header_editor_frame_c() {
 
 bool
 header_editor_frame_c::have_been_modified() {
-  std::vector<he_page_base_c *>::iterator it = m_top_level_pages.begin();
-  while (it != m_top_level_pages.end()) {
-    if ((*it)->has_been_modified())
+  for (int i = 0; m_top_level_pages.size() > i; ++i)
+    if (m_top_level_pages[i]->has_been_modified())
       return true;
-    ++it;
-  }
 
   return false;
 }
 
 void
 header_editor_frame_c::do_modifications() {
-  std::vector<he_page_base_c *>::iterator it = m_top_level_pages.begin();
-  while (it != m_top_level_pages.end()) {
-    (*it)->do_modifications();
-    ++it;
-  }
+  for (int i = 0; m_top_level_pages.size() > i; ++i)
+    m_top_level_pages[i]->do_modifications();
 }
 
 wxTreeItemId
 header_editor_frame_c::validate_pages() {
-  std::vector<he_page_base_c *>::iterator it = m_top_level_pages.begin();
-  while (it != m_top_level_pages.end()) {
-    wxTreeItemId result = (*it)->validate();
+  for (int i = 0; m_top_level_pages.size() > i; ++i) {
+    wxTreeItemId result = m_top_level_pages[i]->validate();
     if (result.IsOk())
       return result;
-
-    ++it;
   }
 
   return wxTreeItemId();
@@ -155,8 +146,8 @@ header_editor_frame_c::validate_pages() {
 
 void
 header_editor_frame_c::clear_pages() {
-  for (std::vector<he_page_base_c *>::iterator it = m_pages.begin(); it != m_pages.end(); ++it)
-    (*it)->Hide();
+  for (int i = 0; m_pages.size() > i; ++i)
+    m_pages[i]->Hide();
 
   m_bs_main->Hide(m_tc_tree);
 
@@ -221,14 +212,14 @@ header_editor_frame_c::open_file(wxFileName file_name) {
 
   m_bs_main->Hide(m_tc_tree);
 
-  for (std::vector<he_page_base_c *>::iterator it = m_pages.begin(); it != m_pages.end(); ++it)
-    (*it)->Hide();
+  int i;
+  for (i = 0; m_pages.size() > i; ++i)
+    m_pages[i]->Hide();
 
   m_tc_tree->DeleteChildren(m_root_id);
   m_pages.clear();
   m_top_level_pages.clear();
 
-  int i;
   for (i = 0; m_analyzer->data.size() > i; ++i) {
     analyzer_data_c *data = m_analyzer->data[i];
     if (data->id == KaxInfo::ClassInfos.GlobalId) {
@@ -492,23 +483,20 @@ header_editor_frame_c::on_file_save(wxCommandEvent &evt) {
 
   do_modifications();
 
-  std::vector<he_page_base_c *>::iterator it = m_top_level_pages.begin();
+  int i;
   bool tracks_written = false;
-  while (it != m_top_level_pages.end()) {
-    if ((*it)->has_been_modified()) {
-      if ((*it)->m_l1_element->Generic().GlobalId == KaxTracks::ClassInfos.GlobalId) {
-        if (tracks_written) {
-          ++it;
+  for (i = 0; m_top_level_pages.size() > i; ++i) {
+    if (m_top_level_pages[i]->has_been_modified()) {
+      if (m_top_level_pages[i]->m_l1_element->Generic().GlobalId == KaxTracks::ClassInfos.GlobalId) {
+        if (tracks_written)
           continue;
-        }
         tracks_written = true;
       }
 
-      kax_analyzer_c::update_element_result_e result = m_analyzer->update_element((*it)->m_l1_element, true);
+      kax_analyzer_c::update_element_result_e result = m_analyzer->update_element(m_top_level_pages[i]->m_l1_element, true);
       if (kax_analyzer_c::uer_success != result)
         display_update_element_result(result);
     }
-    ++it;
   }
 
   open_file(m_file_name);
@@ -679,9 +667,9 @@ header_editor_frame_c::append_page(he_page_base_c *page,
 
 he_page_base_c *
 header_editor_frame_c::find_page_for_item(wxTreeItemId id) {
-  for (std::vector<he_page_base_c *>::iterator it = m_pages.begin(); it != m_pages.end(); ++it)
-    if ((*it)->m_page_id == id)
-      return *it;
+  for (int i = 0; m_pages.size() > i; ++i)
+    if (m_pages[i]->m_page_id == id)
+      return m_pages[i];
 
   return NULL;
 }
