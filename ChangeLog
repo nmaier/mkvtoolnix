@@ -1,5 +1,9 @@
 2009-03-24  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The MPEG program stream (VOB/EVO) reader was
+	sometimes reading the timecodes wrong resulting in bad audio/video
+	synchronization. Fix for bug 337.
+
 	* Released v2.6.0.
 
 2009-03-22  Moritz Bunkus  <moritz@bunkus.org>

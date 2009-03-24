@@ -245,14 +245,17 @@ bool
 mpeg_ps_reader_c::read_timestamp(bit_cursor_c &bc,
                                  int64_t &timestamp) {
   bc.skip_bits(4);
-  timestamp = bc.get_bits(3);
-  bc.skip_bits(1);
-  timestamp = (timestamp << 15) | bc.get_bits(15);
-  bc.skip_bits(1);
-  timestamp = (timestamp << 15) | bc.get_bits(15);
-  bc.skip_bits(1);
+  int64_t temp_timestamp = bc.get_bits(3);
+  if (1 != bc.get_bit())
+    return false;
+  temp_timestamp = (temp_timestamp << 15) | bc.get_bits(15);
+  if (1 != bc.get_bit())
+    return false;
+  temp_timestamp = (temp_timestamp << 15) | bc.get_bits(15);
+  if (1 != bc.get_bit())
+    return false;
 
-  timestamp = timestamp * 100000ll / 9;
+  timestamp = temp_timestamp * 100000ll / 9;
 
   return true;
 }
