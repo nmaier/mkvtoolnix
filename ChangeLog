@@ -1,5 +1,8 @@
 2009-03-25  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: The job manager's status output was garbled if mmg
+	was run with another language as English.
+
 	* mmg: bug fix: The progress bar for each individual job in the
 	job dialog wasn't updated if mmg was run with another language as
 	English.

@@ -243,7 +243,7 @@ job_run_dialog::on_end_process(wxProcessEvent &evt) {
 
   int ndx       = jobs_to_start[current_job];
   int exit_code = evt.GetExitCode();
-  const wxChar *status;
+  wxString status;
 
   if (abort) {
     jobs[ndx].status = JOBS_ABORTED;
@@ -261,8 +261,7 @@ job_run_dialog::on_end_process(wxProcessEvent &evt) {
 
   jobs[ndx].finished_on = wxGetUTCTime();
 
-  wxString format = Z("Finished job ID %d on %s: status '%s'");
-  add_to_log(wxString::Format(format, jobs[ndx].id, format_date_time(jobs[ndx].finished_on).c_str(), status));
+  add_to_log(wxString::Format(Z("Finished job ID %d on %s: status '%s'"), jobs[ndx].id, format_date_time(jobs[ndx].finished_on).c_str(), status.c_str()));
 
   mdlg->save_job_queue();
   delete process;
