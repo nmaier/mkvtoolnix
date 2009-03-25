@@ -1,3 +1,9 @@
+2009-03-25  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: The timecodes in the job queue editor were off by
+	one month. The "added job on" was additionally off by an amount
+	depending on the user's time zone. Fix for bug 362.
+
 2009-03-24  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The MPEG program stream (VOB/EVO) reader was

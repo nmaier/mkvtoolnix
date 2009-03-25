@@ -520,13 +520,7 @@ unescape(const wxString &src) {
 
 wxString
 format_date_time(time_t date_time) {
-  wxString s;
-  wxDateTime dt(date_time);
-
-  s.Printf(wxT("%04d-%02d-%02d %02d:%02d:%02d"), dt.GetYear(),
-           dt.GetMonth(), dt.GetDay(), dt.GetHour(), dt.GetMinute(),
-           dt.GetSecond());
-  return s;
+  return wxDateTime(date_time).Format(wxT("%Y-%m-%d %H:%M:%S"));
 }
 
 #if defined(SYS_WINDOWS)
@@ -1827,7 +1821,7 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
     last_job_id = 0;
   job.id = last_job_id;
   job.status = JOBS_PENDING;
-  job.added_on = wxGetLocalTime();
+  job.added_on = wxGetUTCTime();
   job.started_on = -1;
   job.finished_on = -1;
   job.description = new wxString(description);

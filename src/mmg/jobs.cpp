@@ -110,9 +110,9 @@ job_run_dialog::start_next_job() {
     if (   abort
         || (   cb_abort_after_current->IsChecked()
             && (current_job < jobs_to_start.size())))
-      add_to_log(wxString::Format(Z("Aborted processing on %s"), format_date_time(time(NULL)).c_str()));
+      add_to_log(wxString::Format(Z("Aborted processing on %s"), format_date_time(wxGetUTCTime()).c_str()));
     else
-      add_to_log(wxString::Format(Z("Finished processing on %s"), format_date_time(time(NULL)).c_str()));
+      add_to_log(wxString::Format(Z("Finished processing on %s"), format_date_time(wxGetUTCTime()).c_str()));
 
     b_abort->Enable(false);
     cb_abort_after_current->Enable(false);
@@ -129,7 +129,7 @@ job_run_dialog::start_next_job() {
 
   mdlg->load(wxString::Format(wxT("%s/jobs/%d.mmg"), wxGetCwd().c_str(), jobs[ndx].id));
 
-  opt_file_name.Printf(wxT("%smmg-mkvmerge-options-%d-%d"), get_temp_dir().c_str(), (int)wxGetProcessId(), (int)time(NULL));
+  opt_file_name.Printf(wxT("%smmg-mkvmerge-options-%d-%d"), get_temp_dir().c_str(), (int)wxGetProcessId(), (int)wxGetUTCTime());
 
   wxFile *opt_file;
   try {
@@ -171,7 +171,7 @@ job_run_dialog::start_next_job() {
   out = process->GetInputStream();
 
   *jobs[ndx].log        = wxEmptyString;
-  jobs[ndx].started_on  = time(NULL);
+  jobs[ndx].started_on  = wxGetUTCTime();
   jobs[ndx].finished_on = -1;
 
   add_to_log(wxString::Format(Z("Starting job ID %d (%s) on %s"), jobs[ndx].id, jobs[ndx].description->c_str(), format_date_time(jobs[ndx].started_on).c_str()));
@@ -259,7 +259,7 @@ job_run_dialog::on_end_process(wxProcessEvent &evt) {
     status           = Z("failed");
   }
 
-  jobs[ndx].finished_on = time(NULL);
+  jobs[ndx].finished_on = wxGetUTCTime();
 
   wxString format = Z("Finished job ID %d on %s: status '%s'");
   add_to_log(wxString::Format(format, jobs[ndx].id, format_date_time(jobs[ndx].finished_on).c_str(), status));
