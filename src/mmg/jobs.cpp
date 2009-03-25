@@ -195,7 +195,7 @@ job_run_dialog::process_input() {
 
     if (got_char && ((c == '\n') || (c == '\r') || out->Eof())) {
       wxString wx_line = wxU(line.c_str());
-      if (wx_line.Find(wxT("Progress")) == 0) {
+      if (wx_line.Find(Z("Progress")) == 0) {
         int percent_pos = wx_line.Find(wxT("%"));
         if (0 < percent_pos) {
           wx_line.Remove(percent_pos);

@@ -1,5 +1,9 @@
 2009-03-25  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: The progress bar for each individual job in the
+	job dialog wasn't updated if mmg was run with another language as
+	English.
+
 	* mmg: bug fix: The timecodes in the job queue editor were off by
 	one month. The "added job on" was additionally off by an amount
 	depending on the user's time zone. Fix for bug 362.
