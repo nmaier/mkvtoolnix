@@ -20,6 +20,7 @@
 
 #include "byte_buffer.h"
 #include "common_memory.h"
+#include "smart_pointers.h"
 
 #define TRUEHD_SYNC_WORD 0xf8726fba
 
@@ -46,7 +47,7 @@ struct truehd_frame_t {
     , m_samples_per_frame(0)
   { };
 };
-typedef truehd_frame_t *truehd_frame_cptr;
+typedef counted_ptr<truehd_frame_t> truehd_frame_cptr;
 
 class truehd_parser_c {
 protected:
@@ -68,6 +69,6 @@ public:
 protected:
   virtual unsigned int resync(unsigned int offset);
 };
-typedef truehd_parser_c *truehd_parser_cptr;
+typedef counted_ptr<truehd_parser_c> truehd_parser_cptr;
 
 #endif // __TRUEHD_COMMON_H
