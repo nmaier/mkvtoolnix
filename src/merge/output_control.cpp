@@ -93,6 +93,7 @@
 #include "r_real.h"
 #include "r_srt.h"
 #include "r_ssa.h"
+#include "r_truehd.h"
 #include "r_tta.h"
 #include "r_usf.h"
 #include "r_vc1.h"
@@ -356,6 +357,8 @@ get_file_type(filelist_t &file) {
   // More file types with detection issues.
   if (type != FILE_TYPE_IS_UNKNOWN)
     ;
+  else if (truehd_reader_c::probe_file(io, size))
+    type = FILE_TYPE_TRUEHD;
   else if (mp3_reader_c::probe_file(io, size, 2 * 1024 * 1024, 10))
     type = FILE_TYPE_MP3;
   else if (dts_reader_c::probe_file(io, size))

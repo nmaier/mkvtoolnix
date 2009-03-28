@@ -103,7 +103,7 @@ parse_eac3_header_full(const unsigned char *buf,
   <S_O> F = bitstream mode
 */
 
-static bool
+bool
 parse_ac3_header(const unsigned char *buf,
                  ac3_header_t &header) {
   static const int rate[]                 = {   32,   40,   48,   56,   64,   80,   96,  112,  128,  160,  192,  224,  256,  320,  384,  448,  512,  576,  640 };
