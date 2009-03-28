@@ -581,8 +581,8 @@ render_headers(mm_io_c *out) {
       GetChild<KaxDateUTC>(*s_kax_infos).SetEpochDate(time(NULL));
 
     } else {
-      GetChildAs<KaxMuxingApp, EbmlUnicodeString>(s_kax_infos)  = cstrutf8_to_UTFstring(ENGAGE_NO_VARIABLE_DATA);
-      GetChildAs<KaxWritingApp, EbmlUnicodeString>(s_kax_infos) = cstrutf8_to_UTFstring(ENGAGE_NO_VARIABLE_DATA);
+      GetChildAs<KaxMuxingApp, EbmlUnicodeString>(s_kax_infos)  = cstrutf8_to_UTFstring("no_variable_data");
+      GetChildAs<KaxWritingApp, EbmlUnicodeString>(s_kax_infos) = cstrutf8_to_UTFstring("no_variable_data");
       GetChild<KaxDateUTC>(*s_kax_infos).SetEpochDate(0);
     }
 

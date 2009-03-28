@@ -18,56 +18,49 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
 #include "base64.h"
 #include "common.h"
 #include "hacks.h"
 
-static const char *mkvtoolnix_hacks[] = {
-  ENGAGE_SPACE_AFTER_CHAPTERS,
-  ENGAGE_NO_CHAPTERS_IN_META_SEEK,
-  ENGAGE_NO_META_SEEK,
-  ENGAGE_LACING_XIPH,
-  ENGAGE_LACING_EBML,
-  ENGAGE_NATIVE_MPEG4,
-  ENGAGE_NO_VARIABLE_DATA,
-  ENGAGE_NO_DEFAULT_HEADER_VALUES,
-  ENGAGE_FORCE_PASSTHROUGH_PACKETIZER,
-  ENGAGE_WRITE_HEADERS_TWICE,
-  ENGAGE_ALLOW_AVC_IN_VFW_MODE,
-  ENGAGE_KEEP_BITSTREAM_AR_INFO,
-  ENGAGE_USE_SIMPLE_BLOCK,
-  ENGAGE_OLD_AAC_CODECID,
-  ENGAGE_USE_CODEC_STATE,
-  ENGAGE_ENABLE_TIMECODE_WARNING,
-  NULL
+static const struct {
+  unsigned int id;
+  const char *name;
+} s_available_hacks[] = {
+  { ENGAGE_SPACE_AFTER_CHAPTERS,         "space_after_chapters"         },
+  { ENGAGE_NO_CHAPTERS_IN_META_SEEK,     "no_chapters_in_meta_seek"     },
+  { ENGAGE_NO_META_SEEK,                 "no_meta_seek"                 },
+  { ENGAGE_LACING_XIPH,                  "lacing_xiph"                  },
+  { ENGAGE_LACING_EBML,                  "lacing_ebml"                  },
+  { ENGAGE_NATIVE_MPEG4,                 "native_mpeg4"                 },
+  { ENGAGE_NO_VARIABLE_DATA,             "no_variable_data"             },
+  { ENGAGE_NO_DEFAULT_HEADER_VALUES,     "no_default_header_values"     },
+  { ENGAGE_FORCE_PASSTHROUGH_PACKETIZER, "force_passthrough_packetizer" },
+  { ENGAGE_WRITE_HEADERS_TWICE,          "write_headers_twice"          },
+  { ENGAGE_ALLOW_AVC_IN_VFW_MODE,        "allow_avc_in_vfw_mode"        },
+  { ENGAGE_KEEP_BITSTREAM_AR_INFO,       "keep_bitstream_ar_info"       },
+  { ENGAGE_USE_SIMPLE_BLOCK,             "use_simpleblock"              },
+  { ENGAGE_OLD_AAC_CODECID,              "old_aac_codecid"              },
+  { ENGAGE_USE_CODEC_STATE,              "use_codec_state"              },
+  { ENGAGE_ENABLE_TIMECODE_WARNING,      "enable_timecode_warning"      },
+  { 0,                                   NULL },
 };
-static vector<string> engaged_hacks;
+static std::vector<bool> s_engaged_hacks(ENGAGE_ENABLE_TIMECODE_WARNING + 1, false);
 
 bool
-hack_engaged(const string &hack) {
-  vector<string>::const_iterator hit;
-
-  mxforeach(hit, engaged_hacks)
-    if (*hit == hack)
-      return true;
-
-  return false;
+hack_engaged(unsigned int id) {
+  return (s_engaged_hacks.size() > id) && s_engaged_hacks[id];
 }
 
 void
-engage_hacks(const string &hacks) {
-  vector<string> engage_args;
+engage_hacks(const std::string &hacks) {
+  std::vector<std::string> engage_args = split(hacks, ",");
   int aidx, hidx;
-  bool valid_hack;
 
-  engage_args = split(hacks, ",");
-  for (aidx = 0; aidx < engage_args.size(); aidx++)
+  for (aidx = 0; engage_args.size() > aidx; aidx++)
     if (engage_args[aidx] == "list") {
       mxinfo(Y("Valid hacks are:\n"));
-      for (hidx = 0; mkvtoolnix_hacks[hidx] != NULL; hidx++)
-        mxinfo(boost::format("%1%\n") % mkvtoolnix_hacks[hidx]);
+      for (hidx = 0; NULL != s_available_hacks[hidx].name; ++hidx)
+        mxinfo(boost::format("%1%\n") % s_available_hacks[hidx].name);
       mxexit(0);
 
     } else if (engage_args[aidx] == "cow") {
@@ -82,14 +75,16 @@ engage_hacks(const string &hacks) {
       mxexit(0);
     }
 
-  for (aidx = 0; aidx < engage_args.size(); aidx++) {
-    valid_hack = false;
-    for (hidx = 0; mkvtoolnix_hacks[hidx] != NULL; hidx++)
-      if (engage_args[aidx] == mkvtoolnix_hacks[hidx]) {
+  for (aidx = 0; engage_args.size() > aidx; aidx++) {
+    bool valid_hack = false;
+    int hidx;
+    for (hidx = 0; s_available_hacks[hidx].name != NULL; hidx++)
+      if (engage_args[aidx] == s_available_hacks[hidx].name) {
         valid_hack = true;
-        engaged_hacks.push_back(mkvtoolnix_hacks[hidx]);
+        s_engaged_hacks[s_available_hacks[hidx].id] = true;
         break;
       }
+
     if (!valid_hack)
       mxerror(boost::format(Y("'%1%' is not a valid hack.\n")) % engage_args[aidx]);
   }
