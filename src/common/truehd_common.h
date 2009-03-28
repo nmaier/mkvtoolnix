@@ -68,6 +68,7 @@ public:
 
 protected:
   virtual unsigned int resync(unsigned int offset);
+  virtual int decode_channel_map(int channel_map);
 };
 typedef counted_ptr<truehd_parser_c> truehd_parser_cptr;
 

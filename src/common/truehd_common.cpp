@@ -22,6 +22,23 @@ truehd_parser_c::truehd_parser_c()
 {
 }
 
+// Code for truehd_parser_c::decode_channel_map was taken from
+// the ffmpeg project, source file "libavcodec/mlp_parser.c".
+int
+truehd_parser_c::decode_channel_map(int channel_map) {
+  static const int channel_count[13] = {
+    //  LR    C   LFE  LRs LRvh  LRc LRrs  Cs   Ts  LRsd  LRw  Cvh  LFE2
+         2,   1,   1,   2,   2,   2,   2,   1,   1,   2,   2,   1,   1
+  };
+
+  int channels = 0, i;
+
+  for (i = 0; 13 > i; ++i)
+    channels += channel_count[i] * ((channel_map >> i) & 1);
+
+  return channels;
+}
+
 void
 truehd_parser_c::add_data(const unsigned char *new_data,
                           unsigned int new_size) {
@@ -52,8 +69,10 @@ truehd_parser_c::add_data(const unsigned char *new_data,
       frame->m_type              = truehd_frame_t::sync;
       frame->m_size              = (((data[offset] << 8) | data[offset + 1]) & 0xfff) * 2;
       frame->m_sampling_rate     = sampling_rates[data[offset + 8] >> 4];
-      frame->m_channels          = ((data[offset + 9] & 0x0f) << 1) | (data[offset + 10] >> 7);
       frame->m_samples_per_frame = 40 << ((data[offset + 8] >> 4) & 0x07);
+      int chanmap_substream_1    = ((data[offset +  9] & 0x0f) << 1) | (data[offset + 10] >> 7);
+      int chanmap_substream_2    = ((data[offset + 10] & 0x1f) << 8) |  data[offset + 11];
+      frame->m_channels          = decode_channel_map(chanmap_substream_2 ? chanmap_substream_2 : chanmap_substream_1);
 
     } else if (get_uint16_be(&data[offset]) == 0x770b) {
       ac3_header_t ac3_header;
