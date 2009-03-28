@@ -152,6 +152,8 @@ xtr_base_c::create_extractor(const string &new_codec_id,
     return new xtr_aac_c(new_codec_id, new_tid, tspec);
   else if (starts_with_case(new_codec_id, "A_REAL/"))
     return new xtr_rmff_c(new_codec_id, new_tid, tspec);
+  else if (new_codec_id == MKV_A_TRUEHD)
+    return new xtr_base_c(new_codec_id, new_tid, tspec, "TrueHD");
   else if (new_codec_id == MKV_A_TTA)
     return new xtr_tta_c(new_codec_id, new_tid, tspec);
   else if (new_codec_id == MKV_A_WAVPACK4)
