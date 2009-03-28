@@ -34,28 +34,24 @@ mpeg_es_reader_c::probe_file(mm_io_c *io,
     return 0;
 
   try {
-    unsigned char *buf = (unsigned char *)safemalloc(READ_SIZE);
+    memory_cptr af_buf = memory_c::alloc(READ_SIZE);
+    unsigned char *buf = af_buf->get();
     io->setFilePointer(0, seek_beginning);
     int num_read = io->read(buf, READ_SIZE);
 
-    if (4 > num_read) {
-      safefree(buf);
+    if (4 > num_read)
       return 0;
-    }
+
     io->setFilePointer(0, seek_beginning);
 
     // MPEG TS starts with 0x47.
-    if (0x47 == buf[0]) {
-      safefree(buf);
+    if (0x47 == buf[0])
       return 0;
-    }
 
     // MPEG PS starts with 0x000001ba.
     uint32_t value = get_uint32_be(buf);
-    if (MPEGVIDEO_PACKET_START_CODE == value) {
-      safefree(buf);
+    if (MPEGVIDEO_PACKET_START_CODE == value)
       return 0;
-    }
 
     // Due to type detection woes mkvmerge requires
     // the stream to start with a MPEG start code.
@@ -103,8 +99,6 @@ mpeg_es_reader_c::probe_file(mm_io_c *io,
     mxverb(3,
            boost::format("mpeg_es_detection: sequence %1% picture %2% gop %3% ext %4% slice %5%\n")
            % sequence_start_code_found % picture_start_code_found % gop_start_code_found % ext_start_code_found % slice_start_code_found);
-
-    safefree(buf);
 
     if (!ok)
       return 0;
