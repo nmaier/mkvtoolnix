@@ -58,11 +58,14 @@ truehd_packetizer_c::process(packet_cptr packet) {
 
   while (m_parser.frame_available()) {
     truehd_frame_cptr frame = m_parser.get_next_frame();
+
     if (truehd_frame_t::sync == frame->m_type) {
       adjust_header_values(frame);
       flush();
 
-    } else if (truehd_frame_t::ac3 != frame->m_type)
+    }
+
+    if (truehd_frame_t::ac3 != frame->m_type)
       m_frames.push_back(frame);
   }
 
