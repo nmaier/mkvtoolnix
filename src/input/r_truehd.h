@@ -18,11 +18,11 @@
 
 #include <stdio.h>
 
-#include "truehd_common.h"
 #include "common.h"
 #include "error.h"
 #include "mm_io.h"
 #include "pr_generic.h"
+#include "truehd_common.h"
 
 class truehd_reader_c: public generic_reader_c {
 private:

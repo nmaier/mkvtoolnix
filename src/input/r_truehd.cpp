@@ -23,7 +23,7 @@ extern "C" {
 #include "error.h"
 #include "id3_common.h"
 #include "r_truehd.h"
-#include "p_ac3.h"
+#include "p_truehd.h"
 
 #define TRUEHD_READ_SIZE (1024 * 1024)
 
@@ -89,7 +89,7 @@ truehd_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  add_packetizer(new ac3_packetizer_c(this, ti, m_header->m_sampling_rate, m_header->m_channels, 0));
+  add_packetizer(new truehd_packetizer_c(this, ti, m_header->m_sampling_rate, m_header->m_channels));
   mxinfo_tid(ti.fname, 0, Y("Using the TrueHD output module.\n"));
 }
 

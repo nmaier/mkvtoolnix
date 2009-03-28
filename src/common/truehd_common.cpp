@@ -81,7 +81,8 @@ truehd_parser_c::add_data(const unsigned char *new_data,
 
     frame->m_data = clone_memory(&data[offset], frame->m_size);
 
-    mxinfo(boost::format("type %1% offset %2% size %3% channels %4% sampling_rate %5% samples_per_frame %6%\n")
+    mxverb(3,
+           boost::format("type %1% offset %2% size %3% channels %4% sampling_rate %5% samples_per_frame %6%\n")
            % (  truehd_frame_t::sync   == frame->m_type ? "S"
               : truehd_frame_t::normal == frame->m_type ? "n"
               : truehd_frame_t::ac3    == frame->m_type ? "A"

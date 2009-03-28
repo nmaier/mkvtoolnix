@@ -1092,6 +1092,9 @@ create_readers() {
         case FILE_TYPE_SRT:
           file->reader = new srt_reader_c(*file->ti);
           break;
+        case FILE_TYPE_TRUEHD:
+          file->reader = new truehd_reader_c(*file->ti);
+          break;
         case FILE_TYPE_TTA:
           file->reader = new tta_reader_c(*file->ti);
           break;
