@@ -1,3 +1,9 @@
+2009-03-29  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge, mkvetract: new feature: Added support for TrueHD audio
+	(read from raw streams with or without embedded AC3 frames, MPEG
+	program streams).
+
 2009-03-25  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: The job manager's status output was garbled if mmg
