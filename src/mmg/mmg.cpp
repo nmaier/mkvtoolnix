@@ -213,6 +213,9 @@ cli_options_dlg::init_cli_option_list() {
                                            Z("Use the old AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') instead of the new one ('A_AAC').")));
   all_cli_options.push_back(cli_option_t(wxU("--engage use_codec_state"),
                                            Z("Allows the use of the CodecState element. This is used for e.g. MPEG-1/-2 video tracks for storing the sequence headers.")));
+  all_cli_options.push_back(cli_option_t(wxU("--engage keep_bitstream_ar_info"),
+                                           Z("Normally mkvmerge removes aspect ratio information from MPEG4 video bitstreams and puts the information into the container. "
+                                             "This option lets mkvmerge keep the aspect ratio information in the bitstream.")));
   all_cli_options.push_back(cli_option_t(wxU("--engage cow"),
                                            Z("No help available.")));
 }
