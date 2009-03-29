@@ -216,6 +216,9 @@ cli_options_dlg::init_cli_option_list() {
   all_cli_options.push_back(cli_option_t(wxU("--engage keep_bitstream_ar_info"),
                                            Z("Normally mkvmerge removes aspect ratio information from MPEG4 video bitstreams and puts the information into the container. "
                                              "This option lets mkvmerge keep the aspect ratio information in the bitstream.")));
+  all_cli_options.push_back(cli_option_t(wxU("--engage merge_truehd_frames"),
+                                           Z("TrueHD audio streams know two frame types: sync frames and non-sync frames. With this switch mkvmerge will put one sync frame "
+                                             "and all following non-sync frames into a single Matroska block. Without it each non-sync frame is put into its own Matroska block.")));
   all_cli_options.push_back(cli_option_t(wxU("--engage cow"),
                                            Z("No help available.")));
 }
