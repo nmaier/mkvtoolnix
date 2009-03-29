@@ -85,8 +85,7 @@ truehd_parser_c::parse(bool end_of_stream) {
         if (((size - offset) < ac3_header.bytes) && !end_of_stream)
           break;
 
-        // TODO: CRC check
-        if (((size - offset) >= ac3_header.bytes)) { // && check_ac3_crc())
+        if (((size - offset) >= ac3_header.bytes) && verify_ac3_checksum(&data[offset], size - offset)) {
           frame->m_type = truehd_frame_t::ac3;
           frame->m_size = ac3_header.bytes;
         }

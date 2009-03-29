@@ -11,9 +11,13 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "os.h"
+
 #include <string.h>
 
 #include "ac3_common.h"
+#include "bswap.h"
+#include "checksums.h"
 #include "common.h"
 
 /*
@@ -267,4 +271,69 @@ find_consecutive_ac3_headers(const unsigned char *buf,
   } while ((size - 5) > base);
 
   return -1;
+}
+
+/*
+   The functions mul_poly, pow_poly and verify_ac3_crc were taken
+   or adopted from the ffmpeg project, file "libavcodec/ac3enc.c".
+
+   The license here is the GPL.
+ */
+
+#define CRC16_POLY ((1 << 0) | (1 << 2) | (1 << 15) | (1 << 16))
+
+static unsigned int
+mul_poly(unsigned int a,
+         unsigned int b,
+         unsigned int poly) {
+  unsigned int c;
+
+  c = 0;
+  while (a) {
+    if (a & 1)
+      c ^= b;
+    a = a >> 1;
+    b = b << 1;
+    if (b & (1 << 16))
+      b ^= poly;
+  }
+  return c;
+}
+
+static unsigned int
+pow_poly(unsigned int a,
+         unsigned int n,
+         unsigned int poly) {
+  unsigned int r;
+  r = 1;
+  while (n) {
+    if (n & 1)
+      r = mul_poly(r, a, poly);
+    a = mul_poly(a, a, poly);
+    n >>= 1;
+  }
+  return r;
+}
+
+bool
+verify_ac3_checksum(const unsigned char *buf,
+                    int size) {
+  ac3_header_t ac3_header;
+
+  if (0 != find_ac3_header(buf, size, &ac3_header, false))
+    return false;
+
+  if (size < ac3_header.bytes)
+    return false;
+
+  uint16_t expected_crc = get_uint16_be(&buf[2]);
+
+  int frame_size_words  = ac3_header.bytes >> 1;
+  int frame_size_58     = (frame_size_words >> 1) + (frame_size_words >> 3);
+
+  uint16_t actual_crc   = bswap_16(crc_calc(crc_get_table(CRC_16_ANSI), 0, buf + 4, 2 * frame_size_58 - 4));
+  unsigned int crc_inv  = pow_poly((CRC16_POLY >> 1), (16 * frame_size_58) - 16, CRC16_POLY);
+  actual_crc            = mul_poly(crc_inv, actual_crc, CRC16_POLY);
+
+  return expected_crc == actual_crc;
 }

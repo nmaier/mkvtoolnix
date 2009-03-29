@@ -54,5 +54,6 @@ typedef struct {
 int MTX_DLL_API find_ac3_header(const unsigned char *buf, int size, ac3_header_t *ac3_header, bool look_for_second_header);
 int MTX_DLL_API find_consecutive_ac3_headers(const unsigned char *buf, int size, int num);
 bool MTX_DLL_API parse_ac3_header(const unsigned char *buf, ac3_header_t &header);
+bool MTX_DLL_API verify_ac3_checksum(const unsigned char *buf, int size);
 
 #endif // __AC3COMMON_H
