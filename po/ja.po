@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/extract/xtr_tta.cpp:118
+#: src/extract/xtr_tta.cpp:117
 msgid ""
 "\n"
 "The temporary TTA file for track ID %1% is being copied into the final TTA file. This may take some time.\n"
@@ -23,7 +23,7 @@ msgstr ""
 "\n"
 "一時的に作成されたトラックID %1%のTTAファイルを最終的なTTAファイルにコピー中です。これにはしばらく時間がかかることがあります。\n"
 
-#: src/merge/output_control.cpp:247
+#: src/merge/output_control.cpp:248
 msgid ""
 "\n"
 "mkvmerge received a SIGINT (probably because the user pressed Ctrl+C). Trying to sanitize the file. If mkvmerge hangs during this process you'll have to kill it manually.\n"
@@ -648,8 +648,8 @@ msgstr " セグメント情報操作：\n"
 msgid " at %1%"
 msgstr " at %1%"
 
-#: src/merge/output_control.cpp:255 src/merge/output_control.cpp:264
-#: src/merge/output_control.cpp:276 src/merge/output_control.cpp:283
+#: src/merge/output_control.cpp:256 src/merge/output_control.cpp:265
+#: src/merge/output_control.cpp:277 src/merge/output_control.cpp:284
 msgid " done\n"
 msgstr " 終了\n"
 
@@ -720,7 +720,7 @@ msgstr ""
 msgid "%s (MIME type %s, size %ld) from %s (%s)"
 msgstr "%s（MIMEタイプ %s、サイズ %ldバイト）%s（%s）の添付ファイル"
 
-#: src/mmg/tab_input.cpp:618 src/mmg/tab_input.cpp:1228
+#: src/mmg/tab_input.cpp:619 src/mmg/tab_input.cpp:1229
 #, c-format
 msgid "%s%s (ID %lld, type: %s) from %s"
 msgstr "%s%s（ID %lld、タイプ：%s）%sのトラック"
@@ -986,7 +986,7 @@ msgstr "'%1%'は正しいccTLD国コードではありません。"
 msgid "'%1%' is not a valid file ID in '--track-order %2%'.\n"
 msgstr "'--track-order %2%'の'%1%'は正しいファイルIDではありません。\n"
 
-#: src/common/hacks.cpp:94
+#: src/common/hacks.cpp:89
 msgid "'%1%' is not a valid hack.\n"
 msgstr "'%1%'は正しいハックではありません。\n"
 
@@ -1637,7 +1637,7 @@ msgstr "全てのファイル (*.*)|*.*"
 msgid "All header values are OK."
 msgstr "全てのヘッダの値はOKです。"
 
-#: src/mmg/tab_input.cpp:273
+#: src/mmg/tab_input.cpp:274
 #, c-format
 msgid "All supported media files|%s%s|%s"
 msgstr "サポートされている全てのメディアファイル|%s%s|%s"
@@ -1706,12 +1706,12 @@ msgstr "トラック%1%には既にデフォルトトラックが設定されて
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr "MUXジョブがまだ実行中です。新しいジョブを開始する前に、終了するまで待つか、ジョブを手動で終了させてください。"
 
-#: src/mmg/tab_input.cpp:1258
+#: src/mmg/tab_input.cpp:1259
 #, c-format
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "同じファイルのトラックを別のトラックに追加することはできません。トラック番号%uと%uがこれに当てはまります。"
 
-#: src/merge/output_control.cpp:1570
+#: src/merge/output_control.cpp:1576
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "ファイル番号%2%（'%3%'）のトラック%1%を、ファイル番号%5%（'%6%'）のトラック%4%に追加しています。\n"
 
@@ -2023,11 +2023,11 @@ msgstr "添付ファイルを選んでください"
 msgid "Choose an input file"
 msgstr "入力ファイルを選んでください"
 
-#: src/mmg/tab_input.cpp:275
+#: src/mmg/tab_input.cpp:276
 msgid "Choose an input file to add"
 msgstr "追加する入力ファイルを選んでください"
 
-#: src/mmg/tab_input.cpp:275
+#: src/mmg/tab_input.cpp:276
 msgid "Choose an input file to append"
 msgstr "追加結合する入力ファイルを選んでください"
 
@@ -2195,7 +2195,7 @@ msgstr "コアピクチャフレーム%1%のヘッダサイズ（%2%）が不正
 msgid "CorePicture frame %1% not supported.\n"
 msgstr "コアピクチャフレーム%1%はサポートされていません。\n"
 
-#: src/mmg/jobs.cpp:138 src/mmg/mux_dialog.cpp:112 src/mmg/tab_input.cpp:320
+#: src/mmg/jobs.cpp:138 src/mmg/mux_dialog.cpp:112 src/mmg/tab_input.cpp:321
 #, c-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
 msgstr "'%s'と呼ばれるmkvmergeのコマンドラインオプションの一時ファイルを作成できませんでした (エラーコード %d, %s)。"
@@ -2226,7 +2226,7 @@ msgstr "正しいMP3パケットを見つけられませんでした。"
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "オーディオトラック%1%のインデックスを見つけられませんでした（avilibエラーメッセージ：%2%）。トラックをスキップします。\n"
 
-#: src/merge/output_control.cpp:1525
+#: src/merge/output_control.cpp:1531
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "追加結合時にgptzrを見つけられませんでした。%1%\n"
 
@@ -2405,7 +2405,7 @@ msgstr "現在の値："
 msgid "D&elete"
 msgstr "削除(&D)"
 
-#: src/mmg/tab_input.cpp:215 src/merge/mkvmerge.cpp:87
+#: src/mmg/tab_input.cpp:216 src/merge/mkvmerge.cpp:87
 msgid "DTS (Digital Theater System)"
 msgstr "DTS (Digital Theater System)"
 
@@ -2574,6 +2574,10 @@ msgstr ""
 msgid "Doc type: %1%"
 msgstr ""
 
+#: src/mmg/tab_input.cpp:215
+msgid "Dolby TrueHD"
+msgstr ""
+
 #: src/info/mkvinfo.cpp:1412
 msgid "Duration: %|1$.3f|ms"
 msgstr ""
@@ -2606,7 +2610,7 @@ msgstr ""
 msgid "EBML version: %1%"
 msgstr ""
 
-#: src/merge/output_control.cpp:1117
+#: src/merge/output_control.cpp:1123
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "悪質な内部バグです！（未知のファイルタイプです）。 %1%\n"
 
@@ -2688,7 +2692,7 @@ msgstr "設定のロード中にエラーが発生しました"
 msgid "Error opening file"
 msgstr "ファイルを開く途中でエラーが発生しました"
 
-#: src/input/r_mpeg_ps.cpp:973
+#: src/input/r_mpeg_ps.cpp:1031
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr "MPEG PSパケット解析ののヘッダ読み込みフェイズでエラーが発生しました。このストリームはひどく壊れているようです。\n"
 
@@ -2791,7 +2795,7 @@ msgstr "コーデックID '%2%'のトラック%1%をファイル'%3%'に展開�
 msgid "Extraction of track number %1% with the CodecID '%2%' is not supported.\n"
 msgstr "コーデックID '%2%'のトラック番号%1%の展開はサポートされていません。\n"
 
-#: src/mmg/tab_input.cpp:217
+#: src/mmg/tab_input.cpp:218
 msgid "FLAC (Free Lossless Audio Codec)"
 msgstr "FLAC（Free Lossless Audio Codec）"
 
@@ -2852,7 +2856,7 @@ msgstr ""
 msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n"
 msgstr "ファイルが予測されたよりも少ないフレームしか含んでいないか、フレーム%1%の後ろが壊れています。\n"
 
-#: src/mmg/mmg.cpp:1238 src/mmg/mux_dialog.cpp:113 src/mmg/tab_input.cpp:321
+#: src/mmg/mmg.cpp:1238 src/mmg/mux_dialog.cpp:113 src/mmg/tab_input.cpp:322
 msgid "File creation failed"
 msgstr "ファイル作成に失敗しました"
 
@@ -2864,11 +2868,11 @@ msgstr ""
 msgid "File description: %1%"
 msgstr ""
 
-#: src/mmg/tab_input.cpp:365 src/mmg/tab_input.cpp:372
+#: src/mmg/tab_input.cpp:366 src/mmg/tab_input.cpp:373
 msgid "File identification failed"
 msgstr "ファイルタイプの判定に失敗しました"
 
-#: src/mmg/tab_input.cpp:359
+#: src/mmg/tab_input.cpp:360
 #, c-format
 msgid ""
 "File identification failed for '%s'. Return code: %d\n"
@@ -2877,7 +2881,7 @@ msgstr ""
 "'%s'のファイルタイプの判定に失敗しました。リターンコード：%d\n"
 "\n"
 
-#: src/mmg/tab_input.cpp:369
+#: src/mmg/tab_input.cpp:370
 #, c-format
 msgid "File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable in the settings dialog."
 msgstr "ファイルタイプの判定に失敗しました。リターンコード：%d。エラー%d (%s)。設定ダイアログでmkvmergeのパスを正しく設定したか確認してください。"
@@ -2894,7 +2898,7 @@ msgstr ""
 msgid "File options:"
 msgstr "ファイルオプション："
 
-#: src/mmg/tab_input.cpp:692
+#: src/mmg/tab_input.cpp:693
 msgid "File removal not possible"
 msgstr "ファイルを削除できません"
 
@@ -2914,7 +2918,7 @@ msgstr "ファイル/セグメントタイトル"
 msgid "File/segment title:"
 msgstr "ファイル/セグメントタイトル:"
 
-#: src/merge/output_control.cpp:812
+#: src/merge/output_control.cpp:815
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "ファイルをそのファイル自身に追加結合することはできません。'--append-to'の引数が不正です。\n"
 
@@ -3561,11 +3565,11 @@ msgstr "このトラックのMIMEタイプです。予め定義されたMIMEタ�
 msgid "MIME type:"
 msgstr "MIMEタイプ："
 
-#: src/mmg/tab_input.cpp:218
+#: src/mmg/tab_input.cpp:219
 msgid "MP4 audio/video files"
 msgstr "MP4 オーディオ/ビデオファイル"
 
-#: src/mmg/tab_input.cpp:219
+#: src/mmg/tab_input.cpp:220
 msgid "MPEG audio files"
 msgstr "MPEGオーディオファイル"
 
@@ -3573,11 +3577,11 @@ msgstr "MPEGオーディオファイル"
 msgid "MPEG program stream"
 msgstr "MPEGプログラムストリーム"
 
-#: src/mmg/tab_input.cpp:220
+#: src/mmg/tab_input.cpp:221
 msgid "MPEG program streams"
 msgstr "MPEGプログラムストリーム"
 
-#: src/mmg/tab_input.cpp:221
+#: src/mmg/tab_input.cpp:222
 msgid "MPEG video elementary streams"
 msgstr "MPEGビデオエレメンタリストリーム"
 
@@ -3619,7 +3623,7 @@ msgstr "不正な形式の行？（%1%）\n"
 msgid "Matroska A/V files (*.mka;*.mkv)|*.mkv;*.mka|%s"
 msgstr "Matroska A/Vファイル (*.mka;*.mkv)|*.mkv;*.mka|%s"
 
-#: src/mmg/tab_input.cpp:222
+#: src/mmg/tab_input.cpp:223
 msgid "Matroska audio/video files"
 msgstr "Matroskaオーディオ/ビデオファイル"
 
@@ -3725,7 +3729,7 @@ msgstr "1つの添付ファイルに複数の名前が指定されました。'%
 msgid "More than one root element found."
 msgstr "ルート要素が複数見つかりました。"
 
-#: src/merge/output_control.cpp:889
+#: src/merge/output_control.cpp:892
 msgid "More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"
 msgstr "トラック%1%にファイル番号%2%のファイル（'%3%'）から複数のトラックを追加結合しようとしました。'--append-to'の引数が不正です。\n"
 
@@ -3821,7 +3825,7 @@ msgstr "AC3ヘッダが最初のフレームで見つかりませんでした：
 msgid "No EBML head found."
 msgstr ""
 
-#: src/mmg/tab_input.cpp:1335
+#: src/mmg/tab_input.cpp:1336
 msgid "No FPS selected for AVC/h.264 track"
 msgstr "AVC/h.264トラックのFPSが選択されていません"
 
@@ -3834,7 +3838,7 @@ msgstr "添付ファイル'%s'のMIMEタイプが選択されていません。"
 msgid "No MIME type has been set for the attachment '%1%', and it could not be guessed.\n"
 msgstr "添付ファイル'%1%'にMIMEタイプが設定されておらず、推定することもできませんでした。\n"
 
-#: src/merge/output_control.cpp:848
+#: src/merge/output_control.cpp:851
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr "ファイル番号%1%のファイル（'%2%'）に追加結合のマッピングが指定されていません。デフォルトのマッピング%3%が代わりに使用されます。もしmkvmergeが不正な'--append-to'オプションに関するエラーメッセージを出して中断した場合はこのことを覚えておいてください。\n"
 
@@ -3911,7 +3915,7 @@ msgstr "タグを引き継がない"
 msgid "No track ID specified in '--%1% %2%'.\n"
 msgstr "'--%1% %2%'でトラックIDが指定されていません。\n"
 
-#: src/mmg/tab_input.cpp:570
+#: src/mmg/tab_input.cpp:571
 msgid "No tracks found"
 msgstr "トラックが見つかりませんでした"
 
@@ -3959,7 +3963,7 @@ msgstr "フレーム当たりのナノ秒数です。"
 msgid "Numbers of channels in the track."
 msgstr "トラックのチャンネル数です。"
 
-#: src/mmg/tab_input.cpp:224
+#: src/mmg/tab_input.cpp:225
 msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM オーディオ/ビデオファイル"
 
@@ -3995,7 +3999,7 @@ msgstr "出力ファイルは1つのみ指定することができます。\n"
 msgid "Only one segment info file allowed in '%1% %2%'.\n"
 msgstr "'%1% %2%'でセグメント情報ファイルは1つのみ指定することができます。\n"
 
-#: src/merge/output_control.cpp:829
+#: src/merge/output_control.cpp:832
 msgid "Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the default mapping will be used) or specify a mapping for all tracks that are to be copied.\n"
 msgstr "ファイル番号%1%のファイル'%2%'に対して部分的な追加結合のマッピングしか指定されませんでした。全くマッピングを指定しない（その場合はデフォルトのマッピングが使用されます）か、コピーされるべき全てのトラックにマッピングを指定するかのどちらかにしてください。\n"
 
@@ -4175,7 +4179,7 @@ msgid "Progress"
 msgstr "進行状況"
 
 #: src/extract/timecodes_v2.cpp:286 src/extract/tracks.cpp:423
-#: src/merge/output_control.cpp:433
+#: src/merge/output_control.cpp:436
 msgid "Progress: %1%%%%2%"
 msgstr "進行状況: %1%%%%2%"
 
@@ -4183,7 +4187,7 @@ msgstr "進行状況: %1%%%%2%"
 msgid "Progress: 100%\n"
 msgstr "進行状況: 100%\n"
 
-#: src/merge/output_control.cpp:1819
+#: src/merge/output_control.cpp:1825
 msgid "Progress: 100%%%1%"
 msgstr "進行状況: 100%%%1%"
 
@@ -4191,7 +4195,7 @@ msgstr "進行状況: 100%%%1%"
 msgid "Querying mkvmerge's capabilities"
 msgstr "mkvmergeの機能を調査しています"
 
-#: src/mmg/tab_input.cpp:223
+#: src/mmg/tab_input.cpp:224
 msgid "QuickTime audio/video files"
 msgstr "QuickTime オーディオ/ビデオファイル"
 
@@ -4331,7 +4335,7 @@ msgstr ""
 msgid "Re-enable the selected job(s)"
 msgstr "選択したジョブを再有効化します"
 
-#: src/input/r_mpeg_ps.cpp:385
+#: src/input/r_mpeg_ps.cpp:387
 msgid "Reading encrypted VOBs is not supported.\n"
 msgstr "暗号化されたVOBの読み込みはサポートされていません。\n"
 
@@ -4347,7 +4351,7 @@ msgstr "実際の出力サンプリング周波数（Hz単位）です。"
 msgid "RealMedia audio and video"
 msgstr "RealMediaオーディオとビデオ"
 
-#: src/mmg/tab_input.cpp:225
+#: src/mmg/tab_input.cpp:226
 msgid "RealMedia audio/video files"
 msgstr "RealMediaオーディオ/ビデオファイル"
 
@@ -4419,11 +4423,11 @@ msgstr "選択したジョブを開始(&T)"
 msgid "SHA1-160"
 msgstr ""
 
-#: src/mmg/tab_input.cpp:226 src/merge/mkvmerge.cpp:102
+#: src/mmg/tab_input.cpp:227 src/merge/mkvmerge.cpp:102
 msgid "SRT text subtitles"
 msgstr "SRTテキスト字幕"
 
-#: src/mmg/tab_input.cpp:227 src/merge/mkvmerge.cpp:103
+#: src/mmg/tab_input.cpp:228 src/merge/mkvmerge.cpp:103
 msgid "SSA/ASS text subtitles"
 msgstr "SSA/ASSテキスト字幕"
 
@@ -4767,7 +4771,7 @@ msgstr "修正されたヘッダの値があります。本当にファイルを
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "修正されたヘッダの値があります。本当にファイルを保存しないでリロードしますか？"
 
-#: src/merge/output_control.cpp:1287
+#: src/merge/output_control.cpp:1293
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "失われているタグ要素があります（このエラーは発生するはずはありません―似たような他のエラーが以前に発生しているはずです）。 %1%\n"
 
@@ -4892,7 +4896,7 @@ msgstr "字幕トラック%1%に失われている持続時間要素がありま
 msgid "Subtitle track %u"
 msgstr "字幕トラック%u"
 
-#: src/mmg/tab_input.cpp:228
+#: src/mmg/tab_input.cpp:229
 msgid "TTA (The lossless True Audio codec)"
 msgstr "TTA（The lossless True Audio codec）"
 
@@ -4975,7 +4979,7 @@ msgstr "FLACヘッダを解析することができません：ストリーム�
 msgid "The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n"
 msgstr "FPSは0.0ですが、リーダはパケットのタイムコードを渡しませんでした。%1%\n"
 
-#: src/mmg/tab_input.cpp:1320
+#: src/mmg/tab_input.cpp:1321
 #, c-format
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
 msgstr "トラック番号%s（ファイル'%s'）のFPS設定は不正です。"
@@ -4984,7 +4988,7 @@ msgstr "トラック番号%s（ファイル'%s'）のFPS設定は不正です。
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "FourCCは4文字ちょうどでなければなりません（'%1% %2%'での引数）。\n"
 
-#: src/mmg/tab_input.cpp:1308
+#: src/mmg/tab_input.cpp:1309
 #, c-format
 msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
 msgstr "トラックID %s（ファイル'%s'）のFourCC指定が4文字ちょうどではありません。"
@@ -5043,7 +5047,7 @@ msgstr "'%2%'に対する引数'%1%'が不正です：要素'%3%'にコロンが
 msgid "The argument to '--timecode-scale' must be a number.\n"
 msgstr "'--timecode-scale'に対する引数は数字でなければなりません。\n"
 
-#: src/mmg/tab_input.cpp:1375
+#: src/mmg/tab_input.cpp:1376
 #, c-format
 msgid "The aspect ratio setting for track nr. %s in file '%s' is invalid."
 msgstr "トラック番号%s（ファイル'%s'）のアスペクト比の指定が不正です。"
@@ -5115,11 +5119,11 @@ msgstr "訂正ファイルのヘッダを正しく読み取ることができま
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "国'%s'は正しいccTLDコードではないので選択できません。"
 
-#: src/merge/output_control.cpp:1319
+#: src/merge/output_control.cpp:1325
 msgid "The cue entries (the index) are being written..."
 msgstr "キューエントリ（インデックス）が書き込まれました..."
 
-#: src/mmg/tab_input.cpp:688
+#: src/mmg/tab_input.cpp:689
 #, c-format
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr "現在のファイル（番号%d）を削除することはできません。このファイルにトラックを追加結合すると思われる他のファイルが存在します（少なくとも番号%dのファイルがそうです)。そのファイルをまず削除してください。"
@@ -5132,12 +5136,12 @@ msgstr "現在のパケットのタイムコードは前のパケットのタイ
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr "デフォルトの言語コード'%1%'は正しいISO639-2言語コードではないので無視されます。\n"
 
-#: src/mmg/tab_input.cpp:1287
+#: src/mmg/tab_input.cpp:1288
 #, c-format
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "トラック番号%s（ファイル'%s'）のディレイの指定が不正です。"
 
-#: src/merge/output_control.cpp:1121
+#: src/merge/output_control.cpp:1127
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
 "%2%\n"
@@ -5205,7 +5209,7 @@ msgstr "ファイル'%1%'を開いて書き込むことができませんでし�
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "ファイル'%1%'を開いて書き込むことができませんでした(%2%, %3%)。\n"
 
-#: src/merge/output_control.cpp:1269
+#: src/merge/output_control.cpp:1275
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "ファイル'%1%'を開いて書き込んでいます。\n"
 
@@ -5250,24 +5254,24 @@ msgstr "ファイルヘッダが短かすぎます。\n"
 msgid "The file header was not read correctly.\n"
 msgstr "ファイルヘッダを正しく読み取れませんでした。\n"
 
-#: src/mmg/tab_input.cpp:352
+#: src/mmg/tab_input.cpp:353
 #, c-format
 msgid "The file is an unsupported container format (%s)."
 msgstr "このファイルはサポートされていないコンテナフォーマット（%s）です。"
 
-#: src/merge/output_control.cpp:251
+#: src/merge/output_control.cpp:252
 msgid "The file is being fixed, part 1/4..."
 msgstr "ファイルを修正中です、part 1/4..."
 
-#: src/merge/output_control.cpp:257
+#: src/merge/output_control.cpp:258
 msgid "The file is being fixed, part 2/4..."
 msgstr "ファイルを修正中です、part 2/4..."
 
-#: src/merge/output_control.cpp:266
+#: src/merge/output_control.cpp:267
 msgid "The file is being fixed, part 3/4..."
 msgstr "ファイルを修正中です、part 3/4..."
 
-#: src/merge/output_control.cpp:278
+#: src/merge/output_control.cpp:279
 msgid "The file is being fixed, part 4/4..."
 msgstr "ファイルを修正中です、part 4/4..."
 
@@ -5275,15 +5279,15 @@ msgstr "ファイルを修正中です、part 4/4..."
 msgid "The file name for this segment."
 msgstr "このセグメントのファイル名です。"
 
-#: src/merge/output_control.cpp:862
+#: src/merge/output_control.cpp:865
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. The argument for '--append-to' was invalid.\n"
 msgstr "ファイル番号%1%（'%2%'）はID %3%のトラックを含んでいないか、そのトラックはコピーされません。'--append-to'の引数は不正です。\n"
 
-#: src/merge/output_control.cpp:868
+#: src/merge/output_control.cpp:871
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. Therefore no track can be appended to it. The argument for '--append-to' was invalid.\n"
 msgstr "ファイル番号%1%（'%2%'）はID %3%のトラックを含んでいないか、そのトラックはコピーされません。そのためトラックを追加結合することができません。'--append-to'の引数は不正です。\n"
 
-#: src/merge/output_control.cpp:804
+#: src/merge/output_control.cpp:807
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr "ファイル番号%1%（'%2%'）は追加結合されていません。'--append-to'の引数は不正です。\n"
 
@@ -5315,7 +5319,7 @@ msgstr "指定サイズで分割のフォーマットが不正です。"
 msgid "The format of the split timecode/duration is invalid."
 msgstr "タイムコードで分割・指定時間で分割のフォーマットが不正です。"
 
-#: src/merge/output_control.cpp:932
+#: src/merge/output_control.cpp:935
 msgid "The formats do not match."
 msgstr "フォーマットが一致しません。"
 
@@ -5332,12 +5336,12 @@ msgstr "ヘッダは既に記録されています。"
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "2つのトラック間で縦解像度が異なっています：%1%と%2%"
 
-#: src/mmg/tab_input.cpp:570
+#: src/mmg/tab_input.cpp:571
 #, c-format
 msgid "The input file '%s' does not contain any tracks."
 msgstr "入力ファイル'%s'にはトラックがありません。"
 
-#: src/mmg/tab_input.cpp:1200
+#: src/mmg/tab_input.cpp:1201
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -5352,7 +5356,7 @@ msgstr ""
 "\n"
 "（問題はtab_input::load(), #1で発生しました）"
 
-#: src/mmg/tab_input.cpp:1207
+#: src/mmg/tab_input.cpp:1208
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -5367,7 +5371,7 @@ msgstr ""
 "\n"
 "（問題はtab_input::load(), #2で発生しました）"
 
-#: src/mmg/tab_input.cpp:1220
+#: src/mmg/tab_input.cpp:1221
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -5489,7 +5493,7 @@ msgstr "イメージの上部で除去するビデオピクセル数です。"
 msgid "The option '--meta-seek-size' is no longer supported. Please read mkvmerge's documentation, especially the section about the MATROSKA FILE LAYOUT.\n"
 msgstr "'--meta-seek-size'オプションはもうサポートされていません。mkvmergeのドキュメント、特にMATROSKA FILE LAYOUTの項を読んでください。\n"
 
-#: src/merge/output_control.cpp:1265
+#: src/merge/output_control.cpp:1271
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "出力ファイル'%1%'を開いて書き込むことはできませんでした（%2%）。\n"
 
@@ -5510,7 +5514,7 @@ msgstr "ピクチャタイプ'%1%'は認識されません。\n"
 msgid "The previous UID was already given in '%1% %2%'.\n"
 msgstr "'%1% %2%'で既に前のUIDは指定されています。\n"
 
-#: src/merge/output_control.cpp:934
+#: src/merge/output_control.cpp:937
 msgid "The reason is unknown."
 msgstr "理由はわかりません。"
 
@@ -5550,11 +5554,11 @@ msgstr "ここで指定されたファイルサイズで出力ファイルが分
 msgid "The size of attachment '%1%' is 0.\n"
 msgstr "添付ファイル'%1%'のサイズが0です。\n"
 
-#: src/merge/output_control.cpp:305 src/merge/output_control.cpp:376
+#: src/merge/output_control.cpp:306 src/merge/output_control.cpp:379
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "ソースファイル'%1%'を開くのに失敗したか、最後までシークすることでサイズを測ることができませんでした。\n"
 
-#: src/mmg/tab_input.cpp:1298
+#: src/mmg/tab_input.cpp:1299
 #, c-format
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr "トラック番号%s（ファイル'%s'）の引き延ばしの指定が不正です。"
@@ -5614,11 +5618,11 @@ msgstr "このストリームのタイムコードはファイルの中間でリ
 msgid "The title for the whole movie."
 msgstr "動画全体のタイトルです。"
 
-#: src/merge/output_control.cpp:878
+#: src/merge/output_control.cpp:881
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
 msgstr "ファイル番号%2%（'%3%'）のトラック%1%を複数回追加結合しようとしました。'--append-to'の引数が不正です。\n"
 
-#: src/merge/output_control.cpp:702
+#: src/merge/output_control.cpp:705
 msgid "The track headers could not be rendered correctly. %1%\n"
 msgstr "トラックのヘッダを正常にレンダリングすることができませんでした。%1%\n"
 
@@ -5626,11 +5630,11 @@ msgstr "トラックのヘッダを正常にレンダリングすることがで
 msgid "The track number %1% does not have a valid CodecID.\n"
 msgstr "トラック番号%1%のコーデックIDが不正です。\n"
 
-#: src/merge/output_control.cpp:924
+#: src/merge/output_control.cpp:927
 msgid "The track number %1% from the file '%2%' can probably not be appended correctly to the track number %3% from the file '%4%': %5% Please make sure that the resulting file plays correctly the whole time. The author of this program will probably not give support for playback issues with the resulting file.\n"
 msgstr "ファイル'%2%'のトラック番号%1%をファイル'%4%'のトラック%3%に正しく追加結合することは恐らくできません：%5% 出力ファイルの全体が正しく再生されるか確認してください。このプログラムの作者はこの出力ファイルの再生に関する問題をサポートすることは恐らくありません。\n"
 
-#: src/merge/output_control.cpp:935
+#: src/merge/output_control.cpp:938
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
 msgstr "ファイル'%2%'のトラック番号%1%をファイル'%4%'のトラック番号%3%に追加結合することはできません。%5%\n"
 
@@ -5638,7 +5642,7 @@ msgstr "ファイル'%2%'のトラック番号%1%をファイル'%4%'のトラ�
 msgid "The track number as used in the Block Header."
 msgstr "ブロックヘッダで使われるトラック番号です。"
 
-#: src/merge/output_control.cpp:933
+#: src/merge/output_control.cpp:936
 msgid "The track parameters do not match."
 msgstr "トラックのパラメータが一致しません。"
 
@@ -5646,7 +5650,7 @@ msgstr "トラックのパラメータが一致しません。"
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "2つのトラック間で横解像度が異なっています：%1%と%2%"
 
-#: src/merge/output_control.cpp:798 src/merge/output_control.cpp:808
+#: src/merge/output_control.cpp:801 src/merge/output_control.cpp:811
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr "ID'%1%'のファイルはありません。'--append-to'の引数が不正です。\n"
 
@@ -5761,11 +5765,11 @@ msgstr "この映像のメインタイトルとしてプレーヤが表示する
 msgid "This option needs an additional argument 'n'. Tells mkvmerge to put at most 'n' data blocks into each cluster. If the number is postfixed with 'ms' then put at most 'n' milliseconds of data into each cluster. The maximum length for a cluster is 32767ms. Programs will only be able to seek to clusters, so creating larger clusters may lead to imprecise seeking and/or processing."
 msgstr "このオプションには引数'n'を追加する必要があります。mkvmergeが各クラスタに最大でn個のデータブロックを配置するようにします。もし数字の後に'ms'がついていた場合は、各クラスタに最大nミリ秒のデータを配置するようにします。クラスタの長さは最大で32767msです。プログラムはクラスタ単位でしかシークできないので、大きいクラスタを作成するとシークや処理が不正確になる可能性があります。"
 
-#: src/merge/output_control.cpp:274
+#: src/merge/output_control.cpp:275
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "これは本当に、本当に発生するべきではありません。最初のメタシーク要素のために確保されたスペースが小さすぎます。%1%\n"
 
-#: src/merge/output_control.cpp:1469
+#: src/merge/output_control.cpp:1475
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "これは本当に、本当に発生するべきではありません。最初のメタシーク要素のために確保されたスペースが小さすぎます。必要なサイズ：%1%。%2%\n"
 
@@ -5959,7 +5963,7 @@ msgstr ""
 msgid "UID:"
 msgstr "UID："
 
-#: src/mmg/tab_input.cpp:229
+#: src/mmg/tab_input.cpp:230
 msgid "USF text subtitles"
 msgstr "USFテキスト字幕"
 
@@ -6027,7 +6031,7 @@ msgstr "符号無し整数（%1%）は小さすぎます。最小値は%2%です
 msgid "Unsupported MPEG mpeg_version: 0x%|1$02x| in packet %2% for timecode %3%, assuming MPEG2. No further warnings will be printed for this track.\n"
 msgstr "サポートされていないMPEGバージョンです：0x%|1$02x|（パケット%2%、タイムコード%3%）。MPEG2と仮定します。このトラックに関してはもう警告は表示されません。\n"
 
-#: src/mmg/tab_input.cpp:355
+#: src/mmg/tab_input.cpp:356
 msgid "Unsupported format"
 msgstr "サポートされていないフォーマットです"
 
@@ -6239,7 +6243,7 @@ msgid "Using a NALU size length of 3 bytes might result in tracks that won't be 
 msgstr "NALUサイズを3バイトにすると、特定のAVC/h.264コーデックでトラックがデコードできなくなるかもしれません。\n"
 
 #: src/input/r_ac3.cpp:93 src/input/r_matroska.cpp:1369
-#: src/input/r_mpeg_ps.cpp:1105
+#: src/input/r_mpeg_ps.cpp:1163
 msgid "Using the %1%AC3 output module.\n"
 msgstr "%1%AC3出力モジュールを使用しています。\n"
 
@@ -6290,7 +6294,7 @@ msgid "Using the DTS demultiplexer.\n"
 msgstr "DTSデマルチプレクサを使用しています。\n"
 
 #: src/input/r_avi.cpp:438 src/input/r_dts.cpp:118
-#: src/input/r_matroska.cpp:1378 src/input/r_mpeg_ps.cpp:1110
+#: src/input/r_matroska.cpp:1378 src/input/r_mpeg_ps.cpp:1168
 #: src/input/r_wav.cpp:361
 msgid "Using the DTS output module.\n"
 msgstr "DTS出力モジュールを使用しています。\n"
@@ -6324,16 +6328,16 @@ msgstr "カラオケ・テキスト字幕出力モジュールを使用してい
 msgid "Using the MP2/MP3 demultiplexer.\n"
 msgstr "MP2/MP3デマルチプレクサを使用しています。\n"
 
-#: src/input/r_mpeg_es.cpp:168
+#: src/input/r_mpeg_es.cpp:162
 msgid "Using the MPEG ES demultiplexer.\n"
 msgstr "MPEG ESデマルチプレクサを使用しています。\n"
 
-#: src/input/r_mpeg_ps.cpp:179
+#: src/input/r_mpeg_ps.cpp:181
 msgid "Using the MPEG PS demultiplexer.\n"
 msgstr "MPEG PSデマルチプレクサを使用しています。\n"
 
 #: src/input/r_avi.cpp:420 src/input/r_matroska.cpp:1360
-#: src/input/r_mp3.cpp:75 src/input/r_mpeg_ps.cpp:1100 src/input/r_ogm.cpp:997
+#: src/input/r_mp3.cpp:75 src/input/r_mpeg_ps.cpp:1158 src/input/r_ogm.cpp:997
 #: src/input/r_qtmp4.cpp:1396
 msgid "Using the MPEG audio output module.\n"
 msgstr "MPEGオーディオ出力モジュールを使用しています。\n"
@@ -6342,7 +6346,7 @@ msgstr "MPEGオーディオ出力モジュールを使用しています。\n"
 msgid "Using the MPEG-%1% video output module.\n"
 msgstr "MPEG-%1%ビデオ出力モジュールを使用しています。\n"
 
-#: src/input/r_mpeg_es.cpp:180 src/input/r_mpeg_ps.cpp:1120
+#: src/input/r_mpeg_es.cpp:174 src/input/r_mpeg_ps.cpp:1183
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "MPEG-1/2ビデオ出力モジュールを使用しています。\n"
 
@@ -6351,7 +6355,7 @@ msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "MPEG-4 part 10 (AVC)ビデオ出力モジュールを使用しています。\n"
 
 #: src/input/r_avc.cpp:138 src/input/r_avi.cpp:243
-#: src/input/r_matroska.cpp:1620 src/input/r_mpeg_ps.cpp:1131
+#: src/input/r_matroska.cpp:1620 src/input/r_mpeg_ps.cpp:1194
 #: src/input/r_ogm.cpp:1129
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "MPEG-4 part 10 ESビデオ出力モジュールを使用しています。\n"
@@ -6410,6 +6414,16 @@ msgstr "TTA出力モジュールを使用しています。\n"
 msgid "Using the Theora video output module.\n"
 msgstr "Theoraビデオ出力モジュールを使用しています。\n"
 
+#: src/input/r_truehd.cpp:77
+#, fuzzy
+msgid "Using the TrueHD demultiplexer.\n"
+msgstr "DTSデマルチプレクサを使用しています。\n"
+
+#: src/input/r_mpeg_ps.cpp:1173 src/input/r_truehd.cpp:93
+#, fuzzy
+msgid "Using the TrueHD output module.\n"
+msgstr "DTS出力モジュールを使用しています。\n"
+
 #: src/input/r_usf.cpp:105
 msgid "Using the USF subtitle reader.\n"
 msgstr "USF字幕リーダを使用しています。\n"
@@ -6418,7 +6432,7 @@ msgstr "USF字幕リーダを使用しています。\n"
 msgid "Using the VC1 ES demultiplexer.\n"
 msgstr "VC1 ESデマルチプレクサを使用しています。\n"
 
-#: src/input/r_mpeg_ps.cpp:1136 src/input/r_vc1.cpp:102
+#: src/input/r_mpeg_ps.cpp:1199 src/input/r_vc1.cpp:102
 msgid "Using the VC1 video output module.\n"
 msgstr "VC1ビデオ出力モジュールを使用しています。\n"
 
@@ -6490,7 +6504,7 @@ msgstr "ビデオ出力モジュールを使用しています（FourCC：%|1$.4
 msgid "Using the video output module.\n"
 msgstr "ビデオ出力モジュールを使用しています。\n"
 
-#: src/mmg/tab_input.cpp:230
+#: src/mmg/tab_input.cpp:231
 msgid "VC1 elementary streams"
 msgstr "VC1エレメンタリストリーム"
 
@@ -6498,7 +6512,7 @@ msgstr "VC1エレメンタリストリーム"
 msgid "VC1 video elementary stream"
 msgstr "VC1ビデオエレメンタリストリーム"
 
-#: src/common/hacks.cpp:68
+#: src/common/hacks.cpp:61
 msgid "Valid hacks are:\n"
 msgstr "有効なハック：\n"
 
@@ -6575,15 +6589,15 @@ msgstr "選択したジョブをMUX処理中のmkvmergeの出力を見ます"
 msgid "VobBtn buttons"
 msgstr "VobBtnボタン"
 
-#: src/mmg/tab_input.cpp:234
+#: src/mmg/tab_input.cpp:235
 msgid "VobButtons"
 msgstr ""
 
-#: src/mmg/tab_input.cpp:231 src/merge/mkvmerge.cpp:92
+#: src/mmg/tab_input.cpp:232 src/merge/mkvmerge.cpp:92
 msgid "VobSub subtitles"
 msgstr "VobSub字幕"
 
-#: src/mmg/tab_input.cpp:232
+#: src/mmg/tab_input.cpp:233
 msgid "WAVE (uncompressed PCM audio)"
 msgstr "WAVE（非圧縮PCMオーディオ）"
 
@@ -6595,7 +6609,7 @@ msgstr "WAVE（非圧縮PCM）"
 msgid "WAVPACK lossless audio"
 msgstr "WAVPACKロスレスオーディオ"
 
-#: src/mmg/tab_input.cpp:233
+#: src/mmg/tab_input.cpp:234
 msgid "WAVPACK v4 audio"
 msgstr "WAVPACK v4オーディオ"
 
@@ -6718,11 +6732,11 @@ msgstr ""
 msgid "You have not yet selected an output file."
 msgstr "出力ファイルがまだ指定されていません。"
 
-#: src/mmg/tab_input.cpp:1384
+#: src/mmg/tab_input.cpp:1385
 msgid "You have not yet selected any input file and/or no tracks."
 msgstr "入力ファイルやトラックがまだ1つも指定されていません。"
 
-#: src/mmg/tab_input.cpp:1329
+#: src/mmg/tab_input.cpp:1330
 #, c-format
 msgid ""
 "You haven't selected a number of frames per second for track %lld of file '%s'. mkvmerge cannot determine the number of frames per second for such files itself. Therefore you have to set this parameter yourself on the 'format specific options' page.\n"
@@ -6737,7 +6751,7 @@ msgstr ""
 "\n"
 "続行しますか？"
 
-#: src/mmg/tab_input.cpp:478
+#: src/mmg/tab_input.cpp:479
 msgid ""
 "You're adding an AVC/h.264 elementary stream to the output file. mkvmerge cannot determine the number of frames per second for such files itself. Therefore you have to set this parameter yourself on the 'format specific options' page.\n"
 "\n"
@@ -6803,8 +6817,8 @@ msgstr "追加"
 msgid "append"
 msgstr "追加結合"
 
-#: src/input/r_matroska.cpp:92 src/mmg/tab_input.cpp:619
-#: src/mmg/tab_input.cpp:1231 src/info/mkvinfo.cpp:1016
+#: src/input/r_matroska.cpp:92 src/mmg/tab_input.cpp:620
+#: src/mmg/tab_input.cpp:1232 src/info/mkvinfo.cpp:1016
 msgid "audio"
 msgstr "オーディオ"
 
@@ -6993,7 +7007,7 @@ msgstr "ファイル終端"
 msgid "failed"
 msgstr "失敗"
 
-#: src/merge/output_control.cpp:505
+#: src/merge/output_control.cpp:508
 msgid "filelist_t not found for generic_packetizer_c. %1%\n"
 msgstr ""
 
@@ -7364,10 +7378,10 @@ msgstr ""
 "ヘルプはツールチップの形で、または'ヘルプ'メニューから、\n"
 "またはF1キーを押すことで利用できます。"
 
-#: src/mmg/mmg.cpp:1049 src/mmg/mmg.cpp:1777 src/mmg/tab_input.cpp:1261
-#: src/mmg/tab_input.cpp:1288 src/mmg/tab_input.cpp:1299
-#: src/mmg/tab_input.cpp:1309 src/mmg/tab_input.cpp:1321
-#: src/mmg/tab_input.cpp:1376
+#: src/mmg/mmg.cpp:1049 src/mmg/mmg.cpp:1777 src/mmg/tab_input.cpp:1262
+#: src/mmg/tab_input.cpp:1289 src/mmg/tab_input.cpp:1300
+#: src/mmg/tab_input.cpp:1310 src/mmg/tab_input.cpp:1322
+#: src/mmg/tab_input.cpp:1377
 msgid "mkvmerge GUI: error"
 msgstr "mkvmerge GUI：エラー"
 
@@ -7428,7 +7442,7 @@ msgstr "mkvmergeは2種類のチャプタフォーマットをサポートして
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format. This option specifies the language to be associated with chapters if the OGM chapter format is used. It is ignored for XML chapter files."
 msgstr "mkvmergeは2種類のチャプタフォーマットをサポートしています：テキストフォーマットのようなOGMとフル機能のXMLフォーマットです。このオプションは、OGMチャプタフォーマットが使用された場合にチャプタの言語を指定します。このオプションはXMLチャプタファイルでは無視されます。"
 
-#: src/merge/output_control.cpp:245 src/merge/output_control.cpp:285
+#: src/merge/output_control.cpp:246 src/merge/output_control.cpp:286
 msgid "mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"
 msgstr "mkvmergeは割り込み信号（Ctrl+C？）によって中断されました。\n"
 
@@ -7456,19 +7470,19 @@ msgstr "mkvmerge GUIのオプション"
 msgid "mp3_reader: Could not open the source file."
 msgstr "mp3_reader：ソースファイルを開けませんでした。"
 
-#: src/input/r_mpeg_es.cpp:165
+#: src/input/r_mpeg_es.cpp:159
 msgid "mpeg_es_reader: Could not open the file."
 msgstr "mpeg_es_reader：ファイルを開けませんでした。"
 
-#: src/input/r_mpeg_ps.cpp:82
+#: src/input/r_mpeg_ps.cpp:84
 msgid "mpeg_ps_reader: Could not open the file."
 msgstr "mpeg_ps_reader：ファイルを開けませんでした。"
 
-#: src/input/r_mpeg_ps.cpp:1114
+#: src/input/r_mpeg_ps.cpp:1177
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
 msgstr "mpeg_ps_reader：発生するべきではありません #1。%1%"
 
-#: src/input/r_mpeg_ps.cpp:1140
+#: src/input/r_mpeg_ps.cpp:1203
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader：発生するべきではありません #2。%1%"
 
@@ -7653,7 +7667,7 @@ msgstr ""
 msgid "subtitle"
 msgstr "字幕"
 
-#: src/mmg/tab_input.cpp:621 src/mmg/tab_input.cpp:1233
+#: src/mmg/tab_input.cpp:622 src/mmg/tab_input.cpp:1234
 #: src/info/mkvinfo.cpp:1018
 msgid "subtitles"
 msgstr "字幕"
@@ -7670,6 +7684,16 @@ msgstr "タイムコード"
 msgid "track name"
 msgstr "トラック名"
 
+#: src/input/r_truehd.cpp:80
+#, fuzzy
+msgid "truehd_reader: Could not open the source file."
+msgstr "dts_reader：ソースファイルを開けませんでした。"
+
+#: src/input/r_truehd.cpp:66
+#, fuzzy
+msgid "truehd_reader: Could not read %1% bytes."
+msgstr "dts_reader：%1%バイトを読み込むことができませんでした。"
+
 #: src/input/r_tta.cpp:95
 msgid "tta_reader: Could not open the file."
 msgstr "tta_reader：ファイルを開けませんでした。"
@@ -7683,10 +7707,10 @@ msgid "und (Undetermined)"
 msgstr "und (Undetermined)"
 
 #: src/input/r_matroska.cpp:91 src/input/r_matroska.cpp:2140
-#: src/input/r_matroska.cpp:2147 src/input/r_mpeg_ps.cpp:1307
+#: src/input/r_matroska.cpp:2147 src/input/r_mpeg_ps.cpp:1371
 #: src/common/mm_io.cpp:412 src/mmg/he_value_page.cpp:77
-#: src/mmg/tab_input.cpp:346 src/mmg/tab_input.cpp:622
-#: src/mmg/tab_input.cpp:1234 src/info/mkvinfo.cpp:708
+#: src/mmg/tab_input.cpp:347 src/mmg/tab_input.cpp:623
+#: src/mmg/tab_input.cpp:1235 src/info/mkvinfo.cpp:708
 #: src/info/mkvinfo.cpp:718 src/info/mkvinfo.cpp:737 src/info/mkvinfo.cpp:766
 #: src/info/mkvinfo.cpp:779 src/info/mkvinfo.cpp:789 src/info/mkvinfo.cpp:1020
 msgid "unknown"
@@ -7712,8 +7736,8 @@ msgstr "vc1_es_reader：ソースファイルを開けませんでした。"
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
 msgstr "ベリファイが失敗しました：chapters->CheckMandatory()がfalseです。発生するべきではありません。バグレポートを提出してください。\n"
 
-#: src/input/r_matroska.cpp:94 src/mmg/tab_input.cpp:620
-#: src/mmg/tab_input.cpp:1232 src/info/mkvinfo.cpp:1017
+#: src/input/r_matroska.cpp:94 src/mmg/tab_input.cpp:621
+#: src/mmg/tab_input.cpp:1233 src/info/mkvinfo.cpp:1017
 msgid "video"
 msgstr "ビデオ"
 
