@@ -53,7 +53,8 @@ truehd_packetizer_c::set_headers() {
 
   generic_packetizer_c::set_headers();
 
-  track_entry->EnableLacing(false);
+  if (hack_engaged(ENGAGE_MERGE_TRUEHD_FRAMES))
+    track_entry->EnableLacing(false);
 }
 
 int
