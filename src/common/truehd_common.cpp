@@ -22,6 +22,10 @@ truehd_parser_c::truehd_parser_c()
 {
 }
 
+truehd_parser_c::~truehd_parser_c()
+{
+}
+
 // Code for truehd_parser_c::decode_channel_map was taken from
 // the ffmpeg project, source file "libavcodec/mlp_parser.c".
 int

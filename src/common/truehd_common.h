@@ -61,6 +61,7 @@ protected:
 
 public:
   truehd_parser_c();
+  virtual ~truehd_parser_c();
 
   virtual void add_data(const unsigned char *new_data, unsigned int new_size);
   virtual void parse(bool end_of_stream = false);
