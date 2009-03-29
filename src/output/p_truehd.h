@@ -28,7 +28,7 @@ protected:
   bool m_first_frame;
   truehd_frame_t m_first_truehd_header;
 
-  int64_t m_samples_output;
+  int64_t m_samples_output, m_ref_timecode;
   samples_to_timecode_converter_c m_s2tc;
   truehd_parser_c m_parser;
   std::vector<truehd_frame_cptr> m_frames;
@@ -51,6 +51,9 @@ public:
 
 protected:
   virtual void adjust_header_values(truehd_frame_cptr &frame);
+
+  virtual void flush_frames_merged();
+  virtual void flush_frames_separate();
 };
 
 #endif // __P_TRUEHD_H

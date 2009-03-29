@@ -36,6 +36,7 @@
 #define ENGAGE_OLD_AAC_CODECID              13
 #define ENGAGE_USE_CODEC_STATE              14
 #define ENGAGE_ENABLE_TIMECODE_WARNING      15
+#define ENGAGE_MERGE_TRUEHD_FRAMES          16
 
 void MTX_DLL_API engage_hacks(const std::string &hacks);
 bool MTX_DLL_API hack_engaged(unsigned int id);

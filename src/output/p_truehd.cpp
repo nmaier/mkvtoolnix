@@ -16,11 +16,12 @@
 #include <boost/math/common_factor.hpp>
 #include <vector>
 
-#include "truehd_common.h"
+#include "hacks.h"
 #include "matroska.h"
 #include "output_control.h"
 #include "pr_generic.h"
 #include "p_truehd.h"
+#include "truehd_common.h"
 
 using namespace libmatroska;
 
@@ -32,6 +33,7 @@ truehd_packetizer_c::truehd_packetizer_c(generic_reader_c *p_reader,
   : generic_packetizer_c(p_reader, p_ti)
   , m_first_frame(true)
   , m_samples_output(0)
+  , m_ref_timecode(0)
   , m_s2tc(1000000000ll, sampling_rate)
 {
   m_first_truehd_header.m_sampling_rate = sampling_rate;
@@ -118,6 +120,30 @@ truehd_packetizer_c::flush_frames() {
   if (m_frames.empty())
     return;
 
+  if (hack_engaged(ENGAGE_MERGE_TRUEHD_FRAMES))
+    flush_frames_merged();
+  else
+    flush_frames_separate();
+}
+
+void
+truehd_packetizer_c::flush_frames_separate() {
+  int i;
+  for (i = 0; m_frames.size() > i; ++i) {
+    int64_t timecode  = m_samples_output                          * m_s2tc;
+    int64_t duration  = m_first_truehd_header.m_samples_per_frame * m_s2tc;
+    m_samples_output += m_first_truehd_header.m_samples_per_frame;
+
+    add_packet(new packet_t(m_frames[i]->m_data, timecode, duration, truehd_frame_t::sync == m_frames[i]->m_type ? -1 : m_ref_timecode));
+
+    m_ref_timecode = timecode;
+  }
+
+  m_frames.clear();
+}
+
+void
+truehd_packetizer_c::flush_frames_merged() {
   int full_size = 0;
   int i;
   for (i = 0; m_frames.size() > i; ++i)
