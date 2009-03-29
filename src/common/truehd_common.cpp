@@ -79,7 +79,7 @@ truehd_parser_c::parse(bool end_of_stream) {
       int chanmap_substream_2    = ((data[offset + 10] & 0x1f) << 8) |  data[offset + 11];
       frame->m_channels          = decode_channel_map(chanmap_substream_2 ? chanmap_substream_2 : chanmap_substream_1);
 
-    } else if (get_uint16_be(&data[offset]) == 0x770b) {
+    } else if (get_uint16_be(&data[offset]) == 0x0b77) {
       ac3_header_t ac3_header;
       if (parse_ac3_header(&data[offset], ac3_header)) {
         if (((size - offset) < ac3_header.bytes) && !end_of_stream)
