@@ -22,15 +22,17 @@
 #include "M2VParser.h"
 #include "mp3_common.h"
 #include "mpeg4_common.h"
-#include "r_mpeg_ps.h"
-#include "smart_pointers.h"
 #include "output_control.h"
 #include "p_ac3.h"
 #include "p_avc.h"
 #include "p_dts.h"
 #include "p_mp3.h"
+#include "p_truehd.h"
 #include "p_vc1.h"
 #include "p_video.h"
+#include "r_mpeg_ps.h"
+#include "smart_pointers.h"
+#include "truehd_common.h"
 
 #define PS_PROBE_SIZE 10 * 1024 * 1024
 
@@ -456,6 +458,7 @@ mpeg_ps_reader_c::parse_packet(mpeg_ps_id_t &id,
 
       } else if (   ((0x80 <= id.sub_id) && (0x8f >= id.sub_id))
                  || ((0x98 <= id.sub_id) && (0xaf >= id.sub_id))
+                 || ((0xb1 <= id.sub_id) && (0xb1 >= id.sub_id))
                  || ((0xc0 <= id.sub_id) && (0xcf >= id.sub_id))) {
         io->skip(3);         // number of frames, startpos
         length -= 3;
@@ -849,6 +852,54 @@ mpeg_ps_reader_c::new_stream_a_dts(mpeg_ps_id_t id,
   }
 }
 
+void
+mpeg_ps_reader_c::new_stream_a_truehd(mpeg_ps_id_t id,
+                                      unsigned char *buf,
+                                      int length,
+                                      mpeg_ps_track_ptr &track) {
+  truehd_parser_c parser;
+
+  parser.add_data(buf, length);
+
+  while (1) {
+    while (parser.frame_available()) {
+      truehd_frame_cptr frame = parser.get_next_frame();
+      if (truehd_frame_t::sync != frame->m_type)
+        continue;
+
+      mxverb(2,
+             boost::format("first TrueHD header channels %1% sampling_rate %2% samples_per_frame %3%\n")
+             % frame->m_channels % frame->m_sampling_rate % frame->m_samples_per_frame);
+
+      track->a_channels    = frame->m_channels;
+      track->a_sample_rate = frame->m_sampling_rate;
+
+      return;
+    }
+
+    if (PS_PROBE_SIZE < io->getFilePointer())
+      throw false;
+
+    if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
+      throw false;
+
+    int full_length;
+    int64_t timecode;
+    mpeg_ps_id_t new_id(id.id);
+    if (!parse_packet(new_id, timecode, length, full_length))
+      continue;
+
+    if (id.sub_id != new_id.sub_id)
+      continue;
+
+    memory_cptr new_buf = memory_c::alloc(length);
+    if (io->read(new_buf->get(), length) != length)
+      throw false;
+
+    parser.add_data(new_buf->get(), length);
+  }
+}
+
 /*
   MPEG PS ids and their meaning:
 
@@ -858,7 +909,8 @@ mpeg_ps_reader_c::new_stream_a_dts(mpeg_ps_id_t id,
   . 0x88..0x8f DTS
   . 0x98..0x9f DTS
   . 0xa0..0xaf PCM
-  . 0xb0..0xbf LPCM (without 0xbd)
+  . 0xb1       TrueHD
+  . 0xb0..0xbf LPCM (without 0xb1, 0xbd)
   . 0xc0..0xc7 (E)AC3
   0xc0..0xdf   MP2 audio
   0xe0..0xef   MPEG-1/-2 video
@@ -916,6 +968,9 @@ mpeg_ps_reader_c::found_new_stream(mpeg_ps_id_t id) {
       else if ((0xa0 <= id.sub_id) && (0xa7 >= id.sub_id))
         track->fourcc = FOURCC('P', 'C', 'M', ' ');
 
+      else if ((0xb1 <= id.sub_id) && (0xb1 >= id.sub_id))
+        track->fourcc = FOURCC('T', 'R', 'H', 'D');
+
       else
         track->type = '?';
 
@@ -954,6 +1009,9 @@ mpeg_ps_reader_c::found_new_stream(mpeg_ps_id_t id) {
 
     else if (FOURCC('W', 'V', 'C', '1') == track->fourcc)
       new_stream_v_vc1(id, buf, length, track);
+
+    else if (FOURCC('T', 'R', 'H', 'D') == track->fourcc)
+      new_stream_a_truehd(id, buf, length, track);
 
     else
       // Unsupported track type
@@ -1109,6 +1167,11 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
       if (verbose)
         mxinfo_tid(ti.fname, id, Y("Using the DTS output module.\n"));
       track->ptzr = add_packetizer(new dts_packetizer_c(this, ti, track->dts_header, true));
+
+    } else if (FOURCC('T', 'R', 'H', 'D') == track->fourcc) {
+      if (verbose)
+        mxinfo_tid(ti.fname, id, Y("Using the TrueHD output module.\n"));
+      track->ptzr = add_packetizer(new truehd_packetizer_c(this, ti, track->a_channels, track->a_sample_rate));
 
     } else
       mxerror(boost::format(Y("mpeg_ps_reader: Should not have happened #1. %1%")) % BUGMSG);
@@ -1302,6 +1365,7 @@ mpeg_ps_reader_c::identify() {
                     : FOURCC('M', 'P', '3', ' ') == track->fourcc ? "MPEG-1 layer 3"
                     : FOURCC('A', 'C', '3', ' ') == track->fourcc ? (16 == track->a_bsid ? "EAC3" : "AC3")
                     : FOURCC('D', 'T', 'S', ' ') == track->fourcc ? "DTS"
+                    : FOURCC('T', 'R', 'H', 'D') == track->fourcc ? "TrueHD"
                     : FOURCC('P', 'C', 'M', ' ') == track->fourcc ? "PCM"
                     : FOURCC('L', 'P', 'C', 'M') == track->fourcc ? "LPCM"
                     :                                               Y("unknown"),

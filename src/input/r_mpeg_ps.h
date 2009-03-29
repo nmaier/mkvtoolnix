@@ -163,6 +163,7 @@ private:
   virtual void new_stream_a_mpeg(mpeg_ps_id_t id, unsigned char *buf, int length, mpeg_ps_track_ptr &track);
   virtual void new_stream_a_ac3(mpeg_ps_id_t id, unsigned char *buf, int length, mpeg_ps_track_ptr &track);
   virtual void new_stream_a_dts(mpeg_ps_id_t id, unsigned char *buf, int length, mpeg_ps_track_ptr &track);
+  virtual void new_stream_a_truehd(mpeg_ps_id_t id, unsigned char *buf, int length, mpeg_ps_track_ptr &track);
   virtual bool resync_stream(uint32_t &header);
   virtual file_status_e finish();
   void sort_tracks();
