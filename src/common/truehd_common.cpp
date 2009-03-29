@@ -47,6 +47,11 @@ truehd_parser_c::add_data(const unsigned char *new_data,
 
   m_buffer.add(new_data, new_size);
 
+  parse(false);
+}
+
+void
+truehd_parser_c::parse(bool end_of_stream) {
   unsigned char *data = m_buffer.get_buffer();
   unsigned int size   = m_buffer.get_size();
   unsigned int offset = 0;
@@ -76,10 +81,15 @@ truehd_parser_c::add_data(const unsigned char *new_data,
 
     } else if (get_uint16_be(&data[offset]) == 0x770b) {
       ac3_header_t ac3_header;
-      // TODO: CRC check
       if (parse_ac3_header(&data[offset], ac3_header)) {
-        frame->m_type = truehd_frame_t::ac3;
-        frame->m_size = ac3_header.bytes;
+        if (((size - offset) < ac3_header.bytes) && !end_of_stream)
+          break;
+
+        // TODO: CRC check
+        if (((size - offset) >= ac3_header.bytes)) { // && check_ac3_crc())
+          frame->m_type = truehd_frame_t::ac3;
+          frame->m_size = ac3_header.bytes;
+        }
       }
     }
 

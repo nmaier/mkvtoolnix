@@ -36,8 +36,10 @@ public:
   virtual ~truehd_packetizer_c();
 
   virtual int process(packet_cptr packet);
+  virtual void handle_frames();
   virtual void set_headers();
   virtual void flush();
+  virtual void flush_frames();
 
   virtual const char *get_format_name() {
     return "TrueHD";

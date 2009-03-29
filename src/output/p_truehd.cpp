@@ -56,6 +56,13 @@ int
 truehd_packetizer_c::process(packet_cptr packet) {
   m_parser.add_data(packet->data->get(), packet->data->get_size());
 
+  handle_frames();
+
+  return FILE_STATUS_MOREDATA;
+}
+
+void
+truehd_packetizer_c::handle_frames() {
   while (m_parser.frame_available()) {
     truehd_frame_cptr frame = m_parser.get_next_frame();
 
@@ -68,8 +75,6 @@ truehd_packetizer_c::process(packet_cptr packet) {
     if (truehd_frame_t::ac3 != frame->m_type)
       m_frames.push_back(frame);
   }
-
-  return FILE_STATUS_MOREDATA;
 }
 
 void
@@ -100,6 +105,12 @@ truehd_packetizer_c::adjust_header_values(truehd_frame_cptr &frame) {
 
 void
 truehd_packetizer_c::flush() {
+  m_parser.parse(true);
+  flush_frames();
+}
+
+void
+truehd_packetizer_c::flush_frames() {
   if (m_frames.empty())
     return;
 
