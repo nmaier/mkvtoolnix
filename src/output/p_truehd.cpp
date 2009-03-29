@@ -13,6 +13,7 @@
 
 #include "os.h"
 
+#include <boost/math/common_factor.hpp>
 #include <vector>
 
 #include "truehd_common.h"
@@ -31,6 +32,7 @@ truehd_packetizer_c::truehd_packetizer_c(generic_reader_c *p_reader,
   : generic_packetizer_c(p_reader, p_ti)
   , m_first_frame(true)
   , m_samples_output(0)
+  , m_s2tc(1000000000ll, sampling_rate)
 {
   m_first_truehd_header.m_sampling_rate = sampling_rate;
   m_first_truehd_header.m_channels      = channels;
@@ -101,6 +103,8 @@ truehd_packetizer_c::adjust_header_values(truehd_frame_cptr &frame) {
     rerender_track_headers();
 
   m_first_frame = false;
+
+  m_s2tc.set(1000000000ll, m_first_truehd_header.m_sampling_rate);
 }
 
 void
@@ -127,8 +131,8 @@ truehd_packetizer_c::flush_frames() {
     offset += m_frames[i]->m_data->get_size();
   }
 
-  int64_t timecode  = m_samples_output                                            * 1000000000ll / m_first_truehd_header.m_sampling_rate;
-  int64_t duration  = m_frames.size() * m_first_truehd_header.m_samples_per_frame * 1000000000ll / m_first_truehd_header.m_sampling_rate;
+  int64_t timecode  = m_samples_output                                            * m_s2tc;
+  int64_t duration  = m_frames.size() * m_first_truehd_header.m_samples_per_frame * m_s2tc;
   m_samples_output += m_frames.size() * m_first_truehd_header.m_samples_per_frame;
 
   add_packet(new packet_t(data, timecode, duration));

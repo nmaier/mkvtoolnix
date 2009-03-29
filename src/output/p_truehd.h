@@ -6,7 +6,7 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   class definition for the TRUEHD output module
+   class definition for the TrueHD output module
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
@@ -20,6 +20,7 @@
 
 #include "common.h"
 #include "pr_generic.h"
+#include "samples_timecode_conv.h"
 #include "truehd_common.h"
 
 class truehd_packetizer_c: public generic_packetizer_c {
@@ -28,6 +29,7 @@ protected:
   truehd_frame_t m_first_truehd_header;
 
   int64_t m_samples_output;
+  samples_to_timecode_converter_c m_s2tc;
   truehd_parser_c m_parser;
   std::vector<truehd_frame_cptr> m_frames;
 
