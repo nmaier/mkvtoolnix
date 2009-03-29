@@ -212,6 +212,7 @@ tab_input::select_file(bool append) {
     file_types.push_back(file_type_t(Z("AVC/h.264 elementary streams"),        wxU("264 avc h264 x264")));
     file_types.push_back(file_type_t(Z("AVI (Audio/Video Interleaved)"),       wxU("avi")));
     file_types.push_back(file_type_t(Z("Dirac"),                               wxU("drc")));
+    file_types.push_back(file_type_t(Z("Dolby TrueHD"),                        wxU("thd thd+ac3")));
     file_types.push_back(file_type_t(Z("DTS (Digital Theater System)"),        wxU("dts")));
     if (capabilities[wxT("FLAC")] == wxT("true"))
       file_types.push_back(file_type_t(Z("FLAC (Free Lossless Audio Codec)"),  wxU("flac ogg")));
