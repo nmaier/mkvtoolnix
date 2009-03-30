@@ -1,3 +1,8 @@
+2009-03-30  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: When adding a file with colons in the segment
+	title all colons were replaced with the letter 'c'.
+
 2009-03-29  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge, mkvetract: new feature: Added support for TrueHD audio

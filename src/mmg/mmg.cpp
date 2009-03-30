@@ -511,6 +511,8 @@ unescape(const wxString &src) {
           dst += wxT('"');
         else if (src[next_char] == wxT('s'))
           dst += wxT(' ');
+        else if (src[next_char] == wxT('c'))
+          dst += wxT(':');
         else
           dst += src[next_char];
         current_char++;
