@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2009-03-30 20:03+0900\n"
+"PO-Revision-Date: 2009-03-30 23:58+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -3937,7 +3937,7 @@ msgstr "修正されたヘッダのフィールドはありません。何も保
 
 #: src/mmg/mmg.cpp:217
 msgid "Normally mkvmerge removes aspect ratio information from MPEG4 video bitstreams and puts the information into the container. This option lets mkvmerge keep the aspect ratio information in the bitstream."
-msgstr "通常mkvmergeは、MPEG4ビデオビットストリームからアスペクト比の情報を削除し、コンテナにその情報を格納します。このオプションを使用すると、mkvmergeはビットストリーム内にアスペクト比の情報を保持します。"
+msgstr "通常mkvmergeは、MPEG4ビデオビットストリームからアスペクト比の情報を除去し、コンテナにその情報を格納します。このオプションを使用すると、mkvmergeはビットストリーム内にアスペクト比の情報を保持します。"
 
 #: src/common/common.cpp:117
 msgid "Not a hex digit at position %1%"
@@ -6427,14 +6427,12 @@ msgid "Using the TrueHD output module.\n"
 msgstr "TrueHD出力モジュールを使用しています。\n"
 
 #: src/input/r_truehd.cpp:77
-#, fuzzy
 msgid "Using the TrueHD/MLP demultiplexer.\n"
-msgstr "TrueHDデマルチプレクサを使用しています。\n"
+msgstr "TrueHD・MLPデマルチプレクサを使用しています。\n"
 
 #: src/input/r_truehd.cpp:93
-#, fuzzy
 msgid "Using the TrueHD/MLP output module.\n"
-msgstr "TrueHD出力モジュールを使用しています。\n"
+msgstr "TrueHD・MLP出力モジュールを使用しています。\n"
 
 #: src/input/r_usf.cpp:105
 msgid "Using the USF subtitle reader.\n"
