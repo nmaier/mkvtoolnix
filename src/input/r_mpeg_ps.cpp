@@ -457,9 +457,7 @@ mpeg_ps_reader_c::parse_packet(mpeg_ps_id_t &id,
         return false;
 
       } else if (   ((0x80 <= id.sub_id) && (0x8f >= id.sub_id))
-                 || ((0x98 <= id.sub_id) && (0xaf >= id.sub_id))
-                 || ((0xb1 <= id.sub_id) && (0xb1 >= id.sub_id))
-                 || ((0xc0 <= id.sub_id) && (0xcf >= id.sub_id))) {
+                 || ((0x98 <= id.sub_id) && (0xcf >= id.sub_id))) {
         io->skip(3);         // number of frames, startpos
         length -= 3;
 
@@ -909,8 +907,7 @@ mpeg_ps_reader_c::new_stream_a_truehd(mpeg_ps_id_t id,
   . 0x88..0x8f DTS
   . 0x98..0x9f DTS
   . 0xa0..0xaf PCM
-  . 0xb1       TrueHD
-  . 0xb0..0xbf LPCM (without 0xb1, 0xbd)
+  . 0xb0..0xbf TrueHD
   . 0xc0..0xc7 (E)AC3
   0xc0..0xdf   MP2 audio
   0xe0..0xef   MPEG-1/-2 video
@@ -968,7 +965,7 @@ mpeg_ps_reader_c::found_new_stream(mpeg_ps_id_t id) {
       else if ((0xa0 <= id.sub_id) && (0xa7 >= id.sub_id))
         track->fourcc = FOURCC('P', 'C', 'M', ' ');
 
-      else if ((0xb1 <= id.sub_id) && (0xb1 >= id.sub_id))
+      else if ((0xb0 <= id.sub_id) && (0xbf >= id.sub_id))
         track->fourcc = FOURCC('T', 'R', 'H', 'D');
 
       else
