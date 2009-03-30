@@ -69,19 +69,31 @@ truehd_parser_c::parse(bool end_of_stream) {
       return;
   }
 
-  static const int sampling_rates[] = { 48000, 96000, 192000, 0, 0, 0, 0, 0, 44100, 88200, 176400, 0, 0, 0, 0, 0 };
+  static const int sampling_rates[]     = { 48000, 96000, 192000, 0, 0, 0, 0, 0, 44100, 88200, 176400, 0, 0, 0, 0, 0 };
+  static const uint8_t mlp_channels[32] = {     1,     2,      3, 4, 3, 4, 5, 3,     4,     5,      4, 5, 6, 4, 5, 4,
+                                                5,     6,      5, 5, 6, 0, 0, 0,     0,     0,      0, 0, 0, 0, 0, 0 };
 
   while ((size - offset) >= 10) {
     truehd_frame_cptr frame(new truehd_frame_t);
 
-    if (get_uint32_be(&data[offset + 4]) == TRUEHD_SYNC_WORD) {
-      frame->m_type              = truehd_frame_t::sync;
-      frame->m_size              = (((data[offset] << 8) | data[offset + 1]) & 0xfff) * 2;
-      frame->m_sampling_rate     = sampling_rates[data[offset + 8] >> 4];
-      frame->m_samples_per_frame = 40 << ((data[offset + 8] >> 4) & 0x07);
-      int chanmap_substream_1    = ((data[offset +  9] & 0x0f) << 1) | (data[offset + 10] >> 7);
-      int chanmap_substream_2    = ((data[offset + 10] & 0x1f) << 8) |  data[offset + 11];
-      frame->m_channels          = decode_channel_map(chanmap_substream_2 ? chanmap_substream_2 : chanmap_substream_1);
+    uint32_t sync_word = get_uint32_be(&data[offset + 4]);
+    if ((TRUEHD_SYNC_WORD == sync_word) || (MLP_SYNC_WORD == sync_word)) {
+      frame->m_codec = TRUEHD_SYNC_WORD == sync_word ? truehd_frame_t::truehd : truehd_frame_t::mlp;
+      frame->m_type  = truehd_frame_t::sync;
+      frame->m_size  = (((data[offset] << 8) | data[offset + 1]) & 0xfff) * 2;
+
+      if (frame->is_truehd()) {
+        frame->m_sampling_rate     = sampling_rates[data[offset + 8] >> 4];
+        frame->m_samples_per_frame = 40 << ((data[offset + 8] >> 4) & 0x07);
+        int chanmap_substream_1    = ((data[offset +  9] & 0x0f) << 1) | (data[offset + 10] >> 7);
+        int chanmap_substream_2    = ((data[offset + 10] & 0x1f) << 8) |  data[offset + 11];
+        frame->m_channels          = decode_channel_map(chanmap_substream_2 ? chanmap_substream_2 : chanmap_substream_1);
+
+      } else {
+        frame->m_sampling_rate     = sampling_rates[data[offset + 9] >> 4];
+        frame->m_samples_per_frame = 40 << ((data[offset + 9] >> 4) & 0x07);
+        frame->m_channels          = mlp_channels[data[offset + 11] & 0x1f];
+      }
 
     } else if (get_uint16_be(&data[offset]) == 0x0b77) {
       ac3_header_t ac3_header;
@@ -114,12 +126,14 @@ truehd_parser_c::parse(bool end_of_stream) {
     frame->m_data = clone_memory(&data[offset], frame->m_size);
 
     mxverb(3,
-           boost::format("type %1% offset %2% size %3% channels %4% sampling_rate %5% samples_per_frame %6%\n")
-           % (  truehd_frame_t::sync   == frame->m_type ? "S"
-              : truehd_frame_t::normal == frame->m_type ? "n"
-              : truehd_frame_t::ac3    == frame->m_type ? "A"
-              :                                           "x")
-           % offset % frame->m_size % frame->m_channels % frame->m_sampling_rate % frame->m_samples_per_frame);
+           boost::format("codec %7% type %1% offset %2% size %3% channels %4% sampling_rate %5% samples_per_frame %6%\n")
+           % (  frame->is_sync()   ? "S"
+              : frame->is_normal() ? "n"
+              : frame->is_ac3()    ? "A"
+              :                      "x")
+           % offset % frame->m_size % frame->m_channels % frame->m_sampling_rate % frame->m_samples_per_frame
+           % (  frame->is_truehd() ? "TrueHD"
+              :                      "MLP"));
 
     m_frames.push_back(frame);
 
@@ -150,11 +164,13 @@ truehd_parser_c::resync(unsigned int offset) {
   const unsigned char *data = m_buffer.get_buffer();
   unsigned int size         = m_buffer.get_size();
 
-  for (offset = offset + 4; (offset + 4) < size; ++offset)
-    if (get_uint32_be(&data[offset]) == TRUEHD_SYNC_WORD) {
+  for (offset = offset + 4; (offset + 4) < size; ++offset) {
+    uint32_t sync_word = get_uint32_be(&data[offset]);
+    if ((TRUEHD_SYNC_WORD == sync_word) || (MLP_SYNC_WORD == sync_word)) {
       m_sync_state  = state_synced;
       return offset - 4;
     }
+  }
 
   return 0;
 }

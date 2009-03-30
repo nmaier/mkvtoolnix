@@ -74,7 +74,7 @@ truehd_reader_c::truehd_reader_c(track_info_c &_ti)
     ti.id = 0;                  // ID for this track.
 
     if (verbose)
-      mxinfo_fn(ti.fname, Y("Using the TrueHD demultiplexer.\n"));
+      mxinfo_fn(ti.fname, Y("Using the TrueHD/MLP demultiplexer.\n"));
 
   } catch (...) {
     throw error_c(Y("truehd_reader: Could not open the source file."));
@@ -89,8 +89,8 @@ truehd_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  add_packetizer(new truehd_packetizer_c(this, ti, m_header->m_sampling_rate, m_header->m_channels));
-  mxinfo_tid(ti.fname, 0, Y("Using the TrueHD output module.\n"));
+  add_packetizer(new truehd_packetizer_c(this, ti, m_header->m_codec, m_header->m_sampling_rate, m_header->m_channels));
+  mxinfo_tid(ti.fname, 0, Y("Using the TrueHD/MLP output module.\n"));
 }
 
 file_status_e
@@ -123,8 +123,8 @@ truehd_reader_c::get_progress() {
 
 void
 truehd_reader_c::identify() {
-  id_result_container("TrueHD");
-  id_result_track(0, ID_RESULT_TRACK_AUDIO, "TrueHD");
+  id_result_container("TrueHD/MLP");
+  id_result_track(0, ID_RESULT_TRACK_AUDIO, m_header->is_truehd() ? "TrueHD" : "MLP");
 }
 
 bool
@@ -145,7 +145,7 @@ truehd_reader_c::find_valid_headers(mm_io_c *io,
     int num_sync_frames = 0;
     while (parser.frame_available()) {
       truehd_frame_cptr frame = parser.get_next_frame();
-      if (truehd_frame_t::sync == frame->m_type)
+      if (frame->is_sync())
         ++num_sync_frames;
     }
 

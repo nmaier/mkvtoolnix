@@ -45,6 +45,7 @@
 #define MKV_A_REAL_SIPR  "A_REAL/SIPR"
 #define MKV_A_REAL_ATRC  "A_REAL/ATRC"
 #define MKV_A_FLAC       "A_FLAC"
+#define MKV_A_MLP        "A_MLP"
 #define MKV_A_TRUEHD     "A_TRUEHD"
 #define MKV_A_TTA        "A_TTA1"
 #define MKV_A_WAVPACK4   "A_WAVPACK4"

@@ -146,12 +146,14 @@ xtr_base_c::create_extractor(const string &new_codec_id,
       return new xtr_oggflac_c(new_codec_id, new_tid, tspec);
     else
       return new xtr_flac_c(new_codec_id, new_tid, tspec);
-  } else if (new_codec_id == MKV_A_VORBIS)
+  }  else if (new_codec_id == MKV_A_VORBIS)
     return new xtr_oggvorbis_c(new_codec_id, new_tid, tspec);
   else if (starts_with_case(new_codec_id, "A_AAC"))
     return new xtr_aac_c(new_codec_id, new_tid, tspec);
   else if (starts_with_case(new_codec_id, "A_REAL/"))
     return new xtr_rmff_c(new_codec_id, new_tid, tspec);
+  else if (new_codec_id == MKV_A_MLP)
+    return new xtr_base_c(new_codec_id, new_tid, tspec, "MLP");
   else if (new_codec_id == MKV_A_TRUEHD)
     return new xtr_base_c(new_codec_id, new_tid, tspec, "TrueHD");
   else if (new_codec_id == MKV_A_TTA)

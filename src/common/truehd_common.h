@@ -23,9 +23,15 @@
 #include "smart_pointers.h"
 
 #define TRUEHD_SYNC_WORD 0xf8726fba
+#define MLP_SYNC_WORD    0xf8726fbb
 
 struct truehd_frame_t {
-  enum {
+  enum codec_e {
+    truehd,
+    mlp,
+  } m_codec;
+
+  enum frame_type_e {
     invalid,
     normal,
     sync,
@@ -40,12 +46,29 @@ struct truehd_frame_t {
   memory_cptr m_data;
 
   truehd_frame_t()
-    : m_type(invalid)
+    : m_codec(truehd)
+    , m_type(invalid)
     , m_size(0)
     , m_sampling_rate(0)
     , m_channels(0)
     , m_samples_per_frame(0)
   { };
+
+  bool is_truehd() {
+    return truehd == m_codec;
+  }
+
+  bool is_sync() {
+    return sync == m_type;
+  }
+
+  bool is_normal() {
+    return sync == m_type;
+  }
+
+  bool is_ac3() {
+    return ac3 == m_type;
+  }
 };
 typedef counted_ptr<truehd_frame_t> truehd_frame_cptr;
 

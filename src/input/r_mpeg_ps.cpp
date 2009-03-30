@@ -1168,7 +1168,7 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
     } else if (FOURCC('T', 'R', 'H', 'D') == track->fourcc) {
       if (verbose)
         mxinfo_tid(ti.fname, id, Y("Using the TrueHD output module.\n"));
-      track->ptzr = add_packetizer(new truehd_packetizer_c(this, ti, track->a_channels, track->a_sample_rate));
+      track->ptzr = add_packetizer(new truehd_packetizer_c(this, ti, truehd_frame_t::truehd, track->a_channels, track->a_sample_rate));
 
     } else
       mxerror(boost::format(Y("mpeg_ps_reader: Should not have happened #1. %1%")) % BUGMSG);

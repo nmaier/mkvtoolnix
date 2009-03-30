@@ -27,6 +27,7 @@ using namespace libmatroska;
 
 truehd_packetizer_c::truehd_packetizer_c(generic_reader_c *p_reader,
                                          track_info_c &p_ti,
+                                         truehd_frame_t::codec_e codec,
                                          int sampling_rate,
                                          int channels)
   throw (error_c)
@@ -36,6 +37,7 @@ truehd_packetizer_c::truehd_packetizer_c(generic_reader_c *p_reader,
   , m_ref_timecode(0)
   , m_s2tc(1000000000ll, sampling_rate)
 {
+  m_first_truehd_header.m_codec         = codec;
   m_first_truehd_header.m_sampling_rate = sampling_rate;
   m_first_truehd_header.m_channels      = channels;
 
@@ -47,7 +49,7 @@ truehd_packetizer_c::~truehd_packetizer_c() {
 
 void
 truehd_packetizer_c::set_headers() {
-  set_codec_id(MKV_A_TRUEHD);
+  set_codec_id(m_first_truehd_header.is_truehd() ? MKV_A_TRUEHD : MKV_A_MLP);
   set_audio_sampling_freq((float)m_first_truehd_header.m_sampling_rate);
   set_audio_channels(m_first_truehd_header.m_channels);
 
@@ -71,13 +73,13 @@ truehd_packetizer_c::handle_frames() {
   while (m_parser.frame_available()) {
     truehd_frame_cptr frame = m_parser.get_next_frame();
 
-    if (truehd_frame_t::sync == frame->m_type) {
+    if (frame->is_sync()) {
       adjust_header_values(frame);
       flush();
 
     }
 
-    if (truehd_frame_t::ac3 != frame->m_type)
+    if (!frame->is_ac3())
       m_frames.push_back(frame);
   }
 }
@@ -88,6 +90,12 @@ truehd_packetizer_c::adjust_header_values(truehd_frame_cptr &frame) {
     return;
 
   bool rerender_headers = false;
+  if (frame->m_codec != m_first_truehd_header.m_codec) {
+    rerender_headers              = true;
+    m_first_truehd_header.m_codec = frame->m_codec;
+    set_codec_id(m_first_truehd_header.is_truehd() ? MKV_A_TRUEHD : MKV_A_MLP);
+  }
+
   if (frame->m_channels != m_first_truehd_header.m_channels) {
     rerender_headers                 = true;
     m_first_truehd_header.m_channels = frame->m_channels;
@@ -135,7 +143,7 @@ truehd_packetizer_c::flush_frames_separate() {
     int64_t duration  = m_first_truehd_header.m_samples_per_frame * m_s2tc;
     m_samples_output += m_first_truehd_header.m_samples_per_frame;
 
-    add_packet(new packet_t(m_frames[i]->m_data, timecode, duration, truehd_frame_t::sync == m_frames[i]->m_type ? -1 : m_ref_timecode));
+    add_packet(new packet_t(m_frames[i]->m_data, timecode, duration, m_frames[i]->is_sync() ? -1 : m_ref_timecode));
 
     m_ref_timecode = timecode;
   }
