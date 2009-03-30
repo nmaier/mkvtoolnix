@@ -120,7 +120,7 @@ truehd_parser_c::parse(bool end_of_stream) {
         break;
     }
 
-    if ((frame->m_size + offset) >= size)
+    if ((frame->m_size + offset) > size)
       break;
 
     frame->m_data = clone_memory(&data[offset], frame->m_size);
