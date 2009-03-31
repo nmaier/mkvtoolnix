@@ -105,6 +105,8 @@ protected:
   virtual void identify_audio();
   virtual void identify_subtitles();
   virtual void identify_attachments();
+
+  virtual void debug_dump_video_index();
 };
 
 #endif  // __R_AVI_H

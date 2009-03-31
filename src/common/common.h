@@ -124,6 +124,8 @@ void MTX_DLL_API mxexit(int code = -1);
 
 void MTX_DLL_API mxhexdump(int level, const unsigned char *buffer, int lenth);
 
+bool MTX_DLL_API debugging_requested(const char *option);
+
 class mm_io_c;
 
 void MTX_DLL_API init_stdio();

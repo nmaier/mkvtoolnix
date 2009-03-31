@@ -116,6 +116,9 @@ avi_reader_c::avi_reader_c(track_info_c &_ti)
   max_video_frames = AVI_video_frames(avi);
 
   parse_subtitle_chunks();
+
+  if (debugging_requested("avi_dump_video_index"))
+    debug_dump_video_index();
 }
 
 // }}}
@@ -623,10 +626,13 @@ avi_reader_c::read_video() {
   if (video_frames_read >= max_video_frames)
     return FILE_STATUS_DONE;
 
-  unsigned char *chunk = NULL;
-  int key              = 0;
+  unsigned char *chunk      = NULL;
+  int key                   = 0;
+  int old_video_frames_read = video_frames_read;
 
   int size, nread;
+
+  int dropped_frames_here   = 0;
 
   do {
     safefree(chunk);
@@ -643,7 +649,7 @@ avi_reader_c::read_video() {
       return FILE_STATUS_DONE;
 
     } else if (0 == nread)
-      ++dropped_video_frames;
+      ++dropped_frames_here;
 
   } while ((0 == nread) && (video_frames_read < max_video_frames));
 
@@ -660,13 +666,14 @@ avi_reader_c::read_video() {
 
     int dummy_key;
     AVI_read_frame(avi, NULL, &dummy_key);
+    ++dropped_frames_here;
+    ++video_frames_read;
   }
 
-  int64_t timestamp     = (int64_t)(((int64_t)video_frames_read - 1)     * 1000000000ll / fps);
-  int64_t duration      = (int64_t)(((int64_t)i - video_frames_read + 1) * 1000000000ll / fps);
+  int64_t timestamp     = (int64_t)(((int64_t)old_video_frames_read)   * 1000000000ll / fps);
+  int64_t duration      = (int64_t)(((int64_t)dropped_frames_here + 1) * 1000000000ll / fps);
 
-  dropped_video_frames += i - video_frames_read;
-  video_frames_read     = i;
+  dropped_video_frames += dropped_frames_here;
 
   PTZR(vptzr)->process(new packet_t(new memory_c(chunk, nread, true), timestamp, duration, key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC, VFT_NOBFRAME));
 
@@ -882,3 +889,12 @@ avi_reader_c::add_available_track_ids() {
 }
 
 // }}}
+
+void
+avi_reader_c::debug_dump_video_index() {
+  int num_video_frames = AVI_video_frames(avi), i;
+
+  mxinfo(boost::format("AVI video index dump: %1% entries; frame rate: %2%\n") % num_video_frames % AVI_frame_rate(avi));
+  for (i = 0; num_video_frames > i; ++i)
+    mxinfo(boost::format("  %1%: %2% bytes\n") % i % AVI_frame_size(avi, i));
+}

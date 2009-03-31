@@ -42,6 +42,7 @@
 #include <windows.h>
 #endif
 
+#include <boost/regex.hpp>
 #include <string>
 #include <vector>
 
@@ -64,6 +65,8 @@ const string empty_string("");
 int verbose = 1;
 
 extern bool g_warning_issued;
+
+static std::string s_debug_options;
 
 bitvalue_c::bitvalue_c(int nbitsize) {
   assert(nbitsize > 0);
@@ -1426,6 +1429,14 @@ parse_timecode(const string &src,
   return true;
 }
 
+bool
+debugging_requested(const char *option) {
+  std::string expression = std::string("\\b") + option + "\\b";
+  boost::regex re(expression, boost::regex::perl);
+
+  return boost::regex_search(s_debug_options, re);
+}
+
 /** \brief Reads command line arguments from a file
 
    Each line contains exactly one command line argument or a
@@ -1590,7 +1601,27 @@ string usage_text, version_info;
 bool
 handle_common_cli_args(vector<string> &args,
                        const string &redirect_output_short) {
-  int i;
+  int i                    = 0;
+  bool debug_options_found = false;
+
+  while (args.size() > i) {
+    if (args[i] == "--debug") {
+      if ((i + 1) == args.size())
+        mxerror("Missing argument for '--debug'.\n");
+
+      s_debug_options     = args[i + 1];
+      debug_options_found = true;
+
+      args.erase(args.begin() + i, args.begin() + i + 2);
+    } else
+      ++i;
+  }
+
+  if (!debug_options_found) {
+    const char *value = getenv("MKVTOOLNIX_DEBUG");
+    if (NULL != value)
+      s_debug_options = value;
+  }
 
   // First see if there's an output charset given.
   i = 0;
