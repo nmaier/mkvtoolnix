@@ -352,22 +352,34 @@ extract_language_code(wxString source) {
 }
 
 wxString
-shell_escape(wxString source) {
-  uint32_t i;
+shell_escape(wxString source,
+             bool cmd_exe_mode) {
+
+  int i;
   wxString escaped;
 
-  for (i = 0; i < source.Length(); i++) {
-#if defined(SYS_UNIX) || defined(SYS_APPLE)
-    if (source[i] == wxT('"'))
-      escaped += wxT("\\\"");
-    else if (source[i] == wxT('\\'))
-      escaped += wxT("\\\\");
-#else
-    if (source[i] == wxT('"'))
-      ;
+#if !defined(SYS_WINDOWS)
+  cmd_exe_mode = false;
 #endif
+
+  for (i = 0; i < source.Length(); i++) {
+#if defined(SYS_WINDOWS)
+    if (cmd_exe_mode && (source[i] == wxT('\\')) && ((i + 1) < source.Length()) && (source[i + 1] == wxT('"'))) {
+      escaped += wxT("\\\\\\\"");
+      ++i;
+      continue;
+    }
+#endif
+
+    if (!cmd_exe_mode && (source[i] == wxT('\\')))
+      escaped += wxT("\\\\");
+
+    else if (source[i] == wxT('"'))
+      escaped += wxT("\\\"");
+
     else if ((source[i] == wxT('\n')) || (source[i] == wxT('\r')))
       escaped += wxT(" ");
+
     else
       escaped += source[i];
   }
@@ -1289,9 +1301,6 @@ void
 mmg_dialog::update_command_line() {
   unsigned int i;
 
-  wxString old_cmdline = cmdline;
-  cmdline              = wxT("\"") + options.mkvmerge + wxT("\" -o \"") + tc_output->GetValue() + wxT("\" ");
-
   clargs.Clear();
   clargs.Add(options.mkvmerge);
   clargs.Add(wxT("--output-charset"));
@@ -1358,7 +1367,7 @@ mmg_dialog::update_command_line() {
 
         if ((t->sub_charset.Length() > 0) && (t->sub_charset != wxT("default"))) {
           clargs.Add(wxT("--sub-charset"));
-          clargs.Add(sid + wxT(":") + shell_escape(t->sub_charset));
+          clargs.Add(sid + wxT(":") + t->sub_charset);
         }
       }
 
@@ -1613,12 +1622,10 @@ mmg_dialog::update_command_line() {
     clargs.Add(wxT("use_simpleblock"));
   }
 
-  for (i = args_start; i < clargs.Count(); i++) {
-    if (clargs[i].Find(wxT(" ")) >= 0)
-      cmdline += wxT(" \"") + shell_escape(clargs[i]) + wxT("\"");
-    else
-      cmdline += wxT(" ") + shell_escape(clargs[i]);
-  }
+  cmdline = wxT("\"") + shell_escape(options.mkvmerge, true) + wxT("\" -o \"") + shell_escape(tc_output->GetValue()) + wxT("\" ");
+
+  for (i = args_start; i < clargs.Count(); i++)
+    cmdline += wxT(" \"") + shell_escape(clargs[i]) + wxT("\"");
 }
 
 void

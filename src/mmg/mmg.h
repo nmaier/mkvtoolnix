@@ -180,7 +180,7 @@ extern map<wxString, wxString> capabilities;
 
 wxString &break_line(wxString &line, int break_after = 80);
 wxString extract_language_code(wxString source);
-wxString shell_escape(wxString source);
+wxString shell_escape(wxString source, bool cmd_exe_mode = false);
 vector<wxString> split(const wxString &src, const wxString &pattern,
                        int max_num = -1);
 wxString join(const wxString &pattern, vector<wxString> &strings);

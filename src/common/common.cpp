@@ -1525,57 +1525,43 @@ command_line_utf8(int argc,
 
 #else  // !defined(SYS_WINDOWS)
 
+static std::string
+win32_wide_to_multi_utf8(const wchar_t *wbuffer) {
+  int reqbuf   = WideCharToMultiByte(CP_UTF8, 0, wbuffer, -1, NULL, 0, NULL, NULL);
+  char *buffer = new char[reqbuf];
+  WideCharToMultiByte(CP_UTF8, 0, wbuffer, -1, buffer, reqbuf, NULL, NULL);
+
+  std::string retval = buffer;
+
+  delete []buffer;
+
+  return retval;
+}
+
 vector<string>
 command_line_utf8(int,
                   char **) {
   vector<string> args;
-  wchar_t *p;
   string utf8;
-  bool quoted, ignore_me, skip_first;
 
-  p = GetCommandLineW();
-  quoted = false;
-  ignore_me = true;
-  skip_first = true;
-  while (*p != 0) {
-    if (*p == L'"')
-      quoted = !quoted;
-    else if (*p == L' ') {
-      if (quoted)
-        utf8 += ' ';
-      else if (!ignore_me) {
-        if (!skip_first) {
-          if (utf8[0] == '@')
-            read_args_from_file(args, utf8.substr(1).c_str());
-          else
-            args.push_back(utf8);
-        }
-        skip_first = false;
-        ignore_me = true;
-        utf8.clear();
-      }
-    } else {
-      ignore_me = false;
-      if (*p < 0x80)
-        utf8 += (char)*p;
-      else if (*p < 0x800) {
-        utf8 += (char)(0xc0 | (*p >> 6));
-        utf8 += (char)(0x80 | (*p & 0x3f));
-      } else {
-        utf8 += (char)(0xe0 | (*p >> 12));
-        utf8 += (char)(0x80 | ((*p >> 6) & 0x3f));
-        utf8 += (char)(0x80 | (*p & 0x3f));
-      }
-    }
+  int num_args     = 0;
+  LPWSTR *arg_list = CommandLineToArgvW(GetCommandLineW(), &num_args);
 
-    ++p;
-  }
-  if (!ignore_me && !skip_first) {
-    if (utf8[0] == '@')
-      read_args_from_file(args, utf8.substr(1));
+  if (NULL == arg_list)
+    return args;
+
+  int i;
+  for (i = 1; i < num_args; i++) {
+    std::string arg = win32_wide_to_multi_utf8(arg_list[i]);
+
+    if (arg[0] == L'@')
+      read_args_from_file(args, arg.substr(1));
+
     else
-      args.push_back(utf8);
+      args.push_back(arg);
   }
+
+  LocalFree(arg_list);
 
   return args;
 }
