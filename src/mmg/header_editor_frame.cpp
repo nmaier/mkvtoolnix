@@ -18,6 +18,7 @@
 #include "os.h"
 
 #include <wx/button.h>
+#include <wx/dnd.h>
 #include <wx/msgdlg.h>
 #include <wx/statline.h>
 #include <wx/textctrl.h>
@@ -108,6 +109,7 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
   m_status_bar_timer.SetOwner(this, ID_T_HE_STATUS_BAR);
 
   SetIcon(wxIcon(matroskalogo_xpm));
+  SetDropTarget(this);
 
   set_status_bar(Z("Header editor ready."));
 }
@@ -177,10 +179,7 @@ header_editor_frame_c::on_file_open(wxCommandEvent &evt) {
   if (dlg.ShowModal() != wxID_OK)
     return;
 
-  if (!open_file(wxFileName(dlg.GetPath())))
-    return;
-
-  last_open_dir = dlg.GetDirectory();
+  open_file(wxFileName(dlg.GetPath()));
 }
 
 bool
@@ -238,6 +237,8 @@ header_editor_frame_c::open_file(wxFileName file_name) {
 
   m_bs_main->Show(m_tc_tree);
   m_bs_main->Layout();
+
+  last_open_dir = file_name.GetPath();
 
   return true;
 }
@@ -715,6 +716,20 @@ header_editor_frame_c::set_status_bar(const wxString &text) {
 void
 header_editor_frame_c::on_status_bar_timer(wxTimerEvent &evt) {
   m_status_bar->SetStatusText(wxEmptyString);
+}
+
+bool
+header_editor_frame_c::OnDropFiles(wxCoord x,
+                                   wxCoord y,
+                                   const wxArrayString &dropped_files) {
+  if (   have_been_modified()
+      && (wxYES != wxMessageBox(Z("Some header values have been modified. Do you really want to load a new file without saving the current one?"), Z("Headers modified"),
+                                wxYES_NO | wxICON_QUESTION, this)))
+    return false;
+
+  open_file(wxFileName(dropped_files[0]));
+
+  return true;
 }
 
 IMPLEMENT_CLASS(header_editor_frame_c, wxFrame);
