@@ -1,3 +1,10 @@
+2009-04-05  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: All arguments are shell escaped and quoted instead
+	of only those with spaces in them. Only applies to the menu
+	options "show command line", "save command line to file" and "copy
+	command line to clipboard". Fix for bug 364.
+
 2009-03-30  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge, mkvextract: new feature: Added support for MLP audio.
