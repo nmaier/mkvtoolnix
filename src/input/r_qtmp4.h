@@ -171,6 +171,8 @@ struct qtmp4_demuxer_c {
 
   int ptzr;
 
+  std::string language;
+
   qtmp4_demuxer_c():
     ok(false),
     type('?'),
@@ -309,6 +311,8 @@ protected:
 
   virtual void create_video_packetizer_svq1(qtmp4_demuxer_cptr &dmx);
   virtual bool create_audio_packetizer_ac3(qtmp4_demuxer_cptr &dmx);
+
+  virtual std::string decode_and_verify_language(uint16_t coded_language);
 };
 
 #endif  // __R_QTMP4_H

@@ -30,6 +30,7 @@
 #include "avilib.h"
 #include "common.h"
 #include "hacks.h"
+#include "iso639.h"
 #include "matroska.h"
 #include "output_control.h"
 #include "p_aac.h"
@@ -623,8 +624,7 @@ qtmp4_reader_c::handle_mdhd_atom(qtmp4_demuxer_cptr &new_dmx,
 
     new_dmx->time_scale      = get_uint32_be(&mdhd.time_scale);
     new_dmx->global_duration = get_uint32_be(&mdhd.duration);
-
-    mxverb(2, boost::format("Quicktime/MP4 reader:%1%Time scale: %2%, duration: %3%\n") % space(level * 2 + 1) % new_dmx->time_scale % new_dmx->global_duration);
+    new_dmx->language        = decode_and_verify_language(get_uint16_be(&mdhd.language));
 
   } else if (1 == version) {
     mdhd64_atom_t mdhd;
@@ -636,11 +636,12 @@ qtmp4_reader_c::handle_mdhd_atom(qtmp4_demuxer_cptr &new_dmx,
 
     new_dmx->time_scale      = get_uint32_be(&mdhd.time_scale);
     new_dmx->global_duration = get_uint64_be(&mdhd.duration);
-
-    mxverb(2, boost::format("Quicktime/MP4 reader:%1%Time scale: %2%, duration: %3%\n") % space(level * 2 + 1) % new_dmx->time_scale % new_dmx->global_duration);
+    new_dmx->language        = decode_and_verify_language(get_uint16_be(&mdhd.language));
 
   } else
     mxerror(boost::format(Y("Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n")) % version);
+
+  mxverb(2, boost::format("Quicktime/MP4 reader:%1%Time scale: %2%, duration: %3%, language: %4%\n") % space(level * 2 + 1) % new_dmx->time_scale % new_dmx->global_duration % new_dmx->language);
 
   if (0 == new_dmx->time_scale)
     mxerror(Y("Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"));
@@ -1331,7 +1332,8 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
   if (!dmx->ok || !demuxing_requested(dmx->type, dmx->id) || (-1 != dmx->ptzr))
     return;
 
-  ti.id = dmx->id;
+  ti.id       = dmx->id;
+  ti.language = dmx->language;
 
   if ('v' == dmx->type) {
     if (!strncasecmp(dmx->fourcc, "mp4v", 4)) {
@@ -1456,6 +1458,9 @@ qtmp4_reader_c::identify() {
     if (dmx->v_is_avc)
       verbose_info.push_back("packetizer:mpeg4_p10_video");
 
+    if (!dmx->language.empty())
+      verbose_info.push_back((boost::format("language:%1%") % dmx->language).str());
+
     id_result_track(dmx->id, dmx->type == 'v' ? ID_RESULT_TRACK_VIDEO : dmx->type == 'a' ? ID_RESULT_TRACK_AUDIO : ID_RESULT_TRACK_UNKNOWN,
                     (boost::format("%|1$.4s|") %  dmx->fourcc).str(), verbose_info);
   }
@@ -1468,6 +1473,24 @@ qtmp4_reader_c::add_available_track_ids() {
   for (i =0 ; i < demuxers.size(); ++i)
     available_track_ids.push_back(demuxers[i]->id);
 }
+
+std::string
+qtmp4_reader_c::decode_and_verify_language(uint16_t coded_language) {
+  std::string language;
+  int i;
+
+  for (i = 0; 3 > i; ++i)
+    language += (char)(((coded_language >> ((2 - i) * 5)) & 0x1f) + 0x60);
+
+  language = downcase(language);
+
+  if (is_valid_iso639_2_code(language.c_str()))
+    return language;
+
+  return "";
+}
+
+// ----------------------------------------------------------------------
 
 void
 qtmp4_demuxer_c::calculate_fps() {

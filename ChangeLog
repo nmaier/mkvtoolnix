@@ -1,5 +1,9 @@
 2009-04-05  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: new feature: Added support for reading the track
+	language from QuickTime/MP4 files. Thanks to Eduard Bloch for the
+	code for unpacking the language string.
+
 	* mmg: bug fix: All arguments are shell escaped and quoted instead
 	of only those with spaces in them. Only applies to the menu
 	options "show command line", "save command line to file" and "copy
