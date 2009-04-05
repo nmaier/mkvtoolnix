@@ -16,7 +16,6 @@
 
 #include "os.h"
 
-#include <wx/dnd.h>
 #include <wx/filename.h>
 #include <wx/frame.h>
 #include <wx/menu.h>
@@ -50,7 +49,7 @@
 #define ID_HE_TC_TREE                21002
 #define ID_T_HE_STATUS_BAR           21003
 
-class header_editor_frame_c: public wxFrame, wxFileDropTarget {
+class header_editor_frame_c: public wxFrame {
   DECLARE_CLASS(header_editor_frame_c);
   DECLARE_EVENT_TABLE();
 public:
@@ -105,7 +104,7 @@ public:
     return m_page_panel;
   }
 
-  virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString &dropped_files);
+  virtual bool on_drop_files(wxCoord x, wxCoord y, const wxArrayString &dropped_files);
 
 protected:
   bool may_close();

@@ -46,6 +46,21 @@
 #include "mmg_dialog.h"
 #include "wxcommon.h"
 
+class header_editor_drop_target_c: public wxFileDropTarget {
+private:
+  header_editor_frame_c *m_owner;
+
+public:
+  header_editor_drop_target_c(header_editor_frame_c *owner)
+    : m_owner(owner) { };
+
+  virtual bool OnDropFiles(wxCoord x,
+                           wxCoord y,
+                           const wxArrayString &dropped_files) {
+    return m_owner->on_drop_files(x, y, dropped_files);
+  }
+};
+
 header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
   : wxFrame(parent, wxID_ANY, Z("Header editor"), wxDefaultPosition, wxSize(800, 600), wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL)
   , m_file_menu(NULL)
@@ -109,7 +124,7 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
   m_status_bar_timer.SetOwner(this, ID_T_HE_STATUS_BAR);
 
   SetIcon(wxIcon(matroskalogo_xpm));
-  SetDropTarget(this);
+  SetDropTarget(new header_editor_drop_target_c(this));
 
   set_status_bar(Z("Header editor ready."));
 }
@@ -719,9 +734,9 @@ header_editor_frame_c::on_status_bar_timer(wxTimerEvent &evt) {
 }
 
 bool
-header_editor_frame_c::OnDropFiles(wxCoord x,
-                                   wxCoord y,
-                                   const wxArrayString &dropped_files) {
+header_editor_frame_c::on_drop_files(wxCoord x,
+                                     wxCoord y,
+                                     const wxArrayString &dropped_files) {
   if (   have_been_modified()
       && (wxYES != wxMessageBox(Z("Some header values have been modified. Do you really want to load a new file without saving the current one?"), Z("Headers modified"),
                                 wxYES_NO | wxICON_QUESTION, this)))
