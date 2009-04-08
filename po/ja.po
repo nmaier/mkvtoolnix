@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2009-03-30 23:58+0900\n"
+"PO-Revision-Date: 2009-04-09 00:32+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -3937,9 +3937,8 @@ msgid "None of the header fields has been modified. Nothing has been saved."
 msgstr "修正されたヘッダのフィールドはありません。何も保存されませんでした。"
 
 #: src/mmg/mmg.cpp:217
-#, fuzzy
 msgid "Normally mkvmerge keeps aspect ratio information in MPEG4 video bitstreams and puts the information into the container. This option causes mkvmerge to remove the aspect ratio information from the bitstream."
-msgstr "通常mkvmergeは、MPEG4ビデオビットストリームからアスペクト比の情報を除去し、コンテナにその情報を格納します。このオプションを使用すると、mkvmergeはビットストリーム内にアスペクト比の情報を保持します。"
+msgstr "通常mkvmergeは、MPEG4ビデオビットストリームのアスペクト比の情報を保持し、コンテナにその情報を格納します。このオプションを使用すると、mkvmergeはビットストリームからアスペクト比の情報を除去します。"
 
 #: src/common/common.cpp:120
 msgid "Not a hex digit at position %1%"
@@ -4774,9 +4773,8 @@ msgid "Some header values have been modified. Do you really want to close withou
 msgstr "修正されたヘッダの値があります。本当にファイルを保存しないで閉じますか？"
 
 #: src/mmg/header_editor_frame.cpp:741
-#, fuzzy
 msgid "Some header values have been modified. Do you really want to load a new file without saving the current one?"
-msgstr "修正されたヘッダの値があります。本当にファイルを保存しないでリロードしますか？"
+msgstr "修正されたヘッダの値があります。本当に現在のファイルを保存しないで新しいファイルをロードしますか？"
 
 #: src/mmg/header_editor_frame.cpp:524
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
