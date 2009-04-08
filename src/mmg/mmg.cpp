@@ -213,9 +213,9 @@ cli_options_dlg::init_cli_option_list() {
                                            Z("Use the old AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') instead of the new one ('A_AAC').")));
   all_cli_options.push_back(cli_option_t(wxU("--engage use_codec_state"),
                                            Z("Allows the use of the CodecState element. This is used for e.g. MPEG-1/-2 video tracks for storing the sequence headers.")));
-  all_cli_options.push_back(cli_option_t(wxU("--engage keep_bitstream_ar_info"),
-                                           Z("Normally mkvmerge removes aspect ratio information from MPEG4 video bitstreams and puts the information into the container. "
-                                             "This option lets mkvmerge keep the aspect ratio information in the bitstream.")));
+  all_cli_options.push_back(cli_option_t(wxU("--engage remove_bitstream_ar_info"),
+                                           Z("Normally mkvmerge keeps aspect ratio information in MPEG4 video bitstreams and puts the information into the container. "
+                                             "This option causes mkvmerge to remove the aspect ratio information from the bitstream.")));
   all_cli_options.push_back(cli_option_t(wxU("--engage merge_truehd_frames"),
                                            Z("TrueHD audio streams know two frame types: sync frames and non-sync frames. With this switch mkvmerge will put one sync frame "
                                              "and all following non-sync frames into a single Matroska block. Without it each non-sync frame is put into its own Matroska block.")));

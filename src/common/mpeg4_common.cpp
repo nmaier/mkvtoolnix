@@ -550,7 +550,7 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
   bit_writer_c w(newsps, size);
   int i, nref, mb_width, mb_height;
 
-  keep_ar_info |= hack_engaged(ENGAGE_KEEP_BITSTREAM_AR_INFO);
+  keep_ar_info = !hack_engaged(ENGAGE_REMOVE_BITSTREAM_AR_INFO);
 
   memset(&sps, 0, sizeof(sps));
 

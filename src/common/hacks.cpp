@@ -43,9 +43,10 @@ static const struct {
   { ENGAGE_USE_CODEC_STATE,              "use_codec_state"              },
   { ENGAGE_ENABLE_TIMECODE_WARNING,      "enable_timecode_warning"      },
   { ENGAGE_MERGE_TRUEHD_FRAMES,          "merge_truehd_frames"          },
+  { ENGAGE_REMOVE_BITSTREAM_AR_INFO,     "remove_bitstream_ar_info"     },
   { 0,                                   NULL },
 };
-static std::vector<bool> s_engaged_hacks(ENGAGE_ENABLE_TIMECODE_WARNING + 1, false);
+static std::vector<bool> s_engaged_hacks(ENGAGE_MAX_IDX + 1, false);
 
 bool
 hack_engaged(unsigned int id) {

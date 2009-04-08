@@ -1,5 +1,11 @@
 2009-04-08  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: By default mkvmerge keeps the aspect ratio information
+	in AVC/h.264 video bitstreams now (equivalent to specifying
+	"--engage keep_bitstream_ar_info" in earlier versions). A new
+	option "--engage remove_bitstream_ar_info" is available that
+	restores the previous behaviour.
+
 	* mkvmerge: bug fix: Fixed the aspect ratio extraction for
 	AVC/h.264 video by adding three more pre-defined sample aspect
 	ratios. Mkvmerge also only assumes "free aspect ratio" if the
