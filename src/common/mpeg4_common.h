@@ -197,6 +197,9 @@ namespace mpeg4 {
 #define AVC_SLICE_TYPE2_SP 8
 #define AVC_SLICE_TYPE2_SI 9
 
+#define AVC_EXTENDED_SAR        0xff
+#define AVC_NUM_PREDEFINED_PARS   17
+
     struct sps_info_t {
       unsigned id;
 

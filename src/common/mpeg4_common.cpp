@@ -49,6 +49,28 @@ namespace mpeg4 {
 
     static bool compare_poc_by_poc(const poc_t &poc1, const poc_t &poc2);
     static bool compare_poc_by_dec(const poc_t &poc1, const poc_t &poc2);
+
+    static const struct {
+      int numerator, denominator;
+    } s_predefined_pars[AVC_NUM_PREDEFINED_PARS] = {
+      {   0,  0 },
+      {   1,  1 },
+      {  12, 11 },
+      {  10, 11 },
+      {  16, 11 },
+      {  40, 33 },
+      {  24, 11 },
+      {  20, 11 },
+      {  32, 11 },
+      {  80, 33 },
+      {  18, 11 },
+      {  15, 11 },
+      {  64, 33 },
+      { 160, 99 },
+      {   4,  3 },
+      {   3,  2 },
+      {   2,  1 },
+    };
   };
 };
 
@@ -620,17 +642,9 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
       } else
         w.put_bit(0);
 
-      if (13 >= ar_type) {
-        static const int par_nums[14] = {
-          0, 1, 12, 10, 16, 40, 24, 20, 32, 80, 18, 15, 64, 160
-        };
-        static const int par_denoms[14] = {
-          0, 1, 11, 11, 11, 33, 11, 11, 11, 33, 11, 11, 33, 99
-        };
-        sps.par_num = par_nums[ar_type];
-        sps.par_den = par_denoms[ar_type];
+      sps.ar_found = true;
 
-      } else {
+      if (AVC_EXTENDED_SAR == ar_type) {
         sps.par_num = r.get_bits(16);
         sps.par_den = r.get_bits(16);
 
@@ -638,8 +652,14 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
           w.put_bits(16, sps.par_num);
           w.put_bits(16, sps.par_den);
         }
-      }
-      sps.ar_found = true;
+
+      } else if (AVC_NUM_PREDEFINED_PARS >= ar_type) {
+        sps.par_num = s_predefined_pars[ar_type].numerator;
+        sps.par_den = s_predefined_pars[ar_type].denominator;
+
+      } else
+        sps.ar_found = false;
+
     } else
       w.put_bit(0);             // ar_info_present
 
