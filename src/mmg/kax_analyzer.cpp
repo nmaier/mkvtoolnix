@@ -265,10 +265,10 @@ kax_analyzer_c::create_void_element(int64_t file_pos,
   // See if enough space was freed to fit an EbmlVoid element in.
   file->setFilePointer(file_pos);
 
-  if (5 > void_size) {
+  if (2 > void_size) {
     // No, so just write zero bytes.
-    static char zero[5] = {0, 0, 0, 0, 0};
-    file->write(zero, void_size);
+    unsigned char zero = 0;
+    file->write(&zero, void_size);
 
     if (!add_new_data_element)
       data.erase(data.begin() + data_idx, data.begin() + data_idx + 1);
