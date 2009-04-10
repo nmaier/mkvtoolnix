@@ -75,10 +75,10 @@ Section "Program files" SEC01
 
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  File "libebml.dll"
+;   File "libebml.dll"
   File "libiconv-2.dll"
   File "libintl-8.dll"
-  File "libmatroska.dll"
+;   File "libmatroska.dll"
   File "magic1.dll"
   File "regex2.dll"
   File "zlib1.dll"
