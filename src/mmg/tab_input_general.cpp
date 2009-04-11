@@ -61,21 +61,19 @@ tab_input_general::tab_input_general(wxWindow *parent,
   cob_language->SetToolTip(TIP("Language for this track. Select one of the ISO639-2 language codes."));
   siz_fg->Add(cob_language, 1, wxGROW | wxALL, STDSPACING);
 
-  st_cues = new wxStaticText(this, wxID_STATIC, Z("Cues:"));
-  st_cues->Enable(false);
-  siz_fg->Add(st_cues, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
-
-  cob_cues = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CUES, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
-  cob_cues->SetToolTip(TIP("Selects for which blocks mkvmerge will produce index entries ( = cue entries). \"default\" is a good choice for almost all situations."));
-  cob_cues->SetSizeHints(0, -1);
-  siz_fg->Add(cob_cues, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
-
   st_default = new wxStaticText(this, wxID_STATIC, Z("Default track flag:"));
   siz_fg->Add(st_default, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   cob_default = new wxMTX_COMBOBOX_TYPE(this, ID_CB_MAKEDEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
   cob_default->SetToolTip(TIP("Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."));
   siz_fg->Add(cob_default, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
+
+  st_forced = new wxStaticText(this, wxID_STATIC, Z("Forced track flag:"));
+  siz_fg->Add(st_forced, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
+
+  cob_forced = new wxMTX_COMBOBOX_TYPE(this, ID_CB_FORCED_TRACK, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_forced->SetToolTip(TIP("Mark this track as 'forced'. Players must play this track."));
+  siz_fg->Add(cob_forced, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   st_tags = new wxStaticText(this, wxID_STATIC, Z("Tags:"));
   st_tags->Enable(false);
@@ -107,22 +105,10 @@ tab_input_general::tab_input_general(wxWindow *parent,
   siz_fg->Add(siz_line, 1, wxGROW | wxALIGN_CENTER_VERTICAL, 0);
 
   setup_languages();
-  setup_cues();
   setup_default_track();
+  setup_forced_track();
 
   SetSizer(siz_fg);
-}
-
-void
-tab_input_general::setup_cues() {
-  cob_cues_translations.add(wxT("default"),           Z("default"));
-  cob_cues_translations.add(wxT("only for I frames"), Z("only for I frames"));
-  cob_cues_translations.add(wxT("for all frames"),    Z("for all frames"));
-  cob_cues_translations.add(wxT("none"),              Z("none"));
-
-  int i;
-  for (i = 0; cob_cues_translations.entries.size() > i; ++i)
-    cob_cues->Append(cob_cues_translations.entries[i].translated);
 }
 
 void
@@ -134,6 +120,16 @@ tab_input_general::setup_default_track() {
   int i;
   for (i = 0; cob_default_translations.entries.size() > i; ++i)
     cob_default->Append(cob_default_translations.entries[i].translated);
+}
+
+void
+tab_input_general::setup_forced_track() {
+  cob_forced_translations.add(wxT("no"),  Z("no"));
+  cob_forced_translations.add(wxT("yes"), Z("yes"));
+
+  int i;
+  for (i = 0; cob_forced_translations.entries.size() > i; ++i)
+    cob_forced->Append(cob_forced_translations.entries[i].translated);
 }
 
 void
@@ -194,8 +190,6 @@ tab_input_general::set_track_mode(mmg_track_t *t) {
   cob_language->Enable(enable);
   st_track_name->Enable(enable);
   tc_track_name->Enable(enable);
-  st_cues->Enable(enable);
-  cob_cues->Enable(enable);
   st_tags->Enable(enable);
   tc_tags->Enable(enable);
   b_browse_tags->Enable(enable);
@@ -204,6 +198,8 @@ tab_input_general::set_track_mode(mmg_track_t *t) {
   b_browse_timecodes->Enable(NULL != t);
   st_default->Enable(enable);
   cob_default->Enable(enable);
+  st_forced->Enable(enable);
+  cob_forced->Enable(enable);
 
   if (NULL == t) {
     bool saved_dcvn = input->dont_copy_values_now;
@@ -211,8 +207,8 @@ tab_input_general::set_track_mode(mmg_track_t *t) {
 
     set_combobox_selection(cob_language, sorted_iso_codes[0]);
     tc_track_name->SetValue(wxEmptyString);
-    set_combobox_selection(cob_cues, Z("default"));
     cob_default->SetSelection(0);
+    cob_forced->SetSelection(0);
     tc_tags->SetValue(wxEmptyString);
     tc_timecodes->SetValue(wxEmptyString);
 
@@ -238,19 +234,19 @@ tab_input_general::on_default_track_selected(wxCommandEvent &evt) {
 }
 
 void
+tab_input_general::on_forced_track_selected(wxCommandEvent &evt) {
+  if (input->dont_copy_values_now || (-1 == input->selected_track))
+    return;
+
+  tracks[input->selected_track]->forced_track = cob_forced->GetSelection() == 1;
+}
+
+void
 tab_input_general::on_language_selected(wxCommandEvent &evt) {
   if (input->dont_copy_values_now || (input->selected_track == -1))
     return;
 
   tracks[input->selected_track]->language = cob_language->GetStringSelection();
-}
-
-void
-tab_input_general::on_cues_selected(wxCommandEvent &evt) {
-  if (input->dont_copy_values_now || (input->selected_track == -1))
-    return;
-
-  tracks[input->selected_track]->cues = cob_cues_translations.to_english(cob_cues->GetStringSelection());
 }
 
 void
@@ -312,7 +308,7 @@ BEGIN_EVENT_TABLE(tab_input_general, wxPanel)
   EVT_TEXT(ID_TC_TAGS,              tab_input_general::on_tags_changed)
   EVT_TEXT(ID_TC_TIMECODES,         tab_input_general::on_timecodes_changed)
   EVT_COMBOBOX(ID_CB_MAKEDEFAULT,   tab_input_general::on_default_track_selected)
+  EVT_COMBOBOX(ID_CB_FORCED_TRACK,  tab_input_general::on_forced_track_selected)
   EVT_COMBOBOX(ID_CB_LANGUAGE,      tab_input_general::on_language_selected)
-  EVT_COMBOBOX(ID_CB_CUES,          tab_input_general::on_cues_selected)
   EVT_TEXT(ID_TC_TRACKNAME,         tab_input_general::on_track_name_changed)
 END_EVENT_TABLE();

@@ -53,6 +53,7 @@
 #define ID_CB_NALU_SIZE_LENGTH            11034
 #define ID_TC_USER_DEFINED                11035
 #define ID_B_REMOVE_ALL_FILES             11036
+#define ID_CB_FORCED_TRACK                11037
 #define ID_NB_OPTIONS                     11999
 
 extern const wxChar *predefined_aspect_ratios[];
@@ -64,29 +65,28 @@ class tab_input_general: public wxPanel {
   DECLARE_CLASS(tab_input_general);
   DECLARE_EVENT_TABLE();
 public:
-  wxMTX_COMBOBOX_TYPE *cob_default, *cob_language, *cob_cues;
+  wxMTX_COMBOBOX_TYPE *cob_default, *cob_language, *cob_forced;
   wxTextCtrl *tc_track_name, *tc_tags, *tc_timecodes;
   wxButton *b_browse_tags, *b_browse_timecodes;
 
-  wxStaticText *st_language, *st_track_name, *st_default;
-  wxStaticText *st_cues, *st_tags, *st_timecodes;
+  wxStaticText *st_language, *st_track_name, *st_default, *st_forced;
+  wxStaticText *st_tags, *st_timecodes;
 
   tab_input *input;
 
-  translation_table_c cob_cues_translations;
-  translation_table_c cob_default_translations;
+  translation_table_c cob_default_translations, cob_forced_translations;
 
 public:
   tab_input_general(wxWindow *parent, tab_input *ti);
 
   void setup_languages();
-  void setup_cues();
   void setup_default_track();
+  void setup_forced_track();
   void set_track_mode(mmg_track_t *t);
 
   void on_default_track_selected(wxCommandEvent &evt);
+  void on_forced_track_selected(wxCommandEvent &evt);
   void on_language_selected(wxCommandEvent &evt);
-  void on_cues_selected(wxCommandEvent &evt);
   void on_browse_tags(wxCommandEvent &evt);
   void on_tags_changed(wxCommandEvent &evt);
   void on_track_name_changed(wxCommandEvent &evt);
@@ -139,17 +139,23 @@ class tab_input_extra: public wxPanel {
   DECLARE_CLASS(tab_input_extra);
   DECLARE_EVENT_TABLE();
 public:
+  wxMTX_COMBOBOX_TYPE *cob_cues;
   wxTextCtrl *tc_user_defined;
 
-  wxStaticText *st_user_defined;
+  wxStaticText *st_cues, *st_user_defined;
 
   tab_input *input;
+
+  translation_table_c cob_cues_translations;
 
 public:
   tab_input_extra(wxWindow *parent, tab_input *ti);
 
+  void setup_cues();
+
   void set_track_mode(mmg_track_t *t);
 
+  void on_cues_selected(wxCommandEvent &evt);
   void on_user_defined_changed(wxCommandEvent &evt);
 };
 

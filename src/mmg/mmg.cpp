@@ -1411,6 +1411,11 @@ mmg_dialog::update_command_line() {
         clargs.Add(sid + wxT(":") + (1 == t->default_track ? wxT("yes") : wxT("no")));
       }
 
+      if (!t->appending) {
+        clargs.Add(wxT("--forced-track"));
+        clargs.Add(sid + wxT(":") + (t->forced_track ? wxT("yes") : wxT("no")));
+      }
+
       if (!t->appending && (t->tags.Length() > 0)) {
         clargs.Add(wxT("--tags"));
         clargs.Add(sid + wxT(":") + t->tags);
