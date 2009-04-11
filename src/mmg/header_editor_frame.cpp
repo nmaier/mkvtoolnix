@@ -260,7 +260,7 @@ header_editor_frame_c::open_file(wxFileName file_name) {
 
 void
 header_editor_frame_c::handle_segment_info(analyzer_data_c *data) {
-  EbmlElement *e = m_analyzer->read_element(data, KaxInfo::ClassInfos);
+  EbmlElement *e = m_analyzer->read_element(data);
   if (NULL == e)
     return;
 
@@ -299,7 +299,7 @@ header_editor_frame_c::handle_segment_info(analyzer_data_c *data) {
 
 void
 header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
-  EbmlElement *e = m_analyzer->read_element(data, KaxTracks::ClassInfos);
+  EbmlElement *e = m_analyzer->read_element(data);
   if (NULL == e)
     return;
 

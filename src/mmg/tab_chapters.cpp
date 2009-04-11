@@ -574,7 +574,7 @@ tab_chapters::load(wxString name) {
         return false;
       }
 
-      e = analyzer->read_element(pos, KaxChapters::ClassInfos);
+      e = analyzer->read_element(pos);
       if (e == NULL)
         throw error_c(Y("This file does not contain valid chapters."));
       new_chapters = static_cast<KaxChapters *>(e);

@@ -70,9 +70,9 @@ public:
   virtual ~kax_analyzer_c();
 
   virtual update_element_result_e update_element(EbmlElement *e, bool write_defaults = false);
-  virtual EbmlElement *read_element(analyzer_data_c *element_data, const EbmlCallbacks &callbacks);
-  virtual EbmlElement *read_element(uint32_t pos, const EbmlCallbacks &callbacks) {
-    return read_element(data[pos], callbacks);
+  virtual EbmlElement *read_element(analyzer_data_c *element_data);
+  virtual EbmlElement *read_element(unsigned int pos) {
+    return read_element(data[pos]);
   }
   virtual int find(const EbmlId &id) {
     uint32_t i;
