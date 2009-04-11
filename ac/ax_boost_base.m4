@@ -70,7 +70,7 @@ AC_DEFUN([AX_BOOST_BASE],
         AC_MSG_ERROR(The Boost library is required for building MKVToolNix)
     fi
 
-    boost_lib_version_req=ifelse([$1], ,1.29.0,$1)
+    boost_lib_version_req=ifelse([$1], ,1.32.0,$1)
     boost_lib_version_req_shorten=`expr $boost_lib_version_req : '\([[0-9]]*\.[[0-9]]*\)'`
     boost_lib_version_req_major=`expr $boost_lib_version_req : '\([[0-9]]*\)'`
     boost_lib_version_req_minor=`expr $boost_lib_version_req : '[[0-9]]*\.\([[0-9]]*\)'`

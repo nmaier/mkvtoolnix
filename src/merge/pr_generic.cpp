@@ -110,13 +110,10 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *p_reader,
     ti.cues = ti.cue_creations[-1];
 
   // Let's see if the user has given a default track flag for this track.
-  if (map_has_key(ti.default_track_flags, ti.id)) {
+  if (map_has_key(ti.default_track_flags, ti.id))
     ti.default_track = ti.default_track_flags[ti.id];
-    ti.default_track_flag_present = true;
-  } else if (map_has_key(ti.default_track_flags, -1)) {
+  else if (map_has_key(ti.default_track_flags, -1))
     ti.default_track = ti.default_track_flags[-1];
-    ti.default_track_flag_present = true;
-  }
 
   // Let's see if the user has specified a language for this track.
   if (map_has_key(ti.languages, ti.id))
@@ -218,12 +215,6 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *p_reader,
     htrack_max_add_block_ids = ti.max_blockadd_ids[ti.id];
   else if (map_has_key(ti.max_blockadd_ids, -1))
     htrack_max_add_block_ids = ti.max_blockadd_ids[-1];
-
-  // Let's see if the user has specified "AAC is SBR" for this track.
-  if (map_has_key(ti.all_aac_is_sbr, ti.id))
-    ti.aac_is_sbr = ti.all_aac_is_sbr[ti.id] ? 1 : 0;
-  else if (map_has_key(ti.all_aac_is_sbr, -1))
-    ti.aac_is_sbr = ti.all_aac_is_sbr[-1] ? 1 : 0;
 
   // Let's see if the user has specified a NALU size length for this track.
   if (map_has_key(ti.nalu_size_lengths, ti.id))
@@ -560,7 +551,7 @@ generic_packetizer_c::set_headers() {
 
   idx = TRACK_TYPE_TO_DEFTRACK_TYPE(htrack_type);
 
-  if (!ti.default_track_flag_present)
+  if (boost::logic::indeterminate(ti.default_track))
     set_as_default_track(idx, DEFAULT_TRACK_PRIORITY_FROM_TYPE);
   else if (ti.default_track)
     set_as_default_track(idx, DEFAULT_TRACK_PRIORITY_CMDLINE);
@@ -1376,10 +1367,8 @@ track_info_c::track_info_c()
   , aspect_ratio_is_factor(false)
   , display_dimensions_given(false)
   , cues(CUE_STRATEGY_UNSPECIFIED)
-  , default_track(false)
-  , default_track_flag_present(false)
+  , default_track(boost::logic::indeterminate)
   , tags(NULL)
-  , aac_is_sbr(-1)
   , compression(COMPRESSION_UNSPECIFIED)
   , pixel_cropping_specified(false)
   , stereo_mode(STEREO_MODE_UNSPECIFIED)
@@ -1442,7 +1431,6 @@ track_info_c::operator =(const track_info_c &src) {
 
   default_track_flags        = src.default_track_flags;
   default_track              = src.default_track;
-  default_track_flag_present = src.default_track_flag_present;
 
   languages                  = src.languages;
   language                   = src.language;
@@ -1455,7 +1443,6 @@ track_info_c::operator =(const track_info_c &src) {
   tags                       = NULL != src.tags ? static_cast<KaxTags *>(src.tags->Clone()) : NULL;
 
   all_aac_is_sbr             = src.all_aac_is_sbr;
-  aac_is_sbr                 = src.aac_is_sbr;
 
   compression_list           = src.compression_list;
   compression                = src.compression;

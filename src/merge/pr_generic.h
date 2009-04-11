@@ -17,6 +17,7 @@
 
 #include "os.h"
 
+#include <boost/logic/tribool.hpp>
 #include <deque>
 #include <map>
 #include <vector>
@@ -202,8 +203,7 @@ public:
   cue_strategy_e cues;          // For this very track
 
   map<int64_t, bool> default_track_flags; // As given on the command line
-  bool default_track;           // For this very track
-  bool default_track_flag_present;
+  boost::logic::tribool default_track;    // For this very track
 
   map<int64_t, string> languages; // As given on the command line
   string language;              // For this very track
@@ -215,8 +215,7 @@ public:
   string tags_file_name;        // For this very track
   KaxTags *tags;                // For this very track
 
-  map<int64_t, bool> all_aac_is_sbr;  // For AAC+/HE-AAC/SBR
-  int aac_is_sbr;                     // For this track. -1 = unspecified
+  map<int64_t, bool> all_aac_is_sbr; // For AAC+/HE-AAC/SBR
 
   map<int64_t, compression_method_e> compression_list; // As given on the cmd line
   compression_method_e compression; // For this very track
