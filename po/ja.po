@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2009-04-09 00:32+0900\n"
+"PO-Revision-Date: 2009-04-11 17:01+0200\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -234,7 +234,7 @@ msgid ""
 msgstr ""
 "  --default-track <TID[:bool]>\n"
 "                           'デフォルト'フラグをこのトラックに設定します。\n"
-"                           0が指定された場合はフラグを設定しません。\n"
+"                           ブール型に0が指定された場合はフラグを設定しません。\n"
 
 #: src/merge/mkvmerge.cpp:149
 msgid "  --disable-lacing         Do not Use lacing.\n"
@@ -253,15 +253,14 @@ msgid "  --enable-durations       Enable block durations for all blocks.\n"
 msgstr "  --enable-durations       全てのブロックの長さを記録します。\n"
 
 #: src/merge/mkvmerge.cpp:216
-#, fuzzy
 msgid ""
-"  --force-track <TID[:bool]>\n"
+"  --forced-track <TID[:bool]>\n"
 "                           Sets the 'forced' flag for this track or\n"
 "                           forces it not to be present if bool is 0.\n"
 msgstr ""
-"  --default-track <TID[:bool]>\n"
-"                           'デフォルト'フラグをこのトラックに設定します。\n"
-"                           0が指定された場合はフラグを設定しません。\n"
+"  --forced-track <TID[:bool]>\n"
+"                           '強制表示'フラグをこのトラックに設定します。\n"
+"                           ブール型に0が指定された場合はフラグを設定しません。\n"
 
 #: src/merge/mkvmerge.cpp:122
 msgid "  --global-tags <file>     Read global tags from a XML file.\n"
@@ -1201,9 +1200,8 @@ msgid "'--engage' lacks its argument.\n"
 msgstr "'--engage'に引数がありません。\n"
 
 #: src/merge/mkvmerge.cpp:1989
-#, fuzzy
 msgid "'--forced-track' lacks its argument.\n"
-msgstr "'--default-track'に引数がありません。\n"
+msgstr "'--forced-track'に引数がありません。\n"
 
 #: src/extract/mkvextract.cpp:244
 msgid "'--fullraw' is only allowed when extracting tracks.\n"
@@ -1319,15 +1317,15 @@ msgstr "'-c'に文字セットが指定されていません。\n"
 
 #: src/mmg/header_editor_frame.cpp:352
 msgid "'Default track' flag"
-msgstr "デフォルトトラックフラグ："
+msgstr "'デフォルトトラック'フラグ："
 
 #: src/mmg/header_editor_frame.cpp:359
 msgid "'Forced display' flag"
-msgstr "強制表示フラグ"
+msgstr "'強制表示'フラグ"
 
 #: src/mmg/header_editor_frame.cpp:356
 msgid "'Track enabled' flag"
-msgstr "トラック有効化フラグ"
+msgstr "'トラック有効化'フラグ"
 
 #: src/info/mkvinfo.cpp:1592
 msgid "(Unknown element: %1%)"
@@ -2973,9 +2971,8 @@ msgid "Forced flag: %1%"
 msgstr ""
 
 #: src/mmg/tab_input_general.cpp:71
-#, fuzzy
 msgid "Forced track flag:"
-msgstr "デフォルトトラックフラグ："
+msgstr "強制表示トラックフラグ："
 
 #: src/mmg/tab_input_format.cpp:92
 msgid "Forces the FourCC of the video track to this value. Note that this only works for video tracks that use the AVI compatibility mode or for QuickTime video tracks. This option CANNOT be used to change Matroska's CodecID."
@@ -3250,9 +3247,8 @@ msgid "Invalid boolean option specified in '--default-track %1%'.\n"
 msgstr "'--default-track %1%'で不正なブール型が指定されました。\n"
 
 #: src/merge/mkvmerge.cpp:1002
-#, fuzzy
 msgid "Invalid boolean option specified in '--forced-track %1%'.\n"
-msgstr "'--default-track %1%'で不正なブール型が指定されました。\n"
+msgstr "'--forced-track %1%'で不正なブール型が指定されました。\n"
 
 #: src/merge/mkvmerge.cpp:1362
 msgid "Invalid boolean specified in '--aac-is-sbr %1%'.\n"
@@ -3453,9 +3449,8 @@ msgid "Invalid track ID specified in '--default-track %1%'.\n"
 msgstr "'--default-track %1%'で不正なトラックIDが指定されました。\n"
 
 #: src/merge/mkvmerge.cpp:996
-#, fuzzy
 msgid "Invalid track ID specified in '--forced-track %1%'.\n"
-msgstr "'--default-track %1%'で不正なトラックIDが指定されました。\n"
+msgstr "'--forced-track %1%'で不正なトラックIDが指定されました。\n"
 
 #: src/merge/mkvmerge.cpp:1136
 msgid "Invalid track ID specified in '--sub-charset %1%'.\n"
@@ -3652,7 +3647,7 @@ msgstr "不正な形式の行？（%1%）\n"
 
 #: src/mmg/tab_input_general.cpp:75
 msgid "Mark this track as 'forced'. Players must play this track."
-msgstr ""
+msgstr "このトラックを強制表示として設定します。プレーヤはこのトラックを再生しなければなりません。"
 
 #: src/mmg/mmg.cpp:837
 #, c-format
