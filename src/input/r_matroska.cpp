@@ -1005,6 +1005,12 @@ kax_reader_c::read_headers_tracks(EbmlElement *&l1,
       track->default_track = uint64(*ktfdefault);
     }
 
+    KaxTrackFlagForced *ktfforced = FINDFIRST(ktentry, KaxTrackFlagForced);
+    if (NULL != ktfforced) {
+      mxverb(2, boost::format("matroska_reader: |  + Forced flag: %1%\n") % uint64(*ktfforced));
+      track->forced_track = uint64(*ktfforced);
+    }
+
     KaxTrackFlagLacing *ktflacing = FINDFIRST(ktentry, KaxTrackFlagLacing);
     if (NULL != ktflacing) {
       mxverb(2, boost::format("matroska_reader: |  + Lacing flag: %1%\n") % uint64(*ktflacing));
@@ -1283,9 +1289,14 @@ void
 kax_reader_c::set_packetizer_headers(kax_track_t *t) {
   if (appending)
     return;
+
   if (t->default_track)
     PTZR(t->ptzr)->set_as_default_track(t->type == 'v' ? DEFTRACK_TYPE_VIDEO : t->type == 'a' ? DEFTRACK_TYPE_AUDIO : DEFTRACK_TYPE_SUBS,
                                         DEFAULT_TRACK_PRIORITY_FROM_SOURCE);
+
+  if (t->forced_track && boost::logic::indeterminate(PTZR(t->ptzr)->ti.forced_track))
+    PTZR(t->ptzr)->set_track_forced_flag(true);
+
   if ((0 != t->tuid) && !PTZR(t->ptzr)->set_uid(t->tuid))
     mxwarn(boost::format(Y("matroska_reader: Could not keep the track UID %1% because it is already allocated for the new file.\n")) % t->tuid);
 }
@@ -2122,6 +2133,7 @@ kax_reader_c::identify() {
       verbose_info.push_back((boost::format("stereo_mode:%1%") % (int)tracks[i]->v_stereo_mode).str());
 
     verbose_info.push_back((boost::format("default_track:%1%") % (tracks[i]->default_track ? 1 : 0)).str());
+    verbose_info.push_back((boost::format("forced_track:%1%")  % (tracks[i]->forced_track  ? 1 : 0)).str());
 
     if ((tracks[i]->codec_id == MKV_V_MSCOMP) && mpeg4::p10::is_avc_fourcc(tracks[i]->v_fourcc))
       verbose_info.push_back("packetizer:mpeg4_p10_es_video");

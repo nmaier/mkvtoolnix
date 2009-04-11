@@ -213,6 +213,9 @@ set_usage() {
   usage_text += Y("  --default-track <TID[:bool]>\n"
                   "                           Sets the 'default' flag for this track or\n"
                   "                           forces it not to be present if bool is 0.\n");
+  usage_text += Y("  --force-track <TID[:bool]>\n"
+                  "                           Sets the 'forced' flag for this track or\n"
+                  "                           forces it not to be present if bool is 0.\n");
   usage_text += Y("  --blockadd <TID:x>       Sets the max number of block additional\n"
                   "                           levels for this track.\n");
   usage_text += Y("  --track-name <TID:name>  Sets the name for a track.\n");
@@ -974,6 +977,32 @@ parse_arg_default_track(const string &s,
   }
 
   ti.default_track_flags[id] = is_default;
+}
+
+/** \brief Parse the \c --forced-track argument
+
+   The argument must have the form \c TID or \c TID:boolean. The former
+   is equivalent to \c TID:1.
+*/
+static void
+parse_arg_forced_track(const string &s,
+                        track_info_c &ti) {
+  bool is_forced       = true;
+  vector<string> parts = split(s, ":", 2);
+  int64_t id           = 0;
+
+  strip(parts);
+  if (!parse_int(parts[0], id))
+    mxerror(boost::format(Y("Invalid track ID specified in '--forced-track %1%'.\n")) % s);
+
+  try {
+    if (2 == parts.size())
+      is_forced = parse_bool(parts[1]);
+  } catch (...) {
+    mxerror(boost::format(Y("Invalid boolean option specified in '--forced-track %1%'.\n")) % s);
+  }
+
+  ti.forced_track_flags[id] = is_forced;
 }
 
 /** \brief Parse the \c --cues argument
@@ -1953,6 +1982,13 @@ parse_args(vector<string> args) {
         mxerror(Y("'--default-track' lacks its argument.\n"));
 
       parse_arg_default_track(next_arg, *ti);
+      sit++;
+
+    } else if (this_arg == "--forced-track") {
+      if (no_next_arg)
+        mxerror(Y("'--forced-track' lacks its argument.\n"));
+
+      parse_arg_forced_track(next_arg, *ti);
       sit++;
 
     } else if (this_arg == "--language") {

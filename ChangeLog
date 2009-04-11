@@ -1,5 +1,8 @@
 2009-04-11  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: new feature: Added support for the "forced track"
+	flag. Fix for bug 128.
+
 	* mmg: bug fix: The header editor and chapter editor will not
 	write zero bytes anymore if there's not enough space to write an
 	EbmlVoid element when saving to Matroska files.

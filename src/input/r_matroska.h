@@ -71,6 +71,7 @@ struct kax_track_t {
   uint32_t header_sizes[3];
 
   bool default_track;
+  boost::logic::tribool forced_track;
   string language;
 
   int64_t units_processed;
@@ -122,6 +123,7 @@ struct kax_track_t {
     private_data(NULL),
     private_size(0),
     default_track(false),
+    forced_track(boost::logic::indeterminate),
     language("eng"),
     units_processed(0),
     ok(false),

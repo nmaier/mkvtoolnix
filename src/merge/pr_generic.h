@@ -205,6 +205,9 @@ public:
   map<int64_t, bool> default_track_flags; // As given on the command line
   boost::logic::tribool default_track;    // For this very track
 
+  map<int64_t, bool> forced_track_flags; // As given on the command line
+  boost::logic::tribool forced_track;    // For this very track
+
   map<int64_t, string> languages; // As given on the command line
   string language;              // For this very track
 
@@ -524,6 +527,7 @@ public:
   virtual void set_track_default_duration(int64_t default_duration);
   virtual void set_track_max_additionals(int max_add_block_ids);
   virtual int64_t get_track_default_duration();
+  virtual void set_track_forced_flag(bool forced_track);
 
   virtual void set_audio_sampling_freq(float freq);
   virtual float get_audio_sampling_freq() {

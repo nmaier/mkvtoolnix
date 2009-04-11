@@ -115,6 +115,12 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *p_reader,
   else if (map_has_key(ti.default_track_flags, -1))
     ti.default_track = ti.default_track_flags[-1];
 
+  // Let's see if the user has given a forced track flag for this track.
+  if (map_has_key(ti.forced_track_flags, ti.id))
+    ti.forced_track = ti.forced_track_flags[ti.id];
+  else if (map_has_key(ti.forced_track_flags, -1))
+    ti.forced_track = ti.forced_track_flags[-1];
+
   // Let's see if the user has specified a language for this track.
   if (map_has_key(ti.languages, ti.id))
     ti.language = ti.languages[ti.id];
@@ -391,6 +397,13 @@ generic_packetizer_c::get_track_default_duration() {
 }
 
 void
+generic_packetizer_c::set_track_forced_flag(bool forced_track) {
+  ti.forced_track = forced_track;
+  if (NULL != track_entry)
+    GetChildAs<KaxTrackFlagForced, EbmlUInteger>(track_entry) = forced_track ? 1 : 0;
+}
+
+void
 generic_packetizer_c::set_audio_sampling_freq(float freq) {
   haudio_sampling_freq = freq;
   if (NULL != track_entry)
@@ -562,6 +575,9 @@ generic_packetizer_c::set_headers() {
 
   if (!ti.track_name.empty())
     GetChildAs<KaxTrackName, EbmlUnicodeString>(track_entry) = cstrutf8_to_UTFstring(ti.track_name);
+
+  if (!boost::logic::indeterminate(ti.forced_track))
+    GetChildAs<KaxTrackFlagForced, EbmlUInteger>(track_entry) = ti.forced_track ? 1 : 0;
 
   if (track_video == htrack_type) {
     KaxTrackVideo &video = GetChild<KaxTrackVideo>(track_entry);
@@ -1368,6 +1384,7 @@ track_info_c::track_info_c()
   , display_dimensions_given(false)
   , cues(CUE_STRATEGY_UNSPECIFIED)
   , default_track(boost::logic::indeterminate)
+  , forced_track(boost::logic::indeterminate)
   , tags(NULL)
   , compression(COMPRESSION_UNSPECIFIED)
   , pixel_cropping_specified(false)
@@ -1431,6 +1448,9 @@ track_info_c::operator =(const track_info_c &src) {
 
   default_track_flags        = src.default_track_flags;
   default_track              = src.default_track;
+
+  forced_track_flags         = src.forced_track_flags;
+  forced_track               = src.forced_track;
 
   languages                  = src.languages;
   language                   = src.language;
