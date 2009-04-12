@@ -183,10 +183,10 @@ header_editor_frame_c::clear_pages() {
 
 void
 header_editor_frame_c::on_file_open(wxCommandEvent &evt) {
-  wxString env_value;
-  if (wxGetEnv(wxT("MTX_DEBUG"), &env_value) && (env_value == wxT("1"))) {
-    wxGetEnv(wxT("HOME"), &env_value);
-    open_file(wxFileName(wxString::Format(wxT("%s/prog/video/mkvtoolnix/data/muh.mkv"), env_value.c_str())));
+  if (debugging_requested("he_open_std")) {
+    wxString home;
+    wxGetEnv(wxT("HOME"), &home);
+    open_file(wxFileName(wxString::Format(wxT("%s/prog/video/mkvtoolnix/data/muh.mkv"), home.c_str())));
     return;
   }
 

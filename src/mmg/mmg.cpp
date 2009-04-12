@@ -2281,19 +2281,33 @@ mmg_app::handle_command_line_arguments() {
   if (1 >= app->argc)
     return;
 
-  if (wxString(app->argv[1]) == wxT("--edit-headers")) {
-    if (2 >= app->argc)
+  std::vector<std::string> args;
+  int i;
+  for (i = 1; app->argc > i; ++i)
+    args.push_back(wxMB(wxString(app->argv[i])));
+
+  handle_common_cli_args(args, "");
+
+  if (args.empty())
+    return;
+
+  std::vector<wxString> wargs;
+  for (i = 0; args.size() > i; ++i)
+    wargs.push_back(wxU(args[i].c_str()));
+
+  if (wargs[0] == wxT("--edit-headers")) {
+    if (wargs.size() == 1)
       wxMessageBox(Z("Missing file name after for the option '--edit-headers'."), Z("Missing file name"), wxOK | wxCENTER | wxICON_ERROR);
     else {
       header_editor_frame_c *window  = new header_editor_frame_c(mdlg);
       window->Show();
-      window->open_file(wxFileName(app->argv[2]));
+      window->open_file(wxFileName(wargs[1]));
     }
 
     return;
   }
 
-  wxString file = app->argv[1];
+  wxString file = wargs[0];
   if (!wxFileExists(file) || wxDirExists(file))
     wxMessageBox(wxString::Format(Z("The file '%s' does not exist."), file.c_str()), Z("Error loading settings"), wxOK | wxCENTER | wxICON_ERROR);
   else {
