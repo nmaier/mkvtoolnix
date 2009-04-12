@@ -260,6 +260,10 @@ kax_analyzer_c::create_void_element(int64_t file_pos,
                                     int void_size,
                                     int data_idx,
                                     bool add_new_data_element) {
+  // Do we have anything to do?
+  if (0 == void_size)
+    return false;
+
   // See if enough space was freed to fit an EbmlVoid element in.
   file->setFilePointer(file_pos);
 
