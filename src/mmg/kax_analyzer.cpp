@@ -260,6 +260,9 @@ kax_analyzer_c::create_void_element(int64_t file_pos,
                                     int void_size,
                                     int data_idx,
                                     bool add_new_data_element) {
+  if (debugging_requested("ka_create_void_element"))
+    mxinfo(boost::format("create_void_element file_pos %1% void_size %2% data_idx %3% add_new_data_element %4%\n") % file_pos % void_size % data_idx % add_new_data_element);
+
   // Do we have anything to do?
   if (0 == void_size)
     return false;
@@ -399,7 +402,7 @@ kax_analyzer_c::remove_from_meta_seeks(EbmlId id) {
     data[data_idx]->size = new_size;
 
     // Create a void element to cover the freed space.
-    if (create_void_element(data[data_idx]->pos + new_size, old_size - new_size - 1, data_idx + 1, true))
+    if (create_void_element(data[data_idx]->pos + new_size, old_size - new_size, data_idx + 1, true))
       ++data_idx;
 
     delete element;
