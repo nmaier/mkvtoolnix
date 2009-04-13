@@ -2528,6 +2528,11 @@ msgstr "Diracエレメンタリストリーム"
 msgid "Disable the selected job(s) and sets their status to 'done'"
 msgstr "選択したジョブを無効化し、そのステータスを'終了'にします。"
 
+#: src/mmg/mmg.cpp:211
+#, fuzzy
+msgid "Disable the use of SimpleBlocks instead of BlockGroups."
+msgstr "可能な場合はブロックグループの代わりにシンプルブロックを使用するようにします。"
+
 #: src/mmg/mmg.cpp:174
 msgid "Disables lacing for all tracks. This will increase the file's size, especially if there are many audio tracks. Use only for testing."
 msgstr "全てのトラックで複数のフレームを1つのブロックにまとめません。これは特に多数のオーディオトラックがある場合に、ファイルサイズを増大させます。テスト目的でのみ使用してください。"
@@ -2654,10 +2659,6 @@ msgstr ""
 msgid "Enable splitting..."
 msgstr "分割を有効にする"
 
-#: src/mmg/mmg.cpp:211
-msgid "Enable use of SimpleBlock instead of BlockGroup when possible."
-msgstr "可能な場合はブロックグループの代わりにシンプルブロックを使用するようにします。"
-
 #: src/info/mkvinfo.cpp:897
 msgid "Enabled: %1%"
 msgstr ""
@@ -2698,7 +2699,7 @@ msgstr "%1%行目でエラー発生：サブタイトル番号が見つかると
 msgid "Error initializing the tables for the chapter, tag and segment info elements: Could not find the element with the debug name '%1%'. %2%\n"
 msgstr "チャプタとタグ、セグメント情報のテーブル初期化中にエラーが発生しました：デバッグ名'%1%'の要素が見つかりませんでした。%2%\n"
 
-#: src/mmg/mmg.cpp:890 src/mmg/mmg.cpp:909 src/mmg/mmg.cpp:2298
+#: src/mmg/mmg.cpp:890 src/mmg/mmg.cpp:909 src/mmg/mmg.cpp:2312
 msgid "Error loading settings"
 msgstr "設定のロード中にエラーが発生しました"
 
@@ -3716,11 +3717,11 @@ msgstr "'--output-charset'に引数がありません。\n"
 msgid "Missing argument for '--ui-language'.\n"
 msgstr "'--ui-language'に引数がありません。\n"
 
-#: src/mmg/mmg.cpp:2286
+#: src/mmg/mmg.cpp:2300
 msgid "Missing file name"
 msgstr "ファイル名がありません"
 
-#: src/mmg/mmg.cpp:2286
+#: src/mmg/mmg.cpp:2300
 msgid "Missing file name after for the option '--edit-headers'."
 msgstr "'--edit-headers'オプションの後ろにファイル名がありません。"
 
@@ -5264,7 +5265,7 @@ msgstr "ファイル'%1%'はサポートされていないファイルタイプ�
 msgid "The file '%1%' is empty."
 msgstr "ファイル'%1%'は空です。"
 
-#: src/mmg/mmg.cpp:2298
+#: src/mmg/mmg.cpp:2312
 #, c-format
 msgid "The file '%s' does not exist."
 msgstr "ファイル'%s'は存在しません。"

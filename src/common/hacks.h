@@ -32,7 +32,7 @@
 #define ENGAGE_WRITE_HEADERS_TWICE           9
 #define ENGAGE_ALLOW_AVC_IN_VFW_MODE        10
 #define ENGAGE_KEEP_BITSTREAM_AR_INFO       11
-#define ENGAGE_USE_SIMPLE_BLOCK             12
+#define ENGAGE_NO_SIMPLE_BLOCKS             12
 #define ENGAGE_OLD_AAC_CODECID              13
 #define ENGAGE_USE_CODEC_STATE              14
 #define ENGAGE_ENABLE_TIMECODE_WARNING      15

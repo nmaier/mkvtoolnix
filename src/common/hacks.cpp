@@ -38,7 +38,7 @@ static const struct {
   { ENGAGE_WRITE_HEADERS_TWICE,          "write_headers_twice"          },
   { ENGAGE_ALLOW_AVC_IN_VFW_MODE,        "allow_avc_in_vfw_mode"        },
   { ENGAGE_KEEP_BITSTREAM_AR_INFO,       "keep_bitstream_ar_info"       },
-  { ENGAGE_USE_SIMPLE_BLOCK,             "use_simpleblock"              },
+  { ENGAGE_NO_SIMPLE_BLOCKS,             "no_simpleblocks"              },
   { ENGAGE_OLD_AAC_CODECID,              "old_aac_codecid"              },
   { ENGAGE_USE_CODEC_STATE,              "use_codec_state"              },
   { ENGAGE_ENABLE_TIMECODE_WARNING,      "enable_timecode_warning"      },

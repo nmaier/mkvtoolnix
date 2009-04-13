@@ -277,7 +277,7 @@ cluster_helper_c::render() {
   vector<render_groups_t *> render_groups;
   vector<render_groups_t *>::iterator rg_it;
 
-  bool use_simpleblock              = hack_engaged(ENGAGE_USE_SIMPLE_BLOCK);
+  bool use_simpleblock              = !hack_engaged(ENGAGE_NO_SIMPLE_BLOCKS);
 
   BlockBlobType std_block_blob_type = use_simpleblock ? BLOCK_BLOB_ALWAYS_SIMPLE : BLOCK_BLOB_NO_SIMPLE;
 

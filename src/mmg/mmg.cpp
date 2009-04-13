@@ -207,8 +207,8 @@ cli_options_dlg::init_cli_option_list() {
                                            Z("Forces the Matroska reader to use the generic passthrough packetizer even for known and supported track types.")));
   all_cli_options.push_back(cli_option_t(wxU("--engage allow_avc_in_vfw_mode"),
                                            Z("Allows storing AVC/h.264 video in Video-for-Windows compatibility mode, e.g. when it is read from an AVI")));
-  all_cli_options.push_back(cli_option_t(wxU("--engage use_simpleblock"),
-                                           Z("Enable use of SimpleBlock instead of BlockGroup when possible.")));
+  all_cli_options.push_back(cli_option_t(wxU("--engage no_simpleblocks"),
+                                           Z("Disable the use of SimpleBlocks instead of BlockGroups.")));
   all_cli_options.push_back(cli_option_t(wxU("--engage old_aac_codecid"),
                                            Z("Use the old AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') instead of the new one ('A_AAC').")));
   all_cli_options.push_back(cli_option_t(wxU("--engage use_codec_state"),

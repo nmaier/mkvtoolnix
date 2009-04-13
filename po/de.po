@@ -1,3 +1,4 @@
+
 # translation of de.po to German
 # Copyright (C) 2009 Moritz Bunkus
 # This file is distributed under the same license as the mkvtoolnix package.
@@ -9,7 +10,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-04-11 17:01+0200\n"
+"PO-Revision-Date: 2009-04-13 16:17+0200\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -2563,6 +2564,10 @@ msgstr "Dirac elementary stream"
 msgid "Disable the selected job(s) and sets their status to 'done'"
 msgstr "Die ausgewählten Jobs deaktivieren und ihren Status auf 'erledigt' setzen"
 
+#: src/mmg/mmg.cpp:211
+msgid "Disable the use of SimpleBlocks instead of BlockGroups."
+msgstr "Die Benutzung von vereinfachten Blockelementen anstelle der normalen Blockelemente verhindern."
+
 #: src/mmg/mmg.cpp:174
 msgid "Disables lacing for all tracks. This will increase the file's size, especially if there are many audio tracks. Use only for testing."
 msgstr "Das Zusammenfassen von Blöcken für alle Tracks deaktivieren. Das wird die Dateigröße erhöhen, besonders wenn viele Audiotracks benutzt werden. Nur zum Testen benutzen."
@@ -2689,10 +2694,6 @@ msgstr "Elemente"
 msgid "Enable splitting..."
 msgstr "Aufteilen aktivieren..."
 
-#: src/mmg/mmg.cpp:211
-msgid "Enable use of SimpleBlock instead of BlockGroup when possible."
-msgstr "Die Benutzung von vereinfachten Blockelementen anstelle der normalen Blockelemente erlauben, wo immer sie eingesetzt werden können."
-
 #: src/info/mkvinfo.cpp:897
 msgid "Enabled: %1%"
 msgstr "Aktiv: %1%"
@@ -2733,7 +2734,7 @@ msgstr "Fehler in Zeile %1%: Es wurde eine Untertitelnummer erwartet aber andere
 msgid "Error initializing the tables for the chapter, tag and segment info elements: Could not find the element with the debug name '%1%'. %2%\n"
 msgstr "Fehler bei der Initialisierung der Suchtabellen für Kapitel, Tags und Segmentinformationen: Es wurde kein Element mit dem Debugnamen '%1%' gefunden. %2%\n"
 
-#: src/mmg/mmg.cpp:890 src/mmg/mmg.cpp:909 src/mmg/mmg.cpp:2298
+#: src/mmg/mmg.cpp:890 src/mmg/mmg.cpp:909 src/mmg/mmg.cpp:2312
 msgid "Error loading settings"
 msgstr "Fehler beim Laden der Einstellungen"
 
@@ -3750,11 +3751,11 @@ msgstr "Fehlendes Argument für '--output-charset'.\n"
 msgid "Missing argument for '--ui-language'.\n"
 msgstr "Fehlendes Argument für '--ui-language'.\n"
 
-#: src/mmg/mmg.cpp:2286
+#: src/mmg/mmg.cpp:2300
 msgid "Missing file name"
 msgstr "Fehlender Dateiname"
 
-#: src/mmg/mmg.cpp:2286
+#: src/mmg/mmg.cpp:2300
 msgid "Missing file name after for the option '--edit-headers'."
 msgstr "Fehlender Dateiname für die Option '--edit-headers'."
 
@@ -5311,7 +5312,7 @@ msgstr "Die Datei '%1%' hat einen nicht unterstützten Typ (%2%).\n"
 msgid "The file '%1%' is empty."
 msgstr "Die Datei '%1%' ist leer."
 
-#: src/mmg/mmg.cpp:2298
+#: src/mmg/mmg.cpp:2312
 #, c-format
 msgid "The file '%s' does not exist."
 msgstr "Die Datei '%s' existiert nicht."
