@@ -309,8 +309,17 @@ protected:
 
   virtual memory_cptr create_bitmap_info_header(qtmp4_demuxer_cptr &dmx, const char *fourcc, int extra_size = 0, const void *extra_data = NULL);
 
-  virtual void create_video_packetizer_svq1(qtmp4_demuxer_cptr &dmx);
+  virtual void create_audio_packetizer_aac(qtmp4_demuxer_cptr &dmx);
   virtual bool create_audio_packetizer_ac3(qtmp4_demuxer_cptr &dmx);
+  virtual void create_audio_packetizer_mp3(qtmp4_demuxer_cptr &dmx);
+  virtual void create_audio_packetizer_passthrough(qtmp4_demuxer_cptr &dmx);
+  virtual void create_audio_packetizer_pcm(qtmp4_demuxer_cptr &dmx);
+
+  virtual void create_video_packetizer_mpeg1_2(qtmp4_demuxer_cptr &dmx);
+  virtual void create_video_packetizer_mpeg4_p10(qtmp4_demuxer_cptr &dmx);
+  virtual void create_video_packetizer_mpeg4_p2(qtmp4_demuxer_cptr &dmx);
+  virtual void create_video_packetizer_standard(qtmp4_demuxer_cptr &dmx);
+  virtual void create_video_packetizer_svq1(qtmp4_demuxer_cptr &dmx);
 
   virtual std::string decode_and_verify_language(uint16_t coded_language);
 };
