@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2009-04-11 17:01+0200\n"
+"PO-Revision-Date: 2009-04-14 00:15+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -2529,9 +2529,8 @@ msgid "Disable the selected job(s) and sets their status to 'done'"
 msgstr "選択したジョブを無効化し、そのステータスを'終了'にします。"
 
 #: src/mmg/mmg.cpp:211
-#, fuzzy
 msgid "Disable the use of SimpleBlocks instead of BlockGroups."
-msgstr "可能な場合はブロックグループの代わりにシンプルブロックを使用するようにします。"
+msgstr "シンプルブロックを使用せず、代わりにブロックグループを使用します。"
 
 #: src/mmg/mmg.cpp:174
 msgid "Disables lacing for all tracks. This will increase the file's size, especially if there are many audio tracks. Use only for testing."
