@@ -69,7 +69,7 @@ GetChildAs(EbmlMaster *m) {
   return GetChild<A>(*m);
 }
 
-#define VERSIONNAME "Kelly watch the Stars"
+#define VERSIONNAME "Do It Again"
 #define VERSIONINFO "mkvmerge v" VERSION " ('" VERSIONNAME "')"
 #define BUGMSG Y("This should not have happened. Please contact the author " \
                  "Moritz Bunkus <moritz@bunkus.org> with this error/warning " \
