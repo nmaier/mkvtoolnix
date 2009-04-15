@@ -29,7 +29,6 @@
 #define ID_CB_NEW_AFTER_ADD_TO_JOBQUEUE    15006
 #define ID_CB_WARN_USAGE                   15007
 #define ID_CB_GUI_DEBUGGING                15008
-#define ID_CB_ALWAYS_USE_SIMPLEBLOCK       15009
 #define ID_CB_SET_DELAY_FROM_FILENAME      15010
 #define ID_TC_OUTPUT_DIRECTORY             15011
 #define ID_B_BROWSE_OUTPUT_DIRECTORY       15012
@@ -47,7 +46,7 @@ public:
   wxCheckBox *cb_ask_before_overwriting, *cb_on_top;
   wxCheckBox *cb_filenew_after_add_to_jobqueue;
   wxCheckBox *cb_warn_usage, *cb_gui_debugging;
-  wxCheckBox *cb_always_use_simpleblock, *cb_set_delay_from_filename;
+  wxCheckBox *cb_set_delay_from_filename;
   wxMTX_COMBOBOX_TYPE *cob_priority;
   wxRadioButton *rb_odm_input_file, *rb_odm_previous, *rb_odm_fixed;
   wxButton *b_browse_output_directory;

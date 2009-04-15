@@ -85,11 +85,6 @@ options_dialog::options_dialog(wxWindow *parent,
   for (i = 0; cob_priority_translations.entries.size() > i; ++i)
     cob_priority->Append(cob_priority_translations.entries[i].translated);
 
-  cb_always_use_simpleblock = new wxCheckBox(this, ID_CB_ALWAYS_USE_SIMPLEBLOCK, Z("Always use simple blocks"));
-  cb_always_use_simpleblock->SetToolTip(TIP("Always adds '--engage use_simpleblock' to the command line. "
-                                            "That way Matroska's new 'simple blocks' will be used which "
-                                            "save a bit of overhead at the cost of not being backwards compatible."));
-
   sb_mmg = new wxStaticBox(this, -1, Z("mmg options"));
 
   cb_autoset_output_filename = new wxCheckBox(this, ID_CB_AUTOSET_OUTPUT_FILENAME, Z("Auto-set output filename"));
@@ -175,7 +170,6 @@ options_dialog::options_dialog(wxWindow *parent,
   cb_filenew_after_add_to_jobqueue->SetValue(m_options.filenew_after_add_to_jobqueue);
   cb_warn_usage->SetValue(m_options.warn_usage);
   cb_gui_debugging->SetValue(m_options.gui_debugging);
-  cb_always_use_simpleblock->SetValue(m_options.always_use_simpleblock);
   cb_set_delay_from_filename->SetValue(m_options.set_delay_from_filename);
   select_priority(m_options.priority);
 
@@ -212,9 +206,6 @@ options_dialog::options_dialog(wxWindow *parent,
   siz_fg->Add(cob_priority, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
 
   siz_sb->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT, 5);
-  siz_sb->AddSpacer(5);
-
-  siz_sb->Add(cb_always_use_simpleblock, 0, wxLEFT, 5);
   siz_sb->AddSpacer(5);
 
   siz_all->Add(siz_sb, 0, wxGROW | wxLEFT | wxRIGHT, 5);
@@ -352,7 +343,6 @@ options_dialog::on_ok(wxCommandEvent &evt) {
   m_options.filenew_after_add_to_jobqueue = cb_filenew_after_add_to_jobqueue->IsChecked();
   m_options.warn_usage                    = cb_warn_usage->IsChecked();
   m_options.gui_debugging                 = cb_gui_debugging->IsChecked();
-  m_options.always_use_simpleblock        = cb_always_use_simpleblock->IsChecked();
   m_options.set_delay_from_filename       = cb_set_delay_from_filename->IsChecked();
   m_options.output_directory_mode         = rb_odm_input_file->GetValue() ? ODM_FROM_FIRST_INPUT_FILE :
                                             rb_odm_previous->GetValue()   ? ODM_PREVIOUS :

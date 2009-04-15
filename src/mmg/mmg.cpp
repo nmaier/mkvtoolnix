@@ -1622,11 +1622,6 @@ mmg_dialog::update_command_line() {
       clargs.Add(strip(opts[i]));
   }
 
-  if (options.always_use_simpleblock) {
-    clargs.Add(wxT("--engage"));
-    clargs.Add(wxT("use_simpleblock"));
-  }
-
   cmdline = wxT("\"") + shell_escape(options.mkvmerge, true) + wxT("\" -o \"") + shell_escape(tc_output->GetValue()) + wxT("\" ");
 
   for (i = args_start; i < clargs.Count(); i++)
@@ -1984,7 +1979,6 @@ mmg_dialog::save_preferences() {
   cfg->Write(wxU("on_top"), options.on_top);
   cfg->Write(wxU("warn_usage"), options.warn_usage);
   cfg->Write(wxU("gui_debugging"), options.gui_debugging);
-  cfg->Write(wxU("always_use_simpleblock"), options.always_use_simpleblock);
   cfg->Write(wxU("set_delay_from_filename"), options.set_delay_from_filename);
 
   cfg->Flush();
@@ -2017,7 +2011,6 @@ mmg_dialog::load_preferences() {
   cfg->Read(wxU("on_top"), &options.on_top, false);
   cfg->Read(wxU("warn_usage"), &options.warn_usage, true);
   cfg->Read(wxU("gui_debugging"), &options.gui_debugging, false);
-  cfg->Read(wxU("always_use_simpleblock"), &options.always_use_simpleblock, false);
   cfg->Read(wxU("set_delay_from_filename"), &options.set_delay_from_filename, true);
 
   options.validate();

@@ -1474,7 +1474,7 @@ msgstr "人間が読むことのできる形式のコーデックを指定する
 msgid "A human-readable track name."
 msgstr "人間が読むことのできる形式のトラック名です。"
 
-#: src/mmg/mmg.cpp:1826
+#: src/mmg/mmg.cpp:1821
 #, c-format
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "説明が'%s'のジョブが既に存在しています。本当に同じ説明のジョブを追加しますか？"
@@ -1664,17 +1664,9 @@ msgstr "AVC/h.264ビデオがAVIから読み込まれたときなどに、Video-
 msgid "Allows the use of the CodecState element. This is used for e.g. MPEG-1/-2 video tracks for storing the sequence headers."
 msgstr "CodecState要素の使用を許可します。これは例えばMPEG-1/-2ビデオトラックがシーケンスヘッダを格納するのに使用されます。"
 
-#: src/mmg/options_dialog.cpp:89
-msgid "Always adds '--engage use_simpleblock' to the command line. That way Matroska's new 'simple blocks' will be used which save a bit of overhead at the cost of not being backwards compatible."
-msgstr "常にコマンドラインに'--engage use_simpleblock'オプションを追加します。そうすることでMatroskaの新しい'simple blocks'が使用され、後方互換性を犠牲にする代わりにオーバーヘッドが少し削減されます。"
-
-#: src/mmg/options_dialog.cpp:126
+#: src/mmg/options_dialog.cpp:121
 msgid "Always on top"
 msgstr "常に手前に表示"
-
-#: src/mmg/options_dialog.cpp:88
-msgid "Always use simple blocks"
-msgstr "常にシンプルブロックを使用する"
 
 #: src/mmg/header_editor_frame.cpp:391
 msgid "An ID corresponding to the codec."
@@ -1729,7 +1721,7 @@ msgstr "同じファイルのトラックを別のトラックに追加するこ
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "ファイル番号%2%（'%3%'）のトラック%1%を、ファイル番号%5%（'%6%'）のトラック%4%に追加しています。\n"
 
-#: src/mmg/options_dialog.cpp:110
+#: src/mmg/options_dialog.cpp:105
 msgid "Ask before overwriting things (files, jobs)"
 msgstr "ファイルやジョブを上書きする前に確認する"
 
@@ -1799,7 +1791,7 @@ msgstr "オーディオのサンプリング周波数"
 msgid "Audio track %u"
 msgstr "オーディオトラック%u"
 
-#: src/mmg/options_dialog.cpp:95
+#: src/mmg/options_dialog.cpp:90
 msgid "Auto-set output filename"
 msgstr "出力ファイル名を自動設定する"
 
@@ -1881,7 +1873,7 @@ msgid "Brings up the job queue editor"
 msgstr "ジョブキューエディタを起動します"
 
 #: src/mmg/mmg.cpp:786 src/mmg/options_dialog.cpp:77
-#: src/mmg/options_dialog.cpp:105 src/mmg/tab_global.cpp:173
+#: src/mmg/options_dialog.cpp:100 src/mmg/tab_global.cpp:173
 #: src/mmg/tab_global.cpp:223 src/mmg/tab_input_general.cpp:86
 #: src/mmg/tab_input_general.cpp:100
 msgid "Browse"
@@ -1925,7 +1917,7 @@ msgstr "mkvmerge GUIのオプションを設定します"
 msgid "Change the default values"
 msgstr "デフォルト値を変更します"
 
-#: src/mmg/options_dialog.cpp:365
+#: src/mmg/options_dialog.cpp:355
 msgid "Changing the interface language requires a restart to take effect."
 msgstr "インターフェイス言語の変更は、再起動しないと反映されません。"
 
@@ -2059,11 +2051,11 @@ msgstr "チャプタファイルを選んでください"
 msgid "Choose the location of the mkvmerge GUI help files"
 msgstr "mkvmerge GUIのヘルプファイルがある場所を選んでください"
 
-#: src/mmg/options_dialog.cpp:299
+#: src/mmg/options_dialog.cpp:290
 msgid "Choose the mkvmerge executable"
 msgstr "mkvmergeの実行ファイルを選んでください"
 
-#: src/mmg/options_dialog.cpp:322
+#: src/mmg/options_dialog.cpp:313
 msgid "Choose the output directory"
 msgstr "出力ディレクトリを選んでください"
 
@@ -2071,7 +2063,7 @@ msgstr "出力ディレクトリを選んでください"
 msgid "Choose the tags file"
 msgstr "タグファイルを選んでください"
 
-#: src/mmg/options_dialog.cpp:124
+#: src/mmg/options_dialog.cpp:119
 msgid "Clear inputs after adding a job to the job queue"
 msgstr "ジョブをジョブキューに追加したら入力をクリアする"
 
@@ -2507,7 +2499,7 @@ msgstr "ジョブキューから選択したジョブを削除します"
 msgid "Description"
 msgstr "説明"
 
-#: src/mmg/mmg.cpp:1827
+#: src/mmg/mmg.cpp:1822
 msgid "Description already exists"
 msgstr "説明は既に存在します"
 
@@ -2698,7 +2690,7 @@ msgstr "%1%行目でエラー発生：サブタイトル番号が見つかると
 msgid "Error initializing the tables for the chapter, tag and segment info elements: Could not find the element with the debug name '%1%'. %2%\n"
 msgstr "チャプタとタグ、セグメント情報のテーブル初期化中にエラーが発生しました：デバッグ名'%1%'の要素が見つかりませんでした。%2%\n"
 
-#: src/mmg/mmg.cpp:890 src/mmg/mmg.cpp:909 src/mmg/mmg.cpp:2312
+#: src/mmg/mmg.cpp:890 src/mmg/mmg.cpp:909 src/mmg/mmg.cpp:2305
 msgid "Error loading settings"
 msgstr "設定のロード中にエラーが発生しました"
 
@@ -2768,7 +2760,7 @@ msgstr "エラー："
 msgid "Everything went fine."
 msgstr "全て正常に終了しました。"
 
-#: src/mmg/options_dialog.cpp:301
+#: src/mmg/options_dialog.cpp:292
 #, c-format
 msgid "Executable files (*.exe)|*.exe|%s"
 msgstr "実行ファイル (*.exe)|*.exe|%s"
@@ -3130,19 +3122,19 @@ msgstr "'隠す'にチェックが入っていると、プレーヤはこのチ�
 msgid "If a chapter is not marked 'enabled' then the player should skip the part of the file that this chapter occupies."
 msgstr "'有効'にチェックが入っていないと、プレーヤはファイルのうちこのチャプタが占める部分をスキップします。"
 
-#: src/mmg/options_dialog.cpp:111
+#: src/mmg/options_dialog.cpp:106
 msgid "If checked mmg will ask for confirmation before overwriting existing files, or before adding a new job if there's an old job whose description matches the new one."
 msgstr "チェックが入っていると、mkvmerge GUIは既に存在するファイルを上書きする前や、説明が同じ古いジョブがあった場合に新しいジョブを追加する前に確認メッセージを表示します。"
 
-#: src/mmg/options_dialog.cpp:96
+#: src/mmg/options_dialog.cpp:91
 msgid "If checked mmg will automatically set the output filename if it hasn't been set already. This happens when you add the first file. If unset mmg will not touch the output filename."
 msgstr "チェックが入っていると、mkvmerge GUIは出力ファイル名がまだ設定されていない場合に自動で設定します。これは最初のファイルを追加した際に発生します。チェックが入っていない場合はmkvmerge GUIは出力ファイル名に手出しをしません。"
 
-#: src/mmg/options_dialog.cpp:129
+#: src/mmg/options_dialog.cpp:124
 msgid "If checked mmg will warn if it thinks that you're using it incorrectly. Such warnings are shown at least once even if you turn this feature off."
 msgstr "チェックが入っていると、mkvmerge GUIは使い方が間違っていると考えられる場合に警告します。この機能をオフにしたとしても最低ひとつはそのような警告が表示されます。"
 
-#: src/mmg/options_dialog.cpp:107
+#: src/mmg/options_dialog.cpp:102
 msgid "If left empty then mmg will set the output file name to be in the same directory as the first file added to this job. Otherwise this directory will be used."
 msgstr "空白のままにしておくと、mkvmerge GUIはこのジョブに最初に追加されたファイルと同じディレクトリに出力ファイル名を設定します。空白でない場合はこのディレクトリが使用されます。"
 
@@ -3190,7 +3182,7 @@ msgstr "入力ファイル："
 msgid "Input too long: %1% > %2%"
 msgstr "入力が長すぎます：%1% > %2%"
 
-#: src/mmg/options_dialog.cpp:139
+#: src/mmg/options_dialog.cpp:134
 msgid "Interface language:"
 msgstr "インターフェース言語："
 
@@ -3460,11 +3452,11 @@ msgstr "'--sub-charset %1%'で不正なトラックIDが指定されました。
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "引数'%1%'で不正なトラックID・ファイル名が指定されました。\n"
 
-#: src/mmg/mmg.cpp:1863
+#: src/mmg/mmg.cpp:1858
 msgid "Job added to job queue"
 msgstr "ジョブはジョブキューに追加されました"
 
-#: src/mmg/mmg.cpp:1815
+#: src/mmg/mmg.cpp:1810
 msgid "Job description"
 msgstr "ジョブの説明"
 
@@ -3716,11 +3708,11 @@ msgstr "'--output-charset'に引数がありません。\n"
 msgid "Missing argument for '--ui-language'.\n"
 msgstr "'--ui-language'に引数がありません。\n"
 
-#: src/mmg/mmg.cpp:2300
+#: src/mmg/mmg.cpp:2293
 msgid "Missing file name"
 msgstr "ファイル名がありません"
 
-#: src/mmg/mmg.cpp:2300
+#: src/mmg/mmg.cpp:2293
 msgid "Missing file name after for the option '--edit-headers'."
 msgstr "'--edit-headers'オプションの後ろにファイル名がありません。"
 
@@ -3848,7 +3840,7 @@ msgstr "次のセグメントの固有ID"
 msgid "No %1% specified in '--%2% %3%'.\n"
 msgstr "'--%2% %3%'で%1%が指定されていません。\n"
 
-#: src/input/r_qtmp4.cpp:1294
+#: src/input/r_qtmp4.cpp:1295
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "AC3ヘッダが最初のフレームで見つかりませんでした：トラックはスキップされます。\n"
 
@@ -4102,7 +4094,7 @@ msgstr ""
 msgid "Overwrite existing file(s)?"
 msgstr "既存のファイルに上書きしますか？"
 
-#: src/mmg/mmg.cpp:1030 src/mmg/mmg.cpp:1809
+#: src/mmg/mmg.cpp:1030 src/mmg/mmg.cpp:1804
 msgid "Overwrite existing file?"
 msgstr "既存のファイルに上書きしますか？"
 
@@ -4150,11 +4142,11 @@ msgstr ""
 msgid "Pixel width: %1%"
 msgstr ""
 
-#: src/mmg/options_dialog.cpp:313
+#: src/mmg/options_dialog.cpp:304
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "mkvmerge GUIそれ自体をmkvmergeの実行ファイルとして指定しないでください。"
 
-#: src/mmg/mmg.cpp:1815
+#: src/mmg/mmg.cpp:1810
 msgid "Please enter a description for the new job:"
 msgstr "新しいジョブの説明を入力してください："
 
@@ -4226,7 +4218,7 @@ msgstr "進行状況: 100%\n"
 msgid "Progress: 100%%%1%"
 msgstr "進行状況: 100%%%1%"
 
-#: src/mmg/mmg.cpp:2092
+#: src/mmg/mmg.cpp:2085
 msgid "Querying mkvmerge's capabilities"
 msgstr "mkvmergeの機能を調査しています"
 
@@ -4238,23 +4230,23 @@ msgstr "QuickTime オーディオ/ビデオファイル"
 msgid "Quicktime/MP4 audio and video"
 msgstr "Quicktime/MP4オーディオとビデオ"
 
-#: src/input/r_qtmp4.cpp:468
+#: src/input/r_qtmp4.cpp:469
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
 msgstr "Quicktime/MP4リーダ：'%1%' atomが小さすぎます。期待されるサイズ：%2%以上。実際のサイズ：%3%。\n"
 
-#: src/input/r_qtmp4.cpp:1689
+#: src/input/r_qtmp4.cpp:1726
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
 msgstr "Quicktime/MP4リーダ：一定サンプルサイズと可変フレーム長はまだサポートされていません。そのようなサンプルを持っているなら作者に連絡してください。\n"
 
-#: src/input/r_qtmp4.cpp:1149
+#: src/input/r_qtmp4.cpp:1150
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
 msgstr "Quicktime/MP4リーダ：位置%4%のサイズ%3%のチャンク番号%1%/%2%を読み込むことができませんでした。中断します。\n"
 
-#: src/input/r_qtmp4.cpp:876
+#: src/input/r_qtmp4.cpp:877
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4リーダ：トラックID %1%の拡張サウンド説明atomを読み込むことができませんでした。\n"
 
-#: src/input/r_qtmp4.cpp:854
+#: src/input/r_qtmp4.cpp:855
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4リーダ：トラックID %1%のサウンド説明atomを読み込むことができませんでした。\n"
 
@@ -4262,19 +4254,19 @@ msgstr "Quicktime/MP4リーダ：トラックID %1%のサウンド説明atomを�
 msgid "Quicktime/MP4 reader: Could not read the source file."
 msgstr "Quicktime/MP4リーダ：ソースファイルを読み込むことができませんでした。"
 
-#: src/input/r_qtmp4.cpp:848
+#: src/input/r_qtmp4.cpp:849
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4リーダ：トラックID %1%のストリーム説明atomを読み込むことができませんでした。\n"
 
-#: src/input/r_qtmp4.cpp:907
+#: src/input/r_qtmp4.cpp:908
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4リーダ：トラックID %1%のビデオ説明atomを読み込むことができませんでした。\n"
 
-#: src/input/r_qtmp4.cpp:212
+#: src/input/r_qtmp4.cpp:213
 msgid "Quicktime/MP4 reader: Have not found any header atoms.\n"
 msgstr "Quicktime/MP4リーダ：ヘッダatomが見つかりませんでした。\n"
 
-#: src/input/r_qtmp4.cpp:214
+#: src/input/r_qtmp4.cpp:215
 msgid "Quicktime/MP4 reader: Have not found the 'mdat' atom. No movie data found.\n"
 msgstr "Quicktime/MP4リーダ：'mdat'atomが見つかりませんでした。動画データが見つかりませんでした。\n"
 
@@ -4282,11 +4274,11 @@ msgstr "Quicktime/MP4リーダ：'mdat'atomが見つかりませんでした。�
 msgid "Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n"
 msgstr "Quicktime/MP4リーダ：位置%2%に不正なチャンクサイズ%1%があります。\n"
 
-#: src/input/r_qtmp4.cpp:287
+#: src/input/r_qtmp4.cpp:288
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4リーダ：MPEG4 part 10/AVCトラック%1%にはデコーダ設定がありません。このトラックをスキップします。\n"
 
-#: src/input/r_qtmp4.cpp:280
+#: src/input/r_qtmp4.cpp:281
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4リーダ：MPEG4トラック%1%にはesds atom/デコーダ設定がありません。このトラックをスキップします。\n"
 
@@ -4294,59 +4286,59 @@ msgstr "Quicktime/MP4リーダ：MPEG4トラック%1%にはesds atom/デコー�
 msgid "Quicktime/MP4 reader: Source is not a valid Quicktime/MP4 file."
 msgstr "Quicktime/MP4リーダ：ソースは正しいQuicktime/MP4 fileではありません。"
 
-#: src/input/r_qtmp4.cpp:642
+#: src/input/r_qtmp4.cpp:643
 msgid "Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n"
 msgstr "Quicktime/MP4リーダ：'media header' atom（'mdhd'）がサポートされていないバージョン%1%を使用しています。\n"
 
-#: src/input/r_qtmp4.cpp:841
+#: src/input/r_qtmp4.cpp:842
 msgid "Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4リーダ：トラックID%1%のストリーム説明atomの'size'のフィールドが小さすぎます。\n"
 
-#: src/input/r_qtmp4.cpp:647
+#: src/input/r_qtmp4.cpp:648
 msgid "Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"
 msgstr "Quicktime/MP4リーダ：タイムスケールのパラメータが0です。これはサポートされていません。\n"
 
-#: src/input/r_qtmp4.cpp:248
+#: src/input/r_qtmp4.cpp:249
 msgid "Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4リーダ：AACトラック%1%にはesds atom/デコーダ設定がありません。このトラックをスキップします。\n"
 
-#: src/input/r_qtmp4.cpp:242
+#: src/input/r_qtmp4.cpp:243
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
 msgstr "Quicktime/MP4リーダ：オーディオトラック%1%はesds atomでサポートされていない'object type id'である%2%を使用しています。このトラックをスキップします。\n"
 
-#: src/input/r_qtmp4.cpp:260
+#: src/input/r_qtmp4.cpp:261
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
 msgstr "Quicktime/MP4リーダ：ビデオトラック%1%はESDS atomがありません。このトラックをスキップします。\n"
 
-#: src/input/r_qtmp4.cpp:500
+#: src/input/r_qtmp4.cpp:501
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%%2%%3%%4%'. Aborting.\n"
 msgstr "Quicktime/MP4リーダ：このファイルは未知もしくはサポートされていない圧縮アルゴリズム'%1%%2%%3%%4%'で圧縮されたヘッダを使用しています。中断します。\n"
 
-#: src/input/r_qtmp4.cpp:533
+#: src/input/r_qtmp4.cpp:534
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the expected uncompressed size (%1%) was not what is available after uncompressing (%2%).\n"
 msgstr "Quicktime/MP4リーダ：このファイルは圧縮ヘッダを使用していますが、予測される展開後のサイズ（%1%）は展開後に利用可能なサイズ（%2%）ではありません。\n"
 
-#: src/input/r_qtmp4.cpp:524
+#: src/input/r_qtmp4.cpp:525
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the zlib library could not be initialized. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime/MP4リーダ：このファイルは圧縮ヘッダを使用していますが、zlibライブラリを初期化できませんでした。zlibのエラーコード：%1%。中断します。\n"
 
-#: src/input/r_qtmp4.cpp:529
+#: src/input/r_qtmp4.cpp:530
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but they could not be uncompressed. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime/MP4リーダ：このファイルは圧縮ヘッダを使用していますが、展開することができませんでした。zlibのエラーコード：%1%。中断します。\n"
 
-#: src/input/r_qtmp4.cpp:299
+#: src/input/r_qtmp4.cpp:300
 msgid "Quicktime/MP4 reader: Track %1% has an unknown type.\n"
 msgstr "Quicktime/MP4リーダ：トラック%1%は未知のタイプです。\n"
 
-#: src/input/r_qtmp4.cpp:255 src/input/r_qtmp4.cpp:294
+#: src/input/r_qtmp4.cpp:256 src/input/r_qtmp4.cpp:295
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
 msgstr "Quicktime/MP4リーダ：トラック%1%にはいくつかのデータがありません。ヘッダatomが壊れているのかもしれません。\n"
 
-#: src/input/r_qtmp4.cpp:859 src/input/r_qtmp4.cpp:913
+#: src/input/r_qtmp4.cpp:860 src/input/r_qtmp4.cpp:914
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr "Quicktime/MP4リーダ：トラックID %1%は複数のFourCCを持っています。最初のFourCC（%|2$.4s|）が使用され、このFourCC（%|3$.4s|）は使用されません。\n"
 
-#: src/input/r_qtmp4.cpp:234
+#: src/input/r_qtmp4.cpp:235
 msgid "Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n"
 msgstr "Quicktime/MP4リーダ：トラック%2%のFourCC '%|1$.4s|'は未知もしくはサポートされていません。\n"
 
@@ -4430,7 +4422,7 @@ msgstr "要素を削除"
 msgid "Remove name"
 msgstr "名前を削除"
 
-#: src/mmg/options_dialog.cpp:365
+#: src/mmg/options_dialog.cpp:355
 msgid "Restart required"
 msgstr "再起動が必要です"
 
@@ -4470,7 +4462,7 @@ msgstr "SSA/ASSテキスト字幕"
 msgid "Sa&ve command line"
 msgstr "コマンドラインを保存(&A)"
 
-#: src/mmg/options_dialog.cpp:100
+#: src/mmg/options_dialog.cpp:95
 msgid "Same directory as the first input file's"
 msgstr "最初の入力ファイルと同じディレクトリ"
 
@@ -4662,7 +4654,7 @@ msgstr "トラックが使用されるかどうかを設定します。"
 msgid "Set language to:"
 msgstr "次の言語に設定："
 
-#: src/mmg/options_dialog.cpp:118
+#: src/mmg/options_dialog.cpp:113
 msgid "Set the delay input field from the file name"
 msgstr "ファイル名からディレイの入力フィールドを設定する"
 
@@ -4722,7 +4714,7 @@ msgstr "全ての要素を表示(&A)\tCtrl-A"
 msgid "Show about dialog"
 msgstr "mkvinfoについてのダイアログを表示します"
 
-#: src/mmg/options_dialog.cpp:134
+#: src/mmg/options_dialog.cpp:129
 msgid "Show mmg's debug window"
 msgstr "mkvmerge GUIのデバッグウィンドウを表示する"
 
@@ -4738,7 +4730,7 @@ msgstr "mkvmerge GUIが生成するmkvmergeのコマンドラインを表示し�
 msgid "Show the guide to mkvmerge GUI"
 msgstr "mkvmerge GUIのガイドを表示します"
 
-#: src/mmg/options_dialog.cpp:135
+#: src/mmg/options_dialog.cpp:130
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "デバッグメッセージが表示されるmkvmerge GUIのデバッグウィンドウを表示します。これは作者がmkvmerge GUIのデバッグをする手助けをする場合にのみ役に立ちます。"
 
@@ -4994,7 +4986,7 @@ msgstr ".idxファイルが言語を示す'id: ...'の行を含んでいませ�
 msgid "The AAC profiles are different: %1% and %2%"
 msgstr "AACプロファイルが異なっています：%1%と%2%"
 
-#: src/input/r_qtmp4.cpp:1358
+#: src/input/r_qtmp4.cpp:1344
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr "このAVCビデオトラックにはフレームタイムコードを補正する'CTTS' atomがありません。しかし、AVC/h.264では伝統的な1つ（Pフレームの場合）もしくは2つ（Bフレームの場合）より多く他のフレームを参照することが許されています。そのようなフレームのタイムコードは順番通りでないことがあり、'CTTS' atomはタイムコードを補正するために必要です。それが無いため、このトラックのタイムコードは正しくないかもしれません。出力されたファイルを見て期待通りに見えることを確認してください。\n"
 
@@ -5264,7 +5256,7 @@ msgstr "ファイル'%1%'はサポートされていないファイルタイプ�
 msgid "The file '%1%' is empty."
 msgstr "ファイル'%1%'は空です。"
 
-#: src/mmg/mmg.cpp:2312
+#: src/mmg/mmg.cpp:2305
 #, c-format
 msgid "The file '%s' does not exist."
 msgstr "ファイル'%s'は存在しません。"
@@ -5536,7 +5528,7 @@ msgstr "'--meta-seek-size'オプションはもうサポートされていませ
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "出力ファイル'%1%'を開いて書き込むことはできませんでした（%2%）。\n"
 
-#: src/mmg/mmg.cpp:1030 src/mmg/mmg.cpp:1806
+#: src/mmg/mmg.cpp:1030 src/mmg/mmg.cpp:1801
 #, c-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr "出力ファイル'%s'は既に存在します。上書きしますか？"
@@ -5776,7 +5768,7 @@ msgstr ""
 "この要素は現在ファイルには存在しません。\n"
 "ヘッダエディタでファイルに要素を追加することができます。"
 
-#: src/input/r_qtmp4.cpp:334
+#: src/input/r_qtmp4.cpp:335
 msgid "This file contains at least one frame with a negative timecode. All timecodes will be adjusted by %1% so that none is negative anymore.\n"
 msgstr "このファイルは少なくとも1つ負の値のタイムコードを持つフレームを含んでいます。負の値にならないよう全てのタイムコードは%1%だけズラされます。\n"
 
@@ -5914,7 +5906,7 @@ msgstr "コーデックID '%2%'のトラック%1%は\"default duration\"要素�
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:434
+#: src/input/r_qtmp4.cpp:435
 msgid "Track %1%: AAC found, but decoder config data has length %2%.\n"
 msgstr "トラック%1%：AACが見つかりましたが、デコーダ設定データの長さが%2%です。\n"
 
@@ -5926,7 +5918,7 @@ msgstr "トラック%1%：NALが大きすぎます\n"
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
 msgstr "トラック%1%：字幕エントリ番号%2%には持続時間がありません。1秒と仮定します。\n"
 
-#: src/input/r_qtmp4.cpp:437
+#: src/input/r_qtmp4.cpp:438
 msgid "Track %1%: The AAC information could not be parsed.\n"
 msgstr "トラック%1%：AAC情報を解析することができませんでした。\n"
 
@@ -6269,11 +6261,11 @@ msgstr "このオプションを指定しなければ各ファイル間で異な
 msgid "Use the old AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') instead of the new one ('A_AAC')."
 msgstr "新しいAACコーデックID（'A_AAC'）の代わりに古いAACコーデックID（例：'A_AAC/MPEG4/SBR'）を使用します。"
 
-#: src/mmg/options_dialog.cpp:101
+#: src/mmg/options_dialog.cpp:96
 msgid "Use the previous output directory"
 msgstr "前に使用された出力ディレクトリを使用する"
 
-#: src/mmg/options_dialog.cpp:102
+#: src/mmg/options_dialog.cpp:97
 msgid "Use this directory:"
 msgstr "このディレクトリを使用する："
 
@@ -6303,7 +6295,7 @@ msgid "Using the AAC output module (FourCC: %1%).\n"
 msgstr "AAC出力モジュールを使用しています（FourCC：%1%）。\n"
 
 #: src/input/r_aac.cpp:158 src/input/r_matroska.cpp:1438
-#: src/input/r_ogm.cpp:961 src/input/r_qtmp4.cpp:1394
+#: src/input/r_ogm.cpp:961 src/input/r_qtmp4.cpp:1379
 msgid "Using the AAC output module.\n"
 msgstr "AAC出力モジュールを使用しています。\n"
 
@@ -6315,7 +6307,7 @@ msgstr "AC3デマルチプレクサを使用しています。\n"
 msgid "Using the AC3 output module (FourCC: %1%).\n"
 msgstr "AC3出力モジュールを使用しています（FourCC：%1%）。\n"
 
-#: src/input/r_avi.cpp:430 src/input/r_ogm.cpp:979 src/input/r_qtmp4.cpp:1301
+#: src/input/r_avi.cpp:430 src/input/r_ogm.cpp:979 src/input/r_qtmp4.cpp:1302
 #: src/input/r_wav.cpp:232
 msgid "Using the AC3 output module.\n"
 msgstr "AC3出力モジュールを使用しています。\n"
@@ -6381,11 +6373,11 @@ msgstr "MPEG PSデマルチプレクサを使用しています。\n"
 
 #: src/input/r_avi.cpp:423 src/input/r_matroska.cpp:1371
 #: src/input/r_mp3.cpp:75 src/input/r_mpeg_ps.cpp:1155 src/input/r_ogm.cpp:997
-#: src/input/r_qtmp4.cpp:1398
+#: src/input/r_qtmp4.cpp:1385
 msgid "Using the MPEG audio output module.\n"
 msgstr "MPEGオーディオ出力モジュールを使用しています。\n"
 
-#: src/input/r_matroska.cpp:1320 src/input/r_qtmp4.cpp:1353
+#: src/input/r_matroska.cpp:1320 src/input/r_qtmp4.cpp:1337
 msgid "Using the MPEG-%1% video output module.\n"
 msgstr "MPEG-%1%ビデオ出力モジュールを使用しています。\n"
 
@@ -6393,7 +6385,7 @@ msgstr "MPEG-%1%ビデオ出力モジュールを使用しています。\n"
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "MPEG-1/2ビデオ出力モジュールを使用しています。\n"
 
-#: src/input/r_matroska.cpp:1329 src/input/r_qtmp4.cpp:1369
+#: src/input/r_matroska.cpp:1329 src/input/r_qtmp4.cpp:1355
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "MPEG-4 part 10 (AVC)ビデオ出力モジュールを使用しています。\n"
 
@@ -6404,7 +6396,7 @@ msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "MPEG-4 part 10 ESビデオ出力モジュールを使用しています。\n"
 
 #: src/input/r_avi.cpp:234 src/input/r_matroska.cpp:1324
-#: src/input/r_ogm.cpp:1233 src/input/r_qtmp4.cpp:1347
+#: src/input/r_ogm.cpp:1233 src/input/r_qtmp4.cpp:1329
 msgid "Using the MPEG-4 part 2 video output module.\n"
 msgstr "MPEG-4 part 2ビデオ出力モジュールを使用しています。\n"
 
@@ -6417,7 +6409,7 @@ msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr "OGG/OGMデマルチプレクサを使用しています。\n"
 
 #: src/input/r_avi.cpp:415 src/input/r_matroska.cpp:1367
-#: src/input/r_ogm.cpp:1016 src/input/r_qtmp4.cpp:1403 src/input/r_wav.cpp:402
+#: src/input/r_ogm.cpp:1016 src/input/r_qtmp4.cpp:1391 src/input/r_wav.cpp:402
 msgid "Using the PCM output module.\n"
 msgstr "PCM出力モジュールを使用しています。\n"
 
@@ -6522,7 +6514,7 @@ msgstr "WAVPACKデマルチプレクサを使用しています。\n"
 msgid "Using the WAVPACK output module.\n"
 msgstr "WAVPACK出力モジュールを使用しています。\n"
 
-#: src/input/r_qtmp4.cpp:1419
+#: src/input/r_qtmp4.cpp:1405
 msgid "Using the generic audio output module (FourCC: %|1$.4s|).\n"
 msgstr "一般オーディオ出力モジュールを使用しています（FourCC：%|1$.4s|）。\n"
 
@@ -6540,7 +6532,7 @@ msgstr "テキスト字幕出力モジュールを使用しています。\n"
 msgid "Using the video output module (FourCC: %1%).\n"
 msgstr "ビデオ出力モジュールを使用しています（FourCC：%1%）。\n"
 
-#: src/input/r_qtmp4.cpp:1316 src/input/r_qtmp4.cpp:1380
+#: src/input/r_qtmp4.cpp:1317 src/input/r_qtmp4.cpp:1365
 msgid "Using the video output module (FourCC: %|1$.4s|).\n"
 msgstr "ビデオ出力モジュールを使用しています（FourCC：%|1$.4s|）。\n"
 
@@ -6658,7 +6650,7 @@ msgstr "WAVPACKロスレスオーディオ"
 msgid "WAVPACK v4 audio"
 msgstr "WAVPACK v4オーディオ"
 
-#: src/mmg/options_dialog.cpp:128
+#: src/mmg/options_dialog.cpp:123
 msgid "Warn about possible incorrect usage of mmg"
 msgstr "mkvmerge GUIの使い方が間違っていそうな場合に警告する"
 
@@ -6686,7 +6678,7 @@ msgstr "警告：番号%1%のトラックが複数あります。"
 msgid "Warnings:"
 msgstr "警告： "
 
-#: src/mmg/options_dialog.cpp:119
+#: src/mmg/options_dialog.cpp:114
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
 msgstr "ファイルが追加された際にファイル名をスキャンします。もし'DELAY'という単語の後ろに数字が続いていたら、その数字がファイルで見つかった全てのオーディオトラックの'ディレイ'の入力フィールドに自動的に入力されます。"
 
@@ -6726,7 +6718,7 @@ msgstr "間違ったTheoraのバージョンです：%1%.%2%.%3% != 3.2.x"
 msgid "Wrong argument to '--split-max-files'.\n"
 msgstr "'--split-max-files'の引数が間違っています。\n"
 
-#: src/mmg/options_dialog.cpp:313
+#: src/mmg/options_dialog.cpp:304
 msgid "Wrong file chosen"
 msgstr "間違ったファイルが選択されました"
 
@@ -6773,7 +6765,7 @@ msgstr ""
 "または普通のHH:MM:SS.mmmやHH:MM:SSのフォーマットを取ることができます。\n"
 "例：-00:05:23を指定すると、全てのチャプタを現在より5分23秒早めることができます。"
 
-#: src/mmg/mmg.cpp:1069 src/mmg/mmg.cpp:1797
+#: src/mmg/mmg.cpp:1069 src/mmg/mmg.cpp:1792
 msgid "You have not yet selected an output file."
 msgstr "出力ファイルがまだ指定されていません。"
 
@@ -7037,10 +7029,10 @@ msgstr "有効"
 msgid "encryption"
 msgstr ""
 
-#: src/input/r_qtmp4.cpp:511 src/input/r_qtmp4.cpp:593
-#: src/input/r_qtmp4.cpp:623 src/input/r_qtmp4.cpp:635
-#: src/input/r_qtmp4.cpp:726 src/input/r_qtmp4.cpp:1081
-#: src/input/r_qtmp4.cpp:1239 src/input/r_qtmp4.cpp:1255
+#: src/input/r_qtmp4.cpp:512 src/input/r_qtmp4.cpp:594
+#: src/input/r_qtmp4.cpp:624 src/input/r_qtmp4.cpp:636
+#: src/input/r_qtmp4.cpp:727 src/input/r_qtmp4.cpp:1082
+#: src/input/r_qtmp4.cpp:1240 src/input/r_qtmp4.cpp:1256
 #: src/common/mm_io.cpp:611 src/common/mm_io.cpp:621 src/common/mm_io.cpp:631
 #: src/common/mm_io.cpp:641 src/common/mm_io.cpp:651 src/common/mm_io.cpp:661
 #: src/common/mm_io.cpp:671 src/common/mm_io.cpp:681 src/common/mm_io.cpp:691
@@ -7423,7 +7415,7 @@ msgstr ""
 "ヘルプはツールチップの形で、または'ヘルプ'メニューから、\n"
 "またはF1キーを押すことで利用できます。"
 
-#: src/mmg/mmg.cpp:1069 src/mmg/mmg.cpp:1797 src/mmg/tab_input.cpp:1268
+#: src/mmg/mmg.cpp:1069 src/mmg/mmg.cpp:1792 src/mmg/tab_input.cpp:1268
 #: src/mmg/tab_input.cpp:1295 src/mmg/tab_input.cpp:1306
 #: src/mmg/tab_input.cpp:1316 src/mmg/tab_input.cpp:1328
 #: src/mmg/tab_input.cpp:1383
@@ -7491,7 +7483,7 @@ msgstr "mkvmergeは2種類のチャプタフォーマットをサポートして
 msgid "mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"
 msgstr "mkvmergeは割り込み信号（Ctrl+C？）によって中断されました。\n"
 
-#: src/input/r_qtmp4.cpp:552
+#: src/input/r_qtmp4.cpp:553
 msgid "mkvmerge was not compiled with zlib. Compressed headers in QuickTime/MP4 files are therefore not supported.\n"
 msgstr "mkvmergeはzlibをサポートしてコンパイルされていません。よってQuickTime/MP4ファイルの圧縮ヘッダはサポートされていません。\n"
 
@@ -7507,7 +7499,7 @@ msgstr "mm_text_io_c::read_next_char()：不正なUTF-8の文字です。最初�
 msgid "mmg debug output"
 msgstr "mmgデバッグ出力"
 
-#: src/mmg/options_dialog.cpp:93
+#: src/mmg/options_dialog.cpp:88
 msgid "mmg options"
 msgstr "mkvmerge GUIのオプション"
 
@@ -7859,6 +7851,12 @@ msgstr "はい"
 
 #~ msgid "Adjusting segment size.\n"
 #~ msgstr "セグメントサイズを変更しています。\n"
+
+#~ msgid "Always adds '--engage use_simpleblock' to the command line. That way Matroska's new 'simple blocks' will be used which save a bit of overhead at the cost of not being backwards compatible."
+#~ msgstr "常にコマンドラインに'--engage use_simpleblock'オプションを追加します。そうすることでMatroskaの新しい'simple blocks'が使用され、後方互換性を犠牲にする代わりにオーバーヘッドが少し削減されます。"
+
+#~ msgid "Always use simple blocks"
+#~ msgstr "常にシンプルブロックを使用する"
 
 #~ msgid "Analyzing Matroska file"
 #~ msgstr "Matroskaファイルを解析中です"

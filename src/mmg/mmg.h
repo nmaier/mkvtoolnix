@@ -152,7 +152,6 @@ struct mmg_options_t {
   bool filenew_after_add_to_jobqueue;
   bool warn_usage;
   bool gui_debugging;
-  bool always_use_simpleblock;
   bool set_delay_from_filename;
   wxString priority;
 
@@ -160,7 +159,7 @@ struct mmg_options_t {
     autoset_output_filename(false), output_directory_mode(ODM_FROM_FIRST_INPUT_FILE),
     ask_before_overwriting(false),
     on_top(false), filenew_after_add_to_jobqueue(false),
-    warn_usage(false), gui_debugging(false), always_use_simpleblock(false),
+    warn_usage(false), gui_debugging(false),
     set_delay_from_filename(false) {
   }
 
