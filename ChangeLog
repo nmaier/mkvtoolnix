@@ -1,5 +1,10 @@
 2009-04-15  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The duration of subtitle frames was
+	overwritten with the difference between the next frame's timecode
+	and the current frame's timecode if a timecode file was used for
+	that track. Fix for bug 286.
+
 	* mmg: bug fix: Removed the option "always use simple blocks" from
 	the preferences dialog as this option was already removed from
 	mkvmerge. Fix for bug 370.

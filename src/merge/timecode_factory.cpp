@@ -155,7 +155,8 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
 bool
 timecode_factory_v1_c::get_next(packet_cptr &packet) {
   packet->assigned_timecode = get_at(m_frameno);
-  packet->duration          = get_at(m_frameno + 1) - packet->assigned_timecode;
+  if (!m_preserve_duration || (0 >= packet->duration))
+    packet->duration = get_at(m_frameno + 1) - packet->assigned_timecode;
 
   m_frameno++;
   if ((m_frameno > m_ranges[m_current_range].end_frame) && (m_current_range < (m_ranges.size() - 1)))
@@ -247,18 +248,21 @@ timecode_factory_v2_c::get_next(packet_cptr &packet) {
 
     if (m_timecodes.empty()) {
       packet->assigned_timecode = 0;
-      packet->duration          = 0;
+      if (!m_preserve_duration || (0 >= packet->duration))
+        packet->duration = 0;
 
     } else {
       packet->assigned_timecode = m_timecodes.back();
-      packet->duration          = m_timecodes.back();
+      if (!m_preserve_duration || (0 >= packet->duration))
+        packet->duration = m_timecodes.back();
     }
 
     return false;
   }
 
   packet->assigned_timecode = m_timecodes[m_frameno];
-  packet->duration          = m_durations[m_frameno];
+  if (!m_preserve_duration || (0 >= packet->duration))
+    packet->duration = m_durations[m_frameno];
   m_frameno++;
 
   return false;
@@ -364,7 +368,7 @@ timecode_factory_v3_c::get_next(packet_cptr &packet) {
 
   packet->assigned_timecode = m_current_offset + m_current_timecode;
   // If default_fps is 0 then the duration is unchanged, usefull for audio.
-  if (m_durations[m_current_duration].fps)
+  if (m_durations[m_current_duration].fps && (!m_preserve_duration || (0 >= packet->duration)))
     packet->duration = (int64_t)(1000000000.0 / m_durations[m_current_duration].fps);
 
   packet->duration   /= packet->time_factor;

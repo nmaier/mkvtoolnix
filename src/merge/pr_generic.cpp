@@ -325,6 +325,9 @@ generic_packetizer_c::set_track_type(int type,
 
   else if (TFA_AUTOMATIC != tfa_mode)
     timecode_factory_application_mode = tfa_mode;
+
+  if ((NULL != timecode_factory.get()) && (track_video != type) && (track_audio != type))
+    timecode_factory->set_preserve_duration(true);
 }
 
 void

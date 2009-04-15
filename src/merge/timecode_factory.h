@@ -58,15 +58,18 @@ protected:
   string m_file_name, m_source_name;
   int64_t m_tid;
   int m_version;
+  bool m_preserve_duration;
 
 public:
   timecode_factory_c(const string &file_name,
                      const string &source_name,
-                     int64_t tid, int version)
+                     int64_t tid,
+                     int version)
     : m_file_name(file_name)
     , m_source_name(source_name)
     , m_tid(tid)
     , m_version(version)
+    , m_preserve_duration(false)
   {
   }
   virtual ~timecode_factory_c() {
@@ -85,6 +88,10 @@ public:
 
   virtual bool contains_gap() {
     return false;
+  }
+
+  virtual void set_preserve_duration(bool preserve_duration) {
+    m_preserve_duration = preserve_duration;
   }
 
   static timecode_factory_cptr create(const string &file_name, const string &source_name, int64_t tid);
