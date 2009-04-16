@@ -1,5 +1,9 @@
 2009-04-16  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Splitting without the option "--engage
+	no_simpleblocks" resulted in broken files: all frames were marked
+	as B frames. Fix for bug 371.
+
 	* mkvinfo: bug fix: Timecodes of SimpleBlock elements that were
 	output formatted in summary mode were too small by a factor of
 	1000000.

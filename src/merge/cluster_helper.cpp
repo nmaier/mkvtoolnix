@@ -359,7 +359,8 @@ cluster_helper_c::render() {
 
     // Now put the packet into the cluster.
     render_group->more_data = new_block_group->add_frame_auto(track_entry, pack->assigned_timecode - m_timecode_offset, *data_buffer, lacing_type,
-                                                              pack->bref - m_timecode_offset, pack->fref - m_timecode_offset);
+                                                              (-1 == pack->bref) ? -1 : pack->bref - m_timecode_offset,
+                                                              (-1 == pack->fref) ? -1 : pack->fref - m_timecode_offset);
 
     if (has_codec_state) {
       KaxBlockGroup &bgroup = (KaxBlockGroup &)*new_block_group;
