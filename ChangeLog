@@ -1,3 +1,9 @@
+2009-04-16  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvinfo: bug fix: Timecodes of SimpleBlock elements that were
+	output formatted in summary mode were too small by a factor of
+	1000000.
+
 2009-04-15  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The duration of subtitle frames was

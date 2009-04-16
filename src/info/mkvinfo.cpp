@@ -1286,7 +1286,7 @@ def_handle2(block_group,
                    % block.TrackNum()
                    % block.NumberFrames()
                    % ((float)block.GlobalTimecode() / 1000000000.0)
-                   % format_timecode(block.GlobalTimecode()));
+                   % format_timecode(block.GlobalTimecode(), 3));
 
       lf_timecode = block.GlobalTimecode() / 1000000;
       lf_tnum     = block.TrackNum();
@@ -1486,7 +1486,7 @@ def_handle2(simple_block,
                % block.TrackNum()
                % block.NumberFrames()
                % ((float)timecode / 1000.0)
-               % format_timecode(block.GlobalTimecode()));
+               % format_timecode(block.GlobalTimecode(), 3));
 
   int i;
   for (i = 0; i < (int)block.NumberFrames(); i++) {
@@ -1515,7 +1515,7 @@ def_handle2(simple_block,
              % (block.IsKeyframe() ? 'I' : block.IsDiscardable() ? 'B' : 'P')
              % block.TrackNum()
              % timecode
-             % format_timecode(timecode)
+             % format_timecode(block.GlobalTimecode(), 3)
              % frame_sizes[fidx]
              % frame_adlers[fidx]);
 
