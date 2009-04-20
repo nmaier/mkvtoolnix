@@ -553,8 +553,8 @@ msgstr ""
 msgid " (FourCC: %1%%2%%3%%4%, 0x%|5$08x|)"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:386 src/info/mkvinfo.cpp:927 src/info/mkvinfo.cpp:1302
-#: src/info/mkvinfo.cpp:1498
+#: src/info/mkvinfo.cpp:386 src/info/mkvinfo.cpp:927 src/info/mkvinfo.cpp:1304
+#: src/info/mkvinfo.cpp:1511
 msgid " (adler: 0x%|1$08x|)"
 msgstr ""
 
@@ -675,16 +675,16 @@ msgstr ""
 msgid "%1% built on %2% %3%\n"
 msgstr "%1% ビルド日時 %2% %3%\n"
 
-#: src/info/mkvinfo.cpp:1438
-msgid "%1% frame, track %2%, timecode %3% (%4%), duration %|5$.3f|, size %6%, adler 0x%|7$08x|%8%\n"
+#: src/info/mkvinfo.cpp:1447
+msgid "%1% frame, track %2%, timecode %3% (%4%), duration %|5$.3f|, size %6%, adler 0x%|7$08x|%8%%9%\n"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1514
-msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|\n"
-msgstr ""
-
-#: src/info/mkvinfo.cpp:1448
+#: src/info/mkvinfo.cpp:1534
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%\n"
+msgstr ""
+
+#: src/info/mkvinfo.cpp:1458
+msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"
 msgstr ""
 
 #: src/merge/mkvmerge.cpp:724
@@ -1327,7 +1327,7 @@ msgstr "'強制表示'フラグ"
 msgid "'Track enabled' flag"
 msgstr "'トラック有効化'フラグ"
 
-#: src/info/mkvinfo.cpp:1592
+#: src/info/mkvinfo.cpp:1614
 msgid "(Unknown element: %1%)"
 msgstr ""
 
@@ -1365,11 +1365,11 @@ msgstr "+-> FLACファイルを事前解析中です: %1%%%%2%"
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr "+-> FLACファイルを事前解析中です: 100%\n"
 
-#: src/merge/pr_generic.cpp:1324
+#: src/merge/pr_generic.cpp:1327
 msgid ", description '%1%'"
 msgstr ", 説明 '%1%'"
 
-#: src/merge/pr_generic.cpp:1325
+#: src/merge/pr_generic.cpp:1328
 msgid ", file name '%1%'"
 msgstr ", ファイル名 '%1%'"
 
@@ -1377,6 +1377,11 @@ msgstr ", ファイル名 '%1%'"
 #, c-format
 msgid ", finished on %s"
 msgstr ", %sが完了しました"
+
+#: src/info/mkvinfo.cpp:1442 src/info/mkvinfo.cpp:1530
+#, fuzzy
+msgid ", position %1%"
+msgstr ", 説明 '%1%'"
 
 #: src/mmg/jobs.cpp:639
 #, c-format
@@ -1495,7 +1500,7 @@ msgstr "'+'一文字は正しいコマンドラインオプションではあり
 msgid "A track"
 msgstr ""
 
-#: src/merge/pr_generic.cpp:1207
+#: src/merge/pr_generic.cpp:1210
 msgid "A track with the ID %1% was requested but not found in the file. The corresponding option will be ignored.\n"
 msgstr "トラックID %1%が要求されましたが、ファイル中には見つかりませんでした。対応するオプションは無視されます。\n"
 
@@ -1611,11 +1616,11 @@ msgstr "サブチャプタを追加"
 msgid "Added on"
 msgstr "追加日時"
 
-#: src/info/mkvinfo.cpp:1366
+#: src/info/mkvinfo.cpp:1369
 msgid "AdditionalID: %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1349
+#: src/info/mkvinfo.cpp:1352
 msgid "Additions"
 msgstr ""
 
@@ -1704,7 +1709,7 @@ msgstr "解析中"
 msgid "Analyze MPEG4 bitstreams, put each frame into one Matroska block, use proper timestamping (I P B B = 0 120 40 80), use V_MPEG4/ISO/... CodecIDs."
 msgstr "MPEG4ビットストリームを解析し、1つのフレームを1つのMatroskaブロックに格納し、正しいタイムスタンプ（I P B B = 0 120 40 80）を使用し、V_MPEG4/ISO/...コーデックIDを使用します。"
 
-#: src/merge/pr_generic.cpp:472
+#: src/merge/pr_generic.cpp:475
 msgid "Another default track for %1% tracks has already been set. The 'default' flag for track %2% of '%3%' will not be set.\n"
 msgstr "トラック%1%には既にデフォルトトラックが設定されています。'%3%'のトラック%2%の'default'フラグは設定されません。\n"
 
@@ -1757,7 +1762,7 @@ msgstr ""
 msgid "Attached files"
 msgstr "添付ファイル"
 
-#: src/merge/pr_generic.cpp:1323
+#: src/merge/pr_generic.cpp:1326
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
 msgstr "添付ファイル ID %1%：タイプ'%2%'、サイズ%3%バイト"
 
@@ -1823,19 +1828,19 @@ msgstr ""
 msgid "Bits per sample, mostly used for PCM."
 msgstr "サンプル当たりのビット数です。通常はPCMで使われます。"
 
-#: src/info/mkvinfo.cpp:1285
+#: src/info/mkvinfo.cpp:1286
 msgid "Block (track number %1%, %2% frame(s), timecode %|3$.3f|s = %4%)"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1416
+#: src/info/mkvinfo.cpp:1419
 msgid "Block additional ID: %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1370
+#: src/info/mkvinfo.cpp:1373
 msgid "Block additional: %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1318
+#: src/info/mkvinfo.cpp:1321
 msgid "Block duration: %1%.%|2$06d|ms"
 msgstr ""
 
@@ -1844,7 +1849,7 @@ msgstr ""
 msgid "Block group"
 msgstr "ブロックグループ"
 
-#: src/info/mkvinfo.cpp:1341
+#: src/info/mkvinfo.cpp:1344
 msgid "Block virtual: %1%"
 msgstr ""
 
@@ -1905,7 +1910,7 @@ msgid "Category is not NUL terminated"
 msgstr "カテゴリがNULで終わっていません"
 
 #: src/extract/timecodes_v2.cpp:379 src/extract/tracks.cpp:543
-#: src/info/mkvinfo.cpp:1837
+#: src/info/mkvinfo.cpp:1859
 msgid "Caught exception"
 msgstr "例外をキャッチしました"
 
@@ -1989,7 +1994,7 @@ msgstr "チャプタパーサー：エディションUID %1%がユニークで�
 msgid "Chapter verification error"
 msgstr "チャプタベリファイエラー"
 
-#: src/mmg/tab_global.cpp:165 src/info/mkvinfo.cpp:1638
+#: src/mmg/tab_global.cpp:165 src/info/mkvinfo.cpp:1660
 msgid "Chapters"
 msgstr "チャプタ"
 
@@ -2072,7 +2077,7 @@ msgid "Close the current file without saving"
 msgstr "保存しないで現在のファイルを閉じます"
 
 #: src/extract/timecodes_v2.cpp:281 src/extract/tracks.cpp:419
-#: src/info/mkvinfo.cpp:1777
+#: src/info/mkvinfo.cpp:1799
 msgid "Cluster"
 msgstr "クラスタ"
 
@@ -2084,16 +2089,16 @@ msgstr "クラスタの長さ'%1%'が範囲（0～60000）から外れていま�
 msgid "Cluster length '%1%' out of range (100..32000).\n"
 msgstr "クラスタの長さ'%1%'が範囲（100～32000）から外れています。.\n"
 
-#: src/info/mkvinfo.cpp:1556
+#: src/info/mkvinfo.cpp:1578
 msgid "Cluster position: %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1560
+#: src/info/mkvinfo.cpp:1582
 msgid "Cluster previous size: %1%"
 msgstr ""
 
 #: src/extract/timecodes_v2.cpp:296 src/extract/tracks.cpp:433
-#: src/info/mkvinfo.cpp:1552
+#: src/info/mkvinfo.cpp:1574
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr "クラスタのタイムコード：%|1$.3f|s"
 
@@ -2153,7 +2158,7 @@ msgstr "コマンドラインオプション："
 msgid "Command line saved."
 msgstr "コマンドラインが保存されました。"
 
-#: src/merge/pr_generic.cpp:705
+#: src/merge/pr_generic.cpp:708
 msgid "Compression failed: %1%\n"
 msgstr "圧縮に失敗しました：%1%\n"
 
@@ -2487,7 +2492,7 @@ msgstr "ディレイ(ms単位)："
 msgid "Delay this track's timecodes by a couple of ms. Can be negative. Works best on video and subtitle tracks."
 msgstr "このトラックのタイムコードを数ミリ秒遅らせます。負の値も取ることができます。ビデオや字幕トラックで最も役立つでしょう。"
 
-#: src/info/mkvinfo.cpp:1408
+#: src/info/mkvinfo.cpp:1411
 msgid "Delay: %|1$.3f|ms"
 msgstr ""
 
@@ -2572,15 +2577,15 @@ msgstr "メタシーク要素を全く記録しません。"
 msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
 msgstr "Matroskaの仕様のデフォルト値と同じ値を取るヘッダ要素を記録しません。"
 
-#: src/info/mkvinfo.cpp:1693
+#: src/info/mkvinfo.cpp:1715
 msgid "Doc type read version: %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1690
+#: src/info/mkvinfo.cpp:1712
 msgid "Doc type version: %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1687
+#: src/info/mkvinfo.cpp:1709
 msgid "Doc type: %1%"
 msgstr ""
 
@@ -2588,7 +2593,7 @@ msgstr ""
 msgid "Dolby TrueHD"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1412
+#: src/info/mkvinfo.cpp:1415
 msgid "Duration: %|1$.3f|ms"
 msgstr ""
 
@@ -2604,19 +2609,19 @@ msgstr "MPEG-4 part 2 Bフレーム処理でエラーが発生しました:割�
 msgid "E&xit\tCtrl-Q"
 msgstr "終了(&X)\tCtrl-Q"
 
-#: src/info/mkvinfo.cpp:1666
+#: src/info/mkvinfo.cpp:1688
 msgid "EBML head"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1684
+#: src/info/mkvinfo.cpp:1706
 msgid "EBML maximum ID length: %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1681
+#: src/info/mkvinfo.cpp:1703
 msgid "EBML read version: %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1678
+#: src/info/mkvinfo.cpp:1700
 msgid "EBML version: %1%"
 msgstr ""
 
@@ -2731,7 +2736,7 @@ msgstr "エラー："
 msgid "Error: %1% parser failed for '%2%', line %3%, column %4%: %5%\n"
 msgstr "エラー：%1%パーサが'%2%'、%3%行目、%4%列目のために失敗しました：%5%\n"
 
-#: src/info/mkvinfo.cpp:1716
+#: src/info/mkvinfo.cpp:1738
 msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "エラー：入力ファイル%1%（%2%）を開けませんでした。\n"
 
@@ -2846,11 +2851,11 @@ msgstr ""
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "ファイル%1%は未知のファイルタイプです。サポートされているファイルタイプ一覧（'mkvmerge --list-types'）を参照し、もしそのファイルタイプがサポートされているのに正しく認識されない場合は、作者のMoritz Bunkus <moritz@bunkus.org>に連絡してください。\n"
 
-#: src/merge/pr_generic.cpp:1321
+#: src/merge/pr_generic.cpp:1324
 msgid "File '%1%': container: %2%"
 msgstr "ファイル'%1%'：コンテナ：%2%"
 
-#: src/merge/pr_generic.cpp:1255
+#: src/merge/pr_generic.cpp:1258
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "ファイル'%1%'：サポートされていないコンテナ：%2%\n"
 
@@ -3002,7 +3007,7 @@ msgstr "FourCC：'%1% %2%'で不正なトラックIDがあります。\n"
 msgid "FourCC: Missing track ID in '%1% %2%'.\n"
 msgstr "FourCC：'%1% %2%'でトラックIDがありません。\n"
 
-#: src/info/mkvinfo.cpp:1404
+#: src/info/mkvinfo.cpp:1407
 msgid "Frame number: %1%"
 msgstr ""
 
@@ -3010,7 +3015,7 @@ msgstr ""
 msgid "Frame rate: %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1308 src/info/mkvinfo.cpp:1504
+#: src/info/mkvinfo.cpp:1310 src/info/mkvinfo.cpp:1517
 msgid "Frame with size %1%%2%%3%"
 msgstr ""
 
@@ -3486,7 +3491,7 @@ msgstr ""
 msgid "LZO compression failed. Result: %1%\n"
 msgstr "LZO圧縮に失敗しました：結果%1%\n"
 
-#: src/info/mkvinfo.cpp:1400
+#: src/info/mkvinfo.cpp:1403
 msgid "Lace number: %1%"
 msgstr ""
 
@@ -3527,7 +3532,7 @@ msgstr "左目"
 msgid "Lets you add arbitrary options to the command line"
 msgstr "コマンドラインに任意のオプションを追加できます"
 
-#: src/merge/timecode_factory.cpp:327
+#: src/merge/timecode_factory.cpp:331
 msgid "Line %1% of the timecode file '%2%' contains inconsistent data (e.g. the duration or the FPS are smaller than zero).\n"
 msgstr "タイムコードファイル'%2%'の%1%行目が矛盾したデータを含んでいます（例：フレーム長やFPSが負の数）。\n"
 
@@ -3535,7 +3540,7 @@ msgstr "タイムコードファイル'%2%'の%1%行目が矛盾したデータ�
 msgid "Line %1% of the timecode file '%2%' contains inconsistent data (e.g. the start frame number is bigger than the end frame number, or some values are smaller than zero).\n"
 msgstr "タイムコードファイル'%2%'の%1%行目が矛盾したデータを含んでいます（例：開始フレーム番号が終了フレーム番号より大きい、負の数を取っている値がある）。\n"
 
-#: src/merge/timecode_factory.cpp:96 src/merge/timecode_factory.cpp:320
+#: src/merge/timecode_factory.cpp:96 src/merge/timecode_factory.cpp:324
 msgid "Line %1% of the timecode file '%2%' could not be parsed.\n"
 msgstr "タイムコードファイル'%2%'の%1%行目を解析することができません。\n"
 
@@ -3732,7 +3737,7 @@ msgstr "16進数の桁が1つ足りません"
 msgid "Missing output file name in argument '%1%'.\n"
 msgstr "引数'%1%'で出力ファイル名が指定されていません。\n"
 
-#: src/info/mkvinfo.cpp:1357
+#: src/info/mkvinfo.cpp:1360
 msgid "More"
 msgstr ""
 
@@ -3820,7 +3825,7 @@ msgstr "次のファイル名"
 msgid "Next filename: %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1756
+#: src/info/mkvinfo.cpp:1778
 msgid "Next level 0 element is not a segment but %1%"
 msgstr ""
 
@@ -3844,7 +3849,7 @@ msgstr "'--%2% %3%'で%1%が指定されていません。\n"
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "AC3ヘッダが最初のフレームで見つかりませんでした：トラックはスキップされます。\n"
 
-#: src/info/mkvinfo.cpp:1730
+#: src/info/mkvinfo.cpp:1752
 msgid "No EBML head found."
 msgstr ""
 
@@ -3922,7 +3927,7 @@ msgid "No output file name specified, will use attachment name.\n"
 msgstr "出力ファイル名が指定されなかったので、添付ファイル名を使用します。\n"
 
 #: src/common/quickparser.cpp:55 src/extract/timecodes_v2.cpp:216
-#: src/extract/tracks.cpp:345 src/info/mkvinfo.cpp:1744
+#: src/extract/tracks.cpp:345 src/info/mkvinfo.cpp:1766
 msgid "No segment/level 0 element found."
 msgstr "セグメント/レベル0の要素が見つかりませんでした。"
 
@@ -3942,7 +3947,7 @@ msgstr "'--%1% %2%'でトラックIDが指定されていません。\n"
 msgid "No tracks found"
 msgstr "トラックが見つかりませんでした"
 
-#: src/merge/pr_generic.cpp:1193
+#: src/merge/pr_generic.cpp:1196
 msgid "No tracks will be copied from this file. This usually indicates a mistake in the command line.\n"
 msgstr "このファイルからはトラックがコピーされません。これは通常コマンドラインに誤りがあることを示します。\n"
 
@@ -4114,7 +4119,7 @@ msgstr "パケットキューが空ではありません（フラッシュ：%1%
 msgid "Parse the file completely and show all elements"
 msgstr "ファイルを完全に解析し全ての要素を表示します"
 
-#: src/info/mkvinfo.cpp:1537
+#: src/info/mkvinfo.cpp:1559
 msgid "Parsing file"
 msgstr "ファイルを解析しています"
 
@@ -4386,19 +4391,19 @@ msgstr "RealMediaオーディオ/ビデオファイル"
 msgid "RealMedia files may contain HE-AAC / AAC+ / SBR AAC audio. In some cases this can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr %1%' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
 msgstr "RealMediaファイルはHE-AAC/AAC+/SBR AACオーディオを含んでいることがあります。これは自動で検知できないことがあります。よってこの入力ファイルが実際にSBE AACを含んでいる場合、手動で'--aac-is-sbr %1%'を指定しなければなりません。でないと間違ってMUXされてしまいます。mkvmergeのドキュメントも読んでください。\n"
 
-#: src/info/mkvinfo.cpp:1331
+#: src/info/mkvinfo.cpp:1334
 msgid "Reference block: %1%.%|2$06d|ms"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1327
+#: src/info/mkvinfo.cpp:1330
 msgid "Reference block: -%1%.%|2$06d|ms"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1336
+#: src/info/mkvinfo.cpp:1339
 msgid "Reference priority: %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1345
+#: src/info/mkvinfo.cpp:1348
 msgid "Reference virtual: %1%"
 msgstr ""
 
@@ -4579,11 +4584,11 @@ msgstr "セグメントトラック"
 msgid "Segment unique ID"
 msgstr "セグメントの固有ID"
 
-#: src/info/mkvinfo.cpp:1752
+#: src/info/mkvinfo.cpp:1774
 msgid "Segment, size %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1750
+#: src/info/mkvinfo.cpp:1772
 msgid "Segment, size unknown"
 msgstr ""
 
@@ -4770,7 +4775,7 @@ msgstr "シンプルチャプタパーサ：%1%\n"
 msgid "SimpleBlock"
 msgstr "シンプルブロック"
 
-#: src/info/mkvinfo.cpp:1484
+#: src/info/mkvinfo.cpp:1497
 msgid "SimpleBlock (%1%track number %2%, %3% frame(s), timecode %|4$.3f|s = %5%)"
 msgstr ""
 
@@ -4786,7 +4791,7 @@ msgstr "%1%バイトをスキップします（正しいDTSヘッダが見つか
 msgid "Skipping %1% bytes at the beginning (no valid MP3 header found).\n"
 msgstr "開始点で%1%バイトをスキップします（正しいMP3ヘッダが見つかりませんでした）。\n"
 
-#: src/info/mkvinfo.cpp:1383
+#: src/info/mkvinfo.cpp:1386
 msgid "Slices"
 msgstr ""
 
@@ -4949,7 +4954,7 @@ msgstr "タグファイル (*.xml)|*.xml|%s"
 msgid "Tag files (*.xml;*.txt)|*.xml;*.txt|%s"
 msgstr "タグファイル (*.xml;*.txt)|*.xml;*.txt|%s"
 
-#: src/info/mkvinfo.cpp:1651
+#: src/info/mkvinfo.cpp:1673
 msgid "Tags"
 msgstr "タグ"
 
@@ -5159,7 +5164,7 @@ msgstr "キューエントリ（インデックス）が書き込まれました
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr "現在のファイル（番号%d）を削除することはできません。このファイルにトラックを追加結合すると思われる他のファイルが存在します（少なくとも番号%dのファイルがそうです)。そのファイルをまず削除してください。"
 
-#: src/merge/pr_generic.cpp:768
+#: src/merge/pr_generic.cpp:771
 msgid "The current packet's timecode is smaller than that of the previous packet. This usually means that the source file is a Matroska file that has not been created 100%% correctly. The timecodes of all packets will be adjusted by %1%ms in order not to lose any data. This may throw audio/video synchronization off, but that can be corrected with mkvmerge's \"--sync\" option. If you already use \"--sync\" and you still get this warning then do NOT worry -- this is normal. If this error happens more than once and you get this message more than once for a particular track then either is the source file badly mastered, or mkvmerge contains a bug. In this case you should contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
 msgstr "現在のパケットのタイムコードは前のパケットのタイムコードより小さいです。これは通常ソースファイルが100%%正確に作成されなかったMatroskaファイルであることを意味します。データの損失を避けるためにタイムコードは%1%ミリ秒ズラされます。このためにオーディオ・ビデオの同期が狂うかもしれませんが、\"--sync\"オプションで補正することができます。もし既に\"--sync\"オプションを使っていて、それでもまだこの警告が表示される場合は心配することはありません―これは正常です。もしこのエラーが複数回発生し、特定のトラックでこのメッセージが複数回表示された場合は、そのファイルの製作を失敗しているか、mkvmergeのバグのどちらかです。この場合は作者のMoritz Bunkus <moritz@bunkus.org>に連絡してください。\n"
 
@@ -5248,7 +5253,7 @@ msgstr "ファイル'%1%'を開いて書き込んでいます。\n"
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "ファイル%1%は未知のファイルタイプです。サポートされているファイルタイプ一覧（'mkvmerge --list-types'）を参照し、もしそのファイルタイプがサポートされているのに正しく認識されない場合は、作者のMoritz Bunkus <moritz@bunkus.org>に連絡してください。\n"
 
-#: src/merge/pr_generic.cpp:1259
+#: src/merge/pr_generic.cpp:1262
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "ファイル'%1%'はサポートされていないファイルタイプです（%2%）。\n"
 
@@ -5426,7 +5431,7 @@ msgstr "言語'%s'は正しい言語ではないので選択することがで�
 msgid "The language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr "言語コード'%1%'は正しいISO639-2言語コードではないので無視されます。\n"
 
-#: src/merge/timecode_factory.cpp:195
+#: src/merge/timecode_factory.cpp:196
 msgid "The line %1% of the timecode file '%2%' does not contain a valid floating point number.\n"
 msgstr "タイムコードファイル'%2%'の%1%行目は正しい浮動小数点数を含んでいません。\n"
 
@@ -5492,7 +5497,7 @@ msgstr "2つのオーディオトラック間でサンプル当たりのビッ�
 msgid "The number of channels of the two audio tracks is different: %1% and %2%"
 msgstr "2つのオーディオトラック間でチャンネル数が異なっています：%1%と%2%"
 
-#: src/merge/timecode_factory.cpp:243
+#: src/merge/timecode_factory.cpp:244
 msgid "The number of external timecodes %1% is smaller than the number of frames in this track. The remaining frames of this track might not be timestamped the way you intended them to be. mkvmerge might even crash.\n"
 msgstr "外部タイムコード%1%の数がこのトラックのフレーム数より小さいです。残りのフレームは意図した通りにタイムスタンプを押されないかもしれません。mkvmergeがクラッシュする可能性さえあります。\n"
 
@@ -5615,19 +5620,19 @@ msgid "The timecode file '%1%' could not be opened for reading.\n"
 msgstr "タイムコードファイル'%1%'を開いて読み込むことができませんでした。\n"
 
 #: src/merge/timecode_factory.cpp:73 src/merge/timecode_factory.cpp:81
-#: src/merge/timecode_factory.cpp:87 src/merge/timecode_factory.cpp:274
+#: src/merge/timecode_factory.cpp:87 src/merge/timecode_factory.cpp:278
 msgid "The timecode file '%1%' does not contain a valid 'Assume' line with the default number of frames per second.\n"
 msgstr "タイムコードファイル'%1%'はデフォルトのフレームレートが記載された正しい'Assume'行を含んでいません。\n"
 
-#: src/merge/timecode_factory.cpp:310
+#: src/merge/timecode_factory.cpp:314
 msgid "The timecode file '%1%' does not contain a valid 'Gap' line with the duration of the gap.\n"
 msgstr "タイムコードファイル'%1%'はギャップの持続時間が記載された正しい'Gap'行を含んでいません。\n"
 
-#: src/merge/timecode_factory.cpp:222 src/merge/timecode_factory.cpp:338
+#: src/merge/timecode_factory.cpp:223 src/merge/timecode_factory.cpp:342
 msgid "The timecode file '%1%' does not contain any valid entry.\n"
 msgstr "タイムコードファイル'%1%'には正しいエントリが1つもありません。\n"
 
-#: src/merge/timecode_factory.cpp:198
+#: src/merge/timecode_factory.cpp:199
 msgid ""
 "The timecode v2 file '%1%' contains timecodes that are not ordered. Due to a bug in mkvmerge versions up to and including v1.5.0 this was necessary if the track to which the timecode file was applied contained B frames. Starting with v1.5.1 mkvmerge now handles this correctly, and the timecodes in the timecode file must be ordered normally. For example, the frame sequence 'IPBBP...' at 25 FPS requires a timecode file with the first timecodes being '0', '40', '80', '120' etc and not '0', '120', '40', '80' etc.\n"
 "\n"
@@ -5816,7 +5821,7 @@ msgstr "このトラックがSBR AAC/HE-AAC/AAC+のデータを含んでいる�
 msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
 msgstr "このトラックは'Codec state elements'というMatroskaの機能を使用しています。mkvmergeはこれをサポートしていますが、'--engage use_codec_state'オプションでこの機能がオンになったわけではありません。\n"
 
-#: src/info/mkvinfo.cpp:1391
+#: src/info/mkvinfo.cpp:1394
 msgid "Time slice"
 msgstr ""
 
@@ -5926,7 +5931,7 @@ msgstr "トラック%1%：AAC情報を解析することができませんでし
 msgid "Track ID %1% has an unknown AAC type.\n"
 msgstr "Track ID %1%は未知のAACタイプです。\n"
 
-#: src/merge/pr_generic.cpp:1322
+#: src/merge/pr_generic.cpp:1325
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "トラックID %1%：%2%（%3%）"
 
@@ -6806,7 +6811,7 @@ msgstr ""
 msgid "Zlib decompression failed. Result: %1%\n"
 msgstr "Zlib展開が失敗しました。結果：%1%\n"
 
-#: src/info/mkvinfo.cpp:1460 src/info/mkvinfo.cpp:1524
+#: src/info/mkvinfo.cpp:1471 src/info/mkvinfo.cpp:1546
 msgid "[%1% frame for track %2%, timecode %3%]"
 msgstr ""
 
@@ -6981,7 +6986,7 @@ msgstr "dirac_es_reader：ソースファイルを開けませんでした。"
 msgid "disable all"
 msgstr "全て無効"
 
-#: src/info/mkvinfo.cpp:1481
+#: src/info/mkvinfo.cpp:1494
 msgid "discardable, "
 msgstr " "
 
@@ -7180,7 +7185,7 @@ msgstr "最高"
 msgid "inflateInit() failed. Result: %1%\n"
 msgstr "inflateInit()が失敗しました。結果：%1%\n"
 
-#: src/info/mkvinfo.cpp:1479
+#: src/info/mkvinfo.cpp:1492
 msgid "key, "
 msgstr ""
 
@@ -7617,11 +7622,11 @@ msgstr ""
 msgid "pixel width: %1%"
 msgstr ""
 
-#: src/merge/pr_generic.cpp:780
+#: src/merge/pr_generic.cpp:783
 msgid "pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < last_timecode (%1% < %2%). %3%\n"
 msgstr "pr_generic.cpp/generic_packetizer_c::add_packet()：timecode < last_timecode（%1% < %2%）です。 %3%\n"
 
-#: src/merge/pr_generic.cpp:1121
+#: src/merge/pr_generic.cpp:1124
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr "pr_generic.cpp/generic_reader_c::demuxing_requested()：不正なトラックタイプ%1%."
 
