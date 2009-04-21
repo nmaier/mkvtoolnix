@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2009-04-14 00:15+0900\n"
+"PO-Revision-Date: 2009-04-21 09:37+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -1379,9 +1379,8 @@ msgid ", finished on %s"
 msgstr ", %sが完了しました"
 
 #: src/info/mkvinfo.cpp:1442 src/info/mkvinfo.cpp:1530
-#, fuzzy
 msgid ", position %1%"
-msgstr ", 説明 '%1%'"
+msgstr ""
 
 #: src/mmg/jobs.cpp:639
 #, c-format
@@ -7850,54 +7849,3 @@ msgstr "間違った使用法：読み込み専用メモリへの書き込み"
 #: src/mmg/tab_input_general.cpp:128
 msgid "yes"
 msgstr "はい"
-
-#~ msgid "Adjusting EbmlVoid element %1% at %2% with size %3% to new pos %4% with new size %5%.\n"
-#~ msgstr "%2%の位置にあるサイズ%3%のEbmlVoid要素%1%を、新しい位置%4%と新しいサイズ%5%に変更しています。\n"
-
-#~ msgid "Adjusting segment size.\n"
-#~ msgstr "セグメントサイズを変更しています。\n"
-
-#~ msgid "Always adds '--engage use_simpleblock' to the command line. That way Matroska's new 'simple blocks' will be used which save a bit of overhead at the cost of not being backwards compatible."
-#~ msgstr "常にコマンドラインに'--engage use_simpleblock'オプションを追加します。そうすることでMatroskaの新しい'simple blocks'が使用され、後方互換性を犠牲にする代わりにオーバーヘッドが少し削減されます。"
-
-#~ msgid "Always use simple blocks"
-#~ msgstr "常にシンプルブロックを使用する"
-
-#~ msgid "Analyzing Matroska file"
-#~ msgstr "Matroskaファイルを解析中です"
-
-#~ msgid "Appending new seek head.\n"
-#~ msgstr "新しいシークヘッドを追加しています。\n"
-
-#~ msgid "Creating new seek head.\n"
-#~ msgstr "新しいシークヘッドを作成しています。\n"
-
-#~ msgid "Deleting internal element %1% at %2% with size %3%.\n"
-#~ msgstr "位置%2%でサイズ%3%の内部要素%1%を削除しています。\n"
-
-#~ msgid "Found a suitable place at %1%.\n"
-#~ msgstr "%1%に適切な場所が見つかりました。\n"
-
-#~ msgid "Great! Exact size. Just overwriting :)\n"
-#~ msgstr "素晴らしい！ピッタリサイズです。上書きします。:)\n"
-
-#~ msgid "Inserting new EbmlVoid element at %1% with size %2%.\n"
-#~ msgstr "サイズ%2%の新しいEBMLVoid要素を%1%に挿入しています。\n"
-
-#~ msgid "Inserting new EbmlVoid not possible, remaining size too small.\n"
-#~ msgstr "残りサイズが小さすぎるため、新しいEBMKVoid要素を挿入できません。\n"
-
-#~ msgid "No suitable place found. Appending at the end.\n"
-#~ msgstr "適切な場所が見つかりませんでした。終端に付加します。\n"
-
-#~ msgid "Overwriting/voiding element at %1%.\n"
-#~ msgstr "位置%1%にある要素を上書き/無効化しています。\n"
-
-#~ msgid "Quicktime/MP4 reader: Should not have happened #1."
-#~ msgstr "Quicktime/MP4リーダ：発生すべきではありません #1。"
-
-#~ msgid "found_what == 0, 2nd time. Should not have happened. Please file a bug report.\n"
-#~ msgstr "found_what == 0です。しかも2回目です。発生するべきではありません。バグレポートを提出してください。\n"
-
-#~ msgid "found_what == 0. Should not have happened. Please file a bug report.\n"
-#~ msgstr "found_what == 0です。発生するべきではありません。バグレポートを提出してください。\n"
