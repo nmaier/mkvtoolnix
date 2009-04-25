@@ -32,8 +32,8 @@ typedef struct {
 } mp3_header_t;
 
 int MTX_DLL_API find_mp3_header(const unsigned char *buf, int size);
-int MTX_DLL_API find_consecutive_mp3_headers(const unsigned char *buf,
-                                             int size, int num);
+int MTX_DLL_API find_consecutive_mp3_headers(const unsigned char *buf, int size, int num);
+
 void MTX_DLL_API decode_mp3_header(const unsigned char *buf, mp3_header_t *h);
 
 #endif // __MP3_COMMON_H
