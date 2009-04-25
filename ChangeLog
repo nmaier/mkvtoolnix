@@ -1,3 +1,9 @@
+2009-04-25  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Made the AAC detection code stricter in what
+	it accepts. This results in fewer mis-detections. Fix for bugs 373
+	and 374.
+
 2009-04-16  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Splitting without the option "--engage

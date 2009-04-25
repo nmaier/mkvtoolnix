@@ -353,6 +353,8 @@ get_file_type(filelist_t &file) {
         type = FILE_TYPE_MP3;
       else if (ac3_reader_c::probe_file(io, size, probe_sizes[i], 5))
         type = FILE_TYPE_AC3;
+      else if (aac_reader_c::probe_file(io, size, probe_sizes[i], 5))
+        type = FILE_TYPE_AAC;
   }
   // More file types with detection issues.
   if (type != FILE_TYPE_IS_UNKNOWN)
@@ -363,8 +365,6 @@ get_file_type(filelist_t &file) {
     type = FILE_TYPE_MP3;
   else if (dts_reader_c::probe_file(io, size))
     type = FILE_TYPE_DTS;
-  else if (aac_reader_c::probe_file(io, size))
-    type = FILE_TYPE_AAC;
   else if (vobbtn_reader_c::probe_file(io, size))
     type = FILE_TYPE_VOBBTN;
   else if (avc_es_reader_c::probe_file(io, size))

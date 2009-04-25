@@ -45,12 +45,15 @@ typedef struct {
   int header_bit_size, header_byte_size, data_byte_size;
 } aac_header_t;
 
-bool MTX_DLL_API parse_aac_adif_header(unsigned char *buf, int size, aac_header_t *aac_header);
-int MTX_DLL_API find_aac_header(unsigned char *buf, int size, aac_header_t *aac_header, bool emphasis_present);
+bool MTX_DLL_API operator ==(const aac_header_t &h1, const aac_header_t &h2);
+
+bool MTX_DLL_API parse_aac_adif_header(const unsigned char *buf, int size, aac_header_t *aac_header);
+int MTX_DLL_API find_aac_header(const unsigned char *buf, int size, aac_header_t *aac_header, bool emphasis_present);
+int MTX_DLL_API find_consecutive_aac_headers(const unsigned char *buf, int size, int num);
 
 int MTX_DLL_API get_aac_sampling_freq_idx(int sampling_freq);
 
-bool MTX_DLL_API parse_aac_data(unsigned char *data, int size, int &profile, int &channels, int &sample_rate, int &output_sample_rate, bool &sbr);
+bool MTX_DLL_API parse_aac_data(const unsigned char *data, int size, int &profile, int &channels, int &sample_rate, int &output_sample_rate, bool &sbr);
 int MTX_DLL_API create_aac_data(unsigned char *data, int profile, int channels, int sample_rate, int output_sample_rate, bool sbr);
 bool MTX_DLL_API parse_aac_codec_id(const string &codec_id, int &id, int &profile);
 
