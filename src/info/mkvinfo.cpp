@@ -1269,6 +1269,7 @@ def_handle2(block_group,
 
   int64_t lf_timecode = 0;
   int64_t lf_tnum     = 0;
+  int64_t frame_pos   = 0;
 
   float bduration     = -1.0;
 
@@ -1291,6 +1292,7 @@ def_handle2(block_group,
       lf_timecode = block.GlobalTimecode() / 1000000;
       lf_tnum     = block.TrackNum();
       bduration   = -1.0;
+      frame_pos   = block.GetElementPosition() + block.ElementSize();
 
       int i;
       for (i = 0; i < (int)block.NumberFrames(); i++) {
@@ -1310,6 +1312,7 @@ def_handle2(block_group,
         frame_sizes.push_back(data.Size());
         frame_adlers.push_back(adler);
         frame_hexdumps.push_back(hex);
+        frame_pos -= data.Size();
       }
 
     } else if (is_id(l3, KaxBlockDuration)) {
@@ -1431,11 +1434,17 @@ def_handle2(block_group,
   } // while (l3 != NULL)
 
   if (show_summary) {
+    std::string position;
     int fidx;
 
     for (fidx = 0; fidx < frame_sizes.size(); fidx++) {
+      if (1 <= verbose) {
+        position   = (boost::format(Y(", position %1%")) % frame_pos).str();
+        frame_pos += frame_sizes[fidx];
+      }
+
       if (bduration != -1.0)
-        mxinfo(boost::format(Y("%1% frame, track %2%, timecode %3% (%4%), duration %|5$.3f|, size %6%, adler 0x%|7$08x|%8%\n"))
+        mxinfo(boost::format(Y("%1% frame, track %2%, timecode %3% (%4%), duration %|5$.3f|, size %6%, adler 0x%|7$08x|%8%%9%\n"))
                % (bref_found && fref_found ? 'B' : bref_found ? 'P' : !fref_found ? 'I' : 'P')
                % lf_tnum
                % lf_timecode
@@ -1443,16 +1452,18 @@ def_handle2(block_group,
                % bduration
                % frame_sizes[fidx]
                % frame_adlers[fidx]
-               % frame_hexdumps[fidx]);
+               % frame_hexdumps[fidx]
+               % position);
       else
-        mxinfo(boost::format(Y("%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%\n"))
+        mxinfo(boost::format(Y("%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"))
                % (bref_found && fref_found ? 'B' : bref_found ? 'P' : !fref_found ? 'I' : 'P')
                % lf_tnum
                % lf_timecode
                % format_timecode(lf_timecode * 1000000, 3)
                % frame_sizes[fidx]
                % frame_adlers[fidx]
-               % frame_hexdumps[fidx]);
+               % frame_hexdumps[fidx]
+               % position);
     }
 
   } else if (verbose > 2)
@@ -1471,6 +1482,8 @@ def_handle2(simple_block,
 
   KaxSimpleBlock &block = *static_cast<KaxSimpleBlock *>(l2);
   block.SetParent(*cluster);
+
+  int64_t frame_pos = block.GetElementPosition() + block.ElementSize();
 
   uint64_t timecode = block.GlobalTimecode() / 1000000;
 
@@ -1505,19 +1518,28 @@ def_handle2(simple_block,
 
     frame_sizes.push_back(data.Size());
     frame_adlers.push_back(adler);
+    frame_pos -= data.Size();
   }
 
   if (show_summary) {
+    std::string position;
     int fidx;
 
-    for (fidx = 0; fidx < frame_sizes.size(); fidx++)
-      mxinfo(boost::format(Y("%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|\n"))
+    for (fidx = 0; fidx < frame_sizes.size(); fidx++) {
+      if (1 <= verbose) {
+        position   = (boost::format(Y(", position %1%")) % frame_pos).str();
+        frame_pos += frame_sizes[fidx];
+      }
+
+      mxinfo(boost::format(Y("%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%\n"))
              % (block.IsKeyframe() ? 'I' : block.IsDiscardable() ? 'B' : 'P')
              % block.TrackNum()
              % timecode
              % format_timecode(block.GlobalTimecode(), 3)
              % frame_sizes[fidx]
-             % frame_adlers[fidx]);
+             % frame_adlers[fidx]
+             % position);
+    }
 
   } else if (verbose > 2)
     show_element(NULL, 2,

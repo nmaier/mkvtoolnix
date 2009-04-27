@@ -23,8 +23,8 @@ const int aac_sampling_freq[16] = {96000, 88200, 64000, 48000, 44100, 32000,
                                    24000, 22050, 16000, 12000, 11025,  8000,
                                    0, 0, 0, 0}; // filling
 
-bool
-parse_aac_adif_header_internal(unsigned char *buf,
+static bool
+parse_aac_adif_header_internal(const unsigned char *buf,
                                int size,
                                aac_header_t *aac_header) {
   int i, k;
@@ -93,7 +93,7 @@ parse_aac_adif_header_internal(unsigned char *buf,
 }
 
 bool
-parse_aac_adif_header(unsigned char *buf,
+parse_aac_adif_header(const unsigned char *buf,
                       int size,
                       aac_header_t *aac_header) {
   try {
@@ -104,7 +104,7 @@ parse_aac_adif_header(unsigned char *buf,
 }
 
 static bool
-is_adts_header(unsigned char *buf,
+is_adts_header(const unsigned char *buf,
                int size,
                aac_header_t *aac_header,
                bool emphasis_present) {
@@ -128,6 +128,8 @@ is_adts_header(unsigned char *buf,
     bc.skip_bits(2);            // emphasis, MPEG-4 only
   bc.skip_bits(1 + 1);          // copyright_id_bit & copyright_id_start
   frame_length = bc.get_bits(13);
+  if (0 == frame_length)
+    return false;
   bc.skip_bits(11);             // adts_buffer_fullness
   bc.skip_bits(2);              // no_raw_blocks_in_frame
   if (!protection_absent)
@@ -153,7 +155,7 @@ is_adts_header(unsigned char *buf,
 }
 
 int
-find_aac_header(unsigned char *buf,
+find_aac_header(const unsigned char *buf,
                 int size,
                 aac_header_t *aac_header,
                 bool emphasis_present) {
@@ -184,7 +186,7 @@ get_aac_sampling_freq_idx(int sampling_freq) {
 }
 
 bool
-parse_aac_data(unsigned char *data,
+parse_aac_data(const unsigned char *data,
                int size,
                int &profile,
                int &channels,
@@ -272,4 +274,67 @@ create_aac_data(unsigned char *data,
     return 5;
   }
   return 2;
+}
+
+int
+find_consecutive_aac_headers(const unsigned char *buf,
+                             int size,
+                             int num) {
+  aac_header_t aac_header, new_header;
+
+  int base = 0;
+  int pos  = find_aac_header(&buf[base], size - base, &aac_header, false);
+
+  if (0 > pos)
+    return -1;
+
+  if (1 == num)
+    return pos;
+  base += pos;
+
+  do {
+    mxverb(4, boost::format("find_cons_aac_h: starting with base at %1%\n") % base);
+
+    int offset = aac_header.bytes;
+    int i;
+    for (i = 0; (num - 1) > i; ++i) {
+      if ((size - base - offset) < 2)
+        break;
+
+      pos = find_aac_header(&buf[base + offset], size - base - offset, &new_header, false);
+      if (0 == pos) {
+        if (new_header == aac_header) {
+          mxverb(4, boost::format("find_cons_aac_h: found good header %1%\n") % i);
+          offset += new_header.bytes;
+          continue;
+        } else
+          break;
+      } else
+        break;
+    }
+
+    if (i == (num - 1))
+      return base;
+
+    ++base;
+    offset = 0;
+    pos    = find_aac_header(&buf[base], size - base, &aac_header, false);
+
+    if (-1 == pos)
+      return -1;
+
+    base += pos;
+  } while (base < (size - 5));
+
+  return -1;
+}
+
+bool
+operator ==(const aac_header_t &h1,
+            const aac_header_t &h2) {
+  return (h1.sample_rate == h2.sample_rate)
+      && (h1.bit_rate    == h2.bit_rate)
+      && (h1.channels    == h2.channels)
+      && (h1.id          == h2.id)
+      && (h1.profile     == h2.profile);
 }

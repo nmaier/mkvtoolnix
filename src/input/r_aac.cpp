@@ -22,49 +22,15 @@
 #include "p_aac.h"
 #include "output_control.h"
 
-#define PROBESIZE 8192
-
 int
 aac_reader_c::probe_file(mm_io_c *io,
-                         int64_t size) {
-  unsigned char buf[PROBESIZE];
-  aac_header_t aacheader;
-  int pos;
-
-  if (size < PROBESIZE)
-    return 0;
-  try {
-    io->setFilePointer(0, seek_beginning);
-    skip_id3v2_tag(*io);
-    if (io->read(buf, PROBESIZE) != PROBESIZE)
-      io->setFilePointer(0, seek_beginning);
-    io->setFilePointer(0, seek_beginning);
-  } catch (...) {
-    return 0;
-  }
-
-  if (parse_aac_adif_header(buf, PROBESIZE, &aacheader))
-    return 1;
-
-  pos = find_aac_header(buf, PROBESIZE, &aacheader, false);
-  if ((0 > pos) || ((pos + aacheader.bytes) >= PROBESIZE)) {
-    pos = find_aac_header(buf, PROBESIZE, &aacheader, true);
-    if ((0 > pos) || ((pos + aacheader.bytes) >= PROBESIZE))
-      return 0;
-    pos = find_aac_header(&buf[pos + aacheader.bytes], PROBESIZE - pos - aacheader.bytes, &aacheader, true);
-    if (0 != pos)
-      return 0;
-  }
-
-  pos = find_aac_header(&buf[pos + aacheader.bytes], PROBESIZE - pos - aacheader.bytes, &aacheader, false);
-  if (0 != pos)
-    return 0;
-
-  return 1;
+                         int64_t size,
+                         int64_t probe_range,
+                         int num_headers) {
+  return (find_valid_headers(io, probe_range, num_headers) != -1) ? 1 : 0;
 }
 
-#define INITCHUNKSIZE   16384
-#define SINITCHUNKSIZE "16384"
+#define INITCHUNKSIZE 16384
 
 aac_reader_c::aac_reader_c(track_info_c &_ti)
   throw (error_c):
@@ -218,4 +184,21 @@ aac_reader_c::identify() {
 
   id_result_container("AAC");
   id_result_track(0, ID_RESULT_TRACK_AUDIO, "AAC", verbose_info);
+}
+
+int
+aac_reader_c::find_valid_headers(mm_io_c *io,
+                                 int64_t probe_range,
+                                 int num_headers) {
+  try {
+    io->setFilePointer(0, seek_beginning);
+    memory_cptr buf = memory_c::alloc(probe_range);
+    int num_read    = io->read(buf->get(), probe_range);
+    int pos         = find_consecutive_aac_headers(buf->get(), num_read, num_headers);
+    io->setFilePointer(0, seek_beginning);
+
+    return pos;
+  } catch (...) {
+    return -1;
+  }
 }
