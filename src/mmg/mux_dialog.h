@@ -35,6 +35,8 @@ protected:
   wxButton *b_ok, *b_save_log, *b_abort;
   wxTextCtrl *tc_output, *tc_warnings, *tc_errors;
   wxWindowDisabler *m_window_disabler;
+
+  int m_exit_code;
 public:
 
   mux_dialog(wxWindow *parent);
@@ -48,6 +50,10 @@ public:
   void on_abort(wxCommandEvent &evt);
   void on_close(wxCloseEvent &evt);
   void done();
+
+  void set_exit_code(int exit_code) {
+    m_exit_code = exit_code;
+  }
 };
 
 class mux_process: public wxProcess {

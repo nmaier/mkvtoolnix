@@ -186,7 +186,7 @@ public:
   void set_on_top(bool on_top);
   void restore_on_top();
 
-  void muxing_has_finished();
+  void muxing_has_finished(int exit_code);
 
   bool check_before_overwriting();
 

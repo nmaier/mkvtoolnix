@@ -46,7 +46,9 @@ mux_dialog::mux_dialog(wxWindow *parent):
 #else
            wxSize(700, 520),
 #endif
-           wxDEFAULT_FRAME_STYLE) {
+           wxDEFAULT_FRAME_STYLE)
+  , m_exit_code(0)
+{
   char c;
   string arg_utf8, line;
   long value;
@@ -223,7 +225,7 @@ mux_dialog::on_abort(wxCommandEvent &evt) {
 
 void
 mux_dialog::on_close(wxCloseEvent &evt) {
-  mdlg->muxing_has_finished();
+  mdlg->muxing_has_finished(m_exit_code);
   delete m_window_disabler;
   Destroy();
 }
@@ -247,6 +249,8 @@ mux_process::OnTerminate(int pid,
                          int status) {
   if (NULL == dlg)
     return;
+
+  dlg->set_exit_code(status);
 
   wxString format;
   if ((status != 0) && (status != 1))

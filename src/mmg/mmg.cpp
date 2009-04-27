@@ -1103,9 +1103,14 @@ mmg_dialog::on_run(wxCommandEvent &evt) {
 }
 
 void
-mmg_dialog::muxing_has_finished() {
+mmg_dialog::muxing_has_finished(int exit_code) {
   muxing_in_progress = false;
   restore_on_top();
+
+  if ((0 == exit_code) && options.filenew_after_successful_mux) {
+    wxCommandEvent dummy;
+    on_file_new(dummy);
+  }
 }
 
 void
@@ -1976,6 +1981,7 @@ mmg_dialog::save_preferences() {
   cfg->Write(wxU("output_directory"),                options.output_directory);
   cfg->Write(wxU("ask_before_overwriting"),          options.ask_before_overwriting);
   cfg->Write(wxU("filenew_after_add_to_jobqueue"),   options.filenew_after_add_to_jobqueue);
+  cfg->Write(wxU("filenew_after_successful_mux"),    options.filenew_after_successful_mux);
   cfg->Write(wxU("on_top"),                          options.on_top);
   cfg->Write(wxU("warn_usage"),                      options.warn_usage);
   cfg->Write(wxU("gui_debugging"),                   options.gui_debugging);
@@ -2008,6 +2014,7 @@ mmg_dialog::load_preferences() {
   cfg->Read(wxU("output_directory"),              &options.output_directory, wxU(""));
   cfg->Read(wxU("ask_before_overwriting"),        &options.ask_before_overwriting, true);
   cfg->Read(wxU("filenew_after_add_to_jobqueue"), &options.filenew_after_add_to_jobqueue, false);
+  cfg->Read(wxU("filenew_after_successful_mux"),  &options.filenew_after_successful_mux, false);
   cfg->Read(wxU("on_top"),                        &options.on_top, false);
   cfg->Read(wxU("warn_usage"),                    &options.warn_usage, true);
   cfg->Read(wxU("gui_debugging"),                 &options.gui_debugging, false);

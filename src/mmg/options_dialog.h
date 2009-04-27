@@ -36,6 +36,7 @@
 #define ID_RB_ODM_PREVIOUS                 15014
 #define ID_RB_ODM_FIXED                    15015
 #define ID_COB_UI_LANGUAGE                 15016
+#define ID_CB_NEW_AFTER_SUCCESSFUL_MUX     15017
 
 class options_dialog: public wxDialog {
   DECLARE_CLASS(options_dialog);
@@ -45,6 +46,7 @@ public:
   wxCheckBox *cb_autoset_output_filename;
   wxCheckBox *cb_ask_before_overwriting, *cb_on_top;
   wxCheckBox *cb_filenew_after_add_to_jobqueue;
+  wxCheckBox *cb_filenew_after_successful_mux;
   wxCheckBox *cb_warn_usage, *cb_gui_debugging;
   wxCheckBox *cb_set_delay_from_filename;
   wxMTX_COMBOBOX_TYPE *cob_priority;

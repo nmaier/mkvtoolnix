@@ -150,6 +150,7 @@ struct mmg_options_t {
   bool ask_before_overwriting;
   bool on_top;
   bool filenew_after_add_to_jobqueue;
+  bool filenew_after_successful_mux;
   bool warn_usage;
   bool gui_debugging;
   bool set_delay_from_filename;
@@ -161,6 +162,7 @@ struct mmg_options_t {
     , ask_before_overwriting(false)
     , on_top(false)
     , filenew_after_add_to_jobqueue(false)
+    , filenew_after_successful_mux(false)
     , warn_usage(false)
     , gui_debugging(false)
     , set_delay_from_filename(false)

@@ -118,6 +118,8 @@ options_dialog::options_dialog(wxWindow *parent,
 
   cb_filenew_after_add_to_jobqueue = new wxCheckBox(this, ID_CB_NEW_AFTER_ADD_TO_JOBQUEUE, Z("Clear inputs after adding a job to the job queue"));
 
+  cb_filenew_after_successful_mux = new wxCheckBox(this, ID_CB_NEW_AFTER_SUCCESSFUL_MUX, Z("Clear inputs after a successful muxing run"));
+
   cb_on_top = new wxCheckBox(this, ID_CB_ON_TOP, Z("Always on top"));
 
   cb_warn_usage = new wxCheckBox(this, ID_CB_WARN_USAGE, Z("Warn about possible incorrect usage of mmg"));
@@ -168,6 +170,7 @@ options_dialog::options_dialog(wxWindow *parent,
   cb_ask_before_overwriting->SetValue(m_options.ask_before_overwriting);
   cb_on_top->SetValue(m_options.on_top);
   cb_filenew_after_add_to_jobqueue->SetValue(m_options.filenew_after_add_to_jobqueue);
+  cb_filenew_after_successful_mux->SetValue(m_options.filenew_after_successful_mux);
   cb_warn_usage->SetValue(m_options.warn_usage);
   cb_gui_debugging->SetValue(m_options.gui_debugging);
   cb_set_delay_from_filename->SetValue(m_options.set_delay_from_filename);
@@ -253,6 +256,9 @@ options_dialog::options_dialog(wxWindow *parent,
   siz_sb->AddSpacer(5);
 
   siz_sb->Add(cb_filenew_after_add_to_jobqueue, 0, wxLEFT, 5);
+  siz_sb->AddSpacer(5);
+
+  siz_sb->Add(cb_filenew_after_successful_mux, 0, wxLEFT, 5);
   siz_sb->AddSpacer(5);
 
 #if defined(SYS_WINDOWS)
@@ -341,6 +347,7 @@ options_dialog::on_ok(wxCommandEvent &evt) {
   m_options.ask_before_overwriting        = cb_ask_before_overwriting->IsChecked();
   m_options.on_top                        = cb_on_top->IsChecked();
   m_options.filenew_after_add_to_jobqueue = cb_filenew_after_add_to_jobqueue->IsChecked();
+  m_options.filenew_after_successful_mux  = cb_filenew_after_successful_mux->IsChecked();
   m_options.warn_usage                    = cb_warn_usage->IsChecked();
   m_options.gui_debugging                 = cb_gui_debugging->IsChecked();
   m_options.set_delay_from_filename       = cb_set_delay_from_filename->IsChecked();
