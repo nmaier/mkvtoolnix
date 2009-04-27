@@ -155,12 +155,16 @@ struct mmg_options_t {
   bool set_delay_from_filename;
   wxString priority;
 
-  mmg_options_t():
-    autoset_output_filename(false), output_directory_mode(ODM_FROM_FIRST_INPUT_FILE),
-    ask_before_overwriting(false),
-    on_top(false), filenew_after_add_to_jobqueue(false),
-    warn_usage(false), gui_debugging(false),
-    set_delay_from_filename(false) {
+  mmg_options_t()
+    : autoset_output_filename(false)
+    , output_directory_mode(ODM_FROM_FIRST_INPUT_FILE)
+    , ask_before_overwriting(false)
+    , on_top(false)
+    , filenew_after_add_to_jobqueue(false)
+    , warn_usage(false)
+    , gui_debugging(false)
+    , set_delay_from_filename(false)
+  {
   }
 
   void validate();
