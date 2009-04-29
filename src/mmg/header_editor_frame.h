@@ -73,6 +73,8 @@ public:
 
   EbmlElement *m_e_segment_info, *m_e_tracks;
 
+  bool m_ignore_tree_selection_changes;
+
 public:
   header_editor_frame_c(wxWindow *parent);
   virtual ~header_editor_frame_c();

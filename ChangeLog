@@ -1,3 +1,9 @@
+2009-04-29  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg (header editor): bug fix: The header editor controls on the
+	right stopped responding after the second file had been loaded or
+	the "reload file" feature had been used. Fix for bug 372.
+
 2009-04-27  Moritz Bunkus  <moritz@bunkus.org>
 	* mmg: new feature: Added an option for clearing all inputs after
 	a successful muxing run.

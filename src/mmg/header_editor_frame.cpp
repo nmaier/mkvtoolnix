@@ -71,6 +71,7 @@ header_editor_frame_c::header_editor_frame_c(wxWindow *parent)
   , m_analyzer(NULL)
   , m_e_segment_info(NULL)
   , m_e_tracks(NULL)
+  , m_ignore_tree_selection_changes(false)
 {
   wxPanel *frame_panel = new wxPanel(this);
 
@@ -163,9 +164,13 @@ header_editor_frame_c::validate_pages() {
 
 void
 header_editor_frame_c::clear_pages() {
-  for (int i = 0; m_pages.size() > i; ++i)
-    m_pages[i]->Hide();
+  m_ignore_tree_selection_changes = true;
 
+  for (int i = 0; m_pages.size() > i; ++i)
+    if (m_pages[i]->IsShown())
+      m_pages[i]->Hide();
+
+  m_bs_page->Clear();
   m_bs_main->Hide(m_tc_tree);
 
   m_tc_tree->DeleteChildren(m_root_id);
@@ -179,6 +184,8 @@ header_editor_frame_c::clear_pages() {
 
   m_bs_main->Show(m_tc_tree);
   m_bs_main->Layout();
+
+  m_ignore_tree_selection_changes = false;
 }
 
 void
@@ -222,15 +229,19 @@ header_editor_frame_c::open_file(wxFileName file_name) {
 
   SetTitle(wxString::Format(Z("Header editor: %s"), m_file_name.GetFullName().c_str()));
 
+  m_ignore_tree_selection_changes = true;
+
   enable_menu_entries();
 
   m_bs_main->Hide(m_tc_tree);
 
   int i;
   for (i = 0; m_pages.size() > i; ++i)
-    m_pages[i]->Hide();
+    if (m_pages[i]->IsShown())
+      m_pages[i]->Hide();
 
   m_tc_tree->DeleteChildren(m_root_id);
+  m_bs_page->Clear();
   m_pages.clear();
   m_top_level_pages.clear();
 
@@ -253,7 +264,9 @@ header_editor_frame_c::open_file(wxFileName file_name) {
   m_bs_main->Show(m_tc_tree);
   m_bs_main->Layout();
 
-  last_open_dir = file_name.GetPath();
+  last_open_dir                   = file_name.GetPath();
+
+  m_ignore_tree_selection_changes = false;
 
   return true;
 }
@@ -692,25 +705,22 @@ header_editor_frame_c::find_page_for_item(wxTreeItemId id) {
 
 void
 header_editor_frame_c::on_tree_sel_changed(wxTreeEvent &evt) {
-  m_page_panel->Freeze();
-
-  if (evt.GetOldItem().IsOk()) {
-    he_page_base_c *page = find_page_for_item(evt.GetOldItem());
-    if (NULL != page)
-      page->Hide();
-  }
-
-  if (!evt.GetItem().IsOk()) {
-    m_page_panel->Thaw();
+  if (m_ignore_tree_selection_changes)
     return;
-  }
+
+  if (!evt.GetItem().IsOk())
+    return;
 
   he_page_base_c *page = find_page_for_item(evt.GetItem());
-
-  if (!page) {
-    m_page_panel->Thaw();
+  if (!page)
     return;
-  }
+
+  m_page_panel->Freeze();
+
+  int i;
+  for (i = 0; m_pages.size() > i; ++i)
+    if (m_pages[i]->IsShown())
+      m_pages[i]->Hide();
 
   page->Show();
 
