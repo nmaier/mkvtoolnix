@@ -582,6 +582,18 @@ get_temp_dir() {
 }
 
 wxString
+get_installation_dir() {
+  wxConfig cfg(wxT("mkvmergeGUI"), wxEmptyString, wxEmptyString, wxEmptyString, wxCONFIG_USE_GLOBAL_FILE);
+  cfg.SetPath(wxT("/GUI"));
+
+  wxString path;
+  if (cfg.Read(wxT("installation_path"), &path))
+    return path;
+
+  return wxT("");
+}
+
+wxString
 create_track_order(bool all) {
   int i;
   wxString s, format;
@@ -1129,15 +1141,11 @@ mmg_dialog::display_help(int id) {
     bool first;
 
 #if defined(SYS_WINDOWS)
-    cfg = new wxConfig(wxT("mkvmergeGUI"), wxEmptyString, wxEmptyString, wxEmptyString, wxCONFIG_USE_GLOBAL_FILE);
-    cfg->SetPath(wxT("/GUI"));
-
-    if (cfg->Read(wxT("installation_path"), &help_path)) {
+    help_path = get_installation_dir();
+    if (!help_path.IsEmpty()) {
       help_path += wxT("/doc");
       potential_help_paths.push_back(help_path);
     }
-
-    delete cfg;
 
 #else
     // Debian, probably others
@@ -2021,6 +2029,25 @@ mmg_dialog::load_preferences() {
   cfg->Read(wxU("set_delay_from_filename"),       &options.set_delay_from_filename, true);
 
   options.validate();
+
+#if defined(SYS_WINDOWS)
+  // Check whether or not the mkvmerge executable path is still set to
+  // the default value "mkvmerge". If it is try getting the
+  // installation path from the registry and use that for a more
+  // precise location for mkvmerge.exe. Fall back to the old default
+  // value "mkvmerge" if all else fails.
+  if (options.mkvmerge == wxT("mkvmerge"))
+    options.mkvmerge.Empty();
+
+  if (options.mkvmerge.IsEmpty()) {
+    options.mkvmerge = get_installation_dir();
+    if (!options.mkvmerge.IsEmpty())
+      options.mkvmerge += wxT("\\mkvmerge.exe");
+  }
+
+  if (options.mkvmerge.IsEmpty())
+    options.mkvmerge = wxT("mkvmerge");
+#endif  // SYS_WINDOWS
 }
 
 void

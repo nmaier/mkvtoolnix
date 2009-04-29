@@ -198,6 +198,7 @@ wxString UTFstring_to_wxString(const UTFstring &u);
 wxString unescape(const wxString &src);
 wxString format_date_time(time_t date_time);
 wxString get_temp_dir();
+wxString get_installation_dir();
 
 wxString create_track_order(bool all);
 
