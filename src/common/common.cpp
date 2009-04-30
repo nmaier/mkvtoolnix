@@ -185,122 +185,66 @@ bitvalue_c::generate_random() {
 
 uint16_t
 get_uint16_le(const void *buf) {
-  uint16_t ret;
-  unsigned char *tmp;
-
-  tmp = (unsigned char *) buf;
-
-  ret = tmp[1] & 0xff;
-  ret = (ret << 8) + (tmp[0] & 0xff);
-
-  return ret;
+  return get_uint_le(buf, 2);
 }
 
 uint32_t
 get_uint24_le(const void *buf) {
-  uint32_t ret;
-  unsigned char *tmp;
-
-  tmp = (unsigned char *) buf;
-
-  ret = tmp[2] & 0xff;
-  ret = (ret << 8) + (tmp[1] & 0xff);
-  ret = (ret << 8) + (tmp[0] & 0xff);
-
-  return ret;
+  return get_uint_le(buf, 3);
 }
 
 uint32_t
 get_uint32_le(const void *buf) {
-  uint32_t ret;
-  unsigned char *tmp;
-
-  tmp = (unsigned char *) buf;
-
-  ret = tmp[3] & 0xff;
-  ret = (ret << 8) + (tmp[2] & 0xff);
-  ret = (ret << 8) + (tmp[1] & 0xff);
-  ret = (ret << 8) + (tmp[0] & 0xff);
-
-  return ret;
+  return get_uint_le(buf, 4);
 }
 
 uint64_t
 get_uint64_le(const void *buf) {
-  uint64_t ret;
-  unsigned char *tmp;
+  return get_uint_le(buf, 8);
+}
 
-  tmp = (unsigned char *) buf;
-
-  ret = tmp[7] & 0xff;
-  ret = (ret << 8) + (tmp[6] & 0xff);
-  ret = (ret << 8) + (tmp[5] & 0xff);
-  ret = (ret << 8) + (tmp[4] & 0xff);
-  ret = (ret << 8) + (tmp[3] & 0xff);
-  ret = (ret << 8) + (tmp[2] & 0xff);
-  ret = (ret << 8) + (tmp[1] & 0xff);
-  ret = (ret << 8) + (tmp[0] & 0xff);
+uint64_t
+get_uint_le(const void *buf,
+            int num_bytes) {
+  int i;
+  num_bytes          = std::min(std::max(1, num_bytes), 8);
+  unsigned char *tmp = (unsigned char *) buf;
+  uint64_t ret       = 0;
+  for (i = num_bytes - 1; 0 <= i; --i)
+    ret = (ret << 8) + (tmp[i] & 0xff);
 
   return ret;
 }
 
 uint16_t
 get_uint16_be(const void *buf) {
-  uint16_t ret;
-  unsigned char *tmp;
-
-  tmp = (unsigned char *) buf;
-
-  ret = tmp[0] & 0xff;
-  ret = (ret << 8) + (tmp[1] & 0xff);
-
-  return ret;
+  return get_uint_be(buf, 2);
 }
 
 uint32_t
 get_uint24_be(const void *buf) {
-  uint32_t ret;
-  unsigned char *tmp;
-
-  tmp = (unsigned char *) buf;
-
-  ret = tmp[0] & 0xff;
-  ret = (ret << 8) + (tmp[1] & 0xff);
-  ret = (ret << 8) + (tmp[2] & 0xff);
-
-  return ret;
+  return get_uint_be(buf, 3);
 }
 
 uint32_t
 get_uint32_be(const void *buf) {
-  uint32_t ret;
-  unsigned char *tmp;
-
-  tmp = (unsigned char *) buf;
-
-  ret = tmp[0] & 0xff;
-  ret = (ret << 8) + (tmp[1] & 0xff);
-  ret = (ret << 8) + (tmp[2] & 0xff);
-  ret = (ret << 8) + (tmp[3] & 0xff);
-
-  return ret;
+  return get_uint_be(buf, 4);
 }
 
 uint64_t
 get_uint64_be(const void *buf) {
-  uint64_t ret;
-  unsigned char *tmp;
+  return get_uint_be(buf, 8);
+}
 
-  tmp = (unsigned char *) buf;
-
-  ret = tmp[0] & 0xff;
-  ret = (ret << 8) + (tmp[1] & 0xff);
-  ret = (ret << 8) + (tmp[2] & 0xff);
-  ret = (ret << 8) + (tmp[3] & 0xff);
-  ret = (ret << 8) + (tmp[4] & 0xff);
-  ret = (ret << 8) + (tmp[5] & 0xff);
-  ret = (ret << 8) + (tmp[6] & 0xff);
-  ret = (ret << 8) + (tmp[7] & 0xff);
+uint64_t
+get_uint_be(const void *buf,
+            int num_bytes) {
+  int i;
+  num_bytes          = std::min(std::max(1, num_bytes), 8);
+  unsigned char *tmp = (unsigned char *) buf;
+  uint64_t ret       = 0;
+  for (i = 0; num_bytes > i; ++i)
+    ret = (ret << 8) + (tmp[i] & 0xff);
 
   return ret;
 }
