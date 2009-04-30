@@ -968,20 +968,16 @@ mm_mem_io_c::getFilePointer() {
 void
 mm_mem_io_c::setFilePointer(int64 offset,
                             seek_mode mode) {
-  int64_t npos;
-
-  if (((mem == NULL) && (ro_mem == NULL)) || (mem_size == 0))
+  if (((NULL == mem) && (NULL == ro_mem)) || (0 == mem_size))
     throw error_c(Y("wrong usage: read-only with NULL memory"));
 
-  if (mode == seek_beginning)
-    npos = offset;
-  else if (mode == seek_end)
-    npos = mem_size - offset;
-  else
-    npos = pos + offset;
+  int64_t new_pos
+    = seek_beginning == mode ? offset
+    : seek_end       == mode ? mem_size - offset
+    :                          pos      + offset;
 
-  if ((0 <= npos) && (mem_size >= npos))
-    pos = npos;
+  if ((0 <= new_pos) && (mem_size >= new_pos))
+    pos = new_pos;
   else
     throw mm_io_seek_error_c();
 }
