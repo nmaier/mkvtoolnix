@@ -20,6 +20,7 @@
 #include "os.h"
 
 #include "bit_cursor.h"
+#include "byte_buffer.h"
 #include "checksums.h"
 #include "common.h"
 #include "hacks.h"
@@ -1018,6 +1019,51 @@ mpeg4::p10::compare_poc_by_dec(const poc_t &poc1,
   return poc1.dec < poc2.dec;
 }
 
+memory_cptr
+mpeg4::p10::avcc_to_nalus(const unsigned char *buffer,
+                          int size) {
+  try {
+    if (6 > size)
+      throw false;
+
+    mm_mem_io_c mem(buffer, size);
+    byte_buffer_c nalus(size * 2);
+
+    if (0x01 != mem.read_uint8())
+      throw false;
+
+    mem.setFilePointer(4, seek_beginning);
+    int nal_size_size = 1 + (mem.read_uint8() & 3);
+    if (2 > nal_size_size)
+      throw false;
+
+    int sps_or_pps;
+    for (sps_or_pps = 0; 2 > sps_or_pps; ++sps_or_pps) {
+      int num = mem.read_uint8();
+      if (0 == sps_or_pps)
+        num &= 0x1f;
+
+      int i;
+      for (i = 0; num > i; ++i) {
+        uint16_t element_size = mem.read_uint16_be();
+        memory_cptr copy_buffer = memory_c::alloc(element_size + 4);
+        if (element_size != mem.read(copy_buffer->get() + 4, element_size))
+          throw false;
+
+        put_uint32_be(copy_buffer->get(), NALU_START_CODE);
+        nalus.add(copy_buffer->get(), element_size + 4);
+      }
+    }
+
+    if (mem.getFilePointer() == size)
+      return clone_memory(nalus.get_buffer(), nalus.get_size());
+
+  } catch (...) {
+  }
+
+  return memory_cptr(NULL);
+}
+
 mpeg4::p10::avc_es_parser_c::avc_es_parser_c():
   m_nalu_size_length(4),
   m_keep_ar_info(true),
@@ -1047,9 +1093,9 @@ mpeg4::p10::avc_es_parser_c::add_bytes(unsigned char *buffer,
       (unsigned int)cursor.get_char();
 
     while (1) {
-      if (0x00000001 == marker)
+      if (NALU_START_CODE == marker)
         marker_size = 4;
-      else if (0x00000001 == (marker & 0x00ffffff))
+      else if (NALU_START_CODE == (marker & 0x00ffffff))
         marker_size = 3;
 
       if (0 != marker_size) {
@@ -1089,8 +1135,7 @@ void
 mpeg4::p10::avc_es_parser_c::flush() {
   if ((NULL != m_unparsed_buffer.get()) &&
       (5 <= m_unparsed_buffer->get_size())) {
-    int marker_size = get_uint32_be(m_unparsed_buffer->get()) == 0x0000001 ?
-      4 : 3;
+    int marker_size = get_uint32_be(m_unparsed_buffer->get()) == NALU_START_CODE ? 4 : 3;
     handle_nalu(clone_memory(m_unparsed_buffer->get() + marker_size,
                              m_unparsed_buffer->get_size() - marker_size));
   }

@@ -72,6 +72,11 @@ mpeg4_p10_es_video_packetizer_c::set_headers() {
   track_entry->EnableLacing(false);
 }
 
+void
+mpeg4_p10_es_video_packetizer_c::add_extra_data(memory_cptr data) {
+  m_parser.add_bytes(data->get(), data->get_size());
+}
+
 int
 mpeg4_p10_es_video_packetizer_c::process(packet_cptr packet) {
   try {

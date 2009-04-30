@@ -173,6 +173,8 @@ namespace mpeg4 {
 
   namespace p10 {
 
+#define NALU_START_CODE 0x00000001
+
 #define NALU_TYPE_NON_IDR_SLICE  0x01
 #define NALU_TYPE_DP_A_SLICE     0x02
 #define NALU_TYPE_DP_B_SLICE     0x03
@@ -277,6 +279,7 @@ namespace mpeg4 {
     bool MTX_DLL_API extract_par(uint8_t *&buffer, int &buffer_size,
                                  uint32_t &par_num, uint32_t &par_den);
     bool MTX_DLL_API is_avc_fourcc(const char *fourcc);
+    memory_cptr MTX_DLL_API avcc_to_nalus(const unsigned char *buffer, int size);
 
     struct avc_frame_t {
       memory_cptr m_data;

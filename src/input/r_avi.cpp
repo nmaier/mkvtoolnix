@@ -91,6 +91,7 @@ avi_reader_c::avi_reader_c(track_info_c &_ti)
   dropped_video_frames(0),
   act_wchar(0),
   rederive_keyframes(false),
+  avc_nal_size_size(-1),
   bytes_to_process(0),
   bytes_processed(0) {
 
@@ -228,32 +229,14 @@ avi_reader_c::create_packetizer(int64_t tid) {
     }
 
     ti.id = 0;                 // ID for the video track.
-    if (DIVX_TYPE_MPEG4 == divx_type) {
-      vptzr = add_packetizer(new mpeg4_p2_video_packetizer_c(this, ti, AVI_frame_rate(avi), AVI_video_width(avi), AVI_video_height(avi), false));
-      if (verbose)
-        mxinfo_tid(ti.fname, 0, Y("Using the MPEG-4 part 2 video output module.\n"));
+    if (DIVX_TYPE_MPEG4 == divx_type)
+      create_mpeg4_p2_packetizer();
 
-    } else if (mpeg4::p10::is_avc_fourcc(codec) && !hack_engaged(ENGAGE_ALLOW_AVC_IN_VFW_MODE)) {
-      try {
-        memory_cptr avcc                      = extract_avcc();
-        mpeg4_p10_es_video_packetizer_c *ptzr = new mpeg4_p10_es_video_packetizer_c(this, ti, avcc, AVI_video_width(avi), AVI_video_height(avi));
-        vptzr                                 = add_packetizer(ptzr);
+    else if (mpeg4::p10::is_avc_fourcc(codec) && !hack_engaged(ENGAGE_ALLOW_AVC_IN_VFW_MODE))
+      create_mpeg4_p10_packetizer();
 
-        ptzr->enable_timecode_generation(false);
-        ptzr->set_track_default_duration((int64_t)(1000000000 / AVI_frame_rate(avi)));
-
-        if (verbose)
-          mxinfo_tid(ti.fname, 0, Y("Using the MPEG-4 part 10 ES video output module.\n"));
-
-      } catch (...) {
-        mxerror_tid(ti.fname, 0, Y("Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"));
-      }
-    } else {
-      vptzr = add_packetizer(new video_packetizer_c(this, ti, NULL, AVI_frame_rate(avi), AVI_video_width(avi), AVI_video_height(avi)));
-
-      if (verbose)
-        mxinfo_tid(ti.fname, 0, Y("Using the video output module.\n"));
-    }
+    else
+      create_standard_video_packetizer();
   }
 
   if (0 == tid)
@@ -261,6 +244,43 @@ avi_reader_c::create_packetizer(int64_t tid) {
 
   if ((tid <= AVI_audio_tracks(avi)) && demuxing_requested('a', tid))
     add_audio_demuxer(tid - 1);
+}
+
+void
+avi_reader_c::create_mpeg4_p2_packetizer() {
+  vptzr = add_packetizer(new mpeg4_p2_video_packetizer_c(this, ti, AVI_frame_rate(avi), AVI_video_width(avi), AVI_video_height(avi), false));
+
+  if (verbose)
+    mxinfo_tid(ti.fname, 0, Y("Using the MPEG-4 part 2 video output module.\n"));
+}
+
+void
+avi_reader_c::create_mpeg4_p10_packetizer() {
+  try {
+    memory_cptr avcc                      = extract_avcc();
+    mpeg4_p10_es_video_packetizer_c *ptzr = new mpeg4_p10_es_video_packetizer_c(this, ti, avcc, AVI_video_width(avi), AVI_video_height(avi));
+    vptzr                                 = add_packetizer(ptzr);
+
+    ptzr->enable_timecode_generation(false);
+    ptzr->set_track_default_duration((int64_t)(1000000000 / AVI_frame_rate(avi)));
+
+    if (NULL != avc_extra_nalus.get())
+      ptzr->add_extra_data(avc_extra_nalus);
+
+    if (verbose)
+      mxinfo_tid(ti.fname, 0, Y("Using the MPEG-4 part 10 ES video output module.\n"));
+
+  } catch (...) {
+    mxerror_tid(ti.fname, 0, Y("Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"));
+  }
+}
+
+void
+avi_reader_c::create_standard_video_packetizer() {
+  vptzr = add_packetizer(new video_packetizer_c(this, ti, NULL, AVI_frame_rate(avi), AVI_video_width(avi), AVI_video_height(avi)));
+
+  if (verbose)
+    mxinfo_tid(ti.fname, 0, Y("Using the video output module.\n"));
 }
 
 void
@@ -331,7 +351,6 @@ avi_reader_c::create_ssa_packetizer(int idx) {
 memory_cptr
 avi_reader_c::extract_avcc() {
   avc_es_parser_c parser;
-  int i, size, key;
 
   parser.ignore_nalu_size_length_errors();
   if (map_has_key(ti.nalu_size_lengths, 0))
@@ -339,22 +358,58 @@ avi_reader_c::extract_avcc() {
   else if (map_has_key(ti.nalu_size_lengths, -1))
     parser.set_nalu_size_length(ti.nalu_size_lengths[-1]);
 
+  int extra_data_size = get_uint32_le(&avi->bitmap_info_header->bi_size) - sizeof(alBITMAPINFOHEADER);
+  if (0 < extra_data_size) {
+    avc_extra_nalus = mpeg4::p10::avcc_to_nalus((unsigned char *)(avi->bitmap_info_header + 1), extra_data_size);
+    if (avc_extra_nalus.get() != NULL) {
+      avc_nal_size_size = 1 + (((unsigned char *)(avi->bitmap_info_header + 1))[4] & 0x03);
+      parser.add_bytes(avc_extra_nalus->get(), avc_extra_nalus->get_size());
+    }
+  }
+
+  int i;
   for (i = 0; i < max_video_frames; ++i) {
-    size = AVI_frame_size(avi, i);
+    int size = AVI_frame_size(avi, i);
     if (0 == size)
       continue;
 
-    memory_cptr buffer(new memory_c((unsigned char *)safemalloc(size), size, true));
+    memory_cptr buffer = memory_c::alloc(size);
 
     AVI_set_video_position(avi, i);
-    size = AVI_read_frame(avi, (char *)buffer->get(), &key);
+    int key = 0;
+    size    = AVI_read_frame(avi, (char *)buffer->get(), &key);
+
+    if (   (0 == i)
+        && (4 <= size)
+        && (get_uint32_be(buffer->get()) == NALU_START_CODE))
+      avc_nal_size_size = -1;
 
     if (0 < size) {
-      parser.add_bytes(buffer->get(), size);
-      if (parser.headers_parsed()) {
-        AVI_set_video_position(avi, 0);
-        return parser.get_avcc();
+      if (0 >= avc_nal_size_size)
+        parser.add_bytes(buffer->get(), size);
+      else {
+        int offset = 0;
+
+        while ((offset + avc_nal_size_size) < size) {
+          int nalu_size  = get_uint_be(buffer->get() + offset, avc_nal_size_size);
+          offset        += avc_nal_size_size;
+
+          if ((offset + nalu_size) > size)
+            break;
+
+          memory_cptr nalu = memory_c::alloc(4 + nalu_size);
+          put_uint32_be(nalu->get(), NALU_START_CODE);
+          memcpy(nalu->get() + 4, buffer->get() + offset, nalu_size);
+          offset += nalu_size;
+
+          parser.add_bytes(nalu);
+        }
       }
+    }
+
+    if (parser.headers_parsed()) {
+      AVI_set_video_position(avi, 0);
+      return parser.get_avcc();
     }
   }
 
@@ -675,7 +730,28 @@ avi_reader_c::read_video() {
 
   dropped_video_frames += dropped_frames_here;
 
-  PTZR(vptzr)->process(new packet_t(new memory_c(chunk, nread, true), timestamp, duration, key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC, VFT_NOBFRAME));
+  if (0 >= avc_nal_size_size)   // AVC with framed packets (without NALU start codes but with length fields)?
+    PTZR(vptzr)->process(new packet_t(new memory_c(chunk, nread, true), timestamp, duration, key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC, VFT_NOBFRAME));
+  else {                        // Yes. Re-frame with NALU start codes.
+    int offset = 0;
+
+    while ((offset + avc_nal_size_size) < nread) {
+      int nalu_size  = get_uint_be(chunk + offset, avc_nal_size_size);
+      offset        += avc_nal_size_size;
+
+      if ((offset + nalu_size) > nread)
+        break;
+
+      memory_cptr nalu = memory_c::alloc(4 + nalu_size);
+      put_uint32_be(nalu->get(), NALU_START_CODE);
+      memcpy(nalu->get() + 4, chunk + offset, nalu_size);
+      offset += nalu_size;
+
+      PTZR(vptzr)->process(new packet_t(nalu, timestamp, duration, key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC, VFT_NOBFRAME));
+    }
+
+    safefree(chunk);
+  }
 
   bytes_processed += nread;
 

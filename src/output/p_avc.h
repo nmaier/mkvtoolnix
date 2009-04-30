@@ -33,6 +33,7 @@ public:
   mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, memory_cptr avcc, int width, int height);
 
   virtual int process(packet_cptr packet);
+  virtual void add_extra_data(memory_cptr data);
   virtual void set_headers();
 
   virtual void flush();

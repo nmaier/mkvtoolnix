@@ -67,6 +67,8 @@ private:
   double fps;
   int video_frames_read, max_video_frames, dropped_video_frames, act_wchar;
   bool is_divx, rederive_keyframes;
+  memory_cptr avc_extra_nalus;
+  int avc_nal_size_size;
 
   int64_t bytes_to_process, bytes_processed;
 
@@ -96,6 +98,9 @@ protected:
   virtual void create_subs_packetizer(int idx);
   virtual void create_srt_packetizer(int idx);
   virtual void create_ssa_packetizer(int idx);
+  virtual void create_standard_video_packetizer();
+  virtual void create_mpeg4_p2_packetizer();
+  virtual void create_mpeg4_p10_packetizer();
 
   void extended_identify_mpeg4_l2(vector<string> &extended_info);
 
