@@ -980,12 +980,10 @@ mm_mem_io_c::setFilePointer(int64 offset,
   else
     npos = pos + offset;
 
-  if (npos < 0)
-    pos = 0;
-  else if (npos >= mem_size)
-    pos = mem_size;
-  else
+  if ((0 <= npos) && (mem_size >= npos))
     pos = npos;
+  else
+    throw mm_io_seek_error_c();
 }
 
 uint32
