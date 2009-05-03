@@ -34,10 +34,13 @@ class MTX_DLL_API memory_c {
 public:
   typedef unsigned char X;
 
-  explicit memory_c(void *p = NULL, int s = 0, bool f = false): // allocate a new counter
-    its_counter(NULL) {
+  explicit memory_c(void *p = NULL,
+                    int s = 0,
+                    bool f = false) // allocate a new counter
+    : its_counter(NULL)
+  {
     if (p)
-      its_counter = new counter((unsigned char *)p, s, f);
+      its_counter = new counter(static_cast<unsigned char *>(p), s, f);
   }
 
   ~memory_c() {
@@ -80,18 +83,17 @@ public:
   }
 
   memory_c *clone() const {
-    return new memory_c((unsigned char *)safememdup(get(), get_size()),
-                        get_size(), true);
+    return new memory_c(static_cast<unsigned char *>(safememdup(get(), get_size())), get_size(), true);
   }
 
   void grab() {
     if (!its_counter || its_counter->is_free)
       return;
 
-    its_counter->ptr = (unsigned char *)safememdup(get(), get_size());
-    its_counter->is_free = true;
-    its_counter->size -= its_counter->offset;
-    its_counter->offset = 0;
+    its_counter->ptr      = static_cast<unsigned char *>(safememdup(get(), get_size()));
+    its_counter->is_free  = true;
+    its_counter->size    -= its_counter->offset;
+    its_counter->offset   = 0;
   }
 
   void lock() {
@@ -101,20 +103,28 @@ public:
 
   void resize(int new_size) throw();
 
- public:
+public:
   static memory_cptr alloc(int size) {
-    return memory_cptr(new memory_c((unsigned char *)safemalloc(size), size, true));
+    return memory_cptr(new memory_c(static_cast<unsigned char *>(safemalloc(size)), size, true));
   };
 
 private:
   struct counter {
-    counter(X *p = NULL, int s = 0, bool f = false, unsigned c = 1):
-      ptr(p), size(s), is_free(f), count(c), offset(0) {}
-
     X *ptr;
     int size;
     bool is_free;
     unsigned count, offset;
+
+    counter(X *p = NULL,
+            int s = 0,
+            bool f = false,
+            unsigned c = 1)
+      : ptr(p)
+      , size(s)
+      , is_free(f)
+      , count(c)
+      , offset(0)
+    { }
   } *its_counter;
 
   void acquire(counter *c) throw() { // increment the count
@@ -136,36 +146,37 @@ private:
 };
 
 class MTX_DLL_API memory_slice_cursor_c {
-protected:
+ protected:
   int m_pos, m_pos_in_slice, m_size;
   deque<memory_cptr> m_slices;
   deque<memory_cptr>::iterator m_slice;
 
-public:
-  memory_slice_cursor_c():
-    m_pos(0),
-    m_pos_in_slice(0),
-    m_size(0),
-    m_slice(m_slices.end()) {
-  };
+ public:
+  memory_slice_cursor_c()
+    : m_pos(0)
+    , m_pos_in_slice(0)
+    , m_size(0)
+    , m_slice(m_slices.end())
+  {
+  }
 
   memory_slice_cursor_c(const memory_slice_cursor_c &) {
     mxerror(Y("memory_slice_cursor_c copy c'tor: Must not be used!"));
-  };
+  }
 
   ~memory_slice_cursor_c() {
-  };
+  }
 
   void add_slice(memory_cptr slice) {
     m_slices.push_back(slice);
     m_size += slice->get_size();
     if (m_slice == m_slices.end())
       m_slice = m_slices.begin();
-  };
+  }
 
   void add_slice(unsigned char *buffer, int size) {
     add_slice(memory_cptr(new memory_c(buffer, size, false)));
-  };
+  }
 
   unsigned char get_char() {
     assert(m_pos < m_size);
@@ -204,9 +215,9 @@ public:
       m_slices.clear();
       m_size = 0;
     }
-    m_pos = 0;
+    m_pos          = 0;
     m_pos_in_slice = 0;
-    m_slice = m_slices.begin();
+    m_slice        = m_slices.begin();
   };
 
   void copy(unsigned char *dest, int start, int size) {
@@ -241,7 +252,7 @@ public:
 inline memory_cptr
 clone_memory(void *buffer,
              int size) {
-  return memory_cptr(new memory_c((unsigned char *)safememdup(buffer, size), size, true));
+  return memory_cptr(new memory_c(static_cast<unsigned char *>(safememdup(buffer, size)), size, true));
 }
 
 inline memory_cptr

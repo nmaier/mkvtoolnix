@@ -120,7 +120,7 @@ public:
   virtual void parse(mm_io_c &in);
   virtual bool get_next(packet_cptr &packet);
   virtual double get_default_duration(double proposal) {
-    return 0.0 != m_default_fps ? (double)1000000000.0 / m_default_fps : proposal;
+    return 0.0 != m_default_fps ? 1000000000.0 / m_default_fps : proposal;
   }
 
 protected:
@@ -150,7 +150,7 @@ public:
   virtual void parse(mm_io_c &in);
   virtual bool get_next(packet_cptr &packet);
   virtual double get_default_duration(double proposal) {
-    return m_default_fps != 0.0 ? (double)1000000000.0 / m_default_fps : proposal;
+    return m_default_fps != 0.0 ? static_cast<double>(1000000000.0) / m_default_fps : proposal;
   }
 };
 
