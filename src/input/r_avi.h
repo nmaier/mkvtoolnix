@@ -31,9 +31,19 @@ extern "C" {
 #include "subtitles.h"
 
 typedef struct avi_demuxer_t {
-  int ptzr;
-  int channels, bits_per_sample, samples_per_second, aid;
-  int64_t bytes_processed;
+  int m_ptzr;
+  int m_channels, m_bits_per_sample, m_samples_per_second, m_aid;
+  int64_t m_bytes_processed;
+
+  avi_demuxer_t()
+    : m_ptzr(-1)
+    , m_channels(0)
+    , m_bits_per_sample(0)
+    , m_samples_per_second(0)
+    , m_aid(0)
+    , m_bytes_processed(0)
+  {
+  }
 } avi_demuxer_t;
 
 struct avi_subs_demuxer_t {
@@ -41,15 +51,15 @@ struct avi_subs_demuxer_t {
     TYPE_UNKNOWN,
     TYPE_SRT,
     TYPE_SSA,
-  } type;
+  } m_type;
 
-  int ptzr;
+  int m_ptzr;
 
-  string sub_language;
-  memory_cptr subtitles;
+  std::string m_sub_language;
+  memory_cptr m_subtitles;
 
-  mm_text_io_cptr text_io;
-  subtitles_cptr subs;
+  mm_text_io_cptr m_text_io;
+  subtitles_cptr m_subs;
 };
 
 class avi_reader_c: public generic_reader_c {
@@ -58,19 +68,19 @@ private:
     DIVX_TYPE_NONE,
     DIVX_TYPE_V3,
     DIVX_TYPE_MPEG4
-  } divx_type;
+  } m_divx_type;
 
-  avi_t *avi;
-  int vptzr;
-  vector<avi_demuxer_t> ademuxers;
-  vector<avi_subs_demuxer_t> sdemuxers;
-  double fps;
-  int video_frames_read, max_video_frames, dropped_video_frames, act_wchar;
-  bool is_divx, rederive_keyframes;
-  memory_cptr avc_extra_nalus;
-  int avc_nal_size_size;
+  avi_t *m_avi;
+  int m_vptzr;
+  std::vector<avi_demuxer_t> m_audio_demuxers;
+  std::vector<avi_subs_demuxer_t> m_subtitle_demuxers;
+  double m_fps;
+  int m_video_frames_read, m_max_video_frames, m_dropped_video_frames, m_act_wchar;
+  bool m_is_divx;
+  memory_cptr m_avc_extra_nalus;
+  int m_avc_nal_size_size;
 
-  int64_t bytes_to_process, bytes_processed;
+  int64_t m_bytes_to_process, m_bytes_processed;
 
 public:
   avi_reader_c(track_info_c &_ti) throw (error_c);
@@ -87,7 +97,6 @@ public:
 
 protected:
   virtual void add_audio_demuxer(int aid);
-  virtual int is_keyframe(unsigned char *data, long size, int suggestion);
   virtual file_status_e read_video();
   virtual file_status_e read_audio(avi_demuxer_t &demuxer);
   virtual file_status_e read_subtitles(avi_subs_demuxer_t &demuxer);
@@ -102,7 +111,7 @@ protected:
   virtual void create_mpeg4_p2_packetizer();
   virtual void create_mpeg4_p10_packetizer();
 
-  void extended_identify_mpeg4_l2(vector<string> &extended_info);
+  void extended_identify_mpeg4_l2(std::vector<std::string> &extended_info);
 
   void parse_subtitle_chunks();
 
