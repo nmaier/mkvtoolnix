@@ -14,11 +14,11 @@
 #ifndef __P_AVC_H
 #define __P_AVC_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "common.h"
-#include "mpeg4_common.h"
-#include "pr_generic.h"
+#include "common/common.h"
+#include "common/mpeg4_common.h"
+#include "merge/pr_generic.h"
 
 using namespace mpeg4::p10;
 

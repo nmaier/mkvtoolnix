@@ -44,10 +44,10 @@
 
 #include <string>
 
-#include "os.h"
-#include "base64.h"
-#include "common.h"
-#include "error.h"
+#include "common/os.h"
+#include "common/base64.h"
+#include "common/common.h"
+#include "common/error.h"
 
 using namespace std;
 

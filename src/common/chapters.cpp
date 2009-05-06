@@ -12,20 +12,22 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include <ctype.h>
-#include <stdarg.h>
-
+#include <boost/regex.hpp>
 #include <cassert>
 #include <string>
-#include <boost/regex.hpp>
 
 #include <matroska/KaxChapters.h>
 
-#include "chapters.h"
-#include "commonebml.h"
-#include "error.h"
+#include "common/chapters.h"
+#include "common/ebml.h"
+#include "common/error.h"
+#include "common/locale.h"
+#include "common/mm_io.h"
+#include "common/string_editing.h"
+#include "common/string_parsing.h"
+#include "common/unique_numbers.h"
 
 using namespace std;
 using namespace libmatroska;

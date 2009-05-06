@@ -11,16 +11,17 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <cassert>
 
-#include "common.h"
-#include "hacks.h"
-#include "matroska.h"
-#include "mpeg4_common.h"
-#include "output_control.h"
-#include "p_avc.h"
+#include "common/common.h"
+#include "common/hacks.h"
+#include "common/math.h"
+#include "common/matroska.h"
+#include "common/mpeg4_common.h"
+#include "merge/output_control.h"
+#include "output/p_avc.h"
 
 using namespace libmatroska;
 using namespace mpeg4::p10;

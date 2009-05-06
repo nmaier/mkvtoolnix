@@ -14,13 +14,13 @@
 #ifndef __FLAC_COMMON_H
 #define __FLAC_COMMON_H
 
-#include "config.h"
+#include "common/os.h"
 
 #if defined(HAVE_FLAC_FORMAT_H)
 
 #include <FLAC/format.h>
 
-#include "common.h"
+#include "common/common.h"
 
 #define FLAC_HEADER_STREAM_INFO      1
 #define FLAC_HEADER_VORBIS_COMMENTS  2

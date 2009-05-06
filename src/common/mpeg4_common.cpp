@@ -17,15 +17,18 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include "bit_cursor.h"
-#include "byte_buffer.h"
-#include "checksums.h"
-#include "common.h"
-#include "hacks.h"
-#include "mm_io.h"
-#include "mpeg4_common.h"
+#include "common/bit_cursor.h"
+#include "common/byte_buffer.h"
+#include "common/checksums.h"
+#include "common/common.h"
+#include "common/endian.h"
+#include "common/hacks.h"
+#include "common/math.h"
+#include "common/mm_io.h"
+#include "common/mpeg4_common.h"
+#include "common/string_formatting.h"
 
 namespace mpeg4 {
   namespace p2 {

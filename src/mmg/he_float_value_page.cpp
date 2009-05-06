@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <wx/string.h>
 #include <wx/regex.h>
@@ -19,8 +19,9 @@
 
 #include <ebml/EbmlFloat.h>
 
-#include "he_float_value_page.h"
-#include "wxcommon.h"
+#include "common/string_parsing.h"
+#include "common/wxcommon.h"
+#include "mmg/he_float_value_page.h"
 
 using namespace libebml;
 

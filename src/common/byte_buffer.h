@@ -11,12 +11,13 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __BYTE_BUFFER_H
-#define __BYTE_BUFFER_H
+#ifndef __MTX_COMMON_BYTE_BUFFER_H
+#define __MTX_COMMON_BYTE_BUFFER_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "common.h"
+#include "common/common.h"
+#include "common/memory.h"
 
 class byte_buffer_c {
 private:
@@ -85,4 +86,4 @@ public:
   };
 };
 
-#endif // __BYTE_BUFFER_H
+#endif // __MTX_COMMON_BYTE_BUFFER_H

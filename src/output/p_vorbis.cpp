@@ -11,17 +11,15 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
-
-#include <string.h>
+#include "common/os.h"
 
 #include <ogg/ogg.h>
 #include <vorbis/codec.h>
 
-#include "common.h"
-#include "matroska.h"
-#include "output_control.h"
-#include "p_vorbis.h"
+#include "common/common.h"
+#include "common/matroska.h"
+#include "merge/output_control.h"
+#include "output/p_vorbis.h"
 
 using namespace libmatroska;
 

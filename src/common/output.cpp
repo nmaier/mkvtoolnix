@@ -11,11 +11,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include "common_output.h"
-#include "mm_io.h"
-#include "smart_pointers.h"
+#include "common/mm_io.h"
+#include "common/locale.h"
+#include "common/output.h"
+#include "common/smart_pointers.h"
 
 bool g_suppress_warnings          = false;
 bool g_warning_issued             = false;
@@ -164,3 +165,46 @@ set_cc_stdio(const std::string &charset) {
   g_stdio_charset = charset;
   g_cc_stdio      = utf8_init(charset);
 }
+
+void
+mxhexdump(int level,
+          const unsigned char *buffer,
+          int length) {
+  int i, j;
+  char output[24];
+
+  if (verbose < level)
+    return;
+  j = 0;
+  for (i = 0; i < length; i++) {
+    if ((i % 16) == 0) {
+      if (i > 0) {
+        output[j] = 0;
+        mxinfo(boost::format("%1%\n") % output);
+        j = 0;
+      }
+      mxinfo(boost::format("%|1$08x|  ") % i);
+
+    } else if ((i % 8) == 0) {
+      mxinfo(" ");
+      output[j] = ' ';
+      j++;
+
+    }
+    if ((buffer[i] >= 32) && (buffer[i] < 128))
+      output[j] = buffer[i];
+    else
+      output[j] = '.';
+    j++;
+    mxinfo(boost::format("%|1$02x| ") % (int)buffer[i]);
+  }
+  while ((i % 16) != 0) {
+    if ((i % 8) == 0)
+      mxinfo(" ");
+    mxinfo("   ");
+    i++;
+  }
+  output[j] = 0;
+  mxinfo(boost::format("%1%\n") % output);
+}
+

@@ -14,14 +14,7 @@
 
 // {{{ includes
 
-#include "os.h"
-
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include <typeinfo>
+#include "common/os.h"
 
 extern "C" {                    // for BITMAPINFOHEADER
 #include "avilib.h"
@@ -51,35 +44,38 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include <matroska/KaxTrackAudio.h>
 #include <matroska/KaxTrackVideo.h>
 
-#include "chapters.h"
-#include "common.h"
-#include "commonebml.h"
-#include "hacks.h"
-#include "matroska.h"
-#include "output_control.h"
-#include "mm_io.h"
-#include "pr_generic.h"
-#include "r_matroska.h"
-
-#include "p_aac.h"
-#include "p_ac3.h"
-#include "p_avc.h"
-#include "p_dirac.h"
-#include "p_dts.h"
+#include "common/chapters.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/endian.h"
+#include "common/hacks.h"
+#include "common/math.h"
+#include "common/matroska.h"
+#include "common/mm_io.h"
+#include "common/string_formatting.h"
+#include "common/string_parsing.h"
+#include "input/r_matroska.h"
+#include "merge/output_control.h"
+#include "merge/pr_generic.h"
+#include "output/p_aac.h"
+#include "output/p_ac3.h"
+#include "output/p_avc.h"
+#include "output/p_dirac.h"
+#include "output/p_dts.h"
 #if defined(HAVE_FLAC_FORMAT_H)
-#include "p_flac.h"
+# include "output/p_flac.h"
 #endif
-#include "p_mp3.h"
-#include "p_passthrough.h"
-#include "p_pcm.h"
-#include "p_textsubs.h"
-#include "p_tta.h"
-#include "p_video.h"
-#include "p_vobsub.h"
-#include "p_vobbtn.h"
-#include "p_vorbis.h"
-#include "p_wavpack.h"
-#include "p_kate.h"
+#include "output/p_kate.h"
+#include "output/p_mp3.h"
+#include "output/p_passthrough.h"
+#include "output/p_pcm.h"
+#include "output/p_textsubs.h"
+#include "output/p_tta.h"
+#include "output/p_video.h"
+#include "output/p_vobbtn.h"
+#include "output/p_vobsub.h"
+#include "output/p_vorbis.h"
+#include "output/p_wavpack.h"
 
 using namespace std;
 using namespace libmatroska;

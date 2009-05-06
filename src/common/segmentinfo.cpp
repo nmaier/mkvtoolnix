@@ -13,7 +13,7 @@
    \author Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <ctype.h>
 #include <stdarg.h>
@@ -24,10 +24,10 @@
 #include <matroska/KaxInfo.h>
 #include <matroska/KaxInfoData.h>
 
-#include "common.h"
-#include "commonebml.h"
-#include "error.h"
-#include "segmentinfo.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/error.h"
+#include "common/segmentinfo.h"
 
 using namespace std;
 using namespace libmatroska;

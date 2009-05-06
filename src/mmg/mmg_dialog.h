@@ -16,6 +16,8 @@
 
 #include <wx/html/helpctrl.h>
 
+#include "mmg/mmg.h"
+
 #define ID_TC_OUTPUT                      10000
 #define ID_B_BROWSEOUTPUT                 10001
 #define ID_NOTEBOOK                       10002

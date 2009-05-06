@@ -11,19 +11,18 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include <ctype.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
+#include "common/os.h"
 
-#include "common.h"
-#include "hacks.h"
-#include "matroska.h"
-#include "mpeg4_common.h"
-#include "output_control.h"
-#include "p_video.h"
-#include "theora_common.h"
+#include "common/common.h"
+#include "common/endian.h"
+#include "common/hacks.h"
+#include "common/math.h"
+#include "common/matroska.h"
+#include "common/mpeg4_common.h"
+#include "common/string_formatting.h"
+#include "common/theora_common.h"
+#include "merge/output_control.h"
+#include "output/p_video.h"
 
 extern "C" {
 #include <avilib.h>

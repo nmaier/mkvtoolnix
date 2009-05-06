@@ -11,11 +11,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include "bit_cursor.h"
-#include "common.h"
-#include "theora_common.h"
+#include "common/bit_cursor.h"
+#include "common/common.h"
+#include "common/math.h"
+#include "common/theora_common.h"
 
 theora_identification_header_t::theora_identification_header_t() {
   memset(this, 0, sizeof(theora_identification_header_t));

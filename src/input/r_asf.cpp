@@ -11,10 +11,11 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include "common.h"
-#include "r_asf.h"
+#include "common/common.h"
+#include "common/endian.h"
+#include "input/r_asf.h"
 
 #define MAGIC_ASF_WMV 0x3026b275
 

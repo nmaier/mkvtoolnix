@@ -14,10 +14,10 @@
 #ifndef __R_AVC_H
 #define __R_AVC_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "mpeg4_common.h"
-#include "pr_generic.h"
+#include "common/mpeg4_common.h"
+#include "merge/pr_generic.h"
 
 class avc_es_reader_c: public generic_reader_c {
 private:

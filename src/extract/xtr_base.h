@@ -13,15 +13,16 @@
 #ifndef __XTR_BASE_H
 #define __XTR_BASE_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <string>
 
+#include <matroska/KaxBlock.h>
 #include <matroska/KaxTracks.h>
 
-#include "common.h"
-#include "compression.h"
-#include "mkvextract.h"
+#include "common/common.h"
+#include "common/compression.h"
+#include "extract/mkvextract.h"
 
 using namespace std;
 using namespace libmatroska;

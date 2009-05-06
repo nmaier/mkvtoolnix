@@ -14,10 +14,10 @@
 #ifndef __P_PASSTHROUGH_H
 #define __P_PASSTHROUGH_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "common.h"
-#include "pr_generic.h"
+#include "common/common.h"
+#include "merge/pr_generic.h"
 
 class passthrough_packetizer_c: public generic_packetizer_c {
 public:

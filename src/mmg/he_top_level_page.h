@@ -14,9 +14,9 @@
 #ifndef __HE_TOP_LEVEL_PAGE_H
 #define __HE_TOP_LEVEL_PAGE_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "he_empty_page.h"
+#include "mmg/he_empty_page.h"
 
 class he_top_level_page_c: public he_empty_page_c {
 public:

@@ -11,9 +11,9 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include "mm_io.h"
+#include "common/mm_io.h"
 
 int
 skip_id3v2_tag(mm_io_c &io) {

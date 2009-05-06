@@ -15,18 +15,18 @@
 #ifndef __R_MATROSKA_H
 #define __R_MATROSKA_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <stdio.h>
 
 #include <map>
 #include <vector>
 
-#include "common.h"
-#include "compression.h"
-#include "error.h"
-#include "mm_io.h"
-#include "pr_generic.h"
+#include "common/common.h"
+#include "common/compression.h"
+#include "common/error.h"
+#include "common/mm_io.h"
+#include "merge/pr_generic.h"
 
 #include <ebml/EbmlUnicodeString.h>
 

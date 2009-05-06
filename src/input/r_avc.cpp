@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -23,12 +23,13 @@
 #include <list>
 #include <memory>
 
-#include "byte_buffer.h"
-#include "common.h"
-#include "error.h"
-#include "output_control.h"
-#include "r_avc.h"
-#include "p_avc.h"
+#include "common/byte_buffer.h"
+#include "common/common.h"
+#include "common/error.h"
+#include "common/memory.h"
+#include "input/r_avc.h"
+#include "merge/output_control.h"
+#include "output/p_avc.h"
 
 using namespace std;
 

@@ -11,20 +11,17 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "config.h"
-
 #ifndef __P_FLAC_H
 #define __P_FLAC_H
 
-#include "os.h"
+#include "common/os.h"
 
 #if defined(HAVE_FLAC_FORMAT_H)
 
 #include <FLAC/format.h>
 
-#include "common.h"
-#include "pr_generic.h"
-#include "smart_pointers.h"
+#include "common/common.h"
+#include "merge/pr_generic.h"
 
 class flac_packetizer_c: public generic_packetizer_c {
 private:

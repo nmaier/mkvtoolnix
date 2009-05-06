@@ -11,13 +11,13 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <vector>
 
-#include "common.h"
-#include "common_memory.h"
-#include "error.h"
+#include "common/common.h"
+#include "common/memory.h"
+#include "common/error.h"
 
 using namespace std;
 
@@ -116,3 +116,56 @@ unlace_memory_xiph(memory_cptr &buffer) {
 
   return blocks;
 }
+
+void *
+_safememdup(const void *s,
+            size_t size,
+            const char *file,
+            int line) {
+  void *copy;
+
+  if (s == NULL)
+    return NULL;
+
+  copy = malloc(size);
+  if (copy == NULL)
+    mxerror(boost::format(Y("memory.cpp/safememdup() called from file %1%, line %2%: malloc() returned NULL for a size of %3% bytes.\n")) % file % line % size);
+  memcpy(copy, s, size);
+
+  return copy;
+}
+
+void *
+_safemalloc(size_t size,
+            const char *file,
+            int line) {
+  void *mem;
+
+  mem = malloc(size);
+  if (mem == NULL)
+    mxerror(boost::format(Y("memory.cpp/safemalloc() called from file %1%, line %2%: malloc() returned NULL for a size of %3% bytes.\n")) % file % line % size);
+
+  return mem;
+}
+
+void *
+_saferealloc(void *mem,
+             size_t size,
+             const char *file,
+             int line) {
+  if (0 == size)
+    // Do this so realloc() may not return NULL on success.
+    size = 1;
+  mem = realloc(mem, size);
+  if (mem == NULL)
+    mxerror(boost::format(Y("memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned NULL for a size of %3% bytes.\n")) % file % line % size);
+
+  return mem;
+}
+
+void
+safefree(void *p) {
+  if (p != NULL)
+    free(p);
+}
+

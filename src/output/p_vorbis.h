@@ -11,19 +11,19 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "config.h"
+#include "common/os.h"
 
 #ifndef __P_VORBIS_H
 #define __P_VORBIS_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <ogg/ogg.h>
 #include <vorbis/codec.h>
 
-#include "common.h"
-#include "pr_generic.h"
-#include "pr_generic.h"
+#include "common/common.h"
+#include "merge/pr_generic.h"
+#include "merge/pr_generic.h"
 
 class vorbis_packetizer_c: public generic_packetizer_c {
 private:

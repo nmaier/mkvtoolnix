@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <errno.h>
 #ifdef HAVE_UNISTD_H
@@ -34,10 +34,10 @@
 #include <windows.h>
 #endif
 
-#include "common.h"
-#include "mmg.h"
-#include "mmg_dialog.h"
-#include "mux_dialog.h"
+#include "common/common.h"
+#include "mmg/mmg.h"
+#include "mmg/mmg_dialog.h"
+#include "mmg/mux_dialog.h"
 
 mux_dialog::mux_dialog(wxWindow *parent):
   wxDialog(parent, -1, Z("mkvmerge is running"), wxDefaultPosition,

@@ -11,11 +11,13 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include "ac3_common.h"
-#include "common.h"
-#include "truehd_common.h"
+#include "common/ac3_common.h"
+#include "common/common.h"
+#include "common/endian.h"
+#include "common/memory.h"
+#include "common/truehd_common.h"
 
 truehd_parser_c::truehd_parser_c()
   : m_sync_state(state_unsynced)

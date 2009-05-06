@@ -11,12 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include <memory>
-
-#include "common.h"
-#include "r_mpeg_ts.h"
+#include "common/common.h"
+#include "input/r_mpeg_ts.h"
 
 #define TS_CONSECUTIVE_PACKETS 16
 #define TS_PROBE_SIZE (2 * TS_CONSECUTIVE_PACKETS * 204)

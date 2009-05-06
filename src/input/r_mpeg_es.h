@@ -14,13 +14,13 @@
 #ifndef __R_MPEG_ES_H
 #define __R_MPEG_ES_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "dts_common.h"
-#include "mpeg4_common.h"
-#include "pr_generic.h"
-#include "smart_pointers.h"
-#include "M2VParser.h"
+#include "common/dts_common.h"
+#include "common/mpeg4_common.h"
+#include "merge/pr_generic.h"
+#include "common/smart_pointers.h"
+#include "mpegparser/M2VParser.h"
 
 class error_c;
 class generic_reader_c;

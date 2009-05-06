@@ -11,12 +11,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __THEORA_COMMON_H
-#define __THEORA_COMMON_H
+#ifndef __MTX_COMMON_THEORA_COMMON_H
+#define __MTX_COMMON_THEORA_COMMON_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "error.h"
+#include "common/error.h"
 
 #define THEORA_HEADERTYPE_IDENTIFICATION 0x80
 #define THEORA_HEADERTYPE_COMMENT        0x81
@@ -57,9 +57,6 @@ struct MTX_DLL_API theora_identification_header_t {
   theora_identification_header_t();
 };
 
-void MTX_DLL_API
-theora_parse_identification_header(unsigned char *buffer, int size,
-                                   theora_identification_header_t &header)
-  throw(error_c);
+void MTX_DLL_API theora_parse_identification_header(unsigned char *buffer, int size, theora_identification_header_t &header) throw(error_c);
 
-#endif // __THEORA_COMMON_H
+#endif // __MTX_COMMON_THEORA_COMMON_H

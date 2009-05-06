@@ -12,12 +12,14 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __VC1_COMMON_H
-#define __VC1_COMMON_H
+#ifndef __MTX_COMMON_VC1_COMMON_H
+#define __MTX_COMMON_VC1_COMMON_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "smart_pointers.h"
+#include <deque>
+
+#include "common/smart_pointers.h"
 
 #define VC1_PROFILE_SIMPLE    0x00000000
 #define VC1_PROFILE_MAIN      0x00000001
@@ -141,14 +143,14 @@ namespace vc1 {
 
     memory_cptr m_unparsed_buffer;
 
-    deque<memory_cptr> m_pre_frame_extra_data;
-    deque<memory_cptr> m_post_frame_extra_data;
+    std::deque<memory_cptr> m_pre_frame_extra_data;
+    std::deque<memory_cptr> m_post_frame_extra_data;
 
-    deque<frame_cptr> m_frames;
+    std::deque<frame_cptr> m_frames;
     frame_cptr m_current_frame;
 
-    deque<int64_t> m_timecodes;
-    deque<int64_t> m_timecode_positions;
+    std::deque<int64_t> m_timecodes;
+    std::deque<int64_t> m_timecode_positions;
     int64_t m_previous_timecode;
     int64_t m_num_timecodes;
     int64_t m_num_repeated_fields;
@@ -248,4 +250,4 @@ namespace vc1 {
   };
 };
 
-#endif  // __VC1_COMMON_H
+#endif  // __MTX_COMMON_VC1_COMMON_H

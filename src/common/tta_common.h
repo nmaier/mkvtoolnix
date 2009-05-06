@@ -11,10 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __TTA_COMMON_H
-#define __TTA_COMMON_H
+#ifndef __MTX_COMMON_TTA_COMMON_H
+#define __MTX_COMMON_TTA_COMMON_H
 
-#include "os.h"
+#include "common/os.h"
 
 /* All integers are little endian. */
 
@@ -36,4 +36,4 @@ typedef struct PACKED_STRUCTURE {
 #pragma pack(pop)
 #endif
 
-#endif // __TTA_COMMON_H
+#endif // __MTX_COMMON_TTA_COMMON_H

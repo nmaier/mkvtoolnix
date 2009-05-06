@@ -15,7 +15,7 @@
 // * wxStaticText is not wrapping on Windows.
 // * Add "recent files" to the file menu.
 
-#include "os.h"
+#include "common/os.h"
 
 #include <wx/button.h>
 #include <wx/dnd.h>
@@ -30,21 +30,21 @@
 #include <matroska/KaxTrackEntryData.h>
 #include <matroska/KaxTrackVideo.h>
 
-#include "commonebml.h"
-#include "header_editor_frame.h"
-#include "he_ascii_string_value_page.h"
-#include "he_bit_value_page.h"
-#include "he_bool_value_page.h"
-#include "he_empty_page.h"
-#include "he_float_value_page.h"
-#include "he_language_value_page.h"
-#include "he_string_value_page.h"
-#include "he_top_level_page.h"
-#include "he_unsigned_integer_value_page.h"
-#include "matroskalogo.xpm"
-#include "mmg.h"
-#include "mmg_dialog.h"
-#include "wxcommon.h"
+#include "common/ebml.h"
+#include "common/wxcommon.h"
+#include "mmg/header_editor_frame.h"
+#include "mmg/he_ascii_string_value_page.h"
+#include "mmg/he_bit_value_page.h"
+#include "mmg/he_bool_value_page.h"
+#include "mmg/he_empty_page.h"
+#include "mmg/he_float_value_page.h"
+#include "mmg/he_language_value_page.h"
+#include "mmg/he_string_value_page.h"
+#include "mmg/he_top_level_page.h"
+#include "mmg/he_unsigned_integer_value_page.h"
+#include "mmg/matroskalogo.xpm"
+#include "mmg/mmg_dialog.h"
+#include "mmg/mmg.h"
 
 class header_editor_drop_target_c: public wxFileDropTarget {
 private:

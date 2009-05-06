@@ -11,17 +11,17 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <boost/math/common_factor.hpp>
 #include <vector>
 
-#include "hacks.h"
-#include "matroska.h"
-#include "output_control.h"
-#include "pr_generic.h"
-#include "p_truehd.h"
-#include "truehd_common.h"
+#include "common/hacks.h"
+#include "common/matroska.h"
+#include "common/truehd_common.h"
+#include "merge/output_control.h"
+#include "merge/pr_generic.h"
+#include "output/p_truehd.h"
 
 using namespace libmatroska;
 

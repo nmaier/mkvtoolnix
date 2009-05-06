@@ -11,6 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "common/os.h"
+
 #include <ctype.h>
 
 #include <wx/wxprec.h>
@@ -22,9 +24,11 @@
 #include <wx/config.h>
 #include <wx/regex.h>
 
-#include "common.h"
-#include "mmg.h"
-#include "tab_global.h"
+#include "common/common.h"
+#include "common/string_editing.h"
+#include "common/string_parsing.h"
+#include "mmg/mmg.h"
+#include "mmg/tab_global.h"
 
 tab_global::tab_global(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400), wxTAB_TRAVERSAL) {

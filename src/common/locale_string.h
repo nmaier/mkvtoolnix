@@ -11,11 +11,14 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#ifndef __MTX_COMMON_LOCALE_STRING_H
+#define __MTX_COMMON_LOCALE_STRING_H
+
+#include "common/os.h"
 
 #include <string>
 
-#include "error.h"
+#include "common/error.h"
 
 class locale_string_format_error_c: public error_c {
 public:
@@ -48,3 +51,5 @@ public:
   locale_string_c &set_codeset_and_modifier(const locale_string_c &src);
   std::string str(eval_type_e type = full);
 };
+
+#endif  // __MTX_COMMON_LOCALE_STRING_H

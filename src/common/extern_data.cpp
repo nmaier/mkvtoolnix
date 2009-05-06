@@ -12,22 +12,22 @@
    Changes by Robert Millan <rmh@aybabtu.com>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <algorithm>
-
-#include "common.h"
-#include "extern_data.h"
-#include "mm_io.h"
-
-#ifdef SYS_WINDOWS
-# include "os_windows.h"
-#endif
-
 #if HAVE_MAGIC_H
 extern "C" {
 #include <magic.h>
 };
+#endif
+
+#include "common/common.h"
+#include "common/extern_data.h"
+#include "common/mm_io.h"
+#include "common/string_editing.h"
+
+#ifdef SYS_WINDOWS
+# include "os_windows.h"
 #endif
 
 #ifndef NULL

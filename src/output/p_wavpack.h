@@ -14,11 +14,11 @@
 #ifndef __P_WAVPACK_H
 #define __P_WAVPACK_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "common.h"
-#include "pr_generic.h"
-#include "wavpack_common.h"
+#include "common/common.h"
+#include "merge/pr_generic.h"
+#include "common/wavpack_common.h"
 
 class wavpack_packetizer_c: public generic_packetizer_c {
 private:

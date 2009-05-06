@@ -11,10 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __AACCOMMON_H
-#define __AACCOMMON_H
+#ifndef __MTX_COMMON_AACCOMMON_H
+#define __MTX_COMMON_AACCOMMON_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <string>
 
@@ -57,4 +57,4 @@ bool MTX_DLL_API parse_aac_data(const unsigned char *data, int size, int &profil
 int MTX_DLL_API create_aac_data(unsigned char *data, int profile, int channels, int sample_rate, int output_sample_rate, bool sbr);
 bool MTX_DLL_API parse_aac_codec_id(const string &codec_id, int &id, int &profile);
 
-#endif // __AACCOMMON_H
+#endif // __MTX_COMMON_AACCOMMON_H

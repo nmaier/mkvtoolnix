@@ -14,13 +14,13 @@
 #ifndef __TIMECODE_FACTORY_H
 #define __TIMECODE_FACTORY_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <string>
 #include <vector>
 
-#include "smart_pointers.h"
-#include "packet.h"
+#include "common/smart_pointers.h"
+#include "merge/packet.h"
 
 using namespace std;
 

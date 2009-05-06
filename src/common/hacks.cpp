@@ -11,16 +11,17 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <string.h>
 
 #include <string>
 #include <vector>
 
-#include "base64.h"
-#include "common.h"
-#include "hacks.h"
+#include "common/base64.h"
+#include "common/common.h"
+#include "common/hacks.h"
+#include "common/string_editing.h"
 
 static const struct {
   unsigned int id;

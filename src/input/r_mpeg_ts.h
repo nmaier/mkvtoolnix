@@ -14,9 +14,9 @@
 #ifndef __R_MPEG_TS_H
 #define __R_MPEG_TS_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "pr_generic.h"
+#include "merge/pr_generic.h"
 
 class mpeg_ts_reader_c: public generic_reader_c {
 protected:

@@ -15,15 +15,15 @@
 #ifndef __R_WAV_H
 #define __R_WAV_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <stdio.h>
 
-#include "common.h"
-#include "dts_common.h"
-#include "error.h"
-#include "mm_io.h"
-#include "pr_generic.h"
+#include "common/common.h"
+#include "common/dts_common.h"
+#include "common/error.h"
+#include "common/mm_io.h"
+#include "merge/pr_generic.h"
 
 extern "C" {
 #include "avilib.h"

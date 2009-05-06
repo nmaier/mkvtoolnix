@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "translation_table.h"
+#include "mmg/translation_table.h"
 
 translation_table_c::translation_table_c()
 {

@@ -14,7 +14,7 @@
 #ifndef __WXWIDGETS_UI_H
 #define __WXWIDGETS_UI_H
 
-#include "os.h"
+#include "common/os.h"
 
 #ifdef HAVE_WXWIDGETS
 
@@ -22,7 +22,7 @@
 #include <wx/dnd.h>
 #include <wx/treectrl.h>
 
-#include "wxcommon.h"
+#include "common/wxcommon.h"
 
 class mi_app: public wxApp {
 public:

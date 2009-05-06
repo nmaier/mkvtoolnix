@@ -10,13 +10,13 @@
    Written by Matt Rice <topquark@sluggy.net>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include "common.h"
-#include "commonebml.h"
-#include "mpeg4_common.h"
-
-#include "xtr_mpeg1_2.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/endian.h"
+#include "common/mpeg4_common.h"
+#include "extract/xtr_mpeg1_2.h"
 
 xtr_mpeg1_2_video_c::xtr_mpeg1_2_video_c(const string &codec_id,
                                          int64_t tid,

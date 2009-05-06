@@ -11,15 +11,16 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __XML_ELEMENT_WRITER_H
-#define __XML_ELEMENT_WRITER_H
+#ifndef __MTX_COMMON_XML_ELEMENT_WRITER_H
+#define __MTX_COMMON_XML_ELEMENT_WRITER_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <expat.h>
+#include <string>
 
-#include "mm_io.h"
-#include "xml_element_parser.h"
+#include "common/mm_io.h"
+#include "common/xml_element_parser.h"
 
 namespace libebml {
   class EbmlElement;
@@ -35,26 +36,29 @@ struct xml_writer_cb_t {
   mm_io_c *out;
 };
 
-void MTX_DLL_API
-write_xml_element_rec(int level, int parent_idx,
-                      EbmlElement *e, mm_io_c *out,
-                      const parser_element_t *element_map);
+void MTX_DLL_API write_xml_element_rec(int level, int parent_idx, EbmlElement *e, mm_io_c *out, const parser_element_t *element_map);
 
 class xml_formatter_error_c: public error_c {
 public:
-  xml_formatter_error_c(const string &_error): error_c(_error) { }
-  xml_formatter_error_c(const boost::format &_error): error_c(_error.str()) { }
+  xml_formatter_error_c(const std::string &_error)
+    : error_c(_error)
+  {
+  }
+  xml_formatter_error_c(const boost::format &_error)
+    : error_c(_error.str())
+  {
+  }
 };
 
 class xml_formatter_c: public xml_parser_c {
 private:
   mm_io_c *m_out;
   auto_ptr<mm_text_io_c> m_temp_io;
-  string m_encoding, m_dtd, m_dtd_file, m_stylesheet_type, m_stylesheet_file;
+  std::string m_encoding, m_dtd, m_dtd_file, m_stylesheet_type, m_stylesheet_file;
   int m_cc_utf8;
   bool m_header_written;
 
-  string m_data_buffer;
+  std::string m_data_buffer;
   int m_depth;
 
   enum xml_formatter_state_e {
@@ -66,15 +70,15 @@ private:
   xml_formatter_state_e m_state;
 
 public:
-  xml_formatter_c(mm_io_c *out, const string &encoding = string("UTF-8"));
+  xml_formatter_c(mm_io_c *out, const std::string &encoding = std::string("UTF-8"));
   virtual ~xml_formatter_c();
 
-  virtual void set_doctype(const string &dtd, const string &file);
-  virtual void set_stylesheet(const string &type, const string &file);
+  virtual void set_doctype(const std::string &dtd, const std::string &file);
+  virtual void set_stylesheet(const std::string &type, const std::string &file);
 
   virtual void write_header();
-  virtual void format(const string &text);
-  virtual void format_fixed(const string &text);
+  virtual void format(const std::string &text);
+  virtual void format_fixed(const std::string &text);
   virtual void flush();
 
   virtual void start_element_cb(const char *name, const char **atts);
@@ -82,4 +86,4 @@ public:
   virtual void add_data_cb(const XML_Char *s, int len);
 };
 
-#endif // __XML_ELEMENT_WRITER_H
+#endif // __MTX_COMMON_XML_ELEMENT_WRITER_H

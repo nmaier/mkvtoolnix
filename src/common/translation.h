@@ -11,10 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __TRANSLATION_H
-#define __TRANSLATION_H
+#ifndef __MTX_COMMON_TRANSLATION_H
+#define __MTX_COMMON_TRANSLATION_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <string>
 #include <vector>
@@ -41,4 +41,4 @@ public:
 
 void MTX_DLL_API init_locales(std::string locale = "");
 
-#endif  // __TRANSLATION_H
+#endif  // __MTX_COMMON_TRANSLATION_H

@@ -18,10 +18,10 @@
 #include <matroska/KaxSegment.h>
 #include <matroska/KaxSeekHead.h>
 
-#include "common.h"
-#include "commonebml.h"
-#include "error.h"
-#include "quickparser.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/error.h"
+#include "common/quickparser.h"
 
 using namespace std;
 using namespace libebml;

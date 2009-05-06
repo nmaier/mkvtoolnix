@@ -12,18 +12,13 @@
    Modified by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-
-#include "pr_generic.h"
-#include "dts_common.h"
-#include "matroska.h"
-#include "output_control.h"
-#include "p_dts.h"
+#include "common/dts_common.h"
+#include "common/matroska.h"
+#include "merge/output_control.h"
+#include "merge/pr_generic.h"
+#include "output/p_dts.h"
 
 using namespace libmatroska;
 

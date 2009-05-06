@@ -10,16 +10,15 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "config.h"
+#include "common/os.h"
 
 #include <ebml/EbmlVersion.h>
 #include <matroska/KaxVersion.h>
 
-#include "common.h"
-#include "mkvinfo.h"
-#include "qtcommon.h"
-
-#include "qt_ui.h"
+#include "common/common.h"
+#include "common/qtcommon.h"
+#include "info/qt_ui.h"
+#include "info/mkvinfo.h"
 
 #include <QMessageBox>
 #include <QMouseEvent>

@@ -13,9 +13,9 @@
 #ifndef __XTR_AVC_H
 #define __XTR_AVC_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "xtr_base.h"
+#include "extract/xtr_base.h"
 
 class xtr_avc_c: public xtr_base_c {
 private:

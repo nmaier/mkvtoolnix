@@ -10,10 +10,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __OS_WINDOWS_H
-#define __OS_WINDOWS_H
+#ifndef __MTX_COMMON_OS_WINDOWS_H
+#define __MTX_COMMON_OS_WINDOWS_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <string>
 
@@ -31,4 +31,4 @@ std::string MTX_DLL_API get_environment_variable(const std::string &key);
 
 #endif  // SYS_WINDOWS
 
-#endif  // __OS_WINDOWS_H
+#endif  // __MTX_COMMON_OS_WINDOWS_H

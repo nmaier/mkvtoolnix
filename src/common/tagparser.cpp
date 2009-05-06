@@ -20,13 +20,13 @@
 #include <string>
 #include <vector>
 
-#include "common.h"
-#include "commonebml.h"
-#include "error.h"
-#include "mm_io.h"
-#include "tagparser.h"
-#include "xml_element_mapping.h"
-#include "xml_element_parser.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/error.h"
+#include "common/mm_io.h"
+#include "common/tagparser.h"
+#include "common/xml_element_mapping.h"
+#include "common/xml_element_parser.h"
 
 #include <matroska/KaxTags.h>
 #include <matroska/KaxTag.h>

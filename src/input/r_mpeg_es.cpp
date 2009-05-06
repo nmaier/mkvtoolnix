@@ -11,18 +11,19 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <cstring>
 #include <memory>
 
-#include "common.h"
-#include "error.h"
-#include "M2VParser.h"
-#include "r_mpeg_es.h"
-#include "smart_pointers.h"
-#include "output_control.h"
-#include "p_video.h"
+#include "common/common.h"
+#include "common/endian.h"
+#include "common/error.h"
+#include "common/smart_pointers.h"
+#include "input/r_mpeg_es.h"
+#include "merge/output_control.h"
+#include "mpegparser/M2VParser.h"
+#include "output/p_video.h"
 
 #define PROBESIZE 4
 #define READ_SIZE 1024 * 1024

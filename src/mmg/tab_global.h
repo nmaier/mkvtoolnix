@@ -14,7 +14,7 @@
 #ifndef __TAB_GLOBAL_H
 #define __TAB_GLOBAL_H
 
-#include "wxcommon.h"
+#include "common/wxcommon.h"
 
 #define ID_B_BROWSEGLOBALTAGS             13000
 #define ID_B_BROWSECHAPTERS               13001

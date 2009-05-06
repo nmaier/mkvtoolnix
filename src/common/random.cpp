@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #if !defined(SYS_WINDOWS)
 # include <sys/time.h>
@@ -20,8 +20,8 @@
 # include <windows.h>
 #endif
 
-#include "mm_io.h"
-#include "random.h"
+#include "common/mm_io.h"
+#include "common/random.h"
 
 bool random_c::m_seeded = false;
 

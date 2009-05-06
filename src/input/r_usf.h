@@ -14,17 +14,17 @@
 #ifndef __R_USF_H
 #define __R_USF_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <expat.h>
 #include <setjmp.h>
 
 #include <vector>
 
-#include "mm_io.h"
-#include "common.h"
-#include "pr_generic.h"
-#include "xml_element_parser.h"
+#include "common/mm_io.h"
+#include "common/common.h"
+#include "merge/pr_generic.h"
+#include "common/xml_element_parser.h"
 
 struct usf_entry_t {
   int64_t m_start, m_end;

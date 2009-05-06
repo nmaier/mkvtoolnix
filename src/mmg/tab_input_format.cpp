@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <wx/wxprec.h>
 
@@ -23,14 +23,14 @@
 #include <wx/regex.h>
 #include <wx/statline.h>
 
-#include "common.h"
-#include "extern_data.h"
-#include "iso639.h"
-#include "mkvmerge.h"
-#include "mmg.h"
-#include "mmg_dialog.h"
-#include "tab_input.h"
-#include "tab_global.h"
+#include "common/common.h"
+#include "common/extern_data.h"
+#include "common/iso639.h"
+#include "merge/mkvmerge.h"
+#include "mmg/mmg.h"
+#include "mmg/mmg_dialog.h"
+#include "mmg/tab_input.h"
+#include "mmg/tab_global.h"
 
 using namespace std;
 

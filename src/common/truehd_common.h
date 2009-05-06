@@ -11,16 +11,16 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __TRUEHD_COMMON_H
-#define __TRUEHD_COMMON_H
+#ifndef __MTX_COMMON_TRUEHD_COMMON_H
+#define __MTX_COMMON_TRUEHD_COMMON_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <deque>
 
-#include "byte_buffer.h"
-#include "common_memory.h"
-#include "smart_pointers.h"
+#include "common/byte_buffer.h"
+#include "common/memory.h"
+#include "common/smart_pointers.h"
 
 #define TRUEHD_SYNC_WORD 0xf8726fba
 #define MLP_SYNC_WORD    0xf8726fbb
@@ -97,4 +97,4 @@ protected:
 };
 typedef counted_ptr<truehd_parser_c> truehd_parser_cptr;
 
-#endif // __TRUEHD_COMMON_H
+#endif // __MTX_COMMON_TRUEHD_COMMON_H

@@ -13,13 +13,13 @@
 #ifndef __XTR_AVI_H
 #define __XTR_AVI_H
 
-#include "os.h"
+#include "common/os.h"
 
 extern "C" {
 #include <avilib.h>
 }
 
-#include "xtr_base.h"
+#include "extract/xtr_base.h"
 
 class xtr_avi_c: public xtr_base_c {
 public:

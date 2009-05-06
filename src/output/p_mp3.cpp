@@ -11,15 +11,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
+#include "common/os.h"
 
-#include "matroska.h"
-#include "mp3_common.h"
-#include "output_control.h"
-#include "p_mp3.h"
+#include "common/matroska.h"
+#include "common/mp3_common.h"
+#include "merge/output_control.h"
+#include "output/p_mp3.h"
 
 using namespace libmatroska;
 

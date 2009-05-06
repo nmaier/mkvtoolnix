@@ -11,10 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __AC3COMMON_H
-#define __AC3COMMON_H
+#ifndef __MTX_COMMON_AC3COMMON_H
+#define __MTX_COMMON_AC3COMMON_H
 
-#include "os.h"
+#include "common/os.h"
 
 #define AC3_CHANNEL                  0
 #define AC3_MONO                     1
@@ -56,4 +56,4 @@ int MTX_DLL_API find_consecutive_ac3_headers(const unsigned char *buf, int size,
 bool MTX_DLL_API parse_ac3_header(const unsigned char *buf, ac3_header_t &header);
 bool MTX_DLL_API verify_ac3_checksum(const unsigned char *buf, int size);
 
-#endif // __AC3COMMON_H
+#endif // __MTX_COMMON_AC3COMMON_H

@@ -11,11 +11,11 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include "matroska.h"
-#include "r_srt.h"
-#include "subtitles.h"
+#include "common/matroska.h"
+#include "input/r_srt.h"
+#include "input/subtitles.h"
 
 int
 srt_reader_c::probe_file(mm_text_io_c *io,

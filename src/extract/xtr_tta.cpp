@@ -10,15 +10,15 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <time.h>
 
-#include "checksums.h"
-#include "commonebml.h"
-#include "tta_common.h"
-
-#include "xtr_tta.h"
+#include "common/checksums.h"
+#include "common/ebml.h"
+#include "common/endian.h"
+#include "common/tta_common.h"
+#include "extract/xtr_tta.h"
 
 const double xtr_tta_c::ms_tta_frame_time = 1.04489795918367346939l;
 

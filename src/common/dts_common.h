@@ -12,8 +12,8 @@
    Modified by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __DTSCOMMON_H
-#define __DTSCOMMON_H
+#ifndef __MTX_COMMON_DTSCOMMON_H
+#define __MTX_COMMON_DTSCOMMON_H
 
 static const int64_t max_dts_packet_size = 15384;
 
@@ -184,4 +184,4 @@ bool MTX_DLL_API detect_dts(const void *src_buf, int len,
 
 bool MTX_DLL_API operator!=(const dts_header_t &l, const dts_header_t &r);
 
-#endif // __DTSCOMMON_H
+#endif // __MTX_COMMON_DTSCOMMON_H

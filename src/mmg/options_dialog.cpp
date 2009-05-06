@@ -11,7 +11,11 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
+
+#include <algorithm>
+#include <string>
+#include <vector>
 
 #include <wx/wxprec.h>
 
@@ -22,16 +26,13 @@
 #include <wx/process.h>
 #include <wx/statline.h>
 
-#include "common.h"
-#include "mmg.h"
-#include "mmg_dialog.h"
-#include "options_dialog.h"
-#include "translation.h"
-#include "wxcommon.h"
-
-#include <algorithm>
-#include <string>
-#include <vector>
+#include "common/common.h"
+#include "common/string_editing.h"
+#include "common/translation.h"
+#include "common/wxcommon.h"
+#include "mmg/mmg_dialog.h"
+#include "mmg/mmg.h"
+#include "mmg/options_dialog.h"
 
 struct locale_sorter_t {
   wxString display_val;

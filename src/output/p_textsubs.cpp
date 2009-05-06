@@ -11,15 +11,16 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <boost/regex.hpp>
 #include <string>
 
-#include "common.h"
-#include "pr_generic.h"
-#include "p_textsubs.h"
-#include "matroska.h"
+#include "common/common.h"
+#include "common/locale.h"
+#include "common/matroska.h"
+#include "merge/pr_generic.h"
+#include "output/p_textsubs.h"
 
 using namespace libmatroska;
 

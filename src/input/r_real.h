@@ -14,17 +14,17 @@
 #ifndef __R_REAL_H
 #define __R_REAL_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <stdio.h>
 
 #include <vector>
 
-#include "common.h"
-#include "error.h"
-#include "librmff.h"
-#include "p_video.h"
-#include "pr_generic.h"
+#include "common/common.h"
+#include "common/error.h"
+#include "librmff/librmff.h"
+#include "output/p_video.h"
+#include "merge/pr_generic.h"
 
 typedef struct {
   memory_cptr data;

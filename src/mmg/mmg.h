@@ -17,19 +17,19 @@
 #include <map>
 #include <vector>
 
-#include "os.h"
+#include "common/os.h"
 
 #include <wx/app.h>
 #include <wx/combobox.h>
 #include <wx/config.h>
 #include <wx/string.h>
 
-#include "ebml/EbmlUnicodeString.h"
+#include <ebml/EbmlUnicodeString.h>
 
-#include "iso639.h"
-#include "smart_pointers.h"
-#include "translation_table.h"
-#include "wxcommon.h"
+#include "common/iso639.h"
+#include "common/smart_pointers.h"
+#include "common/wxcommon.h"
+#include "mmg/translation_table.h"
 
 #ifdef SYS_WINDOWS
 # define ALLFILES Z("All Files (*.*)|*.*")

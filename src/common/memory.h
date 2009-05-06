@@ -11,20 +11,49 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __COMMON_MEMORY_H
-#define __COMMON_MEMORY_H
+#ifndef __MTX_COMMON_MEMORY_H
+#define __MTX_COMMON_MEMORY_H
 
-#include "os.h"
-
-#include <stdlib.h>
+#include "common/os.h"
 
 #include <cassert>
 #include <deque>
 #include <memory>
 #include <vector>
 
-#include "common.h"
-#include "smart_pointers.h"
+#include "common/common.h"
+#include "common/output.h"
+
+void MTX_DLL_API safefree(void *p);
+
+#define safemalloc(s) _safemalloc(s, __FILE__, __LINE__)
+void *MTX_DLL_API _safemalloc(size_t size, const char *file, int line);
+
+#define safememdup(src, size) _safememdup(src, size, __FILE__, __LINE__)
+void *MTX_DLL_API _safememdup(const void *src, size_t size, const char *file, int line);
+
+#define safestrdup(s) _safestrdup(s, __FILE__, __LINE__)
+inline char *
+_safestrdup(const string &s,
+            const char *file,
+            int line) {
+  return static_cast<char *>(_safememdup(s.c_str(), s.length() + 1, file, line));
+}
+inline unsigned char *
+_safestrdup(const unsigned char *s,
+            const char *file,
+            int line) {
+  return static_cast<unsigned char *>(_safememdup(s, strlen(reinterpret_cast<const char *>(s)) + 1, file, line));
+}
+inline char *
+_safestrdup(const char *s,
+            const char *file,
+            int line) {
+  return static_cast<char *>(_safememdup(s, strlen(s) + 1, file, line));
+}
+
+#define saferealloc(mem, size) _saferealloc(mem, size, __FILE__, __LINE__)
+void *MTX_DLL_API _saferealloc(void *mem, size_t size, const char *file, int line);
 
 class MTX_DLL_API memory_c;
 typedef counted_ptr<memory_c> memory_cptr;
@@ -148,8 +177,8 @@ private:
 class MTX_DLL_API memory_slice_cursor_c {
  protected:
   int m_pos, m_pos_in_slice, m_size;
-  deque<memory_cptr> m_slices;
-  deque<memory_cptr>::iterator m_slice;
+  std::deque<memory_cptr> m_slices;
+  std::deque<memory_cptr>::iterator m_slice;
 
  public:
   memory_slice_cursor_c()
@@ -269,7 +298,7 @@ struct buffer_t {
   ~buffer_t();
 };
 
-memory_cptr MTX_DLL_API lace_memory_xiph(const vector<memory_cptr> &blocks);
-vector<memory_cptr> MTX_DLL_API unlace_memory_xiph(memory_cptr &buffer);
+memory_cptr MTX_DLL_API lace_memory_xiph(const std::vector<memory_cptr> &blocks);
+std::vector<memory_cptr> MTX_DLL_API unlace_memory_xiph(memory_cptr &buffer);
 
-#endif // __COMMON_MEMORY_H
+#endif  // __MTX_COMMON_MEMORY_H

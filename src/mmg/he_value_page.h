@@ -14,9 +14,9 @@
 #ifndef __HE_VALUE_PAGE_H
 #define __HE_VALUE_PAGE_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "header_editor_frame.h"
+#include "mmg/header_editor_frame.h"
 
 class he_value_page_c: public he_page_base_c {
   DECLARE_CLASS(he_value_page_c);

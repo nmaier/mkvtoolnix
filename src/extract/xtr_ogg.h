@@ -13,13 +13,13 @@
 #ifndef __XTR_OGG_H
 #define __XTR_OGG_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <ogg/ogg.h>
 
-#include "kate_common.h"
-#include "theora_common.h"
-#include "xtr_base.h"
+#include "common/kate_common.h"
+#include "common/theora_common.h"
+#include "extract/xtr_base.h"
 
 class xtr_flac_c: public xtr_base_c {
 public:

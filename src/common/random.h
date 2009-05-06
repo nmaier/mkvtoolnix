@@ -11,13 +11,13 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __RANDOM_H
-#define __RANDOM_H
+#ifndef __MTX_COMMON_RANDOM_H
+#define __MTX_COMMON_RANDOM_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "mm_io.h"
-#include "smart_pointers.h"
+#include "common/mm_io.h"
+#include "common/smart_pointers.h"
 
 class MTX_DLL_API random_c {
 private:
@@ -76,4 +76,4 @@ public:
   static void test();
 };
 
-#endif // __RANDOM_H
+#endif // __MTX_COMMON_RANDOM_H

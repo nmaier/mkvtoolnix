@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <stdarg.h>
 #ifdef HAVE_UNISTD_H
@@ -33,25 +33,29 @@
 #include <wx/statline.h>
 #include <wx/strconv.h>
 
-#include "chapters.h"
-#include "common.h"
-#include "commonebml.h"
-#include "extern_data.h"
-#include "header_editor_frame.h"
-#include "jobs.h"
-#include "mkvmerge.h"
-#include "matroskalogo.xpm"
-#include "mmg.h"
-#include "mmg_dialog.h"
-#include "mux_dialog.h"
-#include "options_dialog.h"
-#include "tab_attachments.h"
-#include "tab_chapters.h"
-#include "tab_input.h"
-#include "tab_global.h"
-#include "translation.h"
-#include "xml_element_mapping.h"
-#include "wxcommon.h"
+#include "common/chapters.h"
+#include "common/command_line.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/extern_data.h"
+#include "common/locale.h"
+#include "common/string_editing.h"
+#include "common/string_formatting.h"
+#include "mmg/header_editor_frame.h"
+#include "mmg/jobs.h"
+#include "merge/mkvmerge.h"
+#include "mmg/matroskalogo.xpm"
+#include "mmg/mmg.h"
+#include "mmg/mmg_dialog.h"
+#include "mmg/mux_dialog.h"
+#include "mmg/options_dialog.h"
+#include "mmg/tab_attachments.h"
+#include "mmg/tab_chapters.h"
+#include "mmg/tab_input.h"
+#include "mmg/tab_global.h"
+#include "common/translation.h"
+#include "common/xml_element_mapping.h"
+#include "common/wxcommon.h"
 
 mmg_app *app;
 mmg_dialog *mdlg;

@@ -10,11 +10,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include "commonebml.h"
-
-#include "xtr_avi.h"
+#include "common/ebml.h"
+#include "common/endian.h"
+#include "common/math.h"
+#include "extract/xtr_avi.h"
 
 xtr_avi_c::xtr_avi_c(const string &codec_id,
                      int64_t tid,

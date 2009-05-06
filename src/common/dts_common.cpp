@@ -15,9 +15,10 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "bit_cursor.h"
-#include "common.h"
-#include "dts_common.h"
+#include "common/bit_cursor.h"
+#include "common/common.h"
+#include "common/dts_common.h"
+#include "common/endian.h"
 
 #define DTS_HEADER_MAGIC    0x7ffe8001
 #define DTS_HD_HEADER_MAGIC 0x64582025

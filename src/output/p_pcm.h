@@ -14,11 +14,11 @@
 #ifndef __P_PCM_H
 #define __P_PCM_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "byte_buffer.h"
-#include "common.h"
-#include "pr_generic.h"
+#include "common/byte_buffer.h"
+#include "common/common.h"
+#include "merge/pr_generic.h"
 
 class pcm_packetizer_c: public generic_packetizer_c {
 private:

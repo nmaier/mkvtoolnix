@@ -11,12 +11,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <wx/textctrl.h>
 
-#include "header_editor_frame.h"
-#include "he_page_base.h"
+#include "mmg/header_editor_frame.h"
+#include "mmg/he_page_base.h"
 
 he_page_base_c::he_page_base_c(header_editor_frame_c *parent)
   : wxPanel(parent->get_page_panel(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL)

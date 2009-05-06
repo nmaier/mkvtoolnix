@@ -19,11 +19,15 @@
 #include <ebml/EbmlUnicodeString.h>
 #include <ebml/EbmlDate.h>
 
-#include "base64.h"
-#include "common.h"
-#include "commonebml.h"
-#include "mm_io.h"
-#include "xml_element_writer.h"
+#include "common/base64.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/locale.h"
+#include "common/mm_io.h"
+#include "common/string_editing.h"
+#include "common/string_formatting.h"
+#include "common/xml.h"
+#include "common/xml_element_writer.h"
 
 using namespace libebml;
 

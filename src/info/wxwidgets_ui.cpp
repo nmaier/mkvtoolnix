@@ -10,7 +10,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "config.h"
+#include "common/os.h"
 
 #ifdef HAVE_WXWIDGETS
 
@@ -22,14 +22,14 @@
 #include <ebml/EbmlVersion.h>
 #include <matroska/KaxVersion.h>
 
-#include "common.h"
-#include "mkvinfo.h"
-#include "translation.h"
-#include "wxwidgets_ui.h"
+#include "common/common.h"
+#include "common/translation.h"
+#include "common/wxcommon.h"
+#include "info/wxwidgets_ui.h"
 #if !defined(SYS_WINDOWS)
-#include "matroska.xpm"
+#include "info/matroska.xpm"
 #endif
-#include "wxcommon.h"
+#include "info/mkvinfo.h"
 
 using namespace libebml;
 using namespace libmatroska;

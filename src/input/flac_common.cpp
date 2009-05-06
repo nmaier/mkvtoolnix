@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "config.h"
+#include "common/os.h"
 
 #if defined(HAVE_FLAC_FORMAT_H)
 
@@ -24,9 +24,9 @@
 # undef LEGACY_FLAC
 #endif
 
-#include "bit_cursor.h"
-#include "common.h"
-#include "flac_common.h"
+#include "common/bit_cursor.h"
+#include "common/common.h"
+#include "input/flac_common.h"
 
 static bool
 flac_skip_utf8(bit_cursor_c &bits,

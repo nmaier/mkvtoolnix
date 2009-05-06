@@ -11,11 +11,11 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <boost/regex.hpp>
 
-#include "locale_string.h"
+#include "common/locale_string.h"
 
 locale_string_c::locale_string_c(std::string locale_string) {
   boost::regex locale_re("^([[:alpha:]]+)?(_[[:alpha:]]+)?(\\.[^@]+)?(@.+)?", boost::regex::perl);

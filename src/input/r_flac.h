@@ -14,9 +14,9 @@
 #ifndef __R_FLAC_H
 #define __R_FLAC_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "mm_io.h"
+#include "common/mm_io.h"
 
 #if defined(HAVE_FLAC_FORMAT_H)
 #include <vector>
@@ -33,7 +33,7 @@
 # include <FLAC/stream_decoder.h>
 #endif
 
-#include "p_flac.h"
+#include "output/p_flac.h"
 
 #define FLAC_BLOCK_TYPE_HEADERS 0
 #define FLAC_BLOCK_TYPE_DATA    1

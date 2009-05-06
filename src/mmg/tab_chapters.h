@@ -20,8 +20,8 @@
 
 #include <matroska/KaxChapters.h>
 
-#include "kax_analyzer.h"
-#include "wxcommon.h"
+#include "mmg/kax_analyzer.h"
+#include "common/wxcommon.h"
 
 #define ID_TRC_CHAPTERS                   16000
 #define ID_B_ADDCHAPTER                   16001

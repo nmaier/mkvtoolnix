@@ -14,8 +14,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "common.h"
-#include "iso639.h"
+#include "common/common.h"
+#include "common/iso639.h"
+#include "common/string_editing.h"
 
 const iso639_language_t iso639_languages[] = {
   { "Abkhazian",                                      "abk", "ab", NULL  },

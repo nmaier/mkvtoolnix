@@ -11,17 +11,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-
-#include "aac_common.h"
-#include "hacks.h"
-#include "matroska.h"
-#include "p_aac.h"
+#include "common/aac_common.h"
+#include "common/hacks.h"
+#include "common/matroska.h"
+#include "output/p_aac.h"
 
 using namespace libmatroska;
 

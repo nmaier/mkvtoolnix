@@ -12,14 +12,14 @@
    Mike Matsnev <mike@po.cs.msu.su>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include "checksums.h"
-#include "commonebml.h"
-#include "iso639.h"
-#include "smart_pointers.h"
-#include "tta_common.h"
-#include "xtr_vobsub.h"
+#include "common/checksums.h"
+#include "common/ebml.h"
+#include "common/iso639.h"
+#include "common/smart_pointers.h"
+#include "common/tta_common.h"
+#include "extract/xtr_vobsub.h"
 
 #if defined(COMP_MSC)
 #pragma pack(push,1)

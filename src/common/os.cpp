@@ -9,11 +9,7 @@
    OS dependant helper functions
 */
 
-#include "os.h"
-
-#include "common.h"
-#include "config.h"
-#include "mm_io.h"
+#include "common/os.h"
 
 #include <errno.h>
 #include <stdio.h>
@@ -23,6 +19,10 @@
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <time.h>
+
+#include "common/common.h"
+#include "common/locale.h"
+#include "common/mm_io.h"
 
 using namespace std;
 

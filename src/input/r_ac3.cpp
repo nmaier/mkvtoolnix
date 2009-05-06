@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <algorithm>
 
@@ -19,11 +19,11 @@ extern "C" {
 #include <avilib.h>
 }
 
-#include "common.h"
-#include "error.h"
-#include "id3_common.h"
-#include "r_ac3.h"
-#include "p_ac3.h"
+#include "common/common.h"
+#include "common/error.h"
+#include "common/id3_common.h"
+#include "input/r_ac3.h"
+#include "output/p_ac3.h"
 
 #define AC3_READ_SIZE 16384
 

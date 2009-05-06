@@ -242,7 +242,7 @@
 extern "C" {
 #endif
 
-#include "os.h"
+#include "common/os.h"
 
 #if defined(HAVE_INTTYPES_H)
 #include <inttypes.h>

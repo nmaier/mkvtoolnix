@@ -14,10 +14,10 @@
 #ifndef __R_ASF_H
 #define __R_ASF_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "mm_io.h"
-#include "pr_generic.h"
+#include "common/mm_io.h"
+#include "merge/pr_generic.h"
 
 class asf_reader_c: public generic_reader_c {
 public:

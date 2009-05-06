@@ -14,12 +14,12 @@
 #ifndef __R_SSA_H
 #define __R_SSA_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "mm_io.h"
-#include "common.h"
-#include "pr_generic.h"
-#include "subtitles.h"
+#include "common/mm_io.h"
+#include "common/common.h"
+#include "merge/pr_generic.h"
+#include "input/subtitles.h"
 
 class ssa_reader_c: public generic_reader_c {
 private:

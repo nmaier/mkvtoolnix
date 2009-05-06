@@ -11,20 +11,16 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include <ctype.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
+#include "common/os.h"
 
 #include <matroska/KaxContentEncoding.h>
 
-#include "common.h"
-#include "compression.h"
-#include "matroska.h"
-#include "mm_io.h"
-#include "p_vobsub.h"
-#include "subtitles.h"
+#include "common/common.h"
+#include "common/compression.h"
+#include "common/matroska.h"
+#include "common/mm_io.h"
+#include "input/subtitles.h"
+#include "output/p_vobsub.h"
 
 using namespace libmatroska;
 

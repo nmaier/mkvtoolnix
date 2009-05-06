@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <boost/regex.hpp>
 #if HAVE_NL_LANGINFO
@@ -24,9 +24,10 @@
 #endif
 #include <locale.h>
 
-#include "common.h"
-#include "locale_string.h"
-#include "translation.h"
+#include "common/common.h"
+#include "common/locale_string.h"
+#include "common/string_editing.h"
+#include "common/translation.h"
 
 #if defined(SYS_WINDOWS)
 # include <windows.h>

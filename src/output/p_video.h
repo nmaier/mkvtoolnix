@@ -14,12 +14,12 @@
 #ifndef __P_VIDEO_H
 #define __P_VIDEO_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "common.h"
-#include "mpeg4_common.h"
-#include "pr_generic.h"
-#include "M2VParser.h"
+#include "common/common.h"
+#include "common/mpeg4_common.h"
+#include "merge/pr_generic.h"
+#include "mpegparser/M2VParser.h"
 
 #define VFT_IFRAME          -1
 #define VFT_PFRAMEAUTOMATIC -2

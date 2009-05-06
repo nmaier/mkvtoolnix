@@ -15,7 +15,7 @@
 #ifndef __LIBMATROSKA_EXTENSIONS
 #define __LIBMATROSKA_EXTENSIONS
 
-#include "os.h"
+#include "common/os.h"
 
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxBlockData.h>

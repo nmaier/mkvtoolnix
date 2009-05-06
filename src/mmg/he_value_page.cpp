@@ -11,14 +11,14 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <wx/statline.h>
 #include <wx/textctrl.h>
 
-#include "commonebml.h"
-#include "he_value_page.h"
-#include "wxcommon.h"
+#include "common/ebml.h"
+#include "mmg/he_value_page.h"
+#include "common/wxcommon.h"
 
 he_value_page_c::he_value_page_c(header_editor_frame_c *parent,
                                  he_page_base_c *toplevel_page,

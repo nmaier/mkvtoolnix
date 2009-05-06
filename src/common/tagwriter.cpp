@@ -10,11 +10,11 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <matroska/KaxTags.h>
 
-#include "xml_element_writer.h"
+#include "common/xml_element_writer.h"
 
 using namespace libmatroska;
 using namespace std;

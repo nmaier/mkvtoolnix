@@ -15,12 +15,12 @@
 #ifndef __P_KATE_H
 #define __P_KATE_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "common.h"
-#include "pr_generic.h"
-#include "smart_pointers.h"
-#include "kate_common.h"
+#include "common/common.h"
+#include "merge/pr_generic.h"
+#include "common/smart_pointers.h"
+#include "common/kate_common.h"
 
 class kate_packetizer_c: public generic_packetizer_c {
 private:

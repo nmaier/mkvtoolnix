@@ -14,7 +14,7 @@
 #ifndef __R_OGM_H
 #define __R_OGM_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <stdio.h>
 
@@ -22,11 +22,11 @@
 
 #include <vector>
 
-#include "mm_io.h"
-#include "common.h"
-#include "pr_generic.h"
-#include "theora_common.h"
-#include "kate_common.h"
+#include "common/mm_io.h"
+#include "common/common.h"
+#include "merge/pr_generic.h"
+#include "common/theora_common.h"
+#include "common/kate_common.h"
 
 enum ogm_stream_type_e {
   OGM_STREAM_TYPE_UNKNOWN,

@@ -14,16 +14,16 @@
 #ifndef __CLUSTER_HELPER_C
 #define __CLUSTER_HELPER_C
 
-#include "os.h"
+#include "common/os.h"
 
 #include <vector>
 
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxCluster.h>
 
-#include "libmatroska_extensions.h"
-#include "mm_io.h"
-#include "pr_generic.h"
+#include "merge/libmatroska_extensions.h"
+#include "common/mm_io.h"
+#include "merge/pr_generic.h"
 
 using namespace std;
 

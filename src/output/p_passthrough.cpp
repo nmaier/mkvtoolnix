@@ -11,17 +11,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-
-#include "common.h"
-#include "pr_generic.h"
-#include "p_passthrough.h"
-#include "matroska.h"
+#include "common/common.h"
+#include "common/matroska.h"
+#include "merge/pr_generic.h"
+#include "output/p_passthrough.h"
 
 using namespace libmatroska;
 

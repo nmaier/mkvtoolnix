@@ -11,15 +11,15 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <wx/textctrl.h>
 
 #include <ebml/EbmlString.h>
 
-#include "he_language_value_page.h"
-#include "mmg.h"
-#include "wxcommon.h"
+#include "mmg/he_language_value_page.h"
+#include "mmg/mmg.h"
+#include "common/wxcommon.h"
 
 using namespace libebml;
 

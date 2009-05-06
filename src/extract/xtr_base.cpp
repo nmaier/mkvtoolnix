@@ -10,29 +10,29 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <matroska/KaxTracks.h>
 #include <matroska/KaxTrackEntryData.h>
 #include <matroska/KaxTrackAudio.h>
 #include <matroska/KaxTrackVideo.h>
 
-#include "common.h"
-#include "commonebml.h"
-#include "matroska.h"
-
-#include "xtr_aac.h"
-#include "xtr_avc.h"
-#include "xtr_avi.h"
-#include "xtr_base.h"
-#include "xtr_cpic.h"
-#include "xtr_mpeg1_2.h"
-#include "xtr_ogg.h"
-#include "xtr_rmff.h"
-#include "xtr_textsubs.h"
-#include "xtr_tta.h"
-#include "xtr_vobsub.h"
-#include "xtr_wav.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/matroska.h"
+#include "common/string_editing.h"
+#include "extract/xtr_aac.h"
+#include "extract/xtr_avc.h"
+#include "extract/xtr_avi.h"
+#include "extract/xtr_base.h"
+#include "extract/xtr_cpic.h"
+#include "extract/xtr_mpeg1_2.h"
+#include "extract/xtr_ogg.h"
+#include "extract/xtr_rmff.h"
+#include "extract/xtr_textsubs.h"
+#include "extract/xtr_tta.h"
+#include "extract/xtr_vobsub.h"
+#include "extract/xtr_wav.h"
 
 using namespace std;
 using namespace libmatroska;

@@ -11,22 +11,20 @@
    Written by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#include "os.h"
-
-#include <errno.h>
-#include <expat.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include "common/os.h"
 
 #include <algorithm>
+#include <expat.h>
 
-#include "matroska.h"
-#include "mm_io.h"
-#include "output_control.h"
-#include "pr_generic.h"
-#include "p_video.h"
-#include "r_corepicture.h"
+#include "common/endian.h"
+#include "common/matroska.h"
+#include "common/mm_io.h"
+#include "common/string_parsing.h"
+#include "common/xml.h"
+#include "input/r_corepicture.h"
+#include "merge/output_control.h"
+#include "merge/pr_generic.h"
+#include "output/p_video.h"
 
 using namespace std;
 

@@ -14,7 +14,7 @@
 #ifndef __TAB_INPUT_H
 #define __TAB_INPUT_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <wx/config.h>
 

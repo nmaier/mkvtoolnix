@@ -14,9 +14,9 @@
 #ifndef __R_CDXA_H
 #define __R_CDXA_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "pr_generic.h"
+#include "merge/pr_generic.h"
 
 class cdxa_reader_c: public generic_reader_c {
 public:

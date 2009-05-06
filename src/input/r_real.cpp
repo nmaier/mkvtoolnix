@@ -11,24 +11,21 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include <ctype.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
+#include "common/os.h"
 
 #include <matroska/KaxTrackVideo.h>
 
-#include "bit_cursor.h"
-#include "common.h"
-#include "error.h"
-#include "p_aac.h"
-#include "p_ac3.h"
-#include "p_passthrough.h"
-#include "p_realaudio.h"
-#include "p_video.h"
-#include "output_control.h"
-#include "r_real.h"
+#include "common/bit_cursor.h"
+#include "common/common.h"
+#include "common/endian.h"
+#include "common/error.h"
+#include "input/r_real.h"
+#include "merge/output_control.h"
+#include "output/p_aac.h"
+#include "output/p_ac3.h"
+#include "output/p_passthrough.h"
+#include "output/p_realaudio.h"
+#include "output/p_video.h"
 
 /*
    Description of the RealMedia file format:

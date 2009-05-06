@@ -12,7 +12,7 @@
    Modifications by Peter Niemayer <niemayer@isg.de>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <errno.h>
 #if HAVE_POSIX_FADVISE
@@ -32,9 +32,13 @@
 # include <sys/types.h>
 #endif // SYS_WINDOWS
 
-#include "error.h"
-#include "mm_io.h"
-#include "common.h"
+#include "common/common.h"
+#include "common/endian.h"
+#include "common/error.h"
+#include "common/locale.h"
+#include "common/mm_io.h"
+#include "common/string_editing.h"
+#include "common/string_parsing.h"
 
 using namespace std;
 

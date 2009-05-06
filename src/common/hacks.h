@@ -11,10 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __HACKS_H
-#define __HACKS_H
+#ifndef __MTX_COMMON_HACKS_H
+#define __MTX_COMMON_HACKS_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <string>
 
@@ -43,4 +43,4 @@
 void MTX_DLL_API engage_hacks(const std::string &hacks);
 bool MTX_DLL_API hack_engaged(unsigned int id);
 
-#endif // __HACKS_H
+#endif // __MTX_COMMON_HACKS_H

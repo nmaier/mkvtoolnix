@@ -10,23 +10,23 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "config.h"
+#include "common/os.h"
 
 #ifdef HAVE_WXWIDGETS
 
-#include "wx/wx.h"
-#include "wx/treectrl.h"
-#include "wx/dnd.h"
+#include "common/wx.h"
+#include "common/treectrl.h"
+#include "common/dnd.h"
 
 #include <ebml/EbmlVersion.h>
 #include <matroska/KaxVersion.h>
 
-#include "common.h"
-#include "mkvinfo.h"
+#include "common/common.h"
 #if !defined(SYS_WINDOWS)
-#include "matroska.xpm"
+#include "common/matroska.xpm"
 #endif
-#include "wxcommon.h"
+#include "common/wxcommon.h"
+#include "info/mkvinfo.h"
 
 using namespace libebml;
 using namespace libmatroska;

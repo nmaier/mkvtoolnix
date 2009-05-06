@@ -11,18 +11,13 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-
-#include "ac3_common.h"
-#include "matroska.h"
-#include "output_control.h"
-#include "pr_generic.h"
-#include "p_ac3.h"
+#include "common/ac3_common.h"
+#include "common/matroska.h"
+#include "merge/output_control.h"
+#include "merge/pr_generic.h"
+#include "output/p_ac3.h"
 
 using namespace libmatroska;
 

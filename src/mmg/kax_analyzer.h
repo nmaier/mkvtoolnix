@@ -22,9 +22,9 @@
 
 #include <wx/wx.h>
 
-#include "common.h"
-#include "error.h"
-#include "mm_io.h"
+#include "common/common.h"
+#include "common/error.h"
+#include "common/mm_io.h"
 
 using namespace std;
 using namespace libmatroska;

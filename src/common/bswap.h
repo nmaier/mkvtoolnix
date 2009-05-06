@@ -11,10 +11,10 @@
    This code was taken from the ffmpeg project, files "libavutil/bswap.h".
 */
 
-#ifndef __BSWAP_H
-#define __BSWAP_H
+#ifndef __MTX_COMMON_BSWAP_H
+#define __MTX_COMMON_BSWAP_H
 
-#include "os.h"
+#include "common/os.h"
 
 inline uint16_t
 bswap_16(uint16_t x) {
@@ -43,4 +43,4 @@ bswap_64(uint64_t x) {
   return r.ll;
 }
 
-#endif  // __BSWAP_H
+#endif  // __MTX_COMMON_BSWAP_H

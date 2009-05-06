@@ -12,17 +12,16 @@
    Modified by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include <ctype.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
+#include "common/os.h"
 
-#include "common.h"
-#include "mm_io.h"
-#include "output_control.h"
-#include "p_vobbtn.h"
-#include "r_vobbtn.h"
+#include "common/common.h"
+#include "common/endian.h"
+#include "common/mm_io.h"
+#include "common/string_formatting.h"
+#include "common/string_parsing.h"
+#include "input/r_vobbtn.h"
+#include "merge/output_control.h"
+#include "output/p_vobbtn.h"
 
 using namespace std;
 

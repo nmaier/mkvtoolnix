@@ -10,10 +10,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include "common.h"
-#include "mkvinfo.h"
+#include "common/common.h"
+#include "info/mkvinfo.h"
 
 void
 console_show_element(int level,

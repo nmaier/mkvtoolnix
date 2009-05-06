@@ -12,15 +12,16 @@
    Modified by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <matroska/KaxContentEncoding.h>
 
-#include "common.h"
-#include "compression.h"
-#include "matroska.h"
-#include "mm_io.h"
-#include "p_vobbtn.h"
+#include "common/common.h"
+#include "common/compression.h"
+#include "common/endian.h"
+#include "common/matroska.h"
+#include "common/mm_io.h"
+#include "output/p_vobbtn.h"
 
 using namespace libmatroska;
 

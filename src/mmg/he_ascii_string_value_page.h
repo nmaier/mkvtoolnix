@@ -14,9 +14,9 @@
 #ifndef __HE_ASCII_STRING_VALUE_PAGE_H
 #define __HE_ASCII_STRING_VALUE_PAGE_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "he_value_page.h"
+#include "mmg/he_value_page.h"
 
 class he_ascii_string_value_page_c: public he_value_page_c {
 public:

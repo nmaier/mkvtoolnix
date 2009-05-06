@@ -14,11 +14,12 @@
      project, files "libavutil/crc.h" and "libavutil/crc.c".
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include "bswap.h"
-#include "checksums.h"
-#include "common.h"
+#include "common/bswap.h"
+#include "common/checksums.h"
+#include "common/common.h"
+#include "common/endian.h"
 
 #define BASE 65521
 #define A0 check += *buffer++; sum2 += check;

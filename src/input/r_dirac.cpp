@@ -11,19 +11,15 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-
-#include "byte_buffer.h"
-#include "common.h"
-#include "error.h"
-#include "output_control.h"
-#include "r_dirac.h"
-#include "p_dirac.h"
+#include "common/byte_buffer.h"
+#include "common/common.h"
+#include "common/endian.h"
+#include "common/error.h"
+#include "input/r_dirac.h"
+#include "merge/output_control.h"
+#include "output/p_dirac.h"
 
 using namespace std;
 

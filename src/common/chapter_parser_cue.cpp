@@ -22,10 +22,15 @@
 #include <matroska/KaxTag.h>
 #include <matroska/KaxTags.h>
 
-#include "chapters.h"
-#include "commonebml.h"
-#include "error.h"
-#include "matroska.h"
+#include "common/chapters.h"
+#include "common/ebml.h"
+#include "common/error.h"
+#include "common/locale.h"
+#include "common/matroska.h"
+#include "common/mm_io.h"
+#include "common/string_editing.h"
+#include "common/string_formatting.h"
+#include "common/unique_numbers.h"
 
 using namespace std;
 using namespace libmatroska;

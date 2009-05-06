@@ -12,12 +12,12 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __DIRAC_COMMON_H
-#define __DIRAC_COMMON_H
+#ifndef __MTX_COMMON_DIRAC_COMMON_H
+#define __MTX_COMMON_DIRAC_COMMON_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "smart_pointers.h"
+#include "common/smart_pointers.h"
 
 #define DIRAC_SYNC_WORD            0x42424344 // 'BBCD'
 #define DIRAC_UNIT_SEQUENCE_HEADER 0x00
@@ -179,4 +179,4 @@ namespace dirac {
   };
 };
 
-#endif  // __DIRAC_COMMON_H
+#endif  // __MTX_COMMON_DIRAC_COMMON_H

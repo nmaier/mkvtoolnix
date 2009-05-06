@@ -14,7 +14,7 @@
 #ifndef __TRANSLATION_TABLE_H
 #define __TRANSLATION_TABLE_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <vector>
 

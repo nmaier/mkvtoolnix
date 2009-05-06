@@ -11,10 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __ID3_COMMON_H
-#define __ID3_COMMON_H
+#ifndef __MTX_COMMON_ID3_COMMON_H
+#define __MTX_COMMON_ID3_COMMON_H
 
-#include "os.h"
+#include "common/os.h"
 
 class mm_io_c;
 

@@ -11,14 +11,15 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <wx/textctrl.h>
 
 #include <ebml/EbmlUInteger.h>
 
-#include "he_unsigned_integer_value_page.h"
-#include "wxcommon.h"
+#include "common/string_parsing.h"
+#include "common/wxcommon.h"
+#include "mmg/he_unsigned_integer_value_page.h"
 
 using namespace libebml;
 

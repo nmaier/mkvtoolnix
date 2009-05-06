@@ -12,12 +12,14 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <string.h>
 
-#include "bit_cursor.h"
-#include "vc1_common.h"
+#include "common/bit_cursor.h"
+#include "common/endian.h"
+#include "common/string_formatting.h"
+#include "common/vc1_common.h"
 
 vc1::sequence_header_t::sequence_header_t() {
   memset(this, 0, sizeof(vc1::sequence_header_t));

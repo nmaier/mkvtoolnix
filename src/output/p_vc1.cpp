@@ -11,18 +11,20 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <cstring>
 
-#include "avilib.h"
-#include "common.h"
-#include "hacks.h"
-#include "matroska.h"
-#include "mpeg4_common.h"
-#include "output_control.h"
-#include "packet_extensions.h"
-#include "p_vc1.h"
+#include <avilib.h>
+
+#include "common/common.h"
+#include "common/endian.h"
+#include "common/hacks.h"
+#include "common/matroska.h"
+#include "common/mpeg4_common.h"
+#include "merge/output_control.h"
+#include "merge/packet_extensions.h"
+#include "output/p_vc1.h"
 
 using namespace libmatroska;
 

@@ -12,16 +12,14 @@
    Modified by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
+#include "common/os.h"
 
-#include "common.h"
-#include "error.h"
-#include "output_control.h"
-#include "p_wavpack.h"
-#include "r_wavpack.h"
+#include "common/common.h"
+#include "common/endian.h"
+#include "common/error.h"
+#include "input/r_wavpack.h"
+#include "merge/output_control.h"
+#include "output/p_wavpack.h"
 
 int
 wavpack_reader_c::probe_file(mm_io_c *io,

@@ -14,15 +14,15 @@
 #ifndef __R_TRUEHD_H
 #define __R_TRUEHD_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <stdio.h>
 
-#include "common.h"
-#include "error.h"
-#include "mm_io.h"
-#include "pr_generic.h"
-#include "truehd_common.h"
+#include "common/common.h"
+#include "common/error.h"
+#include "common/mm_io.h"
+#include "merge/pr_generic.h"
+#include "common/truehd_common.h"
 
 class truehd_reader_c: public generic_reader_c {
 private:

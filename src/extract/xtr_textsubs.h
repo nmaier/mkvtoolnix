@@ -13,14 +13,13 @@
 #ifndef __XTR_TEXTSUBS_H
 #define __XTR_TEXTSUBS_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <string>
 #include <vector>
 
-#include "xml_element_writer.h"
-
-#include "xtr_base.h"
+#include "common/xml_element_writer.h"
+#include "extract/xtr_base.h"
 
 using namespace std;
 

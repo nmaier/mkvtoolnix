@@ -13,7 +13,7 @@
 #ifndef __QT_UI_H
 #define __QT_UI_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <QFile>
 #include <QMainWindow>
@@ -21,7 +21,7 @@
 #include <QTreeWidgetItem>
 #include <QVector>
 
-#include "ui/mainwindow.h"
+#include "common/mainwindow.h"
 
 class main_window_c: public QMainWindow, public Ui_main_window {
   Q_OBJECT;

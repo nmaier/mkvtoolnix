@@ -13,9 +13,9 @@
 #ifndef __XTR_MPEG1_2_H
 #define __XTR_MPEG1_2_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "xtr_base.h"
+#include "extract/xtr_base.h"
 
 class xtr_mpeg1_2_video_c: public xtr_base_c {
 public:

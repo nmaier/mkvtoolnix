@@ -12,11 +12,11 @@
    Adapted from code by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include "bit_cursor.h"
-#include "common.h"
-#include "kate_common.h"
+#include "common/bit_cursor.h"
+#include "common/common.h"
+#include "common/kate_common.h"
 
 kate_identification_header_t::kate_identification_header_t() {
   memset(this, 0, sizeof(kate_identification_header_t));

@@ -10,7 +10,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <cassert>
 #include <iostream>
@@ -29,12 +29,12 @@ extern "C" {
 
 #include <matroska/KaxTags.h>
 
-#include "common.h"
-#include "commonebml.h"
-#include "mkvextract.h"
-#include "mm_io.h"
-#include "quickparser.h"
-#include "tagwriter.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/mm_io.h"
+#include "common/quickparser.h"
+#include "common/tagwriter.h"
+#include "extract/mkvextract.h"
 
 using namespace libmatroska;
 using namespace std;

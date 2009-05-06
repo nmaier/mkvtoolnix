@@ -11,10 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MP3_COMMON_H
-#define __MP3_COMMON_H
+#ifndef __MTX_COMMON_MP3_COMMON_H
+#define __MTX_COMMON_MP3_COMMON_H
 
-#include "os.h"
+#include "common/os.h"
 
 typedef struct {
   int version;
@@ -36,4 +36,4 @@ int MTX_DLL_API find_consecutive_mp3_headers(const unsigned char *buf, int size,
 
 void MTX_DLL_API decode_mp3_header(const unsigned char *buf, mp3_header_t *h);
 
-#endif // __MP3_COMMON_H
+#endif // __MTX_COMMON_MP3_COMMON_H

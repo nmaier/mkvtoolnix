@@ -12,12 +12,15 @@
    Modifications by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
+#include "common/os.h"
+
 #include <map>
 
-#include "common.h"
-#include "mm_io.h"
-#include "pr_generic.h"
-#include "timecode_factory.h"
+#include "common/common.h"
+#include "common/mm_io.h"
+#include "common/string_parsing.h"
+#include "merge/pr_generic.h"
+#include "merge/timecode_factory.h"
 
 using namespace std;
 

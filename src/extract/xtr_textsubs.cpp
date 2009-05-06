@@ -10,16 +10,18 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <algorithm>
 
-#include "common.h"
-#include "commonebml.h"
-#include "matroska.h"
-#include "smart_pointers.h"
-
-#include "xtr_textsubs.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/locale.h"
+#include "common/matroska.h"
+#include "common/string_editing.h"
+#include "common/string_formatting.h"
+#include "common/string_parsing.h"
+#include "extract/xtr_textsubs.h"
 
 xtr_srt_c::xtr_srt_c(const string &codec_id,
                      int64_t tid,

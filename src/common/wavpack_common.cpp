@@ -15,8 +15,8 @@
 
 #include <cctype>
 
-#include "wavpack_common.h"
-#include "common.h"
+#include "common/wavpack_common.h"
+#include "common/common.h"
 
 const uint32_t sample_rates [] = {
    6000,  8000,  9600, 11025, 12000, 16000, 22050,

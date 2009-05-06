@@ -11,10 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __TAG_COMMON_H
-#define __TAG_COMMON_H
+#ifndef __MTX_COMMON_TAG_COMMON_H
+#define __MTX_COMMON_TAG_COMMON_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <string>
 
@@ -30,30 +30,26 @@ namespace libebml {
   class EbmlMaster;
 };
 
-using namespace std;
 using namespace libebml;
 using namespace libmatroska;
 
 void MTX_DLL_API fix_mandatory_tag_elements(EbmlElement *e);
 
-KaxTags *MTX_DLL_API select_tags_for_chapters(KaxTags &tags,
-                                              KaxChapters &chapters);
+KaxTags *MTX_DLL_API select_tags_for_chapters(KaxTags &tags, KaxChapters &chapters);
 
-KaxTagSimple &MTX_DLL_API find_simple_tag(const string &name, EbmlMaster &m);
-KaxTagSimple &MTX_DLL_API find_simple_tag(const UTFstring &name,
-                                          EbmlMaster &m);
-string MTX_DLL_API get_simple_tag_value(const string &name, EbmlMaster &m);
+KaxTagSimple &MTX_DLL_API find_simple_tag(const std::string &name, EbmlMaster &m);
+KaxTagSimple &MTX_DLL_API find_simple_tag(const UTFstring &name, EbmlMaster &m);
+std::string MTX_DLL_API get_simple_tag_value(const std::string &name, EbmlMaster &m);
 int64_t MTX_DLL_API get_tag_tuid(const KaxTag &tag);
 int64_t MTX_DLL_API get_tag_cuid(const KaxTag &tag);
 
-string MTX_DLL_API get_simple_tag_name(const KaxTagSimple &tag);
-string MTX_DLL_API get_simple_tag_value(const KaxTagSimple &tag);
+std::string MTX_DLL_API get_simple_tag_name(const KaxTagSimple &tag);
+std::string MTX_DLL_API get_simple_tag_value(const KaxTagSimple &tag);
 
-void MTX_DLL_API set_simple_tag_name(KaxTagSimple &tag, const string &name);
-void MTX_DLL_API set_simple_tag_value(KaxTagSimple &tag, const string &value);
-void MTX_DLL_API set_simple_tag(KaxTagSimple &tag, const string &name,
-                                const string &valuevalue);
+void MTX_DLL_API set_simple_tag_name(KaxTagSimple &tag, const std::string &name);
+void MTX_DLL_API set_simple_tag_value(KaxTagSimple &tag, const std::string &value);
+void MTX_DLL_API set_simple_tag(KaxTagSimple &tag, const std::string &name, const std::string &valuevalue);
 
 void MTX_DLL_API convert_old_tags(KaxTags &tags);
 
-#endif // __TAG_COMMON_H
+#endif // __MTX_COMMON_TAG_COMMON_H

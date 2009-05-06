@@ -12,10 +12,10 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MPEG4_COMMON_H
-#define __MPEG4_COMMON_H
+#ifndef __MTX_COMMON_MPEG4_COMMON_H
+#define __MTX_COMMON_MPEG4_COMMON_H
 
-#include "common_memory.h"
+#include "common/memory.h"
 
 /** Start code for a MPEG-4 part 2 (?) video object plain */
 #define MPEGVIDEO_VOP_START_CODE                  0x000001b6
@@ -53,8 +53,7 @@
 #define MPEGVIDEO_DSMCC_STREAM                    0xf2
 #define MPEGVIDEO_ITUTRECH222TYPEE_STREAM         0xf8
 
-#define mpeg_is_start_code(v) \
-  ((((v) >> 8) & 0xffffff) == MPEGVIDEO_START_CODE_PREFIX)
+#define mpeg_is_start_code(v) ((((v) >> 8) & 0xffffff) == MPEGVIDEO_START_CODE_PREFIX)
 
 /** MPEG-1/-2 frame rate: 24000/1001 frames per second */
 #define MPEGVIDEO_FPS_23_976    0x01
@@ -103,8 +102,7 @@ enum frame_type_e {
   FRAME_TYPE_P,
   FRAME_TYPE_B
 };
-#define FRAME_TYPE_TO_CHAR(t) \
-  (FRAME_TYPE_I == (t) ? 'I' : FRAME_TYPE_P == (t) ? 'P' : 'B')
+#define FRAME_TYPE_TO_CHAR(t) (FRAME_TYPE_I == (t) ? 'I' : FRAME_TYPE_P == (t) ? 'P' : 'B')
 
 /** Pointers to MPEG4 video frames and their data
 
@@ -140,17 +138,24 @@ struct video_frame_t {
       This value is only set for B frames. */
   int64_t fref;
 
-  video_frame_t():
-    data(NULL), size(0), pos(0), type(FRAME_TYPE_I), priv(NULL),
-    timecode(0), duration(0), bref(0), fref(0) {};
+  video_frame_t()
+    : data(NULL)
+    , size(0)
+    , pos(0)
+    , type(FRAME_TYPE_I)
+    , priv(NULL)
+    , timecode(0)
+    , duration(0)
+    , bref(0)
+    , fref(0)
+  {
+  }
 };
 
 namespace mpeg1_2 {
-  int MTX_DLL_API extract_fps_idx(const unsigned char *buffer,
-                                  int buffer_size);
+  int MTX_DLL_API extract_fps_idx(const unsigned char *buffer, int buffer_size);
   double MTX_DLL_API get_fps(int idx);
-  bool MTX_DLL_API extract_ar(const unsigned char *buffer,
-                              int buffer_size, float &ar);
+  bool MTX_DLL_API extract_ar(const unsigned char *buffer, int buffer_size, float &ar);
 };
 
 namespace mpeg4 {
@@ -158,17 +163,10 @@ namespace mpeg4 {
     bool MTX_DLL_API is_fourcc(const void *fourcc);
     bool MTX_DLL_API is_v3_fourcc(const void *fourcc);
 
-    bool MTX_DLL_API extract_par(const unsigned char *buffer,
-                                 int buffer_size,
-                                 uint32_t &par_num, uint32_t &par_den);
-    bool MTX_DLL_API extract_size(const unsigned char *buffer,
-                                  int buffer_size,
-                                  uint32_t &width, uint32_t &height);
-    void MTX_DLL_API find_frame_types(const unsigned char *buffer,
-                                      int buffer_size,
-                                      vector<video_frame_t> &frames);
-    memory_c * MTX_DLL_API parse_config_data(const unsigned char *buffer,
-                                             int buffer_size);
+    bool MTX_DLL_API extract_par(const unsigned char *buffer, int buffer_size, uint32_t &par_num, uint32_t &par_den);
+    bool MTX_DLL_API extract_size(const unsigned char *buffer, int buffer_size, uint32_t &width, uint32_t &height);
+    void MTX_DLL_API find_frame_types(const unsigned char *buffer, int buffer_size, std::vector<video_frame_t> &frames);
+    memory_c * MTX_DLL_API parse_config_data(const unsigned char *buffer, int buffer_size);
   };
 
   namespace p10 {
@@ -272,12 +270,10 @@ namespace mpeg4 {
     void MTX_DLL_API nalu_to_rbsp(memory_cptr &buffer);
     void MTX_DLL_API rbsp_to_nalu(memory_cptr &buffer);
 
-    bool MTX_DLL_API parse_sps(memory_cptr &buffer, sps_info_t &sps,
-                               bool keep_ar_info = false);
+    bool MTX_DLL_API parse_sps(memory_cptr &buffer, sps_info_t &sps, bool keep_ar_info = false);
     bool MTX_DLL_API parse_pps(memory_cptr &buffer, pps_info_t &pps);
 
-    bool MTX_DLL_API extract_par(uint8_t *&buffer, int &buffer_size,
-                                 uint32_t &par_num, uint32_t &par_den);
+    bool MTX_DLL_API extract_par(uint8_t *&buffer, int &buffer_size, uint32_t &par_num, uint32_t &par_den);
     bool MTX_DLL_API is_avc_fourcc(const char *fourcc);
     memory_cptr MTX_DLL_API avcc_to_nalus(const unsigned char *buffer, int size);
 
@@ -296,25 +292,26 @@ namespace mpeg4 {
       };
 
       avc_frame_t &operator =(const avc_frame_t &f) {
-        m_data = f.m_data;
-        m_start = f.m_start;
-        m_end = f.m_end;
-        m_ref1 = f.m_ref1;
-        m_ref2 = f.m_ref2;
+        m_data     = f.m_data;
+        m_start    = f.m_start;
+        m_end      = f.m_end;
+        m_ref1     = f.m_ref1;
+        m_ref2     = f.m_ref2;
         m_keyframe = f.m_keyframe;
-        m_si = f.m_si;
+        m_si       = f.m_si;
 
         return *this;
       };
 
       void clear() {
-        m_start = 0;
-        m_end = 0;
-        m_ref1 = 0;
-        m_ref2 = 0;
+        m_start    = 0;
+        m_end      = 0;
+        m_ref1     = 0;
+        m_ref2     = 0;
         m_keyframe = false;
+        m_data     = memory_cptr(NULL);
+
         memset(&m_si, 0, sizeof(m_si));
-        m_data = memory_cptr(NULL);
       };
     };
 
@@ -323,8 +320,9 @@ namespace mpeg4 {
       int m_required_length;
 
     public:
-      nalu_size_length_error_c(int required_length):
-        m_required_length(required_length) {
+      nalu_size_length_error_c(int required_length)
+        : m_required_length(required_length)
+        {
       };
 
       int get_required_length() {
@@ -441,10 +439,8 @@ namespace mpeg4 {
       bool flush_decision(slice_info_t &si, slice_info_t &ref);
       void flush_incomplete_frame();
       void flush_unhandled_nalus();
-      void write_nalu_size(unsigned char *buffer, int size,
-                           int nalu_size_length = -1);
-      memory_cptr create_nalu_with_size(const memory_cptr &src,
-                                        bool add_extra_data = false);
+      void write_nalu_size(unsigned char *buffer, int size, int nalu_size_length = -1);
+      memory_cptr create_nalu_with_size(const memory_cptr &src, bool add_extra_data = false);
     };
   };
 };

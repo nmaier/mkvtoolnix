@@ -11,11 +11,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __ERROR_H
-#define __ERROR_H
+#ifndef __MTX_COMMON_ERROR_H
+#define __MTX_COMMON_ERROR_H
 
-#include <string>
-#include <boost/format.hpp>
+#include "os.h"
+
+#include "common/common.h"
 
 using namespace std;
 
@@ -48,4 +49,4 @@ public:
   }
 };
 
-#endif // __ERROR_H
+#endif // __MTX_COMMON_ERROR_H

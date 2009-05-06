@@ -21,12 +21,14 @@
 
 #include <matroska/KaxSegment.h>
 
-#include "base64.h"
-#include "common.h"
-#include "commonebml.h"
-#include "error.h"
-#include "mm_io.h"
-#include "xml_element_parser.h"
+#include "common/base64.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/error.h"
+#include "common/mm_io.h"
+#include "common/string_editing.h"
+#include "common/string_parsing.h"
+#include "common/xml_element_parser.h"
 
 using namespace std;
 using namespace libebml;

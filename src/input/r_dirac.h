@@ -14,10 +14,10 @@
 #ifndef __R_DIRAC_H
 #define __R_DIRAC_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "pr_generic.h"
-#include "dirac_common.h"
+#include "merge/pr_generic.h"
+#include "common/dirac_common.h"
 
 class dirac_es_reader_c: public generic_reader_c {
 private:

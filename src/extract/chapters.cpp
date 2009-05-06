@@ -9,7 +9,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <cassert>
 #include <iostream>
@@ -24,16 +24,16 @@ extern "C" {
 #include <ebml/EbmlSubHead.h>
 #include <ebml/EbmlStream.h>
 #include <ebml/EbmlVoid.h>
-#include <matroska/FileKax.h>
 
+#include <matroska/FileKax.h>
 #include <matroska/KaxChapters.h>
 
-#include "chapters.h"
-#include "common.h"
-#include "commonebml.h"
-#include "mkvextract.h"
-#include "mm_io.h"
-#include "quickparser.h"
+#include "common/chapters.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/mm_io.h"
+#include "common/quickparser.h"
+#include "extract/mkvextract.h"
 
 using namespace libmatroska;
 using namespace std;

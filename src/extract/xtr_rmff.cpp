@@ -10,11 +10,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include "commonebml.h"
-
-#include "xtr_rmff.h"
+#include "common/ebml.h"
+#include "extract/xtr_rmff.h"
 
 xtr_rmff_c::xtr_rmff_c(const string &codec_id,
                        int64_t tid,

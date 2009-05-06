@@ -11,14 +11,14 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <wx/textctrl.h>
 
 #include <ebml/EbmlBinary.h>
 
-#include "he_bit_value_page.h"
-#include "wxcommon.h"
+#include "mmg/he_bit_value_page.h"
+#include "common/wxcommon.h"
 
 using namespace libebml;
 

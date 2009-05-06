@@ -14,12 +14,12 @@
 #ifndef __PACKET_EXTENSIONS_H
 #define __PACKET_EXTENSIONS_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <deque>
 
-#include "packet.h"
-#include "smart_pointers.h"
+#include "merge/packet.h"
+#include "common/smart_pointers.h"
 
 class multiple_timecodes_packet_extension_c: public packet_extension_c {
 protected:

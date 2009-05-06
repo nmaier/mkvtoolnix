@@ -15,11 +15,13 @@
 #ifndef __OUTPUT_CONTROL_H
 #define __OUTPUT_CONTROL_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "mkvmerge.h"
-#include "pr_generic.h"
-#include "smart_pointers.h"
+#include "common/bitvalue.h"
+#include "common/file_types.h"
+#include "common/smart_pointers.h"
+#include "merge/mkvmerge.h"
+#include "merge/pr_generic.h"
 
 namespace libmatroska {
   class KaxChapters;

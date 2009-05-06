@@ -13,11 +13,10 @@
 #ifndef __XTR_VOBSUB_H
 #define __XTR_VOBSUB_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "smart_pointers.h"
-
-#include "xtr_base.h"
+#include "common/smart_pointers.h"
+#include "extract/xtr_base.h"
 
 class xtr_vobsub_c: public xtr_base_c {
 public:

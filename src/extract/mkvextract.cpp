@@ -10,7 +10,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <cassert>
 #include <iostream>
@@ -44,14 +44,17 @@
 #include <matroska/KaxTrackAudio.h>
 #include <matroska/KaxTrackVideo.h>
 
-#include "chapters.h"
-#include "common.h"
-#include "matroska.h"
-#include "mkvextract.h"
-#include "mm_io.h"
-#include "tagwriter.h"
-#include "translation.h"
-#include "xml_element_mapping.h"
+#include "common/chapters.h"
+#include "common/command_line.h"
+#include "common/common.h"
+#include "common/locale.h"
+#include "common/matroska.h"
+#include "common/mm_io.h"
+#include "common/string_parsing.h"
+#include "common/tagwriter.h"
+#include "common/translation.h"
+#include "common/xml_element_mapping.h"
+#include "extract/mkvextract.h"
 
 using namespace libmatroska;
 using namespace std;

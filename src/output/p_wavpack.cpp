@@ -11,14 +11,13 @@
    Written by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include <string.h>
-#include <errno.h>
-
-#include "common.h"
-#include "matroska.h"
-#include "p_wavpack.h"
+#include "common/common.h"
+#include "common/endian.h"
+#include "common/math.h"
+#include "common/matroska.h"
+#include "output/p_wavpack.h"
 
 using namespace libmatroska;
 

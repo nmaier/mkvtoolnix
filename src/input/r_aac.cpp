@@ -11,16 +11,16 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <algorithm>
 
-#include "common.h"
-#include "error.h"
-#include "id3_common.h"
-#include "r_aac.h"
-#include "p_aac.h"
-#include "output_control.h"
+#include "common/common.h"
+#include "common/error.h"
+#include "common/id3_common.h"
+#include "input/r_aac.h"
+#include "output/p_aac.h"
+#include "merge/output_control.h"
 
 int
 aac_reader_c::probe_file(mm_io_c *io,

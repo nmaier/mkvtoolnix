@@ -10,10 +10,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __BASE64_H
-#define __BASE64_H
+#ifndef __MTX_COMMON_BASE64_H
+#define __MTX_COMMON_BASE64_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <string>
 
@@ -24,4 +24,4 @@ string MTX_DLL_API base64_encode(const unsigned char *src, int src_len,
                                  int max_line_len = 72);
 int MTX_DLL_API base64_decode(const string &src, unsigned char *dst);
 
-#endif // __BASE64_H
+#endif // __MTX_COMMON_BASE64_H

@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #if HAVE_NL_LANGINFO
 # include <langinfo.h>
@@ -31,8 +31,9 @@
 #include <matroska/KaxTrackAudio.h>
 #include <matroska/KaxTrackVideo.h>
 
-#include "common.h"
-#include "commonebml.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/memory.h"
 
 using namespace libebml;
 

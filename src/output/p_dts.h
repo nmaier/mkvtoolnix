@@ -15,11 +15,11 @@
 #ifndef __P_DTS_H
 #define __P_DTS_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "common.h"
-#include "pr_generic.h"
-#include "dts_common.h"
+#include "common/common.h"
+#include "merge/pr_generic.h"
+#include "common/dts_common.h"
 
 class dts_packetizer_c: public generic_packetizer_c {
 private:

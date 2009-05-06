@@ -12,12 +12,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <cassert>
 
-#include "common.h"
-#include "libmatroska_extensions.h"
+#include "common/common.h"
+#include "merge/libmatroska_extensions.h"
 
 kax_reference_block_c::kax_reference_block_c():
   KaxReferenceBlock(), m_value(-1) {

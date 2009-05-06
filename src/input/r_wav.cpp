@@ -13,7 +13,7 @@
      modified by Moritz Bunkus.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <algorithm>
 
@@ -26,19 +26,15 @@
 #include <unistd.h>
 #endif
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-
-#include "common.h"
-#include "ac3_common.h"
-#include "dts_common.h"
-#include "error.h"
-#include "r_wav.h"
-#include "p_ac3.h"
-#include "p_dts.h"
-#include "p_pcm.h"
+#include "common/ac3_common.h"
+#include "common/common.h"
+#include "common/dts_common.h"
+#include "common/endian.h"
+#include "common/error.h"
+#include "input/r_wav.h"
+#include "output/p_ac3.h"
+#include "output/p_dts.h"
+#include "output/p_pcm.h"
 
 extern "C" {
 #include <avilib.h> // for wave_header

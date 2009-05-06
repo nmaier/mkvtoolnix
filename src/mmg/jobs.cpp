@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <errno.h>
 #ifdef HAVE_UNISTD_H
@@ -34,10 +34,10 @@
 #include <windows.h>
 #endif
 
-#include "common.h"
-#include "jobs.h"
-#include "mmg.h"
-#include "mmg_dialog.h"
+#include "common/common.h"
+#include "mmg/jobs.h"
+#include "mmg/mmg.h"
+#include "mmg/mmg_dialog.h"
 
 #define JOB_LOG_DIALOG_WIDTH 600
 #define JOB_RUN_DIALOG_WIDTH 500

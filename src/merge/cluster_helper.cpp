@@ -12,20 +12,22 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <algorithm>
 #include <cassert>
 #include <limits.h>
 #include <vector>
 
-#include "cluster_helper.h"
-#include "common.h"
-#include "commonebml.h"
-#include "hacks.h"
-#include "libmatroska_extensions.h"
-#include "output_control.h"
-#include "p_video.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/hacks.h"
+#include "common/math.h"
+#include "common/string_formatting.h"
+#include "merge/cluster_helper.h"
+#include "merge/libmatroska_extensions.h"
+#include "merge/output_control.h"
+#include "output/p_video.h"
 
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxBlockData.h>

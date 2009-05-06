@@ -12,7 +12,7 @@
    Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <algorithm>
 #include <map>
@@ -25,16 +25,19 @@
 #include <matroska/KaxTrackAudio.h>
 #include <matroska/KaxTrackVideo.h>
 
-#include "base64.h"
-#include "common.h"
-#include "commonebml.h"
-#include "compression.h"
-#include "hacks.h"
-#include "mkvmerge.h"
-#include "output_control.h"
-#include "pr_generic.h"
-#include "tagparser.h"
-#include "tag_common.h"
+#include "common/base64.h"
+#include "common/common.h"
+#include "common/compression.h"
+#include "common/ebml.h"
+#include "common/hacks.h"
+#include "common/math.h"
+#include "common/string_formatting.h"
+#include "common/tag_common.h"
+#include "common/tagparser.h"
+#include "common/unique_numbers.h"
+#include "merge/mkvmerge.h"
+#include "merge/output_control.h"
+#include "merge/pr_generic.h"
 
 using namespace std;
 

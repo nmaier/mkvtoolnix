@@ -12,12 +12,12 @@
      <niemayer@isg.de> and modified by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __BIT_CURSOR_H
-#define __BIT_CURSOR_H
+#ifndef __MTX_COMMON_BIT_CURSOR_H
+#define __MTX_COMMON_BIT_CURSOR_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "mm_io.h"
+#include "common/mm_io.h"
 
 class MTX_DLL_API bit_cursor_c {
 private:
@@ -243,4 +243,4 @@ public:
   }
 };
 
-#endif // __BIT_CURSOR_H
+#endif // __MTX_COMMON_BIT_CURSOR_H

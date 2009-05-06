@@ -11,14 +11,15 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <string.h>
 
-#include "ac3_common.h"
-#include "bswap.h"
-#include "checksums.h"
-#include "common.h"
+#include "common/ac3_common.h"
+#include "common/bswap.h"
+#include "common/checksums.h"
+#include "common/common.h"
+#include "common/endian.h"
 
 /*
   EAC3 Header:

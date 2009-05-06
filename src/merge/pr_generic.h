@@ -15,7 +15,7 @@
 #ifndef __PR_GENERIC_H
 #define __PR_GENERIC_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <boost/logic/tribool.hpp>
 #include <deque>
@@ -29,13 +29,14 @@
 #include <matroska/KaxTracks.h>
 #include <matroska/KaxTags.h>
 
-#include "common_memory.h"
-#include "compression.h"
-#include "error.h"
-#include "mm_io.h"
-#include "packet.h"
-#include "smart_pointers.h"
-#include "timecode_factory.h"
+#include "common/compression.h"
+#include "common/error.h"
+#include "common/memory.h"
+#include "common/mm_io.h"
+#include "common/smart_pointers.h"
+#include "common/string_editing.h"
+#include "merge/packet.h"
+#include "merge/timecode_factory.h"
 
 using namespace libmatroska;
 using namespace std;

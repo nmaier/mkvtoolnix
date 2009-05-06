@@ -11,13 +11,17 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include "common.h"
-#include "extern_data.h"
-#include "mm_io.h"
-#include "output_control.h"
-#include "subtitles.h"
+#include "common/common.h"
+#include "common/endian.h"
+#include "common/extern_data.h"
+#include "common/locale.h"
+#include "common/mm_io.h"
+#include "common/string_formatting.h"
+#include "common/string_parsing.h"
+#include "input/subtitles.h"
+#include "merge/output_control.h"
 
 // ------------------------------------------------------------
 

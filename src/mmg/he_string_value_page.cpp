@@ -11,13 +11,13 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <wx/textctrl.h>
 
 #include <ebml/EbmlUnicodeString.h>
 
-#include "he_string_value_page.h"
+#include "mmg/he_string_value_page.h"
 
 using namespace libebml;
 

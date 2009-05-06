@@ -14,7 +14,7 @@
 #ifndef __HEADER_EDITOR_FRAME_H
 #define __HEADER_EDITOR_FRAME_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <wx/filename.h>
 #include <wx/frame.h>
@@ -25,8 +25,8 @@
 #include <wx/timer.h>
 #include <wx/treectrl.h>
 
-#include "he_page_base.h"
-#include "kax_analyzer.h"
+#include "mmg/he_page_base.h"
+#include "mmg/kax_analyzer.h"
 
 #define ID_M_HE_FILE_OPEN            20000
 #define ID_M_HE_FILE_SAVE            20001

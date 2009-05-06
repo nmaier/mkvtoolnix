@@ -12,7 +12,7 @@
    Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <expat.h>
 #include <ctype.h>
@@ -25,14 +25,14 @@
 #include <matroska/KaxInfoData.h>
 #include <matroska/KaxSegment.h>
 
-#include "common.h"
-#include "commonebml.h"
-#include "error.h"
-#include "iso639.h"
-#include "mm_io.h"
-#include "segmentinfo.h"
-#include "xml_element_mapping.h"
-#include "xml_element_parser.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/error.h"
+#include "common/iso639.h"
+#include "common/mm_io.h"
+#include "common/segmentinfo.h"
+#include "common/xml_element_mapping.h"
+#include "common/xml_element_parser.h"
 
 using namespace std;
 using namespace libmatroska;

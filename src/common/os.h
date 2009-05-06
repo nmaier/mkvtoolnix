@@ -10,8 +10,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __OS_H
-#define __OS_H
+#ifndef __MTX_COMMON_OS_H
+#define __MTX_COMMON_OS_H
 
 #include "config.h"
 

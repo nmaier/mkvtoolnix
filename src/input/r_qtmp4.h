@@ -14,18 +14,18 @@
 #ifndef __R_QTMP4_H
 #define __R_QTMP4_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <stdio.h>
 
 #include <vector>
 
-#include "ac3_common.h"
-#include "common.h"
-#include "mm_io.h"
-#include "p_video.h"
-#include "qtmp4_atoms.h"
-#include "smart_pointers.h"
+#include "common/ac3_common.h"
+#include "common/common.h"
+#include "common/mm_io.h"
+#include "output/p_video.h"
+#include "input/qtmp4_atoms.h"
+#include "common/smart_pointers.h"
 
 struct qt_durmap_t {
   uint32_t number;

@@ -11,28 +11,27 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include <algorithm>
-#include <memory>
-
-#include "ac3_common.h"
-#include "common.h"
-#include "error.h"
-#include "M2VParser.h"
-#include "mp3_common.h"
-#include "mpeg4_common.h"
-#include "output_control.h"
-#include "p_ac3.h"
-#include "p_avc.h"
-#include "p_dts.h"
-#include "p_mp3.h"
-#include "p_truehd.h"
-#include "p_vc1.h"
-#include "p_video.h"
-#include "r_mpeg_ps.h"
-#include "smart_pointers.h"
-#include "truehd_common.h"
+#include "common/ac3_common.h"
+#include "common/common.h"
+#include "common/endian.h"
+#include "common/error.h"
+#include "common/math.h"
+#include "common/mp3_common.h"
+#include "common/mpeg4_common.h"
+#include "common/smart_pointers.h"
+#include "common/truehd_common.h"
+#include "input/r_mpeg_ps.h"
+#include "merge/output_control.h"
+#include "mpegparser/M2VParser.h"
+#include "output/p_ac3.h"
+#include "output/p_avc.h"
+#include "output/p_dts.h"
+#include "output/p_mp3.h"
+#include "output/p_truehd.h"
+#include "output/p_vc1.h"
+#include "output/p_video.h"
 
 #define PS_PROBE_SIZE 10 * 1024 * 1024
 

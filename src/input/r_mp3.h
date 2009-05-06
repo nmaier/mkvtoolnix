@@ -14,15 +14,15 @@
 #ifndef __R_MP3_H
 #define __R_MP3_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <stdio.h>
 
-#include "mm_io.h"
-#include "common.h"
-#include "error.h"
+#include "common/mm_io.h"
+#include "common/common.h"
+#include "common/error.h"
 
-#include "p_mp3.h"
+#include "output/p_mp3.h"
 
 class mp3_reader_c: public generic_reader_c {
 private:

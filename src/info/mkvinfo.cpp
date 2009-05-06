@@ -12,7 +12,7 @@
 
 // {{{ includes
 
-#include "os.h"
+#include "common/os.h"
 
 #include <errno.h>
 #include <ctype.h>
@@ -69,16 +69,20 @@ extern "C" {
 #define MATROSKA_VERSION 2
 #endif
 
-#include "mkvinfo.h"
-
-#include "chapters.h"
-#include "checksums.h"
-#include "common.h"
-#include "commonebml.h"
-#include "matroska.h"
-#include "mm_io.h"
-#include "translation.h"
-#include "xml_element_mapping.h"
+#include "common/chapters.h"
+#include "common/checksums.h"
+#include "common/command_line.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/endian.h"
+#include "common/locale.h"
+#include "common/matroska.h"
+#include "common/mm_io.h"
+#include "common/string_editing.h"
+#include "common/string_formatting.h"
+#include "common/translation.h"
+#include "common/xml_element_mapping.h"
+#include "info/mkvinfo.h"
 
 using namespace libmatroska;
 using namespace std;

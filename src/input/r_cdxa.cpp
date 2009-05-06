@@ -11,10 +11,11 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include "common.h"
-#include "r_cdxa.h"
+#include "common/common.h"
+#include "common/endian.h"
+#include "input/r_cdxa.h"
 
 bool
 cdxa_reader_c::probe_file(mm_io_c *io,

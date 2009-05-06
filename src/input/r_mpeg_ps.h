@@ -14,16 +14,16 @@
 #ifndef __R_MPEG_PS_H
 #define __R_MPEG_PS_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <map>
 
-#include "bit_cursor.h"
-#include "dts_common.h"
-#include "mpeg4_common.h"
-#include "packet_extensions.h"
-#include "pr_generic.h"
-#include "smart_pointers.h"
+#include "common/bit_cursor.h"
+#include "common/dts_common.h"
+#include "common/mpeg4_common.h"
+#include "merge/packet_extensions.h"
+#include "merge/pr_generic.h"
+#include "common/smart_pointers.h"
 
 struct mpeg_ps_id_t {
   int id;

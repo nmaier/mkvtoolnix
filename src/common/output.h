@@ -11,17 +11,23 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __COMMON_OUTPUT_H
-#define __COMMON_OUTPUT_H
+#ifndef __MTX_COMMON_OUTPUT_H
+#define __MTX_COMMON_OUTPUT_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <boost/format.hpp>
 #include <string>
 
+class mm_io_c;
+
 extern bool MTX_DLL_API g_suppress_warnings;
 extern std::string MTX_DLL_API g_stdio_charset;
 extern int MTX_DLL_API g_cc_stdio;
+
+void MTX_DLL_API init_stdio();
+void MTX_DLL_API redirect_stdio(mm_io_c *new_stdio);
+bool MTX_DLL_API stdio_redirected();
 
 void MTX_DLL_API init_cc_stdio();
 void MTX_DLL_API set_cc_stdio(const std::string &charset);
@@ -116,4 +122,6 @@ mxverb_tid(int level,
   mxverb_tid(level, file_name, track_id, message.str());
 }
 
-#endif  // __COMMON_OUTPUT_H
+void MTX_DLL_API mxhexdump(int level, const unsigned char *buffer, int lenth);
+
+#endif  // __MTX_COMMON_OUTPUT_H

@@ -12,12 +12,13 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <string.h>
 
-#include "bit_cursor.h"
-#include "dirac_common.h"
+#include "common/bit_cursor.h"
+#include "common/dirac_common.h"
+#include "common/endian.h"
 
 dirac::sequence_header_t::sequence_header_t() {
   memset(this, 0, sizeof(dirac::sequence_header_t));

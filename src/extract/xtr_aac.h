@@ -13,9 +13,9 @@
 #ifndef __XTR_AAC_H
 #define __XTR_AAC_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "xtr_base.h"
+#include "extract/xtr_base.h"
 
 class xtr_aac_c: public xtr_base_c {
 public:

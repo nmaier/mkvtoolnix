@@ -14,7 +14,7 @@
 #ifndef __MKVINFO_H
 #define __MKVINFO_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <string>
 #include <vector>

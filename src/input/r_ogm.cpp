@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
-#include "config.h"
+#include "common/os.h"
+#include "common/os.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,27 +28,29 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "avilib.h"
 }
 
-#include "aac_common.h"
-#include "chapters.h"
-#include "common.h"
-#include "commonebml.h"
-#include "hacks.h"
-#include "iso639.h"
-#include "matroska.h"
-#include "ogmstreams.h"
-#include "output_control.h"
-#include "pr_generic.h"
-#include "p_aac.h"
-#include "p_ac3.h"
-#include "p_avc.h"
-#include "p_mp3.h"
-#include "p_pcm.h"
-#include "p_textsubs.h"
-#include "p_video.h"
-#include "p_vorbis.h"
-#include "p_kate.h"
-#include "r_ogm.h"
-#include "r_ogm_flac.h"
+#include "common/aac_common.h"
+#include "common/chapters.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/endian.h"
+#include "common/hacks.h"
+#include "common/iso639.h"
+#include "common/matroska.h"
+#include "common/locale.h"
+#include "common/ogmstreams.h"
+#include "input/r_ogm.h"
+#include "input/r_ogm_flac.h"
+#include "merge/output_control.h"
+#include "merge/pr_generic.h"
+#include "output/p_aac.h"
+#include "output/p_ac3.h"
+#include "output/p_avc.h"
+#include "output/p_kate.h"
+#include "output/p_mp3.h"
+#include "output/p_pcm.h"
+#include "output/p_textsubs.h"
+#include "output/p_video.h"
+#include "output/p_vorbis.h"
 
 #define BUFFER_SIZE 4096
 

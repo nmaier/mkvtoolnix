@@ -11,10 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __CHECKSUMS_H
-#define __CHECKSUMS_H
+#ifndef __MTX_COMMON_CHECKSUMS_H
+#define __MTX_COMMON_CHECKSUMS_H
 
-#include "os.h"
+#include "common/os.h"
 
 uint32_t MTX_DLL_API calc_adler32(const unsigned char *buffer, int size);
 
@@ -31,4 +31,4 @@ int MTX_DLL_API crc_init(uint32_t *ctx, int le, int bits, uint32_t poly, int ctx
 const uint32_t * MTX_DLL_API crc_get_table(crc_type_e crc_id);
 uint32_t crc_calc(const uint32_t *ctx, uint32_t start_crc, const unsigned char *buffer, size_t length);
 
-#endif // __CHECKSUMS_H
+#endif // __MTX_COMMON_CHECKSUMS_H

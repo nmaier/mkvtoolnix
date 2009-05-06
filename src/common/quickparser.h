@@ -11,16 +11,16 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __QUICKPARSER_H
-#define __QUICKPARSER_H
+#ifndef __MTX_COMMON_QUICKPARSER_H
+#define __MTX_COMMON_QUICKPARSER_H
+
+#include "os.h"
 
 #include <vector>
 
-#include <ebml/EbmlElement.h>
+#include "common/common.h"
+#include "common/mm_io.h"
 
-#include "mm_io.h"
-
-using namespace std;
 using namespace libebml;
 
 typedef struct segment_child_t {
@@ -33,8 +33,8 @@ typedef struct segment_child_t {
 
 class kax_quickparser_c {
 private:
-  vector<segment_child_t> children;
-  vector<segment_child_t>::iterator current_child;
+  std::vector<segment_child_t> children;
+  std::vector<segment_child_t>::iterator current_child;
   mm_io_c &in;
 
 public:

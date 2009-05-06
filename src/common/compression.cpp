@@ -11,14 +11,15 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <matroska/KaxContentEncoding.h>
 #include <matroska/KaxTracks.h>
 
-#include "commonebml.h"
-#include "compression.h"
-#include "hacks.h"
+#include "common/compression.h"
+#include "common/ebml.h"
+#include "common/endian.h"
+#include "common/hacks.h"
 
 using namespace libmatroska;
 

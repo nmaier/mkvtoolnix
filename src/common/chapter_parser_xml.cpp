@@ -20,14 +20,16 @@
 
 #include <matroska/KaxChapters.h>
 
-#include "chapters.h"
-#include "commonebml.h"
-#include "error.h"
-#include "extern_data.h"
-#include "iso639.h"
-#include "mm_io.h"
-#include "xml_element_mapping.h"
-#include "xml_element_parser.h"
+#include "common/chapters.h"
+#include "common/ebml.h"
+#include "common/error.h"
+#include "common/extern_data.h"
+#include "common/iso639.h"
+#include "common/mm_io.h"
+#include "common/string_editing.h"
+#include "common/unique_numbers.h"
+#include "common/xml_element_mapping.h"
+#include "common/xml_element_parser.h"
 
 using namespace std;
 using namespace libmatroska;

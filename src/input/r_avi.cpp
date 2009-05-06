@@ -13,7 +13,7 @@
 
 // {{{ includes
 
-#include "os.h"
+#include "common/os.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -26,23 +26,26 @@ extern "C" {
 #include <avilib.h>
 }
 
-#include "aac_common.h"
-#include "common.h"
-#include "error.h"
-#include "hacks.h"
-#include "matroska.h"
-#include "mpeg4_common.h"
-#include "output_control.h"
-#include "r_avi.h"
-#include "p_aac.h"
-#include "p_ac3.h"
-#include "p_avc.h"
-#include "p_dts.h"
-#include "p_mp3.h"
-#include "p_pcm.h"
-#include "p_video.h"
-#include "p_vorbis.h"
-#include "subtitles.h"
+#include "common/aac_common.h"
+#include "common/common.h"
+#include "common/endian.h"
+#include "common/error.h"
+#include "common/hacks.h"
+#include "common/locale.h"
+#include "common/math.h"
+#include "common/matroska.h"
+#include "common/mpeg4_common.h"
+#include "input/r_avi.h"
+#include "input/subtitles.h"
+#include "merge/output_control.h"
+#include "output/p_aac.h"
+#include "output/p_ac3.h"
+#include "output/p_avc.h"
+#include "output/p_dts.h"
+#include "output/p_mp3.h"
+#include "output/p_pcm.h"
+#include "output/p_video.h"
+#include "output/p_vorbis.h"
 
 #define GAB2_TAG                 FOURCC('G', 'A', 'B', '2')
 #define GAB2_ID_LANGUAGE         0x0000
@@ -427,7 +430,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
 
   AVI_set_audio_track(m_avi, aid);
   if (AVI_read_audio_chunk(m_avi, NULL) < 0) {
-    mxwarn(boost::format(Y("Could not find an index for audio track %1% (m_avilib error message: %2%). Skipping track.\n")) % (aid + 1) % AVI_strerror());
+    mxwarn(boost::format(Y("Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n")) % (aid + 1) % AVI_strerror());
     return;
   }
 

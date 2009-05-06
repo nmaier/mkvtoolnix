@@ -14,10 +14,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "bit_cursor.h"
-#include "common.h"
-#include "aac_common.h"
-#include "matroska.h"
+#include "common/bit_cursor.h"
+#include "common/common.h"
+#include "common/aac_common.h"
+#include "common/matroska.h"
 
 const int aac_sampling_freq[16] = {96000, 88200, 64000, 48000, 44100, 32000,
                                    24000, 22050, 16000, 12000, 11025,  8000,

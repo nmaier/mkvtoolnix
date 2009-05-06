@@ -13,11 +13,11 @@
 #ifndef __XTR_RMFF_H
 #define __XTR_RMFF_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include "librmff.h"
 
-#include "xtr_base.h"
+#include "extract/xtr_base.h"
 
 class xtr_rmff_c: public xtr_base_c {
 public:

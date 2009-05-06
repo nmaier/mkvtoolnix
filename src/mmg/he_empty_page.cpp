@@ -11,13 +11,13 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
 
-#include "he_empty_page.h"
+#include "mmg/he_empty_page.h"
 
 he_empty_page_c::he_empty_page_c(header_editor_frame_c *parent,
                                  const wxString &title,

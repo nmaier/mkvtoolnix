@@ -11,15 +11,13 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
+#include "common/os.h"
 
-#include "common.h"
-#include "matroska.h"
-#include "p_tta.h"
-#include "tta_common.h"
+#include "common/common.h"
+#include "common/math.h"
+#include "common/matroska.h"
+#include "common/tta_common.h"
+#include "output/p_tta.h"
 
 using namespace libmatroska;
 

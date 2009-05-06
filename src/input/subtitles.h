@@ -14,13 +14,13 @@
 #ifndef __SUBTITLES_H
 #define __SUBTITLES_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <string>
 #include <vector>
 
-#include "output_control.h"
-#include "p_textsubs.h"
+#include "merge/output_control.h"
+#include "output/p_textsubs.h"
 
 typedef struct sub_t {
   int64_t start, end;

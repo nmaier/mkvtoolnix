@@ -11,17 +11,17 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 
-#include "header_editor_frame.h"
-#include "he_top_level_page.h"
-#include "segmentinfo.h"
-#include "wxcommon.h"
+#include "mmg/header_editor_frame.h"
+#include "mmg/he_top_level_page.h"
+#include "common/segmentinfo.h"
+#include "common/wxcommon.h"
 
 he_top_level_page_c::he_top_level_page_c(header_editor_frame_c *parent,
                                          const wxString &title,

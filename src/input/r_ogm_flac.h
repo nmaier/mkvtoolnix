@@ -14,14 +14,14 @@
 #ifndef __R_OGM_FLAC_H
 #define __R_OGM_FLAC_H
 
-#include "os.h"
+#include "common/os.h"
 
 #if defined(HAVE_FLAC_FORMAT_H)
 
 #include <ogg/ogg.h>
 #include <FLAC/stream_decoder.h>
 
-#include "mm_io.h"
+#include "common/mm_io.h"
 
 class flac_header_extractor_c {
 public:

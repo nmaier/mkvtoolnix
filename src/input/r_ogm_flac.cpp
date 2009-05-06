@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #if defined(HAVE_FLAC_FORMAT_H)
 
@@ -24,9 +24,9 @@
 # endif
 #endif
 
-#include "p_flac.h"
-#include "r_ogm.h"
-#include "r_ogm_flac.h"
+#include "output/p_flac.h"
+#include "input/r_ogm.h"
+#include "input/r_ogm_flac.h"
 
 #define BUFFER_SIZE 4096
 

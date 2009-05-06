@@ -11,13 +11,14 @@
    and Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <matroska/KaxBlock.h>
 
-#include "common.h"
-#include "commonebml.h"
-#include "xtr_wav.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/endian.h"
+#include "extract/xtr_wav.h"
 
 xtr_wav_c::xtr_wav_c(const string &codec_id,
                      int64_t tid,

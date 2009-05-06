@@ -14,7 +14,7 @@
 #ifndef __OPTIONS_DIALOG_H
 #define __OPTIONS_DIALOG_H
 
-#include "config.h"
+#include "common/os.h"
 
 #include <wx/log.h>
 

@@ -11,14 +11,15 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <cstring>
 
-#include "common.h"
-#include "matroska.h"
-#include "output_control.h"
-#include "p_dirac.h"
+#include "common/common.h"
+#include "common/math.h"
+#include "common/matroska.h"
+#include "merge/output_control.h"
+#include "output/p_dirac.h"
 
 using namespace libmatroska;
 

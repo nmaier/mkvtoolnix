@@ -10,14 +10,16 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common.h"
-#include "commonebml.h"
-#include "random.h"
-#include "kate_common.h"
-
-#include "xtr_ogg.h"
+#include "common/os.h"
 
 #include <vorbis/codec.h>
+
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/endian.h"
+#include "common/random.h"
+#include "common/kate_common.h"
+#include "extract/xtr_ogg.h"
 
 // ------------------------------------------------------------------------
 

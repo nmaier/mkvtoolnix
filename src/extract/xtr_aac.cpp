@@ -10,12 +10,13 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "aac_common.h"
-#include "common.h"
-#include "commonebml.h"
-#include "matroska.h"
+#include "common/os.h"
 
-#include "xtr_aac.h"
+#include "common/aac_common.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/matroska.h"
+#include "extract/xtr_aac.h"
 
 xtr_aac_c::xtr_aac_c(const string &codec_id,
                      int64_t tid,

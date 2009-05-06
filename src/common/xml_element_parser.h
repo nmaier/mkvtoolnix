@@ -11,19 +11,18 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __XML_ELEMENT_PARSER_H
-#define __XML_ELEMENT_PARSER_H
+#ifndef __MTX_COMMON_XML_ELEMENT_PARSER_H
+#define __MTX_COMMON_XML_ELEMENT_PARSER_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <expat.h>
 #include <setjmp.h>
-
 #include <string>
 #include <vector>
 
-#include "common.h"
-#include "xml_element_mapping.h"
+#include "common/common.h"
+#include "common/xml_element_mapping.h"
 
 namespace libebml {
   class EbmlElement;
@@ -32,7 +31,6 @@ namespace libebml {
 
 class mm_text_io_c;
 
-using namespace std;
 using namespace libebml;
 
 class MTX_DLL_API xml_parser_error_c: public error_c {
@@ -40,16 +38,20 @@ public:
   int m_line, m_column;
 
 public:
-  xml_parser_error_c(const string &message, XML_Parser &parser):
-    error_c(message), m_line(XML_GetCurrentLineNumber(parser)),
-    m_column(XML_GetCurrentColumnNumber(parser)) {
+  xml_parser_error_c(const std::string &message, XML_Parser &parser)
+    : error_c(message)
+    , m_line(XML_GetCurrentLineNumber(parser))
+    , m_column(XML_GetCurrentColumnNumber(parser))
+  {
   }
 
-  xml_parser_error_c():
-    error_c(Y("No error")), m_line(-1), m_column(-1) {
+  xml_parser_error_c()
+    : error_c(Y("No error"))
+    , m_line(-1)
+    , m_column(-1) {
   }
 
-  virtual string get_error() {
+  virtual std::string get_error() {
     return (boost::format(Y("Line %1%, column %2%: %3%")) % m_line % m_column % error).str();
   }
 };
@@ -58,7 +60,7 @@ class MTX_DLL_API xml_parser_c {
 private:
   jmp_buf m_parser_error_jmp_buf;
   xml_parser_error_c m_saved_parser_error;
-  string m_xml_attribute_name, m_xml_attribute_value;
+  std::string m_xml_attribute_name, m_xml_attribute_value;
 
 protected:
   enum state_t {
@@ -93,7 +95,7 @@ public:
   virtual void throw_error(const xml_parser_error_c &error);
 
 private:
-  void handle_xml_encoding(string &line);
+  void handle_xml_encoding(std::string &line);
 };
 
 typedef struct {
@@ -106,27 +108,24 @@ typedef struct {
   int depth, skip_depth;
   bool done_reading, data_allowed;
 
-  string *bin;
+  std::string *bin;
   const char *format;
 
-  vector<EbmlElement *> *parents;
-  vector<int> *parent_idxs;
+  std::vector<EbmlElement *> *parents;
+  std::vector<int> *parent_idxs;
 
   EbmlMaster *root_element;
 
   jmp_buf parse_error_jmp;
-  string *parse_error_msg;
+  std::string *parse_error_msg;
 } parser_data_t;
 
 #define CPDATA (parser_data_t *)pdata
 
-#define xmlp_pelt (*((parser_data_t *)pdata)->parents) \
-                     [((parser_data_t *)pdata)->parents->size() - 1]
+#define xmlp_pelt  (*((parser_data_t *)pdata)->parents)[((parser_data_t *)pdata)->parents->size() - 1]
 #define xmlp_pname xmlp_parent_name((parser_data_t *)pdata, xmlp_pelt)
 
-EbmlMaster * MTX_DLL_API
-parse_xml_elements(const char *parser_name, const parser_element_t *mapping,
-                   mm_text_io_c *in);
+EbmlMaster * MTX_DLL_API parse_xml_elements(const char *parser_name, const parser_element_t *mapping, mm_text_io_c *in);
 
 const char * MTX_DLL_API
 xmlp_parent_name(parser_data_t *pdata, EbmlElement *e);

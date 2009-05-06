@@ -10,21 +10,20 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __WXCOMMON_H
-#define __WXCOMMON_H
+#ifndef __MTX_COMMON_WXCOMMON_H
+#define __MTX_COMMON_WXCOMMON_H
 
-#include "config.h"
-#include "os.h"
+#include "common/os.h"
 
 #include <wx/version.h>
 
 #if defined(wxUSE_UNICODE) && wxUSE_UNICODE
-# define wxU(s) wxString(s, wxConvUTF8)
-# define wxCS(s) ((const wchar_t *)(s).c_str())
-# define wxMB(s) ((const char *)(s).mb_str(wxConvUTF8))
-# define wxUCS(s) wxU(s).c_str()
+# define wxU(s)     wxString(s, wxConvUTF8)
+# define wxCS(s)    ((const wchar_t *)(s).c_str())
+# define wxMB(s)    ((const char *)(s).mb_str(wxConvUTF8))
+# define wxUCS(s)   wxU(s).c_str()
 # define wxCS2WS(s) wxUCS((s).c_str())
-# define WXUNICODE 1
+# define WXUNICODE  1
 #else
 # error wxWidgets was not compiled with Unicode support.
 #endif

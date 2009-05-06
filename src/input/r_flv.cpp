@@ -11,10 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include "common.h"
-#include "r_flv.h"
+#include "common/common.h"
+#include "input/r_flv.h"
 
 int
 flv_reader_c::probe_file(mm_io_c *io,

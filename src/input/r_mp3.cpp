@@ -11,16 +11,13 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
+#include "common/os.h"
 
-#include "common.h"
-#include "error.h"
-#include "hacks.h"
-#include "r_mp3.h"
-#include "p_mp3.h"
+#include "common/common.h"
+#include "common/error.h"
+#include "common/hacks.h"
+#include "input/r_mp3.h"
+#include "output/p_mp3.h"
 
 int
 mp3_reader_c::probe_file(mm_io_c *io,

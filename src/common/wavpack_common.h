@@ -12,11 +12,11 @@
    Based on a software from David Bryant <dbryant@impulse.net>.
 */
 
-#ifndef __WAVPACK_COMMON_H
-#define __WAVPACK_COMMON_H
+#ifndef __MTX_COMMON_WAVPACK_COMMON_H
+#define __MTX_COMMON_WAVPACK_COMMON_H
 
-#include "os.h"
-#include "mm_io.h"
+#include "common/os.h"
+#include "common/mm_io.h"
 
 /* All integers are little endian. */
 
@@ -78,9 +78,6 @@ typedef struct {
 #define WV_UNKNOWN_FLAGS  0xC0000000  // also reserved, but refuse decode if
                                       //  encountered
 
-int32_t MTX_DLL_API wv_parse_frame(mm_io_c *mm_io, wavpack_header_t &header,
-                                   wavpack_meta_t &meta,
-                                   bool read_blocked_frames,
-                                   bool keep_initial_position);
+int32_t MTX_DLL_API wv_parse_frame(mm_io_c *mm_io, wavpack_header_t &header, wavpack_meta_t &meta, bool read_blocked_frames, bool keep_initial_position);
 
-#endif // __WAVPACK_COMMON_H
+#endif // __MTX_COMMON_WAVPACK_COMMON_H

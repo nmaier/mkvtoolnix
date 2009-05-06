@@ -11,26 +11,20 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #if defined(HAVE_FLAC_FORMAT_H)
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
 
 #include <ogg/ogg.h>
 #include <vorbis/codec.h>
 
-#include "common.h"
-#include "flac_common.h"
-#include "pr_generic.h"
-#include "p_flac.h"
-#include "matroska.h"
+#include "common/checksums.h"
+#include "common/common.h"
+#include "common/matroska.h"
+#include "input/flac_common.h"
+#include "merge/pr_generic.h"
+#include "output/p_flac.h"
 
-#include "checksums.h"
 using namespace libmatroska;
 
 flac_packetizer_c::flac_packetizer_c(generic_reader_c *p_reader,

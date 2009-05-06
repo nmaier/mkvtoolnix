@@ -11,10 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __SAMPLES_TIMECODE_CONV_H
-#define __SAMPLES_TIMECODE_CONV_H
+#ifndef __MTX_COMMON_SAMPLES_TIMECODE_CONV_H
+#define __MTX_COMMON_SAMPLES_TIMECODE_CONV_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <boost/math/common_factor.hpp>
 
@@ -39,7 +39,7 @@ public:
     if (0 == denominator)
       return;
 
-    int64_t gcd            = boost::math::gcd(numerator, denominator);
+    int64_t gcd   = boost::math::gcd(numerator, denominator);
 
     m_numerator   = numerator   / gcd;
     m_denominator = denominator / gcd;
@@ -58,4 +58,4 @@ operator *(int64_t v1,
   return v1 * v2.m_numerator / v2.m_denominator;
 }
 
-#endif  // __SAMPLES_TIMECODE_CONV_H
+#endif  // __MTX_COMMON_SAMPLES_TIMECODE_CONV_H

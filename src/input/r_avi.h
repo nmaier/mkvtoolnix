@@ -14,7 +14,7 @@
 #ifndef __R_AVI_H
 #define __R_AVI_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <stdio.h>
 
@@ -24,11 +24,11 @@ extern "C" {
 #include <avilib.h>
 }
 
-#include "mm_io.h"
-#include "pr_generic.h"
-#include "common.h"
-#include "error.h"
-#include "subtitles.h"
+#include "common/mm_io.h"
+#include "merge/pr_generic.h"
+#include "common/common.h"
+#include "common/error.h"
+#include "input/subtitles.h"
 
 typedef struct avi_demuxer_t {
   int m_ptzr;

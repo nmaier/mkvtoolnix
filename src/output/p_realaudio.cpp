@@ -11,16 +11,11 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include "matroska.h"
-#include "pr_generic.h"
-#include "p_realaudio.h"
+#include "common/matroska.h"
+#include "merge/pr_generic.h"
+#include "output/p_realaudio.h"
 
 using namespace libmatroska;
 

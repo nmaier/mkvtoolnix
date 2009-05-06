@@ -12,18 +12,16 @@
    Adapted from code by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
+#include "common/os.h"
 
 #include <ogg/ogg.h>
 
-#include "common.h"
-#include "kate_common.h"
-#include "pr_generic.h"
-#include "p_kate.h"
-#include "matroska.h"
+#include "common/common.h"
+#include "common/endian.h"
+#include "common/kate_common.h"
+#include "common/matroska.h"
+#include "merge/pr_generic.h"
+#include "output/p_kate.h"
 
 using namespace libmatroska;
 

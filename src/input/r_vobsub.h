@@ -14,14 +14,14 @@
 #ifndef __R_VOBSUB_H
 #define __R_VOBSUB_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <stdio.h>
 
-#include "common.h"
-#include "mm_io.h"
-#include "pr_generic.h"
-#include "p_vobsub.h"
+#include "common/common.h"
+#include "common/mm_io.h"
+#include "merge/pr_generic.h"
+#include "output/p_vobsub.h"
 
 class vobsub_entry_c {
 public:

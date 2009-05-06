@@ -13,7 +13,7 @@
    \author Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <boost/regex.hpp>
 #include <errno.h>
@@ -40,22 +40,28 @@
 #include <vector>
 
 #include <matroska/KaxChapters.h>
+#include <matroska/KaxInfoData.h>
+#include <matroska/KaxSegment.h>
 #include <matroska/KaxTag.h>
 #include <matroska/KaxTags.h>
 
-#include "chapters.h"
-#include "cluster_helper.h"
-#include "common.h"
-#include "commonebml.h"
-#include "extern_data.h"
-#include "hacks.h"
-#include "iso639.h"
-#include "mkvmerge.h"
-#include "mm_io.h"
-#include "output_control.h"
-#include "segmentinfo.h"
-#include "tagparser.h"
-#include "tag_common.h"
+#include "common/chapters.h"
+#include "common/command_line.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/extern_data.h"
+#include "common/hacks.h"
+#include "common/iso639.h"
+#include "common/locale.h"
+#include "common/mm_io.h"
+#include "common/segmentinfo.h"
+#include "common/string_parsing.h"
+#include "common/tag_common.h"
+#include "common/tagparser.h"
+#include "common/unique_numbers.h"
+#include "merge/cluster_helper.h"
+#include "merge/mkvmerge.h"
+#include "merge/output_control.h"
 
 #ifdef SYS_WINDOWS
 # include "os_windows.h"
@@ -288,8 +294,6 @@ set_usage() {
 
   version_info = "mkvmerge v" VERSION " ('" VERSIONNAME "')";
 }
-
-static bool s_print_malloc_report = false;
 
 /** \brief Prints information about what has been compiled into mkvmerge
 */
@@ -1250,7 +1254,7 @@ parse_arg_append_to(const string &s,
         || (0 > mapping.src_file_id)
         || (0 > mapping.src_track_id)
         || (0 > mapping.dst_file_id)
-        || (0> mapping.dst_track_id))
+        || (0 > mapping.dst_track_id))
       mxerror(boost::format(Y("'%1%' is not a valid mapping of file and track IDs in '--append-to %2%'.\n")) % (*entry) % s);
 
     g_append_mapping.push_back(mapping);
@@ -2092,10 +2096,7 @@ parse_args(vector<string> args) {
       parse_arg_nalu_size_length(next_arg, *ti);
       sit++;
 
-    } else if (this_arg == "--print-malloc-report")
-      s_print_malloc_report = true;
-
-    else if (this_arg.length() == 0)
+    } else if (this_arg.length() == 0)
       mxerror(Y("An empty file name is not valid.\n"));
 
     // The argument is an input file.
@@ -2199,9 +2200,6 @@ main(int argc,
     mxinfo(Y("Muxing took 1 second.\n"));
 
   cleanup();
-
-  if (s_print_malloc_report)
-    dump_malloc_report();
 
   mxexit();
 }

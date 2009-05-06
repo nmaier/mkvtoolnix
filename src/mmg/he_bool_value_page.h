@@ -14,10 +14,10 @@
 #ifndef __HE_BOOL_VALUE_PAGE_H
 #define __HE_BOOL_VALUE_PAGE_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "he_value_page.h"
-#include "wxcommon.h"
+#include "mmg/he_value_page.h"
+#include "common/wxcommon.h"
 
 class he_bool_value_page_c: public he_value_page_c {
 public:

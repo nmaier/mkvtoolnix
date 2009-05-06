@@ -14,9 +14,9 @@
 #ifndef __HE_EMPTY_PAGE_H
 #define __HE_EMPTY_PAGE_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "he_page_base.h"
+#include "mmg/he_page_base.h"
 
 class he_empty_page_c: public he_page_base_c {
 public:

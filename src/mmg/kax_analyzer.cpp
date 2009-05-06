@@ -19,7 +19,7 @@
 #endif
 #include <iostream>
 
-#include "os.h"
+#include "common/os.h"
 
 #include <wx/progdlg.h>
 
@@ -29,9 +29,9 @@
 #include <matroska/KaxCluster.h>
 #include <matroska/KaxSeekHead.h>
 
-#include "commonebml.h"
-#include "kax_analyzer.h"
-#include "mmg.h"
+#include "common/ebml.h"
+#include "mmg/kax_analyzer.h"
+#include "mmg/mmg.h"
 
 using namespace std;
 using namespace libebml;

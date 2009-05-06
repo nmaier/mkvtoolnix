@@ -11,9 +11,9 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __QTCOMMON_H
-#define __QTCOMMON_H
+#ifndef __MTX_COMMON_QTCOMMON_H
+#define __MTX_COMMON_QTCOMMON_H
 
 #define Q(s) QString::fromUtf8(s)
 
-#endif  // __QTCOMMON_H
+#endif  // __MTX_COMMON_QTCOMMON_H

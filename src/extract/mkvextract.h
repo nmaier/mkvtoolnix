@@ -18,14 +18,16 @@ extern "C" {
 }
 
 #include <ogg/ogg.h>
-
 #include <vector>
 
 #include <ebml/EbmlElement.h>
 
+#include <matroska/KaxChapters.h>
+#include <matroska/KaxTags.h>
+
+#include "common/file_types.h"
+#include "common/mm_io.h"
 #include "librmff.h"
-#include "mkvmerge.h"
-#include "mm_io.h"
 
 using namespace std;
 using namespace libebml;

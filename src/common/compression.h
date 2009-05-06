@@ -11,20 +11,17 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __COMPRESSION_H
-#define __COMPRESSION_H
+#ifndef __MTX_COMMON_COMPRESSION_H
+#define __MTX_COMMON_COMPRESSION_H
 
-#include "os.h"
-
-#include <memory>
+#include "common/os.h"
 
 #include <matroska/KaxContentEncoding.h>
 #include <matroska/KaxTracks.h>
 
-#include "common.h"
-#include "common_memory.h"
-#include "error.h"
-#include "smart_pointers.h"
+#include "common/common.h"
+#include "common/memory.h"
+#include "common/error.h"
 
 using namespace libmatroska;
 
@@ -44,7 +41,7 @@ extern const char *MTX_DLL_API xcompression_methods[];
 
 class MTX_DLL_API compression_error_c: public error_c {
 public:
-  compression_error_c(const string &n_error): error_c(n_error) { }
+  compression_error_c(const std::string &n_error): error_c(n_error) { }
   compression_error_c(const boost::format &n_error): error_c(n_error.str()) { }
 };
 
@@ -185,4 +182,4 @@ public:
   }
 };
 
-#endif // __COMPRESSION_H
+#endif // __MTX_COMMON_COMPRESSION_H

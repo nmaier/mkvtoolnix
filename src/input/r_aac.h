@@ -14,15 +14,15 @@
 #ifndef __R_AAC_H
 #define __R_AAC_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <stdio.h>
 
-#include "aac_common.h"
-#include "common.h"
-#include "error.h"
-#include "mm_io.h"
-#include "pr_generic.h"
+#include "common/aac_common.h"
+#include "common/common.h"
+#include "common/error.h"
+#include "common/mm_io.h"
+#include "merge/pr_generic.h"
 
 class aac_reader_c: public generic_reader_c {
 private:

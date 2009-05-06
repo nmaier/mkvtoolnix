@@ -11,20 +11,17 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <ogg/ogg.h>
 #include <vorbis/codec.h>
 
-#include "common.h"
-#include "flac_common.h"
-#include "matroska.h"
-#include "output_control.h"
-#include "pr_generic.h"
-#include "r_flac.h"
+#include "common/common.h"
+#include "common/matroska.h"
+#include "input/flac_common.h"
+#include "input/r_flac.h"
+#include "merge/output_control.h"
+#include "merge/pr_generic.h"
 
 #define BUFFER_SIZE 4096
 

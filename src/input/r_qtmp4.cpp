@@ -15,31 +15,33 @@
      the original authors.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <algorithm>
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstring>
 #if defined(HAVE_ZLIB_H)
 #include <zlib.h>
 #endif
 
-#include "aac_common.h"
+extern "C" {
 #include "avilib.h"
-#include "common.h"
-#include "hacks.h"
-#include "iso639.h"
-#include "matroska.h"
-#include "output_control.h"
-#include "p_aac.h"
-#include "p_ac3.h"
-#include "p_mp3.h"
-#include "p_passthrough.h"
-#include "p_pcm.h"
-#include "p_video.h"
-#include "r_qtmp4.h"
+}
+
+#include "common/aac_common.h"
+#include "common/common.h"
+#include "common/endian.h"
+#include "common/hacks.h"
+#include "common/iso639.h"
+#include "common/matroska.h"
+#include "common/string_formatting.h"
+#include "input/r_qtmp4.h"
+#include "merge/output_control.h"
+#include "output/p_aac.h"
+#include "output/p_ac3.h"
+#include "output/p_mp3.h"
+#include "output/p_passthrough.h"
+#include "output/p_pcm.h"
+#include "output/p_video.h"
 
 using namespace std;
 using namespace libmatroska;

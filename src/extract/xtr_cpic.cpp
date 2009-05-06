@@ -10,14 +10,16 @@
    Written by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <matroska/KaxBlock.h>
 
-#include "common.h"
-#include "commonebml.h"
-#include "xtr_cpic.h"
-#include "r_corepicture.h"
+#include "common/common.h"
+#include "common/corepicture.h"
+#include "common/ebml.h"
+#include "common/endian.h"
+#include "common/string_formatting.h"
+#include "extract/xtr_cpic.h"
 
 xtr_cpic_c::xtr_cpic_c(const string &codec_id,
                      int64_t tid,

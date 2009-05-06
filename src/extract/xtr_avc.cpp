@@ -10,10 +10,11 @@
    Written by Matt Rice <topquark@sluggy.net>.
 */
 
-#include "common.h"
-#include "commonebml.h"
+#include "common/os.h"
 
-#include "xtr_avc.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "extract/xtr_avc.h"
 
 static const binary s_start_code[4] = { 0x00, 0x00, 0x00, 0x01 };
 

@@ -12,8 +12,8 @@
    Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#ifndef __MATROSKA_H
-#define __MATROSKA_H
+#ifndef __MTX_COMMON_MATROSKA_H
+#define __MTX_COMMON_MATROSKA_H
 
 // see http://www.matroska.org/technical/specs/codecid/index.html
 
@@ -132,4 +132,4 @@
 
 #define CHAPTER_PHYSEQUIV_INDEX        10
 
-#endif // __MATROSKA_H
+#endif // __MTX_COMMON_MATROSKA_H

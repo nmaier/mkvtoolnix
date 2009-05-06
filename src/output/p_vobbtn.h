@@ -15,11 +15,11 @@
 #ifndef __P_VOBBTN_H
 #define __P_VOBBTN_H
 
-#include "os.h"
+#include "common/os.h"
 
-#include "common.h"
-#include "compression.h"
-#include "pr_generic.h"
+#include "common/common.h"
+#include "common/compression.h"
+#include "merge/pr_generic.h"
 
 class vobbtn_packetizer_c: public generic_packetizer_c {
 protected:

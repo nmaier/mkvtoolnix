@@ -11,8 +11,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __TAGPARSER_H
-#define __TAGPARSER_H
+#ifndef __MTX_COMMON_TAGPARSER_H
+#define __MTX_COMMON_TAGPARSER_H
+
+#include "common/os.h"
+
+#include <string>
 
 namespace libmatroska {
   class KaxTags;
@@ -20,6 +24,6 @@ namespace libmatroska {
 
 using namespace libmatroska;
 
-void MTX_DLL_API parse_xml_tags(const string &name, KaxTags *tags);
+void MTX_DLL_API parse_xml_tags(const std::string &name, KaxTags *tags);
 
-#endif // __TAGPARSER_H
+#endif // __MTX_COMMON_TAGPARSER_H

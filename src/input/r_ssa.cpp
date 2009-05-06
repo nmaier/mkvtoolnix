@@ -11,16 +11,17 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <string>
 
-#include "base64.h"
-#include "extern_data.h"
-#include "pr_generic.h"
-#include "r_ssa.h"
-#include "matroska.h"
-#include "output_control.h"
+#include "common/base64.h"
+#include "common/extern_data.h"
+#include "common/locale.h"
+#include "common/matroska.h"
+#include "input/r_ssa.h"
+#include "merge/output_control.h"
+#include "merge/pr_generic.h"
 
 using namespace std;
 

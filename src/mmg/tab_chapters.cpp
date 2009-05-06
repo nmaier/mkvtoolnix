@@ -11,10 +11,9 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/os.h"
 
 #include <errno.h>
-#include <stdio.h>
 
 #include <wx/wx.h>
 #include <wx/dnd.h>
@@ -24,17 +23,21 @@
 
 #include <ebml/EbmlStream.h>
 
-#include "chapters.h"
-#include "common.h"
-#include "commonebml.h"
-#include "error.h"
-#include "extern_data.h"
-#include "iso639.h"
-#include "mmg.h"
-#include "mmg_dialog.h"
-#include "kax_analyzer.h"
-#include "tab_chapters.h"
-#include "wxcommon.h"
+#include "common/chapters.h"
+#include "common/common.h"
+#include "common/ebml.h"
+#include "common/error.h"
+#include "common/extern_data.h"
+#include "common/iso639.h"
+#include "common/string_editing.h"
+#include "common/string_formatting.h"
+#include "common/string_parsing.h"
+#include "common/unique_numbers.h"
+#include "common/wxcommon.h"
+#include "mmg/kax_analyzer.h"
+#include "mmg/mmg_dialog.h"
+#include "mmg/mmg.h"
+#include "mmg/tab_chapters.h"
 
 using namespace std;
 using namespace libebml;

@@ -10,8 +10,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __TAGWRITER_H
-#define __TAGWRITER_H
+#ifndef __MTX_COMMON_TAGWRITER_H
+#define __MTX_COMMON_TAGWRITER_H
+
+#include "common/os.h"
 
 #include <matroska/KaxTags.h>
 #include <matroska/KaxTag.h>
@@ -22,4 +24,4 @@ class mm_io_c;
 
 void MTX_DLL_API write_tags_xml(KaxTags &tags, mm_io_c *out);
 
-#endif // __TAGWRITER_H
+#endif // __MTX_COMMON_TAGWRITER_H

@@ -11,15 +11,14 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __CHAPTERS_H
-#define __CHAPTERS_H
+#ifndef __MTX_COMMON_CHAPTERS_H
+#define __MTX_COMMON_CHAPTERS_H
 
-#include <stdio.h>
+#include "os.h"
 
-#include "ebml/EbmlElement.h"
+#include <string>
 
-#include "common.h"
-#include "mm_io.h"
+#include <ebml/EbmlElement.h>
 
 namespace libebml {
   class EbmlMaster;
@@ -35,72 +34,47 @@ namespace libmatroska {
 using namespace libebml;
 using namespace libmatroska;
 
-KaxChapters *MTX_DLL_API
-parse_chapters(const string &file_name, int64_t min_tc = 0,
-               int64_t max_tc = -1, int64_t offset = 0,
-               const string &language = "",
-               const string &charset = "",
-               bool exception_on_error = false,
-               bool *is_simple_format = NULL,
-               KaxTags **tags = NULL);
+class mm_io_c;
+class mm_text_io_c;
 
 KaxChapters *MTX_DLL_API
-parse_chapters(mm_text_io_c *io, int64_t min_tc = 0,
-               int64_t max_tc = -1, int64_t offset = 0,
-               const string &language = "",
-               const string &charset = "",
-               bool exception_on_error = false,
-               bool *is_simple_format = NULL,
-               KaxTags **tags = NULL);
+parse_chapters(const std::string &file_name, int64_t min_tc = 0, int64_t max_tc = -1, int64_t offset = 0, const std::string &language = "", const std::string &charset = "",
+               bool exception_on_error = false, bool *is_simple_format = NULL, KaxTags **tags = NULL);
+
+KaxChapters *MTX_DLL_API
+parse_chapters(mm_text_io_c *io, int64_t min_tc = 0, int64_t max_tc = -1, int64_t offset = 0, const std::string &language = "", const std::string &charset = "",
+               bool exception_on_error = false, bool *is_simple_format = NULL, KaxTags **tags = NULL);
 
 bool MTX_DLL_API probe_xml_chapters(mm_text_io_c *in);
-KaxChapters *MTX_DLL_API parse_xml_chapters(mm_text_io_c *in, int64_t min_tc,
-                                            int64_t max_tc, int64_t offset,
-                                            bool exception_on_error = false);
+KaxChapters *MTX_DLL_API parse_xml_chapters(mm_text_io_c *in, int64_t min_tc, int64_t max_tc, int64_t offset, bool exception_on_error = false);
 
 bool MTX_DLL_API probe_simple_chapters(mm_text_io_c *in);
-KaxChapters *MTX_DLL_API
-parse_simple_chapters(mm_text_io_c *in, int64_t min_tc,
-                      int64_t max_tc, int64_t offset,
-                      const string &language, const string &charset,
-                      bool exception_on_error = false);
+KaxChapters *MTX_DLL_API parse_simple_chapters(mm_text_io_c *in, int64_t min_tc, int64_t max_tc, int64_t offset, const std::string &language, const std::string &charset, bool exception_on_error = false);
 
-extern string MTX_DLL_API cue_to_chapter_name_format;
+extern std::string MTX_DLL_API cue_to_chapter_name_format;
 bool MTX_DLL_API probe_cue_chapters(mm_text_io_c *in);
-KaxChapters *MTX_DLL_API parse_cue_chapters(mm_text_io_c *in, int64_t min_tc,
-                                            int64_t max_tc, int64_t offset,
-                                            const string &language,
-                                            const string &charset,
-                                            bool exception_on_error = false,
-                                            KaxTags **tags = NULL);
+KaxChapters *MTX_DLL_API parse_cue_chapters(mm_text_io_c *in, int64_t min_tc, int64_t max_tc, int64_t offset, const std::string &language, const std::string &charset,
+                                            bool exception_on_error = false, KaxTags **tags = NULL);
 
 void MTX_DLL_API write_chapters_xml(KaxChapters *chapters, mm_io_c *out);
-void MTX_DLL_API write_chapters_simple(int &chapter_num, KaxChapters *chapters,
-                                       mm_io_c *out);
+void MTX_DLL_API write_chapters_simple(int &chapter_num, KaxChapters *chapters, mm_io_c *out);
 
 #define copy_chapters(source) dynamic_cast<KaxChapters *>(source->Clone())
-KaxChapters *MTX_DLL_API
-select_chapters_in_timeframe(KaxChapters *chapters, int64_t min_tc,
-                             int64_t max_tc, int64_t offset);
+KaxChapters *MTX_DLL_API select_chapters_in_timeframe(KaxChapters *chapters, int64_t min_tc, int64_t max_tc, int64_t offset);
 
-extern string MTX_DLL_API default_chapter_language, default_chapter_country;
+extern std::string MTX_DLL_API default_chapter_language, default_chapter_country;
 
 int64_t MTX_DLL_API get_chapter_uid(KaxChapterAtom &atom);
-int64_t MTX_DLL_API get_chapter_start(KaxChapterAtom &atom,
-                                      int64_t value_if_not_found = -1);
-int64_t MTX_DLL_API get_chapter_end(KaxChapterAtom &atom,
-                                    int64_t value_if_not_found = -1);
-string MTX_DLL_API get_chapter_name(KaxChapterAtom &atom);
+int64_t MTX_DLL_API get_chapter_start(KaxChapterAtom &atom, int64_t value_if_not_found = -1);
+int64_t MTX_DLL_API get_chapter_end(KaxChapterAtom &atom, int64_t value_if_not_found = -1);
+std::string MTX_DLL_API get_chapter_name(KaxChapterAtom &atom);
 
 void MTX_DLL_API fix_mandatory_chapter_elements(EbmlElement *e);
-KaxEditionEntry *MTX_DLL_API find_edition_with_uid(KaxChapters &chapters,
-                                                   uint64_t uid);
-KaxChapterAtom *MTX_DLL_API find_chapter_with_uid(KaxChapters &chapters,
-                                                  uint64_t uid);
+KaxEditionEntry *MTX_DLL_API find_edition_with_uid(KaxChapters &chapters, uint64_t uid);
+KaxChapterAtom *MTX_DLL_API find_chapter_with_uid(KaxChapters &chapters, uint64_t uid);
 
 void MTX_DLL_API move_chapters_by_edition(KaxChapters &dst, KaxChapters &src);
 void MTX_DLL_API adjust_chapter_timecodes(EbmlMaster &master, int64_t offset);
 void MTX_DLL_API merge_chapter_entries(EbmlMaster &master);
 
-#endif // __CHAPTERS_H
-
+#endif // __MTX_COMMON_CHAPTERS_H
