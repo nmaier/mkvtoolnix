@@ -1889,9 +1889,7 @@ console_main(vector<string> args) {
   string file_name;
   bool ok;
 
-#if defined(SYS_UNIX) || defined(COMP_CYGWIN)
-  nice(2);
-#endif
+  set_process_priority(-1);
 
   parse_args(args, file_name);
   if (file_name == "") {

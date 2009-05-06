@@ -356,60 +356,6 @@ create_track_number(generic_reader_c *reader,
   return tnum;
 }
 
-/** \brief Sets the priority mkvmerge runs with
-
-   Depending on the OS different functions are used. On Unix like systems
-   the process is being nice'd if priority is negative ( = less important).
-   Only the super user can increase the priority, but you shouldn't do
-   such work as root anyway.
-   On Windows SetPriorityClass is used.
-*/
-static void
-set_process_priority(int priority) {
-#if defined(SYS_WINDOWS)
-  switch (priority) {
-    case -2:
-      SetPriorityClass(GetCurrentProcess(), IDLE_PRIORITY_CLASS);
-      SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_IDLE);
-      break;
-    case -1:
-      SetPriorityClass(GetCurrentProcess(), BELOW_NORMAL_PRIORITY_CLASS);
-      SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_BELOW_NORMAL);
-      break;
-    case 0:
-      SetPriorityClass(GetCurrentProcess(), NORMAL_PRIORITY_CLASS);
-      SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_NORMAL);
-      break;
-    case 1:
-      SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
-      SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);
-      break;
-    case 2:
-      SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
-      SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
-      break;
-  }
-#else
-  switch (priority) {
-    case -2:
-      nice(19);
-      break;
-    case -1:
-      nice(2);
-      break;
-    case 0:
-      nice(0);
-      break;
-    case 1:
-      nice(-2);
-      break;
-    case 2:
-      nice(-5);
-      break;
-  }
-#endif
-}
-
 static string
 guess_mime_type_and_report(string file_name) {
   string mime_type = guess_mime_type(file_name, true);

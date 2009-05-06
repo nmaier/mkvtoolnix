@@ -52,3 +52,37 @@ void
 request_debugging(const std::string &options) {
   s_debug_options = options;
 }
+
+/** \brief Sets the priority mkvmerge runs with
+
+   Depending on the OS different functions are used. On Unix like systems
+   the process is being nice'd if priority is negative ( = less important).
+   Only the super user can increase the priority, but you shouldn't do
+   such work as root anyway.
+   On Windows SetPriorityClass is used.
+
+   \param priority A value between -2 (lowest priority) and 2 (highest
+     priority)
+ */
+void
+set_process_priority(int priority) {
+#if defined(SYS_WINDOWS)
+  static const struct {
+    int priority_class, thread_priority;
+  } s_priority_classes[5] = {
+    { IDLE_PRIORITY_CLASS,         THREAD_PRIORITY_IDLE         },
+    { BELOW_NORMAL_PRIORITY_CLASS, THREAD_PRIORITY_BELOW_NORMAL },
+    { NORMAL_PRIORITY_CLASS,       THREAD_PRIORITY_NORMAL       },
+    { ABOVE_NORMAL_PRIORITY_CLASS, THREAD_PRIORITY_ABOVE_NORMAL },
+    { HIGH_PRIORITY_CLASS,         THREAD_PRIORITY_HIGHEST      },
+  };
+
+  SetPriorityClass(GetCurrentProcess(), s_priority_classes[priority + 2].priority_class);
+  SetThreadPriority(GetCurrentThread(), s_priority_classes[priority + 2].thread_priority);
+
+#else
+  static const int s_nice_levels[5] = { 19, 2, 0, -2, -5 };
+
+  (void)nice(s_nice_levels[priority + 2]);
+#endif
+}

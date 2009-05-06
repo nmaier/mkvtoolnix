@@ -73,6 +73,7 @@ using namespace std;
 #define TIMECODE_SCALE 1000000
 
 void MTX_DLL_API mxexit(int code = -1);
+void MTX_DLL_API set_process_priority(int priority);
 
 bool MTX_DLL_API debugging_requested(const char *option);
 void MTX_DLL_API request_debugging(const std::string &options);

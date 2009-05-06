@@ -342,9 +342,7 @@ main(int argc,
   init_stdio();
   init_locales();
 
-#if defined(SYS_UNIX)
-  nice(2);
-#endif
+  set_process_priority(-1);
 
   mm_file_io_c::setup();
   srand(time(NULL));
