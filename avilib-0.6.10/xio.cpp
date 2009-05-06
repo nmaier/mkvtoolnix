@@ -21,7 +21,7 @@
  *
  */
 
-#include "os.h"
+#include "common/os.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -32,7 +32,7 @@
 #include <sys/stat.h>
 #include <stdarg.h>
 
-#include "mm_io.h"
+#include "common/mm_io.h"
 
 extern "C" {
 

@@ -16,6 +16,7 @@
 #include <matroska/KaxVersion.h>
 
 #include "common/common.h"
+#include "common/locale.h"
 #include "common/qtcommon.h"
 #include "info/qt_ui.h"
 #include "info/mkvinfo.h"
