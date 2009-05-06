@@ -1,3 +1,9 @@
+2009-05-06  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The VobSub reader was dropping the very last
+	MPEG packet possibly resulting in the very last subtitle entry
+	being garbled or discarded completely. Patch by Todd Schmuland.
+
 2009-05-03  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: enhancement: Added "60000/1001" as a pre-defined option to

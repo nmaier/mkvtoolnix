@@ -354,7 +354,7 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
   int64_t timecode             = track->entries[track->idx].timestamp;
   int64_t duration             = track->entries[track->idx].duration;
   int64_t extraction_start_pos = track->entries[track->idx].position;
-  int64_t extraction_end_pos   = track->idx >= track->entries.size() ? sub_file->get_size() : track->entries[track->idx + 1].position;
+  int64_t extraction_end_pos   = track->idx >= track->entries.size() - 1 ? sub_file->get_size() : track->entries[track->idx + 1].position;
 
   int64_t pts                  = 0;
   unsigned char *dst_buf       = NULL;
