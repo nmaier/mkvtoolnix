@@ -16,6 +16,9 @@
 #include <boost/regex.hpp>
 #include <stdlib.h>
 #include <string>
+#ifdef SYS_WINDOWS
+# include <windows.h>
+#endif
 
 #include "common/common.h"
 
