@@ -7,6 +7,13 @@
    or visit http://www.gnu.org/copyleft/gpl.html
 
    OS dependant helper functions
+
+   Written by Moritz Bunkus <moritz@bunkus.org>
+
+   CreateFileUtf8
+     Written by Mike Matsnev <mike@po.cs.msu.su>
+     Modifications by Moritz Bunkus <moritz@bunkus.org>
+     Additional code by Alexander Noé <alexander.noe@s2001.tu-chemnitz.de>
 */
 
 #include "common/os.h"
@@ -31,18 +38,6 @@ using namespace std;
 
 #if defined(SYS_WINDOWS)
 
-/*
-   Utf8ToUtf16 and CreateFileUtf8
-
-   Distributed under the GPL
-   see the file COPYING for details
-   or visit http://www.gnu.org/copyleft/gpl.html
-
-   Written by Mike Matsnev <mike@po.cs.msu.su>
-   Modifications by Moritz Bunkus <moritz@bunkus.org>
-   Additional code by Alexander Noé <alexander.noe@s2001.tu-chemnitz.de>
-*/
-
 # include "os_windows.h"
 
 # include <io.h>
@@ -50,116 +45,6 @@ using namespace std;
 # include <winreg.h>
 # include <direct.h>
 # include <sys/timeb.h>
-
-static unsigned
-Utf8ToUtf16(const char *utf8,
-            int utf8len,
-            wchar_t *utf16,
-            unsigned utf16len) {
-  const unsigned char *u = (const unsigned char *)utf8;
-  const unsigned char *t = u + (utf8len < 0 ? strlen(utf8)+1 : utf8len);
-  wchar_t *d = utf16, *w = utf16 + utf16len, c0, c1;
-  unsigned ch;
-
-  if (utf16len == 0) {
-    d = utf16 = NULL;
-    w = d - 1;
-  }
-
-  while (u<t && d<w) {
-    if (!(*u & 0x80))
-      ch = *u++;
-    else if ((*u & 0xe0) == 0xc0) {
-      ch = (unsigned)(*u++ & 0x1f) << 6;
-      if (u<t && (*u & 0xc0) == 0x80)
-        ch |= *u++ & 0x3f;
-    } else if ((*u & 0xf0) == 0xe0) {
-      ch = (unsigned)(*u++ & 0x0f) << 12;
-      if (u<t && (*u & 0xc0) == 0x80) {
-        ch |= (unsigned)(*u++ & 0x3f) << 6;
-        if (u<t && (*u & 0xc0) == 0x80)
-          ch |= *u++ & 0x3f;
-      }
-    } else if ((*u & 0xf8) == 0xf0) {
-      ch = (unsigned)(*u++ & 0x07) << 18;
-      if (u<t && (*u & 0xc0) == 0x80) {
-        ch |= (unsigned)(*u++ & 0x3f) << 12;
-        if (u<t && (*u & 0xc0) == 0x80) {
-          ch |= (unsigned)(*u++ & 0x3f) << 6;
-          if (u<t && (*u & 0xc0) == 0x80)
-            ch |= *u++ & 0x3f;
-        }
-      }
-    } else
-      continue;
-
-    c0 = c1 = 0x0000;
-
-    if (ch < 0xd800)
-      c0 = (wchar_t)ch;
-    else if (ch < 0xe000) // invalid
-      c0 = 0x0020;
-    else if (ch < 0xffff)
-      c0 = (wchar_t)ch;
-    else if (ch < 0x110000) {
-      c0 = 0xd800 | (ch>>10);
-      c1 = 0xdc00 | (ch & 0x03ff);
-    } else
-      c0 = 0x0020;
-
-    if (utf16) {
-      if (c1) {
-        if (d+1<w) {
-          *d++ = c0;
-          *d++ = c1;
-        } else
-          break;
-      } else
-        *d++ = c0;
-    } else {
-      d++;
-      if (c1)
-        d++;
-    }
-  }
-
-  if (utf16 && d<w)
-    *d = 0x0000;
-
-  if (utf8len < 0 && utf16len > 0)
-    utf16[utf16len - 1] = L'\0';
-
-  return (unsigned)(d - utf16);
-}
-
-static bool
-win32_is_unicode_possible() {
-  OSVERSIONINFOEX ovi;
-
-  ovi.dwOSVersionInfoSize = sizeof(ovi);
-  GetVersionEx((OSVERSIONINFO *)&ovi);
-  return ovi.dwPlatformId == VER_PLATFORM_WIN32_NT;
-}
-
-static char *
-win32_wide_to_multi(const wchar_t *wbuffer) {
-  int reqbuf = WideCharToMultiByte(CP_ACP, 0, wbuffer, -1, NULL, 0, NULL,
-                                   NULL);
-  char *buffer = new char[reqbuf];
-  WideCharToMultiByte(CP_ACP, 0, wbuffer, -1, buffer, reqbuf, NULL, NULL);
-
-  return buffer;
-}
-
-static wchar_t *
-win32_utf8_to_utf16(const char *s) {
-  int wreqbuf = Utf8ToUtf16(s, -1, NULL, 0);
-  wchar_t *wbuffer = new wchar_t[wreqbuf];
-
-  Utf8ToUtf16(s, -1, wbuffer, wreqbuf);
-
-  return wbuffer;
-}
 
 HANDLE
 CreateFileUtf8(LPCSTR lpFileName,
@@ -169,23 +54,9 @@ CreateFileUtf8(LPCSTR lpFileName,
                DWORD dwCreationDisposition,
                DWORD dwFlagsAndAttributes,
                HANDLE hTemplateFile) {
-  HANDLE ret;
   // convert the name to wide chars
   wchar_t *wbuffer = win32_utf8_to_utf16(lpFileName);
-
-  if (win32_is_unicode_possible())
-    ret = CreateFileW(wbuffer, dwDesiredAccess, dwShareMode,
-                      lpSecurityAttributes, dwCreationDisposition,
-                      dwFlagsAndAttributes, hTemplateFile);
-  else {
-    char *buffer = win32_wide_to_multi(wbuffer);
-    ret = CreateFileA(buffer, dwDesiredAccess, dwShareMode,
-                      lpSecurityAttributes, dwCreationDisposition,
-                      dwFlagsAndAttributes, hTemplateFile);
-
-    delete []buffer;
-  }
-
+  HANDLE ret       = CreateFileW(wbuffer, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile);
   delete []wbuffer;
 
   return ret;
@@ -194,18 +65,7 @@ CreateFileUtf8(LPCSTR lpFileName,
 void
 create_directory(const char *path) {
   wchar_t *wbuffer = win32_utf8_to_utf16(path);
-  int result;
-
-  if (win32_is_unicode_possible())
-    result = _wmkdir(wbuffer);
-
-  else {
-    char *buffer = win32_wide_to_multi(wbuffer);
-    result = _mkdir(buffer);
-
-    delete []buffer;
-  }
-
+  int result       = _wmkdir(wbuffer);
   delete []wbuffer;
 
   if (0 != result)
@@ -214,20 +74,10 @@ create_directory(const char *path) {
 
 int
 fs_entry_exists(const char *path) {
-  wchar_t *wbuffer = win32_utf8_to_utf16(path);
   struct _stat s;
-  int result;
 
-  if (win32_is_unicode_possible())
-    result = _wstat(wbuffer, &s);
-
-  else {
-    char *buffer = win32_wide_to_multi(wbuffer);
-
-    result = _stat(buffer, &s);
-    delete []buffer;
-  }
-
+  wchar_t *wbuffer = win32_utf8_to_utf16(path);
+  int result       = _wstat(wbuffer, &s);
   delete []wbuffer;
 
   return 0 == result;

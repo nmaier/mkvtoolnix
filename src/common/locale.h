@@ -32,4 +32,11 @@ std::string MTX_DLL_API from_utf8(int handle, const std::string &utf8);
 
 std::vector<std::string> MTX_DLL_API command_line_utf8(int argc, char **argv);
 
+# ifdef SYS_WINDOWS
+unsigned MTX_DLL_API Utf8ToUtf16(const char *utf8, int utf8len, wchar_t *utf16, unsigned utf16len);
+char * MTX_DLL_API win32_wide_to_multi(const wchar_t *wbuffer);
+wchar_t * MTX_DLL_API win32_utf8_to_utf16(const char *s);
+std::string MTX_DLL_API win32_wide_to_multi_utf8(const wchar_t *wbuffer);
+# endif
+
 #endif  // __MTX_COMMON_LOCALE_H

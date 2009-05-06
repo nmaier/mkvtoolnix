@@ -15,9 +15,9 @@
 
 #include "common/os.h"
 
-#include <string>
-
 #ifdef SYS_WINDOWS
+
+#include <string>
 
 int MTX_DLL_API fs_entry_exists(const char *path);
 void MTX_DLL_API create_directory(const char *path);
