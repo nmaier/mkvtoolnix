@@ -23,13 +23,16 @@
 #include <locale.h>
 #include <string>
 #include <vector>
-#if SYS_WINDOWS
+#ifdef SYS_WINDOWS
 # include <windows.h>
 #endif
 
 #include "common/common.h"
 #include "common/locale.h"
 #include "common/memory.h"
+#ifdef SYS_WINDOWS
+# include "common/string_formatting.h"
+#endif
 
 struct kax_conv_t {
   iconv_t ict_from_utf8, ict_to_utf8;
@@ -65,7 +68,7 @@ get_local_charset() {
 
   setlocale(LC_CTYPE, "");
 #if defined(COMP_MINGW) || defined(COMP_MSC)
-  lc_charset = "CP" + to_std::string(GetACP());
+  lc_charset = "CP" + to_string(GetACP());
 #elif defined(SYS_SOLARIS)
   int i;
 
@@ -84,7 +87,7 @@ get_local_charset() {
 std::string
 get_local_console_charset() {
 #if defined(SYS_WINDOWS)
-  return std::string("CP") + to_std::string(GetOEMCP());
+  return std::string("CP") + to_string(GetOEMCP());
 #else
   return get_local_charset();
 #endif

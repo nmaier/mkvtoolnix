@@ -23,6 +23,9 @@
 #include "common/common.h"
 #include "common/locale.h"
 #include "common/mm_io.h"
+#ifdef SYS_WINDOWS
+# include "common/string_editing.h"
+#endif
 
 using namespace std;
 

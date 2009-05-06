@@ -64,7 +64,7 @@
 #include "merge/output_control.h"
 
 #ifdef SYS_WINDOWS
-# include "os_windows.h"
+# include "common/os_windows.h"
 #endif
 
 using namespace libmatroska;

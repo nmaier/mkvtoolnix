@@ -31,7 +31,8 @@
 
 #if defined(SYS_WINDOWS)
 # include <windows.h>
-# include "os_windows.h"
+# include "common/os_windows.h"
+# include "common/memory.h"
 #endif
 
 std::vector<translation_c> translation_c::ms_available_translations;

@@ -16,6 +16,9 @@
 #include <cstring>
 #include <string>
 #include <vector>
+#ifdef SYS_WINDOWS
+# include <windows.h>
+#endif
 
 #include "common/command_line.h"
 #include "common/common.h"
