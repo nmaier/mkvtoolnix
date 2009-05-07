@@ -256,8 +256,8 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   cob_fourcc->Enable(video);
   st_stereo_mode->Enable(video);
   cob_stereo_mode->Enable(video);
-  st_fps->Enable(avc_es);
-  cob_fps->Enable(avc_es);
+  st_fps->Enable(video);
+  cob_fps->Enable(video);
   st_nalu_size_length->Enable(avc || avc_es);
   cob_nalu_size_length->Enable(avc || avc_es);
   st_compression->Enable((ctype.Find(wxT("vobsub")) >= 0) && !appending);

@@ -55,6 +55,14 @@ mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader,
   set_codec_private(m_avcc->get(), m_avcc->get_size());
   extract_aspect_ratio();
   m_parser.set_keep_ar_info(false);
+
+  // If no external timecode file has been specified then mkvmerge
+  // might have created a factory due to the --default-duration
+  // command line argument. This factory must be disabled for the AVC
+  // packetizer because it takes care of handling the default
+  // duration/FPS itself.
+  if (ti.ext_timecodes.empty())
+    timecode_factory = timecode_factory_cptr(NULL);
 }
 
 void

@@ -95,6 +95,7 @@ public:
   }
 
   static timecode_factory_cptr create(const string &file_name, const string &source_name, int64_t tid);
+  static timecode_factory_cptr create_fps_factory(int64_t default_duration, const string &source_name, int64_t tid);
 };
 
 class timecode_factory_v1_c: public timecode_factory_c {

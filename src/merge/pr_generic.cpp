@@ -236,6 +236,12 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *p_reader,
     hserialno = create_track_number(reader, ti.id);
 
   timecode_factory = timecode_factory_c::create(ti.ext_timecodes, ti.fname, ti.id);
+
+  // If no external timecode file but a default duration has been
+  // given then create a simple timecode factory that generates the
+  // timecodes for the given FPS.
+  if ((NULL == timecode_factory.get()) && (-1 != htrack_default_duration))
+    timecode_factory = timecode_factory_c::create_fps_factory(htrack_default_duration, ti.fname, ti.id);
 }
 
 generic_packetizer_c::~generic_packetizer_c() {

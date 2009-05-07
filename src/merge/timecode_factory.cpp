@@ -18,6 +18,7 @@
 
 #include "common/common.h"
 #include "common/mm_io.h"
+#include "common/string_formatting.h"
 #include "common/string_parsing.h"
 #include "merge/pr_generic.h"
 #include "merge/timecode_factory.h"
@@ -61,6 +62,21 @@ timecode_factory_c::create(const string &file_name,
   delete in;
 
   return timecode_factory_cptr(factory);
+}
+
+timecode_factory_cptr
+timecode_factory_c::create_fps_factory(int64_t default_duration,
+                                       const string &source_name,
+                                       int64_t tid) {
+  mm_text_io_c text_io(new mm_mem_io_c(NULL, 0, 1024));
+  text_io.puts("# timecode format v1\n");
+  text_io.puts(boost::format("assume %1%\n") % to_string(1000000000.0 / default_duration, 9));
+  text_io.setFilePointer(0, seek_beginning);
+
+  timecode_factory_cptr factory(new timecode_factory_v1_c("dummy", source_name, tid));
+  factory->parse(text_io);
+
+  return factory;
 }
 
 void

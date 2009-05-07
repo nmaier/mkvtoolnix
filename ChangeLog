@@ -1,3 +1,10 @@
+2009-05-07  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge, mmg: enhancement: Made mmg's "FPS" input field
+	available for all video tracks. mkvmerge's corresponding option
+	"--default-duration" now not only modifies the track header field
+	but affects the frame timecodes as well.
+
 2009-05-06  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The VobSub reader was dropping the very last
