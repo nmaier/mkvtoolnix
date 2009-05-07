@@ -36,6 +36,11 @@ std::string MTX_DLL_API format_timecode(int64_t timecode, unsigned int precision
 
 void MTX_DLL_API fix_format(const char *fmt, std::string &new_fmt);
 
-std::string MTX_DLL_API to_string(int64_t i);
+std::string MTX_DLL_API to_string(int value);
+std::string MTX_DLL_API to_string(unsigned int value);
+std::string MTX_DLL_API to_string(int64_t value);
+std::string MTX_DLL_API to_string(uint64_t value);
+std::string MTX_DLL_API to_string(double value, unsigned int precision);
+std::string MTX_DLL_API to_string(int64_t numerator, int64_t denominator, unsigned int precision);
 
 #endif  // __MTX_COMMON_STRING_FORMATTING_H

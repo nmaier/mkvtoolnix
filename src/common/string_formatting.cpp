@@ -40,8 +40,56 @@ format_timecode(int64_t timecode,
 }
 
 std::string
-to_string(int64_t i) {
-  return (boost::format("%1%") % i).str();
+to_string(int64_t value) {
+  return (boost::format("%1%") % value).str();
+}
+
+std::string
+to_string(int value) {
+  return (boost::format("%1%") % value).str();
+}
+
+std::string
+to_string(uint64_t value) {
+  return (boost::format("%1%") % value).str();
+}
+
+std::string
+to_string(unsigned int value) {
+  return (boost::format("%1%") % value).str();
+}
+
+std::string
+to_string(double value,
+          unsigned int precision) {
+  int64_t scale = 1;
+  for (int i = 0; i < precision; ++i)
+    scale *= 10;
+
+  return to_string((int64_t)(value * scale), scale, precision);
+}
+
+std::string
+to_string(int64_t numerator,
+          int64_t denominator,
+          unsigned int precision) {
+  std::string output      = (boost::format("%1%") % (numerator / denominator)).str();
+  int64_t fractional_part = numerator % denominator;
+
+  if (0 != fractional_part) {
+    std::string format         = (boost::format(".%%0%1%d") % precision).str();
+    output                    += (boost::format(format) % fractional_part).str();
+    std::string::iterator end  = output.end() - 1;
+
+    while (*end == '0')
+      --end;
+    if (*end == '.')
+      --end;
+
+    output.erase(end + 1, output.end());
+  }
+
+  return output;
 }
 
 void
