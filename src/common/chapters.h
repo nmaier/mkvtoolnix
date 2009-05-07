@@ -51,7 +51,7 @@ KaxChapters *MTX_DLL_API parse_xml_chapters(mm_text_io_c *in, int64_t min_tc, in
 bool MTX_DLL_API probe_simple_chapters(mm_text_io_c *in);
 KaxChapters *MTX_DLL_API parse_simple_chapters(mm_text_io_c *in, int64_t min_tc, int64_t max_tc, int64_t offset, const std::string &language, const std::string &charset, bool exception_on_error = false);
 
-extern std::string MTX_DLL_API cue_to_chapter_name_format;
+extern std::string MTX_DLL_API g_cue_to_chapter_name_format;
 bool MTX_DLL_API probe_cue_chapters(mm_text_io_c *in);
 KaxChapters *MTX_DLL_API parse_cue_chapters(mm_text_io_c *in, int64_t min_tc, int64_t max_tc, int64_t offset, const std::string &language, const std::string &charset,
                                             bool exception_on_error = false, KaxTags **tags = NULL);

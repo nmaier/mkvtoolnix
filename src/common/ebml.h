@@ -111,6 +111,18 @@ GetChildAs(EbmlMaster *m) {
   return GetChild<A>(*m);
 }
 
+template <typename A>A &
+GetFirstOrNextChild(EbmlMaster &master,
+                    A *previous_child) {
+  return NULL == previous_child ? GetChild<A>(master) : GetNextChild<A>(master, *previous_child);
+}
+
+template <typename A>A &
+GetFirstOrNextChild(EbmlMaster *master,
+                    A *previous_child) {
+  return NULL == previous_child ? GetChild<A>(*master) : GetNextChild<A>(*master, *previous_child);
+}
+
 EbmlElement *MTX_DLL_API empty_ebml_master(EbmlElement *e);
 EbmlElement *MTX_DLL_API create_ebml_element(const EbmlCallbacks &callbacks, const EbmlId &id);
 EbmlMaster *MTX_DLL_API sort_ebml_master(EbmlMaster *e);

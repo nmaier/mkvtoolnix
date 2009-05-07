@@ -49,21 +49,16 @@
 #include "common/common.h"
 #include "common/error.h"
 
-using namespace std;
-
-static const char base64_encoding[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkl"
-"mnopqrstuvwxyz0123456789+/";
+static const char base64_encoding[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 static void
 encode_block(const unsigned char in[3],
              int len,
-             string &out) {
+             std::string &out) {
   out += base64_encoding[in[0] >> 2];
   out += base64_encoding[((in[0] & 0x03) << 4) | ((in[1] & 0xf0) >> 4)];
-  out += (unsigned char)
-    (len > 1 ? base64_encoding[((in[1] & 0x0f) << 2) | ((in[2] & 0xc0) >> 6)] :
-     '=');
-  out += (unsigned char)(len > 2 ? base64_encoding[in[2] & 0x3f] : '=');
+  out += (unsigned char)(len > 1 ? base64_encoding[((in[1] & 0x0f) << 2) | ((in[2] & 0xc0) >> 6)] : '=');
+  out += (unsigned char)(len > 2 ? base64_encoding[in[2] & 0x3f]                                  : '=');
 }
 
 string
@@ -71,29 +66,30 @@ base64_encode(const unsigned char *src,
               int src_len,
               bool line_breaks,
               int max_line_len) {
-  unsigned char in[3];
-  int pos, i, len, blocks_out, len_mod;
-  string out;
+  int pos        = 0;
+  int blocks_out = 0;
 
-  pos = 0;
-  blocks_out = 0;
-
-  if (max_line_len < 4)
+  if (4 > max_line_len)
     max_line_len = 4;
-  len_mod = max_line_len / 4;
+
+  int i, len_mod = max_line_len / 4;
+  std::string out;
 
   while (pos < src_len) {
-    len = 0;
-    for (i = 0; i < 3; i++) {
+    unsigned char in[3];
+    int len = 0;
+    for (i = 0; 3 > i; ++i) {
       if (pos < src_len) {
-        len++;
+        ++len;
         in[i] = (unsigned char)src[pos];
       } else
         in[i] = 0;
-      pos++;
+      ++pos;
     }
+
     encode_block(in, len, out);
-    blocks_out++;
+
+    ++blocks_out;
     if (line_breaks && ((blocks_out % len_mod) == 0))
       out += "\n";
   }
@@ -102,47 +98,46 @@ base64_encode(const unsigned char *src,
 }
 
 int
-base64_decode(const string &src,
+base64_decode(const std::string &src,
               unsigned char *dst) {
-  unsigned char in[4], values[4], mid[6], c;
-  int i, k, pos, dst_pos, pad;
-
-  pos = 0;
-  dst_pos = 0;
-  pad = 0;
+  int pos     = 0;
+  int dst_pos = 0;
+  int pad     = 0;
   while (pos < src.size()) {
-    i = 0;
-    while ((pos < src.size()) && (i < 4)) {
-      c = (unsigned char)src[pos];
-      pos++;
+    unsigned char in[3];
+    int in_pos = 0;
 
-      if (((c >= 'A') && (c <= 'Z')) ||
-          ((c >= 'a') && (c <= 'z')) ||
-          ((c >= '0') && (c <= '9')) ||
-          (c == '+') || (c == '/')) {
-        in[i] = c;
-        i++;
+    while ((src.size() > pos) && (4 > in_pos)) {
+      unsigned char c = (unsigned char)src[pos];
+      ++pos;
+
+      if ((('A' <= c) && ('Z' >= c)) || (('a' <= c) && ('z' >= 'c')) || (('0' <= c) && ('9' >= c)) || ('+' == c) || ('/' == c)) {
+        in[in_pos] = c;
+        ++in_pos;
+
       } else if (c == '=')
         pad++;
+
       else if (!isblanktab(c) && !iscr(c))
         return -1;
     }
 
-    for (k = 0; k < i; k++) {
-      if ((in[k] >= 'A') && (in[k] <= 'Z'))
-        values[k] = in[k] - 'A';
-      else if ((in[k] >= 'a') && (in[k] <= 'z'))
-        values[k] = in[k] - 'a' + 26;
-      else if ((in[k] >= '0') && (in[k] <= '9'))
-        values[k] = in[k] - '0' + 52;
-      else if (in[k] == '+')
-        values[k] = 62;
-      else if (in[k] == '/')
-        values[k] = 63;
-      else
+    int values_idx;
+    unsigned char values[4];
+    for (values_idx = 0; values_idx < in_pos; values_idx++) {
+      values[values_idx] =
+          (('A' <= in[values_idx]) && ('Z' >= in[values_idx])) ? in[values_idx] - 'A'
+        : (('a' <= in[values_idx]) && ('z' >= in[values_idx])) ? in[values_idx] - 'a' + 26
+        : (('0' <= in[values_idx]) && ('9' >= in[values_idx])) ? in[values_idx] - '0' + 52
+        :  ('+' == in[values_idx])                             ?  62
+        :  ('/' == in[values_idx])                             ?  63
+        :                                                        255;
+
+      if (255 == values[values_idx])
         throw error_c(Y("Invalid Base64 character encountered"));
     }
 
+    unsigned char mid[6];
     mid[0] = values[0] << 2;
     mid[1] = values[1] >> 4;
     mid[2] = values[1] << 4;
@@ -152,16 +147,16 @@ base64_decode(const string &src,
 
     dst[dst_pos] = mid[0] | mid[1];
     dst_pos++;
-    if (pad <= 1) {
+    if (1 >= pad) {
       dst[dst_pos] = mid[2] | mid[3];
       dst_pos++;
-      if (pad == 0) {
+      if (0 == pad) {
         dst[dst_pos] = mid[4] | mid[5];
         dst_pos++;
       }
     }
 
-    if (pad != 0)
+    if (0 != pad)
       return dst_pos;
   }
 

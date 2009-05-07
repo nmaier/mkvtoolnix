@@ -1781,7 +1781,7 @@ parse_args(vector<string> args) {
       if (g_chapter_file_name != "")
         mxerror(Y("'--cue-chapter-name-format' must be given before '--chapters'.\n"));
 
-      cue_to_chapter_name_format = next_arg;
+      g_cue_to_chapter_name_format = next_arg;
       sit++;
 
     } else if (this_arg == "--chapters") {
