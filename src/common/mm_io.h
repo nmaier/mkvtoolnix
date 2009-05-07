@@ -18,6 +18,11 @@
 
 #include <string>
 #include <stack>
+#if HAVE_POSIX_FADVISE
+# include <unistd.h>
+# include <sys/stat.h>
+# include <sys/types.h>
+#endif
 
 #include <ebml/IOCallback.h>
 
@@ -55,9 +60,11 @@ protected:
   int64_t m_current_position, cached_size;
 
 public:
-  mm_io_c():
-    dos_style_newlines(false),
-    m_current_position(0), cached_size(-1) {
+  mm_io_c()
+    : dos_style_newlines(false)
+    , m_current_position(0)
+    , cached_size(-1)
+  {
   }
   virtual ~mm_io_c() { }
 
@@ -115,15 +122,39 @@ public:
 
 typedef counted_ptr<mm_io_c> mm_io_cptr;
 
+#if HAVE_POSIX_FADVISE
+struct file_id_t {
+  bool m_initialized;
+  dev_t m_dev;
+  ino_t m_ino;
+
+  file_id_t()
+    : m_initialized(false)
+    , m_dev(0)
+    , m_ino(0)
+  {
+  }
+
+  void initialize(const struct stat &st) {
+    m_dev         = st.st_dev;
+    m_ino         = st.st_ino;
+    m_initialized = true;
+  }
+};
+#endif
+
 class MTX_DLL_API mm_file_io_c: public mm_io_c {
 protected:
 #if defined(SYS_WINDOWS)
   bool _eof;
+#else
+  file_id_t m_file_id;
 #endif
 #if HAVE_POSIX_FADVISE
   unsigned long read_count, write_count;
   static bool use_posix_fadvise;
   bool use_posix_fadvise_here;
+  std::string canonicalized_file_name;
 #endif
   std::string file_name;
   void *file;
@@ -149,6 +180,10 @@ public:
   }
 
   virtual int truncate(int64_t pos);
+
+#if HAVE_POSIX_FADVISE
+  void setup_fadvise(const std::string &local_path);
+#endif
 
   static void setup();
 };

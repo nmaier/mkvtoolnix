@@ -17,6 +17,7 @@
 #include <errno.h>
 #if HAVE_POSIX_FADVISE
 # include <fcntl.h>
+# include <map>
 # include <sys/utsname.h>
 #endif
 #include <string.h>
@@ -50,9 +51,24 @@ get_errno_msg() {
 }
 
 # if HAVE_POSIX_FADVISE
-static const unsigned long read_using_willneed = 16 * 1024 * 1024;
+static const unsigned long read_using_willneed   = 16 * 1024 * 1024;
 static const unsigned long write_before_dontneed = 8 * 1024 * 1024;
-bool mm_file_io_c::use_posix_fadvise = false;
+bool mm_file_io_c::use_posix_fadvise             = false;
+
+bool
+operator <(const file_id_t &file_id_1,
+           const file_id_t &file_id_2) {
+  return (file_id_1.m_dev < file_id_2.m_dev) || (file_id_1.m_ino < file_id_2.m_ino);
+}
+
+bool
+operator ==(const file_id_t &file_id_1,
+            const file_id_t &file_id_2) {
+  return (file_id_1.m_dev == file_id_2.m_dev) && (file_id_1.m_ino == file_id_2.m_ino);
+}
+
+static std::map<file_id_t, int> s_fadvised_file_count_by_id;
+static std::map<file_id_t, mm_file_io_c *> s_fadvised_file_object_by_id;
 # endif
 
 #define FADVISE_WARNING                                                         \
@@ -66,7 +82,6 @@ mm_file_io_c::mm_file_io_c(const string &path,
 
   string local_path;
   const char *cmode;
-  struct stat st;
 # if HAVE_POSIX_FADVISE
   int advise;
 
@@ -109,6 +124,7 @@ mm_file_io_c::mm_file_io_c(const string &path,
     prepare_path(path);
   local_path = from_utf8(cc_local_utf8, path);
 
+  struct stat st;
   if ((0 == stat(local_path.c_str(), &st)) && S_ISDIR(st.st_mode))
     throw mm_io_open_error_c();
 
@@ -118,13 +134,31 @@ mm_file_io_c::mm_file_io_c(const string &path,
     throw mm_io_open_error_c();
 
 # if HAVE_POSIX_FADVISE
-  if (use_posix_fadvise && use_posix_fadvise_here &&
-      (0 != posix_fadvise(fileno((FILE *)file), 0, read_using_willneed,
-                          advise))) {
-    mxverb(2, boost::format(FADVISE_WARNING) % path % errno % get_errno_msg());
-    use_posix_fadvise_here = false;
-  }
+  if (POSIX_FADV_WILLNEED == advise)
+    setup_fadvise(local_path);
 # endif
+}
+
+void
+mm_file_io_c::setup_fadvise(const std::string &local_path) {
+  struct stat st;
+  if (0 != stat(local_path.c_str(), &st))
+    throw mm_io_open_error_c();
+
+  m_file_id.initialize(st);
+
+  if (!map_has_key(s_fadvised_file_count_by_id, m_file_id))
+    s_fadvised_file_count_by_id[m_file_id] = 0;
+
+  s_fadvised_file_count_by_id[m_file_id]++;
+
+  if (1 < s_fadvised_file_count_by_id[m_file_id]) {
+    use_posix_fadvise_here = false;
+    if (map_has_key(s_fadvised_file_object_by_id, m_file_id))
+      s_fadvised_file_object_by_id[m_file_id]->use_posix_fadvise_here = false;
+
+  } else
+    s_fadvised_file_object_by_id[m_file_id] = this;
 }
 
 void
@@ -217,6 +251,16 @@ mm_file_io_c::close() {
   if (NULL != file) {
     fclose((FILE *)file);
     file = NULL;
+
+# if HAVE_POSIX_FADVISE
+    if (m_file_id.m_initialized) {
+      s_fadvised_file_count_by_id[m_file_id]--;
+      if (0 == s_fadvised_file_count_by_id[m_file_id])
+        s_fadvised_file_object_by_id.erase(m_file_id);
+
+      m_file_id.m_initialized = false;
+    }
+# endif
   }
 }
 
