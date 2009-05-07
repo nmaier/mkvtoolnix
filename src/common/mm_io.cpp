@@ -939,8 +939,12 @@ mm_mem_io_c::mm_mem_io_c(unsigned char *_mem,
     throw error_c(Y("wrong usage: increase < 0"));
 
   if ((mem == NULL) && (increase > 0)) {
-    mem = (unsigned char *)safemalloc(mem_size);
+    if (0 == mem_size)
+      allocated = increase;
+
+    mem      = (unsigned char *)safemalloc(increase);
     free_mem = true;
+
   } else
     free_mem = false;
 }
@@ -972,7 +976,7 @@ mm_mem_io_c::getFilePointer() {
 void
 mm_mem_io_c::setFilePointer(int64 offset,
                             seek_mode mode) {
-  if (((NULL == mem) && (NULL == ro_mem)) || (0 == mem_size))
+  if ((NULL == mem) && (NULL == ro_mem) && (0 == mem_size))
     throw error_c(Y("wrong usage: read-only with NULL memory"));
 
   int64_t new_pos
