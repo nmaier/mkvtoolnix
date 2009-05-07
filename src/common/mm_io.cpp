@@ -938,11 +938,11 @@ mm_mem_io_c::mm_mem_io_c(unsigned char *_mem,
   if (increase <= 0)
     throw error_c(Y("wrong usage: increase < 0"));
 
-  if ((mem == NULL) && (increase > 0)) {
+  if ((NULL == mem) && (0 < increase)) {
     if (0 == mem_size)
       allocated = increase;
 
-    mem      = (unsigned char *)safemalloc(increase);
+    mem      = (unsigned char *)safemalloc(allocated);
     free_mem = true;
 
   } else
