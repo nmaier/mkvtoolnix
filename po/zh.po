@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-05-07 13:24+0800\n"
+"PO-Revision-Date: 2009-05-07 19:29+0200\n"
 "Last-Translator: Dean Lee <xslidian+t@gmail.com>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -668,18 +668,16 @@ msgid "%1% built on %2% %3%\n"
 msgstr "%1% 编译于 %2% %3%\n"
 
 #: src/info/mkvinfo.cpp:1451
-#, fuzzy
 msgid "%1% frame, track %2%, timecode %3% (%4%), duration %|5$.3f|, size %6%, adler 0x%|7$08x|%8%%9%\n"
-msgstr "%1% 帧, 轨道 %2%, 时间码 %3% (%4%), 时长 %|5$.3f|, 尺寸 %6%, adler 0x%|7$08x|%8%\n"
+msgstr "%1% 帧, 轨道 %2%, 时间码 %3% (%4%), 时长 %|5$.3f|, 尺寸 %6%, adler 0x%|7$08x|%8%%9%\n"
 
 #: src/info/mkvinfo.cpp:1538
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%\n"
 msgstr "%1% 帧, 轨道 %2%, 时间码 %3% (%4%), 尺寸 %5%, adler 0x%|6$08x|%7%\n"
 
 #: src/info/mkvinfo.cpp:1462
-#, fuzzy
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"
-msgstr "%1% 帧, 轨道 %2%, 时间码 %3% (%4%), 尺寸 %5%, adler 0x%|6$08x|%7%\n"
+msgstr "%1% 帧, 轨道 %2%, 时间码 %3% (%4%), 尺寸 %5%, adler 0x%|6$08x|%7%%8%\n"
 
 #: src/merge/mkvmerge.cpp:674
 msgid "%1%: divisor is 0 in '%2% %3%'.\n"
@@ -1373,9 +1371,8 @@ msgid ", finished on %s"
 msgstr ", 完成于 %s"
 
 #: src/info/mkvinfo.cpp:1446 src/info/mkvinfo.cpp:1534
-#, fuzzy
 msgid ", position %1%"
-msgstr "定位位: %1%"
+msgstr ", 位置 %1%"
 
 #: src/mmg/jobs.cpp:639
 #, c-format
@@ -2065,7 +2062,7 @@ msgstr "选择标签文件"
 
 #: src/mmg/options_dialog.cpp:122
 msgid "Clear inputs after a successful muxing run"
-msgstr ""
+msgstr "成功混流后清除输入列表"
 
 #: src/mmg/options_dialog.cpp:120
 msgid "Clear inputs after adding a job to the job queue"
@@ -2298,7 +2295,7 @@ msgstr "无法解析章节自 '%1%': %2%\n"
 msgid "Could not read the FLAC header packets.\n"
 msgstr "无法读取 FLAC 头部包。\n"
 
-#: src/common/mm_io.cpp:160 src/common/mm_io.cpp:417
+#: src/common/mm_io.cpp:194 src/common/mm_io.cpp:461
 msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr "无法写入输出文件: %1% (%2%)\n"
 
@@ -6043,7 +6040,7 @@ msgstr "未知头部字段 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
 msgid "Unknown mode '%1%'.\n"
 msgstr "未知模式 '%1%'。\n"
 
-#: src/common/mm_io.cpp:105 src/common/mm_io.cpp:298
+#: src/common/mm_io.cpp:120 src/common/mm_io.cpp:342
 msgid "Unknown open mode"
 msgstr "打开模式未知"
 
@@ -6606,9 +6603,8 @@ msgid "Video stereo mode"
 msgstr "视频立体模式"
 
 #: src/info/mkvinfo.cpp:579
-#, fuzzy
 msgid "Video track"
-msgstr "Video track"
+msgstr "视频轨"
 
 #: src/mmg/header_editor_frame.cpp:344
 #, c-format
@@ -7010,10 +7006,10 @@ msgstr "加密"
 #: src/input/r_qtmp4.cpp:627 src/input/r_qtmp4.cpp:639
 #: src/input/r_qtmp4.cpp:730 src/input/r_qtmp4.cpp:1085
 #: src/input/r_qtmp4.cpp:1243 src/input/r_qtmp4.cpp:1259
-#: src/common/mm_io.cpp:615 src/common/mm_io.cpp:625 src/common/mm_io.cpp:635
-#: src/common/mm_io.cpp:645 src/common/mm_io.cpp:655 src/common/mm_io.cpp:665
-#: src/common/mm_io.cpp:675 src/common/mm_io.cpp:685 src/common/mm_io.cpp:695
-#: src/common/mm_io.cpp:785 src/common/mm_io.cpp:1194
+#: src/common/mm_io.cpp:659 src/common/mm_io.cpp:669 src/common/mm_io.cpp:679
+#: src/common/mm_io.cpp:689 src/common/mm_io.cpp:699 src/common/mm_io.cpp:709
+#: src/common/mm_io.cpp:719 src/common/mm_io.cpp:729 src/common/mm_io.cpp:739
+#: src/common/mm_io.cpp:829 src/common/mm_io.cpp:1238
 msgid "end-of-file"
 msgstr "文件尾"
 
@@ -7178,14 +7174,12 @@ msgid "link files"
 msgstr "连接文件"
 
 #: src/common/locale.cpp:200
-#, fuzzy
 msgid "locale.cpp/from_utf8(): Invalid conversion handle %1% (num: %2%).\n"
-msgstr "common.cpp/from_utf8(): 无效的转换名号 %1% (数字: %2%)。\n"
+msgstr "locale.cpp/from_utf8(): 无效的转换名号 %1% (数字: %2%)。\n"
 
 #: src/common/locale.cpp:186
-#, fuzzy
 msgid "locale.cpp/to_utf8(): Invalid conversion handle %1% (num: %2%).\n"
-msgstr "common.cpp/to_utf8(): 无效的转换名号 %1% (数字: %2%)。\n"
+msgstr "locale.cpp/to_utf8(): 无效的转换名号 %1% (数字: %2%)。\n"
 
 #: src/mmg/options_dialog.cpp:68
 msgid "lower"
@@ -7332,19 +7326,16 @@ msgid "max. number of files:"
 msgstr "最大文件数:"
 
 #: src/common/memory.cpp:146
-#, fuzzy
 msgid "memory.cpp/safemalloc() called from file %1%, line %2%: malloc() returned NULL for a size of %3% bytes.\n"
-msgstr "common.cpp/safemalloc() 由文件 %1%, 行 %2% 调用: malloc() 对 %3% 字节的尺寸返回 NULL。\n"
+msgstr "memory.cpp/safemalloc() 由文件 %1%, 行 %2% 调用: malloc() 对 %3% 个字节返回 NULL。\n"
 
 #: src/common/memory.cpp:132
-#, fuzzy
 msgid "memory.cpp/safememdup() called from file %1%, line %2%: malloc() returned NULL for a size of %3% bytes.\n"
-msgstr "common.cpp/safememdup() 由文件 %1%, 行 %2% 调用: malloc() 对 %3% 字节的尺寸返回 NULL。\n"
+msgstr "memory.cpp/safememdup() 由文件 %1%, 行 %2% 调用: malloc() 对 %3% 个字节返回 NULL。\n"
 
 #: src/common/memory.cpp:161
-#, fuzzy
 msgid "memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned NULL for a size of %3% bytes.\n"
-msgstr "common.cpp/saferealloc() 由文件 %1%, 行 %2% 调用: realloc() 对 %3% 字节的尺寸返回 NULL。\n"
+msgstr "memory.cpp/saferealloc() 由文件 %1%, 行 %2% 调用: realloc() 对 %3% 个字节返回 NULL。\n"
 
 #: src/common/memory.h:193
 msgid "memory_slice_cursor_c copy c'tor: Must not be used!"
@@ -7488,11 +7479,11 @@ msgstr "mkvmerge 被 SIGINT 中断 (按了 Ctrl+C?)\n"
 msgid "mkvmerge was not compiled with zlib. Compressed headers in QuickTime/MP4 files are therefore not supported.\n"
 msgstr "mkvmerge 编译时没有使用 zlib。因此不支持 QuickTime/MP4 文件中已压缩的头部。\n"
 
-#: src/common/mm_io.cpp:1182
+#: src/common/mm_io.cpp:1226
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c: 目前尚不支持UTF32_*。\n"
 
-#: src/common/mm_io.cpp:1136
+#: src/common/mm_io.cpp:1180
 msgid "mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "mm_text_io_c::read_next_char(): 无效 UTF-8 字符。第一字节: 0x%|1$02x|"
 
@@ -7745,7 +7736,7 @@ msgstr "und (未定)"
 
 #: src/input/r_matroska.cpp:87 src/input/r_matroska.cpp:2148
 #: src/input/r_matroska.cpp:2155 src/input/r_mpeg_ps.cpp:1367
-#: src/common/mm_io.cpp:416 src/mmg/he_value_page.cpp:77
+#: src/common/mm_io.cpp:460 src/mmg/he_value_page.cpp:77
 #: src/mmg/tab_input.cpp:350 src/mmg/tab_input.cpp:629
 #: src/mmg/tab_input.cpp:1244 src/info/mkvinfo.cpp:712
 #: src/info/mkvinfo.cpp:722 src/info/mkvinfo.cpp:741 src/info/mkvinfo.cpp:770
@@ -7830,15 +7821,15 @@ msgstr "wavpack_reader: 未发现音频块\n"
 msgid "wavpack_reader: unknown sample rate!\n"
 msgstr "wavpack_reader: 未知采样率!\n"
 
-#: src/common/mm_io.cpp:939
+#: src/common/mm_io.cpp:983
 msgid "wrong usage: increase < 0"
 msgstr "错误用法: 增量 < 0"
 
-#: src/common/mm_io.cpp:964 src/common/mm_io.cpp:980
+#: src/common/mm_io.cpp:1008 src/common/mm_io.cpp:1024
 msgid "wrong usage: read-only with NULL memory"
 msgstr "错误用法: 对 *空* 内存使用只读模式"
 
-#: src/common/mm_io.cpp:1014
+#: src/common/mm_io.cpp:1058
 msgid "wrong usage: writing to read-only memory"
 msgstr "错误用法: 写入到只读内存"
 
@@ -7857,4 +7848,4 @@ msgstr "是"
 #~ msgstr "总使用简单块"
 
 #~ msgid "found_what == 0. Should not have happened. Please file a bug report.\n"
-#~ msgstr "found_what == 0です。発生するべきではありません。バグレポートを提出してください。\n"
+#~ msgstr "found_what == 0。这不该发生。请提交错误报告。\n"

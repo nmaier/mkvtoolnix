@@ -2302,7 +2302,7 @@ msgstr "'%1%'のチャプタを解析することができませんでした：%
 msgid "Could not read the FLAC header packets.\n"
 msgstr "FLACのヘッダパケットを読み取ることができませんでした。\n"
 
-#: src/common/mm_io.cpp:160 src/common/mm_io.cpp:417
+#: src/common/mm_io.cpp:194 src/common/mm_io.cpp:461
 msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr "出力ファイルに書き込むことができませんでした：%1%（%2%）\n"
 
@@ -6050,7 +6050,7 @@ msgstr "未知のヘッダ 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
 msgid "Unknown mode '%1%'.\n"
 msgstr "'%1%'は未知のモードです。\n"
 
-#: src/common/mm_io.cpp:105 src/common/mm_io.cpp:298
+#: src/common/mm_io.cpp:120 src/common/mm_io.cpp:342
 msgid "Unknown open mode"
 msgstr "未知のオープンモード"
 
@@ -7021,10 +7021,10 @@ msgstr ""
 #: src/input/r_qtmp4.cpp:627 src/input/r_qtmp4.cpp:639
 #: src/input/r_qtmp4.cpp:730 src/input/r_qtmp4.cpp:1085
 #: src/input/r_qtmp4.cpp:1243 src/input/r_qtmp4.cpp:1259
-#: src/common/mm_io.cpp:615 src/common/mm_io.cpp:625 src/common/mm_io.cpp:635
-#: src/common/mm_io.cpp:645 src/common/mm_io.cpp:655 src/common/mm_io.cpp:665
-#: src/common/mm_io.cpp:675 src/common/mm_io.cpp:685 src/common/mm_io.cpp:695
-#: src/common/mm_io.cpp:785 src/common/mm_io.cpp:1194
+#: src/common/mm_io.cpp:659 src/common/mm_io.cpp:669 src/common/mm_io.cpp:679
+#: src/common/mm_io.cpp:689 src/common/mm_io.cpp:699 src/common/mm_io.cpp:709
+#: src/common/mm_io.cpp:719 src/common/mm_io.cpp:729 src/common/mm_io.cpp:739
+#: src/common/mm_io.cpp:829 src/common/mm_io.cpp:1238
 msgid "end-of-file"
 msgstr "ファイル終端"
 
@@ -7495,11 +7495,11 @@ msgstr "mkvmergeは割り込み信号（Ctrl+C？）によって中断されま�
 msgid "mkvmerge was not compiled with zlib. Compressed headers in QuickTime/MP4 files are therefore not supported.\n"
 msgstr "mkvmergeはzlibをサポートしてコンパイルされていません。よってQuickTime/MP4ファイルの圧縮ヘッダはサポートされていません。\n"
 
-#: src/common/mm_io.cpp:1182
+#: src/common/mm_io.cpp:1226
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c：UTF32_*は現在サポートされていません。\n"
 
-#: src/common/mm_io.cpp:1136
+#: src/common/mm_io.cpp:1180
 msgid "mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "mm_text_io_c::read_next_char()：不正なUTF-8の文字です。最初のバイト：0x%|1$02x|"
 
@@ -7752,7 +7752,7 @@ msgstr "und (Undetermined)"
 
 #: src/input/r_matroska.cpp:87 src/input/r_matroska.cpp:2148
 #: src/input/r_matroska.cpp:2155 src/input/r_mpeg_ps.cpp:1367
-#: src/common/mm_io.cpp:416 src/mmg/he_value_page.cpp:77
+#: src/common/mm_io.cpp:460 src/mmg/he_value_page.cpp:77
 #: src/mmg/tab_input.cpp:350 src/mmg/tab_input.cpp:629
 #: src/mmg/tab_input.cpp:1244 src/info/mkvinfo.cpp:712
 #: src/info/mkvinfo.cpp:722 src/info/mkvinfo.cpp:741 src/info/mkvinfo.cpp:770
@@ -7837,15 +7837,15 @@ msgstr "wavpack_reader：非オーディオブロックが見つかりました\
 msgid "wavpack_reader: unknown sample rate!\n"
 msgstr "wavpack_reader：未知のサンプルレートです！\n"
 
-#: src/common/mm_io.cpp:939
+#: src/common/mm_io.cpp:983
 msgid "wrong usage: increase < 0"
 msgstr "間違った使用法：increase < 0"
 
-#: src/common/mm_io.cpp:964 src/common/mm_io.cpp:980
+#: src/common/mm_io.cpp:1008 src/common/mm_io.cpp:1024
 msgid "wrong usage: read-only with NULL memory"
 msgstr "間違った使用法：NULLメモリが読み込み専用です"
 
-#: src/common/mm_io.cpp:1014
+#: src/common/mm_io.cpp:1058
 msgid "wrong usage: writing to read-only memory"
 msgstr "間違った使用法：読み込み専用メモリへの書き込み"
 

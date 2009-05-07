@@ -2337,7 +2337,7 @@ msgstr "Die Kapitel in '%1%' konnten nicht geparst werden: %2%\n"
 msgid "Could not read the FLAC header packets.\n"
 msgstr "Die Pakete mit den FLAC-Kopfdaten konnten nicht gelesen werden.\n"
 
-#: src/common/mm_io.cpp:160 src/common/mm_io.cpp:417
+#: src/common/mm_io.cpp:194 src/common/mm_io.cpp:461
 msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr "In die Ausgabedatei konnte nicht geschrieben werden: %1% (%2%)\n"
 
@@ -6119,7 +6119,7 @@ msgstr "Unbekannter Kopf 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
 msgid "Unknown mode '%1%'.\n"
 msgstr "Unbekannter Arbeitsmodus '%1%'.\n"
 
-#: src/common/mm_io.cpp:105 src/common/mm_io.cpp:298
+#: src/common/mm_io.cpp:120 src/common/mm_io.cpp:342
 msgid "Unknown open mode"
 msgstr "Unbekannter Modus beim Dateiöffnen"
 
@@ -7127,10 +7127,10 @@ msgstr "Verschlüsselung"
 #: src/input/r_qtmp4.cpp:627 src/input/r_qtmp4.cpp:639
 #: src/input/r_qtmp4.cpp:730 src/input/r_qtmp4.cpp:1085
 #: src/input/r_qtmp4.cpp:1243 src/input/r_qtmp4.cpp:1259
-#: src/common/mm_io.cpp:615 src/common/mm_io.cpp:625 src/common/mm_io.cpp:635
-#: src/common/mm_io.cpp:645 src/common/mm_io.cpp:655 src/common/mm_io.cpp:665
-#: src/common/mm_io.cpp:675 src/common/mm_io.cpp:685 src/common/mm_io.cpp:695
-#: src/common/mm_io.cpp:785 src/common/mm_io.cpp:1194
+#: src/common/mm_io.cpp:659 src/common/mm_io.cpp:669 src/common/mm_io.cpp:679
+#: src/common/mm_io.cpp:689 src/common/mm_io.cpp:699 src/common/mm_io.cpp:709
+#: src/common/mm_io.cpp:719 src/common/mm_io.cpp:729 src/common/mm_io.cpp:739
+#: src/common/mm_io.cpp:829 src/common/mm_io.cpp:1238
 msgid "end-of-file"
 msgstr "Ende-der-Datei"
 
@@ -7601,11 +7601,11 @@ msgstr "mkvmerge wurde durch ein Signal unterbrochen (wurde Strg+C gedrückt?)\n
 msgid "mkvmerge was not compiled with zlib. Compressed headers in QuickTime/MP4 files are therefore not supported.\n"
 msgstr "mkvmerge wurde ohne zlib-Unterstützung compiliert. Komprimierte Kopfdaten in QuickTime/MP4-Dateien werden deshalb nicht unterstützt.\n"
 
-#: src/common/mm_io.cpp:1182
+#: src/common/mm_io.cpp:1226
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c: UTF32_* wird momentan nicht unterstützt.\n"
 
-#: src/common/mm_io.cpp:1136
+#: src/common/mm_io.cpp:1180
 msgid "mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "mm_text_io_c::read_next_char(): Ungültiges UTF-8-Zeichen. Erstes Byte: 0x%|1$02x|"
 
@@ -7858,7 +7858,7 @@ msgstr "und (nicht festgelegt)"
 
 #: src/input/r_matroska.cpp:87 src/input/r_matroska.cpp:2148
 #: src/input/r_matroska.cpp:2155 src/input/r_mpeg_ps.cpp:1367
-#: src/common/mm_io.cpp:416 src/mmg/he_value_page.cpp:77
+#: src/common/mm_io.cpp:460 src/mmg/he_value_page.cpp:77
 #: src/mmg/tab_input.cpp:350 src/mmg/tab_input.cpp:629
 #: src/mmg/tab_input.cpp:1244 src/info/mkvinfo.cpp:712
 #: src/info/mkvinfo.cpp:722 src/info/mkvinfo.cpp:741 src/info/mkvinfo.cpp:770
@@ -7943,15 +7943,15 @@ msgstr "wavpack_reader: Nicht-Audio-Block gefunden\n"
 msgid "wavpack_reader: unknown sample rate!\n"
 msgstr "wavpack_reader: Unbekannte Abtastrate!\n"
 
-#: src/common/mm_io.cpp:939
+#: src/common/mm_io.cpp:983
 msgid "wrong usage: increase < 0"
 msgstr "Falsche Benutzung: increase < 0"
 
-#: src/common/mm_io.cpp:964 src/common/mm_io.cpp:980
+#: src/common/mm_io.cpp:1008 src/common/mm_io.cpp:1024
 msgid "wrong usage: read-only with NULL memory"
 msgstr "Falsche Benutzung: Nur-Lese-Modus mit NULL als Speicherzeiger"
 
-#: src/common/mm_io.cpp:1014
+#: src/common/mm_io.cpp:1058
 msgid "wrong usage: writing to read-only memory"
 msgstr "Falsche Benutzung: Schreibversuch im Nur-Lese-Modus"
 
