@@ -951,7 +951,7 @@ tab_input::on_value_copy_timer(wxTimerEvent &evt) {
   mmg_track_t *t  = tracks[selected_track];
   t->aspect_ratio = ti_format->cob_aspect_ratio->GetValue();
   t->fourcc       = ti_format->cob_fourcc->GetValue();
-  t->fps         = ti_format->cob_fps->GetValue();
+  t->fps          = ti_format->cob_fps->GetValue();
 }
 
 void
