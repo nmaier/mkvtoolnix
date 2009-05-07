@@ -1,5 +1,9 @@
 2009-05-07  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: enhancement: Added support for handling AC3 audio in
+	MP4 files with the FourCC "sac3" (as created by e.g. Nero Recode
+	v3/4). Fix for bug 384.
+
 	* mkvmerge, mmg: enhancement: Made mmg's "FPS" input field
 	available for all video tracks. mkvmerge's corresponding option
 	"--default-duration" now not only modifies the track header field

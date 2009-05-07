@@ -233,7 +233,8 @@ qtmp4_reader_c::parse_headers() {
          && strncasecmp(dmx->fourcc, "MP4A", 4)
          && strncasecmp(dmx->fourcc, "twos", 4)
          && strncasecmp(dmx->fourcc, "sowt", 4)
-         && strncasecmp(dmx->fourcc, "ac-3", 4))) {
+         && strncasecmp(dmx->fourcc, "ac-3", 4)
+         && strncasecmp(dmx->fourcc, "sac3", 4))) {
       mxwarn(boost::format(Y("Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n")) % dmx->fourcc % dmx->id);
       continue;
     }
@@ -1453,7 +1454,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
     else if (!strncasecmp(dmx->fourcc, "twos", 4) || !strncasecmp(dmx->fourcc, "sowt", 4))
       create_audio_packetizer_pcm(dmx);
 
-    else if (!strncasecmp(dmx->fourcc, "ac-3", 4))
+    else if (!strncasecmp(dmx->fourcc, "ac-3", 4) || !strncasecmp(dmx->fourcc, "sac3", 4))
       packetizer_ok = create_audio_packetizer_ac3(dmx);
 
     else
