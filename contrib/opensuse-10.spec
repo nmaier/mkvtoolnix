@@ -66,6 +66,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/mkvtoolnix/*
 /usr/share/locale/de/LC_MESSAGES/mkvtoolnix.mo
 /usr/share/locale/ja/LC_MESSAGES/mkvtoolnix.mo
+/usr/share/locale/zh/LC_MESSAGES/mkvtoolnix.mo
 %doc AUTHORS ChangeLog COPYING README
 
 %changelog -n mkvtoolnix

@@ -54,9 +54,10 @@ void
 translation_c::initialize_available_translations() {
   ms_available_translations.clear();
 #if defined(HAVE_LIBINTL_H)
-  ms_available_translations.push_back(translation_c("en_US", "en", "english",  "English",  "English"));
-  ms_available_translations.push_back(translation_c("de_DE", "de", "german",   "German",   "Deutsch"));
-  ms_available_translations.push_back(translation_c("ja_JP", "ja", "japanese", "Japanese", "日本語"));
+  ms_available_translations.push_back(translation_c("en_US", "en", "english",  "English",              "English"));
+  ms_available_translations.push_back(translation_c("de_DE", "de", "german",   "German",               "Deutsch"));
+  ms_available_translations.push_back(translation_c("ja_JP", "ja", "japanese", "Japanese",             "日本語"));
+  ms_available_translations.push_back(translation_c("zh_CN", "zh", "chinese",  "Chinese (simplified)", "简体中文"));
 #endif
 }
 
