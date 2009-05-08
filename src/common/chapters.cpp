@@ -399,7 +399,7 @@ get_chapter_start(KaxChapterAtom &atom,
                   int64_t value_if_not_found) {
   KaxChapterTimeStart *start = FINDFIRST(&atom, KaxChapterTimeStart);
 
-  return NULL == start ? value_if_not_found : uint64(*start);
+  return NULL == start ? value_if_not_found : int64_t(uint64(*start));
 }
 
 /** \brief Get the end timecode for a chapter atom.
@@ -418,7 +418,7 @@ get_chapter_end(KaxChapterAtom &atom,
                 int64_t value_if_not_found) {
   KaxChapterTimeEnd *end = FINDFIRST(&atom, KaxChapterTimeEnd);
 
-  return NULL == end ? value_if_not_found : uint64(*end);
+  return NULL == end ? value_if_not_found : int64_t(uint64(*end));
 }
 
 /** \brief Get the name for a chapter atom.
