@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2009-04-28 22:26+0900\n"
+"PO-Revision-Date: 2009-05-08 13:07+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +29,7 @@ msgid ""
 "mkvmerge received a SIGINT (probably because the user pressed Ctrl+C). Trying to sanitize the file. If mkvmerge hangs during this process you'll have to kill it manually.\n"
 msgstr ""
 "\n"
-"mkvmergeは割り込み信号を受信しました（恐らくCtrl+Cをユーザーが押したためです）。ファイルをきれいにしようとしています。もしこの処理中にmkvmergeがハングした場合、手動でプロセスを終了してください。\n"
+"mkvmergeは割り込み信号を受信しました（恐らくユーザーがCtrl+Cを押したためです）。ファイルをきれいにしようとしています。もしこの処理中にmkvmergeがハングした場合、手動でプロセスを終了してください。\n"
 
 #: src/common/iso639.cpp:552
 msgid ""
@@ -276,15 +276,15 @@ msgstr ""
 
 #: src/merge/mkvmerge.cpp:175
 msgid "  --link                   Link splitted files.\n"
-msgstr "  --link                   分割されたファイルを結合します。\n"
+msgstr "  --link                   分割ファイルを紐付けします。\n"
 
 #: src/merge/mkvmerge.cpp:177
 msgid "  --link-to-next <SID>     Link the last file to the given SID.\n"
-msgstr "  --link-to-next <SID>     指定したSIDに最後の出力ファイルを結合します。\n"
+msgstr "  --link-to-next <SID>     指定したSIDに最後の出力ファイルを紐付けします。\n"
 
 #: src/merge/mkvmerge.cpp:176
 msgid "  --link-to-previous <SID> Link the first file to the given SID.\n"
-msgstr "  --link-to-previous <SID> 指定したSIDに最初の出力ファイルを結合します。\n"
+msgstr "  --link-to-previous <SID> 指定したSIDに最初の出力ファイルを紐付けします。\n"
 
 #: src/merge/mkvmerge.cpp:277
 msgid ""
@@ -616,7 +616,7 @@ msgstr " チャプタ操作：\n"
 
 #: src/merge/mkvmerge.cpp:167
 msgid " File splitting and linking (more global options):\n"
-msgstr " ファイルの分割と結合（グローバルオプションの続き）：\n"
+msgstr " ファイルの分割と紐付け（グローバルオプションの続き）：\n"
 
 #: src/merge/mkvmerge.cpp:143
 msgid " General output control (advanced global options):\n"
@@ -2922,7 +2922,7 @@ msgstr "ファイル構造警告"
 
 #: src/mmg/tab_global.cpp:155
 msgid "File/segment linking"
-msgstr "ファイル/セグメント結合"
+msgstr "ファイル/セグメント紐付け"
 
 #: src/mmg/tab_global.cpp:43
 msgid "File/segment title"
@@ -2956,7 +2956,7 @@ msgstr "浮動小数点数"
 
 #: src/mmg/tab_global.cpp:160 src/mmg/tab_global.cpp:165
 msgid "For an in-depth explanantion of file/segment linking and this feature please read mkvmerge's documentation."
-msgstr "ファイル/セグメント結合とこの機能についての詳しい説明は、mkvmergeのドキュメントを参照してください。"
+msgstr "ファイル/セグメント紐付けとこの機能についての詳しい説明は、mkvmergeのドキュメントを参照してください。"
 
 #: src/mmg/mmg.cpp:200
 msgid "Force EBML style lacing."
@@ -6259,7 +6259,7 @@ msgstr ""
 
 #: src/mmg/tab_global.cpp:137
 msgid "Use 'segment linking' for the resulting files. For an in-depth explanation of this feature consult the mkvmerge documentation."
-msgstr "出力ファイルにセグメント結合を使用します。この機能についての詳しい説明はmkvmergeのドキュメントを参照してください。"
+msgstr "出力ファイルにセグメント紐付けを使用します。この機能についての詳しい説明はmkvmergeのドキュメントを参照してください。"
 
 #: src/mmg/mmg.cpp:205
 msgid "Use fixed values for the elements that change with each file otherwise (muxing date, segment UID, track UIDs etc.). Two files muxed with the same settings and this switch activated will be identical."
@@ -7186,15 +7186,15 @@ msgstr "%1%行目：'delay'タイムスタンプを解析できませんでし�
 
 #: src/mmg/tab_global.cpp:136
 msgid "link files"
-msgstr "ファイルを結合する"
+msgstr "ファイルを紐付けする"
 
 #: src/common/locale.cpp:200
 msgid "locale.cpp/from_utf8(): Invalid conversion handle %1% (num: %2%).\n"
-msgstr ""
+msgstr "locale.cpp/from_utf8()：無効な変換ハンドル%1%（数字：%2%です）。\n"
 
 #: src/common/locale.cpp:186
 msgid "locale.cpp/to_utf8(): Invalid conversion handle %1% (num: %2%).\n"
-msgstr ""
+msgstr "locale.cpp/to_utf8()：無効な変換ハンドル%1%（数字：%2%です）。\n"
 
 #: src/mmg/options_dialog.cpp:68
 msgid "lower"
