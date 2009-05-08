@@ -147,10 +147,9 @@ class MTX_DLL_API mm_file_io_c: public mm_io_c {
 protected:
 #if defined(SYS_WINDOWS)
   bool _eof;
-#else
-  file_id_t m_file_id;
 #endif
 #if HAVE_POSIX_FADVISE
+  file_id_t m_file_id;
   unsigned long read_count, write_count;
   static bool use_posix_fadvise;
   bool use_posix_fadvise_here;

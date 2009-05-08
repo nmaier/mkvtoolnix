@@ -137,6 +137,7 @@ mm_file_io_c::mm_file_io_c(const std::string &path,
 # endif
 }
 
+# if HAVE_POSIX_FADVISE
 void
 mm_file_io_c::setup_fadvise(const std::string &local_path) {
   struct stat st;
@@ -158,6 +159,7 @@ mm_file_io_c::setup_fadvise(const std::string &local_path) {
   } else
     s_fadvised_file_object_by_id[m_file_id] = this;
 }
+#endif  // HAVE_POSIX_FADVISE
 
 void
 mm_file_io_c::setFilePointer(int64 offset,
