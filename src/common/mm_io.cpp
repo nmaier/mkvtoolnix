@@ -41,11 +41,9 @@
 #include "common/string_editing.h"
 #include "common/string_parsing.h"
 
-using namespace std;
-
 #if !defined(SYS_WINDOWS)
 
-static string
+static std::string
 get_errno_msg() {
   return to_utf8(cc_local_utf8, strerror(errno));
 }
@@ -76,11 +74,11 @@ static std::map<file_id_t, mm_file_io_c *> s_fadvised_file_object_by_id;
   "This only means that access to this file might be slower than it could be. " \
   "Data integrity is not in danger."
 
-mm_file_io_c::mm_file_io_c(const string &path,
+mm_file_io_c::mm_file_io_c(const std::string &path,
                            const open_mode mode):
   file_name(path) {
 
-  string local_path;
+  std::string local_path;
   const char *cmode;
 # if HAVE_POSIX_FADVISE
   int advise;
@@ -164,14 +162,9 @@ mm_file_io_c::setup_fadvise(const std::string &local_path) {
 void
 mm_file_io_c::setFilePointer(int64 offset,
                              seek_mode mode) {
-  int whence;
-
-  if (mode == seek_beginning)
-    whence = SEEK_SET;
-  else if (mode == seek_end)
-    whence = SEEK_END;
-  else
-    whence = SEEK_CUR;
+  int whence = mode == seek_beginning ? SEEK_SET
+             : mode == seek_end       ? SEEK_END
+             :                          SEEK_CUR;
 
   if (fseeko((FILE *)file, offset, whence) != 0)
     throw mm_io_seek_error_c();
@@ -187,20 +180,17 @@ mm_file_io_c::setFilePointer(int64 offset,
 size_t
 mm_file_io_c::write(const void *buffer,
                     size_t size) {
-  size_t bwritten;
-
-  bwritten = fwrite(buffer, 1, size, (FILE *)file);
+  size_t bwritten = fwrite(buffer, 1, size, (FILE *)file);
   if (ferror((FILE *)file) != 0)
     mxerror(boost::format(Y("Could not write to the output file: %1% (%2%)\n")) % errno % get_errno_msg());
 
 # if HAVE_POSIX_FADVISE
   write_count += bwritten;
-  if (use_posix_fadvise && use_posix_fadvise_here &&
-      (write_count > write_before_dontneed)) {
-    uint64 pos = getFilePointer();
+  if (use_posix_fadvise && use_posix_fadvise_here && (write_count > write_before_dontneed)) {
+    uint64 pos  = getFilePointer();
     write_count = 0;
-    if (0 != posix_fadvise(fileno((FILE *)file), 0, pos,
-                           POSIX_FADV_DONTNEED)) {
+
+    if (0 != posix_fadvise(fileno((FILE *)file), 0, pos, POSIX_FADV_DONTNEED)) {
       mxverb(2, boost::format(FADVISE_WARNING) % file_name % errno % get_errno_msg());
       use_posix_fadvise_here = false;
     }
@@ -216,24 +206,22 @@ mm_file_io_c::write(const void *buffer,
 uint32
 mm_file_io_c::read(void *buffer,
                    size_t size) {
-  int64_t bread;
-
-  bread = fread(buffer, 1, size, (FILE *)file);
+  int64_t bread = fread(buffer, 1, size, (FILE *)file);
 
 # if HAVE_POSIX_FADVISE
   if (use_posix_fadvise && use_posix_fadvise_here && (0 <= bread)) {
     read_count += bread;
     if (read_count > read_using_willneed) {
       uint64 pos = getFilePointer();
-      int fd = fileno((FILE *)file);
+      int fd     = fileno((FILE *)file);
       read_count = 0;
+
       if (0 != posix_fadvise(fd, 0, pos, POSIX_FADV_DONTNEED)) {
         mxverb(2, boost::format(FADVISE_WARNING) % file_name % errno % get_errno_msg());
         use_posix_fadvise_here = false;
       }
-      if (use_posix_fadvise_here &&
-          (0 != posix_fadvise(fd, pos, pos + read_using_willneed,
-                              POSIX_FADV_WILLNEED))) {
+
+      if (use_posix_fadvise_here && (0 != posix_fadvise(fd, pos, pos + read_using_willneed, POSIX_FADV_WILLNEED))) {
         mxverb(2, boost::format(FADVISE_WARNING) % file_name % errno % get_errno_msg());
         use_posix_fadvise_here = false;
       }
@@ -288,13 +276,10 @@ mm_file_io_c::setup() {
 
   use_posix_fadvise = false;
   if ((0 == uname(&un)) && !strcasecmp(un.sysname, "Linux")) {
-    vector<string> versions;
+    std::vector<std::string> versions = split(un.release, ".");
     int major, minor;
 
-    versions = split(un.release, ".");
-    if ((2 <= versions.size()) &&
-        parse_int(versions[0], major) && parse_int(versions[1], minor) &&
-        ((2 < major) || (6 <= minor)))
+    if ((2 <= versions.size()) && parse_int(versions[0], major) && parse_int(versions[1], minor) && ((2 < major) || (6 <= minor)))
       use_posix_fadvise = true;
   }
 # endif // HAVE_POSIX_FADVISE
@@ -313,7 +298,7 @@ CreateFileUtf8(LPCSTR lpFileName,
                DWORD dwFlagsAndAttributes,
                HANDLE hTemplateFile);
 
-mm_file_io_c::mm_file_io_c(const string &path,
+mm_file_io_c::mm_file_io_c(const std::string &path,
                            const open_mode mode) {
   DWORD access_mode, share_mode, disposition;
 
@@ -344,13 +329,13 @@ mm_file_io_c::mm_file_io_c(const string &path,
 
   if ((MODE_WRITE == mode) || (MODE_CREATE == mode))
     prepare_path(path);
-  file = (void *)CreateFileUtf8(path.c_str(), access_mode, share_mode, NULL,
-                                disposition, 0, NULL);
+
+  file = (void *)CreateFileUtf8(path.c_str(), access_mode, share_mode, NULL, disposition, 0, NULL);
   _eof = false;
   if ((HANDLE)file == (HANDLE)0xFFFFFFFF)
     throw mm_io_open_error_c();
 
-  file_name = path;
+  file_name          = path;
   dos_style_newlines = true;
 }
 
@@ -366,9 +351,8 @@ mm_file_io_c::close() {
 uint64
 mm_file_io_c::get_real_file_pointer() {
   LONG high = 0;
-  DWORD low;
+  DWORD low = SetFilePointer((HANDLE)file, 0, &high, FILE_CURRENT);
 
-  low = SetFilePointer((HANDLE)file, 0, &high, FILE_CURRENT);
   if ((low == INVALID_SET_FILE_POINTER) && (GetLastError() != NO_ERROR))
     return (uint64)-1;
 
@@ -378,27 +362,12 @@ mm_file_io_c::get_real_file_pointer() {
 void
 mm_file_io_c::setFilePointer(int64 offset,
                              seek_mode mode) {
-  DWORD method, low;
-  LONG high;
-
-  switch (mode) {
-    case seek_beginning:
-      method = FILE_BEGIN;
-      break;
-    case seek_current:
-      method = FILE_CURRENT;
-      break;
-    case seek_end:
-      method = FILE_END;
-      break;
-    default:
-      method = FILE_BEGIN;
-      break;
-  }
-
-  high = (LONG)(offset >> 32);
-  low = SetFilePointer((HANDLE)file, (LONG)(offset & 0xffffffff), &high,
-                       method);
+  DWORD method = seek_beginning == mode ? FILE_BEGIN
+               : seek_current   == mode ? FILE_CURRENT
+               : seek_end       == mode ? FILE_END
+               :                          FILE_BEGIN;
+  LONG high    = (LONG)(offset >> 32);
+  DWORD low    = SetFilePointer((HANDLE)file, (LONG)(offset & 0xffffffff), &high, method);
 
   if ((INVALID_SET_FILE_POINTER == low) && (GetLastError() != NO_ERROR))
     throw mm_io_seek_error_c();
@@ -412,8 +381,9 @@ mm_file_io_c::read(void *buffer,
   DWORD bytes_read;
 
   if (!ReadFile((HANDLE)file, buffer, size, &bytes_read, NULL)) {
-    _eof = true;
+    _eof               = true;
     m_current_position = get_real_file_pointer();
+
     return 0;
   }
 
@@ -434,32 +404,27 @@ mm_file_io_c::write(const void *buffer,
     bytes_written = 0;
 
   if (bytes_written != size) {
-    DWORD error;
-    char *error_msg;
-    string error_msg_utf8;
+    std::string error_msg_utf8;
 
-    error = GetLastError();
-    error_msg = NULL;
-    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
-                  FORMAT_MESSAGE_FROM_SYSTEM |
-                  FORMAT_MESSAGE_IGNORE_INSERTS, NULL,
-                  error,
-                  MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                  (LPTSTR)&error_msg, 0, NULL);
-    if (error_msg != NULL) {
-      int idx;
-      idx = strlen(error_msg);
-      idx--;
-      while ((idx >= 0) &&
-             ((error_msg[idx] == '\n') || (error_msg[idx] == '\r'))) {
+    DWORD error     = GetLastError();
+    char *error_msg = NULL;
+    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&error_msg, 0, NULL);
+
+    if (NULL != error_msg) {
+      int idx = strlen(error_msg) - 1;
+
+      while ((0 <= idx) && ((error_msg[idx] == '\n') || (error_msg[idx] == '\r'))) {
         error_msg[idx] = 0;
         idx--;
       }
+
       error_msg_utf8 = to_utf8(cc_local_utf8, error_msg);
     } else
       error_msg_utf8 = Y("unknown");
+
     mxerror(boost::format(Y("Could not write to the output file: %1% (%2%)\n")) % error % error_msg_utf8);
-    if (error_msg != NULL)
+
+    if (NULL != error_msg)
       LocalFree(error_msg);
   }
 
@@ -476,19 +441,18 @@ mm_file_io_c::eof() {
 
 int
 mm_file_io_c::truncate(int64_t pos) {
-  bool result;
-
   cached_size = -1;
 
   save_pos();
   if (setFilePointer2(pos)) {
-    result = SetEndOfFile((HANDLE)file);
+    bool result = SetEndOfFile((HANDLE)file);
     restore_pos();
-    if (result)
-      return 0;
-    return -1;
+
+    return result ? 0 : -1;
   }
+
   restore_pos();
+
   return -1;
 }
 
@@ -499,12 +463,12 @@ mm_file_io_c::setup() {
 #endif // SYS_UNIX
 
 void
-mm_file_io_c::prepare_path(const string &path) {
-  string local_path = path; // contains copy of given path
-  string cur_path;
+mm_file_io_c::prepare_path(const std::string &path) {
+  std::string local_path = path; // contains copy of given path
+  std::string cur_path;
 
 #if defined(SYS_WINDOWS)
-  const string SEPARATOR ("\\");
+  const std::string SEPARATOR ("\\");
   // convert separators for current OS
   std::replace(local_path.begin(), local_path.end(), '/', '\\');
 
@@ -512,13 +476,13 @@ mm_file_io_c::prepare_path(const string &path) {
     // UNC paths -- don't try to create the host name as a directory.
 
     // Fint the host name
-    string::size_type position = local_path.find(SEPARATOR, 2);
-    if (string::npos == position)
+    std::string::size_type position = local_path.find(SEPARATOR, 2);
+    if (std::string::npos == position)
       return;
 
     // Find the share name
     position = local_path.find(SEPARATOR, position + 1);
-    if (string::npos == position)
+    if (std::string::npos == position)
       return;
 
     cur_path = local_path.substr(0, position);
@@ -532,7 +496,7 @@ mm_file_io_c::prepare_path(const string &path) {
   }
 
 #else  // SYS_WINDOWS
-  const string SEPARATOR ("/");
+  const std::string SEPARATOR ("/");
   // convert separators for current OS
   std::replace(local_path.begin(), local_path.end(), '\\', '/');
 #endif // SYS_WINDOWS
@@ -540,12 +504,12 @@ mm_file_io_c::prepare_path(const string &path) {
   if (local_path.substr(0, SEPARATOR.length()) == SEPARATOR)
     cur_path = SEPARATOR;
 
-  vector<string> parts = split(local_path, SEPARATOR);
+  std::vector<std::string> parts = split(local_path, SEPARATOR);
 
   // The file name is the last element -- remove it.
   parts.pop_back();
 
-  for (int i = 0; i < parts.size(); ++i) {
+  for (int i = 0; parts.size() > i; ++i) {
     // Ignore empty path components.
     if (parts[i].empty())
       continue;
@@ -573,10 +537,10 @@ mm_file_io_c::~mm_file_io_c() {
    Abstract base class.
 */
 
-string
+std::string
 mm_io_c::getline() {
   char c;
-  string s;
+  std::string s;
 
   if (eof())
     throw mm_io_eof_error_c();
@@ -593,7 +557,7 @@ mm_io_c::getline() {
 }
 
 bool
-mm_io_c::getline2(string &s) {
+mm_io_c::getline2(std::string &s) {
   try {
     s = getline();
   } catch(...) {
@@ -614,12 +578,11 @@ mm_io_c::setFilePointer2(int64 offset, seek_mode mode) {
 }
 
 size_t
-mm_io_c::puts(const string &s) {
+mm_io_c::puts(const std::string &s) {
   int i;
-  const char *cs;
-  string output, h;
+  std::string output;
 
-  cs = s.c_str();
+  const char *cs = s.c_str();
   for (i = 0; cs[i] != 0; i++)
     if (cs[i] != '\r') {
 #if defined(SYS_WINDOWS)
@@ -634,13 +597,12 @@ mm_io_c::puts(const string &s) {
 }
 
 uint32_t
-mm_io_c::read(string &buffer,
+mm_io_c::read(std::string &buffer,
               size_t size) {
   char *cbuffer = new char[size + 1];
-  int nread;
+  int nread     = read(buffer, size);
 
-  nread = read(buffer, size);
-  if (nread < 0)
+  if (0 > nread)
     buffer = "";
   else {
     cbuffer[nread] = 0;
@@ -747,11 +709,15 @@ mm_io_c::read(memory_cptr &buffer,
               int offset) {
   if (-1 == offset)
     offset = buffer->get_size();
+
   if (buffer->get_size() <= (size + offset))
     buffer->resize(size + offset);
+
   if (read(buffer->get() + offset, size) != size)
     throw mm_io_eof_error_c();
+
   buffer->set_size(size + offset);
+
   return size;
 }
 
@@ -833,13 +799,13 @@ void
 mm_io_c::save_pos(int64_t new_pos) {
   positions.push(getFilePointer());
 
-  if (new_pos != -1)
+  if (-1 != new_pos)
     setFilePointer(new_pos);
 }
 
 bool
 mm_io_c::restore_pos() {
-  if (positions.size() == 0)
+  if (positions.empty())
     return false;
 
   setFilePointer(positions.top());
@@ -849,35 +815,33 @@ mm_io_c::restore_pos() {
 }
 
 bool
-mm_io_c::write_bom(const string &charset) {
-  const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
-  const unsigned char utf16le_bom[2] = {0xff, 0xfe};
-  const unsigned char utf16be_bom[2] = {0xfe, 0xff};
-  const unsigned char utf32le_bom[4] = {0xff, 0xfe, 0x00, 0x00};
-  const unsigned char utf32be_bom[4] = {0x00, 0x00, 0xff, 0xfe};
+mm_io_c::write_bom(const std::string &charset) {
+  static const unsigned char utf8_bom[3]    = {0xef, 0xbb, 0xbf};
+  static const unsigned char utf16le_bom[2] = {0xff, 0xfe};
+  static const unsigned char utf16be_bom[2] = {0xfe, 0xff};
+  static const unsigned char utf32le_bom[4] = {0xff, 0xfe, 0x00, 0x00};
+  static const unsigned char utf32be_bom[4] = {0x00, 0x00, 0xff, 0xfe};
   const unsigned char *bom;
   int bom_len;
 
-  if (charset == "")
+  if (charset.empty())
     return false;
 
   if ((charset =="UTF-8") || (charset =="UTF8")) {
     bom_len = 3;
-    bom = utf8_bom;
-  } else if ((charset =="UTF-16") || (charset =="UTF-16LE") ||
-             (charset =="UTF16") || (charset =="UTF16LE")) {
+    bom     = utf8_bom;
+  } else if ((charset =="UTF-16") || (charset =="UTF-16LE") || (charset =="UTF16") || (charset =="UTF16LE")) {
     bom_len = 2;
-    bom = utf16le_bom;
+    bom     = utf16le_bom;
   } else if ((charset =="UTF-16BE") || (charset =="UTF16BE")) {
     bom_len = 2;
-    bom = utf16be_bom;
-  } else if ((charset =="UTF-32") || (charset =="UTF-32LE") ||
-             (charset =="UTF32") || (charset =="UTF32LE")) {
+    bom     = utf16be_bom;
+  } else if ((charset =="UTF-32") || (charset =="UTF-32LE") || (charset =="UTF32") || (charset =="UTF32LE")) {
     bom_len = 4;
-    bom = utf32le_bom;
+    bom     = utf32le_bom;
   } else if ((charset =="UTF-32BE") || (charset =="UTF32BE")) {
     bom_len = 4;
-    bom = utf32be_bom;
+    bom     = utf32be_bom;
   } else
     return false;
 
@@ -913,10 +877,9 @@ mm_io_c::getch() {
 
 void
 mm_proxy_io_c::close() {
-  if (proxy_io == NULL)
-    return;
-  if (proxy_delete_io)
+  if ((NULL != proxy_io) && proxy_delete_io)
     delete proxy_io;
+
   proxy_io = NULL;
 }
 
@@ -936,12 +899,9 @@ mm_null_io_c::getFilePointer() {
 void
 mm_null_io_c::setFilePointer(int64 offset,
                              seek_mode mode) {
-  if (mode == seek_beginning)
-    pos = offset;
-  else if (mode == seek_end)
-    pos = 0;
-  else
-    pos += offset;
+  pos = seek_beginning == mode ? offset
+      : seek_end       == mode ? 0
+      :                          pos + offset;
 }
 
 uint32
@@ -970,16 +930,16 @@ mm_null_io_c::close() {
 */
 mm_mem_io_c::mm_mem_io_c(unsigned char *_mem,
                          uint64_t _mem_size,
-                         int _increase):
-  pos(0),
-  mem_size(_mem_size),
-  allocated(_mem_size),
-  increase(_increase),
-  mem(_mem),
-  ro_mem(NULL),
-  read_only(false) {
-
-  if (increase <= 0)
+                         int _increase)
+  : pos(0)
+  , mem_size(_mem_size)
+  , allocated(_mem_size)
+  , increase(_increase)
+  , mem(_mem)
+  , ro_mem(NULL)
+  , read_only(false)
+{
+  if (0 >= increase)
     throw error_c(Y("wrong usage: increase < 0"));
 
   if ((NULL == mem) && (0 < increase)) {
@@ -994,17 +954,17 @@ mm_mem_io_c::mm_mem_io_c(unsigned char *_mem,
 }
 
 mm_mem_io_c::mm_mem_io_c(const unsigned char *_mem,
-                         uint64_t _mem_size) :
-  pos(0),
-  mem_size(_mem_size),
-  allocated(_mem_size),
-  increase(0),
-  mem(NULL),
-  ro_mem(_mem),
-  free_mem(false),
-  read_only(true) {
-
-  if (ro_mem == NULL)
+                         uint64_t _mem_size)
+  : pos(0)
+  , mem_size(_mem_size)
+  , allocated(_mem_size)
+  , increase(0)
+  , mem(NULL)
+  , ro_mem(_mem)
+  , free_mem(false)
+  , read_only(true)
+{
+  if (NULL == ro_mem)
     throw error_c(Y("wrong usage: read-only with NULL memory"));
 }
 
@@ -1037,9 +997,7 @@ mm_mem_io_c::setFilePointer(int64 offset,
 uint32
 mm_mem_io_c::read(void *buffer,
                   size_t size) {
-  int64_t rbytes;
-
-  rbytes = (pos + size) >= mem_size ? mem_size - pos : size;
+  int64_t rbytes = (pos + size) >= mem_size ? mem_size - pos : size;
   if (read_only)
     memcpy(buffer, &ro_mem[pos], rbytes);
   else
@@ -1052,30 +1010,29 @@ mm_mem_io_c::read(void *buffer,
 size_t
 mm_mem_io_c::write(const void *buffer,
                    size_t size) {
-  int64_t wbytes;
-
   if (read_only)
     throw error_c(Y("wrong usage: writing to read-only memory"));
 
+  int64_t wbytes;
   if ((pos + size) >= allocated) {
     if (increase) {
-      int64_t new_allocated;
-
-      new_allocated = pos + size - allocated;
-      new_allocated = ((new_allocated / increase) + 1 ) * increase;
-      allocated += new_allocated;
-      mem = (unsigned char *)saferealloc(mem, allocated);
-      wbytes = size;
+      int64_t new_allocated  = pos + size - allocated;
+      new_allocated          = ((new_allocated / increase) + 1 ) * increase;
+      allocated             += new_allocated;
+      mem                    = (unsigned char *)saferealloc(mem, allocated);
+      wbytes                 = size;
     } else
       wbytes = allocated - pos;
+
   } else
     wbytes = size;
+
   if ((pos + size) > mem_size)
     mem_size = pos + size;
-  memcpy(&mem[pos], buffer, wbytes);
-  pos += wbytes;
 
-  cached_size = -1;
+  memcpy(&mem[pos], buffer, wbytes);
+  pos         += wbytes;
+  cached_size  = -1;
 
   return wbytes;
 }
@@ -1084,13 +1041,13 @@ void
 mm_mem_io_c::close() {
   if (free_mem)
     safefree(mem);
-  mem = NULL;
-  ro_mem = NULL;
+  mem       = NULL;
+  ro_mem    = NULL;
   read_only = true;
-  free_mem = false;
-  mem_size = 0;
-  increase = 0;
-  pos = 0;
+  free_mem  = false;
+  mem_size  = 0;
+  increase  = 0;
+  pos       = 0;
 }
 
 bool
@@ -1109,39 +1066,35 @@ mm_mem_io_c::get_and_lock_buffer() {
 */
 
 mm_text_io_c::mm_text_io_c(mm_io_c *_in,
-                           bool _delete_in):
-  mm_proxy_io_c(_in, _delete_in),
-  byte_order(BO_NONE),
-  bom_len(0) {
-  unsigned char buffer[4];
-  int num_read;
+                           bool _delete_in)
+  : mm_proxy_io_c(_in, _delete_in)
+  , byte_order(BO_NONE)
+  , bom_len(0) {
 
   _in->setFilePointer(0, seek_beginning);
 
-  num_read = _in->read(buffer, 4);
+  unsigned char buffer[4];
+  int num_read = _in->read(buffer, 4);
   if (2 > num_read) {
     _in->setFilePointer(0, seek_beginning);
     return;
   }
 
-  if ((3 <= num_read) &&
-      (buffer[0] == 0xef) && (buffer[1] == 0xbb) && (buffer[2] == 0xbf)) {
+  if ((3 <= num_read) && (buffer[0] == 0xef) && (buffer[1] == 0xbb) && (buffer[2] == 0xbf)) {
     byte_order = BO_UTF8;
-    bom_len = 3;
-  } else if ((4 <= num_read) && (buffer[0] == 0xff) && (buffer[1] == 0xfe) &&
-             (buffer[2] == 0x00) && (buffer[3] == 0x00)) {
+    bom_len    = 3;
+  } else if ((4 <= num_read) && (buffer[0] == 0xff) && (buffer[1] == 0xfe) && (buffer[2] == 0x00) && (buffer[3] == 0x00)) {
     byte_order = BO_UTF32_LE;
-    bom_len = 4;
-  } else if ((4 <= num_read) && (buffer[0] == 0x00) && (buffer[1] == 0x00) &&
-             (buffer[2] == 0xfe) && (buffer[3] == 0xff)) {
+    bom_len    = 4;
+  } else if ((4 <= num_read) && (buffer[0] == 0x00) && (buffer[1] == 0x00) && (buffer[2] == 0xfe) && (buffer[3] == 0xff)) {
     byte_order = BO_UTF32_BE;
-    bom_len = 4;
+    bom_len    = 4;
   } else if ((2 <= num_read) && (buffer[0] == 0xff) && (buffer[1] == 0xfe)) {
     byte_order = BO_UTF16_LE;
-    bom_len = 2;
+    bom_len    = 2;
   } else if ((2 <= num_read) && (buffer[0] == 0xfe) && (buffer[1] == 0xff)) {
     byte_order = BO_UTF16_BE;
-    bom_len = 2;
+    bom_len    = 2;
   }
 
   _in->setFilePointer(bom_len, seek_beginning);
@@ -1154,37 +1107,34 @@ mm_text_io_c::mm_text_io_c(mm_io_c *_in,
 int
 mm_text_io_c::read_next_char(char *buffer) {
   unsigned char stream[6];
-  unsigned long data;
-  int size, i;
+  int i;
 
   if (byte_order == BO_NONE)
     return read(buffer, 1);
 
-  size = 0;
+  int size = 0;
   if (byte_order == BO_UTF8) {
     if (read(stream, 1) != 1)
       return 0;
-    if ((stream[0] & 0x80) == 0)
-      size = 1;
-    else if ((stream[0] & 0xe0) == 0xc0)
-      size = 2;
-    else if ((stream[0] & 0xf0) == 0xe0)
-      size = 3;
-    else if ((stream[0] & 0xf8) == 0xf0)
-      size = 4;
-    else if ((stream[0] & 0xfc) == 0xf8)
-      size = 5;
-    else if ((stream[0] & 0xfe) == 0xfc)
-      size = 6;
-    else
+
+    size = ((stream[0] & 0x80) == 0x00) ?  1
+         : ((stream[0] & 0xe0) == 0xc0) ?  2
+         : ((stream[0] & 0xf0) == 0xe0) ?  3
+         : ((stream[0] & 0xf8) == 0xf0) ?  4
+         : ((stream[0] & 0xfc) == 0xf8) ?  5
+         : ((stream[0] & 0xfe) == 0xfc) ?  6
+         :                                -1;
+
+    if (-1 == size)
       mxerror(boost::format(Y("mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|")) % (unsigned int)stream[0]);
 
-    if ((size > 1) && (read(&stream[1], size - 1) != (size - 1)))
+    if ((1 < size) && (read(&stream[1], size - 1) != (size - 1)))
       return 0;
 
     memcpy(buffer, stream, size);
 
     return size;
+
   } else if ((byte_order == BO_UTF16_LE) || (byte_order == BO_UTF16_BE))
     size = 2;
   else
@@ -1193,16 +1143,16 @@ mm_text_io_c::read_next_char(char *buffer) {
   if (read(stream, size) != size)
     return 0;
 
-  data = 0;
+  unsigned long data = 0;
   if ((byte_order == BO_UTF16_LE) || (byte_order == BO_UTF32_LE))
     for (i = 0; i < size; i++) {
       data <<= 8;
-      data |= stream[size - i - 1];
+      data  |= stream[size - i - 1];
     }
   else
     for (i = 0; i < size; i++) {
       data <<= 8;
-      data |= stream[i];
+      data  |= stream[i];
     }
 
   if (data < 0x80) {
@@ -1217,9 +1167,9 @@ mm_text_io_c::read_next_char(char *buffer) {
   }
 
   if (data < 0x10000) {
-    buffer[0] = 0xe0 | (data >> 12);
+    buffer[0] = 0xe0 |  (data >> 12);
     buffer[1] = 0x80 | ((data >> 6) & 0x3f);
-    buffer[2] = 0x80 | (data & 0x3f);
+    buffer[2] = 0x80 |  (data       & 0x3f);
     return 3;
   }
 
@@ -1228,10 +1178,9 @@ mm_text_io_c::read_next_char(char *buffer) {
   return 0;
 }
 
-string
+std::string
 mm_text_io_c::getline() {
-  string s;
-  int len;
+  std::string s;
   char utf8char[8];
 
   if (eof())
@@ -1240,14 +1189,14 @@ mm_text_io_c::getline() {
   while (1) {
     memset(utf8char, 0, 8);
 
-    len = read_next_char(utf8char);
-    if (len == 0)
+    int len = read_next_char(utf8char);
+    if (0 == len)
       return s;
 
-    if ((len == 1) && (utf8char[0] == '\r'))
+    if ((1 == len) && (utf8char[0] == '\r'))
       continue;
 
-    if ((len == 1) && (utf8char[0] == '\n'))
+    if ((1 == len) && (utf8char[0] == '\n'))
       return s;
 
     s += utf8char;
@@ -1262,10 +1211,7 @@ mm_text_io_c::get_byte_order() {
 void
 mm_text_io_c::setFilePointer(int64 offset,
                              seek_mode mode) {
-  if ((offset == 0) && (mode == seek_beginning))
-    mm_proxy_io_c::setFilePointer(bom_len, seek_beginning);
-  else
-    mm_proxy_io_c::setFilePointer(offset, seek_beginning);
+  mm_proxy_io_c::setFilePointer(((0 == offset) && (seek_beginning == mode)) ? bom_len : offset, seek_beginning);
 }
 
 /*
@@ -1295,11 +1241,9 @@ size_t
 mm_stdio_c::write(const void *buffer,
                   size_t size) {
 #if defined(SYS_WINDOWS)
-  int i, bytes_written;
-  const char *s;
-
-  bytes_written = 0;
-  s = (const char *)buffer;
+  int i;
+  int bytes_written = 0;
+  const char *s     = (const char *)buffer;
   for (i = 0; i < size; ++i)
     if (('\r' != s[i]) || ((i + 1) == size) || ('\n' != s[i + 1]))
       bytes_written += fwrite(&s[i], 1, 1, stdout);

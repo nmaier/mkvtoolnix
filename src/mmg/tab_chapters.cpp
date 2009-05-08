@@ -878,14 +878,14 @@ tab_chapters::on_add_chapter(wxCommandEvent &evt) {
   }
   KaxChapterDisplay &display = GetEmptyChild<KaxChapterDisplay>(*chapter);
   *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(display)) = cstrutf8_to_UTFstring(Y("(unnamed)"));
-  if ((default_chapter_language.length() > 0) ||
-      (default_chapter_country.length() > 0)) {
-    if (default_chapter_language.length() > 0)
+  if ((g_default_chapter_language.length() > 0) ||
+      (g_default_chapter_country.length() > 0)) {
+    if (g_default_chapter_language.length() > 0)
       *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(display)) =
-        default_chapter_language.c_str();
-    if (default_chapter_country.length() > 0)
+        g_default_chapter_language.c_str();
+    if (g_default_chapter_country.length() > 0)
       *static_cast<EbmlString *>(&GetChild<KaxChapterCountry>(display)) =
-        default_chapter_country.c_str();
+        g_default_chapter_country.c_str();
   }
   *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(*chapter)) =
     create_unique_uint32(UNIQUE_CHAPTER_IDS);
@@ -960,14 +960,14 @@ tab_chapters::on_add_subchapter(wxCommandEvent &evt) {
   KaxChapterDisplay &display = GetEmptyChild<KaxChapterDisplay>(*chapter);
   *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(display)) =
     cstrutf8_to_UTFstring(Y("(unnamed)"));
-  if ((default_chapter_language.length() > 0) ||
-      (default_chapter_country.length() > 0)) {
-    if (default_chapter_language.length() > 0)
+  if ((g_default_chapter_language.length() > 0) ||
+      (g_default_chapter_country.length() > 0)) {
+    if (g_default_chapter_language.length() > 0)
       *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(display)) =
-        default_chapter_language.c_str();
-    if (default_chapter_country.length() > 0)
+        g_default_chapter_language.c_str();
+    if (g_default_chapter_country.length() > 0)
       *static_cast<EbmlString *>(&GetChild<KaxChapterCountry>(display)) =
-        default_chapter_country.c_str();
+        g_default_chapter_country.c_str();
   }
   m->PushElement(*chapter);
   s = create_chapter_label(*chapter);
@@ -1242,8 +1242,8 @@ tab_chapters::on_set_default_values(wxCommandEvent &evt) {
   wxString language;
   string cctld;
 
-  chapter_values_dlg dlg(this, true, wxU(default_chapter_language.c_str()),
-                         wxU(default_chapter_country.c_str()));
+  chapter_values_dlg dlg(this, true, wxU(g_default_chapter_language.c_str()),
+                         wxU(g_default_chapter_country.c_str()));
 
   if (dlg.ShowModal() != wxID_OK)
     return;
@@ -1253,13 +1253,13 @@ tab_chapters::on_set_default_values(wxCommandEvent &evt) {
     wxMessageBox(wxString::Format(Z("The language '%s' is not a valid language and cannot be selected."), language.c_str()), Z("Invalid language selected"), wxICON_ERROR | wxOK);
     return;
   }
-  default_chapter_language = wxMB(language);
+  g_default_chapter_language = wxMB(language);
   cctld = wxMB(dlg.cob_country->GetValue());
   if (!is_valid_cctld(cctld.c_str())) {
     wxMessageBox(wxString::Format(Z("The country '%s' is not a valid ccTLD and cannot be selected."), dlg.cob_country->GetValue().c_str()), Z("Invalid country selected"), wxICON_ERROR | wxOK);
     return;
   }
-  default_chapter_country = cctld;
+  g_default_chapter_country = cctld;
 }
 
 void
@@ -1607,15 +1607,15 @@ tab_chapters::on_add_chapter_name(wxCommandEvent &evt) {
 
   cdisplay = new KaxChapterDisplay;
   *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(*cdisplay)) = cstrutf8_to_UTFstring(Y("(unnamed)"));
-  if (default_chapter_language.length() > 0)
-    s = wxU(default_chapter_language.c_str());
+  if (g_default_chapter_language.length() > 0)
+    s = wxU(g_default_chapter_language.c_str());
   else
     s = wxT("eng");
   *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(*cdisplay)) =
     wxMB(s);
-  if (default_chapter_country.length() > 0)
+  if (g_default_chapter_country.length() > 0)
     *static_cast<EbmlString *>(&GetChild<KaxChapterCountry>(*cdisplay)) =
-      default_chapter_country.c_str();
+      g_default_chapter_country.c_str();
   // Workaround for a bug in libebml
   if (i == (t->chapter->ListSize() - 1))
     t->chapter->PushElement(*cdisplay);

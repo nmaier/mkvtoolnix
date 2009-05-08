@@ -19,55 +19,56 @@
 #include "common/aac_common.h"
 #include "common/matroska.h"
 
-const int aac_sampling_freq[16] = {96000, 88200, 64000, 48000, 44100, 32000,
-                                   24000, 22050, 16000, 12000, 11025,  8000,
-                                   0, 0, 0, 0}; // filling
+const int g_aac_sampling_freq[16] = {96000, 88200, 64000, 48000, 44100, 32000,
+                                     24000, 22050, 16000, 12000, 11025,  8000,
+                                         0,     0,     0,     0}; // filling
 
 static bool
 parse_aac_adif_header_internal(const unsigned char *buf,
                                int size,
                                aac_header_t *aac_header) {
-  int i, k;
-  int nprogram_conf_e, bitstream_type, profile, sfreq_index;
-  int nfront_c_e, nside_c_e, nback_c_e, nlfe_c_e;
-  int nassoc_data_e, nvalid_cc_e, comment_field_bytes;
-  int channels;
   bit_cursor_c bc(buf, size);
 
-  profile = 0;
-  sfreq_index = 0;
-  comment_field_bytes = 0;
-  channels = 0;
+  int profile             = 0;
+  int sfreq_index         = 0;
+  int comment_field_bytes = 0;
+  int channels            = 0;
+
   if (bc.get_bits(32) != FOURCC('A', 'D', 'I', 'F'))
     return false;
+
   if (bc.get_bit())             // copyright_id_present
     bc.skip_bits(3 * 72);       // copyright_id
   bc.skip_bits(2);              // original_copy & home
-  bitstream_type = bc.get_bit();
+  int bitstream_type = bc.get_bit();
   bc.skip_bits(23);             // bitrate
-  nprogram_conf_e = bc.get_bits(4);
-  for (i = 0; i <= nprogram_conf_e; i++) {
+  int nprogram_conf_e = bc.get_bits(4);
+
+  int program_conf_e_idx;
+  for (program_conf_e_idx = 0; program_conf_e_idx <= nprogram_conf_e; program_conf_e_idx++) {
     channels = 0;
-    if (bitstream_type == 0)
+    if (0 == bitstream_type)
       bc.skip_bits(20);
     bc.skip_bits(4);            // element_instance_tag
-    profile = bc.get_bits(2);
-    sfreq_index = bc.get_bits(4);
-    nfront_c_e = bc.get_bits(4);
-    nside_c_e = bc.get_bits(4);
-    nback_c_e = bc.get_bits(4);
-    nlfe_c_e = bc.get_bits(2);
-    nassoc_data_e = bc.get_bits(3);
-    nvalid_cc_e = bc.get_bits(4);
+    profile           = bc.get_bits(2);
+    sfreq_index       = bc.get_bits(4);
+    int nfront_c_e    = bc.get_bits(4);
+    int nside_c_e     = bc.get_bits(4);
+    int nback_c_e     = bc.get_bits(4);
+    int nlfe_c_e      = bc.get_bits(2);
+    int nassoc_data_e = bc.get_bits(3);
+    int nvalid_cc_e   = bc.get_bits(4);
     if (bc.get_bit())           // mono_mixdown_present
       bc.skip_bits(4);          // mono_mixdown_el_num
     if (bc.get_bit())           // stereo_mixdown_present
       bc.skip_bits(4);          // stereo_mixdown_el_num
-    if (bc.get_bit()) {         // matrix_mixdown_idx_present
+    if (bc.get_bit())           // matrix_mixdown_idx_present
       bc.skip_bits(2 + 1);      // matrix_mixdown_idx & pseudo_surround_table
-    }
+
     channels = nfront_c_e + nside_c_e + nback_c_e;
-    for (k = 0; k < (nfront_c_e + nside_c_e + nback_c_e); k++) {
+
+    int channel_idx;
+    for (channel_idx = 0; channel_idx < (nfront_c_e + nside_c_e + nback_c_e); channel_idx++) {
       if (bc.get_bit())         // *_element_is_cpe
         channels++;
       bc.skip_bits(4);          // *_element_tag_select
@@ -80,13 +81,13 @@ parse_aac_adif_header_internal(const unsigned char *buf,
     bc.skip_bits(8 * comment_field_bytes);
   }
 
-  aac_header->sample_rate = aac_sampling_freq[sfreq_index];
-  aac_header->id = 0;           // MPEG-4
-  aac_header->profile = profile;
-  aac_header->bytes = 0;
-  aac_header->channels = channels > 6 ? 2 : channels;
-  aac_header->bit_rate = 1024;
-  aac_header->header_bit_size = bc.get_bit_position();
+  aac_header->sample_rate      = g_aac_sampling_freq[sfreq_index];
+  aac_header->id               = 0;           // MPEG-4
+  aac_header->profile          = profile;
+  aac_header->bytes            = 0;
+  aac_header->channels         = channels > 6 ? 2 : channels;
+  aac_header->bit_rate         = 1024;
+  aac_header->header_bit_size  = bc.get_bit_position();
   aac_header->header_byte_size = (aac_header->header_bit_size + 7) / 8;
 
   return true;
@@ -108,48 +109,41 @@ is_adts_header(const unsigned char *buf,
                int size,
                aac_header_t *aac_header,
                bool emphasis_present) {
-  int id, profile, sfreq_index, channels, frame_length;
-  bool protection_absent;
   bit_cursor_c bc(buf, size);
 
   if (bc.get_bits(12) != 0xfff)            // ADTS header
     return false;
 
-  id = bc.get_bit();            // ID: 0 = MPEG-4, 1 = MPEG-2
+  int id = bc.get_bit();        // ID: 0 = MPEG-4, 1 = MPEG-2
   if (bc.get_bits(2) != 0)      // layer == 0 !
     return false;
-  protection_absent = bc.get_bit();
-  profile = bc.get_bits(2);
-  sfreq_index = bc.get_bits(4);
+  bool protection_absent = bc.get_bit();
+  int profile            = bc.get_bits(2);
+  int sfreq_index        = bc.get_bits(4);
   bc.skip_bits(1);              // private
-  channels = bc.get_bits(3);
+  int channels = bc.get_bits(3);
   bc.skip_bits(1 + 1);          // original/copy & home
-  if ((id == 0) && emphasis_present)
+  if ((0 == id) && emphasis_present)
     bc.skip_bits(2);            // emphasis, MPEG-4 only
   bc.skip_bits(1 + 1);          // copyright_id_bit & copyright_id_start
-  frame_length = bc.get_bits(13);
+  int frame_length = bc.get_bits(13);
   if (0 == frame_length)
     return false;
+
   bc.skip_bits(11);             // adts_buffer_fullness
   bc.skip_bits(2);              // no_raw_blocks_in_frame
   if (!protection_absent)
     bc.skip_bits(16);
 
-  aac_header->sample_rate = aac_sampling_freq[sfreq_index];
-  aac_header->id = id;
-  aac_header->profile = profile;
-  aac_header->bytes = frame_length;
-  aac_header->channels = channels > 6 ? 2 : channels;
-  aac_header->bit_rate = 1024;
-  if ((id == 0) && emphasis_present) // MPEG-4
-    aac_header->header_bit_size = 58;
-  else
-    aac_header->header_bit_size = 56;
-  if (!protection_absent)
-    aac_header->header_bit_size += 16;
+  aac_header->sample_rate      = g_aac_sampling_freq[sfreq_index];
+  aac_header->id               = id;
+  aac_header->profile          = profile;
+  aac_header->bytes            = frame_length;
+  aac_header->channels         = channels > 6 ? 2 : channels;
+  aac_header->bit_rate         = 1024;
+  aac_header->header_bit_size  = (((0 == id) && emphasis_present) ? 58 : 56) + (!protection_absent ? 16 : 0);
   aac_header->header_byte_size = (aac_header->header_bit_size + 7) / 8;
-  aac_header->data_byte_size = aac_header->bytes -
-    aac_header->header_bit_size / 8;
+  aac_header->data_byte_size   = aac_header->bytes - aac_header->header_bit_size / 8;
 
   return true;
 }
@@ -159,10 +153,8 @@ find_aac_header(const unsigned char *buf,
                 int size,
                 aac_header_t *aac_header,
                 bool emphasis_present) {
-  int bpos;
-
   try {
-    bpos = 0;
+    int bpos = 0;
     while (bpos < size) {
       if (is_adts_header(buf + bpos, size - bpos, aac_header, emphasis_present))
         return bpos;
@@ -179,7 +171,7 @@ get_aac_sampling_freq_idx(int sampling_freq) {
   int i;
 
   for (i = 0; i < 16; i++)
-    if (sampling_freq >= (aac_sampling_freq[i] - 1000))
+    if (sampling_freq >= (g_aac_sampling_freq[i] - 1000))
       return i;
 
   return 0;                     // should never happen
@@ -193,12 +185,11 @@ parse_aac_data(const unsigned char *data,
                int &sample_rate,
                int &output_sample_rate,
                bool &sbr) {
-  int i;
-
   if (size < 2)
     return false;
 
   mxverb(4, boost::format("parse_aac_data: size %1%, data: 0x") % size);
+  int i;
   for (i = 0; i < size; i++)
     mxverb(4, boost::format("%|1$02x| ") % data[i]);
   mxverb(4, "\n");
@@ -207,25 +198,28 @@ parse_aac_data(const unsigned char *data,
   if (0 == profile)
     return false;
   --profile;
-  sample_rate = aac_sampling_freq[((data[0] & 0x07) << 1) | (data[1] >> 7)];
-  channels = (data[1] & 0x7f) >> 3;
+
+  sample_rate = g_aac_sampling_freq[((data[0] & 0x07) << 1) | (data[1] >> 7)];
+  channels    = (data[1] & 0x7f) >> 3;
   if ((5 == profile) && (5 <= size)) {
-    output_sample_rate = aac_sampling_freq[(data[4] & 0x7f) >> 3];
-    sbr = true;
+    output_sample_rate = g_aac_sampling_freq[(data[4] & 0x7f) >> 3];
+    sbr                = true;
+
   } else if (sample_rate <= 24000) {
     output_sample_rate = 2 * sample_rate;
-    sbr = true;
+    sbr                = true;
+
   } else
-    sbr = false;
+    sbr                = false;
 
   return true;
 }
 
 bool
-parse_aac_codec_id(const string &codec_id,
+parse_aac_codec_id(const std::string &codec_id,
                    int &id,
                    int &profile) {
-  string sprofile;
+  std::string sprofile;
 
   if (codec_id.size() < strlen(MKV_A_AAC_2LC))
     return false;
@@ -261,18 +255,19 @@ create_aac_data(unsigned char *data,
                 int sample_rate,
                 int output_sample_rate,
                 bool sbr) {
-  int srate_idx;
+  int srate_idx = get_aac_sampling_freq_idx(sample_rate);
+  data[0]       = ((profile + 1) << 3) | ((srate_idx & 0x0e) >> 1);
+  data[1]       = ((srate_idx & 0x01) << 7) | (channels << 3);
 
-  srate_idx = get_aac_sampling_freq_idx(sample_rate);
-  data[0] = ((profile + 1) << 3) | ((srate_idx & 0x0e) >> 1);
-  data[1] = ((srate_idx & 0x01) << 7) | (channels << 3);
   if (sbr) {
     srate_idx = get_aac_sampling_freq_idx(output_sample_rate);
-    data[2] = AAC_SYNC_EXTENSION_TYPE >> 3;
-    data[3] = ((AAC_SYNC_EXTENSION_TYPE & 0x07) << 5) | 5;
-    data[4] = (1 << 7) | (srate_idx << 3);
+    data[2]   = AAC_SYNC_EXTENSION_TYPE >> 3;
+    data[3]   = ((AAC_SYNC_EXTENSION_TYPE & 0x07) << 5) | 5;
+    data[4]   = (1 << 7) | (srate_idx << 3);
+
     return 5;
   }
+
   return 2;
 }
 

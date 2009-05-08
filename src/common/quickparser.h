@@ -23,22 +23,36 @@
 
 using namespace libebml;
 
-typedef struct segment_child_t {
-  int64_t pos;
-  int64_t size;
-  EbmlId id;
+struct segment_child_t {
+  int64_t m_pos;
+  int64_t m_size;
+  EbmlId m_id;
 
-  segment_child_t(): id((uint32_t)0, 0) {};
-} segment_child_t;
+  segment_child_t()
+    : m_pos(0)
+    , m_size(0)
+    , m_id((uint32_t)0, 0)
+  {
+  }
+
+  segment_child_t(int64_t pos,
+                  int64_t size,
+                  const EbmlId &id)
+    : m_pos(pos)
+    , m_size(size)
+    , m_id(id)
+  {
+  }
+};
 
 class kax_quickparser_c {
 private:
-  std::vector<segment_child_t> children;
-  std::vector<segment_child_t>::iterator current_child;
-  mm_io_c &in;
+  std::vector<segment_child_t> m_children;
+  std::vector<segment_child_t>::iterator m_current_child;
+  mm_io_c &m_in;
 
 public:
-  kax_quickparser_c(mm_io_c &_in, bool parse_fully = false);
+  kax_quickparser_c(mm_io_c &in, bool parse_fully = false);
   virtual ~kax_quickparser_c() {};
 
   virtual int num_elements(const EbmlId &id) const;

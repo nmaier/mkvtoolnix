@@ -17,18 +17,17 @@
 #include "common/xml_element_writer.h"
 
 using namespace libmatroska;
-using namespace std;
 
 void
 write_tags_xml(KaxTags &tags,
                mm_io_c *out) {
   int i;
 
-  for (i = 0; tag_elements[i].name != NULL; i++) {
+  for (i = 0; NULL != tag_elements[i].name; i++) {
     tag_elements[i].start_hook = NULL;
-    tag_elements[i].end_hook = NULL;
+    tag_elements[i].end_hook   = NULL;
   }
 
-  for (i = 0; i < tags.ListSize(); i++)
+  for (i = 0; tags.ListSize() > i; i++)
     write_xml_element_rec(1, 0, tags[i], out, tag_elements);
 }

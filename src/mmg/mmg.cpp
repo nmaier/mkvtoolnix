@@ -2287,16 +2287,16 @@ mmg_app::OnInit() {
   }
   cfg->SetPath(wxT("/chapter_editor"));
   cfg->Read(wxT("default_language"), &k, wxT("und"));
-  default_chapter_language = to_utf8(k).c_str();
-  index = map_to_iso639_2_code(default_chapter_language.c_str());
+  g_default_chapter_language = to_utf8(k).c_str();
+  index = map_to_iso639_2_code(g_default_chapter_language.c_str());
   if (-1 == index)
-    default_chapter_language = "und";
+    g_default_chapter_language = "und";
   else
-    default_chapter_language = iso639_languages[index].iso639_2_code;
+    g_default_chapter_language = iso639_languages[index].iso639_2_code;
   if (cfg->Read(wxT("default_country"), &k) && (0 < k.length()))
-    default_chapter_country = to_utf8(k).c_str();
-  if (!is_valid_cctld(default_chapter_country.c_str()))
-    default_chapter_country = "";
+    g_default_chapter_country = to_utf8(k).c_str();
+  if (!is_valid_cctld(g_default_chapter_country.c_str()))
+    g_default_chapter_country = "";
 
   app = this;
   mdlg = new mmg_dialog();
@@ -2366,8 +2366,8 @@ mmg_app::OnExit() {
   cfg->SetPath(wxT("/GUI"));
   cfg->Write(wxT("last_directory"), last_open_dir);
   cfg->SetPath(wxT("/chapter_editor"));
-  cfg->Write(wxT("default_language"), wxString(default_chapter_language.c_str(), wxConvUTF8));
-  cfg->Write(wxT("default_country"), wxString(default_chapter_country.c_str(), wxConvUTF8));
+  cfg->Write(wxT("default_language"), wxString(g_default_chapter_language.c_str(), wxConvUTF8));
+  cfg->Write(wxT("default_country"), wxString(g_default_chapter_country.c_str(), wxConvUTF8));
   cfg->Flush();
 
   delete cfg;

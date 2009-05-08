@@ -11,9 +11,9 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "common/os.h"
+
 #include <expat.h>
-#include <ctype.h>
-#include <stdarg.h>
 
 #include <string>
 
@@ -25,53 +25,53 @@
 #include "common/mm_io.h"
 #include "common/xml_element_writer.h"
 
-using namespace std;
 using namespace libmatroska;
 
 // {{{ simple chapter output
 
 class chapter_entry_c {
 public:
-  string name;
-  int64_t start, level;
+  std::string m_name;
+  int64_t m_start, m_level;
 
-  chapter_entry_c(string n, int64_t s, int64_t l);
+  chapter_entry_c(std::string name, int64_t start, int64_t level);
 
   bool operator < (const chapter_entry_c &cmp) const;
 };
 
-chapter_entry_c::chapter_entry_c(string n,
-                                 int64_t s,
-                                 int64_t l) {
-  name = n;
-  start = s;
-  level = l;
+chapter_entry_c::chapter_entry_c(std::string name,
+                                 int64_t start,
+                                 int64_t level)
+  : m_name(name)
+  , m_start(start)
+  , m_level(level)
+{
 }
 
 bool
 chapter_entry_c::operator <(const chapter_entry_c &cmp)
   const {
-  return start < cmp.start;
+  return m_start < cmp.m_start;
 }
 
-static vector<chapter_entry_c> chapter_start_times, chapter_names;
-static vector<chapter_entry_c> chapter_entries;
+static std::vector<chapter_entry_c> s_chapter_start_times, s_chapter_names;
+static std::vector<chapter_entry_c> s_chapter_entries;
 
 static void
 handle_name(int level,
-            const string &name) {
+            const std::string &name) {
   int i;
 
-  for (i = 0; i < chapter_start_times.size(); i++) {
-    chapter_entry_c &e = chapter_start_times[i];
-    if (e.level == level) {
-      chapter_entries.push_back(chapter_entry_c(name, e.start, level));
-      chapter_start_times.erase(chapter_start_times.begin() + i);
+  for (i = 0; s_chapter_start_times.size() > i; i++) {
+    chapter_entry_c &e = s_chapter_start_times[i];
+    if (e.m_level == level) {
+      s_chapter_entries.push_back(chapter_entry_c(name, e.m_start, level));
+      s_chapter_start_times.erase(s_chapter_start_times.begin() + i);
       return;
     }
   }
 
-  chapter_names.push_back(chapter_entry_c(name, 0, level));
+  s_chapter_names.push_back(chapter_entry_c(name, 0, level));
 }
 
 static void
@@ -79,16 +79,16 @@ handle_start_time(int level,
                   int64_t start_time) {
   int i;
 
-  for (i = 0; i < chapter_names.size(); i++) {
-    chapter_entry_c &e = chapter_names[i];
-    if (e.level == level) {
-      chapter_entries.push_back(chapter_entry_c(e.name, start_time, level));
-      chapter_names.erase(chapter_names.begin() + i);
+  for (i = 0; s_chapter_names.size() > i; i++) {
+    chapter_entry_c &e = s_chapter_names[i];
+    if (e.m_level == level) {
+      s_chapter_entries.push_back(chapter_entry_c(e.m_name, start_time, level));
+      s_chapter_names.erase(s_chapter_names.begin() + i);
       return;
     }
   }
 
-  chapter_start_times.push_back(chapter_entry_c("", start_time, level));
+  s_chapter_start_times.push_back(chapter_entry_c("", start_time, level));
 }
 
 static void write_chapter_atom_simple(KaxChapterAtom *atom, int level);
@@ -97,17 +97,13 @@ static void
 write_chapter_display_simple(KaxChapterDisplay *display,
                              int level) {
   int i;
-  EbmlElement *e;
-  string s;
 
   for (i = 0; i < display->ListSize(); i++) {
-    e = (*display)[i];
-    if (is_id(e, KaxChapterString)) {
-      s = UTFstring_to_cstrutf8(UTFstring(*static_cast
-                                          <EbmlUnicodeString *>(e)).c_str());
-      handle_name(level - 1, s);
+    EbmlElement *e = (*display)[i];
+    if (is_id(e, KaxChapterString))
+      handle_name(level - 1, UTFstring_to_cstrutf8(UTFstring(*static_cast<EbmlUnicodeString *>(e)).c_str()));
 
-    } else if (is_id(e, KaxChapterAtom))
+    else if (is_id(e, KaxChapterAtom))
       write_chapter_atom_simple((KaxChapterAtom *)e, level + 1);
 
   }
@@ -117,13 +113,12 @@ static void
 write_chapter_track_simple(KaxChapterTrack *track,
                            int level) {
   int i;
-  EbmlElement *e;
 
   for (i = 0; i < track->ListSize(); i++) {
-    e = (*track)[i];
+    EbmlElement *e = (*track)[i];
 
     if (is_id(e, KaxChapterAtom))
-      write_chapter_atom_simple((KaxChapterAtom *)e, level + 1);
+      write_chapter_atom_simple(static_cast<KaxChapterAtom *>(e), level + 1);
 
   }
 }
@@ -132,24 +127,21 @@ static void
 write_chapter_atom_simple(KaxChapterAtom *atom,
                           int level) {
   int i;
-  EbmlElement *e;
-  uint64_t v;
 
   for (i = 0; i < atom->ListSize(); i++) {
-    e = (*atom)[i];
+    EbmlElement *e = (*atom)[i];
 
-    if (is_id(e, KaxChapterTimeStart)) {
-      v = uint64(*static_cast<EbmlUInteger *>(e)) / 1000000;
-      handle_start_time(level, v);
+    if (is_id(e, KaxChapterTimeStart))
+      handle_start_time(level, uint64(*static_cast<EbmlUInteger *>(e)) / 1000000);
 
-    } else if (is_id(e, KaxChapterTrack))
-      write_chapter_track_simple((KaxChapterTrack *)e, level + 1);
+    else if (is_id(e, KaxChapterTrack))
+      write_chapter_track_simple(static_cast<KaxChapterTrack *>(e), level + 1);
 
     else if (is_id(e, KaxChapterDisplay))
-      write_chapter_display_simple((KaxChapterDisplay *)e, level + 1);
+      write_chapter_display_simple(static_cast<KaxChapterDisplay *>(e), level + 1);
 
     else if (is_id(e, KaxChapterAtom))
-      write_chapter_atom_simple((KaxChapterAtom *)e, level + 1);
+      write_chapter_atom_simple(static_cast<KaxChapterAtom *>(e), level + 1);
 
   }
 }
@@ -158,34 +150,33 @@ void
 write_chapters_simple(int &chapter_num,
                       KaxChapters *chapters,
                       mm_io_c *out) {
-  int i, j;
-  int64_t v;
-  KaxEditionEntry *edition;
+  s_chapter_start_times.clear();
+  s_chapter_names.clear();
+  s_chapter_entries.clear();
 
-  chapter_start_times.clear();
-  chapter_names.clear();
-  chapter_entries.clear();
+  int chapter_idx;
+  for (chapter_idx = 0; chapters->ListSize() > chapter_idx; chapter_idx++) {
+    if (is_id((*chapters)[chapter_idx], KaxEditionEntry)) {
+      KaxEditionEntry *edition = static_cast<KaxEditionEntry *>((*chapters)[chapter_idx]);
 
-  for (i = 0; i < chapters->ListSize(); i++) {
-    if (is_id((*chapters)[i], KaxEditionEntry)) {
-      edition = (KaxEditionEntry *)(*chapters)[i];
-      for (j = 0; j < edition->ListSize(); j++)
-        if (is_id((*edition)[j], KaxChapterAtom))
-          write_chapter_atom_simple((KaxChapterAtom *)(*edition)[j], 2);
+      int edition_idx;
+      for (edition_idx = 0; edition->ListSize() > edition_idx; edition_idx++)
+        if (is_id((*edition)[edition_idx], KaxChapterAtom))
+          write_chapter_atom_simple(static_cast<KaxChapterAtom *>((*edition)[edition_idx]), 2);
     }
   }
 
-  for (i = 0; i < chapter_entries.size(); i++) {
-    v = chapter_entries[i].start;
+  for (chapter_idx = 0; s_chapter_entries.size() > chapter_idx; chapter_idx++) {
+    int64_t v = s_chapter_entries[chapter_idx].m_start;
     out->puts(from_utf8(g_cc_stdio, (boost::format("CHAPTER%|1$02d|=%|2$02d|:%|3$02d|:%|4$02d|.%|5$03d|\n")
                                      % chapter_num % (v / 1000 / 60 / 60) % ((v / 1000 / 60) % 60) % ((v / 1000) % 60) % (v % 1000)).str()));
-    out->puts(from_utf8(g_cc_stdio, (boost::format("CHAPTER%|1$02d|NAME=%2%\n") % chapter_num % chapter_entries[i].name).str()));
+    out->puts(from_utf8(g_cc_stdio, (boost::format("CHAPTER%|1$02d|NAME=%2%\n") % chapter_num % s_chapter_entries[chapter_idx].m_name).str()));
     chapter_num++;
   }
 
-  chapter_start_times.clear();
-  chapter_names.clear();
-  chapter_entries.clear();
+  s_chapter_start_times.clear();
+  s_chapter_names.clear();
+  s_chapter_entries.clear();
 }
 
 // }}}
@@ -206,36 +197,36 @@ static int
 cet_index(const char *name) {
   int i;
 
-  for (i = 0; chapter_elements[i].name != NULL; i++)
+  for (i = 0; NULL != chapter_elements[i].name; i++)
     if (!strcmp(name, chapter_elements[i].name))
       return i;
 
   mxerror(boost::format(Y("cet_index: '%1%' not found\n")) % name);
+
   return -1;
 }
 
 static void
 end_write_chapter_atom(void *data) {
-  KaxChapterAtom *atom;
-  xml_writer_cb_t *cb;
+  xml_writer_cb_t *cb  = static_cast<xml_writer_cb_t *>(data);
+  KaxChapterAtom *atom = dynamic_cast<KaxChapterAtom *>(cb->e);
 
-  cb = (xml_writer_cb_t *)data;
-  atom = dynamic_cast<KaxChapterAtom *>(cb->e);
-  assert(atom != NULL);
+  assert(NULL != atom);
+
   if (FINDFIRST(atom, KaxChapterTimeStart) == NULL)
     pt(cb, "<ChapterTimeStart>00:00:00.000</ChapterTimeStart>\n");
 }
 
 static void
 end_write_chapter_display(void *data) {
-  KaxChapterDisplay *display;
-  xml_writer_cb_t *cb;
+  xml_writer_cb_t *cb        = static_cast<xml_writer_cb_t *>(data);
+  KaxChapterDisplay *display = dynamic_cast<KaxChapterDisplay *>(cb->e);
 
-  cb = (xml_writer_cb_t *)data;
-  display = dynamic_cast<KaxChapterDisplay *>(cb->e);
-  assert(display != NULL);
+  assert(NULL != display);
+
   if (FINDFIRST(display, KaxChapterString) == NULL)
     pt(cb, "<ChapterString></ChapterString>\n");
+
   if (FINDFIRST(display, KaxChapterLanguage) == NULL)
     pt(cb, "<ChapterLanguage>eng</ChapterLanguage>\n");
 }
@@ -245,16 +236,15 @@ write_chapters_xml(KaxChapters *chapters,
                    mm_io_c *out) {
   int i;
 
-  for (i = 0; chapter_elements[i].name != NULL; i++) {
+  for (i = 0; NULL != chapter_elements[i].name; i++) {
     chapter_elements[i].start_hook = NULL;
-    chapter_elements[i].end_hook = NULL;
+    chapter_elements[i].end_hook   = NULL;
   }
-  chapter_elements[cet_index("ChapterAtom")].end_hook =
-    end_write_chapter_atom;
-  chapter_elements[cet_index("ChapterDisplay")].end_hook =
-    end_write_chapter_display;
 
-  for (i = 0; i < chapters->ListSize(); i++)
+  chapter_elements[cet_index("ChapterAtom")].end_hook    = end_write_chapter_atom;
+  chapter_elements[cet_index("ChapterDisplay")].end_hook = end_write_chapter_display;
+
+  for (i = 0; chapters->ListSize() > i; i++)
     write_xml_element_rec(1, 0, (*chapters)[i], out, chapter_elements);
 }
 

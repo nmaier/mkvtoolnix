@@ -62,7 +62,7 @@ void MTX_DLL_API write_chapters_simple(int &chapter_num, KaxChapters *chapters, 
 #define copy_chapters(source) dynamic_cast<KaxChapters *>(source->Clone())
 KaxChapters *MTX_DLL_API select_chapters_in_timeframe(KaxChapters *chapters, int64_t min_tc, int64_t max_tc, int64_t offset);
 
-extern std::string MTX_DLL_API default_chapter_language, default_chapter_country;
+extern std::string MTX_DLL_API g_default_chapter_language, g_default_chapter_country;
 
 int64_t MTX_DLL_API get_chapter_uid(KaxChapterAtom &atom);
 int64_t MTX_DLL_API get_chapter_start(KaxChapterAtom &atom, int64_t value_if_not_found = -1);

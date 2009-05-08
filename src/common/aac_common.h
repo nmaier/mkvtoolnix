@@ -33,7 +33,7 @@ using namespace std;
 
 #define AAC_MAX_PRIVATE_DATA_SIZE 5
 
-extern const int MTX_DLL_API aac_sampling_freq[16];
+extern const int MTX_DLL_API g_aac_sampling_freq[16];
 
 typedef struct {
   int sample_rate;

@@ -17,7 +17,6 @@
 #include <expat.h>
 #include <ctype.h>
 #include <setjmp.h>
-#include <stdarg.h>
 
 #include <string>
 
@@ -34,7 +33,6 @@
 #include "common/xml_element_mapping.h"
 #include "common/xml_element_parser.h"
 
-using namespace std;
 using namespace libmatroska;
 
 // {{{ XML chapters
@@ -73,11 +71,7 @@ end_segmentinfo_links(void *) {
 KaxInfo *
 parse_xml_segmentinfo(mm_text_io_c *in,
                       bool exception_on_error) {
-  KaxInfo *info;
-  EbmlMaster *m;
-  string error;
   int i;
-
   for (i = 0; segmentinfo_elements[i].name != NULL; i++) {
     segmentinfo_elements[i].start_hook = NULL;
     segmentinfo_elements[i].end_hook   = NULL;
@@ -87,19 +81,21 @@ parse_xml_segmentinfo(mm_text_io_c *in,
   segmentinfo_elements[chapter_element_map_index("FamilyUID")].end_hook = end_segmentinfo_family;
   segmentinfo_elements[chapter_element_map_index("Links")].end_hook     = end_segmentinfo_links;
 
+  std::string error;
+  KaxInfo *info = NULL;
   try {
-    m = parse_xml_elements("Info", segmentinfo_elements, in);
-    info = dynamic_cast<KaxInfo *>(sort_ebml_master(m));
-    assert(info != NULL);
+    EbmlMaster *m = parse_xml_elements("Info", segmentinfo_elements, in);
+    info          = dynamic_cast<KaxInfo *>(sort_ebml_master(m));
+    assert(NULL != info);
 
   } catch (error_c e) {
     if (!exception_on_error)
       mxerror(e.get_error());
     error = e.get_error();
-    info = NULL;
+    info  = NULL;
   }
 
-  if (error.length() > 0)
+  if (!error.empty())
     throw error_c(error);
 
   fix_mandatory_segmentinfo_elements(info);

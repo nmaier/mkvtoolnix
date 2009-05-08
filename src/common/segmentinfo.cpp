@@ -29,7 +29,6 @@
 #include "common/error.h"
 #include "common/segmentinfo.h"
 
-using namespace std;
 using namespace libmatroska;
 
 /** \brief Parse a XML file containing segment info elements.
@@ -46,12 +45,10 @@ using namespace libmatroska;
      \c NULL if an error occured.
 */
 KaxInfo *MTX_DLL_API
-parse_segmentinfo(const string &file_name,
+parse_segmentinfo(const std::string &file_name,
                   bool exception_on_error) {
-  mm_text_io_c *in;
-
   try {
-    in = new mm_text_io_c(new mm_file_io_c(file_name));
+    mm_text_io_c *in = new mm_text_io_c(new mm_file_io_c(file_name));
     return parse_xml_segmentinfo(in, exception_on_error);
   } catch (error_c &e) {
     if (exception_on_error)
@@ -75,15 +72,14 @@ parse_segmentinfo(const string &file_name,
 */
 void
 fix_mandatory_segmentinfo_elements(EbmlElement *e) {
-  if (e == NULL)
+  if (NULL == e)
     return;
 
-  if (dynamic_cast<EbmlMaster *>(e) != NULL) {
-    EbmlMaster *m;
-    int i;
+  EbmlMaster *m = dynamic_cast<EbmlMaster *>(e);
+  if (NULL == m)
+    return;
 
-    m = static_cast<EbmlMaster *>(e);
-    for (i = 0; i < m->ListSize(); i++)
-      fix_mandatory_segmentinfo_elements((*m)[i]);
-  }
+  int i;
+  for (i = 0; m->ListSize() > i; i++)
+    fix_mandatory_segmentinfo_elements((*m)[i]);
 }

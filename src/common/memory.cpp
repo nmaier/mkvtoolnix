@@ -19,42 +19,39 @@
 #include "common/memory.h"
 #include "common/error.h"
 
-using namespace std;
-
 void
 memory_c::resize(int new_size) throw() {
   if (!its_counter)
     its_counter = new counter(NULL, 0, false);
 
   if (its_counter->is_free) {
-    its_counter->ptr = (X *)saferealloc(its_counter->ptr,
-                                        new_size + its_counter->offset);
+    its_counter->ptr  = (X *)saferealloc(its_counter->ptr, new_size + its_counter->offset);
     its_counter->size = new_size + its_counter->offset;
+
   } else {
     X *tmp = (X *)safemalloc(new_size);
-    memcpy(tmp, its_counter->ptr + its_counter->offset,
-           its_counter->size - its_counter->offset);
-    its_counter->ptr = tmp;
+    memcpy(tmp, its_counter->ptr + its_counter->offset, its_counter->size - its_counter->offset);
+    its_counter->ptr     = tmp;
     its_counter->is_free = true;
-    its_counter->size = new_size;
+    its_counter->size    = new_size;
   }
 }
 
 memory_cptr
 lace_memory_xiph(const vector<memory_cptr> &blocks) {
-  unsigned char *buffer;
-  int size, i, offset, n;
-
-  size = 1;
+  int i;
+  int size = 1;
   for (i = 0; (blocks.size() - 1) > i; ++i)
     size += blocks[i]->get_size() / 255 + 1 + blocks[i]->get_size();
   size += blocks.back()->get_size();
 
-  buffer = (unsigned char *)safemalloc(size);
+  memory_cptr mem       = memory_c::alloc(size);
+  unsigned char *buffer = mem->get();
 
-  buffer[0] = blocks.size() - 1;
-  offset = 1;
+  buffer[0]  = blocks.size() - 1;
+  int offset = 1;
   for (i = 0; (blocks.size() - 1) > i; ++i) {
+    int n;
     for (n = blocks[i]->get_size(); n >= 255; n -= 255) {
       buffer[offset] = 255;
       ++offset;
@@ -62,40 +59,37 @@ lace_memory_xiph(const vector<memory_cptr> &blocks) {
     buffer[offset] = n;
     ++offset;
   }
+
   for (i = 0; blocks.size() > i; ++i) {
     memcpy(&buffer[offset], blocks[i]->get(), blocks[i]->get_size());
     offset += blocks[i]->get_size();
   }
 
-  return memory_cptr(new memory_c(buffer, size, true));
+  return mem;
 }
 
 vector<memory_cptr>
 unlace_memory_xiph(memory_cptr &buffer) {
-  int i, num_blocks, size, last_size;
-  unsigned char *ptr, *end;
-  vector<memory_cptr> blocks;
-  vector<int> sizes;
-
   if (1 > buffer->get_size())
     throw error_c("Lacing error: Buffer too small");
 
-  ptr = buffer->get();
-  end = buffer->get() + buffer->get_size();
-  num_blocks = ptr[0] + 1;
+  std::vector<int> sizes;
+  unsigned char *ptr = buffer->get();
+  unsigned char *end = buffer->get() + buffer->get_size();
+  int last_size      = buffer->get_size();
+  int num_blocks     = ptr[0] + 1;
+  int i;
   ++ptr;
 
-  last_size = buffer->get_size();
   for (i = 0; (num_blocks - 1) > i; ++i) {
-    size = 0;
+    int size = 0;
     while ((ptr < end) && (*ptr == 255)) {
       size += 255;
       ++ptr;
     }
 
     if (ptr >= end)
-      throw error_c("Lacing error: End-of-buffer while reading the block "
-                    "sizes");
+      throw error_c("Lacing error: End-of-buffer while reading the block sizes");
 
     size += *ptr;
     ++ptr;
@@ -105,6 +99,8 @@ unlace_memory_xiph(memory_cptr &buffer) {
   }
 
   sizes.push_back(last_size - (ptr - buffer->get()));
+
+  std::vector<memory_cptr> blocks;
 
   for (i = 0; sizes.size() > i; ++i) {
     if ((ptr + sizes[i]) > end)
@@ -122,13 +118,11 @@ _safememdup(const void *s,
             size_t size,
             const char *file,
             int line) {
-  void *copy;
-
-  if (s == NULL)
+  if (NULL == s)
     return NULL;
 
-  copy = malloc(size);
-  if (copy == NULL)
+  void *copy = malloc(size);
+  if (NULL == copy)
     mxerror(boost::format(Y("memory.cpp/safememdup() called from file %1%, line %2%: malloc() returned NULL for a size of %3% bytes.\n")) % file % line % size);
   memcpy(copy, s, size);
 
@@ -139,10 +133,8 @@ void *
 _safemalloc(size_t size,
             const char *file,
             int line) {
-  void *mem;
-
-  mem = malloc(size);
-  if (mem == NULL)
+  void *mem = malloc(size);
+  if (NULL == mem)
     mxerror(boost::format(Y("memory.cpp/safemalloc() called from file %1%, line %2%: malloc() returned NULL for a size of %3% bytes.\n")) % file % line % size);
 
   return mem;
@@ -156,8 +148,9 @@ _saferealloc(void *mem,
   if (0 == size)
     // Do this so realloc() may not return NULL on success.
     size = 1;
+
   mem = realloc(mem, size);
-  if (mem == NULL)
+  if (NULL == mem)
     mxerror(boost::format(Y("memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned NULL for a size of %3% bytes.\n")) % file % line % size);
 
   return mem;
@@ -165,7 +158,7 @@ _saferealloc(void *mem,
 
 void
 safefree(void *p) {
-  if (p != NULL)
+  if (NULL != p)
     free(p);
 }
 
