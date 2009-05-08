@@ -456,7 +456,7 @@ int64_t
 get_chapter_uid(KaxChapterAtom &atom) {
   KaxChapterUID *uid = FINDFIRST(&atom, KaxChapterUID);
 
-  return uid == NULL ? -1 : uint64(*uid);
+  return uid == NULL ? -1 : int64_t(uint64(*uid));
 }
 
 /** \brief Add missing mandatory elements
