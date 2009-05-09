@@ -13,7 +13,7 @@
 
 #include "common/os.h"
 
-#include <string.h>
+#include <cstring>
 
 #include "common/ac3_common.h"
 #include "common/bswap.h"

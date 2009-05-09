@@ -19,21 +19,14 @@
 #include "common/random.h"
 #include "common/string_editing.h"
 
-bitvalue_c::bitvalue_c(int bitsize)
-  : m_value(NULL)
-  , m_bitsize(bitsize)
-{
-  assert(bitsize > 0);
-  assert((bitsize % 8) == 0);
+bitvalue_c::bitvalue_c(int bitsize) {
+  assert((0 < bitsize) && (0 == (bitsize % 8)));
 
-  m_value = (unsigned char *)safemalloc(bitsize / 8);
-  memset(m_value, 0, m_bitsize / 8);
+  m_value = memory_c::alloc(bitsize / 8);
+  memset(m_value->get(), 0, m_value->get_size());
 }
 
-bitvalue_c::bitvalue_c(const bitvalue_c &src)
-  : m_value(NULL)
-  , m_bitsize(0)
-{
+bitvalue_c::bitvalue_c(const bitvalue_c &src) {
   *this = src;
 }
 
@@ -88,49 +81,42 @@ bitvalue_c::bitvalue_c(std::string s,
       ((allowed_bitlength != -1) && ((len * 4) < allowed_bitlength)))
     throw error_c(Y("Missing one hex digit"));
 
-  m_value   = (unsigned char *)safemalloc(len / 2);
-  m_bitsize = len * 4;
+  m_value = memory_c::alloc(len / 2);
 
   for (i = 0; i < len; i += 2)
-    m_value[i / 2] = hextodec(s2[i]) << 4 | hextodec(s2[i + 1]);
+    m_value->get()[i / 2] = hextodec(s2[i]) << 4 | hextodec(s2[i + 1]);
 }
 
 bitvalue_c::bitvalue_c(const EbmlBinary &elt)
-  : m_value((unsigned char *)safememdup(elt.GetBuffer(), elt.GetSize()))
-  , m_bitsize(elt.GetSize() << 3)
+  : m_value(clone_memory(elt.GetBuffer(), elt.GetSize()))
 {
 }
 
 bitvalue_c &
 bitvalue_c::operator =(const bitvalue_c &src) {
-  safefree(m_value);
-  m_bitsize = src.m_bitsize;
-  m_value   = (unsigned char *)safememdup(src.m_value, m_bitsize / 8);
+  m_value = clone_memory(src.m_value);
 
   return *this;
 }
 
 bitvalue_c::~bitvalue_c() {
-  safefree(m_value);
 }
 
 bool
 bitvalue_c::operator ==(const bitvalue_c &cmp)
   const {
-  if (cmp.m_bitsize != m_bitsize)
-    return false;
-  return memcmp(m_value, cmp.m_value, m_bitsize / 8) == 0;
+  return (cmp.m_value->get_size() == m_value->get_size()) && (0 == memcmp(m_value->get(), cmp.m_value->get(), m_value->get_size()));
 }
 
 unsigned char
 bitvalue_c::operator [](int index)
   const {
-  assert((index >= 0) && (index < (m_bitsize / 8)));
-  return m_value[index];
+  assert((0 <= index) && (m_value->get_size() > index));
+  return m_value->get()[index];
 }
 
 void
 bitvalue_c::generate_random() {
-  random_c::generate_bytes(m_value, m_bitsize / 8);
+  random_c::generate_bytes(m_value->get(), m_value->get_size());
 }
 

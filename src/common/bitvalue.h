@@ -17,13 +17,13 @@
 #include "common/os.h"
 
 #include "common/common.h"
+#include "common/memory.h"
 
 #include <ebml/EbmlBinary.h>
 
 class MTX_DLL_API bitvalue_c {
 private:
-  unsigned char *m_value;
-  int m_bitsize;
+  memory_cptr m_value;
 public:
   bitvalue_c(int size);
   bitvalue_c(const bitvalue_c &src);
@@ -36,14 +36,14 @@ public:
   unsigned char operator [](int index) const;
 
   inline bool empty() const {
-    return 0 == m_bitsize;
+    return 0 == m_value->get_size();
   }
   inline int size() const {
-    return m_bitsize;
+    return m_value->get_size() * 8;
   }
   void generate_random();
   unsigned char *data() const {
-    return m_value;
+    return m_value->get();
   }
 };
 typedef counted_ptr<bitvalue_c> bitvalue_cptr;
