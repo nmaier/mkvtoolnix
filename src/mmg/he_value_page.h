@@ -16,6 +16,8 @@
 
 #include "common/os.h"
 
+#include <wx/checkbox.h>
+
 #include "mmg/header_editor_frame.h"
 
 class he_value_page_c: public he_page_base_c {

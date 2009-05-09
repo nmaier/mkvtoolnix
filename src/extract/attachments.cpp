@@ -33,8 +33,7 @@ extern "C" {
 
 #include "common/common.h"
 #include "common/ebml.h"
-#include "common/mm_io.h"
-#include "common/quickparser.h"
+#include "common/kax_analyzer.h"
 #include "extract/mkvextract.h"
 
 using namespace libmatroska;
@@ -112,26 +111,22 @@ void
 extract_attachments(const char *file_name,
                     vector<track_spec_t> &tracks,
                     bool parse_fully) {
-  mm_io_c *in;
-  kax_quickparser_c *qp;
+  kax_analyzer_cptr analyzer;
 
   // open input file
   try {
-    in = new mm_file_io_c(file_name);
-    qp = new kax_quickparser_c(*in, parse_fully);
+    analyzer = kax_analyzer_cptr(new kax_analyzer_c(file_name));
+    analyzer->process(parse_fully);
   } catch (...) {
     show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).")) % file_name % strerror(errno));
     return;
   }
 
-  KaxAttachments *attachments = dynamic_cast<KaxAttachments *>(qp->read_all(KaxAttachments::ClassInfos));
-  if (attachments != NULL) {
+  KaxAttachments *attachments = dynamic_cast<KaxAttachments *>(analyzer->read_all(KaxAttachments::ClassInfos));
+  if (NULL != attachments) {
     handle_attachments(attachments, tracks);
     delete attachments;
   }
-
-  delete in;
-  delete qp;
 
   int i;
   for (i = 0; i < tracks.size(); i++)

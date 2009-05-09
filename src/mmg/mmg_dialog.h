@@ -14,7 +14,10 @@
 #ifndef __MMG_DIALOG_H
 #define __MMG_DIALOG_H
 
+#include "common/os.h"
+
 #include <wx/html/helpctrl.h>
+#include <wx/log.h>
 
 #include "mmg/mmg.h"
 

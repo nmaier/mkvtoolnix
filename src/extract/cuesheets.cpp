@@ -13,13 +13,6 @@
 #include "common/os.h"
 
 #include <cassert>
-#include <iostream>
-#include <string>
-#include <vector>
-
-extern "C" {
-#include <avilib.h>
-}
 
 #include <ebml/EbmlHead.h>
 #include <ebml/EbmlSubHead.h>
@@ -37,10 +30,10 @@ extern "C" {
 #include "common/chapters.h"
 #include "common/common.h"
 #include "common/ebml.h"
+#include "common/kax_analyzer.h"
 #include "common/math.h"
 #include "common/matroska.h"
 #include "common/mm_io.h"
-#include "common/quickparser.h"
 #include "common/string_formatting.h"
 #include "common/tag_common.h"
 #include "extract/mkvextract.h"
@@ -206,21 +199,20 @@ write_cuesheet(const char *file_name,
 void
 extract_cuesheet(const char *file_name,
                  bool parse_fully) {
-  mm_io_c *in;
-  kax_quickparser_c *qp;
+  kax_analyzer_cptr analyzer;
 
   // open input file
   try {
-    in = new mm_file_io_c(file_name);
-    qp = new kax_quickparser_c(*in, parse_fully);
+    analyzer = kax_analyzer_cptr(new kax_analyzer_c(file_name));
+    analyzer->process(parse_fully);
   } catch (...) {
     show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).")) % file_name % strerror(errno));
     return;
   }
 
   KaxChapters all_chapters;
-  KaxChapters *chapters = dynamic_cast<KaxChapters *>(qp->read_all(KaxChapters::ClassInfos));
-  KaxTags *all_tags     = dynamic_cast<KaxTags *>(qp->read_all(KaxTags::ClassInfos));
+  KaxChapters *chapters = dynamic_cast<KaxChapters *>(analyzer->read_all(KaxChapters::ClassInfos));
+  KaxTags *all_tags     = dynamic_cast<KaxTags *>(analyzer->read_all(KaxTags::ClassInfos));
 
   if ((NULL != chapters) && (NULL != all_tags)) {
     int i;
@@ -244,7 +236,4 @@ extract_cuesheet(const char *file_name,
 
   delete all_tags;
   delete chapters;
-
-  delete in;
-  delete qp;
 }
