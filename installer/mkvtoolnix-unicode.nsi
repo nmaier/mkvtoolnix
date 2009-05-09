@@ -136,6 +136,8 @@ Section "Program files" SEC01
   File "/oname=mkvtoolnix.mo" "po\de.mo"
   SetOutPath "$INSTDIR\locale\ja\LC_MESSAGES"
   File "/oname=mkvtoolnix.mo" "po\ja.mo"
+  SetOutPath "$INSTDIR\locale\zh\LC_MESSAGES"
+  File "/oname=mkvtoolnix.mo" "po\zh.mo"
 
   # Delete files that might be present from older installation
   # if this is just an upgrade.
@@ -313,6 +315,10 @@ Section Uninstall
   Delete "$INSTDIR\locale\ja\LC_MESSAGES\mkvtoolnix.mo"
   RMDir "$INSTDIR\locale\ja\LC_MESSAGES"
   RMDir "$INSTDIR\locale\ja"
+
+  Delete "$INSTDIR\locale\zh\LC_MESSAGES\mkvtoolnix.mo"
+  RMDir "$INSTDIR\locale\zh\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\zh"
 
   RMDir "$INSTDIR\locale"
   RMDir "$INSTDIR\data"
