@@ -20,7 +20,7 @@
 
 #include <matroska/KaxChapters.h>
 
-#include "mmg/kax_analyzer.h"
+#include "mmg/wx_kax_analyzer.h"
 #include "common/wxcommon.h"
 
 #define ID_TRC_CHAPTERS                   16000
@@ -71,7 +71,7 @@ public:
 
   KaxChapters *chapters;
 
-  kax_analyzer_c *analyzer;
+  wx_kax_analyzer_c *analyzer;
 
 public:
   tab_chapters(wxWindow *parent, wxMenu *nm_chapters);

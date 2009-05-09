@@ -26,7 +26,7 @@
 #include <wx/treectrl.h>
 
 #include "mmg/he_page_base.h"
-#include "mmg/kax_analyzer.h"
+#include "mmg/wx_kax_analyzer.h"
 
 #define ID_M_HE_FILE_OPEN            20000
 #define ID_M_HE_FILE_SAVE            20001
@@ -69,7 +69,7 @@ public:
   wxTreeCtrl *m_tc_tree;
   wxTreeItemId m_root_id;
 
-  kax_analyzer_c *m_analyzer;
+  wx_kax_analyzer_c *m_analyzer;
 
   EbmlElement *m_e_segment_info, *m_e_tracks;
 
@@ -116,8 +116,8 @@ protected:
 
   void clear_pages();
 
-  void handle_segment_info(analyzer_data_c *data);
-  void handle_tracks(analyzer_data_c *data);
+  void handle_segment_info(kax_analyzer_data_c *data);
+  void handle_tracks(kax_analyzer_data_c *data);
 
   bool have_been_modified();
   void do_modifications();

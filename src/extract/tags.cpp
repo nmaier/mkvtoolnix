@@ -31,8 +31,8 @@ extern "C" {
 
 #include "common/common.h"
 #include "common/ebml.h"
+#include "common/kax_analyzer.h"
 #include "common/mm_io.h"
-#include "common/quickparser.h"
 #include "common/tagwriter.h"
 #include "extract/mkvextract.h"
 
@@ -42,19 +42,18 @@ using namespace std;
 void
 extract_tags(const char *file_name,
              bool parse_fully) {
-  mm_io_c *in;
-  kax_quickparser_c *qp;
+  kax_analyzer_cptr analyzer;
 
   // open input file
   try {
-    in = new mm_file_io_c(file_name);
-    qp = new kax_quickparser_c(*in, parse_fully);
+    analyzer = kax_analyzer_cptr(new kax_analyzer_c(file_name));
+    analyzer->process(parse_fully);
   } catch (...) {
     show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).")) % file_name % strerror(errno));
     return;
   }
 
-  EbmlMaster *m = qp->read_all(KaxTags::ClassInfos);
+  EbmlMaster *m = analyzer->read_all(KaxTags::ClassInfos);
   if (NULL != m) {
     KaxTags *tags = dynamic_cast<KaxTags *>(m);
     assert(NULL != tags);
@@ -69,7 +68,4 @@ extract_tags(const char *file_name,
 
     delete tags;
   }
-
-  delete in;
-  delete qp;
 }

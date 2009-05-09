@@ -19,6 +19,7 @@
 
 #include <wx/button.h>
 #include <wx/dnd.h>
+#include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 #include <wx/statline.h>
 #include <wx/textctrl.h>
@@ -217,7 +218,7 @@ header_editor_frame_c::open_file(wxFileName file_name) {
   m_e_tracks       = NULL;
 
   delete m_analyzer;
-  m_analyzer = new kax_analyzer_c(this, wxMB(file_name.GetFullPath()));
+  m_analyzer = new wx_kax_analyzer_c(this, wxMB(file_name.GetFullPath()));
   if (!m_analyzer->process()) {
     delete m_analyzer;
     m_analyzer = NULL;
@@ -245,17 +246,17 @@ header_editor_frame_c::open_file(wxFileName file_name) {
   m_pages.clear();
   m_top_level_pages.clear();
 
-  for (i = 0; m_analyzer->data.size() > i; ++i) {
-    analyzer_data_c *data = m_analyzer->data[i];
-    if (data->id == KaxInfo::ClassInfos.GlobalId) {
+  for (i = 0; m_analyzer->m_data.size() > i; ++i) {
+    kax_analyzer_data_c *data = m_analyzer->m_data[i].get();
+    if (data->m_id == KaxInfo::ClassInfos.GlobalId) {
       handle_segment_info(data);
       break;
     }
   }
 
-  for (i = 0; m_analyzer->data.size() > i; ++i) {
-    analyzer_data_c *data = m_analyzer->data[i];
-    if (data->id == KaxTracks::ClassInfos.GlobalId) {
+  for (i = 0; m_analyzer->m_data.size() > i; ++i) {
+    kax_analyzer_data_c *data = m_analyzer->m_data[i].get();
+    if (data->m_id == KaxTracks::ClassInfos.GlobalId) {
       handle_tracks(data);
       break;
     }
@@ -272,7 +273,7 @@ header_editor_frame_c::open_file(wxFileName file_name) {
 }
 
 void
-header_editor_frame_c::handle_segment_info(analyzer_data_c *data) {
+header_editor_frame_c::handle_segment_info(kax_analyzer_data_c *data) {
   EbmlElement *e = m_analyzer->read_element(data);
   if (NULL == e)
     return;
@@ -311,7 +312,7 @@ header_editor_frame_c::handle_segment_info(analyzer_data_c *data) {
 }
 
 void
-header_editor_frame_c::handle_tracks(analyzer_data_c *data) {
+header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
   EbmlElement *e = m_analyzer->read_element(data);
   if (NULL == e)
     return;

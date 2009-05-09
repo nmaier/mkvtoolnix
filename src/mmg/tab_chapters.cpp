@@ -34,10 +34,10 @@
 #include "common/string_parsing.h"
 #include "common/unique_numbers.h"
 #include "common/wxcommon.h"
-#include "mmg/kax_analyzer.h"
 #include "mmg/mmg_dialog.h"
 #include "mmg/mmg.h"
 #include "mmg/tab_chapters.h"
+#include "mmg/wx_kax_analyzer.h"
 
 using namespace std;
 using namespace libebml;
@@ -562,7 +562,7 @@ tab_chapters::load(wxString name) {
     if (kax_analyzer_c::probe(wxMB(name))) {
       if (analyzer != NULL)
         delete analyzer;
-      analyzer = new kax_analyzer_c(this, wxMB(name));
+      analyzer = new wx_kax_analyzer_c(this, wxMB(name));
       file_name = name;
       if (!analyzer->process()) {
         delete analyzer;
@@ -667,7 +667,7 @@ tab_chapters::on_save_chapters_to_kax_file(wxCommandEvent &evt) {
 
   if (analyzer != NULL)
     delete analyzer;
-  analyzer = new kax_analyzer_c(this, wxMB(file_name));
+  analyzer = new wx_kax_analyzer_c(this, wxMB(file_name));
   if (!analyzer->process()) {
     delete analyzer;
     analyzer = NULL;
