@@ -16,6 +16,9 @@
 
 #include "common/os.h"
 
+#include <wx/string.h>
+#include <wx/textctrl.h>
+
 #include "mmg/he_value_page.h"
 
 class he_string_value_page_c: public he_value_page_c {

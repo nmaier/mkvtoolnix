@@ -16,6 +16,8 @@
 
 #include "common/os.h"
 
+#include <wx/textctrl.h>
+
 #include "mmg/he_value_page.h"
 
 class he_unsigned_integer_value_page_c: public he_value_page_c {

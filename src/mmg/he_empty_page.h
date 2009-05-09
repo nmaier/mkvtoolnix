@@ -16,6 +16,8 @@
 
 #include "common/os.h"
 
+#include <wx/string.h>
+
 #include "mmg/he_page_base.h"
 
 class he_empty_page_c: public he_page_base_c {

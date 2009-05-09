@@ -16,6 +16,7 @@
 #include <wx/string.h>
 #include <wx/regex.h>
 #include <wx/textctrl.h>
+#include <wx/valtext.h>
 
 #include <ebml/EbmlFloat.h>
 

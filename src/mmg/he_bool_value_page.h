@@ -16,6 +16,8 @@
 
 #include "common/os.h"
 
+#include <wx/arrstr.h>
+
 #include "mmg/he_value_page.h"
 #include "common/wxcommon.h"
 

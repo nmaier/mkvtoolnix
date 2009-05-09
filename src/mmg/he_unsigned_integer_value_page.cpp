@@ -14,6 +14,7 @@
 #include "common/os.h"
 
 #include <wx/textctrl.h>
+#include <wx/valtext.h>
 
 #include <ebml/EbmlUInteger.h>
 

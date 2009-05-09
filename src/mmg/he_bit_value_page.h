@@ -16,6 +16,8 @@
 
 #include "common/os.h"
 
+#include <wx/textctrl.h>
+
 #include "common/bitvalue.h"
 #include "mmg/he_value_page.h"
 

@@ -14,6 +14,7 @@
 #include "common/os.h"
 
 #include <wx/statline.h>
+#include <wx/stattext.h>
 #include <wx/textctrl.h>
 
 #include "common/ebml.h"

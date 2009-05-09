@@ -61,6 +61,7 @@
 # else
 
 #  define wxMTX_COMBOBOX_TYPE wxComboBox
+#  include <wx/combobox.h>
 
 # endif
 #endif
