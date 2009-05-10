@@ -371,8 +371,11 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
     if ((spu_len >= 0) && ((dst_size >= spu_len) || (sub_file->getFilePointer() >= extraction_end_pos))) {
       if (dst_size != spu_len)
         mxverb(3,
-               boost::format("r_vobsub.cpp: stddeliver spu_len %1% dst_size %2% curpos %3% endpos %4%\n")
-               % spu_len % dst_size % sub_file->getFilePointer() % extraction_end_pos);
+               boost::format("r_vobsub.cpp: stddeliver spu_len different from dst_size; pts %5% spu_len %1% dst_size %2% curpos %3% endpos %4%\n")
+               % spu_len % dst_size % sub_file->getFilePointer() % extraction_end_pos % format_timecode(pts));
+      if (2 < dst_size)
+        put_uint16_be(dst_buf, dst_size);
+
       return deliver();
     }
     if (sub_file->read(buf, 4) != 4)

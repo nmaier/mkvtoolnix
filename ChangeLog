@@ -1,5 +1,11 @@
 2009-05-10  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: enhancement: Invalid VobSub packets whose internal SPU
+	length field differs from its actual length are patched so that
+	the SPU length field matches the actual length. This fixes
+	playback issues with several players and filters. Fix for bug
+	383.
+
 	* mkvmerge: new feature: Added support for reading chapters from
 	MP4 files. Fix for bug 385.
 
