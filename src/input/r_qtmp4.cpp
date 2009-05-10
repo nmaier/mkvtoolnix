@@ -28,6 +28,7 @@ extern "C" {
 }
 
 #include "common/aac_common.h"
+#include "common/chapters.h"
 #include "common/common.h"
 #include "common/endian.h"
 #include "common/hacks.h"
@@ -706,6 +707,9 @@ qtmp4_reader_c::handle_moov_atom(qt_atom_t parent,
     } else if (FOURCC('m', 'v', 'h', 'd') == atom.fourcc)
       handle_mvhd_atom(atom.to_parent(), level + 1);
 
+    else if (FOURCC('u', 'd', 't', 'a') == atom.fourcc)
+      handle_udta_atom(atom.to_parent(), level + 1);
+
     else if (FOURCC('t', 'r', 'a', 'k') == atom.fourcc) {
       qtmp4_demuxer_cptr new_dmx(new qtmp4_demuxer_c);
 
@@ -732,6 +736,62 @@ qtmp4_reader_c::handle_mvhd_atom(qt_atom_t atom,
   time_scale = get_uint32_be(&mvhd.time_scale);
 
   mxverb(2, boost::format("Quicktime/MP4 reader:%1%Time scale: %2%\n") % space(level * 2 + 1) % time_scale);
+}
+
+void
+qtmp4_reader_c::handle_udta_atom(qt_atom_t parent,
+                                 int level) {
+  while (0 < parent.size) {
+    qt_atom_t atom = read_atom();
+    print_basic_atom_info();
+
+    if (FOURCC('c', 'h', 'p', 'l') == atom.fourcc)
+      handle_chpl_atom(atom.to_parent(), level + 1);
+
+    skip_atom();
+    parent.size -= atom.size;
+  }
+}
+
+void
+qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
+                                 int level) {
+  if (ti.no_chapters || (NULL != g_kax_chapters))
+    return;
+
+  io->skip(1 + 3 + 4);          // Version, flags, zero
+
+  int count = io->read_uint8();
+  mxverb(2, boost::format("Quicktime/MP4 reader:%1%Chapter list: %2% entries\n") % space(level * 2 + 1) % count);
+
+  mm_mem_io_c out(NULL, 0, 1000);
+  out.set_file_name(ti.fname);
+  out.write_bom("UTF-8");
+
+  int i;
+  for (i = 0; i < count; ++i) {
+    uint64_t start_time = io->read_uint64_be() * 100;
+    memory_cptr buf     = memory_c::alloc(io->read_uint8() + 1);
+    memset(buf->get(), 0, buf->get_size());
+    if (io->read(buf->get(), buf->get_size() - 1) != (buf->get_size() - 1))
+      return;
+
+    std::string name(reinterpret_cast<char *>(buf->get()));
+
+    out.puts(boost::format("CHAPTER%|1$02d|=%|2$02d|:%|3$02d|:%|4$02d|.%|5$03d|\n"
+                           "CHAPTER%|1$02d|NAME=%6%\n")
+             % count
+             % (int)( start_time / 60 / 60 / 1000000000)
+             % (int)((start_time      / 60 / 1000000000) %   60)
+             % (int)((start_time           / 1000000000) %   60)
+             % (int)((start_time           /    1000000) % 1000)
+             % name);
+
+    mxverb(3, boost::format("Quicktime/MP4 reader:%1%%2%: start %4% name %3%\n") % space((level + 1) * 2 + 1) % i % name % format_timecode(start_time));
+  }
+
+  mm_text_io_c text_out(&out, false);
+  g_kax_chapters = parse_chapters(&text_out);
 }
 
 void

@@ -293,6 +293,8 @@ protected:
   virtual void handle_minf_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
   virtual void handle_moov_atom(qt_atom_t parent, int level);
   virtual void handle_mvhd_atom(qt_atom_t parent, int level);
+  virtual void handle_udta_atom(qt_atom_t parent, int level);
+  virtual void handle_chpl_atom(qt_atom_t parent, int level);
   virtual void handle_stbl_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
   virtual void handle_stco_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
   virtual void handle_co64_atom(qtmp4_demuxer_cptr &new_dmx, qt_atom_t parent, int level);
