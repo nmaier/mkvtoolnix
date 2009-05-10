@@ -741,7 +741,7 @@ qtmp4_reader_c::handle_mvhd_atom(qt_atom_t atom,
 void
 qtmp4_reader_c::handle_udta_atom(qt_atom_t parent,
                                  int level) {
-  while (0 < parent.size) {
+  while (8 <= parent.size) {
     qt_atom_t atom = read_atom();
     print_basic_atom_info();
 
@@ -763,6 +763,9 @@ qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
 
   int count = io->read_uint8();
   mxverb(2, boost::format("Quicktime/MP4 reader:%1%Chapter list: %2% entries\n") % space(level * 2 + 1) % count);
+
+  if (0 == count)
+    return;
 
   mm_mem_io_c out(NULL, 0, 1000);
   out.set_file_name(ti.fname);
