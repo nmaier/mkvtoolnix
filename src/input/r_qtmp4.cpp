@@ -61,6 +61,22 @@ using namespace libmatroska;
    || (MP4OTI_MPEG2AudioLowComplexity         == object_type_id) \
    || (MP4OTI_MPEG2AudioScaleableSamplingRate == object_type_id))
 
+struct chapter_entry_t {
+  std::string m_name;
+  int64_t m_timecode;
+
+  chapter_entry_t(const std::string &name,
+                  int64_t timecode)
+    : m_name(name)
+    , m_timecode(timecode)
+  {
+  }
+
+  bool operator <(const chapter_entry_t &cmp) const {
+    return m_timecode < cmp.m_timecode;
+  }
+};
+
 static std::string
 space(int num) {
   char s[num + 1];
@@ -767,30 +783,44 @@ qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
   if (0 == count)
     return;
 
-  mm_mem_io_c out(NULL, 0, 1000);
-  out.set_file_name(ti.fname);
-  out.write_bom("UTF-8");
+  std::vector<chapter_entry_t> chapters;
 
   int i;
   for (i = 0; i < count; ++i) {
-    uint64_t start_time = io->read_uint64_be() * 100;
-    memory_cptr buf     = memory_c::alloc(io->read_uint8() + 1);
+    uint64_t timecode = io->read_uint64_be() * 100;
+    memory_cptr buf   = memory_c::alloc(io->read_uint8() + 1);
     memset(buf->get(), 0, buf->get_size());
     if (io->read(buf->get(), buf->get_size() - 1) != (buf->get_size() - 1))
       return;
 
     std::string name(reinterpret_cast<char *>(buf->get()));
 
+    chapters.push_back(chapter_entry_t(name, timecode));
+
+  }
+
+  if (chapters.empty())
+    return;
+
+  stable_sort(chapters.begin(), chapters.end());
+
+  mm_mem_io_c out(NULL, 0, 1000);
+  out.set_file_name(ti.fname);
+  out.write_bom("UTF-8");
+
+  for (i = 0; chapters.size() > i; ++i) {
+    chapter_entry_t &chapter = chapters[i];
+
+    mxverb(3, boost::format("Quicktime/MP4 reader:%1%%2%: start %4% name %3%\n") % space((level + 1) * 2 + 1) % i % chapter.m_name % format_timecode(chapter.m_timecode));
+
     out.puts(boost::format("CHAPTER%|1$02d|=%|2$02d|:%|3$02d|:%|4$02d|.%|5$03d|\n"
                            "CHAPTER%|1$02d|NAME=%6%\n")
              % count
-             % (int)( start_time / 60 / 60 / 1000000000)
-             % (int)((start_time      / 60 / 1000000000) %   60)
-             % (int)((start_time           / 1000000000) %   60)
-             % (int)((start_time           /    1000000) % 1000)
-             % name);
-
-    mxverb(3, boost::format("Quicktime/MP4 reader:%1%%2%: start %4% name %3%\n") % space((level + 1) * 2 + 1) % i % name % format_timecode(start_time));
+             % (int)( chapter.m_timecode / 60 / 60 / 1000000000)
+             % (int)((chapter.m_timecode      / 60 / 1000000000) %   60)
+             % (int)((chapter.m_timecode           / 1000000000) %   60)
+             % (int)((chapter.m_timecode           /    1000000) % 1000)
+             % chapter.m_name);
   }
 
   mm_text_io_c text_out(&out, false);
