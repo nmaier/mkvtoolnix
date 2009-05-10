@@ -110,8 +110,8 @@ tab_input_format::tab_input_format(wxWindow *parent,
 
   cob_fps = new wxMTX_COMBOBOX_TYPE(this, ID_CB_FPS, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
   cob_fps->SetToolTip(TIP("Sets the default duration or number of frames per second for a track. This is only possible "
-                          "for input formats from which mkvmerge cannot get this information itself. At the moment this "
-                          "only includes AVC/h.264 elementary streams. This can either be a floating point number or a fraction."));
+                          "for video tracks. For AVC/h.264 elementary streams this option must be given. "
+                          "This can either be a floating point number or a fraction."));
   cob_fps->SetSizeHints(0, -1);
   siz_fg->Add(cob_fps, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
