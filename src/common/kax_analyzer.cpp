@@ -44,11 +44,6 @@ kax_analyzer_c::kax_analyzer_c(std::string file_name)
   , m_close_file(true)
   , m_stream(NULL)
 {
-  try {
-    m_file = new mm_file_io_c(m_file_name, MODE_WRITE);
-  } catch (...) {
-    throw error_c(boost::format(Y("Could not open the file '%1%'.")) % m_file_name);
-  }
 }
 
 kax_analyzer_c::~kax_analyzer_c() {
@@ -94,6 +89,13 @@ kax_analyzer_c::probe(std::string file_name) {
 
 bool
 kax_analyzer_c::process(bool parse_fully) {
+  if (NULL == m_file)
+    try {
+      m_file = new mm_file_io_c(m_file_name, MODE_WRITE);
+    } catch (...) {
+      return false;
+    }
+
   int64_t file_size = m_file->get_size();
   show_progress_start(file_size);
 

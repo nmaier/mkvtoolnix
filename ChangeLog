@@ -1,5 +1,9 @@
 2009-05-10  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: The header and chapter editors will no longer
+	crash the application if the user wants to open a file that's
+	locked by another process and show an error message instead.
+
 	* mkvmerge: enhancement: Invalid VobSub packets whose internal SPU
 	length field differs from its actual length are patched so that
 	the SPU length field matches the actual length. This fixes

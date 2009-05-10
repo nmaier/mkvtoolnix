@@ -565,8 +565,10 @@ tab_chapters::load(wxString name) {
       analyzer = new wx_kax_analyzer_c(this, wxMB(name));
       file_name = name;
       if (!analyzer->process()) {
+        wxMessageBox(Z("This file could not be opened or parsed."), Z("File parsing failed"), wxOK | wxCENTER | wxICON_ERROR);
         delete analyzer;
         analyzer = NULL;
+
         return false;
       }
       pos = analyzer->find(KaxChapters::ClassInfos.GlobalId);
