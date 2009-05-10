@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2009-05-08 13:07+0900\n"
+"PO-Revision-Date: 2009-05-10 20:42+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -4674,9 +4674,8 @@ msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then
 msgstr "VobSub字幕に使用される圧縮方式を指定します。何も指定されていなければVobSubは自動的にzlibで圧縮されます。'無し'を指定するとファイルサイズがかなり増大します。"
 
 #: src/mmg/tab_input_format.cpp:112
-#, fuzzy
 msgid "Sets the default duration or number of frames per second for a track. This is only possible for video tracks. For AVC/h.264 elementary streams this option must be given. This can either be a floating point number or a fraction."
-msgstr "トラックのフレーム長もしくはフレームレートのデフォルト値を指定します。これはmkvmergeが自力でその情報を取得できない入力フォーマットでのみ指定できます。現在これはAVC/h.264エレメンタリストリームのみです。この値は浮動小数点数または分数を取ることができます。"
+msgstr "トラックのデフォルトのフレーム長もしくはフレームレートを指定します。これはビデオトラックでのみ指定できます。AVC/h.264エレメンタリストリームではこのオプションは必ず指定されなければなりません。この値は浮動小数点数または分数を取ることができます。"
 
 #: src/mmg/tab_input_format.cpp:62
 msgid "Sets the display aspect ratio of the track. The format can be either 'a/b' in which case both numbers must be integer (e.g. 16/9) or just a single floting point number 'f' (e.g. 2.35)."
@@ -4800,15 +4799,15 @@ msgstr ""
 
 #: src/mmg/header_editor_frame.cpp:548
 msgid "Some header values have been modified. Do you really want to close without saving the file?"
-msgstr "修正されたヘッダの値があります。本当にファイルを保存しないで閉じますか？"
+msgstr "ヘッダの値が変更されています。本当にファイルを保存しないで閉じますか？"
 
 #: src/mmg/header_editor_frame.cpp:752
 msgid "Some header values have been modified. Do you really want to load a new file without saving the current one?"
-msgstr "修正されたヘッダの値があります。本当に現在のファイルを保存しないで新しいファイルをロードしますか？"
+msgstr "ヘッダの値が変更されています。本当に現在のファイルを保存しないで新しいファイルをロードしますか？"
 
 #: src/mmg/header_editor_frame.cpp:538
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
-msgstr "修正されたヘッダの値があります。本当にファイルを保存しないでリロードしますか？"
+msgstr "ヘッダの値が変更されています。本当にファイルを保存しないでリロードしますか？"
 
 #: src/merge/output_control.cpp:1297
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
