@@ -33,6 +33,7 @@ extern "C" {
 #include "common/endian.h"
 #include "common/hacks.h"
 #include "common/iso639.h"
+#include "common/locale.h"
 #include "common/matroska.h"
 #include "common/string_formatting.h"
 #include "input/r_qtmp4.h"
@@ -775,6 +776,9 @@ qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
   if (ti.no_chapters || (NULL != g_kax_chapters))
     return;
 
+  std::string charset = ti.chapter_charset.empty() ? "UTF-8" : ti.chapter_charset;
+  int charset_handle  = utf8_init(ti.chapter_charset);
+
   io->skip(1 + 3 + 4);          // Version, flags, zero
 
   int count = io->read_uint8();
@@ -790,13 +794,11 @@ qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
     uint64_t timecode = io->read_uint64_be() * 100;
     memory_cptr buf   = memory_c::alloc(io->read_uint8() + 1);
     memset(buf->get(), 0, buf->get_size());
+
     if (io->read(buf->get(), buf->get_size() - 1) != (buf->get_size() - 1))
-      return;
+      break;
 
-    std::string name(reinterpret_cast<char *>(buf->get()));
-
-    chapters.push_back(chapter_entry_t(name, timecode));
-
+    chapters.push_back(chapter_entry_t(to_utf8(charset_handle, reinterpret_cast<char *>(buf->get())), timecode));
   }
 
   if (chapters.empty())
