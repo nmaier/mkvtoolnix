@@ -277,7 +277,7 @@ vobsub_reader_c::parse_headers() {
                                   "The entries will be sorted according to their timestamps. "
                                   "This might result in the wrong order for some subtitle entries. "
                                   "If this is the case then you have to fix the .idx file manually.\n"))
-                  % line_no % format_timecode(entry.timestamp * 1000000, 3) % format_timecode(last_timestamp * 1000000, 3));
+                  % line_no % format_timecode(entry.timestamp, 3) % format_timecode(last_timestamp, 3));
         sort_required = true;
       }
       last_timestamp = entry.timestamp;
