@@ -169,6 +169,8 @@ vobsub_reader_c::parse_headers() {
   num_indices            = 0;
   indices_processed      = 0;
 
+  idx_file->setFilePointer(0, seek_beginning);
+
   while (1) {
     if (!idx_file->getline2(line))
       break;
