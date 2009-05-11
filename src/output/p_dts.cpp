@@ -96,7 +96,10 @@ dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
     m_first_header           = dtsheader;
     m_previous_header        = dtsheader;
     m_get_first_header_later = false;
-    set_headers();
+
+    if (!reader->appending)
+      set_headers();
+
     rerender_track_headers();
   }
 

@@ -17,6 +17,7 @@
 #include <algorithm>
 #include <map>
 #include <string>
+#include <typeinfo>
 
 #include <matroska/KaxContentEncoding.h>
 #include <matroska/KaxTag.h>
@@ -524,8 +525,10 @@ generic_packetizer_c::set_stereo_mode(stereo_mode_e stereo_mode) {
 
 void
 generic_packetizer_c::set_headers() {
-  if (0 < connected_to)
+  if (0 < connected_to) {
+    mxerror(boost::format("generic_packetizer_c::set_headers(): connected_to > 0 (type: %1%). %2%\n") % typeid(*this).name() % BUGMSG);
     return;
+  }
 
   bool found = false;
   int idx;

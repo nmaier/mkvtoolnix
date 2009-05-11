@@ -1,3 +1,9 @@
+2009-05-11  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed potential and actual segmentation
+	faults occuring when appending VC-1 video tracks, Dirac video
+	tracks and DTS audio tracks.
+
 2009-05-10  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: The header and chapter editors will no longer

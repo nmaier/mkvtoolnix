@@ -91,7 +91,9 @@ dirac_video_packetizer_c::headers_found() {
   m_headers_found = true;
 
   m_parser.get_sequence_header(m_seqhdr);
-  set_headers();
+
+  if (!reader->appending)
+    set_headers();
 }
 
 void
