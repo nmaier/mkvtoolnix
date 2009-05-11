@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2009-05-10 20:42+0900\n"
+"PO-Revision-Date: 2009-05-11 11:32+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -2867,7 +2867,7 @@ msgstr "ファイルが予測されたよりも少ないフレームしか含ん
 
 #: src/mmg/mmg.cpp:1275 src/mmg/mux_dialog.cpp:115 src/mmg/tab_input.cpp:325
 msgid "File creation failed"
-msgstr "ファイル作成に失敗しました"
+msgstr "ファイルの作成に失敗しました"
 
 #: src/info/mkvinfo.cpp:1226
 msgid "File data, size: %1%"
@@ -2908,9 +2908,8 @@ msgid "File options:"
 msgstr "ファイルオプション："
 
 #: src/mmg/header_editor_frame.cpp:223 src/mmg/tab_chapters.cpp:568
-#, fuzzy
 msgid "File parsing failed"
-msgstr "ファイル作成に失敗しました"
+msgstr "ファイルの解析に失敗しました"
 
 #: src/mmg/tab_input.cpp:699
 msgid "File removal not possible"
@@ -5785,9 +5784,8 @@ msgid "This file contains coordinates in the timecode lines. Such coordinates ar
 msgstr "このファイルはタイムコードの行に座標を含んでいます。そのような座標はMatroska SRT字幕フォーマットではサポートされていません。座標は自動的に除去されます。\n"
 
 #: src/mmg/header_editor_frame.cpp:223 src/mmg/tab_chapters.cpp:568
-#, fuzzy
 msgid "This file could not be opened or parsed."
-msgstr "ファイルを開いて読み込むことができませんでした。"
+msgstr "このファイルを開く、または解析することができませんでした。。"
 
 #: src/mmg/tab_chapters.cpp:576
 msgid "This file does not contain any chapters."
