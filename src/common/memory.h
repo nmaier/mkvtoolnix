@@ -197,6 +197,9 @@ class MTX_DLL_API memory_slice_cursor_c {
   }
 
   void add_slice(memory_cptr slice) {
+    if (slice->get_size() == 0)
+      return;
+
     m_slices.push_back(slice);
     m_size += slice->get_size();
     if (m_slice == m_slices.end())
@@ -204,38 +207,43 @@ class MTX_DLL_API memory_slice_cursor_c {
   }
 
   void add_slice(unsigned char *buffer, int size) {
+    if (0 == size)
+      return;
+
     add_slice(memory_cptr(new memory_c(buffer, size, false)));
   }
 
-  unsigned char get_char() {
+  inline unsigned char get_char() {
     assert(m_pos < m_size);
 
-    unsigned char c = *((*m_slice)->get() + m_pos_in_slice);
+    memory_c &slice = *(*m_slice).get();
+    unsigned char c = *(slice.get() + m_pos_in_slice);
 
     ++m_pos_in_slice;
     ++m_pos;
 
-    while ((m_slices.end() != m_slice) &&
-           (m_pos_in_slice >= (*m_slice)->get_size())) {
-      m_slice++;
-      m_pos_in_slice = 0;
-    }
+    if (m_pos_in_slice < slice.get_size())
+      return c;
+
+    ++m_slice;
+    m_pos_in_slice = 0;
+
     return c;
   };
 
-  bool char_available() {
+  inline bool char_available() {
     return m_pos < m_size;
   };
 
-  int get_remaining_size() {
+  inline int get_remaining_size() {
     return m_size - m_pos;
   };
 
-  int get_size() {
+  inline int get_size() {
     return m_size;
   };
 
-  int get_position() {
+  inline int get_position() {
     return m_pos;
   };
 
