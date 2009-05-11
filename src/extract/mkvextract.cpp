@@ -14,6 +14,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <stdlib.h>
 #include <string>
 #include <vector>
 
@@ -339,6 +340,8 @@ show_error(const std::string &error) {
 int
 main(int argc,
      char **argv) {
+  atexit(mtx_common_cleanup);
+
   init_stdio();
   init_locales();
 

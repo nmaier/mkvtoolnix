@@ -90,7 +90,7 @@ random_c::generate_bytes(void *destination,
 
 #else  // defined(SYS_WINDOWS)
 
-auto_ptr<mm_file_io_c> random_c::m_dev_urandom;
+mm_file_io_cptr random_c::m_dev_urandom;
 bool random_c::m_tried_dev_urandom = false;
 
 void
@@ -101,8 +101,7 @@ random_c::generate_bytes(void *destination,
   try {
     if (!m_tried_dev_urandom) {
       m_tried_dev_urandom = true;
-      m_dev_urandom =
-        auto_ptr<mm_file_io_c>(new mm_file_io_c("/dev/urandom", MODE_READ));
+      m_dev_urandom = mm_file_io_cptr(new mm_file_io_c("/dev/urandom", MODE_READ));
     }
     if ((NULL != m_dev_urandom.get()) &&
         (m_dev_urandom->read(destination, num_bytes) == num_bytes))
@@ -153,7 +152,7 @@ random_c::test() {
 
 #if !defined(SYS_WINDOWS)
   m_tried_dev_urandom = true;
-  m_dev_urandom = auto_ptr<mm_file_io_c>(NULL);
+  m_dev_urandom.clear();
 
   for (i = 0; i < 16; i++)
     ranges[i] = 0;
@@ -177,4 +176,11 @@ random_c::test() {
 #endif
 
   exit(0);
+}
+
+void
+random_c::cleanup() {
+#if !defined(SYS_WINDOWS)
+  m_dev_urandom.clear();
+#endif
 }

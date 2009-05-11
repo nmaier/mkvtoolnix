@@ -21,6 +21,8 @@
 #endif
 
 #include "common/common.h"
+#include "common/mm_io.h"
+#include "common/random.h"
 
 // Global and static variables
 
@@ -88,4 +90,10 @@ set_process_priority(int priority) {
 
   (void)nice(s_nice_levels[priority + 2]);
 #endif
+}
+
+void
+mtx_common_cleanup() {
+  random_c::cleanup();
+  mm_file_io_c::cleanup();
 }

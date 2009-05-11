@@ -1869,6 +1869,8 @@ process_file(const string &file_name) {
 
 void
 setup(const std::string &locale) {
+  atexit(mtx_common_cleanup);
+
   init_stdio();
   init_locales(locale);
 

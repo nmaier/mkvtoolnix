@@ -13,7 +13,7 @@
 
 #include "common/os.h"
 
-#include <stdarg.h>
+#include <stdlib.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -2261,6 +2261,8 @@ mmg_app::init_ui_locale() {
 
 bool
 mmg_app::OnInit() {
+  atexit(mtx_common_cleanup);
+
   wxConfigBase *cfg;
   uint32_t i;
   wxString k, v;

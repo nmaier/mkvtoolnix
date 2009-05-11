@@ -535,6 +535,14 @@ mm_file_io_c::~mm_file_io_c() {
   file_name = "";
 }
 
+void
+mm_file_io_c::cleanup() {
+#if HAVE_POSIX_FADVISE
+  s_fadvised_file_count_by_id.clear();
+  s_fadvised_file_object_by_id.clear();
+#endif
+}
+
 /*
    Abstract base class.
 */

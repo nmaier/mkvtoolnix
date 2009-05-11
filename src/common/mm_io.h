@@ -185,6 +185,7 @@ public:
 #endif
 
   static void setup();
+  static void cleanup();
 };
 
 typedef counted_ptr<mm_file_io_c> mm_file_io_cptr;

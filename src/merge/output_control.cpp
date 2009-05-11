@@ -1837,6 +1837,8 @@ main_loop() {
 */
 void
 setup() {
+  atexit(mtx_common_cleanup);
+
   init_stdio();
   init_locales();
 
