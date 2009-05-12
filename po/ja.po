@@ -654,7 +654,7 @@ msgstr " &、<、>、\"のような特殊な文字は通常のHTMLにおける�
 msgid " Segment info handling:\n"
 msgstr " セグメント情報操作：\n"
 
-#: src/extract/mkvextract.cpp:330 src/info/console_ui.cpp:30
+#: src/extract/mkvextract.cpp:331 src/info/console_ui.cpp:30
 msgid " at %1%"
 msgstr " at %1%"
 
@@ -1036,7 +1036,7 @@ msgstr "'--nalu-size-length %1%'の'%1%'は正しいトラックIDとNALUサイ�
 msgid "'%1%' is not a valid tuple of track ID and default duration in '--default-duration %1%'.\n"
 msgstr "'--default-duration %1%'の'%1%'は正しいトラックIDとデフォルトのフレーム長の組み合わせではありません。\n"
 
-#: src/extract/mkvextract.cpp:258
+#: src/extract/mkvextract.cpp:259
 msgid "'%1%' is only allowed for chapter extraction.\n"
 msgstr "'%1%'はチャプタ展開にのみ使用することができます。\n"
 
@@ -1107,11 +1107,11 @@ msgstr "'--attachment-mime-type'にMIMEタイプが指定されていません�
 msgid "'--attachment-name' lacks the name.\n"
 msgstr "'--attachment-name'に名前が指定されていません。\n"
 
-#: src/extract/mkvextract.cpp:231
+#: src/extract/mkvextract.cpp:232
 msgid "'--blockadd' is only allowed when extracting tracks.\n"
 msgstr "'--blockadd'はトラック展開時にのみ使用することができます。\n"
 
-#: src/extract/mkvextract.cpp:234
+#: src/extract/mkvextract.cpp:235
 msgid "'--blockadd' lacks a level.\n"
 msgstr "'--blockadd'にレベルが指定されていません。\n"
 
@@ -1175,7 +1175,7 @@ msgstr "'--cue-chapter-name-format'は'--chapters'の前で一度のみ指定す
 msgid "'--cues' lacks its argument.\n"
 msgstr "'--cues' に引数がありません。\n"
 
-#: src/extract/mkvextract.cpp:226
+#: src/extract/mkvextract.cpp:227
 msgid "'--cuesheet' is only allowed when extracting tracks.\n"
 msgstr "'--cuesheet'はトラック展開時にのみ使用することができます。\n"
 
@@ -1203,7 +1203,7 @@ msgstr "'--engage'に引数がありません。\n"
 msgid "'--forced-track' lacks its argument.\n"
 msgstr "'--forced-track'に引数がありません。\n"
 
-#: src/extract/mkvextract.cpp:247
+#: src/extract/mkvextract.cpp:248
 msgid "'--fullraw' is only allowed when extracting tracks.\n"
 msgstr "'--fullraw'はトラック展開時にのみ使用することができます。\n"
 
@@ -1231,7 +1231,7 @@ msgstr "'--link-to-previous'に前のUIDが指定されていません。\n"
 msgid "'--nalu-size-length' lacks its argument.\n"
 msgstr "'--nalu-size-length'に引数がありません。\n"
 
-#: src/extract/mkvextract.cpp:221
+#: src/extract/mkvextract.cpp:222
 msgid "'--no-ogg' is only allowed when extracting tracks.\n"
 msgstr "'--no-ogg'はトラック展開時にのみ使用することができます。\n"
 
@@ -1239,7 +1239,7 @@ msgstr "'--no-ogg'はトラック展開時にのみ使用することができ�
 msgid "'--priority' lacks its argument.\n"
 msgstr "'--priority'に引数がありません。\n"
 
-#: src/extract/mkvextract.cpp:242
+#: src/extract/mkvextract.cpp:243
 msgid "'--raw' is only allowed when extracting tracks.\n"
 msgstr "'--raw'はトラック展開時にのみ使用することができます。\n"
 
@@ -1307,11 +1307,11 @@ msgstr "'-D'と'-d'が同じソースファイルに対して使用されてい�
 msgid "'-S' and '-s' used on the same source file.\n"
 msgstr "'-S'と'-s'が同じソースファイルに対して使用されています。\n"
 
-#: src/extract/mkvextract.cpp:211
+#: src/extract/mkvextract.cpp:212
 msgid "'-c' is only allowed when extracting tracks.\n"
 msgstr "'-c'はトラック展開時にのみ使用することができます。\n"
 
-#: src/extract/mkvextract.cpp:214
+#: src/extract/mkvextract.cpp:215
 msgid "'-c' lacks a charset.\n"
 msgstr "'-c'に文字セットが指定されていません。\n"
 
@@ -1365,11 +1365,11 @@ msgstr "+-> FLACファイルを事前解析中です: %1%%%%2%"
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr "+-> FLACファイルを事前解析中です: 100%\n"
 
-#: src/merge/pr_generic.cpp:1336
+#: src/merge/pr_generic.cpp:1339
 msgid ", description '%1%'"
 msgstr ", 説明 '%1%'"
 
-#: src/merge/pr_generic.cpp:1337
+#: src/merge/pr_generic.cpp:1340
 msgid ", file name '%1%'"
 msgstr ", ファイル名 '%1%'"
 
@@ -1499,7 +1499,7 @@ msgstr "'+'一文字は正しいコマンドラインオプションではあり
 msgid "A track"
 msgstr ""
 
-#: src/merge/pr_generic.cpp:1219
+#: src/merge/pr_generic.cpp:1222
 msgid "A track with the ID %1% was requested but not found in the file. The corresponding option will be ignored.\n"
 msgstr "トラックID %1%が要求されましたが、ファイル中には見つかりませんでした。対応するオプションは無視されます。\n"
 
@@ -1708,7 +1708,7 @@ msgstr "解析中"
 msgid "Analyze MPEG4 bitstreams, put each frame into one Matroska block, use proper timestamping (I P B B = 0 120 40 80), use V_MPEG4/ISO/... CodecIDs."
 msgstr "MPEG4ビットストリームを解析し、1つのフレームを1つのMatroskaブロックに格納し、正しいタイムスタンプ（I P B B = 0 120 40 80）を使用し、V_MPEG4/ISO/...コーデックIDを使用します。"
 
-#: src/merge/pr_generic.cpp:484
+#: src/merge/pr_generic.cpp:485
 msgid "Another default track for %1% tracks has already been set. The 'default' flag for track %2% of '%3%' will not be set.\n"
 msgstr "トラック%1%には既にデフォルトトラックが設定されています。'%3%'のトラック%2%の'default'フラグは設定されません。\n"
 
@@ -1761,7 +1761,7 @@ msgstr ""
 msgid "Attached files"
 msgstr "添付ファイル"
 
-#: src/merge/pr_generic.cpp:1335
+#: src/merge/pr_generic.cpp:1338
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
 msgstr "添付ファイル ID %1%：タイプ'%2%'、サイズ%3%バイト"
 
@@ -1864,11 +1864,11 @@ msgstr "ブール型（はい/いいえ、オン/オフ等）"
 msgid "Both eyes"
 msgstr "両目"
 
-#: src/merge/pr_generic.cpp:190
+#: src/merge/pr_generic.cpp:191
 msgid "Both the aspect ratio and '--display-dimensions' were given.\n"
 msgstr "'--aspect-ratio'と'--display-dimensions'が両方指定されました。\n"
 
-#: src/merge/pr_generic.cpp:188
+#: src/merge/pr_generic.cpp:189
 msgid "Both the aspect ratio factor and '--display-dimensions' were given.\n"
 msgstr "'--aspect-ratio-factor'と'--display-dimensions'が両方指定されました。\n"
 
@@ -2161,7 +2161,7 @@ msgstr "コマンドラインオプション："
 msgid "Command line saved."
 msgstr "コマンドラインが保存されました。"
 
-#: src/merge/pr_generic.cpp:717
+#: src/merge/pr_generic.cpp:720
 msgid "Compression failed: %1%\n"
 msgstr "圧縮に失敗しました：%1%\n"
 
@@ -2227,16 +2227,21 @@ msgstr "指定されたファイルを作成できませんでした。"
 msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "Base64にエンコードされたデータをデコードすることができませんでした。恐らく不正な形式です。"
 
-#: src/input/r_avi.cpp:274 src/input/r_matroska.cpp:1638
+#: src/input/r_avi.cpp:336 src/input/r_matroska.cpp:1638
 #: src/input/r_ogm.cpp:1134
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
+msgstr "このAVC/h.264トラックからデコーダ詳細設定データ（AVCC）を展開できませんでした。\n"
+
+#: src/input/r_avi.cpp:286 src/input/r_avi.cpp:291
+#, fuzzy
+msgid "Could not extract the sequence header from this MPEG-1/2 track.\n"
 msgstr "このAVC/h.264トラックからデコーダ詳細設定データ（AVCC）を展開できませんでした。\n"
 
 #: src/input/r_mp3.cpp:41
 msgid "Could not find a valid MP3 packet."
 msgstr "正しいMP3パケットを見つけられませんでした。"
 
-#: src/input/r_avi.cpp:433
+#: src/input/r_avi.cpp:495
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "オーディオトラック%1%のインデックスを見つけられませんでした（avilibエラーメッセージ：%2%）。トラックをスキップします。\n"
 
@@ -2419,7 +2424,7 @@ msgstr "削除(&D)"
 msgid "DTS (Digital Theater System)"
 msgstr "DTS (Digital Theater System)"
 
-#: src/output/p_dts.cpp:104
+#: src/output/p_dts.cpp:107
 msgid "DTS header information changed! - New format:\n"
 msgstr "DTSヘッダ情報が変更されました! - 新しいフォーマット：\n"
 
@@ -2694,7 +2699,7 @@ msgstr "%1%行目でエラー発生：サブタイトル番号が見つかると
 msgid "Error initializing the tables for the chapter, tag and segment info elements: Could not find the element with the debug name '%1%'. %2%\n"
 msgstr "チャプタとタグ、セグメント情報のテーブル初期化中にエラーが発生しました：デバッグ名'%1%'の要素が見つかりませんでした。%2%\n"
 
-#: src/mmg/mmg.cpp:906 src/mmg/mmg.cpp:925 src/mmg/mmg.cpp:2343
+#: src/mmg/mmg.cpp:906 src/mmg/mmg.cpp:925 src/mmg/mmg.cpp:2345
 msgid "Error loading settings"
 msgstr "設定のロード中にエラーが発生しました"
 
@@ -2849,11 +2854,11 @@ msgstr ""
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "ファイル%1%は未知のファイルタイプです。サポートされているファイルタイプ一覧（'mkvmerge --list-types'）を参照し、もしそのファイルタイプがサポートされているのに正しく認識されない場合は、作者のMoritz Bunkus <moritz@bunkus.org>に連絡してください。\n"
 
-#: src/merge/pr_generic.cpp:1333
+#: src/merge/pr_generic.cpp:1336
 msgid "File '%1%': container: %2%"
 msgstr "ファイル'%1%'：コンテナ：%2%"
 
-#: src/merge/pr_generic.cpp:1267
+#: src/merge/pr_generic.cpp:1270
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "ファイル'%1%'：サポートされていないコンテナ：%2%\n"
 
@@ -3213,7 +3218,7 @@ msgstr "'--%2% %3%'で不正な%1%が指定されました。\n"
 msgid "Invalid Base64 character encountered"
 msgstr "不正なBase64文字に遭遇しました"
 
-#: src/extract/mkvextract.cpp:237
+#: src/extract/mkvextract.cpp:238
 msgid "Invalid BlockAddition level in argument '%1%'.\n"
 msgstr "引数'%1%'で不正なBlockAdditionレベルがあります。\n"
 
@@ -3229,11 +3234,11 @@ msgstr "不正なUIDです。このチャプタUIDは既に使用されていま
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "不正なUIDです。このエディションUIDは既に使用されています。元のUIDは変更されませんでした。"
 
-#: src/input/r_avi.cpp:585 src/input/r_avi.cpp:590 src/input/r_avi.cpp:607
+#: src/input/r_avi.cpp:647 src/input/r_avi.cpp:652 src/input/r_avi.cpp:669
 msgid "Invalid Vorbis headers in AVI audio track."
 msgstr "AVIのオーディオトラックのVorbisヘッダが不正です。"
 
-#: src/extract/mkvextract.cpp:268
+#: src/extract/mkvextract.cpp:269
 msgid "Invalid attachment ID/file name specification in argument '%1%'.\n"
 msgstr "引数'%1%'で指定されている添付ファイルID・ファイル名が不正です。.\n"
 
@@ -3455,7 +3460,7 @@ msgstr "'--forced-track %1%'で不正なトラックIDが指定されました�
 msgid "Invalid track ID specified in '--sub-charset %1%'.\n"
 msgstr "'--sub-charset %1%'で不正なトラックIDが指定されました。\n"
 
-#: src/extract/mkvextract.cpp:266
+#: src/extract/mkvextract.cpp:267
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "引数'%1%'で不正なトラックID・ファイル名が指定されました。\n"
 
@@ -3715,11 +3720,11 @@ msgstr "'--output-charset'に引数がありません。\n"
 msgid "Missing argument for '--ui-language'.\n"
 msgstr "'--ui-language'に引数がありません。\n"
 
-#: src/mmg/mmg.cpp:2331
+#: src/mmg/mmg.cpp:2333
 msgid "Missing file name"
 msgstr "ファイル名がありません"
 
-#: src/mmg/mmg.cpp:2331
+#: src/mmg/mmg.cpp:2333
 msgid "Missing file name after for the option '--edit-headers'."
 msgstr "'--edit-headers'オプションの後ろにファイル名がありません。"
 
@@ -3735,7 +3740,7 @@ msgstr "入力がありません"
 msgid "Missing one hex digit"
 msgstr "16進数の桁が1つ足りません"
 
-#: src/extract/mkvextract.cpp:284
+#: src/extract/mkvextract.cpp:285
 msgid "Missing output file name in argument '%1%'.\n"
 msgstr "引数'%1%'で出力ファイル名が指定されていません。\n"
 
@@ -3904,11 +3909,11 @@ msgstr "ファイルがロードされていません"
 msgid "No filename found after the '@'."
 msgstr "'@'の後ろにファイル名が見つかりませんでした。"
 
-#: src/extract/mkvextract.cpp:251
+#: src/extract/mkvextract.cpp:252
 msgid "No further options allowed when extracting %1%.\n"
 msgstr "%1%を展開する際にはもう他のオプションを指定することはできません。\n"
 
-#: src/extract/mkvextract.cpp:254
+#: src/extract/mkvextract.cpp:255
 msgid "No further options allowed when regenerating the CUE sheet.\n"
 msgstr "CUEシートを再生成する際にはもう他のオプションを指定することはできません。\n"
 
@@ -3924,7 +3929,7 @@ msgstr "入力ファイルが指定されていません。出力ファイルは
 msgid "No metadata block found. This file is broken.\n"
 msgstr "メタデータブロックが見つかりませんでした。このファイルは壊れています。\n"
 
-#: src/extract/mkvextract.cpp:282
+#: src/extract/mkvextract.cpp:283
 msgid "No output file name specified, will use attachment name.\n"
 msgstr "出力ファイル名が指定されなかったので、添付ファイル名を使用します。\n"
 
@@ -3949,7 +3954,7 @@ msgstr "'--%1% %2%'でトラックIDが指定されていません。\n"
 msgid "No tracks found"
 msgstr "トラックが見つかりませんでした"
 
-#: src/merge/pr_generic.cpp:1205
+#: src/merge/pr_generic.cpp:1208
 msgid "No tracks will be copied from this file. This usually indicates a mistake in the command line.\n"
 msgstr "このファイルからはトラックがコピーされません。これは通常コマンドラインに誤りがあることを示します。\n"
 
@@ -3981,7 +3986,7 @@ msgstr "正しいMatroskaファイルではありません（EBMLヘッドが見
 msgid "Not a valid Matroska file (no segment/level 0 element found)"
 msgstr "正しいMatroskaファイルではありません（セグメント/レベル0の要素が見つかりませんでした）"
 
-#: src/extract/mkvextract.cpp:308
+#: src/extract/mkvextract.cpp:309
 msgid ""
 "Nothing to do.\n"
 "\n"
@@ -4113,7 +4118,7 @@ msgstr "PTSエラー：0x%|1$02x| %|2$02x|%|3$02x| %|4$02x|%|5$02x|\n"
 msgid "Packet number %1% contained an invalid FLAC header and is being skipped.\n"
 msgstr "パケット番号%1%は無効なFLACヘッダを含んでいるため、スキップされます。\n"
 
-#: src/merge/pr_generic.cpp:250
+#: src/merge/pr_generic.cpp:251
 msgid "Packet queue not empty (flushed: %1%). Frames have been lost during remux. %2%\n"
 msgstr "パケットキューが空ではありません（フラッシュ：%1%）。MUX中にフレームが失われました。%2%\n"
 
@@ -4217,7 +4222,7 @@ msgstr "進行状況"
 msgid "Progress: %1%%%%2%"
 msgstr "進行状況: %1%%%%2%"
 
-#: src/extract/mkvextract.cpp:363 src/extract/timecodes_v2.cpp:358
+#: src/extract/mkvextract.cpp:366 src/extract/timecodes_v2.cpp:358
 msgid "Progress: 100%\n"
 msgstr "進行状況: 100%\n"
 
@@ -4785,7 +4790,7 @@ msgstr ""
 msgid "Skipping %1% bytes (no valid AAC header found). This might cause audio/video desynchronisation.\n"
 msgstr "%1%バイトをスキップします（正しいAACヘッダが見つかりませんでした）。このためオーディオ・ビデオの同期が狂うかもしれません。\n"
 
-#: src/output/p_dts.cpp:120
+#: src/output/p_dts.cpp:123
 msgid "Skipping %1% bytes (no valid DTS header found). This might cause audio/video desynchronisation.\n"
 msgstr "%1%バイトをスキップします（正しいDTSヘッダが見つかりませんでした）。このためオーディオ・ビデオの同期が狂うかもしれません。\n"
 
@@ -5166,7 +5171,7 @@ msgstr "キューエントリ（インデックス）が書き込まれました
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr "現在のファイル（番号%d）を削除することはできません。このファイルにトラックを追加結合すると思われる他のファイルが存在します（少なくとも番号%dのファイルがそうです)。そのファイルをまず削除してください。"
 
-#: src/merge/pr_generic.cpp:780
+#: src/merge/pr_generic.cpp:783
 msgid "The current packet's timecode is smaller than that of the previous packet. This usually means that the source file is a Matroska file that has not been created 100%% correctly. The timecodes of all packets will be adjusted by %1%ms in order not to lose any data. This may throw audio/video synchronization off, but that can be corrected with mkvmerge's \"--sync\" option. If you already use \"--sync\" and you still get this warning then do NOT worry -- this is normal. If this error happens more than once and you get this message more than once for a particular track then either is the source file badly mastered, or mkvmerge contains a bug. In this case you should contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
 msgstr "現在のパケットのタイムコードは前のパケットのタイムコードより小さいです。これは通常ソースファイルが100%%正確に作成されなかったMatroskaファイルであることを意味します。データの損失を避けるためにタイムコードは%1%ミリ秒ズラされます。このためにオーディオ・ビデオの同期が狂うかもしれませんが、\"--sync\"オプションで補正することができます。もし既に\"--sync\"オプションを使っていて、それでもまだこの警告が表示される場合は心配することはありません―これは正常です。もしこのエラーが複数回発生し、特定のトラックでこのメッセージが複数回表示された場合は、そのファイルの製作を失敗しているか、mkvmergeのバグのどちらかです。この場合は作者のMoritz Bunkus <moritz@bunkus.org>に連絡してください。\n"
 
@@ -5255,7 +5260,7 @@ msgstr "ファイル'%1%'を開いて書き込んでいます。\n"
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "ファイル%1%は未知のファイルタイプです。サポートされているファイルタイプ一覧（'mkvmerge --list-types'）を参照し、もしそのファイルタイプがサポートされているのに正しく認識されない場合は、作者のMoritz Bunkus <moritz@bunkus.org>に連絡してください。\n"
 
-#: src/merge/pr_generic.cpp:1271
+#: src/merge/pr_generic.cpp:1274
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "ファイル'%1%'はサポートされていないファイルタイプです（%2%）。\n"
 
@@ -5263,7 +5268,7 @@ msgstr "ファイル'%1%'はサポートされていないファイルタイプ�
 msgid "The file '%1%' is empty."
 msgstr "ファイル'%1%'は空です。"
 
-#: src/mmg/mmg.cpp:2343
+#: src/mmg/mmg.cpp:2345
 #, c-format
 msgid "The file '%s' does not exist."
 msgstr "ファイル'%s'は存在しません。"
@@ -5601,7 +5606,7 @@ msgstr "ソースファイル'%1%'を開くのに失敗したか、最後まで�
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr "トラック番号%s（ファイル'%s'）の引き延ばしの指定が不正です。"
 
-#: src/merge/pr_generic.cpp:289
+#: src/merge/pr_generic.cpp:290
 msgid "The tags in '%1%' could not be parsed: some mandatory elements are missing.\n"
 msgstr "'%1%'のタグを解析することができません：いくつかの必須要素がありません。\n"
 
@@ -5712,11 +5717,11 @@ msgstr "警告が発せられました"
 msgid "There were warnings, or the process was terminated."
 msgstr "警告が発せられるか、プロセスが終了されました。"
 
-#: src/input/r_avi.cpp:556 src/input/r_real.cpp:326
+#: src/input/r_avi.cpp:618 src/input/r_real.cpp:326
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr "このAACトラックは正しいヘッダを含んでいません。AACの情報を解析することができませんでした。\n"
 
-#: src/input/r_avi.cpp:553
+#: src/input/r_avi.cpp:615
 msgid "This AAC track does not contain valid headers. The extra header size is %1% bytes, expected were 2 or 5 bytes.\n"
 msgstr "このAACトラックは正しいヘッダを含んでいません。追加ヘッダのサイズは%1%ですが、期待されるサイズは2～5バイトです。\n"
 
@@ -5937,7 +5942,7 @@ msgstr "トラック%1%：AAC情報を解析することができませんでし
 msgid "Track ID %1% has an unknown AAC type.\n"
 msgstr "Track ID %1%は未知のAACタイプです。\n"
 
-#: src/merge/pr_generic.cpp:1334
+#: src/merge/pr_generic.cpp:1337
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "トラックID %1%：%2%（%3%）"
 
@@ -6049,7 +6054,7 @@ msgstr "'%1% %2%'で前のUIDが未知のフォーマットです。\n"
 msgid "Unknown header 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
 msgstr "未知のヘッダ 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
 
-#: src/extract/mkvextract.cpp:181
+#: src/extract/mkvextract.cpp:182
 msgid "Unknown mode '%1%'.\n"
 msgstr "'%1%'は未知のモードです。\n"
 
@@ -6057,11 +6062,11 @@ msgstr "'%1%'は未知のモードです。\n"
 msgid "Unknown open mode"
 msgstr "未知のオープンモード"
 
-#: src/input/r_avi.cpp:508
+#: src/input/r_avi.cpp:570
 msgid "Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n"
 msgstr "このトラックのオーディオフォーマット 0x%|1$04x|は未知もしくはサポートされていません。\n"
 
-#: src/extract/mkvextract.cpp:301
+#: src/extract/mkvextract.cpp:302
 msgid "Unrecognized command line option '%1%'. Maybe you put a mode specific option before the input file name?\n"
 msgstr "コマンドラインオプション'%1%'は認識されませんでした。多分モード指定オプションを入力ファイル名の前に指定したのではないですか？\n"
 
@@ -6085,7 +6090,7 @@ msgstr "サポートされていないフォーマットです"
 msgid "Unsupported track type for this track.\n"
 msgstr "このトラックはサポートされているトラックタイプではありません。\n"
 
-#: src/extract/mkvextract.cpp:78
+#: src/extract/mkvextract.cpp:79
 msgid ""
 "Usage: mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]\n"
 "   or  mkvextract tags <inname> [options]\n"
@@ -6293,7 +6298,7 @@ msgstr "NALUサイズを3バイトにすると、特定のAVC/h.264コーデッ�
 msgid "Using the %1%AC3 output module.\n"
 msgstr "%1%AC3出力モジュールを使用しています。\n"
 
-#: src/input/r_avi.cpp:576
+#: src/input/r_avi.cpp:638
 msgid "Using the AAC audio output module.\n"
 msgstr "AACオーディオ出力モジュールを使用しています。\n"
 
@@ -6318,7 +6323,7 @@ msgstr "AC3デマルチプレクサを使用しています。\n"
 msgid "Using the AC3 output module (FourCC: %1%).\n"
 msgstr "AC3出力モジュールを使用しています（FourCC：%1%）。\n"
 
-#: src/input/r_avi.cpp:483 src/input/r_ogm.cpp:981 src/input/r_qtmp4.cpp:1400
+#: src/input/r_avi.cpp:545 src/input/r_ogm.cpp:981 src/input/r_qtmp4.cpp:1400
 #: src/input/r_wav.cpp:228
 msgid "Using the AC3 output module.\n"
 msgstr "AC3出力モジュールを使用しています。\n"
@@ -6327,7 +6332,7 @@ msgstr "AC3出力モジュールを使用しています。\n"
 msgid "Using the AVC/h.264 ES demultiplexer.\n"
 msgstr "AVC/h.264 ESデマルチプレクサを使用しています。\n"
 
-#: src/input/r_avi.cpp:113
+#: src/input/r_avi.cpp:114
 msgid "Using the AVI demultiplexer. Opening file. This may take some time depending on the file's size.\n"
 msgstr "AVIデマルチプレクサを使用しています。ファイルを開いています。ファイルサイズによってはしばらく時間がかかることがあります。\n"
 
@@ -6339,7 +6344,7 @@ msgstr "CorePanorama字幕リーダを使用しています。\n"
 msgid "Using the DTS demultiplexer.\n"
 msgstr "DTSデマルチプレクサを使用しています。\n"
 
-#: src/input/r_avi.cpp:494 src/input/r_dts.cpp:115
+#: src/input/r_avi.cpp:556 src/input/r_dts.cpp:115
 #: src/input/r_matroska.cpp:1385 src/input/r_mpeg_ps.cpp:1164
 #: src/input/r_wav.cpp:357
 msgid "Using the DTS output module.\n"
@@ -6382,7 +6387,7 @@ msgstr "MPEG ESデマルチプレクサを使用しています。\n"
 msgid "Using the MPEG PS demultiplexer.\n"
 msgstr "MPEG PSデマルチプレクサを使用しています。\n"
 
-#: src/input/r_avi.cpp:476 src/input/r_matroska.cpp:1367
+#: src/input/r_avi.cpp:538 src/input/r_matroska.cpp:1367
 #: src/input/r_mp3.cpp:72 src/input/r_mpeg_ps.cpp:1154 src/input/r_ogm.cpp:999
 #: src/input/r_qtmp4.cpp:1483
 msgid "Using the MPEG audio output module.\n"
@@ -6392,7 +6397,8 @@ msgstr "MPEGオーディオ出力モジュールを使用しています。\n"
 msgid "Using the MPEG-%1% video output module.\n"
 msgstr "MPEG-%1%ビデオ出力モジュールを使用しています。\n"
 
-#: src/input/r_mpeg_es.cpp:175 src/input/r_mpeg_ps.cpp:1179
+#: src/input/r_avi.cpp:308 src/input/r_mpeg_es.cpp:175
+#: src/input/r_mpeg_ps.cpp:1179
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "MPEG-1/2ビデオ出力モジュールを使用しています。\n"
 
@@ -6400,13 +6406,13 @@ msgstr "MPEG-1/2ビデオ出力モジュールを使用しています。\n"
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "MPEG-4 part 10 (AVC)ビデオ出力モジュールを使用しています。\n"
 
-#: src/input/r_avc.cpp:139 src/input/r_avi.cpp:271
+#: src/input/r_avc.cpp:139 src/input/r_avi.cpp:333
 #: src/input/r_matroska.cpp:1627 src/input/r_mpeg_ps.cpp:1190
 #: src/input/r_ogm.cpp:1131
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "MPEG-4 part 10 ESビデオ出力モジュールを使用しています。\n"
 
-#: src/input/r_avi.cpp:254 src/input/r_matroska.cpp:1320
+#: src/input/r_avi.cpp:316 src/input/r_matroska.cpp:1320
 #: src/input/r_ogm.cpp:1235 src/input/r_qtmp4.cpp:1427
 msgid "Using the MPEG-4 part 2 video output module.\n"
 msgstr "MPEG-4 part 2ビデオ出力モジュールを使用しています。\n"
@@ -6419,7 +6425,7 @@ msgstr "Matroskaデマルチプレクサを使用しています。\n"
 msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr "OGG/OGMデマルチプレクサを使用しています。\n"
 
-#: src/input/r_avi.cpp:468 src/input/r_matroska.cpp:1363
+#: src/input/r_avi.cpp:530 src/input/r_matroska.cpp:1363
 #: src/input/r_ogm.cpp:1018 src/input/r_qtmp4.cpp:1489 src/input/r_wav.cpp:398
 msgid "Using the PCM output module.\n"
 msgstr "PCM出力モジュールを使用しています。\n"
@@ -6440,7 +6446,7 @@ msgstr "RealMediaデマルチプレクサを使用しています。\n"
 msgid "Using the SRT subtitle reader.\n"
 msgstr "SRT字幕リーダを使用しています。\n"
 
-#: src/input/r_avi.cpp:348
+#: src/input/r_avi.cpp:410
 msgid "Using the SSA/ASS subtitle output module.\n"
 msgstr "SSA/ASS字幕出力モジュールを使用しています。\n"
 
@@ -6504,7 +6510,7 @@ msgstr "VobSub字幕出力モジュールを使用しています（言語：%1%
 msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
 msgstr "VobSub字幕リーダを使用しています（字幕ファイル'%1%'）。\n"
 
-#: src/input/r_avi.cpp:625 src/input/r_matroska.cpp:1389
+#: src/input/r_avi.cpp:687 src/input/r_matroska.cpp:1389
 #: src/input/r_ogm.cpp:1039
 msgid "Using the Vorbis output module.\n"
 msgstr "Vorbis出力モジュールを使用しています。\n"
@@ -6533,7 +6539,7 @@ msgstr "一般オーディオ出力モジュールを使用しています（Fou
 msgid "Using the passthrough output module for this %1% track.\n"
 msgstr "この%1%トラックにパススルー出力モジュールを使用しています。\n"
 
-#: src/input/r_avi.cpp:325 src/input/r_matroska.cpp:1500
+#: src/input/r_avi.cpp:387 src/input/r_matroska.cpp:1500
 #: src/input/r_ogm.cpp:1070 src/input/r_srt.cpp:60 src/input/r_ssa.cpp:74
 #: src/input/r_usf.cpp:260
 msgid "Using the text subtitle output module.\n"
@@ -6547,7 +6553,7 @@ msgstr "ビデオ出力モジュールを使用しています（FourCC：%1%）
 msgid "Using the video output module (FourCC: %|1$.4s|).\n"
 msgstr "ビデオ出力モジュールを使用しています（FourCC：%|1$.4s|）。\n"
 
-#: src/input/r_avi.cpp:283 src/input/r_matroska.cpp:1337
+#: src/input/r_avi.cpp:345 src/input/r_matroska.cpp:1337
 #: src/input/r_ogm.cpp:1240
 msgid "Using the video output module.\n"
 msgstr "ビデオ出力モジュールを使用しています。\n"
@@ -6882,15 +6888,15 @@ msgstr "avc_es_reader：ソースファイルを開けませんでした。"
 msgid "avc_es_reader: Should not have happened."
 msgstr "avc_es_reader：発生するべきではありません。"
 
-#: src/input/r_avi.cpp:116
+#: src/input/r_avi.cpp:117
 msgid "avi_reader: Could not initialize AVI source. Reason: %1%"
 msgstr "avi_reader：AVIソースを初期化できませんでした。理由：%1%"
 
-#: src/input/r_avi.cpp:109
+#: src/input/r_avi.cpp:110
 msgid "avi_reader: Could not read the source file."
 msgstr "avi_reader：ソースファイルを読み込めませんでした。"
 
-#: src/input/r_avi.cpp:106
+#: src/input/r_avi.cpp:107
 msgid "avi_reader: Source is not a valid AVI file."
 msgstr "avi_reader：ソースファイルは正しいAVIファイルではありません。"
 
@@ -7024,10 +7030,10 @@ msgstr ""
 #: src/input/r_qtmp4.cpp:645 src/input/r_qtmp4.cpp:657
 #: src/input/r_qtmp4.cpp:751 src/input/r_qtmp4.cpp:1180
 #: src/input/r_qtmp4.cpp:1338 src/input/r_qtmp4.cpp:1354
-#: src/common/mm_io.cpp:623 src/common/mm_io.cpp:633 src/common/mm_io.cpp:643
-#: src/common/mm_io.cpp:653 src/common/mm_io.cpp:663 src/common/mm_io.cpp:673
-#: src/common/mm_io.cpp:683 src/common/mm_io.cpp:693 src/common/mm_io.cpp:703
-#: src/common/mm_io.cpp:797 src/common/mm_io.cpp:1189
+#: src/common/mm_io.cpp:631 src/common/mm_io.cpp:641 src/common/mm_io.cpp:651
+#: src/common/mm_io.cpp:661 src/common/mm_io.cpp:671 src/common/mm_io.cpp:681
+#: src/common/mm_io.cpp:691 src/common/mm_io.cpp:701 src/common/mm_io.cpp:711
+#: src/common/mm_io.cpp:805 src/common/mm_io.cpp:1197
 msgid "end-of-file"
 msgstr "ファイル終端"
 
@@ -7363,11 +7369,11 @@ msgstr "memory_slice_cursor_c copy c'tor：使われてはいけません！"
 msgid "mkdir(%1%) failed; errno = %2% (%3%)"
 msgstr "mkdir(%1%)が失敗しました；エラーコード%2%（%3%）"
 
-#: src/extract/mkvextract.cpp:318
+#: src/extract/mkvextract.cpp:319
 msgid "mkvextract.cpp/show_element(): level > 9: %1%"
 msgstr ""
 
-#: src/extract/mkvextract.cpp:381
+#: src/extract/mkvextract.cpp:384
 msgid "mkvextract: Unknown mode!?\n"
 msgstr "mkvextract：未知のモード！？\n"
 
@@ -7498,11 +7504,11 @@ msgstr "mkvmergeは割り込み信号（Ctrl+C？）によって中断されま�
 msgid "mkvmerge was not compiled with zlib. Compressed headers in QuickTime/MP4 files are therefore not supported.\n"
 msgstr "mkvmergeはzlibをサポートしてコンパイルされていません。よってQuickTime/MP4ファイルの圧縮ヘッダはサポートされていません。\n"
 
-#: src/common/mm_io.cpp:1178
+#: src/common/mm_io.cpp:1186
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c：UTF32_*は現在サポートされていません。\n"
 
-#: src/common/mm_io.cpp:1131
+#: src/common/mm_io.cpp:1139
 msgid "mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "mm_text_io_c::read_next_char()：不正なUTF-8の文字です。最初のバイト：0x%|1$02x|"
 
@@ -7628,11 +7634,11 @@ msgstr ""
 msgid "pixel width: %1%"
 msgstr ""
 
-#: src/merge/pr_generic.cpp:792
+#: src/merge/pr_generic.cpp:795
 msgid "pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < last_timecode (%1% < %2%). %3%\n"
 msgstr "pr_generic.cpp/generic_packetizer_c::add_packet()：timecode < last_timecode（%1% < %2%）です。 %3%\n"
 
-#: src/merge/pr_generic.cpp:1133
+#: src/merge/pr_generic.cpp:1136
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr "pr_generic.cpp/generic_reader_c::demuxing_requested()：不正なトラックタイプ%1%."
 
@@ -7840,15 +7846,15 @@ msgstr "wavpack_reader：非オーディオブロックが見つかりました\
 msgid "wavpack_reader: unknown sample rate!\n"
 msgstr "wavpack_reader：未知のサンプルレートです！\n"
 
-#: src/common/mm_io.cpp:945
+#: src/common/mm_io.cpp:953
 msgid "wrong usage: increase < 0"
 msgstr "間違った使用法：increase < 0"
 
-#: src/common/mm_io.cpp:970 src/common/mm_io.cpp:986
+#: src/common/mm_io.cpp:978 src/common/mm_io.cpp:994
 msgid "wrong usage: read-only with NULL memory"
 msgstr "間違った使用法：NULLメモリが読み込み専用です"
 
-#: src/common/mm_io.cpp:1016
+#: src/common/mm_io.cpp:1024
 msgid "wrong usage: writing to read-only memory"
 msgstr "間違った使用法：読み込み専用メモリへの書き込み"
 
