@@ -595,6 +595,11 @@ parse_arg_sync(string s,
   if (s.size() == 0)
     mxerror(boost::format(Y("Invalid sync option specified in '%1% %2%'.\n")) % opt % orig);
 
+  if (parts[1] == "reset") {
+    ti.reset_timecodes_specs[id] = true;
+    return;
+  }
+
   // Now parse the actual sync values.
   int idx = s.find(',');
   if (idx >= 0) {

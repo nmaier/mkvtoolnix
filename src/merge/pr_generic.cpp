@@ -59,7 +59,8 @@ vector<generic_packetizer_c *> ptzrs_in_header_order;
 generic_packetizer_c::generic_packetizer_c(generic_reader_c *p_reader,
                                            track_info_c &p_ti)
   throw(error_c)
-  : next_packet_wo_assigned_timecode(0)
+  : m_num_packets(0)
+  , next_packet_wo_assigned_timecode(0)
   , m_free_refs(-1)
   , m_next_free_refs(-1)
   , enqueued_bytes(0)
@@ -106,6 +107,9 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *p_reader,
     ti.tcsync.numerator = 1;
   if (0 == ti.tcsync.denominator)
     ti.tcsync.denominator = 1;
+
+  // Let's see if the user specified "reset timecodes" for this track.
+  ti.reset_timecodes = map_has_key(ti.reset_timecodes_specs, ti.id) || map_has_key(ti.reset_timecodes_specs, -1);
 
   // Let's see if the user has specified which cues he wants for this track.
   if (map_has_key(ti.cue_creations, ti.id))
@@ -701,6 +705,13 @@ generic_packetizer_c::fix_headers() {
 
 void
 generic_packetizer_c::add_packet(packet_cptr pack) {
+  if ((0 == m_num_packets) && ti.reset_timecodes) {
+    mxinfo(boost::format("\nMUH id %1% tc %2%\n") % ti.id % pack->timecode);
+    ti.tcsync.displacement = -pack->timecode;
+  }
+
+  ++m_num_packets;
+
   if (NULL == reader->ptzr_first_packet)
     reader->ptzr_first_packet = this;
 
@@ -1397,6 +1408,7 @@ track_info_c::track_info_c()
   , aspect_ratio_given(false)
   , aspect_ratio_is_factor(false)
   , display_dimensions_given(false)
+  , reset_timecodes(false)
   , cues(CUE_STRATEGY_UNSPECIFIED)
   , default_track(boost::logic::indeterminate)
   , forced_track(boost::logic::indeterminate)
@@ -1457,6 +1469,9 @@ track_info_c::operator =(const track_info_c &src) {
 
   timecode_syncs             = src.timecode_syncs;
   memcpy(&tcsync, &src.tcsync, sizeof(timecode_sync_t));
+
+  reset_timecodes_specs      = src.reset_timecodes_specs;
+  reset_timecodes            = src.reset_timecodes;
 
   cue_creations              = src.cue_creations;
   cues                       = src.cues;

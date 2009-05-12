@@ -200,6 +200,9 @@ public:
   map<int64_t, timecode_sync_t> timecode_syncs; // As given on the command line
   timecode_sync_t tcsync;                       // For this very track
 
+  map<int64_t, bool> reset_timecodes_specs;
+  bool reset_timecodes;
+
   map<int64_t, cue_strategy_e> cue_creations; // As given on the command line
   cue_strategy_e cues;          // For this very track
 
@@ -396,6 +399,7 @@ typedef deque<packet_cptr>::iterator packet_cptr_di;
 
 class generic_packetizer_c {
 protected:
+  int m_num_packets;
   deque<packet_cptr> packet_queue, deferred_packets;
   int next_packet_wo_assigned_timecode;
 
