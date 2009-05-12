@@ -17,6 +17,7 @@
 #include "common/os.h"
 
 #include "common/mm_io.h"
+#include "merge/pr_generic.h"
 
 #if defined(HAVE_FLAC_FORMAT_H)
 #include <vector>

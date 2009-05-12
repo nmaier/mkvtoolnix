@@ -564,7 +564,7 @@ flac_reader_c::probe_file(mm_io_c *io,
     return 0;
   try {
     io->setFilePointer(0, seek_beginning);
-    if (4 != io->read(data, 4) != 4)
+    if (io->read(data, 4) != 4)
       return 0;
     io->setFilePointer(0, seek_beginning);
   } catch (...) {
