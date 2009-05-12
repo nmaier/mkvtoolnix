@@ -15,6 +15,7 @@
 
 #include "common/os.h"
 
+#include <algorithm>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -235,6 +236,9 @@ avi_reader_c::create_packetizer(int64_t tid) {
     else if (mpeg4::p10::is_avc_fourcc(codec) && !hack_engaged(ENGAGE_ALLOW_AVC_IN_VFW_MODE))
       create_mpeg4_p10_packetizer();
 
+    else if (mpeg1_2::is_fourcc(get_uint32_le(codec)))
+      create_mpeg1_2_packetizer();
+
     else
       create_standard_video_packetizer();
   }
@@ -244,6 +248,64 @@ avi_reader_c::create_packetizer(int64_t tid) {
 
   if ((tid <= AVI_audio_tracks(m_avi)) && demuxing_requested('a', tid))
     add_audio_demuxer(tid - 1);
+}
+
+void
+avi_reader_c::create_mpeg1_2_packetizer() {
+  counted_ptr<M2VParser> m2v_parser(new M2VParser);
+
+  if ((0 != ti.private_size) && (ti.private_size < sizeof(alBITMAPINFOHEADER)))
+    m2v_parser->WriteData(ti.private_data + sizeof(alBITMAPINFOHEADER), ti.private_size - sizeof(alBITMAPINFOHEADER));
+
+  int frame_number = 0;
+  int state        = m2v_parser->GetState();
+  while ((frame_number < std::min(m_max_video_frames, 100)) && (MPV_PARSER_STATE_FRAME != state)) {
+    ++frame_number;
+
+    int size = AVI_frame_size(m_avi, frame_number - 1);
+    if (0 == size)
+      continue;
+
+    AVI_set_video_position(m_avi, frame_number - 1);
+
+    memory_cptr buffer = memory_c::alloc(size);
+    int key      = 0;
+    int num_read = AVI_read_frame(m_avi, (char *)buffer->get(), &key);
+
+    if (0 >= num_read)
+      continue;
+
+    m2v_parser->WriteData(buffer->get(), num_read);
+
+    state = m2v_parser->GetState();
+  }
+
+  AVI_set_video_position(m_avi, 0);
+
+  if (MPV_PARSER_STATE_FRAME != state)
+    mxerror_tid(ti.fname, 0, Y("Could not extract the sequence header from this MPEG-1/2 track.\n"));
+
+  MPEG2SequenceHeader seq_hdr = m2v_parser->GetSequenceHeader();
+  counted_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
+  if (frame.get() == NULL)
+    mxerror_tid(ti.fname, 0, Y("Could not extract the sequence header from this MPEG-1/2 track.\n"));
+
+  int display_width      = ((0 >= seq_hdr.aspectRatio) || (1 == seq_hdr.aspectRatio)) ? seq_hdr.width : (int)(seq_hdr.height * seq_hdr.aspectRatio);
+
+  MPEGChunk *raw_seq_hdr = m2v_parser->GetRealSequenceHeader();
+  if (NULL != raw_seq_hdr) {
+    ti.private_data      = raw_seq_hdr->GetPointer();
+    ti.private_size      = raw_seq_hdr->GetSize();
+  } else {
+    ti.private_data      = NULL;
+    ti.private_size      = 0;
+  }
+
+  m_vptzr                = add_packetizer(new mpeg1_2_video_packetizer_c(this, ti, m2v_parser->GetMPEGVersion(), seq_hdr.frameRate,
+                                                                         seq_hdr.width, seq_hdr.height, display_width, seq_hdr.height, false));
+
+  if (verbose)
+    mxinfo_tid(ti.fname, 0, Y("Using the MPEG-1/2 video output module.\n"));
 }
 
 void
@@ -259,7 +321,7 @@ avi_reader_c::create_mpeg4_p10_packetizer() {
   try {
     memory_cptr avcc                      = extract_avcc();
     mpeg4_p10_es_video_packetizer_c *ptzr = new mpeg4_p10_es_video_packetizer_c(this, ti, avcc, AVI_video_width(m_avi), AVI_video_height(m_avi));
-    m_vptzr                                 = add_packetizer(ptzr);
+    m_vptzr                               = add_packetizer(ptzr);
 
     ptzr->enable_timecode_generation(false);
     ptzr->set_track_default_duration((int64_t)(1000000000 / AVI_frame_rate(m_avi)));
@@ -839,13 +901,17 @@ avi_reader_c::identify_video() {
 
   id_result_container("AVI");
 
-  std::string type = AVI_video_compressor(m_avi);
+  const char *fourcc_str = AVI_video_compressor(m_avi);
+  std::string type       = fourcc_str;
 
-  if (IS_MPEG4_L2_FOURCC(type.c_str()))
+  if (IS_MPEG4_L2_FOURCC(fourcc_str))
     extended_identify_mpeg4_l2(extended_info);
 
-  else if (mpeg4::p10::is_avc_fourcc(type.c_str()))
+  else if (mpeg4::p10::is_avc_fourcc(fourcc_str))
     extended_info.push_back("packetizer:mpeg4_p10_es_video");
+
+  else if (mpeg1_2::is_fourcc(get_uint32_le(fourcc_str)))
+    type = "MPEG-1/2";
 
   id_result_track(0, ID_RESULT_TRACK_VIDEO, type, join(" ", extended_info));
 }

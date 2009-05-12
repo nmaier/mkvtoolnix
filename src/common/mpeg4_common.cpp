@@ -966,6 +966,16 @@ mpeg1_2::get_fps(int idx) {
   }
 }
 
+bool
+mpeg1_2::is_fourcc(uint32_t fourcc) {
+  return (MPEGVIDEO_FOURCC_MPEG1 == fourcc) || (MPEGVIDEO_FOURCC_MPEG2 == fourcc);
+}
+
+bool
+mpeg1_2::version_from_fourcc(uint32_t fourcc) {
+  return (MPEGVIDEO_FOURCC_MPEG1 == fourcc) ? 1 : 2;
+}
+
 /** \brief Check whether or not a FourCC refers to MPEG-4 part 2 video
 
    \param fourcc A pointer to a string with four characters

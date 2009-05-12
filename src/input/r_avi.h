@@ -108,6 +108,7 @@ protected:
   virtual void create_srt_packetizer(int idx);
   virtual void create_ssa_packetizer(int idx);
   virtual void create_standard_video_packetizer();
+  virtual void create_mpeg1_2_packetizer();
   virtual void create_mpeg4_p2_packetizer();
   virtual void create_mpeg4_p10_packetizer();
 

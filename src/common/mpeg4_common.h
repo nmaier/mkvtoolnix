@@ -81,6 +81,9 @@
 /** MPEG-1/-2 aspect ratio 2.21 */
 #define MPEGVIDEO_AR_2_21       0x40
 
+#define MPEGVIDEO_FOURCC_MPEG1  0x10000001
+#define MPEGVIDEO_FOURCC_MPEG2  0x10000002
+
 #define IS_MPEG4_L2_FOURCC(s) \
   (!strncasecmp((s), "MP42", 4) || !strncasecmp((s), "DIV2", 4) || \
    !strncasecmp((s), "DIVX", 4) || !strncasecmp((s), "XVID", 4) || \
@@ -156,6 +159,8 @@ namespace mpeg1_2 {
   int MTX_DLL_API extract_fps_idx(const unsigned char *buffer, int buffer_size);
   double MTX_DLL_API get_fps(int idx);
   bool MTX_DLL_API extract_ar(const unsigned char *buffer, int buffer_size, float &ar);
+  bool MTX_DLL_API is_fourcc(uint32_t fourcc);
+  bool MTX_DLL_API version_from_fourcc(uint32_t fourcc);
 };
 
 namespace mpeg4 {
