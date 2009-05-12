@@ -1,3 +1,4 @@
+
 # translation of mkvtoolnix to Chinese
 # Copyright (C) 2009 Moritz Bunkus
 # This file is distributed under the same license as the mkvtoolnix package.
@@ -8,7 +9,7 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-05-11 13:12+0800\n"
+"PO-Revision-Date: 2009-05-12 20:00+0200\n"
 "Last-Translator: Dean Lee <xslidian+t@gmail.com>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -519,7 +520,7 @@ msgstr "  -v, --verbose            “详细”状态\n"
 
 #: src/merge/mkvmerge.cpp:212
 msgid ""
-"  -y, --sync, --delay <TID:d[,o[/p]]>\n"
+"  -y, --sync <TID:d[,o[/p]]>\n"
 "                           Synchronize, adjust the track's timecodes with\n"
 "                           the id TID by 'd' ms.\n"
 "                           'o/p': Adjust the timecodes by multiplying with\n"
@@ -527,7 +528,7 @@ msgid ""
 "                           1000 if omitted. Both 'o' and 'p' can be\n"
 "                           floating point numbers.\n"
 msgstr ""
-"  -y, --sync, --delay <TID:d[,o[/p]]>\n"
+"  -y, --sync <TID:d[,o[/p]]>\n"
 "                           以 'd' 毫秒同步、校准编号为 TID 的轨的时间码。\n"
 "                           'o/p': 通过将时间码与 'o/p' 相乘以修复线性偏差。\n"
 "                           'p' 若省略则默认为 1000。\n"

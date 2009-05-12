@@ -1,3 +1,4 @@
+
 # translation of ja.po to Japanese
 # Copyright (C) 2009 Moritz Bunkus
 # This file is distributed under the same license as the mkvtoolnix package.
@@ -8,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2009-05-11 11:32+0900\n"
+"PO-Revision-Date: 2009-05-12 20:00+0200\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -525,7 +526,7 @@ msgstr "  -v, --verbose            詳細なステータス情報を出力しま
 
 #: src/merge/mkvmerge.cpp:212
 msgid ""
-"  -y, --sync, --delay <TID:d[,o[/p]]>\n"
+"  -y, --sync <TID:d[,o[/p]]>\n"
 "                           Synchronize, adjust the track's timecodes with\n"
 "                           the id TID by 'd' ms.\n"
 "                           'o/p': Adjust the timecodes by multiplying with\n"
@@ -533,7 +534,7 @@ msgid ""
 "                           1000 if omitted. Both 'o' and 'p' can be\n"
 "                           floating point numbers.\n"
 msgstr ""
-"  -y, --sync, --delay <TID:d[,o[/p]]>\n"
+"  -y, --sync <TID:d[,o[/p]]>\n"
 "                           同期のために、トラックのタイムコードをdミリ秒\n"
 "                           ズラします。\n"
 "                           o/pは、長さの同期を修正するために、o/pを\n"

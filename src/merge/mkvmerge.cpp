@@ -209,7 +209,7 @@ set_usage() {
   usage_text += Y("  -M, --no-attachments     Don't copy attachments from a source file.\n");
   usage_text += Y("  --no-chapters            Don't keep chapters from a Matroska file.\n");
   usage_text += Y("  --no-tags                Don't keep tags from a Matroska file.\n");
-  usage_text += Y("  -y, --sync, --delay <TID:d[,o[/p]]>\n"
+  usage_text += Y("  -y, --sync <TID:d[,o[/p]]>\n"
                   "                           Synchronize, adjust the track's timecodes with\n"
                   "                           the id TID by 'd' ms.\n"
                   "                           'o/p': Adjust the timecodes by multiplying with\n"

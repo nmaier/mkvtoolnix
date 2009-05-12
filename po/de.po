@@ -1,3 +1,4 @@
+
 # translation of de.po to German
 # Copyright (C) 2009 Moritz Bunkus
 # This file is distributed under the same license as the mkvtoolnix package.
@@ -9,7 +10,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-05-12 18:47+0200\n"
+"PO-Revision-Date: 2009-05-12 20:00+0200\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -545,7 +546,7 @@ msgstr "  -v, --verbose            Gesprächigkeit erhöhen\n"
 
 #: src/merge/mkvmerge.cpp:212
 msgid ""
-"  -y, --sync, --delay <TID:d[,o[/p]]>\n"
+"  -y, --sync <TID:d[,o[/p]]>\n"
 "                           Synchronize, adjust the track's timecodes with\n"
 "                           the id TID by 'd' ms.\n"
 "                           'o/p': Adjust the timecodes by multiplying with\n"
@@ -553,7 +554,7 @@ msgid ""
 "                           1000 if omitted. Both 'o' and 'p' can be\n"
 "                           floating point numbers.\n"
 msgstr ""
-"  -y, --sync, --delay <TID:d[,o[/p]]>\n"
+"  -y, --sync <TID:d[,o[/p]]>\n"
 "                           Manuelle Synchronisation. Addiert den Wert 'd' zu\n"
 "                           allen Zeitstempeln und multiplziert sie mit 'o/p'.\n"
 "                           'p' wird mit 1000 angenommen, wenn es nicht\n"
