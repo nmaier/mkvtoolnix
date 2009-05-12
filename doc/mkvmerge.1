@@ -405,6 +405,29 @@ slices that are bigger than 65535 bytes.
 For such files you have to use this parameter and increase the size to 3 or
 \fBmkvmerge\fR will abort with an error.
 .TP
+\fB\-\-append\-mode\fR <\fImode\fR>
+Determines how timecodes are calculated when appending files.
+The parameter \fImode\fR can have two values: \fIfile\fR which is also
+the default and \fItrack\fR.
+.br
+When mkvmerge appends a track (called \fItrack2_1\fR from now on) from
+a second file (called \fIfile2\fR) to a track (called \fItrack1_1\fR)
+from the first file (called \fIfile1\fR) then it has to offset all
+timecodes for \fItrack2_1\fR by an amount.  For \fIfile\fR mode this
+amount is the highest timecode encountered in \fIfile1\fR even if that
+timecode was from a different track than \fItrack1_1\fR. In
+\fRtrack\fR mode the offset is the highest timecode of \fItrack1_1\fR.
+.br
+Unfortunately mkvmerge cannot detect which mode to use
+reliably. Therefore it defaults \fIfile\fR mode. \fIfile\fR mode
+usually works better for files that have been created independently of
+each other; e.g. when appending AVI or MP4 files. \fItrack\fR mode may
+work better for sources that are essentially just parts of one big
+file, e.g. for VOB and EVO files.
+.br
+Subtitle tracks are always treated as if \fIfile\fR mode were active
+even if \fItrack\fR mode actually is.
+.TP
 \fB\-\-append\-to\fR <\fISFID1:STID1:DFID1:DTID1\fR[,...]>
 This option controls to which track another track is appended.
 Each spec contains four IDs: a file ID, a track ID, another file ID and
