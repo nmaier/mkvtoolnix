@@ -43,12 +43,12 @@ bool MTX_DLL_API parse_uint(const char *s, uint64_t &value);
 bool MTX_DLL_API parse_uint(const char *s, uint32_t &value);
 inline bool
 parse_uint(const std::string &s,
-          uint64_t &value) {
+           uint64_t &value) {
   return parse_uint(s.c_str(), value);
 }
 inline bool
 parse_uint(const std::string &s,
-          uint32_t &value) {
+           uint32_t &value) {
   return parse_uint(s.c_str(), value);
 }
 
