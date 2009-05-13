@@ -1,7 +1,7 @@
 #ifndef __ELEMENT_INFO
 #define __ELEMENT_INFO
 
-#include "os.h"
+#include "common/os.h"
 
 #include <map>
 #include <string>

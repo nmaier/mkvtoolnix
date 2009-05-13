@@ -10,16 +10,19 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "common/os.h"
+
 #include <errno.h>
 #include <string.h>
 
 #include <string>
 
-#include "os.h"
-
-#include "base64.h"
-#include "common.h"
-#include "mm_io.h"
+#include "common/base64.h"
+#include "common/command_line.h"
+#include "common/common.h"
+#include "common/mm_io.h"
+#include "common/string_editing.h"
+#include "common/string_parsing.h"
 
 using namespace std;
 

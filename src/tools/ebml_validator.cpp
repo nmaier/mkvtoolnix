@@ -1,4 +1,14 @@
-#include "os.h"
+/*
+   ebml_validator - A tool for validating the EBML structure
+
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+
+   Written by Moritz Bunkus <moritz@bunkus.org>.
+*/
+
+#include "common/os.h"
 
 #include <algorithm>
 #include <limits>
@@ -8,12 +18,13 @@
 
 #include <stdlib.h>
 
-#include "bit_cursor.h"
-#include "byte_buffer.h"
-#include "checksums.h"
-#include "common.h"
-#include "mm_io.h"
-#include "translation.h"
+#include "common/bit_cursor.h"
+#include "common/byte_buffer.h"
+#include "common/checksums.h"
+#include "common/common.h"
+#include "common/mm_io.h"
+#include "common/string_parsing.h"
+#include "common/translation.h"
 
 #include "element_info.h"
 

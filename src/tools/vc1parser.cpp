@@ -1,12 +1,22 @@
-#include "os.h"
+/*
+   vc1parser - A tool for testing the VC1 bitstream parser
 
-#include "bit_cursor.h"
-#include "byte_buffer.h"
-#include "checksums.h"
-#include "common.h"
-#include "mm_io.h"
-#include "translation.h"
-#include "vc1_common.h"
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+
+   Written by Moritz Bunkus <moritz@bunkus.org>.
+*/
+
+#include "common/os.h"
+
+#include "common/bit_cursor.h"
+#include "common/byte_buffer.h"
+#include "common/checksums.h"
+#include "common/common.h"
+#include "common/mm_io.h"
+#include "common/translation.h"
+#include "common/vc1_common.h"
 
 static bool g_opt_checksum         = false;
 static bool g_opt_entrypoints      = false;
