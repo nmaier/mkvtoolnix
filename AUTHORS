@@ -68,6 +68,10 @@ Pettersen, Vegard <vegard_p@broadpark.no>
 Rice, Matt <topquark@sluggy.net>
     * Extraction of h.264 into proper h.264 ES streams
 
+Schmuland, Todd <tschmula@gmail.com>
+    * Bugfix for VobSub extraction
+    * Bugfix for VobSub muxing
+
 Stone, Jory (jcsston) <jcsston@toughguy.net>
     * Fixes to mkvinfo's GUI
 
@@ -86,7 +90,7 @@ Stuff that was developped externally and only included/patched in mkvtoolnix:
 
 avilib:
     * Johanni, Rainer <Rainer@Johanni.de> (original source code)
-    * Ãstreich, Thomas <ostreich@theorie.physik.uni-goettingen.de>
+    * Östreich, Thomas <ostreich@theorie.physik.uni-goettingen.de>
       (lots of modifications in transcode)
     * Bunkus, Moritz <moritz@bunkus.org> (lots of modifications in
       ogmtools and mkvtoolnix)

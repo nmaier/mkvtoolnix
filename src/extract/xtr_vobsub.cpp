@@ -138,8 +138,6 @@ xtr_vobsub_c::handle_frame(memory_cptr &frame,
   ps.muxr[1] = 0x89;
   ps.muxr[2] = 0xc3; // just some value
   ps.stlen   = 0xf8;
-  if ((8 > padding) && (first == size))
-    ps.stlen |= (uint8_t)padding;
 
   mpeg_es_header_t es;
   memset(&es, 0, sizeof(mpeg_es_header_t));
@@ -156,11 +154,17 @@ xtr_vobsub_c::handle_frame(memory_cptr &frame,
   es.pts[3]    = (uint8_t)(c >> 7);
   es.pts[4]    = (uint8_t)(c << 1) | 0x01;
   es.lidx      = (NULL == m_master) ? 0x20 : m_stream_id;
+  if ((6 > padding) && (first == size)) {
+    es.hlen += (uint8_t)padding;
+    es.len[0]  = (uint8_t)((first + 9 + padding) >> 8);
+    es.len[1]  = (uint8_t)(first + 9 + padding);
+  }
 
   vmaster->m_out->write(&ps, sizeof(mpeg_ps_header_t));
-  if ((0 < padding) && (8 > padding) && (first == size))
+  vmaster->m_out->write(&es, sizeof(mpeg_es_header_t) - 1);
+  if ((0 < padding) && (6 > padding) && (first == size))
     vmaster->m_out->write(padding_data, padding);
-  vmaster->m_out->write(&es, sizeof(mpeg_es_header_t));
+  vmaster->m_out->write(&es.lidx, 1);
   vmaster->m_out->write(data, first);
   while (first < size) {
     size    -= first;
@@ -169,22 +173,24 @@ xtr_vobsub_c::handle_frame(memory_cptr &frame,
     padding  = (2048 - (size + 10 + sizeof(mpeg_ps_header_t))) & 2047;
     first    = size + 10 + sizeof(mpeg_ps_header_t) > 2048 ? 2048 - 10 - sizeof(mpeg_ps_header_t) : size;
 
-    if ((8 > padding) && (first == size))
-      ps.stlen |= (uint8_t)padding;
-
     es.len[0]   = (uint8_t)((first + 4) >> 8);
     es.len[1]   = (uint8_t)(first + 4);
     es.flags[1] = 0;
     es.hlen     = 0;
-    es.pts[0]   = es.lidx;
+    if ((6 > padding) && (first == size)) {
+      es.hlen += (uint8_t)padding;
+      es.len[0]  = (uint8_t)((first + 4 + padding) >> 8);
+      es.len[1]  = (uint8_t)(first + 4 + padding);
+    }
 
     vmaster->m_out->write(&ps, sizeof(mpeg_ps_header_t));
-    if ((0 < padding) && (8 > padding) && (first == size))
+    vmaster->m_out->write(&es, 9);
+    if ((0 < padding) && (6 > padding) && (first == size))
       vmaster->m_out->write(padding_data, padding);
-    vmaster->m_out->write(&es, 10);
+    vmaster->m_out->write(&es.lidx, 1);
     vmaster->m_out->write(data, first);
   }
-  if (8 <= padding) {
+  if (6 <= padding) {
     padding      -= 6;
     es.stream_id  = 0xbe;
     es.len[0]     = (uint8_t)(padding >> 8);

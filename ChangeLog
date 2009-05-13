@@ -1,5 +1,9 @@
 2009-05-13  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvextract: bug fix: The VobSub extraction was made more
+	compatible with most applications. Fix for bug 245. Patch by Todd
+	Schmuland (see AUTHORS).
+
 	* mkvmerge: bug fix: Fixed support for Windows systems that use
 	code pages that are not supported by the iconv library (e.g. code
 	page 720). mkvmerge was exiting with warnings causing mmg to
