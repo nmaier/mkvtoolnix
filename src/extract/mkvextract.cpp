@@ -349,7 +349,7 @@ main(int argc,
 
   mm_file_io_c::setup();
   srand(time(NULL));
-  cc_local_utf8 = utf8_init("");
+  g_cc_local_utf8 = charset_converter_c::init("");
   init_cc_stdio();
 
   xml_element_map_init();
@@ -382,8 +382,6 @@ main(int argc,
 
   else
     mxerror(Y("mkvextract: Unknown mode!?\n"));
-
-  utf8_done();
 
   return 0;
 

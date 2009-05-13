@@ -102,7 +102,7 @@ cue_entries_to_chapter_name(std::string &performer,
   }
 }
 
-typedef struct {
+struct cue_parser_args_t {
   int num;
   int64_t start_of_track;
   vector<int64_t> start_indices;
@@ -133,14 +133,30 @@ typedef struct {
   std::vector<std::string> comment;
   std::string language;
   int line_num;
-  int cc_utf8;
-} cue_parser_args_t;
+  charset_converter_cptr cc_utf8;
+
+  cue_parser_args_t()
+    : num(0)
+    , start_of_track(-1)
+    , index00_missing(false)
+    , end(0)
+    , min_tc(0)
+    , max_tc(0)
+    , offset(0)
+    , chapters(NULL)
+    , edition(NULL)
+    , atom(NULL)
+    , do_convert(false)
+    , line_num(0)
+  {
+  }
+};
 
 static UTFstring
 cue_str_internal_to_utf(cue_parser_args_t &a,
                         const std::string &s) {
   if (a.do_convert)
-    return cstrutf8_to_UTFstring(to_utf8(a.cc_utf8, s));
+    return cstrutf8_to_UTFstring(a.cc_utf8->utf8(s));
   else
     return cstrutf8_to_UTFstring(s);
 }
@@ -340,22 +356,13 @@ parse_cue_chapters(mm_text_io_c *in,
 
   if (in->get_byte_order() == BO_NONE) {
     a.do_convert = true;
-    a.cc_utf8    = utf8_init(charset);
-
-  } else {
-    a.do_convert = false;
-    a.cc_utf8    = 0;
+    a.cc_utf8    = charset_converter_c::init(charset);
   }
 
-  a.language       = language.empty() ? "eng" : language;
-  a.min_tc         = min_tc;
-  a.max_tc         = max_tc;
-  a.offset         = offset;
-  a.atom           = NULL;
-  a.edition        = NULL;
-  a.num            = 0;
-  a.line_num       = 0;
-  a.start_of_track = -1;
+  a.language = language.empty() ? "eng" : language;
+  a.min_tc   = min_tc;
+  a.max_tc   = max_tc;
+  a.offset   = offset;
 
   try {
     while (in->getline2(line)) {

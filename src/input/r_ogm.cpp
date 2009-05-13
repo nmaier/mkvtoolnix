@@ -726,7 +726,7 @@ ogm_reader_c::handle_stream_comments() {
   string title;
 
   bool charset_warning_printed = false;
-  int cch                      = utf8_init(ti.chapter_charset);
+  charset_converter_cptr cch   = charset_converter_c::init(ti.chapter_charset);
   int i;
 
   for (i = 0; i < sdemuxers.size(); i++) {
@@ -795,7 +795,7 @@ ogm_reader_c::handle_stream_comments() {
     }
 
     if (title != "") {
-      title = to_utf8(cch, title);
+      title = cch->utf8(title);
       if (!g_segment_title_set && g_segment_title.empty() && (OGM_STREAM_TYPE_V_MSCOMP == dmx->stype)) {
         g_segment_title     = title;
         g_segment_title_set = true;
@@ -810,7 +810,7 @@ ogm_reader_c::handle_stream_comments() {
 
         out->write_bom("UTF-8");
         for (j = 0; j < chapter_strings.size(); j++)
-          out->puts(to_utf8(cch, chapter_strings[j]) + string("\n"));
+          out->puts(cch->utf8(chapter_strings[j]) + string("\n"));
         out->set_file_name(ti.fname);
 
         auto_ptr<mm_text_io_c> text_out(new mm_text_io_c(out.get(), false));

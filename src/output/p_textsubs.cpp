@@ -38,13 +38,12 @@ textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *p_reader,
   throw (error_c)
   : generic_packetizer_c(p_reader, p_ti)
   , m_packetno(0)
-  , m_cc_utf8(0)
   , m_global_data(new memory_c((unsigned char *)safememdup(global_data, global_size), global_size, true))
   , m_codec_id(codec_id)
   , m_recode(recode)
 {
   if (m_recode)
-    m_cc_utf8 = utf8_init((ti.sub_charset != "") || !is_utf8 ? ti.sub_charset : "UTF-8");
+    m_cc_utf8 = charset_converter_c::init((ti.sub_charset != "") || !is_utf8 ? ti.sub_charset : "UTF-8");
 
   set_track_type(track_subtitle);
   if (m_codec_id == MKV_S_TEXTUSF)
@@ -82,7 +81,7 @@ textsubs_packetizer_c::process(packet_cptr packet) {
   subs = boost::regex_replace(subs, s_re_translate_nl,       "\r\n", boost::match_default | boost::match_single_line);
 
   if (m_recode)
-    subs = to_utf8(m_cc_utf8, subs);
+    subs = m_cc_utf8->utf8(subs);
 
   packet->data = memory_cptr(new memory_c((unsigned char *)subs.c_str(), subs.length(), false));
 

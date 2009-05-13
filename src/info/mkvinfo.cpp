@@ -1875,15 +1875,10 @@ setup(const std::string &locale) {
   init_locales(locale);
 
   mm_file_io_c::setup();
-  cc_local_utf8 = utf8_init("");
+  g_cc_local_utf8 = charset_converter_c::init("");
   init_cc_stdio();
 
   xml_element_map_init();
-}
-
-void
-cleanup() {
-  utf8_done();
 }
 
 int
@@ -1899,7 +1894,6 @@ console_main(vector<string> args) {
     mxexit(0);
   }
   ok = process_file(file_name.c_str());
-  cleanup();
 
   if (ok)
     return 0;

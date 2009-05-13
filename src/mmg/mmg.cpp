@@ -2274,7 +2274,7 @@ mmg_app::OnInit() {
   init_stdio();
   init_ui_locale();
   mm_file_io_c::setup();
-  cc_local_utf8 = utf8_init("");
+  g_cc_local_utf8 = charset_converter_c::init("");
   xml_element_map_init();
 
   cfg->SetPath(wxT("/GUI"));
@@ -2373,8 +2373,6 @@ mmg_app::OnExit() {
   cfg->Flush();
 
   delete cfg;
-
-  utf8_done();
 
   return 0;
 }

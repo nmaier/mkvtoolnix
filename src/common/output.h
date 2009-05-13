@@ -19,11 +19,13 @@
 #include <boost/format.hpp>
 #include <string>
 
+#include "common/locale.h"
+
 class mm_io_c;
 
 extern bool MTX_DLL_API g_suppress_warnings;
 extern std::string MTX_DLL_API g_stdio_charset;
-extern int MTX_DLL_API g_cc_stdio;
+extern charset_converter_cptr MTX_DLL_API g_cc_stdio;
 
 void MTX_DLL_API init_stdio();
 void MTX_DLL_API redirect_stdio(mm_io_c *new_stdio);

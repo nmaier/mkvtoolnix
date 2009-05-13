@@ -27,7 +27,7 @@ class xtr_srt_c: public xtr_base_c {
 public:
   int m_num_entries;
   string m_sub_charset;
-  int m_conv;
+  charset_converter_cptr m_conv;
 
 public:
   xtr_srt_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
@@ -61,7 +61,7 @@ public:
   vector<string> m_ssa_format;
   vector<ssa_line_c> m_lines;
   string m_sub_charset;
-  int m_conv;
+  charset_converter_cptr m_conv;
   bool m_warning_printed;
 
   static const char *ms_kax_ssa_fields[10];

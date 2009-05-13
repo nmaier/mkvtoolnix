@@ -246,7 +246,7 @@ ssa_parser_c::ssa_parser_c(generic_reader_c *reader,
   , m_io(io)
   , m_file_name(file_name)
   , m_tid(tid)
-  , m_cc_utf8(-1)
+  , m_cc_utf8(charset_converter_c::init("UTF-8"))
   , m_is_ass(false)
   , m_attachment_id(0)
 {
@@ -453,7 +453,7 @@ ssa_parser_c::parse_time(string &stime) {
 
 string
 ssa_parser_c::recode_text(vector<string> &fields) {
-  return to_utf8(m_cc_utf8, get_element("Text", fields));
+  return m_cc_utf8->utf8(get_element("Text", fields));
 }
 
 void
@@ -486,7 +486,7 @@ ssa_parser_c::add_attachment_maybe(std::string &name,
     short_name.erase(0, pos + 1);
 
   attachment.ui_id        = m_attachment_id;
-  attachment.name         = to_utf8(m_cc_utf8, name);
+  attachment.name         = m_cc_utf8->utf8(name);
   attachment.description  = (boost::format(SSA_SECTION_FONTS == section ? Y("Imported font from %1%") : Y("Imported picture from %1%")) % short_name).str();
   attachment.to_all_files = true;
 

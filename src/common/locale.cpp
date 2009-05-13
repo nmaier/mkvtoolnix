@@ -39,33 +39,139 @@
 # include "common/string_formatting.h"
 #endif
 
-struct kax_conv_t {
-  iconv_t ict_from_utf8, ict_to_utf8;
-  std::string charset;
+charset_converter_cptr g_cc_local_utf8;
 
-  kax_conv_t(iconv_t n_ict_from_utf8, iconv_t n_ict_to_utf8,
-             const std::string &n_charset):
-    ict_from_utf8(n_ict_from_utf8), ict_to_utf8(n_ict_to_utf8),
-    charset(n_charset) { }
-};
+std::map<std::string, charset_converter_cptr> charset_converter_c::s_converters;
 
-static std::vector<kax_conv_t> s_kax_convs;
-int cc_local_utf8 = -1;
-
-static int
-add_kax_conv(const std::string &charset,
-             iconv_t ict_from,
-             iconv_t ict_to) {
-  int i;
-
-  for (i = 0; s_kax_convs.size() > i; ++i)
-    if (s_kax_convs[i].charset == charset)
-      return i;
-
-  s_kax_convs.push_back(kax_conv_t(ict_from, ict_to, charset));
-
-  return s_kax_convs.size() - 1;
+charset_converter_c::charset_converter_c(const std::string &charset)
+  : m_charset(charset)
+{
 }
+
+charset_converter_c::~charset_converter_c() {
+}
+
+std::string
+charset_converter_c::utf8(const std::string &source) {
+  return source;
+}
+
+std::string
+charset_converter_c::native(const std::string &source) {
+  return source;
+}
+
+charset_converter_cptr
+charset_converter_c::init(const std::string &charset) {
+  std::string actual_charset = charset.empty() ? get_local_charset() : charset;
+
+  std::map<std::string, charset_converter_cptr>::iterator converter = s_converters.find(actual_charset);
+  if (converter != s_converters.end())
+    return (*converter).second;
+
+#if defined(SYS_WINDOWS)
+  if (iconv_charset_converter_c::is_available(actual_charset) || !windows_charset_converter_c::is_available(actual_charset))
+    return charset_converter_cptr(new iconv_charset_converter_c(actual_charset));
+
+  return charset_converter_cptr(new windows_charset_converter_c(actual_charset));
+
+#else  // defined(SYS_WINDOWS)
+  return charset_converter_cptr(new iconv_charset_converter_c(actual_charset));
+#endif // defined(SYS_WINDOWS)
+}
+
+bool
+charset_converter_c::is_utf8_charset_name(const std::string &charset) {
+  return ((charset == "UTF8") || (charset == "UTF-8"));
+}
+
+// ------------------------------------------------------------
+
+iconv_charset_converter_c::iconv_charset_converter_c(const std::string &charset)
+  : charset_converter_c(charset)
+  , m_is_utf8(false)
+  , m_to_utf8_handle(reinterpret_cast<iconv_t>(-1))
+  , m_from_utf8_handle(reinterpret_cast<iconv_t>(-1))
+{
+  if (is_utf8_charset_name(charset)) {
+    m_is_utf8 = true;
+    return;
+  }
+
+  m_to_utf8_handle = iconv_open("UTF-8", charset.c_str());
+  if (reinterpret_cast<iconv_t>(-1) == m_to_utf8_handle)
+    mxwarn(boost::format(Y("Could not initialize the iconv library for the conversion from %1% to UFT-8. "
+                           "Some strings will not be converted to UTF-8 and the resulting Matroska file "
+                           "might not comply with the Matroska specs (error: %2%, %3%).\n"))
+           % charset % errno % strerror(errno));
+
+  m_from_utf8_handle = iconv_open(charset.c_str(), "UTF-8");
+  if (reinterpret_cast<iconv_t>(-1) == m_from_utf8_handle)
+    mxwarn(boost::format(Y("Could not initialize the iconv library for the conversion from UFT-8 to %1%. "
+                           "Some strings cannot be converted from UTF-8 and might be displayed incorrectly (error: %2%, %3%).\n"))
+           % charset % errno % strerror(errno));
+}
+
+iconv_charset_converter_c::~iconv_charset_converter_c() {
+  if (reinterpret_cast<iconv_t>(-1) == m_to_utf8_handle)
+    iconv_close(m_to_utf8_handle);
+
+  if (reinterpret_cast<iconv_t>(-1) == m_from_utf8_handle)
+    iconv_close(m_from_utf8_handle);
+}
+
+std::string
+iconv_charset_converter_c::utf8(const std::string &source) {
+  return m_is_utf8 ? source : iconv_charset_converter_c::convert(m_to_utf8_handle, source);
+}
+
+std::string
+iconv_charset_converter_c::native(const std::string &source) {
+  return m_is_utf8 ? source : iconv_charset_converter_c::convert(m_from_utf8_handle, source);
+}
+
+std::string
+iconv_charset_converter_c::convert(iconv_t handle,
+                                   const std::string &source) {
+  if (reinterpret_cast<iconv_t>(-1) == handle)
+    return source;
+
+  int length        = source.length() * 4;
+  char *destination = (char *)safemalloc(length + 1);
+  memset(destination, 0, length + 1);
+
+  iconv(handle, NULL, 0, NULL, 0); // Reset the iconv state.
+
+  size_t length_source      = length / 4;
+  size_t length_destination = length;
+  char *source_copy         = safestrdup(source.c_str());
+  char *ptr_source          = source_copy;
+  char *ptr_destination     = destination;
+  iconv(handle, (ICONV_CONST char **)&ptr_source, &length_source, &ptr_destination, &length_destination);
+  iconv(handle, NULL, NULL, &ptr_destination, &length_destination);
+
+  safefree(source_copy);
+  std::string result = destination;
+  safefree(destination);
+
+  return result;
+}
+
+bool
+iconv_charset_converter_c::is_available(const std::string &charset) {
+  if (is_utf8_charset_name(charset))
+    return true;
+
+  iconv_t handle = iconv_open("UTF-8", charset.c_str());
+  if (reinterpret_cast<iconv_t>(-1) == handle)
+    return false;
+
+  iconv_close(handle);
+
+  return true;
+}
+
+// ------------------------------------------------------------
 
 std::string
 get_local_charset() {
@@ -96,110 +202,6 @@ get_local_console_charset() {
 #else
   return get_local_charset();
 #endif
-}
-
-int
-utf8_init(const std::string &charset) {
-  std::string lc_charset;
-  iconv_t ict_from_utf8, ict_to_utf8;
-  int i;
-
-  if (charset == "")
-    lc_charset = get_local_charset();
-  else
-    lc_charset = charset;
-
-  if ((lc_charset == "UTF8") || (lc_charset == "UTF-8"))
-    return -1;
-
-  for (i = 0; i < s_kax_convs.size(); i++)
-    if (s_kax_convs[i].charset == lc_charset)
-      return i;
-
-  ict_to_utf8 = iconv_open("UTF-8", lc_charset.c_str());
-  if (ict_to_utf8 == (iconv_t)(-1))
-    mxwarn(boost::format(Y("Could not initialize the iconv library for the conversion from %1% to UFT-8. "
-                           "Some strings will not be converted to UTF-8 and the resulting Matroska file "
-                           "might not comply with the Matroska specs (error: %2%, %3%).\n"))
-           % lc_charset % errno % strerror(errno));
-
-  ict_from_utf8 = iconv_open(lc_charset.c_str(), "UTF-8");
-  if (ict_from_utf8 == (iconv_t)(-1))
-    mxwarn(boost::format(Y("Could not initialize the iconv library for the conversion from UFT-8 to %1%. "
-                           "Some strings cannot be converted from UTF-8 and might be displayed incorrectly (error: %2%, %3%).\n"))
-           % lc_charset % errno % strerror(errno));
-
-  return add_kax_conv(lc_charset.c_str(), ict_from_utf8, ict_to_utf8);
-}
-
-void
-utf8_done() {
-  int i;
-
-  for (i = 0; s_kax_convs.size() > i; ++i) {
-    if (s_kax_convs[i].ict_from_utf8 != (iconv_t)(-1))
-      iconv_close(s_kax_convs[i].ict_from_utf8);
-
-    if (s_kax_convs[i].ict_to_utf8 != (iconv_t)(-1))
-      iconv_close(s_kax_convs[i].ict_to_utf8);
-  }
-
-  s_kax_convs.clear();
-}
-
-static std::string
-convert_charset(iconv_t ict,
-                const std::string &src) {
-  if (ict == (iconv_t)(-1))
-    return src;
-
-  int len   = src.length() * 4;
-  char *dst = (char *)safemalloc(len + 1);
-  memset(dst, 0, len + 1);
-
-  iconv(ict, NULL, 0, NULL, 0);      // Reset the iconv state.
-
-  size_t lsrc   = len / 4;
-  size_t ldst   = len;
-  char *srccopy = safestrdup(src);
-  char *psrc    = srccopy;
-  char *pdst    = dst;
-  iconv(ict, (ICONV_CONST char **)&psrc, &lsrc, &pdst, &ldst);
-  iconv(ict, NULL, NULL, &pdst, &ldst);
-
-  safefree(srccopy);
-  std::string result = dst;
-  safefree(dst);
-
-  return result;
-}
-
-std::string
-to_utf8(int handle,
-        const std::string &local) {
-  std::string s;
-
-  if (-1 == handle)
-    return local;
-
-  if (s_kax_convs.size() <= handle)
-    mxerror(boost::format(Y("locale.cpp/to_utf8(): Invalid conversion handle %1% (num: %2%).\n")) % handle % s_kax_convs.size());
-
-  return convert_charset(s_kax_convs[handle].ict_to_utf8, local);
-}
-
-std::string
-from_utf8(int handle,
-          const std::string &utf8) {
-  std::string s;
-
-  if (-1 == handle)
-    return utf8;
-
-  if (s_kax_convs.size() <= handle)
-    mxerror(boost::format(Y("locale.cpp/from_utf8(): Invalid conversion handle %1% (num: %2%).\n")) % handle % s_kax_convs.size());
-
-  return convert_charset(s_kax_convs[handle].ict_from_utf8, utf8);
 }
 
 #ifdef SYS_WINDOWS

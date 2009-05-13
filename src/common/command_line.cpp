@@ -92,10 +92,10 @@ read_args_from_file(std::vector<std::string> &args,
 std::vector<std::string>
 command_line_utf8(int argc,
                   char **argv) {
-  int i, cc_command_line;
+  int i;
   std::vector<std::string> args;
 
-  cc_command_line = g_cc_stdio;
+  charset_converter_cptr cc_command_line = g_cc_stdio;
 
   for (i = 1; i < argc; i++)
     if (argv[i][0] == '@')
@@ -104,10 +104,10 @@ command_line_utf8(int argc,
       if (!strcmp(argv[i], "--command-line-charset")) {
         if ((i + 1) == argc)
           mxerror(Y("'--command-line-charset' is missing its argument.\n"));
-        cc_command_line = utf8_init(argv[i + 1] == NULL ? "" : argv[i + 1]);
+        cc_command_line = charset_converter_c::init(argv[i + 1] == NULL ? "" : argv[i + 1]);
         i++;
       } else
-        args.push_back(to_utf8(cc_command_line, argv[i]));
+        args.push_back(cc_command_line->utf8(argv[i]));
     }
 
   return args;

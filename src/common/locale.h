@@ -16,19 +16,58 @@
 
 #include "common/os.h"
 
+#include <iconv.h>
+#include <map>
 #include <string>
 #include <vector>
 
-extern int MTX_DLL_API cc_local_utf8;
+#include "common/smart_pointers.h"
+
+class charset_converter_c;
+typedef counted_ptr<charset_converter_c> charset_converter_cptr;
+
+class charset_converter_c {
+protected:
+  std::string m_charset;
+
+public:
+  charset_converter_c(const std::string &charset);
+  virtual ~charset_converter_c();
+
+  virtual std::string utf8(const std::string &source);
+  virtual std::string native(const std::string &source);
+
+public:                         // Static members
+  static charset_converter_cptr init(const std::string &charset);
+  static bool is_utf8_charset_name(const std::string &charset);
+
+private:
+  static std::map<std::string, charset_converter_cptr> s_converters;
+};
+
+class iconv_charset_converter_c: public charset_converter_c {
+private:
+  bool m_is_utf8;
+  iconv_t m_to_utf8_handle, m_from_utf8_handle;
+
+public:
+  iconv_charset_converter_c(const std::string &charset);
+  virtual ~iconv_charset_converter_c();
+
+  virtual std::string utf8(const std::string &source);
+  virtual std::string native(const std::string &source);
+
+public:                         // Static functions
+  static bool is_available(const std::string &charset);
+
+private:                        // Static functions
+  static std::string convert(iconv_t handle, const std::string &source);
+};
+
+extern charset_converter_cptr MTX_DLL_API g_cc_local_utf8;
 
 std::string MTX_DLL_API get_local_charset();
 std::string MTX_DLL_API get_local_console_charset();
-
-int MTX_DLL_API utf8_init(const std::string &charset);
-void MTX_DLL_API utf8_done();
-
-std::string MTX_DLL_API to_utf8(int handle, const std::string &local);
-std::string MTX_DLL_API from_utf8(int handle, const std::string &utf8);
 
 std::vector<std::string> MTX_DLL_API command_line_utf8(int argc, char **argv);
 

@@ -23,7 +23,7 @@ bool g_warning_issued             = false;
 std::string g_stdio_charset;
 
 static bool s_mm_stdio_redirected = false;
-int g_cc_stdio                    = -1;
+charset_converter_cptr g_cc_stdio;
 static counted_ptr<mm_io_c> s_mm_stdio;
 
 void
@@ -57,19 +57,19 @@ mxmsg(int level,
   if (level == MXMSG_ERROR) {
     if (s_saw_cr_after_nl)
       s_mm_stdio->puts("\n");
-    s_mm_stdio->puts(from_utf8(g_cc_stdio, Y("Error: ")));
+    s_mm_stdio->puts(g_cc_stdio->native(Y("Error: ")));
 
   } else if (level == MXMSG_WARNING)
-    s_mm_stdio->puts(from_utf8(g_cc_stdio, Y("Warning: ")));
+    s_mm_stdio->puts(g_cc_stdio->native(Y("Warning: ")));
 
   else if (level == MXMSG_DEBUG)
-    s_mm_stdio->puts(from_utf8(g_cc_stdio, Y("Debug> ")));
+    s_mm_stdio->puts(g_cc_stdio->native(Y("Debug> ")));
 
   int idx_cr = message.rfind('\r');
   if ((0 <= idx_cr) && (message.rfind('\n') < idx_cr))
     s_saw_cr_after_nl = true;
 
-  string output = from_utf8(g_cc_stdio, message);
+  string output = g_cc_stdio->native(message);
   s_mm_stdio->puts(output);
   s_mm_stdio->flush();
 }
@@ -163,7 +163,7 @@ init_cc_stdio() {
 void
 set_cc_stdio(const std::string &charset) {
   g_stdio_charset = charset;
-  g_cc_stdio      = utf8_init(charset);
+  g_cc_stdio      = charset_converter_c::init(charset);
 }
 
 void

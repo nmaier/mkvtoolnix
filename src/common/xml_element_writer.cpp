@@ -170,16 +170,15 @@ write_xml_element_rec(int level,
 // ------------------------------------------------------------------------
 
 xml_formatter_c::xml_formatter_c(mm_io_c *out,
-                                 const string &encoding):
-  m_out(out),
-  m_temp_io(auto_ptr<mm_text_io_c>(new mm_text_io_c(new mm_mem_io_c(NULL,
-                                                                    100000,
-                                                                    4000)))),
-  m_encoding(encoding), m_cc_utf8(0), m_header_written(false),
-  m_state(XMLF_STATE_NONE) {
-
+                                 const string &encoding)
+  : m_out(out)
+  , m_temp_io(auto_ptr<mm_text_io_c>(new mm_text_io_c(new mm_mem_io_c(NULL, 100000, 4000))))
+  , m_encoding(encoding)
+  , m_header_written(false)
+  , m_cc_utf8(charset_converter_c::init(m_encoding))
+  , m_state(XMLF_STATE_NONE)
+{
   m_xml_source = m_temp_io.get();
-  m_cc_utf8 = utf8_init(m_encoding);
 }
 
 xml_formatter_c::~xml_formatter_c() {
@@ -248,7 +247,7 @@ xml_formatter_c::start_element_cb(const char *name,
   string element;
 
   strip(m_data_buffer, true);
-  m_data_buffer = escape_xml(from_utf8(m_cc_utf8, m_data_buffer));
+  m_data_buffer = escape_xml(m_cc_utf8->native(m_data_buffer));
 
   if (XMLF_STATE_START == m_state)
     m_out->puts(">");
@@ -267,7 +266,7 @@ xml_formatter_c::start_element_cb(const char *name,
 void
 xml_formatter_c::end_element_cb(const char *name) {
   strip(m_data_buffer, true);
-  m_data_buffer = escape_xml(from_utf8(m_cc_utf8, m_data_buffer));
+  m_data_buffer = escape_xml(m_cc_utf8->native(m_data_buffer));
 
   --m_depth;
 

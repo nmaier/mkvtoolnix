@@ -776,8 +776,8 @@ qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
   if (ti.no_chapters || (NULL != g_kax_chapters))
     return;
 
-  std::string charset = ti.chapter_charset.empty() ? "UTF-8" : ti.chapter_charset;
-  int charset_handle  = utf8_init(ti.chapter_charset);
+  std::string charset                   = ti.chapter_charset.empty() ? "UTF-8" : ti.chapter_charset;
+  charset_converter_cptr charset_handle = charset_converter_c::init(ti.chapter_charset);
 
   io->skip(1 + 3 + 4);          // Version, flags, zero
 
@@ -798,7 +798,7 @@ qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
     if (io->read(buf->get(), buf->get_size() - 1) != (buf->get_size() - 1))
       break;
 
-    chapters.push_back(chapter_entry_t(to_utf8(charset_handle, reinterpret_cast<char *>(buf->get())), timecode));
+    chapters.push_back(chapter_entry_t(charset_handle->utf8(reinterpret_cast<char *>(buf->get())), timecode));
   }
 
   if (chapters.empty())

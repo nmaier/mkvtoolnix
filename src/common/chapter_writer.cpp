@@ -168,9 +168,9 @@ write_chapters_simple(int &chapter_num,
 
   for (chapter_idx = 0; s_chapter_entries.size() > chapter_idx; chapter_idx++) {
     int64_t v = s_chapter_entries[chapter_idx].m_start;
-    out->puts(from_utf8(g_cc_stdio, (boost::format("CHAPTER%|1$02d|=%|2$02d|:%|3$02d|:%|4$02d|.%|5$03d|\n")
-                                     % chapter_num % (v / 1000 / 60 / 60) % ((v / 1000 / 60) % 60) % ((v / 1000) % 60) % (v % 1000)).str()));
-    out->puts(from_utf8(g_cc_stdio, (boost::format("CHAPTER%|1$02d|NAME=%2%\n") % chapter_num % s_chapter_entries[chapter_idx].m_name).str()));
+    out->puts(g_cc_stdio->native((boost::format("CHAPTER%|1$02d|=%|2$02d|:%|3$02d|:%|4$02d|.%|5$03d|\n")
+                                  % chapter_num % (v / 1000 / 60 / 60) % ((v / 1000 / 60) % 60) % ((v / 1000) % 60) % (v % 1000)).str()));
+    out->puts(g_cc_stdio->native((boost::format("CHAPTER%|1$02d|NAME=%2%\n") % chapter_num % s_chapter_entries[chapter_idx].m_name).str()));
     chapter_num++;
   }
 

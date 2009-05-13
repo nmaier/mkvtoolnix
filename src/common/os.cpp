@@ -160,14 +160,14 @@ get_environment_variable(const std::string &key) {
 
 void
 create_directory(const char *path) {
-  std::string local_path = from_utf8(cc_local_utf8, path);
+  std::string local_path = g_cc_local_utf8->native(path);
   if (0 != mkdir(local_path.c_str(), 0777))
     throw error_c(boost::format(Y("mkdir(%1%) failed; errno = %2% (%3%)")) % path % errno % strerror(errno));
 }
 
 int
 fs_entry_exists(const char *path) {
-  std::string local_path = from_utf8(cc_local_utf8, path);
+  std::string local_path = g_cc_local_utf8->native(path);
   struct stat s;
   return 0 == stat(local_path.c_str(), &s);
 }

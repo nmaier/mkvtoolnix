@@ -1848,7 +1848,7 @@ setup() {
 #endif
 
   mm_file_io_c::setup();
-  cc_local_utf8 = utf8_init("");
+  g_cc_local_utf8 = charset_converter_c::init("");
   init_cc_stdio();
 
   g_cluster_helper = new cluster_helper_c();
@@ -1898,6 +1898,4 @@ cleanup() {
   g_kax_info_chap = NULL;
 
   g_forced_seguids.clear();
-
-  utf8_done();
 }

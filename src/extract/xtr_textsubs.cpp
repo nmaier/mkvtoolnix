@@ -29,7 +29,7 @@ xtr_srt_c::xtr_srt_c(const string &codec_id,
   : xtr_base_c(codec_id, tid, tspec)
   , m_num_entries(0)
   , m_sub_charset(tspec.sub_charset)
-  , m_conv(utf8_init(tspec.sub_charset))
+  , m_conv(charset_converter_c::init(tspec.sub_charset))
 {
 }
 
@@ -72,7 +72,7 @@ xtr_srt_c::handle_frame(memory_cptr &frame,
      % m_num_entries
      % (start / 1000 / 60 / 60) % ((start / 1000 / 60) % 60) % ((start / 1000) % 60) % (start % 1000)
      % (end   / 1000 / 60 / 60) % ((end   / 1000 / 60) % 60) % ((end   / 1000) % 60) % (end   % 1000)
-     % from_utf8(m_conv, text)
+     % m_conv->native(text)
      ).str();
 
   m_out->puts(buffer);
@@ -92,7 +92,7 @@ xtr_ssa_c::xtr_ssa_c(const string &codec_id,
                      track_spec_t &tspec)
   : xtr_base_c(codec_id, tid, tspec)
   , m_sub_charset(tspec.sub_charset)
-  , m_conv(utf8_init(tspec.sub_charset))
+  , m_conv(charset_converter_c::init(tspec.sub_charset))
   , m_warning_printed(false)
 {
 }
@@ -159,7 +159,7 @@ xtr_ssa_c::create_file(xtr_base_c *master,
   for (pos1 = 0; m_ssa_format.size() > pos1; ++pos1)
     m_ssa_format[pos1] = downcase(m_ssa_format[pos1]);
 
-  sconv = from_utf8(m_conv, sconv);
+  sconv = m_conv->native(sconv);
   m_out->puts(sconv);
 }
 
@@ -254,7 +254,7 @@ xtr_ssa_c::handle_frame(memory_cptr &frame,
   }
 
   // Do the charset conversion.
-  line  = from_utf8(m_conv, line);
+  line  = m_conv->native(line);
   line += "\n";
 
   // Now store that entry.

@@ -107,7 +107,7 @@ protected:
   mm_text_io_c *m_io;
   const std::string &m_file_name;
   int64_t m_tid;
-  int m_cc_utf8;
+  charset_converter_cptr m_cc_utf8;
   std::vector<std::string> m_format;
   bool m_is_ass;
   std::string m_global;
@@ -124,7 +124,7 @@ public:
     return m_is_ass;
   }
 
-  void set_iconv_handle(int cc_utf8) {
+  void set_iconv_handle(charset_converter_cptr cc_utf8) {
     m_cc_utf8 = cc_utf8;
   }
 

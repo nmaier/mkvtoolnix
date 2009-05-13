@@ -45,7 +45,7 @@
 
 static std::string
 get_errno_msg() {
-  return to_utf8(cc_local_utf8, strerror(errno));
+  return g_cc_local_utf8->utf8(strerror(errno));
 }
 
 # if HAVE_POSIX_FADVISE
@@ -120,7 +120,7 @@ mm_file_io_c::mm_file_io_c(const std::string &path,
 
   if ((MODE_WRITE == mode) || (MODE_CREATE == mode))
     prepare_path(path);
-  local_path = from_utf8(cc_local_utf8, path);
+  local_path = g_cc_local_utf8->native(path);
 
   struct stat st;
   if ((0 == stat(local_path.c_str(), &st)) && S_ISDIR(st.st_mode))
@@ -420,7 +420,7 @@ mm_file_io_c::write(const void *buffer,
         idx--;
       }
 
-      error_msg_utf8 = to_utf8(cc_local_utf8, error_msg);
+      error_msg_utf8 = g_cc_local_utf8->utf8(error_msg);
     } else
       error_msg_utf8 = Y("unknown");
 

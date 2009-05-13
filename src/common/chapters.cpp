@@ -149,7 +149,7 @@ parse_simple_chapters(mm_text_io_c *in,
   int mode                 = 0;
   int num                  = 0;
   int64_t start            = 0;
-  int cc_utf8              = 0;
+  charset_converter_cptr cc_utf8;
 
   // The core now uses ns precision timecodes.
   if (0 < min_tc)
@@ -161,7 +161,7 @@ parse_simple_chapters(mm_text_io_c *in,
 
   bool do_convert = in->get_byte_order() == BO_NONE;
   if (do_convert)
-    cc_utf8 = utf8_init(charset);
+    cc_utf8 = charset_converter_c::init(charset);
 
   std::string use_language =
       !language.empty()                   ? language
@@ -224,7 +224,7 @@ parse_simple_chapters(mm_text_io_c *in,
 
           KaxChapterDisplay *display = &GetChild<KaxChapterDisplay>(*atom);
 
-          GetChildAs<KaxChapterString,   EbmlUnicodeString>(*display) = cstrutf8_to_UTFstring(do_convert ? to_utf8(cc_utf8, name) : name);
+          GetChildAs<KaxChapterString,   EbmlUnicodeString>(*display) = cstrutf8_to_UTFstring(do_convert ? cc_utf8->utf8(name) : name);
           GetChildAs<KaxChapterLanguage, EbmlString>(*display)        = use_language;
 
           if (!g_default_chapter_country.empty())

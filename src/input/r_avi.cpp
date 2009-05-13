@@ -389,16 +389,16 @@ avi_reader_c::create_srt_packetizer(int idx) {
 
 void
 avi_reader_c::create_ssa_packetizer(int idx) {
-  avi_subs_demuxer_t &demuxer = m_subtitle_demuxers[idx];
-  int id                      = idx + 1 + AVI_audio_tracks(m_avi);
+  avi_subs_demuxer_t &demuxer    = m_subtitle_demuxers[idx];
+  int id                         = idx + 1 + AVI_audio_tracks(m_avi);
 
-  ssa_parser_c *parser        = new ssa_parser_c(this, demuxer.m_text_io.get(), ti.fname, id);
-  demuxer.m_subs              = subtitles_cptr(parser);
+  ssa_parser_c *parser           = new ssa_parser_c(this, demuxer.m_text_io.get(), ti.fname, id);
+  demuxer.m_subs                 = subtitles_cptr(parser);
 
-  int cc_utf8                 = map_has_key(ti.sub_charsets, id)               ? utf8_init(ti.sub_charsets[id])
-    :                           map_has_key(ti.sub_charsets, -1)               ? utf8_init(ti.sub_charsets[-1])
-    :                           demuxer.m_text_io->get_byte_order() != BO_NONE ? utf8_init("UTF-8")
-    :                                                                            cc_local_utf8;
+  charset_converter_cptr cc_utf8 = map_has_key(ti.sub_charsets, id)               ? charset_converter_c::init(ti.sub_charsets[id])
+                                 : map_has_key(ti.sub_charsets, -1)               ? charset_converter_c::init(ti.sub_charsets[-1])
+                                 : demuxer.m_text_io->get_byte_order() != BO_NONE ? charset_converter_c::init("UTF-8")
+                                 :                                                  g_cc_local_utf8;
 
   parser->set_iconv_handle(cc_utf8);
   parser->set_attachment_id_base(g_attachments.size());

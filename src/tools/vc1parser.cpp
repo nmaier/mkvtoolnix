@@ -276,7 +276,7 @@ setup() {
   init_locales();
 
   mm_file_io_c::setup();
-  cc_local_utf8 = utf8_init("");
+  g_cc_local_utf8 = charset_converter_c::init("");
   init_cc_stdio();
 }
 
