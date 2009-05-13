@@ -213,11 +213,11 @@ cluster_helper_c::set_output(mm_io_c *out) {
 }
 
 void
-cluster_helper_c::set_duration(render_groups_t *rg) {
+cluster_helper_c::set_duration(render_groups_c *rg) {
   if (rg->durations.empty())
     return;
 
-  kax_block_blob_c *group = rg->groups.back();
+  kax_block_blob_c *group = rg->groups.back().get();
   int64_t def_duration    = rg->source->get_track_default_duration();
   int64_t block_duration  = 0;
 
@@ -242,7 +242,7 @@ cluster_helper_c::set_duration(render_groups_t *rg) {
 }
 
 bool
-cluster_helper_c::must_duration_be_set(render_groups_t *rg,
+cluster_helper_c::must_duration_be_set(render_groups_c *rg,
                                        packet_cptr &new_packet) {
   int i;
   int64_t block_duration = 0;
@@ -276,8 +276,8 @@ cluster_helper_c::must_duration_be_set(render_groups_t *rg,
 
 int
 cluster_helper_c::render() {
-  vector<render_groups_t *> render_groups;
-  vector<render_groups_t *>::iterator rg_it;
+  vector<render_groups_cptr> render_groups;
+  vector<render_groups_cptr>::iterator rg_it;
 
   bool use_simpleblock              = !hack_engaged(ENGAGE_NO_SIMPLE_BLOCKS);
 
@@ -309,20 +309,16 @@ cluster_helper_c::render() {
     if (source->contains_gap())
       m_cluster->SetSilentTrackUsed();
 
-    render_groups_t *render_group = NULL;
+    render_groups_c *render_group = NULL;
     mxforeach(rg_it, render_groups)
       if ((*rg_it)->source == source) {
-        render_group = *rg_it;
+        render_group = (*rg_it).get();
         break;
       }
 
     if (NULL == render_group) {
-      render_group                     = new render_groups_t;
-      render_group->source             = source;
-      render_group->more_data          = false;
-      render_group->duration_mandatory = false;
-
-      render_groups.push_back(render_group);
+      render_groups.push_back(render_groups_cptr(new render_groups_c(source)));
+      render_group = render_groups.back().get();
     }
 
     min_cl_timecode                        = std::min(pack->assigned_timecode, min_cl_timecode);
@@ -332,7 +328,7 @@ cluster_helper_c::render() {
 
     KaxTrackEntry &track_entry             = static_cast<KaxTrackEntry &>(*source->get_track_entry());
 
-    kax_block_blob_c *previous_block_group = !render_group->groups.empty() ? render_group->groups.back() : NULL;
+    kax_block_blob_c *previous_block_group = !render_group->groups.empty() ? render_group->groups.back().get() : NULL;
     kax_block_blob_c *new_block_group      = previous_block_group;
 
     if ((-1 != pack->bref) || has_codec_state)
@@ -351,10 +347,10 @@ cluster_helper_c::render() {
       if (has_codec_state)
         this_block_blob_type = BLOCK_BLOB_NO_SIMPLE;
 
-      new_block_group = new kax_block_blob_c(this_block_blob_type);
+      render_group->groups.push_back(kax_block_blob_cptr(new kax_block_blob_c(this_block_blob_type)));
+      new_block_group = render_group->groups.back().get();
       m_cluster->AddBlockBlob(new_block_group);
       new_block_group->SetParent(*m_cluster);
-      render_group->groups.push_back(new_block_group);
 
       added_to_cues = false;
     }
@@ -442,7 +438,7 @@ cluster_helper_c::render() {
 
   if (0 < elements_in_cluster) {
     mxforeach(rg_it, render_groups)
-      set_duration(*rg_it);
+      set_duration((*rg_it).get());
 
     m_cluster->SetPreviousTimecode(min_cl_timecode - m_timecode_offset - 1, (int64_t)g_timecode_scale);
     m_cluster->set_min_timecode(min_cl_timecode - m_timecode_offset);
@@ -457,9 +453,6 @@ cluster_helper_c::render() {
     m_previous_cluster_tc = m_cluster->GlobalTimecode();
   } else
     m_previous_cluster_tc = 0;
-
-  mxforeach(rg_it, render_groups)
-    delete *rg_it;
 
   m_min_timecode_in_cluster = -1;
   m_max_timecode_in_cluster = -1;

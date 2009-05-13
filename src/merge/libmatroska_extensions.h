@@ -32,6 +32,10 @@ public:
     PreviousTimecode = 0;
   }
 
+  virtual ~kax_cluster_c() {
+    RemoveAll();
+  }
+
   void set_min_timecode(int64_t min_timecode) {
     MinTimecode = min_timecode;
   }
@@ -72,5 +76,6 @@ public:
   void set_block_duration(uint64_t time_length);
   bool replace_simple_by_group();
 };
+typedef counted_ptr<kax_block_blob_c> kax_block_blob_cptr;
 
 #endif // __LIBMATROSKA_EXTENSIONS

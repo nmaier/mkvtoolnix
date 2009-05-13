@@ -23,18 +23,28 @@
 
 #include "merge/libmatroska_extensions.h"
 #include "common/mm_io.h"
+#include "common/smart_pointers.h"
 #include "merge/pr_generic.h"
 
 using namespace std;
 
 #define RND_TIMECODE_SCALE(a) (irnd((double)(a) / (double)((int64_t)g_timecode_scale)) * (int64_t)g_timecode_scale)
 
-struct render_groups_t {
-  vector<kax_block_blob_c *> groups;
-  vector<int64_t> durations;
+class render_groups_c {
+public:
+  std::vector<kax_block_blob_cptr> groups;
+  std::vector<int64_t> durations;
   generic_packetizer_c *source;
   bool more_data, duration_mandatory;
+
+  render_groups_c(generic_packetizer_c *n_source)
+    : source(n_source)
+    , more_data(false)
+    , duration_mandatory(false)
+  {
+  }
 };
+typedef counted_ptr<render_groups_c> render_groups_cptr;
 
 struct split_point_t {
   enum split_point_type_e {
@@ -95,8 +105,8 @@ public:
   }
 
 private:
-  void set_duration(render_groups_t *rg);
-  bool must_duration_be_set(render_groups_t *rg, packet_cptr &new_packet);
+  void set_duration(render_groups_c *rg);
+  bool must_duration_be_set(render_groups_c *rg, packet_cptr &new_packet);
 };
 
 extern cluster_helper_c *g_cluster_helper;
