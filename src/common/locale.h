@@ -20,6 +20,9 @@
 #include <map>
 #include <string>
 #include <vector>
+#if defined(SYS_WINDOWS)
+# include <windows.h>
+#endif  // defined(SYS_WINDOWS)
 
 #include "common/smart_pointers.h"
 
@@ -63,6 +66,28 @@ public:                         // Static functions
 private:                        // Static functions
   static std::string convert(iconv_t handle, const std::string &source);
 };
+
+#if defined(SYS_WINDOWS)
+class windows_charset_converter_c: public charset_converter_c {
+private:
+  bool m_is_utf8;
+  UINT m_code_page;
+
+public:
+  windows_charset_converter_c(const std::string &charset);
+  virtual ~windows_charset_converter_c();
+
+  virtual std::string utf8(const std::string &source);
+  virtual std::string native(const std::string &source);
+
+public:                         // Static functions
+  static bool is_available(const std::string &charset);
+
+private:                        // Static functions
+  static std::string convert(UINT source_code_page, UINT destination_code_page, const std::string &source);
+  static UINT extract_code_page(const std::string &charset);
+};
+#endif  // defined(SYS_WINDOWS)
 
 extern charset_converter_cptr MTX_DLL_API g_cc_local_utf8;
 

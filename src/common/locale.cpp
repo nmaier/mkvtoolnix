@@ -37,6 +37,7 @@
 #include "common/memory.h"
 #ifdef SYS_WINDOWS
 # include "common/string_formatting.h"
+# include "common/string_parsing.h"
 #endif
 
 charset_converter_cptr g_cc_local_utf8;
@@ -170,6 +171,77 @@ iconv_charset_converter_c::is_available(const std::string &charset) {
 
   return true;
 }
+
+// ------------------------------------------------------------
+
+#if defined(SYS_WINDOWS)
+
+windows_charset_converter_c::windows_charset_converter_c(const std::string &charset)
+  : charset_converter_c(charset)
+  , m_is_utf8(is_utf8_charset_name(charset))
+  , m_code_page(extract_code_page(charset))
+{
+}
+
+windows_charset_converter_c::~windows_charset_converter_c() {
+}
+
+std::string
+windows_charset_converter_c::utf8(const std::string &source) {
+  return m_is_utf8 ? source : windows_charset_converter_c::convert(m_code_page, CP_UTF8, source);
+}
+
+std::string
+windows_charset_converter_c::native(const std::string &source) {
+  return m_is_utf8 ? source : windows_charset_converter_c::convert(CP_UTF8, m_code_page, source);
+}
+
+std::string
+windows_charset_converter_c::convert(UINT source_code_page,
+                                     UINT destination_code_page,
+                                     const std::string &source) {
+  if (source_code_page == destination_code_page)
+    return source;
+
+  int num_wide_chars = MultiByteToWideChar(source_code_page, 0, source.c_str(), -1, NULL, 0);
+  wchar_t *wbuffer   = new wchar_t[num_wide_chars];
+  MultiByteToWideChar(source_code_page, 0, source.c_str(), -1, wbuffer, num_wide_chars);
+
+  int num_bytes = WideCharToMultiByte(destination_code_page, 0, wbuffer, -1, NULL, 0, NULL, NULL);
+  char *buffer  = new char[num_bytes];
+  WideCharToMultiByte(destination_code_page, 0, wbuffer, -1, buffer, num_bytes, NULL, NULL);
+
+  std::string result = buffer;
+
+  delete []wbuffer;
+  delete []buffer;
+
+  return result;
+}
+
+bool
+windows_charset_converter_c::is_available(const std::string &charset) {
+  UINT code_page = extract_code_page(charset);
+  if (0 == code_page)
+    return false;
+
+  return IsValidCodePage(code_page);
+}
+
+UINT
+windows_charset_converter_c::extract_code_page(const std::string &charset) {
+  if (charset.substr(0, 2) != "CP")
+    return 0;
+
+  std::string number_as_str = charset.substr(2, charset.length() - 2);
+  uint64_t number           = 0;
+  if (!parse_uint(number_as_str.c_str(), number))
+    return 0;
+
+  return number;
+}
+
+#endif  // defined(SYS_WINDOWS)
 
 // ------------------------------------------------------------
 

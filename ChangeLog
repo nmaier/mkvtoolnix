@@ -1,3 +1,10 @@
+2009-05-13  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed support for Windows systems that use
+	code pages that are not supported by the iconv library (e.g. code
+	page 720). mkvmerge was exiting with warnings causing mmg to
+	report that file identification had failed. Fix for bug 376.
+
 2009-05-12  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Added support for handling MPEG-1/-2
