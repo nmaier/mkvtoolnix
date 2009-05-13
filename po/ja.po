@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2009-05-12 20:00+0200\n"
+"PO-Revision-Date: 2009-05-13 13:32+0200\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -2231,12 +2231,11 @@ msgstr "Base64にエンコードされたデータをデコードすることが
 #: src/input/r_avi.cpp:336 src/input/r_matroska.cpp:1638
 #: src/input/r_ogm.cpp:1134
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
-msgstr "このAVC/h.264トラックからデコーダ詳細設定データ（AVCC）を展開できませんでした。\n"
+msgstr "このAVC/h.264トラックからデコーダ詳細設定データ（AVCC）を展開することができませんでした。\n"
 
 #: src/input/r_avi.cpp:286 src/input/r_avi.cpp:291
-#, fuzzy
 msgid "Could not extract the sequence header from this MPEG-1/2 track.\n"
-msgstr "このAVC/h.264トラックからデコーダ詳細設定データ（AVCC）を展開できませんでした。\n"
+msgstr "このMPEG-1/2トラックからシーケンスヘッダを展開することができませんでした。\n"
 
 #: src/input/r_mp3.cpp:41
 msgid "Could not find a valid MP3 packet."
@@ -2759,7 +2758,7 @@ msgstr ""
 
 #: src/output/p_vorbis.cpp:64
 msgid "Error: vorbis_packetizer: Could not extract the stream's parameters from the first packets.\n"
-msgstr "エラー：vorbisパケッタイザ：最初のパケットからストリームのパラメータを展開できませんでした。\n"
+msgstr "エラー：vorbisパケッタイザ：最初のパケットからストリームのパラメータを展開することができませんでした。\n"
 
 #: src/mmg/mux_dialog.cpp:79
 msgid "Errors:"
