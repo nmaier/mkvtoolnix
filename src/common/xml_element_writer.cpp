@@ -174,8 +174,9 @@ xml_formatter_c::xml_formatter_c(mm_io_c *out,
   : m_out(out)
   , m_temp_io(auto_ptr<mm_text_io_c>(new mm_text_io_c(new mm_mem_io_c(NULL, 100000, 4000))))
   , m_encoding(encoding)
-  , m_header_written(false)
   , m_cc_utf8(charset_converter_c::init(m_encoding))
+  , m_header_written(false)
+  , m_depth(0)
   , m_state(XMLF_STATE_NONE)
 {
   m_xml_source = m_temp_io.get();
