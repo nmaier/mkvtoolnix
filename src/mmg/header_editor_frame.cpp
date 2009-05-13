@@ -17,12 +17,8 @@
 
 #include "common/os.h"
 
-#include <wx/button.h>
+#include <wx/wx.h>
 #include <wx/dnd.h>
-#include <wx/filedlg.h>
-#include <wx/msgdlg.h>
-#include <wx/statline.h>
-#include <wx/textctrl.h>
 
 #include <matroska/KaxInfo.h>
 #include <matroska/KaxInfoData.h>

@@ -13,7 +13,7 @@
 
 #include "common/os.h"
 
-#include <wx/textctrl.h>
+#include <wx/wx.h>
 
 #include <ebml/EbmlBinary.h>
 
