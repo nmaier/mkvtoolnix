@@ -855,16 +855,16 @@ tab_input::on_file_selected(wxCommandEvent &evt) {
   selected_track   = -1;
   mmg_file_cptr &f = files[new_sel];
 
+  cb_no_chapters->Enable((FILE_TYPE_MATROSKA == f->container) || (FILE_TYPE_QTMP4 == f->container));
+
   if (FILE_TYPE_MATROSKA == f->container) {
     st_file_options->Enable(true);
-    cb_no_chapters->Enable(true);
     cb_no_tags->Enable(true);
     cb_no_chapters->SetValue(f->no_chapters);
     cb_no_tags->SetValue(f->no_tags);
 
   } else {
     st_file_options->Enable(false);
-    cb_no_chapters->Enable(false);
     cb_no_tags->Enable(false);
     cb_no_chapters->SetValue(false);
     cb_no_tags->SetValue(false);
