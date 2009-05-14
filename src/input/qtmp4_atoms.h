@@ -113,16 +113,34 @@ typedef struct PACKED_STRUCTURE {
   uint32_t         sample_rate;         // 32bit fixed-point number
 } sound_v0_stsd_atom_t;
 
-// 'sound sample description' atom v2
+// 'sound sample description' atom v1
 typedef struct PACKED_STRUCTURE {
   sound_v0_stsd_atom_t v0;
-  struct {
+  struct PACKED_STRUCTURE {
     uint32_t samples_per_packet;
     uint32_t bytes_per_packet;
     uint32_t bytes_per_frame;
     uint32_t bytes_per_sample;
   } v1;
 } sound_v1_stsd_atom_t;
+
+// 'sound sample description' atom v2
+typedef struct PACKED_STRUCTURE {
+  sound_v0_stsd_atom_t v0;
+  struct PACKED_STRUCTURE {
+    uint32_t v2_struct_size;
+    uint64_t sample_rate;       // 64bit float
+    // uint32_t unknown1;
+    uint32_t channels;
+
+    // 16
+    uint32_t const1;            // always 0x7f000000
+    uint32_t bits_per_channel;  // for uncompressed audio
+    uint32_t flags;
+    uint32_t bytes_per_frame;   // if constant
+    uint32_t samples_per_frame; // lpcm frames per audio packet if constant
+  } v2;
+} sound_v2_stsd_atom_t;
 
 // 'video sample description' atom
 typedef struct PACKED_STRUCTURE {
