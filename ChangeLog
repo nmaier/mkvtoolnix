@@ -1,3 +1,14 @@
+2009-05-14  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: enhancement: The "no chapters" checkbox can now be used for
+	QuickTime/MP4 files and OGM files as well.
+
+	* mkvmerge: enhancement: The OGM reader will only print the
+	warning that no chapter charset has been set by the user if the
+	title or the chapter information contained in the OGM file is
+	actually used and not overwritten with '--title ...' or
+	'--no-chapters'.
+
 2009-05-13  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract: bug fix: The VobSub extraction was made more

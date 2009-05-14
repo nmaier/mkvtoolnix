@@ -786,24 +786,19 @@ ogm_reader_c::handle_stream_comments() {
         chapter_strings.push_back((*comments)[j]);
     }
 
-    if (((title != "") || (chapter_strings.size() > 0)) && !charset_warning_printed && (ti.chapter_charset == "")) {
-      mxwarn_fn(ti.fname,
-                Y("This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in "
-                  "the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can "
-                  "be overridden with the '--chapter-charset <charset>' switch.\n"));
-      charset_warning_printed = true;
-    }
-
+    bool segment_title_set = false;
     if (title != "") {
       title = cch->utf8(title);
       if (!g_segment_title_set && g_segment_title.empty() && (OGM_STREAM_TYPE_V_MSCOMP == dmx->stype)) {
         g_segment_title     = title;
         g_segment_title_set = true;
+        segment_title_set   = true;
       }
       dmx->title = title.c_str();
       title      = "";
     }
 
+    bool chapters_set = false;
     if (!chapter_strings.empty() && !ti.no_chapters && (NULL == g_kax_chapters)) {
       try {
         auto_ptr<mm_mem_io_c> out(new mm_mem_io_c(NULL, 0, 1000));
@@ -816,8 +811,19 @@ ogm_reader_c::handle_stream_comments() {
         auto_ptr<mm_text_io_c> text_out(new mm_text_io_c(out.get(), false));
 
         g_kax_chapters = parse_chapters(text_out.get());
+        chapters_set   = true;
       } catch (...) {
       }
+    }
+
+    if (    (segment_title_set || chapters_set)
+         && !charset_warning_printed
+         && (ti.chapter_charset == "")) {
+      mxwarn_fn(ti.fname,
+                Y("This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in "
+                  "the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can "
+                  "be overridden with the '--chapter-charset <charset>' switch.\n"));
+      charset_warning_printed = true;
     }
   }
 }
