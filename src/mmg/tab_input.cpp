@@ -855,7 +855,9 @@ tab_input::on_file_selected(wxCommandEvent &evt) {
   selected_track   = -1;
   mmg_file_cptr &f = files[new_sel];
 
-  cb_no_chapters->Enable((FILE_TYPE_MATROSKA == f->container) || (FILE_TYPE_QTMP4 == f->container));
+  cb_no_chapters->Enable(   (FILE_TYPE_MATROSKA == f->container)
+                         || (FILE_TYPE_QTMP4    == f->container)
+                         || (FILE_TYPE_OGM      == f->container));
 
   if (FILE_TYPE_MATROSKA == f->container) {
     st_file_options->Enable(true);
