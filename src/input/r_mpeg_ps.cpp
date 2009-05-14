@@ -339,9 +339,20 @@ mpeg_ps_reader_c::parse_packet(mpeg_ps_id_t &id,
 
   if (   (0xbc > id.id)
       || ((0xf0 <= id.id) && (0xfd != id.id))
-      || (0xbe == id.id)           // padding stream
       || (0xbf == id.id)) {        // private 2 stream
     io->skip(length);
+    return false;
+  }
+
+  if (0xbe == id.id) {        // padding stream
+    if (   (0 != ((io->getFilePointer() + length) & 0x7ff))  //bit too long or short
+        || (2028 < length)) {                                //way too long
+      full_length = (((io->getFilePointer() >> 11) + 1) << 11) - io->getFilePointer();
+      mxverb(2, boost::format("mpeg_ps: padding stream length adjusted at %1%, from %2% to %3%\n") % (io->getFilePointer() - 6) % length % full_length);
+      io->skip(full_length);
+    } else {
+      io->skip(length);
+    }
     return false;
   }
 
@@ -1234,7 +1245,9 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
     while (find_next_packet(new_id)) {
       packet_pos = io->getFilePointer() - 4;
       if (!parse_packet(new_id, timecode, length, full_length)) {
-        mxverb(2, boost::format("mpeg_ps: packet_parse failed at %1%, skipping %2%\n") % packet_pos % full_length);
+        if (    (0xbe != new_id.id)       // padding stream
+             && (0xbf != new_id.id))      // private 2 stream (navigation data)
+          mxverb(2, boost::format("mpeg_ps: parse_packet failed at %1%, skipping %2%\n") % packet_pos % full_length);
         io->setFilePointer(packet_pos + 4 + 2 + full_length);
         continue;
       }
