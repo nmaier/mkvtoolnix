@@ -748,9 +748,13 @@ avi_reader_c::read_video() {
 
   m_dropped_video_frames += dropped_frames_here;
 
-  if (0 >= m_avc_nal_size_size)   // AVC with framed packets (without NALU start codes but with length fields)?
+  // AVC with framed packets (without NALU start codes but with length fields)
+  // or non-AVC video track?
+  if (0 >= m_avc_nal_size_size)
     PTZR(m_vptzr)->process(new packet_t(chunk, timestamp, duration, key ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC, VFT_NOBFRAME));
-  else {                        // Yes. Re-frame with NALU start codes.
+
+  else {
+    // AVC video track without NALU start codes. Re-frame with NALU start codes.
     int offset = 0;
 
     while ((offset + m_avc_nal_size_size) < num_read) {
