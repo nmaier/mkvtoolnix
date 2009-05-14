@@ -88,7 +88,10 @@ set_process_priority(int priority) {
 #else
   static const int s_nice_levels[5] = { 19, 2, 0, -2, -5 };
 
-  (void)nice(s_nice_levels[priority + 2]);
+  // Avoid a compiler warning due to glibc having flagged 'nice' with
+  // 'warn if return value is ignored'.
+  if (!nice(s_nice_levels[priority + 2]))
+    ;
 #endif
 }
 
