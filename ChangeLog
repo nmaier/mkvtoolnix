@@ -1,5 +1,8 @@
 2009-05-14  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: The "remove all" button was sometimes disabled
+	even though there were still files left to be removed.
+
 	* mkvmerge: enhancement: The MPEG program stream reader will now
 	detect invalid padding packets and skip only to the next 2048 byte
 	packet boundary instead of skipping several good packets. Patch by

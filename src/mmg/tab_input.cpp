@@ -729,7 +729,7 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
   cb_no_chapters->Enable(-1 != selected_file);
   cb_no_tags->Enable(-1 != selected_file);
   b_remove_file->Enable(-1 != selected_file);
-  b_remove_all_files->Enable(-1 != selected_file);
+  b_remove_all_files->Enable(!tracks.empty());
   b_append_file->Enable(tracks.size() > 0);
   b_track_up->Enable(-1 != selected_file);
   b_track_down->Enable(-1 != selected_file);
