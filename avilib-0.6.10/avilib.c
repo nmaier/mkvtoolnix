@@ -2163,7 +2163,8 @@ int avi_parse_index_from_file(avi_t *AVI, const char *filename)
     if (!(fd = fopen(filename, "r"))) { perror ("avi_parse_index_from_file: fopen"); return -1; }
 
     // read header
-    fgets(data, 100, fd);
+    if (!fgets(data, 100, fd))
+	return -1;
 
     if ( strncasecmp(data, "AVIIDX1", 7) != 0) {
 	fprintf(stderr, "%s: Not an AVI index file\n", filename);
@@ -2171,7 +2172,8 @@ int avi_parse_index_from_file(avi_t *AVI, const char *filename)
     }
 
     // read comment
-    fgets(data, 100, fd);
+    if (!fgets(data, 100, fd))
+	return -1;
     f_pos = ftell(fd);
     while (fgets(data, 100, fd)) {
 	d = data[5] - '1';
