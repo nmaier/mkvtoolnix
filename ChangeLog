@@ -1,7 +1,15 @@
+2009-05-15  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: enhancement: Changed how mmg sets the output file name if
+	automatically if the option is enabled. If the user adds more than
+	one file then the output file name is set each time a file is
+	added and not only when the first one is unless the user has
+	changed the output file name manually. Fix for bug 229.
+
 2009-05-14  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mmg: enhancement: Improved support for QuickTime audio tracks
-	with version 2 of the STSD sound descriptor.
+	* mkvmerge: enhancement: Improved support for QuickTime audio
+	tracks with version 2 of the STSD sound descriptor.
 
 	* mmg: bug fix: The "remove all" button was sometimes disabled
 	even though there were still files left to be removed.
