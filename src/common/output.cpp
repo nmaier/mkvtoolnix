@@ -24,7 +24,7 @@ std::string g_stdio_charset;
 static bool s_mm_stdio_redirected = false;
 
 charset_converter_cptr g_cc_stdio;
-counted_ptr<mm_io_c> s_mm_stdio;
+counted_ptr<mm_io_c> g_mm_stdio;
 
 void
 init_stdio() {
