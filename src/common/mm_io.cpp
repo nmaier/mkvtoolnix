@@ -855,6 +855,8 @@ mm_io_c::write_bom(const std::string &charset) {
   } else
     return false;
 
+  setFilePointer(0, seek_beginning);
+
   return (write(bom, bom_len) == bom_len);
 }
 
