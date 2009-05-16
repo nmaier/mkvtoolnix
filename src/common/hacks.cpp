@@ -45,6 +45,7 @@ static const struct {
   { ENGAGE_ENABLE_TIMECODE_WARNING,      "enable_timecode_warning"      },
   { ENGAGE_MERGE_TRUEHD_FRAMES,          "merge_truehd_frames"          },
   { ENGAGE_REMOVE_BITSTREAM_AR_INFO,     "remove_bitstream_ar_info"     },
+  { ENGAGE_VOBSUB_SUBPIC_STOP_CMDS,      "vobsub_subpic_stop_cmds"      },
   { 0,                                   NULL },
 };
 static std::vector<bool> s_engaged_hacks(ENGAGE_MAX_IDX + 1, false);

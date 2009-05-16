@@ -38,7 +38,8 @@
 #define ENGAGE_ENABLE_TIMECODE_WARNING      15
 #define ENGAGE_MERGE_TRUEHD_FRAMES          16
 #define ENGAGE_REMOVE_BITSTREAM_AR_INFO     17
-#define ENGAGE_MAX_IDX                      ENGAGE_REMOVE_BITSTREAM_AR_INFO
+#define ENGAGE_VOBSUB_SUBPIC_STOP_CMDS      18
+#define ENGAGE_MAX_IDX                      ENGAGE_VOBSUB_SUBPIC_STOP_CMDS
 
 void MTX_DLL_API engage_hacks(const std::string &hacks);
 bool MTX_DLL_API hack_engaged(unsigned int id);

@@ -14,6 +14,7 @@
 #include "common/os.h"
 
 #include "common/common.h"
+#include "common/hacks.h"
 #include "common/iso639.h"
 #include "common/endian.h"
 #include "common/mm_io.h"
@@ -322,17 +323,73 @@ vobsub_reader_c::deliver_packet(unsigned char *buf,
                                 int64_t timecode,
                                 int64_t default_duration,
                                 generic_packetizer_c *ptzr) {
-  int64_t duration;
-
   if ((NULL == buf) || (0 == size)) {
     safefree(buf);
     return -1;
   }
 
-  duration = spu_extract_duration(buf, size, timecode);
+  int64_t duration = spu_extract_duration(buf, size, timecode);
   if (1 == -duration) {
-    mxverb_tid(2, ti.fname, ti.id, boost::format("vobsub_reader: Could not extract the duration for a SPU packet (timecode: %1%).\n") % format_timecode(timecode, 3));
     duration = default_duration;
+    mxverb(2, boost::format("vobsub_reader: Could not extract the duration for a SPU packet (timecode: %1%).") % format_timecode(timecode, 3));
+
+    uint32_t dcsq  = buf[2]        << 8 | buf[3];
+    uint32_t dcsq2 = buf[dcsq + 2] << 8 | buf[dcsq + 3];
+
+    // Some players ignore sub-pictures if there is no stop display command.
+    // Add a stop display command only if 1 command chain exists and the hack is enabled.
+
+    if ((dcsq == dcsq2) && hack_engaged(ENGAGE_VOBSUB_SUBPIC_STOP_CMDS)) {
+      dcsq         += 2;        // points to first command chain
+      dcsq2        += 4;        // find end of first command chain
+      bool unknown  = false;
+      unsigned char type;
+      for (type = buf[dcsq2++]; 0xff != type; type = buf[dcsq2++]) {
+        switch(type) {
+          case 0x00:            // Menu ID, 1 byte
+            break;
+          case 0x01:            // Start display
+            break;
+          case 0x02:            // Stop display
+            unknown = true;     // Can only have one Stop Display command
+            break;
+          case 0x03:            // Palette
+            dcsq2 += 2;
+            break;
+          case 0x04:            // Alpha
+            dcsq2 += 2;
+            break;
+          case 0x05:            // Coords
+            dcsq2 += 6;
+            break;
+          case 0x06:            // Graphic lines
+            dcsq2 += 4;
+            break;
+          default:
+            unknown = true;
+        }
+      }
+
+      if (!unknown) {
+        size          += 6;
+        uint32_t len   = (buf[0] << 8 | buf[1]) + 6; // increase sub-picture length by 6
+        buf[0]         = (uint8_t)(len >> 8);
+        buf[1]         = (uint8_t)(len);
+        uint32_t stm   = duration / 1000000;         // calculate STM for Stop Display
+        stm            = ((stm - 1) * 90 >> 10) + 1;
+        buf[dcsq]      = (uint8_t)(dcsq2 >> 8);      // set pointer to 2nd chain
+        buf[dcsq + 1]  = (uint8_t)(dcsq2);
+        buf[dcsq2]     = (uint8_t)(stm >> 8);        // set DCSQ_STM
+        buf[dcsq2 + 1] = (uint8_t)(stm);
+        buf[dcsq2 + 2] = (uint8_t)(dcsq2 >> 8);      // last chain so point to itself
+        buf[dcsq2 + 3] = (uint8_t)(dcsq2);
+        buf[dcsq2 + 4] = 0x02;                       // stop display command
+        buf[dcsq2 + 5] = 0xff;                       // end command
+        mxverb(2, boost::format(" Added Stop Display cmd (SP_DCSQ_STM=0x%|1$04x|)") % stm);
+      }
+    }
+
+    mxverb(2, boost::format("\n"));
   }
 
   if (2 != -duration)
@@ -489,7 +546,15 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
             idx = len;
             break;
           }
-          dst_buf = (unsigned char *)saferealloc(dst_buf, dst_size + packet_size);
+
+          if (hack_engaged(ENGAGE_VOBSUB_SUBPIC_STOP_CMDS)) {
+            // Space for the stop display command and padding
+            dst_buf = (unsigned char *)saferealloc(dst_buf, dst_size + packet_size + 6);
+            memset(dst_buf + packet_size, 6, 0xff);
+
+          } else
+            dst_buf = (unsigned char *)saferealloc(dst_buf, dst_size + packet_size);
+
           mxverb(3, boost::format("vobsub_reader: sub packet data: aid: %1%, pts: %2%, packet_size: %3%\n") % track->aid % format_timecode(pts, 3) % packet_size);
           if (sub_file->read(&dst_buf[dst_size], packet_size) != packet_size) {
             mxwarn(Y("vobsub_reader: sub_file->read failure"));
