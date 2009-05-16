@@ -223,6 +223,8 @@ cli_options_dlg::init_cli_option_list() {
   all_cli_options.push_back(cli_option_t(wxU("--engage merge_truehd_frames"),
                                            Z("TrueHD audio streams know two frame types: sync frames and non-sync frames. With this switch mkvmerge will put one sync frame "
                                              "and all following non-sync frames into a single Matroska block. Without it each non-sync frame is put into its own Matroska block.")));
+  all_cli_options.push_back(cli_option_t(wxU("--engage vobsub_subpic_stop_cmds"),
+                                           Z("Causes mkvmerge to add 'stop display' commands to VobSub subtitle packets that do not contain a duration field.")));
   all_cli_options.push_back(cli_option_t(wxU("--engage cow"),
                                            Z("No help available.")));
 }

@@ -73,6 +73,8 @@ Schmuland, Todd <tschmula@gmail.com>
     * Bugfix for VobSub muxing
     * Enhancements for MPEG program stream parsing (invalid padding
       packet lengths)
+    * Hack for adding 'stop display' commands to VobSub packets without
+      a duration
 
 Stone, Jory (jcsston) <jcsston@toughguy.net>
     * Fixes to mkvinfo's GUI
