@@ -17,7 +17,7 @@
 #include "common/os.h"
 
 #include "common/dts_common.h"
-#include "common/mpeg4_common.h"
+#include "common/mpeg1_2.h"
 #include "merge/pr_generic.h"
 #include "common/smart_pointers.h"
 #include "mpegparser/M2VParser.h"

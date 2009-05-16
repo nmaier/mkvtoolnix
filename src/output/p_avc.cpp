@@ -19,7 +19,7 @@
 #include "common/hacks.h"
 #include "common/math.h"
 #include "common/matroska.h"
-#include "common/mpeg4_common.h"
+#include "common/mpeg4_p10.h"
 #include "merge/output_control.h"
 #include "output/p_avc.h"
 

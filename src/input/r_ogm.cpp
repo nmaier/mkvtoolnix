@@ -36,6 +36,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "common/hacks.h"
 #include "common/iso639.h"
 #include "common/matroska.h"
+#include "common/mpeg4_p2.h"
 #include "common/locale.h"
 #include "common/ogmstreams.h"
 #include "input/r_ogm.h"
@@ -47,8 +48,10 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "output/p_avc.h"
 #include "output/p_kate.h"
 #include "output/p_mp3.h"
+#include "output/p_mpeg4_p2.h"
 #include "output/p_pcm.h"
 #include "output/p_textsubs.h"
+#include "output/p_theora.h"
 #include "output/p_video.h"
 #include "output/p_vorbis.h"
 

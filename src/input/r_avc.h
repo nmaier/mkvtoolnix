@@ -16,7 +16,7 @@
 
 #include "common/os.h"
 
-#include "common/mpeg4_common.h"
+#include "common/mpeg4_p10.h"
 #include "merge/pr_generic.h"
 
 class avc_es_reader_c: public generic_reader_c {

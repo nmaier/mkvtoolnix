@@ -19,11 +19,12 @@
 #include "common/common.h"
 #include "common/endian.h"
 #include "common/error.h"
+#include "common/mpeg4_p2.h"
 #include "common/smart_pointers.h"
 #include "input/r_mpeg_es.h"
 #include "merge/output_control.h"
 #include "mpegparser/M2VParser.h"
-#include "output/p_video.h"
+#include "output/p_mpeg1_2.h"
 
 #define PROBESIZE 4
 #define READ_SIZE 1024 * 1024

@@ -17,7 +17,7 @@
 #include "common/os.h"
 
 #include "common/common.h"
-#include "common/mpeg4_common.h"
+#include "common/mpeg4_p10.h"
 #include "merge/pr_generic.h"
 
 using namespace mpeg4::p10;

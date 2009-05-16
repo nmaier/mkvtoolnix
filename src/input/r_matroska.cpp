@@ -67,9 +67,13 @@ extern "C" {                    // for BITMAPINFOHEADER
 #endif
 #include "output/p_kate.h"
 #include "output/p_mp3.h"
+#include "output/p_mpeg1_2.h"
+#include "output/p_mpeg4_p2.h"
+#include "output/p_mpeg4_p10.h"
 #include "output/p_passthrough.h"
 #include "output/p_pcm.h"
 #include "output/p_textsubs.h"
+#include "output/p_theora.h"
 #include "output/p_tta.h"
 #include "output/p_video.h"
 #include "output/p_vobbtn.h"

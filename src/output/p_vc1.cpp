@@ -21,7 +21,6 @@
 #include "common/endian.h"
 #include "common/hacks.h"
 #include "common/matroska.h"
-#include "common/mpeg4_common.h"
 #include "merge/output_control.h"
 #include "merge/packet_extensions.h"
 #include "output/p_vc1.h"

@@ -15,7 +15,7 @@
 #include "common/common.h"
 #include "common/ebml.h"
 #include "common/endian.h"
-#include "common/mpeg4_common.h"
+#include "common/mpeg1_2.h"
 #include "extract/xtr_mpeg1_2.h"
 
 xtr_mpeg1_2_video_c::xtr_mpeg1_2_video_c(const string &codec_id,

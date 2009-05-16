@@ -19,7 +19,8 @@
 #include "common/error.h"
 #include "common/math.h"
 #include "common/mp3_common.h"
-#include "common/mpeg4_common.h"
+#include "common/mpeg1_2.h"
+#include "common/mpeg4_p2.h"
 #include "common/smart_pointers.h"
 #include "common/truehd_common.h"
 #include "input/r_mpeg_ps.h"
@@ -29,9 +30,9 @@
 #include "output/p_avc.h"
 #include "output/p_dts.h"
 #include "output/p_mp3.h"
+#include "output/p_mpeg1_2.h"
 #include "output/p_truehd.h"
 #include "output/p_vc1.h"
-#include "output/p_video.h"
 
 #define PS_PROBE_SIZE 10 * 1024 * 1024
 
