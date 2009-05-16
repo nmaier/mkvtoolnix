@@ -59,20 +59,19 @@ extract_chapters(const char *file_name,
   KaxChapters *chapters = dynamic_cast<KaxChapters *>(master);
   assert(NULL != chapters);
 
-  mm_stdio_c out;
   if (!chapter_format_simple) {
-    out.write_bom("UTF-8");
-    out.puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-             "\n"
-             "<!-- <!DOCTYPE Tags SYSTEM \"matroskatags.dtd\"> -->\n"
-             "\n"
-             "<Chapters>\n");
-    write_chapters_xml(chapters, &out);
-    out.puts("</Chapters>\n");
+    g_mm_stdio->write_bom("UTF-8");
+    g_mm_stdio->puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                     "\n"
+                     "<!-- <!DOCTYPE Tags SYSTEM \"matroskatags.dtd\"> -->\n"
+                     "\n"
+                     "<Chapters>\n");
+    write_chapters_xml(chapters, g_mm_stdio.get());
+    g_mm_stdio->puts("</Chapters>\n");
 
   } else {
     int dummy = 1;
-    write_chapters_simple(dummy, chapters, &out);
+    write_chapters_simple(dummy, chapters, g_mm_stdio.get());
   }
 
   delete chapters;

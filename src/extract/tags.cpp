@@ -58,13 +58,12 @@ extract_tags(const char *file_name,
     KaxTags *tags = dynamic_cast<KaxTags *>(m);
     assert(NULL != tags);
 
-    mm_stdio_c out;
-    out.write_bom("UTF-8");
-    out.puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n"
-             "<!DOCTYPE Tags SYSTEM \"matroskatags.dtd\">\n\n"
-             "<Tags>\n");
-    write_tags_xml(*tags, &out);
-    out.puts("</Tags>\n");
+    g_mm_stdio->write_bom("UTF-8");
+    g_mm_stdio->puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n"
+                     "<!DOCTYPE Tags SYSTEM \"matroskatags.dtd\">\n\n"
+                     "<Tags>\n");
+    write_tags_xml(*tags, g_mm_stdio.get());
+    g_mm_stdio->puts("</Tags>\n");
 
     delete tags;
   }

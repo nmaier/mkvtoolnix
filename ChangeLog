@@ -1,5 +1,9 @@
 2009-05-16  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvextract: bug fix: The modes 'chapters', 'cuesheet' and 'tags'
+	did not honor the '--redirect-output' option and where always
+	writing to the standard output.
+
 	* mkvmerge: new feature: Added a hack ('vobsub_subpic_stop_cmds')
 	that causes mkvmerge to add 'stop display' commands to VobSub
 	subtitle packets that do not have a duration field. Patch by Todd

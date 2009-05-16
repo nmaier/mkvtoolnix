@@ -227,8 +227,7 @@ extract_cuesheet(const char *file_name,
           all_chapters.PushElement(*(*eentry)[k]);
     }
 
-    mm_stdio_c out;
-    write_cuesheet(file_name, all_chapters, *all_tags, -1, out);
+    write_cuesheet(file_name, all_chapters, *all_tags, -1, *g_mm_stdio);
 
     while (all_chapters.ListSize() > 0)
       all_chapters.Remove(0);
