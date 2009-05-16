@@ -1,6 +1,6 @@
 2009-05-16  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: new feature: Added a back ('vobsub_subpic_stop_cmds')
+	* mkvmerge: new feature: Added a hack ('vobsub_subpic_stop_cmds')
 	that causes mkvmerge to add 'stop display' commands to VobSub
 	subtitle packets that do not have a duration field. Patch by Todd
 	Schmuland (see AUTHORS).
