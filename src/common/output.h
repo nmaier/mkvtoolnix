@@ -26,6 +26,7 @@ class mm_io_c;
 extern bool MTX_DLL_API g_suppress_warnings;
 extern std::string MTX_DLL_API g_stdio_charset;
 extern charset_converter_cptr MTX_DLL_API g_cc_stdio;
+extern counted_ptr<mm_io_c> MTX_DLL_API g_mm_stdio;
 
 void MTX_DLL_API init_stdio();
 void MTX_DLL_API redirect_stdio(mm_io_c *new_stdio);

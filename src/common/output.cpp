@@ -21,20 +21,19 @@
 bool g_suppress_warnings          = false;
 bool g_warning_issued             = false;
 std::string g_stdio_charset;
-
 static bool s_mm_stdio_redirected = false;
+
 charset_converter_cptr g_cc_stdio;
-static counted_ptr<mm_io_c> s_mm_stdio;
+counted_ptr<mm_io_c> s_mm_stdio;
 
 void
 init_stdio() {
-  s_mm_stdio            = counted_ptr<mm_io_c>(new mm_stdio_c());
-  s_mm_stdio_redirected = false;
+  g_mm_stdio = counted_ptr<mm_io_c>(new mm_stdio_c());
 }
 
 void
 redirect_stdio(mm_io_c *stdio) {
-  s_mm_stdio = counted_ptr<mm_io_c>(stdio);
+  g_mm_stdio            = counted_ptr<mm_io_c>(stdio);
   s_mm_stdio_redirected = true;
 }
 
@@ -50,28 +49,28 @@ mxmsg(int level,
 
   if ('\n' == message[0]) {
     message.erase(0, 1);
-    s_mm_stdio->puts("\n");
+    g_mm_stdio->puts("\n");
     s_saw_cr_after_nl = false;
   }
 
   if (level == MXMSG_ERROR) {
     if (s_saw_cr_after_nl)
-      s_mm_stdio->puts("\n");
-    s_mm_stdio->puts(g_cc_stdio->native(Y("Error: ")));
+      g_mm_stdio->puts("\n");
+    g_mm_stdio->puts(g_cc_stdio->native(Y("Error: ")));
 
   } else if (level == MXMSG_WARNING)
-    s_mm_stdio->puts(g_cc_stdio->native(Y("Warning: ")));
+    g_mm_stdio->puts(g_cc_stdio->native(Y("Warning: ")));
 
   else if (level == MXMSG_DEBUG)
-    s_mm_stdio->puts(g_cc_stdio->native(Y("Debug> ")));
+    g_mm_stdio->puts(g_cc_stdio->native(Y("Debug> ")));
 
   int idx_cr = message.rfind('\r');
   if ((0 <= idx_cr) && (message.rfind('\n') < idx_cr))
     s_saw_cr_after_nl = true;
 
   string output = g_cc_stdio->native(message);
-  s_mm_stdio->puts(output);
-  s_mm_stdio->flush();
+  g_mm_stdio->puts(output);
+  g_mm_stdio->flush();
 }
 
 void
