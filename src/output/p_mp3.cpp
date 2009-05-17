@@ -38,9 +38,11 @@ mp3_packetizer_c::mp3_packetizer_c(generic_reader_c *p_reader,
   , m_valid_headers_found(source_is_good)
   , m_previous_timecode(-1)
   , m_num_packets_with_same_timecode(0)
+  , m_s2tc(1152 * 1000000000ll, m_samples_per_sec)
+  , m_single_packet_duration(1 * m_s2tc)
 {
   set_track_type(track_audio);
-  set_track_default_duration((int64_t)(1152000000000.0 / m_samples_per_sec));
+  set_track_default_duration(m_single_packet_duration);
   enable_avi_audio_sync(true);
 }
 
@@ -132,8 +134,12 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
     codec_id[codec_id.length() - 1] = (char)(mp3header->layer + '0');
     set_codec_id(codec_id.c_str());
 
-    if (1152 != m_samples_per_frame)
-      set_track_default_duration((int64_t)(1000000000.0 * m_samples_per_frame / m_samples_per_sec));
+    if (1152 != m_samples_per_frame) {
+      m_s2tc.set(1000000000ll * m_samples_per_frame, m_samples_per_sec);
+      m_single_packet_duration = 1 * m_s2tc;
+      set_track_default_duration(m_single_packet_duration);
+    }
+
     rerender_track_headers();
   }
 
@@ -169,11 +175,11 @@ mp3_packetizer_c::process(packet_cptr packet) {
     int64_t new_timecode;
 
     if (-1 == packet->timecode)
-      new_timecode = (int64_t)(1000000000.0 * m_packetno * m_samples_per_frame / m_samples_per_sec);
+      new_timecode = m_packetno * m_s2tc;
 
     else {
       if ((-1 != m_previous_timecode) && (packet->timecode == m_previous_timecode)) {
-        new_timecode = m_previous_timecode + m_num_packets_with_same_timecode * 1000000000ll * m_samples_per_frame / m_samples_per_sec;
+        new_timecode = m_previous_timecode + m_num_packets_with_same_timecode * m_s2tc;
         ++m_num_packets_with_same_timecode;
       } else {
         new_timecode                     = packet->timecode;
@@ -183,7 +189,7 @@ mp3_packetizer_c::process(packet_cptr packet) {
       m_previous_timecode = packet->timecode;
     }
 
-    add_packet(new packet_t(new memory_c(mp3_packet, mp3header.framesize, true), new_timecode, (int64_t)(1000000000.0 * m_samples_per_frame / m_samples_per_sec)));
+    add_packet(new packet_t(new memory_c(mp3_packet, mp3header.framesize, true), new_timecode, m_single_packet_duration));
     m_packetno++;
   }
 

@@ -18,6 +18,7 @@
 
 #include "common/byte_buffer.h"
 #include "common/common.h"
+#include "common/samples_timecode_conv.h"
 #include "merge/pr_generic.h"
 
 class pcm_packetizer_c: public generic_packetizer_c {
@@ -26,6 +27,7 @@ private:
   int64_t m_packet_size, m_samples_output;
   bool m_big_endian, m_ieee_float;
   byte_buffer_c m_buffer;
+  samples_to_timecode_converter_c m_s2tc;
 
 public:
   pcm_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int p_samples_per_sec, int channels, int bits_per_sample,

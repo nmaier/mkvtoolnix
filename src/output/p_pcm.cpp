@@ -39,6 +39,7 @@ pcm_packetizer_c::pcm_packetizer_c(generic_reader_c *p_reader,
   , m_samples_output(0)
   , m_big_endian(big_endian)
   , m_ieee_float(ieee_float)
+  , m_s2tc(1000000000ll, m_samples_per_sec)
 {
 
   int i;
@@ -86,9 +87,7 @@ pcm_packetizer_c::process(packet_cptr packet) {
   m_buffer.add(packet->data->get(), packet->data->get_size());
 
   while (m_buffer.get_size() >= m_packet_size) {
-    add_packet(new packet_t(new memory_c(m_buffer.get_buffer(), m_packet_size, false),
-                            m_samples_output     * 1000000000ll / m_samples_per_sec,
-                            m_samples_per_packet * 1000000000ll / m_samples_per_sec));
+    add_packet(new packet_t(new memory_c(m_buffer.get_buffer(), m_packet_size, false), m_samples_output * m_s2tc, m_samples_per_packet * m_s2tc));
 
     m_buffer.remove(m_packet_size);
     m_samples_output += m_samples_per_packet;
@@ -101,10 +100,10 @@ void
 pcm_packetizer_c::flush() {
   uint32_t size = m_buffer.get_size();
   if (0 < size) {
-    add_packet(new packet_t(new memory_c(m_buffer.get_buffer(), size, false),
-                            m_samples_output * 1000000000ll / m_samples_per_sec,
-                            size             * 1000000000ll / m_bytes_per_second));
-    m_samples_output += size * 8 / m_channels / m_bits_per_sample;
+    int64_t samples_here = size * 8 / m_channels / m_bits_per_sample;
+    add_packet(new packet_t(new memory_c(m_buffer.get_buffer(), size, false), m_samples_output * m_s2tc, samples_here * m_s2tc));
+
+    m_samples_output += samples_here;
     m_buffer.remove(size);
   }
 

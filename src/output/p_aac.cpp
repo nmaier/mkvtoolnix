@@ -41,9 +41,11 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *p_reader,
   , m_profile(profile)
   , m_headerless(headerless)
   , m_emphasis_present(emphasis_present)
+  , m_s2tc(1024 * 1000000000.0, m_samples_per_sec)
+  , m_single_packet_duration(1 * m_s2tc)
 {
   set_track_type(track_audio);
-  set_track_default_duration((int64_t)(1024 * 1000000000.0 / m_samples_per_sec));
+  set_track_default_duration(m_single_packet_duration);
 }
 
 aac_packetizer_c::~aac_packetizer_c() {
@@ -155,7 +157,7 @@ aac_packetizer_c::process_headerless(packet_cptr packet) {
     new_timecode = packet->timecode;
     if (m_last_timecode == packet->timecode) {
       m_num_packets_same_tc++;
-      new_timecode += (int64_t)(m_num_packets_same_tc * 1024 * 1000000000.0 / m_samples_per_sec);
+      new_timecode += m_num_packets_same_tc * m_s2tc;
 
     } else {
       m_last_timecode       = packet->timecode;
@@ -163,10 +165,10 @@ aac_packetizer_c::process_headerless(packet_cptr packet) {
     }
 
   } else
-    new_timecode = (int64_t)(1024 * 1000000000.0 * m_packetno / m_samples_per_sec);
+    new_timecode = m_packetno * m_s2tc;
 
   m_packetno++;
-  packet->duration = (int64_t)(1024 * 1000000000.0 / m_samples_per_sec);
+  packet->duration = m_single_packet_duration;
   packet->timecode = new_timecode;
 
   add_packet(packet);
@@ -185,8 +187,7 @@ aac_packetizer_c::process(packet_cptr packet) {
 
   m_byte_buffer.add(packet->data->get(), packet->data->get_size());
   while ((aac_packet = get_aac_packet(&header, &aacheader)) != NULL) {
-    int64_t my_timecode = -1 == packet->timecode ? (int64_t)(1024 * 1000000000.0 * m_packetno / m_samples_per_sec) : packet->timecode;
-    add_packet(new packet_t(new memory_c(aac_packet, aacheader.data_byte_size, true), my_timecode, (int64_t)(1024 * 1000000000.0 / m_samples_per_sec)));
+    add_packet(new packet_t(new memory_c(aac_packet, aacheader.data_byte_size, true), -1 == packet->timecode ? m_packetno * m_s2tc : packet->timecode, m_single_packet_duration));
     m_packetno++;
   }
 

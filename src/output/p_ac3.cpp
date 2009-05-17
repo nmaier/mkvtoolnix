@@ -33,13 +33,15 @@ ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *p_reader,
   , m_bytes_skipped(0)
   , m_samples_per_sec(samples_per_sec)
   , m_first_packet(true)
+  , m_s2tc(1536 * 1000000000ll, m_samples_per_sec)
+  , m_single_packet_duration(1 * m_s2tc)
 {
   memset(&m_first_ac3_header, 0, sizeof(ac3_header_t));
   m_first_ac3_header.bsid     = bsid;
   m_first_ac3_header.channels = channels;
 
   set_track_type(track_audio);
-  set_track_default_duration((int64_t)(1536000000000.0 / m_samples_per_sec));
+  set_track_default_duration(m_single_packet_duration);
   enable_avi_audio_sync(true);
 }
 
@@ -129,10 +131,7 @@ ac3_packetizer_c::process(packet_cptr packet) {
   add_to_buffer(packet->data->get(), packet->data->get_size());
   while ((ac3_packet = get_ac3_packet(&header, &ac3header)) != NULL) {
     adjust_header_values(ac3header);
-
-    int64_t new_timecode = -1 == packet->timecode ? (int64_t)(1000000000.0 * m_packetno * ac3header.samples / m_samples_per_sec) : packet->timecode;
-
-    add_packet(new packet_t(new memory_c(ac3_packet, ac3header.bytes, true), new_timecode, (int64_t)(1000000000.0 * ac3header.samples / m_samples_per_sec)));
+    add_packet(new packet_t(new memory_c(ac3_packet, ac3header.bytes, true), -1 == packet->timecode ? m_packetno * m_s2tc : packet->timecode, m_single_packet_duration));
     m_packetno++;
   }
 
@@ -151,8 +150,11 @@ ac3_packetizer_c::adjust_header_values(ac3_header_t &ac3_header) {
   if (16 == m_first_ac3_header.bsid)
     set_codec_id(MKV_A_EAC3);
 
-  if (1536 != m_first_ac3_header.samples)
-    set_track_default_duration((int64_t)(1000000000.0 * m_first_ac3_header.samples / m_samples_per_sec));
+  if (1536 != m_first_ac3_header.samples) {
+    m_s2tc.set(1000000000ll * m_first_ac3_header.samples, m_samples_per_sec);
+    m_single_packet_duration = 1 * m_s2tc;
+    set_track_default_duration(m_single_packet_duration);
+  }
 
   rerender_track_headers();
 }

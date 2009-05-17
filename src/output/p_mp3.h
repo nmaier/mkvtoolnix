@@ -15,11 +15,12 @@
 #define __P_MP3_H
 
 #include "common/os.h"
-
 #include "common/byte_buffer.h"
+
 #include "common/common.h"
-#include "merge/pr_generic.h"
 #include "common/mp3_common.h"
+#include "common/samples_timecode_conv.h"
+#include "merge/pr_generic.h"
 
 class mp3_packetizer_c: public generic_packetizer_c {
 private:
@@ -28,6 +29,8 @@ private:
   byte_buffer_c m_byte_buffer;
   bool m_codec_id_set, m_valid_headers_found;
   int64_t m_previous_timecode, m_num_packets_with_same_timecode;
+  samples_to_timecode_converter_c m_s2tc;
+  int64_t m_single_packet_duration;
 
 public:
   mp3_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, int samples_per_sec, int channels, bool source_is_good) throw (error_c);
