@@ -300,6 +300,11 @@ mpeg4_p2_video_packetizer_c::flush_frames(bool end_of_file) {
   m_available_timecodes.erase(m_available_timecodes.begin(), m_available_timecodes.begin() + m_queued_frames.size());
   m_available_durations.erase(m_available_durations.begin(), m_available_durations.begin() + m_queued_frames.size());
 
+  if (1 < m_available_timecodes.size())
+    m_available_timecodes.erase(m_available_timecodes.begin(), m_available_timecodes.end() - 1);
+  if (1 < m_available_durations.size())
+    m_available_durations.erase(m_available_durations.begin(), m_available_durations.end() - 1);
+
   m_queued_frames.clear();
 }
 

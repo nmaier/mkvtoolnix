@@ -1,3 +1,11 @@
+2009-05-17  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: mkvmerge was not handling dropped frames well
+	when converting from VfW-mode MPEG-4 part 2 to native mode MPEG-4
+	part 2 (with '--engage native_mpeg4'). This resulted in timecodes
+	being to low which in turn resulted in the loss of audio/video
+	synchronization. Fix for bug 236.
+
 2009-05-16  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract: bug fix: The modes 'chapters', 'cuesheet' and 'tags'
