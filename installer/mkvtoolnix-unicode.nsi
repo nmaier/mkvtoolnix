@@ -136,8 +136,8 @@ Section "Program files" SEC01
   File "/oname=mkvtoolnix.mo" "po\de.mo"
   SetOutPath "$INSTDIR\locale\ja\LC_MESSAGES"
   File "/oname=mkvtoolnix.mo" "po\ja.mo"
-  SetOutPath "$INSTDIR\locale\zh\LC_MESSAGES"
-  File "/oname=mkvtoolnix.mo" "po\zh.mo"
+  SetOutPath "$INSTDIR\locale\zh_CN\LC_MESSAGES"
+  File "/oname=mkvtoolnix.mo" "po\zh_CN.mo"
 
   # Delete files that might be present from older installation
   # if this is just an upgrade.
@@ -150,6 +150,10 @@ Section "Program files" SEC01
   Delete "$INSTDIR\locale\german\LC_MESSAGES\mkvtoolnix.mo"
   RMDir "$INSTDIR\locale\german\LC_MESSAGES"
   RMDir "$INSTDIR\locale\german"
+
+  Delete "$INSTDIR\locale\zh\LC_MESSAGES\mkvtoolnix.mo"
+  RMDir "$INSTDIR\locale\zh\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\zh"
 
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\App Paths\AppMainExe.exe"
   Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\base64tool CLI reference.lnk"
@@ -316,6 +320,11 @@ Section Uninstall
   RMDir "$INSTDIR\locale\ja\LC_MESSAGES"
   RMDir "$INSTDIR\locale\ja"
 
+  Delete "$INSTDIR\locale\zh_CN\LC_MESSAGES\mkvtoolnix.mo"
+  RMDir "$INSTDIR\locale\zh_CN\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\zh_CN"
+
+  # From previous versions of mkvtoolnix: translation to Simplified Chinese
   Delete "$INSTDIR\locale\zh\LC_MESSAGES\mkvtoolnix.mo"
   RMDir "$INSTDIR\locale\zh\LC_MESSAGES"
   RMDir "$INSTDIR\locale\zh"
