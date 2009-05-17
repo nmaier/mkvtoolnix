@@ -138,6 +138,8 @@ Section "Program files" SEC01
   File "/oname=mkvtoolnix.mo" "po\ja.mo"
   SetOutPath "$INSTDIR\locale\zh_CN\LC_MESSAGES"
   File "/oname=mkvtoolnix.mo" "po\zh_CN.mo"
+  SetOutPath "$INSTDIR\locale\zh_TW\LC_MESSAGES"
+  File "/oname=mkvtoolnix.mo" "po\zh_TW.mo"
 
   # Delete files that might be present from older installation
   # if this is just an upgrade.
@@ -323,6 +325,10 @@ Section Uninstall
   Delete "$INSTDIR\locale\zh_CN\LC_MESSAGES\mkvtoolnix.mo"
   RMDir "$INSTDIR\locale\zh_CN\LC_MESSAGES"
   RMDir "$INSTDIR\locale\zh_CN"
+
+  Delete "$INSTDIR\locale\zh_TW\LC_MESSAGES\mkvtoolnix.mo"
+  RMDir "$INSTDIR\locale\zh_TW\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\zh_TW"
 
   # From previous versions of mkvtoolnix: translation to Simplified Chinese
   Delete "$INSTDIR\locale\zh\LC_MESSAGES\mkvtoolnix.mo"
