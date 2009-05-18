@@ -22,7 +22,7 @@ private:
   wave_header m_wh;
 
 public:
-  xtr_wav_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
+  xtr_wav_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec);
 
   virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
   virtual void finish_file();
@@ -41,7 +41,7 @@ private:
   int m_channels;
 
 public:
-  xtr_wavpack4_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
+  xtr_wavpack4_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec);
 
   virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
   virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions, int64_t timecode, int64_t duration, int64_t bref, int64_t fref,

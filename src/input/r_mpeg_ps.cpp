@@ -599,7 +599,7 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
                                         unsigned char *buf,
                                         int length,
                                         mpeg_ps_track_ptr &track) {
-  auto_ptr<M2VParser> m2v_parser(new M2VParser);
+  counted_ptr<M2VParser> m2v_parser(new M2VParser);
 
   m2v_parser->WriteData(buf, length);
 
@@ -629,7 +629,7 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
   }
 
   MPEG2SequenceHeader seq_hdr = m2v_parser->GetSequenceHeader();
-  auto_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
+  counted_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
   if (frame.get() == NULL)
     throw false;
 
@@ -1325,7 +1325,7 @@ mpeg_ps_reader_c::finish() {
   if (file_done)
     return FILE_STATUS_DONE;
 
-  vector<mpeg_ps_track_ptr>::iterator track;
+  std::vector<mpeg_ps_track_ptr>::iterator track;
 
   mxforeach(track, tracks) {
     if (0 < (*track)->buffer_usage) {
@@ -1347,7 +1347,7 @@ mpeg_ps_reader_c::get_progress() {
 
 void
 mpeg_ps_reader_c::identify() {
-  vector<string> verbose_info;
+  std::vector<std::string> verbose_info;
   int i;
 
   id_result_container((boost::format("MPEG %1% program stream (PS)") % version).str());

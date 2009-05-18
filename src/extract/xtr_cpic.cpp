@@ -21,7 +21,7 @@
 #include "common/strings/formatting.h"
 #include "extract/xtr_cpic.h"
 
-xtr_cpic_c::xtr_cpic_c(const string &codec_id,
+xtr_cpic_c::xtr_cpic_c(const std::string &codec_id,
                      int64_t tid,
                      track_spec_t &tspec)
   : xtr_base_c(codec_id, tid, tspec)
@@ -57,7 +57,7 @@ xtr_cpic_c::handle_frame(memory_cptr &frame,
     return;
   }
 
-  string frame_file_name = m_file_name_root + "_" + to_string(m_frame_counter);
+  std::string frame_file_name = m_file_name_root + "_" + to_string(m_frame_counter);
   if (7 == header_size) {
     uint8 picture_type = mybuffer[6];
     if (COREPICTURE_TYPE_JPEG == picture_type)

@@ -24,7 +24,6 @@
 
 using namespace libebml;
 using namespace libmatroska;
-using namespace std;
 
 class kax_cluster_c: public KaxCluster {
 public:

@@ -45,18 +45,18 @@ protected:
   virtual void dump_entrypoint(vc1::entrypoint_t &entrypoint);
   virtual void dump_frame_header(vc1::frame_header_t &frame_header);
 
-  virtual string create_checksum_info(memory_cptr packet);
+  virtual std::string create_checksum_info(memory_cptr packet);
 };
 
 void
 vc1_info_c::handle_end_of_sequence_packet(memory_cptr packet) {
-  string checksum = create_checksum_info(packet);
+  std::string checksum = create_checksum_info(packet);
   mxinfo(boost::format(Y("End of sequence at %1% size %2%%3%\n")) % m_stream_pos % packet->get_size() % checksum);
 }
 
 void
 vc1_info_c::handle_entrypoint_packet(memory_cptr packet) {
-  string checksum = create_checksum_info(packet);
+  std::string checksum = create_checksum_info(packet);
   mxinfo(boost::format(Y("Entrypoint at %1% size %2%%3%\n")) % m_stream_pos % packet->get_size() % checksum);
 
   if (!g_opt_entrypoints)
@@ -74,13 +74,13 @@ vc1_info_c::handle_entrypoint_packet(memory_cptr packet) {
 
 void
 vc1_info_c::handle_field_packet(memory_cptr packet) {
-  string checksum = create_checksum_info(packet);
+  std::string checksum = create_checksum_info(packet);
   mxinfo(boost::format(Y("Field at %1% size %2%%3%\n")) % m_stream_pos % packet->get_size() % checksum);
 }
 
 void
 vc1_info_c::handle_frame_packet(memory_cptr packet) {
-  string checksum = create_checksum_info(packet);
+  std::string checksum = create_checksum_info(packet);
   mxinfo(boost::format(Y("Frame at %1% size %2%%3%\n")) % m_stream_pos % packet->get_size() % checksum);
 
   if (!g_opt_frames)
@@ -98,7 +98,7 @@ vc1_info_c::handle_frame_packet(memory_cptr packet) {
 
 void
 vc1_info_c::handle_sequence_header_packet(memory_cptr packet) {
-  string checksum = create_checksum_info(packet);
+  std::string checksum = create_checksum_info(packet);
   mxinfo(boost::format(Y("Sequence header at %1% size %2%%3%\n")) % m_stream_pos % packet->get_size() % checksum);
 
   m_seqhdr_found = vc1::parse_sequence_header(packet->get(), packet->get_size(), m_seqhdr);
@@ -113,18 +113,18 @@ vc1_info_c::handle_sequence_header_packet(memory_cptr packet) {
 
 void
 vc1_info_c::handle_slice_packet(memory_cptr packet) {
-  string checksum = create_checksum_info(packet);
+  std::string checksum = create_checksum_info(packet);
   mxinfo(boost::format(Y("Slice at %1% size %2%%3%\n")) % m_stream_pos % packet->get_size() % checksum);
 }
 
 void
 vc1_info_c::handle_unknown_packet(uint32_t marker,
                                   memory_cptr packet) {
-  string checksum = create_checksum_info(packet);
+  std::string checksum = create_checksum_info(packet);
   mxinfo(boost::format(Y("Unknown (0x%|1$08x|) at %2% size %3%%4%\n")) % marker % m_stream_pos % packet->get_size() % checksum);
 }
 
-string
+std::string
 vc1_info_c::create_checksum_info(memory_cptr packet) {
   if (!g_opt_checksum)
     return "";
@@ -290,11 +290,11 @@ setup() {
   init_cc_stdio();
 }
 
-static string
-parse_args(vector<string> &args) {
-  string file_name;
+static std::string
+parse_args(std::vector<std::string> &args) {
+  std::string file_name;
 
-  vector<string>::iterator arg = args.begin();
+  std::vector<std::string>::iterator arg = args.begin();
   while (arg != args.end()) {
     if ((*arg == "-h") || (*arg == "--help"))
       show_help();
@@ -330,7 +330,7 @@ parse_args(vector<string> &args) {
 }
 
 static void
-parse_file(const string &file_name) {
+parse_file(const std::string &file_name) {
   mm_file_io_c in(file_name);
 
   const int buf_size = 100000;
@@ -360,8 +360,8 @@ main(int argc,
      char **argv) {
   setup();
 
-  vector<string> args = command_line_utf8(argc, argv);
-  string file_name    = parse_args(args);
+  std::vector<std::string> args = command_line_utf8(argc, argv);
+  std::string file_name    = parse_args(args);
 
   try {
     parse_file(file_name);

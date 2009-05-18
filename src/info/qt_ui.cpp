@@ -276,8 +276,8 @@ ui_show_progress(int percentage,
 int
 ui_run(int argc,
        char **argv) {
-  vector<string> args;
-  string initial_file;
+  std::vector<std::string> args;
+  std::string initial_file;
 
   QApplication app(argc, argv);
   main_window_c main_window;

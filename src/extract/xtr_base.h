@@ -24,12 +24,11 @@
 #include "common/compression.h"
 #include "extract/mkvextract.h"
 
-using namespace std;
 using namespace libmatroska;
 
 class xtr_base_c {
 public:
-  string m_codec_id, m_file_name, m_container_name;
+  std::string m_codec_id, m_file_name, m_container_name;
   xtr_base_c *m_master;
   mm_io_c *m_out;
   int64_t m_tid;
@@ -41,7 +40,7 @@ public:
   bool m_content_decoder_initialized;
 
 public:
-  xtr_base_c(const string &codec_id, int64_t tid, track_spec_t &tspec, const char *container_name = NULL);
+  xtr_base_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec, const char *container_name = NULL);
   virtual ~xtr_base_c();
 
   virtual void create_file(xtr_base_c *_master, KaxTrackEntry &track);
@@ -61,12 +60,12 @@ public:
   virtual void init_content_decoder(KaxTrackEntry &track);
   virtual memory_cptr decode_codec_private(KaxCodecPrivate *priv);
 
-  static xtr_base_c *create_extractor(const string &new_codec_id, int64_t new_tid, track_spec_t &tspec);
+  static xtr_base_c *create_extractor(const std::string &new_codec_id, int64_t new_tid, track_spec_t &tspec);
 };
 
 class xtr_fullraw_c : public xtr_base_c {
 public:
-  xtr_fullraw_c(const string &codec_id, int64_t tid, track_spec_t &tspec):
+  xtr_fullraw_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec):
     xtr_base_c(codec_id, tid, tspec) {}
   virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
   virtual void handle_codec_state(memory_cptr &codec_state);

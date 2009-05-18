@@ -192,7 +192,7 @@ mpeg4_p10_es_video_packetizer_c::connect(generic_packetizer_c *src,
 
 connection_result_e
 mpeg4_p10_es_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
-                                                string &error_message) {
+                                                std::string &error_message) {
   mpeg4_p10_es_video_packetizer_c *vsrc = dynamic_cast<mpeg4_p10_es_video_packetizer_c *>(src);
   if (NULL == vsrc)
     return CAN_CONNECT_NO_FORMAT;

@@ -28,14 +28,14 @@
 
 struct usf_entry_t {
   int64_t m_start, m_end;
-  string m_text;
+  std::string m_text;
 
   usf_entry_t():
     m_start(-1),
     m_end(-1) {
   }
 
-  usf_entry_t(int64_t start, int64_t end, const string &text):
+  usf_entry_t(int64_t start, int64_t end, const std::string &text):
     m_start(start),
     m_end(end),
     m_text(text) {
@@ -49,9 +49,9 @@ struct usf_entry_t {
 struct usf_track_t {
   int m_ptzr;
 
-  string m_language;
-  vector<usf_entry_t> m_entries;
-  vector<usf_entry_t>::const_iterator m_current_entry;
+  std::string m_language;
+  std::vector<usf_entry_t> m_entries;
+  std::vector<usf_entry_t>::const_iterator m_current_entry;
 
   usf_track_t():
     m_ptzr(-1) {
@@ -62,12 +62,12 @@ class usf_reader_c: public generic_reader_c, public xml_parser_c {
 private:
   int m_copy_depth;
 
-  vector<usf_track_t> m_tracks;
-  string m_private_data, m_default_language;
+  std::vector<usf_track_t> m_tracks;
+  std::string m_private_data, m_default_language;
   int m_longest_track;
 
-  vector<string> m_parents;
-  string m_data_buffer, m_copy_buffer, m_previous_start;
+  std::vector<std::string> m_parents;
+  std::string m_data_buffer, m_copy_buffer, m_previous_start;
   bool m_strip;
 
 public:

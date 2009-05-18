@@ -44,7 +44,7 @@ bool
 srt_parser_c::probe(mm_text_io_c *io) {
   try {
     io->setFilePointer(0, seek_beginning);
-    string s = io->getline();
+    std::string s = io->getline();
     strip(s);
 
     int64_t dummy;
@@ -53,7 +53,7 @@ srt_parser_c::probe(mm_text_io_c *io) {
 
     s = io->getline();
     boost::regex timecode_re(SRT_RE_TIMECODE_LINE, boost::regex::perl);
-    boost::match_results<string::const_iterator> matches;
+    boost::match_results<std::string::const_iterator> matches;
     if (!boost::regex_search(s, timecode_re))
       return false;
 
@@ -89,12 +89,12 @@ srt_parser_c::parse() {
   bool timecode_warning_printed = false;
   parser_state_e state          = STATE_INITIAL;
   int line_number               = 0;
-  string subtitles;
+  std::string subtitles;
 
   m_io->setFilePointer(0, seek_beginning);
 
   while (1) {
-    string s;
+    std::string s;
     if (!m_io->getline2(s))
       break;
 
@@ -121,7 +121,7 @@ srt_parser_c::parse() {
       state = STATE_TIME;
 
     } else if (STATE_TIME == state) {
-      boost::match_results<string::const_iterator> matches;
+      boost::match_results<std::string::const_iterator> matches;
       if (!boost::regex_search(s, matches, timecode_re)) {
         mxwarn_tid(m_file_name, m_tid, boost::format(Y("Error in line %1%: expected a SRT timecode line but found something else. Aborting this file.\n")) % line_number);
         break;
@@ -136,8 +136,8 @@ srt_parser_c::parse() {
       parse_int(matches[6].str(), e_min);
       parse_int(matches[7].str(), e_sec);
 
-      string s_rest = matches[4].str();
-      string e_rest = matches[8].str();
+      std::string s_rest = matches[4].str();
+      std::string e_rest = matches[8].str();
 
       if (boost::regex_search(s, coordinates_re) && !m_coordinates_warning_shown) {
         mxwarn_tid(m_file_name, m_tid,
@@ -147,7 +147,7 @@ srt_parser_c::parse() {
         m_coordinates_warning_shown = true;
       }
 
-      // The previous entry is done now. Append it to the list of subtitles.
+      // The previous entry is done now. Append it to the std::list of subtitles.
       if (!subtitles.empty()) {
         strip_back(subtitles, true);
         add(start, end, subtitles.c_str());
@@ -327,7 +327,7 @@ ssa_parser_c::parse() {
         // Split the line into fields.
         std::vector<std::string> fields = split(line.c_str(), ",", m_format.size());
         while (fields.size() < m_format.size())
-          fields.push_back(string(""));
+          fields.push_back(std::string(""));
 
         // Parse the start time.
         std::string stime = get_element("Start", fields);
@@ -402,27 +402,27 @@ ssa_parser_c::parse() {
   sort();
 }
 
-string
+std::string
 ssa_parser_c::get_element(const char *index,
-                          vector<string> &fields) {
+                          std::vector<std::string> &fields) {
   int i;
 
   for (i = 0; i < m_format.size(); i++)
     if (m_format[i] == index)
       return fields[i];
 
-  return string("");
+  return std::string("");
 }
 
 int64_t
-ssa_parser_c::parse_time(string &stime) {
+ssa_parser_c::parse_time(std::string &stime) {
   int64_t th, tm, ts, tds;
 
   int pos = stime.find(':');
   if (0 > pos)
     return -1;
 
-  string s = stime.substr(0, pos);
+  std::string s = stime.substr(0, pos);
   if (!parse_int(s, th))
     return -1;
   stime.erase(0, pos + 1);
@@ -451,8 +451,8 @@ ssa_parser_c::parse_time(string &stime) {
   return (tds * 10 + ts * 1000 + tm * 60 * 1000 + th * 60 * 60 * 1000) * 1000000;
 }
 
-string
-ssa_parser_c::recode_text(vector<string> &fields) {
+std::string
+ssa_parser_c::recode_text(std::vector<std::string> &fields) {
   return m_cc_utf8->utf8(get_element("Text", fields));
 }
 

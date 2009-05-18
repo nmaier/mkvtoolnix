@@ -17,7 +17,7 @@
 #include "common/math.h"
 #include "extract/xtr_avi.h"
 
-xtr_avi_c::xtr_avi_c(const string &codec_id,
+xtr_avi_c::xtr_avi_c(const std::string &codec_id,
                      int64_t tid,
                      track_spec_t &tspec)
   : xtr_base_c(codec_id, tid, tspec)
@@ -51,7 +51,7 @@ xtr_avi_c::create_file(xtr_base_c *master,
   if (NULL == m_avi)
     mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % m_file_name % AVI_strerror());
 
-  string writing_app = "mkvextract";
+  std::string writing_app = "mkvextract";
   if (!g_no_variable_data)
     writing_app += (boost::format(" %1%") % VERSION).str();
   m_avi->writing_app = safestrdup(writing_app.c_str());

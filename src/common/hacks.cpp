@@ -68,7 +68,7 @@ engage_hacks(const std::string &hacks) {
       mxexit(0);
 
     } else if (engage_args[aidx] == "cow") {
-      const string initial = "ICAgICAgICAgIChfXykKICAgICAgICAgICgqKikg"
+      const std::string initial = "ICAgICAgICAgIChfXykKICAgICAgICAgICgqKikg"
         "IE9oIGhvbmV5LCB0aGF0J3Mgc28gc3dlZXQhCiAgIC8tLS0tLS0tXC8gICBPZiB"
         "jb3Vyc2UgSSdsbCBtYXJyeSB5b3UhCiAgLyB8ICAgICB8fAogKiAgfHwtLS0tfH"
         "wKICAgIF5eICAgIF5eCg==";

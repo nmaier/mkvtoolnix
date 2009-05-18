@@ -58,7 +58,6 @@
 #include "extract/mkvextract.h"
 
 using namespace libmatroska;
-using namespace std;
 
 #define NAME "mkvextract"
 
@@ -152,10 +151,10 @@ static bool s_chapter_format_simple = false;
 static bool s_parse_fully           = false;
 
 void
-parse_args(vector<string> args,
-           string &file_name,
+parse_args(std::vector<std::string> args,
+           std::string &file_name,
            operation_mode_e &mode,
-           vector<track_spec_t> &tracks) {
+           std::vector<track_spec_t> &tracks) {
 
   verbose = 0;
 
@@ -261,7 +260,7 @@ parse_args(vector<string> args,
       s_chapter_format_simple = true;
 
     } else if ((mode == MODE_TRACKS) || (mode == MODE_ATTACHMENTS) || (MODE_TIMECODES_V2 == mode)) {
-      boost::match_results<string::const_iterator> matches;
+      boost::match_results<std::string::const_iterator> matches;
       if (!boost::regex_search(args[i], matches, tid_re)) {
         if ((MODE_TRACKS == mode) || (MODE_TIMECODES_V2 == mode))
           mxerror(boost::format(Y("Invalid track ID/file name specification in argument '%1%'.\n")) % args[i]);
@@ -274,7 +273,7 @@ parse_args(vector<string> args,
 
       parse_int(matches[1].str(), track.tid);
 
-      string output_file_name;
+      std::string output_file_name;
       if (matches[3].matched)
         output_file_name = matches[3].str();
 
@@ -354,9 +353,9 @@ main(int argc,
 
   xml_element_map_init();
 
-  string input_file;
+  std::string input_file;
   operation_mode_e mode;
-  vector<track_spec_t> tracks;
+  std::vector<track_spec_t> tracks;
 
   parse_args(command_line_utf8(argc, argv), input_file, mode, tracks);
   if (MODE_TRACKS == mode) {

@@ -43,7 +43,7 @@ public:
     return "AC3";
   }
 
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 
 protected:
   virtual unsigned char *get_ac3_packet(unsigned long *header, ac3_header_t *ac3header);

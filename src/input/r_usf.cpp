@@ -25,11 +25,10 @@
 #include "merge/pr_generic.h"
 #include "output/p_textsubs.h"
 
-using namespace std;
 
 class usf_xml_find_root_c: public xml_parser_c {
 public:
-  string m_root_element;
+  std::string m_root_element;
 
 public:
   usf_xml_find_root_c(mm_text_io_c *io):
@@ -108,7 +107,7 @@ void
 usf_reader_c::start_element_cb(const char *name,
                                const char **atts) {
   int i;
-  string node;
+  std::string node;
 
   m_previous_start = name;
   m_parents.push_back(name);
@@ -197,7 +196,7 @@ usf_reader_c::start_element_cb(const char *name,
 void
 usf_reader_c::end_element_cb(const char *name) {
   int i;
-  string node;
+  std::string node;
 
   // Generate the full path to this node.
   for (i = 0; m_parents.size() > i; ++i) {
@@ -309,7 +308,7 @@ usf_reader_c::get_progress() {
   usf_track_t &track = m_tracks[m_longest_track];
   if (track.m_entries.size() == 0)
     return 0;
-  return 100 - distance(track.m_current_entry, (vector<usf_entry_t>::const_iterator)track.m_entries.end()) * 100 / track.m_entries.size();
+  return 100 - distance(track.m_current_entry, (std::vector<usf_entry_t>::const_iterator)track.m_entries.end()) * 100 / track.m_entries.size();
 }
 
 int64_t
@@ -324,7 +323,7 @@ usf_reader_c::try_to_parse_timecode(const char *s) {
 
 void
 usf_reader_c::identify() {
-  vector<string> verbose_info;
+  std::vector<std::string> verbose_info;
   int i;
 
   id_result_container("USF");
@@ -335,7 +334,7 @@ usf_reader_c::identify() {
     verbose_info.clear();
 
     if (!track.m_language.empty())
-      verbose_info.push_back(string("language:") + escape(track.m_language));
+      verbose_info.push_back(std::string("language:") + escape(track.m_language));
 
     id_result_track(i, ID_RESULT_TRACK_SUBTITLES, "USF", verbose_info);
   }

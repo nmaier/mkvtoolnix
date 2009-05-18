@@ -42,7 +42,7 @@ public:
   virtual const char *get_format_name() {
     return "MP3";
   }
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 
 private:
   virtual unsigned char *get_mp3_packet(mp3_header_t *mp3header);

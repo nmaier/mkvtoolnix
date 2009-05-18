@@ -26,7 +26,6 @@
 #include "common/smart_pointers.h"
 #include "merge/pr_generic.h"
 
-using namespace std;
 
 #define RND_TIMECODE_SCALE(a) (irnd((double)(a) / (double)((int64_t)g_timecode_scale)) * (int64_t)g_timecode_scale)
 
@@ -65,7 +64,7 @@ struct split_point_t {
 class cluster_helper_c {
 private:
   kax_cluster_c *m_cluster;
-  vector<packet_cptr> m_packets;
+  std::vector<packet_cptr> m_packets;
   int m_cluster_content_size;
   int64_t m_max_timecode_and_duration, m_max_video_timecode_rendered;
   int64_t m_previous_cluster_tc, m_num_cue_elements, m_header_overhead;
@@ -74,8 +73,8 @@ private:
   int64_t m_min_timecode_in_cluster, m_max_timecode_in_cluster;
   mm_io_c *m_out;
 
-  vector<split_point_t> m_split_points;
-  vector<split_point_t>::iterator m_current_split_point;
+  std::vector<split_point_t> m_split_points;
+  std::vector<split_point_t>::iterator m_current_split_point;
 
 public:
   cluster_helper_c();

@@ -37,7 +37,7 @@ space(int num) {
   memset(s, ' ', num);
   s[num] = 0;
 
-  return string(s);
+  return std::string(s);
 }
 
 static void
@@ -47,7 +47,7 @@ print_binary(int level,
              mm_io_c *out) {
   EbmlBinary *b;
   const unsigned char *p;
-  string s;
+  std::string s;
   int i, size;
   bool ascii_only;
 
@@ -67,7 +67,7 @@ print_binary(int level,
     out->puts(boost::format("<%1% format=\"ascii\">%2%</%1%>\n") % name % escape_xml(s));
 
   } else {
-    string prefix = (boost::format("<%1% format=\"hex\">") % name).str();
+    std::string prefix = (boost::format("<%1% format=\"hex\">") % name).str();
 
     for (i = 0; i < size; i++) {
       if ((i % 16) != 0)
@@ -94,7 +94,7 @@ write_xml_element_rec(int level,
   EbmlMaster *m;
   int elt_idx, i;
   bool found;
-  string s;
+  std::string s;
 
   elt_idx = parent_idx;
   found = false;
@@ -146,7 +146,7 @@ write_xml_element_rec(int level,
       break;
 
     case EBMLT_STRING:
-      out->puts(boost::format("%1%</%2%>\n") % escape_xml(string(*dynamic_cast<EbmlString *>(e))) % element_map[elt_idx].name);
+      out->puts(boost::format("%1%</%2%>\n") % escape_xml(std::string(*dynamic_cast<EbmlString *>(e))) % element_map[elt_idx].name);
       break;
 
     case EBMLT_USTRING:
@@ -170,9 +170,9 @@ write_xml_element_rec(int level,
 // ------------------------------------------------------------------------
 
 xml_formatter_c::xml_formatter_c(mm_io_c *out,
-                                 const string &encoding)
+                                 const std::string &encoding)
   : m_out(out)
-  , m_temp_io(auto_ptr<mm_text_io_c>(new mm_text_io_c(new mm_mem_io_c(NULL, 100000, 4000))))
+  , m_temp_io(counted_ptr<mm_text_io_c>(new mm_text_io_c(new mm_mem_io_c(NULL, 100000, 4000))))
   , m_encoding(encoding)
   , m_cc_utf8(charset_converter_c::init(m_encoding))
   , m_header_written(false)
@@ -186,8 +186,8 @@ xml_formatter_c::~xml_formatter_c() {
 }
 
 void
-xml_formatter_c::set_doctype(const string &dtd,
-                             const string &file) {
+xml_formatter_c::set_doctype(const std::string &dtd,
+                             const std::string &file) {
   if (m_header_written)
     throw xml_formatter_error_c(Y("The header has already been written."));
 
@@ -196,8 +196,8 @@ xml_formatter_c::set_doctype(const string &dtd,
 }
 
 void
-xml_formatter_c::set_stylesheet(const string &type,
-                                const string &file) {
+xml_formatter_c::set_stylesheet(const std::string &type,
+                                const std::string &file) {
   if (m_header_written)
     throw xml_formatter_error_c(Y("The header has already been written."));
 
@@ -224,7 +224,7 @@ xml_formatter_c::write_header() {
 }
 
 void
-xml_formatter_c::format(const string &text) {
+xml_formatter_c::format(const std::string &text) {
   try {
     m_temp_io->save_pos();
     m_temp_io->write(text.c_str(), text.length());
@@ -245,7 +245,7 @@ xml_formatter_c::flush() {
 void
 xml_formatter_c::start_element_cb(const char *name,
                                   const char **atts) {
-  string element;
+  std::string element;
 
   strip(m_data_buffer, true);
   m_data_buffer = escape_xml(m_cc_utf8->native(m_data_buffer));
@@ -288,7 +288,7 @@ xml_formatter_c::end_element_cb(const char *name) {
 void
 xml_formatter_c::add_data_cb(const XML_Char *s,
                              int len) {
-  string test_data_buffer;
+  std::string test_data_buffer;
 
   m_data_buffer.append((const char *)s, len);
   test_data_buffer = m_data_buffer;
@@ -304,7 +304,7 @@ xml_formatter_c::add_data_cb(const XML_Char *s,
 }
 
 void
-xml_formatter_c::format_fixed(const string &text) {
+xml_formatter_c::format_fixed(const std::string &text) {
   if (XMLF_STATE_START == m_state)
     m_out->puts(boost::format(">\n%1%") % space(m_depth * 2));
   else if (XMLF_STATE_END == m_state)

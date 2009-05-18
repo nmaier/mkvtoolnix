@@ -34,7 +34,7 @@ void *MTX_DLL_API _safememdup(const void *src, size_t size, const char *file, in
 
 #define safestrdup(s) _safestrdup(s, __FILE__, __LINE__)
 inline char *
-_safestrdup(const string &s,
+_safestrdup(const std::string &s,
             const char *file,
             int line) {
   return static_cast<char *>(_safememdup(s.c_str(), s.length() + 1, file, line));
@@ -260,7 +260,7 @@ class MTX_DLL_API memory_slice_cursor_c {
   void copy(unsigned char *dest, int start, int size) {
     assert((start + size) <= m_size);
 
-    deque<memory_cptr>::iterator curr = m_slices.begin();
+    std::deque<memory_cptr>::iterator curr = m_slices.begin();
     int offset = 0;
 
     while (start > ((*curr)->get_size() + offset)) {

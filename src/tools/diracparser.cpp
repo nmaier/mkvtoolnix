@@ -40,36 +40,36 @@ protected:
 
   virtual void dump_sequence_header(dirac::sequence_header_t &seqhdr);
 
-  virtual string create_checksum_info(memory_cptr packet);
+  virtual std::string create_checksum_info(memory_cptr packet);
 };
 
 void
 dirac_info_c::handle_auxiliary_data_unit(memory_cptr packet) {
-  string checksum = create_checksum_info(packet);
+  std::string checksum = create_checksum_info(packet);
   mxinfo(boost::format(Y("Auxiliary data at %1% size %2%%3%\n")) % m_stream_pos % packet->get_size() % checksum);
 }
 
 void
 dirac_info_c::handle_end_of_sequence_unit(memory_cptr packet) {
-  string checksum = create_checksum_info(packet);
+  std::string checksum = create_checksum_info(packet);
   mxinfo(boost::format(Y("End of sequence at %1% size %2%%3%\n")) % m_stream_pos % packet->get_size() % checksum);
 }
 
 void
 dirac_info_c::handle_padding_unit(memory_cptr packet) {
-  string checksum = create_checksum_info(packet);
+  std::string checksum = create_checksum_info(packet);
   mxinfo(boost::format(Y("Padding at %1% size %2%%3%\n")) % m_stream_pos % packet->get_size() % checksum);
 }
 
 void
 dirac_info_c::handle_picture_unit(memory_cptr packet) {
-  string checksum = create_checksum_info(packet);
+  std::string checksum = create_checksum_info(packet);
   mxinfo(boost::format(Y("Picture at %1% size %2%%3%\n")) % m_stream_pos % packet->get_size() % checksum);
 }
 
 void
 dirac_info_c::handle_sequence_header_unit(memory_cptr packet) {
-  string checksum = create_checksum_info(packet);
+  std::string checksum = create_checksum_info(packet);
   mxinfo(boost::format(Y("Sequence header at %1% size %2%%3%\n" )) %m_stream_pos % packet->get_size() % checksum);
 
   m_seqhdr_found = dirac::parse_sequence_header(packet->get(), packet->get_size(), m_seqhdr);
@@ -84,11 +84,11 @@ dirac_info_c::handle_sequence_header_unit(memory_cptr packet) {
 
 void
 dirac_info_c::handle_unknown_unit(memory_cptr packet) {
-  string checksum = create_checksum_info(packet);
+  std::string checksum = create_checksum_info(packet);
   mxinfo(boost::format(Y("Unknown (0x%|1$02x|) at %2% size %3%%4%\n")) % (int)packet->get()[4] % m_stream_pos % packet->get_size() % checksum);
 }
 
-string
+std::string
 dirac_info_c::create_checksum_info(memory_cptr packet) {
   if (!g_opt_checksum)
     return "";
@@ -169,11 +169,11 @@ setup() {
   init_cc_stdio();
 }
 
-static string
-parse_args(vector<string> &args) {
-  string file_name;
+static std::string
+parse_args(std::vector<std::string> &args) {
+  std::string file_name;
 
-  vector<string>::iterator arg = args.begin();
+  std::vector<std::string>::iterator arg = args.begin();
   while (arg != args.end()) {
     if ((*arg == "-h") || (*arg == "--help"))
       show_help();
@@ -203,7 +203,7 @@ parse_args(vector<string> &args) {
 }
 
 static void
-parse_file(const string &file_name) {
+parse_file(const std::string &file_name) {
   mm_file_io_c in(file_name);
 
   const int buf_size = 100000;
@@ -233,8 +233,8 @@ main(int argc,
      char **argv) {
   setup();
 
-  vector<string> args = command_line_utf8(argc, argv);
-  string file_name    = parse_args(args);
+  std::vector<std::string> args = command_line_utf8(argc, argv);
+  std::string file_name    = parse_args(args);
 
   try {
     parse_file(file_name);

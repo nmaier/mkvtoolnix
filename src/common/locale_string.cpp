@@ -6,7 +6,7 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   locale string splitting and creation
+   locale std::string splitting and creation
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */

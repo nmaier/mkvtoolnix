@@ -23,11 +23,10 @@
 #include "merge/pr_generic.h"
 #include "merge/timecode_factory.h"
 
-using namespace std;
 
 timecode_factory_cptr
-timecode_factory_c::create(const string &file_name,
-                           const string &source_name,
+timecode_factory_c::create(const std::string &file_name,
+                           const std::string &source_name,
                            int64_t tid) {
   if (file_name.empty())
     return timecode_factory_cptr(NULL);
@@ -39,7 +38,7 @@ timecode_factory_c::create(const string &file_name,
     mxerror(boost::format(Y("The timecode file '%1%' could not be opened for reading.\n")) % file_name);
   }
 
-  string line;
+  std::string line;
   int version;
   if (!in->getline2(line) || !starts_with_case(line, "# timecode format v") || !parse_int(&line[strlen("# timecode format v")], version))
     mxerror(boost::format(Y("The timecode file '%1%' contains an unsupported/unrecognized format line. The very first line must look like '# timecode format v1'.\n"))
@@ -66,7 +65,7 @@ timecode_factory_c::create(const string &file_name,
 
 timecode_factory_cptr
 timecode_factory_c::create_fps_factory(int64_t default_duration,
-                                       const string &source_name,
+                                       const std::string &source_name,
                                        int64_t tid) {
   mm_text_io_c text_io(new mm_mem_io_c(NULL, 0, 1024));
   text_io.puts("# timecode format v1\n");
@@ -81,10 +80,10 @@ timecode_factory_c::create_fps_factory(int64_t default_duration,
 
 void
 timecode_factory_v1_c::parse(mm_io_c &in) {
-  string line;
+  std::string line;
   timecode_range_c t;
-  vector<timecode_range_c>::iterator iit;
-  vector<timecode_range_c>::const_iterator pit;
+  std::vector<timecode_range_c>::iterator iit;
+  std::vector<timecode_range_c>::const_iterator pit;
 
   int line_no = 1;
   do {
@@ -197,8 +196,8 @@ timecode_factory_v1_c::get_at(int64_t frame) {
 
 void
 timecode_factory_v2_c::parse(mm_io_c &in) {
-  string line;
-  map<int64_t, int64_t> dur_map;
+  std::string line;
+  std::map<int64_t, int64_t> dur_map;
 
   int64_t dur_sum          = 0;
   int line_no              = 0;
@@ -242,7 +241,7 @@ timecode_factory_v2_c::parse(mm_io_c &in) {
     mxerror(boost::format(Y("The timecode file '%1%' does not contain any valid entry.\n")) % m_file_name);
 
   dur_sum = -1;
-  map<int64_t, int64_t>::const_iterator it;
+  std::map<int64_t, int64_t>::const_iterator it;
   mxforeach(it, dur_map) {
     if ((0 > dur_sum) || (dur_map[dur_sum] < (*it).second))
       dur_sum = (*it).first;
@@ -289,12 +288,12 @@ timecode_factory_v2_c::get_next(packet_cptr &packet) {
 
 void
 timecode_factory_v3_c::parse(mm_io_c &in) {
-  string line;
+  std::string line;
   timecode_duration_c t;
-  vector<timecode_duration_c>::iterator iit;
-  vector<timecode_duration_c>::const_iterator pit;
+  std::vector<timecode_duration_c>::iterator iit;
+  std::vector<timecode_duration_c>::const_iterator pit;
 
-  string err_msg_assume = (boost::format(Y("The timecode file '%1%' does not contain a valid 'Assume' line with the default number of frames per second.\n"))
+  std::string err_msg_assume = (boost::format(Y("The timecode file '%1%' does not contain a valid 'Assume' line with the default number of frames per second.\n"))
                            % m_file_name).str();
 
   int line_no = 1;

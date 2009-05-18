@@ -28,7 +28,6 @@ namespace libmatroska {
 };
 
 using namespace libmatroska;
-using namespace std;
 
 class generic_packetizer_c;
 
@@ -53,7 +52,7 @@ struct packet_t {
   static int64_t sm_packet_number_counter;
 
   memory_cptr data;
-  vector<memory_cptr> data_adds;
+  std::vector<memory_cptr> data_adds;
   memory_cptr codec_state;
 
   KaxBlockBlob *group;
@@ -66,7 +65,7 @@ struct packet_t {
   bool duration_mandatory, superseeded, gap_following, factory_applied;
   generic_packetizer_c *source;
 
-  vector<packet_extension_cptr> extensions;
+  std::vector<packet_extension_cptr> extensions;
 
   packet_t()
     : group(NULL)

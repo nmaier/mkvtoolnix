@@ -48,7 +48,6 @@ extern "C" {
 #include "output/p_pcm.h"
 #include "output/p_video.h"
 
-using namespace std;
 using namespace libmatroska;
 
 #if defined(ARCH_BIGENDIAN)
@@ -87,7 +86,7 @@ space(int num) {
   memset(s, ' ', num);
   s[num] = 0;
 
-  return string(s);
+  return std::string(s);
 }
 
 int
@@ -338,7 +337,7 @@ qtmp4_reader_c::parse_headers() {
 
 void
 qtmp4_reader_c::calculate_timecodes() {
-  vector<qtmp4_demuxer_cptr>::iterator idmx;
+  std::vector<qtmp4_demuxer_cptr>::iterator idmx;
   int64_t min_timecode = 0;
 
   mxforeach(idmx, demuxers) {
@@ -1182,7 +1181,7 @@ qtmp4_reader_c::handle_elst_atom(qtmp4_demuxer_cptr &new_dmx,
     editlist.speed    = io->read_uint32_be();
   }
 
-  mxverb(2, boost::format("Quicktime/MP4 reader:%1%Edit list table: %2% entries\n") % space(level * 2 + 1) % count);
+  mxverb(2, boost::format("Quicktime/MP4 reader:%1%Edit std::list table: %2% entries\n") % space(level * 2 + 1) % count);
   for (i = 0; i < count; ++i)
     mxverb(4,
            boost::format("Quicktime/MP4 reader:%1%%2%: duration %3% pos %4% speed %5%\n")
@@ -1606,7 +1605,7 @@ qtmp4_reader_c::get_progress() {
 
 void
 qtmp4_reader_c::identify() {
-  vector<string> verbose_info;
+  std::vector<std::string> verbose_info;
   unsigned int i;
 
   id_result_container("Quicktime/MP4");
@@ -1663,7 +1662,7 @@ qtmp4_demuxer_c::calculate_fps() {
     mxverb(3, boost::format("Quicktime/MP4 reader: calculate_fps: case 1: %1%\n") % fps);
 
   } else {
-    map<int64_t, int> duration_map;
+    std::map<int64_t, int> duration_map;
 
     for (int i = 0; sample_table.size() > (i + 1); ++i) {
       int64_t this_duration = sample_table[i + 1].pts - sample_table[i].pts;
@@ -1673,8 +1672,8 @@ qtmp4_demuxer_c::calculate_fps() {
       ++duration_map[this_duration];
     }
 
-    map<int64_t, int>::const_iterator most_common = duration_map.begin();
-    map<int64_t, int>::const_iterator it;
+    std::map<int64_t, int>::const_iterator most_common = duration_map.begin();
+    std::map<int64_t, int>::const_iterator it;
     mxforeach(it, duration_map)
       if (it->second > most_common->second)
         most_common = it;
@@ -1719,7 +1718,7 @@ qtmp4_demuxer_c::calculate_timecodes() {
   }
 
   int64_t v_dts_offset = 0;
-  vector<int64_t> timecodes_before_offsets;
+  std::vector<int64_t> timecodes_before_offsets;
 
   if (('v' == type) && v_is_avc && !frame_offset_table.empty())
     v_dts_offset = to_nsecs(frame_offset_table[0]);
@@ -1911,7 +1910,7 @@ qtmp4_demuxer_c::update_editlist_table(int64_t global_time_scale) {
   if (('v' == type) && v_is_avc && !frame_offset_table.empty() && (frame_offset_table[0] <= min_editlist_pts))
     pts_offset = frame_offset_table[0];
 
-  mxverb(4, boost::format("qtmp4: Updating edit list table for track %1%; pts_offset = %2%\n") % id % pts_offset);
+  mxverb(4, boost::format("qtmp4: Updating edit std::list table for track %1%; pts_offset = %2%\n") % id % pts_offset);
 
   for (i = 0; editlist_table.size() > i; ++i) {
     qt_editlist_t &el = editlist_table[i];

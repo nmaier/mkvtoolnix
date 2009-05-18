@@ -47,7 +47,7 @@ public:
     return "TrueHD";
   }
 
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 
 protected:
   virtual void adjust_header_values(truehd_frame_cptr &frame);

@@ -24,9 +24,9 @@
 
 typedef struct sub_t {
   int64_t start, end;
-  string subs;
+  std::string subs;
 
-  sub_t(int64_t _start, int64_t _end, const string &_subs):
+  sub_t(int64_t _start, int64_t _end, const std::string &_subs):
     start(_start), end(_end), subs(_subs) {
   }
 
@@ -37,14 +37,14 @@ typedef struct sub_t {
 
 class subtitles_c {
 private:
-  deque<sub_t> entries;
-  deque<sub_t>::iterator current;
+  std::deque<sub_t> entries;
+  std::deque<sub_t>::iterator current;
 
 public:
   subtitles_c() {
     current = entries.end();
   }
-  void add(int64_t start, int64_t end, const string &subs) {
+  void add(int64_t start, int64_t end, const std::string &subs) {
     entries.push_back(sub_t(start, end, subs));
   }
   void reset() {
@@ -114,7 +114,7 @@ protected:
   int64_t m_attachment_id;
 
 public:
-  vector<attachment_t> m_attachments;
+  std::vector<attachment_t> m_attachments;
 
 public:
   ssa_parser_c(generic_reader_c *reader, mm_text_io_c *io, const std::string &file_name, int64_t tid);
@@ -141,8 +141,8 @@ public:
 
 protected:
   int64_t parse_time(std::string &time);
-  string get_element(const char *index, std::vector<std::string> &fields);
-  string recode_text(std::vector<std::string> &fields);
+  std::string get_element(const char *index, std::vector<std::string> &fields);
+  std::string recode_text(std::vector<std::string> &fields);
   void add_attachment_maybe(std::string &name, std::string &data_uu, ssa_section_e section);
   void decode_chars(unsigned char c1, unsigned char c2, unsigned char c3, unsigned char c4, memory_cptr &buffer, int bytes_to_add, int &allocated);
 };

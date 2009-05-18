@@ -29,7 +29,6 @@ extern "C" {
 #include "common/mm_io.h"
 #include "librmff.h"
 
-using namespace std;
 using namespace libebml;
 using namespace libmatroska;
 
@@ -68,12 +67,12 @@ show_error(const boost::format &format) {
   show_error(format.str());
 }
 
-bool extract_tracks(const char *file_name, vector<track_spec_t> &tspecs);
+bool extract_tracks(const char *file_name, std::vector<track_spec_t> &tspecs);
 void extract_tags(const char *file_name, bool parse_fully);
 void extract_chapters(const char *file_name, bool chapter_format_simple, bool parse_fully);
-void extract_attachments(const char *file_name, vector<track_spec_t> &tracks, bool parse_fully);
+void extract_attachments(const char *file_name, std::vector<track_spec_t> &tracks, bool parse_fully);
 void extract_cuesheet(const char *file_name, bool parse_fully);
 void write_cuesheet(const char *file_name, KaxChapters &chapters, KaxTags &tags, int64_t tuid, mm_io_c &out);
-void extract_timecodes(const string &file_name, vector<track_spec_t> &tspecs, int version);
+void extract_timecodes(const std::string &file_name, std::vector<track_spec_t> &tspecs, int version);
 
 #endif // __MKVEXTRACT_H

@@ -105,7 +105,7 @@ cue_entries_to_chapter_name(std::string &performer,
 struct cue_parser_args_t {
   int num;
   int64_t start_of_track;
-  vector<int64_t> start_indices;
+  std::vector<int64_t> start_indices;
   bool index00_missing;
   int64_t end;
   int64_t min_tc;

@@ -111,7 +111,6 @@
 #include "merge/output_control.h"
 
 using namespace libmatroska;
-using namespace std;
 
 namespace libmatroska {
 
@@ -123,11 +122,11 @@ namespace libmatroska {
   };
 }
 
-vector<packetizer_t> g_packetizers;
-vector<filelist_t> g_files;
-vector<attachment_t> g_attachments;
-vector<track_order_t> g_track_order;
-vector<append_spec_t> g_append_mapping;
+std::vector<packetizer_t> g_packetizers;
+std::vector<filelist_t> g_files;
+std::vector<attachment_t> g_attachments;
+std::vector<track_order_t> g_track_order;
+std::vector<append_spec_t> g_append_mapping;
 family_uids_c g_segfamily_uids;
 
 int64_t g_attachment_sizes_first            = 0;
@@ -136,7 +135,7 @@ int64_t g_attachment_sizes_others           = 0;
 KaxInfo *g_kax_info_chap                    = NULL;
 
 // Variables set by the command line parser.
-string g_outfile;
+std::string g_outfile;
 int64_t g_file_sizes                        = 0;
 int g_max_blocks_per_cluster                = 65535;
 int64_t g_max_ns_per_cluster                = 2000000000;
@@ -169,13 +168,13 @@ KaxChapters *g_kax_chapters                 = NULL;
 
 KaxTags *g_tags_from_cue_chapters           = NULL;
 
-string g_chapter_file_name;
-string g_chapter_language;
-string g_chapter_charset;
+std::string g_chapter_file_name;
+std::string g_chapter_language;
+std::string g_chapter_charset;
 
-string g_segmentinfo_file_name;
+std::string g_segmentinfo_file_name;
 
-string g_segment_title;
+std::string g_segment_title;
 bool g_segment_title_set                    = false;
 
 int64_t g_tags_size                         = 0;
@@ -186,11 +185,11 @@ int g_split_max_num_files                   = 65535;
 
 append_mode_e g_append_mode                 = APPEND_MODE_FILE_BASED;
 
-string g_default_language                   = "und";
+std::string g_default_language                   = "und";
 
 bitvalue_cptr g_seguid_link_previous;
 bitvalue_cptr g_seguid_link_next;
-vector<bitvalue_cptr> g_forced_seguids;
+std::vector<bitvalue_cptr> g_forced_seguids;
 
 static KaxInfo *s_kax_infos                 = NULL;
 static KaxMyDuration *s_kax_duration        = NULL;
@@ -213,10 +212,10 @@ static int s_display_files_done           = 0;
 static int s_display_path_length          = 1;
 static generic_reader_c *s_display_reader = NULL;
 
-/** \brief Add a segment family UID to the list if it doesn't exist already.
+/** \brief Add a segment family UID to the std::list if it doesn't exist already.
 
   \param family This segment family element is converted to a 128 bit
-    element which is added to the list of segment family UIDs.
+    element which is added to the std::list of segment family UIDs.
 */
 bool
 family_uids_c::add_family_uid(const KaxSegmentFamily &family) {
@@ -415,7 +414,7 @@ display_progress() {
   static int s_previous_percentage      = -1;
 
   if (NULL == s_display_reader) {
-    vector<filelist_t>::const_iterator i;
+    std::vector<filelist_t>::const_iterator i;
 
     const filelist_t *winner = &g_files[0];
     for (i = g_files.begin() + 1; i != g_files.end(); ++i)
@@ -443,7 +442,7 @@ display_progress() {
   s_previous_progress_on = current_time;
 }
 
-/** \brief Add some tags to the list of all tags
+/** \brief Add some tags to the std::list of all tags
 */
 void
 add_tags(KaxTag *tags) {
@@ -463,7 +462,7 @@ add_tags(KaxTag *tags) {
 */
 int64_t
 add_attachment(attachment_t attachment) {
-  vector<attachment_t>::iterator i;
+  std::vector<attachment_t>::iterator i;
 
   // If the attachment is coming from an existing file then we should
   // check if we already have another attachment stored. This can happen
@@ -489,7 +488,7 @@ add_attachment(attachment_t attachment) {
   return attachment.id;
 }
 
-/** \brief Add a packetizer to the list of packetizers
+/** \brief Add a packetizer to the std::list of packetizers
 */
 void
 add_packetizer_globally(generic_packetizer_c *packetizer) {
@@ -500,7 +499,7 @@ add_packetizer_globally(generic_packetizer_c *packetizer) {
   pack.old_status      = pack.status;
   pack.file            = -1;
 
-  vector<filelist_t>::iterator file;
+  std::vector<filelist_t>::iterator file;
   mxforeach(file, g_files)
     if (file->reader == packetizer->reader) {
       pack.file      = distance(g_files.begin(), file);
@@ -520,7 +519,7 @@ set_timecode_scale() {
   bool audio_present          = false;
   int64_t highest_sample_rate = 0;
 
-  vector<packetizer_t>::const_iterator ptzr;
+  std::vector<packetizer_t>::const_iterator ptzr;
   mxforeach(ptzr, g_packetizers)
     if ((*ptzr).packetizer->get_track_type() == track_video)
       video_present = true;
@@ -579,7 +578,7 @@ render_headers(mm_io_c *out) {
     s_kax_infos->PushElement(*s_kax_duration);
 
     if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
-      string version                                            = string("libebml v") + EbmlCodeVersion + string(" + libmatroska v") + KaxCodeVersion;
+      std::string version                                       = std::string("libebml v") + EbmlCodeVersion + std::string(" + libmatroska v") + KaxCodeVersion;
       GetChildAs<KaxMuxingApp, EbmlUnicodeString>(s_kax_infos)  = cstrutf8_to_UTFstring(version.c_str());
       GetChildAs<KaxWritingApp, EbmlUnicodeString>(s_kax_infos) = cstrutf8_to_UTFstring(VERSIONINFO " built on " __DATE__ " " __TIME__);
       GetChild<KaxDateUTC>(*s_kax_infos).SetEpochDate(time(NULL));
@@ -746,7 +745,7 @@ render_attachments(IOCallback *out) {
   s_kax_as           = new KaxAttachments();
   KaxAttached *kax_a = NULL;
 
-  vector<attachment_t>::iterator attch;
+  std::vector<attachment_t>::iterator attch;
   mxforeach(attch, g_attachments) {
     if ((1 == g_file_num) || attch->to_all_files) {
       kax_a = NULL == kax_a ? &GetChild<KaxAttached>(*s_kax_as) : &GetNextChild<KaxAttached>(*s_kax_as, *kax_a);
@@ -757,7 +756,7 @@ render_attachments(IOCallback *out) {
       if (attch->mime_type != "")
         GetChildAs<KaxMimeType, EbmlString>(kax_a)               = attch->mime_type;
 
-      string name;
+      std::string name;
       if (attch->stored_name == "") {
         int path_sep_idx = attch->name.rfind(PATHSEP);
         if (-1 != path_sep_idx)
@@ -792,9 +791,9 @@ render_attachments(IOCallback *out) {
 */
 static void
 check_append_mapping() {
-  vector<append_spec_t>::iterator amap, cmp_amap, trav_amap;
-  vector<int64_t>::iterator id;
-  vector<filelist_t>::iterator src_file, dst_file;
+  std::vector<append_spec_t>::iterator amap, cmp_amap, trav_amap;
+  std::vector<int64_t>::iterator id;
+  std::vector<filelist_t>::iterator src_file, dst_file;
   int count, file_id;
 
   mxforeach(amap, g_append_mapping) {
@@ -836,7 +835,7 @@ check_append_mapping() {
       mxerror(boost::format(Y("Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the "
                               "default mapping will be used) or specify a mapping for all tracks that are to be copied.\n")) % file_id % src_file->name);
     else if (0 == count) {
-      string missing_mappings;
+      std::string missing_mappings;
 
       // Default mapping.
       mxforeach(id, src_file->reader->used_track_ids) {
@@ -901,9 +900,9 @@ check_append_mapping() {
   // Finally see if the packetizers can be connected and connect them if they
   // can.
   mxforeach(amap, g_append_mapping) {
-    vector<generic_packetizer_c *>::const_iterator gptzr;
+    std::vector<generic_packetizer_c *>::const_iterator gptzr;
     generic_packetizer_c *src_ptzr, *dst_ptzr;
-    string error_message;
+    std::string error_message;
     int result;
 
     src_file = g_files.begin() + amap->src_file_id;
@@ -936,7 +935,7 @@ check_append_mapping() {
              % error_message);
 
     else if (CAN_CONNECT_YES != result) {
-      string reason(  result == CAN_CONNECT_NO_FORMAT     ? Y("The formats do not match.")
+      std::string reason(  result == CAN_CONNECT_NO_FORMAT     ? Y("The formats do not match.")
                     : result == CAN_CONNECT_NO_PARAMETERS ? Y("The track parameters do not match.")
                     :                                       Y("The reason is unknown."));
       mxerror(boost::format(Y("The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"))
@@ -994,7 +993,7 @@ check_append_mapping() {
 */
 void
 calc_max_chapter_size() {
-  vector<filelist_t>::iterator file;
+  std::vector<filelist_t>::iterator file;
   KaxChapters *chapters;
 
   // Step 1: Add all chapters from g_files that are not being appended.
@@ -1041,7 +1040,7 @@ calc_max_chapter_size() {
 */
 void
 create_readers() {
-  vector<filelist_t>::iterator file;
+  std::vector<filelist_t>::iterator file;
 
   mxforeach(file, g_files) {
     try {
@@ -1133,7 +1132,7 @@ create_readers() {
   }
 
   if (!g_identifying) {
-    vector<attachment_t>::const_iterator att;
+    std::vector<attachment_t>::const_iterator att;
 
     // Create the packetizers.
     mxforeach(file, g_files) {
@@ -1170,9 +1169,9 @@ create_readers() {
    \arg . ("-%03d" will be inserted before the .)
    \arg "-%03d" will be appended
 */
-string
+std::string
 create_output_name() {
-  string s = g_outfile;
+  std::string s = g_outfile;
   int p2   = 0;
   // First possibility: %d
   int p    = s.find("%d");
@@ -1192,7 +1191,7 @@ create_output_name() {
         if (!isdigit(s[i]))
           break;
 
-      string format(&s.c_str()[p]);
+      std::string format(&s.c_str()[p]);
       format.erase(p2 - p + 1);
       s.replace(p, format.size(), (boost::format(format) % g_file_num).str());
 
@@ -1200,7 +1199,7 @@ create_output_name() {
     }
   }
 
-  string buffer = (boost::format("-%|1$03d|") % g_file_num).str();
+  std::string buffer = (boost::format("-%|1$03d|") % g_file_num).str();
 
   // See if we can find a '.'.
   p = s.rfind(".");
@@ -1262,7 +1261,7 @@ add_tags_from_cue_chapters() {
 */
 void
 create_next_output_file() {
-  string this_outfile = g_cluster_helper->splitting() ? create_output_name() : g_outfile;
+  std::string this_outfile = g_cluster_helper->splitting() ? create_output_name() : g_outfile;
 
   g_kax_segment       = new KaxSegment();
   g_kax_cues          = new KaxCues();
@@ -1526,7 +1525,7 @@ append_track(packetizer_t &ptzr,
 
   // Find the generic_packetizer_c that we will be appending to the one
   // stored in ptzr.
-  vector<generic_packetizer_c *>::const_iterator gptzr;
+  std::vector<generic_packetizer_c *>::const_iterator gptzr;
   mxforeach(gptzr, src_file.reader->reader_packetizers)
     if (amap.src_track_id == (*gptzr)->ti.id)
       break;
@@ -1554,12 +1553,12 @@ append_track(packetizer_t &ptzr,
       && (            -1 == src_file.deferred_max_timecode_seen)
       && (          NULL != g_video_packetizer)) {
 
-    vector<filelist_t>::iterator file;
+    std::vector<filelist_t>::iterator file;
     mxforeach(file, g_files) {
       if (file->done)
         continue;
 
-      vector<generic_packetizer_c *>::const_iterator vptzr;
+      std::vector<generic_packetizer_c *>::const_iterator vptzr;
       mxforeach(vptzr, file->reader->reader_packetizers)
         if ((*vptzr)->get_track_type() == track_video)
           break;
@@ -1625,7 +1624,7 @@ append_track(packetizer_t &ptzr,
       ptzr.status = ptzr.packetizer->read();
 
     if (src_file.reader->ptzr_first_packet != NULL) {
-      vector<append_spec_t>::const_iterator cmp_amap;
+      std::vector<append_spec_t>::const_iterator cmp_amap;
       mxforeach(cmp_amap, g_append_mapping)
         if (   (cmp_amap->src_file_id  == amap.src_file_id)
             && (cmp_amap->src_track_id == src_file.reader->ptzr_first_packet->ti.id)
@@ -1681,7 +1680,7 @@ bool
 append_tracks_maybe() {
   bool appended_a_track = false;
 
-  vector<packetizer_t>::iterator ptzr;
+  std::vector<packetizer_t>::iterator ptzr;
   mxforeach(ptzr, g_packetizers) {
     if (ptzr->deferred)
       continue;
@@ -1692,7 +1691,7 @@ append_tracks_maybe() {
     if (FILE_STATUS_DONE_AND_DRY != ptzr->status)
       continue;
 
-    vector<append_spec_t>::const_iterator amap;
+    std::vector<append_spec_t>::const_iterator amap;
     mxforeach(amap, g_append_mapping)
       if ((amap->dst_file_id == ptzr->file) && (amap->dst_track_id == ptzr->packetizer->ti.id))
         break;
@@ -1723,10 +1722,10 @@ append_tracks_maybe() {
 */
 static void
 establish_deferred_connections(filelist_t &file) {
-  vector<deferred_connection_t> def_cons = file.deferred_connections;
+  std::vector<deferred_connection_t> def_cons = file.deferred_connections;
   file.deferred_connections.clear();
 
-  vector<deferred_connection_t>::iterator def_con;
+  std::vector<deferred_connection_t>::iterator def_con;
   mxforeach(def_con, def_cons)
     append_track(*def_con->ptzr, def_con->amap, &file);
 
@@ -1748,7 +1747,7 @@ main_loop() {
 
     // Step 1: Make sure a packet is available for each output
     // as long we haven't already processed the last one.
-    vector<packetizer_t>::iterator ptzr;
+    std::vector<packetizer_t>::iterator ptzr;
     mxforeach(ptzr, g_packetizers) {
       if (FILE_STATUS_HOLDING == ptzr->status)
         ptzr->status = FILE_STATUS_MOREDATA;
@@ -1790,7 +1789,7 @@ main_loop() {
 
     // Step 2: Pick the packet with the lowest timecode and
     // stuff it into the Matroska file.
-    vector<packetizer_t>::iterator winner = g_packetizers.end();
+    std::vector<packetizer_t>::iterator winner = g_packetizers.end();
     mxforeach(ptzr, g_packetizers) {
       if (NULL != ptzr->pack.get()) {
         if ((g_packetizers.end() == winner) || (NULL == winner->pack.get()))
@@ -1860,7 +1859,7 @@ setup() {
 */
 static void
 destroy_readers() {
-  vector<filelist_t>::const_iterator file;
+  std::vector<filelist_t>::const_iterator file;
   mxforeach(file, g_files) {
     delete file->reader;
     delete file->ti;

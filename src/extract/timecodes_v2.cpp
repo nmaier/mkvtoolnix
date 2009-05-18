@@ -42,29 +42,28 @@
 #include "extract/xtr_base.h"
 
 using namespace libmatroska;
-using namespace std;
 
 struct timecode_extractor_t {
   int64_t m_tid;
   mm_io_c *m_file;
-  vector<int64_t> m_timecodes;
+  std::vector<int64_t> m_timecodes;
   int64_t m_default_duration;
 
   timecode_extractor_t(int64_t tid, mm_io_c *file, int64_t default_duration):
     m_tid(tid), m_file(file), m_default_duration(default_duration) {}
 };
 
-static vector<timecode_extractor_t> timecode_extractors;
+static std::vector<timecode_extractor_t> timecode_extractors;
 
 // ------------------------------------------------------------------------
 
 static void
 close_timecode_files() {
-  vector<timecode_extractor_t>::iterator extractor;
+  std::vector<timecode_extractor_t>::iterator extractor;
 
   mxforeach(extractor, timecode_extractors) {
-    vector<int64_t> &timecodes = extractor->m_timecodes;
-    vector<int64_t>::const_iterator timecode;
+    std::vector<int64_t> &timecodes = extractor->m_timecodes;
+    std::vector<int64_t>::const_iterator timecode;
 
     sort(timecodes.begin(), timecodes.end());
     mxforeach(timecode, timecodes)
@@ -76,9 +75,9 @@ close_timecode_files() {
 
 static void
 create_timecode_files(KaxTracks &kax_tracks,
-                      vector<track_spec_t> &tracks,
+                      std::vector<track_spec_t> &tracks,
                       int version) {
-  vector<track_spec_t>::iterator tspec;
+  std::vector<track_spec_t>::iterator tspec;
   int i;
   int64_t default_duration;
 
@@ -122,7 +121,7 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
   block->SetParent(cluster);
 
   // Do we need this block group?
-  vector<timecode_extractor_t>::iterator extractor;
+  std::vector<timecode_extractor_t>::iterator extractor;
   mxforeach(extractor, timecode_extractors)
     if (block->TrackNum() == extractor->m_tid)
       break;
@@ -147,7 +146,7 @@ handle_simpleblock(KaxSimpleBlock &simpleblock,
 
   simpleblock.SetParent(cluster);
 
-  vector<timecode_extractor_t>::iterator extractor;
+  std::vector<timecode_extractor_t>::iterator extractor;
   // Do we need this simple block?
   mxforeach(extractor, timecode_extractors)
     if (simpleblock.TrackNum() == extractor->m_tid)
@@ -162,8 +161,8 @@ handle_simpleblock(KaxSimpleBlock &simpleblock,
 }
 
 void
-extract_timecodes(const string &file_name,
-                  vector<track_spec_t> &tspecs,
+extract_timecodes(const std::string &file_name,
+                  std::vector<track_spec_t> &tspecs,
                   int version) {
   // open input file
   mm_io_c *in;

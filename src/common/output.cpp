@@ -68,7 +68,7 @@ mxmsg(int level,
   if ((0 <= idx_cr) && (message.rfind('\n') < idx_cr))
     s_saw_cr_after_nl = true;
 
-  string output = g_cc_stdio->native(message);
+  std::string output = g_cc_stdio->native(message);
   g_mm_stdio->puts(output);
   g_mm_stdio->flush();
 }

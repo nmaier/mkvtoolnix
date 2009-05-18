@@ -22,7 +22,7 @@
 
 const double xtr_tta_c::ms_tta_frame_time = 1.04489795918367346939l;
 
-xtr_tta_c::xtr_tta_c(const string &codec_id,
+xtr_tta_c::xtr_tta_c(const std::string &codec_id,
                      int64_t tid,
                      track_spec_t &tspec)
   : xtr_base_c(codec_id, tid, tspec)

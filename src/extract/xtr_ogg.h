@@ -23,7 +23,7 @@
 
 class xtr_flac_c: public xtr_base_c {
 public:
-  xtr_flac_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
+  xtr_flac_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec);
 
   virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
 };
@@ -38,7 +38,7 @@ public:
   int64_t m_previous_end;
 
 public:
-  xtr_oggbase_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
+  xtr_oggbase_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec);
   virtual ~xtr_oggbase_c();
 
   virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
@@ -51,7 +51,7 @@ public:
 
 protected:
   virtual void create_standard_file(xtr_base_c *master, KaxTrackEntry &track);
-  virtual void header_packets_unlaced(vector<memory_cptr> &header_packets);
+  virtual void header_packets_unlaced(std::vector<memory_cptr> &header_packets);
 
   virtual void queue_frame(memory_cptr &frame, int64_t granulepos);
   virtual void write_queued_frame(bool eos);
@@ -59,7 +59,7 @@ protected:
 
 class xtr_oggflac_c: public xtr_oggbase_c {
 public:
-  xtr_oggflac_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
+  xtr_oggflac_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec);
 
   virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
 
@@ -70,7 +70,7 @@ public:
 
 class xtr_oggvorbis_c: public xtr_oggbase_c {
 public:
-  xtr_oggvorbis_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
+  xtr_oggvorbis_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec);
 
   virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
 
@@ -84,7 +84,7 @@ private:
   kate_identification_header_t m_kate_id_header;
 
 public:
-  xtr_oggkate_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
+  xtr_oggkate_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec);
 
   virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
   virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions, int64_t timecode, int64_t duration, int64_t bref,
@@ -95,7 +95,7 @@ public:
   };
 
 protected:
-  virtual void header_packets_unlaced(vector<memory_cptr> &header_packets);
+  virtual void header_packets_unlaced(std::vector<memory_cptr> &header_packets);
 };
 
 class xtr_oggtheora_c: public xtr_oggbase_c {
@@ -104,7 +104,7 @@ private:
   int64_t m_keyframe_number, m_non_keyframe_number;
 
 public:
-  xtr_oggtheora_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
+  xtr_oggtheora_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec);
 
   virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
   virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions, int64_t timecode, int64_t duration, int64_t bref,
@@ -116,7 +116,7 @@ public:
   };
 
 protected:
-  virtual void header_packets_unlaced(vector<memory_cptr> &header_packets);
+  virtual void header_packets_unlaced(std::vector<memory_cptr> &header_packets);
 };
 
 #endif

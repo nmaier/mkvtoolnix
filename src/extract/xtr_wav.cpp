@@ -20,7 +20,7 @@
 #include "common/endian.h"
 #include "extract/xtr_wav.h"
 
-xtr_wav_c::xtr_wav_c(const string &codec_id,
+xtr_wav_c::xtr_wav_c(const std::string &codec_id,
                      int64_t tid,
                      track_spec_t &tspec)
   : xtr_base_c(codec_id, tid, tspec)
@@ -70,7 +70,7 @@ xtr_wav_c::finish_file() {
 
 // ------------------------------------------------------------------------
 
-xtr_wavpack4_c::xtr_wavpack4_c(const string &codec_id,
+xtr_wavpack4_c::xtr_wavpack4_c(const std::string &codec_id,
                                int64_t tid,
                                track_spec_t &tspec)
   : xtr_base_c(codec_id, tid, tspec)
@@ -100,10 +100,10 @@ xtr_wavpack4_c::create_file(xtr_base_c *master,
   m_channels = kt_get_a_channels(track);
 
   if ((0 != kt_get_max_blockadd_id(track)) && (0 != m_extract_blockadd_level)) {
-    string corr_name = m_file_name;
-    size_t pos       = corr_name.rfind('.');
+    std::string corr_name = m_file_name;
+    size_t pos            = corr_name.rfind('.');
 
-    if ((string::npos != pos) && (0 != pos))
+    if ((std::string::npos != pos) && (0 != pos))
       corr_name.erase(pos + 1);
     corr_name += "wvc";
 
@@ -147,7 +147,7 @@ xtr_wavpack4_c::handle_frame(memory_cptr &frame,
   // rest of the header:
   memcpy(&wv_header[20], mybuffer, 3 * sizeof(uint32_t));
 
-  vector<uint32_t> flags;
+  std::vector<uint32_t> flags;
 
   // support multi-track files
   if (2 < m_channels) {

@@ -43,7 +43,7 @@ ra_packetizer_c::~ra_packetizer_c() {
 
 void
 ra_packetizer_c::set_headers() {
-  string codec_id = (boost::format("A_REAL/%1%%2%%3%%4%")
+  std::string codec_id = (boost::format("A_REAL/%1%%2%%3%%4%")
                      % (char)(m_fourcc >> 24) % (char)((m_fourcc >> 16) & 0xff) % (char)((m_fourcc >> 8) & 0xff) % (char)(m_fourcc & 0xff)).str();
   set_codec_id(upcase(codec_id));
   set_audio_sampling_freq((float)m_samples_per_sec);
@@ -64,7 +64,7 @@ ra_packetizer_c::process(packet_cptr packet) {
 
 connection_result_e
 ra_packetizer_c::can_connect_to(generic_packetizer_c *src,
-                                string &error_message) {
+                                std::string &error_message) {
   ra_packetizer_c *psrc = dynamic_cast<ra_packetizer_c *>(src);
   if (NULL == psrc)
     return CAN_CONNECT_NO_FORMAT;

@@ -30,7 +30,6 @@
 #include "common/memory.h"
 #include "common/smart_pointers.h"
 
-using namespace std;
 using namespace libebml;
 
 class MTX_DLL_API mm_io_error_c: public error_c {

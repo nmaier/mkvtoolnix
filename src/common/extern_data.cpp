@@ -2613,9 +2613,9 @@ const char *cctlds[] = {
   NULL
 };
 
-static string
-guess_mime_type_by_ext(string ext) {
-  vector<string> extensions;
+static std::string
+guess_mime_type_by_ext(std::string ext) {
+  std::vector<std::string> extensions;
   int i, j;
 
   /* chop off basename */
@@ -2673,11 +2673,11 @@ guess_mime_type_by_content(magic_t &m,
 }
 #endif  // HAVE_MAGIC_H
 
-string
-guess_mime_type(string ext,
+std::string
+guess_mime_type(std::string ext,
                 bool is_file) {
 #if HAVE_MAGIC_H
-  string ret;
+  std::string ret;
   magic_t m;
 
   if (!is_file)
@@ -2725,7 +2725,7 @@ guess_mime_type(string ext,
 }
 
 bool
-is_valid_cctld(const string &s) {
+is_valid_cctld(const std::string &s) {
   int i;
 
   for (i = 0; NULL != cctlds[i]; ++i)

@@ -92,7 +92,7 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
       mxerror_tid(ti.fname, ti.id, Y("Could not find the codec configuration data in the first MPEG-4 part 2 video frame. This track cannot be stored in native mode.\n"));
   }
 
-  vector<video_frame_t> frames;
+  std::vector<video_frame_t> frames;
   mpeg4::p2::find_frame_types(packet->data->get(), packet->data->get_size(), frames);
 
   // Add a timecode and a duration if they've been given.
@@ -106,7 +106,7 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
   if (-1 != packet->duration)
     m_available_durations.push_back(packet->duration);
 
-  vector<video_frame_t>::iterator frame;
+  std::vector<video_frame_t>::iterator frame;
   mxforeach(frame, frames) {
     // Maybe we can flush queued frames now. But only if we don't have
     // a B frame.

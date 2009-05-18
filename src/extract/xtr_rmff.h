@@ -25,7 +25,7 @@ public:
   rmff_track_t *m_rmtrack;
 
 public:
-  xtr_rmff_c(const string &codec_id, int64_t tid, track_spec_t &tspec);
+  xtr_rmff_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec);
 
   virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
   virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions, int64_t timecode, int64_t duration, int64_t bref, int64_t fref,

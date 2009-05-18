@@ -23,8 +23,8 @@
 
 class multiple_timecodes_packet_extension_c: public packet_extension_c {
 protected:
-  deque<int64_t> m_timecodes;
-  deque<int64_t> m_positions;
+  std::deque<int64_t> m_timecodes;
+  std::deque<int64_t> m_positions;
 
 public:
   multiple_timecodes_packet_extension_c() {

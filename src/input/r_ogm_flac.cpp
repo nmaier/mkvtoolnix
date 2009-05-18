@@ -116,7 +116,7 @@ fhe_error_cb(const FLAC__StreamDecoder *,
   mxverb(2, boost::format("flac_header_extraction: error (%1%)\n") % (int)status);
 }
 
-flac_header_extractor_c::flac_header_extractor_c(const string &file_name,
+flac_header_extractor_c::flac_header_extractor_c(const std::string &file_name,
                                                  int64_t _sid):
   metadata_parsed(false),
   sid(_sid),

@@ -290,7 +290,7 @@ real_reader_c::parse_headers() {
 
 void
 real_reader_c::create_video_packetizer(real_demuxer_cptr dmx) {
-  string codec_id = (boost::format("V_REAL/%1%") % dmx->fourcc).str();
+  std::string codec_id = (boost::format("V_REAL/%1%") % dmx->fourcc).str();
   dmx->ptzr = add_packetizer(new video_packetizer_c(this, ti, codec_id.c_str(), 0.0, dmx->width, dmx->height));
 
   if (strcmp(dmx->fourcc, "RV40"))
@@ -632,7 +632,7 @@ real_reader_c::identify() {
   for (i = 0; i < demuxers.size(); i++) {
     real_demuxer_cptr demuxer = demuxers[i];
 
-    string type, codec;
+    std::string type, codec;
     if (!strcasecmp(demuxer->fourcc, "raac") || !strcasecmp(demuxer->fourcc, "racp")) {
       type  = ID_RESULT_TRACK_AUDIO;
       codec = "AAC";

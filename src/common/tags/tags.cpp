@@ -133,7 +133,7 @@ find_simple_tag(const UTFstring &name,
   throw "";
 }
 
-string
+std::string
 get_simple_tag_value(const std::string &name,
                      EbmlMaster &m) {
   try {
@@ -147,7 +147,7 @@ get_simple_tag_value(const std::string &name,
   return "";
 }
 
-string
+std::string
 get_simple_tag_name(const KaxTagSimple &tag) {
   KaxTagName *tname = FINDFIRST(&tag, KaxTagName);
   if (NULL == tname)
@@ -156,7 +156,7 @@ get_simple_tag_name(const KaxTagSimple &tag) {
   return UTFstring_to_cstrutf8(UTFstring(*tname));
 }
 
-string
+std::string
 get_simple_tag_value(const KaxTagSimple &tag) {
   KaxTagString *tstring = FINDFIRST(&tag, KaxTagString);
   if (NULL == tstring)

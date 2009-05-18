@@ -177,7 +177,7 @@ truehd_packetizer_c::flush_frames_merged() {
 
 connection_result_e
 truehd_packetizer_c::can_connect_to(generic_packetizer_c *src,
-                                 string &error_message) {
+                                 std::string &error_message) {
   truehd_packetizer_c *asrc = dynamic_cast<truehd_packetizer_c *>(src);
   if (NULL == asrc)
     return CAN_CONNECT_NO_FORMAT;

@@ -74,7 +74,7 @@ textsubs_packetizer_c::process(packet_cptr packet) {
 
   packet->duration_mandatory = true;
 
-  string subs((char *)packet->data->get());
+  std::string subs((char *)packet->data->get());
 
   subs = boost::regex_replace(subs, s_re_remove_cr,          "",     boost::match_default | boost::match_single_line);
   subs = boost::regex_replace(subs, s_re_remove_trailing_nl, "",     boost::match_default | boost::match_single_line);
@@ -92,7 +92,7 @@ textsubs_packetizer_c::process(packet_cptr packet) {
 
 connection_result_e
 textsubs_packetizer_c::can_connect_to(generic_packetizer_c *src,
-                                      string &error_message) {
+                                      std::string &error_message) {
   textsubs_packetizer_c *psrc = dynamic_cast<textsubs_packetizer_c *>(src);
   if (NULL == psrc)
     return CAN_CONNECT_NO_FORMAT;

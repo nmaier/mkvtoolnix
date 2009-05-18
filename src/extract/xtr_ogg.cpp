@@ -23,7 +23,7 @@
 
 // ------------------------------------------------------------------------
 
-xtr_flac_c::xtr_flac_c(const string &_codec_id,
+xtr_flac_c::xtr_flac_c(const std::string &_codec_id,
                        int64_t _tid,
                        track_spec_t &tspec)
   : xtr_base_c(_codec_id, _tid, tspec)
@@ -45,7 +45,7 @@ xtr_flac_c::create_file(xtr_base_c *_master,
 
 // ------------------------------------------------------------------------
 
-xtr_oggbase_c::xtr_oggbase_c(const string &codec_id,
+xtr_oggbase_c::xtr_oggbase_c(const std::string &codec_id,
                              int64_t tid,
                              track_spec_t &tspec)
   : xtr_base_c(codec_id, tid, tspec)
@@ -75,7 +75,7 @@ xtr_oggbase_c::create_standard_file(xtr_base_c *master,
   init_content_decoder(track);
   memory_cptr mpriv = decode_codec_private(priv);
 
-  vector<memory_cptr> header_packets;
+  std::vector<memory_cptr> header_packets;
   try {
     header_packets = unlace_memory_xiph(mpriv);
 
@@ -110,7 +110,7 @@ xtr_oggbase_c::create_standard_file(xtr_base_c *master,
 }
 
 void
-xtr_oggbase_c::header_packets_unlaced(vector<memory_cptr> &header_packets) {
+xtr_oggbase_c::header_packets_unlaced(std::vector<memory_cptr> &header_packets) {
 }
 
 void
@@ -205,7 +205,7 @@ xtr_oggbase_c::write_queued_frame(bool eos) {
 
 // ------------------------------------------------------------------------
 
-xtr_oggflac_c::xtr_oggflac_c(const string &codec_id,
+xtr_oggflac_c::xtr_oggflac_c(const std::string &codec_id,
                              int64_t tid,
                              track_spec_t &tspec)
   : xtr_oggbase_c(codec_id, tid, tspec)
@@ -260,7 +260,7 @@ xtr_oggflac_c::create_file(xtr_base_c *master,
 
 // ------------------------------------------------------------------------
 
-xtr_oggvorbis_c::xtr_oggvorbis_c(const string &codec_id,
+xtr_oggvorbis_c::xtr_oggvorbis_c(const std::string &codec_id,
                                  int64_t tid,
                                  track_spec_t &tspec)
   : xtr_oggbase_c(codec_id, tid, tspec)
@@ -275,7 +275,7 @@ xtr_oggvorbis_c::create_file(xtr_base_c *master,
 
 // ------------------------------------------------------------------------
 
-xtr_oggkate_c::xtr_oggkate_c(const string &codec_id,
+xtr_oggkate_c::xtr_oggkate_c(const std::string &codec_id,
                                  int64_t tid,
                                  track_spec_t &tspec)
   : xtr_oggbase_c(codec_id, tid, tspec) 
@@ -289,7 +289,7 @@ xtr_oggkate_c::create_file(xtr_base_c *master,
 }
 
 void
-xtr_oggkate_c::header_packets_unlaced(vector<memory_cptr> &header_packets) {
+xtr_oggkate_c::header_packets_unlaced(std::vector<memory_cptr> &header_packets) {
   kate_parse_identification_header(header_packets[0]->get(), header_packets[0]->get_size(), m_kate_id_header);
   if (m_kate_id_header.nheaders != header_packets.size())
     throw false;
@@ -336,7 +336,7 @@ xtr_oggkate_c::handle_frame(memory_cptr &frame,
 
 // ------------------------------------------------------------------------
 
-xtr_oggtheora_c::xtr_oggtheora_c(const string &codec_id,
+xtr_oggtheora_c::xtr_oggtheora_c(const std::string &codec_id,
                                  int64_t tid,
                                  track_spec_t &tspec)
   : xtr_oggbase_c(codec_id, tid, tspec)
@@ -352,7 +352,7 @@ xtr_oggtheora_c::create_file(xtr_base_c *master,
 }
 
 void
-xtr_oggtheora_c::header_packets_unlaced(vector<memory_cptr> &header_packets) {
+xtr_oggtheora_c::header_packets_unlaced(std::vector<memory_cptr> &header_packets) {
   theora_parse_identification_header(header_packets[0]->get(), header_packets[0]->get_size(), m_theora_header);
 }
 

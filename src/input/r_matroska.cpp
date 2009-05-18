@@ -81,7 +81,6 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "output/p_vorbis.h"
 #include "output/p_wavpack.h"
 
-using namespace std;
 using namespace libmatroska;
 
 #define MAP_TRACK_TYPE(c) (  (c) == 'a' ? track_audio   \
@@ -369,7 +368,7 @@ kax_reader_c::verify_tracks() {
 
             try {
               memory_cptr temp(new memory_c((unsigned char *)t->private_data, t->private_size, false));
-              vector<memory_cptr> blocks = unlace_memory_xiph(temp);
+              std::vector<memory_cptr> blocks = unlace_memory_xiph(temp);
               if (blocks.size() != 3)
                 throw false;
 
@@ -512,7 +511,7 @@ kax_reader_c::handle_attachments(mm_io_c *io,
       if (EbmlId(*att) == KaxAttached::ClassInfos.GlobalId) {
         UTFstring name        = L"";
         UTFstring description = L"";
-        string mime_type      =  "";
+        std::string mime_type      =  "";
         int64_t size          = -1;
         int64_t id            = -1;
         unsigned char *data   = NULL;
@@ -531,7 +530,7 @@ kax_reader_c::handle_attachments(mm_io_c *io,
 
           } else if (EbmlId(*l2) == KaxMimeType::ClassInfos.GlobalId) {
             KaxMimeType &mtype = *static_cast<KaxMimeType *>(l2);
-            mime_type          = string(mtype);
+            mime_type          = std::string(mtype);
 
           } else if (EbmlId(*l2) == KaxFileUID::ClassInfos.GlobalId) {
             KaxFileUID &fuid = *static_cast<KaxFileUID *>(l2);
@@ -733,7 +732,7 @@ kax_reader_c::read_headers_info(EbmlElement *&l1,
   // AVI-Mux GUI 1.16.8 MPEG test build 1, Aug 24 2004  12:42:57
   //
   // The idea is to first replace known application names that contain
-  // spaces with one that doesn't. Then split the whole string up on
+  // spaces with one that doesn't. Then split the whole std::string up on
   // spaces into at most three parts. If the result is at least two parts
   // long then try to parse the version number from the second and
   // store a lower case version of the first as the application's name.
@@ -759,14 +758,14 @@ void
 kax_reader_c::read_headers_info_writing_app(KaxWritingApp *&kwriting_app) {
   int idx;
 
-  string s = UTFstring_to_cstrutf8(UTFstring(*kwriting_app));
+  std::string s = UTFstring_to_cstrutf8(UTFstring(*kwriting_app));
   strip(s);
   mxverb(2, boost::format("matroska_reader: | + writing app: %1%\n") % s);
 
   if (starts_with_case(s, "avi-mux gui"))
     s.replace(0, strlen("avi-mux gui"), "avimuxgui");
 
-  vector<string> parts = split(s.c_str(), " ", 3);
+  std::vector<std::string> parts = split(s.c_str(), " ", 3);
   if (parts.size() < 2) {
     writing_app = "";
     for (idx = 0; idx < s.size(); idx++)
@@ -784,7 +783,7 @@ kax_reader_c::read_headers_info_writing_app(KaxWritingApp *&kwriting_app) {
       if (isdigit(parts[1][idx]) || (parts[1][idx] == '.'))
         s += parts[1][idx];
 
-    vector<string> ver_parts = split(s.c_str(), ".");
+    std::vector<std::string> ver_parts = split(s.c_str(), ".");
     for (idx = ver_parts.size(); idx < 4; idx++)
       ver_parts.push_back("0");
 
@@ -972,8 +971,8 @@ kax_reader_c::read_headers_tracks(EbmlElement *&l1,
 
     KaxCodecID *kcodecid = FINDFIRST(ktentry, KaxCodecID);
     if (NULL != kcodecid) {
-      mxverb(2, boost::format("matroska_reader: |  + Codec ID: %1%\n") % string(*kcodecid));
-      track->codec_id = string(*kcodecid);
+      mxverb(2, boost::format("matroska_reader: |  + Codec ID: %1%\n") % std::string(*kcodecid));
+      track->codec_id = std::string(*kcodecid);
     } else
       mxerror(Y("matroska_reader: The CodecID is missing.\n"));
 
@@ -1027,8 +1026,8 @@ kax_reader_c::read_headers_tracks(EbmlElement *&l1,
 
     KaxTrackLanguage *ktlanguage = FINDFIRST(ktentry, KaxTrackLanguage);
     if (NULL != ktlanguage) {
-      mxverb(2, boost::format("matroska_reader: |  + Language: %1%\n") % string(*ktlanguage));
-      track->language = string(*ktlanguage);
+      mxverb(2, boost::format("matroska_reader: |  + Language: %1%\n") % std::string(*ktlanguage));
+      track->language = std::string(*ktlanguage);
     }
 
     KaxTrackName *ktname = FINDFIRST(ktentry, KaxTrackName);
@@ -1047,9 +1046,9 @@ kax_reader_c::read_headers_tracks(EbmlElement *&l1,
 void
 kax_reader_c::read_headers_seek_head(EbmlElement *&l0,
                                      EbmlElement *&l1,
-                                     vector<int64_t> &deferred_tags,
-                                     vector<int64_t> &deferred_chapters,
-                                     vector<int64_t> &deferred_attachments) {
+                                     std::vector<int64_t> &deferred_tags,
+                                     std::vector<int64_t> &deferred_chapters,
+                                     std::vector<int64_t> &deferred_attachments) {
   EbmlElement *el;
 
   KaxSeekHead &seek_head = *static_cast<KaxSeekHead *>(l1);
@@ -1099,7 +1098,7 @@ kax_reader_c::read_headers_seek_head(EbmlElement *&l0,
 int
 kax_reader_c::read_headers() {
   // Elements for different levels
-  vector<int64_t> deferred_tags, deferred_chapters, deferred_attachments;
+  std::vector<int64_t> deferred_tags, deferred_chapters, deferred_attachments;
 
   bool exit_loop = false;
   try {
@@ -1412,7 +1411,7 @@ kax_reader_c::create_audio_packetizer(kax_track_t *t,
         if (sbr)
           profile        = AAC_PROFILE_SBR;
 
-      } else if (!parse_aac_codec_id(string(t->codec_id), id, profile))
+      } else if (!parse_aac_codec_id(std::string(t->codec_id), id, profile))
         mxerror_tid(ti.fname, t->tnum, boost::format(Y("Malformed codec id '%1%'.\n")) % t->codec_id);
 
     } else {
@@ -1498,7 +1497,7 @@ kax_reader_c::create_subtitle_packetizer(kax_track_t *t,
     t->sub_type = 'v';
 
   } else if (starts_with(t->codec_id, "S_TEXT", 6) || (t->codec_id == "S_SSA") || (t->codec_id == "S_ASS")) {
-    string new_codec_id = ((t->codec_id == "S_SSA") || (t->codec_id == "S_ASS")) ? string("S_TEXT/") + string(&t->codec_id[2]) : t->codec_id;
+    std::string new_codec_id = ((t->codec_id == "S_SSA") || (t->codec_id == "S_ASS")) ? std::string("S_TEXT/") + std::string(&t->codec_id[2]) : t->codec_id;
 
     t->ptzr = add_packetizer(new textsubs_packetizer_c(this, nti, new_codec_id.c_str(), t->private_data, t->private_size, false, true));
     mxinfo_tid(ti.fname, t->tnum, Y("Using the text subtitle output module.\n"));
@@ -1851,7 +1850,7 @@ kax_reader_c::read(generic_packetizer_c *requested_ptzr,
 
             if ((-1 != block_track->ptzr) && block_track->passthrough) {
               // The handling for passthrough is a bit different. We don't have
-              // any special cases, e.g. 0 terminating a string for the subs
+              // any special cases, e.g. 0 terminating a std::string for the subs
               // and stuff. Just pass everything through as it is.
               int i;
               for (i = 0; i < (int)block_simple->NumberFrames(); i++) {
@@ -1954,7 +1953,7 @@ kax_reader_c::read(generic_packetizer_c *requested_ptzr,
 
             if ((-1 != block_track->ptzr) && block_track->passthrough) {
               // The handling for passthrough is a bit different. We don't have
-              // any special cases, e.g. 0 terminating a string for the subs
+              // any special cases, e.g. 0 terminating a std::string for the subs
               // and stuff. Just pass everything through as it is.
               if (bref_found)
                 block_bref += last_timecode;
@@ -2104,7 +2103,7 @@ kax_reader_c::set_headers() {
 
 void
 kax_reader_c::identify() {
-  vector<string> verbose_info;
+  std::vector<std::string> verbose_info;
 
   if (!title.empty())
     verbose_info.push_back((boost::format("title:%1%") % escape(title)).str());
@@ -2140,10 +2139,10 @@ kax_reader_c::identify() {
     else if (tracks[i]->codec_id == MKV_V_MPEG4_AVC)
       verbose_info.push_back("packetizer:mpeg4_p10_video");
 
-    string info = tracks[i]->codec_id;
+    std::string info = tracks[i]->codec_id;
 
     if (tracks[i]->ms_compat)
-      info += string(", ") +
+      info += std::string(", ") +
         (  tracks[i]->type        == 'v'    ? tracks[i]->v_fourcc
          : tracks[i]->a_formattag == 0x0001 ? "PCM"
          : tracks[i]->a_formattag == 0x0003 ? "PCM"

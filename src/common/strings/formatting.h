@@ -6,7 +6,7 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   string formatting functions
+   std::string formatting functions
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */

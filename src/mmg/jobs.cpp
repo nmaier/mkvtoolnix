@@ -43,7 +43,7 @@
 #define JOB_RUN_DIALOG_WIDTH 500
 
 job_run_dialog::job_run_dialog(wxWindow *parent,
-                               vector<int> &n_jobs_to_start)
+                               std::vector<int> &n_jobs_to_start)
   : wxDialog(NULL, -1, Z("mkvmerge is running"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX)
   , t_update(new wxTimer(this, 1))
   , out(NULL)
@@ -158,7 +158,7 @@ job_run_dialog::start_next_job() {
     if ((*arg_list)[i].Length() == 0)
       opt_file->Write(wxT("#EMPTY#"));
     else {
-      string arg_utf8 = to_utf8((*arg_list)[i]);
+      std::string arg_utf8 = to_utf8((*arg_list)[i]);
       opt_file->Write(arg_utf8.c_str(), arg_utf8.length());
     }
     opt_file->Write(wxT("\n"));
@@ -473,7 +473,7 @@ job_dialog::enable_buttons(bool enable,
 void
 job_dialog::on_start(wxCommandEvent &evt) {
   int i;
-  vector<int> jobs_to_start;
+  std::vector<int> jobs_to_start;
 
   for (i = 0; jobs.size() > i; ++i)
     if (JOBS_PENDING == jobs[i].status)
@@ -486,7 +486,7 @@ job_dialog::on_start(wxCommandEvent &evt) {
 void
 job_dialog::on_start_selected(wxCommandEvent &evt) {
   int i;
-  vector<int> jobs_to_start;
+  std::vector<int> jobs_to_start;
 
   for (i = 0; jobs.size() > i; ++i)
     if (lv_jobs->IsSelected(i))
@@ -499,7 +499,7 @@ job_dialog::on_start_selected(wxCommandEvent &evt) {
 void
 job_dialog::on_delete(wxCommandEvent &evt) {
   int i;
-  vector<bool> selected;
+  std::vector<bool> selected;
 
   for (i = 0; lv_jobs->GetItemCount() > i; ++i)
     selected.push_back(lv_jobs->IsSelected(i));
@@ -548,7 +548,7 @@ job_dialog::swap_rows(int lower,
 
 void
 job_dialog::on_up(wxCommandEvent &evt) {
-  vector<bool> selected;
+  std::vector<bool> selected;
 
   bool first = true;
   int i      = 0;
@@ -573,7 +573,7 @@ job_dialog::on_up(wxCommandEvent &evt) {
 
 void
 job_dialog::on_down(wxCommandEvent &evt) {
-  vector<bool> selected;
+  std::vector<bool> selected;
 
   bool first = true;
   int i      = lv_jobs->GetItemCount() - 1;
@@ -663,7 +663,7 @@ job_dialog::on_item_selected(wxListEvent &evt) {
 }
 
 void
-job_dialog::start_jobs(vector<int> &jobs_to_start) {
+job_dialog::start_jobs(std::vector<int> &jobs_to_start) {
   wxString temp_settings = wxGetCwd() + wxT("/jobs/temp.mmg");
   mdlg->save(temp_settings, true);
 

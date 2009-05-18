@@ -56,7 +56,6 @@ using namespace libebml;
                  "the command line used and which operating system you are " \
                  "using. Thank you.")
 
-using namespace std;
 
 #define MXMSG_ERROR    5
 #define MXMSG_WARNING 10

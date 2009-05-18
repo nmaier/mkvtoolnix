@@ -18,11 +18,10 @@
 
 #include "common/common.h"
 
-using namespace std;
 
 class MTX_DLL_API error_c {
 protected:
-  string error;
+  std::string error;
 
 public:
   error_c():
@@ -33,7 +32,7 @@ public:
     error(_error) {
   }
 
-  error_c(const string &_error):
+  error_c(const std::string &_error):
     error(_error) {
   }
 
@@ -44,7 +43,7 @@ public:
   virtual ~error_c() {
   }
 
-  virtual string get_error() const {
+  virtual std::string get_error() const {
     return error;
   }
 };

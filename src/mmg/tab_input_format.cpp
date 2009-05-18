@@ -32,7 +32,6 @@
 #include "mmg/tab_input.h"
 #include "mmg/tab_global.h"
 
-using namespace std;
 
 tab_input_format::tab_input_format(wxWindow *parent,
                                    tab_input *ti)

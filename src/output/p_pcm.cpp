@@ -112,7 +112,7 @@ pcm_packetizer_c::flush() {
 
 connection_result_e
 pcm_packetizer_c::can_connect_to(generic_packetizer_c *src,
-                                 string &error_message) {
+                                 std::string &error_message) {
   pcm_packetizer_c *psrc = dynamic_cast<pcm_packetizer_c *>(src);
   if (NULL == psrc)
     return CAN_CONNECT_NO_FORMAT;

@@ -23,7 +23,6 @@
 #include "merge/output_control.h"
 #include "merge/pr_generic.h"
 
-using namespace std;
 
 int
 ssa_reader_c::probe_file(mm_text_io_c *io,
@@ -35,10 +34,10 @@ ssa_reader_c::ssa_reader_c(track_info_c &_ti)
   throw (error_c)
   : generic_reader_c(_ti)
 {
-  auto_ptr<mm_text_io_c> io;
+  counted_ptr<mm_text_io_c> io;
 
   try {
-    io = auto_ptr<mm_text_io_c>(new mm_text_io_c(new mm_file_io_c(ti.fname)));
+    io = counted_ptr<mm_text_io_c>(new mm_text_io_c(new mm_file_io_c(ti.fname)));
   } catch (...) {
     throw error_c(Y("ssa_reader: Could not open the source file."));
   }

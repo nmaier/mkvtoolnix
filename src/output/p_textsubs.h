@@ -28,7 +28,7 @@ private:
   int m_packetno;
   charset_converter_cptr m_cc_utf8;
   memory_cptr m_global_data;
-  string m_codec_id;
+  std::string m_codec_id;
   bool m_recode;
 
 public:
@@ -42,7 +42,7 @@ public:
   virtual const char *get_format_name() {
     return "text subtitle";
   }
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 
 private:
   static boost::regex s_re_remove_cr, s_re_translate_nl, s_re_remove_trailing_nl;

@@ -71,7 +71,7 @@ wavpack_packetizer_c::process(packet_cptr packet) {
 
 connection_result_e
 wavpack_packetizer_c::can_connect_to(generic_packetizer_c *src,
-                                     string &error_message) {
+                                     std::string &error_message) {
   wavpack_packetizer_c *psrc = dynamic_cast<wavpack_packetizer_c *>(src);
   if (NULL == psrc)
     return CAN_CONNECT_NO_FORMAT;

@@ -38,7 +38,7 @@ memory_c::resize(int new_size) throw() {
 }
 
 memory_cptr
-lace_memory_xiph(const vector<memory_cptr> &blocks) {
+lace_memory_xiph(const std::vector<memory_cptr> &blocks) {
   int i;
   int size = 1;
   for (i = 0; (blocks.size() - 1) > i; ++i)
@@ -68,7 +68,7 @@ lace_memory_xiph(const vector<memory_cptr> &blocks) {
   return mem;
 }
 
-vector<memory_cptr>
+std::vector<memory_cptr>
 unlace_memory_xiph(memory_cptr &buffer) {
   if (1 > buffer->get_size())
     throw error_c("Lacing error: Buffer too small");

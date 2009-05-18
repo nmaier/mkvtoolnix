@@ -403,7 +403,7 @@ header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
     child_page = new he_ascii_string_value_page_c(this, page, k_track_entry, KaxCodecID::ClassInfos, Z("Codec ID"), Z("An ID corresponding to the codec."));
     child_page->init();
 
-    child_page = new he_string_value_page_c(this, page, k_track_entry, KaxCodecName::ClassInfos, Z("Codec name"), Z("A human-readable string specifying the codec."));
+    child_page = new he_string_value_page_c(this, page, k_track_entry, KaxCodecName::ClassInfos, Z("Codec name"), Z("A human-readable std::string specifying the codec."));
     child_page->init();
 
     if (track_video == track_type) {

@@ -40,7 +40,6 @@
 #include "merge/output_control.h"
 #include "merge/pr_generic.h"
 
-using namespace std;
 
 #define TRACK_TYPE_TO_DEFTRACK_TYPE(track_type)      \
   (  track_audio == track_type ? DEFTRACK_TYPE_AUDIO \
@@ -54,7 +53,7 @@ packet_t::~packet_t() {
 
 // ---------------------------------------------------------------------
 
-vector<generic_packetizer_c *> ptzrs_in_header_order;
+std::vector<generic_packetizer_c *> ptzrs_in_header_order;
 
 generic_packetizer_c::generic_packetizer_c(generic_reader_c *p_reader,
                                            track_info_c &p_ti)
@@ -345,14 +344,14 @@ generic_packetizer_c::set_track_type(int type,
 }
 
 void
-generic_packetizer_c::set_track_name(const string &name) {
+generic_packetizer_c::set_track_name(const std::string &name) {
   ti.track_name = name;
   if ((NULL != track_entry) && !name.empty())
     GetChildAs<KaxTrackName, EbmlUnicodeString>(track_entry) = cstrutf8_to_UTFstring(ti.track_name);
 }
 
 void
-generic_packetizer_c::set_codec_id(const string &id) {
+generic_packetizer_c::set_codec_id(const std::string &id) {
   hcodec_id = id;
   if ((NULL != track_entry) && !id.empty())
     GetChildAs<KaxCodecID, EbmlString>(track_entry) = hcodec_id;
@@ -493,7 +492,7 @@ generic_packetizer_c::set_as_default_track(int type,
 }
 
 void
-generic_packetizer_c::set_language(const string &language) {
+generic_packetizer_c::set_language(const std::string &language) {
   ti.language = language;
   if (NULL != track_entry)
     GetChildAs<KaxTrackLanguage, EbmlString>(track_entry) = ti.language;
@@ -820,7 +819,7 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
 
 void
 generic_packetizer_c::process_deferred_packets() {
-  deque<packet_cptr>::iterator packet;
+  std::deque<packet_cptr>::iterator packet;
 
   mxforeach(packet, deferred_packets)
     add_packet2(*packet);
@@ -913,7 +912,7 @@ generic_packetizer_c::apply_factory_short_queueing(packet_cptr_di &p_start) {
 
 struct packet_sorter_t {
   int m_index;
-  static deque<packet_cptr> *m_packet_queue;
+  static std::deque<packet_cptr> *m_packet_queue;
 
   packet_sorter_t(int index)
     : m_index(index)
@@ -925,7 +924,7 @@ struct packet_sorter_t {
   }
 };
 
-deque<packet_cptr> *packet_sorter_t::m_packet_queue = NULL;
+std::deque<packet_cptr> *packet_sorter_t::m_packet_queue = NULL;
 
 void
 generic_packetizer_c::apply_factory_full_queueing(packet_cptr_di &p_start) {
@@ -945,7 +944,7 @@ generic_packetizer_c::apply_factory_full_queueing(packet_cptr_di &p_start) {
 
     // Now sort the frames by their timecode as the factory has to be
     // applied to the packets in the same order as they're timestamped.
-    vector<packet_sorter_t> sorter;
+    std::vector<packet_sorter_t> sorter;
     bool needs_sorting        = false;
     int64_t previous_timecode = 0;
     int                       i = distance(packet_queue.begin(), p_start);
@@ -1061,7 +1060,7 @@ generic_packetizer_c::flush() {
 //--------------------------------------------------------------------
 
 #define add_all_requested_track_ids(type, container)                                              \
-  for (map<int64_t, type>::const_iterator i = ti.container.begin(); ti.container.end() != i; ++i) \
+  for (std::map<int64_t, type>::const_iterator i = ti.container.begin(); ti.container.end() != i; ++i) \
     add_requested_track_id(i->first);
 
 #define add_all_requested_track_ids2(container) \
@@ -1084,18 +1083,18 @@ generic_reader_c::generic_reader_c(track_info_c &_ti)
   add_all_requested_track_ids2(vtracks);
   add_all_requested_track_ids2(stracks);
   add_all_requested_track_ids2(btracks);
-  add_all_requested_track_ids(string, all_fourccs);
+  add_all_requested_track_ids(std::string, all_fourccs);
   add_all_requested_track_ids(display_properties_t, display_properties);
   add_all_requested_track_ids(timecode_sync_t, timecode_syncs);
   add_all_requested_track_ids(cue_strategy_e, cue_creations);
   add_all_requested_track_ids(bool, default_track_flags);
-  add_all_requested_track_ids(string, languages);
-  add_all_requested_track_ids(string, sub_charsets);
-  add_all_requested_track_ids(string, all_tags);
+  add_all_requested_track_ids(std::string, languages);
+  add_all_requested_track_ids(std::string, sub_charsets);
+  add_all_requested_track_ids(std::string, all_tags);
   add_all_requested_track_ids(bool, all_aac_is_sbr);
   add_all_requested_track_ids(compression_method_e, compression_list);
-  add_all_requested_track_ids(string, track_names);
-  add_all_requested_track_ids(string, all_ext_timecodes);
+  add_all_requested_track_ids(std::string, track_names);
+  add_all_requested_track_ids(std::string, all_ext_timecodes);
   add_all_requested_track_ids(pixel_crop_t, pixel_crop_list);
 }
 
@@ -1121,7 +1120,7 @@ generic_reader_c::read_all() {
 bool
 generic_reader_c::demuxing_requested(char type,
                                      int64_t id) {
-  vector<int64_t> *tracks = NULL;
+  std::vector<int64_t> *tracks = NULL;
 
   if ('v' == type) {
     if (ti.no_video)
@@ -1188,14 +1187,14 @@ void
 generic_reader_c::set_timecode_offset(int64_t offset) {
   max_timecode_seen = offset;
 
-  vector<generic_packetizer_c *>::const_iterator it;
+  std::vector<generic_packetizer_c *>::const_iterator it;
   mxforeach(it, reader_packetizers)
     (*it)->correction_timecode_offset = offset;
 }
 
 void
 generic_reader_c::set_headers() {
-  vector<generic_packetizer_c *>::const_iterator it;
+  std::vector<generic_packetizer_c *>::const_iterator it;
 
   mxforeach(it, reader_packetizers)
     (*it)->set_headers();
@@ -1203,7 +1202,7 @@ generic_reader_c::set_headers() {
 
 void
 generic_reader_c::set_headers_for_track(int64_t tid) {
-  vector<generic_packetizer_c *>::const_iterator it;
+  std::vector<generic_packetizer_c *>::const_iterator it;
 
   mxforeach(it, reader_packetizers)
     if ((*it)->ti.id == tid) {
@@ -1256,7 +1255,7 @@ int64_t
 generic_reader_c::get_queued_bytes() {
   int64_t  bytes = 0;
 
-  vector<generic_packetizer_c *>::const_iterator it;
+  std::vector<generic_packetizer_c *>::const_iterator it;
   mxforeach(it, reader_packetizers)
     bytes += (*it)->get_queued_bytes();
 
@@ -1265,15 +1264,15 @@ generic_reader_c::get_queued_bytes() {
 
 void
 generic_reader_c::flush_packetizers() {
-  vector<generic_packetizer_c *>::const_iterator it;
+  std::vector<generic_packetizer_c *>::const_iterator it;
 
   mxforeach(it, reader_packetizers)
     (*it)->flush();
 }
 
 void
-generic_reader_c::id_result_container_unsupported(const string &filename,
-                                                  const string &info) {
+generic_reader_c::id_result_container_unsupported(const std::string &filename,
+                                                  const std::string &info) {
   if (g_identifying) {
     if (g_identify_for_mmg)
       mxinfo(boost::format("File '%1%': unsupported container: %2%\n") % filename % info);
@@ -1286,8 +1285,8 @@ generic_reader_c::id_result_container_unsupported(const string &filename,
 }
 
 void
-generic_reader_c::id_result_container(const string &info,
-                                      const string &verbose_info) {
+generic_reader_c::id_result_container(const std::string &info,
+                                      const std::string &verbose_info) {
   id_results_container.info = info;
   id_results_container.verbose_info.clear();
   if (!verbose_info.empty())
@@ -1295,17 +1294,17 @@ generic_reader_c::id_result_container(const string &info,
 }
 
 void
-generic_reader_c::id_result_container(const string &info,
-                                      const vector<string> &verbose_info) {
+generic_reader_c::id_result_container(const std::string &info,
+                                      const std::vector<std::string> &verbose_info) {
   id_results_container.info         = info;
   id_results_container.verbose_info = verbose_info;
 }
 
 void
 generic_reader_c::id_result_track(int64_t track_id,
-                                  const string &type,
-                                  const string &info,
-                                  const string &verbose_info) {
+                                  const std::string &type,
+                                  const std::string &info,
+                                  const std::string &verbose_info) {
   id_result_t result(track_id, type, info, empty_string, 0);
   if (!verbose_info.empty())
     result.verbose_info.push_back(verbose_info);
@@ -1314,9 +1313,9 @@ generic_reader_c::id_result_track(int64_t track_id,
 
 void
 generic_reader_c::id_result_track(int64_t track_id,
-                                  const string &type,
-                                  const string &info,
-                                  const vector<string> &verbose_info) {
+                                  const std::string &type,
+                                  const std::string &info,
+                                  const std::vector<std::string> &verbose_info) {
   id_result_t result(track_id, type, info, empty_string, 0);
   result.verbose_info = verbose_info;
   id_results_tracks.push_back(result);
@@ -1324,17 +1323,17 @@ generic_reader_c::id_result_track(int64_t track_id,
 
 void
 generic_reader_c::id_result_attachment(int64_t attachment_id,
-                                       const string &type,
+                                       const std::string &type,
                                        int size,
-                                       const string &file_name,
-                                       const string &description) {
+                                       const std::string &file_name,
+                                       const std::string &description) {
   id_result_t result(attachment_id, type, file_name, description, size);
   id_results_attachments.push_back(result);
 }
 
 void
 generic_reader_c::display_identification_results() {
-  string format_file, format_track, format_attachment, format_att_description, format_att_file_name;
+  std::string format_file, format_track, format_attachment, format_att_description, format_att_file_name;
 
   if (g_identify_for_mmg) {
     format_file            =   "File '%1%': container: %2%";

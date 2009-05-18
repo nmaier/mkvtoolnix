@@ -41,7 +41,7 @@ public:
   virtual const char *get_format_name() {
     return "PCM";
   }
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 };
 
 #endif // __P_PCM_H

@@ -112,7 +112,7 @@ cluster_helper_c::add_packet(packet_cptr packet) {
         additional_size = 21;
 
         // Add sizes for all frames.
-        vector<packet_cptr>::iterator p_it;
+        std::vector<packet_cptr>::iterator p_it;
         mxforeach(p_it, m_packets) {
           packet_cptr &p   = *p_it;
           additional_size += p->data->get_size() + ((-1 == p->bref) ? 10 : (-1 == p->fref) ? 13 : 16);
@@ -276,8 +276,8 @@ cluster_helper_c::must_duration_be_set(render_groups_c *rg,
 
 int
 cluster_helper_c::render() {
-  vector<render_groups_cptr> render_groups;
-  vector<render_groups_cptr>::iterator rg_it;
+  std::vector<render_groups_cptr> render_groups;
+  std::vector<render_groups_cptr>::iterator rg_it;
 
   bool use_simpleblock              = !hack_engaged(ENGAGE_NO_SIMPLE_BLOCKS);
 
@@ -297,7 +297,7 @@ cluster_helper_c::render() {
 
   // Make sure that we don't have negative/wrapped around timecodes in the output file.
   // Can happend when we're splitting; so adjust timecode_offset accordingly.
-  vector<packet_cptr>::iterator pack_it;
+  std::vector<packet_cptr>::iterator pack_it;
   mxforeach(pack_it, m_packets)
     m_timecode_offset = std::min(m_timecode_offset, (*pack_it)->assigned_timecode);
 

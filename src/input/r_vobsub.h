@@ -34,15 +34,15 @@ public:
 
 class vobsub_track_c {
 public:
-  string language;
+  std::string language;
   int ptzr;
-  vector<vobsub_entry_c> entries;
+  std::vector<vobsub_entry_c> entries;
   int idx, aid;
   bool mpeg_version_warning_printed;
   int64_t packet_num, spu_size, overhead;
 
 public:
-  vobsub_track_c(const string &new_language):
+  vobsub_track_c(const std::string &new_language):
     language(new_language),
     ptzr(-1),
     idx(0),
@@ -60,12 +60,12 @@ private:
   mm_text_io_c *idx_file;
   int version, ifo_data_size;
   int64_t num_indices, indices_processed, delay;
-  string idx_data;
+  std::string idx_data;
 
-  vector<vobsub_track_c *> tracks;
+  std::vector<vobsub_track_c *> tracks;
 
 private:
-  static const string id_string;
+  static const std::string id_string;
 
 public:
   vobsub_reader_c(track_info_c &_ti) throw (error_c);

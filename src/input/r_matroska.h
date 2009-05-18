@@ -36,12 +36,11 @@
 
 using namespace libebml;
 using namespace libmatroska;
-using namespace std;
 
 struct kax_track_t {
   uint64_t tnum, tuid;
 
-  string codec_id;
+  std::string codec_id;
   bool ms_compat;
 
   char type; // 'v' = video, 'a' = audio, 't' = text subs, 'b' = buttons
@@ -72,11 +71,11 @@ struct kax_track_t {
 
   bool default_track;
   boost::logic::tribool forced_track;
-  string language;
+  std::string language;
 
   int64_t units_processed;
 
-  string track_name;
+  std::string track_name;
 
   bool ok;
 
@@ -149,8 +148,8 @@ class kax_reader_c: public generic_reader_c {
 private:
   int act_wchar;
 
-  vector<kax_track_t *> tracks;
-  map<generic_packetizer_c *, kax_track_t *> ptzr_to_track_map;
+  std::vector<kax_track_t *> tracks;
+  std::map<generic_packetizer_c *, kax_track_t *> ptzr_to_track_map;
 
   int64_t tc_scale;
   int64_t cluster_tc;
@@ -164,11 +163,11 @@ private:
 
   int64_t segment_duration;
   int64_t last_timecode, first_timecode;
-  string title;
+  std::string title;
 
-  vector<int64_t> handled_tags, handled_attachments, handled_chapters;
+  std::vector<int64_t> handled_tags, handled_attachments, handled_chapters;
 
-  string writing_app, muxing_app;
+  std::string writing_app, muxing_app;
   int64_t writing_app_ver;
 
   int64_t m_attachment_id;
@@ -213,7 +212,7 @@ protected:
   virtual void read_headers_track_video(kax_track_t *&track, KaxTrackVideo *&ktvideo);
   virtual void read_headers_tracks(EbmlElement *&l1, EbmlElement *&l2, int &upper_lvl_el);
   virtual void read_headers_seek_head(EbmlElement *&l0, EbmlElement *&l1,
-                                      vector<int64_t> &deferred_tags, vector<int64_t> &deferred_chapters, vector<int64_t> &deferred_attachments);
+                                      std::vector<int64_t> &deferred_tags, std::vector<int64_t> &deferred_chapters, std::vector<int64_t> &deferred_attachments);
   virtual int  read_headers();
 };
 

@@ -39,7 +39,6 @@
 #include "merge/timecode_factory.h"
 
 using namespace libmatroska;
-using namespace std;
 
 // CUE_STRATEGY_* control the creation of cue entries for a track.
 // UNSPECIFIED: is used for command line parsing.
@@ -69,17 +68,17 @@ enum cue_strategy_e {
 
 struct id_result_t {
   int64_t id;
-  string type, info, description;
-  vector<string> verbose_info;
+  std::string type, info, description;
+  std::vector<std::string> verbose_info;
   int64_t size;
 
   id_result_t() {
   };
 
   id_result_t(int64_t p_id,
-              const string &p_type,
-              const string &p_info,
-              const string &p_description,
+              const std::string &p_type,
+              const std::string &p_info,
+              const std::string &p_description,
               int64_t p_size)
     : id(p_id)
     , type(p_type)
@@ -182,77 +181,77 @@ public:
   int64_t id;
 
   // Options used by the readers.
-  string fname;
+  std::string fname;
   bool no_audio, no_video, no_subs, no_buttons;
-  vector<int64_t> atracks, vtracks, stracks, btracks;
+  std::vector<int64_t> atracks, vtracks, stracks, btracks;
 
   // Options used by the packetizers.
   unsigned char *private_data;
   int private_size;
 
-  map<int64_t, string> all_fourccs;
-  string fourcc;
-  map<int64_t, display_properties_t> display_properties;
+  std::map<int64_t, std::string> all_fourccs;
+  std::string fourcc;
+  std::map<int64_t, display_properties_t> display_properties;
   float aspect_ratio;
   int display_width, display_height;
   bool aspect_ratio_given, aspect_ratio_is_factor, display_dimensions_given;
 
-  map<int64_t, timecode_sync_t> timecode_syncs; // As given on the command line
+  std::map<int64_t, timecode_sync_t> timecode_syncs; // As given on the command line
   timecode_sync_t tcsync;                       // For this very track
 
-  map<int64_t, bool> reset_timecodes_specs;
+  std::map<int64_t, bool> reset_timecodes_specs;
   bool reset_timecodes;
 
-  map<int64_t, cue_strategy_e> cue_creations; // As given on the command line
+  std::map<int64_t, cue_strategy_e> cue_creations; // As given on the command line
   cue_strategy_e cues;          // For this very track
 
-  map<int64_t, bool> default_track_flags; // As given on the command line
+  std::map<int64_t, bool> default_track_flags; // As given on the command line
   boost::logic::tribool default_track;    // For this very track
 
-  map<int64_t, bool> forced_track_flags; // As given on the command line
+  std::map<int64_t, bool> forced_track_flags; // As given on the command line
   boost::logic::tribool forced_track;    // For this very track
 
-  map<int64_t, string> languages; // As given on the command line
-  string language;              // For this very track
+  std::map<int64_t, std::string> languages; // As given on the command line
+  std::string language;              // For this very track
 
-  map<int64_t, string> sub_charsets; // As given on the command line
-  string sub_charset;           // For this very track
+  std::map<int64_t, std::string> sub_charsets; // As given on the command line
+  std::string sub_charset;           // For this very track
 
-  map<int64_t, string> all_tags;     // As given on the command line
-  string tags_file_name;        // For this very track
+  std::map<int64_t, std::string> all_tags;     // As given on the command line
+  std::string tags_file_name;        // For this very track
   KaxTags *tags;                // For this very track
 
-  map<int64_t, bool> all_aac_is_sbr; // For AAC+/HE-AAC/SBR
+  std::map<int64_t, bool> all_aac_is_sbr; // For AAC+/HE-AAC/SBR
 
-  map<int64_t, compression_method_e> compression_list; // As given on the cmd line
+  std::map<int64_t, compression_method_e> compression_list; // As given on the cmd line
   compression_method_e compression; // For this very track
 
-  map<int64_t, string> track_names; // As given on the command line
-  string track_name;            // For this very track
+  std::map<int64_t, std::string> track_names; // As given on the command line
+  std::string track_name;            // For this very track
 
-  map<int64_t, string> all_ext_timecodes; // As given on the command line
-  string ext_timecodes;         // For this very track
+  std::map<int64_t, std::string> all_ext_timecodes; // As given on the command line
+  std::string ext_timecodes;         // For this very track
 
-  map<int64_t, pixel_crop_t> pixel_crop_list; // As given on the command line
+  std::map<int64_t, pixel_crop_t> pixel_crop_list; // As given on the command line
   pixel_crop_t pixel_cropping;  // For this very track
   bool pixel_cropping_specified;
 
-  map<int64_t, stereo_mode_e> stereo_mode_list; // As given on the command line
+  std::map<int64_t, stereo_mode_e> stereo_mode_list; // As given on the command line
   stereo_mode_e stereo_mode;                    // For this very track
 
-  map<int64_t, int64_t> default_durations; // As given on the command line
-  map<int64_t, int> max_blockadd_ids; // As given on the command line
+  std::map<int64_t, int64_t> default_durations; // As given on the command line
+  std::map<int64_t, int> max_blockadd_ids; // As given on the command line
 
-  map<int64_t, int> nalu_size_lengths;
+  std::map<int64_t, int> nalu_size_lengths;
   int nalu_size_length;
 
-  map<int64_t, attach_mode_e> attach_mode_list; // As given on the command line
+  std::map<int64_t, attach_mode_e> attach_mode_list; // As given on the command line
 
   bool no_chapters, no_attachments, no_tags;
 
   // Some file formats can contain chapters, but for some the charset
   // cannot be identified unambiguously (*cough* OGM *cough*).
-  string chapter_charset;
+  std::string chapter_charset;
 
   // The following variables are needed for the broken way of
   // syncing audio in AVIs: by prepending it with trash. Thanks to
@@ -261,7 +260,7 @@ public:
   uint32_t avi_samples_per_sec;
   uint32_t avi_avg_bytes_per_sec;
   uint32_t avi_samples_per_chunk;
-  vector<int64_t> avi_block_sizes;
+  std::vector<int64_t> avi_block_sizes;
   bool avi_audio_sync_enabled;
 
 public:
@@ -286,9 +285,9 @@ public:
 class generic_reader_c {
 public:
   track_info_c ti;
-  vector<generic_packetizer_c *> reader_packetizers;
+  std::vector<generic_packetizer_c *> reader_packetizers;
   generic_packetizer_c *ptzr_first_packet;
-  vector<int64_t> requested_track_ids, available_track_ids, used_track_ids;
+  std::vector<int64_t> requested_track_ids, available_track_ids, used_track_ids;
   int64_t max_timecode_seen;
   KaxChapters *chapters;
   bool appending;
@@ -298,7 +297,7 @@ public:
 
 private:
   id_result_t id_results_container;
-  vector<id_result_t> id_results_tracks, id_results_attachments;
+  std::vector<id_result_t> id_results_tracks, id_results_attachments;
 
 public:
   generic_reader_c(track_info_c &p_ti);
@@ -336,15 +335,15 @@ public:
 protected:
   virtual bool demuxing_requested(char type, int64_t id);
 
-  virtual void id_result_container(const string &info, const string &verbose_info = empty_string);
-  virtual void id_result_container(const string &info, const vector<string> &verbose_info);
-  virtual void id_result_track(int64_t track_id, const string &type, const string &info, const string &verbose_info = empty_string);
-  virtual void id_result_track(int64_t track_id, const string &type, const string &info, const vector<string> &verbose_info);
-  virtual void id_result_attachment(int64_t attachment_id, const string &type, int size, const string &file_name = empty_string, const string &description = empty_string);
+  virtual void id_result_container(const std::string &info, const std::string &verbose_info = empty_string);
+  virtual void id_result_container(const std::string &info, const std::vector<std::string> &verbose_info);
+  virtual void id_result_track(int64_t track_id, const std::string &type, const std::string &info, const std::string &verbose_info = empty_string);
+  virtual void id_result_track(int64_t track_id, const std::string &type, const std::string &info, const std::vector<std::string> &verbose_info);
+  virtual void id_result_attachment(int64_t attachment_id, const std::string &type, int size, const std::string &file_name = empty_string, const std::string &description = empty_string);
 
   virtual std::string id_escape_string(const std::string &s);
 
-  static void id_result_container_unsupported(const string &filename, const string &info);
+  static void id_result_container_unsupported(const std::string &filename, const std::string &info);
 };
 
 enum connection_result_e {
@@ -395,12 +394,12 @@ enum connection_result_e {
     return CAN_CONNECT_NO_PARAMETERS;                                                                                \
   }
 
-typedef deque<packet_cptr>::iterator packet_cptr_di;
+typedef std::deque<packet_cptr>::iterator packet_cptr_di;
 
 class generic_packetizer_c {
 protected:
   int m_num_packets;
-  deque<packet_cptr> packet_queue, deferred_packets;
+  std::deque<packet_cptr> packet_queue, deferred_packets;
   int next_packet_wo_assigned_timecode;
 
   int64_t m_free_refs, m_next_free_refs, enqueued_bytes;
@@ -417,7 +416,7 @@ protected:
   uint32_t huid;
   int htrack_max_add_block_ids;
 
-  string hcodec_id;
+  std::string hcodec_id;
   unsigned char *hcodec_private;
   int hcodec_private_length;
 
@@ -522,9 +521,9 @@ public:
   virtual int get_track_type() {
     return htrack_type;
   }
-  virtual void set_language(const string &language);
+  virtual void set_language(const std::string &language);
 
-  virtual void set_codec_id(const string &id);
+  virtual void set_codec_id(const std::string &id);
   virtual void set_codec_private(const unsigned char *cp, int length);
 
   virtual void set_track_min_cache(int min_cache);
@@ -557,7 +556,7 @@ public:
 
   virtual void set_tag_track_uid();
 
-  virtual void set_track_name(const string &name);
+  virtual void set_track_name(const std::string &name);
 
   virtual void set_default_compression_method(compression_method_e method) {
     hcompression = method;
@@ -567,7 +566,7 @@ public:
 
   virtual const char *get_format_name() = 0;
   virtual connection_result_e can_connect_to(generic_packetizer_c *src,
-                                             string &error_message) = 0;
+                                             std::string &error_message) = 0;
   virtual void connect(generic_packetizer_c *src,
                        int64_t p_append_timecode_offset = -1);
 
@@ -588,6 +587,6 @@ public:
   virtual void apply_factory_full_queueing(packet_cptr_di &p_start);
 };
 
-extern vector<generic_packetizer_c *> ptzrs_in_header_order;
+extern std::vector<generic_packetizer_c *> ptzrs_in_header_order;
 
 #endif  // __PR_GENERIC_H

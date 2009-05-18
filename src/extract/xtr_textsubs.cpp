@@ -23,7 +23,7 @@
 #include "common/strings/parsing.h"
 #include "extract/xtr_textsubs.h"
 
-xtr_srt_c::xtr_srt_c(const string &codec_id,
+xtr_srt_c::xtr_srt_c(const std::string &codec_id,
                      int64_t tid,
                      track_spec_t &tspec)
   : xtr_base_c(codec_id, tid, tspec)
@@ -65,7 +65,7 @@ xtr_srt_c::handle_frame(memory_cptr &frame,
   memcpy(text, frame->get(), frame->get_size());
   text[frame->get_size()] = 0;
 
-  string buffer =
+  std::string buffer =
     (boost::format("%1%\n"
                    "%|2$02d|:%|3$02d|:%|4$02d|,%|5$03d| --> %|6$02d|:%|7$02d|:%|8$02d|,%|9$03d|\n"
                    "%10%\n\n")
@@ -87,7 +87,7 @@ const char *xtr_ssa_c::ms_kax_ssa_fields[10] = {
   "effect",    "text",    NULL
 };
 
-xtr_ssa_c::xtr_ssa_c(const string &codec_id,
+xtr_ssa_c::xtr_ssa_c(const std::string &codec_id,
                      int64_t tid,
                      track_spec_t &tspec)
   : xtr_base_c(codec_id, tid, tspec)
@@ -131,7 +131,7 @@ xtr_ssa_c::create_file(xtr_base_c *master,
   char *s       = new char[priv_size + 1];
   memcpy(s, pd, priv_size);
   s[priv_size]  = 0;
-  string sconv  = s;
+  std::string sconv  = s;
   delete []s;
 
   const char *p1;
@@ -195,7 +195,7 @@ xtr_ssa_c::handle_frame(memory_cptr &frame,
   // Specs say that the following fields are to put into the block:
   // 0: ReadOrder, 1: Layer, 2: Style, 3: Name, 4: MarginL, 5: MarginR,
   // 6: MarginV, 7: Effect, 8: Text
-  vector<string> fields = split(s, ",", 9);
+  std::vector<std::string> fields = split(s, ",", 9);
   if (9 < fields.size()) {
     mxwarn(boost::format(Y("Invalid format for a SSA line ('%1%') at timecode %2%: Too many fields found (%3% instead of 9). This entry will be skipped.\n"))
            % s % format_timecode(timecode * 1000000, 3) % fields.size());
@@ -221,10 +221,10 @@ xtr_ssa_c::handle_frame(memory_cptr &frame,
   // Problem is that the CodecPrivate may contain a Format: line
   // that defines a different layout. So let's account for that.
 
-  string line = "Dialogue: ";
+  std::string line = "Dialogue: ";
   int i;
   for (i = 0; i < m_ssa_format.size(); i++) {
-    string format = m_ssa_format[i];
+    std::string format = m_ssa_format[i];
 
     if (downcase(format) == "actor")
       format = "name";
@@ -274,7 +274,7 @@ xtr_ssa_c::finish_file() {
 
 // ------------------------------------------------------------------------
 
-xtr_usf_c::xtr_usf_c(const string &codec_id,
+xtr_usf_c::xtr_usf_c(const std::string &codec_id,
                      int64_t tid,
                      track_spec_t &tspec)
   : xtr_base_c(codec_id, tid, tspec)
@@ -300,7 +300,7 @@ xtr_usf_c::create_file(xtr_base_c *master,
   if (NULL == language)
     m_language = "eng";
   else
-    m_language = string(*language);
+    m_language = std::string(*language);
 
   if (NULL != master) {
     xtr_usf_c *usf_master = dynamic_cast<xtr_usf_c *>(master);
@@ -319,8 +319,8 @@ xtr_usf_c::create_file(xtr_base_c *master,
 
   } else {
     try {
-      string end_tag           = "</USFSubtitles>";
-      string codec_private_mod = m_codec_private;
+      std::string end_tag           = "</USFSubtitles>";
+      std::string codec_private_mod = m_codec_private;
       int end_tag_pos          = codec_private_mod.find(end_tag);
       if (0 <= end_tag_pos)
         codec_private_mod.erase(end_tag_pos, end_tag.length());
@@ -364,9 +364,9 @@ xtr_usf_c::finish_track() {
   try {
     m_formatter->format((boost::format("<subtitles>\n<language code=\"%1%\"/>\n") % m_language).str());
 
-    vector<usf_entry_t>::const_iterator entry;
+    std::vector<usf_entry_t>::const_iterator entry;
     mxforeach(entry, m_entries) {
-      string text = entry->m_text;
+      std::string text = entry->m_text;
       strip(text, true);
       m_formatter->format((boost::format("<subtitle start=\"%1%\" stop=\"%2%\">")
                            % format_timecode(entry->m_start * 1000000, 3) % format_timecode(entry->m_end * 1000000, 3)).str());

@@ -50,7 +50,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
   , m_exit_code(0)
 {
   char c;
-  string arg_utf8, line;
+  std::string arg_utf8, line;
   long value;
   wxString wx_line, tmp;
   wxInputStream *out;

@@ -60,12 +60,12 @@
 mmg_app *app;
 mmg_dialog *mdlg;
 wxString last_open_dir;
-vector<wxString> last_settings;
-vector<wxString> last_chapters;
-vector<mmg_file_cptr> files;
-vector<mmg_track_t *> tracks;
-map<wxString, wxString> capabilities;
-vector<job_t> jobs;
+std::vector<wxString> last_settings;
+std::vector<wxString> last_chapters;
+std::vector<mmg_file_cptr> files;
+std::vector<mmg_track_t *> tracks;
+std::map<wxString, wxString> capabilities;
+std::vector<job_t> jobs;
 
 #define ID_CLIOPTIONS_COB 2000
 #define ID_CLIOPTIONS_ADD 2001
@@ -84,7 +84,7 @@ class cli_options_dlg: public wxDialog {
   DECLARE_CLASS(cli_options_dlg);
   DECLARE_EVENT_TABLE();
 public:
-  static vector<cli_option_t> all_cli_options;
+  static std::vector<cli_option_t> all_cli_options;
 
 public:
   wxComboBox *cob_option;
@@ -100,7 +100,7 @@ public:
   static void init_cli_option_list();
 };
 
-vector<cli_option_t> cli_options_dlg::all_cli_options;
+std::vector<cli_option_t> cli_options_dlg::all_cli_options;
 
 cli_options_dlg::cli_options_dlg(wxWindow *parent):
   wxDialog(parent, 0, Z("Add command line options"), wxDefaultPosition, wxSize(400, 350)) {
@@ -408,13 +408,13 @@ no_cr(wxString source) {
   return escaped;
 }
 
-vector<wxString>
+std::vector<wxString>
 split(const wxString &src,
       const wxString &pattern,
       int max_num) {
   int num, pos;
   wxString copy;
-  vector<wxString> v;
+  std::vector<wxString> v;
 
   copy = src;
   pos = copy.Find(pattern);
@@ -432,7 +432,7 @@ split(const wxString &src,
 
 wxString
 join(const wxString &pattern,
-     vector<wxString> &strings) {
+     std::vector<wxString> &strings) {
   wxString dst;
   uint32_t i;
 
@@ -482,8 +482,8 @@ strip(wxString &s,
   return s;
 }
 
-vector<wxString> &
-strip(vector<wxString> &v,
+std::vector<wxString> &
+strip(std::vector<wxString> &v,
       bool newlines) {
   int i;
 
@@ -493,9 +493,9 @@ strip(vector<wxString> &v,
   return v;
 }
 
-string
+std::string
 to_utf8(const wxString &src) {
-  string retval;
+  std::string retval;
 
   int len    = wxConvUTF8.WC2MB(NULL, src.c_str(), 0);
   char *utf8 = (char *)safemalloc(len + 1);
@@ -603,7 +603,7 @@ wxString
 create_track_order(bool all) {
   int i;
   wxString s, format;
-  string temp;
+  std::string temp;
 
   fix_format("%d:" LLD, temp);
   format = wxU(temp.c_str());
@@ -622,7 +622,7 @@ wxString
 create_append_mapping() {
   int i;
   wxString s, format;
-  string temp;
+  std::string temp;
 
   fix_format("%d:" LLD ":%d:" LLD, temp);
   format = wxU(temp.c_str());
@@ -1142,8 +1142,8 @@ void
 mmg_dialog::display_help(int id) {
   if (help == NULL) {
     wxDirDialog dlg(this, Z("Choose the location of the mkvmerge GUI help files"));
-    vector<wxString> potential_help_paths;
-    vector<wxString>::const_iterator php;
+    std::vector<wxString> potential_help_paths;
+    std::vector<wxString>::const_iterator php;
     wxString help_path;
     wxConfigBase *cfg;
     bool first;
@@ -1264,7 +1264,7 @@ void
 mmg_dialog::on_create_optionfile(wxCommandEvent &evt) {
   const unsigned char utf8_bom[3] = {0xef, 0xbb, 0xbf};
   uint32_t i;
-  string arg_utf8;
+  std::string arg_utf8;
   wxFile *file;
 
   wxFileDialog dlg(NULL, Z("Choose an output file"), last_open_dir, wxEmptyString, ALLFILES, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
@@ -1485,7 +1485,7 @@ mmg_dialog::update_command_line() {
       }
 
       if (t->user_defined.Length() > 0) {
-        vector<wxString> opts = split(t->user_defined, wxString(wxT(" ")));
+        std::vector<wxString> opts = split(t->user_defined, wxString(wxT(" ")));
         for (i = 0; opts.size() > i; i++) {
           wxString opt = strip(opts[i]);
           opt.Replace(wxT("<TID>"), sid, true);
@@ -1638,7 +1638,7 @@ mmg_dialog::update_command_line() {
 
   cli_options = strip(cli_options);
   if (cli_options.length() > 0) {
-    vector<wxString> opts = split(cli_options, wxString(wxT(" ")));
+    std::vector<wxString> opts = split(cli_options, wxString(wxT(" ")));
     for (i = 0; i < opts.size(); i++)
       clargs.Add(strip(opts[i]));
   }
@@ -1772,7 +1772,7 @@ mmg_dialog::set_output_maybe(const wxString &new_output) {
     return;
 
   bool has_video = false, has_audio = false;
-  vector<mmg_track_t *>::iterator t;
+  std::vector<mmg_track_t *>::iterator t;
 
   mxforeach(t, tracks) {
     if ('v' == (*t)->type) {
@@ -1949,7 +1949,7 @@ mmg_dialog::save_job_queue() {
   wxString s;
   wxConfigBase *cfg;
   uint32_t i;
-  vector<wxString> job_groups;
+  std::vector<wxString> job_groups;
   long cookie;
 
   cfg = wxConfigBase::Get();
@@ -2128,7 +2128,7 @@ void
 mmg_dialog::query_mkvmerge_capabilities() {
   wxString tmp;
   wxArrayString output;
-  vector<wxString> parts;
+  std::vector<wxString> parts;
   int result, i;
 
   wxLogMessage(Z("Querying mkvmerge's capabilities"));
@@ -2140,7 +2140,7 @@ mmg_dialog::query_mkvmerge_capabilities() {
   wxProcess *process;
   wxInputStream *out;
   int c;
-  string tmps;
+  std::string tmps;
 
   process = new wxProcess(this, 1);
   process->Redirect();

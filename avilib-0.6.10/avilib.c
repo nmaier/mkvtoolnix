@@ -155,7 +155,7 @@ static void short2str(unsigned char *dst, int32_t n)
 }
 #endif
 
-/* Convert a string of 4 or 2 bytes to a number,
+/* Convert a std::string of 4 or 2 bytes to a number,
    also working on big endian machines */
 
 static uint64_t str2ullong(void *st)
@@ -812,10 +812,10 @@ int avi_update_header(avi_t *AVI)
    OUTLONG(movi_len);    // assume max size
    OUT4CC ("AVI ");
 
-   /* Start the header list */
+   /* Start the header std::list */
 
    OUT4CC ("LIST");
-   OUTLONG(0);        /* Length of list in bytes, don't know yet */
+   OUTLONG(0);        /* Length of std::list in bytes, don't know yet */
    hdrl_start = nhb;  /* Store start position */
    OUT4CC ("hdrl");
 
@@ -857,10 +857,10 @@ int avi_update_header(avi_t *AVI)
    OUTLONG(0);                  /* DataLength: Size of AVI data chunk    */
 
 
-   /* Start the video stream list ---------------------------------- */
+   /* Start the video stream std::list ---------------------------------- */
 
    OUT4CC ("LIST");
-   OUTLONG(0);        /* Length of list in bytes, don't know yet */
+   OUTLONG(0);        /* Length of std::list in bytes, don't know yet */
    strl_start = nhb;  /* Store start position */
    OUT4CC ("strl");
 
@@ -912,19 +912,19 @@ int avi_update_header(avi_t *AVI)
       }
    }
 
-   /* Finish stream list, i.e. put number of bytes in the list to proper pos */
+   /* Finish stream list, i.e. put number of bytes in the std::list to proper pos */
 
    long2str(AVI_header+strl_start-4,nhb-strl_start);
 
    
-   /* Start the audio stream list ---------------------------------- */
+   /* Start the audio stream std::list ---------------------------------- */
    
    for(j=0; j<AVI->anum; ++j) {
        
        sampsize = avi_sampsize(AVI, j);
    
        OUT4CC ("LIST");
-       OUTLONG(0);        /* Length of list in bytes, don't know yet */
+       OUTLONG(0);        /* Length of std::list in bytes, don't know yet */
        strl_start = nhb;  /* Store start position */
        OUT4CC ("strl");
        
@@ -975,12 +975,12 @@ int avi_update_header(avi_t *AVI)
        
        OUTSHRT(AVI->track[j].a_bits);          /* BitsPerSample */
        
-       /* Finish stream list, i.e. put number of bytes in the list to proper pos */
+       /* Finish stream list, i.e. put number of bytes in the std::list to proper pos */
        
        long2str(AVI_header+strl_start-4,nhb-strl_start);
    }
    
-   /* Finish header list */
+   /* Finish header std::list */
    
    long2str(AVI_header+hdrl_start-4,nhb-hdrl_start);
    
@@ -1005,10 +1005,10 @@ int avi_update_header(avi_t *AVI)
    
    nhb += njunk;
 
-   /* Start the movi list */
+   /* Start the movi std::list */
 
    OUT4CC ("LIST");
-   OUTLONG(movi_len); /* Length of list in bytes */
+   OUTLONG(movi_len); /* Length of std::list in bytes */
    OUT4CC ("movi");
 
    /* Output the header, truncate the file to the number of bytes
@@ -1129,7 +1129,7 @@ static int avi_parse_comments (int fd, char *buf, int space_left)
 	    // write length + '\0'
 	    long2str(buf+len, k+1); len += 4;
 
-	    // write comment string
+	    // write comment std::string
 	    memcpy (buf+len, d, k);
 	    // must be null terminated
 	    *(buf+len+k+1) = '\0';
@@ -1184,7 +1184,7 @@ static int avi_close_output_file(avi_t *AVI)
 //   time_t calptr;
 #endif
 
-   /* Calculate length of movi list */
+   /* Calculate length of movi std::list */
 
    // dump the rest of the index
    if (AVI->is_opendml) {
@@ -1270,10 +1270,10 @@ static int avi_close_output_file(avi_t *AVI)
 
    OUT4CC ("AVI ");
 
-   /* Start the header list */
+   /* Start the header std::list */
 
    OUT4CC ("LIST");
-   OUTLONG(0);        /* Length of list in bytes, don't know yet */
+   OUTLONG(0);        /* Length of std::list in bytes, don't know yet */
    hdrl_start = nhb;  /* Store start position */
    OUT4CC ("hdrl");
 
@@ -1319,10 +1319,10 @@ static int avi_close_output_file(avi_t *AVI)
    OUTLONG(0);                  /* DataLength: Size of AVI data chunk    */
 
 
-   /* Start the video stream list ---------------------------------- */
+   /* Start the video stream std::list ---------------------------------- */
 
    OUT4CC ("LIST");
-   OUTLONG(0);        /* Length of list in bytes, don't know yet */
+   OUTLONG(0);        /* Length of std::list in bytes, don't know yet */
    strl_start = nhb;  /* Store start position */
    OUT4CC ("strl");
 
@@ -1416,11 +1416,11 @@ static int avi_close_output_file(avi_t *AVI)
 
    }
 
-   /* Finish stream list, i.e. put number of bytes in the list to proper pos */
+   /* Finish stream list, i.e. put number of bytes in the std::list to proper pos */
 
    long2str(AVI_header+strl_start-4,nhb-strl_start);
 
-   /* Start the audio stream list ---------------------------------- */
+   /* Start the audio stream std::list ---------------------------------- */
 
    for(j=0; j<AVI->anum; ++j) {
      
@@ -1451,7 +1451,7 @@ static int avi_close_output_file(avi_t *AVI)
 	 }
 
 	 OUT4CC ("LIST");
-	 OUTLONG(0);        /* Length of list in bytes, don't know yet */
+	 OUTLONG(0);        /* Length of std::list in bytes, don't know yet */
 	 strl_start = nhb;  /* Store start position */
 	 OUT4CC ("strl");
 	   
@@ -1586,7 +1586,7 @@ static int avi_close_output_file(avi_t *AVI)
 	       OUTLONG(AVI->track[j].audio_superindex->aIndex[k].dwDuration);
 	   }
        }
-       /* Finish stream list, i.e. put number of bytes in the list to proper pos */
+       /* Finish stream list, i.e. put number of bytes in the std::list to proper pos */
        long2str(AVI_header+strl_start-4,nhb-strl_start);
    }
 
@@ -1599,12 +1599,12 @@ static int avi_close_output_file(avi_t *AVI)
        OUTLONG(AVI->total_frames);
    }
    
-   /* Finish header list */
+   /* Finish header std::list */
    
    long2str(AVI_header+hdrl_start-4,nhb-hdrl_start);
 
 
-   // add INFO list --- (0.6.0pre4)
+   // add INFO std::list --- (0.6.0pre4)
 
 #ifdef INFO_LIST
    OUT4CC ("LIST");
@@ -1676,10 +1676,10 @@ static int avi_close_output_file(avi_t *AVI)
    
    nhb += njunk;
 
-   /* Start the movi list */
+   /* Start the movi std::list */
 
    OUT4CC ("LIST");
-   OUTLONG(movi_len); /* Length of list in bytes */
+   OUTLONG(movi_len); /* Length of std::list in bytes */
    OUT4CC ("movi");
 
    /* Output the header, truncate the file to the number of bytes
@@ -2277,7 +2277,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
        strncasecmp(data+8,"AVI ",4) !=0 ) ERR_EXIT(AVI_ERR_NO_AVI)
 
    /* Go through the AVI file and extract the header list,
-      the start position of the 'movi' list and an optionally
+      the start position of the 'movi' std::list and an optionally
       present idx1 tag */
 
    hdrl_data = 0;
@@ -2340,7 +2340,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
    if(!hdrl_data      ) ERR_EXIT(AVI_ERR_NO_HDRL)
    if(!AVI->movi_start) ERR_EXIT(AVI_ERR_NO_MOVI)
 
-   /* Interpret the header list */
+   /* Interpret the header std::list */
 
    for(i=0;i<hdrl_len;)
    {
@@ -2705,7 +2705,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
    if(!getIndex) return(0);
 
    /* if the file has an idx1, check if this is relative
-      to the start of the file or to the start of the movi list */
+      to the start of the file or to the start of the movi std::list */
 
    idx_type = 0;
 
@@ -2735,7 +2735,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
          if(avi_read(AVI->fdes,data,8)!=8) ERR_EXIT(AVI_ERR_READ)
          if( strncasecmp(data,(char *)AVI->idx[i],4)==0 && str2ulong((unsigned char *)data+4)==len )
          {
-            idx_type = 2; /* Index from start of movi list */
+            idx_type = 2; /* Index from start of movi std::list */
          }
       }
       /* idx_type remains 0 if neither of the two tests above succeeds */
@@ -2755,7 +2755,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
          if( avi_read(AVI->fdes,data,8) != 8 ) break;
          n = str2ulong((unsigned char *)data+4);
 
-         /* The movi list may contain sub-lists, ignore them */
+         /* The movi std::list may contain sub-lists, ignore them */
 
          if(strncasecmp(data,"LIST",4)==0)
          {
@@ -3576,7 +3576,7 @@ int AVI_read_data(avi_t *AVI, char *vidbuf, long max_vidbuf,
 
       if( avi_read(AVI->fdes,data,8) != 8 ) return 0;
 
-      /* if we got a list tag, ignore it */
+      /* if we got a std::list tag, ignore it */
 
       if(strncasecmp(data,"LIST",4) == 0)
       {
@@ -3629,8 +3629,8 @@ char *(avi_errors[]) =
   /*  7 */ "avilib - Operation (read/write) not permitted",
   /*  8 */ "avilib - Out of memory (malloc failed)",
   /*  9 */ "avilib - Not an AVI file",
-  /* 10 */ "avilib - AVI file has no header list (corrupted?)",
-  /* 11 */ "avilib - AVI file has no MOVI list (corrupted?)",
+  /* 10 */ "avilib - AVI file has no header std::list (corrupted?)",
+  /* 11 */ "avilib - AVI file has no MOVI std::list (corrupted?)",
   /* 12 */ "avilib - AVI file has no video data",
   /* 13 */ "avilib - operation needs an index",
   /* 14 */ "avilib - Unkown Error"

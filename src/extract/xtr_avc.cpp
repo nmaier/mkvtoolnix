@@ -18,7 +18,7 @@
 
 static const binary s_start_code[4] = { 0x00, 0x00, 0x00, 0x01 };
 
-xtr_avc_c::xtr_avc_c(const string &codec_id,
+xtr_avc_c::xtr_avc_c(const std::string &codec_id,
                      int64_t tid,
                      track_spec_t &tspec)
   : xtr_base_c(codec_id, tid, tspec)

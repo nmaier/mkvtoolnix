@@ -38,7 +38,7 @@
 using namespace libebml;
 
 /*
-   UTFstring <-> C string conversion
+   UTFstring <-> C std::string conversion
 */
 
 static int
@@ -82,7 +82,7 @@ wchar_to_utf8_byte_length(uint32_t w) {
 }
 
 UTFstring
-cstrutf8_to_UTFstring(const string &c) {
+cstrutf8_to_UTFstring(const std::string &c) {
   wchar_t *new_string;
   int slen, dlen, src, dst, clen;
   UTFstring u;
@@ -146,12 +146,12 @@ cstrutf8_to_UTFstring(const string &c) {
   return u;
 }
 
-string
+std::string
 UTFstring_to_cstrutf8(const UTFstring &u) {
   int src, dst, dlen, slen, clen;
   unsigned char *new_string;
   uint32_t uc;
-  string retval;
+  std::string retval;
 
   dlen = 0;
   slen = u.length();
@@ -211,7 +211,7 @@ UTFstring_to_cstrutf8(const UTFstring &u) {
 }
 
 bool
-is_valid_utf8_string(const string &c) {
+is_valid_utf8_string(const std::string &c) {
   int slen, dlen, src, clen;
   UTFstring u;
 
@@ -439,24 +439,24 @@ kt_get_uid(KaxTrackEntry &track) {
   return uint64(*uid);
 }
 
-string
+std::string
 kt_get_codec_id(KaxTrackEntry &track) {
   KaxCodecID *codec_id;
 
   codec_id = FINDFIRST(&track, KaxCodecID);
   if (NULL == codec_id)
     return "";
-  return string(*codec_id);
+  return std::string(*codec_id);
 }
 
-string
+std::string
 kt_get_language(KaxTrackEntry &track) {
   KaxTrackLanguage *language;
 
   language = FINDFIRST(&track, KaxTrackLanguage);
   if (NULL == language)
     return "";
-  return string(*language);
+  return std::string(*language);
 }
 
 int

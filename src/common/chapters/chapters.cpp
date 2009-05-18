@@ -72,7 +72,7 @@ bool
 probe_simple_chapters(mm_text_io_c *in) {
   boost::regex timecode_line_re(SIMCHAP_RE_TIMECODE_LINE, boost::regex::perl);
   boost::regex name_line_re(    SIMCHAP_RE_NAME_LINE,     boost::regex::perl);
-  boost::match_results<string::const_iterator> matches;
+  boost::match_results<std::string::const_iterator> matches;
 
   std::string line;
 
@@ -171,7 +171,7 @@ parse_simple_chapters(mm_text_io_c *in,
   boost::regex timecode_line_re(SIMCHAP_RE_TIMECODE_LINE, boost::regex::perl);
   boost::regex timecode_re(     SIMCHAP_RE_TIMECODE,      boost::regex::perl);
   boost::regex name_line_re(    SIMCHAP_RE_NAME_LINE,     boost::regex::perl);
-  boost::match_results<string::const_iterator> matches;
+  boost::match_results<std::string::const_iterator> matches;
 
   try {
     std::string line, timecode_as_string;
@@ -430,7 +430,7 @@ get_chapter_end(KaxChapterAtom &atom,
    \return The atom's name UTF-8 coded or \c "" if the atom doesn't contain
      such a child element.
 */
-string
+std::string
 get_chapter_name(KaxChapterAtom &atom) {
   KaxChapterDisplay *display = FINDFIRST(&atom, KaxChapterDisplay);
   if (NULL == display)
@@ -465,7 +465,7 @@ get_chapter_uid(KaxChapterAtom &atom) {
    mandatory. This function makes sure that they all exist by adding them
    with their default values if they're missing. It works recursively. See
    <a href="http://www.matroska.org/technical/specs/chapters/index.html">
-   the Matroska chapter specs</a> for a list or mandatory elements.
+   the Matroska chapter specs</a> for a std::list or mandatory elements.
 
    The parameters are checked for validity.
 

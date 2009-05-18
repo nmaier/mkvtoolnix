@@ -24,7 +24,7 @@
 
 class kate_packetizer_c: public generic_packetizer_c {
 private:
-  vector<memory_cptr> m_headers;
+  std::vector<memory_cptr> m_headers;
   memory_cptr m_global_data;
 
   kate_identification_header_t m_kate_id;
@@ -41,7 +41,7 @@ public:
   virtual const char *get_format_name() {
     return "Kate";
   }
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 };
 
 #endif  // __P_KATE_H

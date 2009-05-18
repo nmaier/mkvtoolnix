@@ -52,8 +52,8 @@ private:
   int64_t samples, file_size;
   unsigned char *header;
   int header_size;
-  vector<flac_block_t> blocks;
-  vector<flac_block_t>::iterator current_block;
+  std::vector<flac_block_t> blocks;
+  std::vector<flac_block_t>::iterator current_block;
   FLAC__StreamMetadata_StreamInfo stream_info;
 
 public:

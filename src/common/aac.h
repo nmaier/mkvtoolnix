@@ -18,7 +18,6 @@
 
 #include <string>
 
-using namespace std;
 
 #define AAC_ID_MPEG4 0
 #define AAC_ID_MPEG2 1
@@ -55,6 +54,6 @@ int MTX_DLL_API get_aac_sampling_freq_idx(int sampling_freq);
 
 bool MTX_DLL_API parse_aac_data(const unsigned char *data, int size, int &profile, int &channels, int &sample_rate, int &output_sample_rate, bool &sbr);
 int MTX_DLL_API create_aac_data(unsigned char *data, int profile, int channels, int sample_rate, int output_sample_rate, bool sbr);
-bool MTX_DLL_API parse_aac_codec_id(const string &codec_id, int &id, int &profile);
+bool MTX_DLL_API parse_aac_codec_id(const std::string &codec_id, int &id, int &profile);
 
 #endif // __MTX_COMMON_AACCOMMON_H

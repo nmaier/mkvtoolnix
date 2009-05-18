@@ -57,7 +57,7 @@ struct real_demuxer_t {
   int num_packets;
   int64_t last_timecode, ref_timecode;
 
-  vector<rv_segment_cptr> segments;
+  std::vector<rv_segment_cptr> segments;
 
   real_demuxer_t(rmff_track_t *n_track):
     ptzr(-1),
@@ -94,7 +94,7 @@ typedef counted_ptr<real_demuxer_t> real_demuxer_cptr;
 class real_reader_c: public generic_reader_c {
 private:
   rmff_file_t *file;
-  vector<counted_ptr<real_demuxer_t> > demuxers;
+  std::vector<counted_ptr<real_demuxer_t> > demuxers;
   int64_t file_size;
   bool done;
 

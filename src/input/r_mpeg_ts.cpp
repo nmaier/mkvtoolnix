@@ -25,7 +25,7 @@ bool
 mpeg_ts_reader_c::probe_file(mm_io_c *io,
                              int64_t size) {
   try {
-    vector<int> positions;
+    std::vector<int> positions;
     size = size > TS_PROBE_SIZE ? TS_PROBE_SIZE : size;
     memory_cptr buffer(new memory_c(safemalloc(size), size, true));
     unsigned char *mem = buffer->get();

@@ -123,14 +123,14 @@ private:
   mm_io_c *io;
   int64_t bytes_processed, size, duration, global_timecode_offset;
 
-  map<int, int> id2idx;
-  map<int, bool> blacklisted_ids;
+  std::map<int, int> id2idx;
+  std::map<int, bool> blacklisted_ids;
 
   uint32_t es_map[NUM_ES_MAP_ENTRIES];
   int version;
   bool file_done;
 
-  vector<mpeg_ps_track_ptr> tracks;
+  std::vector<mpeg_ps_track_ptr> tracks;
 
 public:
   mpeg_ps_reader_c(track_info_c &_ti) throw (error_c);

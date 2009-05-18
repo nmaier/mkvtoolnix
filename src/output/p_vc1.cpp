@@ -104,7 +104,7 @@ vc1_video_packetizer_c::add_timecodes_to_parser(packet_cptr &packet) {
   if (-1 != packet->timecode)
     m_parser.add_timecode(packet->timecode, 0);
 
-  vector<packet_extension_cptr>::iterator extensions_it;
+  std::vector<packet_extension_cptr>::iterator extensions_it;
   mxforeach(extensions_it, packet->extensions) {
     if ((*extensions_it)->get_type() == packet_extension_c::MULTIPLE_TIMECODES) {
       multiple_timecodes_packet_extension_c *extension = static_cast<multiple_timecodes_packet_extension_c *>((*extensions_it).get());
@@ -167,7 +167,7 @@ vc1_video_packetizer_c::flush_frames() {
 
 connection_result_e
 vc1_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
-                                       string &error_message) {
+                                       std::string &error_message) {
   vc1_video_packetizer_c *vsrc = dynamic_cast<vc1_video_packetizer_c *>(src);
   if (vsrc == NULL)
     return CAN_CONNECT_NO_FORMAT;

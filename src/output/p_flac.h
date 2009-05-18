@@ -40,7 +40,7 @@ public:
     return "Flac";
   }
 
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 };
 
 #endif  // HAVE_FLAC_STREAM_DECODER_H

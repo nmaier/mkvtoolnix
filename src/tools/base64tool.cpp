@@ -24,7 +24,6 @@
 #include "common/strings/editing.h"
 #include "common/strings/parsing.h"
 
-using namespace std;
 
 void
 set_usage() {
@@ -46,7 +45,7 @@ main(int argc,
   uint64_t size;
   unsigned char *buffer;
   char mode;
-  string s, line;
+  std::string s, line;
   mm_io_c *in, *out;
   mm_text_io_c *intext;
 

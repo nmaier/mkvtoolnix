@@ -6,7 +6,7 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   string parsing helper functions
+   std::string parsing helper functions
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
@@ -112,10 +112,10 @@ parse_double(const char *s,
 /** \brief Platform independant version of sscanf
 
    This is a platform independant version of sscanf. It first fixes the format
-   string (\see fix_format) and then calls sscanf.
+   std::string (\see fix_format) and then calls sscanf.
 
-   \param str The string to parse
-   \param fmt The format string
+   \param str The std::string to parse
+   \param fmt The format std::string
    \returns The number of elements assigned
 */
 int

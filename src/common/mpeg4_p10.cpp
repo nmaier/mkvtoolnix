@@ -611,7 +611,7 @@ mpeg4::p10::avc_es_parser_c::flush() {
 
 void
 mpeg4::p10::avc_es_parser_c::add_timecode(int64_t timecode) {
-  deque<int64_t>::iterator i = m_timecodes.end();
+  std::deque<int64_t>::iterator i = m_timecodes.end();
   while (i != m_timecodes.begin()) {
     if (timecode >= *(i - 1))
       break;
@@ -691,7 +691,7 @@ mpeg4::p10::avc_es_parser_c::flush_incomplete_frame() {
 
 void
 mpeg4::p10::avc_es_parser_c::flush_unhandled_nalus() {
-  deque<memory_cptr>::iterator nalu = m_unhandled_nalus.begin();
+  std::deque<memory_cptr>::iterator nalu = m_unhandled_nalus.begin();
 
   while (m_unhandled_nalus.end() != nalu) {
     handle_nalu(*nalu);
@@ -978,8 +978,8 @@ mpeg4::p10::avc_es_parser_c::parse_slice(memory_cptr &buffer,
 
 void
 mpeg4::p10::avc_es_parser_c::default_cleanup() {
-  deque<avc_frame_t>::iterator i(m_frames.begin());
-  deque<int64_t>::iterator t(m_timecodes.begin());
+  std::deque<avc_frame_t>::iterator i(m_frames.begin());
+  std::deque<int64_t>::iterator t(m_timecodes.begin());
 
   int64_t r = i->m_start = i->m_end = *t;
 
@@ -1003,8 +1003,8 @@ mpeg4::p10::avc_es_parser_c::default_cleanup() {
 
 void
 mpeg4::p10::avc_es_parser_c::cleanup() {
-  deque<avc_frame_t>::iterator i(m_frames.begin());
-  deque<int64_t>::iterator t(m_timecodes.begin());
+  std::deque<avc_frame_t>::iterator i(m_frames.begin());
+  std::deque<int64_t>::iterator t(m_timecodes.begin());
   unsigned j;
 
   if (m_frames.empty())
@@ -1033,7 +1033,7 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
     return;
   }
 
-  vector<poc_t> poc;
+  std::vector<poc_t> poc;
 
   if (0 == sps.pic_order_cnt_type) {
     j = 0;
@@ -1119,7 +1119,7 @@ mpeg4::p10::avc_es_parser_c::create_nalu_with_size(const memory_cptr &src,
   unsigned char *buffer;
 
   if (add_extra_data) {
-    deque<memory_cptr>::iterator it;
+    std::deque<memory_cptr>::iterator it;
 
     mxforeach(it, m_extra_data)
       final_size += (*it)->get_size();
@@ -1143,7 +1143,7 @@ mpeg4::p10::avc_es_parser_c::create_nalu_with_size(const memory_cptr &src,
 
 memory_cptr
 mpeg4::p10::avc_es_parser_c::get_avcc() {
-  deque<memory_cptr>::iterator it;
+  std::deque<memory_cptr>::iterator it;
   unsigned char *buffer;
   int final_size = 6 + 1, offset = 6, size;
 
@@ -1189,7 +1189,7 @@ mpeg4::p10::avc_es_parser_c::get_avcc() {
 void
 mpeg4::p10::avc_es_parser_c::dump_info() {
   mxinfo("Dumping m_frames_out:\n");
-  deque<avc_frame_t>::iterator i;
+  std::deque<avc_frame_t>::iterator i;
 
   mxforeach(i, m_frames_out) {
     mxinfo(boost::format("size %1% key %2% start %3% end %4% ref1 %5% adler32 0x%|6$08x|\n")

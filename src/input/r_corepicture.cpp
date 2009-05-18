@@ -26,11 +26,10 @@
 #include "merge/pr_generic.h"
 #include "output/p_video.h"
 
-using namespace std;
 
 class corepicture_xml_find_root_c: public xml_parser_c {
 public:
-  string m_root_element;
+  std::string m_root_element;
 
 public:
   corepicture_xml_find_root_c(mm_text_io_c *io):
@@ -98,7 +97,7 @@ void
 corepicture_reader_c::start_element_cb(const char *name,
                                        const char **atts) {
   size_t i;
-  string node;
+  std::string node;
 
   m_parents.push_back(name);
 
@@ -167,7 +166,7 @@ corepicture_reader_c::start_element_cb(const char *name,
 void
 corepicture_reader_c::end_element_cb(const char *name) {
   size_t i;
-  string node;
+  std::string node;
 
   // Generate the full path to this node.
   for (i = 0; m_parents.size() > i; ++i) {
@@ -183,7 +182,7 @@ void
 corepicture_reader_c::create_packetizer(int64_t tid) {
   uint8 private_buffer[5];
   uint32 codec_used = 0;
-  vector<corepicture_pic_t>::const_iterator picture;
+  std::vector<corepicture_pic_t>::const_iterator picture;
 
   private_buffer[0] = 0; // version 0
 
@@ -206,7 +205,7 @@ corepicture_reader_c::read(generic_packetizer_c *ptzr,
 
   if (m_current_picture != m_pictures.end()) {
     try {
-      auto_ptr<mm_io_c> io(new mm_file_io_c(m_current_picture->m_url));
+      counted_ptr<mm_io_c> io(new mm_file_io_c(m_current_picture->m_url));
       uint64_t size  = io->get_size();
       binary *buffer = (binary *)safemalloc(7 + size);
 
@@ -239,7 +238,7 @@ int
 corepicture_reader_c::get_progress() {
   if (m_pictures.size() == 0)
     return 0;
-  return 100 - distance(m_current_picture, (vector<corepicture_pic_t>::const_iterator)m_pictures.end()) * 100 / m_pictures.size();
+  return 100 - distance(m_current_picture, (std::vector<corepicture_pic_t>::const_iterator)m_pictures.end()) * 100 / m_pictures.size();
 }
 
 int64_t

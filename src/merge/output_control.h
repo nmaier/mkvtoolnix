@@ -36,7 +36,6 @@ namespace libmatroska {
   class KaxInfo;
 };
 
-using namespace std;
 using namespace libmatroska;
 
 class mm_io_c;
@@ -70,7 +69,7 @@ struct deferred_connection_t {
 };
 
 struct filelist_t {
-  string name;
+  std::string name;
   int64_t size;
 
   file_type_e type;
@@ -83,7 +82,7 @@ struct filelist_t {
   bool appending, appended_to, done;
 
   int num_unfinished_packetizers, old_num_unfinished_packetizers;
-  vector<deferred_connection_t> deferred_connections;
+  std::vector<deferred_connection_t> deferred_connections;
   int64_t deferred_max_timecode_seen;
 
   filelist_t():
@@ -95,7 +94,7 @@ struct filelist_t {
 };
 
 struct attachment_t {
-  string name, stored_name, mime_type, description;
+  std::string name, stored_name, mime_type, description;
   int64_t id;
   bool to_all_files;
   memory_cptr data;
@@ -132,18 +131,18 @@ enum append_mode_e {
   APPEND_MODE_FILE_BASED,
 };
 
-class family_uids_c: public vector<bitvalue_c> {
+class family_uids_c: public std::vector<bitvalue_c> {
 public:
   bool add_family_uid(const KaxSegmentFamily &family);
 };
 
-extern vector<packetizer_t> g_packetizers;
-extern vector<filelist_t> g_files;
-extern vector<attachment_t> g_attachments;
-extern vector<track_order_t> g_track_order;
-extern vector<append_spec_t> g_append_mapping;
+extern std::vector<packetizer_t> g_packetizers;
+extern std::vector<filelist_t> g_files;
+extern std::vector<attachment_t> g_attachments;
+extern std::vector<track_order_t> g_track_order;
+extern std::vector<append_spec_t> g_append_mapping;
 
-extern string g_outfile;
+extern std::string g_outfile;
 
 extern double g_timecode_scale;
 extern timecode_scale_mode_e g_timecode_scale_mode;
@@ -151,18 +150,18 @@ extern timecode_scale_mode_e g_timecode_scale_mode;
 typedef counted_ptr<bitvalue_c> g_bitvalue_cptr;
 
 extern bitvalue_cptr g_seguid_link_previous, g_seguid_link_next;
-extern vector<bitvalue_cptr> g_forced_seguids;
+extern std::vector<bitvalue_cptr> g_forced_seguids;
 extern family_uids_c g_segfamily_uids;
 
 extern KaxInfo *g_kax_info_chap;
 
 extern bool g_write_meta_seek_for_clusters;
 
-extern string g_chapter_file_name;
-extern string g_chapter_language;
-extern string g_chapter_charset;
+extern std::string g_chapter_file_name;
+extern std::string g_chapter_language;
+extern std::string g_chapter_charset;
 
-extern string g_segmentinfo_file_name;
+extern std::string g_segmentinfo_file_name;
 
 extern KaxTags *g_tags_from_cue_chapters;
 
@@ -173,9 +172,9 @@ extern KaxCues *g_kax_cues;
 extern KaxSeekHead *g_kax_sh_main, *g_kax_sh_cues;
 extern KaxChapters *g_kax_chapters;
 extern int64_t g_tags_size;
-extern string g_segment_title;
+extern std::string g_segment_title;
 extern bool g_segment_title_set;
-extern string g_default_language;
+extern std::string g_default_language;
 
 extern float g_video_fps;
 extern generic_packetizer_c *g_video_packetizer;
@@ -209,7 +208,7 @@ void add_tags(KaxTag *tags);
 void create_next_output_file();
 void finish_file(bool last_file = false);
 void rerender_track_headers();
-string create_output_name();
+std::string create_output_name();
 
 int64_t add_attachment(attachment_t attachment);
 

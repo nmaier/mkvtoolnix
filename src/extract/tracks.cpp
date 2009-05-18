@@ -42,15 +42,14 @@
 #include "extract/xtr_base.h"
 
 using namespace libmatroska;
-using namespace std;
 
-static vector<xtr_base_c *> extractors;
+static std::vector<xtr_base_c *> extractors;
 
 // ------------------------------------------------------------------------
 
 static void
 create_extractors(KaxTracks &kax_tracks,
-                  vector<track_spec_t> &tracks) {
+                  std::vector<track_spec_t> &tracks) {
   int i;
 
   for (i = 0; i < kax_tracks.ListSize(); i++) {
@@ -87,7 +86,7 @@ create_extractors(KaxTracks &kax_tracks,
       continue;
 
     // Let's find the codec ID and create an extractor for it.
-    string codec_id = kt_get_codec_id(track);
+    std::string codec_id = kt_get_codec_id(track);
     if (codec_id.empty())
       mxerror(boost::format(Y("The track number %1% does not have a valid CodecID.\n")) % tnum);
 
@@ -248,25 +247,25 @@ close_extractors() {
 static void
 write_all_cuesheets(KaxChapters &chapters,
                     KaxTags &tags,
-                    vector<track_spec_t> &tspecs) {
+                    std::vector<track_spec_t> &tspecs) {
   int i;
   mm_io_c *out = NULL;
 
   for (i = 0; i < tspecs.size(); i++) {
     if (tspecs[i].extract_cuesheet) {
-      string file_name = tspecs[i].out_name;
-      int pos          = file_name.rfind('/');
-      int pos2         = file_name.rfind('\\');
+      std::string file_name = tspecs[i].out_name;
+      int pos               = file_name.rfind('/');
+      int pos2              = file_name.rfind('\\');
 
       if (pos2 > pos)
         pos = pos2;
       if (pos >= 0)
         file_name.erase(0, pos2);
 
-      string cue_file_name = (string)tspecs[i].out_name;
-      pos                  = cue_file_name.rfind('.');
-      pos2                 = cue_file_name.rfind('/');
-      int pos3             = cue_file_name.rfind('\\');
+      std::string cue_file_name = tspecs[i].out_name;
+      pos                       = cue_file_name.rfind('.');
+      pos2                      = cue_file_name.rfind('/');
+      int pos3                  = cue_file_name.rfind('\\');
 
       if ((0 <= pos) && (pos > pos2) && (pos > pos3))
         cue_file_name.erase(pos);
@@ -287,7 +286,7 @@ write_all_cuesheets(KaxChapters &chapters,
 
 static void
 find_track_uids(KaxTracks &tracks,
-                vector<track_spec_t> &tspecs) {
+                std::vector<track_spec_t> &tspecs) {
   int t;
 
   for (t = 0; t < tracks.ListSize(); t++) {
@@ -308,7 +307,7 @@ find_track_uids(KaxTracks &tracks,
 
 bool
 extract_tracks(const char *file_name,
-               vector<track_spec_t> &tspecs) {
+               std::vector<track_spec_t> &tspecs) {
   // open input file
   mm_io_c *in;
   try {

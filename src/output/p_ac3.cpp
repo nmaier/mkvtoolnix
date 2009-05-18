@@ -106,7 +106,7 @@ ac3_packetizer_c::get_ac3_packet(unsigned long *header,
 
 void
 ac3_packetizer_c::set_headers() {
-  string id = MKV_A_AC3;
+  std::string id = MKV_A_AC3;
 
   if (9 == m_first_ac3_header.bsid)
     id += "/BSID9";
@@ -161,7 +161,7 @@ ac3_packetizer_c::adjust_header_values(ac3_header_t &ac3_header) {
 
 connection_result_e
 ac3_packetizer_c::can_connect_to(generic_packetizer_c *src,
-                                 string &error_message) {
+                                 std::string &error_message) {
   ac3_packetizer_c *asrc = dynamic_cast<ac3_packetizer_c *>(src);
   if (NULL == asrc)
     return CAN_CONNECT_NO_FORMAT;

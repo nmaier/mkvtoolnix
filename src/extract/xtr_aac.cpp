@@ -18,7 +18,7 @@
 #include "common/matroska.h"
 #include "extract/xtr_aac.h"
 
-xtr_aac_c::xtr_aac_c(const string &codec_id,
+xtr_aac_c::xtr_aac_c(const std::string &codec_id,
                      int64_t tid,
                      track_spec_t &tspec)
   : xtr_base_c(codec_id, tid, tspec)

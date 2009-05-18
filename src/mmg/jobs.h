@@ -46,7 +46,7 @@ typedef struct {
   wxString *description, *log;
 } job_t;
 
-extern vector<job_t> jobs;
+extern std::vector<job_t> jobs;
 
 class job_log_dialog: public wxDialog {
   DECLARE_CLASS(job_log_dialog);
@@ -72,16 +72,16 @@ protected:
 
   wxTimer *t_update;
   wxInputStream *out;
-  string line;
+  std::string line;
   wxProcess *process;
   wxString opt_file_name;
   bool abort;
   long pid;
-  vector<int> jobs_to_start;
+  std::vector<int> jobs_to_start;
   int current_job;
 
 public:
-  job_run_dialog(wxWindow *parent, vector<int> &n_jobs_to_start);
+  job_run_dialog(wxWindow *parent, std::vector<int> &n_jobs_to_start);
 
   void on_abort(wxCommandEvent &evt);
   void on_end_process(wxProcessEvent &evt);
@@ -127,7 +127,7 @@ public:
   void enable_buttons(bool enable, bool enable_up_down = true);
   void swap_rows(int lower, int higher, bool up);
   void create_list_item(int i);
-  void start_jobs(vector<int> &jobs_to_start);
+  void start_jobs(std::vector<int> &jobs_to_start);
 };
 
 #endif // __JOBS_H

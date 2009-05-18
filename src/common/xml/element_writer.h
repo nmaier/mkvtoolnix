@@ -53,7 +53,7 @@ public:
 class xml_formatter_c: public xml_parser_c {
 private:
   mm_io_c *m_out;
-  auto_ptr<mm_text_io_c> m_temp_io;
+  counted_ptr<mm_text_io_c> m_temp_io;
   std::string m_encoding, m_dtd, m_dtd_file, m_stylesheet_type, m_stylesheet_file;
   charset_converter_cptr m_cc_utf8;
   bool m_header_written;

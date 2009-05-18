@@ -39,14 +39,13 @@
 #include "extract/mkvextract.h"
 
 using namespace libmatroska;
-using namespace std;
 
 static KaxTag *
 find_tag_for_track(int idx,
                    int64_t tuid,
                    int64_t cuid,
                    EbmlMaster &m) {
-  string sidx = to_string(idx);
+  std::string sidx = to_string(idx);
 
   int i;
   for (i = 0; i < m.ListSize(); i++) {
@@ -68,7 +67,7 @@ find_tag_for_track(int idx,
   return NULL;
 }
 
-static string
+static std::string
 get_global_tag(const char *name,
                int64_t tuid,
                KaxTags &tags) {
@@ -83,7 +82,7 @@ static int64_t
 get_chapter_index(int idx,
                   KaxChapterAtom &atom) {
   int i;
-  string sidx = (boost::format("INDEX %|1$02d|") % idx).str();
+  std::string sidx = (boost::format("INDEX %|1$02d|") % idx).str();
   for (i = 0; i < atom.ListSize(); i++)
     if ((EbmlId(*atom[i]) == KaxChapterAtom::ClassInfos.GlobalId) &&
         (get_chapter_name(*static_cast<KaxChapterAtom *>(atom[i])) == sidx))
@@ -101,7 +100,7 @@ _print_if_global(mm_io_c &out,
                  int num_entries,
                  int64_t tuid,
                  KaxTags &tags) {
-  string global = get_global_tag(name, tuid, tags);
+  std::string global = get_global_tag(name, tuid, tags);
   if (!global.empty())
     out.puts(boost::format(format) % global);
 }
@@ -115,7 +114,7 @@ _print_if_available(mm_io_c &out,
                     int64_t tuid,
                     KaxTags &tags,
                     KaxTag &tag) {
-  string value = get_simple_tag_value(name, tag);
+  std::string value = get_simple_tag_value(name, tag);
   if (!value.empty() && (value != get_global_tag(name, tuid, tags)))
     out.puts(boost::format(format) % value);
 }

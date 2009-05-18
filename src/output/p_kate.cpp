@@ -40,7 +40,7 @@ kate_packetizer_c::kate_packetizer_c(generic_reader_c *p_reader,
 
   // the number of headers to expect is stored in the first header
   memory_cptr temp(new memory_c((unsigned char *)m_global_data->get(), m_global_data->get_size(), false));
-  vector<memory_cptr> blocks = unlace_memory_xiph(temp);
+  std::vector<memory_cptr> blocks = unlace_memory_xiph(temp);
 
   kate_parse_identification_header(blocks[0]->get(), blocks[0]->get_size(), m_kate_id);
   if (blocks.size() != m_kate_id.nheaders)
@@ -103,7 +103,7 @@ kate_packetizer_c::process(packet_cptr packet) {
 
 connection_result_e
 kate_packetizer_c::can_connect_to(generic_packetizer_c *src,
-                                  string &error_message) {
+                                  std::string &error_message) {
   kate_packetizer_c *psrc = dynamic_cast<kate_packetizer_c *>(src);
   if (NULL == psrc)
     return CAN_CONNECT_NO_FORMAT;

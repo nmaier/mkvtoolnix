@@ -74,7 +74,7 @@ public:
   virtual const char *get_type() {
     return ID_RESULT_TRACK_AUDIO;
   };
-  virtual string get_codec() {
+  virtual std::string get_codec() {
     return "AAC";
   };
 };
@@ -90,7 +90,7 @@ public:
   virtual const char *get_type() {
     return ID_RESULT_TRACK_AUDIO;
   };
-  virtual string get_codec() {
+  virtual std::string get_codec() {
     return "AC3";
   };
 };
@@ -106,7 +106,7 @@ public:
   virtual const char *get_type() {
     return ID_RESULT_TRACK_AUDIO;
   };
-  virtual string get_codec() {
+  virtual std::string get_codec() {
     return "MP2/MP3";
   };
 };
@@ -122,7 +122,7 @@ public:
   virtual const char *get_type() {
     return ID_RESULT_TRACK_AUDIO;
   };
-  virtual string get_codec() {
+  virtual std::string get_codec() {
     return "PCM";
   };
 };
@@ -140,7 +140,7 @@ public:
   virtual const char *get_type() {
     return ID_RESULT_TRACK_AUDIO;
   };
-  virtual string get_codec() {
+  virtual std::string get_codec() {
     return "Vorbis";
   };
 };
@@ -158,7 +158,7 @@ public:
   virtual const char *get_type() {
     return ID_RESULT_TRACK_SUBTITLES;
   };
-  virtual string get_codec() {
+  virtual std::string get_codec() {
     return "Text";
   };
 };
@@ -173,7 +173,7 @@ public:
     return ID_RESULT_TRACK_VIDEO;
   };
 
-  virtual string get_codec() {
+  virtual std::string get_codec() {
     return "h.264/AVC";
   };
 
@@ -195,7 +195,7 @@ public:
     return ID_RESULT_TRACK_VIDEO;
   };
 
-  virtual string get_codec();
+  virtual std::string get_codec();
 
   virtual void initialize();
   virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
@@ -213,7 +213,7 @@ public:
     return ID_RESULT_TRACK_VIDEO;
   };
 
-  virtual string get_codec() {
+  virtual std::string get_codec() {
     return "Theora";
   };
 
@@ -234,7 +234,7 @@ public:
     return ID_RESULT_TRACK_SUBTITLES;
   };
 
-  virtual string get_codec() {
+  virtual std::string get_codec() {
     return "Kate";
   };
 
@@ -246,9 +246,9 @@ public:
 
 // ---------------------------------------------------------------------------------
 
-static counted_ptr<vector<string> >
+static counted_ptr<std::vector<std::string> >
 extract_vorbis_comments(const memory_cptr &mem) {
-  counted_ptr<vector<string> > comments(new vector<string>);
+  counted_ptr<std::vector<std::string> > comments(new std::vector<std::string>);
   mm_mem_io_c in(mem->get(), mem->get_size());
   uint32_t i, n, len;
 
@@ -267,7 +267,7 @@ extract_vorbis_comments(const memory_cptr &mem) {
       if (in.read(buffer->get(), len) != len)
         throw false;
 
-      comments->push_back(string((char *)buffer->get(), len));
+      comments->push_back(std::string((char *)buffer->get(), len));
     }
   } catch(...) {
   }
@@ -540,7 +540,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
   if (!dmx)
     dmx = new ogm_demuxer_c(this);
 
-  string type   = dmx->get_type();
+  std::string type   = dmx->get_type();
 
   dmx->serialno = ogg_page_serialno(og);
   dmx->track_id = sdemuxers.size();
@@ -694,14 +694,14 @@ ogm_reader_c::get_progress() {
 
 void
 ogm_reader_c::identify() {
-  vector<string> verbose_info;
+  std::vector<std::string> verbose_info;
   int i;
 
   // Check if a video track has a TITLE comment. If yes we use this as the
   // new segment title / global file title.
   for (i = 0; i < sdemuxers.size(); i++)
     if ((sdemuxers[i]->title != "") && (sdemuxers[i]->stype == OGM_STREAM_TYPE_V_MSCOMP)) {
-      verbose_info.push_back(string("title:") + escape(sdemuxers[i]->title));
+      verbose_info.push_back(std::string("title:") + escape(sdemuxers[i]->title));
       break;
     }
 
@@ -711,10 +711,10 @@ ogm_reader_c::identify() {
     verbose_info.clear();
 
     if (sdemuxers[i]->language != "")
-      verbose_info.push_back(string("language:") + escape(sdemuxers[i]->language));
+      verbose_info.push_back(std::string("language:") + escape(sdemuxers[i]->language));
 
     if ((sdemuxers[i]->title != "") && (sdemuxers[i]->stype != OGM_STREAM_TYPE_V_MSCOMP))
-      verbose_info.push_back(string("track_name:") + escape(sdemuxers[i]->title));
+      verbose_info.push_back(std::string("track_name:") + escape(sdemuxers[i]->title));
 
     if ((0 != sdemuxers[i]->display_width) && (0 != sdemuxers[i]->display_height))
       verbose_info.push_back((boost::format("display_dimensions:%1%x%2%") % sdemuxers[i]->display_width % sdemuxers[i]->display_height).str());
@@ -725,8 +725,8 @@ ogm_reader_c::identify() {
 
 void
 ogm_reader_c::handle_stream_comments() {
-  counted_ptr<vector<string> > comments;
-  string title;
+  counted_ptr<std::vector<std::string> > comments;
+  std::string title;
 
   bool charset_warning_printed = false;
   charset_converter_cptr cch   = charset_converter_c::init(ti.chapter_charset);
@@ -741,12 +741,12 @@ ogm_reader_c::handle_stream_comments() {
     if (comments->empty())
       continue;
 
-    vector<string> chapter_strings;
+    std::vector<std::string> chapter_strings;
 
     int j;
     for (j = 0; comments->size() > j; j++) {
       mxverb(2, boost::format("ogm_reader: commment for #%1% for %2%: %3%\n") % j % i % (*comments)[j]);
-      vector<string> comment = split((*comments)[j], "=", 2);
+      std::vector<std::string> comment = split((*comments)[j], "=", 2);
       if (comment.size() != 2)
         continue;
 
@@ -758,7 +758,7 @@ ogm_reader_c::handle_stream_comments() {
           dmx->language = iso639_languages[index].iso639_2_code;
         else {
 
-          string lang = comment[1];
+          std::string lang = comment[1];
           int pos1    = lang.find("[");
           while (0 <= pos1) {
             int pos2 = lang.find("]", pos1);
@@ -804,14 +804,14 @@ ogm_reader_c::handle_stream_comments() {
     bool chapters_set = false;
     if (!chapter_strings.empty() && !ti.no_chapters && (NULL == g_kax_chapters)) {
       try {
-        auto_ptr<mm_mem_io_c> out(new mm_mem_io_c(NULL, 0, 1000));
+        counted_ptr<mm_mem_io_c> out(new mm_mem_io_c(NULL, 0, 1000));
 
         out->write_bom("UTF-8");
         for (j = 0; j < chapter_strings.size(); j++)
-          out->puts(cch->utf8(chapter_strings[j]) + string("\n"));
+          out->puts(cch->utf8(chapter_strings[j]) + std::string("\n"));
         out->set_file_name(ti.fname);
 
-        auto_ptr<mm_text_io_c> text_out(new mm_text_io_c(out.get(), false));
+        counted_ptr<mm_text_io_c> text_out(new mm_text_io_c(out.get(), false));
 
         g_kax_chapters = parse_chapters(text_out.get());
         chapters_set   = true;
@@ -1169,7 +1169,7 @@ ogm_v_avc_demuxer_c::extract_avcc() {
     --private_size;
   }
 
-  vector<memory_cptr>::iterator packet(nh_packet_data.begin());
+  std::vector<memory_cptr>::iterator packet(nh_packet_data.begin());
 
   while (packet != nh_packet_data.end()) {
     if ((*packet)->get_size()) {
@@ -1193,7 +1193,7 @@ ogm_v_mscomp_demuxer_c::ogm_v_mscomp_demuxer_c(ogm_reader_c *p_reader)
   stype = OGM_STREAM_TYPE_V_MSCOMP;
 }
 
-string
+std::string
 ogm_v_mscomp_demuxer_c::get_codec() {
   stream_header *sth = (stream_header *)(packet_data[0]->get() + 1);
   char fourcc[5];
@@ -1256,7 +1256,7 @@ ogm_v_mscomp_demuxer_c::create_packetizer(track_info_c &ti) {
 
 void
 ogm_v_mscomp_demuxer_c::process_page(int64_t granulepos) {
-  vector<ogm_frame_t> frames;
+  std::vector<ogm_frame_t> frames;
   ogg_packet op;
   int64_t duration;
 

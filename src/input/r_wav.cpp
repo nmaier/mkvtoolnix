@@ -66,7 +66,7 @@ public:
 
   virtual void process(int64_t len);
   virtual generic_packetizer_c *create_packetizer();
-  virtual string get_codec() {
+  virtual std::string get_codec() {
     return 16 == m_ac3header.bsid ? "EAC3" : "AC3";
   };
 
@@ -136,7 +136,7 @@ public:
 
   virtual void process(int64_t len);
   virtual generic_packetizer_c *create_packetizer();
-  virtual string get_codec() {
+  virtual std::string get_codec() {
     return "DTS";
   };
 
@@ -165,7 +165,7 @@ public:
 
   virtual void process(int64_t len);
   virtual generic_packetizer_c *create_packetizer();
-  virtual string get_codec() {
+  virtual std::string get_codec() {
     return "PCM";
   };
 

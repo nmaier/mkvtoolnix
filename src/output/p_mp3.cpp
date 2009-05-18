@@ -130,7 +130,7 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
 
   if (0 == m_packetno) {
     m_samples_per_frame = mp3header->samples_per_channel;
-    string codec_id     = MKV_A_MP3;
+    std::string codec_id     = MKV_A_MP3;
     codec_id[codec_id.length() - 1] = (char)(mp3header->layer + '0');
     set_codec_id(codec_id.c_str());
 
@@ -198,7 +198,7 @@ mp3_packetizer_c::process(packet_cptr packet) {
 
 connection_result_e
 mp3_packetizer_c::can_connect_to(generic_packetizer_c *src,
-                                 string &error_message) {
+                                 std::string &error_message) {
   mp3_packetizer_c *msrc = dynamic_cast<mp3_packetizer_c *>(src);
   if (NULL == msrc)
     return CAN_CONNECT_NO_FORMAT;

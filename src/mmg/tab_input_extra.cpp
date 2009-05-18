@@ -32,7 +32,6 @@
 #include "mmg/tab_input.h"
 #include "mmg/tab_global.h"
 
-using namespace std;
 
 tab_input_extra::tab_input_extra(wxWindow *parent,
                                  tab_input *ti)
@@ -64,7 +63,7 @@ tab_input_extra::tab_input_extra(wxWindow *parent,
   tc_user_defined = new wxTextCtrl(this, ID_TC_USER_DEFINED, wxEmptyString);
   tc_user_defined->SetToolTip(TIP("Free-form edit field for user defined options for this track. What you input here is added after all the other options "
                                   "mmg adds so that you could overwrite any of mmg's options for this track. "
-                                  "All occurences of the string \"<TID>\" will be replaced by the track's track ID."));
+                                  "All occurences of the std::string \"<TID>\" will be replaced by the track's track ID."));
   tc_user_defined->SetSizeHints(0, -1);
   tc_user_defined->Enable(false);
   siz_fg->Add(tc_user_defined, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);

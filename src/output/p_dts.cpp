@@ -163,7 +163,7 @@ dts_packetizer_c::process(packet_cptr packet) {
 
 connection_result_e
 dts_packetizer_c::can_connect_to(generic_packetizer_c *src,
-                                 string &error_message) {
+                                 std::string &error_message) {
   dts_packetizer_c *dsrc = dynamic_cast<dts_packetizer_c *>(src);
   if (NULL == dsrc)
     return CAN_CONNECT_NO_FORMAT;

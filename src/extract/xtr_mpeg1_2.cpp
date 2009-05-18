@@ -18,7 +18,7 @@
 #include "common/mpeg1_2.h"
 #include "extract/xtr_mpeg1_2.h"
 
-xtr_mpeg1_2_video_c::xtr_mpeg1_2_video_c(const string &codec_id,
+xtr_mpeg1_2_video_c::xtr_mpeg1_2_video_c(const std::string &codec_id,
                                          int64_t tid,
                                          track_spec_t &tspec)
   : xtr_base_c(codec_id, tid, tspec)

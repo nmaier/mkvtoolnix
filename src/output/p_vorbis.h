@@ -28,7 +28,7 @@
 class vorbis_packetizer_c: public generic_packetizer_c {
 private:
   int64_t m_previous_bs, m_samples, m_previous_samples_sum, m_previous_timecode, m_timecode_offset;
-  vector<memory_cptr> m_headers;
+  std::vector<memory_cptr> m_headers;
   vorbis_info m_vi;
   vorbis_comment m_vc;
 
@@ -45,7 +45,7 @@ public:
   virtual const char *get_format_name() {
     return "Vorbis";
   }
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 };
 
 #endif  // __P_VORBIS_H

@@ -278,7 +278,7 @@ header_removal_compressor_c::compress(memory_cptr &buffer) {
                                               "which is less than the size of the headers that should be removed, %2%.")) % buffer->get_size() % m_bytes->get_size());
 
   if (memcmp(buffer->get(), m_bytes->get(), m_bytes->get_size())) {
-    string b_buffer, b_bytes;
+    std::string b_buffer, b_bytes;
     int i;
 
     for (i = 0; m_bytes->get_size() > i; ++i) {
@@ -415,7 +415,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
     KaxContentCompression *ce_comp;
     KaxContentEncryption *ce_enc;
     kax_content_encoding_t enc;
-    vector<kax_content_encoding_t>::iterator ce_ins_it;
+    std::vector<kax_content_encoding_t>::iterator ce_ins_it;
 
     kcenc = dynamic_cast<KaxContentEncoding *>((*kcencodings)[kcenc_idx]);
     if (NULL == kcenc)
@@ -545,7 +545,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
 void
 content_decoder_c::reverse(memory_cptr &memory,
                            content_encoding_scope_e scope) {
-  vector<kax_content_encoding_t>::const_iterator ce;
+  std::vector<kax_content_encoding_t>::const_iterator ce;
 
   if (!is_ok() || encodings.empty())
     return;

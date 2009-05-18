@@ -51,7 +51,7 @@ public:
 
   virtual generic_packetizer_c *create_packetizer() = 0;
 
-  virtual string get_codec() = 0;
+  virtual std::string get_codec() = 0;
 
   virtual bool probe(mm_io_cptr &io) = 0;
 };
@@ -70,7 +70,7 @@ private:
   struct wave_header m_wheader;
   int64_t m_bytes_processed, m_bytes_in_data_chunks, m_remaining_bytes_in_current_data_chunk;
 
-  vector<wav_chunk_t> m_chunks;
+  std::vector<wav_chunk_t> m_chunks;
   int m_cur_data_chunk_idx;
 
   wav_demuxer_cptr m_demuxer;

@@ -36,7 +36,7 @@ public:
   bool done;
 
 public:
-  flac_header_extractor_c(const string &file_name, int64_t _sid);
+  flac_header_extractor_c(const std::string &file_name, int64_t _sid);
   ~flac_header_extractor_c();
   bool extract();
   bool read_page();
@@ -53,7 +53,7 @@ public:
     return "audio";
   };
 
-  virtual string get_codec() {
+  virtual std::string get_codec() {
     return "FLAC";
   };
 

@@ -21,7 +21,6 @@
 #include "merge/output_control.h"
 #include "output/p_dirac.h"
 
-using namespace std;
 
 #define PROBESIZE 4
 #define READ_SIZE 1024 * 1024

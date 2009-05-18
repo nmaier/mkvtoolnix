@@ -34,10 +34,9 @@
 #include "extract/xtr_vobsub.h"
 #include "extract/xtr_wav.h"
 
-using namespace std;
 using namespace libmatroska;
 
-xtr_base_c::xtr_base_c(const string &codec_id,
+xtr_base_c::xtr_base_c(const std::string &codec_id,
                        int64_t tid,
                        track_spec_t &tspec,
                        const char *container_name)
@@ -122,7 +121,7 @@ xtr_base_c::init_content_decoder(KaxTrackEntry &track) {
 }
 
 xtr_base_c *
-xtr_base_c::create_extractor(const string &new_codec_id,
+xtr_base_c::create_extractor(const std::string &new_codec_id,
                              int64_t new_tid,
                              track_spec_t &tspec) {
   // Raw format

@@ -81,13 +81,13 @@ namespace dirac {
 
     memory_cptr m_unparsed_buffer;
 
-    deque<memory_cptr> m_pre_frame_extra_data;
-    deque<memory_cptr> m_post_frame_extra_data;
+    std::deque<memory_cptr> m_pre_frame_extra_data;
+    std::deque<memory_cptr> m_post_frame_extra_data;
 
-    deque<frame_cptr> m_frames;
+    std::deque<frame_cptr> m_frames;
     frame_cptr m_current_frame;
 
-    deque<int64_t> m_timecodes;
+    std::deque<int64_t> m_timecodes;
     int64_t m_previous_timecode;
     int64_t m_num_timecodes;
     int64_t m_num_repeated_fields;

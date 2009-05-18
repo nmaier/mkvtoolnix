@@ -15,7 +15,7 @@
 #include "common/ebml.h"
 #include "extract/xtr_rmff.h"
 
-xtr_rmff_c::xtr_rmff_c(const string &codec_id,
+xtr_rmff_c::xtr_rmff_c(const std::string &codec_id,
                        int64_t tid,
                        track_spec_t &tspec)
   : xtr_base_c(codec_id, tid, tspec)

@@ -85,7 +85,6 @@ extern "C" {
 #include "info/mkvinfo.h"
 
 using namespace libmatroska;
-using namespace std;
 
 // }}}
 
@@ -172,11 +171,11 @@ _show_unknown_element(EbmlStream *es,
                       EbmlElement *e,
                       int level) {
   int i;
-  string element_id;
+  std::string element_id;
   for (i = e->Generic().GlobalId.Length - 1; 0 <= i; --i)
     element_id += (boost::format("%|1$02x|") % ((e->Generic().GlobalId.Value >> (i * 8)) & 0xff)).str();
 
-  string s = (boost::format(Y("(Unknown element: %1%; ID: 0x%2% size: %3%)")) % e->Generic().DebugName % element_id % (e->GetSize() + e->HeadSize())).str();
+  std::string s = (boost::format(Y("(Unknown element: %1%; ID: 0x%2% size: %3%)")) % e->Generic().DebugName % element_id % (e->GetSize() + e->HeadSize())).str();
   _show_element(e, es, true, level, s);
 }
 
@@ -214,10 +213,10 @@ _show_element(EbmlElement *l,
   _show_element(l, es, skip, level, info.str());
 }
 
-static string
+static std::string
 create_hexdump(const unsigned char *buf,
                int size) {
-  string hex(" hexdump");
+  std::string hex(" hexdump");
   int bmax = std::max(size, hexdump_max_size);
   int b;
 
@@ -227,10 +226,10 @@ create_hexdump(const unsigned char *buf,
   return hex;
 }
 
-static string
+static std::string
 to_hex(const unsigned char *buf,
        int size) {
-  string hex;
+  std::string hex;
   int b;
   for (b = 0; b < size; ++b)
     hex += (boost::format(" 0x%|1$02x|") % (int)buf[b]).str();
@@ -243,8 +242,8 @@ to_hex(const unsigned char *buf,
 // {{{ FUNCTION parse_args
 
 void
-parse_args(vector<string> args,
-           string &file_name) {
+parse_args(std::vector<std::string> args,
+           std::string &file_name) {
   int i;
 
   verbose = 0;
@@ -347,8 +346,8 @@ struct master_sorter_t {
 void
 sort_master(EbmlMaster &m) {
   int i;
-  vector<EbmlElement *> tmp;
-  vector<master_sorter_t> sort_me;
+  std::vector<EbmlElement *> tmp;
+  std::vector<master_sorter_t> sort_me;
 
   for (i = 0; m.ListSize() > i; ++i)
     sort_me.push_back(master_sorter_t(i, m[i]->GetElementPosition()));
@@ -376,12 +375,12 @@ read_master(EbmlMaster *m,
   sort_master(*m);
 }
 
-string
+std::string
 format_binary(EbmlBinary &bin,
               int max_len = 10) {
   int len         = std::max(max_len, (int)bin.GetSize());
   const binary *b = bin.GetBuffer();
-  string result   = (boost::format(Y("length %1%, data: %2%")) % bin.GetSize() % to_hex(b, std::max(max_len, (int)bin.GetSize()))).str();
+  std::string result   = (boost::format(Y("length %1%, data: %2%")) % bin.GetSize() % to_hex(b, std::max(max_len, (int)bin.GetSize()))).str();
 
   if (len < bin.GetSize())
     result += "...";
@@ -531,7 +530,7 @@ def_handle(info) {
 
 void
 def_handle2(audio_track,
-            vector<string> &summary) {
+            std::vector<std::string> &summary) {
   EbmlMaster *m3;
   int i3;
 
@@ -575,7 +574,7 @@ def_handle2(audio_track,
 
 void
 def_handle2(video_track,
-            vector<string> &summary) {
+            std::vector<std::string> &summary) {
   show_element(l3, 3, Y("Video track"));
 
   EbmlMaster *m3 = static_cast<EbmlMaster *>(l3);
@@ -834,11 +833,11 @@ def_handle(tracks) {
       // We actually found a track entry :) We're happy now.
       show_element(l2, 2, Y("A track"));
 
-      vector<string> summary;
+      std::vector<std::string> summary;
       char    kax_track_type   = '?';
       int64_t kax_track_number = -1;
-      string  kax_codec_id;
-      string  fourcc_buffer;
+      std::string  kax_codec_id;
+      std::string  fourcc_buffer;
       bool    ms_compat        = false;
 
       EbmlMaster *m2 = static_cast<EbmlMaster *>(l2);
@@ -907,7 +906,7 @@ def_handle(tracks) {
 
         } else if (is_id(l3, KaxCodecID)) {
           KaxCodecID &codec_id = *static_cast<KaxCodecID *>(l3);
-          kax_codec_id         = string(codec_id);
+          kax_codec_id         = std::string(codec_id);
 
           show_element(l3, 3, boost::format(Y("Codec ID: %1%")) % kax_codec_id);
           if (   ((kax_codec_id == MKV_V_MSCOMP) && ('v' == kax_track_type))
@@ -946,11 +945,11 @@ def_handle(tracks) {
 
         } else if (is_id(l3, KaxCodecInfoURL)) {
           KaxCodecInfoURL &c_infourl = *static_cast<KaxCodecInfoURL *>(l3);
-          show_element(l3, 3, boost::format(Y("Codec info URL: %1%")) % string(c_infourl));
+          show_element(l3, 3, boost::format(Y("Codec info URL: %1%")) % std::string(c_infourl));
 
         } else if (is_id(l3, KaxCodecDownloadURL)) {
           KaxCodecDownloadURL &c_downloadurl = *static_cast<KaxCodecDownloadURL *>(l3);
-          show_element(l3, 3, boost::format(Y("Codec download URL: %1%")) % string(c_downloadurl));
+          show_element(l3, 3, boost::format(Y("Codec download URL: %1%")) % std::string(c_downloadurl));
 
         } else if (is_id(l3, KaxCodecDecodeAll)) {
           KaxCodecDecodeAll &c_decodeall =
@@ -995,8 +994,8 @@ def_handle(tracks) {
 
         } else if (is_id(l3, KaxTrackLanguage)) {
           KaxTrackLanguage &language = *static_cast<KaxTrackLanguage *>(l3);
-          show_element(l3, 3, boost::format(Y("Language: %1%")) % string(language));
-          summary.push_back((boost::format(Y("language: %1%")) % string(language)).str());
+          show_element(l3, 3, boost::format(Y("Language: %1%")) % std::string(language));
+          summary.push_back((boost::format(Y("language: %1%")) % std::string(language)).str());
 
         } else if (is_id(l3, KaxTrackTimecodeScale)) {
           KaxTrackTimecodeScale &ttc_scale = *static_cast<KaxTrackTimecodeScale *>(l3);
@@ -1219,7 +1218,7 @@ def_handle(attachments) {
 
         } else if (is_id(l3, KaxMimeType)) {
           KaxMimeType &mime_type = *static_cast<KaxMimeType *>(l3);
-          show_element(l3, 3, boost::format(Y("Mime type: %1%")) % string(mime_type));
+          show_element(l3, 3, boost::format(Y("Mime type: %1%")) % std::string(mime_type));
 
         } else if (is_id(l3, KaxFileData)) {
           KaxFileData &f_data = *static_cast<KaxFileData *>(l3);
@@ -1264,9 +1263,9 @@ def_handle2(block_group,
             KaxCluster *&cluster) {
   show_element(l2, 2, Y("Block group"));
 
-  vector<int> frame_sizes;
-  vector<uint32_t> frame_adlers;
-  vector<string> frame_hexdumps;
+  std::vector<int> frame_sizes;
+  std::vector<uint32_t> frame_adlers;
+  std::vector<std::string> frame_hexdumps;
 
   bool bref_found     = false;
   bool fref_found     = false;
@@ -1303,11 +1302,11 @@ def_handle2(block_group,
         DataBuffer &data = block.GetBuffer(i);
         uint32_t adler   = calc_adler32(data.Buffer(), data.Size());
 
-        string adler_str;
+        std::string adler_str;
         if (calc_checksums)
           adler_str = (boost::format(Y(" (adler: 0x%|1$08x|)")) % adler).str();
 
-        string hex;
+        std::string hex;
         if (show_hexdump)
           hex = create_hexdump(data.Buffer(), data.Size());
 
@@ -1481,8 +1480,8 @@ def_handle2(block_group,
 void
 def_handle2(simple_block,
             KaxCluster *&cluster) {
-  vector<int> frame_sizes;
-  vector<uint32_t> frame_adlers;
+  std::vector<int> frame_sizes;
+  std::vector<uint32_t> frame_adlers;
 
   KaxSimpleBlock &block = *static_cast<KaxSimpleBlock *>(l2);
   block.SetParent(*cluster);
@@ -1491,7 +1490,7 @@ def_handle2(simple_block,
 
   uint64_t timecode = block.GlobalTimecode() / 1000000;
 
-  string info;
+  std::string info;
   if (block.IsKeyframe())
     info = Y("key, ");
   if (block.IsDiscardable())
@@ -1510,11 +1509,11 @@ def_handle2(simple_block,
     DataBuffer &data = block.GetBuffer(i);
     uint32_t adler   = calc_adler32(data.Buffer(), data.Size());
 
-    string adler_str;
+    std::string adler_str;
     if (calc_checksums)
       adler_str = (boost::format(Y(" (adler: 0x%|1$08x|)")) % adler).str();
 
-    string hex;
+    std::string hex;
     if (show_hexdump)
       hex = create_hexdump(data.Buffer(), data.Size());
 
@@ -1619,7 +1618,7 @@ handle_elements_rec(EbmlStream *es,
     return;
   }
 
-  string elt_name = mapping[elt_idx].name;
+  std::string elt_name = mapping[elt_idx].name;
   EbmlMaster *m;
 
   switch (mapping[elt_idx].type) {
@@ -1639,7 +1638,7 @@ handle_elements_rec(EbmlStream *es,
       break;
 
     case EBMLT_STRING:
-      show_element(e, level, boost::format("%1%: %2%") % elt_name % string(*dynamic_cast<EbmlString *>(e)));
+      show_element(e, level, boost::format("%1%: %2%") % elt_name % std::string(*dynamic_cast<EbmlString *>(e)));
       break;
 
     case EBMLT_USTRING:
@@ -1710,7 +1709,7 @@ handle_ebml_head(EbmlElement *l0,
       show_element(e, 1, boost::format(Y("EBML maximum ID length: %1%")) % uint64(*static_cast<EbmlUInteger *>(e)));
 
     else if (is_id(e, EDocType))
-      show_element(e, 1, boost::format(Y("Doc type: %1%")) % string(*static_cast<EbmlString *>(e)));
+      show_element(e, 1, boost::format(Y("Doc type: %1%")) % std::string(*static_cast<EbmlString *>(e)));
 
     else if (is_id(e, EDocTypeVersion))
       show_element(e, 1, boost::format(Y("Doc type version: %1%")) % uint64(*static_cast<EbmlUInteger *>(e)));
@@ -1727,7 +1726,7 @@ handle_ebml_head(EbmlElement *l0,
 }
 
 bool
-process_file(const string &file_name) {
+process_file(const std::string &file_name) {
   int upper_lvl_el;
   // Elements for different levels
   EbmlElement *l0 = NULL, *l1 = NULL, *l2 = NULL, *l3 = NULL, *l4 = NULL;
@@ -1882,8 +1881,8 @@ setup(const std::string &locale) {
 }
 
 int
-console_main(vector<string> args) {
-  string file_name;
+console_main(std::vector<std::string> args) {
+  std::string file_name;
   bool ok;
 
   set_process_priority(-1);
@@ -1904,8 +1903,8 @@ console_main(vector<string> args) {
 int
 main(int argc,
      char **argv) {
-  vector<string> args;
-  string initial_file;
+  std::vector<std::string> args;
+  std::string initial_file;
 
   setup();
 

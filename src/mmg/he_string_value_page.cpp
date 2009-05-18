@@ -6,7 +6,7 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   header editor: string value page class
+   header editor: std::string value page class
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */

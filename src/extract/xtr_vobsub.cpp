@@ -44,7 +44,7 @@ struct PACKED_STRUCTURE mpeg_ps_header_t {
 #pragma pack(pop)
 #endif
 
-xtr_vobsub_c::xtr_vobsub_c(const string &codec_id,
+xtr_vobsub_c::xtr_vobsub_c(const std::string &codec_id,
                            int64_t tid,
                            track_spec_t &tspec)
   : xtr_base_c(codec_id, tid, tspec)
@@ -72,7 +72,7 @@ xtr_vobsub_c::create_file(xtr_base_c *master,
   m_language = kt_get_language(track);
 
   if (NULL == master) {
-    string sub_file_name = m_base_name + ".sub";
+    std::string sub_file_name = m_base_name + ".sub";
 
     try {
       m_out = new mm_file_io_c(sub_file_name, MODE_CREATE);

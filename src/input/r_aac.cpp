@@ -180,7 +180,7 @@ aac_reader_c::get_progress() {
 
 void
 aac_reader_c::identify() {
-  string verbose_info = string("aac_is_sbr:") + string(AAC_PROFILE_SBR == aacheader.profile ? "true" : "unknown");
+  std::string verbose_info = std::string("aac_is_sbr:") + std::string(AAC_PROFILE_SBR == aacheader.profile ? "true" : "unknown");
 
   id_result_container("AAC");
   id_result_track(0, ID_RESULT_TRACK_AUDIO, "AAC", verbose_info);

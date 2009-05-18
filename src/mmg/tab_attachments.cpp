@@ -25,8 +25,8 @@
 #include "mmg/mmg.h"
 #include "mmg/tab_attachments.h"
 
-vector<mmg_attachment_cptr> attachments;
-vector<mmg_attached_file_cptr> attached_files;
+std::vector<mmg_attachment_cptr> attachments;
+std::vector<mmg_attached_file_cptr> attached_files;
 
 class attachments_drop_target_c: public wxFileDropTarget {
 private:

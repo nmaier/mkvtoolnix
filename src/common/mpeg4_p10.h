@@ -191,20 +191,20 @@ namespace mpeg4 {
       int m_frame_number, m_num_skipped_frames;
       bool m_first_keyframe_found, m_recovery_point_valid;
 
-      deque<avc_frame_t> m_frames, m_frames_out;
-      deque<int64_t> m_timecodes;
+      std::deque<avc_frame_t> m_frames, m_frames_out;
+      std::deque<int64_t> m_timecodes;
 
       bool m_generate_timecodes;
 
-      deque<memory_cptr> m_sps_list, m_pps_list, m_extra_data;
-      vector<sps_info_t> m_sps_info_list;
-      vector<pps_info_t> m_pps_info_list;
+      std::deque<memory_cptr> m_sps_list, m_pps_list, m_extra_data;
+      std::vector<sps_info_t> m_sps_info_list;
+      std::vector<pps_info_t> m_pps_info_list;
 
       memory_cptr m_unparsed_buffer;
 
       avc_frame_t m_incomplete_frame;
       bool m_have_incomplete_frame;
-      deque<memory_cptr> m_unhandled_nalus;
+      std::deque<memory_cptr> m_unhandled_nalus;
 
       bool m_ignore_nalu_size_length_errors;
 

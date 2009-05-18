@@ -59,8 +59,8 @@ public:
   int units_processed;
   int num_header_packets, num_non_header_packets;
   bool headers_read;
-  string language, title;
-  vector<memory_cptr> packet_data, nh_packet_data;
+  std::string language, title;
+  std::vector<memory_cptr> packet_data, nh_packet_data;
   int64_t first_granulepos, last_granulepos, default_duration;
   bool in_use;
 
@@ -74,7 +74,7 @@ public:
   virtual const char *get_type() {
     return "unknown";
   };
-  virtual string get_codec() {
+  virtual std::string get_codec() {
     return "unknown";
   };
 
@@ -98,7 +98,7 @@ class ogm_reader_c: public generic_reader_c {
 private:
   ogg_sync_state oy;
   mm_io_c *io;
-  vector<ogm_demuxer_cptr> sdemuxers;
+  std::vector<ogm_demuxer_cptr> sdemuxers;
   int bos_pages_read;
   int64_t file_size;
 

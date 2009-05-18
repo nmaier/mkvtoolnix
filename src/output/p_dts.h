@@ -47,7 +47,7 @@ public:
     return "DTS";
   }
 
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src, string &error_message);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 
 private:
   virtual void add_to_buffer(unsigned char *buf, int size);

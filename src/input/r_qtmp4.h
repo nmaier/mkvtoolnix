@@ -133,18 +133,18 @@ struct qtmp4_demuxer_c {
 
   uint64_t duration;
 
-  vector<qt_sample_t> sample_table;
-  vector<qt_chunk_t> chunk_table;
-  vector<qt_chunkmap_t> chunkmap_table;
-  vector<qt_durmap_t> durmap_table;
-  vector<uint32_t> keyframe_table;
-  vector<qt_editlist_t> editlist_table;
-  vector<qt_frame_offset_t> raw_frame_offset_table;
-  vector<int32_t> frame_offset_table;
+  std::vector<qt_sample_t> sample_table;
+  std::vector<qt_chunk_t> chunk_table;
+  std::vector<qt_chunkmap_t> chunkmap_table;
+  std::vector<qt_durmap_t> durmap_table;
+  std::vector<uint32_t> keyframe_table;
+  std::vector<qt_editlist_t> editlist_table;
+  std::vector<qt_frame_offset_t> raw_frame_offset_table;
+  std::vector<int32_t> frame_offset_table;
 
-  vector<int64_t> timecodes, durations, frame_indices;
+  std::vector<int64_t> timecodes, durations, frame_indices;
 
-  vector<qt_index_t> m_index;
+  std::vector<qt_index_t> m_index;
 
   int64_t min_timecode, max_timecode;
   double fps;
@@ -155,7 +155,7 @@ struct qtmp4_demuxer_c {
   memory_cptr v_stsd;
   uint32_t v_stsd_size;
   uint32_t v_width, v_height, v_bitdepth;
-  deque<int64_t> references;
+  std::deque<int64_t> references;
   bool v_is_avc, avc_use_bframes;
   memory_cptr a_stsd;
   uint32_t a_channels, a_bitdepth;
@@ -256,7 +256,7 @@ struct qt_atom_t {
 class qtmp4_reader_c: public generic_reader_c {
 private:
   mm_io_c *io;
-  vector<qtmp4_demuxer_cptr> demuxers;
+  std::vector<qtmp4_demuxer_cptr> demuxers;
   int64_t file_size, mdat_pos, mdat_size;
   uint32_t time_scale, compression_algorithm;
   int main_dmx;

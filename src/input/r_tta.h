@@ -29,7 +29,7 @@ private:
   unsigned char *chunk;
   mm_io_c *io;
   int64_t bytes_processed, size;
-  vector<uint32_t> seek_points;
+  std::vector<uint32_t> seek_points;
   int pos;
   tta_file_header_t header;
 

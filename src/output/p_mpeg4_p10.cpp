@@ -94,7 +94,7 @@ mpeg4_p10_video_packetizer_c::process(packet_cptr packet) {
 
 connection_result_e
 mpeg4_p10_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
-                                             string &error_message) {
+                                             std::string &error_message) {
   mpeg4_p10_video_packetizer_c *vsrc = dynamic_cast<mpeg4_p10_video_packetizer_c *>(src);
   if (NULL == vsrc)
     return CAN_CONNECT_NO_FORMAT;
@@ -138,7 +138,7 @@ mpeg4_p10_video_packetizer_c::change_nalu_size_len(packet_cptr packet) {
   if (!src || !size)
     return;
 
-  vector<int> nalu_sizes;
+  std::vector<int> nalu_sizes;
 
   int src_pos = 0;
 

@@ -50,14 +50,13 @@
 // Version 1: base settings
 // Version 2: Added in v1.5.0:
 //   Added splitting by timecodes. The old boolean "split_by_size" was
-//   replaced by new string "split_mode".
+//   replaced by new std::string "split_mode".
 // Version 3: Added after v2.4.2:
 //   The per-file boolean "no attachments" was removed and replaced by
 //   the handling of individual attached files.
 
 #define MMG_CONFIG_FILE_VERSION_MAX 3
 
-using namespace std;
 using namespace libebml;
 
 struct mmg_track_t {
@@ -115,8 +114,8 @@ struct mmg_file_t {
   wxString file_name, title;
   bool title_was_present;
   int container;
-  vector<mmg_track_cptr> tracks;
-  vector<mmg_attached_file_cptr> attached_files;
+  std::vector<mmg_track_cptr> tracks;
+  std::vector<mmg_attached_file_cptr> attached_files;
   bool no_chapters, no_attachments, no_tags;
   bool appending;
 
@@ -173,26 +172,26 @@ struct mmg_options_t {
 };
 
 extern wxString last_open_dir;
-extern vector<wxString> last_settings;
-extern vector<wxString> last_chapters;
-extern vector<mmg_file_cptr> files;
-extern vector<mmg_track_t *> tracks;
-extern vector<mmg_attachment_cptr> attachments;
-extern vector<mmg_attached_file_cptr> attached_files;
+extern std::vector<wxString> last_settings;
+extern std::vector<wxString> last_chapters;
+extern std::vector<mmg_file_cptr> files;
+extern std::vector<mmg_track_t *> tracks;
+extern std::vector<mmg_attachment_cptr> attachments;
+extern std::vector<mmg_attached_file_cptr> attached_files;
 extern wxArrayString sorted_charsets;
 extern wxArrayString sorted_iso_codes;
 extern bool title_was_present;
-extern map<wxString, wxString> capabilities;
+extern std::map<wxString, wxString> capabilities;
 
 wxString &break_line(wxString &line, int break_after = 80);
 wxString extract_language_code(wxString source);
 wxString shell_escape(wxString source, bool cmd_exe_mode = false);
-vector<wxString> split(const wxString &src, const wxString &pattern,
+std::vector<wxString> split(const wxString &src, const wxString &pattern,
                        int max_num = -1);
-wxString join(const wxString &pattern, vector<wxString> &strings);
+wxString join(const wxString &pattern, std::vector<wxString> &strings);
 wxString &strip(wxString &s, bool newlines = false);
-vector<wxString> & strip(vector<wxString> &v, bool newlines = false);
-string to_utf8(const wxString &src);
+std::vector<wxString> & strip(std::vector<wxString> &v, bool newlines = false);
+std::string to_utf8(const wxString &src);
 wxString from_utf8(const wxString &src);
 wxString UTFstring_to_wxString(const UTFstring &u);
 wxString unescape(const wxString &src);

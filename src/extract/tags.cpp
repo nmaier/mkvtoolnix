@@ -37,7 +37,6 @@ extern "C" {
 #include "extract/mkvextract.h"
 
 using namespace libmatroska;
-using namespace std;
 
 void
 extract_tags(const char *file_name,

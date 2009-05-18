@@ -239,12 +239,12 @@ mpeg4::p2::extract_par(const unsigned char *buffer,
 void
 mpeg4::p2::find_frame_types(const unsigned char *buffer,
                             int buffer_size,
-                            vector<video_frame_t> &frames) {
+                            std::vector<video_frame_t> &frames) {
   mm_mem_io_c bytes(buffer, buffer_size);
   uint32_t marker, frame_type;
   bool frame_found;
   video_frame_t frame;
-  vector<video_frame_t>::iterator fit;
+  std::vector<video_frame_t>::iterator fit;
   int i;
 
   frames.clear();
@@ -387,7 +387,7 @@ mpeg4::p2::parse_config_data(const unsigned char *buffer,
 
 /** \brief Check whether or not a FourCC refers to MPEG-4 part 2 video
 
-   \param fourcc A pointer to a string with four characters
+   \param fourcc A pointer to a std::string with four characters
 
    \return true if the FourCC refers to a MPEG-4 part 2 video codec.
 */
@@ -408,7 +408,7 @@ mpeg4::p2::is_fourcc(const void *fourcc) {
 /** \brief Check whether or not a FourCC refers to MPEG-4 part 2
     version 3 video
 
-   \param fourcc A pointer to a string with four characters
+   \param fourcc A pointer to a std::string with four characters
 
    \return true if the FourCC refers to a MPEG-4 part 2 video codec.
 */

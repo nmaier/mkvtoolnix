@@ -167,7 +167,7 @@ struct kax_content_encoding_t {
 
 class MTX_DLL_API content_decoder_c {
 protected:
-  vector<kax_content_encoding_t> encodings;
+  std::vector<kax_content_encoding_t> encodings;
   bool ok;
 
 public:

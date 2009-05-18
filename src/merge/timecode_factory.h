@@ -22,7 +22,6 @@
 #include "common/smart_pointers.h"
 #include "merge/packet.h"
 
-using namespace std;
 
 class mm_io_c;
 
@@ -55,14 +54,14 @@ typedef counted_ptr<timecode_factory_c> timecode_factory_cptr;
 
 class timecode_factory_c {
 protected:
-  string m_file_name, m_source_name;
+  std::string m_file_name, m_source_name;
   int64_t m_tid;
   int m_version;
   bool m_preserve_duration;
 
 public:
-  timecode_factory_c(const string &file_name,
-                     const string &source_name,
+  timecode_factory_c(const std::string &file_name,
+                     const std::string &source_name,
                      int64_t tid,
                      int version)
     : m_file_name(file_name)
@@ -94,20 +93,20 @@ public:
     m_preserve_duration = preserve_duration;
   }
 
-  static timecode_factory_cptr create(const string &file_name, const string &source_name, int64_t tid);
-  static timecode_factory_cptr create_fps_factory(int64_t default_duration, const string &source_name, int64_t tid);
+  static timecode_factory_cptr create(const std::string &file_name, const std::string &source_name, int64_t tid);
+  static timecode_factory_cptr create_fps_factory(int64_t default_duration, const std::string &source_name, int64_t tid);
 };
 
 class timecode_factory_v1_c: public timecode_factory_c {
 protected:
-  vector<timecode_range_c> m_ranges;
+  std::vector<timecode_range_c> m_ranges;
   uint32_t m_current_range;
   int64_t m_frameno;
   double m_default_fps;
 
 public:
-  timecode_factory_v1_c(const string &file_name,
-                        const string &source_name,
+  timecode_factory_v1_c(const std::string &file_name,
+                        const std::string &source_name,
                         int64_t tid)
     : timecode_factory_c(file_name, source_name, tid, 1)
     , m_current_range(0)
@@ -130,14 +129,14 @@ protected:
 
 class timecode_factory_v2_c: public timecode_factory_c {
 protected:
-  vector<int64_t> m_timecodes, m_durations;
+  std::vector<int64_t> m_timecodes, m_durations;
   int64_t m_frameno;
   double m_default_fps;
   bool m_warning_printed;
 
 public:
-  timecode_factory_v2_c(const string &file_name,
-                        const string &source_name,
+  timecode_factory_v2_c(const std::string &file_name,
+                        const std::string &source_name,
                         int64_t tid, int version)
     : timecode_factory_c(file_name, source_name, tid, version)
     , m_frameno(0)
@@ -157,15 +156,15 @@ public:
 
 class timecode_factory_v3_c: public timecode_factory_c {
 protected:
-  vector<timecode_duration_c> m_durations;
+  std::vector<timecode_duration_c> m_durations;
   size_t m_current_duration;
   int64_t m_current_timecode;
   int64_t m_current_offset;
   double m_default_fps;
 
 public:
-  timecode_factory_v3_c(const string &file_name,
-                        const string &source_name,
+  timecode_factory_v3_c(const std::string &file_name,
+                        const std::string &source_name,
                         int64_t tid)
     : timecode_factory_c(file_name, source_name, tid, 3)
     , m_current_duration(0)

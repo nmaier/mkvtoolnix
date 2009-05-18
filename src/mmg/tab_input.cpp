@@ -38,7 +38,6 @@
 #include "mmg/tab_input.h"
 #include "mmg/tab_global.h"
 
-using namespace std;
 
 wxArrayString sorted_iso_codes;
 wxArrayString sorted_charsets;
@@ -207,7 +206,7 @@ struct file_type_t {
 
 void
 tab_input::select_file(bool append) {
-  static vector<file_type_t> file_types;
+  static std::vector<file_type_t> file_types;
 
   if (file_types.empty()) {
     file_types.push_back(file_type_t(Z("A/52 (aka AC3)"),                      wxU("ac3")));
@@ -239,14 +238,14 @@ tab_input::select_file(bool append) {
   }
 
   wxString media_files, rest, a_exts;
-  vector<wxString> all_extensions;
+  std::vector<wxString> all_extensions;
   int ft, ae;
 
   for (ft = 0; file_types.size() > ft; ++ft) {
     wxString s_exts;
     int e;
 
-    vector<wxString> extensions = split(wxString(file_types[ft].extensions), wxU(" "));
+    std::vector<wxString> extensions = split(wxString(file_types[ft].extensions), wxU(" "));
     for (e = 0; e < extensions.size(); e++) {
 
       if (s_exts.Length() > 0)
@@ -303,11 +302,11 @@ tab_input::add_file(const wxString &file_name,
                     bool append) {
   wxString name, command, id, type, exact, video_track_name, opt_file_name;
   wxArrayString output, errors;
-  vector<wxString> args, pair;
+  std::vector<wxString> args, pair;
   int result, pos, new_file_pos;
   unsigned int i, k;
   wxFile *opt_file;
-  string arg_utf8;
+  std::string arg_utf8;
   bool default_video_track_found, default_audio_track_found;
   bool default_subtitle_track_found;
 
@@ -432,9 +431,9 @@ tab_input::add_file(const wxString &file_name,
           else if (pair[0] == wxT("display_dimensions")) {
             int64_t width, height;
 
-            vector<wxString> dims = split(pair[1], wxU("x"));
+            std::vector<wxString> dims = split(pair[1], wxU("x"));
             if ((dims.size() == 2) && parse_int(wxMB(dims[0]), width) && parse_int(wxMB(dims[1]), height)) {
-              string format;
+              std::string format;
               fix_format(LLD, format);
               track->dwidth.Printf(wxU(format.c_str()), width);
               track->dheight.Printf(wxU(format.c_str()), height);
@@ -614,7 +613,7 @@ tab_input::add_file(const wxString &file_name,
     name.Remove(0, 4);
 
   for (i = 0; i < file->tracks.size(); i++) {
-    string format;
+    std::string format;
     wxString label;
     int new_track_pos;
 
@@ -631,7 +630,7 @@ tab_input::add_file(const wxString &file_name,
     label.Printf(wxU(format.c_str()), t->appending ? wxT("++> ") : wxEmptyString, t->ctype.c_str(), t->id, type.c_str(), name.c_str());
 
     // Look for a place to insert this new track. If the file is "added" then
-    // the new track is simply appended to the list of existing tracks.
+    // the new track is simply appended to the std::list of existing tracks.
     // If the file is "appended" then it should be put to the end of the
     // chain of tracks being appended. The n'th track from this new file
     // should be appended to the n'th track of the "old" file this new file is
@@ -678,7 +677,7 @@ tab_input::add_file(const wxString &file_name,
 void
 tab_input::on_remove_file(wxCommandEvent &evt) {
   mmg_track_t *t;
-  vector<mmg_file_t>::iterator eit;
+  std::vector<mmg_file_t>::iterator eit;
 
   if (-1 == selected_file)
     return;
@@ -990,7 +989,7 @@ tab_input::save(wxConfigBase *cfg) {
     cfg->Write(wxT("number_of_tracks"), (int)f->tracks.size());
     unsigned int tidx;
     for (tidx = 0; tidx < f->tracks.size(); tidx++) {
-      string format;
+      std::string format;
 
       mmg_track_cptr &t = f->tracks[tidx];
       s.Printf(wxT("track %u"), tidx);
@@ -1077,7 +1076,7 @@ tab_input::load(wxConfigBase *cfg,
     return;
   }
 
-  string format;
+  std::string format;
   fix_format("%u:%lld", format);
 
   wxString c, track_order;
@@ -1204,10 +1203,10 @@ tab_input::load(wxConfigBase *cfg,
     s = track_order;
   strip(s);
   if (s.length() > 0) {
-    vector<wxString> entries = split(s, (wxString)wxT(","));
+    std::vector<wxString> entries = split(s, (wxString)wxT(","));
     int i;
     for (i = 0; i < entries.size(); i++) {
-      vector<wxString> pair = split(entries[i], (wxString)wxT(":"));
+      std::vector<wxString> pair = split(entries[i], (wxString)wxT(":"));
       if (pair.size() != 2)
         wxdie(Z("The job file could not have been parsed correctly.\n"
                 "Either it is invalid / damaged, or you've just found\n"
@@ -1286,12 +1285,12 @@ tab_input::validate_settings() {
         continue;
 
       tracks_selected = true;
-      string format;
+      std::string format;
       fix_format("%lld", format);
       wxString sid;
       sid.Printf(wxU(format.c_str()), t->id);
 
-      string s = wxMB(t->delay);
+      std::string s = wxMB(t->delay);
       strip(s);
       int dummy_i;
       if ((s.length() > 0) && !parse_int(s, dummy_i)) {

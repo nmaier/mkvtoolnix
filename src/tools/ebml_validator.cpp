@@ -34,7 +34,7 @@ static int64_t g_end   = std::numeric_limits<long long>::max();
 static int64_t g_file_size;
 static mm_file_io_c *g_in;
 
-static map<int64_t, bool> g_is_master;
+static std::map<int64_t, bool> g_is_master;
 
 class vint_c {
 public:
@@ -95,11 +95,11 @@ setup() {
   init_cc_stdio();
 }
 
-static string
-parse_args(vector<string> &args) {
-  string file_name;
+static std::string
+parse_args(std::vector<std::string> &args) {
+  std::string file_name;
 
-  vector<string>::iterator arg = args.begin();
+  std::vector<std::string>::iterator arg = args.begin();
   while (arg != args.end()) {
     if ((*arg == "-h") || (*arg == "--help"))
       show_help();
@@ -187,7 +187,7 @@ public:
   }
 };
 
-static string
+static std::string
 level_string(int level) {
   std::string s;
   int i;
@@ -288,7 +288,7 @@ parse_content(int level,
       vint_c  id          = read_id(end_pos);
       vint_c size         = read_size(end_pos);
 
-      string element_name = g_element_names[id.value];
+      std::string element_name = g_element_names[id.value];
       if (element_name.empty())
         element_name      = Y("unknown");
 
@@ -313,7 +313,7 @@ parse_content(int level,
         mxerror(boost::format(Y("Error: Seek to %1%\n")) % content_end_pos);
 
     } catch (id_error_c &error) {
-      string message
+      std::string message
         = id_error_c::end_of_file            == error.code ? Y("End of file")
         : id_error_c::end_of_scope           == error.code ? Y("End of scope")
         : id_error_c::first_byte_is_zero     == error.code ? Y("First byte is zero")
@@ -327,7 +327,7 @@ parse_content(int level,
       return;
 
     } catch (size_error_c &error) {
-      string message
+      std::string message
         = size_error_c::end_of_file  == error.code ? Y("End of file")
         : size_error_c::end_of_scope == error.code ? Y("End of scope")
         :                                            Y("reason is unknown");
@@ -345,7 +345,7 @@ parse_content(int level,
 }
 
 static void
-parse_file(const string &file_name) {
+parse_file(const std::string &file_name) {
   mm_file_io_c in(file_name);
 
   g_in        = &in;

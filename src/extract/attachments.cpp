@@ -37,11 +37,10 @@ extern "C" {
 #include "extract/mkvextract.h"
 
 using namespace libmatroska;
-using namespace std;
 
 static void
 handle_attachments(KaxAttachments *atts,
-                   vector<track_spec_t> &tracks) {
+                   std::vector<track_spec_t> &tracks) {
   static int64_t attachment_ui_id = 0;
 
   int i;
@@ -49,7 +48,7 @@ handle_attachments(KaxAttachments *atts,
     KaxAttached  *att = dynamic_cast<KaxAttached *>((*atts)[i]);
     assert(NULL != att);
 
-    string name, type;
+    std::string name, type;
     int64_t size       = -1;
     int64_t id         = -1;
     KaxFileData *fdata = NULL;
@@ -62,7 +61,7 @@ handle_attachments(KaxAttachments *atts,
         name = UTFstring_to_cstrutf8(UTFstring(*static_cast<KaxFileName *>(e)));
 
       else if (EbmlId(*e) == KaxMimeType::ClassInfos.GlobalId)
-        type = string(*static_cast<KaxMimeType *>(e));
+        type = std::string(*static_cast<KaxMimeType *>(e));
 
       else if (EbmlId(*e) == KaxFileUID::ClassInfos.GlobalId)
         id = uint32(*static_cast<KaxFileUID *>(e));
@@ -109,7 +108,7 @@ handle_attachments(KaxAttachments *atts,
 
 void
 extract_attachments(const char *file_name,
-                    vector<track_spec_t> &tracks,
+                    std::vector<track_spec_t> &tracks,
                     bool parse_fully) {
   kax_analyzer_cptr analyzer;
 

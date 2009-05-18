@@ -61,7 +61,7 @@ encode_block(const unsigned char in[3],
   out += (unsigned char)(len > 2 ? base64_encoding[in[2] & 0x3f]                                  : '=');
 }
 
-string
+std::string
 base64_encode(const unsigned char *src,
               int src_len,
               bool line_breaks,

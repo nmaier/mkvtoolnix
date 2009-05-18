@@ -25,7 +25,6 @@
 #include "merge/output_control.h"
 #include "output/p_vobsub.h"
 
-using namespace std;
 
 #define hexvalue(c) (  isdigit(c)        ? (c) - '0' \
                      : tolower(c) == 'a' ? 10        \
@@ -36,7 +35,7 @@ using namespace std;
                      :                     15)
 #define ishexdigit(s) (isdigit(s) || (strchr("abcdefABCDEF", s) != NULL))
 
-const string vobsub_reader_c::id_string("# VobSub index file, v");
+const std::string vobsub_reader_c::id_string("# VobSub index file, v");
 
 bool
 vobsub_entry_c::operator < (const vobsub_entry_c &cmp) const {
@@ -72,7 +71,7 @@ vobsub_reader_c::vobsub_reader_c(track_info_c &_ti)
     throw error_c(Y("vobsub_reader: Cound not open the source file."));
   }
 
-  string sub_name = ti.fname;
+  std::string sub_name = ti.fname;
   int len         = sub_name.rfind(".");
   if (0 <= len)
     sub_name.erase(len);
@@ -87,7 +86,7 @@ vobsub_reader_c::vobsub_reader_c(track_info_c &_ti)
   idx_data = "";
   len      = id_string.length();
 
-  string line;
+  std::string line;
   if (!idx_file->getline2(line) || !starts_with_case(line, id_string.c_str(), len) || (line.length() < (len + 1)))
     mxerror_fn(ti.fname, Y("No version number found.\n"));
 
@@ -162,7 +161,7 @@ vobsub_reader_c::create_packetizers() {
 
 void
 vobsub_reader_c::parse_headers() {
-  string language, line;
+  std::string language, line;
   vobsub_track_c *track  = NULL;
   int64_t line_no        = 0;
   int64_t last_timestamp = 0;
@@ -230,7 +229,7 @@ vobsub_reader_c::parse_headers() {
 
       strip(line);
       shrink_whitespace(line);
-      vector<string> parts = split(line.c_str(), " ");
+      std::vector<std::string> parts = split(line.c_str(), " ");
 
       if ((4 != parts.size()) || (13 > parts[1].length()) || (downcase(parts[2]) != "filepos:")) {
         mxwarn_fn(ti.fname, boost::format(Y("Line %1%: The line seems to be a subtitle entry but the format couldn't be recognized. This entry will be skipped.\n")) % line_no);
@@ -632,7 +631,7 @@ vobsub_reader_c::get_progress() {
 
 void
 vobsub_reader_c::identify() {
-  vector<string> verbose_info;
+  std::vector<std::string> verbose_info;
   int i;
 
   id_result_container("VobSub");
@@ -641,7 +640,7 @@ vobsub_reader_c::identify() {
     verbose_info.clear();
 
     if (!tracks[i]->language.empty())
-      verbose_info.push_back(string("language:") + tracks[i]->language);
+      verbose_info.push_back(std::string("language:") + tracks[i]->language);
 
     id_result_track(i, ID_RESULT_TRACK_SUBTITLES, "VobSub", verbose_info);
   }

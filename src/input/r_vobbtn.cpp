@@ -23,7 +23,6 @@
 #include "merge/output_control.h"
 #include "output/p_vobbtn.h"
 
-using namespace std;
 
 int
 vobbtn_reader_c::probe_file(mm_io_c *io,

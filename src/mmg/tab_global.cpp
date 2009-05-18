@@ -50,7 +50,7 @@ tab_global::tab_global(wxWindow *parent):
   siz_split = new wxStaticBoxSizer(new wxStaticBox(this, -1, Z("Splitting")), wxVERTICAL);
   cb_split = new wxCheckBox(this, ID_CB_SPLIT, Z("Enable splitting..."));
   cb_split->SetToolTip(TIP("Enables splitting of the output into more than one file. You can split after a given size, "
-                           "after a given amount of time has passed in each file or after a list of timecodes."));
+                           "after a given amount of time has passed in each file or after a std::list of timecodes."));
   siz_split->Add(cb_split, 0, wxLEFT | wxTOP | wxBOTTOM, 5);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
@@ -435,7 +435,7 @@ bool
 tab_global::is_valid_split_size() {
   int64_t dummy_i, mod;
   char c;
-  string s = wxMB(cob_split_by_size->GetValue());
+  std::string s = wxMB(cob_split_by_size->GetValue());
 
   strip(s);
   if (s.empty()) {
@@ -490,8 +490,8 @@ tab_global::is_valid_split_timecode(wxString s) {
 bool
 tab_global::is_valid_split_timecode_list() {
   wxString s = tc_split_after_timecodes->GetValue();
-  vector<wxString> parts;
-  vector<wxString>::const_iterator i;
+  std::vector<wxString> parts;
+  std::vector<wxString>::const_iterator i;
 
   parts = split(s, wxString(wxT(",")));
   mxforeach(i, parts)
@@ -504,7 +504,7 @@ tab_global::is_valid_split_timecode_list() {
 bool
 tab_global::validate_settings() {
   int64_t dummy_i;
-  string s;
+  std::string s;
 
   if (cb_split->GetValue()) {
     if (rb_split_by_size->GetValue()) {

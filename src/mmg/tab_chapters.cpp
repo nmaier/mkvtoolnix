@@ -39,7 +39,6 @@
 #include "mmg/tab_chapters.h"
 #include "mmg/wx_kax_analyzer.h"
 
-using namespace std;
 using namespace libebml;
 using namespace libmatroska;
 
@@ -466,7 +465,7 @@ tab_chapters::create_chapter_label(KaxChapterAtom &chapter) {
     label += wxT("; ");
   }
   if (language != NULL)
-    label += wxU(string(*static_cast<EbmlString *>(language)).c_str());
+    label += wxU(std::string(*static_cast<EbmlString *>(language)).c_str());
   else
     label += wxT("eng");
 
@@ -755,7 +754,7 @@ tab_chapters::verify_atom_recursively(EbmlElement *e) {
   KaxChapterLanguage *language;
   KaxChapterString *cs;
   wxString label;
-  string lang;
+  std::string lang;
   uint32_t i;
 
   if (dynamic_cast<KaxEditionUID *>(e) != NULL)
@@ -793,7 +792,7 @@ tab_chapters::verify_atom_recursively(EbmlElement *e) {
     wxMessageBox(wxString::Format(Z("The chapter '%s' is missing its language."), label.c_str()), Z("Chapter verification error"), wxCENTER | wxOK | wxICON_ERROR);
     return false;
   }
-  lang = string(*language);
+  lang = std::string(*language);
   if ((0 == lang.size()) || !is_valid_iso639_2_code(lang.c_str())) {
     wxMessageBox(wxString::Format(Z("The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."),
                                   wxU(lang.c_str()).c_str(), label.c_str()),
@@ -850,7 +849,7 @@ tab_chapters::on_add_chapter(wxCommandEvent &evt) {
   EbmlMaster *m;
   chapter_node_data_c *d, *pd;
   wxString s;
-  vector<EbmlElement *> tmpvec;
+  std::vector<EbmlElement *> tmpvec;
   uint32_t start, i;
 
   id = tc_chapters->GetSelection();
@@ -1242,7 +1241,7 @@ tab_chapters::on_chapter_name_changed(wxCommandEvent &evt) {
 void
 tab_chapters::on_set_default_values(wxCommandEvent &evt) {
   wxString language;
-  string cctld;
+  std::string cctld;
 
   chapter_values_dlg dlg(this, true, wxU(g_default_chapter_language.c_str()),
                          wxU(g_default_chapter_country.c_str()));
@@ -1489,7 +1488,7 @@ tab_chapters::copy_values(wxTreeItemId id) {
   KaxChapterAtom *chapter;
   EbmlElement *e;
   int64_t ts_start, ts_end;
-  vector<string> l_codes, c_codes;
+  std::vector<std::string> l_codes, c_codes;
   wxString s;
   uint32_t i;
 
@@ -1854,7 +1853,7 @@ tab_chapters::set_display_values(KaxChapterDisplay *display) {
 
   clanguage = FINDFIRST(display, KaxChapterLanguage);
   if (clanguage != NULL)
-    language = wxU(string(*static_cast<EbmlString *>(clanguage)).c_str());
+    language = wxU(std::string(*static_cast<EbmlString *>(clanguage)).c_str());
   else
     language = wxT("eng");
   for (i = 0; i < sorted_iso_codes.Count(); i++)
@@ -1877,7 +1876,7 @@ tab_chapters::set_display_values(KaxChapterDisplay *display) {
 
   ccountry = FINDFIRST(display, KaxChapterCountry);
   if (ccountry != NULL)
-    cob_country_code->SetValue(wxU(string(*static_cast<EbmlString *>
+    cob_country_code->SetValue(wxU(std::string(*static_cast<EbmlString *>
                                           (ccountry)).c_str()));
   else
     cob_country_code->SetValue(wxEmptyString);
@@ -1888,7 +1887,7 @@ tab_chapters::set_display_values(KaxChapterDisplay *display) {
 int64_t
 tab_chapters::parse_time(wxString s) {
   int64_t nsecs;
-  string utf8s;
+  std::string utf8s;
   const char *c;
 
   utf8s = wxMB(s);

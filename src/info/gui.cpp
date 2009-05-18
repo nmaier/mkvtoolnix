@@ -48,8 +48,8 @@ enum {
 
 bool
 mi_app::OnInit() {
-  string initial_file;
-  vector<string> args;
+  std::string initial_file;
+  std::vector<std::string> args;
 
   setup();
 
@@ -57,7 +57,7 @@ mi_app::OnInit() {
   int i;
 
   for (i = 1; i < argc; i++)
-    args.push_back(string(wxMB(wxString(argv[i]))));
+    args.push_back(std::string(wxMB(wxString(argv[i]))));
 #else
   args = command_line_utf8(argc, argv);
 #endif
@@ -146,7 +146,7 @@ mi_frame::mi_frame(const wxString &title,
 
 void
 mi_frame::open_file(wxString file_name) {
-  string cfile_name;
+  std::string cfile_name;
 
   cfile_name = wxMB(file_name);
   tree->DeleteAllItems();

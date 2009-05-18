@@ -481,7 +481,7 @@ vc1::es_parser_c::flush_frame() {
 void
 vc1::es_parser_c::combine_extra_data_with_packet() {
   int extra_size = 0;
-  deque<memory_cptr>::iterator it;
+  std::deque<memory_cptr>::iterator it;
 
   mxforeach(it, m_pre_frame_extra_data)
     extra_size += (*it)->get_size();
