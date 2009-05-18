@@ -115,8 +115,7 @@ typedef unsigned char boolean;
 #define Tagix02 MAKEFOURCC('i','x','0','2')
 #define Tagix03 MAKEFOURCC('i','x','0','3')
 
-/* Build a std::string from a FOURCC number
-   (s must have room for at least 5 chars) */
+// Build a string from a FOURCC number (s must have room for at least 5 chars)
 
 static void FOURCC2Str(FOURCC fcc, char* s)
 {
@@ -475,8 +474,8 @@ static boolean ProcessChunk(int fd, off_t filepos, off_t filesize,
 			    FOURCC DesiredTag, int RekDepth,
 			    DWORD* chunksize)
 {
-    char   tagstr[5];          /* FOURCC of chunk converted to std::string */
-    FOURCC chunkid;            /* read FOURCC of chunk                */
+    char   tagstr[5];   /* FOURCC of chunk converted to string */
+    FOURCC chunkid;     /* read FOURCC of chunk                */
     off_t  datapos;     /* position of data in file to process */
     
     off_t tt;
@@ -535,7 +534,7 @@ static boolean ProcessChunk(int fd, off_t filepos, off_t filesize,
 	
 	DWORD  datashowed=0;
 	FOURCC formtype;         /* format of chunk                     */
-	char   formstr[5];       /* format of chunk converted to std::string */
+	char   formstr[5];       /* format of chunk converted to string */
 	DWORD  subchunksize=0;   /* size of a read subchunk             */
 	
 	if (!read(fd, &formtype, sizeof(FOURCC))) printf("ERROR\n");     /* read the form type */
@@ -719,7 +718,7 @@ static boolean DumpChunk(int fd, off_t filepos, off_t filesize,
 			 FOURCC DesiredTag, int RekDepth,
 			 DWORD* chunksize, int mode)
 {
-    char   tagstr[5];          /* FOURCC of chunk converted to std::string */
+    char   tagstr[5];          /* FOURCC of chunk converted to string */
     FOURCC chunkid;            /* read FOURCC of chunk                */
     off_t  datapos;            /* position of data in file to process */
     
@@ -764,7 +763,7 @@ static boolean DumpChunk(int fd, off_t filepos, off_t filesize,
 	
       DWORD datashowed;
       FOURCC formtype;       /* format of chunk                     */
-      char   formstr[5];     /* format of chunk converted to std::string */
+      char   formstr[5];     /* format of chunk converted to string */
       DWORD  subchunksize;   /* size of a read subchunk             */
       
       xio_read(fd, &formtype,sizeof(FOURCC));    /* read the form type */

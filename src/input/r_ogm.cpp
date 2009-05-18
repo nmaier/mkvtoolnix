@@ -540,11 +540,11 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
   if (!dmx)
     dmx = new ogm_demuxer_c(this);
 
-  std::string type   = dmx->get_type();
+  std::string type = dmx->get_type();
 
-  dmx->serialno = ogg_page_serialno(og);
-  dmx->track_id = sdemuxers.size();
-  dmx->in_use   = (type != "unknown") && demuxing_requested(type[0], dmx->track_id);
+  dmx->serialno    = ogg_page_serialno(og);
+  dmx->track_id    = sdemuxers.size();
+  dmx->in_use      = (type != "unknown") && demuxing_requested(type[0], dmx->track_id);
 
   dmx->packet_data.push_back(memory_cptr(new memory_c((unsigned char *)safememdup(op.packet, op.bytes), op.bytes, true)));
 
@@ -759,7 +759,7 @@ ogm_reader_c::handle_stream_comments() {
         else {
 
           std::string lang = comment[1];
-          int pos1    = lang.find("[");
+          int pos1         = lang.find("[");
           while (0 <= pos1) {
             int pos2 = lang.find("]", pos1);
             if (-1 == pos2)

@@ -44,7 +44,7 @@ ra_packetizer_c::~ra_packetizer_c() {
 void
 ra_packetizer_c::set_headers() {
   std::string codec_id = (boost::format("A_REAL/%1%%2%%3%%4%")
-                     % (char)(m_fourcc >> 24) % (char)((m_fourcc >> 16) & 0xff) % (char)((m_fourcc >> 8) & 0xff) % (char)(m_fourcc & 0xff)).str();
+                          % (char)(m_fourcc >> 24) % (char)((m_fourcc >> 16) & 0xff) % (char)((m_fourcc >> 8) & 0xff) % (char)(m_fourcc & 0xff)).str();
   set_codec_id(upcase(codec_id));
   set_audio_sampling_freq((float)m_samples_per_sec);
   set_audio_channels(m_channels);

@@ -511,7 +511,7 @@ kax_reader_c::handle_attachments(mm_io_c *io,
       if (EbmlId(*att) == KaxAttached::ClassInfos.GlobalId) {
         UTFstring name        = L"";
         UTFstring description = L"";
-        std::string mime_type      =  "";
+        std::string mime_type =  "";
         int64_t size          = -1;
         int64_t id            = -1;
         unsigned char *data   = NULL;
@@ -1850,7 +1850,7 @@ kax_reader_c::read(generic_packetizer_c *requested_ptzr,
 
             if ((-1 != block_track->ptzr) && block_track->passthrough) {
               // The handling for passthrough is a bit different. We don't have
-              // any special cases, e.g. 0 terminating a std::string for the subs
+              // any special cases, e.g. 0 terminating a string for the subs
               // and stuff. Just pass everything through as it is.
               int i;
               for (i = 0; i < (int)block_simple->NumberFrames(); i++) {
@@ -1953,7 +1953,7 @@ kax_reader_c::read(generic_packetizer_c *requested_ptzr,
 
             if ((-1 != block_track->ptzr) && block_track->passthrough) {
               // The handling for passthrough is a bit different. We don't have
-              // any special cases, e.g. 0 terminating a std::string for the subs
+              // any special cases, e.g. 0 terminating a string for the subs
               // and stuff. Just pass everything through as it is.
               if (bref_found)
                 block_bref += last_timecode;

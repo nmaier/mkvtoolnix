@@ -147,7 +147,7 @@ srt_parser_c::parse() {
         m_coordinates_warning_shown = true;
       }
 
-      // The previous entry is done now. Append it to the std::list of subtitles.
+      // The previous entry is done now. Append it to the list of subtitles.
       if (!subtitles.empty()) {
         strip_back(subtitles, true);
         add(start, end, subtitles.c_str());

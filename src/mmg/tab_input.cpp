@@ -630,7 +630,7 @@ tab_input::add_file(const wxString &file_name,
     label.Printf(wxU(format.c_str()), t->appending ? wxT("++> ") : wxEmptyString, t->ctype.c_str(), t->id, type.c_str(), name.c_str());
 
     // Look for a place to insert this new track. If the file is "added" then
-    // the new track is simply appended to the std::list of existing tracks.
+    // the new track is simply appended to the list of existing tracks.
     // If the file is "appended" then it should be put to the end of the
     // chain of tracks being appended. The n'th track from this new file
     // should be appended to the n'th track of the "old" file this new file is

@@ -387,7 +387,7 @@ mpeg4::p2::parse_config_data(const unsigned char *buffer,
 
 /** \brief Check whether or not a FourCC refers to MPEG-4 part 2 video
 
-   \param fourcc A pointer to a std::string with four characters
+   \param fourcc A pointer to a string with four characters
 
    \return true if the FourCC refers to a MPEG-4 part 2 video codec.
 */
@@ -408,7 +408,7 @@ mpeg4::p2::is_fourcc(const void *fourcc) {
 /** \brief Check whether or not a FourCC refers to MPEG-4 part 2
     version 3 video
 
-   \param fourcc A pointer to a std::string with four characters
+   \param fourcc A pointer to a string with four characters
 
    \return true if the FourCC refers to a MPEG-4 part 2 video codec.
 */

@@ -607,14 +607,14 @@ is_popular_language_code(const char *code) {
     !strcmp(code, "swe");   // Swedish
 }
 
-/** \brief Map a std::string to a ISO 639-2 language code
+/** \brief Map a string to a ISO 639-2 language code
 
    Searches the array of ISO 639 codes. If \c s is a valid ISO 639-2
    code, a valid ISO 639-1 code, a valid terminology abbreviation
    for an ISO 639-2 code or the English name for an ISO 639-2 code
    then it returns the index of that entry in the \c iso639_languages array.
 
-   \param c The std::string to look for in the array of ISO 639 codes.
+   \param c The string to look for in the array of ISO 639 codes.
    \return The index into the \c iso639_languages array if found or
      \c -1 if no such entry was found.
 */

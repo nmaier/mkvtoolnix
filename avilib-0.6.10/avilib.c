@@ -155,7 +155,7 @@ static void short2str(unsigned char *dst, int32_t n)
 }
 #endif
 
-/* Convert a std::string of 4 or 2 bytes to a number,
+/* Convert a string of 4 or 2 bytes to a number,
    also working on big endian machines */
 
 static uint64_t str2ullong(void *st)
@@ -1129,7 +1129,7 @@ static int avi_parse_comments (int fd, char *buf, int space_left)
 	    // write length + '\0'
 	    long2str(buf+len, k+1); len += 4;
 
-	    // write comment std::string
+	    // write comment string
 	    memcpy (buf+len, d, k);
 	    // must be null terminated
 	    *(buf+len+k+1) = '\0';

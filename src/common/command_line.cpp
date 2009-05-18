@@ -148,12 +148,12 @@ std::string usage_text, version_info;
 
 /** Handle command line arguments common to all programs
 
-   Iterates over the std::list of command line arguments and handles the ones
+   Iterates over the list of command line arguments and handles the ones
    that are common to all programs. These include --output-charset,
    --redirect-output, --help, --version and --verbose along with their
    short counterparts.
 
-   \param args A std::vector of strings containing the command line arguments.
+   \param args A vector of strings containing the command line arguments.
      The ones that have been handled are removed from the vector.
    \param redirect_output_short The name of the short option that is
      recognized for --redirect-output. If left empty then no short

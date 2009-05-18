@@ -18,9 +18,7 @@
 #include <string>
 
 
-std::string MTX_DLL_API base64_encode(const unsigned char *src, int src_len,
-                                 bool line_breaks = false,
-                                 int max_line_len = 72);
+std::string MTX_DLL_API base64_encode(const unsigned char *src, int src_len, bool line_breaks = false, int max_line_len = 72);
 int MTX_DLL_API base64_decode(const std::string &src, unsigned char *dst);
 
 #endif // __MTX_COMMON_BASE64_H

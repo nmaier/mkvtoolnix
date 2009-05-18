@@ -38,7 +38,7 @@
 using namespace libebml;
 
 /*
-   UTFstring <-> C std::string conversion
+   UTFstring <-> C string conversion
 */
 
 static int

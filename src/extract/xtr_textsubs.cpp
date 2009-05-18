@@ -125,12 +125,12 @@ xtr_ssa_c::create_file(xtr_base_c *master,
   else if ((2 < priv_size) && (0xfe == pd[0]) && (0xff == pd[1]))
     bom_len = 2;
 
-  pd           += bom_len;
-  priv_size    -= bom_len;
+  pd                += bom_len;
+  priv_size         -= bom_len;
 
-  char *s       = new char[priv_size + 1];
+  char *s            = new char[priv_size + 1];
   memcpy(s, pd, priv_size);
-  s[priv_size]  = 0;
+  s[priv_size]       = 0;
   std::string sconv  = s;
   delete []s;
 
@@ -321,7 +321,7 @@ xtr_usf_c::create_file(xtr_base_c *master,
     try {
       std::string end_tag           = "</USFSubtitles>";
       std::string codec_private_mod = m_codec_private;
-      int end_tag_pos          = codec_private_mod.find(end_tag);
+      int end_tag_pos               = codec_private_mod.find(end_tag);
       if (0 <= end_tag_pos)
         codec_private_mod.erase(end_tag_pos, end_tag.length());
 

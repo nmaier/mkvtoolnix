@@ -378,9 +378,9 @@ read_master(EbmlMaster *m,
 std::string
 format_binary(EbmlBinary &bin,
               int max_len = 10) {
-  int len         = std::max(max_len, (int)bin.GetSize());
-  const binary *b = bin.GetBuffer();
-  std::string result   = (boost::format(Y("length %1%, data: %2%")) % bin.GetSize() % to_hex(b, std::max(max_len, (int)bin.GetSize()))).str();
+  int len            = std::max(max_len, (int)bin.GetSize());
+  const binary *b    = bin.GetBuffer();
+  std::string result = (boost::format(Y("length %1%, data: %2%")) % bin.GetSize() % to_hex(b, std::max(max_len, (int)bin.GetSize()))).str();
 
   if (len < bin.GetSize())
     result += "...";
@@ -834,14 +834,14 @@ def_handle(tracks) {
       show_element(l2, 2, Y("A track"));
 
       std::vector<std::string> summary;
-      char    kax_track_type   = '?';
+      char kax_track_type      = '?';
       int64_t kax_track_number = -1;
-      std::string  kax_codec_id;
-      std::string  fourcc_buffer;
-      bool    ms_compat        = false;
-
-      EbmlMaster *m2 = static_cast<EbmlMaster *>(l2);
+      bool ms_compat           = false;
+      EbmlMaster *m2           = static_cast<EbmlMaster *>(l2);
+      std::string kax_codec_id;
+      std::string fourcc_buffer;
       int i2;
+
       for (i2 = 0; i2 < m2->ListSize(); i2++) {
         l3 = (*m2)[i2];
 

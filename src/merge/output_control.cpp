@@ -185,7 +185,7 @@ int g_split_max_num_files                   = 65535;
 
 append_mode_e g_append_mode                 = APPEND_MODE_FILE_BASED;
 
-std::string g_default_language                   = "und";
+std::string g_default_language              = "und";
 
 bitvalue_cptr g_seguid_link_previous;
 bitvalue_cptr g_seguid_link_next;
@@ -212,10 +212,10 @@ static int s_display_files_done           = 0;
 static int s_display_path_length          = 1;
 static generic_reader_c *s_display_reader = NULL;
 
-/** \brief Add a segment family UID to the std::list if it doesn't exist already.
+/** \brief Add a segment family UID to the list if it doesn't exist already.
 
   \param family This segment family element is converted to a 128 bit
-    element which is added to the std::list of segment family UIDs.
+    element which is added to the list of segment family UIDs.
 */
 bool
 family_uids_c::add_family_uid(const KaxSegmentFamily &family) {
@@ -442,7 +442,7 @@ display_progress() {
   s_previous_progress_on = current_time;
 }
 
-/** \brief Add some tags to the std::list of all tags
+/** \brief Add some tags to the list of all tags
 */
 void
 add_tags(KaxTag *tags) {
@@ -488,7 +488,7 @@ add_attachment(attachment_t attachment) {
   return attachment.id;
 }
 
-/** \brief Add a packetizer to the std::list of packetizers
+/** \brief Add a packetizer to the list of packetizers
 */
 void
 add_packetizer_globally(generic_packetizer_c *packetizer) {
@@ -936,8 +936,8 @@ check_append_mapping() {
 
     else if (CAN_CONNECT_YES != result) {
       std::string reason(  result == CAN_CONNECT_NO_FORMAT     ? Y("The formats do not match.")
-                    : result == CAN_CONNECT_NO_PARAMETERS ? Y("The track parameters do not match.")
-                    :                                       Y("The reason is unknown."));
+                         : result == CAN_CONNECT_NO_PARAMETERS ? Y("The track parameters do not match.")
+                         :                                       Y("The reason is unknown."));
       mxerror(boost::format(Y("The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"))
               % amap->src_track_id % g_files[amap->src_file_id].name
               % amap->dst_track_id % g_files[amap->dst_file_id].name

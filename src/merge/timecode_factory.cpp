@@ -293,8 +293,7 @@ timecode_factory_v3_c::parse(mm_io_c &in) {
   std::vector<timecode_duration_c>::iterator iit;
   std::vector<timecode_duration_c>::const_iterator pit;
 
-  std::string err_msg_assume = (boost::format(Y("The timecode file '%1%' does not contain a valid 'Assume' line with the default number of frames per second.\n"))
-                           % m_file_name).str();
+  std::string err_msg_assume = (boost::format(Y("The timecode file '%1%' does not contain a valid 'Assume' line with the default number of frames per second.\n")) % m_file_name).str();
 
   int line_no = 1;
   do {

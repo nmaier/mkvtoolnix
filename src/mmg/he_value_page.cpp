@@ -68,7 +68,7 @@ he_value_page_c::init() {
   siz_fg->AddSpacer(5);
 
   wxString type
-    = vt_ascii_string     == m_value_type ? Z("ASCII std::string (no special chars like\nUmlaute etc)")
+    = vt_ascii_string     == m_value_type ? Z("ASCII string (no special chars like\nUmlaute etc)")
     : vt_string           == m_value_type ? Z("String")
     : vt_unsigned_integer == m_value_type ? Z("Unsigned integer")
     : vt_signed_integer   == m_value_type ? Z("Signed integer")

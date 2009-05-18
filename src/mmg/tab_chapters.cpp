@@ -1876,8 +1876,7 @@ tab_chapters::set_display_values(KaxChapterDisplay *display) {
 
   ccountry = FINDFIRST(display, KaxChapterCountry);
   if (ccountry != NULL)
-    cob_country_code->SetValue(wxU(std::string(*static_cast<EbmlString *>
-                                          (ccountry)).c_str()));
+    cob_country_code->SetValue(wxU(std::string(*static_cast<EbmlString *>(ccountry)).c_str()));
   else
     cob_country_code->SetValue(wxEmptyString);
 

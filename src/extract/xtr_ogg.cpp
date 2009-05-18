@@ -276,15 +276,15 @@ xtr_oggvorbis_c::create_file(xtr_base_c *master,
 // ------------------------------------------------------------------------
 
 xtr_oggkate_c::xtr_oggkate_c(const std::string &codec_id,
-                                 int64_t tid,
-                                 track_spec_t &tspec)
-  : xtr_oggbase_c(codec_id, tid, tspec) 
+                             int64_t tid,
+                             track_spec_t &tspec)
+  : xtr_oggbase_c(codec_id, tid, tspec)
 {
 }
 
 void
 xtr_oggkate_c::create_file(xtr_base_c *master,
-                             KaxTrackEntry &track) {
+                           KaxTrackEntry &track) {
   create_standard_file(master, track);
 }
 

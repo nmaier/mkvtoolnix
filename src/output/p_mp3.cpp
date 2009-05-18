@@ -129,8 +129,8 @@ mp3_packetizer_c::get_mp3_packet(mp3_header_t *mp3header) {
   m_bytes_skipped = 0;
 
   if (0 == m_packetno) {
-    m_samples_per_frame = mp3header->samples_per_channel;
-    std::string codec_id     = MKV_A_MP3;
+    m_samples_per_frame  = mp3header->samples_per_channel;
+    std::string codec_id = MKV_A_MP3;
     codec_id[codec_id.length() - 1] = (char)(mp3header->layer + '0');
     set_codec_id(codec_id.c_str());
 

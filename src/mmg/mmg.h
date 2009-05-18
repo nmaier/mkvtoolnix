@@ -50,7 +50,7 @@
 // Version 1: base settings
 // Version 2: Added in v1.5.0:
 //   Added splitting by timecodes. The old boolean "split_by_size" was
-//   replaced by new std::string "split_mode".
+//   replaced by new string "split_mode".
 // Version 3: Added after v2.4.2:
 //   The per-file boolean "no attachments" was removed and replaced by
 //   the handling of individual attached files.

@@ -141,7 +141,7 @@ set_usage() {
   usage_text +=   "\n";
   usage_text += Y(" General output control (advanced global options):\n");
   usage_text += Y("  --track-order <FileID1:TID1,FileID2:TID2,FileID3:TID3,...>\n"
-                  "                           A comma separated std::list of both file IDs\n"
+                  "                           A comma separated list of both file IDs\n"
                   "                           and track IDs that controls the order of the\n"
                   "                           tracks in the output file.\n");
   usage_text += Y("  --cluster-length <n[ms]> Put at most n data blocks into each cluster.\n"
@@ -154,7 +154,7 @@ set_usage() {
   usage_text += Y("  --disable-lacing         Do not Use lacing.\n");
   usage_text += Y("  --enable-durations       Enable block durations for all blocks.\n");
   usage_text += Y("  --append-to <SFID1:STID1:DFID1:DTID1,SFID2:STID2:DFID2:DTID2,...>\n"
-                  "                           A comma separated std::list of file and track IDs\n"
+                  "                           A comma separated list of file and track IDs\n"
                   "                           that controls which track of a file is\n"
                   "                           appended to another track of the preceding\n"
                   "                           file.\n");
@@ -502,9 +502,9 @@ parse_number_with_unit(const std::string &s,
     return (int64_t)(multiplier * d_value);
 }
 
-/** \brief Parse a std::string for a boolean value
+/** \brief Parse a string for a boolean value
 
-   Interpretes the std::string \c orig as a boolean value. Accepted
+   Interpretes the string \c orig as a boolean value. Accepted
    is "true", "yes", "1" as boolean true and "false", "no", "0"
    as boolean false.
 */
@@ -519,7 +519,7 @@ parse_bool(const std::string &orig) {
   throw false;
 }
 
-/** \brief Parse tags and add them to the std::list of all tags
+/** \brief Parse tags and add them to the list of all tags
 
    Also tests the tags for missing mandatory elements.
 */
@@ -546,7 +546,7 @@ parse_and_add_tags(const std::string &file_name) {
 
 /** \brief Parse the \c --xtracks arguments
 
-   The argument is a comma separated std::list of track IDs.
+   The argument is a comma separated list of track IDs.
 */
 static void
 parse_arg_tracks(std::string s,
@@ -641,7 +641,7 @@ parse_arg_aspect_ratio(const std::string &s,
                        track_info_c &ti) {
   display_properties_t dprop;
 
-  std::string msg           = is_factor ? Y("Aspect ratio factor") : Y("Aspect ratio");
+  std::string msg      = is_factor ? Y("Aspect ratio factor") : Y("Aspect ratio");
 
   dprop.ar_factor      = is_factor;
   std::vector<std::string> parts = split(s, ":", 2);
@@ -718,7 +718,7 @@ parse_arg_cropping(const std::string &s,
                    track_info_c &ti) {
   pixel_crop_t crop;
 
-  std::string err_msg   = Y("Cropping parameters: not given in the form <TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 (argument was '%1%').\n");
+  std::string err_msg        = Y("Cropping parameters: not given in the form <TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 (argument was '%1%').\n");
 
   std::vector<std::string> v = split(s, ":");
   if (v.size() != 2)
@@ -750,7 +750,7 @@ parse_arg_stereo_mode(const std::string &s,
     "none", "right", "left", "both", NULL
   };
   std::string errmsg = Y("Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and 3 "
-                    "or one of the keywords 'none', 'right', 'left', 'both' (argument was '%1%').\n");
+                         "or one of the keywords 'none', 'right', 'left', 'both' (argument was '%1%').\n");
 
   std::vector<std::string> v = split(s, ":");
   if (v.size() != 2)
@@ -941,9 +941,9 @@ parse_arg_default_track(const std::string &s,
 static void
 parse_arg_forced_track(const std::string &s,
                         track_info_c &ti) {
-  bool is_forced       = true;
+  bool is_forced                 = true;
   std::vector<std::string> parts = split(s, ":", 2);
-  int64_t id           = 0;
+  int64_t id                     = 0;
 
   strip(parts);
   if (!parse_int(parts[0], id))
@@ -1064,7 +1064,7 @@ parse_arg_language(const std::string &s,
     int index = map_to_iso639_2_code(parts[1].c_str());
     if (-1 == index)
       mxerror(boost::format(Y("'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code. "
-                              "See 'mkvmerge --list-languages' for a std::list of all languages and their respective ISO639-2 codes.\n")) % parts[1]);
+                              "See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n")) % parts[1]);
 
     parts[1] = iso639_languages[index].iso639_2_code;
   }
@@ -1127,7 +1127,7 @@ static void
 parse_arg_fourcc(const std::string &s,
                  const std::string &opt,
                  track_info_c &ti) {
-  std::string orig          = s;
+  std::string orig               = s;
   std::vector<std::string> parts = split(s, ":", 2);
   strip(parts);
 
@@ -1146,7 +1146,7 @@ parse_arg_fourcc(const std::string &s,
 
 /** \brief Parse the argument for \c --track-order
 
-   The argument must be a comma separated std::list of track IDs.
+   The argument must be a comma separated list of track IDs.
 */
 static void
 parse_arg_track_order(const std::string &s) {
@@ -1421,7 +1421,7 @@ parse_arg_chapter_language(const std::string &arg) {
   int i = map_to_iso639_2_code(arg.c_str());
   if (-1 == i)
     mxerror(boost::format(Y("'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code in '--chapter-language %1%'. "
-                            "See 'mkvmerge --list-languages' for a std::list of all languages and their respective ISO639-2 codes.\n")) % arg);
+                            "See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n")) % arg);
 
   g_chapter_language = iso639_languages[i].iso639_2_code;
 }
@@ -1488,7 +1488,7 @@ parse_arg_default_language(const std::string &arg) {
   int i = map_to_iso639_2_code(arg.c_str());
   if (-1 == i)
     mxerror(boost::format(Y("'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code in '--default-language %1%'. "
-                            "See 'mkvmerge --list-languages' for a std::list of all languages and their respective ISO639-2 codes.\n")) % arg);
+                            "See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n")) % arg);
 
   g_default_language = iso639_languages[i].iso639_2_code;
 }

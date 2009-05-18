@@ -50,7 +50,7 @@ tab_global::tab_global(wxWindow *parent):
   siz_split = new wxStaticBoxSizer(new wxStaticBox(this, -1, Z("Splitting")), wxVERTICAL);
   cb_split = new wxCheckBox(this, ID_CB_SPLIT, Z("Enable splitting..."));
   cb_split->SetToolTip(TIP("Enables splitting of the output into more than one file. You can split after a given size, "
-                           "after a given amount of time has passed in each file or after a std::list of timecodes."));
+                           "after a given amount of time has passed in each file or after a list of timecodes."));
   siz_split->Add(cb_split, 0, wxLEFT | wxTOP | wxBOTTOM, 5);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);

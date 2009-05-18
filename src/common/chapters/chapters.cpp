@@ -465,7 +465,7 @@ get_chapter_uid(KaxChapterAtom &atom) {
    mandatory. This function makes sure that they all exist by adding them
    with their default values if they're missing. It works recursively. See
    <a href="http://www.matroska.org/technical/specs/chapters/index.html">
-   the Matroska chapter specs</a> for a std::list or mandatory elements.
+   the Matroska chapter specs</a> for a list or mandatory elements.
 
    The parameters are checked for validity.
 

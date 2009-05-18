@@ -669,7 +669,7 @@ void rmff_release_frame(rmff_frame_t *frame);
 
 /** \brief Creates a new track for a file.
 
-  The track will be added to the std::list of tracks in this file.
+  The track will be added to the list of tracks in this file.
   \a librmff will allocate a track ID that is unique in this file.
 
   \param file The file the track will be added to.

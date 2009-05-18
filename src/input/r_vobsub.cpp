@@ -72,7 +72,7 @@ vobsub_reader_c::vobsub_reader_c(track_info_c &_ti)
   }
 
   std::string sub_name = ti.fname;
-  int len         = sub_name.rfind(".");
+  int len              = sub_name.rfind(".");
   if (0 <= len)
     sub_name.erase(len);
   sub_name += ".sub";
