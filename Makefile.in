@@ -184,6 +184,7 @@ ALL_SOURCES=$(wildcard avilib-0.6.10/*.c) $(wildcard avilib-0.6.10/*.cpp) \
 		$(wildcard src/mmg/*.cpp) $(wildcard src/extract/*.cpp) \
 		$(wildcard src/merge/*.cpp) $(wildcard src/info/*.cpp) \
 		$(wildcard src/mpegparser/*.cpp) \
+		$(wildcard src/common/*/*.cpp) \
 		$(patsubst %.ui,%.h,$(UIFILES))
 
 ALL_HEADERS=$(wildcard avilib-0.6.10/*.h) $(wildcard librmff/*.h) \
@@ -191,7 +192,7 @@ ALL_HEADERS=$(wildcard avilib-0.6.10/*.h) $(wildcard librmff/*.h) \
 		$(wildcard src/output/*.h) $(wildcard src/common/*.h) \
 		$(wildcard src/mmg/*.h) $(wildcard src/extract/*.h) \
 		$(wildcard src/merge/*.h) $(wildcard src/info/*.h) \
-		$(wildcard src/mpegparser/*.h)
+		$(wildcard src/mpegparser/*.h) $(wildcard src/common/*/*.h)
 
 ifeq ($(V),1)
   Q =
