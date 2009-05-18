@@ -17,7 +17,7 @@
 
 #include "common/common.h"
 #include "common/locale.h"
-#include "common/qtcommon.h"
+#include "common/qt.h"
 #include "info/qt_ui.h"
 #include "info/mkvinfo.h"
 

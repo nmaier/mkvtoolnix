@@ -26,7 +26,7 @@
 
 #include "common/common.h"
 #include "common/locale_string.h"
-#include "common/string_editing.h"
+#include "common/strings/editing.h"
 #include "common/translation.h"
 
 #if defined(SYS_WINDOWS)

@@ -45,7 +45,7 @@
 #include <matroska/KaxTag.h>
 #include <matroska/KaxTags.h>
 
-#include "common/chapters.h"
+#include "common/chapters/chapters.h"
 #include "common/command_line.h"
 #include "common/common.h"
 #include "common/ebml.h"
@@ -55,9 +55,9 @@
 #include "common/locale.h"
 #include "common/mm_io.h"
 #include "common/segmentinfo.h"
-#include "common/string_parsing.h"
-#include "common/tag_common.h"
-#include "common/tagparser.h"
+#include "common/strings/parsing.h"
+#include "common/tags/tags.h"
+#include "common/tags/parser.h"
 #include "common/unique_numbers.h"
 #include "merge/cluster_helper.h"
 #include "merge/mkvmerge.h"

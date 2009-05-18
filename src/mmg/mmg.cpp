@@ -33,14 +33,14 @@
 #include <wx/statline.h>
 #include <wx/strconv.h>
 
-#include "common/chapters.h"
+#include "common/chapters/chapters.h"
 #include "common/command_line.h"
 #include "common/common.h"
 #include "common/ebml.h"
 #include "common/extern_data.h"
 #include "common/locale.h"
-#include "common/string_editing.h"
-#include "common/string_formatting.h"
+#include "common/strings/editing.h"
+#include "common/strings/formatting.h"
 #include "mmg/header_editor_frame.h"
 #include "mmg/jobs.h"
 #include "merge/mkvmerge.h"
@@ -54,8 +54,8 @@
 #include "mmg/tab_input.h"
 #include "mmg/tab_global.h"
 #include "common/translation.h"
-#include "common/xml_element_mapping.h"
-#include "common/wxcommon.h"
+#include "common/xml/element_mapping.h"
+#include "common/wx.h"
 
 mmg_app *app;
 mmg_dialog *mdlg;

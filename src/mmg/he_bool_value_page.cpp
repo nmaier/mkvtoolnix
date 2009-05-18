@@ -18,7 +18,7 @@
 #include <ebml/EbmlUInteger.h>
 
 #include "mmg/he_bool_value_page.h"
-#include "common/wxcommon.h"
+#include "common/wx.h"
 
 using namespace libebml;
 

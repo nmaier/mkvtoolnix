@@ -20,11 +20,11 @@
 #include <string>
 #include <vector>
 
-#include "common/chapters.h"
+#include "common/chapters/chapters.h"
 #include "common/common.h"
 #include "common/ebml.h"
 #include "common/matroska.h"
-#include "common/tag_common.h"
+#include "common/tags/tags.h"
 
 #include <matroska/KaxTags.h>
 #include <matroska/KaxTag.h>

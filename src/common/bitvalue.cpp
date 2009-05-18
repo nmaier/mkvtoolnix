@@ -17,7 +17,7 @@
 #include "common/error.h"
 #include "common/memory.h"
 #include "common/random.h"
-#include "common/string_editing.h"
+#include "common/strings/editing.h"
 
 bitvalue_c::bitvalue_c(int bitsize) {
   assert((0 < bitsize) && (0 == (bitsize % 8)));

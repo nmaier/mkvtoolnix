@@ -34,7 +34,7 @@
 #include "common/memory.h"
 #include "common/mm_io.h"
 #include "common/smart_pointers.h"
-#include "common/string_editing.h"
+#include "common/strings/editing.h"
 #include "merge/packet.h"
 #include "merge/timecode_factory.h"
 

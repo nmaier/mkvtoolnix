@@ -24,7 +24,7 @@ extern "C" {
 #include "common/common.h"
 #include "common/extern_data.h"
 #include "common/mm_io.h"
-#include "common/string_editing.h"
+#include "common/strings/editing.h"
 
 #ifdef SYS_WINDOWS
 # include "os_windows.h"

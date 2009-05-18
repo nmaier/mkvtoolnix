@@ -22,7 +22,7 @@
 #include <vector>
 
 #include "common/common.h"
-#include "common/xml_element_mapping.h"
+#include "common/xml/element_mapping.h"
 
 namespace libebml {
   class EbmlElement;

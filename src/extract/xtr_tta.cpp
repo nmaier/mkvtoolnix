@@ -17,7 +17,7 @@
 #include "common/checksums.h"
 #include "common/ebml.h"
 #include "common/endian.h"
-#include "common/tta_common.h"
+#include "common/tta.h"
 #include "extract/xtr_tta.h"
 
 const double xtr_tta_c::ms_tta_frame_time = 1.04489795918367346939l;

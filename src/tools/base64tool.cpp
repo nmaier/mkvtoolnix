@@ -21,8 +21,8 @@
 #include "common/command_line.h"
 #include "common/common.h"
 #include "common/mm_io.h"
-#include "common/string_editing.h"
-#include "common/string_parsing.h"
+#include "common/strings/editing.h"
+#include "common/strings/parsing.h"
 
 using namespace std;
 

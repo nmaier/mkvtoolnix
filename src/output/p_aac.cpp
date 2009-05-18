@@ -13,7 +13,7 @@
 
 #include "common/os.h"
 
-#include "common/aac_common.h"
+#include "common/aac.h"
 #include "common/hacks.h"
 #include "common/matroska.h"
 #include "output/p_aac.h"

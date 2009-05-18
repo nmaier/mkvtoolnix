@@ -23,7 +23,7 @@
 #include "common/checksums.h"
 #include "common/common.h"
 #include "common/mm_io.h"
-#include "common/string_parsing.h"
+#include "common/strings/parsing.h"
 #include "common/translation.h"
 
 #include "element_info.h"

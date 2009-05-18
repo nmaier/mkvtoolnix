@@ -18,7 +18,7 @@
 #include "common/byte_buffer.h"
 
 #include "common/common.h"
-#include "common/mp3_common.h"
+#include "common/mp3.h"
 #include "common/samples_timecode_conv.h"
 #include "merge/pr_generic.h"
 

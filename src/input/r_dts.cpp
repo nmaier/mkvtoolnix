@@ -15,7 +15,7 @@
 #include "common/os.h"
 
 #include "common/common.h"
-#include "common/dts_common.h"
+#include "common/dts.h"
 #include "common/error.h"
 #include "input/r_dts.h"
 #include "output/p_dts.h"

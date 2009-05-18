@@ -16,7 +16,7 @@
 
 #include "common/bit_cursor.h"
 #include "common/common.h"
-#include "common/kate_common.h"
+#include "common/kate.h"
 
 kate_identification_header_t::kate_identification_header_t() {
   memset(this, 0, sizeof(kate_identification_header_t));

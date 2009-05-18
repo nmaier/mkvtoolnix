@@ -18,7 +18,7 @@
 
 #include "common/common.h"
 #include "merge/pr_generic.h"
-#include "common/wavpack_common.h"
+#include "common/wavpack.h"
 
 class wavpack_packetizer_c: public generic_packetizer_c {
 private:

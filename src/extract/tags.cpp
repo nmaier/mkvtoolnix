@@ -33,7 +33,7 @@ extern "C" {
 #include "common/ebml.h"
 #include "common/kax_analyzer.h"
 #include "common/mm_io.h"
-#include "common/tagwriter.h"
+#include "common/tags/writer.h"
 #include "extract/mkvextract.h"
 
 using namespace libmatroska;

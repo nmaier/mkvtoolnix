@@ -16,11 +16,11 @@
 #include <matroska/KaxConfig.h>
 #include <matroska/KaxSegment.h>
 
-#include "common/chapters.h"
+#include "common/chapters/chapters.h"
 #include "common/common.h"
 #include "common/ebml.h"
-#include "common/tagparser.h"
-#include "common/xml_element_mapping.h"
+#include "common/tags/parser.h"
+#include "common/xml/element_mapping.h"
 
 using namespace libmatroska;
 

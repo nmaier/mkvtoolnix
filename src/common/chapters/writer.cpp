@@ -19,11 +19,11 @@
 
 #include <matroska/KaxChapters.h>
 
-#include "common/chapters.h"
+#include "common/chapters/chapters.h"
 #include "common/ebml.h"
 #include "common/locale.h"
 #include "common/mm_io.h"
-#include "common/xml_element_writer.h"
+#include "common/xml/element_writer.h"
 
 using namespace libmatroska;
 

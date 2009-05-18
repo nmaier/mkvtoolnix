@@ -17,7 +17,7 @@
 
 #include "common/common.h"
 #include "common/error.h"
-#include "common/id3_common.h"
+#include "common/id3.h"
 #include "input/r_aac.h"
 #include "output/p_aac.h"
 #include "merge/output_control.h"

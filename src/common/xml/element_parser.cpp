@@ -28,9 +28,9 @@
 #include "common/ebml.h"
 #include "common/error.h"
 #include "common/mm_io.h"
-#include "common/string_editing.h"
-#include "common/string_parsing.h"
-#include "common/xml_element_parser.h"
+#include "common/strings/editing.h"
+#include "common/strings/parsing.h"
+#include "common/xml/element_parser.h"
 
 using namespace libebml;
 using namespace libmatroska;

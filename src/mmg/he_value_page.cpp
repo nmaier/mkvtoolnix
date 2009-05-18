@@ -19,7 +19,7 @@
 
 #include "common/ebml.h"
 #include "mmg/he_value_page.h"
-#include "common/wxcommon.h"
+#include "common/wx.h"
 
 he_value_page_c::he_value_page_c(header_editor_frame_c *parent,
                                  he_page_base_c *toplevel_page,

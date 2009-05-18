@@ -28,7 +28,7 @@ extern "C" {
 #include <matroska/FileKax.h>
 #include <matroska/KaxChapters.h>
 
-#include "common/chapters.h"
+#include "common/chapters/chapters.h"
 #include "common/common.h"
 #include "common/ebml.h"
 #include "common/mm_io.h"

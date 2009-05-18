@@ -65,18 +65,18 @@
 #include <matroska/KaxTrackVideo.h>
 #include <matroska/KaxVersion.h>
 
-#include "common/chapters.h"
+#include "common/chapters/chapters.h"
 #include "common/common.h"
 #include "common/ebml.h"
 #include "common/hacks.h"
 #include "common/locale.h"
 #include "common/math.h"
 #include "common/mm_io.h"
-#include "common/string_formatting.h"
-#include "common/tag_common.h"
+#include "common/strings/formatting.h"
+#include "common/tags/tags.h"
 #include "common/translation.h"
 #include "common/unique_numbers.h"
-#include "common/xml_element_mapping.h"
+#include "common/xml/element_mapping.h"
 #include "input/r_aac.h"
 #include "input/r_ac3.h"
 #include "input/r_asf.h"

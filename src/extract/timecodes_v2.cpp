@@ -37,7 +37,7 @@
 #include "common/ebml.h"
 #include "common/matroska.h"
 #include "common/mm_io.h"
-#include "common/string_formatting.h"
+#include "common/strings/formatting.h"
 #include "extract/mkvextract.h"
 #include "extract/xtr_base.h"
 

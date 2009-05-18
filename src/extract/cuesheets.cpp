@@ -27,15 +27,15 @@
 #include <matroska/KaxTag.h>
 #include <matroska/KaxTags.h>
 
-#include "common/chapters.h"
+#include "common/chapters/chapters.h"
 #include "common/common.h"
 #include "common/ebml.h"
 #include "common/kax_analyzer.h"
 #include "common/math.h"
 #include "common/matroska.h"
 #include "common/mm_io.h"
-#include "common/string_formatting.h"
-#include "common/tag_common.h"
+#include "common/strings/formatting.h"
+#include "common/tags/tags.h"
 #include "extract/mkvextract.h"
 
 using namespace libmatroska;

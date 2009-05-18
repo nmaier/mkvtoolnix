@@ -22,7 +22,7 @@
 #include "common/error.h"
 #include "common/mm_io.h"
 #include "merge/pr_generic.h"
-#include "common/wavpack_common.h"
+#include "common/wavpack.h"
 
 class wavpack_reader_c: public generic_reader_c {
 private:

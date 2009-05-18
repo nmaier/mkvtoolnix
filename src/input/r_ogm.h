@@ -25,8 +25,8 @@
 #include "common/mm_io.h"
 #include "common/common.h"
 #include "merge/pr_generic.h"
-#include "common/theora_common.h"
-#include "common/kate_common.h"
+#include "common/theora.h"
+#include "common/kate.h"
 
 enum ogm_stream_type_e {
   OGM_STREAM_TYPE_UNKNOWN,

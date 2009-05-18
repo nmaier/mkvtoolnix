@@ -25,7 +25,7 @@
 #if !defined(SYS_WINDOWS)
 #include "common/matroska.xpm"
 #endif
-#include "common/wxcommon.h"
+#include "common/wx.h"
 #include "info/mkvinfo.h"
 
 using namespace libebml;

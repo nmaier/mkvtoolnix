@@ -17,7 +17,7 @@
 #include "common/os.h"
 
 #include "merge/pr_generic.h"
-#include "common/dirac_common.h"
+#include "common/dirac.h"
 
 class dirac_es_reader_c: public generic_reader_c {
 private:

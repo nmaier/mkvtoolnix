@@ -28,7 +28,7 @@
 #include <matroska/KaxTrackVideo.h>
 
 #include "common/ebml.h"
-#include "common/wxcommon.h"
+#include "common/wx.h"
 #include "mmg/header_editor_frame.h"
 #include "mmg/he_ascii_string_value_page.h"
 #include "mmg/he_bit_value_page.h"

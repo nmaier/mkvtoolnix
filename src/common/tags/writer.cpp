@@ -14,7 +14,7 @@
 
 #include <matroska/KaxTags.h>
 
-#include "common/xml_element_writer.h"
+#include "common/xml/element_writer.h"
 
 using namespace libmatroska;
 

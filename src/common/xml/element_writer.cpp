@@ -24,10 +24,10 @@
 #include "common/ebml.h"
 #include "common/locale.h"
 #include "common/mm_io.h"
-#include "common/string_editing.h"
-#include "common/string_formatting.h"
-#include "common/xml.h"
-#include "common/xml_element_writer.h"
+#include "common/strings/editing.h"
+#include "common/strings/formatting.h"
+#include "common/xml/xml.h"
+#include "common/xml/element_writer.h"
 
 using namespace libebml;
 

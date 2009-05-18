@@ -22,7 +22,7 @@
 #include <wx/dnd.h>
 #include <wx/treectrl.h>
 
-#include "common/wxcommon.h"
+#include "common/wx.h"
 
 class mi_app: public wxApp {
 public:

@@ -14,7 +14,7 @@
 #include "common/os.h"
 
 #include "common/common.h"
-#include "common/string_formatting.h"
+#include "common/strings/formatting.h"
 
 std::string
 format_timecode(int64_t timecode,

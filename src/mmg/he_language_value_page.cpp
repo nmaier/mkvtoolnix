@@ -19,7 +19,7 @@
 
 #include "mmg/he_language_value_page.h"
 #include "mmg/mmg.h"
-#include "common/wxcommon.h"
+#include "common/wx.h"
 
 using namespace libebml;
 

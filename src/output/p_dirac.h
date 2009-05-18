@@ -18,7 +18,7 @@
 
 #include "common/common.h"
 #include "merge/pr_generic.h"
-#include "common/dirac_common.h"
+#include "common/dirac.h"
 
 class dirac_video_packetizer_c: public generic_packetizer_c {
 protected:

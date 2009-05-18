@@ -31,7 +31,7 @@
 #include "common/locale.h"
 #include "common/mm_io.h"
 #ifdef SYS_WINDOWS
-# include "common/string_editing.h"
+# include "common/strings/editing.h"
 #endif
 
 #if defined(SYS_WINDOWS)

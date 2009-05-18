@@ -17,8 +17,8 @@
 
 #include <ogg/ogg.h>
 
-#include "common/kate_common.h"
-#include "common/theora_common.h"
+#include "common/kate.h"
+#include "common/theora.h"
 #include "extract/xtr_base.h"
 
 class xtr_flac_c: public xtr_base_c {

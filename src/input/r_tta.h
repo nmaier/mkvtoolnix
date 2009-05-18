@@ -22,7 +22,7 @@
 #include "common/error.h"
 #include "common/mm_io.h"
 #include "merge/pr_generic.h"
-#include "common/tta_common.h"
+#include "common/tta.h"
 
 class tta_reader_c: public generic_reader_c {
 private:

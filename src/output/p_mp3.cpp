@@ -14,7 +14,7 @@
 #include "common/os.h"
 
 #include "common/matroska.h"
-#include "common/mp3_common.h"
+#include "common/mp3.h"
 #include "merge/output_control.h"
 #include "output/p_mp3.h"
 

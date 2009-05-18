@@ -16,7 +16,7 @@
 
 #include "common/bit_cursor.h"
 #include "common/common.h"
-#include "common/aac_common.h"
+#include "common/aac.h"
 #include "common/matroska.h"
 
 const int g_aac_sampling_freq[16] = {96000, 88200, 64000, 48000, 44100, 32000,

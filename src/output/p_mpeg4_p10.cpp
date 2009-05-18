@@ -19,7 +19,7 @@
 #include "common/math.h"
 #include "common/matroska.h"
 #include "common/mpeg4_p10.h"
-#include "common/string_formatting.h"
+#include "common/strings/formatting.h"
 #include "merge/output_control.h"
 #include "output/p_mpeg4_p10.h"
 

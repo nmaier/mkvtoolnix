@@ -20,8 +20,8 @@
 
 #include "common/common.h"
 #include "common/output.h"
-#include "common/string_formatting.h"
-#include "common/string_parsing.h"
+#include "common/strings/formatting.h"
+#include "common/strings/parsing.h"
 
 bool
 parse_int(const char *s,

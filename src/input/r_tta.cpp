@@ -16,7 +16,7 @@
 #include "common/common.h"
 #include "common/endian.h"
 #include "common/error.h"
-#include "common/id3_common.h"
+#include "common/id3.h"
 #include "common/math.h"
 #include "input/r_tta.h"
 #include "merge/output_control.h"

@@ -25,8 +25,8 @@
 #include <wx/regex.h>
 
 #include "common/common.h"
-#include "common/string_editing.h"
-#include "common/string_parsing.h"
+#include "common/strings/editing.h"
+#include "common/strings/parsing.h"
 #include "mmg/mmg.h"
 #include "mmg/tab_global.h"
 

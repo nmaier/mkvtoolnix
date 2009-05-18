@@ -17,7 +17,7 @@
 #include <string.h>
 
 #include "common/bit_cursor.h"
-#include "common/dirac_common.h"
+#include "common/dirac.h"
 #include "common/endian.h"
 
 dirac::sequence_header_t::sequence_header_t() {

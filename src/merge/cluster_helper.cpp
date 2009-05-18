@@ -23,7 +23,7 @@
 #include "common/ebml.h"
 #include "common/hacks.h"
 #include "common/math.h"
-#include "common/string_formatting.h"
+#include "common/strings/formatting.h"
 #include "merge/cluster_helper.h"
 #include "merge/libmatroska_extensions.h"
 #include "merge/output_control.h"

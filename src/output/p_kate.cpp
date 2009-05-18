@@ -18,7 +18,7 @@
 
 #include "common/common.h"
 #include "common/endian.h"
-#include "common/kate_common.h"
+#include "common/kate.h"
 #include "common/matroska.h"
 #include "merge/pr_generic.h"
 #include "output/p_kate.h"

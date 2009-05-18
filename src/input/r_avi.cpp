@@ -27,7 +27,7 @@ extern "C" {
 #include <avilib.h>
 }
 
-#include "common/aac_common.h"
+#include "common/aac.h"
 #include "common/common.h"
 #include "common/endian.h"
 #include "common/error.h"

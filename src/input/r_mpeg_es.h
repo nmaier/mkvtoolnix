@@ -16,7 +16,7 @@
 
 #include "common/os.h"
 
-#include "common/dts_common.h"
+#include "common/dts.h"
 #include "common/mpeg1_2.h"
 #include "merge/pr_generic.h"
 #include "common/smart_pointers.h"

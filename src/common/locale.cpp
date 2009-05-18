@@ -36,8 +36,8 @@
 #include "common/locale.h"
 #include "common/memory.h"
 #ifdef SYS_WINDOWS
-# include "common/string_formatting.h"
-# include "common/string_parsing.h"
+# include "common/strings/formatting.h"
+# include "common/strings/parsing.h"
 #endif
 
 charset_converter_cptr g_cc_local_utf8;

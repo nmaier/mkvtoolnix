@@ -21,7 +21,7 @@
 #include "common/common.h"
 #include "merge/pr_generic.h"
 #include "common/samples_timecode_conv.h"
-#include "common/truehd_common.h"
+#include "common/truehd.h"
 
 class truehd_packetizer_c: public generic_packetizer_c {
 protected:

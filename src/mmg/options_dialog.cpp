@@ -27,9 +27,9 @@
 #include <wx/statline.h>
 
 #include "common/common.h"
-#include "common/string_editing.h"
+#include "common/strings/editing.h"
 #include "common/translation.h"
-#include "common/wxcommon.h"
+#include "common/wx.h"
 #include "mmg/mmg_dialog.h"
 #include "mmg/mmg.h"
 #include "mmg/options_dialog.h"

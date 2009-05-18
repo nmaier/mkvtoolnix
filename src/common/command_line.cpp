@@ -24,7 +24,7 @@
 #include "common/common.h"
 #include "common/locale.h"
 #include "common/mm_io.h"
-#include "common/string_editing.h"
+#include "common/strings/editing.h"
 #include "common/translation.h"
 
 /** \brief Reads command line arguments from a file

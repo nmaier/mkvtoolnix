@@ -30,8 +30,8 @@
 #include "common/iso639.h"
 #include "common/mm_io.h"
 #include "common/segmentinfo.h"
-#include "common/xml_element_mapping.h"
-#include "common/xml_element_parser.h"
+#include "common/xml/element_mapping.h"
+#include "common/xml/element_parser.h"
 
 using namespace libmatroska;
 

@@ -18,8 +18,8 @@
 
 #include "common/common.h"
 #include "common/mm_io.h"
-#include "common/string_formatting.h"
-#include "common/string_parsing.h"
+#include "common/strings/formatting.h"
+#include "common/strings/parsing.h"
 #include "merge/pr_generic.h"
 #include "merge/timecode_factory.h"
 

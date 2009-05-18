@@ -20,7 +20,7 @@
 #include "common/common.h"
 #include "common/ebml.h"
 #include "common/matroska.h"
-#include "common/string_editing.h"
+#include "common/strings/editing.h"
 #include "extract/xtr_aac.h"
 #include "extract/xtr_avc.h"
 #include "extract/xtr_avi.h"

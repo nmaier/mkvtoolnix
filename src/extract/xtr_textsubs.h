@@ -18,7 +18,7 @@
 #include <string>
 #include <vector>
 
-#include "common/xml_element_writer.h"
+#include "common/xml/element_writer.h"
 #include "extract/xtr_base.h"
 
 using namespace std;

@@ -18,8 +18,8 @@
 #include "common/hacks.h"
 #include "common/math.h"
 #include "common/matroska.h"
-#include "common/string_formatting.h"
-#include "common/theora_common.h"
+#include "common/strings/formatting.h"
+#include "common/theora.h"
 #include "output/p_theora.h"
 
 theora_video_packetizer_c::

@@ -28,8 +28,8 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "avilib.h"
 }
 
-#include "common/aac_common.h"
-#include "common/chapters.h"
+#include "common/aac.h"
+#include "common/chapters/chapters.h"
 #include "common/common.h"
 #include "common/ebml.h"
 #include "common/endian.h"

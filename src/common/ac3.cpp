@@ -15,7 +15,7 @@
 
 #include <cstring>
 
-#include "common/ac3_common.h"
+#include "common/ac3.h"
 #include "common/bswap.h"
 #include "common/checksums.h"
 #include "common/common.h"

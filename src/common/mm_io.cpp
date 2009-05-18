@@ -38,8 +38,8 @@
 #include "common/error.h"
 #include "common/locale.h"
 #include "common/mm_io.h"
-#include "common/string_editing.h"
-#include "common/string_parsing.h"
+#include "common/strings/editing.h"
+#include "common/strings/parsing.h"
 
 #if !defined(SYS_WINDOWS)
 

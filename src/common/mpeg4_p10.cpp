@@ -28,7 +28,7 @@
 #include "common/math.h"
 #include "common/mm_io.h"
 #include "common/mpeg4_p10.h"
-#include "common/string_formatting.h"
+#include "common/strings/formatting.h"
 
 namespace mpeg4 {
   namespace p10 {

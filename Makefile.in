@@ -296,7 +296,7 @@ endif
 clean:
 	rm -f *.o */*.o */*/*.o */lib*.a */*/lib*.a po/*.mo $(APPLICATIONS) \
 		*/*.exe */*/*.exe */*/*.dll */*/*.dll.a doc/*.hhk \
-		src/info/ui/*.h src/info/*.moc.cpp
+		src/info/ui/*.h src/info/*.moc.cpp src/common/*/*.o
 
 distclean dist-clean: clean
 	rm -f config.h config.log config.cache Makefile */Makefile */*/Makefile
@@ -368,7 +368,7 @@ src/mpegparser/libmpegparser.a: $(libmpegparser_OBJECTS)
 # src/common
 #
 
-libmtxcommon_SOURCES = $(wildcard src/common/*.cpp)
+libmtxcommon_SOURCES = $(wildcard src/common/*.cpp) $(wildcard src/common/*/*.cpp)
 libmtxcommon_OBJECTS := $(patsubst %.cpp,%.o,$(libmtxcommon_SOURCES))
 
 src/common/libmtxcommon.dll: $(libmtxcommon_OBJECTS)

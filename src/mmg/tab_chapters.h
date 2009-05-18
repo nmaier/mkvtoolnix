@@ -21,7 +21,7 @@
 #include <matroska/KaxChapters.h>
 
 #include "mmg/wx_kax_analyzer.h"
-#include "common/wxcommon.h"
+#include "common/wx.h"
 
 #define ID_TRC_CHAPTERS                   16000
 #define ID_B_ADDCHAPTER                   16001

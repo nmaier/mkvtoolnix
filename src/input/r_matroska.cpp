@@ -44,7 +44,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include <matroska/KaxTrackAudio.h>
 #include <matroska/KaxTrackVideo.h>
 
-#include "common/chapters.h"
+#include "common/chapters/chapters.h"
 #include "common/common.h"
 #include "common/ebml.h"
 #include "common/endian.h"
@@ -52,8 +52,8 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "common/math.h"
 #include "common/matroska.h"
 #include "common/mm_io.h"
-#include "common/string_formatting.h"
-#include "common/string_parsing.h"
+#include "common/strings/formatting.h"
+#include "common/strings/parsing.h"
 #include "input/r_matroska.h"
 #include "merge/output_control.h"
 #include "merge/pr_generic.h"

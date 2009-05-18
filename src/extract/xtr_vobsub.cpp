@@ -18,7 +18,7 @@
 #include "common/ebml.h"
 #include "common/iso639.h"
 #include "common/smart_pointers.h"
-#include "common/tta_common.h"
+#include "common/tta.h"
 #include "extract/xtr_vobsub.h"
 
 #if defined(COMP_MSC)

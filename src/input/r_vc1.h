@@ -17,7 +17,7 @@
 #include "common/os.h"
 
 #include "merge/pr_generic.h"
-#include "common/vc1_common.h"
+#include "common/vc1.h"
 
 class vc1_es_reader_c: public generic_reader_c {
 private:

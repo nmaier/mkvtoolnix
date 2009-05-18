@@ -14,7 +14,7 @@
 #ifndef __MTX_COMMON_CHAPTERS_H
 #define __MTX_COMMON_CHAPTERS_H
 
-#include "os.h"
+#include "common/os.h"
 
 #include <string>
 

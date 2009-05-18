@@ -18,7 +18,7 @@
 
 #include "common/common.h"
 #include "merge/pr_generic.h"
-#include "common/vc1_common.h"
+#include "common/vc1.h"
 
 class vc1_video_packetizer_c: public generic_packetizer_c {
 protected:

@@ -23,17 +23,17 @@
 
 #include <ebml/EbmlStream.h>
 
-#include "common/chapters.h"
+#include "common/chapters/chapters.h"
 #include "common/common.h"
 #include "common/ebml.h"
 #include "common/error.h"
 #include "common/extern_data.h"
 #include "common/iso639.h"
-#include "common/string_editing.h"
-#include "common/string_formatting.h"
-#include "common/string_parsing.h"
+#include "common/strings/editing.h"
+#include "common/strings/formatting.h"
+#include "common/strings/parsing.h"
 #include "common/unique_numbers.h"
-#include "common/wxcommon.h"
+#include "common/wx.h"
 #include "mmg/mmg_dialog.h"
 #include "mmg/mmg.h"
 #include "mmg/tab_chapters.h"

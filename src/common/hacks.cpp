@@ -21,7 +21,7 @@
 #include "common/base64.h"
 #include "common/common.h"
 #include "common/hacks.h"
-#include "common/string_editing.h"
+#include "common/strings/editing.h"
 
 static const struct {
   unsigned int id;

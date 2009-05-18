@@ -28,7 +28,7 @@
 
 #include "common/iso639.h"
 #include "common/smart_pointers.h"
-#include "common/wxcommon.h"
+#include "common/wx.h"
 #include "mmg/translation_table.h"
 
 #ifdef SYS_WINDOWS

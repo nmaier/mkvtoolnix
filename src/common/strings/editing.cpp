@@ -18,7 +18,7 @@
 
 #include "common/common.h"
 #include "common/memory.h"
-#include "common/string_editing.h"
+#include "common/strings/editing.h"
 
 const std::string empty_string("");
 

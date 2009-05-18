@@ -24,7 +24,7 @@
 
 #include "common/common.h"
 #include "common/translation.h"
-#include "common/wxcommon.h"
+#include "common/wx.h"
 #include "info/wxwidgets_ui.h"
 #if !defined(SYS_WINDOWS)
 #include "info/matroska.xpm"

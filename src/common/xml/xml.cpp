@@ -13,7 +13,7 @@
 
 #include "common/os.h"
 
-#include "common/xml.h"
+#include "common/xml/xml.h"
 
 std::string
 escape_xml(const std::string &source) {

@@ -20,7 +20,7 @@
 #include <stdio.h>
 
 #include "common/common.h"
-#include "common/dts_common.h"
+#include "common/dts.h"
 #include "common/error.h"
 #include "common/mm_io.h"
 #include "merge/pr_generic.h"

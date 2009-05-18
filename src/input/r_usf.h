@@ -24,7 +24,7 @@
 #include "common/mm_io.h"
 #include "common/common.h"
 #include "merge/pr_generic.h"
-#include "common/xml_element_parser.h"
+#include "common/xml/element_parser.h"
 
 struct usf_entry_t {
   int64_t m_start, m_end;

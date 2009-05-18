@@ -19,9 +19,9 @@
 #include "common/ebml.h"
 #include "common/error.h"
 #include "common/mm_io.h"
-#include "common/tagparser.h"
-#include "common/xml_element_mapping.h"
-#include "common/xml_element_parser.h"
+#include "common/tags/parser.h"
+#include "common/xml/element_mapping.h"
+#include "common/xml/element_parser.h"
 
 #include <matroska/KaxTags.h>
 #include <matroska/KaxTag.h>

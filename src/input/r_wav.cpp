@@ -26,9 +26,9 @@
 #include <unistd.h>
 #endif
 
-#include "common/ac3_common.h"
+#include "common/ac3.h"
 #include "common/common.h"
-#include "common/dts_common.h"
+#include "common/dts.h"
 #include "common/endian.h"
 #include "common/error.h"
 #include "input/r_wav.h"

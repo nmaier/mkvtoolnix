@@ -69,7 +69,7 @@ extern "C" {
 #define MATROSKA_VERSION 2
 #endif
 
-#include "common/chapters.h"
+#include "common/chapters/chapters.h"
 #include "common/checksums.h"
 #include "common/command_line.h"
 #include "common/common.h"
@@ -78,10 +78,10 @@ extern "C" {
 #include "common/locale.h"
 #include "common/matroska.h"
 #include "common/mm_io.h"
-#include "common/string_editing.h"
-#include "common/string_formatting.h"
+#include "common/strings/editing.h"
+#include "common/strings/formatting.h"
 #include "common/translation.h"
-#include "common/xml_element_mapping.h"
+#include "common/xml/element_mapping.h"
 #include "info/mkvinfo.h"
 
 using namespace libmatroska;

@@ -15,7 +15,7 @@
 #include "common/checksums.h"
 #include "common/common.h"
 #include "common/mm_io.h"
-#include "common/dirac_common.h"
+#include "common/dirac.h"
 #include "common/translation.h"
 
 static bool g_opt_checksum         = false;

@@ -18,8 +18,8 @@
 
 #include "common/bit_cursor.h"
 #include "common/endian.h"
-#include "common/string_formatting.h"
-#include "common/vc1_common.h"
+#include "common/strings/formatting.h"
+#include "common/vc1.h"
 
 vc1::sequence_header_t::sequence_header_t() {
   memset(this, 0, sizeof(vc1::sequence_header_t));

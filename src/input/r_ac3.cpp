@@ -21,7 +21,7 @@ extern "C" {
 
 #include "common/common.h"
 #include "common/error.h"
-#include "common/id3_common.h"
+#include "common/id3.h"
 #include "input/r_ac3.h"
 #include "output/p_ac3.h"
 

@@ -27,15 +27,15 @@ extern "C" {
 #include "avilib.h"
 }
 
-#include "common/aac_common.h"
-#include "common/chapters.h"
+#include "common/aac.h"
+#include "common/chapters/chapters.h"
 #include "common/common.h"
 #include "common/endian.h"
 #include "common/hacks.h"
 #include "common/iso639.h"
 #include "common/locale.h"
 #include "common/matroska.h"
-#include "common/string_formatting.h"
+#include "common/strings/formatting.h"
 #include "input/r_qtmp4.h"
 #include "merge/output_control.h"
 #include "output/p_aac.h"

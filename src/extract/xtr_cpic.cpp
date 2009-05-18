@@ -18,7 +18,7 @@
 #include "common/corepicture.h"
 #include "common/ebml.h"
 #include "common/endian.h"
-#include "common/string_formatting.h"
+#include "common/strings/formatting.h"
 #include "extract/xtr_cpic.h"
 
 xtr_cpic_c::xtr_cpic_c(const string &codec_id,

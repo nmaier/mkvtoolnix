@@ -13,7 +13,7 @@
 
 #include "common/os.h"
 
-#include "common/ac3_common.h"
+#include "common/ac3.h"
 #include "common/matroska.h"
 #include "merge/output_control.h"
 #include "merge/pr_generic.h"

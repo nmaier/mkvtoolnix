@@ -24,7 +24,7 @@
 #include "common/common.h"
 #include "common/corepicture.h"
 #include "common/mm_io.h"
-#include "common/xml_element_parser.h"
+#include "common/xml/element_parser.h"
 #include "merge/pr_generic.h"
 
 class corepicture_reader_c: public generic_reader_c, public xml_parser_c {

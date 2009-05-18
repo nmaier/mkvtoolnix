@@ -21,7 +21,7 @@
 #include "mmg/header_editor_frame.h"
 #include "mmg/he_top_level_page.h"
 #include "common/segmentinfo.h"
-#include "common/wxcommon.h"
+#include "common/wx.h"
 
 he_top_level_page_c::he_top_level_page_c(header_editor_frame_c *parent,
                                          const wxString &title,

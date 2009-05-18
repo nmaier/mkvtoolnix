@@ -18,8 +18,8 @@
 #include "common/extern_data.h"
 #include "common/locale.h"
 #include "common/mm_io.h"
-#include "common/string_formatting.h"
-#include "common/string_parsing.h"
+#include "common/strings/formatting.h"
+#include "common/strings/parsing.h"
 #include "input/subtitles.h"
 #include "merge/output_control.h"
 

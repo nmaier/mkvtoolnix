@@ -40,7 +40,25 @@ m4_include(ac/ax_boost_base.m4)
 m4_include(ac/ax_boost_regex.m4)
 m4_include(ac/boost.m4)
 
-AC_OUTPUT(Makefile avilib-0.6.10/Makefile librmff/Makefile src/Makefile src/common/Makefile src/input/Makefile src/output/Makefile src/mpegparser/Makefile src/mmg/Makefile src/extract/Makefile src/merge/Makefile src/info/Makefile po/Makefile)
+AC_OUTPUT(
+  Makefile
+  avilib-0.6.10/Makefile
+  librmff/Makefile
+  src/Makefile
+  src/common/Makefile
+  src/common/chapters/Makefile
+  src/common/strings/Makefile
+  src/common/tags/Makefile
+  src/common/xml/Makefile
+  src/input/Makefile
+  src/output/Makefile
+  src/mpegparser/Makefile
+  src/mmg/Makefile
+  src/extract/Makefile
+  src/merge/Makefile
+  src/info/Makefile
+  po/Makefile
+)
 
 echo ''
 echo 'The mkvtoolnix configuration is complete.'

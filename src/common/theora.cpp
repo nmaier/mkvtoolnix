@@ -16,7 +16,7 @@
 #include "common/bit_cursor.h"
 #include "common/common.h"
 #include "common/math.h"
-#include "common/theora_common.h"
+#include "common/theora.h"
 
 theora_identification_header_t::theora_identification_header_t() {
   memset(this, 0, sizeof(theora_identification_header_t));

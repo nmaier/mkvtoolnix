@@ -16,7 +16,7 @@
 #include "common/common.h"
 #include "common/mm_io.h"
 #include "common/translation.h"
-#include "common/vc1_common.h"
+#include "common/vc1.h"
 
 static bool g_opt_checksum         = false;
 static bool g_opt_entrypoints      = false;

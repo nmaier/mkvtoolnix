@@ -18,7 +18,7 @@
 #include <ebml/EbmlBinary.h>
 
 #include "mmg/he_bit_value_page.h"
-#include "common/wxcommon.h"
+#include "common/wx.h"
 
 using namespace libebml;
 

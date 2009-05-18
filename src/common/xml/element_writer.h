@@ -20,7 +20,7 @@
 #include <string>
 
 #include "common/mm_io.h"
-#include "common/xml_element_parser.h"
+#include "common/xml/element_parser.h"
 
 namespace libebml {
   class EbmlElement;

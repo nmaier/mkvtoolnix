@@ -19,7 +19,7 @@
 #include <wx/arrstr.h>
 
 #include "mmg/he_value_page.h"
-#include "common/wxcommon.h"
+#include "common/wx.h"
 
 class he_bool_value_page_c: public he_value_page_c {
 public:

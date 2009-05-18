@@ -18,7 +18,7 @@
 #include "common/ebml.h"
 #include "common/endian.h"
 #include "common/random.h"
-#include "common/kate_common.h"
+#include "common/kate.h"
 #include "extract/xtr_ogg.h"
 
 // ------------------------------------------------------------------------

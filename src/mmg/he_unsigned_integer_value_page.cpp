@@ -18,8 +18,8 @@
 
 #include <ebml/EbmlUInteger.h>
 
-#include "common/string_parsing.h"
-#include "common/wxcommon.h"
+#include "common/strings/parsing.h"
+#include "common/wx.h"
 #include "mmg/he_unsigned_integer_value_page.h"
 
 using namespace libebml;

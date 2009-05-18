@@ -18,9 +18,9 @@
 #include "common/ebml.h"
 #include "common/locale.h"
 #include "common/matroska.h"
-#include "common/string_editing.h"
-#include "common/string_formatting.h"
-#include "common/string_parsing.h"
+#include "common/strings/editing.h"
+#include "common/strings/formatting.h"
+#include "common/strings/parsing.h"
 #include "extract/xtr_textsubs.h"
 
 xtr_srt_c::xtr_srt_c(const string &codec_id,

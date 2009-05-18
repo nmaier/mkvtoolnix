@@ -12,7 +12,7 @@
 
 #include "common/os.h"
 
-#include "common/aac_common.h"
+#include "common/aac.h"
 #include "common/common.h"
 #include "common/ebml.h"
 #include "common/matroska.h"

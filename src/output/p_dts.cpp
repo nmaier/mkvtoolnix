@@ -14,7 +14,7 @@
 
 #include "common/os.h"
 
-#include "common/dts_common.h"
+#include "common/dts.h"
 #include "common/matroska.h"
 #include "merge/output_control.h"
 #include "merge/pr_generic.h"
