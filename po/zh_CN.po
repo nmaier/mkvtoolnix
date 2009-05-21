@@ -724,13 +724,13 @@ msgstr ""
 "源码及最新程序总会在下面的地址提供：\n"
 "http://www.bunkus.org/videotools/mkvtoolnix/"
 
-#: src/mmg/tab_attachments.cpp:381
+#: src/mmg/tabs/attachments.cpp:381
 #, c-format
 msgid "%s (MIME type %s, size %ld) from %s (%s)"
 msgstr "%s (MIME 类型 %s, 尺寸 %ld) 自 %s (%s)"
 
-#: src/mmg/tab_input.cpp:624
-#: src/mmg/tab_input.cpp:1239
+#: src/mmg/tabs/input.cpp:624
+#: src/mmg/tabs/input.cpp:1239
 #, c-format
 msgid "%s%s (ID %lld, type: %s) from %s"
 msgstr "%s%s (ID %lld, 类型: %s) 自 %s"
@@ -783,11 +783,11 @@ msgstr "章节编辑器(&C)"
 msgid "&Chapter editor\tAlt-4"
 msgstr "章节编辑器(&C)\tAlt-4"
 
-#: src/mmg/header_editor_frame.cpp:98
+#: src/mmg/header_editor/frame.cpp:98
 msgid "&Close\tCtrl-W"
 msgstr "关闭(&C)\tCtrl-W"
 
-#: src/mmg/header_editor_frame.cpp:104
+#: src/mmg/header_editor/frame.cpp:104
 msgid "&Collapse all entries\tCtrl-P"
 msgstr "收起所有项(&C)\tCtrl-P"
 
@@ -807,7 +807,7 @@ msgstr "禁用(&D)"
 msgid "&Down"
 msgstr "下移(&D)"
 
-#: src/mmg/header_editor_frame.cpp:103
+#: src/mmg/header_editor/frame.cpp:103
 msgid "&Expand all entries\tCtrl-E"
 msgstr "展开所有项(&E)\tCtrl-E"
 
@@ -815,8 +815,8 @@ msgstr "展开所有项(&E)\tCtrl-E"
 msgid "&Expand important elements\tCtrl-E"
 msgstr "展开重要分支(&E)\tCtrl-E"
 
-#: src/mmg/header_editor_frame.cpp:114
 #: src/mmg/mmg.cpp:763
+#: src/mmg/header_editor/frame.cpp:114
 #: src/info/wxwidgets_ui.cpp:147
 msgid "&File"
 msgstr "文件(&F)"
@@ -829,14 +829,14 @@ msgstr "全局选项(&G)\tAlt-3"
 msgid "&Header editor\tCtrl-E"
 msgstr "头部编辑器(&H)\tCtrl-E"
 
-#: src/mmg/header_editor_frame.cpp:116
 #: src/mmg/mmg.cpp:767
+#: src/mmg/header_editor/frame.cpp:116
 #: src/info/wxwidgets_ui.cpp:149
 msgid "&Help"
 msgstr "帮助(&H)"
 
-#: src/mmg/header_editor_frame.cpp:109
 #: src/mmg/mmg.cpp:759
+#: src/mmg/header_editor/frame.cpp:109
 msgid "&Help\tF1"
 msgstr "帮助(&H)\tF1"
 
@@ -874,7 +874,7 @@ msgstr "新建章节(&N)"
 msgid "&Ok"
 msgstr "确定(&O)"
 
-#: src/mmg/header_editor_frame.cpp:95
+#: src/mmg/header_editor/frame.cpp:95
 #: src/info/wxwidgets_ui.cpp:136
 msgid "&Open\tCtrl-O"
 msgstr "打开(&O)\tCtrl-O"
@@ -883,8 +883,8 @@ msgstr "打开(&O)\tCtrl-O"
 msgid "&Options"
 msgstr "选项(&O)"
 
-#: src/mmg/header_editor_frame.cpp:100
 #: src/mmg/mmg.cpp:719
+#: src/mmg/header_editor/frame.cpp:100
 msgid "&Quit\tCtrl-Q"
 msgstr "退出(&Q)\tCtrl-Q"
 
@@ -892,11 +892,11 @@ msgstr "退出(&Q)\tCtrl-Q"
 msgid "&Re-enable"
 msgstr "重新启用(&R)"
 
-#: src/mmg/header_editor_frame.cpp:97
+#: src/mmg/header_editor/frame.cpp:97
 msgid "&Reload\tCtrl-R"
 msgstr "重新加载(&R)\tCtrl-R"
 
-#: src/mmg/he_value_page.cpp:54
+#: src/mmg/header_editor/value_page.cpp:54
 msgid "&Reset"
 msgstr "重置(&R)"
 
@@ -905,7 +905,7 @@ msgstr "重置(&R)"
 msgid "&Save"
 msgstr "保存(&S)"
 
-#: src/mmg/header_editor_frame.cpp:96
+#: src/mmg/header_editor/frame.cpp:96
 msgid "&Save\tCtrl-S"
 msgstr "保存(&S)\tCtrl-S"
 
@@ -925,7 +925,7 @@ msgstr "启动(&S)"
 msgid "&Up"
 msgstr "上移(&U)"
 
-#: src/mmg/header_editor_frame.cpp:106
+#: src/mmg/header_editor/frame.cpp:106
 msgid "&Validate\tCtrl-T"
 msgstr "检验(&V)\tCtrl-T"
 
@@ -1333,15 +1333,15 @@ msgstr "'-c' 仅允许在提取轨道时使用。\n"
 msgid "'-c' lacks a charset.\n"
 msgstr "'-c' 缺字符集。\n"
 
-#: src/mmg/header_editor_frame.cpp:364
+#: src/mmg/header_editor/frame.cpp:364
 msgid "'Default track' flag"
 msgstr "'默认轨' 标记"
 
-#: src/mmg/header_editor_frame.cpp:371
+#: src/mmg/header_editor/frame.cpp:371
 msgid "'Forced display' flag"
 msgstr "'强制轨' 标记"
 
-#: src/mmg/header_editor_frame.cpp:368
+#: src/mmg/header_editor/frame.cpp:368
 msgid "'Track enabled' flag"
 msgstr "'可用轨' 标记"
 
@@ -1353,7 +1353,7 @@ msgstr "(未知元素: %1%)"
 msgid "(Unknown element: %1%; ID: 0x%2% size: %3%)"
 msgstr "(未知元素: %1%; ID: 0x%2% 尺寸: %3%)"
 
-#: src/mmg/tab_chapters.cpp:407
+#: src/mmg/tabs/chapters.cpp:407
 msgid "(new chapter file)"
 msgstr "(新章节文件)"
 
@@ -1361,15 +1361,15 @@ msgstr "(新章节文件)"
 msgid "(none)"
 msgstr "(无)"
 
-#: src/mmg/tab_chapters.cpp:441
+#: src/mmg/tabs/chapters.cpp:441
 msgid "(unnamed chapter)"
 msgstr "(未命名章节)"
 
-#: src/mmg/tab_chapters.cpp:881
-#: src/mmg/tab_chapters.cpp:963
-#: src/mmg/tab_chapters.cpp:1082
-#: src/mmg/tab_chapters.cpp:1610
-#: src/mmg/tab_chapters.cpp:1625
+#: src/mmg/tabs/chapters.cpp:881
+#: src/mmg/tabs/chapters.cpp:963
+#: src/mmg/tabs/chapters.cpp:1082
+#: src/mmg/tabs/chapters.cpp:1610
+#: src/mmg/tabs/chapters.cpp:1625
 msgid "(unnamed)"
 msgstr "(未命名)"
 
@@ -1422,11 +1422,11 @@ msgstr "--- 任务 %d 终止"
 msgid "--- No job output found.\n"
 msgstr "--- 无任务输出信息。\n"
 
-#: src/mmg/tab_input_general.cpp:176
+#: src/mmg/tabs/input_general.cpp:176
 msgid "---all---"
 msgstr "---全部---"
 
-#: src/mmg/tab_input_general.cpp:173
+#: src/mmg/tabs/input_general.cpp:173
 msgid "---common---"
 msgstr "---常用---"
 
@@ -1434,15 +1434,15 @@ msgstr "---常用---"
 msgid "--timecode-scale REPLACEME"
 msgstr "--timecode-scale REPLACEME"
 
-#: src/mmg/tab_global.cpp:76
+#: src/mmg/tabs/global.cpp:76
 msgid "...after this duration:"
 msgstr "...按时长:"
 
-#: src/mmg/tab_global.cpp:58
+#: src/mmg/tabs/global.cpp:58
 msgid "...after this size:"
 msgstr "...按尺寸:"
 
-#: src/mmg/tab_global.cpp:94
+#: src/mmg/tabs/global.cpp:94
 msgid "...after timecodes:"
 msgstr "...按特定时间码:"
 
@@ -1450,7 +1450,7 @@ msgstr "...按特定时间码:"
 msgid "1: all frames"
 msgstr "1: 各类帧"
 
-#: src/mmg/tab_input_format.cpp:210
+#: src/mmg/tabs/input_format.cpp:210
 msgid "2 bytes"
 msgstr "2 字节"
 
@@ -1458,7 +1458,7 @@ msgstr "2 字节"
 msgid "2: codec private data"
 msgstr "2: 编解码器专用数据"
 
-#: src/mmg/tab_input_format.cpp:211
+#: src/mmg/tabs/input_format.cpp:211
 msgid "4 bytes"
 msgstr "4 字节"
 
@@ -1493,11 +1493,11 @@ msgstr "在 %1% 找到了一个块组，但里面没有块元。这可能会导�
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr "在时间戳 %1% 处找到了轨道号为 %2% 的块。然而，没有找到符合该轨道号的头部信息。此块将被跳过。\n"
 
-#: src/mmg/header_editor_frame.cpp:406
+#: src/mmg/header_editor/frame.cpp:406
 msgid "A human-readable string specifying the codec."
 msgstr "一个人类可读的字串，描述编解码器。"
 
-#: src/mmg/header_editor_frame.cpp:396
+#: src/mmg/header_editor/frame.cpp:396
 msgid "A human-readable track name."
 msgstr "一个人类可读的字串，描述轨道名称。"
 
@@ -1506,7 +1506,7 @@ msgstr "一个人类可读的字串，描述轨道名称。"
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "描述为 '%s' 的任务已存在。是否添加描述相同的任务?"
 
-#: src/mmg/header_editor_frame.cpp:298
+#: src/mmg/header_editor/frame.cpp:298
 msgid ""
 "A randomly generated unique ID to identify the current\n"
 "segment between many others (128 bits)."
@@ -1524,7 +1524,7 @@ msgstr "一条轨道"
 msgid "A track with the ID %1% was requested but not found in the file. The corresponding option will be ignored.\n"
 msgstr "ID 为 %1% 的轨道被要求但在文件中没有找到。相应的选项将被忽略。\n"
 
-#: src/mmg/header_editor_frame.cpp:361
+#: src/mmg/header_editor/frame.cpp:361
 msgid ""
 "A unique ID to identify the Track. This should be\n"
 "kept the same when making a direct stream copy\n"
@@ -1534,24 +1534,24 @@ msgstr ""
 "当直接复制该轨数据流到另一文件时\n"
 "该 ID 会得以保留。"
 
-#: src/mmg/header_editor_frame.cpp:306
+#: src/mmg/header_editor/frame.cpp:306
 msgid ""
 "A unique ID to identify the next chained\n"
 "segment (128 bits)."
 msgstr "识别链接的下一剪辑的唯一 ID (128 位)。"
 
-#: src/mmg/header_editor_frame.cpp:302
+#: src/mmg/header_editor/frame.cpp:302
 msgid ""
 "A unique ID to identify the previous chained\n"
 "segment (128 bits)."
 msgstr "识别链接的上一剪辑的唯一 ID (128 位)。"
 
-#: src/mmg/tab_input.cpp:212
+#: src/mmg/tabs/input.cpp:212
 #: src/merge/mkvmerge.cpp:88
 msgid "A/52 (aka AC3)"
 msgstr "A/52 (亦称 AC3)"
 
-#: src/mmg/tab_input.cpp:213
+#: src/mmg/tabs/input.cpp:213
 #: src/merge/mkvmerge.cpp:87
 msgid "AAC (Advanced Audio Coding)"
 msgstr "AAC (高级音频编码)"
@@ -1560,11 +1560,11 @@ msgstr "AAC (高级音频编码)"
 msgid "AAC files may contain HE-AAC / AAC+ / SBR AAC audio. This can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr 0' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
 msgstr "AAC 文件可能包含 HE-AAC / AAC+ / SBR AAC 音频。这 *不会* 被自动检测出来。因此，如果一输入文件确实包含 SBR AAC，您需要手动为该文件指定 '--aac-is-sbr 0'。否则，文件会被以 *错误* 的方式混流。参阅 mkvmerge 自述文档。\n"
 
-#: src/mmg/tab_input_format.cpp:172
+#: src/mmg/tabs/input_format.cpp:172
 msgid "AAC is SBR/HE-AAC/AAC+"
 msgstr "AAC 是 SBR/HE-AAC/AAC+"
 
-#: src/mmg/he_value_page.cpp:71
+#: src/mmg/header_editor/value_page.cpp:71
 msgid ""
 "ASCII string (no special chars like\n"
 "Umlaute etc)"
@@ -1572,12 +1572,12 @@ msgstr ""
 "ASCII 字符串 (不能使用像德语\n"
 "变元音符号¨这样的特殊字符)"
 
-#: src/mmg/tab_input.cpp:214
+#: src/mmg/tabs/input.cpp:214
 #: src/merge/mkvmerge.cpp:96
 msgid "AVC/h.264 elementary streams"
 msgstr "AVC/h.264 基本流"
 
-#: src/mmg/tab_input.cpp:215
+#: src/mmg/tabs/input.cpp:215
 #: src/merge/mkvmerge.cpp:89
 msgid "AVI (Audio/Video Interleaved)"
 msgstr "AVI (音视频交错文件)"
@@ -1620,7 +1620,7 @@ msgstr "添加"
 msgid "Add &command line options"
 msgstr "添加命令行选项(&C)"
 
-#: src/mmg/tab_chapters.cpp:234
+#: src/mmg/tabs/chapters.cpp:234
 msgid "Add chapter"
 msgstr "添加章节"
 
@@ -1628,15 +1628,15 @@ msgstr "添加章节"
 msgid "Add command line options"
 msgstr "添加命令行选项"
 
-#: src/mmg/he_value_page.cpp:94
+#: src/mmg/header_editor/value_page.cpp:94
 msgid "Add element"
 msgstr "添加元素"
 
-#: src/mmg/tab_chapters.cpp:305
+#: src/mmg/tabs/chapters.cpp:305
 msgid "Add name"
 msgstr "添加名称"
 
-#: src/mmg/tab_chapters.cpp:236
+#: src/mmg/tabs/chapters.cpp:236
 msgid "Add subchapter"
 msgstr "添加子章节"
 
@@ -1656,11 +1656,11 @@ msgstr "附加"
 msgid "Adds the current settings as a new job entry to the job queue"
 msgstr "将当前设置作为新任务项添加到任务队列"
 
-#: src/mmg/tab_chapters.cpp:1392
+#: src/mmg/tabs/chapters.cpp:1392
 msgid "Adjust chapter timecodes"
 msgstr "调整章节时间码"
 
-#: src/mmg/tab_chapters.cpp:244
+#: src/mmg/tabs/chapters.cpp:244
 msgid "Adjust timecodes"
 msgstr "调整时间码"
 
@@ -1680,11 +1680,11 @@ msgstr "所有文件 (*)|*"
 msgid "All Files (*.*)|*.*"
 msgstr "所有文件 (*.*)|*.*"
 
-#: src/mmg/header_editor_frame.cpp:601
+#: src/mmg/header_editor/frame.cpp:601
 msgid "All header values are OK."
 msgstr "所有头部值正常。"
 
-#: src/mmg/tab_input.cpp:276
+#: src/mmg/tabs/input.cpp:276
 #, c-format
 msgid "All supported media files|%s%s|%s"
 msgstr "所有支持的媒体文件|%s%s|%s"
@@ -1701,7 +1701,7 @@ msgstr "允许 CodecState 元素的使用。它被用于 MPEG-1/-2 视频轨等�
 msgid "Always on top"
 msgstr "总在最前"
 
-#: src/mmg/header_editor_frame.cpp:403
+#: src/mmg/header_editor/frame.cpp:403
 msgid "An ID corresponding to the codec."
 msgstr "对应编解码器的 ID。"
 
@@ -1713,20 +1713,20 @@ msgstr "找不到 ID 为 %1% 的附件。\n"
 msgid "An empty file name is not valid.\n"
 msgstr "空文件名是无效的。\n"
 
-#: src/mmg/header_editor_frame.cpp:294
+#: src/mmg/header_editor/frame.cpp:294
 msgid ""
 "An escaped filename corresponding to\n"
 "the next segment."
 msgstr "转义的文件名，对应下一剪辑。"
 
-#: src/mmg/header_editor_frame.cpp:291
+#: src/mmg/header_editor/frame.cpp:291
 msgid ""
 "An escaped filename corresponding to\n"
 "the previous segment."
 msgstr "转义的文件名，对应上一剪辑。"
 
-#: src/mmg/header_editor_frame.cpp:674
-#: src/mmg/tab_chapters.cpp:1945
+#: src/mmg/header_editor/frame.cpp:674
+#: src/mmg/tabs/chapters.cpp:1945
 msgid "An unknown error occured. The file has been modified."
 msgstr "发生未知错误。文件已修改。"
 
@@ -1746,7 +1746,7 @@ msgstr "轨道 %1% 的另一个默认轨已设置。'%3%' 的 %2% 轨道的 '默
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr "另一个混流任务仍在处理中。要启动一项新任务，请等待先前任务完成或手动中断它。"
 
-#: src/mmg/tab_input.cpp:1269
+#: src/mmg/tabs/input.cpp:1269
 #, c-format
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "不允许将一个文件的轨道追加合并到同一个文件的其他轨道。出现问题的轨道号为 %u 与 %u。"
@@ -1771,7 +1771,7 @@ msgstr "宽高比系数"
 msgid "Aspect ratio type: %1%%2%"
 msgstr "宽高比率类型: %1%%2%"
 
-#: src/mmg/tab_input_format.cpp:52
+#: src/mmg/tabs/input_format.cpp:52
 msgid "Aspect ratio:"
 msgstr "宽高比:"
 
@@ -1787,7 +1787,7 @@ msgstr "至少需要一个 <EditionEntry> 元素。"
 msgid "Attached"
 msgstr "附加的"
 
-#: src/mmg/tab_attachments.cpp:51
+#: src/mmg/tabs/attachments.cpp:51
 msgid "Attached files"
 msgstr "附加文件列表"
 
@@ -1795,33 +1795,33 @@ msgstr "附加文件列表"
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
 msgstr "附件 ID %1%: 类型 '%2%', 尺寸 %3% 字节"
 
-#: src/mmg/tab_attachments.cpp:87
+#: src/mmg/tabs/attachments.cpp:87
 msgid "Attachment style:"
 msgstr "附加方式:"
 
 #: src/mmg/mmg.cpp:789
-#: src/mmg/tab_attachments.cpp:59
+#: src/mmg/tabs/attachments.cpp:59
 #: src/info/mkvinfo.cpp:1193
 msgid "Attachments"
 msgstr "附件"
 
-#: src/mmg/header_editor_frame.cpp:479
+#: src/mmg/header_editor/frame.cpp:479
 msgid "Audio bit depth"
 msgstr "音频位深"
 
-#: src/mmg/header_editor_frame.cpp:475
+#: src/mmg/header_editor/frame.cpp:475
 msgid "Audio channels"
 msgstr "音频声道数"
 
-#: src/mmg/header_editor_frame.cpp:471
+#: src/mmg/header_editor/frame.cpp:471
 msgid "Audio output sampling frequency"
 msgstr "音频输出采样率"
 
-#: src/mmg/header_editor_frame.cpp:466
+#: src/mmg/header_editor/frame.cpp:466
 msgid "Audio sampling frequency"
 msgstr "音频采样率"
 
-#: src/mmg/header_editor_frame.cpp:340
+#: src/mmg/header_editor/frame.cpp:340
 #, c-format
 msgid "Audio track %u"
 msgstr "音频轨 %u"
@@ -1847,7 +1847,7 @@ msgstr "可用翻译:\n"
 msgid "BZ2_bzCompressInit() failed. Result: %1%\n"
 msgstr "BZ2_bzCompressInit() 失败。结果: %1%\n"
 
-#: src/mmg/he_value_page.cpp:76
+#: src/mmg/header_editor/value_page.cpp:76
 msgid "Binary (displayed as hex numbers)"
 msgstr "二进制值 (显示为十六进制数字)"
 
@@ -1855,7 +1855,7 @@ msgstr "二进制值 (显示为十六进制数字)"
 msgid "Bit depth: %1%"
 msgstr "位深: %1%"
 
-#: src/mmg/header_editor_frame.cpp:479
+#: src/mmg/header_editor/frame.cpp:479
 msgid "Bits per sample, mostly used for PCM."
 msgstr "比特每采样，主要用于 PCM。"
 
@@ -1889,11 +1889,11 @@ msgstr "块实质: %1%"
 msgid "Bogus aid %1%\n"
 msgstr "无效 aid %1%\n"
 
-#: src/mmg/he_value_page.cpp:77
+#: src/mmg/header_editor/value_page.cpp:77
 msgid "Boolean (yes/no, on/off etc)"
 msgstr "布尔值 (是/非, 开/关 等)"
 
-#: src/mmg/tab_input_format.cpp:199
+#: src/mmg/tabs/input_format.cpp:199
 msgid "Both eyes"
 msgstr "双眼视角"
 
@@ -1912,10 +1912,10 @@ msgstr "调出任务队列编辑器"
 #: src/mmg/mmg.cpp:804
 #: src/mmg/options_dialog.cpp:78
 #: src/mmg/options_dialog.cpp:101
-#: src/mmg/tab_global.cpp:177
-#: src/mmg/tab_global.cpp:227
-#: src/mmg/tab_input_general.cpp:85
-#: src/mmg/tab_input_general.cpp:99
+#: src/mmg/tabs/global.cpp:177
+#: src/mmg/tabs/global.cpp:227
+#: src/mmg/tabs/input_general.cpp:85
+#: src/mmg/tabs/input_general.cpp:99
 msgid "Browse"
 msgstr "浏览"
 
@@ -1959,7 +1959,7 @@ msgstr "让 mkvmerge 向不包含时长字段的 VobSub 字幕包添加 '停止�
 msgid "Change mmg's preferences and options"
 msgstr "修改 mmg 的首选项"
 
-#: src/mmg/tab_chapters.cpp:104
+#: src/mmg/tabs/chapters.cpp:104
 msgid "Change the default values"
 msgstr "修改默认值"
 
@@ -1999,26 +1999,26 @@ msgstr "章节翻译 ID: %1%"
 msgid "Chapter editor is not empty"
 msgstr "章节编辑器非空"
 
-#: src/mmg/tab_global.cpp:172
+#: src/mmg/tabs/global.cpp:172
 msgid "Chapter file:"
 msgstr "章节文件:"
 
-#: src/mmg/tab_chapters.cpp:695
+#: src/mmg/tabs/chapters.cpp:695
 #, c-format
 msgid "Chapter files (*.xml)|*.xml|%s"
 msgstr "章节文件 (*.xml)|*.xml|%s"
 
-#: src/mmg/tab_global.cpp:254
+#: src/mmg/tabs/global.cpp:254
 #, c-format
 msgid "Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 msgstr "章节文件 (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 
-#: src/mmg/tab_chapters.cpp:543
+#: src/mmg/tabs/chapters.cpp:543
 #, c-format
 msgid "Chapter files (*.xml;*.txt;*.mka;*.mkv;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.cue|%s"
 msgstr "章节文件 (*.xml;*.txt;*.mka;*.mkv;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.cue|%s"
 
-#: src/mmg/tab_chapters.cpp:298
+#: src/mmg/tabs/chapters.cpp:298
 msgid "Chapter names and languages"
 msgstr "章节名称与语言"
 
@@ -2030,48 +2030,48 @@ msgstr "章节解析器: 章节 UID %1% 不唯一，不能重复使用。将创�
 msgid "Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n"
 msgstr "章节解析器: 版本 UID %1% 不唯一，不能重复使用。将创建一个新的。\n"
 
-#: src/mmg/tab_chapters.cpp:778
-#: src/mmg/tab_chapters.cpp:786
-#: src/mmg/tab_chapters.cpp:792
-#: src/mmg/tab_chapters.cpp:799
+#: src/mmg/tabs/chapters.cpp:778
+#: src/mmg/tabs/chapters.cpp:786
+#: src/mmg/tabs/chapters.cpp:792
+#: src/mmg/tabs/chapters.cpp:799
 msgid "Chapter verification error"
 msgstr "章节验证出错"
 
-#: src/mmg/tab_global.cpp:169
+#: src/mmg/tabs/global.cpp:169
 #: src/info/mkvinfo.cpp:1663
 msgid "Chapters"
 msgstr "章节"
 
-#: src/mmg/tab_chapters.cpp:626
+#: src/mmg/tabs/chapters.cpp:626
 msgid "Chapters loaded."
 msgstr "章节已载入。"
 
-#: src/mmg/tab_chapters.cpp:740
-#: src/mmg/tab_chapters.cpp:1922
+#: src/mmg/tabs/chapters.cpp:740
+#: src/mmg/tabs/chapters.cpp:1922
 msgid "Chapters written."
 msgstr "章节已写入。"
 
-#: src/mmg/tab_chapters.cpp:225
+#: src/mmg/tabs/chapters.cpp:225
 msgid "Chapters:"
 msgstr "章节:"
 
-#: src/mmg/tab_global.cpp:194
+#: src/mmg/tabs/global.cpp:194
 msgid "Charset:"
 msgstr "字符集:"
 
-#: src/mmg/tab_chapters.cpp:542
+#: src/mmg/tabs/chapters.cpp:542
 msgid "Choose a chapter file"
 msgstr "选择章节文件"
 
-#: src/mmg/tab_input_general.cpp:256
+#: src/mmg/tabs/input_general.cpp:256
 msgid "Choose a tag file"
 msgstr "选择标签文件"
 
-#: src/mmg/tab_input_general.cpp:270
+#: src/mmg/tabs/input_general.cpp:270
 msgid "Choose a timecodes file"
 msgstr "选择时间码文件"
 
-#: src/mmg/tab_attachments.cpp:175
+#: src/mmg/tabs/attachments.cpp:175
 msgid "Choose an attachment file"
 msgstr "选择附件文件"
 
@@ -2079,11 +2079,11 @@ msgstr "选择附件文件"
 msgid "Choose an input file"
 msgstr "选择输入文件"
 
-#: src/mmg/tab_input.cpp:278
+#: src/mmg/tabs/input.cpp:278
 msgid "Choose an input file to add"
 msgstr "选择要添加的文件"
 
-#: src/mmg/tab_input.cpp:278
+#: src/mmg/tabs/input.cpp:278
 msgid "Choose an input file to append"
 msgstr "选择要追加合并的文件"
 
@@ -2093,12 +2093,12 @@ msgstr "选择要追加合并的文件"
 #: src/mmg/mmg.cpp:1249
 #: src/mmg/mmg.cpp:1270
 #: src/mmg/mux_dialog.cpp:203
-#: src/mmg/tab_chapters.cpp:652
-#: src/mmg/tab_chapters.cpp:694
+#: src/mmg/tabs/chapters.cpp:652
+#: src/mmg/tabs/chapters.cpp:694
 msgid "Choose an output file"
 msgstr "选择输出文件"
 
-#: src/mmg/tab_global.cpp:253
+#: src/mmg/tabs/global.cpp:253
 msgid "Choose the chapter file"
 msgstr "选择章节文件"
 
@@ -2114,7 +2114,7 @@ msgstr "选择 mkvmerge 可执行程序"
 msgid "Choose the output directory"
 msgstr "选择输出目录"
 
-#: src/mmg/tab_global.cpp:243
+#: src/mmg/tabs/global.cpp:243
 msgid "Choose the tags file"
 msgstr "选择标签文件"
 
@@ -2126,7 +2126,7 @@ msgstr "成功混流后清空输入文件列表"
 msgid "Clear inputs after adding a job to the job queue"
 msgstr "添加任务到任务列表后清空输入文件列表"
 
-#: src/mmg/header_editor_frame.cpp:98
+#: src/mmg/header_editor/frame.cpp:98
 msgid "Close the current file without saving"
 msgstr "在不保存的情况下关闭当前文件"
 
@@ -2158,7 +2158,7 @@ msgstr "前簇长: %1%"
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr "簇时间码: %|1$.3f|s"
 
-#: src/mmg/header_editor_frame.cpp:403
+#: src/mmg/header_editor/frame.cpp:403
 msgid "Codec ID"
 msgstr "编解码器 ID"
 
@@ -2178,7 +2178,7 @@ msgstr "编解码器下载 URL: %1%"
 msgid "Codec info URL: %1%"
 msgstr "编解码器信息 URL: %1%"
 
-#: src/mmg/header_editor_frame.cpp:406
+#: src/mmg/header_editor/frame.cpp:406
 msgid "Codec name"
 msgstr "编解码器名称"
 
@@ -2194,7 +2194,7 @@ msgstr "编解码器设置: %1%"
 msgid "CodecPrivate, length %1%%2%"
 msgstr "编解码器专有, 长 %1%%2%"
 
-#: src/mmg/header_editor_frame.cpp:104
+#: src/mmg/header_editor/frame.cpp:104
 msgid "Collapse all entries so that none of their sub-entries will be shown"
 msgstr "收起所有条目，这样它们的子条目将不被显示"
 
@@ -2218,7 +2218,7 @@ msgstr "命令行已保存。"
 msgid "Compression failed: %1%\n"
 msgstr "压缩失败: %1%\n"
 
-#: src/mmg/tab_input_format.cpp:160
+#: src/mmg/tabs/input_format.cpp:160
 msgid "Compression:"
 msgstr "压缩方式:"
 
@@ -2264,7 +2264,7 @@ msgstr "不支持 CorePicture 帧 %1%。\n"
 
 #: src/mmg/jobs.cpp:138
 #: src/mmg/mux_dialog.cpp:114
-#: src/mmg/tab_input.cpp:323
+#: src/mmg/tabs/input.cpp:323
 #, c-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
 msgstr "无法为 mkvmerge 的命令行选项创建临时文件 '%s' (错误代号 %d, %s)。"
@@ -2335,7 +2335,7 @@ msgstr "无法打开剪贴板。"
 msgid "Could not open the corresponding correction file '%1%c'.\n"
 msgstr "无法打开一致性校正文件 '%1%c'。\n"
 
-#: src/mmg/tab_chapters.cpp:718
+#: src/mmg/tabs/chapters.cpp:718
 #, c-format
 msgid "Could not open the destination file '%s' for writing. Error code: %d (%s)."
 msgstr "无法打开目标文件 '%s' 以写入。错误代号: %d (%s)。"
@@ -2365,8 +2365,8 @@ msgstr "无法读取 FLAC 头部包。\n"
 msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr "无法写入输出文件: %1% (%2%)\n"
 
-#: src/mmg/tab_chapters.cpp:119
-#: src/mmg/tab_chapters.cpp:331
+#: src/mmg/tabs/chapters.cpp:119
+#: src/mmg/tabs/chapters.cpp:331
 msgid "Country:"
 msgstr "国家:"
 
@@ -2394,7 +2394,7 @@ msgstr "Cue 簇位: %1%"
 msgid "Cue codec state: %1%"
 msgstr "Cue 编解码态: %1%"
 
-#: src/mmg/tab_global.cpp:209
+#: src/mmg/tabs/global.cpp:209
 msgid "Cue name format:"
 msgstr "Cue 表单命名格式:"
 
@@ -2450,7 +2450,7 @@ msgstr "Cue 轨: %1%"
 msgid "Cues (subentries will be skipped)"
 msgstr "Cue 表单 (子条目将被跳过)"
 
-#: src/mmg/tab_input_extra.cpp:50
+#: src/mmg/tabs/input_extra.cpp:50
 msgid "Cues:"
 msgstr "索引:"
 
@@ -2471,7 +2471,7 @@ msgstr "当前任务 ID %d:"
 msgid "Current job ID 1000:"
 msgstr "当前任务 ID 1000:"
 
-#: src/mmg/he_value_page.cpp:99
+#: src/mmg/header_editor/value_page.cpp:99
 msgid "Current value:"
 msgstr "现值:"
 
@@ -2479,7 +2479,7 @@ msgstr "现值:"
 msgid "D&elete"
 msgstr "删除(&E)"
 
-#: src/mmg/tab_input.cpp:218
+#: src/mmg/tabs/input.cpp:218
 #: src/merge/mkvmerge.cpp:92
 msgid "DTS (Digital Theater System)"
 msgstr "DTS (数字影院系统)"
@@ -2528,11 +2528,11 @@ msgstr "日期: %1% UTC"
 msgid "Debug> "
 msgstr "调试> "
 
-#: src/mmg/tab_input_format.cpp:209
+#: src/mmg/tabs/input_format.cpp:209
 msgid "Default"
 msgstr "默认"
 
-#: src/mmg/header_editor_frame.cpp:387
+#: src/mmg/header_editor/frame.cpp:387
 msgid "Default duration"
 msgstr "默认时长"
 
@@ -2544,15 +2544,15 @@ msgstr "默认时长: %|1$.3f|ms (对于视频轨为 %|2$.3f| fps)"
 msgid "Default flag: %1%"
 msgstr "“默认”标记: %1%"
 
-#: src/mmg/tab_input_general.cpp:63
+#: src/mmg/tabs/input_general.cpp:63
 msgid "Default track flag:"
 msgstr "“默认轨”标记:"
 
-#: src/mmg/tab_input_format.cpp:129
+#: src/mmg/tabs/input_format.cpp:129
 msgid "Delay (in ms):"
 msgstr "延时 (ms):"
 
-#: src/mmg/tab_input_format.cpp:134
+#: src/mmg/tabs/input_format.cpp:134
 msgid "Delay this track's timecodes by a couple of ms. Can be negative. Works best on video and subtitle tracks."
 msgstr "将此轨的时间码延迟几毫秒。对视频或音频轨效果最佳。"
 
@@ -2572,13 +2572,13 @@ msgstr "描述"
 msgid "Description already exists"
 msgstr "描述已存在"
 
-#: src/mmg/he_value_page.cpp:84
 #: src/mmg/mmg.cpp:140
-#: src/mmg/tab_attachments.cpp:74
+#: src/mmg/header_editor/value_page.cpp:84
+#: src/mmg/tabs/attachments.cpp:74
 msgid "Description:"
 msgstr "描述:"
 
-#: src/mmg/tab_input.cpp:216
+#: src/mmg/tabs/input.cpp:216
 msgid "Dirac"
 msgstr "Dirac"
 
@@ -2611,11 +2611,11 @@ msgstr "显示高度: %1%"
 msgid "Display unit: %1%%2%"
 msgstr "显示单位: %1%%2%"
 
-#: src/mmg/header_editor_frame.cpp:109
+#: src/mmg/header_editor/frame.cpp:109
 msgid "Display usage information"
 msgstr "显示用法信息"
 
-#: src/mmg/tab_input_format.cpp:66
+#: src/mmg/tabs/input_format.cpp:66
 msgid "Display width/height:"
 msgstr "显示宽/高:"
 
@@ -2627,11 +2627,11 @@ msgstr "显示宽度: %1%"
 msgid "Do not add an entry for the chapters in the meta seek element."
 msgstr "不要在元定位元素中添加章节入口。"
 
-#: src/mmg/tab_input.cpp:128
+#: src/mmg/tabs/input.cpp:128
 msgid "Do not copy chapters from this file. Only applies to a couple of formats (e.g. Matroska files)."
 msgstr "不要从此文件中复制章节。仅适用于部分格式（如 Matroska 文件）。"
 
-#: src/mmg/tab_input.cpp:134
+#: src/mmg/tabs/input.cpp:134
 msgid "Do not copy tags from this file. Only applies to a couple of formats (e.g. Matroska files)."
 msgstr "不要从此文件中复制标签。仅适用于部分格式（如 Matroska 文件）。"
 
@@ -2655,7 +2655,7 @@ msgstr "文档类型版本: %1%"
 msgid "Doc type: %1%"
 msgstr "文档类型: %1%"
 
-#: src/mmg/tab_input.cpp:217
+#: src/mmg/tabs/input.cpp:217
 msgid "Dolby TrueHD"
 msgstr "Dolby TrueHD"
 
@@ -2695,7 +2695,7 @@ msgstr "EBML 版本: %1%"
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "*罪恶的* 内部错误! (未知文件类型)。 %1%\n"
 
-#: src/mmg/tab_chapters.cpp:282
+#: src/mmg/tabs/chapters.cpp:282
 msgid "Each chapter and each edition has a unique identifier. This identifier is normally assigned automatically by the programs, but it can be changed manually if it is really needed."
 msgstr "每个章节和版本都有唯一的 ID。该 ID 通常由程序自动指派，但也可以手动修改（如果确实需要的话）。"
 
@@ -2703,13 +2703,13 @@ msgstr "每个章节和版本都有唯一的 ID。该 ID 通常由程序自动�
 msgid "EbmlVoid (size: %1%)"
 msgstr "Ebml 空隙 (大小: %1%)"
 
-#: src/mmg/tab_chapters.cpp:490
+#: src/mmg/tabs/chapters.cpp:490
 #, c-format
 msgid "Edition %d"
 msgstr "版本 %d"
 
-#: src/mmg/tab_chapters.cpp:871
-#: src/mmg/tab_chapters.cpp:949
+#: src/mmg/tabs/chapters.cpp:871
+#: src/mmg/tabs/chapters.cpp:949
 #, c-format
 msgid "EditionEntry %u"
 msgstr "版本 %u"
@@ -2718,7 +2718,7 @@ msgstr "版本 %u"
 msgid "Elements"
 msgstr "元素"
 
-#: src/mmg/tab_global.cpp:51
+#: src/mmg/tabs/global.cpp:51
 msgid "Enable splitting..."
 msgstr "启用切割..."
 
@@ -2726,7 +2726,7 @@ msgstr "启用切割..."
 msgid "Enabled: %1%"
 msgstr "已启用: %1%"
 
-#: src/mmg/tab_global.cpp:52
+#: src/mmg/tabs/global.cpp:52
 msgid "Enables splitting of the output into more than one file. You can split after a given size, after a given amount of time has passed in each file or after a list of timecodes."
 msgstr "启用切割，将输出文件切割为多个文件。可以在给定尺寸、给定每文件包含的时间量或一系列时间码后切割。"
 
@@ -2738,7 +2738,7 @@ msgstr "加密算法: %1% (%2%)"
 msgid "Encryption key ID: %1%"
 msgstr "加密密匙 ID: %1%"
 
-#: src/mmg/tab_chapters.cpp:267
+#: src/mmg/tabs/chapters.cpp:267
 msgid "End:"
 msgstr "终止时间:"
 
@@ -2769,7 +2769,7 @@ msgstr "初始化章节, 标签及剪辑信息元素表时出错: 无法找到�
 msgid "Error loading settings"
 msgstr "载入设置出错"
 
-#: src/mmg/tab_chapters.cpp:719
+#: src/mmg/tabs/chapters.cpp:719
 msgid "Error opening file"
 msgstr "打开文件出错"
 
@@ -2777,7 +2777,7 @@ msgstr "打开文件出错"
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr "在头部读取阶段解析 MPEG PS 持续流包时出错。流似乎已被严重损坏。\n"
 
-#: src/mmg/tab_chapters.cpp:601
+#: src/mmg/tabs/chapters.cpp:601
 msgid "Error parsing the file"
 msgstr "解析文件出错"
 
@@ -2789,10 +2789,10 @@ msgstr "解析 '%1%' 中的标签出错: 缺一些必须的元素。\n"
 msgid "Error saving the information"
 msgstr "保存信息出错"
 
-#: src/mmg/header_editor_frame.cpp:658
-#: src/mmg/header_editor_frame.cpp:664
-#: src/mmg/tab_chapters.cpp:1928
-#: src/mmg/tab_chapters.cpp:1934
+#: src/mmg/header_editor/frame.cpp:658
+#: src/mmg/header_editor/frame.cpp:664
+#: src/mmg/tabs/chapters.cpp:1928
+#: src/mmg/tabs/chapters.cpp:1934
 msgid "Error writing Matroska file"
 msgstr "写入 Matroska 文件出错"
 
@@ -2842,7 +2842,7 @@ msgstr "一切正常。"
 msgid "Executable files (*.exe)|*.exe|%s"
 msgstr "可执行文件 (*.exe)|*.exe|%s"
 
-#: src/mmg/header_editor_frame.cpp:103
+#: src/mmg/header_editor/frame.cpp:103
 msgid "Expand all entries so that their sub-entries will be shown"
 msgstr "展开所有条目，这样它们的子条目都将被显示"
 
@@ -2854,7 +2854,7 @@ msgstr "预期为如下格式的时间: HH:MM:SS.nnn (HH = 时, MM = 分, SS = �
 msgid "Expected an unsigned integer but found '%1%'."
 msgstr "预期为无符号整数，但发现了 '%1%'。"
 
-#: src/mmg/tab_input.cpp:167
+#: src/mmg/tabs/input.cpp:167
 msgid "Extra options"
 msgstr "额外选项"
 
@@ -2879,7 +2879,7 @@ msgstr "正在提取轨道 %1% （CodecID 为 '%2%'）到文件 '%3%'。容器�
 msgid "Extraction of track number %1% with the CodecID '%2%' is not supported.\n"
 msgstr "不支持对轨道号 %1% （CodecID 为 '%2%'）的提取。\n"
 
-#: src/mmg/tab_input.cpp:220
+#: src/mmg/tabs/input.cpp:220
 msgid "FLAC (Free Lossless Audio Codec)"
 msgstr "FLAC (自由无损音频编解码)"
 
@@ -2887,7 +2887,7 @@ msgstr "FLAC (自由无损音频编解码)"
 msgid "FLAC lossless audio"
 msgstr "FLAC 无损音频"
 
-#: src/mmg/tab_input_format.cpp:106
+#: src/mmg/tabs/input_format.cpp:106
 msgid "FPS:"
 msgstr "帧率 (fps):"
 
@@ -2944,7 +2944,7 @@ msgstr "文件包含的帧数比预期的少，或者文件在 %1% 帧后被破�
 
 #: src/mmg/mmg.cpp:1279
 #: src/mmg/mux_dialog.cpp:115
-#: src/mmg/tab_input.cpp:324
+#: src/mmg/tabs/input.cpp:324
 msgid "File creation failed"
 msgstr "创建文件失败"
 
@@ -2956,12 +2956,12 @@ msgstr "文件数据, 尺寸: %1%"
 msgid "File description: %1%"
 msgstr "文件描述: %1%"
 
-#: src/mmg/tab_input.cpp:368
-#: src/mmg/tab_input.cpp:375
+#: src/mmg/tabs/input.cpp:368
+#: src/mmg/tabs/input.cpp:375
 msgid "File identification failed"
 msgstr "文件无法识别"
 
-#: src/mmg/tab_input.cpp:362
+#: src/mmg/tabs/input.cpp:362
 #, c-format
 msgid ""
 "File identification failed for '%s'. Return code: %d\n"
@@ -2970,12 +2970,12 @@ msgstr ""
 "文件 '%s' 无法识别。返回代码: %d\n"
 "\n"
 
-#: src/mmg/tab_input.cpp:372
+#: src/mmg/tabs/input.cpp:372
 #, c-format
 msgid "File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable in the settings dialog."
 msgstr "文件识别失败。返回代码: %d。错误代号: %d (%s)。请确认您在设置对话框中选择了 mkvmerge 可执行程序。"
 
-#: src/mmg/header_editor_frame.cpp:495
+#: src/mmg/header_editor/frame.cpp:495
 msgid "File modified"
 msgstr "文件已修改"
 
@@ -2983,33 +2983,33 @@ msgstr "文件已修改"
 msgid "File name: %1%"
 msgstr "文件名: %1%"
 
-#: src/mmg/tab_input.cpp:122
+#: src/mmg/tabs/input.cpp:122
 msgid "File options:"
 msgstr "文件选项:"
 
-#: src/mmg/header_editor_frame.cpp:219
-#: src/mmg/tab_chapters.cpp:567
+#: src/mmg/header_editor/frame.cpp:219
+#: src/mmg/tabs/chapters.cpp:567
 msgid "File parsing failed"
 msgstr "解析文件失败"
 
-#: src/mmg/tab_input.cpp:698
+#: src/mmg/tabs/input.cpp:698
 msgid "File removal not possible"
 msgstr "文件不能移除"
 
-#: src/mmg/header_editor_frame.cpp:670
-#: src/mmg/tab_chapters.cpp:1941
+#: src/mmg/header_editor/frame.cpp:670
+#: src/mmg/tabs/chapters.cpp:1941
 msgid "File structure warning"
 msgstr "文件结构警告"
 
-#: src/mmg/tab_global.cpp:155
+#: src/mmg/tabs/global.cpp:155
 msgid "File/segment linking"
 msgstr "文件/剪辑链接"
 
-#: src/mmg/tab_global.cpp:43
+#: src/mmg/tabs/global.cpp:43
 msgid "File/segment title"
 msgstr "文件/剪辑标题"
 
-#: src/mmg/tab_global.cpp:44
+#: src/mmg/tabs/global.cpp:44
 msgid "File/segment title:"
 msgstr "文件/剪辑标题:"
 
@@ -3031,12 +3031,12 @@ msgstr "完成时间"
 msgid "Finished processing on %s"
 msgstr "已完成对 %s 的处理"
 
-#: src/mmg/he_value_page.cpp:75
+#: src/mmg/header_editor/value_page.cpp:75
 msgid "Floating point number"
 msgstr "浮点数"
 
-#: src/mmg/tab_global.cpp:160
-#: src/mmg/tab_global.cpp:165
+#: src/mmg/tabs/global.cpp:160
+#: src/mmg/tabs/global.cpp:165
 msgid "For an in-depth explanantion of file/segment linking and this feature please read mkvmerge's documentation."
 msgstr "要深入了解文件/剪辑链接功能，请阅读 mkvmerge 文档。"
 
@@ -3052,11 +3052,11 @@ msgstr "强制 Xiph 式紧缩。"
 msgid "Forced flag: %1%"
 msgstr "“强制”标记: %1%"
 
-#: src/mmg/tab_input_general.cpp:70
+#: src/mmg/tabs/input_general.cpp:70
 msgid "Forced track flag:"
 msgstr "“强制轨”标记:"
 
-#: src/mmg/tab_input_format.cpp:91
+#: src/mmg/tabs/input_format.cpp:91
 msgid "Forces the FourCC of the video track to this value. Note that this only works for video tracks that use the AVI compatibility mode or for QuickTime video tracks. This option CANNOT be used to change Matroska's CodecID."
 msgstr "强制该视频轨的 FourCC 为此值。注意，这只对使用 AVI 兼容模式的视频轨或 QuickTime 视频轨有效。本选项 *不能* 用于更改 Matroska 的 CodecID。"
 
@@ -3064,7 +3064,7 @@ msgstr "强制该视频轨的 FourCC 为此值。注意，这只对使用 AVI �
 msgid "Forces the Matroska reader to use the generic passthrough packetizer even for known and supported track types."
 msgstr "强制 Matroska 读取器使用通用呈递分组器即使轨道类型已知或受支持。"
 
-#: src/mmg/tab_input_format.cpp:122
+#: src/mmg/tabs/input_format.cpp:122
 msgid "Forces the NALU size length to a certain number of bytes. This parameter is only available for AVC/h.264 elementary streams read from AVC/h.264 ES files, AVIs or Matroska files created with '--engage allow_avc_in_vwf_mode'. It defaults to 4 bytes, but there are files which do not contain a frame or slice that is bigger than 65535 bytes. For such files you can use this parameter and decrease the size to 2."
 msgstr "强制 NALU 长为一定的字节数。本参数只对 AVC/h.264 ES 文件、AVI 文件或使用 '--engage allow_avc_in_vwf_mode' 创建的 Matroska 文件中的 AVC/h.264 基本流有效。如果默认值为 4 字节，但可能有包含大于 65535 字节的帧或切片的文件。对这类文件您可以使用本参数将尺寸降至 2。"
 
@@ -3072,7 +3072,7 @@ msgstr "强制 NALU 长为一定的字节数。本参数只对 AVC/h.264 ES 文�
 msgid "Forces the timecode scale factor to REPLACEME. You have to replace REPLACEME with a value between 1000 and 10000000 or with -1. Normally mkvmerge will use a value of 1000000 which means that timecodes and durations will have a precision of 1ms. For files that will not contain a video track but at least one audio track mkvmerge will automatically choose a timecode scale factor so that all timecodes and durations have a precision of one sample. This causes bigger overhead but allows precise seeking and extraction. If the magical value -1 is used then mkvmerge will use sample precision even if a video track is present."
 msgstr "强制时间码缩放系数为 REPLACEME。您得用 1000 到 10000000 之间的值或者 -1 来替代 REPLACEME。通常 mkvmerge 会使用值 1000000，这样时间码和时长的精度为 1ms。对于不包含视频轨但含有至少一条音频轨的文件，mkvmerge 会自动选择一个时间码缩放系数以使各轨的采样精度相同。这将引起更大的额外开销，但将允许更精确的定位与提取。如果使用了魔法值 -1，即使有视频轨，mkvmerge 也将使用采样精度。"
 
-#: src/mmg/tab_input.cpp:166
+#: src/mmg/tabs/input.cpp:166
 msgid "Format specific options"
 msgstr "格式细节选项"
 
@@ -3080,7 +3080,7 @@ msgstr "格式细节选项"
 msgid "Found no encoded data nor '@file' to read binary data from."
 msgstr "既没发现已编码数据，也没发现引用读取二进制数据的 '@file'。"
 
-#: src/mmg/tab_input_format.cpp:86
+#: src/mmg/tabs/input_format.cpp:86
 msgid "FourCC:"
 msgstr "FourCC:"
 
@@ -3105,7 +3105,7 @@ msgstr "帧率: %1%"
 msgid "Frame with size %1%%2%%3%"
 msgstr "帧，尺寸为 %1%%2%%3%"
 
-#: src/mmg/tab_input_extra.cpp:64
+#: src/mmg/tabs/input_extra.cpp:64
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
 msgstr "无格式限制的文本框，供用户定义此轨的命令行选项。您在这里输入的选项将被放在 mmg 添加的所有其他选项之后，这样您可以覆盖 mmg 为此轨创建的任何选项。所有出现字串 \"<TID>\" 的地方都会被替换为当前轨道的轨道 ID。"
 
@@ -3113,7 +3113,7 @@ msgstr "无格式限制的文本框，供用户定义此轨的命令行选项。
 msgid "Gamma: %1%"
 msgstr "伽玛修正: %1%"
 
-#: src/mmg/tab_input.cpp:165
+#: src/mmg/tabs/input.cpp:165
 msgid "General track options"
 msgstr "轨道常规选项"
 
@@ -3121,23 +3121,23 @@ msgstr "轨道常规选项"
 msgid "Global"
 msgstr "全局"
 
-#: src/mmg/tab_global.cpp:220
+#: src/mmg/tabs/global.cpp:220
 msgid "Global tags"
 msgstr "全局标签"
 
-#: src/mmg/header_editor_frame.cpp:115
+#: src/mmg/header_editor/frame.cpp:115
 msgid "H&eaders"
 msgstr "头部(&E)"
 
-#: src/mmg/header_editor_frame.cpp:62
+#: src/mmg/header_editor/frame.cpp:62
 msgid "Header editor"
 msgstr "头部编辑器"
 
-#: src/mmg/header_editor_frame.cpp:127
+#: src/mmg/header_editor/frame.cpp:127
 msgid "Header editor ready."
 msgstr "头部编辑器准备就绪。"
 
-#: src/mmg/header_editor_frame.cpp:229
+#: src/mmg/header_editor/frame.cpp:229
 #, c-format
 msgid "Header editor: %s"
 msgstr "头部编辑器: %s"
@@ -3150,23 +3150,23 @@ msgstr "无法执行除头压缩，因为缓冲区包含小于要移除头部尺
 msgid "Header removal compression not possible because the buffer did not start with the bytes that should be removed. Wanted bytes:%1%; found:%2%."
 msgstr "无法执行除头压缩，因为缓冲区未以待移除的字节起始。需要的字节:%1%; 找到的是:%2%。"
 
-#: src/mmg/header_editor_frame.cpp:508
-#: src/mmg/header_editor_frame.cpp:601
-#: src/mmg/header_editor_frame.cpp:606
+#: src/mmg/header_editor/frame.cpp:508
+#: src/mmg/header_editor/frame.cpp:601
+#: src/mmg/header_editor/frame.cpp:606
 msgid "Header validation"
 msgstr "头部检验"
 
-#: src/mmg/header_editor_frame.cpp:536
-#: src/mmg/header_editor_frame.cpp:546
-#: src/mmg/header_editor_frame.cpp:750
+#: src/mmg/header_editor/frame.cpp:536
+#: src/mmg/header_editor/frame.cpp:546
+#: src/mmg/header_editor/frame.cpp:750
 msgid "Headers modified"
 msgstr "头部已修改"
 
-#: src/mmg/header_editor_frame.cpp:416
+#: src/mmg/header_editor/frame.cpp:416
 msgid "Height of the encoded video frames in pixels."
 msgstr "编码后的视频帧的高度，单位：像素。"
 
-#: src/mmg/header_editor_frame.cpp:426
+#: src/mmg/header_editor/frame.cpp:426
 msgid "Height of the video frames to display."
 msgstr "视频帧的显示高度。"
 
@@ -3185,11 +3185,11 @@ msgstr ""
 "您既可以直接在下面输入，也可以从下拉框中选取，\n"
 "再按下“添加”按钮。"
 
-#: src/mmg/tab_chapters.cpp:245
+#: src/mmg/tabs/chapters.cpp:245
 msgid "Here you can adjust all the timcdoes of the selected chapter and all its childrend by a specific amount either increasing or decreasing it."
 msgstr "以固定量校准所选章节及其子章节，既可以提前也可以延后。"
 
-#: src/mmg/tab_chapters.cpp:106
+#: src/mmg/tabs/chapters.cpp:106
 msgid ""
 "Here you can set the default values that mmg will use\n"
 "for each chapter that you create. These values can\n"
@@ -3200,7 +3200,7 @@ msgstr ""
 "如果需要，这些值也可以以后修改。\n"
 "默认值会在您退出 mmg 时保存。"
 
-#: src/mmg/tab_chapters.cpp:241
+#: src/mmg/tabs/chapters.cpp:241
 msgid "Here you can set the values for the language and the country that you want to apply to all the chapters below and including the currently selected entry."
 msgstr "设置您希望应用到下面所有章节（含当前所选条目）的语言及国家值。"
 
@@ -3208,11 +3208,11 @@ msgstr "设置您希望应用到下面所有章节（含当前所选条目）的
 msgid "ID"
 msgstr "ID"
 
-#: src/mmg/tab_chapters.cpp:286
+#: src/mmg/tabs/chapters.cpp:286
 msgid "If a chapter is marked 'hidden' then the player should not show this chapter entry to the user. Such entries could still be used by the menu system."
 msgstr "如果一个章节被标记为“隐藏”，播放器将不会向用户显示该章节条目。这样的条目仍然可以通过菜单系统调用。"
 
-#: src/mmg/tab_chapters.cpp:290
+#: src/mmg/tabs/chapters.cpp:290
 msgid "If a chapter is not marked 'enabled' then the player should skip the part of the file that this chapter occupies."
 msgstr "如果一个章节没有被标记为“启用”，播放器将会跳过文件中被该章节占用的一段。"
 
@@ -3232,7 +3232,7 @@ msgstr "如果选中该项，mmg 将在它认为您用法不正确时发出警�
 msgid "If left empty then mmg will set the output file name to be in the same directory as the first file added to this job. Otherwise this directory will be used."
 msgstr "如果留空，mmg 将设置输出文件名与添加到此任务的首个文件同路径。反之将使用此文件夹。"
 
-#: src/mmg/tab_attachments.cpp:92
+#: src/mmg/tabs/attachments.cpp:92
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
 msgstr "如果启用了文件切割，一个文件可以附加到创建的所有文件，或仅附加到创建的首个文件。如果未使用切割功能则无影响。"
 
@@ -3260,16 +3260,16 @@ msgstr "不相容的 AAC 音频包 (长: %1% != len_check %2%)\n"
 msgid "Input"
 msgstr "输入"
 
-#: src/mmg/tab_chapters.cpp:1412
-#: src/mmg/tab_chapters.cpp:1505
-#: src/mmg/tab_chapters.cpp:1514
-#: src/mmg/tab_chapters.cpp:1528
-#: src/mmg/tab_chapters.cpp:1544
-#: src/mmg/tab_chapters.cpp:1552
+#: src/mmg/tabs/chapters.cpp:1412
+#: src/mmg/tabs/chapters.cpp:1505
+#: src/mmg/tabs/chapters.cpp:1514
+#: src/mmg/tabs/chapters.cpp:1528
+#: src/mmg/tabs/chapters.cpp:1544
+#: src/mmg/tabs/chapters.cpp:1552
 msgid "Input data error"
 msgstr "输入数据错误"
 
-#: src/mmg/tab_input.cpp:93
+#: src/mmg/tabs/input.cpp:93
 msgid "Input files:"
 msgstr "输入文件:"
 
@@ -3289,8 +3289,8 @@ msgstr "交错扫描: %1%"
 msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "内部错误: tracks.cpp SSA #1。 %1%"
 
-#: src/mmg/header_editor_frame.cpp:674
-#: src/mmg/tab_chapters.cpp:1945
+#: src/mmg/header_editor/frame.cpp:674
+#: src/mmg/tabs/chapters.cpp:1945
 msgid "Internal program error"
 msgstr "内部程序错误"
 
@@ -3306,15 +3306,15 @@ msgstr "遇到无效的 Base64 字符"
 msgid "Invalid BlockAddition level in argument '%1%'.\n"
 msgstr "无效的附加块层级，在参数 '%1%' 中。\n"
 
-#: src/mmg/tab_chapters.cpp:1505
+#: src/mmg/tabs/chapters.cpp:1505
 msgid "Invalid UID. A UID is simply a number."
 msgstr "无效 UID。UID 仅仅是个数字。"
 
-#: src/mmg/tab_chapters.cpp:1514
+#: src/mmg/tabs/chapters.cpp:1514
 msgid "Invalid UID. This chapter UID is already in use. The original UID has not been changed."
 msgstr "无效 UID。该章节 UID 已被使用。原 UID 没有被改变。"
 
-#: src/mmg/tab_chapters.cpp:1528
+#: src/mmg/tabs/chapters.cpp:1528
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "无效 UID。该版本 UID 已被使用。原 UID 没有被改变。"
 
@@ -3352,7 +3352,7 @@ msgstr "无效的压缩选项指定，在 '--compression %1%' 中。\n"
 msgid "Invalid compression option. No track ID specified in '--compression %1%'.\n"
 msgstr "无效的压缩选项。未在 '--compression %1%' 指定轨道 ID。\n"
 
-#: src/mmg/tab_chapters.cpp:1260
+#: src/mmg/tabs/chapters.cpp:1260
 msgid "Invalid country selected"
 msgstr "无效的国家选择"
 
@@ -3376,16 +3376,16 @@ msgstr "SSA 行 ('%1%') 于时间码 %2% 格式无效: 第一个字段不是整�
 msgid "Invalid format for a SSA line ('%1%') at timecode %2%: Too many fields found (%3% instead of 9). This entry will be skipped.\n"
 msgstr "SSA 行 ('%1%') 于时间码 %2% 格式无效: 发现过多字段 (%3% 而不是 9)。该条将被跳过。\n"
 
-#: src/mmg/tab_chapters.cpp:1412
+#: src/mmg/tabs/chapters.cpp:1412
 msgid "Invalid format used for the adjustment."
 msgstr "调准功能使用的格式无效。"
 
-#: src/mmg/tab_chapters.cpp:1552
+#: src/mmg/tabs/chapters.cpp:1552
 #, c-format
 msgid "Invalid format used for the end time for '%s'. Setting value to 0."
 msgstr "终止时间 '%s' 格式无效。设置值为 0。"
 
-#: src/mmg/tab_chapters.cpp:1544
+#: src/mmg/tabs/chapters.cpp:1544
 #, c-format
 msgid "Invalid format used for the start time for '%s'. Setting value to 0."
 msgstr "起始时间 '%s' 格式无效。设置值为 0。"
@@ -3434,8 +3434,8 @@ msgstr "头长度无效: %1% (总长: %2%, 索引: %3%, 数据索引: %4%)\n"
 msgid "Invalid hexadecimal data encountered: '%1%' is neither white space nor a hexadecimal number."
 msgstr "遇到无效的十六进制数据: '%1%' 既不是空格也不是十六进制数。"
 
-#: src/mmg/tab_chapters.cpp:1254
-#: src/mmg/tab_chapters.cpp:1340
+#: src/mmg/tabs/chapters.cpp:1254
+#: src/mmg/tabs/chapters.cpp:1340
 msgid "Invalid language selected"
 msgstr "无效的语言选择"
 
@@ -3443,7 +3443,7 @@ msgstr "无效的语言选择"
 msgid "Invalid minute: %1%"
 msgstr "无效分数: %1%"
 
-#: src/mmg/tab_global.cpp:524
+#: src/mmg/tabs/global.cpp:524
 msgid "Invalid number of max. split files given."
 msgstr "给出的最大切割文件数无效。"
 
@@ -3594,11 +3594,11 @@ msgstr "紧缩数: %1%"
 msgid "Lacing flag: %1%"
 msgstr "“紧缩”标记: %1%"
 
-#: src/mmg/header_editor_frame.cpp:399
+#: src/mmg/header_editor/frame.cpp:399
 msgid "Language"
 msgstr "语言"
 
-#: src/mmg/tab_input_general.cpp:60
+#: src/mmg/tabs/input_general.cpp:60
 msgid "Language for this track. Select one of the ISO639-2 language codes."
 msgstr "此轨的语言。选择一个 ISO639-2 语言代码。"
 
@@ -3606,10 +3606,10 @@ msgstr "此轨的语言。选择一个 ISO639-2 语言代码。"
 msgid "Language is not NUL terminated"
 msgstr "语言未以 NUL 收尾"
 
-#: src/mmg/tab_chapters.cpp:115
-#: src/mmg/tab_chapters.cpp:320
-#: src/mmg/tab_global.cpp:182
-#: src/mmg/tab_input_general.cpp:55
+#: src/mmg/tabs/chapters.cpp:115
+#: src/mmg/tabs/chapters.cpp:320
+#: src/mmg/tabs/global.cpp:182
+#: src/mmg/tabs/input_general.cpp:55
 msgid "Language:"
 msgstr "语言:"
 
@@ -3621,7 +3621,7 @@ msgstr "语言: %1%"
 msgid "Leave additional space (EbmlVoid) in the output file after the chapters."
 msgstr "在输出文件的章节中留额外的空格 (EbmlVoid)。"
 
-#: src/mmg/tab_input_format.cpp:197
+#: src/mmg/tabs/input_format.cpp:197
 msgid "Left eye"
 msgstr "左眼视角"
 
@@ -3680,19 +3680,19 @@ msgstr "日志输出:"
 msgid "MD5"
 msgstr "MD5"
 
-#: src/mmg/tab_attachments.cpp:80
+#: src/mmg/tabs/attachments.cpp:80
 msgid "MIME type for this track. Select one of the pre-defined MIME types or enter one yourself."
 msgstr "此轨的 MIME 类型。选择一个预定义的 MIME 类型或亲自输入。"
 
-#: src/mmg/tab_attachments.cpp:78
+#: src/mmg/tabs/attachments.cpp:78
 msgid "MIME type:"
 msgstr "MIME 类型:"
 
-#: src/mmg/tab_input.cpp:221
+#: src/mmg/tabs/input.cpp:221
 msgid "MP4 audio/video files"
 msgstr "MP4 音/视频文件"
 
-#: src/mmg/tab_input.cpp:222
+#: src/mmg/tabs/input.cpp:222
 msgid "MPEG audio files"
 msgstr "MPEG 音频文件"
 
@@ -3700,11 +3700,11 @@ msgstr "MPEG 音频文件"
 msgid "MPEG program stream"
 msgstr "MPEG PS 程序流"
 
-#: src/mmg/tab_input.cpp:223
+#: src/mmg/tabs/input.cpp:223
 msgid "MPEG program streams"
 msgstr "MPEG PS 程序流"
 
-#: src/mmg/tab_input.cpp:224
+#: src/mmg/tabs/input.cpp:224
 msgid "MPEG video elementary streams"
 msgstr "MPEG 视频基本流"
 
@@ -3724,7 +3724,7 @@ msgstr "MPEG-1 视频基本流"
 msgid "MPEG-2 video elementary stream"
 msgstr "MPEG-2 视频基本流"
 
-#: src/mmg/tab_input_general.cpp:67
+#: src/mmg/tabs/input_general.cpp:67
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
 msgstr "将此轨作为其所属类（音频，视频，字幕）的默认轨。播放器会优先使用有“默认轨”标记的轨道。"
 
@@ -3743,7 +3743,7 @@ msgstr "畸形的编解码器 id '%1%'。\n"
 msgid "Malformed line? (%1%)\n"
 msgstr "畸形行? (%1%)\n"
 
-#: src/mmg/tab_input_general.cpp:74
+#: src/mmg/tabs/input_general.cpp:74
 msgid "Mark this track as 'forced'. Players must play this track."
 msgstr "将此轨标记为 '强制'。播放器必须播放此轨。"
 
@@ -3752,7 +3752,7 @@ msgstr "将此轨标记为 '强制'。播放器必须播放此轨。"
 msgid "Matroska A/V files (*.mka;*.mkv)|*.mkv;*.mka|%s"
 msgstr "Matroska 音/视频文件 (*.mka;*.mkv)|*.mkv;*.mka|%s"
 
-#: src/mmg/tab_input.cpp:225
+#: src/mmg/tabs/input.cpp:225
 msgid "Matroska audio/video files"
 msgstr "Matroska 音/视频文件"
 
@@ -3760,12 +3760,12 @@ msgstr "Matroska 音/视频文件"
 msgid "Matroska files (*.mkv *.mka *.mks);;All files (*.*)"
 msgstr "Matroska 文件 (*.mkv *.mka *.mks);;所有文件 (*.*)"
 
-#: src/mmg/tab_chapters.cpp:653
+#: src/mmg/tabs/chapters.cpp:653
 #, c-format
 msgid "Matroska files (*.mkv;*.mka)|*.mkv;*.mka|%s"
 msgstr "Matroska 文件 (*.mkv;*.mka)|*.mkv;*.mka|%s"
 
-#: src/mmg/header_editor_frame.cpp:197
+#: src/mmg/header_editor/frame.cpp:197
 #, c-format
 msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|%s"
 msgstr "Matroska 文件 (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|%s"
@@ -3782,7 +3782,7 @@ msgstr "最大附加块 ID: %1%"
 msgid "MaxCache: %1%"
 msgstr "最大缓存: %1%"
 
-#: src/mmg/header_editor_frame.cpp:382
+#: src/mmg/header_editor/frame.cpp:382
 msgid "Maximum cache"
 msgstr "最大缓存"
 
@@ -3802,7 +3802,7 @@ msgstr "Mime 类型: %1%"
 msgid "MinCache: %1%"
 msgstr "最小缓存: %1%"
 
-#: src/mmg/header_editor_frame.cpp:377
+#: src/mmg/header_editor/frame.cpp:377
 msgid "Minimum cache"
 msgstr "最小缓存"
 
@@ -3826,7 +3826,7 @@ msgstr "选项 '--edit-headers' 后缺文件名。"
 msgid "Missing header/comment packets for stream. This file is broken but should be muxed correctly. If not please contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
 msgstr "缺流的头部/注释包。文件已损坏但应该能正常混流。如果确信文件没坏，请联系作者 Moritz Bunkus <moritz@bunkus.org>。\n"
 
-#: src/mmg/tab_attachments.cpp:369
+#: src/mmg/tabs/attachments.cpp:369
 msgid "Missing input"
 msgstr "尚未输入"
 
@@ -3890,20 +3890,20 @@ msgstr "混流耗时 %1% 秒。\n"
 msgid "Muxing took 1 second.\n"
 msgstr "混流耗时 1 秒。\n"
 
-#: src/mmg/tab_input_format.cpp:117
+#: src/mmg/tabs/input_format.cpp:117
 msgid "NALU size length:"
 msgstr "NALU 长:"
 
-#: src/mmg/header_editor_frame.cpp:396
+#: src/mmg/header_editor/frame.cpp:396
 msgid "Name"
 msgstr "名称"
 
-#: src/mmg/tab_input_general.cpp:51
+#: src/mmg/tabs/input_general.cpp:51
 msgid "Name for this track, e.g. \"director's comments\"."
 msgstr "此轨的名称，如“导演评论”。"
 
-#: src/mmg/tab_attachments.cpp:68
-#: src/mmg/tab_chapters.cpp:315
+#: src/mmg/tabs/attachments.cpp:68
+#: src/mmg/tabs/chapters.cpp:315
 msgid "Name:"
 msgstr "名称:"
 
@@ -3911,15 +3911,15 @@ msgstr "名称:"
 msgid "Name: %1%"
 msgstr "名称: %1%"
 
-#: src/mmg/tab_chapters.cpp:428
+#: src/mmg/tabs/chapters.cpp:428
 msgid "New chapters created."
 msgstr "新章节已创建。"
 
-#: src/mmg/he_value_page.cpp:93
+#: src/mmg/header_editor/value_page.cpp:93
 msgid "New value:"
 msgstr "新值:"
 
-#: src/mmg/header_editor_frame.cpp:294
+#: src/mmg/header_editor/frame.cpp:294
 msgid "Next filename"
 msgstr "下一文件名"
 
@@ -3931,7 +3931,7 @@ msgstr "下一文件名: %1%"
 msgid "Next level 0 element is not a segment but %1%"
 msgstr "下一个 0 层级元素不是剪辑而是 %1%"
 
-#: src/mmg/tab_global.cpp:163
+#: src/mmg/tabs/global.cpp:163
 msgid "Next segment UID:"
 msgstr "下一剪辑 UID:"
 
@@ -3939,7 +3939,7 @@ msgstr "下一剪辑 UID:"
 msgid "Next segment UID:%1%"
 msgstr "下一剪辑 UID:%1%"
 
-#: src/mmg/header_editor_frame.cpp:305
+#: src/mmg/header_editor/frame.cpp:305
 msgid "Next segment's unique ID"
 msgstr "下段唯一 ID"
 
@@ -3955,11 +3955,11 @@ msgstr "首帧未发现 AC3 头; 此轨将被跳过。\n"
 msgid "No EBML head found."
 msgstr "未找到 EBML 头。"
 
-#: src/mmg/tab_input.cpp:1346
+#: src/mmg/tabs/input.cpp:1346
 msgid "No FPS selected for AVC/h.264 track"
 msgstr "AVC/h.264 轨道的帧率尚未选择"
 
-#: src/mmg/tab_attachments.cpp:369
+#: src/mmg/tabs/attachments.cpp:369
 #, c-format
 msgid "No MIME type has been selected for the attachment '%s'."
 msgstr "附件 '%s' 的 MIME 类型尚未选择。"
@@ -3972,11 +3972,11 @@ msgstr "附件 '%1%' 的 MIME 类型尚未设定，且不可猜。\n"
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr "没有为文件 %1% ('%2%') 指定追加映射。将使用默认映射 %3%。如果 mkvmerge 异常中止并输出关于无效的 '--append-to' 选项的错误消息，请留心。\n"
 
-#: src/mmg/tab_input.cpp:126
+#: src/mmg/tabs/input.cpp:126
 msgid "No chapters"
 msgstr "不读取章节"
 
-#: src/mmg/tab_chapters.cpp:575
+#: src/mmg/tabs/chapters.cpp:575
 msgid "No chapters found"
 msgstr "未找到章节"
 
@@ -3984,11 +3984,11 @@ msgstr "未找到章节"
 msgid "No error"
 msgstr "无误"
 
-#: src/mmg/header_editor_frame.cpp:500
+#: src/mmg/header_editor/frame.cpp:500
 msgid "No fields modified"
 msgstr "未修改文件"
 
-#: src/mmg/header_editor_frame.cpp:177
+#: src/mmg/header_editor/frame.cpp:177
 msgid ""
 "No file has been loaded yet. You can open a file by selecting\n"
 "'Open' from the 'File' menu."
@@ -3996,8 +3996,8 @@ msgstr ""
 "尚未载入文件。\n"
 "您可以通过“文件”菜单中的“打开”命令打开一个文件。"
 
-#: src/mmg/header_editor_frame.cpp:177
-#: src/mmg/header_editor_frame.cpp:179
+#: src/mmg/header_editor/frame.cpp:177
+#: src/mmg/header_editor/frame.cpp:179
 msgid "No file loaded"
 msgstr "未载入文件"
 
@@ -4039,7 +4039,7 @@ msgstr "未发现剪辑/0 层级元素。"
 msgid "No streams to output were found. Aborting.\n"
 msgstr "未发现待输出流。终止。\n"
 
-#: src/mmg/tab_input.cpp:132
+#: src/mmg/tabs/input.cpp:132
 msgid "No tags"
 msgstr "不读取标签"
 
@@ -4047,7 +4047,7 @@ msgstr "不读取标签"
 msgid "No track ID specified in '--%1% %2%'.\n"
 msgstr "未指定轨道 ID，在 '--%1% %2%'。\n"
 
-#: src/mmg/tab_input.cpp:576
+#: src/mmg/tabs/input.cpp:576
 msgid "No tracks found"
 msgstr "未发现轨道"
 
@@ -4059,11 +4059,11 @@ msgstr "此文件中没有待复制的轨道。这通常是因为命令行中的
 msgid "No version number found.\n"
 msgstr "未发现版本号。\n"
 
-#: src/mmg/tab_input_format.cpp:196
+#: src/mmg/tabs/input_format.cpp:196
 msgid "None"
 msgstr "单视角"
 
-#: src/mmg/header_editor_frame.cpp:500
+#: src/mmg/header_editor/frame.cpp:500
 msgid "None of the header fields has been modified. Nothing has been saved."
 msgstr "头部字段未被修改。未保存任何改动。"
 
@@ -4091,15 +4091,15 @@ msgstr ""
 "无事可做。\n"
 "\n"
 
-#: src/mmg/header_editor_frame.cpp:388
+#: src/mmg/header_editor/frame.cpp:388
 msgid "Number of nanoseconds (not scaled) per frame."
 msgstr "每帧的毫微秒数 (未缩放前的)。"
 
-#: src/mmg/header_editor_frame.cpp:475
+#: src/mmg/header_editor/frame.cpp:475
 msgid "Numbers of channels in the track."
 msgstr "此轨的声道数。"
 
-#: src/mmg/tab_input.cpp:227
+#: src/mmg/tabs/input.cpp:227
 msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM 音/视频文件"
 
@@ -4107,7 +4107,7 @@ msgstr "Ogg/OGM 音/视频文件"
 msgid "Ok"
 msgstr "确定"
 
-#: src/mmg/tab_chapters.cpp:778
+#: src/mmg/tabs/chapters.cpp:778
 msgid "One of the chapters does not have a name."
 msgstr "有一章节无名称。"
 
@@ -4139,7 +4139,7 @@ msgstr "仅允许有一个剪辑文件，在 '%1% %2%'。\n"
 msgid "Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the default mapping will be used) or specify a mapping for all tracks that are to be copied.\n"
 msgstr "只给出了文件 %1% ('%2%') 的部分追加映射。只有不指定任何映射 (此时将使用默认映射) 或为所有轨道指定映射时，才会复制所有轨道。\n"
 
-#: src/mmg/tab_attachments.cpp:91
+#: src/mmg/tabs/attachments.cpp:91
 msgid "Only to the first"
 msgstr "仅附加到首个文件"
 
@@ -4155,12 +4155,12 @@ msgstr "选项(&T)\tCtrl-P"
 msgid "Open File"
 msgstr "打开文件"
 
-#: src/mmg/header_editor_frame.cpp:197
+#: src/mmg/header_editor/frame.cpp:197
 #: src/info/wxwidgets_ui.cpp:136
 msgid "Open a Matroska file"
 msgstr "打开 Matroska 文件"
 
-#: src/mmg/header_editor_frame.cpp:95
+#: src/mmg/header_editor/frame.cpp:95
 msgid "Open an existing Matroska file"
 msgstr "打开现有的 Matroska 文件"
 
@@ -4180,7 +4180,7 @@ msgstr "*仅* 为开发者设计的选项。不要用它们。凡是被官方支
 msgid "Order: %1%"
 msgstr "编码指令: %1%"
 
-#: src/mmg/he_value_page.cpp:115
+#: src/mmg/header_editor/value_page.cpp:115
 msgid "Original value:"
 msgstr "原值:"
 
@@ -4261,7 +4261,7 @@ msgstr "请不要把 'mmg' 自己当作 'mkvmerge' 可执行程序选择。"
 msgid "Please enter a description for the new job:"
 msgstr "请输入新任务的描述:"
 
-#: src/mmg/tab_chapters.cpp:126
+#: src/mmg/tabs/chapters.cpp:126
 msgid ""
 "Please enter the values for the language and the\n"
 "country that you want to apply to all the chapters\n"
@@ -4279,7 +4279,7 @@ msgstr ""
 "请阅读 mkvmerge 命令行自述页。\n"
 "它以大篇幅解释了本列表中不易看透的细节。\n"
 
-#: src/mmg/header_editor_frame.cpp:291
+#: src/mmg/header_editor/frame.cpp:291
 msgid "Previous filename"
 msgstr "上一文件名"
 
@@ -4287,7 +4287,7 @@ msgstr "上一文件名"
 msgid "Previous filename: %1%"
 msgstr "上一文件名: %1%"
 
-#: src/mmg/tab_global.cpp:158
+#: src/mmg/tabs/global.cpp:158
 msgid "Previous segment UID:"
 msgstr "上一剪辑 UID:"
 
@@ -4295,7 +4295,7 @@ msgstr "上一剪辑 UID:"
 msgid "Previous segment UID:%1%"
 msgstr "上一剪辑 UID:%1%"
 
-#: src/mmg/header_editor_frame.cpp:301
+#: src/mmg/header_editor/frame.cpp:301
 msgid "Previous segment's unique ID"
 msgstr "上段唯一 ID"
 
@@ -4336,7 +4336,7 @@ msgstr "进度: 100%%%1%"
 msgid "Querying mkvmerge's capabilities"
 msgstr "正向 mkvmerge 询问处理能力"
 
-#: src/mmg/tab_input.cpp:226
+#: src/mmg/tabs/input.cpp:226
 msgid "QuickTime audio/video files"
 msgstr "QuickTime 音/视频文件"
 
@@ -4463,7 +4463,7 @@ msgstr "Quicktime/MP4 读取器: 未知/不支持的 FourCC '%|1$.4s|'，轨道 
 msgid "Quit the application"
 msgstr "退出本程序"
 
-#: src/mmg/header_editor_frame.cpp:100
+#: src/mmg/header_editor/frame.cpp:100
 msgid "Quit the header editor"
 msgstr "退出头部编辑器"
 
@@ -4487,7 +4487,7 @@ msgstr "不支持读取已加密的 VOB。\n"
 msgid "Ready"
 msgstr "就绪"
 
-#: src/mmg/header_editor_frame.cpp:471
+#: src/mmg/header_editor/frame.cpp:471
 msgid "Real output sampling frequency in Hz."
 msgstr "实际输出的采样率，单位 Hz。"
 
@@ -4495,7 +4495,7 @@ msgstr "实际输出的采样率，单位 Hz。"
 msgid "RealMedia audio and video"
 msgstr "RealMedia 音视频"
 
-#: src/mmg/tab_input.cpp:228
+#: src/mmg/tabs/input.cpp:228
 msgid "RealMedia audio/video files"
 msgstr "RealMedia 音/视频文件"
 
@@ -4519,7 +4519,7 @@ msgstr "参考优先级: %1%"
 msgid "Reference virtual: %1%"
 msgstr "参考实质: %1%"
 
-#: src/mmg/header_editor_frame.cpp:97
+#: src/mmg/header_editor/frame.cpp:97
 msgid "Reload the current file without saving"
 msgstr "在不保存的情况下重新载入当前文件"
 
@@ -4527,15 +4527,15 @@ msgstr "在不保存的情况下重新载入当前文件"
 msgid "Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
 msgstr "记住像 &, <, > 和 \" 这样的特殊字符必须以常用的 HTML 方式转义: &amp; 代表 '&', &lt; 代表 '<', &gt; 代表 '>', &quot; 代表 '\"'。"
 
-#: src/mmg/tab_chapters.cpp:238
+#: src/mmg/tabs/chapters.cpp:238
 msgid "Remove chapter"
 msgstr "移除章节"
 
-#: src/mmg/he_value_page.cpp:100
+#: src/mmg/header_editor/value_page.cpp:100
 msgid "Remove element"
 msgstr "移除元素"
 
-#: src/mmg/tab_chapters.cpp:306
+#: src/mmg/tabs/chapters.cpp:306
 msgid "Remove name"
 msgstr "移除名称"
 
@@ -4543,7 +4543,7 @@ msgstr "移除名称"
 msgid "Restart required"
 msgstr "需要重新运行"
 
-#: src/mmg/tab_input_format.cpp:198
+#: src/mmg/tabs/input_format.cpp:198
 msgid "Right eye"
 msgstr "右眼视角"
 
@@ -4567,12 +4567,12 @@ msgstr "启动所选(&T)"
 msgid "SHA1-160"
 msgstr "SHA1-160"
 
-#: src/mmg/tab_input.cpp:229
+#: src/mmg/tabs/input.cpp:229
 #: src/merge/mkvmerge.cpp:107
 msgid "SRT text subtitles"
 msgstr "SRT 文本字幕"
 
-#: src/mmg/tab_input.cpp:230
+#: src/mmg/tabs/input.cpp:230
 #: src/merge/mkvmerge.cpp:108
 msgid "SSA/ASS text subtitles"
 msgstr "SSA/ASS 文本字幕"
@@ -4585,7 +4585,7 @@ msgstr "保存命令行(&V)"
 msgid "Same directory as the first input file's"
 msgstr "与第一个输入文件同目录"
 
-#: src/mmg/header_editor_frame.cpp:466
+#: src/mmg/header_editor/frame.cpp:466
 msgid "Sampling frequency in Hz."
 msgstr "采样率，单位 Hz。"
 
@@ -4629,7 +4629,7 @@ msgstr "将当前章节以另一名称保存"
 msgid "Save the current chapters to an existing Matroska file"
 msgstr "将当前章节存至现有 Matroska 文件"
 
-#: src/mmg/header_editor_frame.cpp:96
+#: src/mmg/header_editor/frame.cpp:96
 msgid "Save the header values"
 msgstr "保存头部字段值"
 
@@ -4676,7 +4676,7 @@ msgstr "剪辑"
 msgid "Segment UID:%1%"
 msgstr "剪辑 UID:%1%"
 
-#: src/mmg/header_editor_frame.cpp:288
+#: src/mmg/header_editor/frame.cpp:288
 msgid "Segment filename"
 msgstr "剪辑文件名"
 
@@ -4684,7 +4684,7 @@ msgstr "剪辑文件名"
 msgid "Segment filename: %1%"
 msgstr "剪辑文件名: %1%"
 
-#: src/mmg/header_editor_frame.cpp:279
+#: src/mmg/header_editor/frame.cpp:279
 #: src/extract/timecodes_v2.cpp:221
 #: src/extract/tracks.cpp:373
 #: src/info/mkvinfo.cpp:448
@@ -4701,7 +4701,7 @@ msgstr "剪辑信息"
 msgid "Segment tracks"
 msgstr "剪辑轨道"
 
-#: src/mmg/header_editor_frame.cpp:297
+#: src/mmg/header_editor/frame.cpp:297
 msgid "Segment unique ID"
 msgstr "剪辑唯一 ID"
 
@@ -4725,15 +4725,15 @@ msgstr "选择输出文件"
 msgid "Select the file you want to write to"
 msgstr "选择您将写入的文件"
 
-#: src/mmg/tab_chapters.cpp:124
+#: src/mmg/tabs/chapters.cpp:124
 msgid "Select values to be applied"
 msgstr "选择将应用的值"
 
-#: src/mmg/tab_input_extra.cpp:55
+#: src/mmg/tabs/input_extra.cpp:55
 msgid "Selects for which blocks mkvmerge will produce index entries ( = cue entries). \"default\" is a good choice for almost all situations."
 msgstr "选择 mkvmerge 将为哪些块创建索引。在几乎所有情况下，“默认”是个合适的选择。"
 
-#: src/mmg/tab_input_format.cpp:154
+#: src/mmg/tabs/input_format.cpp:154
 msgid "Selects the character set a subtitle file was written with. Only needed for non-UTF files that mkvmerge does not detect correctly."
 msgstr "选择字幕文件保存时使用的字符集。只有非 UTF 文件需要选择（mkvmerge无法正确侦测）。"
 
@@ -4745,11 +4745,11 @@ msgstr "设置默认值(&D)"
 msgid "Set &output file"
 msgstr "设置输出文件(&O)"
 
-#: src/mmg/tab_chapters.cpp:141
+#: src/mmg/tabs/chapters.cpp:141
 msgid "Set country to:"
 msgstr "设置国家为:"
 
-#: src/mmg/header_editor_frame.cpp:365
+#: src/mmg/header_editor/frame.cpp:365
 msgid ""
 "Set if that track (audio, video or subs) SHOULD\n"
 "be used if no language found matches the\n"
@@ -4759,7 +4759,7 @@ msgstr ""
 "此轨 (音频, 视频 或 字幕) 是否 *应该*\n"
 "被使用。"
 
-#: src/mmg/header_editor_frame.cpp:372
+#: src/mmg/header_editor/frame.cpp:372
 msgid ""
 "Set if that track MUST be used during playback.\n"
 "There can be many forced track for a kind (audio,\n"
@@ -4771,11 +4771,11 @@ msgstr ""
 "每类轨道 (音频, 视频 或 字幕)可以有多个强制轨。\n"
 "播放器应该选择符合用户首选项或默认且强制的轨。"
 
-#: src/mmg/header_editor_frame.cpp:368
+#: src/mmg/header_editor/frame.cpp:368
 msgid "Set if the track is used."
 msgstr "设置轨道是否可用。"
 
-#: src/mmg/tab_chapters.cpp:134
+#: src/mmg/tabs/chapters.cpp:134
 msgid "Set language to:"
 msgstr "设置语言为:"
 
@@ -4783,27 +4783,27 @@ msgstr "设置语言为:"
 msgid "Set the delay input field from the file name"
 msgstr "根据首个文件的名称设置“延时”输入框"
 
-#: src/mmg/tab_chapters.cpp:240
+#: src/mmg/tabs/chapters.cpp:240
 msgid "Set values"
 msgstr "设置语言值"
 
-#: src/mmg/tab_input_format.cpp:165
+#: src/mmg/tabs/input_format.cpp:165
 msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
 msgstr "选择 VobSub 字幕使用的压缩方式。如果没有选中任何方式，VobSub 字幕将自动使用 zlib 压缩。选“无”将导致文件变得很大。"
 
-#: src/mmg/tab_input_format.cpp:111
+#: src/mmg/tabs/input_format.cpp:111
 msgid "Sets the default duration or number of frames per second for a track. This is only possible for video tracks. For AVC/h.264 elementary streams this option must be given. This can either be a floating point number or a fraction."
 msgstr "设置轨道的默认时长或每秒帧数（帧率）。仅对视频轨有效。对于 AVC/h.264 基本流，必须设定此选项。既可以是浮点数，也可以是分数。"
 
-#: src/mmg/tab_input_format.cpp:61
+#: src/mmg/tabs/input_format.cpp:61
 msgid "Sets the display aspect ratio of the track. The format can be either 'a/b' in which case both numbers must be integer (e.g. 16/9) or just a single floting point number 'f' (e.g. 2.35)."
 msgstr "设置轨道的显示宽高比。格式可以是两个整数构成的 'a/b' (如 16/9) 或者单个浮点数 'f' (如 2.35)。"
 
-#: src/mmg/tab_input_format.cpp:81
+#: src/mmg/tabs/input_format.cpp:81
 msgid "Sets the display height of the track. The width must be set as well, or this field will be ignored."
 msgstr "设置轨道的显示高度。必须同时设置宽度，否则此字段将被忽略。"
 
-#: src/mmg/tab_input_format.cpp:72
+#: src/mmg/tabs/input_format.cpp:72
 msgid "Sets the display width of the track. The height must be set as well, or this field will be ignored."
 msgstr "设置轨道的显示宽度。必须同时设置高度，否则此字段将被忽略。"
 
@@ -4811,7 +4811,7 @@ msgstr "设置轨道的显示宽度。必须同时设置高度，否则此字段
 msgid "Sets the priority that mkvmerge will run with."
 msgstr "选择 mkvmerge 运行时的优先级。"
 
-#: src/mmg/tab_input_format.cpp:101
+#: src/mmg/tabs/input_format.cpp:101
 msgid "Sets the stereo mode of the video track to this value. If left empty then the track's original stereo mode will be kept or, if it didn't have one, none will be set at all."
 msgstr "选择此视频轨的立体视法。如果留空则保留原模式，或者如果原本就没有，任何模式都不会设置。"
 
@@ -4875,7 +4875,7 @@ msgstr "签名密匙 ID: %1%"
 msgid "Signature: %1%"
 msgstr "签名: %1%"
 
-#: src/mmg/he_value_page.cpp:74
+#: src/mmg/header_editor/value_page.cpp:74
 msgid "Signed integer"
 msgstr "带符号整数"
 
@@ -4915,15 +4915,15 @@ msgstr "跳过开头 %1% 字节 (未发现有效的 MP3 头)。\n"
 msgid "Slices"
 msgstr "切片"
 
-#: src/mmg/header_editor_frame.cpp:546
+#: src/mmg/header_editor/frame.cpp:546
 msgid "Some header values have been modified. Do you really want to close without saving the file?"
 msgstr "一些头部值已被修改。您确实要在不保存文件的情况下关闭？"
 
-#: src/mmg/header_editor_frame.cpp:750
+#: src/mmg/header_editor/frame.cpp:750
 msgid "Some header values have been modified. Do you really want to load a new file without saving the current one?"
 msgstr "一些头部值已被修改。您确实要在不保存当前文件的情况下载入一个新的文件？"
 
-#: src/mmg/header_editor_frame.cpp:536
+#: src/mmg/header_editor/frame.cpp:536
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "一些头部值已被修改。您确实要在不保存文件的情况下重新载入？"
 
@@ -4931,13 +4931,13 @@ msgstr "一些头部值已被修改。您确实要在不保存文件的情况下
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "缺某些标签元素 (不该发生此错误 - 另一个类似的错误应该在早些时候发生过)。%1%\n"
 
-#: src/mmg/header_editor_frame.cpp:400
+#: src/mmg/header_editor/frame.cpp:400
 msgid ""
 "Specifies the language of the track in the\n"
 "Matroska languages form."
 msgstr "指定此轨在 Matroska 语言表单中的语言。"
 
-#: src/mmg/header_editor_frame.cpp:456
+#: src/mmg/header_editor/frame.cpp:456
 msgid ""
 "Specify the possible modifications to the aspect ratio\n"
 "(0: free resizing, 1: keep aspect ratio, 2: fixed)."
@@ -4945,15 +4945,15 @@ msgstr ""
 "指定对宽高比的可行修正\n"
 "(0: 自由调整, 1: 保持宽高比, 2: 固定)。"
 
-#: src/mmg/tab_global.cpp:50
+#: src/mmg/tabs/global.cpp:50
 msgid "Splitting"
 msgstr "切割"
 
-#: src/mmg/tab_global.cpp:442
+#: src/mmg/tabs/global.cpp:442
 msgid "Splitting by size was selected, but no size has been given."
 msgstr "已选择按尺寸切割，但未给出尺寸。"
 
-#: src/mmg/tab_global.cpp:475
+#: src/mmg/tabs/global.cpp:475
 msgid "Splitting by timecode/duration was selected, but nothing was entered."
 msgstr "已选择按时间码/播放时长切割，但未输入任何数值。"
 
@@ -4982,7 +4982,7 @@ msgstr "启动选择的任务（不论其状态如何）"
 msgid "Start with empty settings"
 msgstr "清空所有设置并重新启动"
 
-#: src/mmg/tab_chapters.cpp:262
+#: src/mmg/tabs/chapters.cpp:262
 msgid "Start:"
 msgstr "起始时间:"
 
@@ -5004,7 +5004,7 @@ msgstr "状态"
 msgid "Status and progress"
 msgstr "状态和进度"
 
-#: src/mmg/he_value_page.cpp:109
+#: src/mmg/header_editor/value_page.cpp:109
 msgid "Status:"
 msgstr "状态:"
 
@@ -5016,7 +5016,7 @@ msgstr "立体视法参数: 未以 <TID>:<n|keyword> 形式给出，其中可以
 msgid "Stereo mode: %1%%2%"
 msgstr "立体视法: %1%%2%"
 
-#: src/mmg/header_editor_frame.cpp:461
+#: src/mmg/header_editor/frame.cpp:461
 msgid ""
 "Stereo-3D video mode (0: mono, 1: right eye,\n"
 "2: left eye, 3: both eyes)."
@@ -5024,23 +5024,23 @@ msgstr ""
 "立体-3D 视频模式 (0: 单视角, 1: 右眼视角,\n"
 "2: 左眼视角, 3: 双眼视角)。"
 
-#: src/mmg/tab_input_format.cpp:96
+#: src/mmg/tabs/input_format.cpp:96
 msgid "Stereoscopy:"
 msgstr "立体视法:"
 
-#: src/mmg/tab_input_format.cpp:138
+#: src/mmg/tabs/input_format.cpp:138
 msgid "Stretch by:"
 msgstr "伸展比率:"
 
-#: src/mmg/tab_input_format.cpp:143
+#: src/mmg/tabs/input_format.cpp:143
 msgid "Stretch this track's timecodes. This entry can have two formats. It is either a positive floating point number, or a fraction like e.g. 1200/1253. Works best on video and subtitle tracks."
 msgstr "伸展此轨的时间码。本项支持两种格式。既可以是正的浮点数，也可以是形如 1200/1253 的分数。应用于视频轨与字幕轨时效果最佳。"
 
-#: src/mmg/he_value_page.cpp:72
+#: src/mmg/header_editor/value_page.cpp:72
 msgid "String"
 msgstr "字符串"
 
-#: src/mmg/tab_input_format.cpp:149
+#: src/mmg/tabs/input_format.cpp:149
 msgid "Subtitle charset:"
 msgstr "字幕字符集:"
 
@@ -5048,12 +5048,12 @@ msgstr "字幕字符集:"
 msgid "Subtitle track %1% is missing some duration elements. Please check the resulting SSA/ASS file for entries that have the same start and end time.\n"
 msgstr "字幕轨 %1% 缺时长元素。请检查输出的 SSA/ASS 文件中有相同起始和终止时间的条目。\n"
 
-#: src/mmg/header_editor_frame.cpp:346
+#: src/mmg/header_editor/frame.cpp:346
 #, c-format
 msgid "Subtitle track %u"
 msgstr "字幕轨 %u"
 
-#: src/mmg/tab_input.cpp:231
+#: src/mmg/tabs/input.cpp:231
 msgid "TTA (The lossless True Audio codec)"
 msgstr "TTA (The True Audio 无损音频编解码)"
 
@@ -5061,16 +5061,16 @@ msgstr "TTA (The True Audio 无损音频编解码)"
 msgid "TTA lossless audio"
 msgstr "TTA 无损音频"
 
-#: src/mmg/tab_global.cpp:221
+#: src/mmg/tabs/global.cpp:221
 msgid "Tag file:"
 msgstr "标签文件:"
 
-#: src/mmg/tab_global.cpp:243
+#: src/mmg/tabs/global.cpp:243
 #, c-format
 msgid "Tag files (*.xml)|*.xml|%s"
 msgstr "标签文件 (*.xml)|*.xml|%s"
 
-#: src/mmg/tab_input_general.cpp:256
+#: src/mmg/tabs/input_general.cpp:256
 #, c-format
 msgid "Tag files (*.xml;*.txt)|*.xml;*.txt|%s"
 msgstr "标签文件 (*.xml;*.txt)|*.xml;*.txt|%s"
@@ -5079,7 +5079,7 @@ msgstr "标签文件 (*.xml;*.txt)|*.xml;*.txt|%s"
 msgid "Tags"
 msgstr "标签"
 
-#: src/mmg/tab_input_general.cpp:77
+#: src/mmg/tabs/input_general.cpp:77
 msgid "Tags:"
 msgstr "标签:"
 
@@ -5136,7 +5136,7 @@ msgstr "无法解析 FLAC 头: 找不到流信息结构。\n"
 msgid "The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n"
 msgstr "FPS 为 0.0 且读取器未提供包的时间码。%1%\n"
 
-#: src/mmg/tab_input.cpp:1331
+#: src/mmg/tabs/input.cpp:1331
 #, c-format
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
 msgstr "轨 %s（自文件 '%s'）的 FPS 设置无效。"
@@ -5145,7 +5145,7 @@ msgstr "轨 %s（自文件 '%s'）的 FPS 设置无效。"
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "FourCC 值必须为四个字符的长度，在 '%1% %2%'。\n"
 
-#: src/mmg/tab_input.cpp:1319
+#: src/mmg/tabs/input.cpp:1319
 #, c-format
 msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
 msgstr "轨道 %s（自文件 '%s'）的 FourCC 设置非四字符长。"
@@ -5162,11 +5162,11 @@ msgstr "MPEG-4 part 2 压缩仅适用于原生 MPEG-4。然而，您未使用 '-
 msgid "The Matroska file is analyzed."
 msgstr "正在分析 Matroska 文件。"
 
-#: src/mmg/header_editor_frame.cpp:668
+#: src/mmg/header_editor/frame.cpp:668
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 msgstr "Matroska 文件已修改，但元定位项无法更新。这意味着播放器可能很难找到该元素。请使用您最喜欢的播放器检查此文件。\n"
 
-#: src/mmg/tab_chapters.cpp:1938
+#: src/mmg/tabs/chapters.cpp:1938
 msgid ""
 "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 "\n"
@@ -5204,7 +5204,7 @@ msgstr "'%2%' 的 '%1%' 参数无效: 元素 '%3%' 的冒号过多。\n"
 msgid "The argument to '--timecode-scale' must be a number.\n"
 msgstr "'--timecode-scale' 的参数必须为数字。\n"
 
-#: src/mmg/tab_input.cpp:1386
+#: src/mmg/tabs/input.cpp:1386
 #, c-format
 msgid "The aspect ratio setting for track nr. %s in file '%s' is invalid."
 msgstr "轨道号 %s（文件 '%s'）的宽高比设置无效。"
@@ -5229,12 +5229,12 @@ msgstr "此二进制数据最多 %1% 字节长。"
 msgid "The binary data must be exactly %1% bytes long."
 msgstr "此二进制数据必须为 %1% 字节长。"
 
-#: src/mmg/tab_chapters.cpp:792
+#: src/mmg/tabs/chapters.cpp:792
 #, c-format
 msgid "The chapter '%s' is missing its language."
 msgstr "章节 '%s' 缺语言。"
 
-#: src/mmg/tab_chapters.cpp:786
+#: src/mmg/tabs/chapters.cpp:786
 #, c-format
 msgid "The chapter '%s' is missing the start time."
 msgstr "章节 '%s' 缺起始时间。"
@@ -5273,7 +5273,7 @@ msgstr "编解码器专有数据不匹配。长度相同 (%1%) 但内容不同�
 msgid "The correction file header was not read correctly.\n"
 msgstr "校正文件未能正常读取。\n"
 
-#: src/mmg/tab_chapters.cpp:1260
+#: src/mmg/tabs/chapters.cpp:1260
 #, c-format
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "国家 '%s' 不是有效的 ccTLD，不能选择。"
@@ -5282,7 +5282,7 @@ msgstr "国家 '%s' 不是有效的 ccTLD，不能选择。"
 msgid "The cue entries (the index) are being written..."
 msgstr "正在写入 cue 索引..."
 
-#: src/mmg/tab_input.cpp:694
+#: src/mmg/tabs/input.cpp:694
 #, c-format
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr "当前文件 (序号 %d) 不能移除。有其他文件 -- 至少文件号为 %d 的文件 -- 有要追加合并到此文件某轨道的轨道。请先移除那些文件。"
@@ -5295,7 +5295,7 @@ msgstr "当前包的时间码比前一包的小。这通常表明源文件是未
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr "默认语言码 '%1%' 不是有效的 ISO639-2 语言代码，将被忽略。\n"
 
-#: src/mmg/tab_input.cpp:1298
+#: src/mmg/tabs/input.cpp:1298
 #, c-format
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "对文件 '%s' 的 %s 轨的延时设置无效。"
@@ -5308,7 +5308,7 @@ msgstr ""
 "文件 '%1%' 的分离器无法初始化:\n"
 "%2%\n"
 
-#: src/mmg/tab_global.cpp:228
+#: src/mmg/tabs/global.cpp:228
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr "关于关联至轨道的标签与全局标签的区别已在 mkvmerge 文档中作出解释。简而言之: 全局标签应用于整个文件，而您能在 '输入' 选项卡中添加的标签仅能应用于单个轨道。"
 
@@ -5329,12 +5329,12 @@ msgstr ""
 "拖入的文件 '%s'\n"
 "不是 Matroska 文件。"
 
-#: src/mmg/tab_global.cpp:83
+#: src/mmg/tabs/global.cpp:83
 msgid "The duration after which a new output file is started. The time can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH' and the number of nanoseconds 'nnnnnnnnn'. If given then you may use up to nine digits after the decimal point. Examples: 01:00:00 (after one hour) or 1800s (after 1800 seconds)."
 msgstr "在指定时长后开始输出新文件。时间可以以 HH:MM:SS.nnnnnnnnn 的形式或者后接 's' 的秒数给定。时数 'HH' 与毫微秒数 'nnnnnnnnn' 可省略。如果要给出，您可以在小数点后使用多达九位数。示例: 01:00:00 (一小时后) 或 1800s (1800 秒后)。"
 
-#: src/mmg/header_editor_frame.cpp:656
-#: src/mmg/tab_chapters.cpp:1926
+#: src/mmg/header_editor/frame.cpp:656
+#: src/mmg/tabs/chapters.cpp:1926
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "元素已被写至文件尾部，但剪辑尺寸无法更新。因此这些元素将不可见。处理进程将被中止。文件已被修改!"
 
@@ -5407,7 +5407,7 @@ msgstr "文件不存在。"
 msgid "The file does not seem to be a valid mkvmerge GUI settings file."
 msgstr "文件似乎不是有效的 mkvmerge GUI 设置文件。"
 
-#: src/mmg/header_editor_frame.cpp:494
+#: src/mmg/header_editor/frame.cpp:494
 msgid "The file has been changed by another program since it was read by the header editor. Therefore you have to re-load it. Unfortunately this means that all of your changes will be lost."
 msgstr "在头部编辑器读取此文件后，文件已被其它程序更改。因此您需要重新载入它。不幸的是这意味着您将丢失所有改动。"
 
@@ -5419,7 +5419,7 @@ msgstr "文件头太短。\n"
 msgid "The file header was not read correctly.\n"
 msgstr "文件头读取异常。\n"
 
-#: src/mmg/tab_input.cpp:355
+#: src/mmg/tabs/input.cpp:355
 #, c-format
 msgid "The file is an unsupported container format (%s)."
 msgstr "文件容器格式不支持 (%s)。"
@@ -5440,7 +5440,7 @@ msgstr "正在固定文件，第 3/4 步..."
 msgid "The file is being fixed, part 4/4..."
 msgstr "正在固定文件，第 4/4 步..."
 
-#: src/mmg/header_editor_frame.cpp:288
+#: src/mmg/header_editor/frame.cpp:288
 msgid "The file name for this segment."
 msgstr "此剪辑的文件名。"
 
@@ -5456,15 +5456,15 @@ msgstr "文件 %1% ('%2%') 不含 ID 为 %3% 的轨道，或者没选择复制�
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr "文件 %1% ('%2%') 未被追加合并。选项 '--append-to' 的参数无效。\n"
 
-#: src/mmg/header_editor_frame.cpp:207
+#: src/mmg/header_editor/frame.cpp:207
 msgid "The file you tried to open is not a Matroska file."
 msgstr "您试图打开的文件不是 Matroska 文件。"
 
-#: src/mmg/tab_chapters.cpp:658
+#: src/mmg/tabs/chapters.cpp:658
 msgid "The file you tried to save to is NOT a Matroska file."
 msgstr "您试图保存到的文件 *不是* Matroska 文件。"
 
-#: src/mmg/tab_chapters.cpp:698
+#: src/mmg/tabs/chapters.cpp:698
 msgid "The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."
 msgstr "您试图保存到的文件是个 Matroska 文件。要这样做的话，您应该使用“保存到 Matroska 文件”菜单项。"
 
@@ -5472,16 +5472,16 @@ msgstr "您试图保存到的文件是个 Matroska 文件。要这样做的话�
 msgid "The first file cannot be appended because there are no files to append to.\n"
 msgstr "首个文件不能作为追加文件，因为没有文件供其追加。\n"
 
-#: src/mmg/tab_global.cpp:464
+#: src/mmg/tabs/global.cpp:464
 msgid "The format of the split size is invalid (size too small)."
 msgstr "切割尺寸格式无效 (尺寸太小)。"
 
-#: src/mmg/tab_global.cpp:456
-#: src/mmg/tab_global.cpp:460
+#: src/mmg/tabs/global.cpp:456
+#: src/mmg/tabs/global.cpp:460
 msgid "The format of the split size is invalid."
 msgstr "切割尺寸格式无效。"
 
-#: src/mmg/tab_global.cpp:483
+#: src/mmg/tabs/global.cpp:483
 msgid "The format of the split timecode/duration is invalid."
 msgstr "切割时间码/时长格式无效。"
 
@@ -5503,12 +5503,12 @@ msgstr "头部已被写入。"
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "两轨高度不同: %1% 与 %2%"
 
-#: src/mmg/tab_input.cpp:576
+#: src/mmg/tabs/input.cpp:576
 #, c-format
 msgid "The input file '%s' does not contain any tracks."
 msgstr "输入文件 '%s' 不包含任何轨道。"
 
-#: src/mmg/tab_input.cpp:1211
+#: src/mmg/tabs/input.cpp:1211
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -5524,7 +5524,7 @@ msgstr ""
 "\n"
 "(问题出在 tab_input::load(), #1)"
 
-#: src/mmg/tab_input.cpp:1218
+#: src/mmg/tabs/input.cpp:1218
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -5540,7 +5540,7 @@ msgstr ""
 "\n"
 "(问题出在 tab_input::load(), #2)"
 
-#: src/mmg/tab_input.cpp:1231
+#: src/mmg/tabs/input.cpp:1231
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -5556,8 +5556,8 @@ msgstr ""
 "\n"
 "(问题出在 tab_input::load(), #3)"
 
-#: src/mmg/tab_chapters.cpp:1254
-#: src/mmg/tab_chapters.cpp:1340
+#: src/mmg/tabs/chapters.cpp:1254
+#: src/mmg/tabs/chapters.cpp:1340
 #, c-format
 msgid "The language '%s' is not a valid language and cannot be selected."
 msgstr "语言 '%s' 不是有效的语言，不可选。"
@@ -5574,11 +5574,11 @@ msgstr "时间码文件 '%2%' 的 %1% 行不包含有效的浮点数。\n"
 msgid "The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"
 msgstr "地区无法正常设定。请检查 LANG, LC_ALL 和 LC_MESSAGES 环境变量。\n"
 
-#: src/mmg/tab_global.cpp:147
+#: src/mmg/tabs/global.cpp:147
 msgid "The maximum number of files that will be created even if the last file might contain more bytes/time than wanted. Useful e.g. when you want exactly two files. If you leave this empty then there is no limit for the number of files mkvmerge might create."
 msgstr "将创建的最大文件数，即使最后一个文件包含的字节数/时间多于您想要的。本功能有时很有用，例如当您想要恰恰两个文件时。如果此处留空，mkvmerge 将创建的文件数目将不受限制。"
 
-#: src/mmg/header_editor_frame.cpp:383
+#: src/mmg/header_editor/frame.cpp:383
 msgid ""
 "The maximum number of frames a player\n"
 "should be able to cache during playback.\n"
@@ -5588,12 +5588,12 @@ msgstr ""
 "播放器播放过程中应该缓存的最大帧数。\n"
 "如果设为 0, 将不使用参考伪缓存系统。"
 
-#: src/mmg/header_editor_frame.cpp:662
-#: src/mmg/tab_chapters.cpp:1932
+#: src/mmg/header_editor/frame.cpp:662
+#: src/mmg/tabs/chapters.cpp:1932
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "元定位元素已被写至文件尾部，但剪辑尺寸无法更新。因此这些元素不可见。处理进程将被中止。文件已有改动！"
 
-#: src/mmg/header_editor_frame.cpp:378
+#: src/mmg/header_editor/frame.cpp:378
 msgid ""
 "The minimum number of frames a player\n"
 "should be able to cache during playback.\n"
@@ -5637,25 +5637,25 @@ msgstr "两音频轨的声道数不同: %1% 与 %2%"
 msgid "The number of external timecodes %1% is smaller than the number of frames in this track. The remaining frames of this track might not be timestamped the way you intended them to be. mkvmerge might even crash.\n"
 msgstr "外部时间码数 %1% 小于此轨的帧数。此轨的其余帧将可能不按您想要的方式标记时间戳。mkvmerge 甚至可能崩溃。\n"
 
-#: src/mmg/header_editor_frame.cpp:451
+#: src/mmg/header_editor/frame.cpp:451
 msgid ""
 "The number of video pixels to remove\n"
 "on the bottom of the image."
 msgstr "视频画面下边要移除的像素数。"
 
-#: src/mmg/header_editor_frame.cpp:436
+#: src/mmg/header_editor/frame.cpp:436
 msgid ""
 "The number of video pixels to remove\n"
 "on the left of the image."
 msgstr "视频画面左边要移除的像素数。"
 
-#: src/mmg/header_editor_frame.cpp:446
+#: src/mmg/header_editor/frame.cpp:446
 msgid ""
 "The number of video pixels to remove\n"
 "on the right of the image."
 msgstr "视频画面右边要移除的像素数。"
 
-#: src/mmg/header_editor_frame.cpp:441
+#: src/mmg/header_editor/frame.cpp:441
 msgid ""
 "The number of video pixels to remove\n"
 "on the top of the image."
@@ -5699,7 +5699,7 @@ msgstr "根元索必须为 <%1%>。"
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
 msgstr "两音频轨的采样率不同: %1% 与 %2%"
 
-#: src/mmg/header_editor_frame.cpp:392
+#: src/mmg/header_editor/frame.cpp:392
 msgid ""
 "The scale to apply on this track to work at normal\n"
 "speed in relation with other tracks (mostly used\n"
@@ -5712,12 +5712,12 @@ msgstr ""
 msgid "The seek table in this TTA file seems to be broken.\n"
 msgstr "此 TTA 文件中的定位表似乎已损坏。\n"
 
-#: src/mmg/tab_chapters.cpp:797
+#: src/mmg/tabs/chapters.cpp:797
 #, c-format
 msgid "The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."
 msgstr "选定的语言 '%s' （章节 '%s'）不是有效的语言代码。请选择预定义代码中的一项。"
 
-#: src/mmg/tab_global.cpp:71
+#: src/mmg/tabs/global.cpp:71
 msgid "The size after which a new output file is started. The letters 'G', 'M' and 'K' can be used to indicate giga/mega/kilo bytes respectively. All units are based on 1024 (G = 1024^3, M = 1024^2, K = 1024)."
 msgstr "在此尺寸后开始新的输出文件。字母 'G', 'M' 和 'K' 分别可以用来代表吉/兆/千比特。所有单位换算均基于 1024 (G = 1024^3, M = 1024^2, K = 1024)。"
 
@@ -5730,7 +5730,7 @@ msgstr "附件 '%1%' 的尺寸为 0。\n"
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "源文件 '%1%' 无法成功打开，或者无法通过定位至末端检索。\n"
 
-#: src/mmg/tab_input.cpp:1309
+#: src/mmg/tabs/input.cpp:1309
 #, c-format
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr "轨道 %s（自文件 '%s'）的伸展设置无效。"
@@ -5781,7 +5781,7 @@ msgstr ""
 "\n"
 "如果您确实要指定未排序的时间码，请使用时间码格式 v4。它与格式 v2 完全一致，但允许未排序的时间码。\n"
 
-#: src/mmg/tab_global.cpp:99
+#: src/mmg/tabs/global.cpp:99
 msgid "The timecodes after which a new output file is started. The timecodes refer to the whole stream and not to each individual output file. The timecodes can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH'. You can specify up to nine digits for the number of nanoseconds 'nnnnnnnnn' or none at all. If given then you may use up to nine digits after the decimal point. If two or more timecodes are used then you have to separate them with commas. The formats can be mixed, too. Examples: 01:00:00,01:30:00 (after one hour and after one hour and thirty minutes) or 1800s,3000s,00:10:00 (after three, five and ten minutes)."
 msgstr "在这些时间码后开始创建新的输出文件。这些时间码以整个流而不是分割开的各输出文件为准。时间码可以以 HH:MM:SS.nnnnnnnnn 的形式或紧跟 's' 的秒数给出。小时数 'HH' 可省略。您可以指定多达九位的毫微秒数 'nnnnnnnnn' 或者不指定小数点后的数。如果要给出，您可以在小数点后使用多达九位数字。如果使用的时间码超过一个，请使用逗号分隔。格式也可以混用。示例: 01:00:00,01:30:00 (在一小时后和一个半小时后切割) 或者 1800s,3000s,00:10:00 (在第 3 分钟，第 5 分钟和第 10 分钟后切割)。"
 
@@ -5789,7 +5789,7 @@ msgstr "在这些时间码后开始创建新的输出文件。这些时间码以
 msgid "The timecodes for this stream have been reset in the middle of the file. This is not supported. The current packet will be discarded.\n"
 msgstr "此流的时间码在文件中途重置。这是不支持的。当前数据包将被废除。\n"
 
-#: src/mmg/header_editor_frame.cpp:285
+#: src/mmg/header_editor/frame.cpp:285
 msgid "The title for the whole movie."
 msgstr "整部影片的标题。"
 
@@ -5813,7 +5813,7 @@ msgstr "轨道号 %1% （自文件 '%2%'）可能无法被正确追加到轨道�
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
 msgstr "轨道号 %1% （自文件 '%2%'）无法追加到轨道号 %3% （自文件 '%4%'）。%5%\n"
 
-#: src/mmg/header_editor_frame.cpp:357
+#: src/mmg/header_editor/frame.cpp:357
 msgid "The track number as used in the Block Header."
 msgstr "块头部使用的轨道号。"
 
@@ -5838,8 +5838,8 @@ msgstr "尚无 '%1%' 的翻译。\n"
 msgid "There were ERRORs."
 msgstr "有 *错误* 发生。"
 
-#: src/mmg/header_editor_frame.cpp:508
-#: src/mmg/header_editor_frame.cpp:606
+#: src/mmg/header_editor/frame.cpp:508
+#: src/mmg/header_editor/frame.cpp:606
 msgid "There were errors in the header values preventing the headers from being saved. The first error has been selected."
 msgstr "出现一些影响头部信息保存的头部值错误。第一处错误已被选中。"
 
@@ -5888,7 +5888,7 @@ msgstr "此 MPEG 音频轨包含 %1% 字节的 非-MP3 数据，已跳过。音/
 msgid "This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can be overridden with the '--chapter-charset <charset>' switch.\n"
 msgstr "此 Ogg/OGM 文件包含章节或标题信息。不幸的是此文件中存储这些信息使用的字符集无法准确识别。程序假定以您系统的当前字符集为准。您可以通过 '--chapter-charset <charset>' 开关替代该假定值。\n"
 
-#: src/mmg/he_value_page.cpp:105
+#: src/mmg/header_editor/value_page.cpp:105
 msgid ""
 "This element is currently present in the file.\n"
 "It cannot be removed because it is a\n"
@@ -5897,7 +5897,7 @@ msgstr ""
 "此文件中目前存在本元素。\n"
 "它不能被移除，因为它属于强制头部字段。"
 
-#: src/mmg/he_value_page.cpp:98
+#: src/mmg/header_editor/value_page.cpp:98
 msgid ""
 "This element is currently present in the file.\n"
 "You can let the header editor remove the element\n"
@@ -5906,7 +5906,7 @@ msgstr ""
 "此文件中目前存在本元素。\n"
 "您可以让头部编辑器从该文件移除此元素。"
 
-#: src/mmg/he_value_page.cpp:92
+#: src/mmg/header_editor/value_page.cpp:92
 msgid ""
 "This element is not currently present in the file.\n"
 "You can let the header editor add the element\n"
@@ -5923,24 +5923,24 @@ msgstr "此文件包含至少一个含有原生时间码的帧。全部时间码
 msgid "This file contains coordinates in the timecode lines. Such coordinates are not supported by the Matroska SRT subtitle format. The coordinates will be removed automatically.\n"
 msgstr "此文件含有交叉的时间轴。此类交叉不受 Matroska SRT 字幕格式的支持。交叉将被自动移除。\n"
 
-#: src/mmg/header_editor_frame.cpp:219
-#: src/mmg/tab_chapters.cpp:567
+#: src/mmg/header_editor/frame.cpp:219
+#: src/mmg/tabs/chapters.cpp:567
 msgid "This file could not be opened or parsed."
 msgstr "文件无法打开或解析。"
 
-#: src/mmg/tab_chapters.cpp:575
+#: src/mmg/tabs/chapters.cpp:575
 msgid "This file does not contain any chapters."
 msgstr "此文件不包含任何章节。"
 
-#: src/mmg/tab_chapters.cpp:583
+#: src/mmg/tabs/chapters.cpp:583
 msgid "This file does not contain valid chapters."
 msgstr "此文件不包含有效章节。"
 
-#: src/mmg/tab_attachments.cpp:70
+#: src/mmg/tabs/attachments.cpp:70
 msgid "This is the name that will be stored in the output file for this attachment. It defaults to the file name of the original file but can be changed."
 msgstr "这是附件在输出文件中存储的名称。默认为原文件的名称，但可以修改。"
 
-#: src/mmg/tab_global.cpp:46
+#: src/mmg/tabs/global.cpp:46
 msgid "This is the title that players may show as the 'main title' for this movie."
 msgstr "这是播放器将作为此影片的“主标题”显示的标题。"
 
@@ -5960,7 +5960,7 @@ msgstr "这 *真的* 不该发生。为首个元定位元素预留的空间过�
 msgid "This should not have happened. Please contact the author Moritz Bunkus <moritz@bunkus.org> with this error/warning message, a description of what you were trying to do, the command line used and which operating system you are using. Thank you."
 msgstr "这不该发生。请联系作者 Moritz Bunkus <moritz@bunkus.org>，并附上本错误/警告消息、您正打算做的事情的描述、使用的命令行及您正在使用的操作系统。多谢。"
 
-#: src/mmg/tab_input_format.cpp:174
+#: src/mmg/tabs/input_format.cpp:174
 msgid "This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for these files. Not needed for AAC tracks read from MP4 or Matroska files."
 msgstr "此轨道包含 SBR AAC/HE-AAC/AAC+ 数据。本选项只对 AAC 输入文件有必要，因为这类文件的 SBR AAC 不能被自动侦测。对于从 MP4 或 Matroska 文件读取的 AAC 轨道，不必在意本选项。"
 
@@ -5972,7 +5972,7 @@ msgstr "此轨道使用了叫做 '编解码态元素' 的 Matroska 特性。mkvm
 msgid "Time slice"
 msgstr "时间切片"
 
-#: src/mmg/tab_input_general.cpp:270
+#: src/mmg/tabs/input_general.cpp:270
 #, c-format
 msgid "Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"
 msgstr "时间码文件 (*.tmc;*.txt)|*.tmc;*.txt|%s"
@@ -5984,15 +5984,15 @@ msgstr "时间码文件 (*.tmc;*.txt)|*.tmc;*.txt|%s"
 msgid "Timecode scale: %1%"
 msgstr "时间码缩放比例: %1%"
 
-#: src/mmg/header_editor_frame.cpp:391
+#: src/mmg/header_editor/frame.cpp:391
 msgid "Timecode scaling"
 msgstr "时间码缩放比例"
 
-#: src/mmg/tab_input_general.cpp:90
+#: src/mmg/tabs/input_general.cpp:90
 msgid "Timecodes:"
 msgstr "时间码:"
 
-#: src/mmg/header_editor_frame.cpp:285
+#: src/mmg/header_editor/frame.cpp:285
 msgid "Title"
 msgstr "标题"
 
@@ -6000,7 +6000,7 @@ msgstr "标题"
 msgid "Title: %1%"
 msgstr "标题: %1%"
 
-#: src/mmg/tab_attachments.cpp:90
+#: src/mmg/tabs/attachments.cpp:90
 msgid "To all files"
 msgstr "附加到所有的文件"
 
@@ -6090,7 +6090,7 @@ msgstr "轨道 ID %1% 的 AAC 类型未知。\n"
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "轨道 ID %1%: %2% (%3%)"
 
-#: src/mmg/header_editor_frame.cpp:360
+#: src/mmg/header_editor/frame.cpp:360
 msgid "Track UID"
 msgstr "轨道 UID"
 
@@ -6098,11 +6098,11 @@ msgstr "轨道 UID"
 msgid "Track UID: %1%"
 msgstr "轨道 UID: %1%"
 
-#: src/mmg/tab_input_general.cpp:47
+#: src/mmg/tabs/input_general.cpp:47
 msgid "Track name:"
 msgstr "轨道名称:"
 
-#: src/mmg/header_editor_frame.cpp:356
+#: src/mmg/header_editor/frame.cpp:356
 msgid "Track number"
 msgstr "轨道号"
 
@@ -6126,7 +6126,7 @@ msgstr "轨道类型: %1%"
 msgid "Tracks with unsupported content encoding schemes (compression or encryption) cannot be extracted.\n"
 msgstr "使用不支持的内容编码（压缩或加密）方案的轨道不能提取。\n"
 
-#: src/mmg/tab_input.cpp:140
+#: src/mmg/tabs/input.cpp:140
 msgid "Tracks:"
 msgstr "轨道列表:"
 
@@ -6138,7 +6138,7 @@ msgstr "TrueHD 音频流支持两种帧类：同步帧和非同步帧。启用�
 msgid "Two VobSub tracks can only be extracted into the same file if their CodecPrivate data matches. This is not the case for the tracks %1% and %2%.\n"
 msgstr "两个 VobSub 轨道只能提取到同一个文件中，如果 CodecPrivate 数据相匹配的话。此问题只出在轨道 %1% 与 %2%。\n"
 
-#: src/mmg/header_editor_frame.cpp:431
+#: src/mmg/header_editor/frame.cpp:431
 msgid ""
 "Type of the unit for DisplayWidth/Height\n"
 "(0: pixels, 1: centimeters, 2: inches)."
@@ -6146,7 +6146,7 @@ msgstr ""
 "显示宽/高度的单位类型\n"
 "(0: 像素, 1: 厘米, 2: 英寸)。"
 
-#: src/mmg/he_value_page.cpp:80
+#: src/mmg/header_editor/value_page.cpp:80
 msgid "Type:"
 msgstr "类别:"
 
@@ -6154,11 +6154,11 @@ msgstr "类别:"
 msgid "Type: %1% (%2%)"
 msgstr "类型: %1% (%2%)"
 
-#: src/mmg/tab_chapters.cpp:279
+#: src/mmg/tabs/chapters.cpp:279
 msgid "UID:"
 msgstr "UID:"
 
-#: src/mmg/tab_input.cpp:232
+#: src/mmg/tabs/input.cpp:232
 msgid "USF text subtitles"
 msgstr "USF 文本字幕"
 
@@ -6215,7 +6215,7 @@ msgstr "此音频轨的格式 0x%|1$04x| 未知或不支持。\n"
 msgid "Unrecognized command line option '%1%'. Maybe you put a mode specific option before the input file name?\n"
 msgstr "无法识别命令行选项 '%1%'。您是否将模式细节选项放在了输入文件名的前面？\n"
 
-#: src/mmg/he_value_page.cpp:73
+#: src/mmg/header_editor/value_page.cpp:73
 msgid "Unsigned integer"
 msgstr "无符号整数"
 
@@ -6227,7 +6227,7 @@ msgstr "无符号整数 (%1%) 太小。最小值为 %2%。"
 msgid "Unsupported MPEG mpeg_version: 0x%|1$02x| in packet %2% for timecode %3%, assuming MPEG2. No further warnings will be printed for this track.\n"
 msgstr "不支持 MPEG mpeg_version: 0x%|1$02x| 于数据包 %2% 时间码 %3% 处，假定为 MPEG2。不会再对此轨输出警告。\n"
 
-#: src/mmg/tab_input.cpp:358
+#: src/mmg/tabs/input.cpp:358
 msgid "Unsupported format"
 msgstr "不支持的格式"
 
@@ -6405,7 +6405,7 @@ msgstr ""
 "  -h, --help     显示本帮助。\n"
 "  -V, --version  显示版本信息。\n"
 
-#: src/mmg/tab_global.cpp:137
+#: src/mmg/tabs/global.cpp:137
 msgid "Use 'segment linking' for the resulting files. For an in-depth explanation of this feature consult the mkvmerge documentation."
 msgstr "为生成的文件使用 '剪辑链接'。关于此特性的深入解释请参见 mkvmerge 文档。"
 
@@ -6425,7 +6425,7 @@ msgstr "使用先前的输出目录"
 msgid "Use this directory:"
 msgstr "使用此目录:"
 
-#: src/mmg/tab_input_extra.cpp:59
+#: src/mmg/tabs/input_extra.cpp:59
 msgid "User defined options:"
 msgstr "用户定义选项:"
 
@@ -6730,7 +6730,7 @@ msgstr "使用视频输出模块 (FourCC: %|1$.4s|)。\n"
 msgid "Using the video output module.\n"
 msgstr "使用视频输出模块。\n"
 
-#: src/mmg/tab_input.cpp:233
+#: src/mmg/tabs/input.cpp:233
 msgid "VC1 elementary streams"
 msgstr "VC1 基本流"
 
@@ -6742,7 +6742,7 @@ msgstr "VC1 视频基本流"
 msgid "Valid hacks are:\n"
 msgstr "有效的小补缀有:\n"
 
-#: src/mmg/header_editor_frame.cpp:106
+#: src/mmg/header_editor/frame.cpp:106
 msgid "Validates the content of all changeable headers"
 msgstr "检验所有可变头的内容"
 
@@ -6750,35 +6750,35 @@ msgstr "检验所有可变头的内容"
 msgid "Verify the current chapter entries to see if there are any errors"
 msgstr "验证当前章节条目有无错误"
 
-#: src/mmg/header_editor_frame.cpp:455
+#: src/mmg/header_editor/frame.cpp:455
 msgid "Video aspect ratio type"
 msgstr "视频宽高比类型"
 
-#: src/mmg/header_editor_frame.cpp:451
+#: src/mmg/header_editor/frame.cpp:451
 msgid "Video crop bottom"
 msgstr "视频下边裁减"
 
-#: src/mmg/header_editor_frame.cpp:436
+#: src/mmg/header_editor/frame.cpp:436
 msgid "Video crop left"
 msgstr "视频左边裁减"
 
-#: src/mmg/header_editor_frame.cpp:446
+#: src/mmg/header_editor/frame.cpp:446
 msgid "Video crop right"
 msgstr "视频右边裁减"
 
-#: src/mmg/header_editor_frame.cpp:441
+#: src/mmg/header_editor/frame.cpp:441
 msgid "Video crop top"
 msgstr "视频上边裁减"
 
-#: src/mmg/header_editor_frame.cpp:426
+#: src/mmg/header_editor/frame.cpp:426
 msgid "Video display height"
 msgstr "视频显示高度"
 
-#: src/mmg/header_editor_frame.cpp:431
+#: src/mmg/header_editor/frame.cpp:431
 msgid "Video display unit"
 msgstr "视频显示单位"
 
-#: src/mmg/header_editor_frame.cpp:421
+#: src/mmg/header_editor/frame.cpp:421
 msgid "Video display width"
 msgstr "视频显示宽度"
 
@@ -6786,15 +6786,15 @@ msgstr "视频显示宽度"
 msgid "Video packet assembly failed. Error code: %1% (%2%)\n"
 msgstr "视频包汇编失败。错误代码: %1% (%2%)\n"
 
-#: src/mmg/header_editor_frame.cpp:416
+#: src/mmg/header_editor/frame.cpp:416
 msgid "Video pixel height"
 msgstr "视频像素高度"
 
-#: src/mmg/header_editor_frame.cpp:411
+#: src/mmg/header_editor/frame.cpp:411
 msgid "Video pixel width"
 msgstr "视频像素宽度"
 
-#: src/mmg/header_editor_frame.cpp:461
+#: src/mmg/header_editor/frame.cpp:461
 msgid "Video stereo mode"
 msgstr "视频立体模式"
 
@@ -6802,7 +6802,7 @@ msgstr "视频立体模式"
 msgid "Video track"
 msgstr "视频轨"
 
-#: src/mmg/header_editor_frame.cpp:343
+#: src/mmg/header_editor/frame.cpp:343
 #, c-format
 msgid "Video track %u"
 msgstr "视频轨 %u"
@@ -6815,16 +6815,16 @@ msgstr "查看 mkvmerge 处理选中任务时的输出信息"
 msgid "VobBtn buttons"
 msgstr "VobBtn 按钮"
 
-#: src/mmg/tab_input.cpp:237
+#: src/mmg/tabs/input.cpp:237
 msgid "VobButtons"
 msgstr "VobBtn 按钮"
 
-#: src/mmg/tab_input.cpp:234
+#: src/mmg/tabs/input.cpp:234
 #: src/merge/mkvmerge.cpp:97
 msgid "VobSub subtitles"
 msgstr "VobSub 字幕"
 
-#: src/mmg/tab_input.cpp:235
+#: src/mmg/tabs/input.cpp:235
 msgid "WAVE (uncompressed PCM audio)"
 msgstr "WAVE (未压缩的 PCM 音频)"
 
@@ -6836,7 +6836,7 @@ msgstr "WAVE (未压缩的 PCM)"
 msgid "WAVPACK lossless audio"
 msgstr "WAVPACK 无损音频"
 
-#: src/mmg/tab_input.cpp:236
+#: src/mmg/tabs/input.cpp:236
 msgid "WAVPACK v4 audio"
 msgstr "WAVPACK v4 音频"
 
@@ -6872,11 +6872,11 @@ msgstr "警告信息:"
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
 msgstr "当文件被添加时它的名称会被扫描。如果包含单词“delay”且有一数字紧随其后，这个数字将被自动输入到已发现的该文件的所有音频轨的“延时”输入框。"
 
-#: src/mmg/header_editor_frame.cpp:411
+#: src/mmg/header_editor/frame.cpp:411
 msgid "Width of the encoded video frames in pixels."
 msgstr "编码后的视频帧的宽度，单位：像素。"
 
-#: src/mmg/header_editor_frame.cpp:421
+#: src/mmg/header_editor/frame.cpp:421
 msgid "Width of the video frames to display."
 msgstr "视频帧的显示宽度。"
 
@@ -6912,9 +6912,9 @@ msgstr "'--split-max-files' 参数错误。\n"
 msgid "Wrong file chosen"
 msgstr "文件选错"
 
-#: src/mmg/header_editor_frame.cpp:207
-#: src/mmg/tab_chapters.cpp:658
-#: src/mmg/tab_chapters.cpp:699
+#: src/mmg/header_editor/frame.cpp:207
+#: src/mmg/tabs/chapters.cpp:658
+#: src/mmg/tabs/chapters.cpp:699
 msgid "Wrong file selected"
 msgstr "文件选错"
 
@@ -6939,7 +6939,7 @@ msgstr "XML 解析器出错，于 '%2%' 的第 %1% 行: %3%。%4%%5%"
 msgid "XML parser error at line %1%: %2%."
 msgstr "XML 解析器出错，于行 %1%: %2%。"
 
-#: src/mmg/tab_chapters.cpp:1384
+#: src/mmg/tabs/chapters.cpp:1384
 msgid ""
 "You can use this function for adjusting the timecodes\n"
 "of the selected chapter and all its children by a fixed amount.\n"
@@ -6962,11 +6962,11 @@ msgstr ""
 msgid "You have not yet selected an output file."
 msgstr "您尚未选择任何输入文件。"
 
-#: src/mmg/tab_input.cpp:1395
+#: src/mmg/tabs/input.cpp:1395
 msgid "You have not yet selected any input file and/or no tracks."
 msgstr "您尚未选择任何输入文件和/或未发现轨道。"
 
-#: src/mmg/tab_input.cpp:1340
+#: src/mmg/tabs/input.cpp:1340
 #, c-format
 msgid ""
 "You haven't selected a number of frames per second for track %lld of file '%s'. mkvmerge cannot determine the number of frames per second for such files itself. Therefore you have to set this parameter yourself on the 'format specific options' page.\n"
@@ -6981,7 +6981,7 @@ msgstr ""
 "\n"
 "是否继续?"
 
-#: src/mmg/tab_input.cpp:484
+#: src/mmg/tabs/input.cpp:484
 msgid ""
 "You're adding an AVC/h.264 elementary stream to the output file. mkvmerge cannot determine the number of frames per second for such files itself. Therefore you have to set this parameter yourself on the 'format specific options' page.\n"
 "\n"
@@ -7043,18 +7043,18 @@ msgstr "ac3_reader: 无法读取 %1% 字节。"
 msgid "ac3_reader: No valid AC3 packet found in the first %1% bytes.\n"
 msgstr "ac3_reader: 开头 %1% 字节无有效的 AC3 包。\n"
 
-#: src/mmg/tab_attachments.cpp:62
-#: src/mmg/tab_input.cpp:101
+#: src/mmg/tabs/attachments.cpp:62
+#: src/mmg/tabs/input.cpp:101
 msgid "add"
 msgstr "添加"
 
-#: src/mmg/tab_input.cpp:104
+#: src/mmg/tabs/input.cpp:104
 msgid "append"
 msgstr "追加合并"
 
 #: src/input/r_matroska.cpp:91
-#: src/mmg/tab_input.cpp:625
-#: src/mmg/tab_input.cpp:1242
+#: src/mmg/tabs/input.cpp:625
+#: src/mmg/tabs/input.cpp:1242
 #: src/info/mkvinfo.cpp:1019
 msgid "audio"
 msgstr "音频"
@@ -7142,11 +7142,11 @@ msgstr "create_track_number: file_num 未找到。 %1%\n"
 msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
 msgstr "cstrutf8_to_UTFstring: 遇到了无效的 UTF-8 序列。请联系 moritz@bunkus.org 并要求他实现一套更好的 UTF-8 解析器。"
 
-#: src/mmg/tab_input_extra.cpp:82
-#: src/mmg/tab_input_extra.cpp:105
-#: src/mmg/tab_input_format.cpp:156
-#: src/mmg/tab_input_format.cpp:222
-#: src/mmg/tab_input_general.cpp:115
+#: src/mmg/tabs/input_extra.cpp:82
+#: src/mmg/tabs/input_extra.cpp:105
+#: src/mmg/tabs/input_format.cpp:156
+#: src/mmg/tabs/input_format.cpp:222
+#: src/mmg/tabs/input_general.cpp:115
 msgid "default"
 msgstr "默认"
 
@@ -7162,7 +7162,7 @@ msgstr "deflateInit() 失败。结果: %1%\n"
 msgid "dirac_es_reader: Could not open the source file."
 msgstr "dirac_es_reader: 无法打开源文件。"
 
-#: src/mmg/tab_attachments.cpp:55
+#: src/mmg/tabs/attachments.cpp:55
 msgid "disable all"
 msgstr "全部禁用"
 
@@ -7187,7 +7187,7 @@ msgstr "完成"
 msgid "done/warnings"
 msgstr "完成/有警告"
 
-#: src/mmg/tab_input.cpp:153
+#: src/mmg/tabs/input.cpp:153
 msgid "down"
 msgstr "下移"
 
@@ -7203,11 +7203,11 @@ msgstr "dts_reader: 无法读取 %1% 字节。"
 msgid "dts_reader: No valid DTS packet found in the first %1% bytes.\n"
 msgstr "dts_reader: 开头 %1% 字节未发现有效的 DTS 包。\n"
 
-#: src/mmg/tab_attachments.cpp:54
+#: src/mmg/tabs/attachments.cpp:54
 msgid "enable all"
 msgstr "全部启用"
 
-#: src/mmg/tab_chapters.cpp:289
+#: src/mmg/tabs/chapters.cpp:289
 msgid "enabled"
 msgstr "启用"
 
@@ -7349,7 +7349,7 @@ msgstr "flac_reader: FLAC__stream_decoder_new() 失败。\n"
 msgid "flac_reader: could not initialize the FLAC packetizer.\n"
 msgstr "flac_reader: 无法初始化 FLAC 分组器。\n"
 
-#: src/mmg/tab_input_extra.cpp:84
+#: src/mmg/tabs/input_extra.cpp:84
 msgid "for all frames"
 msgstr "全部帧"
 
@@ -7366,7 +7366,7 @@ msgstr "出现异常\n"
 msgid "header removal"
 msgstr "除头"
 
-#: src/mmg/tab_chapters.cpp:285
+#: src/mmg/tabs/chapters.cpp:285
 msgid "hidden"
 msgstr "隐藏"
 
@@ -7398,7 +7398,7 @@ msgstr "长 %1%, 数据: %2%"
 msgid "line %1%: The 'delay' timestamp could not be parsed.\n"
 msgstr "行 %1%: '延时' 时间戳无法解析。\n"
 
-#: src/mmg/tab_global.cpp:136
+#: src/mmg/tabs/global.cpp:136
 msgid "link files"
 msgstr "连接文件"
 
@@ -7545,7 +7545,7 @@ msgstr "matroska_reader: |  + 有超过一个轨道使用了 UID %1%。\n"
 msgid "matroska_reader: |  + There's more than one track with the number %1%.\n"
 msgstr "matroska_reader: |  + 有超过一个轨道使用了数字 %1%。\n"
 
-#: src/mmg/tab_global.cpp:143
+#: src/mmg/tabs/global.cpp:143
 msgid "max. number of files:"
 msgstr "最大文件数:"
 
@@ -7587,13 +7587,13 @@ msgstr "mkvmerge -o out [全局选项] [选项1] <file1> [@optionsfile ...]\n"
 msgid "mkvmerge FAILED with a return code of %d. %s\n"
 msgstr "mkvmerge 执行 *失败* ，返回代码 %d。 %s\n"
 
-#: src/mmg/tab_global.cpp:442
-#: src/mmg/tab_global.cpp:456
-#: src/mmg/tab_global.cpp:460
-#: src/mmg/tab_global.cpp:464
-#: src/mmg/tab_global.cpp:475
-#: src/mmg/tab_global.cpp:483
-#: src/mmg/tab_global.cpp:524
+#: src/mmg/tabs/global.cpp:442
+#: src/mmg/tabs/global.cpp:456
+#: src/mmg/tabs/global.cpp:460
+#: src/mmg/tabs/global.cpp:464
+#: src/mmg/tabs/global.cpp:475
+#: src/mmg/tabs/global.cpp:483
+#: src/mmg/tabs/global.cpp:524
 msgid "mkvmerge GUI error"
 msgstr "mkvmerge GUI 发生错误"
 
@@ -7638,21 +7638,21 @@ msgstr ""
 
 #: src/mmg/mmg.cpp:1089
 #: src/mmg/mmg.cpp:1820
-#: src/mmg/tab_input.cpp:1272
-#: src/mmg/tab_input.cpp:1299
-#: src/mmg/tab_input.cpp:1310
-#: src/mmg/tab_input.cpp:1320
-#: src/mmg/tab_input.cpp:1332
-#: src/mmg/tab_input.cpp:1387
+#: src/mmg/tabs/input.cpp:1272
+#: src/mmg/tabs/input.cpp:1299
+#: src/mmg/tabs/input.cpp:1310
+#: src/mmg/tabs/input.cpp:1320
+#: src/mmg/tabs/input.cpp:1332
+#: src/mmg/tabs/input.cpp:1387
 msgid "mkvmerge GUI: error"
 msgstr "mkvmerge GUI: 出错"
 
-#: src/mmg/tab_global.cpp:212
+#: src/mmg/tabs/global.cpp:212
 msgid "mkvmerge can read CUE sheets for audio CDs and automatically convert them to chapters. This option controls how the chapter names are created. The sequence '%p' is replaced by the track's PERFORMER, the sequence '%t' by the track's TITLE, '%n' by the track's number and '%N' by the track's number padded with a leading 0 for track numbers < 10. The rest is copied as is. If nothing is entered then '%p - %t' will be used."
 msgstr "mkvmerge 能够从音频 CD 中读取 CUE 表单，并自动转换为章节。此选项控制章节名称的创建方式。'%p' 将被轨道的 *表演者* 替换，'%t' 被轨道的 *标题* 替换，'%n' 被轨道的序号替换，'%N' 被轨道的衬式序号替换（若序号 < 10 则在前面补 0）。其余的照抄不误。若此处留空则默认使用 '%p - %t'。"
 
-#: src/mmg/tab_input_general.cpp:97
-#: src/mmg/tab_input_general.cpp:100
+#: src/mmg/tabs/input_general.cpp:97
+#: src/mmg/tabs/input_general.cpp:100
 msgid "mkvmerge can read and use timecodes from an external text file. This feature is a very advanced feature. Almost all users should leave this entry empty."
 msgstr "mkvmerge 可以读取并使用外部文本文件中的时间码。这是项非常超前的功能，几乎所有用户应该留空。"
 
@@ -7695,16 +7695,16 @@ msgstr "mkvmerge 选项"
 msgid "mkvmerge output:"
 msgstr "mkvmerge 输出信息:"
 
-#: src/mmg/tab_global.cpp:175
-#: src/mmg/tab_global.cpp:178
+#: src/mmg/tabs/global.cpp:175
+#: src/mmg/tabs/global.cpp:178
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format."
 msgstr "mkvmerge 支持两种章节格式：类似 OGM 的文本格式和全功能的 XML 格式。"
 
-#: src/mmg/tab_global.cpp:201
+#: src/mmg/tabs/global.cpp:201
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format. If the OGM format is used and the file's charset is not recognized correctly then this option can be used to correct that. This option is ignored for XML chapter files."
 msgstr "mkvmerge 支持两种章节格式：类似 OGM 的文本格式和全功能的 XML 格式。如果使用 OGM 格式且文件的字符集识别错误，此选项可以用以修正。对于 XML 章节文件，此选项会被忽略。"
 
-#: src/mmg/tab_global.cpp:188
+#: src/mmg/tabs/global.cpp:188
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format. This option specifies the language to be associated with chapters if the OGM chapter format is used. It is ignored for XML chapter files."
 msgstr "mkvmerge 支持两种章节格式：类似 OGM 的文本格式和全功能的 XML 格式。此选项指定 OGM 章节格式所关联的语言。对于 XML 章节文件，此选项将被忽略。"
 
@@ -7753,9 +7753,9 @@ msgstr "mpeg_ps_reader: 不该发生 #1。 %1%"
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: 不该发生 #2。 %1%"
 
-#: src/mmg/he_bool_value_page.cpp:35
-#: src/mmg/tab_input_general.cpp:117
-#: src/mmg/tab_input_general.cpp:126
+#: src/mmg/header_editor/bool_value_page.cpp:35
+#: src/mmg/tabs/input_general.cpp:117
+#: src/mmg/tabs/input_general.cpp:126
 msgid "no"
 msgstr "否"
 
@@ -7779,9 +7779,9 @@ msgstr "未使用签名算法"
 msgid "no signature hash algorithm"
 msgstr "未使用签名散列算法"
 
-#: src/mmg/tab_input_extra.cpp:85
-#: src/mmg/tab_input_format.cpp:225
-#: src/mmg/tab_input_format.cpp:232
+#: src/mmg/tabs/input_extra.cpp:85
+#: src/mmg/tabs/input_format.cpp:225
+#: src/mmg/tabs/input_format.cpp:232
 msgid "none"
 msgstr "无"
 
@@ -7809,11 +7809,11 @@ msgstr "ogm_reader: 无法读取所有头部包。"
 msgid "ogm_reader: Source is not a valid OGG media file."
 msgstr "ogm_reader: 源非有效的 OGG 媒体文件。"
 
-#: src/mmg/tab_chapters.cpp:1074
+#: src/mmg/tabs/chapters.cpp:1074
 msgid "on_entry_selected: display == NULL. Should not have happened."
 msgstr "on_entry_selected: display == NULL。不该出现。"
 
-#: src/mmg/tab_input_extra.cpp:83
+#: src/mmg/tabs/input_extra.cpp:83
 msgid "only for I frames"
 msgstr "仅 I 帧"
 
@@ -7887,12 +7887,12 @@ msgstr "real_reader: 仅支持第 3, 4 和 5 版的音频头。轨道 ID %1% 所
 msgid "real_reader: Source is not a valid RealMedia file."
 msgstr "real_reader: 源非有效的 RealMedia 文件。"
 
-#: src/mmg/tab_attachments.cpp:63
-#: src/mmg/tab_input.cpp:102
+#: src/mmg/tabs/attachments.cpp:63
+#: src/mmg/tabs/input.cpp:102
 msgid "remove"
 msgstr "移除"
 
-#: src/mmg/tab_input.cpp:107
+#: src/mmg/tabs/input.cpp:107
 msgid "remove all"
 msgstr "移除所有"
 
@@ -7928,7 +7928,7 @@ msgstr "ssa_reader: 无效格式。\"[Events]\" 段中未找到 \"Format\" 行�
 msgid "ssa_reader: Source is not a valid SSA/ASS file."
 msgstr "ssa_reader: 源非有效的 SSA/ASS 文件。"
 
-#: src/mmg/tab_chapters.cpp:912
+#: src/mmg/tabs/chapters.cpp:912
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
 msgstr "start >= m->ListSize()。这不该发生。请提交错误报告。多谢。"
 
@@ -7940,8 +7940,8 @@ msgstr "start_element: pdata->bin != NULL"
 msgid "subtitle"
 msgstr "字幕"
 
-#: src/mmg/tab_input.cpp:627
-#: src/mmg/tab_input.cpp:1244
+#: src/mmg/tabs/input.cpp:627
+#: src/mmg/tabs/input.cpp:1244
 #: src/info/mkvinfo.cpp:1021
 msgid "subtitles"
 msgstr "字幕"
@@ -7974,7 +7974,7 @@ msgstr "tta_reader: 无法打开文件。"
 msgid "tta_reader: tag_size < 0 in the c'tor. %1%\n"
 msgstr "tta_reader: c'tor 中 tag_size < 0。 %1%\n"
 
-#: src/mmg/tab_input_general.cpp:172
+#: src/mmg/tabs/input_general.cpp:172
 msgid "und (Undetermined)"
 msgstr "und (未定)"
 
@@ -7983,10 +7983,10 @@ msgstr "und (未定)"
 #: src/input/r_matroska.cpp:2158
 #: src/input/r_mpeg_ps.cpp:1381
 #: src/common/mm_io.cpp:425
-#: src/mmg/he_value_page.cpp:78
-#: src/mmg/tab_input.cpp:349
-#: src/mmg/tab_input.cpp:628
-#: src/mmg/tab_input.cpp:1245
+#: src/mmg/header_editor/value_page.cpp:78
+#: src/mmg/tabs/input.cpp:349
+#: src/mmg/tabs/input.cpp:628
+#: src/mmg/tabs/input.cpp:1245
 #: src/info/mkvinfo.cpp:711
 #: src/info/mkvinfo.cpp:721
 #: src/info/mkvinfo.cpp:740
@@ -7997,7 +7997,7 @@ msgstr "und (未定)"
 msgid "unknown"
 msgstr "未知"
 
-#: src/mmg/tab_input.cpp:150
+#: src/mmg/tabs/input.cpp:150
 msgid "up"
 msgstr "上移"
 
@@ -8013,13 +8013,13 @@ msgstr "usf_reader: 源非有效的 USF 文件。"
 msgid "vc1_es_reader: Could not open the source file."
 msgstr "vc1_es_reader: 无法打开源文件。"
 
-#: src/mmg/tab_chapters.cpp:838
+#: src/mmg/tabs/chapters.cpp:838
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
 msgstr "verify failed: chapters->CheckMandatory() 为非。这不该发生。请提交错误报告。\n"
 
 #: src/input/r_matroska.cpp:93
-#: src/mmg/tab_input.cpp:626
-#: src/mmg/tab_input.cpp:1243
+#: src/mmg/tabs/input.cpp:626
+#: src/mmg/tabs/input.cpp:1243
 #: src/info/mkvinfo.cpp:1020
 msgid "video"
 msgstr "视频"
@@ -8089,9 +8089,9 @@ msgstr "错误用法: 对 *空* 内存使用只读模式"
 msgid "wrong usage: writing to read-only memory"
 msgstr "错误用法: 写入到只读内存"
 
-#: src/mmg/he_bool_value_page.cpp:36
-#: src/mmg/tab_input_general.cpp:116
-#: src/mmg/tab_input_general.cpp:127
+#: src/mmg/header_editor/bool_value_page.cpp:36
+#: src/mmg/tabs/input_general.cpp:116
+#: src/mmg/tabs/input_general.cpp:127
 msgid "yes"
 msgstr "是"
 
