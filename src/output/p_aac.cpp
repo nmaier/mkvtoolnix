@@ -41,7 +41,7 @@ aac_packetizer_c::aac_packetizer_c(generic_reader_c *p_reader,
   , m_profile(profile)
   , m_headerless(headerless)
   , m_emphasis_present(emphasis_present)
-  , m_s2tc(1024 * 1000000000.0, m_samples_per_sec)
+  , m_s2tc(1024 * 1000000000ll, m_samples_per_sec)
   , m_single_packet_duration(1 * m_s2tc)
 {
   set_track_type(track_audio);
