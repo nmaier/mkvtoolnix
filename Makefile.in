@@ -181,16 +181,18 @@ ALL_SOURCES=$(wildcard avilib-0.6.10/*.c) $(wildcard avilib-0.6.10/*.cpp) \
 		$(wildcard librmff/*.c) \
 		$(wildcard src/*.cpp) $(wildcard src/input/*.cpp) \
 		$(wildcard src/output/*.cpp) $(wildcard src/common/*.cpp) \
-		$(wildcard src/mmg/*.cpp) $(wildcard src/extract/*.cpp) \
+		$(wildcard src/common/*/*.cpp) \
+		$(wildcard src/mmg/*.cpp) $(wildcard src/mmg/*/*.cpp) \
+		$(wildcard src/extract/*.cpp) \
 		$(wildcard src/merge/*.cpp) $(wildcard src/info/*.cpp) \
 		$(wildcard src/mpegparser/*.cpp) \
-		$(wildcard src/common/*/*.cpp) \
 		$(patsubst %.ui,%.h,$(UIFILES))
 
 ALL_HEADERS=$(wildcard avilib-0.6.10/*.h) $(wildcard librmff/*.h) \
 		$(wildcard src/*.h) $(wildcard src/input/*.h) \
 		$(wildcard src/output/*.h) $(wildcard src/common/*.h) \
-		$(wildcard src/mmg/*.h) $(wildcard src/extract/*.h) \
+		$(wildcard src/mmg/*.h) $(wildcard src/mmg/*/*.h) \
+		$(wildcard src/extract/*.h) \
 		$(wildcard src/merge/*.h) $(wildcard src/info/*.h) \
 		$(wildcard src/mpegparser/*.h) $(wildcard src/common/*/*.h)
 
@@ -297,7 +299,8 @@ endif
 clean:
 	rm -f *.o */*.o */*/*.o */lib*.a */*/lib*.a po/*.mo $(APPLICATIONS) \
 		*/*.exe */*/*.exe */*/*.dll */*/*.dll.a doc/*.hhk \
-		src/info/ui/*.h src/info/*.moc.cpp src/common/*/*.o
+		src/info/ui/*.h src/info/*.moc.cpp src/common/*/*.o \
+		src/mmg/*/*.o
 
 distclean dist-clean: clean
 	rm -f config.h config.log config.cache Makefile */Makefile */*/Makefile
@@ -480,7 +483,7 @@ mkvextract_LDADD = -lmtxcommon $(MAGIC_LIBS) -lvorbis -logg -lavi -lmatroska -le
 # src/mmg
 #
 
-mmg_SOURCES = $(wildcard src/mmg/*.cpp)
+mmg_SOURCES = $(wildcard src/mmg/*.cpp) $(wildcard src/mmg/*/*.cpp)
 mmg_OBJECTS := $(patsubst %.cpp,%.o,$(mmg_SOURCES)) \
 		$(patsubst %.rc,%.o,$(mmg_RESOURCES))
 mmg_DEPENDENCIES += $(DEP_COMMON)
