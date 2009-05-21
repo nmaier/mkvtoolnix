@@ -68,6 +68,14 @@
 
 2009-05-11  Moritz Bunkus  <moritz@bunkus.org>
 
+	* all: bug fix: Global variables are deconstructed in a
+	pre-defined way no longer causing segfaults when the programs are
+	about to exit.
+
+	* mkvmerge: enhancement: Implemented small speedups for some
+	common memory operation (affects e.g. the MPEG program stream
+	parser).
+
 	* mkvmerge: bug fix: Fixed potential and actual segmentation
 	faults occuring when appending VC-1 video tracks, Dirac video
 	tracks and DTS audio tracks.
