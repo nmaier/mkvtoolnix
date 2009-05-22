@@ -686,6 +686,11 @@ job_dialog::start_jobs(std::vector<int> &jobs_to_start) {
 
 void
 job_dialog::on_key_pressed(wxKeyEvent &evt) {
+  if (WXK_RETURN == evt.GetKeyCode()) {
+    EndModal(0);
+    return;
+  }
+
   if (1 != evt.GetKeyCode()) {  // Ctrl-A
     evt.Skip(true);
     return;
@@ -705,7 +710,9 @@ jobdlg_list_view::jobdlg_list_view(wxWindow *parent,
 
 void
 jobdlg_list_view::on_key_pressed(wxKeyEvent &evt) {
-  if (1 == evt.GetKeyCode())    // Ctrl-A
+  int key_code = evt.GetKeyCode();
+  if (   (1 == key_code)        // Ctrl-A
+      || (WXK_RETURN == key_code))
     ((job_dialog *)GetParent())->on_key_pressed(evt);
   else
     evt.Skip(true);

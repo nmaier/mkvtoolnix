@@ -1,3 +1,8 @@
+2009-05-23  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: Pressing 'return' in the job dialog will close the
+	dialog on Windows, too. Fix for bug 392.
+
 2009-05-22  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: Fixed the behaviour of how mmg sets the output
