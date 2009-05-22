@@ -124,8 +124,6 @@ public:
 
   mmg_options_t options;
 
-  wxString m_automatically_chosen_output_filename;
-
 public:
   mmg_dialog();
   virtual ~mmg_dialog();

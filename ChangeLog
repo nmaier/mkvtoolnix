@@ -1,5 +1,12 @@
 2009-05-22  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: Fixed the behaviour of how mmg sets the output
+	file name automatically if the option is enabled. If the user adds
+	more than one file then the extension of the output file name is
+	set each time a file is added and not only when the first one
+	is. The full file name and path will only be set when the first
+	file is added. Fix for bug 391.
+
 	* Released v2.9.0.
 
 2009-05-17  Moritz Bunkus  <moritz@bunkus.org>

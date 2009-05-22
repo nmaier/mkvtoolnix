@@ -886,7 +886,6 @@ mmg_dialog::on_file_new(wxCommandEvent &evt) {
   tmp_name.Printf(wxT("%stempsettings-%d.mmg"), get_temp_dir().c_str(), (int)wxGetProcessId());
   wxFileConfig cfg(wxT("mkvmerge GUI"), wxT("Moritz Bunkus"), tmp_name);
   tc_output->SetValue(wxEmptyString);
-  m_automatically_chosen_output_filename.clear();
 
   input_page->load(&cfg, MMG_CONFIG_FILE_VERSION_MAX);
   input_page->on_file_new(evt);
@@ -931,7 +930,6 @@ mmg_dialog::load(wxString file_name,
 
   cfg.Read(wxT("output_file_name"), &s);
   tc_output->SetValue(s);
-  m_automatically_chosen_output_filename.clear();
   cfg.Read(wxT("cli_options"), &cli_options, wxEmptyString);
 
   input_page->load(&cfg, version);
@@ -1766,9 +1764,7 @@ mmg_dialog::set_title_maybe(const wxString &new_title) {
 
 void
 mmg_dialog::set_output_maybe(const wxString &new_output) {
-  if (   !options.autoset_output_filename
-      || new_output.empty()
-      || (!tc_output->GetValue().empty() && (tc_output->GetValue() != m_automatically_chosen_output_filename)))
+  if (!options.autoset_output_filename || new_output.empty())
     return;
 
   bool has_video = false, has_audio = false;
@@ -1783,7 +1779,7 @@ mmg_dialog::set_output_maybe(const wxString &new_output) {
   }
 
   wxString output;
-  wxFileName filename(new_output);
+  wxFileName filename(tc_output->GetValue().IsEmpty() ? new_output : tc_output->GetValue());
 
   if (ODM_PREVIOUS == options.output_directory_mode)
     output = previous_output_directory;
@@ -1796,8 +1792,6 @@ mmg_dialog::set_output_maybe(const wxString &new_output) {
   output += wxFileName::GetPathSeparator() + filename.GetName() + (has_video ? wxU(".mkv") : has_audio ? wxU(".mka") : wxU(".mks"));
 
   tc_output->SetValue(output);
-
-  m_automatically_chosen_output_filename = output;
 }
 
 void
@@ -1806,7 +1800,6 @@ mmg_dialog::remove_output_filename() {
     return;
 
   tc_output->SetValue(wxEmptyString);
-  m_automatically_chosen_output_filename.clear();
 }
 
 void
