@@ -251,6 +251,7 @@ qtmp4_reader_c::parse_headers() {
         (   ('a' == dmx->type)
          && strncasecmp(dmx->fourcc, "QDM", 3)
          && strncasecmp(dmx->fourcc, "MP4A", 4)
+         && strncasecmp(dmx->fourcc, ".mp3", 4)
          && strncasecmp(dmx->fourcc, "twos", 4)
          && strncasecmp(dmx->fourcc, "sowt", 4)
          && strncasecmp(dmx->fourcc, "ac-3", 4)
@@ -1569,6 +1570,9 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
       create_audio_packetizer_aac(dmx);
 
     else if (!strncasecmp(dmx->fourcc, "MP4A", 4) && ((MP4OTI_MPEG2AudioPart3 == dmx->esds.object_type_id) || (MP4OTI_MPEG1Audio == dmx->esds.object_type_id)))
+      create_audio_packetizer_mp3(dmx);
+
+    else if (!strncasecmp(dmx->fourcc, ".mp3", 4))
       create_audio_packetizer_mp3(dmx);
 
     else if (!strncasecmp(dmx->fourcc, "twos", 4) || !strncasecmp(dmx->fourcc, "sowt", 4))
