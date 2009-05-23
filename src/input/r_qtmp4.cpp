@@ -246,6 +246,7 @@ qtmp4_reader_c::parse_headers() {
          && strncasecmp(dmx->fourcc, "cvid", 4)
          && strncasecmp(dmx->fourcc, "rle ", 4)
          && strncasecmp(dmx->fourcc, "mp4v", 4)
+         && strncasecmp(dmx->fourcc, "xvid", 4)
          && strncasecmp(dmx->fourcc, "avc1", 4))
         ||
         (   ('a' == dmx->type)
@@ -372,7 +373,7 @@ qtmp4_reader_c::parse_video_header_priv_atoms(qtmp4_demuxer_cptr &dmx,
                                               unsigned char *mem,
                                               int size,
                                               int level) {
-  if (!dmx->v_is_avc && strncasecmp(dmx->fourcc, "mp4v", 4) && (0 != size)) {
+  if (!dmx->v_is_avc && strncasecmp(dmx->fourcc, "mp4v", 4) && strncasecmp(dmx->fourcc, "xvid", 4) && (0 != size)) {
     dmx->priv_size = size;
     dmx->priv      = (unsigned char *)safememdup(mem, size);
 
@@ -1260,7 +1261,11 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
   int buffer_offset = 0;
   unsigned char *buffer;
 
-  if (('v' == dmx->type) && (0 == dmx->pos) && !strncasecmp(dmx->fourcc, "mp4v", 4) && dmx->esds_parsed && (NULL != dmx->esds.decoder_config)) {
+  if (   ('v' == dmx->type)
+      && (0 == dmx->pos)
+      && (!strncasecmp(dmx->fourcc, "mp4v", 4) || !strncasecmp(dmx->fourcc, "xvid", 4))
+      && dmx->esds_parsed
+      && (NULL != dmx->esds.decoder_config)) {
     buffer        = (unsigned char *)safemalloc(index.size + dmx->esds.decoder_config_len);
     buffer_offset = dmx->esds.decoder_config_len;
 
@@ -1549,7 +1554,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
   bool packetizer_ok = true;
 
   if ('v' == dmx->type) {
-    if (!strncasecmp(dmx->fourcc, "mp4v", 4))
+    if (!strncasecmp(dmx->fourcc, "mp4v", 4) || !strncasecmp(dmx->fourcc, "xvid", 4))
       create_video_packetizer_mpeg4_p2(dmx);
 
     else if (!strncasecmp(dmx->fourcc, "mpg1", 4) || !strncasecmp(dmx->fourcc, "mpg2", 4))
