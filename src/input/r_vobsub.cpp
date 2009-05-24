@@ -549,7 +549,7 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
           if (hack_engaged(ENGAGE_VOBSUB_SUBPIC_STOP_CMDS)) {
             // Space for the stop display command and padding
             dst_buf = (unsigned char *)saferealloc(dst_buf, dst_size + packet_size + 6);
-            memset(dst_buf + packet_size, 6, 0xff);
+            memset(dst_buf + dst_size + packet_size, 0xff, 6);
 
           } else
             dst_buf = (unsigned char *)saferealloc(dst_buf, dst_size + packet_size);
