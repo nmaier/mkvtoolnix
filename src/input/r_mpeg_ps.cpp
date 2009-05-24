@@ -346,13 +346,20 @@ mpeg_ps_reader_c::parse_packet(mpeg_ps_id_t &id,
   }
 
   if (0xbe == id.id) {        // padding stream
-    if (   (0 != ((io->getFilePointer() + length) & 0x7ff))  //bit too long or short
-        || (2028 < length)) {                                //way too long
-      full_length = (((io->getFilePointer() >> 11) + 1) << 11) - io->getFilePointer();
-      mxverb(2, boost::format("mpeg_ps: padding stream length adjusted at %1%, from %2% to %3%\n") % (io->getFilePointer() - 6) % length % full_length);
-      io->skip(full_length);
+    int64_t pos = io->getFilePointer();
+    io->skip(length);
+    uint32_t header = io->read_uint32_be();
+    if ( mpeg_is_start_code(header) ) {
+      io->setFilePointer(pos + length);
     } else {
-      io->skip(length);
+      mxverb(2, boost::format("mpeg_ps: [begin] padding stream length incorrect at %1%, find next header...\n") % (pos - 6));
+      io->setFilePointer(pos);
+      header = 0xffffffff;
+      if (resync_stream(header)) {
+        full_length = io->getFilePointer() - pos - 4;
+        mxverb(2, boost::format("mpeg_ps: [end] padding stream length adjusted from %1% to %2%\n") % length % full_length);
+        io->setFilePointer(pos + full_length);
+      }
     }
     return false;
   }

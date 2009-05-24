@@ -1,3 +1,10 @@
+2009-05-24  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The detection of invalid padding packet
+	lengths in the MPEG program stream reader was improved to not
+	produce as many false positives. Patch by Todd Schmuland (see
+	AUTHORS). Fix for bug 393.
+
 2009-05-23  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Added support for the FourCCs ".mp3" and
