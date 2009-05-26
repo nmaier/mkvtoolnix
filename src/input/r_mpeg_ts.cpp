@@ -39,9 +39,8 @@ mpeg_ts_reader_c::probe_file(mm_io_c *io,
         positions.push_back(i);
 
     for (i = 0; positions.size() > i; ++i) {
-      int pos = positions[i];
-
       for (k = 0; 0 != potential_packet_sizes[k]; ++k) {
+        int pos            = positions[i];
         int packet_size    = potential_packet_sizes[k];
         int num_startcodes = 1;
 

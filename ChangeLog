@@ -1,3 +1,8 @@
+2009-05-26  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed the detection of MPEG transport streams
+	with other packet sizes than 188 bytes (e.g. 192 and 204 bytes).
+
 2009-05-24  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The detection of invalid padding packet
