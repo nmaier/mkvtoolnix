@@ -704,10 +704,8 @@ generic_packetizer_c::fix_headers() {
 
 void
 generic_packetizer_c::add_packet(packet_cptr pack) {
-  if ((0 == m_num_packets) && ti.reset_timecodes) {
-    mxinfo(boost::format("\nMUH id %1% tc %2%\n") % ti.id % pack->timecode);
+  if ((0 == m_num_packets) && ti.reset_timecodes)
     ti.tcsync.displacement = -pack->timecode;
-  }
 
   ++m_num_packets;
 
