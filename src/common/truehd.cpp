@@ -116,10 +116,11 @@ truehd_parser_c::parse(bool end_of_stream) {
     }
 
     if (8 > frame->m_size) {
-      m_sync_state = state_unsynced;
-      offset       = resync(offset + 1);
+      unsigned int synced_at = resync(offset + 1);
       if (state_unsynced == m_sync_state)
         break;
+
+      offset = synced_at;
     }
 
     if ((frame->m_size + offset) > size)
@@ -165,6 +166,8 @@ unsigned int
 truehd_parser_c::resync(unsigned int offset) {
   const unsigned char *data = m_buffer.get_buffer();
   unsigned int size         = m_buffer.get_size();
+
+  m_sync_state              = state_unsynced;
 
   for (offset = offset + 4; (offset + 4) < size; ++offset) {
     uint32_t sync_word = get_uint32_be(&data[offset]);
