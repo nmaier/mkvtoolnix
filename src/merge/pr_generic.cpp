@@ -1330,8 +1330,21 @@ generic_reader_c::id_result_attachment(int64_t attachment_id,
 }
 
 void
+generic_reader_c::id_result_chapters(int num_entries) {
+  id_result_t result(0, ID_RESULT_CHAPTERS, empty_string, empty_string, num_entries);
+  id_results_chapters.push_back(result);
+}
+
+void
+generic_reader_c::id_result_tags(int64_t track_id,
+                                 int num_entries) {
+  id_result_t result(track_id, ID_RESULT_TAGS, empty_string, empty_string, num_entries);
+  id_results_tags.push_back(result);
+}
+
+void
 generic_reader_c::display_identification_results() {
-  std::string format_file, format_track, format_attachment, format_att_description, format_att_file_name;
+  std::string format_file, format_track, format_attachment, format_att_description, format_att_file_name, format_chapters, format_tags_global, format_tags_track;
 
   if (g_identify_for_mmg) {
     format_file            =   "File '%1%': container: %2%";
@@ -1339,6 +1352,9 @@ generic_reader_c::display_identification_results() {
     format_attachment      =   "Attachment ID %1%: type \"%2%\", size %3% bytes";
     format_att_description =   ", description \"%1%\"";
     format_att_file_name   =   ", file name \"%1%\"";
+    format_chapters        =   "Chapters: %1% entries";
+    format_tags_global     =   "Tags: %1% entries";
+    format_tags_track      =   "Tags for track ID %1%: %2% entries";
 
   } else {
     format_file            = Y("File '%1%': container: %2%");
@@ -1346,6 +1362,9 @@ generic_reader_c::display_identification_results() {
     format_attachment      = Y("Attachment ID %1%: type '%2%', size %3% bytes");
     format_att_description = Y(", description '%1%'");
     format_att_file_name   = Y(", file name '%1%'");
+    format_chapters        = Y("Chapters: %1% entries");
+    format_tags_global     = Y("Tags: %1% entries");
+    format_tags_track      = Y("Tags for track ID %1%: %2% entries");
   }
 
   mxinfo(boost::format(format_file) % ti.fname % id_results_container.info);
@@ -1356,7 +1375,7 @@ generic_reader_c::display_identification_results() {
   mxinfo("\n");
 
   int i;
-  for (i = 0; i < id_results_tracks.size(); ++i) {
+  for (i = 0; id_results_tracks.size() > i; ++i) {
     id_result_t &result = id_results_tracks[i];
 
     mxinfo(boost::format(format_track) % result.id % result.type % result.info);
@@ -1367,7 +1386,7 @@ generic_reader_c::display_identification_results() {
     mxinfo("\n");
   }
 
-  for (i = 0; i < id_results_attachments.size(); ++i) {
+  for (i = 0; id_results_attachments.size() > i; ++i) {
     id_result_t &result = id_results_attachments[i];
 
     mxinfo(boost::format(format_attachment) % result.id % id_escape_string(result.type) % result.size);
@@ -1377,6 +1396,22 @@ generic_reader_c::display_identification_results() {
 
     if (!result.info.empty())
       mxinfo(boost::format(format_att_file_name) % id_escape_string(result.info));
+
+    mxinfo("\n");
+  }
+
+  for (i = 0; id_results_chapters.size() > i; ++i) {
+    mxinfo(boost::format(format_chapters) % id_results_chapters[i].size);
+    mxinfo("\n");
+  }
+
+  for (i = 0; id_results_tags.size() > i; ++i) {
+    id_result_t &result = id_results_attachments[i];
+
+    if (ID_RESULT_TAGS_ID == result.id)
+      mxinfo(boost::format(format_tags_global) % result.size);
+    else
+      mxinfo(boost::format(format_tags_track) % result.id % result.size);
 
     mxinfo("\n");
   }

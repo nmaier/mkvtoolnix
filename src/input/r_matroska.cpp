@@ -2161,6 +2161,9 @@ kax_reader_c::identify() {
 
   for (i = 0; i < g_attachments.size(); i++)
     id_result_attachment(g_attachments[i].ui_id, g_attachments[i].mime_type, g_attachments[i].data->get_size(), g_attachments[i].name, g_attachments[i].description);
+
+  if (NULL != chapters)
+    id_result_chapters(count_chapter_atoms(*chapters));
 }
 
 // }}}

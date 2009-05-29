@@ -65,6 +65,9 @@ enum cue_strategy_e {
 #define ID_RESULT_TRACK_SUBTITLES "subtitles"
 #define ID_RESULT_TRACK_BUTTONS   "buttons"
 #define ID_RESULT_TRACK_UNKNOWN   "unknown"
+#define ID_RESULT_CHAPTERS        "chapters"
+#define ID_RESULT_TAGS            "tags"
+#define ID_RESULT_TAGS_ID         -1
 
 struct id_result_t {
   int64_t id;
@@ -297,7 +300,7 @@ public:
 
 private:
   id_result_t id_results_container;
-  std::vector<id_result_t> id_results_tracks, id_results_attachments;
+  std::vector<id_result_t> id_results_tracks, id_results_attachments, id_results_chapters, id_results_tags;
 
 public:
   generic_reader_c(track_info_c &p_ti);
@@ -340,6 +343,8 @@ protected:
   virtual void id_result_track(int64_t track_id, const std::string &type, const std::string &info, const std::string &verbose_info = empty_string);
   virtual void id_result_track(int64_t track_id, const std::string &type, const std::string &info, const std::vector<std::string> &verbose_info);
   virtual void id_result_attachment(int64_t attachment_id, const std::string &type, int size, const std::string &file_name = empty_string, const std::string &description = empty_string);
+  virtual void id_result_chapters(int num_entries);
+  virtual void id_result_tags(int64_t track_id, int num_entries);
 
   virtual std::string id_escape_string(const std::string &s);
 

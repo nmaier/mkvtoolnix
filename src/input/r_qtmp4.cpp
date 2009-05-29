@@ -791,7 +791,7 @@ qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
   if (0 == count)
     return;
 
-  std::vector<chapter_entry_t> chapters;
+  std::vector<chapter_entry_t> entries;
 
   int i;
   for (i = 0; i < count; ++i) {
@@ -802,20 +802,20 @@ qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
     if (io->read(buf->get(), buf->get_size() - 1) != (buf->get_size() - 1))
       break;
 
-    chapters.push_back(chapter_entry_t(charset_handle->utf8(reinterpret_cast<char *>(buf->get())), timecode));
+    entries.push_back(chapter_entry_t(charset_handle->utf8(reinterpret_cast<char *>(buf->get())), timecode));
   }
 
-  if (chapters.empty())
+  if (entries.empty())
     return;
 
-  stable_sort(chapters.begin(), chapters.end());
+  stable_sort(entries.begin(), entries.end());
 
   mm_mem_io_c out(NULL, 0, 1000);
   out.set_file_name(ti.fname);
   out.write_bom("UTF-8");
 
-  for (i = 0; chapters.size() > i; ++i) {
-    chapter_entry_t &chapter = chapters[i];
+  for (i = 0; entries.size() > i; ++i) {
+    chapter_entry_t &chapter = entries[i];
 
     mxverb(3, boost::format("Quicktime/MP4 reader:%1%%2%: start %4% name %3%\n") % space((level + 1) * 2 + 1) % i % chapter.m_name % format_timecode(chapter.m_timecode));
 
@@ -830,7 +830,7 @@ qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
   }
 
   mm_text_io_c text_out(&out, false);
-  g_kax_chapters = parse_chapters(&text_out);
+  chapters = parse_chapters(&text_out);
 }
 
 void
@@ -1633,6 +1633,9 @@ qtmp4_reader_c::identify() {
     id_result_track(dmx->id, dmx->type == 'v' ? ID_RESULT_TRACK_VIDEO : dmx->type == 'a' ? ID_RESULT_TRACK_AUDIO : ID_RESULT_TRACK_UNKNOWN,
                     (boost::format("%|1$.4s|") %  dmx->fourcc).str(), verbose_info);
   }
+
+  if (NULL != chapters)
+    id_result_chapters(count_chapter_atoms(*chapters));
 }
 
 void

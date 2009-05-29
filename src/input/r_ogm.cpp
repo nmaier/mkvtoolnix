@@ -721,6 +721,9 @@ ogm_reader_c::identify() {
 
     id_result_track(i, sdemuxers[i]->get_type(), sdemuxers[i]->get_codec(), verbose_info);
   }
+
+  if (NULL != chapters)
+    id_result_chapters(count_chapter_atoms(*chapters));
 }
 
 void
@@ -802,7 +805,7 @@ ogm_reader_c::handle_stream_comments() {
     }
 
     bool chapters_set = false;
-    if (!chapter_strings.empty() && !ti.no_chapters && (NULL == g_kax_chapters)) {
+    if (!chapter_strings.empty() && !ti.no_chapters) {
       try {
         counted_ptr<mm_mem_io_c> out(new mm_mem_io_c(NULL, 0, 1000));
 
@@ -813,15 +816,15 @@ ogm_reader_c::handle_stream_comments() {
 
         counted_ptr<mm_text_io_c> text_out(new mm_text_io_c(out.get(), false));
 
-        g_kax_chapters = parse_chapters(text_out.get());
-        chapters_set   = true;
+        chapters     = parse_chapters(text_out.get());
+        chapters_set = true;
       } catch (...) {
       }
     }
 
     if (    (segment_title_set || chapters_set)
          && !charset_warning_printed
-         && (ti.chapter_charset == "")) {
+         && (ti.chapter_charset.empty())) {
       mxwarn_fn(ti.fname,
                 Y("This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in "
                   "the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can "
