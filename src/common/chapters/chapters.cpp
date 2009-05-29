@@ -991,3 +991,23 @@ adjust_chapter_timecodes(EbmlMaster &master,
       adjust_chapter_timecodes(*work_master, offset);
   }
 }
+
+static int
+count_chapter_atoms_recursively(EbmlMaster &master,
+                                int count) {
+  int master_idx;
+
+  for (master_idx = 0; master.ListSize() > master_idx; ++master_idx)
+    if (is_id(master[master_idx], KaxChapterAtom))
+      ++count;
+
+    else if (dynamic_cast<EbmlMaster *>(master[master_idx]) != NULL)
+      count = count_chapter_atoms_recursively(*static_cast<EbmlMaster *>(master[master_idx]), count);
+
+  return count;
+}
+
+int
+count_chapter_atoms(EbmlMaster &master) {
+  return count_chapter_atoms_recursively(master, 0);
+}
