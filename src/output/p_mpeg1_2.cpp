@@ -61,7 +61,9 @@ mpeg1_2_video_packetizer_c::process_framed(packet_cptr packet) {
   if (0 == packet->data->get_size())
     return FILE_STATUS_MOREDATA;
 
-  if (!hack_engaged(ENGAGE_USE_CODEC_STATE) || (4 > packet->data->get_size()))
+  if (   (   !hack_engaged(ENGAGE_USE_CODEC_STATE)
+           && (NULL != hcodec_private))
+      || (4 > packet->data->get_size()))
     return video_packetizer_c::process(packet);
 
   unsigned char *buf = packet->data->get();
@@ -93,6 +95,14 @@ mpeg1_2_video_packetizer_c::process_framed(packet_cptr packet) {
 
   pos         -= 4;
   int sh_size  = pos - start;
+
+  if (NULL == hcodec_private) {
+    set_codec_private(&buf[start], sh_size);
+    rerender_track_headers();
+  }
+
+  if (!hack_engaged(ENGAGE_USE_CODEC_STATE))
+    return video_packetizer_c::process(packet);
 
   if ((NULL == m_seq_hdr.get()) || (sh_size != m_seq_hdr->get_size()) || memcmp(&buf[start], m_seq_hdr->get(), sh_size)) {
     m_seq_hdr           = clone_memory(&buf[start], sh_size);
@@ -137,6 +147,9 @@ mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
       MPEGFrame *frame = m_parser.ReadFrame();
       if (NULL == frame)
         break;
+
+      if (NULL == hcodec_private)
+        create_private_data();
 
       packet_t *new_packet    = new packet_t(new memory_c(frame->data, frame->size, true), frame->timecode, frame->duration, frame->firstRef, frame->secondRef);
       new_packet->time_factor = MPEG2_PICTURE_TYPE_FRAME == frame->pictureStructure ? 1 : 2;

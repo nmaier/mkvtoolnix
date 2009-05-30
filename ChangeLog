@@ -1,3 +1,10 @@
+2009-05-31  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The sequence header of MPEG-1/2 video tracks
+	is put into the CodecPrivate again while still leaving sequence
+	headers in the bitstream as well. This is more compatible with
+	some existing parsers.
+
 2009-05-30  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: Removed the check if the user has added
