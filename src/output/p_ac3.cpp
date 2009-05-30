@@ -150,8 +150,6 @@ ac3_packetizer_c::process(packet_cptr packet) {
     } else
       new_timecode = m_packetno * m_s2tc;
 
-    m_packetno++;
-
     add_packet(new packet_t(new memory_c(ac3_packet, ac3header.bytes, true), new_timecode, m_single_packet_duration));
     m_packetno++;
   }
