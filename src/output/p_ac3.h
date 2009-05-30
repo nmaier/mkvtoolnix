@@ -24,7 +24,7 @@
 
 class ac3_packetizer_c: public generic_packetizer_c {
 protected:
-  int64_t m_bytes_output, m_packetno, m_bytes_skipped;
+  int64_t m_bytes_output, m_packetno, m_bytes_skipped, m_last_timecode, m_num_packets_same_tc;
   int m_samples_per_sec;
   byte_buffer_c m_byte_buffer;
   bool m_first_packet;

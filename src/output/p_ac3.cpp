@@ -31,6 +31,8 @@ ac3_packetizer_c::ac3_packetizer_c(generic_reader_c *p_reader,
   , m_bytes_output(0)
   , m_packetno(0)
   , m_bytes_skipped(0)
+  , m_last_timecode(-1)
+  , m_num_packets_same_tc(0)
   , m_samples_per_sec(samples_per_sec)
   , m_first_packet(true)
   , m_s2tc(1536 * 1000000000ll, m_samples_per_sec)
@@ -131,7 +133,26 @@ ac3_packetizer_c::process(packet_cptr packet) {
   add_to_buffer(packet->data->get(), packet->data->get_size());
   while ((ac3_packet = get_ac3_packet(&header, &ac3header)) != NULL) {
     adjust_header_values(ac3header);
-    add_packet(new packet_t(new memory_c(ac3_packet, ac3header.bytes, true), -1 == packet->timecode ? m_packetno * m_s2tc : packet->timecode, m_single_packet_duration));
+
+    int64_t new_timecode;
+
+    if (-1 != packet->timecode) {
+      new_timecode = packet->timecode;
+      if (m_last_timecode == packet->timecode) {
+        m_num_packets_same_tc++;
+        new_timecode += m_num_packets_same_tc * m_s2tc;
+
+      } else {
+        m_last_timecode       = packet->timecode;
+        m_num_packets_same_tc = 0;
+      }
+
+    } else
+      new_timecode = m_packetno * m_s2tc;
+
+    m_packetno++;
+
+    add_packet(new packet_t(new memory_c(ac3_packet, ac3header.bytes, true), new_timecode, m_single_packet_duration));
     m_packetno++;
   }
 

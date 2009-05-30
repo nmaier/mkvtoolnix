@@ -1,3 +1,9 @@
+2009-05-30  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Improved the handling of consecutive AC3
+	packets with the same timecode (e.g. if AC3 is read from MP4
+	files). Fix for bug 403.
+
 2009-05-27  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed an endless loop in the TrueHD code
