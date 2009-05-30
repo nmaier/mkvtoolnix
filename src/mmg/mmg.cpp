@@ -1083,11 +1083,6 @@ mmg_dialog::on_run(wxCommandEvent &evt) {
 
   update_command_line();
 
-  if (tc_output->GetValue().Length() == 0) {
-    wxMessageBox(Z("You have not yet selected an output file."), Z("mkvmerge GUI: error"), wxOK | wxCENTER | wxICON_ERROR);
-    return;
-  }
-
   if (!input_page->validate_settings() ||
       !attachments_page->validate_settings() ||
       !global_page->validate_settings())
@@ -1808,11 +1803,6 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
   job_t job;
   int i, result;
   bool ok;
-
-  if (tc_output->GetValue().Length() == 0) {
-    wxMessageBox(Z("You have not yet selected an output file."), Z("mkvmerge GUI: error"), wxOK | wxCENTER | wxICON_ERROR);
-    return;
-  }
 
   if (!input_page->validate_settings() ||
       !attachments_page->validate_settings() ||

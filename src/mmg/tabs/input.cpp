@@ -1274,7 +1274,6 @@ tab_input::validate_settings() {
       return false;
     }
 
-  bool tracks_selected = false;
   unsigned int fidx;
   for (fidx = 0; fidx < files.size(); fidx++) {
     mmg_file_cptr &f = files[fidx];
@@ -1284,7 +1283,6 @@ tab_input::validate_settings() {
       if (!t->enabled)
         continue;
 
-      tracks_selected = true;
       std::string format;
       fix_format("%lld", format);
       wxString sid;
@@ -1389,11 +1387,6 @@ tab_input::validate_settings() {
         }
       }
     }
-  }
-
-  if (!tracks_selected) {
-    wxMessageBox(Z("You have not yet selected any input file and/or no tracks."), wxT("mkvmerge GUI: error"), wxOK | wxCENTER | wxICON_ERROR);
-    return false;
   }
 
   return true;
