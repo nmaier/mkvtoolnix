@@ -19,8 +19,11 @@
 #include <boost/format.hpp>
 #include <string>
 
+#include <ebml/EbmlElement.h>
+
 #include "common/locale.h"
 
+using namespace libebml;
 class mm_io_c;
 
 extern bool MTX_DLL_API g_suppress_warnings;
@@ -126,5 +129,7 @@ mxverb_tid(int level,
 }
 
 void MTX_DLL_API mxhexdump(int level, const unsigned char *buffer, int lenth);
+
+void MTX_DLL_API dump_ebml_elements(EbmlElement *element, bool with_values = false, int level = 0);
 
 #endif  // __MTX_COMMON_OUTPUT_H
