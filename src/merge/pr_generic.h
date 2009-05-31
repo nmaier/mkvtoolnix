@@ -185,8 +185,8 @@ public:
 
   // Options used by the readers.
   std::string fname;
-  bool no_audio, no_video, no_subs, no_buttons;
-  std::vector<int64_t> atracks, vtracks, stracks, btracks;
+  bool no_audio, no_video, no_subs, no_buttons, no_track_tags;
+  std::vector<int64_t> atracks, vtracks, stracks, btracks, track_tags;
 
   // Options used by the packetizers.
   unsigned char *private_data;
@@ -250,7 +250,7 @@ public:
 
   std::map<int64_t, attach_mode_e> attach_mode_list; // As given on the command line
 
-  bool no_chapters, no_attachments, no_tags;
+  bool no_chapters, no_attachments, no_global_tags;
 
   // Some file formats can contain chapters, but for some the charset
   // cannot be identified unambiguously (*cough* OGM *cough*).

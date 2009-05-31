@@ -1,5 +1,13 @@
 2009-05-31  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: new feature: Improved the control over which tags get
+	copied from a source file to the output file. The old option
+	"--no-tags" was replaced with the new options "--no-global-tags"
+	which causes global tags not to be copied and "--no-track-tags"
+	which causes track specific tags to not be copied. The new option
+	"--track-tags" can be used to select tracks for which tags will be
+	copied. The default is still to copy all existing tags.
+
 	* mkvmerge: new feature: Included chapters, global and track
 	specific tracks in the output of mkvmerge's identification mode.
 

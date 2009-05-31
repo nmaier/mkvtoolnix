@@ -146,6 +146,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *p_reader,
   else if (map_has_key(ti.all_tags, -1))
     ti.tags_file_name = ti.all_tags[-1];
   if (ti.tags_file_name != "") {
+    delete ti.tags;
     ti.tags = new KaxTags;
     parse_xml_tags(ti.tags_file_name, ti.tags);
   }
@@ -1081,6 +1082,7 @@ generic_reader_c::generic_reader_c(track_info_c &_ti)
   add_all_requested_track_ids2(vtracks);
   add_all_requested_track_ids2(stracks);
   add_all_requested_track_ids2(btracks);
+  add_all_requested_track_ids2(track_tags);
   add_all_requested_track_ids(std::string, all_fourccs);
   add_all_requested_track_ids(display_properties_t, display_properties);
   add_all_requested_track_ids(timecode_sync_t, timecode_syncs);
@@ -1139,6 +1141,11 @@ generic_reader_c::demuxing_requested(char type,
     if (ti.no_buttons)
       return false;
     tracks = &ti.btracks;
+
+  } else if ('T' == type) {
+    if (ti.no_track_tags)
+      return false;
+    tracks = &ti.track_tags;
 
   } else
     mxerror(boost::format(Y("pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%.")) % type);
@@ -1432,6 +1439,7 @@ track_info_c::track_info_c()
   , no_video(false)
   , no_subs(false)
   , no_buttons(false)
+  , no_track_tags(false)
   , private_data(NULL)
   , private_size(0)
   , aspect_ratio(0.0)
@@ -1451,7 +1459,7 @@ track_info_c::track_info_c()
   , nalu_size_length(0)
   , no_chapters(false)
   , no_attachments(false)
-  , no_tags(false)
+  , no_global_tags(false)
   , avi_block_align(0)
   , avi_samples_per_sec(0)
   , avi_avg_bytes_per_sec(0)
@@ -1483,10 +1491,12 @@ track_info_c::operator =(const track_info_c &src) {
   no_video                   = src.no_video;
   no_subs                    = src.no_subs;
   no_buttons                 = src.no_buttons;
+  no_track_tags              = src.no_track_tags;
   atracks                    = src.atracks;
   btracks                    = src.btracks;
   stracks                    = src.stracks;
   vtracks                    = src.vtracks;
+  track_tags                 = src.track_tags;
 
   private_size               = src.private_size;
   private_data               = (unsigned char *)safememdup(src.private_data, private_size);
@@ -1549,7 +1559,7 @@ track_info_c::operator =(const track_info_c &src) {
 
   no_chapters                = src.no_chapters;
   no_attachments             = src.no_attachments;
-  no_tags                    = src.no_tags;
+  no_global_tags             = src.no_global_tags;
 
   chapter_charset            = src.chapter_charset;
 

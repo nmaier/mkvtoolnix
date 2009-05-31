@@ -210,8 +210,13 @@ set_usage() {
                   "                           all or only the first output file. Default: copy\n"
                   "                           all attachments to all output files.\n");
   usage_text += Y("  -M, --no-attachments     Don't copy attachments from a source file.\n");
-  usage_text += Y("  --no-chapters            Don't keep chapters from a Matroska file.\n");
-  usage_text += Y("  --no-tags                Don't keep tags from a Matroska file.\n");
+  usage_text += Y("  -t, --tags <TID:file>    Read tags for the track from a XML file.\n");
+  usage_text += Y("  --tags-for-tracks <n,m,...>\n"
+                  "                           Copy the tags for tracks n,m etc. Default: copy\n"
+                  "                           tags for all tracks.\n");
+  usage_text += Y("  -T, --no-track-tags      Don't copy tags for tracks from the source file.\n");
+  usage_text += Y("  --no-global-tags         Don't keep global tags from the source file.\n");
+  usage_text += Y("  --no-chapters            Don't keep chapters from the source file.\n");
   usage_text += Y("  -y, --sync <TID:d[,o[/p]]>\n"
                   "                           Synchronize, adjust the track's timecodes with\n"
                   "                           the id TID by 'd' ms.\n"
@@ -233,7 +238,6 @@ set_usage() {
                   "                           None at all, only for I frames, for all.\n");
   usage_text += Y("  --language <TID:lang>    Sets the language for the track (ISO639-2\n"
                   "                           code, see --list-languages).\n");
-  usage_text += Y("  -t, --tags <TID:file>    Read tags for the track from a XML file.\n");
   usage_text += Y("  --aac-is-sbr <TID[:0|1]> The track with the ID is HE-AAC/AAC+/SBR-AAC\n"
                   "                           or not. The value ':1' can be omitted.\n");
   usage_text += Y("  --timecodes <TID:file>   Read the timecodes to be used from a file.\n");
@@ -1823,8 +1827,8 @@ parse_args(std::vector<std::string> args) {
       parse_arg_attachments(this_arg, next_arg, *ti);
       sit++;
 
-    } else if (this_arg == "--no-tags") {
-      ti->no_tags = true;
+    } else if (this_arg == "--no-global-tags") {
+      ti->no_global_tags = true;
 
     } else if (this_arg == "--meta-seek-size") {
       mxwarn(Y("The option '--meta-seek-size' is no longer supported. Please read mkvmerge's documentation, especially the section about the MATROSKA FILE LAYOUT.\n"));
@@ -1848,8 +1852,11 @@ parse_args(std::vector<std::string> args) {
     else if ((this_arg == "-S") || (this_arg == "--nosubs") || (this_arg == "--no-subs") || (this_arg == "--no-subtitles"))
       ti->no_subs = true;
 
-    else if ((this_arg == "-B") || (this_arg == "--nobuttons") || (this_args == "--no-buttons"))
+    else if ((this_arg == "-B") || (this_arg == "--nobuttons") || (this_arg == "--no-buttons"))
       ti->no_buttons = true;
+
+    else if ((this_arg == "-T") || (this_arg == "--no-track-tags"))
+      ti->no_track_tags = true;
 
     else if ((this_arg == "-a") || (this_arg == "--atracks") || (this_arg == "--audio-tracks")) {
       if (no_next_arg)
@@ -1877,6 +1884,13 @@ parse_args(std::vector<std::string> args) {
         mxerror(boost::format(Y("'%1%' lacks the track number(s).\n")) % this_arg);
 
       parse_arg_tracks(next_arg, ti->btracks, this_arg);
+      sit++;
+
+    } else if ((this_arg == "--track-tags")) {
+      if (no_next_arg)
+        mxerror(boost::format(Y("'%1%' lacks the track number(s).\n")) % this_arg);
+
+      parse_arg_tracks(next_arg, ti->track_tags, this_arg);
       sit++;
 
     } else if ((this_arg == "-f") || (this_arg == "--fourcc")) {

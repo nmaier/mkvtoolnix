@@ -269,6 +269,13 @@ switch (see section \fBTRACK IDS\fR).
 They're \fBnot\fR simply the track numbers.
 Default: copy all button tracks.
 .TP
+\fB\-\-tracks\-tags\fR <\fIn\fR,\fIm\fR,...>
+Copy the tags for tracks \fIn\fR, \fIm\fR etc.
+The numbers are track IDs which can be obtained with the \fB\-\-identify\fR
+switch (see section \fBTRACK IDS\fR).
+They're \fBnot\fR simply the track numbers.
+Default: copy tags for all tracks.
+.TP
 \fB\-A\fR, \fB\-\-no-audio\fR
 Don't copy any audio track from this file.
 .TP
@@ -281,13 +288,16 @@ Don't copy any subtitle track from this file.
 \fB\-B\fR, \fB\-\-no-buttons\fR
 Don't copy any button track from this file.
 .TP
+\fN\-T\fR, \fB\-\-no\-track\-tags\fR
+Don't copy any track specific tags from this file.
+.TP
 \fB\-\-no\-chapters\fR
 Don't copy chapters from this file.
 .TP
 \fB\-\-no\-attachments\fR
 Don't copy attachments from this file.
 .TP
-\fB\-\-no\-tags\fR
+\fB\-\-no\-global\-tags\fR
 Don't copy global tags from this file.
 .TP
 \fB\-y\fR, \fB\-\-sync\fR <\fITID\fR:\fId\fR[,\fIo\fR[/\fIp\fR]]>

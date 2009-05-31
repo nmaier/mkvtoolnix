@@ -647,6 +647,7 @@ kax_reader_c::handle_tags(mm_io_c *io,
         continue;
       }
 
+      bool delete_tag       = true;
       bool is_global        = true;
       KaxTag *tag           = static_cast<KaxTag *>((*tags)[0]);
       KaxTagTargets *target = FINDFIRST(tag, KaxTagTargets);
@@ -655,11 +656,10 @@ kax_reader_c::handle_tags(mm_io_c *io,
         KaxTagTrackUID *tuid = FINDFIRST(target, KaxTagTrackUID);
 
         if (NULL != tuid) {
-          found              = false;
+          is_global          = false;
           kax_track_t *track = find_track_by_uid(uint64(*tuid));
 
           if (NULL != track) {
-            found             = true;
             bool contains_tag = false;
 
             for (i = 0; i < tag->ListSize(); i++)
@@ -672,6 +672,8 @@ kax_reader_c::handle_tags(mm_io_c *io,
               if (NULL == track->tags)
                 track->tags = new KaxTags;
               track->tags->PushElement(*tag);
+
+              delete_tag = false;
             }
           }
         }
@@ -682,7 +684,7 @@ kax_reader_c::handle_tags(mm_io_c *io,
           m_tags = new KaxTags;
         m_tags->PushElement(*tag);
 
-      } else if (!found)
+      } else if (delete_tag)
         delete tag;
 
       tags->Remove(0);
@@ -1210,12 +1212,11 @@ kax_reader_c::read_headers() {
       for (i = 0; i < deferred_chapters.size(); i++)
         handle_chapters(in, l0, deferred_chapters[i]);
 
-    if (!ti.no_tags) {
-      for (i = 0; i < deferred_tags.size(); i++)
-        handle_tags(in, l0, deferred_tags[i]);
+    for (i = 0; i < deferred_tags.size(); i++)
+      handle_tags(in, l0, deferred_tags[i]);
 
+    if (!ti.no_global_tags)
       process_global_tags();
-    }
 
   } catch (...) {
     mxerror(Y("matroska_reader: caught exception\n"));
@@ -1572,7 +1573,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
     nti.language   = t->language;
   if (nti.track_name == "")
     nti.track_name = t->track_name;
-  if (NULL != t->tags)
+  if ((NULL != t->tags) && demuxing_requested('T', t->tnum))
     nti.tags       = dynamic_cast<KaxTags *>(t->tags->Clone());
 
   if (hack_engaged(ENGAGE_FORCE_PASSTHROUGH_PACKETIZER)) {
