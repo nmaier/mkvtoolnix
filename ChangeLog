@@ -1,5 +1,8 @@
 2009-05-31  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: new feature: Included chapters, global and track
+	specific tracks in the output of mkvmerge's identification mode.
+
 	* mkvmerge: Renamed a couple of command line options to make the
 	command line interface more consistent: "--no-audio",
 	"--no-video", "--no-subtitles", "--no-buttons", "--audio-tracks",
