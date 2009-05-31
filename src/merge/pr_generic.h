@@ -67,7 +67,7 @@ enum cue_strategy_e {
 #define ID_RESULT_TRACK_UNKNOWN   "unknown"
 #define ID_RESULT_CHAPTERS        "chapters"
 #define ID_RESULT_TAGS            "tags"
-#define ID_RESULT_TAGS_ID         -1
+#define ID_RESULT_GLOBAL_TAGS_ID  -1
 
 struct id_result_t {
   int64_t id;

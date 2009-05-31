@@ -1353,7 +1353,7 @@ generic_reader_c::display_identification_results() {
     format_att_description =   ", description \"%1%\"";
     format_att_file_name   =   ", file name \"%1%\"";
     format_chapters        =   "Chapters: %1% entries";
-    format_tags_global     =   "Tags: %1% entries";
+    format_tags_global     =   "Global tags: %1% entries";
     format_tags_track      =   "Tags for track ID %1%: %2% entries";
 
   } else {
@@ -1363,7 +1363,7 @@ generic_reader_c::display_identification_results() {
     format_att_description = Y(", description '%1%'");
     format_att_file_name   = Y(", file name '%1%'");
     format_chapters        = Y("Chapters: %1% entries");
-    format_tags_global     = Y("Tags: %1% entries");
+    format_tags_global     = Y("Global tags: %1% entries");
     format_tags_track      = Y("Tags for track ID %1%: %2% entries");
   }
 
@@ -1406,9 +1406,9 @@ generic_reader_c::display_identification_results() {
   }
 
   for (i = 0; id_results_tags.size() > i; ++i) {
-    id_result_t &result = id_results_attachments[i];
+    id_result_t &result = id_results_tags[i];
 
-    if (ID_RESULT_TAGS_ID == result.id)
+    if (ID_RESULT_GLOBAL_TAGS_ID == result.id)
       mxinfo(boost::format(format_tags_global) % result.size);
     else
       mxinfo(boost::format(format_tags_track) % result.id % result.size);

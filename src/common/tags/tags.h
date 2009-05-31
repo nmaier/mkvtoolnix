@@ -50,6 +50,8 @@ void MTX_DLL_API set_simple_tag_name(KaxTagSimple &tag, const std::string &name)
 void MTX_DLL_API set_simple_tag_value(KaxTagSimple &tag, const std::string &value);
 void MTX_DLL_API set_simple_tag(KaxTagSimple &tag, const std::string &name, const std::string &valuevalue);
 
+int MTX_DLL_API count_simple_tags(EbmlMaster &master);
+
 void MTX_DLL_API convert_old_tags(KaxTags &tags);
 
 #endif // __MTX_COMMON_TAG_COMMON_H

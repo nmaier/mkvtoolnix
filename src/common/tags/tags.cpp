@@ -263,3 +263,23 @@ convert_old_tags(KaxTags &tags) {
     }
   }
 }
+
+static int
+count_simple_tags_recursively(EbmlMaster &master,
+                              int count) {
+  int master_idx;
+
+  for (master_idx = 0; master.ListSize() > master_idx; ++master_idx)
+    if (is_id(master[master_idx], KaxTagSimple))
+      ++count;
+
+    else if (dynamic_cast<EbmlMaster *>(master[master_idx]) != NULL)
+      count = count_simple_tags_recursively(*static_cast<EbmlMaster *>(master[master_idx]), count);
+
+  return count;
+}
+
+int
+count_simple_tags(EbmlMaster &master) {
+  return count_simple_tags_recursively(master, 0);
+}

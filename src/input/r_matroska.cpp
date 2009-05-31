@@ -54,6 +54,7 @@ extern "C" {                    // for BITMAPINFOHEADER
 #include "common/mm_io.h"
 #include "common/strings/formatting.h"
 #include "common/strings/parsing.h"
+#include "common/tags/tags.h"
 #include "input/r_matroska.h"
 #include "merge/output_control.h"
 #include "merge/pr_generic.h"
@@ -139,6 +140,7 @@ kax_reader_c::kax_reader_c(track_info_c &_ti)
   , first_timecode(-1)
   , writing_app_ver(-1)
   , m_attachment_id(0)
+  , m_tags(NULL)
 {
   if (!read_headers())
     throw error_c(Y("matroska_reader: Failed to read the headers."));
@@ -160,6 +162,7 @@ kax_reader_c::~kax_reader_c() {
   delete in;
   delete es;
   delete segment;
+  delete m_tags;
 }
 
 // }}}
@@ -644,16 +647,14 @@ kax_reader_c::handle_tags(mm_io_c *io,
         continue;
       }
 
-      bool is_global        = false;
+      bool is_global        = true;
       KaxTag *tag           = static_cast<KaxTag *>((*tags)[0]);
       KaxTagTargets *target = FINDFIRST(tag, KaxTagTargets);
 
       if (NULL != target) {
         KaxTagTrackUID *tuid = FINDFIRST(target, KaxTagTrackUID);
 
-        if (NULL == tuid)
-          is_global = true;
-        else {
+        if (NULL != tuid) {
           found              = false;
           kax_track_t *track = find_track_by_uid(uint64(*tuid));
 
@@ -674,12 +675,14 @@ kax_reader_c::handle_tags(mm_io_c *io,
             }
           }
         }
-      } else
-        is_global = true;
+      }
 
-      if (is_global)
-        add_tags(tag);
-      else if (!found)
+      if (is_global) {
+        if (NULL == m_tags)
+          m_tags = new KaxTags;
+        m_tags->PushElement(*tag);
+
+      } else if (!found)
         delete tag;
 
       tags->Remove(0);
@@ -1207,9 +1210,12 @@ kax_reader_c::read_headers() {
       for (i = 0; i < deferred_chapters.size(); i++)
         handle_chapters(in, l0, deferred_chapters[i]);
 
-    if (!ti.no_tags)
+    if (!ti.no_tags) {
       for (i = 0; i < deferred_tags.size(); i++)
         handle_tags(in, l0, deferred_tags[i]);
+
+      process_global_tags();
+    }
 
   } catch (...) {
     mxerror(Y("matroska_reader: caught exception\n"));
@@ -1224,6 +1230,18 @@ kax_reader_c::read_headers() {
 }
 
 // }}}
+
+void
+kax_reader_c::process_global_tags() {
+  if ((NULL == m_tags) || g_identifying)
+    return;
+
+  int i;
+  for (i = 0; m_tags->ListSize() > i; ++i)
+    add_tags(static_cast<KaxTag *>((*m_tags)[i]));
+
+  m_tags->RemoveAll();
+}
 
 // {{{ FUNCTION kax_reader_c::create_packetizers()
 
@@ -2164,6 +2182,13 @@ kax_reader_c::identify() {
 
   if (NULL != chapters)
     id_result_chapters(count_chapter_atoms(*chapters));
+
+  if (NULL != m_tags)
+    id_result_tags(ID_RESULT_GLOBAL_TAGS_ID, count_simple_tags(*m_tags));
+
+  for (i = 0; tracks.size() > i; i++)
+    if (tracks[i]->ok && (NULL != tracks[i]->tags))
+      id_result_tags(tracks[i]->tnum, count_simple_tags(*tracks[i]->tags));
 }
 
 // }}}

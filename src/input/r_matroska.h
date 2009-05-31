@@ -172,6 +172,8 @@ private:
 
   int64_t m_attachment_id;
 
+  KaxTags *m_tags;
+
 public:
   kax_reader_c(track_info_c &_ti) throw (error_c);
   virtual ~kax_reader_c();
@@ -199,6 +201,7 @@ protected:
   virtual void handle_attachments(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void handle_chapters(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void handle_tags(mm_io_c *io, EbmlElement *l0, int64_t pos);
+  virtual void process_global_tags();
 
   virtual void create_video_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_audio_packetizer(kax_track_t *t, track_info_c &nti);
