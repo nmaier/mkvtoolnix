@@ -189,18 +189,22 @@ set_usage() {
                   "                           firsts Matroska file written.\n");
   usage_text +=   "\n";
   usage_text += Y(" Options for each input file:\n");
-  usage_text += Y("  -a, --atracks <n,m,...>  Copy audio tracks n,m etc. Default: copy all\n"
+  usage_text += Y("  -a, --audio-tracks <n,m,...>\n"
+                  "                           Copy audio tracks n,m etc. Default: copy all\n"
                   "                           audio tracks.\n");
-  usage_text += Y("  -A, --noaudio            Don't copy any audio track from this file.\n");
-  usage_text += Y("  -d, --vtracks <n,m,...>  Copy video tracks n,m etc. Default: copy all\n"
+  usage_text += Y("  -A, --no-audio           Don't copy any audio track from this file.\n");
+  usage_text += Y("  -d, --video-tracks <n,m,...>\n"
+                  "                           Copy video tracks n,m etc. Default: copy all\n"
                   "                           video tracks.\n");
-  usage_text += Y("  -D, --novideo            Don't copy any video track from this file.\n");
-  usage_text += Y("  -s, --stracks <n,m,...>  Copy subtitle tracks n,m etc. Default: copy\n"
+  usage_text += Y("  -D, --no-video           Don't copy any video track from this file.\n");
+  usage_text += Y("  -s, --subtitle-tracks <n,m,...>\n"
+                  "                           Copy subtitle tracks n,m etc. Default: copy\n"
                   "                           all subtitle tracks.\n");
-  usage_text += Y("  -S, --nosubs             Don't copy any text track from this file.\n");
-  usage_text += Y("  -b, --btracks <n,m,...>  Copy buttons tracks n,m etc. Default: copy\n"
+  usage_text += Y("  -S, --no-subtitles       Don't copy any subtitle track from this file.\n");
+  usage_text += Y("  -b, --button-tracks <n,m,...>\n"
+                  "                           Copy buttons tracks n,m etc. Default: copy\n"
                   "                           all buttons tracks.\n");
-  usage_text += Y("  -B, --nobuttons          Don't copy any buttons track from this file.\n");
+  usage_text += Y("  -B, --no-buttons         Don't copy any buttons track from this file.\n");
   usage_text += Y("  -m, --attachments <n[:all|first],m[:all|first],...>\n"
                   "                           Copy the attachments with the IDs n, m etc to\n"
                   "                           all or only the first output file. Default: copy\n"
@@ -1835,40 +1839,40 @@ parse_args(std::vector<std::string> args) {
     }
 
     // Options that apply to the next input file only.
-    else if ((this_arg == "-A") || (this_arg == "--noaudio"))
+    else if ((this_arg == "-A") || (this_arg == "--noaudio") || (this_arg == "--no-audio"))
       ti->no_audio = true;
 
-    else if ((this_arg == "-D") || (this_arg == "--novideo"))
+    else if ((this_arg == "-D") || (this_arg == "--novideo") || (this_arg == "--no-video"))
       ti->no_video = true;
 
-    else if ((this_arg == "-S") || (this_arg == "--nosubs"))
+    else if ((this_arg == "-S") || (this_arg == "--nosubs") || (this_arg == "--no-subs") || (this_arg == "--no-subtitles"))
       ti->no_subs = true;
 
-    else if ((this_arg == "-B") || (this_arg == "--nobuttons"))
+    else if ((this_arg == "-B") || (this_arg == "--nobuttons") || (this_args == "--no-buttons"))
       ti->no_buttons = true;
 
-    else if ((this_arg == "-a") || (this_arg == "--atracks")) {
+    else if ((this_arg == "-a") || (this_arg == "--atracks") || (this_arg == "--audio-tracks")) {
       if (no_next_arg)
         mxerror(boost::format(Y("'%1%' lacks the track number(s).\n")) % this_arg);
 
       parse_arg_tracks(next_arg, ti->atracks, this_arg);
       sit++;
 
-    } else if ((this_arg == "-d") || (this_arg == "--vtracks")) {
+    } else if ((this_arg == "-d") || (this_arg == "--vtracks") || (this_arg == "--video-tracks")) {
       if (no_next_arg)
         mxerror(boost::format(Y("'%1%' lacks the track number(s).\n")) % this_arg);
 
       parse_arg_tracks(next_arg, ti->vtracks, this_arg);
       sit++;
 
-    } else if ((this_arg == "-s") || (this_arg == "--stracks")) {
+    } else if ((this_arg == "-s") || (this_arg == "--stracks") || (this_arg == "--sub-tracks") || (this_arg == "--subtitle-tracks")) {
       if (no_next_arg)
         mxerror(boost::format(Y("'%1%' lacks the track number(s).\n")) % this_arg);
 
       parse_arg_tracks(next_arg, ti->stracks, this_arg);
       sit++;
 
-    } else if ((this_arg == "-b") || (this_arg == "--btracks")) {
+    } else if ((this_arg == "-b") || (this_arg == "--btracks") || (this_arg == "--button-tracks")) {
       if (no_next_arg)
         mxerror(boost::format(Y("'%1%' lacks the track number(s).\n")) % this_arg);
 

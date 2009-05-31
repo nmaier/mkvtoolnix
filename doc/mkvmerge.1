@@ -244,51 +244,51 @@ If splitting is not used then both do the same.
 .LP
 Options that can be used for each input file:
 .TP
-\fB\-a\fR, \fB\-\-atracks\fR <\fIn\fR,\fIm\fR,...>
+\fB\-a\fR, \fB\-\-audio\-tracks\fR <\fIn\fR,\fIm\fR,...>
 Copy the audio tracks \fIn\fR, \fIm\fR etc. The numbers are track IDs which
 can be obtained with the \fB\-\-identify\fR switch. They're \fBnot\fR simply
 the track numbers (see section \fBTRACK IDS\fR). Default: copy all audio
 tracks.
 .TP
-\fB\-d\fR, \fB\-\-vtracks\fR <\fIn\fR,\fIm\fR,...>
+\fB\-d\fR, \fB\-\-video\-tracks\fR <\fIn\fR,\fIm\fR,...>
 Copy the video tracks \fIn\fR, \fIm\fR etc. The numbers are track IDs which
 can be obtained with the \fB\-\-identify\fR switch (see
 section \fBTRACK IDS\fR). They're \fBnot\fR simply
 the track numbers. Default: copy all video tracks.
 .TP
-\fB\-s\fR, \fB\-\-stracks\fR <\fIn\fR,\fIm\fR,...>
+\fB\-s\fR, \fB\-\-subtitle\-tracks\fR <\fIn\fR,\fIm\fR,...>
 Copy the subtitle tracks \fIn\fR, \fIm\fR etc. The numbers are track IDs which
 can be obtained with the \fB\-\-identify\fR switch (see
 section \fBTRACK IDS\fR). They're \fBnot\fR simply
 the track numbers. Default: copy all subtitle tracks.
 .TP
-\fB\-b\fR, \fB\-\-btracks\fR <\fIn\fR,\fIm\fR,...>
+\fB\-b\fR, \fB\-\-button\-tracks\fR <\fIn\fR,\fIm\fR,...>
 Copy the button tracks \fIn\fR, \fIm\fR etc.
 The numbers are track IDs which can be obtained with the \fB\-\-identify\fR
 switch (see section \fBTRACK IDS\fR).
 They're \fBnot\fR simply the track numbers.
 Default: copy all button tracks.
 .TP
-\fB\-A\fR, \fB\-\-noaudio\fR
+\fB\-A\fR, \fB\-\-no-audio\fR
 Don't copy any audio track from this file.
 .TP
-\fB\-D\fR, \fB\-\-novideo\fR
+\fB\-D\fR, \fB\-\-no-video\fR
 Don't copy any video track from this file.
 .TP
-\fB\-S\fR, \fB\-\-nosubs\fR
+\fB\-S\fR, \fB\-\-no-subtitles\fR
 Don't copy any subtitle track from this file.
 .TP
-\fB\-B\fR, \fB\-\-nobuttons\fR
+\fB\-B\fR, \fB\-\-no-buttons\fR
 Don't copy any button track from this file.
 .TP
 \fB\-\-no\-chapters\fR
-If the source is a Matroska file then don't copy chapters from it.
+Don't copy chapters from this file.
 .TP
 \fB\-\-no\-attachments\fR
-If the source is a Matroska file then don't copy attachments from it.
+Don't copy attachments from this file.
 .TP
 \fB\-\-no\-tags\fR
-If the source is a Matroska file then don't copy tags from it.
+Don't copy global tags from this file.
 .TP
 \fB\-y\fR, \fB\-\-sync\fR <\fITID\fR:\fId\fR[,\fIo\fR[/\fIp\fR]]>
 Adjust the timecodes of the track with the id \fITID\fR by \fId\fR
