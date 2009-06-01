@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2009-05-31 18:16+0200\n"
+"PO-Revision-Date: 2009-06-01 12:04+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -303,9 +303,8 @@ msgstr ""
 "                           （2 <= n <= 4）。デフォルト値は4です。\n"
 
 #: src/merge/mkvmerge.cpp:219
-#, fuzzy
 msgid "  --no-chapters            Don't keep chapters from the source file.\n"
-msgstr "  --no-chapters            Matroskaファイルからチャプタを引き継ぎません。\n"
+msgstr "  --no-chapters            ソースファイルからチャプタを引き継ぎません。\n"
 
 #: src/merge/mkvmerge.cpp:152
 msgid ""
@@ -320,9 +319,8 @@ msgid "  --no-cues                Do not write the cue data (the index).\n"
 msgstr "  --no-cues                キューデータ（インデックス）を記録しません。\n"
 
 #: src/merge/mkvmerge.cpp:218
-#, fuzzy
 msgid "  --no-global-tags         Don't keep global tags from the source file.\n"
-msgstr "  --no-tags                Matroskaファイルからタグを引き継ぎません。\n"
+msgstr "  --no-global-tags         ソースファイルからグローバルタグを引き継ぎません。\n"
 
 #: src/merge/mkvmerge.cpp:290
 msgid "  --output-charset <cset>  Output messages in this charset\n"
@@ -382,15 +380,14 @@ msgstr ""
 "                           文字セットで書かれているか指定します。\n"
 
 #: src/merge/mkvmerge.cpp:214
-#, fuzzy
 msgid ""
 "  --tags-for-tracks <n,m,...>\n"
 "                           Copy the tags for tracks n,m etc. Default: copy\n"
 "                           tags for all tracks.\n"
 msgstr ""
-"  -a, --audio-tracks <n,m,...>\n"
-"                           n,m,...のオーディオトラックをコピーします。\n"
-"                           デフォルトでは全てコピーします。\n"
+"  --tags-for-tracks <n,m,...>\n"
+"                           トラックn,m,...のタグをコピーします。\n"
+"                           デフォルトでは全てのトラックのタグをコピーします。\n"
 
 #: src/merge/mkvmerge.cpp:164
 msgid "  --timecode-scale <n>     Force the timecode scale factor to n.\n"
@@ -445,9 +442,8 @@ msgid "  -S, --no-subtitles       Don't copy any subtitle track from this file.\
 msgstr "  -S, --no-subtitles       このファイルからテキストトラックをコピーしません。\n"
 
 #: src/merge/mkvmerge.cpp:217
-#, fuzzy
 msgid "  -T, --no-track-tags      Don't copy tags for tracks from the source file.\n"
-msgstr "  -M, --no-attachments     ソースファイルから添付ファイルをコピーしません。\n"
+msgstr "  -T, --no-track-tags      ソースファイルからトラックのタグをコピーしません。\n"
 
 #: src/merge/mkvmerge.cpp:296
 msgid "  -V, --version            Show version information.\n"
@@ -2041,9 +2037,8 @@ msgid "Chapters:"
 msgstr "チャプタ："
 
 #: src/merge/pr_generic.cpp:1372
-#, fuzzy
 msgid "Chapters: %1% entries"
-msgstr "チャプタが書き込まれました。%1%"
+msgstr "チャプタ：%1%個のエントリ"
 
 #: src/mmg/tabs/global.cpp:194
 msgid "Charset:"
@@ -3082,9 +3077,8 @@ msgid "Global tags"
 msgstr "グローバルタグ"
 
 #: src/merge/pr_generic.cpp:1373
-#, fuzzy
 msgid "Global tags: %1% entries"
-msgstr "グローバルタグ%1%"
+msgstr "グローバルタグ：%1%個のエントリ"
 
 #: src/mmg/header_editor/frame.cpp:115
 msgid "H&eaders"
@@ -5006,9 +5000,8 @@ msgid "Tags"
 msgstr "タグ"
 
 #: src/merge/pr_generic.cpp:1374
-#, fuzzy
 msgid "Tags for track ID %1%: %2% entries"
-msgstr "トラックID %1%：%2%"
+msgstr "トラックID %1%のタグ：%2%個のエントリ"
 
 #: src/mmg/tabs/input_general.cpp:77
 msgid "Tags:"
