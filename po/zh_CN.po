@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-05-31 20:18+0200\n"
+"PO-Revision-Date: 2009-06-02 12:50+0800\n"
 "Last-Translator: Dean Lee <xslidian+t@gmail.com>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -297,9 +297,8 @@ msgstr ""
 "                           4 为缺省值。\n"
 
 #: src/merge/mkvmerge.cpp:219
-#, fuzzy
 msgid "  --no-chapters            Don't keep chapters from the source file.\n"
-msgstr "  --no-chapters            不要保留源 Matroska 文件中的章节。\n"
+msgstr "  --no-chapters            不要保留源文件中的章节。\n"
 
 #: src/merge/mkvmerge.cpp:152
 msgid ""
@@ -314,9 +313,8 @@ msgid "  --no-cues                Do not write the cue data (the index).\n"
 msgstr "  --no-cues               不要写入 cue 数据 (索引)。\n"
 
 #: src/merge/mkvmerge.cpp:218
-#, fuzzy
 msgid "  --no-global-tags         Don't keep global tags from the source file.\n"
-msgstr "  --no-tags                不要保留源 Matroska 文件中的标签。\n"
+msgstr "  --no-global-tags         不要保留源文件中的全局标签。\n"
 
 #: src/merge/mkvmerge.cpp:290
 msgid "  --output-charset <cset>  Output messages in this charset\n"
@@ -377,15 +375,14 @@ msgstr ""
 "                           以便转换为 UTF-8。\n"
 
 #: src/merge/mkvmerge.cpp:214
-#, fuzzy
 msgid ""
 "  --tags-for-tracks <n,m,...>\n"
 "                           Copy the tags for tracks n,m etc. Default: copy\n"
 "                           tags for all tracks.\n"
 msgstr ""
-"  -a, --audio-tracks <n,m,...>\n"
-"                           复制 n, m 等音频轨。\n"
-"                           默认：复制所有音频轨。\n"
+"  --tags-for-tracks <n,m,...>\n"
+"                           复制 n,m 等轨的标签。\n"
+"                           默认：复制所有轨道标签。\n"
 
 #: src/merge/mkvmerge.cpp:164
 msgid "  --timecode-scale <n>     Force the timecode scale factor to n.\n"
@@ -439,9 +436,8 @@ msgid "  -S, --no-subtitles       Don't copy any subtitle track from this file.\
 msgstr "  -S, --no-subtitles       不要从此文件中复制任何字幕轨。\n"
 
 #: src/merge/mkvmerge.cpp:217
-#, fuzzy
 msgid "  -T, --no-track-tags      Don't copy tags for tracks from the source file.\n"
-msgstr "  -M, --no-attachments     不要从指定源文件中复制附件。\n"
+msgstr "  -T, --no-track-tags      不要从源文件中复制轨道标签。\n"
 
 #: src/merge/mkvmerge.cpp:296
 msgid "  -V, --version            Show version information.\n"
@@ -2083,9 +2079,8 @@ msgid "Chapters:"
 msgstr "章节:"
 
 #: src/merge/pr_generic.cpp:1372
-#, fuzzy
 msgid "Chapters: %1% entries"
-msgstr "章节已写入。%1%"
+msgstr "章节: %1% 条记录"
 
 #: src/mmg/tabs/global.cpp:194
 msgid "Charset:"
@@ -3158,9 +3153,8 @@ msgid "Global tags"
 msgstr "全局标签"
 
 #: src/merge/pr_generic.cpp:1373
-#, fuzzy
 msgid "Global tags: %1% entries"
-msgstr "全局标签%1%"
+msgstr "全局标签: %1% 条记录"
 
 #: src/mmg/header_editor/frame.cpp:115
 msgid "H&eaders"
@@ -5117,9 +5111,8 @@ msgid "Tags"
 msgstr "标签"
 
 #: src/merge/pr_generic.cpp:1374
-#, fuzzy
 msgid "Tags for track ID %1%: %2% entries"
-msgstr "轨道 ID %1%: %2%"
+msgstr "轨道 %1% 的标签: %2% 条记录"
 
 #: src/mmg/tabs/input_general.cpp:77
 msgid "Tags:"
