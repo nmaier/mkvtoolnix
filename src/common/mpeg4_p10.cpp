@@ -526,14 +526,38 @@ mpeg4::p10::avcc_to_nalus(const unsigned char *buffer,
   return memory_cptr(NULL);
 }
 
-mpeg4::p10::avc_es_parser_c::avc_es_parser_c():
-  m_nalu_size_length(4),
-  m_keep_ar_info(true),
-  m_avcc_ready(false), m_avcc_changed(false),
-  m_default_duration(40000000), m_frame_number(0), m_num_skipped_frames(0),
-  m_first_keyframe_found(false), m_recovery_point_valid(false),
-  m_generate_timecodes(false),
-  m_have_incomplete_frame(false), m_ignore_nalu_size_length_errors(false) {
+mpeg4::p10::avc_es_parser_c::avc_es_parser_c()
+  : m_nalu_size_length(4)
+  , m_keep_ar_info(true)
+  , m_avcc_ready(false)
+  , m_avcc_changed(false)
+  , m_default_duration(40000000)
+  , m_frame_number(0)
+  , m_num_skipped_frames(0)
+  , m_first_keyframe_found(false)
+  , m_recovery_point_valid(false)
+  , m_generate_timecodes(false)
+  , m_have_incomplete_frame(false)
+  , m_ignore_nalu_size_length_errors(false)
+  , m_num_slices_by_type(11, 0)
+{
+}
+
+mpeg4::p10::avc_es_parser_c::~avc_es_parser_c() {
+  if (!debugging_requested("avc_num_slices_by_type"))
+    return;
+
+  static const char *s_type_names[] = {
+    "P",  "B",  "I",  "SP",  "SI",
+    "P2", "B2", "I2", "SP2", "SI2",
+    "unknown"
+  };
+
+  int i;
+  mxinfo("mpeg4::p10: Number of slices by type:\n");
+  for (i = 0; 10 >= i; ++i)
+    if (0 != m_num_slices_by_type[i])
+      mxinfo(boost::format("  %1%: %2%\n") % s_type_names[i] % m_num_slices_by_type[i]);
 }
 
 void
@@ -917,6 +941,8 @@ mpeg4::p10::avc_es_parser_c::parse_slice(memory_cptr &buffer,
 
     geread(r);                  // first_mb_in_slice
     si.type = geread(r);        // slice_type
+
+    ++m_num_slices_by_type[9 < si.type ? 10 : si.type];
 
     if (9 < si.type) {
       mxverb(3, boost::format("slice parser error: 9 < si.type: %1%\n") % si.type);

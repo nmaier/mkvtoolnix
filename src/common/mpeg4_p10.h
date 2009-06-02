@@ -208,8 +208,11 @@ namespace mpeg4 {
 
       bool m_ignore_nalu_size_length_errors;
 
+      std::vector<int> m_num_slices_by_type;
+
     public:
       avc_es_parser_c();
+      ~avc_es_parser_c();
 
       void enable_timecode_generation(int64_t default_duration) {
         m_default_duration = default_duration;
