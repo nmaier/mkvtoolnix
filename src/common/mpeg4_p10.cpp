@@ -536,10 +536,12 @@ mpeg4::p10::avc_es_parser_c::avc_es_parser_c()
   , m_num_skipped_frames(0)
   , m_first_keyframe_found(false)
   , m_recovery_point_valid(false)
+  , m_b_frames_since_keyframe(false)
   , m_generate_timecodes(false)
   , m_have_incomplete_frame(false)
   , m_ignore_nalu_size_length_errors(false)
   , m_num_slices_by_type(11, 0)
+  , m_debug_keyframe_detection(debugging_requested("avc_debug_keyframe_detection"))
 {
 }
 
@@ -751,21 +753,27 @@ mpeg4::p10::avc_es_parser_c::handle_slice_nalu(memory_cptr &nalu) {
     return;
   }
 
-  m_incomplete_frame.m_si = si;
-  m_incomplete_frame.m_keyframe =
-    m_recovery_point_valid ||
-    ((NALU_TYPE_IDR_SLICE == m_incomplete_frame.m_si.nalu_type) &&
-     ((AVC_SLICE_TYPE_I == m_incomplete_frame.m_si.type) ||
-      (AVC_SLICE_TYPE2_I == m_incomplete_frame.m_si.type) ||
-      (AVC_SLICE_TYPE_SI == m_incomplete_frame.m_si.type) ||
-      (AVC_SLICE_TYPE2_SI == m_incomplete_frame.m_si.type)));
+  bool is_i_slice =  (AVC_SLICE_TYPE_I   == si.type)
+                  || (AVC_SLICE_TYPE2_I  == si.type)
+                  || (AVC_SLICE_TYPE_SI  == si.type)
+                  || (AVC_SLICE_TYPE2_SI == si.type);
+  bool is_b_slice =  (AVC_SLICE_TYPE_B   == si.type)
+                  || (AVC_SLICE_TYPE2_B  == si.type);
 
-  m_recovery_point_valid = false;
+  m_incomplete_frame.m_si       =  si;
+  m_incomplete_frame.m_keyframe =  m_recovery_point_valid
+                                || (   is_i_slice
+                                    && (   (m_debug_keyframe_detection && !m_b_frames_since_keyframe)
+                                        || (NALU_TYPE_IDR_SLICE == si.nalu_type)));
+  m_recovery_point_valid        =  false;
 
   if (m_incomplete_frame.m_keyframe) {
     m_first_keyframe_found = true;
+    m_b_frames_since_keyframe = false;
     cleanup();
-  }
+
+  } else
+    m_b_frames_since_keyframe |= is_b_slice;
 
   m_incomplete_frame.m_data = create_nalu_with_size(nalu, true);
   m_have_incomplete_frame = true;

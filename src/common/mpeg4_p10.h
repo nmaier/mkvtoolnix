@@ -189,7 +189,7 @@ namespace mpeg4 {
 
       int64_t m_default_duration;
       int m_frame_number, m_num_skipped_frames;
-      bool m_first_keyframe_found, m_recovery_point_valid;
+      bool m_first_keyframe_found, m_recovery_point_valid, m_b_frames_since_keyframe;
 
       std::deque<avc_frame_t> m_frames, m_frames_out;
       std::deque<int64_t> m_timecodes;
@@ -209,6 +209,7 @@ namespace mpeg4 {
       bool m_ignore_nalu_size_length_errors;
 
       std::vector<int> m_num_slices_by_type;
+      bool m_debug_keyframe_detection;
 
     public:
       avc_es_parser_c();
