@@ -107,6 +107,7 @@
 #include "input/r_wav.h"
 #include "input/r_wavpack.h"
 #include "merge/cluster_helper.h"
+#include "merge/debugging.h"
 #include "merge/mkvmerge.h"
 #include "merge/output_control.h"
 
@@ -1742,6 +1743,8 @@ void
 main_loop() {
   // Let's go!
   while (1) {
+    debug_run_main_loop_hooks();
+
     packet_cptr pack;
     bool appended_a_track;
 
