@@ -56,7 +56,7 @@ debugging_requested(const char *option,
     return false;
 
   if (NULL != arg)
-    *arg = option_ptr->first;
+    *arg = option_ptr->second;
 
   return true;
 }
