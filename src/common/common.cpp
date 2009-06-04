@@ -23,6 +23,7 @@
 #include "common/common.h"
 #include "common/mm_io.h"
 #include "common/random.h"
+#include "common/strings/editing.h"
 
 // Global and static variables
 
@@ -45,17 +46,39 @@ mxexit(int code) {
   exit(0);
 }
 
-bool
-debugging_requested(const char *option) {
-  std::string expression = std::string("\\b") + option + "\\b";
-  boost::regex re(expression, boost::regex::perl);
+static std::map<std::string, std::string> s_debugging_options;
 
-  return boost::regex_search(s_debug_options, re);
+bool
+debugging_requested(const char *option,
+                    std::string *arg) {
+  std::map<std::string, std::string>::iterator option_ptr = s_debugging_options.find(std::string(option));
+  if (s_debugging_options.end() == option_ptr)
+    return false;
+
+  if (NULL != arg)
+    *arg = option_ptr->first;
+
+  return true;
+}
+
+bool
+debugging_requested(const std::string &option,
+                    std::string *arg) {
+  return debugging_requested(option.c_str(), arg);
 }
 
 void
 request_debugging(const std::string &options) {
-  s_debug_options = options;
+  std::vector<std::string> all_options = split(options);
+  std::vector<std::string>::iterator i;
+
+  mxforeach(i, all_options) {
+    std::vector<std::string> parts = split(*i, ":", 2);
+    if (1 == parts.size())
+      s_debugging_options[parts[0]] = "";
+    else
+      s_debugging_options[parts[0]] = parts[1];
+  }
 }
 
 /** \brief Sets the priority mkvmerge runs with

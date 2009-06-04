@@ -74,7 +74,8 @@ using namespace libebml;
 void MTX_DLL_API mxexit(int code = -1);
 void MTX_DLL_API set_process_priority(int priority);
 
-bool MTX_DLL_API debugging_requested(const char *option);
+bool MTX_DLL_API debugging_requested(const char *option, std::string *arg = NULL);
+bool MTX_DLL_API debugging_requested(const std::string &option, std::string *arg = NULL);
 void MTX_DLL_API request_debugging(const std::string &options);
 
 extern int MTX_DLL_API verbose;
