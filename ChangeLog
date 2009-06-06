@@ -1,5 +1,8 @@
 2009-06-06  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The handling of TrueHD/MLP audio in MPEG
+	program streams was broken resulting in many dropped packets.
+
 	* all: bug fix: There was the possibility that invalid memory
 	access occured and e.g. mkvmerge crashed on systems with the
 	posix_fadvise() function (mainly Linux) if mkvmerge was opening

@@ -476,13 +476,10 @@ mpeg_ps_reader_c::parse_packet(mpeg_ps_id_t &id,
 
       } else if (   ((0x80 <= id.sub_id) && (0x8f >= id.sub_id))
                  || ((0x98 <= id.sub_id) && (0xcf >= id.sub_id))) {
-        io->skip(3);         // number of frames, startpos
-        length -= 3;
-
-        if ((0xa0 == (id.sub_id & 0xe0)) && (3 <= length)) { // LPCM
-          io->skip(3);
-          length -= 3;
-        }
+        // Number of frames, startpos. MLP/TrueHD audio has a 4 byte header.
+        int audio_header_len = (0xb0 <= id.sub_id) && (0xbf >= id.sub_id) ? 4 : 3;
+        io->skip(audio_header_len);
+        length -= audio_header_len;
       }
     }
 
