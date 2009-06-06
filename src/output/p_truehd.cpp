@@ -33,6 +33,7 @@ truehd_packetizer_c::truehd_packetizer_c(generic_reader_c *p_reader,
   throw (error_c)
   : generic_packetizer_c(p_reader, p_ti)
   , m_first_frame(true)
+  , m_current_samples_per_frame(0)
   , m_samples_output(0)
   , m_ref_timecode(0)
   , m_s2tc(1000000000ll, sampling_rate)
@@ -139,9 +140,13 @@ void
 truehd_packetizer_c::flush_frames_separate() {
   int i;
   for (i = 0; m_frames.size() > i; ++i) {
-    int64_t timecode  = m_samples_output                          * m_s2tc;
-    int64_t duration  = m_first_truehd_header.m_samples_per_frame * m_s2tc;
-    m_samples_output += m_first_truehd_header.m_samples_per_frame;
+    if (m_frames[i]->is_sync())
+      m_current_samples_per_frame = m_frames[i]->m_samples_per_frame;
+
+    int samples       = 0 == m_frames[i]->m_samples_per_frame ? m_current_samples_per_frame : m_frames[i]->m_samples_per_frame;
+    int64_t timecode  = m_samples_output * m_s2tc;
+    int64_t duration  = samples          * m_s2tc;
+    m_samples_output += samples;
 
     add_packet(new packet_t(m_frames[i]->m_data, timecode, duration, m_frames[i]->is_sync() ? -1 : m_ref_timecode));
 
@@ -154,9 +159,15 @@ truehd_packetizer_c::flush_frames_separate() {
 void
 truehd_packetizer_c::flush_frames_merged() {
   int full_size = 0;
+  int samples   = 0;
   int i;
-  for (i = 0; m_frames.size() > i; ++i)
+  for (i = 0; m_frames.size() > i; ++i) {
+    if (m_frames[i]->is_sync())
+      m_current_samples_per_frame = m_frames[i]->m_samples_per_frame;
+
     full_size += m_frames[i]->m_data->get_size();
+    samples   += 0 == m_frames[i]->m_samples_per_frame ? m_current_samples_per_frame : m_frames[i]->m_samples_per_frame;
+  }
 
   memory_cptr data = memory_c::alloc(full_size);
 
@@ -166,9 +177,9 @@ truehd_packetizer_c::flush_frames_merged() {
     offset += m_frames[i]->m_data->get_size();
   }
 
-  int64_t timecode  = m_samples_output                                            * m_s2tc;
-  int64_t duration  = m_frames.size() * m_first_truehd_header.m_samples_per_frame * m_s2tc;
-  m_samples_output += m_frames.size() * m_first_truehd_header.m_samples_per_frame;
+  int64_t timecode  = m_samples_output * m_s2tc;
+  int64_t duration  = samples          * m_s2tc;
+  m_samples_output += samples;
 
   add_packet(new packet_t(data, timecode, duration));
 

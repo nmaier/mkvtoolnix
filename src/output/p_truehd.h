@@ -28,7 +28,7 @@ protected:
   bool m_first_frame;
   truehd_frame_t m_first_truehd_header;
 
-  int64_t m_samples_output, m_ref_timecode;
+  int64_t m_current_samples_per_frame, m_samples_output, m_ref_timecode;
   samples_to_timecode_converter_c m_s2tc;
   truehd_parser_c m_parser;
   std::vector<truehd_frame_cptr> m_frames;
