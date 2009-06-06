@@ -1,3 +1,13 @@
+2009-06-06  Moritz Bunkus  <moritz@bunkus.org>
+
+	* all: bug fix: There was the possibility that invalid memory
+	access occured and e.g. mkvmerge crashed on systems with the
+	posix_fadvise() function (mainly Linux) if mkvmerge was opening
+	several files from certain file systems (e.g. VFAT). Apart from
+	obvious crashes the only other side effect was that the
+	posix_fadvise() function would not be used resulting in slightly
+	worse I/O performance.
+
 2009-05-31  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Improved the control over which tags get

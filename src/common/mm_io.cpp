@@ -56,7 +56,7 @@ bool mm_file_io_c::use_posix_fadvise             = false;
 bool
 operator <(const file_id_t &file_id_1,
            const file_id_t &file_id_2) {
-  return (file_id_1.m_dev < file_id_2.m_dev) || (file_id_1.m_ino < file_id_2.m_ino);
+  return (file_id_1.m_dev < file_id_2.m_dev) || ((file_id_1.m_dev == file_id_2.m_dev) && (file_id_1.m_ino < file_id_2.m_ino));
 }
 
 bool
