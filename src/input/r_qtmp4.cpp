@@ -777,7 +777,7 @@ qtmp4_reader_c::handle_udta_atom(qt_atom_t parent,
 void
 qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
                                  int level) {
-  if (ti.no_chapters || (NULL != g_kax_chapters))
+  if (ti.no_chapters || (NULL != chapters))
     return;
 
   std::string charset                   = ti.chapter_charset.empty() ? "UTF-8" : ti.chapter_charset;
