@@ -837,7 +837,8 @@ tab_chapters::verify(bool called_interactively) {
     wxdie(Z("verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"));
   chapters->UpdateSize();
 
-  wxMessageBox(Z("All chapter entries are valid."), Z("Chapter verification succeeded"), wxCENTER | wxOK | wxICON_INFORMATION);
+  if (called_interactively)
+    wxMessageBox(Z("All chapter entries are valid."), Z("Chapter verification succeeded"), wxCENTER | wxOK | wxICON_INFORMATION);
 
   return true;
 }
