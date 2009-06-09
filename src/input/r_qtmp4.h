@@ -253,6 +253,22 @@ struct qt_atom_t {
   }
 };
 
+struct qtmp4_chapter_entry_t {
+  std::string m_name;
+  int64_t m_timecode;
+
+  qtmp4_chapter_entry_t(const std::string &name,
+                        int64_t timecode)
+    : m_name(name)
+    , m_timecode(timecode)
+  {
+  }
+
+  bool operator <(const qtmp4_chapter_entry_t &cmp) const {
+    return m_timecode < cmp.m_timecode;
+  }
+};
+
 class qtmp4_reader_c: public generic_reader_c {
 private:
   mm_io_c *io;
@@ -324,6 +340,7 @@ protected:
   virtual void create_video_packetizer_svq1(qtmp4_demuxer_cptr &dmx);
 
   virtual std::string decode_and_verify_language(uint16_t coded_language);
+  virtual void recode_chapter_entries(std::vector<qtmp4_chapter_entry_t> &entries);
 };
 
 #endif  // __R_QTMP4_H

@@ -64,22 +64,6 @@ using namespace libmatroska;
    || (MP4OTI_MPEG2AudioLowComplexity         == object_type_id) \
    || (MP4OTI_MPEG2AudioScaleableSamplingRate == object_type_id))
 
-struct chapter_entry_t {
-  std::string m_name;
-  int64_t m_timecode;
-
-  chapter_entry_t(const std::string &name,
-                  int64_t timecode)
-    : m_name(name)
-    , m_timecode(timecode)
-  {
-  }
-
-  bool operator <(const chapter_entry_t &cmp) const {
-    return m_timecode < cmp.m_timecode;
-  }
-};
-
 static std::string
 space(int num) {
   char s[num + 1];
@@ -780,9 +764,6 @@ qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
   if (ti.no_chapters || (NULL != chapters))
     return;
 
-  std::string charset                   = ti.chapter_charset.empty() ? "UTF-8" : ti.chapter_charset;
-  charset_converter_cptr charset_handle = charset_converter_c::init(ti.chapter_charset);
-
   io->skip(1 + 3 + 4);          // Version, flags, zero
 
   int count = io->read_uint8();
@@ -791,7 +772,7 @@ qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
   if (0 == count)
     return;
 
-  std::vector<chapter_entry_t> entries;
+  std::vector<qtmp4_chapter_entry_t> entries;
 
   int i;
   for (i = 0; i < count; ++i) {
@@ -802,11 +783,13 @@ qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
     if (io->read(buf->get(), buf->get_size() - 1) != (buf->get_size() - 1))
       break;
 
-    entries.push_back(chapter_entry_t(charset_handle->utf8(reinterpret_cast<char *>(buf->get())), timecode));
+    entries.push_back(qtmp4_chapter_entry_t(std::string(reinterpret_cast<char *>(buf->get())), timecode));
   }
 
   if (entries.empty())
     return;
+
+  recode_chapter_entries(entries);
 
   stable_sort(entries.begin(), entries.end());
 
@@ -815,7 +798,7 @@ qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
   out.write_bom("UTF-8");
 
   for (i = 0; entries.size() > i; ++i) {
-    chapter_entry_t &chapter = entries[i];
+    qtmp4_chapter_entry_t &chapter = entries[i];
 
     mxverb(3, boost::format("Quicktime/MP4 reader:%1%%2%: start %4% name %3%\n") % space((level + 1) * 2 + 1) % i % chapter.m_name % format_timecode(chapter.m_timecode));
 
@@ -1660,6 +1643,23 @@ qtmp4_reader_c::decode_and_verify_language(uint16_t coded_language) {
     return language;
 
   return "";
+}
+
+void
+qtmp4_reader_c::recode_chapter_entries(std::vector<qtmp4_chapter_entry_t> &entries) {
+  int i;
+
+  if (g_identifying) {
+    for (i = 0; entries.size() > i; ++i)
+      entries[i].m_name = empty_string;
+    return;
+  }
+
+  std::string charset              = ti.chapter_charset.empty() ? "UTF-8" : ti.chapter_charset;
+  charset_converter_cptr converter = charset_converter_c::init(ti.chapter_charset);
+
+  for (i = 0; entries.size() > i; ++i)
+    entries[i].m_name = converter->utf8(entries[i].m_name);
 }
 
 // ----------------------------------------------------------------------
