@@ -108,7 +108,7 @@ public:
   bool copy_values(wxTreeItemId id);
   int64_t parse_time(wxString s);
   bool verify_atom_recursively(EbmlElement *e);
-  bool verify();
+  bool verify(bool called_interactively = false);
   void add_recursively(wxTreeItemId &parent, EbmlMaster &master);
   wxString create_chapter_label(KaxChapterAtom &chapter);
   void fix_missing_languages(EbmlMaster &master);

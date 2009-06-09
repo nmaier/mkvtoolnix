@@ -742,7 +742,7 @@ tab_chapters::save() {
 
 void
 tab_chapters::on_verify_chapters(wxCommandEvent &evt) {
-  verify();
+  verify(true);
 }
 
 bool
@@ -809,17 +809,17 @@ tab_chapters::verify_atom_recursively(EbmlElement *e) {
 }
 
 bool
-tab_chapters::verify() {
+tab_chapters::verify(bool called_interactively) {
   KaxEditionEntry *eentry;
-  wxTreeItemId id;
   uint32_t eidx, cidx;
 
-  if (chapters == NULL)
+  if ((NULL == chapters) || (chapters->ListSize() == 0)) {
+    if (called_interactively)
+      wxMessageBox(Z("No chapter entries have been create yet."), Z("Chapter verification error"), wxCENTER | wxOK | wxICON_ERROR);
     return false;
-  if (chapters->ListSize() == 0)
-    return false;
+  }
 
-  id = tc_chapters->GetSelection();
+  wxTreeItemId id = tc_chapters->GetSelection();
   if (id.IsOk())
     copy_values(id);
 
@@ -828,8 +828,7 @@ tab_chapters::verify() {
   for (eidx = 0; eidx < chapters->ListSize(); eidx++) {
     eentry = static_cast<KaxEditionEntry *>((*chapters)[eidx]);
     for (cidx = 0; cidx < eentry->ListSize(); cidx++) {
-      if ((dynamic_cast<KaxChapterAtom *>((*eentry)[cidx]) != NULL) &&
-          !verify_atom_recursively((*eentry)[cidx]))
+      if ((dynamic_cast<KaxChapterAtom *>((*eentry)[cidx]) != NULL) && !verify_atom_recursively((*eentry)[cidx]))
         return false;
     }
   }
@@ -837,6 +836,8 @@ tab_chapters::verify() {
   if (!chapters->CheckMandatory())
     wxdie(Z("verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"));
   chapters->UpdateSize();
+
+  wxMessageBox(Z("All chapter entries are valid."), Z("Chapter verification succeeded"), wxCENTER | wxOK | wxICON_INFORMATION);
 
   return true;
 }

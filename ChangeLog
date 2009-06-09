@@ -1,5 +1,9 @@
 2009-06-09  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: enhancement: If the user selects the option "Verify" from
+	the "Chapters" menu then a message will be shown even if the
+	validation succeeded. Fix for bug 410.
+
 	* mmg/mkvmerge: bug fix: Adding MP4 files with chapter entries
 	that are not encoded in UTF-8 will not result in mkvmerge aborting
 	with a message about invalid UTF-8 sequences anymore. Fix for bug
