@@ -121,8 +121,11 @@ protected:
 
   virtual void adjust_segment_size();
   virtual bool create_void_element(int64_t file_pos, int void_size, int data_idx, bool add_new_data_element);
+  virtual bool handle_void_elements(int data_idx);
 
   virtual void debug_dump_elements();
+  virtual void debug_dump_elements_maybe(const std::string &hook_name);
+  virtual void validate_data_structures(const std::string &hook_name);
 
   virtual void read_all_meta_seeks();
   virtual void read_meta_seek(int64_t pos);
