@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2009-06-01 12:04+0900\n"
+"PO-Revision-Date: 2009-06-10 14:04+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -1675,9 +1675,8 @@ msgid "All Files (*.*)|*.*"
 msgstr "全てのファイル (*.*)|*.*"
 
 #: src/mmg/tabs/chapters.cpp:840
-#, fuzzy
 msgid "All chapter entries are valid."
-msgstr "全てのヘッダの値はOKです。"
+msgstr "全てのチャプタエントリは有効です。"
 
 #: src/mmg/header_editor/frame.cpp:601
 msgid "All header values are OK."
@@ -2027,9 +2026,8 @@ msgid "Chapter verification error"
 msgstr "チャプタベリファイエラー"
 
 #: src/mmg/tabs/chapters.cpp:840
-#, fuzzy
 msgid "Chapter verification succeeded"
-msgstr "チャプタベリファイエラー"
+msgstr "チャプタのベリファイに成功しました"
 
 #: src/mmg/tabs/global.cpp:169 src/info/mkvinfo.cpp:1663
 msgid "Chapters"
@@ -3924,7 +3922,7 @@ msgstr "ファイル番号%1%のファイル（'%2%'）に追加結合のマッ�
 
 #: src/mmg/tabs/chapters.cpp:818
 msgid "No chapter entries have been create yet."
-msgstr ""
+msgstr "チャプタエントリがまだ作成されていません。"
 
 #: src/mmg/tabs/input.cpp:126
 msgid "No chapters"
