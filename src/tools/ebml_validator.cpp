@@ -292,7 +292,8 @@ parse_content(int level,
       if (element_name.empty())
         element_name      = Y("unknown");
 
-      mxinfo(boost::format(Y("%1%pos %2% id 0x%|3$x| size %4% (%5%)\n")) % level_string(level) % element_start_pos % id.value % size.value % element_name);
+      mxinfo(boost::format(Y("%1%pos %2% id 0x%|3$x| size %4% header size %5% (%6%)\n"))
+             % level_string(level) % element_start_pos % id.value % size.value % (id.coded_size + size.coded_size) % element_name);
 
       if (size.is_unknown())
         mxinfo(boost::format(Y("%1%  Warning: size is coded as 'unknown' (all bits are set)\n")) % level_string(level));
