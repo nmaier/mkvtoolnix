@@ -161,6 +161,33 @@ kax_analyzer_c::verify_data_structures_against_file(const std::string &hook_name
   mxexit(1);
 }
 
+void
+kax_analyzer_c::debug_dump_elements_maybe(const std::string &hook_name) {
+  if (!debugging_requested("kax_analyzer") && !debugging_requested(std::string("kax_analyzer_") + hook_name))
+    return;
+
+  mxinfo(boost::format("kax_analyzer_%1% dumping elements:\n") % hook_name);
+  debug_dump_elements();
+}
+
+void
+kax_analyzer_c::validate_data_structures(const std::string &hook_name) {
+  int i;
+  bool ok = true;
+
+  for (i = 0; m_data.size() -1 > i; i++) {
+    if ((m_data[i]->m_pos + m_data[i]->m_size) > m_data[i + 1]->m_pos) {
+      mxinfo(boost::format("kax_analyzer_%1%: Interal data structure corruption at pos %2% (size + position > next position); dumping elements\n") % hook_name % i);
+      ok = false;
+    }
+  }
+
+  if (!ok) {
+    debug_dump_elements();
+    mxexit(1);
+  }
+}
+
 bool
 kax_analyzer_c::probe(std::string file_name) {
   try {
