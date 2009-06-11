@@ -43,12 +43,18 @@ kax_analyzer_c::kax_analyzer_c(std::string file_name)
   , m_file(NULL)
   , m_close_file(true)
   , m_stream(NULL)
+  , m_debugging_requested(debugging_requested("kax_analyzer"))
 {
 }
 
 kax_analyzer_c::~kax_analyzer_c() {
   if (m_close_file)
     delete m_file;
+}
+
+bool
+kax_analyzer_c::analyzer_debugging_requested(const std::string &section) {
+  return m_debugging_requested || debugging_requested(std::string("kax_analyzer_") + section);
 }
 
 void
@@ -74,7 +80,7 @@ kax_analyzer_c::debug_dump_elements() {
 
 void
 kax_analyzer_c::debug_dump_elements_maybe(const std::string &hook_name) {
-  if (!debugging_requested("kax_analyzer") && !debugging_requested(std::string("kax_analyzer_") + hook_name))
+  if (!analyzer_debugging_requested(hook_name))
     return;
 
   mxinfo(boost::format("kax_analyzer_%1% dumping elements:\n") % hook_name);
@@ -291,7 +297,7 @@ kax_analyzer_c::create_void_element(int64_t file_pos,
                                     int void_size,
                                     int data_idx,
                                     bool add_new_data_element) {
-  if (debugging_requested("kax_analyzer_create_void_element"))
+  if (analyzer_debugging_requested("create_void_element"))
     mxinfo(boost::format("create_void_element file_pos %1% void_size %2% data_idx %3% add_new_data_element %4%\n") % file_pos % void_size % data_idx % add_new_data_element);
 
   // Do we have anything to do?

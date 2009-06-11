@@ -72,6 +72,7 @@ private:
   counted_ptr<KaxSegment> m_segment;
   std::map<int64_t, bool> m_meta_seeks_by_position;
   EbmlStream *m_stream;
+  bool m_debugging_requested;
 
 public:                         // Static functions
   static bool probe(std::string file_name);
@@ -123,6 +124,7 @@ protected:
   virtual bool create_void_element(int64_t file_pos, int void_size, int data_idx, bool add_new_data_element);
   virtual bool handle_void_elements(int data_idx);
 
+  virtual bool analyzer_debugging_requested(const std::string &section);
   virtual void debug_dump_elements();
   virtual void debug_dump_elements_maybe(const std::string &hook_name);
   virtual void validate_data_structures(const std::string &hook_name);
