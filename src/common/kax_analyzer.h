@@ -35,7 +35,7 @@ public:
   EbmlId m_id;
   int64_t m_pos, m_size;
 
-public:
+public:                         // Static functions
   static kax_analyzer_data_cptr create(const EbmlId id, int64_t pos, int64_t size) {
     return kax_analyzer_data_cptr(new kax_analyzer_data_c(id, pos, size));
   }
@@ -47,6 +47,8 @@ public:
     , m_size(size)
   {
   }
+
+  std::string to_string() const;
 };
 
 bool operator <(const kax_analyzer_data_cptr &d1, const kax_analyzer_data_cptr &d2);
@@ -128,6 +130,7 @@ protected:
   virtual void debug_dump_elements();
   virtual void debug_dump_elements_maybe(const std::string &hook_name);
   virtual void validate_data_structures(const std::string &hook_name);
+  virtual void verify_data_structures_against_file(const std::string &hook_name);
 
   virtual void read_all_meta_seeks();
   virtual void read_meta_seek(int64_t pos);

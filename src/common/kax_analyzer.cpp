@@ -26,6 +26,7 @@
 #include "common/ebml.h"
 #include "common/error.h"
 #include "common/kax_analyzer.h"
+#include "common/strings/editing.h"
 
 using namespace libebml;
 using namespace libmatroska;
@@ -36,6 +37,25 @@ bool
 operator <(const kax_analyzer_data_cptr &d1,
            const kax_analyzer_data_cptr &d2) {
   return d1->m_pos < d2->m_pos;
+}
+
+std::string
+kax_analyzer_data_c::to_string() const {
+  const EbmlCallbacks *callbacks = find_ebml_callbacks(KaxSegment::ClassInfos, m_id);
+
+  if ((NULL == callbacks) && (EbmlVoid::ClassInfos.GlobalId == m_id))
+    callbacks = &EbmlVoid::ClassInfos;
+
+  std::string name;
+  if (NULL != callbacks)
+    name = callbacks->DebugName;
+
+  else {
+    std::string format = (boost::format("0x%%|0%1%x|") % (m_id.Length * 2)).str();
+    name               = (boost::format(format)        %  m_id.Value).str();
+  }
+
+  return (boost::format("%1% size %2% at %3%") % name % m_size % m_pos).str();
 }
 
 kax_analyzer_c::kax_analyzer_c(std::string file_name)
@@ -60,22 +80,8 @@ kax_analyzer_c::analyzer_debugging_requested(const std::string &section) {
 void
 kax_analyzer_c::debug_dump_elements() {
   int i;
-  for (i = 0; i < m_data.size(); i++) {
-    const EbmlCallbacks *callbacks = find_ebml_callbacks(KaxSegment::ClassInfos, m_data[i]->m_id);
-
-    if ((NULL == callbacks) && (EbmlVoid::ClassInfos.GlobalId == m_data[i]->m_id))
-      callbacks = &EbmlVoid::ClassInfos;
-
-    std::string name;
-    if (NULL != callbacks)
-      name = callbacks->DebugName;
-    else {
-      std::string format = (boost::format("0x%%|0%1%x|") % (m_data[i]->m_id.Length * 2)).str();
-      name               = (boost::format(format)        %  m_data[i]->m_id.Value).str();
-    }
-
-    mxinfo(boost::format("%1%: %2% size %3% at %4%\n") % i % name % m_data[i]->m_size % m_data[i]->m_pos);
-  }
+  for (i = 0; i < m_data.size(); i++)
+    mxinfo(boost::format("%1%: %2%\n") % i % m_data[i]->to_string());
 }
 
 void
@@ -103,6 +109,43 @@ kax_analyzer_c::validate_data_structures(const std::string &hook_name) {
     debug_dump_elements();
     mxexit(1);
   }
+}
+
+void
+kax_analyzer_c::verify_data_structures_against_file(const std::string &hook_name) {
+  kax_analyzer_c actual_content(m_file_name);
+  actual_content.process();
+
+  int num_items    = std::max(m_data.size(), actual_content.m_data.size());
+  bool ok          = m_data.size() == actual_content.m_data.size();
+  int max_info_len = 0;
+  std::vector<std::string> info_this, info_actual, info_markings;
+  int i;
+
+  for (i = 0; num_items > i; ++i) {
+    info_this.push_back(                 m_data.size() > i ?                m_data[i]->to_string() : empty_string);
+    info_actual.push_back(actual_content.m_data.size() > i ? actual_content.m_data[i]->to_string() : empty_string);
+
+    max_info_len           = std::max(max_info_len, static_cast<int>(info_this.back().length()));
+
+    bool row_is_identical  = info_this.back() == info_actual.back();
+    ok                    &= row_is_identical;
+
+    info_markings.push_back(row_is_identical ? " " : "*");
+  }
+
+  if (ok)
+    return;
+
+  mxinfo(boost::format("verify_data_structures_against_file(%1%) failed. Dumping this on the left, actual on the right.\n") % hook_name);
+  std::string format = (boost::format("%%1%% %%|2$-%1%s| %%3%%\n") % max_info_len).str();
+
+  mxinfo(format);
+
+  for (i = 0; num_items > i; ++i)
+    mxinfo(boost::format(format) % info_markings[i] % info_this[i] % info_actual[i]);
+
+  mxexit(1);
 }
 
 bool
@@ -224,7 +267,9 @@ kax_analyzer_c::read_element(kax_analyzer_data_c *element_data) {
 #define call_and_validate(function_call, hook_name) \
   debug_dump_elements_maybe(hook_name);             \
   function_call;                                    \
-  validate_data_structures(hook_name);
+  validate_data_structures(hook_name);              \
+  if (analyzer_debugging_requested("verify"))       \
+    verify_data_structures_against_file(hook_name);
 
 kax_analyzer_c::update_element_result_e
 kax_analyzer_c::update_element(EbmlElement *e,
