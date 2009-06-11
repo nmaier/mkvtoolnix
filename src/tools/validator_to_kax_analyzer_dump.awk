@@ -1,5 +1,7 @@
 # This script converts the output of ebml_validator to match the
-# debugging output of the kax_analyzer_c::dump_elements() function.
+# debugging output of the kax_analyzer_c::debug_dump_elements()
+# function.
+
 # Usage: ebml_validator -M file.mkv | awk -f validator_to_kax_analyzer_dump.awk > output.txt
 
 # Format of kax_analyzer_c::dump_elements():
