@@ -67,6 +67,15 @@ kax_analyzer_c::kax_analyzer_c(std::string file_name)
 {
 }
 
+kax_analyzer_c::kax_analyzer_c(mm_file_io_c *file)
+  : m_file_name(file->get_file_name())
+  , m_file(file)
+  , m_close_file(false)
+  , m_stream(NULL)
+  , m_debugging_requested(debugging_requested("kax_analyzer"))
+{
+}
+
 kax_analyzer_c::~kax_analyzer_c() {
   if (m_close_file)
     delete m_file;
@@ -95,12 +104,16 @@ kax_analyzer_c::debug_dump_elements_maybe(const std::string &hook_name) {
 
 void
 kax_analyzer_c::validate_data_structures(const std::string &hook_name) {
+  bool gap_debugging = analyzer_debugging_requested("gaps");
   int i;
   bool ok = true;
 
   for (i = 0; m_data.size() -1 > i; i++) {
     if ((m_data[i]->m_pos + m_data[i]->m_size) > m_data[i + 1]->m_pos) {
       mxinfo(boost::format("kax_analyzer_%1%: Interal data structure corruption at pos %2% (size + position > next position); dumping elements\n") % hook_name % i);
+      ok = false;
+    } else if (gap_debugging && ((m_data[i]->m_pos + m_data[i]->m_size) < m_data[i + 1]->m_pos)) {
+      mxinfo(boost::format("kax_analyzer_%1%: Gap found at pos %2% (size + position < next position); dumping elements\n") % hook_name % i);
       ok = false;
     }
   }
@@ -113,7 +126,7 @@ kax_analyzer_c::validate_data_structures(const std::string &hook_name) {
 
 void
 kax_analyzer_c::verify_data_structures_against_file(const std::string &hook_name) {
-  kax_analyzer_c actual_content(m_file_name);
+  kax_analyzer_c actual_content(m_file);
   actual_content.process();
 
   int num_items    = std::max(m_data.size(), actual_content.m_data.size());
