@@ -448,7 +448,10 @@ kax_analyzer_c::create_void_element(int64_t file_pos,
     changes made to the file.
 
     The function relies on \c m_data[data_idx] to be up to date
-    regarding its size.
+    regarding its size. If the size of \c m_data[data_idx] is zero
+    then it is assumed that the element shall be overwritten with an
+    EbmlVoid element, and \c m_data[data_idx] will be removed from the
+    \c m_data structure.
 
     \param data_idx Index into the \c m_data structure pointing to the
      current element after which the gap is located.
@@ -459,20 +462,16 @@ kax_analyzer_c::create_void_element(int64_t file_pos,
  */
 bool
 kax_analyzer_c::handle_void_elements(int data_idx) {
-  // Are we at the end of the file? If yes then there's nothing to do.
-  if ((m_data.size() - 1) <= data_idx)
-    return false;
+  // Are the following elements EbmlVoid elements?
+  int end_idx = data_idx + 1;
+  while ((m_data.size() > end_idx) && (m_data[end_idx]->m_id == EbmlVoid::ClassInfos.GlobalId))
+    ++end_idx;
 
-  // Is the following element an EbmlVoid element?
-  if (m_data[data_idx + 1]->m_id == EbmlVoid::ClassInfos.GlobalId) {
-    // Yes, it is. Remove this element from the list in order to create
-    // a new EbmlVoid element covering its space as well.
-    m_data.erase(m_data.begin() + data_idx + 1);
-
-    // Are we now at the end of the file? If yes then there's nothing to do.
-    if ((m_data.size() - 1) <= data_idx)
-      return false;
-  }
+  if (end_idx > data_idx + 1)
+    // Yes, there is at least one. Remove these elements from the list
+    // in order to create a new EbmlVoid element covering their space
+    // as well.
+    m_data.erase(m_data.begin() + data_idx + 1, m_data.begin() + end_idx);
 
   // Calculate how much space we have to cover with a void
   // element. This is the difference between the next element's
@@ -537,6 +536,13 @@ kax_analyzer_c::handle_void_elements(int data_idx) {
   evoid.Render(*m_file);
 
   m_data.insert(m_data.begin() + data_idx + 1, kax_analyzer_data_c::create(EbmlVoid::ClassInfos.GlobalId, void_pos, void_size));
+
+  // Now check if we should overwrite the current element with the
+  // EbmlVoid element. That is the case if the current element's size
+  // is 0. In that case simply remove the element from the m_data
+  // vector.
+  if (0 == m_data[data_idx]->m_size)
+    m_data.erase(m_data.begin() + data_idx);
 
   return true;
 }
@@ -636,7 +642,8 @@ kax_analyzer_c::overwrite_all_instances(EbmlId id) {
       continue;
 
     // Overwrite with a void element.
-    create_void_element(m_data[data_idx]->m_pos, m_data[data_idx]->m_size, data_idx, false);
+    m_data[data_idx]->m_size = 0;
+    handle_void_elements(data_idx);
   }
 }
 
