@@ -22,7 +22,7 @@ diracparser_LDADD = -lmtxcommon $(MAGIC_LIBS) -lmatroska -lebml \
 base64tool_SOURCES = src/tools/base64tool.cpp
 base64tool_OBJECTS = $(patsubst %.cpp,%.o,$(base64tool_SOURCES))
 base64tool_DEPENDENCIES += $(DEP_COMMON)
-base64tool_LDADD = -lmtxcommon $(MAGIC_LIBS) -lexpat $(ICONV_LIBS) \
+base64tool_LDADD = -lmtxcommon $(MAGIC_LIBS) -lmatroska -lebml -lexpat $(ICONV_LIBS) \
 		$(LIBINTL_LIBS) $(LIBRPCRT) $(BOOST_REGEX_LIB)
 
 ebml_validator_SOURCES = src/tools/ebml_validator.cpp src/tools/element_info.cpp
