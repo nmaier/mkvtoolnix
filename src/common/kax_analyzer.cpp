@@ -161,33 +161,6 @@ kax_analyzer_c::verify_data_structures_against_file(const std::string &hook_name
   mxexit(1);
 }
 
-void
-kax_analyzer_c::debug_dump_elements_maybe(const std::string &hook_name) {
-  if (!debugging_requested("kax_analyzer") && !debugging_requested(std::string("kax_analyzer_") + hook_name))
-    return;
-
-  mxinfo(boost::format("kax_analyzer_%1% dumping elements:\n") % hook_name);
-  debug_dump_elements();
-}
-
-void
-kax_analyzer_c::validate_data_structures(const std::string &hook_name) {
-  int i;
-  bool ok = true;
-
-  for (i = 0; m_data.size() -1 > i; i++) {
-    if ((m_data[i]->m_pos + m_data[i]->m_size) > m_data[i + 1]->m_pos) {
-      mxinfo(boost::format("kax_analyzer_%1%: Interal data structure corruption at pos %2% (size + position > next position); dumping elements\n") % hook_name % i);
-      ok = false;
-    }
-  }
-
-  if (!ok) {
-    debug_dump_elements();
-    mxexit(1);
-  }
-}
-
 bool
 kax_analyzer_c::probe(std::string file_name) {
   try {
@@ -348,110 +321,6 @@ kax_analyzer_c::adjust_segment_size() {
 
   new_segment->OverwriteHead(*m_file);
   m_segment = new_segment;
-}
-
-/** \brief Create an EbmlVoid element at a specific location
-
-    This function creates an EbmlVoid element at the position \c
-    m_file_pos with the size \c void_size. If \c void_size is not big
-    enough to contain an EbmlVoid element then the space is
-    overwritten with zero bytes.
-
-    The \c data member structure is also updated to reflect the
-    changes made to the m_file. If \c add_new_data_element is \c true
-    and a void element was actually written then a new element will be
-    added to \c data at position \c data_idx.
-
-    If \c add_new_data_element is \c false and a void element could
-    not be written then the element at \c data_idx is removed from \c
-    m_data. Otherwise the element at position \c data_idx is updated.
-
-    \param m_file_pos The position in the m_file for the new void element.
-    \param void_size The size of the new void element.
-    \param data_idx Index into the \c data structure where a new data
-      element will be added or which data element to update.
-    \param add_new_data_element If \c true then a new data element will
-      be added to \c data at position \c data_idx. Otherwise the element
-      at position \c data_idx should be updated.
-
-    \return \c true if a new void element was created and \c false if
-      there was not enough space for it.
- */
-bool
-kax_analyzer_c::create_void_element(int64_t file_pos,
-                                    int void_size,
-                                    int data_idx,
-                                    bool add_new_data_element) {
-  if (analyzer_debugging_requested("create_void_element"))
-    mxinfo(boost::format("create_void_element file_pos %1% void_size %2% data_idx %3% add_new_data_element %4%\n") % file_pos % void_size % data_idx % add_new_data_element);
-
-  // Do we have anything to do?
-  if (0 == void_size)
-    return false;
-
-  // See if enough space was freed to fit an EbmlVoid element in.
-  m_file->setFilePointer(file_pos);
-
-  if (2 > void_size) {
-    // No. The most compatible way to deal with this situation is to
-    // move the element ID of the following element one byte to the
-    // front and extend the following element's size field by one
-    // byte.
-
-    if (!add_new_data_element)
-      m_data.erase(m_data.begin() + data_idx, m_data.begin() + data_idx + 1);
-
-    EbmlElement *e = read_element(m_data[data_idx]);
-
-    if (NULL == e)
-      return false;
-
-    binary head[4 + 8];         // Class D + 64 bits coded size
-    unsigned int head_size = EbmlId(*e).Length;
-    EbmlId(*e).Fill(head);
-
-    int coded_size = CodedSizeLength(e->GetSize(), e->GetSizeLength() + 1, true);
-    CodedValueLength(e->GetSize(), coded_size, &head[head_size]);
-    head_size += coded_size;
-
-    delete e;
-
-    m_file->setFilePointer(m_data[data_idx]->m_pos - 1);
-    m_file->write(head, head_size);
-
-    --m_data[data_idx]->m_pos;
-    ++m_data[data_idx]->m_size;
-
-    // Update meta seek indices for m_data[data_idx]'s new position.
-    e = read_element(m_data[data_idx]);
-
-    remove_from_meta_seeks(e->Generic().GlobalId);
-    merge_void_elements();
-    add_to_meta_seek(e);
-    merge_void_elements();
-
-    delete e;
-
-    return false;
-  }
-
-  // Yes. Write a new EbmlVoid element and update the internal records.
-  EbmlVoid evoid;
-  evoid.SetSize(void_size);
-  evoid.UpdateSize();
-  evoid.SetSize(void_size - evoid.HeadSize());
-  evoid.Render(*m_file);
-
-  if (add_new_data_element)
-    m_data.insert(m_data.begin() + data_idx, kax_analyzer_data_c::create(EbmlVoid::ClassInfos.GlobalId, evoid.GetElementPosition(), void_size));
-
-  else {
-    m_data[data_idx]->m_id   = EbmlVoid::ClassInfos.GlobalId;
-    m_data[data_idx]->m_pos  = evoid.GetElementPosition();
-    m_data[data_idx]->m_size = void_size;
-  }
-
-  return true;
 }
 
 /** \brief Create an EbmlVoid element at a specific location
@@ -641,13 +510,12 @@ kax_analyzer_c::remove_from_meta_seeks(EbmlId id) {
     m_file->setFilePointer(m_data[data_idx]->m_pos);
     seek_head->Render(*m_file, true);
 
+    delete element;
+
     m_data[data_idx]->m_size = new_size;
 
     // Create a void element to cover the freed space.
-    if (create_void_element(m_data[data_idx]->m_pos + new_size, old_size - new_size, data_idx + 1, true))
-      ++data_idx;
-
-    delete element;
+    handle_void_elements(data_idx);
   }
 }
 
@@ -782,7 +650,7 @@ kax_analyzer_c::write_element(EbmlElement *e,
     m_data[data_idx]->m_size = e->ElementSize(write_defaults);
 
     // Create a new void element after the element we've just written.
-    create_void_element(m_data[data_idx]->m_pos + element_size, m_data[data_idx]->m_size - element_size, data_idx + 1, true);
+    handle_void_elements(data_idx);
 
     // We're done.
     return;
@@ -906,11 +774,10 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
     forward_seek_head->Render(*m_file, true);
 
     // Update the internal record to reflect that there's a new seek head.
-    int void_size = m_data[first_seek_head_idx]->m_size - forward_seek_head->ElementSize(true);
     m_data[first_seek_head_idx]->m_size = forward_seek_head->ElementSize(true);
 
     // Create a void element behind the small new first seek head.
-    create_void_element(m_data[first_seek_head_idx]->m_pos + m_data[first_seek_head_idx]->m_size, void_size, first_seek_head_idx + 1, true);
+    handle_void_elements(first_seek_head_idx);
 
     // We're done.
     delete forward_seek_head;
@@ -937,13 +804,13 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
     m_file->setFilePointer(m_data[data_idx]->m_pos);
     new_seek_head->Render(*m_file, true);
 
-    // Write a void element after the newly written seek head in order to
-    // cover the space previously occupied by the old void element.
-    create_void_element(m_data[data_idx]->m_pos + new_seek_head->ElementSize(true), m_data[data_idx]->m_size - new_seek_head->ElementSize(true), data_idx + 1, true);
-
     // Adjust the internal records for the new seek head.
     m_data[data_idx]->m_size = new_seek_head->ElementSize(true);
     m_data[data_idx]->m_id   = KaxSeekHead::ClassInfos.GlobalId;
+
+    // Write a void element after the newly written seek head in order to
+    // cover the space previously occupied by the old void element.
+    handle_void_elements(data_idx);
 
     // We're done.
     delete new_seek_head;

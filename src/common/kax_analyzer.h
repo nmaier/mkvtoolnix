@@ -123,7 +123,6 @@ protected:
   virtual void add_to_meta_seek(EbmlElement *e);
 
   virtual void adjust_segment_size();
-  virtual bool create_void_element(int64_t file_pos, int void_size, int data_idx, bool add_new_data_element);
   virtual bool handle_void_elements(int data_idx);
 
   virtual bool analyzer_debugging_requested(const std::string &section);
