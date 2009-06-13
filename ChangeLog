@@ -1,3 +1,9 @@
+2009-06-13  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: The chapter editor was corrupting Matroska files
+	if the chapters were saved to a file twice in a row without
+	reloading them from the Matroska file.
+
 2009-06-09  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: enhancement: If the user selects the option "Verify" from
