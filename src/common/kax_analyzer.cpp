@@ -277,17 +277,20 @@ kax_analyzer_c::read_element(kax_analyzer_data_c *element_data) {
   return e;
 }
 
-#define call_and_validate(function_call, hook_name) \
-  debug_dump_elements_maybe(hook_name);             \
-  function_call;                                    \
-  validate_data_structures(hook_name);              \
-  if (analyzer_debugging_requested("verify"))       \
-    verify_data_structures_against_file(hook_name);
+#define call_and_validate(function_call, hook_name)            \
+  function_call;                                               \
+  debug_dump_elements_maybe(hook_name);                        \
+  validate_data_structures(hook_name);                         \
+  if (analyzer_debugging_requested("verify"))                  \
+    verify_data_structures_against_file(hook_name);            \
+  if (debugging_requested("kax_analyzer_" hook_name "_break")) \
+    return uer_success;
 
 kax_analyzer_c::update_element_result_e
 kax_analyzer_c::update_element(EbmlElement *e,
                                bool write_defaults) {
   try {
+    call_and_validate({},                                             "update_element_0");
     call_and_validate(overwrite_all_instances(e->Generic().GlobalId), "update_element_1");
     call_and_validate(merge_void_elements(),                          "update_element_2");
     call_and_validate(write_element(e, write_defaults),               "update_element_3");
@@ -295,7 +298,6 @@ kax_analyzer_c::update_element(EbmlElement *e,
     call_and_validate(merge_void_elements(),                          "update_element_5");
     call_and_validate(add_to_meta_seek(e),                            "update_element_6");
     call_and_validate(merge_void_elements(),                          "update_element_7");
-    call_and_validate({},                                             "update_element_8");
 
   } catch (kax_analyzer_c::update_element_result_e result) {
     debug_dump_elements_maybe("update_element_exception");
