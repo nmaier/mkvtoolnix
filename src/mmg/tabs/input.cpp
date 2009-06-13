@@ -300,7 +300,7 @@ tab_input::on_append_file(wxCommandEvent &evt) {
 void
 tab_input::add_file(const wxString &file_name,
                     bool append) {
-  wxString name, command, id, type, exact, video_track_name, opt_file_name;
+  wxString name, command, video_track_name, opt_file_name;
   wxArrayString output, errors;
   std::vector<wxString> args, pair;
   int result, pos, new_file_pos;
@@ -390,15 +390,13 @@ tab_input::add_file(const wxString &file_name,
   default_subtitle_track_found = -1 != default_track_checked('s');
   for (i = 0; i < output.Count(); i++) {
     if (output[i].Find(wxT("Track")) == 0) {
-      wxString info;
       mmg_track_cptr track(new mmg_track_t);
 
-      id = output[i].AfterFirst(wxT(' ')).AfterFirst(wxT(' ')).
-        BeforeFirst(wxT(':'));
-      type = output[i].AfterFirst(wxT(':')).BeforeFirst(wxT('(')).Mid(1).
-        RemoveLast();
-      exact = output[i].AfterFirst(wxT('(')).BeforeFirst(wxT(')'));
-      info = output[i].AfterFirst(wxT('[')).BeforeLast(wxT(']'));
+      wxString id    = output[i].AfterFirst(wxT(' ')).AfterFirst(wxT(' ')).BeforeFirst(wxT(':'));
+      wxString type  = output[i].AfterFirst(wxT(':')).BeforeFirst(wxT('(')).Mid(1).RemoveLast();
+      wxString exact = output[i].AfterFirst(wxT('(')).BeforeFirst(wxT(')'));
+      wxString info  = output[i].AfterFirst(wxT('[')).BeforeLast(wxT(']'));
+
       if (type == wxT("audio"))
         track->type = 'a';
       else if (type == wxT("video"))
@@ -407,8 +405,9 @@ tab_input::add_file(const wxString &file_name,
         track->type = 's';
       else
         track->type = '?';
+
       parse_int(wxMB(id), track->id);
-      track->ctype = exact;
+      track->ctype   = exact;
       track->enabled = true;
 
       if ('a' == track->type)
