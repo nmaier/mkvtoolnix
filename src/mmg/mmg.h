@@ -80,16 +80,25 @@ struct mmg_track_t {
 
   bool appending;
 
-  mmg_track_t():
-    type(0), id(0), source(0),
-    enabled(false), display_dimensions_selected(false),
-    default_track(0), aac_is_sbr(false), aac_is_sbr_detected(false),
-    forced_track(false),
-    track_name_was_present(false),
-    language(wxT("und")), cues(wxT("default")), sub_charset(wxT("default")),
-    nalu_size_length(0),
-    stereo_mode(0),
-    appending(false) {};
+  mmg_track_t()
+    : type(0)
+    , id(0)
+    , source(0)
+    , enabled(false)
+    , display_dimensions_selected(false)
+    , default_track(0)
+    , aac_is_sbr(false)
+    , aac_is_sbr_detected(false)
+    , forced_track(false)
+    , track_name_was_present(false)
+    , language(wxT("und"))
+    , cues(wxT("default"))
+    , sub_charset(wxT("default"))
+    , nalu_size_length(0)
+    , stereo_mode(0)
+    , appending(false)
+  {
+  }
 };
 typedef counted_ptr<mmg_track_t> mmg_track_cptr;
 
@@ -106,7 +115,8 @@ struct mmg_attached_file_t {
     , id(0)
     , size(0)
     , source(NULL)
-  { };
+  {
+  }
 };
 typedef counted_ptr<mmg_attached_file_t> mmg_attached_file_cptr;
 
@@ -119,10 +129,15 @@ struct mmg_file_t {
   bool no_chapters, no_attachments, no_tags;
   bool appending;
 
-  mmg_file_t():
-    title_was_present(false), container(0),
-    no_chapters(false), no_attachments(false), no_tags(false),
-    appending(false) {};
+  mmg_file_t()
+    : title_was_present(false)
+    , container(0)
+    , no_chapters(false)
+    , no_attachments(false)
+    , no_tags(false)
+    , appending(false)
+  {
+  }
 };
 typedef counted_ptr<mmg_file_t> mmg_file_cptr;
 
@@ -130,8 +145,10 @@ struct mmg_attachment_t {
   wxString file_name, stored_name, description, mime_type;
   int style;
 
-  mmg_attachment_t():
-    style(0) {};
+  mmg_attachment_t()
+    : style(0)
+  {
+  }
 };
 typedef counted_ptr<mmg_attachment_t> mmg_attachment_cptr;
 
