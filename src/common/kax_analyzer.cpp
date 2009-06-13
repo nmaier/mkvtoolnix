@@ -81,6 +81,11 @@ kax_analyzer_c::~kax_analyzer_c() {
     delete m_file;
 }
 
+void
+kax_analyzer_c::log_debug_message(const std::string &message) {
+  mxinfo(message);
+}
+
 bool
 kax_analyzer_c::analyzer_debugging_requested(const std::string &section) {
   return m_debugging_requested || debugging_requested(std::string("kax_analyzer_") + section);
@@ -90,7 +95,7 @@ void
 kax_analyzer_c::debug_dump_elements() {
   int i;
   for (i = 0; i < m_data.size(); i++)
-    mxinfo(boost::format("%1%: %2%\n") % i % m_data[i]->to_string());
+    log_debug_message(boost::format("%1%: %2%\n") % i % m_data[i]->to_string());
 }
 
 void
@@ -110,17 +115,17 @@ kax_analyzer_c::validate_data_structures(const std::string &hook_name) {
 
   for (i = 0; m_data.size() -1 > i; i++) {
     if ((m_data[i]->m_pos + m_data[i]->m_size) > m_data[i + 1]->m_pos) {
-      mxinfo(boost::format("kax_analyzer_%1%: Interal data structure corruption at pos %2% (size + position > next position); dumping elements\n") % hook_name % i);
+      log_debug_message(boost::format("kax_analyzer_%1%: Interal data structure corruption at pos %2% (size + position > next position); dumping elements\n") % hook_name % i);
       ok = false;
     } else if (gap_debugging && ((m_data[i]->m_pos + m_data[i]->m_size) < m_data[i + 1]->m_pos)) {
-      mxinfo(boost::format("kax_analyzer_%1%: Gap found at pos %2% (size + position < next position); dumping elements\n") % hook_name % i);
+      log_debug_message(boost::format("kax_analyzer_%1%: Gap found at pos %2% (size + position < next position); dumping elements\n") % hook_name % i);
       ok = false;
     }
   }
 
   if (!ok) {
     debug_dump_elements();
-    mxexit(1);
+    debug_abort_process();
   }
 }
 
@@ -150,15 +155,13 @@ kax_analyzer_c::verify_data_structures_against_file(const std::string &hook_name
   if (ok)
     return;
 
-  mxinfo(boost::format("verify_data_structures_against_file(%1%) failed. Dumping this on the left, actual on the right.\n") % hook_name);
+  log_debug_message(boost::format("verify_data_structures_against_file(%1%) failed. Dumping this on the left, actual on the right.\n") % hook_name);
   std::string format = (boost::format("%%1%% %%|2$-%1%s| %%3%%\n") % max_info_len).str();
 
-  mxinfo(format);
-
   for (i = 0; num_items > i; ++i)
-    mxinfo(boost::format(format) % info_markings[i] % info_this[i] % info_actual[i]);
+    log_debug_message(boost::format(format) % info_markings[i] % info_this[i] % info_actual[i]);
 
-  mxexit(1);
+  debug_abort_process();
 }
 
 bool

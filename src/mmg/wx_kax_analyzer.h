@@ -36,6 +36,9 @@ public:
   virtual void show_progress_start(int64_t size);
   virtual bool show_progress_running(int percentage);
   virtual void show_progress_done();
+
+  virtual void log_debug_message(const std::string &message);
+  virtual void debug_abort_process();
 };
 
 #endif // __WX_KAX_ANALYZER_H

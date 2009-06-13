@@ -13,8 +13,10 @@
 
 #include "common/os.h"
 
+#include <wx/log.h>
 #include <wx/progdlg.h>
 
+#include "common/strings/editing.h"
 #include "mmg/mmg.h"
 #include "mmg/wx_kax_analyzer.h"
 
@@ -50,4 +52,18 @@ void
 wx_kax_analyzer_c::show_progress_done() {
   delete m_prog_dlg;
   m_prog_dlg = NULL;
+}
+
+void
+wx_kax_analyzer_c::log_debug_message(const std::string &message) {
+  kax_analyzer_c::log_debug_message(message);
+
+  std::string msg_no_nl = message;
+  strip_back(msg_no_nl, true);
+  wxLogMessage(wxU(msg_no_nl.c_str()));
+}
+
+void
+wx_kax_analyzer_c::debug_abort_process() {
+  throw uer_error_unknown;
 }
