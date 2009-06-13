@@ -234,14 +234,14 @@ tab_input_format::setup_control_contents() {
 
 void
 tab_input_format::set_track_mode(mmg_track_t *t) {
-  char type = t ? t->type : 'n';
-  wxString ctype = t ? t->ctype : wxT("");
+  char type      = t ? t->type      : 'n';
+  wxString ctype = t ? t->ctype     : wxT("");
   bool appending = t ? t->appending : false;
-  bool video = ('v' == type) && !appending;
+  bool video     = ('v' == type) && !appending;
   bool audio_app = ('a' == type);
-  bool subs_app = ('s' == type);
-  bool avc_es = video && (t->packetizer == wxT("mpeg4_p10_es_video"));
-  bool avc    = video && (t->packetizer == wxT("mpeg4_p10_video"));
+  bool subs_app  = ('s' == type);
+  bool avc_es    = video && (t->packetizer == wxT("mpeg4_p10_es_video"));
+  bool avc       = video && (t->packetizer == wxT("mpeg4_p10_video"));
 
   ctype = ctype.Lower();
 
@@ -273,29 +273,28 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   rb_aspect_ratio->SetValue(video && ar_enabled);
   rb_display_dimensions->SetValue(video && !ar_enabled);
 
-  cb_aac_is_sbr->Enable(audio_app &&
-                        ((ctype.Find(wxT("aac")) >= 0) ||
-                         (ctype.Find(wxT("mp4a")) >= 0)));
+  cb_aac_is_sbr->Enable(audio_app && ((ctype.Find(wxT("aac")) >= 0) || (ctype.Find(wxT("mp4a")) >= 0)));
 
-  if (NULL == t) {
-    bool saved_dcvn = input->dont_copy_values_now;
-    input->dont_copy_values_now = true;
+  if (NULL != t)
+    return;
 
-    set_combobox_selection(cob_aspect_ratio, wxEmptyString);
-    tc_display_width->SetValue(wxEmptyString);
-    tc_display_height->SetValue(wxEmptyString);
-    set_combobox_selection(cob_fourcc, wxEmptyString);
-    set_combobox_selection(cob_fps, wxEmptyString);
-    cob_nalu_size_length->SetSelection(0);
-    set_combobox_selection(cob_stereo_mode, wxEmptyString);
-    tc_delay->SetValue(wxEmptyString);
-    tc_stretch->SetValue(wxEmptyString);
-    set_combobox_selection(cob_sub_charset, wxU(""));
-    set_combobox_selection(cob_compression, wxEmptyString);
-    cb_aac_is_sbr->SetValue(false);
+  bool saved_dcvn             = input->dont_copy_values_now;
+  input->dont_copy_values_now = true;
 
-    input->dont_copy_values_now = saved_dcvn;
-  }
+  set_combobox_selection(cob_aspect_ratio, wxEmptyString);
+  tc_display_width->SetValue(wxEmptyString);
+  tc_display_height->SetValue(wxEmptyString);
+  set_combobox_selection(cob_fourcc, wxEmptyString);
+  set_combobox_selection(cob_fps, wxEmptyString);
+  cob_nalu_size_length->SetSelection(0);
+  set_combobox_selection(cob_stereo_mode, wxEmptyString);
+  tc_delay->SetValue(wxEmptyString);
+  tc_stretch->SetValue(wxEmptyString);
+  set_combobox_selection(cob_sub_charset, wxU(""));
+  set_combobox_selection(cob_compression, wxEmptyString);
+  cb_aac_is_sbr->SetValue(false);
+
+  input->dont_copy_values_now = saved_dcvn;
 }
 
 void
