@@ -1418,7 +1418,8 @@ parse_arg_attach_file(attachment_t &attachment,
 }
 
 static void
-parse_arg_chapter_language(const std::string &arg) {
+parse_arg_chapter_language(const std::string &arg,
+                           track_info_c &ti) {
   if (g_chapter_language != "")
     mxerror(boost::format(Y("'--chapter-language' may only be given once in '--chapter-language %1%'.\n")) % arg);
 
@@ -1430,7 +1431,8 @@ parse_arg_chapter_language(const std::string &arg) {
     mxerror(boost::format(Y("'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code in '--chapter-language %1%'. "
                             "See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n")) % arg);
 
-  g_chapter_language = iso639_languages[i].iso639_2_code;
+  g_chapter_language  = iso639_languages[i].iso639_2_code;
+  ti.chapter_language = iso639_languages[i].iso639_2_code;
 }
 
 static void
@@ -1775,7 +1777,7 @@ parse_args(std::vector<std::string> args) {
       if (no_next_arg)
         mxerror(Y("'--chapter-language' lacks the language.\n"));
 
-      parse_arg_chapter_language(next_arg);
+      parse_arg_chapter_language(next_arg, *ti);
       sit++;
 
     } else if (this_arg == "--chapter-charset") {
@@ -2115,6 +2117,7 @@ parse_args(std::vector<std::string> args) {
 
       ti = new track_info_c;
       g_chapter_charset.clear();
+      g_chapter_language.clear();
     }
   }
 

@@ -254,7 +254,7 @@ public:
 
   // Some file formats can contain chapters, but for some the charset
   // cannot be identified unambiguously (*cough* OGM *cough*).
-  std::string chapter_charset;
+  std::string chapter_charset, chapter_language;
 
   // The following variables are needed for the broken way of
   // syncing audio in AVIs: by prepending it with trash. Thanks to

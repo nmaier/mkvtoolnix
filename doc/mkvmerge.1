@@ -48,9 +48,12 @@ for 'undefined'.
 Chapter handling: (global options)
 .TP
 \fB\-\-chapter\-language\fR <\fIlanguage\fR>
-Sets the ISO639-2 language code that is written for each chapter entry. Applies
-only to simple chapter files. Defaults to "eng". See the section about chapters
-below for details.
+Sets the ISO639-2 language code that is written for each chapter entry.
+Defaults to "eng".
+See the section about chapters below for details.
+This option can be used both for simple chapter files and for source files
+that contain chapters but no information about the chapters' language,
+e.g. MP4 and OGM files.
 .TP
 \fB\-\-chapter\-charset\fR <\fIcharset\fR>
 Sets the charset that is used for the conversion to UTF-8 for simple chapter
@@ -304,6 +307,11 @@ Don't copy global tags from this file.
 \fB\-\-chapter\-charset\fR <\fIcharset\fR>
 Sets the charset that is used for the conversion to UTF-8 for chapter information
 contained in the source file.
+.TP
+\fB\-\-chapter\-language\fR <\fIlanguage\fR>
+Sets the ISO639-2 language code that is written for each chapter entry.
+This option can be used for source files that contain chapters but no information
+about the chapters' languages, e.g. for MP4 and OGM files.
 .TP
 \fB\-y\fR, \fB\-\-sync\fR <\fITID\fR:\fId\fR[,\fIo\fR[/\fIp\fR]]>
 Adjust the timecodes of the track with the id \fITID\fR by \fId\fR

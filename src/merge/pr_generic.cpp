@@ -1562,6 +1562,7 @@ track_info_c::operator =(const track_info_c &src) {
   no_global_tags             = src.no_global_tags;
 
   chapter_charset            = src.chapter_charset;
+  chapter_language           = src.chapter_language;
 
   avi_block_align            = src.avi_block_align;
   avi_samples_per_sec        = src.avi_samples_per_sec;

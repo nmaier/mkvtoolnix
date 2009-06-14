@@ -1,5 +1,9 @@
 2009-06-14  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge, mmg: new feature: The language for chapters read from
+	files such as OGM and MP4 files can be chosen with the
+	--chapter-language command line option. Fix for bug 399.
+
 	* mkvmerge, mmg: new feature: Chapter and tag information
 	contained in source files are now shown in the "track" selection
 	box and can be toggled individually. The user can set the charset

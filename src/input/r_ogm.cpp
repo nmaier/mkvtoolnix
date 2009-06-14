@@ -816,7 +816,7 @@ ogm_reader_c::handle_stream_comments() {
 
         counted_ptr<mm_text_io_c> text_out(new mm_text_io_c(out.get(), false));
 
-        chapters     = parse_chapters(text_out.get());
+        chapters     = parse_chapters(text_out.get(), 0, -1, 0, ti.chapter_language);
         chapters_set = true;
       } catch (...) {
       }

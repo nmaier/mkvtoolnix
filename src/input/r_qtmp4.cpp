@@ -813,7 +813,7 @@ qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
   }
 
   mm_text_io_c text_out(&out, false);
-  chapters = parse_chapters(&text_out);
+  chapters = parse_chapters(&text_out, 0, -1, 0, ti.chapter_language);
 }
 
 void

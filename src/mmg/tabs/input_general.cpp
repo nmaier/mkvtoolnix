@@ -183,11 +183,12 @@ tab_input_general::setup_languages() {
 
 void
 tab_input_general::set_track_mode(mmg_track_t *t) {
-  bool normal_track = (NULL != t) && (('a' == t->type) || ('s' == t->type) || ('v' == t->type));
-  bool enable       = (NULL != t) && !t->appending && normal_track;
+  bool normal_track    = (NULL != t) && (('a' == t->type) || ('s' == t->type) || ('v' == t->type));
+  bool enable          = (NULL != t) && !t->appending && normal_track;
+  bool enable_chapters = (NULL != t);
 
-  st_language->Enable(enable);
-  cob_language->Enable(enable);
+  st_language->Enable(enable || enable_chapters);
+  cob_language->Enable(enable || enable_chapters);
   st_track_name->Enable(enable);
   tc_track_name->Enable(enable);
   st_tags->Enable(enable);

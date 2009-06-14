@@ -1424,6 +1424,11 @@ mmg_dialog::update_command_line() {
           clargs.Add(t->sub_charset);
         }
 
+        if (t->language != wxT("und")) {
+          clargs.Add(wxT("--chapter-language"));
+          clargs.Add(extract_language_code(t->language));
+        }
+
         continue;
 
       } else if (t->type == wxT('t')) {
