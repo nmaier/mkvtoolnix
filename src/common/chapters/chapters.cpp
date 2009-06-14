@@ -1012,19 +1012,18 @@ count_chapter_atoms(EbmlMaster &master) {
   return count_chapter_atoms_recursively(master, 0);
 }
 
-/** \brief Move all chapter atoms to another container keeping editions intact
+/** \brief Change the chapter edition UIDs to a single value
 
-   This function moves all chapter atoms from \a src to \a dst.
-   If there's already an edition in \a dst with the same UID as the current
-   one in \a src, then all atoms will be put into that edition. Otherwise
-   the complete edition will simply be moved over.
+   This function changes the UIDs of all editions for which the
+   function is called to a single value. This is intended for chapters
+   read from source files which do not provide their own edition UIDs
+   (e.g. MP4 or OGM files) so that their chapters can be appended and
+   don't end up in separate editions.
 
-   After processing \a src will be empty.
+   \c chapters may be NULL in which case nothing is done.
 
-   Its parameters don't have to be checked for validity.
-
-   \param dst The container the atoms and editions will be put into.
-   \param src The container the atoms and editions will be taken from.
+   \param dst chapters The chapter structure for which all edition
+      UIDs will be changed.
 */
 void
 align_chapter_edition_uids(KaxChapters *chapters) {
