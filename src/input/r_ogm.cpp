@@ -818,6 +818,8 @@ ogm_reader_c::handle_stream_comments() {
 
         chapters     = parse_chapters(text_out.get(), 0, -1, 0, ti.chapter_language);
         chapters_set = true;
+
+        align_chapter_edition_uids(chapters);
       } catch (...) {
       }
     }

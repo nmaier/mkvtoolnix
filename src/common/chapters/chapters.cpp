@@ -1011,3 +1011,37 @@ int
 count_chapter_atoms(EbmlMaster &master) {
   return count_chapter_atoms_recursively(master, 0);
 }
+
+/** \brief Move all chapter atoms to another container keeping editions intact
+
+   This function moves all chapter atoms from \a src to \a dst.
+   If there's already an edition in \a dst with the same UID as the current
+   one in \a src, then all atoms will be put into that edition. Otherwise
+   the complete edition will simply be moved over.
+
+   After processing \a src will be empty.
+
+   Its parameters don't have to be checked for validity.
+
+   \param dst The container the atoms and editions will be put into.
+   \param src The container the atoms and editions will be taken from.
+*/
+void
+align_chapter_edition_uids(KaxChapters *chapters) {
+  if (NULL == chapters)
+    return;
+
+  static uint32_t s_shared_edition_uid = 0;
+
+  if (0 == s_shared_edition_uid)
+    s_shared_edition_uid = create_unique_uint32(UNIQUE_CHAPTER_IDS);
+
+  int idx;
+  for (idx = 0; chapters->ListSize() > idx; ++idx) {
+    KaxEditionEntry *edition_entry = dynamic_cast<KaxEditionEntry *>((*chapters)[idx]);
+    if (NULL == edition_entry)
+      continue;
+
+    GetChildAs<KaxEditionUID, EbmlUInteger>(*edition_entry) = s_shared_edition_uid;
+  }
+}
