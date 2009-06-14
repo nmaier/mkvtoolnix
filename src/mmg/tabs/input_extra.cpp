@@ -91,22 +91,24 @@ tab_input_extra::setup_cues() {
 
 void
 tab_input_extra::set_track_mode(mmg_track_t *t) {
-  bool enable = (NULL != t) && !t->appending;
+  bool enable       = (NULL != t) && !t->appending;
+  bool normal_track = (NULL != t) && (('a' == t->type) || ('s' == t->type) || ('v' == t->type));
 
-  st_cues->Enable(enable);
-  cob_cues->Enable(enable);
-  st_user_defined->Enable(NULL != t);
-  tc_user_defined->Enable(NULL != t);
+  st_cues->Enable(enable && normal_track);
+  cob_cues->Enable(enable && normal_track);
+  st_user_defined->Enable((NULL != t) && normal_track);
+  tc_user_defined->Enable((NULL != t) && normal_track);
 
-  if (NULL == t) {
-    bool saved_dcvn = input->dont_copy_values_now;
-    input->dont_copy_values_now = true;
+  if (NULL != t)
+    return;
 
-    set_combobox_selection(cob_cues, Z("default"));
-    tc_user_defined->SetValue(wxEmptyString);
+  bool saved_dcvn             = input->dont_copy_values_now;
+  input->dont_copy_values_now = true;
 
-    input->dont_copy_values_now = saved_dcvn;
-  }
+  set_combobox_selection(cob_cues, Z("default"));
+  tc_user_defined->SetValue(wxEmptyString);
+
+  input->dont_copy_values_now = saved_dcvn;
 }
 
 void

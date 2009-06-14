@@ -211,8 +211,7 @@ set_usage() {
                   "                           all attachments to all output files.\n");
   usage_text += Y("  -M, --no-attachments     Don't copy attachments from a source file.\n");
   usage_text += Y("  -t, --tags <TID:file>    Read tags for the track from a XML file.\n");
-  usage_text += Y("  --tags-for-tracks <n,m,...>\n"
-                  "                           Copy the tags for tracks n,m etc. Default: copy\n"
+  usage_text += Y("  --track-tags <n,m,...>   Copy the tags for tracks n,m etc. Default: copy\n"
                   "                           tags for all tracks.\n");
   usage_text += Y("  -T, --no-track-tags      Don't copy tags for tracks from the source file.\n");
   usage_text += Y("  --no-global-tags         Don't keep global tags from the source file.\n");
@@ -2115,6 +2114,7 @@ parse_args(std::vector<std::string> args) {
         delete ti;
 
       ti = new track_info_c;
+      g_chapter_charset.clear();
     }
   }
 

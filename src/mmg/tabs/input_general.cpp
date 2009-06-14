@@ -183,7 +183,8 @@ tab_input_general::setup_languages() {
 
 void
 tab_input_general::set_track_mode(mmg_track_t *t) {
-  bool enable = (NULL != t) && !t->appending;
+  bool normal_track = (NULL != t) && (('a' == t->type) || ('s' == t->type) || ('v' == t->type));
+  bool enable       = (NULL != t) && !t->appending && normal_track;
 
   st_language->Enable(enable);
   cob_language->Enable(enable);
@@ -192,27 +193,28 @@ tab_input_general::set_track_mode(mmg_track_t *t) {
   st_tags->Enable(enable);
   tc_tags->Enable(enable);
   b_browse_tags->Enable(enable);
-  st_timecodes->Enable(NULL != t);
-  tc_timecodes->Enable(NULL != t);
-  b_browse_timecodes->Enable(NULL != t);
+  st_timecodes->Enable((NULL != t) && normal_track);
+  tc_timecodes->Enable((NULL != t) && normal_track);
+  b_browse_timecodes->Enable((NULL != t) && normal_track);
   st_default->Enable(enable);
   cob_default->Enable(enable);
   st_forced->Enable(enable);
   cob_forced->Enable(enable);
 
-  if (NULL == t) {
-    bool saved_dcvn = input->dont_copy_values_now;
-    input->dont_copy_values_now = true;
+  if (NULL != t)
+    return;
 
-    set_combobox_selection(cob_language, sorted_iso_codes[0]);
-    tc_track_name->SetValue(wxEmptyString);
-    cob_default->SetSelection(0);
-    cob_forced->SetSelection(0);
-    tc_tags->SetValue(wxEmptyString);
-    tc_timecodes->SetValue(wxEmptyString);
+  bool saved_dcvn             = input->dont_copy_values_now;
+  input->dont_copy_values_now = true;
 
-    input->dont_copy_values_now = saved_dcvn;
-  }
+  set_combobox_selection(cob_language, sorted_iso_codes[0]);
+  tc_track_name->SetValue(wxEmptyString);
+  cob_default->SetSelection(0);
+  cob_forced->SetSelection(0);
+  tc_tags->SetValue(wxEmptyString);
+  tc_timecodes->SetValue(wxEmptyString);
+
+  input->dont_copy_values_now = saved_dcvn;
 }
 
 void

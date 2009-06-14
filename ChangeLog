@@ -1,3 +1,13 @@
+2009-06-14  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge, mmg: new feature: Chapter and tag information
+	contained in source files are now shown in the "track" selection
+	box and can be toggled individually. The user can set the charset
+	for chapters if the source file's chapters are not encoded in
+	UTF-8 (e.g. in some OGM/MP4 files). The old file specific
+	checkboxes "no tags" and "no chapters" have been removed. Fix for
+	bug 400.
+
 2009-06-13  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: The chapter editor was corrupting Matroska files

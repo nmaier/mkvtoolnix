@@ -146,13 +146,13 @@ tab_input_format::tab_input_format(wxWindow *parent,
   tc_stretch->SetSizeHints(0, -1);
   siz_fg->Add(tc_stretch, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  st_sub_charset = new wxStaticText(this, wxID_STATIC, Z("Subtitle charset:"));
+  st_sub_charset = new wxStaticText(this, wxID_STATIC, Z("Charset:"));
   st_sub_charset->Enable(false);
   siz_fg->Add(st_sub_charset, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   cob_sub_charset = new wxMTX_COMBOBOX_TYPE(this, ID_CB_SUBTITLECHARSET, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
-  cob_sub_charset->SetToolTip(TIP("Selects the character set a subtitle file was written with. Only needed for non-UTF "
-                                  "files that mkvmerge does not detect correctly."));
+  cob_sub_charset->SetToolTip(TIP("Selects the character set a subtitle file or chapter information was written with. Only needed for non-UTF encoded "
+                                  "subtitle files or for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."));
   cob_sub_charset->Append(Z("default"));
   cob_sub_charset->SetSizeHints(0, -1);
   siz_fg->Add(cob_sub_charset, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
@@ -234,23 +234,25 @@ tab_input_format::setup_control_contents() {
 
 void
 tab_input_format::set_track_mode(mmg_track_t *t) {
-  char type      = t ? t->type      : 'n';
-  wxString ctype = t ? t->ctype     : wxT("");
-  bool appending = t ? t->appending : false;
-  bool video     = ('v' == type) && !appending;
-  bool audio_app = ('a' == type);
-  bool subs_app  = ('s' == type);
-  bool avc_es    = video && (t->packetizer == wxT("mpeg4_p10_es_video"));
-  bool avc       = video && (t->packetizer == wxT("mpeg4_p10_video"));
+  char type         = t ? t->type      : 'n';
+  wxString ctype    = t ? t->ctype     : wxT("");
+  bool appending    = t ? t->appending : false;
+  bool video        = ('v' == type) && !appending;
+  bool audio_app    = ('a' == type);
+  bool subs_app     = ('s' == type);
+  bool chapters_app = ('c' == type);
+  bool avc_es       = video && (t->packetizer == wxT("mpeg4_p10_es_video"));
+  bool avc          = video && (t->packetizer == wxT("mpeg4_p10_video"));
+  bool normal_track = video || audio_app || subs_app;
 
   ctype = ctype.Lower();
 
-  st_delay->Enable(NULL != t);
-  tc_delay->Enable(NULL != t);
-  st_stretch->Enable(NULL != t);
-  tc_stretch->Enable(NULL != t);
-  st_sub_charset->Enable(subs_app && (ctype.Find(wxT("vobsub")) < 0));
-  cob_sub_charset->Enable(subs_app && (ctype.Find(wxT("vobsub")) < 0));
+  st_delay->Enable((NULL != t) && normal_track);
+  tc_delay->Enable((NULL != t) && normal_track);
+  st_stretch->Enable((NULL != t) && normal_track);
+  tc_stretch->Enable((NULL != t) && normal_track);
+  st_sub_charset->Enable(chapters_app || (subs_app && (ctype.Find(wxT("vobsub")) < 0)));
+  cob_sub_charset->Enable(chapters_app || (subs_app && (ctype.Find(wxT("vobsub")) < 0)));
   st_fourcc->Enable(video);
   cob_fourcc->Enable(video);
   st_stereo_mode->Enable(video);
@@ -262,7 +264,7 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   st_compression->Enable((ctype.Find(wxT("vobsub")) >= 0) && !appending);
   cob_compression->Enable((ctype.Find(wxT("vobsub")) >= 0) && !appending);
 
-  bool ar_enabled = (NULL != t) && !t->display_dimensions_selected;
+  bool ar_enabled = normal_track && (NULL != t) && !t->display_dimensions_selected;
   rb_aspect_ratio->Enable(video);
   cob_aspect_ratio->Enable(video && ar_enabled);
   rb_display_dimensions->Enable(video);

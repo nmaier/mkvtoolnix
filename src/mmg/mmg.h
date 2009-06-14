@@ -45,6 +45,10 @@
 # define LEFTRIGHTSPACING 5
 #endif
 
+#define TRACK_ID_CHAPTERS    0x10000000
+#define TRACK_ID_GLOBAL_TAGS 0x10000001
+#define TRACK_ID_TAGS_BASE   0x10000002
+
 // Config file versions and their differences
 //
 // Version 1: base settings
@@ -80,6 +84,9 @@ struct mmg_track_t {
 
   bool appending;
 
+  // For chapters and tags:
+  int num_entries;
+
   mmg_track_t()
     : type(0)
     , id(0)
@@ -97,8 +104,11 @@ struct mmg_track_t {
     , nalu_size_length(0)
     , stereo_mode(0)
     , appending(false)
+    , num_entries(0)
   {
   }
+
+  wxString create_label();
 };
 typedef counted_ptr<mmg_track_t> mmg_track_cptr;
 
@@ -126,15 +136,11 @@ struct mmg_file_t {
   int container;
   std::vector<mmg_track_cptr> tracks;
   std::vector<mmg_attached_file_cptr> attached_files;
-  bool no_chapters, no_attachments, no_tags;
   bool appending;
 
   mmg_file_t()
     : title_was_present(false)
     , container(0)
-    , no_chapters(false)
-    , no_attachments(false)
-    , no_tags(false)
     , appending(false)
   {
   }

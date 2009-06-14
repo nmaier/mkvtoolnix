@@ -608,8 +608,9 @@ create_track_order(bool all) {
   fix_format("%d:" LLD, temp);
   format = wxU(temp.c_str());
   for (i = 0; i < tracks.size(); i++) {
-    if (!all && (!tracks[i]->enabled || tracks[i]->appending))
+    if (!all && (!tracks[i]->enabled || tracks[i]->appending || ('c' == tracks[i]->type) || ('t' == tracks[i]->type)))
       continue;
+
     if (s.length() > 0)
       s += wxT(",");
     s += wxString::Format(format, tracks[i]->source, tracks[i]->id);
@@ -627,12 +628,12 @@ create_append_mapping() {
   fix_format("%d:" LLD ":%d:" LLD, temp);
   format = wxU(temp.c_str());
   for (i = 1; i < tracks.size(); i++) {
-    if (!tracks[i]->enabled || !tracks[i]->appending)
+    if (!tracks[i]->enabled || !tracks[i]->appending || ('c' == tracks[i]->type) || ('t' == tracks[i]->type))
       continue;
+
     if (s.length() > 0)
       s += wxT(",");
-    s += wxString::Format(format, tracks[i]->source, tracks[i]->id,
-                          tracks[i - 1]->source, tracks[i - 1]->id);
+    s += wxString::Format(format, tracks[i]->source, tracks[i]->id, tracks[i - 1]->source, tracks[i - 1]->id);
   }
 
   return s;
@@ -683,6 +684,33 @@ wxdie(const wxString &errmsg) {
   wxMessageBox(errmsg, wxT("A serious error has occured"),
                wxOK | wxICON_ERROR);
   exit(1);
+}
+
+wxString
+mmg_track_t::create_label() {
+  wxString file_name = files[source]->file_name;
+  file_name          = wxString::Format(wxT("%s (%s)"), file_name.AfterLast(wxT(PSEP)).c_str(), file_name.BeforeLast(wxT(PSEP)).c_str());
+
+  if ('c' == type)
+    return wxString::Format(Z("Chapters (%d entries) from %s"), num_entries, file_name.c_str());
+
+  if (('t' == type) && (TRACK_ID_GLOBAL_TAGS == id))
+    return wxString::Format(Z("Global tags (%d entries) from %s"), num_entries, file_name.c_str());
+
+  if ('t' == type) {
+    std::string format;
+    fix_format(Y("Tags for track ID %lld (%d entries) from %s"), format);
+    return wxString::Format(wxU(format.c_str()), id - TRACK_ID_TAGS_BASE, num_entries, file_name.c_str());
+  }
+
+  std::string format;
+  fix_format(Y("%s%s (ID %lld, type: %s) from %s"), format);
+  wxString type_str = type == 'a' ? Z("audio")
+                    : type == 'v' ? Z("video")
+                    : type == 's' ? Z("subtitles")
+                    :               Z("unknown");
+
+  return wxString::Format(wxU(format.c_str()), appending ? wxT("++> ") : wxEmptyString, ctype.c_str(), id, type_str.c_str(), file_name.c_str());
 }
 
 mmg_dialog::mmg_dialog():
@@ -1343,9 +1371,13 @@ mmg_dialog::update_command_line() {
     bool no_audio             = true;
     bool no_video             = true;
     bool no_subs              = true;
+    bool no_chapters          = true;
+    bool no_tags              = true;
+    bool no_global_tags       = true;
     wxString aids             = wxEmptyString;
     wxString sids             = wxEmptyString;
     wxString dids             = wxEmptyString;
+    wxString tids             = wxEmptyString;
 
     unsigned int tidx;
     for (tidx = 0; f->tracks.size() > tidx; tidx++) {
@@ -1354,7 +1386,7 @@ mmg_dialog::update_command_line() {
         continue;
 
       tracks_selected_here = true;
-      wxString sid         = wxLongLong(t->id).ToString();
+      wxString sid         = wxLongLong('t' == t->type ? t->id - TRACK_ID_TAGS_BASE : t->id).ToString();
 
       if (t->type == wxT('a')) {
         no_audio = false;
@@ -1383,6 +1415,28 @@ mmg_dialog::update_command_line() {
           clargs.Add(wxT("--sub-charset"));
           clargs.Add(sid + wxT(":") + t->sub_charset);
         }
+
+      } else if (t->type == wxT('c')) {
+        no_chapters = false;
+
+        if ((t->sub_charset.Length() > 0) && (t->sub_charset != wxT("default"))) {
+          clargs.Add(wxT("--chapter-charset"));
+          clargs.Add(t->sub_charset);
+        }
+
+        continue;
+
+      } else if (t->type == wxT('t')) {
+        if (TRACK_ID_GLOBAL_TAGS == t->id)
+          no_global_tags = false;
+        else {
+          no_tags        = false;
+          if (tids.length() > 0)
+            tids += wxT(",");
+          tids += sid;
+        }
+
+        continue;
       }
 
       if (!t->appending && (t->language != wxT("und"))) {
@@ -1499,33 +1553,27 @@ mmg_dialog::update_command_line() {
       clargs.Add(wxT("-s"));
       clargs.Add(sids);
     }
+    if (tids.length() > 0) {
+      clargs.Add(wxT("--track-tags"));
+      clargs.Add(tids);
+    }
 
     if (tracks_selected_here) {
-      if (f->no_chapters)
-        clargs.Add(wxT("--no-chapters"));
+      std::vector<mmg_attached_file_cptr>::iterator att_file = f->attached_files.begin();
+      std::vector<wxString> att_file_ids;
 
-      if (f->no_attachments)
-        clargs.Add(wxT("--no-attachments"));
-      else {
-        std::vector<mmg_attached_file_cptr>::iterator att_file = f->attached_files.begin();
-        std::vector<wxString> att_file_ids;
-
-        while (att_file != f->attached_files.end()) {
-          if ((*att_file)->enabled)
-            att_file_ids.push_back(wxString::Format(wxT("%ld"), (*att_file)->id));
-          ++att_file;
-        }
-
-        if (!att_file_ids.empty()) {
-          clargs.Add(wxT("--attachments"));
-          clargs.Add(join(wxT(","), att_file_ids));
-
-        } else if (!f->attached_files.empty())
-          clargs.Add(wxT("--no-attachments"));
+      while (att_file != f->attached_files.end()) {
+        if ((*att_file)->enabled)
+          att_file_ids.push_back(wxString::Format(wxT("%ld"), (*att_file)->id));
+        ++att_file;
       }
 
-      if (f->no_tags)
-        clargs.Add(wxT("--no-tags"));
+      if (!att_file_ids.empty()) {
+        clargs.Add(wxT("--attachments"));
+        clargs.Add(join(wxT(","), att_file_ids));
+
+      } else if (!f->attached_files.empty())
+        clargs.Add(wxT("--no-attachments"));
 
       if (no_video)
         clargs.Add(wxT("-D"));
@@ -1533,6 +1581,12 @@ mmg_dialog::update_command_line() {
         clargs.Add(wxT("-A"));
       if (no_subs)
         clargs.Add(wxT("-S"));
+      if (no_tags)
+        clargs.Add(wxT("-T"));
+      if (no_global_tags)
+        clargs.Add(wxT("--no-global-tags"));
+      if (no_chapters)
+        clargs.Add(wxT("--no-chapters"));
 
       if (f->appending)
         clargs.Add(wxString(wxT("+")) + f->file_name);

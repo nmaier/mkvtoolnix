@@ -119,25 +119,7 @@ tab_input::tab_input(wxWindow *parent):
   siz_all->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
-  st_file_options = new wxStaticText(this, wxID_STATIC, Z("File options:"));
-  st_file_options->Enable(false);
-  siz_line->Add(st_file_options, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
-
-  cb_no_chapters = new wxCheckBox(this, ID_CB_NOCHAPTERS, Z("No chapters"));
-  cb_no_chapters->SetValue(false);
-  cb_no_chapters->SetToolTip(TIP("Do not copy chapters from this file. Only applies to a couple of formats (e.g. Matroska files)."));
-  cb_no_chapters->Enable(false);
-  siz_line->Add(cb_no_chapters, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
-
-  cb_no_tags = new wxCheckBox(this, ID_CB_NOTAGS, Z("No tags"));
-  cb_no_tags->SetValue(false);
-  cb_no_tags->SetToolTip(TIP("Do not copy tags from this file. Only applies to a couple of formats (e.g. Matroska files)."));
-  cb_no_tags->Enable(false);
-  siz_line->Add(cb_no_tags, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
-  siz_all->Add(siz_line, 0, wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
-
-  siz_line = new wxBoxSizer(wxHORIZONTAL);
-  st_tracks = new wxStaticText(this, wxID_STATIC, Z("Tracks:"));
+  st_tracks = new wxStaticText(this, wxID_STATIC, Z("Tracks, chapters and tags:"));
   st_tracks->Enable(false);
   siz_line->Add(st_tracks, 0, wxALL, STDSPACING);
   siz_all->Add(siz_line, 0, wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
@@ -568,6 +550,31 @@ tab_input::add_file(const wxString &file_name,
         wxLogMessage(wxT("Attached file ID %ld MIME type '%s' size %ld description '%s' name '%s'"),
                      a->id, a->mime_type.c_str(), a->size, a->description.c_str(), a->name.c_str());
       }
+
+    } else if (output[i].Find(wxT("Chapters")) == 0) {
+      mmg_track_cptr track(new mmg_track_t);
+      parse_int(wxMB(output[i].AfterFirst(wxT(' ')).BeforeFirst(wxT(' '))), track->num_entries);
+      track->type = 'c';
+      track->id   = TRACK_ID_CHAPTERS;
+
+      file->tracks.push_back(track);
+
+    } else if (output[i].Find(wxT("Global tags")) == 0) {
+      mmg_track_cptr track(new mmg_track_t);
+      parse_int(wxMB(output[i].AfterFirst(wxT(':')).AfterFirst(wxT(' ')).BeforeFirst(wxT(' '))), track->num_entries);
+      track->type = 't';
+      track->id   = TRACK_ID_GLOBAL_TAGS;
+
+      file->tracks.push_back(track);
+
+    } else if (output[i].Find(wxT("Tags")) == 0) {
+      mmg_track_cptr track(new mmg_track_t);
+      parse_int(wxMB(output[i].BeforeFirst(wxT(':')).AfterLast(wxT(' '))), track->id);
+      parse_int(wxMB(output[i].AfterFirst(wxT(':')).AfterFirst(wxT(' ')).BeforeFirst(wxT(' '))), track->num_entries);
+      track->type  = 't';
+      track->id   += TRACK_ID_TAGS_BASE;
+
+      file->tracks.push_back(track);
     }
   }
 
@@ -612,21 +619,11 @@ tab_input::add_file(const wxString &file_name,
     name.Remove(0, 4);
 
   for (i = 0; i < file->tracks.size(); i++) {
-    std::string format;
-    wxString label;
     int new_track_pos;
 
     mmg_track_cptr &t = file->tracks[i];
-    t->enabled = true;
-    t->source  = new_file_pos;
-
-    fix_format(Y("%s%s (ID %lld, type: %s) from %s"), format);
-    wxString type = t->type == 'a' ? Z("audio")
-                  : t->type == 'v' ? Z("video")
-                  : t->type == 's' ? Z("subtitles")
-                  :                  Z("unknown");
-
-    label.Printf(wxU(format.c_str()), t->appending ? wxT("++> ") : wxEmptyString, t->ctype.c_str(), t->id, type.c_str(), name.c_str());
+    t->enabled        = true;
+    t->source         = new_file_pos;
 
     // Look for a place to insert this new track. If the file is "added" then
     // the new track is simply appended to the list of existing tracks.
@@ -657,7 +654,7 @@ tab_input::add_file(const wxString &file_name,
       new_track_pos = tracks.size();
 
     tracks.insert(tracks.begin() + new_track_pos, t.get());
-    clb_tracks->Insert(label, new_track_pos);
+    clb_tracks->Insert(t->create_label(), new_track_pos);
     clb_tracks->Check(new_track_pos, true);
   }
 
@@ -723,9 +720,6 @@ tab_input::on_remove_file(wxCommandEvent &evt) {
   files.erase(files.begin() + selected_file);
   lb_input_files->Delete(selected_file);
   selected_file = lb_input_files->GetSelection();
-  st_file_options->Enable(-1 != selected_file);
-  cb_no_chapters->Enable(-1 != selected_file);
-  cb_no_tags->Enable(-1 != selected_file);
   b_remove_file->Enable(-1 != selected_file);
   b_remove_all_files->Enable(!tracks.empty());
   b_append_file->Enable(tracks.size() > 0);
@@ -759,9 +753,6 @@ tab_input::on_remove_all_files(wxCommandEvent &evt) {
   selected_track = -1;
   st_tracks->Enable(false);
   clb_tracks->Enable(false);
-  st_file_options->Enable(false);
-  cb_no_chapters->Enable(false);
-  cb_no_tags->Enable(false);
   b_remove_file->Enable(false);
   b_remove_all_files->Enable(false);
   b_append_file->Enable(false);
@@ -849,41 +840,7 @@ tab_input::on_file_selected(wxCommandEvent &evt) {
   b_remove_file->Enable(true);
   b_append_file->Enable(true);
 
-  int old_track    = selected_track;
-  selected_track   = -1;
-  mmg_file_cptr &f = files[new_sel];
-
-  cb_no_chapters->Enable(   (FILE_TYPE_MATROSKA == f->container)
-                         || (FILE_TYPE_QTMP4    == f->container)
-                         || (FILE_TYPE_OGM      == f->container));
-
-  if (FILE_TYPE_MATROSKA == f->container) {
-    st_file_options->Enable(true);
-    cb_no_tags->Enable(true);
-    cb_no_chapters->SetValue(f->no_chapters);
-    cb_no_tags->SetValue(f->no_tags);
-
-  } else {
-    st_file_options->Enable(false);
-    cb_no_tags->Enable(false);
-    cb_no_chapters->SetValue(false);
-    cb_no_tags->SetValue(false);
-  }
-
-  selected_file  = new_sel;
-  selected_track = old_track;
-}
-
-void
-tab_input::on_nochapters_clicked(wxCommandEvent &evt) {
-  if (dont_copy_values_now || (-1 != selected_file))
-    files[selected_file]->no_chapters = cb_no_chapters->GetValue();
-}
-
-void
-tab_input::on_notags_clicked(wxCommandEvent &evt) {
-  if (dont_copy_values_now || (-1 != selected_file))
-    files[selected_file]->no_tags = cb_no_tags->GetValue();
+  selected_file = new_sel;
 }
 
 void
@@ -958,11 +915,6 @@ void
 tab_input::on_file_new(wxCommandEvent &evt) {
   b_append_file->Enable(false);
   b_remove_file->Enable(false);
-  st_file_options->Enable(false);
-  cb_no_chapters->Enable(false);
-  cb_no_tags->Enable(false);
-  cb_no_chapters->SetValue(false);
-  cb_no_tags->SetValue(false);
   b_track_up->Enable(false);
   b_track_down->Enable(false);
 }
@@ -978,12 +930,9 @@ tab_input::save(wxConfigBase *cfg) {
     wxString s;
     s.Printf(wxT("file %u"), fidx);
     cfg->SetPath(s);
-    cfg->Write(wxT("file_name"),        f->file_name);
-    cfg->Write(wxT("container"),        f->container);
-    cfg->Write(wxT("no_chapters"),      f->no_chapters);
-    cfg->Write(wxT("no_attachments"),   f->no_attachments);
-    cfg->Write(wxT("no_tags"),          f->no_tags);
-    cfg->Write(wxT("appending"),        f->appending);
+    cfg->Write(wxT("file_name"), f->file_name);
+    cfg->Write(wxT("container"), f->container);
+    cfg->Write(wxT("appending"), f->appending);
 
     cfg->Write(wxT("number_of_tracks"), (int)f->tracks.size());
     unsigned int tidx;
@@ -1025,6 +974,7 @@ tab_input::save(wxConfigBase *cfg) {
       cfg->Write(wxT("appending"),                   t->appending);
       cfg->Write(wxT("user_defined"),                t->user_defined);
       cfg->Write(wxT("packetizer"),                  t->packetizer);
+      cfg->Write(wxT("num_entries"),                 t->num_entries);
 
       cfg->SetPath(wxT(".."));
     }
@@ -1097,12 +1047,9 @@ tab_input::load(wxConfigBase *cfg,
       cfg->SetPath(wxT(".."));
       continue;
     }
-    cfg->Read(wxT("title"),          &fi->title);
-    cfg->Read(wxT("container"),      &fi->container);
-    cfg->Read(wxT("no_chapters"),    &fi->no_chapters,    false);
-    cfg->Read(wxT("no_attachments"), &fi->no_attachments, false);
-    cfg->Read(wxT("no_tags"),        &fi->no_tags,        false);
-    cfg->Read(wxT("appending"),      &fi->appending,      false);
+    cfg->Read(wxT("title"),     &fi->title);
+    cfg->Read(wxT("container"), &fi->container);
+    cfg->Read(wxT("appending"), &fi->appending, false);
 
     long tidx;
     for (tidx = 0; tidx < (long)num_tracks; tidx++) {
@@ -1119,7 +1066,7 @@ tab_input::load(wxConfigBase *cfg,
       }
 
       tr->type = c.c_str()[0];
-      if (((tr->type != 'a') && (tr->type != 'v') && (tr->type != 's')) || !parse_int(wxMB(id), tr->id)) {
+      if (((tr->type != 'a') && (tr->type != 'v') && (tr->type != 's') && (tr->type != 'c') && (tr->type != 't')) || !parse_int(wxMB(id), tr->id)) {
         cfg->SetPath(wxT(".."));
         continue;
       }
@@ -1153,6 +1100,7 @@ tab_input::load(wxConfigBase *cfg,
       cfg->Read(wxT("appending"),                   &tr->appending,                   false);
       cfg->Read(wxT("user_defined"),                &tr->user_defined);
       cfg->Read(wxT("packetizer"),                  &tr->packetizer);
+      cfg->Read(wxT("num_entries"),                 &tr->num_entries);
 
       tr->source = files.size();
       if (track_order.Length() > 0)
@@ -1235,16 +1183,7 @@ tab_input::load(wxConfigBase *cfg,
       mmg_track_cptr &t = files[fidx]->tracks[tidx];
       tracks.push_back(t.get());
 
-      fix_format(Y("%s%s (ID %lld, type: %s) from %s"), format);
-      wxString name  = files[fidx]->file_name.AfterLast(wxT(PSEP));
-      name          += wxT(" (") + files[fidx]->file_name.BeforeLast(wxT(PSEP)) + wxT(")");
-      wxString type  = t->type == 'a' ? Z("audio")
-                     : t->type == 'v' ? Z("video")
-                     : t->type == 's' ? Z("subtitles")
-                     :                  Z("unknown");
-      wxString label;
-      label.Printf(wxU(format.c_str()), t->appending ? wxT("++> ") : wxEmptyString, t->ctype.c_str(), t->id, type.c_str(), name.c_str());
-      clb_tracks->Append(label);
+      clb_tracks->Append(t->create_label());
       clb_tracks->Check(i, t->enabled);
     }
   }
@@ -1403,9 +1342,6 @@ BEGIN_EVENT_TABLE(tab_input, wxPanel)
   EVT_LISTBOX(ID_LB_INPUTFILES,     tab_input::on_file_selected)
   EVT_LISTBOX(ID_CLB_TRACKS,        tab_input::on_track_selected)
   EVT_CHECKLISTBOX(ID_CLB_TRACKS,   tab_input::on_track_enabled)
-
-  EVT_CHECKBOX(ID_CB_NOCHAPTERS,    tab_input::on_nochapters_clicked)
-  EVT_CHECKBOX(ID_CB_NOTAGS,        tab_input::on_notags_clicked)
 
   EVT_TIMER(ID_T_INPUTVALUES,       tab_input::on_value_copy_timer)
 END_EVENT_TABLE();

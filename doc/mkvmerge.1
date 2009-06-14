@@ -56,7 +56,8 @@ below for details.
 Sets the charset that is used for the conversion to UTF-8 for simple chapter
 files.
 Defaults to the current system locale.
-This switch does also apply to chapters that are copied from an Ogg/OGM file.
+This switch does also apply to chapters that are copied from certain container
+types, e.g. Ogg/OGM and MP4 files.
 See the section about chapters below for details.
 .TP
 \fB\-\-cue\-chapter\-name\-format\fR <\fIformat\fR>
@@ -299,6 +300,10 @@ Don't copy attachments from this file.
 .TP
 \fB\-\-no\-global\-tags\fR
 Don't copy global tags from this file.
+.TP
+\fB\-\-chapter\-charset\fR <\fIcharset\fR>
+Sets the charset that is used for the conversion to UTF-8 for chapter information
+contained in the source file.
 .TP
 \fB\-y\fR, \fB\-\-sync\fR <\fITID\fR:\fId\fR[,\fIo\fR[/\fIp\fR]]>
 Adjust the timecodes of the track with the id \fITID\fR by \fId\fR
