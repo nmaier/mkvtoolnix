@@ -1,5 +1,10 @@
 2009-06-14  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Appending MP4 or OGM files with chapters will
+	merge the chapters from all appended files and not just take the
+	chapters from the first file and discard the chapters from the
+	following files.
+
 	* mkvmerge, mmg: new feature: The language for chapters read from
 	files such as OGM and MP4 files can be chosen with the
 	--chapter-language command line option. Fix for bug 399.
