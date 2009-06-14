@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2009-06-10 14:04+0900\n"
+"PO-Revision-Date: 2009-06-15 01:00+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -408,13 +408,11 @@ msgstr ""
 "                           設定します。\n"
 
 #: src/merge/mkvmerge.cpp:214
-#, fuzzy
 msgid ""
 "  --track-tags <n,m,...>   Copy the tags for tracks n,m etc. Default: copy\n"
 "                           tags for all tracks.\n"
 msgstr ""
-"  --tags-for-tracks <n,m,...>\n"
-"                           トラックn,m,...のタグをコピーします。\n"
+"  --track-tags <n,m,...>   トラックn,m,...のタグをコピーします。\n"
 "                           デフォルトでは全てのトラックのタグをコピーします。\n"
 
 #: src/merge/mkvmerge.cpp:286
@@ -2034,9 +2032,9 @@ msgid "Chapters"
 msgstr "チャプタ"
 
 #: src/mmg/mmg.cpp:695
-#, fuzzy, c-format
+#, c-format
 msgid "Chapters (%d entries) from %s"
-msgstr "チャプタ：%1%個のエントリ"
+msgstr "チャプタ（%d個のエントリ）%sのチャプタ"
 
 #: src/mmg/tabs/chapters.cpp:626
 msgid "Chapters loaded."
@@ -3079,9 +3077,9 @@ msgid "Global tags"
 msgstr "グローバルタグ"
 
 #: src/mmg/mmg.cpp:698
-#, fuzzy, c-format
+#, c-format
 msgid "Global tags (%d entries) from %s"
-msgstr "グローバルタグ：%1%個のエントリ"
+msgstr "グローバルタグ（%d個のエントリ）%sのタグ"
 
 #: src/merge/pr_generic.cpp:1373
 msgid "Global tags: %1% entries"
@@ -4657,9 +4655,8 @@ msgid "Selects for which blocks mkvmerge will produce index entries ( = cue entr
 msgstr "mkvmergeがインデックスエントリ（＝キューエントリ）をどのブロックに生成するかを指定します。殆どの場合\"デフォルト\"がよいでしょう。"
 
 #: src/mmg/tabs/input_format.cpp:154
-#, fuzzy
 msgid "Selects the character set a subtitle file or chapter information was written with. Only needed for non-UTF encoded subtitle files or for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."
-msgstr "字幕が記録された文字セットを指定します。mkvmergeが正しく検出できない非UTFのファイルにのみ必要です。"
+msgstr "字幕またはチャプタ情報が記録された文字セットを指定します。mkvmergeが文字セットを正しく検出できない、非UTFの字幕ファイルとチャプタ情報を持つファイル（例：OGM、MP4）にのみ必要です。"
 
 #: src/mmg/mmg.cpp:775
 msgid "Set &default values"
@@ -5004,9 +5001,9 @@ msgid "Tags for track ID %1%: %2% entries"
 msgstr "トラックID %1%のタグ：%2%個のエントリ"
 
 #: src/mmg/mmg.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Tags for track ID %lld (%d entries) from %s"
-msgstr "トラックID %1%のタグ：%2%個のエントリ"
+msgstr "トラックID %lldのタグ（%d個のエントリ）%sのタグ"
 
 #: src/mmg/tabs/input_general.cpp:77
 msgid "Tags:"
@@ -6027,7 +6024,7 @@ msgstr "サポートされていない方式（圧縮や暗号化）でエンコ
 
 #: src/mmg/tabs/input.cpp:122
 msgid "Tracks, chapters and tags:"
-msgstr ""
+msgstr "トラック、チャプタ、タグ："
 
 #: src/mmg/mmg.cpp:224
 msgid "TrueHD audio streams know two frame types: sync frames and non-sync frames. With this switch mkvmerge will put one sync frame and all following non-sync frames into a single Matroska block. Without it each non-sync frame is put into its own Matroska block."
@@ -7885,39 +7882,3 @@ msgstr "間違った使用法：読み込み専用メモリへの書き込み"
 #: src/mmg/tabs/input_general.cpp:116 src/mmg/tabs/input_general.cpp:127
 msgid "yes"
 msgstr "はい"
-
-#~ msgid "Could not open the file '%1%'."
-#~ msgstr "ファイル'%1%'を開けませんでした。"
-
-#~ msgid "Do not copy chapters from this file. Only applies to a couple of formats (e.g. Matroska files)."
-#~ msgstr "このファイルからチャプタをコピーしません。いくつかのフォーマットにのみ適用されます（例：Matroskaファイル）。"
-
-#~ msgid "Do not copy tags from this file. Only applies to a couple of formats (e.g. Matroska files)."
-#~ msgstr "このファイルからタグをコピーしません。いくつかのフォーマットにのみ適用されます（例：Matroskaファイル）。"
-
-#~ msgid "File options:"
-#~ msgstr "ファイルオプション："
-
-#~ msgid "No chapters"
-#~ msgstr "チャプタを引き継がない"
-
-#~ msgid "No tags"
-#~ msgstr "タグを引き継がない"
-
-#~ msgid "Subtitle charset:"
-#~ msgstr "字幕の文字セット："
-
-#~ msgid "Tracks:"
-#~ msgstr "トラック："
-
-#~ msgid "You have not yet selected an output file."
-#~ msgstr "出力ファイルがまだ指定されていません。"
-
-#~ msgid "You have not yet selected any input file and/or no tracks."
-#~ msgstr "入力ファイルやトラックがまだ1つも指定されていません。"
-
-#~ msgid "locale.cpp/from_utf8(): Invalid conversion handle %1% (num: %2%).\n"
-#~ msgstr "locale.cpp/from_utf8()：無効な変換ハンドル%1%（数字：%2%です）。\n"
-
-#~ msgid "locale.cpp/to_utf8(): Invalid conversion handle %1% (num: %2%).\n"
-#~ msgstr "locale.cpp/to_utf8()：無効な変換ハンドル%1%（数字：%2%です）。\n"
