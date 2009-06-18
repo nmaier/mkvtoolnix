@@ -298,8 +298,6 @@ sighandler(int signum) {
 */
 void
 get_file_type(filelist_t &file) {
-  static const int probe_sizes[] = {16 * 1024, 32 * 1024, 64 * 1024, 128 * 1024, 256 * 1024, 0};
-
   mm_io_c *io  = NULL;
   int64_t size = 0;
 
@@ -350,14 +348,17 @@ get_file_type(filelist_t &file) {
     type = FILE_TYPE_MPEG_ES;
   else {
     // File types which are the same in raw format and in other container formats.
-    // Detection requires five or more consecutive packets. 
+    // Detection requires 20 or more consecutive packets.
+    static const int s_probe_sizes[]                          = { 32 * 1024, 64 * 1024, 128 * 1024, 256 * 1024, 0 };
+    static const int s_probe_num_required_consecutive_packets = 20;
+
     int i;
-    for (i = 0; (probe_sizes[i] != 0) && (type == FILE_TYPE_IS_UNKNOWN); i++)
-      if (mp3_reader_c::probe_file(io, size, probe_sizes[i], 5))
+    for (i = 0; (0 != s_probe_sizes[i]) && (FILE_TYPE_IS_UNKNOWN == type); ++i)
+      if (mp3_reader_c::probe_file(io, size, s_probe_sizes[i], s_probe_num_required_consecutive_packets))
         type = FILE_TYPE_MP3;
-      else if (ac3_reader_c::probe_file(io, size, probe_sizes[i], 5))
+      else if (ac3_reader_c::probe_file(io, size, s_probe_sizes[i], s_probe_num_required_consecutive_packets))
         type = FILE_TYPE_AC3;
-      else if (aac_reader_c::probe_file(io, size, probe_sizes[i], 5))
+      else if (aac_reader_c::probe_file(io, size, s_probe_sizes[i], s_probe_num_required_consecutive_packets))
         type = FILE_TYPE_AAC;
   }
   // More file types with detection issues.
@@ -365,8 +366,6 @@ get_file_type(filelist_t &file) {
     ;
   else if (truehd_reader_c::probe_file(io, size))
     type = FILE_TYPE_TRUEHD;
-  else if (mp3_reader_c::probe_file(io, size, 2 * 1024 * 1024, 10))
-    type = FILE_TYPE_MP3;
   else if (dts_reader_c::probe_file(io, size))
     type = FILE_TYPE_DTS;
   else if (vobbtn_reader_c::probe_file(io, size))

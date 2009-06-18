@@ -1,3 +1,10 @@
+2009-06-18  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Made the detection rules for raw MP3, AC3 and
+	AAC audio files more strict. This avoids a mis-detection of
+	certain files, e.g. AVC/h.264 ES files being misdetected as MP3
+	files. Fix for bug 414.
+
 2009-06-14  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Appending MP4 or OGM files with chapters will
