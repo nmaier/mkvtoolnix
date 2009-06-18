@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-06-10 21:27+0800\n"
+"PO-Revision-Date: 2009-06-16 13:40+0800\n"
 "Last-Translator: Dean Lee <xslidian+t@gmail.com>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -402,13 +402,11 @@ msgstr ""
 "                           控制输出文件中的轨道顺序。\n"
 
 #: src/merge/mkvmerge.cpp:214
-#, fuzzy
 msgid ""
 "  --track-tags <n,m,...>   Copy the tags for tracks n,m etc. Default: copy\n"
 "                           tags for all tracks.\n"
 msgstr ""
-"  --tags-for-tracks <n,m,...>\n"
-"                           复制 n,m 等轨的标签。\n"
+"  --track-tags <n,m,...>   复制 n,m 等轨的标签。\n"
 "                           默认：复制所有轨道标签。\n"
 
 #: src/merge/mkvmerge.cpp:286
@@ -2074,9 +2072,9 @@ msgid "Chapters"
 msgstr "章节"
 
 #: src/mmg/mmg.cpp:695
-#, fuzzy, c-format
+#, c-format
 msgid "Chapters (%d entries) from %s"
-msgstr "章节: %1% 条记录"
+msgstr "章节 (%d 条) 自 %s"
 
 #: src/mmg/tabs/chapters.cpp:626
 msgid "Chapters loaded."
@@ -3155,9 +3153,9 @@ msgid "Global tags"
 msgstr "全局标签"
 
 #: src/mmg/mmg.cpp:698
-#, fuzzy, c-format
+#, c-format
 msgid "Global tags (%d entries) from %s"
-msgstr "全局标签: %1% 条记录"
+msgstr "全局标签 (%d 条) 自 %s"
 
 #: src/merge/pr_generic.cpp:1373
 msgid "Global tags: %1% entries"
@@ -4768,9 +4766,8 @@ msgid "Selects for which blocks mkvmerge will produce index entries ( = cue entr
 msgstr "选择 mkvmerge 将为哪些块创建索引。在几乎所有情况下，“默认”是个合适的选择。"
 
 #: src/mmg/tabs/input_format.cpp:154
-#, fuzzy
 msgid "Selects the character set a subtitle file or chapter information was written with. Only needed for non-UTF encoded subtitle files or for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."
-msgstr "选择字幕文件保存时使用的字符集。只有非 UTF 文件需要选择（mkvmerge无法正确侦测）。"
+msgstr "选择字幕文件或章节信息保存时使用的字符集。只有非 UTF 编码的字幕文件或含有章节信息的文件 (如 OGM, MP4) 需要选择（mkvmerge 无法正确侦测编码）。"
 
 #: src/mmg/mmg.cpp:775
 msgid "Set &default values"
@@ -5115,9 +5112,9 @@ msgid "Tags for track ID %1%: %2% entries"
 msgstr "轨道 %1% 的标签: %2% 条记录"
 
 #: src/mmg/mmg.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Tags for track ID %lld (%d entries) from %s"
-msgstr "轨道 %1% 的标签: %2% 条记录"
+msgstr "轨道 ID %lld 的标签 (%d 条) 自 %s"
 
 #: src/mmg/tabs/input_general.cpp:77
 msgid "Tags:"
@@ -6168,7 +6165,7 @@ msgstr "使用不支持的内容编码（压缩或加密）方案的轨道不能
 
 #: src/mmg/tabs/input.cpp:122
 msgid "Tracks, chapters and tags:"
-msgstr ""
+msgstr "轨道、章节与标签:"
 
 #: src/mmg/mmg.cpp:224
 msgid "TrueHD audio streams know two frame types: sync frames and non-sync frames. With this switch mkvmerge will put one sync frame and all following non-sync frames into a single Matroska block. Without it each non-sync frame is put into its own Matroska block."
