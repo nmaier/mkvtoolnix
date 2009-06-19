@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: zh-TW\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-06-10 22:26+0800\n"
+"PO-Revision-Date: 2009-06-16 03:45+0800\n"
 "Last-Translator: Dong-Jun Wu <ziyawu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <ziyawu@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -401,14 +401,12 @@ msgstr ""
 "                           控制輸出檔中的軌道順序。\n"
 
 #: src/merge/mkvmerge.cpp:214
-#, fuzzy
 msgid ""
 "  --track-tags <n,m,...>   Copy the tags for tracks n,m etc. Default: copy\n"
 "                           tags for all tracks.\n"
 msgstr ""
-"  --tags-for-tracks <n,m,...>\n"
-"                           複製 n, m 等音訊軌。預設：複製\n"
-"                           所有音訊軌。\n"
+"  --track-tags <n,m,...>   複製 n, m 等音軌。預設：複製\n"
+"                           標籤到所有軌道。\n"
 
 #: src/merge/mkvmerge.cpp:286
 msgid "  --ui-language <code>     Force the translations for 'code' to be used.\n"
@@ -1849,7 +1847,7 @@ msgstr "音訊取樣頻率"
 #: src/mmg/header_editor/frame.cpp:340
 #, c-format
 msgid "Audio track %u"
-msgstr "音訊軌 %u"
+msgstr "音軌 %u"
 
 #: src/mmg/options_dialog.cpp:91
 msgid "Auto-set output filename"
@@ -2073,9 +2071,9 @@ msgid "Chapters"
 msgstr "章節"
 
 #: src/mmg/mmg.cpp:695
-#, fuzzy, c-format
+#, c-format
 msgid "Chapters (%d entries) from %s"
-msgstr "章節: %1% 項目"
+msgstr "章節 (%d 個項目) 自 %s"
 
 #: src/mmg/tabs/chapters.cpp:626
 msgid "Chapters loaded."
@@ -2339,7 +2337,7 @@ msgstr "未找到有效的 MP3 套件。"
 
 #: src/input/r_avi.cpp:500
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
-msgstr "找不到音訊軌 %1% 的索引 (avilib 錯誤訊息: %2%)。正在跳過此軌。\n"
+msgstr "找不到音軌 %1% 的索引 (avilib 錯誤訊息: %2%)。正在跳過此軌。\n"
 
 #: src/merge/output_control.cpp:1535
 msgid "Could not find gptzr when appending. %1%\n"
@@ -2594,7 +2592,7 @@ msgstr "延遲 (ms):"
 
 #: src/mmg/tabs/input_format.cpp:134
 msgid "Delay this track's timecodes by a couple of ms. Can be negative. Works best on video and subtitle tracks."
-msgstr "將此軌的時間碼延遲幾毫秒。對視訊或音訊軌效果最佳。"
+msgstr "將此軌的時間碼延遲幾毫秒。對視訊或音軌效果最佳。"
 
 #: src/info/mkvinfo.cpp:1414
 msgid "Delay: %|1$.3f|ms"
@@ -2636,7 +2634,7 @@ msgstr "停用 SimpleBlocks 簡單區塊替代 BlockGroups 區塊群組。"
 
 #: src/mmg/mmg.cpp:178
 msgid "Disables lacing for all tracks. This will increase the file's size, especially if there are many audio tracks. Use only for testing."
-msgstr "停用所有軌道的緊縮。這將增加檔案大小，尤其是有很多音訊軌時。僅供測試用。"
+msgstr "停用所有軌道的緊縮。這將增加檔案大小，尤其是有很多音軌時。僅供測試用。"
 
 #: src/merge/mkvmerge.cpp:703
 #: src/merge/mkvmerge.cpp:709
@@ -3098,7 +3096,7 @@ msgstr "強制 NALU 長度大小為一定的位元組數。本參數只對 AVC/h
 
 #: src/mmg/mmg.cpp:182
 msgid "Forces the timecode scale factor to REPLACEME. You have to replace REPLACEME with a value between 1000 and 10000000 or with -1. Normally mkvmerge will use a value of 1000000 which means that timecodes and durations will have a precision of 1ms. For files that will not contain a video track but at least one audio track mkvmerge will automatically choose a timecode scale factor so that all timecodes and durations have a precision of one sample. This causes bigger overhead but allows precise seeking and extraction. If the magical value -1 is used then mkvmerge will use sample precision even if a video track is present."
-msgstr "強制時間碼縮放係數為 REPLACEME。您得用 1000 至 10000000 之間的值或者 -1 來替代 REPLACEME。通常 mkvmerge 會使用值 1000000，這樣時間碼和持續時間的精確度為 1ms。對於不包含視訊軌但含有至少一條音訊軌的檔，mkvmerge 會自動選擇一個時間碼縮放係數以使各軌的取樣精確度相同。這將引起更大的額外開銷，但將允許更精確的定位與提取。如果使用了魔法值 -1，即使有視訊軌，mkvmerge 也將使用取樣精確度。"
+msgstr "強制時間碼縮放係數為 REPLACEME。您得用 1000 至 10000000 之間的值或者 -1 來替代 REPLACEME。通常 mkvmerge 會使用值 1000000，這樣時間碼和持續時間的精確度為 1ms。對於不包含視訊軌但含有至少一條音軌的檔，mkvmerge 會自動選擇一個時間碼縮放係數以使各軌的取樣精確度相同。這將引起更大的額外開銷，但將允許更精確的定位與提取。如果使用了魔法值 -1，即使有視訊軌，mkvmerge 也將使用取樣精確度。"
 
 #: src/mmg/tabs/input.cpp:148
 msgid "Format specific options"
@@ -3154,9 +3152,9 @@ msgid "Global tags"
 msgstr "整體標籤"
 
 #: src/mmg/mmg.cpp:698
-#, fuzzy, c-format
+#, c-format
 msgid "Global tags (%d entries) from %s"
-msgstr "整體標籤: %1% 項目"
+msgstr "整體標籤 (%d 個項目) 自 %s"
 
 #: src/merge/pr_generic.cpp:1373
 msgid "Global tags: %1% entries"
@@ -3359,7 +3357,7 @@ msgstr "無效 UID。該版本 UID 已被使用。原 UID 沒有被改變。"
 #: src/input/r_avi.cpp:657
 #: src/input/r_avi.cpp:674
 msgid "Invalid Vorbis headers in AVI audio track."
-msgstr "有無效的 Vorbis 表頭，在 AVI 音訊軌中。"
+msgstr "有無效的 Vorbis 表頭，在 AVI 音軌中。"
 
 #: src/extract/mkvextract.cpp:268
 msgid "Invalid attachment ID/file name specification in argument '%1%'.\n"
@@ -4452,7 +4450,7 @@ msgstr "Quicktime/MP4 讀取器: 該 AAC 軌道 %1% 缺少 esds 單元/解碼器
 
 #: src/input/r_qtmp4.cpp:252
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
-msgstr "Quicktime/MP4 讀取器: 音訊軌 %1% 的 'esds' 單元使用了不支援的 'object type id' 物件類別號 %2%。正在跳過該軌。\n"
+msgstr "Quicktime/MP4 讀取器: 音軌 %1% 的 'esds' 單元使用了不支援的 'object type id' 物件類別號 %2%。正在跳過該軌。\n"
 
 #: src/input/r_qtmp4.cpp:270
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
@@ -4767,9 +4765,8 @@ msgid "Selects for which blocks mkvmerge will produce index entries ( = cue entr
 msgstr "選擇 mkvmerge 將為哪些區塊建立索引。在幾乎所有情況下，“預設”是個合適的選擇。"
 
 #: src/mmg/tabs/input_format.cpp:154
-#, fuzzy
 msgid "Selects the character set a subtitle file or chapter information was written with. Only needed for non-UTF encoded subtitle files or for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."
-msgstr "選擇字幕檔儲存時使用的字元集。只有非 UTF 檔需要選擇（mkvmerge無法正確偵測）。"
+msgstr "選擇字幕檔儲存時使用的字元集。只有 非-UTF 編碼的字幕檔或者含有章節資訊的檔案 (即 OGM、MP4) 需要選擇 (mkvmerge 無法正確偵測編碼)。"
 
 #: src/mmg/mmg.cpp:775
 msgid "Set &default values"
@@ -5114,9 +5111,9 @@ msgid "Tags for track ID %1%: %2% entries"
 msgstr "軌道 ID 的標籤 %1%: %2% 項目"
 
 #: src/mmg/mmg.cpp:702
-#, fuzzy, c-format
+#, c-format
 msgid "Tags for track ID %lld (%d entries) from %s"
-msgstr "軌道 ID 的標籤 %1%: %2% 項目"
+msgstr "軌道 ID 的標籤 %lld (%d 個項目) 自 %s"
 
 #: src/mmg/tabs/input_general.cpp:77
 msgid "Tags:"
@@ -5670,7 +5667,7 @@ msgstr "兩軌的每次取樣位元數（音訊位元深度）不同: %1% 與 %2
 
 #: src/merge/pr_generic.h:368
 msgid "The number of channels of the two audio tracks is different: %1% and %2%"
-msgstr "兩音訊軌的聲道數不同: %1% 與 %2%"
+msgstr "兩音軌的聲道數不同: %1% 與 %2%"
 
 #: src/merge/timecode_factory.cpp:262
 msgid "The number of external timecodes %1% is smaller than the number of frames in this track. The remaining frames of this track might not be timestamped the way you intended them to be. mkvmerge might even crash.\n"
@@ -5736,7 +5733,7 @@ msgstr "根元件必須為 <%1%>。"
 
 #: src/merge/pr_generic.h:363
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
-msgstr "兩音訊軌的取樣頻率不同: %1% 與 %2%"
+msgstr "兩音軌的取樣頻率不同: %1% 與 %2%"
 
 #: src/mmg/header_editor/frame.cpp:392
 msgid ""
@@ -5917,11 +5914,11 @@ msgstr "此 AVC/h.264 軌道未以關鍵畫格開頭。已跳過開頭 %1% 畫�
 
 #: src/output/p_mp3.cpp:60
 msgid "This MPEG audio track contains %1% bytes of non-MP3 data at the beginning. This corresponds to a delay of %2%ms. This delay will be used instead of the garbage data.\n"
-msgstr "此 MPEG 音訊軌的開頭包含 %1% 位元組的 非-MP3 資料。這相當於 %2%ms 的延遲。將使用此延遲替代無用資料。\n"
+msgstr "此 MPEG 音軌的開頭包含 %1% 位元組的 非-MP3 資料。這相當於 %2%ms 的延遲。將使用此延遲替代無用資料。\n"
 
 #: src/output/p_mp3.cpp:69
 msgid "This MPEG audio track contains %1% bytes of non-MP3 data which were skipped. The audio/video synchronization may have been lost.\n"
-msgstr "此 MPEG 音訊軌包含 %1% 位元組的 非-MP3 資料，已跳過。音/視訊同步可能已喪失。\n"
+msgstr "此 MPEG 音軌包含 %1% 位元組的 非-MP3 資料，已跳過。音/視訊同步可能已喪失。\n"
 
 #: src/input/r_ogm.cpp:831
 msgid "This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can be overridden with the '--chapter-charset <charset>' switch.\n"
@@ -6167,7 +6164,7 @@ msgstr "使用不支援的內容編碼（壓縮或加密）方案的軌道不能
 
 #: src/mmg/tabs/input.cpp:122
 msgid "Tracks, chapters and tags:"
-msgstr ""
+msgstr "軌道、章節和標籤:"
 
 #: src/mmg/mmg.cpp:224
 msgid "TrueHD audio streams know two frame types: sync frames and non-sync frames. With this switch mkvmerge will put one sync frame and all following non-sync frames into a single Matroska block. Without it each non-sync frame is put into its own Matroska block."
@@ -6248,7 +6245,7 @@ msgstr "未知的開啟模式"
 
 #: src/input/r_avi.cpp:575
 msgid "Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n"
-msgstr "此音訊軌的格式 0x%|1$04x| 未知或不支援。\n"
+msgstr "此音軌的格式 0x%|1$04x| 未知或不支援。\n"
 
 #: src/extract/mkvextract.cpp:301
 msgid "Unrecognized command line option '%1%'. Maybe you put a mode specific option before the input file name?\n"
@@ -6909,7 +6906,7 @@ msgstr "警告:"
 
 #: src/mmg/options_dialog.cpp:115
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
-msgstr "當檔被添加時它的名稱會被掃描。如果包含單詞“delay”且有一數字緊隨其後，這個數字將被自動輸入至已發現的該檔案的所有音訊軌的“延遲”輸入框。"
+msgstr "當檔被添加時它的名稱會被掃描。如果包含單詞“delay”且有一數字緊隨其後，這個數字將被自動輸入至已發現的該檔案的所有音軌的“延遲”輸入框。"
 
 #: src/mmg/header_editor/frame.cpp:411
 msgid "Width of the encoded video frames in pixels."
@@ -7059,7 +7056,7 @@ msgstr "異常中止"
 
 #: src/output/p_ac3.cpp:212
 msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"
-msgstr "ac3_bs_packetizer::add_to_buffer(): 未經測試的碼 ('size' 很古怪)。如果 mkvmerge 崩潰或者生成的檔不含完整且正常的音訊軌，請與作者 Moritz Bunkus 聯繫，電郵為 moritz@bunkus.org。\n"
+msgstr "ac3_bs_packetizer::add_to_buffer(): 未經測試的碼 ('size' 很古怪)。如果 mkvmerge 崩潰或者生成的檔不含完整且正常的音軌，請與作者 Moritz Bunkus 聯繫，電郵為 moritz@bunkus.org。\n"
 
 #: src/input/r_ac3.cpp:70
 msgid "ac3_reader: Could not open the source file."
