@@ -287,11 +287,14 @@ mpeg4_p2_video_packetizer_c::flush_frames(bool end_of_file) {
   for (i = 1; m_queued_frames.size() > i; ++i) {
     m_queued_frames[i].timecode = m_available_timecodes[i - 1];
     m_queued_frames[i].duration = m_available_durations[i - 1];
-    m_queued_frames[i].fref     = m_queued_frames[0].timecode;
+    m_queued_frames[i].fref     = FRAME_TYPE_P == m_queued_frames[i].type ? -1 : m_queued_frames[0].timecode;
     m_queued_frames[i].bref     = m_last_i_p_frame;
+
+    if (FRAME_TYPE_P == m_queued_frames[i].type)
+      m_last_i_p_frame = m_available_timecodes[i - 1];
   }
 
-  m_last_i_p_frame = m_queued_frames[0].timecode;
+  m_last_i_p_frame = std::max(m_last_i_p_frame, m_queued_frames[0].timecode);
 
   for (i = 0; i < m_queued_frames.size(); ++i)
     add_packet(new packet_t(new memory_c(m_queued_frames[i].data, m_queued_frames[i].size, true),
