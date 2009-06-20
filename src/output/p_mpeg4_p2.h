@@ -29,6 +29,7 @@ protected:
   int64_t m_timecodes_generated, m_last_i_p_frame, m_previous_timecode;
   bool m_aspect_ratio_extracted, m_input_is_native, m_output_is_native;
   bool m_size_extracted;
+  mpeg4::p2::config_data_t m_config_data;
 
 public:
   mpeg4_p2_video_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti, double fps, int width, int height, bool input_is_native);

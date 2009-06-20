@@ -29,10 +29,18 @@
 namespace mpeg4 {
   namespace p2 {
     static bool find_vol_header(bit_cursor_c &bits);
-    static bool extract_size_internal(const unsigned char *buffer, int buffer_size, uint32_t &width, uint32_t &height);
+    static bool parse_vol_header(const unsigned char *buffer, int buffer_size, config_data_t &config_data);
     static bool extract_par_internal(const unsigned char *buffer, int buffer_size, uint32_t &par_num, uint32_t &par_den);
   };
 };
+
+mpeg4::p2::config_data_t::config_data_t()
+  : m_time_increment_bits(0)
+  , m_width(0)
+  , m_height(0)
+  , m_width_height_found(false)
+{
+}
 
 static bool
 mpeg4::p2::find_vol_header(bit_cursor_c &bits) {
@@ -59,12 +67,10 @@ mpeg4::p2::find_vol_header(bit_cursor_c &bits) {
 }
 
 static bool
-mpeg4::p2::extract_size_internal(const unsigned char *buffer,
-                                 int buffer_size,
-                                 uint32_t &width,
-                                 uint32_t &height) {
+mpeg4::p2::parse_vol_header(const unsigned char *buffer,
+                            int buffer_size,
+                            mpeg4::p2::config_data_t &config_data) {
   bit_cursor_c bits(buffer, buffer_size);
-  int shape, time_base_den;
 
   if (!find_vol_header(bits))
     return false;
@@ -96,18 +102,18 @@ mpeg4::p2::extract_size_internal(const unsigned char *buffer,
     }
   }
 
-  shape = bits.get_bits(2);
+  int shape = bits.get_bits(2);
   if (3 == shape)               // GRAY_SHAPE
     bits.skip_bits(4);          // video object layer shape extension
 
   bits.skip_bits(1);            // marker
 
-  time_base_den = bits.get_bits(16); // time base den
+  int time_base_den                 = bits.get_bits(16); // time base den
+  config_data.m_time_increment_bits = int_log2(time_base_den - 1) + 1;
+
   bits.skip_bits(1);            // marker
-  if (1 == bits.get_bit()) {    // fixed vop rate
-    int time_increment_bits = int_log2(time_base_den - 1) + 1;
-    bits.skip_bits(time_increment_bits); // time base num
-  }
+  if (1 == bits.get_bit())      // fixed vop rate
+    bits.skip_bits(config_data.m_time_increment_bits); // time base num
 
   if (0 == shape) {             // RECT_SHAPE
     uint32_t tmp_width, tmp_height;
@@ -118,13 +124,13 @@ mpeg4::p2::extract_size_internal(const unsigned char *buffer,
     tmp_height = bits.get_bits(13);
 
     if ((0 != tmp_width) && (0 != tmp_height)) {
-      width = tmp_width;
-      height = tmp_height;
-      return true;
+      config_data.m_width              = tmp_width;
+      config_data.m_height             = tmp_height;
+      config_data.m_width_height_found = true;
     }
   }
 
-  return false;
+  return true;
 }
 
 /** Extract the widht and height from a MPEG4 video frame
@@ -146,7 +152,14 @@ mpeg4::p2::extract_size(const unsigned char *buffer,
                         uint32_t &width,
                         uint32_t &height) {
   try {
-    return extract_size_internal(buffer, buffer_size, width, height);
+    mpeg4::p2::config_data_t config_data;
+    if (!parse_vol_header(buffer, buffer_size, config_data) || !config_data.m_width_height_found)
+      return false;
+
+    width  = config_data.m_width;
+    height = config_data.m_height;
+
+    return true;
   } catch (...) {
     return false;
   }
@@ -239,13 +252,13 @@ mpeg4::p2::extract_par(const unsigned char *buffer,
 void
 mpeg4::p2::find_frame_types(const unsigned char *buffer,
                             int buffer_size,
-                            std::vector<video_frame_t> &frames) {
+                            std::vector<video_frame_t> &frames,
+                            const mpeg4::p2::config_data_t &config_data) {
   mm_mem_io_c bytes(buffer, buffer_size);
-  uint32_t marker, frame_type;
+  uint32_t marker;
   bool frame_found;
   video_frame_t frame;
   std::vector<video_frame_t>::iterator fit;
-  int i;
 
   frames.clear();
   mxverb(3, boost::format("\nmpeg4_frames: start search in %1% bytes\n") % buffer_size);
@@ -274,9 +287,6 @@ mpeg4::p2::find_frame_types(const unsigned char *buffer,
           frame_found = true;
 
         frame.pos = bytes.getFilePointer() - 4;
-        frame_type = bytes.read_uint8() >> 6;
-        frame.type = 0 == frame_type ? FRAME_TYPE_I :
-          2 == frame_type ? FRAME_TYPE_B : FRAME_TYPE_P;
       }
 
       marker = bytes.read_uint32_be();
@@ -284,7 +294,20 @@ mpeg4::p2::find_frame_types(const unsigned char *buffer,
 
     if (frame_found) {
       frame.size = buffer_size - frame.pos;
-      frames.push_back(frame);
+
+      static const frame_type_e s_frame_type_map[4] = { FRAME_TYPE_I, FRAME_TYPE_P, FRAME_TYPE_B, FRAME_TYPE_P };
+      bit_cursor_c bc(&buffer[ frame.pos + 4 ], frame.size);
+
+      frame.type = s_frame_type_map[ bc.get_bits(2) ];
+
+      while (bc.get_bit())
+        ;                       // modulo time base
+      bc.skip_bits(1 + config_data.m_time_increment_bits + 1); // marker, vop time increment, marker
+
+      bool is_coded = bc.get_bit();
+
+      if (is_coded)
+        frames.push_back(frame);
     }
 
   } catch(...) {
@@ -295,14 +318,6 @@ mpeg4::p2::find_frame_types(const unsigned char *buffer,
     for (fit = frames.begin(); fit < frames.end(); fit++)
       mxverb(2, boost::format("'%1%' (%2% at %3%) ") % FRAME_TYPE_TO_CHAR(fit->type) %  fit->size % fit->pos);
     mxverb(2, "\n");
-  }
-
-  i = 0;
-  while (frames.size() > i) {
-    if (frames[i].size < 10)    // dummy frame
-      frames.erase(frames.begin() + i);
-    else
-      ++i;
   }
 }
 
@@ -324,23 +339,19 @@ mpeg4::p2::find_frame_types(const unsigned char *buffer,
 */
 memory_c *
 mpeg4::p2::parse_config_data(const unsigned char *buffer,
-                             int buffer_size) {
-  memory_c *mem;
-  const unsigned char *p, *end;
-  unsigned char *dst;
-  uint32_t marker, size;
-  int vos_offset;
-
-  if (buffer_size < 5)
+                             int buffer_size,
+                             mpeg4::p2::config_data_t &config_data) {
+  if (5 > buffer_size)
     return NULL;
 
   mxverb(3, boost::format("\nmpeg4_config_data: start search in %1% bytes\n") % buffer_size);
 
-  marker = get_uint32_be(buffer) >> 8;
-  p = buffer + 3;
-  end = buffer + buffer_size;
-  vos_offset = -1;
-  size = 0;
+  uint32_t marker          = get_uint32_be(buffer) >> 8;
+  const unsigned char *p   = buffer + 3;
+  const unsigned char *end = buffer + buffer_size;
+  int vos_offset           = -1;
+  int vol_offset           = -1;
+  unsigned int size        = 0;
 
   while (p < end) {
     marker = (marker << 8) | *p;
@@ -351,8 +362,11 @@ mpeg4::p2::parse_config_data(const unsigned char *buffer,
     mxverb(3, boost::format("mpeg4_config_data:   found start code at %1%: 0x%|2$02x|\n") % (unsigned int)(p - buffer - 4) % (marker & 0xff));
     if (MPEGVIDEO_VOS_START_CODE == marker)
       vos_offset = p - 4 - buffer;
-    else if ((MPEGVIDEO_VOP_START_CODE == marker) ||
-             (MPEGVIDEO_GOP_START_CODE == marker)) {
+
+    else if (MPEGVIDEO_VOL_START_CODE == marker)
+      vol_offset = p - 4 - buffer;
+
+    else if ((MPEGVIDEO_VOP_START_CODE == marker) || (MPEGVIDEO_GOP_START_CODE == marker)) {
       size = p - 4 - buffer;
       break;
     }
@@ -361,24 +375,34 @@ mpeg4::p2::parse_config_data(const unsigned char *buffer,
   if (0 == size)
     return NULL;
 
+  if (-1 != vol_offset)
+    try {
+      mpeg4::p2::config_data_t cfg_data;
+      if (parse_vol_header(&buffer[ vol_offset ], buffer_size - vol_offset, cfg_data))
+        config_data.m_time_increment_bits = cfg_data.m_time_increment_bits;
+
+    } catch (...) {
+    }
+
+  memory_c *mem;
   if (-1 == vos_offset) {
-    mem = new memory_c((unsigned char *)safemalloc(size + 5), size + 5, true);
-    dst = mem->get();
+    mem                = new memory_c((unsigned char *)safemalloc(size + 5), size + 5, true);
+    unsigned char *dst = mem->get();
     put_uint32_be(dst, MPEGVIDEO_VOS_START_CODE);
     dst[4] = 0xf5;
     memcpy(dst + 5, buffer, size);
 
   } else {
-    mem = new memory_c((unsigned char *)safemalloc(size), size, true);
-    dst = mem->get();
+    mem                = new memory_c((unsigned char *)safemalloc(size), size, true);
+    unsigned char *dst = mem->get();
     put_uint32_be(dst, MPEGVIDEO_VOS_START_CODE);
     if (3 >= buffer[vos_offset + 4])
       dst[4] = 0xf5;
     else
       dst[4] = buffer[vos_offset + 4];
+
     memcpy(dst + 5, buffer, vos_offset);
-    memcpy(dst + 5 + vos_offset, buffer + vos_offset + 5,
-           size - vos_offset - 5);
+    memcpy(dst + 5 + vos_offset, buffer + vos_offset + 5, size - vos_offset - 5);
   }
 
   mxverb(3, boost::format("mpeg4_config_data:   found GOOD config with size %1%\n") % size);

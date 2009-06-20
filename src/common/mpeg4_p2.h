@@ -21,6 +21,7 @@
 
 /** Start code for a MPEG-4 part 2 (?) video object plain */
 #define MPEGVIDEO_VOP_START_CODE                  0x000001b6
+#define MPEGVIDEO_VOL_START_CODE                  0x00000120
 /** Start code for a MPEG-4 part 2 group of pictures */
 #define MPEGVIDEO_GOP_START_CODE                  0x000001b3
 #define MPEGVIDEO_SYSTEM_HEADER_START_CODE        0x000001bb
@@ -115,13 +116,21 @@ struct video_frame_t {
 
 namespace mpeg4 {
   namespace p2 {
+    struct config_data_t {
+      int m_time_increment_bits;
+      int m_width, m_height;
+      bool m_width_height_found;
+
+      config_data_t();
+    };
+
     bool MTX_DLL_API is_fourcc(const void *fourcc);
     bool MTX_DLL_API is_v3_fourcc(const void *fourcc);
 
     bool MTX_DLL_API extract_par(const unsigned char *buffer, int buffer_size, uint32_t &par_num, uint32_t &par_den);
     bool MTX_DLL_API extract_size(const unsigned char *buffer, int buffer_size, uint32_t &width, uint32_t &height);
-    void MTX_DLL_API find_frame_types(const unsigned char *buffer, int buffer_size, std::vector<video_frame_t> &frames);
-    memory_c * MTX_DLL_API parse_config_data(const unsigned char *buffer, int buffer_size);
+    void MTX_DLL_API find_frame_types(const unsigned char *buffer, int buffer_size, std::vector<video_frame_t> &frames, const config_data_t &config_data);
+    memory_c * MTX_DLL_API parse_config_data(const unsigned char *buffer, int buffer_size, config_data_t &config_data);
   };
 };
 

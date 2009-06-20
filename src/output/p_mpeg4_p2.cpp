@@ -78,7 +78,7 @@ mpeg4_p2_video_packetizer_c::process(packet_cptr packet) {
 int
 mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
   if (NULL == ti.private_data) {
-    memory_c *config_data = mpeg4::p2::parse_config_data(packet->data->get(), packet->data->get_size());
+    memory_c *config_data = mpeg4::p2::parse_config_data(packet->data->get(), packet->data->get_size(), m_config_data);
     if (NULL != config_data) {
       ti.private_data = (unsigned char *)safememdup(config_data->get(), config_data->get_size());
       ti.private_size = config_data->get_size();
@@ -93,7 +93,7 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
   }
 
   std::vector<video_frame_t> frames;
-  mpeg4::p2::find_frame_types(packet->data->get(), packet->data->get_size(), frames);
+  mpeg4::p2::find_frame_types(packet->data->get(), packet->data->get_size(), frames, m_config_data);
 
   // Add a timecode and a duration if they've been given.
   if (-1 != packet->timecode)
