@@ -1,3 +1,9 @@
+2009-06-20  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The frame type detection has been fixed for
+	the native storage mode for MPEG4 part 2 video tracks. Fix for bug
+	298.
+
 2009-06-18  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Made the detection rules for raw MP3, AC3 and
