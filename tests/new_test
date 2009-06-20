@@ -14,7 +14,7 @@ new_file="test-${next_num}${name}.rb"
 cat > "$new_file" <<EOF
 #!/usr/bin/ruby -w
 
-class T_${1} < Test
+class T_${next_num}${name} < Test
   def description
     return "INSERT DESCRIPTION"
   end
