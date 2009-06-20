@@ -1,12 +1,17 @@
-#!/bin/sh
+#!/bin/zsh
 
 if [ "$1" = "" ]; then
   echo 'Name?'
   exit 1
 fi
 
-N=`echo $1 | sed -e 's/\.rb//'`
-cat > test-$N.rb <<EOF
+name="${1%.rb}"
+max_num=$(ls | grep test- | sort -r | head -n 1 | cut -c 6-8)
+let next_num=$max_num+1
+
+new_file="test-${next_num}${name}.rb"
+
+cat > "$new_file" <<EOF
 #!/usr/bin/ruby -w
 
 class T_${1} < Test
@@ -21,3 +26,5 @@ class T_${1} < Test
 end
 
 EOF
+
+echo "New file is $new_file"
