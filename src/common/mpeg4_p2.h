@@ -100,6 +100,9 @@ struct video_frame_t {
       This value is only set for B frames. */
   int64_t fref;
 
+  /** Whether or not this frame is actually coded. */
+  bool is_coded;
+
   video_frame_t()
     : data(NULL)
     , size(0)
@@ -110,6 +113,7 @@ struct video_frame_t {
     , duration(0)
     , bref(0)
     , fref(0)
+    , is_coded(false)
   {
   }
 };

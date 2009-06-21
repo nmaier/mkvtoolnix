@@ -35,7 +35,6 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *p_reader,
                             bool input_is_native)
   : video_packetizer_c(p_reader, p_ti, MKV_V_MPEG4_ASP, fps, width, height)
   , m_timecodes_generated(0)
-  , m_last_i_p_frame(-1)
   , m_previous_timecode(0)
   , m_aspect_ratio_extracted(false)
   , m_input_is_native(input_is_native)
@@ -111,19 +110,15 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
     // Maybe we can flush queued frames now. But only if we don't have
     // a B frame.
     if (FRAME_TYPE_B != frame->type)
-      flush_frames_maybe(frame->type);
+      flush_frames(false);
 
-    // Add a timecode and a duration for each frame if none have been
-    // given and we have a fixed number of FPS.
-    if (-1 == packet->timecode) {
-      m_available_timecodes.push_back((int64_t)(m_timecodes_generated * 1000000000.0 / m_fps));
-      ++m_timecodes_generated;
-    }
-    if (-1 == packet->duration)
-      m_available_durations.push_back((int64_t)(1000000000.0 / m_fps));
+    frame->data     = (unsigned char *)safememdup(packet->data->get() + frame->pos, frame->size);
+    frame->timecode = -1;
 
-    frame->data = (unsigned char *)safememdup(packet->data->get() + frame->pos, frame->size);
-    m_queued_frames.push_back(*frame);
+    if (FRAME_TYPE_B == frame->type)
+      m_b_frames.push_back(*frame);
+    else
+      m_ref_frames.push_back(*frame);
   }
 
   m_previous_timecode = m_available_timecodes.back();
@@ -170,26 +165,6 @@ mpeg4_p2_video_packetizer_c::process_native(packet_cptr packet) {
   return FILE_STATUS_MOREDATA;
 }
 
-void
-mpeg4_p2_video_packetizer_c::flush_frames_maybe(frame_type_e next_frame) {
-  if ((0 == m_queued_frames.size()) || (FRAME_TYPE_B == next_frame))
-    return;
-
-  if ((FRAME_TYPE_I == next_frame) || (FRAME_TYPE_P == m_queued_frames[0].type)) {
-    flush_frames(false);
-    return;
-  }
-
-  int num_bframes = 0;
-  int i;
-  for (i = 0; m_queued_frames.size() > i; ++i)
-    if (FRAME_TYPE_B == m_queued_frames[i].type)
-      ++num_bframes;
-
-  if ((0 < num_bframes) || (2 <= m_queued_frames.size()))
-    flush_frames(false);
-}
-
 /** \brief Handle frame sequences in which too few timecodes are available
 
    This function gets called if mkvmerge wants to flush its frame queue
@@ -207,108 +182,76 @@ mpeg4_p2_video_packetizer_c::flush_frames_maybe(frame_type_e next_frame) {
       end of the file is reached. In this case a dummy frame is missing.
 
    Both cases can be solved if the source file provides a FPS for this
-   track. Otherwise such frames have to be dropped.
+   track. The other case is not supported.
 */
 void
-mpeg4_p2_video_packetizer_c::handle_missing_timecodes(bool end_of_file) {
+mpeg4_p2_video_packetizer_c::generate_timecode_and_duration() {
   if (0.0 < m_fps) {
-    while (m_available_timecodes.size() < m_queued_frames.size()) {
-      m_previous_timecode = (int64_t)(m_previous_timecode +  1000000000.0 / m_fps);
-      m_available_timecodes.push_back(m_previous_timecode);
-      mxverb(3, boost::format("mpeg4_p2::flush_frames(): Needed new timecode %1%\n") % m_previous_timecode);
-    }
-
-    while (m_available_durations.size() < m_queued_frames.size()) {
-      m_available_durations.push_back((int64_t)(1000000000.0 / m_fps));
-      mxverb(3, boost::format("mpeg4_p2::flush_frames(): Needed new duration %1%\n") % m_available_durations.back());
-    }
-
-    return;
+    // TODO: error
+    mxexit(1);
   }
 
-  int num_dropped = 0;
-  if (m_available_timecodes.size() < m_available_durations.size()) {
-    num_dropped = m_queued_frames.size() - m_available_timecodes.size();
-    m_available_durations.erase(m_available_durations.begin() + m_available_timecodes.size(), m_available_durations.end());
-
-  } else {
-    num_dropped = m_queued_frames.size() - m_available_durations.size();
-    m_available_timecodes.erase(m_available_timecodes.begin() + m_available_durations.size(), m_available_timecodes.end());
+  if (m_available_timecodes.empty()) {
+    m_previous_timecode = (int64_t)(m_previous_timecode +  1000000000.0 / m_fps);
+    m_available_timecodes.push_back(m_previous_timecode);
+    mxverb(3, boost::format("mpeg4_p2::flush_frames(): Needed new timecode %1%\n") % m_previous_timecode);
   }
 
-  int i;
-  for (i = m_available_timecodes.size(); m_queued_frames.size() > i; ++i)
-    safefree(m_queued_frames[i].data);
-  m_queued_frames.erase(m_queued_frames.begin() + m_available_timecodes.size(), m_queued_frames.end());
+  if (m_available_durations.empty()) {
+    m_available_durations.push_back((int64_t)(1000000000.0 / m_fps));
+    mxverb(3, boost::format("mpeg4_p2::flush_frames(): Needed new duration %1%\n") % m_available_durations.back());
+  }
+}
 
-  int64_t timecode = m_available_timecodes.empty() ? 0 : m_available_timecodes.front();
+void
+mpeg4_p2_video_packetizer_c::get_next_timecode_and_duration(int64_t &timecode,
+                                                            int64_t &duration) {
+  if (m_available_timecodes.empty() || m_available_durations.empty())
+    generate_timecode_and_duration();
 
-  mxwarn_tid(ti.fname, ti.id,
-             boost::format(Y("During MPEG-4 part 2 B frame handling: The frame queue contains more frames than timecodes are available that "
-                             "can be assigned to them (reason: %1%). Therefore %2% frame(s) had to be dropped. "
-                             "The video might be broken around timecode %3%.\n"))
-             % (end_of_file ? "The end of the source file was encountered." : "An unsupported sequence of frames was encountered.")
-             % num_dropped % format_timecode(timecode, 3));
+  timecode = m_available_timecodes.front();
+  duration = m_available_durations.front();
+
+  m_available_timecodes.pop_front();
+  m_available_durations.pop_front();
 }
 
 void
 mpeg4_p2_video_packetizer_c::flush_frames(bool end_of_file) {
-  if (m_queued_frames.empty())
+  if (m_ref_frames.empty())
     return;
 
-  if ((m_available_timecodes.size() < m_queued_frames.size()) ||
-      (m_available_durations.size() < m_queued_frames.size()))
-    handle_missing_timecodes(end_of_file);
+  if (m_ref_frames.size() == 1) {
+    video_frame_t &frame = m_ref_frames.front();
 
-  // Very first frame?
-  if (-1 == m_last_i_p_frame) {
-    video_frame_t &frame = m_queued_frames.front();
-    m_last_i_p_frame     = m_available_timecodes[0];
-
-    add_packet(new packet_t(new memory_c(frame.data, frame.size, true), m_last_i_p_frame, m_available_durations[0], -1, -1));
-    m_available_timecodes.erase(m_available_timecodes.begin(), m_available_timecodes.begin() + 1);
-    m_available_durations.erase(m_available_durations.begin(), m_available_durations.begin() + 1);
-    m_queued_frames.pop_front();
-    flush_frames(end_of_file);
-
+    // The first frame in the file. Only apply the timecode, nothing else.
+    if (-1 == frame.timecode) {
+      get_next_timecode_and_duration(frame.timecode, frame.duration);
+      add_packet(new packet_t(new memory_c(frame.data, frame.size, true), frame.timecode, frame.duration));
+    }
     return;
   }
 
-  m_queued_frames[0].timecode = m_available_timecodes[m_queued_frames.size() - 1];
-  m_queued_frames[0].duration = m_available_durations[m_queued_frames.size() - 1];
-  m_queued_frames[0].fref     = -1;
+  video_frame_t &bref_frame = m_ref_frames.front();
+  video_frame_t &fref_frame = m_ref_frames.back();
+  bool drop_nvops           = false; // TODO: create a hack for this.
 
-  if (FRAME_TYPE_I == m_queued_frames[0].type)
-    m_queued_frames[0].bref   = -1;
-  else
-    m_queued_frames[0].bref   = m_last_i_p_frame;
+  std::deque<video_frame_t>::iterator frame;
+  mxforeach(frame, m_b_frames)
+    get_next_timecode_and_duration(frame->timecode, frame->duration);
+  get_next_timecode_and_duration(fref_frame.timecode, fref_frame.duration);
 
-  int i;
-  for (i = 1; m_queued_frames.size() > i; ++i) {
-    m_queued_frames[i].timecode = m_available_timecodes[i - 1];
-    m_queued_frames[i].duration = m_available_durations[i - 1];
-    m_queued_frames[i].fref     = FRAME_TYPE_P == m_queued_frames[i].type ? -1 : m_queued_frames[0].timecode;
-    m_queued_frames[i].bref     = m_last_i_p_frame;
+  if (fref_frame.is_coded || !drop_nvops)
+    add_packet(new packet_t(new memory_c(fref_frame.data, fref_frame.size, true), fref_frame.timecode, fref_frame.duration, FRAME_TYPE_P == fref_frame.type ? bref_frame.timecode : VFT_IFRAME));
+  mxforeach(frame, m_b_frames)
+    if (frame->is_coded || !drop_nvops)
+      add_packet(new packet_t(new memory_c(frame->data, frame->size, true), frame->timecode, frame->duration, bref_frame.timecode, fref_frame.timecode));
 
-    if (FRAME_TYPE_P == m_queued_frames[i].type)
-      m_last_i_p_frame = m_available_timecodes[i - 1];
-  }
+  m_ref_frames.pop_front();
+  m_b_frames.clear();
 
-  m_last_i_p_frame = std::max(m_last_i_p_frame, m_queued_frames[0].timecode);
-
-  for (i = 0; i < m_queued_frames.size(); ++i)
-    add_packet(new packet_t(new memory_c(m_queued_frames[i].data, m_queued_frames[i].size, true),
-                            m_queued_frames[i].timecode, m_queued_frames[i].duration, m_queued_frames[i].bref, m_queued_frames[i].fref));
-
-  m_available_timecodes.erase(m_available_timecodes.begin(), m_available_timecodes.begin() + m_queued_frames.size());
-  m_available_durations.erase(m_available_durations.begin(), m_available_durations.begin() + m_queued_frames.size());
-
-  if (1 < m_available_timecodes.size())
-    m_available_timecodes.erase(m_available_timecodes.begin(), m_available_timecodes.end() - 1);
-  if (1 < m_available_durations.size())
-    m_available_durations.erase(m_available_durations.begin(), m_available_durations.end() - 1);
-
-  m_queued_frames.clear();
+  if (end_of_file)
+    m_ref_frames.clear();
 }
 
 void

@@ -31,6 +31,7 @@ namespace mpeg4 {
     static bool find_vol_header(bit_cursor_c &bits);
     static bool parse_vol_header(const unsigned char *buffer, int buffer_size, config_data_t &config_data);
     static bool extract_par_internal(const unsigned char *buffer, int buffer_size, uint32_t &par_num, uint32_t &par_den);
+    static void parse_frame(video_frame_t &frame, const unsigned char *buffer, const mpeg4::p2::config_data_t &config_data);
   };
 };
 
@@ -235,6 +236,23 @@ mpeg4::p2::extract_par(const unsigned char *buffer,
   }
 }
 
+static void
+mpeg4::p2::parse_frame(video_frame_t &frame,
+                       const unsigned char *buffer,
+                       const mpeg4::p2::config_data_t &config_data) {
+  static const frame_type_e s_frame_type_map[4] = { FRAME_TYPE_I, FRAME_TYPE_P, FRAME_TYPE_B, FRAME_TYPE_P };
+
+  bit_cursor_c bc(&buffer[ frame.pos + 4 ], frame.size);
+
+  frame.type = s_frame_type_map[ bc.get_bits(2) ];
+
+  while (bc.get_bit())
+    ;                           // modulo time base
+  bc.skip_bits(1 + config_data.m_time_increment_bits + 1); // marker, vop time increment, marker
+
+  frame.is_coded = bc.get_bit();
+}
+
 /** Find frame boundaries and frame types in a packed video frame
 
    This function searches a buffer containing one or more MPEG4 video frames
@@ -254,23 +272,18 @@ mpeg4::p2::find_frame_types(const unsigned char *buffer,
                             int buffer_size,
                             std::vector<video_frame_t> &frames,
                             const mpeg4::p2::config_data_t &config_data) {
-  mm_mem_io_c bytes(buffer, buffer_size);
-  uint32_t marker;
-  bool frame_found;
-  video_frame_t frame;
-  std::vector<video_frame_t>::iterator fit;
-
   frames.clear();
   mxverb(3, boost::format("\nmpeg4_frames: start search in %1% bytes\n") % buffer_size);
 
   if (4 > buffer_size)
     return;
 
-  frame.pos = 0;
-  frame_found = false;
-
   try {
-    marker = bytes.read_uint32_be();
+    mm_mem_io_c bytes(buffer, buffer_size);
+    uint32_t marker  = bytes.read_uint32_be();
+    bool frame_found = false;
+    video_frame_t frame;
+
     while (!bytes.eof()) {
       if ((marker & 0xffffff00) != 0x00000100) {
         marker <<= 8;
@@ -282,6 +295,7 @@ mpeg4::p2::find_frame_types(const unsigned char *buffer,
       if (marker == MPEGVIDEO_VOP_START_CODE) {
         if (frame_found) {
           frame.size = bytes.getFilePointer() - 4 - frame.pos;
+          parse_frame(frame, buffer, config_data);
           frames.push_back(frame);
         } else
           frame_found = true;
@@ -289,25 +303,16 @@ mpeg4::p2::find_frame_types(const unsigned char *buffer,
         frame.pos = bytes.getFilePointer() - 4;
       }
 
+      if (4 > (buffer_size - bytes.getFilePointer()))
+        break;
+
       marker = bytes.read_uint32_be();
     }
 
     if (frame_found) {
       frame.size = buffer_size - frame.pos;
-
-      static const frame_type_e s_frame_type_map[4] = { FRAME_TYPE_I, FRAME_TYPE_P, FRAME_TYPE_B, FRAME_TYPE_P };
-      bit_cursor_c bc(&buffer[ frame.pos + 4 ], frame.size);
-
-      frame.type = s_frame_type_map[ bc.get_bits(2) ];
-
-      while (bc.get_bit())
-        ;                       // modulo time base
-      bc.skip_bits(1 + config_data.m_time_increment_bits + 1); // marker, vop time increment, marker
-
-      bool is_coded = bc.get_bit();
-
-      if (is_coded)
-        frames.push_back(frame);
+      parse_frame(frame, buffer, config_data);
+      frames.push_back(frame);
     }
 
   } catch(...) {
@@ -315,8 +320,9 @@ mpeg4::p2::find_frame_types(const unsigned char *buffer,
 
   if (2 <= verbose) {
     mxverb(2, boost::format("mpeg4_frames:   summary: found %1% frames ") % frames.size());
+    std::vector<video_frame_t>::iterator fit;
     for (fit = frames.begin(); fit < frames.end(); fit++)
-      mxverb(2, boost::format("'%1%' (%2% at %3%) ") % FRAME_TYPE_TO_CHAR(fit->type) %  fit->size % fit->pos);
+      mxverb(2, boost::format("'%1%' (size %2% coded %4% at %3%) ") % FRAME_TYPE_TO_CHAR(fit->type) %  fit->size % fit->pos % fit->is_coded);
     mxverb(2, "\n");
   }
 }
