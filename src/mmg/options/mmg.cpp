@@ -55,12 +55,7 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   : wxPanel(parent)
   , m_options(options)
 {
-  wxStaticBox *sb_mmg;
-
   // Create the controls.
-
-  sb_mmg = new wxStaticBox(this, -1, Z("mmg options"));
-
   cb_autoset_output_filename = new wxCheckBox(this, ID_CB_AUTOSET_OUTPUT_FILENAME, Z("Auto-set output filename"));
   cb_autoset_output_filename->SetToolTip(TIP("If checked mmg will automatically set the output filename "
                                              "if it hasn't been set already. This happens when you add "
@@ -161,74 +156,75 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
 
   // Create the layout.
 
-  wxStaticBoxSizer *siz_sb;
-  wxBoxSizer *siz_line;
-  int left_offset;
+  wxBoxSizer *siz_all = new wxBoxSizer(wxVERTICAL);
+  siz_all->AddSpacer(5);
 
-  siz_sb = new wxStaticBoxSizer(sb_mmg, wxVERTICAL);
-  siz_sb->AddSpacer(5);
+  siz_all->Add(new wxStaticText(this, wxID_ANY, Z("mmg options")), 0, wxGROW | wxLEFT | wxRIGHT, 5);
+  siz_all->AddSpacer(5);
+  siz_all->Add(new wxStaticLine(this),                             0, wxGROW | wxLEFT | wxRIGHT, 5);
+  siz_all->AddSpacer(5);
 
 #if defined(HAVE_LIBINTL_H)
-  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  wxBoxSizer *siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->Add(st_ui_language, 0, wxALIGN_CENTER_VERTICAL);
   siz_line->Add(cob_ui_language, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
 
-  siz_sb->Add(siz_line, 0, wxGROW | wxLEFT, 5);
-  siz_sb->AddSpacer(5);
+  siz_all->Add(siz_line, 0, wxGROW | wxLEFT, 5);
+  siz_all->AddSpacer(5);
 #endif  // HAVE_LIBINTL_H
 
-  siz_sb->Add(cb_autoset_output_filename, 0, wxLEFT, 5);
-  siz_sb->AddSpacer(5);
+  siz_all->Add(cb_autoset_output_filename, 0, wxLEFT, 5);
+  siz_all->AddSpacer(5);
 
 #if defined(SYS_WINDOWS)
-  left_offset = 16;
+  int left_offset = 16;
 #else
-  left_offset = 24;
+  int left_offset = 24;
 #endif
 
-  siz_sb->Add(rb_odm_input_file, 0, wxLEFT, left_offset);
-  siz_sb->AddSpacer(5);
+  siz_all->Add(rb_odm_input_file, 0, wxLEFT, left_offset);
+  siz_all->AddSpacer(5);
 
-  siz_sb->Add(rb_odm_previous, 0, wxLEFT, left_offset);
-  siz_sb->AddSpacer(5);
+  siz_all->Add(rb_odm_previous, 0, wxLEFT, left_offset);
+  siz_all->AddSpacer(5);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->Add(rb_odm_fixed, 0, wxALIGN_CENTER_VERTICAL, 0);
   siz_line->Add(tc_output_directory, 1, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
   siz_line->Add(b_browse_output_directory, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
 
-  siz_sb->Add(siz_line, 0, wxGROW | wxLEFT, left_offset);
-  siz_sb->AddSpacer(5);
+  siz_all->Add(siz_line, 0, wxGROW | wxLEFT, left_offset);
+  siz_all->AddSpacer(5);
 
-  siz_sb->Add(cb_ask_before_overwriting, 0, wxLEFT, 5);
-  siz_sb->AddSpacer(5);
+  siz_all->Add(cb_ask_before_overwriting, 0, wxLEFT, 5);
+  siz_all->AddSpacer(5);
 
-  siz_sb->Add(cb_set_delay_from_filename, 0, wxLEFT, 5);
-  siz_sb->AddSpacer(5);
+  siz_all->Add(cb_set_delay_from_filename, 0, wxLEFT, 5);
+  siz_all->AddSpacer(5);
 
-  siz_sb->Add(cb_filenew_after_add_to_jobqueue, 0, wxLEFT, 5);
-  siz_sb->AddSpacer(5);
+  siz_all->Add(cb_filenew_after_add_to_jobqueue, 0, wxLEFT, 5);
+  siz_all->AddSpacer(5);
 
-  siz_sb->Add(cb_filenew_after_successful_mux, 0, wxLEFT, 5);
-  siz_sb->AddSpacer(5);
+  siz_all->Add(cb_filenew_after_successful_mux, 0, wxLEFT, 5);
+  siz_all->AddSpacer(5);
 
 #if defined(SYS_WINDOWS)
-  siz_sb->Add(cb_on_top, 0, wxLEFT, 5);
-  siz_sb->AddSpacer(5);
+  siz_all->Add(cb_on_top, 0, wxLEFT, 5);
+  siz_all->AddSpacer(5);
 #else
   cb_on_top->Show(false);
 #endif
 
-  siz_sb->Add(cb_warn_usage, 0, wxLEFT, 5);
-  siz_sb->AddSpacer(5);
+  siz_all->Add(cb_warn_usage, 0, wxLEFT, 5);
+  siz_all->AddSpacer(5);
 
-  siz_sb->Add(cb_gui_debugging, 0, wxLEFT, 5);
-  siz_sb->AddSpacer(5);
+  siz_all->Add(cb_gui_debugging, 0, wxLEFT, 5);
+  siz_all->AddSpacer(5);
 
-  SetSizer(siz_sb);
+  SetSizer(siz_all);
 
-  siz_sb->SetMinSize(wxSize(600, -1));
-  siz_sb->SetSizeHints(this);
+  siz_all->SetMinSize(wxSize(600, -1));
+  siz_all->SetSizeHints(this);
 }
 
 void

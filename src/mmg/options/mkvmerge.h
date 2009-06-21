@@ -34,7 +34,8 @@ public:
 
   mmg_options_t &m_options;
 
-  translation_table_c cob_priority_translations;
+public:
+  static translation_table_c cob_priority_translations;
 
 public:
   optdlg_mkvmerge_tab(wxWindow *parent, mmg_options_t &options);

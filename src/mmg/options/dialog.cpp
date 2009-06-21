@@ -44,7 +44,7 @@ options_dialog::options_dialog(wxWindow *parent,
   tab_mmg      = new optdlg_mmg_tab(nb_tabs, options);
   tab_mkvmerge = new optdlg_mkvmerge_tab(nb_tabs, options);
 
-  nb_tabs->AddPage(tab_mmg, Z("GUI"));
+  nb_tabs->AddPage(tab_mmg, Z("mmg"));
   nb_tabs->AddPage(tab_mkvmerge, Z("mkvmerge"));
 
   wxBoxSizer *siz_all = new wxBoxSizer(wxVERTICAL);

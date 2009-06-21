@@ -34,14 +34,14 @@
 #include "mmg/mmg.h"
 #include "mmg/options/mkvmerge.h"
 
+translation_table_c optdlg_mkvmerge_tab::cob_priority_translations;
+
 optdlg_mkvmerge_tab::optdlg_mkvmerge_tab(wxWindow *parent,
                                          mmg_options_t &options)
   : wxPanel(parent)
   , m_options(options)
 {
-  wxStaticBox *sb_mkvmerge;
-  wxStaticText *st_priority, *st_mkvmerge;
-  wxButton *b_browse;
+  // Setup static variables.
 
   if (cob_priority_translations.entries.empty()) {
 #ifdef SYS_WINDOWS
@@ -55,14 +55,12 @@ optdlg_mkvmerge_tab::optdlg_mkvmerge_tab(wxWindow *parent,
 
   // Create the controls.
 
-  sb_mkvmerge = new wxStaticBox(this, -1, Z("mkvmerge options"));
+  wxStaticText *st_mkvmerge = new wxStaticText(this, -1, Z("mkvmerge executable"));
+  tc_mkvmerge               = new wxTextCtrl(this, ID_TC_MKVMERGE, m_options.mkvmerge, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+  wxButton *b_browse        = new wxButton(this, ID_B_BROWSEMKVMERGE, Z("Browse"));
 
-  st_mkvmerge  = new wxStaticText(this, -1, Z("mkvmerge executable"));
-  tc_mkvmerge  = new wxTextCtrl(this, ID_TC_MKVMERGE, m_options.mkvmerge, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-  b_browse     = new wxButton(this, ID_B_BROWSEMKVMERGE, Z("Browse"));
-
-  st_priority  = new wxStaticText(this, -1, Z("Process priority:"));
-  cob_priority = new wxMTX_COMBOBOX_TYPE(this, ID_COB_PRIORITY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  wxStaticText *st_priority = new wxStaticText(this, -1, Z("Process priority:"));
+  cob_priority              = new wxMTX_COMBOBOX_TYPE(this, ID_COB_PRIORITY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
 
   cob_priority->SetToolTip(TIP("Sets the priority that mkvmerge will run with."));
 
@@ -76,12 +74,16 @@ optdlg_mkvmerge_tab::optdlg_mkvmerge_tab(wxWindow *parent,
 
   // Create the layout.
 
-  wxStaticBoxSizer *siz_sb;
-  wxFlexGridSizer *siz_fg;
+  wxBoxSizer *siz_all = new wxBoxSizer(wxVERTICAL);
 
-  siz_sb = new wxStaticBoxSizer(sb_mkvmerge, wxVERTICAL);
+  siz_all->AddSpacer(5);
 
-  siz_fg = new wxFlexGridSizer(3);
+  siz_all->Add(new wxStaticText(this, wxID_ANY, Z("mkvmerge options")), 0, wxGROW | wxLEFT | wxRIGHT, 5);
+  siz_all->AddSpacer(5);
+  siz_all->Add(new wxStaticLine(this),                                  0, wxGROW | wxLEFT | wxRIGHT, 5);
+  siz_all->AddSpacer(5);
+
+  wxFlexGridSizer *siz_fg = new wxFlexGridSizer(3);
   siz_fg->AddGrowableCol(1);
 
   siz_fg->Add(st_mkvmerge, 0, wxALIGN_CENTER_VERTICAL, 0);
@@ -91,13 +93,13 @@ optdlg_mkvmerge_tab::optdlg_mkvmerge_tab(wxWindow *parent,
   siz_fg->Add(st_priority, 0, wxALIGN_CENTER_VERTICAL, 0);
   siz_fg->Add(cob_priority, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
 
-  siz_sb->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT, 5);
-  siz_sb->AddSpacer(5);
+  siz_all->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT, 5);
+  siz_all->AddSpacer(5);
 
-  SetSizer(siz_sb);
+  SetSizer(siz_all);
 
-  siz_sb->SetMinSize(wxSize(600, -1));
-  siz_sb->SetSizeHints(this);
+  siz_all->SetMinSize(wxSize(600, -1));
+  siz_all->SetSizeHints(this);
 }
 
 void
