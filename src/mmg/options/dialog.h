@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __OPTIONS_DIALOG_H
-#define __OPTIONS_DIALOG_H
+#ifndef __MMG_OPTIONS_DIALOG_H
+#define __MMG_OPTIONS_DIALOG_H
 
 #include "common/os.h"
 
@@ -78,4 +78,4 @@ public:
   wxString get_selected_priority();
 };
 
-#endif // __OPTIONS_DIALOG_H
+#endif // __MMG_OPTIONS_DIALOG_H

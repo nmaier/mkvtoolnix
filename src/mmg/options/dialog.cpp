@@ -32,7 +32,7 @@
 #include "common/wx.h"
 #include "mmg/mmg_dialog.h"
 #include "mmg/mmg.h"
-#include "mmg/options_dialog.h"
+#include "mmg/options/dialog.h"
 
 struct locale_sorter_t {
   wxString display_val;

@@ -48,7 +48,7 @@
 #include "mmg/mmg.h"
 #include "mmg/mmg_dialog.h"
 #include "mmg/mux_dialog.h"
-#include "mmg/options_dialog.h"
+#include "mmg/options/dialog.h"
 #include "mmg/tabs/attachments.h"
 #include "mmg/tabs/chapters.h"
 #include "mmg/tabs/input.h"
