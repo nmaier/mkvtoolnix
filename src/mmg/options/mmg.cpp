@@ -222,9 +222,6 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   siz_all->AddSpacer(5);
 
   SetSizer(siz_all);
-
-  siz_all->SetMinSize(wxSize(600, -1));
-  siz_all->SetSizeHints(this);
 }
 
 void
