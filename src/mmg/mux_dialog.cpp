@@ -120,7 +120,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
     if ((*arg_list)[i].Length() == 0)
       opt_file->Write(wxT("#EMPTY#"));
     else {
-      arg_utf8 = to_utf8((*arg_list)[i]);
+      arg_utf8 = wxMB((*arg_list)[i]);
       opt_file->Write(arg_utf8.c_str(), arg_utf8.length());
     }
     opt_file->Write(wxT("\n"));

@@ -1252,7 +1252,7 @@ tab_chapters::on_set_default_values(wxCommandEvent &evt) {
     return;
 
   language = extract_language_code(dlg.cob_language->GetValue());
-  if (!is_valid_iso639_2_code(to_utf8(language.c_str()).c_str())) {
+  if (!is_valid_iso639_2_code(wxMB(language))) {
     wxMessageBox(wxString::Format(Z("The language '%s' is not a valid language and cannot be selected."), language.c_str()), Z("Invalid language selected"), wxICON_ERROR | wxOK);
     return;
   }
@@ -1338,7 +1338,7 @@ tab_chapters::on_set_values(wxCommandEvent &evt) {
 
   if (dlg.cb_language->IsChecked()) {
     s = extract_language_code(dlg.cob_language->GetValue());
-    if (!is_valid_iso639_2_code(to_utf8(s.c_str()).c_str())) {
+    if (!is_valid_iso639_2_code(wxMB(s))) {
       wxMessageBox(wxString::Format(Z("The language '%s' is not a valid language and cannot be selected."), s.c_str()), Z("Invalid language selected"), wxICON_ERROR | wxOK);
       return;
     }

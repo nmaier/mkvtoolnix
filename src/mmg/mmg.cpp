@@ -253,24 +253,6 @@ strip(std::vector<wxString> &v,
   return v;
 }
 
-std::string
-to_utf8(const wxString &src) {
-  std::string retval;
-
-  int len    = wxConvUTF8.WC2MB(NULL, src.c_str(), 0);
-  char *utf8 = (char *)safemalloc(len + 1);
-  wxConvUTF8.WC2MB(utf8, src.c_str(), len + 1);
-  retval = utf8;
-  safefree(utf8);
-
-  return retval;
-}
-
-wxString
-from_utf8(const wxString &src) {
-  return src;
-}
-
 wxString
 unescape(const wxString &src) {
   wxString dst;
@@ -2093,14 +2075,14 @@ mmg_app::OnInit() {
   }
   cfg->SetPath(wxT("/chapter_editor"));
   cfg->Read(wxT("default_language"), &k, wxT("und"));
-  g_default_chapter_language = to_utf8(k).c_str();
+  g_default_chapter_language = wxMB(k);
   index = map_to_iso639_2_code(g_default_chapter_language.c_str());
   if (-1 == index)
     g_default_chapter_language = "und";
   else
     g_default_chapter_language = iso639_languages[index].iso639_2_code;
   if (cfg->Read(wxT("default_country"), &k) && (0 < k.length()))
-    g_default_chapter_country = to_utf8(k).c_str();
+    g_default_chapter_country = wxMB(k);
   if (!is_valid_cctld(g_default_chapter_country.c_str()))
     g_default_chapter_country = "";
 

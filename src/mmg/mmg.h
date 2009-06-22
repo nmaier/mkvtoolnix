@@ -214,8 +214,6 @@ std::vector<wxString> split(const wxString &src, const wxString &pattern,
 wxString join(const wxString &pattern, std::vector<wxString> &strings);
 wxString &strip(wxString &s, bool newlines = false);
 std::vector<wxString> & strip(std::vector<wxString> &v, bool newlines = false);
-std::string to_utf8(const wxString &src);
-wxString from_utf8(const wxString &src);
 wxString UTFstring_to_wxString(const UTFstring &u);
 wxString unescape(const wxString &src);
 wxString format_date_time(time_t date_time);
