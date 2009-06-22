@@ -69,18 +69,6 @@ std::vector<mmg_track_t *> tracks;
 std::map<wxString, wxString> capabilities;
 std::vector<job_t> jobs;
 
-void
-mmg_options_t::validate() {
-  if (   (ODM_FROM_FIRST_INPUT_FILE != output_directory_mode)
-      && (ODM_PREVIOUS              != output_directory_mode)
-      && (ODM_FIXED                 != output_directory_mode))
-    output_directory_mode = ODM_FROM_FIRST_INPUT_FILE;
-
-  if (   (priority != wxU("highest")) && (priority != wxU("higher")) && (priority != wxU("normal"))
-      && (priority != wxU("lower"))   && (priority != wxU("lowest")))
-    priority = wxU("normal");
-}
-
 wxString
 UTFstring_to_wxString(const UTFstring &u) {
   return wxString(u.c_str());
