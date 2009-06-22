@@ -114,10 +114,10 @@ iconv_charset_converter_c::iconv_charset_converter_c(const std::string &charset)
 }
 
 iconv_charset_converter_c::~iconv_charset_converter_c() {
-  if (reinterpret_cast<iconv_t>(-1) == m_to_utf8_handle)
+  if (reinterpret_cast<iconv_t>(-1) != m_to_utf8_handle)
     iconv_close(m_to_utf8_handle);
 
-  if (reinterpret_cast<iconv_t>(-1) == m_from_utf8_handle)
+  if (reinterpret_cast<iconv_t>(-1) != m_from_utf8_handle)
     iconv_close(m_from_utf8_handle);
 }
 

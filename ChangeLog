@@ -1,3 +1,9 @@
+2009-06-22  Moritz Bunkus  <moritz@bunkus.org>
+
+	* all: bug fix: The programs do not try to close iconv handles -1
+	anymore which resulted in segfault during uninitialization on some
+	platforms (e.g. FreeBSD, Mac OS X). Fix for bug 412.
+
 2009-06-21  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Complete rewrite of the code for the native
