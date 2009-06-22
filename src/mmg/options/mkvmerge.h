@@ -46,4 +46,4 @@ public:
   wxString get_selected_priority();
 };
 
-#endif // __MMG_OPTIONS_DIALOG_H
+#endif // __MMG_OPTIONS_MKVMERGE_H

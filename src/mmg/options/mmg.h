@@ -72,4 +72,4 @@ public:
   std::string get_selected_ui_language();
 };
 
-#endif // __MMG_OPTIONS_DIALOG_H
+#endif // __MMG_OPTIONS_MMG_H
