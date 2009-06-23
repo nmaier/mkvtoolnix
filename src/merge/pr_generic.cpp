@@ -778,7 +778,7 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
   // 'timecode < safety_last_timecode' may only occur for B frames. In this
   // case we have the coding order, e.g. IPB1B2 and the timecodes
   // I: 0, P: 120, B1: 40, B2: 80.
-  if (!relaxed_timecode_checking && (pack->timecode < safety_last_timecode) && (0 > pack->fref) && hack_engaged(ENGAGE_ENABLE_TIMECODE_WARNING)) {
+  if (!relaxed_timecode_checking && (pack->timecode < safety_last_timecode) && (0 > pack->fref) && hack_engaged(ENGAGE_ENABLE_TIMECODE_WARNING)3) {
     if (track_audio == htrack_type) {
       int64_t needed_timecode_offset  = safety_last_timecode + safety_last_duration - pack->timecode;
       correction_timecode_offset     += needed_timecode_offset;
@@ -798,7 +798,6 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
                                  "then either is the source file badly mastered, or mkvmerge contains a bug. "
                                  "In this case you should contact the author Moritz Bunkus <moritz@bunkus.org>.\n"))
                  % ((needed_timecode_offset + 500000) / 1000000));
-      mxinfo(boost::format("tcold %1% tcnew %2%\n") % format_timecode(pack->timecode - needed_timecode_offset) % format_timecode(pack->timecode));
 
     } else
       mxwarn_tid(ti.fname, ti.id,
