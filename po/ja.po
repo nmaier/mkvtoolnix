@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2009-06-22 22:06+0200\n"
+"PO-Revision-Date: 2009-06-24 01:00+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -1602,7 +1602,7 @@ msgstr "mkvinfoについて"
 
 #: src/mmg/mmg_dialog.cpp:602
 msgid "About mkvmerge's GUI"
-msgstr "mkvmerge GUIについて"
+msgstr "mkvmergeのGUIについて"
 
 #: src/mmg/cli_options_dlg.cpp:52
 msgid "Add"
@@ -1944,7 +1944,7 @@ msgstr "mkvmergeが表示時間フィールドを含んでいないVobSub字幕�
 
 #: src/mmg/mmg_dialog.cpp:93
 msgid "Change mmg's preferences and options"
-msgstr "mkvmerge GUIのオプションを設定します"
+msgstr "mmgのオプションを設定します"
 
 #: src/mmg/tabs/chapters.cpp:104
 msgid "Change the default values"
@@ -1952,7 +1952,7 @@ msgstr "デフォルト値を変更します"
 
 #: src/mmg/options/languages.cpp:88
 msgid "Changes to this list do not take effect until mmg is restarted."
-msgstr ""
+msgstr "このリストへの変更はmmgを再起動するまで反映されません。"
 
 #: src/mmg/options/mmg.cpp:275
 msgid "Changing the interface language requires a restart to take effect."
@@ -2210,9 +2210,8 @@ msgid "Command line saved."
 msgstr "コマンドラインが保存されました。"
 
 #: src/mmg/options/languages.cpp:80
-#, fuzzy
 msgid "Common languages"
-msgstr "チャプタ名と言語"
+msgstr "よく使用される言語"
 
 #: src/merge/pr_generic.cpp:729
 msgid "Compression failed: %1%\n"
@@ -3065,7 +3064,7 @@ msgstr ""
 
 #: src/mmg/tabs/input_extra.cpp:64
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
-msgstr "このトラックのユーザー定義オプションを自由に入力するフィールドです。ここに入力したオプションは、このトラックのmkvmerge GUIのオプションを上書きできるようにmkvmerge GUIが付加する全てのオプションの後ろに付加されます。文字列\"<TID>\"は全てこのトラックのトラックIDに置き換えられます。"
+msgstr "このトラックのユーザー定義オプションを自由に入力するフィールドです。ここに入力したオプションは、このトラックのmmgのオプションを上書きできるようにmmgが付加する全てのオプションの後ろに付加されます。文字列\"<TID>\"は全てこのトラックのトラックIDに置き換えられます。"
 
 #: src/info/mkvinfo.cpp:638
 msgid "Gamma: %1%"
@@ -3162,7 +3161,7 @@ msgid ""
 msgstr ""
 "ここでは作成する各チャプタのデフォルト値を設定できます。\n"
 "設定後もこの値は必要なら変えることができます。\n"
-"デフォルト値はmkvmerge GUIの終了時に保存されます。"
+"デフォルト値はmmgの終了時に保存されます。"
 
 #: src/mmg/tabs/chapters.cpp:241
 msgid "Here you can set the values for the language and the country that you want to apply to all the chapters below and including the currently selected entry."
@@ -3182,19 +3181,19 @@ msgstr "'有効'にチェックが入っていないと、プレーヤはファ�
 
 #: src/mmg/options/mmg.cpp:75
 msgid "If checked mmg will ask for confirmation before overwriting existing files, or before adding a new job if there's an old job whose description matches the new one."
-msgstr "チェックが入っていると、mkvmerge GUIは既に存在するファイルを上書きする前や、説明が同じ古いジョブがあった場合に新しいジョブを追加する前に確認メッセージを表示します。"
+msgstr "チェックが入っていると、mmgは既に存在するファイルを上書きする前や、説明が同じ古いジョブがあった場合に新しいジョブを追加する前に確認メッセージを表示します。"
 
 #: src/mmg/options/mmg.cpp:60
 msgid "If checked mmg will automatically set the output filename if it hasn't been set already. This happens when you add the first file. If unset mmg will not touch the output filename."
-msgstr "チェックが入っていると、mkvmerge GUIは出力ファイル名がまだ設定されていない場合に自動で設定します。これは最初のファイルを追加した際に発生します。チェックが入っていない場合はmkvmerge GUIは出力ファイル名に手出しをしません。"
+msgstr "チェックが入っていると、mmgは出力ファイル名がまだ設定されていない場合に自動で設定します。これは最初のファイルを追加した際に発生します。チェックが入っていない場合はmmgは出力ファイル名に手出しをしません。"
 
 #: src/mmg/options/mmg.cpp:95
 msgid "If checked mmg will warn if it thinks that you're using it incorrectly. Such warnings are shown at least once even if you turn this feature off."
-msgstr "チェックが入っていると、mkvmerge GUIは使い方が間違っていると考えられる場合に警告します。この機能をオフにしたとしても最低ひとつはそのような警告が表示されます。"
+msgstr "チェックが入っていると、mmgは使い方が間違っていると考えられる場合に警告します。この機能をオフにしたとしても最低ひとつはそのような警告が表示されます。"
 
 #: src/mmg/options/mmg.cpp:71
 msgid "If left empty then mmg will set the output file name to be in the same directory as the first file added to this job. Otherwise this directory will be used."
-msgstr "空白のままにしておくと、mkvmerge GUIはこのジョブに最初に追加されたファイルと同じディレクトリに出力ファイル名を設定します。空白でない場合はこのディレクトリが使用されます。"
+msgstr "空白のままにしておくと、mmgはこのジョブに最初に追加されたファイルと同じディレクトリに出力ファイル名を設定します。空白でない場合はこのディレクトリが使用されます。"
 
 #: src/mmg/tabs/attachments.cpp:92
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
@@ -3574,7 +3573,6 @@ msgid "Language: %1%"
 msgstr ""
 
 #: src/mmg/options/dialog.cpp:50
-#, fuzzy
 msgid "Languages"
 msgstr "言語"
 
@@ -4203,7 +4201,7 @@ msgstr ""
 
 #: src/mmg/options/mkvmerge.cpp:118
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
-msgstr "mkvmerge GUIそれ自体をmkvmergeの実行ファイルとして指定しないでください。"
+msgstr "mmgそれ自体をmkvmergeの実行ファイルとして指定しないでください。"
 
 #: src/mmg/mmg_dialog.cpp:1228
 msgid "Please enter a description for the new job:"
@@ -4663,6 +4661,8 @@ msgid ""
 "Select the languages you want to be shown at the top\n"
 "of language drop down boxes."
 msgstr ""
+"言語のドロップダウンボックスの一番上に表示したい\n"
+"言語（複数可）を選んでください。"
 
 #: src/mmg/tabs/chapters.cpp:124
 msgid "Select values to be applied"
@@ -4781,7 +4781,7 @@ msgstr "mkvinfoについてのダイアログを表示します"
 
 #: src/mmg/options/mmg.cpp:100
 msgid "Show mmg's debug window"
-msgstr "mkvmerge GUIのデバッグウィンドウを表示する"
+msgstr "mmgのデバッグウィンドウを表示する"
 
 #: src/mmg/mmg_dialog.cpp:138
 msgid "Show program information"
@@ -4789,7 +4789,7 @@ msgstr "プログラムの情報を表示します"
 
 #: src/mmg/mmg_dialog.cpp:105
 msgid "Show the command line mmg creates for mkvmerge"
-msgstr "mkvmerge GUIが生成するmkvmergeのコマンドラインを表示します"
+msgstr "mmgが生成するmkvmergeのコマンドラインを表示します"
 
 #: src/mmg/mmg_dialog.cpp:137
 msgid "Show the guide to mkvmerge GUI"
@@ -4797,7 +4797,7 @@ msgstr "mkvmerge GUIのガイドを表示します"
 
 #: src/mmg/options/mmg.cpp:101
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
-msgstr "デバッグメッセージが表示されるmkvmerge GUIのデバッグウィンドウを表示します。これは作者がmkvmerge GUIのデバッグをする手助けをする場合にのみ役に立ちます。"
+msgstr "デバッグメッセージが表示されるmmgのデバッグウィンドウを表示します。これは作者がmmgの問題をデバッグするのを手助けする場合にのみ役に立ちます。"
 
 #: src/info/mkvinfo.cpp:778
 msgid "Signature algorithm: %1% (%2%)"
@@ -5191,11 +5191,11 @@ msgid ""
 "\n"
 "Note: This warning can be deactivated on the 'settings' page. Turn off the 'Warn about usage...' option."
 msgstr ""
-"チャプタエディタが使用され、データがあります。しかし、グローバルページでチャプタファイルが指定されていません。mkvmerge GUIでは、チャプタエディタはMUX処理とは独立しています。チャプタエディタに存在するチャプタは出力ファイルにMUXされません。チャプタエディタのメニューの保存機能を使用することでのみ、チャプタをハードディスクに書き込むことができます。\n"
+"チャプタエディタが使用され、データがあります。しかし、グローバルページでチャプタファイルが指定されていません。mmgでは、チャプタエディタはMUX処理とは独立しています。チャプタエディタに存在するチャプタは出力ファイルにMUXされません。チャプタエディタのメニューの保存機能を使用することでのみ、チャプタをハードディスクに書き込むことができます。\n"
 "\n"
 "本当にMUX処理を続行しますか？\n"
 "\n"
-"メモ：この警告は設定ページでオフにすることができます。'mkvmerge GUIの使い方が～'のチェックを外してください。"
+"メモ：この警告は設定ページでオフにすることができます。'mmgの使い方が～'のチェックを外してください。"
 
 #: src/output/p_mpeg4_p10.cpp:159
 msgid "The chosen NALU size length of %1% is too small. Try using '4'.\n"
@@ -5452,7 +5452,7 @@ msgid ""
 "(Problem occured in tab_input::load(), #1)"
 msgstr ""
 "ジョブファイルを正常に解析することができませんでした。\n"
-"ファイルが不正もしくは壊れているか、mkvmerge GUIのバグです。\n"
+"ファイルが不正もしくは壊れているか、mmgのバグです。\n"
 "作者のMoritz Bunkus <moritz@bunkus.org>に連絡してください。\n"
 "\n"
 "（問題はtab_input::load(), #1で発生しました）"
@@ -5467,7 +5467,7 @@ msgid ""
 "(Problem occured in tab_input::load(), #2)"
 msgstr ""
 "ジョブファイルを正常に解析することができませんでした。\n"
-"ファイルが不正もしくは壊れているか、mkvmerge GUIのバグです。\n"
+"ファイルが不正もしくは壊れているか、mmgのバグです。\n"
 "作者のMoritz Bunkus <moritz@bunkus.org>に連絡してください。\n"
 "\n"
 "（問題はtab_input::load(), #2で発生しました）"
@@ -5482,7 +5482,7 @@ msgid ""
 "(Problem occured in tab_input::load(), #3)"
 msgstr ""
 "ジョブファイルを正常に解析することができませんでした。\n"
-"ファイルが不正もしくは壊れているか、mkvmerge GUIのバグです。\n"
+"ファイルが不正もしくは壊れているか、mmgのバグです。\n"
 "作者のMoritz Bunkus <moritz@bunkus.org>に連絡してください。\n"
 "\n"
 "（問題はtab_input::load(), #3で発生しました）"
@@ -6727,7 +6727,7 @@ msgstr "WAVPACK v4オーディオ"
 
 #: src/mmg/options/mmg.cpp:94
 msgid "Warn about possible incorrect usage of mmg"
-msgstr "mkvmerge GUIの使い方が間違っていそうな場合に警告する"
+msgstr "mmgの使い方が間違っていそうな場合に警告する"
 
 #: src/input/subtitles.cpp:180
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
@@ -6867,7 +6867,7 @@ msgstr ""
 "\n"
 "もし指定しなかった場合は、mkvmergeは25fpsを指定します。\n"
 "\n"
-"mkvmerge GUIの警告を設定ページで有効にした場合を除いて、このメッセージは1度だけ表示されます。"
+"mmgの警告を設定ページで有効にした場合を除いて、このメッセージは1度だけ表示されます。"
 
 #: src/common/compression.cpp:130 src/common/compression.cpp:167
 msgid "Zlib decompression failed. Result: %1%\n"
@@ -7566,11 +7566,11 @@ msgstr "mmgデバッグ出力"
 
 #: src/mmg/options/mmg.cpp:162
 msgid "mmg options"
-msgstr "mkvmerge GUIのオプション"
+msgstr "mmgのオプション"
 
 #: src/mmg/options/languages.cpp:86
 msgid "mmg will reset to the default list if no entry is selected."
-msgstr ""
+msgstr "どのエントリも選択されていない場合はデフォルトのリストにリセットされます。"
 
 #: src/input/r_mp3.cpp:59
 msgid "mp3_reader: Could not open the source file."
