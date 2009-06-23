@@ -308,7 +308,7 @@ tab_input::add_file(const wxString &file_name,
   }
 
   opt_file->Write(wxT("--output-charset\nUTF-8\n--identify-for-mmg\n"));
-  arg_utf8 = to_utf8(file_name);
+  arg_utf8 = wxMB(file_name);
   opt_file->Write(arg_utf8.c_str(), arg_utf8.length());
   opt_file->Write(wxT("\n"));
   delete opt_file;
@@ -403,7 +403,7 @@ tab_input::add_file(const wxString &file_name,
             continue;
 
           if (pair[0] == wxT("track_name")) {
-            track->track_name             = from_utf8(unescape(pair[1]));
+            track->track_name             = unescape(pair[1]);
             track->track_name_was_present = true;
 
           } else if (pair[0] == wxT("language"))
@@ -519,7 +519,7 @@ tab_input::add_file(const wxString &file_name,
         for (k = 0; k < args.size(); k++) {
           pair = split(args[k], wxU(":"), 2);
           if ((pair.size() == 2) && (pair[0] == wxT("title"))) {
-            file->title = from_utf8(unescape(pair[1]));
+            file->title = unescape(pair[1]);
             file->title_was_present = true;
             title_was_present = true;
           }
