@@ -1,4 +1,3 @@
-
 # translation of ja.po to Japanese
 # Copyright (C) 2009 Moritz Bunkus
 # This file is distributed under the same license as the mkvtoolnix package.
@@ -779,7 +778,7 @@ msgstr ""
 msgid "&Abort"
 msgstr "中断(&A)"
 
-#: src/mmg/mmg_dialog.cpp:136
+#: src/mmg/mmg_dialog.cpp:138
 msgid "&About"
 msgstr "mkvmergeについて(&A)"
 
@@ -787,19 +786,19 @@ msgstr "mkvmergeについて(&A)"
 msgid "&About\tF1"
 msgstr "mkvinfoについて(&A)\tF1"
 
-#: src/mmg/mmg_dialog.cpp:108 src/mmg/mmg_dialog.cpp:191
+#: src/mmg/mmg_dialog.cpp:110 src/mmg/mmg_dialog.cpp:193
 msgid "&Add to job queue"
 msgstr "ジョブキューに追加(&A)"
 
-#: src/mmg/mmg_dialog.cpp:129
+#: src/mmg/mmg_dialog.cpp:131
 msgid "&Attachments\tAlt-2"
 msgstr "添付ファイル(&A)\tAlt-2"
 
-#: src/mmg/mmg_dialog.cpp:141
+#: src/mmg/mmg_dialog.cpp:143
 msgid "&Chapter Editor"
 msgstr "チャプタエディタ(&C)"
 
-#: src/mmg/mmg_dialog.cpp:132
+#: src/mmg/mmg_dialog.cpp:134
 msgid "&Chapter editor\tAlt-4"
 msgstr "チャプタエディタ(&C)\tAlt-4"
 
@@ -811,11 +810,11 @@ msgstr "閉じる(&C)\tCtrl-W"
 msgid "&Collapse all entries\tCtrl-P"
 msgstr "全てのエントリを折り畳む(&C)\tCtrl-P"
 
-#: src/mmg/mmg_dialog.cpp:104
+#: src/mmg/mmg_dialog.cpp:106
 msgid "&Copy command line to clipboard"
 msgstr "コマンドラインをクリップボードにコピー(&C)"
 
-#: src/mmg/mmg_dialog.cpp:188
+#: src/mmg/mmg_dialog.cpp:190
 msgid "&Copy to clipboard"
 msgstr "クリップボードにコピー(&C)"
 
@@ -835,53 +834,53 @@ msgstr "重要な要素を展開(&E)\tCtrl-E"
 msgid "&Expand important elements\tCtrl-E"
 msgstr "重要な要素を展開(&E)\tCtrl-E"
 
-#: src/mmg/mmg_dialog.cpp:139 src/mmg/header_editor/frame.cpp:114
+#: src/mmg/mmg_dialog.cpp:141 src/mmg/header_editor/frame.cpp:114
 #: src/info/wxwidgets_ui.cpp:147
 msgid "&File"
 msgstr "ファイル(&F)"
 
-#: src/mmg/mmg_dialog.cpp:130
+#: src/mmg/mmg_dialog.cpp:132
 msgid "&Global options\tAlt-3"
 msgstr "グローバルオプション(&G)\tAlt-3"
 
-#: src/mmg/mmg_dialog.cpp:93
+#: src/mmg/mmg_dialog.cpp:95
 msgid "&Header editor\tCtrl-E"
 msgstr "ヘッダエディタ(&H)\tCtrl-E"
 
-#: src/mmg/mmg_dialog.cpp:143 src/mmg/header_editor/frame.cpp:116
+#: src/mmg/mmg_dialog.cpp:145 src/mmg/header_editor/frame.cpp:116
 #: src/info/wxwidgets_ui.cpp:149
 msgid "&Help"
 msgstr "ヘルプ(&H)"
 
-#: src/mmg/mmg_dialog.cpp:135 src/mmg/header_editor/frame.cpp:109
+#: src/mmg/mmg_dialog.cpp:137 src/mmg/header_editor/frame.cpp:109
 msgid "&Help\tF1"
 msgstr "ヘルプ(&H)\tF1"
 
-#: src/mmg/mmg_dialog.cpp:128
+#: src/mmg/mmg_dialog.cpp:130
 msgid "&Input\tAlt-1"
 msgstr "入力(&I)\tAlt-1"
 
-#: src/mmg/mmg_dialog.cpp:115
+#: src/mmg/mmg_dialog.cpp:117
 msgid "&Load"
 msgstr "ロード(&L)"
 
-#: src/mmg/mmg_dialog.cpp:86
+#: src/mmg/mmg_dialog.cpp:88
 msgid "&Load settings\tCtrl-L"
 msgstr "設定をロード(&L)\tCtrl-L"
 
-#: src/mmg/mmg_dialog.cpp:109
+#: src/mmg/mmg_dialog.cpp:111
 msgid "&Manage jobs\tCtrl-J"
 msgstr "ジョブの管理(&M)\tCtrl-J"
 
-#: src/mmg/mmg_dialog.cpp:140
+#: src/mmg/mmg_dialog.cpp:142
 msgid "&Muxing"
 msgstr "MUX(&M)"
 
-#: src/mmg/mmg_dialog.cpp:85
+#: src/mmg/mmg_dialog.cpp:87
 msgid "&New\tCtrl-N"
 msgstr "新規作成(&N)\tCtrl-N"
 
-#: src/mmg/mmg_dialog.cpp:114
+#: src/mmg/mmg_dialog.cpp:116
 msgid "&New chapters"
 msgstr "チャプタを新規作成(&N)"
 
@@ -897,7 +896,7 @@ msgstr "開く(&O)\tCtrl-O"
 msgid "&Options"
 msgstr "オプション(&O)"
 
-#: src/mmg/mmg_dialog.cpp:95 src/mmg/header_editor/frame.cpp:100
+#: src/mmg/mmg_dialog.cpp:97 src/mmg/header_editor/frame.cpp:100
 msgid "&Quit\tCtrl-Q"
 msgstr "終了(&Q)\tCtrl-Q"
 
@@ -913,7 +912,7 @@ msgstr "&リロード(&R)\tCtrl-R"
 msgid "&Reset"
 msgstr "リセット(&R)"
 
-#: src/mmg/jobs.cpp:305 src/mmg/mmg_dialog.cpp:117
+#: src/mmg/jobs.cpp:305 src/mmg/mmg_dialog.cpp:119
 msgid "&Save"
 msgstr "保存(&S)"
 
@@ -925,7 +924,7 @@ msgstr "保存(&S)\tCtrl-S"
 msgid "&Save info as text\tCtrl-S"
 msgstr "情報をテキストとして保存(&S)\tCtrl-S"
 
-#: src/mmg/mmg_dialog.cpp:87
+#: src/mmg/mmg_dialog.cpp:89
 msgid "&Save settings\tCtrl-S"
 msgstr "設定を保存(&S)\tCtrl-S"
 
@@ -941,7 +940,7 @@ msgstr "上へ(&U)"
 msgid "&Validate\tCtrl-T"
 msgstr "バリデーション(&V)\tCtrl-T"
 
-#: src/mmg/mmg_dialog.cpp:121
+#: src/mmg/mmg_dialog.cpp:123
 msgid "&Verify"
 msgstr "ベリファイ(&V)"
 
@@ -949,7 +948,7 @@ msgstr "ベリファイ(&V)"
 msgid "&View log"
 msgstr "ログを見る(&V)"
 
-#: src/mmg/mmg_dialog.cpp:142
+#: src/mmg/mmg_dialog.cpp:144
 msgid "&Window"
 msgstr "ウィンドウ(&W)"
 
@@ -1423,11 +1422,11 @@ msgstr "--- ジョブ%dを終了"
 msgid "--- No job output found.\n"
 msgstr "--- ジョブ出力が見つかりませんでした。\n"
 
-#: src/mmg/tabs/input_general.cpp:176
+#: src/mmg/options/languages.cpp:47 src/mmg/tabs/input_general.cpp:155
 msgid "---all---"
 msgstr "---全ての言語---"
 
-#: src/mmg/tabs/input_general.cpp:173
+#: src/mmg/tabs/input_general.cpp:140
 msgid "---common---"
 msgstr "---よく使用される言語---"
 
@@ -1609,7 +1608,7 @@ msgstr "mkvmerge GUIについて"
 msgid "Add"
 msgstr "追加"
 
-#: src/mmg/mmg_dialog.cpp:111
+#: src/mmg/mmg_dialog.cpp:113
 msgid "Add &command line options"
 msgstr "コマンドラインオプションを追加(&C)"
 
@@ -1645,7 +1644,7 @@ msgstr ""
 msgid "Additions"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:108
+#: src/mmg/mmg_dialog.cpp:110
 msgid "Adds the current settings as a new job entry to the job queue"
 msgstr "現在の設定を新しいジョブエントリとしてジョブキューに追加します"
 
@@ -1795,7 +1794,7 @@ msgstr "添付ファイル ID %1%：タイプ'%2%'、サイズ%3%バイト"
 msgid "Attachment style:"
 msgstr "添付方式："
 
-#: src/mmg/mmg_dialog.cpp:165 src/mmg/tabs/attachments.cpp:59
+#: src/mmg/mmg_dialog.cpp:167 src/mmg/tabs/attachments.cpp:59
 #: src/info/mkvinfo.cpp:1193
 msgid "Attachments"
 msgstr "添付ファイル"
@@ -1898,11 +1897,11 @@ msgstr "'--aspect-ratio'と'--display-dimensions'が両方指定されました�
 msgid "Both the aspect ratio factor and '--display-dimensions' were given.\n"
 msgstr "'--aspect-ratio-factor'と'--display-dimensions'が両方指定されました。\n"
 
-#: src/mmg/mmg_dialog.cpp:109
+#: src/mmg/mmg_dialog.cpp:111
 msgid "Brings up the job queue editor"
 msgstr "ジョブキューエディタを起動します"
 
-#: src/mmg/mmg_dialog.cpp:180 src/mmg/options/mkvmerge.cpp:60
+#: src/mmg/mmg_dialog.cpp:182 src/mmg/options/mkvmerge.cpp:60
 #: src/mmg/options/mmg.cpp:69 src/mmg/tabs/global.cpp:177
 #: src/mmg/tabs/global.cpp:227 src/mmg/tabs/input_general.cpp:85
 #: src/mmg/tabs/input_general.cpp:99
@@ -1943,7 +1942,7 @@ msgstr "例外をキャッチしました"
 msgid "Causes mkvmerge to add 'stop display' commands to VobSub subtitle packets that do not contain a duration field."
 msgstr "mkvmergeが表示時間フィールドを含んでいないVobSub字幕パケットに「表示停止」コマンドを付加するようにします。"
 
-#: src/mmg/mmg_dialog.cpp:91
+#: src/mmg/mmg_dialog.cpp:93
 msgid "Change mmg's preferences and options"
 msgstr "mkvmerge GUIのオプションを設定します"
 
@@ -1951,7 +1950,11 @@ msgstr "mkvmerge GUIのオプションを設定します"
 msgid "Change the default values"
 msgstr "デフォルト値を変更します"
 
-#: src/mmg/options/dialog.cpp:91
+#: src/mmg/options/languages.cpp:88
+msgid "Changes to this list do not take effect until mmg is restarted."
+msgstr ""
+
+#: src/mmg/options/mmg.cpp:275
 msgid "Changing the interface language requires a restart to take effect."
 msgstr "インターフェイス言語の変更は、再起動しないと反映されません。"
 
@@ -1963,7 +1966,7 @@ msgstr ""
 msgid "Channels: %1%"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:167
+#: src/mmg/mmg_dialog.cpp:169
 msgid "Chapter Editor"
 msgstr "チャプタエディタ"
 
@@ -2061,11 +2064,11 @@ msgstr "文字セット："
 msgid "Choose a chapter file"
 msgstr "チャプタファイルを選んでください"
 
-#: src/mmg/tabs/input_general.cpp:259
+#: src/mmg/tabs/input_general.cpp:249
 msgid "Choose a tag file"
 msgstr "タグファイルを選んでください"
 
-#: src/mmg/tabs/input_general.cpp:273
+#: src/mmg/tabs/input_general.cpp:263
 msgid "Choose a timecodes file"
 msgstr "タイムコードファイルを選んでください"
 
@@ -2206,6 +2209,11 @@ msgstr "コマンドラインオプション："
 msgid "Command line saved."
 msgstr "コマンドラインが保存されました。"
 
+#: src/mmg/options/languages.cpp:80
+#, fuzzy
+msgid "Common languages"
+msgstr "チャプタ名と言語"
+
 #: src/merge/pr_generic.cpp:729
 msgid "Compression failed: %1%\n"
 msgstr "圧縮に失敗しました：%1%\n"
@@ -2242,7 +2250,7 @@ msgstr ""
 msgid "Content encryption"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:104
+#: src/mmg/mmg_dialog.cpp:106
 msgid "Copy the command line to the clipboard"
 msgstr "コマンドラインをクリップボードにコピーします"
 
@@ -2355,11 +2363,11 @@ msgstr "出力ファイルに書き込むことができませんでした：%1%
 msgid "Country:"
 msgstr "国："
 
-#: src/mmg/mmg_dialog.cpp:106
+#: src/mmg/mmg_dialog.cpp:108
 msgid "Create &option file"
 msgstr "オプションファイルを作成(&O)"
 
-#: src/mmg/mmg_dialog.cpp:114
+#: src/mmg/mmg_dialog.cpp:116
 msgid "Create a new chapter file"
 msgstr "新しいチャプタファイルを作成します"
 
@@ -3067,7 +3075,7 @@ msgstr ""
 msgid "General track options"
 msgstr "一般トラックオプション"
 
-#: src/mmg/mmg_dialog.cpp:166
+#: src/mmg/mmg_dialog.cpp:168
 msgid "Global"
 msgstr "グローバルオプション"
 
@@ -3214,7 +3222,7 @@ msgstr "ファイル'%1%'を使用することができません：ファイル�
 msgid "Inconsistent AAC audio packet (length: %1% != len_check %2%)\n"
 msgstr "矛盾したAACオーディオパケットです（length: %1% != len_check %2%）\n"
 
-#: src/mmg/mmg_dialog.cpp:164
+#: src/mmg/mmg_dialog.cpp:166
 msgid "Input"
 msgstr "入力"
 
@@ -3565,6 +3573,11 @@ msgstr "言語："
 msgid "Language: %1%"
 msgstr ""
 
+#: src/mmg/options/dialog.cpp:50
+#, fuzzy
+msgid "Languages"
+msgstr "言語"
+
 #: src/mmg/cli_options_dlg.cpp:108
 msgid "Leave additional space (EbmlVoid) in the output file after the chapters."
 msgstr "出力ファイルのチャプタの後ろに追加のスペース（EBMLVoid要素）を残します。"
@@ -3573,7 +3586,7 @@ msgstr "出力ファイルのチャプタの後ろに追加のスペース（EBM
 msgid "Left eye"
 msgstr "左目"
 
-#: src/mmg/mmg_dialog.cpp:111
+#: src/mmg/mmg_dialog.cpp:113
 msgid "Lets you add arbitrary options to the command line"
 msgstr "コマンドラインに任意のオプションを追加できます"
 
@@ -3605,11 +3618,11 @@ msgstr "%1%行目：この行は字幕エントリのようですがフォーマ
 msgid "Line %1%: The line seems to be a subtitle entry but the timecode was negative even after adding the track delay. Negative timecodes are not supported in Matroska. This entry will be skipped.\n"
 msgstr "%1%行目：この行は字幕エントリのようですがタイムコードがトラックのディレイを考慮しても負の数になります。負の数のタイムコードはMatroskaではサポートされていません。このエントリはスキップされます。\n"
 
-#: src/mmg/mmg_dialog.cpp:115
+#: src/mmg/mmg_dialog.cpp:117
 msgid "Load a chapter file (simple/OGM format or XML format)"
 msgstr "チャプタファイル（シンプル/OGMフォーマットもしくはXMLフォーマット）をロードします"
 
-#: src/mmg/mmg_dialog.cpp:86
+#: src/mmg/mmg_dialog.cpp:88
 msgid "Load muxing settings from a file"
 msgstr "MUXの設定をファイルからロードします"
 
@@ -4084,7 +4097,7 @@ msgstr "最初のファイルにのみ添付"
 msgid "Only v7 and newer VobSub files are supported. If you have an older version then use the VSConv utility from http://sourceforge.net/projects/guliverkli/ to convert these files to v7 files.\n"
 msgstr "v7以降のVobSubファイルのみがサポートされています。もしそれより古いバージョンがあるならVSConv（http://sourceforge.net/projects/guliverkli/）を使ってv7のファイルに変換してください。\n"
 
-#: src/mmg/mmg_dialog.cpp:91
+#: src/mmg/mmg_dialog.cpp:93
 msgid "Op&tions\tCtrl-P"
 msgstr "オプション(&P)\tCtrl-P"
 
@@ -4124,7 +4137,7 @@ msgstr "元の値："
 msgid "Output"
 msgstr "出力"
 
-#: src/mmg/mmg_dialog.cpp:171
+#: src/mmg/mmg_dialog.cpp:173
 msgid "Output filename"
 msgstr "出力ファイル名"
 
@@ -4264,7 +4277,7 @@ msgstr "進行状況: 100%\n"
 msgid "Progress: 100%%%1%"
 msgstr "進行状況: 100%%%1%"
 
-#: src/mmg/mmg_dialog.cpp:1524
+#: src/mmg/mmg_dialog.cpp:1527
 msgid "Querying mkvmerge's capabilities"
 msgstr "mkvmergeの機能を調査しています"
 
@@ -4388,7 +4401,7 @@ msgstr "Quicktime/MP4リーダ：トラックID %1%は複数のFourCCを持っ�
 msgid "Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n"
 msgstr "Quicktime/MP4リーダ：トラック%2%のFourCC '%|1$.4s|'は未知もしくはサポートされていません。\n"
 
-#: src/mmg/mmg_dialog.cpp:95
+#: src/mmg/mmg_dialog.cpp:97
 msgid "Quit the application"
 msgstr "アプリケーションを終了します"
 
@@ -4468,7 +4481,7 @@ msgstr "要素を削除"
 msgid "Remove name"
 msgstr "名前を削除"
 
-#: src/mmg/options/dialog.cpp:91
+#: src/mmg/options/mmg.cpp:275
 msgid "Restart required"
 msgstr "再起動が必要です"
 
@@ -4476,15 +4489,15 @@ msgstr "再起動が必要です"
 msgid "Right eye"
 msgstr "右目"
 
-#: src/mmg/mmg_dialog.cpp:101
+#: src/mmg/mmg_dialog.cpp:103
 msgid "Run mkvmerge and start the muxing process"
 msgstr "mkvmergeを実行し、MUX処理を開始します"
 
-#: src/mmg/mmg_dialog.cpp:93
+#: src/mmg/mmg_dialog.cpp:95
 msgid "Run the header field editor"
 msgstr "ヘッダフィールドエディタを起動します"
 
-#: src/mmg/mmg_dialog.cpp:103
+#: src/mmg/mmg_dialog.cpp:105
 msgid "S&how the command line"
 msgstr "コマンドラインを表示(&S)"
 
@@ -4504,7 +4517,7 @@ msgstr "SRTテキスト字幕"
 msgid "SSA/ASS text subtitles"
 msgstr "SSA/ASSテキスト字幕"
 
-#: src/mmg/mmg_dialog.cpp:105
+#: src/mmg/mmg_dialog.cpp:107
 msgid "Sa&ve command line"
 msgstr "コマンドラインを保存(&A)"
 
@@ -4520,7 +4533,7 @@ msgstr "サンプリング周波数（Hz単位）です。"
 msgid "Sampling frequency: %1%"
 msgstr ""
 
-#: src/mmg/mmg_dialog.cpp:119
+#: src/mmg/mmg_dialog.cpp:121
 msgid "Save &as"
 msgstr "名前をつけて保存(&A)"
 
@@ -4532,27 +4545,27 @@ msgstr "情報を名前をつけて保存します"
 msgid "Save log"
 msgstr "ログを保存"
 
-#: src/mmg/mmg_dialog.cpp:87
+#: src/mmg/mmg_dialog.cpp:89
 msgid "Save muxing settings to a file"
 msgstr "MUXの設定をファイルに保存します"
 
-#: src/mmg/mmg_dialog.cpp:105
+#: src/mmg/mmg_dialog.cpp:107
 msgid "Save the command line to a file"
 msgstr "コマンドラインをファイルに保存します"
 
-#: src/mmg/mmg_dialog.cpp:106
+#: src/mmg/mmg_dialog.cpp:108
 msgid "Save the command line to an option file that can be read by mkvmerge"
 msgstr "コマンドラインをmkvmergeが読み込めるオプションファイルに保存します"
 
-#: src/mmg/mmg_dialog.cpp:117
+#: src/mmg/mmg_dialog.cpp:119
 msgid "Save the current chapters to a XML file"
 msgstr "現在のチャプタをXMLファイルに保存します"
 
-#: src/mmg/mmg_dialog.cpp:119
+#: src/mmg/mmg_dialog.cpp:121
 msgid "Save the current chapters to a file with another name"
 msgstr "現在のチャプタを別名のファイルに保存します"
 
-#: src/mmg/mmg_dialog.cpp:118
+#: src/mmg/mmg_dialog.cpp:120
 msgid "Save the current chapters to an existing Matroska file"
 msgstr "現在のチャプタを既存のMatroskaファイルに保存します"
 
@@ -4560,7 +4573,7 @@ msgstr "現在のチャプタを既存のMatroskaファイルに保存します"
 msgid "Save the header values"
 msgstr "ヘッダの値を保存します"
 
-#: src/mmg/mmg_dialog.cpp:118
+#: src/mmg/mmg_dialog.cpp:120
 msgid "Save to &Matroska file"
 msgstr "Matroskaファイルに保存(&M)"
 
@@ -4641,9 +4654,15 @@ msgstr "Matroskaファイルを選択してください"
 msgid "Select output file"
 msgstr "出力ファイルを選択してください"
 
-#: src/mmg/mmg_dialog.cpp:89
+#: src/mmg/mmg_dialog.cpp:91
 msgid "Select the file you want to write to"
 msgstr "書き込むファイルを選択します"
+
+#: src/mmg/options/languages.cpp:85
+msgid ""
+"Select the languages you want to be shown at the top\n"
+"of language drop down boxes."
+msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:124
 msgid "Select values to be applied"
@@ -4657,11 +4676,11 @@ msgstr "mkvmergeがインデックスエントリ（＝キューエントリ）�
 msgid "Selects the character set a subtitle file or chapter information was written with. Only needed for non-UTF encoded subtitle files or for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."
 msgstr "字幕またはチャプタ情報が記録された文字セットを指定します。mkvmergeが文字セットを正しく検出できない、非UTFの字幕ファイルとチャプタ情報を持つファイル（例：OGM、MP4）にのみ必要です。"
 
-#: src/mmg/mmg_dialog.cpp:123
+#: src/mmg/mmg_dialog.cpp:125
 msgid "Set &default values"
 msgstr "デフォルト値を設定(&D)"
 
-#: src/mmg/mmg_dialog.cpp:89
+#: src/mmg/mmg_dialog.cpp:91
 msgid "Set &output file"
 msgstr "出力ファイルを指定(&O)"
 
@@ -4764,15 +4783,15 @@ msgstr "mkvinfoについてのダイアログを表示します"
 msgid "Show mmg's debug window"
 msgstr "mkvmerge GUIのデバッグウィンドウを表示する"
 
-#: src/mmg/mmg_dialog.cpp:136
+#: src/mmg/mmg_dialog.cpp:138
 msgid "Show program information"
 msgstr "プログラムの情報を表示します"
 
-#: src/mmg/mmg_dialog.cpp:103
+#: src/mmg/mmg_dialog.cpp:105
 msgid "Show the command line mmg creates for mkvmerge"
 msgstr "mkvmerge GUIが生成するmkvmergeのコマンドラインを表示します"
 
-#: src/mmg/mmg_dialog.cpp:135
+#: src/mmg/mmg_dialog.cpp:137
 msgid "Show the guide to mkvmerge GUI"
 msgstr "mkvmerge GUIのガイドを表示します"
 
@@ -4883,11 +4902,11 @@ msgstr "指定時間で分割・タイムコードで分割が選択されまし
 msgid "Splitting is active, and at least one of the potential output files '%s%s*%s' already exists. Do you want to overwrite them?"
 msgstr "ファイル分割が有効で、出力される予定のファイル'%s%s*%s'が既に存在しています。上書きしますか？"
 
-#: src/mmg/mmg_dialog.cpp:185
+#: src/mmg/mmg_dialog.cpp:187
 msgid "Sta&rt muxing"
 msgstr "MUXスタート(R)"
 
-#: src/mmg/mmg_dialog.cpp:101
+#: src/mmg/mmg_dialog.cpp:103
 msgid "Sta&rt muxing (run mkvmerge)\tCtrl-R"
 msgstr "MUXスタート（mkvmergeを実行）(R)\tCtrl-R"
 
@@ -4899,7 +4918,7 @@ msgstr "ステータスが'未処理'のジョブをスタートします"
 msgid "Start the selected job(s) regardless of their status"
 msgstr "ステータスが何であろうと関係なく選択したジョブをスタートします"
 
-#: src/mmg/mmg_dialog.cpp:85
+#: src/mmg/mmg_dialog.cpp:87
 msgid "Start with empty settings"
 msgstr "設定を空にして新規作成します"
 
@@ -4986,7 +5005,7 @@ msgstr "タグファイル："
 msgid "Tag files (*.xml)|*.xml|%s"
 msgstr "タグファイル (*.xml)|*.xml|%s"
 
-#: src/mmg/tabs/input_general.cpp:259
+#: src/mmg/tabs/input_general.cpp:249
 #, c-format
 msgid "Tag files (*.xml;*.txt)|*.xml;*.txt|%s"
 msgstr "タグファイル (*.xml;*.txt)|*.xml;*.txt|%s"
@@ -5875,7 +5894,7 @@ msgstr "このトラックは'Codec state elements'というMatroskaの機能を
 msgid "Time slice"
 msgstr ""
 
-#: src/mmg/tabs/input_general.cpp:273
+#: src/mmg/tabs/input_general.cpp:263
 #, c-format
 msgid "Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"
 msgstr "タイムコードファイル (*.tmc;*.txt)|*.tmc;*.txt|%s"
@@ -6613,7 +6632,7 @@ msgstr "有効なハック：\n"
 msgid "Validates the content of all changeable headers"
 msgstr "全ての変更可能なヘッダの内容の正当性を検証します"
 
-#: src/mmg/mmg_dialog.cpp:121
+#: src/mmg/mmg_dialog.cpp:123
 msgid "Verify the current chapter entries to see if there are any errors"
 msgstr "エラーチェックのために現在のチャプタをベリファイします"
 
@@ -7399,7 +7418,7 @@ msgstr ""
 msgid "mkvextract: Unknown mode!?\n"
 msgstr "mkvextract：未知のモード！？\n"
 
-#: src/mmg/options/dialog.cpp:48
+#: src/mmg/options/dialog.cpp:49
 msgid "mkvmerge"
 msgstr "mkvmerge"
 
@@ -7428,7 +7447,7 @@ msgstr "mkvmerge GUI準備完了"
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "mkvmerge GUI設定ファイル (*.mmg)|*.mmg|%s"
 
-#: src/mmg/mmg_dialog.cpp:79
+#: src/mmg/mmg_dialog.cpp:81
 #, c-format
 msgid "mkvmerge GUI v%s ('%s')"
 msgstr "mkvmerge GUI v%s ('%s')"
@@ -7537,17 +7556,21 @@ msgstr "mm_text_io_c：UTF32_*は現在サポートされていません。\n"
 msgid "mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "mm_text_io_c::read_next_char()：不正なUTF-8の文字です。最初のバイト：0x%|1$02x|"
 
-#: src/mmg/options/dialog.cpp:47
+#: src/mmg/options/dialog.cpp:48
 msgid "mmg"
 msgstr "mmg"
 
-#: src/mmg/mmg_dialog.cpp:81
+#: src/mmg/mmg_dialog.cpp:83
 msgid "mmg debug output"
 msgstr "mmgデバッグ出力"
 
 #: src/mmg/options/mmg.cpp:162
 msgid "mmg options"
 msgstr "mkvmerge GUIのオプション"
+
+#: src/mmg/options/languages.cpp:86
+msgid "mmg will reset to the default list if no entry is selected."
+msgstr ""
 
 #: src/input/r_mp3.cpp:59
 msgid "mp3_reader: Could not open the source file."
@@ -7783,7 +7806,7 @@ msgstr "tta_reader：ファイルを開けませんでした。"
 msgid "tta_reader: tag_size < 0 in the c'tor. %1%\n"
 msgstr ""
 
-#: src/mmg/tabs/input_general.cpp:172
+#: src/mmg/tabs/input_general.cpp:139
 msgid "und (Undetermined)"
 msgstr "und (Undetermined)"
 

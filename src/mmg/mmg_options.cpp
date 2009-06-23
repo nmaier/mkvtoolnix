@@ -15,8 +15,34 @@
 
 #include <wx/wx.h>
 
+#include "common/extern_data.h"
 #include "common/wx.h"
 #include "mmg/mmg.h"
+#include "common/output.h"
+void
+mmg_options_t::init_popular_languages(const wxString &list) {
+  int i;
+
+  popular_languages.clear();
+
+  if (!list.IsEmpty()) {
+    std::vector<wxString> codes = split(list, wxU(" "));
+    for (i = 0; codes.size() > i; ++i)
+      if (is_valid_iso639_2_code(wxMB(codes[i])))
+        popular_languages.Add(codes[i]);
+  }
+
+  if (popular_languages.IsEmpty()) {
+    std::map<std::string, bool> codes_found;
+    for (i = 0; iso639_languages[i].english_name != NULL; i++)
+      if (!codes_found[std::string(iso639_languages[i].iso639_2_code)] && is_popular_language_code(iso639_languages[i].iso639_2_code)) {
+        popular_languages.Add(wxU(iso639_languages[i].iso639_2_code));
+        codes_found[std::string(iso639_languages[i].iso639_2_code)] = true;
+      }
+  }
+
+  popular_languages.Sort();
+}
 
 void
 mmg_options_t::validate() {

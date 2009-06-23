@@ -70,6 +70,8 @@ public:
   void enable_output_filename_controls(bool enable);
 
   std::string get_selected_ui_language();
+
+  void save_options();
 };
 
 #endif // __MMG_OPTIONS_MMG_H

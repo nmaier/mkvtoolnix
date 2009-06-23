@@ -44,6 +44,8 @@ public:
 
   void select_priority(const wxString &priority);
   wxString get_selected_priority();
+
+  void save_options();
 };
 
 #endif // __MMG_OPTIONS_MKVMERGE_H

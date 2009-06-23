@@ -161,6 +161,23 @@ join(const wxString &pattern,
   return dst;
 }
 
+wxString
+join(const wxString &pattern,
+     wxArrayString &strings) {
+  wxString dst;
+  uint32_t i;
+
+  if (strings.IsEmpty())
+    return wxEmptyString;
+  dst = strings[0];
+  for (i = 1; strings.Count() > i; ++i) {
+    dst += pattern;
+    dst += strings[i];
+  }
+
+  return dst;
+}
+
 wxString &
 strip(wxString &s,
       bool newlines) {

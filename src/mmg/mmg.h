@@ -177,6 +177,7 @@ struct mmg_options_t {
   bool gui_debugging;
   bool set_delay_from_filename;
   wxString priority;
+  wxArrayString popular_languages;
 
   mmg_options_t()
     : autoset_output_filename(false)
@@ -189,9 +190,11 @@ struct mmg_options_t {
     , gui_debugging(false)
     , set_delay_from_filename(false)
   {
+    init_popular_languages();
   }
 
   void validate();
+  void init_popular_languages(const wxString &list = wxEmptyString);
 };
 
 extern wxString last_open_dir;
@@ -209,9 +212,9 @@ extern std::map<wxString, wxString> capabilities;
 wxString &break_line(wxString &line, int break_after = 80);
 wxString extract_language_code(wxString source);
 wxString shell_escape(wxString source, bool cmd_exe_mode = false);
-std::vector<wxString> split(const wxString &src, const wxString &pattern,
-                       int max_num = -1);
+std::vector<wxString> split(const wxString &src, const wxString &pattern, int max_num = -1);
 wxString join(const wxString &pattern, std::vector<wxString> &strings);
+wxString join(const wxString &pattern, wxArrayString &strings);
 wxString &strip(wxString &s, bool newlines = false);
 std::vector<wxString> & strip(std::vector<wxString> &v, bool newlines = false);
 wxString no_cr(wxString source);

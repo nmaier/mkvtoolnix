@@ -40,12 +40,14 @@ options_dialog::options_dialog(wxWindow *parent,
   , m_options(options)
 {
 
-  nb_tabs      = new wxNotebook(this, ID_NOTEBOOK, wxDefaultPosition, wxDefaultSize, wxNB_TOP);
-  tab_mmg      = new optdlg_mmg_tab(nb_tabs, options);
-  tab_mkvmerge = new optdlg_mkvmerge_tab(nb_tabs, options);
+  nb_tabs       = new wxNotebook(this, ID_NOTEBOOK, wxDefaultPosition, wxDefaultSize, wxNB_TOP);
+  tab_mmg       = new optdlg_mmg_tab(nb_tabs, options);
+  tab_mkvmerge  = new optdlg_mkvmerge_tab(nb_tabs, options);
+  tab_languages = new optdlg_languages_tab(nb_tabs, options);
 
-  nb_tabs->AddPage(tab_mmg, Z("mmg"));
-  nb_tabs->AddPage(tab_mkvmerge, Z("mkvmerge"));
+  nb_tabs->AddPage(tab_mmg,       Z("mmg"));
+  nb_tabs->AddPage(tab_mkvmerge,  Z("mkvmerge"));
+  nb_tabs->AddPage(tab_languages, Z("Languages"));
 
   wxBoxSizer *siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->AddSpacer(5);
@@ -69,33 +71,9 @@ options_dialog::options_dialog(wxWindow *parent,
 
 void
 options_dialog::on_ok(wxCommandEvent &evt) {
-  m_options.mkvmerge                      = tab_mkvmerge->tc_mkvmerge->GetValue();
-  m_options.priority                      = tab_mkvmerge->get_selected_priority();
-  m_options.output_directory              = tab_mmg->tc_output_directory->GetValue();
-  m_options.autoset_output_filename       = tab_mmg->cb_autoset_output_filename->IsChecked();
-  m_options.ask_before_overwriting        = tab_mmg->cb_ask_before_overwriting->IsChecked();
-  m_options.on_top                        = tab_mmg->cb_on_top->IsChecked();
-  m_options.filenew_after_add_to_jobqueue = tab_mmg->cb_filenew_after_add_to_jobqueue->IsChecked();
-  m_options.filenew_after_successful_mux  = tab_mmg->cb_filenew_after_successful_mux->IsChecked();
-  m_options.warn_usage                    = tab_mmg->cb_warn_usage->IsChecked();
-  m_options.gui_debugging                 = tab_mmg->cb_gui_debugging->IsChecked();
-  m_options.set_delay_from_filename       = tab_mmg->cb_set_delay_from_filename->IsChecked();
-  m_options.output_directory_mode         = tab_mmg->rb_odm_input_file->GetValue() ? ODM_FROM_FIRST_INPUT_FILE
-                                          : tab_mmg->rb_odm_previous->GetValue()   ? ODM_PREVIOUS
-                                          :                                          ODM_FIXED;
-
-#if defined(HAVE_LIBINTL_H)
-  std::string new_ui_locale = tab_mmg->get_selected_ui_language();
-
-  if (downcase(new_ui_locale) != downcase(app->m_ui_locale))
-    wxMessageBox(Z("Changing the interface language requires a restart to take effect."), Z("Restart required"), wxOK | wxCENTER | wxICON_INFORMATION);
-
-  app->m_ui_locale  = new_ui_locale;
-
-  wxConfigBase *cfg = wxConfigBase::Get();
-  cfg->SetPath(wxT("/GUI"));
-  cfg->Write(wxT("ui_locale"), wxString(new_ui_locale.c_str(), wxConvUTF8));
-#endif  // HAVE_LIBINTL_H
+  tab_mkvmerge->save_options();
+  tab_mmg->save_options();
+  tab_languages->save_options();
 
   EndModal(wxID_OK);
 }

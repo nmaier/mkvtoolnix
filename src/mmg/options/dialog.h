@@ -20,6 +20,7 @@
 
 #include <vector>
 
+#include "mmg/options/languages.h"
 #include "mmg/options/mkvmerge.h"
 #include "mmg/options/mmg.h"
 
@@ -32,6 +33,7 @@ public:
   wxNotebook *nb_tabs;
   optdlg_mkvmerge_tab *tab_mkvmerge;
   optdlg_mmg_tab *tab_mmg;
+  optdlg_languages_tab *tab_languages;
 
 public:
   options_dialog(wxWindow *parent, mmg_options_t &options);

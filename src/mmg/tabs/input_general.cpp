@@ -133,51 +133,41 @@ tab_input_general::setup_forced_track() {
 
 void
 tab_input_general::setup_languages() {
-  wxArrayString popular_languages;
-  wxString language;
-  bool found;
-  int i, j;
+  int i;
 
-  if (sorted_iso_codes.Count() == 0) {
-    wxArrayString temp;
+  if (sorted_iso_codes.IsEmpty()) {
+    sorted_iso_codes.Add(Z("und (Undetermined)"));
+    sorted_iso_codes.Add(Z("---common---"));
 
-    for (i = 0; iso639_languages[i].english_name != NULL; i++) {
-      language.Printf(wxT("%s (%s)"), wxUCS(iso639_languages[i].iso639_2_code), wxUCS(iso639_languages[i].english_name));
-      temp.Add(language);
+    std::map<wxString, bool> is_popular;
+    for (i = 0; i < mdlg->options.popular_languages.Count(); ++i)
+      is_popular[ mdlg->options.popular_languages[i] ] = true;
+
+    for (i = 0; NULL != iso639_languages[i].english_name; ++i) {
+      wxString code = wxU(iso639_languages[i].iso639_2_code);
+      if (!is_popular[code])
+        continue;
+
+      sorted_iso_codes.Add(wxString::Format(wxT("%s (%s)"), wxUCS(iso639_languages[i].iso639_2_code), wxUCS(iso639_languages[i].english_name)));
+      is_popular[code] = false;
     }
+
+    sorted_iso_codes.Add(Z("---all---"));
+
+    wxArrayString temp;
+    for (i = 0; iso639_languages[i].english_name != NULL; i++)
+      temp.Add(wxString::Format(wxT("%s (%s)"), wxUCS(iso639_languages[i].iso639_2_code), wxUCS(iso639_languages[i].english_name)));
     temp.Sort();
 
     for (i = 0; temp.Count() > i; ++i)
       if ((0 == i) || (temp[i - 1].Lower() != temp[i].Lower()))
         sorted_iso_codes.Add(temp[i]);
-
-    for (i = 0; iso639_languages[i].iso639_2_code != NULL; i++) {
-      if (!is_popular_language_code(iso639_languages[i].iso639_2_code))
-        continue;
-      for (j = 0, found = false; j < popular_languages.Count(); j++)
-        if (extract_language_code(popular_languages[j]) ==
-            wxU(iso639_languages[i].iso639_2_code)) {
-          found = true;
-          break;
-        }
-      if (!found) {
-        language.Printf(wxT("%s (%s)"),
-                        wxUCS(iso639_languages[i].iso639_2_code),
-                        wxUCS(iso639_languages[i].english_name));
-        popular_languages.Add(language);
-      }
-    }
-    popular_languages.Sort();
-
-    sorted_iso_codes.Insert(Z("und (Undetermined)"), 0);
-    sorted_iso_codes.Insert(Z("---common---"), 1);
-    for (i = 0; i < popular_languages.Count(); i++)
-      sorted_iso_codes.Insert(popular_languages[i], i + 2);
-    sorted_iso_codes.Insert(Z("---all---"), i + 2);
   }
 
+  cob_language->Clear();
   for (i = 0; i < sorted_iso_codes.Count(); i++)
     cob_language->Append(sorted_iso_codes[i]);
+
   cob_language->SetSizeHints(0, -1);
 }
 

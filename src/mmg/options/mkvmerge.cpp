@@ -132,6 +132,12 @@ optdlg_mkvmerge_tab::get_selected_priority() {
   return cob_priority_translations.to_english(cob_priority->GetValue());
 }
 
+void
+optdlg_mkvmerge_tab::save_options() {
+  m_options.mkvmerge = tc_mkvmerge->GetValue();
+  m_options.priority = get_selected_priority();
+}
+
 IMPLEMENT_CLASS(optdlg_mkvmerge_tab, wxPanel);
 BEGIN_EVENT_TABLE(optdlg_mkvmerge_tab, wxPanel)
   EVT_BUTTON(ID_B_BROWSEMKVMERGE, optdlg_mkvmerge_tab::on_browse_mkvmerge)

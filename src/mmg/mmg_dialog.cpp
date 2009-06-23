@@ -68,6 +68,8 @@ mmg_dialog::mmg_dialog():
 
   mdlg = this;
 
+  load_preferences();
+
 #if defined(__WXGTK__)
   // GTK seems to call bindtextdomain() after our call to it.
   // So lets re-initialize the UI locale in case the user has
@@ -200,8 +202,6 @@ mmg_dialog::mmg_dialog():
   SetSizeHints(700, 660);
   SetSize(700, 660);
 #endif
-
-  load_preferences();
 
   log_window->Show(options.gui_debugging);
   set_on_top(options.on_top);
@@ -1399,6 +1399,7 @@ mmg_dialog::save_preferences() {
   cfg->Write(wxU("warn_usage"),                      options.warn_usage);
   cfg->Write(wxU("gui_debugging"),                   options.gui_debugging);
   cfg->Write(wxU("set_delay_from_filename"),         options.set_delay_from_filename);
+  cfg->Write(wxU("popular_languages"),               join(wxU(" "), options.popular_languages));
 
   cfg->Flush();
 }
@@ -1432,7 +1433,9 @@ mmg_dialog::load_preferences() {
   cfg->Read(wxU("warn_usage"),                    &options.warn_usage, true);
   cfg->Read(wxU("gui_debugging"),                 &options.gui_debugging, false);
   cfg->Read(wxU("set_delay_from_filename"),       &options.set_delay_from_filename, true);
+  cfg->Read(wxU("popular_languages"),             &s, wxEmptyString);
 
+  options.init_popular_languages(s);
   options.validate();
 
 #if defined(SYS_WINDOWS)

@@ -1,4 +1,3 @@
-
 # translation of mkvtoolnix to Chinese
 # Copyright (C) 2009 Moritz Bunkus
 # This file is distributed under the same license as the mkvtoolnix package.
@@ -778,7 +777,7 @@ msgstr ""
 msgid "&Abort"
 msgstr "中断(&A)"
 
-#: src/mmg/mmg_dialog.cpp:136
+#: src/mmg/mmg_dialog.cpp:138
 msgid "&About"
 msgstr "关于(&A)"
 
@@ -786,20 +785,20 @@ msgstr "关于(&A)"
 msgid "&About\tF1"
 msgstr "关于(&A)\tF1"
 
-#: src/mmg/mmg_dialog.cpp:108
-#: src/mmg/mmg_dialog.cpp:191
+#: src/mmg/mmg_dialog.cpp:110
+#: src/mmg/mmg_dialog.cpp:193
 msgid "&Add to job queue"
 msgstr "添加到任务队列(&A)"
 
-#: src/mmg/mmg_dialog.cpp:129
+#: src/mmg/mmg_dialog.cpp:131
 msgid "&Attachments\tAlt-2"
 msgstr "附件选项(&A)\tAlt-2"
 
-#: src/mmg/mmg_dialog.cpp:141
+#: src/mmg/mmg_dialog.cpp:143
 msgid "&Chapter Editor"
 msgstr "章节编辑器(&C)"
 
-#: src/mmg/mmg_dialog.cpp:132
+#: src/mmg/mmg_dialog.cpp:134
 msgid "&Chapter editor\tAlt-4"
 msgstr "章节编辑器(&C)\tAlt-4"
 
@@ -811,11 +810,11 @@ msgstr "关闭(&C)\tCtrl-W"
 msgid "&Collapse all entries\tCtrl-P"
 msgstr "收起所有项(&C)\tCtrl-P"
 
-#: src/mmg/mmg_dialog.cpp:104
+#: src/mmg/mmg_dialog.cpp:106
 msgid "&Copy command line to clipboard"
 msgstr "复制命令行到剪贴板(&C)"
 
-#: src/mmg/mmg_dialog.cpp:188
+#: src/mmg/mmg_dialog.cpp:190
 msgid "&Copy to clipboard"
 msgstr "复制命令行(&C)"
 
@@ -835,56 +834,56 @@ msgstr "展开所有项(&E)\tCtrl-E"
 msgid "&Expand important elements\tCtrl-E"
 msgstr "展开重要分支(&E)\tCtrl-E"
 
-#: src/mmg/mmg_dialog.cpp:139
+#: src/mmg/mmg_dialog.cpp:141
 #: src/mmg/header_editor/frame.cpp:114
 #: src/info/wxwidgets_ui.cpp:147
 msgid "&File"
 msgstr "文件(&F)"
 
-#: src/mmg/mmg_dialog.cpp:130
+#: src/mmg/mmg_dialog.cpp:132
 msgid "&Global options\tAlt-3"
 msgstr "全局选项(&G)\tAlt-3"
 
-#: src/mmg/mmg_dialog.cpp:93
+#: src/mmg/mmg_dialog.cpp:95
 msgid "&Header editor\tCtrl-E"
 msgstr "头部编辑器(&H)\tCtrl-E"
 
-#: src/mmg/mmg_dialog.cpp:143
+#: src/mmg/mmg_dialog.cpp:145
 #: src/mmg/header_editor/frame.cpp:116
 #: src/info/wxwidgets_ui.cpp:149
 msgid "&Help"
 msgstr "帮助(&H)"
 
-#: src/mmg/mmg_dialog.cpp:135
+#: src/mmg/mmg_dialog.cpp:137
 #: src/mmg/header_editor/frame.cpp:109
 msgid "&Help\tF1"
 msgstr "帮助(&H)\tF1"
 
-#: src/mmg/mmg_dialog.cpp:128
+#: src/mmg/mmg_dialog.cpp:130
 msgid "&Input\tAlt-1"
 msgstr "输入选项(&I)\tAlt-1"
 
-#: src/mmg/mmg_dialog.cpp:115
+#: src/mmg/mmg_dialog.cpp:117
 msgid "&Load"
 msgstr "载入(&L)"
 
-#: src/mmg/mmg_dialog.cpp:86
+#: src/mmg/mmg_dialog.cpp:88
 msgid "&Load settings\tCtrl-L"
 msgstr "载入配置文件(&L)\tCtrl-L"
 
-#: src/mmg/mmg_dialog.cpp:109
+#: src/mmg/mmg_dialog.cpp:111
 msgid "&Manage jobs\tCtrl-J"
 msgstr "管理任务(&M)\tCtrl-J"
 
-#: src/mmg/mmg_dialog.cpp:140
+#: src/mmg/mmg_dialog.cpp:142
 msgid "&Muxing"
 msgstr "混流(&M)"
 
-#: src/mmg/mmg_dialog.cpp:85
+#: src/mmg/mmg_dialog.cpp:87
 msgid "&New\tCtrl-N"
 msgstr "新建(&N)\tCtrl-N"
 
-#: src/mmg/mmg_dialog.cpp:114
+#: src/mmg/mmg_dialog.cpp:116
 msgid "&New chapters"
 msgstr "新建章节(&N)"
 
@@ -903,7 +902,7 @@ msgstr "打开(&O)\tCtrl-O"
 msgid "&Options"
 msgstr "选项(&O)"
 
-#: src/mmg/mmg_dialog.cpp:95
+#: src/mmg/mmg_dialog.cpp:97
 #: src/mmg/header_editor/frame.cpp:100
 msgid "&Quit\tCtrl-Q"
 msgstr "退出(&Q)\tCtrl-Q"
@@ -921,7 +920,7 @@ msgid "&Reset"
 msgstr "重置(&R)"
 
 #: src/mmg/jobs.cpp:305
-#: src/mmg/mmg_dialog.cpp:117
+#: src/mmg/mmg_dialog.cpp:119
 msgid "&Save"
 msgstr "保存(&S)"
 
@@ -933,7 +932,7 @@ msgstr "保存(&S)\tCtrl-S"
 msgid "&Save info as text\tCtrl-S"
 msgstr "将信息另存为文本(&S)\tCtrl-S"
 
-#: src/mmg/mmg_dialog.cpp:87
+#: src/mmg/mmg_dialog.cpp:89
 msgid "&Save settings\tCtrl-S"
 msgstr "保存配置文件(&S)\tCtrl-S"
 
@@ -949,7 +948,7 @@ msgstr "上移(&U)"
 msgid "&Validate\tCtrl-T"
 msgstr "检验(&V)\tCtrl-T"
 
-#: src/mmg/mmg_dialog.cpp:121
+#: src/mmg/mmg_dialog.cpp:123
 msgid "&Verify"
 msgstr "验证(&V)"
 
@@ -957,7 +956,7 @@ msgstr "验证(&V)"
 msgid "&View log"
 msgstr "显示日志(&V)"
 
-#: src/mmg/mmg_dialog.cpp:142
+#: src/mmg/mmg_dialog.cpp:144
 msgid "&Window"
 msgstr "窗口(&W)"
 
@@ -1443,11 +1442,12 @@ msgstr "--- 任务 %d 终止"
 msgid "--- No job output found.\n"
 msgstr "--- 无任务输出信息。\n"
 
-#: src/mmg/tabs/input_general.cpp:176
+#: src/mmg/options/languages.cpp:47
+#: src/mmg/tabs/input_general.cpp:155
 msgid "---all---"
 msgstr "---全部---"
 
-#: src/mmg/tabs/input_general.cpp:173
+#: src/mmg/tabs/input_general.cpp:140
 msgid "---common---"
 msgstr "---常用---"
 
@@ -1637,7 +1637,7 @@ msgstr "关于 mkvmerge's GUI"
 msgid "Add"
 msgstr "添加"
 
-#: src/mmg/mmg_dialog.cpp:111
+#: src/mmg/mmg_dialog.cpp:113
 msgid "Add &command line options"
 msgstr "添加命令行选项(&C)"
 
@@ -1673,7 +1673,7 @@ msgstr "附加块 ID: %1%"
 msgid "Additions"
 msgstr "附加"
 
-#: src/mmg/mmg_dialog.cpp:108
+#: src/mmg/mmg_dialog.cpp:110
 msgid "Adds the current settings as a new job entry to the job queue"
 msgstr "将当前设置作为新任务项添加到任务队列"
 
@@ -1824,7 +1824,7 @@ msgstr "附件 ID %1%: 类型 '%2%', 尺寸 %3% 字节"
 msgid "Attachment style:"
 msgstr "附加方式:"
 
-#: src/mmg/mmg_dialog.cpp:165
+#: src/mmg/mmg_dialog.cpp:167
 #: src/mmg/tabs/attachments.cpp:59
 #: src/info/mkvinfo.cpp:1193
 msgid "Attachments"
@@ -1930,11 +1930,11 @@ msgstr "同时给定了宽高比率与 '--display-dimensions'。\n"
 msgid "Both the aspect ratio factor and '--display-dimensions' were given.\n"
 msgstr "同时给定了宽高比系数与 '--display-dimensions'。\n"
 
-#: src/mmg/mmg_dialog.cpp:109
+#: src/mmg/mmg_dialog.cpp:111
 msgid "Brings up the job queue editor"
 msgstr "调出任务队列编辑器"
 
-#: src/mmg/mmg_dialog.cpp:180
+#: src/mmg/mmg_dialog.cpp:182
 #: src/mmg/options/mkvmerge.cpp:60
 #: src/mmg/options/mmg.cpp:69
 #: src/mmg/tabs/global.cpp:177
@@ -1980,7 +1980,7 @@ msgstr "发生异常"
 msgid "Causes mkvmerge to add 'stop display' commands to VobSub subtitle packets that do not contain a duration field."
 msgstr "让 mkvmerge 向不包含时长字段的 VobSub 字幕包添加 '停止显示' 命令。"
 
-#: src/mmg/mmg_dialog.cpp:91
+#: src/mmg/mmg_dialog.cpp:93
 msgid "Change mmg's preferences and options"
 msgstr "修改 mmg 的首选项"
 
@@ -1988,7 +1988,11 @@ msgstr "修改 mmg 的首选项"
 msgid "Change the default values"
 msgstr "修改默认值"
 
-#: src/mmg/options/dialog.cpp:91
+#: src/mmg/options/languages.cpp:88
+msgid "Changes to this list do not take effect until mmg is restarted."
+msgstr ""
+
+#: src/mmg/options/mmg.cpp:275
 msgid "Changing the interface language requires a restart to take effect."
 msgstr "对界面语言的改动将在下次运行时生效。"
 
@@ -2000,7 +2004,7 @@ msgstr "声道位置: %1%"
 msgid "Channels: %1%"
 msgstr "声道数: %1%"
 
-#: src/mmg/mmg_dialog.cpp:167
+#: src/mmg/mmg_dialog.cpp:169
 msgid "Chapter Editor"
 msgstr "章节编辑器"
 
@@ -2103,11 +2107,11 @@ msgstr "字符集:"
 msgid "Choose a chapter file"
 msgstr "选择章节文件"
 
-#: src/mmg/tabs/input_general.cpp:259
+#: src/mmg/tabs/input_general.cpp:249
 msgid "Choose a tag file"
 msgstr "选择标签文件"
 
-#: src/mmg/tabs/input_general.cpp:273
+#: src/mmg/tabs/input_general.cpp:263
 msgid "Choose a timecodes file"
 msgstr "选择时间码文件"
 
@@ -2254,6 +2258,11 @@ msgstr "命令行选项:"
 msgid "Command line saved."
 msgstr "命令行已保存。"
 
+#: src/mmg/options/languages.cpp:80
+#, fuzzy
+msgid "Common languages"
+msgstr "章节名称与语言"
+
 #: src/merge/pr_generic.cpp:729
 msgid "Compression failed: %1%\n"
 msgstr "压缩失败: %1%\n"
@@ -2290,7 +2299,7 @@ msgstr "内容编码"
 msgid "Content encryption"
 msgstr "内容加密"
 
-#: src/mmg/mmg_dialog.cpp:104
+#: src/mmg/mmg_dialog.cpp:106
 msgid "Copy the command line to the clipboard"
 msgstr "复制命令行到剪贴板"
 
@@ -2410,11 +2419,11 @@ msgstr "无法写入输出文件: %1% (%2%)\n"
 msgid "Country:"
 msgstr "国家:"
 
-#: src/mmg/mmg_dialog.cpp:106
+#: src/mmg/mmg_dialog.cpp:108
 msgid "Create &option file"
 msgstr "创建选项文件(&O)"
 
-#: src/mmg/mmg_dialog.cpp:114
+#: src/mmg/mmg_dialog.cpp:116
 msgid "Create a new chapter file"
 msgstr "创建一个新的章节文件"
 
@@ -3141,7 +3150,7 @@ msgstr "伽玛修正: %1%"
 msgid "General track options"
 msgstr "轨道常规选项"
 
-#: src/mmg/mmg_dialog.cpp:166
+#: src/mmg/mmg_dialog.cpp:168
 msgid "Global"
 msgstr "全局"
 
@@ -3289,7 +3298,7 @@ msgstr "无法使用文件 '%1%': 文件无法打开以读取。\n"
 msgid "Inconsistent AAC audio packet (length: %1% != len_check %2%)\n"
 msgstr "不相容的 AAC 音频包 (长: %1% != len_check %2%)\n"
 
-#: src/mmg/mmg_dialog.cpp:164
+#: src/mmg/mmg_dialog.cpp:166
 msgid "Input"
 msgstr "输入"
 
@@ -3650,6 +3659,11 @@ msgstr "语言:"
 msgid "Language: %1%"
 msgstr "语言: %1%"
 
+#: src/mmg/options/dialog.cpp:50
+#, fuzzy
+msgid "Languages"
+msgstr "语言"
+
 #: src/mmg/cli_options_dlg.cpp:108
 msgid "Leave additional space (EbmlVoid) in the output file after the chapters."
 msgstr "在输出文件的章节中留额外的空格 (EbmlVoid)。"
@@ -3658,7 +3672,7 @@ msgstr "在输出文件的章节中留额外的空格 (EbmlVoid)。"
 msgid "Left eye"
 msgstr "左眼视角"
 
-#: src/mmg/mmg_dialog.cpp:111
+#: src/mmg/mmg_dialog.cpp:113
 msgid "Lets you add arbitrary options to the command line"
 msgstr "允许您向命令行添加任意选项"
 
@@ -3692,11 +3706,11 @@ msgstr "行 %1%: 此行似乎是字幕条目但格式无法识别。此条将被
 msgid "Line %1%: The line seems to be a subtitle entry but the timecode was negative even after adding the track delay. Negative timecodes are not supported in Matroska. This entry will be skipped.\n"
 msgstr "行 %1%: 此行似乎是字幕条目但时间码为负即使添加了轨道延时。负的时间码不受 Matroska 的支持。此条将被跳过。\n"
 
-#: src/mmg/mmg_dialog.cpp:115
+#: src/mmg/mmg_dialog.cpp:117
 msgid "Load a chapter file (simple/OGM format or XML format)"
 msgstr "载入章节文件 (简单/OGM 格式或 XML 格式)"
 
-#: src/mmg/mmg_dialog.cpp:86
+#: src/mmg/mmg_dialog.cpp:88
 msgid "Load muxing settings from a file"
 msgstr "从文件载入混流设置"
 
@@ -4176,7 +4190,7 @@ msgstr "仅附加到首个文件"
 msgid "Only v7 and newer VobSub files are supported. If you have an older version then use the VSConv utility from http://sourceforge.net/projects/guliverkli/ to convert these files to v7 files.\n"
 msgstr "只支持 v7 和更高版本的 VobSub 文件。如果你使用的是旧版文件，请使用 VSConv 实用程序（可在 http://sourceforge.net/projects/guliverkli/ 获取）将这些文件转换为 v7 文件。\n"
 
-#: src/mmg/mmg_dialog.cpp:91
+#: src/mmg/mmg_dialog.cpp:93
 msgid "Op&tions\tCtrl-P"
 msgstr "选项(&T)\tCtrl-P"
 
@@ -4217,7 +4231,7 @@ msgstr "原值:"
 msgid "Output"
 msgstr "输出"
 
-#: src/mmg/mmg_dialog.cpp:171
+#: src/mmg/mmg_dialog.cpp:173
 msgid "Output filename"
 msgstr "输出文件名"
 
@@ -4361,7 +4375,7 @@ msgstr "进度: 100%\n"
 msgid "Progress: 100%%%1%"
 msgstr "进度: 100%%%1%"
 
-#: src/mmg/mmg_dialog.cpp:1524
+#: src/mmg/mmg_dialog.cpp:1527
 msgid "Querying mkvmerge's capabilities"
 msgstr "正向 mkvmerge 询问处理能力"
 
@@ -4488,7 +4502,7 @@ msgstr "Quicktime/MP4 读取器: 轨道 ID %1% 有多于一个 FourCC。只使�
 msgid "Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n"
 msgstr "Quicktime/MP4 读取器: 未知/不支持的 FourCC '%|1$.4s|'，轨道 %2%。\n"
 
-#: src/mmg/mmg_dialog.cpp:95
+#: src/mmg/mmg_dialog.cpp:97
 msgid "Quit the application"
 msgstr "退出本程序"
 
@@ -4568,7 +4582,7 @@ msgstr "移除元素"
 msgid "Remove name"
 msgstr "移除名称"
 
-#: src/mmg/options/dialog.cpp:91
+#: src/mmg/options/mmg.cpp:275
 msgid "Restart required"
 msgstr "需要重新运行"
 
@@ -4576,15 +4590,15 @@ msgstr "需要重新运行"
 msgid "Right eye"
 msgstr "右眼视角"
 
-#: src/mmg/mmg_dialog.cpp:101
+#: src/mmg/mmg_dialog.cpp:103
 msgid "Run mkvmerge and start the muxing process"
 msgstr "运行 mkvmerge 并开始混流进程"
 
-#: src/mmg/mmg_dialog.cpp:93
+#: src/mmg/mmg_dialog.cpp:95
 msgid "Run the header field editor"
 msgstr "运行头部字段编辑器"
 
-#: src/mmg/mmg_dialog.cpp:103
+#: src/mmg/mmg_dialog.cpp:105
 msgid "S&how the command line"
 msgstr "显示命令行(&H)"
 
@@ -4606,7 +4620,7 @@ msgstr "SRT 文本字幕"
 msgid "SSA/ASS text subtitles"
 msgstr "SSA/ASS 文本字幕"
 
-#: src/mmg/mmg_dialog.cpp:105
+#: src/mmg/mmg_dialog.cpp:107
 msgid "Sa&ve command line"
 msgstr "保存命令行(&V)"
 
@@ -4622,7 +4636,7 @@ msgstr "采样率，单位 Hz。"
 msgid "Sampling frequency: %1%"
 msgstr "采样率: %1%"
 
-#: src/mmg/mmg_dialog.cpp:119
+#: src/mmg/mmg_dialog.cpp:121
 msgid "Save &as"
 msgstr "另存为(&A)"
 
@@ -4634,27 +4648,27 @@ msgstr "另存信息为"
 msgid "Save log"
 msgstr "保存日志"
 
-#: src/mmg/mmg_dialog.cpp:87
+#: src/mmg/mmg_dialog.cpp:89
 msgid "Save muxing settings to a file"
 msgstr "将混流设置保存到文件"
 
-#: src/mmg/mmg_dialog.cpp:105
+#: src/mmg/mmg_dialog.cpp:107
 msgid "Save the command line to a file"
 msgstr "将命令行保存到文件"
 
-#: src/mmg/mmg_dialog.cpp:106
+#: src/mmg/mmg_dialog.cpp:108
 msgid "Save the command line to an option file that can be read by mkvmerge"
 msgstr "将命令行保存为 mkvmerge 可读的选项文件"
 
-#: src/mmg/mmg_dialog.cpp:117
+#: src/mmg/mmg_dialog.cpp:119
 msgid "Save the current chapters to a XML file"
 msgstr "将当前章节存为 XML 文件"
 
-#: src/mmg/mmg_dialog.cpp:119
+#: src/mmg/mmg_dialog.cpp:121
 msgid "Save the current chapters to a file with another name"
 msgstr "将当前章节以另一名称保存"
 
-#: src/mmg/mmg_dialog.cpp:118
+#: src/mmg/mmg_dialog.cpp:120
 msgid "Save the current chapters to an existing Matroska file"
 msgstr "将当前章节存至现有 Matroska 文件"
 
@@ -4662,7 +4676,7 @@ msgstr "将当前章节存至现有 Matroska 文件"
 msgid "Save the header values"
 msgstr "保存头部字段值"
 
-#: src/mmg/mmg_dialog.cpp:118
+#: src/mmg/mmg_dialog.cpp:120
 msgid "Save to &Matroska file"
 msgstr "保存到 &Matroska 文件(&M)"
 
@@ -4750,9 +4764,15 @@ msgstr "选择 Matroska 文件"
 msgid "Select output file"
 msgstr "选择输出文件"
 
-#: src/mmg/mmg_dialog.cpp:89
+#: src/mmg/mmg_dialog.cpp:91
 msgid "Select the file you want to write to"
 msgstr "选择您将写入的文件"
+
+#: src/mmg/options/languages.cpp:85
+msgid ""
+"Select the languages you want to be shown at the top\n"
+"of language drop down boxes."
+msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:124
 msgid "Select values to be applied"
@@ -4766,11 +4786,11 @@ msgstr "选择 mkvmerge 将为哪些块创建索引。在几乎所有情况下�
 msgid "Selects the character set a subtitle file or chapter information was written with. Only needed for non-UTF encoded subtitle files or for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."
 msgstr "选择字幕文件或章节信息保存时使用的字符集。只有非 UTF 编码的字幕文件或含有章节信息的文件 (如 OGM, MP4) 需要选择（mkvmerge 无法正确侦测编码）。"
 
-#: src/mmg/mmg_dialog.cpp:123
+#: src/mmg/mmg_dialog.cpp:125
 msgid "Set &default values"
 msgstr "设置默认值(&D)"
 
-#: src/mmg/mmg_dialog.cpp:89
+#: src/mmg/mmg_dialog.cpp:91
 msgid "Set &output file"
 msgstr "设置输出文件(&O)"
 
@@ -4872,15 +4892,15 @@ msgstr "显示“关于”对话框"
 msgid "Show mmg's debug window"
 msgstr "显示 mmg 的调试窗口"
 
-#: src/mmg/mmg_dialog.cpp:136
+#: src/mmg/mmg_dialog.cpp:138
 msgid "Show program information"
 msgstr "显示程序信息"
 
-#: src/mmg/mmg_dialog.cpp:103
+#: src/mmg/mmg_dialog.cpp:105
 msgid "Show the command line mmg creates for mkvmerge"
 msgstr "显示 mmg 为 mkvmerge 创建的命令行"
 
-#: src/mmg/mmg_dialog.cpp:135
+#: src/mmg/mmg_dialog.cpp:137
 msgid "Show the guide to mkvmerge GUI"
 msgstr "显示 mkvmerge GUI 指南"
 
@@ -4991,11 +5011,11 @@ msgstr "已选择按时间码/播放时长切割，但未输入任何数值。"
 msgid "Splitting is active, and at least one of the potential output files '%s%s*%s' already exists. Do you want to overwrite them?"
 msgstr "正在执行切割操作，但至少有一个潜在的输出文件 '%s%s*%s' 已存在。是否覆写？"
 
-#: src/mmg/mmg_dialog.cpp:185
+#: src/mmg/mmg_dialog.cpp:187
 msgid "Sta&rt muxing"
 msgstr "开始混流(&R)"
 
-#: src/mmg/mmg_dialog.cpp:101
+#: src/mmg/mmg_dialog.cpp:103
 msgid "Sta&rt muxing (run mkvmerge)\tCtrl-R"
 msgstr "开始混流(启动 mkvmerge)(&R)\tCtrl-R"
 
@@ -5007,7 +5027,7 @@ msgstr "启动状态为“挂起”的任务"
 msgid "Start the selected job(s) regardless of their status"
 msgstr "启动选择的任务（不论其状态如何）"
 
-#: src/mmg/mmg_dialog.cpp:85
+#: src/mmg/mmg_dialog.cpp:87
 msgid "Start with empty settings"
 msgstr "清空所有设置并重新启动"
 
@@ -5095,7 +5115,7 @@ msgstr "标签文件:"
 msgid "Tag files (*.xml)|*.xml|%s"
 msgstr "标签文件 (*.xml)|*.xml|%s"
 
-#: src/mmg/tabs/input_general.cpp:259
+#: src/mmg/tabs/input_general.cpp:249
 #, c-format
 msgid "Tag files (*.xml;*.txt)|*.xml;*.txt|%s"
 msgstr "标签文件 (*.xml;*.txt)|*.xml;*.txt|%s"
@@ -6006,7 +6026,7 @@ msgstr "此轨道使用了叫做 '编解码态元素' 的 Matroska 特性。mkvm
 msgid "Time slice"
 msgstr "时间切片"
 
-#: src/mmg/tabs/input_general.cpp:273
+#: src/mmg/tabs/input_general.cpp:263
 #, c-format
 msgid "Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"
 msgstr "时间码文件 (*.tmc;*.txt)|*.tmc;*.txt|%s"
@@ -6780,7 +6800,7 @@ msgstr "有效的小补缀有:\n"
 msgid "Validates the content of all changeable headers"
 msgstr "检验所有可变头的内容"
 
-#: src/mmg/mmg_dialog.cpp:121
+#: src/mmg/mmg_dialog.cpp:123
 msgid "Verify the current chapter entries to see if there are any errors"
 msgstr "验证当前章节条目有无错误"
 
@@ -7602,7 +7622,7 @@ msgstr "mkvextract.cpp/show_element(): 层级 > 9: %1%"
 msgid "mkvextract: Unknown mode!?\n"
 msgstr "mkvextract: 未知模式!?\n"
 
-#: src/mmg/options/dialog.cpp:48
+#: src/mmg/options/dialog.cpp:49
 msgid "mkvmerge"
 msgstr "mkvmerge"
 
@@ -7635,7 +7655,7 @@ msgstr "mkvmerge GUI 准备就绪"
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "mkvmerge GUI 设置文件 (*.mmg)|*.mmg|%s"
 
-#: src/mmg/mmg_dialog.cpp:79
+#: src/mmg/mmg_dialog.cpp:81
 #, c-format
 msgid "mkvmerge GUI v%s ('%s')"
 msgstr "mkvmerge GUI v%s ('%s')"
@@ -7751,17 +7771,21 @@ msgstr "mm_text_io_c: 目前尚不支持UTF32_*。\n"
 msgid "mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "mm_text_io_c::read_next_char(): 无效 UTF-8 字符。第一字节: 0x%|1$02x|"
 
-#: src/mmg/options/dialog.cpp:47
+#: src/mmg/options/dialog.cpp:48
 msgid "mmg"
 msgstr "mmg"
 
-#: src/mmg/mmg_dialog.cpp:81
+#: src/mmg/mmg_dialog.cpp:83
 msgid "mmg debug output"
 msgstr "mmg 调试输出"
 
 #: src/mmg/options/mmg.cpp:162
 msgid "mmg options"
 msgstr "mmg 选项"
+
+#: src/mmg/options/languages.cpp:86
+msgid "mmg will reset to the default list if no entry is selected."
+msgstr ""
 
 #: src/input/r_mp3.cpp:59
 msgid "mp3_reader: Could not open the source file."
@@ -8003,7 +8027,7 @@ msgstr "tta_reader: 无法打开文件。"
 msgid "tta_reader: tag_size < 0 in the c'tor. %1%\n"
 msgstr "tta_reader: c'tor 中 tag_size < 0。 %1%\n"
 
-#: src/mmg/tabs/input_general.cpp:172
+#: src/mmg/tabs/input_general.cpp:139
 msgid "und (Undetermined)"
 msgstr "und (未定)"
 

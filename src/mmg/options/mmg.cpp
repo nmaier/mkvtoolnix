@@ -253,6 +253,35 @@ optdlg_mmg_tab::get_selected_ui_language() {
   return m_sorted_locales[cob_ui_language->GetSelection()];
 }
 
+void
+optdlg_mmg_tab::save_options() {
+  m_options.output_directory              = tc_output_directory->GetValue();
+  m_options.autoset_output_filename       = cb_autoset_output_filename->IsChecked();
+  m_options.ask_before_overwriting        = cb_ask_before_overwriting->IsChecked();
+  m_options.on_top                        = cb_on_top->IsChecked();
+  m_options.filenew_after_add_to_jobqueue = cb_filenew_after_add_to_jobqueue->IsChecked();
+  m_options.filenew_after_successful_mux  = cb_filenew_after_successful_mux->IsChecked();
+  m_options.warn_usage                    = cb_warn_usage->IsChecked();
+  m_options.gui_debugging                 = cb_gui_debugging->IsChecked();
+  m_options.set_delay_from_filename       = cb_set_delay_from_filename->IsChecked();
+  m_options.output_directory_mode         = rb_odm_input_file->GetValue() ? ODM_FROM_FIRST_INPUT_FILE
+                                          : rb_odm_previous->GetValue()   ? ODM_PREVIOUS
+                                          :                                 ODM_FIXED;
+
+#if defined(HAVE_LIBINTL_H)
+  std::string new_ui_locale = get_selected_ui_language();
+
+  if (downcase(new_ui_locale) != downcase(app->m_ui_locale))
+    wxMessageBox(Z("Changing the interface language requires a restart to take effect."), Z("Restart required"), wxOK | wxCENTER | wxICON_INFORMATION);
+
+  app->m_ui_locale  = new_ui_locale;
+
+  wxConfigBase *cfg = wxConfigBase::Get();
+  cfg->SetPath(wxT("/GUI"));
+  cfg->Write(wxT("ui_locale"), wxString(new_ui_locale.c_str(), wxConvUTF8));
+#endif  // HAVE_LIBINTL_H
+}
+
 IMPLEMENT_CLASS(optdlg_mmg_tab, wxPanel);
 BEGIN_EVENT_TABLE(optdlg_mmg_tab, wxPanel)
   EVT_BUTTON(ID_B_BROWSE_OUTPUT_DIRECTORY,    optdlg_mmg_tab::on_browse_output_directory)
