@@ -18,7 +18,7 @@
 #include "common/extern_data.h"
 #include "common/wx.h"
 #include "mmg/mmg.h"
-#include "common/output.h"
+
 void
 mmg_options_t::init_popular_languages(const wxString &list) {
   int i;
