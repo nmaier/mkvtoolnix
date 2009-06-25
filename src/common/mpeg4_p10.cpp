@@ -671,6 +671,15 @@ mpeg4::p10::avc_es_parser_c::write_nalu_size(unsigned char *buffer,
 bool
 mpeg4::p10::avc_es_parser_c::flush_decision(slice_info_t &si,
                                             slice_info_t &ref) {
+
+  if (NALU_TYPE_IDR_SLICE == si.nalu_type) {
+    if (0 != si.first_mb_in_slice)
+      return false;
+
+    if ((NALU_TYPE_IDR_SLICE == ref.nalu_type) && (si.idr_pic_id != ref.idr_pic_id))
+      return true;
+  }
+
   if (si.frame_num != ref.frame_num)
     return true;
   if (si.field_pic_flag != ref.field_pic_flag)
@@ -693,11 +702,6 @@ mpeg4::p10::avc_es_parser_c::flush_decision(slice_info_t &si,
         return true;
     }
   }
-
-  if ((NALU_TYPE_IDR_SLICE == si.nalu_type) &&
-      (NALU_TYPE_IDR_SLICE == ref.nalu_type) &&
-      (si.idr_pic_id != ref.idr_pic_id))
-    return true;
 
   return false;
 }
@@ -947,8 +951,8 @@ mpeg4::p10::avc_es_parser_c::parse_slice(memory_cptr &buffer,
         (NALU_TYPE_IDR_SLICE != si.nalu_type))
       return false;
 
-    geread(r);                  // first_mb_in_slice
-    si.type = geread(r);        // slice_type
+    si.first_mb_in_slice = geread(r); // first_mb_in_slice
+    si.type              = geread(r); // slice_type
 
     ++m_num_slices_by_type[9 < si.type ? 10 : si.type];
 

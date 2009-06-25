@@ -108,6 +108,7 @@ namespace mpeg4 {
       unsigned pic_order_cnt_lsb;
       int delta_pic_order_cnt_bottom;
       int delta_pic_order_cnt[2];
+      int first_mb_in_slice;
 
       int sps;
       int pps;
