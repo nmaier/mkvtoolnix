@@ -21,9 +21,9 @@
 
 #include <vector>
 
-#define ID_TC_MKVMERGE                     15000
-#define ID_B_BROWSEMKVMERGE                15001
-#define ID_COB_PRIORITY                    15002
+#define ID_TC_MKVMERGE      15000
+#define ID_B_BROWSEMKVMERGE 15001
+#define ID_COB_PRIORITY     15002
 
 class optdlg_mkvmerge_tab: public wxPanel {
   DECLARE_CLASS(optdlg_mkvmerge_tab);

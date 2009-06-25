@@ -20,20 +20,20 @@
 
 #include <vector>
 
-#define ID_CB_AUTOSET_OUTPUT_FILENAME      15103
-#define ID_CB_ASK_BEFORE_OVERWRITING       15104
-#define ID_CB_ON_TOP                       15105
-#define ID_CB_NEW_AFTER_ADD_TO_JOBQUEUE    15106
-#define ID_CB_WARN_USAGE                   15107
-#define ID_CB_GUI_DEBUGGING                15108
-#define ID_CB_SET_DELAY_FROM_FILENAME      15110
-#define ID_TC_OUTPUT_DIRECTORY             15111
-#define ID_B_BROWSE_OUTPUT_DIRECTORY       15112
-#define ID_RB_ODM_INPUT_FILE               15113
-#define ID_RB_ODM_PREVIOUS                 15114
-#define ID_RB_ODM_FIXED                    15115
-#define ID_COB_UI_LANGUAGE                 15116
-#define ID_CB_NEW_AFTER_SUCCESSFUL_MUX     15117
+#define ID_CB_AUTOSET_OUTPUT_FILENAME   15103
+#define ID_CB_ASK_BEFORE_OVERWRITING    15104
+#define ID_CB_ON_TOP                    15105
+#define ID_CB_NEW_AFTER_ADD_TO_JOBQUEUE 15106
+#define ID_CB_WARN_USAGE                15107
+#define ID_CB_GUI_DEBUGGING             15108
+#define ID_CB_SET_DELAY_FROM_FILENAME   15110
+#define ID_TC_OUTPUT_DIRECTORY          15111
+#define ID_B_BROWSE_OUTPUT_DIRECTORY    15112
+#define ID_RB_ODM_INPUT_FILE            15113
+#define ID_RB_ODM_PREVIOUS              15114
+#define ID_RB_ODM_FIXED                 15115
+#define ID_COB_UI_LANGUAGE              15116
+#define ID_CB_NEW_AFTER_SUCCESSFUL_MUX  15117
 
 class optdlg_mmg_tab: public wxPanel {
   DECLARE_CLASS(optdlg_mmg_tab);
