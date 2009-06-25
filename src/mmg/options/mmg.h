@@ -16,9 +16,10 @@
 
 #include "common/os.h"
 
+#include <vector>
 #include <wx/log.h>
 
-#include <vector>
+#include "mmg/options/tab_base.h"
 
 #define ID_CB_AUTOSET_OUTPUT_FILENAME   15103
 #define ID_CB_ASK_BEFORE_OVERWRITING    15104
@@ -35,7 +36,7 @@
 #define ID_COB_UI_LANGUAGE              15116
 #define ID_CB_NEW_AFTER_SUCCESSFUL_MUX  15117
 
-class optdlg_mmg_tab: public wxPanel {
+class optdlg_mmg_tab: public optdlg_base_tab {
   DECLARE_CLASS(optdlg_mmg_tab);
   DECLARE_EVENT_TABLE();
 public:
@@ -48,8 +49,6 @@ public:
   wxCheckBox *cb_set_delay_from_filename;
   wxRadioButton *rb_odm_input_file, *rb_odm_previous, *rb_odm_fixed;
   wxButton *b_browse_output_directory;
-
-  mmg_options_t &m_options;
 
 #if defined(HAVE_LIBINTL_H)
   wxMTX_COMBOBOX_TYPE *cob_ui_language;
@@ -71,7 +70,8 @@ public:
 
   std::string get_selected_ui_language();
 
-  void save_options();
+  virtual void save_options();
+  virtual wxString get_title();
 };
 
 #endif // __MMG_OPTIONS_MMG_H

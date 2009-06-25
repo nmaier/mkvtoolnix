@@ -83,87 +83,53 @@ public:
   wxCheckBox *cb_language, *cb_country;
 
 public:
-  chapter_values_dlg(wxWindow *parent, bool set_defaults,
-                     wxString old_def_language = wxEmptyString,
-                     wxString old_def_country = wxEmptyString);
+  chapter_values_dlg(wxWindow *parent);
   void on_language_clicked(wxCommandEvent &evt);
   void on_country_clicked(wxCommandEvent &evt);
 };
 
-chapter_values_dlg::chapter_values_dlg(wxWindow *parent,
-                                       bool set_defaults,
-                                       wxString old_def_language,
-                                       wxString old_def_country):
-  wxDialog(parent, 0, wxEmptyString, wxDefaultPosition, wxSize(350, 200)) {
+chapter_values_dlg::chapter_values_dlg(wxWindow *parent)
+  : wxDialog(parent, 0, wxEmptyString, wxDefaultPosition, wxSize(350, 200))
+{
   wxBoxSizer *siz_all, *siz_buttons;
   wxFlexGridSizer *siz_input;
   uint32_t i;
 
   siz_all = new wxBoxSizer(wxVERTICAL);
-  if (set_defaults) {
-    SetTitle(Z("Change the default values"));
-    siz_all->Add(new wxStaticText(this, wxID_STATIC,
-                                  Z("Here you can set the default values that mmg will use\n"
-                                    "for each chapter that you create. These values can\n"
-                                    "then be changed if needed. The default values will be\n"
-                                    "saved when you exit mmg.")),
-                 0, wxLEFT | wxRIGHT | wxTOP, 10);
+  SetTitle(Z("Select values to be applied"));
+  siz_all->Add(new wxStaticText(this, wxID_STATIC,
+                                Z("Please enter the values for the language and the\n"
+                                  "country that you want to apply to all the chapters\n"
+                                  "below and including the currently selected entry.")),
+               0, wxLEFT | wxRIGHT | wxTOP, 10);
 
-    siz_input = new wxFlexGridSizer(2);
-    siz_input->AddGrowableCol(1);
+  siz_input = new wxFlexGridSizer(2);
+  siz_input->AddGrowableCol(1);
 
-    siz_input->Add(new wxStaticText(this, wxID_STATIC, Z("Language:")), 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
-    cob_language = new wxMTX_COMBOBOX_TYPE(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
-    siz_input->Add(cob_language, 0, wxGROW, 0);
+  cb_language = new wxCheckBox(this, ID_CVD_CB_LANGUAGE, Z("Set language to:"));
+  cb_language->SetValue(false);
+  siz_input->Add(cb_language, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+  cob_language = new wxMTX_COMBOBOX_TYPE(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_language->Enable(false);
+  siz_input->Add(cob_language, 0, wxGROW, 0);
 
-    siz_input->Add(new wxStaticText(this, wxID_STATIC, Z("Country:")), 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
-    cob_country = new wxMTX_COMBOBOX_TYPE(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
-    siz_input->Add(cob_country, 0, wxGROW, 0);
-
-  } else {
-    SetTitle(Z("Select values to be applied"));
-    siz_all->Add(new wxStaticText(this, wxID_STATIC,
-                                  Z("Please enter the values for the language and the\n"
-                                    "country that you want to apply to all the chapters\n"
-                                    "below and including the currently selected entry.")),
-                 0, wxLEFT | wxRIGHT | wxTOP, 10);
-
-    siz_input = new wxFlexGridSizer(2);
-    siz_input->AddGrowableCol(1);
-
-    cb_language = new wxCheckBox(this, ID_CVD_CB_LANGUAGE, Z("Set language to:"));
-    cb_language->SetValue(false);
-    siz_input->Add(cb_language, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
-    cob_language = new wxMTX_COMBOBOX_TYPE(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
-    cob_language->Enable(false);
-    siz_input->Add(cob_language, 0, wxGROW, 0);
-
-    cb_country = new wxCheckBox(this, ID_CVD_CB_COUNTRY, Z("Set country to:"));
-    cb_country->SetValue(false);
-    siz_input->Add(cb_country, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
-    cob_country = new wxMTX_COMBOBOX_TYPE(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
-    cob_country->Enable(false);
-    siz_input->Add(cob_country, 0, wxGROW, 0);
-
-  }
+  cb_country = new wxCheckBox(this, ID_CVD_CB_COUNTRY, Z("Set country to:"));
+  cb_country->SetValue(false);
+  siz_input->Add(cb_country, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+  cob_country = new wxMTX_COMBOBOX_TYPE(this, wxID_STATIC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_country->Enable(false);
+  siz_input->Add(cob_country, 0, wxGROW, 0);
 
   siz_all->AddSpacer(10);
   siz_all->Add(siz_input, 0, wxGROW | wxLEFT | wxRIGHT, 10);
   siz_all->AddSpacer(10);
 
-  bool found = false;
-  for (i = 0; i < sorted_iso_codes.Count(); i++) {
+  for (i = 0; i < sorted_iso_codes.Count(); i++)
     cob_language->Append(sorted_iso_codes[i]);
-    if (!found && (extract_language_code(sorted_iso_codes[i]) == old_def_language)) {
-      cob_language->SetValue(sorted_iso_codes[i]);
-      found = true;
-    }
-  }
 
   cob_country->Append(wxEmptyString);
   for (i = 0; cctlds[i] != NULL; i++)
     cob_country->Append(wxU(cctlds[i]));
-  cob_country->SetValue(old_def_country);
 
   siz_buttons = new wxBoxSizer(wxHORIZONTAL);
   siz_buttons->AddStretchSpacer();
@@ -1241,31 +1207,6 @@ tab_chapters::on_chapter_name_changed(wxCommandEvent &evt) {
 }
 
 void
-tab_chapters::on_set_default_values(wxCommandEvent &evt) {
-  wxString language;
-  std::string cctld;
-
-  chapter_values_dlg dlg(this, true, wxU(g_default_chapter_language.c_str()),
-                         wxU(g_default_chapter_country.c_str()));
-
-  if (dlg.ShowModal() != wxID_OK)
-    return;
-
-  language = extract_language_code(dlg.cob_language->GetValue());
-  if (!is_valid_iso639_2_code(wxMB(language))) {
-    wxMessageBox(wxString::Format(Z("The language '%s' is not a valid language and cannot be selected."), language.c_str()), Z("Invalid language selected"), wxICON_ERROR | wxOK);
-    return;
-  }
-  g_default_chapter_language = wxMB(language);
-  cctld = wxMB(dlg.cob_country->GetValue());
-  if (!is_valid_cctld(cctld.c_str())) {
-    wxMessageBox(wxString::Format(Z("The country '%s' is not a valid ccTLD and cannot be selected."), dlg.cob_country->GetValue().c_str()), Z("Invalid country selected"), wxICON_ERROR | wxOK);
-    return;
-  }
-  g_default_chapter_country = cctld;
-}
-
-void
 tab_chapters::set_values_recursively(wxTreeItemId id,
                                      const wxString &s,
                                      bool set_language) {
@@ -1327,7 +1268,7 @@ tab_chapters::on_set_values(wxCommandEvent &evt) {
   chapter_node_data_c *t;
   wxString s;
   uint32_t i, n;
-  chapter_values_dlg dlg(this, false);
+  chapter_values_dlg dlg(this);
 
   id = tc_chapters->GetSelection();
   if (!id.IsOk())

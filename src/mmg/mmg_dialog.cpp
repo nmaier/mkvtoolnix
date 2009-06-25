@@ -121,8 +121,6 @@ mmg_dialog::mmg_dialog():
   chapter_menu->Append(ID_M_CHAPTERS_SAVEAS, Z("Save &as"), Z("Save the current chapters to a file with another name"));
   chapter_menu->AppendSeparator();
   chapter_menu->Append(ID_M_CHAPTERS_VERIFY, Z("&Verify"), Z("Verify the current chapter entries to see if there are any errors"));
-  chapter_menu->AppendSeparator();
-  chapter_menu->Append(ID_M_CHAPTERS_SETDEFAULTS, Z("Set &default values"));
   chapter_menu_sep = false;
   update_chapter_menu();
 
@@ -1147,12 +1145,6 @@ mmg_dialog::on_verify_chapters(wxCommandEvent &evt) {
 }
 
 void
-mmg_dialog::on_set_default_chapter_values(wxCommandEvent &evt) {
-  notebook->SetSelection(4);
-  chapter_editor_page->on_set_default_values(evt);
-}
-
-void
 mmg_dialog::on_window_selected(wxCommandEvent &evt) {
   notebook->SetSelection(evt.GetId() - ID_M_WINDOW_INPUT);
 }
@@ -1612,7 +1604,6 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_CHAPTERS_SAVEAS,          mmg_dialog::on_save_chapters_as)
   EVT_MENU(ID_M_CHAPTERS_SAVETOKAX,       mmg_dialog::on_save_chapters_to_kax_file)
   EVT_MENU(ID_M_CHAPTERS_VERIFY,          mmg_dialog::on_verify_chapters)
-  EVT_MENU(ID_M_CHAPTERS_SETDEFAULTS,     mmg_dialog::on_set_default_chapter_values)
   EVT_MENU(ID_M_CHAPTERS_LOADLAST1,       mmg_dialog::on_chapters_load_last)
   EVT_MENU(ID_M_CHAPTERS_LOADLAST2,       mmg_dialog::on_chapters_load_last)
   EVT_MENU(ID_M_CHAPTERS_LOADLAST3,       mmg_dialog::on_chapters_load_last)

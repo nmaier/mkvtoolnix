@@ -38,8 +38,7 @@ translation_table_c optdlg_mkvmerge_tab::cob_priority_translations;
 
 optdlg_mkvmerge_tab::optdlg_mkvmerge_tab(wxWindow *parent,
                                          mmg_options_t &options)
-  : wxPanel(parent)
-  , m_options(options)
+  : optdlg_base_tab(parent, options)
 {
   // Setup static variables.
 
@@ -138,7 +137,12 @@ optdlg_mkvmerge_tab::save_options() {
   m_options.priority = get_selected_priority();
 }
 
-IMPLEMENT_CLASS(optdlg_mkvmerge_tab, wxPanel);
-BEGIN_EVENT_TABLE(optdlg_mkvmerge_tab, wxPanel)
+wxString
+optdlg_mkvmerge_tab::get_title() {
+  return Z("mkvmerge");
+}
+
+IMPLEMENT_CLASS(optdlg_mkvmerge_tab, optdlg_base_tab);
+BEGIN_EVENT_TABLE(optdlg_mkvmerge_tab, optdlg_base_tab)
   EVT_BUTTON(ID_B_BROWSEMKVMERGE, optdlg_mkvmerge_tab::on_browse_mkvmerge)
 END_EVENT_TABLE();

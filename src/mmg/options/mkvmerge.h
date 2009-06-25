@@ -19,22 +19,20 @@
 #include <wx/log.h>
 #include <wx/panel.h>
 
-#include <vector>
+#include "mmg/options/tab_base.h"
 
 #define ID_TC_MKVMERGE      15000
 #define ID_B_BROWSEMKVMERGE 15001
 #define ID_COB_PRIORITY     15002
 
-class optdlg_mkvmerge_tab: public wxPanel {
+class optdlg_mkvmerge_tab: public optdlg_base_tab {
   DECLARE_CLASS(optdlg_mkvmerge_tab);
   DECLARE_EVENT_TABLE();
-public:
+protected:
   wxTextCtrl *tc_mkvmerge;
   wxMTX_COMBOBOX_TYPE *cob_priority;
 
-  mmg_options_t &m_options;
-
-public:
+public:                         // Static
   static translation_table_c cob_priority_translations;
 
 public:
@@ -45,7 +43,8 @@ public:
   void select_priority(const wxString &priority);
   wxString get_selected_priority();
 
-  void save_options();
+  virtual void save_options();
+  virtual wxString get_title();
 };
 
 #endif // __MMG_OPTIONS_MKVMERGE_H

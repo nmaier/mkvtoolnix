@@ -32,7 +32,11 @@
 #include "common/wx.h"
 #include "mmg/mmg_dialog.h"
 #include "mmg/mmg.h"
+#include "mmg/options/chapters.h"
 #include "mmg/options/dialog.h"
+#include "mmg/options/languages.h"
+#include "mmg/options/mkvmerge.h"
+#include "mmg/options/mmg.h"
 
 options_dialog::options_dialog(wxWindow *parent,
                                mmg_options_t &options)
@@ -40,14 +44,16 @@ options_dialog::options_dialog(wxWindow *parent,
   , m_options(options)
 {
 
-  nb_tabs       = new wxNotebook(this, ID_NOTEBOOK, wxDefaultPosition, wxDefaultSize, wxNB_TOP);
-  tab_mmg       = new optdlg_mmg_tab(nb_tabs, options);
-  tab_mkvmerge  = new optdlg_mkvmerge_tab(nb_tabs, options);
-  tab_languages = new optdlg_languages_tab(nb_tabs, options);
+  nb_tabs = new wxNotebook(this, ID_NOTEBOOK, wxDefaultPosition, wxDefaultSize, wxNB_TOP);
 
-  nb_tabs->AddPage(tab_mmg,       Z("mmg"));
-  nb_tabs->AddPage(tab_mkvmerge,  Z("mkvmerge"));
-  nb_tabs->AddPage(tab_languages, Z("Languages"));
+  tabs.push_back(new optdlg_mmg_tab(      nb_tabs, options));
+  tabs.push_back(new optdlg_mkvmerge_tab( nb_tabs, options));
+  tabs.push_back(new optdlg_languages_tab(nb_tabs, options));
+  tabs.push_back(new optdlg_chapters_tab( nb_tabs, options));
+
+  std::vector<optdlg_base_tab *>::iterator tab_it;
+  mxforeach(tab_it, tabs)
+    nb_tabs->AddPage(*tab_it, (*tab_it)->get_title());
 
   wxBoxSizer *siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->AddSpacer(5);
@@ -71,9 +77,15 @@ options_dialog::options_dialog(wxWindow *parent,
 
 void
 options_dialog::on_ok(wxCommandEvent &evt) {
-  tab_mkvmerge->save_options();
-  tab_mmg->save_options();
-  tab_languages->save_options();
+  unsigned int idx;
+  for (idx = 0; tabs.size() > idx; ++idx) {
+    if (!tabs[idx]->validate_choices()) {
+      nb_tabs->SetSelection(idx);
+      return;
+    }
+
+    tabs[idx]->save_options();
+  }
 
   EndModal(wxID_OK);
 }

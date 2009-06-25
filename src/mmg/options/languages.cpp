@@ -35,8 +35,7 @@ wxArrayString optdlg_languages_tab::s_languages;
 
 optdlg_languages_tab::optdlg_languages_tab(wxWindow *parent,
                                            mmg_options_t &options)
-  : wxPanel(parent)
-  , m_options(options)
+  : optdlg_base_tab(parent, options)
 {
   // Setup static variables.
 
@@ -112,6 +111,9 @@ optdlg_languages_tab::save_options() {
     m_options.popular_languages.Add(extract_language_code(lb_popular_languages->GetString(selections[idx])));
 }
 
-IMPLEMENT_CLASS(optdlg_languages_tab, wxPanel);
-BEGIN_EVENT_TABLE(optdlg_languages_tab, wxPanel)
-END_EVENT_TABLE();
+wxString
+optdlg_languages_tab::get_title() {
+  return Z("Languages");
+}
+
+IMPLEMENT_CLASS(optdlg_languages_tab, optdlg_base_tab);

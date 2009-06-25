@@ -16,13 +16,10 @@
 
 #include "common/os.h"
 
+#include <vector>
 #include <wx/log.h>
 
-#include <vector>
-
-#include "mmg/options/languages.h"
-#include "mmg/options/mkvmerge.h"
-#include "mmg/options/mmg.h"
+#include "mmg/options/tab_base.h"
 
 class options_dialog: public wxDialog {
   DECLARE_CLASS(options_dialog);
@@ -31,9 +28,7 @@ public:
   mmg_options_t &m_options;
 
   wxNotebook *nb_tabs;
-  optdlg_mkvmerge_tab *tab_mkvmerge;
-  optdlg_mmg_tab *tab_mmg;
-  optdlg_languages_tab *tab_languages;
+  std::vector<optdlg_base_tab *> tabs;
 
 public:
   options_dialog(wxWindow *parent, mmg_options_t &options);

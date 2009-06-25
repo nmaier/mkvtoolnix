@@ -18,15 +18,12 @@
 
 #include <wx/log.h>
 
-#include <vector>
+#include "mmg/options/tab_base.h"
 
-class optdlg_languages_tab: public wxPanel {
+class optdlg_languages_tab: public optdlg_base_tab {
   DECLARE_CLASS(optdlg_languages_tab);
-  DECLARE_EVENT_TABLE();
-public:
+protected:
   wxListBox *lb_popular_languages;
-
-  mmg_options_t &m_options;
 
 public:
   static wxArrayString s_languages;
@@ -34,7 +31,8 @@ public:
 public:
   optdlg_languages_tab(wxWindow *parent, mmg_options_t &options);
 
-  void save_options();
+  virtual void save_options();
+  virtual wxString get_title();
 };
 
 #endif // __MMG_OPTIONS_LANGUAGES_H

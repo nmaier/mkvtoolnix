@@ -52,8 +52,7 @@ struct locale_sorter_t {
 
 optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
                                mmg_options_t &options)
-  : wxPanel(parent)
-  , m_options(options)
+  : optdlg_base_tab(parent, options)
 {
   // Create the controls.
   cb_autoset_output_filename = new wxCheckBox(this, ID_CB_AUTOSET_OUTPUT_FILENAME, Z("Auto-set output filename"));
@@ -282,8 +281,13 @@ optdlg_mmg_tab::save_options() {
 #endif  // HAVE_LIBINTL_H
 }
 
-IMPLEMENT_CLASS(optdlg_mmg_tab, wxPanel);
-BEGIN_EVENT_TABLE(optdlg_mmg_tab, wxPanel)
+wxString
+optdlg_mmg_tab::get_title() {
+  return Z("mmg");
+}
+
+IMPLEMENT_CLASS(optdlg_mmg_tab, optdlg_base_tab);
+BEGIN_EVENT_TABLE(optdlg_mmg_tab, optdlg_base_tab)
   EVT_BUTTON(ID_B_BROWSE_OUTPUT_DIRECTORY,    optdlg_mmg_tab::on_browse_output_directory)
   EVT_CHECKBOX(ID_CB_AUTOSET_OUTPUT_FILENAME, optdlg_mmg_tab::on_autoset_output_filename_selected)
   EVT_RADIOBUTTON(ID_RB_ODM_INPUT_FILE,       optdlg_mmg_tab::on_autoset_output_filename_selected)

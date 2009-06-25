@@ -94,7 +94,6 @@ public:
   void on_chapter_name_enter(wxCommandEvent &evt);
   void on_add_chapter_name(wxCommandEvent &evt);
   void on_remove_chapter_name(wxCommandEvent &evt);
-  void on_set_default_values(wxCommandEvent &evt);
   void on_set_values(wxCommandEvent &evt);
   void on_adjust_timecodes(wxCommandEvent &evt);
   void on_flag_hidden(wxCommandEvent &evt);
