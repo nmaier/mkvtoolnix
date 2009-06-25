@@ -776,7 +776,7 @@ msgstr ""
 msgid "&Abort"
 msgstr "中止(&A)"
 
-#: src/mmg/mmg_dialog.cpp:138
+#: src/mmg/mmg_dialog.cpp:136
 msgid "&About"
 msgstr "關於(&A)"
 
@@ -785,19 +785,19 @@ msgid "&About\tF1"
 msgstr "關於(&A)\tF1"
 
 #: src/mmg/mmg_dialog.cpp:110
-#: src/mmg/mmg_dialog.cpp:193
+#: src/mmg/mmg_dialog.cpp:191
 msgid "&Add to job queue"
 msgstr "加入到任務佇列(&A)"
 
-#: src/mmg/mmg_dialog.cpp:131
+#: src/mmg/mmg_dialog.cpp:129
 msgid "&Attachments\tAlt-2"
 msgstr "附件選項(&A)\tAlt-2"
 
-#: src/mmg/mmg_dialog.cpp:143
+#: src/mmg/mmg_dialog.cpp:141
 msgid "&Chapter Editor"
 msgstr "章節編輯器(&C)"
 
-#: src/mmg/mmg_dialog.cpp:134
+#: src/mmg/mmg_dialog.cpp:132
 msgid "&Chapter editor\tAlt-4"
 msgstr "章節編輯器(&C)\tAlt-4"
 
@@ -813,7 +813,7 @@ msgstr "收起所有項目(&C)\tCtrl-P"
 msgid "&Copy command line to clipboard"
 msgstr "複製命令列至剪貼簿(&C)"
 
-#: src/mmg/mmg_dialog.cpp:190
+#: src/mmg/mmg_dialog.cpp:188
 msgid "&Copy to clipboard"
 msgstr "複製命令列(&C)"
 
@@ -833,13 +833,13 @@ msgstr "展開所有項(&E)\tCtrl-E"
 msgid "&Expand important elements\tCtrl-E"
 msgstr "展開重要分支(&E)\tCtrl-E"
 
-#: src/mmg/mmg_dialog.cpp:141
+#: src/mmg/mmg_dialog.cpp:139
 #: src/mmg/header_editor/frame.cpp:114
 #: src/info/wxwidgets_ui.cpp:147
 msgid "&File"
 msgstr "檔案(&F)"
 
-#: src/mmg/mmg_dialog.cpp:132
+#: src/mmg/mmg_dialog.cpp:130
 msgid "&Global options\tAlt-3"
 msgstr "整體選項(&G)\tAlt-3"
 
@@ -847,18 +847,18 @@ msgstr "整體選項(&G)\tAlt-3"
 msgid "&Header editor\tCtrl-E"
 msgstr "表頭編輯器(&H)\tCtrl-E"
 
-#: src/mmg/mmg_dialog.cpp:145
+#: src/mmg/mmg_dialog.cpp:143
 #: src/mmg/header_editor/frame.cpp:116
 #: src/info/wxwidgets_ui.cpp:149
 msgid "&Help"
 msgstr "說明(&H)"
 
-#: src/mmg/mmg_dialog.cpp:137
+#: src/mmg/mmg_dialog.cpp:135
 #: src/mmg/header_editor/frame.cpp:109
 msgid "&Help\tF1"
 msgstr "說明(&H)\tF1"
 
-#: src/mmg/mmg_dialog.cpp:130
+#: src/mmg/mmg_dialog.cpp:128
 msgid "&Input\tAlt-1"
 msgstr "輸入(&I)\tAlt-1"
 
@@ -874,7 +874,7 @@ msgstr "載入設定檔(&L)\tCtrl-L"
 msgid "&Manage jobs\tCtrl-J"
 msgstr "管理任務(&M)\tCtrl-J"
 
-#: src/mmg/mmg_dialog.cpp:142
+#: src/mmg/mmg_dialog.cpp:140
 msgid "&Muxing"
 msgstr "合成(&M)"
 
@@ -955,7 +955,7 @@ msgstr "驗證(&V)"
 msgid "&View log"
 msgstr "檢視日誌(&V)"
 
-#: src/mmg/mmg_dialog.cpp:144
+#: src/mmg/mmg_dialog.cpp:142
 msgid "&Window"
 msgstr "視窗(&W)"
 
@@ -1372,7 +1372,7 @@ msgstr "(未知元件: %1%)"
 msgid "(Unknown element: %1%; ID: 0x%2% size: %3%)"
 msgstr "(未知元件: %1%; ID: 0x%2% 大小: %3%)"
 
-#: src/mmg/tabs/chapters.cpp:407
+#: src/mmg/tabs/chapters.cpp:373
 msgid "(new chapter file)"
 msgstr "(新章節檔案)"
 
@@ -1380,15 +1380,15 @@ msgstr "(新章節檔案)"
 msgid "(none)"
 msgstr "(無)"
 
-#: src/mmg/tabs/chapters.cpp:441
+#: src/mmg/tabs/chapters.cpp:407
 msgid "(unnamed chapter)"
 msgstr "(未命名章節)"
 
-#: src/mmg/tabs/chapters.cpp:883
-#: src/mmg/tabs/chapters.cpp:965
-#: src/mmg/tabs/chapters.cpp:1084
-#: src/mmg/tabs/chapters.cpp:1612
-#: src/mmg/tabs/chapters.cpp:1627
+#: src/mmg/tabs/chapters.cpp:849
+#: src/mmg/tabs/chapters.cpp:931
+#: src/mmg/tabs/chapters.cpp:1050
+#: src/mmg/tabs/chapters.cpp:1553
+#: src/mmg/tabs/chapters.cpp:1568
 msgid "(unnamed)"
 msgstr "(未命名)"
 
@@ -1441,7 +1441,7 @@ msgstr "--- 任務 %d 終止"
 msgid "--- No job output found.\n"
 msgstr "--- 無任務輸出。\n"
 
-#: src/mmg/options/languages.cpp:47
+#: src/mmg/options/languages.cpp:46
 #: src/mmg/tabs/input_general.cpp:155
 msgid "---all---"
 msgstr "---全部---"
@@ -1521,7 +1521,7 @@ msgstr "一個人類可讀的字串，描述編解碼器。"
 msgid "A human-readable track name."
 msgstr "一個人類可讀的字串，描述軌道名稱。"
 
-#: src/mmg/mmg_dialog.cpp:1239
+#: src/mmg/mmg_dialog.cpp:1231
 #, c-format
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "描述為 '%s' 的任務已存在。是否加入描述相同的任務?"
@@ -1628,7 +1628,7 @@ msgstr "已中止對 %s 的處理"
 msgid "About mkvinfo"
 msgstr "關於 mkvinfo"
 
-#: src/mmg/mmg_dialog.cpp:602
+#: src/mmg/mmg_dialog.cpp:600
 msgid "About mkvmerge's GUI"
 msgstr "關於 mkvmerge's GUI"
 
@@ -1640,7 +1640,7 @@ msgstr "加入"
 msgid "Add &command line options"
 msgstr "加入命令列選項(&C)"
 
-#: src/mmg/tabs/chapters.cpp:234
+#: src/mmg/tabs/chapters.cpp:200
 msgid "Add chapter"
 msgstr "加入章節"
 
@@ -1652,11 +1652,11 @@ msgstr "加入命令列選項"
 msgid "Add element"
 msgstr "加入元件"
 
-#: src/mmg/tabs/chapters.cpp:305
+#: src/mmg/tabs/chapters.cpp:271
 msgid "Add name"
 msgstr "加入名稱"
 
-#: src/mmg/tabs/chapters.cpp:236
+#: src/mmg/tabs/chapters.cpp:202
 msgid "Add subchapter"
 msgstr "加入子章節"
 
@@ -1676,11 +1676,11 @@ msgstr "附加"
 msgid "Adds the current settings as a new job entry to the job queue"
 msgstr "將目前設定作為新任務項加入到任務佇列"
 
-#: src/mmg/tabs/chapters.cpp:1394
+#: src/mmg/tabs/chapters.cpp:1335
 msgid "Adjust chapter timecodes"
 msgstr "調整章節時間碼"
 
-#: src/mmg/tabs/chapters.cpp:244
+#: src/mmg/tabs/chapters.cpp:210
 msgid "Adjust timecodes"
 msgstr "調整時間碼"
 
@@ -1700,7 +1700,7 @@ msgstr "所有檔案 (*)|*"
 msgid "All Files (*.*)|*.*"
 msgstr "所有檔案 (*.*)|*.*"
 
-#: src/mmg/tabs/chapters.cpp:841
+#: src/mmg/tabs/chapters.cpp:807
 msgid "All chapter entries are valid."
 msgstr "所有章節項目皆正確。"
 
@@ -1721,7 +1721,7 @@ msgstr "允許以 Video-for-Windows 相容模式存儲的 AVC/h.264 視訊，例
 msgid "Allows the use of the CodecState element. This is used for e.g. MPEG-1/-2 video tracks for storing the sequence headers."
 msgstr "允許 CodecState 元件的使用。它被用於 MPEG-1/-2 視訊軌等的序列表頭存儲。"
 
-#: src/mmg/options/mmg.cpp:92
+#: src/mmg/options/mmg.cpp:91
 msgid "Always on top"
 msgstr "總在最前面"
 
@@ -1750,7 +1750,7 @@ msgid ""
 msgstr "轉義的檔名，對應上一剪輯。"
 
 #: src/mmg/header_editor/frame.cpp:674
-#: src/mmg/tabs/chapters.cpp:1947
+#: src/mmg/tabs/chapters.cpp:1888
 msgid "An unknown error occured. The file has been modified."
 msgstr "發生未知錯誤。檔已修改。"
 
@@ -1766,7 +1766,7 @@ msgstr "分析 MPEG4 位流，將每一畫格置於單獨的 Matroska 塊中，�
 msgid "Another default track for %1% tracks has already been set. The 'default' flag for track %2% of '%3%' will not be set.\n"
 msgstr "軌道 %1% 的另一個預設軌已設定。'%3%' 的 %2% 軌道的 '預設軌' 標記將不被設定。\n"
 
-#: src/mmg/mmg_dialog.cpp:455
+#: src/mmg/mmg_dialog.cpp:453
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr "另一個合成任務仍在處理中。要啟動一項新任務，請等待上一個任務完成或手動中止它。"
 
@@ -1779,7 +1779,7 @@ msgstr "不允許將一個檔案的軌道添加至同一個檔案的其他軌道
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "正在添加合併軌道 %1%（自檔 %2% ('%3%')）至軌道 %4%（自檔案 %5% ('%6%')）。\n"
 
-#: src/mmg/options/mmg.cpp:74
+#: src/mmg/options/mmg.cpp:73
 msgid "Ask before overwriting things (files, jobs)"
 msgstr "覆寫前詢問（檔、任務等）"
 
@@ -1823,7 +1823,7 @@ msgstr "附件 ID %1%: 類型 '%2%', 大小 %3% 位元組"
 msgid "Attachment style:"
 msgstr "附加方式:"
 
-#: src/mmg/mmg_dialog.cpp:167
+#: src/mmg/mmg_dialog.cpp:165
 #: src/mmg/tabs/attachments.cpp:59
 #: src/info/mkvinfo.cpp:1193
 msgid "Attachments"
@@ -1850,7 +1850,7 @@ msgstr "音訊取樣頻率"
 msgid "Audio track %u"
 msgstr "音軌 %u"
 
-#: src/mmg/options/mmg.cpp:59
+#: src/mmg/options/mmg.cpp:58
 msgid "Auto-set output filename"
 msgstr "自動設定輸出檔名"
 
@@ -1933,9 +1933,9 @@ msgstr "同時給定了外觀比例係數與 '--display-dimensions'。\n"
 msgid "Brings up the job queue editor"
 msgstr "調出任務佇列編輯器"
 
-#: src/mmg/mmg_dialog.cpp:182
-#: src/mmg/options/mkvmerge.cpp:60
-#: src/mmg/options/mmg.cpp:69
+#: src/mmg/mmg_dialog.cpp:180
+#: src/mmg/options/mkvmerge.cpp:59
+#: src/mmg/options/mmg.cpp:68
 #: src/mmg/tabs/global.cpp:177
 #: src/mmg/tabs/global.cpp:227
 #: src/mmg/tabs/input_general.cpp:85
@@ -1951,7 +1951,7 @@ msgstr "在來源容器不提供時間碼或畫格率值的情況下，無法將
 msgid "Cannot extract tracks of different kinds to the same file. This was requested for the tracks %1% and %2%.\n"
 msgstr "無法將不同類型的軌道提取至同一檔案。軌道 %1% 和 %2% 被要求這樣提取。\n"
 
-#: src/mmg/mmg_dialog.cpp:456
+#: src/mmg/mmg_dialog.cpp:454
 msgid "Cannot start second muxing job"
 msgstr "不能啟動其他合成任務"
 
@@ -1983,15 +1983,11 @@ msgstr "讓 mkvmerge 向不包含持續時間欄位的 VobSub 字幕包加入 '�
 msgid "Change mmg's preferences and options"
 msgstr "修改 mmg 的偏好設定和選項"
 
-#: src/mmg/tabs/chapters.cpp:104
-msgid "Change the default values"
-msgstr "修改預設值"
-
 #: src/mmg/options/languages.cpp:88
 msgid "Changes to this list do not take effect until mmg is restarted."
 msgstr ""
 
-#: src/mmg/options/mmg.cpp:275
+#: src/mmg/options/mmg.cpp:274
 msgid "Changing the interface language requires a restart to take effect."
 msgstr "變更介面語言需要重新啟動才會生效。"
 
@@ -2003,7 +1999,7 @@ msgstr "聲道位置: %1%"
 msgid "Channels: %1%"
 msgstr "聲道數: %1%"
 
-#: src/mmg/mmg_dialog.cpp:169
+#: src/mmg/mmg_dialog.cpp:167
 msgid "Chapter Editor"
 msgstr "章節編輯器"
 
@@ -2023,7 +2019,7 @@ msgstr "章節翻譯版本 UID: %1%"
 msgid "Chapter Translate ID: %1%"
 msgstr "章節翻譯 ID: %1%"
 
-#: src/mmg/mmg_dialog.cpp:479
+#: src/mmg/mmg_dialog.cpp:477
 msgid "Chapter editor is not empty"
 msgstr "章節編輯器不是空的"
 
@@ -2031,7 +2027,7 @@ msgstr "章節編輯器不是空的"
 msgid "Chapter file:"
 msgstr "章節檔案:"
 
-#: src/mmg/tabs/chapters.cpp:695
+#: src/mmg/tabs/chapters.cpp:661
 #, c-format
 msgid "Chapter files (*.xml)|*.xml|%s"
 msgstr "章節檔案 (*.xml)|*.xml|%s"
@@ -2041,14 +2037,19 @@ msgstr "章節檔案 (*.xml)|*.xml|%s"
 msgid "Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 msgstr "章節檔案 (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 
-#: src/mmg/tabs/chapters.cpp:543
+#: src/mmg/tabs/chapters.cpp:509
 #, c-format
 msgid "Chapter files (*.xml;*.txt;*.mka;*.mkv;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.cue|%s"
 msgstr "章節檔案 (*.xml;*.txt;*.mka;*.mkv;*.cue)|*.xml;*.txt;*.mka;*.mkv;*.cue|%s"
 
-#: src/mmg/tabs/chapters.cpp:298
+#: src/mmg/tabs/chapters.cpp:264
 msgid "Chapter names and languages"
 msgstr "章節名稱與語言"
+
+#: src/mmg/options/chapters.cpp:70
+#, fuzzy
+msgid "Chapter options"
+msgstr "額外選項"
 
 #: src/common/chapters/xml_parser.cpp:80
 msgid "Chapter parser: The ChapterUID %1% is not unique and could not be reused. A new one will be created.\n"
@@ -2058,18 +2059,19 @@ msgstr "章節解析器: 章節 UID %1% 不唯一，不能重複使用。將建�
 msgid "Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n"
 msgstr "章節解析器: 版本 UID %1% 不唯一，不能重複使用。將建立一個新的。\n"
 
-#: src/mmg/tabs/chapters.cpp:778
-#: src/mmg/tabs/chapters.cpp:786
-#: src/mmg/tabs/chapters.cpp:792
-#: src/mmg/tabs/chapters.cpp:799
-#: src/mmg/tabs/chapters.cpp:818
+#: src/mmg/tabs/chapters.cpp:744
+#: src/mmg/tabs/chapters.cpp:752
+#: src/mmg/tabs/chapters.cpp:758
+#: src/mmg/tabs/chapters.cpp:765
+#: src/mmg/tabs/chapters.cpp:784
 msgid "Chapter verification error"
 msgstr "章節驗證發生錯誤"
 
-#: src/mmg/tabs/chapters.cpp:841
+#: src/mmg/tabs/chapters.cpp:807
 msgid "Chapter verification succeeded"
 msgstr "章節驗證成功"
 
+#: src/mmg/options/chapters.cpp:130
 #: src/mmg/tabs/global.cpp:169
 #: src/info/mkvinfo.cpp:1663
 msgid "Chapters"
@@ -2080,16 +2082,16 @@ msgstr "章節"
 msgid "Chapters (%d entries) from %s"
 msgstr "章節 (%d 個項目) 自 %s"
 
-#: src/mmg/tabs/chapters.cpp:626
+#: src/mmg/tabs/chapters.cpp:592
 msgid "Chapters loaded."
 msgstr "章節已載入。"
 
-#: src/mmg/tabs/chapters.cpp:740
-#: src/mmg/tabs/chapters.cpp:1924
+#: src/mmg/tabs/chapters.cpp:706
+#: src/mmg/tabs/chapters.cpp:1865
 msgid "Chapters written."
 msgstr "章節已寫入。"
 
-#: src/mmg/tabs/chapters.cpp:225
+#: src/mmg/tabs/chapters.cpp:191
 msgid "Chapters:"
 msgstr "章節:"
 
@@ -2102,7 +2104,7 @@ msgstr "章節: %1% 項目"
 msgid "Charset:"
 msgstr "字元集:"
 
-#: src/mmg/tabs/chapters.cpp:542
+#: src/mmg/tabs/chapters.cpp:508
 msgid "Choose a chapter file"
 msgstr "選擇章節檔"
 
@@ -2118,7 +2120,7 @@ msgstr "選擇時間碼檔"
 msgid "Choose an attachment file"
 msgstr "選擇附件檔"
 
-#: src/mmg/mmg_dialog.cpp:279
+#: src/mmg/mmg_dialog.cpp:277
 msgid "Choose an input file"
 msgstr "選擇輸入檔"
 
@@ -2131,13 +2133,13 @@ msgid "Choose an input file to append"
 msgstr "選擇要添加的檔"
 
 #: src/mmg/jobs.cpp:316
-#: src/mmg/mmg_dialog.cpp:229
-#: src/mmg/mmg_dialog.cpp:323
-#: src/mmg/mmg_dialog.cpp:618
-#: src/mmg/mmg_dialog.cpp:639
+#: src/mmg/mmg_dialog.cpp:227
+#: src/mmg/mmg_dialog.cpp:321
+#: src/mmg/mmg_dialog.cpp:616
+#: src/mmg/mmg_dialog.cpp:637
 #: src/mmg/mux_dialog.cpp:203
-#: src/mmg/tabs/chapters.cpp:652
-#: src/mmg/tabs/chapters.cpp:694
+#: src/mmg/tabs/chapters.cpp:618
+#: src/mmg/tabs/chapters.cpp:660
 msgid "Choose an output file"
 msgstr "選擇輸出檔"
 
@@ -2145,15 +2147,15 @@ msgstr "選擇輸出檔"
 msgid "Choose the chapter file"
 msgstr "選擇章節檔"
 
-#: src/mmg/mmg_dialog.cpp:513
+#: src/mmg/mmg_dialog.cpp:511
 msgid "Choose the location of the mkvmerge GUI help files"
 msgstr "選擇 mkvmerge GUI 説明檔案的路徑"
 
-#: src/mmg/options/mkvmerge.cpp:104
+#: src/mmg/options/mkvmerge.cpp:103
 msgid "Choose the mkvmerge executable"
 msgstr "選擇 mkvmerge 可執行檔"
 
-#: src/mmg/options/mmg.cpp:229
+#: src/mmg/options/mmg.cpp:228
 msgid "Choose the output directory"
 msgstr "選擇輸出目錄"
 
@@ -2161,11 +2163,11 @@ msgstr "選擇輸出目錄"
 msgid "Choose the tags file"
 msgstr "選擇標籤檔"
 
-#: src/mmg/options/mmg.cpp:90
+#: src/mmg/options/mmg.cpp:89
 msgid "Clear inputs after a successful muxing run"
 msgstr "成功合成後清空輸入檔列表"
 
-#: src/mmg/options/mmg.cpp:88
+#: src/mmg/options/mmg.cpp:87
 msgid "Clear inputs after adding a job to the job queue"
 msgstr "任務加入到任務佇列後清空輸入檔列表"
 
@@ -2245,7 +2247,7 @@ msgstr "收起所有項目，這樣它們的子項目將不被顯示"
 msgid "Colour space: %1%"
 msgstr "色彩空間: %1%"
 
-#: src/mmg/mmg_dialog.cpp:670
+#: src/mmg/mmg_dialog.cpp:668
 msgid "Command line copied to clipboard."
 msgstr "命令列已複製至剪貼簿。"
 
@@ -2253,11 +2255,11 @@ msgstr "命令列已複製至剪貼簿。"
 msgid "Command line options:"
 msgstr "命令列選項:"
 
-#: src/mmg/mmg_dialog.cpp:628
+#: src/mmg/mmg_dialog.cpp:626
 msgid "Command line saved."
 msgstr "命令列已儲存。"
 
-#: src/mmg/options/languages.cpp:80
+#: src/mmg/options/languages.cpp:79
 #, fuzzy
 msgid "Common languages"
 msgstr "章節名稱與語言"
@@ -2270,15 +2272,15 @@ msgstr "壓縮失敗: %1%\n"
 msgid "Compression:"
 msgstr "壓縮方式:"
 
-#: src/mmg/mmg_dialog.cpp:274
+#: src/mmg/mmg_dialog.cpp:272
 msgid "Configuration cleared."
 msgstr "設定檔已清空。"
 
-#: src/mmg/mmg_dialog.cpp:317
+#: src/mmg/mmg_dialog.cpp:315
 msgid "Configuration loaded."
 msgstr "設定檔已載入。"
 
-#: src/mmg/mmg_dialog.cpp:352
+#: src/mmg/mmg_dialog.cpp:350
 msgid "Configuration saved."
 msgstr "設定檔已儲存。"
 
@@ -2322,7 +2324,7 @@ msgstr "無法為 mkvmerge 的命令列選項建立暫存檔案 '%s' (錯誤代�
 msgid "Could not create the file '%s'."
 msgstr "無法建立檔案 '%s'。"
 
-#: src/mmg/mmg_dialog.cpp:648
+#: src/mmg/mmg_dialog.cpp:646
 msgid "Could not create the specified file."
 msgstr "無法建立指定檔。"
 
@@ -2375,7 +2377,7 @@ msgstr "無法初始化 iconv 函式庫以供從 UTF-8 至 %1% 的轉換。某�
 msgid "Could not open '%1%' for reading.\n"
 msgstr "無法開啟 '%1%' 以讀取。\n"
 
-#: src/mmg/mmg_dialog.cpp:672
+#: src/mmg/mmg_dialog.cpp:670
 msgid "Could not open the clipboard."
 msgstr "無法開啟剪貼簿。"
 
@@ -2383,7 +2385,7 @@ msgstr "無法開啟剪貼簿。"
 msgid "Could not open the corresponding correction file '%1%c'.\n"
 msgstr "無法開啟一致性校正檔案 '%1%c'。\n"
 
-#: src/mmg/tabs/chapters.cpp:718
+#: src/mmg/tabs/chapters.cpp:684
 #, c-format
 msgid "Could not open the destination file '%s' for writing. Error code: %d (%s)."
 msgstr "無法開啟目的檔案 '%s' 以寫入。錯誤代號: %d (%s)。"
@@ -2413,8 +2415,8 @@ msgstr "無法讀取 FLAC 表頭套件。\n"
 msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr "無法寫入輸出檔: %1% (%2%)\n"
 
-#: src/mmg/tabs/chapters.cpp:119
-#: src/mmg/tabs/chapters.cpp:331
+#: src/mmg/options/chapters.cpp:89
+#: src/mmg/tabs/chapters.cpp:297
 msgid "Country:"
 msgstr "國家:"
 
@@ -2506,7 +2508,7 @@ msgstr "Cue:"
 msgid "Current and past jobs:"
 msgstr "目前和之前的任務:"
 
-#: src/mmg/mmg_dialog.cpp:610
+#: src/mmg/mmg_dialog.cpp:608
 msgid "Current command line"
 msgstr "目前命令列"
 
@@ -2616,7 +2618,7 @@ msgstr "從任務佇列中刪除所選任務"
 msgid "Description"
 msgstr "描述"
 
-#: src/mmg/mmg_dialog.cpp:1240
+#: src/mmg/mmg_dialog.cpp:1232
 msgid "Description already exists"
 msgstr "描述已存在"
 
@@ -2731,7 +2733,7 @@ msgstr "EBML 版本: %1%"
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "*邪惡的* 內部錯誤! (未知檔案類型)。 %1%\n"
 
-#: src/mmg/tabs/chapters.cpp:282
+#: src/mmg/tabs/chapters.cpp:248
 msgid "Each chapter and each edition has a unique identifier. This identifier is normally assigned automatically by the programs, but it can be changed manually if it is really needed."
 msgstr "每個章節和版本都有唯一的 ID。該 ID 通常由程式自動指派，但也可以手動修改（如果確實需要的話）。"
 
@@ -2739,13 +2741,13 @@ msgstr "每個章節和版本都有唯一的 ID。該 ID 通常由程式自動�
 msgid "EbmlVoid (size: %1%)"
 msgstr "Ebml 空隙 (大小: %1%)"
 
-#: src/mmg/tabs/chapters.cpp:490
+#: src/mmg/tabs/chapters.cpp:456
 #, c-format
 msgid "Edition %d"
 msgstr "版本 %d"
 
-#: src/mmg/tabs/chapters.cpp:873
-#: src/mmg/tabs/chapters.cpp:951
+#: src/mmg/tabs/chapters.cpp:839
+#: src/mmg/tabs/chapters.cpp:917
 #, c-format
 msgid "EditionEntry %u"
 msgstr "版本 %u"
@@ -2774,7 +2776,7 @@ msgstr "加密演算法: %1% (%2%)"
 msgid "Encryption key ID: %1%"
 msgstr "加密鑰匙 ID: %1%"
 
-#: src/mmg/tabs/chapters.cpp:267
+#: src/mmg/tabs/chapters.cpp:233
 msgid "End:"
 msgstr "終止時間:"
 
@@ -2800,12 +2802,12 @@ msgid "Error initializing the tables for the chapter, tag and segment info eleme
 msgstr "初始化章節, 標籤及剪輯資訊元件表時發生錯誤: 無法找到除錯名稱為 '%1%' 的元件。%2%\n"
 
 #: src/mmg/mmg.cpp:176
-#: src/mmg/mmg_dialog.cpp:284
-#: src/mmg/mmg_dialog.cpp:303
+#: src/mmg/mmg_dialog.cpp:282
+#: src/mmg/mmg_dialog.cpp:301
 msgid "Error loading settings"
 msgstr "載入設定發生錯誤"
 
-#: src/mmg/tabs/chapters.cpp:719
+#: src/mmg/tabs/chapters.cpp:685
 msgid "Error opening file"
 msgstr "開啟檔案發生錯誤"
 
@@ -2813,7 +2815,7 @@ msgstr "開啟檔案發生錯誤"
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr "在表頭讀取階段解析 MPEG PS 套件時發生錯誤。媒體流似乎已被嚴重損壞。\n"
 
-#: src/mmg/tabs/chapters.cpp:601
+#: src/mmg/tabs/chapters.cpp:567
 msgid "Error parsing the file"
 msgstr "解析檔案發生錯誤"
 
@@ -2827,8 +2829,8 @@ msgstr "儲存資訊發生錯誤"
 
 #: src/mmg/header_editor/frame.cpp:658
 #: src/mmg/header_editor/frame.cpp:664
-#: src/mmg/tabs/chapters.cpp:1930
-#: src/mmg/tabs/chapters.cpp:1936
+#: src/mmg/tabs/chapters.cpp:1871
+#: src/mmg/tabs/chapters.cpp:1877
 msgid "Error writing Matroska file"
 msgstr "寫入 Matroska 檔案發生錯誤"
 
@@ -2873,7 +2875,7 @@ msgstr "錯誤資訊:"
 msgid "Everything went fine."
 msgstr "一切正常。"
 
-#: src/mmg/options/mkvmerge.cpp:106
+#: src/mmg/options/mkvmerge.cpp:105
 #, c-format
 msgid "Executable files (*.exe)|*.exe|%s"
 msgstr "可執行檔 (*.exe)|*.exe|%s"
@@ -2978,7 +2980,7 @@ msgstr "檔案 UID: %1%"
 msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n"
 msgstr "檔案包含的畫格數比預期的少，或者檔在 %1% 畫格後被破壞。\n"
 
-#: src/mmg/mmg_dialog.cpp:648
+#: src/mmg/mmg_dialog.cpp:646
 #: src/mmg/mux_dialog.cpp:115
 #: src/mmg/tabs/input.cpp:306
 msgid "File creation failed"
@@ -3020,7 +3022,7 @@ msgid "File name: %1%"
 msgstr "檔名: %1%"
 
 #: src/mmg/header_editor/frame.cpp:219
-#: src/mmg/tabs/chapters.cpp:567
+#: src/mmg/tabs/chapters.cpp:533
 msgid "File parsing failed"
 msgstr "解析檔失敗"
 
@@ -3029,7 +3031,7 @@ msgid "File removal not possible"
 msgstr "檔不能移除"
 
 #: src/mmg/header_editor/frame.cpp:670
-#: src/mmg/tabs/chapters.cpp:1943
+#: src/mmg/tabs/chapters.cpp:1884
 msgid "File structure warning"
 msgstr "檔結構警告"
 
@@ -3149,7 +3151,7 @@ msgstr "伽瑪修正: %1%"
 msgid "General track options"
 msgstr "軌道一般選項"
 
-#: src/mmg/mmg_dialog.cpp:168
+#: src/mmg/mmg_dialog.cpp:166
 msgid "Global"
 msgstr "整體"
 
@@ -3211,8 +3213,8 @@ msgstr "編碼後的視訊畫格的高度，單位：像素。"
 msgid "Height of the video frames to display."
 msgstr "視訊畫格的顯示高度。"
 
-#: src/mmg/mmg_dialog.cpp:568
-#: src/mmg/mmg_dialog.cpp:574
+#: src/mmg/mmg_dialog.cpp:566
+#: src/mmg/mmg_dialog.cpp:572
 msgid "Help file not found"
 msgstr "找不到說明檔案"
 
@@ -3226,11 +3228,11 @@ msgstr ""
 "您既可以直接在下面輸入，也可以從下拉列表中選取，\n"
 "再按下“加入”按鈕。"
 
-#: src/mmg/tabs/chapters.cpp:245
+#: src/mmg/tabs/chapters.cpp:211
 msgid "Here you can adjust all the timcdoes of the selected chapter and all its childrend by a specific amount either increasing or decreasing it."
 msgstr "以固定量校準所選章節及其子章節，既可以提前也可以延後。"
 
-#: src/mmg/tabs/chapters.cpp:106
+#: src/mmg/options/chapters.cpp:76
 msgid ""
 "Here you can set the default values that mmg will use\n"
 "for each chapter that you create. These values can\n"
@@ -3241,7 +3243,7 @@ msgstr ""
 "如果需要，這些值也可以以後修改。\n"
 "預設值會在您離開 mmg 時儲存。"
 
-#: src/mmg/tabs/chapters.cpp:241
+#: src/mmg/tabs/chapters.cpp:207
 msgid "Here you can set the values for the language and the country that you want to apply to all the chapters below and including the currently selected entry."
 msgstr "設定您希望應用至下面所有章節（含目前所選項目）的語言及國家值。"
 
@@ -3249,27 +3251,27 @@ msgstr "設定您希望應用至下面所有章節（含目前所選項目）的
 msgid "ID"
 msgstr "ID"
 
-#: src/mmg/tabs/chapters.cpp:286
+#: src/mmg/tabs/chapters.cpp:252
 msgid "If a chapter is marked 'hidden' then the player should not show this chapter entry to the user. Such entries could still be used by the menu system."
 msgstr "如果一個章節被標記為“隱藏”，播放器將不會向使用者顯示該章節項目。這樣的項目仍然可以通過功能表系統調用。"
 
-#: src/mmg/tabs/chapters.cpp:290
+#: src/mmg/tabs/chapters.cpp:256
 msgid "If a chapter is not marked 'enabled' then the player should skip the part of the file that this chapter occupies."
 msgstr "如果一個章節沒有被標記為“啟用”，播放器將會跳過檔案中被該章節佔用的一段。"
 
-#: src/mmg/options/mmg.cpp:75
+#: src/mmg/options/mmg.cpp:74
 msgid "If checked mmg will ask for confirmation before overwriting existing files, or before adding a new job if there's an old job whose description matches the new one."
 msgstr "如果選中該項，mmg 將在覆寫已有檔或在新增一個與已有任務描述相同的新任務時，尋求您的確認。"
 
-#: src/mmg/options/mmg.cpp:60
+#: src/mmg/options/mmg.cpp:59
 msgid "If checked mmg will automatically set the output filename if it hasn't been set already. This happens when you add the first file. If unset mmg will not touch the output filename."
 msgstr "如果選中該項，且輸出檔案名尚未設定，mmg 將會自動設定。這只發生在您添加第一個檔時。如果未選該項，mmg 不會修改輸出檔案名。"
 
-#: src/mmg/options/mmg.cpp:95
+#: src/mmg/options/mmg.cpp:94
 msgid "If checked mmg will warn if it thinks that you're using it incorrectly. Such warnings are shown at least once even if you turn this feature off."
 msgstr "如果選中該項，mmg 將在它認為您用法不正確時發出警告。即使您將該功能關閉，此類警告也將至少出現一次。"
 
-#: src/mmg/options/mmg.cpp:71
+#: src/mmg/options/mmg.cpp:70
 msgid "If left empty then mmg will set the output file name to be in the same directory as the first file added to this job. Otherwise this directory will be used."
 msgstr "如果留空，mmg 將設定輸出檔案名與添加至此任務的第一個檔同路徑。反之將使用此目錄。"
 
@@ -3297,16 +3299,16 @@ msgstr "無法使用檔 '%1%': 檔案無法開啟以讀取。\n"
 msgid "Inconsistent AAC audio packet (length: %1% != len_check %2%)\n"
 msgstr "不相容的 AAC 音訊套件 (長度: %1% != len_check %2%)\n"
 
-#: src/mmg/mmg_dialog.cpp:166
+#: src/mmg/mmg_dialog.cpp:164
 msgid "Input"
 msgstr "輸入"
 
-#: src/mmg/tabs/chapters.cpp:1414
-#: src/mmg/tabs/chapters.cpp:1507
-#: src/mmg/tabs/chapters.cpp:1516
-#: src/mmg/tabs/chapters.cpp:1530
-#: src/mmg/tabs/chapters.cpp:1546
-#: src/mmg/tabs/chapters.cpp:1554
+#: src/mmg/tabs/chapters.cpp:1355
+#: src/mmg/tabs/chapters.cpp:1448
+#: src/mmg/tabs/chapters.cpp:1457
+#: src/mmg/tabs/chapters.cpp:1471
+#: src/mmg/tabs/chapters.cpp:1487
+#: src/mmg/tabs/chapters.cpp:1495
 msgid "Input data error"
 msgstr "輸入資料錯誤"
 
@@ -3318,7 +3320,7 @@ msgstr "輸入檔:"
 msgid "Input too long: %1% > %2%"
 msgstr "輸入過長: %1% > %2%"
 
-#: src/mmg/options/mmg.cpp:105
+#: src/mmg/options/mmg.cpp:104
 msgid "Interface language:"
 msgstr "介面語言:"
 
@@ -3331,7 +3333,7 @@ msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "內部錯誤: tracks.cpp SSA #1。 %1%"
 
 #: src/mmg/header_editor/frame.cpp:674
-#: src/mmg/tabs/chapters.cpp:1947
+#: src/mmg/tabs/chapters.cpp:1888
 msgid "Internal program error"
 msgstr "內部程式錯誤"
 
@@ -3347,15 +3349,15 @@ msgstr "遇到無效的 Base64 字元"
 msgid "Invalid BlockAddition level in argument '%1%'.\n"
 msgstr "無效的附加區塊層級，在參數 '%1%' 中。\n"
 
-#: src/mmg/tabs/chapters.cpp:1507
+#: src/mmg/tabs/chapters.cpp:1448
 msgid "Invalid UID. A UID is simply a number."
 msgstr "無效 UID。UID 僅僅是個數位。"
 
-#: src/mmg/tabs/chapters.cpp:1516
+#: src/mmg/tabs/chapters.cpp:1457
 msgid "Invalid UID. This chapter UID is already in use. The original UID has not been changed."
 msgstr "無效 UID。該章節 UID 已被使用。原 UID 沒有被改變。"
 
-#: src/mmg/tabs/chapters.cpp:1530
+#: src/mmg/tabs/chapters.cpp:1471
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "無效 UID。該版本 UID 已被使用。原 UID 沒有被改變。"
 
@@ -3393,7 +3395,7 @@ msgstr "無效的壓縮選項指定，在 '--compression %1%' 中。\n"
 msgid "Invalid compression option. No track ID specified in '--compression %1%'.\n"
 msgstr "無效的壓縮選項。未在 '--compression %1%' 指定軌道 ID。\n"
 
-#: src/mmg/tabs/chapters.cpp:1262
+#: src/mmg/options/chapters.cpp:121
 msgid "Invalid country selected"
 msgstr "無效的國家選擇"
 
@@ -3417,16 +3419,16 @@ msgstr "SSA 行 ('%1%') 於時間碼 %2% 格式無效: 第一個欄位不是整�
 msgid "Invalid format for a SSA line ('%1%') at timecode %2%: Too many fields found (%3% instead of 9). This entry will be skipped.\n"
 msgstr "SSA 行 ('%1%') 於時間碼 %2% 格式無效: 發現過多欄位 (%3% 而不是 9)。該條將被跳過。\n"
 
-#: src/mmg/tabs/chapters.cpp:1414
+#: src/mmg/tabs/chapters.cpp:1355
 msgid "Invalid format used for the adjustment."
 msgstr "調整功能使用的格式無效。"
 
-#: src/mmg/tabs/chapters.cpp:1554
+#: src/mmg/tabs/chapters.cpp:1495
 #, c-format
 msgid "Invalid format used for the end time for '%s'. Setting value to 0."
 msgstr "終止時間 '%s' 格式無效。設定值為 0。"
 
-#: src/mmg/tabs/chapters.cpp:1546
+#: src/mmg/tabs/chapters.cpp:1487
 #, c-format
 msgid "Invalid format used for the start time for '%s'. Setting value to 0."
 msgstr "起始時間 '%s' 格式無效。設定值為 0。"
@@ -3475,8 +3477,8 @@ msgstr "表頭長度無效: %1% (總長: %2%, 索引: %3%, 資料索引: %4%)\n"
 msgid "Invalid hexadecimal data encountered: '%1%' is neither white space nor a hexadecimal number."
 msgstr "遇到無效的十六進位資料: '%1%' 既不是空格也不是十六進位數。"
 
-#: src/mmg/tabs/chapters.cpp:1256
-#: src/mmg/tabs/chapters.cpp:1342
+#: src/mmg/options/chapters.cpp:114
+#: src/mmg/tabs/chapters.cpp:1283
 msgid "Invalid language selected"
 msgstr "無效的語言選擇"
 
@@ -3593,11 +3595,11 @@ msgstr "無效的軌道 ID 指定，在 '--sub-charset %1%'。\n"
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "無效的軌道 ID 或檔案名指定，在參數 '%1%' 中。\n"
 
-#: src/mmg/mmg_dialog.cpp:1276
+#: src/mmg/mmg_dialog.cpp:1268
 msgid "Job added to job queue"
 msgstr "任務已添加至任務佇列"
 
-#: src/mmg/mmg_dialog.cpp:1228
+#: src/mmg/mmg_dialog.cpp:1220
 msgid "Job description"
 msgstr "任務描述"
 
@@ -3647,8 +3649,8 @@ msgstr "此軌的語言。選擇一個 ISO639-2 語言碼。"
 msgid "Language is not NUL terminated"
 msgstr "語言未以 NUL 結尾"
 
-#: src/mmg/tabs/chapters.cpp:115
-#: src/mmg/tabs/chapters.cpp:320
+#: src/mmg/options/chapters.cpp:86
+#: src/mmg/tabs/chapters.cpp:286
 #: src/mmg/tabs/global.cpp:182
 #: src/mmg/tabs/input_general.cpp:55
 msgid "Language:"
@@ -3658,7 +3660,7 @@ msgstr "語言:"
 msgid "Language: %1%"
 msgstr "語言: %1%"
 
-#: src/mmg/options/dialog.cpp:50
+#: src/mmg/options/languages.cpp:116
 #, fuzzy
 msgid "Languages"
 msgstr "語言"
@@ -3793,7 +3795,7 @@ msgstr "不正常行? (%1%)\n"
 msgid "Mark this track as 'forced'. Players must play this track."
 msgstr "將此軌標記為 '強制'。播放器必須播放此軌。"
 
-#: src/mmg/mmg_dialog.cpp:231
+#: src/mmg/mmg_dialog.cpp:229
 #, c-format
 msgid "Matroska A/V files (*.mka;*.mkv)|*.mkv;*.mka|%s"
 msgstr "Matroska 音訊/視訊檔 (*.mka;*.mkv)|*.mkv;*.mka|%s"
@@ -3806,7 +3808,7 @@ msgstr "Matroska 音訊/視訊檔"
 msgid "Matroska files (*.mkv *.mka *.mks);;All files (*.*)"
 msgstr "Matroska 檔案 (*.mkv *.mka *.mks);;所有檔 (*.*)"
 
-#: src/mmg/tabs/chapters.cpp:653
+#: src/mmg/tabs/chapters.cpp:619
 #, c-format
 msgid "Matroska files (*.mkv;*.mka)|*.mkv;*.mka|%s"
 msgstr "Matroska 檔案 (*.mkv;*.mka)|*.mkv;*.mka|%s"
@@ -3949,7 +3951,7 @@ msgid "Name for this track, e.g. \"director's comments\"."
 msgstr "此軌的名稱，如“導演評論”。"
 
 #: src/mmg/tabs/attachments.cpp:68
-#: src/mmg/tabs/chapters.cpp:315
+#: src/mmg/tabs/chapters.cpp:281
 msgid "Name:"
 msgstr "名稱:"
 
@@ -3957,7 +3959,7 @@ msgstr "名稱:"
 msgid "Name: %1%"
 msgstr "名稱: %1%"
 
-#: src/mmg/tabs/chapters.cpp:428
+#: src/mmg/tabs/chapters.cpp:394
 msgid "New chapters created."
 msgstr "新章節已建立。"
 
@@ -4018,11 +4020,11 @@ msgstr "附件 '%1%' 的 MIME 類型尚未設定，且無法猜測。\n"
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr "沒有為檔 %1% ('%2%') 指定添加對應。將使用預設對應 %3%。如果 mkvmerge 異常中止並輸出關於無效的 '--append-to' 選項的錯誤訊息，請留意。\n"
 
-#: src/mmg/tabs/chapters.cpp:818
+#: src/mmg/tabs/chapters.cpp:784
 msgid "No chapter entries have been create yet."
 msgstr "尚未建立任何章節項目。"
 
-#: src/mmg/tabs/chapters.cpp:575
+#: src/mmg/tabs/chapters.cpp:541
 msgid "No chapters found"
 msgstr "未找到章節"
 
@@ -4149,7 +4151,7 @@ msgstr "Ogg/OGM 音訊/視訊檔"
 msgid "Ok"
 msgstr "確定"
 
-#: src/mmg/tabs/chapters.cpp:778
+#: src/mmg/tabs/chapters.cpp:744
 msgid "One of the chapters does not have a name."
 msgstr "有一個章節沒有名稱。"
 
@@ -4206,11 +4208,11 @@ msgstr "開啟 Matroska 檔案"
 msgid "Open an existing Matroska file"
 msgstr "開啟現有的 Matroska 檔案"
 
-#: src/mmg/mmg_dialog.cpp:660
+#: src/mmg/mmg_dialog.cpp:658
 msgid "Option file created."
 msgstr "選項檔已建立。"
 
-#: src/mmg/options/dialog.cpp:39
+#: src/mmg/options/dialog.cpp:43
 msgid "Options"
 msgstr "選項"
 
@@ -4230,7 +4232,7 @@ msgstr "原始數值:"
 msgid "Output"
 msgstr "輸出"
 
-#: src/mmg/mmg_dialog.cpp:173
+#: src/mmg/mmg_dialog.cpp:171
 msgid "Output filename"
 msgstr "輸出檔名"
 
@@ -4242,12 +4244,12 @@ msgstr "所選任務的輸出資訊:"
 msgid "Output sampling frequency: %1%"
 msgstr "輸出取樣頻率: %1%"
 
-#: src/mmg/mmg_dialog.cpp:443
+#: src/mmg/mmg_dialog.cpp:441
 msgid "Overwrite existing file(s)?"
 msgstr "覆寫所有現有檔?"
 
-#: src/mmg/mmg_dialog.cpp:424
-#: src/mmg/mmg_dialog.cpp:1222
+#: src/mmg/mmg_dialog.cpp:422
+#: src/mmg/mmg_dialog.cpp:1214
 msgid "Overwrite existing file?"
 msgstr "覆寫現有的檔案?"
 
@@ -4295,15 +4297,15 @@ msgstr "像素高度: %1%"
 msgid "Pixel width: %1%"
 msgstr "像素寬度: %1%"
 
-#: src/mmg/options/mkvmerge.cpp:118
+#: src/mmg/options/mkvmerge.cpp:117
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "請不要選擇 'mmg' 自己作為 'mkvmerge' 可執行檔。"
 
-#: src/mmg/mmg_dialog.cpp:1228
+#: src/mmg/mmg_dialog.cpp:1220
 msgid "Please enter a description for the new job:"
 msgstr "請輸入新任務的描述:"
 
-#: src/mmg/tabs/chapters.cpp:126
+#: src/mmg/tabs/chapters.cpp:101
 msgid ""
 "Please enter the values for the language and the\n"
 "country that you want to apply to all the chapters\n"
@@ -4341,7 +4343,7 @@ msgstr "上一剪輯 UID:%1%"
 msgid "Previous segment's unique ID"
 msgstr "上一剪輯唯一 ID"
 
-#: src/mmg/options/mkvmerge.cpp:62
+#: src/mmg/options/mkvmerge.cpp:61
 msgid "Process priority:"
 msgstr "處理程序優先權:"
 
@@ -4374,7 +4376,7 @@ msgstr "進度: 100%\n"
 msgid "Progress: 100%%%1%"
 msgstr "進度: 100%%%1%"
 
-#: src/mmg/mmg_dialog.cpp:1527
+#: src/mmg/mmg_dialog.cpp:1519
 msgid "Querying mkvmerge's capabilities"
 msgstr "正向 mkvmerge 查詢處理能力"
 
@@ -4569,7 +4571,7 @@ msgstr "在不儲存的情況下重新載入目前檔"
 msgid "Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
 msgstr "記住像 &, <, > 和 \" 這樣的特殊字元必須以常用的 HTML 方式轉義: &amp; 代表 '&', &lt; 代表 '<', &gt; 代表 '>', &quot; 代表 '\"'。"
 
-#: src/mmg/tabs/chapters.cpp:238
+#: src/mmg/tabs/chapters.cpp:204
 msgid "Remove chapter"
 msgstr "移除章節"
 
@@ -4577,11 +4579,11 @@ msgstr "移除章節"
 msgid "Remove element"
 msgstr "移除元件"
 
-#: src/mmg/tabs/chapters.cpp:306
+#: src/mmg/tabs/chapters.cpp:272
 msgid "Remove name"
 msgstr "移除名稱"
 
-#: src/mmg/options/mmg.cpp:275
+#: src/mmg/options/mmg.cpp:274
 msgid "Restart required"
 msgstr "需要重新啟動"
 
@@ -4623,7 +4625,7 @@ msgstr "SSA/ASS 文字字幕"
 msgid "Sa&ve command line"
 msgstr "儲存命令列(&V)"
 
-#: src/mmg/options/mmg.cpp:64
+#: src/mmg/options/mmg.cpp:63
 msgid "Same directory as the first input file's"
 msgstr "與第一個輸入檔同目錄"
 
@@ -4767,13 +4769,13 @@ msgstr "選擇輸出檔"
 msgid "Select the file you want to write to"
 msgstr "選擇您要寫入的檔案"
 
-#: src/mmg/options/languages.cpp:85
+#: src/mmg/options/languages.cpp:84
 msgid ""
 "Select the languages you want to be shown at the top\n"
 "of language drop down boxes."
 msgstr ""
 
-#: src/mmg/tabs/chapters.cpp:124
+#: src/mmg/tabs/chapters.cpp:99
 msgid "Select values to be applied"
 msgstr "選擇將應用的值"
 
@@ -4785,15 +4787,11 @@ msgstr "選擇 mkvmerge 將為哪些區塊建立索引。在幾乎所有情況�
 msgid "Selects the character set a subtitle file or chapter information was written with. Only needed for non-UTF encoded subtitle files or for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."
 msgstr "選擇字幕檔儲存時使用的字元集。只有 非-UTF 編碼的字幕檔或者含有章節資訊的檔案 (即 OGM、MP4) 需要選擇 (mkvmerge 無法正確偵測編碼)。"
 
-#: src/mmg/mmg_dialog.cpp:125
-msgid "Set &default values"
-msgstr "設定預設值(&D)"
-
 #: src/mmg/mmg_dialog.cpp:91
 msgid "Set &output file"
 msgstr "設定輸出檔(&O)"
 
-#: src/mmg/tabs/chapters.cpp:141
+#: src/mmg/tabs/chapters.cpp:116
 msgid "Set country to:"
 msgstr "設定國家為:"
 
@@ -4823,15 +4821,15 @@ msgstr ""
 msgid "Set if the track is used."
 msgstr "設定軌道是否可用。"
 
-#: src/mmg/tabs/chapters.cpp:134
+#: src/mmg/tabs/chapters.cpp:109
 msgid "Set language to:"
 msgstr "設定語言為:"
 
-#: src/mmg/options/mmg.cpp:82
+#: src/mmg/options/mmg.cpp:81
 msgid "Set the delay input field from the file name"
 msgstr "根據第一個檔案的名稱設定“延遲”輸入框"
 
-#: src/mmg/tabs/chapters.cpp:240
+#: src/mmg/tabs/chapters.cpp:206
 msgid "Set values"
 msgstr "設定語言值"
 
@@ -4855,7 +4853,7 @@ msgstr "設定軌道的顯示高度。必須同時設定寬度，否則此欄位
 msgid "Sets the display width of the track. The height must be set as well, or this field will be ignored."
 msgstr "設定軌道的顯示寬度。必須同時設定高度，否則此欄位將被忽略。"
 
-#: src/mmg/options/mkvmerge.cpp:65
+#: src/mmg/options/mkvmerge.cpp:64
 msgid "Sets the priority that mkvmerge will run with."
 msgstr "選擇 mkvmerge 執行時的優先權。"
 
@@ -4887,11 +4885,11 @@ msgstr "顯示所有分支(&A)\tCtrl-A"
 msgid "Show about dialog"
 msgstr "顯示“關於”對話窗"
 
-#: src/mmg/options/mmg.cpp:100
+#: src/mmg/options/mmg.cpp:99
 msgid "Show mmg's debug window"
 msgstr "顯示 mmg 的除錯視窗"
 
-#: src/mmg/mmg_dialog.cpp:138
+#: src/mmg/mmg_dialog.cpp:136
 msgid "Show program information"
 msgstr "顯示程式資訊"
 
@@ -4899,11 +4897,11 @@ msgstr "顯示程式資訊"
 msgid "Show the command line mmg creates for mkvmerge"
 msgstr "顯示 mmg 為 mkvmerge 建立的命令列"
 
-#: src/mmg/mmg_dialog.cpp:137
+#: src/mmg/mmg_dialog.cpp:135
 msgid "Show the guide to mkvmerge GUI"
 msgstr "顯示 mkvmerge GUI 指南"
 
-#: src/mmg/options/mmg.cpp:101
+#: src/mmg/options/mmg.cpp:100
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "顯示 mmg 的除錯視窗，在該視窗中會出現除錯訊息。這只當您幫助作者除錯 mmg 的問題時有用。"
 
@@ -5005,12 +5003,12 @@ msgstr "已選擇按大小分割，但未給出大小。"
 msgid "Splitting by timecode/duration was selected, but nothing was entered."
 msgstr "已選擇按時間碼/播放持續時間分割，但未輸入任何數值。"
 
-#: src/mmg/mmg_dialog.cpp:441
+#: src/mmg/mmg_dialog.cpp:439
 #, c-format
 msgid "Splitting is active, and at least one of the potential output files '%s%s*%s' already exists. Do you want to overwrite them?"
 msgstr "正在執行分割操作，但至少有一個潛在的輸出檔 '%s%s*%s' 已存在。是否覆寫？"
 
-#: src/mmg/mmg_dialog.cpp:187
+#: src/mmg/mmg_dialog.cpp:185
 msgid "Sta&rt muxing"
 msgstr "開始合成(&R)"
 
@@ -5030,7 +5028,7 @@ msgstr "啟動選擇的任務（不論其狀態如何）"
 msgid "Start with empty settings"
 msgstr "清空所有設定並重新啟動"
 
-#: src/mmg/tabs/chapters.cpp:262
+#: src/mmg/tabs/chapters.cpp:228
 msgid "Start:"
 msgstr "開始時間:"
 
@@ -5219,7 +5217,7 @@ msgstr "正在分析 Matroska 檔。"
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 msgstr "Matroska 檔已修改，但變換定位項無法更新。這意味著播放器可能很難找到該元件。請使用您最喜歡的播放器檢查此檔。\n"
 
-#: src/mmg/tabs/chapters.cpp:1940
+#: src/mmg/tabs/chapters.cpp:1881
 msgid ""
 "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 "\n"
@@ -5282,17 +5280,17 @@ msgstr "此二位元資料最多 %1% 位元組長。"
 msgid "The binary data must be exactly %1% bytes long."
 msgstr "此二位元資料必須為 %1% 位元組長。"
 
-#: src/mmg/tabs/chapters.cpp:792
+#: src/mmg/tabs/chapters.cpp:758
 #, c-format
 msgid "The chapter '%s' is missing its language."
 msgstr "章節 '%s' 遺失它的語言。"
 
-#: src/mmg/tabs/chapters.cpp:786
+#: src/mmg/tabs/chapters.cpp:752
 #, c-format
 msgid "The chapter '%s' is missing the start time."
 msgstr "章節 '%s' 遺失起始時間。"
 
-#: src/mmg/mmg_dialog.cpp:471
+#: src/mmg/mmg_dialog.cpp:469
 msgid ""
 "The chapter editor has been used and contains data. However, no chapter file has been selected on the global page. In mmg, the chapter editor is independant of the muxing process. The chapters present in the editor will NOT be muxed into the output file. Only the various 'save' functions from the chapter editor menu will cause the chapters to be written to the hard disk.\n"
 "\n"
@@ -5326,7 +5324,7 @@ msgstr "編解碼器專有資料不符。長度相同 (%1%) 但內容不同。"
 msgid "The correction file header was not read correctly.\n"
 msgstr "校正檔未能正常讀取。\n"
 
-#: src/mmg/tabs/chapters.cpp:1262
+#: src/mmg/options/chapters.cpp:120
 #, c-format
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "國家 '%s' 不是有效的 ccTLD，不能選擇。"
@@ -5387,7 +5385,7 @@ msgid "The duration after which a new output file is started. The time can be gi
 msgstr "在指定持續時間後開始輸出新檔。時間可以以 HH:MM:SS.nnnnnnnnn 的形式或者後接 's' 的秒數給定。時數 'HH' 與毫微秒數 'nnnnnnnnn' 可省略。如果要給出，您可以在小數點後使用多達九位數。示例: 01:00:00 (一小時後) 或 1800s (1800 秒後)。"
 
 #: src/mmg/header_editor/frame.cpp:656
-#: src/mmg/tabs/chapters.cpp:1928
+#: src/mmg/tabs/chapters.cpp:1869
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "元件已被寫至檔案結尾部，但剪輯大小無法更新。因此這些元件將不可見。處理處理程序將被中止。檔已被修改!"
 
@@ -5452,11 +5450,11 @@ msgstr "檔案 '%s' 不存在。"
 msgid "The file could not be opened for writing."
 msgstr "檔案無法開啟以寫入。"
 
-#: src/mmg/mmg_dialog.cpp:284
+#: src/mmg/mmg_dialog.cpp:282
 msgid "The file does not exist."
 msgstr "檔案不存在。"
 
-#: src/mmg/mmg_dialog.cpp:303
+#: src/mmg/mmg_dialog.cpp:301
 msgid "The file does not seem to be a valid mkvmerge GUI settings file."
 msgstr "檔似乎不是有效的 mkvmerge GUI 設定檔。"
 
@@ -5513,11 +5511,11 @@ msgstr "此檔 %1% ('%2%') 未被添加。選項 '--append-to' 的參數無效�
 msgid "The file you tried to open is not a Matroska file."
 msgstr "您試著開啟的檔不是 Matroska 檔。"
 
-#: src/mmg/tabs/chapters.cpp:658
+#: src/mmg/tabs/chapters.cpp:624
 msgid "The file you tried to save to is NOT a Matroska file."
 msgstr "您試著儲存至的檔 *不是* Matroska 檔。"
 
-#: src/mmg/tabs/chapters.cpp:698
+#: src/mmg/tabs/chapters.cpp:664
 msgid "The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."
 msgstr "您試著儲存至的檔案是個 Matroska 檔。要這樣做的話，您應該使用“儲存至 Matroska 檔”功能表項目。"
 
@@ -5609,8 +5607,8 @@ msgstr ""
 "\n"
 "(問題出在 tab_input::load(), #3)"
 
-#: src/mmg/tabs/chapters.cpp:1256
-#: src/mmg/tabs/chapters.cpp:1342
+#: src/mmg/options/chapters.cpp:113
+#: src/mmg/tabs/chapters.cpp:1283
 #, c-format
 msgid "The language '%s' is not a valid language and cannot be selected."
 msgstr "語言 '%s' 不是有效的語言，不可選。"
@@ -5642,7 +5640,7 @@ msgstr ""
 "如果設為 0, 將不使用參考偽快取系統。"
 
 #: src/mmg/header_editor/frame.cpp:662
-#: src/mmg/tabs/chapters.cpp:1934
+#: src/mmg/tabs/chapters.cpp:1875
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "變換定位元件已被寫至檔案結尾部，但剪輯大小無法更新。因此這些元件不可見。處理處理程序將被中止。檔案已有改動！"
 
@@ -5656,11 +5654,11 @@ msgstr ""
 "播放器播放過程中應該快取的最小畫格數。\n"
 "如果設為 0, 將不使用參考偽快取系統。"
 
-#: src/mmg/mmg_dialog.cpp:572
+#: src/mmg/mmg_dialog.cpp:570
 msgid "The mkvmerge GUI help file was not found in the path you've selected. Please try again, or abort by pressing the 'abort' button."
 msgstr "在您選擇的路徑找不到 mkvmerge GUI 説明檔。請再試一次，或者按 '取消' 按鈕放棄。"
 
-#: src/mmg/mmg_dialog.cpp:565
+#: src/mmg/mmg_dialog.cpp:563
 msgid ""
 "The mkvmerge GUI help file was not found. This indicates that it has never before been opened, or that the installation path has since been changed.\n"
 "\n"
@@ -5722,8 +5720,8 @@ msgstr "選項 '--meta-seek-size' 不再受支援。請閱讀 mkvmerge 的使用
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "即將輸出的檔 '%1%' 無法開啟寫入(%2%)。\n"
 
-#: src/mmg/mmg_dialog.cpp:424
-#: src/mmg/mmg_dialog.cpp:1219
+#: src/mmg/mmg_dialog.cpp:422
+#: src/mmg/mmg_dialog.cpp:1211
 #, c-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr "即將輸出的檔 '%s' 已存在。是否覆蓋？"
@@ -5765,7 +5763,7 @@ msgstr ""
 msgid "The seek table in this TTA file seems to be broken.\n"
 msgstr "此 TTA 檔案中的定位表似乎已損壞。\n"
 
-#: src/mmg/tabs/chapters.cpp:797
+#: src/mmg/tabs/chapters.cpp:763
 #, c-format
 msgid "The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."
 msgstr "選定的語言 '%s' （章節 '%s'）不是有效的語言碼。請選擇預定義碼中的一項。"
@@ -5977,15 +5975,15 @@ msgid "This file contains coordinates in the timecode lines. Such coordinates ar
 msgstr "此檔時間軸中含有坐標。此類坐標不受 Matroska SRT 字幕格式的支援。坐標將被自動移除。\n"
 
 #: src/mmg/header_editor/frame.cpp:219
-#: src/mmg/tabs/chapters.cpp:567
+#: src/mmg/tabs/chapters.cpp:533
 msgid "This file could not be opened or parsed."
 msgstr "檔案無法開啟或解析。"
 
-#: src/mmg/tabs/chapters.cpp:575
+#: src/mmg/tabs/chapters.cpp:541
 msgid "This file does not contain any chapters."
 msgstr "此檔不包含任何章節。"
 
-#: src/mmg/tabs/chapters.cpp:583
+#: src/mmg/tabs/chapters.cpp:549
 msgid "This file does not contain valid chapters."
 msgstr "此檔不包含有效章節。"
 
@@ -6207,7 +6205,7 @@ msgstr "類型:"
 msgid "Type: %1% (%2%)"
 msgstr "類型: %1% (%2%)"
 
-#: src/mmg/tabs/chapters.cpp:279
+#: src/mmg/tabs/chapters.cpp:245
 msgid "UID:"
 msgstr "UID:"
 
@@ -6470,11 +6468,11 @@ msgstr "對隨檔改變而變動的元件 (合成日期, 剪輯 UID, 軌道 UID 
 msgid "Use the old AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') instead of the new one ('A_AAC')."
 msgstr "使用舊的 AAC 編解碼器 ID (如 'A_AAC/MPEG4/SBR') 代替新的 ('A_AAC')。"
 
-#: src/mmg/options/mmg.cpp:65
+#: src/mmg/options/mmg.cpp:64
 msgid "Use the previous output directory"
 msgstr "使用上一個輸出目錄"
 
-#: src/mmg/options/mmg.cpp:66
+#: src/mmg/options/mmg.cpp:65
 msgid "Use this directory:"
 msgstr "使用這個目錄:"
 
@@ -6893,7 +6891,7 @@ msgstr "WAVPACK 無損音訊"
 msgid "WAVPACK v4 audio"
 msgstr "WAVPACK v4 音訊"
 
-#: src/mmg/options/mmg.cpp:94
+#: src/mmg/options/mmg.cpp:93
 msgid "Warn about possible incorrect usage of mmg"
 msgstr "對 mmg 可能的錯誤用法發出警告"
 
@@ -6921,7 +6919,7 @@ msgstr "警告: 序號為 %1% 的軌道多於一條。"
 msgid "Warnings:"
 msgstr "警告:"
 
-#: src/mmg/options/mmg.cpp:83
+#: src/mmg/options/mmg.cpp:82
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
 msgstr "當檔被添加時它的名稱會被掃描。如果包含單詞“delay”且有一數字緊隨其後，這個數字將被自動輸入至已發現的該檔案的所有音軌的“延遲”輸入框。"
 
@@ -6961,13 +6959,13 @@ msgstr "錯誤的 Theora 版本: %1%.%2%.%3% != 3.2.x"
 msgid "Wrong argument to '--split-max-files'.\n"
 msgstr "'--split-max-files' 參數錯誤。\n"
 
-#: src/mmg/options/mkvmerge.cpp:118
+#: src/mmg/options/mkvmerge.cpp:117
 msgid "Wrong file chosen"
 msgstr "選擇錯誤的檔案"
 
 #: src/mmg/header_editor/frame.cpp:207
-#: src/mmg/tabs/chapters.cpp:658
-#: src/mmg/tabs/chapters.cpp:699
+#: src/mmg/tabs/chapters.cpp:624
+#: src/mmg/tabs/chapters.cpp:665
 msgid "Wrong file selected"
 msgstr "選擇錯誤的檔案"
 
@@ -6992,7 +6990,7 @@ msgstr "XML 解析器發生錯誤，於 '%2%' 的第 %1% 行: %3%。%4%%5%"
 msgid "XML parser error at line %1%: %2%."
 msgstr "XML 解析器發生錯誤，於行 %1%: %2%。"
 
-#: src/mmg/tabs/chapters.cpp:1386
+#: src/mmg/tabs/chapters.cpp:1327
 msgid ""
 "You can use this function for adjusting the timecodes\n"
 "of the selected chapter and all its children by a fixed amount.\n"
@@ -7250,7 +7248,7 @@ msgstr "dts_reader: 開頭 %1% 位元組未發現有效的 DTS 套件。\n"
 msgid "enable all"
 msgstr "全部啟用"
 
-#: src/mmg/tabs/chapters.cpp:289
+#: src/mmg/tabs/chapters.cpp:255
 msgid "enabled"
 msgstr "啟用"
 
@@ -7409,15 +7407,15 @@ msgstr "出現異常\n"
 msgid "header removal"
 msgstr "移除表頭"
 
-#: src/mmg/tabs/chapters.cpp:285
+#: src/mmg/tabs/chapters.cpp:251
 msgid "hidden"
 msgstr "隱藏"
 
-#: src/mmg/options/mkvmerge.cpp:49
+#: src/mmg/options/mkvmerge.cpp:48
 msgid "higher"
 msgstr "較高"
 
-#: src/mmg/options/mkvmerge.cpp:48
+#: src/mmg/options/mkvmerge.cpp:47
 msgid "highest"
 msgstr "最高"
 
@@ -7445,11 +7443,11 @@ msgstr "行 %1%: '延遲' 時間戳記無法解析。\n"
 msgid "link files"
 msgstr "連接檔案"
 
-#: src/mmg/options/mkvmerge.cpp:52
+#: src/mmg/options/mkvmerge.cpp:51
 msgid "lower"
 msgstr "較低"
 
-#: src/mmg/options/mkvmerge.cpp:53
+#: src/mmg/options/mkvmerge.cpp:52
 msgid "lowest"
 msgstr "最低"
 
@@ -7621,7 +7619,7 @@ msgstr "mkvextract.cpp/show_element(): 層級 > 9: %1%"
 msgid "mkvextract: Unknown mode!?\n"
 msgstr "mkvextract: 未知模式!?\n"
 
-#: src/mmg/options/dialog.cpp:49
+#: src/mmg/options/mkvmerge.cpp:142
 msgid "mkvmerge"
 msgstr "mkvmerge"
 
@@ -7644,12 +7642,12 @@ msgstr "mkvmerge 執行 *失敗* ，返回碼 %d。 %s\n"
 msgid "mkvmerge GUI error"
 msgstr "mkvmerge GUI 發生錯誤"
 
-#: src/mmg/mmg_dialog.cpp:220
+#: src/mmg/mmg_dialog.cpp:218
 msgid "mkvmerge GUI ready"
 msgstr "mkvmerge GUI 準備就緒"
 
-#: src/mmg/mmg_dialog.cpp:279
-#: src/mmg/mmg_dialog.cpp:323
+#: src/mmg/mmg_dialog.cpp:277
+#: src/mmg/mmg_dialog.cpp:321
 #, c-format
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "mkvmerge GUI 設定檔 (*.mmg)|*.mmg|%s"
@@ -7659,7 +7657,7 @@ msgstr "mkvmerge GUI 設定檔 (*.mmg)|*.mmg|%s"
 msgid "mkvmerge GUI v%s ('%s')"
 msgstr "mkvmerge GUI v%s ('%s')"
 
-#: src/mmg/mmg_dialog.cpp:592
+#: src/mmg/mmg_dialog.cpp:590
 #, c-format
 msgid ""
 "mkvmerge GUI v%s ('%s')\n"
@@ -7709,7 +7707,7 @@ msgstr ""
 "mkvmerge 在此 AVC/h.264 視訊軌中遇到損壞或無法解析的資料。這既可能是由於檔案損壞 (mkvmerge 尚無法應付) 也可能是 mkvmerge 自身的 bug。錯誤訊息是:\n"
 "%1%\n"
 
-#: src/mmg/options/mkvmerge.cpp:58
+#: src/mmg/options/mkvmerge.cpp:57
 msgid "mkvmerge executable"
 msgstr "mkvmerge 可執行檔"
 
@@ -7732,7 +7730,7 @@ msgstr "mkvmerge 編譯時未包含 FLAC 支援，但收到了對此類媒體流
 msgid "mkvmerge is running"
 msgstr "mkvmerge 正在執行"
 
-#: src/mmg/options/mkvmerge.cpp:81
+#: src/mmg/options/mkvmerge.cpp:80
 msgid "mkvmerge options"
 msgstr "mkvmerge 選項"
 
@@ -7770,7 +7768,7 @@ msgstr "mm_text_io_c: 目前尚不支援 UTF32_*。\n"
 msgid "mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "mm_text_io_c::read_next_char(): 無效 UTF-8 字元。第一位元組: 0x%|1$02x|"
 
-#: src/mmg/options/dialog.cpp:48
+#: src/mmg/options/mmg.cpp:286
 msgid "mmg"
 msgstr "mmg"
 
@@ -7778,7 +7776,7 @@ msgstr "mmg"
 msgid "mmg debug output"
 msgstr "mmg 除錯輸出"
 
-#: src/mmg/options/mmg.cpp:162
+#: src/mmg/options/mmg.cpp:161
 msgid "mmg options"
 msgstr "mmg 選項"
 
@@ -7838,7 +7836,7 @@ msgstr "未使用簽章雜湊演算法"
 msgid "none"
 msgstr "無"
 
-#: src/mmg/options/mkvmerge.cpp:51
+#: src/mmg/options/mkvmerge.cpp:50
 msgid "normal"
 msgstr "一般"
 
@@ -7862,7 +7860,7 @@ msgstr "ogm_reader: 無法讀取所有表頭套件。"
 msgid "ogm_reader: Source is not a valid OGG media file."
 msgstr "ogm_reader: 來源非有效的 OGG 媒體檔案。"
 
-#: src/mmg/tabs/chapters.cpp:1076
+#: src/mmg/tabs/chapters.cpp:1042
 msgid "on_entry_selected: display == NULL. Should not have happened."
 msgstr "on_entry_selected: display == NULL。不該出現。"
 
@@ -7981,7 +7979,7 @@ msgstr "ssa_reader: 無效格式。\"[Events]\" 區段中未找到 \"Format\" �
 msgid "ssa_reader: Source is not a valid SSA/ASS file."
 msgstr "ssa_reader: 來來源非有效的 SSA/ASS 檔案。"
 
-#: src/mmg/tabs/chapters.cpp:914
+#: src/mmg/tabs/chapters.cpp:880
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
 msgstr "start >= m->ListSize()。這不該發生。請提交錯誤報告。感謝。"
 
@@ -8064,7 +8062,7 @@ msgstr "usf_reader: 來來源非有效的 USF 檔案。"
 msgid "vc1_es_reader: Could not open the source file."
 msgstr "vc1_es_reader: 無法開啟來源檔案。"
 
-#: src/mmg/tabs/chapters.cpp:837
+#: src/mmg/tabs/chapters.cpp:803
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
 msgstr "verify failed: chapters->CheckMandatory() 為 false。這不該發生。請提交錯誤報告。\n"
 
@@ -8151,6 +8149,8 @@ msgstr "是"
 #~ msgstr "總在命令列中添加 '--engage use_simpleblock'。這樣將使用 Matroska 的新 '簡單區塊'，可以省下一些額外開銷，代價是將無法向下相容。"
 #~ msgid "Always use simple blocks"
 #~ msgstr "總使用簡單區塊"
+#~ msgid "Change the default values"
+#~ msgstr "修改預設值"
 #~ msgid "Could not open the file '%1%'."
 #~ msgstr "無法開啟檔案 '%1%'。"
 #~ msgid "Do not copy chapters from this file. Only applies to a couple of formats (e.g. Matroska files)."
@@ -8165,6 +8165,8 @@ msgstr "是"
 #~ msgstr "不讀取章節"
 #~ msgid "No tags"
 #~ msgstr "不讀取標籤"
+#~ msgid "Set &default values"
+#~ msgstr "設定預設值(&D)"
 #~ msgid "Subtitle charset:"
 #~ msgstr "字幕字元集:"
 #~ msgid "Tracks:"
