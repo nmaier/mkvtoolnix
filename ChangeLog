@@ -1,5 +1,9 @@
 2009-06-25  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: The "preferences" dialog has been split up into several
+	tabs. Some other preferences available in other dialogs have been
+	merged into the "preferences" dialog.
+
 	* mkvmerge: bug fix: The I frame detection for AVC/h.264 video has
 	been fixed. Sometimes a single I frame was recognized as two or
 	more consecutive I frames resulting in garbled display and wrong
