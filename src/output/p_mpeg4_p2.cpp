@@ -186,7 +186,7 @@ mpeg4_p2_video_packetizer_c::process_native(packet_cptr packet) {
 */
 void
 mpeg4_p2_video_packetizer_c::generate_timecode_and_duration() {
-  if (0.0 < m_fps) {
+  if (0.0 >= m_fps) {
     // TODO: error
     mxexit(1);
   }
