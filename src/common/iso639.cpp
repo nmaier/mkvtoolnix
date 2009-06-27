@@ -128,7 +128,7 @@ const iso639_language_t iso639_languages[] = {
   { "Creoles and pidgins",                            "cpf", NULL, NULL  },
   { "Creoles and pidgins",                            "cpp", NULL, NULL  },
   { "Crimean Tatar; Crimean Turkish",                 "crh", NULL, NULL  },
-  { "Croatian; Hrvatske",                             "scr", "hr", "hrv" },
+  { "Croatian; Hrvatske",                             "hrv", "hr", NULL  },
   { "Cushitic (Other)",                               "cus", NULL, NULL  },
   { "Czech",                                          "cze", "cs", "ces" },
   { "Dakota",                                         "dak", NULL, NULL  },
