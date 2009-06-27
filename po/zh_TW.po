@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: zh-TW\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-06-22 22:06+0200\n"
+"PO-Revision-Date: 2009-06-27 21:16+0800\n"
 "Last-Translator: Dong-Jun Wu <ziyawu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <ziyawu@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -65,7 +65,7 @@ msgid ""
 "                           file.\n"
 msgstr ""
 "  --append-to <SFID1:STID1:DFID1:DTID1,SFID2:STID2:DFID2:DTID2,...>\n"
-"                           以逗號分隔的一組檔案及軌道 ID 的列表，\n"
+"                           以逗號分隔的一組檔案及軌道 ID 的清單，\n"
 "                           決定一個檔案的哪個軌道將被添加至前一個\n"
 "                           檔案的某一軌道。\n"
 
@@ -397,7 +397,7 @@ msgid ""
 "                           tracks in the output file.\n"
 msgstr ""
 "  --track-order <FileID1:TID1,FileID2:TID2,FileID3:TID3,...>\n"
-"                           一組以逗號分隔的檔案 ID 及軌道 ID 列表，\n"
+"                           一組以逗號分隔的檔案 ID 及軌道 ID 清單，\n"
 "                           控制輸出檔中的軌道順序。\n"
 
 #: src/merge/mkvmerge.cpp:214
@@ -981,15 +981,15 @@ msgstr "'%1%' 缺少檔案名。\n"
 
 #: src/merge/mkvmerge.cpp:1431
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code in '--chapter-language %1%'. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
-msgstr "'--chapter-language %1%' 中的 '%1%' 既不是有效的 ISO639-2 碼，也不是有效的 ISO639-1 碼。詳見 'mkvmerge --list-languages' 提供的語言列表及各語言的 ISO639-2 碼。\n"
+msgstr "'--chapter-language %1%' 中的 '%1%' 既不是有效的 ISO639-2 碼，也不是有效的 ISO639-1 碼。詳見 'mkvmerge --list-languages' 提供的語言清單及各語言的 ISO639-2 碼。\n"
 
 #: src/merge/mkvmerge.cpp:1499
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code in '--default-language %1%'. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
-msgstr "'--default-language %1%' 中的 '%1%' 既不是有效的 ISO639-2 碼，也不是有效的 ISO639-1 碼。詳見 'mkvmerge --list-languages' 提供的語言列表及各語言的 ISO639-2 碼。\n"
+msgstr "'--default-language %1%' 中的 '%1%' 既不是有效的 ISO639-2 碼，也不是有效的 ISO639-1 碼。詳見 'mkvmerge --list-languages' 提供的語言清單及各語言的 ISO639-2 碼。\n"
 
 #: src/merge/mkvmerge.cpp:1073
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
-msgstr "'%1%' 既不是有效的 ISO639-2 碼，也不是有效的 ISO639-1 碼。詳見 'mkvmerge --list-languages' 提供的所有語言列表及各語言的 ISO639-2 碼。\n"
+msgstr "'%1%' 既不是有效的 ISO639-2 碼，也不是有效的 ISO639-1 碼。詳見 'mkvmerge --list-languages' 提供的所有語言清單及各語言的 ISO639-2 碼。\n"
 
 #: src/common/chapters/chapters.cpp:186
 #: src/common/chapters/chapters.cpp:203
@@ -1506,7 +1506,7 @@ msgstr "<ChapterTrack> 缺少 <ChapterTrackNumber> 子元件。"
 
 #: src/input/r_matroska.cpp:1928
 msgid "A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"
-msgstr "在 %1% 找到了一個區塊群組，但裡面沒有區塊元件。這可能會導致 mkvmerge 崩潰。\n"
+msgstr "在 %1% 找到了一個區塊群組，但裡面沒有區塊元件。這可能會導致 mkvmerge 不正常關閉。\n"
 
 #: src/input/r_matroska.cpp:1835
 #: src/input/r_matroska.cpp:1938
@@ -1813,7 +1813,7 @@ msgstr "附加的"
 
 #: src/mmg/tabs/attachments.cpp:51
 msgid "Attached files"
-msgstr "附加檔列表"
+msgstr "附加檔清單"
 
 #: src/merge/pr_generic.cpp:1369
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
@@ -1985,7 +1985,7 @@ msgstr "修改 mmg 的偏好設定和選項"
 
 #: src/mmg/options/languages.cpp:88
 msgid "Changes to this list do not take effect until mmg is restarted."
-msgstr ""
+msgstr "換成這份清單直到重新啟動 mmg 才生效。"
 
 #: src/mmg/options/mmg.cpp:274
 msgid "Changing the interface language requires a restart to take effect."
@@ -2165,11 +2165,11 @@ msgstr "選擇標籤檔"
 
 #: src/mmg/options/mmg.cpp:89
 msgid "Clear inputs after a successful muxing run"
-msgstr "成功合成後清空輸入檔列表"
+msgstr "成功合成後清空輸入檔清單"
 
 #: src/mmg/options/mmg.cpp:87
 msgid "Clear inputs after adding a job to the job queue"
-msgstr "任務加入到任務佇列後清空輸入檔列表"
+msgstr "任務加入到任務佇列後清空輸入檔清單"
 
 #: src/mmg/header_editor/frame.cpp:98
 msgid "Close the current file without saving"
@@ -2260,9 +2260,8 @@ msgid "Command line saved."
 msgstr "命令列已儲存。"
 
 #: src/mmg/options/languages.cpp:79
-#, fuzzy
 msgid "Common languages"
-msgstr "章節名稱與語言"
+msgstr "共通語言"
 
 #: src/merge/pr_generic.cpp:729
 msgid "Compression failed: %1%\n"
@@ -2961,7 +2960,7 @@ msgstr "家族 UID:%1%"
 
 #: src/merge/mkvmerge.cpp:431
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
-msgstr "檔案 %1% 類型未知。請查看受支援的檔案類型列表 ('mkvmerge --list-types')，如果您的檔案類型受支援但沒被正常識別，請聯繫作者 Moritz Bunkus <moritz@bunkus.org>。\n"
+msgstr "檔案 %1% 類型未知。請查看受支援的檔案類型清單 ('mkvmerge --list-types')，如果您的檔案類型受支援但沒被正常識別，請聯繫作者 Moritz Bunkus <moritz@bunkus.org>。\n"
 
 #: src/merge/pr_generic.cpp:1367
 msgid "File '%1%': container: %2%"
@@ -3225,7 +3224,7 @@ msgid ""
 "down box and pressing the 'add' button."
 msgstr ""
 "在這裡可以加入其他命令列選項。\n"
-"您既可以直接在下面輸入，也可以從下拉列表中選取，\n"
+"您既可以直接在下面輸入，也可以從下拉清單中選取，\n"
 "再按下“加入”按鈕。"
 
 #: src/mmg/tabs/chapters.cpp:211
@@ -3661,7 +3660,6 @@ msgid "Language: %1%"
 msgstr "語言: %1%"
 
 #: src/mmg/options/languages.cpp:116
-#, fuzzy
 msgid "Languages"
 msgstr "語言"
 
@@ -4218,7 +4216,7 @@ msgstr "選項"
 
 #: src/mmg/cli_options_dlg.cpp:105
 msgid "Options meant ONLY for developpers. Do not use them. If something is considered to be an officially supported option then it's NOT in this list!"
-msgstr "*僅* 為開發者設計的選項。不要用它們。凡是被官方支援的東西都 *不在* 這個列表中！"
+msgstr "*僅* 為開發者設計的選項。不要用它們。凡是被官方支援的東西都 *不在* 這個清單中！"
 
 #: src/info/mkvinfo.cpp:698
 msgid "Order: %1%"
@@ -4321,7 +4319,7 @@ msgid ""
 "this listing.\n"
 msgstr ""
 "請閱讀 mkvmerge 命令列使用說明文件。\n"
-"它以大篇幅解釋了本列表中不易看透的細節。\n"
+"它以大篇幅解釋了本清單中不易看透的細節。\n"
 
 #: src/mmg/header_editor/frame.cpp:291
 msgid "Previous filename"
@@ -4774,6 +4772,8 @@ msgid ""
 "Select the languages you want to be shown at the top\n"
 "of language drop down boxes."
 msgstr ""
+"選擇你想要顯示在語言下拉式選單最上面\n"
+"的語言。"
 
 #: src/mmg/tabs/chapters.cpp:99
 msgid "Select values to be applied"
@@ -5686,7 +5686,7 @@ msgstr "兩音軌的聲道數不同: %1% 與 %2%"
 
 #: src/merge/timecode_factory.cpp:262
 msgid "The number of external timecodes %1% is smaller than the number of frames in this track. The remaining frames of this track might not be timestamped the way you intended them to be. mkvmerge might even crash.\n"
-msgstr "外部時間碼數 %1% 小於此軌的畫格數。此軌的其餘畫格將可能不按您想要的方式標記時間戳記。mkvmerge 甚至可能崩潰。\n"
+msgstr "外部時間碼數 %1% 小於此軌的畫格數。此軌的其餘畫格將可能不按您想要的方式標記時間戳記。mkvmerge 甚至可能不正常關閉。\n"
 
 #: src/mmg/header_editor/frame.cpp:451
 msgid ""
@@ -7071,7 +7071,7 @@ msgstr "異常中止"
 
 #: src/output/p_ac3.cpp:212
 msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"
-msgstr "ac3_bs_packetizer::add_to_buffer(): 未經測試的碼 ('size' 很古怪)。如果 mkvmerge 崩潰或者生成的檔不含完整且正常的音軌，請與作者 Moritz Bunkus 聯繫，電郵為 moritz@bunkus.org。\n"
+msgstr "ac3_bs_packetizer::add_to_buffer(): 未經測試的碼 ('size' 很古怪)。如果 mkvmerge 不正常關閉或者生成的檔不含完整且正常的音軌，請與作者 Moritz Bunkus 聯繫，電郵為 moritz@bunkus.org。\n"
 
 #: src/input/r_ac3.cpp:70
 msgid "ac3_reader: Could not open the source file."
@@ -7782,7 +7782,7 @@ msgstr "mmg 選項"
 
 #: src/mmg/options/languages.cpp:86
 msgid "mmg will reset to the default list if no entry is selected."
-msgstr ""
+msgstr "如果沒有選擇任何項目 mmg 將會重設為預設值。"
 
 #: src/input/r_mp3.cpp:59
 msgid "mp3_reader: Could not open the source file."
