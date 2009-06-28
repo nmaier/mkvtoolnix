@@ -94,6 +94,9 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
 
   std::vector<video_frame_t>::iterator frame;
   mxforeach(frame, frames) {
+    if (!frame->is_coded)
+      continue;
+
     // Maybe we can flush queued frames now. But only if we don't have
     // a B frame.
     if (FRAME_TYPE_B != frame->type)
@@ -239,18 +242,15 @@ mpeg4_p2_video_packetizer_c::flush_frames(bool end_of_file) {
 
   video_frame_t &bref_frame = m_ref_frames.front();
   video_frame_t &fref_frame = m_ref_frames.back();
-  bool drop_nvops           = false; // TODO: create a hack for this.
 
   std::deque<video_frame_t>::iterator frame;
   mxforeach(frame, m_b_frames)
     get_next_timecode_and_duration(frame->timecode, frame->duration);
   get_next_timecode_and_duration(fref_frame.timecode, fref_frame.duration);
 
-  if (fref_frame.is_coded || !drop_nvops)
-    add_packet(new packet_t(new memory_c(fref_frame.data, fref_frame.size, true), fref_frame.timecode, fref_frame.duration, FRAME_TYPE_P == fref_frame.type ? bref_frame.timecode : VFT_IFRAME));
+  add_packet(new packet_t(new memory_c(fref_frame.data, fref_frame.size, true), fref_frame.timecode, fref_frame.duration, FRAME_TYPE_P == fref_frame.type ? bref_frame.timecode : VFT_IFRAME));
   mxforeach(frame, m_b_frames)
-    if (frame->is_coded || !drop_nvops)
-      add_packet(new packet_t(new memory_c(frame->data, frame->size, true), frame->timecode, frame->duration, bref_frame.timecode, fref_frame.timecode));
+    add_packet(new packet_t(new memory_c(frame->data, frame->size, true), frame->timecode, frame->duration, bref_frame.timecode, fref_frame.timecode));
 
   m_ref_frames.pop_front();
   m_b_frames.clear();
