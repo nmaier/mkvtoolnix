@@ -90,18 +90,16 @@ mpeg4_p2_video_packetizer_c::~mpeg4_p2_video_packetizer_c() {
 
 int
 mpeg4_p2_video_packetizer_c::process(packet_cptr packet) {
-  if (!m_size_extracted)
-    extract_size(packet->data->get(), packet->data->get_size());
-  if (!m_aspect_ratio_extracted)
-    extract_aspect_ratio(packet->data->get(), packet->data->get_size());
+  extract_size(packet->data->get(), packet->data->get_size());
+  extract_aspect_ratio(packet->data->get(), packet->data->get_size());
 
-  if (m_input_is_native == m_output_is_native)
-    return video_packetizer_c::process(packet);
+  int result = m_input_is_native == m_output_is_native ? video_packetizer_c::process(packet)
+             : m_input_is_native                       ?                     process_native(packet)
+             :                                                               process_non_native(packet);
 
-  if (m_input_is_native)
-    return process_native(packet);
+  ++m_frames_output;
 
-  return process_non_native(packet);
+  return result;
 }
 
 int
@@ -325,6 +323,9 @@ mpeg4_p2_video_packetizer_c::flush() {
 void
 mpeg4_p2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
                                                   int size) {
+  if (m_aspect_ratio_extracted)
+    return;
+
   if (ti.aspect_ratio_given || ti.display_dimensions_given) {
     m_aspect_ratio_extracted = true;
     return;
@@ -349,6 +350,9 @@ mpeg4_p2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
 void
 mpeg4_p2_video_packetizer_c::extract_size(const unsigned char *buffer,
                                           int size) {
+  if (m_size_extracted)
+    return;
+
   uint32_t xtr_width, xtr_height;
 
   if (mpeg4::p2::extract_size(buffer, size, xtr_width, xtr_height)) {
