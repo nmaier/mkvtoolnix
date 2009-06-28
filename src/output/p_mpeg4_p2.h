@@ -24,8 +24,17 @@
 
 class mpeg4_p2_video_packetizer_c: public video_packetizer_c {
 protected:
+  struct timecode_duration_t {
+    int64_t m_timecode, m_duration;
+    timecode_duration_t(int64_t timecode, int64_t duration)
+      : m_timecode(timecode)
+      , m_duration(duration)
+    {
+    }
+  };
+
   std::deque<video_frame_t> m_ref_frames, m_b_frames;
-  std::deque<int64_t> m_available_timecodes, m_available_durations;
+  std::deque<timecode_duration_t> m_available_timecodes;
   int64_t m_timecodes_generated, m_previous_timecode;
   bool m_aspect_ratio_extracted, m_input_is_native, m_output_is_native;
   bool m_size_extracted;

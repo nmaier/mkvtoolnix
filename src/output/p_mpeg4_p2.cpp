@@ -78,19 +78,16 @@ int
 mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
   extract_config_data(packet);
 
+  std::vector<video_frame_t> frames;
+  mpeg4::p2::find_frame_types(packet->data->get(), packet->data->get_size(), frames, m_config_data);
+
   // Add a timecode and a duration if they've been given.
   if (-1 != packet->timecode)
-    m_available_timecodes.push_back(packet->timecode);
+    m_available_timecodes.push_back(timecode_duration_t(packet->timecode, packet->duration));
 
   else if (0.0 == m_fps)
     mxerror_tid(ti.fname, ti.id, Y("Cannot convert non-native MPEG4 video frames into native ones if the source container "
                                    "provides neither timecodes nor a number of frames per second.\n"));
-
-  if (-1 != packet->duration)
-    m_available_durations.push_back(packet->duration);
-
-  std::vector<video_frame_t> frames;
-  mpeg4::p2::find_frame_types(packet->data->get(), packet->data->get_size(), frames, m_config_data);
 
   std::vector<video_frame_t>::iterator frame;
   mxforeach(frame, frames) {
@@ -111,7 +108,7 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
       m_ref_frames.push_back(*frame);
   }
 
-  m_previous_timecode = m_available_timecodes.back();
+  m_previous_timecode = m_available_timecodes.back().m_timecode;
 
   return FILE_STATUS_MOREDATA;
 }
@@ -200,28 +197,22 @@ mpeg4_p2_video_packetizer_c::generate_timecode_and_duration() {
   }
 
   if (m_available_timecodes.empty()) {
-    m_previous_timecode = (int64_t)(m_previous_timecode +  1000000000.0 / m_fps);
-    m_available_timecodes.push_back(m_previous_timecode);
+    m_previous_timecode = (int64_t)(m_previous_timecode + 1000000000.0 / m_fps);
+    m_available_timecodes.push_back(timecode_duration_t(m_previous_timecode, (int64_t)(1000000000.0 / m_fps)));
     mxverb(3, boost::format("mpeg4_p2::flush_frames(): Needed new timecode %1%\n") % m_previous_timecode);
-  }
-
-  if (m_available_durations.empty()) {
-    m_available_durations.push_back((int64_t)(1000000000.0 / m_fps));
-    mxverb(3, boost::format("mpeg4_p2::flush_frames(): Needed new duration %1%\n") % m_available_durations.back());
   }
 }
 
 void
 mpeg4_p2_video_packetizer_c::get_next_timecode_and_duration(int64_t &timecode,
                                                             int64_t &duration) {
-  if (m_available_timecodes.empty() || m_available_durations.empty())
+  if (m_available_timecodes.empty())
     generate_timecode_and_duration();
 
-  timecode = m_available_timecodes.front();
-  duration = m_available_durations.front();
+  timecode = m_available_timecodes.front().m_timecode;
+  duration = m_available_timecodes.front().m_duration;
 
   m_available_timecodes.pop_front();
-  m_available_durations.pop_front();
 }
 
 void
