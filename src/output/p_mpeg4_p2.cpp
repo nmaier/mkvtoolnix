@@ -108,6 +108,25 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
   mxforeach(frame, frames) {
     if (!frame->is_coded) {
       ++m_statistics.m_num_n_vops;
+
+      int num_surplus_timecodes = static_cast<int>(m_available_timecodes.size()) - static_cast<int>(m_ref_frames.size() + m_b_frames.size());
+      if (0 < num_surplus_timecodes) {
+        std::deque<timecode_duration_t>::iterator start = m_available_timecodes.begin() + m_ref_frames.size() + m_b_frames.size();
+        std::deque<timecode_duration_t>::iterator end   = start + num_surplus_timecodes;
+
+        if (0 != (m_ref_frames.size() + m_b_frames.size())) {
+          std::deque<timecode_duration_t>::iterator last = m_available_timecodes.begin() + m_ref_frames.size() + m_b_frames.size() - 1;
+          std::deque<timecode_duration_t>::iterator cur  = start;
+          while (cur != end) {
+            last->m_duration = std::max(last->m_duration, static_cast<int64_t>(0)) + std::max(cur->m_duration, static_cast<int64_t>(0));
+            ++cur;
+          }
+        }
+
+        m_available_timecodes.erase(start, end);
+        m_statistics.m_num_dropped_timecodes += num_surplus_timecodes;
+      }
+
       continue;
     }
 

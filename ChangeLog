@@ -1,3 +1,10 @@
+2009-06-28  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The handling of NVOPs in native MPEG4 part 2
+	video storage has been improved. NVOPs are dropped again both from
+	packed and non-packed bitstreams, and timecodes are adjusted to
+	match the number of dropped frames.
+
 2009-06-25  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: The "preferences" dialog has been split up into several
