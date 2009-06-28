@@ -43,6 +43,7 @@ protected:
   virtual void flush_frames(bool end_of_file);
   virtual void extract_aspect_ratio(const unsigned char *buffer, int size);
   virtual void extract_size(const unsigned char *buffer, int size);
+  virtual void extract_config_data(packet_cptr &packet);
   virtual void fix_codec_string();
   virtual void generate_timecode_and_duration();
   virtual void get_next_timecode_and_duration(int64_t &timecode, int64_t &duration);

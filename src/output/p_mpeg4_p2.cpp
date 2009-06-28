@@ -76,23 +76,7 @@ mpeg4_p2_video_packetizer_c::process(packet_cptr packet) {
 
 int
 mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
-  if (NULL == ti.private_data) {
-    memory_c *config_data = mpeg4::p2::parse_config_data(packet->data->get(), packet->data->get_size(), m_config_data);
-    if (NULL != config_data) {
-      ti.private_data = (unsigned char *)safememdup(config_data->get(), config_data->get_size());
-      ti.private_size = config_data->get_size();
-      delete config_data;
-
-      fix_codec_string();
-      set_codec_private(ti.private_data, ti.private_size);
-      rerender_track_headers();
-
-    } else
-      mxerror_tid(ti.fname, ti.id, Y("Could not find the codec configuration data in the first MPEG-4 part 2 video frame. This track cannot be stored in native mode.\n"));
-  }
-
-  std::vector<video_frame_t> frames;
-  mpeg4::p2::find_frame_types(packet->data->get(), packet->data->get_size(), frames, m_config_data);
+  extract_config_data(packet);
 
   // Add a timecode and a duration if they've been given.
   if (-1 != packet->timecode)
@@ -104,6 +88,9 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
 
   if (-1 != packet->duration)
     m_available_durations.push_back(packet->duration);
+
+  std::vector<video_frame_t> frames;
+  mpeg4::p2::find_frame_types(packet->data->get(), packet->data->get_size(), frames, m_config_data);
 
   std::vector<video_frame_t>::iterator frame;
   mxforeach(frame, frames) {
@@ -124,6 +111,24 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
   m_previous_timecode = m_available_timecodes.back();
 
   return FILE_STATUS_MOREDATA;
+}
+
+void
+mpeg4_p2_video_packetizer_c::extract_config_data(packet_cptr &packet) {
+  if (NULL != ti.private_data)
+    return;
+
+  memory_c *config_data = mpeg4::p2::parse_config_data(packet->data->get(), packet->data->get_size(), m_config_data);
+  if (NULL == config_data)
+    mxerror_tid(ti.fname, ti.id, Y("Could not find the codec configuration data in the first MPEG-4 part 2 video frame. This track cannot be stored in native mode.\n"));
+
+  ti.private_data = (unsigned char *)safememdup(config_data->get(), config_data->get_size());
+  ti.private_size = config_data->get_size();
+  delete config_data;
+
+  fix_codec_string();
+  set_codec_private(ti.private_data, ti.private_size);
+  rerender_track_headers();
 }
 
 void
