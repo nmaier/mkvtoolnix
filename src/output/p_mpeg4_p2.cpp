@@ -41,10 +41,11 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *p_reader,
   , m_output_is_native(hack_engaged(ENGAGE_NATIVE_MPEG4) || input_is_native)
   , m_size_extracted(false)
 {
-
   if (!m_output_is_native) {
     set_codec_id(MKV_V_MSCOMP);
     check_fourcc();
+
+    timecode_factory_application_mode = TFA_SHORT_QUEUEING;
 
   } else {
     set_codec_id(MKV_V_MPEG4_ASP);
@@ -53,9 +54,23 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *p_reader,
       ti.private_data = NULL;
       ti.private_size = 0;
     }
-  }
 
-  timecode_factory_application_mode = TFA_SHORT_QUEUEING;
+    // If no external timecode file has been specified then mkvmerge
+    // might have created a factory due to the --default-duration
+    // command line argument. This factory must be disabled for this
+    // packetizer because it takes care of handling the default
+    // duration/FPS itself.
+    if (ti.ext_timecodes.empty())
+      timecode_factory = timecode_factory_cptr(NULL);
+
+    if (default_duration_forced)
+      m_fps = 1000000000.0 / htrack_default_duration;
+
+    else if (0.0 != m_fps)
+      htrack_default_duration = static_cast<int64_t>(1000000000ll / m_fps);
+
+    timecode_factory_application_mode = TFA_FULL_QUEUEING;
+  }
 }
 
 mpeg4_p2_video_packetizer_c::~mpeg4_p2_video_packetizer_c() {
@@ -93,16 +108,22 @@ int
 mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
   extract_config_data(packet);
 
-  std::vector<video_frame_t> frames;
-  mpeg4::p2::find_frame_types(packet->data->get(), packet->data->get_size(), frames, m_config_data);
-
   // Add a timecode and a duration if they've been given.
-  if (-1 != packet->timecode)
-    m_available_timecodes.push_back(timecode_duration_t(packet->timecode, packet->duration));
+  if (-1 != packet->timecode) {
+    if (!default_duration_forced)
+      m_available_timecodes.push_back(timecode_duration_t(packet->timecode, packet->duration));
 
-  else if (0.0 == m_fps)
+    else {
+      m_available_timecodes.push_back(timecode_duration_t(m_timecodes_generated * htrack_default_duration, htrack_default_duration));
+      ++m_timecodes_generated;
+    }
+
+  } else if (0.0 == m_fps)
     mxerror_tid(ti.fname, ti.id, Y("Cannot convert non-native MPEG4 video frames into native ones if the source container "
                                    "provides neither timecodes nor a number of frames per second.\n"));
+
+  std::vector<video_frame_t> frames;
+  mpeg4::p2::find_frame_types(packet->data->get(), packet->data->get_size(), frames, m_config_data);
 
   std::vector<video_frame_t>::iterator frame;
   mxforeach(frame, frames) {
