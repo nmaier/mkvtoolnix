@@ -58,6 +58,21 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *p_reader,
   timecode_factory_application_mode = TFA_SHORT_QUEUEING;
 }
 
+mpeg4_p2_video_packetizer_c::~mpeg4_p2_video_packetizer_c() {
+  if (!debugging_requested("mpeg4_p2_statistics"))
+    return;
+
+  mxinfo(boost::format("mpeg4_p2_video_packetizer_c statistics:\n"
+                       "  # I frames:            %1%\n"
+                       "  # P frames:            %2%\n"
+                       "  # B frames:            %3%\n"
+                       "  # NVOPs:               %4%\n"
+                       "  # generated timecodes: %5%\n"
+                       "  # dropped timecodes:   %6%\n")
+         % m_statistics.m_num_i_frames % m_statistics.m_num_p_frames % m_statistics.m_num_b_frames % m_statistics.m_num_n_vops
+         % m_statistics.m_num_generated_timecodes % m_statistics.m_num_dropped_timecodes);
+}
+
 int
 mpeg4_p2_video_packetizer_c::process(packet_cptr packet) {
   if (!m_size_extracted)
@@ -91,8 +106,17 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
 
   std::vector<video_frame_t>::iterator frame;
   mxforeach(frame, frames) {
-    if (!frame->is_coded)
+    if (!frame->is_coded) {
+      ++m_statistics.m_num_n_vops;
       continue;
+    }
+
+    if (FRAME_TYPE_I == frame->type)
+      ++m_statistics.m_num_i_frames;
+    else if (FRAME_TYPE_P == frame->type)
+      ++m_statistics.m_num_p_frames;
+    else
+      ++m_statistics.m_num_b_frames;
 
     // Maybe we can flush queued frames now. But only if we don't have
     // a B frame.
@@ -199,7 +223,9 @@ mpeg4_p2_video_packetizer_c::generate_timecode_and_duration() {
   if (m_available_timecodes.empty()) {
     m_previous_timecode = (int64_t)(m_previous_timecode + 1000000000.0 / m_fps);
     m_available_timecodes.push_back(timecode_duration_t(m_previous_timecode, (int64_t)(1000000000.0 / m_fps)));
+
     mxverb(3, boost::format("mpeg4_p2::flush_frames(): Needed new timecode %1%\n") % m_previous_timecode);
+    ++m_statistics.m_num_generated_timecodes;
   }
 }
 
