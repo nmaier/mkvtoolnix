@@ -888,7 +888,8 @@ ogm_demuxer_c::get_duration_and_len(ogg_packet &op,
     duration = 0;
 }
 
-void ogm_demuxer_c::process_page(int64_t granulepos) {
+void
+ogm_demuxer_c::process_page(int64_t granulepos) {
   ogg_packet op;
 
   while (ogg_stream_packetout(&os, &op) == 1) {
