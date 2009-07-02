@@ -770,7 +770,7 @@ mmg_dialog::update_command_line() {
           clargs.Add(t->sub_charset);
         }
 
-        if (t->language != wxT("und")) {
+        if (extract_language_code(t->language) != wxT("und")) {
           clargs.Add(wxT("--chapter-language"));
           clargs.Add(extract_language_code(t->language));
         }

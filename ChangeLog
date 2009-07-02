@@ -1,5 +1,10 @@
 2009-07-02  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: The chapter language for chapters copied from
+	source files (e.g. Matroska, MP4 or OGM files) is only changed if
+	the user has selected any language other than "und". Fix for bug
+	420.
+
 	* mmg: bug fix: mmg will no longer show an error message if the
 	user has not selected a country in the "chapters" tab of the
 	preferences dialog.
