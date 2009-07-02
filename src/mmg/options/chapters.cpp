@@ -116,7 +116,7 @@ optdlg_chapters_tab::validate_choices() {
   }
 
   value = cob_country->GetValue();
-  if (!is_valid_cctld(wxMB(value))) {
+  if (!value.IsEmpty() && !is_valid_cctld(wxMB(value))) {
     wxMessageBox(wxString::Format(Z("The country '%s' is not a valid ccTLD and cannot be selected."), value.c_str()),
                  Z("Invalid country selected"), wxICON_ERROR | wxOK, this);
     return false;
