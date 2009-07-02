@@ -163,27 +163,6 @@ public:
   };
 };
 
-class ogm_v_avc_demuxer_c: public ogm_demuxer_c {
-public:
-
-public:
-  ogm_v_avc_demuxer_c(ogm_reader_c *p_reader);
-
-  virtual const char *get_type() {
-    return ID_RESULT_TRACK_VIDEO;
-  };
-
-  virtual std::string get_codec() {
-    return "h.264/AVC";
-  };
-
-  virtual void initialize();
-  virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
-
-private:
-  virtual memory_cptr extract_avcc();
-};
-
 class ogm_v_mscomp_demuxer_c: public ogm_demuxer_c {
 public:
   int64_t frames_since_granulepos_change;
@@ -200,6 +179,22 @@ public:
   virtual void initialize();
   virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
   virtual void process_page(int64_t granulepos);
+};
+
+class ogm_v_avc_demuxer_c: public ogm_v_mscomp_demuxer_c {
+public:
+
+public:
+  ogm_v_avc_demuxer_c(ogm_reader_c *p_reader);
+
+  virtual std::string get_codec() {
+    return "h.264/AVC";
+  };
+
+  virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
+
+private:
+  virtual memory_cptr extract_avcc();
 };
 
 class ogm_v_theora_demuxer_c: public ogm_demuxer_c {
@@ -1113,18 +1108,10 @@ ogm_s_text_demuxer_c::process_page(int64_t granulepos) {
 // -----------------------------------------------------------
 
 ogm_v_avc_demuxer_c::ogm_v_avc_demuxer_c(ogm_reader_c *p_reader)
-  : ogm_demuxer_c(p_reader)
+  : ogm_v_mscomp_demuxer_c(p_reader)
 {
   stype                  = OGM_STREAM_TYPE_V_AVC;
   num_non_header_packets = 3;
-}
-
-void
-ogm_v_avc_demuxer_c::initialize() {
-  stream_header *sth = (stream_header *)(packet_data[0]->get() + 1);
-
-  if (0 > g_video_fps)
-    g_video_fps = 10000000.0 / (float)get_uint64_le(&sth->time_unit);
 }
 
 generic_packetizer_c *
