@@ -57,8 +57,8 @@ void
 textsubs_packetizer_c::set_headers() {
   set_codec_id(m_codec_id);
 
-  if (NULL != m_global_data->get())
-    set_codec_private((unsigned char *)m_global_data->get(), m_global_data->get_size());
+  if (m_global_data->is_allocated())
+    set_codec_private((unsigned char *)m_global_data->get_buffer(), m_global_data->get_size());
 
   generic_packetizer_c::set_headers();
 
@@ -74,7 +74,7 @@ textsubs_packetizer_c::process(packet_cptr packet) {
 
   packet->duration_mandatory = true;
 
-  std::string subs((char *)packet->data->get());
+  std::string subs((char *)packet->data->get_buffer());
 
   subs = boost::regex_replace(subs, s_re_remove_cr,          "",     boost::match_default | boost::match_single_line);
   subs = boost::regex_replace(subs, s_re_remove_trailing_nl, "",     boost::match_default | boost::match_single_line);

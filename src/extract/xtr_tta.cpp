@@ -61,7 +61,7 @@ xtr_tta_c::handle_frame(memory_cptr &frame,
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   m_frame_sizes.push_back(frame->get_size());
-  m_out->write(frame->get(), frame->get_size());
+  m_out->write(frame);
 
   if (0 < duration)
     m_previous_duration = duration;

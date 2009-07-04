@@ -90,8 +90,8 @@ mpeg4_p2_video_packetizer_c::~mpeg4_p2_video_packetizer_c() {
 
 int
 mpeg4_p2_video_packetizer_c::process(packet_cptr packet) {
-  extract_size(packet->data->get(), packet->data->get_size());
-  extract_aspect_ratio(packet->data->get(), packet->data->get_size());
+  extract_size(packet->data->get_buffer(), packet->data->get_size());
+  extract_aspect_ratio(packet->data->get_buffer(), packet->data->get_size());
 
   int result = m_input_is_native == m_output_is_native ? video_packetizer_c::process(packet)
              : m_input_is_native                       ?                     process_native(packet)
@@ -121,7 +121,7 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
                                    "provides neither timecodes nor a number of frames per second.\n"));
 
   std::vector<video_frame_t> frames;
-  mpeg4::p2::find_frame_types(packet->data->get(), packet->data->get_size(), frames, m_config_data);
+  mpeg4::p2::find_frame_types(packet->data->get_buffer(), packet->data->get_size(), frames, m_config_data);
 
   std::vector<video_frame_t>::iterator frame;
   mxforeach(frame, frames) {
@@ -161,7 +161,7 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
     if (FRAME_TYPE_B != frame->type)
       flush_frames(false);
 
-    frame->data     = (unsigned char *)safememdup(packet->data->get() + frame->pos, frame->size);
+    frame->data     = (unsigned char *)safememdup(packet->data->get_buffer() + frame->pos, frame->size);
     frame->timecode = -1;
 
     if (FRAME_TYPE_B == frame->type)
@@ -180,11 +180,11 @@ mpeg4_p2_video_packetizer_c::extract_config_data(packet_cptr &packet) {
   if (NULL != ti.private_data)
     return;
 
-  memory_c *config_data = mpeg4::p2::parse_config_data(packet->data->get(), packet->data->get_size(), m_config_data);
+  memory_c *config_data = mpeg4::p2::parse_config_data(packet->data->get_buffer(), packet->data->get_size(), m_config_data);
   if (NULL == config_data)
     mxerror_tid(ti.fname, ti.id, Y("Could not find the codec configuration data in the first MPEG-4 part 2 video frame. This track cannot be stored in native mode.\n"));
 
-  ti.private_data = (unsigned char *)safememdup(config_data->get(), config_data->get_size());
+  ti.private_data = (unsigned char *)safememdup(config_data->get_buffer(), config_data->get_size());
   ti.private_size = config_data->get_size();
   delete config_data;
 

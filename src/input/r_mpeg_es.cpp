@@ -37,7 +37,7 @@ mpeg_es_reader_c::probe_file(mm_io_c *io,
 
   try {
     memory_cptr af_buf = memory_c::alloc(READ_SIZE);
-    unsigned char *buf = af_buf->get();
+    unsigned char *buf = af_buf->get_buffer();
     io->setFilePointer(0, seek_beginning);
     int num_read = io->read(buf, READ_SIZE);
 

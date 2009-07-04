@@ -245,7 +245,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *p_reader,
   // If no external timecode file but a default duration has been
   // given then create a simple timecode factory that generates the
   // timecodes for the given FPS.
-  if ((NULL == timecode_factory.get()) && (-1 != htrack_default_duration))
+  if (!timecode_factory.is_set() && (-1 != htrack_default_duration))
     timecode_factory = timecode_factory_c::create_fps_factory(htrack_default_duration, ti.fname, ti.id);
 }
 
@@ -340,7 +340,7 @@ generic_packetizer_c::set_track_type(int type,
   else if (TFA_AUTOMATIC != tfa_mode)
     timecode_factory_application_mode = tfa_mode;
 
-  if ((NULL != timecode_factory.get()) && (track_video != type) && (track_audio != type))
+  if (timecode_factory.is_set() && (track_video != type) && (track_audio != type))
     timecode_factory->set_preserve_duration(true);
 }
 
@@ -576,7 +576,7 @@ generic_packetizer_c::set_headers() {
   if (-1 != htrack_max_add_block_ids)
     GetChildAs<KaxMaxBlockAdditionID, EbmlUInteger>(track_entry) = htrack_max_add_block_ids;
 
-  if (NULL != timecode_factory.get())
+  if (timecode_factory.is_set())
     htrack_default_duration = (int64_t)timecode_factory->get_default_duration(htrack_default_duration);
   if (-1.0 != htrack_default_duration)
     GetChildAs<KaxTrackDefaultDuration, EbmlUInteger>(track_entry) = htrack_default_duration;
@@ -718,7 +718,7 @@ generic_packetizer_c::add_packet(packet_cptr pack) {
       && (pack->data_adds.size()  > htrack_max_add_block_ids))
     pack->data_adds.resize(htrack_max_add_block_ids);
 
-  if (NULL != compressor.get()) {
+  if (compressor.is_set()) {
     try {
       compressor->compress(pack->data);
       int i;
@@ -810,7 +810,7 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
   pack->timecode_before_factory = pack->timecode;
 
   packet_queue.push_back(pack);
-  if ((NULL == timecode_factory.get()) || (TFA_IMMEDIATE == timecode_factory_application_mode))
+  if (!timecode_factory.is_set() || (TFA_IMMEDIATE == timecode_factory_application_mode))
     apply_factory_once(pack);
   else
     apply_factory();
@@ -844,7 +844,7 @@ generic_packetizer_c::get_packet() {
 
 void
 generic_packetizer_c::apply_factory_once(packet_cptr &packet) {
-  if (NULL == timecode_factory.get()) {
+  if (!timecode_factory.is_set()) {
     packet->assigned_timecode = packet->timecode;
     packet->gap_following     = false;
   } else
@@ -1044,10 +1044,7 @@ generic_packetizer_c::set_displacement_maybe(int64_t displacement) {
 
 bool
 generic_packetizer_c::contains_gap() {
-  if (NULL != timecode_factory.get())
-    return timecode_factory->contains_gap();
-  else
-    return false;
+  return timecode_factory.is_set() ? timecode_factory->contains_gap() : false;
 }
 
 void

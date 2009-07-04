@@ -1342,7 +1342,7 @@ parse_arg_priority(const std::string &arg) {
 static void
 parse_arg_previous_segment_uid(const std::string &param,
                                const std::string &arg) {
-  if (NULL != g_seguid_link_previous.get())
+  if (g_seguid_link_previous.is_set())
     mxerror(boost::format(Y("The previous UID was already given in '%1% %2%'.\n")) % param % arg);
 
   try {
@@ -1355,7 +1355,7 @@ parse_arg_previous_segment_uid(const std::string &param,
 static void
 parse_arg_next_segment_uid(const std::string &param,
                            const std::string &arg) {
-  if (NULL != g_seguid_link_next.get())
+  if (g_seguid_link_next.is_set())
     mxerror(boost::format(Y("The next UID was already given in '%1% %2%'.\n")) % param % arg);
 
   try {
@@ -1407,7 +1407,7 @@ parse_arg_attach_file(attachment_t &attachment,
       mxerror(boost::format(Y("The size of attachment '%1%' is 0.\n")) % attachment.name);
 
     attachment.data = memory_c::alloc(io->get_size());
-    io->read(attachment.data->get(), attachment.data->get_size());
+    io->read(attachment.data->get_buffer(), attachment.data->get_size());
 
   } catch (...) {
     mxerror(boost::format(Y("The attachment '%1%' could not be read.\n")) % attachment.name);

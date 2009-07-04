@@ -40,7 +40,7 @@ theora_video_packetizer_c::set_headers() {
 
 int
 theora_video_packetizer_c::process(packet_cptr packet) {
-  if (packet->data->get_size() && (0x00 == (packet->data->get()[0] & 0x40)))
+  if (packet->data->get_size() && (0x00 == (packet->data->get_buffer()[0] & 0x40)))
     packet->bref = VFT_IFRAME;
   else
     packet->bref = VFT_PFRAMEAUTOMATIC;
@@ -60,12 +60,12 @@ theora_video_packetizer_c::extract_aspect_ratio() {
 
   std::vector<memory_cptr>::iterator i;
   mxforeach(i, packets) {
-    if ((0 == (*i)->get_size()) || (THEORA_HEADERTYPE_IDENTIFICATION != (*i)->get()[0]))
+    if ((0 == (*i)->get_size()) || (THEORA_HEADERTYPE_IDENTIFICATION != (*i)->get_buffer()[0]))
       continue;
 
     try {
       theora_identification_header_t theora;
-      theora_parse_identification_header((*i)->get(), (*i)->get_size(), theora);
+      theora_parse_identification_header((*i)->get_buffer(), (*i)->get_size(), theora);
 
       if ((0 == theora.display_width) || (0 == theora.display_height))
         return;

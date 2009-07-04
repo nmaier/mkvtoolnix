@@ -393,14 +393,14 @@ mpeg4::p2::parse_config_data(const unsigned char *buffer,
   memory_c *mem;
   if (-1 == vos_offset) {
     mem                = new memory_c((unsigned char *)safemalloc(size + 5), size + 5, true);
-    unsigned char *dst = mem->get();
+    unsigned char *dst = mem->get_buffer();
     put_uint32_be(dst, MPEGVIDEO_VOS_START_CODE);
     dst[4] = 0xf5;
     memcpy(dst + 5, buffer, size);
 
   } else {
     mem                = new memory_c((unsigned char *)safemalloc(size), size, true);
-    unsigned char *dst = mem->get();
+    unsigned char *dst = mem->get_buffer();
     put_uint32_be(dst, MPEGVIDEO_VOS_START_CODE);
     if (3 >= buffer[vos_offset + 4])
       dst[4] = 0xf5;

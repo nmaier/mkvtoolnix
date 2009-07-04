@@ -47,7 +47,7 @@ mpeg_ps_reader_c::probe_file(mm_io_c *io,
                              int64_t size) {
   try {
     memory_c af_buf((unsigned char *)safemalloc(PS_PROBE_SIZE), 0, true);
-    unsigned char *buf = af_buf.get();
+    unsigned char *buf = af_buf.get_buffer();
     int num_read;
 
     io->setFilePointer(0, seek_beginning);
@@ -414,10 +414,10 @@ mpeg_ps_reader_c::parse_packet(mpeg_ps_id_t &id,
     length -= hdrlen;
 
     memory_c af_header(safemalloc(hdrlen), hdrlen, true);
-    if (io->read(af_header.get(), hdrlen) != hdrlen)
+    if (io->read(af_header.get_buffer(), hdrlen) != hdrlen)
       return false;
 
-    bit_cursor_c bc(af_header.get(), hdrlen);
+    bit_cursor_c bc(af_header.get_buffer(), hdrlen);
 
     try {
       // PTS
@@ -586,10 +586,10 @@ mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(mpeg_ps_id_t id,
         continue;
 
       memory_cptr new_buf = memory_c::alloc(new_length);
-      if (io->read(new_buf->get(), new_length) != new_length)
+      if (io->read(new_buf->get_buffer(), new_length) != new_length)
         throw false;
 
-      buffer.add(new_buf->get(), new_length);
+      buffer.add(new_buf->get_buffer(), new_length);
     }
   } catch (...) {
   }
@@ -618,10 +618,10 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
       break;
 
     memory_c new_buf((unsigned char *)safemalloc(length), 0, true);
-    if (io->read(new_buf.get(), length) != length)
+    if (io->read(new_buf.get_buffer(), length) != length)
       break;
 
-    m2v_parser->WriteData(new_buf.get(), length);
+    m2v_parser->WriteData(new_buf.get_buffer(), length);
 
     state = m2v_parser->GetState();
   }
@@ -634,7 +634,7 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
 
   MPEG2SequenceHeader seq_hdr = m2v_parser->GetSequenceHeader();
   counted_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
-  if (frame.get() == NULL)
+  if (!frame.is_set())
     throw false;
 
   track->fourcc         = FOURCC('M', 'P', 'G', '0' + m2v_parser->GetMPEGVersion());
@@ -683,10 +683,10 @@ mpeg_ps_reader_c::new_stream_v_avc(mpeg_ps_id_t id,
     if (!parse_packet(id, timecode, length, full_length))
       break;
     memory_c new_buf((unsigned char *)safemalloc(length), 0, true);
-    if (io->read(new_buf.get(), length) != length)
+    if (io->read(new_buf.get_buffer(), length) != length)
       break;
 
-    parser.add_bytes(new_buf.get(), length);
+    parser.add_bytes(new_buf.get_buffer(), length);
   }
 
   if (!parser.headers_parsed())
@@ -695,7 +695,7 @@ mpeg_ps_reader_c::new_stream_v_avc(mpeg_ps_id_t id,
   track->v_avcc = parser.get_avcc();
 
   try {
-    mm_mem_io_c avcc(track->v_avcc->get(), track->v_avcc->get_size());
+    mm_mem_io_c avcc(track->v_avcc->get_buffer(), track->v_avcc->get_size());
     mm_mem_io_c new_avcc(NULL, track->v_avcc->get_size(), 1024);
     memory_cptr nalu(new memory_c());
     int num_sps, sps, sps_length;
@@ -717,7 +717,7 @@ mpeg_ps_reader_c::new_stream_v_avc(mpeg_ps_id_t id,
       avcc.read(nalu, sps_length);
 
       abort = false;
-      if ((0 < sps_length) && ((nalu->get()[0] & 0x1f) == 7)) {
+      if ((0 < sps_length) && ((nalu->get_buffer()[0] & 0x1f) == 7)) {
         nalu_to_rbsp(nalu);
         if (!mpeg4::p10::parse_sps(nalu, sps_info, true))
           throw false;
@@ -780,10 +780,10 @@ mpeg_ps_reader_c::new_stream_v_vc1(mpeg_ps_id_t id,
       break;
 
     memory_cptr new_buf = memory_c::alloc(length);
-    if (io->read(new_buf->get(), length) != length)
+    if (io->read(new_buf->get_buffer(), length) != length)
       break;
 
-    parser.add_bytes(new_buf->get(), length);
+    parser.add_bytes(new_buf->get_buffer(), length);
   }
 
   if (!parser.is_sequence_header_available())
@@ -858,10 +858,10 @@ mpeg_ps_reader_c::new_stream_a_dts(mpeg_ps_id_t id,
       continue;
 
     memory_cptr new_buf = memory_c::alloc(length);
-    if (io->read(new_buf->get(), length) != length)
+    if (io->read(new_buf->get_buffer(), length) != length)
       throw false;
 
-    buffer.add(new_buf->get(), length);
+    buffer.add(new_buf->get_buffer(), length);
   }
 }
 
@@ -906,10 +906,10 @@ mpeg_ps_reader_c::new_stream_a_truehd(mpeg_ps_id_t id,
       continue;
 
     memory_cptr new_buf = memory_c::alloc(length);
-    if (io->read(new_buf->get(), length) != length)
+    if (io->read(new_buf->get_buffer(), length) != length)
       throw false;
 
-    parser.add_data(new_buf->get(), length);
+    parser.add_data(new_buf->get_buffer(), length);
   }
 }
 
@@ -1003,7 +1003,7 @@ mpeg_ps_reader_c::found_new_stream(mpeg_ps_id_t id) {
       return;
 
     memory_c af_buf((unsigned char *)safemalloc(length), 0, true);
-    unsigned char *buf = af_buf.get();
+    unsigned char *buf = af_buf.get_buffer();
     if (io->read(buf, length) != length)
       throw false;
 
@@ -1262,7 +1262,7 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
         continue;
       }
 
-      mpeg_ps_track_t *track = tracks[id2idx[new_id.idx()]].get();
+      mpeg_ps_track_t *track = tracks[id2idx[new_id.idx()]].get_object();
 
       mxverb(3,
              boost::format("mpeg_ps: packet for 0x%|1$02x|(%|2$02x|) length %3% at %4% timecode %5%\n")

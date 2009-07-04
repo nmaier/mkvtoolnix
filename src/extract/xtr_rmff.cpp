@@ -46,7 +46,7 @@ xtr_rmff_c::create_file(xtr_base_c *master,
   if (NULL == m_rmtrack)
     mxerror(boost::format(Y("Memory allocation error: %1% (%2%).\n")) % rmff_last_error % rmff_last_error_msg);
 
-  rmff_set_type_specific_data(m_rmtrack, mpriv->get(), mpriv->get_size());
+  rmff_set_type_specific_data(m_rmtrack, mpriv->get_buffer(), mpriv->get_size());
 
   if ('V' == m_codec_id[0])
     rmff_set_track_data(m_rmtrack, "Video", "video/x-pn-realvideo");
@@ -69,7 +69,7 @@ xtr_rmff_c::handle_frame(memory_cptr &frame,
   if (references_valid)
     keyframe = (0 == bref);
 
-  rmff_frame_t *rmff_frame = rmff_allocate_frame(frame->get_size(), frame->get());
+  rmff_frame_t *rmff_frame = rmff_allocate_frame(frame->get_size(), frame->get_buffer());
   if (NULL == rmff_frame)
     mxerror(Y("Memory for a RealAudio/RealVideo frame could not be allocated.\n"));
 

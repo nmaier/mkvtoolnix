@@ -185,7 +185,7 @@ aac_packetizer_c::process(packet_cptr packet) {
   unsigned long header;
   aac_header_t aacheader;
 
-  m_byte_buffer.add(packet->data->get(), packet->data->get_size());
+  m_byte_buffer.add(packet->data->get_buffer(), packet->data->get_size());
   while ((aac_packet = get_aac_packet(&header, &aacheader)) != NULL) {
     add_packet(new packet_t(new memory_c(aac_packet, aacheader.data_byte_size, true), -1 == packet->timecode ? m_packetno * m_s2tc : packet->timecode, m_single_packet_duration));
     m_packetno++;

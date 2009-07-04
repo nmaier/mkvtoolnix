@@ -58,7 +58,7 @@ xtr_avi_c::create_file(xtr_base_c *master,
 
   char ccodec[5];
   memory_cptr mpriv = decode_codec_private(priv);
-  m_bih             = (alBITMAPINFOHEADER *)safememdup(mpriv->get(), mpriv->get_size());
+  m_bih             = (alBITMAPINFOHEADER *)safememdup(mpriv->get_buffer(), mpriv->get_size());
   memcpy(ccodec, &m_bih->bi_compression, 4);
   ccodec[4]         = 0;
 
@@ -84,7 +84,7 @@ xtr_avi_c::handle_frame(memory_cptr &frame,
     keyframe = (0 == bref);
 
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
-  AVI_write_frame(m_avi, (char *)frame->get(), frame->get_size(), keyframe);
+  AVI_write_frame(m_avi, (char *)frame->get_buffer(), frame->get_size(), keyframe);
 
   if (((double)duration / 1000000.0 - (1000.0 / m_fps)) >= 1.5) {
     int k;

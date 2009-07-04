@@ -46,9 +46,9 @@ vc1_video_packetizer_c::vc1_video_packetizer_c(generic_reader_c *n_reader, track
 
 void
 vc1_video_packetizer_c::set_headers() {
-  int priv_size           = sizeof(alBITMAPINFOHEADER) + (NULL != m_raw_headers.get() ? m_raw_headers->get_size() + 1 : 0);
+  int priv_size           = sizeof(alBITMAPINFOHEADER) + (m_raw_headers.is_set() ? m_raw_headers->get_size() + 1 : 0);
   memory_cptr buf         = memory_c::alloc(priv_size);
-  alBITMAPINFOHEADER *bih = (alBITMAPINFOHEADER *)buf->get();
+  alBITMAPINFOHEADER *bih = (alBITMAPINFOHEADER *)buf->get_buffer();
 
   memset(bih, 0, priv_size);
   memcpy(&bih->bi_compression, "WVC1", 4);
@@ -65,7 +65,7 @@ vc1_video_packetizer_c::set_headers() {
   set_video_pixel_width(m_seqhdr.pixel_width);
   set_video_pixel_height(m_seqhdr.pixel_height);
 
-  if (NULL != m_raw_headers.get()) {
+  if (m_raw_headers.is_set()) {
     if (m_seqhdr.display_info_flag) {
       int display_width  = m_seqhdr.display_width;
       int display_height = m_seqhdr.display_height;
@@ -87,12 +87,12 @@ vc1_video_packetizer_c::set_headers() {
     else
       set_track_default_duration(m_parser.get_default_duration());
 
-    memcpy(((unsigned char *)bih) + sizeof(alBITMAPINFOHEADER) + 1, m_raw_headers->get(), m_raw_headers->get_size());
+    memcpy(((unsigned char *)bih) + sizeof(alBITMAPINFOHEADER) + 1, m_raw_headers->get_buffer(), m_raw_headers->get_size());
 
   } else
     set_track_default_duration(1000000000ll * 1001 / 30000);
 
-  set_codec_private(buf->get(), buf->get_size());
+  set_codec_private(buf->get_buffer(), buf->get_size());
 
   generic_packetizer_c::set_headers();
 
@@ -107,7 +107,7 @@ vc1_video_packetizer_c::add_timecodes_to_parser(packet_cptr &packet) {
   std::vector<packet_extension_cptr>::iterator extensions_it;
   mxforeach(extensions_it, packet->extensions) {
     if ((*extensions_it)->get_type() == packet_extension_c::MULTIPLE_TIMECODES) {
-      multiple_timecodes_packet_extension_c *extension = static_cast<multiple_timecodes_packet_extension_c *>((*extensions_it).get());
+      multiple_timecodes_packet_extension_c *extension = static_cast<multiple_timecodes_packet_extension_c *>((*extensions_it).get_object());
       int64_t timecode, position;
 
       while (extension->get_next(timecode, position))
@@ -120,9 +120,9 @@ int
 vc1_video_packetizer_c::process(packet_cptr packet) {
   add_timecodes_to_parser(packet);
 
-  m_parser.add_bytes(packet->data->get(), packet->data->get_size());
+  m_parser.add_bytes(packet->data->get_buffer(), packet->data->get_size());
 
-  if ((NULL == m_raw_headers.get()) && m_parser.are_headers_available())
+  if (!m_raw_headers.is_set() && m_parser.are_headers_available())
     headers_found();
 
   flush_frames();
@@ -139,8 +139,8 @@ vc1_video_packetizer_c::headers_found() {
 
   m_raw_headers              = memory_c::alloc(raw_seqhdr->get_size() + raw_entrypoint->get_size());
 
-  memcpy(m_raw_headers->get(),                          raw_seqhdr->get(),     raw_seqhdr->get_size());
-  memcpy(m_raw_headers->get() + raw_seqhdr->get_size(), raw_entrypoint->get(), raw_entrypoint->get_size());
+  memcpy(m_raw_headers->get_buffer(),                          raw_seqhdr->get_buffer(),     raw_seqhdr->get_size());
+  memcpy(m_raw_headers->get_buffer() + raw_seqhdr->get_size(), raw_entrypoint->get_buffer(), raw_entrypoint->get_size());
 
   if (!reader->appending)
     set_headers();

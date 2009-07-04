@@ -217,7 +217,7 @@ cluster_helper_c::set_duration(render_groups_c *rg) {
   if (rg->durations.empty())
     return;
 
-  kax_block_blob_c *group = rg->groups.back().get();
+  kax_block_blob_c *group = rg->groups.back().get_object();
   int64_t def_duration    = rg->source->get_track_default_duration();
   int64_t block_duration  = 0;
 
@@ -304,7 +304,7 @@ cluster_helper_c::render() {
   mxforeach(pack_it, m_packets) {
     packet_cptr &pack            = *pack_it;
     generic_packetizer_c *source = pack->source;
-    bool has_codec_state         = NULL != pack->codec_state.get();
+    bool has_codec_state         = pack->codec_state.is_set();
 
     if (source->contains_gap())
       m_cluster->SetSilentTrackUsed();
@@ -312,23 +312,23 @@ cluster_helper_c::render() {
     render_groups_c *render_group = NULL;
     mxforeach(rg_it, render_groups)
       if ((*rg_it)->source == source) {
-        render_group = (*rg_it).get();
+        render_group = (*rg_it).get_object();
         break;
       }
 
     if (NULL == render_group) {
       render_groups.push_back(render_groups_cptr(new render_groups_c(source)));
-      render_group = render_groups.back().get();
+      render_group = render_groups.back().get_object();
     }
 
     min_cl_timecode                        = std::min(pack->assigned_timecode, min_cl_timecode);
     max_cl_timecode                        = std::max(pack->assigned_timecode, max_cl_timecode);
 
-    DataBuffer *data_buffer                = new DataBuffer((binary *)pack->data->get(), pack->data->get_size());
+    DataBuffer *data_buffer                = new DataBuffer((binary *)pack->data->get_buffer(), pack->data->get_size());
 
     KaxTrackEntry &track_entry             = static_cast<KaxTrackEntry &>(*source->get_track_entry());
 
-    kax_block_blob_c *previous_block_group = !render_group->groups.empty() ? render_group->groups.back().get() : NULL;
+    kax_block_blob_c *previous_block_group = !render_group->groups.empty() ? render_group->groups.back().get_object() : NULL;
     kax_block_blob_c *new_block_group      = previous_block_group;
 
     if ((-1 != pack->bref) || has_codec_state)
@@ -348,7 +348,7 @@ cluster_helper_c::render() {
         this_block_blob_type = BLOCK_BLOB_NO_SIMPLE;
 
       render_group->groups.push_back(kax_block_blob_cptr(new kax_block_blob_c(this_block_blob_type)));
-      new_block_group = render_group->groups.back().get();
+      new_block_group = render_group->groups.back().get_object();
       m_cluster->AddBlockBlob(new_block_group);
       new_block_group->SetParent(*m_cluster);
 
@@ -364,7 +364,7 @@ cluster_helper_c::render() {
       KaxBlockGroup &bgroup = (KaxBlockGroup &)*new_block_group;
       KaxCodecState *cstate = new KaxCodecState;
       bgroup.PushElement(*cstate);
-      cstate->CopyBuffer(pack->codec_state->get(), pack->codec_state->get_size());
+      cstate->CopyBuffer(pack->codec_state->get_buffer(), pack->codec_state->get_size());
     }
 
     if (-1 == m_first_timecode_in_file)
@@ -393,7 +393,7 @@ cluster_helper_c::render() {
           KaxBlockMore &block_more                                           = AddEmptyChild<KaxBlockMore>(additions);
           *static_cast<EbmlUInteger *>(&GetChild<KaxBlockAddID>(block_more)) = data_add_idx + 1;
 
-          GetChild<KaxBlockAdditional>(block_more).CopyBuffer((binary *)pack->data_adds[data_add_idx]->get(), pack->data_adds[data_add_idx]->get_size());
+          GetChild<KaxBlockAdditional>(block_more).CopyBuffer((binary *)pack->data_adds[data_add_idx]->get_buffer(), pack->data_adds[data_add_idx]->get_size());
         }
       }
     }
@@ -438,7 +438,7 @@ cluster_helper_c::render() {
 
   if (0 < elements_in_cluster) {
     mxforeach(rg_it, render_groups)
-      set_duration((*rg_it).get());
+      set_duration((*rg_it).get_object());
 
     m_cluster->SetPreviousTimecode(min_cl_timecode - m_timecode_offset - 1, (int64_t)g_timecode_scale);
     m_cluster->set_min_timecode(min_cl_timecode - m_timecode_offset);

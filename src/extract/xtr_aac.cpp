@@ -48,7 +48,7 @@ xtr_aac_c::create_file(xtr_base_c *master,
     memory_cptr mem(new memory_c(priv->GetBuffer(), priv->GetSize(), false));
     m_content_decoder.reverse(mem, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
 
-    if (!parse_aac_data(mem->get(), mem->get_size(), m_profile, m_channels, sfreq, output_sfreq, is_sbr))
+    if (!parse_aac_data(mem->get_buffer(), mem->get_size(), m_profile, m_channels, sfreq, output_sfreq, is_sbr))
       mxerror(boost::format(Y("Track %1% with the CodecID '%2%' contains invalid \"codec private\" data for AAC.\n")) % m_tid % m_codec_id);
     m_id = 0;
 
@@ -166,5 +166,5 @@ xtr_aac_c::handle_frame(memory_cptr &frame,
 
   // Write the ADTS header and the data itself.
   m_out->write(adts, 56 / 8);
-  m_out->write(frame->get(), frame->get_size());
+  m_out->write(frame);
 }

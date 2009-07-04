@@ -23,7 +23,7 @@ bitvalue_c::bitvalue_c(int bitsize) {
   assert((0 < bitsize) && (0 == (bitsize % 8)));
 
   m_value = memory_c::alloc(bitsize / 8);
-  memset(m_value->get(), 0, m_value->get_size());
+  memset(m_value->get_buffer(), 0, m_value->get_size());
 }
 
 bitvalue_c::bitvalue_c(const bitvalue_c &src) {
@@ -83,8 +83,9 @@ bitvalue_c::bitvalue_c(std::string s,
 
   m_value = memory_c::alloc(len / 2);
 
+  unsigned char *buffer = m_value->get_buffer();
   for (i = 0; i < len; i += 2)
-    m_value->get()[i / 2] = hextodec(s2[i]) << 4 | hextodec(s2[i + 1]);
+    buffer[i / 2] = hextodec(s2[i]) << 4 | hextodec(s2[i + 1]);
 }
 
 bitvalue_c::bitvalue_c(const EbmlBinary &elt)
@@ -105,18 +106,18 @@ bitvalue_c::~bitvalue_c() {
 bool
 bitvalue_c::operator ==(const bitvalue_c &cmp)
   const {
-  return (cmp.m_value->get_size() == m_value->get_size()) && (0 == memcmp(m_value->get(), cmp.m_value->get(), m_value->get_size()));
+  return (cmp.m_value->get_size() == m_value->get_size()) && (0 == memcmp(m_value->get_buffer(), cmp.m_value->get_buffer(), m_value->get_size()));
 }
 
 unsigned char
 bitvalue_c::operator [](int index)
   const {
   assert((0 <= index) && (m_value->get_size() > index));
-  return m_value->get()[index];
+  return m_value->get_buffer()[index];
 }
 
 void
 bitvalue_c::generate_random() {
-  random_c::generate_bytes(m_value->get(), m_value->get_size());
+  random_c::generate_bytes(m_value->get_buffer(), m_value->get_size());
 }
 

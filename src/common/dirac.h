@@ -101,7 +101,7 @@ namespace dirac {
 
     virtual void add_bytes(unsigned char *buf, int size);
     virtual void add_bytes(memory_cptr &buf) {
-      add_bytes(buf->get(), buf->get_size());
+      add_bytes(buf->get_buffer(), buf->get_size());
     };
 
     virtual void flush();

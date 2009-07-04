@@ -30,11 +30,11 @@ srt_reader_c::srt_reader_c(track_info_c &p_ti)
 
   try {
     m_io = mm_text_io_cptr(new mm_text_io_c(new mm_file_io_c(ti.fname)));
-    if (!srt_parser_c::probe(m_io.get()))
+    if (!srt_parser_c::probe(m_io.get_object()))
       throw error_c(Y("srt_reader: Source is not a valid SRT file."));
 
     ti.id  = 0;                 // ID for this track.
-    m_subs = srt_parser_cptr(new srt_parser_c(m_io.get(), ti.fname, 0));
+    m_subs = srt_parser_cptr(new srt_parser_c(m_io.get_object(), ti.fname, 0));
 
   } catch (...) {
     throw error_c(Y("srt_reader: Could not open the source file."));

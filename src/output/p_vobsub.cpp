@@ -42,7 +42,7 @@ vobsub_packetizer_c::~vobsub_packetizer_c() {
 void
 vobsub_packetizer_c::set_headers() {
   set_codec_id(MKV_S_VOBSUB);
-  set_codec_private(idx_data->get(), idx_data->get_size());
+  set_codec_private(idx_data->get_buffer(), idx_data->get_size());
 
   generic_packetizer_c::set_headers();
 

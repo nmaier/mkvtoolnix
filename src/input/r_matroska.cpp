@@ -241,7 +241,7 @@ kax_reader_c::verify_tracks() {
       memory_cptr private_data(new memory_c((unsigned char *)t->private_data, t->private_size, true));
       t->content_decoder.reverse(private_data, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
       private_data->lock();
-      t->private_data = private_data->get();
+      t->private_data = private_data->get_buffer();
       t->private_size = private_data->get_size();
     }
 
@@ -375,9 +375,9 @@ kax_reader_c::verify_tracks() {
               if (blocks.size() != 3)
                 throw false;
 
-              t->headers[0]      = blocks[0]->get();
-              t->headers[1]      = blocks[1]->get();
-              t->headers[2]      = blocks[2]->get();
+              t->headers[0]      = blocks[0]->get_buffer();
+              t->headers[1]      = blocks[1]->get_buffer();
+              t->headers[2]      = blocks[2]->get_buffer();
               t->header_sizes[0] = blocks[0]->get_size();
               t->header_sizes[1] = blocks[1]->get_size();
               t->header_sizes[2] = blocks[2]->get_size();
@@ -1627,7 +1627,7 @@ kax_reader_c::create_mpeg4_p10_es_video_packetizer(kax_track_t *t,
                                                    track_info_c &nti) {
   try {
     read_first_frame(t);
-    if (NULL == t->first_frame_data.get())
+    if (!t->first_frame_data.is_set())
       throw false;
 
     avc_es_parser_c parser;
@@ -1639,7 +1639,7 @@ kax_reader_c::create_mpeg4_p10_es_video_packetizer(kax_track_t *t,
 
     if (sizeof(alBITMAPINFOHEADER) < t->private_size)
       parser.add_bytes((unsigned char *)t->private_data + sizeof(alBITMAPINFOHEADER), t->private_size - sizeof(alBITMAPINFOHEADER));
-    parser.add_bytes(t->first_frame_data->get(), t->first_frame_data->get_size());
+    parser.add_bytes(t->first_frame_data->get_buffer(), t->first_frame_data->get_size());
     parser.flush();
 
     if (!parser.headers_parsed())
@@ -1665,7 +1665,7 @@ kax_reader_c::create_mpeg4_p10_es_video_packetizer(kax_track_t *t,
 
 void
 kax_reader_c::read_first_frame(kax_track_t *t) {
-  if ((NULL != t->first_frame_data.get()) || (NULL == saved_l1))
+  if (t->first_frame_data.is_set() || (NULL == saved_l1))
     return;
 
   in->save_pos(saved_l1->GetElementPosition());
@@ -1697,7 +1697,7 @@ kax_reader_c::read_first_frame(kax_track_t *t) {
             if ((NULL == block_track) || (0 == block_simple->NumberFrames()))
               continue;
 
-            if (NULL == block_track->first_frame_data.get()) {
+            if (!block_track->first_frame_data.is_set()) {
               DataBuffer &data_buffer = block_simple->GetBuffer(0);
               block_track->first_frame_data = memory_cptr(new memory_c(data_buffer.Buffer(), data_buffer.Size()));
               block_track->content_decoder.reverse(block_track->first_frame_data, CONTENT_ENCODING_SCOPE_BLOCK);
@@ -1723,7 +1723,7 @@ kax_reader_c::read_first_frame(kax_track_t *t) {
             if ((NULL == block_track) || (0 == block->NumberFrames()))
               continue;
 
-            if (NULL == block_track->first_frame_data.get()) {
+            if (!block_track->first_frame_data.is_set()) {
               DataBuffer &data_buffer       = block->GetBuffer(0);
               block_track->first_frame_data = memory_cptr(new memory_c(data_buffer.Buffer(), data_buffer.Size()));
               block_track->content_decoder.reverse(block_track->first_frame_data, CONTENT_ENCODING_SCOPE_BLOCK);
@@ -1888,10 +1888,10 @@ kax_reader_c::read(generic_packetizer_c *requested_ptzr,
                 block_track->content_decoder.reverse(data, CONTENT_ENCODING_SCOPE_BLOCK);
 
                 if (('s' == block_track->type) && ('t' == block_track->sub_type)) {
-                  if ((2 < data->get_size()) || ((0 < data->get_size()) && (' ' != *data->get()) && (0 != *data->get()) && !iscr(*data->get()))) {
+                  if ((2 < data->get_size()) || ((0 < data->get_size()) && (' ' != *data->get_buffer()) && (0 != *data->get_buffer()) && !iscr(*data->get_buffer()))) {
                     char *lines             = (char *)safemalloc(data->get_size() + 1);
                     lines[data->get_size()] = 0;
-                    memcpy(lines, data->get(), data->get_size());
+                    memcpy(lines, data->get_buffer(), data->get_size());
 
                     PTZR(block_track->ptzr)-> process(new packet_t(new memory_c((unsigned char *)lines, 0, true), last_timecode, block_duration, block_bref, block_fref));
                   }
@@ -2009,10 +2009,10 @@ kax_reader_c::read(generic_packetizer_c *requested_ptzr,
                 block_track->content_decoder.reverse(data, CONTENT_ENCODING_SCOPE_BLOCK);
 
                 if (('s' == block_track->type) && ('t' == block_track->sub_type)) {
-                  if ((2 < data->get_size()) || ((0 < data->get_size()) && (' ' != *data->get()) && (0 != *data->get()) && !iscr(*data->get()))) {
+                  if ((2 < data->get_size()) || ((0 < data->get_size()) && (' ' != *data->get_buffer()) && (0 != *data->get_buffer()) && !iscr(*data->get_buffer()))) {
                     char *lines             = (char *)safemalloc(data->get_size() + 1);
                     lines[data->get_size()] = 0;
-                    memcpy(lines, data->get(), data->get_size());
+                    memcpy(lines, data->get_buffer(), data->get_size());
 
                     packet_t *packet = new packet_t(new memory_c((unsigned char *)lines, 0, true), last_timecode, block_duration, block_bref, block_fref);
                     if (NULL != codec_state)

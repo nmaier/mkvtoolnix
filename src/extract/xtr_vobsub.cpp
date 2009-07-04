@@ -87,7 +87,7 @@ xtr_vobsub_c::create_file(xtr_base_c *master,
       mxerror(boost::format(Y("Cannot extract tracks of different kinds to the same file. This was requested for the tracks %1% and %2%.\n"))
               % m_tid % m_master->m_tid);
 
-    if ((m_private_data->get_size() != vmaster->m_private_data->get_size()) || memcmp(priv->GetBuffer(), vmaster->m_private_data->get(), m_private_data->get_size()))
+    if ((m_private_data->get_size() != vmaster->m_private_data->get_size()) || memcmp(priv->GetBuffer(), vmaster->m_private_data->get_buffer(), m_private_data->get_size()))
       mxerror(boost::format(Y("Two VobSub tracks can only be extracted into the same file if their CodecPrivate data matches. "
                               "This is not the case for the tracks %1% and %2%.\n")) % m_tid % m_master->m_tid);
 
@@ -113,7 +113,7 @@ xtr_vobsub_c::handle_frame(memory_cptr &frame,
 
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
-  unsigned char *data = frame->get();
+  unsigned char *data = frame->get_buffer();
   int size            = frame->get_size();
 
   m_positions.push_back(vmaster->m_out->getFilePointer());
@@ -222,9 +222,9 @@ xtr_vobsub_c::finish_file() {
     mm_file_io_c idx(m_base_name, MODE_CREATE);
     mxinfo(boost::format(Y("Writing the VobSub index file '%1%'.\n")) % m_base_name);
 
-    if ((25 > m_private_data->get_size()) || strncasecmp((char *)m_private_data->get(), header_line, 25))
+    if ((25 > m_private_data->get_size()) || strncasecmp((char *)m_private_data->get_buffer(), header_line, 25))
       idx.puts(header_line);
-    idx.write(m_private_data->get(), m_private_data->get_size());
+    idx.write(m_private_data->get_buffer(), m_private_data->get_size());
 
     write_idx(idx, 0);
     int slave;

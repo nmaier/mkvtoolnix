@@ -712,7 +712,7 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
     if (-1 == first_seek_head_idx)
       first_seek_head_idx = data_idx;
 
-    seek_head->IndexThis(*e, *m_segment.get());
+    seek_head->IndexThis(*e, *m_segment.get_object());
     seek_head->UpdateSize(true);
 
     // We can use this seek head if it is at the end of the m_file, or if there
@@ -757,7 +757,7 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
       throw uer_error_unknown;
 
     // ...index our element...
-    seek_head->IndexThis(*e, *m_segment.get());
+    seek_head->IndexThis(*e, *m_segment.get_object());
     seek_head->UpdateSize(true);
 
     // ...write the seek head at the end of the m_file...
@@ -772,7 +772,7 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
 
     // Create a new seek head and write it to the m_file.
     KaxSeekHead *forward_seek_head = new KaxSeekHead;
-    forward_seek_head->IndexThis(*seek_head, *m_segment.get());
+    forward_seek_head->IndexThis(*seek_head, *m_segment.get_object());
     forward_seek_head->UpdateSize(true);
 
     m_file->setFilePointer(m_data[first_seek_head_idx]->m_pos);
@@ -793,7 +793,7 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
 
   // We don't have a seek head to copy. Create one before the first chapter if possible.
   KaxSeekHead *new_seek_head = new KaxSeekHead;
-  new_seek_head->IndexThis(*e, *m_segment.get());
+  new_seek_head->IndexThis(*e, *m_segment.get_object());
   new_seek_head->UpdateSize(true);
 
   for (data_idx = 0; m_data.size() > data_idx; ++data_idx) {
@@ -836,7 +836,7 @@ kax_analyzer_c::read_all(const EbmlCallbacks &callbacks) {
   int i;
 
   for (i = 0; m_data.size() > i; ++i) {
-    kax_analyzer_data_c &data = *m_data[i].get();
+    kax_analyzer_data_c &data = *m_data[i].get_object();
     if (callbacks.GlobalId != data.m_id)
       continue;
 

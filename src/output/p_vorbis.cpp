@@ -45,9 +45,9 @@ vorbis_packetizer_c::vorbis_packetizer_c(generic_reader_c *p_reader,
 
   ogg_packet ogg_headers[3];
   memset(ogg_headers, 0, 3 * sizeof(ogg_packet));
-  ogg_headers[0].packet   = m_headers[0]->get();
-  ogg_headers[1].packet   = m_headers[1]->get();
-  ogg_headers[2].packet   = m_headers[2]->get();
+  ogg_headers[0].packet   = m_headers[0]->get_buffer();
+  ogg_headers[1].packet   = m_headers[1]->get_buffer();
+  ogg_headers[2].packet   = m_headers[2]->get_buffer();
   ogg_headers[0].bytes    = l_header;
   ogg_headers[1].bytes    = l_comments;
   ogg_headers[2].bytes    = l_codecsetup;
@@ -79,7 +79,7 @@ vorbis_packetizer_c::set_headers() {
   set_codec_id(MKV_A_VORBIS);
 
   memory_cptr codec_private = lace_memory_xiph(m_headers);
-  set_codec_private(codec_private->get(), codec_private->get_size());
+  set_codec_private(codec_private->get_buffer(), codec_private->get_size());
 
   set_audio_sampling_freq((float)m_vi.rate);
   set_audio_channels(m_vi.channels);
@@ -97,7 +97,7 @@ vorbis_packetizer_c::process(packet_cptr packet) {
 
   // Update the number of samples we have processed so that we can
   // calculate the timecode on the next call.
-  op.packet                  = packet->data->get();
+  op.packet                  = packet->data->get_buffer();
   op.bytes                   = packet->data->get_size();
   int64_t this_bs            = vorbis_packet_blocksize(&m_vi, &op);
   int64_t samples_here       = (this_bs + m_previous_bs) / 4;
@@ -139,7 +139,7 @@ vorbis_packetizer_c::can_connect_to(generic_packetizer_c *src,
   connect_check_a_samplerate(m_vi.rate,   vsrc->m_vi.rate);
   connect_check_a_channels(m_vi.channels, vsrc->m_vi.channels);
 
-  if ((m_headers[2]->get_size() != vsrc->m_headers[2]->get_size()) || memcmp(m_headers[2]->get(), vsrc->m_headers[2]->get(), m_headers[2]->get_size())) {
+  if ((m_headers[2]->get_size() != vsrc->m_headers[2]->get_size()) || memcmp(m_headers[2]->get_buffer(), vsrc->m_headers[2]->get_buffer(), m_headers[2]->get_size())) {
     error_message = Y("The Vorbis codebooks are different; such tracks cannot be concatenated without reencoding");
     return CAN_CONNECT_NO_FORMAT;
   }

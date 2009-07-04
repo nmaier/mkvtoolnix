@@ -302,7 +302,7 @@ vc1::es_parser_c::add_bytes(unsigned char *buffer,
   int previous_pos            = -1;
   int64_t previous_stream_pos = m_stream_pos;
 
-  if ((NULL != m_unparsed_buffer.get()) && (0 != m_unparsed_buffer->get_size()))
+  if (m_unparsed_buffer.is_set() && (0 != m_unparsed_buffer->get_size()))
     cursor.add_slice(m_unparsed_buffer);
   cursor.add_slice(buffer, size);
 
@@ -315,7 +315,7 @@ vc1::es_parser_c::add_bytes(unsigned char *buffer,
           int new_size = cursor.get_position() - 4 - previous_pos;
 
           memory_cptr packet(new memory_c(safemalloc(new_size), new_size, true));
-          cursor.copy(packet->get(), previous_pos, new_size);
+          cursor.copy(packet->get_buffer(), previous_pos, new_size);
 
           handle_packet(packet);
         }
@@ -338,7 +338,7 @@ vc1::es_parser_c::add_bytes(unsigned char *buffer,
   int new_size = cursor.get_size() - previous_pos;
   if (0 != new_size) {
     memory_cptr new_unparsed_buffer = memory_c::alloc(new_size);
-    cursor.copy(new_unparsed_buffer->get(), previous_pos, new_size);
+    cursor.copy(new_unparsed_buffer->get_buffer(), previous_pos, new_size);
     m_unparsed_buffer = new_unparsed_buffer;
 
   } else
@@ -347,10 +347,10 @@ vc1::es_parser_c::add_bytes(unsigned char *buffer,
 
 void
 vc1::es_parser_c::flush() {
-  if ((NULL != m_unparsed_buffer.get()) && (4 <= m_unparsed_buffer->get_size())) {
-    uint32_t marker = get_uint32_be(m_unparsed_buffer->get());
+  if (m_unparsed_buffer.is_set() && (4 <= m_unparsed_buffer->get_size())) {
+    uint32_t marker = get_uint32_be(m_unparsed_buffer->get_buffer());
     if (vc1::is_marker(marker))
-      handle_packet(clone_memory(m_unparsed_buffer->get(), m_unparsed_buffer->get_size()));
+      handle_packet(clone_memory(m_unparsed_buffer->get_buffer(), m_unparsed_buffer->get_size()));
   }
 
   m_unparsed_buffer = memory_cptr(NULL);
@@ -360,7 +360,7 @@ vc1::es_parser_c::flush() {
 
 void
 vc1::es_parser_c::handle_packet(memory_cptr packet) {
-  uint32_t marker = get_uint32_be(packet->get());
+  uint32_t marker = get_uint32_be(packet->get_buffer());
 
   switch (marker) {
     case VC1_MARKER_SEQHDR:
@@ -401,7 +401,7 @@ void
 vc1::es_parser_c::handle_entrypoint_packet(memory_cptr packet) {
   add_pre_frame_extra_data(packet);
 
-  if (NULL == m_raw_entrypoint.get())
+  if (!m_raw_entrypoint.is_set())
     m_raw_entrypoint = memory_cptr(packet->clone());
 }
 
@@ -415,7 +415,7 @@ vc1::es_parser_c::handle_frame_packet(memory_cptr packet) {
   flush_frame();
 
   vc1::frame_header_t frame_header;
-  if (!m_seqhdr_found || !vc1::parse_frame_header(packet->get(), packet->get_size(), frame_header, m_seqhdr))
+  if (!m_seqhdr_found || !vc1::parse_frame_header(packet->get_buffer(), packet->get_size(), frame_header, m_seqhdr))
     return;
 
   m_current_frame        = frame_cptr(new frame_t);
@@ -438,10 +438,10 @@ vc1::es_parser_c::handle_sequence_header_packet(memory_cptr packet) {
   add_pre_frame_extra_data(packet);
 
   vc1::sequence_header_t seqhdr;
-  if (!vc1::parse_sequence_header(packet->get(), packet->get_size(), seqhdr))
+  if (!vc1::parse_sequence_header(packet->get_buffer(), packet->get_size(), seqhdr))
     return;
 
-  m_seqhdr_changed = !m_seqhdr_found || (packet->get_size() != m_raw_seqhdr->get_size()) || memcmp(packet->get(), m_raw_seqhdr->get(), packet->get_size());
+  m_seqhdr_changed = !m_seqhdr_found || (packet->get_size() != m_raw_seqhdr->get_size()) || memcmp(packet->get_buffer(), m_raw_seqhdr->get_buffer(), packet->get_size());
 
   memcpy(&m_seqhdr, &seqhdr, sizeof(vc1::sequence_header_t));
   m_raw_seqhdr   = memory_cptr(packet->clone());
@@ -464,7 +464,7 @@ vc1::es_parser_c::handle_unknown_packet(uint32_t marker,
 
 void
 vc1::es_parser_c::flush_frame() {
-  if (!m_current_frame.get())
+  if (!m_current_frame.is_set())
     return;
 
   if (!m_pre_frame_extra_data.empty() || !m_post_frame_extra_data.empty())
@@ -489,24 +489,24 @@ vc1::es_parser_c::combine_extra_data_with_packet() {
     extra_size += (*it)->get_size();
 
   memory_cptr new_packet = memory_c::alloc(extra_size + m_current_frame->data->get_size());
-  unsigned char *ptr     = new_packet->get();
+  unsigned char *ptr     = new_packet->get_buffer();
 
   mxforeach(it, m_pre_frame_extra_data) {
-    memcpy(ptr, (*it)->get(), (*it)->get_size());
+    memcpy(ptr, (*it)->get_buffer(), (*it)->get_size());
     ptr += (*it)->get_size();
 
-    if (VC1_MARKER_SEQHDR == get_uint32_be((*it)->get()))
+    if (VC1_MARKER_SEQHDR == get_uint32_be((*it)->get_buffer()))
       m_current_frame->contains_sequence_header = true;
   }
 
-  memcpy(ptr, m_current_frame->data->get(), m_current_frame->data->get_size());
+  memcpy(ptr, m_current_frame->data->get_buffer(), m_current_frame->data->get_size());
   ptr += m_current_frame->data->get_size();
 
   mxforeach(it, m_post_frame_extra_data) {
-    memcpy(ptr, (*it)->get(), (*it)->get_size());
+    memcpy(ptr, (*it)->get_buffer(), (*it)->get_size());
     ptr += (*it)->get_size();
 
-    if (VC1_MARKER_FIELD == get_uint32_be((*it)->get()))
+    if (VC1_MARKER_FIELD == get_uint32_be((*it)->get_buffer()))
       m_current_frame->contains_field = true;
   }
 
@@ -560,7 +560,7 @@ void
 vc1::es_parser_c::add_timecode(int64_t timecode,
                                int64_t position) {
   position += m_stream_pos;
-  if (NULL != m_unparsed_buffer.get())
+  if (m_unparsed_buffer.is_set())
     position += m_unparsed_buffer->get_size();
 
   m_timecodes.push_back(timecode);

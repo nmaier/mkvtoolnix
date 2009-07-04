@@ -84,7 +84,7 @@ pcm_packetizer_c::set_headers() {
 
 int
 pcm_packetizer_c::process(packet_cptr packet) {
-  m_buffer.add(packet->data->get(), packet->data->get_size());
+  m_buffer.add(packet->data->get_buffer(), packet->data->get_size());
 
   while (m_buffer.get_size() >= m_packet_size) {
     add_packet(new packet_t(new memory_c(m_buffer.get_buffer(), m_packet_size, false), m_samples_output * m_s2tc, m_samples_per_packet * m_s2tc));

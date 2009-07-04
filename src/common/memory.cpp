@@ -46,7 +46,7 @@ lace_memory_xiph(const std::vector<memory_cptr> &blocks) {
   size += blocks.back()->get_size();
 
   memory_cptr mem       = memory_c::alloc(size);
-  unsigned char *buffer = mem->get();
+  unsigned char *buffer = mem->get_buffer();
 
   buffer[0]  = blocks.size() - 1;
   int offset = 1;
@@ -61,7 +61,7 @@ lace_memory_xiph(const std::vector<memory_cptr> &blocks) {
   }
 
   for (i = 0; blocks.size() > i; ++i) {
-    memcpy(&buffer[offset], blocks[i]->get(), blocks[i]->get_size());
+    memcpy(&buffer[offset], blocks[i]->get_buffer(), blocks[i]->get_size());
     offset += blocks[i]->get_size();
   }
 
@@ -74,8 +74,8 @@ unlace_memory_xiph(memory_cptr &buffer) {
     throw error_c("Lacing error: Buffer too small");
 
   std::vector<int> sizes;
-  unsigned char *ptr = buffer->get();
-  unsigned char *end = buffer->get() + buffer->get_size();
+  unsigned char *ptr = buffer->get_buffer();
+  unsigned char *end = buffer->get_buffer() + buffer->get_size();
   int last_size      = buffer->get_size();
   int num_blocks     = ptr[0] + 1;
   int i;
@@ -98,7 +98,7 @@ unlace_memory_xiph(memory_cptr &buffer) {
     last_size -= size;
   }
 
-  sizes.push_back(last_size - (ptr - buffer->get()));
+  sizes.push_back(last_size - (ptr - buffer->get_buffer()));
 
   std::vector<memory_cptr> blocks;
 

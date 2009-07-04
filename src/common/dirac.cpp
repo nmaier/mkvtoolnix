@@ -223,7 +223,7 @@ dirac::es_parser_c::add_bytes(unsigned char *buffer,
   int previous_pos            = -1;
   int64_t previous_stream_pos = m_stream_pos;
 
-  if ((NULL != m_unparsed_buffer.get()) && (0 != m_unparsed_buffer->get_size()))
+  if (m_unparsed_buffer.is_set() && (0 != m_unparsed_buffer->get_size()))
     cursor.add_slice(m_unparsed_buffer);
   cursor.add_slice(buffer, size);
 
@@ -253,7 +253,7 @@ dirac::es_parser_c::add_bytes(unsigned char *buffer,
           int new_size = cursor.get_position() - 4 - previous_pos;
 
           memory_cptr packet = memory_c::alloc(new_size);
-          cursor.copy(packet->get(), previous_pos, new_size);
+          cursor.copy(packet->get_buffer(), previous_pos, new_size);
 
           handle_unit(packet);
 
@@ -276,7 +276,7 @@ dirac::es_parser_c::add_bytes(unsigned char *buffer,
   int new_size = cursor.get_size() - previous_pos;
   if (0 != new_size) {
     memory_cptr new_unparsed_buffer = memory_c::alloc(new_size);
-    cursor.copy(new_unparsed_buffer->get(), previous_pos, new_size);
+    cursor.copy(new_unparsed_buffer->get_buffer(), previous_pos, new_size);
     m_unparsed_buffer = new_unparsed_buffer;
 
   } else
@@ -285,10 +285,10 @@ dirac::es_parser_c::add_bytes(unsigned char *buffer,
 
 void
 dirac::es_parser_c::flush() {
-  if ((NULL != m_unparsed_buffer.get()) && (4 <= m_unparsed_buffer->get_size())) {
-    uint32_t marker = get_uint32_be(m_unparsed_buffer->get());
+  if (m_unparsed_buffer.is_set() && (4 <= m_unparsed_buffer->get_size())) {
+    uint32_t marker = get_uint32_be(m_unparsed_buffer->get_buffer());
     if (DIRAC_SYNC_WORD == marker)
-      handle_unit(clone_memory(m_unparsed_buffer->get(), m_unparsed_buffer->get_size()));
+      handle_unit(clone_memory(m_unparsed_buffer->get_buffer(), m_unparsed_buffer->get_size()));
   }
 
   m_unparsed_buffer = memory_cptr(NULL);
@@ -298,7 +298,7 @@ dirac::es_parser_c::flush() {
 
 void
 dirac::es_parser_c::handle_unit(memory_cptr packet) {
-  unsigned char type = packet->get()[4];
+  unsigned char type = packet->get_buffer()[4];
 
   if (DIRAC_UNIT_SEQUENCE_HEADER == type)
     handle_sequence_header_unit(packet);
@@ -349,10 +349,10 @@ dirac::es_parser_c::handle_sequence_header_unit(memory_cptr packet) {
   add_pre_frame_extra_data(packet);
 
   dirac::sequence_header_t seqhdr;
-  if (!dirac::parse_sequence_header(packet->get(), packet->get_size(), seqhdr))
+  if (!dirac::parse_sequence_header(packet->get_buffer(), packet->get_size(), seqhdr))
     return;
 
-  m_seqhdr_changed = !m_seqhdr_found || (packet->get_size() != m_raw_seqhdr->get_size()) || memcmp(packet->get(), m_raw_seqhdr->get(), packet->get_size());
+  m_seqhdr_changed = !m_seqhdr_found || (packet->get_size() != m_raw_seqhdr->get_size()) || memcmp(packet->get_buffer(), m_raw_seqhdr->get_buffer(), packet->get_size());
 
   memcpy(&m_seqhdr, &seqhdr, sizeof(dirac::sequence_header_t));
   m_raw_seqhdr   = memory_cptr(packet->clone());
@@ -374,7 +374,7 @@ dirac::es_parser_c::handle_unknown_unit(memory_cptr packet) {
 
 void
 dirac::es_parser_c::flush_frame() {
-  if (!m_current_frame.get())
+  if (!m_current_frame.is_set())
     return;
 
   if (!m_pre_frame_extra_data.empty() || !m_post_frame_extra_data.empty())
@@ -399,21 +399,21 @@ dirac::es_parser_c::combine_extra_data_with_packet() {
     extra_size += (*it)->get_size();
 
   memory_cptr new_packet = memory_c::alloc(extra_size + m_current_frame->data->get_size());
-  unsigned char *ptr     = new_packet->get();
+  unsigned char *ptr     = new_packet->get_buffer();
 
   mxforeach(it, m_pre_frame_extra_data) {
-    memcpy(ptr, (*it)->get(), (*it)->get_size());
+    memcpy(ptr, (*it)->get_buffer(), (*it)->get_size());
     ptr += (*it)->get_size();
 
-    if (DIRAC_UNIT_SEQUENCE_HEADER == (*it)->get()[4])
+    if (DIRAC_UNIT_SEQUENCE_HEADER == (*it)->get_buffer()[4])
       m_current_frame->contains_sequence_header = true;
   }
 
-  memcpy(ptr, m_current_frame->data->get(), m_current_frame->data->get_size());
+  memcpy(ptr, m_current_frame->data->get_buffer(), m_current_frame->data->get_size());
   ptr += m_current_frame->data->get_size();
 
   mxforeach(it, m_post_frame_extra_data) {
-    memcpy(ptr, (*it)->get(), (*it)->get_size());
+    memcpy(ptr, (*it)->get_buffer(), (*it)->get_size());
     ptr += (*it)->get_size();
   }
 

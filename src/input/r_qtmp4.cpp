@@ -513,9 +513,9 @@ qtmp4_reader_c::handle_cmvd_atom(qt_atom_t atom,
   mm_io_c *old_io         = io;
   uint32_t cmov_size      = atom.size - atom.hsize;
   memory_cptr af_cmov_buf = memory_c::alloc(cmov_size);
-  unsigned char *cmov_buf = af_cmov_buf->get();
+  unsigned char *cmov_buf = af_cmov_buf->get_buffer();
   memory_cptr af_moov_buf = memory_c::alloc(moov_size + 16);
-  unsigned char *moov_buf = af_moov_buf->get();
+  unsigned char *moov_buf = af_moov_buf->get_buffer();
 
   if (io->read(cmov_buf, cmov_size) != cmov_size)
     throw error_c(Y("end-of-file"));
@@ -778,12 +778,12 @@ qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
   for (i = 0; i < count; ++i) {
     uint64_t timecode = io->read_uint64_be() * 100;
     memory_cptr buf   = memory_c::alloc(io->read_uint8() + 1);
-    memset(buf->get(), 0, buf->get_size());
+    memset(buf->get_buffer(), 0, buf->get_size());
 
-    if (io->read(buf->get(), buf->get_size() - 1) != (buf->get_size() - 1))
+    if (io->read(buf->get_buffer(), buf->get_size() - 1) != (buf->get_size() - 1))
       break;
 
-    entries.push_back(qtmp4_chapter_entry_t(std::string(reinterpret_cast<char *>(buf->get())), timecode));
+    entries.push_back(qtmp4_chapter_entry_t(std::string(reinterpret_cast<char *>(buf->get_buffer())), timecode));
   }
 
   if (entries.empty())
@@ -928,7 +928,7 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
       mxerror(boost::format(Y("Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n")) % new_dmx->id);
 
     memory_cptr af_priv = memory_c::alloc(size);
-    unsigned char *priv = af_priv->get();
+    unsigned char *priv = af_priv->get_buffer();
 
     put_uint32_be(priv, size);
     if (io->read(priv + sizeof(uint32_t), size - sizeof(uint32_t)) != (size - sizeof(uint32_t)))
@@ -1383,7 +1383,7 @@ qtmp4_reader_c::create_bitmap_info_header(qtmp4_demuxer_cptr &dmx,
                                           const void *extra_data) {
   int full_size           = sizeof(alBITMAPINFOHEADER) + extra_size;
   memory_cptr bih_p       = memory_c::alloc(full_size);
-  alBITMAPINFOHEADER *bih = (alBITMAPINFOHEADER *)bih_p->get();
+  alBITMAPINFOHEADER *bih = (alBITMAPINFOHEADER *)bih_p->get_buffer();
 
   memset(bih, 0, full_size);
   put_uint32_le(&bih->bi_size,       full_size);
@@ -1404,7 +1404,7 @@ bool
 qtmp4_reader_c::create_audio_packetizer_ac3(qtmp4_demuxer_cptr &dmx) {
   memory_cptr buf = memory_c::alloc(64);
 
-  if (!dmx->read_first_bytes(buf, 64, io) || (-1 == find_ac3_header(buf->get(), buf->get_size(), &dmx->m_ac3_header, false))) {
+  if (!dmx->read_first_bytes(buf, 64, io) || (-1 == find_ac3_header(buf->get_buffer(), buf->get_size(), &dmx->m_ac3_header, false))) {
     mxwarn_tid(ti.fname, dmx->id, Y("No AC3 header found in first frame; track will be skipped.\n"));
     dmx->ok = false;
 
@@ -1422,7 +1422,7 @@ qtmp4_reader_c::create_video_packetizer_svq1(qtmp4_demuxer_cptr &dmx) {
   memory_cptr bih(create_bitmap_info_header(dmx, "SVQ1"));
 
   ti.private_size = bih->get_size();
-  ti.private_data = (unsigned char *)bih->get();
+  ti.private_data = (unsigned char *)bih->get_buffer();
 
   dmx->ptzr       = add_packetizer(new video_packetizer_c(this, ti, MKV_V_MSCOMP, 0.0, dmx->v_width, dmx->v_height));
   ti.private_data = NULL;
@@ -1435,7 +1435,7 @@ qtmp4_reader_c::create_video_packetizer_mpeg4_p2(qtmp4_demuxer_cptr &dmx) {
   memory_cptr bih(create_bitmap_info_header(dmx, "DIVX"));
 
   ti.private_size = bih->get_size();
-  ti.private_data = (unsigned char *)bih->get();
+  ti.private_data = (unsigned char *)bih->get_buffer();
   dmx->ptzr       = add_packetizer(new mpeg4_p2_video_packetizer_c(this, ti, 0.0, dmx->v_width, dmx->v_height, false));
   ti.private_data = NULL;
 
@@ -1471,7 +1471,7 @@ qtmp4_reader_c::create_video_packetizer_mpeg4_p10(qtmp4_demuxer_cptr &dmx) {
 void
 qtmp4_reader_c::create_video_packetizer_standard(qtmp4_demuxer_cptr &dmx) {
   ti.private_size = dmx->v_stsd->get_size();
-  ti.private_data = dmx->v_stsd->get();
+  ti.private_data = dmx->v_stsd->get_buffer();
   dmx->ptzr       = add_packetizer(new video_packetizer_c(this, ti, MKV_V_QUICKTIME, 0.0, dmx->v_width, dmx->v_height));
   ti.private_data = NULL;
 
@@ -1511,7 +1511,7 @@ qtmp4_reader_c::create_audio_packetizer_passthrough(qtmp4_demuxer_cptr &dmx) {
 
   ptzr->set_track_type(track_audio);
   ptzr->set_codec_id(MKV_A_QUICKTIME);
-  ptzr->set_codec_private(dmx->a_stsd->get(), dmx->a_stsd->get_size());
+  ptzr->set_codec_private(dmx->a_stsd->get_buffer(), dmx->a_stsd->get_size());
   ptzr->set_audio_sampling_freq(dmx->a_samplerate);
   ptzr->set_audio_channels(dmx->a_channels);
 
@@ -1529,7 +1529,7 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
       break;
     }
 
-  if (!dmx.get() || !dmx->ok || !demuxing_requested(dmx->type, dmx->id) || (-1 != dmx->ptzr))
+  if (!dmx.is_set() || !dmx->ok || !demuxing_requested(dmx->type, dmx->id) || (-1 != dmx->ptzr))
     return;
 
   ti.id              = dmx->id;
@@ -1987,7 +1987,7 @@ qtmp4_demuxer_c::build_index_constant_sample_size_mode() {
       frame_size = chunk_table[frame_idx].size;
 
       if ('a' == type) {
-        sound_v1_stsd_atom_t *sound_stsd_atom = (sound_v1_stsd_atom_t *)a_stsd->get();
+        sound_v1_stsd_atom_t *sound_stsd_atom = (sound_v1_stsd_atom_t *)a_stsd->get_buffer();
         if (get_uint16_be(&sound_stsd_atom->v0.version) == 1) {
           frame_size *= get_uint32_be(&sound_stsd_atom->v1.bytes_per_frame);
           frame_size /= get_uint32_be(&sound_stsd_atom->v1.samples_per_packet);
@@ -2041,7 +2041,7 @@ qtmp4_demuxer_c::read_first_bytes(memory_cptr &buf,
     int num_bytes_to_read = std::min((int64_t)num_bytes, index.size);
 
     io->setFilePointer(index.file_pos);
-    if (io->read(buf->get() + buf_pos, num_bytes_to_read) < num_bytes_to_read)
+    if (io->read(buf->get_buffer() + buf_pos, num_bytes_to_read) < num_bytes_to_read)
       return false;
 
     num_bytes -= num_bytes_to_read;

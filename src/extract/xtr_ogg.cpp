@@ -40,7 +40,7 @@ xtr_flac_c::create_file(xtr_base_c *_master,
   xtr_base_c::create_file(_master, track);
 
   memory_cptr mpriv = decode_codec_private(priv);
-  m_out->write(mpriv->get(), mpriv->get_size());
+  m_out->write(mpriv);
 }
 
 // ------------------------------------------------------------------------
@@ -96,7 +96,7 @@ xtr_oggbase_c::create_standard_file(xtr_base_c *master,
     op.b_o_s      = (0 == m_packetno ? 1 : 0);
     op.e_o_s      = 0;
     op.packetno   = m_packetno;
-    op.packet     = header_packets[m_packetno]->get();
+    op.packet     = header_packets[m_packetno]->get_buffer();
     op.bytes      = header_packets[m_packetno]->get_size();
     op.granulepos = 0;
     ogg_stream_packetin(&m_os, &op);
@@ -190,7 +190,7 @@ xtr_oggbase_c::write_queued_frame(bool eos) {
   op.b_o_s      = 0;
   op.e_o_s      = eos ? 1 : 0;
   op.packetno   = m_packetno;
-  op.packet     = m_queued_frame->get();
+  op.packet     = m_queued_frame->get_buffer();
   op.bytes      = m_queued_frame->get_size();
   op.granulepos = m_queued_granulepos;
 
@@ -240,7 +240,7 @@ xtr_oggflac_c::create_file(xtr_base_c *master,
   ogg_stream_packetin(&m_os, &op);
   flush_pages();
 
-  const binary *ptr = mpriv->get();
+  const binary *ptr = mpriv->get_buffer();
   if ((mpriv->get_size() >= 4) && !memcmp(ptr, "fLaC", 4)) {
     ptr      += 4;
     op.bytes  = mpriv->get_size() - 4;
@@ -290,7 +290,7 @@ xtr_oggkate_c::create_file(xtr_base_c *master,
 
 void
 xtr_oggkate_c::header_packets_unlaced(std::vector<memory_cptr> &header_packets) {
-  kate_parse_identification_header(header_packets[0]->get(), header_packets[0]->get_size(), m_kate_id_header);
+  kate_parse_identification_header(header_packets[0]->get_buffer(), header_packets[0]->get_size(), m_kate_id_header);
   if (m_kate_id_header.nheaders != header_packets.size())
     throw false;
 }
@@ -309,9 +309,9 @@ xtr_oggkate_c::handle_frame(memory_cptr &frame,
 
   ogg_packet op;
   op.b_o_s    = 0;
-  op.e_o_s    = (frame->get_size() == 1) && (frame->get()[0] == 0x7f);
+  op.e_o_s    = (frame->get_size() == 1) && (frame->get_buffer()[0] == 0x7f);
   op.packetno = m_packetno;
-  op.packet   = frame->get();
+  op.packet   = frame->get_buffer();
   op.bytes    = frame->get_size();
 
   /* we encode the backlink in the granulepos */
@@ -353,7 +353,7 @@ xtr_oggtheora_c::create_file(xtr_base_c *master,
 
 void
 xtr_oggtheora_c::header_packets_unlaced(std::vector<memory_cptr> &header_packets) {
-  theora_parse_identification_header(header_packets[0]->get(), header_packets[0]->get_size(), m_theora_header);
+  theora_parse_identification_header(header_packets[0]->get_buffer(), header_packets[0]->get_size(), m_theora_header);
 }
 
 void
@@ -368,7 +368,7 @@ xtr_oggtheora_c::handle_frame(memory_cptr &frame,
                               bool references_valid) {
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
-  if (frame->get_size() && (0x00 == (frame->get()[0] & 0x40))) {
+  if (frame->get_size() && (0x00 == (frame->get_buffer()[0] & 0x40))) {
     keyframe               = true;
     m_keyframe_number     += m_non_keyframe_number + 1;
     m_non_keyframe_number  = 0;

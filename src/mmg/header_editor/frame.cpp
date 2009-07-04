@@ -245,7 +245,7 @@ header_editor_frame_c::open_file(wxFileName file_name) {
   m_top_level_pages.clear();
 
   for (i = 0; m_analyzer->m_data.size() > i; ++i) {
-    kax_analyzer_data_c *data = m_analyzer->m_data[i].get();
+    kax_analyzer_data_c *data = m_analyzer->m_data[i].get_object();
     if (data->m_id == KaxInfo::ClassInfos.GlobalId) {
       handle_segment_info(data);
       break;
@@ -253,7 +253,7 @@ header_editor_frame_c::open_file(wxFileName file_name) {
   }
 
   for (i = 0; m_analyzer->m_data.size() > i; ++i) {
-    kax_analyzer_data_c *data = m_analyzer->m_data[i].get();
+    kax_analyzer_data_c *data = m_analyzer->m_data[i].get_object();
     if (data->m_id == KaxTracks::ClassInfos.GlobalId) {
       handle_tracks(data);
       break;

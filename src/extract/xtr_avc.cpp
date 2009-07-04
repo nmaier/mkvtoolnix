@@ -59,7 +59,7 @@ xtr_avc_c::create_file(xtr_base_c *master,
   if (mpriv->get_size() < 6)
     mxerror(boost::format(Y("Track %1% CodecPrivate is too small.\n")) % m_tid);
 
-  binary *buf = mpriv->get();
+  binary *buf     = mpriv->get_buffer();
   m_nal_size_size = 1 + (buf[4] & 3);
 
   int pos    = 6;
@@ -90,7 +90,7 @@ xtr_avc_c::handle_frame(memory_cptr &frame,
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   int pos     = 0;
-  binary *buf = (binary *)frame->get();
+  binary *buf = (binary *)frame->get_buffer();
 
   while (frame->get_size() > pos)
     write_nal(buf, pos, frame->get_size(), m_nal_size_size);

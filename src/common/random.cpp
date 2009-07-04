@@ -28,14 +28,12 @@ bool random_c::m_seeded = false;
 #if defined(SYS_WINDOWS)
 
 bool random_c::m_tried_uuidcreate = false;
-bool random_c::m_use_uuidcreate = false;
+bool random_c::m_use_uuidcreate   = false;
 
 void
 random_c::generate_bytes(void *destination,
                          int num_bytes) {
-  int num_written, num_left;
   UUID uuid;
-  RPC_STATUS status;
 
   if (!m_seeded) {
     srand(GetTickCount());
@@ -50,7 +48,7 @@ random_c::generate_bytes(void *destination,
     int i;
 
     m_use_uuidcreate = true;
-    status = UuidCreate(&first_uuid);
+    RPC_STATUC status = UuidCreate(&first_uuid);
     if ((RPC_S_OK == status) || (RPC_S_UUID_LOCAL_ONLY == status)) {
       for (i = 0; i < 5; ++i) {
         status = UuidCreate(&uuid);
@@ -66,16 +64,16 @@ random_c::generate_bytes(void *destination,
     m_tried_uuidcreate = true;
   }
 
-  num_written = 0;
+  int num_written = 0;
   while (num_written < num_bytes) {
     if (m_use_uuidcreate) {
-      status = UuidCreate(&uuid);
+      RPC_STATUS status = UuidCreate(&uuid);
       if ((RPC_S_OK != status) && (RPC_S_UUID_LOCAL_ONLY != status)) {
         m_use_uuidcreate = false;
         continue;
       }
 
-      num_left = num_bytes - num_written;
+      int num_left = num_bytes - num_written;
       if (num_left > 8)
         num_left = 8;
       memcpy((unsigned char *)destination + num_written, &uuid.Data4, num_left);
@@ -83,8 +81,7 @@ random_c::generate_bytes(void *destination,
 
     } else
       for (; num_written < num_bytes; ++num_written)
-        ((unsigned char *)destination)[num_written] =
-          (unsigned char)(256.0 * rand() / (RAND_MAX + 1.0));
+        ((unsigned char *)destination)[num_written] = (unsigned char)(256.0 * rand() / (RAND_MAX + 1.0));
   }
 }
 
@@ -101,10 +98,9 @@ random_c::generate_bytes(void *destination,
   try {
     if (!m_tried_dev_urandom) {
       m_tried_dev_urandom = true;
-      m_dev_urandom = mm_file_io_cptr(new mm_file_io_c("/dev/urandom", MODE_READ));
+      m_dev_urandom       = mm_file_io_cptr(new mm_file_io_c("/dev/urandom", MODE_READ));
     }
-    if ((NULL != m_dev_urandom.get()) &&
-        (m_dev_urandom->read(destination, num_bytes) == num_bytes))
+    if (m_dev_urandom.is_set() && (m_dev_urandom->read(destination, num_bytes) == num_bytes))
       return;
   } catch(...) {
   }
@@ -118,25 +114,25 @@ random_c::generate_bytes(void *destination,
   }
 
   for (i = 0; i < num_bytes; ++i)
-    ((unsigned char *)destination)[i] =
-      (unsigned char)(256.0 * rand() / (RAND_MAX + 1.0));
+    ((unsigned char *)destination)[i] = (unsigned char)(256.0 * rand() / (RAND_MAX + 1.0));
 }
 
 #endif // defined(SYS_WINDOWS)
 
 void
 random_c::test() {
-  uint32_t n, ranges[16], i, k;
+  uint32_t ranges[16];
   const int num = 1000000;
-  bool found;
 
-  for (i = 0; i < 16; i++)
+  int i;
+  for (i = 0; 16 > i; ++i)
     ranges[i] = 0;
 
-  for (i = 0; i < num; i++) {
-    n = random_c::generate_32bits();
-    found = false;
-    for (k = 1; k <= 15; ++k)
+  for (i = 0; num > i; ++i) {
+    uint32_t n = random_c::generate_32bits();
+    bool found = false;
+    int k;
+    for (k = 1; 15 >= k; ++k)
       if (n < (k * 0x10000000)) {
         ++ranges[k - 1];
         found = true;
@@ -147,20 +143,20 @@ random_c::test() {
   }
 
   for (i = 0; i < 16; i++)
-    printf("%0d: %d (%.2f%%)\n", i, ranges[i],
-           (double)ranges[i] * 100.0 / num);
+    printf("%0d: %d (%.2f%%)\n", i, ranges[i], (double)ranges[i] * 100.0 / num);
 
 #if !defined(SYS_WINDOWS)
   m_tried_dev_urandom = true;
   m_dev_urandom.clear();
 
-  for (i = 0; i < 16; i++)
+  for (i = 0; 16 > i; i++)
     ranges[i] = 0;
 
-  for (i = 0; i < num; i++) {
-    n = random_c::generate_32bits();
-    found = false;
-    for (k = 1; k <= 15; ++k)
+  for (i = 0; num > i; i++) {
+    uint32_t n = random_c::generate_32bits();
+    bool found = false;
+    int k;
+    for (k = 1; 15 >= k; ++k)
       if (n < (k * 0x10000000)) {
         ++ranges[k - 1];
         found = true;
@@ -171,8 +167,7 @@ random_c::test() {
   }
 
   for (i = 0; i < 16; i++)
-    printf("%0d: %d (%.2f%%)\n", i, ranges[i],
-           (double)ranges[i] * 100.0 / num);
+    printf("%0d: %d (%.2f%%)\n", i, ranges[i], (double)ranges[i] * 100.0 / num);
 #endif
 
   exit(0);

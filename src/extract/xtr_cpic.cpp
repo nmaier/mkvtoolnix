@@ -42,7 +42,7 @@ xtr_cpic_c::handle_frame(memory_cptr &frame,
                          bool references_valid) {
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
-  binary *mybuffer = frame->get();
+  binary *mybuffer = frame->get_buffer();
   int data_size    = frame->get_size();
   if (2 > data_size) {
     mxinfo(boost::format(Y("CorePicture frame %1% not supported.\n")) % m_frame_counter);

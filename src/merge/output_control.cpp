@@ -640,14 +640,14 @@ render_headers(mm_io_c *out) {
       }
     }
 
-    if (first_file && (NULL != g_seguid_link_previous.get()))
+    if (first_file && g_seguid_link_previous.is_set())
       GetChild<KaxPrevUID>(*s_kax_infos).CopyBuffer(g_seguid_link_previous->data(), 128 / 8);
 
     // The next segment UID is also set in finish_file(). This is not
     // redundant! It is set here as well in order to reserve enough space
     // for the KaxInfo structure in the file. If it is removed later then
     // an EbmlVoid element will be used for the freed space.
-    if (NULL != g_seguid_link_next.get())
+    if (g_seguid_link_next.is_set())
       GetChild<KaxNextUID>(*s_kax_infos).CopyBuffer(g_seguid_link_next->data(), 128 / 8);
 
     if (!g_no_linking && g_cluster_helper->splitting()) {
@@ -770,7 +770,7 @@ render_attachments(IOCallback *out) {
       GetChildAs<KaxFileName, EbmlUnicodeString>(kax_a) = cstrutf8_to_UTFstring(name);
       GetChildAs<KaxFileUID, EbmlUInteger>(kax_a)       = attch->id;
 
-      GetChild<KaxFileData>(*kax_a).CopyBuffer(attch->data->get(), attch->data->get_size());
+      GetChild<KaxFileData>(*kax_a).CopyBuffer(attch->data->get_buffer(), attch->data->get_size());
     }
   }
 
@@ -1351,7 +1351,7 @@ finish_file(bool last_file) {
   int64_t info_size = s_kax_infos->ElementSize();
   int changed       = 0;
 
-  if (last_file && (NULL != g_seguid_link_next.get())) {
+  if (last_file && g_seguid_link_next.is_set()) {
     GetChild<KaxNextUID>(*s_kax_infos).CopyBuffer(g_seguid_link_next->data(), 128 / 8);
     changed = 1;
 
@@ -1756,7 +1756,7 @@ main_loop() {
 
       ptzr->old_status = ptzr->status;
 
-      while (   (NULL == ptzr->pack.get())
+      while (   !ptzr->pack.is_set()
              && (FILE_STATUS_MOREDATA == ptzr->status)
              && !ptzr->packetizer->packet_available())
         ptzr->status = ptzr->packetizer->read();
@@ -1765,10 +1765,10 @@ main_loop() {
           && (FILE_STATUS_MOREDATA == ptzr->old_status))
         ptzr->packetizer->force_duration_on_last_packet();
 
-      if (NULL == ptzr->pack.get())
+      if (!ptzr->pack.is_set())
         ptzr->pack = ptzr->packetizer->get_packet();
 
-      if ((NULL == ptzr->pack.get()) && (FILE_STATUS_DONE == ptzr->status))
+      if (!ptzr->pack.is_set() && (FILE_STATUS_DONE == ptzr->status))
         ptzr->status = FILE_STATUS_DONE_AND_DRY;
 
       // Has this packetizer changed its status from "data available" to
@@ -1793,11 +1793,11 @@ main_loop() {
     // stuff it into the Matroska file.
     std::vector<packetizer_t>::iterator winner = g_packetizers.end();
     mxforeach(ptzr, g_packetizers) {
-      if (NULL != ptzr->pack.get()) {
-        if ((g_packetizers.end() == winner) || (NULL == winner->pack.get()))
+      if (ptzr->pack.is_set()) {
+        if ((g_packetizers.end() == winner) || !winner->pack.is_set())
           winner = ptzr;
 
-        else if ((NULL != ptzr->pack.get()) && (ptzr->pack->assigned_timecode < winner->pack->assigned_timecode))
+        else if (ptzr->pack.is_set() && (ptzr->pack->assigned_timecode < winner->pack->assigned_timecode))
           winner = ptzr;
       }
     }
@@ -1805,7 +1805,7 @@ main_loop() {
     // Append the next track if appending is wanted.
     appended_a_track = append_tracks_maybe();
 
-    if ((g_packetizers.end() != winner) && (NULL != winner->pack.get())) {
+    if ((g_packetizers.end() != winner) && winner->pack.is_set()) {
       pack = winner->pack;
 
       // Step 3: Add the winning packet to a cluster. Full clusters will be

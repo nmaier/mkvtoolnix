@@ -62,13 +62,13 @@ truehd_reader_c::truehd_reader_c(track_info_c &_ti)
 
     int init_read_len = std::min(m_file_size - tag_size_start, (int64_t)TRUEHD_READ_SIZE);
 
-    if (m_io->read(m_chunk->get(), init_read_len) != init_read_len)
+    if (m_io->read(m_chunk->get_buffer(), init_read_len) != init_read_len)
       throw error_c(boost::format(Y("truehd_reader: Could not read %1% bytes.")) % TRUEHD_READ_SIZE);
 
     m_io->setFilePointer(tag_size_start, seek_beginning);
 
     truehd_parser_c parser;
-    parser.add_data(m_chunk->get(), init_read_len);
+    parser.add_data(m_chunk->get_buffer(), init_read_len);
     m_header = parser.get_next_frame();
 
     ti.id = 0;                  // ID for this track.
@@ -98,14 +98,14 @@ truehd_reader_c::read(generic_packetizer_c *,
                       bool) {
   int64_t remaining_bytes = m_file_size - m_io->getFilePointer();
   int64_t read_len        = std::min((int64_t)TRUEHD_READ_SIZE, remaining_bytes);
-  int num_read            = m_io->read(m_chunk->get(), read_len);
+  int num_read            = m_io->read(m_chunk->get_buffer(), read_len);
 
   if (0 > num_read) {
     PTZR0->flush();
     return FILE_STATUS_DONE;
   }
 
-  PTZR0->process(new packet_t(new memory_c(m_chunk->get(), num_read, false)));
+  PTZR0->process(new packet_t(new memory_c(m_chunk->get_buffer(), num_read, false)));
   m_bytes_processed += num_read;
 
   if (0 < (remaining_bytes - num_read))
@@ -137,10 +137,10 @@ truehd_reader_c::find_valid_headers(mm_io_c *io,
     io->setFilePointer(0, seek_beginning);
     skip_id3v2_tag(*io);
 
-    int num_read = io->read(buf->get(), probe_range);
+    int num_read = io->read(buf->get_buffer(), probe_range);
 
     truehd_parser_c parser;
-    parser.add_data(buf->get(), num_read);
+    parser.add_data(buf->get_buffer(), num_read);
 
     int num_sync_frames = 0;
     while (parser.frame_available()) {

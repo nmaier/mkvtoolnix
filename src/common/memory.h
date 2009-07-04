@@ -88,7 +88,7 @@ public:
     return *this;
   }
 
-  X *get() const throw() {
+  X *get_buffer() const throw() {
     return its_counter ? its_counter->ptr + its_counter->offset : NULL;
   }
 
@@ -107,19 +107,23 @@ public:
     its_counter->offset = new_offset;
   }
 
-  bool unique() const throw() {
+  bool is_unique() const throw() {
     return (its_counter ? its_counter->count == 1 : true);
   }
 
+  bool is_allocated() const throw() {
+    return (NULL != its_counter) && (NULL != its_counter->ptr);
+  }
+
   memory_c *clone() const {
-    return new memory_c(static_cast<unsigned char *>(safememdup(get(), get_size())), get_size(), true);
+    return new memory_c(static_cast<unsigned char *>(safememdup(get_buffer(), get_size())), get_size(), true);
   }
 
   void grab() {
     if (!its_counter || its_counter->is_free)
       return;
 
-    its_counter->ptr      = static_cast<unsigned char *>(safememdup(get(), get_size()));
+    its_counter->ptr      = static_cast<unsigned char *>(safememdup(get_buffer(), get_size()));
     its_counter->is_free  = true;
     its_counter->size    -= its_counter->offset;
     its_counter->offset   = 0;
@@ -216,8 +220,8 @@ class MTX_DLL_API memory_slice_cursor_c {
   inline unsigned char get_char() {
     assert(m_pos < m_size);
 
-    memory_c &slice = *(*m_slice).get();
-    unsigned char c = *(slice.get() + m_pos_in_slice);
+    memory_c &slice = *(*m_slice).get_object();
+    unsigned char c = *(slice.get_buffer() + m_pos_in_slice);
 
     ++m_pos_in_slice;
     ++m_pos;
@@ -275,7 +279,7 @@ class MTX_DLL_API memory_slice_cursor_c {
       if (num_bytes > size)
         num_bytes = size;
 
-      memcpy(dest, (*curr)->get() + offset, num_bytes);
+      memcpy(dest, (*curr)->get_buffer() + offset, num_bytes);
 
       size -= num_bytes;
       dest += num_bytes;
@@ -294,7 +298,7 @@ clone_memory(void *buffer,
 
 inline memory_cptr
 clone_memory(memory_cptr data) {
-  return clone_memory(data->get(), data->get_size());
+  return clone_memory(data->get_buffer(), data->get_size());
 }
 
 struct buffer_t {

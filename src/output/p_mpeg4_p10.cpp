@@ -132,7 +132,7 @@ mpeg4_p10_video_packetizer_c::setup_nalu_size_len_change() {
 
 void
 mpeg4_p10_video_packetizer_c::change_nalu_size_len(packet_cptr packet) {
-  unsigned char *src = packet->data->get();
+  unsigned char *src = packet->data->get_buffer();
   int size           = packet->data->get_size();
 
   if (!src || !size)
@@ -171,7 +171,7 @@ mpeg4_p10_video_packetizer_c::change_nalu_size_len(packet_cptr packet) {
   }
 
   // Copy the NALUs and write the new sized length field.
-  unsigned char *dst = packet->data->get();
+  unsigned char *dst = packet->data->get_buffer();
   src_pos            = 0;
   int dst_pos        = 0;
 

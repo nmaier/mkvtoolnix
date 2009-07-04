@@ -35,17 +35,17 @@ vc1_es_reader_c::probe_file(mm_io_c *io,
     io->setFilePointer(0, seek_beginning);
 
     memory_cptr buf = memory_c::alloc(READ_SIZE);
-    int num_read    = io->read(buf->get(), READ_SIZE);
+    int num_read    = io->read(buf->get_buffer(), READ_SIZE);
 
     if (4 > num_read)
       return 0;
 
-    uint32_t marker = get_uint32_be(buf->get());
+    uint32_t marker = get_uint32_be(buf->get_buffer());
     if ((VC1_MARKER_SEQHDR != marker) && (VC1_MARKER_ENTRYPOINT != marker) && (VC1_MARKER_FRAME != marker))
       return 0;
 
     vc1::es_parser_c parser;
-    parser.add_bytes(buf->get(), num_read);
+    parser.add_bytes(buf->get_buffer(), num_read);
 
     return parser.is_sequence_header_available();
 
@@ -69,8 +69,8 @@ vc1_es_reader_c::vc1_es_reader_c(track_info_c &n_ti)
 
     vc1::es_parser_c parser;
 
-    int num_read = m_io->read(m_buffer->get(), READ_SIZE);
-    parser.add_bytes(m_buffer->get(), num_read);
+    int num_read = m_io->read(m_buffer->get_buffer(), READ_SIZE);
+    parser.add_bytes(m_buffer->get_buffer(), num_read);
 
     if (!parser.is_sequence_header_available())
       throw false;
@@ -103,11 +103,11 @@ vc1_es_reader_c::read(generic_packetizer_c *,
   if (m_bytes_processed >= m_size)
     return FILE_STATUS_DONE;
 
-  int num_read = m_io->read(m_buffer->get(), READ_SIZE);
+  int num_read = m_io->read(m_buffer->get_buffer(), READ_SIZE);
   if (0 >= num_read)
     return FILE_STATUS_DONE;
 
-  PTZR0->process(new packet_t(new memory_c(m_buffer->get(), num_read)));
+  PTZR0->process(new packet_t(new memory_c(m_buffer->get_buffer(), num_read)));
 
   m_bytes_processed += num_read;
 

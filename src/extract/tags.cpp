@@ -61,7 +61,7 @@ extract_tags(const char *file_name,
     g_mm_stdio->puts("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n"
                      "<!DOCTYPE Tags SYSTEM \"matroskatags.dtd\">\n\n"
                      "<Tags>\n");
-    write_tags_xml(*tags, g_mm_stdio.get());
+    write_tags_xml(*tags, g_mm_stdio.get_object());
     g_mm_stdio->puts("</Tags>\n");
 
     delete tags;

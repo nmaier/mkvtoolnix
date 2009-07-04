@@ -193,8 +193,8 @@ aac_reader_c::find_valid_headers(mm_io_c *io,
   try {
     io->setFilePointer(0, seek_beginning);
     memory_cptr buf = memory_c::alloc(probe_range);
-    int num_read    = io->read(buf->get(), probe_range);
-    int pos         = find_consecutive_aac_headers(buf->get(), num_read, num_headers);
+    int num_read    = io->read(buf->get_buffer(), probe_range);
+    int pos         = find_consecutive_aac_headers(buf->get_buffer(), num_read, num_headers);
     io->setFilePointer(0, seek_beginning);
 
     return pos;

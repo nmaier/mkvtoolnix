@@ -164,7 +164,7 @@ namespace vc1 {
 
     virtual void add_bytes(unsigned char *buf, int size);
     virtual void add_bytes(memory_cptr &buf) {
-      add_bytes(buf->get(), buf->get_size());
+      add_bytes(buf->get_buffer(), buf->get_size());
     };
 
     virtual void flush();
@@ -178,7 +178,7 @@ namespace vc1 {
     }
 
     virtual bool are_headers_available() {
-      return m_seqhdr_found && (NULL != m_raw_entrypoint.get());
+      return m_seqhdr_found && m_raw_entrypoint.is_set();
     }
 
     virtual void get_sequence_header(sequence_header_t &seqhdr) {
@@ -194,10 +194,7 @@ namespace vc1 {
     }
 
     virtual memory_cptr get_raw_entrypoint() {
-      if (NULL != m_raw_entrypoint.get())
-        return memory_cptr(m_raw_entrypoint->clone());
-      else
-        return memory_cptr(NULL);
+      return memory_cptr(m_raw_entrypoint.is_set() ? m_raw_entrypoint->clone() : NULL);
     }
 
     virtual void handle_packet(memory_cptr packet);

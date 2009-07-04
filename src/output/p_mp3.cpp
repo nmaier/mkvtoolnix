@@ -170,7 +170,7 @@ mp3_packetizer_c::process(packet_cptr packet) {
   unsigned char *mp3_packet;
   mp3_header_t mp3header;
 
-  m_byte_buffer.add(packet->data->get(), packet->data->get_size());
+  m_byte_buffer.add(packet->data->get_buffer(), packet->data->get_size());
   while ((mp3_packet = get_mp3_packet(&mp3header)) != NULL) {
     int64_t new_timecode;
 

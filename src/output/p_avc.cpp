@@ -52,7 +52,7 @@ mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader,
 
   set_codec_id(MKV_V_MPEG4_AVC);
 
-  set_codec_private(m_avcc->get(), m_avcc->get_size());
+  set_codec_private(m_avcc->get_buffer(), m_avcc->get_size());
   extract_aspect_ratio();
   m_parser.set_keep_ar_info(false);
 
@@ -83,7 +83,7 @@ mpeg4_p10_es_video_packetizer_c::set_headers() {
 
 void
 mpeg4_p10_es_video_packetizer_c::add_extra_data(memory_cptr data) {
-  m_parser.add_bytes(data->get(), data->get_size());
+  m_parser.add_bytes(data->get_buffer(), data->get_size());
 }
 
 int
@@ -91,7 +91,7 @@ mpeg4_p10_es_video_packetizer_c::process(packet_cptr packet) {
   try {
     if (!m_allow_timecode_generation)
       m_parser.add_timecode(packet->timecode);
-    m_parser.add_bytes(packet->data->get(), packet->data->get_size());
+    m_parser.add_bytes(packet->data->get_buffer(), packet->data->get_size());
     flush_frames();
 
   } catch (nalu_size_length_error_c &error) {

@@ -49,7 +49,7 @@ ra_packetizer_c::set_headers() {
   set_audio_sampling_freq((float)m_samples_per_sec);
   set_audio_channels(m_channels);
   set_audio_bit_depth(m_bits_per_sample);
-  set_codec_private(m_private_data->get(), m_private_data->get_size());
+  set_codec_private(m_private_data->get_buffer(), m_private_data->get_size());
 
   generic_packetizer_c::set_headers();
   track_entry->EnableLacing(false);

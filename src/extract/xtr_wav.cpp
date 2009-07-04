@@ -93,7 +93,7 @@ xtr_wavpack4_c::create_file(xtr_base_c *master,
 
   if ((NULL == priv) || (2 > mpriv->get_size()))
     mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
-  memcpy(m_version, mpriv->get(), 2);
+  memcpy(m_version, mpriv->get_buffer(), 2);
 
   xtr_base_c::create_file(master, track);
 
@@ -140,7 +140,7 @@ xtr_wavpack4_c::handle_frame(memory_cptr &frame,
   wv_header[15] = 0xFF;
   put_uint32_le(&wv_header[16], m_number_of_samples); // block_index
 
-  binary *mybuffer     = frame->get();
+  binary *mybuffer     = frame->get_buffer();
   int data_size        = frame->get_size();
   m_number_of_samples += get_uint32_le(mybuffer);
 

@@ -723,7 +723,7 @@ mm_io_c::read(memory_cptr &buffer,
   if (buffer->get_size() <= (size + offset))
     buffer->resize(size + offset);
 
-  if (read(buffer->get() + offset, size) != size)
+  if (read(buffer->get_buffer() + offset, size) != size)
     throw mm_io_eof_error_c();
 
   buffer->set_size(size + offset);
@@ -790,7 +790,7 @@ mm_io_c::write(const memory_cptr &buffer,
                int offset) {
   if (-1 == size)
     size = buffer->get_size();
-  if (write(buffer->get() + offset, size) != size)
+  if (write(buffer->get_buffer() + offset, size) != size)
     throw mm_io_eof_error_c();
   return size;
 }

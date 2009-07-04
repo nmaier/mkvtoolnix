@@ -61,7 +61,7 @@ public:
   };
 
   virtual unsigned char *get_buffer() {
-    return m_buf[m_cur_buf]->get();
+    return m_buf[m_cur_buf]->get_buffer();
   };
 
   virtual void process(int64_t len);
@@ -131,7 +131,7 @@ public:
   };
 
   virtual unsigned char *get_buffer() {
-    return m_buf[m_cur_buf]->get();
+    return m_buf[m_cur_buf]->get_buffer();
   };
 
   virtual void process(int64_t len);
@@ -160,7 +160,7 @@ public:
   };
 
   virtual unsigned char *get_buffer() {
-    return m_buffer->get();
+    return m_buffer->get_buffer();
   };
 
   virtual void process(int64_t len);
@@ -192,21 +192,21 @@ wav_ac3acm_demuxer_c::~wav_ac3acm_demuxer_c() {
 bool
 wav_ac3acm_demuxer_c::probe(mm_io_cptr &io) {
   io->save_pos();
-  int len = io->read(m_buf[m_cur_buf]->get(), AC3ACM_READ_SIZE);
+  int len = io->read(m_buf[m_cur_buf]->get_buffer(), AC3ACM_READ_SIZE);
   io->restore_pos();
 
-  int pos = find_consecutive_ac3_headers(m_buf[m_cur_buf]->get(), len, 4);
+  int pos = find_consecutive_ac3_headers(m_buf[m_cur_buf]->get_buffer(), len, 4);
 
   if (-1 == pos) {
     m_swap_bytes = true;
     decode_buffer(len);
-    pos = find_consecutive_ac3_headers(m_buf[m_cur_buf]->get(), len, 4);
+    pos = find_consecutive_ac3_headers(m_buf[m_cur_buf]->get_buffer(), len, 4);
   }
 
   if (-1 == pos)
     return false;
 
-  find_ac3_header(m_buf[m_cur_buf]->get() + pos, len - pos, &m_ac3header, true);
+  find_ac3_header(m_buf[m_cur_buf]->get_buffer() + pos, len - pos, &m_ac3header, true);
 
   return true;
 }
@@ -214,7 +214,7 @@ wav_ac3acm_demuxer_c::probe(mm_io_cptr &io) {
 int
 wav_ac3acm_demuxer_c::decode_buffer(int len) {
   if ((2 < len) && m_swap_bytes) {
-    swab((char *)m_buf[m_cur_buf]->get(), (char *)m_buf[m_cur_buf ^ 1]->get(), len);
+    swab((char *)m_buf[m_cur_buf]->get_buffer(), (char *)m_buf[m_cur_buf ^ 1]->get_buffer(), len);
     m_cur_buf ^= 1;
   }
 
@@ -236,7 +236,7 @@ wav_ac3acm_demuxer_c::process(int64_t size) {
     return;
 
   decode_buffer(size);
-  m_ptzr->process(new packet_t(new memory_c(m_buf[m_cur_buf]->get(), size, false)));
+  m_ptzr->process(new packet_t(new memory_c(m_buf[m_cur_buf]->get_buffer(), size, false)));
 }
 
 // ----------------------------------------------------------
@@ -252,7 +252,7 @@ wav_ac3wav_demuxer_c::~wav_ac3wav_demuxer_c() {
 bool
 wav_ac3wav_demuxer_c::probe(mm_io_cptr &io) {
   io->save_pos();
-  int len = io->read(m_buf[m_cur_buf]->get(), AC3WAV_BLOCK_SIZE);
+  int len = io->read(m_buf[m_cur_buf]->get_buffer(), AC3WAV_BLOCK_SIZE);
   io->restore_pos();
 
   if (decode_buffer(len) > 0)
@@ -268,12 +268,12 @@ wav_ac3wav_demuxer_c::decode_buffer(int len) {
     return -1;
 
   if (m_swap_bytes) {
-    memcpy(      m_buf[m_cur_buf ^ 1]->get(),         m_buf[m_cur_buf]->get(),         8);
-    swab((char *)m_buf[m_cur_buf]->get() + 8, (char *)m_buf[m_cur_buf ^ 1]->get() + 8, len - 8);
+    memcpy(      m_buf[m_cur_buf ^ 1]->get_buffer(),         m_buf[m_cur_buf]->get_buffer(),         8);
+    swab((char *)m_buf[m_cur_buf]->get_buffer() + 8, (char *)m_buf[m_cur_buf ^ 1]->get_buffer() + 8, len - 8);
     m_cur_buf ^= 1;
   }
 
-  unsigned char *base = m_buf[m_cur_buf]->get();
+  unsigned char *base = m_buf[m_cur_buf]->get_buffer();
 
   if ((get_uint16_le(&base[0]) != AC3WAV_SYNC_WORD1) || (get_uint16_le(&base[2]) != AC3WAV_SYNC_WORD2) || (0x01 != base[4]))
     return -1;
@@ -295,7 +295,7 @@ wav_ac3wav_demuxer_c::process(int64_t size) {
 
   long dec_len = decode_buffer(size);
   if (0 < dec_len)
-    m_ptzr->process(new packet_t(new memory_c(m_buf[m_cur_buf]->get() + 8, dec_len, false)));
+    m_ptzr->process(new packet_t(new memory_c(m_buf[m_cur_buf]->get_buffer() + 8, dec_len, false)));
 }
 
 // ----------------------------------------------------------
@@ -317,12 +317,12 @@ wav_dts_demuxer_c::~wav_dts_demuxer_c() {
 bool
 wav_dts_demuxer_c::probe(mm_io_cptr &io) {
   io->save_pos();
-  int len = io->read(m_buf[m_cur_buf]->get(), DTS_READ_SIZE);
+  int len = io->read(m_buf[m_cur_buf]->get_buffer(), DTS_READ_SIZE);
   io->restore_pos();
 
-  if (detect_dts(m_buf[m_cur_buf]->get(), len, m_pack_14_16, m_swap_bytes)) {
+  if (detect_dts(m_buf[m_cur_buf]->get_buffer(), len, m_pack_14_16, m_swap_bytes)) {
     len = decode_buffer(len);
-    if (find_dts_header(m_buf[m_cur_buf]->get(), len, &m_dtsheader) >= 0) {
+    if (find_dts_header(m_buf[m_cur_buf]->get_buffer(), len, &m_dtsheader) >= 0) {
       mxverb(3, boost::format("DTSinWAV: 14->16 %1% swap %2%\n") % m_pack_14_16 % m_swap_bytes);
       return true;
     }
@@ -334,12 +334,12 @@ wav_dts_demuxer_c::probe(mm_io_cptr &io) {
 int
 wav_dts_demuxer_c::decode_buffer(int len) {
   if (m_swap_bytes) {
-    swab((char *)m_buf[m_cur_buf]->get(), (char *)m_buf[m_cur_buf ^ 1]->get(), len);
+    swab((char *)m_buf[m_cur_buf]->get_buffer(), (char *)m_buf[m_cur_buf ^ 1]->get_buffer(), len);
     m_cur_buf ^= 1;
   }
 
   if (m_pack_14_16) {
-    dts_14_to_dts_16((unsigned short *)m_buf[m_cur_buf]->get(), len / 2, (unsigned short *)m_buf[m_cur_buf ^ 1]->get());
+    dts_14_to_dts_16((unsigned short *)m_buf[m_cur_buf]->get_buffer(), len / 2, (unsigned short *)m_buf[m_cur_buf ^ 1]->get_buffer());
     m_cur_buf ^= 1;
     len        = len * 7 / 8;
   }
@@ -368,7 +368,7 @@ wav_dts_demuxer_c::process(int64_t size) {
     return;
 
   long dec_len = decode_buffer(size);
-  m_ptzr->process(new packet_t(new memory_c(m_buf[m_cur_buf]->get(), dec_len, false)));
+  m_ptzr->process(new packet_t(new memory_c(m_buf[m_cur_buf]->get_buffer(), dec_len, false)));
 }
 
 // ----------------------------------------------------------
@@ -405,7 +405,7 @@ wav_pcm_demuxer_c::process(int64_t len) {
   if (0 >= len)
     return;
 
-  m_ptzr->process(new packet_t(new memory_c(m_buffer->get(), len, false)));
+  m_ptzr->process(new packet_t(new memory_c(m_buffer->get_buffer(), len, false)));
 }
 
 // ----------------------------------------------------------
@@ -452,7 +452,7 @@ wav_reader_c::wav_reader_c(track_info_c &ti_)
     throw error_c(Y("wav_reader: Could not open the source file."));
   }
 
-  if (!wav_reader_c::probe_file(m_io.get(), size))
+  if (!wav_reader_c::probe_file(m_io.get_object(), size))
     throw error_c(Y("wav_reader: Source is not a valid WAVE file."));
 
   parse_file();
@@ -501,19 +501,19 @@ wav_reader_c::create_demuxer() {
       m_demuxer.clear();
   }
 
-  if (!m_demuxer.get()) {
+  if (!m_demuxer.is_set()) {
     m_demuxer = wav_demuxer_cptr(new wav_dts_demuxer_c(this, &m_wheader));
     if (!m_demuxer->probe(m_io))
       m_demuxer.clear();
   }
 
-  if (!m_demuxer.get()) {
+  if (!m_demuxer.is_set()) {
     m_demuxer = wav_demuxer_cptr(new wav_ac3wav_demuxer_c(this, &m_wheader));
     if (!m_demuxer->probe(m_io))
       m_demuxer.clear();
   }
 
-  if (!m_demuxer.get())
+  if (!m_demuxer.is_set())
     m_demuxer = wav_demuxer_cptr(new wav_pcm_demuxer_c(this, &m_wheader, ieee_float));
 
   if (verbose)

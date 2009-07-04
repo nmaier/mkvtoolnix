@@ -76,7 +76,7 @@ dirac_video_packetizer_c::process(packet_cptr packet) {
   if (-1 != packet->timecode)
     m_parser.add_timecode(packet->timecode);
 
-  m_parser.add_bytes(packet->data->get(), packet->data->get_size());
+  m_parser.add_bytes(packet->data->get_buffer(), packet->data->get_size());
 
   if (!m_headers_found && m_parser.are_headers_available())
     headers_found();

@@ -62,7 +62,7 @@ xtr_srt_c::handle_frame(memory_cptr &frame,
 
   ++m_num_entries;
   char *text = new char[frame->get_size() + 1];
-  memcpy(text, frame->get(), frame->get_size());
+  memcpy(text, frame->get_buffer(), frame->get_size());
   text[frame->get_size()] = 0;
 
   std::string buffer =
@@ -109,7 +109,7 @@ xtr_ssa_c::create_file(xtr_base_c *master,
 
   memory_cptr mpriv = decode_codec_private(priv);
 
-  const unsigned char *pd = mpriv->get();
+  const unsigned char *pd = mpriv->get_buffer();
   int priv_size           = mpriv->get_size();
   int bom_len             = 0;
 
@@ -188,7 +188,7 @@ xtr_ssa_c::handle_frame(memory_cptr &frame,
 
   char *s       = (char *)safemalloc(frame->get_size() + 1);
   memory_c af_s((unsigned char *)s, 0, true);
-  memcpy(s, frame->get(), frame->get_size());
+  memcpy(s, frame->get_buffer(), frame->get_size());
   s[frame->get_size()] = 0;
 
   // Split the line into the fields.
@@ -294,7 +294,7 @@ xtr_usf_c::create_file(xtr_base_c *master,
   init_content_decoder(track);
 
   memory_cptr new_priv = decode_codec_private(priv);
-  m_codec_private.append((const char *)new_priv->get(), new_priv->get_size());
+  m_codec_private.append((const char *)new_priv->get_buffer(), new_priv->get_size());
 
   KaxTrackLanguage *language = FINDFIRST(&track, KaxTrackLanguage);
   if (NULL == language)
@@ -355,7 +355,7 @@ xtr_usf_c::handle_frame(memory_cptr &frame,
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   usf_entry_t entry("", timecode, timecode + duration);
-  entry.m_text.append((const char *)frame->get(), frame->get_size());
+  entry.m_text.append((const char *)frame->get_buffer(), frame->get_size());
   m_entries.push_back(entry);
 }
 

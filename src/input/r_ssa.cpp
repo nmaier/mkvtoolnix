@@ -42,7 +42,7 @@ ssa_reader_c::ssa_reader_c(track_info_c &_ti)
     throw error_c(Y("ssa_reader: Could not open the source file."));
   }
 
-  if (!ssa_reader_c::probe_file(io.get(), 0))
+  if (!ssa_reader_c::probe_file(io.get_object(), 0))
     throw error_c(Y("ssa_reader: Source is not a valid SSA/ASS file."));
 
   charset_converter_cptr cc_utf8 = map_has_key(ti.sub_charsets, 0)  ? charset_converter_c::init(ti.sub_charsets[0])
@@ -51,7 +51,7 @@ ssa_reader_c::ssa_reader_c(track_info_c &_ti)
                                  :                                    g_cc_local_utf8;
 
   ti.id  = 0;
-  m_subs = ssa_parser_cptr(new ssa_parser_c(this, io.get(), ti.fname, 0));
+  m_subs = ssa_parser_cptr(new ssa_parser_c(this, io.get_object(), ti.fname, 0));
 
   m_subs->set_iconv_handle(cc_utf8);
   m_subs->parse();

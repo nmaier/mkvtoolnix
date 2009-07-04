@@ -66,7 +66,7 @@ mpeg1_2_video_packetizer_c::process_framed(packet_cptr packet) {
       || (4 > packet->data->get_size()))
     return video_packetizer_c::process(packet);
 
-  unsigned char *buf = packet->data->get();
+  unsigned char *buf = packet->data->get_buffer();
   int pos            = 4;
   int size           = packet->data->get_size();
   int marker         = get_uint32_be(buf);
@@ -104,7 +104,7 @@ mpeg1_2_video_packetizer_c::process_framed(packet_cptr packet) {
   if (!hack_engaged(ENGAGE_USE_CODEC_STATE))
     return video_packetizer_c::process(packet);
 
-  if ((NULL == m_seq_hdr.get()) || (sh_size != m_seq_hdr->get_size()) || memcmp(&buf[start], m_seq_hdr->get(), sh_size)) {
+  if (!m_seq_hdr.is_set() || (sh_size != m_seq_hdr->get_size()) || memcmp(&buf[start], m_seq_hdr->get_buffer(), sh_size)) {
     m_seq_hdr           = clone_memory(&buf[start], sh_size);
     packet->codec_state = clone_memory(&buf[start], sh_size);
   }
@@ -118,10 +118,10 @@ mpeg1_2_video_packetizer_c::process_framed(packet_cptr packet) {
 int
 mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
   if (0.0 > m_fps)
-    extract_fps(packet->data->get(), packet->data->get_size());
+    extract_fps(packet->data->get_buffer(), packet->data->get_size());
 
   if (!m_aspect_ratio_extracted)
-    extract_aspect_ratio(packet->data->get(), packet->data->get_size());
+    extract_aspect_ratio(packet->data->get_buffer(), packet->data->get_size());
 
   if (m_framed)
     return process_framed(packet);
@@ -131,7 +131,7 @@ mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
     return FILE_STATUS_DONE;
 
   memory_cptr old_memory  = packet->data;
-  unsigned char *data_ptr = old_memory->get();
+  unsigned char *data_ptr = old_memory->get_buffer();
   int new_bytes           = old_memory->get_size();
 
   do {
@@ -155,9 +155,9 @@ mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
       new_packet->time_factor = MPEG2_PICTURE_TYPE_FRAME == frame->pictureStructure ? 1 : 2;
 
       if (   (NULL != frame->seqHdrData)
-          && (   (NULL == m_seq_hdr.get())
+          && (   !m_seq_hdr.is_set()
               || (frame->seqHdrDataSize != m_seq_hdr->get_size())
-              || memcmp(frame->seqHdrData, m_seq_hdr->get(), frame->seqHdrDataSize))) {
+              || memcmp(frame->seqHdrData, m_seq_hdr->get_buffer(), frame->seqHdrDataSize))) {
         m_seq_hdr               = memory_cptr(new memory_c(frame->seqHdrData, frame->seqHdrDataSize, true));
         frame->seqHdrData       = NULL;
         new_packet->codec_state = clone_memory(m_seq_hdr);

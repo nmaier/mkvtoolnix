@@ -543,7 +543,7 @@ tab_input::add_file(const wxString &file_name,
         if (re_att_name.Matches(output[i]))
           a->name = unescape(re_att_name.GetMatch(output[i], 1));
 
-        a->source = file.get();
+        a->source = file.get_object();
 
         file->attached_files.push_back(a);
 
@@ -653,7 +653,7 @@ tab_input::add_file(const wxString &file_name,
     } else
       new_track_pos = tracks.size();
 
-    tracks.insert(tracks.begin() + new_track_pos, t.get());
+    tracks.insert(tracks.begin() + new_track_pos, t.get_object());
     clb_tracks->Insert(t->create_label(), new_track_pos);
     clb_tracks->Check(new_track_pos, true);
   }
@@ -1129,7 +1129,7 @@ tab_input::load(wxConfigBase *cfg,
         cfg->SetPath(wxT(".."));
 
         if (0 != a->id) {
-          a->source = fi.get();
+          a->source = fi.get_object();
           fi->attached_files.push_back(a);
         }
       }
@@ -1181,7 +1181,7 @@ tab_input::load(wxConfigBase *cfg,
                 "Moritz Bunkus <moritz@bunkus.org>\n\n"
                 "(Problem occured in tab_input::load(), #3)"));
       mmg_track_cptr &t = files[fidx]->tracks[tidx];
-      tracks.push_back(t.get());
+      tracks.push_back(t.get_object());
 
       clb_tracks->Append(t->create_label());
       clb_tracks->Check(i, t->enabled);

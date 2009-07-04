@@ -148,7 +148,7 @@ dts_packetizer_c::process(packet_cptr packet) {
   dts_header_t dtsheader;
   unsigned char *dts_packet;
 
-  add_to_buffer(packet->data->get(), packet->data->get_size());
+  add_to_buffer(packet->data->get_buffer(), packet->data->get_size());
   while ((dts_packet = get_dts_packet(dtsheader)) != NULL) {
     int64_t new_timecode = -1 == packet->timecode ? (int64_t)(((double)m_samples_written * 1000000000.0) / ((double)dtsheader.core_sampling_frequency)) : packet->timecode;
 

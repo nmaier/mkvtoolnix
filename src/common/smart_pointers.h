@@ -61,15 +61,18 @@ public:
   X *operator->() const throw() {
     return its_counter->ptr;
   }
-  X *get() const throw() {
+  X *get_object() const throw() {
     return its_counter ? its_counter->ptr : 0;
   }
-  bool unique() const throw() {
+  bool is_unique() const throw() {
     return (its_counter ? its_counter->count == 1 : true);
   }
   void clear() throw() {
     release();
     its_counter = NULL;
+  }
+  bool is_set() const throw() {
+    return (NULL != its_counter) && (NULL != its_counter->ptr);
   }
 
 private:

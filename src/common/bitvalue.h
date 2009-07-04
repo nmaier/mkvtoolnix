@@ -43,7 +43,7 @@ public:
   }
   void generate_random();
   unsigned char *data() const {
-    return m_value->get();
+    return m_value->get_buffer();
   }
 };
 typedef counted_ptr<bitvalue_c> bitvalue_cptr;

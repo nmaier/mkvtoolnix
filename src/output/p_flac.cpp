@@ -39,13 +39,13 @@ flac_packetizer_c::flac_packetizer_c(generic_reader_c *p_reader,
 
   if ((4 > l_header) || memcmp(header, "fLaC", 4)) {
     m_header = memory_c::alloc(l_header + 4);
-    memcpy(m_header->get(),     "fLaC", 4);
-    memcpy(m_header->get() + 4, header, l_header);
+    memcpy(m_header->get_buffer(),     "fLaC", 4);
+    memcpy(m_header->get_buffer() + 4, header, l_header);
 
   } else
     m_header = memory_cptr(new memory_c((unsigned char *)safememdup(header, l_header), l_header, true));
 
-  result = flac_decode_headers(m_header->get(), m_header->get_size(), 1, FLAC_HEADER_STREAM_INFO, &m_stream_info);
+  result = flac_decode_headers(m_header->get_buffer(), m_header->get_size(), 1, FLAC_HEADER_STREAM_INFO, &m_stream_info);
   if (!(result & FLAC_HEADER_STREAM_INFO))
     mxerror_tid(ti.fname, ti.id, Y("The FLAC headers could not be parsed: the stream info structure was not found.\n"));
 
@@ -60,7 +60,7 @@ flac_packetizer_c::~flac_packetizer_c() {
 void
 flac_packetizer_c::set_headers() {
   set_codec_id(MKV_A_FLAC);
-  set_codec_private(m_header->get(), m_header->get_size());
+  set_codec_private(m_header->get_buffer(), m_header->get_size());
   set_audio_sampling_freq((float)m_stream_info.sample_rate);
   set_audio_channels(m_stream_info.channels);
   set_audio_bit_depth(m_stream_info.bits_per_sample);
@@ -72,7 +72,7 @@ int
 flac_packetizer_c::process(packet_cptr packet) {
   m_num_packets++;
 
-  packet->duration = flac_get_num_samples(packet->data->get(), packet->data->get_size(), m_stream_info);
+  packet->duration = flac_get_num_samples(packet->data->get_buffer(), packet->data->get_size(), m_stream_info);
 
   if (-1 == packet->duration) {
     mxwarn_tid(ti.fname, ti.id, boost::format(Y("Packet number %1% contained an invalid FLAC header and is being skipped.\n")) % m_num_packets);
@@ -97,9 +97,9 @@ flac_packetizer_c::can_connect_to(generic_packetizer_c *src,
   connect_check_a_bitdepth(m_stream_info.bits_per_sample, fsrc->m_stream_info.bits_per_sample);
 
   if (   (m_header->get_size() != fsrc->m_header->get_size())
-      || (NULL == m_header.get())
-      || (NULL == fsrc->m_header.get())
-      || memcmp(m_header->get(), fsrc->m_header->get(), m_header->get_size())) {
+      || !m_header.is_set()
+      || !fsrc->m_header.is_set()
+      || memcmp(m_header->get_buffer(), fsrc->m_header->get_buffer(), m_header->get_size())) {
     error_message = (boost::format(Y("The FLAC header data is different for the two tracks (lengths: %1% and %2%)")) % m_header->get_size() % fsrc->m_header->get_size()).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }

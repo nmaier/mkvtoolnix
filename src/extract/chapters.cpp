@@ -66,12 +66,12 @@ extract_chapters(const char *file_name,
                      "<!-- <!DOCTYPE Tags SYSTEM \"matroskatags.dtd\"> -->\n"
                      "\n"
                      "<Chapters>\n");
-    write_chapters_xml(chapters, g_mm_stdio.get());
+    write_chapters_xml(chapters, g_mm_stdio.get_object());
     g_mm_stdio->puts("</Chapters>\n");
 
   } else {
     int dummy = 1;
-    write_chapters_simple(dummy, chapters, g_mm_stdio.get());
+    write_chapters_simple(dummy, chapters, g_mm_stdio.get_object());
   }
 
   delete chapters;

@@ -39,10 +39,10 @@ kate_packetizer_c::kate_packetizer_c(generic_reader_c *p_reader,
   set_track_type(track_subtitle);
 
   // the number of headers to expect is stored in the first header
-  memory_cptr temp(new memory_c((unsigned char *)m_global_data->get(), m_global_data->get_size(), false));
+  memory_cptr temp(new memory_c((unsigned char *)m_global_data->get_buffer(), m_global_data->get_size(), false));
   std::vector<memory_cptr> blocks = unlace_memory_xiph(temp);
 
-  kate_parse_identification_header(blocks[0]->get(), blocks[0]->get_size(), m_kate_id);
+  kate_parse_identification_header(blocks[0]->get_buffer(), blocks[0]->get_size(), m_kate_id);
   if (blocks.size() != m_kate_id.nheaders)
     throw false;
 
@@ -60,7 +60,7 @@ kate_packetizer_c::set_headers() {
   set_codec_id(MKV_S_KATE);
 
   memory_cptr codec_private = lace_memory_xiph(m_headers);
-  set_codec_private(codec_private->get(), codec_private->get_size());
+  set_codec_private(codec_private->get_buffer(), codec_private->get_size());
 
   generic_packetizer_c::set_headers();
 }
@@ -69,7 +69,7 @@ int
 kate_packetizer_c::process(packet_cptr packet) {
   if (packet->data->get_size() < (1 + 3 * sizeof(int64_t))) {
     /* end packet is 1 byte long and has type 0x7f */
-    if ((packet->data->get_size() == 1) && (packet->data->get()[0] == 0x7f)) {
+    if ((packet->data->get_size() == 1) && (packet->data->get_buffer()[0] == 0x7f)) {
       packet->timecode           = m_previous_timecode;
       packet->duration           = 1;
       packet->duration_mandatory = true;
@@ -81,8 +81,8 @@ kate_packetizer_c::process(packet_cptr packet) {
     return FILE_STATUS_MOREDATA;
   }
 
-  int64_t start_time         = get_uint64_le(packet->data->get() + 1);
-  int64_t duration           = get_uint64_le(packet->data->get() + 1 + sizeof(int64_t));
+  int64_t start_time         = get_uint64_le(packet->data->get_buffer() + 1);
+  int64_t duration           = get_uint64_le(packet->data->get_buffer() + 1 + sizeof(int64_t));
 
   double scaled_timecode     = start_time * (double)m_kate_id.gden / (double)m_kate_id.gnum;
   double scaled_duration     = duration   * (double)m_kate_id.gden / (double)m_kate_id.gnum;

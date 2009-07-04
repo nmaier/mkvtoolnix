@@ -406,7 +406,7 @@ void
 real_reader_c::create_packetizer(int64_t tid) {
 
   real_demuxer_cptr dmx = find_demuxer(tid);
-  if (dmx.get() == NULL)
+  if (!dmx.is_set())
     return;
 
   if (-1 != dmx->ptzr)
@@ -448,7 +448,7 @@ real_reader_c::finish() {
 
   for (i = 0; i < demuxers.size(); i++) {
     real_demuxer_cptr dmx = demuxers[i];
-    if ((NULL != dmx.get()) && (NULL != dmx->track) && (dmx->track->type == RMFF_TRACK_TYPE_AUDIO) && !dmx->segments.empty())
+    if (dmx.is_set() && (NULL != dmx->track) && (dmx->track->type == RMFF_TRACK_TYPE_AUDIO) && !dmx->segments.empty())
       deliver_audio_frames(dmx, dmx->last_timecode / dmx->num_packets);
   }
 
@@ -485,7 +485,7 @@ real_reader_c::read(generic_packetizer_c *,
   int64_t timecode      = (int64_t)frame->timecode * 1000000ll;
   real_demuxer_cptr dmx = find_demuxer(frame->id);
 
-  if ((dmx.get() == NULL) || (-1 == dmx->ptzr)) {
+  if (!dmx.is_set() || (-1 == dmx->ptzr)) {
     rmff_release_frame(frame);
     return FILE_STATUS_MOREDATA;
   }
@@ -584,7 +584,7 @@ real_reader_c::deliver_audio_frames(real_demuxer_cptr dmx,
 void
 real_reader_c::deliver_aac_frames(real_demuxer_cptr dmx,
                                   memory_c &mem) {
-  unsigned char *chunk = mem.get();
+  unsigned char *chunk = mem.get_buffer();
   int length           = mem.get_size();
   if (2 > length) {
     mxwarn_tid(ti.fname, dmx->track->id, boost::format(Y("Short AAC audio packet (length: %1% < 2)\n")) % length);
@@ -798,7 +798,7 @@ real_reader_c::get_information_from_data() {
     rmff_frame_t *frame   = rmff_read_next_frame(file, NULL);
     real_demuxer_cptr dmx = find_demuxer(frame->id);
 
-    if (dmx.get() == NULL) {
+    if (!dmx.is_set()) {
       rmff_release_frame(frame);
       continue;
     }

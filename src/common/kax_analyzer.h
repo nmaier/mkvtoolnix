@@ -89,7 +89,7 @@ public:
 
   virtual EbmlElement *read_element(kax_analyzer_data_c *element_data);
   virtual EbmlElement *read_element(kax_analyzer_data_cptr element_data) {
-    return read_element(element_data.get());
+    return read_element(element_data.get_object());
   }
   virtual EbmlElement *read_element(unsigned int pos) {
     return read_element(m_data[pos]);

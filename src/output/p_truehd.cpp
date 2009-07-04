@@ -62,7 +62,7 @@ truehd_packetizer_c::set_headers() {
 
 int
 truehd_packetizer_c::process(packet_cptr packet) {
-  m_parser.add_data(packet->data->get(), packet->data->get_size());
+  m_parser.add_data(packet->data->get_buffer(), packet->data->get_size());
 
   handle_frames();
 
@@ -173,7 +173,7 @@ truehd_packetizer_c::flush_frames_merged() {
 
   int offset = 0;
   for (i = 0; m_frames.size() > i; ++i) {
-    memcpy(data->get() + offset, m_frames[i]->m_data->get(), m_frames[i]->m_data->get_size());
+    memcpy(data->get_buffer() + offset, m_frames[i]->m_data->get_buffer(), m_frames[i]->m_data->get_size());
     offset += m_frames[i]->m_data->get_size();
   }
 

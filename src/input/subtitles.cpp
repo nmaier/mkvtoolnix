@@ -540,7 +540,7 @@ ssa_parser_c::decode_chars(unsigned char c1,
     buffer->set_size(old_size);
   }
 
-  memcpy(buffer->get() + buffer->get_size(), bytes, bytes_to_add);
+  memcpy(buffer->get_buffer() + buffer->get_size(), bytes, bytes_to_add);
   buffer->set_size(buffer->get_size() + bytes_to_add);
 }
 

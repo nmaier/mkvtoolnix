@@ -47,14 +47,15 @@ static const int compression_method_map[] = {
 # include <lzoutil.h>
 #endif
 
-lzo_compressor_c::lzo_compressor_c():
-  compressor_c(COMPRESSION_LZO) {
+lzo_compressor_c::lzo_compressor_c()
+  : compressor_c(COMPRESSION_LZO)
+{
   int result;
-
   if ((result = lzo_init()) != LZO_E_OK)
     mxerror(boost::format(Y("lzo_init() failed. Result: %1%\n")) % result);
+
   wrkmem = (lzo_bytep)lzo_malloc(LZO1X_999_MEM_COMPRESS);
-  if (wrkmem == NULL)
+  if (NULL == wrkmem)
     mxerror(Y("lzo_malloc(LZO1X_999_MEM_COMPRESS) failed.\n"));
 }
 
@@ -69,26 +70,23 @@ lzo_compressor_c::decompress(memory_cptr &buffer) {
 
 void
 lzo_compressor_c::compress(memory_cptr &buffer) {
-  unsigned char *dst;
-  int result, dstsize, size;
-
-  size = buffer->get_size();
-  dst = (unsigned char *)safemalloc(size * 2);
-
+  int size             = buffer->get_size();
+  unsigned char *dst   = (unsigned char *)safemalloc(size * 2);
   lzo_uint lzo_dstsize = size * 2;
-  if ((result = lzo1x_999_compress(buffer->get(), buffer->get_size(),
-                                   dst, &lzo_dstsize, wrkmem)) != LZO_E_OK)
+
+  int result;
+  if ((result = lzo1x_999_compress(buffer->get_buffer(), buffer->get_size(), dst, &lzo_dstsize, wrkmem)) != LZO_E_OK)
     mxerror(boost::format(Y("LZO compression failed. Result: %1%\n")) % result);
-  dstsize = lzo_dstsize;
+
+  int dstsize = lzo_dstsize;
 
   mxverb(3, boost::format("lzo_compressor_c: Compression from %1% to %2%, %3%%%\n") % size % dstsize % (dstsize * 100 / size));
 
-  raw_size += size;
+  raw_size        += size;
   compressed_size += dstsize;
   items++;
 
-  dst = (unsigned char *)saferealloc(dst, dstsize);
-  buffer = memory_cptr(new memory_c(dst, dstsize, true));
+  buffer = memory_cptr(new memory_c((unsigned char *)saferealloc(dst, dstsize), dstsize, true));
 }
 
 #endif // HAVE_LZO
@@ -96,8 +94,9 @@ lzo_compressor_c::compress(memory_cptr &buffer) {
 // ---------------------------------------------------------------------
 
 #if defined(HAVE_ZLIB_H)
-zlib_compressor_c::zlib_compressor_c():
-  compressor_c(COMPRESSION_ZLIB) {
+zlib_compressor_c::zlib_compressor_c()
+  : compressor_c(COMPRESSION_ZLIB)
+{
 }
 
 zlib_compressor_c::~zlib_compressor_c() {
@@ -105,74 +104,76 @@ zlib_compressor_c::~zlib_compressor_c() {
 
 void
 zlib_compressor_c::decompress(memory_cptr &buffer) {
-  int result, dstsize, n;
-  unsigned char *dst;
   z_stream d_stream;
 
   d_stream.zalloc = (alloc_func)0;
-  d_stream.zfree = (free_func)0;
+  d_stream.zfree  = (free_func)0;
   d_stream.opaque = (voidpf)0;
-  result = inflateInit(&d_stream);
-  if (result != Z_OK)
+  int result      = inflateInit(&d_stream);
+
+  if (Z_OK != result)
     mxerror(boost::format(Y("inflateInit() failed. Result: %1%\n")) % result);
 
-  d_stream.next_in = (Bytef *)buffer->get();
-  d_stream.avail_in = buffer->get_size();
-  n = 0;
-  dst = NULL;
+  d_stream.next_in   = (Bytef *)buffer->get_buffer();
+  d_stream.avail_in  = buffer->get_size();
+  int n              = 0;
+  unsigned char *dst = NULL;
+
   do {
     n++;
-    dst = (unsigned char *)saferealloc(dst, n * 4000);
-    d_stream.next_out = (Bytef *)&dst[(n - 1) * 4000];
+    dst                = (unsigned char *)saferealloc(dst, n * 4000);
+    d_stream.next_out  = (Bytef *)&dst[(n - 1) * 4000];
     d_stream.avail_out = 4000;
-    result = inflate(&d_stream, Z_NO_FLUSH);
-    if ((result != Z_OK) && (result != Z_STREAM_END))
-      mxerror(boost::format(Y("Zlib decompression failed. Result: %1%\n")) % result);
-  } while ((d_stream.avail_out == 0) && (d_stream.avail_in != 0) &&
-           (result != Z_STREAM_END));
+    result             = inflate(&d_stream, Z_NO_FLUSH);
 
-  dstsize = d_stream.total_out;
+    if ((Z_OK != result) && (Z_STREAM_END != result))
+      mxerror(boost::format(Y("Zlib decompression failed. Result: %1%\n")) % result);
+
+  } while ((0 == d_stream.avail_out) && (0 != d_stream.avail_in) && (Z_STREAM_END != result));
+
+  int dstsize = d_stream.total_out;
   inflateEnd(&d_stream);
 
   mxverb(3, boost::format("zlib_compressor_c: Decompression from %1% to %2%, %3%%%\n") % buffer->get_size() % dstsize % (dstsize * 100 / buffer->get_size()));
 
-  dst = (unsigned char *)saferealloc(dst, dstsize);
-  buffer = memory_cptr(new memory_c(dst, dstsize, true));
+  buffer = memory_cptr(new memory_c((unsigned char *)saferealloc(dst, dstsize), dstsize, true));
 }
 
 void
 zlib_compressor_c::compress(memory_cptr &buffer) {
-  int result, dstsize, n;
-  unsigned char *dst;
   z_stream c_stream;
 
   c_stream.zalloc = (alloc_func)0;
-  c_stream.zfree = (free_func)0;
+  c_stream.zfree  = (free_func)0;
   c_stream.opaque = (voidpf)0;
-  result = deflateInit(&c_stream, 9);
-  if (result != Z_OK)
+  int result      = deflateInit(&c_stream, 9);
+
+  if (Z_OK != result)
     mxerror(boost::format(Y("deflateInit() failed. Result: %1%\n")) % result);
 
-  c_stream.next_in = (Bytef *)buffer->get();
-  c_stream.avail_in = buffer->get_size();
-  n = 0;
-  dst = NULL;
+  c_stream.next_in   = (Bytef *)buffer->get_buffer();
+  c_stream.avail_in  = buffer->get_size();
+  int n              = 0;
+  unsigned char *dst = NULL;
+
   do {
     n++;
-    dst = (unsigned char *)saferealloc(dst, n * 4000);
-    c_stream.next_out = (Bytef *)&dst[(n - 1) * 4000];
+    dst                = (unsigned char *)saferealloc(dst, n * 4000);
+    c_stream.next_out  = (Bytef *)&dst[(n - 1) * 4000];
     c_stream.avail_out = 4000;
-    result = deflate(&c_stream, Z_FINISH);
-    if ((result != Z_OK) && (result != Z_STREAM_END))
+    result             = deflate(&c_stream, Z_FINISH);
+
+    if ((Z_OK != result) && (Z_STREAM_END != result))
       mxerror(boost::format(Y("Zlib decompression failed. Result: %1%\n")) % result);
+
   } while ((c_stream.avail_out == 0) && (result != Z_STREAM_END));
-  dstsize = c_stream.total_out;
+
+  int dstsize = c_stream.total_out;
   deflateEnd(&c_stream);
 
   mxverb(3, boost::format("zlib_compressor_c: Compression from %1% to %2%, %3%%%\n") % buffer->get_size() % dstsize % (dstsize * 100 / buffer->get_size()));
 
-  dst = (unsigned char *)saferealloc(dst, dstsize);
-  buffer = memory_cptr(new memory_c(dst, dstsize, true));
+  buffer = memory_cptr(new memory_c((unsigned char *)saferealloc(dst, dstsize), dstsize, true));
 }
 
 #endif // HAVE_ZLIB_H
@@ -180,8 +181,9 @@ zlib_compressor_c::compress(memory_cptr &buffer) {
 // ---------------------------------------------------------------------
 
 #if defined(HAVE_BZLIB_H)
-bzlib_compressor_c::bzlib_compressor_c():
-  compressor_c(COMPRESSION_BZ2) {
+bzlib_compressor_c::bzlib_compressor_c()
+  : compressor_c(COMPRESSION_BZ2)
+{
 }
 
 bzlib_compressor_c::~bzlib_compressor_c() {
@@ -189,156 +191,150 @@ bzlib_compressor_c::~bzlib_compressor_c() {
 
 void
 bzlib_compressor_c::decompress(memory_cptr &buffer) {
-  int result;
-  bz_stream d_stream;
-
   mxerror(Y("bzlib_compressor_c::decompress() not implemented\n"));
 
-  d_stream.bzalloc = NULL;
-  d_stream.bzfree = NULL;
-  d_stream.opaque = NULL;
+  bz_stream d_stream;
 
-  result = BZ2_bzDecompressInit(&d_stream, 0, 0);
-  if (result != BZ_OK)
+  d_stream.bzalloc = NULL;
+  d_stream.bzfree  = NULL;
+  d_stream.opaque  = NULL;
+  int result       = BZ2_bzDecompressInit(&d_stream, 0, 0);
+
+  if (BZ_OK != result)
     mxerror(boost::format(Y("BZ2_bzCompressInit() failed. Result: %1%\n")) % result);
+
   BZ2_bzDecompressEnd(&d_stream);
 }
 
 void
 bzlib_compressor_c::compress(memory_cptr &buffer) {
-  unsigned char *dst;
-  int result, dstsize, size;
   bz_stream c_stream;
 
-  size = buffer->get_size();
-  dst = (unsigned char *)safemalloc(size * 2);
+  int size           = buffer->get_size();
+  unsigned char *dst = (unsigned char *)safemalloc(size * 2);
 
-  c_stream.bzalloc = NULL;
-  c_stream.bzfree = NULL;
-  c_stream.opaque = NULL;
+  c_stream.bzalloc   = NULL;
+  c_stream.bzfree    = NULL;
+  c_stream.opaque    = NULL;
 
-  result = BZ2_bzCompressInit(&c_stream, 9, 0, 30);
-  if (result != BZ_OK)
+  int result         = BZ2_bzCompressInit(&c_stream, 9, 0, 30);
+  if (BZ_OK != result)
     mxerror(boost::format(Y("BZ2_bzCompressInit() failed. Result: %1%\n")) % result);
 
-  c_stream.next_in = (char *)buffer->get();
-  c_stream.next_out = (char *)dst;
-  c_stream.avail_in = size;
+  c_stream.next_in   = (char *)buffer->get_buffer();
+  c_stream.next_out  = (char *)dst;
+  c_stream.avail_in  = size;
   c_stream.avail_out = 2 * size;
-  result = BZ2_bzCompress(&c_stream, BZ_FINISH);
-  if (result != BZ_STREAM_END)
+  result             = BZ2_bzCompress(&c_stream, BZ_FINISH);
+
+  if (BZ_STREAM_END != result)
     mxerror(boost::format(Y("bzip2 compression failed. Result: %1%\n")) % result);
 
   BZ2_bzCompressEnd(&c_stream);
 
-  dstsize = 2 * size - c_stream.avail_out;
+  int dstsize = 2 * size - c_stream.avail_out;
 
   mxverb(3, boost::format("bzlib_compressor_c: Compression from %1% to %2%, %3%%%\n") % size % dstsize % (dstsize * 100 / size));
 
-  raw_size += size;
+  raw_size        += size;
   compressed_size += dstsize;
   items++;
 
-  dst = (unsigned char *)saferealloc(dst, dstsize);
-  buffer = memory_cptr(new memory_c(dst, dstsize, true));
+  buffer = memory_cptr(new memory_c((unsigned char *)saferealloc(dst, dstsize), dstsize, true));
 }
 
 #endif // HAVE_BZLIB_H
 
 // ---------------------------------------------------------------------
 
-header_removal_compressor_c::header_removal_compressor_c():
-  compressor_c(COMPRESSION_HEADER_REMOVAL) {
+header_removal_compressor_c::header_removal_compressor_c()
+  : compressor_c(COMPRESSION_HEADER_REMOVAL)
+{
 }
 
 void
 header_removal_compressor_c::decompress(memory_cptr &buffer) {
-  if ((NULL == m_bytes.get()) || (0 == m_bytes->get_size()))
+  if (!m_bytes.is_set() || (0 == m_bytes->get_size()))
     return;
 
-  memory_cptr new_buffer(new memory_c((unsigned char *)
-                                      safemalloc(buffer->get_size() +
-                                                 m_bytes->get_size()),
-                                      buffer->get_size() + m_bytes->get_size(),
-                                      true));
-  memcpy(new_buffer->get(), m_bytes->get(), m_bytes->get_size());
-  memcpy(new_buffer->get() + m_bytes->get_size(), buffer->get(),
-         buffer->get_size());
+  memory_cptr new_buffer = memory_c::alloc(buffer->get_size() + m_bytes->get_size());
+
+  memcpy(new_buffer->get_buffer(),                       m_bytes->get_buffer(), m_bytes->get_size());
+  memcpy(new_buffer->get_buffer() + m_bytes->get_size(), buffer->get_buffer(),  buffer->get_size());
 
   buffer = new_buffer;
 }
 
 void
 header_removal_compressor_c::compress(memory_cptr &buffer) {
-  if ((NULL == m_bytes.get()) || (0 == m_bytes->get_size()))
+  if (!m_bytes.is_set() || (0 == m_bytes->get_size()))
     return;
 
-  if (buffer->get_size() < m_bytes->get_size())
+  int size = m_bytes->get_size();
+  if (buffer->get_size() < size)
     throw compression_error_c(boost::format(Y("Header removal compression not possible because the buffer contained %1% bytes "
-                                              "which is less than the size of the headers that should be removed, %2%.")) % buffer->get_size() % m_bytes->get_size());
+                                              "which is less than the size of the headers that should be removed, %2%.")) % buffer->get_size() % size);
 
-  if (memcmp(buffer->get(), m_bytes->get(), m_bytes->get_size())) {
+  unsigned char *buffer_ptr = buffer->get_buffer();
+  unsigned char *bytes_ptr  = m_bytes->get_buffer();
+
+  if (memcmp(buffer_ptr, bytes_ptr, size)) {
     std::string b_buffer, b_bytes;
     int i;
 
-    for (i = 0; m_bytes->get_size() > i; ++i) {
-      b_buffer += (boost::format(" %|1$02x|") % buffer->get()[i]).str();
-      b_bytes  += (boost::format(" %|1$02x|") % m_bytes->get()[i]).str();
+    for (i = 0; size > i; ++i) {
+      b_buffer += (boost::format(" %|1$02x|") % buffer_ptr[i]).str();
+      b_bytes  += (boost::format(" %|1$02x|") % bytes_ptr[i]).str();
     }
     throw compression_error_c(boost::format(Y("Header removal compression not possible because the buffer did not start with the bytes that should be removed. "
                                               "Wanted bytes:%1%; found:%2%.")) % b_bytes % b_buffer);
   }
 
-  memmove(buffer->get(), buffer->get() + m_bytes->get_size(),
-          buffer->get_size() - m_bytes->get_size());
-  buffer->set_size(buffer->get_size() - m_bytes->get_size());
+  int new_size = buffer->get_size() - size;
+  memmove(buffer_ptr, buffer_ptr + size, new_size);
+  buffer->set_size(new_size);
 }
 
 void
 header_removal_compressor_c::set_track_headers(KaxContentEncoding
                                                &c_encoding) {
-  KaxContentCompression *c_comp;
-
   compressor_c::set_track_headers(c_encoding);
 
-  c_comp = &GetChild<KaxContentCompression>(c_encoding);
+  KaxContentCompression *c_comp = &GetChild<KaxContentCompression>(c_encoding);
   // Set compression parameters.
-  static_cast<EbmlBinary *>(&GetChild<KaxContentCompSettings>(*c_comp))->
-    SetBuffer(m_bytes->get(), m_bytes->get_size());
+  static_cast<EbmlBinary *>(&GetChild<KaxContentCompSettings>(*c_comp))->SetBuffer(m_bytes->get_buffer(), m_bytes->get_size());
 }
 
 mpeg4_p2_compressor_c::mpeg4_p2_compressor_c() {
   if (!hack_engaged(ENGAGE_NATIVE_MPEG4))
     mxerror(Y("The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"));
 
-  memory_cptr bytes(new memory_c((unsigned char *)safemalloc(4), 4, true));
-  put_uint32_be(bytes->get(), 0x000001b6);
+  memory_cptr bytes = memory_c::alloc(4);
+  put_uint32_be(bytes->get_buffer(), 0x000001b6);
   set_bytes(bytes);
 }
 
 // ---------------------------------------------------------------------
 
 compressor_c::~compressor_c() {
-  if (items != 0)
-    mxverb(2,
-           boost::format("compression: Overall stats: raw size: %1%, compressed size: %2%, items: %3%, ratio: %|4$.2f|%%, avg bytes per item: %5%\n")
-           % raw_size % compressed_size % items % (compressed_size * 100.0 / raw_size) % (compressed_size / items));
+  if (0 == items)
+    return;
+
+  mxverb(2,
+         boost::format("compression: Overall stats: raw size: %1%, compressed size: %2%, items: %3%, ratio: %|4$.2f|%%, avg bytes per item: %5%\n")
+         % raw_size % compressed_size % items % (compressed_size * 100.0 / raw_size) % (compressed_size / items));
 }
 
 void
 compressor_c::set_track_headers(KaxContentEncoding &c_encoding) {
-  KaxContentCompression *c_comp;
-
-  c_comp = &GetChild<KaxContentCompression>(c_encoding);
+  KaxContentCompression *c_comp = &GetChild<KaxContentCompression>(c_encoding);
   // Set compression method.
-  *static_cast<EbmlUInteger *>(&GetChild<KaxContentCompAlgo>(*c_comp)) =
-    compression_method_map[method];
+  *static_cast<EbmlUInteger *>(&GetChild<KaxContentCompAlgo>(*c_comp)) = compression_method_map[method];
 }
 
 compressor_ptr
 compressor_c::create(compression_method_e method) {
-  if ((method <= COMPRESSION_UNSPECIFIED) ||
-      (method > COMPRESSION_NUM))
+  if ((COMPRESSION_UNSPECIFIED >= method) || (COMPRESSION_NUM < method))
     return compressor_ptr();
 
   return create(compression_methods[method]);
@@ -372,116 +368,98 @@ compressor_c::create(const char *method) {
 
 // ------------------------------------------------------------------------
 
-kax_content_encoding_t::kax_content_encoding_t():
-  order(0), type(0), scope(CONTENT_ENCODING_SCOPE_BLOCK), comp_algo(0),
-  enc_algo(0), sig_algo(0), sig_hash_algo(0) {
+kax_content_encoding_t::kax_content_encoding_t()
+  : order(0)
+  , type(0)
+  , scope(CONTENT_ENCODING_SCOPE_BLOCK)
+  , comp_algo(0)
+  , enc_algo(0)
+  , sig_algo(0)
+  , sig_hash_algo(0)
+{
 }
 
-content_decoder_c::content_decoder_c():
-  ok(true) {
+content_decoder_c::content_decoder_c()
+  : ok(true)
+{
 }
 
-content_decoder_c::content_decoder_c(KaxTrackEntry &ktentry):
-  ok(true) {
+content_decoder_c::content_decoder_c(KaxTrackEntry &ktentry)
+  : ok(true)
+{
   initialize(ktentry);
 }
 
 content_decoder_c::~content_decoder_c() {
 }
 
-#define EBMLBIN_TO_COUNTEDMEM(bin) \
-  memory_cptr(new memory_c((unsigned char *)safememdup(bin->GetBuffer(), \
-                                                       bin->GetSize()), \
-                           bin->GetSize(), true))
+#define EBMLBIN_TO_COUNTEDMEM(bin) clone_memory(bin->GetBuffer(), bin->GetSize())
 
 bool
 content_decoder_c::initialize(KaxTrackEntry &ktentry) {
-  KaxContentEncodings *kcencodings;
-  int kcenc_idx, tid;
-
   encodings.clear();
 
-  kcencodings = FINDFIRST(&ktentry, KaxContentEncodings);
+  KaxContentEncodings *kcencodings = FINDFIRST(&ktentry, KaxContentEncodings);
   if (NULL == kcencodings)
     return true;
 
-  tid = kt_get_number(ktentry);
+  int tid = kt_get_number(ktentry);
 
+  int kcenc_idx;
   for (kcenc_idx = 0; kcenc_idx < kcencodings->ListSize(); kcenc_idx++) {
-    KaxContentEncoding *kcenc;
-    KaxContentEncodingOrder *ce_order;
-    KaxContentEncodingType *ce_type;
-    KaxContentEncodingScope *ce_scope;
-    KaxContentCompression *ce_comp;
-    KaxContentEncryption *ce_enc;
-    kax_content_encoding_t enc;
-    std::vector<kax_content_encoding_t>::iterator ce_ins_it;
-
-    kcenc = dynamic_cast<KaxContentEncoding *>((*kcencodings)[kcenc_idx]);
+    KaxContentEncoding *kcenc = dynamic_cast<KaxContentEncoding *>((*kcencodings)[kcenc_idx]);
     if (NULL == kcenc)
       continue;
 
+    kax_content_encoding_t enc;
     memset(&enc, 0, sizeof(kax_content_encoding_t));
 
-    ce_order = FINDFIRST(kcenc, KaxContentEncodingOrder);
-    if (ce_order != NULL)
+    KaxContentEncodingOrder *ce_order = FINDFIRST(kcenc, KaxContentEncodingOrder);
+    if (NULL != ce_order)
       enc.order = uint32(*ce_order);
 
-    ce_type = FINDFIRST(kcenc, KaxContentEncodingType);
-    if (ce_type != NULL)
+    KaxContentEncodingType *ce_type = FINDFIRST(kcenc, KaxContentEncodingType);
+    if (NULL != ce_type)
       enc.type = uint32(*ce_type);
 
-    ce_scope = FINDFIRST(kcenc, KaxContentEncodingScope);
-    if (ce_scope != NULL)
-      enc.scope = uint32(*ce_scope);
-    else
-      enc.scope = 1;
+    KaxContentEncodingScope *ce_scope = FINDFIRST(kcenc, KaxContentEncodingScope);
+    enc.scope = NULL != ce_scope ? uint32(*ce_scope) : 1;
 
-    ce_comp = FINDFIRST(kcenc, KaxContentCompression);
-    if (ce_comp != NULL) {
-      KaxContentCompAlgo *cc_algo;
-      KaxContentCompSettings *cc_settings;
-
-      cc_algo = FINDFIRST(ce_comp, KaxContentCompAlgo);
-      if (cc_algo != NULL)
+    KaxContentCompression *ce_comp = FINDFIRST(kcenc, KaxContentCompression);
+    if (NULL != ce_comp) {
+      KaxContentCompAlgo *cc_algo = FINDFIRST(ce_comp, KaxContentCompAlgo);
+      if (NULL != cc_algo)
         enc.comp_algo = uint32(*cc_algo);
 
-      cc_settings = FINDFIRST(ce_comp, KaxContentCompSettings);
-      if (cc_settings != NULL)
+      KaxContentCompSettings *cc_settings = FINDFIRST(ce_comp, KaxContentCompSettings);
+      if (NULL != cc_settings)
         enc.comp_settings = EBMLBIN_TO_COUNTEDMEM(cc_settings);
     }
 
-    ce_enc = FINDFIRST(kcenc, KaxContentEncryption);
-    if (ce_enc != NULL) {
-      KaxContentEncAlgo *ce_ealgo;
-      KaxContentEncKeyID *ce_ekeyid;
-      KaxContentSigAlgo *ce_salgo;
-      KaxContentSigHashAlgo *ce_shalgo;
-      KaxContentSigKeyID *ce_skeyid;
-      KaxContentSignature *ce_signature;
-
-      ce_ealgo = FINDFIRST(ce_enc, KaxContentEncAlgo);
-      if (ce_ealgo != NULL)
+    KaxContentEncryption *ce_enc = FINDFIRST(kcenc, KaxContentEncryption);
+    if (NULL != ce_enc) {
+      KaxContentEncAlgo *ce_ealgo = FINDFIRST(ce_enc, KaxContentEncAlgo);
+      if (NULL != ce_ealgo)
         enc.enc_algo = uint32(*ce_ealgo);
 
-      ce_ekeyid = FINDFIRST(ce_enc, KaxContentEncKeyID);
-      if (ce_ekeyid != NULL)
+      KaxContentEncKeyID *ce_ekeyid = FINDFIRST(ce_enc, KaxContentEncKeyID);
+      if (NULL != ce_ekeyid)
         enc.enc_keyid = EBMLBIN_TO_COUNTEDMEM(ce_ekeyid);
 
-      ce_salgo = FINDFIRST(ce_enc, KaxContentSigAlgo);
-      if (ce_salgo != NULL)
+      KaxContentSigAlgo *ce_salgo = FINDFIRST(ce_enc, KaxContentSigAlgo);
+      if (NULL != ce_salgo)
         enc.enc_algo = uint32(*ce_salgo);
 
-      ce_shalgo = FINDFIRST(ce_enc, KaxContentSigHashAlgo);
-      if (ce_shalgo != NULL)
+      KaxContentSigHashAlgo *ce_shalgo = FINDFIRST(ce_enc, KaxContentSigHashAlgo);
+      if (NULL != ce_shalgo)
         enc.enc_algo = uint32(*ce_shalgo);
 
-      ce_skeyid = FINDFIRST(ce_enc, KaxContentSigKeyID);
-      if (ce_skeyid != NULL)
+      KaxContentSigKeyID *ce_skeyid = FINDFIRST(ce_enc, KaxContentSigKeyID);
+      if (NULL != ce_skeyid)
         enc.sig_keyid = EBMLBIN_TO_COUNTEDMEM(ce_skeyid);
 
-      ce_signature = FINDFIRST(ce_enc, KaxContentSignature);
-      if (ce_signature != NULL)
+      KaxContentSignature *ce_signature = FINDFIRST(ce_enc, KaxContentSignature);
+      if (NULL != ce_signature)
         enc.signature = EBMLBIN_TO_COUNTEDMEM(ce_signature);
 
     }
@@ -533,7 +511,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
       break;
     }
 
-    ce_ins_it = encodings.begin();
+    std::vector<kax_content_encoding_t>::iterator ce_ins_it = encodings.begin();
     while ((ce_ins_it != encodings.end()) && (enc.order <= (*ce_ins_it).order))
       ce_ins_it++;
     encodings.insert(ce_ins_it, enc);
@@ -545,11 +523,10 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
 void
 content_decoder_c::reverse(memory_cptr &memory,
                            content_encoding_scope_e scope) {
-  std::vector<kax_content_encoding_t>::const_iterator ce;
-
   if (!is_ok() || encodings.empty())
     return;
 
+  std::vector<kax_content_encoding_t>::const_iterator ce;
   mxforeach(ce, encodings)
     if (0 != (ce->scope & scope))
       ce->compressor->decompress(memory);

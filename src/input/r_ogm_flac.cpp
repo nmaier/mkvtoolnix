@@ -296,7 +296,7 @@ ogm_a_flac_demuxer_c::create_packetizer(track_info_c &ti) {
   size               = 0;
 
   for (i = 1; i < (int)packet_data.size(); i++) {
-    memcpy(&buf[size], packet_data[i]->get(), packet_data[i]->get_size());
+    memcpy(&buf[size], packet_data[i]->get_buffer(), packet_data[i]->get_size());
     size += packet_data[i]->get_size();
   }
 

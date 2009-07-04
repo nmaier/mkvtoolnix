@@ -179,7 +179,7 @@ xml_formatter_c::xml_formatter_c(mm_io_c *out,
   , m_depth(0)
   , m_state(XMLF_STATE_NONE)
 {
-  m_xml_source = m_temp_io.get();
+  m_xml_source = m_temp_io.get_object();
 }
 
 xml_formatter_c::~xml_formatter_c() {

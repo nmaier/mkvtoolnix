@@ -85,7 +85,7 @@ xtr_base_c::handle_frame(memory_cptr &frame,
                          bool discardable,
                          bool references_valid) {
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
-  m_out->write(frame->get(), frame->get_size());
+  m_out->write(frame);
   m_bytes_written += frame->get_size();
 }
 
@@ -199,12 +199,12 @@ xtr_fullraw_c::create_file(xtr_base_c *master,
   if ((NULL != priv) && (0 != priv->GetSize())) {
     memory_cptr mem(new memory_c(priv->GetBuffer(), priv->GetSize(), false));
     m_content_decoder.reverse(mem, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
-    m_out->write(mem->get(), mem->get_size());
+    m_out->write(mem);
   }
 }
 
 void
 xtr_fullraw_c::handle_codec_state(memory_cptr &codec_state) {
   m_content_decoder.reverse(codec_state, CONTENT_ENCODING_SCOPE_CODECPRIVATE);
-  m_out->write(codec_state->get(), codec_state->get_size());
+  m_out->write(codec_state);
 }

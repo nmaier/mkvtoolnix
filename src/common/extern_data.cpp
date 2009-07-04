@@ -2658,10 +2658,10 @@ guess_mime_type_by_content(magic_t &m,
       if (buf->get_size() < (buffer_size + bytes_to_read))
         buf->resize(buffer_size + bytes_to_read);
 
-      int64_t bytes_read     = file.read(buf->get() + buffer_size, bytes_to_read);
+      int64_t bytes_read     = file.read(buf->get_buffer() + buffer_size, bytes_to_read);
       buffer_size           += bytes_read;
 
-      std::string mime_type  = magic_buffer(m, buf->get(), buffer_size);
+      std::string mime_type  = magic_buffer(m, buf->get_buffer(), buffer_size);
 
       if (!mime_type.empty())
         return mime_type;

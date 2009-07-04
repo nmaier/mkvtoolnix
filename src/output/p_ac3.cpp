@@ -130,7 +130,7 @@ ac3_packetizer_c::process(packet_cptr packet) {
   unsigned long header;
   ac3_header_t ac3header;
 
-  add_to_buffer(packet->data->get(), packet->data->get_size());
+  add_to_buffer(packet->data->get_buffer(), packet->data->get_size());
   while ((ac3_packet = get_ac3_packet(&header, &ac3header)) != NULL) {
     adjust_header_values(ac3header);
 
