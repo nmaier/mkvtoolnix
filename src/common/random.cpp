@@ -48,7 +48,7 @@ random_c::generate_bytes(void *destination,
     int i;
 
     m_use_uuidcreate = true;
-    RPC_STATUC status = UuidCreate(&first_uuid);
+    RPC_STATUS status = UuidCreate(&first_uuid);
     if ((RPC_S_OK == status) || (RPC_S_UUID_LOCAL_ONLY == status)) {
       for (i = 0; i < 5; ++i) {
         status = UuidCreate(&uuid);
