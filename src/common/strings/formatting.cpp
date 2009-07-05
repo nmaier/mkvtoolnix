@@ -19,7 +19,10 @@
 std::string
 format_timecode(int64_t timecode,
                 unsigned int precision) {
-  std::string result = (boost::format("%|1$02d|:%|2$02d|:%|3$02d|")
+  static boost::format s_bf_format("%|1$02d|:%|2$02d|:%|3$02d|");
+  static boost::format s_bf_decimals(".%|1$09d|");
+
+  std::string result = (s_bf_format
                         % (int)( timecode / 60 / 60 / 1000000000)
                         % (int)((timecode      / 60 / 1000000000) % 60)
                         % (int)((timecode           / 1000000000) % 60)).str();
@@ -28,7 +31,7 @@ format_timecode(int64_t timecode,
     precision = 9;
 
   if (precision) {
-    std::string decimals = (boost::format(".%|1$09d|") % (int)(timecode % 1000000000)).str();
+    std::string decimals = (s_bf_decimals % (int)(timecode % 1000000000)).str();
 
     if (decimals.length() > (precision + 1))
       decimals.erase(precision + 1);
@@ -39,24 +42,26 @@ format_timecode(int64_t timecode,
   return result;
 }
 
+static boost::format s_bf_single_value("%1%");
+
 std::string
 to_string(int64_t value) {
-  return (boost::format("%1%") % value).str();
+  return (s_bf_single_value % value).str();
 }
 
 std::string
 to_string(int value) {
-  return (boost::format("%1%") % value).str();
+  return (s_bf_single_value % value).str();
 }
 
 std::string
 to_string(uint64_t value) {
-  return (boost::format("%1%") % value).str();
+  return (s_bf_single_value % value).str();
 }
 
 std::string
 to_string(unsigned int value) {
-  return (boost::format("%1%") % value).str();
+  return (s_bf_single_value % value).str();
 }
 
 std::string
@@ -73,11 +78,13 @@ std::string
 to_string(int64_t numerator,
           int64_t denominator,
           unsigned int precision) {
-  std::string output      = (boost::format("%1%") % (numerator / denominator)).str();
+  std::string output      = (s_bf_single_value % (numerator / denominator)).str();
   int64_t fractional_part = numerator % denominator;
 
   if (0 != fractional_part) {
-    std::string format         = (boost::format(".%%0%1%d") % precision).str();
+    static boost::format s_bf_precision_format_format(".%%0%1%d");
+
+    std::string format         = (s_bf_precision_format_format % precision).str();
     output                    += (boost::format(format) % fractional_part).str();
     std::string::iterator end  = output.end() - 1;
 

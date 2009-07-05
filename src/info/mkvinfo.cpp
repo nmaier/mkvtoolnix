@@ -29,7 +29,9 @@
 
 #include <algorithm>
 #include <iostream>
+#include <map>
 #include <typeinfo>
+#include <vector>
 
 extern "C" {
 #include <avilib.h>
@@ -90,43 +92,103 @@ typedef struct {
   int64_t size;
 } kax_track_t;
 
-kax_track_t **tracks = NULL;
-int num_tracks = 0;
-bool use_gui = false;
-bool calc_checksums = false;
-bool show_summary = false;
-bool show_hexdump = false;
+std::vector<kax_track_t *> tracks;
+std::map<unsigned int, kax_track_t *> tracks_by_number, tracks_by_uid;
+bool use_gui         = false;
+bool calc_checksums  = false;
+bool show_summary    = false;
+bool show_hexdump    = false;
 int hexdump_max_size = 16;
-uint64_t tc_scale = TIMECODE_SCALE;
+uint64_t tc_scale    = TIMECODE_SCALE;
+std::vector<boost::format> g_common_boost_formats;
+
+#define BF_DO(n)                             g_common_boost_formats[n]
+#define BF_ADD(s)                            g_common_boost_formats.push_back(boost::format(s))
+#define BF_SHOW_UNKNOWN_ELEMENT              BF_DO( 0)
+#define BF_EBMLVOID                          BF_DO( 1)
+#define BF_FORMAT_BINARY_1                   BF_DO( 2)
+#define BF_FORMAT_BINARY_2                   BF_DO( 3)
+#define BF_BLOCK_GROUP_BLOCK_BASICS          BF_DO( 4)
+#define BF_BLOCK_GROUP_BLOCK_ADLER           BF_DO( 3) // Intentional -- same format.
+#define BF_BLOCK_GROUP_BLOCK_FRAME           BF_DO( 5)
+#define BF_BLOCK_GROUP_DURATION              BF_DO( 6)
+#define BF_BLOCK_GROUP_REFERENCE_1           BF_DO( 7)
+#define BF_BLOCK_GROUP_REFERENCE_2           BF_DO( 8)
+#define BF_BLOCK_GROUP_REFERENCE_PRIORITY    BF_DO( 9)
+#define BF_BLOCK_GROUP_VIRTUAL               BF_DO(10)
+#define BF_BLOCK_GROUP_REFERENCE_VIRTUAL     BF_DO(11)
+#define BF_BLOCK_GROUP_ADD_ID                BF_DO(12)
+#define BF_BLOCK_GROUP_ADDITIONAL            BF_DO(13)
+#define BF_BLOCK_GROUP_SLICE_LACE            BF_DO(14)
+#define BF_BLOCK_GROUP_SLICE_FRAME           BF_DO(15)
+#define BF_BLOCK_GROUP_SLICE_DELAY           BF_DO(16)
+#define BF_BLOCK_GROUP_SLICE_DURATION        BF_DO(17)
+#define BF_BLOCK_GROUP_SLICE_ADD_ID          BF_DO(18)
+#define BF_BLOCK_GROUP_SUMMARY_POSITION      BF_DO(19)
+#define BF_BLOCK_GROUP_SUMMARY_WITH_DURATION BF_DO(20)
+#define BF_BLOCK_GROUP_SUMMARY_NO_DURATION   BF_DO(21)
+#define BF_BLOCK_GROUP_SUMMARY_V2            BF_DO(22)
+#define BF_SIMPLE_BLOCK_BASICS               BF_DO(23)
+#define BF_SIMPLE_BLOCK_ADLER                BF_DO( 3) // Intentional -- same format.
+#define BF_SIMPLE_BLOCK_FRAME                BF_DO(24)
+#define BF_SIMPLE_BLOCK_POSITION             BF_DO(19) // Intentional -- same format.
+#define BF_SIMPLE_BLOCK_SUMMARY              BF_DO(25)
+#define BF_SIMPLE_BLOCK_SUMMARY_V2           BF_DO(26)
+#define BF_HANDLE_ELEMENTS_REC_UNKNOWN       BF_DO(27)
+#define BF_CLUSTER_TIMECODE                  BF_DO(28)
+#define BF_CLUSTER_POSITION                  BF_DO(29)
+#define BF_CLUSTER_PREVIOUS_SIZE             BF_DO(30)
 
 void
-add_track(kax_track_t *s) {
-  tracks = (kax_track_t **)saferealloc(tracks, sizeof(kax_track_t *) *
-                                       (num_tracks + 1));
-  tracks[num_tracks] = s;
-  num_tracks++;
+init_common_boost_formats() {
+  BF_ADD(Y("(Unknown element: %1%; ID: 0x%2% size: %3%)"));                                                     //  0 -- BF_SHOW_UNKNOWN_ELEMENT
+  BF_ADD(Y("EbmlVoid (size: %1%)"));                                                                            //  1 -- BF_EBMLVOID
+  BF_ADD(Y("length %1%, data: %2%"));                                                                           //  2 -- BF_FORMAT_BINARY_1
+  BF_ADD(Y(" (adler: 0x%|1$08x|)"));                                                                            //  3 -- BF_FORMAT_BINARY_2
+  BF_ADD(Y("Block (track number %1%, %2% frame(s), timecode %|3$.3f|s = %4%)"));                                //  4 -- BF_BLOCK_GROUP_BLOCK_SUMMARY
+  BF_ADD(Y("Frame with size %1%%2%%3%"));                                                                       //  5 -- BF_BLOCK_GROUP_BLOCK_FRAME
+  BF_ADD(Y("Block duration: %1%.%|2$06d|ms"));                                                                  //  6 -- BF_BLOCK_GROUP_DURATION
+  BF_ADD(Y("Reference block: -%1%.%|2$06d|ms"));                                                                //  7 -- BF_BLOCK_GROUP_REFERENCE_1
+  BF_ADD(Y("Reference block: %1%.%|2$06d|ms"));                                                                 //  8 -- BF_BLOCK_GROUP_REFERENCE_2
+  BF_ADD(Y("Reference priority: %1%"));                                                                         //  9 -- BF_BLOCK_GROUP_REFERENCE_PRIORITY
+  BF_ADD(Y("Block virtual: %1%"));                                                                              // 10 -- BF_BLOCK_GROUP_VIRTUAL
+  BF_ADD(Y("Reference virtual: %1%"));                                                                          // 11 -- BF_BLOCK_GROUP_REFERENCE_VIRTUAL
+  BF_ADD(Y("AdditionalID: %1%"));                                                                               // 12 -- BF_BLOCK_GROUP_ADD_ID
+  BF_ADD(Y("Block additional: %1%"));                                                                           // 13 -- BF_BLOCK_GROUP_ADDITIONAL
+  BF_ADD(Y("Lace number: %1%"));                                                                                // 14 -- BF_BLOCK_GROUP_SLICE_LACE
+  BF_ADD(Y("Frame number: %1%"));                                                                               // 15 -- BF_BLOCK_GROUP_SLICE_FRAME
+  BF_ADD(Y("Delay: %|1$.3f|ms"));                                                                               // 16 -- BF_BLOCK_GROUP_SLICE_DELAY
+  BF_ADD(Y("Duration: %|1$.3f|ms"));                                                                            // 17 -- BF_BLOCK_GROUP_SLICE_DURATION
+  BF_ADD(Y("Block additional ID: %1%"));                                                                        // 18 -- BF_BLOCK_GROUP_SLICE_ADD_ID
+  BF_ADD(Y(", position %1%"));                                                                                  // 19 -- BF_BLOCK_GROUP_SUMMARY_POSITION
+  BF_ADD(Y("%1% frame, track %2%, timecode %3% (%4%), duration %|5$.3f|, size %6%, adler 0x%|7$08x|%8%%9%\n")); // 20 -- BF_BLOCK_GROUP_SUMMARY_WITH_DURATION
+  BF_ADD(Y("%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"));                    // 21 -- BF_BLOCK_GROUP_SUMMARY_NO_DURATION
+  BF_ADD(Y("[%1% frame for track %2%, timecode %3%]"));                                                         // 22 -- BF_BLOCK_GROUP_SUMMARY_V2
+  BF_ADD(Y("SimpleBlock (%1%track number %2%, %3% frame(s), timecode %|4$.3f|s = %5%)"));                       // 23 -- BF_SIMPLE_BLOCK_BASICS
+  BF_ADD(Y("Frame with size %1%%2%%3%"));                                                                       // 24 -- BF_SIMPLE_BLOCK_FRAME
+  BF_ADD(Y("%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%\n"));                       // 25 -- BF_SIMPLE_BLOCK_SUMMARY
+  BF_ADD(Y("[%1% frame for track %2%, timecode %3%]"));                                                         // 26 -- BF_SIMPLE_BLOCK_SUMMARY_V2
+  BF_ADD(Y("(Unknown element: %1%)"));                                                                          // 27 -- BF_HANDLE_ELEMENTS_REC_UNKNOWN
+  BF_ADD(Y("Cluster timecode: %|1$.3f|s"));                                                                     // 28 -- BF_CLUSTER_TIMECODE
+  BF_ADD(Y("Cluster position: %1%"));                                                                           // 29 -- BF_CLUSTER_POSITION
+  BF_ADD(Y("Cluster previous size: %1%"));                                                                      // 30 -- BF_CLUSTER_PREVIOUS_SIZE
+}
+
+void
+add_track(kax_track_t *t) {
+  tracks.push_back(t);
+  tracks_by_number[t->tnum] = t;
+  tracks_by_uid[t->tuid]    = t;
 }
 
 kax_track_t *
 find_track(int tnum) {
-  int i;
-
-  for (i = 0; i < num_tracks; i++)
-    if (tracks[i]->tnum == tnum)
-      return tracks[i];
-
-  return NULL;
+  return tracks_by_number[tnum];
 }
 
 kax_track_t *
 find_track_by_uid(int tuid) {
-  int i;
-
-  for (i = 0; i < num_tracks; i++)
-    if (tracks[i]->tuid == tuid)
-      return tracks[i];
-
-  return NULL;
+  return tracks_by_uid[tuid];
 }
 
 void
@@ -164,12 +226,14 @@ static void
 _show_unknown_element(EbmlStream *es,
                       EbmlElement *e,
                       int level) {
+  static boost::format s_bf_show_unknown_element("%|1$02x|");
+
   int i;
   std::string element_id;
   for (i = e->Generic().GlobalId.Length - 1; 0 <= i; --i)
-    element_id += (boost::format("%|1$02x|") % ((e->Generic().GlobalId.Value >> (i * 8)) & 0xff)).str();
+    element_id += (s_bf_show_unknown_element % ((e->Generic().GlobalId.Value >> (i * 8)) & 0xff)).str();
 
-  std::string s = (boost::format(Y("(Unknown element: %1%; ID: 0x%2% size: %3%)")) % e->Generic().DebugName % element_id % (e->GetSize() + e->HeadSize())).str();
+  std::string s = (BF_SHOW_UNKNOWN_ELEMENT % e->Generic().DebugName % element_id % (e->GetSize() + e->HeadSize())).str();
   _show_element(e, es, true, level, s);
 }
 
@@ -210,12 +274,14 @@ _show_element(EbmlElement *l,
 static std::string
 create_hexdump(const unsigned char *buf,
                int size) {
+  static boost::format s_bf_create_hexdump(" %|1$02x|");
+
   std::string hex(" hexdump");
   int bmax = std::max(size, hexdump_max_size);
   int b;
 
   for (b = 0; b < bmax; ++b)
-    hex += (boost::format(" %|1$02x|") % buf[b]).str();
+    hex += (s_bf_create_hexdump % buf[b]).str();
 
   return hex;
 }
@@ -223,10 +289,12 @@ create_hexdump(const unsigned char *buf,
 static std::string
 to_hex(const unsigned char *buf,
        int size) {
+  static boost::format s_bf_to_hex(" 0x%|1$02x|");
+
   std::string hex;
   int b;
   for (b = 0; b < size; ++b)
-    hex += (boost::format(" 0x%|1$02x|") % (int)buf[b]).str();
+    hex += (s_bf_to_hex % (int)buf[b]).str();
 
   return hex;
 }
@@ -280,7 +348,7 @@ is_global(EbmlStream *es,
           EbmlElement *l,
           int level) {
   if (is_id(l, EbmlVoid)) {
-    show_element(l, level, (boost::format(Y("EbmlVoid (size: %1%)")) % (l->ElementSize() - l->HeadSize())).str());
+    show_element(l, level, (BF_EBMLVOID % (l->ElementSize() - l->HeadSize())).str());
     return true;
 
   } else if (is_id(l, EbmlCrc32)) {
@@ -364,13 +432,13 @@ format_binary(EbmlBinary &bin,
               int max_len = 10) {
   int len            = std::max(max_len, (int)bin.GetSize());
   const binary *b    = bin.GetBuffer();
-  std::string result = (boost::format(Y("length %1%, data: %2%")) % bin.GetSize() % to_hex(b, std::max(max_len, (int)bin.GetSize()))).str();
+  std::string result = (BF_FORMAT_BINARY_1 % bin.GetSize() % to_hex(b, std::max(max_len, (int)bin.GetSize()))).str();
 
   if (len < bin.GetSize())
     result += "...";
 
   if (calc_checksums)
-    result += (boost::format(Y(" (adler: 0x%|1$08x|)")) % calc_adler32(bin.GetBuffer(), bin.GetSize())).str();
+    result += (BF_FORMAT_BINARY_2 % calc_adler32(bin.GetBuffer(), bin.GetSize())).str();
 
   strip(result);
 
@@ -1270,7 +1338,7 @@ def_handle2(block_group,
       KaxBlock &block = *static_cast<KaxBlock *>(l3);
       block.SetParent(*cluster);
       show_element(l3, 3,
-                   boost::format(Y("Block (track number %1%, %2% frame(s), timecode %|3$.3f|s = %4%)"))
+                   BF_BLOCK_GROUP_BLOCK_BASICS
                    % block.TrackNum()
                    % block.NumberFrames()
                    % ((float)block.GlobalTimecode() / 1000000000.0)
@@ -1288,13 +1356,13 @@ def_handle2(block_group,
 
         std::string adler_str;
         if (calc_checksums)
-          adler_str = (boost::format(Y(" (adler: 0x%|1$08x|)")) % adler).str();
+          adler_str = (BF_BLOCK_GROUP_BLOCK_ADLER % adler).str();
 
         std::string hex;
         if (show_hexdump)
           hex = create_hexdump(data.Buffer(), data.Size());
 
-        show_element(NULL, 4, boost::format(Y("Frame with size %1%%2%%3%")) % data.Size() % adler_str % hex);
+        show_element(NULL, 4, BF_BLOCK_GROUP_BLOCK_FRAME % data.Size() % adler_str % hex);
 
         frame_sizes.push_back(data.Size());
         frame_adlers.push_back(adler);
@@ -1305,7 +1373,7 @@ def_handle2(block_group,
     } else if (is_id(l3, KaxBlockDuration)) {
       KaxBlockDuration &duration = *static_cast<KaxBlockDuration *>(l3);
       bduration = ((float)uint64(duration)) * tc_scale / 1000000.0;
-      show_element(l3, 3, boost::format(Y("Block duration: %1%.%|2$06d|ms")) % (uint64(duration) * tc_scale / 1000000) % (uint64(duration) * tc_scale % 1000000));
+      show_element(l3, 3, BF_BLOCK_GROUP_DURATION % (uint64(duration) * tc_scale / 1000000) % (uint64(duration) * tc_scale % 1000000));
 
     } else if (is_id(l3, KaxReferenceBlock)) {
       KaxReferenceBlock &k_reference = *static_cast<KaxReferenceBlock *>(l3);
@@ -1314,25 +1382,25 @@ def_handle2(block_group,
       if (0 >= reference) {
         bref_found  = true;
         reference  *= -1;
-        show_element(l3, 3, boost::format(Y("Reference block: -%1%.%|2$06d|ms")) % (reference / 1000000) % (reference % 1000000));
+        show_element(l3, 3, BF_BLOCK_GROUP_REFERENCE_1 % (reference / 1000000) % (reference % 1000000));
 
       } else if (0 < reference) {
         fref_found = true;
-        show_element(l3, 3, boost::format(Y("Reference block: %1%.%|2$06d|ms")) % (reference / 1000000) % (reference % 1000000));
+        show_element(l3, 3, BF_BLOCK_GROUP_REFERENCE_2 % (reference / 1000000) % (reference % 1000000));
       }
 
     } else if (is_id(l3, KaxReferencePriority)) {
       KaxReferencePriority &priority = *static_cast<KaxReferencePriority *>(l3);
-      show_element(l3, 3, boost::format(Y("Reference priority: %1%")) % uint64(priority));
+      show_element(l3, 3, BF_BLOCK_GROUP_REFERENCE_PRIORITY % uint64(priority));
 
 #if MATROSKA_VERSION >= 2
     } else if (is_id(l3, KaxBlockVirtual)) {
       KaxBlockVirtual &bvirt = *static_cast<KaxBlockVirtual *>(l3);
-      show_element(l3, 3, boost::format(Y("Block virtual: %1%")) % format_binary(bvirt));
+      show_element(l3, 3, BF_BLOCK_GROUP_VIRTUAL % format_binary(bvirt));
 
     } else if (is_id(l3, KaxReferenceVirtual)) {
       KaxReferenceVirtual &ref_virt = *static_cast<KaxReferenceVirtual *>(l3);
-      show_element(l3, 3, boost::format(Y("Reference virtual: %1%")) % int64(ref_virt));
+      show_element(l3, 3, BF_BLOCK_GROUP_REFERENCE_VIRTUAL % int64(ref_virt));
 
 #endif // MATROSKA_VERSION >= 2
     } else if (is_id(l3, KaxBlockAdditions)) {
@@ -1353,11 +1421,11 @@ def_handle2(block_group,
 
             if (is_id(l5, KaxBlockAddID)) {
               KaxBlockAddID &add_id = *static_cast<KaxBlockAddID *>(l5);
-              show_element(l5, 5, boost::format(Y("AdditionalID: %1%")) % uint64(add_id));
+              show_element(l5, 5, BF_BLOCK_GROUP_ADD_ID % uint64(add_id));
 
             } else if (is_id(l5, KaxBlockAdditional)) {
               KaxBlockAdditional &block = *static_cast<KaxBlockAdditional *>(l5);
-              show_element(l5, 5, boost::format(Y("Block additional: %1%")) % format_binary(block));
+              show_element(l5, 5, BF_BLOCK_GROUP_ADDITIONAL % format_binary(block));
 
             } else if (!is_global(es, l5, 5))
               show_unknown_element(l5, 5);
@@ -1387,23 +1455,23 @@ def_handle2(block_group,
 
             if (is_id(l5, KaxSliceLaceNumber)) {
               KaxSliceLaceNumber &slace_number = *static_cast<KaxSliceLaceNumber *>(l5);
-              show_element(l5, 5, boost::format(Y("Lace number: %1%")) % uint64(slace_number));
+              show_element(l5, 5, BF_BLOCK_GROUP_SLICE_LACE % uint64(slace_number));
 
             } else if (is_id(l5, KaxSliceFrameNumber)) {
               KaxSliceFrameNumber &sframe_number = *static_cast<KaxSliceFrameNumber *>(l5);
-              show_element(l5, 5, boost::format(Y("Frame number: %1%")) % uint64(sframe_number));
+              show_element(l5, 5, BF_BLOCK_GROUP_SLICE_FRAME % uint64(sframe_number));
 
             } else if (is_id(l5, KaxSliceDelay)) {
               KaxSliceDelay &sdelay = *static_cast<KaxSliceDelay *>(l5);
-              show_element(l5, 5, boost::format(Y("Delay: %|1$.3f|ms")) % (((float)uint64(sdelay)) * tc_scale / 1000000.0));
+              show_element(l5, 5, BF_BLOCK_GROUP_SLICE_DELAY % (((float)uint64(sdelay)) * tc_scale / 1000000.0));
 
             } else if (is_id(l5, KaxSliceDuration)) {
               KaxSliceDuration &sduration = *static_cast<KaxSliceDuration *>(l5);
-              show_element(l5, 5, boost::format(Y("Duration: %|1$.3f|ms")) % (((float)uint64(sduration)) * tc_scale / 1000000.0));
+              show_element(l5, 5, BF_BLOCK_GROUP_SLICE_DURATION % (((float)uint64(sduration)) * tc_scale / 1000000.0));
 
             } else if (is_id(l5, KaxSliceBlockAddID)) {
               KaxSliceBlockAddID &sbaid = *static_cast<KaxSliceBlockAddID *>(l5);
-              show_element(l5, 5, boost::format(Y("Block additional ID: %1%")) % uint64(sbaid));
+              show_element(l5, 5, BF_BLOCK_GROUP_SLICE_ADD_ID % uint64(sbaid));
 
             } else if (!is_global(es, l5, 5))
               show_unknown_element(l5, 5);
@@ -1426,12 +1494,12 @@ def_handle2(block_group,
 
     for (fidx = 0; fidx < frame_sizes.size(); fidx++) {
       if (1 <= verbose) {
-        position   = (boost::format(Y(", position %1%")) % frame_pos).str();
+        position   = (BF_BLOCK_GROUP_SUMMARY_POSITION % frame_pos).str();
         frame_pos += frame_sizes[fidx];
       }
 
       if (bduration != -1.0)
-        mxinfo(boost::format(Y("%1% frame, track %2%, timecode %3% (%4%), duration %|5$.3f|, size %6%, adler 0x%|7$08x|%8%%9%\n"))
+        mxinfo(BF_BLOCK_GROUP_SUMMARY_WITH_DURATION
                % (bref_found && fref_found ? 'B' : bref_found ? 'P' : !fref_found ? 'I' : 'P')
                % lf_tnum
                % lf_timecode
@@ -1442,7 +1510,7 @@ def_handle2(block_group,
                % frame_hexdumps[fidx]
                % position);
       else
-        mxinfo(boost::format(Y("%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"))
+        mxinfo(BF_BLOCK_GROUP_SUMMARY_NO_DURATION
                % (bref_found && fref_found ? 'B' : bref_found ? 'P' : !fref_found ? 'I' : 'P')
                % lf_tnum
                % lf_timecode
@@ -1455,7 +1523,7 @@ def_handle2(block_group,
 
   } else if (verbose > 2)
     show_element(NULL, 2,
-                 boost::format(Y("[%1% frame for track %2%, timecode %3%]"))
+                 BF_BLOCK_GROUP_SUMMARY_V2
                  % (bref_found && fref_found ? 'B' : bref_found ? 'P' : !fref_found ? 'I' : 'P')
                  % lf_tnum
                  % lf_timecode);
@@ -1481,7 +1549,7 @@ def_handle2(simple_block,
     info += Y("discardable, ");
 
   show_element(l2, 2,
-               boost::format(Y("SimpleBlock (%1%track number %2%, %3% frame(s), timecode %|4$.3f|s = %5%)"))
+               BF_SIMPLE_BLOCK_BASICS
                % info
                % block.TrackNum()
                % block.NumberFrames()
@@ -1495,13 +1563,13 @@ def_handle2(simple_block,
 
     std::string adler_str;
     if (calc_checksums)
-      adler_str = (boost::format(Y(" (adler: 0x%|1$08x|)")) % adler).str();
+      adler_str = (BF_SIMPLE_BLOCK_ADLER % adler).str();
 
     std::string hex;
     if (show_hexdump)
       hex = create_hexdump(data.Buffer(), data.Size());
 
-    show_element(NULL, 4, boost::format(Y("Frame with size %1%%2%%3%")) % data.Size() % adler_str % hex);
+    show_element(NULL, 4, BF_SIMPLE_BLOCK_FRAME % data.Size() % adler_str % hex);
 
     frame_sizes.push_back(data.Size());
     frame_adlers.push_back(adler);
@@ -1514,11 +1582,11 @@ def_handle2(simple_block,
 
     for (fidx = 0; fidx < frame_sizes.size(); fidx++) {
       if (1 <= verbose) {
-        position   = (boost::format(Y(", position %1%")) % frame_pos).str();
+        position   = (BF_SIMPLE_BLOCK_POSITION % frame_pos).str();
         frame_pos += frame_sizes[fidx];
       }
 
-      mxinfo(boost::format(Y("%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%\n"))
+      mxinfo(BF_SIMPLE_BLOCK_SUMMARY
              % (block.IsKeyframe() ? 'I' : block.IsDiscardable() ? 'B' : 'P')
              % block.TrackNum()
              % timecode
@@ -1530,7 +1598,7 @@ def_handle2(simple_block,
 
   } else if (verbose > 2)
     show_element(NULL, 2,
-                 boost::format(Y("[%1% frame for track %2%, timecode %3%]"))
+                 BF_SIMPLE_BLOCK_SUMMARY_V2
                  % (block.IsKeyframe() ? 'I' : block.IsDiscardable() ? 'B' : 'P')
                  % block.TrackNum()
                  % timecode);
@@ -1558,15 +1626,15 @@ def_handle2(cluster,
       int64_t cluster_tc     = uint64(ctc);
       cluster->InitTimecode(cluster_tc, tc_scale);
 
-      show_element(l2, 2, boost::format(Y("Cluster timecode: %|1$.3f|s")) % ((float)cluster_tc * (float)tc_scale / 1000000000.0));
+      show_element(l2, 2, BF_CLUSTER_TIMECODE % ((float)cluster_tc * (float)tc_scale / 1000000000.0));
 
     } else if (is_id(l2, KaxClusterPosition)) {
       KaxClusterPosition &c_pos = *static_cast<KaxClusterPosition *>(l2);
-      show_element(l2, 2, boost::format(Y("Cluster position: %1%")) % uint64(c_pos));
+      show_element(l2, 2, BF_CLUSTER_POSITION % uint64(c_pos));
 
     } else if (is_id(l2, KaxClusterPrevSize)) {
       KaxClusterPrevSize &c_psize = *static_cast<KaxClusterPrevSize *>(l2);
-      show_element(l2, 2, boost::format(Y("Cluster previous size: %1%")) % uint64(c_psize));
+      show_element(l2, 2, BF_CLUSTER_PREVIOUS_SIZE % uint64(c_psize));
 
     } else if (is_id(l2, KaxClusterSilentTracks))
       handle2(silent_track, cluster);
@@ -1589,6 +1657,8 @@ handle_elements_rec(EbmlStream *es,
                     int parent_idx,
                     EbmlElement *e,
                     const parser_element_t *mapping) {
+  static boost::format s_bf_handle_elements_rec("%1%: %2%");
+
   bool found = false;
   int elt_idx;
   for (elt_idx = 0; NULL != mapping[elt_idx].name; ++elt_idx)
@@ -1598,7 +1668,7 @@ handle_elements_rec(EbmlStream *es,
     }
 
   if (!found) {
-    show_element(e, level, boost::format(Y("(Unknown element: %1%)")) % e->Generic().DebugName);
+    show_element(e, level, BF_HANDLE_ELEMENTS_REC_UNKNOWN % e->Generic().DebugName);
     return;
   }
 
@@ -1618,23 +1688,23 @@ handle_elements_rec(EbmlStream *es,
 
     case EBMLT_UINT:
     case EBMLT_BOOL:
-      show_element(e, level, boost::format("%1%: %2%") % elt_name % uint64(*dynamic_cast<EbmlUInteger *>(e)));
+      show_element(e, level, s_bf_handle_elements_rec % elt_name % uint64(*dynamic_cast<EbmlUInteger *>(e)));
       break;
 
     case EBMLT_STRING:
-      show_element(e, level, boost::format("%1%: %2%") % elt_name % std::string(*dynamic_cast<EbmlString *>(e)));
+      show_element(e, level, s_bf_handle_elements_rec % elt_name % std::string(*dynamic_cast<EbmlString *>(e)));
       break;
 
     case EBMLT_USTRING:
-      show_element(e, level, boost::format("%1%: %2%") % elt_name % UTF2STR(UTFstring(*static_cast<EbmlUnicodeString *>(e)).c_str()));
+      show_element(e, level, s_bf_handle_elements_rec % elt_name % UTF2STR(UTFstring(*static_cast<EbmlUnicodeString *>(e)).c_str()));
       break;
 
     case EBMLT_TIME:
-      show_element(e, level, boost::format("%1%: %2%") % elt_name % format_timecode(uint64(*dynamic_cast<EbmlUInteger *>(e))));
+      show_element(e, level, s_bf_handle_elements_rec % elt_name % format_timecode(uint64(*dynamic_cast<EbmlUInteger *>(e))));
       break;
 
     case EBMLT_BINARY:
-      show_element(e, level, boost::format("%1%: %2%") % elt_name % format_binary(*static_cast<EbmlBinary *>(e)));
+      show_element(e, level, s_bf_handle_elements_rec % elt_name % format_binary(*static_cast<EbmlBinary *>(e)));
       break;
 
     default:
@@ -1862,6 +1932,8 @@ setup(const std::string &locale) {
   init_cc_stdio();
 
   xml_element_map_init();
+
+  init_common_boost_formats();
 }
 
 int
