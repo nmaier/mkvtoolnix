@@ -10,8 +10,6 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-// {{{ includes
-
 #include "common/os.h"
 
 #include <errno.h>
@@ -85,10 +83,6 @@ extern "C" {
 #include "info/mkvinfo.h"
 
 using namespace libmatroska;
-
-// }}}
-
-// {{{ structs, output/helper functions
 
 typedef struct {
   unsigned int tnum, tuid;
@@ -237,10 +231,6 @@ to_hex(const unsigned char *buf,
   return hex;
 }
 
-// }}}
-
-// {{{ FUNCTION parse_args
-
 void
 parse_args(std::vector<std::string> args,
            std::string &file_name) {
@@ -279,10 +269,6 @@ parse_args(std::vector<std::string> args,
     else
       file_name = args[i];
 }
-
-// }}}
-
-// {{{ is_global, parse_multicomment/chapter_atom, asctime_r, gmtime_r
 
 #define in_parent(p) \
   (!p->IsFiniteSize() || \
@@ -328,8 +314,6 @@ asctime_r(const struct tm *tm,
   return abuf;
 }
 #endif
-
-// }}}
 
 struct master_sorter_t {
   int m_index;

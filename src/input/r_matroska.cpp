@@ -12,8 +12,6 @@
    Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-// {{{ includes
-
 #include "common/os.h"
 
 extern "C" {                    // for BITMAPINFOHEADER
@@ -97,11 +95,7 @@ using namespace libmatroska;
 #define in_parent(p) \
   (!p->IsFiniteSize() || (in->getFilePointer() < (p->GetElementPosition() + p->HeadSize() + p->GetSize())))
 
-// }}}
-
 #define is_ebmlvoid(e) (EbmlId(*e) == EbmlVoid::ClassInfos.GlobalId)
-
-// {{{ FUNCTION kax_reader::probe_file()
 
 #define MAGIC_MKV 0x1a45dfa3
 
@@ -129,10 +123,6 @@ kax_reader_c::probe_file(mm_io_c *io,
   return 1;
 }
 
-// }}}
-
-// {{{ C'TOR
-
 kax_reader_c::kax_reader_c(track_info_c &_ti)
   throw (error_c)
   : generic_reader_c(_ti)
@@ -148,10 +138,6 @@ kax_reader_c::kax_reader_c(track_info_c &_ti)
     mxinfo_fn(ti.fname, Y("Using the Matroska demultiplexer.\n"));
 }
 
-// }}}
-
-// {{{ D'TOR
-
 kax_reader_c::~kax_reader_c() {
   int i;
 
@@ -164,10 +150,6 @@ kax_reader_c::~kax_reader_c() {
   delete segment;
   delete m_tags;
 }
-
-// }}}
-
-// {{{ FUNCTIONS packets_available(), new_kax_track(), find_track*
 
 int
 kax_reader_c::packets_available() {
@@ -218,10 +200,6 @@ kax_reader_c::find_track_by_uid(uint64_t uid,
 
   return NULL;
 }
-
-// }}}
-
-// {{{ FUNCTION kax_reader_c::verify_tracks()
 
 void
 kax_reader_c::verify_tracks() {
@@ -475,10 +453,6 @@ kax_reader_c::verify_tracks() {
   }
 }
 
-// }}}
-
-// {{{ FUNCTION kax_reader_c::handle_attachments()
-
 void
 kax_reader_c::handle_attachments(mm_io_c *io,
                                  EbmlElement *l0,
@@ -695,8 +669,6 @@ kax_reader_c::handle_tags(mm_io_c *io,
 
   io->restore_pos();
 }
-
-// }}}
 
 void
 kax_reader_c::read_headers_info(EbmlElement *&l1,
@@ -1098,8 +1070,6 @@ kax_reader_c::read_headers_seek_head(EbmlElement *&l0,
   }
 }
 
-// {{{ FUNCTION kax_reader_c::read_headers()
-
 int
 kax_reader_c::read_headers() {
   // Elements for different levels
@@ -1230,8 +1200,6 @@ kax_reader_c::read_headers() {
   return 1;
 }
 
-// }}}
-
 void
 kax_reader_c::process_global_tags() {
   if ((NULL == m_tags) || g_identifying)
@@ -1243,8 +1211,6 @@ kax_reader_c::process_global_tags() {
 
   m_tags->RemoveAll();
 }
-
-// {{{ FUNCTION kax_reader_c::create_packetizers()
 
 void
 kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
@@ -1661,8 +1627,6 @@ kax_reader_c::create_mpeg4_p10_es_video_packetizer(kax_track_t *t,
   }
 }
 
-// }}}
-
 void
 kax_reader_c::read_first_frame(kax_track_t *t) {
   if (t->first_frame_data.is_set() || (NULL == saved_l1))
@@ -1766,8 +1730,6 @@ kax_reader_c::read_first_frame(kax_track_t *t) {
 
   in->restore_pos();
 }
-
-// {{{ FUNCTION kax_reader_c::read()
 
 file_status_e
 kax_reader_c::read(generic_packetizer_c *requested_ptzr,
@@ -2094,10 +2056,6 @@ kax_reader_c::read(generic_packetizer_c *requested_ptzr,
   return FILE_STATUS_DONE;
 }
 
-// }}}
-
-// {{{ FUNCTIONS display_*
-
 int
 kax_reader_c::get_progress() {
   if (0 != segment_duration)
@@ -2115,10 +2073,6 @@ kax_reader_c::set_headers() {
     if ((-1 != tracks[i]->ptzr) && tracks[i]->passthrough)
       PTZR(tracks[i]->ptzr)->get_track_entry()->EnableLacing(tracks[i]->lacing_flag);
 }
-
-// }}}
-
-// {{{ FUNCTION kax_reader_c::identify()
 
 void
 kax_reader_c::identify() {
@@ -2191,8 +2145,6 @@ kax_reader_c::identify() {
     if (tracks[i]->ok && (NULL != tracks[i]->tags))
       id_result_tags(tracks[i]->tnum, count_simple_tags(*tracks[i]->tags));
 }
-
-// }}}
 
 void
 kax_reader_c::add_available_track_ids() {

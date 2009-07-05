@@ -11,8 +11,6 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-// {{{ includes
-
 #include "common/os.h"
 
 #include <algorithm>
@@ -58,10 +56,6 @@ extern "C" {
 #define GAB2_ID_LANGUAGE_UNICODE 0x0002
 #define GAB2_ID_SUBTITLES        0x0004
 
-// }}}
-
-// {{{ FUNCTION avi_reader_c::probe_file
-
 int
 avi_reader_c::probe_file(mm_io_c *io,
                          int64_t size) {
@@ -83,10 +77,6 @@ avi_reader_c::probe_file(mm_io_c *io,
 
   return 1;
 }
-
-// }}}
-
-// {{{ C'TOR
 
 avi_reader_c::avi_reader_c(track_info_c &_ti)
   throw (error_c)
@@ -130,10 +120,6 @@ avi_reader_c::avi_reader_c(track_info_c &_ti)
     debug_dump_video_index();
 }
 
-// }}}
-
-// {{{ D'TOR
-
 avi_reader_c::~avi_reader_c() {
   if (NULL != m_avi)
     AVI_close(m_avi);
@@ -142,8 +128,6 @@ avi_reader_c::~avi_reader_c() {
 
   mxverb(2, boost::format("avi_reader_c: Dropped video frames: %1%\n") % m_dropped_video_frames);
 }
-
-// }}}
 
 void
 avi_reader_c::parse_subtitle_chunks() {
@@ -485,8 +469,6 @@ avi_reader_c::extract_avcc() {
   throw false;
 }
 
-// {{{ FUNCTION avi_reader_c::add_audio_demuxer
-
 void
 avi_reader_c::add_audio_demuxer(int aid) {
   std::vector<avi_demuxer_t>::const_iterator it;
@@ -583,8 +565,6 @@ avi_reader_c::add_audio_demuxer(int aid) {
   for (i = 0; i < maxchunks; i++)
     m_bytes_to_process += AVI_audio_size(m_avi, i);
 }
-
-// }}}
 
 generic_packetizer_c *
 avi_reader_c::create_aac_packetizer(int aid,
@@ -700,8 +680,6 @@ avi_reader_c::create_vorbis_packetizer(int aid) {
     return NULL;
   }
 }
-
-// {{{ FUNCTION avi_reader_c::read
 
 file_status_e
 avi_reader_c::read_video() {
@@ -855,14 +833,10 @@ avi_reader_c::read(generic_packetizer_c *ptzr,
   return FILE_STATUS_DONE;
 }
 
-// }}}
-
 int
 avi_reader_c::get_progress() {
   return 0 == m_bytes_to_process ? 0 : 100 * m_bytes_processed / m_bytes_to_process;
 }
-
-// {{{ FUNCTION avi_reader_c::identify
 
 void
 avi_reader_c::extended_identify_mpeg4_l2(std::vector<std::string> &extended_info) {
@@ -986,8 +960,6 @@ avi_reader_c::add_available_track_ids() {
   for (i = 0; (AVI_audio_tracks(m_avi) + m_subtitle_demuxers.size()) >= i; i++)
     available_track_ids.push_back(i);
 }
-
-// }}}
 
 void
 avi_reader_c::debug_dump_video_index() {

@@ -27,8 +27,6 @@
 
 using namespace libmatroska;
 
-// {{{ simple chapter output
-
 class chapter_entry_c {
 public:
   std::string m_name;
@@ -179,10 +177,6 @@ write_chapters_simple(int &chapter_num,
   s_chapter_entries.clear();
 }
 
-// }}}
-
-// {{{ XML chapter output
-
 static void
 pt(xml_writer_cb_t *cb,
    const char *tag) {
@@ -247,5 +241,3 @@ write_chapters_xml(KaxChapters *chapters,
   for (i = 0; chapters->ListSize() > i; i++)
     write_xml_element_rec(1, 0, (*chapters)[i], out, chapter_elements);
 }
-
-// }}}

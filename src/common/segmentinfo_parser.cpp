@@ -35,8 +35,6 @@
 
 using namespace libmatroska;
 
-// {{{ XML chapters
-
 #define CPDATA (parser_data_t *)pdata
 
 static void
@@ -102,5 +100,3 @@ parse_xml_segmentinfo(mm_text_io_c *in,
 
   return info;
 }
-
-// }}}
