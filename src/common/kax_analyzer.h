@@ -85,6 +85,7 @@ public:
   virtual ~kax_analyzer_c();
 
   virtual update_element_result_e update_element(EbmlElement *e, bool write_defaults = false);
+  virtual update_element_result_e remove_elements(EbmlId id);
   virtual EbmlMaster *read_all(const EbmlCallbacks &callbacks);
 
   virtual EbmlElement *read_element(kax_analyzer_data_c *element_data);

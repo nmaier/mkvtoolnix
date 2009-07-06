@@ -119,7 +119,7 @@ public:
   bool is_empty();
 
 protected:
-  void display_update_element_result(kax_analyzer_c::update_element_result_e result);
+  void write_chapters_to_matroska_file();
 };
 
 #endif // __TAB_CHAPTERS_H

@@ -310,6 +310,23 @@ kax_analyzer_c::update_element(EbmlElement *e,
   return uer_success;
 }
 
+kax_analyzer_c::update_element_result_e
+kax_analyzer_c::remove_elements(EbmlId id) {
+  try {
+    call_and_validate({},                          "remove_elements_0");
+    call_and_validate(overwrite_all_instances(id), "remove_elements_1");
+    call_and_validate(merge_void_elements(),       "remove_elements_2");
+    call_and_validate(remove_from_meta_seeks(id),  "remove_elements_3");
+    call_and_validate(merge_void_elements(),       "remove_elements_4");
+
+  } catch (kax_analyzer_c::update_element_result_e result) {
+    debug_dump_elements_maybe("update_element_exception");
+    return result;
+  }
+
+  return uer_success;
+}
+
 /** \brief Sets the m_segment size to the length of the m_file
  */
 void

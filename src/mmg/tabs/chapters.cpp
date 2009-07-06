@@ -600,7 +600,7 @@ tab_chapters::on_save_chapters(wxCommandEvent &evt) {
     return;
 
   if (source_is_kax_file) {
-    display_update_element_result(analyzer->update_element(chapters));
+    write_chapters_to_matroska_file();
     return;
   }
 
@@ -641,7 +641,7 @@ tab_chapters::on_save_chapters_to_kax_file(wxCommandEvent &evt) {
     return;
   }
 
-  display_update_element_result(analyzer->update_element(chapters));
+  write_chapters_to_matroska_file();
   mdlg->set_last_chapters_in_menu(file_name);
 }
 
@@ -776,27 +776,43 @@ tab_chapters::verify_atom_recursively(EbmlElement *e) {
 
 bool
 tab_chapters::verify(bool called_interactively) {
-  KaxEditionEntry *eentry;
   uint32_t eidx, cidx;
 
-  if ((NULL == chapters) || (chapters->ListSize() == 0)) {
-    if (called_interactively)
-      wxMessageBox(Z("No chapter entries have been create yet."), Z("Chapter verification error"), wxCENTER | wxOK | wxICON_ERROR);
+  if (NULL == chapters){
+    wxMessageBox(Z("No chapter entries have been create yet."), Z("Chapter verification error"), wxCENTER | wxOK | wxICON_ERROR);
     return false;
   }
+
+  if (0 == chapters->ListSize())
+    return true;
 
   wxTreeItemId id = tc_chapters->GetSelection();
   if (id.IsOk())
     copy_values(id);
 
+  for (eidx = 0; eidx < chapters->ListSize(); eidx++) {
+    KaxEditionEntry *eentry = static_cast<KaxEditionEntry *>((*chapters)[eidx]);
+    bool contains_atom      = false;
+
+    for (cidx = 0; cidx < eentry->ListSize(); cidx++)
+      if (dynamic_cast<KaxChapterAtom *>((*eentry)[cidx]) != NULL) {
+        contains_atom = true;
+        break;
+      }
+
+    if (!contains_atom) {
+      wxMessageBox(Z("Each edition must contain at least one chapter."), Z("Chapter verification error"), wxCENTER | wxOK | wxICON_ERROR);
+      return false;
+    }
+  }
+
   fix_mandatory_chapter_elements(chapters);
 
   for (eidx = 0; eidx < chapters->ListSize(); eidx++) {
-    eentry = static_cast<KaxEditionEntry *>((*chapters)[eidx]);
-    for (cidx = 0; cidx < eentry->ListSize(); cidx++) {
+    KaxEditionEntry *eentry = static_cast<KaxEditionEntry *>((*chapters)[eidx]);
+    for (cidx = 0; cidx < eentry->ListSize(); cidx++)
       if ((dynamic_cast<KaxChapterAtom *>((*eentry)[cidx]) != NULL) && !verify_atom_recursively((*eentry)[cidx]))
         return false;
-    }
   }
 
   if (!chapters->CheckMandatory())
@@ -1859,7 +1875,9 @@ tab_chapters::is_empty() {
 }
 
 void
-tab_chapters::display_update_element_result(kax_analyzer_c::update_element_result_e result) {
+tab_chapters::write_chapters_to_matroska_file() {
+  kax_analyzer_c::update_element_result_e result = (0 == chapters->ListSize() ? analyzer->remove_elements(KaxChapters::ClassInfos.GlobalId) : analyzer->update_element(chapters));
+
   switch (result) {
     case kax_analyzer_c::uer_success:
       mdlg->set_status_bar(Z("Chapters written."));
