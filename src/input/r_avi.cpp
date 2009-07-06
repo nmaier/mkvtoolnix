@@ -498,6 +498,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
   ti.avi_block_align               = get_uint16_le(&wfe->n_block_align);
   ti.avi_avg_bytes_per_sec         = get_uint32_le(&wfe->n_avg_bytes_per_sec);
   ti.avi_samples_per_chunk         = get_uint32_le(&m_avi->stream_headers[aid].dw_scale);
+  ti.avi_sample_scale              = get_uint32_le(&m_avi->stream_headers[aid].dw_rate);
   ti.avi_samples_per_sec           = demuxer.m_samples_per_second;
 
   if (get_uint16_le(&wfe->cb_size) > 0) {

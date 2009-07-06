@@ -992,17 +992,15 @@ generic_packetizer_c::handle_avi_audio_sync(int64_t num_bytes,
      duration = num_bytes * 1000000000 / ti.avi_avg_bytes_per_sec;
 
   else {
-    double samples = 0.0;
-
+    int num_blocks = 0;
     int i;
     for (i = 0; (ti.avi_block_sizes.size() > i) && (0 < num_bytes); ++i) {
-      int64_t block_size = ti.avi_block_sizes[i];
-      int cur_bytes      = num_bytes < block_size ? num_bytes : block_size;
-
-      samples   += (double)ti.avi_samples_per_chunk * cur_bytes / ti.avi_block_align;
-      num_bytes -= cur_bytes;
+      int64_t block_size  = ti.avi_block_sizes[i];
+      num_blocks         += (block_size + ti.avi_block_align - 1) / ti.avi_block_align;
+      num_bytes          -= std::min(num_bytes, block_size);
     }
-    duration = (int64_t)(samples * 1000000000 / ti.avi_samples_per_sec);
+
+    duration = static_cast<int64_t>(num_blocks * 1000000000ll * static_cast<double>(ti.avi_samples_per_chunk) / static_cast<double>(ti.avi_sample_scale));
   }
 
   enable_avi_audio_sync(false);
@@ -1461,6 +1459,7 @@ track_info_c::track_info_c()
   , avi_samples_per_sec(0)
   , avi_avg_bytes_per_sec(0)
   , avi_samples_per_chunk(0)
+  , avi_sample_scale(0)
   , avi_audio_sync_enabled(false)
 {
   memset(&pixel_cropping, 0, sizeof(pixel_crop_t));
@@ -1565,6 +1564,7 @@ track_info_c::operator =(const track_info_c &src) {
   avi_samples_per_sec        = src.avi_samples_per_sec;
   avi_avg_bytes_per_sec      = src.avi_avg_bytes_per_sec;
   avi_samples_per_chunk      = src.avi_samples_per_chunk;
+  avi_sample_scale           = src.avi_sample_scale;
   avi_block_sizes.clear();
   avi_audio_sync_enabled     = false;
 

@@ -1,5 +1,8 @@
 2009-07-06  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Fixed the audio sync for tracks read from AVI
+	files containing garbage at the beginning. Fix for bug 421.
+
 	* mmg: bug fix: Trying to save chapters that contain editions
 	without a single chapter entry does no longer result in a crash
 	but a descriptive error message instead. Saving empty chapters to

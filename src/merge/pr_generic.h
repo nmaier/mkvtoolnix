@@ -263,6 +263,7 @@ public:
   uint32_t avi_samples_per_sec;
   uint32_t avi_avg_bytes_per_sec;
   uint32_t avi_samples_per_chunk;
+  uint32_t avi_sample_scale;
   std::vector<int64_t> avi_block_sizes;
   bool avi_audio_sync_enabled;
 
