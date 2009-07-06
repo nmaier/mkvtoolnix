@@ -589,21 +589,36 @@ mm_io_c::setFilePointer2(int64 offset, seek_mode mode) {
 
 size_t
 mm_io_c::puts(const std::string &s) {
-  int i;
-  std::string output;
-
-  const char *cs = s.c_str();
-  for (i = 0; cs[i] != 0; i++)
-    if (cs[i] != '\r') {
 #if defined(SYS_WINDOWS)
-      if ('\n' == cs[i])
-        output += "\r";
+  bool is_windows    = true;
+#else
+  bool is_windows    = false;
 #endif
-      output += cs[i];
-    } else if ('\n' != cs[i + 1])
-      output += "\r";
+  size_t num_written = 0;
+  const char *cs     = s.c_str();
+  int prev_pos       = 0;
+  int cur_pos;
 
-  return write(output.c_str(), output.length());
+  for (cur_pos = 0; cs[cur_pos] != 0; ++cur_pos) {
+    bool keep_char = is_windows || ('\r' != cs[cur_pos]) || ('\n' != cs[cur_pos + 1]);
+    bool insert_cr = is_windows && ('\n' == cs[cur_pos]) && ((0 == cur_pos) || ('\r' != cs[cur_pos - 1]));
+
+    if (keep_char && !insert_cr)
+      continue;
+
+    if (prev_pos < cur_pos)
+      num_written += write(&cs[prev_pos], cur_pos - prev_pos);
+
+    if (insert_cr)
+      num_written += write("\r", 1);
+
+    prev_pos = cur_pos + (keep_char ? 0 : 1);
+  }
+
+  if (prev_pos < cur_pos)
+    num_written += write(&cs[prev_pos], cur_pos - prev_pos);
+
+  return num_written;
 }
 
 uint32_t
