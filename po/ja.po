@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2009-06-27 21:43+0900\n"
+"PO-Revision-Date: 2009-07-07 18:49+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -2677,9 +2677,8 @@ msgid "Each chapter and each edition has a unique identifier. This identifier is
 msgstr "各チャプタや各エディションはユニークな識別子を持っています。この識別子は通常プログラムによって自動的に割り当てられますが、本当に必要な場合は手動で変えることができます。"
 
 #: src/mmg/tabs/chapters.cpp:804
-#, fuzzy
 msgid "Each edition must contain at least one chapter."
-msgstr "このファイルにはチャプタがありません。"
+msgstr "各エディションは少なくとも1つのチャプタを含んでいなければなりません。"
 
 #: src/info/mkvinfo.cpp:145
 msgid "EbmlVoid (size: %1%)"
