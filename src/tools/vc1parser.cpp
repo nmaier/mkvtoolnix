@@ -68,7 +68,7 @@ vc1_info_c::handle_entrypoint_packet(memory_cptr packet) {
   }
 
   vc1::entrypoint_t entrypoint;
-  if (vc1::parse_entrypoint(packet->get(), packet->get_size(), entrypoint, m_seqhdr))
+  if (vc1::parse_entrypoint(packet->get_buffer(), packet->get_size(), entrypoint, m_seqhdr))
     dump_entrypoint(entrypoint);
 }
 
@@ -92,7 +92,7 @@ vc1_info_c::handle_frame_packet(memory_cptr packet) {
   }
 
   vc1::frame_header_t frame_header;
-  if (vc1::parse_frame_header(packet->get(), packet->get_size(), frame_header, m_seqhdr))
+  if (vc1::parse_frame_header(packet->get_buffer(), packet->get_size(), frame_header, m_seqhdr))
     dump_frame_header(frame_header);
 }
 
@@ -101,7 +101,7 @@ vc1_info_c::handle_sequence_header_packet(memory_cptr packet) {
   std::string checksum = create_checksum_info(packet);
   mxinfo(boost::format(Y("Sequence header at %1% size %2%%3%\n")) % m_stream_pos % packet->get_size() % checksum);
 
-  m_seqhdr_found = vc1::parse_sequence_header(packet->get(), packet->get_size(), m_seqhdr);
+  m_seqhdr_found = vc1::parse_sequence_header(packet->get_buffer(), packet->get_size(), m_seqhdr);
 
   if (g_opt_sequence_headers) {
     if (m_seqhdr_found)
@@ -129,7 +129,7 @@ vc1_info_c::create_checksum_info(memory_cptr packet) {
   if (!g_opt_checksum)
     return "";
 
-  return (boost::format(Y(" checksum 0x%|1$08x|")) % calc_adler32(packet->get(), packet->get_size())).str();
+  return (boost::format(Y(" checksum 0x%|1$08x|")) % calc_adler32(packet->get_buffer(), packet->get_size())).str();
 }
 
 void
@@ -340,7 +340,7 @@ parse_file(const std::string &file_name) {
     mxerror(Y("File too small\n"));
 
   memory_cptr mem    = memory_c::alloc(buf_size);
-  unsigned char *ptr = mem->get();
+  unsigned char *ptr = mem->get_buffer();
 
   vc1_info_c parser;
 

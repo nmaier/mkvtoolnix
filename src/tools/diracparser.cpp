@@ -72,7 +72,7 @@ dirac_info_c::handle_sequence_header_unit(memory_cptr packet) {
   std::string checksum = create_checksum_info(packet);
   mxinfo(boost::format(Y("Sequence header at %1% size %2%%3%\n" )) %m_stream_pos % packet->get_size() % checksum);
 
-  m_seqhdr_found = dirac::parse_sequence_header(packet->get(), packet->get_size(), m_seqhdr);
+  m_seqhdr_found = dirac::parse_sequence_header(packet->get_buffer(), packet->get_size(), m_seqhdr);
 
   if (g_opt_sequence_headers) {
     if (m_seqhdr_found)
@@ -85,7 +85,7 @@ dirac_info_c::handle_sequence_header_unit(memory_cptr packet) {
 void
 dirac_info_c::handle_unknown_unit(memory_cptr packet) {
   std::string checksum = create_checksum_info(packet);
-  mxinfo(boost::format(Y("Unknown (0x%|1$02x|) at %2% size %3%%4%\n")) % (int)packet->get()[4] % m_stream_pos % packet->get_size() % checksum);
+  mxinfo(boost::format(Y("Unknown (0x%|1$02x|) at %2% size %3%%4%\n")) % (int)packet->get_buffer()[4] % m_stream_pos % packet->get_size() % checksum);
 }
 
 std::string
@@ -93,7 +93,7 @@ dirac_info_c::create_checksum_info(memory_cptr packet) {
   if (!g_opt_checksum)
     return "";
 
-  return (boost::format(Y(" checksum 0x%|1$08x|")) % calc_adler32(packet->get(), packet->get_size())).str();
+  return (boost::format(Y(" checksum 0x%|1$08x|")) % calc_adler32(packet->get_buffer(), packet->get_size())).str();
 }
 
 void
@@ -213,7 +213,7 @@ parse_file(const std::string &file_name) {
     mxerror(Y("File too small\n"));
 
   memory_cptr mem    = memory_c::alloc(buf_size);
-  unsigned char *ptr = mem->get();
+  unsigned char *ptr = mem->get_buffer();
 
   dirac_info_c parser;
 
