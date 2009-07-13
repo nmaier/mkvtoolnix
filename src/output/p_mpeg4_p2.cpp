@@ -326,7 +326,7 @@ mpeg4_p2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
   if (m_aspect_ratio_extracted)
     return;
 
-  if (ti.aspect_ratio_given || ti.display_dimensions_given) {
+  if ((0 != connected_to) || ti.aspect_ratio_given || ti.display_dimensions_given) {
     m_aspect_ratio_extracted = true;
     return;
   }
@@ -352,6 +352,11 @@ mpeg4_p2_video_packetizer_c::extract_size(const unsigned char *buffer,
                                           int size) {
   if (m_size_extracted)
     return;
+
+  if (0 != connected_to) {
+    m_size_extracted = true;
+    return;
+  }
 
   uint32_t xtr_width, xtr_height;
 
