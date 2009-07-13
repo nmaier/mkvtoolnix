@@ -1385,11 +1385,11 @@ msgstr "+-> FLACファイルを事前解析中です: %1%%%%2%"
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr "+-> FLACファイルを事前解析中です: 100%\n"
 
-#: src/merge/pr_generic.cpp:1367
+#: src/merge/pr_generic.cpp:1363
 msgid ", description '%1%'"
 msgstr ", 説明 '%1%'"
 
-#: src/merge/pr_generic.cpp:1368
+#: src/merge/pr_generic.cpp:1364
 msgid ", file name '%1%'"
 msgstr ", ファイル名 '%1%'"
 
@@ -1519,7 +1519,7 @@ msgstr "'+'一文字は正しいコマンドラインオプションではあり
 msgid "A track"
 msgstr ""
 
-#: src/merge/pr_generic.cpp:1234
+#: src/merge/pr_generic.cpp:1230
 msgid "A track with the ID %1% was requested but not found in the file. The corresponding option will be ignored.\n"
 msgstr "トラックID %1%が要求されましたが、ファイル中には見つかりませんでした。対応するオプションは無視されます。\n"
 
@@ -1785,7 +1785,7 @@ msgstr ""
 msgid "Attached files"
 msgstr "添付ファイル"
 
-#: src/merge/pr_generic.cpp:1366
+#: src/merge/pr_generic.cpp:1362
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
 msgstr "添付ファイル ID %1%：タイプ'%2%'、サイズ%3%バイト"
 
@@ -2052,7 +2052,7 @@ msgstr "チャプタが書き込まれました。"
 msgid "Chapters:"
 msgstr "チャプタ："
 
-#: src/merge/pr_generic.cpp:1369
+#: src/merge/pr_generic.cpp:1365
 msgid "Chapters: %1% entries"
 msgstr "チャプタ：%1%個のエントリ"
 
@@ -2897,11 +2897,11 @@ msgstr ""
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "ファイル%1%は未知のファイルタイプです。サポートされているファイルタイプ一覧（'mkvmerge --list-types'）を参照し、もしそのファイルタイプがサポートされているのに正しく認識されない場合は、作者のMoritz Bunkus <moritz@bunkus.org>に連絡してください。\n"
 
-#: src/merge/pr_generic.cpp:1364
+#: src/merge/pr_generic.cpp:1360
 msgid "File '%1%': container: %2%"
 msgstr "ファイル'%1%'：コンテナ：%2%"
 
-#: src/merge/pr_generic.cpp:1282
+#: src/merge/pr_generic.cpp:1278
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "ファイル'%1%'：サポートされていないコンテナ：%2%\n"
 
@@ -3091,7 +3091,7 @@ msgstr "グローバルタグ"
 msgid "Global tags (%d entries) from %s"
 msgstr "グローバルタグ（%d個のエントリ）%sのタグ"
 
-#: src/merge/pr_generic.cpp:1370
+#: src/merge/pr_generic.cpp:1366
 msgid "Global tags: %1% entries"
 msgstr "グローバルタグ：%1%個のエントリ"
 
@@ -3283,7 +3283,7 @@ msgstr "不正なUIDです。このチャプタUIDは既に使用されていま
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "不正なUIDです。このエディションUIDは既に使用されています。元のUIDは変更されませんでした。"
 
-#: src/input/r_avi.cpp:632 src/input/r_avi.cpp:637 src/input/r_avi.cpp:654
+#: src/input/r_avi.cpp:633 src/input/r_avi.cpp:638 src/input/r_avi.cpp:655
 msgid "Invalid Vorbis headers in AVI audio track."
 msgstr "AVIのオーディオトラックのVorbisヘッダが不正です。"
 
@@ -4002,10 +4002,6 @@ msgstr "'--%1% %2%'でトラックIDが指定されていません。\n"
 #: src/mmg/tabs/input.cpp:582
 msgid "No tracks found"
 msgstr "トラックが見つかりませんでした"
-
-#: src/merge/pr_generic.cpp:1220
-msgid "No tracks will be copied from this file. This usually indicates a mistake in the command line.\n"
-msgstr "このファイルからはトラックがコピーされません。これは通常コマンドラインに誤りがあることを示します。\n"
 
 #: src/input/r_vobsub.cpp:91
 msgid "No version number found.\n"
@@ -5014,7 +5010,7 @@ msgstr "タグファイル (*.xml;*.txt)|*.xml;*.txt|%s"
 msgid "Tags"
 msgstr "タグ"
 
-#: src/merge/pr_generic.cpp:1371
+#: src/merge/pr_generic.cpp:1367
 msgid "Tags for track ID %1%: %2% entries"
 msgstr "トラックID %1%のタグ：%2%個のエントリ"
 
@@ -5064,7 +5060,7 @@ msgstr "このAVCビデオトラックにはフレームタイムコードを補
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
 msgstr "トラック%1%のCUEシートは'%2%'に書き込まれました。\n"
 
-#: src/merge/pr_generic.h:398
+#: src/merge/pr_generic.h:399
 msgid "The CodecID of the two tracks is different: %1% and %2%"
 msgstr "2つのトラック間でコーデックIDが異なっています：%1%と%2%"
 
@@ -5254,11 +5250,11 @@ msgstr ""
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr "トラックのタグとグローバルタグの違いはmkvmergeのドキュメントで説明されています。手短に説明すると、'入力'タブで追加できるタグは1つのトラックのみに適用されるのに対し、グローバルタグはファイル全体に適用されます。"
 
-#: src/merge/pr_generic.h:393
+#: src/merge/pr_generic.h:394
 msgid "The display height of the two tracks is different: %1% and %2%"
 msgstr "2つのトラック間で縦解像度が異なっています：%1%と%2%"
 
-#: src/merge/pr_generic.h:388
+#: src/merge/pr_generic.h:389
 msgid "The display width of the two tracks is different: %1% and %2%"
 msgstr "2つのトラック間で横解像度が異なっています：%1%と%2%"
 
@@ -5280,7 +5276,7 @@ msgstr "ここで指定された時間でファイルが分割作成されます
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "要素はファイルの終端に書き込まれましたが、セグメントサイズを更新できませんでした。そのため要素は不可視となります。処理は中断されます。ファイルは変更されました！"
 
-#: src/output/p_mpeg4_p2.cpp:379
+#: src/output/p_mpeg4_p2.cpp:384
 msgid "The extracted values for video width and height from the MPEG4 layer 2 video data bitstream differ from what the values in the source container. The ones from the video data bitstream (%1%x%2%) will be used.\n"
 msgstr "MPEG4 layer 2ビデオデータビットストリームから展開された解像度の値が、ソースコンテナの値と異なっています。ビデオデータビットストリームの値（%1%x%2%）が使用されます。\n"
 
@@ -5318,7 +5314,7 @@ msgstr "ファイル'%1%'を開いて書き込んでいます。\n"
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "ファイル%1%は未知のファイルタイプです。サポートされているファイルタイプ一覧（'mkvmerge --list-types'）を参照し、もしそのファイルタイプがサポートされているのに正しく認識されない場合は、作者のMoritz Bunkus <moritz@bunkus.org>に連絡してください。\n"
 
-#: src/merge/pr_generic.cpp:1286
+#: src/merge/pr_generic.cpp:1282
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "ファイル'%1%'はサポートされていないファイルタイプです（%2%）。\n"
 
@@ -5433,7 +5429,7 @@ msgstr "指定されたタイムスケールの係数は有効な範囲（1～10
 msgid "The header has already been written."
 msgstr "ヘッダは既に記録されています。"
 
-#: src/merge/pr_generic.h:383
+#: src/merge/pr_generic.h:384
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "2つのトラック間で縦解像度が異なっています：%1%と%2%"
 
@@ -5554,11 +5550,11 @@ msgstr "出力ファイル名'%1%'と入力ファイルの1つのファイル名
 msgid "The next UID was already given in '%1% %2%'.\n"
 msgstr "'%1% %2%'で既に次のUIDは指定されています。\n"
 
-#: src/merge/pr_generic.h:373
+#: src/merge/pr_generic.h:374
 msgid "The number of bits per sample of the two audio tracks is different: %1% and %2%"
 msgstr "2つのオーディオトラック間でサンプル当たりのビット数が異なります：%1%と%2%"
 
-#: src/merge/pr_generic.h:368
+#: src/merge/pr_generic.h:369
 msgid "The number of channels of the two audio tracks is different: %1% and %2%"
 msgstr "2つのオーディオトラック間でチャンネル数が異なっています：%1%と%2%"
 
@@ -5623,7 +5619,7 @@ msgstr "理由はわかりません。"
 msgid "The root element must be <%1%>."
 msgstr "ルート要素は<%1%>でなければなりません。"
 
-#: src/merge/pr_generic.h:363
+#: src/merge/pr_generic.h:364
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
 msgstr "2つのオーディオトラック間でサンプリングレートが異なっています：%1%と%2%"
 
@@ -5747,7 +5743,7 @@ msgstr "ブロックヘッダで使われるトラック番号です。"
 msgid "The track parameters do not match."
 msgstr "トラックのパラメータが一致しません。"
 
-#: src/merge/pr_generic.h:378
+#: src/merge/pr_generic.h:379
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "2つのトラック間で横解像度が異なっています：%1%と%2%"
 
@@ -5775,11 +5771,11 @@ msgstr "警告が発せられました"
 msgid "There were warnings, or the process was terminated."
 msgstr "警告が発せられるか、プロセスが終了されました。"
 
-#: src/input/r_avi.cpp:603 src/input/r_real.cpp:326
+#: src/input/r_avi.cpp:604 src/input/r_real.cpp:326
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr "このAACトラックは正しいヘッダを含んでいません。AACの情報を解析することができませんでした。\n"
 
-#: src/input/r_avi.cpp:600
+#: src/input/r_avi.cpp:601
 msgid "This AAC track does not contain valid headers. The extra header size is %1% bytes, expected were 2 or 5 bytes.\n"
 msgstr "このAACトラックは正しいヘッダを含んでいません。追加ヘッダのサイズは%1%ですが、期待されるサイズは2～5バイトです。\n"
 
@@ -6000,7 +5996,7 @@ msgstr "トラック%1%：AAC情報を解析することができませんでし
 msgid "Track ID %1% has an unknown AAC type.\n"
 msgstr "Track ID %1%は未知のAACタイプです。\n"
 
-#: src/merge/pr_generic.cpp:1365
+#: src/merge/pr_generic.cpp:1361
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "トラックID %1%：%2%（%3%）"
 
@@ -6120,7 +6116,7 @@ msgstr "'%1%'は未知のモードです。\n"
 msgid "Unknown open mode"
 msgstr "未知のオープンモード"
 
-#: src/input/r_avi.cpp:557
+#: src/input/r_avi.cpp:558
 msgid "Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n"
 msgstr "このトラックのオーディオフォーマット 0x%|1$04x|は未知もしくはサポートされていません。\n"
 
@@ -6356,7 +6352,7 @@ msgstr "NALUサイズを3バイトにすると、特定のAVC/h.264コーデッ�
 msgid "Using the %1%AC3 output module.\n"
 msgstr "%1%AC3出力モジュールを使用しています。\n"
 
-#: src/input/r_avi.cpp:623
+#: src/input/r_avi.cpp:624
 msgid "Using the AAC audio output module.\n"
 msgstr "AACオーディオ出力モジュールを使用しています。\n"
 
@@ -6381,7 +6377,7 @@ msgstr "AC3デマルチプレクサを使用しています。\n"
 msgid "Using the AC3 output module (FourCC: %1%).\n"
 msgstr "AC3出力モジュールを使用しています（FourCC：%1%）。\n"
 
-#: src/input/r_avi.cpp:532 src/input/r_ogm.cpp:991 src/input/r_qtmp4.cpp:1415
+#: src/input/r_avi.cpp:533 src/input/r_ogm.cpp:991 src/input/r_qtmp4.cpp:1415
 #: src/input/r_wav.cpp:228
 msgid "Using the AC3 output module.\n"
 msgstr "AC3出力モジュールを使用しています。\n"
@@ -6402,7 +6398,7 @@ msgstr "CorePanorama字幕リーダを使用しています。\n"
 msgid "Using the DTS demultiplexer.\n"
 msgstr "DTSデマルチプレクサを使用しています。\n"
 
-#: src/input/r_avi.cpp:543 src/input/r_dts.cpp:115
+#: src/input/r_avi.cpp:544 src/input/r_dts.cpp:115
 #: src/input/r_matroska.cpp:1373 src/input/r_mpeg_ps.cpp:1180
 #: src/input/r_wav.cpp:357
 msgid "Using the DTS output module.\n"
@@ -6445,7 +6441,7 @@ msgstr "MPEG ESデマルチプレクサを使用しています。\n"
 msgid "Using the MPEG PS demultiplexer.\n"
 msgstr "MPEG PSデマルチプレクサを使用しています。\n"
 
-#: src/input/r_avi.cpp:525 src/input/r_matroska.cpp:1355
+#: src/input/r_avi.cpp:526 src/input/r_matroska.cpp:1355
 #: src/input/r_mp3.cpp:72 src/input/r_mpeg_ps.cpp:1170
 #: src/input/r_ogm.cpp:1009 src/input/r_qtmp4.cpp:1498
 msgid "Using the MPEG audio output module.\n"
@@ -6483,7 +6479,7 @@ msgstr "Matroskaデマルチプレクサを使用しています。\n"
 msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr "OGG/OGMデマルチプレクサを使用しています。\n"
 
-#: src/input/r_avi.cpp:517 src/input/r_matroska.cpp:1351
+#: src/input/r_avi.cpp:518 src/input/r_matroska.cpp:1351
 #: src/input/r_ogm.cpp:1028 src/input/r_qtmp4.cpp:1504 src/input/r_wav.cpp:398
 msgid "Using the PCM output module.\n"
 msgstr "PCM出力モジュールを使用しています。\n"
@@ -6568,7 +6564,7 @@ msgstr "VobSub字幕出力モジュールを使用しています（言語：%1%
 msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
 msgstr "VobSub字幕リーダを使用しています（字幕ファイル'%1%'）。\n"
 
-#: src/input/r_avi.cpp:672 src/input/r_matroska.cpp:1377
+#: src/input/r_avi.cpp:673 src/input/r_matroska.cpp:1377
 #: src/input/r_ogm.cpp:1049
 msgid "Using the Vorbis output module.\n"
 msgstr "Vorbis出力モジュールを使用しています。\n"
@@ -7690,7 +7686,7 @@ msgstr ""
 msgid "pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < last_timecode (%1% < %2%). %3%\n"
 msgstr "pr_generic.cpp/generic_packetizer_c::add_packet()：timecode < last_timecode（%1% < %2%）です。 %3%\n"
 
-#: src/merge/pr_generic.cpp:1148
+#: src/merge/pr_generic.cpp:1146
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr "pr_generic.cpp/generic_reader_c::demuxing_requested()：不正なトラックタイプ%1%."
 
@@ -7918,6 +7914,9 @@ msgstr "はい"
 
 #~ msgid "During MPEG-4 part 2 B frame handling: The frame queue contains more frames than timecodes are available that can be assigned to them (reason: %1%). Therefore %2% frame(s) had to be dropped. The video might be broken around timecode %3%.\n"
 #~ msgstr "MPEG-4 part 2 Bフレーム処理でエラーが発生しました:割り当てられたタイムコードより多くのフレームをフレームキューが含んでいます (理由: %1%)。よって%2%フレームをドロップせざるをえませんでした。ビデオはタイムコード%3%周辺で壊れている可能性があります。\n"
+
+#~ msgid "No tracks will be copied from this file. This usually indicates a mistake in the command line.\n"
+#~ msgstr "このファイルからはトラックがコピーされません。これは通常コマンドラインに誤りがあることを示します。\n"
 
 #~ msgid "Set &default values"
 #~ msgstr "デフォルト値を設定(&D)"

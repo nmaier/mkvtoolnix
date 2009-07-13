@@ -1402,11 +1402,11 @@ msgstr "+-> 預先解析 FLAC 檔案: %1%%%%2%"
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr "+-> 預先解析 FLAC 檔案: 100%\n"
 
-#: src/merge/pr_generic.cpp:1367
+#: src/merge/pr_generic.cpp:1363
 msgid ", description '%1%'"
 msgstr ", 描述 '%1%'"
 
-#: src/merge/pr_generic.cpp:1368
+#: src/merge/pr_generic.cpp:1364
 msgid ", file name '%1%'"
 msgstr ", 檔名 '%1%'"
 
@@ -1537,7 +1537,7 @@ msgstr "單獨的 '+' 不是有效的命令列選項。如果您希望用 '+' �
 msgid "A track"
 msgstr "一個軌道"
 
-#: src/merge/pr_generic.cpp:1234
+#: src/merge/pr_generic.cpp:1230
 msgid "A track with the ID %1% was requested but not found in the file. The corresponding option will be ignored.\n"
 msgstr "ID 為 %1% 的軌道被要求但在檔中沒有找到。相應的選項將被忽略。\n"
 
@@ -1812,7 +1812,7 @@ msgstr "附加的"
 msgid "Attached files"
 msgstr "附加檔清單"
 
-#: src/merge/pr_generic.cpp:1366
+#: src/merge/pr_generic.cpp:1362
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
 msgstr "附件 ID %1%: 類型 '%2%', 大小 %3% 位元組"
 
@@ -2092,7 +2092,7 @@ msgstr "章節已寫入。"
 msgid "Chapters:"
 msgstr "章節:"
 
-#: src/merge/pr_generic.cpp:1369
+#: src/merge/pr_generic.cpp:1365
 msgid "Chapters: %1% entries"
 msgstr "章節: %1% 項目"
 
@@ -2963,11 +2963,11 @@ msgstr "家族 UID:%1%"
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "檔案 %1% 類型未知。請查看受支援的檔案類型清單 ('mkvmerge --list-types')，如果您的檔案類型受支援但沒被正常識別，請聯繫作者 Moritz Bunkus <moritz@bunkus.org>。\n"
 
-#: src/merge/pr_generic.cpp:1364
+#: src/merge/pr_generic.cpp:1360
 msgid "File '%1%': container: %2%"
 msgstr "檔案 '%1%': 容器: %2%"
 
-#: src/merge/pr_generic.cpp:1282
+#: src/merge/pr_generic.cpp:1278
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "檔案 '%1%': 不支援的容器: %2%\n"
 
@@ -3164,7 +3164,7 @@ msgstr "整體標籤"
 msgid "Global tags (%d entries) from %s"
 msgstr "整體標籤 (%d 個項目) 自 %s"
 
-#: src/merge/pr_generic.cpp:1370
+#: src/merge/pr_generic.cpp:1366
 msgid "Global tags: %1% entries"
 msgstr "整體標籤: %1% 項目"
 
@@ -3361,9 +3361,9 @@ msgstr "無效 UID。該章節 UID 已被使用。原 UID 沒有被改變。"
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "無效 UID。該版本 UID 已被使用。原 UID 沒有被改變。"
 
-#: src/input/r_avi.cpp:632
-#: src/input/r_avi.cpp:637
-#: src/input/r_avi.cpp:654
+#: src/input/r_avi.cpp:633
+#: src/input/r_avi.cpp:638
+#: src/input/r_avi.cpp:655
 msgid "Invalid Vorbis headers in AVI audio track."
 msgstr "有無效的 Vorbis 表頭，在 AVI 音軌中。"
 
@@ -4093,10 +4093,6 @@ msgstr "未指定軌道 ID，在 '--%1% %2%'。\n"
 #: src/mmg/tabs/input.cpp:582
 msgid "No tracks found"
 msgstr "未發現軌道"
-
-#: src/merge/pr_generic.cpp:1220
-msgid "No tracks will be copied from this file. This usually indicates a mistake in the command line.\n"
-msgstr "此檔中沒有待複製的軌道。這通常是因為命令列中的差錯。\n"
 
 #: src/input/r_vobsub.cpp:91
 msgid "No version number found.\n"
@@ -5122,7 +5118,7 @@ msgstr "標籤檔案 (*.xml;*.txt)|*.xml;*.txt|%s"
 msgid "Tags"
 msgstr "標籤"
 
-#: src/merge/pr_generic.cpp:1371
+#: src/merge/pr_generic.cpp:1367
 msgid "Tags for track ID %1%: %2% entries"
 msgstr "軌道 ID 的標籤 %1%: %2% 項目"
 
@@ -5172,7 +5168,7 @@ msgstr "此 AVC 視訊軌缺少 'CTTS' 畫格時間碼偏移單元。然而，AV
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
 msgstr "軌道 %1% 的 CUE 表單將被寫至 '%2%'。\n"
 
-#: src/merge/pr_generic.h:398
+#: src/merge/pr_generic.h:399
 msgid "The CodecID of the two tracks is different: %1% and %2%"
 msgstr "兩軌的 CodecID 不同: %1% 與 %2%"
 
@@ -5364,11 +5360,11 @@ msgstr ""
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr "關於關聯至軌道的標籤與整體標籤的區別已在 mkvmerge 文檔中作出解釋。簡而言之: 整體標籤應用於整個檔案，而您能在 '輸入' 選項分頁中添加的標籤僅能應用於單個軌道。"
 
-#: src/merge/pr_generic.h:393
+#: src/merge/pr_generic.h:394
 msgid "The display height of the two tracks is different: %1% and %2%"
 msgstr "兩軌的顯示高度不同: %1% 與 %2%"
 
-#: src/merge/pr_generic.h:388
+#: src/merge/pr_generic.h:389
 msgid "The display width of the two tracks is different: %1% and %2%"
 msgstr "兩軌的顯示寬度不同: %1% 與 %2%"
 
@@ -5390,7 +5386,7 @@ msgstr "在指定持續時間後開始輸出新檔。時間可以以 HH:MM:SS.nn
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "元件已被寫至檔案結尾部，但剪輯大小無法更新。因此這些元件將不可見。處理處理程序將被中止。檔已被修改!"
 
-#: src/output/p_mpeg4_p2.cpp:379
+#: src/output/p_mpeg4_p2.cpp:384
 msgid "The extracted values for video width and height from the MPEG4 layer 2 video data bitstream differ from what the values in the source container. The ones from the video data bitstream (%1%x%2%) will be used.\n"
 msgstr "從 MPEG4 layer 2 視訊資料位元流中提取的視訊寬度和高度值與來源容器中的不同。將使用視訊資料位元流中的 (%1%x%2%)。\n"
 
@@ -5434,7 +5430,7 @@ msgstr "檔案 '%1%' 已開啟以寫入。\n"
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "檔案 '%1%' 類型未知。請查看支援的檔案類型 ('mkvmerge --list-types')，若您的檔案類型受支援但被錯誤識別，請聯繫作者 Moritz Bunkus <moritz@bunkus.org>。\n"
 
-#: src/merge/pr_generic.cpp:1286
+#: src/merge/pr_generic.cpp:1282
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "檔 '%1%' 類型不支援 (%2%)。\n"
 
@@ -5551,7 +5547,7 @@ msgstr "給定的時間碼縮放比例超出有效範圍 (1...10000000 或 -1 �
 msgid "The header has already been written."
 msgstr "表頭已被寫入。"
 
-#: src/merge/pr_generic.h:383
+#: src/merge/pr_generic.h:384
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "兩軌高度不同: %1% 與 %2%"
 
@@ -5677,11 +5673,11 @@ msgstr "輸出檔 '%1%' 的名稱與輸入檔之一相同。這將使 mkvmerge �
 msgid "The next UID was already given in '%1% %2%'.\n"
 msgstr "下一 UID 已在 '%1% %2%' 給出。\n"
 
-#: src/merge/pr_generic.h:373
+#: src/merge/pr_generic.h:374
 msgid "The number of bits per sample of the two audio tracks is different: %1% and %2%"
 msgstr "兩軌的每次取樣位元數（音訊位元深度）不同: %1% 與 %2%"
 
-#: src/merge/pr_generic.h:368
+#: src/merge/pr_generic.h:369
 msgid "The number of channels of the two audio tracks is different: %1% and %2%"
 msgstr "兩音軌的聲道數不同: %1% 與 %2%"
 
@@ -5747,7 +5743,7 @@ msgstr "原因不詳。"
 msgid "The root element must be <%1%>."
 msgstr "根元件必須為 <%1%>。"
 
-#: src/merge/pr_generic.h:363
+#: src/merge/pr_generic.h:364
 msgid "The sample rate of the two audio tracks is different: %1% and %2%"
 msgstr "兩音軌的取樣頻率不同: %1% 與 %2%"
 
@@ -5873,7 +5869,7 @@ msgstr "區塊表頭使用的軌道編號。"
 msgid "The track parameters do not match."
 msgstr "軌道參數不符。"
 
-#: src/merge/pr_generic.h:378
+#: src/merge/pr_generic.h:379
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "兩軌寬度不同: %1% 與 %2%"
 
@@ -5903,12 +5899,12 @@ msgstr "有警告資訊"
 msgid "There were warnings, or the process was terminated."
 msgstr "有警告資訊，或者處理處理程序被中止。"
 
-#: src/input/r_avi.cpp:603
+#: src/input/r_avi.cpp:604
 #: src/input/r_real.cpp:326
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr "此 AAC 軌道不含有效的表頭。無法解析 AAC 資訊。\n"
 
-#: src/input/r_avi.cpp:600
+#: src/input/r_avi.cpp:601
 msgid "This AAC track does not contain valid headers. The extra header size is %1% bytes, expected were 2 or 5 bytes.\n"
 msgstr "此 AAC 軌道不含有效的頭。超額的表頭大小為 %1% 位元組, 預期為 2 或 5 位元組。\n"
 
@@ -6138,7 +6134,7 @@ msgstr "軌道 %1%: AAC 資訊無法解析。\n"
 msgid "Track ID %1% has an unknown AAC type.\n"
 msgstr "軌道 ID %1% 的 AAC 類型未知。\n"
 
-#: src/merge/pr_generic.cpp:1365
+#: src/merge/pr_generic.cpp:1361
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "軌道 ID %1%: %2% (%3%)"
 
@@ -6259,7 +6255,7 @@ msgstr "未知的模式 '%1%'。\n"
 msgid "Unknown open mode"
 msgstr "未知的開啟模式"
 
-#: src/input/r_avi.cpp:557
+#: src/input/r_avi.cpp:558
 msgid "Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n"
 msgstr "此音軌的格式 0x%|1$04x| 未知或不支援。\n"
 
@@ -6491,7 +6487,7 @@ msgstr "使用 3 位元組的 NALU 長可能會導致某些 AVC/h.264 編解碼�
 msgid "Using the %1%AC3 output module.\n"
 msgstr "使用 %1%AC3 輸出模組。\n"
 
-#: src/input/r_avi.cpp:623
+#: src/input/r_avi.cpp:624
 msgid "Using the AAC audio output module.\n"
 msgstr "使用 AAC 音訊輸出模組。\n"
 
@@ -6518,7 +6514,7 @@ msgstr "使用 AC3 分離器。\n"
 msgid "Using the AC3 output module (FourCC: %1%).\n"
 msgstr "使用 AC3 輸出模組 (FourCC: %1%)。\n"
 
-#: src/input/r_avi.cpp:532
+#: src/input/r_avi.cpp:533
 #: src/input/r_ogm.cpp:991
 #: src/input/r_qtmp4.cpp:1415
 #: src/input/r_wav.cpp:228
@@ -6541,7 +6537,7 @@ msgstr "使用 CorePanorama 字幕讀取器。\n"
 msgid "Using the DTS demultiplexer.\n"
 msgstr "使用 DTS 分離器。\n"
 
-#: src/input/r_avi.cpp:543
+#: src/input/r_avi.cpp:544
 #: src/input/r_dts.cpp:115
 #: src/input/r_matroska.cpp:1373
 #: src/input/r_mpeg_ps.cpp:1180
@@ -6588,7 +6584,7 @@ msgstr "使用 MPEG ES 分離器。\n"
 msgid "Using the MPEG PS demultiplexer.\n"
 msgstr "使用 MPEG PS 分離器。\n"
 
-#: src/input/r_avi.cpp:525
+#: src/input/r_avi.cpp:526
 #: src/input/r_matroska.cpp:1355
 #: src/input/r_mp3.cpp:72
 #: src/input/r_mpeg_ps.cpp:1170
@@ -6636,7 +6632,7 @@ msgstr "使用 Matroska 分離器。\n"
 msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr "使用 OGG/OGM 分離器。\n"
 
-#: src/input/r_avi.cpp:517
+#: src/input/r_avi.cpp:518
 #: src/input/r_matroska.cpp:1351
 #: src/input/r_ogm.cpp:1028
 #: src/input/r_qtmp4.cpp:1504
@@ -6727,7 +6723,7 @@ msgstr "使用 VobSub 字幕輸出模組 (語言: %1%)。\n"
 msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
 msgstr "使用 VobSub 字幕讀取器 (SUB 檔 '%1%')。\n"
 
-#: src/input/r_avi.cpp:672
+#: src/input/r_avi.cpp:673
 #: src/input/r_matroska.cpp:1377
 #: src/input/r_ogm.cpp:1049
 msgid "Using the Vorbis output module.\n"
@@ -7906,7 +7902,7 @@ msgstr "像素寬度: %1%"
 msgid "pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < last_timecode (%1% < %2%). %3%\n"
 msgstr "pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < last_timecode (%1% < %2%)。 %3%\n"
 
-#: src/merge/pr_generic.cpp:1148
+#: src/merge/pr_generic.cpp:1146
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr "pr_generic.cpp/generic_reader_c::demuxing_requested(): 無效軌道類型 %1%。"
 
@@ -8166,6 +8162,8 @@ msgstr "是"
 #~ msgstr "不讀取章節"
 #~ msgid "No tags"
 #~ msgstr "不讀取標籤"
+#~ msgid "No tracks will be copied from this file. This usually indicates a mistake in the command line.\n"
+#~ msgstr "此檔中沒有待複製的軌道。這通常是因為命令列中的差錯。\n"
 #~ msgid "Set &default values"
 #~ msgstr "設定預設值(&D)"
 #~ msgid "Subtitle charset:"

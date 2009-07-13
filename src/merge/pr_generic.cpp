@@ -1214,8 +1214,6 @@ generic_reader_c::set_headers_for_track(int64_t tid) {
 void
 generic_reader_c::check_track_ids_and_packetizers() {
   add_available_track_ids();
-  if (reader_packetizers.size() == 0)
-    mxwarn_fn(ti.fname, Y("No tracks will be copied from this file. This usually indicates a mistake in the command line.\n"));
 
   int r;
   for (r = 0; requested_track_ids.size() > r; ++r) {
