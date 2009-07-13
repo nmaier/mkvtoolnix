@@ -712,18 +712,14 @@ mmg_dialog::update_command_line() {
 
   unsigned int fidx;
   for (fidx = 0; files.size() > fidx; fidx++) {
-    mmg_file_cptr &f          = files[fidx];
-    bool tracks_selected_here = false;
-    bool no_audio             = true;
-    bool no_video             = true;
-    bool no_subs              = true;
-    bool no_chapters          = true;
-    bool no_tags              = true;
-    bool no_global_tags       = true;
-    wxString aids             = wxEmptyString;
-    wxString sids             = wxEmptyString;
-    wxString dids             = wxEmptyString;
-    wxString tids             = wxEmptyString;
+    mmg_file_cptr &f    = files[fidx];
+    bool no_audio       = true;
+    bool no_video       = true;
+    bool no_subs        = true;
+    bool no_chapters    = true;
+    bool no_tags        = true;
+    bool no_global_tags = true;
+    wxString aids, dids, sids, tids;
 
     unsigned int tidx;
     for (tidx = 0; f->tracks.size() > tidx; tidx++) {
@@ -731,8 +727,7 @@ mmg_dialog::update_command_line() {
       if (!t->enabled)
         continue;
 
-      tracks_selected_here = true;
-      wxString sid         = wxLongLong('t' == t->type ? t->id - TRACK_ID_TAGS_BASE : t->id).ToString();
+      wxString sid = wxLongLong('t' == t->type ? t->id - TRACK_ID_TAGS_BASE : t->id).ToString();
 
       if (t->type == wxT('a')) {
         no_audio = false;
@@ -909,41 +904,39 @@ mmg_dialog::update_command_line() {
       clargs.Add(tids);
     }
 
-    if (tracks_selected_here) {
-      std::vector<mmg_attached_file_cptr>::iterator att_file = f->attached_files.begin();
-      std::vector<wxString> att_file_ids;
+    std::vector<mmg_attached_file_cptr>::iterator att_file = f->attached_files.begin();
+    std::vector<wxString> att_file_ids;
 
-      while (att_file != f->attached_files.end()) {
-        if ((*att_file)->enabled)
-          att_file_ids.push_back(wxString::Format(wxT("%ld"), (*att_file)->id));
-        ++att_file;
-      }
-
-      if (!att_file_ids.empty()) {
-        clargs.Add(wxT("--attachments"));
-        clargs.Add(join(wxT(","), att_file_ids));
-
-      } else if (!f->attached_files.empty())
-        clargs.Add(wxT("--no-attachments"));
-
-      if (no_video)
-        clargs.Add(wxT("-D"));
-      if (no_audio)
-        clargs.Add(wxT("-A"));
-      if (no_subs)
-        clargs.Add(wxT("-S"));
-      if (no_tags)
-        clargs.Add(wxT("-T"));
-      if (no_global_tags)
-        clargs.Add(wxT("--no-global-tags"));
-      if (no_chapters)
-        clargs.Add(wxT("--no-chapters"));
-
-      if (f->appending)
-        clargs.Add(wxString(wxT("+")) + f->file_name);
-      else
-        clargs.Add(f->file_name);
+    while (att_file != f->attached_files.end()) {
+      if ((*att_file)->enabled)
+        att_file_ids.push_back(wxString::Format(wxT("%ld"), (*att_file)->id));
+      ++att_file;
     }
+
+    if (!att_file_ids.empty()) {
+      clargs.Add(wxT("--attachments"));
+      clargs.Add(join(wxT(","), att_file_ids));
+
+    } else if (!f->attached_files.empty())
+      clargs.Add(wxT("--no-attachments"));
+
+    if (no_video)
+      clargs.Add(wxT("-D"));
+    if (no_audio)
+      clargs.Add(wxT("-A"));
+    if (no_subs)
+      clargs.Add(wxT("-S"));
+    if (no_tags)
+      clargs.Add(wxT("-T"));
+    if (no_global_tags)
+      clargs.Add(wxT("--no-global-tags"));
+    if (no_chapters)
+      clargs.Add(wxT("--no-chapters"));
+
+    if (f->appending)
+      clargs.Add(wxString(wxT("+")) + f->file_name);
+    else
+      clargs.Add(f->file_name);
   }
 
   wxString track_order = create_track_order(false);

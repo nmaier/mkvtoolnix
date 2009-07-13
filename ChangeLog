@@ -1,5 +1,9 @@
 2009-07-13  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: Files for which all tracks were disabled were left
+	out from mkvmerge's command line so that tags, chapters and
+	attachments were not copied from such files either.
+
 	* mkvmerge: bug fix: Appending MPEG4 part 2 video tracks from
 	Matroska files which contain aspect ratio information will not
 	result in an error message "connected_to > 0" anymore. Fix for bug
