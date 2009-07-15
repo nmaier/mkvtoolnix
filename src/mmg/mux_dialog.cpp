@@ -127,8 +127,13 @@ mux_dialog::mux_dialog(wxWindow *parent):
   }
   delete opt_file;
 
-  pid = wxExecute((*arg_list)[0] + wxT(" \"@") + opt_file_name + wxT("\""),
-                  wxEXEC_ASYNC, process);
+  wxString command_line = wxString::Format(wxT("\"%s\" \"@%s\""), (*arg_list)[0].c_str(), opt_file_name.c_str());
+  pid = wxExecute(command_line, wxEXEC_ASYNC, process);
+  if (0 == pid) {
+    wxLogError(wxT("Execution of '%s' failed."), command_line.c_str());
+    done();
+    return;
+  }
   out = process->GetInputStream();
 
   line = "";

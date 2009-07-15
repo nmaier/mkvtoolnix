@@ -1,3 +1,10 @@
+2009-07-15  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: Running mkvmerge on Windows from an installation
+	directory with two spaces in the path (e.g. "C:\Program
+	Files\Video tools\mkvtolnix") crashed mmg when the user started
+	muxing. Fix for bug 419.
+
 2009-07-13  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: Files for which all tracks were disabled were left

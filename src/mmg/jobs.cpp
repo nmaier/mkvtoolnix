@@ -167,7 +167,12 @@ job_run_dialog::start_next_job() {
 
   process = new wxProcess(this, 1);
   process->Redirect();
-  pid = wxExecute((*arg_list)[0] + wxT(" \"@") + opt_file_name + wxT("\""), wxEXEC_ASYNC, process);
+  wxString command_line = wxString::Format(wxT("\"%s\" \"@%s\""), (*arg_list)[0].c_str(), opt_file_name.c_str());
+  pid = wxExecute(command_line, wxEXEC_ASYNC, process);
+  if (0 == pid) {
+    wxLogError(wxT("Execution of '%s' failed."), command_line.c_str());
+    return;
+  }
   out = process->GetInputStream();
 
   *jobs[ndx].log        = wxEmptyString;
