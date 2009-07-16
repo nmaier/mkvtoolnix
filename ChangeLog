@@ -1,5 +1,10 @@
 2009-07-16  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: Tracks added from Matroska files did not get their
+	'default track' drop down box set correctly if the flag was 'off'
+	in the source file and no other track of its kind hat its 'default
+	track' flag set.
+
 	* mkvmerge: bug fix: mkvmerge was wrongly turning the 'default
 	track' flag back on for the first subtitle track muxed from a
 	Matroska file if none of the subtitle tracks muxed had their

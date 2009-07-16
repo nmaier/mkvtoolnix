@@ -14,6 +14,7 @@
 #include <errno.h>
 
 #include <algorithm>
+#include <map>
 
 #include <wx/wxprec.h>
 
@@ -289,8 +290,6 @@ tab_input::add_file(const wxString &file_name,
   unsigned int i, k;
   wxFile *opt_file;
   std::string arg_utf8;
-  bool default_video_track_found, default_audio_track_found;
-  bool default_subtitle_track_found;
 
   wxFileName file_name_obj(file_name);
   last_open_dir = file_name_obj.GetPath();
@@ -367,9 +366,11 @@ tab_input::add_file(const wxString &file_name,
 
   mmg_file_cptr file           = mmg_file_cptr(new mmg_file_t);
 
-  default_audio_track_found    = -1 != default_track_checked('a');
-  default_video_track_found    = -1 != default_track_checked('v');
-  default_subtitle_track_found = -1 != default_track_checked('s');
+  std::map<char, bool> default_track_found_for;
+  default_track_found_for['a'] = -1 != default_track_checked('a');
+  default_track_found_for['v'] = -1 != default_track_checked('v');
+  default_track_found_for['s'] = -1 != default_track_checked('s');
+
   for (i = 0; i < output.Count(); i++) {
     if (output[i].Find(wxT("Track")) == 0) {
       mmg_track_cptr track(new mmg_track_t);
@@ -421,18 +422,13 @@ tab_input::add_file(const wxString &file_name,
               track->display_dimensions_selected = true;
             }
 
-          } else if ((pair[0] == wxT("default_track")) && (pair[1] == wxT("1"))) {
-            if (('a' == track->type) && !default_audio_track_found) {
-              track->default_track      = true;
-              default_audio_track_found = true;
+          } else if (pair[0] == wxT("default_track")) {
+            if (pair[1] != wxT("1"))
+              track->default_track = 2; // A definitive 'no'.
 
-            } else if (('v' == track->type) && !default_video_track_found) {
-              track->default_track      = true;
-              default_video_track_found = true;
-
-            } else if (('s' == track->type) && !default_subtitle_track_found) {
-              track->default_track         = true;
-              default_subtitle_track_found = true;
+            else if ((('a' == track->type) || ('v' == track->type) || ('s' == track->type)) && !default_track_found_for[track->type]) {
+              track->default_track                 = 1; // A definitive 'yes'.
+              default_track_found_for[track->type] = true;
             }
 
           } else if (pair[0] == wxT("stereo_mode")) {
