@@ -332,8 +332,8 @@ vobsub_reader_c::deliver_packet(unsigned char *buf,
     duration = default_duration;
     mxverb(2, boost::format("vobsub_reader: Could not extract the duration for a SPU packet (timecode: %1%).") % format_timecode(timecode, 3));
 
-    uint32_t dcsq  = buf[2]        << 8 | buf[3];
-    uint32_t dcsq2 = buf[dcsq + 2] << 8 | buf[dcsq + 3];
+    int dcsq  =                   get_uint16_be(&buf[2]);
+    int dcsq2 = dcsq + 3 < size ? get_uint16_be(&buf[dcsq + 2]) : -1;
 
     // Some players ignore sub-pictures if there is no stop display command.
     // Add a stop display command only if 1 command chain exists and the hack is enabled.
