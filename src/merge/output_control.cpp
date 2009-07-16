@@ -349,7 +349,7 @@ get_file_type(filelist_t &file) {
   else {
     // File types which are the same in raw format and in other container formats.
     // Detection requires 20 or more consecutive packets.
-    static const int s_probe_sizes[]                          = { 32 * 1024, 64 * 1024, 128 * 1024, 256 * 1024, 0 };
+    static const int s_probe_sizes[]                          = { 32 * 1024, 64 * 1024, 128 * 1024, 256 * 1024, 512 * 1024, 1024 * 1024, 0 };
     static const int s_probe_num_required_consecutive_packets = 20;
 
     int i;
