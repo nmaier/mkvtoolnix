@@ -1,3 +1,12 @@
+2009-07-16  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: mkvmerge was wrongly turning the 'default
+	track' flag back on for the first subtitle track muxed from a
+	Matroska file if none of the subtitle tracks muxed had their
+	'default track' flag set in their source files and if the user
+	didn't use the '--default-track' option for setting that flag
+	explicitely.
+
 2009-07-15  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: Running mkvmerge on Windows from an installation

@@ -167,14 +167,8 @@ kax_reader_c::packets_available() {
 
 kax_track_t *
 kax_reader_c::new_kax_track() {
-  // Set some default values.
-  kax_track_t *t   = new kax_track_t;
-  t->default_track = true;
-  t->ptzr          = -1;
-
-  tracks.push_back(t);
-
-  return t;
+  tracks.push_back(new kax_track_t);
+  return tracks.back();
 }
 
 kax_track_t *
@@ -1275,8 +1269,10 @@ kax_reader_c::set_packetizer_headers(kax_track_t *t) {
     return;
 
   if (t->default_track)
-    PTZR(t->ptzr)->set_as_default_track(t->type == 'v' ? DEFTRACK_TYPE_VIDEO : t->type == 'a' ? DEFTRACK_TYPE_AUDIO : DEFTRACK_TYPE_SUBS,
-                                        DEFAULT_TRACK_PRIORITY_FROM_SOURCE);
+    PTZR(t->ptzr)->set_as_default_track(t->type == 'v' ? DEFTRACK_TYPE_VIDEO : t->type == 'a' ? DEFTRACK_TYPE_AUDIO : DEFTRACK_TYPE_SUBS, DEFAULT_TRACK_PRIORITY_FROM_SOURCE);
+
+  else if (!boost::logic::indeterminate(t->default_track) && boost::logic::indeterminate(PTZR(t->ptzr)->ti.default_track))
+    PTZR(t->ptzr)->ti.default_track = false;
 
   if (t->forced_track && boost::logic::indeterminate(PTZR(t->ptzr)->ti.forced_track))
     PTZR(t->ptzr)->set_track_forced_flag(true);

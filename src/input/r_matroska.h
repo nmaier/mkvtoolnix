@@ -17,8 +17,7 @@
 
 #include "common/os.h"
 
-#include <stdio.h>
-
+#include <boost/logic/tribool.hpp>
 #include <map>
 #include <vector>
 
@@ -69,8 +68,7 @@ struct kax_track_t {
   unsigned char *headers[3];
   uint32_t header_sizes[3];
 
-  bool default_track;
-  boost::logic::tribool forced_track;
+  boost::logic::tribool default_track, forced_track;
   std::string language;
 
   int64_t units_processed;
@@ -128,7 +126,7 @@ struct kax_track_t {
     , ok(false)
     , previous_timecode(0)
     , tags(NULL)
-    , ptzr(0)
+    , ptzr(-1)
     , headers_set(false)
     , ignore_duration_hack(false)
   {
