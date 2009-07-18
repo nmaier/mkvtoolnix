@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-07-02 13:54+0800\n"
+"PO-Revision-Date: 2009-07-18 20:45+0800\n"
 "Last-Translator: Dean Lee <xslidian+t@gmail.com>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -2735,9 +2735,8 @@ msgid "Each chapter and each edition has a unique identifier. This identifier is
 msgstr "每个章节和版本都有唯一的 ID。该 ID 通常由程序自动指派，但也可以手动修改（如果确实需要的话）。"
 
 #: src/mmg/tabs/chapters.cpp:804
-#, fuzzy
 msgid "Each edition must contain at least one chapter."
-msgstr "此文件不包含任何章节。"
+msgstr "每个版本至少需含有一个章节。"
 
 #: src/info/mkvinfo.cpp:145
 msgid "EbmlVoid (size: %1%)"
