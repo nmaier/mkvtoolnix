@@ -23,6 +23,7 @@
 # include <libintl.h>
 #endif
 #include <locale.h>
+#include <stdlib.h>
 
 #include "common/common.h"
 #include "common/locale_string.h"
@@ -119,17 +120,20 @@ translation_c::get_default_ui_locale() {
   char *data = setlocale(LC_MESSAGES, NULL);
   if (NULL != data) {
     std::string previous_locale = data;
-    mxverb(4, boost::format("[get_default_ui_locale previous %1%]\n") % previous_locale);
+    if (debugging_requested("locale"))
+      mxinfo(boost::format("[get_default_ui_locale previous %1%]\n") % previous_locale);
     setlocale(LC_MESSAGES, "");
     data = setlocale(LC_MESSAGES, NULL);
 
     if (NULL != data)
       locale = data;
-    mxverb(4, boost::format("[get_default_ui_locale new %1%]\n") % locale);
+
+    if (debugging_requested("locale"))
+      mxinfo(boost::format("[get_default_ui_locale new %1%]\n") % locale);
 
     setlocale(LC_MESSAGES, previous_locale.c_str());
-  } else
-    mxverb(4, boost::format("[get_default_ui_locale get previous failed]\n"));
+  } else if (debugging_requested("locale"))
+    mxinfo(boost::format("[get_default_ui_locale get previous failed]\n"));
 
 # endif // SYS_WINDOWS
 #endif  // HAVE_LIBINTL_H
@@ -152,19 +156,22 @@ void
 init_locales(std::string locale) {
   translation_c::initialize_available_translations();
 
-  mxverb(4, boost::format("[init_locales start: locale %1%]\n") % locale);
+  if (debugging_requested("locale"))
+    mxinfo(boost::format("[init_locales start: locale %1%]\n") % locale);
 
   std::string locale_dir;
   std::string default_locale = translation_c::get_default_ui_locale();
 
   if (-1 == translation_c::look_up_translation(locale)) {
-    mxverb(4, boost::format("[init_locales lookup failed; clearing locale]\n"));
+    if (debugging_requested("locale"))
+      mxinfo(boost::format("[init_locales lookup failed; clearing locale]\n"));
     locale = "";
   }
 
   if (locale.empty()) {
     locale = default_locale;
-    mxverb(4, boost::format("[init_locales setting to default locale %1%]\n") % locale);
+    if (debugging_requested("locale"))
+      mxinfo(boost::format("[init_locales setting to default locale %1%]\n") % locale);
   }
 
 # if defined(SYS_WINDOWS)
@@ -205,16 +212,24 @@ init_locales(std::string locale) {
     }
 
   } catch (locale_string_format_error_c &error) {
-    mxverb(4, boost::format("[init_locales format error in %1%]\n") % error.m_format);
+    if (debugging_requested("locale"))
+      mxinfo(boost::format("[init_locales format error in %1%]\n") % error.m_format);
   }
 
-  mxverb(4, boost::format("[init_locales chosen locale %1%]\n") % chosen_locale);
+  if (debugging_requested("locale"))
+    mxinfo(boost::format("[init_locales chosen locale %1%]\n") % chosen_locale);
 
   if (chosen_locale.empty())
     mxerror(Y("The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"));
 
   locale_dir = MTX_LOCALE_DIR;
 # endif  // SYS_WINDOWS
+
+#if defined(SYS_APPLE)
+  int result = setenv("LC_MESSAGES", chosen_locale.c_str(), 1);
+  if (debugging_requested("locale"))
+    mxinfo(boost::format("[init_locales setenv() return code: %1%]\n") % result);
+#endif
 
   bindtextdomain("mkvtoolnix", locale_dir.c_str());
   textdomain("mkvtoolnix");
