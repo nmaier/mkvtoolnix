@@ -63,7 +63,7 @@ parse_segmentinfo(const std::string &file_name,
 
    The Matroska specs and \c libmatroska say that several elements are
    mandatory. This function makes sure that they all exist by adding them
-   with their default values if they're missing. It works recursively.
+   with their default values if they're missing.
 
    The parameters are checked for validity.
 
@@ -75,11 +75,11 @@ fix_mandatory_segmentinfo_elements(EbmlElement *e) {
   if (NULL == e)
     return;
 
-  EbmlMaster *m = dynamic_cast<EbmlMaster *>(e);
-  if (NULL == m)
+  KaxInfo *info = dynamic_cast<KaxInfo *>(e);
+  if (NULL == info)
     return;
 
-  int i;
-  for (i = 0; m->ListSize() > i; i++)
-    fix_mandatory_segmentinfo_elements((*m)[i]);
+  GetChild<KaxTimecodeScale>(info);
+  GetChild<KaxMuxingApp>(info);
+  GetChild<KaxWritingApp>(info);
 }

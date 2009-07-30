@@ -1,3 +1,9 @@
+2009-07-30  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg/header editor: bug fix: The header editor copes better with
+	files that do not contain all mandatory header fields. The missing
+	ones are added or assumed to be default values.
+
 2009-07-23  Moritz Bunkus  <moritz@bunkus.org>
 
 	* all: bug fix: Selecting the translations with the
