@@ -38,6 +38,7 @@ AR = @AR@
 CC = @CC@
 CPP = @CPP@
 CXX = @CXX@
+ETAGS = @ETAGS@
 EXEEXT = @EXEEXT@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_HEADER = $(INSTALL_DATA)
@@ -208,7 +209,15 @@ ifeq (1,$(TOOLS))
 include src/tools/Makefile
 endif
 
-all: $(APPLICATIONS) $(TRANSLATIONS_MOS) $(HTMLHELPBOOKS)
+# Only rebuild the TAGS file if one is already present by a previous
+# call to "make tags". This is only useful for developers.
+ifneq (,$(wildcard TAGS))
+ifdef ETAGS
+  TAGSFILE = TAGS
+endif
+endif
+
+all: $(APPLICATIONS) $(TRANSLATIONS_MOS) $(HTMLHELPBOOKS) $(TAGSFILE)
 
 install: install-programs install-mans install-trans install-guide
 
@@ -303,7 +312,7 @@ clean:
 		src/mmg/*/*.o
 
 distclean dist-clean: clean
-	rm -f config.h config.log config.cache Makefile */Makefile */*/Makefile
+	rm -f config.h config.log config.cache Makefile */Makefile */*/Makefile TAGS
 	rm -rf .deps
 
 maintainer-clean: distclean
@@ -331,6 +340,12 @@ po-stats po-statistics:
 	done
 
 mkvmerge-gui-book:	doc/mkvmerge-gui.hhk
+
+tags: TAGS
+
+TAGS: $(ALL_SOURCES)
+	@echo '   ETAGS'
+	$(Q)$(ETAGS) -o $@ $^
 
 #
 # avilib-0.6.10

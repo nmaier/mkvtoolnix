@@ -39,6 +39,7 @@ m4_include(ac/magic.m4)
 m4_include(ac/ax_boost_base.m4)
 m4_include(ac/ax_boost_regex.m4)
 m4_include(ac/boost.m4)
+m4_include(ac/etags.m4)
 
 AC_OUTPUT(
   Makefile
