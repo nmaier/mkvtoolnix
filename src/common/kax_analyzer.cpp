@@ -898,16 +898,21 @@ kax_analyzer_c::read_all_meta_seeks() {
   m_meta_seeks_by_position.clear();
 
   unsigned int i, num_entries = m_data.size();
+  std::map<int64_t, bool> positions_found;
+
+  for (i = 0; i < num_entries; i++)
+    positions_found[m_data[i]->m_pos] = true;
 
   for (i = 0; i < num_entries; i++)
     if (KaxSeekHead::ClassInfos.GlobalId == m_data[i]->m_id)
-      read_meta_seek(m_data[i]->m_pos);
+      read_meta_seek(m_data[i]->m_pos, positions_found);
 
   sort(m_data.begin(), m_data.end());
 }
 
 void
-kax_analyzer_c::read_meta_seek(int64_t pos) {
+kax_analyzer_c::read_meta_seek(int64_t pos,
+                               std::map<int64_t, bool> &positions_found) {
   if (m_meta_seeks_by_position[pos])
     return;
 
@@ -942,21 +947,15 @@ kax_analyzer_c::read_meta_seek(int64_t pos) {
     if ((0 == pos) || (NULL == seek_id))
       continue;
 
-    bool found = false;
-    std::vector<kax_analyzer_data_cptr>::iterator it;
-    mxforeach(it, m_data)
-      if ((*it)->m_pos == seek_pos) {
-        found = true;
-        break;
-      }
+    if (positions_found[seek_pos])
+      continue;
 
-    if (!found) {
-      EbmlId the_id(seek_id->GetBuffer(), seek_id->GetSize());
-      m_data.push_back(kax_analyzer_data_c::create(the_id, seek_pos, -1));
+    EbmlId the_id(seek_id->GetBuffer(), seek_id->GetSize());
+    m_data.push_back(kax_analyzer_data_c::create(the_id, seek_pos, -1));
+    positions_found[seek_pos] = true;
 
-      if (KaxSeekHead::ClassInfos.GlobalId == the_id)
-        read_meta_seek(seek_pos);
-    }
+    if (KaxSeekHead::ClassInfos.GlobalId == the_id)
+      read_meta_seek(seek_pos, positions_found);
   }
 
   delete l1;

@@ -146,7 +146,7 @@ protected:
   virtual void verify_data_structures_against_file(const std::string &hook_name);
 
   virtual void read_all_meta_seeks();
-  virtual void read_meta_seek(int64_t pos);
+  virtual void read_meta_seek(int64_t pos, std::map<int64_t, bool> &positions_found);
 };
 typedef counted_ptr<kax_analyzer_c> kax_analyzer_cptr;
 
