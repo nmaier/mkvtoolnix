@@ -215,7 +215,7 @@ header_editor_frame_c::open_file(wxFileName file_name) {
 
   delete m_analyzer;
   m_analyzer = new wx_kax_analyzer_c(this, wxMB(file_name.GetFullPath()));
-  if (!m_analyzer->process()) {
+  if (!m_analyzer->process(kax_analyzer_c::parse_mode_fast)) {
     wxMessageBox(Z("This file could not be opened or parsed."), Z("File parsing failed"), wxOK | wxCENTER | wxICON_ERROR);
     delete m_analyzer;
     m_analyzer = NULL;
