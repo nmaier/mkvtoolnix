@@ -147,6 +147,7 @@ protected:
 
   virtual void read_all_meta_seeks();
   virtual void read_meta_seek(int64_t pos, std::map<int64_t, bool> &positions_found);
+  virtual void fix_element_sizes(int64_t file_size);
 };
 typedef counted_ptr<kax_analyzer_c> kax_analyzer_cptr;
 

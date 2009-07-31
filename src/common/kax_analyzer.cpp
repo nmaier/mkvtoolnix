@@ -253,8 +253,12 @@ kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode) {
 
   show_progress_done();
 
-  if (!aborted)
+  if (!aborted) {
+    if (parse_mode_full != parse_mode)
+      fix_element_sizes(file_size);
+
     return true;
+  }
 
   m_segment.clear();
   m_data.clear();
@@ -959,4 +963,12 @@ kax_analyzer_c::read_meta_seek(int64_t pos,
   }
 
   delete l1;
+}
+
+void
+kax_analyzer_c::fix_element_sizes(int64_t file_size) {
+  unsigned int i;
+  for (i = 0; m_data.size() > i; ++i)
+    if (-1 == m_data[i]->m_size)
+      m_data[i]->m_size = ((i + 1) < m_data.size() ? m_data[i + 1]->m_pos : file_size) - m_data[i]->m_pos;
 }
