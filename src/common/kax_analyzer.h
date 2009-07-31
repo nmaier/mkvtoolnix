@@ -64,6 +64,11 @@ public:
     uer_error_unknown,
   };
 
+  enum parse_mode_e {
+    parse_mode_fast,
+    parse_mode_full,
+  };
+
 public:
   std::vector<kax_analyzer_data_cptr> m_data;
 
@@ -106,7 +111,7 @@ public:
     return -1;
   }
 
-  virtual bool process(bool parse_fully = true);
+  virtual bool process(parse_mode_e parse_mode = parse_mode_full);
 
   virtual void show_progress_start(int64_t size) {
   }

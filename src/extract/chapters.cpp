@@ -46,7 +46,7 @@ extract_chapters(const char *file_name,
   // open input file
   try {
     analyzer = kax_analyzer_cptr(new kax_analyzer_c(file_name));
-    analyzer->process(parse_fully);
+    analyzer->process(parse_fully ? kax_analyzer_c::parse_mode_full : kax_analyzer_c::parse_mode_fast);
   } catch (...) {
     show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).")) % file_name % strerror(errno));
     return;

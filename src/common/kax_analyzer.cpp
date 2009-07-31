@@ -180,7 +180,9 @@ kax_analyzer_c::probe(std::string file_name) {
 }
 
 bool
-kax_analyzer_c::process(bool parse_fully) {
+kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode) {
+  bool parse_fully = parse_mode_full == parse_mode;
+
   if (NULL == m_file)
     try {
       m_file = new mm_file_io_c(m_file_name, MODE_WRITE);
@@ -906,7 +908,7 @@ kax_analyzer_c::read_all_meta_seeks() {
 
 void
 kax_analyzer_c::read_meta_seek(int64_t pos) {
-  if (map_has_key(m_meta_seeks_by_position, pos))
+  if (m_meta_seeks_by_position[pos])
     return;
 
   m_meta_seeks_by_position[pos] = true;
