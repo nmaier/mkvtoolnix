@@ -1,3 +1,14 @@
+2009-08-06  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: mmg will handle multiple consecutive spaces in the
+	options given with "add command line options" properly and not
+	cause mkvmerge to exit with misleading error messages anymore. The
+	"add command line options" dialog has been reordered, and the drop
+	down box in it is now read-only. Fixes for bug 429.
+
+	* doc, mmg: bug fix: The tooltip and documentation for the 'delay'
+	option was misleading. Fix for bug 420.
+
 2009-07-31  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg/header editor: enhancement: Implemented a considerable
