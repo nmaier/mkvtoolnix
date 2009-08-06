@@ -1030,8 +1030,11 @@ mmg_dialog::update_command_line() {
   cli_options = strip(cli_options);
   if (cli_options.length() > 0) {
     std::vector<wxString> opts = split(cli_options, wxString(wxT(" ")));
-    for (i = 0; i < opts.size(); i++)
-      clargs.Add(strip(opts[i]));
+    for (i = 0; i < opts.size(); i++) {
+      wxString opt = strip(opts[i]);
+      if (!opt.IsEmpty())
+        clargs.Add(opt);
+    }
   }
 
   cmdline = wxT("\"") + shell_escape(options.mkvmerge, true) + wxT("\" -o \"") + shell_escape(tc_output->GetValue()) + wxT("\" ");
