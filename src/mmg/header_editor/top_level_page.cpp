@@ -13,6 +13,7 @@
 
 #include "common/os.h"
 
+#include <wx/dialog.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
