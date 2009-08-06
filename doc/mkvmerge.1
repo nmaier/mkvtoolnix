@@ -196,7 +196,7 @@ so on. If there's no extension then '-%03d' will be appended to the name.
 .TP
 \fB\-\-split\-max\-files\fR <\fIn\fR>
 Create at most \fIn\fR files, even if the last file will be longer or larger
-than indicated by \fB\-\-split\fR.
+than indicated by the \fB\-\-split\fR option.
 .TP
 \fB\-\-link\fR
 Link files to one another when splitting the output file. See the
@@ -292,7 +292,7 @@ Don't copy any subtitle track from this file.
 \fB\-B\fR, \fB\-\-no-buttons\fR
 Don't copy any button track from this file.
 .TP
-\fN\-T\fR, \fB\-\-no\-track\-tags\fR
+\fB\-T\fR, \fB\-\-no\-track\-tags\fR
 Don't copy any track specific tags from this file.
 .TP
 \fB\-\-no\-chapters\fR
@@ -327,6 +327,7 @@ Defaults: no manual sync correction (which is the same as \fId\fR = 0 and
 .br
 This option can be used multiple times for an input file applying to several
 tracks by selecting different track IDs each time.
+.TP
 \fB\-\-cues\fR <\fITID\fR:\fInone\fR|\fIiframes\fR|\fIall\fR>
 Controls for which tracks cue (index) entries are created for the given track
 (see section \fBTRACK IDS\fR). \fInone\fR inhibits the creation of cue entries.
