@@ -82,8 +82,9 @@ cli_options_dlg::init_cli_option_list() {
   all_cli_options.push_back(cli_option_t(wxU("--cluster-length"),
                                            Z("This option needs an additional argument 'n'. Tells mkvmerge to put at most 'n' data blocks into each cluster. "
                                              "If the number is postfixed with 'ms' then put at most 'n' milliseconds of data into each cluster. "
-                                             "The maximum length for a cluster is 32767ms. Programs will only be able to seek to clusters, so creating larger clusters "
-                                             "may lead to imprecise seeking and/or processing.")));
+                                             "The maximum length for a cluster that mkvmerge accepts is 60000 blocks and 32000ms; the minimum length is 100ms. "
+                                             "Programs will only be able to seek to clusters, so creating larger clusters may lead to imprecise or slow seeking.")));
+
   all_cli_options.push_back(cli_option_t(wxU("--no-cues"),
                                            Z("Tells mkvmerge not to create and write the cue data which can be compared to an index in an AVI. "
                                              "Matroska files can be played back without the cue data, but seeking will probably be imprecise and slower. "
