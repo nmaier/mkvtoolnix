@@ -1007,7 +1007,7 @@ console_kax_analyzer_c::show_progress_start(int64_t size) {
 bool
 console_kax_analyzer_c::show_progress_running(int percentage) {
   if (percentage == m_previous_percentage)
-    return;
+    return true;
 
   std::string full_bar(        percentage  * CONSOLE_PERCENTAGE_WIDTH / 100, '=');
   std::string empty_bar((100 - percentage) * CONSOLE_PERCENTAGE_WIDTH / 100, ' ');
@@ -1016,6 +1016,8 @@ console_kax_analyzer_c::show_progress_running(int percentage) {
   mxinfo("\r");
 
   m_previous_percentage = percentage;
+
+  return true;
 }
 
 void

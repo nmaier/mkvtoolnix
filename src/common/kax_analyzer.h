@@ -160,7 +160,7 @@ public:
   console_kax_analyzer_c(std::string file_name);
   virtual ~console_kax_analyzer_c();
 
-  virtual void set_show_progress();
+  virtual void set_show_progress(bool show_progress);
 
   virtual void show_progress_start(int64_t size);
   virtual bool show_progress_running(int percentage);
@@ -169,5 +169,6 @@ public:
   virtual void log_debug_message(const std::string &message);
   virtual void debug_abort_process();
 };
+typedef counted_ptr<console_kax_analyzer_c> console_kax_analyzer_cptr;
 
 #endif  // __MTX_COMMON_KAX_ANALYZER_H
