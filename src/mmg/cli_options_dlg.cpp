@@ -31,18 +31,13 @@ cli_options_dlg::cli_options_dlg(wxWindow *parent)
   siz_all->Add(new wxStaticText(this, -1, Z("Here you can add more command line options either by\n"
                                             "entering them below or by chosing one from the drop\n"
                                             "down box and pressing the 'add' button.")), 0, wxLEFT | wxRIGHT, 10);
-  siz_all->AddSpacer(10);
-  siz_all->Add(new wxStaticText(this, -1, Z("Command line options:")), 0, wxLEFT, 10);
-  siz_all->AddSpacer(5);
-  tc_options = new wxTextCtrl(this, -1);
-  siz_all->Add(tc_options, 0, wxGROW | wxLEFT | wxRIGHT, 10);
 
   siz_all->AddSpacer(10);
   siz_all->Add(new wxStaticText(this, -1, Z("Available options:")), 0, wxLEFT, 10);
   siz_all->AddSpacer(5);
 
   wxBoxSizer *siz_line = new wxBoxSizer(wxHORIZONTAL);
-  cob_option = new wxComboBox(this, ID_CLIOPTIONS_COB);
+  cob_option           = new wxMTX_COMBOBOX_TYPE(this, ID_CLIOPTIONS_COB, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
 
   int i;
   for (i = 0; i < all_cli_options.size(); i++)
@@ -59,10 +54,15 @@ cli_options_dlg::cli_options_dlg(wxWindow *parent)
   siz_all->Add(tc_description, 1, wxGROW | wxLEFT | wxRIGHT, 10);
 
   siz_all->AddSpacer(10);
+  siz_all->Add(new wxStaticText(this, -1, Z("Command line options:")), 0, wxLEFT, 10);
+  siz_all->AddSpacer(5);
+  tc_options = new wxTextCtrl(this, -1);
+  siz_all->Add(tc_options, 0, wxGROW | wxLEFT | wxRIGHT, 10);
+
+  siz_all->AddSpacer(10);
   siz_all->Add(new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT, 10);
 
   siz_all->AddSpacer(10);
-
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->AddStretchSpacer();
   siz_line->Add(CreateStdDialogButtonSizer(wxOK | wxCANCEL), 0, 0, 0);

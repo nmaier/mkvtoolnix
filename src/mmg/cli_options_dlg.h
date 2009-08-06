@@ -42,7 +42,7 @@ public:
   static std::vector<cli_option_t> all_cli_options;
 
 public:
-  wxComboBox *cob_option;
+  wxMTX_COMBOBOX_TYPE *cob_option;
   wxTextCtrl *tc_options, *tc_description;
 
 public:
