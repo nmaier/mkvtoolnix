@@ -1370,11 +1370,12 @@ parse_arg_cluster_length(std::string arg) {
   int idx = arg.find("ms");
   if (0 <= idx) {
     arg.erase(idx);
-    if (!parse_int(arg, g_max_ns_per_cluster) || (100 > g_max_ns_per_cluster) || (32000 < g_max_ns_per_cluster))
+    int64_t max_ms_per_cluster;
+    if (!parse_int(arg, max_ms_per_cluster) || (100 > max_ms_per_cluster) || (32000 < max_ms_per_cluster))
       mxerror(boost::format(Y("Cluster length '%1%' out of range (100..32000).\n")) % arg);
 
-    g_max_ns_per_cluster     *= 1000000;
-    g_max_blocks_per_cluster  = 65535;
+    g_max_ns_per_cluster     = max_ms_per_cluster * 1000000;
+    g_max_blocks_per_cluster = 65535;
 
   } else {
     if (!parse_int(arg, g_max_blocks_per_cluster) || (0 > g_max_blocks_per_cluster) || (60000 < g_max_blocks_per_cluster))
