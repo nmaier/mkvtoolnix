@@ -20,16 +20,40 @@
 
 #include "propedit/change.h"
 
+using namespace libebml;
+
 class target_c {
 public:
-  std::vector<change_c> m_changes;
-  std::string m_target_spec;
+  enum target_type_e {
+    tt_undefined,
+    tt_segment_info,
+    tt_track,
+  };
+
+  enum selection_mode_e {
+    sm_undefined,
+    sm_by_number,
+    sm_by_uid,
+    sm_by_position,
+    sm_by_type_and_position,
+  };
+
+  target_type_e m_type;
+  selection_mode_e m_selection_mode;
+  int64_t m_selection_param;
+
   EbmlMaster *m_target;
+  std::vector<change_cptr> m_changes;
 
 public:
   target_c();
 
   void validate();
+
+  void add_change(change_c::change_type_e type, const std::string &spec);
+  void parse_target_spec(std::string spec);
+  void parse_track_spec(const std::string &spec);
 };
+typedef counted_ptr<target_c> target_cptr;
 
 #endif // __PROPEDIT_TARGET_H

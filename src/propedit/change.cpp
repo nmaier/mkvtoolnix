@@ -13,8 +13,8 @@
 #include "propedit/change.h"
 
 change_c::change_c(change_c::change_type_e type,
-                   const std::string name,
-                   const std::string value)
+                   const std::string &name,
+                   const std::string &value)
   : m_type(type)
   , m_name(name)
   , m_value(value)

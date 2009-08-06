@@ -15,6 +15,8 @@
 
 #include <string>
 
+#include "common/smart_pointers.h"
+
 class change_c {
 public:
   enum change_type_e {
@@ -27,9 +29,10 @@ public:
   std::string m_name, m_value;
 
 public:
-  change_c(change_type_e type, const std::string name, const std::string value);
+  change_c(change_type_e type, const std::string &name, const std::string &value);
 
   void validate();
 };
+typedef counted_ptr<change_c> change_cptr;
 
 #endif // __PROPEDIT_CHANGE_H

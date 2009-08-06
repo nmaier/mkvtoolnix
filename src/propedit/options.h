@@ -24,7 +24,7 @@
 class options_c {
 public:
   std::string m_file_name;
-  std::vector<target_c> m_targets;
+  std::vector<target_cptr> m_targets;
   bool m_show_progress;
   kax_analyzer_c::parse_mode_e m_parse_mode;
 
@@ -32,6 +32,15 @@ public:
   options_c();
 
   void validate();
+
+  target_cptr add_target(target_c::target_type_e type);
+  target_cptr add_target(const std::string &spec);
+  void set_file_name(const std::string &file_name);
+  void set_parse_mode(const std::string &parse_mode);
+
+protected:
+  target_cptr add_target(target_c::target_type_e type, const std::string &spec);
 };
+typedef counted_ptr<options_c> options_cptr;
 
 #endif // __PROPEDIT_OPTIONS_H
