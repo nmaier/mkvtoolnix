@@ -217,7 +217,7 @@ ifdef ETAGS
 endif
 endif
 
-all: $(APPLICATIONS) $(TRANSLATIONS_MOS) $(HTMLHELPBOOKS) $(TAGSFILE)
+all: $(TAGSFILE) $(APPLICATIONS) $(TRANSLATIONS_MOS) $(HTMLHELPBOOKS)
 
 install: install-programs install-mans install-trans install-guide
 
