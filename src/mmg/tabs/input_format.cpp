@@ -131,7 +131,8 @@ tab_input_format::tab_input_format(wxWindow *parent,
   siz_fg->Add(st_delay, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   tc_delay = new wxTextCtrl(this, ID_TC_DELAY, wxEmptyString);
-  tc_delay->SetToolTip(TIP("Delay this track's timecodes by a couple of ms. Can be negative. Works best on video and subtitle tracks."));
+  tc_delay->SetToolTip(TIP("Delay this track's timecodes by a couple of ms. Can be negative. Works with all track types, "
+                           "but negative delays should not be used with video tracks."));
   tc_delay->SetSizeHints(0, -1);
   siz_fg->Add(tc_delay, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
