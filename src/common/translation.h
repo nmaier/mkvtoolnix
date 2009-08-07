@@ -19,7 +19,7 @@
 #include <string>
 #include <vector>
 
-class MTX_DLL_API  translation_c {
+class MTX_DLL_API translation_c {
 public:
   static std::vector<translation_c> ms_available_translations;
 
