@@ -41,6 +41,7 @@ public:
   target_type_e m_type;
   selection_mode_e m_selection_mode;
   int64_t m_selection_param;
+  char m_selection_track_type;
 
   EbmlMaster *m_target;
   std::vector<change_cptr> m_changes;
@@ -52,6 +53,12 @@ public:
 
   void add_change(change_c::change_type_e type, const std::string &spec);
   void parse_target_spec(std::string spec);
+  void dump_info();
+
+  bool operator ==(const target_c &cmp) const;
+  bool operator !=(const target_c &cmp) const;
+
+protected:
   void parse_track_spec(const std::string &spec);
 };
 typedef counted_ptr<target_c> target_cptr;

@@ -41,6 +41,7 @@ main(int argc,
 
   options_cptr options = propedit_cli_parser_c(command_line_utf8(argc, argv)).run();
   options->validate();
+  options->dump_info();
 
   run(options);
 

@@ -32,6 +32,7 @@ public:
   change_c(change_type_e type, const std::string &name, const std::string &value);
 
   void validate();
+  void dump_info();
 };
 typedef counted_ptr<change_c> change_cptr;
 

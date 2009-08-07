@@ -85,9 +85,9 @@ propedit_cli_parser_c::init_parser() {
 
   add_section_header(YT("Actions"));
   OPT("e|edit=<selector>",     add_target,          YT("Sets the Matroska file section that all following add/set/delete "
-                                                      "actions operate on (see man page for syntax)"));
+                                                       "actions operate on (see man page for syntax)"));
   OPT("a|add=<name=value>",    add_change,          YT("Adds a property with the value even if such a property already "
-                                                      "exists"));
+                                                       "exists"));
   OPT("s|set=<name=value>",    add_change,          YT("Sets a property to the value if it exists and add it otherwise"));
   OPT("d|delete=<name>",       add_change,          YT("Delete all occurences of a property"));
 

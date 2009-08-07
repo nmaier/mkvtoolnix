@@ -14,12 +14,14 @@
 
 #include "common/common.h"
 #include "common/strings/editing.h"
+#include "common/strings/parsing.h"
 #include "propedit/target.h"
 
 target_c::target_c()
   : m_type(target_c::tt_undefined)
   , m_selection_mode(target_c::sm_undefined)
   , m_selection_param(-1)
+  , m_selection_track_type(' ')
   , m_target(NULL)
 {
 }
@@ -67,13 +69,59 @@ target_c::parse_target_spec(std::string spec) {
     parse_track_spec(spec.substr(prefix.length()));
     return;
   }
+
+  throw false;
 }
 
 void
 target_c::parse_track_spec(const std::string &spec) {
-  boost::regex track_re("^([[:alpha:]]+)?(_[[:alpha:]]+)?(\\.[^@]+)?(@.+)?", boost::regex::perl);
+  boost::regex track_re("^([absv=\\+]?)(\\d+)", boost::regex::perl);
   boost::smatch matches;
 
   if (!boost::regex_match(spec, matches, track_re))
     throw false;
+
+  std::string prefix = matches[1].str();
+  parse_int(matches[2].str(), m_selection_param);
+
+  m_selection_mode = prefix.empty() ? target_c::sm_by_number
+                   : prefix == "="  ? target_c::sm_by_uid
+                   : prefix == "+"  ? target_c::sm_by_position
+                   :                  target_c::sm_by_type_and_position;
+  if (target_c::sm_by_type_and_position == m_selection_mode)
+    m_selection_track_type = prefix[0];
+}
+
+void
+target_c::dump_info() {
+  mxinfo(boost::format("  target:\n"
+                       "    type:                 %1%\n"
+                       "    selection_mode:       %2%\n"
+                       "    selection_param:      %3%\n"
+                       "    selection_track_type: %4%\n")
+         % static_cast<int>(m_type)
+         % static_cast<int>(m_selection_mode)
+         % m_selection_param
+         % m_selection_track_type);
+
+  std::vector<change_cptr>::iterator change_it;
+  mxforeach(change_it, m_changes)
+    (*change_it)->dump_info();
+}
+
+bool
+target_c::operator ==(const target_c &cmp)
+  const
+{
+  return (m_type                 == cmp.m_type)
+      && (m_selection_mode       == cmp.m_selection_mode)
+      && (m_selection_param      == cmp.m_selection_param)
+      && (m_selection_track_type == cmp.m_selection_track_type);
+}
+
+bool
+target_c::operator !=(const target_c &cmp)
+  const
+{
+  return !(*this == cmp);
 }

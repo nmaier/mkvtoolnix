@@ -10,6 +10,7 @@
 
 #include "common/os.h"
 
+#include "common/output.h"
 #include "propedit/change.h"
 
 change_c::change_c(change_c::change_type_e type,
@@ -23,4 +24,15 @@ change_c::change_c(change_c::change_type_e type,
 
 void
 change_c::validate() {
+}
+
+void
+change_c::dump_info() {
+  mxinfo(boost::format("    change:\n"
+                       "      type:  %1%\n"
+                       "      name:  %2%\n"
+                       "      value: %3%\n")
+         % static_cast<int>(m_type)
+         % m_name
+         % m_value);
 }
