@@ -18,20 +18,34 @@
 #include <string>
 #include <vector>
 
+#include "common/translation.h"
+
 typedef boost::function<void(void)> cli_parser_cb_t;
 
 class cli_parser_c {
 protected:
   struct option_t {
-    std::string m_name, m_description;
+    enum option_type_e {
+      ot_option,
+      ot_section_header,
+      ot_information,
+    };
+
+    option_type_e m_type;
+    std::string m_spec, m_name;
+    translatable_string_c m_description;
     cli_parser_cb_t m_callback;
     bool m_needs_arg;
 
     option_t();
-    option_t(std::string name, std::string description, cli_parser_cb_t callback, bool needs_arg);
+    option_t(option_type_e type, const translatable_string_c &description);
+    option_t(const std::string &spec, const translatable_string_c &description, cli_parser_cb_t callback, bool needs_arg);
+
+    std::string format_text();
   };
 
-  std::map<std::string, option_t> m_options;
+  std::map<std::string, option_t> m_option_map;
+  std::vector<option_t> m_options;
   std::vector<std::string> m_args;
 
   std::string m_current_arg, m_next_arg;
@@ -40,12 +54,18 @@ protected:
 
 protected:
   cli_parser_c(const std::vector<std::string> &args);
-  virtual ~cli_parser_c();
 
-  virtual void add_option(std::string spec, cli_parser_cb_t callback, const std::string &description);
-  virtual void set_default_callback(cli_parser_cb_t callback);
-  virtual void parse_args();
-  virtual void set_usage() = 0;
+  void add_option(const std::string &spec, cli_parser_cb_t callback, const translatable_string_c &description);
+  void add_section_header(const translatable_string_c &title);
+  void add_information(const translatable_string_c &information);
+  void add_separator();
+  void add_common_options();
+
+  void set_default_callback(cli_parser_cb_t callback);
+  void parse_args();
+  void set_usage();
+
+  void dummy_callback();
 };
 
 #endif // __COMMON_CLI_PARSER_H

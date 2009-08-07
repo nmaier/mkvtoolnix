@@ -10,6 +10,7 @@
 
 #include "common/os.h"
 
+#include "propedit/propedit_cli_parser.h"
 #include "propedit/setup.h"
 
 static void
