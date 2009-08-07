@@ -39,6 +39,21 @@ public:
   static std::string get_default_ui_locale();
 };
 
+class MTX_DLL_API translatable_string_c {
+protected:
+  std::string m_untranslated_string;
+
+public:
+  translatable_string_c();
+  translatable_string_c(const std::string &untranslated_string);
+  translatable_string_c(const char *untranslated_string);
+
+  std::string get_translated();
+  std::string get_untranslated();
+};
+
+#define YT(s) translatable_string_c(s)
+
 void MTX_DLL_API init_locales(std::string locale = "");
 
 #endif  // __MTX_COMMON_TRANSLATION_H

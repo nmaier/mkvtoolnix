@@ -150,6 +150,34 @@ translation_c::get_locale() {
 #endif
 }
 
+// ------------------------------------------------------------
+
+translatable_string_c::translatable_string_c()
+{
+}
+
+translatable_string_c::translatable_string_c(const std::string &untranslated_string)
+  : m_untranslated_string(untranslated_string)
+{
+}
+
+translatable_string_c::translatable_string_c(const char *untranslated_string)
+  : m_untranslated_string(untranslated_string)
+{
+}
+
+std::string
+translatable_string_c::get_translated() {
+  return m_untranslated_string.empty() ? "" : Y(m_untranslated_string.c_str());
+}
+
+std::string
+translatable_string_c::get_untranslated() {
+  return m_untranslated_string;
+}
+
+// ------------------------------------------------------------
+
 #if defined(HAVE_LIBINTL_H)
 
 void

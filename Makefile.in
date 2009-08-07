@@ -339,7 +339,8 @@ maintainer-clean: distclean
 
 update-po:
 	@echo 'XGETTEXT'
-	@xgettext --keyword=Y --keyword=Z --keyword=TIP --default-domain=mkvtoolnix --from-code=UTF-8 -s --omit-header -o po/mkvtoolnix.pot \
+	@xgettext --keyword=YT --keyword=Y --keyword=Z --keyword=TIP \
+		--default-domain=mkvtoolnix --from-code=UTF-8 -s --omit-header -o po/mkvtoolnix.pot \
 		$(ALL_SOURCES) $(ALL_HEADERS)
 	@for i in po/*.po ; do \
 		echo 'MSGMERGE ' $$i ; \
