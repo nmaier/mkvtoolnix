@@ -243,7 +243,7 @@
     </listitem>
    </varlistentry>
 
-   <varlistentry>
+   <varlistentry id="mkvmerge.description.no_cues">
     <term><option>--no-cues</option></term>
     <listitem>
      <para>
@@ -504,11 +504,391 @@
     </listitem>
    </varlistentry>
   </variablelist>
+
+  <para>
+   Options that can be used for each input file:
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><option>-a</option>, <option>--audio-tracks</option> <parameter>n,m,...</parameter></term>
+    <listitem>
+     <para>
+      Copy the audio tracks <parameter>n</parameter>, <parameter>m</parameter> etc. The numbers are track IDs which can be obtained with the
+      <link linkend="mkvmerge.description.identify"><option>--identify</option></link> switch. They're not simply the track numbers (see
+      section <link linkend="mkvmerge.track_ids">track IDs</link>). Default: copy all audio tracks.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-a</option>, <option>--video-tracks</option> <parameter>n,m,...</parameter></term>
+    <listitem>
+     <para>
+      Copy the video tracks <parameter>n</parameter>, <parameter>m</parameter> etc. The numbers are track IDs which can be obtained with the
+      <link linkend="mkvmerge.description.identify"><option>--identify</option></link> switch. They're not simply the track numbers (see
+      section <link linkend="mkvmerge.track_ids">track IDs</link>). Default: copy all video tracks.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-a</option>, <option>--subtitle-tracks</option> <parameter>n,m,...</parameter></term>
+    <listitem>
+     <para>
+      Copy the subtitle tracks <parameter>n</parameter>, <parameter>m</parameter> etc. The numbers are track IDs which can be obtained with
+      the <link linkend="mkvmerge.description.identify"><option>--identify</option></link> switch. They're not simply the track numbers (see
+      section <link linkend="mkvmerge.track_ids">track IDs</link>). Default: copy all subtitle tracks.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-a</option>, <option>--button-tracks</option> <parameter>n,m,...</parameter></term>
+    <listitem>
+     <para>
+      Copy the button tracks <parameter>n</parameter>, <parameter>m</parameter> etc. The numbers are track IDs which can be obtained with
+      the <link linkend="mkvmerge.description.identify"><option>--identify</option></link> switch. They're not simply the track numbers (see
+      section <link linkend="mkvmerge.track_ids">track IDs</link>). Default: copy all button tracks.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--track-tags</option> <parameter>n,m,...</parameter></term>
+    <listitem>
+     <para>
+      Copy the tags for tracks <parameter>n</parameter>, <parameter>m</parameter> etc.  The numbers are track IDs which can be obtained with
+      the <link linkend="mkvmerge.description.identify"><option>--identify</option></link> switch (see section <link
+      linkend="mkvmerge.track_ids">track IDs</link>).  They're not simply the track numbers.  Default: copy tags for all tracks.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-A</option>, <option>--no-audio</option></term>
+    <listitem>
+     <para>
+      Don't copy any audio track from this file.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-D</option>, <option>--no-video</option></term>
+    <listitem>
+     <para>
+      Don't copy any video track from this file.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-S</option>, <option>--no-subtitles</option></term>
+    <listitem>
+     <para>
+      Don't copy any subtitle track from this file.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-B</option>, <option>--no-buttons</option></term>
+    <listitem>
+     <para>
+      Don't copy any button track from this file.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-T</option>, <option>--no-track-tags</option></term>
+    <listitem>
+     <para>
+      Don't copy any track specific tags from this file.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--no-chapters</option></term>
+    <listitem>
+     <para>
+      Don't copy chapters from this file.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--no-attachments</option></term>
+    <listitem>
+     <para>
+      Don't copy attachments from this file.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--no-global-tags</option></term>
+    <listitem>
+     <para>
+      Don't copy global tags from this file.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--chapter-charset</option> <parameter>character-set</parameter></term>
+    <listitem>
+     <para>
+      Sets the charset that is used for the conversion to UTF-8 for chapter information contained in the source file. See the section about
+      <link linkend="mkvmerge.text_files_and_charsets">text files and character sets</link> for an explanation how &mkvmerge; converts
+      between character sets.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--chapter-language</option> <parameter>language-code</parameter></term>
+    <listitem>
+     <para>
+      Sets the ISO639-2 language code that is written for each chapter entry.  This option can be used for source files that contain
+      chapters but no information about the chapters' languages, e.g. for MP4 and OGM files.
+     </para>
+    </listitem>
+  </varlistentry>
+
+   <varlistentry>
+    <term><option>-y</option>, <option>--sync</option> <parameter>TID:d<optional>,o<optional>/p</optional></optional></parameter></term>
+    <listitem>
+     <para>
+      Adjust the timecodes of the track with the id <parameter>TID</parameter> by <parameter>d</parameter> ms. The track IDs are the same as
+      the ones given with <link linkend="mkvmerge.description.identify"><option>--identify</option></link> (see section <link
+      linkend="mkvmerge.track_ids">track IDs</link>).
+     </para>
+
+     <para>
+      <parameter>o</parameter>/<parameter>p</parameter>: adjust the timestamps by <parameter>o</parameter>/<parameter>p</parameter> to fix
+      linear drifts. <parameter>p</parameter> defaults to 1 if omitted. Both <parameter>o</parameter> and <parameter>p</parameter> can be
+      floating point numbers.
+     </para>
+
+     <para>
+      Defaults: no manual sync correction (which is the same as <parameter>d</parameter> = <constant>0</constant> and
+      <parameter>o</parameter>/<parameter>p</parameter> = <constant>1.0</constant>).
+     </para>
+
+     <para>
+      This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.cues">
+    <term><option>--cues</option> <parameter>TID:none|iframes|all</parameter></term>
+    <listitem>
+     <para>
+      Controls for which tracks cue (index) entries are created for the given track (see section <link linkend="mkvmerge.track_ids">track
+      IDs</link>). '<literal>none</literal>' inhibits the creation of cue entries.  For '<literal>iframes</literal>' only blocks with
+      no backward or forward references ( = I frames in video tracks) are put into the cue sheet. '<literal>all</literal>' causes
+      &mkvmerge; to create cue entries for all blocks which will make the file very big.
+     </para>
+
+     <para>
+      The default is '<literal>iframes</literal>' for video tracks and '<literal>none</literal>' for all others.  See also option <link
+      linkend="mkvmerge.description.no_cues"><option>--no-cues</option></link> which inhibits the creation of cue entries regardless of the
+      <option>--cues</option> options used.
+     </para>
+
+     <para>
+      This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--default-track</option> <parameter>TID<optional>:bool</optional></parameter></term>
+    <listitem>
+     <para>
+      Sets the 'default' flag for the given track (see section <link linkend="mkvmerge.track_ids">track IDs</link>) if the optional argument
+      <parameter>bool</parameter> is not present.  If the user does not explicitly select a track himself then the player should prefer the
+      track that has his 'default' flag set. Only one track of each kind (audio, video, subtitles, buttons) can have his 'default' flag set.
+      If the user wants no track to have the default track flag set then he has to set <parameter>bool</parameter> to <constant>0</constant>
+      for all tracks.
+     </para>
+
+     <para>
+      This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--blockadd</option> <parameter>TID:level</parameter></term>
+    <listitem>
+     <para>
+      Keep only the <classname>BlockAdditions</classname> up to the level <parameter>level</parameter> for the given track.  The default is
+      to keep all levels.  This option only affects certain kinds of codecs like WAVPACK4.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--track-name</option> <parameter>TID:name</parameter></term>
+    <listitem>
+     <para>
+      Sets the track name for the given track (see section <link linkend="mkvmerge.track_ids">track IDs</link>) to
+      <parameter>name</parameter>.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--language</option> <parameter>TID:language</parameter></term>
+    <listitem>
+     <para>
+      Sets the language for the given track (see section <link linkend="mkvmerge.track_ids">track IDs</link>). Both ISO639-2 language codes
+      and ISO639-1 country codes are allowed. The country codes will be converted to language codes automatically.  All languages including
+      their ISO639-2 codes can be listed with the <link
+      linkend="mkvmerge.description.list_languages"><option>--list-languages</option></link> option.
+     </para>
+
+     <para>
+      This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-t</option>, <option>--tags</option> <parameter>TID:file-name</parameter></term>
+    <listitem>
+     <para>
+      Read tags for the track with the number <parameter>TID</parameter> from the file <parameter>file-name</parameter>. See the section
+      about <link linkend="mkvmerge.tags">tags</link> below for details.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--aac-is-sbr</option> <parameter>TID<optional>:0|1</optional></parameter></term>
+    <listitem>
+     <para>
+      Tells &mkvmerge; that the track with the ID <parameter>TID</parameter> is <abbrev>SBR AAC</abbrev> (also known as
+      <abbrev>HE-AAC</abbrev> or <abbrev>AAC+</abbrev>). This options is needed if a) the source file is an <abbrev>AAC</abbrev> file
+      (<emphasis>not</emphasis> for a Matroska file) and b) the <abbrev>AAC</abbrev> file contains <abbrev>SBR AAC</abbrev> data.  The
+      reason for this switch is that it is technically impossible to automatically tell normal <abbrev>AAC</abbrev> data from <abbrev>SBR
+      AAC</abbrev> data without decoding a complete <abbrev>AAC</abbrev> frame. As there are several patent issues with <abbrev>AAC</abbrev>
+      decoders &mkvmerge; will never contain this decoding stage. So for <abbrev>SBR AAC</abbrev> files this switch is mandatory. The
+      resulting file might not play back correctly or even not at all if the switch was omitted.
+     </para>
+
+     <para>
+      If the source file is a Matroska file then the <classname>CodecID</classname> should be enough to detect <abbrev>SBR
+      AAC</abbrev>. However, if the <classname>CodecID</classname> is wrong then this switch can be used to correct that.
+     </para>
+
+     <para>
+      If mkvmerge wrongfully detects that an <abbrev>AAC</abbrev> file is <abbrev>SBR</abbrev> then you can add
+      '<literal>:0</literal>' to the track ID.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--timecodes</option> <parameter>TID:file-name</parameter></term>
+    <listitem>
+     <para>
+      Read the timecodes to be used for the specific track ID from <parameter>file-name</parameter>.  These timecodes forcefully override
+      the timecodes that &mkvmerge; normally calculates. Read the section about <link linkend="mkvmerge.external_timecode_files">external
+      timecode files</link>.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--default-duration</option> <parameter>TID:x</parameter></term>
+    <listitem>
+     <para>
+      Forces the default duration of a given track to the specified value.  Also modifies the track's timecodes to match the default
+      duration.  The argument <parameter>x</parameter> must be postfixed with '<literal>s</literal>', '<literal>ms</literal>',
+      '<literal>us</literal>', '<literal>ns</literal>' or '<literal>fps</literal>' to specify the default duration in seconds, milliseconds,
+      microseconds, nanoseconds or 'frames per second' respectively.  The number <parameter>x</parameter> itself can be a floating point
+      number or a fraction.
+     </para>
+
+     <para>
+      If the default duration is not forced then mkvmerge will try to derive the track's default duration from the container and/or codec
+      used.  One case in which this option is of use is when adding <foreignphrase>AVC/h.264</foreignphrase> elementary streams because
+      these do not contain information about their number of frames or a default duration for each frame.  For such files &mkvmerge; will
+      assume a default duration of '<literal>25fps</literal>' unless overridden.
+     </para>
+
+     <para>
+      This option can also be used to change the <abbrev>FPS</abbrev> of video tracks without having to use an external timecode file.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--nalu-size-length</option> <parameter>TID:n</parameter></term>
+    <listitem>
+     <para>
+      Forces the <abbrev>NALU</abbrev> size length to <parameter>n</parameter> bytes.  This parameter is only used if the
+      <foreignphrase>AVC/h.264</foreignphrase> elementary stream packetizer is used.  If left out it defaults to 4 bytes, but there are
+      files that contain frames or slices that are a4ll smaller than 65536 bytes.  For such files you can use this parameter and decrease
+      the size to 2.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--append-mode</option> <parameter>mode</parameter></term>
+    <listitem>
+     <para>
+      Determines how timecodes are calculated when appending files.  The parameter <parameter>mode</parameter> can have two values:
+      '<literal>file</literal>' which is also the default and '<literal>track</literal>'.
+     </para>
+
+     <para>
+      When mkvmerge appends a track (called '<literal>track2_1</literal>' from now on) from a second file (called
+      '<literal>file2</literal>') to a track (called '<literal>track1_1</literal>') from the first file (called '<literal>file1</literal>')
+      then it has to offset all timecodes for '<literal>track2_1</literal>' by an amount.  For '<literal>file</literal>' mode this amount is
+      the highest timecode encountered in '<literal>file1</literal>' even if that timecode was from a different track than
+      '<literal>track1_1</literal>'. In track mode the offset is the highest timecode of '<literal>track1_1</literal>'.
+     </para>
+
+     <para>
+      Unfortunately mkvmerge cannot detect which mode to use reliably. Therefore it defaults to '<literal>file</literal>'
+      mode. '<literal>file</literal>' mode usually works better for files that have been created independently of each other; e.g. when
+      appending <abbrev>AVI</abbrev> or <abbrev>MP4</abbrev> files. '<literal>track</literal>' mode may work better for sources that are
+      essentially just parts of one big file, e.g. for <abbrev>VOB</abbrev> and <abbrev>EVO</abbrev> files.
+     </para>
+
+     <para>
+      Subtitle tracks are always treated as if '<literal>file</literal>' mode were active even if '<literal>track</literal>' mode actually
+      is.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--append-to</option> <parameter>SFID1:STID1:DFID1:DTID1<optional>,...</optional></parameter></term>
+    <listitem>
+     <para>
+      This option controls to which track another track is appended.  Each spec contains four IDs: a file ID, a track ID, a second file ID
+      and a second track ID.  The first pair, "source file ID" and "source track ID", identifies the track that is to be appended.  The
+      second pair, "destination file ID" and "destination track ID", identifies the track the first one is appended to.
+     </para>
+
+     <para>
+      If this option has been omitted then a standard mapping is used.  This standard mapping appends each track from the current file to a
+      track from the previous file with the same track ID.  This allows for easy appending if a movie has been split into two parts and both
+      file have the same number of tracks and track IDs with the command <command>mkvmerge -o output.mkv part1.mkv +part2.mkv</command>.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
  </refsect1>
-
-
-
-
 
 
 
