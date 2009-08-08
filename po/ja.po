@@ -2133,8 +2133,8 @@ msgid "Cluster"
 msgstr "クラスタ"
 
 #: src/merge/mkvmerge.cpp:1382
-msgid "Cluster length '%1%' out of range (0..60000).\n"
-msgstr "クラスタの長さ'%1%'が範囲（0～60000）から外れています。.\n"
+msgid "Cluster length '%1%' out of range (0..65535).\n"
+msgstr "クラスタの長さ'%1%'が範囲（0～65535）から外れています。.\n"
 
 #: src/merge/mkvmerge.cpp:1375
 msgid "Cluster length '%1%' out of range (100..32000).\n"

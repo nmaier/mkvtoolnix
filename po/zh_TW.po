@@ -2179,8 +2179,8 @@ msgid "Cluster"
 msgstr "叢集"
 
 #: src/merge/mkvmerge.cpp:1382
-msgid "Cluster length '%1%' out of range (0..60000).\n"
-msgstr "叢集長度 '%1%' 超出範圍 (0..60000)。\n"
+msgid "Cluster length '%1%' out of range (0..65535).\n"
+msgstr "叢集長度 '%1%' 超出範圍 (0..65535)。\n"
 
 #: src/merge/mkvmerge.cpp:1375
 msgid "Cluster length '%1%' out of range (100..32000).\n"

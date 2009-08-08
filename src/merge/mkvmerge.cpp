@@ -1378,8 +1378,8 @@ parse_arg_cluster_length(std::string arg) {
     g_max_blocks_per_cluster = 65535;
 
   } else {
-    if (!parse_int(arg, g_max_blocks_per_cluster) || (0 > g_max_blocks_per_cluster) || (60000 < g_max_blocks_per_cluster))
-      mxerror(boost::format(Y("Cluster length '%1%' out of range (0..60000).\n")) % arg);
+    if (!parse_int(arg, g_max_blocks_per_cluster) || (0 > g_max_blocks_per_cluster) || (65535 < g_max_blocks_per_cluster))
+      mxerror(boost::format(Y("Cluster length '%1%' out of range (0..65535).\n")) % arg);
 
     g_max_ns_per_cluster = 32000000000ull;
   }
