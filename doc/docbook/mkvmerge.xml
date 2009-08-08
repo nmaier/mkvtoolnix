@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "/usr/share/xml/docbook/schema/dtd/4.5/docbookx.dtd"
+[
+<!ENTITY product "mkvmerge">
+<!ENTITY version "2.9.7">
+]>
+
+<refentry lang="en" id="mkvmerge">
+ <refentryinfo>
+  <productname>&product;</productname>
+  <authorgroup>
+   <author>
+    <contrib>Developer</contrib>
+    <firstname>Moritz</firstname>
+    <surname>Bunkus</surname>
+    <email>moritz@bunkus.org</email>
+   </author>
+  </authorgroup>
+ </refentryinfo>
+ <refmeta>
+  <refentrytitle>&product;</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="version">&version;</refmiscinfo>
+  <refmiscinfo class="source">http://www.bunkus.org/videotools/mkvtoolnix</refmiscinfo>
+  <refmiscinfo class="manual">http://www.bunkus.org/videotools/mkvtoolnix/doc</refmiscinfo>
+ </refmeta>
+
+ <refnamediv>
+  <refname>&product;</refname>
+  <refpurpose>Merge multimedia streams into a Matroska file</refpurpose>
+ </refnamediv>
+
+ <refsynopsisdiv id="mkvmerge.synopsis">
+  <title>Synopsis</title>
+  <cmdsynopsis>
+   <command>mkvmerge</command>
+   <arg>global options</arg>
+   <arg choice="req">-o out</arg>
+   <arg>options1</arg>
+   <arg choice="req">file1</arg>
+   <arg>
+    <arg>options2</arg>
+    <arg choice="req">file2</arg>
+   </arg>
+   <arg>@optionsfile</arg>
+  </cmdsynopsis>
+ </refsynopsisdiv>
+
+ <refsect1 id="mkvmerge.description">
+  <title>Description</title>
+  <para>
+   This program takes the input from several media files and joins their streams (all of them or just a selection) into
+   a Matroska file; see <ulink url="http://www.matroska.org/">the Matroska website</ulink>.
+  </para>
+
+  <para>
+   Global options:
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><option>-v</option>, <option>--verbose</option></term>
+    <listitem>
+     <para>Increase verbosity.</para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-q</option>, <option>--quiet</option></term>
+    <listitem>
+     <para>Suppress status output.</para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-o</option>, <option>--out</option> <arg choice="req">out</arg></term>
+    <listitem>
+     <para>Write to the file <parameter>out</parameter>.  If splitting is used then this parameter is treated a bit
+     differently.  See the explanation for the <link
+     linkend="mkvmerge.description.split"><option>--split</option></link> option for details.</para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--title</option> <arg choice="req">title</arg></term>
+    <listitem>
+     <para>Sets the general title for the output file, e.g. the movie name.</para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--tags</option> <arg choice="req">file</arg></term>
+    <listitem>
+     <para>Read global tags from the <abbrev>XML</abbrev> file <parameter>file</parameter>. See the section about tags
+     below for details.</para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--default-language</option> <arg choice="req">code</arg></term>
+    <listitem>
+     <para>Sets the default language code that will be used for all tracks unless overwritten with the
+     <option>--language</option> option. The default language code is '<literal>und</literal>' for 'undefined'.</para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   Chapter handling: (global options)
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><option>--chapter-language</option> <arg choice="req">language</arg></term>
+    <listitem>
+     <para>
+      Sets the ISO639-2 language code that is written for each chapter entry.
+      Defaults to '<literal>eng</literal>'.
+      See the section about chapters below for details.
+     </para>
+
+     <para>
+      This option can be used both for simple chapter files and for source files
+      that contain chapters but no information about the chapters' language,
+      e.g. MP4 and OGM files.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--chapter-charset</option> <arg choice="req">charset</arg></term>
+    <listitem>
+     <para>
+      Sets the charset that is used for the conversion to UTF-8 for simple chapter files. Defaults to the current system
+      locale.
+     </para>
+
+     <para>
+      This switch does also apply to chapters that are copied from certain container types, e.g. Ogg/OGM and MP4 files.
+      See the section about chapters below for details.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--cue-chapter-name-format</option> <arg choice="req">format</arg></term>
+    <listitem>
+     <para>
+      <productname>mkvmerge</productname> supports reading <abbrev>CUE</abbrev> sheets for audio files as the input for
+      chapters. <abbrev>CUE</abbrev> sheets usually contain the entries <varname>PERFORMER</varname> and
+      <varname>TITLE</varname> for each index entry. <productname>mkvmerge</productname> uses these two strings in order
+      to construct the chapter name. With this option the format used for this name can be set.
+     </para>
+
+     <para>
+      If this option is not given then <productname>mkvmerge</productname> defaults to the format '<code>%p - %t</code>'
+      (the performer, followed by a space, a dash, another space and the title).
+     </para>
+
+     <para>
+      If the format is given then everything except the following meta characters is copied as-is, and the meta
+      characters are replaced like this:
+     </para>
+
+     <itemizedlist>
+      <listitem>
+       <para><parameter>%p</parameter> is replaced by the current entry's <varname>PERFORMER</varname> string,</para>
+      </listitem>
+      <listitem>
+       <para><parameter>%t</parameter> is replaced by the current entry's <varname>TITLE</varname> string,</para>
+      </listitem>
+      <listitem>
+       <para><parameter>%n</parameter> is replaced by the current track number and</para>
+      </listitem>
+      <listitem>
+       <para><parameter>%N</parameter> is replaced by the current track number padded with a leading zero if
+       it is &lt; 10.</para>
+      </listitem>
+     </itemizedlist>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--chapters</option> <parameter>file</parameter></term>
+    <listitem>
+     <para>
+      Read chapter information from the file <parameter>file</parameter>. See the section about chapters below for
+      details.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   General output control (advanced global options):
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><option>--track-order</option> <arg choice="req">FID1:TID1,FID2:TID2,...</arg></term>
+    <listitem>
+     <para>
+      This option changes the order in which the tracks for an input file are created. The argument is a comma separated
+      list of pairs IDs. Each pair contains first the file ID which is simply the number of the file on the command line
+      starting at 0. The second is a track ID from that file.  If some track IDs are omitted then those tracks are
+      created after the ones given with this option have been created.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--cluster-length</option> <arg choice="req">n</arg>ms</term>
+    <listitem>
+     <para>
+      Put at most <parameter>n</parameter> data blocks into each cluster. If the number is postfixed with 'ms' then put
+      at most <parameter>n</parameter> milliseconds of data into each cluster. The maximum length for a cluster that
+      <productname>mkvmerge</productname> accepts is 60000 blocks and 32000ms; the minimum length is 100ms. Programs
+      will only be able to seek to clusters, so creating larger clusters may lead to imprecise or slow seeking.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--no-cues</option></term>
+    <listitem>
+     <para>
+      Tells <productname>mkvmerge</productname> not to create and write the cue data which can be compared to an index
+      in an AVI. Matroska files can be played back without the cue data, but seeking will probably be imprecise and
+      slower. Use this only if you're really desperate for space or for testing purposes. See also option
+      <option>--cues</option> which can be specified for each input file.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--no-clusters-in-meta-seek</option></term>
+    <listitem>
+     <para>
+      Tells <productname>mkvmerge</productname> not to create a meta seek element at the end of the file containing all
+      clusters. See also the section about the <link linkend="mkvmerge.file_layout">Matroska file layout</link>.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--disable-lacing</option></term>
+    <listitem>
+     <para>
+      Disables lacing for all tracks. This will increase the file's size, especially if there are many audio
+      tracks. This option is not intended for everyday use.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--enable-durations</option></term>
+    <listitem>
+     <para>
+      Write durations for all blocks. This will increase file size and does not offer any additional value for players
+      at the moment.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--timecode-scale</option> <arg choice="req">n</arg></term>
+    <listitem>
+     <para>
+      Forces the timecode scale factor to <parameter>n</parameter>. Valid values are in the range
+      <literal>1000</literal>..<literal>10000000</literal> or the special value <literal>-1</literal>.
+     </para>
+
+     <para>
+      Normally <productname>mkvmerge</productname> will use a value of <literal>1000000</literal> which means that
+      timecodes and durations will have a precision of 1ms. For files that will not contain a video track but at least
+      one audio track <productname>mkvmerge</productname> will automatically chose a timecode scale factor so that all
+      timecodes and durations have a precision of one audio sample. This causes bigger overhead but allows precise seeking
+      and extraction.
+     </para>
+
+     <para>
+      If the special value <literal>-1</literal> is used then <productname>mkvmerge</productname> will use sample
+      precision even if a video track is present.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   File splitting and linking (more global options):
+  </para>
+
+  <variablelist>
+   <varlistentry id="mkvmerge.description.split">
+    <term><option>--split</option> <arg choice="req">specification</arg></term>
+
+    <listitem>
+     <para>
+      Splits the output file after a given size or a given time.  Please note that tracks can only be split right before a key frame.  Due
+      to buffering <productname>mkvmerge</productname> will split right before the next key frame after the split point has been reached.
+      Therefore the split point may be a bit off from what the user has specified.
+     </para>
+
+     <para>
+      At the moment <productname>mkvmerge</productname> supports three different modes.
+     </para>
+
+     <orderedlist>
+      <listitem>
+       <para>
+        Splitting by size.
+       </para>
+
+       <para>
+        Syntax: <option>--split </option> <arg choice="req"><arg>size:</arg><parameter>d</parameter><arg>k|m|g</arg></arg>
+       </para>
+
+       <para>
+        Examples: <code>--split size:700m</code> or <code>--split 150000000</code>
+       </para>
+
+       <para>
+        The parameter <parameter>d</parameter> may end with '<literal>k</literal>', '<literal>m</literal>' or '<literal>g</literal>' to
+        indicate that the size is in KB, MB or GB respectively.  Otherwise a size in Bytes is assumed.  After the current output file has
+        reached this size limit a new one will be started.
+       </para>
+
+       <para>
+        The '<literal>size:</literal>' prefix may be omitted for compatibility reasons.
+       </para>
+      </listitem>
+
+      <listitem>
+       <para>
+        Splitting after a duration.
+       </para>
+
+       <para>
+        Syntax: <option>--split</option> <arg choice="req"><arg>duration:</arg><parameter>HH:MM:SS.nnnnnnnnn</parameter>|<parameter>n</parameter>s</arg>
+       </para>
+
+       <para>
+        Examples: <code>--split duration:00:60:00.000</code> or <code>--split 3600s</code>
+       </para>
+
+       <para>
+        The paramter must either have the form <parameter>HH:MM:SS.nnnnnnnnn</parameter> for specifying the duration in up to nano-second
+        precision or be a number <parameter>n</parameter> followed by the letter '<literal>s</literal>' for the duration in
+        seconds. <parameter>HH</parameter> is the number of hours, <parameter>MM</parameter> the number of minutes,
+        <parameter>SS</parameter> the number of seconds and <parameter>nnnnnnnnn</parameter> the number of nanoseconds.  Both the number of
+        hours and the number of nanoseconds can be omitted.  There can be up to nine digits after the decimal point.  After the duration of
+        the contents in the current output has reached this limit a new output file will be started.
+       </para>
+
+       <para>
+        The '<literal>duration:</literal>' prefix may be omitted for compatibility reasons.
+       </para>
+      </listitem>
+
+      <listitem>
+       <para>
+        Splitting after specific timecodes.
+       </para>
+
+       <para>
+        Syntax: <option>--split</option> <arg choice="req">timecodes:<parameter>A</parameter><arg>,<parameter>B</parameter><arg>,<parameter>C</parameter>...</arg></arg></arg>
+       </para>
+
+       <para>
+        Example: <code>--split timecodes:00:45:00.000,01:20:00.250,6300s</code>
+       </para>
+
+       <para>
+        The parameters <parameter>A</parameter>, <parameter>B</parameter> etc must all have the same format as the ones used for the
+        duration (see above). The list of timecodes is separated by commas.  After the input stream has reached the current split point's
+        timecode a new file is created. Then the next split point given in this list is used.
+       </para>
+
+       <para>
+        The '<literal>timecodes:</literal>' prefix must not be omitted.
+       </para>
+
+       <para>
+        For this splitting mode the output filename is treated differently than for the normal operation. It may contain a
+        <function>printf</function> like expression '<literal>%d</literal>' including an optional field width,
+        e.g. '<literal>%02d</literal>'. If it does then the current file number will be formatted appropriately and inserted at that point
+        in the filename.  If there is no such pattern then a pattern of '<literal>-%03d</literal>' is assumed right before the file's
+        extension: '<literal>-o output.mkv</literal>' would result in '<literal>output-001.mkv</literal>' and so on. If there's no extension
+        then '<literal>-%03d</literal>' will be appended to the name.
+       </para>
+      </listitem>
+     </orderedlist>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--link</option></term>
+    <listitem>
+     <para>
+      Link files to one another when splitting the output file. See the section on <link linkend="mkvmerge.file_linking">file linking</link>
+      below for details.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--link-to-previous</option> <arg choice="req">SID</arg></term>
+    <listitem>
+     <para>
+      Links the first output file to the segment with the segment UID given by the <parameter>SID</parameter> parameter. See the section on
+      <link linkend="mkvmerge.file_linking">file linking</link> below for details.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--link-to-next</option> <arg choice="req">SID</arg></term>
+    <listitem>
+     <para>
+      Links the last output file to the segment with the segment UID given by the <parameter>SID</parameter> parameter. See the section on
+      <link linkend="mkvmerge.file_linking">file linking</link> below for details.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </refsect1>
+
+
+
+
+
+
+
+
+ <refsect1 id="mkvmerge.file_linking">
+  <title>File linking</title>
+  <para>
+   Matroska supports file linking which simply says that a specific file is the predecessor or successor of the current file. To be precise,
+   it's not really the files that are linked but the Matroska segments. As most files will probably only contain one Matroska segment the
+   following explanations use the term 'file linking' although 'segment linking' would be more appropriate.
+  </para>
+
+  <para>
+   Each segment is identified by a unique 128 bit wide segment UID. This UID is automatically generated by
+   <productname>mkvmerge</productname>. The linking is done primarily via putting the segment UIDs (short: <abbrev>SID</abbrev>) of the
+   previous/next file into the segment header information.
+   <citerefentry>
+    <refentrytitle>mkvinfo</refentrytitle>
+    <manvolnum>1</manvolnum>
+   </citerefentry>
+   prints these <abbrev>SIDs</abbrev> if it finds them.
+  </para>
+
+  <para>
+   If a file is split into several smaller ones and linking is used then the timecodes will not start at 0 again but will continue where the
+   last file has left off. This way the absolute time is kept even if the previous files are not available (e.g. when streaming). If no
+   linking is used then the timecodes should start at 0 for each file. By default <productname>mkvmerge</productname> does not use file
+   linking. If you want that you can turn it on with the <option>--link</option> option. This option is only useful if splitting is
+   activated as well.
+  </para>
+
+  <para>
+   Regardless of whether splitting is active or not the user can tell <productname>mkvmerge</productname> to link the produced files to
+   specific <abbrev>SIDs</abbrev>. This is achieved with the options <option>--link-to-previous</option> and
+   <option>--link-to-next</option>.  These options accept a segment <abbrev>SID</abbrev> in the format that
+   <citerefentry>
+    <refentrytitle>mkvinfo</refentrytitle>
+    <manvolnum>1</manvolnum>
+   </citerefentry>
+   outputs: 16 hexadecimal numbers between <constant>0x00</constant> and <constant>0xff</constant> prefixed with '<literal>0x</literal>'
+   each, e.g. '<literal>0x41 0xda 0x73 0x66 0xd9 0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3 0x93</literal>'. Alternatively a shorter
+   form can be used: 16 hexadecimal numbers between <constant>0x00</constant> and <constant>0xff</constant> without the
+   '<literal>0x</literal>' prefixes and without the spaces, e.g.  '<literal>41da7366d9cfb21eae78ebb45ecab393</literal>'.
+  </para>
+
+  <para>
+   If splitting is used then the first file is linked to the <abbrev>SID</abbrev> given with <option>--link-to-previous</option> and the
+   last file is linked to the <abbrev>SID</abbrev> given with <option>--link-to-next</option>. If splitting is not used then the one output
+   file will be linked to both of the two <abbrev>SIDs</abbrev>.
+  </para>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.seealso">
+  <title>See also</title>
+  <para>
+   <citerefentry><refentrytitle>mkvinfo</refentrytitle><manvolnum>1</manvolnum></citerefentry>,
+   <citerefentry><refentrytitle>mkvextract</refentrytitle><manvolnum>1</manvolnum></citerefentry>,
+   <citerefentry><refentrytitle>mmg</refentrytitle><manvolnum>1</manvolnum></citerefentry>
+  </para>
+ </refsect1>
+
+</refentry>
