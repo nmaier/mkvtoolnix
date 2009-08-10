@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "/usr/share/xml/docbook/schema/dtd/4.5/docbookx.dtd"
+[
+<!ENTITY product "mkvinfo">
+<!ENTITY version "2.9.7">
+<!ENTITY date "July 2009">
+
+<!ENTITY mkvmerge "<citerefentry><refentrytitle>mkvmerge</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mkvinfo "<citerefentry><refentrytitle>mkvinfo</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mkvextract "<citerefentry><refentrytitle>mkvextract</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mmg "<citerefentry><refentrytitle>mmg</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+
+<!ENTITY matroska "<productname>Matroska</productname>">
+<!ENTITY oggvorbis "<productname>OggVorbis</productname>">
+<!ENTITY xml "<abbrev>XML</abbrev>">
+
+]>
+
+<refentry lang="en" id="mkvinfo">
+ <refentryinfo>
+  <productname>&product;</productname>
+  <date>&date;</date>
+  <authorgroup>
+   <author>
+    <contrib>Developer</contrib>
+    <firstname>Moritz</firstname>
+    <surname>Bunkus</surname>
+    <email>moritz@bunkus.org</email>
+   </author>
+  </authorgroup>
+ </refentryinfo>
+ <refmeta>
+  <refentrytitle>&product;</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="version">&version;</refmiscinfo>
+  <refmiscinfo class="date">&date;</refmiscinfo>
+  <refmiscinfo class="source">www.bunkus.org</refmiscinfo>
+  <refmiscinfo class="manual">http://www.bunkus.org/videotools/mkvtoolnix/doc</refmiscinfo>
+ </refmeta>
+
+ <refnamediv>
+  <refname>&product;</refname>
+  <refpurpose>Print information about elements in &matroska; files</refpurpose>
+ </refnamediv>
+
+ <refsynopsisdiv id="mkvinfo.synopsis">
+  <title>Synopsis</title>
+  <cmdsynopsis>
+   <command>mkvinfo</command>
+   <arg>options</arg>
+   <arg choice="req">source-filename</arg>
+  </cmdsynopsis>
+ </refsynopsisdiv>
+
+ <refsect1 id="mkvinfo.description">
+  <title>Description</title>
+  <para>
+   This program lists all elements contained in a &matroska;. The output can be limited to a list of tracks in the file including
+   information about the codecs used.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><option>-g</option>, <option>--gui</option></term>
+    <listitem>
+     <para>
+      Start the <abbrev>GUI</abbrev>. This option is only available if mkvinfo was compiled with <abbrev>GUI</abbrev> support.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-c</option>, <option>--checksums</option></term>
+    <listitem>
+     <para>
+      Calculates and display the <function>Adler32</function> checksum for each frame. Useful for debugging only.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-s</option>, <option>--summary</option></term>
+    <listitem>
+     <para>
+      Only show a terse summary of what &mkvinfo; finds and not each element.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvinfo.description.command_line_charset">
+    <term><option>--command-line-charset</option> <parameter>character-set</parameter></term>
+    <listitem>
+     <para>
+      Sets the character set to convert strings given on the command line from. It defaults to the character set given by system's current
+      locale.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvinfo.description.output_charset">
+    <term><option>--output-charset</option> <parameter>character-set</parameter></term>
+    <listitem>
+     <para>
+      Sets the character set to which strings are converted that are to be output.  It defaults to the character set given by system's
+      current locale.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvinfo.description.redirect_output">
+    <term><option>-r</option>, <option>--redirect-output</option> <parameter>file-name</parameter></term>
+    <listitem>
+     <para>
+      Writes all messages to the file <parameter>file-name</parameter> instead of to the console.  While this can be done easily with
+      output redirection there are cases in which this option is needed: when the terminal reinterprets the output before writing it to a
+      file.  The character set set with <link
+      linkend="mkvinfo.description.output_charset"><option>--output-charset</option></link> is honored.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvinfo.description.ui_language">
+    <term><option>--ui-language</option> <parameter>code</parameter></term>
+    <listitem>
+     <para>
+      Forces the translations for the language <parameter>code</parameter> to be used (e.g.  '<literal>de_DE</literal>' for the German
+      translations). It is preferable to use the environment variables <varname>LANG</varname>, <varname>LC_MESSAGES</varname> and
+      <varname>LC_ALL</varname> though. Entering '<literal>list</literal>' as the <parameter>code</parameter> will cause &mkvinfo; to
+      output a list of available translations.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvinfo.description.verbose">
+    <term><option>-v</option>, <option>--verbose</option></term>
+    <listitem>
+     <para>
+      Be more verbose. See the section about <link linkend="mkvinfo.verbosity_levels">verbosity levels</link> for a description which
+      information will be output at which level.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-h</option>, <option>--help</option></term>
+    <listitem>
+     <para>
+      Show usage information and exit.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-V</option>, <option>--version</option></term>
+    <listitem>
+     <para>
+      Show version information and exit.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>@</option>options-file</term>
+    <listitem>
+     <para>
+      Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace
+      character is a hash mark ('<literal>#</literal>') are treated as comments and ignored. White spaces at the start and end of a line
+      will be stripped. Each line must contain exactly one option.  There is no meta character escaping.
+     </para>
+
+     <para>
+      The command line '<command>mkvinfo -v -v input.mkv --redirect-output info.txt</command>' could be converted into the following
+      option file:
+     </para>
+
+     <programlisting>
+# Be more verbose
+-v
+-v
+# Parse input.mkv
+input.mkv
+# and write the output to info.txt
+--redirect-output
+info.txt
+     </programlisting>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </refsect1>
+
+ <refsect1 id="mkvinfo.verbosity_levels">
+  <title>Verbosity levels</title>
+
+  <para>
+   The <link linkend="mkvinfo.description.verbose"><option>-v</option></link> option can be used to increase &mkvinfo;'s verbosity level
+   and print more information about the current file.
+  </para>
+
+  <para>
+   At level 0 &mkvinfo; will print only the track headers it finds and their types. &mkvinfo; will exit as soon as the headers are parsed
+   completely (more technical: as soon as the first cluster is encountered). In this level the seek head entries and the cues will not be
+   displayed -- even if they're located in front of the track information.
+  </para>
+
+  <para>
+   At level 1 &mkvinfo; will also print all &matroska; elements encountered for the complete file but the seek head entries and the cue
+   entries. If the summary mode is enabled then &mkvinfo; will output the frame position as well.
+  </para>
+
+  <para>
+   At level 2 &mkvinfo; will also print the seek head entries, the cue entries and the file position at which each &matroska; element can be
+   found at.
+  </para>
+
+  <para>
+   At level 3 and above &mkvinfo; will print some information that is not directly connected to a &matroska; element. All other elements
+   only print stuff about the elements that were just found. Level 3 adds meta information to ease debugging (read: it's intended for
+   developers only). All lines written by level 3 are enclosed in square brackets to make filtering them out easy.
+  </para>
+ </refsect1>
+
+ <refsect1>
+  <title>Exit codes</title>
+
+  <para>
+   &mkvinfo; exits with one of three exit codes:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     <constant>0</constant> -- This exit codes means that the run has completed successfully.
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     <constant>1</constant> -- In this case &mkvinfo; has output at least one warning, but the run did continue.  A warning is
+     prefixed with the text '<literal>Warning:</literal>'.
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     <constant>2</constant> -- This exit code is used after an error occured.  &mkvinfo; aborts right after outputting the error message.
+     Error messages range from wrong command line arguments over read/write errors to broken files.
+    </para>
+   </listitem>
+  </itemizedlist>
+ </refsect1>
+
+ <refsect1 id="mkvinfo.seealso">
+  <title>See also</title>
+  <para>
+   &mkvmerge;, &mkvextract;, &mmg;
+  </para>
+ </refsect1>
+
+ <refsect1 id="mkvinfo.www">
+  <title>WWW</title>
+  <para>
+   The latest version can always be found at <ulink url="http://www.bunkus.org/videotools/mkvtoolnix/">the MKVToolNix homepage</ulink>.
+  </para>
+ </refsect1>
+
+</refentry>
