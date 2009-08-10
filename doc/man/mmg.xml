@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "/usr/share/xml/docbook/schema/dtd/4.5/docbookx.dtd"
+[
+<!ENTITY product "mmg">
+<!ENTITY version "2.9.7">
+<!ENTITY date "July 2009">
+
+<!ENTITY mkvmerge "<citerefentry><refentrytitle>mkvmerge</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mkvinfo "<citerefentry><refentrytitle>mkvinfo</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mkvextract "<citerefentry><refentrytitle>mkvextract</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mmg "<citerefentry><refentrytitle>mmg</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+
+<!ENTITY matroska "<productname>Matroska</productname>">
+<!ENTITY oggvorbis "<productname>OggVorbis</productname>">
+<!ENTITY xml "<abbrev>XML</abbrev>">
+
+]>
+
+<refentry lang="en" id="mmg">
+ <refentryinfo>
+  <productname>&product;</productname>
+  <date>&date;</date>
+  <authorgroup>
+   <author>
+    <contrib>Developer</contrib>
+    <firstname>Moritz</firstname>
+    <surname>Bunkus</surname>
+    <email>moritz@bunkus.org</email>
+   </author>
+  </authorgroup>
+ </refentryinfo>
+ <refmeta>
+  <refentrytitle>&product;</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="version">&version;</refmiscinfo>
+  <refmiscinfo class="date">&date;</refmiscinfo>
+  <refmiscinfo class="source">MkvToolNix</refmiscinfo>
+  <refmiscinfo class="manual">User Commands</refmiscinfo>
+ </refmeta>
+
+ <refnamediv>
+  <refname>&product;</refname>
+  <refpurpose>a GUI for &mkvmerge; including a chapter and a header editor</refpurpose>
+ </refnamediv>
+
+ <refsynopsisdiv id="mmg.synopsis">
+  <title>Synopsis</title>
+  <cmdsynopsis>
+   <command>mmg</command>
+   <group>
+    <arg>
+     <arg choice="req">--edit-headers</arg>
+     <arg choice="req">filename.mkv</arg>
+    </arg>
+    <arg>preferences-file.mmg</arg>
+    <arg>source-file.ext</arg>
+   </group>
+  </cmdsynopsis>
+ </refsynopsisdiv>
+
+ <refsect1 id="mmg.description">
+  <title>Description</title>
+  <para>
+   &mmg; is a <productname>wxWindows</productname> based <abbrev>GUI</abbrev> for &mkvmerge;. It offers easy access to all of &mkvmerge;'s
+   options. All settings (e.g. source files, track options etc) can be saved and restored.  Included is a chapter editor that can read
+   <abbrev>OGM</abbrev> style and &xml; style chapter files, write &xml; style chapter files and even read chapters from &matroska; files
+   and write chapters directly to &matroska; files. Included is also a header editor that can be used to quickly change properties of
+   existing &matroska; files without needing a complete remux.
+  </para>
+
+  <para>
+   &mmg; knows few options. The first possibility is to start it with a single file name. If that file name's extenion is
+   '<literal>.mmg</literal>' then it will be treated as a preferences file and &mmg; will load its setting when it starts. Otherwise the
+   name is interpreted as being the name of an input file which will be added.
+  </para>
+
+  <para>
+   The second operation mode is invoked with the option <option>--edit-headers</option> and a file name. This lets &mmg; run its header
+   editor and load the file.
+  </para>
+
+  <para>
+   The full documentation is available in HTML form (<filename>doc/mkvmerge-gui.html</filename>).
+  </para>
+ </refsect1>
+
+ <refsect1 id="mmg.seealso">
+  <title>See also</title>
+  <para>
+   &mkvmerge;, &mkvextract;, &mkvinfo;
+  </para>
+ </refsect1>
+
+ <refsect1 id="mmg.www">
+  <title>WWW</title>
+  <para>
+   The latest version can always be found at <ulink url="http://www.bunkus.org/videotools/mkvtoolnix/">the MKVToolNix homepage</ulink>.
+  </para>
+ </refsect1>
+
+</refentry>
