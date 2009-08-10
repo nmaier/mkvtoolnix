@@ -1148,7 +1148,7 @@
     <listitem>
      <para>
       Forces the translations for the language <parameter>code</parameter> to be used (e.g.  '<literal>de_DE</literal>' for the German
-      translations). If is preferable to use the environment variables <varname>LANG</varname>, <varname>LC_MESSAGES</varname> and
+      translations). It is preferable to use the environment variables <varname>LANG</varname>, <varname>LC_MESSAGES</varname> and
       <varname>LC_ALL</varname> though. Entering '<literal>list</literal>' as the <parameter>code</parameter> will cause &mkvmerge; to
       output a list of available translations.
      </para>
