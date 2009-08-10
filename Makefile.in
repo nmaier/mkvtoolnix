@@ -272,6 +272,8 @@ install-guide:
 	  $(INSTALL_DATA) $$i $(DESTDIR)$(pkgdatadir)/images/; \
 	done
 
+manpages: $(MANPAGES)
+
 # Some general rules
 ifeq (1,$(LIBMTXCOMMONDLL))
 %.o: %.cpp
