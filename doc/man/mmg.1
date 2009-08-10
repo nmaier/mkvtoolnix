@@ -1,0 +1,76 @@
+.\"     Title: mmg
+.\"    Author: Moritz Bunkus <moritz@bunkus.org>
+.\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
+.\"      Date: July 2009
+.\"    Manual: User Commands
+.\"    Source: MkvToolNix 2.9.7
+.\"
+.TH "MMG" "1" "July 2009" "MkvToolNix 2\&.9\&.7" "User Commands"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+mmg \- a GUI for mkvmerge1 including a chapter and a header editor
+.SH "SYNOPSIS"
+.HP 4
+\fBmmg\fR [[{\-\-edit\-headers}\ {filename\&.mkv}] | [preferences\-file\&.mmg] | [source\-file\&.ext]]
+.SH "DESCRIPTION"
+.PP
+
+\fBmmg\fR(1)
+is a
+wxWindows(TM)
+based
+GUI
+for
+\fBmkvmerge\fR(1)\&. It offers easy access to all of
+\fBmkvmerge\fR(1)\'s options\&. All settings (e\&.g\&. source files, track options etc) can be saved and restored\&. Included is a chapter editor that can read
+OGM
+style and
+XML
+style chapter files, write
+XML
+style chapter files and even read chapters from
+Matroska(TM)
+files and write chapters directly to
+Matroska(TM)
+files\&. Included is also a header editor that can be used to quickly change properties of existing
+Matroska(TM)
+files without needing a complete remux\&.
+.PP
+
+\fBmmg\fR(1)
+knows few options\&. The first possibility is to start it with a single file name\&. If that file name\'s extenion is \'\&.mmg\' then it will be treated as a preferences file and
+\fBmmg\fR(1)
+will load its setting when it starts\&. Otherwise the name is interpreted as being the name of an input file which will be added\&.
+.PP
+The second operation mode is invoked with the option
+\fB\-\-edit\-headers\fR
+and a file name\&. This lets
+\fBmmg\fR(1)
+run its header editor and load the file\&.
+.PP
+The full documentation is available in HTML form (\fIdoc/mkvmerge\-gui\&.html\fR)\&.
+.SH "SEE ALSO"
+.PP
+
+\fBmkvmerge\fR(1),
+\fBmkvextract\fR(1),
+\fBmkvinfo\fR(1)
+.SH "WWW"
+.PP
+The latest version can always be found at
+\fIthe MKVToolNix homepage\fR\&[1]\&.
+.SH "AUTHOR"
+.PP
+\fBMoritz Bunkus\fR <\&moritz@bunkus\&.org\&>
+.sp -1n
+.IP "" 4
+Developer
+.SH "NOTES"
+.IP " 1." 4
+the MKVToolNix homepage
+.RS 4
+\%http://www.bunkus.org/videotools/mkvtoolnix/
+.RE

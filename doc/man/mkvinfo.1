@@ -1,0 +1,198 @@
+.\"     Title: mkvinfo
+.\"    Author: Moritz Bunkus <moritz@bunkus.org>
+.\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
+.\"      Date: July 2009
+.\"    Manual: User Commands
+.\"    Source: MkvToolNix 2.9.7
+.\"
+.TH "MKVINFO" "1" "July 2009" "MkvToolNix 2\&.9\&.7" "User Commands"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+mkvinfo \- Print information about elements in Matroska files
+.SH "SYNOPSIS"
+.HP 8
+\fBmkvinfo\fR [options] {source\-filename}
+.SH "DESCRIPTION"
+.PP
+This program lists all elements contained in a
+Matroska(TM)\&. The output can be limited to a list of tracks in the file including information about the codecs used\&.
+.PP
+\fB\-g\fR, \fB\-\-gui\fR
+.RS 4
+Start the
+GUI\&. This option is only available if mkvinfo was compiled with
+GUI
+support\&.
+.RE
+.PP
+\fB\-c\fR, \fB\-\-checksums\fR
+.RS 4
+Calculates and display the
+\fBAdler32\fR
+checksum for each frame\&. Useful for debugging only\&.
+.RE
+.PP
+\fB\-s\fR, \fB\-\-summary\fR
+.RS 4
+Only show a terse summary of what
+\fBmkvinfo\fR(1)
+finds and not each element\&.
+.RE
+.PP
+\fB\-\-command\-line\-charset\fR \fIcharacter\-set\fR
+.RS 4
+Sets the character set to convert strings given on the command line from\&. It defaults to the character set given by system\'s current locale\&.
+.RE
+.PP
+\fB\-\-output\-charset\fR \fIcharacter\-set\fR
+.RS 4
+Sets the character set to which strings are converted that are to be output\&. It defaults to the character set given by system\'s current locale\&.
+.RE
+.PP
+\fB\-r\fR, \fB\-\-redirect\-output\fR \fIfile\-name\fR
+.RS 4
+Writes all messages to the file
+\fIfile\-name\fR
+instead of to the console\&. While this can be done easily with output redirection there are cases in which this option is needed: when the terminal reinterprets the output before writing it to a file\&. The character set set with
+\fB\-\-output\-charset\fR
+is honored\&.
+.RE
+.PP
+\fB\-\-ui\-language\fR \fIcode\fR
+.RS 4
+Forces the translations for the language
+\fIcode\fR
+to be used (e\&.g\&. \'de_DE\' for the German translations)\&. It is preferable to use the environment variables
+\fILANG\fR,
+\fILC_MESSAGES\fR
+and
+\fILC_ALL\fR
+though\&. Entering \'list\' as the
+\fIcode\fR
+will cause
+\fBmkvinfo\fR(1)
+to output a list of available translations\&.
+.RE
+.PP
+\fB\-v\fR, \fB\-\-verbose\fR
+.RS 4
+Be more verbose\&. See the section about
+verbosity levels
+for a description which information will be output at which level\&.
+.RE
+.PP
+\fB\-h\fR, \fB\-\-help\fR
+.RS 4
+Show usage information and exit\&.
+.RE
+.PP
+\fB\-V\fR, \fB\-\-version\fR
+.RS 4
+Show version information and exit\&.
+.RE
+.PP
+\fB@\fRoptions\-file
+.RS 4
+Reads additional command line arguments from the file
+\fIoptions\-file\fR\&. Lines whose first non\-whitespace character is a hash mark (\'#\') are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&. There is no meta character escaping\&.
+.sp
+The command line \'\fBmkvinfo \-v \-v input\&.mkv \-\-redirect\-output info\&.txt\fR\' could be converted into the following option file:
+.sp
+.RS 4
+.nf
+# Be more verbose
+\-v
+\-v
+# Parse input\&.mkv
+input\&.mkv
+# and write the output to info\&.txt
+\-\-redirect\-output
+info\&.txt
+     
+.fi
+.RE
+.RE
+.SH "VERBOSITY LEVELS"
+.PP
+The
+\fB\-v\fR
+option can be used to increase
+\fBmkvinfo\fR(1)\'s verbosity level and print more information about the current file\&.
+.PP
+At level 0
+\fBmkvinfo\fR(1)
+will print only the track headers it finds and their types\&.
+\fBmkvinfo\fR(1)
+will exit as soon as the headers are parsed completely (more technical: as soon as the first cluster is encountered)\&. In this level the seek head entries and the cues will not be displayed \-\- even if they\'re located in front of the track information\&.
+.PP
+At level 1
+\fBmkvinfo\fR(1)
+will also print all
+Matroska(TM)
+elements encountered for the complete file but the seek head entries and the cue entries\&. If the summary mode is enabled then
+\fBmkvinfo\fR(1)
+will output the frame position as well\&.
+.PP
+At level 2
+\fBmkvinfo\fR(1)
+will also print the seek head entries, the cue entries and the file position at which each
+Matroska(TM)
+element can be found at\&.
+.PP
+At level 3 and above
+\fBmkvinfo\fR(1)
+will print some information that is not directly connected to a
+Matroska(TM)
+element\&. All other elements only print stuff about the elements that were just found\&. Level 3 adds meta information to ease debugging (read: it\'s intended for developers only)\&. All lines written by level 3 are enclosed in square brackets to make filtering them out easy\&.
+.SH "EXIT CODES"
+.PP
+
+\fBmkvinfo\fR(1)
+exits with one of three exit codes:
+.sp
+.RS 4
+\h'-04'\(bu\h'+03'
+\fB0\fR
+\-\- This exit codes means that the run has completed successfully\&.
+.RE
+.sp
+.RS 4
+\h'-04'\(bu\h'+03'
+\fB1\fR
+\-\- In this case
+\fBmkvinfo\fR(1)
+has output at least one warning, but the run did continue\&. A warning is prefixed with the text \'Warning:\'\&.
+.RE
+.sp
+.RS 4
+\h'-04'\(bu\h'+03'
+\fB2\fR
+\-\- This exit code is used after an error occured\&.
+\fBmkvinfo\fR(1)
+aborts right after outputting the error message\&. Error messages range from wrong command line arguments over read/write errors to broken files\&.
+.RE
+.SH "SEE ALSO"
+.PP
+
+\fBmkvmerge\fR(1),
+\fBmkvextract\fR(1),
+\fBmmg\fR(1)
+.SH "WWW"
+.PP
+The latest version can always be found at
+\fIthe MKVToolNix homepage\fR\&[1]\&.
+.SH "AUTHOR"
+.PP
+\fBMoritz Bunkus\fR <\&moritz@bunkus\&.org\&>
+.sp -1n
+.IP "" 4
+Developer
+.SH "NOTES"
+.IP " 1." 4
+the MKVToolNix homepage
+.RS 4
+\%http://www.bunkus.org/videotools/mkvtoolnix/
+.RE

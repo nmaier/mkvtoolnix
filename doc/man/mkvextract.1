@@ -1,0 +1,514 @@
+.\"     Title: mkvextract
+.\"    Author: Moritz Bunkus <moritz@bunkus.org>
+.\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
+.\"      Date: July 2009
+.\"    Manual: User Commands
+.\"    Source: MkvToolNix 2.9.7
+.\"
+.TH "MKVEXTRACT" "1" "July 2009" "MkvToolNix 2\&.9\&.7" "User Commands"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+mkvextract \- extract tracks from Matroska files into other files
+.SH "SYNOPSIS"
+.HP 11
+\fBmkvextract\fR {mode} {source\-filename} [options] [extraction\-spec]
+.SH "DESCRIPTION"
+.PP
+This program extracts specific parts from a Matroska file to other useful formats\&. The first argument,
+\fBmode\fR, tells
+\fBmkvextract\fR(1)
+what to extract\&. Currently supported is the extraction of
+tracks,
+tags,
+attachments,
+chapters,
+CUE sheets
+and
+timecodes\&. The second argument is the name of the source file\&. It must be a
+Matroska(TM)
+file\&. All following arguments are options and extraction specifications; both of which depend on the selected mode\&.
+.SS "Common options"
+.PP
+The following options are available in all modes and only described once in this section\&.
+.PP
+\fB\-\-command\-line\-charset\fR \fIcharacter\-set\fR
+.RS 4
+Sets the character set to convert strings given on the command line from\&. It defaults to the character set given by system\'s current locale\&.
+.RE
+.PP
+\fB\-\-output\-charset\fR \fIcharacter\-set\fR
+.RS 4
+Sets the character set to which strings are converted that are to be output\&. It defaults to the character set given by system\'s current locale\&.
+.RE
+.PP
+\fB\-r\fR, \fB\-\-redirect\-output\fR \fIfile\-name\fR
+.RS 4
+Writes all messages to the file
+\fIfile\-name\fR
+instead of to the console\&. While this can be done easily with output redirection there are cases in which this option is needed: when the terminal reinterprets the output before writing it to a file\&. The character set set with
+\fB\-\-output\-charset\fR
+is honored\&.
+.RE
+.PP
+\fB\-\-ui\-language\fR \fIcode\fR
+.RS 4
+Forces the translations for the language
+\fIcode\fR
+to be used (e\&.g\&. \'de_DE\' for the German translations)\&. It is preferable to use the environment variables
+\fILANG\fR,
+\fILC_MESSAGES\fR
+and
+\fILC_ALL\fR
+though\&. Entering \'list\' as the
+\fIcode\fR
+will cause
+\fBmkvextract\fR(1)
+to output a list of available translations\&.
+.RE
+.PP
+\fB\-v\fR, \fB\-\-verbose\fR
+.RS 4
+Be verbose and show all the important
+Matroska(TM)
+elements as they\'re read\&.
+.RE
+.PP
+\fB\-h\fR, \fB\-\-help\fR
+.RS 4
+Show usage information and exit\&.
+.RE
+.PP
+\fB\-V\fR, \fB\-\-version\fR
+.RS 4
+Show version information and exit\&.
+.RE
+.PP
+\fB@\fRoptions\-file
+.RS 4
+Reads additional command line arguments from the file
+\fIoptions\-file\fR\&. Lines whose first non\-whitespace character is a hash mark (\'#\') are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&. There is no meta character escaping\&.
+.sp
+The command line \'\fBmkvextract tracks source\&.mkv \-\-raw 1:destination\&.raw\fR\' could be converted into the following option file:
+.sp
+.RS 4
+.nf
+# Extract a track from source\&.mkv
+tracks
+source\&.mkv
+# Output the track as raw data\&.
+\-\-raw
+1;destination\&.raw
+      
+.fi
+.RE
+.RE
+.SS "Track extraction mode"
+.PP
+Syntax:
+\fBmkvextract\fR
+\fBtracks\fR
+\fIsource\-filename\fR
+[\fIoptions\fR]
+\fITID1:dest\-filename1\fR
+[\fITID2:dest\-filename2\fR \&.\&.\&.]
+.PP
+The following command line options are available for each track in the \'tracks\' extraction mode\&. They have to appear in front of the track specification (see below) they should be applied to\&.
+.PP
+\fB\-c\fR \fIcharacter\-set\fR
+.RS 4
+Sets the character set to convert the next text subtitle track to\&. Only valid if the next track ID targets a text subtitle track\&. It defaults to UTF\-8\&.
+.RE
+.PP
+\fB\-\-blockadd\fR \fIlevel\fR
+.RS 4
+Keep only the BlockAdditions up to this level\&. The default is to keep all levels\&. This option only affects certain kinds of codecs like WAVPACK4\&.
+.RE
+.PP
+\fB\-\-cuesheet\fR
+.RS 4
+Causes
+\fBmkvextract\fR(1)
+to extract a
+CUE
+sheet from the chapter information and tag data for the following track into a file whose name is the track\'s output name with \'\&.cue\' appended to it\&.
+.RE
+.PP
+\fB\-\-raw\fR
+.RS 4
+Extracts the raw data into a file without any container data around it\&. Unlike the
+\fB\-\-fullraw\fR
+flag this flag does not cause the contents of the
+CodecPrivate
+element to be written to the file\&. This mode works with all
+CodecIDs, even the ones that
+\fBmkvextract\fR(1)
+doesn\'t support otherwise, but the resulting files might not be usable\&.
+.RE
+.PP
+\fB\-\-fullraw\fR
+.RS 4
+Extracts the raw data into a file without any container data around it\&. The contents of the
+CodecPrivate
+element will be written to the file first if the track contains such a header element\&. This mode works with all
+CodecIDs, even the ones that
+\fBmkvextract\fR(1)
+doesn\'t support otherwise, but the resulting files might not be usable\&.
+.RE
+.PP
+\fB\-\-no\-ogg\fR
+.RS 4
+Only valid for
+FLAC
+tracks\&. Normally
+FLAC
+tracks are embedded in an Ogg transport stream\&. With this switch they are extracted to raw
+FLAC
+files instead\&.
+.RE
+.PP
+\fITID:outname\fR
+.RS 4
+Causes extraction of the track with the ID
+\fITID\fR
+into the file
+\fIoutname\fR
+if such a track exists in the source file\&. This option can be given multiple times\&. The track IDs are the same as the ones output by
+\fBmkvmerge\fR(1)\'s
+\fB\-\-identify\fR
+option\&.
+.sp
+Each output name should be used only once\&. The exception are RealAudio and RealVideo tracks\&. If you use the same name for different tracks then those tracks will be saved in the same file\&. Example:
+.sp
+.RS 4
+.nf
+$ mkvextract tracks input\&.mkv 1:output\-two\-tracks\&.rm 2:output\-two\-tracks\&.rm
+      
+.fi
+.RE
+.RE
+.SS "Tags extraction mode"
+.PP
+Syntax:
+\fBmkvextract\fR
+\fBtags\fR
+\fIsource\-filename\fR
+[\fIoptions\fR]
+.PP
+The extracted tags are written to the console unless the output is redirected (see the section about
+output redirection
+for details)\&.
+.SS "Attachments extraction mode"
+.PP
+Syntax:
+\fBmkvextract\fR
+\fBattachments\fR
+\fIsource\-filename\fR
+[\fIoptions\fR]
+\fIAID1:outname1\fR
+[\fIAID2:outname2\fR \&.\&.\&.]
+.PP
+AID:outname
+.RS 4
+Causes extraction of the attachment with the ID
+\fIAID\fR
+into the file
+\fIoutname\fR
+if such an attachment exists in the source file\&. If the
+\fIoutname\fR
+is left empty then the name of the attachment inside the source
+Matroska(TM)
+file is used instead\&. This option can be given multiple times\&. The attachment IDs are the same as the ones output by
+\fBmkvmerge\fR(1)\'s
+\fB\-\-identify\fR
+option\&.
+.RE
+.SS "Chapters extraction mode"
+.PP
+Syntax:
+\fBmkvextract\fR
+\fBchapters\fR
+\fIsource\-filename\fR
+[\fIoptions\fR]
+.PP
+\fB\-s\fR, \fB\-\-simple\fR
+.RS 4
+Exports the chapter information in the simple format used in the
+OGM
+tools (CHAPTER01=\&.\&.\&., CHAPTER01NAME=\&.\&.\&.)\&. In this mode some information has to be discarded\&. Default is to output the chapters in
+XML
+format\&.
+.RE
+.PP
+The extracted chapters are written to the console unless the output is redirected (see the section about
+output redirection
+for details)\&.
+.SS "Cue sheet extraction mode"
+.PP
+Syntax:
+\fBmkvextract\fR
+\fBcuesheet\fR
+\fIsource\-filename\fR
+[\fIoptions\fR]
+.PP
+The extracted cue sheet is written to the console unless the output is redirected (see the section about
+output redirection
+for details)\&.
+.SS "Timecode extraction mode"
+.PP
+Syntax:
+\fBmkvextract\fR
+\fBtimecodes_v2\fR
+\fIsource\-filename\fR
+[\fIoptions\fR]
+.PP
+The extracted timecodes are written to the console unless the output is redirected (see the section about
+output redirection
+for details)\&.
+.SH "OUTPUT REDIRECTION"
+.PP
+Several extraction modes cause
+\fBmkvextract\fR(1)
+to write the extracted data to the console\&. There are generally two ways of writing this data into a file: one provided by the shell and one provided by
+\fBmkvextract\fR(1)
+itself\&.
+.PP
+The shell\'s builtin redirection mechanism is used by appending \'> output\-filename\&.ext\' to the command line\&. Example:
+.sp
+.RS 4
+.nf
+$ mkvextract tags source\&.mkv > tags\&.xml
+  
+.fi
+.RE
+.PP
+
+\fBmkvextract\fR(1)\'s own redirection is invoked with the
+\fB\-\-redirect\-output\fR
+option\&. Example:
+.sp
+.RS 4
+.nf
+$ mkvextract tags source\&.mkv \-\-redirect\-output tags\&.xml
+  
+.fi
+.RE
+.sp
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+Note
+.PP
+On Windows you should probably use the
+\fB\-\-redirect\-output\fR
+option because
+\fBcmd\&.exe\fR
+sometimes interpretes special characters before they\'re written into the output file resulting in broken output\&.
+.SH "OUTPUT FILE FORMATS"
+.PP
+The decision about the output format is based on the track type, not on the extension used for the output file name\&. The following track types are supported at the moment:
+.PP
+V_MPEG4/ISO/AVC
+.RS 4
+
+H\&.264
+/
+AVC
+video tracks are written to
+H\&.264
+elementary streams which can be processed further with e\&.g\&.
+MP4Box(TM)
+from the
+GPAC(TM)
+package\&.
+.RE
+.PP
+V_MS/VFW/FOURCC
+.RS 4
+Fixed
+FPS
+video tracks with this
+CodecID
+are written to
+AVI
+files\&.
+.RE
+.PP
+V_REAL/*
+.RS 4
+
+RealVideo(TM)
+tracks are written to
+RealMedia(TM)
+files\&.
+.RE
+.PP
+A_MPEG/L3, A_AC3
+.RS 4
+These will be extracted to raw
+MP3
+and
+AC3
+files\&.
+.RE
+.PP
+A_PCM/INT/LIT
+.RS 4
+Raw
+PCM
+data will be written to a
+WAV
+file\&.
+.RE
+.PP
+A_AAC/MPEG2/*, A_AAC/MPEG4/*, A_AAC
+.RS 4
+All
+AAC
+files will be written into an
+AAC
+file with
+ADTS
+headers before each packet\&. The
+ADTS
+headers will not contain the deprecated emphasis field\&.
+.RE
+.PP
+A_VORBIS
+.RS 4
+Vorbis audio will be written into an
+OggVorbis(TM)
+file\&.
+.RE
+.PP
+A_REAL/*
+.RS 4
+
+RealAudio(TM)
+tracks are written to
+RealMedia(TM)
+files\&.
+.RE
+.PP
+A_TTA1
+.RS 4
+
+TrueAudio(TM)
+tracks are written to
+TTA
+files\&. Please note that due to
+Matroska(TM)\'s limited timecode precision the extracted file\'s header will be different regarding two fields:
+\fIdata_length\fR
+(the total number of samples in the file) and the
+CRC\&.
+.RE
+.PP
+S_TEXT/UTF8
+.RS 4
+Simple text subtitles will be written as
+SRT
+files\&.
+.RE
+.PP
+S_TEXT/SSA, S_TEXT/ASS
+.RS 4
+
+SSA
+and
+ASS
+text subtitles will be written as
+SSA/ASS
+files respectively\&.
+.RE
+.PP
+S_KATE
+.RS 4
+
+Kate(TM)
+streams will be written within an
+Ogg(TM)
+container\&.
+.RE
+.PP
+Tags
+.RS 4
+Tags are converted to a
+XML
+format\&. This format is the same that
+\fBmkvmerge\fR(1)
+supports for reading tags\&.
+.RE
+.PP
+Attachments
+.RS 4
+Attachments are written to they output file as they are\&. No conversion whatsoever is done\&.
+.RE
+.PP
+Chapters
+.RS 4
+Chapters are converted to a
+XML
+format\&. This format is the same that
+\fBmkvmerge\fR(1)
+supports for reading chapters\&. Alternatively a stripped\-down version can be output in the simple
+OGM
+style format\&.
+.RE
+.PP
+Timecodes
+.RS 4
+Timecodes are first sorted and then output as a timecode v2 format compliant file ready to be fed to
+\fBmkvmerge\fR(1)\&. The extraction to other formats (v1, v3 and v4) is not supported\&.
+.RE
+.SH "EXIT CODES"
+.PP
+
+\fBmkvextract\fR(1)
+exits with one of three exit codes:
+.sp
+.RS 4
+\h'-04'\(bu\h'+03'
+\fB0\fR
+\-\- This exit codes means that extraction has completed successfully\&.
+.RE
+.sp
+.RS 4
+\h'-04'\(bu\h'+03'
+\fB1\fR
+\-\- In this case
+\fBmkvextract\fR(1)
+has output at least one warning, but extraction did continue\&. A warning is prefixed with the text \'Warning:\'\&. Depending on the issues involved the resulting files might be ok or not\&. The user is urged to check both the warning and the resulting files\&.
+.RE
+.sp
+.RS 4
+\h'-04'\(bu\h'+03'
+\fB2\fR
+\-\- This exit code is used after an error occured\&.
+\fBmkvextract\fR(1)
+aborts right after outputting the error message\&. Error messages range from wrong command line arguments over read/write errors to broken files\&.
+.RE
+.SH "SEE ALSO"
+.PP
+
+\fBmkvmerge\fR(1),
+\fBmkvinfo\fR(1),
+\fBmmg\fR(1)
+.SH "WWW"
+.PP
+The latest version can always be found at
+\fIthe MKVToolNix homepage\fR\&[1]\&.
+.SH "AUTHOR"
+.PP
+\fBMoritz Bunkus\fR <\&moritz@bunkus\&.org\&>
+.sp -1n
+.IP "" 4
+Developer
+.SH "NOTES"
+.IP " 1." 4
+the MKVToolNix homepage
+.RS 4
+\%http://www.bunkus.org/videotools/mkvtoolnix/
+.RE
