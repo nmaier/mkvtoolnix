@@ -40,6 +40,7 @@ CPP = @CPP@
 CXX = @CXX@
 ETAGS = @ETAGS@
 EXEEXT = @EXEEXT@
+GREP = @GREP@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_HEADER = $(INSTALL_DATA)
 INSTALL = @INSTALL@
@@ -63,6 +64,8 @@ BOOST_CPPFLAGS = @BOOST_CPPFLAGS@
 BOOST_LDFLAGS = @BOOST_LDFLAGS@
 BOOST_REGEX_LIB = @BOOST_REGEX_LIB@
 DEBUG_CFLAGS = @DEBUG_CFLAGS@
+DOCBOOK_MANPAGES_STYLESHEET = @DOCBOOK_MANPAGES_STYLESHEET@
+DOCBOOK_ROOT = @DOCBOOK_ROOT@
 EBML_CFLAGS = @EBML_CFLAGS@
 EBML_LIBS = @EBML_LIBS@
 EXPAT_CFLAGS = @EXPAT_CFLAGS@
@@ -94,6 +97,9 @@ VORBIS_LIBS = @VORBIS_LIBS@
 WXWIDGETS_CFLAGS = @WXWIDGETS_CFLAGS@
 WXWIDGETS_INCLUDES = @WXWIDGETS_INCLUDES@
 WXWIDGETS_LIBS = @WXWIDGETS_LIBS@
+XSLTPROC = @XSLTPROC@
+XSLTPROC_FLAGS = @XSLTPROC_FLAGS@
+XSLTPROC_WORKS = @XSLTPROC_WORKS@
 ZLIB_LIBS = @ZLIB_LIBS@
 
 WARNING_CFLAGS = -Wall -Wno-sign-compare -Wno-comment
@@ -152,10 +158,10 @@ DEP_MPEGPARSER = src/mpegparser/libmpegparser.a
 COMPRESSION_LIBRARIES = $(LZO_LIBS) $(BZ2_LIBS)
 
 APPLICATIONS = src/mkvmerge@EXEEXT@ src/mkvinfo@EXEEXT@ src/mkvextract@EXEEXT@
-MANPAGES = doc/mkvmerge.1 doc/mkvinfo.1 doc/mkvextract.1
+MANPAGES = doc/man/mkvmerge.1 doc/man/mkvinfo.1 doc/man/mkvextract.1
 ifeq (yes,$(USE_WXWIDGETS))
 APPLICATIONS += src/mmg/mmg@EXEEXT@
-MANPAGES += doc/mmg.1
+MANPAGES += doc/man/mmg.1
 endif
 
 TRANSLATIONS = @TRANSLATIONS@
@@ -217,7 +223,13 @@ ifdef ETAGS
 endif
 endif
 
-all: $(TAGSFILE) $(APPLICATIONS) $(TRANSLATIONS_MOS) $(HTMLHELPBOOKS)
+# Only rebuild the man pages if both xsltproc and the DocBook
+# stylesheet have been found by configure.
+ifeq ($(XSLTPROC_WORKS),yes)
+  MANPAGES_DEP = $(MANPAGES)
+endif
+
+all: $(MANPAGES_DEP) $(TAGSFILE) $(APPLICATIONS) $(TRANSLATIONS_MOS) $(HTMLHELPBOOKS)
 
 install: install-programs install-mans install-trans install-guide
 
@@ -264,7 +276,7 @@ install-guide:
 ifeq (1,$(LIBMTXCOMMONDLL))
 %.o: %.cpp
 	@echo '     CXX ' $<
-	@if echo $@ | grep src.common > /dev/null 2>&1; then \
+	@if echo $@ | $(GREP) src.common > /dev/null 2>&1; then \
 		test x$(V) = "x1" && echo $(CXXCOMPILE) $(CXXFLAGS_SRC_COMMON) -c -o $@ $< ; \
 		$(CXXCOMPILE) $(CXXFLAGS_SRC_COMMON) -c -MMD -o $@ $< ; \
 		./handle_deps $@ $$? ; \
@@ -294,7 +306,12 @@ endif
 # HTML help book stuff
 %.hhk: %.hhc
 	@echo '    GREP ' $<
-	$(Q)grep -v 'name="ID"' $< > $@
+	$(Q)$(GREP) -v 'name="ID"' $< > $@
+
+# man pages from DocBook XML
+%.1: %.xml
+	@echo 'XSLTPROC ' $<
+	$(Q)$(XSLTPROC) $(XSLTPROC_FLAGS) -o $@ $(DOCBOOK_MANPAGES_STYLESHEET) $<
 
 # Qt files
 %.h: %.ui
