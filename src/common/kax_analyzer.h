@@ -151,4 +151,23 @@ protected:
 };
 typedef counted_ptr<kax_analyzer_c> kax_analyzer_cptr;
 
+class console_kax_analyzer_c: public kax_analyzer_c {
+private:
+  bool m_show_progress;
+  int m_previous_percentage;
+
+public:
+  console_kax_analyzer_c(std::string file_name);
+  virtual ~console_kax_analyzer_c();
+
+  virtual void set_show_progress();
+
+  virtual void show_progress_start(int64_t size);
+  virtual bool show_progress_running(int percentage);
+  virtual void show_progress_done();
+
+  virtual void log_debug_message(const std::string &message);
+  virtual void debug_abort_process();
+};
+
 #endif  // __MTX_COMMON_KAX_ANALYZER_H

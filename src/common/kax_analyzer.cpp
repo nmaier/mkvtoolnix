@@ -32,6 +32,7 @@ using namespace libebml;
 using namespace libmatroska;
 
 #define in_parent(p) (m_file->getFilePointer() < (p->GetElementPosition() + p->ElementSize()))
+#define CONSOLE_PERCENTAGE_WIDTH 25
 
 bool
 operator <(const kax_analyzer_data_cptr &d1,
@@ -971,4 +972,63 @@ kax_analyzer_c::fix_element_sizes(int64_t file_size) {
   for (i = 0; m_data.size() > i; ++i)
     if (-1 == m_data[i]->m_size)
       m_data[i]->m_size = ((i + 1) < m_data.size() ? m_data[i + 1]->m_pos : file_size) - m_data[i]->m_pos;
+}
+
+// ------------------------------------------------------------
+
+bool m_show_progress;
+int m_previous_percentage;
+
+console_kax_analyzer_c::console_kax_analyzer_c(std::string file_name)
+  : kax_analyzer_c(file_name)
+  , m_show_progress(false)
+  , m_previous_percentage(-1)
+{
+}
+
+console_kax_analyzer_c::~console_kax_analyzer_c() {
+}
+
+void
+console_kax_analyzer_c::set_show_progress(bool show_progress) {
+  if (-1 == m_previous_percentage)
+    m_show_progress = show_progress;
+}
+
+void
+console_kax_analyzer_c::show_progress_start(int64_t size) {
+  if (!m_show_progress)
+    return;
+
+  m_previous_percentage = -1;
+  show_progress_running(0);
+}
+
+bool
+console_kax_analyzer_c::show_progress_running(int percentage) {
+  if (percentage == m_previous_percentage)
+    return;
+
+  std::string full_bar(        percentage  * CONSOLE_PERCENTAGE_WIDTH / 100, '=');
+  std::string empty_bar((100 - percentage) * CONSOLE_PERCENTAGE_WIDTH / 100, ' ');
+
+  mxinfo(boost::format(Y("Progress: [%1%%2%] %3%%%")) % full_bar % empty_bar % percentage);
+  mxinfo("\r");
+
+  m_previous_percentage = percentage;
+}
+
+void
+console_kax_analyzer_c::show_progress_done() {
+  show_progress_running(100);
+  mxinfo("\n");
+}
+
+void
+console_kax_analyzer_c::log_debug_message(const std::string &message) {
+  mxverb(3, message);
+}
+
+void
+console_kax_analyzer_c::debug_abort_process() {
 }

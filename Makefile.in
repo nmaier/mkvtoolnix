@@ -157,8 +157,8 @@ DEP_RMFF = librmff/librmff.a
 DEP_MPEGPARSER = src/mpegparser/libmpegparser.a
 COMPRESSION_LIBRARIES = $(LZO_LIBS) $(BZ2_LIBS)
 
-APPLICATIONS = src/mkvmerge@EXEEXT@ src/mkvinfo@EXEEXT@ src/mkvextract@EXEEXT@
-MANPAGES = doc/man/mkvmerge.1 doc/man/mkvinfo.1 doc/man/mkvextract.1
+APPLICATIONS = src/mkvmerge@EXEEXT@ src/mkvinfo@EXEEXT@ src/mkvextract@EXEEXT@ src/mkvpropedit@EXEEXT@
+MANPAGES = doc/man/mkvmerge.1 doc/man/mkvinfo.1 doc/man/mkvextract.1 # doc/man/mkvpropedit.1
 ifeq (yes,$(USE_WXWIDGETS))
 APPLICATIONS += src/mmg/mmg@EXEEXT@
 MANPAGES += doc/man/mmg.1
@@ -190,7 +190,7 @@ ALL_SOURCES=$(wildcard avilib-0.6.10/*.c) $(wildcard avilib-0.6.10/*.cpp) \
 		$(wildcard src/output/*.cpp) $(wildcard src/common/*.cpp) \
 		$(wildcard src/common/*/*.cpp) \
 		$(wildcard src/mmg/*.cpp) $(wildcard src/mmg/*/*.cpp) \
-		$(wildcard src/extract/*.cpp) \
+		$(wildcard src/extract/*.cpp) $(wildcard src/propedit/*.cpp) \
 		$(wildcard src/merge/*.cpp) $(wildcard src/info/*.cpp) \
 		$(wildcard src/mpegparser/*.cpp) \
 		$(patsubst %.ui,%.h,$(UIFILES))
@@ -199,7 +199,7 @@ ALL_HEADERS=$(wildcard avilib-0.6.10/*.h) $(wildcard librmff/*.h) \
 		$(wildcard src/*.h) $(wildcard src/input/*.h) \
 		$(wildcard src/output/*.h) $(wildcard src/common/*.h) \
 		$(wildcard src/mmg/*.h) $(wildcard src/mmg/*/*.h) \
-		$(wildcard src/extract/*.h) \
+		$(wildcard src/extract/*.h) $(willdcard src/propedit/*.h) \
 		$(wildcard src/merge/*.h) $(wildcard src/info/*.h) \
 		$(wildcard src/mpegparser/*.h) $(wildcard src/common/*/*.h)
 
@@ -514,6 +514,19 @@ mkvextract_LDADD = -lmtxcommon $(MAGIC_LIBS) -lvorbis -logg -lavi -lmatroska -le
 		$(BOOST_REGEX_LIB)
 
 #
+# src/propedit
+#
+
+mkvpropedit_SOURCES = $(wildcard src/propedit/*.cpp)
+mkvpropedit_OBJECTS := $(patsubst %.cpp,%.o,$(mkvpropedit_SOURCES)) \
+		$(patsubst %.rc,%.o,$(mkvpropedit_RESOURCES))
+mkvpropedit_DEPENDENCIES += $(DEP_COMMON) $(DEP_AVILIB) $(DEP_RMFF)
+mkvpropedit_LDADD = -lmtxcommon $(MAGIC_LIBS) -lvorbis -logg -lavi -lmatroska -lebml -lrmff \
+		$(ICONV_LIBS) $(LIBINTL_LIBS) -lexpat \
+		-lz $(COMPRESSION_LIBRARIES) $(LIBRPCRT) \
+		$(BOOST_REGEX_LIB)
+
+#
 # src/mmg
 #
 
@@ -542,6 +555,12 @@ mkvextract: src/mkvextract@EXEEXT@
 src/mkvextract@EXEEXT@: $(mkvextract_OBJECTS) $(mkvextract_DEPENDENCIES)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(mkvextract_OBJECTS) $(mkvextract_LDADD)
+
+mkvpropedit: src/mkvpropedit@EXEEXT@
+
+src/mkvpropedit@EXEEXT@: $(mkvpropedit_OBJECTS) $(mkvpropedit_DEPENDENCIES)
+	@echo '    LINK ' $@
+	$(Q)$(LINK) -o $@ $(mkvpropedit_OBJECTS) $(mkvpropedit_LDADD)
 
 mmg: src/mmg/mmg@EXEEXT@
 
