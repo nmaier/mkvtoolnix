@@ -50,7 +50,7 @@ options_c::add_target(const std::string &spec) {
 void
 options_c::set_file_name(const std::string &file_name) {
   if (!m_file_name.empty())
-    mxinfo(boost::format(Y("More than one file name has been given ('%1%' and '%2%').")) % m_file_name % file_name);
+    mxerror(boost::format(Y("More than one file name has been given ('%1%' and '%2%').\n")) % m_file_name % file_name);
 
   m_file_name = file_name;
 }
