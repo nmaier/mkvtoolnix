@@ -97,7 +97,7 @@ propedit_cli_parser_c::init_parser() {
   add_separator();
   add_information(YT("The order of the various options is not important."));
 
-  set_default_callback(boost::bind(&propedit_cli_parser_c::set_file_name, this));
+  add_hook(cli_parser_c::ht_unknown_option, boost::bind(&propedit_cli_parser_c::set_file_name, this));
 }
 
 #undef OPT

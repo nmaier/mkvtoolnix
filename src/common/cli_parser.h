@@ -44,13 +44,18 @@ protected:
     std::string format_text();
   };
 
+  enum hook_type_e {
+    ht_common_options_parsed,
+    ht_unknown_option,
+  };
+
   std::map<std::string, option_t> m_option_map;
   std::vector<option_t> m_options;
   std::vector<std::string> m_args;
 
   std::string m_current_arg, m_next_arg;
 
-  cli_parser_cb_t m_default_callback;
+  std::map<hook_type_e, std::vector<cli_parser_cb_t> > m_hooks;
 
 protected:
   cli_parser_c(const std::vector<std::string> &args);
@@ -61,11 +66,13 @@ protected:
   void add_separator();
   void add_common_options();
 
-  void set_default_callback(cli_parser_cb_t callback);
   void parse_args();
   void set_usage();
 
   void dummy_callback();
+
+  void add_hook(hook_type_e hook_type, const cli_parser_cb_t &callback);
+  bool run_hooks(hook_type_e hook_type);
 };
 
 #endif // __COMMON_CLI_PARSER_H

@@ -128,6 +128,8 @@ cli_parser_c::option_t::format_text() {
 cli_parser_c::cli_parser_c(const std::vector<std::string> &args)
   : m_args(args)
 {
+  m_hooks[cli_parser_c::ht_common_options_parsed] = std::vector<cli_parser_cb_t>();
+  m_hooks[cli_parser_c::ht_unknown_option]        = std::vector<cli_parser_cb_t>();
 }
 
 void
@@ -135,6 +137,8 @@ cli_parser_c::parse_args() {
   set_usage();
   while (handle_common_cli_args(m_args, ""))
     set_usage();
+
+  run_hooks(cli_parser_c::ht_common_options_parsed);
 
   std::vector<std::string>::const_iterator sit;
   mxforeach(sit, m_args) {
@@ -154,10 +158,7 @@ cli_parser_c::parse_args() {
 
       option.m_callback();
 
-    } else if (m_default_callback)
-      m_default_callback();
-
-    else
+    } else if (!run_hooks(cli_parser_c::ht_unknown_option))
       mxerror(boost::format(Y("Unknown option '%1%'.\n")) % m_current_arg);
   }
 }
@@ -226,11 +227,6 @@ cli_parser_c::add_common_options() {
 #undef OPT
 
 void
-cli_parser_c::set_default_callback(cli_parser_cb_t callback) {
-  m_default_callback = callback;
-}
-
-void
 cli_parser_c::set_usage() {
   usage_text = "";
   std::vector<cli_parser_c::option_t>::iterator option_it;
@@ -241,4 +237,23 @@ cli_parser_c::set_usage() {
 void
 cli_parser_c::dummy_callback() {
   mxerror(boost::format("cli_parser_c::dummy_callback(): %1%") % BUGMSG);
+}
+
+void
+cli_parser_c::add_hook(cli_parser_c::hook_type_e hook_type,
+                       const cli_parser_cb_t &callback) {
+  m_hooks[hook_type].push_back(callback);
+}
+
+bool
+cli_parser_c::run_hooks(cli_parser_c::hook_type_e hook_type) {
+  if (m_hooks[hook_type].empty())
+    return false;
+
+  std::vector<cli_parser_cb_t>::iterator hook_it;
+  mxforeach(hook_it, m_hooks[hook_type])
+    if (*hook_it)
+      (*hook_it)();
+
+  return true;
 }
