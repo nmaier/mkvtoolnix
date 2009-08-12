@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-07-18 20:45+0800\n"
-"Last-Translator: Dean Lee <xslidian+t@gmail.com>\n"
+"PO-Revision-Date: 2009-08-12 21:09+0800\n"
+"Last-Translator: Dean Lee <xslidian@greatdreamers.cn>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2600,9 +2600,8 @@ msgid "Delay (in ms):"
 msgstr "延时 (ms):"
 
 #: src/mmg/tabs/input_format.cpp:134
-#, fuzzy
 msgid "Delay this track's timecodes by a couple of ms. Can be negative. Works with all track types, but negative delays should not be used with video tracks."
-msgstr "将此轨的时间码延迟几毫秒。对视频或音频轨效果最佳。"
+msgstr "将此轨的时间码延迟几毫秒。可以为负数。对所有类型的轨道可用，但不可以为视频轨设定负的延时。"
 
 #: src/info/mkvinfo.cpp:160
 msgid "Delay: %|1$.3f|ms"
@@ -5993,9 +5992,8 @@ msgid "This is the title that players may show as the 'main title' for this movi
 msgstr "这是播放器将作为此影片的“主标题”显示的标题。"
 
 #: src/mmg/cli_options_dlg.cpp:83
-#, fuzzy
 msgid "This option needs an additional argument 'n'. Tells mkvmerge to put at most 'n' data blocks into each cluster. If the number is postfixed with 'ms' then put at most 'n' milliseconds of data into each cluster. The maximum length for a cluster that mkvmerge accepts is 60000 blocks and 32000ms; the minimum length is 100ms. Programs will only be able to seek to clusters, so creating larger clusters may lead to imprecise or slow seeking."
-msgstr "此选项需要附加参数 'n'。告知 mkvmerge 在每簇最多放置 'n' 个数据块。如果数字后缀有 'ms' 则在每簇中最多放置 'n' 毫秒的数据。单个簇的最大长度为 32767ms。程序定位只能精确到簇，因此创建大尺寸的簇将导致不精确的定位与/或处理。"
+msgstr "此选项需要附加参数 'n'。告知 mkvmerge 在每簇最多放置 'n' 个数据块。如果数字后缀有 'ms' 则在每簇中最多放置 'n' 毫秒的数据。mkvmerge 接受的单个簇的最大长度为 60000 块，即 32000 ms；最小长度为 100 ms。程序定位只能精确到簇，因此创建大尺寸的簇将导致缓慢且不精确的定位。"
 
 #: src/merge/output_control.cpp:279
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
