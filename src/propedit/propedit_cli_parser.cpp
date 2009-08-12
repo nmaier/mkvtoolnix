@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <boost/bind.hpp>
 #include <boost/regex.hpp>
+#include <stdexcept>
 #include <string>
 #include <typeinfo>
 #include <vector>
@@ -57,15 +58,39 @@ propedit_cli_parser_c::add_change() {
                                  : (m_current_arg == "-s") || (m_current_arg == "--set") ? change_c::ct_set
                                  :                                                         change_c::ct_delete;
     m_target->add_change(type, m_next_arg);
-  } catch (const char *message) {
-    mxerror(boost::format(Y("Invalid change spec (%3%) in '%1% %2%'.\n")) % m_current_arg % m_next_arg % message);
+  } catch (std::runtime_error &error) {
+    mxerror(boost::format(Y("Invalid change spec (%3%) in '%1% %2%'.\n")) % m_current_arg % m_next_arg % error.what());
   }
 }
 
 void
 propedit_cli_parser_c::list_property_names() {
   mxinfo(Y("All known property names and their meaning:\n"));
+
+  list_property_names_for_table(property_element_c::get_table_for(KaxInfo::ClassInfos,   NULL, true), Y("Segment information"), "info");
+  list_property_names_for_table(property_element_c::get_table_for(KaxTracks::ClassInfos, NULL, true), Y("Track header"),        "track:...");
+
   mxexit(0);
+}
+
+void
+propedit_cli_parser_c::list_property_names_for_table(const std::vector<property_element_c> &table,
+                                                     const std::string &title,
+                                                     const std::string &edit_spec) {
+  size_t max_name_len = 0;
+  std::vector<property_element_c>::const_iterator table_it;
+  mxforeach(table_it, table)
+    max_name_len = std::max(max_name_len, table_it->m_name.length());
+
+  static boost::regex s_newline_re("\\s*\\n\\s*", boost::regex::perl);
+  boost::format format((boost::format("    %%|1$-%1%s| | %%2%%: %%3%%\n") % max_name_len).str());
+
+  mxinfo("\n");
+  mxinfo(boost::format(Y("  Elements in the category '%1%' ('--edit %2%')\n")) % title % edit_spec);
+
+  mxforeach(table_it, table)
+    mxinfo(format % table_it->m_name % table_it->m_title.get_translated()
+           % boost::regex_replace(table_it->m_description.get_translated(), s_newline_re, " ",  boost::match_default | boost::match_single_line));
 }
 
 void
@@ -113,3 +138,4 @@ propedit_cli_parser_c::run() {
 
   return m_options;
 }
+

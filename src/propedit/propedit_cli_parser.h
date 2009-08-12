@@ -36,7 +36,9 @@ protected:
   void add_change();
   void set_parse_mode();
   void set_file_name();
+
   void list_property_names();
+  void list_property_names_for_table(const std::vector<property_element_c> &table, const std::string &title, const std::string &edit_spec);
 };
 
 #endif // __PROPEDIT_PROPEDIT_CLI_PARSER_H
