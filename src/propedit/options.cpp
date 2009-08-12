@@ -22,6 +22,9 @@ void
 options_c::validate() {
   if (m_file_name.empty())
     mxerror(Y("No file name given.\n"));
+
+  if (!has_changes())
+    mxerror(Y("Nothing to do.\n"));
 }
 
 target_cptr
@@ -31,8 +34,14 @@ options_c::add_target(target_c::target_type_e type,
   target->m_type = type;
   target->parse_target_spec(spec);
 
-  if (m_targets.empty() || (*m_targets.back() != *target))
-    m_targets.push_back(target);
+  if (!m_targets.empty()) {
+    std::vector<target_cptr>::iterator target_it;
+    mxforeach(target_it, m_targets)
+      if (**target_it == *target)
+        return *target_it;
+  }
+
+  m_targets.push_back(target);
 
   return target;
 }
@@ -68,7 +77,9 @@ options_c::set_parse_mode(const std::string &parse_mode) {
 }
 
 void
-options_c::dump_info() {
+options_c::dump_info()
+  const
+{
   mxinfo(boost::format("options:\n"
                        "  file_name:     %1%\n"
                        "  show_progress: %2%\n"
@@ -77,7 +88,19 @@ options_c::dump_info() {
          % m_show_progress
          % static_cast<int>(m_parse_mode));
 
-  std::vector<target_cptr>::iterator target_it;
+  std::vector<target_cptr>::const_iterator target_it;
   mxforeach(target_it, m_targets)
     (*target_it)->dump_info();
+}
+
+bool
+options_c::has_changes()
+  const
+{
+  std::vector<target_cptr>::const_iterator target_it;
+  mxforeach(target_it, m_targets)
+    if ((*target_it)->has_changes())
+      return true;
+
+  return false;
 }
