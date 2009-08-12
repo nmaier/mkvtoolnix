@@ -145,8 +145,6 @@ format_paragraph(const std::string &text_to_wrap,
                  const std::string &text_first_line,
                  int wrap_column,
                  const char *break_chars) {
-  wrap_column += 5;
-
   std::string text   = text_first_line;
   int current_column = utf8_strlen(text);
 
