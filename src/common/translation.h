@@ -48,8 +48,8 @@ public:
   translatable_string_c(const std::string &untranslated_string);
   translatable_string_c(const char *untranslated_string);
 
-  std::string get_translated();
-  std::string get_untranslated();
+  std::string get_translated() const;
+  std::string get_untranslated() const;
 };
 
 #define YT(s) translatable_string_c(s)

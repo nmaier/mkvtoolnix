@@ -167,12 +167,16 @@ translatable_string_c::translatable_string_c(const char *untranslated_string)
 }
 
 std::string
-translatable_string_c::get_translated() {
+translatable_string_c::get_translated()
+  const
+{
   return m_untranslated_string.empty() ? "" : Y(m_untranslated_string.c_str());
 }
 
 std::string
-translatable_string_c::get_untranslated() {
+translatable_string_c::get_untranslated()
+  const
+{
   return m_untranslated_string;
 }
 
