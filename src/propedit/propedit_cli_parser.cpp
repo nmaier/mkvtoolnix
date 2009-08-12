@@ -23,6 +23,7 @@
 
 #include "common/common.h"
 #include "common/ebml.h"
+#include "common/strings/formatting.h"
 #include "common/translation.h"
 #include "propedit/propedit_cli_parser.h"
 
@@ -83,14 +84,19 @@ propedit_cli_parser_c::list_property_names_for_table(const std::vector<property_
     max_name_len = std::max(max_name_len, table_it->m_name.length());
 
   static boost::regex s_newline_re("\\s*\\n\\s*", boost::regex::perl);
-  boost::format format((boost::format("    %%|1$-%1%s| | %%2%%: %%3%%\n") % max_name_len).str());
+  boost::format format((boost::format("    %%|1$-%1%s| |") % max_name_len).str());
+  std::string indent_string = std::string(max_name_len + 4, ' ') + " | ";
 
   mxinfo("\n");
   mxinfo(boost::format(Y("  Elements in the category '%1%' ('--edit %2%')\n")) % title % edit_spec);
 
-  mxforeach(table_it, table)
-    mxinfo(format % table_it->m_name % table_it->m_title.get_translated()
-           % boost::regex_replace(table_it->m_description.get_translated(), s_newline_re, " ",  boost::match_default | boost::match_single_line));
+  mxforeach(table_it, table) {
+    std::string name        = (format % table_it->m_name).str();
+    std::string description = table_it->m_title.get_translated()
+                            + ": "
+                            + boost::regex_replace(table_it->m_description.get_translated(), s_newline_re, " ",  boost::match_default | boost::match_single_line);
+    mxinfo(format_paragraph(description, max_name_len + 4 + 3, name, indent_string));
+  }
 }
 
 void
