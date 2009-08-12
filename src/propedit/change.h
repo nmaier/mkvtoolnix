@@ -16,6 +16,7 @@
 #include <string>
 
 #include "common/smart_pointers.h"
+#include "propedit/property_element.h"
 
 class change_c {
 public:
@@ -28,11 +29,15 @@ public:
   change_type_e m_type;
   std::string m_name, m_value;
 
+  property_element_c m_property;
+
 public:
   change_c(change_type_e type, const std::string &name, const std::string &value);
 
   void validate();
-  void dump_info();
+  void dump_info() const;
+
+  bool lookup_property(std::vector<property_element_c> &table);
 };
 typedef counted_ptr<change_c> change_cptr;
 

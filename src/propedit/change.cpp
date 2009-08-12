@@ -27,7 +27,9 @@ change_c::validate() {
 }
 
 void
-change_c::dump_info() {
+change_c::dump_info()
+  const
+{
   mxinfo(boost::format("    change:\n"
                        "      type:  %1%\n"
                        "      name:  %2%\n"
@@ -35,4 +37,16 @@ change_c::dump_info() {
          % static_cast<int>(m_type)
          % m_name
          % m_value);
+}
+
+bool
+change_c::lookup_property(std::vector<property_element_c> &table) {
+  std::vector<property_element_c>::iterator property_it;
+  mxforeach(property_it, table)
+    if (property_it->m_name == m_name) {
+      m_property = *property_it;
+      return true;
+    }
+
+  return false;
 }
