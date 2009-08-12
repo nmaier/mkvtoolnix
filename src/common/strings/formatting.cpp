@@ -142,10 +142,11 @@ fix_format(const char *fmt,
 std::string
 format_paragraph(const std::string &text_to_wrap,
                  int indent_column,
-                 const std::string &text_first_line,
+                 const std::string &indent_first_line,
+                 std::string indent_following_lines,
                  int wrap_column,
                  const char *break_chars) {
-  std::string text   = text_first_line;
+  std::string text   = indent_first_line;
   int current_column = utf8_strlen(text);
 
   if ((0 != indent_column) && (current_column >= indent_column)) {
@@ -153,7 +154,9 @@ format_paragraph(const std::string &text_to_wrap,
     current_column  = 0;
   }
 
-  std::string indent(indent_column, ' ');
+  if (indent_following_lines.empty())
+    indent_following_lines = std::string(indent_column, ' ');
+
   text                                += std::string(indent_column - current_column, ' ');
   current_column                       = indent_column;
   std::string::size_type current_pos   = 0;
@@ -184,7 +187,7 @@ format_paragraph(const std::string &text_to_wrap,
     bool needs_space_now = needs_space && (0 != word.find_first_of(break_chars));
 
     if (!first_word_in_line && ((current_column + (needs_space_now ? 0 : 1) + word_length) >= wrap_column)) {
-      text               += "\n" + indent;
+      text               += "\n" + indent_following_lines;
       current_column      = indent_column;
       first_word_in_line  = true;
     }
