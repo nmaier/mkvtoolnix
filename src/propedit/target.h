@@ -53,10 +53,12 @@ public:
 
   void add_change(change_c::change_type_e type, const std::string &spec);
   void parse_target_spec(std::string spec);
-  void dump_info();
+  void dump_info() const;
 
   bool operator ==(const target_c &cmp) const;
   bool operator !=(const target_c &cmp) const;
+
+  bool has_changes() const;
 
 protected:
   void parse_track_spec(const std::string &spec);

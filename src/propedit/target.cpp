@@ -11,6 +11,7 @@
 #include "common/os.h"
 
 #include <boost/regex.hpp>
+#include <stdexcept>
 
 #include "common/common.h"
 #include "common/strings/editing.h"
@@ -28,6 +29,9 @@ target_c::target_c()
 
 void
 target_c::validate() {
+  std::vector<change_cptr>::iterator change_it;
+  mxforeach(change_it, m_changes)
+    (*change_it)->validate();
 }
 
 void
@@ -40,14 +44,14 @@ target_c::add_change(change_c::change_type_e type,
   else {
     std::vector<std::string> parts = split(spec, "=", 2);
     if (2 != parts.size())
-      throw Y("missing value");
+      throw std::runtime_error(Y("missing value"));
 
     name  = parts[0];
     value = parts[1];
   }
 
   if (name.empty())
-    throw Y("missing property name");
+    throw std::runtime_error(Y("missing property name"));
 
   m_changes.push_back(change_cptr(new change_c(type, name, value)));
 }
@@ -93,7 +97,9 @@ target_c::parse_track_spec(const std::string &spec) {
 }
 
 void
-target_c::dump_info() {
+target_c::dump_info()
+  const
+{
   mxinfo(boost::format("  target:\n"
                        "    type:                 %1%\n"
                        "    selection_mode:       %2%\n"
@@ -104,7 +110,7 @@ target_c::dump_info() {
          % m_selection_param
          % m_selection_track_type);
 
-  std::vector<change_cptr>::iterator change_it;
+  std::vector<change_cptr>::const_iterator change_it;
   mxforeach(change_it, m_changes)
     (*change_it)->dump_info();
 }
@@ -124,4 +130,11 @@ target_c::operator !=(const target_c &cmp)
   const
 {
   return !(*this == cmp);
+}
+
+bool
+target_c::has_changes()
+  const
+{
+  return !m_changes.empty();
 }
