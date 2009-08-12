@@ -18,6 +18,8 @@
 
 #include <string>
 
+#include "common/strings/editing.h"
+
 #define FMT_TIMECODE "%02d:%02d:%02d.%03d"
 #define ARG_TIMECODEINT(t) (int32_t)( (t) / 60 /   60 / 1000),         \
                            (int32_t)(((t) / 60        / 1000) %   60), \
@@ -32,7 +34,14 @@
                             (int32_t)( (t)                         % 1000000000)
 #define ARG_TIMECODEN(t) ARG_TIMECODENINT((int64_t)(t))
 
+#define WRAP_COLUMN 79
+
 std::string MTX_DLL_API format_timecode(int64_t timecode, unsigned int precision = 9);
+std::string MTX_DLL_API format_paragraph(const std::string &text_to_wrap,
+                                         int indent_column                  = 0,
+                                         const std::string &text_first_line = empty_string,
+                                         int wrap_column                    = WRAP_COLUMN,
+                                         const char *break_chars            = " ,.)/:");
 
 void MTX_DLL_API fix_format(const char *fmt, std::string &new_fmt);
 

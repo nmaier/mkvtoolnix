@@ -18,12 +18,12 @@
 #include "common/command_line.h"
 #include "common/common.h"
 #include "common/strings/editing.h"
+#include "common/strings/formatting.h"
 #include "common/translation.h"
 
 #define INDENT_COLUMN_OPTION_NAME         2
 #define INDENT_COLUMN_OPTION_DESCRIPTION 30
 #define INDENT_COLUMN_SECTION_HEADER      1
-#define WRAP_COLUMN                      79
 
 cli_parser_c::option_t::option_t()
   : m_needs_arg(false)
@@ -52,75 +52,15 @@ cli_parser_c::option_t::option_t(const std::string &spec,
 
 std::string
 cli_parser_c::option_t::format_text() {
-  std::string text;
   std::string description = m_description.get_translated();
-  int indent_column       = 0;
-  int current_column      = 0;
 
-  if (cli_parser_c::option_t::ot_option == m_type) {
-    indent_column  = INDENT_COLUMN_OPTION_DESCRIPTION;
-    text           = std::string(INDENT_COLUMN_OPTION_NAME, ' ') + m_name;
-    current_column = text.length();
+  if (cli_parser_c::option_t::ot_option == m_type)
+    return format_paragraph(description, INDENT_COLUMN_OPTION_DESCRIPTION, std::string(INDENT_COLUMN_OPTION_NAME, ' ') + m_name);
 
-  } else if (cli_parser_c::option_t::ot_section_header == m_type) {
-    indent_column  = INDENT_COLUMN_SECTION_HEADER;
-    text           = "\n";
-    description   += ":";
-  }
+  else if (cli_parser_c::option_t::ot_section_header == m_type)
+    return std::string("\n") + format_paragraph(description + ":", INDENT_COLUMN_SECTION_HEADER);
 
-  if ((0 != indent_column) && (indent_column <= current_column)) {
-    text           += "\n";
-    current_column  = 0;
-  }
-
-  std::string indent(indent_column, ' ');
-  text                                += std::string(indent_column - current_column, ' ');
-  current_column                       = utf8_strlen(text);
-  std::string::size_type current_pos   = 0;
-  bool first_word_in_line              = true;
-  bool needs_space                     = false;
-  const char * break_chars             = " ,.)/:";
-
-  while (description.length() > current_pos) {
-    std::string::size_type word_start = description.find_first_not_of(" ", current_pos);
-    if (std::string::npos == word_start)
-      break;
-
-    std::string::size_type word_end = description.find_first_of(break_chars, word_start);
-    char next_needs_space           = false;
-    if (std::string::npos == word_end)
-      word_end = description.length();
-
-    else if (description[word_end] != ' ')
-      ++word_end;
-
-    else
-      next_needs_space = true;
-
-    std::string word     = description.substr(word_start, word_end - word_start);
-    bool needs_space_now = needs_space && (0 != word.find_first_of(break_chars));
-
-    if (!first_word_in_line && ((current_column + (needs_space_now ? 0 : 1) + utf8_strlen(word)) >= WRAP_COLUMN)) {
-      text               += "\n" + indent;
-      current_column      = indent_column;
-      first_word_in_line  = true;
-    }
-
-    if (!first_word_in_line && needs_space_now) {
-      text += " ";
-      ++current_column;
-    }
-
-    text               += word;
-    current_column     += utf8_strlen(word);
-    current_pos         = word_end;
-    first_word_in_line  = false;
-    needs_space         = next_needs_space;
-  }
-
-  text += "\n";
-
-  return text;
+  return format_paragraph(description);
 }
 
 // ------------------------------------------------------------
