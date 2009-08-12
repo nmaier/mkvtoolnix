@@ -15,8 +15,8 @@
 
 #include <string>
 
+#include "common/property_element.h"
 #include "common/smart_pointers.h"
-#include "propedit/property_element.h"
 
 class change_c {
 public:

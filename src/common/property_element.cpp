@@ -30,9 +30,9 @@
 
 #include "common/common.h"
 #include "common/ebml.h"
+#include "common/property_element.h"
 #include "common/translation.h"
 #include "common/xml/element_mapping.h"
-#include "propedit/property_element.h"
 
 std::map<uint32_t, std::vector<property_element_c> > property_element_c::s_properties;
 std::map<uint32_t, std::vector<property_element_c> > property_element_c::s_composed_properties;
