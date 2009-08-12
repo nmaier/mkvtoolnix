@@ -64,4 +64,6 @@ extern const std::string MTX_DLL_API empty_string;
 int MTX_DLL_API get_arg_len(const char *fmt, ...);
 int MTX_DLL_API get_varg_len(const char *fmt, va_list ap);
 
+size_t MTX_DLL_API utf8_strlen(const std::string &s);
+
 #endif  // __MTX_COMMON_STRINGS_H

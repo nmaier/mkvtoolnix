@@ -255,3 +255,27 @@ get_displayable_string(const char *src,
   return result;
 }
 
+size_t
+utf8_strlen(const std::string &s) {
+  size_t length = 0;
+  size_t index  = 0;
+
+  while (s.length() > index) {
+    unsigned char c  = s[index];
+    size_t num_bytes = ((c & 0x80) == 0x00) ?  1
+                     : ((c & 0xe0) == 0xc0) ?  2
+                     : ((c & 0xf0) == 0xe0) ?  3
+                     : ((c & 0xf8) == 0xf0) ?  4
+                     : ((c & 0xfc) == 0xf8) ?  5
+                     : ((c & 0xfe) == 0xfc) ?  6
+                     :                        -1;
+
+    if (-1 == num_bytes)
+      mxerror(boost::format(Y("utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|")) % static_cast<unsigned int>(c));
+
+    ++length;
+    index += num_bytes;
+  }
+
+  return length;
+}
