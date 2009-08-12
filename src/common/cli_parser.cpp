@@ -75,7 +75,7 @@ cli_parser_c::option_t::format_text() {
 
   std::string indent(indent_column, ' ');
   text                                += std::string(indent_column - current_column, ' ');
-  current_column                       = indent_column;
+  current_column                       = utf8_strlen(text);
   std::string::size_type current_pos   = 0;
   bool first_word_in_line              = true;
   bool needs_space                     = false;
@@ -100,7 +100,7 @@ cli_parser_c::option_t::format_text() {
     std::string word     = description.substr(word_start, word_end - word_start);
     bool needs_space_now = needs_space && (0 != word.find_first_of(break_chars));
 
-    if (!first_word_in_line && ((current_column + (needs_space_now ? 0 : 1) + word.length()) >= WRAP_COLUMN)) {
+    if (!first_word_in_line && ((current_column + (needs_space_now ? 0 : 1) + utf8_strlen(word)) >= WRAP_COLUMN)) {
       text               += "\n" + indent;
       current_column      = indent_column;
       first_word_in_line  = true;
@@ -112,7 +112,7 @@ cli_parser_c::option_t::format_text() {
     }
 
     text               += word;
-    current_column     += word.length();
+    current_column     += utf8_strlen(word);
     current_pos         = word_end;
     first_word_in_line  = false;
     needs_space         = next_needs_space;
