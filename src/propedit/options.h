@@ -42,6 +42,7 @@ public:
 
 protected:
   target_cptr add_target(target_c::target_type_e type, const std::string &spec);
+  void remove_empty_targets();
 };
 typedef counted_ptr<options_c> options_cptr;
 

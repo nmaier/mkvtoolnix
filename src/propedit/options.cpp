@@ -23,6 +23,8 @@ options_c::validate() {
   if (m_file_name.empty())
     mxerror(Y("No file name given.\n"));
 
+  remove_empty_targets();
+
   if (!has_changes())
     mxerror(Y("Nothing to do.\n"));
 }
@@ -97,10 +99,16 @@ bool
 options_c::has_changes()
   const
 {
+  return !m_targets.empty();
+}
+
+void
+options_c::remove_empty_targets() {
+  std::vector<target_cptr> temp;
   std::vector<target_cptr>::const_iterator target_it;
   mxforeach(target_it, m_targets)
     if ((*target_it)->has_changes())
-      return true;
+      temp.push_back(*target_it);
 
-  return false;
+  m_targets = temp;
 }
