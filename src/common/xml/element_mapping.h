@@ -23,9 +23,7 @@ using namespace libebml;
 
 typedef void (*parser_element_callback_t)(void *pdata);
 
-enum ebml_type_e {EBMLT_MASTER, EBMLT_INT, EBMLT_UINT, EBMLT_BOOL,
-                  EBMLT_STRING, EBMLT_USTRING, EBMLT_TIME, EBMLT_BINARY,
-                  EBMLT_SKIP};
+enum ebml_type_e {EBMLT_MASTER, EBMLT_INT, EBMLT_UINT, EBMLT_BOOL, EBMLT_STRING, EBMLT_USTRING, EBMLT_TIME, EBMLT_BINARY, EBMLT_FLOAT, EBMLT_SKIP};
 
 #define NO_MIN_VALUE -9223372036854775807ll-1
 #define NO_MAX_VALUE  9223372036854775807ll
