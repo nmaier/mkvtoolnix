@@ -1,3 +1,9 @@
+2009-08-13  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: The inputs for timecode files and the language are
+	deactivated if the user has selected a track that will be appended
+	to another track. Fix for bug 432.
+
 2009-08-06  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: mmg will handle multiple consecutive spaces in the

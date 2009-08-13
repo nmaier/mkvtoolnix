@@ -175,7 +175,7 @@ void
 tab_input_general::set_track_mode(mmg_track_t *t) {
   bool normal_track    = (NULL != t) && (('a' == t->type) || ('s' == t->type) || ('v' == t->type));
   bool enable          = (NULL != t) && !t->appending && normal_track;
-  bool enable_chapters = (NULL != t);
+  bool enable_chapters = (NULL != t) && ('c' == t->type);
 
   st_language->Enable(enable || enable_chapters);
   cob_language->Enable(enable || enable_chapters);
@@ -184,9 +184,9 @@ tab_input_general::set_track_mode(mmg_track_t *t) {
   st_tags->Enable(enable);
   tc_tags->Enable(enable);
   b_browse_tags->Enable(enable);
-  st_timecodes->Enable((NULL != t) && normal_track);
-  tc_timecodes->Enable((NULL != t) && normal_track);
-  b_browse_timecodes->Enable((NULL != t) && normal_track);
+  st_timecodes->Enable(enable);
+  tc_timecodes->Enable(enable);
+  b_browse_timecodes->Enable(enable);
   st_default->Enable(enable);
   cob_default->Enable(enable);
   st_forced->Enable(enable);
