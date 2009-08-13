@@ -1,18 +1,18 @@
-diff -ur mkvtoolnix-1.7.0.orig/Makefile.in mkvtoolnix-1.7.0/Makefile.in
---- mkvtoolnix-1.7.0.orig/Makefile.in	2006-09-25 17:37:44.000000000 +0200
-+++ mkvtoolnix-1.7.0/Makefile.in	2006-11-09 15:00:23.553384159 +0100
-@@ -129,8 +129,8 @@
- 		src/mkvextract@EXEEXT@ src/base64tool@EXEEXT@
- MANPAGES = doc/mkvmerge.1 doc/mkvinfo.1 doc/mkvextract.1 doc/base64tool.1
+diff -ur mkvtoolnix-2.9.8.orig/Makefile.in mkvtoolnix-2.9.8/Makefile.in
+--- mkvtoolnix-2.9.8.orig/Makefile.in	2009-08-13 12:32:50.000000000 +0200
++++ mkvtoolnix-2.9.8/Makefile.in	2009-08-13 18:46:57.462879372 +0200
+@@ -160,8 +160,8 @@
+ APPLICATIONS = src/mkvmerge@EXEEXT@ src/mkvinfo@EXEEXT@ src/mkvextract@EXEEXT@
+ MANPAGES = doc/man/mkvmerge.1 doc/man/mkvinfo.1 doc/man/mkvextract.1
  ifeq (yes,$(USE_WXWIDGETS))
 -APPLICATIONS += src/mmg/mmg@EXEEXT@
--MANPAGES += doc/mmg.1
+-MANPAGES += doc/man/mmg.1
 +APPLICATIONS += src/mmg/mkvmerge-gui@EXEEXT@
-+MANPAGES += doc/mkvmerge-gui.1
++MANPAGES += doc/man/mkvmerge-gui.1
  endif
  
  TRANSLATIONS = @TRANSLATIONS@
-@@ -145,6 +145,7 @@
+@@ -235,6 +235,7 @@
  
  install-programs: $(APPLICATIONS)
  	$(mkinstalldirs) $(DESTDIR)$(bindir)
@@ -20,21 +20,20 @@ diff -ur mkvtoolnix-1.7.0.orig/Makefile.in mkvtoolnix-1.7.0/Makefile.in
  	@list='$(APPLICATIONS)'; for p in $$list; do \
  	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
  	  if test -f $$p ; then \
-@@ -157,6 +158,7 @@
+@@ -246,6 +247,7 @@
  
  install-mans:
  	$(mkinstalldirs) $(DESTDIR)$(man1dir)
-+	mv doc/mmg.1 doc/mkvmerge-gui.1
++	mv doc/man/mmg.1 doc/man/mkvmerge-gui.1
  	@for i in $(MANPAGES); do \
  	  inst=`echo $$i | sed -e 's/^.*\///'`; \
  	  echo " $(INSTALL_DATA) $$i $(DESTDIR)$(man1dir)/$$inst"; \
-@@ -466,6 +468,8 @@
+@@ -549,6 +551,8 @@
  	@echo '    LINK ' $@
  	$(Q)$(LINK) -o $@ $(mmg_OBJECTS) $(mmg_LDADD)
  
 +src/mmg/mkvmerge-gui@EXEEXT@: src/mmg/mmg@EXEEXT@
 +
+ .SECONDARY:
+ 
  #
- # include dependency files if they exist
- #
-Only in mkvtoolnix-1.7.0: Makefile.in.orig
