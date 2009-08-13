@@ -49,7 +49,7 @@ namespace libebml {
 
 using namespace libebml;
 
-#define VERSIONNAME "Tenderness"
+#define VERSIONNAME "C'est le bon"
 #define VERSIONINFO "mkvmerge v" VERSION " ('" VERSIONNAME "')"
 #define BUGMSG Y("This should not have happened. Please contact the author " \
                  "Moritz Bunkus <moritz@bunkus.org> with this error/warning " \
