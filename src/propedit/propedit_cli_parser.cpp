@@ -64,12 +64,38 @@ propedit_cli_parser_c::add_change() {
   }
 }
 
+std::map<ebml_type_e, const char *> &
+propedit_cli_parser_c::get_ebml_type_abbrev_map() {
+  static std::map<ebml_type_e, const char *> s_ebml_type_abbrevs;
+  if (s_ebml_type_abbrevs.empty()) {
+    s_ebml_type_abbrevs[EBMLT_INT]     = "SI";
+    s_ebml_type_abbrevs[EBMLT_UINT]    = "UI";
+    s_ebml_type_abbrevs[EBMLT_BOOL]    = "B";
+    s_ebml_type_abbrevs[EBMLT_STRING]  = "S";
+    s_ebml_type_abbrevs[EBMLT_USTRING] = "US";
+    s_ebml_type_abbrevs[EBMLT_BINARY]  = "X";
+    s_ebml_type_abbrevs[EBMLT_FLOAT]   = "FP";
+  }
+
+  return s_ebml_type_abbrevs;
+}
+
 void
 propedit_cli_parser_c::list_property_names() {
-  mxinfo(Y("All known property names and their meaning:\n"));
+  mxinfo(Y("All known property names and their meaning\n"));
 
   list_property_names_for_table(property_element_c::get_table_for(KaxInfo::ClassInfos,   NULL, true), Y("Segment information"), "info");
   list_property_names_for_table(property_element_c::get_table_for(KaxTracks::ClassInfos, NULL, true), Y("Track headers"),       "track:...");
+
+  mxinfo("\n");
+  mxinfo(Y("Element types:\n"));
+  mxinfo(Y("  SI: signed integer\n"));
+  mxinfo(Y("  UI: unsigned integer\n"));
+  mxinfo(Y("  B:  boolean (0 or 1)\n"));
+  mxinfo(Y("  S:  string\n"));
+  mxinfo(Y("  US: Unicode string\n"));
+  mxinfo(Y("  X:  binary in hex\n"));
+  mxinfo(Y("  FP: floating point number\n"));
 
   mxexit(0);
 }
@@ -78,24 +104,26 @@ void
 propedit_cli_parser_c::list_property_names_for_table(const std::vector<property_element_c> &table,
                                                      const std::string &title,
                                                      const std::string &edit_spec) {
-  size_t max_name_len = 0;
+  std::map<ebml_type_e, const char *> &ebml_type_map = get_ebml_type_abbrev_map();
+  size_t max_name_len                                = 0;
+
   std::vector<property_element_c>::const_iterator table_it;
   mxforeach(table_it, table)
     max_name_len = std::max(max_name_len, table_it->m_name.length());
 
   static boost::regex s_newline_re("\\s*\\n\\s*", boost::regex::perl);
-  boost::format format((boost::format("    %%|1$-%1%s| |") % max_name_len).str());
-  std::string indent_string = std::string(max_name_len + 4, ' ') + " | ";
+  boost::format format((boost::format("%%|1$-%1%s| | %%|2$-2s| |") % max_name_len).str());
+  std::string indent_string = std::string(max_name_len, ' ') + " |    | ";
 
   mxinfo("\n");
-  mxinfo(boost::format(Y("  Elements in the category '%1%' ('--edit %2%')\n")) % title % edit_spec);
+  mxinfo(boost::format(Y("Elements in the category '%1%' ('--edit %2%'):\n")) % title % edit_spec);
 
   mxforeach(table_it, table) {
-    std::string name        = (format % table_it->m_name).str();
+    std::string name        = (format % table_it->m_name % ebml_type_map[table_it->m_type]).str();
     std::string description = table_it->m_title.get_translated()
                             + ": "
                             + boost::regex_replace(table_it->m_description.get_translated(), s_newline_re, " ",  boost::match_default | boost::match_single_line);
-    mxinfo(format_paragraph(description, max_name_len + 4 + 3, name, indent_string));
+    mxinfo(format_paragraph(description, max_name_len + 8, name, indent_string));
   }
 }
 
