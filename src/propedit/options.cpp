@@ -10,6 +10,8 @@
 
 #include "common/os.h"
 
+#include <cassert>
+
 #include "propedit/options.h"
 
 options_c::options_c()
@@ -32,8 +34,7 @@ options_c::validate() {
 target_cptr
 options_c::add_target(target_c::target_type_e type,
                       const std::string &spec) {
-  target_cptr target(new target_c);
-  target->m_type = type;
+  target_cptr target(new target_c(type));
   target->parse_target_spec(spec);
 
   if (!m_targets.empty()) {
@@ -111,4 +112,73 @@ options_c::remove_empty_targets() {
       temp.push_back(*target_it);
 
   m_targets = temp;
+}
+
+template<typename T> static T*
+read_element(kax_analyzer_c *analyzer,
+             const std::string &category) {
+  int index = analyzer->find(T::ClassInfos.GlobalId);
+  T *t      = NULL;
+
+  if (-1 != index)
+    t = dynamic_cast<T *>(analyzer->read_element(index));
+
+  if (NULL == t)
+    mxerror(boost::format(Y("Modification of properties in the section '%1%' was requested, but no corresponding level 1 element was found in the file. %2%\n"))
+            % category % Y("The file has not been modified."));
+
+  return t;
+}
+
+void
+options_c::find_elements(kax_analyzer_c *analyzer) {
+  KaxInfo *info     = NULL;
+  KaxTracks *tracks = NULL;
+
+  std::vector<target_cptr>::iterator target_it;
+  mxforeach(target_it, m_targets) {
+    target_c &target = **target_it;
+    if (target_c::tt_segment_info == target.m_type) {
+      if (NULL == info)
+        info = read_element<KaxInfo>(analyzer, Y("Segment information"));
+      target.set_level1_element(info);
+
+    } else if (target_c::tt_track == target.m_type) {
+      if (NULL == tracks)
+        tracks = read_element<KaxTracks>(analyzer, Y("Track headers"));
+      target.set_level1_element(tracks);
+
+    } else
+      assert(false);
+  }
+
+  merge_targets();
+}
+
+void
+options_c::merge_targets() {
+  std::map<uint64_t, target_c *> targets_by_track_uid;
+  std::vector<target_cptr>::iterator target_it;
+  std::vector<target_cptr> targets_to_keep;
+
+  mxforeach(target_it, m_targets) {
+    if (target_c::tt_segment_info == (*target_it)->m_type) {
+      targets_to_keep.push_back(*target_it);
+      continue;
+    }
+
+    std::map<uint64_t, target_c *>::iterator existing_target_it = targets_by_track_uid.find((*target_it)->m_track_uid);
+    if (targets_by_track_uid.end() == existing_target_it) {
+      targets_to_keep.push_back(*target_it);
+      targets_by_track_uid[(*target_it)->m_track_uid] = target_it->get_object();
+      continue;
+    }
+
+    existing_target_it->second->m_changes.insert(existing_target_it->second->m_changes.end(), (*target_it)->m_changes.begin(), (*target_it)->m_changes.end());
+
+    mxwarn(boost::format(Y("The edit specifications '%1%' and '%2%' resolve to the same track with the UID %3%.\n"))
+           % existing_target_it->second->m_spec % (*target_it)->m_spec % (*target_it)->m_track_uid);
+  }
+
+  m_targets = targets_to_keep;
 }

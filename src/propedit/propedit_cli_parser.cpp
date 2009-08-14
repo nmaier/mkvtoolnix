@@ -69,7 +69,7 @@ propedit_cli_parser_c::list_property_names() {
   mxinfo(Y("All known property names and their meaning:\n"));
 
   list_property_names_for_table(property_element_c::get_table_for(KaxInfo::ClassInfos,   NULL, true), Y("Segment information"), "info");
-  list_property_names_for_table(property_element_c::get_table_for(KaxTracks::ClassInfos, NULL, true), Y("Track header"),        "track:...");
+  list_property_names_for_table(property_element_c::get_table_for(KaxTracks::ClassInfos, NULL, true), Y("Track headers"),       "track:...");
 
   mxexit(0);
 }
@@ -116,7 +116,7 @@ propedit_cli_parser_c::init_parser() {
 
   add_section_header(YT("Actions"));
   OPT("e|edit=<selector>",     add_target,          YT("Sets the Matroska file section that all following add/set/delete "
-                                                       "actions operate on (see man page for syntax)"));
+                                                       "actions operate on (see below and man page for syntax)"));
   OPT("a|add=<name=value>",    add_change,          YT("Adds a property with the value even if such a property already "
                                                        "exists"));
   OPT("s|set=<name=value>",    add_change,          YT("Sets a property to the value if it exists and add it otherwise"));
@@ -127,6 +127,17 @@ propedit_cli_parser_c::init_parser() {
 
   add_separator();
   add_information(YT("The order of the various options is not important."));
+
+  add_section_header(YT("Edit selectors"), 0);
+  add_section_header(YT("Segment information"), 1);
+  add_information(YT("The strings 'info', 'segment_info' or 'segmentinfo' select the segment information element. This is also the default until the first '--edit' option is found."), 2);
+
+  add_section_header(YT("Track headers"), 1);
+  add_information(YT("The string 'track:n' with 'n' being a number selects the nth track."), 2);
+  add_information(YT("The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track "
+                     "(e.g. '--edit track:a2')."), 2);
+  add_information(YT("The string 'track:=uid' with 'uid' being a number selects the track whose 'track UID' element equals 'uid'."), 2);
+  add_information(YT("The string 'track:@number' with 'number' being a number selects the track whose 'track number' element equals 'number'."), 2);
 
   add_hook(cli_parser_c::ht_unknown_option, boost::bind(&propedit_cli_parser_c::set_file_name, this));
 }

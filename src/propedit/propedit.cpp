@@ -27,6 +27,16 @@ run(options_cptr options) {
   }
 
   analyzer->set_show_progress(options->m_show_progress);
+
+  if (!analyzer->process(options->m_parse_mode))
+    mxerror(Y("This file could not be opened or parsed."));
+
+  options->find_elements(analyzer.get_object());
+
+  if (debugging_requested("dump_options")) {
+    mxinfo("\nDumping options after file and element analysis\n\n");
+    options->dump_info();
+  }
 }
 
 /** \brief Setup and high level program control
@@ -41,7 +51,11 @@ main(int argc,
 
   options_cptr options = propedit_cli_parser_c(command_line_utf8(argc, argv)).run();
   options->validate();
-  options->dump_info();
+
+  if (debugging_requested("dump_options")) {
+    mxinfo("\nDumping options after parsing the command line\n\n");
+    options->dump_info();
+  }
 
   run(options);
 

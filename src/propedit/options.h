@@ -40,9 +40,12 @@ public:
   void dump_info() const;
   bool has_changes() const;
 
+  void find_elements(kax_analyzer_c *analyzer);
+
 protected:
   target_cptr add_target(target_c::target_type_e type, const std::string &spec);
   void remove_empty_targets();
+  void merge_targets();
 };
 typedef counted_ptr<options_c> options_cptr;
 

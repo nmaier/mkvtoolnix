@@ -39,15 +39,18 @@ public:
   };
 
   target_type_e m_type;
+  std::string m_spec;
   selection_mode_e m_selection_mode;
-  int64_t m_selection_param;
-  char m_selection_track_type;
+  uint64_t m_selection_param;
+  track_type m_selection_track_type;
 
-  EbmlMaster *m_target;
+  EbmlMaster *m_level1_element, *m_master, *m_sub_master;
+  uint64_t m_track_uid;
+
   std::vector<change_cptr> m_changes;
 
 public:
-  target_c();
+  target_c(target_type_e type);
 
   void validate();
 
@@ -59,6 +62,8 @@ public:
   bool operator !=(const target_c &cmp) const;
 
   bool has_changes() const;
+
+  void set_level1_element(EbmlMaster *level1_element);
 
 protected:
   void parse_track_spec(const std::string &spec);
