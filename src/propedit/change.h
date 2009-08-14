@@ -14,6 +14,7 @@
 #include "common/os.h"
 
 #include <string>
+#include <vector>
 
 #include "common/property_element.h"
 #include "common/smart_pointers.h"
@@ -34,7 +35,7 @@ public:
 public:
   change_c(change_type_e type, const std::string &name, const std::string &value);
 
-  void validate();
+  void validate(std::vector<property_element_c> *property_table = NULL);
   void dump_info() const;
 
   bool lookup_property(std::vector<property_element_c> &table);

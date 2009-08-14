@@ -39,14 +39,25 @@ target_c::target_c(target_c::target_type_e type)
   , m_master(NULL)
   , m_sub_master(NULL)
   , m_track_uid(0)
+  , m_track_type(INVALID_TRACK_TYPE)
 {
 }
 
 void
 target_c::validate() {
+  assert(target_c::tt_undefined != m_type);
+
+  std::vector<property_element_c> *property_table
+    = NULL == m_level1_element ? NULL
+    :                            &property_element_c::get_table_for(target_c::tt_segment_info == m_type ? KaxInfo::ClassInfos : KaxTracks::ClassInfos,
+                                                                      track_audio == m_track_type ? &KaxTrackAudio::ClassInfos
+                                                                    : track_video == m_track_type ? &KaxTrackVideo::ClassInfos
+                                                                    :                               NULL,
+                                                                    false);
+
   std::vector<change_cptr>::iterator change_it;
   mxforeach(change_it, m_changes)
-    (*change_it)->validate();
+    (*change_it)->validate(property_table);
 }
 
 void
@@ -191,7 +202,7 @@ target_c::set_level1_element(EbmlMaster *level1_element) {
     assert(NULL != track);
 
     KaxTrackType *kax_track_type     = dynamic_cast<KaxTrackType *>(FINDFIRST(track, KaxTrackType));
-    int track_type                   = NULL == kax_track_type ? track_video : uint8(*kax_track_type);
+    track_type this_track_type       = NULL == kax_track_type ? track_video : static_cast<track_type>(uint8(*kax_track_type));
 
     KaxTrackUID *kax_track_uid       = dynamic_cast<KaxTrackUID *>(FINDFIRST(track, KaxTrackUID));
     uint64_t track_uid               = NULL == kax_track_uid ? 0 : uint64(*kax_track_uid);
@@ -199,26 +210,27 @@ target_c::set_level1_element(EbmlMaster *level1_element) {
     KaxTrackNumber *kax_track_number = dynamic_cast<KaxTrackNumber *>(FINDFIRST(track, KaxTrackNumber));
 
     ++num_tracks_total;
-    ++num_tracks_by_type[track_type];
+    ++num_tracks_by_type[this_track_type];
 
     if (debugging_requested("track_matching"))
       mxinfo(boost::format("Testing match (mode %1% param %2% track_type %3%) (ntt %4% ntbt %5% type %7% uid %6%)\n")
              % m_selection_mode % m_selection_param % m_selection_track_type
-             % num_tracks_total % num_tracks_by_type[track_type] % track_uid % track_type);
+             % num_tracks_total % num_tracks_by_type[this_track_type] % track_uid % this_track_type);
 
     bool track_matches = target_c::sm_by_uid      == m_selection_mode ? m_selection_param == track_uid
                        : target_c::sm_by_position == m_selection_mode ? m_selection_param == num_tracks_total
-                       : target_c::sm_by_number   == m_selection_mode ? (NULL       != kax_track_number)       && (m_selection_param == uint64(*kax_track_number))
-                       :                                                (track_type == m_selection_track_type) && (m_selection_param == num_tracks_by_type[track_type]);
+                       : target_c::sm_by_number   == m_selection_mode ? (NULL            != kax_track_number)       && (m_selection_param == uint64(*kax_track_number))
+                       :                                                (this_track_type == m_selection_track_type) && (m_selection_param == num_tracks_by_type[this_track_type]);
 
     if (!track_matches)
       continue;
 
     m_track_uid  = track_uid;
+    m_track_type = this_track_type;
     m_master     = track;
-    m_sub_master = track_video == track_type ? dynamic_cast<EbmlMaster *>(FINDFIRST(track, KaxTrackVideo))
-                 : track_audio == track_type ? dynamic_cast<EbmlMaster *>(FINDFIRST(track, KaxTrackAudio))
-                 :                             NULL;
+    m_sub_master = track_video == m_track_type ? dynamic_cast<EbmlMaster *>(FINDFIRST(track, KaxTrackVideo))
+                 : track_audio == m_track_type ? dynamic_cast<EbmlMaster *>(FINDFIRST(track, KaxTrackAudio))
+                 :                               NULL;
 
    return;
   }

@@ -32,6 +32,7 @@ public:
   options_c();
 
   void validate();
+  void options_parsed();
 
   target_cptr add_target(target_c::target_type_e type);
   target_cptr add_target(const std::string &spec);

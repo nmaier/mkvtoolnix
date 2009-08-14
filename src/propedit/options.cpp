@@ -25,10 +25,12 @@ options_c::validate() {
   if (m_file_name.empty())
     mxerror(Y("No file name given.\n"));
 
-  remove_empty_targets();
-
   if (!has_changes())
     mxerror(Y("Nothing to do.\n"));
+
+  std::vector<target_cptr>::iterator target_it;
+  mxforeach(target_it, m_targets)
+    (*target_it)->validate();
 }
 
 target_cptr
@@ -181,4 +183,10 @@ options_c::merge_targets() {
   }
 
   m_targets = targets_to_keep;
+}
+
+void
+options_c::options_parsed() {
+  remove_empty_targets();
+  m_show_progress = 1 < verbose;
 }

@@ -32,6 +32,7 @@ run(options_cptr options) {
     mxerror(Y("This file could not be opened or parsed."));
 
   options->find_elements(analyzer.get_object());
+  options->validate();
 
   if (debugging_requested("dump_options")) {
     mxinfo("\nDumping options after file and element analysis\n\n");
@@ -50,7 +51,6 @@ main(int argc,
   setup();
 
   options_cptr options = propedit_cli_parser_c(command_line_utf8(argc, argv)).run();
-  options->validate();
 
   if (debugging_requested("dump_options")) {
     mxinfo("\nDumping options after parsing the command line\n\n");

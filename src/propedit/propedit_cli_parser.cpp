@@ -178,8 +178,8 @@ propedit_cli_parser_c::run() {
 
   parse_args();
 
+  m_options->options_parsed();
   m_options->validate();
-  m_options->m_show_progress = 1 < verbose;
 
   return m_options;
 }

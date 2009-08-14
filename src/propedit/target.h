@@ -46,6 +46,7 @@ public:
 
   EbmlMaster *m_level1_element, *m_master, *m_sub_master;
   uint64_t m_track_uid;
+  track_type m_track_type;
 
   std::vector<change_cptr> m_changes;
 

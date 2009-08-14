@@ -23,7 +23,19 @@ change_c::change_c(change_c::change_type_e type,
 }
 
 void
-change_c::validate() {
+change_c::validate(std::vector<property_element_c> *property_table) {
+  if (NULL == property_table)
+    return;
+
+  std::vector<property_element_c>::iterator property_it;
+  mxforeach(property_it, *property_table)
+    if (property_it->m_name == m_name)
+      return;
+
+  std::string spec = change_c::ct_delete == m_type ? (boost::format("delete %1%")                                                 % m_name          ).str()
+                   :                                 (boost::format("%1% %2%=%3%") % (change_c::ct_add == m_type ? "add" : "set") % m_name % m_value).str();
+
+  mxerror(boost::format(Y("The name '%1%' is not a valid property name for the current edit specification in '--%2%'.\n")) % m_name % spec);
 }
 
 void
