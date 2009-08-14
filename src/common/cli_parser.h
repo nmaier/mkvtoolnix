@@ -20,6 +20,8 @@
 
 #include "common/translation.h"
 
+#define INDENT_DEFAULT -1
+
 typedef boost::function<void(void)> cli_parser_cb_t;
 
 class cli_parser_c {
@@ -36,9 +38,10 @@ protected:
     translatable_string_c m_description;
     cli_parser_cb_t m_callback;
     bool m_needs_arg;
+    int m_indent;
 
     option_t();
-    option_t(option_type_e type, const translatable_string_c &description);
+    option_t(option_type_e type, const translatable_string_c &description, int indent = INDENT_DEFAULT);
     option_t(const std::string &spec, const translatable_string_c &description, cli_parser_cb_t callback, bool needs_arg);
 
     std::string format_text();
@@ -61,8 +64,8 @@ protected:
   cli_parser_c(const std::vector<std::string> &args);
 
   void add_option(const std::string &spec, cli_parser_cb_t callback, const translatable_string_c &description);
-  void add_section_header(const translatable_string_c &title);
-  void add_information(const translatable_string_c &information);
+  void add_section_header(const translatable_string_c &title, int indent = INDENT_DEFAULT);
+  void add_information(const translatable_string_c &information, int indent = INDENT_DEFAULT);
   void add_separator();
   void add_common_options();
 

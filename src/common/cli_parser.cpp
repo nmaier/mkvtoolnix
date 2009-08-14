@@ -31,10 +31,12 @@ cli_parser_c::option_t::option_t()
 }
 
 cli_parser_c::option_t::option_t(cli_parser_c::option_t::option_type_e type,
-                                 const translatable_string_c &description)
+                                 const translatable_string_c &description,
+                                 int indent)
   : m_type(type)
   , m_description(description)
   , m_needs_arg(false)
+  , m_indent(indent)
 {
 }
 
@@ -47,6 +49,7 @@ cli_parser_c::option_t::option_t(const std::string &spec,
   , m_description(description)
   , m_callback(callback)
   , m_needs_arg(needs_arg)
+  , m_indent(INDENT_DEFAULT)
 {
 }
 
@@ -55,12 +58,12 @@ cli_parser_c::option_t::format_text() {
   std::string description = m_description.get_translated();
 
   if (cli_parser_c::option_t::ot_option == m_type)
-    return format_paragraph(description, INDENT_COLUMN_OPTION_DESCRIPTION, std::string(INDENT_COLUMN_OPTION_NAME, ' ') + m_name);
+    return format_paragraph(description, INDENT_DEFAULT == m_indent ? INDENT_COLUMN_OPTION_DESCRIPTION : m_indent, std::string(INDENT_COLUMN_OPTION_NAME, ' ') + m_name);
 
   else if (cli_parser_c::option_t::ot_section_header == m_type)
-    return std::string("\n") + format_paragraph(description + ":", INDENT_COLUMN_SECTION_HEADER);
+    return std::string("\n") + format_paragraph(description + ":", INDENT_DEFAULT == m_indent ? INDENT_COLUMN_SECTION_HEADER : m_indent);
 
-  return format_paragraph(description);
+  return format_paragraph(description, INDENT_DEFAULT == m_indent ? 0 : m_indent);
 }
 
 // ------------------------------------------------------------
@@ -136,13 +139,15 @@ cli_parser_c::add_option(const std::string &spec,
 }
 
 void
-cli_parser_c::add_section_header(const translatable_string_c &title) {
-  m_options.push_back(cli_parser_c::option_t(cli_parser_c::option_t::ot_section_header, title));
+cli_parser_c::add_section_header(const translatable_string_c &title,
+                                 int indent) {
+  m_options.push_back(cli_parser_c::option_t(cli_parser_c::option_t::ot_section_header, title, indent));
 }
 
 void
-cli_parser_c::add_information(const translatable_string_c &information) {
-  m_options.push_back(cli_parser_c::option_t(cli_parser_c::option_t::ot_information, information));
+cli_parser_c::add_information(const translatable_string_c &information,
+                              int indent) {
+  m_options.push_back(cli_parser_c::option_t(cli_parser_c::option_t::ot_information, information, indent));
 }
 
 void
