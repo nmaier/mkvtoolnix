@@ -509,23 +509,6 @@ parse_number_with_unit(const std::string &s,
     return (int64_t)(multiplier * d_value);
 }
 
-/** \brief Parse a string for a boolean value
-
-   Interpretes the string \c orig as a boolean value. Accepted
-   is "true", "yes", "1" as boolean true and "false", "no", "0"
-   as boolean false.
-*/
-bool
-parse_bool(const std::string &orig) {
-  std::string s(downcase(orig));
-
-  if ((s == "yes") || (s == "true") || (s == "1"))
-    return true;
-  if ((s == "no") || (s == "false") || (s == "0"))
-    return false;
-  throw false;
-}
-
 /** \brief Parse tags and add them to the list of all tags
 
    Also tests the tags for missing mandatory elements.

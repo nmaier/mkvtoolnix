@@ -296,3 +296,19 @@ parse_timecode(const std::string &src,
   return true;
 }
 
+/** \brief Parse a string for a boolean value
+
+   Interpretes the string \c orig as a boolean value. Accepted
+   is "true", "yes", "1" as boolean true and "false", "no", "0"
+   as boolean false.
+*/
+bool
+parse_bool(const std::string &orig) {
+  std::string s(downcase(orig));
+
+  if ((s == "yes") || (s == "true") || (s == "1"))
+    return true;
+  if ((s == "no") || (s == "false") || (s == "0"))
+    return false;
+  throw false;
+}
