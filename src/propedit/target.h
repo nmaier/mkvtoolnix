@@ -63,8 +63,11 @@ public:
   bool operator !=(const target_c &cmp) const;
 
   bool has_changes() const;
+  bool has_add_or_set_change() const;
 
   void set_level1_element(EbmlMaster *level1_element);
+
+  void execute();
 
 protected:
   void parse_track_spec(const std::string &spec);

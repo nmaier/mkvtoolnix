@@ -41,6 +41,8 @@ public:
   bitvalue_c m_x_value;
   double m_fp_value;
 
+  EbmlMaster *m_master;
+
 public:
   change_c(change_type_e type, const std::string &name, const std::string &value);
 
@@ -51,6 +53,8 @@ public:
 
   std::string get_spec();
 
+  void execute(EbmlMaster *master, EbmlMaster *sub_master);
+
 protected:
   void parse_ascii_string();
   void parse_binary();
@@ -60,6 +64,15 @@ protected:
   void parse_unicode_string();
   void parse_unsigned_integer();
   void parse_value();
+
+  void execute_add_or_set();
+  void execute_delete();
+  void do_add_element();
+  void set_element_at(int idx);
+
+  void validate_deletion_of_mandatory();
+
+  const EbmlSemantic *get_semantic();
 };
 typedef counted_ptr<change_c> change_cptr;
 

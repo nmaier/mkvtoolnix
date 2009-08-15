@@ -38,6 +38,8 @@ run(options_cptr options) {
     mxinfo("\nDumping options after file and element analysis\n\n");
     options->dump_info();
   }
+
+  options->execute();
 }
 
 /** \brief Setup and high level program control

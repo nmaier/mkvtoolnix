@@ -10,6 +10,15 @@
 
 #include "common/os.h"
 
+#include <ebml/EbmlBinary.h>
+#include <ebml/EbmlFloat.h>
+#include <ebml/EbmlSInteger.h>
+#include <ebml/EbmlString.h>
+#include <ebml/EbmlUInteger.h>
+#include <ebml/EbmlUnicodeString.h>
+#include <matroska/KaxSegment.h>
+
+#include "common/ebml.h"
 #include "common/output.h"
 #include "common/strings/parsing.h"
 #include "propedit/change.h"
@@ -26,6 +35,7 @@ change_c::change_c(change_c::change_type_e type,
   , m_b_value(false)
   , m_x_value(128)
   , m_fp_value(0)
+  , m_master(NULL)
 {
 }
 
@@ -38,7 +48,12 @@ change_c::validate(std::vector<property_element_c> *property_table) {
   mxforeach(property_it, *property_table)
     if (property_it->m_name == m_name) {
       m_property = *property_it;
-      parse_value();
+
+      if (change_c::ct_delete == m_type)
+        validate_deletion_of_mandatory();
+      else
+        parse_value();
+
       return;
     }
 
@@ -141,3 +156,103 @@ change_c::parse_binary() {
   }
 }
 
+void
+change_c::execute(EbmlMaster *master,
+                  EbmlMaster *sub_master) {
+  m_master = NULL == m_property.m_sub_master_callbacks ? master : sub_master;
+
+  if (NULL == m_master)
+    return;
+
+  if (change_c::ct_delete == m_type)
+    execute_delete();
+  else
+    execute_add_or_set();
+}
+
+void
+change_c::execute_delete() {
+  int idx         = 0;
+  int num_deleted = 0;
+  while (m_master->ListSize() > idx) {
+    if (m_property.m_callbacks->GlobalId == (*m_master)[idx]->Generic().GlobalId) {
+      m_master->Remove(idx);
+      ++num_deleted;
+    } else
+      ++idx;
+  }
+
+  if (1 < verbose)
+    mxinfo(boost::format(Y("Change for '%1%' executed. Number of entries deleted: %2%\n")) % get_spec() % num_deleted);
+}
+
+void
+change_c::execute_add_or_set() {
+  int idx;
+  int num_found = 0;
+  for (idx = 0; m_master->ListSize() > idx; ++idx) {
+    if (m_property.m_callbacks->GlobalId != (*m_master)[idx]->Generic().GlobalId)
+      continue;
+
+    if (change_c::ct_set == m_type)
+      set_element_at(idx);
+
+    ++num_found;
+  }
+
+  if (0 == num_found) {
+    do_add_element();
+    if (1 < verbose)
+      mxinfo(boost::format(Y("Change for '%1%' executed. No property of this type found. One entry added.\n")) % get_spec());
+    return;
+  }
+
+  if (change_c::ct_set == m_type) {
+    if (1 < verbose)
+      mxinfo(boost::format(Y("Change for '%1%' executed. Number of entries set: %2%.\n")) % get_spec() % num_found);
+    return;
+  }
+
+  const EbmlSemantic *semantic = get_semantic();
+  if ((NULL != semantic) && semantic->Unique)
+    mxerror(boost::format(Y("This property is unique. More instances cannot be added in '%1%'. %2%\n")) % get_spec() % FILE_NOT_MODIFIED);
+
+  do_add_element();
+
+ if (1 < verbose)
+    mxinfo(boost::format(Y("Change for '%1%' executed. One entry added.\n")) % get_spec());
+}
+
+void
+change_c::do_add_element() {
+  m_master->PushElement(m_property.m_callbacks->Create());
+  set_element_at(m_master->ListSize() - 1);
+}
+
+void
+change_c::set_element_at(int idx) {
+  EbmlElement *e = (*m_master)[idx];
+
+  switch (m_property.m_type) {
+    case EBMLT_STRING:  *static_cast<EbmlString *>(e)        = m_s_value;                                  break;
+    case EBMLT_USTRING: *static_cast<EbmlUnicodeString *>(e) = cstrutf8_to_UTFstring(m_s_value);           break;
+    case EBMLT_UINT:    *static_cast<EbmlUInteger *>(e)      = m_ui_value;                                 break;
+    case EBMLT_INT:     *static_cast<EbmlSInteger *>(e)      = m_si_value;                                 break;
+    case EBMLT_BOOL:    *static_cast<EbmlUInteger *>(e)      = m_b_value ? 1 : 0;                          break;
+    case EBMLT_FLOAT:   *static_cast<EbmlFloat *>(e)         = m_fp_value;                                 break;
+    case EBMLT_BINARY:   static_cast<EbmlBinary *>(e)->CopyBuffer(m_x_value.data(), m_x_value.size() / 8); break;
+    default:            assert(false);
+  }
+}
+
+void
+change_c::validate_deletion_of_mandatory() {
+  const EbmlSemantic *semantic = get_semantic();
+  if ((NULL != semantic) && semantic->Mandatory)
+    mxerror(boost::format(Y("This property is mandatory and cannot be deleted in '%1%'. %2%\n")) % get_spec() % FILE_NOT_MODIFIED);
+}
+
+const EbmlSemantic *
+change_c::get_semantic() {
+  return find_ebml_semantic(KaxSegment::ClassInfos, m_property.m_callbacks->GlobalId);
+}

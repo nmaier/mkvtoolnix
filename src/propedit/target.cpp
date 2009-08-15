@@ -179,6 +179,18 @@ target_c::has_changes()
   return !m_changes.empty();
 }
 
+bool
+target_c::has_add_or_set_change()
+  const
+{
+  std::vector<change_cptr>::const_iterator change_it;
+  mxforeach(change_it, m_changes)
+    if (change_c::ct_delete != (*change_it)->m_type)
+      return true;
+
+  return false;
+}
+
 void
 target_c::set_level1_element(EbmlMaster *level1_element) {
   m_level1_element = level1_element;
@@ -233,8 +245,24 @@ target_c::set_level1_element(EbmlMaster *level1_element) {
                  : track_audio == m_track_type ? dynamic_cast<EbmlMaster *>(FINDFIRST(track, KaxTrackAudio))
                  :                               NULL;
 
+    if (   (NULL == m_sub_master)
+        && (   (track_video == m_track_type)
+            || (track_audio == m_track_type))
+        && has_add_or_set_change()) {
+      m_sub_master = track_video == m_track_type ? static_cast<EbmlMaster *>(new KaxTrackVideo) : static_cast<EbmlMaster *>(new KaxTrackAudio);
+      m_master->PushElement(*m_sub_master);
+    }
+
    return;
   }
 
   mxerror(boost::format(Y("No track corresponding to the edit specification '%1%' was found. %2%\n")) % m_spec % FILE_NOT_MODIFIED);
 }
+
+void
+target_c::execute() {
+  std::vector<change_cptr>::iterator change_it;
+  mxforeach(change_it, m_changes)
+    (*change_it)->execute(m_master, m_sub_master);
+}
+

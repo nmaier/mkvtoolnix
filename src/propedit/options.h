@@ -43,6 +43,8 @@ public:
 
   void find_elements(kax_analyzer_c *analyzer);
 
+  void execute();
+
 protected:
   target_cptr add_target(target_c::target_type_e type, const std::string &spec);
   void remove_empty_targets();

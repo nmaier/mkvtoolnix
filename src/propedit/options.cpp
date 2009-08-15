@@ -34,6 +34,13 @@ options_c::validate() {
     (*target_it)->validate();
 }
 
+void
+options_c::execute() {
+  std::vector<target_cptr>::iterator target_it;
+  mxforeach(target_it, m_targets)
+    (*target_it)->execute();
+}
+
 target_cptr
 options_c::add_target(target_c::target_type_e type,
                       const std::string &spec) {
