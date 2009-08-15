@@ -13,6 +13,7 @@
 #include <cassert>
 
 #include "propedit/options.h"
+#include "propedit/propedit.h"
 
 options_c::options_c()
   : m_show_progress(false)
@@ -126,8 +127,7 @@ read_element(kax_analyzer_c *analyzer,
     t = dynamic_cast<T *>(analyzer->read_element(index));
 
   if (NULL == t)
-    mxerror(boost::format(Y("Modification of properties in the section '%1%' was requested, but no corresponding level 1 element was found in the file. %2%\n"))
-            % category % Y("The file has not been modified."));
+    mxerror(boost::format(Y("Modification of properties in the section '%1%' was requested, but no corresponding level 1 element was found in the file. %2%\n")) % category % FILE_NOT_MODIFIED);
 
   return t;
 }

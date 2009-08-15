@@ -24,6 +24,7 @@
 #include "common/common.h"
 #include "common/strings/editing.h"
 #include "common/strings/parsing.h"
+#include "propedit/propedit.h"
 #include "propedit/target.h"
 
 using namespace libmatroska;
@@ -235,5 +236,5 @@ target_c::set_level1_element(EbmlMaster *level1_element) {
    return;
   }
 
-  mxerror(boost::format(Y("No track corresponding to the edit specification '%1%' was found. %2%\n")) % m_spec % Y("The file has not been modified."));
+  mxerror(boost::format(Y("No track corresponding to the edit specification '%1%' was found. %2%\n")) % m_spec % FILE_NOT_MODIFIED);
 }
