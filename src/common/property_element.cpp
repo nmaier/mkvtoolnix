@@ -175,11 +175,11 @@ property_element_c::get_table_for(const EbmlCallbacks &master_callbacks,
     return composed_map_it->second;
 
   s_composed_properties[element_id]      = std::vector<property_element_c>();
-  std::vector<property_element_c> &table = s_composed_properties[sub_master_callbacks->GlobalId.Value];
+  std::vector<property_element_c> &table = s_composed_properties[element_id];
   std::vector<property_element_c>::iterator property_it;
 
   mxforeach(property_it, src_map_it->second)
-    if ((NULL == property_it->m_sub_master_callbacks) || (sub_master_callbacks->GlobalId == property_it->m_sub_master_callbacks->GlobalId))
+    if ((NULL == property_it->m_sub_master_callbacks) || ((NULL != sub_master_callbacks) && (sub_master_callbacks->GlobalId == property_it->m_sub_master_callbacks->GlobalId)))
       table.push_back(*property_it);
 
   return table;
