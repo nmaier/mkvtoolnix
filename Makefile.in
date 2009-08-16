@@ -158,7 +158,7 @@ DEP_MPEGPARSER = src/mpegparser/libmpegparser.a
 COMPRESSION_LIBRARIES = $(LZO_LIBS) $(BZ2_LIBS)
 
 APPLICATIONS = src/mkvmerge@EXEEXT@ src/mkvinfo@EXEEXT@ src/mkvextract@EXEEXT@ src/mkvpropedit@EXEEXT@
-MANPAGES = doc/man/mkvmerge.1 doc/man/mkvinfo.1 doc/man/mkvextract.1 # doc/man/mkvpropedit.1
+MANPAGES = doc/man/mkvmerge.1 doc/man/mkvinfo.1 doc/man/mkvextract.1 doc/man/mkvpropedit.1
 ifeq (yes,$(USE_WXWIDGETS))
 APPLICATIONS += src/mmg/mmg@EXEEXT@
 MANPAGES += doc/man/mmg.1

@@ -9,6 +9,7 @@
 <!ENTITY mkvmerge "<citerefentry><refentrytitle>mkvmerge</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
 <!ENTITY mkvinfo "<citerefentry><refentrytitle>mkvinfo</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
 <!ENTITY mkvextract "<citerefentry><refentrytitle>mkvextract</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mkvpropedit "<citerefentry><refentrytitle>mkvpropedit</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
 <!ENTITY mmg "<citerefentry><refentrytitle>mmg</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
 
 <!ENTITY matroska "<productname>Matroska</productname>">
@@ -58,7 +59,7 @@
  <refsect1 id="mkvextract.description">
   <title>Description</title>
   <para>
-   This program extracts specific parts from a Matroska file to other useful formats. The first argument, <option>mode</option>, tells
+   This program extracts specific parts from a &matroska; file to other useful formats. The first argument, <option>mode</option>, tells
    &mkvextract; what to extract. Currently supported is the extraction of <link linkend="mkvextract.description.tracks">tracks</link>, <link
    linkend="mkvextract.description.tags">tags</link>, <link linkend="mkvextract.description.attachments">attachments</link>, <link
    linkend="mkvextract.description.chapters">chapters</link>, <link linkend="mkvextract.description.cuesheets">CUE sheets</link> and <link
@@ -165,7 +166,7 @@ tracks
 source.mkv
 # Output the track as raw data.
 --raw
-1;destination.raw
+1:destination.raw
       </programlisting>
      </listitem>
     </varlistentry>
@@ -592,7 +593,7 @@ $ mkvextract tags source.mkv --redirect-output tags.xml
  <refsect1 id="mkvextract.seealso">
   <title>See also</title>
   <para>
-   &mkvmerge;, &mkvinfo;, &mmg;
+   &mkvmerge;, &mkvinfo;, &mkvpropedit;, &mmg;
   </para>
  </refsect1>
 
