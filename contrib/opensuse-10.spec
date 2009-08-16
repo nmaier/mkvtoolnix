@@ -22,8 +22,8 @@ Prefix:       /usr
 %description
 Tools to create and manipulate Matroska files (extensions .mkv and
 .mka), a new container format for audio and video files. Includes
-command line tools mkvextract, mkvinfo, mkvmerge and a graphical
-frontend for them, mkvmerge-gui.
+command line tools mkvextract, mkvinfo, mkvmerge, mkvpropedit and a
+graphical frontend for them, mkvmerge-gui.
 
 
 
@@ -59,10 +59,12 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/mkvinfo
 /usr/bin/mkvmerge
 /usr/bin/mkvmerge-gui
+/usr/bin/mkvpropedit
 /usr/share/man/man1/mkvextract.1.gz
 /usr/share/man/man1/mkvinfo.1.gz
 /usr/share/man/man1/mkvmerge.1.gz
 /usr/share/man/man1/mkvmerge-gui.1.gz
+/usr/share/man/man1/mkvpropedit.1.gz
 /usr/share/mkvtoolnix/*
 /usr/share/locale/de/LC_MESSAGES/mkvtoolnix.mo
 /usr/share/locale/ja/LC_MESSAGES/mkvtoolnix.mo
