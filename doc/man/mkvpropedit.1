@@ -1,0 +1,288 @@
+.\"     Title: mkvpropedit
+.\"    Author: Moritz Bunkus <moritz@bunkus.org>
+.\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
+.\"      Date: August 2009
+.\"    Manual: User Commands
+.\"    Source: MkvToolNix 2.9.8
+.\"
+.TH "MKVPROPEDIT" "1" "August 2009" "MkvToolNix 2\&.9\&.8" "User Commands"
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.SH "NAME"
+mkvpropedit \- Modify properties of existing Matroska files without a complete remux
+.SH "SYNOPSIS"
+.HP 12
+\fBmkvpropedit\fR [options] {source\-filename} {actions}
+.SH "DESCRIPTION"
+.PP
+This program analyses an existing
+Matroska(TM)
+file and modifies some of its properties\&. Then it writes those modifications to the existing file\&. Among the properties that can be changed are the segment information elements (e\&.g\&. the title) and the track headers (e\&.g\&. the language code, \'default track\' flag or the name)\&.
+.PP
+Options:
+.PP
+\fB\-l\fR, \fB\-\-list\-property\-names\fR
+.RS 4
+Lists all known and editable property names, their type (string, integer, boolean etc) and a short description\&. The program exits afterwards\&. Therefore the
+\fIsource\-filename\fR
+parameter does not have to be supplied\&.
+.RE
+.PP
+\fB\-p\fR, \fB\-\-parse\-mode\fR \fImode\fR
+.RS 4
+Sets the parse mode\&. The parameter \'\fImode\fR\' can either be \'fast\' (which is also the default) or \'full\'\&. The \'fast\' mode does not parse the whole file but uses the meta seek elements for locating the required elements of a source file\&. In 99% of all cases this is enough\&. But for files that do not contain meta seek elements or which are damaged the user might have to se the \'full\' parse mode\&. A full scan of a file can take a couple of minutes while a fast scan only takes seconds\&.
+.RE
+.PP
+Actions:
+.PP
+\fB\-e\fR, \fB\-\-edit\fR \fIselector\fR
+.RS 4
+Sets the
+Matroska(TM)
+file section (segment information or a certain track\'s headers) that all following
+add,
+set
+and
+delete
+actions operate on\&. This option can be used multiple times in order to make modifications to more than one element\&.
+.sp
+See the section about
+edit selectors
+for a full description of the syntax\&.
+.RE
+.PP
+\fB\-a\fR, \fB\-\-add\fR \fIname\fR=\fIvalue\fR
+.RS 4
+Adds a property
+\fIname\fR
+with the value
+\fIvalue\fR\&. The property will be added even if such a property exists already\&. Note that most properties are unique and cannot occur more than once\&.
+.RE
+.PP
+\fB\-s\fR, \fB\-\-set\fR \fIname\fR=\fIvalue\fR
+.RS 4
+Sets all occurences of the property
+\fIname\fR
+to the value
+\fIvalue\fR\&. If no such property exists then it will be added\&.
+.RE
+.PP
+\fB\-d\fR, \fB\-\-delete\fR \fIname\fR
+.RS 4
+Deletes all occurences of the property
+\fIname\fR\&. Note that some properties are required and cannot be deleted\&.
+.RE
+.PP
+Other options:
+.PP
+\fB\-\-command\-line\-charset\fR \fIcharacter\-set\fR
+.RS 4
+Sets the character set to convert strings given on the command line from\&. It defaults to the character set given by system\'s current locale\&.
+.RE
+.PP
+\fB\-\-output\-charset\fR \fIcharacter\-set\fR
+.RS 4
+Sets the character set to which strings are converted that are to be output\&. It defaults to the character set given by system\'s current locale\&.
+.RE
+.PP
+\fB\-r\fR, \fB\-\-redirect\-output\fR \fIfile\-name\fR
+.RS 4
+Writes all messages to the file
+\fIfile\-name\fR
+instead of to the console\&. While this can be done easily with output redirection there are cases in which this option is needed: when the terminal reinterprets the output before writing it to a file\&. The character set set with
+\fB\-\-output\-charset\fR
+is honored\&.
+.RE
+.PP
+\fB\-\-ui\-language\fR \fIcode\fR
+.RS 4
+Forces the translations for the language
+\fIcode\fR
+to be used (e\&.g\&. \'de_DE\' for the German translations)\&. It is preferable to use the environment variables
+\fILANG\fR,
+\fILC_MESSAGES\fR
+and
+\fILC_ALL\fR
+though\&. Entering \'list\' as the
+\fIcode\fR
+will cause
+\fBmkvextract\fR(1)
+to output a list of available translations\&.
+.RE
+.PP
+\fB\-v\fR, \fB\-\-verbose\fR
+.RS 4
+Be verbose and show all the important
+Matroska(TM)
+elements as they\'re read\&.
+.RE
+.PP
+\fB\-h\fR, \fB\-\-help\fR
+.RS 4
+Show usage information and exit\&.
+.RE
+.PP
+\fB\-V\fR, \fB\-\-version\fR
+.RS 4
+Show version information and exit\&.
+.RE
+.PP
+\fB@\fRoptions\-file
+.RS 4
+Reads additional command line arguments from the file
+\fIoptions\-file\fR\&. Lines whose first non\-whitespace character is a hash mark (\'#\') are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&. There is no meta character escaping\&.
+.sp
+The command line \'\fBmkvpropedit source\&.mkv \-\-edit track:a2 \-\-set title=Comments\fR\' could be converted into the following option file:
+.sp
+.RS 4
+.nf
+# Modify source\&.mkv
+source\&.mkv
+# Edit the second audio track
+\-\-edit
+track:a2
+# and set the title to \'Comments\'
+\-\-set
+title=Comments
+     
+.fi
+.RE
+.RE
+.SH "EDIT SELECTORS"
+.PP
+The
+\fB\-\-edit\fR
+option sets the
+Matroska(TM)
+file section (segment information or a certain track\'s headers) that all following
+add,
+set
+and
+delete
+actions operate on\&. This stays valid until the next
+\fB\-\-edit\fR
+option is found\&. The argument to this option is called the edit selector\&.
+.SS "Segment information"
+.PP
+The segment information can be selected with one of these three words: \'info\', \'segment_info\' or \'segmentinfo\'\&. It contains properties like the segment title or the segment
+UID\&.
+.SS "Track headers"
+.PP
+Track headers can be selected with a slightly more complex selector\&. All variations start with \'track:\'\&. The track header properties include elements like the language code, \'default track\' flag or the track\'s name\&.
+.PP
+\fBtrack:\fR\fIn\fR
+.RS 4
+If the parameter
+\fIn\fR
+is a number then the
+\fIn\fRth track will be selected\&. The track order is the same that
+\fBmkvmerge\fR(1)\'s
+\fB\-\-identify\fR
+option outputs\&.
+.RE
+.PP
+\fBtrack:\fR\fIt\fR\fIn\fR
+.RS 4
+If the parameter starts with a single character
+\fIt\fR
+followed by a
+\fIn\fR
+then the
+\fIn\fRth track of a specific track type will be selected\&. The track type parameter
+\fIt\fR
+must be one of these fourc characters: \'a\' for an audio track, \'b\' for a button track, \'s\' for a subtitle track and \'v\' for a video track\&. The track order is the same that
+\fBmkvmerge\fR(1)\'s
+\fB\-\-identify\fR
+option outputs\&.
+.RE
+.PP
+\fBtrack:\fR=\fIuid\fR
+.RS 4
+If the parameter starts with a \'=\' followed by a number
+\fIuid\fR
+then the track whose track
+UID
+element equals this
+\fIuid\fR\&. Track
+UIDs
+can be obtained with
+\fBmkvinfo\fR(1)\&.
+.RE
+.PP
+\fBtrack:\fR@\fInumber\fR
+.RS 4
+If the parameter starts with a \'@\' followed by a number
+\fInumber\fR
+then the track whose track number element equals this
+\fInumber\fR\&. Track number can be obtained with
+\fBmkvinfo\fR(1)\&.
+.RE
+.SS "Notes"
+.PP
+Due to the nature of the track edit selectors it is possible that several selectors actually match the same track headers\&. In such cases all actions for those edit selectors will be combined and executed in the order in which they\'re given on the command line\&.
+.SH "EXAMPLES"
+.PP
+The following example edits a file called \'movie\&.mkv\'\&. It sets the segment title and modifies the language code of an audio and a subtitle track\&. Note that this example can be shortened by leaving out the first
+\fB\-\-edit\fR
+option because editing the segment information element is the default for all options found before the first
+\fB\-\-edit\fR
+option anyway\&.
+.sp
+.RS 4
+.nf
+$ mkvpropedit movie\&.mkv \-\-edit info \-\-set "title=The movie" \-\-edit track:a1 \-\-set language=fre \-\-edit track:a2 \-\-set language=ita
+  
+.fi
+.RE
+.SH "EXIT CODES"
+.PP
+
+\fBmkvpropedit\fR(1)
+exits with one of three exit codes:
+.sp
+.RS 4
+\h'-04'\(bu\h'+03'
+\fB0\fR
+\-\- This exit codes means that the modification has completed successfully\&.
+.RE
+.sp
+.RS 4
+\h'-04'\(bu\h'+03'
+\fB1\fR
+\-\- In this case
+\fBmkvpropedit\fR(1)
+has output at least one warning, but the modification did continue\&. A warning is prefixed with the text \'Warning:\'\&. Depending on the issues involved the resulting files might be ok or not\&. The user is urged to check both the warning and the resulting files\&.
+.RE
+.sp
+.RS 4
+\h'-04'\(bu\h'+03'
+\fB2\fR
+\-\- This exit code is used after an error occured\&.
+\fBmkvpropedit\fR(1)
+aborts right after outputting the error message\&. Error messages range from wrong command line arguments over read/write errors to broken files\&.
+.RE
+.SH "SEE ALSO"
+.PP
+
+\fBmkvmerge\fR(1),
+\fBmkvinfo\fR(1),
+\fBmkvextract\fR(1),
+\fBmmg\fR(1)
+.SH "WWW"
+.PP
+The latest version can always be found at
+\fIthe MKVToolNix homepage\fR\&[1]\&.
+.SH "AUTHOR"
+.PP
+\fBMoritz Bunkus\fR <\&moritz@bunkus\&.org\&>
+.sp -1n
+.IP "" 4
+Developer
+.SH "NOTES"
+.IP " 1." 4
+the MKVToolNix homepage
+.RS 4
+\%http://www.bunkus.org/videotools/mkvtoolnix/
+.RE
