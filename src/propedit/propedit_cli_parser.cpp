@@ -39,7 +39,7 @@ propedit_cli_parser_c::set_parse_mode() {
   try {
     m_options->set_parse_mode(m_next_arg);
   } catch (...) {
-    mxerror(boost::format(Y("Unknown parse mode in '%1% %2%'.")) % m_current_arg % m_next_arg);
+    mxerror(boost::format(Y("Unknown parse mode in '%1% %2%'.\n")) % m_current_arg % m_next_arg);
   }
 }
 
