@@ -103,6 +103,7 @@ Section "Program files" SEC01
   File "doc\mkvmerge-gui.hhp"
   File "doc\mkvmerge-gui.html"
   File "doc\mkvmerge.html"
+  File "doc\mkvpropedit.html"
   File "doc\mmg.html"
   File "doc\README.txt"
   File "doc\README.Windows.txt"
@@ -176,6 +177,7 @@ Section "Program files" SEC01
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\mkvmerge CLI reference.lnk" "$INSTDIR\doc\mkvmerge.html"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\mkvinfo CLI reference.lnk" "$INSTDIR\doc\mkvinfo.html"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\mkvextract CLI reference.lnk" "$INSTDIR\doc\mkvextract.html"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\mkvpropedit CLI reference.lnk" "$INSTDIR\doc\mkvpropedit.html"
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation\ChangeLog - What is new.lnk" "$INSTDIR\doc\ChangeLog.txt"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation\README.lnk" "$INSTDIR\doc\README.txt"
@@ -277,6 +279,7 @@ Section Uninstall
 
   Delete "$INSTDIR\doc\ChangeLog.txt"
   Delete "$INSTDIR\doc\COPYING.txt"
+  Delete "$INSTDIR\doc\mkvpropedit.html"
   Delete "$INSTDIR\doc\mkvextract.html"
   Delete "$INSTDIR\doc\mkvinfo.html"
   Delete "$INSTDIR\doc\mkvmerge-gui.hhc"
