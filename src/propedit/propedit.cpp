@@ -10,11 +10,67 @@
 
 #include "common/os.h"
 
+#include <matroska/KaxInfo.h>
+#include <matroska/KaxTracks.h>
+
 #include "propedit/propedit_cli_parser.h"
 #include "propedit/setup.h"
 
 static void
-run(options_cptr options) {
+display_update_element_result(const EbmlCallbacks &callbacks,
+                              kax_analyzer_c::update_element_result_e result) {
+  mxinfo(boost::format(Y("Updating the '%1%' element failed. Reason:\n")) % callbacks.DebugName);
+
+  switch (result) {
+    case kax_analyzer_c::uer_error_segment_size_for_element:
+      mxerror(Y("The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. "
+                "The process will be aborted. The file has been changed!"));
+      break;
+
+    case kax_analyzer_c::uer_error_segment_size_for_meta_seek:
+      mxerror(Y("The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. "
+                "The process will be aborted. The file has been changed!"));
+      break;
+
+    case kax_analyzer_c::uer_error_meta_seek:
+      mxerror(Y("The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. "
+                "Please use your favorite player to check this file.\n"));
+      break;
+
+    default:
+      mxerror(Y("An unknown error occured. The file has been modified."));
+  }
+}
+
+static void
+write_changes(options_cptr &options,
+              kax_analyzer_c *analyzer) {
+  std::vector<EbmlId> ids_to_write;
+  ids_to_write.push_back(KaxInfo::ClassInfos.GlobalId);
+  ids_to_write.push_back(KaxTracks::ClassInfos.GlobalId);
+
+  std::vector<EbmlId>::iterator id_to_write_it;
+  mxforeach(id_to_write_it, ids_to_write) {
+    std::vector<target_cptr>::iterator target_it;
+    mxforeach(target_it, options->m_targets) {
+      EbmlMaster &l1_element = *(*target_it)->m_level1_element;
+
+      if (*id_to_write_it != l1_element.Generic().GlobalId)
+        continue;
+
+      mxverb(2, boost::format(Y("Element %1% is written.\n")) % l1_element.Generic().DebugName);
+
+      kax_analyzer_c::update_element_result_e result = analyzer->update_element(&l1_element, true);
+      if (kax_analyzer_c::uer_success != result)
+        display_update_element_result(l1_element.Generic(), result);
+
+      break;
+    }
+  }
+}
+
+static void
+run(options_cptr &options) {
   console_kax_analyzer_cptr analyzer;
 
   try {
@@ -25,6 +81,8 @@ run(options_cptr options) {
   } catch (...) {
     mxerror(boost::format("The file '%1%' could not be opened for read/write access.\n") % options->m_file_name);
   }
+
+  mxinfo(Y("The file is analyzed.\n"));
 
   analyzer->set_show_progress(options->m_show_progress);
 
@@ -40,6 +98,14 @@ run(options_cptr options) {
   }
 
   options->execute();
+
+  mxinfo(Y("The changes are written to the file.\n"));
+
+  write_changes(options, analyzer.get_object());
+
+  mxinfo(Y("Done.\n"));
+
+  mxexit(0);
 }
 
 /** \brief Setup and high level program control
