@@ -136,7 +136,7 @@ propedit_cli_parser_c::set_file_name() {
 
 void
 propedit_cli_parser_c::init_parser() {
-  add_information(YT("mkvpropedit [options] <file> [actions]"));
+  add_information(YT("mkvpropedit [options] <file> <actions>"));
 
   add_section_header(YT("Options"));
   OPT("l|list-property-names", list_property_names, YT("List all valid property names and exit"));
