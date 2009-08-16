@@ -510,7 +510,7 @@ fix_mandatory_chapter_elements(EbmlElement *e) {
       GetChildAs<KaxChapterString, EbmlUnicodeString>(d) = L"";
 
     if (FINDFIRST(&d, KaxChapterLanguage) == NULL)
-      GetChildAs<KaxChapterLanguage, EbmlString>(d) = "und";
+      GetChildAs<KaxChapterLanguage, EbmlString>(d) = "eng";
 
   } else if (dynamic_cast<KaxChapterProcess *>(e) != NULL) {
     KaxChapterProcess &p = *static_cast<KaxChapterProcess *>(e);

@@ -1,5 +1,9 @@
 2009-08-16  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Missing ChapterLanguage elements were assumed
+	to be set to "und". They're now assumed to be "eng" in accordance
+	with the Matroska specifications.
+
 	* Added a new program 'mkvpropedit' that can modify certain
 	properties of existing Matroska files. It is mmg's header editor,
 	just for the command line.
