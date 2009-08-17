@@ -13,6 +13,7 @@
 
 #include "common/os.h"
 
+#include <algorithm>
 #include <boost/regex.hpp>
 #if HAVE_NL_LANGINFO
 # include <langinfo.h>
@@ -37,30 +38,35 @@
 #endif
 
 std::vector<translation_c> translation_c::ms_available_translations;
+int translation_c::ms_active_translation_idx = 0;
 
 translation_c::translation_c(const std::string &unix_locale,
                              const std::string &windows_locale,
                              const std::string &windows_locale_sysname,
                              const std::string &english_name,
-                             const std::string &translated_name)
+                             const std::string &translated_name,
+                             bool line_breaks_anywhere)
   : m_unix_locale(unix_locale)
   , m_windows_locale(windows_locale)
   , m_windows_locale_sysname(windows_locale_sysname)
   , m_english_name(english_name)
   , m_translated_name(translated_name)
+  , m_line_breaks_anywhere(line_breaks_anywhere)
 {
 }
 
 void
 translation_c::initialize_available_translations() {
   ms_available_translations.clear();
+  ms_available_translations.push_back(translation_c("en_US", "en",    "english",  "English",             "English",  false));
 #if defined(HAVE_LIBINTL_H)
-  ms_available_translations.push_back(translation_c("en_US", "en",    "english",  "English",             "English"));
-  ms_available_translations.push_back(translation_c("de_DE", "de",    "german",   "German",              "Deutsch"));
-  ms_available_translations.push_back(translation_c("ja_JP", "ja",    "japanese", "Japanese",            "日本語"));
-  ms_available_translations.push_back(translation_c("zh_CN", "zh_CN", "chinese",  "Chinese Simplified",  "简体中文"));
-  ms_available_translations.push_back(translation_c("zh_TW", "zh_TW", "chinese",  "Chinese Traditional", "繁體中文"));
+  ms_available_translations.push_back(translation_c("de_DE", "de",    "german",   "German",              "Deutsch",  false));
+  ms_available_translations.push_back(translation_c("ja_JP", "ja",    "japanese", "Japanese",            "日本語",   true));
+  ms_available_translations.push_back(translation_c("zh_CN", "zh_CN", "chinese",  "Chinese Simplified",  "简体中文", true));
+  ms_available_translations.push_back(translation_c("zh_TW", "zh_TW", "chinese",  "Chinese Traditional", "繁體中文", true));
 #endif
+
+  ms_active_translation_idx = 0;
 }
 
 int
@@ -150,6 +156,20 @@ translation_c::get_locale() {
 #endif
 }
 
+translation_c &
+translation_c::get_active_translation() {
+  return ms_available_translations[ms_active_translation_idx];
+}
+
+void
+translation_c::set_active_translation(const std::string &locale) {
+  int idx                   = look_up_translation(locale);
+  ms_active_translation_idx = std::max(idx, 0);
+
+  if (debugging_requested("locale"))
+    mxinfo(boost::format("[translation_c::set_active_translation() active_translation_idx %1% for locale %2%]\n") % ms_active_translation_idx % locale);
+}
+
 // ------------------------------------------------------------
 
 translatable_string_c::translatable_string_c()
@@ -220,6 +240,8 @@ init_locales(std::string locale) {
 
     set_environment_variable("LANG",        locale);
     set_environment_variable("LC_MESSAGES", locale);
+
+    translation_c::set_active_translation(locale);
   }
 
   locale_dir = get_installation_path() + "\\locale";
@@ -254,14 +276,16 @@ init_locales(std::string locale) {
   if (chosen_locale.empty())
     mxerror(Y("The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"));
 
+  translation_c::set_active_translation(chosen_locale);
+
   locale_dir = MTX_LOCALE_DIR;
 # endif  // SYS_WINDOWS
 
-#if defined(SYS_APPLE)
+# if defined(SYS_APPLE)
   int result = setenv("LC_MESSAGES", chosen_locale.c_str(), 1);
   if (debugging_requested("locale"))
     mxinfo(boost::format("[init_locales setenv() return code: %1%]\n") % result);
-#endif
+# endif
 
   bindtextdomain("mkvtoolnix", locale_dir.c_str());
   textdomain("mkvtoolnix");
@@ -272,6 +296,7 @@ init_locales(std::string locale) {
 
 void
 init_locales(std::string) {
+  translation_c::initialize_available_translations();
 }
 
 #endif  // HAVE_LIBINTL_H

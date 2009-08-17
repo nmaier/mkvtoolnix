@@ -22,21 +22,26 @@
 class MTX_DLL_API translation_c {
 public:
   static std::vector<translation_c> ms_available_translations;
+  static int ms_active_translation_idx;
 
 public:
   std::string m_unix_locale, m_windows_locale, m_windows_locale_sysname, m_english_name, m_translated_name;
+  bool m_line_breaks_anywhere;
 
   translation_c(const std::string &unix_locale,
                 const std::string &windows_locale,
                 const std::string &windows_locale_sysname,
                 const std::string &english_name,
-                const std::string &translated_name);
+                const std::string &translated_name,
+                bool line_breaks_anywhere);
 
   std::string get_locale();
 
   static void initialize_available_translations();
   static int look_up_translation(const std::string &locale);
   static std::string get_default_ui_locale();
+  static translation_c &get_active_translation();
+  static void set_active_translation(const std::string &locale);
 };
 
 class MTX_DLL_API translatable_string_c {
