@@ -1840,7 +1840,6 @@ void
 setup() {
   atexit(mtx_common_cleanup);
 
-  init_stdio();
   init_locales();
 
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)

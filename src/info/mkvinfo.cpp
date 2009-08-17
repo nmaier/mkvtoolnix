@@ -1924,7 +1924,6 @@ void
 setup(const std::string &locale) {
   atexit(mtx_common_cleanup);
 
-  init_stdio();
   init_locales(locale);
 
   mm_file_io_c::setup();

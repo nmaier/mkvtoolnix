@@ -341,7 +341,6 @@ main(int argc,
      char **argv) {
   atexit(mtx_common_cleanup);
 
-  init_stdio();
   init_locales();
 
   set_process_priority(-1);

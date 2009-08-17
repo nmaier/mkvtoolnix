@@ -101,7 +101,6 @@ mmg_app::OnInit() {
   cfg = new wxConfig(wxT("mkvmergeGUI"));
   wxConfigBase::Set(cfg);
 
-  init_stdio();
   init_ui_locale();
   mm_file_io_c::setup();
   g_cc_local_utf8 = charset_converter_c::init("");

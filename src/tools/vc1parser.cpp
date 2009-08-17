@@ -282,7 +282,6 @@ show_version() {
 
 static void
 setup() {
-  init_stdio();
   init_locales();
 
   mm_file_io_c::setup();

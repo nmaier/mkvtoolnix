@@ -47,7 +47,6 @@ setup() {
   atexit(mtx_common_cleanup);
 
   init_globals();
-  init_stdio();
   init_locales();
 
   mm_file_io_c::setup();
