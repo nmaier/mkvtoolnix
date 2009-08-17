@@ -339,18 +339,9 @@ show_error(const std::string &error) {
 int
 main(int argc,
      char **argv) {
-  atexit(mtx_common_cleanup);
-
-  init_locales();
+  mtx_common_init();
 
   set_process_priority(-1);
-
-  mm_file_io_c::setup();
-  srand(time(NULL));
-  g_cc_local_utf8 = charset_converter_c::init("");
-  init_cc_stdio();
-
-  xml_element_map_init();
 
   std::string input_file;
   operation_mode_e mode;

@@ -159,15 +159,6 @@ show_version() {
   mxexit(0);
 }
 
-static void
-setup() {
-  init_locales();
-
-  mm_file_io_c::setup();
-  g_cc_local_utf8 = charset_converter_c::init("");
-  init_cc_stdio();
-}
-
 static std::string
 parse_args(std::vector<std::string> &args) {
   std::string file_name;
@@ -230,7 +221,7 @@ parse_file(const std::string &file_name) {
 int
 main(int argc,
      char **argv) {
-  setup();
+  mtx_common_init();
 
   std::vector<std::string> args = command_line_utf8(argc, argv);
   std::string file_name    = parse_args(args);

@@ -91,7 +91,7 @@ mmg_app::init_ui_locale() {
 
 bool
 mmg_app::OnInit() {
-  atexit(mtx_common_cleanup);
+  mtx_common_init();
 
   wxConfigBase *cfg;
   uint32_t i;
@@ -102,10 +102,6 @@ mmg_app::OnInit() {
   wxConfigBase::Set(cfg);
 
   init_ui_locale();
-  mm_file_io_c::setup();
-  g_cc_local_utf8 = charset_converter_c::init("");
-  init_cc_stdio();
-  xml_element_map_init();
 
   cfg->SetPath(wxT("/GUI"));
   cfg->Read(wxT("last_directory"), &last_open_dir, wxEmptyString);

@@ -1922,15 +1922,9 @@ process_file(const std::string &file_name) {
 
 void
 setup(const std::string &locale) {
-  atexit(mtx_common_cleanup);
+  mtx_common_init();
 
   init_locales(locale);
-
-  mm_file_io_c::setup();
-  g_cc_local_utf8 = charset_converter_c::init("");
-  init_cc_stdio();
-
-  xml_element_map_init();
 
   init_common_boost_formats();
 }

@@ -82,6 +82,6 @@ extern int MTX_DLL_API verbose;
 #define mxfind2(it, value, cont) ((it = std::find((cont).begin(), (cont).end(), value)) != (cont).end())
 #define map_has_key(m, k)        ((m).end() != (m).find(k))
 
-void mtx_common_cleanup();
+void MTX_DLL_API mtx_common_init();
 
 #endif // __MTX_COMMON_H

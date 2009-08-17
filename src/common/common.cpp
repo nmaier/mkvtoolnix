@@ -24,6 +24,8 @@
 #include "common/mm_io.h"
 #include "common/random.h"
 #include "common/strings/editing.h"
+#include "common/translation.h"
+#include "common/xml/element_mapping.h"
 
 // Global and static variables
 
@@ -81,8 +83,24 @@ set_process_priority(int priority) {
 #endif
 }
 
-void
+static void
 mtx_common_cleanup() {
   random_c::cleanup();
   mm_file_io_c::cleanup();
 }
+
+void
+mtx_common_init() {
+  atexit(mtx_common_cleanup);
+
+  srand(time(NULL));
+
+  init_locales();
+
+  mm_file_io_c::setup();
+  g_cc_local_utf8 = charset_converter_c::init("");
+  init_cc_stdio();
+
+  xml_element_map_init();
+}
+

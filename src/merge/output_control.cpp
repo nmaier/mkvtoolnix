@@ -1838,22 +1838,14 @@ main_loop() {
 */
 void
 setup() {
-  atexit(mtx_common_cleanup);
-
-  init_locales();
+  mtx_common_init();
 
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
   signal(SIGUSR1, sighandler);
   signal(SIGINT, sighandler);
 #endif
 
-  mm_file_io_c::setup();
-  g_cc_local_utf8 = charset_converter_c::init("");
-  init_cc_stdio();
-
   g_cluster_helper = new cluster_helper_c();
-
-  xml_element_map_init();
 }
 
 /** \brief Deletes the file readers and other associated objects
