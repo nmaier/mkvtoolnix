@@ -44,6 +44,9 @@ charset_converter_cptr g_cc_local_utf8;
 
 std::map<std::string, charset_converter_cptr> charset_converter_c::s_converters;
 
+charset_converter_c::charset_converter_c() {
+}
+
 charset_converter_c::charset_converter_c(const std::string &charset)
   : m_charset(charset)
 {

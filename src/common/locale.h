@@ -34,6 +34,7 @@ protected:
   std::string m_charset;
 
 public:
+  charset_converter_c();
   charset_converter_c(const std::string &charset);
   virtual ~charset_converter_c();
 
