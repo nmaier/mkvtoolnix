@@ -172,18 +172,15 @@ handle_common_cli_args(std::vector<std::string> &args,
       if ((i + 1) == args.size())
         mxerror("Missing argument for '--debug'.\n");
 
+      if (!debug_options_found)
+        clear_debugging_requests();
+
       request_debugging(args[i + 1]);
       debug_options_found = true;
 
       args.erase(args.begin() + i, args.begin() + i + 2);
     } else
       ++i;
-  }
-
-  if (!debug_options_found) {
-    const char *value = getenv("MKVTOOLNIX_DEBUG");
-    if (NULL != value)
-      request_debugging(value);
   }
 
   // First see if there's an output charset given.

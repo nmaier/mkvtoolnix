@@ -56,3 +56,14 @@ request_debugging(const std::string &options) {
   }
 }
 
+void
+clear_debugging_requests() {
+  s_debugging_options.clear();
+}
+
+void
+init_debugging() {
+  const char *value = getenv("MKVTOOLNIX_DEBUG");
+  if (NULL != value)
+    request_debugging(value);
+}

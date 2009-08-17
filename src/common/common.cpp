@@ -95,6 +95,8 @@ mtx_common_init() {
 
   srand(time(NULL));
 
+  init_debugging();
+
   init_locales();
 
   mm_file_io_c::setup();
