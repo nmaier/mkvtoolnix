@@ -44,10 +44,10 @@ m4_include(ac/ax_docbook.m4)
 
 AC_OUTPUT(
   Makefile
-  avilib-0.6.10/Makefile
   doc/Makefile
   doc/man/Makefile
-  librmff/Makefile
+  lib/avilib-0.6.10/Makefile
+  lib/librmff/Makefile
   src/Makefile
   src/common/Makefile
   src/common/chapters/Makefile

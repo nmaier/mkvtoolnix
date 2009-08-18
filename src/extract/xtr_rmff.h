@@ -15,7 +15,7 @@
 
 #include "common/os.h"
 
-#include "librmff.h"
+#include "librmff/librmff.h"
 
 #include "extract/xtr_base.h"
 

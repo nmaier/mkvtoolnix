@@ -27,7 +27,7 @@ extern "C" {
 
 #include "common/file_types.h"
 #include "common/mm_io.h"
-#include "librmff.h"
+#include "librmff/librmff.h"
 
 using namespace libebml;
 using namespace libmatroska;

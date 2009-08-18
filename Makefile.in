@@ -125,10 +125,6 @@ CXXFLAGS += -DMTX_LOCALE_DIR=\"$(localedir)\" \
 USE_WXWIDGETS = @USE_WXWIDGETS@
 USE_QT = @USE_QT@
 
-AVILIB_INCLUDES = -Iavilib-0.6.10
-AVILIB_LIBDIRS = -Lavilib-0.6.10
-DEP_AVILIB = avilib-0.6.10/libavi.a
-
 LIBMTXCOMMONDLL=@LIBMTXCOMMONDLL@
 ifeq (1,$(LIBMTXCOMMONDLL))
 LIBMTXCOMMONEXT = dll
@@ -152,8 +148,8 @@ DEP_EBMLCOMMON = src/common/libmtxebmlcommon.a
 DEP_KAXCOMMON = src/common/libmtxkaxcommon.a
 DEP_INPUT = src/input/libmtxinput.a
 DEP_OUTPUT = src/output/libmtxoutput.a
-DEP_AVI = $(DEP_AVILIB)
-DEP_RMFF = librmff/librmff.a
+DEP_AVI = lib/avilib-0.6.10/libavi.a
+DEP_RMFF = lib/librmff/librmff.a
 DEP_MPEGPARSER = src/mpegparser/libmpegparser.a
 COMPRESSION_LIBRARIES = $(LZO_LIBS) $(BZ2_LIBS)
 
@@ -170,11 +166,9 @@ TRANSLATIONS_MOS = $(patsubst %.po,%.mo,$(TRANSLATIONS_POS))
 
 HTMLHELPBOOKS = mkvmerge-gui-book
 
-SYSTEM_INCLUDES = $(AVILIB_INCLUDES) \
-		-I. -Ilibrmff -Isrc
-SYSTEM_LIBDIRS = $(AVILIB_LIBDIRS) \
-		-Llibrmff -Lsrc/common -Lsrc/input -Lsrc/output \
-		-Lsrc/mpegparser
+SYSTEM_INCLUDES = -I. -Ilib -Ilib/avilib-0.6.10 -Isrc
+SYSTEM_LIBDIRS = -Llib/avilib-0.6.10 -Llib/librmff \
+		-Lsrc/common -Lsrc/input -Lsrc/output -Lsrc/mpegparser
 
 RUNAR = $(AR) rcu
 LINK = $(CXX) $(LDFLAGS) $(LIBDIRS) $(SYSTEM_LIBDIRS)
@@ -184,8 +178,8 @@ CXXCOMPILE = $(CXX) $(CXXFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES)
 CCOMPILE = $(CC) $(CFLAGS) $(INCLUDES) $(SYSTEM_INCLUDES)
 RCCOMPILE = $(WINDRES) $(WXWIDGETS_INCLUDES) -Isrc/mmg
 
-ALL_SOURCES=$(wildcard avilib-0.6.10/*.c) $(wildcard avilib-0.6.10/*.cpp) \
-		$(wildcard librmff/*.c) \
+ALL_SOURCES=$(wildcard lib/avilib-0.6.10/*.c) $(wildcard lib/avilib-0.6.10/*.cpp) \
+		$(wildcard lib/librmff/*.c) \
 		$(wildcard src/*.cpp) $(wildcard src/input/*.cpp) \
 		$(wildcard src/output/*.cpp) $(wildcard src/common/*.cpp) \
 		$(wildcard src/common/*/*.cpp) \
@@ -195,7 +189,7 @@ ALL_SOURCES=$(wildcard avilib-0.6.10/*.c) $(wildcard avilib-0.6.10/*.cpp) \
 		$(wildcard src/mpegparser/*.cpp) \
 		$(patsubst %.ui,%.h,$(UIFILES))
 
-ALL_HEADERS=$(wildcard avilib-0.6.10/*.h) $(wildcard librmff/*.h) \
+ALL_HEADERS=$(wildcard lib/avilib-0.6.10/*.h) $(wildcard lib/librmff/*.h) \
 		$(wildcard src/*.h) $(wildcard src/input/*.h) \
 		$(wildcard src/output/*.h) $(wildcard src/common/*.h) \
 		$(wildcard src/mmg/*.h) $(wildcard src/mmg/*/*.h) \
@@ -371,10 +365,10 @@ TAGS: $(ALL_SOURCES)
 # avilib-0.6.10
 #
 
-libavi_SOURCES = $(wildcard avilib-0.6.10/*.c) $(wildcard avilib-0.6.10/*.cpp)
+libavi_SOURCES = $(wildcard lib/avilib-0.6.10/*.c) $(wildcard lib/avilib-0.6.10/*.cpp)
 libavi_OBJECTS := $(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(libavi_SOURCES)))
 
-avilib-0.6.10/libavi.a: $(libavi_OBJECTS)
+lib/avilib-0.6.10/libavi.a: $(libavi_OBJECTS)
 	@rm -f $@
 	@echo '      AR ' $@
 	$(Q)$(RUNAR) $@ $(libavi_OBJECTS)
@@ -384,10 +378,10 @@ avilib-0.6.10/libavi.a: $(libavi_OBJECTS)
 #
 # librmff
 #
-librmff_SOURCES = $(wildcard librmff/*.c)
+librmff_SOURCES = $(wildcard lib/librmff/*.c)
 librmff_OBJECTS := $(patsubst %.c,%.o,$(librmff_SOURCES))
 
-librmff/librmff.a: $(librmff_OBJECTS)
+lib/librmff/librmff.a: $(librmff_OBJECTS)
 	@rm -f $@
 	@echo '      AR ' $@
 	$(Q)$(RUNAR) $@ $(librmff_OBJECTS)
@@ -508,7 +502,7 @@ mkvinfo_LDADD += -lexpat $(ICONV_LIBS) $(LIBINTL_LIBS) $(LIBRPCRT)
 mkvextract_SOURCES = $(wildcard src/extract/*.cpp)
 mkvextract_OBJECTS := $(patsubst %.cpp,%.o,$(mkvextract_SOURCES)) \
 		$(patsubst %.rc,%.o,$(mkvextract_RESOURCES))
-mkvextract_DEPENDENCIES += $(DEP_COMMON) $(DEP_AVILIB) $(DEP_RMFF)
+mkvextract_DEPENDENCIES += $(DEP_COMMON) $(DEP_AVI) $(DEP_RMFF)
 mkvextract_LDADD = -lmtxcommon $(MAGIC_LIBS) -lvorbis -logg -lavi -lmatroska -lebml -lrmff \
 		$(ICONV_LIBS) $(LIBINTL_LIBS) -lexpat \
 		-lz $(COMPRESSION_LIBRARIES) $(LIBRPCRT) \
@@ -521,7 +515,7 @@ mkvextract_LDADD = -lmtxcommon $(MAGIC_LIBS) -lvorbis -logg -lavi -lmatroska -le
 mkvpropedit_SOURCES = $(wildcard src/propedit/*.cpp)
 mkvpropedit_OBJECTS := $(patsubst %.cpp,%.o,$(mkvpropedit_SOURCES)) \
 		$(patsubst %.rc,%.o,$(mkvpropedit_RESOURCES))
-mkvpropedit_DEPENDENCIES += $(DEP_COMMON) $(DEP_AVILIB) $(DEP_RMFF)
+mkvpropedit_DEPENDENCIES += $(DEP_COMMON) $(DEP_AVI) $(DEP_RMFF)
 mkvpropedit_LDADD = -lmtxcommon $(MAGIC_LIBS) -lvorbis -logg -lavi -lmatroska -lebml -lrmff \
 		$(ICONV_LIBS) $(LIBINTL_LIBS) -lexpat \
 		-lz $(COMPRESSION_LIBRARIES) $(LIBRPCRT) \
