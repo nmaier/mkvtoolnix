@@ -140,7 +140,7 @@ fix_format(const char *fmt,
 #endif
 }
 
-static std::wstring
+std::wstring
 format_paragraph(const std::wstring &text_to_wrap,
                  int indent_column,
                  const std::wstring &indent_first_line,

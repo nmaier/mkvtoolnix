@@ -44,6 +44,13 @@ std::string MTX_DLL_API format_paragraph(const std::string &text_to_wrap,
                                          int wrap_column                      = WRAP_COLUMN,
                                          const char *break_chars              = " ,.)/:");
 
+std::wstring MTX_DLL_API format_paragraph(const std::wstring &text_to_wrap,
+                                          int indent_column                     = 0,
+                                          const std::wstring &indent_first_line = L" ",
+                                          std::wstring indent_following_lines   = L" ",
+                                          int wrap_column                       = WRAP_COLUMN,
+                                          const std::wstring &break_chars       = L" ,.)/:");
+
 void MTX_DLL_API fix_format(const char *fmt, std::string &new_fmt);
 
 std::string MTX_DLL_API to_string(int value);
