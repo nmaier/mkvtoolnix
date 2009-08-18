@@ -253,7 +253,7 @@ tab_input::select_file(bool append) {
   for (ae = 0; ae < all_extensions.size(); ae++) {
     if (a_exts.Length() > 0)
       a_exts += wxT(";");
-    a_exts += wxString::Format(wxT("*.%s"), all_extensions[ae].c_str());
+    a_exts += wxString::Format(wxT("*.%s;*.%s"), all_extensions[ae].c_str(), all_extensions[ae].Upper().c_str());
   }
 
   media_files.Printf(Z("All supported media files|%s%s|%s"), a_exts.c_str(), rest.c_str(), ALLFILES.c_str());

@@ -1,3 +1,10 @@
+2009-08-18  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: enhancement: The file dialogs for 'add file'/'append file'
+	will show files with extensions in all uppercase as well. This
+	only applies to file systems that distinguish between case
+	(e.g. most of the non-Windows, non-FAT world). Fix for bug 433.
+
 2009-08-16  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Missing ChapterLanguage elements were assumed
