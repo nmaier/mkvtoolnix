@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: zh-TW\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-08-13 07:13+0800\n"
+"PO-Revision-Date: 2009-08-18 02:56+0800\n"
 "Last-Translator: Dong-Jun Wu <ziyawu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <ziyawu@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -562,35 +562,31 @@ msgstr ""
 
 #: src/propedit/propedit_cli_parser.cpp:94
 msgid "  B:  boolean (0 or 1)\n"
-msgstr ""
+msgstr "  B:  布林值 (0 或 1)\n"
 
 #: src/propedit/propedit_cli_parser.cpp:98
-#, fuzzy
 msgid "  FP: floating point number\n"
-msgstr "浮點數"
+msgstr "  FP: 浮點數\n"
 
 #: src/propedit/propedit_cli_parser.cpp:95
-#, fuzzy
 msgid "  S:  string\n"
-msgstr "字串"
+msgstr "  S:  字串\n"
 
 #: src/propedit/propedit_cli_parser.cpp:92
-#, fuzzy
 msgid "  SI: signed integer\n"
-msgstr "帶符號整數"
+msgstr "  SI: 帶正負號的整數\n"
 
 #: src/propedit/propedit_cli_parser.cpp:93
-#, fuzzy
 msgid "  UI: unsigned integer\n"
-msgstr "不帶正負號的整數"
+msgstr "  UI: 不帶正負號的整數\n"
 
 #: src/propedit/propedit_cli_parser.cpp:96
 msgid "  US: Unicode string\n"
-msgstr ""
+msgstr "  US: Unicode 字串\n"
 
 #: src/propedit/propedit_cli_parser.cpp:97
 msgid "  X:  binary in hex\n"
-msgstr ""
+msgstr "  X:  用十六進位表示二進位檔\n"
 
 #: src/info/mkvinfo.cpp:974
 msgid " (FourCC: %1%%2%%3%%4%, 0x%|5$08x|)"
@@ -623,7 +619,7 @@ msgstr " (任意調整大小)"
 
 #: src/info/mkvinfo.cpp:685
 msgid " (inches)"
-msgstr " (英吋)"
+msgstr " (英寸)"
 
 #: src/info/mkvinfo.cpp:713
 msgid " (keep aspect ratio)"
@@ -1671,9 +1667,8 @@ msgid "About mkvmerge's GUI"
 msgstr "關於 mkvmerge's GUI"
 
 #: src/propedit/propedit_cli_parser.cpp:145
-#, fuzzy
 msgid "Actions"
-msgstr "附加"
+msgstr "動作"
 
 #: src/mmg/cli_options_dlg.cpp:47
 msgid "Add"
@@ -1717,7 +1712,7 @@ msgstr "附加"
 
 #: src/propedit/propedit_cli_parser.cpp:148
 msgid "Adds a property with the value even if such a property already exists"
-msgstr ""
+msgstr "以此數值加入屬性，即使這個屬性已經存在"
 
 #: src/mmg/mmg_dialog.cpp:110
 msgid "Adds the current settings as a new job entry to the job queue"
@@ -1757,7 +1752,7 @@ msgstr "所有表頭值正常。"
 
 #: src/propedit/propedit_cli_parser.cpp:85
 msgid "All known property names and their meaning\n"
-msgstr ""
+msgstr "所有已知的屬性名稱和代表意義\n"
 
 #: src/mmg/tabs/input.cpp:259
 #, c-format
@@ -2041,19 +2036,19 @@ msgstr "讓 mkvmerge 向不包含持續時間欄位的 VobSub 字幕包加入 '�
 
 #: src/propedit/change.cpp:206
 msgid "Change for '%1%' executed. No property of this type found. One entry added.\n"
-msgstr ""
+msgstr "'%1%' 的變更已執行。未發現這類型的屬性。加入了一個項目。\n"
 
 #: src/propedit/change.cpp:186
 msgid "Change for '%1%' executed. Number of entries deleted: %2%\n"
-msgstr ""
+msgstr "'%1%' 的變更已執行。刪除了一些項目: %2%\n"
 
 #: src/propedit/change.cpp:212
 msgid "Change for '%1%' executed. Number of entries set: %2%.\n"
-msgstr ""
+msgstr "'%1%' 的變更已執行。設定了一些項目: %2%.\n"
 
 #: src/propedit/change.cpp:223
 msgid "Change for '%1%' executed. One entry added.\n"
-msgstr ""
+msgstr "'%1%' 的變更已執行。加入了一個項目。\n"
 
 #: src/mmg/mmg_dialog.cpp:93
 msgid "Change mmg's preferences and options"
@@ -2176,9 +2171,8 @@ msgid "Chapters: %1% entries"
 msgstr "章節: %1% 項目"
 
 #: src/common/cli_parser.cpp:164
-#, fuzzy
 msgid "Charset for strings on the command line"
-msgstr "允許您向命令列添加任意選項"
+msgstr "命令列上字串的字元集"
 
 #: src/mmg/tabs/global.cpp:194
 #: src/mmg/tabs/input_format.cpp:150
@@ -2695,7 +2689,7 @@ msgstr "延遲: %|1$.3f|ms"
 
 #: src/propedit/propedit_cli_parser.cpp:151
 msgid "Delete all occurences of a property"
-msgstr ""
+msgstr "刪除一個屬性的所有事件"
 
 #: src/mmg/jobs.cpp:396
 msgid "Delete the selected job(s) from the job queue"
@@ -2762,7 +2756,7 @@ msgstr "顯示寬度: %1%"
 
 #: src/mmg/cli_options_dlg.cpp:111
 msgid "Do not add an entry for the chapters in the meta seek element."
-msgstr "不要在變換定位元件中添加章節入口。"
+msgstr "不要在變換定位元件中添加章節項目。"
 
 #: src/mmg/cli_options_dlg.cpp:113
 msgid "Do not write meta seek elements at all."
@@ -2789,9 +2783,8 @@ msgid "Dolby TrueHD"
 msgstr "Dolby TrueHD"
 
 #: src/propedit/propedit.cpp:106
-#, fuzzy
 msgid "Done.\n"
-msgstr " 完成\n"
+msgstr "完成。\n"
 
 #: src/info/mkvinfo.cpp:161
 msgid "Duration: %|1$.3f|ms"
@@ -2839,7 +2832,7 @@ msgstr "Ebml 空隙 (大小: %1%)"
 
 #: src/propedit/propedit_cli_parser.cpp:159
 msgid "Edit selectors"
-msgstr ""
+msgstr "編輯選擇器"
 
 #: src/mmg/tabs/chapters.cpp:456
 #, c-format
@@ -2854,12 +2847,11 @@ msgstr "版本 %u"
 
 #: src/propedit/propedit.cpp:61
 msgid "Element %1% is written.\n"
-msgstr ""
+msgstr "元件 %1% 已寫入。\n"
 
 #: src/propedit/propedit_cli_parser.cpp:91
-#, fuzzy
 msgid "Element types:\n"
-msgstr "元件"
+msgstr "元件類型:\n"
 
 #: src/info/qt_ui.cpp:54
 msgid "Elements"
@@ -2867,7 +2859,7 @@ msgstr "元件"
 
 #: src/propedit/propedit_cli_parser.cpp:119
 msgid "Elements in the category '%1%' ('--edit %2%'):\n"
-msgstr ""
+msgstr "元件於類別 '%1%' ('--edit %2%'):\n"
 
 #: src/mmg/tabs/global.cpp:51
 msgid "Enable splitting..."
@@ -3196,9 +3188,8 @@ msgid "Force Xiph style lacing."
 msgstr "強制 Xiph 式緊縮。"
 
 #: src/common/cli_parser.cpp:163
-#, fuzzy
 msgid "Force the translations for 'code' to be used."
-msgstr "  --ui-language <code>     強制使用 'code' 代表的翻譯版本。\n"
+msgstr "強制使用 'code' 的翻譯。"
 
 #: src/info/mkvinfo.cpp:1045
 msgid "Forced flag: %1%"
@@ -3421,7 +3412,7 @@ msgstr "不相容的 AAC 音訊套件 (長度: %1% != len_check %2%)\n"
 
 #: src/common/cli_parser.cpp:162
 msgid "Increase verbosity."
-msgstr ""
+msgstr "增強詳細程度。"
 
 #: src/mmg/mmg_dialog.cpp:164
 msgid "Input"
@@ -3512,9 +3503,8 @@ msgid "Invalid boolean specified in '--aac-is-sbr %1%'.\n"
 msgstr "無效的布林值指定，在 '--aac-is-sbr %1%' 中。\n"
 
 #: src/propedit/propedit_cli_parser.cpp:63
-#, fuzzy
 msgid "Invalid change spec (%3%) in '%1% %2%'.\n"
-msgstr "無效軌道 ID，在 '%1% %2%'。\n"
+msgstr "無效的變更規格 (%3%)，在 '%1% %2%'。\n"
 
 #: src/merge/mkvmerge.cpp:1001
 msgid "Invalid compression option specified in '--compression %1%'.\n"
@@ -3632,9 +3622,8 @@ msgid "Invalid second: %1%"
 msgstr "無效秒數: %1%"
 
 #: src/propedit/propedit_cli_parser.cpp:51
-#, fuzzy
 msgid "Invalid selector in '%1% %2%'.\n"
-msgstr "無效軌道 ID，在 '%1% %2%'。\n"
+msgstr "無效的選擇器，在 '%1% %2%'。\n"
 
 #: src/merge/mkvmerge.cpp:815
 msgid "Invalid split size in '--split %1%'.\n"
@@ -3843,7 +3832,7 @@ msgstr "行 %1%: 此行似乎是字幕項目但時間碼為負即使添加了軌
 
 #: src/propedit/propedit_cli_parser.cpp:142
 msgid "List all valid property names and exit"
-msgstr ""
+msgstr "列出全部有效的屬性名稱並離開"
 
 #: src/mmg/mmg_dialog.cpp:117
 msgid "Load a chapter file (simple/OGM format or XML format)"
@@ -4003,9 +3992,8 @@ msgid "Missing argument for '--ui-language'.\n"
 msgstr "'--ui-language' 缺少參數。\n"
 
 #: src/common/cli_parser.cpp:98
-#, fuzzy
 msgid "Missing argument to '%1%'.\n"
-msgstr "'--ui-language' 缺少參數。\n"
+msgstr "缺少給 '%1%' 的參數。\n"
 
 #: src/mmg/mmg.cpp:164
 msgid "Missing file name"
@@ -4033,7 +4021,7 @@ msgstr "參數 '%1%' 缺少輸出檔名。\n"
 
 #: src/propedit/options.cpp:137
 msgid "Modification of properties in the section '%1%' was requested, but no corresponding level 1 element was found in the file. %2%\n"
-msgstr ""
+msgstr "在段落 '%1%' 中屬性必須修改，但檔案裡未發現符合的等級 1 元件。%2%\n"
 
 #: src/info/mkvinfo.cpp:1415
 msgid "More"
@@ -4048,9 +4036,8 @@ msgid "More than one description was given for a single attachment.\n"
 msgstr "單個附件被指定了多於一個描述。\n"
 
 #: src/propedit/options.cpp:75
-#, fuzzy
 msgid "More than one file name has been given ('%1%' and '%2%').\n"
-msgstr "無效的標籤檔名指定在 '%1% %2%'。\n"
+msgstr "指定多個檔名 ('%1%' 和 '%2%')。\n"
 
 #: src/merge/mkvmerge.cpp:1737
 msgid "More than one name was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
@@ -4207,11 +4194,8 @@ msgid "No file loaded"
 msgstr "未載入檔案"
 
 #: src/propedit/options.cpp:27
-#, fuzzy
 msgid "No file name given.\n"
-msgstr ""
-"錯誤：未給定輸出檔名。\n"
-"\n"
+msgstr "未給定檔名。\n"
 
 #: src/common/xml/element_parser.cpp:126
 msgid "No filename found after the '@'."
@@ -4257,7 +4241,7 @@ msgstr "未指定軌道 ID，在 '--%1% %2%'。\n"
 
 #: src/propedit/target.cpp:259
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
-msgstr ""
+msgstr "沒有發現符合編輯規格 '%1%' 的軌道。%2%\n"
 
 #: src/mmg/tabs/input.cpp:578
 msgid "No tracks found"
@@ -4292,11 +4276,8 @@ msgid "Not a valid Matroska file (no segment/level 0 element found)"
 msgstr "不是有效的 Matroska 檔 (未發現有效的 剪輯/0 層級元件)"
 
 #: src/propedit/options.cpp:30
-#, fuzzy
 msgid "Nothing to do.\n"
-msgstr ""
-"沒有事情可做。\n"
-"\n"
+msgstr "什麼都不做。\n"
 
 #: src/extract/mkvextract.cpp:308
 msgid ""
@@ -4403,9 +4384,8 @@ msgid "Original value:"
 msgstr "原始數值:"
 
 #: src/propedit/propedit_cli_parser.cpp:153
-#, fuzzy
 msgid "Other options"
-msgstr " 其他選項:\n"
+msgstr "其他選項"
 
 #: src/mmg/mux_dialog.cpp:72
 msgid "Output"
@@ -4416,9 +4396,8 @@ msgid "Output filename"
 msgstr "輸出檔名"
 
 #: src/common/cli_parser.cpp:165
-#, fuzzy
 msgid "Output messages in this charset"
-msgstr "  --output-charset <cset>  用指定的字元集輸出訊息\n"
+msgstr "用這個字元集輸出訊息"
 
 #: src/mmg/jobs.cpp:300
 msgid "Output of the selected jobs:"
@@ -4563,9 +4542,8 @@ msgid "Progress: 100%%%1%"
 msgstr "進度: 100%%%1%"
 
 #: src/common/kax_analyzer.cpp:1015
-#, fuzzy
 msgid "Progress: [%1%%2%] %3%%%"
-msgstr "進度: %1%%%%2%"
+msgstr "進度: [%1%%2%] %3%%%"
 
 #: src/mmg/mmg_dialog.cpp:1515
 msgid "Querying mkvmerge's capabilities"
@@ -4719,11 +4697,8 @@ msgid "Reading encrypted VOBs is not supported.\n"
 msgstr "不支援讀取加密的 VOB。\n"
 
 #: src/common/cli_parser.cpp:167
-#, fuzzy
 msgid "Reads additional command line options from the specified file (see man page)."
-msgstr ""
-"  @optionsfile             從指定檔讀取額外的命令列選項\n"
-"                           （詳見 mkvmerge 命令列使用說明）。\n"
+msgstr "從指定檔讀取額外的命令列選項 (詳見使用說明)。"
 
 #: src/info/qt_ui.cpp:154
 msgid "Ready"
@@ -4748,7 +4723,7 @@ msgstr "RealMedia 檔可能包含 HE-AAC / AAC+ / SBR AAC 音訊。某些情況�
 
 #: src/common/cli_parser.cpp:166
 msgid "Redirects all messages into this file."
-msgstr ""
+msgstr "轉移全部的訊息到這個檔案裡。"
 
 #: src/info/mkvinfo.cpp:152
 msgid "Reference block: %1%.%|2$06d|ms"
@@ -5049,15 +5024,15 @@ msgstr "設定語言值"
 
 #: src/propedit/propedit_cli_parser.cpp:150
 msgid "Sets a property to the value if it exists and add it otherwise"
-msgstr ""
+msgstr "如果屬性已存在把屬性設定為這個值，不然將屬性加入"
 
 #: src/propedit/propedit_cli_parser.cpp:146
 msgid "Sets the Matroska file section that all following add/set/delete actions operate on (see below and man page for syntax)"
-msgstr ""
+msgstr "設定 Matroska 檔案段落全部後面接著 加入/設定/刪除 動作操作 (詳見下面內容和 syntax 的使用說明)"
 
 #: src/propedit/propedit_cli_parser.cpp:143
 msgid "Sets the Matroska parser mode to 'fast' (default) or 'full'"
-msgstr ""
+msgstr "設定 Matroska 解析器模式為「快速」(預設) 或「完整」"
 
 #: src/mmg/tabs/input_format.cpp:166
 msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
@@ -5129,12 +5104,11 @@ msgstr "顯示 mkvmerge GUI 指南"
 
 #: src/common/cli_parser.cpp:168
 msgid "Show this help."
-msgstr ""
+msgstr "顯示這項說明。"
 
 #: src/common/cli_parser.cpp:169
-#, fuzzy
 msgid "Show version information."
-msgstr "顯示程式資訊"
+msgstr "顯示版本資訊。"
 
 #: src/mmg/options/mmg.cpp:100
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
@@ -5158,7 +5132,7 @@ msgstr "簽章: %1%"
 
 #: src/mmg/header_editor/value_page.cpp:74
 msgid "Signed integer"
-msgstr "帶符號整數"
+msgstr "帶正負號的整數"
 
 #: src/info/mkvinfo.cpp:1306
 msgid "Silent Track Number: %1%"
@@ -5521,7 +5495,7 @@ msgstr "此二位元資料必須為 %1% 位元組長。"
 
 #: src/propedit/propedit.cpp:102
 msgid "The changes are written to the file.\n"
-msgstr ""
+msgstr "將變更寫入檔案。\n"
 
 #: src/mmg/tabs/chapters.cpp:758
 #, c-format
@@ -5629,7 +5603,7 @@ msgstr "在指定持續時間後開始輸出新檔。時間可以以 HH:MM:SS.nn
 
 #: src/propedit/options.cpp:188
 msgid "The edit specifications '%1%' and '%2%' resolve to the same track with the UID %3%.\n"
-msgstr ""
+msgstr "此編輯規格 '%1%' 和 '%2%' 決定 UID %3% 為相同軌道。\n"
 
 #: src/mmg/header_editor/frame.cpp:656
 #: src/mmg/tabs/chapters.cpp:1887
@@ -5724,9 +5698,8 @@ msgid "The file is an unsupported container format (%s)."
 msgstr "此檔為不支援的容器格式 (%s)。"
 
 #: src/propedit/propedit.cpp:85
-#, fuzzy
 msgid "The file is analyzed.\n"
-msgstr "正在分析 Matroska 檔。"
+msgstr "檔案已分析。\n"
 
 #: src/merge/output_control.cpp:256
 msgid "The file is being fixed, part 1/4..."
@@ -5927,7 +5900,7 @@ msgstr ""
 
 #: src/propedit/change.cpp:60
 msgid "The name '%1%' is not a valid property name for the current edit specification in '%2%'.\n"
-msgstr ""
+msgstr "名稱 '%1%' 對於目前在 '%2%' 中的編輯規範不是有效的屬性名稱。\n"
 
 #: src/merge/mkvmerge.cpp:2058
 msgid "The name of the output file '%1%' and of one of the input files is the same. This would cause mkvmerge to overwrite one of your input files. This is most likely not what you want.\n"
@@ -5983,7 +5956,7 @@ msgstr "選項 '--meta-seek-size' 不再受支援。請閱讀 mkvmerge 的使用
 
 #: src/propedit/propedit_cli_parser.cpp:157
 msgid "The order of the various options is not important."
-msgstr ""
+msgstr "各種選項的順序不會影響結果。"
 
 #: src/merge/output_control.cpp:1274
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
@@ -6009,30 +5982,27 @@ msgstr "上一 UID 已在 '%1% %2%' 給出。\n"
 
 #: src/propedit/change.cpp:113
 msgid "The property value contains non-ASCII characters, but the property is not a Unicode string in '%1%'. %2%\n"
-msgstr ""
+msgstr "此屬性值包含非 ASCII 字元，但在 '%1%' 的屬性不是 Unicode 字串。%2%\n"
 
 #: src/propedit/change.cpp:155
 msgid "The property value is not a valid binary spec or it is not exactly 128 bits long in '%1%'. %2%\n"
-msgstr ""
+msgstr "此屬性值在 '%1%' 不是有效的二進位規格或者不是準確地 128 位元長。%2%\n"
 
 #: src/propedit/change.cpp:140
-#, fuzzy
 msgid "The property value is not a valid boolean in '%1%'. %2%\n"
-msgstr "上一 UID 已在 '%1% %2%' 給出。\n"
+msgstr "屬性值 '%1%' 不是有效的布林值。%2%\n"
 
 #: src/propedit/change.cpp:147
-#, fuzzy
 msgid "The property value is not a valid floating point number in '%1%'. %2%\n"
-msgstr "時間碼檔 '%2%' 的 %1% 行不包含有效的浮點數。\n"
+msgstr "屬性值 '%1%' 不是有效的浮點數。%2%\n"
 
 #: src/propedit/change.cpp:132
-#, fuzzy
 msgid "The property value is not a valid signed integer in '%1%'. %2%\n"
-msgstr "上一 UID 已在 '%1% %2%' 給出。\n"
+msgstr "屬性值 '%1%' 不是有效的帶正負號整數。%2%\n"
 
 #: src/propedit/change.cpp:126
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
-msgstr ""
+msgstr "此屬性值在 '%1%' 不是有效的不帶正負號整數。%2%\n"
 
 #: src/merge/output_control.cpp:940
 msgid "The reason is unknown."
@@ -6085,23 +6055,23 @@ msgstr "軌道 %s（自檔 '%s'）的延展設定無效。"
 
 #: src/propedit/propedit_cli_parser.cpp:165
 msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2')."
-msgstr ""
+msgstr "字串 'track:' 後面接著 'a'、'b'、's' 或 'v' 其中一個字元，而字元後面的數字 'n' 表示選擇第幾音軌、按鈕軌道、字幕軌或視訊軌 (例如 '--edit track:a2')。"
 
 #: src/propedit/propedit_cli_parser.cpp:167
 msgid "The string 'track:=uid' with 'uid' being a number selects the track whose 'track UID' element equals 'uid'."
-msgstr ""
+msgstr "字串 'track:=uid' 中的 'uid' 為一個數字，表示選擇軌道的 'track UID' 元件為 'uid'。"
 
 #: src/propedit/propedit_cli_parser.cpp:168
 msgid "The string 'track:@number' with 'number' being a number selects the track whose 'track number' element equals 'number'."
-msgstr ""
+msgstr "字串 'track:@number' 中的 'number' 為一個數字，表示選擇的軌道的 'track number' 元件為 'number'。"
 
 #: src/propedit/propedit_cli_parser.cpp:164
 msgid "The string 'track:n' with 'n' being a number selects the nth track."
-msgstr ""
+msgstr "字串 'track:n' 中的 'n' 為一個數字表示選擇第幾軌道。"
 
 #: src/propedit/propedit_cli_parser.cpp:161
 msgid "The strings 'info', 'segment_info' or 'segmentinfo' select the segment information element. This is also the default until the first '--edit' option is found."
-msgstr ""
+msgstr "字串 'info'、'segment_info' 或 'segmentinfo' 表示選擇的片段資訊元件。這項也是預設功能找到的第一個 '--edit' 選項。"
 
 #: src/merge/pr_generic.cpp:294
 msgid "The tags in '%1%' could not be parsed: some mandatory elements are missing.\n"
@@ -6321,11 +6291,11 @@ msgstr "此選項需要附加參數 'n'。告知 mkvmerge 在每叢集最多放�
 
 #: src/propedit/change.cpp:252
 msgid "This property is mandatory and cannot be deleted in '%1%'. %2%\n"
-msgstr ""
+msgstr "這項屬性在 '%1%' 中是強制的且不能刪除的。%2%\n"
 
 #: src/propedit/change.cpp:218
 msgid "This property is unique. More instances cannot be added in '%1%'. %2%\n"
-msgstr ""
+msgstr "這名稱是唯一的。多數情況下無法被加入到 '%1%'。%2%\n"
 
 #: src/merge/output_control.cpp:279
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
@@ -6483,9 +6453,8 @@ msgstr "軌道 UID: %1%"
 #: src/propedit/options.cpp:157
 #: src/propedit/propedit_cli_parser.cpp:88
 #: src/propedit/propedit_cli_parser.cpp:163
-#, fuzzy
 msgid "Track headers"
-msgstr "軌道名稱:"
+msgstr "軌道表頭"
 
 #: src/mmg/tabs/input_general.cpp:47
 msgid "Track name:"
@@ -6535,7 +6504,7 @@ msgid ""
 "(0: pixels, 1: centimeters, 2: inches)."
 msgstr ""
 "顯示寬/高度的單位類型\n"
-"(0: 像素, 1: 公分, 2: 英吋)。"
+"(0: 像素, 1: 公分, 2: 英寸)。"
 
 #: src/mmg/header_editor/value_page.cpp:80
 msgid "Type:"
@@ -6599,14 +6568,12 @@ msgid "Unknown open mode"
 msgstr "未知的開啟模式"
 
 #: src/common/cli_parser.cpp:105
-#, fuzzy
 msgid "Unknown option '%1%'.\n"
-msgstr "未知的模式 '%1%'。\n"
+msgstr "未知的選項 '%1%'。\n"
 
 #: src/propedit/propedit_cli_parser.cpp:42
-#, fuzzy
 msgid "Unknown parse mode in '%1% %2%'.\n"
-msgstr "未知的模式 '%1%'。\n"
+msgstr "未知的解析模式 '%1% %2%'。\n"
 
 #: src/input/r_avi.cpp:558
 msgid "Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n"
@@ -6638,7 +6605,7 @@ msgstr "不支援此軌道的軌道類型。\n"
 
 #: src/propedit/propedit.cpp:22
 msgid "Updating the '%1%' element failed. Reason:\n"
-msgstr ""
+msgstr "更新 '%1%' 元件失敗。原因:\n"
 
 #: src/extract/mkvextract.cpp:78
 msgid ""
@@ -6798,7 +6765,7 @@ msgstr ""
 " 選項:\n"
 "  -g, --gui      啟動 GUI (如果給定檔 inname 則開啟)。\n"
 "  inname         使用 'inname' 作為來來源檔案。\n"
-"  -v, --verbose  增強“詳細”程度。詳見使用說明文件中關於 \n"
+"  -v, --verbose  增強 “詳細” 程度。詳見使用說明文件中關於 \n"
 "                 mkvinfo 輸出什麼的詳盡說明。\n"
 "  -c, --checksum 計算並顯示畫格內容的校驗碼。\n"
 "  -s, --summary  僅顯示內容的摘要，而非所有元件。\n"
@@ -7974,14 +7941,12 @@ msgid "memory_slice_cursor_c copy c'tor: Must not be used!"
 msgstr "memory_slice_cursor_c copy c'tor: 不能用!"
 
 #: src/propedit/target.cpp:81
-#, fuzzy
 msgid "missing property name"
-msgstr "缺少檔名"
+msgstr "缺少屬性名稱"
 
 #: src/propedit/target.cpp:74
-#, fuzzy
 msgid "missing value"
-msgstr "原始數值:"
+msgstr "缺少數值"
 
 #: src/common/os.cpp:70
 #: src/common/os.cpp:165
@@ -8139,7 +8104,7 @@ msgstr "mkvmerge 編譯時沒有使用 zlib。因此不支援 QuickTime/MP4 檔�
 
 #: src/propedit/propedit_cli_parser.cpp:139
 msgid "mkvpropedit [options] <file> <actions>"
-msgstr ""
+msgstr "mkvpropedit [選項] <檔案> <動作>"
 
 #: src/common/mm_io.cpp:1203
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
@@ -8440,9 +8405,8 @@ msgid "usf_reader: Source is not a valid USF file."
 msgstr "usf_reader: 來來源非有效的 USF 檔案。"
 
 #: src/common/strings/editing.cpp:274
-#, fuzzy
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
-msgstr "mm_text_io_c::read_next_char(): 無效 UTF-8 字元。第一位元組: 0x%|1$02x|"
+msgstr "utf8_strlen(): 無效 UTF-8 字元。第一位元組: 0x%|1$02x|"
 
 #: src/input/r_vc1.cpp:83
 msgid "vc1_es_reader: Could not open the source file."
