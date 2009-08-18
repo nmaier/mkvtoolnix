@@ -15,6 +15,7 @@
 
 #include "common/common.h"
 #include "common/strings/formatting.h"
+#include "common/strings/utf8.h"
 
 std::string
 format_timecode(int64_t timecode,
@@ -139,41 +140,41 @@ fix_format(const char *fmt,
 #endif
 }
 
-std::string
-format_paragraph(const std::string &text_to_wrap,
+static std::wstring
+format_paragraph(const std::wstring &text_to_wrap,
                  int indent_column,
-                 const std::string &indent_first_line,
-                 std::string indent_following_lines,
+                 const std::wstring &indent_first_line,
+                 std::wstring indent_following_lines,
                  int wrap_column,
-                 const char *break_chars) {
-  std::string text   = indent_first_line;
-  int current_column = utf8_strlen(text);
+                 const std::wstring &break_chars) {
+  std::wstring text  = indent_first_line;
+  int current_column = text.length();
 
   if ((0 != indent_column) && (current_column >= indent_column)) {
-    text           += "\n";
+    text           += L"\n";
     current_column  = 0;
   }
 
   if (indent_following_lines.empty())
-    indent_following_lines = std::string(indent_column, ' ');
+    indent_following_lines = std::wstring(indent_column, L' ');
 
-  text                                += std::string(indent_column - current_column, ' ');
+  text                                += std::wstring(indent_column - current_column, L' ');
   current_column                       = indent_column;
-  std::string::size_type current_pos   = 0;
+  std::wstring::size_type current_pos  = 0;
   bool first_word_in_line              = true;
   bool needs_space                     = false;
 
   while (text_to_wrap.length() > current_pos) {
-    std::string::size_type word_start = text_to_wrap.find_first_not_of(" ", current_pos);
+    std::wstring::size_type word_start = text_to_wrap.find_first_not_of(L" ", current_pos);
     if (std::string::npos == word_start)
       break;
 
     if (word_start != current_pos)
       needs_space = true;
 
-    std::string::size_type word_end = text_to_wrap.find_first_of(break_chars, word_start);
-    char next_needs_space           = false;
-    if (std::string::npos == word_end)
+    std::wstring::size_type word_end = text_to_wrap.find_first_of(break_chars, word_start);
+    char next_needs_space            = false;
+    if (std::wstring::npos == word_end)
       word_end = text_to_wrap.length();
 
     else if (text_to_wrap[word_end] != ' ')
@@ -182,18 +183,18 @@ format_paragraph(const std::string &text_to_wrap,
     else
       next_needs_space = true;
 
-    std::string word     = text_to_wrap.substr(word_start, word_end - word_start);
-    size_t word_length   = utf8_strlen(word);
+    std::wstring word    = text_to_wrap.substr(word_start, word_end - word_start);
+    size_t word_length   = word.length();
     bool needs_space_now = needs_space && (0 != word.find_first_of(break_chars));
 
     if (!first_word_in_line && ((current_column + (needs_space_now ? 0 : 1) + word_length) >= wrap_column)) {
-      text               += "\n" + indent_following_lines;
+      text               += L"\n" + indent_following_lines;
       current_column      = indent_column;
       first_word_in_line  = true;
     }
 
     if (!first_word_in_line && needs_space_now) {
-      text += " ";
+      text += L" ";
       ++current_column;
     }
 
@@ -204,7 +205,17 @@ format_paragraph(const std::string &text_to_wrap,
     needs_space         = next_needs_space;
   }
 
-  text += "\n";
+  text += L"\n";
 
   return text;
+}
+
+std::string
+format_paragraph(const std::string &text_to_wrap,
+                 int indent_column,
+                 const std::string &indent_first_line,
+                 std::string indent_following_lines,
+                 int wrap_column,
+                 const char *break_chars) {
+  return to_utf8(format_paragraph(to_wide(text_to_wrap), indent_column, to_wide(indent_first_line), to_wide(indent_following_lines), wrap_column, to_wide(break_chars)));
 }
