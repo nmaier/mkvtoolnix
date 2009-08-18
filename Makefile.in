@@ -166,7 +166,7 @@ TRANSLATIONS_MOS = $(patsubst %.po,%.mo,$(TRANSLATIONS_POS))
 
 HTMLHELPBOOKS = mkvmerge-gui-book
 
-SYSTEM_INCLUDES = -I. -Ilib -Ilib/avilib-0.6.10 -Isrc
+SYSTEM_INCLUDES = -I. -Ilib -Ilib/avilib-0.6.10 -Ilib/utf8-cpp/source -Isrc
 SYSTEM_LIBDIRS = -Llib/avilib-0.6.10 -Llib/librmff \
 		-Lsrc/common -Lsrc/input -Lsrc/output -Lsrc/mpegparser
 

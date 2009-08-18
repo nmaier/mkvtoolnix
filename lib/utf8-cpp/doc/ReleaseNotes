@@ -1,0 +1,22 @@
+utf8 cpp library
+<<<<<<< .mine
+Release 2.3
+=======
+Release 2.2.1
+>>>>>>> .r98
+
+<<<<<<< .mine
+This is a bug fix release. 
+=======
+This is a minor bug fix release aimed at supporting GCC 4.3. 
+>>>>>>> .r98
+
+<<<<<<< .mine
+Changes from version 2.2
+- Bug fix: ID: 2830326 :  multiple definition of `utf8::internal::is_overlong_sequence
+=======
+Changes from version 2.2
+- Bug fix [ ID: 2823847 ] "warning from GCC 4.3"
+>>>>>>> .r98
+
+Files included in the release: utf8.h, core.h, checked.h, unchecked.h, utf8cpp.html, ReleaseNotes
