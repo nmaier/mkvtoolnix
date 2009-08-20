@@ -625,11 +625,9 @@ map_to_iso639_2_code(const char *s,
   std::vector<std::string> names;
 
   for (i = 0; NULL != iso639_languages[i].iso639_2_code; ++i)
-    if (!strcmp(iso639_languages[i].iso639_2_code, s) ||
-        ((NULL != iso639_languages[i].terminology_abbrev) &&
-         !strcmp(iso639_languages[i].terminology_abbrev, s)) ||
-        ((NULL != iso639_languages[i].iso639_1_code) &&
-         !strcmp(iso639_languages[i].iso639_1_code, s)))
+    if (                                                        !strcmp(iso639_languages[i].iso639_2_code,      s)
+        || ((NULL != iso639_languages[i].terminology_abbrev) && !strcmp(iso639_languages[i].terminology_abbrev, s))
+        || ((NULL != iso639_languages[i].iso639_1_code)      && !strcmp(iso639_languages[i].iso639_1_code,      s)))
       return i;
 
   for (i = 0; NULL != iso639_languages[i].iso639_2_code; ++i) {
