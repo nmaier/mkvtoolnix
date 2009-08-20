@@ -424,7 +424,7 @@ const iso639_language_t iso639_languages[] = {
   { "Scottish Gaelic; Gaelic",                        "gla", "gd", NULL  },
   { "Selkup",                                         "sel", NULL, NULL  },
   { "Semitic (Other)",                                "sem", NULL, NULL  },
-  { "Serbian",                                        "scc", "sr", "srp" },
+  { "Serbian",                                        "srp", "sr", NULL  },
   { "Serer",                                          "srr", NULL, NULL  },
   { "Shan",                                           "shn", NULL, NULL  },
   { "Shona",                                          "sna", "sn", NULL  },
