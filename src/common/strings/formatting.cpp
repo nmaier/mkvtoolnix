@@ -175,7 +175,7 @@ format_paragraph(const std::wstring &text_to_wrap,
       needs_space = true;
 
     std::wstring::size_type word_end = text_to_wrap.find_first_of(break_chars, word_start);
-    char next_needs_space            = false;
+    bool next_needs_space            = false;
     if (std::wstring::npos == word_end)
       word_end = text_to_wrap.length();
 
@@ -196,6 +196,9 @@ format_paragraph(const std::wstring &text_to_wrap,
         offset   += get_width_in_em(text_to_wrap[word_end - 1]);
         word_end -= 1;
       }
+
+      if (0 != offset)
+        next_needs_space = false;
 
       word_length -= offset;
       new_column  -= offset;
