@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2009-08-18 19:31+0200\n"
+"PO-Revision-Date: 2009-08-21 22:32+0200\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -550,7 +550,7 @@ msgid ""
 "                           the id TID by 'd' ms.\n"
 "                           'o/p': Adjust the timecodes by multiplying with\n"
 "                           'o/p' to fix linear drifts. 'p' defaults to\n"
-"                           1000 if omitted. Both 'o' and 'p' can be\n"
+"                           1 if omitted. Both 'o' and 'p' can be\n"
 "                           floating point numbers.\n"
 msgstr ""
 "  -y, --sync <TID:d[,o[/p]]>\n"
@@ -558,7 +558,7 @@ msgstr ""
 "                           ズラします。\n"
 "                           o/pは、長さの同期を修正するために、o/pを\n"
 "                           タイムコードにかけることで調整します。\n"
-"                           pは省略されるとデフォルト値の1000が使用されます。\n"
+"                           pは省略されるとデフォルト値の1が使用されます。\n"
 "                           oとpは浮動小数点数を取ることができます。\n"
 
 #: src/merge/mkvmerge.cpp:292
@@ -718,7 +718,7 @@ msgstr "### グローバル出力コントロール ###"
 msgid "%1% at %2%"
 msgstr ""
 
-#: src/common/command_line.cpp:256 src/merge/mkvmerge.cpp:1588
+#: src/common/command_line.cpp:253 src/merge/mkvmerge.cpp:1588
 msgid "%1% built on %2% %3%\n"
 msgstr "%1% ビルド日時 %2% %3%\n"
 
@@ -995,7 +995,7 @@ msgstr "'%1%'は--compressionの引数としてサポートされていません
 msgid "'%1%' is an unsupported argument for --cues.\n"
 msgstr "'%1%'は--cuesの引数としてサポートされていません。\n"
 
-#: src/common/command_line.cpp:208
+#: src/common/command_line.cpp:205
 msgid "'%1%' is missing the file name.\n"
 msgstr "'%1%'はファイル名がありません。\n"
 
@@ -1117,13 +1117,13 @@ msgstr "'%1%'にトラックIDが指定されていません。\n"
 msgid "'%1%' lacks the track number(s).\n"
 msgstr "'%1%'にトラック番号が指定されていません。\n"
 
-#: src/common/output.cpp:120 src/common/output.cpp:133
-#: src/common/output.cpp:146 src/common/output.cpp:167
+#: src/common/output.cpp:115 src/common/output.cpp:128
+#: src/common/output.cpp:141 src/common/output.cpp:162
 msgid "'%1%' track %2%: %3%"
 msgstr "'%1%'トラック%2%：%3%"
 
-#: src/common/output.cpp:113 src/common/output.cpp:126
-#: src/common/output.cpp:139 src/common/output.cpp:156
+#: src/common/output.cpp:108 src/common/output.cpp:121
+#: src/common/output.cpp:134 src/common/output.cpp:151
 msgid "'%1%': %2%"
 msgstr "'%1%'：%2%"
 
@@ -1872,7 +1872,7 @@ msgstr "'%1%'のMIMEタイプ自動認識：%2%\n"
 msgid "Available options:"
 msgstr "利用可能なオプション："
 
-#: src/common/command_line.cpp:231
+#: src/common/command_line.cpp:228
 msgid "Available translations:\n"
 msgstr "利用可能な翻訳：\n"
 
@@ -1982,19 +1982,19 @@ msgstr "例外をキャッチしました"
 msgid "Causes mkvmerge to add 'stop display' commands to VobSub subtitle packets that do not contain a duration field."
 msgstr "mkvmergeが表示時間フィールドを含んでいないVobSub字幕パケットに「表示停止」コマンドを付加するようにします。"
 
-#: src/propedit/change.cpp:206
+#: src/propedit/change.cpp:207
 msgid "Change for '%1%' executed. No property of this type found. One entry added.\n"
 msgstr "'%1%'への変更が実行されました。このタイプのプロパティは見つかりませんでした。1つのエントリが追加されました。\n"
 
-#: src/propedit/change.cpp:186
+#: src/propedit/change.cpp:187
 msgid "Change for '%1%' executed. Number of entries deleted: %2%\n"
 msgstr "'%1%'への変更が実行されました。このタイプのプロパティは見つかりませんでした。削除されたエントリの数：%2%個\n"
 
-#: src/propedit/change.cpp:212
+#: src/propedit/change.cpp:213
 msgid "Change for '%1%' executed. Number of entries set: %2%.\n"
 msgstr "'%1%'への変更が実行されました。このタイプのプロパティは見つかりませんでした。設定されたエントリの数：%2%個\n"
 
-#: src/propedit/change.cpp:223
+#: src/propedit/change.cpp:224
 msgid "Change for '%1%' executed. One entry added.\n"
 msgstr "'%1%'への変更が実行されました。1つのエントリが追加されました。\n"
 
@@ -2369,11 +2369,11 @@ msgstr "最初のMPEG-4 part 2ビデオフレームのコーデック設定デ�
 msgid "Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n"
 msgstr "次のOGGページを見つけられませんでした。これはOGG/OGMファイルが壊れていることを意味します。処理続行を試みます。\n"
 
-#: src/common/locale.cpp:104
+#: src/common/locale.cpp:107
 msgid "Could not initialize the iconv library for the conversion from %1% to UFT-8. Some strings will not be converted to UTF-8 and the resulting Matroska file might not comply with the Matroska specs (error: %2%, %3%).\n"
 msgstr "%1%からUTF-8へ変換するためにiconvライブラリを初期化することができませんでした。UTF-8に変換されない文字列が存在し、そのためMatroskaファイルはMatroskaの仕様から外れてしまうかもしれません（エラー：%2%、%3%）。\n"
 
-#: src/common/locale.cpp:111
+#: src/common/locale.cpp:114
 msgid "Could not initialize the iconv library for the conversion from UFT-8 to %1%. Some strings cannot be converted from UTF-8 and might be displayed incorrectly (error: %2%, %3%).\n"
 msgstr "UTF-8から%1%へ変換するためにiconvライブラリを初期化することができませんでした。UTF-8から変換されない文字列が存在し、それを正しく表示できないかもしれません（エラー：%2%、%3%）。\n"
 
@@ -2395,7 +2395,7 @@ msgstr "付随する訂正ファイル'%1%c'を開くことができませんで
 msgid "Could not open the destination file '%s' for writing. Error code: %d (%s)."
 msgstr "ファイル'%s'を開いて書き込むことができませんでした。エラーコード: %d (%s)。"
 
-#: src/common/command_line.cpp:217
+#: src/common/command_line.cpp:214
 msgid "Could not open the file '%1%' for directing the output.\n"
 msgstr "ファイル'%1%'を開いて出力を書き込むことができませんでした。\n"
 
@@ -2576,7 +2576,7 @@ msgstr ""
 msgid "Date: %1% UTC"
 msgstr ""
 
-#: src/common/output.cpp:78
+#: src/common/output.cpp:73
 msgid "Debug> "
 msgstr "Debug> "
 
@@ -2827,7 +2827,7 @@ msgstr "%1%行目でエラー発生：サブタイトル番号が見つかると
 msgid "Error initializing the tables for the chapter, tag and segment info elements: Could not find the element with the debug name '%1%'. %2%\n"
 msgstr "チャプタとタグ、セグメント情報のテーブル初期化中にエラーが発生しました：デバッグ名'%1%'の要素が見つかりませんでした。%2%\n"
 
-#: src/mmg/mmg.cpp:176 src/mmg/mmg_dialog.cpp:282 src/mmg/mmg_dialog.cpp:301
+#: src/mmg/mmg.cpp:171 src/mmg/mmg_dialog.cpp:282 src/mmg/mmg_dialog.cpp:301
 msgid "Error loading settings"
 msgstr "設定のロード中にエラーが発生しました"
 
@@ -2860,7 +2860,7 @@ msgstr "Matroskaファイルの書き込み中にエラーが発生しました"
 msgid "Error:"
 msgstr "エラー："
 
-#: src/common/output.cpp:72
+#: src/common/output.cpp:67
 msgid "Error: "
 msgstr "エラー："
 
@@ -3870,23 +3870,24 @@ msgstr ""
 msgid "Minimum cache"
 msgstr "最小キャッシュ"
 
-#: src/common/command_line.cpp:194
+#: src/common/command_line.cpp:191
 msgid "Missing argument for '--output-charset'.\n"
 msgstr "'--output-charset'に引数がありません。\n"
 
-#: src/common/command_line.cpp:228
+#: src/common/command_line.cpp:225
 msgid "Missing argument for '--ui-language'.\n"
 msgstr "'--ui-language'に引数がありません。\n"
 
 #: src/common/cli_parser.cpp:98
-msgid "Missing argument to .\n"
+#, fuzzy
+msgid "Missing argument to '%1%'.\n"
 msgstr "'%1%'に引数がありません。\n"
 
-#: src/mmg/mmg.cpp:164
+#: src/mmg/mmg.cpp:159
 msgid "Missing file name"
 msgstr "ファイル名がありません"
 
-#: src/mmg/mmg.cpp:164
+#: src/mmg/mmg.cpp:159
 msgid "Missing file name after for the option '--edit-headers'."
 msgstr "'--edit-headers'オプションの後ろにファイル名がありません。"
 
@@ -4404,7 +4405,7 @@ msgstr "進行状況"
 msgid "Progress: %1%%%%2%"
 msgstr "進行状況: %1%%%%2%"
 
-#: src/extract/mkvextract.cpp:365 src/extract/timecodes_v2.cpp:357
+#: src/extract/mkvextract.cpp:355 src/extract/timecodes_v2.cpp:357
 msgid "Progress: 100%\n"
 msgstr "進行状況: 100%\n"
 
@@ -5502,7 +5503,7 @@ msgstr "ファイル'%1%'はサポートされていないファイルタイプ�
 msgid "The file '%1%' is empty."
 msgstr "ファイル'%1%'は空です。"
 
-#: src/mmg/mmg.cpp:176
+#: src/mmg/mmg.cpp:171
 #, c-format
 msgid "The file '%s' does not exist."
 msgstr "ファイル'%s'は存在しません。"
@@ -5680,7 +5681,7 @@ msgstr "言語コード'%1%'は正しいISO639-2言語コードではないの�
 msgid "The line %1% of the timecode file '%2%' does not contain a valid floating point number.\n"
 msgstr "タイムコードファイル'%2%'の%1%行目は正しい浮動小数点数を含んでいません。\n"
 
-#: src/common/translation.cpp:255
+#: src/common/translation.cpp:277
 msgid "The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"
 msgstr "ロケールを正しく設定することができませんでした。環境変数LANG・LC_ALL・LC_MESSAGESを確認してください。\n"
 
@@ -5727,7 +5728,7 @@ msgstr ""
 "\n"
 "'mkvmerge-gui.hhp'ファイルの場所を指定してください。"
 
-#: src/propedit/change.cpp:60
+#: src/propedit/change.cpp:61
 msgid "The name '%1%' is not a valid property name for the current edit specification in '%2%'.\n"
 msgstr "%1%は現在editで指定されている%2%で有効なプロパティ名ではありません。\n"
 
@@ -5804,27 +5805,27 @@ msgstr "ピクチャタイプ'%1%'は認識されません。\n"
 msgid "The previous UID was already given in '%1% %2%'.\n"
 msgstr "'%1% %2%'で既に前のUIDは指定されています。\n"
 
-#: src/propedit/change.cpp:113
+#: src/propedit/change.cpp:114
 msgid "The property value contains non-ASCII characters, but the property is not a Unicode string in '%1%'. %2%\n"
 msgstr "'%1%'において、このプロパティの値は非ASCII文字を含んでいますが、このプロパティはユニコード文字列ではありません。%2%\n"
 
-#: src/propedit/change.cpp:155
+#: src/propedit/change.cpp:156
 msgid "The property value is not a valid binary spec or it is not exactly 128 bits long in '%1%'. %2%\n"
 msgstr "'%1%'において、このプロパティの値は有効なバイナリの仕様ではないか、128bitちょうどではありません。%2%\n"
 
-#: src/propedit/change.cpp:140
+#: src/propedit/change.cpp:141
 msgid "The property value is not a valid boolean in '%1%'. %2%\n"
 msgstr "'%1%'においてこのプロパティの値は有効なブール型ではありません。%2%\n"
 
-#: src/propedit/change.cpp:147
+#: src/propedit/change.cpp:148
 msgid "The property value is not a valid floating point number in '%1%'. %2%\n"
 msgstr "'%1%'においてこのプロパティの値は有効な浮動小数点数ではありません。%2%\n"
 
-#: src/propedit/change.cpp:132
+#: src/propedit/change.cpp:133
 msgid "The property value is not a valid signed integer in '%1%'. %2%\n"
 msgstr "'%1%'においてこのプロパティの値は符号付き整数ではありません。%2%\n"
 
-#: src/propedit/change.cpp:126
+#: src/propedit/change.cpp:127
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr "'%1%'においてこのプロパティの値は符号無し整数ではありません。%2%\n"
 
@@ -5988,7 +5989,7 @@ msgstr "2つのトラック間で横解像度が異なっています：%1%と%2
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr "ID'%1%'のファイルはありません。'--append-to'の引数が不正です。\n"
 
-#: src/common/command_line.cpp:241
+#: src/common/command_line.cpp:238
 msgid "There is no translation available for '%1%'.\n"
 msgstr "'%1%'の翻訳は利用できません。\n"
 
@@ -6104,11 +6105,11 @@ msgstr "この映像のメインタイトルとしてプレーヤが表示する
 msgid "This option needs an additional argument 'n'. Tells mkvmerge to put at most 'n' data blocks into each cluster. If the number is postfixed with 'ms' then put at most 'n' milliseconds of data into each cluster. The maximum length for a cluster that mkvmerge accepts is 60000 blocks and 32000ms; the minimum length is 100ms. Programs will only be able to seek to clusters, so creating larger clusters may lead to imprecise or slow seeking."
 msgstr "このオプションには引数'n'を追加する必要があります。mkvmergeが各クラスタに最大でn個のデータブロックを配置するようにします。もし数字の後に'ms'がついていた場合は、各クラスタに最大nミリ秒のデータを配置するようにします。mkvmergeが対応するクラスタの長さは最大で60000ブロックまたは32000ms、最小で100msです。プログラムはクラスタ単位でしかシークできないので、大きいクラスタを作成するとシークが不正確になったり遅くなったりする可能性があります。"
 
-#: src/propedit/change.cpp:252
+#: src/propedit/change.cpp:253
 msgid "This property is mandatory and cannot be deleted in '%1%'. %2%\n"
 msgstr "このプロパティは必須であり、'%1%'で削除することはできません。%2%\n"
 
-#: src/propedit/change.cpp:218
+#: src/propedit/change.cpp:219
 msgid "This property is unique. More instances cannot be added in '%1%'. %2%\n"
 msgstr "このプロパティは唯一のものです。'%1%'でさらに追加することはできません。%2%\n"
 
@@ -6996,7 +6997,7 @@ msgstr "%1%行目で警告：開始時間のタイムコードが前のエント
 msgid "Warning:"
 msgstr "警告："
 
-#: src/common/output.cpp:75
+#: src/common/output.cpp:70
 msgid "Warning: "
 msgstr "警告："
 
@@ -7681,7 +7682,7 @@ msgstr "mkdir(%1%)が失敗しました；エラーコード%2%（%3%）"
 msgid "mkvextract.cpp/show_element(): level > 9: %1%"
 msgstr ""
 
-#: src/extract/mkvextract.cpp:383
+#: src/extract/mkvextract.cpp:373
 msgid "mkvextract: Unknown mode!?\n"
 msgstr "mkvextract：未知のモード！？\n"
 

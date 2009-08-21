@@ -221,7 +221,7 @@ set_usage() {
                   "                           the id TID by 'd' ms.\n"
                   "                           'o/p': Adjust the timecodes by multiplying with\n"
                   "                           'o/p' to fix linear drifts. 'p' defaults to\n"
-                  "                           1000 if omitted. Both 'o' and 'p' can be\n"
+                  "                           1 if omitted. Both 'o' and 'p' can be\n"
                   "                           floating point numbers.\n");
   usage_text += Y("  --default-track <TID[:bool]>\n"
                   "                           Sets the 'default' flag for this track or\n"

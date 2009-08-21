@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-08-16 14:03+0200\n"
+"PO-Revision-Date: 2009-08-21 22:32+0200\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -572,15 +572,14 @@ msgid ""
 "                           the id TID by 'd' ms.\n"
 "                           'o/p': Adjust the timecodes by multiplying with\n"
 "                           'o/p' to fix linear drifts. 'p' defaults to\n"
-"                           1000 if omitted. Both 'o' and 'p' can be\n"
+"                           1 if omitted. Both 'o' and 'p' can be\n"
 "                           floating point numbers.\n"
 msgstr ""
 "  -y, --sync <TID:d[,o[/p]]>\n"
 "                           Manuelle Synchronisation. Addiert den Wert 'd' zu\n"
 "                           allen Zeitstempeln und multiplziert sie mit 'o/p'.\n"
-"                           'p' wird mit 1000 angenommen, wenn es nicht\n"
-"                           angegeben wird. 'o' und 'p' können Fließkommazahlen\n"
-"                           sein.\n"
+"                           'p' wird mit 1 angenommen, wenn es nicht angegeben\n"
+"                           wird. 'o' und 'p' können Fließkommazahlen sein.\n"
 
 #: src/merge/mkvmerge.cpp:292
 msgid ""
@@ -739,7 +738,7 @@ msgstr "### Globale Einstellungen zur Ausgabe ###"
 msgid "%1% at %2%"
 msgstr "%1% an %2%"
 
-#: src/common/command_line.cpp:256 src/merge/mkvmerge.cpp:1588
+#: src/common/command_line.cpp:253 src/merge/mkvmerge.cpp:1588
 msgid "%1% built on %2% %3%\n"
 msgstr "%1% gebaut am %2% %3%\n"
 
@@ -1018,7 +1017,7 @@ msgstr "'%1%' ist kein gültiges Argument für '--compression'. Verfügbare Opti
 msgid "'%1%' is an unsupported argument for --cues.\n"
 msgstr "'%1%' ist kein gültiges Argument für '--cues'.\n"
 
-#: src/common/command_line.cpp:208
+#: src/common/command_line.cpp:205
 msgid "'%1%' is missing the file name.\n"
 msgstr "'%1%' fehlt der Dateiname.\n"
 
@@ -1140,13 +1139,13 @@ msgstr "Der Option '%1%' fehlt die Track-ID.\n"
 msgid "'%1%' lacks the track number(s).\n"
 msgstr "Der Option '%1%' fehlen die Track-ID(s).\n"
 
-#: src/common/output.cpp:120 src/common/output.cpp:133
-#: src/common/output.cpp:146 src/common/output.cpp:167
+#: src/common/output.cpp:115 src/common/output.cpp:128
+#: src/common/output.cpp:141 src/common/output.cpp:162
 msgid "'%1%' track %2%: %3%"
 msgstr "'%1%' Track %2%: %3%"
 
-#: src/common/output.cpp:113 src/common/output.cpp:126
-#: src/common/output.cpp:139 src/common/output.cpp:156
+#: src/common/output.cpp:108 src/common/output.cpp:121
+#: src/common/output.cpp:134 src/common/output.cpp:151
 msgid "'%1%': %2%"
 msgstr "'%1%': %2%"
 
@@ -1909,7 +1908,7 @@ msgstr "Automatische MIME-Typ-Erkennung für '%1%': %2%\n"
 msgid "Available options:"
 msgstr "Verfügbare Optionen:"
 
-#: src/common/command_line.cpp:231
+#: src/common/command_line.cpp:228
 msgid "Available translations:\n"
 msgstr "Verfügbare Übersetzungen:\n"
 
@@ -2019,19 +2018,19 @@ msgstr "Eine Ausnahme wurde abgefangen."
 msgid "Causes mkvmerge to add 'stop display' commands to VobSub subtitle packets that do not contain a duration field."
 msgstr "Sorgt dafür, dass mkvmerge 'Anzeige beenden'-Befehle in VobSub-Untertitelpakete einfügt, die kein Anzeigedauerfeld enthalten."
 
-#: src/propedit/change.cpp:206
+#: src/propedit/change.cpp:207
 msgid "Change for '%1%' executed. No property of this type found. One entry added.\n"
 msgstr "Veränderung für '%1%' ausgeführt. Es wurde kein Merkmal diesen Typs gefunden. Ein Eintrag hinzugefügt.\n"
 
-#: src/propedit/change.cpp:186
+#: src/propedit/change.cpp:187
 msgid "Change for '%1%' executed. Number of entries deleted: %2%\n"
 msgstr "Veränderung für '%1%' ausgeführt. Anzahl gelöschter Einträge: %2%\n"
 
-#: src/propedit/change.cpp:212
+#: src/propedit/change.cpp:213
 msgid "Change for '%1%' executed. Number of entries set: %2%.\n"
 msgstr "Veränderung für '%1%' ausgeführt. Anzahl gesetzter Einträge: %2%\n"
 
-#: src/propedit/change.cpp:223
+#: src/propedit/change.cpp:224
 msgid "Change for '%1%' executed. One entry added.\n"
 msgstr "Veränderung für '%1%\" ausgeführt. Ein Eintrag hinzugefügt.\n"
 
@@ -2406,11 +2405,11 @@ msgstr "Die Codec-Konfigurationsdaten konnten im ersten MPEG-4 Teil 2-Videoframe
 msgid "Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n"
 msgstr "Die nächste Ogg-Seite konnte nicht gefunden werden. Das deutet auf eine beschädigte Ogg/OGM-Datei hin. Es wird versucht fortzusetzen.\n"
 
-#: src/common/locale.cpp:104
+#: src/common/locale.cpp:107
 msgid "Could not initialize the iconv library for the conversion from %1% to UFT-8. Some strings will not be converted to UTF-8 and the resulting Matroska file might not comply with the Matroska specs (error: %2%, %3%).\n"
 msgstr "Die \"iconv\"-Bibliothek konnte nicht für die Zeichensatzumwandlung von %1% nach UTF-8 initialisiert werden. Einige Zeichenketten werden somit nicht nach UTF-8 konvertiert werden können, und die entstehende Matroska-Datei wird eventuell nicht den Spezifikationen entsprechen (Fehlermeldung: %2%, %3%).\n"
 
-#: src/common/locale.cpp:111
+#: src/common/locale.cpp:114
 msgid "Could not initialize the iconv library for the conversion from UFT-8 to %1%. Some strings cannot be converted from UTF-8 and might be displayed incorrectly (error: %2%, %3%).\n"
 msgstr "Die \"iconv\"-Bibliothek konnte nicht für die Zeichensatzumwandlung von UTF-8 nach %1% nicht initialisiert werden. Einige Zeichenketten werden somit nicht von UTF-8 konvertiert werden können und werden eventuell falsch angezeigt werden (Fehlermeldung: %2%, %3%).\n"
 
@@ -2432,7 +2431,7 @@ msgstr "Die dazugehörige Korrekturdatei '%1%c' konnte nicht geöffnet werden.\n
 msgid "Could not open the destination file '%s' for writing. Error code: %d (%s)."
 msgstr "Die Zieldatei '%s' konnte nicht zum Schreiben geöffnet werden. Fehlercode: %d (%s)."
 
-#: src/common/command_line.cpp:217
+#: src/common/command_line.cpp:214
 msgid "Could not open the file '%1%' for directing the output.\n"
 msgstr "Die Datei '%1%' konnte nicht für Umleitung der Ausgabe zum Schreiben geöffnet werden.\n"
 
@@ -2613,7 +2612,7 @@ msgstr "Datum (ungültig, Wert: %1%)"
 msgid "Date: %1% UTC"
 msgstr "Datum: %1% UTC"
 
-#: src/common/output.cpp:78
+#: src/common/output.cpp:73
 msgid "Debug> "
 msgstr "Debug> "
 
@@ -2864,7 +2863,7 @@ msgstr "Fehler in Zeile %1%: Es wurde eine Untertitelnummer erwartet aber andere
 msgid "Error initializing the tables for the chapter, tag and segment info elements: Could not find the element with the debug name '%1%'. %2%\n"
 msgstr "Fehler bei der Initialisierung der Suchtabellen für Kapitel, Tags und Segmentinformationen: Es wurde kein Element mit dem Debugnamen '%1%' gefunden. %2%\n"
 
-#: src/mmg/mmg.cpp:176 src/mmg/mmg_dialog.cpp:282 src/mmg/mmg_dialog.cpp:301
+#: src/mmg/mmg.cpp:171 src/mmg/mmg_dialog.cpp:282 src/mmg/mmg_dialog.cpp:301
 msgid "Error loading settings"
 msgstr "Fehler beim Laden der Einstellungen"
 
@@ -2897,7 +2896,7 @@ msgstr "Fehler beim Schreiben der Matroska-Datei"
 msgid "Error:"
 msgstr "Fehler:"
 
-#: src/common/output.cpp:72
+#: src/common/output.cpp:67
 msgid "Error: "
 msgstr "Fehler: "
 
@@ -3906,11 +3905,11 @@ msgstr "MinCache: %1%"
 msgid "Minimum cache"
 msgstr "Minimale Cachetiefe"
 
-#: src/common/command_line.cpp:194
+#: src/common/command_line.cpp:191
 msgid "Missing argument for '--output-charset'.\n"
 msgstr "Fehlendes Argument für '--output-charset'.\n"
 
-#: src/common/command_line.cpp:228
+#: src/common/command_line.cpp:225
 msgid "Missing argument for '--ui-language'.\n"
 msgstr "Fehlendes Argument für '--ui-language'.\n"
 
@@ -3918,11 +3917,11 @@ msgstr "Fehlendes Argument für '--ui-language'.\n"
 msgid "Missing argument to '%1%'.\n"
 msgstr "Fehlendes Argument für '%1%'.\n"
 
-#: src/mmg/mmg.cpp:164
+#: src/mmg/mmg.cpp:159
 msgid "Missing file name"
 msgstr "Fehlender Dateiname"
 
-#: src/mmg/mmg.cpp:164
+#: src/mmg/mmg.cpp:159
 msgid "Missing file name after for the option '--edit-headers'."
 msgstr "Fehlender Dateiname für die Option '--edit-headers'."
 
@@ -4442,7 +4441,7 @@ msgstr "Fortschritt"
 msgid "Progress: %1%%%%2%"
 msgstr "Fortschritt: %1%%%%2%"
 
-#: src/extract/mkvextract.cpp:365 src/extract/timecodes_v2.cpp:357
+#: src/extract/mkvextract.cpp:355 src/extract/timecodes_v2.cpp:357
 msgid "Progress: 100%\n"
 msgstr "Fortschritt: 100%\n"
 
@@ -5551,7 +5550,7 @@ msgstr "Die Datei '%1%' hat einen nicht unterstützten Typ (%2%).\n"
 msgid "The file '%1%' is empty."
 msgstr "Die Datei '%1%' ist leer."
 
-#: src/mmg/mmg.cpp:176
+#: src/mmg/mmg.cpp:171
 #, c-format
 msgid "The file '%s' does not exist."
 msgstr "Die Datei '%s' existiert nicht."
@@ -5732,7 +5731,7 @@ msgstr "Das Sprachkürzel '%1%' ist kein gültiges ISO639-2-Sprachkürzel und wi
 msgid "The line %1% of the timecode file '%2%' does not contain a valid floating point number.\n"
 msgstr "Die Zeile %1% der Zeitstempeldatei '%2%' enthält keine gültige Fließkommazahl.\n"
 
-#: src/common/translation.cpp:255
+#: src/common/translation.cpp:277
 msgid "The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"
 msgstr "Die Sprachumgebung konnte nicht erfolgreich gesetzt werden. Bitte überprüfen Sie die Umgebungsvariablen LANG, LC_ALL und LC_MESSAGES.\n"
 
@@ -5783,7 +5782,7 @@ msgstr ""
 "\n"
 "Bitte wählen Sie den Ort der Datei 'mkvmerge-gui.hhp' aus."
 
-#: src/propedit/change.cpp:60
+#: src/propedit/change.cpp:61
 msgid "The name '%1%' is not a valid property name for the current edit specification in '%2%'.\n"
 msgstr "Der Name '%1%' ist kein Name eines gültigen Merkmales für das aktuelle Bearbeitungsziel '%2%'.\n"
 
@@ -5868,27 +5867,27 @@ msgstr "Der Bildtyp '%1%' wurde nicht erkannt.\n"
 msgid "The previous UID was already given in '%1% %2%'.\n"
 msgstr "Die vorherige UID wurde bereits angegeben (Argument war '%1% %2%').\n"
 
-#: src/propedit/change.cpp:113
+#: src/propedit/change.cpp:114
 msgid "The property value contains non-ASCII characters, but the property is not a Unicode string in '%1%'. %2%\n"
 msgstr "Der Merkmalswert enthalt Nicht-ASCII-Zeichen, aber das Merkmal selber ist keine Unicodezeichenkette bei '%1%'. %2%\n"
 
-#: src/propedit/change.cpp:155
+#: src/propedit/change.cpp:156
 msgid "The property value is not a valid binary spec or it is not exactly 128 bits long in '%1%'. %2%\n"
 msgstr "Der Merkmalswert ist keine gültige Hexadezimalziffer oder nicht exakt 128 Bits lang bei '%1%'. %2%\n"
 
-#: src/propedit/change.cpp:140
+#: src/propedit/change.cpp:141
 msgid "The property value is not a valid boolean in '%1%'. %2%\n"
 msgstr "Der Merkmalswert ist kein gültiger an/aus-Wert bei '%1%'. %2%\n"
 
-#: src/propedit/change.cpp:147
+#: src/propedit/change.cpp:148
 msgid "The property value is not a valid floating point number in '%1%'. %2%\n"
 msgstr "Der Merkmalswert ist keine gültige Fließkommazahl bei '%1%'. %2%\n"
 
-#: src/propedit/change.cpp:132
+#: src/propedit/change.cpp:133
 msgid "The property value is not a valid signed integer in '%1%'. %2%\n"
 msgstr "Der Merkmalswert ist keine gültige vorzeichenbehaftete Zahl bei '%1%'. %2%\n"
 
-#: src/propedit/change.cpp:126
+#: src/propedit/change.cpp:127
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr "Der Merkmalswert ist keine gültige vorzeichenlose Zahl bei '%1%'. %2%\n"
 
@@ -6055,7 +6054,7 @@ msgstr "Die Breite der zwei Tracks ist unterschiedlich: %1% und %2%"
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr "Es gibt keine Datei mit der Nummer '%1%'. Das Argument für '--append-to' war ungültig.\n"
 
-#: src/common/command_line.cpp:241
+#: src/common/command_line.cpp:238
 msgid "There is no translation available for '%1%'.\n"
 msgstr "Für '%1%' ist keine Übersetzung verfübar.\n"
 
@@ -6175,11 +6174,11 @@ msgstr "Dies ist der Titel, den Abspielprogramme als Name oder Titel des Films a
 msgid "This option needs an additional argument 'n'. Tells mkvmerge to put at most 'n' data blocks into each cluster. If the number is postfixed with 'ms' then put at most 'n' milliseconds of data into each cluster. The maximum length for a cluster that mkvmerge accepts is 60000 blocks and 32000ms; the minimum length is 100ms. Programs will only be able to seek to clusters, so creating larger clusters may lead to imprecise or slow seeking."
 msgstr "Diese Option benötigt ein zusäzliches Argument 'n'. Sie sorgt dafür, dass mkvmerge höchstens 'n' Datenblöcke in jeden Cluster schreibt. Falls die Zahl mit 'ms' aufhört, so werden höchstens 'n' Millisekunden an Daten in jeden Cluster geschrieben. Die Maximallänge eines Clusters, die mkvmerge akzeptiert, beträgt 60000 Blöcke bzw. 32000ms; die Minimallänge beträgt 100ms. Abspielprogramme können nur Clustergrenzen direkt anspringen, sodass das Erstellen großer Cluster zu ungenauem oder langsamem Springen führen kann."
 
-#: src/propedit/change.cpp:252
+#: src/propedit/change.cpp:253
 msgid "This property is mandatory and cannot be deleted in '%1%'. %2%\n"
 msgstr "Dieses Merkmal ist erforderlich und kann nicht gelöscht werden bei '%1%'. %2%\n"
 
-#: src/propedit/change.cpp:218
+#: src/propedit/change.cpp:219
 msgid "This property is unique. More instances cannot be added in '%1%'. %2%\n"
 msgstr "Dieses Merkmal ist einzigartig. Es können keine weiteren Instanzen davon angelegt werden bei '%1%'. %2%\n"
 
@@ -7096,7 +7095,7 @@ msgstr "Warnung in Zeile %1%: Der Start-Zeitstempel ist kleiner als der des vorh
 msgid "Warning:"
 msgstr "Warnung:"
 
-#: src/common/output.cpp:75
+#: src/common/output.cpp:70
 msgid "Warning: "
 msgstr "Warnung: "
 
@@ -7789,7 +7788,7 @@ msgstr "mkdir(%1%) schlug fehl; Fehlercode: %2% (%3%)"
 msgid "mkvextract.cpp/show_element(): level > 9: %1%"
 msgstr "mkvextract.cpp/show_element(): level > 9: %1%"
 
-#: src/extract/mkvextract.cpp:383
+#: src/extract/mkvextract.cpp:373
 msgid "mkvextract: Unknown mode!?\n"
 msgstr "mkvextract: Unbekannter Modus!?\n"
 

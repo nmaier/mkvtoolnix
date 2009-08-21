@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-08-12 21:09+0800\n"
+"PO-Revision-Date: 2009-08-21 22:33+0200\n"
 "Last-Translator: Dean Lee <xslidian@greatdreamers.cn>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -544,13 +544,13 @@ msgid ""
 "                           the id TID by 'd' ms.\n"
 "                           'o/p': Adjust the timecodes by multiplying with\n"
 "                           'o/p' to fix linear drifts. 'p' defaults to\n"
-"                           1000 if omitted. Both 'o' and 'p' can be\n"
+"                           1 if omitted. Both 'o' and 'p' can be\n"
 "                           floating point numbers.\n"
 msgstr ""
 "  -y, --sync, --delay <TID:d[,o[/p]]>\n"
 "                           以 'd' 毫秒同步、校准轨 TID 的时间码。\n"
 "                           'o/p': 将时间码与 'o/p' 相乘以修复线性偏差。\n"
-"                           'p' 若省略则默认为 1000。\n"
+"                           'p' 若省略则默认为 1。\n"
 "                           'o' 和 'p' 均可为浮点数。\n"
 
 #: src/merge/mkvmerge.cpp:292
@@ -719,7 +719,7 @@ msgstr "### 全局输出控制 ###"
 msgid "%1% at %2%"
 msgstr "%1% 于 %2%"
 
-#: src/common/command_line.cpp:256
+#: src/common/command_line.cpp:253
 #: src/merge/mkvmerge.cpp:1588
 msgid "%1% built on %2% %3%\n"
 msgstr "%1% 编译于 %2% %3%\n"
@@ -1006,7 +1006,7 @@ msgstr "'%1%' 是 --compression 不支持的参数。可选的压缩方式为 'n
 msgid "'%1%' is an unsupported argument for --cues.\n"
 msgstr "'%1%' 是 --cues 不支持的参数。\n"
 
-#: src/common/command_line.cpp:208
+#: src/common/command_line.cpp:205
 msgid "'%1%' is missing the file name.\n"
 msgstr "'%1%' 缺文件名。\n"
 
@@ -1133,17 +1133,17 @@ msgstr "'%1%' 缺轨道 ID。\n"
 msgid "'%1%' lacks the track number(s).\n"
 msgstr "'%1%' 缺轨道号。\n"
 
-#: src/common/output.cpp:120
-#: src/common/output.cpp:133
-#: src/common/output.cpp:146
-#: src/common/output.cpp:167
+#: src/common/output.cpp:115
+#: src/common/output.cpp:128
+#: src/common/output.cpp:141
+#: src/common/output.cpp:162
 msgid "'%1%' track %2%: %3%"
 msgstr "'%1%' 轨道 %2%: %3%"
 
-#: src/common/output.cpp:113
-#: src/common/output.cpp:126
-#: src/common/output.cpp:139
-#: src/common/output.cpp:156
+#: src/common/output.cpp:108
+#: src/common/output.cpp:121
+#: src/common/output.cpp:134
+#: src/common/output.cpp:151
 msgid "'%1%': %2%"
 msgstr "'%1%': %2%"
 
@@ -1922,7 +1922,7 @@ msgstr "对 '%1%' 的 MIME 类型的自动识别结果: %2%\n"
 msgid "Available options:"
 msgstr "可用选项:"
 
-#: src/common/command_line.cpp:231
+#: src/common/command_line.cpp:228
 msgid "Available translations:\n"
 msgstr "可用翻译:\n"
 
@@ -2040,19 +2040,19 @@ msgstr "发生异常"
 msgid "Causes mkvmerge to add 'stop display' commands to VobSub subtitle packets that do not contain a duration field."
 msgstr "让 mkvmerge 向不包含时长字段的 VobSub 字幕包添加 '停止显示' 命令。"
 
-#: src/propedit/change.cpp:206
+#: src/propedit/change.cpp:207
 msgid "Change for '%1%' executed. No property of this type found. One entry added.\n"
 msgstr ""
 
-#: src/propedit/change.cpp:186
+#: src/propedit/change.cpp:187
 msgid "Change for '%1%' executed. Number of entries deleted: %2%\n"
 msgstr ""
 
-#: src/propedit/change.cpp:212
+#: src/propedit/change.cpp:213
 msgid "Change for '%1%' executed. Number of entries set: %2%.\n"
 msgstr ""
 
-#: src/propedit/change.cpp:223
+#: src/propedit/change.cpp:224
 msgid "Change for '%1%' executed. One entry added.\n"
 msgstr ""
 
@@ -2446,11 +2446,11 @@ msgstr "在首个 MPEG-4 part 2 视频帧中找不到编解码器配置数据。
 msgid "Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n"
 msgstr "找不到 Ogg 的下一页。这表明 Ogg/Ogm 文件可能已损坏。将尝试继续。\n"
 
-#: src/common/locale.cpp:104
+#: src/common/locale.cpp:107
 msgid "Could not initialize the iconv library for the conversion from %1% to UFT-8. Some strings will not be converted to UTF-8 and the resulting Matroska file might not comply with the Matroska specs (error: %2%, %3%).\n"
 msgstr "无法初始化 iconv 库以供从 %1% 到 UTF-8 的转换。某些字串将不被转换为 UTF-8，且生成的 Matroska 文件可能不符合 Matroska 规范 (错误: %2%, %3%)。\n"
 
-#: src/common/locale.cpp:111
+#: src/common/locale.cpp:114
 msgid "Could not initialize the iconv library for the conversion from UFT-8 to %1%. Some strings cannot be converted from UTF-8 and might be displayed incorrectly (error: %2%, %3%).\n"
 msgstr "无法初始化 iconv 库以供从 UTF-8 至 %1% 的转换。某些字串未能从 UTF-8 转换，可能会被错误地显示 (错误: %2%, %3%)。\n"
 
@@ -2473,7 +2473,7 @@ msgstr "无法打开一致性校正文件 '%1%c'。\n"
 msgid "Could not open the destination file '%s' for writing. Error code: %d (%s)."
 msgstr "无法打开目标文件 '%s' 以写入。错误代号: %d (%s)。"
 
-#: src/common/command_line.cpp:217
+#: src/common/command_line.cpp:214
 msgid "Could not open the file '%1%' for directing the output.\n"
 msgstr "无法打开文件 '%1%' 以控制输出。\n"
 
@@ -2657,7 +2657,7 @@ msgstr "日期 (无效, 值: %1%)"
 msgid "Date: %1% UTC"
 msgstr "日期: %1% UTC"
 
-#: src/common/output.cpp:78
+#: src/common/output.cpp:73
 msgid "Debug> "
 msgstr "调试> "
 
@@ -2915,7 +2915,7 @@ msgstr "在行 %1% 处出错: 预期为字幕号码但发现一些文字。\n"
 msgid "Error initializing the tables for the chapter, tag and segment info elements: Could not find the element with the debug name '%1%'. %2%\n"
 msgstr "初始化章节, 标签及剪辑信息元素表时出错: 无法找到调试名为 '%1%' 的元素。%2%\n"
 
-#: src/mmg/mmg.cpp:176
+#: src/mmg/mmg.cpp:171
 #: src/mmg/mmg_dialog.cpp:282
 #: src/mmg/mmg_dialog.cpp:301
 msgid "Error loading settings"
@@ -2952,7 +2952,7 @@ msgstr "写入 Matroska 文件出错"
 msgid "Error:"
 msgstr "出错:"
 
-#: src/common/output.cpp:72
+#: src/common/output.cpp:67
 msgid "Error: "
 msgstr "出错: "
 
@@ -3995,11 +3995,11 @@ msgstr "最小缓存: %1%"
 msgid "Minimum cache"
 msgstr "最小缓存"
 
-#: src/common/command_line.cpp:194
+#: src/common/command_line.cpp:191
 msgid "Missing argument for '--output-charset'.\n"
 msgstr "'--output-charset' 缺参数。\n"
 
-#: src/common/command_line.cpp:228
+#: src/common/command_line.cpp:225
 msgid "Missing argument for '--ui-language'.\n"
 msgstr "'--ui-language' 缺参数。\n"
 
@@ -4008,11 +4008,11 @@ msgstr "'--ui-language' 缺参数。\n"
 msgid "Missing argument to '%1%'.\n"
 msgstr "'--ui-language' 缺参数。\n"
 
-#: src/mmg/mmg.cpp:164
+#: src/mmg/mmg.cpp:159
 msgid "Missing file name"
 msgstr "缺文件名"
 
-#: src/mmg/mmg.cpp:164
+#: src/mmg/mmg.cpp:159
 msgid "Missing file name after for the option '--edit-headers'."
 msgstr "选项 '--edit-headers' 后缺文件名。"
 
@@ -4554,7 +4554,7 @@ msgstr "进度"
 msgid "Progress: %1%%%%2%"
 msgstr "进度: %1%%%%2%"
 
-#: src/extract/mkvextract.cpp:365
+#: src/extract/mkvextract.cpp:355
 #: src/extract/timecodes_v2.cpp:357
 msgid "Progress: 100%\n"
 msgstr "进度: 100%\n"
@@ -5688,7 +5688,7 @@ msgstr "文件 '%1%' 类型不支持 (%2%)。\n"
 msgid "The file '%1%' is empty."
 msgstr "文件 '%1%' 为空。"
 
-#: src/mmg/mmg.cpp:176
+#: src/mmg/mmg.cpp:171
 #, c-format
 msgid "The file '%s' does not exist."
 msgstr "文件 '%s' 不存在。"
@@ -5874,7 +5874,7 @@ msgstr "语言码 '%1%' 不是有效的 ISO639-2 语言代码，将被忽略。\
 msgid "The line %1% of the timecode file '%2%' does not contain a valid floating point number.\n"
 msgstr "时间码文件 '%2%' 的 %1% 行不包含有效的浮点数。\n"
 
-#: src/common/translation.cpp:255
+#: src/common/translation.cpp:277
 msgid "The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"
 msgstr "地区无法正常设定。请检查 LANG, LC_ALL 和 LC_MESSAGES 环境变量。\n"
 
@@ -5924,7 +5924,7 @@ msgstr ""
 "\n"
 "请选择文件 'mkvmerge-gui.hhp' 的存放位置。"
 
-#: src/propedit/change.cpp:60
+#: src/propedit/change.cpp:61
 msgid "The name '%1%' is not a valid property name for the current edit specification in '%2%'.\n"
 msgstr ""
 
@@ -6006,30 +6006,30 @@ msgstr "图片类型 '%1%' 无法识别。\n"
 msgid "The previous UID was already given in '%1% %2%'.\n"
 msgstr "上一 UID 已在 '%1% %2%' 给出。\n"
 
-#: src/propedit/change.cpp:113
+#: src/propedit/change.cpp:114
 msgid "The property value contains non-ASCII characters, but the property is not a Unicode string in '%1%'. %2%\n"
 msgstr ""
 
-#: src/propedit/change.cpp:155
+#: src/propedit/change.cpp:156
 msgid "The property value is not a valid binary spec or it is not exactly 128 bits long in '%1%'. %2%\n"
 msgstr ""
 
-#: src/propedit/change.cpp:140
+#: src/propedit/change.cpp:141
 #, fuzzy
 msgid "The property value is not a valid boolean in '%1%'. %2%\n"
 msgstr "上一 UID 已在 '%1% %2%' 给出。\n"
 
-#: src/propedit/change.cpp:147
+#: src/propedit/change.cpp:148
 #, fuzzy
 msgid "The property value is not a valid floating point number in '%1%'. %2%\n"
 msgstr "时间码文件 '%2%' 的 %1% 行不包含有效的浮点数。\n"
 
-#: src/propedit/change.cpp:132
+#: src/propedit/change.cpp:133
 #, fuzzy
 msgid "The property value is not a valid signed integer in '%1%'. %2%\n"
 msgstr "上一 UID 已在 '%1% %2%' 给出。\n"
 
-#: src/propedit/change.cpp:126
+#: src/propedit/change.cpp:127
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr ""
 
@@ -6199,7 +6199,7 @@ msgstr "两轨宽度不同: %1% 与 %2%"
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr "没有文件的 ID 为 '%1%'。参数 '--append-to' 无效。\n"
 
-#: src/common/command_line.cpp:241
+#: src/common/command_line.cpp:238
 msgid "There is no translation available for '%1%'.\n"
 msgstr "尚无 '%1%' 的翻译。\n"
 
@@ -6318,11 +6318,11 @@ msgstr "这是播放器将作为此影片的“主标题”显示的标题。"
 msgid "This option needs an additional argument 'n'. Tells mkvmerge to put at most 'n' data blocks into each cluster. If the number is postfixed with 'ms' then put at most 'n' milliseconds of data into each cluster. The maximum length for a cluster that mkvmerge accepts is 60000 blocks and 32000ms; the minimum length is 100ms. Programs will only be able to seek to clusters, so creating larger clusters may lead to imprecise or slow seeking."
 msgstr "此选项需要附加参数 'n'。告知 mkvmerge 在每簇最多放置 'n' 个数据块。如果数字后缀有 'ms' 则在每簇中最多放置 'n' 毫秒的数据。mkvmerge 接受的单个簇的最大长度为 60000 块，即 32000 ms；最小长度为 100 ms。程序定位只能精确到簇，因此创建大尺寸的簇将导致缓慢且不精确的定位。"
 
-#: src/propedit/change.cpp:252
+#: src/propedit/change.cpp:253
 msgid "This property is mandatory and cannot be deleted in '%1%'. %2%\n"
 msgstr ""
 
-#: src/propedit/change.cpp:218
+#: src/propedit/change.cpp:219
 msgid "This property is unique. More instances cannot be added in '%1%'. %2%\n"
 msgstr ""
 
@@ -7267,7 +7267,7 @@ msgstr "行 %1% 处警告: 起始时间早于前一条的起始时间。此文�
 msgid "Warning:"
 msgstr "警告信息:"
 
-#: src/common/output.cpp:75
+#: src/common/output.cpp:70
 msgid "Warning: "
 msgstr "警告: "
 
@@ -7991,7 +7991,7 @@ msgstr "mkdir(%1%) 创建文件夹失败; 错误号 = %2% (%3%)"
 msgid "mkvextract.cpp/show_element(): level > 9: %1%"
 msgstr "mkvextract.cpp/show_element(): 层级 > 9: %1%"
 
-#: src/extract/mkvextract.cpp:383
+#: src/extract/mkvextract.cpp:373
 msgid "mkvextract: Unknown mode!?\n"
 msgstr "mkvextract: 未知模式!?\n"
 
