@@ -16,6 +16,7 @@
 #include "common/common.h"
 #include "common/strings/formatting.h"
 #include "common/strings/utf8.h"
+#include "common/translation.h"
 
 std::string
 format_timecode(int64_t timecode,
@@ -147,8 +148,9 @@ format_paragraph(const std::wstring &text_to_wrap,
                  std::wstring indent_following_lines,
                  int wrap_column,
                  const std::wstring &break_chars) {
-  std::wstring text  = indent_first_line;
-  int current_column = text.length();
+  std::wstring text   = indent_first_line;
+  int current_column  = get_width_in_em(text);
+  bool break_anywhere = translation_c::get_active_translation().m_line_breaks_anywhere;
 
   if ((0 != indent_column) && (current_column >= indent_column)) {
     text           += L"\n";
@@ -177,17 +179,30 @@ format_paragraph(const std::wstring &text_to_wrap,
     if (std::wstring::npos == word_end)
       word_end = text_to_wrap.length();
 
-    else if (text_to_wrap[word_end] != ' ')
+    else if (text_to_wrap[word_end] != L' ')
       ++word_end;
 
     else
       next_needs_space = true;
 
     std::wstring word    = text_to_wrap.substr(word_start, word_end - word_start);
-    size_t word_length   = word.length();
-    bool needs_space_now = needs_space && (0 != word.find_first_of(break_chars));
+    bool needs_space_now = needs_space && (text_to_wrap.substr(word_start, 1).find_first_of(break_chars) == std::wstring::npos);
+    size_t word_length   = get_width_in_em(word);
+    size_t new_column    = current_column + (needs_space_now ? 0 : 1) + word_length;
 
-    if (!first_word_in_line && ((current_column + (needs_space_now ? 0 : 1) + word_length) >= wrap_column)) {
+    if (break_anywhere && (new_column >= wrap_column)) {
+      size_t offset = 0;
+      while (((word_end - 1) > word_start) && ((128 > text_to_wrap[word_end - 1]) || ((new_column - offset) >= wrap_column))) {
+        offset   += get_width_in_em(text_to_wrap[word_end - 1]);
+        word_end -= 1;
+      }
+
+      word_length -= offset;
+      new_column  -= offset;
+      word.erase(word_end - word_start);
+    }
+
+    if (!first_word_in_line && (new_column >= wrap_column)) {
       text               += L"\n" + indent_following_lines;
       current_column      = indent_column;
       first_word_in_line  = true;
