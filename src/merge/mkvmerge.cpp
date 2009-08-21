@@ -571,7 +571,7 @@ parse_arg_sync(std::string s,
   timecode_sync_t tcsync;
 
   // Extract the track number.
-  std::string orig          = s;
+  std::string orig               = s;
   std::vector<std::string> parts = split(s, ":", 2);
   if (parts.size() != 2)
     mxerror(boost::format(Y("Invalid sync option. No track ID specified in '%1% %2%'.\n")) % opt % s);
