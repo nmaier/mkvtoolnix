@@ -377,6 +377,19 @@ If this option has been omitted then a standard mapping is used\&. This standard
 \fBmkvmerge \-o output\&.mkv part1\&.mkv +part2\&.mkv\fR\&.
 .RE
 .PP
+\fB+\fR
+.RS 4
+A single \'+\' causes the next file to be appended instead of added\&. The \'+\' can also be put in front of the next file name\&. Therefore the following two commands are equivalent:
+.sp
+.RS 4
+.nf
+$ mkvmerge \-o full\&.mkv file1\&.mkv + file2\&.mkv
+$ mkvmerge \-o full\&.mkv file1\&.mkv +file2\&.mkv
+     
+.fi
+.RE
+.RE
+.PP
 Attachment support (more global options):
 .PP
 \fB\-\-attachment\-description\fR \fIdescription\fR

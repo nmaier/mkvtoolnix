@@ -1617,8 +1617,9 @@ parse_args(std::vector<std::string> args) {
     usage(2);
   }
 
-  track_info_c *ti  = new track_info_c;
-  bool inputs_found = false;
+  track_info_c *ti      = new track_info_c;
+  bool inputs_found     = false;
+  bool append_next_file = false;
   attachment_t attachment;
 
   mxforeach(sit, args) {
@@ -2052,6 +2053,9 @@ parse_args(std::vector<std::string> args) {
     } else if (this_arg.length() == 0)
       mxerror(Y("An empty file name is not valid.\n"));
 
+    else if (this_arg == "+")
+      append_next_file = true;
+
     // The argument is an input file.
     else {
       if (g_outfile == this_arg)
@@ -2072,17 +2076,18 @@ parse_args(std::vector<std::string> args) {
 
       filelist_t file;
       if ('+' == this_arg[0]) {
-        file.name = this_arg.substr(1);
-        if (file.name.empty())
-          mxerror(Y("A single '+' is not a valid command line option. If you want to append a file "
-                    "use '+' directly followed by the file name, e.g. '+movie_part_2.avi'."));
+        append_next_file = true;
+        file.name        = this_arg.substr(1);
+      } else
+        file.name        = this_arg;
+
+      if (append_next_file) {
         if (g_files.empty())
           mxerror(Y("The first file cannot be appended because there are no files to append to.\n"));
 
-        file.appending = true;
-
-      } else
-        file.name = this_arg;
+        file.appending   = true;
+        append_next_file = false;
+      }
 
       ti->fname = file.name;
 

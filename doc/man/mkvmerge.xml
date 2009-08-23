@@ -507,6 +507,21 @@
      </para>
     </listitem>
    </varlistentry>
+
+   <varlistentry>
+    <term><option>+</option></term>
+    <listitem>
+     <para>
+      A single '+' causes the next file to be appended instead of added. The '+' can also be put in front of the next file name. Therefore
+      the following two commands are equivalent:
+     </para>
+
+     <screen>
+$ mkvmerge -o full.mkv file1.mkv + file2.mkv
+$ mkvmerge -o full.mkv file1.mkv +file2.mkv
+     </screen>
+    </listitem>
+   </varlistentry>
   </variablelist>
 
   <para>

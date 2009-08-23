@@ -1099,32 +1099,32 @@ msgstr "'%1%' 僅限提取章節時使用。\n"
 msgid "'%1%' lacks a file name.\n"
 msgstr "'%1%' 缺少檔案名。\n"
 
-#: src/merge/mkvmerge.cpp:1810
-#: src/merge/mkvmerge.cpp:1974
+#: src/merge/mkvmerge.cpp:1811
+#: src/merge/mkvmerge.cpp:1975
 msgid "'%1%' lacks its argument.\n"
 msgstr "'%1%' 缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1883
+#: src/merge/mkvmerge.cpp:1884
 msgid "'%1%' lacks the FourCC.\n"
 msgstr "'%1%' 缺少 FourCC 值。\n"
 
-#: src/merge/mkvmerge.cpp:1925
+#: src/merge/mkvmerge.cpp:1926
 msgid "'%1%' lacks the delay.\n"
 msgstr "'%1%' 缺少延遲持續時間。\n"
 
-#: src/merge/mkvmerge.cpp:1744
+#: src/merge/mkvmerge.cpp:1745
 msgid "'%1%' lacks the file name.\n"
 msgstr "'%1%' 缺少附件檔案名。\n"
 
-#: src/merge/mkvmerge.cpp:1981
+#: src/merge/mkvmerge.cpp:1982
 msgid "'%1%' lacks the track ID.\n"
 msgstr "'%1%' 缺少軌道 ID。\n"
 
-#: src/merge/mkvmerge.cpp:1848
-#: src/merge/mkvmerge.cpp:1855
-#: src/merge/mkvmerge.cpp:1862
-#: src/merge/mkvmerge.cpp:1869
-#: src/merge/mkvmerge.cpp:1876
+#: src/merge/mkvmerge.cpp:1849
+#: src/merge/mkvmerge.cpp:1856
+#: src/merge/mkvmerge.cpp:1863
+#: src/merge/mkvmerge.cpp:1870
+#: src/merge/mkvmerge.cpp:1877
 msgid "'%1%' lacks the track number(s).\n"
 msgstr "'%1%' 缺少軌道編號。\n"
 
@@ -1142,31 +1142,31 @@ msgstr "'%1%' 軌道 %2%: %3%"
 msgid "'%1%': %2%"
 msgstr "'%1%': %2%"
 
-#: src/merge/mkvmerge.cpp:2033
+#: src/merge/mkvmerge.cpp:2034
 msgid "'--append-mode' lacks its argument.\n"
 msgstr "'--append-mode' 缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:2026
+#: src/merge/mkvmerge.cpp:2027
 msgid "'--append-to' lacks its argument.\n"
 msgstr "'--append-to' 缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1890
+#: src/merge/mkvmerge.cpp:1891
 msgid "'--aspect-ratio' lacks the aspect ratio.\n"
 msgstr "'--aspect-ratio' 缺少外觀比例。\n"
 
-#: src/merge/mkvmerge.cpp:1897
+#: src/merge/mkvmerge.cpp:1898
 msgid "'--aspect-ratio-factor' lacks the aspect ratio factor.\n"
 msgstr "'--aspect-ratio-factor' 缺少外觀比例係數。\n"
 
-#: src/merge/mkvmerge.cpp:1715
+#: src/merge/mkvmerge.cpp:1716
 msgid "'--attachment-description' lacks the description.\n"
 msgstr "'--attachment-description' 缺少描述。\n"
 
-#: src/merge/mkvmerge.cpp:1724
+#: src/merge/mkvmerge.cpp:1725
 msgid "'--attachment-mime-type' lacks the MIME type.\n"
 msgstr "'--attachment-mime-type' 缺少 MIME 類型。\n"
 
-#: src/merge/mkvmerge.cpp:1734
+#: src/merge/mkvmerge.cpp:1735
 msgid "'--attachment-name' lacks the name.\n"
 msgstr "'--attachment-name' 缺少名稱。\n"
 
@@ -1178,11 +1178,11 @@ msgstr "'--blockadd' 僅允許在提取軌道時使用。\n"
 msgid "'--blockadd' lacks a level.\n"
 msgstr "'--blockadd' 缺少層級。\n"
 
-#: src/merge/mkvmerge.cpp:1995
+#: src/merge/mkvmerge.cpp:1996
 msgid "'--blockadd' lacks its argument.\n"
 msgstr "'--blockadd' 缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1769
+#: src/merge/mkvmerge.cpp:1770
 msgid "'--chapter-charset' lacks the charset.\n"
 msgstr "'--chapter-charset' 缺少字元集。\n"
 
@@ -1194,7 +1194,7 @@ msgstr "'--chapter-charset' 在 '--chapter-charset %1%' 中只能給出一次。
 msgid "'--chapter-charset' must be given before '--chapters' in '--chapter-charset %1%'.\n"
 msgstr "'--chapter-charset' 必須在 '--chapter-charset %1%' 中 '--chapters' 之前給出。\n"
 
-#: src/merge/mkvmerge.cpp:1762
+#: src/merge/mkvmerge.cpp:1763
 msgid "'--chapter-language' lacks the language.\n"
 msgstr "'--chapter-language' 缺少語言。\n"
 
@@ -1206,11 +1206,11 @@ msgstr "'--chapter-language' 在 '--chapter-language %1%' 中只能給出一次�
 msgid "'--chapter-language' must be given before '--chapters' in '--chapter-language %1%'.\n"
 msgstr "'--chapter-language' 必須在 '--chapter-language %1%' 中 '--chapters'之前給出。\n"
 
-#: src/merge/mkvmerge.cpp:1786
+#: src/merge/mkvmerge.cpp:1787
 msgid "'--chapters' lacks the file name.\n"
 msgstr "'--chapters' 缺少檔案名。\n"
 
-#: src/merge/mkvmerge.cpp:1696
+#: src/merge/mkvmerge.cpp:1697
 msgid "'--cluster-length' lacks the length.\n"
 msgstr "'--cluster-length' 缺少叢集長度。\n"
 
@@ -1218,23 +1218,23 @@ msgstr "'--cluster-length' 缺少叢集長度。\n"
 msgid "'--command-line-charset' is missing its argument.\n"
 msgstr "'--command-line-charset' 缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1988
+#: src/merge/mkvmerge.cpp:1989
 msgid "'--compression' lacks its argument.\n"
 msgstr "'--compression' 缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1911
+#: src/merge/mkvmerge.cpp:1912
 msgid "'--cropping' lacks the crop parameters.\n"
 msgstr "'--cropping' 缺少剪裁參數。\n"
 
-#: src/merge/mkvmerge.cpp:1776
+#: src/merge/mkvmerge.cpp:1777
 msgid "'--cue-chapter-name-format' lacks the format.\n"
 msgstr "'--cue-chapter-name-format' 缺少格式。\n"
 
-#: src/merge/mkvmerge.cpp:1779
+#: src/merge/mkvmerge.cpp:1780
 msgid "'--cue-chapter-name-format' must be given before '--chapters'.\n"
 msgstr "'--cue-chapter-name-format' 必須在 '--chapters' 之前給出。\n"
 
-#: src/merge/mkvmerge.cpp:1932
+#: src/merge/mkvmerge.cpp:1933
 msgid "'--cues' lacks its argument.\n"
 msgstr "'--cues' 缺少參數。\n"
 
@@ -1242,19 +1242,19 @@ msgstr "'--cues' 缺少參數。\n"
 msgid "'--cuesheet' is only allowed when extracting tracks.\n"
 msgstr "'--cuesheet' 只能在提取軌道時使用。\n"
 
-#: src/merge/mkvmerge.cpp:2040
+#: src/merge/mkvmerge.cpp:2041
 msgid "'--default-duration' lacks its argument.\n"
 msgstr "'--default-duration' 缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1960
+#: src/merge/mkvmerge.cpp:1961
 msgid "'--default-language' lacks its argument.\n"
 msgstr "'--default-language' 缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1939
+#: src/merge/mkvmerge.cpp:1940
 msgid "'--default-track' lacks its argument.\n"
 msgstr "'--default-track' 缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1904
+#: src/merge/mkvmerge.cpp:1905
 msgid "'--display-dimensions' lacks the dimensions.\n"
 msgstr "'--display-dimensions' 缺少大小。\n"
 
@@ -1262,7 +1262,7 @@ msgstr "'--display-dimensions' 缺少大小。\n"
 msgid "'--engage' lacks its argument.\n"
 msgstr "'--engage' lacks 缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1946
+#: src/merge/mkvmerge.cpp:1947
 msgid "'--forced-track' lacks its argument.\n"
 msgstr "'--forced-track' 缺少參數。\n"
 
@@ -1270,27 +1270,27 @@ msgstr "'--forced-track' 缺少參數。\n"
 msgid "'--fullraw' is only allowed when extracting tracks.\n"
 msgstr "'--fullraw' 只能在提取軌道時使用。\n"
 
-#: src/merge/mkvmerge.cpp:1753
+#: src/merge/mkvmerge.cpp:1754
 msgid "'--global-tags' lacks the file name.\n"
 msgstr "'--global-tags' 缺少檔案名。\n"
 
-#: src/merge/mkvmerge.cpp:1953
+#: src/merge/mkvmerge.cpp:1954
 msgid "'--language' lacks its argument.\n"
 msgstr "'--language' 缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:2109
+#: src/merge/mkvmerge.cpp:2114
 msgid "'--link' is only useful in combination with '--split'.\n"
 msgstr "'--link' 只能與 '--split' 結合使用。\n"
 
-#: src/merge/mkvmerge.cpp:1689
+#: src/merge/mkvmerge.cpp:1690
 msgid "'--link-to-next' lacks the next UID.\n"
 msgstr "'--link-to-next' 缺少下一個 UID。\n"
 
-#: src/merge/mkvmerge.cpp:1682
+#: src/merge/mkvmerge.cpp:1683
 msgid "'--link-to-previous' lacks the previous UID.\n"
 msgstr "'--link-to-previous' 缺少上一個 UID。\n"
 
-#: src/merge/mkvmerge.cpp:2047
+#: src/merge/mkvmerge.cpp:2048
 msgid "'--nalu-size-length' lacks its argument.\n"
 msgstr "'--nalu-size-length' 缺少參數。\n"
 
@@ -1298,7 +1298,7 @@ msgstr "'--nalu-size-length' 缺少參數。\n"
 msgid "'--no-ogg' is only allowed when extracting tracks.\n"
 msgstr "'--no-ogg' 只能在提取軌道時使用。\n"
 
-#: src/merge/mkvmerge.cpp:1642
+#: src/merge/mkvmerge.cpp:1643
 msgid "'--priority' lacks its argument.\n"
 msgstr "'--priority' 缺少參數。\n"
 
@@ -1306,27 +1306,27 @@ msgstr "'--priority' 缺少參數。\n"
 msgid "'--raw' is only allowed when extracting tracks.\n"
 msgstr "'--raw' 只能在提取軌道時使用。\n"
 
-#: src/merge/mkvmerge.cpp:1795
+#: src/merge/mkvmerge.cpp:1796
 msgid "'--segmentinfo' lacks the file name.\n"
 msgstr "'--segmentinfo' 缺少檔案名。\n"
 
-#: src/merge/mkvmerge.cpp:1663
+#: src/merge/mkvmerge.cpp:1664
 msgid "'--split' lacks the size.\n"
 msgstr "'--split' 缺少大小。\n"
 
-#: src/merge/mkvmerge.cpp:1670
+#: src/merge/mkvmerge.cpp:1671
 msgid "'--split-max-files' lacks the number of files.\n"
 msgstr "'--split-max-files' 缺少檔案數。\n"
 
-#: src/merge/mkvmerge.cpp:1918
+#: src/merge/mkvmerge.cpp:1919
 msgid "'--stereo-mode' lacks its argument.\n"
 msgstr "'--stereo-mode' 缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1967
+#: src/merge/mkvmerge.cpp:1968
 msgid "'--sub-charset' lacks its argument.\n"
 msgstr "'--sub-charset' 缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1824
+#: src/merge/mkvmerge.cpp:1825
 msgid "'--timecode-scale' lacks its argument.\n"
 msgstr "'--timecode-scale' 缺少參數。\n"
 
@@ -1334,39 +1334,39 @@ msgstr "'--timecode-scale' 缺少參數。\n"
 msgid "'--timecode-scale' was used more than once.\n"
 msgstr "'--timecode-scale' 被使用多於一次。\n"
 
-#: src/merge/mkvmerge.cpp:2009
+#: src/merge/mkvmerge.cpp:2010
 msgid "'--timecodes' lacks its argument.\n"
 msgstr "'--timecodes' 缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1655
+#: src/merge/mkvmerge.cpp:1656
 msgid "'--title' lacks the title.\n"
 msgstr "'--title' 缺少標題。\n"
 
-#: src/merge/mkvmerge.cpp:2002
+#: src/merge/mkvmerge.cpp:2003
 msgid "'--track-name' lacks its argument.\n"
 msgstr "'--track-name' 缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:2016
+#: src/merge/mkvmerge.cpp:2017
 msgid "'--track-order' lacks its argument.\n"
 msgstr "'--track-order' 缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:2019
+#: src/merge/mkvmerge.cpp:2020
 msgid "'--track-order' may only be given once.\n"
 msgstr "'--track-order' 只能給予一次。\n"
 
-#: src/merge/mkvmerge.cpp:2062
+#: src/merge/mkvmerge.cpp:2066
 msgid "'-A' and '-a' used on the same source file.\n"
 msgstr "'-A' 和 '-a' 用於相同的來源檔案上。\n"
 
-#: src/merge/mkvmerge.cpp:2071
+#: src/merge/mkvmerge.cpp:2075
 msgid "'-B' and '-b' used on the same source file.\n"
 msgstr "'-B' 和 '-b' 用於相同的來源檔案上。\n"
 
-#: src/merge/mkvmerge.cpp:2065
+#: src/merge/mkvmerge.cpp:2069
 msgid "'-D' and '-d' used on the same source file.\n"
 msgstr "'-D' 和 '-d' 用於相同的來源檔案上。\n"
 
-#: src/merge/mkvmerge.cpp:2068
+#: src/merge/mkvmerge.cpp:2072
 msgid "'-S' and '-s' used on the same source file.\n"
 msgstr "'-S' 和 '-s' 用於相同的來源檔案上。\n"
 
@@ -1562,10 +1562,6 @@ msgid ""
 "A randomly generated unique ID to identify the current\n"
 "segment between many others (128 bits)."
 msgstr "隨機生成的在眾多剪輯中識別目前剪輯的唯一 ID (128 位)。"
-
-#: src/merge/mkvmerge.cpp:2077
-msgid "A single '+' is not a valid command line option. If you want to append a file use '+' directly followed by the file name, e.g. '+movie_part_2.avi'."
-msgstr "單獨的 '+' 不是有效的命令列選項。如果您希望用 '+' 直接添加檔，請確保檔案名緊跟著它，例如 '+movie_part_2.avi'。"
 
 #: src/info/mkvinfo.cpp:886
 msgid "A track"
@@ -1780,7 +1776,7 @@ msgstr "對應編解碼器的 ID。"
 msgid "An attachment with the ID %1% was not found.\n"
 msgstr "找不到 ID 為 %1% 的附件。\n"
 
-#: src/merge/mkvmerge.cpp:2053
+#: src/merge/mkvmerge.cpp:2054
 msgid "An empty file name is not valid.\n"
 msgstr "空白檔名是無效的。\n"
 
@@ -4027,11 +4023,11 @@ msgstr "在段落 '%1%' 中屬性必須修改，但檔案裡未發現符合的�
 msgid "More"
 msgstr "更多"
 
-#: src/merge/mkvmerge.cpp:1727
+#: src/merge/mkvmerge.cpp:1728
 msgid "More than one MIME type was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
 msgstr "單個附件被指定了多於一個 MIME 類型。'%1%' 將被廢棄，並用 '%2%' 代替。\n"
 
-#: src/merge/mkvmerge.cpp:1718
+#: src/merge/mkvmerge.cpp:1719
 msgid "More than one description was given for a single attachment.\n"
 msgstr "單個附件被指定了多於一個描述。\n"
 
@@ -4039,7 +4035,7 @@ msgstr "單個附件被指定了多於一個描述。\n"
 msgid "More than one file name has been given ('%1%' and '%2%').\n"
 msgstr "指定多個檔名 ('%1%' 和 '%2%')。\n"
 
-#: src/merge/mkvmerge.cpp:1737
+#: src/merge/mkvmerge.cpp:1738
 msgid "More than one name was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
 msgstr "單個附件被指定了多於一個名稱。'%1%' 將被廢棄，並用 '%2%' 代替。\n"
 
@@ -4071,11 +4067,11 @@ msgstr "合成程式: %1%"
 msgid "Muxing in progress."
 msgstr "合成進行中。"
 
-#: src/merge/mkvmerge.cpp:2153
+#: src/merge/mkvmerge.cpp:2158
 msgid "Muxing took %1% seconds.\n"
 msgstr "合成花費 %1% 秒。\n"
 
-#: src/merge/mkvmerge.cpp:2155
+#: src/merge/mkvmerge.cpp:2160
 msgid "Muxing took 1 second.\n"
 msgstr "合成花費 1 秒。\n"
 
@@ -4213,7 +4209,7 @@ msgstr "重新生成 CUE 表單時不允許其他額外選項。\n"
 msgid "No help available."
 msgstr "無可用的說明。"
 
-#: src/merge/mkvmerge.cpp:2114
+#: src/merge/mkvmerge.cpp:2119
 msgid "No input files were given. No output will be created.\n"
 msgstr "未給定任何輸入檔。將不建立輸出檔。\n"
 
@@ -4231,7 +4227,7 @@ msgstr "未指定輸出檔名，將使用附件名。\n"
 msgid "No segment/level 0 element found."
 msgstr "未發現剪輯/0 層級元件。"
 
-#: src/merge/mkvmerge.cpp:2144
+#: src/merge/mkvmerge.cpp:2149
 msgid "No streams to output were found. Aborting.\n"
 msgstr "未發現待輸出媒體流。終止。\n"
 
@@ -5651,7 +5647,7 @@ msgstr "檔案 '%1%' 無法開啟以寫入 (%2%, %3%)。\n"
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "檔案 '%1%' 已開啟以寫入。\n"
 
-#: src/merge/mkvmerge.cpp:2092
+#: src/merge/mkvmerge.cpp:2097
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "檔案 '%1%' 類型未知。請查看支援的檔案類型 ('mkvmerge --list-types')，若您的檔案類型受支援但被錯誤識別，請聯繫作者 Moritz Bunkus <moritz@bunkus.org>。\n"
 
@@ -5746,7 +5742,7 @@ msgstr "您試著儲存至的檔 *不是* Matroska 檔。"
 msgid "The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."
 msgstr "您試著儲存至的檔案是個 Matroska 檔。要這樣做的話，您應該使用“儲存至 Matroska 檔”功能表項目。"
 
-#: src/merge/mkvmerge.cpp:2080
+#: src/merge/mkvmerge.cpp:2086
 msgid "The first file cannot be appended because there are no files to append to.\n"
 msgstr "第一個檔不能作為添加檔，因為沒有檔案可供其添加。\n"
 
@@ -5902,7 +5898,7 @@ msgstr ""
 msgid "The name '%1%' is not a valid property name for the current edit specification in '%2%'.\n"
 msgstr "名稱 '%1%' 對於目前在 '%2%' 中的編輯規範不是有效的屬性名稱。\n"
 
-#: src/merge/mkvmerge.cpp:2058
+#: src/merge/mkvmerge.cpp:2062
 msgid "The name of the output file '%1%' and of one of the input files is the same. This would cause mkvmerge to overwrite one of your input files. This is most likely not what you want.\n"
 msgstr "輸出檔 '%1%' 的名稱與輸入檔之一相同。這將使 mkvmerge 覆寫輸入檔之一。這大概不是您想要的。\n"
 
@@ -5950,7 +5946,7 @@ msgid ""
 "on the top of the image."
 msgstr "視訊畫面頂部要移除的像素數目。"
 
-#: src/merge/mkvmerge.cpp:1819
+#: src/merge/mkvmerge.cpp:1820
 msgid "The option '--meta-seek-size' is no longer supported. Please read mkvmerge's documentation, especially the section about the MATROSKA FILE LAYOUT.\n"
 msgstr "選項 '--meta-seek-size' 不再受支援。請閱讀 mkvmerge 的使用說明，尤其是關於 *Matroska 檔規劃* 的段落。\n"
 
@@ -7289,7 +7285,7 @@ msgstr "錯誤的 Kate 版本: %1%.%2% > %3%.x"
 msgid "Wrong Theora version: %1%.%2%.%3% != 3.2.x"
 msgstr "錯誤的 Theora 版本: %1%.%2%.%3% != 3.2.x"
 
-#: src/merge/mkvmerge.cpp:1673
+#: src/merge/mkvmerge.cpp:1674
 msgid "Wrong argument to '--split-max-files'.\n"
 msgstr "'--split-max-files' 參數錯誤。\n"
 
@@ -8346,11 +8342,11 @@ msgstr "字幕"
 msgid "tet_index: '%1%' not found\n"
 msgstr "tet_index: '%1%' 未發現\n"
 
-#: src/merge/mkvmerge.cpp:2011
+#: src/merge/mkvmerge.cpp:2012
 msgid "timecodes"
 msgstr "時間碼"
 
-#: src/merge/mkvmerge.cpp:2004
+#: src/merge/mkvmerge.cpp:2005
 msgid "track name"
 msgstr "軌道名稱"
 
@@ -8495,6 +8491,8 @@ msgstr "是"
 
 #~ msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|\n"
 #~ msgstr "%1% 畫格, 軌道 %2%, 時間碼 %3% (%4%), 大小 %5%, adler 0x%|6$08x|\n"
+#~ msgid "A single '+' is not a valid command line option. If you want to append a file use '+' directly followed by the file name, e.g. '+movie_part_2.avi'."
+#~ msgstr "單獨的 '+' 不是有效的命令列選項。如果您希望用 '+' 直接添加檔，請確保檔案名緊跟著它，例如 '+movie_part_2.avi'。"
 #~ msgid "Always adds '--engage use_simpleblock' to the command line. That way Matroska's new 'simple blocks' will be used which save a bit of overhead at the cost of not being backwards compatible."
 #~ msgstr "總在命令列中添加 '--engage use_simpleblock'。這樣將使用 Matroska 的新 '簡單區塊'，可以省下一些額外開銷，代價是將無法向下相容。"
 #~ msgid "Always use simple blocks"
