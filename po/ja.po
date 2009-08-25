@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2009-08-22 13:08+0200\n"
+"PO-Revision-Date: 2009-08-25 11:02+0200\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -30,14 +30,6 @@ msgid ""
 msgstr ""
 "\n"
 "mkvmergeは割り込み信号を受信しました（恐らくユーザーがCtrl+Cを押したためです）。ファイルをきれいにしようとしています。もしこの処理中にmkvmergeがハングした場合、手動でプロセスを終了してください。\n"
-
-#: src/common/iso639.cpp:552
-msgid ""
-"                             English language name | ISO639-2 code | ISO639-1 code\n"
-"---------------------------------------------------+---------------+--------------\n"
-msgstr ""
-"                                    英語での言語名 |ISO639-2コード |ISO639-1コード\n"
-"---------------------------------------------------+---------------+--------------\n"
 
 #: src/merge/mkvmerge.cpp:240
 msgid ""
@@ -1117,13 +1109,13 @@ msgstr "'%1%'にトラックIDが指定されていません。\n"
 msgid "'%1%' lacks the track number(s).\n"
 msgstr "'%1%'にトラック番号が指定されていません。\n"
 
-#: src/common/output.cpp:115 src/common/output.cpp:128
-#: src/common/output.cpp:141 src/common/output.cpp:162
+#: src/common/output.cpp:126 src/common/output.cpp:139
+#: src/common/output.cpp:152 src/common/output.cpp:173
 msgid "'%1%' track %2%: %3%"
 msgstr "'%1%'トラック%2%：%3%"
 
-#: src/common/output.cpp:108 src/common/output.cpp:121
-#: src/common/output.cpp:134 src/common/output.cpp:151
+#: src/common/output.cpp:119 src/common/output.cpp:132
+#: src/common/output.cpp:145 src/common/output.cpp:162
 msgid "'%1%': %2%"
 msgstr "'%1%'：%2%"
 
@@ -2572,7 +2564,7 @@ msgstr ""
 msgid "Date: %1% UTC"
 msgstr ""
 
-#: src/common/output.cpp:73
+#: src/common/output.cpp:74
 msgid "Debug> "
 msgstr "Debug> "
 
@@ -2803,6 +2795,10 @@ msgstr ""
 msgid "End:"
 msgstr "終了時間："
 
+#: src/common/iso639.cpp:552
+msgid "English language name"
+msgstr "英語での言語名"
+
 #: src/info/qt_ui.cpp:129 src/info/wxwidgets_ui.cpp:260
 msgid "Error"
 msgstr "エラー"
@@ -2856,7 +2852,7 @@ msgstr "Matroskaファイルの書き込み中にエラーが発生しました"
 msgid "Error:"
 msgstr "エラー："
 
-#: src/common/output.cpp:67
+#: src/common/output.cpp:68
 msgid "Error: "
 msgstr "エラー："
 
@@ -3259,6 +3255,14 @@ msgstr "ここでは現在選択しているエントリ以下の全てのチャ
 #: src/mmg/jobs.cpp:345
 msgid "ID"
 msgstr "ID"
+
+#: src/common/iso639.cpp:554
+msgid "ISO639-1 code"
+msgstr "ISO639-1コード"
+
+#: src/common/iso639.cpp:553
+msgid "ISO639-2 code"
+msgstr "ISO639-2コード"
 
 #: src/mmg/tabs/chapters.cpp:252
 msgid "If a chapter is marked 'hidden' then the player should not show this chapter entry to the user. Such entries could still be used by the menu system."
@@ -6117,7 +6121,7 @@ msgstr "これは本当に、本当に発生するべきではありません。
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "これは本当に、本当に発生するべきではありません。最初のメタシーク要素のために確保されたスペースが小さすぎます。必要なサイズ：%1%。%2%\n"
 
-#: src/common/common.h:54
+#: src/common/common.h:55
 msgid "This should not have happened. Please contact the author Moritz Bunkus <moritz@bunkus.org> with this error/warning message, a description of what you were trying to do, the command line used and which operating system you are using. Thank you."
 msgstr "これは発生するべきではありません。作者のMoritz Bunkus <moritz@bunkus.org>に、このエラー・警告メッセージ、何をしようとしたのかの説明、使用したコマンドライン、使用しているOSを連絡してください。ありがとうございます。"
 
@@ -6993,7 +6997,7 @@ msgstr "%1%行目で警告：開始時間のタイムコードが前のエント
 msgid "Warning:"
 msgstr "警告："
 
-#: src/common/output.cpp:70
+#: src/common/output.cpp:71
 msgid "Warning: "
 msgstr "警告："
 
@@ -8184,6 +8188,13 @@ msgstr "間違った使用法：読み込み専用メモリへの書き込み"
 #: src/mmg/tabs/input_general.cpp:116 src/mmg/tabs/input_general.cpp:127
 msgid "yes"
 msgstr "はい"
+
+#~ msgid ""
+#~ "                             English language name | ISO639-2 code | ISO639-1 code\n"
+#~ "---------------------------------------------------+---------------+--------------\n"
+#~ msgstr ""
+#~ "                                    英語での言語名 |ISO639-2コード |ISO639-1コード\n"
+#~ "---------------------------------------------------+---------------+--------------\n"
 
 #~ msgid "A single '+' is not a valid command line option. If you want to append a file use '+' directly followed by the file name, e.g. '+movie_part_2.avi'."
 #~ msgstr "'+'一文字は正しいコマンドラインオプションではありません。ファイルを追加結合したい場合は、'+'のあとにそのままファイル名を続けてください（例：'+film_teil_2.avi'）。"

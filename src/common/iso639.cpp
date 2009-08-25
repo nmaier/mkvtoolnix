@@ -17,6 +17,7 @@
 #include "common/common.h"
 #include "common/iso639.h"
 #include "common/strings/editing.h"
+#include "common/strings/utf8.h"
 
 const iso639_language_t iso639_languages[] = {
   { "Abkhazian",                                      "abk", "ab", NULL  },
@@ -546,17 +547,31 @@ is_valid_iso639_2_code(const char *iso639_2_code) {
   return false;
 }
 
+#define FILL(s, idx) s + std::wstring(longest[idx] - get_width_in_em(s), L' ')
+
 void
 list_iso639_languages() {
-  int i = 0;
-  mxinfo(Y("                             English language name | ISO639-2 code | ISO639-1 code\n"
-           "---------------------------------------------------+---------------+--------------\n"));
-  while (iso639_languages[i].iso639_2_code != NULL) {
-    mxinfo(boost::format("%|1$50s| | %|2$13s| | %|3$13s|\n")
-           % (NULL != iso639_languages[i].english_name  ? iso639_languages[i].english_name  : "")
-           % iso639_languages[i].iso639_2_code
-           % (NULL != iso639_languages[i].iso639_1_code ? iso639_languages[i].iso639_1_code : ""));
-    i++;
+  std::wstring w_col1 = to_wide(Y("English language name"));
+  std::wstring w_col2 = to_wide(Y("ISO639-2 code"));
+  std::wstring w_col3 = to_wide(Y("ISO639-1 code"));
+
+  size_t longest[3]   = { get_width_in_em(w_col1), get_width_in_em(w_col2), get_width_in_em(w_col3) };
+  int i;
+
+  for (i = 0; NULL != iso639_languages[i].iso639_2_code; ++i) {
+    longest[0] = std::max(longest[0], get_width_in_em(to_wide(iso639_languages[i].english_name)));
+    longest[1] = std::max(longest[1], get_width_in_em(to_wide(iso639_languages[i].iso639_2_code)));
+    longest[2] = std::max(longest[2], get_width_in_em(to_wide(NULL != iso639_languages[i].iso639_1_code ? iso639_languages[i].iso639_1_code : "")));
+  }
+
+  mxinfo(FILL(w_col1, 0) + L" | " + FILL(w_col2, 1) + L" | " + FILL(w_col3, 2) + L"\n");
+  mxinfo(std::wstring(longest[0] + 1, L'-') + L'+' + std::wstring(longest[1] + 2, L'-') + L'+' + std::wstring(longest[2] + 1, L'-') + L"\n");
+
+  for (i = 0; NULL != iso639_languages[i].iso639_2_code; ++i) {
+    std::wstring english = to_wide(iso639_languages[i].english_name);
+    std::wstring code2   = to_wide(iso639_languages[i].iso639_2_code);
+    std::wstring code1   = NULL != iso639_languages[i].iso639_1_code ? to_wide(iso639_languages[i].iso639_1_code) : L"";
+    mxinfo(FILL(english, 0) + L" | " + FILL(code2, 1) + L" | " + FILL(code1, 2) + L"\n");
   }
 }
 

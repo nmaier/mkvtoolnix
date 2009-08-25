@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: zh-TW\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-08-21 22:32+0200\n"
+"PO-Revision-Date: 2009-08-25 11:03+0200\n"
 "Last-Translator: Dong-Jun Wu <ziyawu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <ziyawu@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -30,14 +30,6 @@ msgid ""
 msgstr ""
 "\n"
 "mkvmerge 收到了一個 SIGINT（使用者可能按了 Ctrl+C）。正在嘗試恢復檔。如果 mkvmerge 在過程中沒有回應，您需要手動停止它。\n"
-
-#: src/common/iso639.cpp:552
-msgid ""
-"                             English language name | ISO639-2 code | ISO639-1 code\n"
-"---------------------------------------------------+---------------+--------------\n"
-msgstr ""
-"                                        英文語言名稱 | ISO639-2 碼 | ISO639-1 碼\n"
-"---------------------------------------------------+---------------+--------------\n"
 
 #: src/merge/mkvmerge.cpp:240
 msgid ""
@@ -1128,17 +1120,17 @@ msgstr "'%1%' 缺少軌道 ID。\n"
 msgid "'%1%' lacks the track number(s).\n"
 msgstr "'%1%' 缺少軌道編號。\n"
 
-#: src/common/output.cpp:115
-#: src/common/output.cpp:128
-#: src/common/output.cpp:141
-#: src/common/output.cpp:162
+#: src/common/output.cpp:126
+#: src/common/output.cpp:139
+#: src/common/output.cpp:152
+#: src/common/output.cpp:173
 msgid "'%1%' track %2%: %3%"
 msgstr "'%1%' 軌道 %2%: %3%"
 
-#: src/common/output.cpp:108
-#: src/common/output.cpp:121
-#: src/common/output.cpp:134
-#: src/common/output.cpp:151
+#: src/common/output.cpp:119
+#: src/common/output.cpp:132
+#: src/common/output.cpp:145
+#: src/common/output.cpp:162
 msgid "'%1%': %2%"
 msgstr "'%1%': %2%"
 
@@ -2646,7 +2638,7 @@ msgstr "日期 (無效, 值: %1%)"
 msgid "Date: %1% UTC"
 msgstr "日期: %1% UTC"
 
-#: src/common/output.cpp:73
+#: src/common/output.cpp:74
 msgid "Debug> "
 msgstr "除錯> "
 
@@ -2881,6 +2873,10 @@ msgstr "加密鑰匙 ID: %1%"
 msgid "End:"
 msgstr "終止時間:"
 
+#: src/common/iso639.cpp:552
+msgid "English language name"
+msgstr "英文語言名稱"
+
 #: src/info/qt_ui.cpp:129
 #: src/info/wxwidgets_ui.cpp:260
 msgid "Error"
@@ -2939,7 +2935,7 @@ msgstr "寫入 Matroska 檔案發生錯誤"
 msgid "Error:"
 msgstr "發生錯誤:"
 
-#: src/common/output.cpp:67
+#: src/common/output.cpp:68
 msgid "Error: "
 msgstr "發生錯誤: "
 
@@ -3357,6 +3353,14 @@ msgstr "設定您希望應用至下面所有章節（含目前所選項目）的
 #: src/mmg/jobs.cpp:345
 msgid "ID"
 msgstr "ID"
+
+#: src/common/iso639.cpp:554
+msgid "ISO639-1 code"
+msgstr "ISO639-1 碼"
+
+#: src/common/iso639.cpp:553
+msgid "ISO639-2 code"
+msgstr "ISO639-2 碼"
 
 #: src/mmg/tabs/chapters.cpp:252
 msgid "If a chapter is marked 'hidden' then the player should not show this chapter entry to the user. Such entries could still be used by the menu system."
@@ -6301,7 +6305,7 @@ msgstr "這 *真的* 不該發生。為第一個變換定位元件預留的空�
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "這 *真的* 不該發生。為第一個變換定位元件預留的空間過小。需要的大小: %1%. %2%\n"
 
-#: src/common/common.h:54
+#: src/common/common.h:55
 msgid "This should not have happened. Please contact the author Moritz Bunkus <moritz@bunkus.org> with this error/warning message, a description of what you were trying to do, the command line used and which operating system you are using. Thank you."
 msgstr "這不該發生。請聯繫作者 Moritz Bunkus <moritz@bunkus.org>，並附上本錯誤/警告訊息、您正打算做的事情的描述、使用的命令列及您正在使用的作業系統。感謝。"
 
@@ -7231,7 +7235,7 @@ msgstr "行 %1% 處警告: 起始時間早於前一條的起始時間。此檔�
 msgid "Warning:"
 msgstr "警告:"
 
-#: src/common/output.cpp:70
+#: src/common/output.cpp:71
 msgid "Warning: "
 msgstr "警告: "
 
@@ -8489,6 +8493,12 @@ msgstr "錯誤用法: 寫入至唯讀記憶體"
 msgid "yes"
 msgstr "是"
 
+#~ msgid ""
+#~ "                             English language name | ISO639-2 code | ISO639-1 code\n"
+#~ "---------------------------------------------------+---------------+--------------\n"
+#~ msgstr ""
+#~ "                                        英文語言名稱 | ISO639-2 碼 | ISO639-1 碼\n"
+#~ "---------------------------------------------------+---------------+--------------\n"
 #~ msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|\n"
 #~ msgstr "%1% 畫格, 軌道 %2%, 時間碼 %3% (%4%), 大小 %5%, adler 0x%|6$08x|\n"
 #~ msgid "A single '+' is not a valid command line option. If you want to append a file use '+' directly followed by the file name, e.g. '+movie_part_2.avi'."
