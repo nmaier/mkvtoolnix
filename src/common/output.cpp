@@ -19,6 +19,7 @@
 #include "common/output.h"
 #include "common/smart_pointers.h"
 #include "common/strings/formatting.h"
+#include "common/strings/utf8.h"
 
 #include <ebml/EbmlDate.h>
 #include <ebml/EbmlDummy.h>
@@ -84,6 +85,11 @@ mxmsg(int level,
 void
 mxinfo(const std::string &info) {
   mxmsg(MXMSG_INFO, info);
+}
+
+void
+mxinfo(const boost::wformat &info) {
+  mxmsg(MXMSG_INFO, to_utf8(info.str()));
 }
 
 void

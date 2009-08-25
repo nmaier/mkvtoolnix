@@ -48,6 +48,7 @@ void MTX_DLL_API mxinfo(const std::string &info);
 inline void mxinfo(const boost::format &info) {
   mxinfo(info.str());
 }
+void MTX_DLL_API mxinfo(const boost::wformat &info);
 
 void MTX_DLL_API mxwarn(const std::string &warning);
 inline void
