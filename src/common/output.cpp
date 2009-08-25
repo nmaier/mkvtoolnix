@@ -88,6 +88,11 @@ mxinfo(const std::string &info) {
 }
 
 void
+mxinfo(const std::wstring &info) {
+  mxmsg(MXMSG_INFO, to_utf8(info));
+}
+
+void
 mxinfo(const boost::wformat &info) {
   mxmsg(MXMSG_INFO, to_utf8(info.str()));
 }
