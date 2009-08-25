@@ -50,6 +50,7 @@ get_width_in_em(const std::wstring &s) {
   return width;
 }
 
+// See http://unicode.org/reports/tr11/
 size_t
 get_width_in_em(wchar_t c) {
   return (    (0x0000a1 == c)
@@ -70,7 +71,6 @@ get_width_in_em(wchar_t c) {
           ||  (0x0000f0 == c)
           || ((0x0000f2 <= c) && (0x0000f3 >= c))
           || ((0x0000f7 <= c) && (0x0000fa >= c))
-          ||  (0x0000fc == c)
           ||  (0x0000fe == c)
           ||  (0x000101 == c)
           ||  (0x000111 == c)
