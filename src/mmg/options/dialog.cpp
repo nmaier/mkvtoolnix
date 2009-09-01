@@ -51,9 +51,8 @@ options_dialog::options_dialog(wxWindow *parent,
   tabs.push_back(new optdlg_languages_tab(nb_tabs, options));
   tabs.push_back(new optdlg_chapters_tab( nb_tabs, options));
 
-  std::vector<optdlg_base_tab *>::iterator tab_it;
-  mxforeach(tab_it, tabs)
-    nb_tabs->AddPage(*tab_it, (*tab_it)->get_title());
+  foreach(optdlg_base_tab *tab, tabs)
+    nb_tabs->AddPage(tab, tab->get_title());
 
   wxBoxSizer *siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->AddSpacer(5);

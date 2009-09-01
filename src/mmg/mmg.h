@@ -109,6 +109,25 @@ struct mmg_track_t {
   }
 
   wxString create_label();
+
+  bool is_video() {
+    return 'v' == type;
+  }
+  bool is_audio() {
+    return 'a' == type;
+  }
+  bool is_subtitles() {
+    return 's' == type;
+  }
+  bool is_buttons() {
+    return 'b' == type;
+  }
+  bool is_chapters() {
+    return 'c' == type;
+  }
+  bool is_tags() {
+    return 't' == type;
+  }
 };
 typedef counted_ptr<mmg_track_t> mmg_track_cptr;
 

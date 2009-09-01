@@ -45,10 +45,9 @@ debugging_requested(const std::string &option,
 void
 request_debugging(const std::string &options) {
   std::vector<std::string> all_options = split(options);
-  std::vector<std::string>::iterator i;
 
-  mxforeach(i, all_options) {
-    std::vector<std::string> parts = split(*i, ":", 2);
+  foreach(std::string &one_option, all_options) {
+    std::vector<std::string> parts = split(one_option, ":", 2);
     if (1 == parts.size())
       s_debugging_options[parts[0]] = "";
     else

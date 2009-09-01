@@ -36,13 +36,11 @@ debug_memory_usage_details_hook() {
 
   std::string timecode = (boost::format("memory_usage_details :: %1%.%|2$04d| :: ") % (now / 1000) % (now % 1000)).str();
 
-  std::vector<filelist_t>::iterator file;
-  mxforeach(file, g_files) {
-    mxinfo(boost::format("%1%reader :: %2% :: %3%\n") % timecode % file->name % file->reader->get_queued_bytes());
+  foreach(filelist_t &file, g_files) {
+    mxinfo(boost::format("%1%reader :: %2% :: %3%\n") % timecode % file.name % file.reader->get_queued_bytes());
 
-    std::vector<generic_packetizer_c *>::iterator packetizer;
-    mxforeach(packetizer, file->reader->reader_packetizers)
-      mxinfo(boost::format("%1%packetizer :: %2% :: %3% :: %4%\n") % timecode % (*packetizer)->ti.id % typeid(*packetizer).name() % (*packetizer)->get_queued_bytes());
+    foreach(generic_packetizer_c *packetizer, file.reader->reader_packetizers)
+      mxinfo(boost::format("%1%packetizer :: %2% :: %3% :: %4%\n") % timecode % packetizer->ti.id % typeid(*packetizer).name() % packetizer->get_queued_bytes());
   }
 }
 

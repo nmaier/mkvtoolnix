@@ -23,7 +23,6 @@
 #include "merge/pr_generic.h"
 #include "merge/timecode_factory.h"
 
-
 timecode_factory_cptr
 timecode_factory_c::create(const std::string &file_name,
                            const std::string &source_name,
@@ -241,11 +240,11 @@ timecode_factory_v2_c::parse(mm_io_c &in) {
     mxerror(boost::format(Y("The timecode file '%1%' does not contain any valid entry.\n")) % m_file_name);
 
   dur_sum = -1;
-  std::map<int64_t, int64_t>::const_iterator it;
-  mxforeach(it, dur_map) {
-    if ((0 > dur_sum) || (dur_map[dur_sum] < (*it).second))
-      dur_sum = (*it).first;
-    mxverb(4, boost::format("ext_m_timecodes v2 dur_map %1% = %2%\n") % it->first % it->second);
+  std::pair<int64_t, int64_t> entry;
+  foreach(entry, dur_map) {
+    if ((0 > dur_sum) || (dur_map[dur_sum] < entry.second))
+      dur_sum = entry.first;
+    mxverb(4, boost::format("ext_m_timecodes v2 dur_map %1% = %2%\n") % entry.first % entry.second);
   }
   mxverb(4, boost::format("ext_m_timecodes v2 max is %1% = %2%\n") % dur_sum % dur_map[dur_sum]);
 

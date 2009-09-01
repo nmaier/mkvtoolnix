@@ -58,14 +58,13 @@ theora_video_packetizer_c::extract_aspect_ratio() {
   memory_cptr private_data         = memory_cptr(new memory_c(ti.private_data, ti.private_size, false));
   std::vector<memory_cptr> packets = unlace_memory_xiph(private_data);
 
-  std::vector<memory_cptr>::iterator i;
-  mxforeach(i, packets) {
-    if ((0 == (*i)->get_size()) || (THEORA_HEADERTYPE_IDENTIFICATION != (*i)->get_buffer()[0]))
+  foreach(memory_cptr &packet, packets) {
+    if ((0 == packet->get_size()) || (THEORA_HEADERTYPE_IDENTIFICATION != packet->get_buffer()[0]))
       continue;
 
     try {
       theora_identification_header_t theora;
-      theora_parse_identification_header((*i)->get_buffer(), (*i)->get_size(), theora);
+      theora_parse_identification_header(packet->get_buffer(), packet->get_size(), theora);
 
       if ((0 == theora.display_width) || (0 == theora.display_height))
         return;

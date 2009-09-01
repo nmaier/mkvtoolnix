@@ -462,19 +462,17 @@ add_tags(KaxTag *tags) {
 */
 int64_t
 add_attachment(attachment_t attachment) {
-  std::vector<attachment_t>::iterator i;
-
   // If the attachment is coming from an existing file then we should
   // check if we already have another attachment stored. This can happen
   // if we're concatenating files.
   if (0 != attachment.id) {
-    mxforeach(i, g_attachments)
-      if ((   (i->id == attachment.id)
+    foreach(attachment_t &ex_attachment, g_attachments)
+      if ((   (ex_attachment.id == attachment.id)
            && !hack_engaged(ENGAGE_NO_VARIABLE_DATA))
           ||
-          (   (i->name             == attachment.name)
-           && (i->description      == attachment.description)
-           && (i->data->get_size() == attachment.data->get_size())))
+          (   (ex_attachment.name             == attachment.name)
+           && (ex_attachment.description      == attachment.description)
+           && (ex_attachment.data->get_size() == attachment.data->get_size())))
         return attachment.id;
 
     add_unique_uint32(attachment.id, UNIQUE_ATTACHMENT_IDS);
@@ -499,13 +497,14 @@ add_packetizer_globally(generic_packetizer_c *packetizer) {
   pack.old_status      = pack.status;
   pack.file            = -1;
 
-  std::vector<filelist_t>::iterator file;
-  mxforeach(file, g_files)
-    if (file->reader == packetizer->reader) {
-      pack.file      = distance(g_files.begin(), file);
+  int idx = 0;
+  foreach(filelist_t &file, g_files)
+    if (file.reader == packetizer->reader) {
+      pack.file      = idx;
       pack.orig_file = pack.file;
       break;
-    }
+    } else
+      ++idx;
 
   if (-1 == pack.file)
     mxerror(boost::format(Y("filelist_t not found for generic_packetizer_c. %1%\n")) % BUGMSG);
@@ -519,14 +518,13 @@ set_timecode_scale() {
   bool audio_present          = false;
   int64_t highest_sample_rate = 0;
 
-  std::vector<packetizer_t>::const_iterator ptzr;
-  mxforeach(ptzr, g_packetizers)
-    if ((*ptzr).packetizer->get_track_type() == track_video)
+  foreach(packetizer_t &ptzr, g_packetizers)
+    if (ptzr.packetizer->get_track_type() == track_video)
       video_present = true;
 
-    else if ((*ptzr).packetizer->get_track_type() == track_audio) {
+    else if (ptzr.packetizer->get_track_type() == track_audio) {
       audio_present       = true;
-      highest_sample_rate = std::max((int64_t)ptzr->packetizer->get_audio_sampling_freq(), highest_sample_rate);
+      highest_sample_rate = std::max(static_cast<int64_t>(ptzr.packetizer->get_audio_sampling_freq()), highest_sample_rate);
     }
 
   if (   (TIMECODE_SCALE_MODE_FIXED != g_timecode_scale_mode)
@@ -745,32 +743,31 @@ render_attachments(IOCallback *out) {
   s_kax_as           = new KaxAttachments();
   KaxAttached *kax_a = NULL;
 
-  std::vector<attachment_t>::iterator attch;
-  mxforeach(attch, g_attachments) {
-    if ((1 == g_file_num) || attch->to_all_files) {
+  foreach(attachment_t &attch, g_attachments) {
+    if ((1 == g_file_num) || attch.to_all_files) {
       kax_a = NULL == kax_a ? &GetChild<KaxAttached>(*s_kax_as) : &GetNextChild<KaxAttached>(*s_kax_as, *kax_a);
 
-      if (attch->description != "")
-        GetChildAs<KaxFileDescription, EbmlUnicodeString>(kax_a) = cstrutf8_to_UTFstring(attch->description);
+      if (attch.description != "")
+        GetChildAs<KaxFileDescription, EbmlUnicodeString>(kax_a) = cstrutf8_to_UTFstring(attch.description);
 
-      if (attch->mime_type != "")
-        GetChildAs<KaxMimeType, EbmlString>(kax_a)               = attch->mime_type;
+      if (attch.mime_type != "")
+        GetChildAs<KaxMimeType, EbmlString>(kax_a)               = attch.mime_type;
 
       std::string name;
-      if (attch->stored_name == "") {
-        int path_sep_idx = attch->name.rfind(PATHSEP);
+      if (attch.stored_name == "") {
+        int path_sep_idx = attch.name.rfind(PATHSEP);
         if (-1 != path_sep_idx)
-          name = attch->name.substr(path_sep_idx + 1);
+          name = attch.name.substr(path_sep_idx + 1);
         else
-          name = attch->name;
+          name = attch.name;
 
       } else
-        name = attch->stored_name;
+        name = attch.stored_name;
 
       GetChildAs<KaxFileName, EbmlUnicodeString>(kax_a) = cstrutf8_to_UTFstring(name);
-      GetChildAs<KaxFileUID, EbmlUInteger>(kax_a)       = attch->id;
+      GetChildAs<KaxFileUID, EbmlUInteger>(kax_a)       = attch.id;
 
-      GetChild<KaxFileData>(*kax_a).CopyBuffer(attch->data->get_buffer(), attch->data->get_size());
+      GetChild<KaxFileData>(*kax_a).CopyBuffer(attch.data->get_buffer(), attch.data->get_size());
     }
   }
 
@@ -993,14 +990,12 @@ check_append_mapping() {
 */
 void
 calc_max_chapter_size() {
-  std::vector<filelist_t>::iterator file;
-  KaxChapters *chapters;
-
   // Step 1: Add all chapters from g_files that are not being appended.
-  mxforeach(file, g_files) {
-    if (file->appending)
+  foreach(filelist_t &file, g_files) {
+    if (file.appending)
       continue;
-    chapters = file->reader->chapters;
+
+    KaxChapters *chapters = file.reader->chapters;
     if (NULL == chapters)
       continue;
 
@@ -1009,7 +1004,7 @@ calc_max_chapter_size() {
 
     move_chapters_by_edition(*g_kax_chapters, *chapters);
     delete chapters;
-    file->reader->chapters = NULL;
+    file.reader->chapters = NULL;
   }
 
   // Step 2: Fix the mandatory elements and count the size of all chapters.
@@ -1020,8 +1015,8 @@ calc_max_chapter_size() {
     s_max_chapter_size += g_kax_chapters->ElementSize();
   }
 
-  mxforeach(file, g_files) {
-    chapters = file->reader->chapters;
+  foreach(filelist_t &file, g_files) {
+    KaxChapters *chapters = file.reader->chapters;
     if (NULL == chapters)
       continue;
 
@@ -1040,121 +1035,117 @@ calc_max_chapter_size() {
 */
 void
 create_readers() {
-  std::vector<filelist_t>::iterator file;
-
-  mxforeach(file, g_files) {
+  foreach(filelist_t &file, g_files) {
     try {
-      switch (file->type) {
+      switch (file.type) {
         case FILE_TYPE_AAC:
-          file->reader = new aac_reader_c(*file->ti);
+          file.reader = new aac_reader_c(*file.ti);
           break;
         case FILE_TYPE_AC3:
-          file->reader = new ac3_reader_c(*file->ti);
+          file.reader = new ac3_reader_c(*file.ti);
           break;
         case FILE_TYPE_AVC_ES:
-          file->reader = new avc_es_reader_c(*file->ti);
+          file.reader = new avc_es_reader_c(*file.ti);
           break;
         case FILE_TYPE_AVI:
-          file->reader = new avi_reader_c(*file->ti);
+          file.reader = new avi_reader_c(*file.ti);
           break;
         case FILE_TYPE_DIRAC:
-          file->reader = new dirac_es_reader_c(*file->ti);
+          file.reader = new dirac_es_reader_c(*file.ti);
           break;
         case FILE_TYPE_DTS:
-          file->reader = new dts_reader_c(*file->ti);
+          file.reader = new dts_reader_c(*file.ti);
           break;
 #if defined(HAVE_FLAC_FORMAT_H)
         case FILE_TYPE_FLAC:
-          file->reader = new flac_reader_c(*file->ti);
+          file.reader = new flac_reader_c(*file.ti);
           break;
 #endif
         case FILE_TYPE_MATROSKA:
-          file->reader = new kax_reader_c(*file->ti);
+          file.reader = new kax_reader_c(*file.ti);
           break;
         case FILE_TYPE_MP3:
-          file->reader = new mp3_reader_c(*file->ti);
+          file.reader = new mp3_reader_c(*file.ti);
           break;
         case FILE_TYPE_MPEG_ES:
-          file->reader = new mpeg_es_reader_c(*file->ti);
+          file.reader = new mpeg_es_reader_c(*file.ti);
           break;
         case FILE_TYPE_MPEG_PS:
-          file->reader = new mpeg_ps_reader_c(*file->ti);
+          file.reader = new mpeg_ps_reader_c(*file.ti);
           break;
         case FILE_TYPE_OGM:
-          file->reader = new ogm_reader_c(*file->ti);
+          file.reader = new ogm_reader_c(*file.ti);
           break;
         case FILE_TYPE_QTMP4:
-          file->reader = new qtmp4_reader_c(*file->ti);
+          file.reader = new qtmp4_reader_c(*file.ti);
           break;
         case FILE_TYPE_REAL:
-          file->reader = new real_reader_c(*file->ti);
+          file.reader = new real_reader_c(*file.ti);
           break;
         case FILE_TYPE_SSA:
-          file->reader = new ssa_reader_c(*file->ti);
+          file.reader = new ssa_reader_c(*file.ti);
           break;
         case FILE_TYPE_SRT:
-          file->reader = new srt_reader_c(*file->ti);
+          file.reader = new srt_reader_c(*file.ti);
           break;
         case FILE_TYPE_TRUEHD:
-          file->reader = new truehd_reader_c(*file->ti);
+          file.reader = new truehd_reader_c(*file.ti);
           break;
         case FILE_TYPE_TTA:
-          file->reader = new tta_reader_c(*file->ti);
+          file.reader = new tta_reader_c(*file.ti);
           break;
         case FILE_TYPE_USF:
-          file->reader = new usf_reader_c(*file->ti);
+          file.reader = new usf_reader_c(*file.ti);
           break;
         case FILE_TYPE_COREPICTURE:
-          file->reader = new corepicture_reader_c(*file->ti);
+          file.reader = new corepicture_reader_c(*file.ti);
           break;
         case FILE_TYPE_VC1:
-          file->reader = new vc1_es_reader_c(*file->ti);
+          file.reader = new vc1_es_reader_c(*file.ti);
           break;
         case FILE_TYPE_VOBBTN:
-          file->reader = new vobbtn_reader_c(*file->ti);
+          file.reader = new vobbtn_reader_c(*file.ti);
           break;
         case FILE_TYPE_VOBSUB:
-          file->reader = new vobsub_reader_c(*file->ti);
+          file.reader = new vobsub_reader_c(*file.ti);
           break;
         case FILE_TYPE_WAV:
-          file->reader = new wav_reader_c(*file->ti);
+          file.reader = new wav_reader_c(*file.ti);
           break;
         case FILE_TYPE_WAVPACK4:
-          file->reader = new wavpack_reader_c(*file->ti);
+          file.reader = new wavpack_reader_c(*file.ti);
           break;
         default:
           mxerror(boost::format(Y("EVIL internal bug! (unknown file type). %1%\n")) % BUGMSG);
           break;
       }
     } catch (error_c &error) {
-      mxerror(boost::format(Y("The demultiplexer for the file '%1%' failed to initialize:\n%2%\n")) % file->ti->fname % error.get_error());
+      mxerror(boost::format(Y("The demultiplexer for the file '%1%' failed to initialize:\n%2%\n")) % file.ti->fname % error.get_error());
     }
   }
 
   if (!g_identifying) {
-    std::vector<attachment_t>::const_iterator att;
-
     // Create the packetizers.
-    mxforeach(file, g_files) {
-      file->reader->appending = file->appending;
-      file->reader->create_packetizers();
+    foreach(filelist_t &file, g_files) {
+      file.reader->appending = file.appending;
+      file.reader->create_packetizers();
     }
     // Check if all track IDs given on the command line are actually
     // present.
-    mxforeach(file, g_files) {
-      file->reader->check_track_ids_and_packetizers();
-      file->num_unfinished_packetizers     = file->reader->reader_packetizers.size();
-      file->old_num_unfinished_packetizers = file->num_unfinished_packetizers;
+    foreach(filelist_t &file, g_files) {
+      file.reader->check_track_ids_and_packetizers();
+      file.num_unfinished_packetizers     = file.reader->reader_packetizers.size();
+      file.old_num_unfinished_packetizers = file.num_unfinished_packetizers;
     }
 
     // Check if the append mappings are ok.
     check_append_mapping();
 
     // Calculate the size of all attachments for split control.
-    mxforeach(att, g_attachments) {
-      g_attachment_sizes_first += att->data->get_size();
-      if (att->to_all_files)
-        g_attachment_sizes_others += att->data->get_size();
+    foreach(attachment_t &att, g_attachments) {
+      g_attachment_sizes_first += att.data->get_size();
+      if (att.to_all_files)
+        g_attachment_sizes_others += att.data->get_size();
     }
 
     calc_max_chapter_size();
@@ -1680,26 +1671,27 @@ bool
 append_tracks_maybe() {
   bool appended_a_track = false;
 
-  std::vector<packetizer_t>::iterator ptzr;
-  mxforeach(ptzr, g_packetizers) {
-    if (ptzr->deferred)
+  foreach(packetizer_t &ptzr, g_packetizers) {
+    if (ptzr.deferred)
       continue;
 
-    if (!g_files[ptzr->orig_file].appended_to)
+    if (!g_files[ptzr.orig_file].appended_to)
       continue;
 
-    if (FILE_STATUS_DONE_AND_DRY != ptzr->status)
+    if (FILE_STATUS_DONE_AND_DRY != ptzr.status)
       continue;
 
-    std::vector<append_spec_t>::const_iterator amap;
-    mxforeach(amap, g_append_mapping)
-      if ((amap->dst_file_id == ptzr->file) && (amap->dst_track_id == ptzr->packetizer->ti.id))
+    append_spec_t *amap = NULL;
+    foreach(append_spec_t &amap_idx, g_append_mapping)
+      if ((amap_idx.dst_file_id == ptzr.file) && (amap_idx.dst_track_id == ptzr.packetizer->ti.id)) {
+        amap = &amap_idx;
         break;
+      }
 
-    if (g_append_mapping.end() == amap)
+    if (NULL == amap)
       continue;
 
-    append_track(*ptzr, *amap);
+    append_track(ptzr, *amap);
     appended_a_track = true;
   }
 
@@ -1725,9 +1717,8 @@ establish_deferred_connections(filelist_t &file) {
   std::vector<deferred_connection_t> def_cons = file.deferred_connections;
   file.deferred_connections.clear();
 
-  std::vector<deferred_connection_t>::iterator def_con;
-  mxforeach(def_con, def_cons)
-    append_track(*def_con->ptzr, def_con->amap, &file);
+  foreach(deferred_connection_t &def_con, def_cons)
+    append_track(*def_con.ptzr, def_con.amap, &file);
 
   // \todo Select a new file that the subs will defer to.
 }
@@ -1744,39 +1735,35 @@ main_loop() {
   while (1) {
     debug_run_main_loop_hooks();
 
-    packet_cptr pack;
-    bool appended_a_track;
-
     // Step 1: Make sure a packet is available for each output
     // as long we haven't already processed the last one.
-    std::vector<packetizer_t>::iterator ptzr;
-    mxforeach(ptzr, g_packetizers) {
-      if (FILE_STATUS_HOLDING == ptzr->status)
-        ptzr->status = FILE_STATUS_MOREDATA;
+    foreach(packetizer_t &ptzr, g_packetizers) {
+      if (FILE_STATUS_HOLDING == ptzr.status)
+        ptzr.status = FILE_STATUS_MOREDATA;
 
-      ptzr->old_status = ptzr->status;
+      ptzr.old_status = ptzr.status;
 
-      while (   !ptzr->pack.is_set()
-             && (FILE_STATUS_MOREDATA == ptzr->status)
-             && !ptzr->packetizer->packet_available())
-        ptzr->status = ptzr->packetizer->read();
+      while (   !ptzr.pack.is_set()
+             && (FILE_STATUS_MOREDATA == ptzr.status)
+             && !ptzr.packetizer->packet_available())
+        ptzr.status = ptzr.packetizer->read();
 
-      if (   (FILE_STATUS_MOREDATA != ptzr->status)
-          && (FILE_STATUS_MOREDATA == ptzr->old_status))
-        ptzr->packetizer->force_duration_on_last_packet();
+      if (   (FILE_STATUS_MOREDATA != ptzr.status)
+          && (FILE_STATUS_MOREDATA == ptzr.old_status))
+        ptzr.packetizer->force_duration_on_last_packet();
 
-      if (!ptzr->pack.is_set())
-        ptzr->pack = ptzr->packetizer->get_packet();
+      if (!ptzr.pack.is_set())
+        ptzr.pack = ptzr.packetizer->get_packet();
 
-      if (!ptzr->pack.is_set() && (FILE_STATUS_DONE == ptzr->status))
-        ptzr->status = FILE_STATUS_DONE_AND_DRY;
+      if (!ptzr.pack.is_set() && (FILE_STATUS_DONE == ptzr.status))
+        ptzr.status = FILE_STATUS_DONE_AND_DRY;
 
       // Has this packetizer changed its status from "data available" to
       // "file done" during this loop? If so then decrease the number of
       // unfinished packetizers in the corresponding file structure.
-      if (   (FILE_STATUS_DONE_AND_DRY == ptzr->status)
-          && (ptzr->old_status != ptzr->status)) {
-        filelist_t &file = g_files[ptzr->file];
+      if (   (FILE_STATUS_DONE_AND_DRY == ptzr.status)
+          && (ptzr.old_status != ptzr.status)) {
+        filelist_t &file = g_files[ptzr.file];
         file.num_unfinished_packetizers--;
 
         // If all packetizers for a file have finished then establish the
@@ -1791,22 +1778,22 @@ main_loop() {
 
     // Step 2: Pick the packet with the lowest timecode and
     // stuff it into the Matroska file.
-    std::vector<packetizer_t>::iterator winner = g_packetizers.end();
-    mxforeach(ptzr, g_packetizers) {
-      if (ptzr->pack.is_set()) {
-        if ((g_packetizers.end() == winner) || !winner->pack.is_set())
-          winner = ptzr;
+    packetizer_t * winner = NULL;
+    foreach(packetizer_t &ptzr, g_packetizers) {
+      if (ptzr.pack.is_set()) {
+        if ((NULL == winner) || !winner->pack.is_set())
+          winner = &ptzr;
 
-        else if (ptzr->pack.is_set() && (ptzr->pack->assigned_timecode < winner->pack->assigned_timecode))
-          winner = ptzr;
+        else if (ptzr.pack.is_set() && (ptzr.pack->assigned_timecode < winner->pack->assigned_timecode))
+          winner = &ptzr;
       }
     }
 
     // Append the next track if appending is wanted.
-    appended_a_track = append_tracks_maybe();
+    bool appended_a_track = append_tracks_maybe();
 
-    if ((g_packetizers.end() != winner) && winner->pack.is_set()) {
-      pack = winner->pack;
+    if ((NULL != winner) && winner->pack.is_set()) {
+      packet_cptr pack = winner->pack;
 
       // Step 3: Add the winning packet to a cluster. Full clusters will be
       // rendered automatically.
@@ -1852,10 +1839,9 @@ setup() {
 */
 static void
 destroy_readers() {
-  std::vector<filelist_t>::const_iterator file;
-  mxforeach(file, g_files) {
-    delete file->reader;
-    delete file->ti;
+  foreach(filelist_t &file, g_files) {
+    delete file.reader;
+    delete file.ti;
   }
 
   g_files.clear();

@@ -1143,15 +1143,13 @@ mpeg4::p10::avc_es_parser_c::create_nalu_with_size(const memory_cptr &src,
   unsigned char *buffer;
 
   if (add_extra_data) {
-    std::deque<memory_cptr>::iterator it;
-
-    mxforeach(it, m_extra_data)
-      final_size += (*it)->get_size();
+    foreach(memory_cptr &mem, m_extra_data)
+      final_size += mem->get_size();
     buffer = (unsigned char *)safemalloc(final_size);
 
-    mxforeach(it, m_extra_data) {
-      memcpy(buffer + offset, (*it)->get_buffer(), (*it)->get_size());
-      offset += (*it)->get_size();
+    foreach(memory_cptr &mem, m_extra_data) {
+      memcpy(buffer + offset, mem->get_buffer(), mem->get_size());
+      offset += mem->get_size();
     }
 
     m_extra_data.clear();
@@ -1165,16 +1163,16 @@ mpeg4::p10::avc_es_parser_c::create_nalu_with_size(const memory_cptr &src,
   return memory_cptr(new memory_c(buffer, final_size, true));
 }
 
+// TODO:DRY
 memory_cptr
 mpeg4::p10::avc_es_parser_c::get_avcc() {
-  std::deque<memory_cptr>::iterator it;
   int final_size = 6 + 1;
   int offset     = 6;
 
-  mxforeach(it, m_sps_list)
-    final_size += (*it)->get_size() + 2;
-  mxforeach(it, m_pps_list)
-    final_size += (*it)->get_size() + 2;
+  foreach(memory_cptr &mem, m_sps_list)
+    final_size += mem->get_size() + 2;
+  foreach(memory_cptr &mem, m_pps_list)
+    final_size += mem->get_size() + 2;
 
   unsigned char *buffer = (unsigned char *)safemalloc(final_size);
 
@@ -1188,22 +1186,22 @@ mpeg4::p10::avc_es_parser_c::get_avcc() {
   buffer[4] = 0xfc | (m_nalu_size_length - 1);
   buffer[5] = 0xe0 | m_sps_list.size();
 
-  mxforeach(it, m_sps_list) {
-    int size = (*it)->get_size();
+  foreach(memory_cptr &mem, m_sps_list) {
+    int size = mem->get_size();
 
     write_nalu_size(buffer + offset, size, 2);
-    memcpy(&buffer[offset + 2], (*it)->get_buffer(), size);
+    memcpy(&buffer[offset + 2], mem->get_buffer(), size);
     offset += 2 + size;
   }
 
   buffer[offset] = m_pps_list.size();
   ++offset;
 
-  mxforeach(it, m_pps_list) {
-    int size = (*it)->get_size();
+  foreach(memory_cptr &mem, m_pps_list) {
+    int size = mem->get_size();
 
     write_nalu_size(buffer + offset, size, 2);
-    memcpy(&buffer[offset + 2], (*it)->get_buffer(), size);
+    memcpy(&buffer[offset + 2], mem->get_buffer(), size);
     offset += 2 + size;
   }
 
@@ -1213,11 +1211,13 @@ mpeg4::p10::avc_es_parser_c::get_avcc() {
 void
 mpeg4::p10::avc_es_parser_c::dump_info() {
   mxinfo("Dumping m_frames_out:\n");
-  std::deque<avc_frame_t>::iterator i;
-
-  mxforeach(i, m_frames_out) {
+  foreach(avc_frame_t &frame, m_frames_out) {
     mxinfo(boost::format("size %1% key %2% start %3% end %4% ref1 %5% adler32 0x%|6$08x|\n")
-           % i->m_data->get_size() % i->m_keyframe % format_timecode(i->m_start) % format_timecode(i->m_end) % format_timecode(i->m_ref1)
-           % calc_adler32(i->m_data->get_buffer(), i->m_data->get_size()));
+           % frame.m_data->get_size()
+           % frame.m_keyframe
+           % format_timecode(frame.m_start)
+           % format_timecode(frame.m_end)
+           % format_timecode(frame.m_ref1)
+           % calc_adler32(frame.m_data->get_buffer(), frame.m_data->get_size()));
   }
 }

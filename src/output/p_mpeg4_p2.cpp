@@ -123,9 +123,8 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
   std::vector<video_frame_t> frames;
   mpeg4::p2::find_frame_types(packet->data->get_buffer(), packet->data->get_size(), frames, m_config_data);
 
-  std::vector<video_frame_t>::iterator frame;
-  mxforeach(frame, frames) {
-    if (!frame->is_coded) {
+  foreach(video_frame_t &frame, frames) {
+    if (!frame.is_coded) {
       ++m_statistics.m_num_n_vops;
 
       int num_surplus_timecodes = static_cast<int>(m_available_timecodes.size()) - static_cast<int>(m_ref_frames.size() + m_b_frames.size());
@@ -149,25 +148,25 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
       continue;
     }
 
-    if (FRAME_TYPE_I == frame->type)
+    if (FRAME_TYPE_I == frame.type)
       ++m_statistics.m_num_i_frames;
-    else if (FRAME_TYPE_P == frame->type)
+    else if (FRAME_TYPE_P == frame.type)
       ++m_statistics.m_num_p_frames;
     else
       ++m_statistics.m_num_b_frames;
 
     // Maybe we can flush queued frames now. But only if we don't have
     // a B frame.
-    if (FRAME_TYPE_B != frame->type)
+    if (FRAME_TYPE_B != frame.type)
       flush_frames(false);
 
-    frame->data     = (unsigned char *)safememdup(packet->data->get_buffer() + frame->pos, frame->size);
-    frame->timecode = -1;
+    frame.data     = (unsigned char *)safememdup(packet->data->get_buffer() + frame.pos, frame.size);
+    frame.timecode = -1;
 
-    if (FRAME_TYPE_B == frame->type)
-      m_b_frames.push_back(*frame);
+    if (FRAME_TYPE_B == frame.type)
+      m_b_frames.push_back(frame);
     else
-      m_ref_frames.push_back(*frame);
+      m_ref_frames.push_back(frame);
   }
 
   m_previous_timecode = m_available_timecodes.back().m_timecode;
@@ -298,14 +297,13 @@ mpeg4_p2_video_packetizer_c::flush_frames(bool end_of_file) {
   video_frame_t &bref_frame = m_ref_frames.front();
   video_frame_t &fref_frame = m_ref_frames.back();
 
-  std::deque<video_frame_t>::iterator frame;
-  mxforeach(frame, m_b_frames)
-    get_next_timecode_and_duration(frame->timecode, frame->duration);
+  foreach(video_frame_t &frame, m_b_frames)
+    get_next_timecode_and_duration(frame.timecode, frame.duration);
   get_next_timecode_and_duration(fref_frame.timecode, fref_frame.duration);
 
   add_packet(new packet_t(new memory_c(fref_frame.data, fref_frame.size, true), fref_frame.timecode, fref_frame.duration, FRAME_TYPE_P == fref_frame.type ? bref_frame.timecode : VFT_IFRAME));
-  mxforeach(frame, m_b_frames)
-    add_packet(new packet_t(new memory_c(frame->data, frame->size, true), frame->timecode, frame->duration, bref_frame.timecode, fref_frame.timecode));
+  foreach(video_frame_t &frame, m_b_frames)
+    add_packet(new packet_t(new memory_c(frame.data, frame.size, true), frame.timecode, frame.duration, bref_frame.timecode, fref_frame.timecode));
 
   m_ref_frames.pop_front();
   m_b_frames.clear();

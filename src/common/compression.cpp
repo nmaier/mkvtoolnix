@@ -526,8 +526,7 @@ content_decoder_c::reverse(memory_cptr &memory,
   if (!is_ok() || encodings.empty())
     return;
 
-  std::vector<kax_content_encoding_t>::const_iterator ce;
-  mxforeach(ce, encodings)
-    if (0 != (ce->scope & scope))
-      ce->compressor->decompress(memory);
+  foreach(kax_content_encoding_t &ce, encodings)
+    if (0 != (ce.scope & scope))
+      ce.compressor->decompress(memory);
 }

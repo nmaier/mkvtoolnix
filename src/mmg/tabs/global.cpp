@@ -489,13 +489,9 @@ tab_global::is_valid_split_timecode(wxString s) {
 
 bool
 tab_global::is_valid_split_timecode_list() {
-  wxString s = tc_split_after_timecodes->GetValue();
-  std::vector<wxString> parts;
-  std::vector<wxString>::const_iterator i;
-
-  parts = split(s, wxString(wxT(",")));
-  mxforeach(i, parts)
-    if (!is_valid_split_timecode(*i))
+  std::vector<wxString> parts = split(tc_split_after_timecodes->GetValue(), wxString(wxT(",")));
+  foreach(const wxString &part, parts)
+    if (!is_valid_split_timecode(part))
       return false;
 
   return true;

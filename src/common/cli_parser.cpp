@@ -115,11 +115,10 @@ cli_parser_c::add_option(const std::string &spec,
   cli_parser_c::option_t option(spec, description, callback, needs_arg);
 
   std::vector<std::string> names = split(parts[0], "|");
-  std::vector<std::string>::iterator name;
-  mxforeach(name, names) {
-    std::string full_name = '@' == (*name)[0]     ? *name
-                          : 1   == name->length() ? std::string( "-") + *name
-                          :                         std::string("--") + *name;
+  foreach(std::string &name, names) {
+    std::string full_name = '@' == name[0]       ? name
+                          : 1   == name.length() ? std::string( "-") + name
+                          :                        std::string("--") + name;
 
     if (map_has_key(m_option_map, full_name))
       mxerror(boost::format("cli_parser_c::add_option(): Programming error: option '%1%' is already used for spec '%2%' "
@@ -174,9 +173,8 @@ cli_parser_c::add_common_options() {
 void
 cli_parser_c::set_usage() {
   usage_text = "";
-  std::vector<cli_parser_c::option_t>::iterator option_it;
-  mxforeach(option_it, m_options)
-    usage_text += option_it->format_text();
+  foreach(option_t &option, m_options)
+    usage_text += option.format_text();
 }
 
 void
@@ -195,10 +193,9 @@ cli_parser_c::run_hooks(cli_parser_c::hook_type_e hook_type) {
   if (m_hooks[hook_type].empty())
     return false;
 
-  std::vector<cli_parser_cb_t>::iterator hook_it;
-  mxforeach(hook_it, m_hooks[hook_type])
-    if (*hook_it)
-      (*hook_it)();
+  foreach(cli_parser_cb_t &hook, m_hooks[hook_type])
+    if (hook)
+      (hook)();
 
   return true;
 }

@@ -510,7 +510,6 @@ mmg_dialog::display_help(int id) {
   if (help == NULL) {
     wxDirDialog dlg(this, Z("Choose the location of the mkvmerge GUI help files"));
     std::vector<wxString> potential_help_paths;
-    std::vector<wxString>::const_iterator php;
     wxString help_path;
     wxConfigBase *cfg;
     bool first;
@@ -551,9 +550,9 @@ mmg_dialog::display_help(int id) {
     potential_help_paths.push_back(wxGetCwd());
 
     help_path = wxEmptyString;
-    mxforeach(php, potential_help_paths)
-      if (wxFileExists(*php + wxT("/mkvmerge-gui.hhp"))) {
-        help_path = *php;
+    foreach(const wxString &php, potential_help_paths)
+      if (wxFileExists(php + wxT("/mkvmerge-gui.hhp"))) {
+        help_path = php;
         break;
       }
 
@@ -1158,13 +1157,12 @@ mmg_dialog::set_output_maybe(const wxString &new_output) {
     return;
 
   bool has_video = false, has_audio = false;
-  std::vector<mmg_track_t *>::iterator t;
 
-  mxforeach(t, tracks) {
-    if ('v' == (*t)->type) {
+  foreach(mmg_track_t *t, tracks) {
+    if (t->is_video()) {
       has_video = true;
       break;
-    } else if ('a' == (*t)->type)
+    } else if (t->is_audio())
       has_audio = true;
   }
 
