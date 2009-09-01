@@ -223,17 +223,19 @@ kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode) {
     delete l0;
   }
 
-  m_segment          = counted_ptr<KaxSegment>(static_cast<KaxSegment *>(l0));
-  int upper_lvl_el   = 0;
-  bool aborted       = false;
-  bool cluster_found = false;
+  m_segment            = counted_ptr<KaxSegment>(static_cast<KaxSegment *>(l0));
+  int upper_lvl_el     = 0;
+  bool aborted         = false;
+  bool cluster_found   = false;
+  bool meta_seek_found = false;
 
   // We've got our segment, so let's find all level 1 elements.
   EbmlElement *l1 = m_stream->FindNextElement(m_segment->Generic().Context, upper_lvl_el, 0xFFFFFFFFFFFFFFFFLL, true, 1);
   while ((NULL != l1) && (0 >= upper_lvl_el)) {
     m_data.push_back(kax_analyzer_data_c::create(l1->Generic().GlobalId, l1->GetElementPosition(), l1->ElementSize(true)));
 
-    cluster_found |= is_id(l1, KaxCluster);
+    cluster_found   |= is_id(l1, KaxCluster);
+    meta_seek_found |= is_id(l1, KaxSeekHead);
 
     l1->SkipData(*m_stream, l1->Generic().Context);
     delete l1;
@@ -241,7 +243,7 @@ kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode) {
 
     aborted = !show_progress_running((int)(m_file->getFilePointer() * 100 / file_size));
 
-    if (!in_parent(m_segment) || aborted || (cluster_found && !parse_fully))
+    if (!in_parent(m_segment) || aborted || (cluster_found && meta_seek_found && !parse_fully))
       break;
 
     l1 = m_stream->FindNextElement(m_segment->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
