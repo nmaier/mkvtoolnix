@@ -56,6 +56,11 @@ extern "C" {
 #define GAB2_ID_LANGUAGE_UNICODE 0x0002
 #define GAB2_ID_SUBTITLES        0x0004
 
+avi_subs_demuxer_t::avi_subs_demuxer_t()
+  : m_ptzr(-1)
+{
+}
+
 int
 avi_reader_c::probe_file(mm_io_c *io,
                          int64_t size) {
@@ -349,6 +354,9 @@ avi_reader_c::create_packetizers() {
 
 void
 avi_reader_c::create_subs_packetizer(int idx) {
+  if (!demuxing_requested('s', 1 + AVI_audio_tracks(m_avi) + idx))
+    return;
+
   avi_subs_demuxer_t &demuxer = m_subtitle_demuxers[idx];
 
   demuxer.m_text_io = mm_text_io_cptr(new mm_text_io_c(new mm_mem_io_c(demuxer.m_subtitles->get_buffer(), demuxer.m_subtitles->get_size())));

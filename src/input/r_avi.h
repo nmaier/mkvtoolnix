@@ -60,6 +60,8 @@ struct avi_subs_demuxer_t {
 
   mm_text_io_cptr m_text_io;
   subtitles_cptr m_subs;
+
+  avi_subs_demuxer_t();
 };
 
 class avi_reader_c: public generic_reader_c {
