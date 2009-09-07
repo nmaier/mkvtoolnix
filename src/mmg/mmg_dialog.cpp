@@ -1066,9 +1066,9 @@ mmg_dialog::update_file_menu() {
   wxString s;
 
   for (i = ID_M_FILE_LOADLAST1; i <= ID_M_FILE_LOADLAST4; i++) {
-    mi = file_menu->Remove(i);
+    mi = file_menu->FindItem(i);
     if (mi != NULL)
-      delete mi;
+      file_menu->Destroy(mi);
   }
 
   if ((last_settings.size() > 0) && !file_menu_sep) {
@@ -1088,9 +1088,9 @@ mmg_dialog::update_chapter_menu() {
   wxString s;
 
   for (i = ID_M_CHAPTERS_LOADLAST1; i <= ID_M_CHAPTERS_LOADLAST4; i++) {
-    mi = chapter_menu->Remove(i);
+    mi = chapter_menu->FindItem(i);
     if (mi != NULL)
-      delete mi;
+      chapter_menu->Destroy(mi);
   }
 
   if ((last_chapters.size() > 0) && !chapter_menu_sep) {
