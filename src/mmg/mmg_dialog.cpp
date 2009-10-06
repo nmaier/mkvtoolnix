@@ -908,7 +908,7 @@ mmg_dialog::update_command_line() {
 
     while (att_file != f->attached_files.end()) {
       if ((*att_file)->enabled)
-        att_file_ids.push_back(wxString::Format(wxT("%ld"), (*att_file)->id));
+        att_file_ids.push_back(wxString::Format(wxT("%d"), int((*att_file)->id)));
       ++att_file;
     }
 

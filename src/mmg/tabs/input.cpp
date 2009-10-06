@@ -543,8 +543,8 @@ tab_input::add_file(const wxString &file_name,
 
         file->attached_files.push_back(a);
 
-        wxLogMessage(wxT("Attached file ID %ld MIME type '%s' size %ld description '%s' name '%s'"),
-                     a->id, a->mime_type.c_str(), a->size, a->description.c_str(), a->name.c_str());
+        wxLogMessage(wxT("Attached file ID %d MIME type '%s' size %d description '%s' name '%s'"),
+                     int(a->id), a->mime_type.c_str(), int(a->size), a->description.c_str(), a->name.c_str());
       }
 
     } else if (output[i].Find(wxT("Chapters")) == 0) {
@@ -1047,12 +1047,12 @@ tab_input::load(wxConfigBase *cfg,
     cfg->Read(wxT("container"), &fi->container);
     cfg->Read(wxT("appending"), &fi->appending, false);
 
-    long tidx;
+    int tidx;
     for (tidx = 0; tidx < (long)num_tracks; tidx++) {
       mmg_track_cptr tr(new mmg_track_t);
       bool dummy = false;
 
-      s.Printf(wxT("track %ld"), tidx);
+      s.Printf(wxT("track %d"), tidx);
 
       cfg->SetPath(s);
       wxString id;

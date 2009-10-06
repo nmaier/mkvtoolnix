@@ -1,3 +1,8 @@
+2009-10-06  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: No attachments were copied from a source file to
+	the destination file.
+
 2009-09-04  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed the subtitle track selection for AVI
@@ -2148,7 +2153,7 @@
 2005-05-17  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract: bug fix: The MPEG packets are now padded to 2048
-	byte boundaries as some programs require them to be. Patch by  
+	byte boundaries as some programs require them to be. Patch by
 	Mike Matsnev (see AUTHORS).
 
 2005-05-07  Moritz Bunkus  <moritz@bunkus.org>
@@ -2508,7 +2513,7 @@
 
 	* mmg: bug fix: mmg now has an icon associated with it while it is
 	running instead of the generic Windows application icon (Windows
-	only). 
+	only).
 
 	* mmg: bug fix: The main window is now minimized during
 	muxing. This allows to hide both of the windows while muxing is
@@ -2800,7 +2805,7 @@
 	* mkvmerge: bug fix: Use 'setjmp' and 'longjmp' Instead of
 	throwing a C++ exception during the chapter parsing
 	stage. Otherwise libexpat will abort with a non-descriptive error
-	message on Windows. 
+	message on Windows.
 
 2004-08-20  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -3589,7 +3594,7 @@
 
 	* mmg: bug fix: If one added a Matroska file and the track name or
 	language of a track consisted of only blanks then mmg would
-	segfault. 
+	segfault.
 
 2003-12-15  Moritz Bunkus  <moritz@bunkus.org>
 
@@ -4377,8 +4382,8 @@
 	* --sub-charset now also needs a track ID.
 
 	* Modified the verbosity levels for mkvinfo: The seek head subentries
-	and cue subentries will only be shown at level 2 to make the 
-	output easier to read. 
+	and cue subentries will only be shown at level 2 to make the
+	output easier to read.
 
 	* The language and default track settings are now kept again if
 	not overridden when reading from Matroska files.
@@ -4554,7 +4559,7 @@
 
 2003-05-04  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvinfo reports the FourCC for video tracks with a 
+	* mkvinfo reports the FourCC for video tracks with a
 	CodecID of V_MS/VFW/FOURCC and the format tag for audio tracks
 	with a CodecID of A_MS/ACM.
 
