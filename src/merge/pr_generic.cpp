@@ -46,6 +46,12 @@
    : track_video == track_type ? DEFTRACK_TYPE_VIDEO \
    :                             DEFTRACK_TYPE_SUBS)
 
+#define LOOKUP_TRACK_ID(container)          \
+      map_has_key(container, ti.id) ? ti.id \
+    : map_has_key(container, -1)    ? -1    \
+    :                                 -2
+
+
 int64_t packet_t::sm_packet_number_counter = 0;
 
 packet_t::~packet_t() {
@@ -171,9 +177,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *p_reader,
 
   // Let's see if the user has specified an aspect ratio or display dimensions
   // for this track.
-  int i = map_has_key(ti.display_properties, ti.id)? ti.id
-        : map_has_key(ti.display_properties, -1)   ? -1
-        :                                            -2;
+  int i = LOOKUP_TRACK_ID(ti.display_properties);
   if (-2 != i) {
     display_properties_t &dprop = ti.display_properties[i];
     if (0 > dprop.aspect_ratio) {
@@ -198,19 +202,14 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *p_reader,
     ti.fourcc = ti.all_fourccs[-1];
 
   // Let's see if the user has specified a FourCC for this track.
-  ti.pixel_cropping_specified = true;
-  if (map_has_key(ti.pixel_crop_list, ti.id))
-    ti.pixel_cropping = ti.pixel_crop_list[ti.id];
-  else if (map_has_key(ti.pixel_crop_list, -1))
-    ti.pixel_cropping = ti.pixel_crop_list[-1];
-  else
-    ti.pixel_cropping_specified = false;
+  i = LOOKUP_TRACK_ID(ti.pixel_crop_list);
+  if (-2 != i)
+    set_video_pixel_cropping(ti.pixel_crop_list[i], PARAMETER_SOURCE_CMDLINE);
 
   // Let's see if the user has specified a stereo mode for this track.
-  if (map_has_key(ti.stereo_mode_list, ti.id))
-    ti.stereo_mode = ti.stereo_mode_list[ti.id];
-  else if (map_has_key(ti.stereo_mode_list, -1))
-    ti.stereo_mode = ti.stereo_mode_list[-1];
+  i = LOOKUP_TRACK_ID(ti.stereo_mode_list);
+  if (-2 != i)
+    set_video_stereo_mode(ti.stereo_mode_list[ti.id], PARAMETER_SOURCE_CMDLINE);
 
   // Let's see if the user has specified a default duration for this track.
   if (map_has_key(ti.default_durations, ti.id))
@@ -531,11 +530,16 @@ void
 generic_packetizer_c::set_video_pixel_cropping(int left,
                                                int top,
                                                int right,
-                                               int bottom) {
+                                               int bottom,
+                                               parameter_source_e source) {
+  if (source <= ti.pixel_cropping_source)
+    return;
+
   ti.pixel_cropping.left   = left;
   ti.pixel_cropping.top    = top;
   ti.pixel_cropping.right  = right;
   ti.pixel_cropping.bottom = bottom;
+  ti.pixel_cropping_source = source;
 
   if (NULL != track_entry) {
     KaxTrackVideo &video = GetChild<KaxTrackVideo>(track_entry);
@@ -548,8 +552,19 @@ generic_packetizer_c::set_video_pixel_cropping(int left,
 }
 
 void
-generic_packetizer_c::set_stereo_mode(stereo_mode_e stereo_mode) {
-  ti.stereo_mode = stereo_mode;
+generic_packetizer_c::set_video_pixel_cropping(const pixel_crop_t &cropping,
+                                               parameter_source_e source) {
+  set_video_pixel_cropping(cropping.left, cropping.top, cropping.right, cropping.bottom, source);
+}
+
+void
+generic_packetizer_c::set_video_stereo_mode(stereo_mode_e stereo_mode,
+                                            parameter_source_e source) {
+  if (source <= ti.stereo_mode_source)
+    return;
+
+  ti.stereo_mode        = stereo_mode;
+  ti.stereo_mode_source = source;
 
   if ((NULL != track_entry) && (STEREO_MODE_UNSPECIFIED != stereo_mode))
     GetChildAs<KaxVideoStereoMode, EbmlUInteger>(GetChild<KaxTrackVideo>(*track_entry)) = ti.stereo_mode;
@@ -662,14 +677,14 @@ generic_packetizer_c::set_headers() {
       GetChild<KaxVideoDisplayWidth>(video).SetDefaultSize(4);
       GetChild<KaxVideoDisplayHeight>(video).SetDefaultSize(4);
 
-      if (ti.pixel_cropping_specified) {
+      if (PARAMETER_SOURCE_NONE != ti.pixel_cropping_source) {
         GetChildAs<KaxVideoPixelCropLeft,   EbmlUInteger>(video) = ti.pixel_cropping.left;
         GetChildAs<KaxVideoPixelCropTop,    EbmlUInteger>(video) = ti.pixel_cropping.top;
         GetChildAs<KaxVideoPixelCropRight,  EbmlUInteger>(video) = ti.pixel_cropping.right;
         GetChildAs<KaxVideoPixelCropBottom, EbmlUInteger>(video) = ti.pixel_cropping.bottom;
       }
 
-      if (STEREO_MODE_UNSPECIFIED != ti.stereo_mode)
+      if ((PARAMETER_SOURCE_NONE != ti.stereo_mode_source) && (STEREO_MODE_UNSPECIFIED != ti.stereo_mode))
         GetChildAs<KaxVideoStereoMode, EbmlUInteger>(video) = ti.stereo_mode;
     }
 
@@ -1481,8 +1496,9 @@ track_info_c::track_info_c()
   , forced_track(boost::logic::indeterminate)
   , tags(NULL)
   , compression(COMPRESSION_UNSPECIFIED)
-  , pixel_cropping_specified(false)
+  , pixel_cropping_source(PARAMETER_SOURCE_NONE)
   , stereo_mode(STEREO_MODE_UNSPECIFIED)
+  , stereo_mode_source(PARAMETER_SOURCE_NONE)
   , nalu_size_length(0)
   , no_chapters(false)
   , no_attachments(false)
@@ -1576,10 +1592,11 @@ track_info_c::operator =(const track_info_c &src) {
 
   pixel_crop_list            = src.pixel_crop_list;
   pixel_cropping             = src.pixel_cropping;
-  pixel_cropping_specified   = src.pixel_cropping_specified;
+  pixel_cropping_source      = src.pixel_cropping_source;
 
   stereo_mode_list           = src.stereo_mode_list;
   stereo_mode                = src.stereo_mode;
+  stereo_mode_source         = src.stereo_mode_source;
 
   nalu_size_lengths          = src.nalu_size_lengths;
   nalu_size_length           = src.nalu_size_length;

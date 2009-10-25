@@ -144,6 +144,8 @@ struct kax_track_t {
   }
 
   void handle_packetizer_display_dimensions();
+  void handle_packetizer_pixel_cropping();
+  void handle_packetizer_stereo_mode();
 };
 
 class kax_reader_c: public generic_reader_c {

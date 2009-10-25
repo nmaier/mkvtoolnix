@@ -1,5 +1,8 @@
 2009-10-25  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The pixel cropping parameters were not kept
+	when muxing from Matroska files.
+
 	* mkvmerge: bug fix: The display width/height parameters were not
 	kept when muxing from Matroska files if the bitstream of the track
 	contained different aspect ratio information. Now the order is

@@ -245,10 +245,11 @@ public:
 
   std::map<int64_t, pixel_crop_t> pixel_crop_list; // As given on the command line
   pixel_crop_t pixel_cropping;  // For this very track
-  bool pixel_cropping_specified;
+  parameter_source_e pixel_cropping_source;
 
   std::map<int64_t, stereo_mode_e> stereo_mode_list; // As given on the command line
   stereo_mode_e stereo_mode;                    // For this very track
+  parameter_source_e stereo_mode_source;
 
   std::map<int64_t, int64_t> default_durations; // As given on the command line
   std::map<int64_t, int> max_blockadd_ids; // As given on the command line
@@ -562,9 +563,9 @@ public:
   virtual void set_video_display_height(int height);
   virtual void set_video_display_dimensions(int width, int height, parameter_source_e source);
   virtual void set_video_aspect_ratio(double aspect_ratio, bool is_factor, parameter_source_e source);
-  virtual void set_video_pixel_cropping(int left, int top, int right,
-                                        int bottom);
-  virtual void set_stereo_mode(stereo_mode_e stereo_mode);
+  virtual void set_video_pixel_cropping(int left, int top, int right, int bottom, parameter_source_e source);
+  virtual void set_video_pixel_cropping(const pixel_crop_t &cropping, parameter_source_e source);
+  virtual void set_video_stereo_mode(stereo_mode_e stereo_mode, parameter_source_e source);
 
   virtual void set_as_default_track(int type, int priority);
 

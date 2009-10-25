@@ -111,6 +111,18 @@ kax_track_t::handle_packetizer_display_dimensions() {
   ptzr_ptr->set_video_display_dimensions(v_dwidth, v_dheight, PARAMETER_SOURCE_CONTAINER);
 }
 
+void
+kax_track_t::handle_packetizer_pixel_cropping() {
+  if ((0 < v_pcleft) || (0 < v_pctop) || (0 < v_pcright) || (0 < v_pcbottom))
+    ptzr_ptr->set_video_pixel_cropping(v_pcleft, v_pctop, v_pcright, v_pcbottom, PARAMETER_SOURCE_CONTAINER);
+}
+
+void
+kax_track_t::handle_packetizer_stereo_mode() {
+  if (STEREO_MODE_UNSPECIFIED != v_stereo_mode)
+    ptzr_ptr->set_video_stereo_mode(v_stereo_mode, PARAMETER_SOURCE_CONTAINER);
+}
+
 /*
    Probes a file by simply comparing the first four bytes to the EBML
    head signature.
@@ -1251,11 +1263,9 @@ kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
     ptzr->set_video_pixel_height(t->v_height);
 
     t->handle_packetizer_display_dimensions();
+    t->handle_packetizer_pixel_cropping();
+    t->handle_packetizer_stereo_mode();
 
-    if (!ptzr->ti.pixel_cropping_specified && ((t->v_pcleft > 0)  || (t->v_pctop > 0) || (t->v_pcright > 0) || (t->v_pcbottom > 0)))
-      ptzr->set_video_pixel_cropping(t->v_pcleft, t->v_pctop, t->v_pcright, t->v_pcbottom);
-    if (STEREO_MODE_UNSPECIFIED == ptzr->ti.stereo_mode)
-      ptzr->set_stereo_mode(t->v_stereo_mode);
     if (CUE_STRATEGY_UNSPECIFIED == ptzr->get_cue_creation())
       ptzr->set_cue_creation(CUE_STRATEGY_IFRAMES);
 
@@ -1335,11 +1345,8 @@ kax_reader_c::create_video_packetizer(kax_track_t *t,
     t->ptzr_ptr = PTZR(t->ptzr);
 
     t->handle_packetizer_display_dimensions();
-
-    if (!PTZR(t->ptzr)->ti.pixel_cropping_specified && ((t->v_pcleft > 0) || (t->v_pctop > 0) || (t->v_pcright > 0) || (t->v_pcbottom > 0)))
-      PTZR(t->ptzr)->set_video_pixel_cropping(t->v_pcleft, t->v_pctop, t->v_pcright, t->v_pcbottom);
-    if (STEREO_MODE_UNSPECIFIED == PTZR(t->ptzr)->ti.stereo_mode)
-      PTZR(t->ptzr)->set_stereo_mode(t->v_stereo_mode);
+    t->handle_packetizer_pixel_cropping();
+    t->handle_packetizer_stereo_mode();
 
   } else
     init_passthrough_packetizer(t);
