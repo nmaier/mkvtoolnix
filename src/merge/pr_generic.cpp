@@ -171,23 +171,19 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *p_reader,
 
   // Let's see if the user has specified an aspect ratio or display dimensions
   // for this track.
-  int i = -2;
-  if (map_has_key(ti.display_properties, ti.id))
-    i = ti.id;
-  else if (map_has_key(ti.display_properties, -1))
-    i = -1;
+  int i = map_has_key(ti.display_properties, ti.id)? ti.id
+        : map_has_key(ti.display_properties, -1)   ? -1
+        :                                            -2;
   if (-2 != i) {
     display_properties_t &dprop = ti.display_properties[i];
     if (0 > dprop.aspect_ratio) {
-      ti.display_width            = dprop.width;
-      ti.display_height           = dprop.height;
-      ti.display_dimensions_given = true;
+      set_video_display_dimensions(dprop.width, dprop.height, PARAMETER_SOURCE_CMDLINE);
     } else {
-      ti.aspect_ratio             = dprop.aspect_ratio;
-      ti.aspect_ratio_given       = true;
-      ti.aspect_ratio_is_factor   = dprop.ar_factor;
+      set_video_aspect_ratio(dprop.aspect_ratio, dprop.ar_factor, PARAMETER_SOURCE_CMDLINE);
+      ti.aspect_ratio_given = true;
     }
   }
+
   if (ti.aspect_ratio_given && ti.display_dimensions_given) {
     if (ti.aspect_ratio_is_factor)
       mxerror_tid(ti.fname, ti.id, boost::format(Y("Both the aspect ratio factor and '--display-dimensions' were given.\n")));
@@ -474,6 +470,38 @@ generic_packetizer_c::set_video_display_height(int height) {
   hvideo_display_height = height;
   if (NULL != track_entry)
     GetChildAs<KaxVideoDisplayHeight, EbmlUInteger>(GetChild<KaxTrackVideo>(*track_entry)) = hvideo_display_height;
+}
+
+void
+generic_packetizer_c::set_video_display_dimensions(int width,
+                                                   int height,
+                                                   parameter_source_e source) {
+  if (display_dimensions_or_aspect_ratio_set() && (ti.display_dimensions_source >= source))
+    return;
+
+  ti.display_width             = width;
+  ti.display_height            = height;
+  ti.display_dimensions_source = source;
+  ti.display_dimensions_given  = true;
+  ti.aspect_ratio_given        = false;
+
+  set_video_display_width(width);
+  set_video_display_height(height);
+
+}
+
+void
+generic_packetizer_c::set_video_aspect_ratio(double aspect_ratio,
+                                             bool is_factor,
+                                             parameter_source_e source) {
+  if (display_dimensions_or_aspect_ratio_set() && (ti.display_dimensions_source >= source))
+    return;
+
+  ti.aspect_ratio              = aspect_ratio;
+  ti.aspect_ratio_is_factor    = is_factor;
+  ti.display_dimensions_source = source;
+  ti.display_dimensions_given  = false;
+  ti.aspect_ratio_given        = true;
 }
 
 void
@@ -1051,6 +1079,11 @@ generic_packetizer_c::flush() {
   apply_factory();
 }
 
+bool
+generic_packetizer_c::display_dimensions_or_aspect_ratio_set() {
+  return ti.display_dimensions_or_aspect_ratio_set();
+}
+
 //--------------------------------------------------------------------
 
 #define add_all_requested_track_ids(type, container)                                              \
@@ -1441,6 +1474,7 @@ track_info_c::track_info_c()
   , aspect_ratio_given(false)
   , aspect_ratio_is_factor(false)
   , display_dimensions_given(false)
+  , display_dimensions_source(PARAMETER_SOURCE_NONE)
   , reset_timecodes(false)
   , cues(CUE_STRATEGY_UNSPECIFIED)
   , default_track(boost::logic::indeterminate)
@@ -1502,6 +1536,7 @@ track_info_c::operator =(const track_info_c &src) {
   aspect_ratio_given         = false;
   aspect_ratio_is_factor     = false;
   display_dimensions_given   = false;
+  display_dimensions_source  = src.display_dimensions_source;
 
   timecode_syncs             = src.timecode_syncs;
   memcpy(&tcsync, &src.tcsync, sizeof(timecode_sync_t));
@@ -1573,3 +1608,9 @@ track_info_c::operator =(const track_info_c &src) {
 
   return *this;
 }
+
+bool
+track_info_c::display_dimensions_or_aspect_ratio_set() {
+  return PARAMETER_SOURCE_NONE != display_dimensions_source;
+}
+

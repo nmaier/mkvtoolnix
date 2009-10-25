@@ -36,19 +36,15 @@ mpeg1_2_video_packetizer_c(generic_reader_c *p_reader,
                            bool framed)
   : video_packetizer_c(p_reader, p_ti, "V_MPEG1", fps, width, height)
   , m_framed(framed)
-  , m_aspect_ratio_extracted(false)
+  , m_aspect_ratio_extracted(true)
 {
 
   set_codec_id((boost::format("V_MPEG%1%") % version).str());
-  if (!ti.aspect_ratio_given && !ti.display_dimensions_given) {
-    if ((0 < dwidth) && (0 < dheight)) {
-      m_aspect_ratio_extracted    = true;
-      ti.display_dimensions_given = true;
-      ti.display_width            = dwidth;
-      ti.display_height           = dheight;
-    }
-  } else
-    m_aspect_ratio_extracted      = true;
+  if (!display_dimensions_or_aspect_ratio_set())
+    if ((0 < dwidth) && (0 < dheight))
+      set_video_display_dimensions(dwidth, dheight, PARAMETER_SOURCE_BITSTREAM);
+    else
+      m_aspect_ratio_extracted = false;
 
   timecode_factory_application_mode = TFA_SHORT_QUEUEING;
 
@@ -202,18 +198,13 @@ mpeg1_2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
                                                  int size) {
   float ar;
 
-  if (ti.aspect_ratio_given || ti.display_dimensions_given)
+  if (display_dimensions_or_aspect_ratio_set())
     return;
 
   if (!mpeg1_2::extract_ar(buffer, size, ar))
     return;
 
-  ti.display_dimensions_given = true;
-  if ((0 >= ar) || (1 == ar))
-    set_video_display_width(m_width);
-  else
-    set_video_display_width((int)(m_height * ar));
-  set_video_display_height(m_height);
+  set_video_display_dimensions((0 >= ar) || (1 == ar) ? m_width : (int)(m_height * ar), m_height, PARAMETER_SOURCE_BITSTREAM);
 
   rerender_track_headers();
   m_aspect_ratio_extracted = true;

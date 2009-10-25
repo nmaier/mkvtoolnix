@@ -736,7 +736,7 @@ real_reader_c::set_dimensions(real_demuxer_cptr dmx,
   if ((dmx->width != width) || (dmx->height != height)) {
     uint32_t disp_width, disp_height;
 
-    if (!ti.aspect_ratio_given && !ti.display_dimensions_given) {
+    if (!ti.display_dimensions_or_aspect_ratio_set()) {
       disp_width  = dmx->width;
       disp_height = dmx->height;
 
@@ -750,7 +750,7 @@ real_reader_c::set_dimensions(real_demuxer_cptr dmx,
       dmx->width  = width;
       dmx->height = height;
 
-    } else {                  // ti.aspect_ratio_given == true
+    } else if (ti.aspect_ratio_given) {
       dmx->width  = width;
       dmx->height = height;
 

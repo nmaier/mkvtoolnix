@@ -84,6 +84,7 @@ struct kax_track_t {
   KaxTags *tags;
 
   int ptzr;
+  generic_packetizer_c *ptzr_ptr;
   bool headers_set;
 
   bool ignore_duration_hack;
@@ -127,6 +128,7 @@ struct kax_track_t {
     , previous_timecode(0)
     , tags(NULL)
     , ptzr(-1)
+    , ptzr_ptr(NULL)
     , headers_set(false)
     , ignore_duration_hack(false)
   {
@@ -140,6 +142,8 @@ struct kax_track_t {
     if (NULL != tags)
       delete tags;
   }
+
+  void handle_packetizer_display_dimensions();
 };
 
 class kax_reader_c: public generic_reader_c {

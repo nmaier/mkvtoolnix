@@ -99,6 +99,18 @@ using namespace libmatroska;
 
 #define MAGIC_MKV 0x1a45dfa3
 
+void
+kax_track_t::handle_packetizer_display_dimensions() {
+  // If user hasn't set an aspect ratio via the command line and the
+  // source file provides display width/height paramaters then use
+  // these and signal the packetizer not to extract the dimensions
+  // from the bitstream.
+  if ((0 == v_dwidth) || (0 == v_dheight))
+    return;
+
+  ptzr_ptr->set_video_display_dimensions(v_dwidth, v_dheight, PARAMETER_SOURCE_CONTAINER);
+}
+
 /*
    Probes a file by simply comparing the first four bytes to the EBML
    head signature.
@@ -1219,6 +1231,7 @@ kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
 
   ptzr                    = new passthrough_packetizer_c(this, nti);
   t->ptzr                 = add_packetizer(ptzr);
+  t->ptzr_ptr             = ptzr;
   t->passthrough          = true;
   ptzr_to_track_map[ptzr] = t;
 
@@ -1236,12 +1249,9 @@ kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
   if ('v' == t->type) {
     ptzr->set_video_pixel_width(t->v_width);
     ptzr->set_video_pixel_height(t->v_height);
-    if (!ptzr->ti.aspect_ratio_given) { // The user hasn't set it.
-      if (0 != t->v_dwidth)
-        ptzr->set_video_display_width(t->v_dwidth);
-      if (0 != t->v_dheight)
-        ptzr->set_video_display_height(t->v_dheight);
-    }
+
+    t->handle_packetizer_display_dimensions();
+
     if (!ptzr->ti.pixel_cropping_specified && ((t->v_pcleft > 0)  || (t->v_pctop > 0) || (t->v_pcright > 0) || (t->v_pcbottom > 0)))
       ptzr->set_video_pixel_cropping(t->v_pcleft, t->v_pctop, t->v_pcright, t->v_pcbottom);
     if (STEREO_MODE_UNSPECIFIED == ptzr->ti.stereo_mode)
@@ -1322,13 +1332,9 @@ kax_reader_c::create_video_packetizer(kax_track_t *t,
       t->ptzr = add_packetizer(new video_packetizer_c(this, nti, t->codec_id.c_str(), t->v_frate, t->v_width, t->v_height));
     }
 
-    if (!PTZR(t->ptzr)->ti.aspect_ratio_given) {
-      // The user hasn't set it.
-      if (0 != t->v_dwidth)
-        PTZR(t->ptzr)->set_video_display_width(t->v_dwidth);
-      if (0 != t->v_dheight)
-        PTZR(t->ptzr)->set_video_display_height(t->v_dheight);
-    }
+    t->ptzr_ptr = PTZR(t->ptzr);
+
+    t->handle_packetizer_display_dimensions();
 
     if (!PTZR(t->ptzr)->ti.pixel_cropping_specified && ((t->v_pcleft > 0) || (t->v_pctop > 0) || (t->v_pcright > 0) || (t->v_pcbottom > 0)))
       PTZR(t->ptzr)->set_video_pixel_cropping(t->v_pcleft, t->v_pctop, t->v_pcright, t->v_pcbottom);

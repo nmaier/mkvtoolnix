@@ -135,6 +135,13 @@ enum default_track_priority_e {
   DEFAULT_TRACK_PRIORITY_CMDLINE     = 255
 };
 
+enum parameter_source_e {
+  PARAMETER_SOURCE_NONE      = 0,
+  PARAMETER_SOURCE_BITSTREAM = 1,
+  PARAMETER_SOURCE_CONTAINER = 2,
+  PARAMETER_SOURCE_CMDLINE   = 3,
+};
+
 struct display_properties_t {
   float aspect_ratio;
   bool ar_factor;
@@ -198,6 +205,7 @@ public:
   float aspect_ratio;
   int display_width, display_height;
   bool aspect_ratio_given, aspect_ratio_is_factor, display_dimensions_given;
+  parameter_source_e display_dimensions_source;
 
   std::map<int64_t, timecode_sync_t> timecode_syncs; // As given on the command line
   timecode_sync_t tcsync;                       // For this very track
@@ -280,6 +288,7 @@ public:
 
   track_info_c &operator =(const track_info_c &src);
   virtual void free_contents();
+  virtual bool display_dimensions_or_aspect_ratio_set();
 };
 
 #define PTZR(i) reader_packetizers[i]
@@ -551,9 +560,8 @@ public:
   virtual void set_video_pixel_height(int height);
   virtual void set_video_display_width(int width);
   virtual void set_video_display_height(int height);
-  virtual void set_video_aspect_ratio(float ar) {
-    ti.aspect_ratio = ar;
-  }
+  virtual void set_video_display_dimensions(int width, int height, parameter_source_e source);
+  virtual void set_video_aspect_ratio(double aspect_ratio, bool is_factor, parameter_source_e source);
   virtual void set_video_pixel_cropping(int left, int top, int right,
                                         int bottom);
   virtual void set_stereo_mode(stereo_mode_e stereo_mode);
@@ -591,6 +599,8 @@ public:
   virtual void apply_factory_once(packet_cptr &packet);
   virtual void apply_factory_short_queueing(packet_cptr_di &p_start);
   virtual void apply_factory_full_queueing(packet_cptr_di &p_start);
+
+  virtual bool display_dimensions_or_aspect_ratio_set();
 };
 
 extern std::vector<generic_packetizer_c *> ptzrs_in_header_order;

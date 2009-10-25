@@ -324,7 +324,7 @@ mpeg4_p2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
   if (m_aspect_ratio_extracted)
     return;
 
-  if ((0 != connected_to) || ti.aspect_ratio_given || ti.display_dimensions_given) {
+  if ((0 != connected_to) || display_dimensions_or_aspect_ratio_set()) {
     m_aspect_ratio_extracted = true;
     return;
   }
@@ -332,8 +332,8 @@ mpeg4_p2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
   uint32_t num, den;
   if (mpeg4::p2::extract_par(buffer, size, num, den)) {
     m_aspect_ratio_extracted = true;
-    ti.aspect_ratio_given    = true;
-    ti.aspect_ratio          = (float)hvideo_pixel_width / (float)hvideo_pixel_height * (float)num / (float)den;
+    set_video_aspect_ratio((double)hvideo_pixel_width / (double)hvideo_pixel_height * (double)num / (double)den,
+                           false, PARAMETER_SOURCE_BITSTREAM);
 
     generic_packetizer_c::set_headers();
     rerender_track_headers();
