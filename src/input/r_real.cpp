@@ -734,7 +734,8 @@ real_reader_c::set_dimensions(real_demuxer_cptr dmx,
     return;
 
   if ((dmx->width != width) || (dmx->height != height)) {
-    uint32_t disp_width, disp_height;
+    uint32_t disp_width  = 0;
+    uint32_t disp_height = 0;
 
     if (!ti.display_dimensions_or_aspect_ratio_set()) {
       disp_width  = dmx->width;
@@ -768,11 +769,13 @@ real_reader_c::set_dimensions(real_demuxer_cptr dmx,
     KaxTrackEntry *track_entry = PTZR(dmx->ptzr)->get_track_entry();
     KaxTrackVideo &video       = GetChild<KaxTrackVideo>(*track_entry);
 
-    *(static_cast<EbmlUInteger *>(&GetChild<KaxVideoPixelWidth>(video)))    = width;
-    *(static_cast<EbmlUInteger *>(&GetChild<KaxVideoPixelHeight>(video)))   = height;
+    *(static_cast<EbmlUInteger *>(&GetChild<KaxVideoPixelWidth>(video)))      = width;
+    *(static_cast<EbmlUInteger *>(&GetChild<KaxVideoPixelHeight>(video)))     = height;
 
-    *(static_cast<EbmlUInteger *>(&GetChild<KaxVideoDisplayWidth>(video)))  = disp_width;
-    *(static_cast<EbmlUInteger *>(&GetChild<KaxVideoDisplayHeight>(video))) = disp_height;
+    if ((0 != disp_width) && (0 != disp_height)) {
+      *(static_cast<EbmlUInteger *>(&GetChild<KaxVideoDisplayWidth>(video)))  = disp_width;
+      *(static_cast<EbmlUInteger *>(&GetChild<KaxVideoDisplayHeight>(video))) = disp_height;
+    }
 
     rerender_track_headers();
   }
