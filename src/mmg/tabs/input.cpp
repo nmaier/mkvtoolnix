@@ -455,6 +455,7 @@ tab_input::add_file(const wxString &file_name,
       file->tracks.push_back(track);
 
       if (   (FILE_TYPE_AVC_ES == file->container)
+          && !track->appending
           && ('v' == track->type)
           && (track->ctype.Find(wxT("MPEG-4 part 10 ES")) >= 0)
           && (!avc_es_fps_warning_shown || mdlg->options.warn_usage)) {
@@ -1265,6 +1266,7 @@ tab_input::validate_settings() {
           return false;
         }
       } else if (   (FILE_TYPE_AVC_ES == f->container)
+                 && !t->appending
                  && ('v' == t->type)
                  && (t->ctype.Find(wxT("MPEG-4 part 10 ES")) >= 0)
                  && mdlg->options.warn_usage) {

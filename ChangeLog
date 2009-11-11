@@ -1,3 +1,9 @@
+2009-11-11  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: The warning that no FPS has been entered for
+	AVC/h.264 elementary streams is not shown anymore for appended
+	tracks (only once for the first track that they're appended to).
+
 2009-10-25  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The pixel cropping parameters were not kept
