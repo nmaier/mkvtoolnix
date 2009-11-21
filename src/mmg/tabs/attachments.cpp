@@ -378,8 +378,8 @@ void
 tab_attachments::add_attached_file(mmg_attached_file_cptr &a,
                                    bool update_column_widths) {
   wxFileName file_name(a->source->file_name);
-  clb_attached_files->Append(wxString::Format(Z("%s (MIME type %s, size %d) from %s (%s)"),
-                                              a->name.c_str(), a->mime_type.c_str(), int(a->size), file_name.GetFullName().c_str(), file_name.GetPath().c_str()));
+  clb_attached_files->Append(wxString::Format(Z("%s (MIME type %s, size %ld) from %s (%s)"),
+                                              a->name.c_str(), a->mime_type.c_str(), a->size, file_name.GetFullName().c_str(), file_name.GetPath().c_str()));
   clb_attached_files->Check(m_attached_files.size(), a->enabled);
   m_attached_files.push_back(a);
 
