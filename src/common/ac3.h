@@ -36,7 +36,7 @@
 #define EAC3_FRAME_TYPE_AC3_CONVERT  2
 #define EAC3_FRAME_TYPE_RESERVED     3
 
-typedef struct {
+struct ac3_header_t {
   int sample_rate;
   int bit_rate;
   int channels;
@@ -49,7 +49,9 @@ typedef struct {
   int sub_stream_id;
 
   bool has_dependent_frames;
-} ac3_header_t;
+
+  ac3_header_t();
+};
 
 int MTX_DLL_API find_ac3_header(const unsigned char *buf, int size, ac3_header_t *ac3_header, bool look_for_second_header);
 int MTX_DLL_API find_consecutive_ac3_headers(const unsigned char *buf, int size, int num);

@@ -21,6 +21,10 @@
 #include "common/common.h"
 #include "common/endian.h"
 
+ac3_header_t::ac3_header_t() {
+  memset(this, 0, sizeof(ac3_header_t));
+}
+
 /*
   EAC3 Header:
   AAAAAAAA AAAAAAAA BBCCCDDD DDDDDDDD EEFFGGGH IIIII...
