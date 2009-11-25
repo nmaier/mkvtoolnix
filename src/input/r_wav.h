@@ -91,6 +91,8 @@ protected:
   void scan_chunks();
   int find_chunk(const char *id, int start_idx = 0, bool allow_empty = true);
 
+  void dump_headers();
+
   void parse_file();
   void create_demuxer();
 };
