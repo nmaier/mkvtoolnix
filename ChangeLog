@@ -17,7 +17,7 @@
 	kept when muxing from Matroska files if the bitstream of the track
 	contained different aspect ratio information. Now the order is
 	"command line" first, "source container" second and "bitstream"
-	first.
+	last.
 
 2009-09-04  Moritz Bunkus  <moritz@bunkus.org>
 
