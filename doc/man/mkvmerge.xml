@@ -278,7 +278,7 @@
      </para>
 
      <para>
-      If the number <parameter>n</parameter> is postfixed with '<literal>ms</literal>' then &mkvmerge; puts at most <parameter>d</parameter>
+      If the number <parameter>d</parameter> is postfixed with '<literal>ms</literal>' then &mkvmerge; puts at most <parameter>d</parameter>
       milliseconds of data into each cluster. The minimum for <parameter>d</parameter> is '<literal>100ms</literal>', and the maximum is
       '<literal>32000ms</literal>'.
      </para>
