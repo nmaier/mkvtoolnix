@@ -965,7 +965,7 @@ $ mkvmerge -o full.mkv file1.mkv +file2.mkv
      <para>
       Forces the <abbrev>NALU</abbrev> size length to <parameter>n</parameter> bytes.  This parameter is only used if the
       <foreignphrase>AVC/h.264</foreignphrase> elementary stream packetizer is used.  If left out it defaults to 4 bytes, but there are
-      files that contain frames or slices that are a4ll smaller than 65536 bytes.  For such files you can use this parameter and decrease
+      files that contain frames or slices that are all smaller than 65536 bytes.  For such files you can use this parameter and decrease
       the size to 2.
      </para>
     </listitem>
