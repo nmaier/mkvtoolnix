@@ -450,17 +450,16 @@
        <para>
         The '<literal>timecodes:</literal>' prefix must not be omitted.
        </para>
-
-       <para>
-        For this splitting mode the output filename is treated differently than for the normal operation. It may contain a
-        <function>printf</function> like expression '<literal>%d</literal>' including an optional field width,
-        e.g. '<literal>%02d</literal>'. If it does then the current file number will be formatted appropriately and inserted at that point
-        in the filename.  If there is no such pattern then a pattern of '<literal>-%03d</literal>' is assumed right before the file's
-        extension: '<literal>-o output.mkv</literal>' would result in '<literal>output-001.mkv</literal>' and so on. If there's no extension
-        then '<literal>-%03d</literal>' will be appended to the name.
-       </para>
       </listitem>
      </orderedlist>
+     <para>
+       For this splitting mode the output filename is treated differently than for the normal operation. It may contain a
+       <function>printf</function> like expression '<literal>%d</literal>' including an optional field width,
+       e.g. '<literal>%02d</literal>'. If it does then the current file number will be formatted appropriately and inserted at that point
+       in the filename.  If there is no such pattern then a pattern of '<literal>-%03d</literal>' is assumed right before the file's
+       extension: '<literal>-o output.mkv</literal>' would result in '<literal>output-001.mkv</literal>' and so on. If there's no extension
+       then '<literal>-%03d</literal>' will be appended to the name.
+     </para>
     </listitem>
    </varlistentry>
 
