@@ -87,7 +87,7 @@ run(options_cptr &options) {
   analyzer->set_show_progress(options->m_show_progress);
 
   if (!analyzer->process(options->m_parse_mode))
-    mxerror(Y("This file could not be opened or parsed."));
+    mxerror(Y("This file could not be opened or parsed.\n"));
 
   options->find_elements(analyzer.get_object());
   options->validate();
