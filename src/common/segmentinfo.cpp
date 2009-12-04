@@ -21,8 +21,11 @@
 #include <cassert>
 #include <string>
 
+#include <ebml/EbmlVersion.h>
+
 #include <matroska/KaxInfo.h>
 #include <matroska/KaxInfoData.h>
+#include <matroska/KaxVersion.h>
 
 #include "common/common.h"
 #include "common/ebml.h"
@@ -80,6 +83,6 @@ fix_mandatory_segmentinfo_elements(EbmlElement *e) {
     return;
 
   GetChild<KaxTimecodeScale>(info);
-  GetChild<KaxMuxingApp>(info);
-  GetChild<KaxWritingApp>(info);
+  provide_default_for_child<KaxMuxingApp>( info, cstrutf8_to_UTFstring((boost::format("libebml v%1% + libmatroska v%2%") %  EbmlCodeVersion % KaxCodeVersion).str()));
+  provide_default_for_child<KaxWritingApp>(info, cstrutf8_to_UTFstring(VERSIONINFO " built on " __DATE__ " " __TIME__));
 }
