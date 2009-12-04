@@ -302,6 +302,8 @@ kax_analyzer_c::read_element(kax_analyzer_data_c *element_data) {
 kax_analyzer_c::update_element_result_e
 kax_analyzer_c::update_element(EbmlElement *e,
                                bool write_defaults) {
+  fix_mandatory_elements(e);
+
   try {
     call_and_validate({},                                             "update_element_0");
     call_and_validate(overwrite_all_instances(e->Generic().GlobalId), "update_element_1");
