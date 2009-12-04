@@ -136,4 +136,18 @@ EbmlElement *MTX_DLL_API find_ebml_element_by_id(EbmlMaster *master, const EbmlI
 
 void MTX_DLL_API fix_mandatory_elements(EbmlElement *master);
 
+template<typename A> void
+provide_default_for_child(EbmlMaster &master,
+                          const UTFstring &default_value) {
+  EbmlUnicodeString &value = GetChildAs<A, EbmlUnicodeString>(master);
+  if (!static_cast<const UTFstring &>(value).length())
+    value = default_value;
+}
+
+template<typename A> void
+provide_default_for_child(EbmlMaster *master,
+                          const UTFstring &default_value) {
+  provide_default_for_child<A>(*master, default_value);
+}
+
 #endif // __MTX_COMMON_EBML_H
