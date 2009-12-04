@@ -105,7 +105,7 @@ kax_analyzer_c::debug_dump_elements_maybe(const std::string &hook_name) {
   if (!analyzer_debugging_requested(hook_name))
     return;
 
-  mxinfo(boost::format("kax_analyzer_%1% dumping elements:\n") % hook_name);
+  log_debug_message(boost::format("kax_analyzer_%1% dumping elements:\n") % hook_name);
   debug_dump_elements();
 }
 
@@ -1030,11 +1030,6 @@ console_kax_analyzer_c::show_progress_done() {
 
   show_progress_running(100);
   mxinfo("\n");
-}
-
-void
-console_kax_analyzer_c::log_debug_message(const std::string &message) {
-  mxverb(3, message);
 }
 
 void
