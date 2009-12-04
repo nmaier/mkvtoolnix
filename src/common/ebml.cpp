@@ -28,12 +28,18 @@
 #include <ebml/EbmlUInteger.h>
 #include <ebml/EbmlUnicodeString.h>
 
+#include <matroska/KaxChapters.h>
+#include <matroska/KaxTags.h>
 #include <matroska/KaxTrackAudio.h>
 #include <matroska/KaxTrackVideo.h>
 
+#include "common/chapters/chapters.h"
 #include "common/common.h"
 #include "common/ebml.h"
 #include "common/memory.h"
+#include "common/segmentinfo.h"
+#include "common/segment_tracks.h"
+#include "common/tags/tags.h"
 
 using namespace libebml;
 
@@ -574,4 +580,19 @@ find_ebml_element_by_id(EbmlMaster *master,
       return (*master)[i];
 
   return NULL;
+}
+
+void
+fix_mandatory_elements(EbmlElement *master) {
+  if (NULL != dynamic_cast<KaxInfo *>(master))
+    fix_mandatory_segmentinfo_elements(master);
+
+  else if (NULL != dynamic_cast<KaxTracks *>(master))
+    fix_mandatory_segment_tracks_elements(master);
+
+  else if (NULL != dynamic_cast<KaxTags *>(master))
+    fix_mandatory_tag_elements(master);
+
+  else if (NULL != dynamic_cast<KaxChapters *>(master))
+    fix_mandatory_chapter_elements(master);
 }

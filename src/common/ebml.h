@@ -134,4 +134,6 @@ const EbmlSemantic *MTX_DLL_API find_ebml_semantic(const EbmlCallbacks &base, co
 
 EbmlElement *MTX_DLL_API find_ebml_element_by_id(EbmlMaster *master, const EbmlId &id);
 
+void MTX_DLL_API fix_mandatory_elements(EbmlElement *master);
+
 #endif // __MTX_COMMON_EBML_H
