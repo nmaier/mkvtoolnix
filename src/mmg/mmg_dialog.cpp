@@ -698,7 +698,7 @@ mmg_dialog::update_command_line() {
 #if defined(HAVE_LIBINTL_H)
   if (!app->m_ui_locale.empty()) {
     clargs.Add(wxT("--ui-language"));
-    clargs.Add(wxCS2WS(app->m_ui_locale));
+    clargs.Add(wxU(app->m_ui_locale));
   }
 #endif  // HAVE_LIBINTL_H
 

@@ -15,6 +15,7 @@
 
 #include "common/os.h"
 
+#include <boost/format.hpp>
 #include <string>
 
 #include <ebml/EbmlString.h>
@@ -38,6 +39,11 @@ wxU(const std::string &s) {
 }
 
 inline wxString
+wxU(const boost::format &s) {
+  return wxString(s.str().c_str(), wxConvUTF8);
+}
+
+inline wxString
 wxU(const EbmlString &s) {
   return wxString(static_cast<const std::string &>(s).c_str(), wxConvUTF8);
 }
@@ -54,10 +60,8 @@ wxU(const wxString &s) {
   return s;
 }
 
-#define wxCS(s)    ((const wchar_t *)(s).c_str())
-#define wxMB(s)    ((const char *)(s).mb_str(wxConvUTF8))
-#define wxUCS(s)   wxU(s).c_str()
-#define wxCS2WS(s) wxUCS((s).c_str())
+#define wxUCS(s) wxU(s).c_str()
+#define wxMB(s)  ((const char *)(s).mb_str(wxConvUTF8))
 
 /* i18n stuff */
 #if defined(HAVE_LIBINTL_H)

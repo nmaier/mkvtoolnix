@@ -109,7 +109,7 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   wxString select_locale;
   std::vector<locale_sorter_t> sorted_entries;
   while (translation != translation_c::ms_available_translations.end()) {
-    wxString curr_entry = wxCS2WS((boost::format("%1% (%2%)") % translation->m_translated_name % translation->m_english_name).str());
+    wxString curr_entry = wxU(boost::format("%1% (%2%)") % translation->m_translated_name % translation->m_english_name);
     sorted_entries.push_back(locale_sorter_t(curr_entry, translation->get_locale()));
 
     if (   (select_locale.IsEmpty() && (translation->m_english_name == "English"))
@@ -120,7 +120,7 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   }
 
   wxLogMessage(wxT("Locale selection logic: select_locale %s uu_locale_lower %s translation_c::get_default_ui_locale() %s app->m_ui_locale %s"),
-               select_locale.c_str(), wxCS2WS(ui_locale_lower), wxCS2WS(translation_c::get_default_ui_locale()), wxCS2WS(app->m_ui_locale));
+               select_locale.c_str(), wxUCS(ui_locale_lower), wxUCS(translation_c::get_default_ui_locale()), wxUCS(app->m_ui_locale));
 
   std::sort(sorted_entries.begin(), sorted_entries.end());
 
