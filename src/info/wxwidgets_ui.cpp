@@ -35,10 +35,6 @@
 using namespace libebml;
 using namespace libmatroska;
 
-#if ! wxCHECK_VERSION(2,4,2)
-# define wxTreeItemIdValue long
-#endif
-
 static mi_frame *frame;
 
 enum {
@@ -81,14 +77,9 @@ mi_app::OnInit() {
 
   setup(get_ui_locale());
 
-#if WXUNICODE
   int i;
-
   for (i = 1; i < argc; i++)
     args.push_back(std::string(wxMB(wxString(argv[i]))));
-#else
-  args = command_line_utf8(argc, argv);
-#endif
 
   parse_args(args, initial_file);
 

@@ -17,16 +17,15 @@
 
 #include <wx/version.h>
 
-#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
-# define wxU(s)     wxString(s, wxConvUTF8)
-# define wxCS(s)    ((const wchar_t *)(s).c_str())
-# define wxMB(s)    ((const char *)(s).mb_str(wxConvUTF8))
-# define wxUCS(s)   wxU(s).c_str()
-# define wxCS2WS(s) wxUCS((s).c_str())
-# define WXUNICODE  1
-#else
+#if !defined(wxUSE_UNICODE) || !wxUSE_UNICODE
 # error wxWidgets was not compiled with Unicode support.
 #endif
+
+#define wxU(s)     wxString(s, wxConvUTF8)
+#define wxCS(s)    ((const wchar_t *)(s).c_str())
+#define wxMB(s)    ((const char *)(s).mb_str(wxConvUTF8))
+#define wxUCS(s)   wxU(s).c_str()
+#define wxCS2WS(s) wxUCS((s).c_str())
 
 /* i18n stuff */
 #if defined(HAVE_LIBINTL_H)
