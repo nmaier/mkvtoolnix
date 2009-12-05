@@ -196,7 +196,7 @@ tab_attachments::add_attachment(const wxString &file_name) {
   lb_attachments->Append(name);
 
   if (ext.Length() > 0)
-    attch->mime_type = wxU(guess_mime_type(wxMB(file_name), true).c_str());
+    attch->mime_type = wxU(guess_mime_type(wxMB(file_name), true));
   attch->style       = 0;
   attch->stored_name = derive_stored_name_from_file_name(attch->file_name);
 

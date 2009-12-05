@@ -45,7 +45,7 @@ optdlg_chapters_tab::optdlg_chapters_tab(wxWindow *parent,
 
   // Set the defaults.
 
-  wxString default_language = wxU(g_default_chapter_language.c_str());
+  wxString default_language = wxU(g_default_chapter_language);
   bool found                = false;
   unsigned int idx;
   for (idx = 0; sorted_iso_codes.Count() > idx; ++idx) {
@@ -59,7 +59,7 @@ optdlg_chapters_tab::optdlg_chapters_tab(wxWindow *parent,
   cob_country->Append(wxEmptyString);
   for (idx = 0; NULL != cctlds[idx]; ++idx)
     cob_country->Append(wxU(cctlds[idx]));
-  set_combobox_selection(cob_country, wxU(g_default_chapter_country.c_str()));
+  set_combobox_selection(cob_country, wxU(g_default_chapter_country));
 
   // Create the layout.
 

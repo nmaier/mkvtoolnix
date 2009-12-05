@@ -15,13 +15,45 @@
 
 #include "common/os.h"
 
+#include <string>
+
+#include <ebml/EbmlString.h>
+
 #include <wx/version.h>
 
 #if !defined(wxUSE_UNICODE) || !wxUSE_UNICODE
 # error wxWidgets was not compiled with Unicode support.
 #endif
 
-#define wxU(s)     wxString(s, wxConvUTF8)
+using namespace libebml;
+
+inline wxString
+wxU(const char *s) {
+  return wxString(s, wxConvUTF8);
+}
+
+inline wxString
+wxU(const std::string &s) {
+  return wxString(s.c_str(), wxConvUTF8);
+}
+
+inline wxString
+wxU(const EbmlString &s) {
+  return wxString(static_cast<const std::string &>(s).c_str(), wxConvUTF8);
+}
+
+inline wxString
+wxU(EbmlString *s) {
+  if (NULL == s)
+    return wxEmptyString;
+  return wxString(static_cast<const std::string &>(*s).c_str(), wxConvUTF8);
+}
+
+inline const wxString &
+wxU(const wxString &s) {
+  return s;
+}
+
 #define wxCS(s)    ((const wchar_t *)(s).c_str())
 #define wxMB(s)    ((const char *)(s).mb_str(wxConvUTF8))
 #define wxUCS(s)   wxU(s).c_str()

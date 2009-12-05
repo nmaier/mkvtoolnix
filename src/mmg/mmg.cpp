@@ -47,7 +47,7 @@ mmg_track_t::create_label() {
   if ('t' == type) {
     std::string format;
     fix_format(Y("Tags for track ID %lld (%d entries) from %s"), format);
-    return wxString::Format(wxU(format.c_str()), id - TRACK_ID_TAGS_BASE, num_entries, file_name.c_str());
+    return wxString::Format(wxU(format), id - TRACK_ID_TAGS_BASE, num_entries, file_name.c_str());
   }
 
   std::string format;
@@ -57,7 +57,7 @@ mmg_track_t::create_label() {
                     : type == 's' ? Z("subtitles")
                     :               Z("unknown");
 
-  return wxString::Format(wxU(format.c_str()), appending ? wxT("++> ") : wxEmptyString, ctype.c_str(), id, type_str.c_str(), file_name.c_str());
+  return wxString::Format(wxU(format), appending ? wxT("++> ") : wxEmptyString, ctype.c_str(), id, type_str.c_str(), file_name.c_str());
 }
 
 void
@@ -152,7 +152,7 @@ mmg_app::handle_command_line_arguments() {
 
   std::vector<wxString> wargs;
   for (i = 0; args.size() > i; ++i)
-    wargs.push_back(wxU(args[i].c_str()));
+    wargs.push_back(wxU(args[i]));
 
   if (wargs[0] == wxT("--edit-headers")) {
     if (wargs.size() == 1)

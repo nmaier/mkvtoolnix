@@ -319,7 +319,7 @@ create_track_order(bool all) {
   std::string temp;
 
   fix_format("%d:" LLD, temp);
-  format = wxU(temp.c_str());
+  format = wxU(temp);
   for (i = 0; i < tracks.size(); i++) {
     if (!all && (!tracks[i]->enabled || tracks[i]->appending || ('c' == tracks[i]->type) || ('t' == tracks[i]->type)))
       continue;
@@ -339,7 +339,7 @@ create_append_mapping() {
   std::string temp;
 
   fix_format("%d:" LLD ":%d:" LLD, temp);
-  format = wxU(temp.c_str());
+  format = wxU(temp);
   for (i = 1; i < tracks.size(); i++) {
     if (!tracks[i]->enabled || !tracks[i]->appending || ('c' == tracks[i]->type) || ('t' == tracks[i]->type))
       continue;

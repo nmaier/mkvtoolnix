@@ -40,7 +40,7 @@ he_language_value_page_c::~he_language_value_page_c() {
 wxControl *
 he_language_value_page_c::create_input_control() {
   if (NULL != m_element)
-    m_original_value = wxU(std::string(*static_cast<EbmlString *>(m_element)).c_str());
+    m_original_value = wxU(dynamic_cast<EbmlString *>(m_element));
 
   m_cb_language = new wxMTX_COMBOBOX_TYPE(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
 

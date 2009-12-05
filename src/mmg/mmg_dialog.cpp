@@ -79,7 +79,7 @@ mmg_dialog::mmg_dialog():
   app->init_ui_locale();
 #endif
 
-  SetTitle(wxU(get_version_info("mkvmerge GUI").c_str()));
+  SetTitle(wxU(get_version_info("mkvmerge GUI")));
 
   log_window = new wxLogWindow(this, Z("mmg debug output"), false);
   wxLog::SetActiveTarget(log_window);
@@ -595,7 +595,7 @@ mmg_dialog::on_about(wxCommandEvent &evt) {
                                   "\n"
                                   "Help is available in form of tool tips, from the\n"
                                   "'Help' menu or by pressing the 'F1' key."),
-                                wxU(get_version_info("mkvmerge GUI", true).c_str()).c_str()),
+                                wxUCS(get_version_info("mkvmerge GUI", true))),
                Z("About mkvmerge's GUI"),
                wxOK | wxCENTER | wxICON_INFORMATION);
 }
@@ -1534,7 +1534,7 @@ mmg_dialog::query_mkvmerge_capabilities() {
     if (!out->Eof()) {
       c = out->GetC();
       if (c == '\n') {
-        output.Add(wxU(tmps.c_str()));
+        output.Add(wxU(tmps));
         tmps = "";
       } else if (c < 0)
         break;
@@ -1544,7 +1544,7 @@ mmg_dialog::query_mkvmerge_capabilities() {
       break;
   }
   if (tmps.length() > 0)
-    output.Add(wxU(tmps.c_str()));
+    output.Add(wxU(tmps));
   result = 0;
 #endif
 

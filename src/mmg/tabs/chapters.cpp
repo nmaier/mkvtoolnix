@@ -431,7 +431,7 @@ tab_chapters::create_chapter_label(KaxChapterAtom &chapter) {
     label += wxT("; ");
   }
   if (language != NULL)
-    label += wxU(std::string(*static_cast<EbmlString *>(language)).c_str());
+    label += wxU(language);
   else
     label += wxT("eng");
 
@@ -560,7 +560,7 @@ tab_chapters::load(wxString name) {
     if (analyzer)
       delete analyzer;
     analyzer = NULL;
-    s = wxU(ex.get_error().c_str());
+    s = wxU(ex.get_error());
     break_line(s);
     while (s[s.Length() - 1] == wxT('\n'))
       s.Remove(s.Length() - 1);
@@ -761,7 +761,7 @@ tab_chapters::verify_atom_recursively(EbmlElement *e) {
   lang = std::string(*language);
   if ((0 == lang.size()) || !is_valid_iso639_2_code(lang.c_str())) {
     wxMessageBox(wxString::Format(Z("The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."),
-                                  wxU(lang.c_str()).c_str(), label.c_str()),
+                                  wxUCS(lang), label.c_str()),
                  Z("Chapter verification error"), wxCENTER | wxOK | wxICON_ERROR);
     return false;
   }
@@ -1568,7 +1568,7 @@ tab_chapters::on_add_chapter_name(wxCommandEvent &evt) {
   cdisplay = new KaxChapterDisplay;
   *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(*cdisplay)) = cstrutf8_to_UTFstring(Y("(unnamed)"));
   if (g_default_chapter_language.length() > 0)
-    s = wxU(g_default_chapter_language.c_str());
+    s = wxU(g_default_chapter_language);
   else
     s = wxT("eng");
   *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(*cdisplay)) =
@@ -1812,7 +1812,7 @@ tab_chapters::set_display_values(KaxChapterDisplay *display) {
 
   clanguage = FINDFIRST(display, KaxChapterLanguage);
   if (clanguage != NULL)
-    language = wxU(std::string(*static_cast<EbmlString *>(clanguage)).c_str());
+    language = wxU(clanguage);
   else
     language = wxT("eng");
   for (i = 0; i < sorted_iso_codes.Count(); i++)
@@ -1835,7 +1835,7 @@ tab_chapters::set_display_values(KaxChapterDisplay *display) {
 
   ccountry = FINDFIRST(display, KaxChapterCountry);
   if (ccountry != NULL)
-    cob_country_code->SetValue(wxU(std::string(*static_cast<EbmlString *>(ccountry)).c_str()));
+    cob_country_code->SetValue(wxU(ccountry));
   else
     cob_country_code->SetValue(wxEmptyString);
 

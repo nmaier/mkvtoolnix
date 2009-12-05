@@ -60,7 +60,7 @@ wx_kax_analyzer_c::log_debug_message(const std::string &message) {
 
   std::string msg_no_nl = message;
   strip_back(msg_no_nl, true);
-  wxLogMessage(wxU(msg_no_nl.c_str()));
+  wxLogMessage(wxU(msg_no_nl));
 }
 
 void

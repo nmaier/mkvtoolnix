@@ -417,8 +417,8 @@ tab_input::add_file(const wxString &file_name,
             if ((dims.size() == 2) && parse_int(wxMB(dims[0]), width) && parse_int(wxMB(dims[1]), height)) {
               std::string format;
               fix_format(LLD, format);
-              track->dwidth.Printf(wxU(format.c_str()), width);
-              track->dheight.Printf(wxU(format.c_str()), height);
+              track->dwidth.Printf(wxU(format), width);
+              track->dheight.Printf(wxU(format), height);
               track->display_dimensions_selected = true;
             }
 
@@ -943,7 +943,7 @@ tab_input::save(wxConfigBase *cfg) {
       s.Printf(wxT("%c"),                            t->type);
       cfg->Write(wxT("type"),                        s);
       fix_format("" LLD,                             format);
-      s.Printf(wxU(format.c_str()),                  t->id);
+      s.Printf(wxU(format),                          t->id);
       cfg->Write(wxT("id"),                          s);
       cfg->Write(wxT("enabled"),                     t->enabled);
       cfg->Write(wxT("content_type"),                t->ctype);
@@ -1102,7 +1102,7 @@ tab_input::load(wxConfigBase *cfg,
       tr->source = files.size();
       if (track_order.Length() > 0)
         track_order += wxT(",");
-      track_order += wxString::Format(wxUCS(format.c_str()), files.size(), tr->id);
+      track_order += wxString::Format(wxUCS(format), files.size(), tr->id);
 
       fi->tracks.push_back(tr);
       cfg->SetPath(wxT(".."));
@@ -1221,7 +1221,7 @@ tab_input::validate_settings() {
       std::string format;
       fix_format("%lld", format);
       wxString sid;
-      sid.Printf(wxU(format.c_str()), t->id);
+      sid.Printf(wxU(format), t->id);
 
       std::string s = wxMB(t->delay);
       strip(s);
