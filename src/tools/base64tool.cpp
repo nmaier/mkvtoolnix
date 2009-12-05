@@ -23,7 +23,7 @@
 #include "common/mm_io.h"
 #include "common/strings/editing.h"
 #include "common/strings/parsing.h"
-
+#include "common/version.h"
 
 void
 set_usage() {
@@ -35,7 +35,7 @@ set_usage() {
     "  decode - Read from <input>, decode to binary and write to <output>.\n"
     );
 
-  version_info = "base64util v" VERSION;
+  version_info = get_version_info("base64util", true);
 }
 
 int

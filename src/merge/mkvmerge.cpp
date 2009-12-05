@@ -59,6 +59,7 @@
 #include "common/tags/tags.h"
 #include "common/tags/parser.h"
 #include "common/unique_numbers.h"
+#include "common/version.h"
 #include "merge/cluster_helper.h"
 #include "merge/mkvmerge.h"
 #include "merge/output_control.h"
@@ -298,7 +299,7 @@ set_usage() {
                   "explains several details in great length which are not obvious from\n"
                   "this listing.\n");
 
-  version_info = "mkvmerge v" VERSION " ('" VERSIONNAME "')";
+  version_info = get_version_info("mkvmerge", true);
 }
 
 /** \brief Prints information about what has been compiled into mkvmerge
@@ -1585,7 +1586,7 @@ parse_args(std::vector<std::string> args) {
 
   }
 
-  mxinfo(boost::format(Y("%1% built on %2% %3%\n")) % version_info % __DATE__ % __TIME__);
+  mxinfo(boost::format("%1%\n") % get_version_info("mkvmerge", true));
 
   // Now parse options that are needed right at the beginning.
   mxforeach(sit, args) {

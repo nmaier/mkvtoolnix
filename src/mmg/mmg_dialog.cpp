@@ -35,6 +35,7 @@
 #include "common/strings/editing.h"
 #include "common/strings/formatting.h"
 #include "common/translation.h"
+#include "common/version.h"
 #include "common/wx.h"
 #include "common/xml/element_mapping.h"
 #include "merge/mkvmerge.h"
@@ -78,7 +79,7 @@ mmg_dialog::mmg_dialog():
   app->init_ui_locale();
 #endif
 
-  SetTitle(wxString::Format(Z("mkvmerge GUI v%s ('%s')"), wxU(VERSION).c_str(), wxU(VERSIONNAME).c_str()));
+  SetTitle(wxU(get_version_info("mkvmerge GUI").c_str()));
 
   log_window = new wxLogWindow(this, Z("mmg debug output"), false);
   wxLog::SetActiveTarget(log_window);
@@ -586,8 +587,7 @@ mmg_dialog::display_help(int id) {
 
 void
 mmg_dialog::on_about(wxCommandEvent &evt) {
-  wxMessageBox(wxString::Format(Z("mkvmerge GUI v%s ('%s')\n"
-                                  "built on %s %s\n\n"
+  wxMessageBox(wxString::Format(Z("%s\n\n"
                                   "This GUI was written by Moritz Bunkus <moritz@bunkus.org>"
                                   "\nBased on mmg by Florian Wagner <flo.wagner@gmx.de>\n"
                                   "mkvmerge GUI is licensed under the GPL.\n"
@@ -595,7 +595,7 @@ mmg_dialog::on_about(wxCommandEvent &evt) {
                                   "\n"
                                   "Help is available in form of tool tips, from the\n"
                                   "'Help' menu or by pressing the 'F1' key."),
-                                wxU(VERSION).c_str(), wxU(VERSIONNAME).c_str(), wxU(__DATE__).c_str(), wxU(__TIME__).c_str()),
+                                wxU(get_version_info("mkvmerge GUI", true).c_str()).c_str()),
                Z("About mkvmerge's GUI"),
                wxOK | wxCENTER | wxICON_INFORMATION);
 }

@@ -26,6 +26,7 @@
 #include "common/mm_io.h"
 #include "common/strings/editing.h"
 #include "common/translation.h"
+#include "common/version.h"
 
 /** \brief Reads command line arguments from a file
 
@@ -250,7 +251,7 @@ handle_common_cli_args(std::vector<std::string> &args,
   i = 0;
   while (args.size() > i) {
     if ((args[i] == "-V") || (args[i] == "--version")) {
-      mxinfo(boost::format(Y("%1% built on %2% %3%\n")) % version_info % __DATE__ % __TIME__);
+      mxinfo(boost::format("%1%\n") % version_info);
       mxexit(0);
 
     } else if ((args[i] == "-v") || (args[i] == "--verbose")) {

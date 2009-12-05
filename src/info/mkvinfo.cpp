@@ -81,6 +81,7 @@ extern "C" {
 #include "common/strings/editing.h"
 #include "common/strings/formatting.h"
 #include "common/translation.h"
+#include "common/version.h"
 #include "common/xml/element_mapping.h"
 #include "info/mkvinfo.h"
 
@@ -210,7 +211,7 @@ set_usage() {
       "  -h, --help     Show this help.\n"
       "  -V, --version  Show version information.\n");
 
-  version_info = (boost::format("mkvinfo v%1% ('%2%')") % VERSION % VERSIONNAME).str();
+  version_info = get_version_info("mkvinfo", true);
 }
 
 #define UTF2STR(s)                 UTFstring_to_cstrutf8(UTFstring(s))

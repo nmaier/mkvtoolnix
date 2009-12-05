@@ -76,6 +76,7 @@
 #include "common/tags/tags.h"
 #include "common/translation.h"
 #include "common/unique_numbers.h"
+#include "common/version.h"
 #include "common/xml/element_mapping.h"
 #include "input/r_aac.h"
 #include "input/r_ac3.h"
@@ -576,9 +577,9 @@ render_headers(mm_io_c *out) {
     s_kax_infos->PushElement(*s_kax_duration);
 
     if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
-      std::string version                                       = std::string("libebml v") + EbmlCodeVersion + std::string(" + libmatroska v") + KaxCodeVersion;
-      GetChildAs<KaxMuxingApp, EbmlUnicodeString>(s_kax_infos)  = cstrutf8_to_UTFstring(version.c_str());
-      GetChildAs<KaxWritingApp, EbmlUnicodeString>(s_kax_infos) = cstrutf8_to_UTFstring(VERSIONINFO " built on " __DATE__ " " __TIME__);
+      std::string muxing_app                                    = std::string("libebml v") + EbmlCodeVersion + std::string(" + libmatroska v") + KaxCodeVersion;
+      GetChildAs<KaxMuxingApp, EbmlUnicodeString>(s_kax_infos)  = cstrutf8_to_UTFstring(muxing_app);
+      GetChildAs<KaxWritingApp, EbmlUnicodeString>(s_kax_infos) = cstrutf8_to_UTFstring(get_version_info("mkvmerge", true));
       GetChild<KaxDateUTC>(*s_kax_infos).SetEpochDate(time(NULL));
 
     } else {

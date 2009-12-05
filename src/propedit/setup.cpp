@@ -26,6 +26,7 @@
 #include "common/mm_io.h"
 #include "common/translation.h"
 #include "common/unique_numbers.h"
+#include "common/version.h"
 #include "common/xml/element_mapping.h"
 #include "propedit/setup.h"
 
@@ -34,7 +35,7 @@
 static void
 init_globals() {
   clear_list_of_unique_uint32(UNIQUE_ALL_IDS);
-  version_info = "mkvpropedit v" VERSION " ('" VERSIONNAME "')";
+  version_info = get_version_info("mkvpropedit", true);
 }
 
 /** \brief Global program initialization

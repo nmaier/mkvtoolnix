@@ -54,6 +54,7 @@
 #include "common/strings/parsing.h"
 #include "common/tags/writer.h"
 #include "common/translation.h"
+#include "common/version.h"
 #include "common/xml/element_mapping.h"
 #include "extract/mkvextract.h"
 
@@ -144,7 +145,7 @@ set_usage() {
 "  -h, --help     Show this help.\n"
 "  -V, --version  Show version information.\n");
 
-  version_info = "mkvextract v" VERSION " ('" VERSIONNAME "')";
+  version_info = get_version_info("mkvextract", true);
 }
 
 static bool s_chapter_format_simple = false;

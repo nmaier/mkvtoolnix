@@ -18,6 +18,7 @@
 #include "common/common.h"
 #include "common/locale.h"
 #include "common/qt.h"
+#include "common/version.h"
 #include "info/qt_ui.h"
 #include "info/mkvinfo.h"
 
@@ -118,7 +119,7 @@ main_window_c::about() {
         "It was written by Moritz Bunkus <moritz@bunkus.org>.\n"
         "Sources and the latest binaries are always available at\n"
         "http://www.bunkus.org/videotools/mkvtoolnix/"))
-    .arg(Q(VERSIONINFO))
+    .arg(Q(get_version_info("mkvinfo GUI").c_str()))
     .arg(Q(EbmlCodeVersion.c_str()))
     .arg(Q(KaxCodeVersion.c_str()));
   QMessageBox::about(this, Q(Y("About mkvinfo")), msg);

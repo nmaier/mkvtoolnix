@@ -4,6 +4,7 @@
 
 #include "common.h"
 #include "qtcommon.h"
+#include "common/version.h"
 
 #include "mmg_qt.h"
 
@@ -67,14 +68,13 @@ main_window_c::add_debug_message(const QString &message) {
 void
 main_window_c::on_action_about_activated() {
   QString msg =
-    Q(Y("mkvmerge GUI (Qt version) v%1 ('%2').\n"
-        "Compiled with libebml %3 + libmatroska %4.\n\n"
+    Q(Y("%1.\n"
+        "Compiled with libebml %2 + libmatroska %3.\n\n"
         "This program is licensed under the GPL v2 (see COPYING).\n"
         "It was written by Moritz Bunkus <moritz@bunkus.org>.\n\n"
         "Sources and the latest binaries are always available at\n"
         "http://www.bunkus.org/videotools/mkvtoolnix/"))
-    .arg(Q(VERSION))
-    .arg(Q(VERSIONNAME))
+    .arg(Q(get_version_info("mkvmerge GUI (Qt version)").c_str()))
     .arg(Q(EbmlCodeVersion.c_str()))
     .arg(Q(KaxCodeVersion.c_str()));
 

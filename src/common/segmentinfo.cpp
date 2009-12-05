@@ -30,7 +30,9 @@
 #include "common/common.h"
 #include "common/ebml.h"
 #include "common/error.h"
+#include "common/hacks.h"
 #include "common/segmentinfo.h"
+#include "common/version.h"
 
 using namespace libmatroska;
 
@@ -83,6 +85,12 @@ fix_mandatory_segmentinfo_elements(EbmlElement *e) {
     return;
 
   GetChild<KaxTimecodeScale>(info);
-  provide_default_for_child<KaxMuxingApp>( info, cstrutf8_to_UTFstring((boost::format("libebml v%1% + libmatroska v%2%") %  EbmlCodeVersion % KaxCodeVersion).str()));
-  provide_default_for_child<KaxWritingApp>(info, cstrutf8_to_UTFstring(VERSIONINFO " built on " __DATE__ " " __TIME__));
+
+  if (!hack_engaged(ENGAGE_NO_VARIABLE_DATA)) {
+    provide_default_for_child<KaxMuxingApp>( info, cstrutf8_to_UTFstring((boost::format("libebml v%1% + libmatroska v%2%") %  EbmlCodeVersion % KaxCodeVersion).str()));
+    provide_default_for_child<KaxWritingApp>(info, cstrutf8_to_UTFstring(get_version_info("mkvmerge", true)));
+  } else {
+    provide_default_for_child<KaxMuxingApp>( info, cstrutf8_to_UTFstring("no_variable_data"));
+    provide_default_for_child<KaxWritingApp>(info, cstrutf8_to_UTFstring("no_variable_data"));
+  }
 }

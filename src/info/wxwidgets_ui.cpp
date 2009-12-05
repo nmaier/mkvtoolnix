@@ -24,6 +24,7 @@
 
 #include "common/common.h"
 #include "common/translation.h"
+#include "common/version.h"
 #include "common/wx.h"
 #include "info/wxwidgets_ui.h"
 #if !defined(SYS_WINDOWS)
@@ -359,7 +360,7 @@ mi_frame::on_help_about(wxCommandEvent &WXUNUSED(event)) {
                "<moritz@bunkus.org>.\nSources and the latest binaries are "
                "always available at\nhttp://www.bunkus.org/videotools/"
                "mkvtoolnix/"),
-             wxUCS(VERSIONINFO), wxCS2WS(EbmlCodeVersion), wxCS2WS(KaxCodeVersion));
+             wxCS2WS(get_version_info("mkvinfo GUI")), wxCS2WS(EbmlCodeVersion), wxCS2WS(KaxCodeVersion));
   wxMessageBox(msg, Z("About mkvinfo"), wxOK | wxICON_INFORMATION, this);
 }
 
