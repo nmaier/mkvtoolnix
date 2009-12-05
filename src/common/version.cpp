@@ -24,8 +24,12 @@ std::string
 get_version_info(const std::string &program,
                  bool full) {
   std::string short_version_info = (boost::format("%1% v%2% ('%3%')") % program % VERSION % VERSIONNAME).str();
+#if !defined(HAVE_BUILD_TIMESTAMP)
+  return short_version_info;
+#else  // !defined(HAVE_BUILD_TIMESTAMP)
   if (!full)
     return short_version_info;
 
   return (boost::format(Y("%1% built on %2% %3%")) % short_version_info % __DATE__ % __TIME__).str();
+#endif  // !defined(HAVE_BUILD_TIMESTAMP)
 }
