@@ -1,7 +1,7 @@
 2009-12-05  Moritz Bunkus  <moritz@bunkus.org>
 
 	* configure: Added an option ('--without-build-timestamp') that
-	omits the build timestamp from any version information so that two
+	omits the build timestamp from all version information so that two
 	builds of mkvtoolnix can be byte-identical.
 
 2009-12-04  Moritz Bunkus  <moritz@bunkus.org>
