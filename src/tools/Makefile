@@ -3,7 +3,6 @@ all_with_tools:
 
 APPLICATIONS += src/tools/base64tool$(EXEEXT) src/tools/diracparser$(EXEEXT) src/tools/vc1parser$(EXEEXT) src/tools/ebml_validator$(EXEEXT)
 ALL_SOURCES  += $(wildcard src/tools/*.cpp)
-MANPAGES     +=  doc/base64tool.1
 
 vc1parser_SOURCES = src/tools/vc1parser.cpp
 vc1parser_OBJECTS = $(patsubst %.cpp,%.o,$(vc1parser_SOURCES))
