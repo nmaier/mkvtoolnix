@@ -29,6 +29,17 @@ std::string MTX_DLL_API get_installation_path();
 void MTX_DLL_API set_environment_variable(const std::string &key, const std::string &value);
 std::string MTX_DLL_API get_environment_variable(const std::string &key);
 
+#define WINDOWS_VERSION_UNKNOWN      0x00000000
+#define WINDOWS_VERSION_2000         0x00050000
+#define WINDOWS_VERSION_XP           0x00050001
+#define WINDOWS_VERSION_SERVER2003   0x00050002
+#define WINDOWS_VERSION_VISTA        0x00060000
+#define WINDOWS_VERSION_SERVER2008   0x00060000
+#define WINDOWS_VERSION_SERVER2008R2 0x00060001
+#define WINDOWS_VERSION_7            0x00060001
+
+unsigned int MTX_DLL_API get_windows_version();
+
 #endif  // SYS_WINDOWS
 
 #endif  // __MTX_COMMON_OS_WINDOWS_H

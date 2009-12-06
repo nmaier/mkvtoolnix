@@ -1,5 +1,8 @@
 2009-12-06  Moritz Bunkus  <moritz@bunkus.org>
 
+	* all: bug fix: The charset for output in cmd.exe for non-English
+	interface languages has been fixed on Windows Vista and Windows 7.
+
 	* all: enhancement for Windows platforms: If one of the mkvtoolnix
 	components is run without having been installed before then
 	translations will be read from the directory the .exe is run
