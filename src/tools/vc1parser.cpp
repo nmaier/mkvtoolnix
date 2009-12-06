@@ -280,7 +280,7 @@ show_version() {
   mxexit(0);
 }
 
-void
+static std::string
 parse_args(std::vector<std::string> &args) {
   std::string file_name;
 
