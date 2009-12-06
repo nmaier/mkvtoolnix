@@ -122,6 +122,23 @@ get_registry_key_value(const std::string &key,
 }
 
 std::string
+get_current_exe_path() {
+  char file_name[4000];
+  memset(file_name, 0, sizeof(file_name));
+  if (!GetModuleFileName(NULL, file_name, 3999))
+    return "";
+
+  std::string path           = file_name;
+  std::string::size_type pos = path.rfind('\\');
+  if (std::string::npos == pos)
+    return "";
+
+  path.erase(pos);
+
+  return path;
+}
+
+std::string
 get_installation_path() {
   std::string path;
 
@@ -131,7 +148,7 @@ get_installation_path() {
   if (get_registry_key_value("HKEY_CURRENT_USER\\Software\\mkvmergeGUI\\GUI", "installation_path", path) && !path.empty())
     return path;
 
-  return "";
+  return get_current_exe_path();
 }
 
 void
@@ -151,6 +168,19 @@ get_environment_variable(const std::string &key) {
     return "";
 
   return buffer;
+}
+
+unsigned int
+get_windows_version() {
+  OSVERSIONINFO os_version_info;
+
+  memset(&os_version_info, 0, sizeof(OSVERSIONINFO));
+  os_version_info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+
+  if (!GetVersionEx(&os_version_info))
+    return WINDOWS_VERSION_UNKNOWN;
+
+  return (os_version_info.dwMajorVersion << 16) | os_version_info.dwMinorVersion;
 }
 
 #else // SYS_WINDOWS

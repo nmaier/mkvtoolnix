@@ -1,3 +1,10 @@
+2009-12-06  Moritz Bunkus  <moritz@bunkus.org>
+
+	* all: enhancement for Windows platforms: If one of the mkvtoolnix
+	components is run without having been installed before then
+	translations will be read from the directory the .exe is run
+	from.
+
 2009-12-05  Moritz Bunkus  <moritz@bunkus.org>
 
 	* configure: Added an option ('--without-build-timestamp') that
