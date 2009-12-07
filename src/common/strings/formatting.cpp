@@ -16,6 +16,7 @@
 #include "common/common.h"
 #include "common/strings/formatting.h"
 #include "common/strings/utf8.h"
+#include "common/terminal.h"
 #include "common/translation.h"
 
 std::string
@@ -151,6 +152,9 @@ format_paragraph(const std::wstring &text_to_wrap,
   std::wstring text   = indent_first_line;
   int current_column  = get_width_in_em(text);
   bool break_anywhere = translation_c::get_active_translation().m_line_breaks_anywhere;
+
+  if (WRAP_AT_TERMINAL_WIDTH == wrap_column)
+    wrap_column = get_terminal_columns() - 1;
 
   if ((0 != indent_column) && (current_column >= indent_column)) {
     text           += L"\n";

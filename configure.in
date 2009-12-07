@@ -43,6 +43,7 @@ m4_include(ac/ax_boost_foreach.m4)
 m4_include(ac/boost.m4)
 m4_include(ac/etags.m4)
 m4_include(ac/ax_docbook.m4)
+m4_include(ac/tiocgwinsz.m4)
 
 AC_OUTPUT(
   Makefile
