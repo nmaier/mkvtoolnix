@@ -33,20 +33,26 @@ using namespace libebml;
 using namespace libmatroska;
 
 struct track_spec_t {
-  int64_t tid, tuid;
-  char *out_name;
+  enum target_mode_e {
+    tm_normal,
+    tm_raw,
+    tm_full_raw
+  };
 
-  char *sub_charset;
+  int64_t tid, tuid;
+  std::string out_name;
+
+  std::string sub_charset;
   bool embed_in_ogg;
   bool extract_cuesheet;
 
-  int extract_raw;
+  target_mode_e target_mode;
   int extract_blockadd_level;
 
   bool done;
-};
 
-extern bool g_no_variable_data;
+  track_spec_t();
+};
 
 #define in_parent(p)                                                                     \
   (   !p->IsFiniteSize()                                                                 \

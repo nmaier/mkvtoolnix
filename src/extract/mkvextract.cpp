@@ -62,6 +62,17 @@ using namespace libmatroska;
 
 #define NAME "mkvextract"
 
+track_spec_t::track_spec_t()
+  : tid(0)
+  , tuid(0)
+  , embed_in_ogg(false)
+  , extract_cuesheet(false)
+  , target_mode(track_spec_t::tm_normal)
+  , extract_blockadd_level(0)
+  , done(false)
+{
+}
+
 enum operation_mode_e {
   MODE_TRACKS,
   MODE_TAGS,
@@ -147,9 +158,6 @@ set_usage() {
 
   version_info = get_version_info("mkvextract", true);
 }
-
-static bool s_chapter_format_simple = false;
-static bool s_parse_fully           = false;
 
 void
 parse_args(std::vector<std::string> args,

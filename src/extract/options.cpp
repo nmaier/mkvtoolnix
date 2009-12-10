@@ -1,0 +1,23 @@
+/*
+   mkvextract -- extract tracks from Matroska files into other files
+
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+
+   Written by Moritz Bunkus <moritz@bunkus.org>.
+*/
+
+#include "common/os.h"
+
+#include <cassert>
+
+#include "extract/options.h"
+
+options_c::options_c()
+  : m_extract_cuesheet(false)
+  , m_simple_chapter_format(false)
+  , m_parse_fully(false)
+  , m_extraction_mode(options_c::em_unknown)
+{
+}

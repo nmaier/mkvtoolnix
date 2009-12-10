@@ -64,6 +64,7 @@ protected:
   cli_parser_c(const std::vector<std::string> &args);
 
   void add_option(const std::string &spec, cli_parser_cb_t callback, const translatable_string_c &description);
+  void add_informational_option(const std::string &spec, const translatable_string_c &description);
   void add_section_header(const translatable_string_c &title, int indent = INDENT_DEFAULT);
   void add_information(const translatable_string_c &information, int indent = INDENT_DEFAULT);
   void add_separator();
