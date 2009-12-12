@@ -1,10 +1,12 @@
 #include "common/os.h"
 
-#include <wx/wx.h>
-#include <wx/statusbr.h>
+#if defined(SYS_WINDOWS)
 
-#include "mmg/mmg_dialog.h"
-#include "mmg/taskbar_progress.h"
+# include <wx/wx.h>
+# include <wx/statusbr.h>
+
+# include "mmg/mmg_dialog.h"
+# include "mmg/taskbar_progress.h"
 
 taskbar_progress_c::taskbar_progress_c(wxWindow *window)
   : m_window(window)
@@ -64,3 +66,5 @@ taskbar_progress_c::get_interface() {
 }
 
 IMPLEMENT_DYNAMIC_CLASS(taskbar_progress_c, wxEvtHandler)
+
+#endif  // SYS_WINDOWS
