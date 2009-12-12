@@ -18,7 +18,7 @@
 #include "common/common.h"
 #include "common/version.h"
 
-#define VERSIONNAME "Tutu"
+#define VERSIONNAME "Hang up your Hang-Ups"
 
 std::string
 get_version_info(const std::string &program,
