@@ -62,8 +62,12 @@ std::vector<mmg_track_t *> tracks;
 std::map<wxString, wxString> capabilities;
 std::vector<job_t> jobs;
 
-mmg_dialog::mmg_dialog():
-  wxFrame(NULL, wxID_ANY, wxEmptyString) {
+mmg_dialog::mmg_dialog()
+  : wxFrame(NULL, wxID_ANY, wxEmptyString)
+#if defined(SYS_WINDOWS)
+  , m_taskbar_msg_received(false)
+#endif
+{
   wxBoxSizer *bs_main;
   wxPanel *panel;
 
@@ -217,6 +221,10 @@ mmg_dialog::mmg_dialog():
   help = NULL;
 
   set_status_bar(Z("mkvmerge GUI ready"));
+
+#if defined(SYS_WINDOWS)
+  RegisterWindowMessages();
+#endif
 }
 
 mmg_dialog::~mmg_dialog() {

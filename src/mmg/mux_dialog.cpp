@@ -47,6 +47,9 @@ mux_dialog::mux_dialog(wxWindow *parent):
            wxSize(700, 520),
 #endif
            wxDEFAULT_FRAME_STYLE)
+#if defined(SYS_WINDOWS)
+  , m_taskbar_progress(NULL)
+#endif  // SYS_WINDOWS
   , m_exit_code(0)
 {
   char c;
@@ -127,11 +130,19 @@ mux_dialog::mux_dialog(wxWindow *parent):
   }
   delete opt_file;
 
+#if defined(SYS_WINDOWS)
+  if (get_windows_version() >= WINDOWS_VERSION_7) {
+    m_taskbar_progress = new taskbar_progress_c();
+    m_taskbar_progress->set_state(TBPF_NORMAL);
+    m_taskbar_progress->set_value(0, 100);
+  }
+#endif  // SYS_WINDOWS
+
   wxString command_line = wxString::Format(wxT("\"%s\" \"@%s\""), (*arg_list)[0].c_str(), opt_file_name.c_str());
   pid = wxExecute(command_line, wxEXEC_ASYNC, process);
   if (0 == pid) {
     wxLogError(wxT("Execution of '%s' failed."), command_line.c_str());
-    done();
+    done(2);
     return;
   }
   out = process->GetInputStream();
@@ -181,6 +192,12 @@ mux_dialog::mux_dialog(wxWindow *parent):
 }
 
 mux_dialog::~mux_dialog() {
+#if defined(SYS_WINDOWS)
+  if (NULL != m_taskbar_progress)
+    m_taskbar_progress->set_state(TBPF_NOPROGRESS);
+  delete m_taskbar_progress;
+#endif  // SYS_WINDOWS
+
   process->dlg = NULL;
   delete process;
   wxRemoveFile(opt_file_name);
@@ -194,6 +211,10 @@ mux_dialog::update_window(wxString text) {
 void
 mux_dialog::update_gauge(long value) {
   g_progress->SetValue(value);
+#if defined(SYS_WINDOWS)
+  if (NULL != m_taskbar_progress)
+    m_taskbar_progress->set_value(value, 100);
+#endif  // SYS_WINDOWS
 }
 
 void
@@ -236,12 +257,17 @@ mux_dialog::on_close(wxCloseEvent &evt) {
 }
 
 void
-mux_dialog::done() {
+mux_dialog::done(int status) {
   SetTitle(Z("mkvmerge has finished"));
 
   b_ok->Enable(true);
   b_abort->Enable(false);
   b_ok->SetFocus();
+
+#if defined(SYS_WINDOWS)
+  if ((NULL != m_taskbar_progress) && (0 != status))
+    m_taskbar_progress->set_state(TBPF_ERROR);
+#endif
 }
 
 mux_process::mux_process(mux_dialog *mux_dlg):
@@ -275,7 +301,7 @@ mux_process::OnTerminate(int pid,
                       :               wxString(wxT(""));
 
   dlg->update_window(wxString::Format(format, status, status_str.c_str()));
-  dlg->done();
+  dlg->done((0 == status) || (1 == status) ? status : 2);
 }
 
 IMPLEMENT_CLASS(mux_dialog, wxDialog);

@@ -123,6 +123,10 @@ public:
 
   mmg_options_t options;
 
+#if defined(SYS_WINDOWS)
+  bool m_taskbar_msg_received;
+#endif
+
 public:
   mmg_dialog();
   virtual ~mmg_dialog();
@@ -202,6 +206,12 @@ public:
   void query_mkvmerge_capabilities();
 
   void display_help(int id);
+
+protected:
+#if defined(SYS_WINDOWS)
+  virtual WXLRESULT MSWWindowProc(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam);
+  void RegisterWindowMessages();
+#endif
 };
 
 extern mmg_dialog *mdlg;

@@ -14,8 +14,15 @@
 #ifndef __MUX_DIALOG_H
 #define __MUX_DIALOG_H
 
+#include "common/os.h"
+
 #include <wx/dialog.h>
 #include <wx/process.h>
+
+#if defined(SYS_WINDOWS)
+# include "common/os_windows.h"
+# include "mmg/taskbar_progress.h"
+#endif  // SYS_WINDOWS
 
 #define ID_B_MUX_OK                       17000
 #define ID_B_MUX_SAVELOG                  17001
@@ -35,6 +42,9 @@ protected:
   wxButton *b_ok, *b_save_log, *b_abort;
   wxTextCtrl *tc_output, *tc_warnings, *tc_errors;
   wxWindowDisabler *m_window_disabler;
+#if defined(SYS_WINDOWS)
+  taskbar_progress_c *m_taskbar_progress;
+#endif  // SYS_WINDOWS
 
   int m_exit_code;
 public:
@@ -49,7 +59,7 @@ public:
   void on_save_log(wxCommandEvent &evt);
   void on_abort(wxCommandEvent &evt);
   void on_close(wxCloseEvent &evt);
-  void done();
+  void done(int status);
 
   void set_exit_code(int exit_code) {
     m_exit_code = exit_code;

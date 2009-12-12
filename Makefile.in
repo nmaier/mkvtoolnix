@@ -140,6 +140,7 @@ mkvmerge_RESOURCES = src/merge/resources.rc
 mkvinfo_RESOURCES = src/info/resources.rc
 mkvextract_RESOURCES = src/extract/resources.rc
 LIBRPCRT = -lrpcrt4
+LIBS_WINGUI = -lole32 -lshell32
 LDFLAGS += -Wl,--enable-auto-import
 endif
 
@@ -531,7 +532,7 @@ mmg_OBJECTS := $(patsubst %.cpp,%.o,$(mmg_SOURCES)) \
 mmg_DEPENDENCIES += $(DEP_COMMON)
 mmg_LDADD = -lmtxcommon $(MAGIC_LIBS) -lmatroska -lebml -lexpat $(ICONV_LIBS) \
 		$(WXWIDGETS_LIBS) $(LIBINTL_LIBS) $(MINGW_GUIAPP) \
-		$(BOOST_REGEX_LIB) $(LIBRPCRT)
+		$(BOOST_REGEX_LIB) $(LIBRPCRT) $(LIBS_WINGUI)
 
 mkvmerge: src/mkvmerge@EXEEXT@
 
