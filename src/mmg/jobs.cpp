@@ -31,13 +31,15 @@
 #include <wx/statline.h>
 
 #if defined(SYS_WINDOWS)
-#include <windows.h>
+# include <windows.h>
+# include "common/os_windows.h"
 #endif
 
 #include "common/common.h"
 #include "mmg/jobs.h"
 #include "mmg/mmg.h"
 #include "mmg/mmg_dialog.h"
+#include "mmg/taskbar_progress.h"
 
 #define JOB_LOG_DIALOG_WIDTH 600
 #define JOB_RUN_DIALOG_WIDTH 500
@@ -51,6 +53,9 @@ job_run_dialog::job_run_dialog(wxWindow *parent,
   , abort(false)
   , jobs_to_start(n_jobs_to_start)
   , current_job(-1)
+#if defined(SYS_WINDOWS)
+  , m_taskbar_progress(NULL)
+#endif
 {
   wxBoxSizer *siz_all      = new wxBoxSizer(wxVERTICAL);
   wxStaticBoxSizer *siz_sb = new wxStaticBoxSizer(new wxStaticBox(this, -1, Z("Status and progress")), wxVERTICAL);
@@ -95,6 +100,11 @@ job_run_dialog::job_run_dialog(wxWindow *parent,
 
   SetSizer(siz_all);
 
+#if defined(SYS_WINDOWS)
+  if (get_windows_version() >= WINDOWS_VERSION_7)
+    m_taskbar_progress = new taskbar_progress_c(this);
+#endif
+
   start_next_job();
 
   ShowModal();
@@ -122,6 +132,13 @@ job_run_dialog::start_next_job() {
 
     return;
   }
+
+#if defined(SYS_WINDOWS)
+  if (NULL != m_taskbar_progress) {
+    m_taskbar_progress->set_state(TBPF_NORMAL);
+    m_taskbar_progress->set_value(current_job * 100, jobs_to_start.size() * 100);
+  }
+#endif
 
   int ndx = jobs_to_start[current_job];
   st_jobs->SetLabel(wxString::Format(Z("Processing job %d/%d"), current_job + 1, (int)jobs_to_start.size()));
@@ -209,7 +226,7 @@ job_run_dialog::process_input() {
           long value;
           tmp.ToLong(&value);
           if ((value >= 0) && (value <= 100))
-            g_progress->SetValue(value);
+            set_progress_value(value);
         }
       } else if (wx_line.Length() > 0)
         *jobs[jobs_to_start[current_job]].log += wx_line + wxT("\n");
@@ -220,6 +237,16 @@ job_run_dialog::process_input() {
     if (out->Eof())
       break;
   }
+}
+
+void
+job_run_dialog::set_progress_value(long value) {
+  g_progress->SetValue(value);
+
+#if defined(SYS_WINDOWS)
+  if (NULL != m_taskbar_progress)
+    m_taskbar_progress->set_value(current_job * 100 + value, jobs_to_start.size() * 100);
+#endif
 }
 
 void
@@ -237,6 +264,8 @@ job_run_dialog::on_abort(wxCommandEvent &evt) {
   abort = true;
 #if defined(SYS_WINDOWS)
   wxKill(pid, wxSIGKILL);
+  if (NULL != m_taskbar_progress)
+    m_taskbar_progress->set_state(TBPF_ERROR);
 #else
   wxKill(pid, wxSIGTERM);
 #endif

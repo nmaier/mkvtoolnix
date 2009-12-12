@@ -18,6 +18,8 @@
 #include <wx/listctrl.h>
 #include <wx/process.h>
 
+#include "mmg/taskbar_progress.h"
+
 #define ID_JOBS_B_UP                      17001
 #define ID_JOBS_B_DOWN                    17002
 #define ID_JOBS_B_DELETE                  17003
@@ -80,6 +82,10 @@ protected:
   std::vector<int> jobs_to_start;
   int current_job;
 
+#if defined(SYS_WINDOWS)
+  taskbar_progress_c *m_taskbar_progress;
+#endif
+
 public:
   job_run_dialog(wxWindow *parent, std::vector<int> &n_jobs_to_start);
 
@@ -91,6 +97,7 @@ public:
   void start_next_job();
   void process_input();
   void add_to_log(wxString text);
+  void set_progress_value(long value);
 };
 
 class jobdlg_list_view: public wxListView {

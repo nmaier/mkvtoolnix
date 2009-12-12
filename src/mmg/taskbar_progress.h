@@ -20,12 +20,13 @@
 class taskbar_progress_c: public wxEvtHandler {
   DECLARE_DYNAMIC_CLASS_NO_COPY(taskbar_progress_c);
 protected:
+  wxWindow *m_window;
   TBPFLAG m_state;
   ULONGLONG m_completed, m_total;
   ITaskbarList3 *m_interface;
 
 public:
-  taskbar_progress_c();
+  taskbar_progress_c(wxWindow *window = NULL);
   virtual ~taskbar_progress_c();
   virtual void set_value(ULONGLONG completed, ULONGLONG total);
   virtual void set_state(TBPFLAG state);

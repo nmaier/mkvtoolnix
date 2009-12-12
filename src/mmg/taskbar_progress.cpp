@@ -6,8 +6,9 @@
 #include "mmg/mmg_dialog.h"
 #include "mmg/taskbar_progress.h"
 
-taskbar_progress_c::taskbar_progress_c()
-  : m_state(TBPF_NOPROGRESS)
+taskbar_progress_c::taskbar_progress_c(wxWindow *window)
+  : m_window(window)
+  , m_state(TBPF_NOPROGRESS)
   , m_completed(0)
   , m_total(0)
   , m_interface(NULL)
@@ -25,7 +26,7 @@ taskbar_progress_c::set_value(ULONGLONG completed,
   m_total     = total;
 
   if (NULL != get_interface())
-    m_interface->lpVtbl->SetProgressValue(m_interface, GetHwndOf(mdlg), m_completed, m_total);
+    m_interface->lpVtbl->SetProgressValue(m_interface, GetHwndOf(m_window), m_completed, m_total);
 }
 
 void
@@ -33,7 +34,7 @@ taskbar_progress_c::set_state(TBPFLAG state) {
   m_state = state;
 
   if (NULL != get_interface())
-    m_interface->lpVtbl->SetProgressState(m_interface, GetHwndOf(mdlg), m_state);
+    m_interface->lpVtbl->SetProgressState(m_interface, GetHwndOf(m_window), m_state);
 }
 
 void

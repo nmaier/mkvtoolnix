@@ -132,7 +132,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
 
 #if defined(SYS_WINDOWS)
   if (get_windows_version() >= WINDOWS_VERSION_7) {
-    m_taskbar_progress = new taskbar_progress_c();
+    m_taskbar_progress = new taskbar_progress_c(mdlg);
     m_taskbar_progress->set_state(TBPF_NORMAL);
     m_taskbar_progress->set_value(0, 100);
   }
