@@ -1,3 +1,10 @@
+2009-12-15  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: On Windows 2000/XP the 'add/append file' dialog
+	was not showing files with certain extensions (e.g. ".srt" or
+	".mp4") if the option "all supported media files" was
+	selected. Fix for bug 448.
+
 2009-12-12  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v3.0.0.

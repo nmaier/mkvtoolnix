@@ -216,6 +216,9 @@ struct mmg_options_t {
   void init_popular_languages(const wxString &list = wxEmptyString);
 };
 
+typedef std::pair<const wxString, bool> wxstring_bool_pair_t;
+typedef std::pair<const wxString, wxString> wxstring_wxstring_pair_t;
+
 extern wxString last_open_dir;
 extern std::vector<wxString> last_settings;
 extern std::vector<wxString> last_chapters;

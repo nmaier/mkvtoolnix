@@ -187,78 +187,79 @@ struct file_type_t {
   }
 };
 
-void
-tab_input::select_file(bool append) {
-  static std::vector<file_type_t> file_types;
+wxString
+tab_input::setup_file_type_filter() {
+  static wxString media_files;
 
-  if (file_types.empty()) {
-    file_types.push_back(file_type_t(Z("A/52 (aka AC3)"),                      wxU("ac3")));
-    file_types.push_back(file_type_t(Z("AAC (Advanced Audio Coding)"),         wxU("aac m4a mp4")));
-    file_types.push_back(file_type_t(Z("AVC/h.264 elementary streams"),        wxU("264 avc h264 x264")));
-    file_types.push_back(file_type_t(Z("AVI (Audio/Video Interleaved)"),       wxU("avi")));
-    file_types.push_back(file_type_t(Z("Dirac"),                               wxU("drc")));
-    file_types.push_back(file_type_t(Z("Dolby TrueHD"),                        wxU("thd thd+ac3")));
-    file_types.push_back(file_type_t(Z("DTS (Digital Theater System)"),        wxU("dts")));
-    if (capabilities[wxT("FLAC")] == wxT("true"))
-      file_types.push_back(file_type_t(Z("FLAC (Free Lossless Audio Codec)"),  wxU("flac ogg")));
-    file_types.push_back(file_type_t(Z("MP4 audio/video files"),               wxU("mp4")));
-    file_types.push_back(file_type_t(Z("MPEG audio files"),                    wxU("mp2 mp3")));
-    file_types.push_back(file_type_t(Z("MPEG program streams"),                wxU("mpg mpeg m2v evo evob vob")));
-    file_types.push_back(file_type_t(Z("MPEG video elementary streams"),       wxU("m1v m2v")));
-    file_types.push_back(file_type_t(Z("Matroska audio/video files"),          wxU("mka mks mkv")));
-    file_types.push_back(file_type_t(Z("QuickTime audio/video files"),         wxU("mov")));
-    file_types.push_back(file_type_t(Z("Ogg/OGM audio/video files"),           wxU("ogg ogm")));
-    file_types.push_back(file_type_t(Z("RealMedia audio/video files"),         wxU("ra ram rm rmvb rv")));
-    file_types.push_back(file_type_t(Z("SRT text subtitles"),                  wxU("srt")));
-    file_types.push_back(file_type_t(Z("SSA/ASS text subtitles"),              wxU("ass ssa")));
-    file_types.push_back(file_type_t(Z("TTA (The lossless True Audio codec)"), wxU("tta")));
-    file_types.push_back(file_type_t(Z("USF text subtitles"),                  wxU("usf xml")));
-    file_types.push_back(file_type_t(Z("VC1 elementary streams"),              wxU("vc1")));
-    file_types.push_back(file_type_t(Z("VobSub subtitles"),                    wxU("idx")));
-    file_types.push_back(file_type_t(Z("WAVE (uncompressed PCM audio)"),       wxU("wav")));
-    file_types.push_back(file_type_t(Z("WAVPACK v4 audio"),                    wxU("wv")));
-    file_types.push_back(file_type_t(Z("VobButtons"),                          wxU("btn")));
-  }
+  if (!media_files.empty())
+    return media_files;
 
-  wxString media_files, rest, a_exts;
-  std::vector<wxString> all_extensions;
-  int ft, ae;
+  std::vector<file_type_t> file_types;
 
-  for (ft = 0; file_types.size() > ft; ++ft) {
-    wxString s_exts;
-    int e;
+  file_types.push_back(file_type_t(Z("A/52 (aka AC3)"),                      wxU("ac3")));
+  file_types.push_back(file_type_t(Z("AAC (Advanced Audio Coding)"),         wxU("aac m4a mp4")));
+  file_types.push_back(file_type_t(Z("AVC/h.264 elementary streams"),        wxU("264 avc h264 x264")));
+  file_types.push_back(file_type_t(Z("AVI (Audio/Video Interleaved)"),       wxU("avi")));
+  file_types.push_back(file_type_t(Z("Dirac"),                               wxU("drc")));
+  file_types.push_back(file_type_t(Z("Dolby TrueHD"),                        wxU("thd thd+ac3")));
+  file_types.push_back(file_type_t(Z("DTS (Digital Theater System)"),        wxU("dts")));
+  if (capabilities[wxT("FLAC")] == wxT("true"))
+    file_types.push_back(file_type_t(Z("FLAC (Free Lossless Audio Codec)"),  wxU("flac ogg")));
+  file_types.push_back(file_type_t(Z("MP4 audio/video files"),               wxU("mp4")));
+  file_types.push_back(file_type_t(Z("MPEG audio files"),                    wxU("mp2 mp3")));
+  file_types.push_back(file_type_t(Z("MPEG program streams"),                wxU("mpg mpeg m2v evo evob vob")));
+  file_types.push_back(file_type_t(Z("MPEG video elementary streams"),       wxU("m1v m2v")));
+  file_types.push_back(file_type_t(Z("Matroska audio/video files"),          wxU("mka mks mkv")));
+  file_types.push_back(file_type_t(Z("QuickTime audio/video files"),         wxU("mov")));
+  file_types.push_back(file_type_t(Z("Ogg/OGM audio/video files"),           wxU("ogg ogm")));
+  file_types.push_back(file_type_t(Z("RealMedia audio/video files"),         wxU("ra ram rm rmvb rv")));
+  file_types.push_back(file_type_t(Z("SRT text subtitles"),                  wxU("srt")));
+  file_types.push_back(file_type_t(Z("SSA/ASS text subtitles"),              wxU("ass ssa")));
+  file_types.push_back(file_type_t(Z("TTA (The lossless True Audio codec)"), wxU("tta")));
+  file_types.push_back(file_type_t(Z("USF text subtitles"),                  wxU("usf xml")));
+  file_types.push_back(file_type_t(Z("VC1 elementary streams"),              wxU("vc1")));
+  file_types.push_back(file_type_t(Z("VobSub subtitles"),                    wxU("idx")));
+  file_types.push_back(file_type_t(Z("WAVE (uncompressed PCM audio)"),       wxU("wav")));
+  file_types.push_back(file_type_t(Z("WAVPACK v4 audio"),                    wxU("wv")));
+  file_types.push_back(file_type_t(Z("VobButtons"),                          wxU("btn")));
 
-    std::vector<wxString> extensions = split(wxString(file_types[ft].extensions), wxU(" "));
-    for (e = 0; e < extensions.size(); e++) {
+  std::map<wxString, bool> all_extensions_map;
+  wxString filters;
 
-      if (s_exts.Length() > 0)
-        s_exts += wxT(";");
-      s_exts += wxString::Format(wxT("*.%s"), extensions[e].c_str());
+  foreach(file_type_t &file_type, file_types) {
+    std::vector<wxString> extensions = split(wxString(file_type.extensions), wxU(" "));
+    std::vector<wxString> extensions_full;
 
-      bool found = false;
-      for (ae = 0; ae < all_extensions.size(); ae++)
-        if (all_extensions[ae] == extensions[e]) {
-          found = true;
-          break;
-        }
-      if (!found)
-        all_extensions.push_back(extensions[e]);
+    foreach(wxString &extension, extensions) {
+      all_extensions_map[extension] = true;
+      extensions_full.push_back(wxString::Format(wxT("*.%s"), extension.c_str()));
+
+#if !defined(SYS_WINDOWS)
+      wxString extension_upper = extension.Upper();
+      all_extensions_map[extension_upper] = true;
+      if (extension_upper != extension)
+        extensions_full.push_back(wxString::Format(wxT("*.%s"), extension_upper.c_str()));
+#endif  // !SYS_WINDOWS
     }
 
-    rest += wxString::Format(wxT("|%s (%s)|%s"), file_types[ft].title.c_str(), s_exts.c_str(), s_exts.c_str());
+    wxString filter_ext  = join(wxT(";"), extensions_full);
+    filters             += wxString::Format(wxT("|%s (%s)|%s"), file_type.title.c_str(), filter_ext.c_str(), filter_ext.c_str());
   }
+
+  std::vector<wxString> all_extensions;
+  foreach(wxstring_bool_pair_t &extension, all_extensions_map)
+    all_extensions.push_back(wxString::Format(wxT("*.%s"), extension.first.c_str()));
 
   sort(all_extensions.begin(), all_extensions.end());
 
-  for (ae = 0; ae < all_extensions.size(); ae++) {
-    if (a_exts.Length() > 0)
-      a_exts += wxT(";");
-    a_exts += wxString::Format(wxT("*.%s;*.%s"), all_extensions[ae].c_str(), all_extensions[ae].Upper().c_str());
-  }
+  media_files.Printf(Z("All supported media files|%s%s|%s"), join(wxT(";"), all_extensions).c_str(), filters.c_str(), ALLFILES.c_str());
 
-  media_files.Printf(Z("All supported media files|%s%s|%s"), a_exts.c_str(), rest.c_str(), ALLFILES.c_str());
+  return media_files;
+}
 
-  wxFileDialog dlg(NULL, append ? Z("Choose an input file to append") : Z("Choose an input file to add"), last_open_dir, wxEmptyString, media_files, wxFD_OPEN | wxFD_MULTIPLE);
+void
+tab_input::select_file(bool append) {
+  wxFileDialog dlg(NULL, append ? Z("Choose an input file to append") : Z("Choose an input file to add"), last_open_dir, wxEmptyString, setup_file_type_filter(), wxFD_OPEN | wxFD_MULTIPLE);
   if(dlg.ShowModal() != wxID_OK)
     return;
 

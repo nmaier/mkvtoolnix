@@ -202,6 +202,8 @@ public:
   void save(wxConfigBase *cfg);
   void load(wxConfigBase *cfg, int version);
   bool validate_settings();
+
+  wxString setup_file_type_filter();
 };
 
 #endif // __TAB_INPUT_H
