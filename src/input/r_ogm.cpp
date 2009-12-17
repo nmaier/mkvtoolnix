@@ -1341,10 +1341,13 @@ ogm_v_theora_demuxer_c::process_page(int64_t granulepos) {
   while (ogg_stream_packetout(&os, &op) == 1) {
     eos |= op.e_o_s;
 
-    if ((0 == op.bytes) || (0 != (op.packet[0] & 0x80)))
+    if ((0 != op.bytes) && (0 != (op.packet[0] & 0x80)))
+      // Header packets have the very first bit set. Skip those.
       continue;
 
-    bool is_keyframe = 0x00 == (op.packet[0] & 0x40);
+    // Zero-length frames are 'repeat previous frame' markers and
+    // cannot be I frames.
+    bool is_keyframe = (0 != op.bytes) && (0x00 == (op.packet[0] & 0x40));
     int64_t timecode = (int64_t)(1000000000.0 * units_processed * theora.frd / theora.frn);
     int64_t duration = (int64_t)(1000000000.0 *                   theora.frd / theora.frn);
     int64_t bref     = is_keyframe ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC;
@@ -1361,7 +1364,7 @@ ogm_v_theora_demuxer_c::process_page(int64_t granulepos) {
 
 bool
 ogm_v_theora_demuxer_c::is_header_packet(ogg_packet &op) {
-  return ((0x80 <= op.packet[0]) && (0x82 >= op.packet[0]));
+  return (0 != op.bytes) && (0x80 <= op.packet[0]) && (0x82 >= op.packet[0]);
 }
 
 // -----------------------------------------------------------
