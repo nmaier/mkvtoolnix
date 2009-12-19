@@ -121,6 +121,23 @@
   </variablelist>
 
   <para>
+   Segment info handling: (global options)
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><option>--segmentinfo</option> <parameter>filename.xml</parameter></term>
+    <listitem>
+     <para>
+      Read segment information from a <abbrev>XML</abbrev> file. This file can contain the segment family <abbrev>UID</abbrev>, segment
+      <abbrev>UID</abbrev>, previous and next segment <abbrev>UID</abbrev> elements. An example file and a <abbrev>DTD</abbrev> are included
+      in the MkvToolNix distribution.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
    Chapter and tag handling: (global options)
   </para>
 
