@@ -999,6 +999,11 @@ mmg_dialog::update_command_line() {
       clargs.Add(wxT("--link"));
   }
 
+  if (!global_page->tc_segment_uid->GetValue().IsEmpty()) {
+    clargs.Add(wxT("--segment-uid"));
+    clargs.Add(global_page->tc_segment_uid->GetValue());
+  }
+
   if (global_page->tc_previous_segment_uid->GetValue().Length() > 0) {
     clargs.Add(wxT("--link-to-previous"));
     clargs.Add(global_page->tc_previous_segment_uid->GetValue());

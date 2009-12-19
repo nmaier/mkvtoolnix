@@ -62,6 +62,28 @@ Sets the default language code that will be used for all tracks unless overwritt
 option\&. The default language code is \'und\' for \'undefined\'\&.
 .RE
 .PP
+Segment info handling: (global options)
+.PP
+\fB\-\-segmentinfo\fR \fIfilename\&.xml\fR
+.RS 4
+Read segment information from a
+XML
+file\&. This file can contain the segment family
+UID, segment
+UID, previous and next segment
+UID
+elements\&. An example file and a
+DTD
+are included in the MkvToolNix distribution\&.
+.RE
+.PP
+\fB\-\-segment\-uid\fR \fISID1,SID2,\&.\&.\&.\fR
+.RS 4
+Sets the segment UIDs to use\&. This is a comma\-separated list of 128bit segment UIDs in the usual UID form: hex numbers with or without the "0x" prefix, with or without spaces, exactly 32 digits\&.
+.sp
+Each file created contains one segment, and each segment has one segment UID\&. If more segment UIDs are specified than segments are created then the surplus UIDs are ignored\&. If fewer UIDs are specified than segments are created then random UIDs will be created for them\&.
+.RE
+.PP
 Chapter and tag handling: (global options)
 .PP
 \fB\-\-chapter\-language\fR \fIlanguage\-code\fR

@@ -135,6 +135,22 @@
      </para>
     </listitem>
    </varlistentry>
+
+   <varlistentry>
+    <term><option>--segment-uid</option> <parameter>SID1,SID2,...</parameter></term>
+    <listitem>
+     <para>
+      Sets the segment UIDs to use. This is a comma-separated list of 128bit segment UIDs in the usual UID form: hex numbers with or without
+      the &quot;0x&quot; prefix, with or without spaces, exactly 32 digits.
+     </para>
+
+     <para>
+      Each file created contains one segment, and each segment has one segment UID. If more segment UIDs are specified than segments are
+      created then the surplus UIDs are ignored. If fewer UIDs are specified than segments are created then random UIDs will be created for
+      them.
+     </para>
+    </listitem>
+   </varlistentry>
   </variablelist>
 
   <para>

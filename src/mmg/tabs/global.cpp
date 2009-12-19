@@ -155,6 +155,17 @@ tab_global::tab_global(wxWindow *parent):
   siz_linking_box = new wxStaticBoxSizer(new wxStaticBox(this, -1, Z("File/segment linking")), wxVERTICAL);
   siz_linking = new wxFlexGridSizer(2, 2);
   siz_linking->AddGrowableCol(1);
+
+  siz_linking->Add(new wxStaticText(this, -1, Z("Segment UIDs:")), 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
+  tc_segment_uid = new wxTextCtrl(this, ID_TC_SEGMENTUID, wxEmptyString);
+  tc_segment_uid->SetToolTip(TIP("Sets the segment UIDs to use. "
+                                 "This is a comma-separated list of 128bit segment UIDs in the usual UID form: "
+                                 "hex numbers with or without the \"0x\" prefix, with or without spaces, exactly 32 digits.\n\n"
+                                 "Each file created contains one segment, and each segment has one segment UID. "
+                                 "If more segment UIDs are specified than segments are created then the surplus UIDs are ignored. "
+                                 "If fewer UIDs are specified than segments are created then random UIDs will be created for them."));
+  siz_linking->Add(tc_segment_uid, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
+
   siz_linking->Add(new wxStaticText(this, -1, Z("Previous segment UID:")), 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
   tc_previous_segment_uid = new wxTextCtrl(this, ID_TC_PREVIOUSSEGMENTUID, wxEmptyString);
   tc_previous_segment_uid->SetToolTip(TIP("For an in-depth explanantion of file/segment linking and this feature please read mkvmerge's documentation."));
@@ -380,6 +391,8 @@ tab_global::load(wxConfigBase *cfg,
   else
     cb_link->SetValue(false);
 
+  cfg->Read(wxT("segment_uid"), &s);
+  tc_segment_uid->SetValue(s);
   cfg->Read(wxT("previous_segment_uid"), &s);
   tc_previous_segment_uid->SetValue(s);
   cfg->Read(wxT("next_segment_uid"), &s);
@@ -418,6 +431,7 @@ tab_global::save(wxConfigBase *cfg) {
   cfg->Write(wxT("split_max_files"), tc_split_max_files->GetValue());
   cfg->Write(wxT("link"), cb_link->IsChecked());
 
+  cfg->Write(wxT("segment_uid"), tc_segment_uid->GetValue());
   cfg->Write(wxT("previous_segment_uid"), tc_previous_segment_uid->GetValue());
   cfg->Write(wxT("next_segment_uid"), tc_next_segment_uid->GetValue());
 

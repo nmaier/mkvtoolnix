@@ -38,13 +38,14 @@
 #define ID_RB_SPLITAFTEREACHCHAPTER       13019
 #define ID_RB_SPLITAFTERTIMECODES         13020
 #define ID_TC_SPLITAFTERTIMECODES         13021
+#define ID_TC_SEGMENTUID                  13022
 
 class tab_global: public wxPanel {
   DECLARE_CLASS(tab_global);
   DECLARE_EVENT_TABLE();
 public:
   wxTextCtrl *tc_chapters, *tc_global_tags, *tc_split_max_files, *tc_title;
-  wxTextCtrl *tc_next_segment_uid, *tc_previous_segment_uid;
+  wxTextCtrl *tc_next_segment_uid, *tc_previous_segment_uid, *tc_segment_uid;
   wxTextCtrl *tc_split_bytes, *tc_split_time, *tc_cue_name_format;
   wxTextCtrl *tc_split_chapters, *tc_split_after_timecodes;
   wxCheckBox *cb_split, *cb_link;

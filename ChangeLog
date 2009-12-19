@@ -1,5 +1,9 @@
 2009-12-19  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge/mmg: enhancement: Added an option '--segment-uid' for
+	specifying the segment UIDs to use instead of having to use a XML
+	file and '--segmentinfo'.
+
 	* Installer: The installer will no longer offer to run mmg after
 	it has been installed. On Windows setups where a normal user
 	account doesn't have administrator privileges this caused mmg to

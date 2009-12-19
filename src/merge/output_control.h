@@ -17,6 +17,8 @@
 
 #include "common/os.h"
 
+#include <deque>
+
 #include "common/bitvalue.h"
 #include "common/file_types.h"
 #include "common/smart_pointers.h"
@@ -150,7 +152,7 @@ extern timecode_scale_mode_e g_timecode_scale_mode;
 typedef counted_ptr<bitvalue_c> g_bitvalue_cptr;
 
 extern bitvalue_cptr g_seguid_link_previous, g_seguid_link_next;
-extern std::vector<bitvalue_cptr> g_forced_seguids;
+extern std::deque<bitvalue_cptr> g_forced_seguids;
 extern family_uids_c g_segfamily_uids;
 
 extern KaxInfo *g_kax_info_chap;

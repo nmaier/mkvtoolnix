@@ -139,6 +139,8 @@ set_usage() {
   usage_text +=   "\n";
   usage_text += Y(" Segment info handling:\n");
   usage_text += Y("  --segmentinfo <file>     Read segment information from the file.\n");
+  usage_text += Y("  --segment-uid <SID1,[SID2...]>\n"
+                  "                           Set the segment UIDs to SID1, SID2 etc.\n");
   usage_text +=   "\n";
   usage_text += Y(" General output control (advanced global options):\n");
   usage_text += Y("  --track-order <FileID1:TID1,FileID2:TID2,FileID3:TID3,...>\n"
@@ -1350,6 +1352,19 @@ parse_arg_next_segment_uid(const std::string &param,
 }
 
 static void
+parse_arg_segment_uid(const std::string &param,
+                      const std::string &arg) {
+  std::vector<std::string> parts = split(arg, ",");
+  foreach(std::string &part, parts) {
+    try {
+      g_forced_seguids.push_back(bitvalue_cptr(new bitvalue_c(part, 128)));
+    } catch (...) {
+      mxerror(boost::format(Y("Unknown format for the segment UID '%3%' in '%1% %2%'.\n")) % param % arg % part);
+    }
+  }
+}
+
+static void
 parse_arg_cluster_length(std::string arg) {
   int idx = arg.find("ms");
   if (0 <= idx) {
@@ -1691,6 +1706,13 @@ parse_args(std::vector<std::string> args) {
         mxerror(Y("'--link-to-next' lacks the next UID.\n"));
 
       parse_arg_next_segment_uid(this_arg, next_arg);
+      sit++;
+
+    } else if (this_arg == "--segment-uid") {
+      if (no_next_arg || next_arg.empty())
+        mxerror(Y("'--segment-uid' lacks the segment UID.\n"));
+
+      parse_arg_segment_uid(this_arg, next_arg);
       sit++;
 
     } else if (this_arg == "--cluster-length") {

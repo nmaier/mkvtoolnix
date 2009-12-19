@@ -191,7 +191,7 @@ std::string g_default_language              = "und";
 
 bitvalue_cptr g_seguid_link_previous;
 bitvalue_cptr g_seguid_link_next;
-std::vector<bitvalue_cptr> g_forced_seguids;
+std::deque<bitvalue_cptr> g_forced_seguids;
 
 static KaxInfo *s_kax_infos                 = NULL;
 static KaxMyDuration *s_kax_duration        = NULL;
@@ -597,8 +597,8 @@ render_headers(mm_io_c *out) {
         if (g_forced_seguids.empty())
           s_seguid_current.generate_random();
         else {
-          s_seguid_current = *g_forced_seguids.back();
-          g_forced_seguids.pop_back();
+          s_seguid_current = *g_forced_seguids.front();
+          g_forced_seguids.pop_front();
         }
         s_seguid_next.generate_random();
 
@@ -607,8 +607,8 @@ render_headers(mm_io_c *out) {
         if (g_forced_seguids.empty())
           s_seguid_current = s_seguid_next;
         else {
-          s_seguid_current = *g_forced_seguids.back();
-          g_forced_seguids.pop_back();
+          s_seguid_current = *g_forced_seguids.front();
+          g_forced_seguids.pop_front();
         }
         s_seguid_next.generate_random();
       }
