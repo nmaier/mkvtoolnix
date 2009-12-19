@@ -1,3 +1,12 @@
+2009-12-19  Moritz Bunkus  <moritz@bunkus.org>
+
+	* Installer: The installer will no longer offer to run mmg after
+	it has been installed. On Windows setups where a normal user
+	account doesn't have administrator privileges this caused mmg to
+	be run as the user "Administrator" instead of the normal user
+	account causing confusion and some things not to work, e.g. drag &
+	drop.
+
 2009-12-17  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Zero-length frames in Theora bitstreams as

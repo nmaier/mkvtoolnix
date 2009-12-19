@@ -31,9 +31,6 @@ var ICONS_GROUP
 !define MUI_STARTMENUPAGE_REGISTRY_KEY "${PRODUCT_UNINST_KEY}"
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "${PRODUCT_STARTMENU_REGVAL}"
 
-# Settings for the finish page (offer to run mmg.exe)
-!define MUI_FINISHPAGE_RUN "$INSTDIR\mmg.exe"
-
 # Welcome page
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_DIRECTORY
