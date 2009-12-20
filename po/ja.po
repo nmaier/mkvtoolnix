@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2009-12-07 21:02+0900\n"
+"PO-Revision-Date: 2009-12-20 15:44+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -327,6 +327,8 @@ msgid ""
 "  --segment-uid <SID1,[SID2...]>\n"
 "                           Set the segment UIDs to SID1, SID2 etc.\n"
 msgstr ""
+"  --segment-uid <SID1,[SID2...]>\n"
+"                           セグメントUIDをSID1,SID2...に設定します。\n"
 
 #: src/merge/mkvmerge.cpp:141
 msgid "  --segmentinfo <file>     Read segment information from the file.\n"
@@ -1313,9 +1315,8 @@ msgid "'--raw' is only allowed when extracting tracks.\n"
 msgstr "'--raw'はトラック展開時にのみ使用することができます。\n"
 
 #: src/merge/mkvmerge.cpp:1713
-#, fuzzy
 msgid "'--segment-uid' lacks the segment UID.\n"
-msgstr "'--segmentinfo'にファイル名が指定されていません。\n"
+msgstr "'--segmentinfo'にセグメントUIDが指定されていません。\n"
 
 #: src/merge/mkvmerge.cpp:1819
 msgid "'--segmentinfo' lacks the file name.\n"
@@ -4797,9 +4798,8 @@ msgid "Segment UID:%1%"
 msgstr ""
 
 #: src/mmg/tabs/global.cpp:159
-#, fuzzy
 msgid "Segment UIDs:"
-msgstr "次のセグメントUID："
+msgstr "セグメントUID："
 
 #: src/common/property_element.cpp:103 src/mmg/header_editor/frame.cpp:288
 msgid "Segment filename"
@@ -4956,6 +4956,9 @@ msgid ""
 "\n"
 "Each file created contains one segment, and each segment has one segment UID. If more segment UIDs are specified than segments are created then the surplus UIDs are ignored. If fewer UIDs are specified than segments are created then random UIDs will be created for them."
 msgstr ""
+"セグメントUIDを指定します。これは通常のUID形式（プレフィックス\"0x\"は有っても無くてもよく、スペースも有っても無くてもよい、32桁ちょうどの16進数の数）の128ビットセグメントUIDのコンマで区切られたリストです。\n"
+"\n"
+"作成される各ファイルは1つのセグメントを含んでおり、各セグメントは1つのセグメントUIDを持っています。もし作成されるセグメントより多くのセグメントUIDが指定されたなら、その時は余りのUIDは無視されます。もし作成されるセグメントよりも少ないUIDが指定されたなら、その時は不足分のためにランダムなUIDが生成されます。"
 
 #: src/mmg/tabs/input_format.cpp:101
 msgid "Sets the stereo mode of the video track to this value. If left empty then the track's original stereo mode will be kept or, if it didn't have one, none will be set at all."
@@ -6406,9 +6409,8 @@ msgid "Unknown format for the previous UID in '%1% %2%'.\n"
 msgstr "'%1% %2%'で前のUIDが未知のフォーマットです。\n"
 
 #: src/merge/mkvmerge.cpp:1362
-#, fuzzy
 msgid "Unknown format for the segment UID '%3%' in '%1% %2%'.\n"
-msgstr "'%1% %2%'で次のUIDが未知のフォーマットです。\n"
+msgstr "'%1% %2%'でセグメントIDが未知のフォーマットです。\n"
 
 #: src/input/r_vobsub.cpp:591
 msgid "Unknown header 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
@@ -8212,28 +8214,3 @@ msgstr "間違った使用法：読み込み専用メモリへの書き込み"
 #: src/mmg/tabs/input_general.cpp:116 src/mmg/tabs/input_general.cpp:127
 msgid "yes"
 msgstr "はい"
-
-#~ msgid ""
-#~ "                             English language name | ISO639-2 code | ISO639-1 code\n"
-#~ "---------------------------------------------------+---------------+--------------\n"
-#~ msgstr ""
-#~ "                                    英語での言語名 |ISO639-2コード |ISO639-1コード\n"
-#~ "---------------------------------------------------+---------------+--------------\n"
-
-#~ msgid "A single '+' is not a valid command line option. If you want to append a file use '+' directly followed by the file name, e.g. '+movie_part_2.avi'."
-#~ msgstr "'+'一文字は正しいコマンドラインオプションではありません。ファイルを追加結合したい場合は、'+'のあとにそのままファイル名を続けてください（例：'+film_teil_2.avi'）。"
-
-#~ msgid "Change the default values"
-#~ msgstr "デフォルト値を変更します"
-
-#~ msgid "During MPEG-4 part 2 B frame handling: The frame queue contains more frames than timecodes are available that can be assigned to them (reason: %1%). Therefore %2% frame(s) had to be dropped. The video might be broken around timecode %3%.\n"
-#~ msgstr "MPEG-4 part 2 Bフレーム処理でエラーが発生しました:割り当てられたタイムコードより多くのフレームをフレームキューが含んでいます (理由: %1%)。よって%2%フレームをドロップせざるをえませんでした。ビデオはタイムコード%3%周辺で壊れている可能性があります。\n"
-
-#~ msgid "No tracks will be copied from this file. This usually indicates a mistake in the command line.\n"
-#~ msgstr "このファイルからはトラックがコピーされません。これは通常コマンドラインに誤りがあることを示します。\n"
-
-#~ msgid "Set &default values"
-#~ msgstr "デフォルト値を設定(&D)"
-
-#~ msgid "mkvmerge GUI v%s ('%s')"
-#~ msgstr "mkvmerge GUI v%s ('%s')"
