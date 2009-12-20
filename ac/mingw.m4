@@ -3,11 +3,14 @@ dnl Check for mingw
 dnl
 AC_CACHE_CHECK([if being compiled with mingw32],
   [ac_cv_mingw32],[
-  if test "x`$CXX --version | grep -i mingw`" = "x" ; then
-    ac_cv_mingw32=no
-  else
-    ac_cv_mingw32=yes
-  fi])
+  case $host in
+    *mingw*)
+      ac_cv_mingw32=yes
+      ;;
+    *)
+      ac_cv_mingw32=no
+      ;;
+  esac])
 
   if test "x$ac_cv_mingw32" = "xyes"; then
     export MINGW=1
