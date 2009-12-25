@@ -126,10 +126,11 @@ xtr_base_c::create_extractor(const std::string &new_codec_id,
                              int64_t new_tid,
                              track_spec_t &tspec) {
   // Raw format
-  if (1 == tspec.extract_raw)
+  if (track_spec_t::tm_raw == tspec.target_mode)
     return new xtr_base_c(new_codec_id, new_tid, tspec);
-  else if (2 == tspec.extract_raw)
+  else if (track_spec_t::tm_full_raw == tspec.target_mode)
     return new xtr_fullraw_c(new_codec_id, new_tid, tspec);
+
   // Audio formats
   else if (new_codec_id == MKV_A_AC3)
     return new xtr_base_c(new_codec_id, new_tid, tspec, "Dolby Digital (AC3)");

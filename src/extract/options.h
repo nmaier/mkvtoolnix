@@ -14,6 +14,7 @@
 #include "common/os.h"
 
 #include <string>
+#include <vector>
 
 class options_c {
 public:
@@ -29,8 +30,10 @@ public:
 
   std::string m_file_name;
   bool m_simple_chapter_format;
-  bool m_parse_fully;
+  kax_analyzer_c::parse_mode_e m_parse_mode;
   extraction_mode_e m_extraction_mode;
+
+  std::vector<track_spec_t> m_tracks;
 
 public:
   options_c();

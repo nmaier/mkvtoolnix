@@ -86,10 +86,8 @@ handle_attachments(KaxAttachments *atts,
 
       if (found && !tracks[k].done) {
         // check for output name
-        if (strlen(tracks[k].out_name) == 0) {
-          safefree(tracks[k].out_name);
-          tracks[k].out_name = safestrdup(name.c_str());
-        }
+        if (tracks[k].out_name.empty())
+          tracks[k].out_name = name;
 
         mxinfo(boost::format(Y("The attachment #%1%, ID %2%, MIME type %3%, size %4%, is written to '%5%'.\n")) % attachment_ui_id % id % type % size % tracks[k].out_name);
         mm_io_c *out = NULL;
@@ -107,15 +105,15 @@ handle_attachments(KaxAttachments *atts,
 }
 
 void
-extract_attachments(const char *file_name,
+extract_attachments(const std::string &file_name,
                     std::vector<track_spec_t> &tracks,
-                    bool parse_fully) {
+                    kax_analyzer_c::parse_mode_e parse_mode) {
   kax_analyzer_cptr analyzer;
 
   // open input file
   try {
     analyzer = kax_analyzer_cptr(new kax_analyzer_c(file_name));
-    analyzer->process(parse_fully ? kax_analyzer_c::parse_mode_full : kax_analyzer_c::parse_mode_fast);
+    analyzer->process(parse_mode);
   } catch (...) {
     show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).")) % file_name % strerror(errno));
     return;

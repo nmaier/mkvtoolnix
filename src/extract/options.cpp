@@ -12,12 +12,12 @@
 
 #include <cassert>
 
+#include "extract/mkvextract.h"
 #include "extract/options.h"
 
 options_c::options_c()
-  : m_extract_cuesheet(false)
-  , m_simple_chapter_format(false)
-  , m_parse_fully(false)
+  : m_simple_chapter_format(false)
+  , m_parse_mode(kax_analyzer_c::parse_mode_fast)
   , m_extraction_mode(options_c::em_unknown)
 {
 }

@@ -133,7 +133,7 @@ print_comments(const char *prefix,
 }
 
 void
-write_cuesheet(const char *file_name,
+write_cuesheet(std::string file_name,
                KaxChapters &chapters,
                KaxTags &tags,
                int64_t tuid,
@@ -196,14 +196,14 @@ write_cuesheet(const char *file_name,
 }
 
 void
-extract_cuesheet(const char *file_name,
-                 bool parse_fully) {
+extract_cuesheet(const std::string &file_name,
+                 kax_analyzer_c::parse_mode_e parse_mode) {
   kax_analyzer_cptr analyzer;
 
   // open input file
   try {
     analyzer = kax_analyzer_cptr(new kax_analyzer_c(file_name));
-    analyzer->process(parse_fully ? kax_analyzer_c::parse_mode_full : kax_analyzer_c::parse_mode_fast);
+    analyzer->process(parse_mode);
   } catch (...) {
     show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).")) % file_name % strerror(errno));
     return;

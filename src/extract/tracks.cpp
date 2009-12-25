@@ -278,7 +278,7 @@ write_all_cuesheets(KaxChapters &chapters,
       }
 
       mxinfo(boost::format(Y("The CUE sheet for track %1% will be written to '%2%'.\n")) % tspecs[i].tid % cue_file_name);
-      write_cuesheet(file_name.c_str(), chapters, tags, tspecs[i].tuid, *out);
+      write_cuesheet(file_name, chapters, tags, tspecs[i].tuid, *out);
       delete out;
     }
   }
@@ -306,7 +306,7 @@ find_track_uids(KaxTracks &tracks,
 }
 
 bool
-extract_tracks(const char *file_name,
+extract_tracks(const std::string &file_name,
                std::vector<track_spec_t> &tspecs) {
   // open input file
   mm_io_c *in;

@@ -109,7 +109,7 @@ cli_parser_c::parse_args() {
 void
 cli_parser_c::add_informational_option(const std::string &spec,
                                        const translatable_string_c &description) {
-  m_options.push_back(cli_parser_c::option_t(spec, description));
+  add_option(spec, boost::bind(&cli_parser_c::dummy_callback, this), description);
 }
 
 void

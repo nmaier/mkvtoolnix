@@ -24,23 +24,24 @@
 #include "common/common.h"
 #include "common/ebml.h"
 #include "common/strings/formatting.h"
+#include "common/strings/parsing.h"
 #include "common/translation.h"
 #include "extract/extract_cli_parser.h"
+#include "extract/options.h"
 
 extract_cli_parser_c::extract_cli_parser_c(const std::vector<std::string> &args)
   : cli_parser_c(args)
   , m_num_unknown_args(0)
-  , m_charset("UTF-8"),
+  , m_charset("UTF-8")
   , m_embed_in_ogg(true)
-  , m_blockadd_level(1)
-  , m_target_mode(options_c::tm_normal)
+  , m_extract_blockadd_level(1)
 {
 }
 
-#define OPT(spec, func, description) add_option(spec, boost::bind(&propedit_cli_parser_c::func, this), description)
+#define OPT(spec, func, description) add_option(spec, boost::bind(&extract_cli_parser_c::func, this), description)
 
 void
-propedit_cli_parser_c::init_parser() {
+extract_cli_parser_c::init_parser() {
   add_information(YT("mkvextract <mode> <source-filename> [options] <extraction-spec>"));
   add_separator();
 
@@ -126,70 +127,70 @@ propedit_cli_parser_c::init_parser() {
 #undef OPT
 
 void
-extract_cli_parser_c::assert_mode(option_c::extraction_mode_e mode) {
-  if      ((option_c::em_tracks   == mode) && (m_options.m_mode != mode))
+extract_cli_parser_c::assert_mode(options_c::extraction_mode_e mode) {
+  if      ((options_c::em_tracks   == mode) && (m_options.m_extraction_mode != mode))
     mxerror(boost::format(Y("'%1%' is only allowed when extracting tracks.\n"))   % m_current_arg);
 
-  else if ((option_c::em_chapters == mode) && (m_options._mode != mode))
+  else if ((options_c::em_chapters == mode) && (m_options.m_extraction_mode != mode))
     mxerror(boost::format(Y("'%1%' is only allowed when extracting chapters.\n")) % m_current_arg);
 }
 
 void
 extract_cli_parser_c::set_parse_fully() {
-  m_options.m_parse_fuly = true;
+  m_options.m_parse_mode = kax_analyzer_c::parse_mode_full;
 }
 
 void
 extract_cli_parser_c::set_charset() {
-  assert_mode(option_c::em_tracks);
+  assert_mode(options_c::em_tracks);
   m_charset = m_next_arg;
 }
 
 void
 extract_cli_parser_c::set_no_ogg() {
-  assert_mode(option_c::em_tracks);
+  assert_mode(options_c::em_tracks);
   m_embed_in_ogg = false;
 }
 
 void
 extract_cli_parser_c::set_cuesheet() {
-  assert_mode(option_c::em_tracks);
+  assert_mode(options_c::em_tracks);
   m_extract_cuesheet = true;
 }
 
 void
 extract_cli_parser_c::set_blockadd() {
-  assert_mode(option_c::em_tracks);
+  assert_mode(options_c::em_tracks);
   if (!parse_int(m_next_arg, m_extract_blockadd_level) || (-1 > m_extract_blockadd_level))
     mxerror(boost::format(Y("Invalid BlockAddition level in argument '%1%'.\n")) % m_next_arg);
 }
 
 void
 extract_cli_parser_c::set_raw() {
-  assert_mode(option_c::em_tracks);
-  m_target_mode = option_c::tm_raw;
+  assert_mode(options_c::em_tracks);
+  m_target_mode = track_spec_t::tm_raw;
 }
 
 void
-extract_cli_parser_c::set_full_raw() {
-  assert_mode(option_c::em_tracks);
-  m_target_mode = option_c::tm_full_raw;
+extract_cli_parser_c::set_fullraw() {
+  assert_mode(options_c::em_tracks);
+  m_target_mode = track_spec_t::tm_full_raw;
 }
 
 void
 extract_cli_parser_c::set_simple() {
-  assert_mode(option_c::em_chapters);
+  assert_mode(options_c::em_chapters);
   m_options.m_simple_chapter_format = true;
 }
 
 void
 extract_cli_parser_c::set_mode_or_extraction_spec() {
-  ++m_num_unknown_options;
+  ++m_num_unknown_args;
 
-  if (1 == m_num_unknown_options)
+  if (1 == m_num_unknown_args)
     set_extraction_mode();
 
-  else if (2 == m_num_unknown_options)
+  else if (2 == m_num_unknown_args)
     m_options.m_file_name = m_next_arg;
 
   else
@@ -200,21 +201,21 @@ void
 extract_cli_parser_c::set_extraction_mode() {
   static struct {
     const char *name;
-    options_c::extraction_mode_e mode;
+    options_c::extraction_mode_e extraction_mode;
   } s_mode_map[] = {
-    { "tracks",       option_c::em_tracks       },
-    { "tags",         option_c::em_tags         },
-    { "attachments",  option_c::em_attachments  },
-    { "chapters",     option_c::em_chapters     },
-    { "cuesheet",     option_c::em_cuesheet     },
-    { "timecodes_v2", option_c::em_timecodes_v2 },
-    { NULL,           option_c::em_unknown      },
+    { "tracks",       options_c::em_tracks       },
+    { "tags",         options_c::em_tags         },
+    { "attachments",  options_c::em_attachments  },
+    { "chapters",     options_c::em_chapters     },
+    { "cuesheet",     options_c::em_cuesheet     },
+    { "timecodes_v2", options_c::em_timecodes_v2 },
+    { NULL,           options_c::em_unknown      },
   };
 
   int i;
   for (i = 0; NULL != s_mode_map[i].name; ++i)
     if (m_next_arg == s_mode_map[i].name) {
-      m_options.m_extraction_mode = s_mode_map[i].mode;
+      m_options.m_extraction_mode = s_mode_map[i].extraction_mode;
       return;
     }
 
@@ -223,16 +224,16 @@ extract_cli_parser_c::set_extraction_mode() {
 
 void
 extract_cli_parser_c::add_extraction_spec() {
-  if (   (options_c::em_tracks       != m_options.mode)
-      && (options_c::em_timecodes_v2 != m_options.mode)
-      && (options_c::em_attachments  != m_options.mode))
+  if (   (options_c::em_tracks       != m_options.m_extraction_mode)
+      && (options_c::em_timecodes_v2 != m_options.m_extraction_mode)
+      && (options_c::em_attachments  != m_options.m_extraction_mode))
     mxerror(boost::format(Y("Unrecognized command line option '%1%'.\n")) % m_current_arg);
 
   boost::regex s_track_id_re("^(\\d+)(:(.+))?$", boost::regex::perl);
 
   boost::match_results<std::string::const_iterator> matches;
   if (!boost::regex_search(m_current_arg, matches, s_track_id_re)) {
-    if (options_c::em_attachments == m_options.mode)
+    if (options_c::em_attachments == m_options.m_extraction_mode)
       mxerror(boost::format(Y("Invalid attachment ID/file name specification in argument '%1%'.\n")) % m_current_arg);
     else
       mxerror(boost::format(Y("Invalid track ID/file name specification in argument '%1%'.\n")) % m_current_arg);
@@ -247,27 +248,27 @@ extract_cli_parser_c::add_extraction_spec() {
     output_file_name = matches[3].str();
 
   if (output_file_name.empty()) {
-    if (option_c::em_attachments == mode)
+    if (options_c::em_attachments == m_options.m_extraction_mode)
       mxinfo(Y("No output file name specified, will use attachment name.\n"));
     else
-      mxerror(boost::format(Y("Missing output file name in argument '%1%'.\n")) % args[i]);
+      mxerror(boost::format(Y("Missing output file name in argument '%1%'.\n")) % m_current_arg);
   }
 
   track.out_name               = output_file_name;
-  track.sub_charset            = m_sub_charset;
+  track.sub_charset            = m_charset;
   track.embed_in_ogg           = m_embed_in_ogg;
   track.extract_cuesheet       = m_extract_cuesheet;
   track.extract_blockadd_level = m_extract_blockadd_level;
   track.target_mode            = m_target_mode;
-  tracks.push_back(track);
+  m_options.m_tracks.push_back(track);
 
-  m_sub_charset                = "UTF-8";
+  m_charset                    = "UTF-8";
   m_embed_in_ogg               = true;
   m_extract_cuesheet           = false;
   m_target_mode                = track_spec_t::tm_normal;
 }
 
-options_cptr
+options_c
 extract_cli_parser_c::run() {
   init_parser();
 

@@ -38,15 +38,15 @@ extern "C" {
 using namespace libmatroska;
 
 void
-extract_chapters(const char *file_name,
+extract_chapters(const std::string &file_name,
                  bool chapter_format_simple,
-                 bool parse_fully) {
+                 kax_analyzer_c::parse_mode_e parse_mode) {
   kax_analyzer_cptr analyzer;
 
   // open input file
   try {
     analyzer = kax_analyzer_cptr(new kax_analyzer_c(file_name));
-    analyzer->process(parse_fully ? kax_analyzer_c::parse_mode_full : kax_analyzer_c::parse_mode_fast);
+    analyzer->process(parse_mode);
   } catch (...) {
     show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).")) % file_name % strerror(errno));
     return;
