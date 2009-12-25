@@ -40,6 +40,16 @@ cli_parser_c::option_t::option_t(cli_parser_c::option_t::option_type_e type,
 {
 }
 
+cli_parser_c::option_t::option_t(const std::string &name,
+                                 const translatable_string_c &description)
+  : m_type(cli_parser_c::option_t::ot_informational_option)
+  , m_name(name)
+  , m_description(description)
+  , m_needs_arg(false)
+  , m_indent(INDENT_DEFAULT)
+{
+}
+
 cli_parser_c::option_t::option_t(const std::string &spec,
                                  const translatable_string_c &description,
                                  cli_parser_cb_t callback,
@@ -57,7 +67,7 @@ std::string
 cli_parser_c::option_t::format_text() {
   std::string description = m_description.get_translated();
 
-  if (cli_parser_c::option_t::ot_option == m_type)
+  if ((cli_parser_c::option_t::ot_option == m_type) || (cli_parser_c::option_t::ot_informational_option == m_type))
     return format_paragraph(description, INDENT_DEFAULT == m_indent ? INDENT_COLUMN_OPTION_DESCRIPTION : m_indent, std::string(INDENT_COLUMN_OPTION_NAME, ' ') + m_name);
 
   else if (cli_parser_c::option_t::ot_section_header == m_type)
@@ -107,9 +117,9 @@ cli_parser_c::parse_args() {
 }
 
 void
-cli_parser_c::add_informational_option(const std::string &spec,
+cli_parser_c::add_informational_option(const std::string &name,
                                        const translatable_string_c &description) {
-  add_option(spec, boost::bind(&cli_parser_c::dummy_callback, this), description);
+  m_options.push_back(cli_parser_c::option_t(name, description));
 }
 
 void
@@ -185,7 +195,6 @@ cli_parser_c::set_usage() {
 
 void
 cli_parser_c::dummy_callback() {
-  mxerror(boost::format("cli_parser_c::dummy_callback(): %1%") % BUGMSG);
 }
 
 void

@@ -31,6 +31,7 @@ protected:
       ot_option,
       ot_section_header,
       ot_information,
+      ot_informational_option,
     };
 
     option_type_e m_type;
@@ -43,6 +44,7 @@ protected:
     option_t();
     option_t(option_type_e type, const translatable_string_c &description, int indent = INDENT_DEFAULT);
     option_t(const std::string &spec, const translatable_string_c &description, cli_parser_cb_t callback, bool needs_arg);
+    option_t(const std::string &name, const translatable_string_c &description);
 
     std::string format_text();
   };
@@ -64,7 +66,7 @@ protected:
   cli_parser_c(const std::vector<std::string> &args);
 
   void add_option(const std::string &spec, cli_parser_cb_t callback, const translatable_string_c &description);
-  void add_informational_option(const std::string &spec, const translatable_string_c &description);
+  void add_informational_option(const std::string &name, const translatable_string_c &description);
   void add_section_header(const translatable_string_c &title, int indent = INDENT_DEFAULT);
   void add_information(const translatable_string_c &information, int indent = INDENT_DEFAULT);
   void add_separator();
