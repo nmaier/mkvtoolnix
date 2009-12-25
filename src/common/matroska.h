@@ -74,6 +74,7 @@
 #define MKV_S_VOBSUB     "S_VOBSUB"
 #define MKV_S_VOBSUBZLIB "S_VOBSUB/ZLIB"
 #define MKV_S_KATE       "S_KATE"
+#define MKV_S_HDMV_PGS   "S_HDMV/PGS"
 
 #define MKV_B_VOBBTN     "B_VOBBTN"
 
