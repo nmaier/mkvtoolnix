@@ -38,17 +38,6 @@ using namespace libmatroska;
 
 #define NAME "mkvextract"
 
-track_spec_t::track_spec_t()
-  : tid(0)
-  , tuid(0)
-  , embed_in_ogg(false)
-  , extract_cuesheet(false)
-  , target_mode(track_spec_t::tm_normal)
-  , extract_blockadd_level(0)
-  , done(false)
-{
-}
-
 enum operation_mode_e {
   MODE_TRACKS,
   MODE_TAGS,
@@ -86,12 +75,19 @@ show_error(const std::string &error) {
   mxinfo(boost::format("(%1%) %2%\n") % NAME % error);
 }
 
-int
-main(int argc,
-     char **argv) {
+static void
+setup() {
   mtx_common_init();
 
   set_process_priority(-1);
+
+  verbose = 0;
+}
+
+int
+main(int argc,
+     char **argv) {
+  setup();
 
   options_c options = extract_cli_parser_c(command_line_utf8(argc, argv)).run();
 

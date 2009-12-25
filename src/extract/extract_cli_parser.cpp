@@ -32,10 +32,17 @@
 extract_cli_parser_c::extract_cli_parser_c(const std::vector<std::string> &args)
   : cli_parser_c(args)
   , m_num_unknown_args(0)
-  , m_charset("UTF-8")
-  , m_embed_in_ogg(true)
-  , m_extract_blockadd_level(1)
 {
+  set_default_values();
+}
+
+void
+extract_cli_parser_c::set_default_values() {
+  m_charset                = "UTF-8";
+  m_embed_in_ogg           = true;
+  m_extract_cuesheet       = false;
+  m_extract_blockadd_level = -1;
+  m_target_mode            = track_spec_t::tm_normal;
 }
 
 #define OPT(spec, func, description) add_option(spec, boost::bind(&extract_cli_parser_c::func, this), description)
@@ -43,7 +50,6 @@ extract_cli_parser_c::extract_cli_parser_c(const std::vector<std::string> &args)
 void
 extract_cli_parser_c::init_parser() {
   add_information(YT("mkvextract <mode> <source-filename> [options] <extraction-spec>"));
-  add_separator();
 
   add_section_header(YT("Usage"));
   add_information(YT("mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]"));
@@ -61,17 +67,20 @@ extract_cli_parser_c::init_parser() {
                      "All other options depend on the mode."));
 
   add_section_header(YT("Global options"));
-  OPT("-f|parse-fully",   set_parse_fully, YT("Parse the whole file instead of relying on the index."));
+  OPT("f|parse-fully",    set_parse_fully,      YT("Parse the whole file instead of relying on the index."));
+  OPT("no-variable-data", set_no_variable_data, YT("Don't write variable parts to output files (only for debugging)."));
+
+  add_common_options();
 
   add_section_header(YT("Track extraction"));
   add_information(YT("The first mode extracts some tracks to external files."));
-  OPT("-c=charset",       set_charset,     YT("Convert text subtitles to this charset (default: UTF-8)."));
-  OPT("--no-ogg",         set_no_ogg,      YT("Write raw FLAC files (default: write OggFLAC files)."));
-  OPT("--cuesheet",       set_cuesheet,    YT("Also try to extract the CUE sheet from the chapter information and tags for this track."));
-  OPT("--blockadd=level", set_blockadd,    YT("Keep only the BlockAdditions up to this level (default: keep all levels)"));
-  OPT("--raw",            set_raw,         YT("Extract the data to a raw file."));
-  OPT("--fullraw",        set_fullraw,     YT("Extract the data to a raw file including the CodecPrivate as a header."));
-  add_informational_option("TID:out",      YT("Write track with the ID TID to the file 'out'."));
+  OPT("c=charset",      set_charset,  YT("Convert text subtitles to this charset (default: UTF-8)."));
+  OPT("no-ogg",         set_no_ogg,   YT("Write raw FLAC files (default: write OggFLAC files)."));
+  OPT("cuesheet",       set_cuesheet, YT("Also try to extract the CUE sheet from the chapter information and tags for this track."));
+  OPT("blockadd=level", set_blockadd, YT("Keep only the BlockAdditions up to this level (default: keep all levels)"));
+  OPT("raw",            set_raw,      YT("Extract the data to a raw file."));
+  OPT("fullraw",        set_fullraw,  YT("Extract the data to a raw file including the CodecPrivate as a header."));
+  add_informational_option("TID:out", YT("Write track with the ID TID to the file 'out'."));
 
   add_section_header(YT("Example"));
 
@@ -96,7 +105,7 @@ extract_cli_parser_c::init_parser() {
 
   add_section_header(YT("Chapter extraction"));
   add_information(YT("The fourth mode extracts the chapters and converts them to XML. The output is written to the standard output. The output can be used as a source for mkvmerge."));
-  OPT("-s|--simple", set_simple, YT("Exports the chapter infomartion in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."));
+  OPT("s|simple", set_simple, YT("Exports the chapter infomartion in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."));
 
   add_section_header(YT("Example"));
 
@@ -118,8 +127,6 @@ extract_cli_parser_c::init_parser() {
   add_section_header(YT("Example"));
 
   add_information(YT("mkvextract timecodes_v2 \"a movie.mkv\" 1:timecodes_track1.txt"));
-
-  add_common_options();
 
   add_hook(cli_parser_c::ht_unknown_option, boost::bind(&extract_cli_parser_c::set_mode_or_extraction_spec, this));
 }
@@ -191,10 +198,15 @@ extract_cli_parser_c::set_mode_or_extraction_spec() {
     set_extraction_mode();
 
   else if (2 == m_num_unknown_args)
-    m_options.m_file_name = m_next_arg;
+    m_options.m_file_name = m_current_arg;
 
   else
     add_extraction_spec();
+}
+
+void
+extract_cli_parser_c::set_no_variable_data() {
+  g_no_variable_data = true;
 }
 
 void
@@ -214,12 +226,12 @@ extract_cli_parser_c::set_extraction_mode() {
 
   int i;
   for (i = 0; NULL != s_mode_map[i].name; ++i)
-    if (m_next_arg == s_mode_map[i].name) {
+    if (m_current_arg == s_mode_map[i].name) {
       m_options.m_extraction_mode = s_mode_map[i].extraction_mode;
       return;
     }
 
-  mxerror(boost::format(Y("Unknown mode '%1%'.\n")) % m_next_arg);
+  mxerror(boost::format(Y("Unknown mode '%1%'.\n")) % m_current_arg);
 }
 
 void
@@ -262,10 +274,7 @@ extract_cli_parser_c::add_extraction_spec() {
   track.target_mode            = m_target_mode;
   m_options.m_tracks.push_back(track);
 
-  m_charset                    = "UTF-8";
-  m_embed_in_ogg               = true;
-  m_extract_cuesheet           = false;
-  m_target_mode                = track_spec_t::tm_normal;
+  set_default_values();
 }
 
 options_c
