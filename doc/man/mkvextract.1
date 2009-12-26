@@ -1,19 +1,27 @@
+'\" t
 .\"     Title: mkvextract
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.73.2 <http://docbook.sf.net/>
+.\" Generator: DocBook XSL Stylesheets v1.75.1 <http://docbook.sf.net/>
 .\"      Date: December 2009
 .\"    Manual: User Commands
 .\"    Source: MkvToolNix 3.0.0
+.\"  Language: English
 .\"
 .TH "MKVEXTRACT" "1" "December 2009" "MkvToolNix 3\&.0\&.0" "User Commands"
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
 .ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
 .SH "NAME"
-mkvextract \- extract tracks from Matroska files into other files
+mkvextract \- extract tracks from Matroska(TM) files into other files
 .SH "SYNOPSIS"
-.HP 11
+.HP \w'\fBmkvextract\fR\ 'u
 \fBmkvextract\fR {mode} {source\-filename} [options] [extraction\-spec]
 .SH "DESCRIPTION"
 .PP
@@ -95,7 +103,9 @@ Reads additional command line arguments from the file
 .sp
 The command line \'\fBmkvextract tracks source\&.mkv \-\-raw 1:destination\&.raw\fR\' could be converted into the following option file:
 .sp
+.if n \{\
 .RS 4
+.\}
 .nf
 # Extract a track from source\&.mkv
 tracks
@@ -105,7 +115,9 @@ source\&.mkv
 1:destination\&.raw
       
 .fi
+.if n \{\
 .RE
+.\}
 .RE
 .SS "Track extraction mode"
 .PP
@@ -184,12 +196,16 @@ option\&.
 .sp
 Each output name should be used only once\&. The exception are RealAudio and RealVideo tracks\&. If you use the same name for different tracks then those tracks will be saved in the same file\&. Example:
 .sp
+.if n \{\
 .RS 4
+.\}
 .nf
 $ mkvextract tracks input\&.mkv 1:output\-two\-tracks\&.rm 2:output\-two\-tracks\&.rm
       
 .fi
+.if n \{\
 .RE
+.\}
 .RE
 .SS "Tags extraction mode"
 .PP
@@ -279,36 +295,52 @@ itself\&.
 .PP
 The shell\'s builtin redirection mechanism is used by appending \'> output\-filename\&.ext\' to the command line\&. Example:
 .sp
+.if n \{\
 .RS 4
+.\}
 .nf
 $ mkvextract tags source\&.mkv > tags\&.xml
   
 .fi
+.if n \{\
 .RE
+.\}
 .PP
 
 \fBmkvextract\fR(1)\'s own redirection is invoked with the
 \fB\-\-redirect\-output\fR
 option\&. Example:
 .sp
+.if n \{\
 .RS 4
+.\}
 .nf
 $ mkvextract tags source\&.mkv \-\-redirect\-output tags\&.xml
   
 .fi
+.if n \{\
 .RE
+.\}
+.if n \{\
 .sp
+.\}
+.RS 4
 .it 1 an-trap
 .nr an-no-space-flag 1
 .nr an-break-flag 1
 .br
-Note
+.ps +1
+\fBNote\fR
+.ps -1
+.br
 .PP
 On Windows you should probably use the
 \fB\-\-redirect\-output\fR
 option because
 \fBcmd\&.exe\fR
 sometimes interpretes special characters before they\'re written into the output file resulting in broken output\&.
+.sp .5v
+.RE
 .SH "OUTPUT FILE FORMATS"
 .PP
 The decision about the output format is based on the track type, not on the extension used for the output file name\&. The following track types are supported at the moment:
@@ -472,13 +504,27 @@ Timecodes are first sorted and then output as a timecode v2 format compliant fil
 exits with one of three exit codes:
 .sp
 .RS 4
-\h'-04'\(bu\h'+03'
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
 \fB0\fR
 \-\- This exit codes means that extraction has completed successfully\&.
 .RE
 .sp
 .RS 4
-\h'-04'\(bu\h'+03'
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
 \fB1\fR
 \-\- In this case
 \fBmkvextract\fR(1)
@@ -486,7 +532,14 @@ has output at least one warning, but extraction did continue\&. A warning is pre
 .RE
 .sp
 .RS 4
-\h'-04'\(bu\h'+03'
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
 \fB2\fR
 \-\- This exit code is used after an error occured\&.
 \fBmkvextract\fR(1)
@@ -502,13 +555,13 @@ aborts right after outputting the error message\&. Error messages range from wro
 .SH "WWW"
 .PP
 The latest version can always be found at
-\fIthe MKVToolNix homepage\fR\&[1]\&.
+\m[blue]\fBthe MKVToolNix homepage\fR\m[]\&\s-2\u[1]\d\s+2\&.
 .SH "AUTHOR"
 .PP
 \fBMoritz Bunkus\fR <\&moritz@bunkus\&.org\&>
-.sp -1n
-.IP "" 4
+.RS 4
 Developer
+.RE
 .SH "NOTES"
 .IP " 1." 4
 the MKVToolNix homepage
