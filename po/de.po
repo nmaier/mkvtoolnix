@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-12-19 15:13+0100\n"
+"PO-Revision-Date: 2009-12-26 21:36+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -721,7 +721,7 @@ msgstr " Bedenken Sie, dass Sonderzeichen wie &, <, > und \" in der für HTML ü
 msgid " Segment info handling:\n"
 msgstr " Behandlung von Segment-Informationen:\n"
 
-#: src/extract/mkvextract.cpp:331 src/info/console_ui.cpp:30
+#: src/extract/mkvextract.cpp:69 src/info/console_ui.cpp:30
 msgid " at %1%"
 msgstr " an %1%"
 
@@ -1128,9 +1128,13 @@ msgstr "'%1%' ist kein gültiges Paar aus Track-ID und Länge des NALU-Größenf
 msgid "'%1%' is not a valid tuple of track ID and default duration in '--default-duration %1%'.\n"
 msgstr "'%1%' ist kein gültiges Paar aus Track-ID und Standarddauer in '--default-duration %1%'.\n"
 
-#: src/extract/mkvextract.cpp:259
-msgid "'%1%' is only allowed for chapter extraction.\n"
-msgstr "'%1%' ist nur beim Extrahieren von Kapitelinformationen erlaubt.\n"
+#: src/extract/extract_cli_parser.cpp:142
+msgid "'%1%' is only allowed when extracting chapters.\n"
+msgstr "'%1%' darf nur beim Extrahieren von Kapiteln benutzt werden.\n"
+
+#: src/extract/extract_cli_parser.cpp:139
+msgid "'%1%' is only allowed when extracting tracks.\n"
+msgstr "'%1%' darf nur beim Extrahieren von Tracks benutzt werden.\n"
 
 #: src/merge/mkvmerge.cpp:1615
 msgid "'%1%' lacks a file name.\n"
@@ -1200,14 +1204,6 @@ msgstr "Der Option '--attachment-mime-type' fehlt der MIME-Typ.\n"
 msgid "'--attachment-name' lacks the name.\n"
 msgstr "Der Option '--attachment-name' fehlt der Name.\n"
 
-#: src/extract/mkvextract.cpp:232
-msgid "'--blockadd' is only allowed when extracting tracks.\n"
-msgstr "Die Option '--blockadd' ist nur erlaubt, wenn Tracks exportiert werden.\n"
-
-#: src/extract/mkvextract.cpp:235
-msgid "'--blockadd' lacks a level.\n"
-msgstr "Der Option '--blockadd' fehlt das Level.\n"
-
 #: src/merge/mkvmerge.cpp:2019
 msgid "'--blockadd' lacks its argument.\n"
 msgstr "Der Option '--blockadd' fehlt ihr Argument.\n"
@@ -1268,10 +1264,6 @@ msgstr "Die Option '--cue-chapter-name-format' muss vor der Option '--chapters' 
 msgid "'--cues' lacks its argument.\n"
 msgstr "Der Option '--cues' fehlt ihr Argument.\n"
 
-#: src/extract/mkvextract.cpp:227
-msgid "'--cuesheet' is only allowed when extracting tracks.\n"
-msgstr "Die Option '--cuesheet' darf nur beim Extrahieren von Tracks benutzt werden.\n"
-
 #: src/merge/mkvmerge.cpp:2064
 msgid "'--default-duration' lacks its argument.\n"
 msgstr "Der Option '--default-duration' fehlt ihr Argument.\n"
@@ -1295,10 +1287,6 @@ msgstr "Der Option '--engage' fehlt ihr Argument.\n"
 #: src/merge/mkvmerge.cpp:1970
 msgid "'--forced-track' lacks its argument.\n"
 msgstr "Der Option '--forced-track' fehlt ihr Argument.\n"
-
-#: src/extract/mkvextract.cpp:248
-msgid "'--fullraw' is only allowed when extracting tracks.\n"
-msgstr "Die Option '--fullraw' darf nur beim Extrahieren von Tracks benutzt werden.\n"
 
 #: src/merge/mkvmerge.cpp:1777
 msgid "'--global-tags' lacks the file name.\n"
@@ -1324,17 +1312,9 @@ msgstr "Der Option '--link-to-previous' fehlt die vorherige Segment-UID.\n"
 msgid "'--nalu-size-length' lacks its argument.\n"
 msgstr "Der Option '--nalu-size-length' fehlt ihr Argument.\n"
 
-#: src/extract/mkvextract.cpp:222
-msgid "'--no-ogg' is only allowed when extracting tracks.\n"
-msgstr "Die Option '--no-ogg' darf nur beim Extrahieren von Tracks benutzt werden.\n"
-
 #: src/merge/mkvmerge.cpp:1659
 msgid "'--priority' lacks its argument.\n"
 msgstr "Der Option '--priority' fehlt ihr Argument.\n"
-
-#: src/extract/mkvextract.cpp:243
-msgid "'--raw' is only allowed when extracting tracks.\n"
-msgstr "Die Option '--raw' darf nur beim Extrahieren von Tracks benutzt werdens.\n"
 
 #: src/merge/mkvmerge.cpp:1713
 msgid "'--segment-uid' lacks the segment UID.\n"
@@ -1403,14 +1383,6 @@ msgstr "Die Optionen '-D' und '-d' wurden für dieselbe Quelldatei angegeben.\n"
 #: src/merge/mkvmerge.cpp:2095
 msgid "'-S' and '-s' used on the same source file.\n"
 msgstr "Die Optionen '-S' und '-s' wurden für dieselbe Quelldatei angegeben.\n"
-
-#: src/extract/mkvextract.cpp:212
-msgid "'-c' is only allowed when extracting tracks.\n"
-msgstr "Die Option '-c' darf nur beim Extrahieren von Tracks benutzt werden.\n"
-
-#: src/extract/mkvextract.cpp:215
-msgid "'-c' lacks a charset.\n"
-msgstr "Der Option '-c' fehlt der Zeichensatz.\n"
 
 #: src/common/property_element.cpp:116 src/mmg/header_editor/frame.cpp:364
 msgid "'Default track' flag"
@@ -1787,6 +1759,10 @@ msgstr "Erlaubt, AVC/h.264-Video im Video-for-Windows-Kompatibilitätsmodus zu s
 msgid "Allows the use of the CodecState element. This is used for e.g. MPEG-1/-2 video tracks for storing the sequence headers."
 msgstr "Erlaubt die Benutzung von CodecState-Elementen. Diese werden z.B. bei MPEG-1/-2-Videotracks zum Speichern der Sequenzköpfe benutzt."
 
+#: src/extract/extract_cli_parser.cpp:79
+msgid "Also try to extract the CUE sheet from the chapter information and tags for this track."
+msgstr "Zusätzlich zu Tracks werden Kapitelinformationen als Cuesheet extrahiert."
+
 #: src/mmg/options/mmg.cpp:91
 msgid "Always on top"
 msgstr "Über allen anderen Fenstern"
@@ -1795,7 +1771,7 @@ msgstr "Über allen anderen Fenstern"
 msgid "An ID corresponding to the codec."
 msgstr "Eine den Codec identifizierende ID."
 
-#: src/extract/attachments.cpp:133
+#: src/extract/attachments.cpp:131
 msgid "An attachment with the ID %1% was not found.\n"
 msgstr "Ein Dateianhang mit der ID %1% wurde nicht gefunden.\n"
 
@@ -1876,6 +1852,10 @@ msgstr "Es wird mindestens ein <ChapterAtom>-Element benötigt."
 #: src/common/xml/element_parser.cpp:383
 msgid "At least one <EditionEntry> element is needed."
 msgstr "Es wird mindestens ein <EditionEntry>-Element benötigt."
+
+#: src/extract/extract_cli_parser.cpp:97
+msgid "Atatchment extraction"
+msgstr "Extraktion von Anhängen"
 
 #: src/info/mkvinfo.cpp:1257
 msgid "Attached"
@@ -2007,6 +1987,10 @@ msgstr "Zeigt den Editor für die Jobwarteschlange an"
 msgid "Browse"
 msgstr "Auswählen"
 
+#: src/extract/extract_cli_parser.cpp:114
+msgid "CUE sheet extraction"
+msgstr "Cuesheet-Extraktion"
+
 #: src/output/p_mpeg4_p2.cpp:120
 msgid "Cannot convert non-native MPEG4 video frames into native ones if the source container provides neither timecodes nor a number of frames per second.\n"
 msgstr "Nicht-native MPEG4 Videotracks können nicht in native umgewandelt werden, wenn das Quellformat weder Zeitstempel noch die Anzahl der Bilder pro Sekunde zur Verfügung stellt.\n"
@@ -2023,7 +2007,7 @@ msgstr "Weiterer Mux-Job kann nicht gestartet werden"
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file, and their CodecPrivate data (the USF styles etc) do not match.\n"
 msgstr "Der Track %1% mit der CodecID '%2%' kann nicht in die Datei '%3%' geschrieben werden, weil bereits Track %4% mit der CodecID '%5%' in dieselbe Datei geschrieben wird und sich ihre privaten Codec-Daten (z.B. USF-Stile) unterscheiden.\n"
 
-#: src/extract/xtr_avi.cpp:46 src/extract/xtr_base.cpp:63
+#: src/extract/xtr_avi.cpp:46 src/extract/xtr_base.cpp:64
 #: src/extract/xtr_textsubs.cpp:308
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file.\n"
 msgstr "Der Track %1% mit der CodecID '%2%' kann nicht in die Datei '%3%' geschrieben werden, weil bereits Track %4% mit der CodecID '%5%' in dieselbe Datei geschrieben wird.\n"
@@ -2101,6 +2085,10 @@ msgstr "Kapitelübersetzung, ID: %1%"
 msgid "Chapter editor is not empty"
 msgstr "Kapiteleditor nicht leer"
 
+#: src/extract/extract_cli_parser.cpp:106
+msgid "Chapter extraction"
+msgstr "Kapitelextraktion"
+
 #: src/mmg/tabs/global.cpp:183
 msgid "Chapter file:"
 msgstr "Kapiteldatei:"
@@ -2172,7 +2160,7 @@ msgstr "Kapitel:"
 msgid "Chapters: %1% entries"
 msgstr "Kapitel: %1% Einträge"
 
-#: src/common/cli_parser.cpp:163
+#: src/common/cli_parser.cpp:179
 msgid "Charset for strings on the command line"
 msgstr "Zeichensatz für Zeichenketten auf der Kommandozeile"
 
@@ -2368,6 +2356,10 @@ msgstr "Inhaltskodierungen"
 #: src/info/mkvinfo.cpp:804
 msgid "Content encryption"
 msgstr "Inhaltsverschlüsselung"
+
+#: src/extract/extract_cli_parser.cpp:77
+msgid "Convert text subtitles to this charset (default: UTF-8)."
+msgstr "Textuntertitel in diesen Zeichensatz umwandeln (Standard: UTF-8)."
 
 #: src/mmg/mmg_dialog.cpp:111
 msgid "Copy the command line to the clipboard"
@@ -2764,6 +2756,10 @@ msgstr "Dokumententyp: %1%"
 msgid "Dolby TrueHD"
 msgstr "Dolby TrueHD"
 
+#: src/extract/extract_cli_parser.cpp:71
+msgid "Don't write variable parts to output files (only for debugging)."
+msgstr "Keine veränderlichen Teile in die Ausgabedateien schreiben (nur für Debugging)."
+
 #: src/propedit/propedit.cpp:106
 msgid "Done.\n"
 msgstr "Fertig.\n"
@@ -2959,6 +2955,14 @@ msgstr "Fehler:"
 msgid "Everything went fine."
 msgstr "Alles lief gut."
 
+#: src/extract/extract_cli_parser.cpp:85 src/extract/extract_cli_parser.cpp:93
+#: src/extract/extract_cli_parser.cpp:102
+#: src/extract/extract_cli_parser.cpp:110
+#: src/extract/extract_cli_parser.cpp:119
+#: src/extract/extract_cli_parser.cpp:127
+msgid "Example"
+msgstr "Beispiel"
+
 #: src/mmg/options/mkvmerge.cpp:105
 #, c-format
 msgid "Executable files (*.exe)|*.exe|%s"
@@ -2976,9 +2980,21 @@ msgstr "Es wurde ein Zeitstempel im folgenden Format erwartet: HH:MM:SS.nnn (HH 
 msgid "Expected an unsigned integer but found '%1%'."
 msgstr "Es wurde eine vorzeichenlose Zahl erwartet aber folgendes vorgefunden: '%1%'."
 
+#: src/extract/extract_cli_parser.cpp:108
+msgid "Exports the chapter infomartion in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
+msgstr "Extrahiert Kapitelinformationen im einfachen Format, das auch in verschiedenen OGM-Tools verwendet wird (CHAPTER01=... CHAPTER01NAME=...)."
+
 #: src/mmg/tabs/input.cpp:150
 msgid "Extra options"
 msgstr "Zusatzoptionen"
+
+#: src/extract/extract_cli_parser.cpp:82
+msgid "Extract the data to a raw file including the CodecPrivate as a header."
+msgstr "Daten inklusive der privaten Codec-Konfigurationsdaten roh extrahieren und nicht in einen Container einbetten."
+
+#: src/extract/extract_cli_parser.cpp:81
+msgid "Extract the data to a raw file."
+msgstr "Daten roh extrahieren, und nicht in einen Container einbetten."
 
 #: src/output/p_avc.cpp:128 src/output/p_mpeg4_p10.cpp:60
 msgid "Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"
@@ -3016,7 +3032,7 @@ msgstr "BPS:"
 msgid "Failed to create the VobSub data file '%1%': %2% (%3%)\n"
 msgstr "Die VobSub-Datendatei '%1%' konnte nicht erstellt werden: %2% (%3%)\n"
 
-#: src/extract/xtr_base.cpp:71 src/extract/xtr_textsubs.cpp:337
+#: src/extract/xtr_base.cpp:72 src/extract/xtr_textsubs.cpp:337
 #: src/extract/xtr_vobsub.cpp:235
 msgid "Failed to create the file '%1%': %2% (%3%)\n"
 msgstr "Die Datei '%1%' konnte nicht erstellt werden: %2% (%3%)\n"
@@ -3158,7 +3174,7 @@ msgstr "Blockzusammenfassung nach EBML-Methode erzwingen"
 msgid "Force Xiph style lacing."
 msgstr "Blockzusammenfassung nach Xiph-Methode erzwingen<"
 
-#: src/common/cli_parser.cpp:162
+#: src/common/cli_parser.cpp:178
 msgid "Force the translations for 'code' to be used."
 msgstr "Erzwingt die Benutzung der Übersetzung für die Sprache 'code'."
 
@@ -3233,6 +3249,10 @@ msgstr "Allgemeine Track-Optionen"
 #: src/mmg/mmg_dialog.cpp:171
 msgid "Global"
 msgstr "Global"
+
+#: src/extract/extract_cli_parser.cpp:69
+msgid "Global options"
+msgstr "Globale Optionen"
 
 #: src/mmg/tabs/global.cpp:231
 msgid "Global tags"
@@ -3384,7 +3404,7 @@ msgstr "Es ist nicht möglich, die Datei '%1%' zu benutzen: Die Datei konnte nic
 msgid "Inconsistent AAC audio packet (length: %1% != len_check %2%)\n"
 msgstr "Inkonsistentes AAC Audio-Paket (Länge: %1% != len_check %2%)\n"
 
-#: src/common/cli_parser.cpp:161
+#: src/common/cli_parser.cpp:177
 msgid "Increase verbosity."
 msgstr "Gesprächigkeit erhöhen."
 
@@ -3430,7 +3450,7 @@ msgstr "Ungültige %1% in '--%2% %3%' angegeben.\n"
 msgid "Invalid Base64 character encountered"
 msgstr "Ungültiges Zeichen für Base64-Kodierung gefunden"
 
-#: src/extract/mkvextract.cpp:238
+#: src/extract/extract_cli_parser.cpp:172
 msgid "Invalid BlockAddition level in argument '%1%'.\n"
 msgstr "Ungültiges Level für BlockAddition in Argument '%1%'.\n"
 
@@ -3450,7 +3470,7 @@ msgstr "Ungültige UID. Die Editions-UID wird bereits verwendet. Die bisherige U
 msgid "Invalid Vorbis headers in AVI audio track."
 msgstr "Ungültige Vorbis-Kopfdaten in AVI Audio-Track."
 
-#: src/extract/mkvextract.cpp:269
+#: src/extract/extract_cli_parser.cpp:249
 msgid "Invalid attachment ID/file name specification in argument '%1%'.\n"
 msgstr "Ungültige Angabe für Dateianhangs-ID und Dateiname in Argument '%1%'.\n"
 
@@ -3680,7 +3700,7 @@ msgstr "Ungültige Track-ID in '--forced-track %1%' angegeben.\n"
 msgid "Invalid track ID specified in '--sub-charset %1%'.\n"
 msgstr "Ungültige Track-ID in '--sub-charset %1%' angegeben.\n"
 
-#: src/extract/mkvextract.cpp:267
+#: src/extract/extract_cli_parser.cpp:251
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "Ungültige Angabe von Track-ID und Dateiname in Argument '%1%'.\n"
 
@@ -3703,6 +3723,10 @@ msgstr "Jobwarteschlangenverwaltung"
 #: src/output/p_kate.cpp:79
 msgid "Kate packet is too small and is being skipped.\n"
 msgstr "Ein Kate-Paket ist zu kurz und wird ausgelassen.\n"
+
+#: src/extract/extract_cli_parser.cpp:80
+msgid "Keep only the BlockAdditions up to this level (default: keep all levels)"
+msgstr "Nur die BlockAdditions bis zum angegebenen Level erhalten (Standard: alle Level erhalten)"
 
 #: src/merge/mkvmerge.cpp:404
 msgid ""
@@ -3948,7 +3972,7 @@ msgstr "Fehlendes Argument für '--output-charset'.\n"
 msgid "Missing argument for '--ui-language'.\n"
 msgstr "Fehlendes Argument für '--ui-language'.\n"
 
-#: src/common/cli_parser.cpp:98
+#: src/common/cli_parser.cpp:108
 msgid "Missing argument to '%1%'.\n"
 msgstr "Fehlendes Argument für '%1%'.\n"
 
@@ -3972,7 +3996,7 @@ msgstr "Fehlende Eingabe"
 msgid "Missing one hex digit"
 msgstr "Es fehlt eine Hexadezimalziffer"
 
-#: src/extract/mkvextract.cpp:285
+#: src/extract/extract_cli_parser.cpp:266
 msgid "Missing output file name in argument '%1%'.\n"
 msgstr "Im Argument '%1%' fehlt der Ausgabedateiname.\n"
 
@@ -4153,14 +4177,6 @@ msgstr "Es wurde kein Dateiname angegeben.\n"
 msgid "No filename found after the '@'."
 msgstr "Nach dem '@' wurde kein Dateiname angegeben."
 
-#: src/extract/mkvextract.cpp:252
-msgid "No further options allowed when extracting %1%.\n"
-msgstr "Es sind keine weiteren Optionen beim Extrahieren von %1% erlaubt.\n"
-
-#: src/extract/mkvextract.cpp:255
-msgid "No further options allowed when regenerating the CUE sheet.\n"
-msgstr "Es sind keine weiteren Optionen erlaubt, wenn ein Cuesheet erzeugt werden soll.\n"
-
 #: src/mmg/cli_options_dlg.cpp:146
 msgid "No help available."
 msgstr "Keine Hilfe verfügbar."
@@ -4173,7 +4189,7 @@ msgstr "Es wurden keine Quelldateien angegeben. Es wird keine Ausgabe erzeugt.\n
 msgid "No metadata block found. This file is broken.\n"
 msgstr "Es wurde kein Metadatenblock gefunden. Diese Datei ist beschädigt.\n"
 
-#: src/extract/mkvextract.cpp:283
+#: src/extract/extract_cli_parser.cpp:264
 msgid "No output file name specified, will use attachment name.\n"
 msgstr "Es wurde kein Ausgabedateiname angegeben. Der Dateianhangsname wird statt dessen verwendet.\n"
 
@@ -4229,14 +4245,6 @@ msgstr "Keine gültige Matroska-Datei (kein Segment/Level-0-Element gefunden)"
 #: src/propedit/options.cpp:30
 msgid "Nothing to do.\n"
 msgstr "Nichts zu tun.\n"
-
-#: src/extract/mkvextract.cpp:309
-msgid ""
-"Nothing to do.\n"
-"\n"
-msgstr ""
-"Nichts zu tun.\n"
-"\n"
 
 #: src/common/property_element.cpp:127 src/mmg/header_editor/frame.cpp:388
 msgid "Number of nanoseconds (not scaled) per frame."
@@ -4342,7 +4350,7 @@ msgstr "Ausgabe"
 msgid "Output filename"
 msgstr "Zieldateiname"
 
-#: src/common/cli_parser.cpp:164
+#: src/common/cli_parser.cpp:180
 msgid "Output messages in this charset"
 msgstr "Alle Nachrichten in diesem Zeichensatz ausgeben"
 
@@ -4377,6 +4385,10 @@ msgstr "Die Paketwarteschlange ist nicht leer (Anzahl an fertigen Paketen: %1%).
 #: src/info/wxwidgets_ui.cpp:133
 msgid "Parse the file completely and show all elements"
 msgstr "Datei vollständig parsen und alle Elemente anzeigen"
+
+#: src/extract/extract_cli_parser.cpp:70
+msgid "Parse the whole file instead of relying on the index."
+msgstr "Die ganze Datei parsen, anstatt den Index zu benutzen."
 
 #: src/info/mkvinfo.cpp:1615
 msgid "Parsing file"
@@ -4476,7 +4488,7 @@ msgstr "Fortschritt"
 msgid "Progress: %1%%%%2%"
 msgstr "Fortschritt: %1%%%%2%"
 
-#: src/extract/mkvextract.cpp:356 src/extract/timecodes_v2.cpp:357
+#: src/extract/mkvextract.cpp:98 src/extract/timecodes_v2.cpp:357
 msgid "Progress: 100%\n"
 msgstr "Fortschritt: 100%\n"
 
@@ -4636,7 +4648,7 @@ msgstr "Die ausgewählten Jobs wieder aktivieren"
 msgid "Reading encrypted VOBs is not supported.\n"
 msgstr "Die Verarbeitung von verschlüsselten VOBs wird nicht unterstützt.\n"
 
-#: src/common/cli_parser.cpp:166
+#: src/common/cli_parser.cpp:182
 msgid "Reads additional command line options from the specified file (see man page)."
 msgstr "Weitere Kommandozeilenargumente aus einer Datei lesen (siehe Dokumentation)."
 
@@ -4660,7 +4672,7 @@ msgstr "RealMedia Audio/Video-Dateien"
 msgid "RealMedia files may contain HE-AAC / AAC+ / SBR AAC audio. In some cases this can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr %1%' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
 msgstr "RealMedia-Dateien können HE-AAC / AAC+ / SBR AAC Audio enthalten. Manchmal ist es nicht möglich, das diese automatisch von normalem AAC unterschieden und richtig erkannt werden. Deshalb müssen Sie eventuell selber mit  '--aac-is-sbr %1%' festlegen, dass dieser Track SBR AAC enthält. Andernfalls wird der Track falsch gemuxt. Lesen Sie auch den entsprechenden Abschnitt in der mkvmerge-Dokumentation.\n"
 
-#: src/common/cli_parser.cpp:165
+#: src/common/cli_parser.cpp:181
 msgid "Redirects all messages into this file."
 msgstr "Leitet alle Nachrichten in diese Datei um."
 
@@ -5045,11 +5057,11 @@ msgstr "Die Kommandozeile anzeigen, die mmg für mkvmerge erstellt"
 msgid "Show the guide to mkvmerge GUI"
 msgstr "Den mkvmerge-GUI-Leitfaden anzeigen"
 
-#: src/common/cli_parser.cpp:167
+#: src/common/cli_parser.cpp:183
 msgid "Show this help."
 msgstr "Zeigt diesen Hilfetext an."
 
-#: src/common/cli_parser.cpp:168
+#: src/common/cli_parser.cpp:184
 msgid "Show version information."
 msgstr "Versionsinformationen anzeigen."
 
@@ -5257,6 +5269,10 @@ msgstr "TTA (The lossless True Audio codec)"
 msgid "TTA lossless audio"
 msgstr "TTA verlustfreies Audio"
 
+#: src/extract/extract_cli_parser.cpp:90
+msgid "Tag extraction"
+msgstr "Extraktion von Tags"
+
 #: src/mmg/tabs/global.cpp:232
 msgid "Tag file:"
 msgstr "Tagdatei:"
@@ -5414,7 +5430,7 @@ msgstr "Das Argument für '--timecode-scale' muss eine Nummer sein.\n"
 msgid "The aspect ratio setting for track nr. %s in file '%s' is invalid."
 msgstr "Die Werte für das Seitenverhältnis für Track Nummer %s in Datei '%s' ist ungültig."
 
-#: src/extract/attachments.cpp:94
+#: src/extract/attachments.cpp:92
 msgid "The attachment #%1%, ID %2%, MIME type %3%, size %4%, is written to '%5%'.\n"
 msgstr "Der Dateianhang #%1%, ID %2%, MIME-Typ %3%, Größe %4%, wird in die Datei '%5%' geschrieben.\n"
 
@@ -5557,11 +5573,15 @@ msgstr ""
 msgid "The extracted values for video width and height from the MPEG4 layer 2 video data bitstream differ from what the values in the source container. The ones from the video data bitstream (%1%x%2%) will be used.\n"
 msgstr "Die aus dem MPEG-4 Layer 2 Video-Datenstrom extrahierten Werte für Höhe und Breite entsprechen nicht den Werten, die im Quellcontainer angegeben waren. Die aus dem Datemstrom extrahierten Werte (%1%x%2%) werden benutzt.\n"
 
+#: src/extract/extract_cli_parser.cpp:116
+msgid "The fifth mode tries to extract chapter information and tags and outputs them as a CUE sheet. This is the reverse of using a CUE sheet with mkvmerge's '--chapters' option."
+msgstr "Im fünften Modus wird versucht, Kapitelinformationen und Tags zusammen als Cuesheet zu extrahieren. Dies ist funktioniert dann, wenn die Kapitel und Tags in der Quelldatei mit mkvmerges '--chapters'-Option aus einem Cuesheet erstellt wurden."
+
 #: src/merge/mkvmerge.cpp:1394
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
 msgstr "Die Datei '%1%' kann nicht angehängt werden, weil sie entweder nicht existiert oder nicht gelesen werden kann.\n"
 
-#: src/extract/attachments.cpp:120 src/extract/chapters.cpp:51
+#: src/extract/attachments.cpp:118 src/extract/chapters.cpp:51
 #: src/extract/cuesheets.cpp:208 src/extract/tags.cpp:51
 msgid "The file '%1%' could not be opened for reading (%2%)."
 msgstr "Die Datei '%1%' konnte nicht zum Lesen geöffnet werden (%2%)."
@@ -5579,7 +5599,7 @@ msgstr "Die Datei '%1%' konnte nicht geöffnet werden, um aus ihr Kommandozeilen
 msgid "The file '%1%' could not be opened for writing (%2%).\n"
 msgstr "Die Daten '%1%' konnte nicht zum Schreiben geöffnet werden (%2%).\n"
 
-#: src/extract/attachments.cpp:99 src/extract/xtr_rmff.cpp:40
+#: src/extract/attachments.cpp:97 src/extract/xtr_rmff.cpp:40
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "Die Daten '%1%' konnte nicht zum Schreiben geöffnet werden (%2%, %3%).\n"
 
@@ -5685,6 +5705,14 @@ msgstr "Die Datei, in die Sie speichern wollten, ist eine Matroska-Datei. Damit 
 msgid "The first file cannot be appended because there are no files to append to.\n"
 msgstr "Die erste Datei kann nicht angehängt werden, weil es keine Dateien gibt, an die sie angehängt werden könnte.\n"
 
+#: src/extract/extract_cli_parser.cpp:76
+msgid "The first mode extracts some tracks to external files."
+msgstr "Im ersten Modus werden Tracks in externe Dateien extrahiert."
+
+#: src/extract/extract_cli_parser.cpp:65
+msgid "The first word tells mkvextract what to extract. The second must be the source file. There are few global options that can be used with all modes. All other options depend on the mode."
+msgstr "Das erste Wort ist der Modus und teilt mkvextract mit, was extrahiert werden soll. Das zweite Wort muss der Name der Quelldatei sein. Es gibt nur eine Option, die bei jedem Modus verwendet werden kann, und das ist '-' oder lang '--verbose' damit mkvextract mehr Informationen ausgibt. Alle anderen Optionen hängen vom ausgewählten Modus ab."
+
 #: src/mmg/tabs/global.cpp:478
 msgid "The format of the split size is invalid (size too small)."
 msgstr "Das Format der Aufteilungsgröße ist ungültig (Aufteilungsgröße ist zu klein)."
@@ -5700,6 +5728,10 @@ msgstr "Das Format des Aufteilungszeitstempels/der Aufteilungsdauer ist ungülti
 #: src/merge/output_control.cpp:936
 msgid "The formats do not match."
 msgstr "Die Formate stimmen nicht überein."
+
+#: src/extract/extract_cli_parser.cpp:107
+msgid "The fourth mode extracts the chapters and converts them to XML. The output is written to the standard output. The output can be used as a source for mkvmerge."
+msgstr "Im vierten Modus werden Kapitelinformationen extrahiert und in ein XML-Format umgewandelt. Die Ausgabe wird auf die Standardausgabe geschrieben und kann mit normalen Shellmethoden in eine Datei umgeleitet werden. Die Ausgabe kann erneut als Quelldatei für mkvmerge dienen."
 
 #: src/merge/mkvmerge.cpp:1488
 msgid "The given timecode scale factor is outside the valid range (1...10000000 or -1 for 'sample precision even if a video track is present').\n"
@@ -5966,6 +5998,10 @@ msgstr ""
 "anzupassen, wenn die Länge des Audiotracks nicht\n"
 "dazupasst)."
 
+#: src/extract/extract_cli_parser.cpp:91
+msgid "The second mode extracts the tags and converts them to XML. The output is written to the standard output. The output can be used as a source for mkvmerge."
+msgstr "Im zweiten Modus werden Tags extrahiert und in ein XML-Format konvertiert. Die Ausgabe wird auf die Standardausgabe geschrieben und kann mit normalen Shellmethoden in eine Datei umgeleitet werden. Die Ausgabe kann erneut als Quelldatei für mkvmerge dienen. "
+
 #: src/input/r_tta.cpp:85
 msgid "The seek table in this TTA file seems to be broken.\n"
 msgstr "Die Suchindextabelle in dieser TTA-Datei scheint beschädigt zu sein.\n"
@@ -5974,6 +6010,10 @@ msgstr "Die Suchindextabelle in dieser TTA-Datei scheint beschädigt zu sein.\n"
 #, c-format
 msgid "The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."
 msgstr "Die ausgewählte Sprache '%s' für Kapitel '%s' ist kein gültiges Sprachkürzel. Bitte wählen Sie eines der vordefinierten Sprachkürzel aus."
+
+#: src/extract/extract_cli_parser.cpp:125
+msgid "The sixth mode finds the timecodes of all blocks for a track and outpus a timecode v2 file with these timecodes."
+msgstr "Im sechsten Modus werden die Zeitstempel aller Frames gelesen und in eine Zeitstempeldatei der Version 2 geschrieben. "
 
 #: src/mmg/tabs/global.cpp:71
 msgid "The size after which a new output file is started. The letters 'G', 'M' and 'K' can be used to indicate giga/mega/kilo bytes respectively. All units are based on 1024 (G = 1024^3, M = 1024^2, K = 1024)."
@@ -6019,6 +6059,10 @@ msgstr "Die Tags in '%1%' konnten nicht geparst werden, weil einige notwendige E
 #: src/extract/xtr_tta.cpp:79
 msgid "The temporary file '%1%' could not be opened for reading (%2%).\n"
 msgstr "Die temporäre Datei '%1%' konnte nicht zum Lesen geöffnet werden (%2%).\n"
+
+#: src/extract/extract_cli_parser.cpp:99
+msgid "The third mode extracts attachments from the source file."
+msgstr "Beim dritten Modus werden Dateianhänge aus der Quelldatei extrahiert."
 
 #: src/merge/timecode_factory.cpp:57
 msgid "The timecode file '%1%' contains an unsupported/unrecognized format (version %2%).\n"
@@ -6258,6 +6302,10 @@ msgstr "Dieser Track benutzt ein Feature von Matroska, das 'Codec-Zustandselemen
 msgid "Time slice"
 msgstr "Zeitscheibe"
 
+#: src/extract/extract_cli_parser.cpp:123
+msgid "Timecode extraction"
+msgstr "Zeitstempelextraktion"
+
 #: src/mmg/tabs/input_general.cpp:263
 #, c-format
 msgid "Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"
@@ -6376,6 +6424,10 @@ msgstr "Track UID"
 msgid "Track UID: %1%"
 msgstr "Track UID: %1%"
 
+#: src/extract/extract_cli_parser.cpp:75
+msgid "Track extraction"
+msgstr "Extraktion von Spuren"
+
 #: src/propedit/options.cpp:157 src/propedit/propedit_cli_parser.cpp:88
 #: src/propedit/propedit_cli_parser.cpp:163
 msgid "Track headers"
@@ -6405,7 +6457,7 @@ msgstr "Track Overlay: %1%"
 msgid "Track type: %1%"
 msgstr "Tracktyp: %1%"
 
-#: src/extract/xtr_base.cpp:118
+#: src/extract/xtr_base.cpp:119
 msgid "Tracks with unsupported content encoding schemes (compression or encryption) cannot be extracted.\n"
 msgstr "Tracks mit nicht unterstützten Kodierschemata (Kompression oder Verschlüsselung) können nicht extrahiert werden.\n"
 
@@ -6485,7 +6537,7 @@ msgstr "Unbekanntes Format für die Segment-UID '%3%' in '%1% %2%'.\n"
 msgid "Unknown header 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
 msgstr "Unbekannter Kopf 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
 
-#: src/extract/mkvextract.cpp:182
+#: src/extract/extract_cli_parser.cpp:234
 msgid "Unknown mode '%1%'.\n"
 msgstr "Unbekannter Arbeitsmodus '%1%'.\n"
 
@@ -6493,7 +6545,7 @@ msgstr "Unbekannter Arbeitsmodus '%1%'.\n"
 msgid "Unknown open mode"
 msgstr "Unbekannter Modus beim Dateiöffnen"
 
-#: src/common/cli_parser.cpp:105
+#: src/common/cli_parser.cpp:115
 msgid "Unknown option '%1%'.\n"
 msgstr "Unbekannte Option '%1%'.\n"
 
@@ -6505,9 +6557,9 @@ msgstr "Unbekannter Analysemodus bei '%1% %2%'.\n"
 msgid "Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n"
 msgstr "Unbekanntes/nicht unterstütztes Audioformat 0x%|1$04x| in diesem Audio-Track.\n"
 
-#: src/extract/mkvextract.cpp:302
-msgid "Unrecognized command line option '%1%'. Maybe you put a mode specific option before the input file name?\n"
-msgstr "Nicht erkannte Kommandozeilenoption '%1%'. Haben Sie vielleicht eine Option noch vor den Namen der Quelldatei geschrieben?\n"
+#: src/extract/extract_cli_parser.cpp:242
+msgid "Unrecognized command line option '%1%'.\n"
+msgstr "Unbekannte Kommandozeilenoption '%1%'.\n"
 
 #: src/mmg/header_editor/value_page.cpp:73
 msgid "Unsigned integer"
@@ -6536,155 +6588,9 @@ msgstr "Nicht unterstützter Track-Typ.\n"
 msgid "Updating the '%1%' element failed. Reason:\n"
 msgstr "Die Aktualisierung des '%1%'-Elementes schlug fehl. Grund:\n"
 
-#: src/extract/mkvextract.cpp:79
-msgid ""
-"Usage: mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]\n"
-"   or  mkvextract tags <inname> [options]\n"
-"   or  mkvextract attachments <inname> [options] [AID1:out1 [AID2:out2 ...]]\n"
-"   or  mkvextract chapters <inname> [options]\n"
-"   or  mkvextract cuesheet <inname> [options]\n"
-"   or  mkvextract timecodes_v2 <inname> [TID1:out1 [TID2:out2 ...]]\n"
-"   or  mkvextract <-h|-V>\n"
-"\n"
-" The first word tells mkvextract what to extract. The second must be the\n"
-" source file. The only 'global' option that can be used with all modes is\n"
-" '-v' or '--verbose' to increase the verbosity. All other options depend\n"
-" on the mode.\n"
-"\n"
-" The first mode extracts some tracks to external files.\n"
-"  -c charset       Convert text subtitles to this charset (default: UTF-8).\n"
-"  --no-ogg         Write raw FLAC files (default: write OggFLAC files).\n"
-"  --cuesheet       Also try to extract the CUE sheet from the chapter\n"
-"                   information and tags for this track.\n"
-"  --blockadd level Keep only the BlockAdditions up to this level\n"
-"                   (default: keep all levels)\n"
-"  --raw            Extract the data to a raw file.\n"
-"  --fullraw        Extract the data to a raw file including the CodecPrivate\n"
-"                   as a header.\n"
-"  TID:out          Write track with the ID TID to the file 'out'.\n"
-"\n"
-" Example:\n"
-" mkvextract tracks \"a movie.mkv\" 2:audio.ogg -c ISO8859-1 3:subs.srt\n"
-"\n"
-" The second mode extracts the tags and converts them to XML. The output is\n"
-" written to the standard output. The output can be used as a source\n"
-" for mkvmerge.\n"
-"\n"
-" Example:\n"
-" mkvextract tags \"a movie.mkv\" > movie_tags.xml\n"
-"\n"
-" The third mode extracts attachments from the source file.\n"
-"  AID:outname    Write the attachment with the ID 'AID' to 'outname'.\n"
-"\n"
-" Example:\n"
-" mkvextract attachments \"a movie.mkv\" 4:cover.jpg\n"
-"\n"
-" The fourth mode extracts the chapters and converts them to XML. The\n"
-" output is written to the standard output. The output can be used as a\n"
-" source for mkvmerge.\n"
-"  -s, --simple   Exports the chapter infomartion in the simple format\n"
-"                 used in OGM tools (CHAPTER01=... CHAPTER01NAME=...).\n"
-"\n"
-" Example:\n"
-" mkvextract chapters \"a movie.mkv\" > movie_chapters.xml\n"
-"\n"
-" The fifth mode tries to extract chapter information and tags and outputs\n"
-" them as a CUE sheet. This is the reverse of using a CUE sheet with\n"
-" mkvmerge's '--chapters' option.\n"
-"\n"
-" Example:\n"
-" mkvextract cuesheet \"audiofile.mka\" > audiofile.cue\n"
-"\n"
-" The sixth mode finds the timecodes of all blocks for a track and outpus\n"
-" a timecode v2 file with these timecodes.\n"
-"\n"
-" Example:\n"
-" mkvextract timecodes_v2 \"a movie.mkv\" 1:timecodes_track1.txt\n"
-"\n"
-" These options can be used instead of the mode keyword to obtain\n"
-" further information:\n"
-"  -v, --verbose  Increase verbosity.\n"
-"  -h, --help     Show this help.\n"
-"  -V, --version  Show version information.\n"
-msgstr ""
-"Benutzung: mkvextract tracks <Quellname> [Optionen] [TID1:aus1 [TID2:aus2 ...]]\n"
-"   oder  mkvextract tags <Quellname> [Optionen]\n"
-"   oder  mkvextract attachments <Quellname> [Optionen] [AID1:aus1 [AID2:aus2 ...]]\n"
-"   oder  mkvextract chapters <Quellname> [Optionen]\n"
-"   oder  mkvextract cuesheet <Quellname> [Optionen]\n"
-"   oder  mkvextract timecodes_v2 <Quellname> [TID1:aus1 [TID2:aus2 ...]]\n"
-"   oder  mkvextract <-h|-V>\n"
-"\n"
-" Das erste Wort ist der Modus und teilt mkvextract mit, was extrahiert werden\n"
-" soll. Das zweite Wort muss der Name der Quelldatei sein. Es gibt nur eine \n"
-" Option, die bei jedem Modus verwendet werden kann, und das ist '-' oder lang\n"
-" '--verbose' damit mkvextract mehr Informationen ausgibt. Alle anderen\n"
-" Optionen hängen vom ausgewählten Modus ab.\n"
-"\n"
-" Im ersten Modus werden Tracks in externe Dateien extrahiert. Optionen:\n"
-"  -c Zeichensatz   Untertitel werden in diesen Zeichensatz konvertiert\n"
-"                   (Standard: UTF-8).\n"
-"  --no-ogg         Bei FLAC-Tracks die rohen FLAC-Daten extrahieren\n"
-"                   (Standard: FLAC in Ogg einbetten).\n"
-"  --cuesheet       Zusätzlich zu Tracks werden Kapitelinformationen als\n"
-"                   Cuesheet extrahiert.\n"
-"  --blockadd level Nur die BlockAdditions bis zum angegebenen Level erhalten\n"
-"                   (Standard: alle Level erhalten)\n"
-"  --raw            Daten roh extrahieren, und nicht in einen Container\n"
-"                   einbetten.\n"
-"  --fullraw        Daten inklusive der privaten Codec-Konfigurationsdaten\n"
-"                   roh extrahieren, und nicht in einen Container einbetten.\n"
-"  TID:aus          Den Track mit der ID 'TID' in die Datei 'aus' extrahieren.\n"
-"\n"
-" Beispiel:\n"
-" mkvextract tracks \"Ein Film.mkv\" 2:audio.ogg -c ISO8859-1 3:subs.srt\n"
-"\n"
-" Im zweiten Modus werden Tags extrahiert und in ein XML-Format konvertiert.\n"
-" Die Ausgabe wird auf die Standardausgabe geschrieben und kann mit normalen\n"
-" Shellmethoden in eine Datei umgeleitet werden. Die Ausgabe kann erneut als\n"
-" Quelldatei für mkvmerge dienen.\n"
-"\n"
-" Beispiel:\n"
-" mkvextract tags \"Ein Film.mkv\" > film_tags.xml\n"
-"\n"
-" Beim dritten Modus werden Dateianhänge aus der Quelldatei extrahiert.\n"
-" Optionen:\n"
-"  AID:ausname      Den Dateianhang mit der ID 'AID' in die Datei 'ausname'\n"
-"                   extrahieren.\n"
-"\n"
-" Beispiel:\n"
-" mkvextract attachments \"Ein Film.mkv\" 4:cover.jpg\n"
-"\n"
-" Im vierten Modus werden Kapitelinformationen extrahiert und in ein XML-Format\n"
-" umgewandelt. Die Ausgabe wird auf die Standardausgabe geschrieben und kann\n"
-" mit normalen Shellmethoden in eine Datei umgeleitet werden. Die Ausgabe kann\n"
-" erneut als Quelldatei für mkvmerge dienen.\n"
-"  -s, --simple     Extrahiert Kapitelinformationen im einfachen Format,\n"
-"                   das auch in verschiedenen OGM-Tools verwendet wird\n"
-"                   (CHAPTER01=... CHAPTER01NAME=...).\n"
-"\n"
-" Beispiel:\n"
-" mkvextract chapters \"Ein Film.mkv\" > kapitel.xml\n"
-"\n"
-" Im fünften Modus wird versucht, Kapitelinformationen und Tags zusammen\n"
-" als Cuesheet zu extrahieren. Dies ist funktioniert dann, wenn die Kapitel\n"
-" und Tags in der Quelldatei mit mkvmerges '--chapters'-Option aus einem\n"
-" Cuesheet erstellt wurden.\n"
-"\n"
-" Beispiel:\n"
-" mkvextract cuesheet \"audiodatei.mka\" > audiodatei.cue\n"
-"\n"
-" Im sechsten Modus werden die Zeitstempel aller Frames gelesen und\n"
-" in eine Zeitstempeldatei der Version 2 geschrieben.\n"
-"\n"
-" Beispiel:\n"
-" mkvextract timecodes_v2 \"Ein Film.mkv\" 1:zeitstempel_track1.txt\n"
-"\n"
-" Anstelle des Modus kann eine der folgenden Optionen angegeben werden,\n"
-" um weitere Informationen zu erhalten:\n"
-"  -v, --verbose  Die Gesprächigkeit erhöhen.\n"
-"  -h, --help     Diesen Hilfetext anzeigen.\n"
-"  -V, --version  Versionsinformationen anzeigen.\n"
+#: src/extract/extract_cli_parser.cpp:54
+msgid "Usage"
+msgstr "Benutzung"
 
 #: src/info/mkvinfo.cpp:198
 msgid ""
@@ -7185,6 +7091,18 @@ msgstr ""
 "Die mkvmerge-GUI-Hilfedateien wurden nicht gefunden. Das deutet darauf hin, dass die Hilfe bisher noch nie aufgerufen wurde, oder dass der Installationspfad seitdem geändert wurde.\n"
 "\n"
 "Bitte wählen Sie den Ort der Datei 'mkvmerge-gui.hhp' aus."
+
+#: src/extract/extract_cli_parser.cpp:78
+msgid "Write raw FLAC files (default: write OggFLAC files)."
+msgstr "Bei FLAC-Tracks die rohen FLAC-Daten extrahieren (Standard: FLAC in Ogg einbetten)."
+
+#: src/extract/extract_cli_parser.cpp:100
+msgid "Write the attachment with the ID 'AID' to 'outname'."
+msgstr "Den Dateianhang mit der ID 'AID' in die Datei 'ausname' extrahieren."
+
+#: src/extract/extract_cli_parser.cpp:83
+msgid "Write track with the ID TID to the file 'out'."
+msgstr "Schreibe Spur mit der ID 'TID' in die Datei 'out'."
 
 #: src/info/mkvinfo.cpp:529
 msgid "Writing application: %1%"
@@ -7840,11 +7758,67 @@ msgstr "fehlender Wert"
 msgid "mkdir(%1%) failed; errno = %2% (%3%)"
 msgstr "mkdir(%1%) schlug fehl; Fehlercode: %2% (%3%)"
 
-#: src/extract/mkvextract.cpp:319
+#: src/extract/extract_cli_parser.cpp:61
+msgid "mkvextract <-h|-V>"
+msgstr "mkvextract <-h|-V>"
+
+#: src/extract/extract_cli_parser.cpp:52
+msgid "mkvextract <mode> <source-filename> [options] <extraction-spec>"
+msgstr "mkvextract <modus> <quell-dateiname> [optionen] <extraktionsangabe>"
+
+#: src/extract/extract_cli_parser.cpp:104
+msgid "mkvextract attachments \"a movie.mkv\" 4:cover.jpg"
+msgstr "mkvextract attachments \"ein film.mkv\" 4:titelbild.jpg"
+
+#: src/extract/extract_cli_parser.cpp:57
+msgid "mkvextract attachments <inname> [options] [AID1:out1 [AID2:out2 ...]]"
+msgstr "mkvextract attachments <quellname> [optionen] [AID1:aus1 [AID2:aus2 ...]]"
+
+#: src/extract/extract_cli_parser.cpp:112
+msgid "mkvextract chapters \"a movie.mkv\" > movie_chapters.xml"
+msgstr "mkvextract chapters \"ein film.mkv\" > film_kapitel.xml"
+
+#: src/extract/extract_cli_parser.cpp:58
+msgid "mkvextract chapters <inname> [options]"
+msgstr "mkvextract chapters <quellname> [optionen]"
+
+#: src/extract/extract_cli_parser.cpp:121
+msgid "mkvextract cuesheet \"audiofile.mka\" > audiofile.cue"
+msgstr "mkvextract cuesheet \"audio-datei.mka\" > audio-datei.cue"
+
+#: src/extract/extract_cli_parser.cpp:59
+msgid "mkvextract cuesheet <inname> [options]"
+msgstr "mkvextract cuesheet <quellname> [optionen]"
+
+#: src/extract/extract_cli_parser.cpp:95
+msgid "mkvextract tags \"a movie.mkv\" > movie_tags.xml"
+msgstr "mkvextract tags \"ein film.mkv\" > film_tags.xml"
+
+#: src/extract/extract_cli_parser.cpp:56
+msgid "mkvextract tags <inname> [options]"
+msgstr "mkvextract tags <Quellname> [Optionen]"
+
+#: src/extract/extract_cli_parser.cpp:129
+msgid "mkvextract timecodes_v2 \"a movie.mkv\" 1:timecodes_track1.txt"
+msgstr "mkvextract timecodes_v2 \"ein film.mkv\" 1:zeitstempel_spur1.txt"
+
+#: src/extract/extract_cli_parser.cpp:60
+msgid "mkvextract timecodes_v2 <inname> [TID1:out1 [TID2:out2 ...]]"
+msgstr "mkvextract timecodes_v2 <quellname> [TID1:aus1 [TID2:aus2 ...]]"
+
+#: src/extract/extract_cli_parser.cpp:87
+msgid "mkvextract tracks \"a movie.mkv\" 2:audio.ogg -c ISO8859-1 3:subs.srt"
+msgstr "mkvextract tracks \"ein film.mkv\" 2:audio.ogg -c ISO8859-1 3:untertitel.srt"
+
+#: src/extract/extract_cli_parser.cpp:55
+msgid "mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]"
+msgstr "mkvextract tracks <quellname> [optionen] [TID1:aus1 [TID2:aus2 ...]]"
+
+#: src/extract/mkvextract.cpp:57
 msgid "mkvextract.cpp/show_element(): level > 9: %1%"
 msgstr "mkvextract.cpp/show_element(): level > 9: %1%"
 
-#: src/extract/mkvextract.cpp:374
+#: src/extract/mkvextract.cpp:116
 msgid "mkvextract: Unknown mode!?\n"
 msgstr "mkvextract: Unbekannter Modus!?\n"
 
@@ -8102,7 +8076,7 @@ msgstr "pr_generic.cpp/generic_reader_c::demuxing_requested(): Ungültiger Track
 msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 msgstr "r_matroska: Der Cluster enthält keinen Clusterzeitstempel. Die Datei ist beschädigt bzw. ungültig. Abbruch.\n"
 
-#: src/extract/xtr_base.cpp:45
+#: src/extract/xtr_base.cpp:46
 msgid "raw data"
 msgstr "Rohdaten"
 
@@ -8331,6 +8305,30 @@ msgstr "ja"
 #~ msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|\n"
 #~ msgstr "%1% Frame, Track %2%, Zeitstempel %3% (%4%), Größe %5%, Adler 0x%|6$08x|\n"
 
+#~ msgid "'%1%' is only allowed for chapter extraction.\n"
+#~ msgstr "'%1%' ist nur beim Extrahieren von Kapitelinformationen erlaubt.\n"
+
+#~ msgid "'--blockadd' is only allowed when extracting tracks.\n"
+#~ msgstr "Die Option '--blockadd' ist nur erlaubt, wenn Tracks exportiert werden.\n"
+
+#~ msgid "'--blockadd' lacks a level.\n"
+#~ msgstr "Der Option '--blockadd' fehlt das Level.\n"
+
+#~ msgid "'--cuesheet' is only allowed when extracting tracks.\n"
+#~ msgstr "Die Option '--cuesheet' darf nur beim Extrahieren von Tracks benutzt werden.\n"
+
+#~ msgid "'--fullraw' is only allowed when extracting tracks.\n"
+#~ msgstr "Die Option '--fullraw' darf nur beim Extrahieren von Tracks benutzt werden.\n"
+
+#~ msgid "'--no-ogg' is only allowed when extracting tracks.\n"
+#~ msgstr "Die Option '--no-ogg' darf nur beim Extrahieren von Tracks benutzt werden.\n"
+
+#~ msgid "'--raw' is only allowed when extracting tracks.\n"
+#~ msgstr "Die Option '--raw' darf nur beim Extrahieren von Tracks benutzt werdens.\n"
+
+#~ msgid "'-c' lacks a charset.\n"
+#~ msgstr "Der Option '-c' fehlt der Zeichensatz.\n"
+
 #~ msgid "A single '+' is not a valid command line option. If you want to append a file use '+' directly followed by the file name, e.g. '+movie_part_2.avi'."
 #~ msgstr "Ein einfaches '+' ist keine gültige Option. Wenn Sie eine die Trackas einer Datei an vorher angegebene Tracks anfügen wollen, so geben Sie '+' direkt gefolgt vom Dateinamen an (z.B. '+film_teil_2.avi')."
 
@@ -8394,6 +8392,12 @@ msgstr "ja"
 #~ msgid "No chapters"
 #~ msgstr "Keine Kapitel"
 
+#~ msgid "No further options allowed when extracting %1%.\n"
+#~ msgstr "Es sind keine weiteren Optionen beim Extrahieren von %1% erlaubt.\n"
+
+#~ msgid "No further options allowed when regenerating the CUE sheet.\n"
+#~ msgstr "Es sind keine weiteren Optionen erlaubt, wenn ein Cuesheet erzeugt werden soll.\n"
+
 #~ msgid "No suitable place found. Appending at the end.\n"
 #~ msgstr "Kein passender Ort gefunden. Wird am Ende angehängt.\n"
 
@@ -8402,6 +8406,13 @@ msgstr "ja"
 
 #~ msgid "No tracks will be copied from this file. This usually indicates a mistake in the command line.\n"
 #~ msgstr "Aus dieser Quelldatei werden keine Tracks gemuxt. Das deutet meistens auf einen Fehler bei der Zusammenstellung der Kommandozeilenargumente hin.\n"
+
+#~ msgid ""
+#~ "Nothing to do.\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Nichts zu tun.\n"
+#~ "\n"
 
 #~ msgid "Overwriting/voiding element at %1%.\n"
 #~ msgstr "Element an Position %1% wird überschrieben/durch ein Void-Element ersetzt.\n"
@@ -8414,6 +8425,158 @@ msgstr "ja"
 
 #~ msgid "Tracks:"
 #~ msgstr "Tracks:"
+
+#~ msgid "Unrecognized command line option '%1%'. Maybe you put a mode specific option before the input file name?\n"
+#~ msgstr "Nicht erkannte Kommandozeilenoption '%1%'. Haben Sie vielleicht eine Option noch vor den Namen der Quelldatei geschrieben?\n"
+
+#~ msgid ""
+#~ "Usage: mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]\n"
+#~ "   or  mkvextract tags <inname> [options]\n"
+#~ "   or  mkvextract attachments <inname> [options] [AID1:out1 [AID2:out2 ...]]\n"
+#~ "   or  mkvextract chapters <inname> [options]\n"
+#~ "   or  mkvextract cuesheet <inname> [options]\n"
+#~ "   or  mkvextract timecodes_v2 <inname> [TID1:out1 [TID2:out2 ...]]\n"
+#~ "   or  mkvextract <-h|-V>\n"
+#~ "\n"
+#~ " The first word tells mkvextract what to extract. The second must be the\n"
+#~ " source file. The only 'global' option that can be used with all modes is\n"
+#~ " '-v' or '--verbose' to increase the verbosity. All other options depend\n"
+#~ " on the mode.\n"
+#~ "\n"
+#~ " The first mode extracts some tracks to external files.\n"
+#~ "  -c charset       Convert text subtitles to this charset (default: UTF-8).\n"
+#~ "  --no-ogg         Write raw FLAC files (default: write OggFLAC files).\n"
+#~ "  --cuesheet       Also try to extract the CUE sheet from the chapter\n"
+#~ "                   information and tags for this track.\n"
+#~ "  --blockadd level Keep only the BlockAdditions up to this level\n"
+#~ "                   (default: keep all levels)\n"
+#~ "  --raw            Extract the data to a raw file.\n"
+#~ "  --fullraw        Extract the data to a raw file including the CodecPrivate\n"
+#~ "                   as a header.\n"
+#~ "  TID:out          Write track with the ID TID to the file 'out'.\n"
+#~ "\n"
+#~ " Example:\n"
+#~ " mkvextract tracks \"a movie.mkv\" 2:audio.ogg -c ISO8859-1 3:subs.srt\n"
+#~ "\n"
+#~ " The second mode extracts the tags and converts them to XML. The output is\n"
+#~ " written to the standard output. The output can be used as a source\n"
+#~ " for mkvmerge.\n"
+#~ "\n"
+#~ " Example:\n"
+#~ " mkvextract tags \"a movie.mkv\" > movie_tags.xml\n"
+#~ "\n"
+#~ " The third mode extracts attachments from the source file.\n"
+#~ "  AID:outname    Write the attachment with the ID 'AID' to 'outname'.\n"
+#~ "\n"
+#~ " Example:\n"
+#~ " mkvextract attachments \"a movie.mkv\" 4:cover.jpg\n"
+#~ "\n"
+#~ " The fourth mode extracts the chapters and converts them to XML. The\n"
+#~ " output is written to the standard output. The output can be used as a\n"
+#~ " source for mkvmerge.\n"
+#~ "  -s, --simple   Exports the chapter infomartion in the simple format\n"
+#~ "                 used in OGM tools (CHAPTER01=... CHAPTER01NAME=...).\n"
+#~ "\n"
+#~ " Example:\n"
+#~ " mkvextract chapters \"a movie.mkv\" > movie_chapters.xml\n"
+#~ "\n"
+#~ " The fifth mode tries to extract chapter information and tags and outputs\n"
+#~ " them as a CUE sheet. This is the reverse of using a CUE sheet with\n"
+#~ " mkvmerge's '--chapters' option.\n"
+#~ "\n"
+#~ " Example:\n"
+#~ " mkvextract cuesheet \"audiofile.mka\" > audiofile.cue\n"
+#~ "\n"
+#~ " The sixth mode finds the timecodes of all blocks for a track and outpus\n"
+#~ " a timecode v2 file with these timecodes.\n"
+#~ "\n"
+#~ " Example:\n"
+#~ " mkvextract timecodes_v2 \"a movie.mkv\" 1:timecodes_track1.txt\n"
+#~ "\n"
+#~ " These options can be used instead of the mode keyword to obtain\n"
+#~ " further information:\n"
+#~ "  -v, --verbose  Increase verbosity.\n"
+#~ "  -h, --help     Show this help.\n"
+#~ "  -V, --version  Show version information.\n"
+#~ msgstr ""
+#~ "Benutzung: mkvextract tracks <Quellname> [Optionen] [TID1:aus1 [TID2:aus2 ...]]\n"
+#~ "   oder  mkvextract tags <Quellname> [Optionen]\n"
+#~ "   oder  mkvextract attachments <Quellname> [Optionen] [AID1:aus1 [AID2:aus2 ...]]\n"
+#~ "   oder  mkvextract chapters <Quellname> [Optionen]\n"
+#~ "   oder  mkvextract cuesheet <Quellname> [Optionen]\n"
+#~ "   oder  mkvextract timecodes_v2 <Quellname> [TID1:aus1 [TID2:aus2 ...]]\n"
+#~ "   oder  mkvextract <-h|-V>\n"
+#~ "\n"
+#~ " Das erste Wort ist der Modus und teilt mkvextract mit, was extrahiert werden\n"
+#~ " soll. Das zweite Wort muss der Name der Quelldatei sein. Es gibt nur eine \n"
+#~ " Option, die bei jedem Modus verwendet werden kann, und das ist '-' oder lang\n"
+#~ " '--verbose' damit mkvextract mehr Informationen ausgibt. Alle anderen\n"
+#~ " Optionen hängen vom ausgewählten Modus ab.\n"
+#~ "\n"
+#~ " Im ersten Modus werden Tracks in externe Dateien extrahiert. Optionen:\n"
+#~ "  -c Zeichensatz   Untertitel werden in diesen Zeichensatz konvertiert\n"
+#~ "                   (Standard: UTF-8).\n"
+#~ "  --no-ogg         Bei FLAC-Tracks die rohen FLAC-Daten extrahieren\n"
+#~ "                   (Standard: FLAC in Ogg einbetten).\n"
+#~ "  --cuesheet       Zusätzlich zu Tracks werden Kapitelinformationen als\n"
+#~ "                   Cuesheet extrahiert.\n"
+#~ "  --blockadd level Nur die BlockAdditions bis zum angegebenen Level erhalten\n"
+#~ "                   (Standard: alle Level erhalten)\n"
+#~ "  --raw            Daten roh extrahieren, und nicht in einen Container\n"
+#~ "                   einbetten.\n"
+#~ "  --fullraw        Daten inklusive der privaten Codec-Konfigurationsdaten\n"
+#~ "                   roh extrahieren, und nicht in einen Container einbetten.\n"
+#~ "  TID:aus          Den Track mit der ID 'TID' in die Datei 'aus' extrahieren.\n"
+#~ "\n"
+#~ " Beispiel:\n"
+#~ " mkvextract tracks \"Ein Film.mkv\" 2:audio.ogg -c ISO8859-1 3:subs.srt\n"
+#~ "\n"
+#~ " Im zweiten Modus werden Tags extrahiert und in ein XML-Format konvertiert.\n"
+#~ " Die Ausgabe wird auf die Standardausgabe geschrieben und kann mit normalen\n"
+#~ " Shellmethoden in eine Datei umgeleitet werden. Die Ausgabe kann erneut als\n"
+#~ " Quelldatei für mkvmerge dienen.\n"
+#~ "\n"
+#~ " Beispiel:\n"
+#~ " mkvextract tags \"Ein Film.mkv\" > film_tags.xml\n"
+#~ "\n"
+#~ " Beim dritten Modus werden Dateianhänge aus der Quelldatei extrahiert.\n"
+#~ " Optionen:\n"
+#~ "  AID:ausname      Den Dateianhang mit der ID 'AID' in die Datei 'ausname'\n"
+#~ "                   extrahieren.\n"
+#~ "\n"
+#~ " Beispiel:\n"
+#~ " mkvextract attachments \"Ein Film.mkv\" 4:cover.jpg\n"
+#~ "\n"
+#~ " Im vierten Modus werden Kapitelinformationen extrahiert und in ein XML-Format\n"
+#~ " umgewandelt. Die Ausgabe wird auf die Standardausgabe geschrieben und kann\n"
+#~ " mit normalen Shellmethoden in eine Datei umgeleitet werden. Die Ausgabe kann\n"
+#~ " erneut als Quelldatei für mkvmerge dienen.\n"
+#~ "  -s, --simple     Extrahiert Kapitelinformationen im einfachen Format,\n"
+#~ "                   das auch in verschiedenen OGM-Tools verwendet wird\n"
+#~ "                   (CHAPTER01=... CHAPTER01NAME=...).\n"
+#~ "\n"
+#~ " Beispiel:\n"
+#~ " mkvextract chapters \"Ein Film.mkv\" > kapitel.xml\n"
+#~ "\n"
+#~ " Im fünften Modus wird versucht, Kapitelinformationen und Tags zusammen\n"
+#~ " als Cuesheet zu extrahieren. Dies ist funktioniert dann, wenn die Kapitel\n"
+#~ " und Tags in der Quelldatei mit mkvmerges '--chapters'-Option aus einem\n"
+#~ " Cuesheet erstellt wurden.\n"
+#~ "\n"
+#~ " Beispiel:\n"
+#~ " mkvextract cuesheet \"audiodatei.mka\" > audiodatei.cue\n"
+#~ "\n"
+#~ " Im sechsten Modus werden die Zeitstempel aller Frames gelesen und\n"
+#~ " in eine Zeitstempeldatei der Version 2 geschrieben.\n"
+#~ "\n"
+#~ " Beispiel:\n"
+#~ " mkvextract timecodes_v2 \"Ein Film.mkv\" 1:zeitstempel_track1.txt\n"
+#~ "\n"
+#~ " Anstelle des Modus kann eine der folgenden Optionen angegeben werden,\n"
+#~ " um weitere Informationen zu erhalten:\n"
+#~ "  -v, --verbose  Die Gesprächigkeit erhöhen.\n"
+#~ "  -h, --help     Diesen Hilfetext anzeigen.\n"
+#~ "  -V, --version  Versionsinformationen anzeigen.\n"
 
 #~ msgid "You have not yet selected an output file."
 #~ msgstr "Sie haben noch keine Zieldatei ausgewählt."
