@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-12-26 21:36+0100\n"
+"PO-Revision-Date: 2009-12-26 21:59+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -3388,11 +3388,11 @@ msgstr "Wenn das Aufteilen der Zieldatei aktiviert ist, so kann ein Dateianhang 
 msgid "Ignoring an entry which starts after it ends.\n"
 msgstr "Ein Eintrag wird ignoriert, dessen End-Zeitstempel vor dem Start-Zeitstempel liegt.\n"
 
-#: src/input/subtitles.cpp:490
+#: src/input/subtitles.cpp:502
 msgid "Imported font from %1%"
 msgstr "Aus %1% importierte Schrit"
 
-#: src/input/subtitles.cpp:490
+#: src/input/subtitles.cpp:502
 msgid "Imported picture from %1%"
 msgstr "Aus %1% importiertes Bild"
 
@@ -3803,6 +3803,10 @@ msgstr "Zeile %1% der Zeitstempeldatei '%2%' konnte nicht geparst werden.\n"
 msgid "Line %1%, column %2%: %3%"
 msgstr "Zeile %1%, Spalte %2%: %3%"
 
+#: src/input/subtitles.cpp:180
+msgid "Line %1%: Negative timestamp encountered. The entry will be adjusted to start from 00:00:00.000.\n"
+msgstr "Zeile %1%: Negativer Zeitstempel gefunden. Der Eintrag wird so angepasst, dass er an 00:00:00.000 anfängt.\n"
+
 #: src/input/r_vobsub.cpp:278
 msgid "Line %1%: The current timestamp (%2%) is smaller than the previous one (%3%). The entries will be sorted according to their timestamps. This might result in the wrong order for some subtitle entries. If this is the case then you have to fix the .idx file manually.\n"
 msgstr "Zeile %1%: Der aktuelle Zeitstempel (%2%) ist kleiner als der vorherige (%3%). Die Einträge werden anhand der Zeitstempel sortiert. Dadurch können manche Untertitel falsche Zeitstempel zugewiesen werden. Falls das der Fall sein sollte, müssen Sie vor dem erneuten Muxen die Einträge in der .idx-Datei manuell korrigieren.\n"
@@ -3896,8 +3900,8 @@ msgstr "Ungültige AAC-Codec-Initialisierungsdaten gefunden.\n"
 msgid "Malformed codec id '%1%'.\n"
 msgstr "Ungültige CodecID '%1%'.\n"
 
-#: src/input/subtitles.cpp:336 src/input/subtitles.cpp:344
-#: src/input/subtitles.cpp:349
+#: src/input/subtitles.cpp:348 src/input/subtitles.cpp:356
+#: src/input/subtitles.cpp:361
 msgid "Malformed line? (%1%)\n"
 msgstr "Falsch formatierte Zeile? (%1%)\n"
 
@@ -6238,7 +6242,7 @@ msgstr ""
 msgid "This file contains at least one frame with a negative timecode. All timecodes will be adjusted by %1% so that none is negative anymore.\n"
 msgstr "Diese Datei enthält mindestens einen Frame mit einem negativen Zeitstempel. Deshalb werden alle Zeitstempel um den Wert %1% verschoben, damit kein Zeitstempel mehr negativ ist.\n"
 
-#: src/input/subtitles.cpp:144
+#: src/input/subtitles.cpp:147
 msgid "This file contains coordinates in the timecode lines. Such coordinates are not supported by the Matroska SRT subtitle format. The coordinates will be removed automatically.\n"
 msgstr "Diese Datei enthält Anzeigekoordinaten zusammen in den Zeitstempeln. Solche Koordinaten werden vom Matroska SRT-Untertitelformat nicht unterstützt. Die Koordinaten werden automatisch entfernt.\n"
 
@@ -7049,7 +7053,7 @@ msgstr "WAVPACK v4 Audio"
 msgid "Warn about possible incorrect usage of mmg"
 msgstr "Wegen potenziell falscher Benutzung von mmg warnen"
 
-#: src/input/subtitles.cpp:180
+#: src/input/subtitles.cpp:192
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
 msgstr "Warnung in Zeile %1%: Der Start-Zeitstempel ist kleiner als der des vorhergehenden Eintrages. Alle Einträge aus dieser Datei werden nach ihrem Start-Zeitstempel sortiert.\n"
 
@@ -8116,7 +8120,7 @@ msgstr "Rest: unbekannt"
 msgid "sampling freq: %1%"
 msgstr "Abtastfrequenz: %1%"
 
-#: src/input/subtitles.cpp:568
+#: src/input/subtitles.cpp:580
 msgid "spu_extraction_duration: Encountered broken SPU packet (next_off < start_off) at timecode %1%. This packet might be displayed incorrectly or not at all.\n"
 msgstr "spu_extraction_duration: Es wurde ein beschädigtes SPU-Paket bei Zeitstempel %1% gefunden (next_off < start_off). Dieses Paket wird beim Abspielen eventuell falsch oder gar nicht angezeigt.\n"
 
@@ -8132,7 +8136,7 @@ msgstr "srt_reader: Die Quelldatei ist keine gültige SRT-Datei."
 msgid "ssa_reader: Could not open the source file."
 msgstr "ssa_reader: Die Quelldatei konnte nicht geöffnet werden."
 
-#: src/input/subtitles.cpp:321
+#: src/input/subtitles.cpp:333
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr "ssa_reader: Ungültiges Format. Es wurde keine \"Format\"-Zeile im Abschnitt \"[Events]\" gefunden."
 

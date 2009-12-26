@@ -1,3 +1,9 @@
+2009-12-26  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: enhancement: SRT files with negative timecodes will
+	are not rejected anymore. Negative timecodes will be adjusted to
+	start at 00:00:00.000.
+
 2009-12-25  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract: new feature: Added support for extracting Blu-Ray

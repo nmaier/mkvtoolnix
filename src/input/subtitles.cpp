@@ -36,7 +36,7 @@ subtitles_c::process(generic_packetizer_c *p) {
 
 // ------------------------------------------------------------
 
-#define SRT_RE_TIMECODE      "\\s*(\\d+):\\s*(\\d+):\\s*(\\d+)[,\\.]\\s*(\\d+)?"
+#define SRT_RE_TIMECODE      "\\s*(-?)\\s*(\\d+):\\s*(\\d+):\\s*(\\d+)[,\\.]\\s*(\\d+)?"
 #define SRT_RE_TIMECODE_LINE "^" SRT_RE_TIMECODE "\\s*-+>\\s*" SRT_RE_TIMECODE "\\s*"
 #define SRT_RE_COORDINATES   "([XY]\\d+:\\d+\\s*){4}\\s*$"
 
@@ -129,15 +129,18 @@ srt_parser_c::parse() {
 
       int s_h, s_min, s_sec, e_h, e_min, e_sec;
 
-      parse_int(matches[1].str(), s_h);
-      parse_int(matches[2].str(), s_min);
-      parse_int(matches[3].str(), s_sec);
-      parse_int(matches[5].str(), e_h);
-      parse_int(matches[6].str(), e_min);
-      parse_int(matches[7].str(), e_sec);
+      parse_int(matches[2].str(), s_h);
+      parse_int(matches[3].str(), s_min);
+      parse_int(matches[4].str(), s_sec);
+      parse_int(matches[7].str(), e_h);
+      parse_int(matches[8].str(), e_min);
+      parse_int(matches[9].str(), e_sec);
 
-      std::string s_rest = matches[4].str();
-      std::string e_rest = matches[8].str();
+      std::string s_rest = matches[ 5].str();
+      std::string e_rest = matches[10].str();
+
+      int64_t s_neg      = matches[ 1].str() == "-" ? -1 : 1;
+      int64_t e_neg      = matches[ 6].str() == "-" ? -1 : 1;
 
       if (boost::regex_search(s, coordinates_re) && !m_coordinates_warning_shown) {
         mxwarn_tid(m_file_name, m_tid,
@@ -157,8 +160,8 @@ srt_parser_c::parse() {
       start  = (int64_t)s_h * 60 * 60 + s_min * 60 + s_sec;
       end    = (int64_t)e_h * 60 * 60 + e_min * 60 + e_sec;
 
-      start *= 1000000000ll;
-      end   *= 1000000000ll;
+      start *= 1000000000ll * s_neg;
+      end   *= 1000000000ll * e_neg;
 
       while (s_rest.length() < 9)
         s_rest += "0";
@@ -171,6 +174,15 @@ srt_parser_c::parse() {
       if (e_rest.length() > 9)
         e_rest.erase(9);
       end += atol(e_rest.c_str());
+
+      if (0 > start) {
+        mxwarn_tid(m_file_name, m_tid,
+                   boost::format(Y("Line %1%: Negative timestamp encountered. The entry will be adjusted to start from 00:00:00.000.\n")) % line_number);
+        end   -= start;
+        start  = 0;
+        if (0 > end)
+          end *= -1;
+      }
 
       // There are files for which start timecodes overlap. Matroska requires
       // blocks to be sorted by their timecode. mkvmerge does this at the end
