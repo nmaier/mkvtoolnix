@@ -64,6 +64,7 @@ BOOST_CPPFLAGS = @BOOST_CPPFLAGS@
 BOOST_FILESYSTEM_LIB = @BOOST_FILESYSTEM_LIB@
 BOOST_LDFLAGS = @BOOST_LDFLAGS@
 BOOST_REGEX_LIB = @BOOST_REGEX_LIB@
+BOOST_SYSTEM_LIB = @BOOST_SYSTEM_LIB@
 DEBUG_CFLAGS = @DEBUG_CFLAGS@
 DOCBOOK_MANPAGES_STYLESHEET = @DOCBOOK_MANPAGES_STYLESHEET@
 DOCBOOK_ROOT = @DOCBOOK_ROOT@
@@ -466,7 +467,7 @@ mkvmerge_LDADD = -lmtxinput -lmtxoutput \
 		-lavi -lrmff -lmpegparser \
 		$(FLAC_LIBS) -lvorbis -logg -lz $(COMPRESSION_LIBRARIES) \
 		-lexpat $(ICONV_LIBS) $(LIBINTL_LIBS) $(LIBRPCRT) \
-		$(BOOST_REGEX_LIB) $(BOOST_FILESYSTEM_LIB)
+		$(BOOST_REGEX_LIB) $(BOOST_FILESYSTEM_LIB) $(BOOST_SYSTEM_LIB)
 
 #
 # src/info
@@ -474,7 +475,7 @@ mkvmerge_LDADD = -lmtxinput -lmtxoutput \
 
 mkvinfo_SOURCES = src/info/mkvinfo.cpp src/info/console_ui.cpp
 mkvinfo_LDADD = -lmtxcommon $(MAGIC_LIBS) -lmatroska -lebml \
-		$(BOOST_REGEX_LIB) $(BOOST_FILESYSTEM_LIB)
+		$(BOOST_REGEX_LIB) $(BOOST_FILESYSTEM_LIB) $(BOOST_SYSTEM_LIB)
 
 ifeq (yes,$(USE_QT))
 mkvinfo_SOURCES += src/info/qt_ui.cpp src/info/qt_ui.moc.cpp \
@@ -508,7 +509,7 @@ mkvextract_DEPENDENCIES += $(DEP_COMMON) $(DEP_AVI) $(DEP_RMFF)
 mkvextract_LDADD = -lmtxcommon $(MAGIC_LIBS) -lvorbis -logg -lavi -lmatroska -lebml -lrmff \
 		$(ICONV_LIBS) $(LIBINTL_LIBS) -lexpat \
 		-lz $(COMPRESSION_LIBRARIES) $(LIBRPCRT) \
-		$(BOOST_REGEX_LIB) $(BOOST_FILESYSTEM_LIB)
+		$(BOOST_REGEX_LIB) $(BOOST_FILESYSTEM_LIB) $(BOOST_SYSTEM_LIB)
 
 #
 # src/propedit
@@ -521,7 +522,7 @@ mkvpropedit_DEPENDENCIES += $(DEP_COMMON) $(DEP_AVI) $(DEP_RMFF)
 mkvpropedit_LDADD = -lmtxcommon $(MAGIC_LIBS) -lvorbis -logg -lavi -lmatroska -lebml -lrmff \
 		$(ICONV_LIBS) $(LIBINTL_LIBS) -lexpat \
 		-lz $(COMPRESSION_LIBRARIES) $(LIBRPCRT) \
-		$(BOOST_REGEX_LIB) $(BOOST_FILESYSTEM_LIB)
+		$(BOOST_REGEX_LIB) $(BOOST_FILESYSTEM_LIB) $(BOOST_SYSTEM_LIB)
 
 #
 # src/mmg
@@ -533,7 +534,7 @@ mmg_OBJECTS := $(patsubst %.cpp,%.o,$(mmg_SOURCES)) \
 mmg_DEPENDENCIES += $(DEP_COMMON)
 mmg_LDADD = -lmtxcommon $(MAGIC_LIBS) -lmatroska -lebml -lexpat $(ICONV_LIBS) \
 		$(WXWIDGETS_LIBS) $(LIBINTL_LIBS) $(MINGW_GUIAPP) \
-		$(BOOST_REGEX_LIB) $(BOOST_FILESYSTEM_LIB) \
+		$(BOOST_REGEX_LIB) $(BOOST_FILESYSTEM_LIB) $(BOOST_SYSTEM_LIB) \
 		$(LIBRPCRT) $(LIBS_WINGUI)
 
 mkvmerge: src/mkvmerge@EXEEXT@
