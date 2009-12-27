@@ -122,7 +122,7 @@ extract_cli_parser_c::init_parser() {
 
   add_section_header(YT("Timecode extraction"));
 
-  add_information(YT("The sixth mode finds the timecodes of all blocks for a track and outpus a timecode v2 file with these timecodes."));
+  add_information(YT("The sixth mode finds the timecodes of all blocks for a track and outputs a timecode v2 file with these timecodes."));
 
   add_section_header(YT("Example"));
 
