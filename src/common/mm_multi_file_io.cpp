@@ -1,0 +1,216 @@
+/*
+   mkvmerge -- utility for splicing together matroska files
+   from component media subtypes
+
+   Distributed under the GPL
+   see the file COPYING for details
+   or visit http://www.gnu.org/copyleft/gpl.html
+
+   IO callback class definitions
+
+   Written by Moritz Bunkus <moritz@bunkus.org>.
+*/
+
+#include "common/os.h"
+
+#include <algorithm>
+#include <boost/regex.hpp>
+#include <vector>
+
+#include "common/mm_multi_file_io.h"
+#include "common/output.h"
+#include "common/strings/editing.h"
+#include "common/strings/parsing.h"
+
+namespace bfs = boost::filesystem;
+
+mm_multi_file_io_c::file_t::file_t(const bfs::path &file_name,
+                                   uint64_t global_start,
+                                   mm_file_io_cptr file)
+  : m_file_name(file_name)
+  , m_size(file->get_size())
+  , m_global_start(global_start)
+  , m_file(file)
+{
+}
+
+mm_multi_file_io_c::mm_multi_file_io_c(std::vector<bfs::path> file_names)
+  : m_file_name(file_names[0])
+  , m_total_size(0)
+  , m_current_pos(0)
+  , m_current_local_pos(0)
+  , m_current_file(0)
+{
+  foreach(const bfs::path &file_name, file_names) {
+    mm_file_io_cptr file(new mm_file_io_c(file_name.string()));
+    m_files.push_back(mm_multi_file_io_c::file_t(file_name, m_total_size, file));
+
+    m_total_size += file->get_size();
+  }
+}
+
+mm_multi_file_io_c::~mm_multi_file_io_c() {
+  close();
+}
+
+uint64
+mm_multi_file_io_c::getFilePointer() {
+  return m_current_pos;
+}
+
+void
+mm_multi_file_io_c::setFilePointer(int64 offset,
+                                   seek_mode mode) {
+  int64_t new_pos
+    = seek_beginning == mode ? offset
+    : seek_end       == mode ? m_total_size  - offset
+    :                          m_current_pos + offset;
+
+  if ((0 > new_pos) || (m_total_size < new_pos))
+    throw mm_io_seek_error_c();
+
+  m_current_file = 0;
+  foreach(const mm_multi_file_io_c::file_t &file, m_files) {
+    if ((file.m_global_start + file.m_size) < new_pos) {
+      ++m_current_file;
+      continue;
+    }
+
+    m_current_pos       = new_pos;
+    m_current_local_pos = new_pos - file.m_global_start;
+    file.m_file->setFilePointer(m_current_local_pos, seek_beginning);
+    break;
+  }
+}
+
+uint32
+mm_multi_file_io_c::read(void *buffer,
+                         size_t size) {
+  size_t num_read_total     = 0;
+  unsigned char *buffer_ptr = static_cast<unsigned char *>(buffer);
+
+  while (!eof() && (num_read_total < size)) {
+    mm_multi_file_io_c::file_t &file = m_files[m_current_file];
+    size_t num_to_read = std::min(size - num_read_total, file.m_size - m_current_local_pos);
+
+    if (0 != num_to_read) {
+      size_t num_read      = file.m_file->read(buffer_ptr, num_to_read);
+      num_read_total      += num_read;
+      buffer_ptr          += num_read;
+      m_current_local_pos += num_read;
+      m_current_pos       += num_read;
+
+      if (num_read != num_to_read)
+        break;
+    }
+
+    if ((m_current_local_pos >= file.m_size) && (m_files.size() > (m_current_file + 1))) {
+      ++m_current_file;
+      m_current_local_pos = 0;
+      m_files[m_current_file].m_file->setFilePointer(0, seek_beginning);
+    }
+  }
+
+  return num_read_total;
+}
+
+size_t
+mm_multi_file_io_c::write(const void *buffer,
+                          size_t size) {
+  throw mm_io_error_c("write-to-multi-file-io-object");
+}
+
+void
+mm_multi_file_io_c::close() {
+  foreach(const mm_multi_file_io_c::file_t &file, m_files)
+    file.m_file->close();
+
+  m_files.clear();
+  m_total_size        = 0;
+  m_current_pos       = 0;
+  m_current_local_pos = 0;
+}
+
+bool
+mm_multi_file_io_c::eof() {
+  return m_files.empty() || ((m_current_file == (m_files.size() - 1)) && (m_current_local_pos >= m_files[m_current_file].m_size));
+}
+
+std::vector<bfs::path>
+mm_multi_file_io_c::get_file_names() {
+  std::vector<bfs::path> file_names;
+  foreach(const mm_multi_file_io_c::file_t &file, m_files)
+    file_names.push_back(file.m_file_name);
+
+  return file_names;
+}
+
+void
+mm_multi_file_io_c::create_verbose_identification_info(const bfs::path &exclude_file_name,
+                                                       std::vector<std::string> &verbose_info) {
+  foreach(const mm_multi_file_io_c::file_t &file, m_files)
+    if (file.m_file_name != exclude_file_name)
+      verbose_info.push_back((boost::format("other_file:%1%") % escape(file.m_file_name.string())).str());
+}
+
+struct path_sorter_t {
+  bfs::path m_path;
+  int m_number;
+
+  path_sorter_t(const bfs::path &path, int number)
+    : m_path(path)
+    , m_number(number)
+  {
+  }
+
+  bool operator <(const path_sorter_t &cmp) const {
+    return m_number < cmp.m_number;
+  }
+};
+
+mm_multi_file_io_cptr
+mm_multi_file_io_c::open_multi(bfs::path first_file_name) {
+  std::string base_name = first_file_name.stem();
+  std::string extension = downcase(first_file_name.extension());
+  boost::regex file_name_re("(.+?)(\\d+)", boost::regex::perl);
+  boost::smatch matches;
+
+  if (!boost::regex_match(base_name, matches, file_name_re)) {
+    std::vector<bfs::path> file_names;
+    file_names.push_back(first_file_name);
+    return mm_multi_file_io_cptr(new mm_multi_file_io_c(file_names));
+  }
+
+  base_name        = downcase(matches[1].str());
+  int start_number = 1;
+  parse_int(matches[2].str(), start_number);
+
+  std::vector<path_sorter_t> paths;
+  paths.push_back(path_sorter_t(first_file_name, start_number));
+
+  bfs::directory_iterator end_itr;
+  for (bfs::directory_iterator itr(first_file_name.branch_path()); itr != end_itr; ++itr) {
+    if (   bfs::is_directory(itr->status())
+        || (downcase(itr->path().extension()) != extension))
+      continue;
+
+    std::string stem   = itr->path().stem();
+    int current_number = 0;
+
+    if (   !boost::regex_match(stem, matches, file_name_re)
+        || (downcase(matches[1].str()) != base_name)
+        || !parse_int(matches[2].str(), current_number)
+        || (current_number <= start_number))
+      continue;
+
+    paths.push_back(path_sorter_t(itr->path(), current_number));
+  }
+
+  sort(paths.begin(), paths.end());
+
+  std::vector<bfs::path> file_names;
+  foreach(const path_sorter_t &path, paths)
+    file_names.push_back(path.m_path);
+
+  return mm_multi_file_io_cptr(new mm_multi_file_io_c(file_names));
+}
