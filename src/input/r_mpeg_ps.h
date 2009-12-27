@@ -16,14 +16,17 @@
 
 #include "common/os.h"
 
+#include <boost/filesystem.hpp>
 #include <map>
 
 #include "common/bit_cursor.h"
 #include "common/dts.h"
+#include "common/mm_multi_file_io.h"
 #include "common/mpeg1_2.h"
 #include "merge/packet_extensions.h"
 #include "merge/pr_generic.h"
-#include "common/smart_pointers.h"
+
+namespace bfs = boost::filesystem;
 
 struct mpeg_ps_id_t {
   int id;
@@ -120,7 +123,8 @@ typedef counted_ptr<mpeg_ps_track_t> mpeg_ps_track_ptr;
 
 class mpeg_ps_reader_c: public generic_reader_c {
 private:
-  mm_io_c *io;
+  mm_multi_file_io_cptr io;
+  bfs::path m_first_file_name;
   int64_t bytes_processed, size, duration, global_timecode_offset;
 
   std::map<int, int> id2idx;

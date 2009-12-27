@@ -67,18 +67,19 @@ mpeg_ps_reader_c::probe_file(mm_io_c *io,
 }
 
 mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
-  throw (error_c):
-  generic_reader_c(_ti) {
-
+  throw (error_c)
+  : generic_reader_c(_ti)
+  , m_first_file_name(bfs::system_complete(bfs::path(_ti.fname)))
+  , file_done(false)
+{
   init_reader();
 }
 
 void
 mpeg_ps_reader_c::init_reader() {
   try {
-    io        = new mm_file_io_c(ti.fname);
-    size      = io->get_size();
-    file_done = false;
+    io   = mm_multi_file_io_c::open_multi(m_first_file_name);
+    size = io->get_size();
 
   } catch (...) {
     throw error_c(Y("mpeg_ps_reader: Could not open the file."));
@@ -182,7 +183,6 @@ mpeg_ps_reader_c::init_reader() {
 }
 
 mpeg_ps_reader_c::~mpeg_ps_reader_c() {
-  delete io;
 }
 
 void
@@ -1354,7 +1354,9 @@ mpeg_ps_reader_c::identify() {
   std::vector<std::string> verbose_info;
   int i;
 
-  id_result_container((boost::format("MPEG %1% program stream (PS)") % version).str());
+  io->create_verbose_identification_info(m_first_file_name, verbose_info);
+
+  id_result_container((boost::format("MPEG %1% program stream (PS)") % version).str(), verbose_info);
 
   for (i = 0; i < tracks.size(); i++) {
     mpeg_ps_track_ptr &track = tracks[i];
