@@ -91,7 +91,7 @@ mm_multi_file_io_c::read(void *buffer,
 
   while (!eof() && (num_read_total < size)) {
     mm_multi_file_io_c::file_t &file = m_files[m_current_file];
-    size_t num_to_read = std::min(size - num_read_total, file.m_size - m_current_local_pos);
+    size_t num_to_read = std::min(size - num_read_total, static_cast<size_t>(file.m_size - m_current_local_pos));
 
     if (0 != num_to_read) {
       size_t num_read      = file.m_file->read(buffer_ptr, num_to_read);
