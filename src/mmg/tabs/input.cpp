@@ -293,6 +293,15 @@ tab_input::add_file(const wxString &file_name,
   std::string arg_utf8;
 
   wxFileName file_name_obj(file_name);
+  foreach(mmg_file_cptr file_itr, files)
+    foreach(const wxFileName &other_file_name, file_itr->other_files)
+      if (file_name_obj == other_file_name) {
+        wxMessageBox(wxString::Format(Z("The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."),
+                                      file_name_obj.GetFullPath().c_str(), other_file_name.GetFullPath().c_str()),
+                     Z("File is already processed"), wxOK | wxCENTER | wxICON_ERROR);
+        return;
+      }
+
   last_open_dir = file_name_obj.GetPath();
 
   opt_file_name.Printf(wxT("%smmg-mkvmerge-options-%d-%d"), get_temp_dir().c_str(), (int)wxGetProcessId(), (int)wxGetUTCTime());
@@ -520,7 +529,10 @@ tab_input::add_file(const wxString &file_name,
             file->title = unescape(pair[1]);
             file->title_was_present = true;
             title_was_present = true;
-          }
+
+          } else if ((pair.size() == 2) && (pair[0] == wxT("other_file")))
+            file->other_files.push_back(wxFileName(pair[1]));
+
         }
       }
 
@@ -932,6 +944,11 @@ tab_input::save(wxConfigBase *cfg) {
     cfg->Write(wxT("container"), f->container);
     cfg->Write(wxT("appending"), f->appending);
 
+    std::vector<wxString> other_file_names;
+    foreach(const wxFileName other_file_name, f->other_files)
+      other_file_names.push_back(other_file_name.GetFullPath());
+    cfg->Write(wxT("other_files"), join(wxT(":::"), other_file_names));
+
     cfg->Write(wxT("number_of_tracks"), (int)f->tracks.size());
     unsigned int tidx;
     for (tidx = 0; tidx < f->tracks.size(); tidx++) {
@@ -1048,6 +1065,11 @@ tab_input::load(wxConfigBase *cfg,
     cfg->Read(wxT("title"),     &fi->title);
     cfg->Read(wxT("container"), &fi->container);
     cfg->Read(wxT("appending"), &fi->appending, false);
+
+    cfg->Read(wxT("other_files"), &s, wxT(""));
+    std::vector<wxString> other_file_names = split(s, wxU(":::"));
+    foreach(const wxString &other_file_name, other_file_names)
+      fi->other_files.push_back(wxFileName(other_file_name));
 
     long tidx;
     for (tidx = 0; tidx < (long)num_tracks; tidx++) {

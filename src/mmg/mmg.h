@@ -22,6 +22,7 @@
 #include <wx/app.h>
 #include <wx/combobox.h>
 #include <wx/config.h>
+#include <wx/filename.h>
 #include <wx/string.h>
 
 #include <ebml/EbmlUnicodeString.h>
@@ -156,6 +157,7 @@ struct mmg_file_t {
   std::vector<mmg_track_cptr> tracks;
   std::vector<mmg_attached_file_cptr> attached_files;
   bool appending;
+  std::vector<wxFileName> other_files;
 
   mmg_file_t()
     : title_was_present(false)
