@@ -1732,11 +1732,11 @@ msgstr "載入檔案後展開最重要的元件"
 msgid "Algorithm: %1% (%2%)"
 msgstr "演算法: %1% (%2%)"
 
-#: src/mmg/mmg.h:41
+#: src/mmg/mmg.h:42
 msgid "All Files (*)|*"
 msgstr "所有檔案 (*)|*"
 
-#: src/mmg/mmg.h:35
+#: src/mmg/mmg.h:36
 msgid "All Files (*.*)|*.*"
 msgstr "所有檔案 (*.*)|*.*"
 
@@ -1822,7 +1822,7 @@ msgstr "軌道 %1% 的另一個預設軌已設定。'%3%' 的 %2% 軌道的 '預
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr "另一個合成任務仍在處理中。要啟動一項新任務，請等待上一個任務完成或手動中止它。"
 
-#: src/mmg/tabs/input.cpp:1205
+#: src/mmg/tabs/input.cpp:1227
 #, c-format
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "不允許將一個檔案的軌道添加至同一個檔案的其他軌道。出現問題的軌道編號為 %u 與 %u。"
@@ -2410,7 +2410,7 @@ msgstr "不支援 CorePicture 畫格 %1%。\n"
 
 #: src/mmg/jobs.cpp:155
 #: src/mmg/mux_dialog.cpp:117
-#: src/mmg/tabs/input.cpp:305
+#: src/mmg/tabs/input.cpp:314
 #, c-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
 msgstr "無法為 mkvmerge 的命令列選項建立暫存檔案 '%s' (錯誤代碼 %d, %s)。"
@@ -3136,7 +3136,7 @@ msgstr "檔案包含的畫格數比預期的少，或者檔在 %1% 畫格後被�
 
 #: src/mmg/mmg_dialog.cpp:653
 #: src/mmg/mux_dialog.cpp:118
-#: src/mmg/tabs/input.cpp:306
+#: src/mmg/tabs/input.cpp:315
 msgid "File creation failed"
 msgstr "建立檔案失敗"
 
@@ -3148,12 +3148,12 @@ msgstr "檔案資料, 大小: %1%"
 msgid "File description: %1%"
 msgstr "檔案描述: %1%"
 
-#: src/mmg/tabs/input.cpp:350
-#: src/mmg/tabs/input.cpp:357
+#: src/mmg/tabs/input.cpp:359
+#: src/mmg/tabs/input.cpp:366
 msgid "File identification failed"
 msgstr "檔案無法識別"
 
-#: src/mmg/tabs/input.cpp:344
+#: src/mmg/tabs/input.cpp:353
 #, c-format
 msgid ""
 "File identification failed for '%s'. Return code: %d\n"
@@ -3162,10 +3162,14 @@ msgstr ""
 "檔案 '%s' 無法識別。返回碼: %d\n"
 "\n"
 
-#: src/mmg/tabs/input.cpp:354
+#: src/mmg/tabs/input.cpp:363
 #, c-format
 msgid "File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable in the settings dialog."
 msgstr "檔案識別失敗。返回碼: %d。錯誤代號: %d (%s)。請確認您在設定對話窗中選擇了 mkvmerge 可執行檔。"
+
+#: src/mmg/tabs/input.cpp:301
+msgid "File is already processed"
+msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:495
 msgid "File modified"
@@ -3180,7 +3184,7 @@ msgstr "檔名: %1%"
 msgid "File parsing failed"
 msgstr "解析檔案失敗"
 
-#: src/mmg/tabs/input.cpp:692
+#: src/mmg/tabs/input.cpp:704
 msgid "File removal not possible"
 msgstr "檔案不能移除"
 
@@ -4217,7 +4221,7 @@ msgstr "第一個畫格未發現 AC3 表頭; 此軌將被跳過。\n"
 msgid "No EBML head found."
 msgstr "未找到 EBML 表頭。"
 
-#: src/mmg/tabs/input.cpp:1281
+#: src/mmg/tabs/input.cpp:1303
 msgid "No FPS selected for AVC/h.264 track"
 msgstr "AVC/h.264 軌道的畫格率尚未選擇"
 
@@ -4305,7 +4309,7 @@ msgstr "未指定軌道 ID，在 '--%1% %2%'。\n"
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "沒有發現符合編輯規格 '%1%' 的軌道。%2%\n"
 
-#: src/mmg/tabs/input.cpp:580
+#: src/mmg/tabs/input.cpp:592
 msgid "No tracks found"
 msgstr "未發現軌道"
 
@@ -5474,7 +5478,7 @@ msgstr "無法解析 FLAC 頭: 找不到媒體流資訊結構。\n"
 msgid "The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n"
 msgstr "FPS 為 0.0 且讀取器未提供套件的時間碼。%1%\n"
 
-#: src/mmg/tabs/input.cpp:1265
+#: src/mmg/tabs/input.cpp:1287
 #, c-format
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
 msgstr "軌 %s（自檔案 '%s'）的 FPS 設定無效。"
@@ -5483,7 +5487,7 @@ msgstr "軌 %s（自檔案 '%s'）的 FPS 設定無效。"
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "FourCC 值必須為四個字元的長度，在 '%1% %2%'。\n"
 
-#: src/mmg/tabs/input.cpp:1253
+#: src/mmg/tabs/input.cpp:1275
 #, c-format
 msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
 msgstr "軌道 %s（自檔案 '%s'）的 FourCC 設定非四字元長。"
@@ -5543,7 +5547,7 @@ msgstr "'%2%' 的 '%1%' 參數無效: 元件 '%3%' 的冒號過多。\n"
 msgid "The argument to '--timecode-scale' must be a number.\n"
 msgstr "'--timecode-scale' 的參數必須為數字。\n"
 
-#: src/mmg/tabs/input.cpp:1321
+#: src/mmg/tabs/input.cpp:1343
 #, c-format
 msgid "The aspect ratio setting for track nr. %s in file '%s' is invalid."
 msgstr "軌道編號 %s（檔案 '%s'）的外觀比例設定無效。"
@@ -5625,7 +5629,7 @@ msgstr "國家 '%s' 不是有效的 ccTLD，不能選擇。"
 msgid "The cue entries (the index) are being written..."
 msgstr "正在寫入 cue 項目(此索引)..."
 
-#: src/mmg/tabs/input.cpp:688
+#: src/mmg/tabs/input.cpp:700
 #, c-format
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr "目前檔案 (序號 %d) 不能移除。有其他檔案 -- 至少檔案號為 %d 的檔案 -- 有要添加至此檔某軌道的軌道。請先移除那些檔案。"
@@ -5638,7 +5642,7 @@ msgstr "目前套件的時間碼比前一個套件的小。這通常表明來源
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr "預設語言碼 '%1%' 不是有效的 ISO639-2 語言碼，將被忽略。\n"
 
-#: src/mmg/tabs/input.cpp:1232
+#: src/mmg/tabs/input.cpp:1254
 #, c-format
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "對檔案 '%s' 的 %s 軌的延遲設定無效。"
@@ -5747,6 +5751,11 @@ msgstr "檔案 '%1%' 為空。"
 msgid "The file '%s' does not exist."
 msgstr "檔案 '%s' 不存在。"
 
+#: src/mmg/tabs/input.cpp:299
+#, c-format
+msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
+msgstr ""
+
 #: src/info/qt_ui.cpp:77
 msgid "The file could not be opened for writing."
 msgstr "檔案無法開啟以寫入。"
@@ -5771,7 +5780,7 @@ msgstr "檔頭太短。\n"
 msgid "The file header was not read correctly.\n"
 msgstr "檔頭讀取異常。\n"
 
-#: src/mmg/tabs/input.cpp:337
+#: src/mmg/tabs/input.cpp:346
 #, c-format
 msgid "The file is an unsupported container format (%s)."
 msgstr "此檔案為不支援的容器格式 (%s)。"
@@ -5872,12 +5881,12 @@ msgstr "表頭已被寫入。"
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "兩軌高度不同: %1% 與 %2%"
 
-#: src/mmg/tabs/input.cpp:580
+#: src/mmg/tabs/input.cpp:592
 #, c-format
 msgid "The input file '%s' does not contain any tracks."
 msgstr "輸入檔 '%s' 不包含任何軌道。"
 
-#: src/mmg/tabs/input.cpp:1156
+#: src/mmg/tabs/input.cpp:1178
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -5893,7 +5902,7 @@ msgstr ""
 "\n"
 "(問題出在 tab_input::load(), #1)"
 
-#: src/mmg/tabs/input.cpp:1163
+#: src/mmg/tabs/input.cpp:1185
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -5909,7 +5918,7 @@ msgstr ""
 "\n"
 "(問題出在 tab_input::load(), #2)"
 
-#: src/mmg/tabs/input.cpp:1176
+#: src/mmg/tabs/input.cpp:1198
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -6147,7 +6156,7 @@ msgstr "附件 '%1%' 的大小為 0。\n"
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "來源檔案 '%1%' 無法成功開啟，或者無法透過定位至末端檢索。\n"
 
-#: src/mmg/tabs/input.cpp:1243
+#: src/mmg/tabs/input.cpp:1265
 #, c-format
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr "軌道 %s（自檔案 '%s'）的延展設定無效。"
@@ -6717,7 +6726,7 @@ msgstr "不帶正負號的整數 (%1%) 太小。最小值為 %2%。"
 msgid "Unsupported MPEG mpeg_version: 0x%|1$02x| in packet %2% for timecode %3%, assuming MPEG2. No further warnings will be printed for this track.\n"
 msgstr "不支援 MPEG mpeg_version: 0x%|1$02x| 於資料套件 %2% 時間碼 %3% 處，假定為 MPEG2。不會再對此軌輸出警告。\n"
 
-#: src/mmg/tabs/input.cpp:340
+#: src/mmg/tabs/input.cpp:349
 msgid "Unsupported format"
 msgstr "不支援的格式"
 
@@ -7347,7 +7356,7 @@ msgstr ""
 "還可以是通常的 HH:MM:SS.mmm 或 HH:MM:SS 格式。\n"
 "範例: -00:05:23 將使所有章節比現在提前 5 分 23 秒開始。"
 
-#: src/mmg/tabs/input.cpp:1275
+#: src/mmg/tabs/input.cpp:1297
 #, c-format
 msgid ""
 "You haven't selected a number of frames per second for track %lld of file '%s'. mkvmerge cannot determine the number of frames per second for such files itself. Therefore you have to set this parameter yourself on the 'format specific options' page.\n"
@@ -7362,7 +7371,7 @@ msgstr ""
 "\n"
 "是否繼續?"
 
-#: src/mmg/tabs/input.cpp:463
+#: src/mmg/tabs/input.cpp:472
 msgid ""
 "You're adding an AVC/h.264 elementary stream to the output file. mkvmerge cannot determine the number of frames per second for such files itself. Therefore you have to set this parameter yourself on the 'format specific options' page.\n"
 "\n"
@@ -8056,12 +8065,12 @@ msgstr "mkvmerge GUI 準備就緒"
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "mkvmerge GUI 設定檔 (*.mmg)|*.mmg|%s"
 
-#: src/mmg/tabs/input.cpp:1208
-#: src/mmg/tabs/input.cpp:1233
-#: src/mmg/tabs/input.cpp:1244
-#: src/mmg/tabs/input.cpp:1254
+#: src/mmg/tabs/input.cpp:1230
+#: src/mmg/tabs/input.cpp:1255
 #: src/mmg/tabs/input.cpp:1266
-#: src/mmg/tabs/input.cpp:1322
+#: src/mmg/tabs/input.cpp:1276
+#: src/mmg/tabs/input.cpp:1288
+#: src/mmg/tabs/input.cpp:1344
 msgid "mkvmerge GUI: error"
 msgstr "mkvmerge GUI: 發生錯誤"
 
@@ -8414,7 +8423,7 @@ msgstr "und (未定)"
 #: src/common/mm_io.cpp:425
 #: src/mmg/mmg.cpp:58
 #: src/mmg/header_editor/value_page.cpp:78
-#: src/mmg/tabs/input.cpp:331
+#: src/mmg/tabs/input.cpp:340
 #: src/info/mkvinfo.cpp:764
 #: src/info/mkvinfo.cpp:774
 #: src/info/mkvinfo.cpp:793

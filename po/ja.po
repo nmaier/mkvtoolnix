@@ -1698,11 +1698,11 @@ msgstr "ファイルロード後に最も重要な要素を展開します"
 msgid "Algorithm: %1% (%2%)"
 msgstr ""
 
-#: src/mmg/mmg.h:41
+#: src/mmg/mmg.h:42
 msgid "All Files (*)|*"
 msgstr "全てのファイル(*)|*"
 
-#: src/mmg/mmg.h:35
+#: src/mmg/mmg.h:36
 msgid "All Files (*.*)|*.*"
 msgstr "全てのファイル (*.*)|*.*"
 
@@ -1784,7 +1784,7 @@ msgstr "トラック%1%には既にデフォルトトラックが設定されて
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr "MUXジョブがまだ実行中です。新しいジョブを開始する前に、終了するまで待つか、ジョブを手動で終了させてください。"
 
-#: src/mmg/tabs/input.cpp:1205
+#: src/mmg/tabs/input.cpp:1227
 #, c-format
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "同じファイルのトラックを別のトラックに追加することはできません。トラック番号%uと%uがこれに当てはまります。"
@@ -2341,7 +2341,7 @@ msgstr "コアピクチャフレーム%1%のヘッダサイズ（%2%）が不正
 msgid "CorePicture frame %1% not supported.\n"
 msgstr "コアピクチャフレーム%1%はサポートされていません。\n"
 
-#: src/mmg/jobs.cpp:155 src/mmg/mux_dialog.cpp:117 src/mmg/tabs/input.cpp:305
+#: src/mmg/jobs.cpp:155 src/mmg/mux_dialog.cpp:117 src/mmg/tabs/input.cpp:314
 #, c-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
 msgstr "'%s'と呼ばれるmkvmergeのコマンドラインオプションの一時ファイルを作成できませんでした (エラーコード %d, %s)。"
@@ -3046,7 +3046,7 @@ msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n
 msgstr "ファイルが予測されたよりも少ないフレームしか含んでいないか、フレーム%1%の後ろが壊れています。\n"
 
 #: src/mmg/mmg_dialog.cpp:653 src/mmg/mux_dialog.cpp:118
-#: src/mmg/tabs/input.cpp:306
+#: src/mmg/tabs/input.cpp:315
 msgid "File creation failed"
 msgstr "ファイルの作成に失敗しました"
 
@@ -3058,11 +3058,11 @@ msgstr ""
 msgid "File description: %1%"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:350 src/mmg/tabs/input.cpp:357
+#: src/mmg/tabs/input.cpp:359 src/mmg/tabs/input.cpp:366
 msgid "File identification failed"
 msgstr "ファイルタイプの判定に失敗しました"
 
-#: src/mmg/tabs/input.cpp:344
+#: src/mmg/tabs/input.cpp:353
 #, c-format
 msgid ""
 "File identification failed for '%s'. Return code: %d\n"
@@ -3071,10 +3071,14 @@ msgstr ""
 "'%s'のファイルタイプの判定に失敗しました。リターンコード：%d\n"
 "\n"
 
-#: src/mmg/tabs/input.cpp:354
+#: src/mmg/tabs/input.cpp:363
 #, c-format
 msgid "File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable in the settings dialog."
 msgstr "ファイルタイプの判定に失敗しました。リターンコード：%d。エラー%d (%s)。設定ダイアログでmkvmergeのパスを正しく設定したか確認してください。"
+
+#: src/mmg/tabs/input.cpp:301
+msgid "File is already processed"
+msgstr ""
 
 #: src/mmg/header_editor/frame.cpp:495
 msgid "File modified"
@@ -3088,7 +3092,7 @@ msgstr ""
 msgid "File parsing failed"
 msgstr "ファイルの解析に失敗しました"
 
-#: src/mmg/tabs/input.cpp:692
+#: src/mmg/tabs/input.cpp:704
 msgid "File removal not possible"
 msgstr "ファイルを削除できません"
 
@@ -4097,7 +4101,7 @@ msgstr "AC3ヘッダが最初のフレームで見つかりませんでした：
 msgid "No EBML head found."
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:1281
+#: src/mmg/tabs/input.cpp:1303
 msgid "No FPS selected for AVC/h.264 track"
 msgstr "AVC/h.264トラックのFPSが選択されていません"
 
@@ -4183,7 +4187,7 @@ msgstr "'--%1% %2%'でトラックIDが指定されていません。\n"
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "editで指定された'%1%'に対応するトラックが見つかりませんでした。%2%\n"
 
-#: src/mmg/tabs/input.cpp:580
+#: src/mmg/tabs/input.cpp:592
 msgid "No tracks found"
 msgstr "トラックが見つかりませんでした"
 
@@ -5320,7 +5324,7 @@ msgstr "FLACヘッダを解析することができません：ストリーム�
 msgid "The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n"
 msgstr "FPSは0.0ですが、リーダはパケットのタイムコードを渡しませんでした。%1%\n"
 
-#: src/mmg/tabs/input.cpp:1265
+#: src/mmg/tabs/input.cpp:1287
 #, c-format
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
 msgstr "トラック番号%s（ファイル'%s'）のFPS設定は不正です。"
@@ -5329,7 +5333,7 @@ msgstr "トラック番号%s（ファイル'%s'）のFPS設定は不正です。
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "FourCCは4文字ちょうどでなければなりません（'%1% %2%'での引数）。\n"
 
-#: src/mmg/tabs/input.cpp:1253
+#: src/mmg/tabs/input.cpp:1275
 #, c-format
 msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
 msgstr "トラックID %s（ファイル'%s'）のFourCC指定が4文字ちょうどではありません。"
@@ -5388,7 +5392,7 @@ msgstr "'%2%'に対する引数'%1%'が不正です：要素'%3%'にコロンが
 msgid "The argument to '--timecode-scale' must be a number.\n"
 msgstr "'--timecode-scale'に対する引数は数字でなければなりません。\n"
 
-#: src/mmg/tabs/input.cpp:1321
+#: src/mmg/tabs/input.cpp:1343
 #, c-format
 msgid "The aspect ratio setting for track nr. %s in file '%s' is invalid."
 msgstr "トラック番号%s（ファイル'%s'）のアスペクト比の指定が不正です。"
@@ -5468,7 +5472,7 @@ msgstr "国'%s'は正しいccTLDコードではないので選択できません
 msgid "The cue entries (the index) are being written..."
 msgstr "キューエントリ（インデックス）が書き込まれました..."
 
-#: src/mmg/tabs/input.cpp:688
+#: src/mmg/tabs/input.cpp:700
 #, c-format
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr "現在のファイル（番号%d）を削除することはできません。このファイルにトラックを追加結合すると思われる他のファイルが存在します（少なくとも番号%dのファイルがそうです)。そのファイルをまず削除してください。"
@@ -5481,7 +5485,7 @@ msgstr "現在のパケットのタイムコードは前のパケットのタイ
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr "デフォルトの言語コード'%1%'は正しいISO639-2言語コードではないので無視されます。\n"
 
-#: src/mmg/tabs/input.cpp:1232
+#: src/mmg/tabs/input.cpp:1254
 #, c-format
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "トラック番号%s（ファイル'%s'）のディレイの指定が不正です。"
@@ -5584,6 +5588,11 @@ msgstr "ファイル'%1%'は空です。"
 msgid "The file '%s' does not exist."
 msgstr "ファイル'%s'は存在しません。"
 
+#: src/mmg/tabs/input.cpp:299
+#, c-format
+msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
+msgstr ""
+
 #: src/info/qt_ui.cpp:77
 msgid "The file could not be opened for writing."
 msgstr "ファイルを開いて読み込むことができませんでした。"
@@ -5608,7 +5617,7 @@ msgstr "ファイルヘッダが短かすぎます。\n"
 msgid "The file header was not read correctly.\n"
 msgstr "ファイルヘッダを正しく読み取れませんでした。\n"
 
-#: src/mmg/tabs/input.cpp:337
+#: src/mmg/tabs/input.cpp:346
 #, c-format
 msgid "The file is an unsupported container format (%s)."
 msgstr "このファイルはサポートされていないコンテナフォーマット（%s）です。"
@@ -5706,12 +5715,12 @@ msgstr "ヘッダは既に記録されています。"
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "2つのトラック間で縦解像度が異なっています：%1%と%2%"
 
-#: src/mmg/tabs/input.cpp:580
+#: src/mmg/tabs/input.cpp:592
 #, c-format
 msgid "The input file '%s' does not contain any tracks."
 msgstr "入力ファイル'%s'にはトラックがありません。"
 
-#: src/mmg/tabs/input.cpp:1156
+#: src/mmg/tabs/input.cpp:1178
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -5726,7 +5735,7 @@ msgstr ""
 "\n"
 "（問題はtab_input::load(), #1で発生しました）"
 
-#: src/mmg/tabs/input.cpp:1163
+#: src/mmg/tabs/input.cpp:1185
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -5741,7 +5750,7 @@ msgstr ""
 "\n"
 "（問題はtab_input::load(), #2で発生しました）"
 
-#: src/mmg/tabs/input.cpp:1176
+#: src/mmg/tabs/input.cpp:1198
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -5969,7 +5978,7 @@ msgstr "添付ファイル'%1%'のサイズが0です。\n"
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "ソースファイル'%1%'を開くのに失敗したか、最後までシークすることでサイズを測ることができませんでした。\n"
 
-#: src/mmg/tabs/input.cpp:1243
+#: src/mmg/tabs/input.cpp:1265
 #, c-format
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr "トラック番号%s（ファイル'%s'）の引き延ばしの指定が不正です。"
@@ -6511,7 +6520,7 @@ msgstr "符号無し整数（%1%）は小さすぎます。最小値は%2%です
 msgid "Unsupported MPEG mpeg_version: 0x%|1$02x| in packet %2% for timecode %3%, assuming MPEG2. No further warnings will be printed for this track.\n"
 msgstr "サポートされていないMPEGバージョンです：0x%|1$02x|（パケット%2%、タイムコード%3%）。MPEG2と仮定します。このトラックに関してはもう警告は表示されません。\n"
 
-#: src/mmg/tabs/input.cpp:340
+#: src/mmg/tabs/input.cpp:349
 msgid "Unsupported format"
 msgstr "サポートされていないフォーマットです"
 
@@ -7092,7 +7101,7 @@ msgstr ""
 "または普通のHH:MM:SS.mmmやHH:MM:SSのフォーマットを取ることができます。\n"
 "例：-00:05:23を指定すると、全てのチャプタを現在より5分23秒早めることができます。"
 
-#: src/mmg/tabs/input.cpp:1275
+#: src/mmg/tabs/input.cpp:1297
 #, c-format
 msgid ""
 "You haven't selected a number of frames per second for track %lld of file '%s'. mkvmerge cannot determine the number of frames per second for such files itself. Therefore you have to set this parameter yourself on the 'format specific options' page.\n"
@@ -7107,7 +7116,7 @@ msgstr ""
 "\n"
 "続行しますか？"
 
-#: src/mmg/tabs/input.cpp:463
+#: src/mmg/tabs/input.cpp:472
 msgid ""
 "You're adding an AVC/h.264 elementary stream to the output file. mkvmerge cannot determine the number of frames per second for such files itself. Therefore you have to set this parameter yourself on the 'format specific options' page.\n"
 "\n"
@@ -7763,9 +7772,9 @@ msgstr "mkvmerge GUI準備完了"
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "mkvmerge GUI設定ファイル (*.mmg)|*.mmg|%s"
 
-#: src/mmg/tabs/input.cpp:1208 src/mmg/tabs/input.cpp:1233
-#: src/mmg/tabs/input.cpp:1244 src/mmg/tabs/input.cpp:1254
-#: src/mmg/tabs/input.cpp:1266 src/mmg/tabs/input.cpp:1322
+#: src/mmg/tabs/input.cpp:1230 src/mmg/tabs/input.cpp:1255
+#: src/mmg/tabs/input.cpp:1266 src/mmg/tabs/input.cpp:1276
+#: src/mmg/tabs/input.cpp:1288 src/mmg/tabs/input.cpp:1344
 msgid "mkvmerge GUI: error"
 msgstr "mkvmerge GUI：エラー"
 
@@ -8103,7 +8112,7 @@ msgstr "und (Undetermined)"
 #: src/input/r_matroska.cpp:89 src/input/r_matroska.cpp:2133
 #: src/input/r_matroska.cpp:2140 src/input/r_mpeg_ps.cpp:1388
 #: src/common/mm_io.cpp:425 src/mmg/mmg.cpp:58
-#: src/mmg/header_editor/value_page.cpp:78 src/mmg/tabs/input.cpp:331
+#: src/mmg/header_editor/value_page.cpp:78 src/mmg/tabs/input.cpp:340
 #: src/info/mkvinfo.cpp:764 src/info/mkvinfo.cpp:774 src/info/mkvinfo.cpp:793
 #: src/info/mkvinfo.cpp:822 src/info/mkvinfo.cpp:835 src/info/mkvinfo.cpp:845
 #: src/info/mkvinfo.cpp:1076
