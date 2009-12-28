@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-12-28 21:47+0100\n"
+"PO-Revision-Date: 2009-12-28 22:02+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -5609,15 +5609,15 @@ msgstr "Die Datei '%1%' konnte nicht geöffnet werden, um aus ihr Kommandozeilen
 #: src/extract/tracks.cpp:277 src/extract/xtr_avi.cpp:52
 #: src/extract/xtr_tta.cpp:86 src/extract/xtr_wav.cpp:113
 msgid "The file '%1%' could not be opened for writing (%2%).\n"
-msgstr "Die Daten '%1%' konnte nicht zum Schreiben geöffnet werden (%2%).\n"
+msgstr "Die Datei '%1%' konnte nicht zum Schreiben geöffnet werden (%2%).\n"
 
 #: src/extract/attachments.cpp:97 src/extract/xtr_rmff.cpp:40
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
-msgstr "Die Daten '%1%' konnte nicht zum Schreiben geöffnet werden (%2%, %3%).\n"
+msgstr "Die Datei '%1%' konnte nicht zum Schreiben geöffnet werden (%2%, %3%).\n"
 
 #: src/merge/output_control.cpp:1270
 msgid "The file '%1%' has been opened for writing.\n"
-msgstr "Die Daten '%1%' wurde zum Schreiben geöffnet.\n"
+msgstr "Die Datei '%1%' wurde zum Schreiben geöffnet.\n"
 
 #: src/merge/mkvmerge.cpp:2120
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
@@ -5655,7 +5655,7 @@ msgstr "Die Datei scheint keine gültige mkvmerge GUI Optionsdatei zu sein."
 
 #: src/mmg/header_editor/frame.cpp:494
 msgid "The file has been changed by another program since it was read by the header editor. Therefore you have to re-load it. Unfortunately this means that all of your changes will be lost."
-msgstr "Die Daten wurde von einem anderen Programm verändert, seitdem der Kopfdateneditor sie das letzte Mal gelesen hat. Deswegen müssen Sie die Datei neu laden. Leider bedeutet das, dass all Ihre Änderungen verloren gehen."
+msgstr "Die Datei wurde von einem anderen Programm verändert, seitdem der Kopfdateneditor sie das letzte Mal gelesen hat. Deswegen müssen Sie die Datei neu laden. Leider bedeutet das, dass all Ihre Änderungen verloren gehen."
 
 #: src/input/r_tta.cpp:65
 msgid "The file header is too short.\n"
