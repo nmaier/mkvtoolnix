@@ -1,3 +1,10 @@
+2009-12-28  Moritz Bunkus  <moritz@bunkus.org>
+
+	* Build requirements changed: mkvtoolnix requires Boost v1.34.0 or
+	later. It requires the Boost::Filesystem library (with all Boost
+	versions) and the Boost::System libraries (starting with Boost
+	v1.35.0).
+
 2009-12-26  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: SRT files with negative timecodes will
