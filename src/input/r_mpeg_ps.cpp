@@ -69,7 +69,6 @@ mpeg_ps_reader_c::probe_file(mm_io_c *io,
 mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
   throw (error_c)
   : generic_reader_c(_ti)
-  , m_first_file_name(bfs::system_complete(bfs::path(_ti.fname)))
   , file_done(false)
 {
   init_reader();
@@ -78,7 +77,7 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
 void
 mpeg_ps_reader_c::init_reader() {
   try {
-    io   = mm_multi_file_io_c::open_multi(m_first_file_name);
+    io   = mm_multi_file_io_c::open_multi(ti.fname);
     size = io->get_size();
 
   } catch (...) {
@@ -178,8 +177,10 @@ mpeg_ps_reader_c::init_reader() {
 
   io->setFilePointer(0, seek_beginning);
 
-  if (verbose)
+  if (verbose) {
     mxinfo_fn(ti.fname, Y("Using the MPEG PS demultiplexer.\n"));
+    io->display_other_file_info();
+  }
 }
 
 mpeg_ps_reader_c::~mpeg_ps_reader_c() {
@@ -1354,7 +1355,7 @@ mpeg_ps_reader_c::identify() {
   std::vector<std::string> verbose_info;
   int i;
 
-  io->create_verbose_identification_info(m_first_file_name, verbose_info);
+  io->create_verbose_identification_info(verbose_info);
 
   id_result_container((boost::format("MPEG %1% program stream (PS)") % version).str(), verbose_info);
 

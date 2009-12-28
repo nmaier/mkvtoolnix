@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-12-27 18:25+0100\n"
+"PO-Revision-Date: 2009-12-28 21:17+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -1175,6 +1175,10 @@ msgstr "'%1%' Track %2%: %3%"
 #: src/common/output.cpp:145 src/common/output.cpp:162
 msgid "'%1%': %2%"
 msgstr "'%1%': %2%"
+
+#: src/common/mm_multi_file_io.cpp:165
+msgid "'%1%': Processing the following files as well: %2%\n"
+msgstr "'%1%': Auch die folgenden Dateien werden verarbeitet: %2%\n"
 
 #: src/merge/mkvmerge.cpp:2057
 msgid "'--append-mode' lacks its argument.\n"
@@ -2894,7 +2898,7 @@ msgstr "Fehler beim Laden der Einstellungen"
 msgid "Error opening file"
 msgstr "Fehler beim Öffnen der Datei"
 
-#: src/input/r_mpeg_ps.cpp:1043
+#: src/input/r_mpeg_ps.cpp:1044
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr "Fehler beim Parsen eines MPEG PS Paketes in der Phase, in der die Kopfdaten gelesen werden. Dieser Track scheint stark beschädigt zu sein.\n"
 
@@ -4648,7 +4652,7 @@ msgstr "RSA"
 msgid "Re-enable the selected job(s)"
 msgstr "Die ausgewählten Jobs wieder aktivieren"
 
-#: src/input/r_mpeg_ps.cpp:405
+#: src/input/r_mpeg_ps.cpp:406
 msgid "Reading encrypted VOBs is not supported.\n"
 msgstr "Die Verarbeitung von verschlüsselten VOBs wird nicht unterstützt.\n"
 
@@ -6670,7 +6674,7 @@ msgid "Using a NALU size length of 3 bytes might result in tracks that won't be 
 msgstr "Das NALU-Längenfeld drei Bytes lang zu machen kann dazu führen, dass es zu Abspielproblemen mit manchen AVC/h.264-Codecs kommt.\n"
 
 #: src/input/r_ac3.cpp:93 src/input/r_matroska.cpp:1373
-#: src/input/r_mpeg_ps.cpp:1175
+#: src/input/r_mpeg_ps.cpp:1176
 msgid "Using the %1%AC3 output module.\n"
 msgstr "Das %1%AC3-Ausgabemodul wird benutzt.\n"
 
@@ -6721,7 +6725,7 @@ msgid "Using the DTS demultiplexer.\n"
 msgstr "Der DTS-Demultiplexer wird benutzt.\n"
 
 #: src/input/r_avi.cpp:552 src/input/r_dts.cpp:115
-#: src/input/r_matroska.cpp:1382 src/input/r_mpeg_ps.cpp:1180
+#: src/input/r_matroska.cpp:1382 src/input/r_mpeg_ps.cpp:1181
 #: src/input/r_wav.cpp:357
 msgid "Using the DTS output module.\n"
 msgstr "Das DTS-Ausgabemodul wird benutzt.\n"
@@ -6764,7 +6768,7 @@ msgid "Using the MPEG PS demultiplexer.\n"
 msgstr "Der MPEG PS-Demultiplexer wird benutzt.\n"
 
 #: src/input/r_avi.cpp:534 src/input/r_matroska.cpp:1364
-#: src/input/r_mp3.cpp:72 src/input/r_mpeg_ps.cpp:1170
+#: src/input/r_mp3.cpp:72 src/input/r_mpeg_ps.cpp:1171
 #: src/input/r_ogm.cpp:1009 src/input/r_qtmp4.cpp:1498
 msgid "Using the MPEG audio output module.\n"
 msgstr "Das  MPEG-Audio-Ausgabemodul wird benutzt.\n"
@@ -6774,7 +6778,7 @@ msgid "Using the MPEG-%1% video output module.\n"
 msgstr "Das MPEG-%1%-Video-Ausgabemodul wird benuztz.\n"
 
 #: src/input/r_avi.cpp:302 src/input/r_mpeg_es.cpp:176
-#: src/input/r_mpeg_ps.cpp:1195
+#: src/input/r_mpeg_ps.cpp:1196
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "Das MPEG-1/2-Video-Ausgabemodul wird benutzt.\n"
 
@@ -6783,7 +6787,7 @@ msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "Das MPEG-4 Teil 10 (AVC)-Video-Ausgabemodul wird benutzt.\n"
 
 #: src/input/r_avc.cpp:138 src/input/r_avi.cpp:327
-#: src/input/r_matroska.cpp:1624 src/input/r_mpeg_ps.cpp:1206
+#: src/input/r_matroska.cpp:1624 src/input/r_mpeg_ps.cpp:1207
 #: src/input/r_ogm.cpp:1133
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "Das MPEG-4 Teil 10 ES-Video-Ausgabemodul wird benutzt.\n"
@@ -6842,7 +6846,7 @@ msgstr "Das TTA-Ausgabemodul wird benutzt.\n"
 msgid "Using the Theora video output module.\n"
 msgstr "Das Theora-Video-Ausgabemodul wird benutzt.\n"
 
-#: src/input/r_mpeg_ps.cpp:1185
+#: src/input/r_mpeg_ps.cpp:1186
 msgid "Using the TrueHD output module.\n"
 msgstr "Das TrueHD-Ausgabemodul wird benutzt.\n"
 
@@ -6862,7 +6866,7 @@ msgstr "Das USF-Untertitel-Lesemodul wird benutzt.\n"
 msgid "Using the VC1 ES demultiplexer.\n"
 msgstr "Der VC1 ES-Demultiplexer wird benutzt.\n"
 
-#: src/input/r_mpeg_ps.cpp:1211 src/input/r_vc1.cpp:97
+#: src/input/r_mpeg_ps.cpp:1212 src/input/r_vc1.cpp:97
 msgid "Using the VC1 video output module.\n"
 msgstr "Das VC1-Video-Ausgabemodul wird benutzt.\n"
 
@@ -7966,11 +7970,11 @@ msgstr "mpeg_es_reader: Die Quelldatei konnte nicht gelesen werden."
 msgid "mpeg_ps_reader: Could not open the file."
 msgstr "mpeg_ps_reader: Die Quelldatei konnte nicht geöffnet werden. file."
 
-#: src/input/r_mpeg_ps.cpp:1189
+#: src/input/r_mpeg_ps.cpp:1190
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
 msgstr "mpeg_ps_reader: Hätte nicht passieren sollen #1. %1%"
 
-#: src/input/r_mpeg_ps.cpp:1215
+#: src/input/r_mpeg_ps.cpp:1216
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: Hätte nicht passieren sollen #2. %1%"
 
@@ -8193,7 +8197,7 @@ msgid "und (Undetermined)"
 msgstr "und (nicht festgelegt)"
 
 #: src/input/r_matroska.cpp:89 src/input/r_matroska.cpp:2133
-#: src/input/r_matroska.cpp:2140 src/input/r_mpeg_ps.cpp:1385
+#: src/input/r_matroska.cpp:2140 src/input/r_mpeg_ps.cpp:1388
 #: src/common/mm_io.cpp:425 src/mmg/mmg.cpp:58
 #: src/mmg/header_editor/value_page.cpp:78 src/mmg/tabs/input.cpp:331
 #: src/info/mkvinfo.cpp:764 src/info/mkvinfo.cpp:774 src/info/mkvinfo.cpp:793

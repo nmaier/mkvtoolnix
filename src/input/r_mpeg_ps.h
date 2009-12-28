@@ -123,7 +123,6 @@ typedef counted_ptr<mpeg_ps_track_t> mpeg_ps_track_ptr;
 class mpeg_ps_reader_c: public generic_reader_c {
 private:
   mm_multi_file_io_cptr io;
-  bfs::path m_first_file_name;
   int64_t bytes_processed, size, duration, global_timecode_offset;
 
   std::map<int, int> id2idx;

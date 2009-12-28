@@ -1170,6 +1170,10 @@ msgstr "'%1%' 轨道 %2%: %3%"
 msgid "'%1%': %2%"
 msgstr "'%1%': %2%"
 
+#: src/common/mm_multi_file_io.cpp:165
+msgid "'%1%': Processing the following files as well: %2%\n"
+msgstr ""
+
 #: src/merge/mkvmerge.cpp:2057
 msgid "'--append-mode' lacks its argument.\n"
 msgstr "'--append-mode' 缺参数。\n"
@@ -2942,7 +2946,7 @@ msgstr "载入设置出错"
 msgid "Error opening file"
 msgstr "打开文件出错"
 
-#: src/input/r_mpeg_ps.cpp:1043
+#: src/input/r_mpeg_ps.cpp:1044
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr "在头部读取阶段解析 MPEG PS 持续流包时出错。流似乎已被严重损坏。\n"
 
@@ -4748,7 +4752,7 @@ msgstr "RSA"
 msgid "Re-enable the selected job(s)"
 msgstr "重新启用所选任务"
 
-#: src/input/r_mpeg_ps.cpp:405
+#: src/input/r_mpeg_ps.cpp:406
 msgid "Reading encrypted VOBs is not supported.\n"
 msgstr "不支持读取已加密的 VOB。\n"
 
@@ -6796,7 +6800,7 @@ msgstr "使用 3 字节的 NALU 长可能会导致某些 AVC/h.264 编解码器�
 
 #: src/input/r_ac3.cpp:93
 #: src/input/r_matroska.cpp:1373
-#: src/input/r_mpeg_ps.cpp:1175
+#: src/input/r_mpeg_ps.cpp:1176
 msgid "Using the %1%AC3 output module.\n"
 msgstr "使用 %1%AC3 输出模块。\n"
 
@@ -6853,7 +6857,7 @@ msgstr "使用 DTS 分离器。\n"
 #: src/input/r_avi.cpp:552
 #: src/input/r_dts.cpp:115
 #: src/input/r_matroska.cpp:1382
-#: src/input/r_mpeg_ps.cpp:1180
+#: src/input/r_mpeg_ps.cpp:1181
 #: src/input/r_wav.cpp:357
 msgid "Using the DTS output module.\n"
 msgstr "使用 DTS 输出模块。\n"
@@ -6900,7 +6904,7 @@ msgstr "使用 MPEG PS 分离器。\n"
 #: src/input/r_avi.cpp:534
 #: src/input/r_matroska.cpp:1364
 #: src/input/r_mp3.cpp:72
-#: src/input/r_mpeg_ps.cpp:1170
+#: src/input/r_mpeg_ps.cpp:1171
 #: src/input/r_ogm.cpp:1009
 #: src/input/r_qtmp4.cpp:1498
 msgid "Using the MPEG audio output module.\n"
@@ -6913,7 +6917,7 @@ msgstr "使用 MPEG-%1% 视频输出模块。\n"
 
 #: src/input/r_avi.cpp:302
 #: src/input/r_mpeg_es.cpp:176
-#: src/input/r_mpeg_ps.cpp:1195
+#: src/input/r_mpeg_ps.cpp:1196
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "使用 MPEG-1/2 视频输出模块。\n"
 
@@ -6925,7 +6929,7 @@ msgstr "使用 MPEG-4 part 10 (AVC) 视频输出模块。\n"
 #: src/input/r_avc.cpp:138
 #: src/input/r_avi.cpp:327
 #: src/input/r_matroska.cpp:1624
-#: src/input/r_mpeg_ps.cpp:1206
+#: src/input/r_mpeg_ps.cpp:1207
 #: src/input/r_ogm.cpp:1133
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "使用 MPEG-4 part 10 ES 视频输出模块。\n"
@@ -6991,7 +6995,7 @@ msgstr "使用 TTA 输出模块。\n"
 msgid "Using the Theora video output module.\n"
 msgstr "使用 Theora 视频输出模块。\n"
 
-#: src/input/r_mpeg_ps.cpp:1185
+#: src/input/r_mpeg_ps.cpp:1186
 msgid "Using the TrueHD output module.\n"
 msgstr "使用 TrueHD 输出模块。\n"
 
@@ -7011,7 +7015,7 @@ msgstr "使用 USF 字幕读取器。\n"
 msgid "Using the VC1 ES demultiplexer.\n"
 msgstr "使用 VC1 ES 分离器。\n"
 
-#: src/input/r_mpeg_ps.cpp:1211
+#: src/input/r_mpeg_ps.cpp:1212
 #: src/input/r_vc1.cpp:97
 msgid "Using the VC1 video output module.\n"
 msgstr "使用 VC1 视频输出模块。\n"
@@ -8172,11 +8176,11 @@ msgstr "mpeg_es_reader: 无法打开文件。"
 msgid "mpeg_ps_reader: Could not open the file."
 msgstr "mpeg_ps_reader: 无法打开文件。"
 
-#: src/input/r_mpeg_ps.cpp:1189
+#: src/input/r_mpeg_ps.cpp:1190
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
 msgstr "mpeg_ps_reader: 不该发生 #1。 %1%"
 
-#: src/input/r_mpeg_ps.cpp:1215
+#: src/input/r_mpeg_ps.cpp:1216
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: 不该发生 #2。 %1%"
 
@@ -8407,7 +8411,7 @@ msgstr "und (未定)"
 #: src/input/r_matroska.cpp:89
 #: src/input/r_matroska.cpp:2133
 #: src/input/r_matroska.cpp:2140
-#: src/input/r_mpeg_ps.cpp:1385
+#: src/input/r_mpeg_ps.cpp:1388
 #: src/common/mm_io.cpp:425
 #: src/mmg/mmg.cpp:58
 #: src/mmg/header_editor/value_page.cpp:78

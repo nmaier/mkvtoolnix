@@ -37,13 +37,13 @@ class MTX_DLL_API mm_multi_file_io_c: public mm_io_c {
   };
 
 protected:
-  bfs::path m_file_name;
+  std::string m_display_file_name;
   uint64_t m_total_size, m_current_pos, m_current_local_pos;
   unsigned int m_current_file;
   std::vector<mm_multi_file_io_c::file_t> m_files;
 
 public:
-  mm_multi_file_io_c(std::vector<bfs::path> file_names);
+  mm_multi_file_io_c(std::vector<bfs::path> file_names, const std::string &display_file_name);
   virtual ~mm_multi_file_io_c();
 
   virtual uint64 getFilePointer();
@@ -54,12 +54,13 @@ public:
   virtual bool eof();
 
   virtual std::string get_file_name() const {
-    return m_file_name.string();
+    return m_display_file_name;
   }
   virtual std::vector<bfs::path> get_file_names();
-  void create_verbose_identification_info(const bfs::path &exclude_file_name, std::vector<std::string> &verbose_info);
+  virtual void create_verbose_identification_info(std::vector<std::string> &verbose_info);
+  virtual void display_other_file_info();
 
-  static mm_multi_file_io_cptr open_multi(bfs::path first_file_name);
+  static mm_multi_file_io_cptr open_multi(const std::string &display_file_name);
 };
 
 #endif  // __MTX_COMMON_MM_MULTI_FILE_IO_H

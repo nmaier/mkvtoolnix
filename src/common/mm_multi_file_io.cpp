@@ -34,8 +34,9 @@ mm_multi_file_io_c::file_t::file_t(const bfs::path &file_name,
 {
 }
 
-mm_multi_file_io_c::mm_multi_file_io_c(std::vector<bfs::path> file_names)
-  : m_file_name(file_names[0])
+mm_multi_file_io_c::mm_multi_file_io_c(std::vector<bfs::path> file_names,
+                                       const std::string &display_file_name)
+  : m_display_file_name(display_file_name)
   , m_total_size(0)
   , m_current_pos(0)
   , m_current_local_pos(0)
@@ -146,11 +147,22 @@ mm_multi_file_io_c::get_file_names() {
 }
 
 void
-mm_multi_file_io_c::create_verbose_identification_info(const bfs::path &exclude_file_name,
-                                                       std::vector<std::string> &verbose_info) {
+mm_multi_file_io_c::create_verbose_identification_info(std::vector<std::string> &verbose_info) {
   foreach(const mm_multi_file_io_c::file_t &file, m_files)
-    if (file.m_file_name != exclude_file_name)
+    if (file.m_file_name != m_files.front().m_file_name)
       verbose_info.push_back((boost::format("other_file:%1%") % escape(file.m_file_name.string())).str());
+}
+
+void
+mm_multi_file_io_c::display_other_file_info() {
+  std::vector<std::string> file_names;
+
+  foreach(const mm_multi_file_io_c::file_t &file, m_files)
+    if (file.m_file_name != m_files.front().m_file_name)
+      file_names.push_back(file.m_file_name.leaf());
+
+  if (!file_names.empty())
+    mxinfo(boost::format(Y("'%1%': Processing the following files as well: %2%\n")) % m_display_file_name % join(", ", file_names));
 }
 
 struct path_sorter_t {
@@ -169,7 +181,8 @@ struct path_sorter_t {
 };
 
 mm_multi_file_io_cptr
-mm_multi_file_io_c::open_multi(bfs::path first_file_name) {
+mm_multi_file_io_c::open_multi(const std::string &display_file_name) {
+  bfs::path first_file_name(bfs::system_complete(bfs::path(display_file_name)));
   std::string base_name = bfs::basename(first_file_name);
   std::string extension = downcase(bfs::extension(first_file_name));
   boost::regex file_name_re("(.+?)(\\d+)", boost::regex::perl);
@@ -178,7 +191,7 @@ mm_multi_file_io_c::open_multi(bfs::path first_file_name) {
   if (!boost::regex_match(base_name, matches, file_name_re)) {
     std::vector<bfs::path> file_names;
     file_names.push_back(first_file_name);
-    return mm_multi_file_io_cptr(new mm_multi_file_io_c(file_names));
+    return mm_multi_file_io_cptr(new mm_multi_file_io_c(file_names, display_file_name));
   }
 
   base_name        = downcase(matches[1].str());
@@ -212,5 +225,5 @@ mm_multi_file_io_c::open_multi(bfs::path first_file_name) {
   foreach(const path_sorter_t &path, paths)
     file_names.push_back(path.m_path);
 
-  return mm_multi_file_io_cptr(new mm_multi_file_io_c(file_names));
+  return mm_multi_file_io_cptr(new mm_multi_file_io_c(file_names, display_file_name));
 }
