@@ -16,7 +16,6 @@
 
 #include "common/os.h"
 
-#include <boost/filesystem.hpp>
 #include <map>
 
 #include "common/bit_cursor.h"
