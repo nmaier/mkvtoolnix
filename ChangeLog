@@ -1,5 +1,18 @@
 2009-12-28  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge, mmg: new feature: If a file is added to mkvmerge whose
+	base name ends in a number then mkvmerge will automatically read
+	and process all other files in the same directory with the same
+	base name, same extension and different numbers. Those files are
+	treated as if they were a single big file. This applies e.g.  to
+	VOB files from DVD images that are named VTS_01_1.VOB,
+	VTS_01_2.VOB, VTS_01_3.VOB etc. mmg will output an error message
+	if the user tries to add or append one of the other files that
+	mkvmerge will process automatically (e.g. if the user has added
+	VTS_01_1.VOB already and tries to append VTS_01_2.VOB).
+
+	This also fixes bug 437.
+
 	* Build requirements changed: mkvtoolnix requires Boost v1.34.0 or
 	later. It requires the Boost::Filesystem library (with all Boost
 	versions) and the Boost::System libraries (starting with Boost
