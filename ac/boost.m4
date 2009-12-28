@@ -9,11 +9,14 @@ if test x"$ax_cv_boost_filesystem" != "xyes"; then
 fi
 
 # boost::system must be present if boost::filesystem needs it.
-# TODO: Implement check whether or not Boost::System is really needed.
-AX_BOOST_SYSTEM()
+AX_BOOST_FILESYSTEM_DEPENDENCIES()
 
-if test x"$ax_cv_boost_system" != "xyes"; then
-  AC_MSG_ERROR(The Boost System library was not found.)
+if test x"$ax_cv_boost_dependencies_system" = "xyes"; then
+  AX_BOOST_SYSTEM()
+
+  if test x"$ax_cv_boost_system" != "xyes"; then
+    AC_MSG_ERROR(The Boost System library was not found.)
+  fi
 fi
 
 # boost::regex must be present.
