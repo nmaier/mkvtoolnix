@@ -531,7 +531,7 @@ tab_input::add_file(const wxString &file_name,
             title_was_present = true;
 
           } else if ((pair.size() == 2) && (pair[0] == wxT("other_file")))
-            file->other_files.push_back(wxFileName(pair[1]));
+            file->other_files.push_back(wxFileName(unescape(pair[1])));
 
         }
       }
