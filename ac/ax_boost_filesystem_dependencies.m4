@@ -19,7 +19,7 @@ AC_DEFUN([AX_BOOST_FILESYSTEM_DEPENDENCIES],[
           #include <boost/filesystem.hpp>
         ],[
           boost::filesystem::path p1("/etc/hosts");
-          int i = p1.stem().length();
+          int i = boost::filesystem::basename(p1).length();
         ])],
       [ax_cv_boost_dependencies_system=no],
       [ax_cv_boost_dependencies_system=yes])

@@ -170,8 +170,8 @@ struct path_sorter_t {
 
 mm_multi_file_io_cptr
 mm_multi_file_io_c::open_multi(bfs::path first_file_name) {
-  std::string base_name = first_file_name.stem();
-  std::string extension = downcase(first_file_name.extension());
+  std::string base_name = bfs::basename(first_file_name);
+  std::string extension = downcase(bfs::extension(first_file_name));
   boost::regex file_name_re("(.+?)(\\d+)", boost::regex::perl);
   boost::smatch matches;
 
@@ -191,10 +191,10 @@ mm_multi_file_io_c::open_multi(bfs::path first_file_name) {
   bfs::directory_iterator end_itr;
   for (bfs::directory_iterator itr(first_file_name.branch_path()); itr != end_itr; ++itr) {
     if (   bfs::is_directory(itr->status())
-        || (downcase(itr->path().extension()) != extension))
+        || (downcase(bfs::extension(itr->path())) != extension))
       continue;
 
-    std::string stem   = itr->path().stem();
+    std::string stem   = bfs::basename(itr->path());
     int current_number = 0;
 
     if (   !boost::regex_match(stem, matches, file_name_re)
