@@ -897,6 +897,7 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
   ti_general->cob_default->SetSelection(t->default_track);
   ti_general->cob_forced->SetSelection(t->forced_track ? 1 : 0);
   ti_general->cob_language->SetValue(lang);
+  ti_general->tc_tags->SetValue(t->tags);
   ti_general->tc_timecodes->SetValue(t->timecodes);
   ti_general->tc_track_name->SetFocus();
   ti_general->tc_track_name->SetValue(t->track_name);
