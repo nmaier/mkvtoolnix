@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2009-12-27 18:27+0100\n"
+"PO-Revision-Date: 2009-12-29 23:16+0100\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -1156,7 +1156,7 @@ msgstr "'%1%'：%2%"
 
 #: src/common/mm_multi_file_io.cpp:165
 msgid "'%1%': Processing the following files as well: %2%\n"
-msgstr ""
+msgstr "'%1%'：続きのファイルも同様に処理しています：%2%\n"
 
 #: src/merge/mkvmerge.cpp:2057
 msgid "'--append-mode' lacks its argument.\n"
@@ -3078,7 +3078,7 @@ msgstr "ファイルタイプの判定に失敗しました。リターンコー
 
 #: src/mmg/tabs/input.cpp:301
 msgid "File is already processed"
-msgstr ""
+msgstr "ファイルは既に処理されています"
 
 #: src/mmg/header_editor/frame.cpp:495
 msgid "File modified"
@@ -5591,7 +5591,7 @@ msgstr "ファイル'%s'は存在しません。"
 #: src/mmg/tabs/input.cpp:299
 #, c-format
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
-msgstr ""
+msgstr "ファイル'%s'はファイル'%s'と一緒に既に処理されています。再び追加することはできません。"
 
 #: src/info/qt_ui.cpp:77
 msgid "The file could not be opened for writing."
