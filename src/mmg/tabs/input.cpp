@@ -878,28 +878,30 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
       break;
     }
 
-  ti_general->cob_language->SetValue(lang);
-  ti_general->tc_track_name->SetValue(t->track_name);
   ti_extra->cob_cues->SetValue(ti_extra->cob_cues_translations.to_translated(t->cues));
-  ti_format->tc_delay->SetValue(t->delay);
-  ti_format->tc_stretch->SetValue(t->stretch);
-  ti_format->cob_sub_charset->SetValue(ti_format->cob_sub_charset_translations.to_translated(t->sub_charset));
-  ti_general->cob_default->SetSelection(t->default_track);
-  ti_general->cob_forced->SetSelection(t->forced_track ? 1 : 0);
-  ti_format->cb_aac_is_sbr->SetValue(t->aac_is_sbr);
-  set_combobox_selection(ti_format->cob_aspect_ratio, t->aspect_ratio);
-  ti_format->tc_display_width->SetValue(t->dwidth);
-  ti_format->tc_display_height->SetValue(t->dheight);
-  selected_track = new_sel;
-  ti_format->cob_compression->SetValue(ti_format->cob_compression_translations.to_translated(t->compression));
-  ti_general->tc_timecodes->SetValue(t->timecodes);
-  set_combobox_selection(ti_format->cob_fourcc, t->fourcc);
-  set_combobox_selection(ti_format->cob_fps, t->fps);
-  ti_format->cob_nalu_size_length->SetSelection(t->nalu_size_length / 2);
-  ti_general->tc_track_name->SetFocus();
-  ti_format->cob_stereo_mode->SetSelection(t->stereo_mode);
   ti_extra->tc_user_defined->SetValue(t->user_defined);
 
+  ti_format->cb_aac_is_sbr->SetValue(t->aac_is_sbr);
+  ti_format->cob_compression->SetValue(ti_format->cob_compression_translations.to_translated(t->compression));
+  ti_format->cob_nalu_size_length->SetSelection(t->nalu_size_length / 2);
+  ti_format->cob_stereo_mode->SetSelection(t->stereo_mode);
+  ti_format->cob_sub_charset->SetValue(ti_format->cob_sub_charset_translations.to_translated(t->sub_charset));
+  ti_format->tc_delay->SetValue(t->delay);
+  ti_format->tc_display_height->SetValue(t->dheight);
+  ti_format->tc_display_width->SetValue(t->dwidth);
+  ti_format->tc_stretch->SetValue(t->stretch);
+  set_combobox_selection(ti_format->cob_aspect_ratio, t->aspect_ratio);
+  set_combobox_selection(ti_format->cob_fourcc,       t->fourcc);
+  set_combobox_selection(ti_format->cob_fps,          t->fps);
+
+  ti_general->cob_default->SetSelection(t->default_track);
+  ti_general->cob_forced->SetSelection(t->forced_track ? 1 : 0);
+  ti_general->cob_language->SetValue(lang);
+  ti_general->tc_timecodes->SetValue(t->timecodes);
+  ti_general->tc_track_name->SetFocus();
+  ti_general->tc_track_name->SetValue(t->track_name);
+
+  selected_track       = new_sel;
   dont_copy_values_now = false;
 }
 
