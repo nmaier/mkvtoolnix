@@ -12,6 +12,7 @@
 
 #include "common/os.h"
 
+#include <algorithm>
 #include <matroska/KaxBlock.h>
 
 #include "common/common.h"
@@ -48,11 +49,8 @@ xtr_pgs_c::handle_frame(memory_cptr &frame,
   put_uint32_be(&sup_header[2], (uint32)pts);
   put_uint32_be(&sup_header[6], 0);
 
-  while (offset < data_size) {
-    int packet_size = get_uint16_be(mybuffer + offset + 1) + 3;
-
-    if ((offset + packet_size) >= data_size)
-      return;
+  while ((offset + 3) <= data_size) {
+    int packet_size = std::min(static_cast<int>(get_uint16_be(mybuffer + offset + 1) + 3), data_size - offset);
 
     m_out->write(sup_header, 10);
     m_out->write(mybuffer + offset, packet_size);
