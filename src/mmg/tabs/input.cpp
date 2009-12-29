@@ -678,6 +678,16 @@ tab_input::add_file(const wxString &file_name,
   clb_tracks->Enable(true);
   b_append_file->Enable(true);
   b_remove_all_files->Enable(true);
+
+  if (!file->other_files.empty()) {
+    std::vector<wxString> other_file_names;
+
+    foreach(const wxFileName &other_file_name, file->other_files)
+      other_file_names.push_back(other_file_name.GetFullName());
+
+    wxMessageBox(wxU(boost::wformat(Z("'%1%': Processing the following files as well: %2%\n").c_str()) % file_name.c_str() % join(L", ", other_file_names).c_str()),
+                 Z("Note"), wxOK | wxCENTER | wxICON_INFORMATION, this);
+  }
 }
 
 void

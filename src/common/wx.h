@@ -40,19 +40,24 @@ wxU(const std::string &s) {
 
 inline wxString
 wxU(const boost::format &s) {
-  return wxString(s.str().c_str(), wxConvUTF8);
+  return wxU(s.str());
+}
+
+inline wxString
+wxU(const boost::wformat &s) {
+  return wxString(s.str().c_str());
 }
 
 inline wxString
 wxU(const EbmlString &s) {
-  return wxString(static_cast<const std::string &>(s).c_str(), wxConvUTF8);
+  return wxU(static_cast<const std::string &>(s));
 }
 
 inline wxString
 wxU(EbmlString *s) {
   if (NULL == s)
     return wxEmptyString;
-  return wxString(static_cast<const std::string &>(*s).c_str(), wxConvUTF8);
+  return wxU(static_cast<const std::string &>(*s));
 }
 
 inline const wxString &
