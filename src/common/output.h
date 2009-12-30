@@ -129,7 +129,7 @@ mxverb_tid(int level,
   mxverb_tid(level, file_name, track_id, message.str());
 }
 
-void MTX_DLL_API mxhexdump(int level, const unsigned char *buffer, int lenth);
+void MTX_DLL_API mxhexdump(int level, const void *buffer_to_dump, int lenth);
 
 void MTX_DLL_API dump_ebml_elements(EbmlElement *element, bool with_values = false, int level = 0);
 

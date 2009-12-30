@@ -186,43 +186,47 @@ set_cc_stdio(const std::string &charset) {
 
 void
 mxhexdump(int level,
-          const unsigned char *buffer,
+          const void *buffer_to_dump,
           int length) {
-  int i, j;
-  char output[24];
-
   if (verbose < level)
     return;
-  j = 0;
-  for (i = 0; i < length; i++) {
-    if ((i % 16) == 0) {
-      if (i > 0) {
-        output[j] = 0;
+
+  const unsigned char *buffer = static_cast<const unsigned char *>(buffer_to_dump);
+  unsigned int output_idx = 0;
+  unsigned int buffer_idx = 0;
+  char output[24];
+
+  while (buffer_idx < length) {
+    if ((buffer_idx % 16) == 0) {
+      if (0 < buffer_idx) {
+        output[output_idx] = 0;
         mxinfo(boost::format("%1%\n") % output);
-        j = 0;
+        output_idx = 0;
       }
-      mxinfo(boost::format("%|1$08x|  ") % i);
+      mxinfo(boost::format("%|1$08x|  ") % buffer_idx);
 
-    } else if ((i % 8) == 0) {
+    } else if ((buffer_idx % 8) == 0) {
       mxinfo(" ");
-      output[j] = ' ';
-      j++;
-
+      output[output_idx] = ' ';
+      ++output_idx;
     }
-    if ((buffer[i] >= 32) && (buffer[i] < 128))
-      output[j] = buffer[i];
-    else
-      output[j] = '.';
-    j++;
-    mxinfo(boost::format("%|1$02x| ") % (int)buffer[i]);
+
+    output[output_idx] = ((32 <= buffer[buffer_idx]) && (128 > buffer[buffer_idx])) ? buffer[buffer_idx] : '.';
+    ++output_idx;
+
+    mxinfo(boost::format("%|1$02x| ") % static_cast<unsigned int>(buffer[buffer_idx]));
+
+    ++buffer_idx;
   }
-  while ((i % 16) != 0) {
-    if ((i % 8) == 0)
+
+  while ((buffer_idx % 16) != 0) {
+    if ((buffer_idx % 8) == 0)
       mxinfo(" ");
     mxinfo("   ");
-    i++;
+    ++buffer_idx;
   }
-  output[j] = 0;
+  output[output_idx] = 0;
+
   mxinfo(boost::format("%1%\n") % output);
 }
 
