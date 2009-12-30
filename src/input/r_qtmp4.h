@@ -273,6 +273,7 @@ class qtmp4_reader_c: public generic_reader_c {
 private:
   mm_io_c *io;
   std::vector<qtmp4_demuxer_cptr> demuxers;
+  qtmp4_demuxer_cptr chapter_dmx;
   int64_t file_size, mdat_pos, mdat_size;
   uint32_t time_scale, compression_algorithm;
   int main_dmx;
@@ -340,7 +341,9 @@ protected:
   virtual void create_video_packetizer_svq1(qtmp4_demuxer_cptr &dmx);
 
   virtual std::string decode_and_verify_language(uint16_t coded_language);
+  virtual void read_chapter_track();
   virtual void recode_chapter_entries(std::vector<qtmp4_chapter_entry_t> &entries);
+  virtual void process_chapter_entries(int level, std::vector<qtmp4_chapter_entry_t> &entries);
 };
 
 #endif  // __R_QTMP4_H

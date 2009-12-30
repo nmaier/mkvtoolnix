@@ -1,3 +1,10 @@
+2009-12-30  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: new feature: Added support for reading chapters from
+	MP4 files that are stored in tracks with subtype 'text'. Such
+	files are used e.g. on iPods/iPhones and can be created by
+	HandBrake. Fix for bug 454.
+
 2009-12-29  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: The "tags" input box on the "general track

@@ -18,6 +18,7 @@
 #include "common/os.h"
 
 #include <algorithm>
+#include <boost/math/common_factor.hpp>
 #include <cstring>
 #if defined(HAVE_ZLIB_H)
 #include <zlib.h>
@@ -314,6 +315,8 @@ qtmp4_reader_c::parse_headers() {
 
     dmx->ok = true;
   }
+
+  read_chapter_track();
 
   if (!g_identifying)
     calculate_timecodes();
@@ -612,6 +615,10 @@ qtmp4_reader_c::handle_hdlr_atom(qtmp4_demuxer_cptr &new_dmx,
     case FOURCC('v', 'i', 'd', 'e'):
       new_dmx->type = 'v';
       break;
+
+    case FOURCC('t', 'e', 'x', 't'):
+      chapter_dmx = new_dmx;
+      break;
   }
 }
 
@@ -786,10 +793,52 @@ qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
     entries.push_back(qtmp4_chapter_entry_t(std::string(reinterpret_cast<char *>(buf->get_buffer())), timecode));
   }
 
+  recode_chapter_entries(entries);
+  process_chapter_entries(level, entries);
+}
+
+void
+qtmp4_reader_c::read_chapter_track() {
+  if (ti.no_chapters || (NULL != chapters) || !chapter_dmx.is_set())
+    return;
+
+  chapter_dmx->update_tables(time_scale);
+
+  if (chapter_dmx->sample_table.empty())
+    return;
+
+  std::vector<qtmp4_chapter_entry_t> entries;
+  uint64_t pts_scale_gcd = boost::math::gcd(static_cast<uint64_t>(1000000000ull), static_cast<uint64_t>(chapter_dmx->time_scale));
+  uint64_t pts_scale_num = 1000000000ull                                  / pts_scale_gcd;
+  uint64_t pts_scale_den = static_cast<uint64_t>(chapter_dmx->time_scale) / pts_scale_gcd;
+
+  foreach(qt_sample_t &sample, chapter_dmx->sample_table) {
+    if (2 >= sample.size)
+      continue;
+
+    io->setFilePointer(sample.pos, seek_beginning);
+    memory_cptr chunk(memory_c::alloc(sample.size));
+    if (io->read(chunk->get_buffer(), sample.size) != sample.size)
+      continue;
+
+    unsigned int name_len = get_uint16_be(chunk->get_buffer());
+    if ((name_len + 2) > sample.size)
+      continue;
+
+    entries.push_back(qtmp4_chapter_entry_t(std::string(reinterpret_cast<char *>(chunk->get_buffer()) + 2, name_len),
+                                            sample.pts * pts_scale_num / pts_scale_den));
+  }
+
+  process_chapter_entries(0, entries);
+}
+
+void
+qtmp4_reader_c::process_chapter_entries(int level,
+                                        std::vector<qtmp4_chapter_entry_t> &entries) {
   if (entries.empty())
     return;
 
-  recode_chapter_entries(entries);
+  mxverb(3, boost::format("Quicktime/MP4 reader:%1%%2% chapter(s):\n") % space((level + 1) * 2 + 1) % entries.size());
 
   stable_sort(entries.begin(), entries.end());
 
@@ -797,14 +846,15 @@ qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
   out.set_file_name(ti.fname);
   out.write_bom("UTF-8");
 
-  for (i = 0; entries.size() > i; ++i) {
+  unsigned int i = 0;
+  for (; entries.size() > i; ++i) {
     qtmp4_chapter_entry_t &chapter = entries[i];
 
     mxverb(3, boost::format("Quicktime/MP4 reader:%1%%2%: start %4% name %3%\n") % space((level + 1) * 2 + 1) % i % chapter.m_name % format_timecode(chapter.m_timecode));
 
     out.puts(boost::format("CHAPTER%|1$02d|=%|2$02d|:%|3$02d|:%|4$02d|.%|5$03d|\n"
                            "CHAPTER%|1$02d|NAME=%6%\n")
-             % count
+             % i
              % (int)( chapter.m_timecode / 60 / 60 / 1000000000)
              % (int)((chapter.m_timecode      / 60 / 1000000000) %   60)
              % (int)((chapter.m_timecode           / 1000000000) %   60)
