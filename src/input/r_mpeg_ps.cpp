@@ -1372,6 +1372,9 @@ mpeg_ps_reader_c::identify() {
 
     verbose_info.push_back((boost::format("stream_id:%|1$02x| sub_stream_id:%|2$02x|") % track->id.id % track->id.sub_id).str());
 
+    if ((0 != track->v_dwidth) && (0 != track->v_dheight))
+      verbose_info.push_back((boost::format("display_dimensions:%1%x%2%") % track->v_dwidth % track->v_dheight).str());
+
     id_result_track(i, 'a' == track->type ? ID_RESULT_TRACK_AUDIO : ID_RESULT_TRACK_VIDEO,
                       FOURCC('M', 'P', 'G', '1') == track->fourcc ? "MPEG-1"
                     : FOURCC('M', 'P', 'G', '2') == track->fourcc ? "MPEG-2"
