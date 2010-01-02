@@ -1179,20 +1179,31 @@ mmg_dialog::set_output_maybe(const wxString &new_output) {
       has_audio = true;
   }
 
-  wxString output;
-  wxFileName filename(tc_output->GetValue().IsEmpty() ? new_output : tc_output->GetValue());
-
+  wxFileName source_file_name(tc_output->GetValue().IsEmpty() ? new_output : tc_output->GetValue());
+  wxString output_dir;
   if (ODM_PREVIOUS == options.output_directory_mode)
-    output = previous_output_directory;
+    output_dir = previous_output_directory;
   else if (ODM_FIXED == options.output_directory_mode)
-    output = options.output_directory;
+    output_dir = options.output_directory;
 
-  if (output.IsEmpty())
-    output = filename.GetPath();
+  if (output_dir.IsEmpty())
+    output_dir = source_file_name.GetPath();
 
-  output += wxFileName::GetPathSeparator() + filename.GetName() + (has_video ? wxU(".mkv") : has_audio ? wxU(".mka") : wxU(".mks"));
+  wxFileName output_file_name;
+  wxFileName dir   = wxFileName::DirName(output_dir);
+  unsigned int idx = 0;
+  while (true) {
+    output_file_name = dir;
+    output_file_name.SetName(source_file_name.GetName() + (0 == idx ? wxT("") : wxString::Format(wxT(" (%u)"), idx)));
+    output_file_name.SetExt(has_video ? wxU("mkv") : has_audio ? wxU("mka") : wxU("mks"));
 
-  tc_output->SetValue(output);
+    if (!output_file_name.FileExists())
+      break;
+
+    ++idx;
+  }
+
+  tc_output->SetValue(output_file_name.GetFullPath());
 }
 
 void

@@ -1,3 +1,9 @@
+2010-01-02  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: enhancement: When constructing the output file name mmg
+	will only suggest names that don't exist already by appending a
+	number to the file name (e.g. resulting in "/path/file (1).mkv").
+
 2009-12-30  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Added support for reading chapters from
