@@ -197,6 +197,7 @@ public:
   void muxing_has_finished(int exit_code);
 
   bool check_before_overwriting();
+  bool is_output_file_name_valid();
 
   void load_preferences();
   void save_preferences();

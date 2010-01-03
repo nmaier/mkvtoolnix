@@ -769,7 +769,7 @@ msgstr ""
 "源码及最新程序总会在下面的地址提供：\n"
 "http://www.bunkus.org/videotools/mkvtoolnix/"
 
-#: src/mmg/mmg_dialog.cpp:598
+#: src/mmg/mmg_dialog.cpp:618
 #, c-format
 msgid ""
 "%s\n"
@@ -1537,12 +1537,12 @@ msgstr "<ChapterDisplay> 缺 <ChapterString> 子元素。"
 msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr "<ChapterTrack> 缺 <ChapterTrackNumber> 子元素。"
 
-#: src/input/r_matroska.cpp:1899
+#: src/input/r_matroska.cpp:1904
 msgid "A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"
 msgstr "在 %1% 找到了一个块组，但里面没有块元。这可能会导致 mkvmerge 崩溃。\n"
 
-#: src/input/r_matroska.cpp:1806
-#: src/input/r_matroska.cpp:1909
+#: src/input/r_matroska.cpp:1811
+#: src/input/r_matroska.cpp:1914
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr "在时间戳 %1% 处找到了轨道号为 %2% 的块。然而，没有找到符合该轨道号的头部信息。此块将被跳过。\n"
 
@@ -1556,7 +1556,7 @@ msgstr "一个人类可读的字串，描述编解码器。"
 msgid "A human-readable track name."
 msgstr "一个人类可读的字串，描述轨道名称。"
 
-#: src/mmg/mmg_dialog.cpp:1249
+#: src/mmg/mmg_dialog.cpp:1269
 #, c-format
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "描述为 '%s' 的任务已存在。是否添加描述相同的任务?"
@@ -1663,7 +1663,7 @@ msgstr "已中断对 %s 的处理"
 msgid "About mkvinfo"
 msgstr "关于 mkvinfo"
 
-#: src/mmg/mmg_dialog.cpp:607
+#: src/mmg/mmg_dialog.cpp:627
 msgid "About mkvmerge's GUI"
 msgstr "关于 mkvmerge's GUI"
 
@@ -1821,7 +1821,7 @@ msgstr "分析 MPEG4 位流，将每一帧置于单独的 Matroska 块中，使�
 msgid "Another default track for %1% tracks has already been set. The 'default' flag for track %2% of '%3%' will not be set.\n"
 msgstr "轨道 %1% 的另一个默认轨已设置。'%3%' 的 %2% 轨道的 '默认轨' 标记将不被设置。\n"
 
-#: src/mmg/mmg_dialog.cpp:462
+#: src/mmg/mmg_dialog.cpp:477
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr "另一个混流任务仍在处理中。要启动一项新任务，请等待先前任务完成或手动中断它。"
 
@@ -2020,7 +2020,7 @@ msgstr "在源容器不提供时间码或帧率值的情况下，无法将非原
 msgid "Cannot extract tracks of different kinds to the same file. This was requested for the tracks %1% and %2%.\n"
 msgstr "无法将不同类型的轨道提取到一个文件。轨道 %1% 和 %2% 被要求这样提取。\n"
 
-#: src/mmg/mmg_dialog.cpp:463
+#: src/mmg/mmg_dialog.cpp:478
 msgid "Cannot start second muxing job"
 msgstr "不能启动其他混流任务"
 
@@ -2104,7 +2104,7 @@ msgstr "章节翻译版本 UID: %1%"
 msgid "Chapter Translate ID: %1%"
 msgstr "章节翻译 ID: %1%"
 
-#: src/mmg/mmg_dialog.cpp:486
+#: src/mmg/mmg_dialog.cpp:506
 msgid "Chapter editor is not empty"
 msgstr "章节编辑器非空"
 
@@ -2229,8 +2229,8 @@ msgstr "选择要追加合并的文件"
 #: src/mmg/jobs.cpp:350
 #: src/mmg/mmg_dialog.cpp:236
 #: src/mmg/mmg_dialog.cpp:330
-#: src/mmg/mmg_dialog.cpp:623
-#: src/mmg/mmg_dialog.cpp:644
+#: src/mmg/mmg_dialog.cpp:643
+#: src/mmg/mmg_dialog.cpp:664
 #: src/mmg/mux_dialog.cpp:231
 #: src/mmg/tabs/chapters.cpp:618
 #: src/mmg/tabs/chapters.cpp:660
@@ -2241,7 +2241,7 @@ msgstr "选择输出文件"
 msgid "Choose the chapter file"
 msgstr "选择章节文件"
 
-#: src/mmg/mmg_dialog.cpp:520
+#: src/mmg/mmg_dialog.cpp:540
 msgid "Choose the location of the mkvmerge GUI help files"
 msgstr "选择 mkvmerge GUI 帮助文件的路径"
 
@@ -2343,7 +2343,7 @@ msgstr "收起所有条目，这样它们的子条目将不被显示"
 msgid "Colour space: %1%"
 msgstr "色彩空间: %1%"
 
-#: src/mmg/mmg_dialog.cpp:675
+#: src/mmg/mmg_dialog.cpp:695
 msgid "Command line copied to clipboard."
 msgstr "命令行已复制到剪贴板。"
 
@@ -2351,7 +2351,7 @@ msgstr "命令行已复制到剪贴板。"
 msgid "Command line options:"
 msgstr "命令行选项:"
 
-#: src/mmg/mmg_dialog.cpp:633
+#: src/mmg/mmg_dialog.cpp:653
 msgid "Command line saved."
 msgstr "命令行已保存。"
 
@@ -2423,7 +2423,7 @@ msgstr "无法为 mkvmerge 的命令行选项创建临时文件 '%s' (错误代�
 msgid "Could not create the file '%s'."
 msgstr "无法创建文件 '%s'。"
 
-#: src/mmg/mmg_dialog.cpp:653
+#: src/mmg/mmg_dialog.cpp:673
 msgid "Could not create the specified file."
 msgstr "无法创建指定文件。"
 
@@ -2432,7 +2432,7 @@ msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "无法解码以 Base64 编码的数据 - 似乎是畸形的。"
 
 #: src/input/r_avi.cpp:330
-#: src/input/r_matroska.cpp:1635
+#: src/input/r_matroska.cpp:1640
 #: src/input/r_ogm.cpp:1136
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "无法从该 AVC/h.264 轨道提取解码器特有设置数据 (AVCC)。\n"
@@ -2476,7 +2476,7 @@ msgstr "无法初始化 iconv 库以供从 UTF-8 至 %1% 的转换。某些字�
 msgid "Could not open '%1%' for reading.\n"
 msgstr "无法打开 '%1%' 以读取。\n"
 
-#: src/mmg/mmg_dialog.cpp:677
+#: src/mmg/mmg_dialog.cpp:697
 msgid "Could not open the clipboard."
 msgstr "无法打开剪贴板。"
 
@@ -2607,7 +2607,7 @@ msgstr "索引:"
 msgid "Current and past jobs:"
 msgstr "当前和过去的任务:"
 
-#: src/mmg/mmg_dialog.cpp:615
+#: src/mmg/mmg_dialog.cpp:635
 msgid "Current command line"
 msgstr "当前命令行"
 
@@ -2722,7 +2722,7 @@ msgstr "从任务队列中删除所选任务"
 msgid "Description"
 msgstr "描述"
 
-#: src/mmg/mmg_dialog.cpp:1250
+#: src/mmg/mmg_dialog.cpp:1270
 msgid "Description already exists"
 msgstr "描述已存在"
 
@@ -3137,7 +3137,7 @@ msgstr "文件 UID: %1%"
 msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n"
 msgstr "文件包含的帧数比预期的少，或者文件在 %1% 帧后被破坏。\n"
 
-#: src/mmg/mmg_dialog.cpp:653
+#: src/mmg/mmg_dialog.cpp:673
 #: src/mmg/mux_dialog.cpp:120
 #: src/mmg/tabs/input.cpp:315
 msgid "File creation failed"
@@ -3385,8 +3385,8 @@ msgstr "编码后的视频帧的高度，单位：像素。"
 msgid "Height of the video frames to display."
 msgstr "视频帧的显示高度。"
 
-#: src/mmg/mmg_dialog.cpp:574
-#: src/mmg/mmg_dialog.cpp:580
+#: src/mmg/mmg_dialog.cpp:594
+#: src/mmg/mmg_dialog.cpp:600
 msgid "Help file not found"
 msgstr "找不到帮助文件"
 
@@ -3595,6 +3595,11 @@ msgstr "无效的索引选项指定，在 '--cues %1%' 中。\n"
 msgid "Invalid cues option. No track ID specified in '--cues %1%'.\n"
 msgstr "无效的索引选项。未在 '--cues %1%' 指定轨道 ID。\n"
 
+#: src/mmg/mmg_dialog.cpp:485
+#, fuzzy
+msgid "Invalid file name"
+msgstr "缺文件名"
+
 #: src/merge/mkvmerge.cpp:864
 msgid "Invalid format for '--split' in '--split %1%'.\n"
 msgstr "'--split' 格式无效，在 '--split %1%' 中。\n"
@@ -3787,11 +3792,11 @@ msgstr "无效的轨道 ID 指定，在 '--sub-charset %1%'。\n"
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "无效的轨道 ID 或文件名指定，在参数 '%1%' 中。\n"
 
-#: src/mmg/mmg_dialog.cpp:1286
+#: src/mmg/mmg_dialog.cpp:1306
 msgid "Job added to job queue"
 msgstr "任务已添加到任务队列"
 
-#: src/mmg/mmg_dialog.cpp:1238
+#: src/mmg/mmg_dialog.cpp:1258
 msgid "Job description"
 msgstr "任务描述"
 
@@ -3980,12 +3985,12 @@ msgstr "MPEG-2 视频基本流"
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
 msgstr "将此轨作为其所属类（音频，视频，字幕）的默认轨。播放器会优先使用有“默认轨”标记的轨道。"
 
-#: src/input/r_matroska.cpp:1401
-#: src/input/r_matroska.cpp:1416
+#: src/input/r_matroska.cpp:1406
+#: src/input/r_matroska.cpp:1421
 msgid "Malformed AAC codec initialization data found.\n"
 msgstr "发现畸形的 AAC 编解码器初始化数据。\n"
 
-#: src/input/r_matroska.cpp:1409
+#: src/input/r_matroska.cpp:1414
 msgid "Malformed codec id '%1%'.\n"
 msgstr "畸形的编解码器 id '%1%'。\n"
 
@@ -4433,7 +4438,7 @@ msgstr "打开现有的 Matroska 文件"
 msgid "Open folder"
 msgstr "打开文件"
 
-#: src/mmg/mmg_dialog.cpp:665
+#: src/mmg/mmg_dialog.cpp:685
 msgid "Option file created."
 msgstr "选项文件已创建。"
 
@@ -4483,7 +4488,7 @@ msgid "Overwrite existing file(s)?"
 msgstr "覆写所有现有文件?"
 
 #: src/mmg/mmg_dialog.cpp:431
-#: src/mmg/mmg_dialog.cpp:1232
+#: src/mmg/mmg_dialog.cpp:1252
 msgid "Overwrite existing file?"
 msgstr "覆写现有的文件?"
 
@@ -4539,7 +4544,7 @@ msgstr "像素宽度: %1%"
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "请不要把 'mmg' 自己当作 'mkvmerge' 可执行程序选择。"
 
-#: src/mmg/mmg_dialog.cpp:1238
+#: src/mmg/mmg_dialog.cpp:1258
 msgid "Please enter a description for the new job:"
 msgstr "请输入新任务的描述:"
 
@@ -4616,11 +4621,11 @@ msgstr "进度: 100%\n"
 msgid "Progress: 100%%%1%"
 msgstr "进度: 100%%%1%"
 
-#: src/common/kax_analyzer.cpp:1020
+#: src/common/kax_analyzer.cpp:1027
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "进度: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1537
+#: src/mmg/mmg_dialog.cpp:1557
 msgid "Querying mkvmerge's capabilities"
 msgstr "正向 mkvmerge 询问处理能力"
 
@@ -5599,7 +5604,7 @@ msgstr "章节 '%s' 缺语言。"
 msgid "The chapter '%s' is missing the start time."
 msgstr "章节 '%s' 缺起始时间。"
 
-#: src/mmg/mmg_dialog.cpp:478
+#: src/mmg/mmg_dialog.cpp:498
 msgid ""
 "The chapter editor has been used and contains data. However, no chapter file has been selected on the global page. In mmg, the chapter editor is independant of the muxing process. The chapters present in the editor will NOT be muxed into the output file. Only the various 'save' functions from the chapter editor menu will cause the chapters to be written to the hard disk.\n"
 "\n"
@@ -5997,11 +6002,11 @@ msgstr ""
 "播放器播放过程中应该缓存的最小帧数。\n"
 "如果设为 0, 将不使用参考伪缓存系统。"
 
-#: src/mmg/mmg_dialog.cpp:578
+#: src/mmg/mmg_dialog.cpp:598
 msgid "The mkvmerge GUI help file was not found in the path you've selected. Please try again, or abort by pressing the 'abort' button."
 msgstr "在您选择的路径找不到 mkvmerge GUI 帮助文件。请再试一次，或者按 '取消' 按钮放弃。"
 
-#: src/mmg/mmg_dialog.cpp:571
+#: src/mmg/mmg_dialog.cpp:591
 msgid ""
 "The mkvmerge GUI help file was not found. This indicates that it has never before been opened, or that the installation path has since been changed.\n"
 "\n"
@@ -6076,10 +6081,14 @@ msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "即将输出的文件 '%1%' 无法打开写入(%2%)。\n"
 
 #: src/mmg/mmg_dialog.cpp:431
-#: src/mmg/mmg_dialog.cpp:1229
+#: src/mmg/mmg_dialog.cpp:1249
 #, c-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr "即将输出的文件 '%s' 已存在。是否覆盖？"
+
+#: src/mmg/mmg_dialog.cpp:485
+msgid "The output file name is invalid, e.g. it might contain invalid characters like ':'."
+msgstr ""
 
 #: src/input/r_corepicture.cpp:155
 msgid "The panoramic mode '%1%' is not recognized.\n"
@@ -6442,7 +6451,7 @@ msgstr "这不该发生。请联系作者 Moritz Bunkus <moritz@bunkus.org>，�
 msgid "This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for these files. Not needed for AAC tracks read from MP4 or Matroska files."
 msgstr "此轨道包含 SBR AAC/HE-AAC/AAC+ 数据。本选项只对 AAC 输入文件有必要，因为这类文件的 SBR AAC 不能被自动侦测。对于从 MP4 或 Matroska 文件读取的 AAC 轨道，不必在意本选项。"
 
-#: src/input/r_matroska.cpp:1941
+#: src/input/r_matroska.cpp:1946
 msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
 msgstr "此轨道使用了叫做 '编解码态元素' 的 Matroska 特性。mkvmerge 支持该特性，但您尚未通过 '--engage use_codec_state' 来启用该特性。\n"
 
@@ -6742,7 +6751,7 @@ msgstr "不支持 MPEG mpeg_version: 0x%|1$02x| 于数据包 %2% 时间码 %3% �
 msgid "Unsupported format"
 msgstr "不支持的格式"
 
-#: src/input/r_matroska.cpp:1579
+#: src/input/r_matroska.cpp:1584
 msgid "Unsupported track type for this track.\n"
 msgstr "不支持此轨道的轨道类型。\n"
 
@@ -6819,7 +6828,7 @@ msgid "Using a NALU size length of 3 bytes might result in tracks that won't be 
 msgstr "使用 3 字节的 NALU 长可能会导致某些 AVC/h.264 编解码器无法解码该轨道。\n"
 
 #: src/input/r_ac3.cpp:93
-#: src/input/r_matroska.cpp:1373
+#: src/input/r_matroska.cpp:1378
 #: src/input/r_mpeg_ps.cpp:1176
 msgid "Using the %1%AC3 output module.\n"
 msgstr "使用 %1%AC3 输出模块。\n"
@@ -6837,7 +6846,7 @@ msgid "Using the AAC output module (FourCC: %1%).\n"
 msgstr "使用 AAC 输出模块 (FourCC: %1%)。\n"
 
 #: src/input/r_aac.cpp:124
-#: src/input/r_matroska.cpp:1431
+#: src/input/r_matroska.cpp:1436
 #: src/input/r_ogm.cpp:973
 #: src/input/r_qtmp4.cpp:1542
 msgid "Using the AAC output module.\n"
@@ -6876,7 +6885,7 @@ msgstr "使用 DTS 分离器。\n"
 
 #: src/input/r_avi.cpp:552
 #: src/input/r_dts.cpp:115
-#: src/input/r_matroska.cpp:1382
+#: src/input/r_matroska.cpp:1387
 #: src/input/r_mpeg_ps.cpp:1181
 #: src/input/r_wav.cpp:357
 msgid "Using the DTS output module.\n"
@@ -6887,7 +6896,7 @@ msgid "Using the Dirac demultiplexer.\n"
 msgstr "使用 Dirac 分离器。\n"
 
 #: src/input/r_dirac.cpp:97
-#: src/input/r_matroska.cpp:1337
+#: src/input/r_matroska.cpp:1342
 msgid "Using the Dirac video output module.\n"
 msgstr "使用 Dirac 视频输出模块。\n"
 
@@ -6896,12 +6905,12 @@ msgid "Using the FLAC demultiplexer.\n"
 msgstr "使用 FLAC 分离器。\n"
 
 #: src/input/r_flac.cpp:238
-#: src/input/r_matroska.cpp:1446
+#: src/input/r_matroska.cpp:1451
 #: src/input/r_ogm_flac.cpp:306
 msgid "Using the FLAC output module.\n"
 msgstr "使用 FLAC 输出模块。\n"
 
-#: src/input/r_matroska.cpp:1505
+#: src/input/r_matroska.cpp:1510
 msgid "Using the Kate output module.\n"
 msgstr "使用 Kate 输出模块。\n"
 
@@ -6922,7 +6931,7 @@ msgid "Using the MPEG PS demultiplexer.\n"
 msgstr "使用 MPEG PS 分离器。\n"
 
 #: src/input/r_avi.cpp:534
-#: src/input/r_matroska.cpp:1364
+#: src/input/r_matroska.cpp:1369
 #: src/input/r_mp3.cpp:72
 #: src/input/r_mpeg_ps.cpp:1171
 #: src/input/r_ogm.cpp:1009
@@ -6930,7 +6939,7 @@ msgstr "使用 MPEG PS 分离器。\n"
 msgid "Using the MPEG audio output module.\n"
 msgstr "使用 MPEG 音频输出模块。\n"
 
-#: src/input/r_matroska.cpp:1320
+#: src/input/r_matroska.cpp:1325
 #: src/input/r_qtmp4.cpp:1500
 msgid "Using the MPEG-%1% video output module.\n"
 msgstr "使用 MPEG-%1% 视频输出模块。\n"
@@ -6941,27 +6950,27 @@ msgstr "使用 MPEG-%1% 视频输出模块。\n"
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "使用 MPEG-1/2 视频输出模块。\n"
 
-#: src/input/r_matroska.cpp:1329
+#: src/input/r_matroska.cpp:1334
 #: src/input/r_qtmp4.cpp:1518
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "使用 MPEG-4 part 10 (AVC) 视频输出模块。\n"
 
 #: src/input/r_avc.cpp:138
 #: src/input/r_avi.cpp:327
-#: src/input/r_matroska.cpp:1624
+#: src/input/r_matroska.cpp:1629
 #: src/input/r_mpeg_ps.cpp:1207
 #: src/input/r_ogm.cpp:1133
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "使用 MPEG-4 part 10 ES 视频输出模块。\n"
 
 #: src/input/r_avi.cpp:310
-#: src/input/r_matroska.cpp:1324
+#: src/input/r_matroska.cpp:1329
 #: src/input/r_ogm.cpp:1237
 #: src/input/r_qtmp4.cpp:1492
 msgid "Using the MPEG-4 part 2 video output module.\n"
 msgstr "使用 MPEG-4 part 2 视频输出模块。\n"
 
-#: src/input/r_matroska.cpp:162
+#: src/input/r_matroska.cpp:165
 msgid "Using the Matroska demultiplexer.\n"
 msgstr "使用 Matroska 分离器。\n"
 
@@ -6970,7 +6979,7 @@ msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr "使用 OGG/OGM 分离器。\n"
 
 #: src/input/r_avi.cpp:526
-#: src/input/r_matroska.cpp:1360
+#: src/input/r_matroska.cpp:1365
 #: src/input/r_ogm.cpp:1028
 #: src/input/r_qtmp4.cpp:1554
 #: src/input/r_wav.cpp:398
@@ -7005,12 +7014,12 @@ msgstr "使用 SSA/ASS 字幕读取器。\n"
 msgid "Using the TTA demultiplexer.\n"
 msgstr "使用 TTA 分离器。\n"
 
-#: src/input/r_matroska.cpp:1455
+#: src/input/r_matroska.cpp:1460
 #: src/input/r_tta.cpp:110
 msgid "Using the TTA output module.\n"
 msgstr "使用 TTA 输出模块。\n"
 
-#: src/input/r_matroska.cpp:1333
+#: src/input/r_matroska.cpp:1338
 #: src/input/r_ogm.cpp:1330
 msgid "Using the Theora video output module.\n"
 msgstr "使用 Theora 视频输出模块。\n"
@@ -7044,11 +7053,11 @@ msgstr "使用 VC1 视频输出模块。\n"
 msgid "Using the VobBtn button reader.\n"
 msgstr "使用 VobBtn 按钮读取器。\n"
 
-#: src/input/r_matroska.cpp:1516
+#: src/input/r_matroska.cpp:1521
 msgid "Using the VobBtn output module.\n"
 msgstr "使用 VobBtn 输出模块。\n"
 
-#: src/input/r_matroska.cpp:1489
+#: src/input/r_matroska.cpp:1494
 msgid "Using the VobSub output module.\n"
 msgstr "使用 VobSub 输出模块。\n"
 
@@ -7061,7 +7070,7 @@ msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
 msgstr "使用 VobSub 字幕读取器 (SUB 文件 '%1%')。\n"
 
 #: src/input/r_avi.cpp:681
-#: src/input/r_matroska.cpp:1386
+#: src/input/r_matroska.cpp:1391
 #: src/input/r_ogm.cpp:1049
 msgid "Using the Vorbis output module.\n"
 msgstr "使用 Vorbis 输出模块。\n"
@@ -7078,7 +7087,7 @@ msgstr "使用附带了纠错文件的 WAVPACK 分离器。\n"
 msgid "Using the WAVPACK demultiplexer.\n"
 msgstr "使用 WAVPACK 分离器。\n"
 
-#: src/input/r_matroska.cpp:1475
+#: src/input/r_matroska.cpp:1480
 #: src/input/r_wavpack.cpp:109
 msgid "Using the WAVPACK output module.\n"
 msgstr "使用 WAVPACK 输出模块。\n"
@@ -7087,12 +7096,12 @@ msgstr "使用 WAVPACK 输出模块。\n"
 msgid "Using the generic audio output module (FourCC: %|1$.4s|).\n"
 msgstr "使用通用音频输出模块 (FourCC: %|1$.4s|)。\n"
 
-#: src/input/r_matroska.cpp:1238
+#: src/input/r_matroska.cpp:1243
 msgid "Using the passthrough output module for this %1% track.\n"
 msgstr "对轨道 %1% 使用呈递输出模块。\n"
 
 #: src/input/r_avi.cpp:384
-#: src/input/r_matroska.cpp:1497
+#: src/input/r_matroska.cpp:1502
 #: src/input/r_ogm.cpp:1080
 #: src/input/r_srt.cpp:60
 #: src/input/r_ssa.cpp:73
@@ -7110,7 +7119,7 @@ msgid "Using the video output module (FourCC: %|1$.4s|).\n"
 msgstr "使用视频输出模块 (FourCC: %|1$.4s|)。\n"
 
 #: src/input/r_avi.cpp:339
-#: src/input/r_matroska.cpp:1341
+#: src/input/r_matroska.cpp:1346
 #: src/input/r_ogm.cpp:1242
 msgid "Using the video output module.\n"
 msgstr "使用视频输出模块。\n"
@@ -7823,126 +7832,126 @@ msgstr "lzo_init() 失败。结果: %1%\n"
 msgid "lzo_malloc(LZO1X_999_MEM_COMPRESS) failed.\n"
 msgstr "lzo_malloc(LZO1X_999_MEM_COMPRESS) 失败。\n"
 
-#: src/input/r_matroska.cpp:343
+#: src/input/r_matroska.cpp:354
 msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% bits per sample, but the WAVEFORMATEX says that there are %3%.\n"
 msgstr "matroska_reader: (微软兼容模式，轨道 %1%) Matroska 说每采样为 %2% 比特，但这个 WAVEFORMATEX 波形格式项索引 说有 %3% 比特。\n"
 
-#: src/input/r_matroska.cpp:334
+#: src/input/r_matroska.cpp:345
 msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% channels, but the WAVEFORMATEX says that there are %3%.\n"
 msgstr "matroska_reader: (微软兼容模式，轨道 %1%) Matroska 说有 %2% 声道，但这个 WAVEFORMATEX 波形格式项索引 说有 %3% 声道。\n"
 
-#: src/input/r_matroska.cpp:325
+#: src/input/r_matroska.cpp:336
 msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% samples per second, but WAVEFORMATEX says that there are %3%.\n"
 msgstr "matroska_reader: (微软兼容模式，轨道 %1%) Matroska 说每秒有 %2% 采样，但这个 WAVEFORMATEX 波形格式项索引 说有 %3% 采样。\n"
 
-#: src/input/r_matroska.cpp:263
+#: src/input/r_matroska.cpp:274
 msgid "matroska_reader: (MS compatibility mode, track %1%) Matrosa says video width is %2%, but the BITMAPINFOHEADER says %3%.\n"
 msgstr "matroska_reader: (微软兼容模式, 轨道 %1%) Matrosa 说视频宽度为 %2%，但这个 BITMAPINFOHEADER 位图信息头 说是 %3%。\n"
 
-#: src/input/r_matroska.cpp:272
+#: src/input/r_matroska.cpp:283
 msgid "matroska_reader: (MS compatibility mode, track %1%) Matrosa video height is %2%, but the BITMAPINFOHEADER says %3%.\n"
 msgstr "matroska_reader: (微软兼容模式, 轨道 %1%) Matroska 视频高度为 %2%，但这个 BITMAPINFOHEADER 位图信息头 说是 %3%。\n"
 
-#: src/input/r_matroska.cpp:936
+#: src/input/r_matroska.cpp:947
 msgid "matroska_reader: A track is missing its track UID.\n"
 msgstr "matroska_reader: 有一条轨道缺 UID。\n"
 
-#: src/input/r_matroska.cpp:927
+#: src/input/r_matroska.cpp:938
 msgid "matroska_reader: A track is missing its track number.\n"
 msgstr "matroska_reader: 有一条轨道缺轨道号。\n"
 
-#: src/input/r_matroska.cpp:1301
+#: src/input/r_matroska.cpp:1306
 msgid "matroska_reader: Could not keep the track UID %1% because it is already allocated for the new file.\n"
 msgstr "matroska_reader: 无法保留轨道 UID %1%，因为它已被指派给了新文件。\n"
 
-#: src/input/r_matroska.cpp:160
+#: src/input/r_matroska.cpp:163
 msgid "matroska_reader: Failed to read the headers."
 msgstr "matroska_reader: 无法读取头部。"
 
-#: src/input/r_matroska.cpp:1118
-#: src/input/r_matroska.cpp:1123
+#: src/input/r_matroska.cpp:1119
+#: src/input/r_matroska.cpp:1124
 msgid "matroska_reader: No segment found.\n"
 msgstr "matroska_reader: 未发现剪辑。\n"
 
-#: src/input/r_matroska.cpp:852
+#: src/input/r_matroska.cpp:847
 msgid "matroska_reader: Pixel height is missing.\n"
 msgstr "matroska_reader: 缺象素高度。\n"
 
-#: src/input/r_matroska.cpp:845
+#: src/input/r_matroska.cpp:840
 msgid "matroska_reader: Pixel width is missing.\n"
 msgstr "matroska_reader: 缺象素宽度。\n"
 
-#: src/input/r_matroska.cpp:457
+#: src/input/r_matroska.cpp:468
 msgid "matroska_reader: The CodecID '%1%' for track %2% is unknown.\n"
 msgstr "matroska_reader: 轨 %2% 的 CodecID '%1%' 未知。\n"
 
-#: src/input/r_matroska.cpp:251
+#: src/input/r_matroska.cpp:262
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no BITMAPINFOHEADER struct present. Therefore we don't have a FourCC to identify the video codec used.\n"
 msgstr "matroska_reader: 轨 %1% 的 CodecID 为 '%2%'，但没有出现 BITMAPINFOHEADER 位图信息头结构。因此我们没有可标记视频编码的 FourCC。\n"
 
-#: src/input/r_matroska.cpp:313
+#: src/input/r_matroska.cpp:324
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no WAVEFORMATEX struct present. Therefore we don't have a format ID to identify the audio codec used.\n"
 msgstr "matroska_reader: 轨 %1% 的 CodecID 为 '%2%'，但没有出现 WAVEFORMATEX 波形格式项索引结构。因此我们没有可标记音频编码的 Format ID。\n"
 
-#: src/input/r_matroska.cpp:284
+#: src/input/r_matroska.cpp:295
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no codec private headers.\n"
 msgstr "matroska_reader: 轨 %1% 的 CodecID 为 '%2%'，但没有编解码器专有头。\n"
 
-#: src/input/r_matroska.cpp:440
-#: src/input/r_matroska.cpp:447
+#: src/input/r_matroska.cpp:451
+#: src/input/r_matroska.cpp:458
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no private data found.\n"
 msgstr "matroska_reader: 轨 %1% 的 CodecID 为 '%2%'，但没发现专有数据。\n"
 
-#: src/input/r_matroska.cpp:364
+#: src/input/r_matroska.cpp:375
 msgid "matroska_reader: The CodecID for track %1% is 'A_VORBIS', but there are no header packets present.\n"
 msgstr "matroska_reader: 轨 %1% 的 CodecID 为 'A_VORBIS'，但没有出现头部包。\n"
 
-#: src/input/r_matroska.cpp:972
+#: src/input/r_matroska.cpp:983
 msgid "matroska_reader: The CodecID is missing.\n"
 msgstr "matroska_reader: 缺CodecID。\n"
 
-#: src/input/r_matroska.cpp:297
+#: src/input/r_matroska.cpp:308
 msgid "matroska_reader: The height for track %1% was not set.\n"
 msgstr "matroska_reader: 轨道 %1% 的高未设置。\n"
 
-#: src/input/r_matroska.cpp:291
+#: src/input/r_matroska.cpp:302
 msgid "matroska_reader: The width for track %1% was not set.\n"
 msgstr "matroska_reader: 轨道 %1% 的宽未设置。\n"
 
-#: src/input/r_matroska.cpp:470
+#: src/input/r_matroska.cpp:481
 msgid "matroska_reader: Track %1% seems to be ok.\n"
 msgstr "matroska_reader: 轨道 %1% 应该是正常的。\n"
 
-#: src/input/r_matroska.cpp:951
+#: src/input/r_matroska.cpp:962
 msgid "matroska_reader: Track type was not found.\n"
 msgstr "matroska_reader: 轨道类型未找到。\n"
 
-#: src/input/r_matroska.cpp:383
+#: src/input/r_matroska.cpp:394
 msgid "matroska_reader: Vorbis track does not contain valid headers.\n"
 msgstr "matroska_reader: Vorbis 轨道不含有效头。\n"
 
-#: src/input/r_matroska.cpp:1210
-#: src/input/r_matroska.cpp:2056
+#: src/input/r_matroska.cpp:1215
+#: src/input/r_matroska.cpp:2061
 msgid "matroska_reader: caught exception\n"
 msgstr "matroska_reader: 发生异常\n"
 
-#: src/input/r_matroska.cpp:416
+#: src/input/r_matroska.cpp:427
 msgid "matroska_reader: mkvmerge was not compiled with FLAC support. Ignoring track %1%.\n"
 msgstr "matroska_reader: mkvmerge 编译时没有附加 FLAC 支持。已忽略轨道 %1%。\n"
 
-#: src/input/r_matroska.cpp:1105
+#: src/input/r_matroska.cpp:1106
 msgid "matroska_reader: no EBML head found.\n"
 msgstr "matroska_reader: 未发现 EBML 头。\n"
 
-#: src/input/r_matroska.cpp:465
+#: src/input/r_matroska.cpp:476
 msgid "matroska_reader: unknown demuxer type for track %1%: '%2%'\n"
 msgstr "matroska_reader: 轨道 %1% 分离器类型未知: '%2%'\n"
 
-#: src/input/r_matroska.cpp:940
+#: src/input/r_matroska.cpp:951
 msgid "matroska_reader: |  + There's more than one track with the UID %1%.\n"
 msgstr "matroska_reader: |  + 有超过一个轨道使用了 UID %1%。\n"
 
-#: src/input/r_matroska.cpp:932
+#: src/input/r_matroska.cpp:943
 msgid "matroska_reader: |  + There's more than one track with the number %1%.\n"
 msgstr "matroska_reader: |  + 有超过一个轨道使用了数字 %1%。\n"
 
@@ -8309,7 +8318,7 @@ msgstr "pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < last_timec
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr "pr_generic.cpp/generic_reader_c::demuxing_requested(): 无效轨道类型 %1%。"
 
-#: src/input/r_matroska.cpp:1777
+#: src/input/r_matroska.cpp:1782
 msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 msgstr "r_matroska: 簇不含簇时间码。文件已损坏。正在中断操作。\n"
 
@@ -8429,8 +8438,8 @@ msgid "und (Undetermined)"
 msgstr "und (未定)"
 
 #: src/input/r_matroska.cpp:89
-#: src/input/r_matroska.cpp:2133
-#: src/input/r_matroska.cpp:2140
+#: src/input/r_matroska.cpp:2138
+#: src/input/r_matroska.cpp:2145
 #: src/input/r_mpeg_ps.cpp:1391
 #: src/common/mm_io.cpp:425
 #: src/mmg/mmg.cpp:58

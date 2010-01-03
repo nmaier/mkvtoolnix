@@ -456,6 +456,21 @@ mmg_dialog::check_before_overwriting() {
   return true;
 }
 
+bool
+mmg_dialog::is_output_file_name_valid() {
+#if defined(SYS_WINDOWS)
+  wxString forbidden_chars(wxFileName::GetForbiddenChars());
+  wxFileName output_file_name(tc_output->GetValue());
+  wxString check_name(output_file_name.GetFullName());
+
+  int i;
+  for (i = 0; check_name.Length() > i; ++i)
+    if (wxNOT_FOUND != forbidden_chars.Find(check_name[i]))
+      return false;
+#endif
+  return true;
+}
+
 void
 mmg_dialog::on_run(wxCommandEvent &evt) {
   if (muxing_in_progress) {
@@ -465,6 +480,11 @@ mmg_dialog::on_run(wxCommandEvent &evt) {
   }
 
   update_command_line();
+
+  if (!is_output_file_name_valid()) {
+    wxMessageBox(Z("The output file name is invalid, e.g. it might contain invalid characters like ':'."), Z("Invalid file name"), wxOK | wxCENTER | wxICON_ERROR, this);
+    return;
+  }
 
   if (!input_page->validate_settings() ||
       !attachments_page->validate_settings() ||
