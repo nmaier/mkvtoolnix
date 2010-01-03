@@ -156,6 +156,9 @@ kax_reader_c::kax_reader_c(track_info_c &_ti)
   , m_attachment_id(0)
   , m_tags(NULL)
 {
+  init_l1_position_storage(deferred_l1_positions);
+  init_l1_position_storage(handled_l1_positions);
+
   if (!read_headers())
     throw error_c(Y("matroska_reader: Failed to read the headers."));
   if (verbose)
@@ -173,6 +176,14 @@ kax_reader_c::~kax_reader_c() {
   delete es;
   delete segment;
   delete m_tags;
+}
+
+void
+kax_reader_c::init_l1_position_storage(deferred_positions_t &storage) {
+  storage[dl1t_attachments] = std::vector<int64_t>();
+  storage[dl1t_chapters]    = std::vector<int64_t>();
+  storage[dl1t_tags]        = std::vector<int64_t>();
+  storage[dl1t_tracks]      = std::vector<int64_t>();
 }
 
 int
@@ -471,23 +482,24 @@ kax_reader_c::verify_tracks() {
   }
 }
 
+bool
+kax_reader_c::has_deferred_element_been_processed(kax_reader_c::deferred_l1_type_e type,
+                                                  int64_t position) {
+  foreach(int64_t test_position, handled_l1_positions[type])
+    if (position == test_position)
+      return true;
+
+  handled_l1_positions[type].push_back(position);
+
+  return false;
+}
+
 void
 kax_reader_c::handle_attachments(mm_io_c *io,
                                  EbmlElement *l0,
                                  int64_t pos) {
-  bool found = false;
-
-  int i;
-  for (i = 0; i < handled_attachments.size(); i++)
-    if (handled_attachments[i] == pos) {
-      found = true;
-      break;
-    }
-
-  if (found)
+  if (has_deferred_element_been_processed(dl1t_attachments, pos))
     return;
-
-  handled_attachments.push_back(pos);
 
   io->save_pos(pos);
   int upper_lvl_el;
@@ -500,6 +512,7 @@ kax_reader_c::handle_attachments(mm_io_c *io,
 
     atts->Read(*es, KaxAttachments::ClassInfos.Context, upper_lvl_el, l2, true);
 
+    int i;
     for (i = 0; i < atts->ListSize(); i++) {
       KaxAttached *att = (KaxAttached *)(*atts)[i];
 
@@ -566,18 +579,8 @@ void
 kax_reader_c::handle_chapters(mm_io_c *io,
                               EbmlElement *l0,
                               int64_t pos) {
-  bool found = false;
-  int i;
-  for (i = 0; i < handled_chapters.size(); i++)
-    if (handled_chapters[i] == pos) {
-      found = true;
-      break;
-    }
-
-  if (found)
+  if (has_deferred_element_been_processed(dl1t_chapters, pos))
     return;
-
-  handled_chapters.push_back(pos);
 
   int upper_lvl_el = 0;
   io->save_pos(pos);
@@ -593,6 +596,7 @@ kax_reader_c::handle_chapters(mm_io_c *io,
     if (NULL == chapters)
       chapters = new KaxChapters;
 
+    int i;
     for (i = 0; i < tmp_chapters->ListSize(); i++)
       chapters->PushElement(*(*tmp_chapters)[i]);
     tmp_chapters->RemoveAll();
@@ -608,18 +612,8 @@ void
 kax_reader_c::handle_tags(mm_io_c *io,
                           EbmlElement *l0,
                           int64_t pos) {
-  bool found = false;
-  int i;
-  for (i = 0; i < handled_tags.size(); i++)
-    if (handled_tags[i] == pos) {
-      found = true;
-      break;
-    }
-
-  if (found)
+  if (has_deferred_element_been_processed(dl1t_tags, pos))
     return;
-
-  handled_tags.push_back(pos);
 
   int upper_lvl_el = 0;
   io->save_pos(pos);
@@ -654,6 +648,7 @@ kax_reader_c::handle_tags(mm_io_c *io,
           if (NULL != track) {
             bool contains_tag = false;
 
+            int i;
             for (i = 0; i < tag->ListSize(); i++)
               if (dynamic_cast<KaxTagSimple *>((*tag)[i]) != NULL) {
                 contains_tag = true;
@@ -904,13 +899,29 @@ kax_reader_c::read_headers_track_video(kax_track_t *&track,
 }
 
 void
-kax_reader_c::read_headers_tracks(EbmlElement *&l1,
-                                  EbmlElement *&l2,
-                                  int &upper_lvl_el) {
+kax_reader_c::read_headers_tracks(mm_io_c *io,
+                                  EbmlElement *l0,
+                                  int64_t position) {
   // Yep, we've found our KaxTracks element. Now find all tracks
   // contained in this segment.
+  if (has_deferred_element_been_processed(dl1t_tracks, position))
+    return;
+
   mxverb(2, "matroska_reader: |+ segment tracks...\n");
 
+  int upper_lvl_el = 0;
+  io->save_pos(position);
+  EbmlElement *l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
+
+  if ((l1 == NULL) || !is_id(l1, KaxTracks)) {
+    delete l1;
+    io->restore_pos();
+
+    return;
+  }
+
+  EbmlElement *l2 = NULL;
+  upper_lvl_el    = 0;
   l1->Read(*es, KaxTracks::ClassInfos.Context, upper_lvl_el, l2, true);
 
   KaxTrackEntry *ktentry = FINDFIRST(l1, KaxTrackEntry);
@@ -1035,15 +1046,13 @@ kax_reader_c::read_headers_tracks(EbmlElement *&l1,
     ktentry = FINDNEXT(l1, KaxTrackEntry, ktentry);
   } // while (ktentry != NULL)
 
-  l1->SkipData(*es, l1->Generic().Context);
+  delete l1;
+  io->restore_pos();
 }
 
 void
 kax_reader_c::read_headers_seek_head(EbmlElement *&l0,
-                                     EbmlElement *&l1,
-                                     std::vector<int64_t> &deferred_tags,
-                                     std::vector<int64_t> &deferred_chapters,
-                                     std::vector<int64_t> &deferred_attachments) {
+                                     EbmlElement *&l1) {
   EbmlElement *el;
 
   KaxSeekHead &seek_head = *static_cast<KaxSeekHead *>(l1);
@@ -1055,35 +1064,28 @@ kax_reader_c::read_headers_seek_head(EbmlElement *&l0,
     if (EbmlId(*seek_head[i]) != KaxSeek::ClassInfos.GlobalId)
       continue;
 
-    KaxSeek &seek       = *static_cast<KaxSeek *>(seek_head[i]);
-    int64_t pos         = -1;
-    bool is_attachments = false;
-    bool is_chapters    = false;
-    bool is_tags        = false;
+    KaxSeek &seek           = *static_cast<KaxSeek *>(seek_head[i]);
+    int64_t pos             = -1;
+    deferred_l1_type_e type = dl1t_unknown;
     int k;
 
     for (k = 0; k < seek.ListSize(); k++)
       if (EbmlId(*seek[k]) == KaxSeekID::ClassInfos.GlobalId) {
         KaxSeekID &sid = *static_cast<KaxSeekID *>(seek[k]);
         EbmlId id(sid.GetBuffer(), sid.GetSize());
-        if (id == KaxAttachments::ClassInfos.GlobalId)
-          is_attachments = true;
-        else if (id == KaxChapters::ClassInfos.GlobalId)
-          is_chapters = true;
-        else if (id == KaxTags::ClassInfos.GlobalId)
-          is_tags = true;
+
+        type = id == KaxAttachments::ClassInfos.GlobalId ? dl1t_attachments
+          :    id == KaxChapters::ClassInfos.GlobalId    ? dl1t_chapters
+          :    id == KaxTags::ClassInfos.GlobalId        ? dl1t_tags
+          :    id == KaxTracks::ClassInfos.GlobalId      ? dl1t_tracks
+          :                                                dl1t_unknown;
 
       } else if (EbmlId(*seek[k]) == KaxSeekPosition::ClassInfos.GlobalId)
         pos = uint64(*static_cast<KaxSeekPosition *>(seek[k]));
 
-    if (-1 != pos) {
+    if ((-1 != pos) && (dl1t_unknown != type)) {
       pos = ((KaxSegment *)l0)->GetGlobalPosition(pos);
-      if (is_attachments)
-        deferred_attachments.push_back(pos);
-      else if (is_chapters)
-        deferred_chapters.push_back(pos);
-      else if (is_tags)
-        deferred_tags.push_back(pos);
+      deferred_l1_positions[type].push_back(pos);
     }
   }
 }
@@ -1091,7 +1093,6 @@ kax_reader_c::read_headers_seek_head(EbmlElement *&l0,
 int
 kax_reader_c::read_headers() {
   // Elements for different levels
-  std::vector<int64_t> deferred_tags, deferred_chapters, deferred_attachments;
 
   bool exit_loop = false;
   try {
@@ -1140,19 +1141,19 @@ kax_reader_c::read_headers() {
         read_headers_info(l1, l2, upper_lvl_el);
 
       else if (EbmlId(*l1) == KaxTracks::ClassInfos.GlobalId)
-        read_headers_tracks(l1, l2, upper_lvl_el);
+        deferred_l1_positions[dl1t_tracks].push_back(l1->GetElementPosition());
 
       else if (EbmlId(*l1) == KaxAttachments::ClassInfos.GlobalId)
-        deferred_attachments.push_back(l1->GetElementPosition());
+        deferred_l1_positions[dl1t_attachments].push_back(l1->GetElementPosition());
 
       else if (EbmlId(*l1) == KaxChapters::ClassInfos.GlobalId)
-        deferred_chapters.push_back(l1->GetElementPosition());
+        deferred_l1_positions[dl1t_chapters].push_back(l1->GetElementPosition());
 
       else if (EbmlId(*l1) == KaxTags::ClassInfos.GlobalId)
-        deferred_tags.push_back(l1->GetElementPosition());
+        deferred_l1_positions[dl1t_tags].push_back(l1->GetElementPosition());
 
       else if (EbmlId(*l1) == KaxSeekHead::ClassInfos.GlobalId)
-        read_headers_seek_head(l0, l1, deferred_tags, deferred_chapters, deferred_attachments);
+        read_headers_seek_head(l0, l1);
 
       else if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
         mxverb(2, "matroska_reader: |+ found cluster, headers are parsed completely\n");
@@ -1191,17 +1192,21 @@ kax_reader_c::read_headers() {
 
     } // while (l1 != NULL)
 
-    int i;
-    if (!ti.no_attachments)
-      for (i = 0; i < deferred_attachments.size(); i++)
-        handle_attachments(in, l0, deferred_attachments[i]);
+    foreach(int64_t position, deferred_l1_positions[dl1t_tracks])
+      read_headers_tracks(in, l0, position);
 
-    if (!ti.no_chapters)
-      for (i = 0; i < deferred_chapters.size(); i++)
-        handle_chapters(in, l0, deferred_chapters[i]);
+    if (!ti.no_attachments) {
+      foreach(int64_t position, deferred_l1_positions[dl1t_attachments])
+        handle_attachments(in, l0, position);
+    }
 
-    for (i = 0; i < deferred_tags.size(); i++)
-      handle_tags(in, l0, deferred_tags[i]);
+    if (!ti.no_chapters) {
+      foreach(int64_t position, deferred_l1_positions[dl1t_chapters])
+        handle_chapters(in, l0, position);
+    }
+
+    foreach(int64_t position, deferred_l1_positions[dl1t_tags])
+      handle_tags(in, l0, position);
 
     if (!ti.no_global_tags)
       process_global_tags();

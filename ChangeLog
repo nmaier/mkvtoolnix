@@ -1,5 +1,8 @@
 2010-01-03  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Matroska files which have its 'tracks'
+	element located behind the clusters are read correctly now.
+
 	* mmg: enhancement: After muxing the "abort" button is changed to
 	"open folder" which opens the explorer on the output file's
 	folder. This only happens on Windows.

@@ -150,6 +150,14 @@ struct kax_track_t {
 
 class kax_reader_c: public generic_reader_c {
 private:
+  enum deferred_l1_type_e {
+    dl1t_unknown,
+    dl1t_attachments,
+    dl1t_chapters,
+    dl1t_tags,
+    dl1t_tracks,
+  };
+
   int act_wchar;
 
   std::vector<kax_track_t *> tracks;
@@ -169,7 +177,9 @@ private:
   int64_t last_timecode, first_timecode;
   std::string title;
 
-  std::vector<int64_t> handled_tags, handled_attachments, handled_chapters;
+  // typedef std::map<deferred_l1_type_e, counted_ptr<std::vector<int64_t> > > deferred_positions_t;
+  typedef std::map<deferred_l1_type_e, std::vector<int64_t> > deferred_positions_t;
+  deferred_positions_t deferred_l1_positions, handled_l1_positions;
 
   std::string writing_app, muxing_app;
   int64_t writing_app_ver;
@@ -217,10 +227,12 @@ protected:
   virtual void read_headers_info_writing_app(KaxWritingApp *&kwriting_app);
   virtual void read_headers_track_audio(kax_track_t *&track, KaxTrackAudio *&ktaudio);
   virtual void read_headers_track_video(kax_track_t *&track, KaxTrackVideo *&ktvideo);
-  virtual void read_headers_tracks(EbmlElement *&l1, EbmlElement *&l2, int &upper_lvl_el);
-  virtual void read_headers_seek_head(EbmlElement *&l0, EbmlElement *&l1,
-                                      std::vector<int64_t> &deferred_tags, std::vector<int64_t> &deferred_chapters, std::vector<int64_t> &deferred_attachments);
+  virtual void read_headers_tracks(mm_io_c *io, EbmlElement *l0, int64_t position);
+  virtual void read_headers_seek_head(EbmlElement *&l0, EbmlElement *&l1);
   virtual int  read_headers();
+
+  void init_l1_position_storage(deferred_positions_t &storage);
+  virtual bool has_deferred_element_been_processed(deferred_l1_type_e type, int64_t position);
 };
 
 #endif  // __R_MATROSKA_H
