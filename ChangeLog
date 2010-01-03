@@ -1,5 +1,8 @@
 2010-01-03  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvpropedit, mmg: bug fix: Files with an infinite segment size
+	are handled correctly now. Fix for bug 438.
+
 	* mkvmerge: bug fix: Matroska files which have its 'tracks'
 	element located behind the clusters are read correctly now.
 

@@ -343,6 +343,13 @@ kax_analyzer_c::remove_elements(EbmlId id) {
  */
 void
 kax_analyzer_c::adjust_segment_size() {
+  // If the old segment's size is unknown then don't try to force a
+  // finite size as this will fail most of the time: an
+  // infinite/unknown size is coded by the value 0 which is often
+  // stored as a single byte (e.g. Haali's muxer does this).
+  if (!m_segment->IsFiniteSize())
+    return;
+
   counted_ptr<KaxSegment> new_segment = counted_ptr<KaxSegment>(new KaxSegment);
   m_file->setFilePointer(m_segment->GetElementPosition());
   new_segment->WriteHead(*m_file, m_segment->HeadSize() - 4);
