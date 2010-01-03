@@ -48,7 +48,9 @@ mux_dialog::mux_dialog(wxWindow *parent):
 #endif
            wxDEFAULT_FRAME_STYLE)
 #if defined(SYS_WINDOWS)
+  , pid(0)
   , m_taskbar_progress(NULL)
+  , m_abort_button_changed(false)
 #endif  // SYS_WINDOWS
   , m_exit_code(0)
 {
@@ -242,11 +244,21 @@ mux_dialog::on_save_log(wxCommandEvent &evt) {
 void
 mux_dialog::on_abort(wxCommandEvent &evt) {
 #if defined(SYS_WINDOWS)
+  if (0 == pid) {
+    wxFileName output_file_name(static_cast<mmg_dialog *>(GetParent())->tc_output->GetValue());
+    wxExecute(wxString::Format(wxT("explorer \"%s\""), output_file_name.GetPath().c_str()));
+    return;
+  }
+
   wxKill(pid, wxSIGKILL);
+  change_abort_button();
 #else
+  if (0 == pid)
+    return;
+
   wxKill(pid, wxSIGTERM);
-#endif
   b_abort->Enable(false);
+#endif
 }
 
 void
@@ -260,15 +272,31 @@ void
 mux_dialog::done(int status) {
   SetTitle(Z("mkvmerge has finished"));
 
+  pid = 0;
   b_ok->Enable(true);
-  b_abort->Enable(false);
   b_ok->SetFocus();
 
 #if defined(SYS_WINDOWS)
+  change_abort_button();
   if ((NULL != m_taskbar_progress) && (0 != status))
     m_taskbar_progress->set_state(TBPF_ERROR);
-#endif
+#else  // SYS_WINDOWS
+  b_abort->Enable(false);
+#endif  // SYS_WINDOWS
 }
+
+#if defined(SYS_WINDOWS)
+void
+mux_dialog::change_abort_button() {
+  if (m_abort_button_changed)
+    return;
+
+  b_abort->SetLabel(Z("Open folder"));
+  m_abort_button_changed = true;
+
+  Layout();
+}
+#endif  // SYS_WINDOWS
 
 mux_process::mux_process(mux_dialog *mux_dlg):
   wxProcess(wxPROCESS_REDIRECT),
@@ -276,7 +304,7 @@ mux_process::mux_process(mux_dialog *mux_dlg):
 }
 
 void
-mux_process::OnTerminate(int pid,
+mux_process::OnTerminate(int terminated_pid,
                          int status) {
   if (NULL == dlg)
     return;

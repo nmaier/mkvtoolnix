@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-12-29 21:26+0100\n"
+"PO-Revision-Date: 2010-01-03 14:55+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -1553,7 +1553,7 @@ msgstr ""
 msgid "A human-readable track name."
 msgstr "Ein menschenlesbarer Name des Tracks."
 
-#: src/mmg/mmg_dialog.cpp:1238
+#: src/mmg/mmg_dialog.cpp:1249
 #, c-format
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "Es gibt bereits einen Job mit der Beschreibung '%s'. Wollen Sie wirklich einen weiteren Job mit derselben Beschreibung anlegen?"
@@ -1633,7 +1633,7 @@ msgstr "AVC/h.264 elementary streams"
 msgid "AVI (Audio/Video Interleaved)"
 msgstr "AVI (Audio/Video Interleaved)"
 
-#: src/mmg/mux_dialog.cpp:92
+#: src/mmg/mux_dialog.cpp:94
 msgid "Abort"
 msgstr "Abbrechen"
 
@@ -2202,7 +2202,7 @@ msgstr "Quelldatei zum Anhängen auswählen"
 
 #: src/mmg/jobs.cpp:350 src/mmg/mmg_dialog.cpp:236 src/mmg/mmg_dialog.cpp:330
 #: src/mmg/mmg_dialog.cpp:623 src/mmg/mmg_dialog.cpp:644
-#: src/mmg/mux_dialog.cpp:229 src/mmg/tabs/chapters.cpp:618
+#: src/mmg/mux_dialog.cpp:231 src/mmg/tabs/chapters.cpp:618
 #: src/mmg/tabs/chapters.cpp:660
 msgid "Choose an output file"
 msgstr "Zieldatei auswählen"
@@ -2377,7 +2377,7 @@ msgstr "Der CorePictureFrame %1% hat eine ungültige Kopfgröße %2%.\n"
 msgid "CorePicture frame %1% not supported.\n"
 msgstr "CorePicture-Frame %1% wird nicht unterstützt.\n"
 
-#: src/mmg/jobs.cpp:155 src/mmg/mux_dialog.cpp:117 src/mmg/tabs/input.cpp:314
+#: src/mmg/jobs.cpp:155 src/mmg/mux_dialog.cpp:119 src/mmg/tabs/input.cpp:314
 #, c-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
 msgstr "Die temporäre Datei für die Kommandozeile für mkvmerge '%s' konnte nicht erstellt werden (Fehlercode %d, %s)."
@@ -2679,7 +2679,7 @@ msgstr "Die ausgewählten Jobs aus der Jobwarteschlange löschen"
 msgid "Description"
 msgstr "Beschreibung"
 
-#: src/mmg/mmg_dialog.cpp:1239
+#: src/mmg/mmg_dialog.cpp:1250
 msgid "Description already exists"
 msgstr "Beschreibung existiert bereits"
 
@@ -2919,7 +2919,7 @@ msgstr "Fehler beim Speichern der Informationen"
 msgid "Error writing Matroska file"
 msgstr "Fehler beim Schreiben der Matroska-Datei"
 
-#: src/mmg/mux_dialog.cpp:173
+#: src/mmg/mux_dialog.cpp:175
 msgid "Error:"
 msgstr "Fehler:"
 
@@ -2951,11 +2951,11 @@ msgstr ""
 msgid "Error: vorbis_packetizer: Could not extract the stream's parameters from the first packets.\n"
 msgstr "Fehler: vorbis_packetizer: Die Streamparameter konnten nicht aus den ersten Paketen extrahiert werden.\n"
 
-#: src/mmg/mux_dialog.cpp:82
+#: src/mmg/mux_dialog.cpp:84
 msgid "Errors:"
 msgstr "Fehler:"
 
-#: src/mmg/mux_dialog.cpp:298
+#: src/mmg/mux_dialog.cpp:326
 msgid "Everything went fine."
 msgstr "Alles lief gut."
 
@@ -3081,7 +3081,7 @@ msgstr "Datei-UID: %1%"
 msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n"
 msgstr "Die Datei enthält weniger Frames als erwartet, oder sie ist nach Frame %1% defekt.\n"
 
-#: src/mmg/mmg_dialog.cpp:653 src/mmg/mux_dialog.cpp:118
+#: src/mmg/mmg_dialog.cpp:653 src/mmg/mux_dialog.cpp:120
 #: src/mmg/tabs/input.cpp:315
 msgid "File creation failed"
 msgstr "Erstellen einer Datei schlug fehl"
@@ -3712,11 +3712,11 @@ msgstr "Ungültige Track-ID in '--sub-charset %1%' angegeben.\n"
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "Ungültige Angabe von Track-ID und Dateiname in Argument '%1%'.\n"
 
-#: src/mmg/mmg_dialog.cpp:1275
+#: src/mmg/mmg_dialog.cpp:1286
 msgid "Job added to job queue"
 msgstr "Job zur Jobwarteschlange hinzugefügt"
 
-#: src/mmg/mmg_dialog.cpp:1227
+#: src/mmg/mmg_dialog.cpp:1238
 msgid "Job description"
 msgstr "Jobbeschreibung"
 
@@ -3839,7 +3839,7 @@ msgstr "Kapiteldatei laden (einfaches/OGM-Format oder XML-Format)"
 msgid "Load muxing settings from a file"
 msgstr "Einstellungen aus einer Datei laden"
 
-#: src/mmg/mux_dialog.cpp:229
+#: src/mmg/mux_dialog.cpp:231
 #, c-format
 msgid "Log files (*.txt)|*.txt|%s"
 msgstr "Logdateien (*.txt)|*.txt|%s"
@@ -4060,7 +4060,7 @@ msgstr "Den ausgewählten Job nach oben verschieben"
 msgid "Muxing application: %1%"
 msgstr "Muxeranwendung: %1%"
 
-#: src/mmg/mux_dialog.cpp:105
+#: src/mmg/mux_dialog.cpp:107
 msgid "Muxing in progress."
 msgstr "Muxen läuft."
 
@@ -4128,7 +4128,7 @@ msgstr "Eindeutige ID des nächsten Segments"
 msgid "No %1% specified in '--%2% %3%'.\n"
 msgstr "In '--%2% %3%' wurde kein %1% angegeben.\n"
 
-#: src/input/r_qtmp4.cpp:1408
+#: src/input/r_qtmp4.cpp:1458
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "Im ersten Frame wurde kein AC3-Kopf gefunden. Der Track wird ausgelassen.\n"
 
@@ -4274,7 +4274,7 @@ msgstr "Anzahl Kanäle in diesem Track."
 msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM Audio/Video-Dateien"
 
-#: src/mmg/mux_dialog.cpp:88
+#: src/mmg/mux_dialog.cpp:90
 msgid "Ok"
 msgstr "Ok"
 
@@ -4334,6 +4334,10 @@ msgstr "Matroska-Datei öffnen"
 msgid "Open an existing Matroska file"
 msgstr "Eine bestehende Matroska-Datei öffnen"
 
+#: src/mmg/mux_dialog.cpp:294
+msgid "Open folder"
+msgstr "Ordner öffnen"
+
 #: src/mmg/mmg_dialog.cpp:665
 msgid "Option file created."
 msgstr "Optionsdatei erstellt."
@@ -4358,7 +4362,7 @@ msgstr "Originalwert:"
 msgid "Other options"
 msgstr "Weitere Optionen"
 
-#: src/mmg/mux_dialog.cpp:75
+#: src/mmg/mux_dialog.cpp:77
 msgid "Output"
 msgstr "Ausgabe"
 
@@ -4382,7 +4386,7 @@ msgstr "Ausgabeabtastrate: %1%"
 msgid "Overwrite existing file(s)?"
 msgstr "Bestehende Datei(en) überschreiben?"
 
-#: src/mmg/mmg_dialog.cpp:431 src/mmg/mmg_dialog.cpp:1221
+#: src/mmg/mmg_dialog.cpp:431 src/mmg/mmg_dialog.cpp:1232
 msgid "Overwrite existing file?"
 msgstr "Bestehende Datei überschreiben?"
 
@@ -4438,7 +4442,7 @@ msgstr "Pixelbreite: %1%"
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "Bitte wählen Sie nicht 'mmg' als Datei für 'mkvmerge' aus, weil es dadurch zu einer Endlosschleife kommt."
 
-#: src/mmg/mmg_dialog.cpp:1227
+#: src/mmg/mmg_dialog.cpp:1238
 msgid "Please enter a description for the new job:"
 msgstr "Bitte geben Sie eine Beschreibung für den neuen Job ein:"
 
@@ -4495,7 +4499,7 @@ msgstr "Ausfürhung 1000/1000"
 msgid "Processing job %d/%d"
 msgstr "Ausführung von Job %d/%d"
 
-#: src/mmg/jobs.cpp:220 src/mmg/mux_dialog.cpp:175
+#: src/mmg/jobs.cpp:220 src/mmg/mux_dialog.cpp:177
 msgid "Progress"
 msgstr "Fortschritt"
 
@@ -4516,7 +4520,7 @@ msgstr "Fortschritt: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "Fortschritt: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1526
+#: src/mmg/mmg_dialog.cpp:1537
 msgid "Querying mkvmerge's capabilities"
 msgstr "Abfrage der von mkvmerge unterstützten Features"
 
@@ -4528,115 +4532,115 @@ msgstr "QuickTime Audio/Video-Dateien"
 msgid "Quicktime/MP4 audio and video"
 msgstr "Quicktime/MP4 Audio und Video"
 
-#: src/input/r_qtmp4.cpp:478
+#: src/input/r_qtmp4.cpp:481
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
 msgstr "Quicktime/MP4-Demuxer: Ein '%1%'-Element ist zu klein. Erwartete Größe: >= %2%. Tatsächliche Größe: %3%.\n"
 
-#: src/input/r_qtmp4.cpp:1862
+#: src/input/r_qtmp4.cpp:1912
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
 msgstr "Quicktime/MP4-Demuxer: Tracks mit konstanter Samplegröße und variabler Dauer werden noch nicht unterstützt. Falls Sie eine solche Datei haben, so kontaktieren Sie bitte den Autor.\n"
 
-#: src/input/r_qtmp4.cpp:1263
+#: src/input/r_qtmp4.cpp:1313
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
 msgstr "Quicktime/MP4-Demuxer: Der Block Nummer %1%/%2% mit Größe %3% an Position %4% konnte nicht gelesen werden. Abbruch.\n"
 
-#: src/input/r_qtmp4.cpp:968 src/input/r_qtmp4.cpp:981
+#: src/input/r_qtmp4.cpp:1018 src/input/r_qtmp4.cpp:1031
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4-Demuxer: Die erweiterten Kopfdaten für den Audiotrack ID %1% konnten nicht gelesen werden.\n"
 
-#: src/input/r_qtmp4.cpp:941
+#: src/input/r_qtmp4.cpp:991
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4-Demuxer: Die Kopfdaten für den Audiotrack ID %1% konnten nicht gelesen werden.\n"
 
-#: src/input/r_qtmp4.cpp:136
+#: src/input/r_qtmp4.cpp:137
 msgid "Quicktime/MP4 reader: Could not read the source file."
 msgstr "Quicktime/MP4-Demuxer: Die Quelldatei konnte nicht gelesen werden."
 
-#: src/input/r_qtmp4.cpp:935
+#: src/input/r_qtmp4.cpp:985
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4-Demuxer: Das Trackbeschreibungselement von Track ID %1% konnte nicht gelesen werden.\n"
 
-#: src/input/r_qtmp4.cpp:1017
+#: src/input/r_qtmp4.cpp:1067
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4-Demuxer: Die Kopfdaten von Videotrack ID %1% konnten nicht gelesen werden.\n"
 
-#: src/input/r_qtmp4.cpp:219
+#: src/input/r_qtmp4.cpp:220
 msgid "Quicktime/MP4 reader: Have not found any header atoms.\n"
 msgstr "Quicktime/MP4-Demuxer: Es wurden keine Kopfelemente gefunden.\n"
 
-#: src/input/r_qtmp4.cpp:221
+#: src/input/r_qtmp4.cpp:222
 msgid "Quicktime/MP4 reader: Have not found the 'mdat' atom. No movie data found.\n"
 msgstr "Quicktime/MP4-Demuxer: Es wurde kein 'mdat'-Element gefunden, d.h. keine Audio- und Videodatenpakete.\n"
 
-#: src/input/r_qtmp4.cpp:168
+#: src/input/r_qtmp4.cpp:169
 msgid "Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n"
 msgstr "Quicktime/MP4-Demuxer: Ungültige Blockgröße %1% an Position %2%.\n"
 
-#: src/input/r_qtmp4.cpp:297
+#: src/input/r_qtmp4.cpp:298
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4-Demuxer: Dem MPEG4 Teil 10/AVC-Track %1% fehlen die Codec-Konfigurationsdaten. Der Track wird ausgelassen.\n"
 
-#: src/input/r_qtmp4.cpp:290
+#: src/input/r_qtmp4.cpp:291
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4-Demuxer: Dem MPEG4-Track %1% fehlen das ESDS-Element bzw. die Codec-Konfigurationsdaten. Der Track wird ausgelassen.\n"
 
-#: src/input/r_qtmp4.cpp:128
+#: src/input/r_qtmp4.cpp:129
 msgid "Quicktime/MP4 reader: Source is not a valid Quicktime/MP4 file."
 msgstr "Quicktime/MP4-Demuxer: Die Quelldatei ist keine gültige Quicktime-/MP4-Datei."
 
-#: src/input/r_qtmp4.cpp:652
+#: src/input/r_qtmp4.cpp:659
 msgid "Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n"
 msgstr "Quicktime/MP4-Demuxer: Das Medienkopf-Element ('mdhd') benutzt die nicht unterstützte Version %1%.\n"
 
-#: src/input/r_qtmp4.cpp:928
+#: src/input/r_qtmp4.cpp:978
 msgid "Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4-Demuxer: Das Längenfeld im Trackbeschreibungselement von Track ID %1% ist zu klein.\n"
 
-#: src/input/r_qtmp4.cpp:657
+#: src/input/r_qtmp4.cpp:664
 msgid "Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"
 msgstr "Quicktime/MP4-Demuxer: Der Zeitstempelskalierungsfaktor ist 0. Das wird nicht unterstützt.\n"
 
-#: src/input/r_qtmp4.cpp:258
+#: src/input/r_qtmp4.cpp:259
 msgid "Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4-Demuxer: Dem AAC-Track %1% fehlt das ESDS-Element bzw. die Codec-Konfigurationsdaten. Der Track wird ausgelassen.\n"
 
-#: src/input/r_qtmp4.cpp:252
+#: src/input/r_qtmp4.cpp:253
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
 msgstr "Quicktime/MP4-Demuxer: Der Audio-Track %1% enthält die nicht unterstützte Objekttyp-ID %2% im ESDS-Element. Der Track wird ausgelassen.\n"
 
-#: src/input/r_qtmp4.cpp:270
+#: src/input/r_qtmp4.cpp:271
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
 msgstr "Quicktime/MP4-Demuxer: Dem Videotrack %1% fehlt das ESDS-Element. Der Track wird ausgelassen.\n"
 
-#: src/input/r_qtmp4.cpp:510
+#: src/input/r_qtmp4.cpp:513
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%%2%%3%%4%'. Aborting.\n"
 msgstr "Quicktime/MP4-Demuxer: Diese Datei enthält komprimierte Kopfelemente mit einem unbekannten oder nicht unterstützten Kompressionsalgorithmus '%1%%2%%3%%4%'. Abbruch.\n"
 
-#: src/input/r_qtmp4.cpp:543
+#: src/input/r_qtmp4.cpp:546
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the expected uncompressed size (%1%) was not what is available after uncompressing (%2%).\n"
 msgstr "Quicktime/MP4-Demuxer: Diese Datei benutzt komprimierte Kopfelemente, aber nach der Dekompression sind die Kopfelemente nicht so groß wie erwartet (erwartete Größe: %1%, tatsächliche Größe: %2%).\n"
 
-#: src/input/r_qtmp4.cpp:534
+#: src/input/r_qtmp4.cpp:537
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the zlib library could not be initialized. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime/MP4-Demuxer: Diese Datei enthält komprimierte Kopfelemente, aber die zlib-Kompressionsbibliothek konnte nicht initialisiert werden. Fehlercode von zlib: %1%. Abbruch.\n"
 
-#: src/input/r_qtmp4.cpp:539
+#: src/input/r_qtmp4.cpp:542
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but they could not be uncompressed. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime/MP4-Demuxer: Diese Datei enthält komprimierte Kopfelemente, die nicht dekomprimiert werden konnten. Fehlercode von zlib: %1%. Abbruch.\n"
 
-#: src/input/r_qtmp4.cpp:309
+#: src/input/r_qtmp4.cpp:310
 msgid "Quicktime/MP4 reader: Track %1% has an unknown type.\n"
 msgstr "Quicktime/MP4-Demuxer: Track %1% hat einen unbekannten Typ.\n"
 
-#: src/input/r_qtmp4.cpp:265 src/input/r_qtmp4.cpp:304
+#: src/input/r_qtmp4.cpp:266 src/input/r_qtmp4.cpp:305
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
 msgstr "Quicktime/MP4-Demuxer: Dem Track %1% fehlen Kopfdaten. Beschädigte Datei?\n"
 
-#: src/input/r_qtmp4.cpp:949 src/input/r_qtmp4.cpp:1023
+#: src/input/r_qtmp4.cpp:999 src/input/r_qtmp4.cpp:1073
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr "Quicktime/MP4-Demuxer: Der Track ID %1% hat mehr als einen FourCC-Code. Es wird nur der erste benutzt (%|2$.4s|) und nicht der eben gefundene (%|3$.4s|).\n"
 
-#: src/input/r_qtmp4.cpp:244
+#: src/input/r_qtmp4.cpp:245
 msgid "Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n"
 msgstr "Quicktime/MP4-Demuxer: Unbekannte/nicht unterstützte FourCC '%|1$.4s|' für Track %2%.\n"
 
@@ -4788,7 +4792,7 @@ msgstr "Speichern &unter"
 msgid "Save information as"
 msgstr "Informationen speichern unter"
 
-#: src/mmg/mux_dialog.cpp:95
+#: src/mmg/mux_dialog.cpp:97
 msgid "Save log"
 msgstr "Log speichern"
 
@@ -5228,7 +5232,7 @@ msgstr "Job mit ID %d (%s) wird am %s gestartet"
 msgid "Status"
 msgstr "Status"
 
-#: src/mmg/jobs.cpp:61 src/mmg/mux_dialog.cpp:69
+#: src/mmg/jobs.cpp:61 src/mmg/mux_dialog.cpp:71
 msgid "Status and progress"
 msgstr "Status und Fortschritt"
 
@@ -5349,7 +5353,7 @@ msgstr "Die .idxßDatei enthält keine Zeile der Form 'id: ...', mit der die Spr
 msgid "The AAC profiles are different: %1% and %2%"
 msgstr "Die AAC-Profile unterscheiden sich: %1% und %2%"
 
-#: src/input/r_qtmp4.cpp:1457
+#: src/input/r_qtmp4.cpp:1507
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr "Dem AVC-Video-Track fehlt das 'CTTS'-Element, das die Zeitstempeloffsets enthält. Dieses wird für AVC-Video-Tracks benötigt, weil diese mehr als zwei Referenz-Frames enthalten können und deshalb die Zeitstempel für solche Frames nicht sortiert sind. Der Inhalt des 'CTTS'-Elements wird benötigt, um diese Zeitstempel richtig zu berechnen. Da es fehlt werden die Zeitstempel vermutlich falsch sein. Sie sollten sich die Ausgabedatei genau ansehen und sicherstellen, dass sie wie erwartet aussieht.\n"
 
@@ -5952,7 +5956,7 @@ msgstr "Die Reihenfolge der verschiedenen Optionen ist unwichtig."
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "Die Zieldatei '%1%' konnte nicht zum Schreiben geöffnet werden (%2%).\n"
 
-#: src/mmg/mmg_dialog.cpp:431 src/mmg/mmg_dialog.cpp:1218
+#: src/mmg/mmg_dialog.cpp:431 src/mmg/mmg_dialog.cpp:1229
 #, c-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr "Die Zieldatei '%s' existiert bereits. Wollen Sie sie überschreiben?"
@@ -6172,7 +6176,7 @@ msgstr "Es gibt keine Datei mit der Nummer '%1%'. Das Argument für '--append-to
 msgid "There is no translation available for '%1%'.\n"
 msgstr "Für '%1%' ist keine Übersetzung verfübar.\n"
 
-#: src/mmg/mux_dialog.cpp:300
+#: src/mmg/mux_dialog.cpp:328
 msgid "There were ERRORs."
 msgstr "Es gab FEHLER."
 
@@ -6180,11 +6184,11 @@ msgstr "Es gab FEHLER."
 msgid "There were errors in the header values preventing the headers from being saved. The first error has been selected."
 msgstr "Es gibt Fehler in den Kopfdaten, sodass sie nicht gespeichert werden können. Der erste fehlerhafte Eintrag wurde ausgewählt."
 
-#: src/mmg/mux_dialog.cpp:295
+#: src/mmg/mux_dialog.cpp:323
 msgid "There were warnings"
 msgstr "Es gab Warnungen"
 
-#: src/mmg/mux_dialog.cpp:293
+#: src/mmg/mux_dialog.cpp:321
 msgid "There were warnings, or the process was terminated."
 msgstr "Es gab Warnungen, oder mkvmerge wurde unerwartet beendet"
 
@@ -6255,7 +6259,7 @@ msgstr ""
 "vorhanden. Sie können den Kopfdateneditor das\n"
 "Element zur Datei hinzufügen lassen."
 
-#: src/input/r_qtmp4.cpp:344
+#: src/input/r_qtmp4.cpp:347
 msgid "This file contains at least one frame with a negative timecode. All timecodes will be adjusted by %1% so that none is negative anymore.\n"
 msgstr "Diese Datei enthält mindestens einen Frame mit einem negativen Zeitstempel. Deshalb werden alle Zeitstempel um den Wert %1% verschoben, damit kein Zeitstempel mehr negativ ist.\n"
 
@@ -6413,7 +6417,7 @@ msgstr "Dem Track %1% mit der CodecID '%2%' fehlt das \"Standarddauer\"-Element.
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr "Track %1%: %2%, Codec-ID: %3%%4%%5%%6%\n"
 
-#: src/input/r_qtmp4.cpp:444
+#: src/input/r_qtmp4.cpp:447
 msgid "Track %1%: AAC found, but decoder config data has length %2%.\n"
 msgstr "Track %1%: AAC-Audiotrack gefunden, aber die privaten Codec-Konfigurationsdaten haben einen Länge von %2%.\n"
 
@@ -6425,7 +6429,7 @@ msgstr "Track %1%: NAL zu groß\n"
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
 msgstr "Track %1%: Dem Untertitel-Frame Nummer %2% fehlt die Angabe der Dauer. Es wird angenommen, dass er 1s dauert.\n"
 
-#: src/input/r_qtmp4.cpp:447
+#: src/input/r_qtmp4.cpp:450
 msgid "Track %1%: The AAC information could not be parsed.\n"
 msgstr "Track %1%: Die AAC-Codec-Konfigurationsdaten konnten nicht geparst werden.\n"
 
@@ -6704,7 +6708,7 @@ msgid "Using the AAC output module (FourCC: %1%).\n"
 msgstr "Das AAC-Ausgabemodul wird benutzt (FourCC: %1%).\n"
 
 #: src/input/r_aac.cpp:124 src/input/r_matroska.cpp:1431
-#: src/input/r_ogm.cpp:973 src/input/r_qtmp4.cpp:1492
+#: src/input/r_ogm.cpp:973 src/input/r_qtmp4.cpp:1542
 msgid "Using the AAC output module.\n"
 msgstr "Das AAC-Ausgabemodul wird benutzt.\n"
 
@@ -6716,7 +6720,7 @@ msgstr "Der AC3-Demultiplexer wird benutzt.\n"
 msgid "Using the AC3 output module (FourCC: %1%).\n"
 msgstr "Das AC3-Ausgabemodul wird benutzt (FourCC: %1%).\n"
 
-#: src/input/r_avi.cpp:541 src/input/r_ogm.cpp:991 src/input/r_qtmp4.cpp:1415
+#: src/input/r_avi.cpp:541 src/input/r_ogm.cpp:991 src/input/r_qtmp4.cpp:1465
 #: src/input/r_wav.cpp:228
 msgid "Using the AC3 output module.\n"
 msgstr "Das AC3-Ausgabemodul wird benutzt.\n"
@@ -6782,11 +6786,11 @@ msgstr "Der MPEG PS-Demultiplexer wird benutzt.\n"
 
 #: src/input/r_avi.cpp:534 src/input/r_matroska.cpp:1364
 #: src/input/r_mp3.cpp:72 src/input/r_mpeg_ps.cpp:1171
-#: src/input/r_ogm.cpp:1009 src/input/r_qtmp4.cpp:1498
+#: src/input/r_ogm.cpp:1009 src/input/r_qtmp4.cpp:1548
 msgid "Using the MPEG audio output module.\n"
 msgstr "Das  MPEG-Audio-Ausgabemodul wird benutzt.\n"
 
-#: src/input/r_matroska.cpp:1320 src/input/r_qtmp4.cpp:1450
+#: src/input/r_matroska.cpp:1320 src/input/r_qtmp4.cpp:1500
 msgid "Using the MPEG-%1% video output module.\n"
 msgstr "Das MPEG-%1%-Video-Ausgabemodul wird benuztz.\n"
 
@@ -6795,7 +6799,7 @@ msgstr "Das MPEG-%1%-Video-Ausgabemodul wird benuztz.\n"
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "Das MPEG-1/2-Video-Ausgabemodul wird benutzt.\n"
 
-#: src/input/r_matroska.cpp:1329 src/input/r_qtmp4.cpp:1468
+#: src/input/r_matroska.cpp:1329 src/input/r_qtmp4.cpp:1518
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "Das MPEG-4 Teil 10 (AVC)-Video-Ausgabemodul wird benutzt.\n"
 
@@ -6806,7 +6810,7 @@ msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "Das MPEG-4 Teil 10 ES-Video-Ausgabemodul wird benutzt.\n"
 
 #: src/input/r_avi.cpp:310 src/input/r_matroska.cpp:1324
-#: src/input/r_ogm.cpp:1237 src/input/r_qtmp4.cpp:1442
+#: src/input/r_ogm.cpp:1237 src/input/r_qtmp4.cpp:1492
 msgid "Using the MPEG-4 part 2 video output module.\n"
 msgstr "Das MPEG-4 Teil 2-Video-Ausgabemodul wird benutzt.\n"
 
@@ -6819,11 +6823,11 @@ msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr "Der Ogg/OGM-Demultiplexer wird benutzt.\n"
 
 #: src/input/r_avi.cpp:526 src/input/r_matroska.cpp:1360
-#: src/input/r_ogm.cpp:1028 src/input/r_qtmp4.cpp:1504 src/input/r_wav.cpp:398
+#: src/input/r_ogm.cpp:1028 src/input/r_qtmp4.cpp:1554 src/input/r_wav.cpp:398
 msgid "Using the PCM output module.\n"
 msgstr "Das PCM-Ausgabemodul wird benutzt.\n"
 
-#: src/input/r_qtmp4.cpp:131
+#: src/input/r_qtmp4.cpp:132
 msgid "Using the Quicktime/MP4 demultiplexer.\n"
 msgstr "Der Quicktime/MP4-Demultiplexer wird benutzt.\n"
 
@@ -6924,7 +6928,7 @@ msgstr "Der WAVPACK-Demultiplexer wird benutzt.\n"
 msgid "Using the WAVPACK output module.\n"
 msgstr "Das WAVPACK-Ausgabemodul wird benutzt.\n"
 
-#: src/input/r_qtmp4.cpp:1518
+#: src/input/r_qtmp4.cpp:1568
 msgid "Using the generic audio output module (FourCC: %|1$.4s|).\n"
 msgstr "Das generische Audio-Ausgabemodul wird benutzt (FourCC: %|1$.4s|).\n"
 
@@ -6942,7 +6946,7 @@ msgstr "Das Textuntertitel-Ausgabemodul wird benutzt.\n"
 msgid "Using the video output module (FourCC: %1%).\n"
 msgstr "Das Video-Ausgabemodul wird benutzt (FourCC: %1%).\n"
 
-#: src/input/r_qtmp4.cpp:1430 src/input/r_qtmp4.cpp:1478
+#: src/input/r_qtmp4.cpp:1480 src/input/r_qtmp4.cpp:1528
 msgid "Using the video output module (FourCC: %|1$.4s|).\n"
 msgstr "Das Video-Ausgabemodul wird benutzt (FourCC: %|1$.4s|).\n"
 
@@ -7074,7 +7078,7 @@ msgstr "Wegen potenziell falscher Benutzung von mmg warnen"
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
 msgstr "Warnung in Zeile %1%: Der Start-Zeitstempel ist kleiner als der des vorhergehenden Eintrages. Alle Einträge aus dieser Datei werden nach ihrem Start-Zeitstempel sortiert.\n"
 
-#: src/mmg/mux_dialog.cpp:171
+#: src/mmg/mux_dialog.cpp:173
 msgid "Warning:"
 msgstr "Warnung:"
 
@@ -7090,7 +7094,7 @@ msgstr "Warnung: Es gibt mehr als einen Track mit der UID %1%."
 msgid "Warning: There's more than one track with the number %1%."
 msgstr "Warnung: Es gibt mehr als einen Track mit der Nummer %1%."
 
-#: src/mmg/mux_dialog.cpp:79
+#: src/mmg/mux_dialog.cpp:81
 msgid "Warnings:"
 msgstr "Warnungen: "
 
@@ -7436,10 +7440,10 @@ msgstr "aktiviert"
 msgid "encryption"
 msgstr "Verschlüsselung"
 
-#: src/input/r_qtmp4.cpp:521 src/input/r_qtmp4.cpp:603
-#: src/input/r_qtmp4.cpp:633 src/input/r_qtmp4.cpp:645
-#: src/input/r_qtmp4.cpp:739 src/input/r_qtmp4.cpp:1191
-#: src/input/r_qtmp4.cpp:1353 src/input/r_qtmp4.cpp:1369
+#: src/input/r_qtmp4.cpp:524 src/input/r_qtmp4.cpp:606
+#: src/input/r_qtmp4.cpp:640 src/input/r_qtmp4.cpp:652
+#: src/input/r_qtmp4.cpp:746 src/input/r_qtmp4.cpp:1241
+#: src/input/r_qtmp4.cpp:1403 src/input/r_qtmp4.cpp:1419
 #: src/common/mm_io.cpp:646 src/common/mm_io.cpp:656 src/common/mm_io.cpp:666
 #: src/common/mm_io.cpp:676 src/common/mm_io.cpp:686 src/common/mm_io.cpp:696
 #: src/common/mm_io.cpp:706 src/common/mm_io.cpp:716 src/common/mm_io.cpp:726
@@ -7851,7 +7855,7 @@ msgstr "mkvmerge"
 msgid "mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]\n"
 msgstr "mkvmerge -o aus [globale Optionen] [Optionen1] <Datei1> [@Optionsdatei ...]\n"
 
-#: src/mmg/mux_dialog.cpp:288
+#: src/mmg/mux_dialog.cpp:316
 #, c-format
 msgid "mkvmerge FAILED with a return code of %d. %s\n"
 msgstr "mkvmerge schlug mit einem Rückgabewert von %d fehl. %s\n"
@@ -7898,12 +7902,12 @@ msgstr ""
 msgid "mkvmerge executable"
 msgstr "mkvmerge-Programmdatei"
 
-#: src/mmg/mux_dialog.cpp:290
+#: src/mmg/mux_dialog.cpp:318
 #, c-format
 msgid "mkvmerge finished with a return code of %d. %s\n"
 msgstr "mkvmerge schloss den Prozess mit einem Rückgabewert von %d ab. %s\n"
 
-#: src/mmg/jobs.cpp:131 src/mmg/mux_dialog.cpp:261
+#: src/mmg/jobs.cpp:131 src/mmg/mux_dialog.cpp:273
 msgid "mkvmerge has finished"
 msgstr "mkvmerge ist fertig"
 
@@ -7919,7 +7923,7 @@ msgstr "mkvmerge läuft"
 msgid "mkvmerge options"
 msgstr "mkvmerge-Optionen"
 
-#: src/mmg/mux_dialog.cpp:76
+#: src/mmg/mux_dialog.cpp:78
 msgid "mkvmerge output:"
 msgstr "mkvmerge-Zieldatei:"
 
@@ -7939,7 +7943,7 @@ msgstr "mkvmerge unterstützt zwei Kapitelformate: das bei OGM-Dateien verwendet
 msgid "mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"
 msgstr "mkvmerge wurde durch ein Signal unterbrochen (wurde Strg+C gedrückt?)\n"
 
-#: src/input/r_qtmp4.cpp:562
+#: src/input/r_qtmp4.cpp:565
 msgid "mkvmerge was not compiled with zlib. Compressed headers in QuickTime/MP4 files are therefore not supported.\n"
 msgstr "mkvmerge wurde ohne zlib-Unterstützung compiliert. Komprimierte Kopfdaten in QuickTime/MP4-Dateien werden deshalb nicht unterstützt.\n"
 
@@ -8210,7 +8214,7 @@ msgid "und (Undetermined)"
 msgstr "und (nicht festgelegt)"
 
 #: src/input/r_matroska.cpp:89 src/input/r_matroska.cpp:2133
-#: src/input/r_matroska.cpp:2140 src/input/r_mpeg_ps.cpp:1388
+#: src/input/r_matroska.cpp:2140 src/input/r_mpeg_ps.cpp:1391
 #: src/common/mm_io.cpp:425 src/mmg/mmg.cpp:58
 #: src/mmg/header_editor/value_page.cpp:78 src/mmg/tabs/input.cpp:340
 #: src/info/mkvinfo.cpp:764 src/info/mkvinfo.cpp:774 src/info/mkvinfo.cpp:793

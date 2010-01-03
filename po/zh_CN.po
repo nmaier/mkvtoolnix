@@ -1556,7 +1556,7 @@ msgstr "一个人类可读的字串，描述编解码器。"
 msgid "A human-readable track name."
 msgstr "一个人类可读的字串，描述轨道名称。"
 
-#: src/mmg/mmg_dialog.cpp:1238
+#: src/mmg/mmg_dialog.cpp:1249
 #, c-format
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "描述为 '%s' 的任务已存在。是否添加描述相同的任务?"
@@ -1637,7 +1637,7 @@ msgstr "AVC/h.264 基本流"
 msgid "AVI (Audio/Video Interleaved)"
 msgstr "AVI (音视频交错文件)"
 
-#: src/mmg/mux_dialog.cpp:92
+#: src/mmg/mux_dialog.cpp:94
 msgid "Abort"
 msgstr "中断"
 
@@ -2231,7 +2231,7 @@ msgstr "选择要追加合并的文件"
 #: src/mmg/mmg_dialog.cpp:330
 #: src/mmg/mmg_dialog.cpp:623
 #: src/mmg/mmg_dialog.cpp:644
-#: src/mmg/mux_dialog.cpp:229
+#: src/mmg/mux_dialog.cpp:231
 #: src/mmg/tabs/chapters.cpp:618
 #: src/mmg/tabs/chapters.cpp:660
 msgid "Choose an output file"
@@ -2412,7 +2412,7 @@ msgid "CorePicture frame %1% not supported.\n"
 msgstr "不支持 CorePicture 帧 %1%。\n"
 
 #: src/mmg/jobs.cpp:155
-#: src/mmg/mux_dialog.cpp:117
+#: src/mmg/mux_dialog.cpp:119
 #: src/mmg/tabs/input.cpp:314
 #, c-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
@@ -2722,7 +2722,7 @@ msgstr "从任务队列中删除所选任务"
 msgid "Description"
 msgstr "描述"
 
-#: src/mmg/mmg_dialog.cpp:1239
+#: src/mmg/mmg_dialog.cpp:1250
 msgid "Description already exists"
 msgstr "描述已存在"
 
@@ -2970,7 +2970,7 @@ msgstr "保存信息出错"
 msgid "Error writing Matroska file"
 msgstr "写入 Matroska 文件出错"
 
-#: src/mmg/mux_dialog.cpp:173
+#: src/mmg/mux_dialog.cpp:175
 msgid "Error:"
 msgstr "出错:"
 
@@ -3003,11 +3003,11 @@ msgstr ""
 msgid "Error: vorbis_packetizer: Could not extract the stream's parameters from the first packets.\n"
 msgstr "出错: vorbis_packetizer: 无法从第一个包中提取流参数。\n"
 
-#: src/mmg/mux_dialog.cpp:82
+#: src/mmg/mux_dialog.cpp:84
 msgid "Errors:"
 msgstr "错误信息:"
 
-#: src/mmg/mux_dialog.cpp:298
+#: src/mmg/mux_dialog.cpp:326
 msgid "Everything went fine."
 msgstr "一切正常。"
 
@@ -3138,7 +3138,7 @@ msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n
 msgstr "文件包含的帧数比预期的少，或者文件在 %1% 帧后被破坏。\n"
 
 #: src/mmg/mmg_dialog.cpp:653
-#: src/mmg/mux_dialog.cpp:118
+#: src/mmg/mux_dialog.cpp:120
 #: src/mmg/tabs/input.cpp:315
 msgid "File creation failed"
 msgstr "创建文件失败"
@@ -3787,11 +3787,11 @@ msgstr "无效的轨道 ID 指定，在 '--sub-charset %1%'。\n"
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "无效的轨道 ID 或文件名指定，在参数 '%1%' 中。\n"
 
-#: src/mmg/mmg_dialog.cpp:1275
+#: src/mmg/mmg_dialog.cpp:1286
 msgid "Job added to job queue"
 msgstr "任务已添加到任务队列"
 
-#: src/mmg/mmg_dialog.cpp:1227
+#: src/mmg/mmg_dialog.cpp:1238
 msgid "Job description"
 msgstr "任务描述"
 
@@ -3919,7 +3919,7 @@ msgstr "载入章节文件 (简单/OGM 格式或 XML 格式)"
 msgid "Load muxing settings from a file"
 msgstr "从文件载入混流设置"
 
-#: src/mmg/mux_dialog.cpp:229
+#: src/mmg/mux_dialog.cpp:231
 #, c-format
 msgid "Log files (*.txt)|*.txt|%s"
 msgstr "日志文件 (*.txt)|*.txt|%s"
@@ -4144,7 +4144,7 @@ msgstr "将所选任务上移"
 msgid "Muxing application: %1%"
 msgstr "混流程序: %1%"
 
-#: src/mmg/mux_dialog.cpp:105
+#: src/mmg/mux_dialog.cpp:107
 msgid "Muxing in progress."
 msgstr "混流进行中。"
 
@@ -4216,7 +4216,7 @@ msgstr "下段唯一 ID"
 msgid "No %1% specified in '--%2% %3%'.\n"
 msgstr "未指定 %1%，在 '--%2% %3%'。\n"
 
-#: src/input/r_qtmp4.cpp:1408
+#: src/input/r_qtmp4.cpp:1458
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "首帧未发现 AC3 头; 此轨将被跳过。\n"
 
@@ -4367,7 +4367,7 @@ msgstr "此轨的声道数。"
 msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM 音/视频文件"
 
-#: src/mmg/mux_dialog.cpp:88
+#: src/mmg/mux_dialog.cpp:90
 msgid "Ok"
 msgstr "确定"
 
@@ -4428,6 +4428,11 @@ msgstr "打开 Matroska 文件"
 msgid "Open an existing Matroska file"
 msgstr "打开现有的 Matroska 文件"
 
+#: src/mmg/mux_dialog.cpp:294
+#, fuzzy
+msgid "Open folder"
+msgstr "打开文件"
+
 #: src/mmg/mmg_dialog.cpp:665
 msgid "Option file created."
 msgstr "选项文件已创建。"
@@ -4453,7 +4458,7 @@ msgstr "原值:"
 msgid "Other options"
 msgstr "其他选项"
 
-#: src/mmg/mux_dialog.cpp:75
+#: src/mmg/mux_dialog.cpp:77
 msgid "Output"
 msgstr "输出"
 
@@ -4478,7 +4483,7 @@ msgid "Overwrite existing file(s)?"
 msgstr "覆写所有现有文件?"
 
 #: src/mmg/mmg_dialog.cpp:431
-#: src/mmg/mmg_dialog.cpp:1221
+#: src/mmg/mmg_dialog.cpp:1232
 msgid "Overwrite existing file?"
 msgstr "覆写现有的文件?"
 
@@ -4534,7 +4539,7 @@ msgstr "像素宽度: %1%"
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "请不要把 'mmg' 自己当作 'mkvmerge' 可执行程序选择。"
 
-#: src/mmg/mmg_dialog.cpp:1227
+#: src/mmg/mmg_dialog.cpp:1238
 msgid "Please enter a description for the new job:"
 msgstr "请输入新任务的描述:"
 
@@ -4592,7 +4597,7 @@ msgid "Processing job %d/%d"
 msgstr "正在处理任务 %d/%d"
 
 #: src/mmg/jobs.cpp:220
-#: src/mmg/mux_dialog.cpp:175
+#: src/mmg/mux_dialog.cpp:177
 msgid "Progress"
 msgstr "进度"
 
@@ -4615,7 +4620,7 @@ msgstr "进度: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "进度: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1526
+#: src/mmg/mmg_dialog.cpp:1537
 msgid "Querying mkvmerge's capabilities"
 msgstr "正向 mkvmerge 询问处理能力"
 
@@ -4627,118 +4632,118 @@ msgstr "QuickTime 音/视频文件"
 msgid "Quicktime/MP4 audio and video"
 msgstr "Quicktime/MP4 音视频"
 
-#: src/input/r_qtmp4.cpp:478
+#: src/input/r_qtmp4.cpp:481
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
 msgstr "Quicktime/MP4 读取器: '%1%' 单元过小。预期尺寸: >= %2%。实际尺寸: %3%。\n"
 
-#: src/input/r_qtmp4.cpp:1862
+#: src/input/r_qtmp4.cpp:1912
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
 msgstr "Quicktime/MP4 读取器: 尚不支持恒定采样尺寸与可变时长。如果您有这样的文件样本，请联系作者。\n"
 
-#: src/input/r_qtmp4.cpp:1263
+#: src/input/r_qtmp4.cpp:1313
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
 msgstr "Quicktime/MP4 读取器: 无法读取块号 %1%/%2% 尺寸 %3% 位置 %4%。正在中止。\n"
 
-#: src/input/r_qtmp4.cpp:968
-#: src/input/r_qtmp4.cpp:981
+#: src/input/r_qtmp4.cpp:1018
+#: src/input/r_qtmp4.cpp:1031
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 读取器: 无法读取轨道 %1% 的扩展音频描述单元。\n"
 
-#: src/input/r_qtmp4.cpp:941
+#: src/input/r_qtmp4.cpp:991
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 读取器: 无法读取轨道 %1% 的音频描述单元。\n"
 
-#: src/input/r_qtmp4.cpp:136
+#: src/input/r_qtmp4.cpp:137
 msgid "Quicktime/MP4 reader: Could not read the source file."
 msgstr "Quicktime/MP4 读取器: 无法读取源文件。"
 
-#: src/input/r_qtmp4.cpp:935
+#: src/input/r_qtmp4.cpp:985
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 读取器: 无法读取轨道 %1% 的流描述单元。\n"
 
-#: src/input/r_qtmp4.cpp:1017
+#: src/input/r_qtmp4.cpp:1067
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 读取器: 无法读取轨道 %1% 的视频描述单元。\n"
 
-#: src/input/r_qtmp4.cpp:219
+#: src/input/r_qtmp4.cpp:220
 msgid "Quicktime/MP4 reader: Have not found any header atoms.\n"
 msgstr "Quicktime/MP4 读取器: 未发现任何头部单元。\n"
 
-#: src/input/r_qtmp4.cpp:221
+#: src/input/r_qtmp4.cpp:222
 msgid "Quicktime/MP4 reader: Have not found the 'mdat' atom. No movie data found.\n"
 msgstr "Quicktime/MP4 读取器: 未发现 'mdat' 单元。找不到影片数据。\n"
 
-#: src/input/r_qtmp4.cpp:168
+#: src/input/r_qtmp4.cpp:169
 msgid "Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n"
 msgstr "Quicktime/MP4 读取器: 无效的块尺寸 %1% 于 %2%。\n"
 
-#: src/input/r_qtmp4.cpp:297
+#: src/input/r_qtmp4.cpp:298
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 读取器: MPEG4 part 10/AVC 轨道 %1% 缺解码器设置信息。正在跳过该轨。\n"
 
-#: src/input/r_qtmp4.cpp:290
+#: src/input/r_qtmp4.cpp:291
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 读取器: MPEG4 轨 %1% 缺 esds 单元/解码器设置信息。正在跳过该轨。\n"
 
-#: src/input/r_qtmp4.cpp:128
+#: src/input/r_qtmp4.cpp:129
 msgid "Quicktime/MP4 reader: Source is not a valid Quicktime/MP4 file."
 msgstr "Quicktime/MP4 读取器: 源非有效的 Quicktime/MP4 文件。"
 
-#: src/input/r_qtmp4.cpp:652
+#: src/input/r_qtmp4.cpp:659
 msgid "Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n"
 msgstr "Quicktime/MP4 读取器: 'media header' 媒体头单元 ('mdhd') 使用了不受支持的版本 %1%。\n"
 
-#: src/input/r_qtmp4.cpp:928
+#: src/input/r_qtmp4.cpp:978
 msgid "Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n"
 msgstr "Quicktime/MP4 读取器: 轨道 %1% 的流描述单元的 'size' 字段过小。\n"
 
-#: src/input/r_qtmp4.cpp:657
+#: src/input/r_qtmp4.cpp:664
 msgid "Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"
 msgstr "Quicktime/MP4 读取器: 'time scale' 时间缩放参数为 0。这是不支持的。\n"
 
-#: src/input/r_qtmp4.cpp:258
+#: src/input/r_qtmp4.cpp:259
 msgid "Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
 msgstr "Quicktime/MP4 读取器: 该 AAC 轨道 %1% 缺 esds 单元/解码器设置信息。正在跳过该轨。\n"
 
-#: src/input/r_qtmp4.cpp:252
+#: src/input/r_qtmp4.cpp:253
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
 msgstr "Quicktime/MP4 读取器: 音频轨 %1% 的 'esds' 单元使用了不支持的 'object type id' 对象类别号 %2%。正在跳过该轨。\n"
 
-#: src/input/r_qtmp4.cpp:270
+#: src/input/r_qtmp4.cpp:271
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
 msgstr "Quicktime/MP4 读取器: 视频轨 %1% 缺 ESDS 单元。正在跳过此轨。\n"
 
-#: src/input/r_qtmp4.cpp:510
+#: src/input/r_qtmp4.cpp:513
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%%2%%3%%4%'. Aborting.\n"
 msgstr "Quicktime/MP4 读取器: 此文件的头部经未知或不支持的压缩算法 '%1%%2%%3%%4%' 压缩。正在中止。\n"
 
-#: src/input/r_qtmp4.cpp:543
+#: src/input/r_qtmp4.cpp:546
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the expected uncompressed size (%1%) was not what is available after uncompressing (%2%).\n"
 msgstr "Quicktime/MP4 读取器: 此文件头部经压缩，但预期的解压后尺寸 (%1%) 与解压得到的尺寸不符 (%2%)。\n"
 
-#: src/input/r_qtmp4.cpp:534
+#: src/input/r_qtmp4.cpp:537
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the zlib library could not be initialized. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime/MP4 读取器: 此文件头部经压缩，但无法初始化 zlib 库。zlib 错误代码: %1%。正在中止。\n"
 
-#: src/input/r_qtmp4.cpp:539
+#: src/input/r_qtmp4.cpp:542
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but they could not be uncompressed. Error code from zlib: %1%. Aborting.\n"
 msgstr "Quicktime/MP4 读取器: 此文件头部经压缩，但无法解压。zlib 错误代码: %1%。正在中止。\n"
 
-#: src/input/r_qtmp4.cpp:309
+#: src/input/r_qtmp4.cpp:310
 msgid "Quicktime/MP4 reader: Track %1% has an unknown type.\n"
 msgstr "Quicktime/MP4 读取器: 轨道 %1% 类型未知。\n"
 
-#: src/input/r_qtmp4.cpp:265
-#: src/input/r_qtmp4.cpp:304
+#: src/input/r_qtmp4.cpp:266
+#: src/input/r_qtmp4.cpp:305
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
 msgstr "Quicktime/MP4 读取器: 轨道 %1% 缺一些数据。头部单元损坏?\n"
 
-#: src/input/r_qtmp4.cpp:949
-#: src/input/r_qtmp4.cpp:1023
+#: src/input/r_qtmp4.cpp:999
+#: src/input/r_qtmp4.cpp:1073
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
 msgstr "Quicktime/MP4 读取器: 轨道 ID %1% 有多于一个 FourCC。只使用了第一个 (%|2$.4s|) 而非 (%|3$.4s|)。\n"
 
-#: src/input/r_qtmp4.cpp:244
+#: src/input/r_qtmp4.cpp:245
 msgid "Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n"
 msgstr "Quicktime/MP4 读取器: 未知/不支持的 FourCC '%|1$.4s|'，轨道 %2%。\n"
 
@@ -4894,7 +4899,7 @@ msgstr "另存为(&A)"
 msgid "Save information as"
 msgstr "另存信息为"
 
-#: src/mmg/mux_dialog.cpp:95
+#: src/mmg/mux_dialog.cpp:97
 msgid "Save log"
 msgstr "保存日志"
 
@@ -5339,7 +5344,7 @@ msgid "Status"
 msgstr "状态"
 
 #: src/mmg/jobs.cpp:61
-#: src/mmg/mux_dialog.cpp:69
+#: src/mmg/mux_dialog.cpp:71
 msgid "Status and progress"
 msgstr "状态和进度"
 
@@ -5462,7 +5467,7 @@ msgstr "此 .idx 文件不包含指明语言的 'id: ...' 行。\n"
 msgid "The AAC profiles are different: %1% and %2%"
 msgstr "AAC profile 不同: %1% 与 %2%"
 
-#: src/input/r_qtmp4.cpp:1457
+#: src/input/r_qtmp4.cpp:1507
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
 msgstr "此 AVC 视频轨缺 'CTTS' 帧时间码偏移单元。然而，AVC/h.264 允许帧有超过通常的一次 (对于 P 帧) 或两次 (对于 B 帧) 帧参考。此类帧的时间码会变得无序，需要 'CTTS' 单元来修正。由于缺时间码，此轨可能出错。请查看生成的文件，确认它是不是您预期的样子。\n"
 
@@ -6071,7 +6076,7 @@ msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "即将输出的文件 '%1%' 无法打开写入(%2%)。\n"
 
 #: src/mmg/mmg_dialog.cpp:431
-#: src/mmg/mmg_dialog.cpp:1218
+#: src/mmg/mmg_dialog.cpp:1229
 #, c-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr "即将输出的文件 '%s' 已存在。是否覆盖？"
@@ -6295,7 +6300,7 @@ msgstr "没有文件的 ID 为 '%1%'。参数 '--append-to' 无效。\n"
 msgid "There is no translation available for '%1%'.\n"
 msgstr "尚无 '%1%' 的翻译。\n"
 
-#: src/mmg/mux_dialog.cpp:300
+#: src/mmg/mux_dialog.cpp:328
 msgid "There were ERRORs."
 msgstr "有 *错误* 发生。"
 
@@ -6304,11 +6309,11 @@ msgstr "有 *错误* 发生。"
 msgid "There were errors in the header values preventing the headers from being saved. The first error has been selected."
 msgstr "出现一些影响头部信息保存的头部值错误。第一处错误已被选中。"
 
-#: src/mmg/mux_dialog.cpp:295
+#: src/mmg/mux_dialog.cpp:323
 msgid "There were warnings"
 msgstr "有警告信息"
 
-#: src/mmg/mux_dialog.cpp:293
+#: src/mmg/mux_dialog.cpp:321
 msgid "There were warnings, or the process was terminated."
 msgstr "有警告信息，或者处理进程被中止。"
 
@@ -6376,7 +6381,7 @@ msgstr ""
 "此文件中目前不存在本元素。\n"
 "您可以让头部编辑器为该文件添加此元素。"
 
-#: src/input/r_qtmp4.cpp:344
+#: src/input/r_qtmp4.cpp:347
 msgid "This file contains at least one frame with a negative timecode. All timecodes will be adjusted by %1% so that none is negative anymore.\n"
 msgstr "此文件包含至少一个含有原生时间码的帧。全部时间码将以 %1% 调整以确保没有原生帧。\n"
 
@@ -6545,7 +6550,7 @@ msgstr "轨道 %1%（CodecID 为 '%2%'）缺 \"default duration\" 默认时长�
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr "轨道 %1%: %2%, 编解码器 ID: %3%%4%%5%%6%\n"
 
-#: src/input/r_qtmp4.cpp:444
+#: src/input/r_qtmp4.cpp:447
 msgid "Track %1%: AAC found, but decoder config data has length %2%.\n"
 msgstr "轨道 %1%: 已发现 AAC, 但解码器配置数据长为 %2%。\n"
 
@@ -6557,7 +6562,7 @@ msgstr "轨道 %1%: NAL 太长\n"
 msgid "Track %1%: Subtitle entry number %2% is missing its duration. Assuming a duration of 1s.\n"
 msgstr "轨道 %1%: 字幕号 %2% 缺时长。假定为 1 秒。\n"
 
-#: src/input/r_qtmp4.cpp:447
+#: src/input/r_qtmp4.cpp:450
 msgid "Track %1%: The AAC information could not be parsed.\n"
 msgstr "轨道 %1%: AAC 信息无法解析。\n"
 
@@ -6834,7 +6839,7 @@ msgstr "使用 AAC 输出模块 (FourCC: %1%)。\n"
 #: src/input/r_aac.cpp:124
 #: src/input/r_matroska.cpp:1431
 #: src/input/r_ogm.cpp:973
-#: src/input/r_qtmp4.cpp:1492
+#: src/input/r_qtmp4.cpp:1542
 msgid "Using the AAC output module.\n"
 msgstr "使用 AAC 输出模块。\n"
 
@@ -6848,7 +6853,7 @@ msgstr "使用 AC3 输出模块 (FourCC: %1%)。\n"
 
 #: src/input/r_avi.cpp:541
 #: src/input/r_ogm.cpp:991
-#: src/input/r_qtmp4.cpp:1415
+#: src/input/r_qtmp4.cpp:1465
 #: src/input/r_wav.cpp:228
 msgid "Using the AC3 output module.\n"
 msgstr "使用 AC3 输出模块。\n"
@@ -6921,12 +6926,12 @@ msgstr "使用 MPEG PS 分离器。\n"
 #: src/input/r_mp3.cpp:72
 #: src/input/r_mpeg_ps.cpp:1171
 #: src/input/r_ogm.cpp:1009
-#: src/input/r_qtmp4.cpp:1498
+#: src/input/r_qtmp4.cpp:1548
 msgid "Using the MPEG audio output module.\n"
 msgstr "使用 MPEG 音频输出模块。\n"
 
 #: src/input/r_matroska.cpp:1320
-#: src/input/r_qtmp4.cpp:1450
+#: src/input/r_qtmp4.cpp:1500
 msgid "Using the MPEG-%1% video output module.\n"
 msgstr "使用 MPEG-%1% 视频输出模块。\n"
 
@@ -6937,7 +6942,7 @@ msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "使用 MPEG-1/2 视频输出模块。\n"
 
 #: src/input/r_matroska.cpp:1329
-#: src/input/r_qtmp4.cpp:1468
+#: src/input/r_qtmp4.cpp:1518
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "使用 MPEG-4 part 10 (AVC) 视频输出模块。\n"
 
@@ -6952,7 +6957,7 @@ msgstr "使用 MPEG-4 part 10 ES 视频输出模块。\n"
 #: src/input/r_avi.cpp:310
 #: src/input/r_matroska.cpp:1324
 #: src/input/r_ogm.cpp:1237
-#: src/input/r_qtmp4.cpp:1442
+#: src/input/r_qtmp4.cpp:1492
 msgid "Using the MPEG-4 part 2 video output module.\n"
 msgstr "使用 MPEG-4 part 2 视频输出模块。\n"
 
@@ -6967,12 +6972,12 @@ msgstr "使用 OGG/OGM 分离器。\n"
 #: src/input/r_avi.cpp:526
 #: src/input/r_matroska.cpp:1360
 #: src/input/r_ogm.cpp:1028
-#: src/input/r_qtmp4.cpp:1504
+#: src/input/r_qtmp4.cpp:1554
 #: src/input/r_wav.cpp:398
 msgid "Using the PCM output module.\n"
 msgstr "使用 PCM 输出模块。\n"
 
-#: src/input/r_qtmp4.cpp:131
+#: src/input/r_qtmp4.cpp:132
 msgid "Using the Quicktime/MP4 demultiplexer.\n"
 msgstr "使用 Quicktime/MP4 分离器。\n"
 
@@ -7078,7 +7083,7 @@ msgstr "使用 WAVPACK 分离器。\n"
 msgid "Using the WAVPACK output module.\n"
 msgstr "使用 WAVPACK 输出模块。\n"
 
-#: src/input/r_qtmp4.cpp:1518
+#: src/input/r_qtmp4.cpp:1568
 msgid "Using the generic audio output module (FourCC: %|1$.4s|).\n"
 msgstr "使用通用音频输出模块 (FourCC: %|1$.4s|)。\n"
 
@@ -7099,8 +7104,8 @@ msgstr "使用文本字幕输出模块。\n"
 msgid "Using the video output module (FourCC: %1%).\n"
 msgstr "使用视频输出模块 (FourCC: %1%)。\n"
 
-#: src/input/r_qtmp4.cpp:1430
-#: src/input/r_qtmp4.cpp:1478
+#: src/input/r_qtmp4.cpp:1480
+#: src/input/r_qtmp4.cpp:1528
 msgid "Using the video output module (FourCC: %|1$.4s|).\n"
 msgstr "使用视频输出模块 (FourCC: %|1$.4s|)。\n"
 
@@ -7239,7 +7244,7 @@ msgstr "对 mmg 可能的错误用法发出警告"
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
 msgstr "行 %1% 处警告: 起始时间早于前一条的起始时间。此文件中的所有条目都将按起始时间重新排列。\n"
 
-#: src/mmg/mux_dialog.cpp:171
+#: src/mmg/mux_dialog.cpp:173
 msgid "Warning:"
 msgstr "警告信息:"
 
@@ -7255,7 +7260,7 @@ msgstr "警告: UID 为 %1% 的轨道多于一条。"
 msgid "Warning: There's more than one track with the number %1%."
 msgstr "警告: 序号为 %1% 的轨道多于一条。"
 
-#: src/mmg/mux_dialog.cpp:79
+#: src/mmg/mux_dialog.cpp:81
 msgid "Warnings:"
 msgstr "警告信息:"
 
@@ -7611,14 +7616,14 @@ msgstr "启用"
 msgid "encryption"
 msgstr "加密"
 
-#: src/input/r_qtmp4.cpp:521
-#: src/input/r_qtmp4.cpp:603
-#: src/input/r_qtmp4.cpp:633
-#: src/input/r_qtmp4.cpp:645
-#: src/input/r_qtmp4.cpp:739
-#: src/input/r_qtmp4.cpp:1191
-#: src/input/r_qtmp4.cpp:1353
-#: src/input/r_qtmp4.cpp:1369
+#: src/input/r_qtmp4.cpp:524
+#: src/input/r_qtmp4.cpp:606
+#: src/input/r_qtmp4.cpp:640
+#: src/input/r_qtmp4.cpp:652
+#: src/input/r_qtmp4.cpp:746
+#: src/input/r_qtmp4.cpp:1241
+#: src/input/r_qtmp4.cpp:1403
+#: src/input/r_qtmp4.cpp:1419
 #: src/common/mm_io.cpp:646
 #: src/common/mm_io.cpp:656
 #: src/common/mm_io.cpp:666
@@ -8047,7 +8052,7 @@ msgstr "mkvmerge"
 msgid "mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]\n"
 msgstr "mkvmerge -o out [全局选项] [选项1] <file1> [@optionsfile ...]\n"
 
-#: src/mmg/mux_dialog.cpp:288
+#: src/mmg/mux_dialog.cpp:316
 #, c-format
 msgid "mkvmerge FAILED with a return code of %d. %s\n"
 msgstr "mkvmerge 执行 *失败* ，返回代码 %d。 %s\n"
@@ -8102,13 +8107,13 @@ msgstr ""
 msgid "mkvmerge executable"
 msgstr "mkvmerge 可执行程序"
 
-#: src/mmg/mux_dialog.cpp:290
+#: src/mmg/mux_dialog.cpp:318
 #, c-format
 msgid "mkvmerge finished with a return code of %d. %s\n"
 msgstr "mkvmerge 执行完毕，返回代码 %d。%s\n"
 
 #: src/mmg/jobs.cpp:131
-#: src/mmg/mux_dialog.cpp:261
+#: src/mmg/mux_dialog.cpp:273
 msgid "mkvmerge has finished"
 msgstr "mkvmerge 已经执行完毕"
 
@@ -8125,7 +8130,7 @@ msgstr "mkvmerge 正在运行"
 msgid "mkvmerge options"
 msgstr "mkvmerge 选项"
 
-#: src/mmg/mux_dialog.cpp:76
+#: src/mmg/mux_dialog.cpp:78
 msgid "mkvmerge output:"
 msgstr "mkvmerge 输出信息:"
 
@@ -8147,7 +8152,7 @@ msgstr "mkvmerge 支持两种章节格式：类似 OGM 的文本格式和全功�
 msgid "mkvmerge was interrupted by a SIGINT (Ctrl+C?)\n"
 msgstr "mkvmerge 被 SIGINT 中断 (按了 Ctrl+C?)\n"
 
-#: src/input/r_qtmp4.cpp:562
+#: src/input/r_qtmp4.cpp:565
 msgid "mkvmerge was not compiled with zlib. Compressed headers in QuickTime/MP4 files are therefore not supported.\n"
 msgstr "mkvmerge 编译时没有使用 zlib。因此不支持 QuickTime/MP4 文件中已压缩的头部。\n"
 
@@ -8426,7 +8431,7 @@ msgstr "und (未定)"
 #: src/input/r_matroska.cpp:89
 #: src/input/r_matroska.cpp:2133
 #: src/input/r_matroska.cpp:2140
-#: src/input/r_mpeg_ps.cpp:1388
+#: src/input/r_mpeg_ps.cpp:1391
 #: src/common/mm_io.cpp:425
 #: src/mmg/mmg.cpp:58
 #: src/mmg/header_editor/value_page.cpp:78

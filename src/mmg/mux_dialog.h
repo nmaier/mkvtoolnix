@@ -44,6 +44,7 @@ protected:
   wxWindowDisabler *m_window_disabler;
 #if defined(SYS_WINDOWS)
   taskbar_progress_c *m_taskbar_progress;
+  bool m_abort_button_changed;
 #endif  // SYS_WINDOWS
 
   int m_exit_code;
@@ -64,6 +65,10 @@ public:
   void set_exit_code(int exit_code) {
     m_exit_code = exit_code;
   }
+
+#if defined(SYS_WINDOWS)
+  void change_abort_button();
+#endif  // SYS_WINDOWS
 };
 
 class mux_process: public wxProcess {
@@ -71,7 +76,7 @@ public:
   mux_dialog *dlg;
 
   mux_process(mux_dialog *mdlg);
-  virtual void OnTerminate(int pid, int status);
+  virtual void OnTerminate(int terminated_pid, int status);
 };
 
 #endif // __MUX_DIALOG_H
