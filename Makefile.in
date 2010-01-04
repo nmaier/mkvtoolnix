@@ -239,7 +239,7 @@ endif
 
 all: $(MANPAGES_DEP) $(TAGSFILE) $(APPLICATIONS) $(TRANSLATIONS_MOS) $(HTMLHELPBOOKS)
 
-install: install-programs install-mans install-trans install-guide
+install: install-programs install-mans install-translated-mans install-trans install-guide
 
 install-programs: $(APPLICATIONS)
 	$(mkinstalldirs) $(DESTDIR)$(bindir)
@@ -258,6 +258,16 @@ install-mans:
 	  inst=`echo $$i | sed -e 's/^.*\///'`; \
 	  echo " $(INSTALL_DATA) $$i $(DESTDIR)$(man1dir)/$$inst"; \
 	  $(INSTALL_DATA) $$i $(DESTDIR)$(man1dir)/$$inst; \
+	done
+
+install-translated-mans:
+	@for lang in $(MANPAGES_TRANSLATIONS); do \
+	  $(mkinstalldirs) $(DESTDIR)$(mandir)/$$lang/man1; \
+	  for manpage in $(MANPAGES); do \
+	    inst=`echo $$manpage | sed -e 's/^.*\///'`; \
+	    echo " $(INSTALL_DATA) $$manpage $(DESTDIR)$(mandir)/$$lang/man1/$$inst"; \
+	    $(INSTALL_DATA) $$manpage $(DESTDIR)$(mandir)/$$lang/man1/$$inst; \
+	  done; \
 	done
 
 install-trans:
