@@ -1,0 +1,183 @@
+'\" t
+.\"     Title: mkvinfo
+.\"    Author: Bunkus Moritz[FAMILY Given] <moritz@bunkus.org>
+.\" Generator: DocBook XSL Stylesheets v1.75.1 <http://docbook.sf.net/>
+.\"      Date: 2009年12月
+.\"    Manual:  
+.\"    Source: MkvToolNix 3.0.0
+.\"  Language: Japanese
+.\"
+.TH "MKVINFO" "1" "2009年12月" "MkvToolNix 3\&.0\&.0" ""
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "名前"
+mkvinfo \- Matroska(TM)ファイルの要素についての情報を表示します。
+.SH "書式"
+.HP \w'\fBmkvinfo\fR\ 'u
+\fBmkvinfo\fR [options] {source\-filename}
+.SH "説明"
+.PP
+このプログラムは、Matroska(TM)
+ファイルに格納されている全ての要素の一覧を表示します。出力は、使用されているコーデックを含む、トラックのリストのみに制限することもできます。
+.PP
+\fB\-g\fR, \fB\-\-gui\fR
+.RS 4
+
+GUIを起動します。このオプションは、mkvinfoがGUIをサポートするようにコンパイルされていなければ無効です。
+.RE
+.PP
+\fB\-c\fR, \fB\-\-checksums\fR
+.RS 4
+フレームごとに\fBAdler32\fRチェックサムを計算し、表示します。デバッグのためにのみ有用です。
+.RE
+.PP
+\fB\-s\fR, \fB\-\-summary\fR
+.RS 4
+Only show a terse summary of what
+\fBmkvinfo\fR(1)
+finds and not each element\&.
+.RE
+.PP
+\fB\-\-command\-line\-charset\fR \fIcharacter\-set\fR
+.RS 4
+コマンドライン文字列の文字コードを指定します。デフォルトは、システムの現在のロケールの文字コードになります。
+.RE
+.PP
+\fB\-\-output\-charset\fR \fIcharacter\-set\fR
+.RS 4
+出力する文字コードを指定します。デフォルトは、システムの現在のロケールの文字コードになります。
+.RE
+.PP
+\fB\-r\fR, \fB\-\-redirect\-output\fR \fIfile\-name\fR
+.RS 4
+全てのメッセージをコンソールではなく\fIfile\-name\fRで指定したファイルに書き出します。出力リダイレクトによっても同じことが簡単にできますが、このオプションが必要な場合もあります。ターミナルがファイルに書き込む前に出力を処理してしまう場合などです。\fB\-\-output\-charset\fRによって指定された文字コードは尊重されます。
+.RE
+.PP
+\fB\-\-ui\-language\fR \fIcode\fR
+.RS 4
+指定した\fIcode\fRを強制的に言語コード(例: 日本語ならば\'ja_JP\')として使用します。しかし、環境変数\fILANG\fRや\fILC_MESSAGES\fR、\fILC_ALL\fRを使用したほうが好ましいでしょう。\fIcode\fRにlistと指定すると、指定できる言語コードの一覧を出力します。
+.RE
+.PP
+\fB\-v\fR, \fB\-\-verbose\fR
+.RS 4
+冗長モードになります。冗長レベルセクションに、どの冗長レベルでどの情報が出力されるかの説明があります。
+.RE
+.PP
+\fB\-h\fR, \fB\-\-help\fR
+.RS 4
+コマンド書式情報を出力して終了します。
+.RE
+.PP
+\fB\-V\fR, \fB\-\-version\fR
+.RS 4
+バージョン情報を出力して終了します。
+.RE
+.PP
+\fB@\fRoptions\-file
+.RS 4
+
+\fIoptions\-file\fRで指定されたファイルから追加のコマンドラインオプションを読み込みます。行で最初の空白文字でない文字がハッシュマーク(\'#)である行はコメントとして扱われ、無視されます。行頭、及び行末の空白文字は取り除かれます。各行には一つずつしかオプションを指定できません。メタキャラクタのエスケープは必要ありません。
+.sp
+\'\fBmkvinfo \-v \-v input\&.mkv \-\-redirect\-output info\&.txt\fRというコマンドラインと同じことは、次のようなオプションファイルで指定できます。
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# 冗長モード
+\-v
+\-v
+# input\&.mkvを解析する
+input\&.mkv
+# info\&.txtに出力を書き込む
+\-\-redirect\-output
+info\&.txt
+     
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.SH "冗長レベル"
+.PP
+
+\fB\-v\fRオプションにより、\fBmkvinfo\fR(1)の冗長レベルを上げ、入力ファイルについてのより詳しい情報を出力させることができます。
+.PP
+レベル0では、トラックヘッダとトラックの種類のみを出力します。\fBmkvinfo\fR(1)は、ヘッダを完全に解析し終るとすぐに(より技術的には、最初のクラスタを検出した直後に)終了します。このレベルでは、シークヘッドエントリ及びCUEがトラック情報の前に格納されていたとしても表示されません。
+.PP
+レベル1では、ファイル全体にあるシークヘッドエントリとCUE以外のMatroska(TM)エレメントを表示します。もし、サマリモードが有効の場合、フレーム位置も出力します。
+.PP
+レベル2では、シークヘッドエントリ、CUE、及び各Matroska(TM)エレメントのファイル内位置も表示します。
+.PP
+レベル3以上では、Matroska(TM)エレメントに直接関係ない情報も表示します。他のエレメントについては、見付かったものだけを表示します。レベル3はデバッグ用にメタ情報を追加します(開発者向け)。レベル3で追加された行は、全て角括弧で囲われています。
+.SH "返り値"
+.PP
+
+\fBmkvinfo\fR(1)は下の3つの返り値を返します。
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB0\fR
+\-\- この返り値は正常に終了したことを示します。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB1\fR
+\-\- この返り値は、少なくとも一つの警告が表示されましたが、処理が続行されたことを意味します。警告は \'警告:\' という文字列を先頭につけて出力されます。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+この返り値は、エラーが発生し、エラーメッセージを表示した直後に\fBmkvinfo\fR(1)が終了したことを示します。エラーメッセージは不正なコマンドラインやファイルI/Oエラー、壊れたファイルなど様々です。
+.RE
+.SH "関連項目"
+.PP
+
+\fBmkvmerge\fR(1),
+\fBmkvextract\fR(1),
+\fBmkvpropedit\fR(1),
+\fBmmg\fR(1)
+.SH "ウェブ"
+.PP
+最新のバージョンは、常時\m[blue]\fBMKVToolNixのホームページ\fR\m[]\&\s-2\u[1]\d\s+2から取得できます。
+.SH "著者"
+.PP
+\fBBunkus Moritz[FAMILY Given]\fR <\&moritz@bunkus\&.org\&>
+.RS 4
+開発者
+.RE
+.SH "注意"
+.IP " 1." 4
+MKVToolNixのホームページ
+.RS 4
+\%http://www.bunkus.org/videotools/mkvtoolnix/
+.RE
