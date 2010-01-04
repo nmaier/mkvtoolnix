@@ -9,7 +9,8 @@ MANPAGES_TRANSLATED="`for lang in $MANPAGES_TRANSLATIONS; do \
 
 MANPAGES_TRANSLATED_XML_RULE="`for lang in $MANPAGES_TRANSLATIONS; do \
   echo "doc/man/$lang/%.xml: doc/man/%.xml doc/man/po4a/po/$lang.po"
-  echo '	$(PO4A_TRANSLATE) $(PO4A_TRANSLATE_FLAGS) -m $< -p '"doc/man/po4a/po/$lang.po "'-l $@';done`"
+  echo "	@echo '    PO4A ' \$<"
+  echo '	$(Q)$(PO4A_TRANSLATE) $(PO4A_TRANSLATE_FLAGS) -m $< -p '"doc/man/po4a/po/$lang.po "'-l $@';done`"
 
 
 AC_SUBST(MANPAGES_TRANSLATIONS)
