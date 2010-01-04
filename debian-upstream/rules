@@ -82,7 +82,10 @@ binary-arch: build install
 	mv debian/mkvtoolnix/usr/bin/mkvinfo debian/mkvtoolnix/usr/bin/mkvinfo-text
 	mv debian/mkvtoolnix-gui/usr/bin/mmg-gui debian/mkvtoolnix-gui/usr/bin/mmg
 	dh_installmenu -pmkvtoolnix-gui
-	dh_installman
+	dh_installman --language=C doc/man/mkvextract.1 doc/man/mkvinfo.1 doc/man/mkvmerge.1 doc/man/mkvpropedit.1
+	dh_installman --language=C -pmkvtoolnix-gui doc/man/mmg.1
+	dh_installman --language=ja doc/man/ja/mkvextract.1 doc/man/ja/mkvinfo.1 doc/man/ja/mkvmerge.1 doc/man/ja/mkvpropedit.1
+	dh_installman --language=ja -pmkvtoolnix-gui doc/man/ja/mmg.1
 	dh_desktop -pmkvtoolnix-gui
 
 	dh_link -pmkvtoolnix usr/share/man/man1/mkvinfo.1.gz usr/share/man/man1/mkvinfo-text.1.gz
