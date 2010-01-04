@@ -278,7 +278,7 @@
      </para>
 
      <para>
-      If the number <parameter>n</parameter> is postfixed with '<literal>ms</literal>' then &mkvmerge; puts at most <parameter>d</parameter>
+      If the number <parameter>d</parameter> is postfixed with '<literal>ms</literal>' then &mkvmerge; puts at most <parameter>d</parameter>
       milliseconds of data into each cluster. The minimum for <parameter>d</parameter> is '<literal>100ms</literal>', and the maximum is
       '<literal>32000ms</literal>'.
      </para>
@@ -442,7 +442,7 @@
        </para>
 
        <para>
-        The parameters <parameter>A</parameter>, <parameter>B</parameter>, <parameter>c</parameter> etc must all have the same format as the
+        The parameters <parameter>A</parameter>, <parameter>B</parameter>, <parameter>C</parameter> etc must all have the same format as the
         ones used for the duration (see above). The list of timecodes is separated by commas.  After the input stream has reached the
         current split point's timecode a new file is created. Then the next split point given in this list is used.
        </para>
@@ -450,17 +450,16 @@
        <para>
         The '<literal>timecodes:</literal>' prefix must not be omitted.
        </para>
-
-       <para>
-        For this splitting mode the output filename is treated differently than for the normal operation. It may contain a
-        <function>printf</function> like expression '<literal>%d</literal>' including an optional field width,
-        e.g. '<literal>%02d</literal>'. If it does then the current file number will be formatted appropriately and inserted at that point
-        in the filename.  If there is no such pattern then a pattern of '<literal>-%03d</literal>' is assumed right before the file's
-        extension: '<literal>-o output.mkv</literal>' would result in '<literal>output-001.mkv</literal>' and so on. If there's no extension
-        then '<literal>-%03d</literal>' will be appended to the name.
-       </para>
       </listitem>
      </orderedlist>
+     <para>
+       For this splitting mode the output filename is treated differently than for the normal operation. It may contain a
+       <function>printf</function> like expression '<literal>%d</literal>' including an optional field width,
+       e.g. '<literal>%02d</literal>'. If it does then the current file number will be formatted appropriately and inserted at that point
+       in the filename.  If there is no such pattern then a pattern of '<literal>-%03d</literal>' is assumed right before the file's
+       extension: '<literal>-o output.mkv</literal>' would result in '<literal>output-001.mkv</literal>' and so on. If there's no extension
+       then '<literal>-%03d</literal>' will be appended to the name.
+     </para>
     </listitem>
    </varlistentry>
 
@@ -965,7 +964,7 @@ $ mkvmerge -o full.mkv file1.mkv +file2.mkv
      <para>
       Forces the <abbrev>NALU</abbrev> size length to <parameter>n</parameter> bytes.  This parameter is only used if the
       <foreignphrase>AVC/h.264</foreignphrase> elementary stream packetizer is used.  If left out it defaults to 4 bytes, but there are
-      files that contain frames or slices that are a4ll smaller than 65536 bytes.  For such files you can use this parameter and decrease
+      files that contain frames or slices that are all smaller than 65536 bytes.  For such files you can use this parameter and decrease
       the size to 2.
      </para>
     </listitem>

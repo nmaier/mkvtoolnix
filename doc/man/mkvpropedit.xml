@@ -290,7 +290,7 @@ title=Comments
       <para>
        If the parameter starts with a single character <parameter>t</parameter> followed by a <parameter>n</parameter> then the
        <parameter>n</parameter>th track of a specific track type will be selected. The track type parameter <parameter>t</parameter> must be
-       one of these fourc characters: '<literal>a</literal>' for an audio track, '<literal>b</literal>' for a button track,
+       one of these four characters: '<literal>a</literal>' for an audio track, '<literal>b</literal>' for a button track,
        '<literal>s</literal>' for a subtitle track and '<literal>v</literal>' for a video track. The track order is the same that
        &mkvmerge;'s <option>--identify</option> option outputs.
       </para>
