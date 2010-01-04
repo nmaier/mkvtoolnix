@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-01-04 02:17+0900\n"
+"PO-Revision-Date: 2010-01-04 14:05+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -3488,9 +3488,8 @@ msgid "Invalid cues option. No track ID specified in '--cues %1%'.\n"
 msgstr "不正なキューオプションです。'--cues %1%'でトラックIDが指定されていません。\n"
 
 #: src/mmg/mmg_dialog.cpp:485
-#, fuzzy
 msgid "Invalid file name"
-msgstr "ファイル名がありません"
+msgstr "無効なファイル名"
 
 #: src/merge/mkvmerge.cpp:864
 msgid "Invalid format for '--split' in '--split %1%'.\n"
@@ -5905,7 +5904,7 @@ msgstr "出力ファイル'%s'は既に存在します。上書きしますか�
 
 #: src/mmg/mmg_dialog.cpp:485
 msgid "The output file name is invalid, e.g. it might contain invalid characters like ':'."
-msgstr ""
+msgstr "出力ファイル名は無効です。例えば、':'のような無効な文字を含んでいるのかもしれません。"
 
 #: src/input/r_corepicture.cpp:155
 msgid "The panoramic mode '%1%' is not recognized.\n"
