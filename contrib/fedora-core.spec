@@ -21,6 +21,7 @@ Matroska video utilities.
 %doc doc/mkvmerge-gui.html
 %{_bindir}/*
 %{_datadir}/man/man1/*
+%{_datadir}/man/ja/man1/*
 %{_datadir}/mkvtoolnix
 %{_datadir}/locale/de/LC_MESSAGES/mkvtoolnix.mo
 %{_datadir}/locale/ja/LC_MESSAGES/mkvtoolnix.mo
@@ -38,7 +39,7 @@ Matroska video utilities.
 %build
 make
 
-%install  
+%install
 [ -n "$RPM_BUILD_ROOT" -a "$RPM_BUILD_ROOT" != / ] && rm -rf $RPM_BUILD_ROOT
 %makeinstall
 
