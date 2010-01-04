@@ -229,7 +229,7 @@ will put at most
 data blocks into each cluster\&. The maximum number of blocks is 65535\&.
 .sp
 If the number
-\fIn\fR
+\fId\fR
 is postfixed with \'ms\' then
 \fBmkvmerge\fR(1)
 puts at most
@@ -391,15 +391,15 @@ Example:
 The parameters
 \fIA\fR,
 \fIB\fR,
-\fIc\fR
+\fIC\fR
 etc must all have the same format as the ones used for the duration (see above)\&. The list of timecodes is separated by commas\&. After the input stream has reached the current split point\'s timecode a new file is created\&. Then the next split point given in this list is used\&.
 .sp
 The \'timecodes:\' prefix must not be omitted\&.
-.sp
+.RE
+.RS 4
 For this splitting mode the output filename is treated differently than for the normal operation\&. It may contain a
 \fBprintf\fR
 like expression \'%d\' including an optional field width, e\&.g\&. \'%02d\'\&. If it does then the current file number will be formatted appropriately and inserted at that point in the filename\&. If there is no such pattern then a pattern of \'\-%03d\' is assumed right before the file\'s extension: \'\-o output\&.mkv\' would result in \'output\-001\&.mkv\' and so on\&. If there\'s no extension then \'\-%03d\' will be appended to the name\&.
-.RE
 .RE
 .PP
 \fB\-\-link\fR
@@ -835,7 +835,7 @@ size length to
 \fIn\fR
 bytes\&. This parameter is only used if the
 AVC/h\&.264
-elementary stream packetizer is used\&. If left out it defaults to 4 bytes, but there are files that contain frames or slices that are a4ll smaller than 65536 bytes\&. For such files you can use this parameter and decrease the size to 2\&.
+elementary stream packetizer is used\&. If left out it defaults to 4 bytes, but there are files that contain frames or slices that are all smaller than 65536 bytes\&. For such files you can use this parameter and decrease the size to 2\&.
 .RE
 .PP
 Options that only apply to video tracks:
