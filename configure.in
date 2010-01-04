@@ -47,6 +47,8 @@ m4_include(ac/boost.m4)
 m4_include(ac/etags.m4)
 m4_include(ac/ax_docbook.m4)
 m4_include(ac/tiocgwinsz.m4)
+m4_include(ac/po4a.m4)
+m4_include(ac/manpages_translations.m4)
 
 AC_OUTPUT(
   Makefile
