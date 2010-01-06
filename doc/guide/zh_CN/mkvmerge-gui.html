@@ -1,0 +1,952 @@
+<html>
+ <head>
+  <title>mkvmerge GUI 指南</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Language" content="zh-cn">
+ </head>
+ <body>
+  <h1>mkvmerge GUI (mmg) 指南</h1>
+
+  <i>Moritz Bunkus</i>
+  <hr>
+
+  <h2>目录</h2>
+
+  <ol>
+   <li>
+    <a href="mkvmerge-gui.html#introduction">简介</a>
+    <br>
+    <ol>
+     <li>
+      <a href="mkvmerge-gui.html#whatismatroska">什么是 Matroska？</a>
+     </li>
+     <li>
+      <a href="mkvmerge-gui.html#whatismkvmerge">什么是 mkvmerge？什么是 mkvmerge GUI？</a>
+     </li>
+     <li>
+      <a href="mkvmerge-gui.html#latestversion">获取最新版本</a>
+     </li>
+     <li>
+      <a href="mkvmerge-gui.html#scope">本指南讲解的范围</a>
+     </li>
+    </ol>
+   </li>
+   <li>
+    <a href="mkvmerge-gui.html#setup">配置 mkvmerge GUI</a>
+   </li>
+   <li>
+    <a href="mkvmerge-gui.html#muxing">创建 Matroska 文件</a>
+    <br>
+    <ol>
+     <li>
+      <a href="mkvmerge-gui.html#basics">基本步骤</a>
+     </li>
+     <li>
+      <a href="mkvmerge-gui.html#trackoptions">轨道选项</a>
+     </li>
+     <li>
+      <a href="mkvmerge-gui.html#attachments">附件</a>
+     </li>
+     <li>
+      <a href="mkvmerge-gui.html#globaloptions">全局选项</a>
+      <br>
+      <ol>
+       <li>
+        <a href="mkvmerge-gui.html#global_title">文件/剪辑标题</a>
+       </li>
+       <li>
+        <a href="mkvmerge-gui.html#global_split">自动切割与文件链接</a>
+       </li>
+       <li>
+        <a href="mkvmerge-gui.html#global_link">手动文件/剪辑链接</a>
+       </li>
+       <li>
+        <a href="mkvmerge-gui.html#global_chapters">章节</a>
+       </li>
+       <li>
+        <a href="mkvmerge-gui.html#global_tags">全局标签</a>
+       </li>
+      </ol>
+     </li>
+     <li>
+      <a href="mkvmerge-gui.html#doit">启动混流进程</a>
+     </li>
+     <li>
+      <a href="mkvmerge-gui.html#saveload">保存与载入混流配置</a>
+     </li>
+     <li>
+      <a href="mkvmerge-gui.html#jobqueue">排队处理多项任务</a>
+     </li>
+    </ol>
+   </li>
+   <li>
+    <a href="mkvmerge-gui.html#chaptereditor">章节编辑器</a>
+    <br>
+    <ol>
+     <li>
+      <a href="mkvmerge-gui.html#chapterconcept">Matroska 的章节概念</a>
+     </li>
+     <li>
+      <a href="mkvmerge-gui.html#chapterexamples">示例</a>
+     </li>
+     <li>
+      <a href="mkvmerge-gui.html#chapterformats">mkvmerge 支持的章节格式</a>
+      <br>
+      <ol>
+       <li>
+        <a href="mkvmerge-gui.html#cfsimple">简单/OGM 格式章节文件</a>
+       </li>
+       <li>
+        <a href="mkvmerge-gui.html#cfxml">全功能的 XML 格式章节文件</a>
+       </li>
+       <li>
+        <a href="mkvmerge-gui.html#cfkax">Matroska 文件中的章节</a>
+       </li>
+      </ol>
+     </li>
+     <li>
+      <a href="mkvmerge-gui.html#creatingchapters">创建章节文件</a>
+     </li>
+     <li>
+      <a href="mkvmerge-gui.html#editingchapters">编辑现有章节</a>
+     </li>
+    </ol>
+   </li>
+   <li>
+    <a href="mkvmerge-gui.html#headereditor">头部编辑器</a>
+    <br>
+    <ol>
+     <li>
+      <a href="mkvmerge-gui.html#he_addingremovingheaderfields">添加与移除头部字段</a>
+     </li>
+     <li>
+      <a href="mkvmerge-gui.html#he_analyzingthefile">打开现有文件</a>
+     </li>
+     <li>
+      <a href="mkvmerge-gui.html#he_editing">编辑头部字段</a>
+     </li>
+     <li>
+      <a href="mkvmerge-gui.html#he_validation">检验</a>
+     </li>
+     <li>
+      <a href="mkvmerge-gui.html#he_saving">保存文件</a>
+     </li>
+    </ol>
+   </li>
+  </ol>
+
+  <hr>
+
+  <a name="wxhh_introduction"></a>
+  <h2><a name="introduction">1. 简介</a></h2>
+
+  <h3><a name="whatismatroska">1.1. 什么是 Matroska？</a></h3>
+
+  <p>（<i>注：从 <a href="http://www.matroska.org/">
+     www.matroska.org</a> 简单复制而来。</i>）</p>
+
+  <p><b>Matroska</b> 力求成为多媒体容器格式的<strong>唯一</strong>标准。
+	它起源于一个称为 MCF 项目，但已有显著差别，因为它基于 EBML（可扩展二进制元语言），
+	XML 的二进制衍生语言。EBML 使得 Matroska 开发团队在未来格式可扩展性方面
+	显示出相当的优越性，而不破坏旧解析器对文件的支持。</p>
+
+  <p>要了解更多信息，请移步 
+   <a href="http://www.matroska.org/">Matroska 主页</a>。</p>
+
+  <h3><a name="whatismkvmerge">1.2. 什么是 mkvmerge？什么是 mkvmerge GUI？</a></h3>
+
+  <p><i>mkvmerge</i> 与 <i>mkvmerge GUI</i>（即 <i>mmg</i>）是由 
+	<a href="mailto:moritz@bunkus.org">Moritz Bunkus</a> 编写的两个程序。
+	它们是 <i>mkvtoolnix</i> 工具包的一部分。<i>mkvmerge</i>
+	可以读取很多种多媒体文件，并将它们包含的内容存放在 Matroska 文件中。
+	不幸的是，这是个命令行程序，而并非所有人都能适应命令行操作。这便是 
+   <i>mkvmerge GUI</i> 的用武之地。该 GUI 为用户提供既直观又强大的 
+	<i>mkvmerge</i> 界面。</p>
+
+  <p>两个程序都有适用于 Windows 与 GNU/Linux 及其他 Unix 派生环境的版本。
+	程序依 GPL 授权，所以任何感兴趣的人都可以获取源码。</p>
+
+  <h3><a name="latestversion">1.3. 获取最新版本</a></h3>
+
+  <p><i>mkvtoolnix</i> 的最新版本的总可以在 
+   <a href="http://www.bunkus.org/videotools/mkvtoolnix/">Moritz Bunkus 的网站</a>
+	找到。Windows 用户需要同时下载运行期 DLL 与 <i>mkvtoolnix</i> 二进制程序。
+	Linux/Unix 用户或许会下载源码并自行编译 <i>mkvtoolnix</i>。</p>
+
+  <h3><a name="scope">1.4. 本指南讲解的范围</a></h3>
+
+  <p>本指南仅集中讲解这些工具的 GUI 部分。所有命令行选项在 
+   <a href="mkvmerge.html"><i>mkvmerge</i> 的手册/HTML 文档页</a>
+	中都有详尽解释。</p>
+
+  <hr>
+
+  <a name="wxhh_setup"></a>
+  <h2><a name="setup">2. 配置 mkvmerge GUI</a></h2>
+
+  <p>（<i>注：本段不涉及编译与安装。要了解相关信息，请参阅包含于 
+	<i>mkvtoolnix</i> 工具包的 <i>mkvmerge</i> 的自述文档以及 
+    <code>README</code> 文件。</i>）</p>
+
+  <div align="center">
+   <p>
+    <img src="images/selectmkvmergeexecutable.gif"
+         alt="选择 mkvmerge 可执行程序">
+    <br>
+    <font size="-1">图 1：使用此按钮选择 <i>mkvmerge</i> 程序的路径。</font>
+   </p>
+  </div>
+
+  <p><i>mmg</i> 只需要知道 <i>mkvmerge</i> 程序的位置。通常情况下它会被自动找到。
+	但如果没有，您可以在 <i>选项</i> 窗口选择要使用的程序。</p>
+
+  <hr>
+
+  <a name="wxhh_muxing"></a>
+  <h2><a name="muxing">3. 创建 Matroska 文件</a></h2>
+
+  <h3><a name="basics">3.1. 基本步骤</a></h3>
+
+  <p><i>mkvmerge</i> 对 <i>文件</i> 与 <i>轨道</i> 严格区分。
+	一个输入 <i>文件</i> 通常包含一条或多条 <i>轨道</i>。
+   <i>mkvmerge</i> 的运行至少需要一个输入文件与要创建的 Matroska 文件的文件名。
+	用户可以从这组基本选项开始，添加更多输入文件，为每条轨道选择高级选项，
+	应用更多全局选项等。</p>
+
+  <p>典型的基本步骤如下：</p>
+  <ol>
+   <li>选择一些输入 <i>文件</i>，</li>
+   <li>为 <i>轨道</i> 设置语言选项，</li>
+   <li>设置剪辑/文件标题，</li>
+   <li>选择要写入的文件并</li>
+   <li>开始混流过程。</li>
+  </ol>
+
+  <div align="center">
+   <p>
+    <img src="images/addremovefiles.gif"
+         alt="添加与移除文件">
+    <br>
+    <font size="-1">图 2：适用这些按钮来添加与移除文件。</font>
+   </p>
+  </div>
+
+  <p>当 <i>mmg</i> 启动时，它显示第一个（或许也是最重要的）选项卡：
+   <i>输入选项卡</i>。在这里您可以看到三块不同的区域。最上面的输入框列出所有的
+	输入 <i>文件</i>。</p>
+
+  <p>图 2 显示了上方列表框右边的四个按钮，您可以使用 
+   <i>添加</i> 与 <i>追加</i> 按钮来添加文件到列表框，也可以通过 
+   <i>移除</i> 与 <i>移除所有</i> 按钮来移除选中项或所有输入文件。</p>
+
+  <p><i>添加一个文件</i> 与 <i>追加一个文件</i> 之间是有不同的。
+	通常来说，<i>添加了的</i> 文件中的所有轨道将被平行置于输出文件中。例如
+	当您有一条视频轨，一条或多条音频轨，以及一条或多条字幕轨时，符合这种情况。
+	它们都包含时间码相同的资料，应当同时被播放出来。</p>
+
+  <p>而 <i>追加一个文件</i> 将使第二个文件的所有轨道被追加到上一个 
+	<i>添加的</i> 文件的对应轨道。这样这些轨道的内容将被一个接一个地播放。
+	您只能连接类型相同（如将视频轨连接到视频轨）、编码相同（如将 MP3 
+	连接到 MP3 而不是将 MP3 连接到 AC3）且参数相同（如采样率必须相匹配）。</p>
+
+  <p>您可以通过文件名分辨 <i>添加的</i> 和 <i>追加的</i> 文件。
+	<i>追加的</i> 文件和轨道以“<code>++&gt;</code>”开头。</p>
+
+  <div align="center">
+   <p>
+    <img src="images/trackselection.gif"
+         alt="选择特定轨道">
+    <br>
+    <font size="-1">图 3：一条启用的轨与一条禁用的轨。
+	第二条轨道不会被复制到输出文件中。</font>
+   </p>
+  </div>
+
+  <p>只要用户在上方列表框中添加至少一个输入 <i>文件</i>，第二个列表框将列出所有可用 
+   <i>轨道</i>。每条轨道默认是<strong>启用</strong>的，将被混流至输出文件中。
+	然而，您可以简单点击第二个列表框中各轨道正前方的复选框来改变它。如图 3 所示。</p>
+
+  <p>对这里的每条轨道，用户都可以通过轨道列表下方的输入框与复选框来选择
+	轨道的细节选项。下面的章节将介绍这些选项。</p>
+
+  <p>轨道列表框的右边有两个按钮，您可以通过它们控制输出文件中轨道的次序。
+	点击 <i>上移</i> 与 <i>下移</i> 按钮，当前选中的轨道将按相应方向移动。
+	移动 <i>追加的</i> 轨道（以“<code>++&gt;</code>”开头的）时
+	有些限制，例如 <i>追加的</i> 轨道不能作为第一条轨道。</p>
+
+  <p>关于章节的更多信息可以在本文档关于 
+   <a href="mkvmerge-gui.html#chaptereditor">章节编辑器</a> 的章节
+	以及 <i>mkvmerge</i> 的自述文档中找到。</p>
+
+  <h3><a name="trackoptions">3.2. 轨道选项</a></h3>
+
+  <p>根据当前选择的轨道类型（视频，音频，字幕等）甚至是轨道内容，
+	所有轨道选项中仅有部分可用。这些选项跨越三个子选项卡：<em>轨道常规选项
+	</em>、<em>格式细节选项</em> 与 <em>额外选项</em>。</p>
+
+  <div align="center">
+   <p>
+    <img src="images/generaltrackoptions.gif"
+         alt="一条视频轨的典型选项">
+    <br>
+    <font size="-1">图 4：各类轨道常见的选项</font>
+   </p>
+  </div>
+
+  <p><b>注：</b>除非被用户改动，<i>mkvmerge</i> 将从输入文件复制轨道配置
+	（如果源文件格式支持此类信息）或自主选择默认值。</p>
+
+  <p>可用的常规选项有：</p>
+
+  <ul>
+   <li><code>轨道名称：</code>用户可为当前轨道设定名称。
+	该名称是无格式限制的字串。实例如“导演评论”或“西雅图大观”。
+	注意这些名称不必包括影片名称。</li>
+
+   <li><code>语言：</code>用户可为所有类型的轨道选择语言。
+	语言以 ISO639-2 语言码编码。下拉框包括所有
+	ISO639-2 代码所以用户不必担心选错语言码。</li>
+
+   <li><code>索引：</code>Matroska 的 <i>cue</i> 索引相当于 AVI 的 
+	index 索引。它们是关键帧的纽带。通常该选项应维持“默认”一值。
+	<i>mkvmerge</i> 会自动为任何给定轨道类型选择最佳规则。 
+	关于轨道的完整解释可在 <a href="mkvmerge.html">
+	<i>mkvmerge</i> 文档</a> 中找到。</li>
+
+   <li><code>“默认轨”标签：</code> Matroska 接受可告知播放器
+	优先播放指定轨道（用户未选择其他轨时）的标签。
+	当然，每种轨道<i>类型</i>有它自己的默认轨，例如
+	默认音频轨是英语的，同时默认字幕轨是法语的。如果没有轨道被设为
+	默认轨，<i>mkvmerge</i> 将提升它发现的每类的第一条轨道为默认轨。
+	这与各类媒体播放器的行为一致。</li>
+
+   <li><code>标签：</code>您可以为每条轨道创建 XML 标签文件。
+	关于所有标签的完整解释请参看示例文件和 <a
+    href="mkvmerge.html"><i>mkvmerge</i> 自述文档</a>。 
+	如果您使用<strong>这个</strong>选项，99% 是想关联标签到特定轨道。
+	全局选项卡的标签选项可能不是您需要的。</li>
+
+   <li><code>时间码：</code>通常 <i>mkvmerge</i> 会从源文件导出 
+	各帧的时间码，但它也能读取并使用此处指定的外部文本文件中的时间码。
+	本功能非常复杂。几乎所有用户应将此项留空。</li>
+  </ul>
+
+  <div align="center">
+   <p>
+    <img src="images/videotrackoptions.gif"
+         alt="视频轨典型选项">
+    <br>
+    <font size="-1">图 5：视频轨的典型选项</font>
+   </p>
+  </div>
+
+  <p>格式细节选项包括：</p>
+
+  <ul>
+   <li><code>宽高比：</code>用户可通过本选项设定播放时应使用的宽高比。
+	它默认为视频编码时的宽高比，但可以更改，比如针对变形编码。
+	GUI 要求格式为浮点数（如“2.33”）或分数（如“16/9”）。
+    <br>
+    另一种可能情况是手动设置显示宽度和显示高度的值。
+	当您想调整这些参数到特定的分辨率时，这项功能会很有用。
+    如果您指定的是宽高比，<i>mkvmerge</i> 将根据视频尺寸计算显示尺寸。
+    <br>
+    本选项仅对视频轨可用。</li>
+
+   <li><code>FourCC：</code>Matroska 通常不储存
+	其他容器用来识别编解码器的四位代码（Four-CC）。
+	Matroska 有自己的格式，叫作 <i>CodecID</i>，
+	但它也有个 AVI 兼容模式。在此模式下，将同时储存 FourCC 值。
+	使用本选项可以强制 FourCC 为指定值。
+	但您无法更改 <i>mkvmerge</i> 所用的 <i>CodecID</i>。
+    <br>
+    本选项仅对视频轨可用。</li>
+
+   <li><code>立体视法：</code> 现有一种技术，通过同时播放两条视频轨，
+	它们摄制于很相近但又有细微偏差的方位，以展示虚拟三维图像。
+	每只眼睛只能看到其中一轨（的画面）。这就叫作 <i>立体视法</i>。
+	大多数用户应将此项留空。
+    <br>
+    本选项仅对视频轨可用。</li>
+
+   <li><code>帧率：</code>AVC/h.264 视频轨的 <i>每秒帧数</i>。当您添加 
+	AVC/h.264 基本流时，必须告知 <i>mkvmerge</i> 该视频录制时每秒有多少帧，
+	因为在基本流中并没有这条信息。
+	如果您未进行任何选择，<i>mkvmerge</i> 将默认为 25。
+	您既可以输入浮点数（如 29.97），也可以输入分数（如 30000/1001）。
+    <br>
+    本选项仅对读入自 AVC/h.264 基本流的 AVC/h.264 视频轨可用。</li>
+
+  </ul>
+
+  <div align="center">
+   <p>
+    <img src="images/audiotrackoptions.gif"
+         alt="音频轨典型选项">
+    <br>
+    <font size="-1">图 6：音频轨的典型选项</font>
+   </p>
+  </div>
+
+  <ul>
+   <li><code>延时（ms）：</code>有时音频与视频没有正常同步。
+	通过本选项，用户可以对任何轨道的时间码进行偏移调整。指定值正负皆可。
+	此处输入的数以毫秒为单位，并将在 <code>伸展比率</code>（参见下文）
+	得到应用之后 加到各时间码上。
+    <br>
+    本选项对所有类型的轨道均可用。
+	但在回放时，时间码调整对视频轨与字幕轨效果最佳。</li>
+
+   <li><code>伸展比率：</code>有时音视频同步是随着播放进度逐渐错开的。
+	这可以通过提供 <i>mkvmerge</i> 伸展时间码的比率来解决。
+	如果未输入任何数值，不改变时间码的“1.0”将被采用。
+    <br>
+    您输入的数值可以是浮点数或分数，如“1/2”。
+	此比率将在添加 <code>延时</code>（参见上文）之前得到应用。
+    <br>
+    本选项对所有类型的轨道均可用。
+	但在回放时，时间码调整对视频轨与字幕轨效果最佳。</li>
+
+   <li><code>字符集：</code> 某些文本字幕与章节并不存放它们创建时所用字符集的信息。
+	本选项非常重要，因为文本字幕与章节在混流过程中会被自动转换为 UTF-8 字符集。<i>
+	mkvmerge</i> 通常假定系统当前的字符集为字幕或章节文件保存所用的字符集。
+	但如果不是这样，用户可以自己选择正确的字符集。
+    <br>
+    本选项仅对字幕轨与章节可用。</li>
+  </ul>
+
+  <div align="center">
+   <p>
+    <img src="images/textsubtitlestrackoptions.gif"
+         alt="字幕轨典型选项">
+    <br>
+    <font size="-1">图 7：字幕轨的典型选项</font>
+   </p>
+  </div>
+
+  <ul>
+   <li><code>压缩方式：</code>Matroska 有一套对轨道进行无损压缩的强大系统。
+	这些压缩方式（算法）可以应用到任何给定轨道，但有些播放器只支持 VobSub 
+	轨道对本功能的使用。这也是该功能最有用的地方。
+	至于其他轨道，尤其是音视频轨，已经被压缩过，所以额外的压缩并不会起多大效果。
+	对于 VobSub 字幕，如果您启用 zlib 压缩，将可以另外获得约 30% 的压缩率。
+	这就是它是 VobSub 轨道的默认处理方式的原因。
+    <br>
+    您只需保持此选项为 <i>默认</i> 即可。</li>
+
+   <li><code>AAC 是 SBR/HE-AAC/AAC+：</code>被称作“高效 AAC”(HE-AAC) 
+    的新技术在以<code>.AAC</code> 为扩展名存储时有些缺点：无法侦测这些文件中的 
+	HE-AAC 部分。因此当文件使用该技术时，用户得手动勾选本项。请注意，存储于
+	 <code>.MP4</code> 文件中的 HE-AAC 不存在此问题。</li>
+  </ul>
+
+  <h3><a name="attachments">3.3. 附件</a></h3>
+
+  <p>Matroska 文件可以包含其它文件，叫作附件。
+	它基本上就像您最爱的电子邮件程序一样工作。
+	这一概念的提出，是为了提供关于文件的额外信息。例如 
+	CD rip 的封面照片，文本格式的影片背景信息补充，
+	甚至是显示字幕需要的字体包。</p>
+
+  <p>每个附件需要两个基本信息：文件名（很显然需要）与应当与文件关联的 MIME 
+	类型。使用方法很简单，与在 <i>输入</i> 选项卡中添加文件类似。</p>
+
+  <div align="center">
+   <p>
+    <img src="images/addingremovingattachments.gif"
+         alt="添加与移除附件">
+    <br>
+    <font size="-1">图 8：使用这些按钮添加与移除附件</font>
+   </p>
+  </div>
+
+  <p>在 GUI 的第二个选项卡，<i>附件</i> 选项卡中，您可以使用 
+	<i>添加</i> 按钮添加文件，使用 <i>移除</i> 按钮移除所选附件。
+	一旦选中一个附件，此选项卡的其他控件都将可用。
+	您必须为每个附件选择 MIME 类型，但描述是可选的——尽管总提供描述是个好想法。
+	这将使别人更容易识别出您向这个 Matroska 文件附加了什么。</p>
+
+  <div align="center">
+   <p>
+    <img src="images/attachmentoptions.gif"
+         alt="附件典型选项">
+    <br>
+    <font size="-1">图 9：附件的典型选项</font>
+   </p>
+  </div>
+
+  <p>最后一个选项，<code>附加方式</code>，只有在您同时切割输出文件时有影响。
+	（全局切割选项将在后续段落中解释）如果选择了 <code>附加到所有文件</code>，
+	则当前文件将被附加到创建的所有输出文件。如果选择了 
+	<code>仅附加到首个文件</code>，当前文件仅附加到创建的第一个文件。</p>
+
+  <h3><a name="globaloptions">3.4. 全局选项</a></h3>
+
+  <p>第三个选项卡，<i>全局</i>，挤满了应用到整个文件，而不只是一或多个轨道的选项。</p>
+
+  <h4><a name="global_title">3.4.1. 文件/剪辑标题</a></h4>
+
+  <div align="center">
+   <p>
+    <img src="images/movietitle.gif"
+         alt="选择影片标题">
+    <br>
+    <font size="-1">图 10：为当前影片选择标题</font>
+   </p>
+  </div>
+
+  <p><code>文件/剪辑标题:</code> 此标题用作真实的影片标题，如《香草天空》。</p>
+
+  <h4><a name="global_split">3.4.2. 自动切割与文件链接</a></h4>
+
+  <p><code>切割</code> 段落处理如何切割输出文件为多个小文件。
+	如果没有选择切割，将只创建一个大文件。如果“切割”处于选中状态，您可以告知 
+   <i>mkvmerge</i> 在写入指定数据量或到达指定时间码时开始创建新的输出文件。
+	可接受的格式有：
+  </p>
+  <ul>
+   <li>按尺寸：被字母“K”“M”或“G”紧跟的数字代表
+	千字节（1024 字节），兆字节（1024 * 1024 字节）或
+	吉字节（1024 * 1024 * 1024 字节）示例：“700M”或“100000K”。</li>
+
+   <li>按时间：格式可以是多达九位即精确到毫微秒的 <code>HH:MM:SS.nnn</code> 
+    或后接字母“s”的秒数。多个时间码可以用逗号隔开。<br>
+
+    请注意这些时间码根据未切割的输出流计算。
+	也就是说，输入“00:10:00,00:20:00”将生成三个文件，
+	其中前两个文件均长约十分钟。而第三段将包含其余的输入流。
+	此功能与“文件链接”功能相独立。<br>
+
+    示例：“01:20:00”（1 小时 20 分钟后切割）或“1800s”
+	（1800 秒，即 30 分钟后切割）。</li>
+  </ul>
+
+  <div align="center">
+   <p>
+    <img src="images/splitting.gif"
+         alt="切割典型选项">
+    <br>
+    <font size="-1">图 11：切割的典型选项。创建两个文件约 700 兆大小的文件。</font>
+   </p>
+  </div>
+
+  <p><code>连接文件：</code> 此选项控制 <i>mkvmerge</i> 如何处理切割。
+	关于此功能的一点解释：</p>
+
+  <p>Matroska 支持简单告知特定文件是前趋或后继文件的文件链接功能。
+	严谨地讲，被连接的并不是文件，而是 Matroska 剪辑。
+	因为大多数文件可能只包含一个 Matroska 剪辑，所以我简单地讲“文件链接”，
+	尽管“剪辑链接”更恰当。</p>
+
+  <p>每个剪辑以唯一的 128 位宽的剪辑 UID 标记。此 UID 
+	由 <i>mkvmerge</i> 自动生成。
+	链接操作主要通过写入前/后文件的剪辑 UID 到当前剪辑的头部信息完成。
+	<i>mkvinfo</i> 发现这些 UID 时会将它们输出。</p>
+
+  <p>如果一个文件被切割为多个小文件，并且使用了链接功能，后续文件的时间码将不会从 0 开始，
+	而是从前一文件停止的地方继续。这样，绝对的时间将得以保留，即使前一文件不可用
+	（如用作流媒体时）。如果未使用链接，每个文件的时间码都将从 0 开始。默认情况下 
+   <i>mkvmerge</i> 不会使用文件链接，因为某些播放器仍然无法处理连接起来的文件。
+	如果您希望连接文件，您可以通过勾选 <code>连接文件</code> 复选框来启用该功能。</p>
+
+  <h4><a name="global_link">3.4.3. 手动文件/剪辑链接</a></h4>
+
+  <p>不论是否启用了切割，用户都可以告知 
+   <i>mkvmerge</i> 将生成的文件连接到指定的 UID。This is done by 
+	您可以通过在 <code>上一剪辑 UID</code> 和 <code>下一剪辑 UID</code> 
+	两个输入框中输入有效的剪辑 UID 来完成这项操作。这些选项接受 
+	<i>mkvinfo</i> 输出的剪辑 UID 格式：以“0x”为前缀、以空格分隔的 16 个
+	介于 0x00 与 0xff 十六进制数。如 <code>0x41 0xda 0x73 0x66 0xd9 
+	0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3 0x93</code>。
+	另有一种较短的格式可供选择：没有“0x”前缀或空格的 16 个介于 
+	0x00 与 0xff 的十六进制，如 
+   <code>41da7366d9cfb21eae78ebb45ecab393</code>。</p>
+
+  <p>如果启用了切割功能，第一个输出文件将与 <code>
+	上一剪辑 UID</code> 输入框中指定的 UID 相连，最后一个输出文件将与 
+	<code>下一剪辑 UID</code> 输入框中指定的 UID 相连。
+	如果未启用切割，唯一的输出文件将同时与指定的两个 UID 相连接。</p>
+
+  <h4><a name="global_chapters">3.4.4. 章节</a></h4>
+
+  <p>您可以通过浏览按钮选择要添加到输出文件中的章节。
+	关于章节各方面的完整解释可以在 <a href="mkvmerge-gui.html#chaptereditor"> 
+	章节编辑器段落</a> 找到。</p>
+
+  <h4><a name="global_tags">3.4.5. 全局标签</a></h4>
+
+  <p>不像您在输入选项卡为每条轨道选择的标签，此处所选的标签必须包含轨道 UID。
+	这些标签不会被自动指派给任何轨道相连。
+	在 99% 的情况下，这<strong>不是</strong>您希望使用的选项！</p>
+
+  <p>完整的解释可以在 
+   <a href="mkvmerge.html">mkvmerge 自述文档</a> 中找到。</p>
+
+  <h3><a name="doit">3.5. 启动混流进程</a></h3>
+
+  <p>当您一切都设置完毕时就可以启动混流进程了。
+	您要做的最后一件事就是选择要混流到哪里。您可以通过 
+   <code>浏览</code> 按钮选择输出文件。
+	完成之后，点击 <code>开始混流</code> 按钮或者在 
+	<code>混流</code> 菜单中选择同样的菜单项。</p>
+
+  <p>如果一切都已正确设定，<i>mmg</i> 将显示混流窗口。
+	进度在顶部显示，作为 <i>mkvmerge</i> 当前状态的大体描述。</p>
+
+  <div align="center">
+   <p>
+    <img src="images/muxingwindow.gif"
+         alt="混流窗口">
+    <br>
+    <font size="-1">图 12：混流窗口</font>
+   </p>
+  </div>
+
+  <p><i>mkvmerge</i> 有三种不同“严肃级别”的信息：
+	状态报告，警告信息与错误信息。所有状态报告信息都在上方窗格显示。
+	包括发现的轨道类型及其它令人感兴趣的信息。</p>
+
+  <p>警告信息在中间的窗格显示。<i>mkvmerge</i> 发出警告时不会中断处理，
+	但可能停止对遭警告的轨道进行混流。
+	您应该关注所有警告信息。</p>
+
+  <p>错误信息在下方的窗格显示。错误通常是致命的，
+   <i>mkvmerge</i> 输出错误信息后即停止混流。
+	此类信息可能是硬盘已满或者
+	源文件已损坏且无法继续处理。</p>
+
+  <p><code>中断</code> 按钮向 <i>mkvmerge</i> 发出停止混流的信号。
+	除非 <i>mkvmerge</i> 遭遇死循环，它会在您按下按钮不久之后停下。
+	您可以通过 <code>保存日志</code> 按钮保存 
+	<i>mkvmerge</i> 的完整输出信息为文本文件供进一步研究，
+	或者如果您发现了设计缺陷，且希望给我辅助信息。</p>
+
+  <h3><a name="saveload">3.6. 保存与载入混流配置</a></h3>
+
+  <p>您配置选项的所有努力都不必随着退出程序而消失。
+	您可以通过 <code>文件</code> 菜单中的 <code>保存配置</code> 
+	选项保存所有混流配置为基于文本的配置文件，以后可以通过
+	<code>载入配置</code> 选项恢复配置。
+	默认扩展名为通常不被其它程序使用的 <code>.mmg</code>。
+	您也可以将此扩展名与 <i>mmg</i> 关联，
+	这样当它被附加这样的配置文件名调用时，可以自动加载配置。</p>
+
+  <h3><a name="jobqueue">3.7. 排队处理多项任务</a></h3>
+
+  <p>当您要混流多个文件时，您不必先准备第一个文件，等它混流完毕，再准备第二个文件，
+	等它完成，如此如此。<i>mkvmerge GUI</i> 包含一个任务管理器，
+	可以将完整的任务排队，并在您方便时挨个运行。使用任务管理器的基本步骤如下：</p>
+
+  <ol>
+   <li>添加所有文件，配置所有选项，配置输出文件名。</li>
+   <li>点击 <code>添加到任务队列</code> 按钮，并为它设定一个易于辨认的标题。</li>
+   <li>按您的需要，重复上面的步骤。</li>
+   <li>在 <code>混流</code> 菜单中选择 <code>管理任务</code>，
+    调出任务管理器。</li>
+   <li>点击 <code>启动</code> 按钮。</li>
+   <li>泡杯茶，买点东西或者谈谈天;)</li>
+  </ol>
+
+  <div align="center">
+   <p>
+    <img src="images/jobmanager.gif" alt="任务管理窗口">
+    <br>
+    <font size="-1">图 13：任务管理窗口</font>
+   </p>
+  </div>
+
+  <p>每项任务有六个属性：一个由 
+   <i>mkvmerge GUI</i> 自动选定的 ID；它的状态（<code>挂起</code>：尚未混流；
+	<code>完成</code>：已成功混流；
+   <code>完成，有警告</code>：成功完成混流，但是有警告；
+	<code>失败</code>：混流失败）；您输入的名称；
+	任务添加到任务队列的日期与时间；
+	混流进程启动的日期与时间；
+	混流进程完成的日期与时间。</p>
+
+  <p>全局控件位于窗口底部。<code>启动</code> 
+	按钮将启动所有状态为 <code>挂起</code> 的任务。
+	<code>启动所选</code> 按钮将启动当前选中的所有混流任务，
+	不论其状态如何。</p>
+
+  <p>右边的按钮对选中的所有任务进行操作。
+   <code>上移</code> 与 <code>下移</code> 将所选任务在列表中移向上方或下方。
+	<code>重新启用</code> 按钮设定所选任务的状态为 
+   <code>挂起</code>，这样，下次按下 
+   <code>启动</code> 按钮时它们将被启动。<code>禁用</code> 
+	按钮将设定状态为 <code>完成</code>。</p>
+
+  <p>混流过程中 <i>mkvmerge</i> 的输出信息不会被显示，而是被储存下来。
+	如果您想查看任务的输出信息，您可以点击 <code>查看日志</code> 
+	按钮。这当任务完成但有警告时，或者当任务完全失败时非常有用。</p>
+
+  <hr>
+
+  <a name="wxhh_chaptereditor"></a>
+  <h2><a name="chaptereditor">4. 章节编辑器</a></h2>
+
+  <p>全功能的章节编辑器是 <i>mmg</i> 的新功能之一。
+	它可以读取基于文本的章节文件，从已有的 Matroska 
+	文件导入章节，输出可以在全局选项卡中选定的基于文本的章节文件，
+	以及将章节直接写入现有 Matroska 文件。</p>
+
+  <h3><a name="chapterconcept">4.1. Matroska 的章节概念</a></h3>
+
+  <p>不像其他很多系统，Matroska 支持 <i>嵌套的</i> 
+   章节。这主要意味着您可以为章节定义子章节。</p>
+
+  <p>Matroska 中的章节实体至少由四个项目组成：它所应用到的轨道的 UID，
+	章节标题/名称，它的起始时间以及与它关联的语言代码。
+	另外的元素是可选的，包括终止时间以及其他语言代码和国家代码。
+	用户通常只需要必备元素。在这些元素中，需要指定的只有名称，起始时间和语言码。
+	<i>mkvmerge</i> 会自动将所有章节指派给整个文件。</p>
+
+  <h3><a name="chapterexamples">4.2. 示例</a></h3>
+
+  <p>第一个例子比较简单。被讨论的影片包含四部分：
+	开头的序幕，第一幕，第二幕，以及演职员表。
+	注意，终止时间戳是可选的。</p>
+
+  <p><code>序幕（起始于 00:00:00，语言 英语）
+    <br>
+    第一幕（起始于 00:01:00，语言 英语）
+    <br>
+    第二幕（起始于 00:05:30，语言 英语）
+    <br>
+    演职员表（起始于 00:12:20 终止于 00;12:55，语言 英语）</code></p>
+
+  <p>再举个更复杂的例子，它包括子章节。以路德维希·范·贝多芬（Ludwig van Beethoven）
+	的戏剧《Fidelio》为例。为简便起见，我只算了前两幕的前三段。</p>
+
+  <p>第一幕包括：</p>
+  <ol>
+   <li>Overtüre（6:24 分钟长），</li>
+   <li>Arie: &#39;Jetzt, Schätzchen, jetzt sind wir allein&#39;（4:46 分钟长）以及</li>
+   <li>Dialog: &#39;Armer Jaquino&#39;（0:10 分钟长）。</li>
+  </ol>
+  <p>第二幕包括：</p>
+  <ol>
+   <li>Ouvertüre und Arie: &#39;Gott! welch Dunkel hier!&#39;（10:46 分钟长），</li>
+   <li>Melodrama und Duett: &#39;Wie kalt ist es&#39;（5:21 分钟长）以及</li>
+   <li>Dialog: &#39;Er erwacht!&#39;（0:59 分钟长）。</li>
+  </ol>
+
+  <p>第一幕，也就是我们的第一章，总时长为 
+	11:20。第二幕时长 17:06。这些章节的结构如下所示：</p>
+
+  <p><code>Erster Akt（起始于 00:00:00 终止于 00:11:20，语言 德语，国家 德国）
+    <br>
+    &nbsp;&nbsp;&nbsp; Ouvertüre（起始于 00:00:00 终止于 00:06:24，语言 德语，国家 德国）
+    <br>
+    &nbsp;&nbsp;&nbsp; Arie: &#39;Jetzt, Schätzchen, jetzt sind wir allein&#39;
+	（起始于 00:06:24 终止于 00:11:10，语言 德语，国家 德国）<br>
+    &nbsp;&nbsp;&nbsp; Dialog: &#39;Armer Jaquino&#39;（起始于 00:11:10 终止于 00:11:20，
+	语言 德语，国家 德国）
+    <br>
+
+    Zweiter Akt（起始于 00:11:20 终止于 00:28:26，语言 德语，国家 德国）
+    <br>
+    &nbsp;&nbsp;&nbsp; Ouvertüre und Arie: &#39;Gott! welch Dunkel hier!&#39;（起始于 
+	00:11:20 终止于 00:22:06，语言 德语，国家 德国）
+    <br>
+    &nbsp;&nbsp;&nbsp; Melodrama und Duett: &#39;Wie kalt ist es&#39;（起始于 00:22:06 
+	终止于 00:27:27，语言 德语，国家 德国）
+    <br>
+    &nbsp;&nbsp;&nbsp; Dialog: &#39;Er erwacht!&#39;（起始于 00:27:27 终止于 00:28:26，
+	语言 德语，国家 德国）
+   </code>
+  </p>
+
+  <h3><a name="chapterformats">4.3. mkvmerge 支持的章节格式</a></h3>
+
+  <p><i>mkvmerge</i> 与 <i>mmg</i> 的章节编辑器都支持不同格式的章节文件。</p>
+
+  <h4><a name="cfsimple">4.3.1. 简单/OGM 格式章节文件</a></h4>
+
+  <p>OGM 文件中的格式是最基本的格式之一。它是一种基于文本的格式。
+	每个章节项目包含两行，第一行包含开始时间，第二行则是章节标题/名称。
+	每行都有编号。</p>
+
+  <p>上边第一个例子可以用这种格式表示：<br>
+   <code>CHAPTER01=00:00:00.000<br>
+    CHAPTER01NAME=序幕<br>
+    CHAPTER02=00:01:00.000<br>
+    CHAPTER02NAME=第一幕<br>
+    CHAPTER03=00:05:30.000<br>
+    CHAPTER03NAME=第二幕<br>
+    CHAPTER04=00:12:20.000<br>
+    CHAPTER04NAME=演职员表
+   </code>
+  </p>
+
+  <p>第二个例子不能用这种格式表示，因为这种格式既不支持语言指定，
+	也不支持终止时间或者嵌套章节。
+	它也有优越之处，就是这种文件很容易创建，而且
+	不论是 Windows 平台还是 Unix/Linux 平台上都有一些工具可以
+	直接从 DVD 创建此类文件。</p>
+
+  <p>由于一些限制因素，<i>mmg</i> 不能以此格式输出章节。</p>
+
+  <h4><a name="cfxml">4.3.2. 全功能的 XML 格式章节文件</a></h4>
+
+  <p>我创建了一种基于 XML 的章节格式，它与 Matroska 所用的系统非常一致。
+	使用此格式，您可以尽情控制所有功能。
+	在这里我就不详细描述这种格式了。请参看 <i>mkvtoolnix</i> 附带的示例 
+	XML 章节文件。</p>
+
+  <h4><a name="cfkax">4.3.3. Matroska 文件中的章节</a></h4>
+
+  <p>章节编辑器可以直接从 Matroska 文件读取章节。这些章节可以
+	输出为 XML 章节文件，也可以导回原来的 Matroska 文件
+	或者写入另一个 Matroska 文件。支持所有功能。</p>
+
+  <h3><a name="creatingchapters">4.4. 创建章节文件</a></h3>
+
+  <p>章节编辑器包括三部分：所有章节的树形结构，
+	用来添加、移除与调整章节的五个按钮，
+	以及用来设置各章节数据的输入框。</p>
+
+  <div align="center">
+   <p>
+    <img src="images/chaptereditor.gif"
+         alt="章节编辑器">
+    <br>
+    <font size="-1">图 14：章节编辑器，显示的是前文所述的例子</font>
+   </p>
+  </div>
+
+  <p>Matroska 文件中的章节被定义有起始时间，名称和与名称相关联的语言。
+	每个章节可以有多个名称，每个名称与不同的语言相关联。
+	您也可以添加终止时间，但这不是必需的。</p>
+
+  <p>通过 <code>章节编辑器</code> 菜单中的 <code>新建</code> 
+	菜单项可以创建新章节文件。您可以通过 <code>添加章节</code> 
+	或 <code>添加子章节</code> 按钮添加章节。这两个按钮的不同之处在于
+	当一个章节已被选中时， <code>添加章节</code> 按钮将在所选章节后
+	直接追加一个同级章节，而 <code>添加子章节</code> 
+	按钮将在当前选中章节下级末端添加一个章节，作为其最后一个子章节。</p>
+
+  <p><code>移除章节</code> 按钮需小心使用。它会移除整个子树而不要求确认，
+	而且目前也没有“撤销”菜单项可用。</p>
+
+  <p>选中一个章节条目后您可以更改它的数据。 起始时间与终止时间的格式均为 
+	<code>HH:MM:SS.mmm</code> 或更简易的 
+   <code>HH:MM:SS</code>。将会预先添加一个章节名称。
+	您可以编辑它并选择这个名字所用的语言。这样您可以提供多语种的名称，如
+	“The hero arrives”以“eng”为语言，
+	“Der Held kommt an”以“ger”为语言。
+	您只需点击 <code>添加名称</code> 按钮来满足更多需求或者点击 <code>
+	移除名称</code> 去掉一个。</p>
+
+  <p>创建很多章节，又总是不停更换着语言，可是件不小的工作。
+	因此您可以在选项窗口的 <code>章节</code> 选项卡中选择 
+	<i>mmg</i> 默认应该添加的语言与国家标签。
+   <code>设置语言值</code> 按钮的效果与此类似。
+	您可以通过该按钮将所选的语言与/或国家应用到所选章节项目及其所有子项。</p>
+
+  <p>要保存章节为 XML 文件，您可以选择 <code>保存</code> 或 
+   <code>另存为</code>。<code>另存为</code> 不能用来写入章节至现有 
+	Matroska 文件——您应该通过 <code>保存到 Matroska 
+	文件</code> 来实现。</p>
+
+  <h3><a name="editingchapters">4.5. 编辑现有章节</a></h3>
+
+  <p>您可以通过 <code>章节编辑器</code> 菜单中的 <code>载入</code>  
+	菜单项载入已有章节文件或者 Matroska 文件中的章节。
+   <i>mmg</i> 将自动侦测使用的文件类型并读取章节。</p>
+
+  <a name="wxhh_headereditor"></a>
+  <h2><a name="headereditor">5. 头部编辑器</a></h2>
+
+  <p>
+   mmg 包含有针对已有 Matroska 文件头部字段的编辑器。
+	您可以通过选择 mmg “文件”菜单中的“头部编辑器”来启动它。</p>
+
+  <p>
+   头部编辑器允许用户在不对整个文件重新混流的前提下编辑剪辑信息头和各轨道头中的一些字段。
+	用法很简单：载入文件，选择您希望更改的头部字段，
+	更改选中字段的取值，最后保存文件。
+  </p>
+
+  <h3><a name="he_addingremovingheaderfields">5.1. 添加与移除头部字段</a></h3>
+
+  <p>
+   Matroska 文件格式对大多数头部字段的存在与否留有余地。
+	mmg 的头部编辑器显示它支持的所有头部字段，即使文件中不存在这些字段。
+	它允许用户在文件中添加目前不存在的字段，也允许用户从文件中移除已存在的字段。
+  </p>
+
+  <h3><a name="he_analyzingthefile">5.2. 打开现有文件</a></h3>
+
+  <p>
+   用户可以在“文件”菜单中选择“打开”来开始编辑文件。
+	选择恰当文件后，头部编辑器将会扫描文件中的所有重要元素。
+	根据文件大小，这要耗费相应的时间。
+	由于 Matroska 灵活的文件结构，这是必要的一步。
+  </p>
+
+  <h3><a name="he_editing">5.3. 编辑头部字段</a></h3>
+
+  <p>
+   打开文件之后，左窗格将为文件中发现的各剪辑头与各轨道各显示一个元素。
+	树形结构中的每个节点都包含一系列的子元素，它们代表真实的头部值。
+	用户选择这样的子元素后，右窗格将被更新，以显示该元素的一系列情况：
+  </p>
+
+  <ul>
+   <li>它的类型（数字，字串等），</li>
+   <li>它的名字，</li>
+   <li>它的用途简述，</li>
+   <li>文件中是否存在该字段
+	（若存在则提供移除选项，反之则提供添加选项），</li>
+   <li>元素的原值（若打开的文件中存在该元素）以及</li>
+   <li>修改内容用的控件。</li>
+  </ul>
+
+  <p>
+   大部分值的数据类型显而易见：数字，字符串等。然而，二进制类型以十六进制数位的序列显示。
+	可接受的格式与 mkvmerge 指定剪辑 UID 的那些选项相同：既可以是简单的十六进制数位序列
+	（如 1857a7fe7d……）也可以是每两位以“0x”为前缀的十六进制数
+	（如 0x18 0x57 0xa7 0xfe 0x7d……）。
+  </p>
+
+  <h3><a name="he_validation">5.4. 检验</a></h3>
+
+  <p>
+   您可以通过选择“头部”菜单中的“检验”对您的改动进行检验。
+	在用户保存文件时，检验也会自动进行。
+	检验操作可以确保用户提供的数值能够存储到相关元素中。
+	例如数字元素不能包含字符。
+  </p>
+
+  <p>
+   如果检验失败，
+	首个未通过检验的元素将被选中，这样用户可以修正错误。
+  </p>
+
+  <h3><a name="he_saving">5.5. 保存文件</a></h3>
+
+  <p>
+   用户可以通过选择“文件”菜单中的“保存”来保存改动。
+	如果未进行任何改动，mmg 会如实告知，且不会对文件进行改动。
+  </p>
+
+  <p>
+   在改动文件之前，mmg 会检查文件打开后是否已被其它应用程序改动。
+	如果是这样，mmg 
+	会警告用户，放弃所有改动并重新载入文件，以确保文件不被破坏。
+  </p>
+
+  <p>
+   mmg 会尽可能在最合适的地方写入改动后的头部。
+	它会在原位置、EbmlVoid 元素处以及它发现的所有其他头部实例处覆写已有头部元素。
+	它还会更新元定位头，以便读取此文件的其他程序找到这些头部字段。
+  </p>
+
+  <p>
+   保存文件后，头部辑器将自动重新载入该文件并重新分析它。
+	这样做可以确保文件未发生任何损坏。
+	这一安全功能会很大程度地延缓保存文件的过程。
+	在完成足够的测试之后，后续版本的 mmg 中将移除该功能。</p>
+ </body>
+</html>
