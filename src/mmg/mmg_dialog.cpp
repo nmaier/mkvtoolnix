@@ -32,6 +32,7 @@
 #include "common/ebml.h"
 #include "common/extern_data.h"
 #include "common/locale.h"
+#include "common/locale_string.h"
 #include "common/strings/editing.h"
 #include "common/strings/formatting.h"
 #include "common/translation.h"
@@ -539,16 +540,11 @@ mmg_dialog::display_help(int id) {
   if (help == NULL) {
     wxDirDialog dlg(this, Z("Choose the location of the mkvmerge GUI help files"));
     std::vector<wxString> potential_help_paths;
-    wxString help_path;
-    wxConfigBase *cfg;
-    bool first;
 
 #if defined(SYS_WINDOWS)
-    help_path = get_installation_dir();
-    if (!help_path.IsEmpty()) {
-      help_path += wxT("/doc");
-      potential_help_paths.push_back(help_path);
-    }
+    wxString installation_path = get_installation_dir();
+    if (!installation_path.IsEmpty())
+      potential_help_paths.push_back(installation_path + wxT("/doc"));
 
 #else
     // Debian, probably others
@@ -570,22 +566,39 @@ mmg_dialog::display_help(int id) {
     potential_help_paths.push_back(wxT(MTX_PKG_DATA_DIR "-" VERSION));
 #endif
 
-    cfg = wxConfigBase::Get();
+    wxConfigBase *cfg = wxConfigBase::Get();
     cfg->SetPath(wxT("/GUI"));
+    wxString help_path;
     if (cfg->Read(wxT("help_path"), &help_path))
       potential_help_paths.push_back(help_path);
 
     potential_help_paths.push_back(wxGetCwd() + wxT("/doc"));
     potential_help_paths.push_back(wxGetCwd());
 
-    help_path = wxEmptyString;
+    std::vector<wxString> help_paths_to_test;
+#if defined(HAVE_LIBINTL_H)
+    if (!app->m_ui_locale.empty()) {
+      locale_string_c locale_string(app->m_ui_locale);
+      foreach(const wxString &php, potential_help_paths) {
+        help_paths_to_test.push_back(php + wxT("/guide/") + wxU(locale_string.str(locale_string_c::half)));
+        help_paths_to_test.push_back(php + wxT("/guide/") + wxU(locale_string.str(locale_string_c::language)));
+      }
+    }
+#endif  // HAVE_LIBINTL_H
+
     foreach(const wxString &php, potential_help_paths)
+      help_paths_to_test.push_back(php + wxT("/guide/en"));
+
+    help_path.Empty();
+    foreach(const wxString &php, help_paths_to_test) {
+      wxLogMessage(wxT("HELP PATH testing %s"), php.c_str());
       if (wxFileExists(php + wxT("/mkvmerge-gui.hhp"))) {
         help_path = php;
         break;
       }
+    }
 
-    first = true;
+    bool first = true;
     while (!wxFileExists(help_path + wxT("/mkvmerge-gui.hhp"))) {
       if (first) {
         wxMessageBox(Z("The mkvmerge GUI help file was not found. "

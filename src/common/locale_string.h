@@ -37,6 +37,7 @@ protected:
 
 public:
   enum eval_type_e {
+    language  = 0,
     territory = 1,
     codeset   = 2,
     modifier  = 4,

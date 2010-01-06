@@ -35,7 +35,6 @@ m4_include(ac/lzo.m4)
 m4_include(ac/bz.m4)
 m4_include(ac/wxwidgets.m4)
 m4_include(ac/qt4.m4)
-m4_include(ac/translations.m4)
 m4_include(ac/magic.m4)
 m4_include(ac/ax_boost_base.m4)
 m4_include(ac/ax_boost_filesystem.m4)
@@ -48,12 +47,16 @@ m4_include(ac/etags.m4)
 m4_include(ac/ax_docbook.m4)
 m4_include(ac/tiocgwinsz.m4)
 m4_include(ac/po4a.m4)
+m4_include(ac/translations.m4)
 m4_include(ac/manpages_translations.m4)
+m4_include(ac/guide_translations.m4)
 
 AC_OUTPUT(
   Makefile
   doc/Makefile
   doc/man/Makefile
+  doc/guide/Makefile
+  doc/guide/en/Makefile
   lib/avilib-0.6.10/Makefile
   lib/librmff/Makefile
   src/Makefile

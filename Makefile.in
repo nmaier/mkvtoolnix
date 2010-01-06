@@ -176,6 +176,8 @@ MANPAGES_TRANSLATIONS = @MANPAGES_TRANSLATIONS@
 MANPAGES_TRANSLATIONS_POS = @MANPAGES_TRANSLATIONS_POS@
 MANPAGES_TRANSLATED = @MANPAGES_TRANSLATED@
 
+GUIDE_TRANSLATIONS = @GUIDE_TRANSLATIONS@
+
 HTMLHELPBOOKS = mkvmerge-gui-book
 
 SYSTEM_INCLUDES = -I. -Ilib -Ilib/avilib-0.6.10 -Ilib/utf8-cpp/source -Isrc
@@ -281,14 +283,16 @@ install-trans:
 
 install-guide:
 	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)
-	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/images
-	@for i in doc/mkvmerge-gui.*; do \
-	  echo " $(INSTALL_DATA) $$i $(DESTDIR)$(pkgdatadir)/"; \
-	  $(INSTALL_DATA) $$i $(DESTDIR)$(pkgdatadir)/; \
-	done
-	@for i in doc/images/*gif; do \
-	  echo " $(INSTALL_DATA) $$i $(DESTDIR)$(pkgdatadir)/images/"; \
-	  $(INSTALL_DATA) $$i $(DESTDIR)$(pkgdatadir)/images/; \
+	@for lang in $(GUIDE_TRANSLATIONS); do \
+	  $(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/guide/$$lang/images ; \
+	  for file in doc/guide/$$lang/mkvmerge-gui.*; do \
+	    echo " $(INSTALL_DATA) $$file $(DESTDIR)$(pkgdatadir)/guide/$$lang/"; \
+	    $(INSTALL_DATA) $$file $(DESTDIR)$(pkgdatadir)/guide/$$lang/; \
+	  done; \
+	  for file in doc/guide/$$lang/images/*gif; do \
+	    echo " $(INSTALL_DATA) $$file $(DESTDIR)$(pkgdatadir)/guide/$$lang/images/"; \
+	    $(INSTALL_DATA) $$file $(DESTDIR)$(pkgdatadir)/guide/$$lang/images/; \
+	  done; \
 	done
 
 manpages: $(MANPAGES)
@@ -386,7 +390,7 @@ po-stats po-statistics:
 		msgfmt --statistics -o /dev/null $$i ; \
 	done
 
-mkvmerge-gui-book:	doc/mkvmerge-gui.hhk
+mkvmerge-gui-book:	$(patsubst %,doc/guide/%/mkvmerge-gui.hhk,$(GUIDE_TRANSLATIONS))
 
 tags: TAGS
 
