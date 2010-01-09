@@ -775,7 +775,7 @@ mmg_dialog::update_command_line() {
           aids += wxT(",");
         aids += sid;
 
-        if (!t->appending && (t->aac_is_sbr || t->aac_is_sbr_detected)) {
+        if (t->aac_is_sbr || t->aac_is_sbr_detected) {
           clargs.Add(wxT("--aac-is-sbr"));
           clargs.Add(wxString::Format(wxT("%s:%d"), sid.c_str(), t->aac_is_sbr ? 1 : 0));
         }

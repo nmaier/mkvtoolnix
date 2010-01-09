@@ -1,3 +1,10 @@
+2010-01-09  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: The option 'AAC is SBR/HE-AAC' was not honored
+	for appended AAC tracks. This could lead to mkvmerge aborting with
+	an error that the track parameters did not match if it itself
+	could not detect HE-AAC in the second file.
+
 2010-01-06  Moritz Bunkus  <moritz@bunkus.org>
 
 	* documentation: Added a Chinese Simplified translation for mmg's
