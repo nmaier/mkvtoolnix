@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2009-12-20 14:47+0800\n"
+"PO-Revision-Date: 2010-01-09 22:50+0800\n"
 "Last-Translator: Dean Lee <xslidian@gmail.com>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -182,7 +182,7 @@ msgid ""
 "                           entries to chapter names.\n"
 msgstr ""
 "  --cue-chapter-name-format <format>\n"
-"                           由 CUE 索引向章节名称的转换模式。\n"
+"                           由 CUE 表单元素向章节名称的转换模式。\n"
 
 #: src/merge/mkvmerge.cpp:238
 msgid ""
@@ -1114,14 +1114,12 @@ msgid "'%1%' is not a valid tuple of track ID and default duration in '--default
 msgstr "'%1%' 不是有效的 轨道 ID - 默认时长 组，在 '--default-duration %1%'。\n"
 
 #: src/extract/extract_cli_parser.cpp:142
-#, fuzzy
 msgid "'%1%' is only allowed when extracting chapters.\n"
-msgstr "'-c' 仅允许在提取轨道时使用。\n"
+msgstr "'%1%' 仅允许在提取章节时使用。\n"
 
 #: src/extract/extract_cli_parser.cpp:139
-#, fuzzy
 msgid "'%1%' is only allowed when extracting tracks.\n"
-msgstr "'-c' 仅允许在提取轨道时使用。\n"
+msgstr "'%1%' 仅允许在提取轨道时使用。\n"
 
 #: src/merge/mkvmerge.cpp:1615
 msgid "'%1%' lacks a file name.\n"
@@ -1173,7 +1171,7 @@ msgstr "'%1%': %2%"
 #: src/common/mm_multi_file_io.cpp:165
 #: src/mmg/tabs/input.cpp:688
 msgid "'%1%': Processing the following files as well: %2%\n"
-msgstr ""
+msgstr "'%1%': 将同时处理以下文件: %2%\n"
 
 #: src/merge/mkvmerge.cpp:2057
 msgid "'--append-mode' lacks its argument.\n"
@@ -1717,7 +1715,7 @@ msgstr "以此值新增属性，即使已存在这样的属性"
 
 #: src/mmg/mmg_dialog.cpp:115
 msgid "Adds the current settings as a new job entry to the job queue"
-msgstr "将当前设置作为新任务项添加到任务队列"
+msgstr "将当前配置作为新任务项添加到任务队列"
 
 #: src/mmg/tabs/chapters.cpp:1351
 msgid "Adjust chapter timecodes"
@@ -1770,7 +1768,7 @@ msgstr "允许 CodecState 元素的使用。它被用于 MPEG-1/-2 视频轨等�
 
 #: src/extract/extract_cli_parser.cpp:79
 msgid "Also try to extract the CUE sheet from the chapter information and tags for this track."
-msgstr ""
+msgstr "同时尝试将此轨道的章节信息和标签提取为 CUE 表单。"
 
 #: src/mmg/options/mmg.cpp:91
 msgid "Always on top"
@@ -1864,7 +1862,7 @@ msgstr "至少需要一个 <EditionEntry> 元素。"
 
 #: src/extract/extract_cli_parser.cpp:97
 msgid "Atatchment extraction"
-msgstr ""
+msgstr "附件提取"
 
 #: src/info/mkvinfo.cpp:1257
 msgid "Attached"
@@ -2008,9 +2006,8 @@ msgid "Browse"
 msgstr "浏览"
 
 #: src/extract/extract_cli_parser.cpp:114
-#, fuzzy
 msgid "CUE sheet extraction"
-msgstr "发生异常"
+msgstr "CUE 表单提取"
 
 #: src/output/p_mpeg4_p2.cpp:120
 msgid "Cannot convert non-native MPEG4 video frames into native ones if the source container provides neither timecodes nor a number of frames per second.\n"
@@ -2109,9 +2106,8 @@ msgid "Chapter editor is not empty"
 msgstr "章节编辑器非空"
 
 #: src/extract/extract_cli_parser.cpp:106
-#, fuzzy
 msgid "Chapter extraction"
-msgstr "章节选项"
+msgstr "章节提取"
 
 #: src/mmg/tabs/global.cpp:183
 msgid "Chapter file:"
@@ -2397,7 +2393,7 @@ msgstr "内容加密"
 
 #: src/extract/extract_cli_parser.cpp:77
 msgid "Convert text subtitles to this charset (default: UTF-8)."
-msgstr ""
+msgstr "将文本字幕转换为指定字符集 (默认: UTF-8)。"
 
 #: src/mmg/mmg_dialog.cpp:111
 msgid "Copy the command line to the clipboard"
@@ -2435,7 +2431,7 @@ msgstr "无法解码以 Base64 编码的数据 - 似乎是畸形的。"
 #: src/input/r_matroska.cpp:1640
 #: src/input/r_ogm.cpp:1136
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
-msgstr "无法从该 AVC/h.264 轨道提取解码器特有设置数据 (AVCC)。\n"
+msgstr "无法从该 AVC/h.264 轨道提取解码器特有配置数据 (AVCC)。\n"
 
 #: src/input/r_avi.cpp:280
 #: src/input/r_avi.cpp:285
@@ -2807,7 +2803,7 @@ msgstr "Dolby TrueHD"
 
 #: src/extract/extract_cli_parser.cpp:71
 msgid "Don't write variable parts to output files (only for debugging)."
-msgstr ""
+msgstr "不要将可变部分写入至输出文件中 (仅供调试使用)。"
 
 #: src/propedit/propedit.cpp:106
 msgid "Done.\n"
@@ -2941,7 +2937,7 @@ msgstr "初始化章节, 标签及剪辑信息元素表时出错: 无法找到�
 #: src/mmg/mmg_dialog.cpp:291
 #: src/mmg/mmg_dialog.cpp:310
 msgid "Error loading settings"
-msgstr "载入设置出错"
+msgstr "载入配置出错"
 
 #: src/mmg/tabs/chapters.cpp:685
 msgid "Error opening file"
@@ -3018,7 +3014,7 @@ msgstr "一切正常。"
 #: src/extract/extract_cli_parser.cpp:119
 #: src/extract/extract_cli_parser.cpp:127
 msgid "Example"
-msgstr ""
+msgstr "示例"
 
 #: src/mmg/options/mkvmerge.cpp:105
 #, c-format
@@ -3039,7 +3035,7 @@ msgstr "预期为无符号整数，但发现了 '%1%'。"
 
 #: src/extract/extract_cli_parser.cpp:108
 msgid "Exports the chapter infomartion in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
-msgstr ""
+msgstr "将章节信息以 OGM tools 所用的简单格式 (CHAPTER01=... CHAPTER01NAME=...) 导出。"
 
 #: src/mmg/tabs/input.cpp:150
 msgid "Extra options"
@@ -3047,11 +3043,11 @@ msgstr "额外选项"
 
 #: src/extract/extract_cli_parser.cpp:82
 msgid "Extract the data to a raw file including the CodecPrivate as a header."
-msgstr ""
+msgstr "将数据提取为原始文件，并以 CodecPrivate 编解码器私有数据作为文件头。"
 
 #: src/extract/extract_cli_parser.cpp:81
 msgid "Extract the data to a raw file."
-msgstr ""
+msgstr "将数据提取为原始文件。"
 
 #: src/output/p_avc.cpp:128
 #: src/output/p_mpeg4_p10.cpp:60
@@ -3172,7 +3168,7 @@ msgstr "文件识别失败。返回代码: %d。错误代号: %d (%s)。请确�
 
 #: src/mmg/tabs/input.cpp:301
 msgid "File is already processed"
-msgstr ""
+msgstr "文件已在处理"
 
 #: src/mmg/header_editor/frame.cpp:495
 msgid "File modified"
@@ -3321,9 +3317,8 @@ msgid "Global"
 msgstr "全局"
 
 #: src/extract/extract_cli_parser.cpp:69
-#, fuzzy
 msgid "Global options"
-msgstr " 全局选项:\n"
+msgstr "全局选项"
 
 #: src/mmg/tabs/global.cpp:231
 msgid "Global tags"
@@ -3596,9 +3591,8 @@ msgid "Invalid cues option. No track ID specified in '--cues %1%'.\n"
 msgstr "无效的索引选项。未在 '--cues %1%' 指定轨道 ID。\n"
 
 #: src/mmg/mmg_dialog.cpp:485
-#, fuzzy
 msgid "Invalid file name"
-msgstr "缺文件名"
+msgstr "无效的文件名"
 
 #: src/merge/mkvmerge.cpp:864
 msgid "Invalid format for '--split' in '--split %1%'.\n"
@@ -3814,7 +3808,7 @@ msgstr "Kate 包过小，跳过。\n"
 
 #: src/extract/extract_cli_parser.cpp:80
 msgid "Keep only the BlockAdditions up to this level (default: keep all levels)"
-msgstr ""
+msgstr "仅保留高达此层级的附加块 (默认: 保留所有层级)"
 
 #: src/merge/mkvmerge.cpp:404
 msgid ""
@@ -3897,7 +3891,7 @@ msgstr "行 %1%, 列 %2%: %3%"
 
 #: src/input/subtitles.cpp:180
 msgid "Line %1%: Negative timestamp encountered. The entry will be adjusted to start from 00:00:00.000.\n"
-msgstr ""
+msgstr "行 %1%: 遇到负的时间戳。此项将被调整为起始于 00:00:00.000。\n"
 
 #: src/input/r_vobsub.cpp:278
 msgid "Line %1%: The current timestamp (%2%) is smaller than the previous one (%3%). The entries will be sorted according to their timestamps. This might result in the wrong order for some subtitle entries. If this is the case then you have to fix the .idx file manually.\n"
@@ -3922,7 +3916,7 @@ msgstr "载入章节文件 (简单/OGM 格式或 XML 格式)"
 
 #: src/mmg/mmg_dialog.cpp:93
 msgid "Load muxing settings from a file"
-msgstr "从文件载入混流设置"
+msgstr "从文件载入混流配置"
 
 #: src/mmg/mux_dialog.cpp:231
 #, c-format
@@ -4350,9 +4344,8 @@ msgid "Not a valid Matroska file (no segment/level 0 element found)"
 msgstr "不是有效的 Matroska 文件 (未发现有效的 剪辑/0 层级元素)"
 
 #: src/mmg/tabs/input.cpp:689
-#, fuzzy
 msgid "Note"
-msgstr "单视角"
+msgstr "注意"
 
 #: src/propedit/options.cpp:30
 msgid "Nothing to do.\n"
@@ -4434,9 +4427,8 @@ msgid "Open an existing Matroska file"
 msgstr "打开现有的 Matroska 文件"
 
 #: src/mmg/mux_dialog.cpp:294
-#, fuzzy
 msgid "Open folder"
-msgstr "打开文件"
+msgstr "打开文件夹"
 
 #: src/mmg/mmg_dialog.cpp:685
 msgid "Option file created."
@@ -4510,7 +4502,7 @@ msgstr "完整解析文件并显示所有元素"
 
 #: src/extract/extract_cli_parser.cpp:70
 msgid "Parse the whole file instead of relying on the index."
-msgstr ""
+msgstr "解析整个文件，而不是依照索引。"
 
 #: src/info/mkvinfo.cpp:1615
 msgid "Parsing file"
@@ -4684,11 +4676,11 @@ msgstr "Quicktime/MP4 读取器: 无效的块尺寸 %1% 于 %2%。\n"
 
 #: src/input/r_qtmp4.cpp:298
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
-msgstr "Quicktime/MP4 读取器: MPEG4 part 10/AVC 轨道 %1% 缺解码器设置信息。正在跳过该轨。\n"
+msgstr "Quicktime/MP4 读取器: MPEG4 part 10/AVC 轨道 %1% 缺解码器配置信息。正在跳过该轨。\n"
 
 #: src/input/r_qtmp4.cpp:291
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
-msgstr "Quicktime/MP4 读取器: MPEG4 轨 %1% 缺 esds 单元/解码器设置信息。正在跳过该轨。\n"
+msgstr "Quicktime/MP4 读取器: MPEG4 轨 %1% 缺 esds 单元/解码器配置信息。正在跳过该轨。\n"
 
 #: src/input/r_qtmp4.cpp:129
 msgid "Quicktime/MP4 reader: Source is not a valid Quicktime/MP4 file."
@@ -4708,7 +4700,7 @@ msgstr "Quicktime/MP4 读取器: 'time scale' 时间缩放参数为 0。这是�
 
 #: src/input/r_qtmp4.cpp:259
 msgid "Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
-msgstr "Quicktime/MP4 读取器: 该 AAC 轨道 %1% 缺 esds 单元/解码器设置信息。正在跳过该轨。\n"
+msgstr "Quicktime/MP4 读取器: 该 AAC 轨道 %1% 缺 esds 单元/解码器配置信息。正在跳过该轨。\n"
 
 #: src/input/r_qtmp4.cpp:253
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
@@ -4910,7 +4902,7 @@ msgstr "保存日志"
 
 #: src/mmg/mmg_dialog.cpp:94
 msgid "Save muxing settings to a file"
-msgstr "将混流设置保存到文件"
+msgstr "将混流配置保存到文件"
 
 #: src/mmg/mmg_dialog.cpp:112
 msgid "Save the command line to a file"
@@ -5156,7 +5148,7 @@ msgstr "选择此视频轨的立体视法。如果留空则保留原模式，或
 
 #: src/info/mkvinfo.cpp:797
 msgid "Settings: %1%"
-msgstr "设置: %1%"
+msgstr "配置: %1%"
 
 #: src/mmg/cli_options_dlg.cpp:81
 msgid "Several options that control the overall output that mkvmerge creates."
@@ -5408,9 +5400,8 @@ msgid "TTA lossless audio"
 msgstr "TTA 无损音频"
 
 #: src/extract/extract_cli_parser.cpp:90
-#, fuzzy
 msgid "Tag extraction"
-msgstr "发生异常"
+msgstr "标签提取"
 
 #: src/mmg/tabs/global.cpp:232
 msgid "Tag file:"
@@ -5714,7 +5705,7 @@ msgstr "从 MPEG4 layer 2 视频数据位流中提取的视频宽度和高度值
 
 #: src/extract/extract_cli_parser.cpp:116
 msgid "The fifth mode tries to extract chapter information and tags and outputs them as a CUE sheet. This is the reverse of using a CUE sheet with mkvmerge's '--chapters' option."
-msgstr ""
+msgstr "第一个模式将尝试提取章节信息和标签并将其以 CUE 表单的形式输出。这是使用 mkvmerge 的 '--chapters' 选项调用 CUE 表单的逆操作。"
 
 #: src/merge/mkvmerge.cpp:1394
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
@@ -5772,7 +5763,7 @@ msgstr "文件 '%s' 不存在。"
 #: src/mmg/tabs/input.cpp:299
 #, c-format
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
-msgstr ""
+msgstr "文件 '%s' 已经与文件 '%s' 作为组合处理。不能重复添加。"
 
 #: src/info/qt_ui.cpp:77
 msgid "The file could not be opened for writing."
@@ -5784,11 +5775,11 @@ msgstr "文件不存在。"
 
 #: src/mmg/mmg_dialog.cpp:310
 msgid "The file does not seem to be a valid mkvmerge GUI settings file."
-msgstr "文件似乎不是有效的 mkvmerge GUI 设置文件。"
+msgstr "文件似乎不是有效的 mkvmerge GUI 配置文件。"
 
 #: src/mmg/header_editor/frame.cpp:494
 msgid "The file has been changed by another program since it was read by the header editor. Therefore you have to re-load it. Unfortunately this means that all of your changes will be lost."
-msgstr "在头部编辑器读取此文件后，文件已被其它程序更改。因此您需要重新载入它。不幸的是这意味着您将丢失所有改动。"
+msgstr "在头部编辑器读取此文件后，文件已被其他程序更改。因此您需要重新载入它。不幸的是这意味着您将丢失所有改动。"
 
 #: src/input/r_tta.cpp:65
 msgid "The file header is too short.\n"
@@ -5858,11 +5849,11 @@ msgstr "首个文件不能作为追加文件，因为没有文件供其追加。
 
 #: src/extract/extract_cli_parser.cpp:76
 msgid "The first mode extracts some tracks to external files."
-msgstr ""
+msgstr "第一个模式将把指定轨道提取为外部文件。"
 
 #: src/extract/extract_cli_parser.cpp:65
 msgid "The first word tells mkvextract what to extract. The second must be the source file. There are few global options that can be used with all modes. All other options depend on the mode."
-msgstr ""
+msgstr "第一个单词告诉 mkvextract 要提取什么。第二个必须是源文件。全局选项可在所有模式下使用。其他选项依模式决定。"
 
 #: src/mmg/tabs/global.cpp:478
 msgid "The format of the split size is invalid (size too small)."
@@ -5883,7 +5874,7 @@ msgstr "格式不匹配。"
 
 #: src/extract/extract_cli_parser.cpp:107
 msgid "The fourth mode extracts the chapters and converts them to XML. The output is written to the standard output. The output can be used as a source for mkvmerge."
-msgstr ""
+msgstr "第三个模式将提取章节，并将其转换为 XML。输出文件将按标准输出。输出文件可作为 mkvmerge 处理所用的源文件。"
 
 #: src/merge/mkvmerge.cpp:1488
 msgid "The given timecode scale factor is outside the valid range (1...10000000 or -1 for 'sample precision even if a video track is present').\n"
@@ -6088,7 +6079,7 @@ msgstr "即将输出的文件 '%s' 已存在。是否覆盖？"
 
 #: src/mmg/mmg_dialog.cpp:485
 msgid "The output file name is invalid, e.g. it might contain invalid characters like ':'."
-msgstr ""
+msgstr "输出文件名无效，可能含有 ':' 一类的无效字符。"
 
 #: src/input/r_corepicture.cpp:155
 msgid "The panoramic mode '%1%' is not recognized.\n"
@@ -6150,7 +6141,7 @@ msgstr ""
 
 #: src/extract/extract_cli_parser.cpp:91
 msgid "The second mode extracts the tags and converts them to XML. The output is written to the standard output. The output can be used as a source for mkvmerge."
-msgstr ""
+msgstr "第三个模式将提取标签，并将其转换为 XML。输出文件将按标准输出。输出文件可作为 mkvmerge 处理所用的源文件。"
 
 #: src/input/r_tta.cpp:85
 msgid "The seek table in this TTA file seems to be broken.\n"
@@ -6163,7 +6154,7 @@ msgstr "选定的语言 '%s' （章节 '%s'）不是有效的语言代码。请�
 
 #: src/extract/extract_cli_parser.cpp:125
 msgid "The sixth mode finds the timecodes of all blocks for a track and outputs a timecode v2 file with these timecodes."
-msgstr ""
+msgstr "第六个模式将查找指定轨道所有块的时间码，并将其输出为时间码 v2 文件。"
 
 #: src/mmg/tabs/global.cpp:71
 msgid "The size after which a new output file is started. The letters 'G', 'M' and 'K' can be used to indicate giga/mega/kilo bytes respectively. All units are based on 1024 (G = 1024^3, M = 1024^2, K = 1024)."
@@ -6212,9 +6203,8 @@ msgid "The temporary file '%1%' could not be opened for reading (%2%).\n"
 msgstr "临时文件 '%1%' 无法打开以读取 (%2%)。\n"
 
 #: src/extract/extract_cli_parser.cpp:99
-#, fuzzy
 msgid "The third mode extracts attachments from the source file."
-msgstr "  -M, --no-attachments     不要从指定源文件中复制附件。\n"
+msgstr "第三个模式将从源文件中提取附件。"
 
 #: src/merge/timecode_factory.cpp:57
 msgid "The timecode file '%1%' contains an unsupported/unrecognized format (version %2%).\n"
@@ -6460,9 +6450,8 @@ msgid "Time slice"
 msgstr "时间切片"
 
 #: src/extract/extract_cli_parser.cpp:123
-#, fuzzy
 msgid "Timecode extraction"
-msgstr "时间码缩放比例"
+msgstr "时间码提取"
 
 #: src/mmg/tabs/input_general.cpp:263
 #, c-format
@@ -6595,7 +6584,7 @@ msgstr "轨道 UID: %1%"
 
 #: src/extract/extract_cli_parser.cpp:75
 msgid "Track extraction"
-msgstr ""
+msgstr "轨道提取"
 
 #: src/propedit/options.cpp:157
 #: src/propedit/propedit_cli_parser.cpp:88
@@ -6731,9 +6720,8 @@ msgid "Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n"
 msgstr "此音频轨的格式 0x%|1$04x| 未知或不支持。\n"
 
 #: src/extract/extract_cli_parser.cpp:242
-#, fuzzy
 msgid "Unrecognized command line option '%1%'.\n"
-msgstr "添加命令行选项"
+msgstr "无法识别的命令行选项 '%1%'。\n"
 
 #: src/mmg/header_editor/value_page.cpp:73
 msgid "Unsigned integer"
@@ -6761,7 +6749,7 @@ msgstr "更新元素 '%1%' 失败。原因:\n"
 
 #: src/extract/extract_cli_parser.cpp:54
 msgid "Usage"
-msgstr ""
+msgstr "用法"
 
 #: src/info/mkvinfo.cpp:198
 msgid ""
@@ -6805,7 +6793,7 @@ msgstr "为生成的文件使用 '剪辑链接'。关于此特性的深入解释
 
 #: src/mmg/cli_options_dlg.cpp:122
 msgid "Use fixed values for the elements that change with each file otherwise (muxing date, segment UID, track UIDs etc.). Two files muxed with the same settings and this switch activated will be identical."
-msgstr "对随文件改变而变动的元素 (混流日期, 剪辑 UID, 轨道 UID 等) 使用固定值。在激活本开关的情况下，使用相同设置混流的两个文件会完全一样。"
+msgstr "对随文件改变而变动的元素 (混流日期, 剪辑 UID, 轨道 UID 等) 使用固定值。在激活本开关的情况下，使用相同配置混流的两个文件会完全一样。"
 
 #: src/mmg/cli_options_dlg.cpp:134
 msgid "Use the old AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') instead of the new one ('A_AAC')."
@@ -7293,16 +7281,15 @@ msgstr "为所有块写入时长。这将增大文件尺寸，而且当前对播
 
 #: src/extract/extract_cli_parser.cpp:78
 msgid "Write raw FLAC files (default: write OggFLAC files)."
-msgstr ""
+msgstr "写入为原始 FLAC 文件 (默认: 写为 OggFLAC 文件)。"
 
 #: src/extract/extract_cli_parser.cpp:100
-#, fuzzy
 msgid "Write the attachment with the ID 'AID' to 'outname'."
-msgstr "找不到 ID 为 %1% 的附件。\n"
+msgstr "将 ID 为 'AID' 的附件写为 'outname'。"
 
 #: src/extract/extract_cli_parser.cpp:83
 msgid "Write track with the ID TID to the file 'out'."
-msgstr ""
+msgstr "将 ID 为 TID 的轨道写入为文件 'out'。"
 
 #: src/info/mkvinfo.cpp:529
 msgid "Writing application: %1%"
@@ -7912,11 +7899,11 @@ msgstr "matroska_reader: 缺CodecID。\n"
 
 #: src/input/r_matroska.cpp:308
 msgid "matroska_reader: The height for track %1% was not set.\n"
-msgstr "matroska_reader: 轨道 %1% 的高未设置。\n"
+msgstr "matroska_reader: 未设置轨道 %1% 的高。\n"
 
 #: src/input/r_matroska.cpp:302
 msgid "matroska_reader: The width for track %1% was not set.\n"
-msgstr "matroska_reader: 轨道 %1% 的宽未设置。\n"
+msgstr "matroska_reader: 未设置轨道 %1% 的宽。\n"
 
 #: src/input/r_matroska.cpp:481
 msgid "matroska_reader: Track %1% seems to be ok.\n"
@@ -7990,60 +7977,59 @@ msgstr "mkdir(%1%) 创建文件夹失败; 错误号 = %2% (%3%)"
 
 #: src/extract/extract_cli_parser.cpp:61
 msgid "mkvextract <-h|-V>"
-msgstr ""
+msgstr "mkvextract <-h|-V>"
 
 #: src/extract/extract_cli_parser.cpp:52
 msgid "mkvextract <mode> <source-filename> [options] <extraction-spec>"
-msgstr ""
+msgstr "mkvextract <模式> <源文件名> [选项] <输出指定>"
 
 #: src/extract/extract_cli_parser.cpp:104
 msgid "mkvextract attachments \"a movie.mkv\" 4:cover.jpg"
-msgstr ""
+msgstr "mkvextract attachments \"一部影片.mkv\" 4:封面.jpg"
 
 #: src/extract/extract_cli_parser.cpp:57
 msgid "mkvextract attachments <inname> [options] [AID1:out1 [AID2:out2 ...]]"
-msgstr ""
+msgstr "mkvextract attachments <inname> [选项] [AID1:out1 [AID2:out2 ...]]"
 
 #: src/extract/extract_cli_parser.cpp:112
 msgid "mkvextract chapters \"a movie.mkv\" > movie_chapters.xml"
-msgstr ""
+msgstr "mkvextract chapters \"一部影片.mkv\" > 影片章节.xml"
 
 #: src/extract/extract_cli_parser.cpp:58
 msgid "mkvextract chapters <inname> [options]"
-msgstr ""
+msgstr "mkvextract chapters <inname> [选项]"
 
 #: src/extract/extract_cli_parser.cpp:121
 msgid "mkvextract cuesheet \"audiofile.mka\" > audiofile.cue"
-msgstr ""
+msgstr "mkvextract cuesheet \"音频文件.mka\" > 音频文件.cue"
 
 #: src/extract/extract_cli_parser.cpp:59
 msgid "mkvextract cuesheet <inname> [options]"
-msgstr ""
+msgstr "mkvextract cuesheet <inname> [选项]"
 
 #: src/extract/extract_cli_parser.cpp:95
 msgid "mkvextract tags \"a movie.mkv\" > movie_tags.xml"
-msgstr ""
+msgstr "mkvextract tags \"一部影片.mkv\" > 影片标签.xml"
 
 #: src/extract/extract_cli_parser.cpp:56
-#, fuzzy
 msgid "mkvextract tags <inname> [options]"
-msgstr "mkvmerge 选项"
+msgstr "mkvextract tags <inname> [选项]"
 
 #: src/extract/extract_cli_parser.cpp:129
 msgid "mkvextract timecodes_v2 \"a movie.mkv\" 1:timecodes_track1.txt"
-msgstr ""
+msgstr "mkvextract timecodes_v2 \"一部影片.mkv\" 1:时间码_轨道1.txt"
 
 #: src/extract/extract_cli_parser.cpp:60
 msgid "mkvextract timecodes_v2 <inname> [TID1:out1 [TID2:out2 ...]]"
-msgstr ""
+msgstr "mkvextract timecodes_v2 <inname> [TID1:out1 [TID2:out2 ...]]"
 
 #: src/extract/extract_cli_parser.cpp:87
 msgid "mkvextract tracks \"a movie.mkv\" 2:audio.ogg -c ISO8859-1 3:subs.srt"
-msgstr ""
+msgstr "mkvextract tracks \"一部影片.mkv\" 2:音频.ogg -c ISO8859-1 3:字幕.srt"
 
 #: src/extract/extract_cli_parser.cpp:55
 msgid "mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]"
-msgstr ""
+msgstr "mkvextract tracks <inname> [选项] [TID1:out1 [TID2:out2 ...]]"
 
 #: src/extract/mkvextract.cpp:57
 msgid "mkvextract.cpp/show_element(): level > 9: %1%"
@@ -8084,7 +8070,7 @@ msgstr "mkvmerge GUI 准备就绪"
 #: src/mmg/mmg_dialog.cpp:330
 #, c-format
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
-msgstr "mkvmerge GUI 设置文件 (*.mmg)|*.mmg|%s"
+msgstr "mkvmerge GUI 配置文件 (*.mmg)|*.mmg|%s"
 
 #: src/mmg/tabs/input.cpp:1243
 #: src/mmg/tabs/input.cpp:1268
