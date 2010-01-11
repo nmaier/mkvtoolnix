@@ -1640,6 +1640,9 @@ qtmp4_reader_c::create_packetizers() {
 
 int
 qtmp4_reader_c::get_progress() {
+  if (-1 == main_dmx)
+    return 100;
+
   qtmp4_demuxer_cptr &dmx = demuxers[main_dmx];
   unsigned int max_chunks = (0 == dmx->sample_size) ? dmx->sample_table.size() : dmx->chunk_table.size();
 
