@@ -175,15 +175,7 @@ Sets the segment UIDs to use\&. This is a comma\-separated list of 128bit segmen
 .sp
 単位が指定されなかった場合、クラスタごとのデータブロックの最大個数は\fIn\fRに設定されます。上限は65535です。
 .sp
-If the number
-\fId\fR
-is postfixed with \'ms\' then
-\fBmkvmerge\fR(1)
-puts at most
-\fId\fR
-milliseconds of data into each cluster\&. The minimum for
-\fId\fR
-is \'100ms\', and the maximum is \'32000ms\'\&.
+数字\fId\fRに\'ms\'が後置されていた場合、\fBmkvmerge\fR(1)は各データクラスタ毎に最大でも\fId\fRミリ秒分のデータしか格納しません。\fId\fRの最小値は\'100ms\'、最大値は\'32000ms\'です。
 .sp
 デフォルトは、データクラスタ毎に65535データブロック以下、2000ms以下のデータを書き込みます。
 .sp
@@ -292,11 +284,7 @@ timecodes:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
 例:
 \-\-split timecodes:00:45:00\&.000,01:20:00\&.250,6300s
 .sp
-The parameters
-\fIA\fR,
-\fIB\fR,
-\fIC\fR
-etc must all have the same format as the ones used for the duration (see above)\&. The list of timecodes is separated by commas\&. After the input stream has reached the current split point\'s timecode a new file is created\&. Then the next split point given in this list is used\&.
+パラメータ\fIA\fR、\fIB\fR、\fIC\fR\&...は、durationで使用されるものと同じフォーマットで指定しなければなりません(上記参照)。タイムコードのリストはコンマで区切られます。入力ストリームが現在の分割点に達すると次のファイルが作成され、このリストから次の分割点が使用されます。
 .sp
 \'timecodes:\'という接頭辞は、互換性のために省略できるようになっています。
 .RE
@@ -548,13 +536,8 @@ default duration が強制的に指定されない場合、mkvmergeはトラッ�
 .PP
 \fB\-\-nalu\-size\-length\fR \fITID:n\fR
 .RS 4
-Forces the
-NALU
-size length to
-\fIn\fR
-bytes\&. This parameter is only used if the
-AVC/h\&.264
-elementary stream packetizer is used\&. If left out it defaults to 4 bytes, but there are files that contain frames or slices that are all smaller than 65536 bytes\&. For such files you can use this parameter and decrease the size to 2\&.
+
+NALUサイズ長を\fIn\fRバイトに強制設定します。このパラメータはAVC/h\&.264エレメンタリストリームパケタイザが使用される場合にのみ使用されます。何も指定しなかった時のデフォルト値は4バイトですが、65535バイト以上のフレームやスライスが含まれていないファイルも存在します。そのようなファイルでは、このパラメータを使用してNALUサイズ長を2に減らすことができます。
 .RE
 .PP
 ビデオトラックにのみ適用されるオプション:
