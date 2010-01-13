@@ -18,7 +18,6 @@ Matroska video utilities.
 %files
 %defattr(-, root, root)
 %doc AUTHORS COPYING README ChangeLog NEWS TODO
-%doc doc/mkvmerge-gui.html
 %{_bindir}/*
 %{_datadir}/man/man1/*
 %{_datadir}/man/ja/man1/*
