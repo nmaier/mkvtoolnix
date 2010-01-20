@@ -912,6 +912,11 @@ mmg_dialog::update_command_line() {
         clargs.Add(sid + wxT(":") + compression);
       }
 
+      if (!t->appending && !t->cropping.IsEmpty()) {
+        clargs.Add(wxT("--cropping"));
+        clargs.Add(sid + wxT(":") + t->cropping);
+      }
+
       if (!t->appending && (t->timecodes.Length() > 0)) {
         clargs.Add(wxT("--timecodes"));
         clargs.Add(sid + wxT(":") + t->timecodes);

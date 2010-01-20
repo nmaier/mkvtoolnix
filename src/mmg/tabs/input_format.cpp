@@ -158,15 +158,14 @@ tab_input_format::tab_input_format(wxWindow *parent,
   cob_sub_charset->SetSizeHints(0, -1);
   siz_fg->Add(cob_sub_charset, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  st_compression = new wxStaticText(this, -1, Z("Compression:"));
-  st_compression->Enable(false);
-  siz_fg->Add(st_compression, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
+  st_cropping = new wxStaticText(this, -1, Z("Cropping:"));
+  st_cropping->Enable(false);
+  siz_fg->Add(st_cropping, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  cob_compression = new wxMTX_COMBOBOX_TYPE(this, ID_CB_COMPRESSION, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
-  cob_compression->SetToolTip(TIP("Sets the compression used for VobSub subtitles. If nothing is chosen then the "
-                                  "VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."));
-  cob_compression->SetSizeHints(0, -1);
-  siz_fg->Add(cob_compression, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
+  tc_cropping = new wxTextCtrl(this, ID_TC_CROPPING, wxEmptyString);
+  tc_cropping->SetToolTip(TIP("Sets the cropping parameters. Must be comma-separated list of four numbers for the cropping to be used at the left, top, right and bottom."));
+  tc_cropping->SetSizeHints(0, -1);
+  siz_fg->Add(tc_cropping, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   siz_all->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
 
@@ -221,16 +220,6 @@ tab_input_format::setup_control_contents() {
     cob_sub_charset->Append(sorted_charsets[i]);
 
   cob_sub_charset_translations.add(wxT("default"), Z("default"));
-
-  cob_compression->Append(wxEmptyString);
-  cob_compression->Append(Z("none"));
-  cob_compression->Append(wxT("zlib"));
-  if (capabilities[wxT("BZ2")] == wxT("true"))
-    cob_compression->Append(wxT("bz2"));
-  if (capabilities[wxT("LZO")] == wxT("true"))
-    cob_compression->Append(wxT("lzo"));
-
-  cob_compression_translations.add(wxT("none"), Z("none"));
 }
 
 void
@@ -262,8 +251,6 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   cob_fps->Enable(video);
   st_nalu_size_length->Enable(avc || avc_es);
   cob_nalu_size_length->Enable(avc || avc_es);
-  st_compression->Enable((ctype.Find(wxT("vobsub")) >= 0) && !appending);
-  cob_compression->Enable((ctype.Find(wxT("vobsub")) >= 0) && !appending);
 
   bool ar_enabled = normal_track && (NULL != t) && !t->display_dimensions_selected;
   rb_aspect_ratio->Enable(video);
@@ -272,6 +259,8 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   tc_display_width->Enable(video && !ar_enabled);
   st_x->Enable(video && !ar_enabled);
   tc_display_height->Enable(video && !ar_enabled);
+  st_cropping->Enable(video);
+  tc_cropping->Enable(video);
 
   rb_aspect_ratio->SetValue(video && ar_enabled);
   rb_display_dimensions->SetValue(video && !ar_enabled);
@@ -294,7 +283,6 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   tc_delay->SetValue(wxEmptyString);
   tc_stretch->SetValue(wxEmptyString);
   set_combobox_selection(cob_sub_charset, wxU(""));
-  set_combobox_selection(cob_compression, wxEmptyString);
   cb_aac_is_sbr->SetValue(false);
 
   input->dont_copy_values_now = saved_dcvn;
@@ -330,6 +318,14 @@ tab_input_format::on_stretch_changed(wxCommandEvent &evt) {
     return;
 
   tracks[input->selected_track]->stretch = tc_stretch->GetValue();
+}
+
+void
+tab_input_format::on_cropping_changed(wxCommandEvent &evt) {
+  if (input->dont_copy_values_now || (-1 == input->selected_track))
+    return;
+
+  tracks[input->selected_track]->cropping = tc_cropping->GetValue();
 }
 
 void
@@ -370,14 +366,6 @@ tab_input_format::on_stereo_mode_changed(wxCommandEvent &evt) {
     return;
 
   tracks[input->selected_track]->stereo_mode = cob_stereo_mode->GetSelection();
-}
-
-void
-tab_input_format::on_compression_selected(wxCommandEvent &evt) {
-  if (input->dont_copy_values_now || (input->selected_track == -1))
-    return;
-
-  tracks[input->selected_track]->compression = cob_compression_translations.to_english(cob_compression->GetStringSelection());
 }
 
 void
@@ -432,9 +420,9 @@ BEGIN_EVENT_TABLE(tab_input_format, wxPanel)
   EVT_TEXT(ID_CB_SUBTITLECHARSET,          tab_input_format::on_subcharset_selected)
   EVT_TEXT(ID_TC_DELAY,                    tab_input_format::on_delay_changed)
   EVT_TEXT(ID_TC_STRETCH,                  tab_input_format::on_stretch_changed)
+  EVT_TEXT(ID_TC_CROPPING,                 tab_input_format::on_cropping_changed)
   EVT_RADIOBUTTON(ID_RB_ASPECTRATIO,       tab_input_format::on_aspect_ratio_selected)
   EVT_RADIOBUTTON(ID_RB_DISPLAYDIMENSIONS, tab_input_format::on_display_dimensions_selected)
   EVT_TEXT(ID_TC_DISPLAYWIDTH,             tab_input_format::on_display_width_changed)
   EVT_TEXT(ID_TC_DISPLAYHEIGHT,            tab_input_format::on_display_height_changed)
-  EVT_COMBOBOX(ID_CB_COMPRESSION,          tab_input_format::on_compression_selected)
 END_EVENT_TABLE();

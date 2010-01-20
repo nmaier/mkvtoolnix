@@ -54,6 +54,7 @@
 #define ID_TC_USER_DEFINED                11035
 #define ID_B_REMOVE_ALL_FILES             11036
 #define ID_CB_FORCED_TRACK                11037
+#define ID_TC_CROPPING                    11038
 #define ID_NB_OPTIONS                     11999
 
 extern const wxChar *predefined_aspect_ratios[];
@@ -99,19 +100,18 @@ class tab_input_format: public wxPanel {
   DECLARE_EVENT_TABLE();
 public:
   wxCheckBox *cb_aac_is_sbr;
-  wxMTX_COMBOBOX_TYPE *cob_sub_charset, *cob_aspect_ratio, *cob_fourcc, *cob_compression, *cob_stereo_mode, *cob_fps, *cob_nalu_size_length;
-  wxTextCtrl *tc_delay, *tc_stretch;
+  wxMTX_COMBOBOX_TYPE *cob_sub_charset, *cob_aspect_ratio, *cob_fourcc, *cob_stereo_mode, *cob_fps, *cob_nalu_size_length;
+  wxTextCtrl *tc_delay, *tc_stretch, *tc_cropping;
   wxRadioButton *rb_aspect_ratio, *rb_display_dimensions;
   wxTextCtrl *tc_display_width, *tc_display_height;
 
-  wxStaticText *st_delay, *st_stretch, *st_stereo_mode;
-  wxStaticText *st_x, *st_sub_charset, *st_fourcc, *st_compression;
+  wxStaticText *st_delay, *st_stretch, *st_stereo_mode, *st_cropping;
+  wxStaticText *st_x, *st_sub_charset, *st_fourcc;
   wxStaticText *st_fps, *st_nalu_size_length;
 
   tab_input *input;
 
   translation_table_c cob_sub_charset_translations;
-  translation_table_c cob_compression_translations;
 
 public:
   tab_input_format(wxWindow *parent, tab_input *ti);
@@ -132,30 +132,32 @@ public:
   void on_fps_changed(wxCommandEvent &evt);
   void on_nalu_size_length_changed(wxCommandEvent &evt);
   void on_stereo_mode_changed(wxCommandEvent &evt);
-  void on_compression_selected(wxCommandEvent &evt);
+  void on_cropping_changed(wxCommandEvent &evt);
 };
 
 class tab_input_extra: public wxPanel {
   DECLARE_CLASS(tab_input_extra);
   DECLARE_EVENT_TABLE();
 public:
-  wxMTX_COMBOBOX_TYPE *cob_cues;
+  wxMTX_COMBOBOX_TYPE *cob_cues, *cob_compression;
   wxTextCtrl *tc_user_defined;
 
-  wxStaticText *st_cues, *st_user_defined;
+  wxStaticText *st_cues, *st_user_defined, *st_compression;
 
   tab_input *input;
 
-  translation_table_c cob_cues_translations;
+  translation_table_c cob_cues_translations, cob_compression_translations;
 
 public:
   tab_input_extra(wxWindow *parent, tab_input *ti);
 
   void setup_cues();
+  void setup_compression();
 
   void set_track_mode(mmg_track_t *t);
 
   void on_cues_selected(wxCommandEvent &evt);
+  void on_compression_selected(wxCommandEvent &evt);
   void on_user_defined_changed(wxCommandEvent &evt);
 };
 

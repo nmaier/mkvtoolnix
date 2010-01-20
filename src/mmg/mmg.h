@@ -75,7 +75,7 @@ struct mmg_track_t {
   bool aac_is_sbr, aac_is_sbr_detected, forced_track;
   bool track_name_was_present;
   wxString language, track_name, cues, delay, stretch, sub_charset;
-  wxString tags, fourcc, aspect_ratio, compression, timecodes, fps;
+  wxString tags, fourcc, aspect_ratio, cropping, compression, timecodes, fps;
   wxString packetizer;
   int nalu_size_length;
   wxString dwidth, dheight;

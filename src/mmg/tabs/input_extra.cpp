@@ -56,6 +56,16 @@ tab_input_extra::tab_input_extra(wxWindow *parent,
   cob_cues->SetSizeHints(0, -1);
   siz_fg->Add(cob_cues, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
+  st_compression = new wxStaticText(this, -1, Z("Compression:"));
+  st_compression->Enable(false);
+  siz_fg->Add(st_compression, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
+
+  cob_compression = new wxMTX_COMBOBOX_TYPE(this, ID_CB_COMPRESSION, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
+  cob_compression->SetToolTip(TIP("Sets the compression used for VobSub subtitles. If nothing is chosen then the "
+                                  "VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."));
+  cob_compression->SetSizeHints(0, -1);
+  siz_fg->Add(cob_compression, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
+
   st_user_defined = new wxStaticText(this, -1, Z("User defined options:"));
   st_user_defined->Enable(false);
   siz_fg->Add(st_user_defined, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
@@ -73,6 +83,7 @@ tab_input_extra::tab_input_extra(wxWindow *parent,
   siz_all->AddSpacer(TOPBOTTOMSPACING);
 
   setup_cues();
+  setup_compression();
 
   SetSizer(siz_all);
 }
@@ -90,12 +101,30 @@ tab_input_extra::setup_cues() {
 }
 
 void
+tab_input_extra::setup_compression() {
+  cob_compression->Append(wxEmptyString);
+  cob_compression->Append(Z("none"));
+  cob_compression->Append(wxT("zlib"));
+  if (capabilities[wxT("BZ2")] == wxT("true"))
+    cob_compression->Append(wxT("bz2"));
+  if (capabilities[wxT("LZO")] == wxT("true"))
+    cob_compression->Append(wxT("lzo"));
+
+  cob_compression_translations.add(wxT("none"), Z("none"));
+}
+
+void
 tab_input_extra::set_track_mode(mmg_track_t *t) {
   bool enable       = (NULL != t) && !t->appending;
   bool normal_track = (NULL != t) && (('a' == t->type) || ('s' == t->type) || ('v' == t->type));
+  wxString ctype    = t ? t->ctype     : wxT("");
+
+  ctype.MakeLower();
 
   st_cues->Enable(enable && normal_track);
   cob_cues->Enable(enable && normal_track);
+  st_compression->Enable((ctype.Find(wxT("vobsub")) >= 0) && !t->appending);
+  cob_compression->Enable((ctype.Find(wxT("vobsub")) >= 0) && !t->appending);
   st_user_defined->Enable((NULL != t) && normal_track);
   tc_user_defined->Enable((NULL != t) && normal_track);
 
@@ -107,6 +136,7 @@ tab_input_extra::set_track_mode(mmg_track_t *t) {
 
   set_combobox_selection(cob_cues, Z("default"));
   tc_user_defined->SetValue(wxEmptyString);
+  set_combobox_selection(cob_compression, wxEmptyString);
 
   input->dont_copy_values_now = saved_dcvn;
 }
@@ -127,8 +157,17 @@ tab_input_extra::on_cues_selected(wxCommandEvent &evt) {
   tracks[input->selected_track]->cues = cob_cues_translations.to_english(cob_cues->GetStringSelection());
 }
 
+void
+tab_input_extra::on_compression_selected(wxCommandEvent &evt) {
+  if (input->dont_copy_values_now || (input->selected_track == -1))
+    return;
+
+  tracks[input->selected_track]->compression = cob_compression_translations.to_english(cob_compression->GetStringSelection());
+}
+
 IMPLEMENT_CLASS(tab_input_extra, wxPanel);
 BEGIN_EVENT_TABLE(tab_input_extra, wxPanel)
-  EVT_COMBOBOX(ID_CB_CUES,     tab_input_extra::on_cues_selected)
-  EVT_TEXT(ID_TC_USER_DEFINED, tab_input_extra::on_user_defined_changed)
+  EVT_COMBOBOX(ID_CB_CUES,        tab_input_extra::on_cues_selected)
+  EVT_COMBOBOX(ID_CB_COMPRESSION, tab_input_extra::on_compression_selected)
+  EVT_TEXT(ID_TC_USER_DEFINED,    tab_input_extra::on_user_defined_changed)
 END_EVENT_TABLE();

@@ -420,6 +420,9 @@ tab_input::add_file(const wxString &file_name,
           } else if (pair[0] == wxT("language"))
             track->language = unescape(pair[1]);
 
+          else if (pair[0] == wxT("cropping"))
+            track->cropping = unescape(pair[1]);
+
           else if (pair[0] == wxT("display_dimensions")) {
             int64_t width, height;
 
@@ -889,13 +892,14 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
     }
 
   ti_extra->cob_cues->SetValue(ti_extra->cob_cues_translations.to_translated(t->cues));
+  ti_extra->cob_compression->SetValue(ti_extra->cob_compression_translations.to_translated(t->compression));
   ti_extra->tc_user_defined->SetValue(t->user_defined);
 
   ti_format->cb_aac_is_sbr->SetValue(t->aac_is_sbr);
-  ti_format->cob_compression->SetValue(ti_format->cob_compression_translations.to_translated(t->compression));
   ti_format->cob_nalu_size_length->SetSelection(t->nalu_size_length / 2);
   ti_format->cob_stereo_mode->SetSelection(t->stereo_mode);
   ti_format->cob_sub_charset->SetValue(ti_format->cob_sub_charset_translations.to_translated(t->sub_charset));
+  ti_format->tc_cropping->SetValue(t->cropping);
   ti_format->tc_delay->SetValue(t->delay);
   ti_format->tc_display_height->SetValue(t->dheight);
   ti_format->tc_display_width->SetValue(t->dwidth);
@@ -991,6 +995,7 @@ tab_input::save(wxConfigBase *cfg) {
       cfg->Write(wxT("timecodes"),                   t->timecodes);
       cfg->Write(wxT("display_dimensions_selected"), t->display_dimensions_selected);
       cfg->Write(wxT("aspect_ratio"),                t->aspect_ratio);
+      cfg->Write(wxT("cropping"),                    t->cropping);
       cfg->Write(wxT("display_width"),               t->dwidth);
       cfg->Write(wxT("display_height"),              t->dheight);
       cfg->Write(wxT("fourcc"),                      t->fourcc);
@@ -1121,6 +1126,7 @@ tab_input::load(wxConfigBase *cfg,
       cfg->Read(wxT("tags"),                        &tr->tags);
       cfg->Read(wxT("display_dimensions_selected"), &tr->display_dimensions_selected, false);
       cfg->Read(wxT("aspect_ratio"),                &tr->aspect_ratio);
+      cfg->Read(wxT("cropping"),                    &tr->cropping);
       cfg->Read(wxT("display_width"),               &tr->dwidth);
       cfg->Read(wxT("display_height"),              &tr->dheight);
       cfg->Read(wxT("fourcc"),                      &tr->fourcc);

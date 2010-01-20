@@ -2118,6 +2118,9 @@ kax_reader_c::identify() {
     if (STEREO_MODE_UNSPECIFIED != tracks[i]->v_stereo_mode)
       verbose_info.push_back((boost::format("stereo_mode:%1%") % (int)tracks[i]->v_stereo_mode).str());
 
+    if ((0 != tracks[i]->v_pcleft) || (0 != tracks[i]->v_pctop) || (0 != tracks[i]->v_pcright) || (0 != tracks[i]->v_pcbottom))
+      verbose_info.push_back((boost::format("cropping:%1%,%2%,%3%,%4%") % tracks[i]->v_pcleft % tracks[i]->v_pctop % tracks[i]->v_pcright % tracks[i]->v_pcbottom).str());
+
     verbose_info.push_back((boost::format("default_track:%1%") % (tracks[i]->default_track ? 1 : 0)).str());
     verbose_info.push_back((boost::format("forced_track:%1%")  % (tracks[i]->forced_track  ? 1 : 0)).str());
 

@@ -1171,7 +1171,7 @@ msgid "'%1%': %2%"
 msgstr "「%1%」: %2%"
 
 #: src/common/mm_multi_file_io.cpp:165
-#: src/mmg/tabs/input.cpp:688
+#: src/mmg/tabs/input.cpp:691
 msgid "'%1%': Processing the following files as well: %2%\n"
 msgstr "「%1%」: 正在處理下列檔案: %2%\n"
 
@@ -1503,7 +1503,7 @@ msgstr "...按特定時間碼:"
 msgid "1: all frames"
 msgstr "1: 全部畫格"
 
-#: src/mmg/tabs/input_format.cpp:211
+#: src/mmg/tabs/input_format.cpp:210
 msgid "2 bytes"
 msgstr "2 位元組"
 
@@ -1511,7 +1511,7 @@ msgstr "2 位元組"
 msgid "2: codec private data"
 msgstr "2: 編解碼器專用資料"
 
-#: src/mmg/tabs/input_format.cpp:212
+#: src/mmg/tabs/input_format.cpp:211
 msgid "4 bytes"
 msgstr "4 位元組"
 
@@ -1556,7 +1556,7 @@ msgstr "一個人類可讀的字串，描述編解碼器。"
 msgid "A human-readable track name."
 msgstr "一個人類可讀的字串，描述軌道名稱。"
 
-#: src/mmg/mmg_dialog.cpp:1282
+#: src/mmg/mmg_dialog.cpp:1287
 #, c-format
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "描述為「%s」的任務已存在。是否加入描述相同的任務?"
@@ -1615,7 +1615,7 @@ msgstr "AAC (進階音訊編碼)"
 msgid "AAC files may contain HE-AAC / AAC+ / SBR AAC audio. This can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr 0' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
 msgstr "AAC 檔可能包含 HE-AAC / AAC+ / SBR AAC 音訊。這 *不會* 被自動檢測出來。因此，如果一輸入檔確實包含 SBR AAC，您需要手動為該檔案指定「--aac-is-sbr 0」。否則，檔案會被以 *錯誤* 的方式合成。參閱 mkvmerge 使用說明。\n"
 
-#: src/mmg/tabs/input_format.cpp:173
+#: src/mmg/tabs/input_format.cpp:172
 msgid "AAC is SBR/HE-AAC/AAC+"
 msgstr "AAC 是 SBR/HE-AAC/AAC+"
 
@@ -1825,7 +1825,7 @@ msgstr "軌道 %1% 的另一個預設軌已設定。「%3%」的 %2% 軌道的�
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr "另一個合成任務仍在處理中。要啟動一項新任務，請等待上一個任務完成或手動中止它。"
 
-#: src/mmg/tabs/input.cpp:1240
+#: src/mmg/tabs/input.cpp:1246
 #, c-format
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "不允許將一個檔案的軌道添加至同一個檔案的其他軌道。出現問題的軌道編號為 %u 與 %u。"
@@ -1981,7 +1981,7 @@ msgstr "無效 aid %1%\n"
 msgid "Boolean (yes/no, on/off etc)"
 msgstr "布林值 (是/非, 開/關 等)"
 
-#: src/mmg/tabs/input_format.cpp:200
+#: src/mmg/tabs/input_format.cpp:199
 msgid "Both eyes"
 msgstr "雙眼視角"
 
@@ -2361,7 +2361,7 @@ msgstr "共通語言"
 msgid "Compression failed: %1%\n"
 msgstr "壓縮失敗: %1%\n"
 
-#: src/mmg/tabs/input_format.cpp:161
+#: src/mmg/tabs/input_extra.cpp:59
 msgid "Compression:"
 msgstr "壓縮方式:"
 
@@ -2529,6 +2529,10 @@ msgstr "建立一個新的章節檔"
 msgid "Cropping parameters: not given in the form <TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 (argument was '%1%').\n"
 msgstr "剪裁參數: 未以 <TID>:<left>,<top>,<right>,<bottom> 的形式給定 例如 0:10,5,10,5 (您的參數為「%1%」)。\n"
 
+#: src/mmg/tabs/input_format.cpp:161
+msgid "Cropping:"
+msgstr ""
+
 #: src/info/mkvinfo.cpp:1191
 msgid "Cue block number: %1%"
 msgstr "Cue 區塊數: %1%"
@@ -2678,7 +2682,7 @@ msgstr "日期: %1% UTC"
 msgid "Debug> "
 msgstr "除錯> "
 
-#: src/mmg/tabs/input_format.cpp:210
+#: src/mmg/tabs/input_format.cpp:209
 msgid "Default"
 msgstr "預設"
 
@@ -2723,7 +2727,7 @@ msgstr "從任務佇列中刪除所選任務"
 msgid "Description"
 msgstr "描述"
 
-#: src/mmg/mmg_dialog.cpp:1283
+#: src/mmg/mmg_dialog.cpp:1288
 msgid "Description already exists"
 msgstr "描述已存在"
 
@@ -3188,7 +3192,7 @@ msgstr "檔名: %1%"
 msgid "File parsing failed"
 msgstr "解析檔案失敗"
 
-#: src/mmg/tabs/input.cpp:714
+#: src/mmg/tabs/input.cpp:717
 msgid "File removal not possible"
 msgstr "檔案不能移除"
 
@@ -3305,7 +3309,7 @@ msgstr "畫格率: %1%"
 msgid "Frame with size %1%%2%%3%"
 msgstr "畫格，大小為 %1%%2%%3%"
 
-#: src/mmg/tabs/input_extra.cpp:64
+#: src/mmg/tabs/input_extra.cpp:74
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
 msgstr "無格式限制的文字方塊，供使用者定義此軌的命令列選項。您在這裡輸入的選項將被放在 mmg 添加的所有其他選項之後，這樣您可以覆蓋 mmg 為此軌建立的任何選項。所有出現字串 \"<TID>\" 的地方都會被替換為目前軌道的軌道 ID。"
 
@@ -3791,11 +3795,11 @@ msgstr "無效的軌道 ID 指定，在「--sub-charset %1%」。\n"
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "在參數「%1%」中指定的軌道 ID 或檔名無效。\n"
 
-#: src/mmg/mmg_dialog.cpp:1319
+#: src/mmg/mmg_dialog.cpp:1324
 msgid "Job added to job queue"
 msgstr "任務已添加至任務佇列"
 
-#: src/mmg/mmg_dialog.cpp:1271
+#: src/mmg/mmg_dialog.cpp:1276
 msgid "Job description"
 msgstr "任務描述"
 
@@ -3869,7 +3873,7 @@ msgstr "語言"
 msgid "Leave additional space (EbmlVoid) in the output file after the chapters."
 msgstr "在輸出檔的章節中留額外的空格 (EbmlVoid)。"
 
-#: src/mmg/tabs/input_format.cpp:198
+#: src/mmg/tabs/input_format.cpp:197
 msgid "Left eye"
 msgstr "左眼視角"
 
@@ -4228,7 +4232,7 @@ msgstr "第一個畫格未發現 AC3 表頭; 此軌將被跳過。\n"
 msgid "No EBML head found."
 msgstr "未找到 EBML 表頭。"
 
-#: src/mmg/tabs/input.cpp:1316
+#: src/mmg/tabs/input.cpp:1322
 msgid "No FPS selected for AVC/h.264 track"
 msgstr "AVC/h.264 軌道的畫格率尚未選擇"
 
@@ -4316,7 +4320,7 @@ msgstr "未指定軌道 ID，在「--%1% %2%」。\n"
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "沒有發現符合編輯規格「%1%」的軌道。%2%\n"
 
-#: src/mmg/tabs/input.cpp:592
+#: src/mmg/tabs/input.cpp:595
 msgid "No tracks found"
 msgstr "未發現軌道"
 
@@ -4324,7 +4328,7 @@ msgstr "未發現軌道"
 msgid "No version number found.\n"
 msgstr "未發現版本號。\n"
 
-#: src/mmg/tabs/input_format.cpp:197
+#: src/mmg/tabs/input_format.cpp:196
 msgid "None"
 msgstr "單視角"
 
@@ -4348,7 +4352,7 @@ msgstr "不是有效的 Matroska 檔 (未發現 EBML 表頭)"
 msgid "Not a valid Matroska file (no segment/level 0 element found)"
 msgstr "不是有效的 Matroska 檔 (未發現有效的 剪輯/0 層級元件)"
 
-#: src/mmg/tabs/input.cpp:689
+#: src/mmg/tabs/input.cpp:692
 msgid "Note"
 msgstr "備註"
 
@@ -4485,7 +4489,7 @@ msgid "Overwrite existing file(s)?"
 msgstr "覆寫已存在的檔案?"
 
 #: src/mmg/mmg_dialog.cpp:432
-#: src/mmg/mmg_dialog.cpp:1265
+#: src/mmg/mmg_dialog.cpp:1270
 msgid "Overwrite existing file?"
 msgstr "覆寫已存在的檔案?"
 
@@ -4541,7 +4545,7 @@ msgstr "像素寬度: %1%"
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "請不要選擇「mmg」自己作為「mkvmerge」可執行檔。"
 
-#: src/mmg/mmg_dialog.cpp:1271
+#: src/mmg/mmg_dialog.cpp:1276
 msgid "Please enter a description for the new job:"
 msgstr "請輸入新任務的描述:"
 
@@ -4622,7 +4626,7 @@ msgstr "進度: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "進度: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1570
+#: src/mmg/mmg_dialog.cpp:1575
 msgid "Querying mkvmerge's capabilities"
 msgstr "正向 mkvmerge 查詢處理能力"
 
@@ -4842,7 +4846,7 @@ msgstr "移除名稱"
 msgid "Restart required"
 msgstr "需要重新啟動"
 
-#: src/mmg/tabs/input_format.cpp:199
+#: src/mmg/tabs/input_format.cpp:198
 msgid "Right eye"
 msgstr "右眼視角"
 
@@ -5115,9 +5119,13 @@ msgstr "設定 Matroska 檔案段落全部後面接著 加入/設定/刪除 動�
 msgid "Sets the Matroska parser mode to 'fast' (default) or 'full'"
 msgstr "設定 Matroska 解析器模式為「快速」(預設) 或「完整」"
 
-#: src/mmg/tabs/input_format.cpp:166
+#: src/mmg/tabs/input_extra.cpp:64
 msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
 msgstr "選擇 VobSub 字幕使用的壓縮方式。如果沒有選中任何方式，VobSub 字幕將自動使用 zlib 壓縮。選“無”將導致檔案變得很大。"
+
+#: src/mmg/tabs/input_format.cpp:166
+msgid "Sets the cropping parameters. Must be comma-separated list of four numbers for the cropping to be used at the left, top, right and bottom."
+msgstr ""
 
 #: src/mmg/tabs/input_format.cpp:111
 msgid "Sets the default duration or number of frames per second for a track. This is only possible for video tracks. For AVC/h.264 elementary streams this option must be given. This can either be a floating point number or a fraction."
@@ -5494,7 +5502,7 @@ msgstr "無法解析 FLAC 頭: 找不到媒體流資訊結構。\n"
 msgid "The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n"
 msgstr "FPS 為 0.0 且讀取器未提供套件的時間碼。%1%\n"
 
-#: src/mmg/tabs/input.cpp:1300
+#: src/mmg/tabs/input.cpp:1306
 #, c-format
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
 msgstr "軌 %s（自檔案「%s」）的 FPS 設定無效。"
@@ -5503,7 +5511,7 @@ msgstr "軌 %s（自檔案「%s」）的 FPS 設定無效。"
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "FourCC 值必須為四個字元的長度，在「%1% %2%」。\n"
 
-#: src/mmg/tabs/input.cpp:1288
+#: src/mmg/tabs/input.cpp:1294
 #, c-format
 msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
 msgstr "軌道 %s（自檔案「%s」）的 FourCC 設定非四字元長。"
@@ -5563,7 +5571,7 @@ msgstr "「%2%」的「%1%」參數無效: 元件「%3%」的冒號過多。\n"
 msgid "The argument to '--timecode-scale' must be a number.\n"
 msgstr "「--timecode-scale」的參數必須為數字。\n"
 
-#: src/mmg/tabs/input.cpp:1356
+#: src/mmg/tabs/input.cpp:1362
 #, c-format
 msgid "The aspect ratio setting for track nr. %s in file '%s' is invalid."
 msgstr "軌道編號 %s（檔案「%s」）的外觀比例設定無效。"
@@ -5645,7 +5653,7 @@ msgstr "國家「%s」不是有效的 ccTLD，不能選擇。"
 msgid "The cue entries (the index) are being written..."
 msgstr "正在寫入 cue 項目(此索引)..."
 
-#: src/mmg/tabs/input.cpp:710
+#: src/mmg/tabs/input.cpp:713
 #, c-format
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr "目前檔案 (序號 %d) 不能移除。有其他檔案 -- 至少檔案號為 %d 的檔案 -- 有要添加至此檔某軌道的軌道。請先移除那些檔案。"
@@ -5658,7 +5666,7 @@ msgstr "目前套件的時間碼比前一個套件的小。這通常表明來源
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr "預設語言碼「%1%」不是有效的 ISO639-2 語言碼，將被忽略。\n"
 
-#: src/mmg/tabs/input.cpp:1267
+#: src/mmg/tabs/input.cpp:1273
 #, c-format
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "對檔案「%s」的 %s 軌的延遲設定無效。"
@@ -5897,12 +5905,12 @@ msgstr "表頭已被寫入。"
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "兩軌高度不同: %1% 與 %2%"
 
-#: src/mmg/tabs/input.cpp:592
+#: src/mmg/tabs/input.cpp:595
 #, c-format
 msgid "The input file '%s' does not contain any tracks."
 msgstr "輸入檔「%s」不包含任何軌道。"
 
-#: src/mmg/tabs/input.cpp:1191
+#: src/mmg/tabs/input.cpp:1197
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -5918,7 +5926,7 @@ msgstr ""
 "\n"
 "(問題出在 tab_input::load(), #1)"
 
-#: src/mmg/tabs/input.cpp:1198
+#: src/mmg/tabs/input.cpp:1204
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -5934,7 +5942,7 @@ msgstr ""
 "\n"
 "(問題出在 tab_input::load(), #2)"
 
-#: src/mmg/tabs/input.cpp:1211
+#: src/mmg/tabs/input.cpp:1217
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -6079,7 +6087,7 @@ msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "即將輸出的檔案「%1%」無法開啟寫入 (%2%)。\n"
 
 #: src/mmg/mmg_dialog.cpp:432
-#: src/mmg/mmg_dialog.cpp:1262
+#: src/mmg/mmg_dialog.cpp:1267
 #, c-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr "即將輸出的檔案「%s」已存在。是否覆蓋？"
@@ -6176,7 +6184,7 @@ msgstr "附件「%1%」的大小為 0。\n"
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "來源檔案「%1%」無法成功開啟，或者無法透過定位至末端檢索。\n"
 
-#: src/mmg/tabs/input.cpp:1278
+#: src/mmg/tabs/input.cpp:1284
 #, c-format
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr "軌道 %s（自檔案「%s」）的延展設定無效。"
@@ -6444,7 +6452,7 @@ msgstr "這 *真的* 不該發生。為第一個變換定位元件預留的空�
 msgid "This should not have happened. Please contact the author Moritz Bunkus <moritz@bunkus.org> with this error/warning message, a description of what you were trying to do, the command line used and which operating system you are using. Thank you."
 msgstr "這不該發生。請聯繫作者 Moritz Bunkus <moritz@bunkus.org>，並附上本錯誤/警告訊息、您正打算做的事情的描述、使用的命令列及您正在使用的作業系統。感謝。"
 
-#: src/mmg/tabs/input_format.cpp:175
+#: src/mmg/tabs/input_format.cpp:174
 msgid "This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for these files. Not needed for AAC tracks read from MP4 or Matroska files."
 msgstr "此軌道包含 SBR AAC/HE-AAC/AAC+ 資料。本選項只對 AAC 輸入檔有必要，因為這類檔案的 SBR AAC 不能被自動偵測。對於從 MP4 或 Matroska 檔案讀取的 AAC 軌道，不必在意本選項。"
 
@@ -6814,7 +6822,7 @@ msgstr "使用上一個輸出目錄"
 msgid "Use this directory:"
 msgstr "使用這個目錄:"
 
-#: src/mmg/tabs/input_extra.cpp:59
+#: src/mmg/tabs/input_extra.cpp:69
 msgid "User defined options:"
 msgstr "使用者定義選項:"
 
@@ -7371,7 +7379,7 @@ msgstr ""
 "還可以是通常的 HH:MM:SS.mmm 或 HH:MM:SS 格式。\n"
 "範例: -00:05:23 將使所有章節比現在提前 5 分 23 秒開始。"
 
-#: src/mmg/tabs/input.cpp:1310
+#: src/mmg/tabs/input.cpp:1316
 #, c-format
 msgid ""
 "You haven't selected a number of frames per second for track %lld of file '%s'. mkvmerge cannot determine the number of frames per second for such files itself. Therefore you have to set this parameter yourself on the 'format specific options' page.\n"
@@ -7386,7 +7394,7 @@ msgstr ""
 "\n"
 "是否繼續?"
 
-#: src/mmg/tabs/input.cpp:472
+#: src/mmg/tabs/input.cpp:475
 msgid ""
 "You're adding an AVC/h.264 elementary stream to the output file. mkvmerge cannot determine the number of frames per second for such files itself. Therefore you have to set this parameter yourself on the 'format specific options' page.\n"
 "\n"
@@ -7546,10 +7554,10 @@ msgstr "create_track_number: file_num 未找到。 %1%\n"
 msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
 msgstr "cstrutf8_to_UTFstring: 遇到了無效的 UTF-8 序列。請聯繫 moritz@bunkus.org 並要求他實現一套更好的 UTF-8 解析器。"
 
-#: src/mmg/tabs/input_extra.cpp:82
-#: src/mmg/tabs/input_extra.cpp:108
+#: src/mmg/tabs/input_extra.cpp:93
+#: src/mmg/tabs/input_extra.cpp:137
 #: src/mmg/tabs/input_format.cpp:157
-#: src/mmg/tabs/input_format.cpp:223
+#: src/mmg/tabs/input_format.cpp:222
 #: src/mmg/tabs/input_general.cpp:115
 msgid "default"
 msgstr "預設"
@@ -7753,7 +7761,7 @@ msgstr "flac_reader: FLAC__stream_decoder_new() 失敗。\n"
 msgid "flac_reader: could not initialize the FLAC packetizer.\n"
 msgstr "flac_reader: 無法初始化 FLAC 分組器。\n"
 
-#: src/mmg/tabs/input_extra.cpp:84
+#: src/mmg/tabs/input_extra.cpp:95
 msgid "for all frames"
 msgstr "全部畫格"
 
@@ -8079,12 +8087,12 @@ msgstr "mkvmerge GUI 準備就緒"
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "mkvmerge GUI 設定檔 (*.mmg)|*.mmg|%s"
 
-#: src/mmg/tabs/input.cpp:1243
-#: src/mmg/tabs/input.cpp:1268
-#: src/mmg/tabs/input.cpp:1279
-#: src/mmg/tabs/input.cpp:1289
-#: src/mmg/tabs/input.cpp:1301
-#: src/mmg/tabs/input.cpp:1357
+#: src/mmg/tabs/input.cpp:1249
+#: src/mmg/tabs/input.cpp:1274
+#: src/mmg/tabs/input.cpp:1285
+#: src/mmg/tabs/input.cpp:1295
+#: src/mmg/tabs/input.cpp:1307
+#: src/mmg/tabs/input.cpp:1363
 msgid "mkvmerge GUI: error"
 msgstr "mkvmerge GUI: 發生錯誤"
 
@@ -8232,9 +8240,9 @@ msgstr "未使用簽章演算法"
 msgid "no signature hash algorithm"
 msgstr "未使用簽章雜湊演算法"
 
-#: src/mmg/tabs/input_extra.cpp:85
-#: src/mmg/tabs/input_format.cpp:226
-#: src/mmg/tabs/input_format.cpp:233
+#: src/mmg/tabs/input_extra.cpp:96
+#: src/mmg/tabs/input_extra.cpp:106
+#: src/mmg/tabs/input_extra.cpp:113
 msgid "none"
 msgstr "無"
 
@@ -8266,7 +8274,7 @@ msgstr "ogm_reader: 來源非有效的 OGG 媒體檔案。"
 msgid "on_entry_selected: display == NULL. Should not have happened."
 msgstr "on_entry_selected: display == NULL。不該出現。"
 
-#: src/mmg/tabs/input_extra.cpp:83
+#: src/mmg/tabs/input_extra.cpp:94
 msgid "only for I frames"
 msgstr "僅 I 畫格"
 
@@ -8431,8 +8439,8 @@ msgid "und (Undetermined)"
 msgstr "und (未定)"
 
 #: src/input/r_matroska.cpp:89
-#: src/input/r_matroska.cpp:2138
-#: src/input/r_matroska.cpp:2145
+#: src/input/r_matroska.cpp:2141
+#: src/input/r_matroska.cpp:2148
 #: src/input/r_mpeg_ps.cpp:1391
 #: src/common/mm_io.cpp:425
 #: src/mmg/mmg.cpp:58
