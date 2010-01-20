@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-01-04 14:05+0900\n"
+"PO-Revision-Date: 2010-01-20 21:01+0100\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -2551,13 +2551,17 @@ msgstr "現在の値："
 msgid "D&elete"
 msgstr "削除(&D)"
 
-#: src/mmg/tabs/input.cpp:205 src/merge/mkvmerge.cpp:93
+#: src/merge/mkvmerge.cpp:93
 msgid "DTS (Digital Theater System)"
 msgstr "DTS (Digital Theater System)"
 
 #: src/output/p_dts.cpp:107
 msgid "DTS header information changed! - New format:\n"
 msgstr "DTSヘッダ情報が変更されました! - 新しいフォーマット：\n"
+
+#: src/mmg/tabs/input.cpp:205
+msgid "DTS/DTS-HD (Digital Theater System)"
+msgstr "DTS/DTS-HD (Digital Theater System)"
 
 #: src/common/dts.cpp:181
 msgid "DTS_Header problem: encoded with an incompatible new encoder version\n"
@@ -4475,7 +4479,7 @@ msgstr "進行状況"
 msgid "Progress: %1%%%%2%"
 msgstr "進行状況: %1%%%%2%"
 
-#: src/extract/mkvextract.cpp:98 src/extract/timecodes_v2.cpp:357
+#: src/extract/mkvextract.cpp:99 src/extract/timecodes_v2.cpp:357
 msgid "Progress: 100%\n"
 msgstr "進行状況: 100%\n"
 
@@ -4503,7 +4507,7 @@ msgstr "Quicktime/MP4オーディオとビデオ"
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
 msgstr "Quicktime/MP4リーダ：'%1%' atomが小さすぎます。期待されるサイズ：%2%以上。実際のサイズ：%3%。\n"
 
-#: src/input/r_qtmp4.cpp:1912
+#: src/input/r_qtmp4.cpp:1915
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
 msgstr "Quicktime/MP4リーダ：一定サンプルサイズと可変フレーム長はまだサポートされていません。そのようなサンプルを持っているなら作者に連絡してください。\n"
 
@@ -7755,7 +7759,7 @@ msgstr "mkvextract tracks <入力ファイル名> [オプション] [TID1:出力
 msgid "mkvextract.cpp/show_element(): level > 9: %1%"
 msgstr ""
 
-#: src/extract/mkvextract.cpp:116
+#: src/extract/mkvextract.cpp:117
 msgid "mkvextract: Unknown mode!?\n"
 msgstr "mkvextract：未知のモード！？\n"
 

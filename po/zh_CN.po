@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-01-09 22:50+0800\n"
+"PO-Revision-Date: 2010-01-20 21:01+0100\n"
 "Last-Translator: Dean Lee <xslidian@gmail.com>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -2624,7 +2624,6 @@ msgstr "现值:"
 msgid "D&elete"
 msgstr "删除(&E)"
 
-#: src/mmg/tabs/input.cpp:205
 #: src/merge/mkvmerge.cpp:93
 msgid "DTS (Digital Theater System)"
 msgstr "DTS (数字影院系统)"
@@ -2632,6 +2631,10 @@ msgstr "DTS (数字影院系统)"
 #: src/output/p_dts.cpp:107
 msgid "DTS header information changed! - New format:\n"
 msgstr "DTS 头部信息已变更! - 新格式:\n"
+
+#: src/mmg/tabs/input.cpp:205
+msgid "DTS/DTS-HD (Digital Theater System)"
+msgstr "DTS/DTS-HD (数字影院系统)"
 
 #: src/common/dts.cpp:181
 msgid "DTS_Header problem: encoded with an incompatible new encoder version\n"
@@ -4604,7 +4607,7 @@ msgstr "进度"
 msgid "Progress: %1%%%%2%"
 msgstr "进度: %1%%%%2%"
 
-#: src/extract/mkvextract.cpp:98
+#: src/extract/mkvextract.cpp:99
 #: src/extract/timecodes_v2.cpp:357
 msgid "Progress: 100%\n"
 msgstr "进度: 100%\n"
@@ -4633,7 +4636,7 @@ msgstr "Quicktime/MP4 音视频"
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
 msgstr "Quicktime/MP4 读取器: '%1%' 单元过小。预期尺寸: >= %2%。实际尺寸: %3%。\n"
 
-#: src/input/r_qtmp4.cpp:1912
+#: src/input/r_qtmp4.cpp:1915
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
 msgstr "Quicktime/MP4 读取器: 尚不支持恒定采样尺寸与可变时长。如果您有这样的文件样本，请联系作者。\n"
 
@@ -8035,7 +8038,7 @@ msgstr "mkvextract tracks <inname> [选项] [TID1:out1 [TID2:out2 ...]]"
 msgid "mkvextract.cpp/show_element(): level > 9: %1%"
 msgstr "mkvextract.cpp/show_element(): 层级 > 9: %1%"
 
-#: src/extract/mkvextract.cpp:116
+#: src/extract/mkvextract.cpp:117
 msgid "mkvextract: Unknown mode!?\n"
 msgstr "mkvextract: 未知模式!?\n"
 
