@@ -1,3 +1,8 @@
+2010-01-20  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: bug fix: "mkvextract --version" was only writing an
+	empty string. Fix for bug 463.
+
 2010-01-18  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v3.1.0.

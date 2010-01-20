@@ -81,7 +81,8 @@ setup() {
 
   set_process_priority(-1);
 
-  verbose = 0;
+  verbose      = 0;
+  version_info = get_version_info("mkvextract", true);
 }
 
 int
