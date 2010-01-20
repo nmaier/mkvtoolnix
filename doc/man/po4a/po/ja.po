@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 2.9.9\n"
-"POT-Creation-Date: 2010-01-10 23:32+0900\n"
-"PO-Revision-Date: 2010-01-10 00:16+0100\n"
+"POT-Creation-Date: 2010-01-20 18:25+0100\n"
+"PO-Revision-Date: 2010-01-20 18:26+0100\n"
 "Last-Translator: Katsuhiko Nishimra <kat841@hotmail.com>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
@@ -24,14 +24,15 @@ msgstr "mkvextract"
 #. type: Content of the version entity
 #: doc/man/mkvextract.xml:6 doc/man/mkvinfo.xml:6 doc/man/mkvmerge.xml:6
 #: doc/man/mkvpropedit.xml:6 doc/man/mmg.xml:6
-msgid "3.0.0"
+#, fuzzy
+msgid "3.1.0"
 msgstr "3.0.0"
 
 #. type: Content of the date entity
 #: doc/man/mkvextract.xml:7 doc/man/mkvinfo.xml:7 doc/man/mkvmerge.xml:7
 #: doc/man/mkvpropedit.xml:7 doc/man/mmg.xml:7
-msgid "December 2009"
-msgstr "2009年12月"
+msgid "January 2010"
+msgstr ""
 
 #. type: Content of the mkvmerge entity
 #: doc/man/mkvextract.xml:9 doc/man/mkvinfo.xml:9 doc/man/mkvmerge.xml:9
@@ -5302,11 +5303,8 @@ msgstr ""
 #: doc/man/mkvpropedit.xml:232
 msgid ""
 "The command line '<command>mkvpropedit source.mkv --edit track:a2 --set "
-"title=Comments</command>' could be converted into the following option file:"
-msgstr ""
-"'<command>mkvpropedit source.mkv --edit trach:a2 --set title=Comments</"
-"command>'というコマンドラインと同じことは、次のようなオプションファイルによっ"
-"て指定できます。"
+"name=Comments</command>' could be converted into the following option file:"
+msgstr "'<command>mkvpropedit source.mkv --edit trach:a2 --set name=Comments</command>'というコマンドラインと同じことは、次のようなオプションファイルによって指定できます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><programlisting>
 #: doc/man/mkvpropedit.xml:237
@@ -5643,6 +5641,9 @@ msgstr ""
 #: doc/man/mmg.xml:92
 msgid "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
 msgstr "&mkvmerge; &mkvextract;, &mkvinfo;, &mkvpropedit;"
+
+#~ msgid "December 2009"
+#~ msgstr "2009年12月"
 
 #~ msgid "2.9.9"
 #~ msgstr "2.9.9"
