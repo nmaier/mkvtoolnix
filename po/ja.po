@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-01-20 21:01+0100\n"
+"PO-Revision-Date: 2010-01-21 17:49+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -2452,11 +2452,11 @@ msgstr "新しいチャプタファイルを作成します"
 
 #: src/merge/mkvmerge.cpp:714
 msgid "Cropping parameters: not given in the form <TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 (argument was '%1%').\n"
-msgstr "クロッピングパラメータ：<TID>:<left>,<top>,<right>,<bottom>（例：0:10,5,10,5）の形で指定されていません（引数は'%1%'でした）。\n"
+msgstr "クロッピングのパラメータ：<TID>:<left>,<top>,<right>,<bottom>（例：0:10,5,10,5）の形で指定されていません（引数は'%1%'でした。）\n"
 
 #: src/mmg/tabs/input_format.cpp:161
 msgid "Cropping:"
-msgstr ""
+msgstr "クロッピング："
 
 #: src/info/mkvinfo.cpp:1191
 msgid "Cue block number: %1%"
@@ -4975,7 +4975,7 @@ msgstr "VobSub字幕に使用される圧縮方式を指定します。何も指
 
 #: src/mmg/tabs/input_format.cpp:166
 msgid "Sets the cropping parameters. Must be comma-separated list of four numbers for the cropping to be used at the left, top, right and bottom."
-msgstr ""
+msgstr "クロッピングのパラメータを指定します。左、上、右、下で使われるクロッピングの4つの数字のコンマで区切られたリストでなければなりません。"
 
 #: src/mmg/tabs/input_format.cpp:111
 msgid "Sets the default duration or number of frames per second for a track. This is only possible for video tracks. For AVC/h.264 elementary streams this option must be given. This can either be a floating point number or a fraction."
