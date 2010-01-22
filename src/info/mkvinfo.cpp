@@ -1763,6 +1763,9 @@ handle_ebml_head(EbmlElement *l0,
     else if (is_id(e, EMaxIdLength))
       show_element(e, 1, boost::format(Y("EBML maximum ID length: %1%")) % uint64(*static_cast<EbmlUInteger *>(e)));
 
+    else if (is_id(e, EMaxSizeLength))
+      show_element(e, 1, boost::format(Y("EBML maximum size length: %1%")) % uint64(*static_cast<EbmlUInteger *>(e)));
+
     else if (is_id(e, EDocType))
       show_element(e, 1, boost::format(Y("Doc type: %1%")) % std::string(*static_cast<EbmlString *>(e)));
 
