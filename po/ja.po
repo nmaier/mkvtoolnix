@@ -1985,7 +1985,7 @@ msgid "Category is not NUL terminated"
 msgstr "カテゴリがNULで終わっていません"
 
 #: src/extract/timecodes_v2.cpp:360 src/extract/tracks.cpp:541
-#: src/info/mkvinfo.cpp:1917
+#: src/info/mkvinfo.cpp:1920
 msgid "Caught exception"
 msgstr "例外をキャッチしました"
 
@@ -2204,7 +2204,7 @@ msgid "Close the current file without saving"
 msgstr "保存しないで現在のファイルを閉じます"
 
 #: src/extract/timecodes_v2.cpp:262 src/extract/tracks.cpp:417
-#: src/info/mkvinfo.cpp:1857
+#: src/info/mkvinfo.cpp:1860
 msgid "Cluster"
 msgstr "クラスタ"
 
@@ -2716,15 +2716,15 @@ msgstr "メタシーク要素を全く記録しません。"
 msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
 msgstr "Matroskaの仕様のデフォルト値と同じ値を取るヘッダ要素を記録しません。"
 
-#: src/info/mkvinfo.cpp:1773
+#: src/info/mkvinfo.cpp:1776
 msgid "Doc type read version: %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1770
+#: src/info/mkvinfo.cpp:1773
 msgid "Doc type version: %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1767
+#: src/info/mkvinfo.cpp:1770
 msgid "Doc type: %1%"
 msgstr ""
 
@@ -2759,6 +2759,11 @@ msgstr ""
 #: src/info/mkvinfo.cpp:1764
 msgid "EBML maximum ID length: %1%"
 msgstr ""
+
+#: src/info/mkvinfo.cpp:1767
+#, fuzzy
+msgid "EBML maximum size length: %1%"
+msgstr "NALUサイズ長："
 
 #: src/info/mkvinfo.cpp:1761
 msgid "EBML read version: %1%"
@@ -2903,7 +2908,7 @@ msgstr "エラー："
 msgid "Error: %1% parser failed for '%2%', line %3%, column %4%: %5%\n"
 msgstr "エラー：%1%パーサが'%2%'、%3%行目、%4%列目のために失敗しました：%5%\n"
 
-#: src/info/mkvinfo.cpp:1796
+#: src/info/mkvinfo.cpp:1799
 msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "エラー：入力ファイル%1%（%2%）を開けませんでした。\n"
 
@@ -4085,7 +4090,7 @@ msgstr "次のファイル名"
 msgid "Next filename: %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1836
+#: src/info/mkvinfo.cpp:1839
 msgid "Next level 0 element is not a segment but %1%"
 msgstr ""
 
@@ -4109,7 +4114,7 @@ msgstr "'--%2% %3%'で%1%が指定されていません。\n"
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "AC3ヘッダが最初のフレームで見つかりませんでした：トラックはスキップされます。\n"
 
-#: src/info/mkvinfo.cpp:1810
+#: src/info/mkvinfo.cpp:1813
 msgid "No EBML head found."
 msgstr ""
 
@@ -4183,7 +4188,7 @@ msgid "No output file name specified, will use attachment name.\n"
 msgstr "出力ファイル名が指定されなかったので、添付ファイル名を使用します。\n"
 
 #: src/extract/timecodes_v2.cpp:197 src/extract/tracks.cpp:343
-#: src/info/mkvinfo.cpp:1824
+#: src/info/mkvinfo.cpp:1827
 msgid "No segment/level 0 element found."
 msgstr "セグメント/レベル0の要素が見つかりませんでした。"
 
@@ -4870,11 +4875,11 @@ msgstr "セグメントトラック"
 msgid "Segment unique ID"
 msgstr "セグメントの固有ID"
 
-#: src/info/mkvinfo.cpp:1832
+#: src/info/mkvinfo.cpp:1835
 msgid "Segment, size %1%"
 msgstr ""
 
-#: src/info/mkvinfo.cpp:1830
+#: src/info/mkvinfo.cpp:1833
 msgid "Segment, size unknown"
 msgstr ""
 

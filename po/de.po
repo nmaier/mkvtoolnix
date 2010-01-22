@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-01-20 22:27+0100\n"
+"PO-Revision-Date: 2010-01-22 08:55+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -2021,7 +2021,7 @@ msgid "Category is not NUL terminated"
 msgstr "Die Kategoriezeichenkette wird nicht mit einem NUL-Zeichen abgeschlossen."
 
 #: src/extract/timecodes_v2.cpp:360 src/extract/tracks.cpp:541
-#: src/info/mkvinfo.cpp:1917
+#: src/info/mkvinfo.cpp:1920
 msgid "Caught exception"
 msgstr "Eine Ausnahme wurde abgefangen."
 
@@ -2240,7 +2240,7 @@ msgid "Close the current file without saving"
 msgstr "Die aktuelle Datei schließen, ohne zu speichern"
 
 #: src/extract/timecodes_v2.cpp:262 src/extract/tracks.cpp:417
-#: src/info/mkvinfo.cpp:1857
+#: src/info/mkvinfo.cpp:1860
 msgid "Cluster"
 msgstr "Cluster"
 
@@ -2752,15 +2752,15 @@ msgstr "Keinen Meta-Index schreiben."
 msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
 msgstr "Diejenigen Kopfelemente, die laut Matroska-Spezifikationen dem Standardwert für das Element entsprechen, nicht in die Zieldatei schreiben."
 
-#: src/info/mkvinfo.cpp:1773
+#: src/info/mkvinfo.cpp:1776
 msgid "Doc type read version: %1%"
 msgstr "Dokumententyp Leseversion: %1%"
 
-#: src/info/mkvinfo.cpp:1770
+#: src/info/mkvinfo.cpp:1773
 msgid "Doc type version: %1%"
 msgstr "Dokumententyp Version: %1%"
 
-#: src/info/mkvinfo.cpp:1767
+#: src/info/mkvinfo.cpp:1770
 msgid "Doc type: %1%"
 msgstr "Dokumententyp: %1%"
 
@@ -2795,6 +2795,10 @@ msgstr "EBML-Kopf"
 #: src/info/mkvinfo.cpp:1764
 msgid "EBML maximum ID length: %1%"
 msgstr "Maximale EBML-ID-Länge: %1%"
+
+#: src/info/mkvinfo.cpp:1767
+msgid "EBML maximum size length: %1%"
+msgstr "Maximale Länge des EBML-Längenattributes: %1%"
 
 #: src/info/mkvinfo.cpp:1761
 msgid "EBML read version: %1%"
@@ -2939,7 +2943,7 @@ msgstr "Fehler: "
 msgid "Error: %1% parser failed for '%2%', line %3%, column %4%: %5%\n"
 msgstr "Fehler:: Der %1%-Parser schlug in '%2%', Zeile %3%, Spalte %4% fehl: %5%\n"
 
-#: src/info/mkvinfo.cpp:1796
+#: src/info/mkvinfo.cpp:1799
 msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "Fehler: Die Quelldatei %1% konnte nicht geöffnet werden (%2%).\n"
 
@@ -4120,7 +4124,7 @@ msgstr "Nächster Dateiname"
 msgid "Next filename: %1%"
 msgstr "Nächster Dateiname: %1%"
 
-#: src/info/mkvinfo.cpp:1836
+#: src/info/mkvinfo.cpp:1839
 msgid "Next level 0 element is not a segment but %1%"
 msgstr "Das nachfolgende Level-0-Element ist kein Segment sondern %1%"
 
@@ -4144,7 +4148,7 @@ msgstr "In '--%2% %3%' wurde kein %1% angegeben.\n"
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "Im ersten Frame wurde kein AC3-Kopf gefunden. Der Track wird ausgelassen.\n"
 
-#: src/info/mkvinfo.cpp:1810
+#: src/info/mkvinfo.cpp:1813
 msgid "No EBML head found."
 msgstr "Es wurde kein EBML-Kopf gefunden."
 
@@ -4218,7 +4222,7 @@ msgid "No output file name specified, will use attachment name.\n"
 msgstr "Es wurde kein Ausgabedateiname angegeben. Der Dateianhangsname wird statt dessen verwendet.\n"
 
 #: src/extract/timecodes_v2.cpp:197 src/extract/tracks.cpp:343
-#: src/info/mkvinfo.cpp:1824
+#: src/info/mkvinfo.cpp:1827
 msgid "No segment/level 0 element found."
 msgstr "Es wurde kein Segment/Level-0-Element gefunden."
 
@@ -4907,11 +4911,11 @@ msgstr "Segment-Tracks"
 msgid "Segment unique ID"
 msgstr "Eindeutige Segment-ID"
 
-#: src/info/mkvinfo.cpp:1832
+#: src/info/mkvinfo.cpp:1835
 msgid "Segment, size %1%"
 msgstr "Segment, Größe %1%"
 
-#: src/info/mkvinfo.cpp:1830
+#: src/info/mkvinfo.cpp:1833
 msgid "Segment, size unknown"
 msgstr "Segment, unbekannte Größe"
 

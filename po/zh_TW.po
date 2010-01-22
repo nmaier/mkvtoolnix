@@ -2039,7 +2039,7 @@ msgstr "類別未以 NUL 結尾"
 
 #: src/extract/timecodes_v2.cpp:360
 #: src/extract/tracks.cpp:541
-#: src/info/mkvinfo.cpp:1917
+#: src/info/mkvinfo.cpp:1920
 msgid "Caught exception"
 msgstr "發生異常"
 
@@ -2269,7 +2269,7 @@ msgstr "在不儲存的情況下關閉目前檔案"
 
 #: src/extract/timecodes_v2.cpp:262
 #: src/extract/tracks.cpp:417
-#: src/info/mkvinfo.cpp:1857
+#: src/info/mkvinfo.cpp:1860
 msgid "Cluster"
 msgstr "叢集"
 
@@ -2794,15 +2794,15 @@ msgstr "不要寫入任何變換定位元件。"
 msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
 msgstr "不要寫入值與 Matroska 規範中的預設值相同的表頭元件。"
 
-#: src/info/mkvinfo.cpp:1773
+#: src/info/mkvinfo.cpp:1776
 msgid "Doc type read version: %1%"
 msgstr "文件檔類型讀取版本: %1%"
 
-#: src/info/mkvinfo.cpp:1770
+#: src/info/mkvinfo.cpp:1773
 msgid "Doc type version: %1%"
 msgstr "文件檔類型版本: %1%"
 
-#: src/info/mkvinfo.cpp:1767
+#: src/info/mkvinfo.cpp:1770
 msgid "Doc type: %1%"
 msgstr "文件檔類型: %1%"
 
@@ -2836,6 +2836,11 @@ msgstr "EBML 表頭"
 
 #: src/info/mkvinfo.cpp:1764
 msgid "EBML maximum ID length: %1%"
+msgstr "EBML 最大 ID 長: %1%"
+
+#: src/info/mkvinfo.cpp:1767
+#, fuzzy
+msgid "EBML maximum size length: %1%"
 msgstr "EBML 最大 ID 長: %1%"
 
 #: src/info/mkvinfo.cpp:1761
@@ -2987,7 +2992,7 @@ msgstr "發生錯誤: "
 msgid "Error: %1% parser failed for '%2%', line %3%, column %4%: %5%\n"
 msgstr "發生錯誤: %1% 解析器失敗，對於「%2%」, 第 %3% 行, 第 %4% 列: %5%\n"
 
-#: src/info/mkvinfo.cpp:1796
+#: src/info/mkvinfo.cpp:1799
 msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "發生錯誤: 無法開啟輸入檔 %1% (%2%)。\n"
 
@@ -4203,7 +4208,7 @@ msgstr "下一個檔名"
 msgid "Next filename: %1%"
 msgstr "下一個檔名: %1%"
 
-#: src/info/mkvinfo.cpp:1836
+#: src/info/mkvinfo.cpp:1839
 msgid "Next level 0 element is not a segment but %1%"
 msgstr "下一個 0 層級元件不是剪輯而是 %1%"
 
@@ -4228,7 +4233,7 @@ msgstr "未指定 %1%，在「--%2% %3%」。\n"
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "第一個畫格未發現 AC3 表頭; 此軌將被跳過。\n"
 
-#: src/info/mkvinfo.cpp:1810
+#: src/info/mkvinfo.cpp:1813
 msgid "No EBML head found."
 msgstr "未找到 EBML 表頭。"
 
@@ -4304,7 +4309,7 @@ msgstr "未指定輸出檔名，將使用附件名。\n"
 
 #: src/extract/timecodes_v2.cpp:197
 #: src/extract/tracks.cpp:343
-#: src/info/mkvinfo.cpp:1824
+#: src/info/mkvinfo.cpp:1827
 msgid "No segment/level 0 element found."
 msgstr "未發現剪輯/0 層級元件。"
 
@@ -5018,11 +5023,11 @@ msgstr "剪輯軌道"
 msgid "Segment unique ID"
 msgstr "剪輯唯一 ID"
 
-#: src/info/mkvinfo.cpp:1832
+#: src/info/mkvinfo.cpp:1835
 msgid "Segment, size %1%"
 msgstr "剪輯, 大小 %1%"
 
-#: src/info/mkvinfo.cpp:1830
+#: src/info/mkvinfo.cpp:1833
 msgid "Segment, size unknown"
 msgstr "剪輯, 未知大小"
 
