@@ -265,23 +265,7 @@ format_date_time(time_t date_time) {
 #if defined(SYS_WINDOWS)
 wxString
 format_tooltip(const wxString &s) {
-  static bool first = true;
-  wxString tooltip(s), nl(wxT("\n"));
-  unsigned int i;
-
-  if (!first)
-    return s;
-
-  for (i = 60; i < tooltip.length(); ++i)
-    if (wxT(' ') == tooltip[i]) {
-      first = false;
-      return tooltip.Left(i) + nl + tooltip.Right(tooltip.length() - i - 1);
-    } else if (wxT('(') == tooltip[i]) {
-      first = false;
-      return tooltip.Left(i) + nl + tooltip.Right(tooltip.length() - i);
-    }
-
-  return tooltip;
+  return format_paragraph(s.c_str(), 0, L"", L"", 80);
 }
 #endif
 
