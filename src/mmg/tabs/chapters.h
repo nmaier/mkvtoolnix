@@ -63,7 +63,7 @@ public:
   bool inputs_enabled, no_update;
 
   wxStaticText *st_start, *st_end, *st_uid, *st_name, *st_language;
-  wxStaticText *st_country;
+  wxStaticText *st_country, *st_chapters;
   wxStaticBox *sb_names;
 
   wxString file_name;
@@ -117,6 +117,7 @@ public:
   bool load(wxString name);
   void save();
   bool is_empty();
+  void translate_ui();
 
 protected:
   void write_chapters_to_matroska_file();

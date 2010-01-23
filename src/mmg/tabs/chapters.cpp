@@ -187,8 +187,9 @@ tab_chapters::tab_chapters(wxWindow *parent,
 
   siz_all = new wxBoxSizer(wxVERTICAL);
 
+  st_chapters = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   siz_all->AddSpacer(5);
-  siz_all->Add(new wxStaticText(this, wxID_STATIC, Z("Chapters:")), 0, wxLEFT, 10);
+  siz_all->Add(st_chapters, 0, wxLEFT, 10);
   siz_all->AddSpacer(5);
 
 #ifdef SYS_WINDOWS
@@ -197,18 +198,11 @@ tab_chapters::tab_chapters(wxWindow *parent,
   tc_chapters = new wxTreeCtrl(this, ID_TRC_CHAPTERS, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER | wxTR_HAS_BUTTONS);
 #endif
 
-  b_add_chapter = new wxButton(this, ID_B_ADDCHAPTER, Z("Add chapter"));
-
-  b_add_subchapter = new wxButton(this, ID_B_ADDSUBCHAPTER, Z("Add subchapter"));
-
-  b_remove_chapter = new wxButton(this, ID_B_REMOVECHAPTER, Z("Remove chapter"));
-
-  b_set_values = new wxButton(this, ID_B_SETVALUES, Z("Set values"));
-  b_set_values->SetToolTip(TIP("Here you can set the values for the language and the country that you want to apply to all the "
-                               "chapters below and including the currently selected entry."));
-
-  b_adjust_timecodes = new wxButton(this, ID_B_ADJUSTTIMECODES, Z("Adjust timecodes"));
-  b_adjust_timecodes->SetToolTip(TIP("Here you can adjust all the timcdoes of the selected chapter and all its childrend by a specific amount either increasing or decreasing it."));
+  b_add_chapter      = new wxButton(this, ID_B_ADDCHAPTER);
+  b_add_subchapter   = new wxButton(this, ID_B_ADDSUBCHAPTER);
+  b_remove_chapter   = new wxButton(this, ID_B_REMOVECHAPTER);
+  b_set_values       = new wxButton(this, ID_B_SETVALUES);
+  b_adjust_timecodes = new wxButton(this, ID_B_ADJUSTTIMECODES);
 
   siz_fg = new wxFlexGridSizer(2);
   siz_fg->AddGrowableCol(0);
@@ -225,12 +219,12 @@ tab_chapters::tab_chapters(wxWindow *parent,
   siz_fg->Add(siz_column, 0, wxLEFT | wxBOTTOM, 5);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
-  st_start = new wxStaticText(this, wxID_STATIC, Z("Start:"));
+  st_start = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   siz_line->Add(st_start, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
   tc_start_time = new wxTextCtrl(this, ID_TC_CHAPTERSTART, wxEmptyString);
   siz_line->Add(tc_start_time, 1, wxGROW | wxRIGHT, 10);
 
-  st_end = new wxStaticText(this, wxID_STATIC, Z("End:"));
+  st_end = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   siz_line->Add(st_end, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
   tc_end_time = new wxTextCtrl(this, ID_TC_CHAPTEREND, wxEmptyString);
   siz_line->Add(tc_end_time, 1, wxGROW, 0);
@@ -242,18 +236,13 @@ tab_chapters::tab_chapters(wxWindow *parent,
   siz_fg->AddSpacer(5);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
-  st_uid = new wxStaticText(this, wxID_STATIC, Z("UID:"));
+  st_uid = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   siz_line->Add(st_uid, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
   tc_uid = new wxTextCtrl(this, ID_TC_UID, wxEmptyString);
-  tc_uid->SetToolTip(TIP("Each chapter and each edition has a unique identifier. This identifier is normally assigned "
-                          "automatically by the programs, but it can be changed manually if it is really needed."));
   siz_line->Add(tc_uid, 1, wxGROW | wxRIGHT | wxALIGN_CENTER_VERTICAL, 10);
-  cb_flag_hidden = new wxCheckBox(this, ID_CB_CHAPTERHIDDEN, Z("hidden"));
-  cb_flag_hidden->SetToolTip(TIP("If a chapter is marked 'hidden' then the player should not show this chapter entry "
-                                 "to the user. Such entries could still be used by the menu system."));
+  cb_flag_hidden = new wxCheckBox(this, ID_CB_CHAPTERHIDDEN, wxEmptyString);
   siz_line->Add(cb_flag_hidden, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 10);
-  cb_flag_enabled = new wxCheckBox(this, ID_CB_CHAPTERENABLED, Z("enabled"));
-  cb_flag_enabled->SetToolTip(TIP("If a chapter is not marked 'enabled' then the player should skip the part of the file that this chapter occupies."));
+  cb_flag_enabled = new wxCheckBox(this, ID_CB_CHAPTERENABLED, wxEmptyString);
   siz_line->Add(cb_flag_enabled, 0, wxALIGN_CENTER_VERTICAL, 0);
 
   siz_fg->Add(siz_line, 0, wxGROW | wxRIGHT, 5);
@@ -261,16 +250,16 @@ tab_chapters::tab_chapters(wxWindow *parent,
 
   siz_all->Add(siz_fg, 1, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
 
-  sb_names = new wxStaticBox(this, wxID_STATIC, Z("Chapter names and languages"));
+  sb_names = new wxStaticBox(this, wxID_STATIC, wxEmptyString);
   siz_sb = new wxStaticBoxSizer(sb_names, wxVERTICAL);
 
   lb_chapter_names = new wxListBox(this, ID_LB_CHAPTERNAMES);
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->Add(lb_chapter_names, 1, wxGROW | wxRIGHT, 10);
 
-  b_add_chapter_name = new wxButton(this, ID_B_ADD_CHAPTERNAME, Z("Add name"));
-  b_remove_chapter_name = new wxButton(this, ID_B_REMOVE_CHAPTERNAME, Z("Remove name"));
-  siz_column = new wxBoxSizer(wxVERTICAL);
+  b_add_chapter_name    = new wxButton(this, ID_B_ADD_CHAPTERNAME);
+  b_remove_chapter_name = new wxButton(this, ID_B_REMOVE_CHAPTERNAME);
+  siz_column            = new wxBoxSizer(wxVERTICAL);
   siz_column->Add(b_add_chapter_name, 0, wxGROW | wxBOTTOM, 3);
   siz_column->Add(b_remove_chapter_name, 0, wxGROW, 0);
   siz_line->Add(siz_column, 0, 0, 0);
@@ -278,12 +267,12 @@ tab_chapters::tab_chapters(wxWindow *parent,
 
   siz_fg = new wxFlexGridSizer(2);
   siz_fg->AddGrowableCol(1);
-  st_name = new wxStaticText(this, wxID_STATIC, Z("Name:"));
+  st_name = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   siz_fg->Add(st_name, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxBOTTOM, 10);
   tc_chapter_name = new wxTextCtrl(this, ID_TC_CHAPTERNAME, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
   siz_fg->Add(tc_chapter_name, 1, wxGROW | wxBOTTOM, 10);
 
-  st_language = new wxStaticText(this, wxID_STATIC, Z("Language:"));
+  st_language = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   siz_fg->Add(st_language, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
 
   cob_language_code = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CHAPTERSELECTLANGUAGECODE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
@@ -294,7 +283,7 @@ tab_chapters::tab_chapters(wxWindow *parent,
   siz_line->Add(cob_language_code, 1, wxGROW, 0);
   siz_line->Add(10, 0, 0, 0, 0);
 
-  st_country = new wxStaticText(this, wxID_STATIC, Z("Country:"));
+  st_country = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   siz_line->Add(st_country, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 5);
   cob_country_code = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CHAPTERSELECTCOUNTRYCODE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
   cob_country_code->Append(wxEmptyString);
@@ -304,34 +293,62 @@ tab_chapters::tab_chapters(wxWindow *parent,
   siz_line->Add(cob_country_code, 1, wxGROW, 0);
   siz_fg->Add(siz_line, 0, wxGROW, 0);
 
-  siz_sb->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
+  siz_sb->Add(siz_fg,  0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
   siz_all->Add(siz_sb, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 10);
 
   enable_inputs(false);
 
-  m_chapters->Enable(ID_M_CHAPTERS_SAVE, false);
-  m_chapters->Enable(ID_M_CHAPTERS_SAVEAS, false);
+  m_chapters->Enable(ID_M_CHAPTERS_SAVE,      false);
+  m_chapters->Enable(ID_M_CHAPTERS_SAVEAS,    false);
   m_chapters->Enable(ID_M_CHAPTERS_SAVETOKAX, false);
-  m_chapters->Enable(ID_M_CHAPTERS_VERIFY, false);
+  m_chapters->Enable(ID_M_CHAPTERS_VERIFY,    false);
   enable_buttons(false);
 
-  file_name = wxEmptyString;
-  chapters = NULL;
-  analyzer = NULL;
-  source_is_kax_file = false;
+  file_name               = wxEmptyString;
+  chapters                = NULL;
+  analyzer                = NULL;
+  source_is_kax_file      = false;
   source_is_simple_format = false;
+  no_update               = false;
 
-  no_update = false;
+  translate_ui();
 
   SetDropTarget(new chapters_drop_target_c(this));
   SetSizer(siz_all);
 }
 
 tab_chapters::~tab_chapters() {
-  if (chapters != NULL)
-    delete chapters;
-  if (analyzer != NULL)
-    delete analyzer;
+  delete chapters;
+  delete analyzer;
+}
+
+void
+tab_chapters::translate_ui() {
+  st_chapters->SetLabel(Z("Chapters:"));
+  b_add_chapter->SetLabel(Z("Add chapter"));
+  b_add_subchapter->SetLabel(Z("Add subchapter"));
+  b_remove_chapter->SetLabel(Z("Remove chapter"));
+  b_set_values->SetLabel(Z("Set values"));
+  b_set_values->SetToolTip(TIP("Here you can set the values for the language and the country that you want to apply to all the "
+                               "chapters below and including the currently selected entry."));
+  b_adjust_timecodes->SetLabel(Z("Adjust timecodes"));
+  b_adjust_timecodes->SetToolTip(TIP("Here you can adjust all the timcdoes of the selected chapter and all its childrend by a specific amount either increasing or decreasing it."));
+  st_start->SetLabel(Z("Start:"));
+  st_end->SetLabel(Z("End:"));
+  st_uid->SetLabel(Z("UID:"));
+  tc_uid->SetToolTip(TIP("Each chapter and each edition has a unique identifier. This identifier is normally assigned "
+                          "automatically by the programs, but it can be changed manually if it is really needed."));
+  cb_flag_hidden->SetLabel(Z("hidden"));
+  cb_flag_hidden->SetToolTip(TIP("If a chapter is marked 'hidden' then the player should not show this chapter entry "
+                                 "to the user. Such entries could still be used by the menu system."));
+  cb_flag_enabled->SetLabel(Z("enabled"));
+  cb_flag_enabled->SetToolTip(TIP("If a chapter is not marked 'enabled' then the player should skip the part of the file that this chapter occupies."));
+  sb_names->SetLabel(Z("Chapter names and languages"));
+  b_add_chapter_name->SetLabel(Z("Add name"));
+  b_remove_chapter_name->SetLabel(Z("Remove name"));
+  st_name->SetLabel(Z("Name:"));
+  st_language->SetLabel(Z("Language:"));
+  st_country->SetLabel(Z("Country:"));
 }
 
 void
