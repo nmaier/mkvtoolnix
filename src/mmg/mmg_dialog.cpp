@@ -86,68 +86,10 @@ mmg_dialog::mmg_dialog()
 
   SetTitle(wxU(get_version_info("mkvmerge GUI")));
 
-  log_window = new wxLogWindow(this, Z("mmg debug output"), false);
+  log_window = new wxLogWindow(this, wxEmptyString, false);
   wxLog::SetActiveTarget(log_window);
 
-  file_menu = new wxMenu();
-  file_menu->Append(ID_M_FILE_NEW, Z("&New\tCtrl-N"), Z("Start with empty settings"));
-  file_menu->Append(ID_M_FILE_LOAD, Z("&Load settings\tCtrl-L"), Z("Load muxing settings from a file"));
-  file_menu->Append(ID_M_FILE_SAVE, Z("&Save settings\tCtrl-S"), Z("Save muxing settings to a file"));
-  file_menu->AppendSeparator();
-  file_menu->Append(ID_M_FILE_SETOUTPUT, Z("Set &output file"), Z("Select the file you want to write to"));
-  file_menu->AppendSeparator();
-  file_menu->Append(ID_M_FILE_OPTIONS, Z("Op&tions\tCtrl-P"), Z("Change mmg's preferences and options"));
-  file_menu->AppendSeparator();
-  file_menu->Append(ID_M_FILE_HEADEREDITOR, Z("&Header editor\tCtrl-E"), Z("Run the header field editor"));
-  file_menu->AppendSeparator();
-  file_menu->Append(ID_M_FILE_EXIT, Z("&Quit\tCtrl-Q"), Z("Quit the application"));
-
-  file_menu_sep = false;
-  update_file_menu();
-
-  wxMenu *muxing_menu = new wxMenu();
-  muxing_menu->Append(ID_M_MUXING_START, Z("Sta&rt muxing (run mkvmerge)\tCtrl-R"), Z("Run mkvmerge and start the muxing process"));
-  muxing_menu->AppendSeparator();
-  muxing_menu->Append(ID_M_MUXING_SHOW_CMDLINE, Z("S&how the command line"), Z("Show the command line mmg creates for mkvmerge"));
-  muxing_menu->Append(ID_M_MUXING_COPY_CMDLINE, Z("&Copy command line to clipboard"), Z("Copy the command line to the clipboard"));
-  muxing_menu->Append(ID_M_MUXING_SAVE_CMDLINE, Z("Sa&ve command line"), Z("Save the command line to a file"));
-  muxing_menu->Append(ID_M_MUXING_CREATE_OPTIONFILE, Z("Create &option file"), Z("Save the command line to an option file that can be read by mkvmerge"));
-  muxing_menu->AppendSeparator();
-  muxing_menu->Append(ID_M_MUXING_ADD_TO_JOBQUEUE, Z("&Add to job queue"), Z("Adds the current settings as a new job entry to the job queue"));
-  muxing_menu->Append(ID_M_MUXING_MANAGE_JOBS, Z("&Manage jobs\tCtrl-J"), Z("Brings up the job queue editor"));
-  muxing_menu->AppendSeparator();
-  muxing_menu->Append(ID_M_MUXING_ADD_CLI_OPTIONS, Z("Add &command line options"), Z("Lets you add arbitrary options to the command line"));
-
-  chapter_menu = new wxMenu();
-  chapter_menu->Append(ID_M_CHAPTERS_NEW, Z("&New chapters"), Z("Create a new chapter file"));
-  chapter_menu->Append(ID_M_CHAPTERS_LOAD, Z("&Load"), Z("Load a chapter file (simple/OGM format or XML "
-                           "format)"));
-  chapter_menu->Append(ID_M_CHAPTERS_SAVE, Z("&Save"), Z("Save the current chapters to a XML file"));
-  chapter_menu->Append(ID_M_CHAPTERS_SAVETOKAX, Z("Save to &Matroska file"), Z("Save the current chapters to an existing Matroska file"));
-  chapter_menu->Append(ID_M_CHAPTERS_SAVEAS, Z("Save &as"), Z("Save the current chapters to a file with another name"));
-  chapter_menu->AppendSeparator();
-  chapter_menu->Append(ID_M_CHAPTERS_VERIFY, Z("&Verify"), Z("Verify the current chapter entries to see if there are any errors"));
-  chapter_menu_sep = false;
-  update_chapter_menu();
-
-  wxMenu *window_menu = new wxMenu();
-  window_menu->Append(ID_M_WINDOW_INPUT, Z("&Input\tAlt-1"));
-  window_menu->Append(ID_M_WINDOW_ATTACHMENTS, Z("&Attachments\tAlt-2"));
-  window_menu->Append(ID_M_WINDOW_GLOBAL, Z("&Global options\tAlt-3"));
-  window_menu->AppendSeparator();
-  window_menu->Append(ID_M_WINDOW_CHAPTEREDITOR, Z("&Chapter editor\tAlt-4"));
-
-  wxMenu *help_menu = new wxMenu();
-  help_menu->Append(ID_M_HELP_HELP, Z("&Help\tF1"), Z("Show the guide to mkvmerge GUI"));
-  help_menu->Append(ID_M_HELP_ABOUT, Z("&About"), Z("Show program information"));
-
-  wxMenuBar *menu_bar = new wxMenuBar();
-  menu_bar->Append(file_menu, Z("&File"));
-  menu_bar->Append(muxing_menu, Z("&Muxing"));
-  menu_bar->Append(chapter_menu, Z("&Chapter Editor"));
-  menu_bar->Append(window_menu, Z("&Window"));
-  menu_bar->Append(help_menu, Z("&Help"));
-  SetMenuBar(menu_bar);
+  create_menus();
 
   status_bar = new wxStatusBar(this, -1);
   SetStatusBar(status_bar);
@@ -159,23 +101,21 @@ mmg_dialog::mmg_dialog()
   panel->SetSizer(bs_main);
   panel->SetAutoLayout(true);
 
-  notebook =
-    new wxNotebook(panel, ID_NOTEBOOK, wxDefaultPosition, wxSize(500, 500),
-                   wxNB_TOP);
-  input_page = new tab_input(notebook);
-  attachments_page = new tab_attachments(notebook);
-  global_page = new tab_global(notebook);
+  notebook            = new wxNotebook(panel, ID_NOTEBOOK, wxDefaultPosition, wxSize(500, 500), wxNB_TOP);
+  input_page          = new tab_input(notebook);
+  attachments_page    = new tab_attachments(notebook);
+  global_page         = new tab_global(notebook);
   chapter_editor_page = new tab_chapters(notebook, chapter_menu);
 
-  notebook->AddPage(input_page, Z("Input"));
-  notebook->AddPage(attachments_page, Z("Attachments"));
-  notebook->AddPage(global_page, Z("Global"));
-  notebook->AddPage(chapter_editor_page, Z("Chapter Editor"));
+  notebook->AddPage(input_page,          wxEmptyString);
+  notebook->AddPage(attachments_page,    wxEmptyString);
+  notebook->AddPage(global_page,         wxEmptyString);
+  notebook->AddPage(chapter_editor_page, wxEmptyString);
 
   bs_main->Add(notebook, 1, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT | wxGROW, 5);
 
-  wxStaticBox *sb_low = new wxStaticBox(panel, -1, Z("Output filename"));
-  wxStaticBoxSizer *sbs_low = new wxStaticBoxSizer(sb_low, wxHORIZONTAL);
+  sb_output_filename = new wxStaticBox(panel, -1, wxEmptyString);
+  wxStaticBoxSizer *sbs_low = new wxStaticBoxSizer(sb_output_filename, wxHORIZONTAL);
   bs_main->Add(sbs_low, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT | wxGROW, 5);
 
   tc_output = new wxTextCtrl(panel, ID_TC_OUTPUT, wxEmptyString);
@@ -183,18 +123,18 @@ mmg_dialog::mmg_dialog()
   sbs_low->Add(tc_output, 1, wxALIGN_CENTER_VERTICAL | wxTOP | wxBOTTOM | wxGROW, 2);
   sbs_low->AddSpacer(5);
 
-  b_browse_output = new wxButton(panel, ID_B_BROWSEOUTPUT, Z("Browse"));
+  b_browse_output = new wxButton(panel, ID_B_BROWSEOUTPUT, wxEmptyString);
   sbs_low->Add(b_browse_output, 0, wxALIGN_CENTER_VERTICAL | wxALL, 3);
 
   wxBoxSizer *bs_buttons = new wxBoxSizer(wxHORIZONTAL);
 
-  b_start_muxing = new wxButton(panel, ID_B_STARTMUXING, Z("Sta&rt muxing"));
+  b_start_muxing = new wxButton(panel, ID_B_STARTMUXING);
   bs_buttons->Add(b_start_muxing, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 8);
 
-  b_copy_to_clipboard = new wxButton(panel, ID_B_COPYTOCLIPBOARD, Z("&Copy to clipboard"));
+  b_copy_to_clipboard = new wxButton(panel, ID_B_COPYTOCLIPBOARD);
   bs_buttons->Add(b_copy_to_clipboard, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 8);
 
-  b_add_to_jobqueue = new wxButton(panel, ID_B_ADD_TO_JOBQUEUE, Z("&Add to job queue"));
+  b_add_to_jobqueue = new wxButton(panel, ID_B_ADD_TO_JOBQUEUE);
   bs_buttons->Add(b_add_to_jobqueue, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 8);
 
   bs_main->Add(bs_buttons, 0, wxALIGN_CENTER_HORIZONTAL);
@@ -221,6 +161,8 @@ mmg_dialog::mmg_dialog()
 
   help = NULL;
 
+  translate_ui();
+
   set_status_bar(Z("mkvmerge GUI ready"));
 
 #if defined(SYS_WINDOWS)
@@ -230,6 +172,139 @@ mmg_dialog::mmg_dialog()
 
 mmg_dialog::~mmg_dialog() {
   delete help;
+}
+
+void
+mmg_dialog::create_menus() {
+  file_menu = new wxMenu();
+  file_menu->Append(ID_M_FILE_NEW);
+  file_menu->Append(ID_M_FILE_LOAD);
+  file_menu->Append(ID_M_FILE_SAVE);
+  file_menu->AppendSeparator();
+  file_menu->Append(ID_M_FILE_SETOUTPUT);
+  file_menu->AppendSeparator();
+  file_menu->Append(ID_M_FILE_OPTIONS);
+  file_menu->AppendSeparator();
+  file_menu->Append(ID_M_FILE_HEADEREDITOR);
+  file_menu->AppendSeparator();
+  file_menu->Append(ID_M_FILE_EXIT);
+
+  file_menu_sep = false;
+  update_file_menu();
+
+  muxing_menu = new wxMenu();
+  muxing_menu->Append(ID_M_MUXING_START);
+  muxing_menu->AppendSeparator();
+  muxing_menu->Append(ID_M_MUXING_SHOW_CMDLINE);
+  muxing_menu->Append(ID_M_MUXING_COPY_CMDLINE);
+  muxing_menu->Append(ID_M_MUXING_SAVE_CMDLINE);
+  muxing_menu->Append(ID_M_MUXING_CREATE_OPTIONFILE);
+  muxing_menu->AppendSeparator();
+  muxing_menu->Append(ID_M_MUXING_ADD_TO_JOBQUEUE);
+  muxing_menu->Append(ID_M_MUXING_MANAGE_JOBS);
+  muxing_menu->AppendSeparator();
+  muxing_menu->Append(ID_M_MUXING_ADD_CLI_OPTIONS);
+
+  chapter_menu = new wxMenu();
+  chapter_menu->Append(ID_M_CHAPTERS_NEW);
+  chapter_menu->Append(ID_M_CHAPTERS_LOAD);
+  chapter_menu->Append(ID_M_CHAPTERS_SAVE);
+  chapter_menu->Append(ID_M_CHAPTERS_SAVETOKAX);
+  chapter_menu->Append(ID_M_CHAPTERS_SAVEAS);
+  chapter_menu->AppendSeparator();
+  chapter_menu->Append(ID_M_CHAPTERS_VERIFY);
+  chapter_menu_sep = false;
+  update_chapter_menu();
+
+  window_menu = new wxMenu();
+  window_menu->Append(ID_M_WINDOW_INPUT);
+  window_menu->Append(ID_M_WINDOW_ATTACHMENTS);
+  window_menu->Append(ID_M_WINDOW_GLOBAL);
+  window_menu->AppendSeparator();
+  window_menu->Append(ID_M_WINDOW_CHAPTEREDITOR);
+
+  help_menu = new wxMenu();
+  help_menu->Append(ID_M_HELP_HELP);
+  help_menu->Append(ID_M_HELP_ABOUT);
+
+  menu_bar = new wxMenuBar();
+  menu_bar->Append(file_menu,    wxEmptyString);
+  menu_bar->Append(muxing_menu,  wxEmptyString);
+  menu_bar->Append(chapter_menu, wxEmptyString);
+  menu_bar->Append(window_menu,  wxEmptyString);
+  menu_bar->Append(help_menu,    wxEmptyString);
+  SetMenuBar(menu_bar);
+}
+
+void
+mmg_dialog::set_menu_item_strings(int id,
+                                  const wxString &title,
+                                  const wxString &help_text) {
+  wxMenuItem *item = menu_bar->FindItem(id);
+  if (NULL != item) {
+    item->SetItemLabel(title);
+    if (!help_text.IsEmpty())
+      item->SetHelp(help_text);
+  }
+}
+
+void
+mmg_dialog::translate_ui() {
+  log_window->GetFrame()->SetTitle(Z("mmg debug output"));
+
+  set_menu_item_strings(ID_M_FILE_NEW,                 Z("&New\tCtrl-N"),                         Z("Start with empty settings"));
+  set_menu_item_strings(ID_M_FILE_LOAD,                Z("&Load settings\tCtrl-L"),               Z("Load muxing settings from a file"));
+  set_menu_item_strings(ID_M_FILE_SAVE,                Z("&Save settings\tCtrl-S"),               Z("Save muxing settings to a file"));
+  set_menu_item_strings(ID_M_FILE_SETOUTPUT,           Z("Set &output file"),                     Z("Select the file you want to write to"));
+  set_menu_item_strings(ID_M_FILE_OPTIONS,             Z("Op&tions\tCtrl-P"),                     Z("Change mmg's preferences and options"));
+  set_menu_item_strings(ID_M_FILE_HEADEREDITOR,        Z("&Header editor\tCtrl-E"),               Z("Run the header field editor"));
+  set_menu_item_strings(ID_M_FILE_EXIT,                Z("&Quit\tCtrl-Q"),                        Z("Quit the application"));
+  set_menu_item_strings(ID_M_MUXING_START,             Z("Sta&rt muxing (run mkvmerge)\tCtrl-R"), Z("Run mkvmerge and start the muxing process"));
+  set_menu_item_strings(ID_M_MUXING_SHOW_CMDLINE,      Z("S&how the command line"),               Z("Show the command line mmg creates for mkvmerge"));
+  set_menu_item_strings(ID_M_MUXING_COPY_CMDLINE,      Z("&Copy command line to clipboard"),      Z("Copy the command line to the clipboard"));
+  set_menu_item_strings(ID_M_MUXING_SAVE_CMDLINE,      Z("Sa&ve command line"),                   Z("Save the command line to a file"));
+  set_menu_item_strings(ID_M_MUXING_CREATE_OPTIONFILE, Z("Create &option file"),                  Z("Save the command line to an option file that can be read by mkvmerge"));
+  set_menu_item_strings(ID_M_MUXING_ADD_TO_JOBQUEUE,   Z("&Add to job queue"),                    Z("Adds the current settings as a new job entry to the job queue"));
+  set_menu_item_strings(ID_M_MUXING_MANAGE_JOBS,       Z("&Manage jobs\tCtrl-J"),                 Z("Brings up the job queue editor"));
+  set_menu_item_strings(ID_M_MUXING_ADD_CLI_OPTIONS,   Z("Add &command line options"),            Z("Lets you add arbitrary options to the command line"));
+  set_menu_item_strings(ID_M_CHAPTERS_NEW,             Z("&New chapters"),                        Z("Create a new chapter file"));
+  set_menu_item_strings(ID_M_CHAPTERS_LOAD,            Z("&Load"),                                Z("Load a chapter file (simple/OGM format or XML format)"));
+  set_menu_item_strings(ID_M_CHAPTERS_SAVE,            Z("&Save"),                                Z("Save the current chapters to a XML file"));
+  set_menu_item_strings(ID_M_CHAPTERS_SAVETOKAX,       Z("Save to &Matroska file"),               Z("Save the current chapters to an existing Matroska file"));
+  set_menu_item_strings(ID_M_CHAPTERS_SAVEAS,          Z("Save &as"),                             Z("Save the current chapters to a file with another name"));
+  set_menu_item_strings(ID_M_CHAPTERS_VERIFY,          Z("&Verify"),                              Z("Verify the current chapter entries to see if there are any errors"));
+  set_menu_item_strings(ID_M_WINDOW_INPUT,             Z("&Input\tAlt-1"));
+  set_menu_item_strings(ID_M_WINDOW_ATTACHMENTS,       Z("&Attachments\tAlt-2"));
+  set_menu_item_strings(ID_M_WINDOW_GLOBAL,            Z("&Global options\tAlt-3"));
+  set_menu_item_strings(ID_M_WINDOW_CHAPTEREDITOR,     Z("&Chapter editor\tAlt-4"));
+  set_menu_item_strings(ID_M_HELP_HELP,                Z("&Help\tF1"),                            Z("Show the guide to mkvmerge GUI"));
+  set_menu_item_strings(ID_M_HELP_ABOUT,               Z("&About"),                               Z("Show program information"));
+
+  menu_bar->SetMenuLabel(0, Z("&File"));
+  menu_bar->SetMenuLabel(1, Z("&Muxing"));
+  menu_bar->SetMenuLabel(2, Z("&Chapter Editor"));
+  menu_bar->SetMenuLabel(3, Z("&Window"));
+  menu_bar->SetMenuLabel(4, Z("&Help"));
+
+  notebook->SetPageText(0, Z("Input"));
+  notebook->SetPageText(1, Z("Attachments"));
+  notebook->SetPageText(2, Z("Global"));
+  notebook->SetPageText(3, Z("Chapter Editor"));
+
+  sb_output_filename->SetLabel(Z("Output filename"));
+  b_browse_output->SetLabel(Z("Browse"));
+  b_start_muxing->SetLabel(Z("Sta&rt muxing"));
+  b_copy_to_clipboard->SetLabel(Z("&Copy to clipboard"));
+  b_add_to_jobqueue->SetLabel(Z("&Add to job queue"));
+
+  attachments_page->translate_ui();
+
+  // Really force wxWidgets/GTK to re-calculate the sizes of all
+  // controls. Layout() on its own is not enough -- it won't calculate
+  // the width/height for the new labels.
+  Layout();
+  SetSize(GetSize().GetWidth() + 1, GetSize().GetHeight());
+  SetSize(GetSize().GetWidth() - 1, GetSize().GetHeight());
 }
 
 void

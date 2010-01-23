@@ -100,9 +100,11 @@ public:
   wxTimer status_bar_timer;
 
   wxStatusBar *status_bar;
+  wxStaticBox *sb_output_filename;
 
   wxNotebook *notebook;
-  wxMenu *file_menu, *chapter_menu;
+  wxMenu *file_menu, *muxing_menu, *chapter_menu, *window_menu, *help_menu;
+  wxMenuBar *menu_bar;
   bool file_menu_sep, chapter_menu_sep;
 
   tab_input *input_page;
@@ -188,6 +190,8 @@ public:
 
   void on_run_header_editor(wxCommandEvent &evt);
 
+  void translate_ui();
+
   void load_job_queue();
   void save_job_queue();
 
@@ -213,6 +217,9 @@ protected:
   virtual WXLRESULT MSWWindowProc(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam);
   void RegisterWindowMessages();
 #endif
+
+  void set_menu_item_strings(int id, const wxString &title, const wxString &help_text = wxEmptyString);
+  void create_menus();
 };
 
 extern mmg_dialog *mdlg;

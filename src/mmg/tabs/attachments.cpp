@@ -48,48 +48,44 @@ tab_attachments::tab_attachments(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL) {
 
   // Create all elements
-  wxStaticBox *sb_attached_files = new wxStaticBox(this, wxID_STATIC, Z("Attached files"));
-  clb_attached_files             = new wxCheckListBox(this, ID_CLB_ATTACHED_FILES);
+  sb_attached_files  = new wxStaticBox(this, wxID_STATIC, wxEmptyString);
+  clb_attached_files = new wxCheckListBox(this, ID_CLB_ATTACHED_FILES);
 
-  b_enable_all                   = new wxButton(this, ID_B_ENABLEALLATTACHED, Z("enable all"));
-  b_disable_all                  = new wxButton(this, ID_B_DISABLEALLATTACHED, Z("disable all"));
+  b_enable_all       = new wxButton(this, ID_B_ENABLEALLATTACHED);
+  b_disable_all      = new wxButton(this, ID_B_DISABLEALLATTACHED);
   b_enable_all->Enable(false);
   b_disable_all->Enable(false);
 
-  wxStaticBox *sb_attachments    = new wxStaticBox(this, wxID_STATIC, Z("Attachments"));
-  lb_attachments                 = new wxListBox(this, ID_LB_ATTACHMENTS);
+  sb_attachments      = new wxStaticBox(this, wxID_STATIC, wxEmptyString);
+  lb_attachments      = new wxListBox(this, ID_LB_ATTACHMENTS);
 
-  b_add_attachment               = new wxButton(this, ID_B_ADDATTACHMENT, Z("add"));
-  b_remove_attachment            = new wxButton(this, ID_B_REMOVEATTACHMENT, Z("remove"));
+  b_add_attachment    = new wxButton(this, ID_B_ADDATTACHMENT);
+  b_remove_attachment = new wxButton(this, ID_B_REMOVEATTACHMENT);
   b_remove_attachment->Enable(false);
 
   wxStaticLine *sl_options = new wxStaticLine(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL);
 
-  st_name = new wxStaticText(this, wxID_STATIC, Z("Name:"));
+  st_name = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   tc_name = new wxTextCtrl(this, ID_TC_ATTACHMENTNAME);
-  tc_name->SetToolTip(TIP("This is the name that will be stored in the output file for this attachment. "
-                          "It defaults to the file name of the original file but can be changed."));
   tc_name->SetSizeHints(0, -1);
 
-  st_description = new wxStaticText(this, wxID_STATIC, Z("Description:"));
+  st_description = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   tc_description = new wxTextCtrl(this, ID_TC_DESCRIPTION);
   tc_description->SetSizeHints(0, -1);
 
-  st_mimetype    = new wxStaticText(this, wxID_STATIC, Z("MIME type:"));
+  st_mimetype    = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   cob_mimetype   = new wxMTX_COMBOBOX_TYPE(this, ID_CB_MIMETYPE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
-  cob_mimetype->SetToolTip(TIP("MIME type for this track. Select one of the pre-defined MIME types or enter one yourself."));
   cob_mimetype->Append(wxEmptyString);
   int i;
   for (i = 0; mime_types[i].name != NULL; i++)
     cob_mimetype->Append(wxU(mime_types[i].name));
   cob_mimetype->SetSizeHints(0, -1);
 
-  st_style  = new wxStaticText(this, wxID_STATIC, Z("Attachment style:"));
+  st_style  = new wxStaticText(this, wxID_STATIC, wxEmptyString);
 
   cob_style = new wxMTX_COMBOBOX_TYPE(this, ID_CB_ATTACHMENTSTYLE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY | wxCB_DROPDOWN);
-  cob_style->Append(Z("To all files"));
-  cob_style->Append(Z("Only to the first"));
-  cob_style->SetToolTip(TIP("If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."));
+  cob_style->Append(wxEmptyString);
+  cob_style->Append(wxEmptyString);
   cob_style->SetSizeHints(0, -1);
 
   // Create the layout.
@@ -142,6 +138,8 @@ tab_attachments::tab_attachments(wxWindow *parent):
 
   SetSizer(siz_all);
 
+  translate_ui();
+
   enable(false);
   selected_attachment = -1;
 
@@ -149,6 +147,25 @@ tab_attachments::tab_attachments(wxWindow *parent):
   t_get_entries.Start(333);
 
   SetDropTarget(new attachments_drop_target_c(this));
+}
+
+void
+tab_attachments::translate_ui() {
+  sb_attached_files->SetLabel(Z("Attached files"));
+  b_enable_all->SetLabel(Z("enable all"));
+  b_disable_all->SetLabel(Z("disable all"));
+  sb_attachments->SetLabel(Z("Attachments"));
+  b_add_attachment->SetLabel(Z("add"));
+  b_remove_attachment->SetLabel(Z("remove"));
+  st_name->SetLabel(Z("Name:"));
+  tc_name->SetToolTip(TIP("This is the name that will be stored in the output file for this attachment. It defaults to the file name of the original file but can be changed."));
+  st_description->SetLabel(Z("Description:"));
+  st_mimetype->SetLabel(Z("MIME type:"));
+  cob_mimetype->SetToolTip(TIP("MIME type for this track. Select one of the pre-defined MIME types or enter one yourself."));
+  st_style->SetLabel(Z("Attachment style:"));
+  cob_style->SetString(0, Z("To all files"));
+  cob_style->SetString(1, Z("Only to the first"));
+  cob_style->SetToolTip(TIP("If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."));
 }
 
 void

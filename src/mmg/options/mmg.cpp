@@ -270,14 +270,18 @@ optdlg_mmg_tab::save_options() {
 #if defined(HAVE_LIBINTL_H)
   std::string new_ui_locale = get_selected_ui_language();
 
-  if (downcase(new_ui_locale) != downcase(app->m_ui_locale))
-    wxMessageBox(Z("Changing the interface language requires a restart to take effect."), Z("Restart required"), wxOK | wxCENTER | wxICON_INFORMATION);
+  if (downcase(new_ui_locale) != downcase(app->m_ui_locale)) {
+    // wxMessageBox(Z("Changing the interface language requires a restart to take effect."), Z("Restart required"), wxOK | wxCENTER | wxICON_INFORMATION);
 
-  app->m_ui_locale  = new_ui_locale;
+    app->m_ui_locale  = new_ui_locale;
 
-  wxConfigBase *cfg = wxConfigBase::Get();
-  cfg->SetPath(wxT("/GUI"));
-  cfg->Write(wxT("ui_locale"), wxString(new_ui_locale.c_str(), wxConvUTF8));
+    wxConfigBase *cfg = wxConfigBase::Get();
+    cfg->SetPath(wxT("/GUI"));
+    cfg->Write(wxT("ui_locale"), wxString(new_ui_locale.c_str(), wxConvUTF8));
+
+    app->init_ui_locale();
+    mdlg->translate_ui();
+  }
 #endif  // HAVE_LIBINTL_H
 }
 

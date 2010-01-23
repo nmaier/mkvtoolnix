@@ -34,6 +34,7 @@ class tab_attachments: public wxPanel {
   DECLARE_CLASS(tab_attachments);
   DECLARE_EVENT_TABLE();
 protected:
+  wxStaticBox *sb_attached_files, *sb_attachments;
   wxCheckListBox *clb_attached_files;
   wxListBox *lb_attachments;
   wxButton *b_enable_all, *b_disable_all, *b_add_attachment, *b_remove_attachment;
@@ -74,6 +75,8 @@ public:
   void add_attached_file(mmg_attached_file_cptr &a, bool update_column_widths = false);
   void remove_attached_files_for(mmg_file_cptr &f);
   void remove_all_attached_files();
+
+  void translate_ui();
 };
 
 #endif // __TAB_ATTACHMENTS_H
