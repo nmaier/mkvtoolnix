@@ -163,9 +163,12 @@ tab_attachments::translate_ui() {
   st_mimetype->SetLabel(Z("MIME type:"));
   cob_mimetype->SetToolTip(TIP("MIME type for this track. Select one of the pre-defined MIME types or enter one yourself."));
   st_style->SetLabel(Z("Attachment style:"));
+
+  int selection = cob_style->GetSelection();
   cob_style->SetString(0, Z("To all files"));
   cob_style->SetString(1, Z("Only to the first"));
   cob_style->SetToolTip(TIP("If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."));
+  cob_style->SetSelection(selection);
 }
 
 void
