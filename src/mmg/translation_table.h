@@ -38,6 +38,7 @@ public:
   translation_table_c();
 
   void add(const wxString &english, const wxString &translated);
+  void clear();
   wxString to_translated(const wxString &english);
   wxString to_english(const wxString &translated);
 };

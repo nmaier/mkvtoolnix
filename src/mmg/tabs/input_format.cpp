@@ -49,7 +49,7 @@ tab_input_format::tab_input_format(wxWindow *parent,
   siz_fg->AddGrowableCol(1);
   siz_fg->AddGrowableCol(3);
 
-  rb_aspect_ratio = new wxRadioButton(this, ID_RB_ASPECTRATIO, Z("Aspect ratio:"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
+  rb_aspect_ratio = new wxRadioButton(this, ID_RB_ASPECTRATIO, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
   rb_aspect_ratio->SetValue(true);
   siz_fg->Add(rb_aspect_ratio, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
@@ -58,18 +58,15 @@ tab_input_format::tab_input_format(wxWindow *parent,
   for (i = 0; NULL != predefined_aspect_ratios[i]; ++i)
     cob_aspect_ratio->Append(predefined_aspect_ratios[i]);
 
-  cob_aspect_ratio->SetToolTip(TIP("Sets the display aspect ratio of the track. The format can be either 'a/b' in which case both numbers must be integer "
-                                   "(e.g. 16/9) or just a single floting point number 'f' (e.g. 2.35)."));
   cob_aspect_ratio->SetSizeHints(0, -1);
   siz_fg->Add(cob_aspect_ratio, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  rb_display_dimensions = new wxRadioButton(this, ID_RB_DISPLAYDIMENSIONS, Z("Display width/height:"));
+  rb_display_dimensions = new wxRadioButton(this, ID_RB_DISPLAYDIMENSIONS, wxEmptyString);
   rb_display_dimensions->SetValue(false);
   siz_fg->Add(rb_display_dimensions, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   tc_display_width = new wxTextCtrl(this, ID_TC_DISPLAYWIDTH, wxEmptyString);
-  tc_display_width->SetToolTip(TIP("Sets the display width of the track. The height must be set as well, or this field will be ignored."));
   tc_display_width->SetSizeHints(0, -1);
   siz_line->Add(tc_display_width, 1, wxGROW | wxALL, STDSPACING);
 
@@ -78,101 +75,78 @@ tab_input_format::tab_input_format(wxWindow *parent,
   siz_line->Add(st_x, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   tc_display_height = new wxTextCtrl(this, ID_TC_DISPLAYHEIGHT, wxEmptyString);
-  tc_display_height->SetToolTip(TIP("Sets the display height of the track. The width must be set as well, or this field will be ignored."));
   tc_display_height->SetSizeHints(0, -1);
   siz_line->Add(tc_display_height, 1, wxGROW | wxALL, STDSPACING);
   siz_fg->Add(siz_line, 1, wxGROW, 0);
 
-  st_fourcc = new wxStaticText(this, -1, Z("FourCC:"));
+  st_fourcc = new wxStaticText(this, -1, wxEmptyString);
   st_fourcc->Enable(false);
   siz_fg->Add(st_fourcc, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   cob_fourcc = new wxMTX_COMBOBOX_TYPE(this, ID_CB_FOURCC, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
-  cob_fourcc->SetToolTip(TIP("Forces the FourCC of the video track to this value. Note that this only works for video "
-                             "tracks that use the AVI compatibility mode or for QuickTime video tracks. This option CANNOT be used to change Matroska's CodecID."));
   cob_fourcc->SetSizeHints(0, -1);
   siz_fg->Add(cob_fourcc, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  st_stereo_mode = new wxStaticText(this, -1, Z("Stereoscopy:"));
+  st_stereo_mode = new wxStaticText(this, -1, wxEmptyString);
   st_stereo_mode->Enable(false);
   siz_fg->Add(st_stereo_mode, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   cob_stereo_mode = new wxMTX_COMBOBOX_TYPE(this, ID_CB_STEREO_MODE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
-  cob_stereo_mode->SetToolTip(TIP("Sets the stereo mode of the video track to this value. If left empty then the track's original stereo mode will be kept or, if "
-                                  "it didn't have one, none will be set at all."));
   cob_stereo_mode->SetSizeHints(0, -1);
   siz_fg->Add(cob_stereo_mode, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  st_fps = new wxStaticText(this, -1, Z("FPS:"));
+  st_fps = new wxStaticText(this, -1, wxEmptyString);
   st_fps->Enable(false);
   siz_fg->Add(st_fps, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   cob_fps = new wxMTX_COMBOBOX_TYPE(this, ID_CB_FPS, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN);
-  cob_fps->SetToolTip(TIP("Sets the default duration or number of frames per second for a track. This is only possible "
-                          "for video tracks. For AVC/h.264 elementary streams this option must be given. "
-                          "This can either be a floating point number or a fraction."));
   cob_fps->SetSizeHints(0, -1);
   siz_fg->Add(cob_fps, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  st_nalu_size_length = new wxStaticText(this, -1, Z("NALU size length:"));
+  st_nalu_size_length = new wxStaticText(this, -1, wxEmptyString);
   st_nalu_size_length->Enable(false);
   siz_fg->Add(st_nalu_size_length, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   cob_nalu_size_length = new wxMTX_COMBOBOX_TYPE(this, ID_CB_NALU_SIZE_LENGTH, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY);
-  cob_nalu_size_length->SetToolTip(TIP("Forces the NALU size length to a certain number of bytes. This parameter is only available for AVC/h.264 elementary "
-                                       "streams read from AVC/h.264 ES files, AVIs or Matroska files created with '--engage allow_avc_in_vwf_mode'. "
-                                       "It defaults to 4 bytes, but there are files which do not contain a frame or slice that is bigger than 65535 bytes. "
-                                       "For such files you can use this parameter and decrease the size to 2."));
   cob_nalu_size_length->SetSizeHints(0, -1);
   siz_fg->Add(cob_nalu_size_length, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  st_delay = new wxStaticText(this, wxID_STATIC, Z("Delay (in ms):"));
+  st_delay = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   st_delay->Enable(false);
   siz_fg->Add(st_delay, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   tc_delay = new wxTextCtrl(this, ID_TC_DELAY, wxEmptyString);
-  tc_delay->SetToolTip(TIP("Delay this track's timecodes by a couple of ms. Can be negative. Works with all track types, "
-                           "but negative delays should not be used with video tracks."));
   tc_delay->SetSizeHints(0, -1);
   siz_fg->Add(tc_delay, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  st_stretch = new wxStaticText(this, wxID_STATIC, Z("Stretch by:"));
+  st_stretch = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   st_stretch->Enable(false);
   siz_fg->Add(st_stretch, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   tc_stretch = new wxTextCtrl(this, ID_TC_STRETCH, wxEmptyString);
-  tc_stretch->SetToolTip(TIP("Stretch this track's timecodes. This entry can have two formats. "
-                             "It is either a positive floating point number, or a fraction like e.g. 1200/1253. "
-                             "Works best on video and subtitle tracks."));
   tc_stretch->SetSizeHints(0, -1);
   siz_fg->Add(tc_stretch, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  st_sub_charset = new wxStaticText(this, wxID_STATIC, Z("Charset:"));
+  st_sub_charset = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   st_sub_charset->Enable(false);
   siz_fg->Add(st_sub_charset, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   cob_sub_charset = new wxMTX_COMBOBOX_TYPE(this, ID_CB_SUBTITLECHARSET, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
-  cob_sub_charset->SetToolTip(TIP("Selects the character set a subtitle file or chapter information was written with. Only needed for non-UTF encoded "
-                                  "subtitle files or for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."));
-  cob_sub_charset->Append(Z("default"));
   cob_sub_charset->SetSizeHints(0, -1);
   siz_fg->Add(cob_sub_charset, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  st_cropping = new wxStaticText(this, -1, Z("Cropping:"));
+  st_cropping = new wxStaticText(this, -1, wxEmptyString);
   st_cropping->Enable(false);
   siz_fg->Add(st_cropping, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   tc_cropping = new wxTextCtrl(this, ID_TC_CROPPING, wxEmptyString);
-  tc_cropping->SetToolTip(TIP("Sets the cropping parameters. Must be comma-separated list of four numbers for the cropping to be used at the left, top, right and bottom."));
   tc_cropping->SetSizeHints(0, -1);
   siz_fg->Add(tc_cropping, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   siz_all->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
 
-  cb_aac_is_sbr = new wxCheckBox(this, ID_CB_AACISSBR, Z("AAC is SBR/HE-AAC/AAC+"));
+  cb_aac_is_sbr = new wxCheckBox(this, ID_CB_AACISSBR, wxEmptyString);
   cb_aac_is_sbr->SetValue(false);
-  cb_aac_is_sbr->SetToolTip(TIP("This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for "
-                                "these files. Not needed for AAC tracks read from MP4 or Matroska files."));
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->Add(cb_aac_is_sbr, 0, wxALL, STDSPACING);
@@ -181,45 +155,106 @@ tab_input_format::tab_input_format(wxWindow *parent,
   siz_all->AddSpacer(TOPBOTTOMSPACING);
 
   SetSizer(siz_all);
-
-  setup_control_contents();
 }
 
 void
 tab_input_format::setup_control_contents() {
-  int i;
+  int i, selection;
+  if (0 == cob_fourcc->GetCount())
+    for (i = 0; NULL != predefined_fourccs[i]; ++i)
+      cob_fourcc->Append(predefined_fourccs[i]);
 
-  for (i = 0; NULL != predefined_fourccs[i]; ++i)
-    cob_fourcc->Append(predefined_fourccs[i]);
+  if (0 == cob_stereo_mode->GetCount())
+    for (i = 0; 5 > i; ++i)
+      cob_stereo_mode->Append(wxEmptyString);
 
-  cob_stereo_mode->Append(wxEmptyString);
-  cob_stereo_mode->Append(Z("None"));
-  cob_stereo_mode->Append(Z("Left eye"));
-  cob_stereo_mode->Append(Z("Right eye"));
-  cob_stereo_mode->Append(Z("Both eyes"));
+  selection = cob_stereo_mode->GetSelection();
+  cob_stereo_mode->SetString(1, Z("None"));
+  cob_stereo_mode->SetString(2, Z("Left eye"));
+  cob_stereo_mode->SetString(3, Z("Right eye"));
+  cob_stereo_mode->SetString(4, Z("Both eyes"));
+  cob_stereo_mode->SetSelection(selection);
 
-  cob_fps->Append(wxEmptyString);
-  cob_fps->Append(wxT("24"));
-  cob_fps->Append(wxT("25"));
-  cob_fps->Append(wxT("30"));
-  cob_fps->Append(wxT("60000/1001"));
-  cob_fps->Append(wxT("30000/1001"));
-  cob_fps->Append(wxT("24000/1001"));
+  if (0 == cob_fps->GetCount()) {
+    cob_fps->Append(wxEmptyString);
+    cob_fps->Append(wxT("24"));
+    cob_fps->Append(wxT("25"));
+    cob_fps->Append(wxT("30"));
+    cob_fps->Append(wxT("60000/1001"));
+    cob_fps->Append(wxT("30000/1001"));
+    cob_fps->Append(wxT("24000/1001"));
+  }
 
-  cob_nalu_size_length->Append(Z("Default"));
-  cob_nalu_size_length->Append(Z("2 bytes"));
-  cob_nalu_size_length->Append(Z("4 bytes"));
+  if (0 == cob_nalu_size_length->GetCount())
+    for (i = 0; 3 > i; ++i)
+      cob_nalu_size_length->Append(wxEmptyString);
 
-  if (sorted_charsets.Count() == 0) {
-    for (i = 0; sub_charsets[i] != NULL; i++)
+  selection = cob_nalu_size_length->GetSelection();
+  cob_nalu_size_length->SetString(0, Z("Default"));
+  cob_nalu_size_length->SetString(1, Z("2 bytes"));
+  cob_nalu_size_length->SetString(2, Z("4 bytes"));
+  cob_nalu_size_length->SetSelection(selection);
+
+  if (0 == sorted_charsets.Count()) {
+    for (i = 0; NULL != sub_charsets[i]; ++i)
       sorted_charsets.Add(wxU(sub_charsets[i]));
     sorted_charsets.Sort();
   }
 
-  for (i = 0; i < sorted_charsets.Count(); i++)
-    cob_sub_charset->Append(sorted_charsets[i]);
+  if (0 == cob_sub_charset->GetCount()) {
+    cob_sub_charset->Append(wxEmptyString);
+    for (i = 0; sorted_charsets.Count() > i; ++i)
+      cob_sub_charset->Append(sorted_charsets[i]);
+  }
 
-  cob_sub_charset_translations.add(wxT("default"), Z("default"));
+  cob_sub_charset_translations.clear();
+  cob_sub_charset_translations.add(wxT("default"), Z("Default"));
+
+  selection = cob_sub_charset->GetSelection();
+  cob_sub_charset->SetString(0, cob_sub_charset_translations.entries[0].translated);
+  cob_sub_charset->SetSelection(selection);
+}
+
+void
+tab_input_format::translate_ui() {
+  rb_aspect_ratio->SetLabel(Z("Aspect ratio:"));
+  cob_aspect_ratio->SetToolTip(TIP("Sets the display aspect ratio of the track. The format can be either 'a/b' in which case both numbers must be integer "
+                                   "(e.g. 16/9) or just a single floting point number 'f' (e.g. 2.35)."));
+  rb_display_dimensions->SetLabel(Z("Display width/height:"));
+  tc_display_width->SetToolTip(TIP("Sets the display width of the track. The height must be set as well, or this field will be ignored."));
+  tc_display_height->SetToolTip(TIP("Sets the display height of the track. The width must be set as well, or this field will be ignored."));
+  st_fourcc->SetLabel(Z("FourCC:"));
+  cob_fourcc->SetToolTip(TIP("Forces the FourCC of the video track to this value. Note that this only works for video "
+                             "tracks that use the AVI compatibility mode or for QuickTime video tracks. This option CANNOT be used to change Matroska's CodecID."));
+  st_stereo_mode->SetLabel(Z("Stereoscopy:"));
+  cob_stereo_mode->SetToolTip(TIP("Sets the stereo mode of the video track to this value. If left empty then the track's original stereo mode will be kept or, if "
+                                  "it didn't have one, none will be set at all."));
+  st_fps->SetLabel(Z("FPS:"));
+  cob_fps->SetToolTip(TIP("Sets the default duration or number of frames per second for a track. This is only possible "
+                          "for video tracks. For AVC/h.264 elementary streams this option must be given. "
+                          "This can either be a floating point number or a fraction."));
+  st_nalu_size_length->SetLabel(Z("NALU size length:"));
+  cob_nalu_size_length->SetToolTip(TIP("Forces the NALU size length to a certain number of bytes. This parameter is only available for AVC/h.264 elementary "
+                                       "streams read from AVC/h.264 ES files, AVIs or Matroska files created with '--engage allow_avc_in_vwf_mode'. "
+                                       "It defaults to 4 bytes, but there are files which do not contain a frame or slice that is bigger than 65535 bytes. "
+                                       "For such files you can use this parameter and decrease the size to 2."));
+  st_delay->SetLabel(Z("Delay (in ms):"));
+  tc_delay->SetToolTip(TIP("Delay this track's timecodes by a couple of ms. Can be negative. Works with all track types, "
+                           "but negative delays should not be used with video tracks."));
+  st_stretch->SetLabel(Z("Stretch by:"));
+  tc_stretch->SetToolTip(TIP("Stretch this track's timecodes. This entry can have two formats. "
+                             "It is either a positive floating point number, or a fraction like e.g. 1200/1253. "
+                             "Works best on video and subtitle tracks."));
+  st_sub_charset->SetLabel(Z("Charset:"));
+  cob_sub_charset->SetToolTip(TIP("Selects the character set a subtitle file or chapter information was written with. Only needed for non-UTF encoded "
+                                  "subtitle files or for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."));
+  st_cropping->SetLabel(Z("Cropping:"));
+  tc_cropping->SetToolTip(TIP("Sets the cropping parameters. Must be comma-separated list of four numbers for the cropping to be used at the left, top, right and bottom."));
+  cb_aac_is_sbr->SetLabel(Z("AAC is SBR/HE-AAC/AAC+"));
+  cb_aac_is_sbr->SetToolTip(TIP("This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for "
+                                "these files. Not needed for AAC tracks read from MP4 or Matroska files."));
+
+  setup_control_contents();
 }
 
 void
@@ -282,7 +317,6 @@ tab_input_format::set_track_mode(mmg_track_t *t) {
   set_combobox_selection(cob_stereo_mode, wxEmptyString);
   tc_delay->SetValue(wxEmptyString);
   tc_stretch->SetValue(wxEmptyString);
-  set_combobox_selection(cob_sub_charset, wxU(""));
   cb_aac_is_sbr->SetValue(false);
 
   input->dont_copy_values_now = saved_dcvn;

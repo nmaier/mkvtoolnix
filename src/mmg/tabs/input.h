@@ -93,6 +93,8 @@ public:
   void on_track_name_changed(wxCommandEvent &evt);
   void on_timecodes_changed(wxCommandEvent &evt);
   void on_browse_timecodes_clicked(wxCommandEvent &evt);
+
+  void translate_ui();
 };
 
 class tab_input_format: public wxPanel {
@@ -133,6 +135,8 @@ public:
   void on_nalu_size_length_changed(wxCommandEvent &evt);
   void on_stereo_mode_changed(wxCommandEvent &evt);
   void on_cropping_changed(wxCommandEvent &evt);
+
+  void translate_ui();
 };
 
 class tab_input_extra: public wxPanel {
@@ -159,6 +163,8 @@ public:
   void on_cues_selected(wxCommandEvent &evt);
   void on_compression_selected(wxCommandEvent &evt);
   void on_user_defined_changed(wxCommandEvent &evt);
+
+  void translate_ui();
 };
 
 class tab_input: public wxPanel {
@@ -173,7 +179,7 @@ public:
   wxButton *b_add_file, *b_remove_file, *b_remove_all_files;
   wxButton *b_track_up, *b_track_down, *b_append_file;
   wxCheckListBox *clb_tracks;
-  wxStaticText *st_tracks;
+  wxStaticText *st_tracks, *st_input_files;
   wxNotebook *nb_options;
 
   wxTimer value_copy_timer;
@@ -181,6 +187,8 @@ public:
   bool avc_es_fps_warning_shown;
 
   int selected_file, selected_track;
+
+  wxString media_files;
 
 public:
   tab_input(wxWindow *parent);
@@ -206,6 +214,8 @@ public:
   bool validate_settings();
 
   wxString setup_file_type_filter();
+
+  void translate_ui();
 };
 
 #endif // __TAB_INPUT_H

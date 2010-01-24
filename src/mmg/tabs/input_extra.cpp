@@ -82,35 +82,63 @@ tab_input_extra::tab_input_extra(wxWindow *parent,
 
   siz_all->AddSpacer(TOPBOTTOMSPACING);
 
-  setup_cues();
-  setup_compression();
-
   SetSizer(siz_all);
 }
 
 void
 tab_input_extra::setup_cues() {
+  cob_cues_translations.clear();
   cob_cues_translations.add(wxT("default"),           Z("default"));
   cob_cues_translations.add(wxT("only for I frames"), Z("only for I frames"));
   cob_cues_translations.add(wxT("for all frames"),    Z("for all frames"));
   cob_cues_translations.add(wxT("none"),              Z("none"));
 
   int i;
-  for (i = 0; cob_cues_translations.entries.size() > i; ++i)
-    cob_cues->Append(cob_cues_translations.entries[i].translated);
+  if (0 == cob_cues->GetCount())
+    for (i = 0; cob_cues_translations.entries.size() > i; ++i)
+      cob_cues->Append(cob_cues_translations.entries[i].translated);
+  else {
+    int selection = cob_cues->GetSelection();
+    for (i = 0; cob_cues_translations.entries.size() > i; ++i)
+      cob_cues->SetString(i, cob_cues_translations.entries[i].translated);
+    cob_cues->SetSelection(selection);
+  }
 }
 
 void
 tab_input_extra::setup_compression() {
-  cob_compression->Append(wxEmptyString);
-  cob_compression->Append(Z("none"));
-  cob_compression->Append(wxT("zlib"));
-  if (capabilities[wxT("BZ2")] == wxT("true"))
-    cob_compression->Append(wxT("bz2"));
-  if (capabilities[wxT("LZO")] == wxT("true"))
-    cob_compression->Append(wxT("lzo"));
+  if (0 == cob_compression->GetCount()) {
+    cob_compression->Append(wxEmptyString);
+    cob_compression->Append(wxEmptyString);
+    cob_compression->Append(wxT("zlib"));
+    if (capabilities[wxT("BZ2")] == wxT("true"))
+      cob_compression->Append(wxT("bz2"));
+    if (capabilities[wxT("LZO")] == wxT("true"))
+      cob_compression->Append(wxT("lzo"));
+  }
 
+  cob_compression_translations.clear();
   cob_compression_translations.add(wxT("none"), Z("none"));
+
+  int selection = cob_compression->GetSelection();
+  cob_compression->SetString(1, Z("none"));
+  cob_compression->SetSelection(selection);
+}
+
+void
+tab_input_extra::translate_ui() {
+  st_cues->SetLabel(Z("Cues:"));
+  cob_cues->SetToolTip(TIP("Selects for which blocks mkvmerge will produce index entries ( = cue entries). \"default\" is a good choice for almost all situations."));
+  st_compression->SetLabel(Z("Compression:"));
+  cob_compression->SetToolTip(TIP("Sets the compression used for VobSub subtitles. If nothing is chosen then the "
+                                  "VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."));
+  st_user_defined->SetLabel(Z("User defined options:"));
+  tc_user_defined->SetToolTip(TIP("Free-form edit field for user defined options for this track. What you input here is added after all the other options "
+                                  "mmg adds so that you could overwrite any of mmg's options for this track. "
+                                  "All occurences of the string \"<TID>\" will be replaced by the track's track ID."));
+
+  setup_cues();
+  setup_compression();
 }
 
 void

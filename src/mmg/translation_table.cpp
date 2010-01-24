@@ -23,6 +23,11 @@ translation_table_c::add(const wxString &english,
   entries.push_back(translation_t(english, translated));
 }
 
+void
+translation_table_c::clear() {
+  entries.clear();
+}
+
 wxString
 translation_table_c::to_translated(const wxString &english) {
   std::vector<translation_t>::iterator i = entries.begin();

@@ -90,22 +90,23 @@ tab_input::tab_input(wxWindow *parent):
   siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->AddSpacer(TOPBOTTOMSPACING);
 
-  siz_line = new wxBoxSizer(wxHORIZONTAL);
-  siz_line->Add(new wxStaticText(this, wxID_STATIC, Z("Input files:")), 0, wxALL, STDSPACING);
+  st_input_files = new wxStaticText(this, wxID_STATIC, wxEmptyString);
+  siz_line       = new wxBoxSizer(wxHORIZONTAL);
+  siz_line->Add(st_input_files, 0, wxALL, STDSPACING);
   siz_all->Add(siz_line, 0, wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
   lb_input_files = new wxListBox(this, ID_LB_INPUTFILES);
   siz_line->Add(lb_input_files, 1, wxGROW | wxALL, STDSPACING);
 
-  siz_column = new wxBoxSizer(wxVERTICAL);
-  b_add_file = new wxButton(this, ID_B_ADDFILE, Z("add"));
-  b_remove_file = new wxButton(this, ID_B_REMOVEFILE, Z("remove"));
-  b_remove_file->Enable(false);
-  b_append_file = new wxButton(this, ID_B_APPENDFILE, Z("append"));
-  b_append_file->Enable(false);
+  siz_column         = new wxBoxSizer(wxVERTICAL);
+  b_add_file         = new wxButton(this, ID_B_ADDFILE,          wxEmptyString);
+  b_remove_file      = new wxButton(this, ID_B_REMOVEFILE,       wxEmptyString);
+  b_append_file      = new wxButton(this, ID_B_APPENDFILE,       wxEmptyString);
+  b_remove_all_files = new wxButton(this, ID_B_REMOVE_ALL_FILES, wxEmptyString);
 
-  b_remove_all_files = new wxButton(this, ID_B_REMOVE_ALL_FILES, Z("remove all"));
+  b_remove_file->Enable(false);
+  b_append_file->Enable(false);
   b_remove_all_files->Enable(false);
 
   siz_column->Add(b_add_file, 0, wxGROW | wxALL, STDSPACING);
@@ -119,8 +120,8 @@ tab_input::tab_input(wxWindow *parent):
 
   siz_all->Add(siz_line, 0, wxGROW | wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
 
-  siz_line = new wxBoxSizer(wxHORIZONTAL);
-  st_tracks = new wxStaticText(this, wxID_STATIC, Z("Tracks, chapters and tags:"));
+  siz_line  = new wxBoxSizer(wxHORIZONTAL);
+  st_tracks = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   st_tracks->Enable(false);
   siz_line->Add(st_tracks, 0, wxALL, STDSPACING);
   siz_all->Add(siz_line, 0, wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
@@ -130,10 +131,10 @@ tab_input::tab_input(wxWindow *parent):
   clb_tracks = new wxCheckListBox(this, ID_CLB_TRACKS);
   clb_tracks->Enable(false);
   siz_line->Add(clb_tracks, 1, wxGROW | wxALIGN_TOP | wxALL, STDSPACING);
-  b_track_up = new wxButton(this, ID_B_TRACKUP, Z("up"));
+  b_track_up = new wxButton(this, ID_B_TRACKUP, wxEmptyString);
   b_track_up->Enable(false);
   siz_column->Add(b_track_up, 0, wxGROW | wxALL, STDSPACING);
-  b_track_down = new wxButton(this, ID_B_TRACKDOWN, Z("down"));
+  b_track_down = new wxButton(this, ID_B_TRACKDOWN, wxEmptyString);
   b_track_down->Enable(false);
   siz_column->Add(b_track_down, 0, wxGROW | wxALL, STDSPACING);
   siz_line->Add(siz_column);
@@ -142,18 +143,20 @@ tab_input::tab_input(wxWindow *parent):
   nb_options = new wxNotebook(this, ID_NB_OPTIONS, wxDefaultPosition, wxDefaultSize, wxNB_TOP);
 
   ti_general = new tab_input_general(nb_options, this);
-  ti_format  = new tab_input_format(nb_options, this);
-  ti_extra   = new tab_input_extra(nb_options, this);
+  ti_format  = new tab_input_format(nb_options,  this);
+  ti_extra   = new tab_input_extra(nb_options,   this);
 
-  nb_options->AddPage(ti_general, Z("General track options"));
-  nb_options->AddPage(ti_format,  Z("Format specific options"));
-  nb_options->AddPage(ti_extra,   Z("Extra options"));
+  nb_options->AddPage(ti_general, wxEmptyString);
+  nb_options->AddPage(ti_format,  wxEmptyString);
+  nb_options->AddPage(ti_extra,   wxEmptyString);
 
   siz_all->Add(nb_options, 0, wxGROW | wxLEFT | wxRIGHT, LEFTRIGHTSPACING);
 
   siz_all->AddSpacer(TOPBOTTOMSPACING);
 
   SetSizer(siz_all);
+
+  translate_ui();
 
   set_track_mode(NULL);
   selected_file  = -1;
@@ -169,6 +172,37 @@ tab_input::tab_input(wxWindow *parent):
 
   cfg->SetPath(wxT("/GUI"));
   cfg->Read(wxT("avc_es_fps_warning_shown"), &avc_es_fps_warning_shown, false);
+}
+
+void
+tab_input::translate_ui() {
+  dont_copy_values_now = true;
+
+  st_input_files->SetLabel(Z("Input files:"));
+  b_add_file->SetLabel(Z("add"));
+  b_remove_file->SetLabel(Z("remove"));
+  b_append_file->SetLabel(Z("append"));
+  b_remove_all_files->SetLabel(Z("remove all"));
+  st_tracks->SetLabel(Z("Tracks, chapters and tags:"));
+  b_track_up->SetLabel(Z("up"));
+  b_track_down->SetLabel(Z("down"));
+  nb_options->SetPageText(0, Z("General track options"));
+  nb_options->SetPageText(1, Z("Format specific options"));
+  nb_options->SetPageText(2, Z("Extra options"));
+
+  media_files.Empty();
+
+  ti_extra->translate_ui();
+  ti_format->translate_ui();
+  ti_general->translate_ui();
+
+  unsigned int track_idx;
+  for (track_idx = 0; tracks.size() > track_idx; ++track_idx) {
+    clb_tracks->SetString(track_idx, tracks[track_idx]->create_label());
+    clb_tracks->Check(    track_idx, tracks[track_idx]->enabled);
+  }
+
+  dont_copy_values_now = true;
 }
 
 void
@@ -189,8 +223,6 @@ struct file_type_t {
 
 wxString
 tab_input::setup_file_type_filter() {
-  static wxString media_files;
-
   if (!media_files.empty())
     return media_files;
 

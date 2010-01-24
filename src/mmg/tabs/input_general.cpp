@@ -44,37 +44,34 @@ tab_input_general::tab_input_general(wxWindow *parent,
   siz_fg = new wxFlexGridSizer(2);
   siz_fg->AddGrowableCol(1);
 
-  st_track_name = new wxStaticText(this, wxID_STATIC, Z("Track name:"));
+  st_track_name = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   st_track_name->Enable(false);
   siz_fg->Add(st_track_name, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
   tc_track_name = new wxTextCtrl(this, ID_TC_TRACKNAME, wxEmptyString);
-  tc_track_name->SetToolTip(TIP("Name for this track, e.g. \"director's comments\"."));
   tc_track_name->SetSizeHints(0, -1);
   siz_fg->Add(tc_track_name, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  st_language = new wxStaticText(this, wxID_STATIC, Z("Language:"));
+  st_language = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   st_language->Enable(false);
   siz_fg->Add(st_language, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   cob_language = new wxMTX_COMBOBOX_TYPE(this, ID_CB_LANGUAGE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
-  cob_language->SetToolTip(TIP("Language for this track. Select one of the ISO639-2 language codes."));
   siz_fg->Add(cob_language, 1, wxGROW | wxALL, STDSPACING);
+  cob_language->SetSizeHints(0, -1);
 
-  st_default = new wxStaticText(this, wxID_STATIC, Z("Default track flag:"));
+  st_default = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   siz_fg->Add(st_default, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   cob_default = new wxMTX_COMBOBOX_TYPE(this, ID_CB_MAKEDEFAULT, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
-  cob_default->SetToolTip(TIP("Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."));
   siz_fg->Add(cob_default, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  st_forced = new wxStaticText(this, wxID_STATIC, Z("Forced track flag:"));
+  st_forced = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   siz_fg->Add(st_forced, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   cob_forced = new wxMTX_COMBOBOX_TYPE(this, ID_CB_FORCED_TRACK, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
-  cob_forced->SetToolTip(TIP("Mark this track as 'forced'. Players must play this track."));
   siz_fg->Add(cob_forced, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
-  st_tags = new wxStaticText(this, wxID_STATIC, Z("Tags:"));
+  st_tags = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   st_tags->Enable(false);
   siz_fg->Add(st_tags, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
@@ -82,93 +79,122 @@ tab_input_general::tab_input_general(wxWindow *parent,
 
   tc_tags = new wxTextCtrl(this, ID_TC_TAGS, wxEmptyString);
   siz_line->Add(tc_tags, 1, wxGROW | wxALL, STDSPACING);
-  b_browse_tags = new wxButton(this, ID_B_BROWSETAGS, Z("Browse"));
+  b_browse_tags = new wxButton(this, ID_B_BROWSETAGS, wxEmptyString);
   siz_line->Add(b_browse_tags, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   siz_fg->Add(siz_line, 1, wxGROW | wxALIGN_CENTER_VERTICAL, 0);
 
-  st_timecodes = new wxStaticText(this, wxID_STATIC, Z("Timecodes:"));
+  st_timecodes = new wxStaticText(this, wxID_STATIC, wxEmptyString);
   st_timecodes->Enable(false);
   siz_fg->Add(st_timecodes, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   siz_line = new wxBoxSizer(wxHORIZONTAL);
 
   tc_timecodes = new wxTextCtrl(this, ID_TC_TIMECODES, wxEmptyString);
-  tc_timecodes->SetToolTip(TIP("mkvmerge can read and use timecodes from an external text file. This feature is a very advanced feature. Almost all users should leave this entry empty."));
   siz_line->Add(tc_timecodes, 1, wxGROW | wxALL, STDSPACING);
-  b_browse_timecodes = new wxButton(this, ID_B_BROWSE_TIMECODES, Z("Browse"));
-  b_browse_timecodes->SetToolTip(TIP("mkvmerge can read and use timecodes from an external text file. This feature is a very advanced feature. "
-                                     "Almost all users should leave this entry empty."));
+  b_browse_timecodes = new wxButton(this, ID_B_BROWSE_TIMECODES, wxEmptyString);
   siz_line->Add(b_browse_timecodes, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   siz_fg->Add(siz_line, 1, wxGROW | wxALIGN_CENTER_VERTICAL, 0);
-
-  setup_languages();
-  setup_default_track();
-  setup_forced_track();
 
   SetSizer(siz_fg);
 }
 
 void
 tab_input_general::setup_default_track() {
+  cob_default_translations.clear();
   cob_default_translations.add(wxT("default"), Z("default"));
   cob_default_translations.add(wxT("yes"),     Z("yes"));
   cob_default_translations.add(wxT("no"),      Z("no"));
 
   int i;
+  if (0 == cob_default->GetCount())
+    for (i = 0; cob_default_translations.entries.size() > i; ++i)
+      cob_default->Append(wxEmptyString);
+
+  int selection = cob_default->GetSelection();
   for (i = 0; cob_default_translations.entries.size() > i; ++i)
-    cob_default->Append(cob_default_translations.entries[i].translated);
+    cob_default->SetString(i, cob_default_translations.entries[i].translated);
+  cob_default->SetSelection(selection);
 }
 
 void
 tab_input_general::setup_forced_track() {
+  cob_forced_translations.clear();
   cob_forced_translations.add(wxT("no"),  Z("no"));
   cob_forced_translations.add(wxT("yes"), Z("yes"));
 
   int i;
+  if (0 == cob_forced->GetCount())
+    for (i = 0; cob_forced_translations.entries.size() > i; ++i)
+      cob_forced->Append(wxEmptyString);
+
+  int selection = cob_forced->GetSelection();
   for (i = 0; cob_forced_translations.entries.size() > i; ++i)
-    cob_forced->Append(cob_forced_translations.entries[i].translated);
+    cob_forced->SetString(i, cob_forced_translations.entries[i].translated);
+  cob_forced->SetSelection(selection);
 }
 
 void
 tab_input_general::setup_languages() {
   int i;
 
-  if (sorted_iso_codes.IsEmpty()) {
-    sorted_iso_codes.Add(Z("und (Undetermined)"));
-    sorted_iso_codes.Add(Z("---common---"));
+  sorted_iso_codes.Clear();
+  sorted_iso_codes.Add(Z("und (Undetermined)"));
+  sorted_iso_codes.Add(Z("---common---"));
 
-    std::map<wxString, bool> is_popular;
-    for (i = 0; i < mdlg->options.popular_languages.Count(); ++i)
-      is_popular[ mdlg->options.popular_languages[i] ] = true;
+  std::map<wxString, bool> is_popular;
+  for (i = 0; i < mdlg->options.popular_languages.Count(); ++i)
+    is_popular[ mdlg->options.popular_languages[i] ] = true;
 
-    for (i = 0; NULL != iso639_languages[i].english_name; ++i) {
-      wxString code = wxU(iso639_languages[i].iso639_2_code);
-      if (!is_popular[code])
-        continue;
+  for (i = 0; NULL != iso639_languages[i].english_name; ++i) {
+    wxString code = wxU(iso639_languages[i].iso639_2_code);
+    if (!is_popular[code])
+      continue;
 
-      sorted_iso_codes.Add(wxString::Format(wxT("%s (%s)"), wxUCS(iso639_languages[i].iso639_2_code), wxUCS(iso639_languages[i].english_name)));
-      is_popular[code] = false;
-    }
-
-    sorted_iso_codes.Add(Z("---all---"));
-
-    wxArrayString temp;
-    for (i = 0; iso639_languages[i].english_name != NULL; i++)
-      temp.Add(wxString::Format(wxT("%s (%s)"), wxUCS(iso639_languages[i].iso639_2_code), wxUCS(iso639_languages[i].english_name)));
-    temp.Sort();
-
-    for (i = 0; temp.Count() > i; ++i)
-      if ((0 == i) || (temp[i - 1].Lower() != temp[i].Lower()))
-        sorted_iso_codes.Add(temp[i]);
+    sorted_iso_codes.Add(wxString::Format(wxT("%s (%s)"), wxUCS(iso639_languages[i].iso639_2_code), wxUCS(iso639_languages[i].english_name)));
+    is_popular[code] = false;
   }
 
+  sorted_iso_codes.Add(Z("---all---"));
+
+  wxArrayString temp;
+  for (i = 0; iso639_languages[i].english_name != NULL; i++)
+    temp.Add(wxString::Format(wxT("%s (%s)"), wxUCS(iso639_languages[i].iso639_2_code), wxUCS(iso639_languages[i].english_name)));
+  temp.Sort();
+
+  for (i = 0; temp.Count() > i; ++i)
+    if ((0 == i) || (temp[i - 1].Lower() != temp[i].Lower()))
+      sorted_iso_codes.Add(temp[i]);
+
+  int selection = cob_language->GetSelection();
   cob_language->Clear();
   for (i = 0; i < sorted_iso_codes.Count(); i++)
     cob_language->Append(sorted_iso_codes[i]);
+  cob_language->SetSelection(selection);
+}
 
-  cob_language->SetSizeHints(0, -1);
+void
+tab_input_general::translate_ui() {
+  st_track_name->SetLabel(Z("Track name:"));
+  tc_track_name->SetToolTip(TIP("Name for this track, e.g. \"director's comments\"."));
+  st_language->SetLabel(Z("Language:"));
+  cob_language->SetToolTip(TIP("Language for this track. Select one of the ISO639-2 language codes."));
+  st_default->SetLabel(Z("Default track flag:"));
+  cob_default->SetToolTip(TIP("Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."));
+  st_forced->SetLabel(Z("Forced track flag:"));
+  cob_forced->SetToolTip(TIP("Mark this track as 'forced'. Players must play this track."));
+  st_tags->SetLabel(Z("Tags:"));
+  b_browse_tags->SetLabel(Z("Browse"));
+  st_timecodes->SetLabel(Z("Timecodes:"));
+  tc_timecodes->SetToolTip(TIP("mkvmerge can read and use timecodes from an external text file. This feature is a very advanced feature. Almost all users should leave this entry empty."));
+  b_browse_timecodes->SetLabel(Z("Browse"));
+  b_browse_timecodes->SetToolTip(TIP("mkvmerge can read and use timecodes from an external text file. This feature is a very advanced feature. "
+                                     "Almost all users should leave this entry empty."));
+
+  setup_languages();
+  setup_default_track();
+  setup_forced_track();
 }
 
 void
