@@ -1,3 +1,8 @@
+2010-01-24  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Reading VOB files bigger than 4 GB was broken
+	in v3.1.0 on 32bit platforms.
+
 2010-01-22  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: Tooltips were not word-wrapped on Windows.
