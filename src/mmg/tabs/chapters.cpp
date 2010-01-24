@@ -311,8 +311,6 @@ tab_chapters::tab_chapters(wxWindow *parent,
   source_is_simple_format = false;
   no_update               = false;
 
-  translate_ui();
-
   SetDropTarget(new chapters_drop_target_c(this));
   SetSizer(siz_all);
 }

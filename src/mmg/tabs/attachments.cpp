@@ -138,8 +138,6 @@ tab_attachments::tab_attachments(wxWindow *parent):
 
   SetSizer(siz_all);
 
-  translate_ui();
-
   enable(false);
   selected_attachment = -1;
 

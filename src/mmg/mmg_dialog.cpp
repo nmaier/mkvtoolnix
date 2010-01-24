@@ -298,6 +298,7 @@ mmg_dialog::translate_ui() {
   b_add_to_jobqueue->SetLabel(Z("&Add to job queue"));
 
   attachments_page->translate_ui();
+  global_page->translate_ui();
   chapter_editor_page->translate_ui();
 
   // Really force wxWidgets/GTK to re-calculate the sizes of all
