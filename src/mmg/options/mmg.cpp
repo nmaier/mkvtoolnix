@@ -271,8 +271,6 @@ optdlg_mmg_tab::save_options() {
   std::string new_ui_locale = get_selected_ui_language();
 
   if (downcase(new_ui_locale) != downcase(app->m_ui_locale)) {
-    // wxMessageBox(Z("Changing the interface language requires a restart to take effect."), Z("Restart required"), wxOK | wxCENTER | wxICON_INFORMATION);
-
     app->m_ui_locale  = new_ui_locale;
 
     wxConfigBase *cfg = wxConfigBase::Get();
