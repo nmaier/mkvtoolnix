@@ -383,3 +383,15 @@ wxdie(const wxString &errmsg) {
   exit(1);
 }
 
+void
+set_menu_item_strings(wxFrame *frame,
+                      int id,
+                      const wxString &title,
+                      const wxString &help_text) {
+  wxMenuItem *item = frame->GetMenuBar()->FindItem(id);
+  if (NULL != item) {
+    item->SetItemLabel(title);
+    if (!help_text.IsEmpty())
+      item->SetHelp(help_text);
+  }
+}

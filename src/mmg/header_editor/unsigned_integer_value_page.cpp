@@ -28,8 +28,8 @@ he_unsigned_integer_value_page_c::he_unsigned_integer_value_page_c(header_editor
                                                                    he_page_base_c *toplevel_page,
                                                                    EbmlMaster *master,
                                                                    const EbmlCallbacks &callbacks,
-                                                                   const wxString &title,
-                                                                   const wxString &description)
+                                                                   const translatable_string_c &title,
+                                                                   const translatable_string_c &description)
   : he_value_page_c(parent, toplevel_page, master, callbacks, vt_unsigned_integer, title, description)
   , m_tc_text(NULL)
   , m_original_value(0)

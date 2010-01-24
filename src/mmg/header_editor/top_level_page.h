@@ -20,10 +20,11 @@
 
 class he_top_level_page_c: public he_empty_page_c {
 public:
-  he_top_level_page_c(header_editor_frame_c *parent, const wxString &title, EbmlElement *l1_element);
+  he_top_level_page_c(header_editor_frame_c *parent, const translatable_string_c &title, EbmlElement *l1_element);
   virtual ~he_top_level_page_c();
 
   virtual void do_modifications();
+  virtual void init();
 };
 
 #endif // __HE_TOP_LEVEL_PAGE_H

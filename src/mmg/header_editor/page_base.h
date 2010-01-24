@@ -33,9 +33,10 @@ public:
   header_editor_frame_c *m_parent;
   wxTreeItemId m_page_id;
   EbmlElement *m_l1_element;
+  translatable_string_c m_title;
 
 public:
-  he_page_base_c(header_editor_frame_c *parent);
+  he_page_base_c(header_editor_frame_c *parent, const translatable_string_c &title);
   virtual ~he_page_base_c();
 
   virtual bool has_been_modified();
@@ -44,6 +45,8 @@ public:
   virtual void modify_this() = 0;
   virtual wxTreeItemId validate();
   virtual bool validate_this() = 0;
+  virtual void translate_ui() = 0;
+  wxString get_title();
 };
 
 #endif // __HE_PAGE_BASE_H

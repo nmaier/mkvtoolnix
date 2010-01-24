@@ -13,6 +13,7 @@
 
 #include "common/os.h"
 
+#include <algorithm>
 #include <wx/wx.h>
 #include <wx/clipbrd.h>
 #include <wx/config.h>
@@ -192,7 +193,7 @@ mmg_dialog::create_menus() {
   file_menu_sep = false;
   update_file_menu();
 
-  muxing_menu = new wxMenu();
+  wxMenu *muxing_menu = new wxMenu();
   muxing_menu->Append(ID_M_MUXING_START);
   muxing_menu->AppendSeparator();
   muxing_menu->Append(ID_M_MUXING_SHOW_CMDLINE);
@@ -216,18 +217,18 @@ mmg_dialog::create_menus() {
   chapter_menu_sep = false;
   update_chapter_menu();
 
-  window_menu = new wxMenu();
+  wxMenu *window_menu = new wxMenu();
   window_menu->Append(ID_M_WINDOW_INPUT);
   window_menu->Append(ID_M_WINDOW_ATTACHMENTS);
   window_menu->Append(ID_M_WINDOW_GLOBAL);
   window_menu->AppendSeparator();
   window_menu->Append(ID_M_WINDOW_CHAPTEREDITOR);
 
-  help_menu = new wxMenu();
+  wxMenu *help_menu = new wxMenu();
   help_menu->Append(ID_M_HELP_HELP);
   help_menu->Append(ID_M_HELP_ABOUT);
 
-  menu_bar = new wxMenuBar();
+  wxMenuBar *menu_bar = new wxMenuBar();
   menu_bar->Append(file_menu,    wxEmptyString);
   menu_bar->Append(muxing_menu,  wxEmptyString);
   menu_bar->Append(chapter_menu, wxEmptyString);
@@ -240,12 +241,7 @@ void
 mmg_dialog::set_menu_item_strings(int id,
                                   const wxString &title,
                                   const wxString &help_text) {
-  wxMenuItem *item = menu_bar->FindItem(id);
-  if (NULL != item) {
-    item->SetItemLabel(title);
-    if (!help_text.IsEmpty())
-      item->SetHelp(help_text);
-  }
+  ::set_menu_item_strings(this, id, title, help_text);
 }
 
 void
@@ -280,11 +276,11 @@ mmg_dialog::translate_ui() {
   set_menu_item_strings(ID_M_HELP_HELP,                Z("&Help\tF1"),                            Z("Show the guide to mkvmerge GUI"));
   set_menu_item_strings(ID_M_HELP_ABOUT,               Z("&About"),                               Z("Show program information"));
 
-  menu_bar->SetMenuLabel(0, Z("&File"));
-  menu_bar->SetMenuLabel(1, Z("&Muxing"));
-  menu_bar->SetMenuLabel(2, Z("&Chapter Editor"));
-  menu_bar->SetMenuLabel(3, Z("&Window"));
-  menu_bar->SetMenuLabel(4, Z("&Help"));
+  GetMenuBar()->SetMenuLabel(0, Z("&File"));
+  GetMenuBar()->SetMenuLabel(1, Z("&Muxing"));
+  GetMenuBar()->SetMenuLabel(2, Z("&Chapter Editor"));
+  GetMenuBar()->SetMenuLabel(3, Z("&Window"));
+  GetMenuBar()->SetMenuLabel(4, Z("&Help"));
 
   notebook->SetPageText(0, Z("Input"));
   notebook->SetPageText(1, Z("Attachments"));
@@ -308,6 +304,9 @@ mmg_dialog::translate_ui() {
   Layout();
   SetSize(GetSize().GetWidth() + 1, GetSize().GetHeight());
   // SetSize(GetSize().GetWidth() - 1, GetSize().GetHeight());
+
+  foreach(header_editor_frame_c *frame, header_editor_frames)
+    frame->translate_ui();
 }
 
 void
@@ -1638,9 +1637,13 @@ mmg_dialog::on_file_options(wxCommandEvent &evt) {
 
 void
 mmg_dialog::on_run_header_editor(wxCommandEvent &evt) {
-  header_editor_frame_c *window  = new header_editor_frame_c(this);
+  header_editor_frames.push_back(new header_editor_frame_c(this));
+  header_editor_frames.back()->Show();
+}
 
-  window->Show();
+void
+mmg_dialog::header_editor_frame_closed(header_editor_frame_c *frame) {
+  header_editor_frames.erase(find(header_editor_frames.begin(), header_editor_frames.end(), frame));
 }
 
 void

@@ -27,7 +27,8 @@ public:
   wxString m_original_value;
 
 public:
-  he_language_value_page_c(header_editor_frame_c *parent, he_page_base_c *toplevel_page, EbmlMaster *master, const EbmlCallbacks &callbacks, const wxString &title, const wxString &description);
+  he_language_value_page_c(header_editor_frame_c *parent, he_page_base_c *toplevel_page, EbmlMaster *master, const EbmlCallbacks &callbacks,
+                           const translatable_string_c &title, const translatable_string_c &description);
   virtual ~he_language_value_page_c();
 
   virtual wxControl *create_input_control();
@@ -36,6 +37,7 @@ public:
   virtual bool validate_value();
   virtual void reset_value();
   virtual void copy_value_to_element();
+  virtual void translate_ui();
 };
 
 #endif // __HE_LANGUAGE_VALUE_PAGE_H

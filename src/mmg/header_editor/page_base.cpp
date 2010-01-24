@@ -15,14 +15,17 @@
 
 #include <wx/textctrl.h>
 
+#include "common/wx.h"
 #include "mmg/header_editor/frame.h"
 #include "mmg/header_editor/page_base.h"
 
-he_page_base_c::he_page_base_c(header_editor_frame_c *parent)
+he_page_base_c::he_page_base_c(header_editor_frame_c *parent,
+                               const translatable_string_c &title)
   : wxPanel(parent->get_page_panel(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL)
   , m_parent(parent)
   , m_page_id()
   , m_l1_element(NULL)
+  , m_title(title)
 {
   Hide();
 }
@@ -73,4 +76,9 @@ he_page_base_c::validate() {
   }
 
   return wxTreeItemId();
+}
+
+wxString
+he_page_base_c::get_title() {
+  return wxU(m_title.get_translated());
 }

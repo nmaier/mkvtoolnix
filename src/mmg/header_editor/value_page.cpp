@@ -26,13 +26,12 @@ he_value_page_c::he_value_page_c(header_editor_frame_c *parent,
                                  EbmlMaster *master,
                                  const EbmlCallbacks &callbacks,
                                  const value_type_e value_type,
-                                 const wxString &title,
-                                 const wxString &description)
-  : he_page_base_c(parent)
+                                 const translatable_string_c &title,
+                                 const translatable_string_c &description)
+  : he_page_base_c(parent, title)
   , m_master(master)
   , m_callbacks(callbacks)
   , m_sub_master_callbacks(NULL)
-  , m_title(title)
   , m_description(description)
   , m_value_type(value_type)
   , m_present(false)
@@ -51,14 +50,14 @@ void
 he_value_page_c::init() {
   m_cb_add_or_remove = new wxCheckBox(this, ID_HE_CB_ADD_OR_REMOVE, wxEmptyString);
   m_input            = create_input_control();
-  m_b_reset          = new wxButton(this, ID_HE_B_RESET, Z("&Reset"));
+  m_b_reset          = new wxButton(this, ID_HE_B_RESET);
 
   wxBoxSizer *siz = new wxBoxSizer(wxVERTICAL);
 
   siz->AddSpacer(5);
-  siz->Add(new wxStaticText(this, wxID_ANY, m_title), 0, wxGROW | wxLEFT | wxRIGHT, 5);
+  siz->Add(new wxStaticText(this, wxID_ANY, wxU(m_title.get_translated())), 0, wxGROW | wxLEFT | wxRIGHT, 5);
   siz->AddSpacer(5);
-  siz->Add(new wxStaticLine(this),                    0, wxGROW | wxLEFT | wxRIGHT, 5);
+  siz->Add(new wxStaticLine(this),                                          0, wxGROW | wxLEFT | wxRIGHT, 5);
   siz->AddSpacer(5);
 
   wxFlexGridSizer *siz_fg = new wxFlexGridSizer(2, 5, 5);
@@ -67,59 +66,48 @@ he_value_page_c::init() {
   siz_fg->AddSpacer(5);
   siz_fg->AddSpacer(5);
 
-  wxString type
-    = vt_ascii_string     == m_value_type ? Z("ASCII string (no special chars like\nUmlaute etc)")
-    : vt_string           == m_value_type ? Z("String")
-    : vt_unsigned_integer == m_value_type ? Z("Unsigned integer")
-    : vt_signed_integer   == m_value_type ? Z("Signed integer")
-    : vt_float            == m_value_type ? Z("Floating point number")
-    : vt_binary           == m_value_type ? Z("Binary (displayed as hex numbers)")
-    : vt_bool             == m_value_type ? Z("Boolean (yes/no, on/off etc)")
-    :                                       Z("unknown");
+  m_st_type_label = new wxStaticText(this, wxID_ANY, wxEmptyString);
+  m_st_type       = new wxStaticText(this, wxID_ANY, wxEmptyString);
+  siz_fg->Add(m_st_type_label, 0, wxALIGN_TOP,          0);
+  siz_fg->Add(m_st_type,       0, wxALIGN_TOP | wxGROW, 0);
 
-  siz_fg->Add(new wxStaticText(this, wxID_ANY, Z("Type:")), 0, wxALIGN_TOP,          0);
-  siz_fg->Add(new wxStaticText(this, wxID_ANY, type),       0, wxALIGN_TOP | wxGROW, 0);
-
-  if (!m_description.IsEmpty()) {
-    siz_fg->Add(new wxStaticText(this, wxID_ANY, Z("Description:")), 0, wxALIGN_TOP,          0);
-    siz_fg->Add(new wxStaticText(this, wxID_ANY, m_description),     0, wxALIGN_TOP | wxGROW, 0);
+  if (!m_description.get_untranslated().empty()) {
+    m_st_description_label = new wxStaticText(this, wxID_ANY, wxEmptyString);
+    m_st_description       = new wxStaticText(this, wxID_ANY, wxEmptyString);
+    siz_fg->Add(m_st_description_label, 0, wxALIGN_TOP,          0);
+    siz_fg->Add(m_st_description,       0, wxALIGN_TOP | wxGROW, 0);
   }
 
-  wxString value_label;
-  wxStaticText *st_add_or_remove;
-  if (NULL == m_element) {
-    m_present        = false;
-    st_add_or_remove = new wxStaticText(this, wxID_ANY, Z("This element is not currently present in the file.\nYou can let the header editor add the element\nto the file."));
-    value_label      = Z("New value:");
-    m_cb_add_or_remove->SetLabel(Z("Add element"));
+  m_st_add_or_remove = new wxStaticText(this, wxID_ANY, wxEmptyString);
 
-  } else {
+  if (NULL == m_element)
+    m_present        = false;
+
+  else {
     m_present        = true;
-    st_add_or_remove = new wxStaticText(this, wxID_ANY, Z("This element is currently present in the file.\nYou can let the header editor remove the element\nfrom the file."));
-    value_label      = Z("Current value:");
-    m_cb_add_or_remove->SetLabel(Z("Remove element"));
 
     const EbmlSemantic *semantic = find_ebml_semantic(KaxSegment::ClassInfos, m_callbacks.GlobalId);
-    if ((NULL != semantic) && semantic->Mandatory) {
+    if ((NULL != semantic) && semantic->Mandatory)
       m_cb_add_or_remove->Disable();
-      st_add_or_remove->SetLabel(Z("This element is currently present in the file.\nIt cannot be removed because it is a\nmandatory header field."));
-    }
   }
 
-  siz_fg->Add(new wxStaticText(this, wxID_ANY, Z("Status:")), 0, wxALIGN_TOP, 0);
-  siz_fg->Add(st_add_or_remove,   1, wxALIGN_TOP | wxGROW, 0);
+  m_st_status = new wxStaticText(this, wxID_ANY, wxEmptyString);
+  siz_fg->Add(m_st_status,        0, wxALIGN_TOP, 0);
+  siz_fg->Add(m_st_add_or_remove, 1, wxALIGN_TOP | wxGROW, 0);
   siz_fg->AddSpacer(0);
   siz_fg->Add(m_cb_add_or_remove, 1, wxALIGN_TOP | wxGROW, 0);
 
   if (m_present) {
-    siz_fg->Add(new wxStaticText(this, wxID_ANY, Z("Original value:")),           0, wxALIGN_TOP,          0);
+    m_st_original_value = new wxStaticText(this, wxID_ANY, wxEmptyString);
+    siz_fg->Add(m_st_original_value,                                              0, wxALIGN_TOP,          0);
     siz_fg->Add(new wxStaticText(this, wxID_ANY, get_original_value_as_string()), 1, wxALIGN_TOP | wxGROW, 0);
   }
 
   m_input->Enable(m_present);
 
-  siz_fg->Add(new wxStaticText(this, wxID_ANY, value_label), 0, wxALIGN_CENTER_VERTICAL,          0);
-  siz_fg->Add(m_input,                                       1, wxALIGN_CENTER_VERTICAL | wxGROW, 0);
+  m_st_value_label = new wxStaticText(this, wxID_ANY, wxEmptyString);
+  siz_fg->Add(m_st_value_label, 0, wxALIGN_CENTER_VERTICAL,          0);
+  siz_fg->Add(m_input,          1, wxALIGN_CENTER_VERTICAL | wxGROW, 0);
 
   siz->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT, 5);
 
@@ -135,11 +123,57 @@ he_value_page_c::init() {
   SetSizer(siz);
 
   if (NULL == m_toplevel_page)
-    m_parent->append_page(this, m_title);
+    m_parent->append_page(this);
   else
-    m_parent->append_sub_page(this, m_title, m_toplevel_page->m_page_id);
+    m_parent->append_sub_page(this, m_toplevel_page->m_page_id);
 
   m_toplevel_page->m_children.push_back(this);
+
+  translate_ui();
+}
+
+void
+he_value_page_c::translate_ui() {
+  if (NULL == m_b_reset)
+    return;
+
+  m_b_reset->SetLabel(Z("&Reset"));
+
+  wxString type
+    = vt_ascii_string     == m_value_type ? Z("ASCII string (no special chars like\nUmlaute etc)")
+    : vt_string           == m_value_type ? Z("String")
+    : vt_unsigned_integer == m_value_type ? Z("Unsigned integer")
+    : vt_signed_integer   == m_value_type ? Z("Signed integer")
+    : vt_float            == m_value_type ? Z("Floating point number")
+    : vt_binary           == m_value_type ? Z("Binary (displayed as hex numbers)")
+    : vt_bool             == m_value_type ? Z("Boolean (yes/no, on/off etc)")
+    :                                       Z("unknown");
+
+  m_st_type_label->SetLabel(Z("Type:"));
+  m_st_type->SetLabel(type);
+  if (!m_description.get_translated().empty()) {
+    m_st_description_label->SetLabel(Z("Description:"));
+    m_st_description->SetLabel(wxU(m_description.get_translated()));
+  }
+
+  if (NULL == m_element) {
+    m_st_add_or_remove->SetLabel(Z("This element is not currently present in the file.\nYou can let the header editor add the element\nto the file."));
+    m_st_value_label->SetLabel(Z("New value:"));
+    m_cb_add_or_remove->SetLabel(Z("Add element"));
+
+  } else {
+    m_st_add_or_remove->SetLabel(Z("This element is currently present in the file.\nYou can let the header editor remove the element\nfrom the file."));
+    m_st_value_label->SetLabel(Z("Current value:"));
+    m_cb_add_or_remove->SetLabel(Z("Remove element"));
+
+    const EbmlSemantic *semantic = find_ebml_semantic(KaxSegment::ClassInfos, m_callbacks.GlobalId);
+    if ((NULL != semantic) && semantic->Mandatory)
+      m_st_add_or_remove->SetLabel(Z("This element is currently present in the file.\nIt cannot be removed because it is a\nmandatory header field."));
+  }
+
+  m_st_status->SetLabel(Z("Status:"));
+  if (m_present)
+    m_st_original_value->SetLabel(Z("Original value:"));
 }
 
 void

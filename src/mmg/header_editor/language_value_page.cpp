@@ -27,14 +27,27 @@ he_language_value_page_c::he_language_value_page_c(header_editor_frame_c *parent
                                                    he_page_base_c *toplevel_page,
                                                    EbmlMaster *master,
                                                    const EbmlCallbacks &callbacks,
-                                                   const wxString &title,
-                                                   const wxString &description)
+                                                   const translatable_string_c &title,
+                                                   const translatable_string_c &description)
   : he_value_page_c(parent, toplevel_page, master, callbacks, vt_string, title, description)
   , m_cb_language(NULL)
 {
 }
 
 he_language_value_page_c::~he_language_value_page_c() {
+}
+
+void
+he_language_value_page_c::translate_ui() {
+  he_value_page_c::translate_ui();
+
+  if (NULL == m_cb_language)
+    return;
+
+  int i, selection = m_cb_language->GetSelection();
+  for (i = 0; i < sorted_iso_codes.Count(); i++)
+    m_cb_language->SetString(i, sorted_iso_codes[i]);
+  m_cb_language->SetSelection(selection);
 }
 
 wxControl *

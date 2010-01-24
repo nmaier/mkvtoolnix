@@ -25,6 +25,7 @@
 #include <wx/timer.h>
 #include <wx/treectrl.h>
 
+#include "common/translation.h"
 #include "mmg/header_editor/page_base.h"
 #include "mmg/wx_kax_analyzer.h"
 
@@ -99,14 +100,16 @@ public:
 
   bool open_file(wxFileName file_name);
 
-  void append_page(he_page_base_c *page, const wxString &title);
-  void append_sub_page(he_page_base_c *page, const wxString &title, wxTreeItemId parent_id);
+  void append_page(he_page_base_c *page);
+  void append_sub_page(he_page_base_c *page, wxTreeItemId parent_id);
 
   wxPanel *get_page_panel() {
     return m_page_panel;
   }
 
   virtual bool on_drop_files(wxCoord x, wxCoord y, const wxArrayString &dropped_files);
+
+  void translate_ui();
 
 protected:
   bool may_close();
@@ -129,6 +132,7 @@ protected:
   he_page_base_c *find_page_for_item(wxTreeItemId id);
 
   void set_status_bar(const wxString &text);
+  void set_window_title();
 };
 
 #endif // __HEADER_EDITOR_FRAME_H

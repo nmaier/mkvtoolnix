@@ -85,6 +85,7 @@ class tab_chapters;
 class tab_global;
 class tab_input;
 class job_dialog;
+class header_editor_frame_c;
 
 class mmg_dialog: public wxFrame {
   DECLARE_CLASS(mmg_dialog);
@@ -103,8 +104,7 @@ public:
   wxStaticBox *sb_output_filename;
 
   wxNotebook *notebook;
-  wxMenu *file_menu, *muxing_menu, *chapter_menu, *window_menu, *help_menu;
-  wxMenuBar *menu_bar;
+  wxMenu *file_menu, *chapter_menu;
   bool file_menu_sep, chapter_menu_sep;
 
   tab_input *input_page;
@@ -124,6 +124,8 @@ public:
   bool warned_chapter_editor_not_empty;
 
   mmg_options_t options;
+
+  std::vector<header_editor_frame_c *> header_editor_frames;
 
 #if defined(SYS_WINDOWS)
   bool m_taskbar_msg_received;
@@ -189,6 +191,7 @@ public:
   void on_close(wxCloseEvent &evt);
 
   void on_run_header_editor(wxCommandEvent &evt);
+  void header_editor_frame_closed(header_editor_frame_c *frame);
 
   void translate_ui();
 

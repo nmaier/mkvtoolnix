@@ -39,7 +39,7 @@ public:
   const EbmlCallbacks &m_callbacks;
   const EbmlCallbacks *m_sub_master_callbacks;
 
-  wxString m_title, m_description;
+  translatable_string_c m_description;
 
   value_type_e m_value_type;
 
@@ -48,6 +48,7 @@ public:
   wxCheckBox *m_cb_add_or_remove;
   wxControl *m_input;
   wxButton *m_b_reset;
+  wxStaticText *m_st_status, *m_st_description_label, *m_st_description, *m_st_original_value, *m_st_add_or_remove, *m_st_value_label, *m_st_type_label, *m_st_type;
 
   EbmlElement *m_element;
 
@@ -55,7 +56,7 @@ public:
 
 public:
   he_value_page_c(header_editor_frame_c *parent, he_page_base_c *toplevel_page, EbmlMaster *master, const EbmlCallbacks &callbacks,
-                  const value_type_e value_type, const wxString &title, const wxString &description);
+                  const value_type_e value_type, const translatable_string_c &title, const translatable_string_c &description);
   virtual ~he_value_page_c();
 
   void init();
@@ -69,6 +70,7 @@ public:
   virtual void reset_value() = 0;
   virtual bool validate_value() = 0;
   virtual void copy_value_to_element() = 0;
+  virtual void translate_ui();
 
   virtual bool has_this_been_modified();
   virtual void modify_this();

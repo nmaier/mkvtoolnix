@@ -17,23 +17,25 @@
 #include <wx/statline.h>
 #include <wx/stattext.h>
 
+#include "common/wx.h"
 #include "mmg/header_editor/empty_page.h"
 
 he_empty_page_c::he_empty_page_c(header_editor_frame_c *parent,
-                                 const wxString &title,
-                                 const wxString &content)
-  : he_page_base_c(parent)
-  , m_title(title)
+                                 const translatable_string_c &title,
+                                 const translatable_string_c &content)
+  : he_page_base_c(parent, title)
   , m_content(content)
 {
   wxBoxSizer *siz = new wxBoxSizer(wxVERTICAL);
+  m_st_title      = new wxStaticText(this, wxID_ANY, wxEmptyString);
+  m_st_content    = new wxStaticText(this, wxID_ANY, wxEmptyString);
 
   siz->AddSpacer(5);
-  siz->Add(new wxStaticText(this, wxID_ANY, m_title),   0, wxGROW | wxLEFT | wxRIGHT, 5);
+  siz->Add(m_st_title,             0, wxGROW | wxLEFT | wxRIGHT, 5);
   siz->AddSpacer(5);
-  siz->Add(new wxStaticLine(this),                      0, wxGROW | wxLEFT | wxRIGHT, 5);
+  siz->Add(new wxStaticLine(this), 0, wxGROW | wxLEFT | wxRIGHT, 5);
   siz->AddSpacer(5);
-  siz->Add(new wxStaticText(this, wxID_ANY, m_content), 0, wxGROW | wxLEFT | wxRIGHT, 5);
+  siz->Add(m_st_content,           0, wxGROW | wxLEFT | wxRIGHT, 5);
   siz->AddStretchSpacer();
 
   SetSizer(siz);
@@ -56,3 +58,8 @@ void
 he_empty_page_c::modify_this() {
 }
 
+void
+he_empty_page_c::translate_ui() {
+  m_st_title->SetLabel(wxU(m_title.get_translated()));
+  m_st_content->SetLabel(wxU(m_content.get_translated()));
+}

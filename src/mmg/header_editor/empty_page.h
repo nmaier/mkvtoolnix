@@ -18,19 +18,23 @@
 
 #include <wx/string.h>
 
+#include "common/translation.h"
 #include "mmg/header_editor/page_base.h"
 
 class he_empty_page_c: public he_page_base_c {
 public:
-  wxString m_title, m_content;
+  translatable_string_c m_content;
+
+  wxStaticText *m_st_title, *m_st_content;
 
 public:
-  he_empty_page_c(header_editor_frame_c *parent, const wxString &title, const wxString &content);
+  he_empty_page_c(header_editor_frame_c *parent, const translatable_string_c &title, const translatable_string_c &content);
   virtual ~he_empty_page_c();
 
   virtual bool has_this_been_modified();
   virtual bool validate_this();
   virtual void modify_this();
+  virtual void translate_ui();
 };
 
 #endif // __HE_EMPTY_PAGE_H

@@ -27,16 +27,19 @@
 #include "mmg/header_editor/top_level_page.h"
 
 he_top_level_page_c::he_top_level_page_c(header_editor_frame_c *parent,
-                                         const wxString &title,
+                                         const translatable_string_c &title,
                                          EbmlElement *l1_element)
-  : he_empty_page_c(parent, title, wxEmptyString)
+  : he_empty_page_c(parent, title, "")
 {
   m_l1_element = l1_element;
-
-  parent->append_page(this, title);
 }
 
 he_top_level_page_c::~he_top_level_page_c() {
+}
+
+void
+he_top_level_page_c::init() {
+  m_parent->append_page(this);
 }
 
 void
