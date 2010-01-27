@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-01-20 21:01+0100\n"
-"Last-Translator: Dean Lee <xslidian@gmail.com>\n"
+"PO-Revision-Date: 2010-01-27 22:06+0800\n"
+"Last-Translator: Dean Lee <xslidian@lidian.info>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2526,7 +2526,7 @@ msgstr "裁减参数: 未以 <TID>:<left>,<top>,<right>,<bottom> 的形式给出
 
 #: src/mmg/tabs/input_format.cpp:251
 msgid "Cropping:"
-msgstr ""
+msgstr "画面裁剪:"
 
 #: src/info/mkvinfo.cpp:1191
 msgid "Cue block number: %1%"
@@ -2836,9 +2836,8 @@ msgid "EBML maximum ID length: %1%"
 msgstr "EBML 最大 ID 长: %1%"
 
 #: src/info/mkvinfo.cpp:1767
-#, fuzzy
 msgid "EBML maximum size length: %1%"
-msgstr "EBML 最大 ID 长: %1%"
+msgstr "EBML 最大长度: %1%"
 
 #: src/info/mkvinfo.cpp:1761
 msgid "EBML read version: %1%"
@@ -5123,7 +5122,7 @@ msgstr "选择 VobSub 字幕使用的压缩方式。如果没有选中任何方�
 
 #: src/mmg/tabs/input_format.cpp:252
 msgid "Sets the cropping parameters. Must be comma-separated list of four numbers for the cropping to be used at the left, top, right and bottom."
-msgstr ""
+msgstr "设置裁减参数。必须为逗号分隔的四个数字，分别代表从视频画面左边、顶部、右边和底部移除的像素数。"
 
 #: src/mmg/tabs/input_format.cpp:233
 msgid "Sets the default duration or number of frames per second for a track. This is only possible for video tracks. For AVC/h.264 elementary streams this option must be given. This can either be a floating point number or a fraction."
