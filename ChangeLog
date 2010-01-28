@@ -1,3 +1,10 @@
+2010-01-28  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: bug fix: Modes 'attachments', 'chapters', 'tags' and
+	'cuesheet': mkvextract will output an error message if the file
+	cannot be opened (e.g. because it does not exist or due to lack of
+	access).
+
 2010-01-24  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: enhancement: Changing the interface language does not
