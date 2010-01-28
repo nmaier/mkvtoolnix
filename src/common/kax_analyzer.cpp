@@ -182,12 +182,13 @@ kax_analyzer_c::probe(std::string file_name) {
 }
 
 bool
-kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode) {
+kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode,
+                        const open_mode mode) {
   bool parse_fully = parse_mode_full == parse_mode;
 
   if (NULL == m_file)
     try {
-      m_file = new mm_file_io_c(m_file_name, MODE_WRITE);
+      m_file = new mm_file_io_c(m_file_name, mode);
     } catch (...) {
       return false;
     }

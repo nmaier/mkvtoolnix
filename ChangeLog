@@ -1,5 +1,9 @@
 2010-01-28  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvextract: bug fix: Files are only opened for reading, not for
+	writing, so that mkvextract will work on files the user only has
+	read-only permissions for.
+
 	* mkvextract: bug fix: Modes 'attachments', 'chapters', 'tags' and
 	'cuesheet': mkvextract will output an error message if the file
 	cannot be opened (e.g. because it does not exist or due to lack of

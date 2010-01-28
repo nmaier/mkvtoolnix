@@ -311,7 +311,7 @@ extract_tracks(const std::string &file_name,
   // open input file
   mm_io_c *in;
   try {
-    in = new mm_file_io_c(file_name);
+    in = new mm_file_io_c(file_name, MODE_READ);
   } catch (...) {
     show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).\n")) % file_name % strerror(errno));
     return false;

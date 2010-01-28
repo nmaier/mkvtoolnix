@@ -203,7 +203,7 @@ extract_cuesheet(const std::string &file_name,
   // open input file
   try {
     analyzer = kax_analyzer_cptr(new kax_analyzer_c(file_name));
-    if (!analyzer->process(parse_mode))
+    if (!analyzer->process(parse_mode, MODE_READ))
       throw false;
   } catch (...) {
     show_error(boost::format(Y("The file '%1%' could not be opened for reading (%2%).")) % file_name % strerror(errno));
