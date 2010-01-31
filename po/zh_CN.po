@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-01-27 22:06+0800\n"
+"PO-Revision-Date: 2010-01-31 20:02+0100\n"
 "Last-Translator: Dean Lee <xslidian@lidian.info>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -1779,7 +1779,7 @@ msgstr "总在最前"
 msgid "An ID corresponding to the codec."
 msgstr "对应编解码器的 ID。"
 
-#: src/extract/attachments.cpp:131
+#: src/extract/attachments.cpp:132
 msgid "An attachment with the ID %1% was not found.\n"
 msgstr "找不到 ID 为 %1% 的附件。\n"
 
@@ -1906,7 +1906,7 @@ msgstr "音频输出采样率"
 msgid "Audio sampling frequency"
 msgstr "音频采样率"
 
-#: src/mmg/header_editor/track_type_page.cpp:45
+#: src/mmg/header_editor/track_type_page.cpp:46
 #, c-format
 msgid "Audio track %u"
 msgstr "音频轨 %u"
@@ -4345,11 +4345,11 @@ msgstr "通常 mkvmerge 保留 MPEG4 视频位流中的宽高比信息并将信�
 msgid "Not a hex digit at position %1%"
 msgstr "非十六进制数位，于 %1%"
 
-#: src/common/kax_analyzer.cpp:207
+#: src/common/kax_analyzer.cpp:208
 msgid "Not a valid Matroska file (no EBML head found)"
 msgstr "不是有效的 Matroska 文件 (未发现 EBML 头)"
 
-#: src/common/kax_analyzer.cpp:217
+#: src/common/kax_analyzer.cpp:218
 msgid "Not a valid Matroska file (no segment/level 0 element found)"
 msgstr "不是有效的 Matroska 文件 (未发现有效的 剪辑/0 层级元素)"
 
@@ -4623,7 +4623,7 @@ msgstr "进度: 100%\n"
 msgid "Progress: 100%%%1%"
 msgstr "进度: 100%%%1%"
 
-#: src/common/kax_analyzer.cpp:1027
+#: src/common/kax_analyzer.cpp:1028
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "进度: [%1%%2%] %3%%%"
 
@@ -5398,7 +5398,7 @@ msgstr "字符串"
 msgid "Subtitle track %1% is missing some duration elements. Please check the resulting SSA/ASS file for entries that have the same start and end time.\n"
 msgstr "字幕轨 %1% 缺时长元素。请检查输出的 SSA/ASS 文件中有相同起始和终止时间的条目。\n"
 
-#: src/mmg/header_editor/track_type_page.cpp:51
+#: src/mmg/header_editor/track_type_page.cpp:52
 #, c-format
 msgid "Subtitle track %u"
 msgstr "字幕轨 %u"
@@ -5723,10 +5723,10 @@ msgstr "第一个模式将尝试提取章节信息和标签并将其以 CUE 表�
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
 msgstr "文件 '%1%' 无法附加，因为它不存在或不可读。\n"
 
-#: src/extract/attachments.cpp:118
-#: src/extract/chapters.cpp:51
-#: src/extract/cuesheets.cpp:208
-#: src/extract/tags.cpp:51
+#: src/extract/attachments.cpp:119
+#: src/extract/chapters.cpp:52
+#: src/extract/cuesheets.cpp:209
+#: src/extract/tags.cpp:52
 msgid "The file '%1%' could not be opened for reading (%2%)."
 msgstr "文件 '%1%' 无法打开以读取 (%2%)。"
 
@@ -7208,7 +7208,7 @@ msgstr "视频立体模式"
 msgid "Video track"
 msgstr "视频轨"
 
-#: src/mmg/header_editor/track_type_page.cpp:48
+#: src/mmg/header_editor/track_type_page.cpp:49
 #, c-format
 msgid "Video track %u"
 msgstr "视频轨 %u"
@@ -8060,8 +8060,8 @@ msgstr "mkvmerge -o out [全局选项] [选项1] <file1> [@optionsfile ...]\n"
 
 #: src/mmg/mux_dialog.cpp:316
 #, c-format
-msgid "mkvmerge FAILED with a return code of %d. %s\n"
-msgstr "mkvmerge 执行 *失败* ，返回代码 %d。 %s\n"
+msgid "mkvmerge FAILED with a return code of %d. %s"
+msgstr "mkvmerge 执行 *失败* ，返回代码 %d。 %s"
 
 #: src/mmg/tabs/global.cpp:476
 #: src/mmg/tabs/global.cpp:490
@@ -8115,8 +8115,8 @@ msgstr "mkvmerge 可执行程序"
 
 #: src/mmg/mux_dialog.cpp:318
 #, c-format
-msgid "mkvmerge finished with a return code of %d. %s\n"
-msgstr "mkvmerge 执行完毕，返回代码 %d。%s\n"
+msgid "mkvmerge finished with a return code of %d. %s"
+msgstr "mkvmerge 执行完毕，返回代码 %d。%s"
 
 #: src/mmg/jobs.cpp:131
 #: src/mmg/mux_dialog.cpp:273

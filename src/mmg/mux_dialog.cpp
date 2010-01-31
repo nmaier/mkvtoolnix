@@ -313,9 +313,9 @@ mux_process::OnTerminate(int terminated_pid,
 
   wxString format;
   if ((status != 0) && (status != 1))
-    format = Z("mkvmerge FAILED with a return code of %d. %s\n");
+    format = Z("mkvmerge FAILED with a return code of %d. %s");
   else
-    format = Z("mkvmerge finished with a return code of %d. %s\n");
+    format = Z("mkvmerge finished with a return code of %d. %s");
 
 #if defined(SYS_WINDOWS)
   wxString status_1 = Z("There were warnings, or the process was terminated.");

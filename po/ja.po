@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-01-23 11:48+0900\n"
+"PO-Revision-Date: 2010-01-31 20:02+0100\n"
 "Last-Translator: Katsuhiko Nishimra <kat841@hotmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -1748,7 +1748,7 @@ msgstr "常に手前に表示"
 msgid "An ID corresponding to the codec."
 msgstr "コーデックに対応するIDです。"
 
-#: src/extract/attachments.cpp:131
+#: src/extract/attachments.cpp:132
 msgid "An attachment with the ID %1% was not found.\n"
 msgstr "ID %1%の添付ファイルが見つかりませんでした。\n"
 
@@ -1868,7 +1868,7 @@ msgstr "オーディオの出力サンプリング周波数"
 msgid "Audio sampling frequency"
 msgstr "オーディオのサンプリング周波数"
 
-#: src/mmg/header_editor/track_type_page.cpp:45
+#: src/mmg/header_editor/track_type_page.cpp:46
 #, c-format
 msgid "Audio track %u"
 msgstr "オーディオトラック%u"
@@ -4245,11 +4245,11 @@ msgstr "通常mkvmergeは、MPEG4ビデオビットストリームのアスペ�
 msgid "Not a hex digit at position %1%"
 msgstr "%1%にあるのは16進数の数ではありません"
 
-#: src/common/kax_analyzer.cpp:207
+#: src/common/kax_analyzer.cpp:208
 msgid "Not a valid Matroska file (no EBML head found)"
 msgstr "正しいMatroskaファイルではありません（EBMLヘッドが見つかりませんでした）"
 
-#: src/common/kax_analyzer.cpp:217
+#: src/common/kax_analyzer.cpp:218
 msgid "Not a valid Matroska file (no segment/level 0 element found)"
 msgstr "正しいMatroskaファイルではありません（セグメント/レベル0の要素が見つかりませんでした）"
 
@@ -4514,7 +4514,7 @@ msgstr "進行状況: 100%\n"
 msgid "Progress: 100%%%1%"
 msgstr "進行状況: 100%%%1%"
 
-#: src/common/kax_analyzer.cpp:1027
+#: src/common/kax_analyzer.cpp:1028
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "進行状況: [%1%%2%] %3%%%"
 
@@ -5268,7 +5268,7 @@ msgstr "文字列"
 msgid "Subtitle track %1% is missing some duration elements. Please check the resulting SSA/ASS file for entries that have the same start and end time.\n"
 msgstr "字幕トラック%1%に失われている持続時間要素があります。同じ開始時間と終了時間がないか出力されるSSA/ASSファイルのエントリをチェックしてください。\n"
 
-#: src/mmg/header_editor/track_type_page.cpp:51
+#: src/mmg/header_editor/track_type_page.cpp:52
 #, c-format
 msgid "Subtitle track %u"
 msgstr "字幕トラック%u"
@@ -5590,8 +5590,8 @@ msgstr "5番目のモードでは、チャプタ情報とタグを展開しCUE�
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
 msgstr "ファイルが存在していないか読み取れないため、ファイル'%1%'を添付することができません。\n"
 
-#: src/extract/attachments.cpp:118 src/extract/chapters.cpp:51
-#: src/extract/cuesheets.cpp:208 src/extract/tags.cpp:51
+#: src/extract/attachments.cpp:119 src/extract/chapters.cpp:52
+#: src/extract/cuesheets.cpp:209 src/extract/tags.cpp:52
 msgid "The file '%1%' could not be opened for reading (%2%)."
 msgstr "ファイル'%1%'を開いて読み込むことができませんでした（%2%）。"
 
@@ -6986,7 +6986,7 @@ msgstr "ビデオステレオモード"
 msgid "Video track"
 msgstr "ビデオトラック"
 
-#: src/mmg/header_editor/track_type_page.cpp:48
+#: src/mmg/header_editor/track_type_page.cpp:49
 #, c-format
 msgid "Video track %u"
 msgstr "ビデオトラック%u"
@@ -7809,8 +7809,8 @@ msgstr "mkvmerge -o 出力ファイル [グローバルオプション] [オプ�
 
 #: src/mmg/mux_dialog.cpp:316
 #, c-format
-msgid "mkvmerge FAILED with a return code of %d. %s\n"
-msgstr "mkvmergeはリターンコード%dで異常終了しました。%s\n"
+msgid "mkvmerge FAILED with a return code of %d. %s"
+msgstr "mkvmergeはリターンコード%dで異常終了しました。%s"
 
 #: src/mmg/tabs/global.cpp:476 src/mmg/tabs/global.cpp:490
 #: src/mmg/tabs/global.cpp:494 src/mmg/tabs/global.cpp:498
@@ -7856,8 +7856,8 @@ msgstr "mkvmergeの実行ファイル"
 
 #: src/mmg/mux_dialog.cpp:318
 #, c-format
-msgid "mkvmerge finished with a return code of %d. %s\n"
-msgstr "mkvmergeはリターンコード%dで終了しました。%s\n"
+msgid "mkvmerge finished with a return code of %d. %s"
+msgstr "mkvmergeはリターンコード%dで終了しました。%s"
 
 #: src/mmg/jobs.cpp:131 src/mmg/mux_dialog.cpp:273
 msgid "mkvmerge has finished"

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-01-23 12:31+0100\n"
+"PO-Revision-Date: 2010-01-31 20:01+0100\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -1775,7 +1775,7 @@ msgstr "Über allen anderen Fenstern"
 msgid "An ID corresponding to the codec."
 msgstr "Eine den Codec identifizierende ID."
 
-#: src/extract/attachments.cpp:131
+#: src/extract/attachments.cpp:132
 msgid "An attachment with the ID %1% was not found.\n"
 msgstr "Ein Dateianhang mit der ID %1% wurde nicht gefunden.\n"
 
@@ -1898,7 +1898,7 @@ msgstr "Audio Ausgabeabtastrate"
 msgid "Audio sampling frequency"
 msgstr "Audio Abtastrate"
 
-#: src/mmg/header_editor/track_type_page.cpp:45
+#: src/mmg/header_editor/track_type_page.cpp:46
 #, c-format
 msgid "Audio track %u"
 msgstr "Audio-Track %u"
@@ -4258,11 +4258,11 @@ msgstr "Normalerweise belässt mkvmerge Informationen über das Seitenverhältni
 msgid "Not a hex digit at position %1%"
 msgstr "An Position %1% befindet sich keine Hexadezimalziffer"
 
-#: src/common/kax_analyzer.cpp:207
+#: src/common/kax_analyzer.cpp:208
 msgid "Not a valid Matroska file (no EBML head found)"
 msgstr "Keine gültige Matroska-Datei (kein EBML-Kopf gefunden)"
 
-#: src/common/kax_analyzer.cpp:217
+#: src/common/kax_analyzer.cpp:218
 msgid "Not a valid Matroska file (no segment/level 0 element found)"
 msgstr "Keine gültige Matroska-Datei (kein Segment/Level-0-Element gefunden)"
 
@@ -4528,7 +4528,7 @@ msgstr "Fortschritt: 100%\n"
 msgid "Progress: 100%%%1%"
 msgstr "Fortschritt: 100%%%1%"
 
-#: src/common/kax_analyzer.cpp:1027
+#: src/common/kax_analyzer.cpp:1028
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "Fortschritt: [%1%%2%] %3%%%"
 
@@ -5288,7 +5288,7 @@ msgstr "Zeichenkette"
 msgid "Subtitle track %1% is missing some duration elements. Please check the resulting SSA/ASS file for entries that have the same start and end time.\n"
 msgstr "Dem Untertiteltrack %1% fehlen einige Elemente für die Framedauer. Bitte überprüfen Sie die extrahierte SSA/ASS-Datei auf Einträge, deren Start-Zeitstempel mit dem End-Zeitstempel übereinstimmt, und korrigieren Sie diese Einträge manuell.\n"
 
-#: src/mmg/header_editor/track_type_page.cpp:51
+#: src/mmg/header_editor/track_type_page.cpp:52
 #, c-format
 msgid "Subtitle track %u"
 msgstr "Untertiteltrack %u"
@@ -5613,8 +5613,8 @@ msgstr "Im fünften Modus wird versucht, Kapitelinformationen und Tags zusammen 
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
 msgstr "Die Datei '%1%' kann nicht angehängt werden, weil sie entweder nicht existiert oder nicht gelesen werden kann.\n"
 
-#: src/extract/attachments.cpp:118 src/extract/chapters.cpp:51
-#: src/extract/cuesheets.cpp:208 src/extract/tags.cpp:51
+#: src/extract/attachments.cpp:119 src/extract/chapters.cpp:52
+#: src/extract/cuesheets.cpp:209 src/extract/tags.cpp:52
 msgid "The file '%1%' could not be opened for reading (%2%)."
 msgstr "Die Datei '%1%' konnte nicht zum Lesen geöffnet werden (%2%)."
 
@@ -7049,7 +7049,7 @@ msgstr "Video Stereomodus"
 msgid "Video track"
 msgstr "Video-Track"
 
-#: src/mmg/header_editor/track_type_page.cpp:48
+#: src/mmg/header_editor/track_type_page.cpp:49
 #, c-format
 msgid "Video track %u"
 msgstr "Video-Track %u"
@@ -7872,8 +7872,8 @@ msgstr "mkvmerge -o aus [globale Optionen] [Optionen1] <Datei1> [@Optionsdatei .
 
 #: src/mmg/mux_dialog.cpp:316
 #, c-format
-msgid "mkvmerge FAILED with a return code of %d. %s\n"
-msgstr "mkvmerge schlug mit einem Rückgabewert von %d fehl. %s\n"
+msgid "mkvmerge FAILED with a return code of %d. %s"
+msgstr "mkvmerge schlug mit einem Rückgabewert von %d fehl. %s"
 
 #: src/mmg/tabs/global.cpp:476 src/mmg/tabs/global.cpp:490
 #: src/mmg/tabs/global.cpp:494 src/mmg/tabs/global.cpp:498
@@ -7919,8 +7919,8 @@ msgstr "mkvmerge-Programmdatei"
 
 #: src/mmg/mux_dialog.cpp:318
 #, c-format
-msgid "mkvmerge finished with a return code of %d. %s\n"
-msgstr "mkvmerge schloss den Prozess mit einem Rückgabewert von %d ab. %s\n"
+msgid "mkvmerge finished with a return code of %d. %s"
+msgstr "mkvmerge schloss den Prozess mit einem Rückgabewert von %d ab. %s"
 
 #: src/mmg/jobs.cpp:131 src/mmg/mux_dialog.cpp:273
 msgid "mkvmerge has finished"
