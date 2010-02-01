@@ -653,7 +653,7 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
 
   MPEGChunk *raw_seq_hdr = m2v_parser->GetRealSequenceHeader();
   if (NULL != raw_seq_hdr) {
-    track->raw_seq_hdr      = (unsigned char *) safememdup(raw_seq_hdr->GetPointer(), raw_seq_hdr->GetSize());
+    track->raw_seq_hdr      = (unsigned char *)safememdup(raw_seq_hdr->GetPointer(), raw_seq_hdr->GetSize());
     track->raw_seq_hdr_size = raw_seq_hdr->GetSize();
   }
 
