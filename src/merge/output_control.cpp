@@ -68,6 +68,7 @@
 #include "common/chapters/chapters.h"
 #include "common/common.h"
 #include "common/ebml.h"
+#include "common/fs_sys_helpers.h"
 #include "common/hacks.h"
 #include "common/locale.h"
 #include "common/math.h"

@@ -13,6 +13,7 @@
 
 #include "common/os.h"
 
+#include "common/fs_sys_helpers.h"
 #include "common/output.h"
 #include "common/strings/editing.h"
 #include "common/strings/parsing.h"

@@ -131,8 +131,4 @@ typedef UINT64_TYPE uint64_t;
 # define ARCH_LITTLEENDIAN
 #endif
 
-int MTX_DLL_API fs_entry_exists(const char *path);
-void MTX_DLL_API create_directory(const char *path);
-int64_t MTX_DLL_API get_current_time_millis();
-
 #endif

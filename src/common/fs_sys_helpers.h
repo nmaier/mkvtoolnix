@@ -5,23 +5,21 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   Cross platform compatibility definitions
+   Cross platform helper functions
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_OS_WINDOWS_H
-#define __MTX_COMMON_OS_WINDOWS_H
+#ifndef __MTX_COMMON_FS_SYS_HELPERS_H
+#define __MTX_COMMON_FS_SYS_HELPERS_H
 
-#include "common/os.h"
-
-#ifdef SYS_WINDOWS
-
-#include <string>
+#include "os.h"
 
 int MTX_DLL_API fs_entry_exists(const char *path);
 void MTX_DLL_API create_directory(const char *path);
 int64_t MTX_DLL_API get_current_time_millis();
+
+#if defined(SYS_WINDOWS)
 
 bool MTX_DLL_API get_registry_key_value(const std::string &key, const std::string &value_name, std::string &value);
 std::string MTX_DLL_API get_installation_path();
@@ -40,6 +38,6 @@ std::string MTX_DLL_API get_environment_variable(const std::string &key);
 
 unsigned int MTX_DLL_API get_windows_version();
 
-#endif  // SYS_WINDOWS
+#endif
 
-#endif  // __MTX_COMMON_OS_WINDOWS_H
+#endif
