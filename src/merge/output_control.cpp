@@ -14,9 +14,6 @@
 */
 
 #include "common/os.h"
-#ifdef SYS_WINDOWS
-# include "common/os_windows.h"
-#endif
 
 #include <errno.h>
 #include <ctype.h>

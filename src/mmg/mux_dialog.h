@@ -20,7 +20,7 @@
 #include <wx/process.h>
 
 #if defined(SYS_WINDOWS)
-# include "common/os_windows.h"
+# include "common/fs_sys_helpers.h"
 # include "mmg/taskbar_progress.h"
 #endif  // SYS_WINDOWS
 

@@ -30,13 +30,13 @@
 #include <vector>
 #ifdef SYS_WINDOWS
 # include <windows.h>
-# include "os_windows.h"
 #endif
 
 #include "common/common.h"
 #include "common/locale.h"
 #include "common/memory.h"
 #ifdef SYS_WINDOWS
+# include "common/fs_sys_helpers.h"
 # include "common/strings/formatting.h"
 # include "common/strings/parsing.h"
 #endif

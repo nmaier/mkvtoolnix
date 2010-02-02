@@ -65,10 +65,6 @@
 #include "merge/mkvmerge.h"
 #include "merge/output_control.h"
 
-#ifdef SYS_WINDOWS
-# include "common/os_windows.h"
-#endif
-
 using namespace libmatroska;
 
 struct ext_file_type_t {

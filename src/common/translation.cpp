@@ -33,7 +33,7 @@
 
 #if defined(SYS_WINDOWS)
 # include <windows.h>
-# include "common/os_windows.h"
+# include "common/fs_sys_helpers.h"
 # include "common/memory.h"
 #endif
 

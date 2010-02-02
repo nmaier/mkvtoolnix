@@ -23,12 +23,9 @@ extern "C" {
 
 #include "common/common.h"
 #include "common/extern_data.h"
+#include "common/fs_sys_helpers.h"
 #include "common/mm_io.h"
 #include "common/strings/editing.h"
-
-#ifdef SYS_WINDOWS
-# include "os_windows.h"
-#endif
 
 #ifndef NULL
 # define NULL 0

@@ -32,7 +32,7 @@
 
 #if defined(SYS_WINDOWS)
 # include <windows.h>
-# include "common/os_windows.h"
+# include "common/fs_sys_helpers.h"
 #endif
 
 #include "common/common.h"

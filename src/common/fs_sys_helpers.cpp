@@ -16,11 +16,10 @@
 #include "common/common.h"
 #include "common/error.h"
 #include "common/fs_sys_helpers.h"
+#include "common/strings/editing.h"
 #include "common/strings/utf8.h"
 
 #if defined(SYS_WINDOWS)
-
-# include "os_windows.h"
 
 # include <io.h>
 # include <windows.h>
