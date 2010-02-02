@@ -109,32 +109,6 @@ parse_double(const char *s,
   return ok;
 }
 
-/** \brief Platform independant version of sscanf
-
-   This is a platform independant version of sscanf. It first fixes the format
-   string (\see fix_format) and then calls sscanf.
-
-   \param str The string to parse
-   \param fmt The format string
-   \returns The number of elements assigned
-*/
-int
-mxsscanf(const std::string &str,
-         const char *fmt,
-         ...) {
-  va_list ap;
-  std::string new_fmt;
-  int result;
-
-  mxverb(5, boost::format("mxsscanf: str: %1% /// fmt: %2%\n") % str % fmt);
-  fix_format(fmt, new_fmt);
-  va_start(ap, fmt);
-  result = vsscanf(str.c_str(), new_fmt.c_str(), ap);
-  va_end(ap);
-
-  return result;
-}
-
 std::string timecode_parser_error;
 
 inline bool

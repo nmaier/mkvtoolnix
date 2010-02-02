@@ -21,12 +21,6 @@
 extern std::string MTX_DLL_API timecode_parser_error;
 extern bool MTX_DLL_API parse_timecode(const std::string &s, int64_t &timecode, bool allow_negative = false);
 
-#if defined(__GNUC__)
-int MTX_DLL_API mxsscanf(const std::string &str, const char *fmt, ...) __attribute__ ((format (scanf, 2, 3)));
-#else
-int MTX_DLL_API mxsscanf(const std::string &str, const char *fmt, ...);
-#endif
-
 bool MTX_DLL_API parse_int(const char *s, int64_t &value);
 bool MTX_DLL_API parse_int(const char *s, int &value);
 inline bool

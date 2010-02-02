@@ -109,7 +109,11 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
     if (line.empty() || ('#' == line[0]))
       continue;
 
-    if (mxsscanf(line, "" LLD "," LLD ",%lf", &t.start_frame, &t.end_frame, &t.fps) != 3) {
+    std::vector<std::string> parts = split(line, ",", 3);
+    if (   (parts.size() != 3)
+        || !parse_int(parts[0], t.start_frame)
+        || !parse_int(parts[1], t.end_frame)
+        || !parse_double(parts[2], t.fps)) {
       mxwarn(boost::format(Y("Line %1% of the timecode file '%2%' could not be parsed.\n")) % line_no % m_file_name);
       continue;
     }
@@ -332,11 +336,12 @@ timecode_factory_v3_c::parse(mm_io_c &in) {
 
     } else {
       t.is_gap = false;
-      int res  = mxsscanf(line, "%lf,%lf", &dur, &t.fps);
-      if (1 == res) {
+      std::vector<std::string> parts = split(line, ",");
+
+      if ((1 == parts.size()) && parse_double(parts[0], dur))
         t.fps = m_default_fps;
 
-      } else if (2 != res) {
+      else if ((2 != parts.size()) || !parse_double(parts[1], t.fps)) {
         mxwarn(boost::format(Y("Line %1% of the timecode file '%2%' could not be parsed.\n")) % line_no % m_file_name);
         continue;
       }

@@ -1193,7 +1193,13 @@ parse_arg_append_to(const std::string &s,
   mxforeach(entry, entries) {
     append_spec_t mapping;
 
-    if (   (mxsscanf((*entry).c_str(), "" LLD ":" LLD ":" LLD ":" LLD, &mapping.src_file_id, &mapping.src_track_id, &mapping.dst_file_id, &mapping.dst_track_id) != 4)
+    std::vector<std::string> parts = split(entry->c_str(), ":");
+
+    if (   (parts.size() != 4)
+        || !parse_int(parts[0], mapping.src_file_id)
+        || !parse_int(parts[1], mapping.src_track_id)
+        || !parse_int(parts[2], mapping.dst_file_id)
+        || !parse_int(parts[3], mapping.dst_track_id)
         || (0 > mapping.src_file_id)
         || (0 > mapping.src_track_id)
         || (0 > mapping.dst_file_id)
