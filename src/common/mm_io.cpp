@@ -477,7 +477,7 @@ mm_file_io_c::prepare_path(const std::string &path) {
   if (local_path.substr(0, 2) == "\\\\") {
     // UNC paths -- don't try to create the host name as a directory.
 
-    // Fint the host name
+    // Find the host name
     std::string::size_type position = local_path.find(SEPARATOR, 2);
     if (std::string::npos == position)
       return;
