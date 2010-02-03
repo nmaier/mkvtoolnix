@@ -25,6 +25,7 @@
 # include <windows.h>
 # include <winreg.h>
 # include <direct.h>
+# include <shlobj.h>
 # include <sys/timeb.h>
 
 HANDLE
@@ -170,10 +171,8 @@ std::string
 get_application_data_folder() {
   wchar_t szPath[MAX_PATH];
 
-  if (SUCCEEDED(SHGetFolderPath(NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, 0, szPath))) {
-    PathAppend(szPath, TEXT("mkvtoolnix"));
-    return to_utf8(std::wstring(szPath));
-  }
+  if (SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, 0, szPath)))
+    return to_utf8(std::wstring(szPath)) + "\\mkvtoolnix";
 
   return "";
 }
