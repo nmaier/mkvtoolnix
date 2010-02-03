@@ -1,3 +1,16 @@
+2010-02-03  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: The jobs will be saved in the 'mkvtoolnix/jobs'
+	sub-directory of the 'application data' folder instead of the
+	'jobs' folder in the current directory. On Windows this is the
+	special 'application data' folder inside the user's profile
+	directory, e.g. 'C:\Users\mbunkus\AppData\mkvtoolnix'. On
+	non-Windows systems this is the folder '.mkvtoolnix' in the user's
+	home directory.
+	mmg's configuration file has also been moved from ~/.mkvmergeGUI
+	to ~/.mkvtoolnix/config on non-Windows systems.
+	Fix for bug 466.
+
 2010-01-28  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract: bug fix: Files are only opened for reading, not for

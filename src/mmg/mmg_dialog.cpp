@@ -1386,8 +1386,7 @@ mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
   job.log = new wxString();
   jobs.push_back(job);
 
-  description.Printf(wxT("/jobs/%d.mmg"), job.id);
-  save(wxGetCwd() + description);
+  save(wxString::Format(wxT("%s/%d.mmg"), app->get_jobs_folder().c_str(), job.id));
 
   save_job_queue();
 

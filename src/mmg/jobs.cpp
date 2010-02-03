@@ -144,7 +144,7 @@ job_run_dialog::start_next_job() {
   st_jobs->SetLabel(wxString::Format(Z("Processing job %d/%d"), current_job + 1, (int)jobs_to_start.size()));
   st_current->SetLabel(wxString::Format(Z("Current job ID %d:"), jobs[ndx].id));
 
-  mdlg->load(wxString::Format(wxT("%s/jobs/%d.mmg"), wxGetCwd().c_str(), jobs[ndx].id));
+  mdlg->load(wxString::Format(wxT("%s/%d.mmg"), app->get_jobs_folder().c_str(), jobs[ndx].id));
 
   opt_file_name.Printf(wxT("%smmg-mkvmerge-options-%d-%d"), get_temp_dir().c_str(), (int)wxGetProcessId(), (int)wxGetUTCTime());
 
@@ -542,7 +542,7 @@ job_dialog::on_delete(wxCommandEvent &evt) {
   int k = 0;
   while (jobs.size() > i) {
     if (selected[k]) {
-      wxRemoveFile(wxString::Format(wxT("jobs/%d.mmg"), jobs[i].id));
+      wxRemoveFile(wxString::Format(wxT("%s/%d.mmg"), app->get_jobs_folder().c_str(), jobs[i].id));
       jobs.erase(jobs.begin() + i);
       lv_jobs->DeleteItem(i);
     } else
@@ -698,7 +698,7 @@ job_dialog::on_item_selected(wxListEvent &evt) {
 
 void
 job_dialog::start_jobs(std::vector<int> &jobs_to_start) {
-  wxString temp_settings = wxGetCwd() + wxT("/jobs/temp.mmg");
+  wxString temp_settings = app->get_jobs_folder() + wxT("/temp.mmg");
   mdlg->save(temp_settings, true);
 
   mdlg->Show(false);

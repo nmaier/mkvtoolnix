@@ -166,6 +166,18 @@ get_windows_version() {
   return (os_version_info.dwMajorVersion << 16) | os_version_info.dwMinorVersion;
 }
 
+std::string
+get_application_data_folder() {
+  wchar_t szPath[MAX_PATH];
+
+  if (SUCCEEDED(SHGetFolderPath(NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, 0, szPath))) {
+    PathAppend(szPath, TEXT("mkvtoolnix"));
+    return to_utf8(std::wstring(szPath));
+  }
+
+  return "";
+}
+
 #else // SYS_WINDOWS
 
 # include <errno.h>
@@ -196,6 +208,15 @@ get_current_time_millis() {
     return -1;
 
   return (int64_t)tv.tv_sec * 1000 + (int64_t)tv.tv_usec / 1000;
+}
+
+std::string
+get_application_data_folder() {
+  const char *home = getenv("HOME");
+  if (NULL == home)
+    return "";
+
+  return std::string(home) + "/.mkvtoolnix";
 }
 
 #endif // SYS_WINDOWS

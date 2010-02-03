@@ -21,6 +21,7 @@
 #include "common/common.h"
 #include "common/extern_data.h"
 #include "common/extern_data.h"
+#include "common/fs_sys_helpers.h"
 #include "common/mm_io.h"
 #include "common/strings/formatting.h"
 #include "common/translation.h"
@@ -89,6 +90,37 @@ mmg_app::init_ui_locale() {
   init_locales(locale);
 }
 
+wxString
+mmg_app::get_config_file_name() {
+  return wxU(get_application_data_folder()) + wxT("/config");
+}
+
+wxString
+mmg_app::get_jobs_folder() {
+  return wxU(get_application_data_folder()) + wxT("/jobs");
+}
+
+void
+mmg_app::prepare_mmg_data_folder() {
+  // The 'jobs' folder is part of the application data
+  // folder. Therefore both directories will be creatd.
+  // 'prepare_path' treats the last part of the path as a file name;
+  // therefore append a dummy file name so that all directory parts
+  // will be created.
+  mm_file_io_c::prepare_path(wxMB(get_jobs_folder() + wxT("/dummy")));
+
+#if !defined(SYS_WINDOWS)
+  // Migrate the config file from its old location ~/.mkvmergeGUI to
+  // the new location ~/.mkvtoolnix/config
+  wxString old_config_name;
+  wxGetEnv(wxT("HOME"), &old_config_name);
+  old_config_name += wxT("/.mkvmergeGUI");
+
+  if (wxFileExists(old_config_name))
+    wxRenameFile(old_config_name, get_config_file_name());
+#endif
+}
+
 bool
 mmg_app::OnInit() {
   mtx_common_init();
@@ -98,7 +130,13 @@ mmg_app::OnInit() {
   wxString k, v;
   int index;
 
+  prepare_mmg_data_folder();
+
+#if defined(SYS_WINDOWS)
   cfg = new wxConfig(wxT("mkvmergeGUI"));
+#else
+  cfg = new wxFileConfig(wxT("mkvmergeGUI"), wxEmptyString, get_config_file_name());
+#endif
   wxConfigBase::Set(cfg);
 
   init_ui_locale();

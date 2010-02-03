@@ -276,6 +276,9 @@ public:
   virtual int OnExit();
   virtual void init_ui_locale();
   virtual void handle_command_line_arguments();
+  virtual wxString get_config_file_name();
+  virtual wxString get_jobs_folder();
+  virtual void prepare_mmg_data_folder();
 };
 
 extern mmg_app *app;
