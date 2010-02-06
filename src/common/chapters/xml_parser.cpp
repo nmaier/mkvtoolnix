@@ -33,8 +33,6 @@
 
 using namespace libmatroska;
 
-#define CPDATA (parser_data_t *)pdata
-
 static void
 end_edition_entry(void *pdata) {
   KaxEditionUID *euid = NULL;

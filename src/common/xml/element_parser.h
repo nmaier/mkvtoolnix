@@ -98,32 +98,34 @@ private:
   void handle_xml_encoding(std::string &line);
 };
 
-typedef struct {
+struct parser_data_t {
+public:
   XML_Parser parser;
 
-  const char *file_name;
-  const char *parser_name;
+  std::string file_name, parser_name, parse_error_msg;
   const parser_element_t *mapping;
 
   int depth, skip_depth;
   bool done_reading, data_allowed;
 
-  std::string *bin;
-  const char *format;
+  std::string bin, format;
 
-  std::vector<EbmlElement *> *parents;
-  std::vector<int> *parent_idxs;
+  std::vector<EbmlElement *> parents;
+  std::vector<int> parent_idxs;
 
   EbmlMaster *root_element;
 
   jmp_buf parse_error_jmp;
-  std::string *parse_error_msg;
-} parser_data_t;
 
-#define CPDATA (parser_data_t *)pdata
+public:
+  parser_data_t();
+};
+typedef counted_ptr<parser_data_t> parser_data_cptr;
 
-#define xmlp_pelt  (*((parser_data_t *)pdata)->parents)[((parser_data_t *)pdata)->parents->size() - 1]
-#define xmlp_pname xmlp_parent_name((parser_data_t *)pdata, xmlp_pelt)
+#define CPDATA static_cast<parser_data_t *>(pdata)
+
+#define xmlp_pelt  static_cast<parser_data_t *>(pdata)->parents.back()
+#define xmlp_pname xmlp_parent_name(static_cast<parser_data_t *>(pdata), xmlp_pelt)
 
 EbmlMaster * MTX_DLL_API parse_xml_elements(const char *parser_name, const parser_element_t *mapping, mm_text_io_c *in);
 

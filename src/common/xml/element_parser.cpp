@@ -35,6 +35,18 @@
 using namespace libebml;
 using namespace libmatroska;
 
+parser_data_t::parser_data_t()
+  : mapping(NULL)
+  , depth(0)
+  , skip_depth(0)
+  , done_reading(false)
+  , data_allowed(false)
+  , root_element(NULL)
+{
+  memset(&parser,          0, sizeof(parser));
+  memset(&parse_error_jmp, 0, sizeof(parse_error_jmp));
+}
+
 const char *
 xmlp_parent_name(parser_data_t *pdata,
                  EbmlElement *e) {
@@ -50,7 +62,7 @@ xmlp_parent_name(parser_data_t *pdata,
 void
 xmlp_error(parser_data_t *pdata,
            const std::string &message) {
-  *pdata->parse_error_msg =
+  pdata->parse_error_msg =
     (boost::format(Y("Error: %1% parser failed for '%2%', line %3%, column %4%: %5%\n"))
      % pdata->parser_name % pdata->file_name % XML_GetCurrentLineNumber(pdata->parser) % XML_GetCurrentColumnNumber(pdata->parser) % message).str();
 
@@ -64,9 +76,9 @@ el_get_uint(parser_data_t *pdata,
             bool is_bool = false) {
   int64 value;
 
-  strip(*pdata->bin);
-  if (!parse_int(pdata->bin->c_str(), value))
-    xmlp_error(pdata, boost::format(Y("Expected an unsigned integer but found '%1%'.")) % *pdata->bin);
+  strip(pdata->bin);
+  if (!parse_int(pdata->bin.c_str(), value))
+    xmlp_error(pdata, boost::format(Y("Expected an unsigned integer but found '%1%'.")) % pdata->bin);
 
   if (value < min_value)
     xmlp_error(pdata, boost::format(Y("Unsigned integer (%1%) is too small. Mininum value is %2%.")) % value % min_value);
@@ -80,15 +92,15 @@ el_get_uint(parser_data_t *pdata,
 static void
 el_get_string(parser_data_t *pdata,
               EbmlElement *el) {
-  strip(*pdata->bin);
-  *(static_cast<EbmlString *>(el)) = pdata->bin->c_str();
+  strip(pdata->bin);
+  *(static_cast<EbmlString *>(el)) = pdata->bin.c_str();
 }
 
 static void
 el_get_utf8string(parser_data_t *pdata,
                   EbmlElement *el) {
-  strip(*pdata->bin);
-  *(static_cast<EbmlUnicodeString *>(el)) = cstrutf8_to_UTFstring(pdata->bin->c_str());
+  strip(pdata->bin);
+  *(static_cast<EbmlUnicodeString *>(el)) = cstrutf8_to_UTFstring(pdata->bin.c_str());
 }
 
 static void
@@ -96,14 +108,14 @@ el_get_time(parser_data_t *pdata,
             EbmlElement *el) {
   int64_t usec;
 
-  strip(*pdata->bin);
-  if (!parse_timecode(*pdata->bin, usec))
+  strip(pdata->bin);
+  if (!parse_timecode(pdata->bin, usec))
     xmlp_error(pdata,
                boost::format(Y("Expected a time in the following format: HH:MM:SS.nnn "
                                "(HH = hour, MM = minute, SS = second, nnn = millisecond up to nanosecond. "
                                "You may use up to nine digits for 'n' which would mean nanosecond precision). "
                                "You may omit the hour as well. Found '%1%' instead. Additional error message: %2%"))
-               % pdata->bin->c_str() % timecode_parser_error.c_str());
+               % pdata->bin.c_str() % timecode_parser_error.c_str());
 
   *(static_cast<EbmlUInteger *>(el)) = usec;
 }
@@ -116,37 +128,36 @@ el_get_binary(parser_data_t *pdata,
   int64_t length = 0;
   binary *buffer = NULL;
 
-  strip(*pdata->bin, true);
+  strip(pdata->bin, true);
 
-  if (pdata->bin->empty())
+  if (pdata->bin.empty())
     xmlp_error(pdata, Y("Found no encoded data nor '@file' to read binary data from."));
 
-  if ((*pdata->bin)[0] == '@') {
-    if (pdata->bin->length() == 1)
+  if (pdata->bin[0] == '@') {
+    if (pdata->bin.length() == 1)
       xmlp_error(pdata, Y("No filename found after the '@'."));
 
+    std::string file_name = pdata->bin.substr(1);
     try {
-      mm_file_io_c io(&(pdata->bin->c_str())[1]);
-      io.setFilePointer(0, seek_end);
-      length = io.getFilePointer();
-      io.setFilePointer(0, seek_beginning);
+      mm_file_io_c io(file_name);
+      length = io.get_size();
       if (0 >= length)
-        xmlp_error(pdata, boost::format(Y("The file '%1%' is empty.")) % pdata->bin->substr(1));
+        xmlp_error(pdata, boost::format(Y("The file '%1%' is empty.")) % file_name);
 
       buffer = new binary[length];
       io.read(buffer, length);
     } catch(...) {
-      xmlp_error(pdata, boost::format(Y("Could not open/read the file '%1%'.")) % pdata->bin->substr(1));
+      xmlp_error(pdata, boost::format(Y("Could not open/read the file '%1%'.")) % file_name);
     }
 
-  } else if ((pdata->format == NULL) || !strcasecmp(pdata->format, "base64")) {
-    buffer = new binary[pdata->bin->length() / 4 * 3 + 1];
-    length = base64_decode(*pdata->bin, static_cast<unsigned char *>(buffer));
+  } else if (pdata->format.empty() || (downcase(pdata->format) == "base64")) {
+    buffer = new binary[pdata->bin.length() / 4 * 3 + 1];
+    length = base64_decode(pdata->bin, static_cast<unsigned char *>(buffer));
     if (0 > length)
       xmlp_error(pdata, Y("Could not decode the Base64 encoded data - it seems to be malformed."));
 
-  } else if (!strcasecmp(pdata->format, "hex")) {
-    const char *p = pdata->bin->c_str();
+  } else if (downcase(pdata->format) ==  "hex") {
+    const char *p = pdata->bin.c_str();
     length        = 0;
 
     while (*p != 0) {
@@ -168,7 +179,7 @@ el_get_binary(parser_data_t *pdata,
       xmlp_error(pdata, Y("Too few hexadecimal digits found. The number of digits must be > 0 and divisable by 2."));
 
     buffer     = new binary[length / 2];
-    p          = pdata->bin->c_str();
+    p          = pdata->bin.c_str();
     bool upper = true;
     length     = 0;
     while (0 != *p) {
@@ -194,10 +205,10 @@ el_get_binary(parser_data_t *pdata,
       ++p;
     }
 
-  } else if (!strcasecmp(pdata->format, "ascii")) {
-    length = pdata->bin->length();
+  } else if (downcase(pdata->format) ==  "ascii") {
+    length = pdata->bin.length();
     buffer = new binary[length];
-    memcpy(buffer, pdata->bin->c_str(), pdata->bin->length());
+    memcpy(buffer, pdata->bin.c_str(), pdata->bin.length());
 
   } else
     xmlp_error(pdata, boost::format(Y("Invalid binary data format '%1%' specified. Supported are 'Base64', 'ASCII' and 'hex'.")) % pdata->format);
@@ -231,11 +242,8 @@ add_data(void *user_data,
     return;
   }
 
-  if (NULL == pdata->bin)
-    pdata->bin = new std::string;
-
   for (i = 0; i < len; i++)
-    (*pdata->bin) += s[i];
+    pdata->bin += s[i];
 }
 
 static void end_element(void *user_data, const char *name);
@@ -305,8 +313,8 @@ add_new_element(parser_data_t *pdata,
     m->PushElement(*e);
   }
 
-  pdata->parents->push_back(e);
-  pdata->parent_idxs->push_back(elt_idx);
+  pdata->parents.push_back(e);
+  pdata->parent_idxs.push_back(elt_idx);
 
   if (NULL != pdata->mapping[elt_idx].start_hook)
     pdata->mapping[elt_idx].start_hook(pdata);
@@ -331,7 +339,7 @@ start_element(void *user_data,
     parent_idx = 0;
 
   } else
-    parent_idx = (*pdata->parent_idxs)[pdata->parent_idxs->size() - 1];
+    parent_idx = pdata->parent_idxs.back();
 
   int elt_idx = find_element_index(pdata, name, parent_idx);
   if ((0 < pdata->skip_depth) || ((-1 != elt_idx) && (EBMLT_SKIP == pdata->mapping[elt_idx].type))) {
@@ -343,21 +351,18 @@ start_element(void *user_data,
     xmlp_error(pdata, boost::format(Y("<%1%> is not a valid child element of <%2%>.")) % name % xmlp_pname);
 
   pdata->data_allowed = false;
-  pdata->format       = NULL;
-
-  if (NULL != pdata->bin)
-    mxerror(Y("start_element: pdata->bin != NULL"));
+  pdata->format.clear();
 
   add_new_element(pdata, name, parent_idx);
 
-  parent_idx = (*pdata->parent_idxs)[pdata->parent_idxs->size() - 1];
+  parent_idx = pdata->parent_idxs.back();
 
   int i;
   for (i = 0; (atts[i] != NULL) && (atts[i + 1] != NULL); i += 2) {
     if (!strcasecmp(atts[i], "format"))
       pdata->format = atts[i + 1];
     else {
-      pdata->bin = new std::string(atts[i + 1]);
+      pdata->bin = std::string(atts[i + 1]);
       add_new_element(pdata, atts[i], parent_idx);
       end_element(pdata, atts[i]);
     }
@@ -373,9 +378,6 @@ end_element(void *user_data,
     pdata->skip_depth--;
     return;
   }
-
-  if (pdata->data_allowed && (NULL == pdata->bin))
-    pdata->bin = new std::string;
 
   if (1 == pdata->depth) {
     EbmlMaster *m = static_cast<EbmlMaster *>(xmlp_pelt);
@@ -421,15 +423,11 @@ end_element(void *user_data,
       pdata->mapping[elt_idx].end_hook(pdata);
   }
 
-  if (NULL != pdata->bin) {
-    delete pdata->bin;
-    pdata->bin = NULL;
-  }
-
+  pdata->bin.clear();
   pdata->data_allowed = false;
   pdata->depth--;
-  pdata->parents->pop_back();
-  pdata->parent_idxs->pop_back();
+  pdata->parents.pop_back();
+  pdata->parent_idxs.pop_back();
 }
 
 EbmlMaster *
@@ -438,17 +436,13 @@ parse_xml_elements(const char *parser_name,
                    mm_text_io_c *in) {
   XML_Parser parser    = XML_ParserCreate(NULL);
 
-  parser_data_t *pdata = (parser_data_t *)safemalloc(sizeof(parser_data_t));
-  memset(pdata, 0, sizeof(parser_data_t));
+  parser_data_cptr pdata(new parser_data_t);
   pdata->parser          = parser;
-  pdata->file_name       = in->get_file_name().c_str();
+  pdata->file_name       = in->get_file_name();
   pdata->parser_name     = parser_name;
   pdata->mapping         = mapping;
-  pdata->parents         = new std::vector<EbmlElement *>;
-  pdata->parent_idxs     = new std::vector<int>;
-  pdata->parse_error_msg = new std::string;
 
-  XML_SetUserData(parser, pdata);
+  XML_SetUserData(parser, pdata.get_object());
   XML_SetElementHandler(parser, start_element, end_element);
   XML_SetCharacterDataHandler(parser, add_data);
 
@@ -458,7 +452,7 @@ parse_xml_elements(const char *parser_name,
 
   try {
     if (setjmp(pdata->parse_error_jmp) == 1)
-      throw error_c(*pdata->parse_error_msg);
+      throw error_c(pdata->parse_error_msg);
 
     std::string buffer;
     bool done = !in->getline2(buffer);
@@ -487,10 +481,6 @@ parse_xml_elements(const char *parser_name,
 
   EbmlMaster *root_element = pdata->root_element;
   XML_ParserFree(parser);
-  delete pdata->parents;
-  delete pdata->parent_idxs;
-  delete pdata->parse_error_msg;
-  safefree(pdata);
 
   if (!error.empty()) {
     if (NULL != root_element)

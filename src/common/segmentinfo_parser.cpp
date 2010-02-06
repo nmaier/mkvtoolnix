@@ -35,8 +35,6 @@
 
 using namespace libmatroska;
 
-#define CPDATA (parser_data_t *)pdata
-
 static void
 end_segmentinfo_data(void *) {
 /* TODO verify that the FamilyUID is set
