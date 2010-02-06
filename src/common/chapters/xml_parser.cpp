@@ -13,7 +13,6 @@
 
 #include <expat.h>
 #include <ctype.h>
-#include <setjmp.h>
 #include <stdarg.h>
 
 #include <string>

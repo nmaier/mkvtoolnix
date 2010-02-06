@@ -16,9 +16,6 @@
 
 #include "common/os.h"
 
-#include <expat.h>
-#include <setjmp.h>
-
 #include <vector>
 
 #include "common/common.h"

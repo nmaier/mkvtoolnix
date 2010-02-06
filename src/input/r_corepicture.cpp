@@ -14,7 +14,6 @@
 #include "common/os.h"
 
 #include <algorithm>
-#include <expat.h>
 
 #include "common/endian.h"
 #include "common/matroska.h"

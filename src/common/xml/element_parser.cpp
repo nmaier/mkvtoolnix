@@ -43,8 +43,7 @@ parser_data_t::parser_data_t()
   , data_allowed(false)
   , root_element(NULL)
 {
-  memset(&parser,          0, sizeof(parser));
-  memset(&parse_error_jmp, 0, sizeof(parse_error_jmp));
+  memset(&parser, 0, sizeof(parser));
 }
 
 const char *
@@ -62,11 +61,11 @@ xmlp_parent_name(parser_data_t *pdata,
 void
 xmlp_error(parser_data_t *pdata,
            const std::string &message) {
-  pdata->parse_error_msg =
+  std::string error_message =
     (boost::format(Y("Error: %1% parser failed for '%2%', line %3%, column %4%: %5%\n"))
      % pdata->parser_name % pdata->file_name % XML_GetCurrentLineNumber(pdata->parser) % XML_GetCurrentColumnNumber(pdata->parser) % message).str();
 
-  longjmp(pdata->parse_error_jmp, 1);
+  throw error_c(error_message);
 }
 
 static void
@@ -451,9 +450,6 @@ parse_xml_elements(const char *parser_name,
   std::string error;
 
   try {
-    if (setjmp(pdata->parse_error_jmp) == 1)
-      throw error_c(pdata->parse_error_msg);
-
     std::string buffer;
     bool done = !in->getline2(buffer);
     while (!done) {
@@ -497,38 +493,20 @@ static void
 xml_parser_start_element_cb(void *user_data,
                             const char *name,
                             const char **atts) {
-  xml_parser_c *parser = static_cast<xml_parser_c *>(user_data);
-
-  try {
-    parser->start_element_cb(name, atts);
-  } catch (xml_parser_error_c &e) {
-    parser->throw_error(e);
-  }
+  static_cast<xml_parser_c *>(user_data)->start_element_cb(name, atts);
 }
 
 static void
 xml_parser_end_element_cb(void *user_data,
                           const char *name) {
-  xml_parser_c *parser = static_cast<xml_parser_c *>(user_data);
-
-  try {
-    parser->end_element_cb(name);
-  } catch (xml_parser_error_c &e) {
-    parser->throw_error(e);
-  }
+  static_cast<xml_parser_c *>(user_data)->end_element_cb(name);
 }
 
 static void
 xml_parser_add_data_cb(void *user_data,
                        const XML_Char *s,
                        int len) {
-  xml_parser_c *parser = static_cast<xml_parser_c *>(user_data);
-
-  try {
-    parser->add_data_cb(s, len);
-  } catch (xml_parser_error_c &e) {
-    parser->throw_error(e);
-  }
+  static_cast<xml_parser_c *>(user_data)->add_data_cb(s, len);
 }
 
 xml_parser_c::xml_parser_c(mm_text_io_c *xml_source)
@@ -575,9 +553,6 @@ xml_parser_c::parse_one_xml_line() {
   if (NULL == m_xml_parser)
     setup_xml_parser();
 
-  if (setjmp(m_parser_error_jmp_buf) == 1)
-    throw m_saved_parser_error;
-
   if (!m_xml_source->getline2(line))
     return false;
 
@@ -594,12 +569,6 @@ xml_parser_c::parse_one_xml_line() {
   }
 
   return true;
-}
-
-void
-xml_parser_c::throw_error(const xml_parser_error_c &error) {
-  m_saved_parser_error = error;
-  longjmp(m_parser_error_jmp_buf, 1);
 }
 
 void

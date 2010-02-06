@@ -17,7 +17,6 @@
 #include "common/os.h"
 
 #include <expat.h>
-#include <setjmp.h>
 #include <string>
 #include <vector>
 
@@ -58,8 +57,6 @@ public:
 
 class MTX_DLL_API xml_parser_c {
 private:
-  jmp_buf m_parser_error_jmp_buf;
-  xml_parser_error_c m_saved_parser_error;
   std::string m_xml_attribute_name, m_xml_attribute_value;
 
 protected:
@@ -92,8 +89,6 @@ public:
   virtual void parse_xml_file();
   virtual bool parse_one_xml_line();
 
-  virtual void throw_error(const xml_parser_error_c &error);
-
 private:
   void handle_xml_encoding(std::string &line);
 };
@@ -102,7 +97,7 @@ struct parser_data_t {
 public:
   XML_Parser parser;
 
-  std::string file_name, parser_name, parse_error_msg;
+  std::string file_name, parser_name;
   const parser_element_t *mapping;
 
   int depth, skip_depth;
@@ -114,9 +109,6 @@ public:
   std::vector<int> parent_idxs;
 
   EbmlMaster *root_element;
-
-  jmp_buf parse_error_jmp;
-
 public:
   parser_data_t();
 };
