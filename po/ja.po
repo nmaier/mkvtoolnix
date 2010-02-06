@@ -651,7 +651,7 @@ msgstr " (ピクセル)"
 msgid " (right eye)"
 msgstr " (右目)"
 
-#: src/common/xml/element_parser.cpp:476
+#: src/common/xml/element_parser.cpp:470
 msgid " Aborting.\n"
 msgstr " 中断します。\n"
 
@@ -695,7 +695,7 @@ msgstr " ビデオトラックにのみ適用されるオプション:\n"
 msgid " Other options:\n"
 msgstr " その他のオプション:\n"
 
-#: src/common/xml/element_parser.cpp:472
+#: src/common/xml/element_parser.cpp:466
 msgid " Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
 msgstr " &、<、>、\"のような特殊な文字は通常のHTMLにおける方法でエスケープされなければならないことに注意してください。:'&'は&amp;、'<'は&lt;、'>'は&gt;、'\"'は&quot;。"
 
@@ -1048,7 +1048,7 @@ msgstr "'%1%'の行はCHAPTERxxNAME=....ではありません。"
 msgid "'%1%' is not a valid %2% in '%3% %4%'.\n"
 msgstr "'%3% %4%'の'%1%'は正しい%2%ではありません。\n"
 
-#: src/common/chapters/xml_parser.cpp:125
+#: src/common/chapters/xml_parser.cpp:123
 msgid "'%1%' is not a valid ISO639-2 language code."
 msgstr "'%1%'は正しいISO639-2言語コードではありません。"
 
@@ -1060,7 +1060,7 @@ msgstr "'--append-mode %1%'の'%1%'は正しい引数ではありません。\n"
 msgid "'%1%' is not a valid block additional max in '--blockadd %2%'.\n"
 msgstr "'--blockadd %2%'の'%1%は正しいBlockAdditionの最大値ではありません。\n"
 
-#: src/common/chapters/xml_parser.cpp:135
+#: src/common/chapters/xml_parser.cpp:133
 msgid "'%1%' is not a valid ccTLD country code."
 msgstr "'%1%'は正しいccTLD国コードではありません。"
 
@@ -1392,7 +1392,7 @@ msgstr "(未知のエレメント: %1%; ID：0x%2% サイズ： %3%)"
 msgid "(new chapter file)"
 msgstr "（新しいチャプタファイル）"
 
-#: src/common/xml/element_parser.cpp:47
+#: src/common/xml/element_parser.cpp:59
 msgid "(none)"
 msgstr "（無し）"
 
@@ -1499,20 +1499,20 @@ msgstr "4バイト"
 msgid "<!-- Unknown element '%1%' -->\n"
 msgstr "<!-- 未知の要素'%1%' -->\n"
 
-#: src/common/xml/element_parser.cpp:263 src/common/xml/element_parser.cpp:280
-#: src/common/xml/element_parser.cpp:343
+#: src/common/xml/element_parser.cpp:271 src/common/xml/element_parser.cpp:288
+#: src/common/xml/element_parser.cpp:351
 msgid "<%1%> is not a valid child element of <%2%>."
 msgstr "<%1%>は正しい<%2%>の子要素ではありません。"
 
-#: src/common/chapters/xml_parser.cpp:88
+#: src/common/chapters/xml_parser.cpp:86
 msgid "<ChapterAtom> is missing the <ChapterTimeStart> child."
 msgstr "<ChapterAtom>には<ChapterTimeStart>子要素がありません。"
 
-#: src/common/chapters/xml_parser.cpp:110
+#: src/common/chapters/xml_parser.cpp:108
 msgid "<ChapterDisplay> is missing the <ChapterString> child."
 msgstr "<ChapterDisplay>には<ChapterString>子要素がありません。"
 
-#: src/common/chapters/xml_parser.cpp:102
+#: src/common/chapters/xml_parser.cpp:100
 msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr "<ChapterTrack>には<ChapterTrackNumber>子要素がありません。"
 
@@ -1818,11 +1818,11 @@ msgstr "アスペクト比の種類：%1%%2%"
 msgid "Aspect ratio:"
 msgstr "アスペクト比:"
 
-#: src/common/chapters/xml_parser.cpp:54
+#: src/common/chapters/xml_parser.cpp:52
 msgid "At least one <ChapterAtom> element is needed."
 msgstr "最低でも1つの<ChapterAtom>要素が必要です。"
 
-#: src/common/xml/element_parser.cpp:383
+#: src/common/xml/element_parser.cpp:385
 msgid "At least one <EditionEntry> element is needed."
 msgstr "最低でも1つの<EditionEntry>要素が必要です。"
 
@@ -2089,11 +2089,11 @@ msgstr "チャプタ名と言語"
 msgid "Chapter options"
 msgstr "チャプタオプション"
 
-#: src/common/chapters/xml_parser.cpp:78
+#: src/common/chapters/xml_parser.cpp:76
 msgid "Chapter parser: The ChapterUID %1% is not unique and could not be reused. A new one will be created.\n"
 msgstr "チャプタパーサー：チャプタUID %1%がユニークではなく、再使用されることもできません。新しいUIDが生成されます。\n"
 
-#: src/common/chapters/xml_parser.cpp:68
+#: src/common/chapters/xml_parser.cpp:66
 msgid "Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n"
 msgstr "チャプタパーサー：エディションUID %1%がユニークではなく、再使用されるこもできません。新しいUIDが生成されます。\n"
 
@@ -2369,7 +2369,7 @@ msgstr "ファイル%sを作成できませんでした。"
 msgid "Could not create the specified file."
 msgstr "指定されたファイルを作成できませんでした。"
 
-#: src/common/xml/element_parser.cpp:146
+#: src/common/xml/element_parser.cpp:157
 msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "Base64にエンコードされたデータをデコードすることができませんでした。恐らく不正な形式です。"
 
@@ -2436,7 +2436,7 @@ msgstr "ファイル'%1%'を開いて出力を書き込むことができませ�
 msgid "Could not open the timecode file '%1%' for writing (%2%).\n"
 msgstr "タイムコードファイル'%1%'を開いて書き込むことができませんでした（%2%）。\n"
 
-#: src/common/xml/element_parser.cpp:139
+#: src/common/xml/element_parser.cpp:150
 msgid "Could not open/read the file '%1%'."
 msgstr "ファイル'%1%'を開く・読み込むことができませんでした。"
 
@@ -2607,7 +2607,7 @@ msgstr "DTSヘッダに問題：ソースPCMの解像度が不正です\n"
 msgid "DTS_Header problem: not enough data to read header\n"
 msgstr "DTSヘッダに問題：十分なデータがなくヘッダを読み取ることができません\n"
 
-#: src/common/xml/element_parser.cpp:230
+#: src/common/xml/element_parser.cpp:241
 msgid "Data is not allowed inside <%1%>."
 msgstr "<%1%>内にデータの存在は許されません。"
 
@@ -2923,7 +2923,7 @@ msgstr "エラー："
 msgid "Error: "
 msgstr "エラー："
 
-#: src/common/xml/element_parser.cpp:54
+#: src/common/xml/element_parser.cpp:66
 msgid "Error: %1% parser failed for '%2%', line %3%, column %4%: %5%\n"
 msgstr "エラー：%1%パーサが'%2%'、%3%行目、%4%列目のために失敗しました：%5%\n"
 
@@ -2972,11 +2972,11 @@ msgstr "実行ファイル (*.exe)|*.exe|%s"
 msgid "Expand all entries so that their sub-entries will be shown"
 msgstr "全てのエントリを展開し、サブエントリを表示します"
 
-#: src/common/xml/element_parser.cpp:102
+#: src/common/xml/element_parser.cpp:114
 msgid "Expected a time in the following format: HH:MM:SS.nnn (HH = hour, MM = minute, SS = second, nnn = millisecond up to nanosecond. You may use up to nine digits for 'n' which would mean nanosecond precision). You may omit the hour as well. Found '%1%' instead. Additional error message: %2%"
 msgstr "時間は次のフォーマットで指定されなければなりません：HH:MM:SS.nnn（HH＝時間、MM＝分、SS＝秒、nnn＝ミリ秒からナノ秒です。'n'はナノ秒単位の精度を意味する9桁まで使用することができます）。同様に時間を省略することもできます。代わりに'%1%'が見つかりました。追加エラーメッセージ：%2%"
 
-#: src/common/xml/element_parser.cpp:69
+#: src/common/xml/element_parser.cpp:81
 msgid "Expected an unsigned integer but found '%1%'."
 msgstr "符号無しの整数が見つかるべきところですが、'%1%'が見つかりました。"
 
@@ -3212,7 +3212,7 @@ msgstr "タイムコードスケールの係数をこの値に強制設定しま
 msgid "Format specific options"
 msgstr "フォーマット詳細オプション"
 
-#: src/common/xml/element_parser.cpp:122
+#: src/common/xml/element_parser.cpp:134
 msgid "Found no encoded data nor '@file' to read binary data from."
 msgstr "エンコードされたデータもしくはバイナリデータを読み込むための'@file'が見つかりませんでした。"
 
@@ -3478,7 +3478,7 @@ msgstr "AVIのオーディオトラックのVorbisヘッダが不正です。"
 msgid "Invalid attachment ID/file name specification in argument '%1%'.\n"
 msgstr "引数'%1%'で指定されている添付ファイルID・ファイル名が不正です。.\n"
 
-#: src/common/xml/element_parser.cpp:203
+#: src/common/xml/element_parser.cpp:214
 msgid "Invalid binary data format '%1%' specified. Supported are 'Base64', 'ASCII' and 'hex'."
 msgstr "不正なバイナリデータフォーマット'%1%'が指定されました。サポートされているのは'Base64'、'ASCII'、'hex'です。"
 
@@ -3588,7 +3588,7 @@ msgstr "不正なフォーマットです：未知の文字'%1%'が見つかり�
 msgid "Invalid header length: %1% (total length: %2%, idx: %3%, dataidx: %4%)\n"
 msgstr "不正なヘッダ長です：%1%（全体の長さ：%2%、idx：%3%、dataidx：%4%）\n"
 
-#: src/common/xml/element_parser.cpp:162
+#: src/common/xml/element_parser.cpp:173
 msgid "Invalid hexadecimal data encountered: '%1%' is neither white space nor a hexadecimal number."
 msgstr "不正な16進数データに遭遇しました：'%1%'は空白でも16進数の数でもありません。"
 
@@ -4036,7 +4036,7 @@ msgstr "ファイル名が複数指定されました（'%1%'と'%2%'。）\n"
 msgid "More than one name was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
 msgstr "1つの添付ファイルに複数の名前が指定されました。'%1%'は破棄され代わりに'%2%'が使われます。\n"
 
-#: src/common/xml/element_parser.cpp:328
+#: src/common/xml/element_parser.cpp:336
 msgid "More than one root element found."
 msgstr "ルート要素が複数見つかりました。"
 
@@ -4185,7 +4185,7 @@ msgstr "ファイルがロードされていません"
 msgid "No file name given.\n"
 msgstr "ファイル名が指定されていません。\n"
 
-#: src/common/xml/element_parser.cpp:126
+#: src/common/xml/element_parser.cpp:138
 msgid "No filename found after the '@'."
 msgstr "'@'の後ろにファイル名が見つかりませんでした。"
 
@@ -4290,7 +4290,7 @@ msgstr "'%1% %2%'ではチャプタファイルを1つのみ指定すること�
 msgid "Only one input file is allowed.\n"
 msgstr "入力ファイルは1つのみ指定することができます。\n"
 
-#: src/common/xml/element_parser.cpp:290
+#: src/common/xml/element_parser.cpp:298
 msgid "Only one instance of <%1%> is allowed beneath <%2%>."
 msgstr "<%2%>の下には<%1%>は1度のみ許されます。"
 
@@ -4721,7 +4721,7 @@ msgstr ""
 msgid "Reload the current file without saving"
 msgstr "保存しないで現在のファイルをリロードします"
 
-#: src/common/xml/element_parser.cpp:602
+#: src/common/xml/element_parser.cpp:592
 msgid "Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
 msgstr " &、<、>、\"のような特殊な文字は通常のHTMLにおける方法でエスケープされなければならないことに注意してください。:'&'は&amp;、'<'は&lt;、'>'は&gt;、'\"'は&quot;。"
 
@@ -5466,15 +5466,15 @@ msgstr "添付ファイル#%1%、ID %2%、MIMEタイプ%3%、サイズ%4%は'%5%
 msgid "The attachment '%1%' could not be read.\n"
 msgstr "添付ファイル'%1%'を読み込むことができませんでした。\n"
 
-#: src/common/xml/element_parser.cpp:209
+#: src/common/xml/element_parser.cpp:220
 msgid "The binary data must be at least %1% bytes long."
 msgstr "そのバイナリデータは最低でも%1%バイトでなければなりません。"
 
-#: src/common/xml/element_parser.cpp:212
+#: src/common/xml/element_parser.cpp:223
 msgid "The binary data must be at most %1% bytes long."
 msgstr "そのバイナリデータは最高でも%1%バイトでなければなりません。"
 
-#: src/common/xml/element_parser.cpp:206
+#: src/common/xml/element_parser.cpp:217
 msgid "The binary data must be exactly %1% bytes long."
 msgstr "そのバイナリデータは%1%バイトちょうどでなければなりません。"
 
@@ -5640,7 +5640,7 @@ msgstr "ファイル%1%は未知のファイルタイプです。サポートさ
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "ファイル'%1%'はサポートされていないファイルタイプです（%2%）。\n"
 
-#: src/common/xml/element_parser.cpp:134
+#: src/common/xml/element_parser.cpp:145
 msgid "The file '%1%' is empty."
 msgstr "ファイル'%1%'は空です。"
 
@@ -5995,7 +5995,7 @@ msgstr "'%1%'においてこのプロパティの値は符号無し整数では�
 msgid "The reason is unknown."
 msgstr "理由はわかりません。"
 
-#: src/common/xml/element_parser.cpp:330
+#: src/common/xml/element_parser.cpp:338
 msgid "The root element must be <%1%>."
 msgstr "ルート要素は<%1%>でなければなりません。"
 
@@ -6348,7 +6348,7 @@ msgstr "タイトル：%1%"
 msgid "To all files"
 msgstr "全てのファイルに添付"
 
-#: src/common/xml/element_parser.cpp:168
+#: src/common/xml/element_parser.cpp:179
 msgid "Too few hexadecimal digits found. The number of digits must be > 0 and divisable by 2."
 msgstr "16進数の桁が足りません。桁数は0以上の偶数でなければなりません。"
 
@@ -6577,7 +6577,7 @@ msgstr "'%1%'は認識できないコマンドラインオプションです。\
 msgid "Unsigned integer"
 msgstr "符号無し整数"
 
-#: src/common/xml/element_parser.cpp:72
+#: src/common/xml/element_parser.cpp:84
 msgid "Unsigned integer (%1%) is too small. Mininum value is %2%."
 msgstr "符号無し整数（%1%）は小さすぎます。最小値は%2%です。"
 
@@ -7140,7 +7140,7 @@ msgstr "間違った識別文字列です：'%|1$6s|' != 'theora'"
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr "間違った識別文字列です：'%|1$7s|' != 'kate\\0\\0\\0'"
 
-#: src/common/xml/element_parser.cpp:469
+#: src/common/xml/element_parser.cpp:463
 msgid "XML parser error at line %1% of '%2%': %3%.%4%%5%"
 msgstr "'%2%'の%1%行目でXMLパーサエラーが発生しました：%3%。%4%%5%"
 
@@ -7299,7 +7299,7 @@ msgstr "bzip2圧縮が失敗しました。結果：%1%\n"
 msgid "bzlib_compressor_c::decompress() not implemented\n"
 msgstr "bzlib_compressor_c::decompress()は実装されていません\n"
 
-#: src/common/chapters/writer.cpp:198 src/common/chapters/xml_parser.cpp:146
+#: src/common/chapters/writer.cpp:198 src/common/chapters/xml_parser.cpp:144
 msgid "cet_index: '%1%' not found\n"
 msgstr "cet_index：'%1%'が見つかりませんでした\n"
 
@@ -8137,10 +8137,6 @@ msgstr "ssa_reader：ソースは正しいSSA/ASSファイルではありませ�
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
 msgstr "start >= m->ListSize()。これは発生するべきではありません。バグレポートを提出してください。ありがとうございます。"
 
-#: src/common/xml/element_parser.cpp:349
-msgid "start_element: pdata->bin != NULL"
-msgstr "start_element: pdata->bin != NULL"
-
 #: src/input/r_matroska.cpp:93
 msgid "subtitle"
 msgstr "字幕"
@@ -8296,3 +8292,6 @@ msgstr "はい"
 
 #~ msgid "Restart required"
 #~ msgstr "再起動が必要です"
+
+#~ msgid "start_element: pdata->bin != NULL"
+#~ msgstr "start_element: pdata->bin != NULL"

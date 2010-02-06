@@ -642,7 +642,7 @@ msgstr " (像素)"
 msgid " (right eye)"
 msgstr " (右视角)"
 
-#: src/common/xml/element_parser.cpp:476
+#: src/common/xml/element_parser.cpp:470
 msgid " Aborting.\n"
 msgstr " 异常中止。\n"
 
@@ -686,7 +686,7 @@ msgstr " 仅适用于视频轨的选项:\n"
 msgid " Other options:\n"
 msgstr " 其他选项:\n"
 
-#: src/common/xml/element_parser.cpp:472
+#: src/common/xml/element_parser.cpp:466
 msgid " Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
 msgstr " 记住像 &, <, > 和 \" 这样的专有符号必须以常用的 HTML 方式转义：&amp; 代表 '&'，&lt; 代表 '<'，&gt; 代表 '>' ， &quot; 代表 '\"'。"
 
@@ -1052,7 +1052,7 @@ msgstr "'%1%' 行的格式不是 CHAPTERxxNAME=... 。"
 msgid "'%1%' is not a valid %2% in '%3% %4%'.\n"
 msgstr "'%1%' 不是有效的 %2% 在  '%3% %4%' 中。\n"
 
-#: src/common/chapters/xml_parser.cpp:125
+#: src/common/chapters/xml_parser.cpp:123
 msgid "'%1%' is not a valid ISO639-2 language code."
 msgstr "'%1%' 不是有效的 ISO639-2 语言代码。"
 
@@ -1064,7 +1064,7 @@ msgstr "'%1%' 不是有效的追加模式，在 '--append-mode %1%' 中。\n"
 msgid "'%1%' is not a valid block additional max in '--blockadd %2%'.\n"
 msgstr "'%1%' 不是有效的附加块最大值，在 '--blockadd %2%'。\n"
 
-#: src/common/chapters/xml_parser.cpp:135
+#: src/common/chapters/xml_parser.cpp:133
 msgid "'%1%' is not a valid ccTLD country code."
 msgstr "'%1%' 不是有效的 ccTLD 国家代码。"
 
@@ -1408,7 +1408,7 @@ msgstr "(未知元素: %1%; ID: 0x%2% 尺寸: %3%)"
 msgid "(new chapter file)"
 msgstr "(新章节文件)"
 
-#: src/common/xml/element_parser.cpp:47
+#: src/common/xml/element_parser.cpp:59
 msgid "(none)"
 msgstr "(无)"
 
@@ -1517,21 +1517,21 @@ msgstr "4 字节"
 msgid "<!-- Unknown element '%1%' -->\n"
 msgstr "<!-- 未知元素 '%1%' -->\n"
 
-#: src/common/xml/element_parser.cpp:263
-#: src/common/xml/element_parser.cpp:280
-#: src/common/xml/element_parser.cpp:343
+#: src/common/xml/element_parser.cpp:271
+#: src/common/xml/element_parser.cpp:288
+#: src/common/xml/element_parser.cpp:351
 msgid "<%1%> is not a valid child element of <%2%>."
 msgstr "<%1%> 不是 <%2%> 的有效子元素。"
 
-#: src/common/chapters/xml_parser.cpp:88
+#: src/common/chapters/xml_parser.cpp:86
 msgid "<ChapterAtom> is missing the <ChapterTimeStart> child."
 msgstr "<ChapterAtom> 缺 <ChapterTimeStart> 子元素。"
 
-#: src/common/chapters/xml_parser.cpp:110
+#: src/common/chapters/xml_parser.cpp:108
 msgid "<ChapterDisplay> is missing the <ChapterString> child."
 msgstr "<ChapterDisplay> 缺 <ChapterString> 子元素。"
 
-#: src/common/chapters/xml_parser.cpp:102
+#: src/common/chapters/xml_parser.cpp:100
 msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr "<ChapterTrack> 缺 <ChapterTrackNumber> 子元素。"
 
@@ -1852,11 +1852,11 @@ msgstr "宽高比率类型: %1%%2%"
 msgid "Aspect ratio:"
 msgstr "宽高比:"
 
-#: src/common/chapters/xml_parser.cpp:54
+#: src/common/chapters/xml_parser.cpp:52
 msgid "At least one <ChapterAtom> element is needed."
 msgstr "至少需要一个 <ChapterAtom> 元素。"
 
-#: src/common/xml/element_parser.cpp:383
+#: src/common/xml/element_parser.cpp:385
 msgid "At least one <EditionEntry> element is needed."
 msgstr "至少需要一个 <EditionEntry> 元素。"
 
@@ -2133,11 +2133,11 @@ msgstr "章节名称与语言"
 msgid "Chapter options"
 msgstr "章节选项"
 
-#: src/common/chapters/xml_parser.cpp:78
+#: src/common/chapters/xml_parser.cpp:76
 msgid "Chapter parser: The ChapterUID %1% is not unique and could not be reused. A new one will be created.\n"
 msgstr "章节解析器: 章节 UID %1% 不唯一，不能重复使用。将创建一个新的。\n"
 
-#: src/common/chapters/xml_parser.cpp:68
+#: src/common/chapters/xml_parser.cpp:66
 msgid "Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n"
 msgstr "章节解析器: 版本 UID %1% 不唯一，不能重复使用。将创建一个新的。\n"
 
@@ -2426,7 +2426,7 @@ msgstr "无法创建文件 '%s'。"
 msgid "Could not create the specified file."
 msgstr "无法创建指定文件。"
 
-#: src/common/xml/element_parser.cpp:146
+#: src/common/xml/element_parser.cpp:157
 msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "无法解码以 Base64 编码的数据 - 似乎是畸形的。"
 
@@ -2496,7 +2496,7 @@ msgstr "无法打开文件 '%1%' 以控制输出。\n"
 msgid "Could not open the timecode file '%1%' for writing (%2%).\n"
 msgstr "无法打开时间码文件 '%1%' 以写入 (%2%)。\n"
 
-#: src/common/xml/element_parser.cpp:139
+#: src/common/xml/element_parser.cpp:150
 msgid "Could not open/read the file '%1%'."
 msgstr "无法打开/读取文件 '%1%'。"
 
@@ -2668,7 +2668,7 @@ msgstr "DTS_Header 问题: 无效的源 PCM 分辨率\n"
 msgid "DTS_Header problem: not enough data to read header\n"
 msgstr "DTS_Header 问题: 数据不足以读取头部\n"
 
-#: src/common/xml/element_parser.cpp:230
+#: src/common/xml/element_parser.cpp:241
 msgid "Data is not allowed inside <%1%>."
 msgstr "<%1%> 内部不允许有数据。"
 
@@ -2990,7 +2990,7 @@ msgstr "出错:"
 msgid "Error: "
 msgstr "出错: "
 
-#: src/common/xml/element_parser.cpp:54
+#: src/common/xml/element_parser.cpp:66
 msgid "Error: %1% parser failed for '%2%', line %3%, column %4%: %5%\n"
 msgstr "出错: %1% 解析器失败，对于 '%2%', 行 %3%, 列 %4%: %5%\n"
 
@@ -3041,11 +3041,11 @@ msgstr "可执行文件 (*.exe)|*.exe|%s"
 msgid "Expand all entries so that their sub-entries will be shown"
 msgstr "展开所有条目，这样它们的子条目都将被显示"
 
-#: src/common/xml/element_parser.cpp:102
+#: src/common/xml/element_parser.cpp:114
 msgid "Expected a time in the following format: HH:MM:SS.nnn (HH = hour, MM = minute, SS = second, nnn = millisecond up to nanosecond. You may use up to nine digits for 'n' which would mean nanosecond precision). You may omit the hour as well. Found '%1%' instead. Additional error message: %2%"
 msgstr "预期为如下格式的时间: HH:MM:SS.nnn (HH = 时, MM = 分, SS = 秒, nnn = 毫秒到毫微秒。您可以使用多达九位的 'n' 以精确到毫微秒)。也可以省略时数。但发现的为 '%1%'。其他错误信息: %2%"
 
-#: src/common/xml/element_parser.cpp:69
+#: src/common/xml/element_parser.cpp:81
 msgid "Expected an unsigned integer but found '%1%'."
 msgstr "预期为无符号整数，但发现了 '%1%'。"
 
@@ -3287,7 +3287,7 @@ msgstr "强制时间码缩放系数为 REPLACEME。您得用 1000 到 10000000 �
 msgid "Format specific options"
 msgstr "格式细节选项"
 
-#: src/common/xml/element_parser.cpp:122
+#: src/common/xml/element_parser.cpp:134
 msgid "Found no encoded data nor '@file' to read binary data from."
 msgstr "既没发现已编码数据，也没发现引用读取二进制数据的 '@file'。"
 
@@ -3563,7 +3563,7 @@ msgstr "有无效的 Vorbis 头，在 AVI 音频轨中。"
 msgid "Invalid attachment ID/file name specification in argument '%1%'.\n"
 msgstr "无效的附件 ID/文件名指定，在参数 '%1%' 中。\n"
 
-#: src/common/xml/element_parser.cpp:203
+#: src/common/xml/element_parser.cpp:214
 msgid "Invalid binary data format '%1%' specified. Supported are 'Base64', 'ASCII' and 'hex'."
 msgstr "指定了无效的二进制数据 '%1%'。仅支持 'Base64', 'ASCII' 与 'hex'。"
 
@@ -3673,7 +3673,7 @@ msgstr "格式无效: 发现未知字符 '%1%'"
 msgid "Invalid header length: %1% (total length: %2%, idx: %3%, dataidx: %4%)\n"
 msgstr "头长度无效: %1% (总长: %2%, 索引: %3%, 数据索引: %4%)\n"
 
-#: src/common/xml/element_parser.cpp:162
+#: src/common/xml/element_parser.cpp:173
 msgid "Invalid hexadecimal data encountered: '%1%' is neither white space nor a hexadecimal number."
 msgstr "遇到无效的十六进制数据: '%1%' 既不是空格也不是十六进制数。"
 
@@ -4132,7 +4132,7 @@ msgstr "给定了多个文件名 ('%1%' 与 '%2%')。\n"
 msgid "More than one name was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
 msgstr "单个附件被指定了多于一个名称。'%1%' 将被废弃，并用 '%2%' 代替。\n"
 
-#: src/common/xml/element_parser.cpp:328
+#: src/common/xml/element_parser.cpp:336
 msgid "More than one root element found."
 msgstr "根元素多于一个。"
 
@@ -4285,7 +4285,7 @@ msgstr "未载入文件"
 msgid "No file name given.\n"
 msgstr "未给定文件名。\n"
 
-#: src/common/xml/element_parser.cpp:126
+#: src/common/xml/element_parser.cpp:138
 msgid "No filename found after the '@'."
 msgstr "在 '@' 后未找到文件名。"
 
@@ -4393,7 +4393,7 @@ msgstr "仅允许有一个章节文件，在 '%1% %2%'。\n"
 msgid "Only one input file is allowed.\n"
 msgstr "仅允许有一个输入文件。\n"
 
-#: src/common/xml/element_parser.cpp:290
+#: src/common/xml/element_parser.cpp:298
 msgid "Only one instance of <%1%> is allowed beneath <%2%>."
 msgstr "<%2%> 下只允许使用一个 <%1%> 实例。"
 
@@ -4834,7 +4834,7 @@ msgstr "参考实质: %1%"
 msgid "Reload the current file without saving"
 msgstr "在不保存的情况下重新载入当前文件"
 
-#: src/common/xml/element_parser.cpp:602
+#: src/common/xml/element_parser.cpp:592
 msgid "Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
 msgstr "记住像 &, <, > 和 \" 这样的特殊字符必须以常用的 HTML 方式转义: &amp; 代表 '&', &lt; 代表 '<', &gt; 代表 '>', &quot; 代表 '\"'。"
 
@@ -5598,15 +5598,15 @@ msgstr "附件 #%1%, ID %2%, MIME 类型 %3%, 尺寸 %4%, 正被写入 '%5%'。\
 msgid "The attachment '%1%' could not be read.\n"
 msgstr "附件 '%1%' 不可读。\n"
 
-#: src/common/xml/element_parser.cpp:209
+#: src/common/xml/element_parser.cpp:220
 msgid "The binary data must be at least %1% bytes long."
 msgstr "此二进制数据最少 %1% 字节长。"
 
-#: src/common/xml/element_parser.cpp:212
+#: src/common/xml/element_parser.cpp:223
 msgid "The binary data must be at most %1% bytes long."
 msgstr "此二进制数据最多 %1% 字节长。"
 
-#: src/common/xml/element_parser.cpp:206
+#: src/common/xml/element_parser.cpp:217
 msgid "The binary data must be exactly %1% bytes long."
 msgstr "此二进制数据必须为 %1% 字节长。"
 
@@ -5781,7 +5781,7 @@ msgstr "文件 '%1%' 类型未知。请查看支持的文件类型 ('mkvmerge --
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "文件 '%1%' 类型不支持 (%2%)。\n"
 
-#: src/common/xml/element_parser.cpp:134
+#: src/common/xml/element_parser.cpp:145
 msgid "The file '%1%' is empty."
 msgstr "文件 '%1%' 为空。"
 
@@ -6151,7 +6151,7 @@ msgstr "'%1%' 中的属性值不是有效的无符号整数。%2%\n"
 msgid "The reason is unknown."
 msgstr "原因未知。"
 
-#: src/common/xml/element_parser.cpp:330
+#: src/common/xml/element_parser.cpp:338
 msgid "The root element must be <%1%>."
 msgstr "根元索必须为 <%1%>。"
 
@@ -6517,7 +6517,7 @@ msgstr "标题: %1%"
 msgid "To all files"
 msgstr "附加到所有的文件"
 
-#: src/common/xml/element_parser.cpp:168
+#: src/common/xml/element_parser.cpp:179
 msgid "Too few hexadecimal digits found. The number of digits must be > 0 and divisable by 2."
 msgstr "十六进制位数过少。位数必须 > 0 且能被 2 整除。"
 
@@ -6757,7 +6757,7 @@ msgstr "无法识别的命令行选项 '%1%'。\n"
 msgid "Unsigned integer"
 msgstr "无符号整数"
 
-#: src/common/xml/element_parser.cpp:72
+#: src/common/xml/element_parser.cpp:84
 msgid "Unsigned integer (%1%) is too small. Mininum value is %2%."
 msgstr "无符号整数 (%1%) 太小。最小值为 %2%。"
 
@@ -7369,7 +7369,7 @@ msgstr "错误的识别串: '%|1$6s|' != 'theora'"
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr "错误的识别串: '%|1$7s|' != 'kate\\0\\0\\0'"
 
-#: src/common/xml/element_parser.cpp:469
+#: src/common/xml/element_parser.cpp:463
 msgid "XML parser error at line %1% of '%2%': %3%.%4%%5%"
 msgstr "XML 解析器出错，于 '%2%' 的第 %1% 行: %3%。%4%%5%"
 
@@ -7533,7 +7533,7 @@ msgid "bzlib_compressor_c::decompress() not implemented\n"
 msgstr "bzlib_compressor_c::decompress() 未实现\n"
 
 #: src/common/chapters/writer.cpp:198
-#: src/common/chapters/xml_parser.cpp:146
+#: src/common/chapters/xml_parser.cpp:144
 msgid "cet_index: '%1%' not found\n"
 msgstr "cet_index: '%1%' 未找到\n"
 
@@ -8407,10 +8407,6 @@ msgstr "ssa_reader: 源非有效的 SSA/ASS 文件。"
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
 msgstr "start >= m->ListSize()。这不该发生。请提交错误报告。多谢。"
 
-#: src/common/xml/element_parser.cpp:349
-msgid "start_element: pdata->bin != NULL"
-msgstr "start_element: pdata->bin != NULL"
-
 #: src/input/r_matroska.cpp:93
 msgid "subtitle"
 msgstr "字幕"
@@ -8787,4 +8783,6 @@ msgstr "是"
 #~ msgstr "locale.cpp/to_utf8(): 无效的转换名号 %1% (数字: %2%)。\n"
 #~ msgid "mkvmerge GUI v%s ('%s')"
 #~ msgstr "mkvmerge GUI v%s ('%s')"
+#~ msgid "start_element: pdata->bin != NULL"
+#~ msgstr "start_element: pdata->bin != NULL"
 

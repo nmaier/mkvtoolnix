@@ -669,7 +669,7 @@ msgstr " (Pixel)"
 msgid " (right eye)"
 msgstr " (Rechtes Auge)"
 
-#: src/common/xml/element_parser.cpp:476
+#: src/common/xml/element_parser.cpp:470
 msgid " Aborting.\n"
 msgstr " Abbruch.\n"
 
@@ -713,7 +713,7 @@ msgstr " Optionen, die nur für Video-Tracks gelten:\n"
 msgid " Other options:\n"
 msgstr " Weitere Optionen:\n"
 
-#: src/common/xml/element_parser.cpp:472
+#: src/common/xml/element_parser.cpp:466
 msgid " Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
 msgstr " Bedenken Sie, dass Sonderzeichen wie &, <, > und \" in der für HTML üblichen Art geschrieben werden: &amp; für '&', &lt; für '<', &gt; für '>' und &quot; für '\"'."
 
@@ -1068,7 +1068,7 @@ msgstr "'%1%' ist keine Zeile nach dem Muster 'CHAPTERxxNAME=...'."
 msgid "'%1%' is not a valid %2% in '%3% %4%'.\n"
 msgstr "'%1%' ist kein gültiger %2% in '%3% %4%'.\n"
 
-#: src/common/chapters/xml_parser.cpp:125
+#: src/common/chapters/xml_parser.cpp:123
 msgid "'%1%' is not a valid ISO639-2 language code."
 msgstr "'%1%' ist kein gültiger ISO639-2-Sprach-Code."
 
@@ -1080,7 +1080,7 @@ msgstr "'%1%' ist keine gültiges Argument für '--append-mode %1%'.\n"
 msgid "'%1%' is not a valid block additional max in '--blockadd %2%'.\n"
 msgstr "'%1%' ist keine gültiges Argument '--blockadd %2%'.\n"
 
-#: src/common/chapters/xml_parser.cpp:135
+#: src/common/chapters/xml_parser.cpp:133
 msgid "'%1%' is not a valid ccTLD country code."
 msgstr "'%1%' ist kein gültiger ccTLD Ländercode."
 
@@ -1412,7 +1412,7 @@ msgstr "(Unbekanntes Element: %1%; ID: 0x%2% Größe: %3%)"
 msgid "(new chapter file)"
 msgstr "(neue Kapiteldatei)"
 
-#: src/common/xml/element_parser.cpp:47
+#: src/common/xml/element_parser.cpp:59
 msgid "(none)"
 msgstr "(keine)"
 
@@ -1518,20 +1518,20 @@ msgstr "4 Bytes"
 msgid "<!-- Unknown element '%1%' -->\n"
 msgstr "<!-- Unbekanntes Element '%1%' -->\n"
 
-#: src/common/xml/element_parser.cpp:263 src/common/xml/element_parser.cpp:280
-#: src/common/xml/element_parser.cpp:343
+#: src/common/xml/element_parser.cpp:271 src/common/xml/element_parser.cpp:288
+#: src/common/xml/element_parser.cpp:351
 msgid "<%1%> is not a valid child element of <%2%>."
 msgstr "<%1%> ist kein gültiges Unterelement von <%2%>."
 
-#: src/common/chapters/xml_parser.cpp:88
+#: src/common/chapters/xml_parser.cpp:86
 msgid "<ChapterAtom> is missing the <ChapterTimeStart> child."
 msgstr "Dem Element <ChapterAtom> fehlt das Unterelement <ChapterTimeStart>."
 
-#: src/common/chapters/xml_parser.cpp:110
+#: src/common/chapters/xml_parser.cpp:108
 msgid "<ChapterDisplay> is missing the <ChapterString> child."
 msgstr "Dem Element <ChapterDisplay> fehlt das Unterelement <ChapterString>."
 
-#: src/common/chapters/xml_parser.cpp:102
+#: src/common/chapters/xml_parser.cpp:100
 msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr "Dem Element <ChapterTrack> fehlt das Unterelement <ChapterTrackNumber>."
 
@@ -1849,11 +1849,11 @@ msgstr "Seitenverhältnistyp: %1%%2%"
 msgid "Aspect ratio:"
 msgstr "Seitenverhältnis:"
 
-#: src/common/chapters/xml_parser.cpp:54
+#: src/common/chapters/xml_parser.cpp:52
 msgid "At least one <ChapterAtom> element is needed."
 msgstr "Es wird mindestens ein <ChapterAtom>-Element benötigt."
 
-#: src/common/xml/element_parser.cpp:383
+#: src/common/xml/element_parser.cpp:385
 msgid "At least one <EditionEntry> element is needed."
 msgstr "Es wird mindestens ein <EditionEntry>-Element benötigt."
 
@@ -2116,11 +2116,11 @@ msgstr "Kapitelnamen und -sprachen"
 msgid "Chapter options"
 msgstr "Kapiteloptionen"
 
-#: src/common/chapters/xml_parser.cpp:78
+#: src/common/chapters/xml_parser.cpp:76
 msgid "Chapter parser: The ChapterUID %1% is not unique and could not be reused. A new one will be created.\n"
 msgstr "Kapitelparser: Die Kapitel-UID %1% ist nicht einmalig und kann nicht wiederbenutzt werden. Es wird statt dessen eine neue UID erzeugt.\n"
 
-#: src/common/chapters/xml_parser.cpp:68
+#: src/common/chapters/xml_parser.cpp:66
 msgid "Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n"
 msgstr "Kapitelparser: Die Edition-UID %1% ist nicht eindeutig und kann nicht wiederbenutzt werden. Eine neue UID wird erzeugt.\n"
 
@@ -2391,7 +2391,7 @@ msgstr "Die Datei '%s' konnte nicht erstellt werden."
 msgid "Could not create the specified file."
 msgstr "Die angegebene Datei konnte nicht erstellt werden. file."
 
-#: src/common/xml/element_parser.cpp:146
+#: src/common/xml/element_parser.cpp:157
 msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "Base64 kodierte Daten konnten nicht dekodiert werden - sie sind vermutlich falsch formatiert."
 
@@ -2458,7 +2458,7 @@ msgstr "Die Datei '%1%' konnte nicht für Umleitung der Ausgabe zum Schreiben ge
 msgid "Could not open the timecode file '%1%' for writing (%2%).\n"
 msgstr "Die Zeitstempeldatei '%1%' konnte nicht zum Schreiben geöffnet werden (%2%).\n"
 
-#: src/common/xml/element_parser.cpp:139
+#: src/common/xml/element_parser.cpp:150
 msgid "Could not open/read the file '%1%'."
 msgstr "Die Datei '%1%' konnte nicht geöffnet bzw. gelesen werden."
 
@@ -2627,7 +2627,7 @@ msgstr "DTS_Header-Problem: ungültige Quell-PCM-Bittiefe\n"
 msgid "DTS_Header problem: not enough data to read header\n"
 msgstr "DTS_Header-Problem: nicht genug Daten vorhanden, um Kopf zu lesen\n"
 
-#: src/common/xml/element_parser.cpp:230
+#: src/common/xml/element_parser.cpp:241
 msgid "Data is not allowed inside <%1%>."
 msgstr "Im Tag <%1%> sind keine Daten erlaubt."
 
@@ -2939,7 +2939,7 @@ msgstr "Fehler:"
 msgid "Error: "
 msgstr "Fehler: "
 
-#: src/common/xml/element_parser.cpp:54
+#: src/common/xml/element_parser.cpp:66
 msgid "Error: %1% parser failed for '%2%', line %3%, column %4%: %5%\n"
 msgstr "Fehler:: Der %1%-Parser schlug in '%2%', Zeile %3%, Spalte %4% fehl: %5%\n"
 
@@ -2988,11 +2988,11 @@ msgstr "Ausführbare Dateien (*.exe)|*.exe|%s"
 msgid "Expand all entries so that their sub-entries will be shown"
 msgstr "Alle Einträge ausklappen, sodass ihre Untereinträge angezeigt werden"
 
-#: src/common/xml/element_parser.cpp:102
+#: src/common/xml/element_parser.cpp:114
 msgid "Expected a time in the following format: HH:MM:SS.nnn (HH = hour, MM = minute, SS = second, nnn = millisecond up to nanosecond. You may use up to nine digits for 'n' which would mean nanosecond precision). You may omit the hour as well. Found '%1%' instead. Additional error message: %2%"
 msgstr "Es wurde ein Zeitstempel im folgenden Format erwartet: HH:MM:SS.nnn (HH = Stunden, MM = Minuten, SS = Sekunden, nnn = Millisekunden bis hin zu Nanosekunden. Sie können bis zu neun Ziffern für 'n' angeben, was einer Genauigkeit von einer Nanosekunde entspricht). Sie können die Stunden auch weglassen. Statt dessen wurde '%1%' gefunden. Zusätzliche Fehlermeldung: %2%"
 
-#: src/common/xml/element_parser.cpp:69
+#: src/common/xml/element_parser.cpp:81
 msgid "Expected an unsigned integer but found '%1%'."
 msgstr "Es wurde eine vorzeichenlose Zahl erwartet aber folgendes vorgefunden: '%1%'."
 
@@ -3226,7 +3226,7 @@ msgstr "Setzt den Zeitstempelskalierungsfaktor fest auf ERSETZMICH. Sie müssen 
 msgid "Format specific options"
 msgstr "Formatspezifische Optionen"
 
-#: src/common/xml/element_parser.cpp:122
+#: src/common/xml/element_parser.cpp:134
 msgid "Found no encoded data nor '@file' to read binary data from."
 msgstr "Es wurden weder enthaltene kodierte Binärdaten noch die Zeichenkette '@dateiname' gefunden, die eine Datei angegeben hätte, von der die Binärdaten gelesen werden sollen."
 
@@ -3490,7 +3490,7 @@ msgstr "Ungültige Vorbis-Kopfdaten in AVI Audio-Track."
 msgid "Invalid attachment ID/file name specification in argument '%1%'.\n"
 msgstr "Ungültige Angabe für Dateianhangs-ID und Dateiname in Argument '%1%'.\n"
 
-#: src/common/xml/element_parser.cpp:203
+#: src/common/xml/element_parser.cpp:214
 msgid "Invalid binary data format '%1%' specified. Supported are 'Base64', 'ASCII' and 'hex'."
 msgstr "Ungültiges Format für Binärdaten '%1%' angegeben. Unterstützt werden 'Base64', 'ASCII' und 'hex'."
 
@@ -3600,7 +3600,7 @@ msgstr "Ungültiges FOrmat: unbekanntes Zeichen '%1%' gefunden"
 msgid "Invalid header length: %1% (total length: %2%, idx: %3%, dataidx: %4%)\n"
 msgstr "Ungültige Kopflänge: %1% (Gesamtlänge: %2%, Index: %3%, Datenindex: %4%)\n"
 
-#: src/common/xml/element_parser.cpp:162
+#: src/common/xml/element_parser.cpp:173
 msgid "Invalid hexadecimal data encountered: '%1%' is neither white space nor a hexadecimal number."
 msgstr "Ungültige Hexadeximaldaten gefunden: '%1%' ist weder Whitespace noch eine hexadezimale Ziffer."
 
@@ -4048,7 +4048,7 @@ msgstr "Es wurde mehr als ein Dateinamen angegeben ('%1%' und '%2%').\n"
 msgid "More than one name was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
 msgstr "Für einen Dateianhang wurde mehr als ein Name angegeben. '%1%' wird ignoriert und statt dessen '%2%' benutzt.\n"
 
-#: src/common/xml/element_parser.cpp:328
+#: src/common/xml/element_parser.cpp:336
 msgid "More than one root element found."
 msgstr "Es wurde mehr als ein Wurzelelement gefunden."
 
@@ -4197,7 +4197,7 @@ msgstr "Keine Datei geladen"
 msgid "No file name given.\n"
 msgstr "Es wurde kein Dateiname angegeben.\n"
 
-#: src/common/xml/element_parser.cpp:126
+#: src/common/xml/element_parser.cpp:138
 msgid "No filename found after the '@'."
 msgstr "Nach dem '@' wurde kein Dateiname angegeben."
 
@@ -4302,7 +4302,7 @@ msgstr "Es darf nur eine Kapiteldatei angegeben werden (Argument war '%1% %2%').
 msgid "Only one input file is allowed.\n"
 msgstr "Es darf nur eine Quelldatei angegeben werden.\n"
 
-#: src/common/xml/element_parser.cpp:290
+#: src/common/xml/element_parser.cpp:298
 msgid "Only one instance of <%1%> is allowed beneath <%2%>."
 msgstr "Unterhalb von <%2%> darf es nur eine Instanz von <%1%> geben."
 
@@ -4732,7 +4732,7 @@ msgstr "Referenz virtuell: %1%"
 msgid "Reload the current file without saving"
 msgstr "Die aktuelle Datei neu laden, ohne zu speichern"
 
-#: src/common/xml/element_parser.cpp:602
+#: src/common/xml/element_parser.cpp:592
 msgid "Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
 msgstr "Beachten Sie, dass Sonderzeichen wie &, <, > und \" in der für HTML üblichen Weise angegeben werden müssen: &amp; für '&', &lt; für '<', &gt; für '>' und &quot; für '\"'."
 
@@ -5483,15 +5483,15 @@ msgstr "Der Dateianhang #%1%, ID %2%, MIME-Typ %3%, Größe %4%, wird in die Dat
 msgid "The attachment '%1%' could not be read.\n"
 msgstr "Der Dateianhang '%1%' konnte nicht gelesen werden.\n"
 
-#: src/common/xml/element_parser.cpp:209
+#: src/common/xml/element_parser.cpp:220
 msgid "The binary data must be at least %1% bytes long."
 msgstr "Die Binärdaten müssen mindestens %1% Bytes lang sein."
 
-#: src/common/xml/element_parser.cpp:212
+#: src/common/xml/element_parser.cpp:223
 msgid "The binary data must be at most %1% bytes long."
 msgstr "Die Binärdaten dürfen höchstens %1% Bytes lang sein."
 
-#: src/common/xml/element_parser.cpp:206
+#: src/common/xml/element_parser.cpp:217
 msgid "The binary data must be exactly %1% bytes long."
 msgstr "Die Binärdaten müssen genau %1% Bytes lang sein."
 
@@ -5660,7 +5660,7 @@ msgstr "Die Datei '%1%' hat einen unbekannten Typ. Schauen Sie sich bitte die Li
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "Die Datei '%1%' hat einen nicht unterstützten Typ (%2%).\n"
 
-#: src/common/xml/element_parser.cpp:134
+#: src/common/xml/element_parser.cpp:145
 msgid "The file '%1%' is empty."
 msgstr "Die Datei '%1%' ist leer."
 
@@ -6030,7 +6030,7 @@ msgstr "Der Merkmalswert ist keine gültige vorzeichenlose Zahl bei '%1%'. %2%\n
 msgid "The reason is unknown."
 msgstr "Der Grund ist nicht bekannt."
 
-#: src/common/xml/element_parser.cpp:330
+#: src/common/xml/element_parser.cpp:338
 msgid "The root element must be <%1%>."
 msgstr "Das Wurzelelement muss <%1%> sein."
 
@@ -6390,7 +6390,7 @@ msgstr "Titel: %1%"
 msgid "To all files"
 msgstr "An alle Dateien"
 
-#: src/common/xml/element_parser.cpp:168
+#: src/common/xml/element_parser.cpp:179
 msgid "Too few hexadecimal digits found. The number of digits must be > 0 and divisable by 2."
 msgstr "Zu wenige Hexadezimalziffern gefunden. Die Anzahl der Ziffern muss größer als Null und durch zwei teilbar sein."
 
@@ -6619,7 +6619,7 @@ msgstr "Unbekannte Kommandozeilenoption '%1%'.\n"
 msgid "Unsigned integer"
 msgstr "Vorzeichenlose ganze Zahl"
 
-#: src/common/xml/element_parser.cpp:72
+#: src/common/xml/element_parser.cpp:84
 msgid "Unsigned integer (%1%) is too small. Mininum value is %2%."
 msgstr "Die Vorzeichenlose Zahl (%1%) ist zu klein. Der erwartete Minimalwert ist %2%."
 
@@ -7203,7 +7203,7 @@ msgstr "Falsche Identifikationskennung: '%|1$6s|' != 'theora'"
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
 msgstr "Falsche Identifikationskennung: '%|1$7s|' != 'kate\\0\\0\\0'"
 
-#: src/common/xml/element_parser.cpp:469
+#: src/common/xml/element_parser.cpp:463
 msgid "XML parser error at line %1% of '%2%': %3%.%4%%5%"
 msgstr "XML-Parserfehler in Zeile %1% in Datei '%2%': %3%.%4%%5%"
 
@@ -7363,7 +7363,7 @@ msgstr "bzip2-Komprimierung schlug fehl. Fehlercode: %1%\n"
 msgid "bzlib_compressor_c::decompress() not implemented\n"
 msgstr "bzlib_compressor_c::decompress() ist noch nicht implementiert\n"
 
-#: src/common/chapters/writer.cpp:198 src/common/chapters/xml_parser.cpp:146
+#: src/common/chapters/writer.cpp:198 src/common/chapters/xml_parser.cpp:144
 msgid "cet_index: '%1%' not found\n"
 msgstr "cet_index: '%1%' nicht gefunden\n"
 
@@ -8197,10 +8197,6 @@ msgstr "ssa_reader: Die Quelldatei ist keine gültige SSA/ASS-Datei."
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
 msgstr "start >= m->ListSize(). Hätte nicht passieren sollen. Bitte erstellen Sie einen Fehlerbericht. Danke."
 
-#: src/common/xml/element_parser.cpp:349
-msgid "start_element: pdata->bin != NULL"
-msgstr "start_element: pdata->bin != NULL"
-
 #: src/input/r_matroska.cpp:93
 msgid "subtitle"
 msgstr "Untertitel"
@@ -8660,3 +8656,6 @@ msgstr "ja"
 
 #~ msgid "mkvmerge GUI v%s ('%s')"
 #~ msgstr "mkvmerge GUI v%s ('%s')"
+
+#~ msgid "start_element: pdata->bin != NULL"
+#~ msgstr "start_element: pdata->bin != NULL"
