@@ -45,7 +45,7 @@ avc_es_reader_c::probe_file(mm_io_c *io,
     if (PROBESIZE > size)
       return 0;
 
-    memory_cptr buf(new memory_c((unsigned char *)safemalloc(READ_SIZE), READ_SIZE));
+    memory_cptr buf = memory_c::alloc(READ_SIZE);
     int num_read, i;
     bool first = true;
 
@@ -82,11 +82,11 @@ avc_es_reader_c::probe_file(mm_io_c *io,
 }
 
 avc_es_reader_c::avc_es_reader_c(track_info_c &n_ti)
-  throw (error_c):
-  generic_reader_c(n_ti),
-  m_bytes_processed(0),
-  m_buffer(new memory_c((unsigned char *)safemalloc(READ_SIZE), READ_SIZE)) {
-
+  throw (error_c)
+  : generic_reader_c(n_ti)
+  , m_bytes_processed(0)
+  , m_buffer(memory_c::alloc(READ_SIZE))
+{
   try {
     m_io   = counted_ptr<mm_io_c>(new mm_file_io_c(ti.fname));
     m_size = m_io->get_size();
