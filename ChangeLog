@@ -1,5 +1,8 @@
 2010-02-06  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Outputting error messages about invalid XML
+	files will not cause mkvmerge to crash on Windows anymore.
+
 	* mmg: enhancement: Added an input field for the segment info XML
 	file (mkvmerge's "--segmentinfo" option) on the "global" tab.
 
