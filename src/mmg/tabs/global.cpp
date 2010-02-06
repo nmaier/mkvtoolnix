@@ -34,7 +34,7 @@ tab_global::tab_global(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400), wxTAB_TRAVERSAL) {
   wxStaticBoxSizer *siz_fs_title, *siz_split, *siz_linking_box, *siz_chapters;
   wxStaticBoxSizer *siz_gl_tags;
-  wxFlexGridSizer *siz_linking, *siz_chap_l1_l2;
+  wxFlexGridSizer *siz_linking, *siz_chap_l1_l2, *siz_fg;
   wxBoxSizer *siz_all, *siz_line, *siz_line2;
   wxBoxSizer *siz_chap_l1, *siz_chap_l2, *siz_chap_l3, *siz_col;
   uint32_t i;
@@ -175,17 +175,28 @@ tab_global::tab_global(wxWindow *parent):
   siz_chap_l3->Add(tc_cue_name_format, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
   siz_chapters->Add(siz_chap_l3, 0, wxTOP, 2);
 
-  sb_global_tags = new wxStaticBox(this,  -1, wxEmptyString);
-  st_tag_file    = new wxStaticText(this, -1, wxEmptyString);
-  siz_gl_tags    = new wxStaticBoxSizer(sb_global_tags, wxHORIZONTAL);
-  siz_gl_tags->Add(st_tag_file, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
+  st_tag_file             = new wxStaticText(this, -1, wxEmptyString);
+  tc_global_tags          = new wxTextCtrl(this, ID_TC_GLOBALTAGS, wxEmptyString);
+  b_browse_global_tags    = new wxButton(this, ID_B_BROWSEGLOBALTAGS);
 
-  tc_global_tags = new wxTextCtrl(this, ID_TC_GLOBALTAGS, wxEmptyString);
-  siz_gl_tags->AddSpacer(5);
-  siz_gl_tags->Add(tc_global_tags, 1, wxALIGN_CENTER_VERTICAL | wxGROW | wxTOP | wxBOTTOM, 2);
-  siz_gl_tags->AddSpacer(5);
-  b_browse_global_tags = new wxButton(this, ID_B_BROWSEGLOBALTAGS);
-  siz_gl_tags->Add(b_browse_global_tags, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
+  st_segmentinfo_file     = new wxStaticText(this, -1, wxEmptyString);
+  tc_segmentinfo          = new wxTextCtrl(this, ID_TC_SEGMENTINFO, wxEmptyString);
+  b_browse_segmentinfo    = new wxButton(this, ID_B_BROWSESEGMENTINFO);
+
+  sb_other_global_options = new wxStaticBox(this,  -1, wxEmptyString);
+
+  siz_fg = new wxFlexGridSizer(3, 2);
+  siz_fg->AddGrowableCol(1);
+
+  siz_fg->Add(st_tag_file,          0, wxALIGN_CENTER_VERTICAL | wxLEFT,           5);
+  siz_fg->Add(tc_global_tags,       1, wxALIGN_CENTER_VERTICAL | wxLEFT | wxGROW,  5);
+  siz_fg->Add(b_browse_global_tags, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
+  siz_fg->Add(st_segmentinfo_file,  0, wxALIGN_CENTER_VERTICAL | wxLEFT,           5);
+  siz_fg->Add(tc_segmentinfo,       1, wxALIGN_CENTER_VERTICAL | wxLEFT | wxGROW,  5);
+  siz_fg->Add(b_browse_segmentinfo, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
+
+  siz_gl_tags = new wxStaticBoxSizer(sb_other_global_options, wxHORIZONTAL);
+  siz_gl_tags->Add(siz_fg, 1, wxTOP | wxBOTTOM, 2);
 
   siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->Add(siz_fs_title,    0, wxGROW | wxALL,                       5);
@@ -262,11 +273,15 @@ tab_global::translate_ui() {
                                      "PERFORMER, the sequence '%t' by the track's TITLE, '%n' by the track's number and '%N' by the track's number "
                                      "padded with a leading 0 for track numbers < 10. "
                                      "The rest is copied as is. If nothing is entered then '%p - %t' will be used."));
-  sb_global_tags->SetLabel(Z("Global tags"));
+  sb_other_global_options->SetLabel(Z("Other global options"));
   st_tag_file->SetLabel(Z("Tag file:"));
   b_browse_global_tags->SetLabel(Z("Browse"));
-  b_browse_global_tags->SetToolTip(TIP("The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. "
-                                       "In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."));
+  tc_global_tags->SetToolTip(TIP("The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. "
+                                 "In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."));
+  st_segmentinfo_file->SetLabel(Z("Segment info file:"));
+  b_browse_segmentinfo->SetLabel(Z("Browse"));
+  tc_segmentinfo->SetToolTip(TIP("The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. "
+                                 "In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."));
 }
 
 void
@@ -277,6 +292,16 @@ tab_global::on_browse_global_tags(wxCommandEvent &evt) {
 
   last_open_dir = dlg.GetDirectory();
   tc_global_tags->SetValue(dlg.GetPath());
+}
+
+void
+tab_global::on_browse_segmentinfo(wxCommandEvent &evt) {
+  wxFileDialog dlg(NULL, Z("Choose the segment info file"), last_open_dir, wxEmptyString, wxString::Format(Z("Segment info files (*.xml)|*.xml|%s"), ALLFILES.c_str()), wxFD_OPEN);
+  if(dlg.ShowModal() != wxID_OK)
+    return;
+
+  last_open_dir = dlg.GetDirectory();
+  tc_segmentinfo->SetValue(dlg.GetPath());
 }
 
 void
@@ -429,6 +454,8 @@ tab_global::load(wxConfigBase *cfg,
 
   cfg->Read(wxT("global_tags"), &s);
   tc_global_tags->SetValue(s);
+  cfg->Read(wxT("segmentinfo"), &s);
+  tc_segmentinfo->SetValue(s);
 
   cfg->Read(wxT("title_was_present"), &title_was_present, false);
 }
@@ -461,6 +488,7 @@ tab_global::save(wxConfigBase *cfg) {
   cfg->Write(wxT("cue_name_format"), tc_cue_name_format->GetValue());
 
   cfg->Write(wxT("global_tags"), tc_global_tags->GetValue());
+  cfg->Write(wxT("segmentinfo"), tc_segmentinfo->GetValue());
 
   cfg->Write(wxT("title_was_present"), title_was_present);
 }
@@ -562,6 +590,7 @@ tab_global::validate_settings() {
 IMPLEMENT_CLASS(tab_global, wxPanel);
 BEGIN_EVENT_TABLE(tab_global, wxPanel)
   EVT_BUTTON(ID_B_BROWSEGLOBALTAGS,          tab_global::on_browse_global_tags)
+  EVT_BUTTON(ID_B_BROWSESEGMENTINFO,         tab_global::on_browse_segmentinfo)
   EVT_BUTTON(ID_B_BROWSECHAPTERS,            tab_global::on_browse_chapters)
   EVT_CHECKBOX(ID_CB_SPLIT,                  tab_global::on_split_clicked)
   EVT_RADIOBUTTON(ID_RB_SPLITBYSIZE,         tab_global::on_splitby_size_clicked)
