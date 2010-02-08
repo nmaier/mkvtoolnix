@@ -173,6 +173,21 @@ $ mkvpropedit movie\&.mkv \-\-edit info \-\-set "title=The movie" \-\-edit track
 .if n \{\
 .RE
 .\}
+.PP
+The second example removes the \'default track flag\' from the first subtitle track and sets it for the second one\&. Note that
+\fBmkvpropedit\fR(1), unlike
+\fBmkvmerge\fR(1), does not set the \'default track flag\' of other flags to \'0\' if it is set to \'1\' for a different track automatically\&.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-edit tracks:s1 \-\-set flag\-default=0 \-\-edit tracks:s2 \-\-set flag\-default=1
+  
+.fi
+.if n \{\
+.RE
+.\}
 .SH "返り値"
 .PP
 
