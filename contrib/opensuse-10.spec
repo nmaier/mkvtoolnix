@@ -70,6 +70,11 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/man/ja/man1/mkvmerge.1.gz
 /usr/share/man/ja/man1/mkvmerge-gui.1.gz
 /usr/share/man/ja/man1/mkvpropedit.1.gz
+/usr/share/man/zh_CN/man1/mkvextract.1.gz
+/usr/share/man/zh_CN/man1/mkvinfo.1.gz
+/usr/share/man/zh_CN/man1/mkvmerge.1.gz
+/usr/share/man/zh_CN/man1/mkvmerge-gui.1.gz
+/usr/share/man/zh_CN/man1/mkvpropedit.1.gz
 /usr/share/mkvtoolnix/*
 /usr/share/locale/de/LC_MESSAGES/mkvtoolnix.mo
 /usr/share/locale/ja/LC_MESSAGES/mkvtoolnix.mo
