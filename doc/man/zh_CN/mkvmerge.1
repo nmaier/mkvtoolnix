@@ -1,0 +1,2279 @@
+'\" t
+.\"     Title: mkvmerge
+.\"    Author: Moritz Bunkus <moritz@bunkus.org>
+.\" Generator: DocBook XSL Stylesheets v1.75.1 <http://docbook.sf.net/>
+.\"      Date: January 2010
+.\"    Manual: 用户命令
+.\"    Source: MkvToolNix 3.1.0
+.\"  Language: Chinese
+.\"
+.TH "MKVMERGE" "1" "January 2010" "MkvToolNix 3\&.1\&.0" "用户命令"
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "名称"
+mkvmerge \- 将多媒体流合并到 Matroska(TM) 文件中
+.SH "概要"
+.HP \w'\fBmkvmerge\fR\ 'u
+\fBmkvmerge\fR [全局选项] {\-o\ 输出文件} [选项1] {文件1} [[选项2]\ {文件2}] [@选项文件]
+.SH "说明"
+.PP
+本程序可读取多种媒体文件并将它们的数据流（全部或者按选择）合并到
+Matroska(TM)
+文件中去；参见
+\m[blue]\fBMatroska(TM) 网站\fR\m[]\&\s-2\u[1]\d\s+2。
+.PP
+全局选项:
+.PP
+\fB\-v\fR, \fB\-\-verbose\fR
+.RS 4
+增强\(lq详细\(rq程度。
+.RE
+.PP
+\fB\-q\fR, \fB\-\-quiet\fR
+.RS 4
+取消状态输出。
+.RE
+.PP
+\fB\-o\fR, \fB\-\-out\fR \fI文件名\fR
+.RS 4
+写至文件
+\fI文件名\fR。如果使用了切割功能，对此参数的处理将有所不同。 详情请参阅关于
+\fB\-\-split\fR
+选项的说明。
+.RE
+.PP
+\fB\-\-title\fR \fI标题\fR
+.RS 4
+设置整个生成文件的标题，比如电影名称。
+.RE
+.PP
+\fB\-\-tags\fR \fI文件名\fR
+.RS 4
+从
+XML
+文件
+\fI文件名\fR
+中读取全局标签。详细情况请参阅下文关于标签的段落。
+.RE
+.PP
+\fB\-\-default\-language\fR \fI语言代码\fR
+.RS 4
+设置默认语言代码。所有轨道将使用此语言码，除非被用
+\fB\-\-language\fR
+选项覆盖。默认的语言代码是 \'und\' 代表 \'undefined\'（未定）。
+.RE
+.PP
+剪辑信息处理: (全局选项)
+.PP
+\fB\-\-segmentinfo\fR \fI文件名\&.xml\fR
+.RS 4
+从
+XML
+文件中读取剪辑信息。此文件可能包含剪辑家族的
+UID、剪辑的
+UID、上一剪辑以及下一剪辑的
+UID
+元素。示例文件以及
+DTD
+已包含在 MkvToolNix 分发包中。
+.RE
+.PP
+\fB\-\-segment\-uid\fR \fISID1,SID2,\&.\&.\&.\fR
+.RS 4
+设定要使用的剪辑 UID。这是个逗号分割的 128 位 UID 列表，UID 为通常的格式: 十六进制数字，"0x" 前缀可选，空格可选，但必须恰好有 32 个数位。
+.sp
+创建的每个文件都包含一个剪辑，每个剪辑有一个剪辑 UID。如果指定的剪辑 UID 比创建的剪辑多，则多余的 UID 将被忽略。如果指定的 UID 比创建的剪辑少，则将随机创建 UID。
+.RE
+.PP
+章节与标签处理: (全局选项)
+.PP
+\fB\-\-chapter\-language\fR \fI语言代码\fR
+.RS 4
+设置各章节项的 ISO639\-2 语言代码。 默认为 \'eng\'。 详情参见下文中关于
+章节
+的段落。
+.sp
+此选项可用于简单章节文件与包含章节但不含章节语言信息的源文件，如 MP4 与 OGM 文件。
+.RE
+.PP
+\fB\-\-chapter\-charset\fR \fI字符集\fR
+.RS 4
+设置简单章节文件所用的字符集，用以转为 UTF\-8。关于
+\fBmkvmerge\fR(1)
+如何在字符集之间转换的说明请参见关于
+文本文件与字符集
+的段落。
+.sp
+此开关亦可应用到从特定容器类型，如 Ogg/OGM 和 MP4 文件中复制而来的章节。 详情参见下文关于章节的段落。
+.RE
+.PP
+\fB\-\-cue\-chapter\-name\-format\fR \fI格式\fR
+.RS 4
+
+\fBmkvmerge\fR(1)
+支持读取音频文件的
+CUE
+表单作为章节输入。CUE
+表单中各索引项通常含有
+\fIPERFORMER（表演者）\fR
+与
+\fITITLE（标题）\fR
+项。\fBmkvmerge\fR(1)
+使用这两个字串构建章节名称。使用此选项可设定构建名称所用的格式。
+.sp
+如果此选项未给定则
+\fBmkvmerge\fR(1)
+默认使用 \'%p \- %t\' 格式 (表演者, 后接空格, 一个破折号, 另一个空格以及标题)。
+.sp
+如果给定了格式，则除了后续的标签字符以外都将被原样复制，标签字符将被进行下述替换:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fI%p\fR
+被当前项的
+\fIPERFORMER（表演者）\fR
+字符串替代,
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fI%t\fR
+被当前项的
+\fITITLE（标题）\fR
+字符串替代,
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fI%n\fR
+被当前轨道编号替代，此外
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\fI%N\fR
+被当前轨道衬式编号（小于 10 则在前面加零）替代。
+.RE
+.RE
+.PP
+\fB\-\-chapters\fR \fI文件名\fR
+.RS 4
+从文件
+\fI文件名\fR
+读取章节信息。详情参阅下文关于
+章节
+的段落。
+.RE
+.PP
+\fB\-\-global\-tags\fR \fI文件名\fR
+.RS 4
+从文件
+\fI文件名\fR
+读取全局标签。详情参阅下文关于
+标签
+的段落。
+.RE
+.PP
+全局输出控制 (高级全局选项):
+.PP
+\fB\-\-track\-order\fR \fIFID1:TID1,FID2:TID2,\&.\&.\&.\fR
+.RS 4
+此选项更改输入文件创建时轨道的顺序。变量为逗号分隔的成对的 ID 列。每对先包含有文件 ID (\fIFID1\fR)，即文件在命令行中的顺序，由 0 开始计数。第二个是在该文件中的轨道 ID (\fITID1\fR)。 如果省去部分轨道的 ID，则这些轨道将在使用本选项给定的轨道创建之后创建。
+.RE
+.PP
+\fB\-\-cluster\-length\fR \fI指令\fR
+.RS 4
+限制每个簇中数据块的数量或数据的时长。\fI指令\fR
+参数可以是无单位的数字
+\fIn\fR，也可以是后缀有 \'ms\' 的
+\fId\fR。
+.sp
+如果未使用数字，\fBmkvmerge\fR(1)
+将在每个簇中放置最多
+\fIn\fR
+个数据块。最大块数是 65535。
+.sp
+如果数字
+\fId\fR
+后缀有 \'ms\'，\fBmkvmerge\fR(1)
+将在每个簇中放置最多
+\fId\fR
+毫秒的数据。\fId\fR
+的最小值是 \'100ms\'，最大值是 \'32000ms\'。
+.sp
+
+\fBmkvmerge\fR(1)
+默认每簇最多放置 65535 个数据块或 2000ms 的数据。
+.sp
+尝试定位到特定帧的程序只能直接定位到簇，然后需要读取整个簇（来完成定位）。因此创建较大的簇将导致定位不精确或缓慢。
+.RE
+.PP
+\fB\-\-no\-cues\fR
+.RS 4
+让
+\fBmkvmerge\fR(1)
+不要创建或写入 cue 索引（ 可类比作 AVI 文件中的索引）。没有索引的
+Matroska(TM)
+文件也能播放，但定位可能不精确且缓慢。仅当您确实强求空间或用作测试时使用此选项。请参阅可为各输入文件指定的
+\fB\-\-cues\fR
+选项。
+.RE
+.PP
+\fB\-\-no\-clusters\-in\-meta\-seek\fR
+.RS 4
+告诉
+\fBmkvmerge\fR(1)
+在文件末尾不要创建包含所有簇的元定位元素。参阅关于
+Matroska(TM) 文件规划
+的段落。
+.RE
+.PP
+\fB\-\-disable\-lacing\fR
+.RS 4
+禁用所有轨道的紧缩。这将增加文件大小，尤其是当有很多音频轨时。此选项不供日常之用。
+.RE
+.PP
+\fB\-\-enable\-durations\fR
+.RS 4
+为所有块写入时长。这将增大文件尺寸，而且目前对播放器来说不提供任何额外的益处。
+.RE
+.PP
+\fB\-\-timecode\-scale\fR \fI系数\fR
+.RS 4
+强制时间码缩放系数为
+\fI系数\fR。有效值域为
+\fB1000\fR\&.\&.\fB10000000\fR
+或特殊值
+\fB\-1\fR。
+.sp
+通常
+\fBmkvmerge\fR(1)
+会使用数值
+\fB1000000\fR，这样时间码和时长的精度为 1ms。对于不包含视频轨但含有至少一条音频轨的文件，\fBmkvmerge\fR(1)
+将自动选择一个时间码缩放系数以使各轨的音频采样精度相同。这将引起更大的额外开销，但将允许更为精确的定位与提取。
+.sp
+如果使用了特殊值
+\fB\-1\fR，即使有视频轨，\fBmkvmerge\fR(1)
+也将使用采样精度。
+.RE
+.PP
+文件切割、链接与追加合并 (其他全局选项):
+.PP
+\fB\-\-split\fR \fI指令\fR
+.RS 4
+在给定尺寸或时间之后切割输出文件。请注意，各轨道只能在关键帧之前的位置切割开。由于缓冲原因，\fBmkvmerge\fR(1)
+将在达到切割点后发现的首个关键帧前的位置切割。因此实际切割点可能比用户指定的稍稍靠后些。
+.sp
+目前
+\fBmkvmerge\fR(1)
+支持三种不同模式。
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+按尺寸切割。
+.sp
+语法:
+\fB\-\-split\fR
+[size:]\fId\fR[k|m|g]
+.sp
+示例:
+\-\-split size:700m
+或者
+\-\-split 150000000
+.sp
+参数
+\fId\fR
+可以以 \'k\'、\'m\' 或 \'g\' 结尾，分别说明尺寸的单位为 KB、MB 或 GB。若不加单位，则假定单位为字节。 当前输出文件达到此尺寸限制后将开始输出新的文件。
+.sp
+为兼顾兼容性，\'size:\' 前缀可以省略。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+在一定时长后切割。
+.sp
+语法:
+\fB\-\-split\fR
+[duration:]\fIHH:MM:SS\&.nnnnnnnnn\fR|\fId\fRs
+.sp
+示例:
+\-\-split duration:00:60:00\&.000
+或
+\-\-split 3600s
+.sp
+此参数可以用
+\fIHH:MM:SS\&.nnnnnnnnn\fR
+的形式指定纳秒精度的时长，也可以是后接字母 \'s\' 的指定秒数时长的数字
+\fId\fR。\fIHH\fR
+为小时数，\fIMM\fR
+为分钟数，\fISS\fR
+为秒数，而\fInnnnnnnnn\fR
+为纳秒数。 小时数与纳秒数均可省略。 小数点后最多可以有九位。 当前输出内容的时长达到此限制后将开始输出新的输出文件。
+.sp
+为兼顾兼容性，\'duration:\' 前缀可以省略。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+在指定时间码后切割。
+.sp
+语法:
+\fB\-\-split\fR
+timecodes:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
+.sp
+示例:
+\-\-split timecodes:00:45:00\&.000,01:20:00\&.250,6300s
+.sp
+参数
+\fIA\fR、\fIB\fR、\fIC\fR
+等等的格式与按时长切割模式（见上文）所用的格式相同。时间码表以逗号分隔。 输入流达到当前切割点的时间码后将创建新的输出文件。然后将使用所给定的下一个切割点。
+.sp
+\'timecodes:\' 前缀不得省略。
+.RE
+.RS 4
+此切割模式下输出文件名将以不同于常用操作的方式对待。可能会含有类似
+\fBprintf\fR
+的表达式 \'%d\'，包括可选的字段宽度，如 \'%02d\'。如果含有上述表达式，当前文件序号将按相应格式生成，然后插入到文件名中的相应位置。 如果没有此类匹配模式，则假定匹配模式为在文件扩展名之前插入 \'\-%03d\': \'\-o 输出\&.mkv\' 将生成 \'输出\-001\&.mkv\' 这样的一系列文件。如果没有扩展名，\'\-%03d\' 将被追加在文件名之后。
+.RE
+.PP
+\fB\-\-link\fR
+.RS 4
+切割输出文件时连接文件。详情请参阅下文
+文件链接
+段落。
+.RE
+.PP
+\fB\-\-link\-to\-previous\fR \fI剪辑\-UID\fR
+.RS 4
+连接第一个输出文件到指定
+\fI剪辑\-UID\fR
+参数对应的剪辑。详情请参阅下文
+文件链接
+段落。
+.RE
+.PP
+\fB\-\-link\-to\-next\fR \fI剪辑\-UID\fR
+.RS 4
+连接最后一个输出文件到指定
+\fI剪辑\-UID\fR
+参数对应的剪辑。详情请参阅下文
+文件链接
+段落。
+.RE
+.PP
+\fB\-\-append\-mode\fR \fI模式\fR
+.RS 4
+决定追加合并文件时如何计算时间码。 参数
+\fI模式\fR
+可以有两个数值: 默认的 \'file（文件）\' 和 \'track（轨道）\'。
+.sp
+当 mkvmerge 将来自另一文件 (本段中假设为 \'文件2\') 的一条轨道 (假设为 \'轨道2_1\' ) 追加合并到首个文件 (假设为 \'文件1\')的一条轨道 (假设为 \'轨道1_1\') 时，它将为 \'轨道2_1\' 的所有时间码设定一定量的延时。 对于 \'file（文件）\' 模式此延时量是 \'文件1\' 中遇到的最大时间码，即使此时间码不属于轨道 \'轨道1_1\'。而在 track （轨道模式）下此延时为 \'轨道1_1\' 的最大时间码。
+.sp
+不幸的是 mkvmerge 无法侦测使用哪种模式更为可靠。因此默认为 \'file（文件）\' 模式。\'file\' 模式对单独创建的文件的处理通常更好；例如在追加
+AVI
+或
+MP4
+文件时。\'track（轨道）\' 模式对一个大文件的完整分块的处理更好，例如对于
+VOB
+与
+EVO
+文件。
+.sp
+即使选用了 \'track（轨道）\' 模式，字母轨道也将按照 \'file（文件）\' 模式处理。
+.RE
+.PP
+\fB\-\-append\-to\fR \fISFID1:STID1:DFID1:DTID1\fR\fI[,\&.\&.\&.]\fR
+.RS 4
+此选项控制要追加合并哪些轨道与哪些轨道。 各指令由四个 ID 组成: 源文件 ID, 源轨道 ID, 目标文件 ID 和目标轨道 ID。 第一对，"源文件 ID" 与 "源轨道 ID"确定要追加合并的轨道。 第二对，"目标文件 ID" 与 "目标轨道 ID"，确定源轨道要追加合并到的轨道。
+.sp
+如果忽略本选项，则将使用标准映射。 标准映射即将当前文件的各个轨道追加到前一个文件的相应轨道（轨道 ID 相同）。 当影片被切割为多段，且各文件中轨道数和轨道 ID 相同时，这将允许简单的追加合并，命令行为
+\fBmkvmerge \-o 输出\&.mkv 第一段\&.mkv +第二段\&.mkv\fR。
+.RE
+.PP
+\fB+\fR
+.RS 4
+单个 \'+\' 将追加后面的文件，而不是添加。\'+\' 也可以直接放在下一个文件名的前面。因此以下两条命令等效:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o 完整\&.mkv 文件1\&.mkv + 文件2\&.mkv
+$ mkvmerge \-o 完整\&.mkv 文件1\&.mkv +文件2\&.mkv
+     
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.PP
+附件支持（其他全局选项）：
+.PP
+\fB\-\-attachment\-description\fR \fI描述\fR
+.RS 4
+对后面附件的纯文字描述。将应用到下一个
+\fB\-\-attach\-file\fR
+或
+\fB\-\-attach\-file\-once\fR
+选项。
+.RE
+.PP
+\fB\-\-attachment\-mime\-type\fR \fIMIME 类型\fR
+.RS 4
+后面附件的
+MIME
+类型。将应用到下一个
+\fB\-\-attach\-file\fR
+或
+\fB\-\-attach\-file\-once\fR
+选项。 官方认可的
+MIME
+类型列表可以在如
+\m[blue]\fBIANA 主页\fR\m[]\&\s-2\u[2]\d\s+2
+找到。MIME
+类型对附件来说是必需的。
+.RE
+.PP
+\fB\-\-attachment\-name\fR \fI名称\fR
+.RS 4
+设置此附件将在输出文件中储存的名称。 如果未给出此选项则将由
+\fB\-\-attach\-file\fR
+或
+\fB\-\-attach\-file\-once\fR
+选项所设的文件名推得。
+.RE
+.PP
+\fB\-\-attach\-file\fR \fI文件名\fR, \fB\-\-attach\-file\-once\fR \fI文件名\fR
+.RS 4
+在
+Matroska(TM)
+文件中创建文件附件。MIME
+类型必须在使用此选项之前设定。两种形式的不同之处在于使用
+\fB\-\-attach\-file\fR
+附加的文件在切割过程中将被附加到所有输出文件中，而使用
+\fB\-\-attach\-file\-once\fR
+附加的文件只被附加到创建的首个文件中。如果未使用切割功能，两种形式效果相同。
+.sp
+可以使用
+\fBmkvextract\fR(1)
+从
+Matroska(TM)
+文件中提取附件文件。
+.RE
+.PP
+用于各输入文件的选项：
+.PP
+\fB\-a\fR, \fB\-\-audio\-tracks\fR \fIn,m,\&.\&.\&.\fR
+.RS 4
+复制
+\fIn\fR、\fIm\fR
+等音频轨。数字是可以通过
+\fB\-\-identify\fR
+开关获取的轨道 ID。他们不只是简单的轨道序号（参见
+轨道 ID段落）。默认: 复制所有音频轨道。
+.RE
+.PP
+\fB\-d\fR, \fB\-\-video\-tracks\fR \fIn,m,\&.\&.\&.\fR
+.RS 4
+复制
+\fIn\fR、\fIm\fR
+等视频轨。数字是可以通过
+\fB\-\-identify\fR
+开关获取的轨道 ID。他们不只是简单的轨道序号（参见
+轨道 ID段落）。默认: 复制所有视频轨道。
+.RE
+.PP
+\fB\-s\fR, \fB\-\-subtitle\-tracks\fR \fIn,m,\&.\&.\&.\fR
+.RS 4
+复制
+\fIn\fR、\fIm\fR
+等字幕轨。数字是可以通过
+\fB\-\-identify\fR
+开关获取的轨道 ID。他们不只是简单的轨道序号（参见
+轨道 ID段落）。默认: 复制所有字幕轨道。
+.RE
+.PP
+\fB\-b\fR, \fB\-\-button\-tracks\fR \fIn,m,\&.\&.\&.\fR
+.RS 4
+复制
+\fIn\fR、\fIm\fR
+等按钮轨。数字是可以通过
+\fB\-\-identify\fR
+开关获取的轨道 ID。他们不只是简单的轨道序号（参见
+轨道 ID段落）。默认: 复制所有按钮轨道。
+.RE
+.PP
+\fB\-\-track\-tags\fR \fIn,m,\&.\&.\&.\fR
+.RS 4
+复制
+\fIn\fR、\fIm\fR
+等轨道的标签。数字是可以通过
+\fB\-\-identify\fR
+开关获取的轨道 ID。他们不只是简单的轨道序号（参见
+轨道 ID段落）。默认: 复制所有轨道的标签。
+.RE
+.PP
+\fB\-m\fR, \fB\-\-attachments\fR \fIn\fR\fI[:all|first]\fR\fI,m\fR\fI[:all|first]\fR\fI,\&.\&.\&.\fR
+.RS 4
+复制 ID 为
+\fIn\fR、\fIm\fR
+等的附件到所有或者仅首个输出文件中。各 ID 后可接 \':all\'（如果两可选数值均未输入，此为默认值）或者 \':first\'。如果切割功能已被起用，则 ID 被指定为 \':all\' 的附件将被复制到所有生成的输出文件中，而其他附件只被复制到首个输出文件中。如果未使用切割功能则两变量等效。
+.sp
+默认复制所有附件到所有输出文件中。
+.RE
+.PP
+\fB\-A\fR, \fB\-\-no\-audio\fR
+.RS 4
+不要从此文件中复制任何音频轨。
+.RE
+.PP
+\fB\-D\fR, \fB\-\-no\-video\fR
+.RS 4
+不要从此文件中复制任何视频轨。
+.RE
+.PP
+\fB\-S\fR, \fB\-\-no\-subtitles\fR
+.RS 4
+不要从此文件中复制任何字幕轨。
+.RE
+.PP
+\fB\-B\fR, \fB\-\-no\-buttons\fR
+.RS 4
+不要从此文件中复制任何按钮轨。
+.RE
+.PP
+\fB\-T\fR, \fB\-\-no\-track\-tags\fR
+.RS 4
+不要从此文件中复制任何轨道细节标签。
+.RE
+.PP
+\fB\-\-no\-chapters\fR
+.RS 4
+不要从此文件中复制章节。
+.RE
+.PP
+\fB\-M\fR, \fB\-\-no\-attachments\fR
+.RS 4
+不要从此文件中复制附件。
+.RE
+.PP
+\fB\-\-no\-global\-tags\fR
+.RS 4
+不要从此文件中复制全局标签。
+.RE
+.PP
+\fB\-\-chapter\-charset\fR \fI字符集\fR
+.RS 4
+设置源文件中章节信息的字符集，以供转为 UTF\-8 之用。关于
+\fBmkvmerge\fR(1)
+如何在字符集之间进行转换的说明，请参阅下文
+文本文件与字符集
+段落。
+.RE
+.PP
+\fB\-\-chapter\-language\fR \fI语言代码\fR
+.RS 4
+选择各章节项所用的 ISO639\-2 语言代码。 此选项可用于包含章节但不含关于章节语言的信息的源文件，如 MP4 与 OGM 文件。
+.RE
+.PP
+\fB\-y\fR, \fB\-\-sync\fR \fITID:d\fR\fI[,o[/p]]\fR
+.RS 4
+将 id 为
+\fITID\fR
+的轨道的时间码按
+\fId\fR
+ms 进行调整。轨道 ID 与
+\fB\-\-identify\fR
+所给出的相同 (参见
+轨道 ID
+段落)。
+.sp
+
+\fIo\fR/\fIp\fR: 按
+\fIo\fR/\fIp\fR
+调整时间戳以修复线性偏移。如果省略
+\fIp\fR
+则默认为 1。\fIo\fR
+与
+\fIp\fR
+均可为浮点数。
+.sp
+默认: 无手动同步校正 (与
+\fId\fR
+=
+\fB0\fR
+及
+\fIo\fR/\fIp\fR
+=
+\fB1\&.0\fR
+效果相同)。
+.sp
+此选项可以对同一输入文件多次使用，通过每次选择不同轨道 ID 分别应用到多个轨道。
+.RE
+.PP
+\fB\-\-cues\fR \fITID:none|iframes|all\fR
+.RS 4
+控制为指定轨道 (参阅
+轨道 ID
+段落) 创建何种 cue 索引。\'none（无）\' 将阻止 cue 索引的创建。 而 \'iframes（仅 i 帧）\' 表示仅将没有前后参考的块 ( = 视频轨道中的 I 帧) 置于 cue 索引项中。\'all（全部）\' 将使
+\fBmkvmerge\fR(1)
+为所有区块创建索引，会使生成的文件非常大。
+.sp
+默认视频轨为 \'iframes（仅 i 帧）\'，其他所有轨道均为 \'none（无）\'\&. 参见不论是否使用
+\fB\-\-cues\fR
+选项时都能阻止创建 cue 索引项的
+\fB\-\-no\-cues\fR
+选项。
+.sp
+此选项可以对同一输入文件多次使用，通过每次选择不同轨道 ID 分别应用到多个轨道。
+.RE
+.PP
+\fB\-\-default\-track\fR \fITID\fR\fI[:bool]\fR
+.RS 4
+当为设定可选变量
+\fIbool\fR
+时为指定轨道 (参见
+轨道 ID
+段落) 设置 \'默认轨\' 标记。 当用户未明确选定一个轨道时，播放器将优先选用设有 \'默认轨\' 标记的轨道。各类 (音频、视频、字幕、按钮) 轨道只能有一条设置 \'默认轨\' 标记。 如果用户希望所有轨道都不被设置默认轨标记，可以将所有轨道的
+\fIbool\fR
+设为
+\fB0\fR。
+.sp
+此选项可以对同一输入文件多次使用，通过每次选择不同轨道 ID 分别应用到多个轨道。
+.RE
+.PP
+\fB\-\-blockadd\fR \fITID:层级\fR
+.RS 4
+只保留选定轨道中高达
+\fI层级\fR
+层级的
+BlockAdditions
+附加块。 默认保留所有层级。 此选项只影响特定类型的编解码器，如 WAVPACK4。
+.RE
+.PP
+\fB\-\-track\-name\fR \fITID:名称\fR
+.RS 4
+将指定轨道 (参见
+轨道 ID
+段落) 的轨道名称设为
+\fI名称\fR。
+.RE
+.PP
+\fB\-\-language\fR \fITID:语言\fR
+.RS 4
+为指定轨道 (参见
+轨道 ID) 设置语言。允许使用 ISO639\-2 语言代码与 ISO639\-1 国家代码。国家代码将被自动转换为语言代码。 可以使用
+\fB\-\-list\-languages\fR
+选项列出所有语言以及它们的 ISO639\-2 代码。
+.sp
+此选项可以对同一输入文件多次使用，通过每次选择不同轨道 ID 分别应用到多个轨道。
+.RE
+.PP
+\fB\-t\fR, \fB\-\-tags\fR \fITID:文件名\fR
+.RS 4
+从文件
+\fI文件名\fR
+读取轨道号为
+\fITID\fR
+的轨道的标签。详情参见下文
+标签
+段落。
+.RE
+.PP
+\fB\-\-aac\-is\-sbr\fR \fITID\fR\fI[:0|1]\fR
+.RS 4
+告诉
+\fBmkvmerge\fR(1)
+ID 为
+\fITID\fR
+的轨道是
+SBR AAC
+(亦作
+HE\-AAC
+或
+AAC+)。下述情况下需要此选项：a) 源文件是
+AAC
+文件 (\fI不是\fR
+Matroska(TM)
+文件) 且 b) 该
+AAC
+文件含有
+SBR AAC
+数据。 设置此开关的原因是目前技术上无法在不解码一个完整的
+AAC
+帧的情况下自动分辨普通的
+AAC
+数据与
+SBR AAC
+数据。由于
+AAC
+解码器的诸多专利问题，\fBmkvmerge\fR(1)
+永远不会包含此解码层。因此此开关对于
+SBR AAC
+文件是必需的。如果忽略了此开关，生成的文件可能无法正常回放，甚至可能根本无法播放。
+.sp
+如果源文件是
+Matroska(TM)
+文件，则已有足够侦测
+SBR AAC
+的
+CodecID
+了。然而，如果
+CodecID
+标注错误，此开关可用于更正之。
+.sp
+如果 mkvmerge 错将
+AAC
+文件侦测为
+SBR，您可以将 \':0\' 添加到轨道 ID。
+.RE
+.PP
+\fB\-\-timecodes\fR \fITID:文件名\fR
+.RS 4
+从
+\fI文件名\fR
+读取要应用到指定轨道 ID 的时间码。 这些时间码将强制覆盖
+\fBmkvmerge\fR(1)
+默认计算出的时间码。参阅关于
+外部时间码文件
+的章节。
+.RE
+.PP
+\fB\-\-default\-duration\fR \fITID:x\fR
+.RS 4
+强制指定轨道的默认时长为指定数值。 将同时修改轨道的时间码以匹配该默认时长。 变量
+\fIx\fR
+必须有 \'s\', \'ms\', \'us\', \'ns\' 或 \'fps\' 后缀，分别说明默认时长的单位为秒、毫秒、微秒、纳秒以及帧每秒。 数字
+\fIx\fR
+本身可为浮点数或分数。
+.sp
+如果未强定默认时长，mkvmerge 将尝试根据使用的容器和/或编解码器推定轨道的默认时长。 此选项有用的一种情况是当添加
+AVC/h\&.264
+基本流时，因为此类流不含关于帧数及各帧默认时长的信息。 对此类文件
+\fBmkvmerge\fR(1)
+将假定默认时长为 \'25fps\'，除非被（用户设置）覆盖。
+.sp
+此选项也可用于在不使用外部时间码文件的情况下更改视频轨的
+FPS（帧率）。
+.RE
+.PP
+\fB\-\-nalu\-size\-length\fR \fITID:n\fR
+.RS 4
+强制
+NALU
+长度为
+\fIn\fR
+字节。 此变量仅当使用
+AVC/h\&.264
+基本流分包器时使用。 如果留空，则默认为 4 字节，然而有的文件包含的所有帧或切片都小于 65536 字节。 对此类文件您可以使用此参数并将长度降为 2。
+.RE
+.PP
+仅用于视频轨的选项：
+.PP
+\fB\-f\fR, \fB\-\-fourcc\fR \fITID:FourCC\fR
+.RS 4
+强制
+FourCC
+为指定值。仅对 \'微软兼容模式\' 的视频轨有效。
+.RE
+.PP
+\fB\-\-display\-dimensions\fR \fITID:宽度x高度\fR
+.RS 4
+
+Matroska(TM)
+文件含有两个设定播放器回放时应当将画面缩放到的显示属性值: 显示宽度与显示高度。 可以使用本选项设定这些数值，如 \'1:640x480\'。
+.sp
+指定所用数值的其他方法是使用
+\fB\-\-aspect\-ratio\fR
+或
+\fB\-\-aspect\-ratio\-factor\fR
+选项 (参见下文)。 这些选项是互相独立的。
+.RE
+.PP
+\fB\-\-aspect\-ratio\fR \fITID:宽高比|宽度/高度\fR
+.RS 4
+
+Matroska(TM)
+文件含有两个设定播放器回放时应当将画面缩放到的显示属性值: 显示宽度与显示高度。 通过本选项
+\fBmkvmerge\fR(1)
+可自动根据画面原始宽高和本选项给定的宽高比计算出显示宽度和显示高度。 宽高比可以以浮点数
+\fI宽高比\fR
+或分数 \'\fI宽度\fR/\fI高度\fR\' 的形式给出，如 \'16/9\'。
+.sp
+指定所用数值的其他方法是使用
+\fB\-\-aspect\-ratio\-factor\fR
+或
+\fB\-\-display\-dimensions\fR
+选项 (参见上下文)。这些选项相互独立。
+.RE
+.PP
+\fB\-\-aspect\-ratio\-factor\fR \fITID:系数|n/d\fR
+.RS 4
+另一种设置宽高比的方法是指定一个
+\fI系数\fR。将将原始宽高比与
+\fI系数\fR
+相乘后用作目标宽高比。
+.sp
+指定所用数值的其他方法是使用
+\fB\-\-aspect\-ratio\fR
+或
+\fB\-\-display\-dimensions\fR
+选项 (参见上文)。这些选项互相独立。
+.RE
+.PP
+\fB\-\-cropping\fR \fITID:左,上,右,下\fR
+.RS 4
+将视频轨道的像素裁减参数设为指定数值。
+.RE
+.PP
+\fB\-\-stereo\-mode\fR \fITID:n|关键词\fR
+.RS 4
+设置 ID 为
+\fITID\fR
+的视频轨的立体视法。 模式既可以是
+\fB0\fR
+到
+\fB3\fR
+之间的数字
+\fIn\fR，也可以是 \'none（无立体视法）\' (与
+\fIn\fR=\fB0\fR
+相同), \'right（右眼视角）\' (与
+\fIn\fR=\fB1\fR
+相同), \'left（左眼视角）\' (与
+\fIn\fR=\fB2\fR
+相同) or \'both（双眼视角）\' (与
+\fIn\fR=\fB3\fR
+相同)。
+.RE
+.PP
+\fB\-\-compression\fR \fITID:压缩方式\fR
+.RS 4
+选择用于 VobSub 轨道的压缩方式。注意播放器也得支持该方式。有效的值有 \'none（无压缩）\'、\'zlib\'、\'lzo\'/\'lxo1x\'、\'bz2\'/\'bzlib\' 与 \'mpeg4_p2\'/\'mpeg4p2\'。值 \'lzo\'/\'lxo1x\' 与 \'bz2\'/\'bzlib\' 仅当
+\fBmkvmerge\fR(1)
+附加相应的
+liblzo(TM)
+和
+bzlib(TM)
+压缩库编译时有效。
+.sp
+压缩方式 \'mpeg4_p2\'/\'mpeg4p2\' 是一种称为 \'header removal\' 的特殊压缩方式，只对 MPEG4 part 2 视频轨可用。其他压缩方式是可用于所有类型轨道的通用压缩方式。
+.sp
+默认为 \'zlib\' 压缩。此压缩方式也是几乎所有回放程序都支持的压缩方式。无法保证对除 \'none（无压缩）\' 以外的其他压缩方式的支持。
+.RE
+.PP
+仅适用于文本字幕轨道的选项:
+.PP
+\fB\-\-sub\-charset\fR \fITID:字符集\fR
+.RS 4
+为指定轨道 ID 指定所用字符集，用以转为 UTF\-8 编码的 UTF\-8 字幕。如果未指定字符集，则将根据当前区域设置推算字符集。注意对于从
+Matroska(TM)
+文件或 Kate 流中读取的字幕不必指定字符集，因为在这些格式中已使用 UTF\-8 编码储存。关于
+\fBmkvmerge\fR(1)
+如何在字符集间进行转换的说明请参见关于
+文本文件与字符集
+的段落。
+.sp
+此选项可以对同一输入文件多次使用，通过每次选择不同轨道 ID 分别应用到多个轨道。
+.RE
+.PP
+其他选项：
+.PP
+\fB\-i\fR, \fB\-\-identify\fR \fI文件名\fR
+.RS 4
+将使
+\fBmkvmerge\fR(1)
+探查单个文件并报告其类型、文件中包含的轨道及其轨道 ID。如果使用了本选项，唯一可用的其他选项就是文件名。
+.RE
+.PP
+\fB\-l\fR, \fB\-\-list\-types\fR
+.RS 4
+列出受支持的输入文件类型。
+.RE
+.PP
+\fB\-\-list\-languages\fR
+.RS 4
+列出所有语言及其 ISO639\-2 代码，这些代码可以在
+\fB\-\-language\fR
+选项中使用。
+.RE
+.PP
+\fB\-\-priority\fR \fI优先级\fR
+.RS 4
+设置
+\fBmkvmerge\fR(1)
+运行时的进程优先级。有效的值为 \'lowest（最低）\', \'lower（较低）\', \'normal（普通）\', \'higher（较高）\' 与 \'highest（最高）\'。如果未予设定，则使用 \'normal（普通优先级）\'。在 类\-Unix 系统中
+\fBmkvmerge\fR(1)
+将使用
+\fBnice\fR(2)
+功能。因此只有超级用户才能使用 \'higher（较高优先级）\' 与 \'highest（最高优先级）\'。对于 Windows 用户来说所有值都可用。
+.RE
+.PP
+\fB\-\-command\-line\-charset\fR \fI字符集\fR
+.RS 4
+设定在命令行给出的字符串的字符集，用于转为其他字符集。默认为系统当前区域设置中所给定的字符集。此设置将应用到以下选项的变量:
+\fB\-\-title\fR、\fB\-\-track\-name\fR
+及
+\fB\-\-attachment\-description\fR。
+.RE
+.PP
+\fB\-\-output\-charset\fR \fI字符集\fR
+.RS 4
+设置输出的字符串应被转换到何种字符集。默认为系统当前区域设置中所给定的字符集。
+.RE
+.PP
+\fB\-r\fR, \fB\-\-redirect\-output\fR \fI文件名\fR
+.RS 4
+将所有信息输出至文件
+\fI文件名\fR
+而不是在命令行显示。 尽管该操作可以用输出重定向轻松实现，但在某些情况下还需要靠它：如当终端在写入文件之前重新解释（覆盖输出）时。 将优先使用通过
+\fB\-\-output\-charset\fR
+设定的字符集。
+.RE
+.PP
+\fB\-\-ui\-language\fR \fI语言代码\fR
+.RS 4
+强制使用语言代码为
+\fI语言代码\fR
+的翻译（如 \'de_DE\' 对应德文翻译）。使用
+\fILANG\fR,
+\fILC_MESSAGES\fR
+及
+\fILC_ALL\fR
+这些环境变量更好。如果在
+\fI语言代码\fR
+处输入 \'list\'，\fBmkvmerge\fR(1)
+将输出可用翻译列表。
+.RE
+.PP
+\fB@\fR选项文件
+.RS 4
+从文件
+\fI选项文件\fR
+中读取额外的命令行参数。首个非空白字符为井号 (\'#\') 的行将被当作注释对待，在处理过程中将被忽略。各行开头与结尾的空白将被除去。各行必须恰好含有一个选项。没有元字符转义。
+.sp
+命令行 \'\fBmkvmerge \-o "我的文件\&.mkv" \-A "一部影片\&.avi" 声音\&.ogg\fR\' 可以转换为下述选项文件:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# 输出到文件 "我的文件\&.mkv"。
+\-o
+我的文件\&.mkv
+# 只取 "一部影片\&.avi" 中的视频。
+\-A
+一部影片\&.avi
+声音\&.ogg
+     
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.PP
+\fB\-\-capabilities\fR
+.RS 4
+列出编译时附加的可选功能并退出。输出信息的第一行是版本信息。接下来的每行包含一个单词，各单词的出现意味着编译时附加了相应功能。这些功能包括：
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\'BZ2\' \-\-
+bzlib(TM)
+压缩库。影响
+\fB\-\-compression\fR
+选项可用的压缩方式。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\'LZO\' \-\-
+lzo(TM)
+压缩库。影响
+\fB\-\-compression\fR
+选项可用的压缩方式。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+\'FLAC\' \-\- 读取原始
+FLAC
+文件，以及处理其他容器中的
+FLAC
+轨道，例如
+Ogg(TM)
+或
+Matroska(TM)
+容器中的。
+.RE
+.RE
+.PP
+\fB\-h\fR, \fB\-\-help\fR
+.RS 4
+显示用法信息并退出。
+.RE
+.PP
+\fB\-V\fR, \fB\-\-version\fR
+.RS 4
+显示版本信息并退出。
+.RE
+.SH "用法"
+.PP
+用户可以选择各文件中
+\fBmkvmerge\fR(1)
+应该使用的轨道。它们都将被封装到
+\fB\-o\fR所指定的文件中。可通过
+\fB\-l\fR
+选项获取已知（且受支持的）来源格式列表。
+.SH "示例"
+.PP
+假定您有个名为 我的影片\&.avi 的文件，以及分开存放的音频轨如 \'我的影片\&.wav\'。您希望先将音频编码为
+OggVorbis(TM):
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ oggenc \-q4 \-o 我的影片\&.ogg 我的影片\&.wav
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+几分钟后您就可以合并视频和音频了:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o 我的有声影片\&.mkv 我的影片\&.avi 我的影片\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+如果您的
+AVI
+文件已经含有一条音频轨，则将同时复制该轨道（只要
+\fBmkvmerge\fR(1)
+支持该音频格式）。要避免此状况，只需要这样
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o 我的有声影片\&.mkv \-A 我的影片\&.avi 我的影片\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+又过了几分钟，您又制作了另一条音频轨，如 导演评论或者是另一种语言的配音，您生成的文件名是 \'我影片的另一音轨\&.wav\'。 再进行一次编码操作，然后将其合并:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ oggenc \-q4 \-o 我影片的另一音轨\&.ogg 我影片的另一音轨\&.wav
+$ mkvmerge \-o 我的影片\-成品\&.mkv 我的有声影片\&.mkv 我影片的另一音轨\&.ogg
+  
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+照下面的做法结果相同
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o 我的影片\-成品\&.mkv \-A 我的影片\&.avi 我的影片\&.ogg 我影片的另一音轨\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+现在开启
+mplayer(TM)
+尽情享受吧。如果您有多条音频轨（或者甚至是视频轨），那么您可以通过 \'\fB\-vid\fR\' 与 \'\fB\-aid\fR\' 选项告诉
+mplayer(TM)
+应该播放哪些轨道。这些是基础功能，不区分视频与音频。
+.PP
+如果您需要同步音频轨，会非常容易。首先找清 Vorbis 轨道的轨道 ID
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-\-identify 错开了的\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+现在您可以在下述命令行中使用该 ID:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o 同步了的\&.mkv \-A 源\&.avi \-y 12345:200 错开了的\&.ogg
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+这将在 \'错开了的\&.ogg\' 中 ID 为
+\fB12345\fR
+的音频轨的开头添加 200ms 的静音。
+.PP
+有些影片在开头同步正常，但音画同步会慢慢偏离开。对此类影片您可以指定延时系数，该系数将被应用到所有时间戳 \-\- 不添加或移除任何数据。因此如果您所设定的系数过大或过小会造成很糟糕的结果。例如我转码的一期节目有
+\fB77340\fR
+帧长，在结尾处有
+\fB0\&.2\fR
+秒的同步偏离。在
+\fB29\&.97fps\fR
+帧率下大约是每
+\fB6\fR
+帧错开
+\fB0\&.2\fR
+秒。于是我这样操作
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o 同步了的\&.mkv \-y 23456:0,77346/77340 错开了的\&.mkv
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+搞定了。
+.PP
+同步选项对字幕同样起作用。
+.PP
+对于文本字幕，您既可以选用一些 Windows 软件（如
+SubRipper(TM)）或 \'contrib/subrip\' 目录
+\fBtranscode\fR(1)
+的源码中的
+subrip(TM)
+包。大体过程是这样的:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+从源文件中提取原始字幕流:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ tccat \-i /path/to/copied/dvd/ \-T 1 \-L | tcextract \-x ps1 \-t vob \-a 0x20 | subtitle2pgm \-o mymovie
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+使用 gocr 将生成的 PGM 图像转为文本:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ pgm2txt mymovie
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+对生成的文本文件进行拼写检查:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ ispell \-d american *txt
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 4.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  4." 4.2
+.\}
+将文本文件转为 SRT 文件:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ srttool \-s \-w \-i mymovie\&.srtx \-o mymovie\&.srt
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.PP
+这样生成的文件可用作
+\fBmkvmerge\fR(1)
+的输入文件:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o mymovie\&.mkv mymovie\&.avi mymovie\&.srt
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+如果您希望为指定轨道指定语言，这将很容易完成。首先找到您所需语言的 ISO639\-2 代码。\fBmkvmerge\fR(1)
+会为您列出所有代码:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-\-list\-languages
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+在列表中找到您所需的语言。假定您已在
+Matroska(TM)
+文件中放入两条音轨，并希望设置它们的语言代码，两条轨道的轨道 ID 为 2 和 3。可以这样操作
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o 含语言代码的\&.mkv \-\-language 2:ger \-\-language 3:dut 无语言代码的\&.mkv
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+如您所见，\fB\-\-language\fR
+开关可多次使用。
+.PP
+或许您还想让荷兰语作为默认语言。您还有其他语言的字幕，如英语和法语的，并希望让播放器默认显示法语字幕。可以这样操作
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o 含语言代码的\&.mkv \-\-language 2:ger \-\-language 3:dut \-\-default\-track 3 无语言代码的\&.mkv \-\-language 0:eng 英语\&.srt \-\-default\-track 0 \-\-language 0:fre 法语\&.srt
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+如果您在
+\fBmkvinfo\fR(1)
+的输出信息中没找到您指定的语言或默认轨标记，请参阅关于
+默认值
+的段落。
+.SH "轨道 ID"
+.PP
+
+\fBmkvmerge\fR(1)
+的一些选项要求提供轨道 ID 以指定应应用到的轨道。 当读取器分离当前输入文件时，或者使用
+\fB\-\-identify\fR
+选项调用
+\fBmkvmerge\fR(1)
+时这些轨道 ID 会被显示出来。此类输出的一个示例：
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-i v\&.mkv
+File \'v\&.mkv\': container: Matroska(TM)
+Track ID 1: video (V_MS/VFW/FOURCC, DIV3)
+Track ID 2: audio (A_MPEG/L3)
+  
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+轨道 ID 通常这样分配：
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+AVI
+文件: 视频轨 ID 为 0。音频轨的 ID 由 1 开始升序分配。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+AAC、AC3、MP3、SRT
+与
+WAV
+文件: 此类文件中唯一的 \'轨道\' 的 ID 为 0。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Ogg/OGM
+文件: 轨道 ID 按在文件中被找到的顺序由 0 开始分配。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+Matroska(TM)
+文件: 轨道 ID 与
+\fBmkvinfo\fR(1)
+所报告的相同。注意
+\fI不是\fR
+轨道 UID。
+.RE
+.PP
+特殊的轨道 ID \'\fB\-1\fR\' 是个百搭号，它将使给定的开关应用到从输入文件中读到的所有轨道。
+.PP
+使用轨道 ID 的选项的描述中均含有 \'TID\'。此外下列选项也使用轨道 ID:
+\fB\-\-atracks\fR、\fB\-\-vtracks\fR、\fB\-\-stracks\fR
+以及
+\fB\-\-btracks\fR。
+.SH "文本文件与字符集转换"
+.if n \{\
+.sp
+.\}
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+\fB注意\fR
+.ps -1
+.br
+.PP
+此段落可应用到 MkvToolNix 中的所有程序，尽管此处仅提及了
+\fBmkvmerge\fR(1)。
+.sp .5v
+.RE
+.PP
+
+Matroska(TM)
+文件中的所有文本均使用 UTF\-8 编码。这意味着
+\fBmkvmerge\fR(1)
+需要将读取到的文本文件以及从命令行收到的文本从其他字符集转换为 UTF\-8。相反，这意味着
+\fBmkvmerge\fR(1)
+的输出信息同样需要由 UTF\-8 转回原来的字符集，例如来自
+\fB\-\-ui\-language\fR
+所选的非英语界面或来自
+Matroska(TM)
+文件中的文本。
+.PP
+
+\fBmkvmerge\fR(1)
+根据是否有
+字节顺序标记
+(英文缩写:
+BOM) 出现以及系统的当前区域来进行自动转换。如何根据区域推定字符集取决于
+\fBmkvmerge\fR(1)
+所执行在的操作系统。
+.PP
+以 BOM 开头的文本文件已经使用一种 UTF 模式编码。\fBmkvmerge\fR(1)
+支持以下五种模式: UTF\-8、UTF\-16 小端序 及 大端序、UTF\-32 小端序 及 大端序。含 BOM 的文本文件将被自动转换为 UTF\-8。对此类文件设定字符集的参数 (如
+\fB\-\-sub\-charset\fR) 将被直接忽略，无通知。
+.PP
+在 类\-Unix 系统
+\fBmkvmerge\fR(1)
+将使用
+\fBsetlocale\fR(3)
+系统指令，它将返回环境变量
+\fILANG\fR、\fILC_ALL\fR
+及
+\fILC_CYPE\fR。输出的字符集通常是 UTF\-8 或 ISO\-8859\-* 家族之一，将被用于所有文本文件操作以及编码命令行上的字符串和输出到命令行。
+.PP
+在 Windows 上
+\fBmkvmerge\fR(1)
+实际上使用两种不同的字符集，因为要执行 Windows shell 程序
+\fBcmd\&.exe\fR。第一个字符集由
+\fBGetCP()\fR
+系统指令决定。此字符集用作文本文件转换和 MkvToolNix 工具包中
+GUI
+程序所显示的所有元素的默认字符集。\fBcmd\&.exe\fR
+使用的另一个字符集由
+\fBGetACP()\fR
+系统指令决定。这是命令行读入的所有字符串以及输出到命令行的所有字符串的默认字符集。
+.PP
+现有下述选项支持指定字符集:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB\-\-sub\-charset\fR
+用于文本字幕文件以及存储于字符集含糊的容器格式（如 Ogg 文件）中的文本字幕轨,
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB\-\-chapter\-charset\fR
+用于章节文本文件以及存储于字符集含糊的容器格式（如 Ogg 文件的章节信息，轨道和文件标题等；MP4 文件的章节信息）中的章节和文件标题,
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB\-\-command\-line\-charset\fR
+用于所有命令行上的字符串,
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB\-\-output\-charset\fR
+用于输出到命令行或文件（当使用
+\fB\-\-redirect\-output\fR
+选项重定向输出时）的字符串。
+.RE
+.SH "SUBTITLES"
+.PP
+可在
+Matroska(TM)
+文件中嵌入多种文本字幕格式目前
+\fBmkvmerge\fR(1)
+支持纯文本、VobSub 以及 Kate 字幕格式。文本字幕将被重新编码为 UTF\-8 以确保播放器能准确显示（关于
+\fBmkvmerge\fR(1)
+如何在字符集间进行转换的说明请参见关于
+文本文件与字符集
+的段落）。Kate 字幕已经是 UTF\-8 编码，因此不会被重新编码。
+.PP
+目前支持以下字幕格式:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Subtitle Ripper (SRT) 文件
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+Substation Alpha (SSA) / 高级 Substation Alpha 脚本 (ASS)
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+OggKate 流
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+VobSub 位图字幕文件
+.RE
+.SH "文件链接"
+.PP
+
+Matroska(TM)
+支持文件链接，即声明当前文件的前趋与后继文件是哪个文件。严谨地讲，被连接的不是文件而是
+Matroska(TM)
+剪辑。鉴于大多数文件只含有一个
+Matroska(TM)
+剪辑，以下说明中将使用术语 \'文件链接\'，尽管 \'剪辑链接\' 更为贴切。
+.PP
+各剪辑由唯一的 128 位宽的剪辑 UID 确定。此 UID 是由
+\fBmkvmerge\fR(1)
+自动创建的。链接主要通过将前后文件的剪辑 UID (英文缩写:
+SID) 置于剪辑头部信息中完成。\fBmkvinfo\fR(1)
+会在找到
+SID
+时输出它们。
+.PP
+如果文件被切割为多段，且启用了链接功能，则文件的时间码不会重新从 0 开始，而是会从上一个文件结束的地方继续计算。这样可以保留绝对时间，即使之前的文件不可用 (如进行流式处理时)。如果未使用链接功能，各文件的时间码应从 0 开始。\fBmkvmerge\fR(1)
+默认不启用文件链接。如果您希望启用，可以通过
+\fB\-\-link\fR
+选项打开。此选项仅当同时启用切割功能时有用。
+.PP
+无论是否开启了切割功能，用户都可以让
+\fBmkvmerge\fR(1)
+将生成的文件与指定的
+SID
+建立链接。可通过
+\fB\-\-link\-to\-previous\fR
+与
+\fB\-\-link\-to\-next\fR
+选项实现。 这些选项只接受
+\fBmkvinfo\fR(1)
+所输出的
+SID
+格式: 16 个
+\fB0x00\fR
+与
+\fB0xff\fR
+之间的十六进制数，各数字带有 \'0x\' 前缀，如 \'0x41 0xda 0x73 0x66 0xd9 0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3 0x93\'。还可以选用另一种较短的格式: 16 个
+\fB0x00\fR
+与\fB0xff\fR
+之间的十六进制数，无 \'0x\' 前缀，无空格，如 \'41da7366d9cfb21eae78ebb45ecab393\'。
+.PP
+如果启用了切割功能，第一个文件将与通过
+\fB\-\-link\-to\-previous\fR
+给定的
+SID
+建立链接，而最后一个文件将与通过
+\fB\-\-link\-to\-next\fR
+给定的
+SID
+建立链接。如果未启用切割功能，唯一的输出文件将同时与给定的两个
+SID
+建立链接。
+.SH "默认值"
+.PP
+
+Matroska(TM)
+规范提到，一些元素有其默认值。通常为了节省空间，如果一个元素的值等同于其默认值，它将不被写入文件。用户在
+\fBmkvinfo\fR(1)
+的输出信息中可能发现缺失的元素有
+\fI语言\fR
+和
+\fI默认轨标记\fR。
+\fI语言\fR
+的默认值是 English (\'eng\')，\fI默认轨标记\fR
+的默认值是
+\fItrue\fR。因此如果您对一条轨道应用选项
+\fB\-\-language 0:eng\fR
+，它将不在
+\fBmkvinfo\fR(1)
+的输出信息中显示。
+.SH "附件"
+.PP
+或许您希望将一些照片与您的
+Matroska(TM)
+文件一起存放，或者您正在使用
+SSA
+字幕，需要一个非常稀有的特殊
+TrueType(TM)
+字体。这种情况下您可以将这些文件附加到
+Matroska(TM)
+文件中。它们不会被追加到文件当中，而是被嵌入到文件中。然后播放器就可以显示这些文件 (如 \'照片\' 一例) 或者用它们来渲染字幕 (如 \'TrueType(TM)
+字体\' 一例)。
+.PP
+这是关于如何在输出文件中附加照片和
+TrueType(TM)
+字体的示例:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o 输出\&.mkv \-A 视频\&.avi 声音\&.ogg \-\-attachment\-description "乐队与我在后台小聚" \-\-attachment\-mime\-type image/jpeg \-\-attach\-file 乐队与我\&.jpg \-\-attachment\-description "难得一见的绝美字体" \-\-attachment\-type application/octet\-stream \-\-attach\-file 很酷的字体\&.ttf
+  
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+如果含有附件的
+Matroska(TM)
+文件被用作输入文件，\fBmkvmerge\fR(1)
+会将附件复制到新文件中。要复制哪些文件、不复制那些文件的选择可以通过
+\fB\-\-attachments\fR
+与
+\fB\-\-no\-attachments\fR
+选项修改。
+.SH "章节"
+.PP
+
+Matroska(TM)
+章节系统比大家知道的旧系统\(em\(em
+OGM
+中所使用的\(em\(em更为强大。完整的规范可以在
+\m[blue]\fBMatroska(TM) 网站\fR\m[]\&\s-2\u[1]\d\s+2
+找到。
+.PP
+
+\fBmkvmerge\fR(1)
+支持输入两种章节文件。第一种格式，叫作 \'简单章节格式\'，与
+OGM
+tools 所用的相同。第二种是基于
+XML
+的章节格式，它支持
+Matroska(TM)
+的所有章节功能。
+.SS "简单章节格式"
+.PP
+此格式由成对的相继以 \'CHAPTERxx=\' 与 \'CHAPTERxxNAME=\' 开头的行组成。单数行包含起始时间码，而双数行包含标题。这是一个示例：
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+CHAPTER01=00:00:00\&.000
+CHAPTER01NAME=导入部分
+CHAPTER02=00:02:30\&.000
+CHAPTER02NAME=宝宝准备摇
+CHAPTER03=00:02:42\&.300
+CHAPTER03NAME=宝宝摇屋子
+   
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+
+\fBmkvmerge\fR(1)
+将转换每两行为一个
+Matroska(TM)
+章节单位（ChapterAtom）。这种情况不会设定任何
+章节轨道号（ChapterTrackNumber），也就是说所有章节被应用到文件的所有轨道。
+.PP
+由于是文本文件，可能需要进行字符集转换。关于
+\fBmkvmerge\fR(1)
+如何在字符集间进行转换的说明请参见关于
+文本文件与字符集
+的段落。
+.SS "基于 XML 的章节格式"
+.PP
+基于
+XML
+的章节格式看起来与这个示例类似：
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+<?xml version="1\&.0" encoding="ISO\-8859\-1"?>
+<!DOCTYPE Chapters SYSTEM "matroskachapters\&.dtd">
+<Chapters>
+  <EditionEntry>
+    <ChapterAtom>
+      <ChapterTimeStart>00:00:30\&.000</ChapterTimeStart>
+      <ChapterTimeEnd>00:01:20\&.000</ChapterTimeEnd>
+      <ChapterDisplay>
+        <ChapterString>短短的一节</ChapterString>
+        <ChapterLanguage>eng</ChapterLanguage>
+      </ChapterDisplay>
+      <ChapterAtom>
+        <ChapterTimeStart>00:00:46\&.000</ChapterTimeStart>
+        <ChapterTimeEnd>00:01:10\&.000</ChapterTimeEnd>
+        <ChapterDisplay>
+          <ChapterString>那短短的一节的一部分</ChapterString>
+          <ChapterLanguage>eng</ChapterLanguage>
+        </ChapterDisplay>
+      </ChapterAtom>
+    </ChapterAtom>
+  </EditionEntry>
+</Chapters>
+   
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+使用此格式可以做到三件简单章节格式做不到的事:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  1." 4.2
+.\}
+可以设置章节终止处的时间戳,
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  2." 4.2
+.\}
+章节可以嵌套,
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.sp -1
+.IP "  3." 4.2
+.\}
+可以设置语言与国家。
+.RE
+.PP
+mkvtoolnix 分发包的
+doc
+子目录包含了一些典型示例文件。
+.SS "一般性备注"
+.PP
+
+\fBmkvmerge\fR(1)
+切割文件时会同时适当调整章节。这意味着每个文件只包含应用到该文件的章节项，时间码也将被调整到与各输出文件相匹配。
+.PP
+
+\fBmkvmerge\fR(1)
+能够从
+Matroska(TM)
+源文件中复制章节，除非使用
+\fB\-\-no\-chapters\fR
+选项明令禁用。来自各类来源 (Matroska(TM)
+文件、Ogg 文件、MP4
+文件、章节文本文件) 的章节通常不被合并，而是分成多个
+ChapterEditions（章节版本）。仅当从多个
+Matroska(TM)
+或
+XML
+文件读取的章节具有相同的版本 UID 时，章节才会被合并为单个
+ChapterEdition。如果在其他情况下需要此类合并，用户需要先用
+\fBmkvextract\fR(1)
+从所有来源提取章节，手动合并
+XML
+文件然后再混流。
+.SH "标签"
+.SS "介绍"
+.PP
+
+Matroska(TM)
+广泛支持废弃标签，还支持一种新式的、类似其他大多数容器使用的较简单的标签系统:
+\fIKEY=VALUE\fR。然而，在
+Matroska(TM)
+中这些标签也可以嵌套，\fIKEY\fR
+与
+\fIVALUE\fR
+都是属于它们自身的元素。示例文件
+example\-tags\-2\&.xml
+展示了如何使用这个新系统。
+.SS "标签细述"
+.PP
+
+Matroska(TM)
+标签不会自动应用到整个文件上。它们可以应用到整个文件，还可以应用到文件的不同部分: 一个或多个轨道, 一个或多个章节, 甚至是两者的组合。\m[blue]\fBMatroska(TM) 规范\fR\m[]\&\s-2\u[3]\d\s+2
+有这方面的更多详情。
+.PP
+重要的一点是标签通过
+Targets
+Matroska(TM)
+标签元素与轨道或章节相连，而用于此链接的 UID
+\fI并非\fR
+\fBmkvmerge\fR(1)
+常用的轨道 ID。而是
+\fBmkvmerge\fR(1)
+自动计算而来 (当轨道来自非
+Matroska(TM)
+文件时) 或当轨道源文件是
+Matroska(TM)
+文件时复制而来的 的 UID。因此在文件被
+\fBmkvmerge\fR(1)
+处理过之前很难知道应该在标签文件中使用哪些 UID。
+.PP
+
+\fBmkvmerge\fR(1)
+支持两个为
+Matroska(TM)
+文件添加标签的选项:
+\fB\-\-global\-tags\fR
+与 the
+\fB\-\-tags\fR
+选项。不同之处在于前者，\fB\-\-global\-tags\fR，将通过移除所有上文提到的
+Targets
+元素使标签应用到整个文件。 而后者，\fB\-\-tags\fR，将使
+\fBmkvmerge\fR(1)
+为通过
+\fB\-\-tags\fR
+选项的
+\fITID\fR
+部分指定的标签自动插入 UID。
+.SS "示例"
+.PP
+假定您希望为从一个
+AVI
+文件读取的视频轨道添加标签。\fBmkvmerge \-\-identify 文件\&.avi\fR
+告诉您该视频轨道的 ID (不要将此 ID 与 UID 混淆!) 为 0。于是您创建了一个标签文件，省去了所有
+Targets
+元素，然后这样调用
+\fBmkvmerge\fR(1):
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o 文件\&.mkv \-\-tags 0:标签\&.xml 文件\&.avi
+   
+.fi
+.if n \{\
+.RE
+.\}
+.SS "标签文件格式"
+.PP
+
+\fBmkvmerge\fR(1)
+支持基于
+XML
+的标签文件格式。此格式是以
+\m[blue]\fBMatroska(TM) 规范\fR\m[]\&\s-2\u[3]\d\s+2
+为依据严格制定的。MkvToolNix 的程序以及源码分发都含有名为
+example\-tags\-2\&.xml
+的示例文件，该文件已简明地列出了所有已知的可用作实际处理的基本标签。
+.PP
+基本要点有：
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+最外层的元素必须为
+<Tags>。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+实际意义上的标签放在
+<Tag>
+XML
+标签对中。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+标签内容前后的空白将被忽略。
+.RE
+.SS "数据类型"
+.PP
+新的
+Matroska(TM)
+标签系统只识别两种数据类型，UTF\-8 字串与二进制类型。前者用于标签名称和
+<String>
+元素，而二进制类型用于
+<Binary>
+元素。
+.PP
+由于二进制数据自身与
+XML
+文件不相容，\fBmkvmerge\fR(1)
+支持另两种储存二进制数据的方法。如果
+XML
+标签的内容以 \'@\' 开头，则后续文本将被作为文件名对待。相应文件的内容将被复制到
+Matroska(TM)
+元素中。
+.PP
+还有一种可能，即数据经
+Base64
+编码。这是将二进制数据转换为一定的
+ASCII
+字集字符，在电子邮件等程序中有所应用。\fBmkvextract\fR(1)
+将将二进制元素以
+Base64
+编码的数据的形式输出。
+.PP
+已被废弃的标签系统可识别更多的数据类型，这在
+Matroska(TM)
+官方的标签规范中可以找到。由于
+\fBmkvmerge\fR(1)
+不再支持此系统，此处不对这些类型作多余说明。
+.SH "MATROSKA(TM) 文件规划"
+.PP
+
+Matroska(TM)
+文件规划非常灵活。\fBmkvmerge\fR(1)
+将按预先定义的方式渲染文件。生成的文件是这样的：
+.PP
+[EBML 头] [剪辑 {元定位 #1} {附件} {章节} [剪辑信息] [轨道信息] [簇 1] {簇 2} \&.\&.\&. {簇 n} {索引} {元定位 #2} {标签}]
+.PP
+大括号中的元素是可选的，依所用的内容和选项而定。有两点要注意的：
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+元定位 #1 只包含很少量的 level 1 元素，且仅当它们存在时才包含：附件、章节、索引、标签以及元定位 #2。较早版本的
+\fBmkvmerge\fR(1)
+亦曾将簇放置在元定位元素中。因此应留给不精确的传言一些空间\(em\(em真相总会大白。 现在只有簇才被储存在元定位 #2 中，元定位 #1 将引用元定位元素 #2。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+附件、章节和标签元素仅当被添加后才会出现。
+.RE
+.PP
+允许的最短小的 Matroska 文件是像这样的：
+.PP
+[EBML 头] [剪辑 [剪辑信息] [轨道信息] [簇 1]]
+.PP
+这也是纯音频文件的样子。
+.SH "外部时间码文件"
+.PP
+
+\fBmkvmerge\fR(1)
+允许用户为各轨道选择特定的时间码。这可用来创建包含可变帧率视频或音频中有空隙的文件。这种情况下的帧是
+\fBmkvmerge\fR(1)
+创建各
+Matroska(TM)
+块的单位。对视频来说恰好是一帧，对音频来说是相应音频类型的一个数据包。例如对
+AC3
+来说是包含
+\fB1536\fR
+采样的一个数据包。
+.PP
+用于轨道追加合并的时间码必须只指定给一系列（同一）轨道的第一部分。例如当您追加合并两个文件，v1\&.avi 与 v2\&.avi，且希望使用时间码时，您的命令行必须像这样组织：
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+mkvmerge \&.\&.\&. \-\-timecodes 0:我的时间码\&.txt v1\&.avi +v2\&.avi
+  
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+
+\fBmkvmerge\fR(1)
+可识别四种格式的时间码。版本号在时间码文件的第一行内。空行，只含有空格的行，以及以 \'#\' 开头的行在处理时将被忽略。
+.SS "时间码文件格式 v1"
+.PP
+此格式的第一行是版本声明。第二行则声明默认的帧率。 接下来的各行包含由逗号分隔的三个数字: 起始帧（\fB0\fR
+代表第一帧）、终止帧以及此范围内的帧率。FPS（帧率）
+为浮点数，小数点用 \'\&.\' 表示。各行定义的范围间可以有间隔，间隔内将使用默认的
+FPS。一个示例：
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# timecode format v1
+assume 27\&.930
+800,1000,25
+1500,1700,30
+   
+.fi
+.if n \{\
+.RE
+.\}
+.SS "时间码文件格式 v2"
+.PP
+此格式中每行包含相应帧的时间码。此时间码必须以毫秒为精度。可以使浮点数，但不强求。您指定的时间码行数
+\fI必须\fR
+不少于对应轨道的帧数。此类文件中的时间码必须经过排序。 以 25fps 为例：
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# timecode format v2
+0
+40
+80
+   
+.fi
+.if n \{\
+.RE
+.\}
+.SS "时间码文件格式 v3"
+.PP
+此格式中各行包含时长（秒数），后接（可选）帧率。 二者均可为浮点数。 如果未提供帧率，则采用默认的帧率。 对于音频，您应当让编解码器自行计算各帧的时间码。 这样您应当使用
+\fB0\&.0\fR
+作为帧率。 您可以使用 \'gap\' 关键词后接空隙时长在流中创建空隙。 以音频文件为例：
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# timecode format v3
+assume 0\&.0
+25\&.325
+7\&.530,38\&.236
+gap, 10\&.050
+2\&.000,38\&.236
+   
+.fi
+.if n \{\
+.RE
+.\}
+.SS "时间码文件格式 v4"
+.PP
+此格式与 v2 格式相似。 唯一的不同在于时间码不必经过排序。 通常不应使用此格式。
+.SH "退出代码"
+.PP
+
+\fBmkvmerge\fR(1)
+退出时会返回以下三个退出代码中的一个：
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB0\fR
+\-\- 此退出代码说明已成功完成混流。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB1\fR
+\-\- 这种情况下
+\fBmkvmerge\fR(1)
+至少输出了一条警告信息，但混流并未因之中止。 警告信息以文字 \'警告:\' 为前缀。根据问题的不同，生成的文件可能是好的，也可能不是。 强烈建议用户检查警告信息以及生成的文件。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB2\fR
+\-\- 此退出代码用于错误发生之后。
+\fBmkvmerge\fR(1)
+在输出错误信息后即中断处理。错误信息可能是错误的命令行参数，也可能是损坏文件的读取/写入错误。
+.RE
+.SH "参阅"
+.PP
+
+\fBmkvinfo\fR(1),
+\fBmkvextract\fR(1),
+\fBmkvpropedit\fR(1),
+\fBmmg\fR(1)
+.SH "网络"
+.PP
+最新版本总可以在
+\m[blue]\fBMKVToolNix 主页\fR\m[]\&\s-2\u[4]\d\s+2
+找到。
+.SH "作者"
+.PP
+\fBMoritz Bunkus\fR <\&moritz@bunkus\&.org\&>
+.RS 4
+开发者
+.RE
+.SH "备注"
+.IP " 1." 4
+Matroska(TM) 网站
+.RS 4
+\%http://www.matroska.org/
+.RE
+.IP " 2." 4
+IANA 主页
+.RS 4
+\%http://www.iana.org/assignments/media-types/
+.RE
+.IP " 3." 4
+Matroska(TM) 规范
+.RS 4
+\%http://matroska.org/technical/specs/index.html
+.RE
+.IP " 4." 4
+MKVToolNix 主页
+.RS 4
+\%http://www.bunkus.org/videotools/mkvtoolnix/
+.RE

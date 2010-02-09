@@ -1,0 +1,85 @@
+'\" t
+.\"     Title: mmg
+.\"    Author: Moritz Bunkus <moritz@bunkus.org>
+.\" Generator: DocBook XSL Stylesheets v1.75.1 <http://docbook.sf.net/>
+.\"      Date: January 2010
+.\"    Manual: 用户命令
+.\"    Source: MkvToolNix 3.1.0
+.\"  Language: Chinese
+.\"
+.TH "MMG" "1" "January 2010" "MkvToolNix 3\&.1\&.0" "用户命令"
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "名称"
+mmg \- \fBmkvmerge\fR(1) 的 GUI，包含章节编辑器和头部字段编辑器
+.SH "概要"
+.HP \w'\fBmmg\fR\ 'u
+\fBmmg\fR [[{\-\-edit\-headers}\ {文件名\&.mkv}] | [配置文件\&.mmg] | [源文件\&.扩展名]]
+.SH "说明"
+.PP
+
+\fBmmg\fR(1)
+是
+\fBmkvmerge\fR(1)
+的
+GUI，它基于
+wxWindows(TM)。它提供了
+\fBmkvmerge\fR(1)
+所有选项的简易使用途径。所有配置（例如源文件，轨道选项等）都可以保存和复原。它还包含了可以读取类似
+OGM
+中的简单章节与
+XML
+格式章节，输出
+XML
+格式章节文件，甚至还可以从
+Matroska(TM)
+文件中读取章节，也可以将章节直接写入
+Matroska(TM)
+文件。它还包含了一个头部编辑器，可用于快速修改现有
+Matroska(TM)
+文件的属性，且无须进行完整的重新混流。
+.PP
+
+\fBmmg\fR(1)
+需要的选项很少。最可能的情况是附带一个文件名启动它。如果文件的扩展名为 \'\&.mmg\'，则该文件将被当作配置文件处理，\fBmmg\fR(1)
+启动时将载入其中的配置。如果文件名包含其他扩展名，则将被理解为即将添加的输入文件名。
+.PP
+第二个操作模式是附带选项
+\fB\-\-edit\-headers\fR
+与一个文件名调用。这将使
+\fBmmg\fR(1)
+运行它的头部字段编辑器并载入指定文件。
+.PP
+另有完整的 HTML 格式的文档（doc/mkvmerge\-gui\&.html）。
+.SH "参阅"
+.PP
+
+\fBmkvmerge\fR(1),
+\fBmkvextract\fR(1),
+\fBmkvinfo\fR(1),
+\fBmkvpropedit\fR(1)
+.SH "网络"
+.PP
+最新版本总可以在
+\m[blue]\fBMKVToolNix 主页\fR\m[]\&\s-2\u[1]\d\s+2
+找到。
+.SH "作者"
+.PP
+\fBMoritz Bunkus\fR <\&moritz@bunkus\&.org\&>
+.RS 4
+开发者
+.RE
+.SH "备注"
+.IP " 1." 4
+MKVToolNix 主页
+.RS 4
+\%http://www.bunkus.org/videotools/mkvtoolnix/
+.RE

@@ -1,0 +1,2093 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "/usr/share/xml/docbook/schema/dtd/4.5/docbookx.dtd"
+[
+<!ENTITY product "mkvmerge">
+<!ENTITY version "3.1.0">
+<!ENTITY date "January 2010">
+
+<!ENTITY mkvmerge "<citerefentry><refentrytitle>mkvmerge</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mkvinfo "<citerefentry><refentrytitle>mkvinfo</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mkvextract "<citerefentry><refentrytitle>mkvextract</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mkvpropedit "<citerefentry><refentrytitle>mkvpropedit</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mmg "<citerefentry><refentrytitle>mmg</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+
+<!ENTITY matroska "<productname>Matroska</productname>">
+<!ENTITY oggvorbis "<productname>OggVorbis</productname>">
+<!ENTITY xml "<abbrev>XML</abbrev>">
+
+]>
+
+<refentry lang="zh-hans" id="mkvmerge">
+ <refentryinfo>
+  <productname>&product;</productname> <date>&date;</date>
+  <authorgroup>
+   <author>
+    <contrib>开发者</contrib>
+    <firstname>Moritz</firstname>
+    <surname>Bunkus</surname>
+    <email>moritz@bunkus.org</email>
+   </author>
+  </authorgroup>
+ </refentryinfo>
+ <refmeta>
+  <refentrytitle>&product;</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="version">&version;</refmiscinfo>
+  <refmiscinfo class="date">&date;</refmiscinfo>
+  <refmiscinfo class="source">MkvToolNix</refmiscinfo>
+  <refmiscinfo class="manual">用户命令</refmiscinfo>
+ </refmeta>
+
+ <refnamediv>
+  <refname>&product;</refname>
+  <refpurpose>将多媒体流合并到 &matroska; 文件中</refpurpose>
+ </refnamediv>
+
+ <refsynopsisdiv id="mkvmerge.synopsis">
+  <title>概要</title>
+  <cmdsynopsis>
+<command>mkvmerge</command> <arg>全局选项</arg> <arg choice="req">-o 输出文件</arg>
+<arg>选项1</arg> <arg choice="req">文件1</arg> <arg> <arg>选项2</arg> <arg
+choice="req">文件2</arg> </arg> <arg>@选项文件</arg></cmdsynopsis>
+ </refsynopsisdiv>
+
+ <refsect1 id="mkvmerge.description">
+  <title>说明</title>
+  <para>
+   本程序可读取多种媒体文件并将它们的数据流（全部或者按选择）合并到 &matroska; 文件中去；参见 <ulink
+url="http://www.matroska.org/">&matroska; 网站</ulink>。
+  </para>
+
+  <para>
+   全局选项:
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><option>-v</option>, <option>--verbose</option></term>
+    <listitem>
+     <para>增强“详细”程度。</para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-q</option>, <option>--quiet</option></term>
+    <listitem>
+     <para>取消状态输出。</para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-o</option>, <option>--out</option> <parameter>文件名</parameter></term>
+    <listitem>
+     <para>写至文件 <parameter>文件名</parameter>。如果使用了切割功能，对此参数的处理将有所不同。 详情请参阅关于 <link
+linkend="mkvmerge.description.split"><option>--split</option></link> 选项的说明。</para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.title">
+    <term><option>--title</option> <parameter>标题</parameter></term>
+    <listitem>
+     <para>设置整个生成文件的标题，比如电影名称。</para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.tags">
+    <term><option>--tags</option> <parameter>文件名</parameter></term>
+    <listitem>
+     <para>从 &xml; 文件 <parameter>文件名</parameter> 中读取全局标签。详细情况请参阅下文关于标签的段落。</para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--default-language</option> <parameter>语言代码</parameter></term>
+    <listitem>
+     <para>设置默认语言代码。所有轨道将使用此语言码，除非被用 <link
+linkend="mkvmerge.description.language"><option>--language</option></link>
+选项覆盖。默认的语言代码是 '<literal>und</literal>' 代表 'undefined'（未定）。</para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   剪辑信息处理: (全局选项)
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><option>--segmentinfo</option> <parameter>文件名.xml</parameter></term>
+    <listitem>
+     <para>
+      从 <abbrev>XML</abbrev> 文件中读取剪辑信息。此文件可能包含剪辑家族的 <abbrev>UID</abbrev>、剪辑的
+<abbrev>UID</abbrev>、上一剪辑以及下一剪辑的 <abbrev>UID</abbrev> 元素。示例文件以及
+<abbrev>DTD</abbrev> 已包含在 MkvToolNix 分发包中。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--segment-uid</option> <parameter>SID1,SID2,...</parameter></term>
+    <listitem>
+     <para>
+      设定要使用的剪辑 UID。这是个逗号分割的 128 位 UID 列表，UID 为通常的格式: 十六进制数字，&quot;0x&quot;
+前缀可选，空格可选，但必须恰好有 32 个数位。
+     </para>
+
+     <para>
+      创建的每个文件都包含一个剪辑，每个剪辑有一个剪辑 UID。如果指定的剪辑 UID 比创建的剪辑多，则多余的 UID 将被忽略。如果指定的 UID
+比创建的剪辑少，则将随机创建 UID。
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   章节与标签处理: (全局选项)
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><option>--chapter-language</option> <parameter>语言代码</parameter></term>
+    <listitem>
+     <para>
+      设置各章节项的 ISO639-2 语言代码。 默认为 '<literal>eng</literal>'。 详情参见下文中关于 <link
+linkend="mkvmerge.chapters">章节</link> 的段落。
+     </para>
+
+     <para>
+      此选项可用于简单章节文件与包含章节但不含章节语言信息的源文件，如 MP4 与 OGM 文件。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.chapter_charset">
+    <term><option>--chapter-charset</option> <parameter>字符集</parameter></term>
+    <listitem>
+     <para>
+      设置简单章节文件所用的字符集，用以转为 UTF-8。关于 &mkvmerge; 如何在字符集之间转换的说明请参见关于 <link
+linkend="mkvmerge.text_files_and_charsets"> 文本文件与字符集</link> 的段落。
+     </para>
+
+     <para>
+      此开关亦可应用到从特定容器类型，如 Ogg/OGM 和 MP4 文件中复制而来的章节。 详情参见下文关于章节的段落。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--cue-chapter-name-format</option> <parameter>格式</parameter></term>
+    <listitem>
+     <para>
+      &mkvmerge; 支持读取音频文件的 <abbrev>CUE</abbrev> 表单作为章节输入。<abbrev>CUE</abbrev>
+表单中各索引项通常含有 <varname>PERFORMER（表演者）</varname> 与 <varname>TITLE（标题）</varname>
+项。&mkvmerge; 使用这两个字串构建章节名称。使用此选项可设定构建名称所用的格式。
+     </para>
+
+     <para>
+      如果此选项未给定则 &mkvmerge; 默认使用 '<code>%p - %t</code>' 格式 (表演者, 后接空格, 一个破折号,
+另一个空格以及标题)。
+     </para>
+
+     <para>
+      如果给定了格式，则除了后续的标签字符以外都将被原样复制，标签字符将被进行下述替换:
+     </para>
+
+     <itemizedlist>
+      <listitem>
+       <para><parameter>%p</parameter> 被当前项的 <varname>PERFORMER（表演者）</varname> 字符串替代,</para>
+      </listitem>
+      <listitem>
+       <para><parameter>%t</parameter> 被当前项的 <varname>TITLE（标题）</varname> 字符串替代,</para>
+      </listitem>
+      <listitem>
+       <para><parameter>%n</parameter> 被当前轨道编号替代，此外</para>
+      </listitem>
+      <listitem>
+       <para><parameter>%N</parameter> 被当前轨道衬式编号（小于 10 则在前面加零）替代。</para>
+      </listitem>
+     </itemizedlist>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--chapters</option> <parameter>文件名</parameter></term>
+    <listitem>
+     <para>
+      从文件 <parameter>文件名</parameter> 读取章节信息。详情参阅下文关于 <link
+linkend="mkvmerge.chapters">章节</link> 的段落。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.global_tags">
+    <term><option>--global-tags</option> <parameter>文件名</parameter></term>
+    <listitem>
+     <para>
+      从文件 <parameter>文件名</parameter> 读取全局标签。详情参阅下文关于 <link
+linkend="mkvmerge.tags">标签</link> 的段落。
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   全局输出控制 (高级全局选项):
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><option>--track-order</option>
+<parameter>FID1:TID1,FID2:TID2,...</parameter></term>
+    <listitem>
+     <para>
+      此选项更改输入文件创建时轨道的顺序。变量为逗号分隔的成对的 ID 列。每对先包含有文件 ID
+(<parameter>FID1</parameter>)，即文件在命令行中的顺序，由 0 开始计数。第二个是在该文件中的轨道 ID
+(<parameter>TID1</parameter>)。 如果省去部分轨道的 ID，则这些轨道将在使用本选项给定的轨道创建之后创建。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--cluster-length</option> <parameter>指令</parameter></term>
+    <listitem>
+     <para>
+      限制每个簇中数据块的数量或数据的时长。<parameter>指令</parameter> 参数可以是无单位的数字
+<parameter>n</parameter>，也可以是后缀有 '<literal>ms</literal>' 的
+<parameter>d</parameter>。
+     </para>
+
+     <para>
+      如果未使用数字，&mkvmerge; 将在每个簇中放置最多 <parameter>n</parameter> 个数据块。最大块数是 65535。
+     </para>
+
+     <para>
+      如果数字 <parameter>d</parameter> 后缀有 '<literal>ms</literal>'，&mkvmerge;
+将在每个簇中放置最多 <parameter>d</parameter> 毫秒的数据。<parameter>d</parameter> 的最小值是
+'<literal>100ms</literal>'，最大值是 '<literal>32000ms</literal>'。
+     </para>
+
+     <para>
+      &mkvmerge; 默认每簇最多放置 65535 个数据块或 2000ms 的数据。
+     </para>
+
+     <para>
+      尝试定位到特定帧的程序只能直接定位到簇，然后需要读取整个簇（来完成定位）。因此创建较大的簇将导致定位不精确或缓慢。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.no_cues">
+    <term><option>--no-cues</option></term>
+    <listitem>
+     <para>
+      让 &mkvmerge; 不要创建或写入 cue 索引（ 可类比作 AVI 文件中的索引）。没有索引的 &matroska;
+文件也能播放，但定位可能不精确且缓慢。仅当您确实强求空间或用作测试时使用此选项。请参阅可为各输入文件指定的 <link
+linkend="mkvmerge.description.cues"><option>--cues</option></link> 选项。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--no-clusters-in-meta-seek</option></term>
+    <listitem>
+     <para>
+      告诉 &mkvmerge; 在文件末尾不要创建包含所有簇的元定位元素。参阅关于 <link
+linkend="mkvmerge.file_layout">&matroska; 文件规划</link> 的段落。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--disable-lacing</option></term>
+    <listitem>
+     <para>
+      禁用所有轨道的紧缩。这将增加文件大小，尤其是当有很多音频轨时。此选项不供日常之用。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--enable-durations</option></term>
+    <listitem>
+     <para>
+      为所有块写入时长。这将增大文件尺寸，而且目前对播放器来说不提供任何额外的益处。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--timecode-scale</option> <parameter>系数</parameter></term>
+    <listitem>
+     <para>
+      强制时间码缩放系数为 <parameter>系数</parameter>。有效值域为
+<constant>1000</constant>..<constant>10000000</constant> 或特殊值
+<constant>-1</constant>。
+     </para>
+
+     <para>
+      通常 &mkvmerge; 会使用数值 <constant>1000000</constant>，这样时间码和时长的精度为
+1ms。对于不包含视频轨但含有至少一条音频轨的文件，&mkvmerge;
+将自动选择一个时间码缩放系数以使各轨的音频采样精度相同。这将引起更大的额外开销，但将允许更为精确的定位与提取。
+     </para>
+
+     <para>
+      如果使用了特殊值 <constant>-1</constant>，即使有视频轨，&mkvmerge; 也将使用采样精度。
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   文件切割、链接与追加合并 (其他全局选项):
+  </para>
+
+  <variablelist>
+   <varlistentry id="mkvmerge.description.split">
+    <term><option>--split</option> <parameter>指令</parameter></term>
+
+    <listitem>
+     <para>
+      在给定尺寸或时间之后切割输出文件。请注意，各轨道只能在关键帧之前的位置切割开。由于缓冲原因，&mkvmerge;
+将在达到切割点后发现的首个关键帧前的位置切割。因此实际切割点可能比用户指定的稍稍靠后些。
+     </para>
+
+     <para>
+      目前 &mkvmerge; 支持三种不同模式。
+     </para>
+
+     <orderedlist>
+      <listitem>
+       <para>
+        按尺寸切割。
+       </para>
+
+       <para>
+        语法: <option>--split</option>
+<optional>size:</optional><parameter>d</parameter><optional>k|m|g</optional>
+       </para>
+
+       <para>
+        示例: <code>--split size:700m</code> 或者 <code>--split 150000000</code>
+       </para>
+
+       <para>
+        参数 <parameter>d</parameter> 可以以
+'<literal>k</literal>'、'<literal>m</literal>' 或 '<literal>g</literal>'
+结尾，分别说明尺寸的单位为 KB、MB 或 GB。若不加单位，则假定单位为字节。 当前输出文件达到此尺寸限制后将开始输出新的文件。
+       </para>
+
+       <para>
+        为兼顾兼容性，'<literal>size:</literal>' 前缀可以省略。
+       </para>
+      </listitem>
+
+      <listitem>
+       <para>
+        在一定时长后切割。
+       </para>
+
+       <para>
+        语法: <option>--split</option>
+<optional>duration:</optional><parameter>HH:MM:SS.nnnnnnnnn</parameter>|<parameter>d</parameter>s
+       </para>
+
+       <para>
+        示例: <code>--split duration:00:60:00.000</code> 或 <code>--split 3600s</code>
+       </para>
+
+       <para>
+        此参数可以用 <parameter>HH:MM:SS.nnnnnnnnn</parameter> 的形式指定纳秒精度的时长，也可以是后接字母
+'<literal>s</literal>' 的指定秒数时长的数字
+<parameter>d</parameter>。<parameter>HH</parameter>
+为小时数，<parameter>MM</parameter> 为分钟数，<parameter>SS</parameter>
+为秒数，而<parameter>nnnnnnnnn</parameter> 为纳秒数。 小时数与纳秒数均可省略。 小数点后最多可以有九位。
+当前输出内容的时长达到此限制后将开始输出新的输出文件。
+       </para>
+
+       <para>
+        为兼顾兼容性，'<literal>duration:</literal>' 前缀可以省略。
+       </para>
+      </listitem>
+
+      <listitem>
+       <para>
+        在指定时间码后切割。
+       </para>
+
+       <para>
+        语法: <option>--split</option>
+timecodes:<parameter>A</parameter><optional>,<parameter>B</parameter><optional>,<parameter>C</parameter>...</optional></optional>
+       </para>
+
+       <para>
+        示例: <code>--split timecodes:00:45:00.000,01:20:00.250,6300s</code>
+       </para>
+
+       <para>
+        参数
+<parameter>A</parameter>、<parameter>B</parameter>、<parameter>C</parameter>
+等等的格式与按时长切割模式（见上文）所用的格式相同。时间码表以逗号分隔。
+输入流达到当前切割点的时间码后将创建新的输出文件。然后将使用所给定的下一个切割点。
+       </para>
+
+       <para>
+        '<literal>timecodes:</literal>' 前缀不得省略。
+       </para>
+      </listitem>
+     </orderedlist>
+     <para>
+       此切割模式下输出文件名将以不同于常用操作的方式对待。可能会含有类似 <function>printf</function> 的表达式
+'<literal>%d</literal>'，包括可选的字段宽度，如
+'<literal>%02d</literal>'。如果含有上述表达式，当前文件序号将按相应格式生成，然后插入到文件名中的相应位置。
+如果没有此类匹配模式，则假定匹配模式为在文件扩展名之前插入 '<literal>-%03d</literal>': '<literal>-o
+输出.mkv</literal>' 将生成 '<literal>输出-001.mkv</literal>'
+这样的一系列文件。如果没有扩展名，'<literal>-%03d</literal>' 将被追加在文件名之后。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.link">
+    <term><option>--link</option></term>
+    <listitem>
+     <para>
+      切割输出文件时连接文件。详情请参阅下文 <link linkend="mkvmerge.file_linking">文件链接</link> 段落。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--link-to-previous</option> <parameter>剪辑-UID</parameter></term>
+    <listitem>
+     <para>
+      连接第一个输出文件到指定 <parameter>剪辑-UID</parameter> 参数对应的剪辑。详情请参阅下文 <link
+linkend="mkvmerge.file_linking">文件链接</link> 段落。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--link-to-next</option> <parameter>剪辑-UID</parameter></term>
+    <listitem>
+     <para>
+      连接最后一个输出文件到指定 <parameter>剪辑-UID</parameter> 参数对应的剪辑。详情请参阅下文 <link
+linkend="mkvmerge.file_linking">文件链接</link> 段落。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--append-mode</option> <parameter>模式</parameter></term>
+    <listitem>
+     <para>
+      决定追加合并文件时如何计算时间码。 参数 <parameter>模式</parameter> 可以有两个数值: 默认的
+'<literal>file（文件）</literal>' 和 '<literal>track（轨道）</literal>'。
+     </para>
+
+     <para>
+      当 mkvmerge 将来自另一文件 (本段中假设为 '<literal>文件2</literal>') 的一条轨道 (假设为
+'<literal>轨道2_1</literal>' ) 追加合并到首个文件 (假设为 '<literal>文件1</literal>')的一条轨道
+(假设为 '<literal>轨道1_1</literal>') 时，它将为 '<literal>轨道2_1</literal>'
+的所有时间码设定一定量的延时。 对于 '<literal>file（文件）</literal>' 模式此延时量是
+'<literal>文件1</literal>' 中遇到的最大时间码，即使此时间码不属于轨道 '<literal>轨道1_1</literal>'。而在
+track （轨道模式）下此延时为 '<literal>轨道1_1</literal>' 的最大时间码。
+     </para>
+
+     <para>
+      不幸的是 mkvmerge 无法侦测使用哪种模式更为可靠。因此默认为 '<literal>file（文件）</literal>'
+模式。'<literal>file</literal>' 模式对单独创建的文件的处理通常更好；例如在追加 <abbrev>AVI</abbrev> 或
+<abbrev>MP4</abbrev> 文件时。'<literal>track（轨道）</literal>'
+模式对一个大文件的完整分块的处理更好，例如对于 <abbrev>VOB</abbrev> 与 <abbrev>EVO</abbrev> 文件。
+     </para>
+
+     <para>
+      即使选用了 '<literal>track（轨道）</literal>' 模式，字母轨道也将按照
+'<literal>file（文件）</literal>' 模式处理。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--append-to</option>
+<parameter>SFID1:STID1:DFID1:DTID1<optional>,...</optional></parameter></term>
+    <listitem>
+     <para>
+      此选项控制要追加合并哪些轨道与哪些轨道。 各指令由四个 ID 组成: 源文件 ID, 源轨道 ID, 目标文件 ID 和目标轨道 ID。
+第一对，"源文件 ID" 与 "源轨道 ID"确定要追加合并的轨道。 第二对，"目标文件 ID" 与 "目标轨道 ID"，确定源轨道要追加合并到的轨道。
+     </para>
+
+     <para>
+      如果忽略本选项，则将使用标准映射。 标准映射即将当前文件的各个轨道追加到前一个文件的相应轨道（轨道 ID 相同）。
+当影片被切割为多段，且各文件中轨道数和轨道 ID 相同时，这将允许简单的追加合并，命令行为 <command>mkvmerge -o 输出.mkv
+第一段.mkv +第二段.mkv</command>。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>+</option></term>
+    <listitem>
+     <para>
+      单个 '+' 将追加后面的文件，而不是添加。'+' 也可以直接放在下一个文件名的前面。因此以下两条命令等效:
+     </para>
+
+     <screen>
+$ mkvmerge -o 完整.mkv 文件1.mkv + 文件2.mkv
+$ mkvmerge -o 完整.mkv 文件1.mkv +文件2.mkv
+     </screen>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   附件支持（其他全局选项）：
+  </para>
+
+  <variablelist>
+   <varlistentry  id="mkvmerge.description.attachment_description">
+    <term><option>--attachment-description</option> <parameter>描述</parameter></term>
+    <listitem>
+     <para>
+      对后面附件的纯文字描述。将应用到下一个 <link
+linkend="mkvmerge.description.attach_file"><option>--attach-file</option></link>
+或 <option>--attach-file-once</option> 选项。
+
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--attachment-mime-type</option> <parameter>MIME 类型</parameter></term>
+    <listitem>
+     <para>
+      后面附件的 <abbrev >MIME</abbrev> 类型。将应用到下一个 <link
+linkend="mkvmerge.description.attach_file"><option>--attach-file</option></link>
+或 <link
+linkend="mkvmerge.description.attach_file"><option>--attach-file-once</option></link>
+选项。 官方认可的 <abbrev>MIME</abbrev> 类型列表可以在如 <ulink
+url="http://www.iana.org/assignments/media-types/">IANA 主页</ulink>
+找到。<abbrev>MIME</abbrev> 类型对附件来说是必需的。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--attachment-name</option> <parameter>名称</parameter></term>
+    <listitem>
+     <para>
+      设置此附件将在输出文件中储存的名称。 如果未给出此选项则将由 <link
+linkend="mkvmerge.description.attach_file"><option>--attach-file</option></link>
+或 <link
+linkend="mkvmerge.description.attach_file"><option>--attach-file-once</option></link>
+选项所设的文件名推得。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.attach_file">
+    <term>
+     <option>--attach-file</option> <parameter>文件名</parameter>,
+<option>--attach-file-once</option> <parameter>文件名</parameter>
+    </term>
+    <listitem>
+     <para>
+      在 &matroska; 文件中创建文件附件。<abbrev>MIME</abbrev> 类型必须在使用此选项之前设定。两种形式的不同之处在于使用
+<option>--attach-file</option> 附加的文件在切割过程中将被附加到所有输出文件中，而使用
+<option>--attach-file-once</option> 附加的文件只被附加到创建的首个文件中。如果未使用切割功能，两种形式效果相同。
+     </para>
+
+     <para>
+      可以使用 &mkvextract; 从 &matroska; 文件中提取附件文件。
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   用于各输入文件的选项：
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><option>-a</option>, <option>--audio-tracks</option>
+<parameter>n,m,...</parameter></term>
+    <listitem>
+     <para>
+      复制 <parameter>n</parameter>、<parameter>m</parameter> 等音频轨。数字是可以通过 <link
+linkend="mkvmerge.description.identify"><option>--identify</option></link>
+开关获取的轨道 ID。他们不只是简单的轨道序号（参见 <link linkend="mkvmerge.track_ids">轨道
+ID</link>段落）。默认: 复制所有音频轨道。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-d</option>, <option>--video-tracks</option>
+<parameter>n,m,...</parameter></term>
+    <listitem>
+     <para>
+      复制 <parameter>n</parameter>、<parameter>m</parameter> 等视频轨。数字是可以通过 <link
+linkend="mkvmerge.description.identify"><option>--identify</option></link>
+开关获取的轨道 ID。他们不只是简单的轨道序号（参见 <link linkend="mkvmerge.track_ids">轨道
+ID</link>段落）。默认: 复制所有视频轨道。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-s</option>, <option>--subtitle-tracks</option>
+<parameter>n,m,...</parameter></term>
+    <listitem>
+     <para>
+      复制 <parameter>n</parameter>、<parameter>m</parameter> 等字幕轨。数字是可以通过 <link
+linkend="mkvmerge.description.identify"><option>--identify</option></link>
+开关获取的轨道 ID。他们不只是简单的轨道序号（参见 <link linkend="mkvmerge.track_ids">轨道
+ID</link>段落）。默认: 复制所有字幕轨道。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-b</option>, <option>--button-tracks</option>
+<parameter>n,m,...</parameter></term>
+    <listitem>
+     <para>
+      复制 <parameter>n</parameter>、<parameter>m</parameter> 等按钮轨。数字是可以通过 <link
+linkend="mkvmerge.description.identify"><option>--identify</option></link>
+开关获取的轨道 ID。他们不只是简单的轨道序号（参见 <link linkend="mkvmerge.track_ids">轨道
+ID</link>段落）。默认: 复制所有按钮轨道。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--track-tags</option> <parameter>n,m,...</parameter></term>
+    <listitem>
+     <para>
+      复制 <parameter>n</parameter>、<parameter>m</parameter> 等轨道的标签。数字是可以通过 <link
+linkend="mkvmerge.description.identify"><option>--identify</option></link>
+开关获取的轨道 ID。他们不只是简单的轨道序号（参见 <link linkend="mkvmerge.track_ids">轨道
+ID</link>段落）。默认: 复制所有轨道的标签。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.attachments">
+    <term><option>-m</option>, <option>--attachments</option>
+<parameter>n<optional>:all|first</optional>,m<optional>:all|first</optional>,...</parameter></term>
+    <listitem>
+     <para>
+      复制 ID 为 <parameter>n</parameter>、<parameter>m</parameter>
+等的附件到所有或者仅首个输出文件中。各 ID 后可接 '<literal>:all</literal>'（如果两可选数值均未输入，此为默认值）或者
+'<literal>:first</literal>'。如果切割功能已被起用，则 ID 被指定为 '<literal>:all</literal>'
+的附件将被复制到所有生成的输出文件中，而其他附件只被复制到首个输出文件中。如果未使用切割功能则两变量等效。
+     </para>
+
+     <para>
+      默认复制所有附件到所有输出文件中。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-A</option>, <option>--no-audio</option></term>
+    <listitem>
+     <para>
+      不要从此文件中复制任何音频轨。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-D</option>, <option>--no-video</option></term>
+    <listitem>
+     <para>
+      不要从此文件中复制任何视频轨。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-S</option>, <option>--no-subtitles</option></term>
+    <listitem>
+     <para>
+      不要从此文件中复制任何字幕轨。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-B</option>, <option>--no-buttons</option></term>
+    <listitem>
+     <para>
+      不要从此文件中复制任何按钮轨。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-T</option>, <option>--no-track-tags</option></term>
+    <listitem>
+     <para>
+      不要从此文件中复制任何轨道细节标签。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.no_chapters">
+    <term><option>--no-chapters</option></term>
+    <listitem>
+     <para>
+      不要从此文件中复制章节。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.no_attachments">
+    <term><option>-M</option>, <option>--no-attachments</option></term>
+    <listitem>
+     <para>
+      不要从此文件中复制附件。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--no-global-tags</option></term>
+    <listitem>
+     <para>
+      不要从此文件中复制全局标签。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--chapter-charset</option> <parameter>字符集</parameter></term>
+    <listitem>
+     <para>
+      设置源文件中章节信息的字符集，以供转为 UTF-8 之用。关于 &mkvmerge; 如何在字符集之间进行转换的说明，请参阅下文 <link
+linkend="mkvmerge.text_files_and_charsets"> 文本文件与字符集</link> 段落。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--chapter-language</option> <parameter>语言代码</parameter></term>
+    <listitem>
+     <para>
+      选择各章节项所用的 ISO639-2 语言代码。 此选项可用于包含章节但不含关于章节语言的信息的源文件，如 MP4 与 OGM 文件。
+     </para>
+    </listitem>
+  </varlistentry>
+
+   <varlistentry>
+    <term><option>-y</option>, <option>--sync</option>
+<parameter>TID:d<optional>,o<optional>/p</optional></optional></parameter></term>
+    <listitem>
+     <para>
+      将 id 为 <parameter>TID</parameter> 的轨道的时间码按 <parameter>d</parameter> ms
+进行调整。轨道 ID 与 <link
+linkend="mkvmerge.description.identify"><option>--identify</option></link>
+所给出的相同 (参见 <link linkend="mkvmerge.track_ids">轨道 ID</link> 段落)。
+     </para>
+
+     <para>
+      <parameter>o</parameter>/<parameter>p</parameter>: 按
+<parameter>o</parameter>/<parameter>p</parameter> 调整时间戳以修复线性偏移。如果省略
+<parameter>p</parameter> 则默认为 1。<parameter>o</parameter> 与
+<parameter>p</parameter> 均可为浮点数。
+     </para>
+
+     <para>
+      默认: 无手动同步校正 (与 <parameter>d</parameter> = <constant>0</constant> 及
+<parameter>o</parameter>/<parameter>p</parameter> = <constant>1.0</constant>
+效果相同)。
+     </para>
+
+     <para>
+      此选项可以对同一输入文件多次使用，通过每次选择不同轨道 ID 分别应用到多个轨道。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.cues">
+    <term><option>--cues</option> <parameter>TID:none|iframes|all</parameter></term>
+    <listitem>
+     <para>
+      控制为指定轨道 (参阅 <link linkend="mkvmerge.track_ids">轨道 ID</link> 段落) 创建何种 cue
+索引。'<literal>none（无）</literal>' 将阻止 cue 索引的创建。 而 '<literal>iframes（仅 i
+帧）</literal>' 表示仅将没有前后参考的块 ( = 视频轨道中的 I 帧) 置于 cue
+索引项中。'<literal>all（全部）</literal>' 将使 &mkvmerge; 为所有区块创建索引，会使生成的文件非常大。
+     </para>
+
+     <para>
+      默认视频轨为 '<literal>iframes（仅 i 帧）</literal>'，其他所有轨道均为
+'<literal>none（无）</literal>'. 参见不论是否使用 <option>--cues</option> 选项时都能阻止创建 cue
+索引项的 <link
+linkend="mkvmerge.description.no_cues"><option>--no-cues</option></link> 选项。
+     </para>
+
+     <para>
+      此选项可以对同一输入文件多次使用，通过每次选择不同轨道 ID 分别应用到多个轨道。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--default-track</option>
+<parameter>TID<optional>:bool</optional></parameter></term>
+    <listitem>
+     <para>
+      当为设定可选变量 <parameter>bool</parameter> 时为指定轨道 (参见 <link
+linkend="mkvmerge.track_ids">轨道 ID</link> 段落) 设置 '默认轨' 标记。
+当用户未明确选定一个轨道时，播放器将优先选用设有 '默认轨' 标记的轨道。各类 (音频、视频、字幕、按钮) 轨道只能有一条设置 '默认轨' 标记。
+如果用户希望所有轨道都不被设置默认轨标记，可以将所有轨道的 <parameter>bool</parameter> 设为
+<constant>0</constant>。
+     </para>
+
+     <para>
+      此选项可以对同一输入文件多次使用，通过每次选择不同轨道 ID 分别应用到多个轨道。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--blockadd</option> <parameter>TID:层级</parameter></term>
+    <listitem>
+     <para>
+      只保留选定轨道中高达 <parameter>层级</parameter> 层级的
+<classname>BlockAdditions</classname> 附加块。 默认保留所有层级。 此选项只影响特定类型的编解码器，如
+WAVPACK4。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.track_name">
+    <term><option>--track-name</option> <parameter>TID:名称</parameter></term>
+    <listitem>
+     <para>
+      将指定轨道 (参见 <link linkend="mkvmerge.track_ids">轨道 ID</link> 段落) 的轨道名称设为
+<parameter>名称</parameter>。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.language">
+    <term><option>--language</option> <parameter>TID:语言</parameter></term>
+    <listitem>
+     <para>
+      为指定轨道 (参见 <link linkend="mkvmerge.track_ids">轨道 ID</link>) 设置语言。允许使用
+ISO639-2 语言代码与 ISO639-1 国家代码。国家代码将被自动转换为语言代码。 可以使用 <link
+linkend="mkvmerge.description.list_languages"><option>--list-languages</option></link>
+选项列出所有语言以及它们的 ISO639-2 代码。
+     </para>
+
+     <para>
+      此选项可以对同一输入文件多次使用，通过每次选择不同轨道 ID 分别应用到多个轨道。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-t</option>, <option>--tags</option> <parameter>TID:文件名</parameter></term>
+    <listitem>
+     <para>
+      从文件 <parameter>文件名</parameter> 读取轨道号为 <parameter>TID</parameter>
+的轨道的标签。详情参见下文 <link linkend="mkvmerge.tags">标签</link> 段落。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--aac-is-sbr</option>
+<parameter>TID<optional>:0|1</optional></parameter></term>
+    <listitem>
+     <para>
+      告诉 &mkvmerge; ID 为 <parameter>TID</parameter> 的轨道是 <abbrev>SBR AAC</abbrev>
+(亦作 <abbrev>HE-AAC</abbrev> 或 <abbrev>AAC+</abbrev>)。下述情况下需要此选项：a) 源文件是
+<abbrev>AAC</abbrev> 文件 (<emphasis>不是</emphasis> &matroska; 文件) 且 b) 该
+<abbrev>AAC</abbrev> 文件含有 <abbrev>SBR AAC</abbrev> 数据。
+设置此开关的原因是目前技术上无法在不解码一个完整的 <abbrev>AAC</abbrev> 帧的情况下自动分辨普通的
+<abbrev>AAC</abbrev> 数据与 <abbrev>SBR AAC</abbrev> 数据。由于 <abbrev>AAC</abbrev>
+解码器的诸多专利问题，&mkvmerge; 永远不会包含此解码层。因此此开关对于 <abbrev>SBR AAC</abbrev>
+文件是必需的。如果忽略了此开关，生成的文件可能无法正常回放，甚至可能根本无法播放。
+     </para>
+
+     <para>
+      如果源文件是 &matroska; 文件，则已有足够侦测 <abbrev>SBR AAC</abbrev> 的
+<classname>CodecID</classname> 了。然而，如果 <classname>CodecID</classname>
+标注错误，此开关可用于更正之。
+     </para>
+
+     <para>
+      如果 mkvmerge 错将 <abbrev>AAC</abbrev> 文件侦测为 <abbrev>SBR</abbrev>，您可以将
+'<literal>:0</literal>' 添加到轨道 ID。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--timecodes</option> <parameter>TID:文件名</parameter></term>
+    <listitem>
+     <para>
+      从 <parameter>文件名</parameter> 读取要应用到指定轨道 ID 的时间码。 这些时间码将强制覆盖 &mkvmerge;
+默认计算出的时间码。参阅关于 <link
+linkend="mkvmerge.external_timecode_files">外部时间码文件</link> 的章节。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--default-duration</option> <parameter>TID:x</parameter></term>
+    <listitem>
+     <para>
+      强制指定轨道的默认时长为指定数值。 将同时修改轨道的时间码以匹配该默认时长。 变量 <parameter>x</parameter> 必须有
+'<literal>s</literal>', '<literal>ms</literal>', '<literal>us</literal>',
+'<literal>ns</literal>' 或 '<literal>fps</literal>'
+后缀，分别说明默认时长的单位为秒、毫秒、微秒、纳秒以及帧每秒。 数字 <parameter>x</parameter> 本身可为浮点数或分数。
+     </para>
+
+     <para>
+      如果未强定默认时长，mkvmerge 将尝试根据使用的容器和/或编解码器推定轨道的默认时长。 此选项有用的一种情况是当添加
+<foreignphrase>AVC/h.264</foreignphrase> 基本流时，因为此类流不含关于帧数及各帧默认时长的信息。 对此类文件
+&mkvmerge; 将假定默认时长为 '<literal>25fps</literal>'，除非被（用户设置）覆盖。
+     </para>
+
+     <para>
+      此选项也可用于在不使用外部时间码文件的情况下更改视频轨的 <abbrev>FPS（帧率）</abbrev>。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--nalu-size-length</option> <parameter>TID:n</parameter></term>
+    <listitem>
+     <para>
+      强制 <abbrev>NALU</abbrev> 长度为 <parameter>n</parameter> 字节。 此变量仅当使用
+<foreignphrase>AVC/h.264</foreignphrase> 基本流分包器时使用。 如果留空，则默认为 4
+字节，然而有的文件包含的所有帧或切片都小于 65536 字节。 对此类文件您可以使用此参数并将长度降为 2。
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   仅用于视频轨的选项：
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term><option>-f</option>, <option>--fourcc</option>
+<parameter>TID:FourCC</parameter></term>
+    <listitem>
+     <para>
+      强制 <classname>FourCC</classname> 为指定值。仅对
+'<foreignphrase>微软兼容模式</foreignphrase>' 的视频轨有效。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.display_dimensions">
+    <term><option>--display-dimensions</option> <parameter>TID:宽度x高度</parameter></term>
+    <listitem>
+     <para>
+      &matroska; 文件含有两个设定播放器回放时应当将画面缩放到的显示属性值: 显示宽度与显示高度。 可以使用本选项设定这些数值，如
+'<literal>1:640x480</literal>'。
+     </para>
+
+     <para>
+      指定所用数值的其他方法是使用 <link
+linkend="mkvmerge.description.aspect_ratio"><option>--aspect-ratio</option></link>
+或 <link
+linkend="mkvmerge.description.aspect_ratio_factor"><option>--aspect-ratio-factor</option></link>
+选项 (参见下文)。 这些选项是互相独立的。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.aspect_ratio">
+    <term><option>--aspect-ratio</option> <parameter>TID:宽高比|宽度/高度</parameter></term>
+    <listitem>
+     <para>
+      &matroska; 文件含有两个设定播放器回放时应当将画面缩放到的显示属性值: 显示宽度与显示高度。 通过本选项 &mkvmerge;
+可自动根据画面原始宽高和本选项给定的宽高比计算出显示宽度和显示高度。 宽高比可以以浮点数 <parameter>宽高比</parameter> 或分数
+'<parameter>宽度</parameter>/<parameter>高度</parameter>' 的形式给出，如
+'<literal>16/9</literal>'。
+     </para>
+
+     <para>
+      指定所用数值的其他方法是使用 <link
+linkend="mkvmerge.description.aspect_ratio_factor"><option>--aspect-ratio-factor</option></link>
+或 <link
+linkend="mkvmerge.description.display_dimensions"><option>--display-dimensions</option></link>
+选项 (参见上下文)。这些选项相互独立。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.aspect_ratio_factor">
+    <term><option>--aspect-ratio-factor</option> <parameter>TID:系数|n/d</parameter></term>
+    <listitem>
+     <para>
+      另一种设置宽高比的方法是指定一个 <parameter>系数</parameter>。将将原始宽高比与
+<parameter>系数</parameter> 相乘后用作目标宽高比。
+     </para>
+
+     <para>
+      指定所用数值的其他方法是使用 <link
+linkend="mkvmerge.description.aspect_ratio"><option>--aspect-ratio</option></link>
+或 <link
+linkend="mkvmerge.description.display_dimensions"><option>--display-dimensions</option></link>
+选项 (参见上文)。这些选项互相独立。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--cropping</option> <parameter>TID:左,上,右,下</parameter></term>
+    <listitem>
+     <para>
+      将视频轨道的像素裁减参数设为指定数值。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--stereo-mode</option> <parameter>TID:n|关键词</parameter></term>
+    <listitem>
+     <para>
+      设置 ID 为 <parameter>TID</parameter> 的视频轨的立体视法。 模式既可以是 <constant>0</constant>
+到 <constant>3</constant> 之间的数字 <parameter>n</parameter>，也可以是
+'<literal>none（无立体视法）</literal>' (与
+<parameter>n</parameter>=<constant>0</constant> 相同),
+'<literal>right（右眼视角）</literal>' (与
+<parameter>n</parameter>=<constant>1</constant> 相同),
+'<literal>left（左眼视角）</literal>' (与
+<parameter>n</parameter>=<constant>2</constant> 相同)  or
+'<literal>both（双眼视角）</literal>' (与
+<parameter>n</parameter>=<constant>3</constant> 相同)。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.compression">
+    <term><option>--compression</option> <parameter>TID:压缩方式</parameter></term>
+    <listitem>
+     <para>
+      选择用于 VobSub 轨道的压缩方式。注意播放器也得支持该方式。有效的值有
+'<literal>none（无压缩）</literal>'、'<literal>zlib</literal>'、'<literal>lzo</literal>'/'<literal>lxo1x</literal>'、'<literal>bz2</literal>'/'<literal>bzlib</literal>'
+与 '<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>'。值
+'<literal>lzo</literal>'/'<literal>lxo1x</literal>' 与
+'<literal>bz2</literal>'/'<literal>bzlib</literal>' 仅当 &mkvmerge; 附加相应的
+<productname>liblzo</productname> 和 <productname>bzlib</productname>
+压缩库编译时有效。
+     </para>
+
+     <para>
+      压缩方式 '<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>' 是一种称为
+'<foreignphrase>header removal</foreignphrase>' 的特殊压缩方式，只对 MPEG4 part 2
+视频轨可用。其他压缩方式是可用于所有类型轨道的通用压缩方式。
+     </para>
+
+     <para>
+      默认为 '<literal>zlib</literal>' 压缩。此压缩方式也是几乎所有回放程序都支持的压缩方式。无法保证对除
+'<literal>none（无压缩）</literal>' 以外的其他压缩方式的支持。
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   仅适用于文本字幕轨道的选项:
+  </para>
+
+  <variablelist>
+   <varlistentry id="mkvmerge.description.sub_charset">
+    <term><option>--sub-charset</option> <parameter>TID:字符集</parameter></term>
+    <listitem>
+     <para>
+      为指定轨道 ID 指定所用字符集，用以转为 UTF-8 编码的 UTF-8 字幕。如果未指定字符集，则将根据当前区域设置推算字符集。注意对于从
+&matroska; 文件或 Kate 流中读取的字幕不必指定字符集，因为在这些格式中已使用 UTF-8 编码储存。关于 &mkvmerge;
+如何在字符集间进行转换的说明请参见关于 <link linkend="mkvmerge.text_files_and_charsets">
+文本文件与字符集</link> 的段落。
+     </para>
+
+     <para>
+      此选项可以对同一输入文件多次使用，通过每次选择不同轨道 ID 分别应用到多个轨道。
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   其他选项：
+  </para>
+
+  <variablelist>
+   <varlistentry id="mkvmerge.description.identify">
+    <term><option>-i</option>, <option>--identify</option> <parameter>文件名</parameter></term>
+    <listitem>
+     <para>
+      将使 &mkvmerge; 探查单个文件并报告其类型、文件中包含的轨道及其轨道 ID。如果使用了本选项，唯一可用的其他选项就是文件名。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-l</option>, <option>--list-types</option></term>
+    <listitem>
+     <para>
+      列出受支持的输入文件类型。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.list_languages">
+    <term><option>--list-languages</option></term>
+    <listitem>
+     <para>
+      列出所有语言及其 ISO639-2 代码，这些代码可以在 <link
+linkend="mkvmerge.description.language"><option>--language</option></link>
+选项中使用。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--priority</option> <parameter>优先级</parameter></term>
+    <listitem>
+     <para>
+      设置 &mkvmerge; 运行时的进程优先级。有效的值为 '<literal>lowest（最低）</literal>',
+'<literal>lower（较低）</literal>', '<literal>normal（普通）</literal>',
+'<literal>higher（较高）</literal>' 与
+'<literal>highest（最高）</literal>'。如果未予设定，则使用
+'<literal>normal（普通优先级）</literal>'。在 类-Unix 系统中 &mkvmerge; 将使用
+<citerefentry><refentrytitle>nice</refentrytitle><manvolnum>2</manvolnum></citerefentry>
+功能。因此只有超级用户才能使用 '<literal>higher（较高优先级）</literal>' 与
+'<literal>highest（最高优先级）</literal>'。对于 Windows 用户来说所有值都可用。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.command_line_charset">
+    <term><option>--command-line-charset</option> <parameter>字符集</parameter></term>
+    <listitem>
+     <para>
+      设定在命令行给出的字符串的字符集，用于转为其他字符集。默认为系统当前区域设置中所给定的字符集。此设置将应用到以下选项的变量: <link
+linkend="mkvmerge.description.title"><option>--title</option></link>、<link
+linkend="mkvmerge.description.track_name"><option>--track-name</option></link>
+及 <link
+linkend="mkvmerge.description.attachment_description"><option>--attachment-description</option></link>。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.output_charset">
+    <term><option>--output-charset</option> <parameter>字符集</parameter></term>
+    <listitem>
+     <para>
+      设置输出的字符串应被转换到何种字符集。默认为系统当前区域设置中所给定的字符集。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.redirect_output">
+    <term><option>-r</option>, <option>--redirect-output</option>
+<parameter>文件名</parameter></term>
+    <listitem>
+     <para>
+      将所有信息输出至文件 <parameter>文件名</parameter> 而不是在命令行显示。
+尽管该操作可以用输出重定向轻松实现，但在某些情况下还需要靠它：如当终端在写入文件之前重新解释（覆盖输出）时。 将优先使用通过 <link
+linkend="mkvmerge.description.output_charset"><option>--output-charset</option></link>
+设定的字符集。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvmerge.description.ui_language">
+    <term><option>--ui-language</option> <parameter>语言代码</parameter></term>
+    <listitem>
+     <para>
+      强制使用语言代码为 <parameter>语言代码</parameter> 的翻译（如  '<literal>de_DE</literal>'
+对应德文翻译）。使用 <varname>LANG</varname>, <varname>LC_MESSAGES</varname> 及
+<varname>LC_ALL</varname> 这些环境变量更好。如果在 <parameter>语言代码</parameter> 处输入
+'<literal>list</literal>'，&mkvmerge; 将输出可用翻译列表。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>@</option>选项文件</term>
+    <listitem>
+     <para>
+      从文件 <parameter>选项文件</parameter> 中读取额外的命令行参数。首个非空白字符为井号
+('<literal>#</literal>')
+的行将被当作注释对待，在处理过程中将被忽略。各行开头与结尾的空白将被除去。各行必须恰好含有一个选项。没有元字符转义。
+     </para>
+
+     <para>
+      命令行 '<command>mkvmerge -o "我的文件.mkv" -A "一部影片.avi" 声音.ogg</command>'
+可以转换为下述选项文件:
+     </para>
+
+     <programlisting>
+# 输出到文件 "我的文件.mkv"。
+-o
+我的文件.mkv
+# 只取 "一部影片.avi" 中的视频。
+-A
+一部影片.avi
+声音.ogg
+     </programlisting>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--capabilities</option></term>
+    <listitem>
+     <para>
+      列出编译时附加的可选功能并退出。输出信息的第一行是版本信息。接下来的每行包含一个单词，各单词的出现意味着编译时附加了相应功能。这些功能包括：
+     </para>
+
+     <itemizedlist>
+      <listitem>
+       <para>
+        '<literal>BZ2</literal>' -- <productname>bzlib</productname> 压缩库。影响 <link
+linkend="mkvmerge.description.compression"><option>--compression</option></link>
+选项可用的压缩方式。
+       </para>
+      </listitem>
+
+      <listitem>
+       <para>
+        '<literal>LZO</literal>' -- <productname>lzo</productname> 压缩库。影响 <link
+linkend="mkvmerge.description.compression"><option>--compression</option></link>
+选项可用的压缩方式。
+       </para>
+      </listitem>
+
+      <listitem>
+       <para>
+        '<literal>FLAC</literal>' -- 读取原始 <abbrev>FLAC</abbrev> 文件，以及处理其他容器中的
+<abbrev>FLAC</abbrev> 轨道，例如 <productname>Ogg</productname> 或 &matroska;
+容器中的。
+       </para>
+      </listitem>
+     </itemizedlist>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-h</option>, <option>--help</option></term>
+    <listitem>
+     <para>
+      显示用法信息并退出。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-V</option>, <option>--version</option></term>
+    <listitem>
+     <para>
+      显示版本信息并退出。
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.usage">
+  <title>用法</title>
+  <para>
+   用户可以选择各文件中 &mkvmerge; 应该使用的轨道。它们都将被封装到 <option>-o</option>所指定的文件中。可通过
+<option>-l</option> 选项获取已知（且受支持的）来源格式列表。
+  </para>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.examples">
+  <title>示例</title>
+  <para>
+   假定您有个名为 我的影片.avi 的文件，以及分开存放的音频轨如 '<literal>我的影片.wav</literal>'。您希望先将音频编码为
+&oggvorbis;:
+  </para>
+
+  <screen>$ oggenc -q4 -o 我的影片.ogg 我的影片.wav</screen>
+
+  <para>
+   几分钟后您就可以合并视频和音频了:
+  </para>
+
+  <screen>$ mkvmerge -o 我的有声影片.mkv 我的影片.avi 我的影片.ogg</screen>
+
+  <para>
+   如果您的 <abbrev>AVI</abbrev> 文件已经含有一条音频轨，则将同时复制该轨道（只要 &mkvmerge;
+支持该音频格式）。要避免此状况，只需要这样
+  </para>
+
+  <screen>$ mkvmerge -o 我的有声影片.mkv -A 我的影片.avi 我的影片.ogg</screen>
+
+  <para>
+   又过了几分钟，您又制作了另一条音频轨，如 导演评论或者是另一种语言的配音，您生成的文件名是
+'<literal>我影片的另一音轨.wav</literal>'。 再进行一次编码操作，然后将其合并:
+  </para>
+
+  <screen>
+$ oggenc -q4 -o 我影片的另一音轨.ogg 我影片的另一音轨.wav
+$ mkvmerge -o 我的影片-成品.mkv 我的有声影片.mkv 我影片的另一音轨.ogg
+  </screen>
+
+  <para>
+   照下面的做法结果相同
+  </para>
+
+  <screen>$ mkvmerge -o 我的影片-成品.mkv -A 我的影片.avi 我的影片.ogg 我影片的另一音轨.ogg</screen>
+
+  <para>
+   现在开启 <productname>mplayer</productname> 尽情享受吧。如果您有多条音频轨（或者甚至是视频轨），那么您可以通过
+'<option>-vid</option>' 与 '<option>-aid</option>' 选项告诉
+<productname>mplayer</productname> 应该播放哪些轨道。这些是基础功能，不区分视频与音频。
+  </para>
+
+  <para>
+   如果您需要同步音频轨，会非常容易。首先找清 Vorbis 轨道的轨道 ID
+  </para>
+
+  <screen>$ mkvmerge --identify 错开了的.ogg</screen>
+
+  <para>
+   现在您可以在下述命令行中使用该 ID:
+  </para>
+
+  <screen>$ mkvmerge -o 同步了的.mkv -A 源.avi -y 12345:200 错开了的.ogg</screen>
+
+  <para>
+   这将在 '<literal>错开了的.ogg</literal>' 中 ID 为 <constant>12345</constant>
+的音频轨的开头添加 200ms 的静音。
+  </para>
+
+  <para>
+   有些影片在开头同步正常，但音画同步会慢慢偏离开。对此类影片您可以指定延时系数，该系数将被应用到所有时间戳 --
+不添加或移除任何数据。因此如果您所设定的系数过大或过小会造成很糟糕的结果。例如我转码的一期节目有 <constant>77340</constant>
+帧长，在结尾处有 <constant>0.2</constant> 秒的同步偏离。在 <constant>29.97fps</constant>
+帧率下大约是每 <constant>6</constant> 帧错开 <constant>0.2</constant> 秒。于是我这样操作
+  </para>
+
+  <screen>$ mkvmerge -o 同步了的.mkv -y 23456:0,77346/77340 错开了的.mkv</screen>
+
+  <para>
+   搞定了。
+  </para>
+
+  <para>
+   同步选项对字幕同样起作用。
+  </para>
+
+  <para>
+   对于文本字幕，您既可以选用一些 Windows 软件（如 <productname>SubRipper</productname>）或
+'<literal>contrib/subrip</literal>' 目录
+<citerefentry><refentrytitle>transcode</refentrytitle><manvolnum>1</manvolnum></citerefentry>
+的源码中的 <productname>subrip</productname> 包。大体过程是这样的:
+  </para>
+
+  <orderedlist>
+   <listitem>
+    <para>从源文件中提取原始字幕流:</para>
+    <screen>$ tccat -i /path/to/copied/dvd/ -T 1 -L | tcextract -x ps1 -t vob -a 0x20 | subtitle2pgm -o mymovie</screen>
+   </listitem>
+
+   <listitem>
+    <para>使用 gocr 将生成的 PGM 图像转为文本:</para>
+    <screen>$ pgm2txt mymovie</screen>
+   </listitem>
+
+   <listitem>
+    <para>对生成的文本文件进行拼写检查:</para>
+    <screen>$ ispell -d american *txt</screen>
+   </listitem>
+
+   <listitem>
+    <para>将文本文件转为 SRT 文件:</para>
+    <screen>$ srttool -s -w -i mymovie.srtx -o mymovie.srt</screen>
+   </listitem>
+  </orderedlist>
+
+  <para>
+   这样生成的文件可用作 &mkvmerge; 的输入文件:
+  </para>
+
+  <screen>$ mkvmerge -o mymovie.mkv mymovie.avi mymovie.srt</screen>
+
+  <para>
+   如果您希望为指定轨道指定语言，这将很容易完成。首先找到您所需语言的 ISO639-2 代码。&mkvmerge; 会为您列出所有代码:
+  </para>
+
+  <screen>$ mkvmerge --list-languages</screen>
+
+  <para>
+   在列表中找到您所需的语言。假定您已在 &matroska; 文件中放入两条音轨，并希望设置它们的语言代码，两条轨道的轨道 ID 为 2 和
+3。可以这样操作
+  </para>
+
+  <screen>$ mkvmerge -o 含语言代码的.mkv --language 2:ger --language 3:dut 无语言代码的.mkv</screen>
+
+  <para>
+   如您所见，<link
+linkend="mkvmerge.description.language"><option>--language</option></link>
+开关可多次使用。
+  </para>
+
+  <para>
+   或许您还想让荷兰语作为默认语言。您还有其他语言的字幕，如英语和法语的，并希望让播放器默认显示法语字幕。可以这样操作
+  </para>
+
+  <screen>$ mkvmerge -o 含语言代码的.mkv --language 2:ger --language 3:dut --default-track 3 无语言代码的.mkv --language 0:eng 英语.srt --default-track 0 --language 0:fre 法语.srt</screen>
+
+  <para>
+   如果您在 &mkvinfo; 的输出信息中没找到您指定的语言或默认轨标记，请参阅关于 <link
+linkend="mkvmerge.default_values">默认值</link> 的段落。
+  </para>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.track_ids">
+  <title>轨道 ID</title>
+
+  <para>
+   &mkvmerge; 的一些选项要求提供轨道 ID 以指定应应用到的轨道。 当读取器分离当前输入文件时，或者使用 <link
+linkend="mkvmerge.description.identify"><option>--identify</option></link>
+选项调用 &mkvmerge; 时这些轨道 ID 会被显示出来。此类输出的一个示例：
+  </para>
+
+  <screen>
+$ mkvmerge -i v.mkv
+File 'v.mkv': container: &matroska;
+Track ID 1: video (V_MS/VFW/FOURCC, DIV3)
+Track ID 2: audio (A_MPEG/L3)
+  </screen>
+
+  <para>
+   轨道 ID 通常这样分配：
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     <abbrev>AVI</abbrev> 文件: 视频轨 ID 为 0。音频轨的 ID 由 1 开始升序分配。
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     <abbrev>AAC</abbrev>、<abbrev>AC3</abbrev>、<abbrev>MP3</abbrev>、<abbrev>SRT</abbrev>
+与 <abbrev>WAV</abbrev> 文件: 此类文件中唯一的 '轨道' 的 ID 为 0。
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     Ogg/<abbrev>OGM</abbrev> 文件: 轨道 ID 按在文件中被找到的顺序由 0 开始分配。
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     &matroska; 文件: 轨道 ID 与 &mkvinfo; 所报告的相同。注意 <emphasis>不是</emphasis> 轨道 UID。
+    </para>
+   </listitem>
+  </itemizedlist>
+
+  <para>
+   特殊的轨道 ID '<constant>-1</constant>' 是个百搭号，它将使给定的开关应用到从输入文件中读到的所有轨道。
+  </para>
+
+  <para>
+   使用轨道 ID 的选项的描述中均含有 '<literal>TID</literal>'。此外下列选项也使用轨道 ID:
+<option>--atracks</option>、<option>--vtracks</option>、<option>--stracks</option>
+以及 <option>--btracks</option>。
+  </para>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.text_files_and_charsets">
+  <title>文本文件与字符集转换</title>
+  <note>
+   <para>
+    此段落可应用到 MkvToolNix 中的所有程序，尽管此处仅提及了 &mkvmerge;。
+   </para>
+  </note>
+
+  <para>
+   &matroska; 文件中的所有文本均使用 UTF-8 编码。这意味着 &mkvmerge;
+需要将读取到的文本文件以及从命令行收到的文本从其他字符集转换为 UTF-8。相反，这意味着 &mkvmerge; 的输出信息同样需要由 UTF-8
+转回原来的字符集，例如来自 <link
+linkend="mkvmerge.description.ui_language"><option>--ui-language</option></link>
+所选的非英语界面或来自 &matroska; 文件中的文本。
+  </para>
+
+  <para>
+   &mkvmerge; 根据是否有 <foreignphrase>字节顺序标记</foreignphrase> (英文缩写:
+<abbrev>BOM</abbrev>) 出现以及系统的当前区域来进行自动转换。如何根据区域推定字符集取决于 &mkvmerge;
+所执行在的操作系统。
+  </para>
+
+  <para>
+   以 BOM 开头的文本文件已经使用一种 UTF 模式编码。&mkvmerge; 支持以下五种模式: UTF-8、UTF-16 小端序 及
+大端序、UTF-32 小端序 及 大端序。含 BOM 的文本文件将被自动转换为 UTF-8。对此类文件设定字符集的参数 (如 <link
+linkend="mkvmerge.description.sub_charset"><option>--sub-charset</option></link>)
+将被直接忽略，无通知。
+  </para>
+
+  <para>
+   在 类-Unix 系统 &mkvmerge; 将使用
+<citerefentry><refentrytitle>setlocale</refentrytitle><manvolnum>3</manvolnum></citerefentry>
+系统指令，它将返回环境变量 <varname>LANG</varname>、<varname>LC_ALL</varname> 及
+<varname>LC_CYPE</varname>。输出的字符集通常是 UTF-8 或 ISO-8859-*
+家族之一，将被用于所有文本文件操作以及编码命令行上的字符串和输出到命令行。
+  </para>
+
+  <para>
+   在 Windows 上 &mkvmerge; 实际上使用两种不同的字符集，因为要执行 Windows shell 程序
+<command>cmd.exe</command>。第一个字符集由 <function>GetCP()</function>
+系统指令决定。此字符集用作文本文件转换和 MkvToolNix 工具包中 <abbrev>GUI</abbrev>
+程序所显示的所有元素的默认字符集。<command>cmd.exe</command> 使用的另一个字符集由
+<function>GetACP()</function> 系统指令决定。这是命令行读入的所有字符串以及输出到命令行的所有字符串的默认字符集。
+  </para>
+
+  <para>
+   现有下述选项支持指定字符集:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     <link
+linkend="mkvmerge.description.sub_charset"><option>--sub-charset</option></link>
+用于文本字幕文件以及存储于字符集含糊的容器格式（如 Ogg 文件）中的文本字幕轨,
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     <link
+linkend="mkvmerge.description.chapter_charset"><option>--chapter-charset</option></link>
+用于章节文本文件以及存储于字符集含糊的容器格式（如 Ogg 文件的章节信息，轨道和文件标题等；MP4 文件的章节信息）中的章节和文件标题,
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     <link
+linkend="mkvmerge.description.command_line_charset"><option>--command-line-charset</option></link>
+用于所有命令行上的字符串,
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     <link
+linkend="mkvmerge.description.output_charset"><option>--output-charset</option></link>
+用于输出到命令行或文件（当使用 <link
+linkend="mkvmerge.description.redirect_output"><option>--redirect-output</option></link>
+选项重定向输出时）的字符串。
+    </para>
+   </listitem>
+  </itemizedlist>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.subtitles">
+  <title>Subtitles</title>
+  <para>
+   可在 &matroska; 文件中嵌入多种文本字幕格式目前 &mkvmerge; 支持纯文本、VobSub 以及 Kate
+字幕格式。文本字幕将被重新编码为 UTF-8 以确保播放器能准确显示（关于 &mkvmerge; 如何在字符集间进行转换的说明请参见关于 <link
+linkend="mkvmerge.text_files_and_charsets"> 文本文件与字符集</link> 的段落）。Kate 字幕已经是
+UTF-8 编码，因此不会被重新编码。
+  </para>
+
+  <para>
+   目前支持以下字幕格式:
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     Subtitle Ripper (SRT) 文件
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     Substation Alpha (SSA) / 高级 Substation Alpha 脚本 (ASS)
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     OggKate 流
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     VobSub 位图字幕文件
+    </para>
+   </listitem>
+  </itemizedlist>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.file_linking">
+  <title>文件链接</title>
+  <para>
+   &matroska; 支持文件链接，即声明当前文件的前趋与后继文件是哪个文件。严谨地讲，被连接的不是文件而是 &matroska;
+剪辑。鉴于大多数文件只含有一个 &matroska; 剪辑，以下说明中将使用术语 '文件链接'，尽管 '剪辑链接' 更为贴切。
+  </para>
+
+  <para>
+   各剪辑由唯一的 128 位宽的剪辑 UID 确定。此 UID 是由 &mkvmerge; 自动创建的。链接主要通过将前后文件的剪辑 UID (英文缩写:
+<abbrev>SID</abbrev>) 置于剪辑头部信息中完成。&mkvinfo; 会在找到 <abbrev>SID</abbrev> 时输出它们。
+  </para>
+
+  <para>
+   如果文件被切割为多段，且启用了链接功能，则文件的时间码不会重新从 0
+开始，而是会从上一个文件结束的地方继续计算。这样可以保留绝对时间，即使之前的文件不可用 (如进行流式处理时)。如果未使用链接功能，各文件的时间码应从 0
+开始。&mkvmerge; 默认不启用文件链接。如果您希望启用，可以通过 <option>--link</option>
+选项打开。此选项仅当同时启用切割功能时有用。
+  </para>
+
+  <para>
+   无论是否开启了切割功能，用户都可以让 &mkvmerge; 将生成的文件与指定的 <abbrev>SID</abbrev> 建立链接。可通过
+<option>--link-to-previous</option> 与 <option>--link-to-next</option> 选项实现。
+这些选项只接受 &mkvinfo; 所输出的 <abbrev>SID</abbrev> 格式: 16 个
+<constant>0x00</constant> 与 <constant>0xff</constant> 之间的十六进制数，各数字带有
+'<literal>0x</literal>' 前缀，如 '<literal>0x41 0xda 0x73 0x66 0xd9 0xcf 0xb2
+0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3 0x93</literal>'。还可以选用另一种较短的格式: 16 个
+<constant>0x00</constant> 与<constant>0xff</constant> 之间的十六进制数，无
+'<literal>0x</literal>' 前缀，无空格，如
+'<literal>41da7366d9cfb21eae78ebb45ecab393</literal>'。
+  </para>
+
+  <para>
+   如果启用了切割功能，第一个文件将与通过 <option>--link-to-previous</option> 给定的
+<abbrev>SID</abbrev> 建立链接，而最后一个文件将与通过 <option>--link-to-next</option> 给定的
+<abbrev>SID</abbrev> 建立链接。如果未启用切割功能，唯一的输出文件将同时与给定的两个 <abbrev>SID</abbrev>
+建立链接。
+  </para>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.default_values">
+  <title>默认值</title>
+  <para>
+   &matroska; 规范提到，一些元素有其默认值。通常为了节省空间，如果一个元素的值等同于其默认值，它将不被写入文件。用户在 &mkvinfo;
+的输出信息中可能发现缺失的元素有 <parameter>语言</parameter> 和 <parameter>默认轨标记</parameter>。
+<parameter>语言</parameter> 的默认值是 English
+('<literal>eng</literal>')，<parameter>默认轨标记</parameter> 的默认值是
+<parameter>true</parameter>。因此如果您对一条轨道应用选项 <option>--language 0:eng</option>
+，它将不在 &mkvinfo; 的输出信息中显示。
+  </para>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.attachments">
+  <title>附件</title>
+  <para>
+   或许您希望将一些照片与您的 &matroska; 文件一起存放，或者您正在使用 <abbrev>SSA</abbrev> 字幕，需要一个非常稀有的特殊
+<productname>TrueType</productname> 字体。这种情况下您可以将这些文件附加到 &matroska;
+文件中。它们不会被追加到文件当中，而是被嵌入到文件中。然后播放器就可以显示这些文件 (如 '照片' 一例) 或者用它们来渲染字幕 (如
+'<productname>TrueType</productname> 字体' 一例)。
+  </para>
+
+  <para>
+   这是关于如何在输出文件中附加照片和 <productname>TrueType</productname> 字体的示例:
+  </para>
+
+  <screen>
+$ mkvmerge -o 输出.mkv -A 视频.avi 声音.ogg --attachment-description "乐队与我在后台小聚" --attachment-mime-type image/jpeg --attach-file 乐队与我.jpg --attachment-description "难得一见的绝美字体" --attachment-type application/octet-stream --attach-file 很酷的字体.ttf
+  </screen>
+
+  <para>
+   如果含有附件的 &matroska; 文件被用作输入文件，&mkvmerge; 会将附件复制到新文件中。要复制哪些文件、不复制那些文件的选择可以通过
+<link
+linkend="mkvmerge.description.attachments"><option>--attachments</option></link>
+与 <link
+linkend="mkvmerge.description.no_attachments"><option>--no-attachments</option></link>
+选项修改。
+  </para>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.chapters">
+  <title>章节</title>
+  <para>
+   &matroska; 章节系统比大家知道的旧系统—— <abbrev>OGM</abbrev> 中所使用的——更为强大。完整的规范可以在 <ulink
+url="http://www.matroska.org/">&matroska; 网站</ulink> 找到。
+  </para>
+
+  <para>
+   &mkvmerge; 支持输入两种章节文件。第一种格式，叫作 '<foreignphrase>简单章节格式</foreignphrase>'，与
+<abbrev>OGM</abbrev> tools 所用的相同。第二种是基于 &xml; 的章节格式，它支持 &matroska; 的所有章节功能。
+  </para>
+
+  <refsect2>
+   <title>简单章节格式</title>
+
+   <para>
+    此格式由成对的相继以 '<literal>CHAPTERxx=</literal>' 与
+'<literal>CHAPTERxxNAME=</literal>' 开头的行组成。单数行包含起始时间码，而双数行包含标题。这是一个示例：
+   </para>
+
+   <screen>
+CHAPTER01=00:00:00.000
+CHAPTER01NAME=导入部分
+CHAPTER02=00:02:30.000
+CHAPTER02NAME=宝宝准备摇
+CHAPTER03=00:02:42.300
+CHAPTER03NAME=宝宝摇屋子
+   </screen>
+
+   <para>
+    &mkvmerge; 将转换每两行为一个 &matroska;
+<classname>章节单位（ChapterAtom）</classname>。这种情况不会设定任何
+<classname>章节轨道号（ChapterTrackNumber）</classname>，也就是说所有章节被应用到文件的所有轨道。
+   </para>
+
+   <para>
+    由于是文本文件，可能需要进行字符集转换。关于 &mkvmerge; 如何在字符集间进行转换的说明请参见关于 <link
+linkend="mkvmerge.text_files_and_charsets"> 文本文件与字符集</link> 的段落。
+   </para>
+  </refsect2>
+
+  <refsect2>
+   <title>基于 &xml; 的章节格式</title>
+   <para>
+    基于 &xml; 的章节格式看起来与这个示例类似：
+   </para>
+
+   <screen>
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+&lt;!DOCTYPE Chapters SYSTEM &quot;matroskachapters.dtd&quot;&gt;
+&lt;Chapters&gt;
+  &lt;EditionEntry&gt;
+    &lt;ChapterAtom&gt;
+      &lt;ChapterTimeStart&gt;00:00:30.000&lt;/ChapterTimeStart&gt;
+      &lt;ChapterTimeEnd&gt;00:01:20.000&lt;/ChapterTimeEnd&gt;
+      &lt;ChapterDisplay&gt;
+        &lt;ChapterString&gt;短短的一节&lt;/ChapterString&gt;
+        &lt;ChapterLanguage&gt;eng&lt;/ChapterLanguage&gt;
+      &lt;/ChapterDisplay&gt;
+      &lt;ChapterAtom&gt;
+        &lt;ChapterTimeStart&gt;00:00:46.000&lt;/ChapterTimeStart&gt;
+        &lt;ChapterTimeEnd&gt;00:01:10.000&lt;/ChapterTimeEnd&gt;
+        &lt;ChapterDisplay&gt;
+          &lt;ChapterString&gt;那短短的一节的一部分&lt;/ChapterString&gt;
+          &lt;ChapterLanguage&gt;eng&lt;/ChapterLanguage&gt;
+        &lt;/ChapterDisplay&gt;
+      &lt;/ChapterAtom&gt;
+    &lt;/ChapterAtom&gt;
+  &lt;/EditionEntry&gt;
+&lt;/Chapters&gt;
+   </screen>
+
+   <para>
+    使用此格式可以做到三件简单章节格式做不到的事:
+   </para>
+
+   <orderedlist>
+    <listitem><para>可以设置章节终止处的时间戳,</para></listitem>
+    <listitem><para>章节可以嵌套,</para></listitem>
+    <listitem><para>可以设置语言与国家。</para></listitem>
+   </orderedlist>
+
+   <para>
+    mkvtoolnix 分发包的 <filename>doc</filename> 子目录包含了一些典型示例文件。
+   </para>
+  </refsect2>
+
+  <refsect2>
+   <title>一般性备注</title>
+   <para>
+    &mkvmerge; 切割文件时会同时适当调整章节。这意味着每个文件只包含应用到该文件的章节项，时间码也将被调整到与各输出文件相匹配。
+   </para>
+
+   <para>
+    &mkvmerge; 能够从 &matroska; 源文件中复制章节，除非使用 <link
+linkend="mkvmerge.description.no_chapters"><option>--no-chapters</option></link>
+选项明令禁用。来自各类来源 (&matroska; 文件、Ogg 文件、<abbrev>MP4</abbrev> 文件、章节文本文件)
+的章节通常不被合并，而是分成多个 <classname>ChapterEditions（章节版本）</classname>。仅当从多个
+&matroska; 或 &xml; 文件读取的章节具有相同的版本 UID 时，章节才会被合并为单个
+<classname>ChapterEdition</classname>。如果在其他情况下需要此类合并，用户需要先用 &mkvextract;
+从所有来源提取章节，手动合并 &xml; 文件然后再混流。
+   </para>
+  </refsect2>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.tags">
+  <title>标签</title>
+
+  <refsect2>
+   <title>介绍</title>
+
+   <para>
+    &matroska; 广泛支持废弃标签，还支持一种新式的、类似其他大多数容器使用的较简单的标签系统:
+<parameter>KEY=VALUE</parameter>。然而，在 &matroska;
+中这些标签也可以嵌套，<parameter>KEY</parameter> 与 <parameter>VALUE</parameter>
+都是属于它们自身的元素。示例文件 <filename>example-tags-2.xml</filename> 展示了如何使用这个新系统。
+   </para>
+  </refsect2>
+
+  <refsect2>
+   <title>标签细述</title>
+
+   <para>
+    &matroska; 标签不会自动应用到整个文件上。它们可以应用到整个文件，还可以应用到文件的不同部分: 一个或多个轨道, 一个或多个章节,
+甚至是两者的组合。<ulink
+url="http://matroska.org/technical/specs/index.html">&matroska; 规范</ulink>
+有这方面的更多详情。
+   </para>
+
+   <para>
+    重要的一点是标签通过 <classname>Targets</classname> &matroska; 标签元素与轨道或章节相连，而用于此链接的
+UID <emphasis>并非</emphasis> &mkvmerge; 常用的轨道 ID。而是 &mkvmerge; 自动计算而来 (当轨道来自非
+&matroska; 文件时) 或当轨道源文件是 &matroska; 文件时复制而来的 的 UID。因此在文件被 &mkvmerge;
+处理过之前很难知道应该在标签文件中使用哪些 UID。
+   </para>
+
+   <para>
+    &mkvmerge; 支持两个为 &matroska; 文件添加标签的选项: <link
+linkend="mkvmerge.description.global_tags"><option>--global-tags</option></link>
+与 the <link
+linkend="mkvmerge.description.tags"><option>--tags</option></link>
+选项。不同之处在于前者，<link
+linkend="mkvmerge.description.global_tags"><option>--global-tags</option></link>，将通过移除所有上文提到的
+<classname>Targets</classname> 元素使标签应用到整个文件。 而后者，<link
+linkend="mkvmerge.description.tags"><option>--tags</option></link>，将使
+&mkvmerge; 为通过 <link
+linkend="mkvmerge.description.tags"><option>--tags</option></link> 选项的
+<parameter>TID</parameter> 部分指定的标签自动插入 UID。
+   </para>
+  </refsect2>
+
+  <refsect2>
+   <title>示例</title>
+   <para>
+    假定您希望为从一个 <abbrev>AVI</abbrev> 文件读取的视频轨道添加标签。<command>mkvmerge --identify
+文件.avi</command> 告诉您该视频轨道的 ID (不要将此 ID 与 UID 混淆!) 为 0。于是您创建了一个标签文件，省去了所有
+<classname>Targets</classname> 元素，然后这样调用 &mkvmerge;:
+   </para>
+
+   <screen>
+$ mkvmerge -o 文件.mkv --tags 0:标签.xml 文件.avi
+   </screen>
+  </refsect2>
+
+  <refsect2>
+   <title>标签文件格式</title>
+   <para>
+    &mkvmerge; 支持基于 &xml; 的标签文件格式。此格式是以 <ulink
+url="http://matroska.org/technical/specs/index.html">&matroska; 规范</ulink>
+为依据严格制定的。MkvToolNix 的程序以及源码分发都含有名为 <filename>example-tags-2.xml</filename>
+的示例文件，该文件已简明地列出了所有已知的可用作实际处理的基本标签。
+   </para>
+
+   <para>
+    基本要点有：
+   </para>
+
+   <itemizedlist>
+    <listitem><para>最外层的元素必须为 <classname>&lt;Tags&gt;</classname>。</para></listitem>
+    <listitem>
+     <para>实际意义上的标签放在 <classname>&lt;Tag&gt;</classname> &xml; 标签对中。</para>
+    </listitem>
+    <listitem><para>标签内容前后的空白将被忽略。</para></listitem>
+   </itemizedlist>
+  </refsect2>
+
+  <refsect2>
+   <title>数据类型</title>
+   <para>
+    新的 &matroska; 标签系统只识别两种数据类型，UTF-8 字串与二进制类型。前者用于标签名称和
+<classname>&lt;String&gt;</classname> 元素，而二进制类型用于
+<classname>&lt;Binary&gt;</classname> 元素。
+   </para>
+
+   <para>
+    由于二进制数据自身与 &xml; 文件不相容，&mkvmerge; 支持另两种储存二进制数据的方法。如果 &xml; 标签的内容以
+'<literal>@</literal>' 开头，则后续文本将被作为文件名对待。相应文件的内容将被复制到 &matroska; 元素中。
+   </para>
+
+   <para>
+    还有一种可能，即数据经 <foreignphrase>Base64</foreignphrase> 编码。这是将二进制数据转换为一定的
+<abbrev>ASCII</abbrev> 字集字符，在电子邮件等程序中有所应用。&mkvextract; 将将二进制元素以
+<foreignphrase>Base64</foreignphrase> 编码的数据的形式输出。
+   </para>
+
+   <para>
+    已被废弃的标签系统可识别更多的数据类型，这在 &matroska; 官方的标签规范中可以找到。由于 &mkvmerge;
+不再支持此系统，此处不对这些类型作多余说明。
+   </para>
+  </refsect2>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.file_layout">
+  <title>&matroska; 文件规划</title>
+  <para>
+   &matroska; 文件规划非常灵活。&mkvmerge; 将按预先定义的方式渲染文件。生成的文件是这样的：
+  </para>
+
+  <para>
+   [EBML 头] [剪辑 {元定位 #1} {附件} {章节} [剪辑信息] [轨道信息] [簇 1] {簇 2} ...  {簇 n} {索引}
+{元定位 #2} {标签}]
+  </para>
+
+  <para>
+   大括号中的元素是可选的，依所用的内容和选项而定。有两点要注意的：
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     元定位 #1 只包含很少量的 level 1 元素，且仅当它们存在时才包含：附件、章节、索引、标签以及元定位 #2。较早版本的 &mkvmerge;
+亦曾将簇放置在元定位元素中。因此应留给不精确的传言一些空间——真相总会大白。 现在只有簇才被储存在元定位 #2 中，元定位 #1 将引用元定位元素
+#2。
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>附件、章节和标签元素仅当被添加后才会出现。</para>
+   </listitem>
+  </itemizedlist>
+
+  <para>
+   允许的最短小的 Matroska 文件是像这样的：
+  </para>
+
+  <para>
+   [EBML 头] [剪辑 [剪辑信息] [轨道信息] [簇 1]]
+  </para>
+
+  <para>
+   这也是纯音频文件的样子。
+  </para>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.external_timecode_files">
+  <title>外部时间码文件</title>
+  <para>
+   &mkvmerge; 允许用户为各轨道选择特定的时间码。这可用来创建包含可变帧率视频或音频中有空隙的文件。这种情况下的帧是 &mkvmerge; 创建各
+&matroska; 块的单位。对视频来说恰好是一帧，对音频来说是相应音频类型的一个数据包。例如对 <abbrev>AC3</abbrev> 来说是包含
+<constant>1536</constant> 采样的一个数据包。
+  </para>
+
+  <para>
+   用于轨道追加合并的时间码必须只指定给一系列（同一）轨道的第一部分。例如当您追加合并两个文件，v1.avi 与
+v2.avi，且希望使用时间码时，您的命令行必须像这样组织：
+  </para>
+
+  <screen>
+mkvmerge ... --timecodes 0:我的时间码.txt v1.avi +v2.avi
+  </screen>
+
+  <para>
+   &mkvmerge; 可识别四种格式的时间码。版本号在时间码文件的第一行内。空行，只含有空格的行，以及以 '<literal>#</literal>'
+开头的行在处理时将被忽略。
+  </para>
+
+  <refsect2>
+   <title>时间码文件格式 v1</title>
+   <para>
+    此格式的第一行是版本声明。第二行则声明默认的帧率。 接下来的各行包含由逗号分隔的三个数字: 起始帧（<constant>0</constant>
+代表第一帧）、终止帧以及此范围内的帧率。<abbrev>FPS（帧率）</abbrev> 为浮点数，小数点用
+'<literal>.</literal>' 表示。各行定义的范围间可以有间隔，间隔内将使用默认的 <abbrev>FPS</abbrev>。一个示例：
+   </para>
+
+   <screen>
+# timecode format v1
+assume 27.930
+800,1000,25
+1500,1700,30
+   </screen>
+  </refsect2>
+
+  <refsect2>
+   <title>时间码文件格式 v2</title>
+
+   <para>
+    此格式中每行包含相应帧的时间码。此时间码必须以毫秒为精度。可以使浮点数，但不强求。您指定的时间码行数 <emphasis>必须</emphasis>
+不少于对应轨道的帧数。此类文件中的时间码必须经过排序。 以 25fps 为例：
+   </para>
+
+   <screen>
+# timecode format v2
+0
+40
+80
+   </screen>
+  </refsect2>
+
+  <refsect2>
+   <title>时间码文件格式 v3</title>
+   <para>
+    此格式中各行包含时长（秒数），后接（可选）帧率。 二者均可为浮点数。 如果未提供帧率，则采用默认的帧率。
+对于音频，您应当让编解码器自行计算各帧的时间码。 这样您应当使用 <constant>0.0</constant> 作为帧率。 您可以使用
+'<literal>gap</literal>' 关键词后接空隙时长在流中创建空隙。 以音频文件为例：
+   </para>
+
+   <screen>
+# timecode format v3
+assume 0.0
+25.325
+7.530,38.236
+gap, 10.050
+2.000,38.236
+   </screen>
+  </refsect2>
+
+  <refsect2>
+   <title>时间码文件格式 v4</title>
+   <para>
+    此格式与 v2 格式相似。 唯一的不同在于时间码不必经过排序。 通常不应使用此格式。
+   </para>
+  </refsect2>
+ </refsect1>
+
+ <refsect1>
+  <title>退出代码</title>
+
+  <para>
+   &mkvmerge; 退出时会返回以下三个退出代码中的一个：
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     <constant>0</constant> -- 此退出代码说明已成功完成混流。
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     <constant>1</constant> -- 这种情况下 &mkvmerge; 至少输出了一条警告信息，但混流并未因之中止。 警告信息以文字
+'<literal>警告:</literal>' 为前缀。根据问题的不同，生成的文件可能是好的，也可能不是。 强烈建议用户检查警告信息以及生成的文件。
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     <constant>2</constant> -- 此退出代码用于错误发生之后。 &mkvmerge;
+在输出错误信息后即中断处理。错误信息可能是错误的命令行参数，也可能是损坏文件的读取/写入错误。
+    </para>
+   </listitem>
+  </itemizedlist>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.seealso">
+  <title>参阅</title>
+  <para>
+   &mkvinfo;, &mkvextract;, &mkvpropedit;, &mmg;
+  </para>
+ </refsect1>
+
+ <refsect1 id="mkvmerge.www">
+  <title>网络</title>
+  <para>
+   最新版本总可以在 <ulink
+url="http://www.bunkus.org/videotools/mkvtoolnix/">MKVToolNix 主页</ulink> 找到。
+  </para>
+ </refsect1>
+
+</refentry>

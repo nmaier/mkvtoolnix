@@ -1,0 +1,230 @@
+'\" t
+.\"     Title: mkvinfo
+.\"    Author: Moritz Bunkus <moritz@bunkus.org>
+.\" Generator: DocBook XSL Stylesheets v1.75.1 <http://docbook.sf.net/>
+.\"      Date: January 2010
+.\"    Manual: 用户命令
+.\"    Source: MkvToolNix 3.1.0
+.\"  Language: Chinese
+.\"
+.TH "MKVINFO" "1" "January 2010" "MkvToolNix 3\&.1\&.0" "用户命令"
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "名称"
+mkvinfo \- 输出关于 Matroska(TM) 文件中各轨的信息
+.SH "概要"
+.HP \w'\fBmkvinfo\fR\ 'u
+\fBmkvinfo\fR [选项] {源文件名}
+.SH "说明"
+.PP
+本程序可列出
+Matroska(TM)文件中包含的所有轨道，输出信息可以限定为文件的轨道列表以及所用编解码器的信息。
+.PP
+\fB\-g\fR, \fB\-\-gui\fR
+.RS 4
+启动
+GUI。本选项仅当 mkvinfo 编译时附加
+GUI
+支持时可用。
+.RE
+.PP
+\fB\-c\fR, \fB\-\-checksums\fR
+.RS 4
+计算并显示各帧的
+\fBAdler32\fR
+校验码。仅当调试时有用处。
+.RE
+.PP
+\fB\-s\fR, \fB\-\-summary\fR
+.RS 4
+仅显示
+\fBmkvinfo\fR(1)
+所获取信息的简要概述，而非各元素。
+.RE
+.PP
+\fB\-\-command\-line\-charset\fR \fI字符集\fR
+.RS 4
+设定在命令行给出的字符串的字符集，用于转为其他字符集。默认为系统当前区域设置中所给定的字符集。
+.RE
+.PP
+\fB\-\-output\-charset\fR \fI字符集\fR
+.RS 4
+设置输出的字符串应被转换到何种字符集。默认为系统当前区域设置中所给定的字符集。
+.RE
+.PP
+\fB\-r\fR, \fB\-\-redirect\-output\fR \fI文件名\fR
+.RS 4
+将所有信息输出至文件
+\fI文件名\fR，而不是在命令行显示。尽管该操作可以用输出重定向轻松实现，但在特定情况下还是缺不得它：当终端写入文件之前重新解释（覆盖输出）时。
+\fB\-\-output\-charset\fR
+中所选定的字符集将被优先选用。
+.RE
+.PP
+\fB\-\-ui\-language\fR \fI语言代码\fR
+.RS 4
+强制使用语言代码
+\fI语言代码\fR
+所对应的翻译（如 \'de_DE\' 对应德文翻译）。使用
+\fILANG\fR、\fILC_MESSAGES\fR
+及
+\fILC_ALL\fR
+这些环境变量更好。如果在
+\fIcode\fR
+处输入 \'list\'，\fBmkvinfo\fR(1)
+将输出可用翻译的列表。
+.RE
+.PP
+\fB\-v\fR, \fB\-\-verbose\fR
+.RS 4
+使输出更详尽。请参阅关于
+\(lq详细\(rq程度
+的段落获取在哪些层级将输出哪些信息的描述。
+.RE
+.PP
+\fB\-h\fR, \fB\-\-help\fR
+.RS 4
+显示用法信息并退出。
+.RE
+.PP
+\fB\-V\fR, \fB\-\-version\fR
+.RS 4
+显示版本信息并退出。
+.RE
+.PP
+\fB@\fR选项文件
+.RS 4
+从文件
+\fI选项文件\fR
+中读取额外的命令行参数。首个非空白字符为井号 (\'#\') 的行将被当作注释对待，在处理过程中将被忽略。各行开头与结尾的空白将被除去。各行必须恰好含有一个选项。没有元字符转义。
+.sp
+命令行 \'\fBmkvinfo \-v \-v 输入\&.mkv \-\-redirect\-output 信息\&.txt\fR\' 可以转换为下面所示的选项文件:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# 更为详尽
+\-v
+\-v
+# 解析 输入\&.mkv
+输入\&.mkv
+# 并将输出信息写入 信息\&.txt
+\-\-redirect\-output
+信息\&.txt
+     
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.SH "\(lq详细\(rq程度"
+.PP
+
+\fB\-v\fR
+选项可以使
+\fBmkvinfo\fR(1)
+增强其\(lq详细\(rq程度并输出关于当前文件的更多信息。
+.PP
+在 level 0
+\fBmkvinfo\fR(1)
+仅输出它发现的轨道头及其类型。头部解析完毕后（更专业地：遇到首个簇时），\fBmkvinfo\fR(1)
+将退出执行。在此层级，定位头项与 cue 索引不会显示出来\(em\(em即使它们位于轨道信息之前。
+.PP
+在 level 1
+\fBmkvinfo\fR(1)
+同样将输出在整个文件中遇到的所有
+Matroska(TM)
+元素，此外还将输出定位头项与 cue 索引项。如果启用了简要模式，\fBmkvinfo\fR(1)
+还将输出各帧位置。
+.PP
+在 level 2
+\fBmkvinfo\fR(1)
+同样将输出定位头项与 cue 索引项，以及文件中各
+Matroska(TM)
+元素被发现的位置。
+.PP
+在 level 3 及更高层级
+\fBmkvinfo\fR(1)
+将输出一些与
+Matroska(TM)
+元素不直接相连的信息。对于其他元素，将只输出发现的基本信息。Level 3 增加了元信息以便调试（换句话说：它是为开发人员设计的）。Level 3 输出的所有行都以方括号嵌套以便过滤。
+.SH "退出代码"
+.PP
+
+\fBmkvinfo\fR(1)
+退出时会返回以下三个退出代码中的一个：
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB0\fR
+\-\- 此退出代码说明已成功完成运行。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB1\fR
+\-\- 这种情况下
+\fBmkvinfo\fR(1)
+至少输出了一条警告信息，但运行并未因之中止。 警告信息以文字 \'警告:\' 为前缀。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB2\fR
+\-\- 此退出代码用于错误发生之后。
+\fBmkvinfo\fR(1)
+在输出错误信息后即中断运行。错误信息可能是错误的命令行参数，也可能是损坏文件的读取/写入错误。
+.RE
+.SH "参阅"
+.PP
+
+\fBmkvmerge\fR(1),
+\fBmkvextract\fR(1),
+\fBmkvpropedit\fR(1),
+\fBmmg\fR(1)
+.SH "网络"
+.PP
+最新版本总可以在
+\m[blue]\fBMKVToolNix 主页\fR\m[]\&\s-2\u[1]\d\s+2
+找到。
+.SH "作者"
+.PP
+\fBMoritz Bunkus\fR <\&moritz@bunkus\&.org\&>
+.RS 4
+开发者
+.RE
+.SH "备注"
+.IP " 1." 4
+MKVToolNix 主页
+.RS 4
+\%http://www.bunkus.org/videotools/mkvtoolnix/
+.RE

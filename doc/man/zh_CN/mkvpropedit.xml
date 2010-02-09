@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "/usr/share/xml/docbook/schema/dtd/4.5/docbookx.dtd"
+[
+<!ENTITY product "mkvpropedit">
+<!ENTITY version "3.1.0">
+<!ENTITY date "January 2010">
+
+<!ENTITY mkvmerge "<citerefentry><refentrytitle>mkvmerge</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mkvinfo "<citerefentry><refentrytitle>mkvinfo</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mkvextract "<citerefentry><refentrytitle>mkvextract</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mkvpropedit "<citerefentry><refentrytitle>mkvpropedit</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mmg "<citerefentry><refentrytitle>mmg</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+
+<!ENTITY matroska "<productname>Matroska</productname>">
+<!ENTITY oggvorbis "<productname>OggVorbis</productname>">
+<!ENTITY xml "<abbrev>XML</abbrev>">
+
+]>
+
+<refentry lang="zh-hans" id="mkvextract">
+ <refentryinfo>
+  <productname>&product;</productname> <date>&date;</date>
+  <authorgroup>
+   <author>
+    <contrib>开发者</contrib>
+    <firstname>Moritz</firstname>
+    <surname>Bunkus</surname>
+    <email>moritz@bunkus.org</email>
+   </author>
+  </authorgroup>
+ </refentryinfo>
+ <refmeta>
+  <refentrytitle>&product;</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="version">&version;</refmiscinfo>
+  <refmiscinfo class="date">&date;</refmiscinfo>
+  <refmiscinfo class="source">MkvToolNix</refmiscinfo>
+  <refmiscinfo class="manual">用户命令</refmiscinfo>
+ </refmeta>
+
+ <refnamediv>
+  <refname>&product;</refname>
+  <refpurpose>在不进行完整的重新混流的情况下修改现有 &matroska; 文件的属性</refpurpose>
+ </refnamediv>
+
+ <refsynopsisdiv id="mkvpropedit.synopsis">
+  <title>概要</title>
+  <cmdsynopsis>
+<command>mkvpropedit</command> <arg>选项</arg> <arg choice="req">源文件名</arg>
+<arg choice="req">操作</arg></cmdsynopsis>
+ </refsynopsisdiv>
+
+ <refsect1 id="mkvpropedit.description">
+  <title>说明</title>
+  <para>
+   此程序可分析现有 &matroska;
+文件，并修改其部分属性。然后它将将变更写入现有文件。可修改的属性包括剪辑信息元素（如标题）和轨道头部（如语言代码、'默认轨' 标记或轨道名称）。
+  </para>
+
+  <para>
+   选项:
+  </para>
+
+  <variablelist>
+   <varlistentry id="mkvpropedit.description.list_property_names">
+    <term><option>-l</option>, <option>--list-property-names</option></term>
+    <listitem>
+     <para>
+      列出所有已知的可编辑的属性名称、它们的类型（字符串型、整数型、布尔型等等）及简短说明。程序随后将退出执行。因此不必提供
+<parameter>source-filename</parameter> 参数。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvpropedit.description.parse_mode">
+    <term><option>-p</option>, <option>--parse-mode</option> <parameter>模式</parameter></term>
+    <listitem>
+     <para>
+      设置解析模式。参数 '<parameter>模式</parameter>' 可以为
+'<literal>fast（快速）</literal>'（此项为默认值）或
+'<literal>full（完整）</literal>'。'<literal>fast（快速）</literal>'模式不解析整个文件，而是使用元定位元素确定源文件中所需元素的位置。99%
+的情况下这就足够了。但如果碰到不含元定位元素或者元定位元素损坏的文件，用户可能得考虑 '<literal>full（完整）</literal>'
+解析模式。完整扫描文件可能要花费几分钟，而快速扫描只需要几秒钟。
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   操作:
+  </para>
+
+  <variablelist>
+   <varlistentry id="mkvpropedit.description.edit">
+    <term><option>-e</option>, <option>--edit</option> <parameter>选择器</parameter></term>
+    <listitem>
+     <para>
+      设置后续的 <link linkend="mkvpropedit.description.add">添加</link>、<link
+linkend="mkvpropedit.description.set">设置</link> 或 <link
+linkend="mkvpropedit.description.delete">删除</link> 操作所针对的 &matroska;
+文件区域（即剪辑信息或某个轨道的头部）。此选项可多次使用，以同时修改多个元素。
+     </para>
+
+     <para>
+      关于完整的语法说明请参见关于 <link linkend="mkvpropedit.edit_selectors">编辑选择器</link> 的段落。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvpropedit.description.add">
+    <term><option>-a</option>, <option>--add</option>
+<parameter>名称</parameter>=<parameter>数值</parameter></term>
+    <listitem>
+     <para>
+      添加名为 <parameter>名称</parameter>、值为 <parameter>数值</parameter>
+的属性。即使已存在这样的属性，也将执行添加属性操作。注意大多数属性是唯一的，不能出现多个。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvpropedit.description.set">
+    <term><option>-s</option>, <option>--set</option>
+<parameter>名称</parameter>=<parameter>数值</parameter></term>
+    <listitem>
+     <para>
+      设置所有名为 <parameter>名称</parameter> 的属性的数值为
+<parameter>数值</parameter>。如果不存在这样的属性，则将添加该属性。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvpropedit.description.delete">
+    <term><option>-d</option>, <option>--delete</option> <parameter>名称</parameter></term>
+    <listitem>
+     <para>
+      删除所有名为 <parameter>名称</parameter> 的属性。注意部分属性是必需的，不能删除。
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <para>
+   其他选项：
+  </para>
+
+  <variablelist>
+   <varlistentry id="mkvpropedit.description.command_line_charset">
+    <term><option>--command-line-charset</option> <parameter>字符集</parameter></term>
+    <listitem>
+     <para>
+      设定在命令行给出的字符串的字符集，用于转为其他字符集。默认为系统当前区域设置中所给定的字符集。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvpropedit.description.output_charset">
+    <term><option>--output-charset</option> <parameter>字符集</parameter></term>
+    <listitem>
+     <para>
+      设置输出的字符串应被转换到何种字符集。默认为系统当前区域设置中所给定的字符集。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvpropedit.description.redirect_output">
+    <term><option>-r</option>, <option>--redirect-output</option>
+<parameter>文件名</parameter></term>
+    <listitem>
+     <para>
+      将所有信息写入文件 <parameter>文件名</parameter> 而不是输出到命令行。
+尽管该操作可以用输出重定向轻松实现，但在某些情况下还需要靠它：如当终端在写入文件之前重新解释（覆盖输出）时。将优先使用通过 <link
+linkend="mkvpropedit.description.output_charset"><option>--output-charset</option></link>
+设定的字符集。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry id="mkvpropedit.description.ui_language">
+    <term><option>--ui-language</option> <parameter>语言代码</parameter></term>
+    <listitem>
+     <para>
+      强制使用语言代码为 <parameter>语言代码</parameter> 的翻译（如  '<literal>de_DE</literal>'
+对应德文翻译）。使用 <varname>LANG</varname>, <varname>LC_MESSAGES</varname> 及
+<varname>LC_ALL</varname> 这些环境变量更好。如果在 <parameter>语言代码</parameter> 处输入
+'<literal>list</literal>'，&mkvextract; 将输出可用翻译列表。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-v</option>, <option>--verbose</option></term>
+    <listitem>
+     <para>
+      使输出信息更详尽，且每当读取到重要的 &matroska; 元素时就将其显示。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-h</option>, <option>--help</option></term>
+    <listitem>
+     <para>
+      显示用法信息并退出。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-V</option>, <option>--version</option></term>
+    <listitem>
+     <para>
+      显示版本信息并退出。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>@</option>选项文件</term>
+    <listitem>
+     <para>
+      从文件 <parameter>选项文件</parameter> 中读取额外的命令行参数。首个非空白字符为井号
+('<literal>#</literal>')
+的行将被当作注释对待，在处理过程中将被忽略。各行开头与结尾的空白将被除去。各行必须恰好含有一个选项。没有元字符转义。
+     </para>
+
+     <para>
+      The command line '<command>mkvpropedit source.mkv --edit track:a2 --set
+name=Comments</command>' could be converted into the following option file:
+     </para>
+
+     <programlisting>
+# 修改 源.mkv
+源.mkv
+#编辑第二条音频轨
+--edit
+track:a2
+# 并设置标题为 '注释'
+--set
+title=注释
+     </programlisting>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </refsect1>
+
+ <refsect1 id="mkvpropedit.edit_selectors">
+  <title>编辑选择器</title>
+  <para>
+   <link linkend="mkvpropedit.description.edit"><option>--edit</option></link>
+选项设置后续的 <link linkend="mkvpropedit.description.add">添加</link>, <link
+linkend="mkvpropedit.description.set">设置</link> 或 <link
+linkend="mkvpropedit.description.delete">删除</link> 操作所影响的 &matroska;
+文件区域（剪辑信息或者特定轨道的头部）。在出现另一个 <link
+linkend="mkvpropedit.description.edit"><option>--edit</option></link>
+选项之前，此选项将一直有效。此选项的参数就叫做编辑选择器。
+  </para>
+
+  <refsect2 id="mkvpropedit.edit_selectors.segment_info">
+   <title>剪辑信息</title>
+   <para>
+    可以通过这三个词中的任意一个选择剪辑信息:
+'<literal>info</literal>'、'<literal>segment_info</literal>' 或
+'<literal>segmentinfo</literal>'。剪辑信息包含的属性包括剪辑标题、剪辑 <abbrev>UID</abbrev> 等。
+   </para>
+  </refsect2>
+
+  <refsect2 id="mkvpropedit.edit_selectors.track_headers">
+   <title>轨道头部</title>
+   <para>
+    可用于选择轨道头部的选择器稍显复杂：所有以 '<literal>track:</literal>' 开头的变体。轨道头部属性包括如语言代码、'默认轨'
+标记、轨道名称等属性。
+   </para>
+
+   <variablelist>
+    <varlistentry>
+     <term><option>track:</option><parameter>n</parameter></term>
+     <listitem>
+      <para>
+       如果参数 <parameter>n</parameter> 为数字，则将选择第 <parameter>n</parameter> 条轨道。轨道顺序与
+&mkvmerge; 的 <option>--identify</option> 选项所输出的相同。
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>track:</option><parameter>t</parameter><parameter>n</parameter></term>
+     <listitem>
+      <para>
+       如果参数以字母 <parameter>t</parameter> 后接 <parameter>n</parameter>
+开头，则将选择选定轨道类型中的第 <parameter>n</parameter> 条轨道。轨道类型参数
+<parameter>t</parameter> 必须为下述四个字母中的一个: '<literal>a</literal>'
+代表音频轨道，'<literal>b</literal>' 代表按钮轨道，'<literal>s</literal>'
+代表字幕轨道，'<literal>v</literal>' 代表视频轨道。轨道顺序与 &mkvmerge; 的
+<option>--identify</option> 选项所输出的相同。
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>track:</option>=<parameter>uid</parameter></term>
+     <listitem>
+      <para>
+       如果参数以 '<literal>=</literal>' 后接 <parameter>uid</parameter> 开头，则将选择轨道
+<abbrev>UID</abbrev> 元素等于此 <parameter>uid</parameter> 的轨道。轨道
+<abbrev>UID</abbrev> 可通过 &mkvinfo; 获取。
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>track:</option>@<parameter>数字</parameter></term>
+     <listitem>
+      <para>
+       如果参数以 '<literal>@</literal>' 后接 <parameter>数字</parameter> 开头，则选择轨道号元素等于
+<parameter>数字</parameter> 的轨道。轨道号可以通过 &mkvinfo; 获取。
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
+
+  <refsect2 id="mkvpropedit.edit_selectors.notes">
+   <title>注</title>
+   <para>
+    由于轨道编辑选择器的特性，一些选择器所匹配的轨道头部可能是相同的。在此情况下，这些编辑选择器的所有操作将被按照在命令行给出的顺序合并运行。
+   </para>
+  </refsect2>
+ </refsect1>
+
+ <refsect1 id="mkvpropedit.examples">
+  <title>示例</title>
+  <para>
+   下面的示例将编辑一个名为 '<literal>电影.mkv</literal>'
+的文件。示例中将设置剪辑标题并修改一条音频轨和一条字幕轨的语言代码。附注，本示例可以简写，即省去 <link
+linkend="mkvpropedit.description.edit"><option>--edit</option></link>
+选项，因为在第一个 <link
+linkend="mkvpropedit.description.edit"><option>--edit</option></link>
+选项之前的所有选项默认编辑的就是剪辑信息元素。
+  </para>
+
+  <screen>
+$ mkvpropedit 电影.mkv --edit info --set "title=影片" --edit track:a1 --set language=fre --edit track:a2 --set language=ita
+  </screen>
+
+  <para>
+   The second example removes the 'default track flag' from the first subtitle
+track and sets it for the second one. Note that &mkvpropedit;, unlike
+&mkvmerge;, does not set the 'default track flag' of other flags to '0' if
+it is set to '1' for a different track automatically.
+  </para>
+
+  <screen>
+$ mkvpropedit movie.mkv --edit tracks:s1 --set flag-default=0 --edit tracks:s2 --set flag-default=1
+  </screen>
+ </refsect1>
+
+ <refsect1>
+  <title>退出代码</title>
+
+  <para>
+   &mkvpropedit; 退出时会返回以下三个退出代码中的一个：
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     <constant>0</constant> -- 此退出代码说明已成功完成修改。
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     <constant>1</constant> -- 这种情况下 &mkvpropedit; 至少输出了一条警告信息，但修改并未因之中止。 警告信息以文字
+'<literal>警告:</literal>' 为前缀。根据问题的不同，生成的文件可能是好的，也可能不是。 强烈建议用户检查警告信息以及生成的文件。
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     <constant>2</constant> -- 此退出代码用于错误发生之后。 &mkvpropedit;
+在输出错误信息后即中断处理。错误信息可能是错误的命令行参数，也可能是损坏文件的读取/写入错误。
+    </para>
+   </listitem>
+  </itemizedlist>
+ </refsect1>
+
+ <refsect1 id="mkvpropedit.seealso">
+  <title>参阅</title>
+  <para>
+   &mkvmerge;, &mkvinfo;, &mkvextract;, &mmg;
+  </para>
+ </refsect1>
+
+ <refsect1 id="mkvpropedit.www">
+  <title>网络</title>
+  <para>
+   最新版本总可以在 <ulink
+url="http://www.bunkus.org/videotools/mkvtoolnix/">MKVToolNix 主页</ulink> 找到。
+  </para>
+ </refsect1>
+
+</refentry>

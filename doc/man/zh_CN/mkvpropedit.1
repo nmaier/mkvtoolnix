@@ -1,0 +1,350 @@
+'\" t
+.\"     Title: mkvpropedit
+.\"    Author: Moritz Bunkus <moritz@bunkus.org>
+.\" Generator: DocBook XSL Stylesheets v1.75.1 <http://docbook.sf.net/>
+.\"      Date: January 2010
+.\"    Manual: 用户命令
+.\"    Source: MkvToolNix 3.1.0
+.\"  Language: Chinese
+.\"
+.TH "MKVPROPEDIT" "1" "January 2010" "MkvToolNix 3\&.1\&.0" "用户命令"
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "名称"
+mkvpropedit \- 在不进行完整的重新混流的情况下修改现有 Matroska(TM) 文件的属性
+.SH "概要"
+.HP \w'\fBmkvpropedit\fR\ 'u
+\fBmkvpropedit\fR [选项] {源文件名} {操作}
+.SH "说明"
+.PP
+此程序可分析现有
+Matroska(TM)
+文件，并修改其部分属性。然后它将将变更写入现有文件。可修改的属性包括剪辑信息元素（如标题）和轨道头部（如语言代码、\'默认轨\' 标记或轨道名称）。
+.PP
+选项:
+.PP
+\fB\-l\fR, \fB\-\-list\-property\-names\fR
+.RS 4
+列出所有已知的可编辑的属性名称、它们的类型（字符串型、整数型、布尔型等等）及简短说明。程序随后将退出执行。因此不必提供
+\fIsource\-filename\fR
+参数。
+.RE
+.PP
+\fB\-p\fR, \fB\-\-parse\-mode\fR \fI模式\fR
+.RS 4
+设置解析模式。参数 \'\fI模式\fR\' 可以为 \'fast（快速）\'（此项为默认值）或 \'full（完整）\'。\'fast（快速）\'模式不解析整个文件，而是使用元定位元素确定源文件中所需元素的位置。99% 的情况下这就足够了。但如果碰到不含元定位元素或者元定位元素损坏的文件，用户可能得考虑 \'full（完整）\' 解析模式。完整扫描文件可能要花费几分钟，而快速扫描只需要几秒钟。
+.RE
+.PP
+操作:
+.PP
+\fB\-e\fR, \fB\-\-edit\fR \fI选择器\fR
+.RS 4
+设置后续的
+添加、设置
+或
+删除
+操作所针对的
+Matroska(TM)
+文件区域（即剪辑信息或某个轨道的头部）。此选项可多次使用，以同时修改多个元素。
+.sp
+关于完整的语法说明请参见关于
+编辑选择器
+的段落。
+.RE
+.PP
+\fB\-a\fR, \fB\-\-add\fR \fI名称\fR=\fI数值\fR
+.RS 4
+添加名为
+\fI名称\fR、值为
+\fI数值\fR
+的属性。即使已存在这样的属性，也将执行添加属性操作。注意大多数属性是唯一的，不能出现多个。
+.RE
+.PP
+\fB\-s\fR, \fB\-\-set\fR \fI名称\fR=\fI数值\fR
+.RS 4
+设置所有名为
+\fI名称\fR
+的属性的数值为
+\fI数值\fR。如果不存在这样的属性，则将添加该属性。
+.RE
+.PP
+\fB\-d\fR, \fB\-\-delete\fR \fI名称\fR
+.RS 4
+删除所有名为
+\fI名称\fR
+的属性。注意部分属性是必需的，不能删除。
+.RE
+.PP
+其他选项：
+.PP
+\fB\-\-command\-line\-charset\fR \fI字符集\fR
+.RS 4
+设定在命令行给出的字符串的字符集，用于转为其他字符集。默认为系统当前区域设置中所给定的字符集。
+.RE
+.PP
+\fB\-\-output\-charset\fR \fI字符集\fR
+.RS 4
+设置输出的字符串应被转换到何种字符集。默认为系统当前区域设置中所给定的字符集。
+.RE
+.PP
+\fB\-r\fR, \fB\-\-redirect\-output\fR \fI文件名\fR
+.RS 4
+将所有信息写入文件
+\fI文件名\fR
+而不是输出到命令行。 尽管该操作可以用输出重定向轻松实现，但在某些情况下还需要靠它：如当终端在写入文件之前重新解释（覆盖输出）时。将优先使用通过
+\fB\-\-output\-charset\fR
+设定的字符集。
+.RE
+.PP
+\fB\-\-ui\-language\fR \fI语言代码\fR
+.RS 4
+强制使用语言代码为
+\fI语言代码\fR
+的翻译（如 \'de_DE\' 对应德文翻译）。使用
+\fILANG\fR,
+\fILC_MESSAGES\fR
+及
+\fILC_ALL\fR
+这些环境变量更好。如果在
+\fI语言代码\fR
+处输入 \'list\'，\fBmkvextract\fR(1)
+将输出可用翻译列表。
+.RE
+.PP
+\fB\-v\fR, \fB\-\-verbose\fR
+.RS 4
+使输出信息更详尽，且每当读取到重要的
+Matroska(TM)
+元素时就将其显示。
+.RE
+.PP
+\fB\-h\fR, \fB\-\-help\fR
+.RS 4
+显示用法信息并退出。
+.RE
+.PP
+\fB\-V\fR, \fB\-\-version\fR
+.RS 4
+显示版本信息并退出。
+.RE
+.PP
+\fB@\fR选项文件
+.RS 4
+从文件
+\fI选项文件\fR
+中读取额外的命令行参数。首个非空白字符为井号 (\'#\') 的行将被当作注释对待，在处理过程中将被忽略。各行开头与结尾的空白将被除去。各行必须恰好含有一个选项。没有元字符转义。
+.sp
+The command line \'\fBmkvpropedit source\&.mkv \-\-edit track:a2 \-\-set name=Comments\fR\' could be converted into the following option file:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+# 修改 源\&.mkv
+源\&.mkv
+#编辑第二条音频轨
+\-\-edit
+track:a2
+# 并设置标题为 \'注释\'
+\-\-set
+title=注释
+     
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.SH "编辑选择器"
+.PP
+
+\fB\-\-edit\fR
+选项设置后续的
+添加,
+设置
+或
+删除
+操作所影响的
+Matroska(TM)
+文件区域（剪辑信息或者特定轨道的头部）。在出现另一个
+\fB\-\-edit\fR
+选项之前，此选项将一直有效。此选项的参数就叫做编辑选择器。
+.SS "剪辑信息"
+.PP
+可以通过这三个词中的任意一个选择剪辑信息: \'info\'、\'segment_info\' 或 \'segmentinfo\'。剪辑信息包含的属性包括剪辑标题、剪辑
+UID
+等。
+.SS "轨道头部"
+.PP
+可用于选择轨道头部的选择器稍显复杂：所有以 \'track:\' 开头的变体。轨道头部属性包括如语言代码、\'默认轨\' 标记、轨道名称等属性。
+.PP
+\fBtrack:\fR\fIn\fR
+.RS 4
+如果参数
+\fIn\fR
+为数字，则将选择第
+\fIn\fR
+条轨道。轨道顺序与
+\fBmkvmerge\fR(1)
+的
+\fB\-\-identify\fR
+选项所输出的相同。
+.RE
+.PP
+\fBtrack:\fR\fIt\fR\fIn\fR
+.RS 4
+如果参数以字母
+\fIt\fR
+后接
+\fIn\fR
+开头，则将选择选定轨道类型中的第
+\fIn\fR
+条轨道。轨道类型参数
+\fIt\fR
+必须为下述四个字母中的一个: \'a\' 代表音频轨道，\'b\' 代表按钮轨道，\'s\' 代表字幕轨道，\'v\' 代表视频轨道。轨道顺序与
+\fBmkvmerge\fR(1)
+的
+\fB\-\-identify\fR
+选项所输出的相同。
+.RE
+.PP
+\fBtrack:\fR=\fIuid\fR
+.RS 4
+如果参数以 \'=\' 后接
+\fIuid\fR
+开头，则将选择轨道
+UID
+元素等于此
+\fIuid\fR
+的轨道。轨道
+UID
+可通过
+\fBmkvinfo\fR(1)
+获取。
+.RE
+.PP
+\fBtrack:\fR@\fI数字\fR
+.RS 4
+如果参数以 \'@\' 后接
+\fI数字\fR
+开头，则选择轨道号元素等于
+\fI数字\fR
+的轨道。轨道号可以通过
+\fBmkvinfo\fR(1)
+获取。
+.RE
+.SS "注"
+.PP
+由于轨道编辑选择器的特性，一些选择器所匹配的轨道头部可能是相同的。在此情况下，这些编辑选择器的所有操作将被按照在命令行给出的顺序合并运行。
+.SH "示例"
+.PP
+下面的示例将编辑一个名为 \'电影\&.mkv\' 的文件。示例中将设置剪辑标题并修改一条音频轨和一条字幕轨的语言代码。附注，本示例可以简写，即省去
+\fB\-\-edit\fR
+选项，因为在第一个
+\fB\-\-edit\fR
+选项之前的所有选项默认编辑的就是剪辑信息元素。
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit 电影\&.mkv \-\-edit info \-\-set "title=影片" \-\-edit track:a1 \-\-set language=fre \-\-edit track:a2 \-\-set language=ita
+  
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+The second example removes the \'default track flag\' from the first subtitle track and sets it for the second one\&. Note that
+\fBmkvpropedit\fR(1), unlike
+\fBmkvmerge\fR(1), does not set the \'default track flag\' of other flags to \'0\' if it is set to \'1\' for a different track automatically\&.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvpropedit movie\&.mkv \-\-edit tracks:s1 \-\-set flag\-default=0 \-\-edit tracks:s2 \-\-set flag\-default=1
+  
+.fi
+.if n \{\
+.RE
+.\}
+.SH "退出代码"
+.PP
+
+\fBmkvpropedit\fR(1)
+退出时会返回以下三个退出代码中的一个：
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB0\fR
+\-\- 此退出代码说明已成功完成修改。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB1\fR
+\-\- 这种情况下
+\fBmkvpropedit\fR(1)
+至少输出了一条警告信息，但修改并未因之中止。 警告信息以文字 \'警告:\' 为前缀。根据问题的不同，生成的文件可能是好的，也可能不是。 强烈建议用户检查警告信息以及生成的文件。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+\fB2\fR
+\-\- 此退出代码用于错误发生之后。
+\fBmkvpropedit\fR(1)
+在输出错误信息后即中断处理。错误信息可能是错误的命令行参数，也可能是损坏文件的读取/写入错误。
+.RE
+.SH "参阅"
+.PP
+
+\fBmkvmerge\fR(1),
+\fBmkvinfo\fR(1),
+\fBmkvextract\fR(1),
+\fBmmg\fR(1)
+.SH "网络"
+.PP
+最新版本总可以在
+\m[blue]\fBMKVToolNix 主页\fR\m[]\&\s-2\u[1]\d\s+2
+找到。
+.SH "作者"
+.PP
+\fBMoritz Bunkus\fR <\&moritz@bunkus\&.org\&>
+.RS 4
+开发者
+.RE
+.SH "备注"
+.IP " 1." 4
+MKVToolNix 主页
+.RS 4
+\%http://www.bunkus.org/videotools/mkvtoolnix/
+.RE

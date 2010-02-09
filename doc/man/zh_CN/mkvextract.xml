@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "/usr/share/xml/docbook/schema/dtd/4.5/docbookx.dtd"
+[
+<!ENTITY product "mkvextract">
+<!ENTITY version "3.1.0">
+<!ENTITY date "January 2010">
+
+<!ENTITY mkvmerge "<citerefentry><refentrytitle>mkvmerge</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mkvinfo "<citerefentry><refentrytitle>mkvinfo</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mkvextract "<citerefentry><refentrytitle>mkvextract</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mkvpropedit "<citerefentry><refentrytitle>mkvpropedit</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+<!ENTITY mmg "<citerefentry><refentrytitle>mmg</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
+
+<!ENTITY matroska "<productname>Matroska</productname>">
+<!ENTITY oggvorbis "<productname>OggVorbis</productname>">
+<!ENTITY xml "<abbrev>XML</abbrev>">
+
+]>
+
+<refentry lang="zh-hans" id="mkvextract">
+ <refentryinfo>
+  <productname>&product;</productname> <date>&date;</date>
+  <authorgroup>
+   <author>
+    <contrib>开发者</contrib>
+    <firstname>Moritz</firstname>
+    <surname>Bunkus</surname>
+    <email>moritz@bunkus.org</email>
+   </author>
+  </authorgroup>
+ </refentryinfo>
+ <refmeta>
+  <refentrytitle>&product;</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="version">&version;</refmiscinfo>
+  <refmiscinfo class="date">&date;</refmiscinfo>
+  <refmiscinfo class="source">MkvToolNix</refmiscinfo>
+  <refmiscinfo class="manual">用户命令</refmiscinfo>
+ </refmeta>
+
+ <refnamediv>
+  <refname>&product;</refname>
+  <refpurpose>将 &matroska; 文件中的轨道提取为另外的文件</refpurpose>
+ </refnamediv>
+
+ <refsynopsisdiv id="mkvextract.synopsis">
+  <title>概要</title>
+  <cmdsynopsis>
+<command>mkvextract</command> <arg choice="req">模式</arg> <arg
+choice="req">源文件名</arg> <arg>选项</arg> <arg>提取指令</arg></cmdsynopsis>
+ </refsynopsisdiv>
+
+ <refsect1 id="mkvextract.description">
+  <title>说明</title>
+  <para>
+   本程序可以将 &matroska; 文件的指定部分提取为其他有用的格式。第一个参数，<option>模式</option>告诉 &mkvextract;
+要提取什么。目前支持提取 <link
+linkend="mkvextract.description.tracks">tracks（轨道）</link>、<link
+linkend="mkvextract.description.tags">tags（标签）</link>、<link
+linkend="mkvextract.description.attachments">attachments（附件）</link>、<link
+linkend="mkvextract.description.chapters">chapters（章节）</link>、<link
+linkend="mkvextract.description.cuesheets">CUE sheets（CUE 表单）</link>以及<link
+linkend="mkvextract.description.timecodes_v2">timecodes（时间码）</link>。第二个参数是源文件名。它必须是
+&matroska; 文件。以下参数为选项及提取指令；两者均依所选模式而定。
+  </para>
+
+  <refsect2 id="mkvextract.description.common">
+   <title>通用选项</title>
+
+   <para>
+    以下选项在所有模式下可用，本段落只讲一遍，不赘述。
+   </para>
+
+   <variablelist>
+    <varlistentry id="mkvextract.description.common.command_line_charset">
+     <term><option>--command-line-charset</option> <parameter>字符集</parameter></term>
+     <listitem>
+      <para>
+       设定在命令行给出的字符串的字符集，用于转为其他字符集。默认为系统当前区域设置中所给定的字符集。
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvextract.description.common.output_charset">
+     <term><option>--output-charset</option> <parameter>字符集</parameter></term>
+     <listitem>
+      <para>
+       设置输出的字符串应被转换到何种字符集。默认为系统当前区域设置中所给定的字符集。
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvextract.description.common.redirect_output">
+     <term><option>-r</option>, <option>--redirect-output</option>
+<parameter>文件名</parameter></term>
+     <listitem>
+      <para>
+       将所有信息输出至文件 <parameter>文件名</parameter>
+而不是在命令行显示。尽管该操作可以用输出重定向轻松实现，但在某些情况下还需要靠它：如当终端在写入文件之前重新解释（覆盖输出）时。将优先使用通过
+<link
+linkend="mkvextract.description.common.output_charset"><option>--output-charset</option></link>
+设定的字符集。
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvextract.description.common.ui_language">
+     <term><option>--ui-language</option> <parameter>语言代码</parameter></term>
+     <listitem>
+      <para>
+       强制使用语言代码为 <parameter>语言代码</parameter> 的翻译（如  '<literal>de_DE</literal>'
+对应德文翻译）。使用 <varname>LANG</varname>, <varname>LC_MESSAGES</varname> 及
+<varname>LC_ALL</varname> 这些环境变量更好。如果在 <parameter>语言代码</parameter> 处输入
+'<literal>list</literal>'，&mkvextract; 将输出可用翻译列表。
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>-v</option>, <option>--verbose</option></term>
+     <listitem>
+      <para>
+       使输出信息更详尽，且每当读取到重要的 &matroska; 元素时就将其显示。
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>-h</option>, <option>--help</option></term>
+     <listitem>
+      <para>
+       显示用法信息并退出。
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>-V</option>, <option>--version</option></term>
+     <listitem>
+      <para>
+       显示版本信息并退出。
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>@</option>选项文件</term>
+     <listitem>
+      <para>
+       从文件 <parameter>选项文件</parameter> 中读取额外的命令行参数。首个非空白字符为井号
+('<literal>#</literal>')
+的行将被当作注释对待，在处理过程中将被忽略。各行开头与结尾的空白将被除去。各行必须恰好含有一个选项。没有元字符转义。
+      </para>
+
+      <para>
+       命令行 '<command>mkvextract tracks 源.mkv --raw 1:目标.raw</command>'
+可以转换为下面所示选项文件:
+      </para>
+
+      <programlisting>
+# 从 源.mkv 提取轨道
+tracks
+源.mkv
+# 将轨道以原始数据形式输出。
+--raw
+1:目标.raw
+      </programlisting>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
+
+  <refsect2 id="mkvextract.description.tracks">
+   <title>轨道提取模式</title>
+
+   <para>
+    语法: <command>mkvextract</command> <option>tracks</option>
+<parameter>源文件名</parameter> <optional><parameter>选项</parameter></optional>
+<parameter>TID1:目标文件名1</parameter>
+<optional><parameter>TID2:目标文件名2</parameter> ...</optional>
+   </para>
+
+   <para>
+    以下命令行在 '<literal>tracks</literal>' 轨道提取模式下对各轨道可用。它们应当在所应用到的轨道指令（参阅下文）之前出现。
+   </para>
+
+   <variablelist>
+    <varlistentry>
+     <term><option>-c</option> <parameter>字符集</parameter></term>
+     <listitem>
+      <para>
+       设定下一个字幕轨应被转换为哪一字符集。仅当后面的轨道 ID 对应文本字幕轨时有效。默认为 UTF-8。
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--blockadd</option> <parameter>层级</parameter></term>
+     <listitem>
+      <para>
+       只保留低于或等于此层级的 BlockAdditions 附加块。默认保留所有层级。 本选项仅影响特定类别的编解码器，如 WAVPACK4。
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--cuesheet</option></term>
+     <listitem>
+      <para>
+       让 &mkvextract; 根据下一轨道的标签数据与章节信息提取出 <abbrev>CUE</abbrev> 表单，输出文件名为轨道的输出名后接
+'<literal>.cue</literal>' 扩展名。
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--raw</option></term>
+     <listitem>
+      <para>
+       将原始数据提取为文件，输出文件的周围没有任何容器数据。 与 <link
+linkend="mkvextract.description.tracks.fullraw"><option>--fullraw</option></link>
+标记不同的是，此标记不会将 <classname>CodecPrivate</classname> 元素的内容写入输出文件。 此模式对所有
+<classname>CodecIDs</classname> 有效，即使是 &mkvextract; 不支持处理的，然而生成的文件可能无法使用。
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry id="mkvextract.description.tracks.fullraw">
+     <term><option>--fullraw</option></term>
+     <listitem>
+      <para>
+       提取原始数据，输出文件的周围没有任何容器数据。 如果轨道包含 <classname>CodecPrivate</classname>
+编解码器私有元素，它的内容将先被写入文件。 此模式对所有 <classname>CodecIDs</classname> 有效，即使是
+&mkvextract; 不支持的那些，但是生成的文件可能无法使用。
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><option>--no-ogg</option></term>
+     <listitem>
+      <para>
+       仅对 <abbrev>FLAC</abbrev> 轨道有效。通常 <abbrev>FLAC</abbrev> 轨道是嵌套在 Ogg
+传输流（TS）中的。通过本开关，它们可以被提取为原始 <abbrev>FLAC</abbrev> 文件。
+      </para>
+     </listitem>
+    </varlistentry>
+
+    <varlistentry>
+     <term><parameter>TID:输出文件名</parameter></term>
+     <listitem>
+      <para>
+       如果源文件中存在 ID 为 <parameter>TID</parameter> 的轨道，则将其提取为文件
+<parameter>输出文件名</parameter>。本选项可多次给出。轨道 ID 与 &mkvmerge; 的
+<option>--identify</option> 选项所输出的相同。
+      </para>
+
+      <para>
+       每个输出文件名只能用一次。但 RealAudio 与 RealVideo
+轨道例外。如果您为不同轨道使用了同样的输出文件名，这些轨道将被存入同一个文件中。示例：
+      </para>
+
+      <screen>
+$ mkvextract tracks input.mkv 1:output-two-tracks.rm 2:output-two-tracks.rm
+      </screen>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect2>
+
+  <refsect2 id="mkvextract.description.tags">
+   <title>标签提取模式</title>
+
+   <para>
+    语法: <command>mkvextract</command> <option>tags</option>
+<parameter>源文件名</parameter> <optional><parameter>选项</parameter></optional>
+   </para>
+
+   <para>
+    提取出的标签将被输出到命令行，除非输出被重定向（详情参见关于 <link
+linkend="mkvextract.output_redirection">输出重定向</link> 的章节）。
+   </para>
+  </refsect2>
+
+  <refsect2 id="mkvextract.description.attachments">
+   <title>附件提取模式</title>
+
+   <para>
+    语法: <command>mkvextract</command> <option>attachments</option>
+<parameter>源文件名</parameter> <optional><parameter>选项</parameter></optional>
+<parameter>AID1:输出文件名1</parameter>
+<optional><parameter>AID2:输出文件名2</parameter> ...</optional>
+   </para>
+
+   <variablelist>
+    <varlistentry>
+     <term>AID:输出文件名</term>
+     <listitem>
+      <para>
+       如果源文件中存在 ID 为 <parameter>AID</parameter> 的附件，则将其提取为文件
+<parameter>输出文件名</parameter>。如果 <parameter>输出文件名</parameter> 处留空，将使用所用
+&matroska; 文件中的附件名称。本选项可多次给出。附件 ID 与 &mkvmerge; 的
+<option>--identify</option> 选项所输出的相同。
+     </para>
+    </listitem>
+   </varlistentry>
+   </variablelist>
+  </refsect2>
+
+  <refsect2 id="mkvextract.description.chapters">
+   <title>章节提取模式</title>
+
+   <para>
+    语法: <command>mkvextract</command> <option>chapters</option>
+<parameter>源文件名</parameter> <optional><parameter>选项</parameter></optional>
+   </para>
+
+   <variablelist>
+    <varlistentry>
+     <term><option>-s</option>, <option>--simple</option></term>
+     <listitem>
+      <para>
+       将章节信息以 <abbrev>OGM</abbrev> tools 所用的简单格式 (CHAPTER01=..., CHAPTER01NAME=...)
+导出。此模式下部分信息将被废弃。默认以 &xml; 格式输出章节。
+      </para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+
+   <para>
+    提取出的章节将被输出到命令行，除非输出被重定向（详情参见关于 <link
+linkend="mkvextract.output_redirection">输出重定向</link> 的章节）。
+   </para>
+  </refsect2>
+
+  <refsect2 id="mkvextract.description.cuesheets">
+   <title>Cue 表单提取模式</title>
+
+   <para>
+    语法: <command>mkvextract</command> <option>cuesheet</option>
+<parameter>源文件名</parameter> <optional><parameter>选项</parameter></optional>
+   </para>
+
+   <para>
+    提取出的 cue 表单将被输出到命令行，除非输出被重定向（详情参见关于 <link
+linkend="mkvextract.output_redirection">输出重定向</link> 的章节）。
+   </para>
+  </refsect2>
+
+  <refsect2 id="mkvextract.description.timecodes_v2">
+   <title>时间码提取模式</title>
+
+   <para>
+    语法: <command>mkvextract</command> <option>timecodes_v2</option>
+<parameter>源文件名</parameter> <optional><parameter>选项</parameter></optional>
+   </para>
+
+   <para>
+    提取出的时间码将被输出到命令行，除非输出被重定向（详情参见关于 <link
+linkend="mkvextract.output_redirection">输出重定向</link> 的章节）。
+   </para>
+  </refsect2>
+ </refsect1>
+
+ <refsect1 id="mkvextract.output_redirection">
+  <title>输出重定向</title>
+
+  <para>
+   有些提取模式会使 &mkvextract; 将提取出的数据输出到命令行。通常有两种方法将数据写入文件：一种由 shell 提供，另一种由
+&mkvextract; 自身提供。
+  </para>
+
+  <para>
+   shell 的报告重定向功能可以通过在命令行后追加 '<literal>&gt; 输出文件名.扩展名</literal>' 命令实现。示例：
+  </para>
+
+  <screen>
+$ mkvextract tags 源.mkv &gt; 标签.xml
+  </screen>
+
+  <para>
+   &mkvextract; 自身的重定向功能可通过 <link
+linkend="mkvextract.description.common.redirect_output"><option>--redirect-output</option></link>
+选项唤出。示例：
+   </para>
+
+  <screen>
+$ mkvextract tags 源.mkv --redirect-output 标签.xml
+  </screen>
+
+  <note>
+   <para>
+    在 Windows 平台上您应当使用 <link
+linkend="mkvextract.description.common.redirect_output"><option>--redirect-output</option></link>
+选项，因为 <command>cmd.exe</command> 有时会在写入文件之前对特殊字符进行转义，导致输出文件损坏。
+   </para>
+  </note>
+ </refsect1>
+
+ <refsect1 id="mkvextract.output_file_formats">
+  <title>输出文件格式</title>
+
+  <para>
+   输出文件的格式取决于轨道的类型，而不是输出文件名的扩展名。目前支持以下轨道类型：
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>V_MPEG4/ISO/AVC</term>
+    <listitem>
+     <para>
+      <abbrev>H.264</abbrev> / <abbrev>AVC</abbrev> 视频轨将被输出为
+<abbrev>H.264</abbrev> 基本流，可以使用如 <productname>GPAC</productname> 工具包中的
+<productname>MP4Box</productname> 作进一步处理。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>V_MS/VFW/FOURCC</term>
+    <listitem>
+     <para>
+      使用此 <classname>CodecID</classname> 且 <abbrev>FPS</abbrev> 恒定的视频轨将被输出为
+<abbrev>AVI</abbrev> 文件。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>V_REAL/*</term>
+    <listitem>
+     <para>
+      <productname>RealVideo</productname> 轨道将被输出为
+<productname>RealMedia</productname> 文件。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_MPEG/L3, A_AC3</term>
+    <listitem>
+     <para>
+      这些将被输出为原始的 <abbrev>MP3</abbrev> 与 <abbrev>AC3</abbrev> 文件。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_PCM/INT/LIT</term>
+    <listitem>
+     <para>
+      原始 <abbrev>PCM</abbrev> 数据将被输出为 <abbrev>WAV</abbrev> 文件。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_AAC/MPEG2/*, A_AAC/MPEG4/*, A_AAC</term>
+    <listitem>
+     <para>
+      所有 <abbrev>AAC</abbrev> 文件将被输出为 <abbrev>AAC</abbrev> 文件，其中数据包前有
+<abbrev>ADTS</abbrev> 头。<abbrev>ADTS</abbrev> 头将不含反增强字段（deprecated emphasis
+field）。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_VORBIS</term>
+    <listitem>
+     <para>
+      Vorbis 音频将被输出为 &oggvorbis; 文件。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_REAL/*</term>
+    <listitem>
+     <para>
+      <productname>RealAudio</productname> 轨道将被输出为
+<productname>RealMedia</productname> 文件。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>A_TTA1</term>
+    <listitem>
+     <para>
+      <productname>TrueAudio</productname> 轨道将被输出为 <abbrev>TTA</abbrev> 文件。请注意，由于
+&matroska; 时间码的精度限制，解开来的文件的头部有两个字段不同：<varname>data_length</varname>
+(文件的总采样数) 与 <abbrev>CRC</abbrev>。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>S_TEXT/UTF8</term>
+    <listitem>
+     <para>
+      简单的文本字幕将被输出为 <abbrev>SRT</abbrev> 文件。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>S_TEXT/SSA, S_TEXT/ASS</term>
+    <listitem>
+     <para>
+      <abbrev>SSA</abbrev> 与 <abbrev>ASS</abbrev> 文本字幕将分别被输出为
+<abbrev>SSA</abbrev>/<abbrev>ASS</abbrev> 文件。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>S_KATE</term>
+    <listitem>
+     <para>
+      <productname>Kate</productname> 流将以 <productname>Ogg</productname> 为容器输出。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>标签</term>
+    <listitem>
+     <para>
+      标签将被转换为 &xml; 格式。此格式与 &mkvmerge; 所支持读取的标签格式相同。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>附件</term>
+    <listitem>
+     <para>
+      附件将被以原样输出。不会进行任何转换。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>章节</term>
+    <listitem>
+     <para>
+      章节将被转换为 &xml; 格式。此格式与 &mkvmerge; 所支持读取的章节格式相同。您也可以选择输出精简的简单
+<abbrev>OGM</abbrev> 格式。
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>时间码</term>
+    <listitem>
+     <para>
+      时间码会先被排序，然后以 timecode v2 格式文件输出，该文件适用于 &mkvmerge;。不支持提取为其他格式 (v1, v3 或 v4)。
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+ </refsect1>
+
+ <refsect1>
+  <title>退出代码</title>
+
+  <para>
+   &mkvextract; 退出时会返回以下三个退出代码中的一个：
+  </para>
+
+  <itemizedlist>
+   <listitem>
+    <para>
+     <constant>0</constant> -- 此退出代码说明已成功完成提取。
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     <constant>1</constant> -- 这种情况下 &mkvextract; 至少输出了一条警告信息，但提取并未因之中止。 警告信息以文字
+'<literal>警告:</literal>' 为前缀。根据问题的不同，生成的文件可能是好的，也可能不是。 强烈建议用户检查警告信息以及生成的文件。
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     <constant>2</constant> -- 此退出代码用于错误发生之后。 &mkvextract;
+在输出错误信息后即中断处理。错误信息可能是错误的命令行参数，也可能是损坏文件的读取/写入错误。
+    </para>
+   </listitem>
+  </itemizedlist>
+ </refsect1>
+
+ <refsect1 id="mkvextract.seealso">
+  <title>参阅</title>
+  <para>
+   &mkvmerge;, &mkvinfo;, &mkvpropedit;, &mmg;
+  </para>
+ </refsect1>
+
+ <refsect1 id="mkvextract.www">
+  <title>网络</title>
+  <para>
+   最新版本总可以在 <ulink
+url="http://www.bunkus.org/videotools/mkvtoolnix/">MKVToolNix 主页</ulink> 找到。
+  </para>
+ </refsect1>
+
+</refentry>
