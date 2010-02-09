@@ -4,7 +4,7 @@
 [
 <!ENTITY product "mkvpropedit">
 <!ENTITY version "3.1.0">
-<!ENTITY date "January 2010">
+<!ENTITY date "2010 年 1 月">
 
 <!ENTITY mkvmerge "<citerefentry><refentrytitle>mkvmerge</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
 <!ENTITY mkvinfo "<citerefentry><refentrytitle>mkvinfo</refentrytitle><manvolnum>1</manvolnum></citerefentry>">
@@ -225,8 +225,8 @@ linkend="mkvpropedit.description.output_charset"><option>--output-charset</optio
      </para>
 
      <para>
-      The command line '<command>mkvpropedit source.mkv --edit track:a2 --set
-name=Comments</command>' could be converted into the following option file:
+      命令行 '<command>mkvpropedit 源.mkv --edit track:a2 --set name=注释</command>'
+可以转换为下述选项文件:
      </para>
 
      <programlisting>
@@ -344,14 +344,12 @@ $ mkvpropedit 电影.mkv --edit info --set "title=影片" --edit track:a1 --set 
   </screen>
 
   <para>
-   The second example removes the 'default track flag' from the first subtitle
-track and sets it for the second one. Note that &mkvpropedit;, unlike
-&mkvmerge;, does not set the 'default track flag' of other flags to '0' if
-it is set to '1' for a different track automatically.
+   第二个示例，将 '默认轨标记' 从第一条字幕轨移除并设置到第二条字幕轨上。注意 &mkvpropedit;, 与 &mkvmerge;
+不同，不会在将另一个轨道的 '默认轨标记'设为 '1' 的时候自动将其他轨道的标记设为 '0'。
   </para>
 
   <screen>
-$ mkvpropedit movie.mkv --edit tracks:s1 --set flag-default=0 --edit tracks:s2 --set flag-default=1
+$ mkvpropedit 影片.mkv --edit tracks:s1 --set flag-default=0 --edit tracks:s2 --set flag-default=1
   </screen>
  </refsect1>
 
