@@ -301,7 +301,7 @@ manpages: $(MANPAGES)
 
 translated-manpages: $(MANPAGES_TRANSLATED)
 
-update-manpage-po:
+update-manpage-po update-man-po:
 	$(PO4A) $(PO4A_FLAGS) doc/man/po4a/po4a.cfg
 
 # Some general rules
@@ -390,7 +390,7 @@ update-po: create-pot
 	done
 
 po-stats po-statistics:
-	@for i in po/*.po ; do \
+	@for i in po/*.po doc/man/po4a/po/*.po; do \
 		echo '  MSGFMT ' $$i ; \
 		$(SQ) msgfmt --statistics -o /dev/null $$i ; \
 		msgfmt --statistics -o /dev/null $$i ; \
