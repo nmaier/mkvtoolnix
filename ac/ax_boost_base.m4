@@ -87,16 +87,32 @@ AC_DEFUN([AX_BOOST_BASE],
     dnl or if you install boost with RPM
     if test "$ac_boost_path" != ""; then
         case $target in
-             powerpc64*|ppc64*|sparc64*|x86_64*) BOOST_LDFLAGS="-L$ac_boost_path/lib64" ;;
-             *)                       BOOST_LDFLAGS="-L$ac_boost_path/lib" ;;
+             powerpc64*|ppc64*|sparc64*|x86_64*)
+               if test -d "$ac_boost_path/lib64" ; then
+                 BOOST_LDFLAGS="-L$ac_boost_path/lib64"
+               else
+                 BOOST_LDFLAGS="-L$ac_boost_path/lib"
+               fi
+               ;;
+             *)
+               BOOST_LDFLAGS="-L$ac_boost_path/lib"
+               ;;
         esac
         BOOST_CPPFLAGS="-I$ac_boost_path/include"
     else
         for ac_boost_path_tmp in /usr /usr/local /opt /opt/local ; do
             if test -d "$ac_boost_path_tmp/include/boost" && test -r "$ac_boost_path_tmp/include/boost"; then
                 case $target in
-                     powerpc64*|ppc64*|sparc64*|x86_64*) BOOST_LDFLAGS="-L$ac_boost_path_tmp/lib64" ;;
-                     *)                       BOOST_LDFLAGS="-L$ac_boost_path_tmp/lib" ;;
+                     powerpc64*|ppc64*|sparc64*|x86_64*)
+                       if test -d "$ac_boost_path_tmp/lib64" ; then
+                         BOOST_LDFLAGS="-L$ac_boost_path_tmp/lib64"
+                       else
+                         BOOST_LDFLAGS="-L$ac_boost_path_tmp/lib"
+                       fi
+                       ;;
+                     *)
+                       BOOST_LDFLAGS="-L$ac_boost_path_tmp/lib"
+                       ;;
                 esac
                 BOOST_CPPFLAGS="-I$ac_boost_path_tmp/include"
                 break;
