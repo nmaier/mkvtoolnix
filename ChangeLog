@@ -1,3 +1,8 @@
+2010-02-11  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg, mkvpropedit: Fixed another bug causing a crash writing
+	chapters/other elements to existing Matroska files.
+
 2010-02-10  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Build system: bug fix: Improved detection of Boost::Filesystem

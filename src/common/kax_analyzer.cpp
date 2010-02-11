@@ -400,6 +400,17 @@ kax_analyzer_c::adjust_segment_size() {
  */
 bool
 kax_analyzer_c::handle_void_elements(int data_idx) {
+  // Is the element at the end of the file? If so truncate the file
+  // and remove the element from the m_data structure if that was
+  // requested. Then we're done.
+  if (m_data.size() == (data_idx + 1)) {
+    m_file->truncate(m_data[data_idx]->m_pos + m_data[data_idx]->m_size);
+    adjust_segment_size();
+    if (0 == m_data[data_idx]->m_size)
+      m_data.erase(m_data.begin() + data_idx);
+    return false;
+  }
+
   // Are the following elements EbmlVoid elements?
   int end_idx = data_idx + 1;
   while ((m_data.size() > end_idx) && (m_data[end_idx]->m_id == EbmlVoid::ClassInfos.GlobalId))
