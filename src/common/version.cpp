@@ -18,7 +18,7 @@
 #include "common/common.h"
 #include "common/version.h"
 
-#define VERSIONNAME "Happy up here"
+#define VERSIONNAME "Beginnings"
 
 std::string
 get_version_info(const std::string &program,
