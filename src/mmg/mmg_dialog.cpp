@@ -276,11 +276,11 @@ mmg_dialog::translate_ui() {
   set_menu_item_strings(ID_M_HELP_HELP,                Z("&Help\tF1"),                            Z("Show the guide to mkvmerge GUI"));
   set_menu_item_strings(ID_M_HELP_ABOUT,               Z("&About"),                               Z("Show program information"));
 
-  GetMenuBar()->SetMenuLabel(0, Z("&File"));
-  GetMenuBar()->SetMenuLabel(1, Z("&Muxing"));
-  GetMenuBar()->SetMenuLabel(2, Z("&Chapter Editor"));
-  GetMenuBar()->SetMenuLabel(3, Z("&Window"));
-  GetMenuBar()->SetMenuLabel(4, Z("&Help"));
+  set_menu_label(this, 0, Z("&File"));
+  set_menu_label(this, 1, Z("&Muxing"));
+  set_menu_label(this, 2, Z("&Chapter Editor"));
+  set_menu_label(this, 3, Z("&Window"));
+  set_menu_label(this, 4, Z("&Help"));
 
   notebook->SetPageText(0, Z("Input"));
   notebook->SetPageText(1, Z("Attachments"));

@@ -134,6 +134,34 @@ wxBitmapComboBox bitmap_combobox(NULL, -1);
       AC_DEFINE(HAVE_WXBITMAPCOMBOBOX, 1, [Define if the wxWindows class wxBitmapComboBox is present])
     fi
 
+    AC_CACHE_CHECK([for wxMenuBar member function SetMenuLabel], [ac_cv_wx_menubar_setmenulabel], [
+      AC_TRY_COMPILE([
+#include <wx/string.h>
+#include <wx/menu.h>
+], [
+wxMenuBar bar;
+bar.SetMenuLabel(0, wxEmptyString);
+], [ ac_cv_wx_menubar_setmenulabel=yes ], [ ac_cv_wx_menubar_setmenulabel=no ])
+    ])
+
+    if test x"$ac_cv_wx_menubar_setmenulabel" = "xyes" ; then
+      AC_DEFINE(HAVE_WXMENUBAR_SETMENULABEL, 1, [Define if the wxWindows member function wxMenuBar::SetMenuLabel is present])
+    fi
+
+    AC_CACHE_CHECK([for wxMenuItem member function SetItemlabel], [ac_cv_wx_menuitem_setitemlabel], [
+      AC_TRY_COMPILE([
+#include <wx/string.h>
+#include <wx/menuitem.h>
+], [
+wxMenuItem item;
+item.SetItemLabel(wxEmptyString);
+], [ ac_cv_wx_menuitem_setitemlabel=yes ], [ ac_cv_wx_menuitem_setitemlabel=no ])
+    ])
+
+    if test x"$ac_cv_wx_menuitem_setitemlabel" = "xyes" ; then
+      AC_DEFINE(HAVE_WXMENUITEM_SETITEMLABEL, 1, [Define if the wxWindows member function wxMenuItem::SetItemlabel is present])
+    fi
+
     AC_LANG_POP()
     CXXFLAGS="$ac_save_CXXFLAGS"
     LIBS="$ac_save_LIBS"

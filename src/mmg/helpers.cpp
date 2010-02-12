@@ -390,8 +390,23 @@ set_menu_item_strings(wxFrame *frame,
                       const wxString &help_text) {
   wxMenuItem *item = frame->GetMenuBar()->FindItem(id);
   if (NULL != item) {
+#if defined(HAVE_WXMENUITEM_SETITEMLABEL)
     item->SetItemLabel(title);
+#else
+    item->SetText(title);
+#endif
     if (!help_text.IsEmpty())
       item->SetHelp(help_text);
   }
+}
+
+void
+set_menu_label(wxFrame *frame,
+               int pos,
+               const wxString &label) {
+#if defined(HAVE_WXMENUBAR_SETMENULABEL)
+  frame->GetMenuBar()->SetMenuLabel(pos, label);
+#else
+  frame->GetMenuBar()->SetLabelTop(pos, label);
+#endif
 }

@@ -148,9 +148,9 @@ header_editor_frame_c::translate_ui() {
   set_menu_item_strings(this, ID_M_HE_HEADERS_COLLAPSE_ALL, Z("&Collapse all entries\tCtrl-P"), Z("Collapse all entries so that none of their sub-entries will be shown"));
   set_menu_item_strings(this, ID_M_HE_HEADERS_VALIDATE,     Z("&Validate\tCtrl-T"),             Z("Validates the content of all changeable headers"));
   set_menu_item_strings(this, ID_M_HE_HELP_HELP,            Z("&Help\tF1"),                     Z("Display usage information"));
-  GetMenuBar()->SetMenuLabel(0, Z("&File"));
-  GetMenuBar()->SetMenuLabel(1, Z("H&eaders"));
-  GetMenuBar()->SetMenuLabel(2, Z("&Help"));
+  set_menu_label(this, 0, Z("&File"));
+  set_menu_label(this, 1, Z("H&eaders"));
+  set_menu_label(this, 2, Z("&Help"));
 
   set_window_title();
 
