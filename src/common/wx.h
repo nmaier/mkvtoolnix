@@ -80,20 +80,10 @@ wxU(const wxString &s) {
 # endif
 #endif
 
-// Some of these constants are not defined in wxWidgets 2.6,
-// but the old ones are outdated in 2.8 and not present if
-// it was compiled without 2.6 compatibility.
-#if !defined(HAVE_WX_FILEDIALOG_ENUM_WITH_FD_PREFIX)
-# define wxFD_OPEN             wxOPEN
-# define wxFD_SAVE             wxSAVE
-# define wxFD_MULTIPLE         wxMULTIPLE
-# define wxFD_OVERWRITE_PROMPT wxOVERWRITE_PROMPT
-#endif
-
 // Use wxComboBox on non-Windows builds with wxWidgets 2.8.0 and newer
 // because GTK's combo box has serious problems (see bug 339).
 #if !defined(wxMTX_COMBOBOX_TYPE)
-# if !defined(SYS_WINDOWS) && !defined(SYS_APPLE) && wxCHECK_VERSION(2, 8, 0) && defined(HAVE_WXBITMAPCOMBOBOX) && HAVE_WXBITMAPCOMBOBOX
+# if !defined(SYS_WINDOWS) && !defined(SYS_APPLE) && defined(HAVE_WXBITMAPCOMBOBOX) && HAVE_WXBITMAPCOMBOBOX
 #  define USE_WXBITMAPCOMBOBOX
 #  define wxMTX_COMBOBOX_TYPE wxBitmapComboBox
 #  include <wx/bmpcbox.h>
