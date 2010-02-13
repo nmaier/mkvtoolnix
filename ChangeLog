@@ -1,3 +1,8 @@
+2010-02-13  Moritz Bunkus  <moritz@bunkus.org>
+
+	* Build system: Fixed configure for systems on which 'echo' does
+	not support the '-n' parameter (e.g. Mac OS).
+
 2010-02-12  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v3.2.0.
