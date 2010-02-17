@@ -2,14 +2,14 @@
 # Copyright (C) 2009 Moritz Bunkus
 # This file is distributed under the same license as the mkvtoolnix package.
 #
-# Hiroki Taniura <zuntakapokoten@gmail.com> 2009.
+# Hiroki Taniura <zuntakapokoten@gmail.com> 2009, 2010.
 # Katsuhiko Nishimra <kat841@hotmail.com> 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-02-07 15:43+0900\n"
+"PO-Revision-Date: 2010-02-17 22:07+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -639,7 +639,6 @@ msgid " (left eye)"
 msgstr " (左目)"
 
 #: src/info/mkvinfo.cpp:702
-#, fuzzy
 msgid " (mono)"
 msgstr " (モノラル)"
 
@@ -726,15 +725,15 @@ msgstr "%1% ビルド日時 %2% %3%"
 
 #: src/info/mkvinfo.cpp:165
 msgid "%1% frame, track %2%, timecode %3% (%4%), duration %|5$.3f|, size %6%, adler 0x%|7$08x|%8%%9%\n"
-msgstr "%1% フレーム、トラック %2%、タイムコード %3% (%4%)、長さ %|5$.3f|、サイズ %6%, adler 0x%|7$08x|%8%%9%\n"
+msgstr "%1% フレーム、トラック %2%、タイムコード %3% (%4%)、長さ %|5$.3f|、サイズ %6%、adler 0x%|7$08x|%8%%9%\n"
 
 #: src/info/mkvinfo.cpp:170
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%\n"
-msgstr "%1% フレーム、トラック %2%、タイムコード %3% (%4%)、サイズ %5%, adler 0x%|6$08x|%7%\n"
+msgstr "%1% フレーム、トラック %2%、タイムコード %3% (%4%)、サイズ %5%、adler 0x%|6$08x|%7%\n"
 
 #: src/info/mkvinfo.cpp:166
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"
-msgstr "%1% フレーム、トラック %2%、タイムコード %3% (%4%)、サイズ %5%, adler 0x%|6$08x|%7%%8%\n"
+msgstr "%1% フレーム、トラック %2%、タイムコード %3% (%4%)、サイズ %5%、adler 0x%|6$08x|%7%%8%\n"
 
 #: src/merge/mkvmerge.cpp:668
 msgid "%1%: divisor is 0 in '%2% %3%'.\n"
@@ -1831,7 +1830,6 @@ msgid "Atatchment extraction"
 msgstr "添付ファイルの展開"
 
 #: src/info/mkvinfo.cpp:1257
-#, fuzzy
 msgid "Attached"
 msgstr "添付ファイル"
 
@@ -1898,9 +1896,8 @@ msgid "Binary (displayed as hex numbers)"
 msgstr "バイナリ（16進数で表示されます）"
 
 #: src/info/mkvinfo.cpp:619
-#, fuzzy
 msgid "Bit depth: %1%"
-msgstr "ビット深さ: %1%"
+msgstr "ビット深さ：%1%"
 
 #: src/common/property_element.cpp:155 src/mmg/header_editor/frame.cpp:509
 msgid "Bits per sample, mostly used for PCM."
@@ -1928,7 +1925,6 @@ msgid "Block group"
 msgstr "ブロックグループ"
 
 #: src/info/mkvinfo.cpp:155
-#, fuzzy
 msgid "Block virtual: %1%"
 msgstr "バーチャルブロック：%1%"
 
@@ -2030,7 +2026,6 @@ msgid "Channel positions: %1%"
 msgstr "チャンネル位置：%1%"
 
 #: src/info/mkvinfo.cpp:608
-#, fuzzy
 msgid "Channels: %1%"
 msgstr "チャンネル数：%1%"
 
@@ -2265,14 +2260,13 @@ msgstr "コーデック名"
 
 #: src/info/mkvinfo.cpp:992
 msgid "Codec name: %1%"
-msgstr "コーデック名 %1%"
+msgstr "コーデック名：%1%"
 
 #: src/info/mkvinfo.cpp:997
 msgid "Codec settings: %1%"
 msgstr "コーデック設定：%1%"
 
 #: src/info/mkvinfo.cpp:988
-#, fuzzy
 msgid "CodecPrivate, length %1%%2%"
 msgstr "CodecPrivate、長さ %1%%2%"
 
@@ -2325,12 +2319,10 @@ msgid "Content compression"
 msgstr "コンテンツ圧縮"
 
 #: src/info/mkvinfo.cpp:742
-#, fuzzy
 msgid "Content encoding"
 msgstr "コンテンツエンコーディング"
 
 #: src/info/mkvinfo.cpp:734
-#, fuzzy
 msgid "Content encodings"
 msgstr "コンテンツエンコーディング"
 
@@ -2481,7 +2473,7 @@ msgstr "CUEクラスタ位置：%1%"
 
 #: src/info/mkvinfo.cpp:1196
 msgid "Cue codec state: %1%"
-msgstr "CUEコーデック状態："
+msgstr "CUEコーデック状態：%1%"
 
 #: src/mmg/tabs/global.cpp:270
 msgid "Cue name format:"
@@ -2497,7 +2489,7 @@ msgstr "CUE参照クラスタ：%1%"
 
 #: src/info/mkvinfo.cpp:1220
 msgid "Cue ref codec state: %1%"
-msgstr "CUE参照状態"
+msgstr "CUE参照状態：%1%"
 
 #: src/info/mkvinfo.cpp:1216
 #, fuzzy
@@ -2756,12 +2748,10 @@ msgid "Done.\n"
 msgstr "完了。\n"
 
 #: src/info/mkvinfo.cpp:162
-#, fuzzy
 msgid "Duration: %|1$.3f|ms"
 msgstr "長さ: %|1$.3f|ms"
 
 #: src/info/mkvinfo.cpp:519
-#, fuzzy
 msgid "Duration: %|1$.3f|s (%2%)"
 msgstr "長さ: %|1$.3f|s (%2%)"
 
@@ -2802,9 +2792,8 @@ msgid "Each edition must contain at least one chapter."
 msgstr "各エディションは少なくとも1つのチャプタを含んでいなければなりません。"
 
 #: src/info/mkvinfo.cpp:146
-#, fuzzy
 msgid "EbmlVoid (size: %1%)"
-msgstr "EbmlVoid (サイズ: %1%)"
+msgstr "EbmlVoid (サイズ：%1%)"
 
 #: src/propedit/propedit_cli_parser.cpp:159
 msgid "Edit selectors"
@@ -2841,7 +2830,6 @@ msgid "Enable splitting..."
 msgstr "分割を有効にする"
 
 #: src/info/mkvinfo.cpp:953
-#, fuzzy
 msgid "Enabled: %1%"
 msgstr "有効：%1%"
 
@@ -2855,7 +2843,7 @@ msgstr "暗号化アルゴリズム：%1% (%2%)"
 
 #: src/info/mkvinfo.cpp:826
 msgid "Encryption key ID: %1%"
-msgstr "暗号化鍵ID: %1%"
+msgstr "暗号化鍵ID：%1%"
 
 #: src/mmg/tabs/chapters.cpp:335
 msgid "End:"
@@ -3229,7 +3217,7 @@ msgstr "FourCC：'%1% %2%'でトラックIDがありません。\n"
 
 #: src/info/mkvinfo.cpp:160
 msgid "Frame number: %1%"
-msgstr "フレーム数"
+msgstr "フレーム数：%1%"
 
 #: src/info/mkvinfo.cpp:724
 msgid "Frame rate: %1%"
@@ -3433,7 +3421,6 @@ msgid "Interface language:"
 msgstr "インターフェース言語："
 
 #: src/info/mkvinfo.cpp:695
-#, fuzzy
 msgid "Interlaced: %1%"
 msgstr "インターレース：%1%"
 
@@ -7275,7 +7262,6 @@ msgid "avi_reader: Source is not a valid AVI file."
 msgstr "avi_reader：ソースファイルは正しいAVIファイルではありません。"
 
 #: src/info/mkvinfo.cpp:620
-#, fuzzy
 msgid "bits per sample: %1%"
 msgstr "サンプルあたりビット数：%1%"
 
@@ -7358,11 +7344,11 @@ msgstr " "
 
 #: src/info/mkvinfo.cpp:656
 msgid "display height: %1%"
-msgstr "表示高さ"
+msgstr "表示高さ：%1%"
 
 #: src/info/mkvinfo.cpp:651
 msgid "display width: %1%"
-msgstr "表示幅"
+msgstr "表示幅：%1%"
 
 #: src/mmg/jobs.cpp:469 src/mmg/jobs.cpp:657
 msgid "done"
@@ -7561,7 +7547,7 @@ msgstr "キー、"
 
 #: src/info/mkvinfo.cpp:1051
 msgid "language: %1%"
-msgstr "言語： %1%"
+msgstr "言語：%1%"
 
 #: src/info/mkvinfo.cpp:147
 msgid "length %1%, data: %2%"
@@ -8023,7 +8009,7 @@ msgstr "Iフレームのみ"
 
 #: src/info/mkvinfo.cpp:604
 msgid "output sampling freq: %1%"
-msgstr "出力さサンプル周波数"
+msgstr "出力サンプル周波数：%1%"
 
 #: src/mmg/jobs.cpp:468 src/mmg/jobs.cpp:642
 msgid "pending"
