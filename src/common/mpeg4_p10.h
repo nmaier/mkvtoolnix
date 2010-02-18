@@ -297,6 +297,7 @@ namespace mpeg4 {
       void write_nalu_size(unsigned char *buffer, int size, int nalu_size_length = -1);
       memory_cptr create_nalu_with_size(const memory_cptr &src, bool add_extra_data = false);
     };
+    typedef counted_ptr<avc_es_parser_c> avc_es_parser_cptr;
   };
 };
 

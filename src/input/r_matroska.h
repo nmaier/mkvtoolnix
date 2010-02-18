@@ -25,6 +25,7 @@
 #include "common/compression.h"
 #include "common/error.h"
 #include "common/mm_io.h"
+#include "common/mpeg4_p10.h"
 #include "merge/pr_generic.h"
 
 #include <ebml/EbmlUnicodeString.h>
@@ -89,7 +90,7 @@ struct kax_track_t {
 
   bool ignore_duration_hack;
 
-  memory_cptr first_frame_data;
+  std::vector<memory_cptr> first_frames_data;
 
   kax_track_t()
     : tnum(0)
@@ -206,7 +207,7 @@ public:
 protected:
   virtual void init_passthrough_packetizer(kax_track_t *t);
   virtual void set_packetizer_headers(kax_track_t *t);
-  virtual void read_first_frame(kax_track_t *t);
+  virtual void read_first_frames(kax_track_t *t, unsigned num_wanted = 1);
   virtual kax_track_t *new_kax_track();
   virtual kax_track_t *find_track_by_num(uint64_t num, kax_track_t *c = NULL);
   virtual kax_track_t *find_track_by_uid(uint64_t uid, kax_track_t *c = NULL);
@@ -221,6 +222,7 @@ protected:
   virtual void create_audio_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_subtitle_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_button_packetizer(kax_track_t *t, track_info_c &nti);
+  virtual void create_mpeg4_p10_video_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_mpeg4_p10_es_video_packetizer(kax_track_t *t, track_info_c &nti);
 
   virtual void read_headers_info(EbmlElement *&l1, EbmlElement *&l2, int &upper_lvl_el);
@@ -230,6 +232,8 @@ protected:
   virtual void read_headers_tracks(mm_io_c *io, EbmlElement *l0, int64_t position);
   virtual void read_headers_seek_head(EbmlElement *&l0, EbmlElement *&l1);
   virtual int  read_headers();
+
+  virtual mpeg4::p10::avc_es_parser_cptr parse_first_mpeg4_p10_frame(kax_track_t *t, track_info_c &nti);
 
   void init_l1_position_storage(deferred_positions_t &storage);
   virtual bool has_deferred_element_been_processed(deferred_l1_type_e type, int64_t position);

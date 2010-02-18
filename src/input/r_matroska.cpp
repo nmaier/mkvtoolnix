@@ -1330,11 +1330,10 @@ kax_reader_c::create_video_packetizer(kax_track_t *t,
       bool is_native = IS_MPEG4_L2_CODECID(t->codec_id);
       t->ptzr = add_packetizer(new mpeg4_p2_video_packetizer_c(this, nti, t->v_frate, t->v_width, t->v_height, is_native));
 
-    } else if (t->codec_id == MKV_V_MPEG4_AVC) {
-      mxinfo_tid(ti.fname, t->tnum, Y("Using the MPEG-4 part 10 (AVC) video output module.\n"));
-      t->ptzr = add_packetizer(new mpeg4_p10_video_packetizer_c(this, nti, t->v_frate, t->v_width, t->v_height));
+    } else if (t->codec_id == MKV_V_MPEG4_AVC)
+      create_mpeg4_p10_video_packetizer(t, nti);
 
-    } else if (t->codec_id == MKV_V_THEORA) {
+    else if (t->codec_id == MKV_V_THEORA) {
       mxinfo_tid(ti.fname, t->tnum, Y("Using the Theora video output module.\n"));
       t->ptzr = add_packetizer(new theora_video_packetizer_c(this, nti, t->v_frate, t->v_width, t->v_height));
 
@@ -1602,48 +1601,77 @@ kax_reader_c::create_packetizers() {
   }
 }
 
-void
-kax_reader_c::create_mpeg4_p10_es_video_packetizer(kax_track_t *t,
-                                                   track_info_c &nti) {
+mpeg4::p10::avc_es_parser_cptr
+kax_reader_c::parse_first_mpeg4_p10_frame(kax_track_t *t,
+                                          track_info_c &nti) {
   try {
-    read_first_frame(t);
-    if (!t->first_frame_data.is_set())
-      throw false;
+    read_first_frames(t, 5);
 
-    avc_es_parser_c parser;
-    parser.ignore_nalu_size_length_errors();
+    avc_es_parser_cptr parser(new avc_es_parser_c);
+
+    parser->ignore_nalu_size_length_errors();
     if (map_has_key(ti.nalu_size_lengths, t->tnum))
-      parser.set_nalu_size_length(ti.nalu_size_lengths[t->tnum]);
+      parser->set_nalu_size_length(ti.nalu_size_lengths[t->tnum]);
     else if (map_has_key(ti.nalu_size_lengths, -1))
-      parser.set_nalu_size_length(ti.nalu_size_lengths[-1]);
+      parser->set_nalu_size_length(ti.nalu_size_lengths[-1]);
 
     if (sizeof(alBITMAPINFOHEADER) < t->private_size)
-      parser.add_bytes((unsigned char *)t->private_data + sizeof(alBITMAPINFOHEADER), t->private_size - sizeof(alBITMAPINFOHEADER));
-    parser.add_bytes(t->first_frame_data->get_buffer(), t->first_frame_data->get_size());
-    parser.flush();
+      parser->add_bytes((unsigned char *)t->private_data + sizeof(alBITMAPINFOHEADER), t->private_size - sizeof(alBITMAPINFOHEADER));
+    foreach(memory_cptr &frame, t->first_frames_data)
+      parser->add_bytes(frame->get_buffer(), frame->get_size());
+    parser->flush();
 
-    if (!parser.headers_parsed())
+    if (!parser->headers_parsed())
       throw false;
 
-    if (verbose)
-      mxinfo_tid(ti.fname, t->tnum, Y("Using the MPEG-4 part 10 ES video output module.\n"));
-
-    memory_cptr avcc                      = parser.get_avcc();
-    mpeg4_p10_es_video_packetizer_c *ptzr = new mpeg4_p10_es_video_packetizer_c(this, nti, avcc, t->v_width, t->v_height);
-    t->ptzr                               = add_packetizer(ptzr);
-
-    ptzr->enable_timecode_generation(false);
-    if (t->default_duration)
-      ptzr->set_track_default_duration(t->default_duration);
-
+    return parser;
   } catch (...) {
     mxerror_tid(ti.fname, t->tnum, Y("Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"));
   }
+
+  return avc_es_parser_cptr(NULL);
 }
 
 void
-kax_reader_c::read_first_frame(kax_track_t *t) {
-  if (t->first_frame_data.is_set() || (NULL == saved_l1))
+kax_reader_c::create_mpeg4_p10_es_video_packetizer(kax_track_t *t,
+                                                   track_info_c &nti) {
+  avc_es_parser_cptr parser = parse_first_mpeg4_p10_frame(t, nti);
+
+  if (verbose)
+    mxinfo_tid(ti.fname, t->tnum, Y("Using the MPEG-4 part 10 ES video output module.\n"));
+
+  mpeg4_p10_es_video_packetizer_c *ptzr = new mpeg4_p10_es_video_packetizer_c(this, nti, parser->get_avcc(), t->v_width, t->v_height);
+  t->ptzr                               = add_packetizer(ptzr);
+
+  ptzr->enable_timecode_generation(false);
+  if (t->default_duration)
+    ptzr->set_track_default_duration(t->default_duration);
+}
+
+void
+kax_reader_c::create_mpeg4_p10_video_packetizer(kax_track_t *t,
+                                                track_info_c &nti) {
+  if ((0 == nti.private_size) || (NULL == nti.private_data)) {
+    avc_es_parser_cptr parser = parse_first_mpeg4_p10_frame(t, nti);
+    memory_cptr avcc          = parser->get_avcc();
+
+    safefree(nti.private_data);
+    nti.private_data = static_cast<unsigned char *>(safememdup(avcc->get_buffer(), avcc->get_size()));
+    nti.private_size = avcc->get_size();
+
+    mxverb_tid(2, ti.fname, t->tnum, boost::format("AVC track missing CodecPrivate; re-created from bitstream with size %1%\n") % nti.private_size);
+  }
+
+  if (verbose)
+    mxinfo_tid(ti.fname, t->tnum, Y("Using the MPEG-4 part 10 (AVC) video output module.\n"));
+
+  t->ptzr = add_packetizer(new mpeg4_p10_video_packetizer_c(this, nti, t->v_frate, t->v_width, t->v_height));
+}
+
+void
+kax_reader_c::read_first_frames(kax_track_t *t,
+                                unsigned num_wanted) {
+  if ((t->first_frames_data.size() >= num_wanted) || (NULL == saved_l1))
     return;
 
   in->save_pos(saved_l1->GetElementPosition());
@@ -1675,17 +1703,15 @@ kax_reader_c::read_first_frame(kax_track_t *t) {
             if ((NULL == block_track) || (0 == block_simple->NumberFrames()))
               continue;
 
-            if (!block_track->first_frame_data.is_set()) {
-              DataBuffer &data_buffer = block_simple->GetBuffer(0);
-              block_track->first_frame_data = memory_cptr(new memory_c(data_buffer.Buffer(), data_buffer.Size()));
-              block_track->content_decoder.reverse(block_track->first_frame_data, CONTENT_ENCODING_SCOPE_BLOCK);
-              block_track->first_frame_data->grab();
+            DataBuffer &data_buffer = block_simple->GetBuffer(0);
+            block_track->first_frames_data.push_back(memory_cptr(new memory_c(data_buffer.Buffer(), data_buffer.Size())));
+            block_track->content_decoder.reverse(block_track->first_frames_data.back(), CONTENT_ENCODING_SCOPE_BLOCK);
+            block_track->first_frames_data.back()->grab();
 
-              if (t == block_track) {
-                in->restore_pos();
-                delete l1;
-                return;
-              }
+            if ((t == block_track) && (block_track->first_frames_data.size() >= num_wanted)) {
+              in->restore_pos();
+              delete l1;
+              return;
             }
 
           } else if ((EbmlId(*(*cluster)[bgidx]) == KaxBlockGroup::ClassInfos.GlobalId)) {
@@ -1701,17 +1727,15 @@ kax_reader_c::read_first_frame(kax_track_t *t) {
             if ((NULL == block_track) || (0 == block->NumberFrames()))
               continue;
 
-            if (!block_track->first_frame_data.is_set()) {
-              DataBuffer &data_buffer       = block->GetBuffer(0);
-              block_track->first_frame_data = memory_cptr(new memory_c(data_buffer.Buffer(), data_buffer.Size()));
-              block_track->content_decoder.reverse(block_track->first_frame_data, CONTENT_ENCODING_SCOPE_BLOCK);
-              block_track->first_frame_data->grab();
+            DataBuffer &data_buffer = block->GetBuffer(0);
+            block_track->first_frames_data.push_back(memory_cptr(new memory_c(data_buffer.Buffer(), data_buffer.Size())));
+            block_track->content_decoder.reverse(block_track->first_frames_data.back(), CONTENT_ENCODING_SCOPE_BLOCK);
+            block_track->first_frames_data.back()->grab();
 
-              if (t == block_track) {
-                in->restore_pos();
-                delete l1;
-                return;
-              }
+            if ((t == block_track) && (block_track->first_frames_data.size() >= num_wanted)) {
+              in->restore_pos();
+              delete l1;
+              return;
             }
           }
         }

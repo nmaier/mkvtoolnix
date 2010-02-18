@@ -1,5 +1,10 @@
 2010-02-18  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: enhancement: Some Matroska files contain h.264/AVC
+	tracks lacking their CodecPrivate element (e.g. files created by
+	gstreamer's muxer). For such tracks the CodecPrivate element (the
+	AVCC) is re-created from the bitstream. Fix for bug 470.
+
 	* mkvmerge: bug fix: MP4 files that do contain edit lists but
 	whose edit lists do not span the entire file are processed
 	properly. Such files are created by current x264 builds. Fix for
