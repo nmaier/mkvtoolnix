@@ -1,3 +1,10 @@
+2010-02-18  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: MP4 files that do contain edit lists but
+	whose edit lists do not span the entire file are processed
+	properly. Such files are created by current x264 builds. Fix for
+	bug 469.
+
 2010-02-13  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Build system: Fixed configure for systems on which 'echo' does

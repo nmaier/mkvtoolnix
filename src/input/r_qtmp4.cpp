@@ -1217,7 +1217,7 @@ qtmp4_reader_c::handle_elst_atom(qtmp4_demuxer_cptr &new_dmx,
     editlist.speed    = io->read_uint32_be();
   }
 
-  mxverb(2, boost::format("Quicktime/MP4 reader:%1%Edit std::list table: %2% entries\n") % space(level * 2 + 1) % count);
+  mxverb(2, boost::format("Quicktime/MP4 reader:%1%Edit list table: %2% entries\n") % space(level * 2 + 1) % count);
   for (i = 0; i < count; ++i)
     mxverb(4,
            boost::format("Quicktime/MP4 reader:%1%%2%: duration %3% pos %4% speed %5%\n")
@@ -1799,15 +1799,19 @@ qtmp4_demuxer_c::calculate_timecodes() {
       while (((editlist_table.size() - 1) > editlist_pos) && (frame >= editlist_table[editlist_pos + 1].start_frame))
         ++editlist_pos;
 
-      if ((editlist_table[editlist_pos].start_frame + editlist_table[editlist_pos].frames) <= frame)
-        continue; // EOF
+      if ((editlist_table[editlist_pos].start_frame + editlist_table[editlist_pos].frames) <= frame) {
+        // EOF
+        // calc pts:
+        timecode = to_nsecs(sample_table[real_frame].pts);
 
-      // calc real frame index:
-      real_frame -= editlist_table[editlist_pos].start_frame;
-      real_frame += editlist_table[editlist_pos].start_sample;
+      } else {
+        // calc real frame index:
+        real_frame -= editlist_table[editlist_pos].start_frame;
+        real_frame += editlist_table[editlist_pos].start_sample;
 
-      // calc pts:
-      timecode = to_nsecs(sample_table[real_frame].pts + editlist_table[editlist_pos].pts_offset);
+        // calc pts:
+        timecode = to_nsecs(sample_table[real_frame].pts + editlist_table[editlist_pos].pts_offset);
+      }
 
       frame_indices.push_back(real_frame);
 
@@ -1976,7 +1980,7 @@ qtmp4_demuxer_c::update_editlist_table(int64_t global_time_scale) {
   if (('v' == type) && v_is_avc && !frame_offset_table.empty() && (frame_offset_table[0] <= min_editlist_pts))
     pts_offset = frame_offset_table[0];
 
-  mxverb(4, boost::format("qtmp4: Updating edit std::list table for track %1%; pts_offset = %2%\n") % id % pts_offset);
+  mxverb(4, boost::format("qtmp4: Updating edit list table for track %1%; pts_offset = %2%\n") % id % pts_offset);
 
   for (i = 0; editlist_table.size() > i; ++i) {
     qt_editlist_t &el = editlist_table[i];
