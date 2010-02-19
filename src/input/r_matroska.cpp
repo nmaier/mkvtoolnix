@@ -1617,11 +1617,8 @@ kax_reader_c::parse_first_mpeg4_p10_frame(kax_track_t *t,
 
     if (sizeof(alBITMAPINFOHEADER) < t->private_size)
       parser->add_bytes((unsigned char *)t->private_data + sizeof(alBITMAPINFOHEADER), t->private_size - sizeof(alBITMAPINFOHEADER));
-    foreach(memory_cptr &frame, t->first_frames_data) {
+    foreach(memory_cptr &frame, t->first_frames_data)
       parser->add_bytes(frame->get_buffer(), frame->get_size());
-      mxinfo("---\n");
-      mxhexdump(0, frame->get_buffer(), std::min(static_cast<int>(frame->get_size()), 64));
-    }
     parser->flush();
 
     if (!parser->headers_parsed())
