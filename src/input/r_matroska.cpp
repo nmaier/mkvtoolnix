@@ -1669,6 +1669,8 @@ kax_reader_c::read_first_frames(kax_track_t *t,
   if ((t->first_frames_data.size() >= num_wanted) || (NULL == saved_l1))
     return;
 
+  std::map<int64_t, int> frames_by_track_id;
+
   in->save_pos(saved_l1->GetElementPosition());
 
   try {
@@ -1698,10 +1700,17 @@ kax_reader_c::read_first_frames(kax_track_t *t,
             if ((NULL == block_track) || (0 == block_simple->NumberFrames()))
               continue;
 
-            DataBuffer &data_buffer = block_simple->GetBuffer(0);
-            block_track->first_frames_data.push_back(memory_cptr(new memory_c(data_buffer.Buffer(), data_buffer.Size())));
-            block_track->content_decoder.reverse(block_track->first_frames_data.back(), CONTENT_ENCODING_SCOPE_BLOCK);
-            block_track->first_frames_data.back()->grab();
+            for (int frame_idx = 0; block_simple->NumberFrames() > frame_idx; ++frame_idx) {
+              frames_by_track_id[ block_simple->TrackNum() ]++;
+
+              if (frames_by_track_id[ block_simple->TrackNum() ] <= block_track->first_frames_data.size())
+                continue;
+
+              DataBuffer &data_buffer = block_simple->GetBuffer(frame_idx);
+              block_track->first_frames_data.push_back(memory_cptr(new memory_c(data_buffer.Buffer(), data_buffer.Size())));
+              block_track->content_decoder.reverse(block_track->first_frames_data.back(), CONTENT_ENCODING_SCOPE_BLOCK);
+              block_track->first_frames_data.back()->grab();
+            }
 
             if ((t == block_track) && (block_track->first_frames_data.size() >= num_wanted)) {
               in->restore_pos();
@@ -1722,10 +1731,17 @@ kax_reader_c::read_first_frames(kax_track_t *t,
             if ((NULL == block_track) || (0 == block->NumberFrames()))
               continue;
 
-            DataBuffer &data_buffer = block->GetBuffer(0);
-            block_track->first_frames_data.push_back(memory_cptr(new memory_c(data_buffer.Buffer(), data_buffer.Size())));
-            block_track->content_decoder.reverse(block_track->first_frames_data.back(), CONTENT_ENCODING_SCOPE_BLOCK);
-            block_track->first_frames_data.back()->grab();
+            for (int frame_idx = 0; block->NumberFrames() > frame_idx; ++frame_idx) {
+              frames_by_track_id[ block->TrackNum() ]++;
+
+              if (frames_by_track_id[ block->TrackNum() ] <= block_track->first_frames_data.size())
+                continue;
+
+              DataBuffer &data_buffer = block->GetBuffer(frame_idx);
+              block_track->first_frames_data.push_back(memory_cptr(new memory_c(data_buffer.Buffer(), data_buffer.Size())));
+              block_track->content_decoder.reverse(block_track->first_frames_data.back(), CONTENT_ENCODING_SCOPE_BLOCK);
+              block_track->first_frames_data.back()->grab();
+            }
 
             if ((t == block_track) && (block_track->first_frames_data.size() >= num_wanted)) {
               in->restore_pos();
