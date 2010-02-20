@@ -829,6 +829,7 @@ qtmp4_reader_c::read_chapter_track() {
                                             sample.pts * pts_scale_num / pts_scale_den));
   }
 
+  recode_chapter_entries(entries);
   process_chapter_entries(0, entries);
 }
 
@@ -1701,19 +1702,20 @@ qtmp4_reader_c::decode_and_verify_language(uint16_t coded_language) {
 
 void
 qtmp4_reader_c::recode_chapter_entries(std::vector<qtmp4_chapter_entry_t> &entries) {
-  int i;
-
   if (g_identifying) {
-    for (i = 0; entries.size() > i; ++i)
-      entries[i].m_name = empty_string;
+    foreach(qtmp4_chapter_entry_t &entry, entries)
+      entry.m_name = empty_string;
     return;
   }
 
   std::string charset              = ti.chapter_charset.empty() ? "UTF-8" : ti.chapter_charset;
   charset_converter_cptr converter = charset_converter_c::init(ti.chapter_charset);
+  converter->enable_byte_order_marker_detection(true);
 
-  for (i = 0; entries.size() > i; ++i)
-    entries[i].m_name = converter->utf8(entries[i].m_name);
+  foreach(qtmp4_chapter_entry_t &entry, entries)
+    entry.m_name = converter->utf8(entry.m_name);
+
+  converter->enable_byte_order_marker_detection(false);
 }
 
 // ----------------------------------------------------------------------
