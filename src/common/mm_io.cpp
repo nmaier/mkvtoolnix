@@ -1106,24 +1106,44 @@ mm_text_io_c::mm_text_io_c(mm_io_c *_in,
     return;
   }
 
-  if ((3 <= num_read) && (buffer[0] == 0xef) && (buffer[1] == 0xbb) && (buffer[2] == 0xbf)) {
-    byte_order = BO_UTF8;
-    bom_len    = 3;
-  } else if ((4 <= num_read) && (buffer[0] == 0xff) && (buffer[1] == 0xfe) && (buffer[2] == 0x00) && (buffer[3] == 0x00)) {
-    byte_order = BO_UTF32_LE;
-    bom_len    = 4;
-  } else if ((4 <= num_read) && (buffer[0] == 0x00) && (buffer[1] == 0x00) && (buffer[2] == 0xfe) && (buffer[3] == 0xff)) {
-    byte_order = BO_UTF32_BE;
-    bom_len    = 4;
-  } else if ((2 <= num_read) && (buffer[0] == 0xff) && (buffer[1] == 0xfe)) {
-    byte_order = BO_UTF16_LE;
-    bom_len    = 2;
-  } else if ((2 <= num_read) && (buffer[0] == 0xfe) && (buffer[1] == 0xff)) {
-    byte_order = BO_UTF16_BE;
-    bom_len    = 2;
-  }
+  detect_byte_order_marker(buffer, num_read, byte_order, bom_len);
 
   _in->setFilePointer(bom_len, seek_beginning);
+}
+
+bool
+mm_text_io_c::detect_byte_order_marker(const unsigned char *buffer,
+                                       unsigned int size,
+                                       byte_order_e &byte_order,
+                                       unsigned int &bom_length) {
+  if ((3 <= size) && (buffer[0] == 0xef) && (buffer[1] == 0xbb) && (buffer[2] == 0xbf)) {
+    byte_order = BO_UTF8;
+    bom_length = 3;
+  } else if ((4 <= size) && (buffer[0] == 0xff) && (buffer[1] == 0xfe) && (buffer[2] == 0x00) && (buffer[3] == 0x00)) {
+    byte_order = BO_UTF32_LE;
+    bom_length = 4;
+  } else if ((4 <= size) && (buffer[0] == 0x00) && (buffer[1] == 0x00) && (buffer[2] == 0xfe) && (buffer[3] == 0xff)) {
+    byte_order = BO_UTF32_BE;
+    bom_length = 4;
+  } else if ((2 <= size) && (buffer[0] == 0xff) && (buffer[1] == 0xfe)) {
+    byte_order = BO_UTF16_LE;
+    bom_length = 2;
+  } else if ((2 <= size) && (buffer[0] == 0xfe) && (buffer[1] == 0xff)) {
+    byte_order = BO_UTF16_BE;
+    bom_length = 2;
+  } else {
+    byte_order = BO_NONE;
+    bom_length = 0;
+  }
+
+  return BO_NONE != byte_order;
+}
+
+bool
+mm_text_io_c::has_byte_order_marker(const std::string &string) {
+  byte_order_e byte_order;
+  unsigned int bom_length;
+  return detect_byte_order_marker(reinterpret_cast<const unsigned char *>(string.c_str()), string.length(), byte_order, bom_length);
 }
 
 // 1 byte: 0xxxxxxx,

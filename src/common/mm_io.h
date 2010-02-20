@@ -284,7 +284,7 @@ enum byte_order_e {BO_UTF8, BO_UTF16_LE, BO_UTF16_BE, BO_UTF32_LE, BO_UTF32_BE, 
 class MTX_DLL_API mm_text_io_c: public mm_proxy_io_c {
 protected:
   byte_order_e byte_order;
-  int bom_len;
+  unsigned int bom_len;
 
 public:
   mm_text_io_c(mm_io_c *_in, bool _delete_in = true);
@@ -296,6 +296,10 @@ public:
   virtual void set_byte_order(byte_order_e new_byte_order) {
     byte_order = new_byte_order;
   }
+
+public:
+  static bool has_byte_order_marker(const std::string &string);
+  static bool detect_byte_order_marker(const unsigned char *buffer, unsigned int size, byte_order_e &byte_order, unsigned int &bom_length);
 };
 
 typedef counted_ptr<mm_text_io_c> mm_text_io_cptr;
