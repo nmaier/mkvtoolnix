@@ -32,6 +32,7 @@ typedef counted_ptr<charset_converter_c> charset_converter_cptr;
 class charset_converter_c {
 protected:
   std::string m_charset;
+  bool m_detect_byte_order_marker;
 
 public:
   charset_converter_c();
@@ -40,6 +41,10 @@ public:
 
   virtual std::string utf8(const std::string &source);
   virtual std::string native(const std::string &source);
+  virtual void enable_byte_order_marker_detection(bool enable);
+
+protected:
+  bool handle_string_with_bom(const std::string &source, std::string &recoded);
 
 public:                         // Static members
   static charset_converter_cptr init(const std::string &charset);

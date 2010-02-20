@@ -35,6 +35,7 @@
 #include "common/common.h"
 #include "common/locale.h"
 #include "common/memory.h"
+#include "common/mm_io.h"
 #ifdef SYS_WINDOWS
 # include "common/fs_sys_helpers.h"
 # include "common/strings/formatting.h"
@@ -45,11 +46,14 @@ charset_converter_cptr g_cc_local_utf8;
 
 std::map<std::string, charset_converter_cptr> charset_converter_c::s_converters;
 
-charset_converter_c::charset_converter_c() {
+charset_converter_c::charset_converter_c()
+  : m_detect_byte_order_marker(false)
+{
 }
 
 charset_converter_c::charset_converter_c(const std::string &charset)
   : m_charset(charset)
+  , m_detect_byte_order_marker(false)
 {
 }
 
@@ -90,6 +94,29 @@ charset_converter_c::is_utf8_charset_name(const std::string &charset) {
   return ((charset == "UTF8") || (charset == "UTF-8"));
 }
 
+void
+charset_converter_c::enable_byte_order_marker_detection(bool enable) {
+  m_detect_byte_order_marker = enable;
+}
+
+bool
+charset_converter_c::handle_string_with_bom(const std::string &source,
+                                            std::string &recoded) {
+  if (!m_detect_byte_order_marker)
+    return false;
+
+  if (!mm_text_io_c::has_byte_order_marker(source))
+    return false;
+
+  recoded.clear();
+  mm_text_io_c io(new mm_mem_io_c(reinterpret_cast<const unsigned char *>(source.c_str()), source.length()));
+  std::string line;
+  while (io.getline2(line))
+    recoded += line;
+
+  return true;
+}
+
 // ------------------------------------------------------------
 
 iconv_charset_converter_c::iconv_charset_converter_c(const std::string &charset)
@@ -127,6 +154,10 @@ iconv_charset_converter_c::~iconv_charset_converter_c() {
 
 std::string
 iconv_charset_converter_c::utf8(const std::string &source) {
+  std::string recoded;
+  if (handle_string_with_bom(source, recoded))
+    return recoded;
+
   return m_is_utf8 ? source : iconv_charset_converter_c::convert(m_to_utf8_handle, source);
 }
 
@@ -192,6 +223,10 @@ windows_charset_converter_c::~windows_charset_converter_c() {
 
 std::string
 windows_charset_converter_c::utf8(const std::string &source) {
+  std::string recoded;
+  if (handle_string_with_bom(source, recoded))
+    return recoded;
+
   return m_is_utf8 ? source : windows_charset_converter_c::convert(m_code_page, CP_UTF8, source);
 }
 
