@@ -263,6 +263,12 @@ init_locales(std::string locale) {
       std::string loc_req_with_utf8 = locale_string_c(locale).set_codeset_and_modifier(locale_string_c("dummy.UTF-8")).str();
       if (setlocale(LC_MESSAGES, loc_req_with_utf8.c_str()) != NULL)
         chosen_locale = loc_req_with_utf8;
+
+      // Hard fallback to "C" locale if English was selected. This can
+      // happen if the system has no locales for "en_US" or
+      // "en_US.UTF-8" compiled.
+      else if ((locale_string_c(locale).str(locale_string_c::half) == "en_US") && (setlocale(LC_MESSAGES, "C") != NULL))
+        chosen_locale = "C";
     }
 
   } catch (locale_string_format_error_c &error) {
