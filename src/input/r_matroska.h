@@ -160,28 +160,25 @@ private:
     dl1t_tracks,
   };
 
-  std::vector<kax_track_t *> tracks;
-  std::map<generic_packetizer_c *, kax_track_t *> ptzr_to_track_map;
+  std::vector<kax_track_t *> m_tracks;
+  std::map<generic_packetizer_c *, kax_track_t *> m_ptzr_to_track_map;
 
-  int64_t tc_scale;
+  int64_t m_tc_scale;
 
-  mm_io_cptr in;
+  mm_io_cptr m_in;
   kax_file_cptr m_in_file;
-  int64_t file_size;
+  int64_t m_file_size;
 
-  EbmlStream *es;
-  EbmlElement *segment;
+  counted_ptr<EbmlStream> m_es;
 
-  int64_t segment_duration;
-  int64_t last_timecode, first_timecode;
-  std::string title;
+  int64_t m_segment_duration, m_last_timecode, m_first_timecode;
+  std::string m_title;
 
-  // typedef std::map<deferred_l1_type_e, counted_ptr<std::vector<int64_t> > > deferred_positions_t;
   typedef std::map<deferred_l1_type_e, std::vector<int64_t> > deferred_positions_t;
-  deferred_positions_t deferred_l1_positions, handled_l1_positions;
+  deferred_positions_t m_deferred_l1_positions, m_handled_l1_positions;
 
-  std::string writing_app, muxing_app;
-  int64_t writing_app_ver;
+  std::string m_writing_app, m_muxing_app;
+  int64_t m_writing_app_ver;
 
   int64_t m_attachment_id;
 
