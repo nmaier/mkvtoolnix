@@ -154,7 +154,6 @@ kax_reader_c::kax_reader_c(track_info_c &_ti)
   , m_first_timecode(-1)
   , m_writing_app_ver(-1)
   , m_attachment_id(0)
-  , m_tags(NULL)
   , m_file_status(FILE_STATUS_MOREDATA)
 {
   init_l1_position_storage(m_deferred_l1_positions);
@@ -167,10 +166,6 @@ kax_reader_c::kax_reader_c(track_info_c &_ti)
 }
 
 kax_reader_c::~kax_reader_c() {
-  foreach(kax_track_t *track, m_tracks)
-    delete track;
-
-  delete m_tags;
 }
 
 void
@@ -186,7 +181,7 @@ kax_reader_c::packets_available() {
   if (m_tracks.empty())
     return 0;
 
-  foreach(kax_track_t *track, m_tracks)
+  foreach(kax_track_cptr &track, m_tracks)
     if ((-1 != track->ptzr) && !PTZR(track->ptzr)->packet_available())
       return 0;
 
@@ -195,16 +190,16 @@ kax_reader_c::packets_available() {
 
 kax_track_t *
 kax_reader_c::new_kax_track() {
-  m_tracks.push_back(new kax_track_t);
-  return m_tracks.back();
+  m_tracks.push_back(kax_track_cptr(new kax_track_t));
+  return m_tracks.back().get_object();
 }
 
 kax_track_t *
 kax_reader_c::find_track_by_num(uint64_t n,
                                 kax_track_t *c) {
-  foreach(kax_track_t *track, m_tracks)
-    if ((NULL != track) && (track->tnum == n) && (track != c))
-      return track;
+  foreach(kax_track_cptr &track, m_tracks)
+    if ((track->tnum == n) && (track.get_object() != c))
+      return track.get_object();
 
   return NULL;
 }
@@ -212,9 +207,9 @@ kax_reader_c::find_track_by_num(uint64_t n,
 kax_track_t *
 kax_reader_c::find_track_by_uid(uint64_t uid,
                                 kax_track_t *c) {
-  foreach(kax_track_t *track, m_tracks)
-    if ((NULL != track) && (track->tuid == uid) && (track != c))
-      return track;
+  foreach(kax_track_cptr &track, m_tracks)
+    if ((track->tuid == uid) && (track.get_object() != c))
+      return track.get_object();
 
   return NULL;
 }
@@ -225,7 +220,7 @@ kax_reader_c::verify_tracks() {
   kax_track_t *t;
 
   for (tnum = 0; tnum < m_tracks.size(); tnum++) {
-    t = m_tracks[tnum];
+    t = m_tracks[tnum].get_object();
 
     t->ok = t->content_decoder.is_ok();
 
@@ -656,8 +651,8 @@ kax_reader_c::handle_tags(mm_io_c *io,
       }
 
       if (is_global) {
-        if (NULL == m_tags)
-          m_tags = new KaxTags;
+        if (!m_tags.is_set())
+          m_tags = counted_ptr<KaxTags>(new KaxTags);
         m_tags->PushElement(*tag);
 
       } else if (delete_tag)
@@ -1214,7 +1209,7 @@ kax_reader_c::read_headers() {
 
 void
 kax_reader_c::process_global_tags() {
-  if ((NULL == m_tags) || g_identifying)
+  if (!m_tags.is_set() || g_identifying)
     return;
 
   int i;
@@ -1573,7 +1568,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
 
 void
 kax_reader_c::create_packetizers() {
-  foreach(kax_track_t *track, m_tracks)
+  foreach(kax_track_cptr &track, m_tracks)
     create_packetizer(track->tnum);
 
   if (!g_segment_title_set) {
@@ -2038,7 +2033,7 @@ void
 kax_reader_c::set_headers() {
   generic_reader_c::set_headers();
 
-  foreach(kax_track_t *track, m_tracks)
+  foreach(kax_track_cptr &track, m_tracks)
     if ((-1 != track->ptzr) && track->passthrough)
       PTZR(track->ptzr)->get_track_entry()->EnableLacing(track->lacing_flag);
 }
@@ -2054,7 +2049,7 @@ kax_reader_c::identify() {
 
   id_result_container("Matroska", verbose_info);
 
-  foreach(kax_track_t *track, m_tracks) {
+  foreach(kax_track_cptr &track, m_tracks) {
     if (!track->ok)
       continue;
 
@@ -2109,17 +2104,17 @@ kax_reader_c::identify() {
   if (NULL != chapters)
     id_result_chapters(count_chapter_atoms(*chapters));
 
-  if (NULL != m_tags)
+  if (m_tags.is_set())
     id_result_tags(ID_RESULT_GLOBAL_TAGS_ID, count_simple_tags(*m_tags));
 
-  foreach(kax_track_t *track, m_tracks)
+  foreach(kax_track_cptr &track, m_tracks)
     if (track->ok && (NULL != track->tags))
       id_result_tags(track->tnum, count_simple_tags(*track->tags));
 }
 
 void
 kax_reader_c::add_available_track_ids() {
-  foreach(kax_track_t *track, m_tracks)
+  foreach(kax_track_cptr &track, m_tracks)
     available_track_ids.push_back(track->tnum);
 }
 

@@ -149,6 +149,7 @@ struct kax_track_t {
   void handle_packetizer_pixel_cropping();
   void handle_packetizer_stereo_mode();
 };
+typedef counted_ptr<kax_track_t> kax_track_cptr;
 
 class kax_reader_c: public generic_reader_c {
 private:
@@ -160,7 +161,7 @@ private:
     dl1t_tracks,
   };
 
-  std::vector<kax_track_t *> m_tracks;
+  std::vector<kax_track_cptr> m_tracks;
   std::map<generic_packetizer_c *, kax_track_t *> m_ptzr_to_track_map;
 
   int64_t m_tc_scale;
@@ -182,7 +183,7 @@ private:
 
   int64_t m_attachment_id;
 
-  KaxTags *m_tags;
+  counted_ptr<KaxTags> m_tags;
 
   file_status_e m_file_status;
 
