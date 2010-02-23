@@ -13,10 +13,12 @@
 
 #include "os.h"
 
+#include <ebml/EbmlCrc32.h>
 #include <ebml/EbmlStream.h>
+#include <ebml/EbmlVoid.h>
 
+#include "common/ebml.h"
 #include "common/kax_file.h"
-#include "common/vint.h"
 
 kax_file_c::kax_file_c(mm_io_cptr &in)
   : m_in(in)
@@ -29,58 +31,62 @@ kax_file_c::kax_file_c(mm_io_cptr &in)
 
 EbmlElement *
 kax_file_c::read_next_level1_element(uint32_t wanted_id) {
+  try {
+    return read_next_level1_element_internal(wanted_id);
+  } catch (...) {
+    mxinfo("READ X\n");
+    return NULL;
+  }
+}
+
+EbmlElement *
+kax_file_c::read_next_level1_element_internal(uint32_t wanted_id) {
   m_resynced         = false;
   m_resync_start_pos = 0;
 
   bool debug_this    = debugging_requested("kax_file") || debugging_requested("kax_file_read_next");
 
-  // Enough space left to read the ID?
-  int64_t remaining_size = m_file_size - m_in->getFilePointer();
-  if (4 > remaining_size)
-    return NULL;
-
-  // Easiest case: next level 1 element following the previous one
-  // without any element inbetween.
+  // Read the next ID.
   int64_t search_start_pos = m_in->getFilePointer();
-  uint32_t actual_id       = m_in->read_uint32_be();
+  vint_c actual_id         = vint_c::read_ebml_id(m_in);
   m_in->setFilePointer(search_start_pos, seek_beginning);
 
   if (debug_this)
-    mxinfo(boost::format("kax_file::read_next_level1_element(): SEARCH AT %1% ACT ID %|2$04x|\n") % search_start_pos % actual_id);
+    mxinfo(boost::format("kax_file::read_next_level1_element(): SEARCH AT %1% ACT ID %|2$x|\n") % search_start_pos % actual_id.m_value);
 
-  if ((wanted_id == actual_id) || ((0 == wanted_id) && is_level1_element_id(actual_id))) {
-    int upper_lvl_el = 0;
-    EbmlElement *l1  = m_es->FindNextElement(KaxSegment::ClassInfos.Context, upper_lvl_el, 0xFFFFFFFFL, true);
-    EbmlElement *l2  = NULL;
+  // If no valid ID was read then re-sync right away. No other tests
+  // can be run.
+  if (!actual_id.is_valid())
+    return resync_to_level1_element(wanted_id);
 
-    l1->Read(*m_es.get_object(), KaxCluster::ClassInfos.Context, upper_lvl_el, l2, true);
-    delete l2;
 
-    return l1;
+  // Easiest case: next level 1 element following the previous one
+  // without any element inbetween.
+  if (   (wanted_id == actual_id.m_value)
+         || (   (0 == wanted_id)
+                && (   is_level1_element_id(actual_id)
+                       || is_global_element_id(actual_id)))) {
+    EbmlElement *l1 = read_one_element();
+    if (NULL != l1)
+      return l1;
   }
 
   // If a specific level 1 is wanted then look for next ID by skipping
-  // other known level 1 elements. If that files fallback to a
+  // other level 1 or special elements. If that files fallback to a
   // byte-for-byte search for the ID.
-  if ((0 != wanted_id) && is_level1_element_id(actual_id)) {
+  if ((0 != wanted_id) && (is_level1_element_id(actual_id) || is_global_element_id(actual_id))) {
     m_in->setFilePointer(search_start_pos, seek_beginning);
-    int upper_lvl_el = 0;
-    EbmlElement *l1  = m_es->FindNextElement(KaxSegment::ClassInfos.Context, upper_lvl_el, 0xFFFFFFFFL, true);
+    EbmlElement *l1 = read_one_element();
 
-    if ((NULL != l1) && (EbmlId(*l1).Value == actual_id)) {
-      // Found another level 1 element, just as we thought we
-      // would. Seek to its end and restart the search from there.
-
-      int upper_lvl_el = 0;
-      EbmlElement *l2  = NULL;
-      l1->Read(*m_es.get_object(), KaxSegment::ClassInfos.Context, upper_lvl_el, l2, true);
+    if (NULL != l1) {
       bool ok = m_in->setFilePointer2(l1->GetElementPosition() + l1->ElementSize(), seek_beginning);
-      delete l2;
 
       if (debug_this)
         mxinfo(boost::format("kax_file::read_next_level1_element(): other level 1 element %1% new pos %2% fsize %3% epos %4% esize %5%\n")
                % l1->Generic().DebugName  % (l1->GetElementPosition() + l1->ElementSize()) % m_file_size
                % l1->GetElementPosition() % l1->ElementSize());
+
+      delete l1;
 
       return ok ? read_next_level1_element(wanted_id) : NULL;
     }
@@ -93,23 +99,53 @@ kax_file_c::read_next_level1_element(uint32_t wanted_id) {
   return resync_to_level1_element(wanted_id);
 }
 
-bool
-kax_file_c::is_level1_element_id(const EbmlId &id) const {
-  return is_level1_element_id(static_cast<uint32_t>(id.Value));
+EbmlElement *
+kax_file_c::read_one_element() {
+  int upper_lvl_el = 0;
+  EbmlElement *l1  = m_es->FindNextElement(KaxSegment::ClassInfos.Context, upper_lvl_el, 0xFFFFFFFFL, true);
+
+  if (NULL == l1)
+    return NULL;
+
+  const EbmlCallbacks *callbacks = find_ebml_callbacks(KaxSegment::ClassInfos, EbmlId(*l1));
+  if (NULL == callbacks)
+    callbacks = &KaxSegment::ClassInfos;
+
+  EbmlElement *l2 = NULL;
+  l1->Read(*m_es.get_object(), callbacks->Context, upper_lvl_el, l2, true);
+  delete l2;
+
+  return l1;
 }
 
 bool
-kax_file_c::is_level1_element_id(uint32_t id) const {
+kax_file_c::is_level1_element_id(vint_c id) const {
   const EbmlSemanticContext &context = KaxSegment::ClassInfos.Context;
   for (int segment_idx = 0; context.Size > segment_idx; ++segment_idx)
-    if (context.MyTable[segment_idx].GetCallbacks.GlobalId.Value == id)
+    if (context.MyTable[segment_idx].GetCallbacks.GlobalId.Value == id.m_value)
       return true;
 
   return false;
 }
 
+bool
+kax_file_c::is_global_element_id(vint_c id) const {
+  return (EbmlVoid::ClassInfos.GlobalId.Value  == id.m_value)
+    ||   (EbmlCrc32::ClassInfos.GlobalId.Value == id.m_value);
+}
+
 EbmlElement *
 kax_file_c::resync_to_level1_element(uint32_t wanted_id) {
+  try {
+    return resync_to_level1_element_internal(wanted_id);
+  } catch (...) {
+    mxinfo("RESYNC X\n");
+    return NULL;
+  }
+}
+
+EbmlElement *
+kax_file_c::resync_to_level1_element_internal(uint32_t wanted_id) {
   m_resynced         = true;
   m_resync_start_pos = m_in->getFilePointer();
 
@@ -120,7 +156,7 @@ kax_file_c::resync_to_level1_element(uint32_t wanted_id) {
     actual_id = (actual_id << 8) | m_in->read_uint8();
 
     if (   ((0 != wanted_id) && (wanted_id != actual_id))
-        || ((0 == wanted_id) && !is_level1_element_id(actual_id)))
+        || ((0 == wanted_id) && !is_level1_element_id(vint_c(actual_id, 4))))
       continue;
 
     int64_t current_start_pos = m_in->getFilePointer() - 4;
@@ -128,7 +164,7 @@ kax_file_c::resync_to_level1_element(uint32_t wanted_id) {
     unsigned int num_headers  = 1;
 
     if (debug_this)
-      mxinfo(boost::format("kax_file::resync_to_level1_element(): byte-for-byte search, found level 1 ID %|2$04x| at %1%\n") % current_start_pos % actual_id);
+      mxinfo(boost::format("kax_file::resync_to_level1_element(): byte-for-byte search, found level 1 ID %|2$x| at %1%\n") % current_start_pos % actual_id);
 
     try {
       unsigned int idx;
@@ -147,10 +183,10 @@ kax_file_c::resync_to_level1_element(uint32_t wanted_id) {
         uint32_t next_id = m_in->read_uint32_be();
 
         if (debug_this)
-          mxinfo(boost::format("kax_file::resync_to_level1_element():   next ID is %|1$04x| at %2%\n") % next_id % element_pos);
+          mxinfo(boost::format("kax_file::resync_to_level1_element():   next ID is %|1$x| at %2%\n") % next_id % element_pos);
 
         if (   ((0 != wanted_id) && (wanted_id != next_id))
-            || ((0 == wanted_id) && !is_level1_element_id(next_id)))
+            || ((0 == wanted_id) && !is_level1_element_id(vint_c(next_id, 4))))
           break;
 
         ++num_headers;

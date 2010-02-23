@@ -20,6 +20,7 @@
 #include <matroska/KaxCluster.h>
 
 #include "common/mm_io.h"
+#include "common/vint.h"
 
 using namespace libebml;
 using namespace libmatroska;
@@ -34,17 +35,22 @@ protected:
 public:
   kax_file_c(mm_io_cptr &in);
 
-
   virtual bool was_resynced() const;
   virtual int64_t get_resync_start_pos() const;
-  virtual bool is_level1_element_id(const EbmlId &id) const;
-  virtual bool is_level1_element_id(uint32_t id) const;
+  virtual bool is_level1_element_id(vint_c id) const;
+  virtual bool is_global_element_id(vint_c id) const;
 
   virtual EbmlElement *read_next_level1_element(uint32_t wanted_id = 0);
   virtual KaxCluster *read_next_cluster();
 
   virtual EbmlElement *resync_to_level1_element(uint32_t wanted_id = 0);
   virtual KaxCluster *resync_to_cluster();
+
+protected:
+  virtual EbmlElement *read_one_element();
+
+  virtual EbmlElement *read_next_level1_element_internal(uint32_t wanted_id = 0);
+  virtual EbmlElement *resync_to_level1_element_internal(uint32_t wanted_id = 0);
 };
 typedef counted_ptr<kax_file_c> kax_file_cptr;
 
