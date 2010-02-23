@@ -155,6 +155,7 @@ kax_reader_c::kax_reader_c(track_info_c &_ti)
   , writing_app_ver(-1)
   , m_attachment_id(0)
   , m_tags(NULL)
+  , m_file_status(FILE_STATUS_MOREDATA)
 {
   init_l1_position_storage(deferred_l1_positions);
   init_l1_position_storage(handled_l1_positions);
@@ -171,8 +172,6 @@ kax_reader_c::~kax_reader_c() {
   for (i = 0; i < tracks.size(); i++)
     delete tracks[i];
 
-  delete saved_l1;
-  delete in;
   delete es;
   delete segment;
   delete m_tags;
@@ -1090,21 +1089,22 @@ kax_reader_c::read_headers_seek_head(EbmlElement *&l0,
   }
 }
 
-int
+bool
 kax_reader_c::read_headers() {
   // Elements for different levels
 
-  bool exit_loop = false;
+  KaxCluster *cluster = NULL;
   try {
-    in        = new mm_file_io_c(ti.fname);
+    in        = mm_io_cptr(new mm_file_io_c(ti.fname));
     file_size = in->get_size();
     es        = new EbmlStream(*in);
+    m_in_file = kax_file_cptr(new kax_file_c(in));
 
     // Find the EbmlHead element. Must be the first one.
     EbmlElement *l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFFFFFFFFFLL);
     if (NULL == l0) {
       mxwarn(Y("matroska_reader: no EBML head found.\n"));
-      return 0;
+      return false;
     }
 
     // Don't verify its data for now.
@@ -1117,12 +1117,12 @@ kax_reader_c::read_headers() {
     if (NULL == l0) {
       if (verbose)
         mxwarn(Y("matroska_reader: No segment found.\n"));
-      return 0;
+      return false;
     }
     if (!(EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId)) {
       if (verbose)
         mxwarn(Y("matroska_reader: No segment found.\n"));
-      return 0;
+      return false;
     }
     mxverb(2, "matroska_reader: + a segment...\n");
 
@@ -1130,7 +1130,6 @@ kax_reader_c::read_headers() {
 
     // We've got our segment, so let's find the tracks
     int upper_lvl_el = 0;
-    exit_loop        = false;
     tc_scale         = TIMECODE_SCALE;
     EbmlElement *l1  = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true, 1);
 
@@ -1157,13 +1156,12 @@ kax_reader_c::read_headers() {
 
       else if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
         mxverb(2, "matroska_reader: |+ found cluster, headers are parsed completely\n");
-        saved_l1  = l1;
-        exit_loop = true;
+        cluster = static_cast<KaxCluster *>(l1);
 
       } else
         l1->SkipData(*es, l1->Generic().Context);
 
-      if (exit_loop)      // we've found the first cluster, so get out
+      if (NULL != cluster)      // we've found the first cluster, so get out
         break;
 
       if (!in_parent(l0)) {
@@ -1193,20 +1191,20 @@ kax_reader_c::read_headers() {
     } // while (l1 != NULL)
 
     foreach(int64_t position, deferred_l1_positions[dl1t_tracks])
-      read_headers_tracks(in, l0, position);
+      read_headers_tracks(in.get_object(), l0, position);
 
     if (!ti.no_attachments) {
       foreach(int64_t position, deferred_l1_positions[dl1t_attachments])
-        handle_attachments(in, l0, position);
+        handle_attachments(in.get_object(), l0, position);
     }
 
     if (!ti.no_chapters) {
       foreach(int64_t position, deferred_l1_positions[dl1t_chapters])
-        handle_chapters(in, l0, position);
+        handle_chapters(in.get_object(), l0, position);
     }
 
     foreach(int64_t position, deferred_l1_positions[dl1t_tags])
-      handle_tags(in, l0, position);
+      handle_tags(in.get_object(), l0, position);
 
     if (!ti.no_global_tags)
       process_global_tags();
@@ -1215,12 +1213,15 @@ kax_reader_c::read_headers() {
     mxerror(Y("matroska_reader: caught exception\n"));
   }
 
-  if (!exit_loop)               // We have NOT found a cluster!
-    return 0;
+  if (NULL == cluster)          // We have NOT found a cluster!
+    return false;
 
   verify_tracks();
 
-  return 1;
+  in->setFilePointer(cluster->GetElementPosition(), seek_beginning);
+  delete cluster;
+
+  return true;
 }
 
 void
@@ -1666,114 +1667,80 @@ kax_reader_c::create_mpeg4_p10_video_packetizer(kax_track_t *t,
 void
 kax_reader_c::read_first_frames(kax_track_t *t,
                                 unsigned num_wanted) {
-  if ((t->first_frames_data.size() >= num_wanted) || (NULL == saved_l1))
+  if (t->first_frames_data.size() >= num_wanted)
     return;
 
   std::map<int64_t, int> frames_by_track_id;
 
-  in->save_pos(saved_l1->GetElementPosition());
+  in->save_pos();
 
   try {
-    int upper_lvl_el = 0;
-    EbmlElement *l1  = es->FindNextElement(segment->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
-    EbmlElement *l2  = NULL;
+    while (true) {
+      KaxCluster *cluster = m_in_file->read_next_cluster();
+      if (NULL == cluster)
+        return;
 
-    while ((l1 != NULL) && (upper_lvl_el <= 0)) {
-      if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
-        cluster = (KaxCluster *)l1;
-        cluster->Read(*es, KaxCluster::ClassInfos.Context, upper_lvl_el, l2, true);
+      KaxClusterTimecode *ctc = static_cast<KaxClusterTimecode *> (cluster->FindFirstElt(KaxClusterTimecode::ClassInfos, false));
+      if (NULL != ctc) {
+        cluster_tc = uint64(*ctc);
+        cluster->InitTimecode(cluster_tc, tc_scale);
+      }
 
-        KaxClusterTimecode *ctc = static_cast<KaxClusterTimecode *> (cluster->FindFirstElt(KaxClusterTimecode::ClassInfos, false));
-        if (NULL != ctc) {
-          cluster_tc = uint64(*ctc);
-          cluster->InitTimecode(cluster_tc, tc_scale);
-        }
+      int bgidx;
+      for (bgidx = 0; bgidx < cluster->ListSize(); bgidx++) {
+        if ((EbmlId(*(*cluster)[bgidx]) == KaxSimpleBlock::ClassInfos.GlobalId)) {
+          KaxSimpleBlock *block_simple = static_cast<KaxSimpleBlock *>((*cluster)[bgidx]);
 
-        int bgidx;
-        for (bgidx = 0; bgidx < cluster->ListSize(); bgidx++) {
-          if ((EbmlId(*(*cluster)[bgidx]) == KaxSimpleBlock::ClassInfos.GlobalId)) {
-            KaxSimpleBlock *block_simple = static_cast<KaxSimpleBlock *>((*cluster)[bgidx]);
+          block_simple->SetParent(*cluster);
+          kax_track_t *block_track = find_track_by_num(block_simple->TrackNum());
 
-            block_simple->SetParent(*cluster);
-            kax_track_t *block_track = find_track_by_num(block_simple->TrackNum());
+          if ((NULL == block_track) || (0 == block_simple->NumberFrames()))
+            continue;
 
-            if ((NULL == block_track) || (0 == block_simple->NumberFrames()))
+          for (int frame_idx = 0; block_simple->NumberFrames() > frame_idx; ++frame_idx) {
+            frames_by_track_id[ block_simple->TrackNum() ]++;
+
+            if (frames_by_track_id[ block_simple->TrackNum() ] <= block_track->first_frames_data.size())
               continue;
 
-            for (int frame_idx = 0; block_simple->NumberFrames() > frame_idx; ++frame_idx) {
-              frames_by_track_id[ block_simple->TrackNum() ]++;
+            DataBuffer &data_buffer = block_simple->GetBuffer(frame_idx);
+            block_track->first_frames_data.push_back(memory_cptr(new memory_c(data_buffer.Buffer(), data_buffer.Size())));
+            block_track->content_decoder.reverse(block_track->first_frames_data.back(), CONTENT_ENCODING_SCOPE_BLOCK);
+            block_track->first_frames_data.back()->grab();
+          }
 
-              if (frames_by_track_id[ block_simple->TrackNum() ] <= block_track->first_frames_data.size())
-                continue;
+        } else if ((EbmlId(*(*cluster)[bgidx]) == KaxBlockGroup::ClassInfos.GlobalId)) {
+          KaxBlockGroup *block_group = static_cast<KaxBlockGroup *>((*cluster)[bgidx]);
+          KaxBlock *block            = static_cast<KaxBlock *>(block_group->FindFirstElt(KaxBlock::ClassInfos, false));
 
-              DataBuffer &data_buffer = block_simple->GetBuffer(frame_idx);
-              block_track->first_frames_data.push_back(memory_cptr(new memory_c(data_buffer.Buffer(), data_buffer.Size())));
-              block_track->content_decoder.reverse(block_track->first_frames_data.back(), CONTENT_ENCODING_SCOPE_BLOCK);
-              block_track->first_frames_data.back()->grab();
-            }
+          if (NULL == block)
+            continue;
 
-            if ((t == block_track) && (block_track->first_frames_data.size() >= num_wanted)) {
-              in->restore_pos();
-              delete l1;
-              return;
-            }
+          block->SetParent(*cluster);
+          kax_track_t *block_track = find_track_by_num(block->TrackNum());
 
-          } else if ((EbmlId(*(*cluster)[bgidx]) == KaxBlockGroup::ClassInfos.GlobalId)) {
-            KaxBlockGroup *block_group = static_cast<KaxBlockGroup *>((*cluster)[bgidx]);
-            KaxBlock *block            = static_cast<KaxBlock *>(block_group->FindFirstElt(KaxBlock::ClassInfos, false));
+          if ((NULL == block_track) || (0 == block->NumberFrames()))
+            continue;
 
-            if (NULL == block)
+          for (int frame_idx = 0; block->NumberFrames() > frame_idx; ++frame_idx) {
+            frames_by_track_id[ block->TrackNum() ]++;
+
+            if (frames_by_track_id[ block->TrackNum() ] <= block_track->first_frames_data.size())
               continue;
 
-            block->SetParent(*cluster);
-            kax_track_t *block_track = find_track_by_num(block->TrackNum());
-
-            if ((NULL == block_track) || (0 == block->NumberFrames()))
-              continue;
-
-            for (int frame_idx = 0; block->NumberFrames() > frame_idx; ++frame_idx) {
-              frames_by_track_id[ block->TrackNum() ]++;
-
-              if (frames_by_track_id[ block->TrackNum() ] <= block_track->first_frames_data.size())
-                continue;
-
-              DataBuffer &data_buffer = block->GetBuffer(frame_idx);
-              block_track->first_frames_data.push_back(memory_cptr(new memory_c(data_buffer.Buffer(), data_buffer.Size())));
-              block_track->content_decoder.reverse(block_track->first_frames_data.back(), CONTENT_ENCODING_SCOPE_BLOCK);
-              block_track->first_frames_data.back()->grab();
-            }
-
-            if ((t == block_track) && (block_track->first_frames_data.size() >= num_wanted)) {
-              in->restore_pos();
-              delete l1;
-              return;
-            }
+            DataBuffer &data_buffer = block->GetBuffer(frame_idx);
+            block_track->first_frames_data.push_back(memory_cptr(new memory_c(data_buffer.Buffer(), data_buffer.Size())));
+            block_track->content_decoder.reverse(block_track->first_frames_data.back(), CONTENT_ENCODING_SCOPE_BLOCK);
+            block_track->first_frames_data.back()->grab();
           }
         }
       }
 
-      l1->SkipData(*es, l1->Generic().Context);
+      delete cluster;
 
-      if (!in_parent(segment)) {
-        delete l1;
+      if (t->first_frames_data.size() >= num_wanted)
         break;
-      }
-
-      if (0 < upper_lvl_el) {
-        upper_lvl_el--;
-        if (0 < upper_lvl_el)
-          break;
-        delete l1;
-        l1 = l2;
-        break;
-
-      } else if (0 > upper_lvl_el)
-        upper_lvl_el++;
-
-      delete l1;
-      l1 = es->FindNextElement(segment->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
-    } // while (l1 != NULL)
-
+    }
   } catch (...) {
   }
 
@@ -1783,13 +1750,8 @@ kax_reader_c::read_first_frames(kax_track_t *t,
 file_status_e
 kax_reader_c::read(generic_packetizer_c *requested_ptzr,
                    bool force) {
-  if (tracks.size() == 0)
+  if (tracks.empty() || (FILE_STATUS_DONE == m_file_status))
     return FILE_STATUS_DONE;
-
-  if (NULL == saved_l1) {       // We're done.
-    flush_packetizers();
-    return FILE_STATUS_DONE;
-  }
 
   int64_t num_queued_bytes = get_queued_bytes();
   if (!force && (20 * 1024 * 1024 < num_queued_bytes)) {
@@ -1798,299 +1760,43 @@ kax_reader_c::read(generic_packetizer_c *requested_ptzr,
       return FILE_STATUS_HOLDING;
   }
 
-  bool found_cluster = false;
-  int upper_lvl_el   = 0;
-  EbmlElement *l0    = segment;
-  EbmlElement *l1    = saved_l1;
-  EbmlElement *l2    = NULL;
-  saved_l1           = NULL;
-
   try {
-    while ((NULL != l1) && (0 >= upper_lvl_el)) {
-      if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
-        found_cluster = true;
-        cluster       = (KaxCluster *)l1;
-        cluster->Read(*es, KaxCluster::ClassInfos.Context, upper_lvl_el, l2, true);
+    KaxCluster *cluster = m_in_file->read_next_cluster();
+    if (NULL == cluster) {
+      flush_packetizers();
 
-        KaxClusterTimecode *ctc = static_cast<KaxClusterTimecode *>(cluster->FindFirstElt(KaxClusterTimecode::ClassInfos, false));
-        if (NULL == ctc)
-          mxerror(Y("r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"));
+      m_file_status = FILE_STATUS_DONE;
+      return FILE_STATUS_DONE;
+    }
 
-        cluster_tc = uint64(*ctc);
-        cluster->InitTimecode(cluster_tc, tc_scale);
-        if (-1 == first_timecode) {
-          first_timecode = cluster_tc * tc_scale;
+    KaxClusterTimecode *ctc = static_cast<KaxClusterTimecode *>(cluster->FindFirstElt(KaxClusterTimecode::ClassInfos, false));
+    if (NULL == ctc)
+      mxerror(Y("r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"));
 
-          // If we're appending this file to another one then the core
-          // needs the timecodes shifted to zero.
-          if (appending && (NULL != chapters) && (0 < first_timecode))
-            adjust_chapter_timecodes(*chapters, -first_timecode);
-        }
+    cluster_tc = uint64(*ctc);
+    cluster->InitTimecode(cluster_tc, tc_scale);
+    if (-1 == first_timecode) {
+      first_timecode = cluster_tc * tc_scale;
 
-        int bgidx;
-        for (bgidx = 0; bgidx < cluster->ListSize(); bgidx++) {
-          int64_t block_duration = -1;
-          int64_t block_bref     = VFT_IFRAME;
-          int64_t block_fref     = VFT_NOBFRAME;
-          bool bref_found        = false;
-          bool fref_found        = false;
+      // If we're appending this file to another one then the core
+      // needs the timecodes shifted to zero.
+      if (appending && (NULL != chapters) && (0 < first_timecode))
+        adjust_chapter_timecodes(*chapters, -first_timecode);
+    }
 
-          if ((EbmlId(*(*cluster)[bgidx]) == KaxSimpleBlock::ClassInfos.GlobalId)) {
-            KaxSimpleBlock *block_simple = static_cast<KaxSimpleBlock *>((*cluster)[bgidx]);
+    int bgidx;
+    for (bgidx = 0; bgidx < cluster->ListSize(); bgidx++) {
+      EbmlElement *element = (*cluster)[bgidx];
 
-            block_simple->SetParent(*cluster);
-            kax_track_t *block_track = find_track_by_num(block_simple->TrackNum());
+      if (EbmlId(*element) == KaxSimpleBlock::ClassInfos.GlobalId)
+        process_simple_block(cluster, static_cast<KaxSimpleBlock *>(element));
 
-            if (NULL == block_track) {
-              mxwarn_fn(ti.fname,
-                        boost::format(Y("A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. "
-                                        "The block will be skipped.\n")) % format_timecode(block_simple->GlobalTimecode()) % block_simple->TrackNum());
-              continue;
-            }
+      else if (EbmlId(*element) == KaxBlockGroup::ClassInfos.GlobalId)
+        process_block_group(cluster, static_cast<KaxBlockGroup *>(element));
+    }
 
-            if (0 != block_track->v_frate)
-              block_duration = (int64_t)(1000000000.0 / block_track->v_frate);
-            int64_t frame_duration = (block_duration == -1) ? 0 : block_duration;
-
-            if (('s' == block_track->type) && (-1 == block_duration))
-              block_duration = 0;
-
-            if (block_track->ignore_duration_hack) {
-              frame_duration = 0;
-              if (0 < block_duration)
-                block_duration = 0;
-            }
-
-            if (!block_simple->IsKeyframe()) {
-              if (block_simple->IsDiscardable()) {
-                block_fref = block_track->previous_timecode;
-                fref_found = true;
-              } else {
-                block_bref = block_track->previous_timecode;
-                bref_found = true;
-              }
-            }
-
-            last_timecode = block_simple->GlobalTimecode();
-
-            // If we're appending this file to another one then the core
-            // needs the timecodes shifted to zero.
-            if (appending)
-              last_timecode -= first_timecode;
-
-            if ((-1 != block_track->ptzr) && block_track->passthrough) {
-              // The handling for passthrough is a bit different. We don't have
-              // any special cases, e.g. 0 terminating a string for the subs
-              // and stuff. Just pass everything through as it is.
-              int i;
-              for (i = 0; i < (int)block_simple->NumberFrames(); i++) {
-                DataBuffer &data = block_simple->GetBuffer(i);
-                packet_t *packet = new packet_t(new memory_c((unsigned char *)data.Buffer(), data.Size(), false),
-                                                last_timecode + i * frame_duration, block_duration, block_bref, block_fref);
-
-                ((passthrough_packetizer_c *)PTZR(block_track->ptzr))->process(packet_cptr(packet));
-              }
-
-            } else if (-1 != block_track->ptzr) {
-              int i;
-              for (i = 0; i < (int)block_simple->NumberFrames(); i++) {
-                DataBuffer &data_buffer = block_simple->GetBuffer(i);
-                memory_cptr data(new memory_c(data_buffer.Buffer(), data_buffer.Size(), false));
-                block_track->content_decoder.reverse(data, CONTENT_ENCODING_SCOPE_BLOCK);
-
-                if (('s' == block_track->type) && ('t' == block_track->sub_type)) {
-                  if ((2 < data->get_size()) || ((0 < data->get_size()) && (' ' != *data->get_buffer()) && (0 != *data->get_buffer()) && !iscr(*data->get_buffer()))) {
-                    char *lines             = (char *)safemalloc(data->get_size() + 1);
-                    lines[data->get_size()] = 0;
-                    memcpy(lines, data->get_buffer(), data->get_size());
-
-                    PTZR(block_track->ptzr)-> process(new packet_t(new memory_c((unsigned char *)lines, 0, true), last_timecode, block_duration, block_bref, block_fref));
-                  }
-
-                } else {
-                  packet_cptr packet(new packet_t(data, last_timecode + i * frame_duration, block_duration, block_bref, block_fref));
-                  PTZR(block_track->ptzr)->process(packet);
-                }
-              }
-            }
-
-            block_track->previous_timecode  = (int64_t)last_timecode;
-            block_track->units_processed   += block_simple->NumberFrames();
-
-          } else if ((EbmlId(*(*cluster)[bgidx]) == KaxBlockGroup::ClassInfos.GlobalId)) {
-            KaxBlockGroup *block_group   = static_cast<KaxBlockGroup *>((*cluster)[bgidx]);
-            KaxReferenceBlock *ref_block = static_cast<KaxReferenceBlock *>(block_group->FindFirstElt(KaxReferenceBlock::ClassInfos, false));
-
-            while (NULL != ref_block) {
-              if (0 >= int64(*ref_block)) {
-                block_bref = int64(*ref_block) * tc_scale;
-                bref_found = true;
-              } else {
-                block_fref = int64(*ref_block) * tc_scale;
-                fref_found = true;
-              }
-
-              ref_block = static_cast<KaxReferenceBlock *>(block_group->FindNextElt(*ref_block, false));
-            }
-
-            KaxBlock *block = static_cast<KaxBlock *>(block_group->FindFirstElt(KaxBlock::ClassInfos, false));
-            if (NULL == block) {
-              mxwarn_fn(ti.fname,
-                        boost::format(Y("A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"))
-                        % block_group->GetElementPosition());
-              continue;
-            }
-
-            block->SetParent(*cluster);
-            kax_track_t *block_track = find_track_by_num(block->TrackNum());
-
-            if (NULL == block_track) {
-              mxwarn_fn(ti.fname,
-                        boost::format(Y("A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. "
-                                        "The block will be skipped.\n")) % format_timecode(block->GlobalTimecode()) % block->TrackNum());
-              continue;
-            }
-
-            KaxBlockAdditions *blockadd = static_cast<KaxBlockAdditions *>(block_group->FindFirstElt(KaxBlockAdditions::ClassInfos, false));
-            KaxBlockDuration *duration  = static_cast<KaxBlockDuration *>(block_group->FindFirstElt(KaxBlockDuration::ClassInfos, false));
-
-            if (NULL != duration)
-              block_duration = (int64_t)uint64(*duration) * tc_scale / block->NumberFrames();
-            else if (0 != block_track->v_frate)
-              block_duration = (int64_t)(1000000000.0 / block_track->v_frate);
-            int64_t frame_duration = (block_duration == -1) ? 0 : block_duration;
-
-            if (('s' == block_track->type) && (-1 == block_duration))
-              block_duration = 0;
-
-            if (block_track->ignore_duration_hack) {
-              frame_duration = 0;
-              if (0 < block_duration)
-                block_duration = 0;
-            }
-
-            last_timecode = block->GlobalTimecode();
-            // If we're appending this file to another one then the core
-            // needs the timecodes shifted to zero.
-            if (appending)
-              last_timecode -= first_timecode;
-
-            KaxCodecState *codec_state = static_cast<KaxCodecState *>(block_group->FindFirstElt(KaxCodecState::ClassInfos));
-            if ((NULL != codec_state) && !hack_engaged(ENGAGE_USE_CODEC_STATE))
-              mxerror_tid(ti.fname, block_track->tnum,
-                          Y("This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but "
-                            "this feature has not been turned on with the option '--engage use_codec_state'.\n"));
-
-            if ((-1 != block_track->ptzr) && block_track->passthrough) {
-              // The handling for passthrough is a bit different. We don't have
-              // any special cases, e.g. 0 terminating a string for the subs
-              // and stuff. Just pass everything through as it is.
-              if (bref_found)
-                block_bref += last_timecode;
-              if (fref_found)
-                block_fref += last_timecode;
-
-              int i;
-              for (i = 0; i < (int)block->NumberFrames(); i++) {
-                DataBuffer &data           = block->GetBuffer(i);
-                packet_t *packet           = new packet_t(new memory_c((unsigned char *)data.Buffer(), data.Size(), false),
-                                                          last_timecode + i * frame_duration, block_duration, block_bref, block_fref);
-                packet->duration_mandatory = duration != NULL;
-
-                if (NULL != codec_state)
-                  packet->codec_state = clone_memory(codec_state->GetBuffer(), codec_state->GetSize());
-
-                ((passthrough_packetizer_c *)PTZR(block_track->ptzr))->process(packet_cptr(packet));
-              }
-
-            } else if (-1 != block_track->ptzr) {
-              if (bref_found) {
-                if (FOURCC('r', 'e', 'a', 'l') == block_track->a_formattag)
-                  block_bref = block_track->previous_timecode;
-                else
-                  block_bref += (int64_t)last_timecode;
-              }
-              if (fref_found)
-                block_fref += (int64_t)last_timecode;
-
-              int i;
-              for (i = 0; i < (int)block->NumberFrames(); i++) {
-                DataBuffer &data_buffer = block->GetBuffer(i);
-                memory_cptr data(new memory_c(data_buffer.Buffer(), data_buffer.Size(), false));
-                block_track->content_decoder.reverse(data, CONTENT_ENCODING_SCOPE_BLOCK);
-
-                if (('s' == block_track->type) && ('t' == block_track->sub_type)) {
-                  if ((2 < data->get_size()) || ((0 < data->get_size()) && (' ' != *data->get_buffer()) && (0 != *data->get_buffer()) && !iscr(*data->get_buffer()))) {
-                    char *lines             = (char *)safemalloc(data->get_size() + 1);
-                    lines[data->get_size()] = 0;
-                    memcpy(lines, data->get_buffer(), data->get_size());
-
-                    packet_t *packet = new packet_t(new memory_c((unsigned char *)lines, 0, true), last_timecode, block_duration, block_bref, block_fref);
-                    if (NULL != codec_state)
-                      packet->codec_state = clone_memory(codec_state->GetBuffer(), codec_state->GetSize());
-
-                    PTZR(block_track->ptzr)->process(packet);
-                  }
-
-                } else {
-                  packet_cptr packet(new packet_t(data, last_timecode + i * frame_duration, block_duration, block_bref, block_fref));
-
-                  if (NULL != codec_state)
-                    packet->codec_state = clone_memory(codec_state->GetBuffer(), codec_state->GetSize());
-
-                  if (blockadd) {
-                    int k;
-                    for (k = 0; k < blockadd->ListSize(); k++) {
-                      if (!(is_id((*blockadd)[k], KaxBlockMore)))
-                        continue;
-
-                      KaxBlockMore *blockmore           = static_cast<KaxBlockMore *>((*blockadd)[k]);
-                      KaxBlockAdditional *blockadd_data = &GetChild<KaxBlockAdditional>(*blockmore);
-
-                      memory_cptr blockadded(new memory_c(blockadd_data->GetBuffer(), blockadd_data->GetSize(), false));
-                      block_track->content_decoder.reverse(blockadded, CONTENT_ENCODING_SCOPE_BLOCK);
-
-                      packet->data_adds.push_back(blockadded);
-                    }
-                  }
-
-                  PTZR(block_track->ptzr)->process(packet);
-                }
-              }
-
-              block_track->previous_timecode  = (int64_t)last_timecode;
-              block_track->units_processed   += block->NumberFrames();
-            }
-          }
-        }
-      }
-
-      l1->SkipData(*es, l1->Generic().Context);
-
-      if (!in_parent(l0)) {
-        delete l1;
-        break;
-      }
-
-      if (0 < upper_lvl_el) {
-        upper_lvl_el--;
-        if (0 < upper_lvl_el)
-          break;
-        delete l1;
-        saved_l1 = l2;
-        break;
-
-      } else if (0 > upper_lvl_el)
-        upper_lvl_el++;
-
-      delete l1;
-      l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
-      if (found_cluster) {
-        saved_l1 = l1;
-        break;
-      }
-
-    } // while (l1 != NULL)
+    in->setFilePointer(cluster->GetElementPosition() + cluster->ElementSize(), seek_beginning);
+    delete cluster;
 
   } catch (...) {
     mxwarn(Y("matroska_reader: caught exception\n"));
@@ -2098,11 +1804,248 @@ kax_reader_c::read(generic_packetizer_c *requested_ptzr,
     return FILE_STATUS_DONE;
   }
 
-  if (found_cluster)
-    return FILE_STATUS_MOREDATA;
+  return FILE_STATUS_MOREDATA;
+}
 
-  flush_packetizers();
-  return FILE_STATUS_DONE;
+void
+kax_reader_c::process_simple_block(KaxCluster *cluster,
+                                   KaxSimpleBlock *block_simple) {
+  int64_t block_duration = -1;
+  int64_t block_bref     = VFT_IFRAME;
+  int64_t block_fref     = VFT_NOBFRAME;
+  bool bref_found        = false;
+  bool fref_found        = false;
+
+  block_simple->SetParent(*cluster);
+  kax_track_t *block_track = find_track_by_num(block_simple->TrackNum());
+
+  if (NULL == block_track) {
+    mxwarn_fn(ti.fname,
+              boost::format(Y("A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. "
+                              "The block will be skipped.\n")) % format_timecode(block_simple->GlobalTimecode()) % block_simple->TrackNum());
+    return;
+  }
+
+  if (0 != block_track->v_frate)
+    block_duration = (int64_t)(1000000000.0 / block_track->v_frate);
+  int64_t frame_duration = (block_duration == -1) ? 0 : block_duration;
+
+  if (('s' == block_track->type) && (-1 == block_duration))
+    block_duration = 0;
+
+  if (block_track->ignore_duration_hack) {
+    frame_duration = 0;
+    if (0 < block_duration)
+      block_duration = 0;
+  }
+
+  if (!block_simple->IsKeyframe()) {
+    if (block_simple->IsDiscardable()) {
+      block_fref = block_track->previous_timecode;
+      fref_found = true;
+    } else {
+      block_bref = block_track->previous_timecode;
+      bref_found = true;
+    }
+  }
+
+  last_timecode = block_simple->GlobalTimecode();
+
+  // If we're appending this file to another one then the core
+  // needs the timecodes shifted to zero.
+  if (appending)
+    last_timecode -= first_timecode;
+
+  if ((-1 != block_track->ptzr) && block_track->passthrough) {
+    // The handling for passthrough is a bit different. We don't have
+    // any special cases, e.g. 0 terminating a string for the subs
+    // and stuff. Just pass everything through as it is.
+    int i;
+    for (i = 0; i < (int)block_simple->NumberFrames(); i++) {
+      DataBuffer &data = block_simple->GetBuffer(i);
+      packet_t *packet = new packet_t(new memory_c((unsigned char *)data.Buffer(), data.Size(), false),
+                                      last_timecode + i * frame_duration, block_duration, block_bref, block_fref);
+
+      ((passthrough_packetizer_c *)PTZR(block_track->ptzr))->process(packet_cptr(packet));
+    }
+
+  } else if (-1 != block_track->ptzr) {
+    int i;
+    for (i = 0; i < (int)block_simple->NumberFrames(); i++) {
+      DataBuffer &data_buffer = block_simple->GetBuffer(i);
+      memory_cptr data(new memory_c(data_buffer.Buffer(), data_buffer.Size(), false));
+      block_track->content_decoder.reverse(data, CONTENT_ENCODING_SCOPE_BLOCK);
+
+      if (('s' == block_track->type) && ('t' == block_track->sub_type)) {
+        if ((2 < data->get_size()) || ((0 < data->get_size()) && (' ' != *data->get_buffer()) && (0 != *data->get_buffer()) && !iscr(*data->get_buffer()))) {
+          char *lines             = (char *)safemalloc(data->get_size() + 1);
+          lines[data->get_size()] = 0;
+          memcpy(lines, data->get_buffer(), data->get_size());
+
+          PTZR(block_track->ptzr)-> process(new packet_t(new memory_c((unsigned char *)lines, 0, true), last_timecode, block_duration, block_bref, block_fref));
+        }
+
+      } else {
+        packet_cptr packet(new packet_t(data, last_timecode + i * frame_duration, block_duration, block_bref, block_fref));
+        PTZR(block_track->ptzr)->process(packet);
+      }
+    }
+  }
+
+  block_track->previous_timecode  = (int64_t)last_timecode;
+  block_track->units_processed   += block_simple->NumberFrames();
+}
+
+void
+kax_reader_c::process_block_group(KaxCluster *cluster,
+                                  KaxBlockGroup *block_group) {
+  int64_t block_duration       = -1;
+  int64_t block_bref           = VFT_IFRAME;
+  int64_t block_fref           = VFT_NOBFRAME;
+  bool bref_found              = false;
+  bool fref_found              = false;
+  KaxReferenceBlock *ref_block = static_cast<KaxReferenceBlock *>(block_group->FindFirstElt(KaxReferenceBlock::ClassInfos, false));
+
+  while (NULL != ref_block) {
+    if (0 >= int64(*ref_block)) {
+      block_bref = int64(*ref_block) * tc_scale;
+      bref_found = true;
+    } else {
+      block_fref = int64(*ref_block) * tc_scale;
+      fref_found = true;
+    }
+
+    ref_block = static_cast<KaxReferenceBlock *>(block_group->FindNextElt(*ref_block, false));
+  }
+
+  KaxBlock *block = static_cast<KaxBlock *>(block_group->FindFirstElt(KaxBlock::ClassInfos, false));
+  if (NULL == block) {
+    mxwarn_fn(ti.fname,
+              boost::format(Y("A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"))
+              % block_group->GetElementPosition());
+    return;
+  }
+
+  block->SetParent(*cluster);
+  kax_track_t *block_track = find_track_by_num(block->TrackNum());
+
+  if (NULL == block_track) {
+    mxwarn_fn(ti.fname,
+              boost::format(Y("A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. "
+                              "The block will be skipped.\n")) % format_timecode(block->GlobalTimecode()) % block->TrackNum());
+    return;
+  }
+
+  KaxBlockAdditions *blockadd = static_cast<KaxBlockAdditions *>(block_group->FindFirstElt(KaxBlockAdditions::ClassInfos, false));
+  KaxBlockDuration *duration  = static_cast<KaxBlockDuration *>(block_group->FindFirstElt(KaxBlockDuration::ClassInfos, false));
+
+  if (NULL != duration)
+    block_duration = (int64_t)uint64(*duration) * tc_scale / block->NumberFrames();
+  else if (0 != block_track->v_frate)
+    block_duration = (int64_t)(1000000000.0 / block_track->v_frate);
+  int64_t frame_duration = (block_duration == -1) ? 0 : block_duration;
+
+  if (('s' == block_track->type) && (-1 == block_duration))
+    block_duration = 0;
+
+  if (block_track->ignore_duration_hack) {
+    frame_duration = 0;
+    if (0 < block_duration)
+      block_duration = 0;
+  }
+
+  last_timecode = block->GlobalTimecode();
+  // If we're appending this file to another one then the core
+  // needs the timecodes shifted to zero.
+  if (appending)
+    last_timecode -= first_timecode;
+
+  KaxCodecState *codec_state = static_cast<KaxCodecState *>(block_group->FindFirstElt(KaxCodecState::ClassInfos));
+  if ((NULL != codec_state) && !hack_engaged(ENGAGE_USE_CODEC_STATE))
+    mxerror_tid(ti.fname, block_track->tnum,
+                Y("This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but "
+                  "this feature has not been turned on with the option '--engage use_codec_state'.\n"));
+
+  if ((-1 != block_track->ptzr) && block_track->passthrough) {
+    // The handling for passthrough is a bit different. We don't have
+    // any special cases, e.g. 0 terminating a string for the subs
+    // and stuff. Just pass everything through as it is.
+    if (bref_found)
+      block_bref += last_timecode;
+    if (fref_found)
+      block_fref += last_timecode;
+
+    int i;
+    for (i = 0; i < (int)block->NumberFrames(); i++) {
+      DataBuffer &data           = block->GetBuffer(i);
+      packet_t *packet           = new packet_t(new memory_c((unsigned char *)data.Buffer(), data.Size(), false),
+                                                last_timecode + i * frame_duration, block_duration, block_bref, block_fref);
+      packet->duration_mandatory = duration != NULL;
+
+      if (NULL != codec_state)
+        packet->codec_state = clone_memory(codec_state->GetBuffer(), codec_state->GetSize());
+
+      ((passthrough_packetizer_c *)PTZR(block_track->ptzr))->process(packet_cptr(packet));
+    }
+
+  } else if (-1 != block_track->ptzr) {
+    if (bref_found) {
+      if (FOURCC('r', 'e', 'a', 'l') == block_track->a_formattag)
+        block_bref = block_track->previous_timecode;
+      else
+        block_bref += (int64_t)last_timecode;
+    }
+    if (fref_found)
+      block_fref += (int64_t)last_timecode;
+
+    int i;
+    for (i = 0; i < (int)block->NumberFrames(); i++) {
+      DataBuffer &data_buffer = block->GetBuffer(i);
+      memory_cptr data(new memory_c(data_buffer.Buffer(), data_buffer.Size(), false));
+      block_track->content_decoder.reverse(data, CONTENT_ENCODING_SCOPE_BLOCK);
+
+      if (('s' == block_track->type) && ('t' == block_track->sub_type)) {
+        if ((2 < data->get_size()) || ((0 < data->get_size()) && (' ' != *data->get_buffer()) && (0 != *data->get_buffer()) && !iscr(*data->get_buffer()))) {
+          char *lines             = (char *)safemalloc(data->get_size() + 1);
+          lines[data->get_size()] = 0;
+          memcpy(lines, data->get_buffer(), data->get_size());
+
+          packet_t *packet = new packet_t(new memory_c((unsigned char *)lines, 0, true), last_timecode, block_duration, block_bref, block_fref);
+          if (NULL != codec_state)
+            packet->codec_state = clone_memory(codec_state->GetBuffer(), codec_state->GetSize());
+
+          PTZR(block_track->ptzr)->process(packet);
+        }
+
+      } else {
+        packet_cptr packet(new packet_t(data, last_timecode + i * frame_duration, block_duration, block_bref, block_fref));
+
+        if (NULL != codec_state)
+          packet->codec_state = clone_memory(codec_state->GetBuffer(), codec_state->GetSize());
+
+        if (blockadd) {
+          int k;
+          for (k = 0; k < blockadd->ListSize(); k++) {
+            if (!(is_id((*blockadd)[k], KaxBlockMore)))
+              continue;
+
+            KaxBlockMore *blockmore           = static_cast<KaxBlockMore *>((*blockadd)[k]);
+            KaxBlockAdditional *blockadd_data = &GetChild<KaxBlockAdditional>(*blockmore);
+
+            memory_cptr blockadded(new memory_c(blockadd_data->GetBuffer(), blockadd_data->GetSize(), false));
+            block_track->content_decoder.reverse(blockadded, CONTENT_ENCODING_SCOPE_BLOCK);
+
+            packet->data_adds.push_back(blockadded);
+          }
+        }
+
+        PTZR(block_track->ptzr)->process(packet);
+      }
+    }
+
+    block_track->previous_timecode  = (int64_t)last_timecode;
+    block_track->units_processed   += block->NumberFrames();
+  }
 }
 
 int

@@ -24,6 +24,7 @@
 #include "common/common.h"
 #include "common/compression.h"
 #include "common/error.h"
+#include "common/kax_file.h"
 #include "common/mm_io.h"
 #include "common/mpeg4_p10.h"
 #include "merge/pr_generic.h"
@@ -167,12 +168,13 @@ private:
   int64_t tc_scale;
   int64_t cluster_tc;
 
-  mm_io_c *in;
+  mm_io_cptr in;
+  kax_file_cptr m_in_file;
   int64_t file_size;
 
   EbmlStream *es;
-  EbmlElement *saved_l1, *saved_l2, *segment;
-  KaxCluster *cluster;
+  EbmlElement *segment;
+  // KaxCluster *cluster;
 
   int64_t segment_duration;
   int64_t last_timecode, first_timecode;
@@ -188,6 +190,8 @@ private:
   int64_t m_attachment_id;
 
   KaxTags *m_tags;
+
+  file_status_e m_file_status;
 
 public:
   kax_reader_c(track_info_c &_ti) throw (error_c);
@@ -231,7 +235,10 @@ protected:
   virtual void read_headers_track_video(kax_track_t *&track, KaxTrackVideo *&ktvideo);
   virtual void read_headers_tracks(mm_io_c *io, EbmlElement *l0, int64_t position);
   virtual void read_headers_seek_head(EbmlElement *&l0, EbmlElement *&l1);
-  virtual int  read_headers();
+  virtual bool read_headers();
+
+  virtual void process_simple_block(KaxCluster *cluster, KaxSimpleBlock *block_simple);
+  virtual void process_block_group(KaxCluster *cluster, KaxBlockGroup *block_group);
 
   virtual mpeg4::p10::avc_es_parser_cptr parse_first_mpeg4_p10_frame(kax_track_t *t, track_info_c &nti);
 
