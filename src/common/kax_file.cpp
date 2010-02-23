@@ -23,7 +23,7 @@ kax_file_c::kax_file_c(mm_io_cptr &in)
   , m_resynced(false)
   , m_resync_start_pos(0)
   , m_file_size(m_in->get_size())
-  , m_es(counted_ptr<EbmlStream>(new EbmlStream(*m_in.get_object())))
+  , m_es(new EbmlStream(*m_in))
 {
 }
 
