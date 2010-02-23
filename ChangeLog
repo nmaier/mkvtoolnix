@@ -1,3 +1,9 @@
+2010-02-23  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge, mkvextract: enhancement: Improved the error resilience
+	when dealing with damaged Matroska files. When a damaged part is
+	encountered reading will continue at the next cluster.
+
 2010-02-20  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed the handling of UTF-16 encoded chapter
