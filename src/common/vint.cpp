@@ -50,11 +50,12 @@ vint_c::is_valid() {
 }
 
 vint_c
-vint_c::read(mm_io_c *in) {
+vint_c::read(mm_io_c *in,
+             vint_c::read_mode_e read_mode) {
   int64_t pos       = in->getFilePointer();
   int64_t file_size = in->get_size();
   int mask          = 0x80;
-  int size_len      = 1;
+  int value_len      = 1;
 
   if (pos >= file_size)
     return vint_c();
@@ -66,23 +67,48 @@ vint_c::read(mm_io_c *in) {
       break;
 
     mask >>= 1;
-    size_len++;
+    value_len++;
   }
 
-  if ((pos + size_len) > file_size)
+  if ((pos + value_len) > file_size)
     return vint_c();
 
-  int64_t size = first_byte & ~mask;
+  if (   (rm_ebml_id == read_mode)
+      && (   (0 == mask)
+          || (4 <  value_len)))
+    return vint_c();
+
+  int64_t value = first_byte;
+  if (rm_normal == read_mode)
+    value &= ~mask;
+
   int i;
-  for (i = 1; i < size_len; ++i) {
-    size <<= 8;
-    size  |= in->read_uint8();
+  for (i = 1; i < value_len; ++i) {
+    value <<= 8;
+    value  |= in->read_uint8();
   }
 
-  return vint_c(size, size_len);
+  return vint_c(value, value_len);
 }
 
 vint_c
-vint_c::read(mm_io_cptr &in) {
-  return read(in.get_object());
+vint_c::read_ebml_id(mm_io_c *in) {
+  return read(in, rm_ebml_id);
 }
+
+vint_c
+vint_c::read(mm_io_cptr &in,
+             vint_c::read_mode_e read_mode) {
+  return read(in.get_object(), read_mode);
+}
+
+vint_c
+vint_c::read_ebml_id(mm_io_cptr &in) {
+  return read(in.get_object(), rm_ebml_id);
+}
+
+vint_c::operator EbmlId()
+  const {
+  return EbmlId(m_value, m_coded_size);
+}
+
