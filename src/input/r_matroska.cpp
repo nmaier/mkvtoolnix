@@ -1681,10 +1681,8 @@ kax_reader_c::read_first_frames(kax_track_t *t,
         return;
 
       KaxClusterTimecode *ctc = static_cast<KaxClusterTimecode *> (cluster->FindFirstElt(KaxClusterTimecode::ClassInfos, false));
-      if (NULL != ctc) {
-        cluster_tc = uint64(*ctc);
-        cluster->InitTimecode(cluster_tc, tc_scale);
-      }
+      if (NULL != ctc)
+        cluster->InitTimecode(uint64(*ctc), tc_scale);
 
       int bgidx;
       for (bgidx = 0; bgidx < cluster->ListSize(); bgidx++) {
@@ -1773,7 +1771,7 @@ kax_reader_c::read(generic_packetizer_c *requested_ptzr,
     if (NULL == ctc)
       mxerror(Y("r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"));
 
-    cluster_tc = uint64(*ctc);
+    uint64_t cluster_tc = uint64(*ctc);
     cluster->InitTimecode(cluster_tc, tc_scale);
     if (-1 == first_timecode) {
       first_timecode = cluster_tc * tc_scale;

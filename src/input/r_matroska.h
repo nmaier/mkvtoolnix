@@ -160,13 +160,10 @@ private:
     dl1t_tracks,
   };
 
-  int act_wchar;
-
   std::vector<kax_track_t *> tracks;
   std::map<generic_packetizer_c *, kax_track_t *> ptzr_to_track_map;
 
   int64_t tc_scale;
-  int64_t cluster_tc;
 
   mm_io_cptr in;
   kax_file_cptr m_in_file;
@@ -174,7 +171,6 @@ private:
 
   EbmlStream *es;
   EbmlElement *segment;
-  // KaxCluster *cluster;
 
   int64_t segment_duration;
   int64_t last_timecode, first_timecode;
