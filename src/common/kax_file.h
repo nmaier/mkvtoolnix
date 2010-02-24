@@ -32,6 +32,8 @@ protected:
   int64_t m_resync_start_pos, m_file_size;
   counted_ptr<EbmlStream> m_es;
 
+  bool m_debug_read_next, m_debug_resync;
+
 public:
   kax_file_c(mm_io_cptr &in);
 
