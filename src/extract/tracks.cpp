@@ -357,31 +357,23 @@ extract_tracks(const std::string &file_name,
     }
 
     bool tracks_found = false;
-    int upper_lvl_el  = 0;
-    // We've got our segment, so let's find the tracks
-    EbmlElement *l1     = NULL; // es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFFFFFFFFFLL, true, 1);
-    EbmlElement *l2     = NULL;
+    EbmlElement *l1   = NULL;
+    uint64_t tc_scale = TIMECODE_SCALE;
 
-    uint64_t tc_scale   = TIMECODE_SCALE;
-    uint64_t cluster_tc = 0;
-
-    KaxCluster *cluster = NULL;
     KaxChapters all_chapters;
     KaxTags all_tags;
 
     while (NULL != (l1 = file->read_next_level1_element())) {
-      upper_lvl_el = 0;
-      l2           = NULL;
+      int64_t element_end_pos = l1->GetElementPosition() + l1->ElementSize();
 
       if (EbmlId(*l1) == KaxInfo::ClassInfos.GlobalId) {
         // General info about this Matroska file
         show_element(l1, 1, Y("Segment information"));
-        l1->Read(*es, KaxInfo::ClassInfos.Context, upper_lvl_el, l2, true);
 
         KaxTimecodeScale *ktc_scale = FINDFIRST(l1, KaxTimecodeScale);
         if (NULL != ktc_scale) {
-          tc_scale = uint64(ktc_scale);
-          show_element(l2, 2, boost::format(Y("Timecode scale: %1%")) % tc_scale);
+          tc_scale = uint64(*ktc_scale);
+          show_element(ktc_scale, 2, boost::format(Y("Timecode scale: %1%")) % tc_scale);
         }
 
       } else if ((EbmlId(*l1) == KaxTracks::ClassInfos.GlobalId) && !tracks_found) {
@@ -391,40 +383,39 @@ extract_tracks(const std::string &file_name,
         show_element(l1, 1, Y("Segment tracks"));
 
         tracks_found = true;
-        l1->Read(*es, KaxTracks::ClassInfos.Context, upper_lvl_el, l2, true);
         find_track_uids(*dynamic_cast<KaxTracks *>(l1), tspecs);
         create_extractors(*dynamic_cast<KaxTracks *>(l1), tspecs);
 
       } else if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
         show_element(l1, 1, Y("Cluster"));
-        cluster = (KaxCluster *)l1;
-
-        l1->Read(*es, KaxCluster::ClassInfos.Context, upper_lvl_el, l2, true);
+        KaxCluster *cluster = static_cast<KaxCluster *>(l1);
 
         if (0 == verbose)
           mxinfo(boost::format(Y("Progress: %1%%%%2%")) % (int)(in->getFilePointer() * 100 / file_size) % "\r");
 
         KaxClusterTimecode *ctc = FINDFIRST(l1, KaxClusterTimecode);
         if (NULL != ctc) {
-          cluster_tc = uint64(ctc);
-          show_element(l2, 2, boost::format(Y("Cluster timecode: %|1$.3f|s")) % ((float)cluster_tc * (float)tc_scale / 1000000000.0));
+          uint64_t cluster_tc = uint64(*ctc);
+          show_element(ctc, 2, boost::format(Y("Cluster timecode: %|1$.3f|s")) % ((float)cluster_tc * (float)tc_scale / 1000000000.0));
           cluster->InitTimecode(cluster_tc, tc_scale);
         }
 
         int i;
-        for (i = 0; cluster->ListSize() > i; ++i)
-          if (EbmlId(*(*cluster)[i]) == KaxBlockGroup::ClassInfos.GlobalId) {
-            show_element(l2, 2, Y("Block group"));
-            handle_blockgroup(*static_cast<KaxBlockGroup *>((*cluster)[i]), *cluster, tc_scale);
+        for (i = 0; cluster->ListSize() > i; ++i) {
+          EbmlElement *el = (*cluster)[i];
+          if (EbmlId(*el) == KaxBlockGroup::ClassInfos.GlobalId) {
+            show_element(el, 2, Y("Block group"));
+            handle_blockgroup(*static_cast<KaxBlockGroup *>(el), *cluster, tc_scale);
 
-          } else if (EbmlId(*(*cluster)[i]) == KaxSimpleBlock::ClassInfos.GlobalId) {
-            show_element(l2, 2, Y("SimpleBlock"));
-            handle_simpleblock(*static_cast<KaxSimpleBlock *>((*cluster)[i]), *cluster);
+          } else if (EbmlId(*el) == KaxSimpleBlock::ClassInfos.GlobalId) {
+            show_element(el, 2, Y("SimpleBlock"));
+            handle_simpleblock(*static_cast<KaxSimpleBlock *>(el), *cluster);
           }
+        }
 
       } else if (EbmlId(*l1) == KaxChapters::ClassInfos.GlobalId) {
         KaxChapters &chapters = *static_cast<KaxChapters *>(l1);
-        chapters.Read(*es, KaxChapters::ClassInfos.Context, upper_lvl_el, l2, true);
+
         while (chapters.ListSize() > 0) {
           if (EbmlId(*chapters[0]) == KaxEditionEntry::ClassInfos.GlobalId) {
             KaxEditionEntry &entry = *static_cast<KaxEditionEntry *>(chapters[0]);
@@ -439,7 +430,6 @@ extract_tracks(const std::string &file_name,
 
       } else if (EbmlId(*l1) == KaxTags::ClassInfos.GlobalId) {
         KaxTags &tags = *static_cast<KaxTags *>(l1);
-        tags.Read(*es, KaxTags::ClassInfos.Context, upper_lvl_el, l2, true);
 
         while (tags.ListSize() > 0) {
           all_tags.PushElement(*tags[0]);
@@ -448,9 +438,8 @@ extract_tracks(const std::string &file_name,
 
       }
 
-      in->setFilePointer(l1->GetElementPosition() + l1->ElementSize(), seek_beginning);
+      in->setFilePointer(element_end_pos, seek_beginning);
       delete l1;
-      delete l2;
 
     } // while (l1 != NULL)
 
