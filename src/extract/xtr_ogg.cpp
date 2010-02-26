@@ -264,13 +264,66 @@ xtr_oggvorbis_c::xtr_oggvorbis_c(const std::string &codec_id,
                                  int64_t tid,
                                  track_spec_t &tspec)
   : xtr_oggbase_c(codec_id, tid, tspec)
+  , m_previous_block_size(-1)
+  , m_samples(0)
 {
+  vorbis_info_init(&m_vorbis_info);
+  vorbis_comment_init(&m_vorbis_comment);
+}
+
+xtr_oggvorbis_c::~xtr_oggvorbis_c() {
+  vorbis_info_clear(&m_vorbis_info);
+  vorbis_comment_clear(&m_vorbis_comment);
 }
 
 void
 xtr_oggvorbis_c::create_file(xtr_base_c *master,
                              KaxTrackEntry &track) {
   create_standard_file(master, track);
+}
+
+void
+xtr_oggvorbis_c::header_packets_unlaced(std::vector<memory_cptr> &header_packets) {
+  int packet_num = 0;
+  foreach(memory_cptr &packet, header_packets) {
+    ogg_packet op;
+    op.packet   = packet->get_buffer();
+    op.bytes    = packet->get_size();
+    op.b_o_s    = 0 == packet_num;
+    op.packetno = packet_num;
+    ++packet_num;
+
+    vorbis_synthesis_headerin(&m_vorbis_info, &m_vorbis_comment, &op);
+  }
+}
+
+
+void
+xtr_oggvorbis_c::handle_frame(memory_cptr &frame,
+                              KaxBlockAdditions *additions,
+                              int64_t timecode,
+                              int64_t duration,
+                              int64_t bref,
+                              int64_t fref,
+                              bool keyframe,
+                              bool discardable,
+                              bool references_valid) {
+  m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
+
+  ogg_packet op;
+  op.packet               = frame->get_buffer();
+  op.bytes                = frame->get_size();
+  int64_t this_block_size = vorbis_packet_blocksize(&m_vorbis_info, &op);
+
+  if (-1 != m_previous_block_size) {
+    m_queued_granulepos   = m_samples;
+    m_samples            += (this_block_size + m_previous_block_size) / 4;
+  }
+
+  m_previous_end        = m_samples * 1000000000 / m_sfreq;
+  m_previous_block_size = this_block_size;
+
+  queue_frame(frame, 0);
 }
 
 // ------------------------------------------------------------------------

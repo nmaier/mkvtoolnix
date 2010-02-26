@@ -1,3 +1,8 @@
+2010-02-26  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: bug fix: Fixed granulepos calculation when
+	extracting Vorbis tracks into Ogg files. Fix for bug 473.
+
 2010-02-24  Moritz Bunkus  <moritz@bunkus.org>
 
 	* All: bug fix: The programs will no longer abort with an error

@@ -16,6 +16,7 @@
 #include "common/os.h"
 
 #include <ogg/ogg.h>
+#include <vorbis/codec.h>
 
 #include "common/kate.h"
 #include "common/theora.h"
@@ -69,10 +70,19 @@ public:
 };
 
 class xtr_oggvorbis_c: public xtr_oggbase_c {
+protected:
+  vorbis_info m_vorbis_info;
+  vorbis_comment m_vorbis_comment;
+  int64_t m_previous_block_size, m_samples;
+
 public:
   xtr_oggvorbis_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec);
+  virtual ~xtr_oggvorbis_c();
 
   virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
+  virtual void handle_frame(memory_cptr &frame, KaxBlockAdditions *additions, int64_t timecode, int64_t duration, int64_t bref, int64_t fref,
+                            bool keyframe, bool discardable, bool references_valid);
+  virtual void header_packets_unlaced(std::vector<memory_cptr> &header_packets);
 
   virtual const char *get_container_name() {
     return "Ogg (Vorbis in Ogg)";
