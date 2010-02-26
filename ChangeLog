@@ -1,5 +1,9 @@
 2010-02-26  Moritz Bunkus  <moritz@bunkus.org>
 
+	* Installer: bug fix: The "jobs" directory in the application data
+	folder is removed during uninstallation if the user requests
+	it. Fix for bug 474.
+
 	* mkvextract: bug fix: Fixed granulepos calculation when
 	extracting Vorbis tracks into Ogg files. Fix for bug 473.
 
