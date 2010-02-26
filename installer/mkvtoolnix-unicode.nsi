@@ -426,11 +426,21 @@ Section Uninstall
   RMDir "$INSTDIR\doc"
   RMDir "$INSTDIR\examples"
 
-  StrCmp $unRemoveJobs "Yes" 0 +2
+  StrCmp $unRemoveJobs "Yes" 0 +8
   Delete "$INSTDIR\jobs\*.mmg"
   RMDir "$INSTDIR\jobs"
+  SetShellVarContext current
+  Delete "$APPDATA\mkvtoolnix\jobs\*.mmg"
+  RMDir "$APPDATA\mkvtoolnix\jobs"
+  SetShellVarContext all
+  Delete "$APPDATA\mkvtoolnix\jobs\*.mmg"
+  RMDir "$APPDATA\mkvtoolnix\jobs"
 
   RMDir "$INSTDIR"
+  SetShellVarContext current
+  RMDir "$APPDATA\mkvtoolnix"
+  SetShellVarContext all
+  RMDir "$APPDATA\mkvtoolnix"
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
