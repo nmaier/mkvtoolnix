@@ -31,15 +31,15 @@
 
 class render_groups_c {
 public:
-  std::vector<kax_block_blob_cptr> groups;
-  std::vector<int64_t> durations;
-  generic_packetizer_c *source;
-  bool more_data, duration_mandatory;
+  std::vector<kax_block_blob_cptr> m_groups;
+  std::vector<int64_t> m_durations;
+  generic_packetizer_c *m_source;
+  bool m_more_data, m_duration_mandatory;
 
-  render_groups_c(generic_packetizer_c *n_source)
-    : source(n_source)
-    , more_data(false)
-    , duration_mandatory(false)
+  render_groups_c(generic_packetizer_c *source)
+    : m_source(source)
+    , m_more_data(false)
+    , m_duration_mandatory(false)
   {
   }
 };
