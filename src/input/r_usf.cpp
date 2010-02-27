@@ -68,7 +68,7 @@ usf_reader_c::usf_reader_c(track_info_c &_ti)
   m_strip(false) {
 
   try {
-    m_xml_source = new mm_text_io_c(new mm_file_io_c(ti.fname));
+    m_xml_source = new mm_text_io_c(new mm_file_io_c(ti.m_fname));
     int i;
 
     if (!usf_reader_c::probe_file(m_xml_source, 0))
@@ -97,7 +97,7 @@ usf_reader_c::usf_reader_c(track_info_c &_ti)
   }
 
   if (verbose)
-    mxinfo_fn(ti.fname, Y("Using the USF subtitle reader.\n"));
+    mxinfo_fn(ti.m_fname, Y("Using the USF subtitle reader.\n"));
 }
 
 usf_reader_c::~usf_reader_c() {
@@ -126,7 +126,7 @@ usf_reader_c::start_element_cb(const char *name,
         if (-1 != index)
           m_default_language = iso639_languages[index].iso639_2_code;
         else if (!g_identifying)
-          mxwarn_fn(ti.fname, boost::format(Y("The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n")) % atts[i + 1]);
+          mxwarn_fn(ti.m_fname, boost::format(Y("The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n")) % atts[i + 1]);
         break;
       }
   }
@@ -158,7 +158,7 @@ usf_reader_c::start_element_cb(const char *name,
           m_tracks[m_tracks.size() - 1].m_language =
             iso639_languages[index].iso639_2_code;
         else if (!g_identifying)
-          mxwarn_tid(ti.fname, m_tracks.size(), boost::format(Y("The language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n")) % atts[i + 1]);
+          mxwarn_tid(ti.m_fname, m_tracks.size(), boost::format(Y("The language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n")) % atts[i + 1]);
         break;
       }
 
@@ -254,9 +254,9 @@ usf_reader_c::create_packetizer(int64_t tid) {
   if (!demuxing_requested('s', tid) || (-1 != track.m_ptzr))
     return;
 
-  ti.language  = track.m_language;
-  track.m_ptzr = add_packetizer(new textsubs_packetizer_c(this, ti, MKV_S_TEXTUSF, m_private_data.c_str(), m_private_data.length(), false, true));
-  mxinfo_tid(ti.fname, tid, Y("Using the text subtitle output module.\n"));
+  ti.m_language = track.m_language;
+  track.m_ptzr  = add_packetizer(new textsubs_packetizer_c(this, ti, MKV_S_TEXTUSF, m_private_data.c_str(), m_private_data.length(), false, true));
+  mxinfo_tid(ti.m_fname, tid, Y("Using the text subtitle output module.\n"));
 }
 
 void

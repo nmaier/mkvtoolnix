@@ -47,7 +47,7 @@ flac_packetizer_c::flac_packetizer_c(generic_reader_c *p_reader,
 
   result = flac_decode_headers(m_header->get_buffer(), m_header->get_size(), 1, FLAC_HEADER_STREAM_INFO, &m_stream_info);
   if (!(result & FLAC_HEADER_STREAM_INFO))
-    mxerror_tid(ti.fname, ti.id, Y("The FLAC headers could not be parsed: the stream info structure was not found.\n"));
+    mxerror_tid(ti.m_fname, ti.m_id, Y("The FLAC headers could not be parsed: the stream info structure was not found.\n"));
 
   set_track_type(track_audio);
   if (m_stream_info.min_blocksize == m_stream_info.max_blocksize)
@@ -75,7 +75,7 @@ flac_packetizer_c::process(packet_cptr packet) {
   packet->duration = flac_get_num_samples(packet->data->get_buffer(), packet->data->get_size(), m_stream_info);
 
   if (-1 == packet->duration) {
-    mxwarn_tid(ti.fname, ti.id, boost::format(Y("Packet number %1% contained an invalid FLAC header and is being skipped.\n")) % m_num_packets);
+    mxwarn_tid(ti.m_fname, ti.m_id, boost::format(Y("Packet number %1% contained an invalid FLAC header and is being skipped.\n")) % m_num_packets);
     return FILE_STATUS_MOREDATA;
   }
 

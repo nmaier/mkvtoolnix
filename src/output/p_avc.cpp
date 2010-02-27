@@ -42,8 +42,8 @@ mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader,
 
   relaxed_timecode_checking = true;
 
-  if (0 != ti.nalu_size_length)
-    m_parser.set_nalu_size_length(ti.nalu_size_length);
+  if (0 != ti.m_nalu_size_length)
+    m_parser.set_nalu_size_length(ti.m_nalu_size_length);
 
   if (get_cue_creation() == CUE_STRATEGY_UNSPECIFIED)
     set_cue_creation(CUE_STRATEGY_IFRAMES);
@@ -61,7 +61,7 @@ mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader,
   // command line argument. This factory must be disabled for the AVC
   // packetizer because it takes care of handling the default
   // duration/FPS itself.
-  if (ti.ext_timecodes.empty())
+  if (ti.m_ext_timecodes.empty())
     timecode_factory = timecode_factory_cptr(NULL);
 }
 
@@ -95,14 +95,14 @@ mpeg4_p10_es_video_packetizer_c::process(packet_cptr packet) {
     flush_frames();
 
   } catch (nalu_size_length_error_c &error) {
-    mxerror_tid(ti.fname, ti.id,
+    mxerror_tid(ti.m_fname, ti.m_id,
                 boost::format(Y("This AVC/h.264 contains frames that are too big for the current maximum NALU size. "
                                 "You have to re-run mkvmerge and set the maximum NALU size to %1% for this track "
                                 "(command line parameter '--nalu-size-length %2%:%1%').\n"))
-                % error.get_required_length() % ti.id);
+                % error.get_required_length() % ti.m_id);
 
   } catch (error_c &error) {
-    mxerror_tid(ti.fname, ti.id,
+    mxerror_tid(ti.m_fname, ti.m_id,
                 boost::format(Y("mkvmerge encountered broken or unparsable data in this AVC/h.264 video track. "
                                 "Either your file is damaged (which mkvmerge cannot cope with yet) or this is a bug in mkvmerge itself. "
                                 "The error message was:\n%1%\n")) % error.get_error());
@@ -124,9 +124,9 @@ mpeg4_p10_es_video_packetizer_c::extract_aspect_ratio() {
                                    1 <= par ? m_height            : irnd(m_height / par),
                                    PARAMETER_SOURCE_BITSTREAM);
 
-      mxinfo_tid(ti.fname, ti.id,
+      mxinfo_tid(ti.m_fname, ti.m_id,
                  boost::format(Y("Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data "
-                                 "and set the display dimensions to %1%/%2%.\n")) % ti.display_width % ti.display_height);
+                                 "and set the display dimensions to %1%/%2%.\n")) % ti.m_display_width % ti.m_display_height);
     }
   }
 
@@ -146,7 +146,7 @@ mpeg4_p10_es_video_packetizer_c::flush_frames() {
   while (m_parser.frame_available()) {
     avc_frame_t frame(m_parser.get_frame());
     if (m_first_frame && (0 < m_parser.get_num_skipped_frames()))
-      mxwarn_tid(ti.fname, ti.id,
+      mxwarn_tid(ti.m_fname, ti.m_id,
                  boost::format(Y("This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n")) % m_parser.get_num_skipped_frames());
     add_packet(new packet_t(frame.m_data, frame.m_start,
                             frame.m_end > frame.m_start ? frame.m_end - frame.m_start : htrack_default_duration,
@@ -194,10 +194,10 @@ mpeg4_p10_es_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
   connect_check_v_height(m_height, vsrc->m_height);
   connect_check_codec_id(hcodec_id, vsrc->hcodec_id);
 
-  if (((NULL == ti.private_data) && (NULL != vsrc->ti.private_data)) ||
-      ((NULL != ti.private_data) && (NULL == vsrc->ti.private_data)) ||
-      (ti.private_size != vsrc->ti.private_size)) {
-    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % ti.private_size % vsrc->ti.private_size).str();
+  if (((NULL == ti.m_private_data) && (NULL != vsrc->ti.m_private_data)) ||
+      ((NULL != ti.m_private_data) && (NULL == vsrc->ti.m_private_data)) ||
+      (ti.m_private_size != vsrc->ti.m_private_size)) {
+    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % ti.m_private_size % vsrc->ti.m_private_size).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }
 

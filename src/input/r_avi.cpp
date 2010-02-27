@@ -101,7 +101,7 @@ avi_reader_c::avi_reader_c(track_info_c &_ti)
   int64_t size;
 
   try {
-    mm_file_io_c io(ti.fname);
+    mm_file_io_c io(ti.m_fname);
     size = io.get_size();
     if (!avi_reader_c::probe_file(&io, size))
       throw error_c(Y("avi_reader: Source is not a valid AVI file."));
@@ -111,9 +111,9 @@ avi_reader_c::avi_reader_c(track_info_c &_ti)
   }
 
   if (verbose)
-    mxinfo_fn(ti.fname, Y("Using the AVI demultiplexer. Opening file. This may take some time depending on the file's size.\n"));
+    mxinfo_fn(ti.m_fname, Y("Using the AVI demultiplexer. Opening file. This may take some time depending on the file's size.\n"));
 
-  if (NULL == (m_avi = AVI_open_input_file(ti.fname.c_str(), 1)))
+  if (NULL == (m_avi = AVI_open_input_file(ti.m_fname.c_str(), 1)))
     throw error_c(boost::format(Y("avi_reader: Could not initialize AVI source. Reason: %1%")) % AVI_strerror());
 
   m_fps              = AVI_frame_rate(m_avi);
@@ -129,7 +129,7 @@ avi_reader_c::~avi_reader_c() {
   if (NULL != m_avi)
     AVI_close(m_avi);
 
-  ti.private_data = NULL;
+  ti.m_private_data = NULL;
 
   mxverb(2, boost::format("avi_reader_c: Dropped video frames: %1%\n") % m_dropped_video_frames);
 }
@@ -198,22 +198,22 @@ avi_reader_c::create_packetizer(int64_t tid) {
   if ((0 == tid) && demuxing_requested('v', 0) && (-1 == m_vptzr)) {
     int i;
 
-    mxverb_tid(4, ti.fname, 0, "frame sizes:\n");
+    mxverb_tid(4, ti.m_fname, 0, "frame sizes:\n");
 
     for (i = 0; i < m_max_video_frames; i++) {
       m_bytes_to_process += AVI_frame_size(m_avi, i);
       mxverb(4, boost::format("  %1%: %2%\n") % i % AVI_frame_size(m_avi, i));
     }
 
-    ti.private_data = (unsigned char *)m_avi->bitmap_info_header;
-    if (NULL != ti.private_data)
-      ti.private_size = get_uint32_le(&m_avi->bitmap_info_header->bi_size);
+    ti.m_private_data = (unsigned char *)m_avi->bitmap_info_header;
+    if (NULL != ti.m_private_data)
+      ti.m_private_size = get_uint32_le(&m_avi->bitmap_info_header->bi_size);
 
-    mxverb(4, boost::format("track extra data size: %1%\n") % (ti.private_size - sizeof(alBITMAPINFOHEADER)));
-    if (sizeof(alBITMAPINFOHEADER) < ti.private_size) {
+    mxverb(4, boost::format("track extra data size: %1%\n") % (ti.m_private_size - sizeof(alBITMAPINFOHEADER)));
+    if (sizeof(alBITMAPINFOHEADER) < ti.m_private_size) {
       mxverb(4, "  ");
-      for (i = sizeof(alBITMAPINFOHEADER); i < ti.private_size; ++i)
-        mxverb(4, boost::format("%|1$02x| ") % ti.private_data[i]);
+      for (i = sizeof(alBITMAPINFOHEADER); i < ti.m_private_size; ++i)
+        mxverb(4, boost::format("%|1$02x| ") % ti.m_private_data[i]);
       mxverb(4, "\n");
     }
 
@@ -223,7 +223,7 @@ avi_reader_c::create_packetizer(int64_t tid) {
     else if (mpeg4::p2::is_fourcc(codec))
       m_divx_type = DIVX_TYPE_MPEG4;
 
-    ti.id = 0;                 // ID for the video track.
+    ti.m_id = 0;                 // ID for the video track.
     if (DIVX_TYPE_MPEG4 == m_divx_type)
       create_mpeg4_p2_packetizer();
 
@@ -248,8 +248,8 @@ void
 avi_reader_c::create_mpeg1_2_packetizer() {
   counted_ptr<M2VParser> m2v_parser(new M2VParser);
 
-  if ((0 != ti.private_size) && (ti.private_size < sizeof(alBITMAPINFOHEADER)))
-    m2v_parser->WriteData(ti.private_data + sizeof(alBITMAPINFOHEADER), ti.private_size - sizeof(alBITMAPINFOHEADER));
+  if ((0 != ti.m_private_size) && (ti.m_private_size < sizeof(alBITMAPINFOHEADER)))
+    m2v_parser->WriteData(ti.m_private_data + sizeof(alBITMAPINFOHEADER), ti.m_private_size - sizeof(alBITMAPINFOHEADER));
 
   int frame_number = 0;
   int state        = m2v_parser->GetState();
@@ -277,29 +277,29 @@ avi_reader_c::create_mpeg1_2_packetizer() {
   AVI_set_video_position(m_avi, 0);
 
   if (MPV_PARSER_STATE_FRAME != state)
-    mxerror_tid(ti.fname, 0, Y("Could not extract the sequence header from this MPEG-1/2 track.\n"));
+    mxerror_tid(ti.m_fname, 0, Y("Could not extract the sequence header from this MPEG-1/2 track.\n"));
 
   MPEG2SequenceHeader seq_hdr = m2v_parser->GetSequenceHeader();
   counted_ptr<MPEGFrame> frame(m2v_parser->ReadFrame());
   if (!frame.is_set())
-    mxerror_tid(ti.fname, 0, Y("Could not extract the sequence header from this MPEG-1/2 track.\n"));
+    mxerror_tid(ti.m_fname, 0, Y("Could not extract the sequence header from this MPEG-1/2 track.\n"));
 
   int display_width      = ((0 >= seq_hdr.aspectRatio) || (1 == seq_hdr.aspectRatio)) ? seq_hdr.width : (int)(seq_hdr.height * seq_hdr.aspectRatio);
 
   MPEGChunk *raw_seq_hdr = m2v_parser->GetRealSequenceHeader();
   if (NULL != raw_seq_hdr) {
-    ti.private_data      = raw_seq_hdr->GetPointer();
-    ti.private_size      = raw_seq_hdr->GetSize();
+    ti.m_private_data      = raw_seq_hdr->GetPointer();
+    ti.m_private_size      = raw_seq_hdr->GetSize();
   } else {
-    ti.private_data      = NULL;
-    ti.private_size      = 0;
+    ti.m_private_data      = NULL;
+    ti.m_private_size      = 0;
   }
 
   m_vptzr                = add_packetizer(new mpeg1_2_video_packetizer_c(this, ti, m2v_parser->GetMPEGVersion(), seq_hdr.frameRate,
                                                                          seq_hdr.width, seq_hdr.height, display_width, seq_hdr.height, false));
 
   if (verbose)
-    mxinfo_tid(ti.fname, 0, Y("Using the MPEG-1/2 video output module.\n"));
+    mxinfo_tid(ti.m_fname, 0, Y("Using the MPEG-1/2 video output module.\n"));
 }
 
 void
@@ -307,7 +307,7 @@ avi_reader_c::create_mpeg4_p2_packetizer() {
   m_vptzr = add_packetizer(new mpeg4_p2_video_packetizer_c(this, ti, AVI_frame_rate(m_avi), AVI_video_width(m_avi), AVI_video_height(m_avi), false));
 
   if (verbose)
-    mxinfo_tid(ti.fname, 0, Y("Using the MPEG-4 part 2 video output module.\n"));
+    mxinfo_tid(ti.m_fname, 0, Y("Using the MPEG-4 part 2 video output module.\n"));
 }
 
 void
@@ -324,10 +324,10 @@ avi_reader_c::create_mpeg4_p10_packetizer() {
       ptzr->add_extra_data(m_avc_extra_nalus);
 
     if (verbose)
-      mxinfo_tid(ti.fname, 0, Y("Using the MPEG-4 part 10 ES video output module.\n"));
+      mxinfo_tid(ti.m_fname, 0, Y("Using the MPEG-4 part 10 ES video output module.\n"));
 
   } catch (...) {
-    mxerror_tid(ti.fname, 0, Y("Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"));
+    mxerror_tid(ti.m_fname, 0, Y("Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"));
   }
 }
 
@@ -336,7 +336,7 @@ avi_reader_c::create_standard_video_packetizer() {
   m_vptzr = add_packetizer(new video_packetizer_c(this, ti, NULL, AVI_frame_rate(m_avi), AVI_video_width(m_avi), AVI_video_height(m_avi)));
 
   if (verbose)
-    mxinfo_tid(ti.fname, 0, Y("Using the video output module.\n"));
+    mxinfo_tid(ti.m_fname, 0, Y("Using the video output module.\n"));
 }
 
 void
@@ -373,7 +373,7 @@ avi_reader_c::create_srt_packetizer(int idx) {
   avi_subs_demuxer_t &demuxer = m_subtitle_demuxers[idx];
   int id                      = idx + 1 + AVI_audio_tracks(m_avi);
 
-  srt_parser_c *parser        = new srt_parser_c(demuxer.m_text_io.get_object(), ti.fname, id);
+  srt_parser_c *parser        = new srt_parser_c(demuxer.m_text_io.get_object(), ti.m_fname, id);
   demuxer.m_subs              = subtitles_cptr(parser);
 
   parser->parse();
@@ -381,7 +381,7 @@ avi_reader_c::create_srt_packetizer(int idx) {
   bool is_utf8   = demuxer.m_text_io->get_byte_order() != BO_NONE;
   demuxer.m_ptzr = add_packetizer(new textsubs_packetizer_c(this, ti, MKV_S_TEXTUTF8, NULL, 0, true, is_utf8));
 
-  mxinfo_tid(ti.fname, id, Y("Using the text subtitle output module.\n"));
+  mxinfo_tid(ti.m_fname, id, Y("Using the text subtitle output module.\n"));
 }
 
 void
@@ -389,11 +389,11 @@ avi_reader_c::create_ssa_packetizer(int idx) {
   avi_subs_demuxer_t &demuxer    = m_subtitle_demuxers[idx];
   int id                         = idx + 1 + AVI_audio_tracks(m_avi);
 
-  ssa_parser_c *parser           = new ssa_parser_c(this, demuxer.m_text_io.get_object(), ti.fname, id);
+  ssa_parser_c *parser           = new ssa_parser_c(this, demuxer.m_text_io.get_object(), ti.m_fname, id);
   demuxer.m_subs                 = subtitles_cptr(parser);
 
-  charset_converter_cptr cc_utf8 = map_has_key(ti.sub_charsets, id)               ? charset_converter_c::init(ti.sub_charsets[id])
-                                 : map_has_key(ti.sub_charsets, -1)               ? charset_converter_c::init(ti.sub_charsets[-1])
+  charset_converter_cptr cc_utf8 = map_has_key(ti.m_sub_charsets, id)               ? charset_converter_c::init(ti.m_sub_charsets[id])
+                                 : map_has_key(ti.m_sub_charsets, -1)               ? charset_converter_c::init(ti.m_sub_charsets[-1])
                                  : demuxer.m_text_io->get_byte_order() != BO_NONE ? charset_converter_c::init("UTF-8")
                                  :                                                  g_cc_local_utf8;
 
@@ -404,7 +404,7 @@ avi_reader_c::create_ssa_packetizer(int idx) {
   std::string global = parser->get_global();
   demuxer.m_ptzr     = add_packetizer(new textsubs_packetizer_c(this, ti, parser->is_ass() ?  MKV_S_TEXTASS : MKV_S_TEXTSSA, global.c_str(), global.length(), false, false));
 
-  mxinfo_tid(ti.fname, id, Y("Using the SSA/ASS subtitle output module.\n"));
+  mxinfo_tid(ti.m_fname, id, Y("Using the SSA/ASS subtitle output module.\n"));
 }
 
 memory_cptr
@@ -412,10 +412,10 @@ avi_reader_c::extract_avcc() {
   avc_es_parser_c parser;
 
   parser.ignore_nalu_size_length_errors();
-  if (map_has_key(ti.nalu_size_lengths, 0))
-    parser.set_nalu_size_length(ti.nalu_size_lengths[0]);
-  else if (map_has_key(ti.nalu_size_lengths, -1))
-    parser.set_nalu_size_length(ti.nalu_size_lengths[-1]);
+  if (map_has_key(ti.m_nalu_size_lengths, 0))
+    parser.set_nalu_size_length(ti.m_nalu_size_lengths[0]);
+  else if (map_has_key(ti.m_nalu_size_lengths, -1))
+    parser.set_nalu_size_length(ti.m_nalu_size_lengths[-1]);
 
   int extra_data_size = get_uint32_le(&m_avi->bitmap_info_header->bi_size) - sizeof(alBITMAPINFOHEADER);
   if (0 < extra_data_size) {
@@ -502,19 +502,19 @@ avi_reader_c::add_audio_demuxer(int aid) {
   demuxer.m_channels               = AVI_audio_channels(m_avi);
   demuxer.m_bits_per_sample        = AVI_audio_bits(m_avi);
 
-  ti.id                            = aid + 1;       // ID for this audio track.
-  ti.avi_block_align               = get_uint16_le(&wfe->n_block_align);
-  ti.avi_avg_bytes_per_sec         = get_uint32_le(&wfe->n_avg_bytes_per_sec);
-  ti.avi_samples_per_chunk         = get_uint32_le(&m_avi->stream_headers[aid].dw_scale);
-  ti.avi_sample_scale              = get_uint32_le(&m_avi->stream_headers[aid].dw_rate);
-  ti.avi_samples_per_sec           = demuxer.m_samples_per_second;
+  ti.m_id                          = aid + 1;       // ID for this audio track.
+  ti.m_avi_block_align             = get_uint16_le(&wfe->n_block_align);
+  ti.m_avi_avg_bytes_per_sec       = get_uint32_le(&wfe->n_avg_bytes_per_sec);
+  ti.m_avi_samples_per_chunk       = get_uint32_le(&m_avi->stream_headers[aid].dw_scale);
+  ti.m_avi_sample_scale            = get_uint32_le(&m_avi->stream_headers[aid].dw_rate);
+  ti.m_avi_samples_per_sec         = demuxer.m_samples_per_second;
 
   if (get_uint16_le(&wfe->cb_size) > 0) {
-    ti.private_data                = (unsigned char *)(wfe + 1);
-    ti.private_size                = get_uint16_le(&wfe->cb_size);
+    ti.m_private_data              = (unsigned char *)(wfe + 1);
+    ti.m_private_size              = get_uint16_le(&wfe->cb_size);
   } else {
-    ti.private_data                = NULL;
-    ti.private_size                = 0;
+    ti.m_private_data              = NULL;
+    ti.m_private_size              = 0;
   }
 
   switch(audio_format) {
@@ -523,7 +523,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
       packetizer = new pcm_packetizer_c(this, ti, demuxer.m_samples_per_second, demuxer.m_channels, demuxer.m_bits_per_sample, false, audio_format == 0x0003);
 
       if (verbose)
-        mxinfo_tid(ti.fname, aid + 1, Y("Using the PCM output module.\n"));
+        mxinfo_tid(ti.m_fname, aid + 1, Y("Using the PCM output module.\n"));
       break;
 
     case 0x0050:                // MP2
@@ -531,14 +531,14 @@ avi_reader_c::add_audio_demuxer(int aid) {
       packetizer = new mp3_packetizer_c(this, ti, demuxer.m_samples_per_second, demuxer.m_channels, false);
 
       if (verbose)
-        mxinfo_tid(ti.fname, aid + 1, Y("Using the MPEG audio output module.\n"));
+        mxinfo_tid(ti.m_fname, aid + 1, Y("Using the MPEG audio output module.\n"));
       break;
 
     case 0x2000:                // AC3
       packetizer = new ac3_packetizer_c(this, ti, demuxer.m_samples_per_second, demuxer.m_channels, 0);
 
       if (verbose)
-        mxinfo_tid(ti.fname, aid + 1, Y("Using the AC3 output module.\n"));
+        mxinfo_tid(ti.m_fname, aid + 1, Y("Using the AC3 output module.\n"));
       break;
 
     case 0x2001: {              // DTS
@@ -549,7 +549,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
       packetizer                        = new dts_packetizer_c(this, ti, dtsheader, true);
 
       if (verbose)
-        mxinfo_tid(ti.fname, aid + 1, Y("Using the DTS output module.\n"));
+        mxinfo_tid(ti.m_fname, aid + 1, Y("Using the DTS output module.\n"));
       break;
     }
 
@@ -563,7 +563,7 @@ avi_reader_c::add_audio_demuxer(int aid) {
       break;
 
     default:
-      mxerror_tid(ti.fname, aid + 1, boost::format(Y("Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n")) % audio_format);
+      mxerror_tid(ti.m_fname, aid + 1, boost::format(Y("Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n")) % audio_format);
   }
 
   demuxer.m_ptzr = add_packetizer(packetizer);
@@ -584,7 +584,7 @@ avi_reader_c::create_aac_packetizer(int aid,
   bool aac_data_created  = false;
   bool headerless        = (AVI_audio_format(m_avi) != 0x706d);
 
-  if (0 == ti.private_size) {
+  if (0 == ti.m_private_size) {
     aac_data_created     = true;
     channels             = AVI_audio_channels(m_avi);
     sample_rate          = AVI_audio_rate(m_avi);
@@ -600,16 +600,16 @@ avi_reader_c::create_aac_packetizer(int aid,
 
     unsigned char created_aac_data[AAC_MAX_PRIVATE_DATA_SIZE];
 
-    ti.private_size      = create_aac_data(created_aac_data, profile, channels, sample_rate, output_sample_rate, is_sbr);
-    ti.private_data      = created_aac_data;
+    ti.m_private_size    = create_aac_data(created_aac_data, profile, channels, sample_rate, output_sample_rate, is_sbr);
+    ti.m_private_data    = created_aac_data;
 
   } else {
-    if ((2 != ti.private_size) && (5 != ti.private_size))
-      mxerror_tid(ti.fname, aid + 1,
-                  boost::format(Y("This AAC track does not contain valid headers. The extra header size is %1% bytes, expected were 2 or 5 bytes.\n")) % ti.private_size);
+    if ((2 != ti.m_private_size) && (5 != ti.m_private_size))
+      mxerror_tid(ti.m_fname, aid + 1,
+                  boost::format(Y("This AAC track does not contain valid headers. The extra header size is %1% bytes, expected were 2 or 5 bytes.\n")) % ti.m_private_size);
 
-    if (!parse_aac_data(ti.private_data, ti.private_size, profile, channels, sample_rate, output_sample_rate, is_sbr))
-      mxerror_tid(ti.fname, aid + 1, Y("This AAC track does not contain valid headers. Could not parse the AAC information.\n"));
+    if (!parse_aac_data(ti.m_private_data, ti.m_private_size, profile, channels, sample_rate, output_sample_rate, is_sbr))
+      mxerror_tid(ti.m_fname, aid + 1, Y("This AAC track does not contain valid headers. Could not parse the AAC information.\n"));
 
     if (is_sbr)
       profile = AAC_PROFILE_SBR;
@@ -624,12 +624,12 @@ avi_reader_c::create_aac_packetizer(int aid,
     packetizer->set_audio_output_sampling_freq(output_sample_rate);
 
   if (aac_data_created) {
-    ti.private_size = 0;
-    ti.private_data = NULL;
+    ti.m_private_size = 0;
+    ti.m_private_data = NULL;
   }
 
   if (verbose)
-    mxinfo_tid(ti.fname, aid + 1, Y("Using the AAC audio output module.\n"));
+    mxinfo_tid(ti.m_fname, aid + 1, Y("Using the AAC audio output module.\n"));
 
   return packetizer;
 }
@@ -637,16 +637,16 @@ avi_reader_c::create_aac_packetizer(int aid,
 generic_packetizer_c *
 avi_reader_c::create_vorbis_packetizer(int aid) {
   try {
-    if (!ti.private_data || !ti.private_size)
+    if (!ti.m_private_data || !ti.m_private_size)
       throw error_c(Y("Invalid Vorbis headers in AVI audio track."));
 
-    unsigned char *c = (unsigned char *)ti.private_data;
+    unsigned char *c = (unsigned char *)ti.m_private_data;
 
     if (2 != c[0])
       throw error_c(Y("Invalid Vorbis headers in AVI audio track."));
 
     int offset           = 1;
-    const int laced_size = ti.private_size;
+    const int laced_size = ti.m_private_size;
     int i;
 
     int header_sizes[3];
@@ -667,23 +667,23 @@ avi_reader_c::create_vorbis_packetizer(int aid) {
       ++offset;
     }
 
-    headers[0]      = &c[offset];
-    headers[1]      = &c[offset + header_sizes[0]];
-    headers[2]      = &c[offset + header_sizes[0] + header_sizes[1]];
-    header_sizes[2] = laced_size - offset - header_sizes[0] - header_sizes[1];
+    headers[0]        = &c[offset];
+    headers[1]        = &c[offset + header_sizes[0]];
+    headers[2]        = &c[offset + header_sizes[0] + header_sizes[1]];
+    header_sizes[2]   = laced_size - offset - header_sizes[0] - header_sizes[1];
 
-    ti.private_data = NULL;
-    ti.private_size = 0;
+    ti.m_private_data = NULL;
+    ti.m_private_size = 0;
 
     vorbis_packetizer_c *ptzr = new vorbis_packetizer_c(this, ti, headers[0], header_sizes[0], headers[1], header_sizes[1], headers[2], header_sizes[2]);
 
     if (verbose)
-      mxinfo_tid(ti.fname, aid + 1, Y("Using the Vorbis output module.\n"));
+      mxinfo_tid(ti.m_fname, aid + 1, Y("Using the Vorbis output module.\n"));
 
     return ptzr;
 
   } catch (error_c &e) {
-    mxerror_tid(ti.fname, aid + 1, boost::format("%1%\n") % e.get_error());
+    mxerror_tid(ti.m_fname, aid + 1, boost::format("%1%\n") % e.get_error());
 
     // Never reached, but make the compiler happy:
     return NULL;
@@ -948,7 +948,7 @@ avi_reader_c::identify_attachments() {
     try {
       avi_subs_demuxer_t &demuxer = m_subtitle_demuxers[i];
       mm_text_io_c text_io(new mm_mem_io_c(demuxer.m_subtitles->get_buffer(), demuxer.m_subtitles->get_size()));
-      ssa_parser_c parser(this, &text_io, ti.fname, i + 1 + AVI_audio_tracks(m_avi));
+      ssa_parser_c parser(this, &text_io, ti.m_fname, i + 1 + AVI_audio_tracks(m_avi));
 
       parser.set_attachment_id_base(g_attachments.size());
       parser.parse();

@@ -904,7 +904,7 @@ check_append_mapping() {
     src_file = g_files.begin() + amap->src_file_id;
     src_ptzr = NULL;
     mxforeach(gptzr, src_file->reader->reader_packetizers)
-      if ((*gptzr)->ti.id == amap->src_track_id) {
+      if ((*gptzr)->ti.m_id == amap->src_track_id) {
         src_ptzr = (*gptzr);
         break;
       }
@@ -912,7 +912,7 @@ check_append_mapping() {
     dst_file = g_files.begin() + amap->dst_file_id;
     dst_ptzr = NULL;
     mxforeach(gptzr, dst_file->reader->reader_packetizers)
-      if ((*gptzr)->ti.id == amap->dst_track_id) {
+      if ((*gptzr)->ti.m_id == amap->dst_track_id) {
         dst_ptzr = (*gptzr);
         break;
       }
@@ -1119,7 +1119,7 @@ create_readers() {
           break;
       }
     } catch (error_c &error) {
-      mxerror(boost::format(Y("The demultiplexer for the file '%1%' failed to initialize:\n%2%\n")) % file.ti->fname % error.get_error());
+      mxerror(boost::format(Y("The demultiplexer for the file '%1%' failed to initialize:\n%2%\n")) % file.ti->m_fname % error.get_error());
     }
   }
 
@@ -1517,7 +1517,7 @@ append_track(packetizer_t &ptzr,
   // stored in ptzr.
   std::vector<generic_packetizer_c *>::const_iterator gptzr;
   mxforeach(gptzr, src_file.reader->reader_packetizers)
-    if (amap.src_track_id == (*gptzr)->ti.id)
+    if (amap.src_track_id == (*gptzr)->ti.m_id)
       break;
 
   if (src_file.reader->reader_packetizers.end() == gptzr)
@@ -1567,7 +1567,7 @@ append_track(packetizer_t &ptzr,
   }
 
   mxinfo(boost::format(Y("Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"))
-         % (*gptzr)->ti.id % amap.src_file_id % (*gptzr)->ti.fname % ptzr.packetizer->ti.id % amap.dst_file_id % ptzr.packetizer->ti.fname);
+         % (*gptzr)->ti.m_id % amap.src_file_id % (*gptzr)->ti.m_fname % ptzr.packetizer->ti.m_id % amap.dst_file_id % ptzr.packetizer->ti.m_fname);
 
   // Is the current file currently used for displaying the progress? If yes
   // then replace it with the next one.
@@ -1617,13 +1617,13 @@ append_track(packetizer_t &ptzr,
       std::vector<append_spec_t>::const_iterator cmp_amap;
       mxforeach(cmp_amap, g_append_mapping)
         if (   (cmp_amap->src_file_id  == amap.src_file_id)
-            && (cmp_amap->src_track_id == src_file.reader->ptzr_first_packet->ti.id)
+            && (cmp_amap->src_track_id == src_file.reader->ptzr_first_packet->ti.m_id)
             && (cmp_amap->dst_file_id  == amap.dst_file_id))
           break;
 
       if (g_append_mapping.end() != cmp_amap)
         mxforeach(gptzr, dst_file.reader->reader_packetizers)
-          if ((*gptzr)->ti.id == cmp_amap->dst_track_id) {
+          if ((*gptzr)->ti.m_id == cmp_amap->dst_track_id) {
             timecode_adjustment = (*gptzr)->max_timecode_seen;
             break;
           }
@@ -1632,13 +1632,13 @@ append_track(packetizer_t &ptzr,
 
   if ((APPEND_MODE_FILE_BASED == g_append_mode) || (ptzr.packetizer->get_track_type() == track_subtitle)) {
     mxverb(2, boost::format("append_track: new timecode_adjustment for append_mode == FILE_BASED or subtitle track: %1% for %2%\n")
-           % format_timecode(timecode_adjustment) % ptzr.packetizer->ti.id);
+           % format_timecode(timecode_adjustment) % ptzr.packetizer->ti.m_id);
     // The actual connection.
     ptzr.packetizer->connect(old_packetizer, timecode_adjustment);
 
   } else {
     mxverb(2, boost::format("append_track: new timecode_adjustment for append_mode == TRACK_BASED and NON subtitle track: %1% for %2%\n")
-           % format_timecode(timecode_adjustment) % ptzr.packetizer->ti.id);
+           % format_timecode(timecode_adjustment) % ptzr.packetizer->ti.m_id);
     // The actual connection.
     ptzr.packetizer->connect(old_packetizer);
   }
@@ -1682,7 +1682,7 @@ append_tracks_maybe() {
 
     append_spec_t *amap = NULL;
     foreach(append_spec_t &amap_idx, g_append_mapping)
-      if ((amap_idx.dst_file_id == ptzr.file) && (amap_idx.dst_track_id == ptzr.packetizer->ti.id)) {
+      if ((amap_idx.dst_file_id == ptzr.file) && (amap_idx.dst_track_id == ptzr.packetizer->ti.m_id)) {
         amap = &amap_idx;
         break;
       }

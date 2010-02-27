@@ -186,7 +186,7 @@ flac_reader_c::flac_reader_c(track_info_c &_ti)
   header(NULL) {
 
   try {
-    file      = new mm_file_io_c(ti.fname);
+    file      = new mm_file_io_c(ti.m_fname);
     file_size = file->get_size();
   } catch (...) {
     throw error_c(Y("flac_reader: Could not open the source file."));
@@ -195,7 +195,7 @@ flac_reader_c::flac_reader_c(track_info_c &_ti)
   if (g_identifying)
     return;
 
-  mxinfo_fn(ti.fname, Y("Using the FLAC demultiplexer.\n"));
+  mxinfo_fn(ti.m_fname, Y("Using the FLAC demultiplexer.\n"));
 
   if (!parse_file())
     throw error_c(Y("flac_reader: Could not read all header packets."));
@@ -235,7 +235,7 @@ flac_reader_c::create_packetizer(int64_t) {
     return;
 
   add_packetizer(new flac_packetizer_c(this, ti, header, header_size));
-  mxinfo_tid(ti.fname, 0, Y("Using the FLAC output module.\n"));
+  mxinfo_tid(ti.m_fname, 0, Y("Using the FLAC output module.\n"));
 }
 
 bool
@@ -302,7 +302,7 @@ flac_reader_c::parse_file() {
   mxverb(2, boost::format("flac_reader: extract->metadata, result: %1%, mdp: %2%, num blocks: %3%\n") % result % metadata_parsed % blocks.size());
 
   if (!metadata_parsed)
-    mxerror_fn(ti.fname, Y("No metadata block found. This file is broken.\n"));
+    mxerror_fn(ti.m_fname, Y("No metadata block found. This file is broken.\n"));
 
 #ifdef LEGACY_FLAC
   FLAC__seekable_stream_decoder_get_decode_position(decoder, &u);

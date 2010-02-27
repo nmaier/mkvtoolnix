@@ -49,7 +49,7 @@ truehd_reader_c::truehd_reader_c(track_info_c &_ti)
 {
 
   try {
-    m_io               = mm_io_cptr(new mm_file_io_c(ti.fname));
+    m_io               = mm_io_cptr(new mm_file_io_c(ti.m_fname));
     m_file_size        = m_io->get_size();
 
     int tag_size_start = skip_id3v2_tag(*m_io);
@@ -71,10 +71,10 @@ truehd_reader_c::truehd_reader_c(track_info_c &_ti)
     parser.add_data(m_chunk->get_buffer(), init_read_len);
     m_header = parser.get_next_frame();
 
-    ti.id = 0;                  // ID for this track.
+    ti.m_id = 0;                  // ID for this track.
 
     if (verbose)
-      mxinfo_fn(ti.fname, Y("Using the TrueHD/MLP demultiplexer.\n"));
+      mxinfo_fn(ti.m_fname, Y("Using the TrueHD/MLP demultiplexer.\n"));
 
   } catch (...) {
     throw error_c(Y("truehd_reader: Could not open the source file."));
@@ -90,7 +90,7 @@ truehd_reader_c::create_packetizer(int64_t) {
     return;
 
   add_packetizer(new truehd_packetizer_c(this, ti, m_header->m_codec, m_header->m_sampling_rate, m_header->m_channels));
-  mxinfo_tid(ti.fname, 0, Y("Using the TrueHD/MLP output module.\n"));
+  mxinfo_tid(ti.m_fname, 0, Y("Using the TrueHD/MLP output module.\n"));
 }
 
 file_status_e

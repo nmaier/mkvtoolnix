@@ -64,7 +64,7 @@ dirac_es_reader_c::dirac_es_reader_c(track_info_c &n_ti)
 {
 
   try {
-    m_io   = counted_ptr<mm_io_c>(new mm_file_io_c(ti.fname));
+    m_io   = counted_ptr<mm_io_c>(new mm_file_io_c(ti.m_fname));
     m_size = m_io->get_size();
 
     dirac::es_parser_c parser;
@@ -84,7 +84,7 @@ dirac_es_reader_c::dirac_es_reader_c(track_info_c &n_ti)
   }
 
   if (verbose)
-    mxinfo_fn(ti.fname, Y("Using the Dirac demultiplexer.\n"));
+    mxinfo_fn(ti.m_fname, Y("Using the Dirac demultiplexer.\n"));
 }
 
 void
@@ -94,7 +94,7 @@ dirac_es_reader_c::create_packetizer(int64_t) {
 
   add_packetizer(new dirac_video_packetizer_c(this, ti));
 
-  mxinfo_tid(ti.fname, 0, Y("Using the Dirac video output module.\n"));
+  mxinfo_tid(ti.m_fname, 0, Y("Using the Dirac video output module.\n"));
 }
 
 file_status_e

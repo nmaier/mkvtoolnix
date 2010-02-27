@@ -77,7 +77,7 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
 void
 mpeg_ps_reader_c::init_reader() {
   try {
-    io   = mm_multi_file_io_c::open_multi(ti.fname);
+    io   = mm_multi_file_io_c::open_multi(ti.m_fname);
     size = io->get_size();
 
   } catch (...) {
@@ -178,7 +178,7 @@ mpeg_ps_reader_c::init_reader() {
   io->setFilePointer(0, seek_beginning);
 
   if (verbose) {
-    mxinfo_fn(ti.fname, Y("Using the MPEG PS demultiplexer.\n"));
+    mxinfo_fn(ti.m_fname, Y("Using the MPEG PS demultiplexer.\n"));
     io->display_other_file_info();
   }
 }
@@ -403,7 +403,7 @@ mpeg_ps_reader_c::parse_packet(mpeg_ps_id_t &id,
 
   } else if ((c & 0xc0) == 0x80) {
     if ((c & 0x30) != 0x00)
-      mxerror_fn(ti.fname, Y("Reading encrypted VOBs is not supported.\n"));
+      mxerror_fn(ti.m_fname, Y("Reading encrypted VOBs is not supported.\n"));
 
     int flags   = io->read_uint8();
     int hdrlen  = io->read_uint8();
@@ -668,10 +668,10 @@ mpeg_ps_reader_c::new_stream_v_avc(mpeg_ps_id_t id,
   mpeg4::p10::avc_es_parser_c parser;
 
   parser.ignore_nalu_size_length_errors();
-  if (map_has_key(ti.nalu_size_lengths, tracks.size()))
-    parser.set_nalu_size_length(ti.nalu_size_lengths[0]);
-  else if (map_has_key(ti.nalu_size_lengths, -1))
-    parser.set_nalu_size_length(ti.nalu_size_lengths[-1]);
+  if (map_has_key(ti.m_nalu_size_lengths, tracks.size()))
+    parser.set_nalu_size_length(ti.m_nalu_size_lengths[0]);
+  else if (map_has_key(ti.m_nalu_size_lengths, -1))
+    parser.set_nalu_size_length(ti.m_nalu_size_lengths[-1]);
 
   parser.add_bytes(buf, length);
 
@@ -1038,10 +1038,10 @@ mpeg_ps_reader_c::found_new_stream(mpeg_ps_id_t id) {
     blacklisted_ids[id.idx()] = true;
 
   } catch (const char *msg) {
-    mxerror_fn(ti.fname, msg);
+    mxerror_fn(ti.m_fname, msg);
 
   } catch (...) {
-    mxerror_fn(ti.fname, Y("Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"));
+    mxerror_fn(ti.m_fname, Y("Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"));
   }
 }
 
@@ -1161,29 +1161,29 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
   if (!demuxing_requested(tracks[id]->type, id))
     return;
 
-  ti.id = id;
+  ti.m_id = id;
   mpeg_ps_track_ptr &track = tracks[id];
   if ('a' == track->type) {
     if (   (FOURCC('M', 'P', '1', ' ') == track->fourcc)
         || (FOURCC('M', 'P', '2', ' ') == track->fourcc)
         || (FOURCC('M', 'P', '3', ' ') == track->fourcc)) {
       if (verbose)
-        mxinfo_tid(ti.fname, id, Y("Using the MPEG audio output module.\n"));
+        mxinfo_tid(ti.m_fname, id, Y("Using the MPEG audio output module.\n"));
       track->ptzr = add_packetizer(new mp3_packetizer_c(this, ti, track->a_sample_rate, track->a_channels, true));
 
     } else if (FOURCC('A', 'C', '3', ' ') == track->fourcc) {
       if (verbose)
-        mxinfo_tid(ti.fname, id, boost::format(Y("Using the %1%AC3 output module.\n")) % (16 == track->a_bsid ? "E" : ""));
+        mxinfo_tid(ti.m_fname, id, boost::format(Y("Using the %1%AC3 output module.\n")) % (16 == track->a_bsid ? "E" : ""));
       track->ptzr = add_packetizer(new ac3_packetizer_c(this, ti, track->a_sample_rate, track->a_channels, track->a_bsid));
 
     } else if (FOURCC('D', 'T', 'S', ' ') == track->fourcc) {
       if (verbose)
-        mxinfo_tid(ti.fname, id, Y("Using the DTS output module.\n"));
+        mxinfo_tid(ti.m_fname, id, Y("Using the DTS output module.\n"));
       track->ptzr = add_packetizer(new dts_packetizer_c(this, ti, track->dts_header, true));
 
     } else if (FOURCC('T', 'R', 'H', 'D') == track->fourcc) {
       if (verbose)
-        mxinfo_tid(ti.fname, id, Y("Using the TrueHD output module.\n"));
+        mxinfo_tid(ti.m_fname, id, Y("Using the TrueHD output module.\n"));
       track->ptzr = add_packetizer(new truehd_packetizer_c(this, ti, truehd_frame_t::truehd, track->a_sample_rate, track->a_channels));
 
     } else
@@ -1193,23 +1193,23 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
     if (   (FOURCC('M', 'P', 'G', '1') == track->fourcc)
         || (FOURCC('M', 'P', 'G', '2') == track->fourcc)) {
       if (verbose)
-        mxinfo_tid(ti.fname, id, Y("Using the MPEG-1/2 video output module.\n"));
+        mxinfo_tid(ti.m_fname, id, Y("Using the MPEG-1/2 video output module.\n"));
 
-      ti.private_data = track->raw_seq_hdr;
-      ti.private_size = track->raw_seq_hdr_size;
-      track->ptzr     = add_packetizer(new mpeg1_2_video_packetizer_c(this, ti, track->v_version, track->v_frame_rate, track->v_width, track->v_height,
-                                                                      track->v_dwidth, track->v_dheight, false));
-      ti.private_data = NULL;
-      ti.private_size = 0;
+      ti.m_private_data = track->raw_seq_hdr;
+      ti.m_private_size = track->raw_seq_hdr_size;
+      track->ptzr       = add_packetizer(new mpeg1_2_video_packetizer_c(this, ti, track->v_version, track->v_frame_rate, track->v_width, track->v_height,
+                                                                        track->v_dwidth, track->v_dheight, false));
+      ti.m_private_data = NULL;
+      ti.m_private_size = 0;
 
     } else if (track->fourcc == FOURCC('A', 'V', 'C', '1')) {
       if (verbose)
-        mxinfo_tid(ti.fname, id, Y("Using the MPEG-4 part 10 ES video output module.\n"));
+        mxinfo_tid(ti.m_fname, id, Y("Using the MPEG-4 part 10 ES video output module.\n"));
       track->ptzr = add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, ti, track->v_avcc, track->v_width, track->v_height));
 
     } else if (FOURCC('W', 'V', 'C', '1') == track->fourcc) {
       if (verbose)
-        mxinfo_tid(ti.fname, id, Y("Using the VC1 video output module.\n"));
+        mxinfo_tid(ti.m_fname, id, Y("Using the VC1 video output module.\n"));
       track->ptzr = add_packetizer(new vc1_video_packetizer_c(this, ti));
 
     } else
@@ -1217,7 +1217,7 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
   }
 
   if (-1 != track->timecode_offset)
-    PTZR(track->ptzr)->ti.tcsync.displacement += track->timecode_offset;
+    PTZR(track->ptzr)->ti.m_tcsync.displacement += track->timecode_offset;
 }
 
 void

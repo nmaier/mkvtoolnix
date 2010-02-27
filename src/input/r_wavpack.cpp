@@ -49,12 +49,12 @@ wavpack_reader_c::wavpack_reader_c(track_info_c &_ti)
   generic_reader_c(_ti) {
 
   try {
-    io              = new mm_file_io_c(ti.fname);
+    io              = new mm_file_io_c(ti.m_fname);
     size            = io->get_size();
 
     int packet_size = wv_parse_frame(io, header, meta, true, true);
     if (0 > packet_size)
-      mxerror_fn(ti.fname, Y("The file header was not read correctly.\n"));
+      mxerror_fn(ti.m_fname, Y("The file header was not read correctly.\n"));
   } catch (...) {
     throw error_c(Y("wavpack_reader: Could not open the file."));
   }
@@ -67,24 +67,24 @@ wavpack_reader_c::wavpack_reader_c(track_info_c &_ti)
 
   try {
     if (header.flags & WV_HYBRID_FLAG) {
-      io_correc       = new mm_file_io_c(ti.fname + "c");
+      io_correc       = new mm_file_io_c(ti.m_fname + "c");
       int packet_size = wv_parse_frame(io_correc, header_correc, meta_correc, true, true);
       if (0 > packet_size)
-        mxerror_fn(ti.fname, Y("The correction file header was not read correctly.\n"));
+        mxerror_fn(ti.m_fname, Y("The correction file header was not read correctly.\n"));
 
       io_correc->setFilePointer(io_correc->getFilePointer() - sizeof(wavpack_header_t), seek_beginning);
       meta.has_correction = true;
     }
   } catch (...) {
     if (verbose)
-      mxinfo_fn(ti.fname, boost::format(Y("Could not open the corresponding correction file '%1%c'.\n")) % ti.fname);
+      mxinfo_fn(ti.m_fname, boost::format(Y("Could not open the corresponding correction file '%1%c'.\n")) % ti.m_fname);
   }
 
   if (verbose) {
     if (meta.has_correction)
-      mxinfo_fn(ti.fname, Y("Using the WAVPACK demultiplexer with a correction file.\n"));
+      mxinfo_fn(ti.m_fname, Y("Using the WAVPACK demultiplexer with a correction file.\n"));
     else
-      mxinfo_fn(ti.fname, Y("Using the WAVPACK demultiplexer.\n"));
+      mxinfo_fn(ti.m_fname, Y("Using the WAVPACK demultiplexer.\n"));
   }
 }
 
@@ -101,12 +101,12 @@ wavpack_reader_c::create_packetizer(int64_t) {
     return;
 
   put_uint16_le(&version_le, header.version);
-  ti.private_data = (unsigned char *)&version_le;
-  ti.private_size = sizeof(uint16_t);
+  ti.m_private_data = (unsigned char *)&version_le;
+  ti.m_private_size = sizeof(uint16_t);
   add_packetizer(new wavpack_packetizer_c(this, ti, meta));
-  ti.private_data = NULL;
+  ti.m_private_data = NULL;
 
-  mxinfo_tid(ti.fname, 0, Y("Using the WAVPACK output module.\n"));
+  mxinfo_tid(ti.m_fname, 0, Y("Using the WAVPACK output module.\n"));
 }
 
 file_status_e

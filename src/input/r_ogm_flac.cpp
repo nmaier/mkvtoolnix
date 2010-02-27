@@ -271,10 +271,10 @@ ogm_a_flac_demuxer_c::process_header_page() {
 
 void
 ogm_a_flac_demuxer_c::initialize() {
-  flac_header_extractor_c fhe(reader->ti.fname, serialno);
+  flac_header_extractor_c fhe(reader->ti.m_fname, serialno);
 
   if (!fhe.extract())
-    mxerror_tid(reader->ti.fname, track_id, Y("Could not read the FLAC header packets.\n"));
+    mxerror_tid(reader->ti.m_fname, track_id, Y("Could not read the FLAC header packets.\n"));
 
   flac_header_packets = fhe.num_header_packets;
   sample_rate         = fhe.sample_rate;
@@ -303,7 +303,7 @@ ogm_a_flac_demuxer_c::create_packetizer(track_info_c &ti) {
   generic_packetizer_c *ptzr_obj = new flac_packetizer_c(reader, ti, buf, size);
   safefree(buf);
 
-  mxinfo_tid(ti.fname, ti.id, Y("Using the FLAC output module.\n"));
+  mxinfo_tid(ti.m_fname, ti.m_id, Y("Using the FLAC output module.\n"));
 
   return ptzr_obj;
 }

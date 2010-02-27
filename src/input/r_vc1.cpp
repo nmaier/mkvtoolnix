@@ -64,7 +64,7 @@ vc1_es_reader_c::vc1_es_reader_c(track_info_c &n_ti)
 {
 
   try {
-    m_io   = counted_ptr<mm_io_c>(new mm_file_io_c(ti.fname));
+    m_io   = counted_ptr<mm_io_c>(new mm_file_io_c(ti.m_fname));
     m_size = m_io->get_size();
 
     vc1::es_parser_c parser;
@@ -84,7 +84,7 @@ vc1_es_reader_c::vc1_es_reader_c(track_info_c &n_ti)
   }
 
   if (verbose)
-    mxinfo_fn(ti.fname, Y("Using the VC1 ES demultiplexer.\n"));
+    mxinfo_fn(ti.m_fname, Y("Using the VC1 ES demultiplexer.\n"));
 }
 
 void
@@ -94,7 +94,7 @@ vc1_es_reader_c::create_packetizer(int64_t) {
 
   add_packetizer(new vc1_video_packetizer_c(this, ti));
 
-  mxinfo_tid(ti.fname, 0, Y("Using the VC1 video output module.\n"));
+  mxinfo_tid(ti.m_fname, 0, Y("Using the VC1 video output module.\n"));
 }
 
 file_status_e

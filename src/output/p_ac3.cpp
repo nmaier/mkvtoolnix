@@ -76,19 +76,19 @@ ac3_packetizer_c::get_ac3_packet(unsigned long *header,
     if (0 == m_packetno) {
       int64_t offset = handle_avi_audio_sync(m_bytes_skipped, false);
       if (-1 != offset) {
-        mxinfo_tid(ti.fname, ti.id,
+        mxinfo_tid(ti.m_fname, ti.m_id,
                    boost::format(Y("This AC3 track contains %1% bytes of non-AC3 data at the beginning. "
                                    "This corresponds to a delay of %2%ms. "
                                    "This delay will be used instead of the non-AC3 data.\n"))
                    % m_bytes_skipped % (offset / 1000000));
 
-        warning_printed         = true;
-        ti.tcsync.displacement += offset;
+        warning_printed           = true;
+        ti.m_tcsync.displacement += offset;
       }
     }
 
     if (!warning_printed)
-      mxwarn_tid(ti.fname, ti.id,
+      mxwarn_tid(ti.m_fname, ti.m_id,
                  boost::format(Y("This AC3 track contains %1% bytes of non-AC3 data which were skipped. "
                                  "The audio/video synchronization may have been lost.\n")) % m_bytes_skipped);
 

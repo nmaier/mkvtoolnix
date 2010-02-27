@@ -184,102 +184,98 @@ enum attach_mode_e {
 
 class track_info_c {
 protected:
-  bool initialized;
+  bool m_initialized;
 
 public:
   // The track ID.
-  int64_t id;
+  int64_t m_id;
 
   // Options used by the readers.
-  std::string fname;
-  bool no_audio, no_video, no_subs, no_buttons, no_track_tags;
-  std::vector<int64_t> atracks, vtracks, stracks, btracks, track_tags;
+  std::string m_fname;
+  bool m_no_audio, m_no_video, m_no_subs, m_no_buttons, m_no_track_tags;
+  std::vector<int64_t> m_atracks, m_vtracks, m_stracks, m_btracks, m_track_tags;
 
   // Options used by the packetizers.
-  unsigned char *private_data;
-  int private_size;
+  unsigned char *m_private_data;
+  int m_private_size;
 
-  std::map<int64_t, std::string> all_fourccs;
-  std::string fourcc;
-  std::map<int64_t, display_properties_t> display_properties;
-  float aspect_ratio;
-  int display_width, display_height;
-  bool aspect_ratio_given, aspect_ratio_is_factor, display_dimensions_given;
-  parameter_source_e display_dimensions_source;
+  std::map<int64_t, std::string> m_all_fourccs;
+  std::string m_fourcc;
+  std::map<int64_t, display_properties_t> m_display_properties;
+  float m_aspect_ratio;
+  int m_display_width, m_display_height;
+  bool m_aspect_ratio_given, m_aspect_ratio_is_factor, m_display_dimensions_given;
+  parameter_source_e m_display_dimensions_source;
 
-  std::map<int64_t, timecode_sync_t> timecode_syncs; // As given on the command line
-  timecode_sync_t tcsync;                       // For this very track
+  std::map<int64_t, timecode_sync_t> m_timecode_syncs; // As given on the command line
+  timecode_sync_t m_tcsync;                       // For this very track
 
-  std::map<int64_t, bool> reset_timecodes_specs;
-  bool reset_timecodes;
+  std::map<int64_t, bool> m_reset_timecodes_specs;
+  bool m_reset_timecodes;
 
-  std::map<int64_t, cue_strategy_e> cue_creations; // As given on the command line
-  cue_strategy_e cues;          // For this very track
+  std::map<int64_t, cue_strategy_e> m_cue_creations; // As given on the command line
+  cue_strategy_e m_cues;          // For this very track
 
-  std::map<int64_t, bool> default_track_flags; // As given on the command line
-  boost::logic::tribool default_track;    // For this very track
+  std::map<int64_t, bool> m_default_track_flags; // As given on the command line
+  boost::logic::tribool m_default_track;    // For this very track
 
-  std::map<int64_t, bool> forced_track_flags; // As given on the command line
-  boost::logic::tribool forced_track;    // For this very track
+  std::map<int64_t, bool> m_forced_track_flags; // As given on the command line
+  boost::logic::tribool m_forced_track;    // For this very track
 
-  std::map<int64_t, std::string> languages; // As given on the command line
-  std::string language;              // For this very track
+  std::map<int64_t, std::string> m_languages; // As given on the command line
+  std::string m_language;              // For this very track
 
-  std::map<int64_t, std::string> sub_charsets; // As given on the command line
-  std::string sub_charset;           // For this very track
+  std::map<int64_t, std::string> m_sub_charsets; // As given on the command line
+  std::string m_sub_charset;           // For this very track
 
-  std::map<int64_t, std::string> all_tags;     // As given on the command line
-  std::string tags_file_name;        // For this very track
-  KaxTags *tags;                // For this very track
+  std::map<int64_t, std::string> m_all_tags;     // As given on the command line
+  std::string m_tags_file_name;        // For this very track
+  KaxTags *m_tags;                // For this very track
 
-  std::map<int64_t, bool> all_aac_is_sbr; // For AAC+/HE-AAC/SBR
+  std::map<int64_t, bool> m_all_aac_is_sbr; // For AAC+/HE-AAC/SBR
 
-  std::map<int64_t, compression_method_e> compression_list; // As given on the cmd line
-  compression_method_e compression; // For this very track
+  std::map<int64_t, compression_method_e> m_compression_list; // As given on the cmd line
+  compression_method_e m_compression; // For this very track
 
-  std::map<int64_t, std::string> track_names; // As given on the command line
-  std::string track_name;            // For this very track
+  std::map<int64_t, std::string> m_track_names; // As given on the command line
+  std::string m_track_name;            // For this very track
 
-  std::map<int64_t, std::string> all_ext_timecodes; // As given on the command line
-  std::string ext_timecodes;         // For this very track
+  std::map<int64_t, std::string> m_all_ext_timecodes; // As given on the command line
+  std::string m_ext_timecodes;         // For this very track
 
-  std::map<int64_t, pixel_crop_t> pixel_crop_list; // As given on the command line
-  pixel_crop_t pixel_cropping;  // For this very track
-  parameter_source_e pixel_cropping_source;
+  std::map<int64_t, pixel_crop_t> m_pixel_crop_list; // As given on the command line
+  pixel_crop_t m_pixel_cropping;  // For this very track
+  parameter_source_e m_pixel_cropping_source;
 
-  std::map<int64_t, stereo_mode_e> stereo_mode_list; // As given on the command line
-  stereo_mode_e stereo_mode;                    // For this very track
-  parameter_source_e stereo_mode_source;
+  std::map<int64_t, stereo_mode_e> m_stereo_mode_list; // As given on the command line
+  stereo_mode_e m_stereo_mode;                    // For this very track
+  parameter_source_e m_stereo_mode_source;
 
-  std::map<int64_t, int64_t> default_durations; // As given on the command line
-  std::map<int64_t, int> max_blockadd_ids; // As given on the command line
+  std::map<int64_t, int64_t> m_default_durations; // As given on the command line
+  std::map<int64_t, int> m_max_blockadd_ids; // As given on the command line
 
-  std::map<int64_t, int> nalu_size_lengths;
-  int nalu_size_length;
+  std::map<int64_t, int> m_nalu_size_lengths;
+  int m_nalu_size_length;
 
-  std::map<int64_t, attach_mode_e> attach_mode_list; // As given on the command line
+  std::map<int64_t, attach_mode_e> m_attach_mode_list; // As given on the command line
 
-  bool no_chapters, no_attachments, no_global_tags;
+  bool m_no_chapters, m_no_attachments, m_no_global_tags;
 
   // Some file formats can contain chapters, but for some the charset
   // cannot be identified unambiguously (*cough* OGM *cough*).
-  std::string chapter_charset, chapter_language;
+  std::string m_chapter_charset, m_chapter_language;
 
   // The following variables are needed for the broken way of
   // syncing audio in AVIs: by prepending it with trash. Thanks to
   // the nandub author for this really, really sucky implementation.
-  uint16_t avi_block_align;
-  uint32_t avi_samples_per_sec;
-  uint32_t avi_avg_bytes_per_sec;
-  uint32_t avi_samples_per_chunk;
-  uint32_t avi_sample_scale;
-  std::vector<int64_t> avi_block_sizes;
-  bool avi_audio_sync_enabled;
+  uint16_t m_avi_block_align, m_avi_samples_per_sec, m_avi_avg_bytes_per_sec, m_avi_samples_per_chunk,  m_avi_sample_scale;
+  std::vector<int64_t> m_avi_block_sizes;
+  bool m_avi_audio_sync_enabled;
 
 public:
   track_info_c();
   track_info_c(const track_info_c &src)
-    : initialized(false)
+    : m_initialized(false)
   {
     *this = src;
   }
@@ -505,10 +501,10 @@ public:
   virtual int process(packet_cptr packet) = 0;
 
   virtual void set_cue_creation(cue_strategy_e create_cue_data) {
-    ti.cues = create_cue_data;
+    ti.m_cues = create_cue_data;
   }
   virtual cue_strategy_e get_cue_creation() {
-    return ti.cues;
+    return ti.m_cues;
   }
   virtual int64_t get_last_cue_timecode() {
     return last_cue_timecode;
@@ -524,7 +520,7 @@ public:
     return hserialno;
   }
   virtual int64_t get_source_track_num() {
-    return ti.id;
+    return ti.m_id;
   }
 
   virtual int set_uid(uint32_t uid);
@@ -586,12 +582,12 @@ public:
                        int64_t p_append_timecode_offset = -1);
 
   virtual void enable_avi_audio_sync(bool enable) {
-    ti.avi_audio_sync_enabled = enable;
+    ti.m_avi_audio_sync_enabled = enable;
   }
   virtual int64_t handle_avi_audio_sync(int64_t num_bytes, bool vbr);
   virtual void add_avi_block_size(int64_t block_size) {
-    if (ti.avi_audio_sync_enabled)
-      ti.avi_block_sizes.push_back(block_size);
+    if (ti.m_avi_audio_sync_enabled)
+      ti.m_avi_block_sizes.push_back(block_size);
   }
 
   virtual void set_displacement_maybe(int64_t displacement);

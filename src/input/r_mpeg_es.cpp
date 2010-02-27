@@ -124,7 +124,7 @@ mpeg_es_reader_c::mpeg_es_reader_c(track_info_c &_ti)
   try {
     M2VParser parser;
 
-    io   = new mm_file_io_c(ti.fname);
+    io   = new mm_file_io_c(ti.m_fname);
     size = io->get_size();
 
     // Let's find the first frame. We need its information like
@@ -151,8 +151,8 @@ mpeg_es_reader_c::mpeg_es_reader_c(track_info_c &_ti)
 
     MPEGChunk *raw_seq_hdr = parser.GetRealSequenceHeader();
     if (NULL != raw_seq_hdr) {
-      ti.private_data = (unsigned char *)safememdup(raw_seq_hdr->GetPointer(), raw_seq_hdr->GetSize());
-      ti.private_size = raw_seq_hdr->GetSize();
+      ti.m_private_data = (unsigned char *)safememdup(raw_seq_hdr->GetPointer(), raw_seq_hdr->GetSize());
+      ti.m_private_size = raw_seq_hdr->GetSize();
     }
 
     mxverb(2, boost::format("mpeg_es_reader: version %1% width %2% height %3% FPS %4% AR %5%\n") % version % width % height % frame_rate % aspect_ratio);
@@ -161,7 +161,7 @@ mpeg_es_reader_c::mpeg_es_reader_c(track_info_c &_ti)
     throw error_c(Y("mpeg_es_reader: Could not open the file."));
   }
   if (verbose)
-    mxinfo_fn(ti.fname, Y("Using the MPEG ES demultiplexer.\n"));
+    mxinfo_fn(ti.m_fname, Y("Using the MPEG ES demultiplexer.\n"));
 }
 
 mpeg_es_reader_c::~mpeg_es_reader_c() {
@@ -173,7 +173,7 @@ mpeg_es_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  mxinfo_tid(ti.fname, 0, Y("Using the MPEG-1/2 video output module.\n"));
+  mxinfo_tid(ti.m_fname, 0, Y("Using the MPEG-1/2 video output module.\n"));
   add_packetizer(new mpeg1_2_video_packetizer_c(this, ti, version, frame_rate, width, height, dwidth, dheight, false));
 }
 

@@ -50,9 +50,9 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *p_reader,
   } else {
     set_codec_id(MKV_V_MPEG4_ASP);
     if (!m_input_is_native) {
-      safefree(ti.private_data);
-      ti.private_data = NULL;
-      ti.private_size = 0;
+      safefree(ti.m_private_data);
+      ti.m_private_data = NULL;
+      ti.m_private_size = 0;
     }
 
     // If no external timecode file has been specified then mkvmerge
@@ -60,7 +60,7 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *p_reader,
     // command line argument. This factory must be disabled for this
     // packetizer because it takes care of handling the default
     // duration/FPS itself.
-    if (ti.ext_timecodes.empty())
+    if (ti.m_ext_timecodes.empty())
       timecode_factory = timecode_factory_cptr(NULL);
 
     if (default_duration_forced)
@@ -117,8 +117,8 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
     }
 
   } else if (0.0 == m_fps)
-    mxerror_tid(ti.fname, ti.id, Y("Cannot convert non-native MPEG4 video frames into native ones if the source container "
-                                   "provides neither timecodes nor a number of frames per second.\n"));
+    mxerror_tid(ti.m_fname, ti.m_id, Y("Cannot convert non-native MPEG4 video frames into native ones if the source container "
+                                       "provides neither timecodes nor a number of frames per second.\n"));
 
   std::vector<video_frame_t> frames;
   mpeg4::p2::find_frame_types(packet->data->get_buffer(), packet->data->get_size(), frames, m_config_data);
@@ -176,19 +176,19 @@ mpeg4_p2_video_packetizer_c::process_non_native(packet_cptr packet) {
 
 void
 mpeg4_p2_video_packetizer_c::extract_config_data(packet_cptr &packet) {
-  if (NULL != ti.private_data)
+  if (NULL != ti.m_private_data)
     return;
 
   memory_c *config_data = mpeg4::p2::parse_config_data(packet->data->get_buffer(), packet->data->get_size(), m_config_data);
   if (NULL == config_data)
-    mxerror_tid(ti.fname, ti.id, Y("Could not find the codec configuration data in the first MPEG-4 part 2 video frame. This track cannot be stored in native mode.\n"));
+    mxerror_tid(ti.m_fname, ti.m_id, Y("Could not find the codec configuration data in the first MPEG-4 part 2 video frame. This track cannot be stored in native mode.\n"));
 
-  ti.private_data = (unsigned char *)safememdup(config_data->get_buffer(), config_data->get_size());
-  ti.private_size = config_data->get_size();
+  ti.m_private_data = (unsigned char *)safememdup(config_data->get_buffer(), config_data->get_size());
+  ti.m_private_size = config_data->get_size();
   delete config_data;
 
   fix_codec_string();
-  set_codec_private(ti.private_data, ti.private_size);
+  set_codec_private(ti.m_private_data, ti.m_private_size);
   rerender_track_headers();
 }
 
@@ -196,13 +196,13 @@ void
 mpeg4_p2_video_packetizer_c::fix_codec_string() {
   static const unsigned char start_code[4] = {0x00, 0x00, 0x01, 0xb2};
 
-  if ((NULL == ti.private_data) || (0 == ti.private_size))
+  if ((NULL == ti.m_private_data) || (0 == ti.m_private_size))
     return;
 
-  int size = ti.private_size;
+  int size = ti.m_private_size;
   int i;
   for (i = 0; 9 < size;) {
-    if (memcmp(&ti.private_data[i], start_code, 4) != 0) {
+    if (memcmp(&ti.m_private_data[i], start_code, 4) != 0) {
       ++i;
       --size;
       continue;
@@ -210,12 +210,12 @@ mpeg4_p2_video_packetizer_c::fix_codec_string() {
 
     i    += 8;
     size -= 8;
-    if (strncasecmp((const char *)&ti.private_data[i - 4], "divx", 4) != 0)
+    if (strncasecmp((const char *)&ti.m_private_data[i - 4], "divx", 4) != 0)
       continue;
 
-    unsigned char *end_pos = (unsigned char *)memchr(&ti.private_data[i], 0, size);
+    unsigned char *end_pos = (unsigned char *)memchr(&ti.m_private_data[i], 0, size);
     if (NULL == end_pos)
-      end_pos = &ti.private_data[i + size];
+      end_pos = &ti.m_private_data[i + size];
 
     --end_pos;
     if ('p' == *end_pos)
@@ -337,7 +337,7 @@ mpeg4_p2_video_packetizer_c::extract_aspect_ratio(const unsigned char *buffer,
 
     generic_packetizer_c::set_headers();
     rerender_track_headers();
-    mxinfo_tid(ti.fname, ti.id,
+    mxinfo_tid(ti.m_fname, ti.m_id,
                boost::format(Y("Extracted the aspect ratio information from the MPEG4 layer 2 video data and set the display dimensions to %1%/%2%.\n"))
                % hvideo_display_width % hvideo_display_height);
 
@@ -365,11 +365,11 @@ mpeg4_p2_video_packetizer_c::extract_size(const unsigned char *buffer,
       set_video_pixel_width(xtr_width);
       set_video_pixel_height(xtr_height);
 
-      if (!m_output_is_native && (sizeof(alBITMAPINFOHEADER) <= ti.private_size)) {
-        alBITMAPINFOHEADER *bih = (alBITMAPINFOHEADER *)ti.private_data;
+      if (!m_output_is_native && (sizeof(alBITMAPINFOHEADER) <= ti.m_private_size)) {
+        alBITMAPINFOHEADER *bih = (alBITMAPINFOHEADER *)ti.m_private_data;
         put_uint32_le(&bih->bi_width,  xtr_width);
         put_uint32_le(&bih->bi_height, xtr_height);
-        set_codec_private(ti.private_data, ti.private_size);
+        set_codec_private(ti.m_private_data, ti.m_private_size);
       }
 
       hvideo_display_width  = -1;
@@ -378,7 +378,7 @@ mpeg4_p2_video_packetizer_c::extract_size(const unsigned char *buffer,
       generic_packetizer_c::set_headers();
       rerender_track_headers();
 
-      mxinfo_tid(ti.fname, ti.id,
+      mxinfo_tid(ti.m_fname, ti.m_id,
                  boost::format(Y("The extracted values for video width and height from the MPEG4 layer 2 video data bitstream differ from what the values "
                                  "in the source container. The ones from the video data bitstream (%1%x%2%) will be used.\n")) % xtr_width % xtr_height);
     }

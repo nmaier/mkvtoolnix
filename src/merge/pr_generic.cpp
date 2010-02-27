@@ -46,10 +46,10 @@
    : track_video == track_type ? DEFTRACK_TYPE_VIDEO \
    :                             DEFTRACK_TYPE_SUBS)
 
-#define LOOKUP_TRACK_ID(container)          \
-      map_has_key(container, ti.id) ? ti.id \
-    : map_has_key(container, -1)    ? -1    \
-    :                                 -2
+#define LOOKUP_TRACK_ID(container)              \
+      map_has_key(container, ti.m_id) ? ti.m_id \
+    : map_has_key(container, -1)      ? -1      \
+    :                                   -2
 
 
 int64_t packet_t::sm_packet_number_counter = 0;
@@ -104,161 +104,161 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *p_reader,
   , relaxed_timecode_checking(false)
 {
   // Let's see if the user specified timecode sync for this track.
-  if (map_has_key(ti.timecode_syncs, ti.id))
-    ti.tcsync = ti.timecode_syncs[ti.id];
-  else if (map_has_key(ti.timecode_syncs, -1))
-    ti.tcsync = ti.timecode_syncs[-1];
-  if (0 == ti.tcsync.numerator)
-    ti.tcsync.numerator = 1;
-  if (0 == ti.tcsync.denominator)
-    ti.tcsync.denominator = 1;
+  if (map_has_key(ti.m_timecode_syncs, ti.m_id))
+    ti.m_tcsync = ti.m_timecode_syncs[ti.m_id];
+  else if (map_has_key(ti.m_timecode_syncs, -1))
+    ti.m_tcsync = ti.m_timecode_syncs[-1];
+  if (0 == ti.m_tcsync.numerator)
+    ti.m_tcsync.numerator = 1;
+  if (0 == ti.m_tcsync.denominator)
+    ti.m_tcsync.denominator = 1;
 
   // Let's see if the user specified "reset timecodes" for this track.
-  ti.reset_timecodes = map_has_key(ti.reset_timecodes_specs, ti.id) || map_has_key(ti.reset_timecodes_specs, -1);
+  ti.m_reset_timecodes = map_has_key(ti.m_reset_timecodes_specs, ti.m_id) || map_has_key(ti.m_reset_timecodes_specs, -1);
 
   // Let's see if the user has specified which cues he wants for this track.
-  if (map_has_key(ti.cue_creations, ti.id))
-    ti.cues = ti.cue_creations[ti.id];
-  else if (map_has_key(ti.cue_creations, -1))
-    ti.cues = ti.cue_creations[-1];
+  if (map_has_key(ti.m_cue_creations, ti.m_id))
+    ti.m_cues = ti.m_cue_creations[ti.m_id];
+  else if (map_has_key(ti.m_cue_creations, -1))
+    ti.m_cues = ti.m_cue_creations[-1];
 
   // Let's see if the user has given a default track flag for this track.
-  if (map_has_key(ti.default_track_flags, ti.id))
-    ti.default_track = ti.default_track_flags[ti.id];
-  else if (map_has_key(ti.default_track_flags, -1))
-    ti.default_track = ti.default_track_flags[-1];
+  if (map_has_key(ti.m_default_track_flags, ti.m_id))
+    ti.m_default_track = ti.m_default_track_flags[ti.m_id];
+  else if (map_has_key(ti.m_default_track_flags, -1))
+    ti.m_default_track = ti.m_default_track_flags[-1];
 
   // Let's see if the user has given a forced track flag for this track.
-  if (map_has_key(ti.forced_track_flags, ti.id))
-    ti.forced_track = ti.forced_track_flags[ti.id];
-  else if (map_has_key(ti.forced_track_flags, -1))
-    ti.forced_track = ti.forced_track_flags[-1];
+  if (map_has_key(ti.m_forced_track_flags, ti.m_id))
+    ti.m_forced_track = ti.m_forced_track_flags[ti.m_id];
+  else if (map_has_key(ti.m_forced_track_flags, -1))
+    ti.m_forced_track = ti.m_forced_track_flags[-1];
 
   // Let's see if the user has specified a language for this track.
-  if (map_has_key(ti.languages, ti.id))
-    ti.language = ti.languages[ti.id];
-  else if (map_has_key(ti.languages, -1))
-    ti.language = ti.languages[-1];
+  if (map_has_key(ti.m_languages, ti.m_id))
+    ti.m_language = ti.m_languages[ti.m_id];
+  else if (map_has_key(ti.m_languages, -1))
+    ti.m_language = ti.m_languages[-1];
 
   // Let's see if the user has specified a sub charset for this track.
-  if (map_has_key(ti.sub_charsets, ti.id))
-    ti.sub_charset = ti.sub_charsets[ti.id];
-  else if (map_has_key(ti.sub_charsets, -1))
-    ti.sub_charset = ti.sub_charsets[-1];
+  if (map_has_key(ti.m_sub_charsets, ti.m_id))
+    ti.m_sub_charset = ti.m_sub_charsets[ti.m_id];
+  else if (map_has_key(ti.m_sub_charsets, -1))
+    ti.m_sub_charset = ti.m_sub_charsets[-1];
 
   // Let's see if the user has specified a sub charset for this track.
-  if (map_has_key(ti.all_tags, ti.id))
-    ti.tags_file_name = ti.all_tags[ti.id];
-  else if (map_has_key(ti.all_tags, -1))
-    ti.tags_file_name = ti.all_tags[-1];
-  if (ti.tags_file_name != "") {
-    delete ti.tags;
-    ti.tags = new KaxTags;
-    parse_xml_tags(ti.tags_file_name, ti.tags);
+  if (map_has_key(ti.m_all_tags, ti.m_id))
+    ti.m_tags_file_name = ti.m_all_tags[ti.m_id];
+  else if (map_has_key(ti.m_all_tags, -1))
+    ti.m_tags_file_name = ti.m_all_tags[-1];
+  if (ti.m_tags_file_name != "") {
+    delete ti.m_tags;
+    ti.m_tags = new KaxTags;
+    parse_xml_tags(ti.m_tags_file_name, ti.m_tags);
   }
 
   // Let's see if the user has specified how this track should be compressed.
-  if (map_has_key(ti.compression_list, ti.id))
-    ti.compression = ti.compression_list[ti.id];
-  else if (map_has_key(ti.compression_list, -1))
-    ti.compression = ti.compression_list[-1];
+  if (map_has_key(ti.m_compression_list, ti.m_id))
+    ti.m_compression = ti.m_compression_list[ti.m_id];
+  else if (map_has_key(ti.m_compression_list, -1))
+    ti.m_compression = ti.m_compression_list[-1];
 
   // Let's see if the user has specified a name for this track.
-  if (map_has_key(ti.track_names, ti.id))
-    ti.track_name = ti.track_names[ti.id];
-  else if (map_has_key(ti.track_names, -1))
-    ti.track_name = ti.track_names[-1];
+  if (map_has_key(ti.m_track_names, ti.m_id))
+    ti.m_track_name = ti.m_track_names[ti.m_id];
+  else if (map_has_key(ti.m_track_names, -1))
+    ti.m_track_name = ti.m_track_names[-1];
 
   // Let's see if the user has specified external timecodes for this track.
-  if (map_has_key(ti.all_ext_timecodes, ti.id))
-    ti.ext_timecodes = ti.all_ext_timecodes[ti.id];
-  else if (map_has_key(ti.all_ext_timecodes, -1))
-    ti.ext_timecodes = ti.all_ext_timecodes[-1];
+  if (map_has_key(ti.m_all_ext_timecodes, ti.m_id))
+    ti.m_ext_timecodes = ti.m_all_ext_timecodes[ti.m_id];
+  else if (map_has_key(ti.m_all_ext_timecodes, -1))
+    ti.m_ext_timecodes = ti.m_all_ext_timecodes[-1];
 
   // Let's see if the user has specified an aspect ratio or display dimensions
   // for this track.
-  int i = LOOKUP_TRACK_ID(ti.display_properties);
+  int i = LOOKUP_TRACK_ID(ti.m_display_properties);
   if (-2 != i) {
-    display_properties_t &dprop = ti.display_properties[i];
+    display_properties_t &dprop = ti.m_display_properties[i];
     if (0 > dprop.aspect_ratio) {
       set_video_display_dimensions(dprop.width, dprop.height, PARAMETER_SOURCE_CMDLINE);
     } else {
       set_video_aspect_ratio(dprop.aspect_ratio, dprop.ar_factor, PARAMETER_SOURCE_CMDLINE);
-      ti.aspect_ratio_given = true;
+      ti.m_aspect_ratio_given = true;
     }
   }
 
-  if (ti.aspect_ratio_given && ti.display_dimensions_given) {
-    if (ti.aspect_ratio_is_factor)
-      mxerror_tid(ti.fname, ti.id, boost::format(Y("Both the aspect ratio factor and '--display-dimensions' were given.\n")));
+  if (ti.m_aspect_ratio_given && ti.m_display_dimensions_given) {
+    if (ti.m_aspect_ratio_is_factor)
+      mxerror_tid(ti.m_fname, ti.m_id, boost::format(Y("Both the aspect ratio factor and '--display-dimensions' were given.\n")));
     else
-      mxerror_tid(ti.fname, ti.id, boost::format(Y("Both the aspect ratio and '--display-dimensions' were given.\n")));
+      mxerror_tid(ti.m_fname, ti.m_id, boost::format(Y("Both the aspect ratio and '--display-dimensions' were given.\n")));
   }
 
   // Let's see if the user has specified a FourCC for this track.
-  if (map_has_key(ti.all_fourccs, ti.id))
-    ti.fourcc = ti.all_fourccs[ti.id];
-  else if (map_has_key(ti.all_fourccs, -1))
-    ti.fourcc = ti.all_fourccs[-1];
+  if (map_has_key(ti.m_all_fourccs, ti.m_id))
+    ti.m_fourcc = ti.m_all_fourccs[ti.m_id];
+  else if (map_has_key(ti.m_all_fourccs, -1))
+    ti.m_fourcc = ti.m_all_fourccs[-1];
 
   // Let's see if the user has specified a FourCC for this track.
-  i = LOOKUP_TRACK_ID(ti.pixel_crop_list);
+  i = LOOKUP_TRACK_ID(ti.m_pixel_crop_list);
   if (-2 != i)
-    set_video_pixel_cropping(ti.pixel_crop_list[i], PARAMETER_SOURCE_CMDLINE);
+    set_video_pixel_cropping(ti.m_pixel_crop_list[i], PARAMETER_SOURCE_CMDLINE);
 
   // Let's see if the user has specified a stereo mode for this track.
-  i = LOOKUP_TRACK_ID(ti.stereo_mode_list);
+  i = LOOKUP_TRACK_ID(ti.m_stereo_mode_list);
   if (-2 != i)
-    set_video_stereo_mode(ti.stereo_mode_list[ti.id], PARAMETER_SOURCE_CMDLINE);
+    set_video_stereo_mode(ti.m_stereo_mode_list[ti.m_id], PARAMETER_SOURCE_CMDLINE);
 
   // Let's see if the user has specified a default duration for this track.
-  if (map_has_key(ti.default_durations, ti.id))
-    htrack_default_duration = ti.default_durations[ti.id];
-  else if (map_has_key(ti.default_durations, -1))
-    htrack_default_duration = ti.default_durations[-1];
+  if (map_has_key(ti.m_default_durations, ti.m_id))
+    htrack_default_duration = ti.m_default_durations[ti.m_id];
+  else if (map_has_key(ti.m_default_durations, -1))
+    htrack_default_duration = ti.m_default_durations[-1];
   else
     default_duration_forced = false;
 
   // Let's see if the user has set a max_block_add_id
-  if (map_has_key(ti.max_blockadd_ids, ti.id))
-    htrack_max_add_block_ids = ti.max_blockadd_ids[ti.id];
-  else if (map_has_key(ti.max_blockadd_ids, -1))
-    htrack_max_add_block_ids = ti.max_blockadd_ids[-1];
+  if (map_has_key(ti.m_max_blockadd_ids, ti.m_id))
+    htrack_max_add_block_ids = ti.m_max_blockadd_ids[ti.m_id];
+  else if (map_has_key(ti.m_max_blockadd_ids, -1))
+    htrack_max_add_block_ids = ti.m_max_blockadd_ids[-1];
 
   // Let's see if the user has specified a NALU size length for this track.
-  if (map_has_key(ti.nalu_size_lengths, ti.id))
-    ti.nalu_size_length = ti.nalu_size_lengths[ti.id];
-  else if (map_has_key(ti.nalu_size_lengths, -1))
-    ti.nalu_size_length = ti.nalu_size_lengths[-1];
+  if (map_has_key(ti.m_nalu_size_lengths, ti.m_id))
+    ti.m_nalu_size_length = ti.m_nalu_size_lengths[ti.m_id];
+  else if (map_has_key(ti.m_nalu_size_lengths, -1))
+    ti.m_nalu_size_length = ti.m_nalu_size_lengths[-1];
 
   // Set default header values to 'unset'.
   if (!reader->appending)
-    hserialno = create_track_number(reader, ti.id);
+    hserialno = create_track_number(reader, ti.m_id);
 
-  timecode_factory = timecode_factory_c::create(ti.ext_timecodes, ti.fname, ti.id);
+  timecode_factory = timecode_factory_c::create(ti.m_ext_timecodes, ti.m_fname, ti.m_id);
 
   // If no external timecode file but a default duration has been
   // given then create a simple timecode factory that generates the
   // timecodes for the given FPS.
   if (!timecode_factory.is_set() && (-1 != htrack_default_duration))
-    timecode_factory = timecode_factory_c::create_fps_factory(htrack_default_duration, ti.fname, ti.id);
+    timecode_factory = timecode_factory_c::create_fps_factory(htrack_default_duration, ti.m_fname, ti.m_id);
 }
 
 generic_packetizer_c::~generic_packetizer_c() {
   safefree(hcodec_private);
   if (!packet_queue.empty())
-    mxerror_tid(ti.fname, ti.id, boost::format(Y("Packet queue not empty (flushed: %1%). Frames have been lost during remux. %2%\n")) % has_been_flushed % BUGMSG);
+    mxerror_tid(ti.m_fname, ti.m_id, boost::format(Y("Packet queue not empty (flushed: %1%). Frames have been lost during remux. %2%\n")) % has_been_flushed % BUGMSG);
 }
 
 void
 generic_packetizer_c::set_tag_track_uid() {
-  if (NULL == ti.tags)
+  if (NULL == ti.m_tags)
     return;
 
-  convert_old_tags(*ti.tags);
+  convert_old_tags(*ti.m_tags);
   int idx_tags;
-  for (idx_tags = 0; ti.tags->ListSize() > idx_tags; ++idx_tags) {
-    KaxTag *tag = (KaxTag *)(*ti.tags)[idx_tags];
+  for (idx_tags = 0; ti.m_tags->ListSize() > idx_tags; ++idx_tags) {
+    KaxTag *tag = (KaxTag *)(*ti.m_tags)[idx_tags];
 
     int idx_tag;
     for (idx_tag = 0; tag->ListSize() > idx_tag; idx_tag++) {
@@ -287,7 +287,7 @@ generic_packetizer_c::set_tag_track_uid() {
 
     if (!tag->CheckMandatory())
       mxerror(boost::format(Y("The tags in '%1%' could not be parsed: some mandatory elements are missing.\n"))
-              % (ti.tags_file_name != "" ? ti.tags_file_name : ti.fname));
+              % (ti.m_tags_file_name != "" ? ti.m_tags_file_name : ti.m_fname));
   }
 }
 
@@ -310,8 +310,8 @@ generic_packetizer_c::set_track_type(int type,
                                      timecode_factory_application_e tfa_mode) {
   htrack_type = type;
 
-  if ((track_audio == type) && (CUE_STRATEGY_UNSPECIFIED == ti.cues))
-    ti.cues = CUE_STRATEGY_SPARSE;
+  if ((track_audio == type) && (CUE_STRATEGY_UNSPECIFIED == ti.m_cues))
+    ti.m_cues = CUE_STRATEGY_SPARSE;
 
   if (track_audio == type)
     reader->num_audio_tracks++;
@@ -341,9 +341,9 @@ generic_packetizer_c::set_track_type(int type,
 
 void
 generic_packetizer_c::set_track_name(const std::string &name) {
-  ti.track_name = name;
+  ti.m_track_name = name;
   if ((NULL != track_entry) && !name.empty())
-    GetChildAs<KaxTrackName, EbmlUnicodeString>(track_entry) = cstrutf8_to_UTFstring(ti.track_name);
+    GetChildAs<KaxTrackName, EbmlUnicodeString>(track_entry) = cstrutf8_to_UTFstring(ti.m_track_name);
 }
 
 void
@@ -390,7 +390,7 @@ generic_packetizer_c::set_track_default_duration(int64_t def_dur) {
   if (default_duration_forced)
     return;
 
-  htrack_default_duration = (int64_t)(def_dur * ti.tcsync.numerator / ti.tcsync.denominator);
+  htrack_default_duration = (int64_t)(def_dur * ti.m_tcsync.numerator / ti.m_tcsync.denominator);
 
   if (NULL != track_entry)
     GetChildAs<KaxTrackDefaultDuration, EbmlUInteger>(track_entry) = htrack_default_duration;
@@ -410,7 +410,7 @@ generic_packetizer_c::get_track_default_duration() {
 
 void
 generic_packetizer_c::set_track_forced_flag(bool forced_track) {
-  ti.forced_track = forced_track;
+  ti.m_forced_track = forced_track;
   if (NULL != track_entry)
     GetChildAs<KaxTrackFlagForced, EbmlUInteger>(track_entry) = forced_track ? 1 : 0;
 }
@@ -475,14 +475,14 @@ void
 generic_packetizer_c::set_video_display_dimensions(int width,
                                                    int height,
                                                    parameter_source_e source) {
-  if (display_dimensions_or_aspect_ratio_set() && (ti.display_dimensions_source >= source))
+  if (display_dimensions_or_aspect_ratio_set() && (ti.m_display_dimensions_source >= source))
     return;
 
-  ti.display_width             = width;
-  ti.display_height            = height;
-  ti.display_dimensions_source = source;
-  ti.display_dimensions_given  = true;
-  ti.aspect_ratio_given        = false;
+  ti.m_display_width             = width;
+  ti.m_display_height            = height;
+  ti.m_display_dimensions_source = source;
+  ti.m_display_dimensions_given  = true;
+  ti.m_aspect_ratio_given        = false;
 
   set_video_display_width(width);
   set_video_display_height(height);
@@ -493,14 +493,14 @@ void
 generic_packetizer_c::set_video_aspect_ratio(double aspect_ratio,
                                              bool is_factor,
                                              parameter_source_e source) {
-  if (display_dimensions_or_aspect_ratio_set() && (ti.display_dimensions_source >= source))
+  if (display_dimensions_or_aspect_ratio_set() && (ti.m_display_dimensions_source >= source))
     return;
 
-  ti.aspect_ratio              = aspect_ratio;
-  ti.aspect_ratio_is_factor    = is_factor;
-  ti.display_dimensions_source = source;
-  ti.display_dimensions_given  = false;
-  ti.aspect_ratio_given        = true;
+  ti.m_aspect_ratio              = aspect_ratio;
+  ti.m_aspect_ratio_is_factor    = is_factor;
+  ti.m_display_dimensions_source = source;
+  ti.m_display_dimensions_given  = false;
+  ti.m_aspect_ratio_given        = true;
 }
 
 void
@@ -514,16 +514,16 @@ generic_packetizer_c::set_as_default_track(int type,
              && (g_default_tracks[type] != hserialno)
              && !default_track_warning_printed) {
     mxwarn(boost::format(Y("Another default track for %1% tracks has already been set. The 'default' flag for track %2% of '%3%' will not be set.\n"))
-           % (DEFTRACK_TYPE_AUDIO == type ? "audio" : DEFTRACK_TYPE_VIDEO == type ? "video" : "subtitle") % ti.id % ti.fname);
+           % (DEFTRACK_TYPE_AUDIO == type ? "audio" : DEFTRACK_TYPE_VIDEO == type ? "video" : "subtitle") % ti.m_id % ti.m_fname);
     default_track_warning_printed = true;
   }
 }
 
 void
 generic_packetizer_c::set_language(const std::string &language) {
-  ti.language = language;
+  ti.m_language = language;
   if (NULL != track_entry)
-    GetChildAs<KaxTrackLanguage, EbmlString>(track_entry) = ti.language;
+    GetChildAs<KaxTrackLanguage, EbmlString>(track_entry) = ti.m_language;
 }
 
 void
@@ -532,22 +532,22 @@ generic_packetizer_c::set_video_pixel_cropping(int left,
                                                int right,
                                                int bottom,
                                                parameter_source_e source) {
-  if (source <= ti.pixel_cropping_source)
+  if (source <= ti.m_pixel_cropping_source)
     return;
 
-  ti.pixel_cropping.left   = left;
-  ti.pixel_cropping.top    = top;
-  ti.pixel_cropping.right  = right;
-  ti.pixel_cropping.bottom = bottom;
-  ti.pixel_cropping_source = source;
+  ti.m_pixel_cropping.left   = left;
+  ti.m_pixel_cropping.top    = top;
+  ti.m_pixel_cropping.right  = right;
+  ti.m_pixel_cropping.bottom = bottom;
+  ti.m_pixel_cropping_source = source;
 
   if (NULL != track_entry) {
     KaxTrackVideo &video = GetChild<KaxTrackVideo>(track_entry);
 
-    GetChildAs<KaxVideoPixelCropLeft,   EbmlUInteger>(video) = ti.pixel_cropping.left;
-    GetChildAs<KaxVideoPixelCropTop,    EbmlUInteger>(video) = ti.pixel_cropping.top;
-    GetChildAs<KaxVideoPixelCropRight,  EbmlUInteger>(video) = ti.pixel_cropping.right;
-    GetChildAs<KaxVideoPixelCropBottom, EbmlUInteger>(video) = ti.pixel_cropping.bottom;
+    GetChildAs<KaxVideoPixelCropLeft,   EbmlUInteger>(video) = ti.m_pixel_cropping.left;
+    GetChildAs<KaxVideoPixelCropTop,    EbmlUInteger>(video) = ti.m_pixel_cropping.top;
+    GetChildAs<KaxVideoPixelCropRight,  EbmlUInteger>(video) = ti.m_pixel_cropping.right;
+    GetChildAs<KaxVideoPixelCropBottom, EbmlUInteger>(video) = ti.m_pixel_cropping.bottom;
   }
 }
 
@@ -560,14 +560,14 @@ generic_packetizer_c::set_video_pixel_cropping(const pixel_crop_t &cropping,
 void
 generic_packetizer_c::set_video_stereo_mode(stereo_mode_e stereo_mode,
                                             parameter_source_e source) {
-  if (source <= ti.stereo_mode_source)
+  if (source <= ti.m_stereo_mode_source)
     return;
 
-  ti.stereo_mode        = stereo_mode;
-  ti.stereo_mode_source = source;
+  ti.m_stereo_mode        = stereo_mode;
+  ti.m_stereo_mode_source = source;
 
   if ((NULL != track_entry) && (STEREO_MODE_UNSPECIFIED != stereo_mode))
-    GetChildAs<KaxVideoStereoMode, EbmlUInteger>(GetChild<KaxTrackVideo>(*track_entry)) = ti.stereo_mode;
+    GetChildAs<KaxVideoStereoMode, EbmlUInteger>(GetChild<KaxTrackVideo>(*track_entry)) = ti.m_stereo_mode;
 }
 
 void
@@ -626,44 +626,44 @@ generic_packetizer_c::set_headers() {
 
   idx = TRACK_TYPE_TO_DEFTRACK_TYPE(htrack_type);
 
-  if (boost::logic::indeterminate(ti.default_track))
+  if (boost::logic::indeterminate(ti.m_default_track))
     set_as_default_track(idx, DEFAULT_TRACK_PRIORITY_FROM_TYPE);
-  else if (ti.default_track)
+  else if (ti.m_default_track)
     set_as_default_track(idx, DEFAULT_TRACK_PRIORITY_CMDLINE);
   else if (g_default_tracks[idx] == hserialno)
     g_default_tracks[idx] = 0;
 
-  GetChildAs<KaxTrackLanguage, EbmlString>(track_entry) = ti.language != "" ? ti.language : g_default_language.c_str();
+  GetChildAs<KaxTrackLanguage, EbmlString>(track_entry) = ti.m_language != "" ? ti.m_language : g_default_language.c_str();
 
-  if (!ti.track_name.empty())
-    GetChildAs<KaxTrackName, EbmlUnicodeString>(track_entry) = cstrutf8_to_UTFstring(ti.track_name);
+  if (!ti.m_track_name.empty())
+    GetChildAs<KaxTrackName, EbmlUnicodeString>(track_entry) = cstrutf8_to_UTFstring(ti.m_track_name);
 
-  if (!boost::logic::indeterminate(ti.forced_track))
-    GetChildAs<KaxTrackFlagForced, EbmlUInteger>(track_entry) = ti.forced_track ? 1 : 0;
+  if (!boost::logic::indeterminate(ti.m_forced_track))
+    GetChildAs<KaxTrackFlagForced, EbmlUInteger>(track_entry) = ti.m_forced_track ? 1 : 0;
 
   if (track_video == htrack_type) {
     KaxTrackVideo &video = GetChild<KaxTrackVideo>(track_entry);
 
     if ((-1 != hvideo_pixel_height) && (-1 != hvideo_pixel_width)) {
-      if ((-1 == hvideo_display_width) || (-1 == hvideo_display_height) || ti.aspect_ratio_given || ti.display_dimensions_given) {
-        if (ti.display_dimensions_given) {
-          hvideo_display_width  = ti.display_width;
-          hvideo_display_height = ti.display_height;
+      if ((-1 == hvideo_display_width) || (-1 == hvideo_display_height) || ti.m_aspect_ratio_given || ti.m_display_dimensions_given) {
+        if (ti.m_display_dimensions_given) {
+          hvideo_display_width  = ti.m_display_width;
+          hvideo_display_height = ti.m_display_height;
 
         } else {
-          if (!ti.aspect_ratio_given)
-            ti.aspect_ratio = (float)hvideo_pixel_width                   / (float)hvideo_pixel_height;
+          if (!ti.m_aspect_ratio_given)
+            ti.m_aspect_ratio = (float)hvideo_pixel_width                   / (float)hvideo_pixel_height;
 
-          else if (ti.aspect_ratio_is_factor)
-            ti.aspect_ratio = (float)hvideo_pixel_width * ti.aspect_ratio / (float)hvideo_pixel_height;
+          else if (ti.m_aspect_ratio_is_factor)
+            ti.m_aspect_ratio = (float)hvideo_pixel_width * ti.m_aspect_ratio / (float)hvideo_pixel_height;
 
-          if (ti.aspect_ratio > ((float)hvideo_pixel_width / (float)hvideo_pixel_height)) {
-            hvideo_display_width  = irnd(hvideo_pixel_height * ti.aspect_ratio);
+          if (ti.m_aspect_ratio > ((float)hvideo_pixel_width / (float)hvideo_pixel_height)) {
+            hvideo_display_width  = irnd(hvideo_pixel_height * ti.m_aspect_ratio);
             hvideo_display_height = hvideo_pixel_height;
 
           } else {
             hvideo_display_width  = hvideo_pixel_width;
-            hvideo_display_height = irnd(hvideo_pixel_width / ti.aspect_ratio);
+            hvideo_display_height = irnd(hvideo_pixel_width / ti.m_aspect_ratio);
           }
         }
       }
@@ -677,15 +677,15 @@ generic_packetizer_c::set_headers() {
       GetChild<KaxVideoDisplayWidth>(video).SetDefaultSize(4);
       GetChild<KaxVideoDisplayHeight>(video).SetDefaultSize(4);
 
-      if (PARAMETER_SOURCE_NONE != ti.pixel_cropping_source) {
-        GetChildAs<KaxVideoPixelCropLeft,   EbmlUInteger>(video) = ti.pixel_cropping.left;
-        GetChildAs<KaxVideoPixelCropTop,    EbmlUInteger>(video) = ti.pixel_cropping.top;
-        GetChildAs<KaxVideoPixelCropRight,  EbmlUInteger>(video) = ti.pixel_cropping.right;
-        GetChildAs<KaxVideoPixelCropBottom, EbmlUInteger>(video) = ti.pixel_cropping.bottom;
+      if (PARAMETER_SOURCE_NONE != ti.m_pixel_cropping_source) {
+        GetChildAs<KaxVideoPixelCropLeft,   EbmlUInteger>(video) = ti.m_pixel_cropping.left;
+        GetChildAs<KaxVideoPixelCropTop,    EbmlUInteger>(video) = ti.m_pixel_cropping.top;
+        GetChildAs<KaxVideoPixelCropRight,  EbmlUInteger>(video) = ti.m_pixel_cropping.right;
+        GetChildAs<KaxVideoPixelCropBottom, EbmlUInteger>(video) = ti.m_pixel_cropping.bottom;
       }
 
-      if ((PARAMETER_SOURCE_NONE != ti.stereo_mode_source) && (STEREO_MODE_UNSPECIFIED != ti.stereo_mode))
-        GetChildAs<KaxVideoStereoMode, EbmlUInteger>(video) = ti.stereo_mode;
+      if ((PARAMETER_SOURCE_NONE != ti.m_stereo_mode_source) && (STEREO_MODE_UNSPECIFIED != ti.m_stereo_mode))
+        GetChildAs<KaxVideoStereoMode, EbmlUInteger>(video) = ti.m_stereo_mode;
     }
 
   } else if (track_audio == htrack_type) {
@@ -713,8 +713,8 @@ generic_packetizer_c::set_headers() {
 
   }
 
-  if (COMPRESSION_UNSPECIFIED != ti.compression)
-    hcompression = ti.compression;
+  if (COMPRESSION_UNSPECIFIED != ti.m_compression)
+    hcompression = ti.m_compression;
   if ((COMPRESSION_UNSPECIFIED != hcompression) && (COMPRESSION_NONE != hcompression)) {
     KaxContentEncoding &c_encoding = GetChild<KaxContentEncoding>(GetChild<KaxContentEncodings>(track_entry));
 
@@ -730,11 +730,11 @@ generic_packetizer_c::set_headers() {
     track_entry->EnableLacing(false);
 
   set_tag_track_uid();
-  if (NULL != ti.tags) {
-    while (ti.tags->ListSize() != 0) {
-      KaxTag *tag = (KaxTag *)(*ti.tags)[0];
+  if (NULL != ti.m_tags) {
+    while (ti.m_tags->ListSize() != 0) {
+      KaxTag *tag = (KaxTag *)(*ti.m_tags)[0];
       add_tags(tag);
-      ti.tags->Remove(0);
+      ti.m_tags->Remove(0);
     }
   }
 }
@@ -748,8 +748,8 @@ generic_packetizer_c::fix_headers() {
 
 void
 generic_packetizer_c::add_packet(packet_cptr pack) {
-  if ((0 == m_num_packets) && ti.reset_timecodes)
-    ti.tcsync.displacement = -pack->timecode;
+  if ((0 == m_num_packets) && ti.m_reset_timecodes)
+    ti.m_tcsync.displacement = -pack->timecode;
 
   ++m_num_packets;
 
@@ -769,7 +769,7 @@ generic_packetizer_c::add_packet(packet_cptr pack) {
         compressor->compress(pack->data_adds[i]);
 
     } catch (compression_error_c &e) {
-      mxerror_tid(ti.fname, ti.id, boost::format(Y("Compression failed: %1%\n")) % e.get_error());
+      mxerror_tid(ti.m_fname, ti.m_id, boost::format(Y("Compression failed: %1%\n")) % e.get_error());
     }
 
   } else {
@@ -794,7 +794,7 @@ generic_packetizer_c::add_packet(packet_cptr pack) {
     deferred_packets.push_back(pack);
 }
 
-#define ADJUST_TIMECODE(x) (int64_t)((x + correction_timecode_offset + append_timecode_offset) * ti.tcsync.numerator / ti.tcsync.denominator) + ti.tcsync.displacement
+#define ADJUST_TIMECODE(x) (int64_t)((x + correction_timecode_offset + append_timecode_offset) * ti.m_tcsync.numerator / ti.m_tcsync.denominator) + ti.m_tcsync.displacement
 
 void
 generic_packetizer_c::add_packet2(packet_cptr pack) {
@@ -804,7 +804,7 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
   if (0 <= pack->fref)
     pack->fref     = ADJUST_TIMECODE(pack->fref);
   if (0 < pack->duration)
-    pack->duration = (int64_t)(pack->duration * ti.tcsync.numerator / ti.tcsync.denominator);
+    pack->duration = (int64_t)(pack->duration * ti.m_tcsync.numerator / ti.m_tcsync.denominator);
 
   if ((2 > htrack_min_cache) && (0 <= pack->fref)) {
     set_track_min_cache(2);
@@ -831,7 +831,7 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
       if (0 <= pack->fref)
         pack->fref += needed_timecode_offset;
 
-      mxwarn_tid(ti.fname, ti.id,
+      mxwarn_tid(ti.m_fname, ti.m_id,
                  boost::format(Y("The current packet's timecode is smaller than that of the previous packet. "
                                  "This usually means that the source file is a Matroska file that has not been created 100%% correctly. "
                                  "The timecodes of all packets will be adjusted by %1%ms in order not to lose any data. "
@@ -843,7 +843,7 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
                  % ((needed_timecode_offset + 500000) / 1000000));
 
     } else
-      mxwarn_tid(ti.fname, ti.id,
+      mxwarn_tid(ti.m_fname, ti.m_id,
                  boost::format(Y("pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < last_timecode (%1% < %2%). %3%\n"))
                  % format_timecode(pack->timecode) % format_timecode(safety_last_timecode) % BUGMSG);
   }
@@ -1013,37 +1013,37 @@ generic_packetizer_c::apply_factory_full_queueing(packet_cptr_di &p_start) {
 void
 generic_packetizer_c::force_duration_on_last_packet() {
   if (packet_queue.empty()) {
-    mxverb_tid(2, ti.fname, ti.id, "force_duration_on_last_packet: packet queue is empty\n");
+    mxverb_tid(2, ti.m_fname, ti.m_id, "force_duration_on_last_packet: packet queue is empty\n");
     return;
   }
   packet_cptr &packet        = packet_queue.back();
   packet->duration_mandatory = true;
-  mxverb_tid(2, ti.fname, ti.id,
+  mxverb_tid(2, ti.m_fname, ti.m_id,
              boost::format("force_duration_on_last_packet: forcing at %1% with %|2$.3f|ms\n") % format_timecode(packet->timecode) % (packet->duration / 1000.0));
 }
 
 int64_t
 generic_packetizer_c::handle_avi_audio_sync(int64_t num_bytes,
                                             bool vbr) {
-  if ((0 == ti.avi_samples_per_sec) || (0 == ti.avi_block_align) || (0 == ti.avi_avg_bytes_per_sec) || !ti.avi_audio_sync_enabled) {
+  if ((0 == ti.m_avi_samples_per_sec) || (0 == ti.m_avi_block_align) || (0 == ti.m_avi_avg_bytes_per_sec) || !ti.m_avi_audio_sync_enabled) {
     enable_avi_audio_sync(false);
     return -1;
   }
 
   int64_t duration;
   if (!vbr)
-     duration = num_bytes * 1000000000 / ti.avi_avg_bytes_per_sec;
+     duration = num_bytes * 1000000000 / ti.m_avi_avg_bytes_per_sec;
 
   else {
     int num_blocks = 0;
     int i;
-    for (i = 0; (ti.avi_block_sizes.size() > i) && (0 < num_bytes); ++i) {
-      int64_t block_size  = ti.avi_block_sizes[i];
-      num_blocks         += (block_size + ti.avi_block_align - 1) / ti.avi_block_align;
+    for (i = 0; (ti.m_avi_block_sizes.size() > i) && (0 < num_bytes); ++i) {
+      int64_t block_size  = ti.m_avi_block_sizes[i];
+      num_blocks         += (block_size + ti.m_avi_block_align - 1) / ti.m_avi_block_align;
       num_bytes          -= std::min(num_bytes, block_size);
     }
 
-    duration = static_cast<int64_t>(num_blocks * 1000000000ll * static_cast<double>(ti.avi_samples_per_chunk) / static_cast<double>(ti.avi_sample_scale));
+    duration = static_cast<int64_t>(num_blocks * 1000000000ll * static_cast<double>(ti.m_avi_samples_per_chunk) / static_cast<double>(ti.m_avi_sample_scale));
   }
 
   enable_avi_audio_sync(false);
@@ -1079,8 +1079,8 @@ generic_packetizer_c::connect(generic_packetizer_c *src,
 
 void
 generic_packetizer_c::set_displacement_maybe(int64_t displacement) {
-  if ((1 == ti.tcsync.numerator) && (1 == ti.tcsync.denominator) && (0 == ti.tcsync.displacement))
-    ti.tcsync.displacement = displacement;
+  if ((1 == ti.m_tcsync.numerator) && (1 == ti.m_tcsync.denominator) && (0 == ti.m_tcsync.displacement))
+    ti.m_tcsync.displacement = displacement;
 }
 
 bool
@@ -1121,24 +1121,24 @@ generic_reader_c::generic_reader_c(track_info_c &_ti)
   , reference_timecode_tolerance(0)
 {
 
-  add_all_requested_track_ids2(atracks);
-  add_all_requested_track_ids2(vtracks);
-  add_all_requested_track_ids2(stracks);
-  add_all_requested_track_ids2(btracks);
-  add_all_requested_track_ids2(track_tags);
-  add_all_requested_track_ids(std::string, all_fourccs);
-  add_all_requested_track_ids(display_properties_t, display_properties);
-  add_all_requested_track_ids(timecode_sync_t, timecode_syncs);
-  add_all_requested_track_ids(cue_strategy_e, cue_creations);
-  add_all_requested_track_ids(bool, default_track_flags);
-  add_all_requested_track_ids(std::string, languages);
-  add_all_requested_track_ids(std::string, sub_charsets);
-  add_all_requested_track_ids(std::string, all_tags);
-  add_all_requested_track_ids(bool, all_aac_is_sbr);
-  add_all_requested_track_ids(compression_method_e, compression_list);
-  add_all_requested_track_ids(std::string, track_names);
-  add_all_requested_track_ids(std::string, all_ext_timecodes);
-  add_all_requested_track_ids(pixel_crop_t, pixel_crop_list);
+  add_all_requested_track_ids2(m_atracks);
+  add_all_requested_track_ids2(m_vtracks);
+  add_all_requested_track_ids2(m_stracks);
+  add_all_requested_track_ids2(m_btracks);
+  add_all_requested_track_ids2(m_track_tags);
+  add_all_requested_track_ids(std::string,          m_all_fourccs);
+  add_all_requested_track_ids(display_properties_t, m_display_properties);
+  add_all_requested_track_ids(timecode_sync_t,      m_timecode_syncs);
+  add_all_requested_track_ids(cue_strategy_e,       m_cue_creations);
+  add_all_requested_track_ids(bool,                 m_default_track_flags);
+  add_all_requested_track_ids(std::string,          m_languages);
+  add_all_requested_track_ids(std::string,          m_sub_charsets);
+  add_all_requested_track_ids(std::string,          m_all_tags);
+  add_all_requested_track_ids(bool,                 m_all_aac_is_sbr);
+  add_all_requested_track_ids(compression_method_e, m_compression_list);
+  add_all_requested_track_ids(std::string,          m_track_names);
+  add_all_requested_track_ids(std::string,          m_all_ext_timecodes);
+  add_all_requested_track_ids(pixel_crop_t,         m_pixel_crop_list);
 }
 
 generic_reader_c::~generic_reader_c() {
@@ -1166,29 +1166,29 @@ generic_reader_c::demuxing_requested(char type,
   std::vector<int64_t> *tracks = NULL;
 
   if ('v' == type) {
-    if (ti.no_video)
+    if (ti.m_no_video)
       return false;
-    tracks = &ti.vtracks;
+    tracks = &ti.m_vtracks;
 
   } else if ('a' == type) {
-    if (ti.no_audio)
+    if (ti.m_no_audio)
       return false;
-    tracks = &ti.atracks;
+    tracks = &ti.m_atracks;
 
   } else if ('s' == type) {
-    if (ti.no_subs)
+    if (ti.m_no_subs)
       return false;
-    tracks = &ti.stracks;
+    tracks = &ti.m_stracks;
 
   } else if ('b' == type) {
-    if (ti.no_buttons)
+    if (ti.m_no_buttons)
       return false;
-    tracks = &ti.btracks;
+    tracks = &ti.m_btracks;
 
   } else if ('T' == type) {
-    if (ti.no_track_tags)
+    if (ti.m_no_track_tags)
       return false;
-    tracks = &ti.track_tags;
+    tracks = &ti.m_track_tags;
 
   } else
     mxerror(boost::format(Y("pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%.")) % type);
@@ -1206,17 +1206,17 @@ generic_reader_c::demuxing_requested(char type,
 
 attach_mode_e
 generic_reader_c::attachment_requested(int64_t id) {
-  if (ti.no_attachments)
+  if (ti.m_no_attachments)
     return ATTACH_MODE_SKIP;
 
-  if (ti.attach_mode_list.empty())
+  if (ti.m_attach_mode_list.empty())
     return ATTACH_MODE_TO_ALL_FILES;
 
-  if (map_has_key(ti.attach_mode_list, id))
-    return ti.attach_mode_list[id];
+  if (map_has_key(ti.m_attach_mode_list, id))
+    return ti.m_attach_mode_list[id];
 
-  if (map_has_key(ti.attach_mode_list, -1))
-    return ti.attach_mode_list[-1];
+  if (map_has_key(ti.m_attach_mode_list, -1))
+    return ti.m_attach_mode_list[-1];
 
   return ATTACH_MODE_SKIP;
 }
@@ -1224,7 +1224,7 @@ generic_reader_c::attachment_requested(int64_t id) {
 int
 generic_reader_c::add_packetizer(generic_packetizer_c *ptzr) {
   reader_packetizers.push_back(ptzr);
-  used_track_ids.push_back(ptzr->ti.id);
+  used_track_ids.push_back(ptzr->ti.m_id);
   if (!appending)
     add_packetizer_globally(ptzr);
 
@@ -1253,7 +1253,7 @@ generic_reader_c::set_headers_for_track(int64_t tid) {
   std::vector<generic_packetizer_c *>::const_iterator it;
 
   mxforeach(it, reader_packetizers)
-    if ((*it)->ti.id == tid) {
+    if ((*it)->ti.m_id == tid) {
       (*it)->set_headers();
       break;
     }
@@ -1274,7 +1274,7 @@ generic_reader_c::check_track_ids_and_packetizers() {
       }
 
     if (!found)
-      mxwarn_fn(ti.fname,
+      mxwarn_fn(ti.m_fname,
                 boost::format(Y("A track with the ID %1% was requested but not found in the file. The corresponding option will be ignored.\n"))
                 % requested_track_ids[r]);
   }
@@ -1415,7 +1415,7 @@ generic_reader_c::display_identification_results() {
     format_tags_track      = Y("Tags for track ID %1%: %2% entries");
   }
 
-  mxinfo(boost::format(format_file) % ti.fname % id_results_container.info);
+  mxinfo(boost::format(format_file) % ti.m_fname % id_results_container.info);
 
   if (g_identify_verbose && !id_results_container.verbose_info.empty())
     mxinfo(boost::format(" [%1%]") % join(" ", id_results_container.verbose_info));
@@ -1474,160 +1474,159 @@ generic_reader_c::id_escape_string(const std::string &s) {
 //--------------------------------------------------------------------
 
 track_info_c::track_info_c()
-  : initialized(true)
-  , id(0)
-  , no_audio(false)
-  , no_video(false)
-  , no_subs(false)
-  , no_buttons(false)
-  , no_track_tags(false)
-  , private_data(NULL)
-  , private_size(0)
-  , aspect_ratio(0.0)
-  , display_width(0)
-  , display_height(0)
-  , aspect_ratio_given(false)
-  , aspect_ratio_is_factor(false)
-  , display_dimensions_given(false)
-  , display_dimensions_source(PARAMETER_SOURCE_NONE)
-  , reset_timecodes(false)
-  , cues(CUE_STRATEGY_UNSPECIFIED)
-  , default_track(boost::logic::indeterminate)
-  , forced_track(boost::logic::indeterminate)
-  , tags(NULL)
-  , compression(COMPRESSION_UNSPECIFIED)
-  , pixel_cropping_source(PARAMETER_SOURCE_NONE)
-  , stereo_mode(STEREO_MODE_UNSPECIFIED)
-  , stereo_mode_source(PARAMETER_SOURCE_NONE)
-  , nalu_size_length(0)
-  , no_chapters(false)
-  , no_attachments(false)
-  , no_global_tags(false)
-  , avi_block_align(0)
-  , avi_samples_per_sec(0)
-  , avi_avg_bytes_per_sec(0)
-  , avi_samples_per_chunk(0)
-  , avi_sample_scale(0)
-  , avi_audio_sync_enabled(false)
+  : m_initialized(true)
+  , m_id(0)
+  , m_no_audio(false)
+  , m_no_video(false)
+  , m_no_subs(false)
+  , m_no_buttons(false)
+  , m_no_track_tags(false)
+  , m_private_data(NULL)
+  , m_private_size(0)
+  , m_aspect_ratio(0.0)
+  , m_display_width(0)
+  , m_display_height(0)
+  , m_aspect_ratio_given(false)
+  , m_aspect_ratio_is_factor(false)
+  , m_display_dimensions_given(false)
+  , m_display_dimensions_source(PARAMETER_SOURCE_NONE)
+  , m_reset_timecodes(false)
+  , m_cues(CUE_STRATEGY_UNSPECIFIED)
+  , m_default_track(boost::logic::indeterminate)
+  , m_forced_track(boost::logic::indeterminate)
+  , m_tags(NULL)
+  , m_compression(COMPRESSION_UNSPECIFIED)
+  , m_pixel_cropping_source(PARAMETER_SOURCE_NONE)
+  , m_stereo_mode(STEREO_MODE_UNSPECIFIED)
+  , m_stereo_mode_source(PARAMETER_SOURCE_NONE)
+  , m_nalu_size_length(0)
+  , m_no_chapters(false)
+  , m_no_attachments(false)
+  , m_no_global_tags(false)
+  , m_avi_block_align(0)
+  , m_avi_samples_per_sec(0)
+  , m_avi_avg_bytes_per_sec(0)
+  , m_avi_samples_per_chunk(0)
+  , m_avi_sample_scale(0)
+  , m_avi_audio_sync_enabled(false)
 {
-  memset(&pixel_cropping, 0, sizeof(pixel_crop_t));
 }
 
 void
 track_info_c::free_contents() {
-  if (!initialized)
+  if (!m_initialized)
     return;
 
-  safefree(private_data);
-  delete tags;
+  safefree(m_private_data);
+  delete m_tags;
 
-  initialized = false;
+  m_initialized = false;
 }
 
 track_info_c &
 track_info_c::operator =(const track_info_c &src) {
   free_contents();
 
-  id                         = src.id;
-  fname                      = src.fname;
+  m_id                         = src.m_id;
+  m_fname                      = src.m_fname;
 
-  no_audio                   = src.no_audio;
-  no_video                   = src.no_video;
-  no_subs                    = src.no_subs;
-  no_buttons                 = src.no_buttons;
-  no_track_tags              = src.no_track_tags;
-  atracks                    = src.atracks;
-  btracks                    = src.btracks;
-  stracks                    = src.stracks;
-  vtracks                    = src.vtracks;
-  track_tags                 = src.track_tags;
+  m_no_audio                   = src.m_no_audio;
+  m_no_video                   = src.m_no_video;
+  m_no_subs                    = src.m_no_subs;
+  m_no_buttons                 = src.m_no_buttons;
+  m_no_track_tags              = src.m_no_track_tags;
+  m_atracks                    = src.m_atracks;
+  m_btracks                    = src.m_btracks;
+  m_stracks                    = src.m_stracks;
+  m_vtracks                    = src.m_vtracks;
+  m_track_tags                 = src.m_track_tags;
 
-  private_size               = src.private_size;
-  private_data               = (unsigned char *)safememdup(src.private_data, private_size);
+  m_private_size               = src.m_private_size;
+  m_private_data               = (unsigned char *)safememdup(src.m_private_data, m_private_size);
 
-  all_fourccs                = src.all_fourccs;
+  m_all_fourccs                = src.m_all_fourccs;
 
-  display_properties         = src.display_properties;
-  aspect_ratio               = src.aspect_ratio;
-  aspect_ratio_given         = false;
-  aspect_ratio_is_factor     = false;
-  display_dimensions_given   = false;
-  display_dimensions_source  = src.display_dimensions_source;
+  m_display_properties         = src.m_display_properties;
+  m_aspect_ratio               = src.m_aspect_ratio;
+  m_aspect_ratio_given         = false;
+  m_aspect_ratio_is_factor     = false;
+  m_display_dimensions_given   = false;
+  m_display_dimensions_source  = src.m_display_dimensions_source;
 
-  timecode_syncs             = src.timecode_syncs;
-  memcpy(&tcsync, &src.tcsync, sizeof(timecode_sync_t));
+  m_timecode_syncs             = src.m_timecode_syncs;
+  m_tcsync                     = src.m_tcsync;
 
-  reset_timecodes_specs      = src.reset_timecodes_specs;
-  reset_timecodes            = src.reset_timecodes;
+  m_reset_timecodes_specs      = src.m_reset_timecodes_specs;
+  m_reset_timecodes            = src.m_reset_timecodes;
 
-  cue_creations              = src.cue_creations;
-  cues                       = src.cues;
+  m_cue_creations              = src.m_cue_creations;
+  m_cues                       = src.m_cues;
 
-  default_track_flags        = src.default_track_flags;
-  default_track              = src.default_track;
+  m_default_track_flags        = src.m_default_track_flags;
+  m_default_track              = src.m_default_track;
 
-  forced_track_flags         = src.forced_track_flags;
-  forced_track               = src.forced_track;
+  m_forced_track_flags         = src.m_forced_track_flags;
+  m_forced_track               = src.m_forced_track;
 
-  languages                  = src.languages;
-  language                   = src.language;
+  m_languages                  = src.m_languages;
+  m_language                   = src.m_language;
 
-  sub_charsets               = src.sub_charsets;
-  sub_charset                = src.sub_charset;
+  m_sub_charsets               = src.m_sub_charsets;
+  m_sub_charset                = src.m_sub_charset;
 
-  all_tags                   = src.all_tags;
-  tags_file_name             = src.tags_file_name;
-  tags                       = NULL != src.tags ? static_cast<KaxTags *>(src.tags->Clone()) : NULL;
+  m_all_tags                   = src.m_all_tags;
+  m_tags_file_name             = src.m_tags_file_name;
+  m_tags                       = NULL != src.m_tags ? static_cast<KaxTags *>(src.m_tags->Clone()) : NULL;
 
-  all_aac_is_sbr             = src.all_aac_is_sbr;
+  m_all_aac_is_sbr             = src.m_all_aac_is_sbr;
 
-  compression_list           = src.compression_list;
-  compression                = src.compression;
+  m_compression_list           = src.m_compression_list;
+  m_compression                = src.m_compression;
 
-  track_names                = src.track_names;
-  track_name                 = src.track_name;
+  m_track_names                = src.m_track_names;
+  m_track_name                 = src.m_track_name;
 
-  all_ext_timecodes          = src.all_ext_timecodes;
-  ext_timecodes              = src.ext_timecodes;
+  m_all_ext_timecodes          = src.m_all_ext_timecodes;
+  m_ext_timecodes              = src.m_ext_timecodes;
 
-  pixel_crop_list            = src.pixel_crop_list;
-  pixel_cropping             = src.pixel_cropping;
-  pixel_cropping_source      = src.pixel_cropping_source;
+  m_pixel_crop_list            = src.m_pixel_crop_list;
+  m_pixel_cropping             = src.m_pixel_cropping;
+  m_pixel_cropping_source      = src.m_pixel_cropping_source;
 
-  stereo_mode_list           = src.stereo_mode_list;
-  stereo_mode                = src.stereo_mode;
-  stereo_mode_source         = src.stereo_mode_source;
+  m_stereo_mode_list           = src.m_stereo_mode_list;
+  m_stereo_mode                = src.m_stereo_mode;
+  m_stereo_mode_source         = src.m_stereo_mode_source;
 
-  nalu_size_lengths          = src.nalu_size_lengths;
-  nalu_size_length           = src.nalu_size_length;
+  m_nalu_size_lengths          = src.m_nalu_size_lengths;
+  m_nalu_size_length           = src.m_nalu_size_length;
 
-  attach_mode_list           = src.attach_mode_list;
+  m_attach_mode_list           = src.m_attach_mode_list;
 
-  no_chapters                = src.no_chapters;
-  no_attachments             = src.no_attachments;
-  no_global_tags             = src.no_global_tags;
+  m_no_chapters                = src.m_no_chapters;
+  m_no_attachments             = src.m_no_attachments;
+  m_no_global_tags             = src.m_no_global_tags;
 
-  chapter_charset            = src.chapter_charset;
-  chapter_language           = src.chapter_language;
+  m_chapter_charset            = src.m_chapter_charset;
+  m_chapter_language           = src.m_chapter_language;
 
-  avi_block_align            = src.avi_block_align;
-  avi_samples_per_sec        = src.avi_samples_per_sec;
-  avi_avg_bytes_per_sec      = src.avi_avg_bytes_per_sec;
-  avi_samples_per_chunk      = src.avi_samples_per_chunk;
-  avi_sample_scale           = src.avi_sample_scale;
-  avi_block_sizes.clear();
-  avi_audio_sync_enabled     = false;
+  m_avi_block_align            = src.m_avi_block_align;
+  m_avi_samples_per_sec        = src.m_avi_samples_per_sec;
+  m_avi_avg_bytes_per_sec      = src.m_avi_avg_bytes_per_sec;
+  m_avi_samples_per_chunk      = src.m_avi_samples_per_chunk;
+  m_avi_sample_scale           = src.m_avi_sample_scale;
+  m_avi_block_sizes.clear();
+  m_avi_audio_sync_enabled     = false;
 
-  default_durations          = src.default_durations;
-  max_blockadd_ids           = src.max_blockadd_ids;
+  m_default_durations          = src.m_default_durations;
+  m_max_blockadd_ids           = src.m_max_blockadd_ids;
 
-  initialized                = true;
+  m_initialized                = true;
 
   return *this;
 }
 
 bool
 track_info_c::display_dimensions_or_aspect_ratio_set() {
-  return PARAMETER_SOURCE_NONE != display_dimensions_source;
+  return PARAMETER_SOURCE_NONE != m_display_dimensions_source;
 }
 

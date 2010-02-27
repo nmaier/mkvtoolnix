@@ -43,7 +43,7 @@ textsubs_packetizer_c::textsubs_packetizer_c(generic_reader_c *p_reader,
   , m_recode(recode)
 {
   if (m_recode)
-    m_cc_utf8 = charset_converter_c::init((ti.sub_charset != "") || !is_utf8 ? ti.sub_charset : "UTF-8");
+    m_cc_utf8 = charset_converter_c::init((ti.m_sub_charset != "") || !is_utf8 ? ti.m_sub_charset : "UTF-8");
 
   set_track_type(track_subtitle);
   if (m_codec_id == MKV_S_TEXTUSF)
@@ -68,7 +68,7 @@ textsubs_packetizer_c::set_headers() {
 int
 textsubs_packetizer_c::process(packet_cptr packet) {
   if (0 > packet->duration) {
-    mxwarn_tid(ti.fname, ti.id, Y("Ignoring an entry which starts after it ends.\n"));
+    mxwarn_tid(ti.m_fname, ti.m_id, Y("Ignoring an entry which starts after it ends.\n"));
     return FILE_STATUS_MOREDATA;
   }
 
@@ -97,10 +97,10 @@ textsubs_packetizer_c::can_connect_to(generic_packetizer_c *src,
   if (NULL == psrc)
     return CAN_CONNECT_NO_FORMAT;
 
-  if (   ((NULL == ti.private_data) && (NULL != src->ti.private_data))
-      || ((NULL != ti.private_data) && (NULL == src->ti.private_data))
-      || (ti.private_size != src->ti.private_size)) {
-    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % ti.private_size % src->ti.private_size).str();
+  if (   ((NULL == ti.m_private_data) && (NULL != src->ti.m_private_data))
+      || ((NULL != ti.m_private_data) && (NULL == src->ti.m_private_data))
+      || (ti.m_private_size != src->ti.m_private_size)) {
+    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % ti.m_private_size % src->ti.m_private_size).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }
 

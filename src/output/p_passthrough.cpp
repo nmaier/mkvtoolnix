@@ -54,14 +54,14 @@ passthrough_packetizer_c::can_connect_to(generic_packetizer_c *src,
   if (CMP(htrack_type) || CMP(hcodec_id))
     return CAN_CONNECT_NO_PARAMETERS;
 
-  if (   ((NULL == ti.private_data) && (NULL != psrc->ti.private_data))
-      || ((NULL != ti.private_data) && (NULL == psrc->ti.private_data))
-      || (ti.private_size != psrc->ti.private_size)
-      || (   (NULL != ti.private_data)
-          && (NULL != psrc->ti.private_data)
-          && (ti.private_size == psrc->ti.private_size)
-          && memcmp(ti.private_data, psrc->ti.private_data, ti.private_size))) {
-    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % ti.private_size % psrc->ti.private_size).str();
+  if (   ((NULL == ti.m_private_data) && (NULL != psrc->ti.m_private_data))
+      || ((NULL != ti.m_private_data) && (NULL == psrc->ti.m_private_data))
+      || (ti.m_private_size != psrc->ti.m_private_size)
+      || (   (NULL != ti.m_private_data)
+          && (NULL != psrc->ti.m_private_data)
+          && (ti.m_private_size == psrc->ti.m_private_size)
+          && memcmp(ti.m_private_data, psrc->ti.m_private_data, ti.m_private_size))) {
+    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % ti.m_private_size % psrc->ti.m_private_size).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }
 

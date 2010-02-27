@@ -39,7 +39,7 @@ wavpack_packetizer_c::wavpack_packetizer_c(generic_reader_c *p_reader,
 void
 wavpack_packetizer_c::set_headers() {
   set_codec_id(MKV_A_WAVPACK4);
-  set_codec_private(ti.private_data, ti.private_size);
+  set_codec_private(ti.m_private_data, ti.m_private_size);
   set_audio_sampling_freq((float)m_sample_rate);
   set_audio_channels(m_channels);
   set_audio_bit_depth(m_bits_per_sample);
