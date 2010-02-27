@@ -53,7 +53,7 @@ ssa_reader_c::ssa_reader_c(track_info_c &_ti)
   ti.m_id = 0;
   m_subs  = ssa_parser_cptr(new ssa_parser_c(this, io.get_object(), ti.m_fname, 0));
 
-  m_subs->set_iconv_handle(cc_utf8);
+  m_subs->set_charset_converter(cc_utf8);
   m_subs->parse();
 
   if (verbose)

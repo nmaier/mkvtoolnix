@@ -397,7 +397,7 @@ avi_reader_c::create_ssa_packetizer(int idx) {
                                  : demuxer.m_text_io->get_byte_order() != BO_NONE ? charset_converter_c::init("UTF-8")
                                  :                                                  g_cc_local_utf8;
 
-  parser->set_iconv_handle(cc_utf8);
+  parser->set_charset_converter(cc_utf8);
   parser->set_attachment_id_base(g_attachments.size());
   parser->parse();
 

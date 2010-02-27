@@ -124,7 +124,7 @@ public:
     return m_is_ass;
   }
 
-  void set_iconv_handle(charset_converter_cptr cc_utf8) {
+  void set_charset_converter(charset_converter_cptr cc_utf8) {
     m_cc_utf8 = cc_utf8;
   }
 
