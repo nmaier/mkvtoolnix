@@ -51,7 +51,7 @@ vobbtn_reader_c::vobbtn_reader_c(track_info_c &_ti)
   generic_reader_c(_ti) {
 
   try {
-    btn_file = new mm_file_io_c(ti.m_fname);
+    btn_file = new mm_file_io_c(m_ti.m_fname);
     size     = btn_file->get_size();
   } catch (...) {
     throw error_c(Y("vobbtn_reader: Could not open the file."));
@@ -65,7 +65,7 @@ vobbtn_reader_c::vobbtn_reader_c(track_info_c &_ti)
   btn_file->setFilePointer(16, seek_beginning);
 
   if (verbose)
-    mxinfo_fn(ti.m_fname, Y("Using the VobBtn button reader.\n"));
+    mxinfo_fn(m_ti.m_fname, Y("Using the VobBtn button reader.\n"));
 }
 
 vobbtn_reader_c::~vobbtn_reader_c() {
@@ -74,9 +74,9 @@ vobbtn_reader_c::~vobbtn_reader_c() {
 
 void
 vobbtn_reader_c::create_packetizer(int64_t tid) {
-  ti.m_id = tid;
+  m_ti.m_id = tid;
   if (demuxing_requested('s', tid))
-    add_packetizer(new vobbtn_packetizer_c(this, ti, width, height));
+    add_packetizer(new vobbtn_packetizer_c(this, m_ti, width, height));
 }
 
 file_status_e

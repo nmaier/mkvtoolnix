@@ -50,7 +50,7 @@ tta_reader_c::tta_reader_c(track_info_c &_ti)
   generic_reader_c(_ti) {
 
   try {
-    io   = new mm_file_io_c(ti.m_fname);
+    io   = new mm_file_io_c(m_ti.m_fname);
     size = io->get_size();
 
     if (g_identifying)
@@ -58,11 +58,11 @@ tta_reader_c::tta_reader_c(track_info_c &_ti)
 
     int tag_size = skip_id3v2_tag(*io);
     if (0 > tag_size)
-      mxerror_fn(ti.m_fname, boost::format(Y("tta_reader: tag_size < 0 in the c'tor. %1%\n")) % BUGMSG);
+      mxerror_fn(m_ti.m_fname, boost::format(Y("tta_reader: tag_size < 0 in the c'tor. %1%\n")) % BUGMSG);
     size -= tag_size;
 
     if (io->read(&header, sizeof(tta_file_header_t)) != sizeof(tta_file_header_t))
-      mxerror_fn(ti.m_fname, Y("The file header is too short.\n"));
+      mxerror_fn(m_ti.m_fname, Y("The file header is too short.\n"));
 
     int64_t seek_sum  = io->getFilePointer() + 4 - tag_size;
     size             -= id3_tag_present_at_end(*io);
@@ -82,19 +82,19 @@ tta_reader_c::tta_reader_c(track_info_c &_ti)
            % seek_sum      % size               % seek_points.size());
 
     if (seek_sum != size)
-      mxerror_fn(ti.m_fname, Y("The seek table in this TTA file seems to be broken.\n"));
+      mxerror_fn(m_ti.m_fname, Y("The seek table in this TTA file seems to be broken.\n"));
 
     io->skip(4);
 
     bytes_processed = 0;
     pos             = 0;
-    ti.m_id         = 0;        // ID for this track.
+    m_ti.m_id       = 0;        // ID for this track.
 
   } catch (...) {
     throw error_c(Y("tta_reader: Could not open the file."));
   }
   if (verbose)
-    mxinfo_fn(ti.m_fname, Y("Using the TTA demultiplexer.\n"));
+    mxinfo_fn(m_ti.m_fname, Y("Using the TTA demultiplexer.\n"));
 }
 
 tta_reader_c::~tta_reader_c() {
@@ -106,8 +106,8 @@ tta_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  add_packetizer(new tta_packetizer_c(this, ti, get_uint16_le(&header.channels), get_uint16_le(&header.bits_per_sample), get_uint32_le(&header.sample_rate)));
-  mxinfo_tid(ti.m_fname, 0, Y("Using the TTA output module.\n"));
+  add_packetizer(new tta_packetizer_c(this, m_ti, get_uint16_le(&header.channels), get_uint16_le(&header.bits_per_sample), get_uint32_le(&header.sample_rate)));
+  mxinfo_tid(m_ti.m_fname, 0, Y("Using the TTA output module.\n"));
 }
 
 file_status_e

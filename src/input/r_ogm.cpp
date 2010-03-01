@@ -302,7 +302,7 @@ ogm_reader_c::ogm_reader_c(track_info_c &_ti)
   generic_reader_c(_ti) {
 
   try {
-    io        = new mm_file_io_c(ti.m_fname);
+    io        = new mm_file_io_c(m_ti.m_fname);
     file_size = io->get_size();
   } catch (...) {
     throw error_c(Y("ogm_reader: Could not open the source file."));
@@ -313,7 +313,7 @@ ogm_reader_c::ogm_reader_c(track_info_c &_ti)
   ogg_sync_init(&oy);
 
   if (verbose)
-    mxinfo_fn(ti.m_fname, Y("Using the OGG/OGM demultiplexer.\n"));
+    mxinfo_fn(m_ti.m_fname, Y("Using the OGG/OGM demultiplexer.\n"));
 
   if (read_headers() <= 0)
     throw error_c(Y("ogm_reader: Could not read all header packets."));
@@ -356,11 +356,11 @@ ogm_reader_c::read_page(ogg_page *og) {
     if (0 >= np) {
       // np < 0 is the error case. Should not happen with local OGG files.
       if (0 > np)
-        mxwarn_fn(ti.m_fname, Y("Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n"));
+        mxwarn_fn(m_ti.m_fname, Y("Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n"));
 
       buf = (unsigned char *)ogg_sync_buffer(&oy, BUFFER_SIZE);
       if (!buf)
-        mxerror_fn(ti.m_fname, Y("ogg_sync_buffer failed\n"));
+        mxerror_fn(m_ti.m_fname, Y("ogg_sync_buffer failed\n"));
 
       if (0 >= (nread = io->read(buf, BUFFER_SIZE)))
         return 0;
@@ -387,19 +387,19 @@ ogm_reader_c::create_packetizer(int64_t tid) {
   if (!dmx->in_use)
     return;
 
-  ti.m_private_data = NULL;
-  ti.m_private_size = 0;
-  ti.m_id           = tid;
-  ti.m_language     = dmx->language;
-  ti.m_track_name   = dmx->title;
+  m_ti.m_private_data = NULL;
+  m_ti.m_private_size = 0;
+  m_ti.m_id           = tid;
+  m_ti.m_language     = dmx->language;
+  m_ti.m_track_name   = dmx->title;
 
-  ptzr              = dmx->create_packetizer(ti);
+  ptzr                = dmx->create_packetizer(m_ti);
 
   if (NULL != ptzr)
-    dmx->ptzr     = add_packetizer(ptzr);
+    dmx->ptzr         = add_packetizer(ptzr);
 
-  ti.m_language.clear();
-  ti.m_track_name.clear();
+  m_ti.m_language.clear();
+  m_ti.m_track_name.clear();
 }
 
 void
@@ -449,7 +449,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
   ogg_packet op;
 
   if (ogg_stream_init(&os, ogg_page_serialno(og))) {
-    mxwarn_fn(ti.m_fname, boost::format(Y("ogg_stream_init for stream number %1% failed. Will try to continue and ignore this stream.\n")) % sdemuxers.size());
+    mxwarn_fn(m_ti.m_fname, boost::format(Y("ogg_stream_init for stream number %1% failed. Will try to continue and ignore this stream.\n")) % sdemuxers.size());
     return;
   }
 
@@ -476,7 +476,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
   else if ((4 <= op.bytes) && !strncmp((char *)op.packet, "fLaC", 4)) {
 #if !defined(HAVE_FLAC_FORMAT_H)
     if (demuxing_requested('a', sdemuxers.size()))
-      mxerror_fn(ti.m_fname, Y("mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"));
+      mxerror_fn(m_ti.m_fname, Y("mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"));
 
     else {
       dmx         = new ogm_demuxer_c(this);
@@ -521,7 +521,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
         dmx = new ogm_a_aac_demuxer_c(this);
 
       else
-        mxwarn_fn(ti.m_fname, boost::format(Y("Unknown audio stream type 0x%|1$04x|. Stream ID %2% will be ignored.\n")) % codec_id % sdemuxers.size());
+        mxwarn_fn(m_ti.m_fname, boost::format(Y("Unknown audio stream type 0x%|1$04x|. Stream ID %2% will be ignored.\n")) % codec_id % sdemuxers.size());
 
     } else if (!strncmp(sth->streamtype, "text", 4))
       dmx = new ogm_s_text_demuxer_c(this);
@@ -570,7 +570,7 @@ ogm_reader_c::process_page(ogg_page *og) {
   granulepos = ogg_page_granulepos(og);
 
   if ((-1 != granulepos) && (granulepos < dmx->last_granulepos)) {
-    mxwarn_tid(ti.m_fname, dmx->track_id,
+    mxwarn_tid(m_ti.m_fname, dmx->track_id,
                Y("The timecodes for this stream have been reset in the middle of the file. This is not supported. The current packet will be discarded.\n"));
     return;
   }
@@ -717,8 +717,8 @@ ogm_reader_c::identify() {
     id_result_track(i, sdemuxers[i]->get_type(), sdemuxers[i]->get_codec(), verbose_info);
   }
 
-  if (NULL != chapters)
-    id_result_chapters(count_chapter_atoms(*chapters));
+  if (NULL != m_chapters)
+    id_result_chapters(count_chapter_atoms(*m_chapters));
 }
 
 void
@@ -727,7 +727,7 @@ ogm_reader_c::handle_stream_comments() {
   std::string title;
 
   bool charset_warning_printed = false;
-  charset_converter_cptr cch   = charset_converter_c::init(ti.m_chapter_charset);
+  charset_converter_cptr cch   = charset_converter_c::init(m_ti.m_chapter_charset);
   int i;
 
   for (i = 0; i < sdemuxers.size(); i++) {
@@ -800,29 +800,29 @@ ogm_reader_c::handle_stream_comments() {
     }
 
     bool chapters_set = false;
-    if (!chapter_strings.empty() && !ti.m_no_chapters) {
+    if (!chapter_strings.empty() && !m_ti.m_no_chapters) {
       try {
         counted_ptr<mm_mem_io_c> out(new mm_mem_io_c(NULL, 0, 1000));
 
         out->write_bom("UTF-8");
         for (j = 0; j < chapter_strings.size(); j++)
           out->puts(cch->utf8(chapter_strings[j]) + std::string("\n"));
-        out->set_file_name(ti.m_fname);
+        out->set_file_name(m_ti.m_fname);
 
         counted_ptr<mm_text_io_c> text_out(new mm_text_io_c(out.get_object(), false));
 
-        chapters     = parse_chapters(text_out.get_object(), 0, -1, 0, ti.m_chapter_language);
+        m_chapters   = parse_chapters(text_out.get_object(), 0, -1, 0, m_ti.m_chapter_language);
         chapters_set = true;
 
-        align_chapter_edition_uids(chapters);
+        align_chapter_edition_uids(m_chapters);
       } catch (...) {
       }
     }
 
     if (    (segment_title_set || chapters_set)
          && !charset_warning_printed
-         && (ti.m_chapter_charset.empty())) {
-      mxwarn_fn(ti.m_fname,
+         && (m_ti.m_chapter_charset.empty())) {
+      mxwarn_fn(m_ti.m_fname,
                 Y("This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in "
                   "the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can "
                   "be overridden with the '--chapter-charset <charset>' switch.\n"));
@@ -836,7 +836,7 @@ ogm_reader_c::add_available_track_ids() {
   int i;
 
   for (i = 0; i < sdemuxers.size(); i++)
-    available_track_ids.push_back(i);
+    add_available_track_id(i);
 }
 
 // -----------------------------------------------------------
@@ -898,7 +898,7 @@ ogm_demuxer_c::process_page(int64_t granulepos) {
     get_duration_and_len(op, duration, duration_len);
 
     memory_c *mem = new memory_c(&op.packet[duration_len + 1], op.bytes - 1 - duration_len, false);
-    reader->reader_packetizers[ptzr]->process(new packet_t(mem));
+    reader->m_reader_packetizers[ptzr]->process(new packet_t(mem));
     units_processed += op.bytes - 1;
   }
 }
@@ -916,7 +916,7 @@ ogm_demuxer_c::process_header_page() {
         continue;
       }
 
-      mxwarn_tid(reader->ti.m_fname, track_id,
+      mxwarn_tid(reader->m_ti.m_fname, track_id,
                  Y("Missing header/comment packets for stream. This file is broken but should be muxed correctly. "
                    "If not please contact the author Moritz Bunkus <moritz@bunkus.org>.\n"));
       headers_read = true;
@@ -1061,7 +1061,7 @@ ogm_a_vorbis_demuxer_c::process_page(int64_t granulepos) {
     if (((*op.packet & 3) == PACKET_TYPE_HEADER) || ((*op.packet & 3) == PACKET_TYPE_COMMENT))
       continue;
 
-    reader->reader_packetizers[ptzr]->process(new packet_t(new memory_c(op.packet, op.bytes, false)));
+    reader->m_reader_packetizers[ptzr]->process(new packet_t(new memory_c(op.packet, op.bytes, false)));
   }
 }
 
@@ -1100,7 +1100,7 @@ ogm_s_text_demuxer_c::process_page(int64_t granulepos) {
 
     if (((op.bytes - 1 - duration_len) > 2) || ((op.packet[duration_len + 1] != ' ') && (op.packet[duration_len + 1] != 0) && !iscr(op.packet[duration_len + 1]))) {
       memory_c *mem = new memory_c(&op.packet[duration_len + 1], op.bytes - 1 - duration_len, false);
-      reader->reader_packetizers[ptzr]->process(new packet_t(mem, granulepos * 1000000, (int64_t)duration * 1000000));
+      reader->m_reader_packetizers[ptzr]->process(new packet_t(mem, granulepos * 1000000, (int64_t)duration * 1000000));
     }
   }
 }
@@ -1144,10 +1144,10 @@ ogm_v_avc_demuxer_c::extract_avcc() {
   avc_es_parser_c parser;
 
   parser.ignore_nalu_size_length_errors();
-  if (map_has_key(reader->ti.m_nalu_size_lengths, track_id))
-    parser.set_nalu_size_length(reader->ti.m_nalu_size_lengths[track_id]);
-  else if (map_has_key(reader->ti.m_nalu_size_lengths, -1))
-    parser.set_nalu_size_length(reader->ti.m_nalu_size_lengths[-1]);
+  if (map_has_key(reader->m_ti.m_nalu_size_lengths, track_id))
+    parser.set_nalu_size_length(reader->m_ti.m_nalu_size_lengths[track_id]);
+  else if (map_has_key(reader->m_ti.m_nalu_size_lengths, -1))
+    parser.set_nalu_size_length(reader->m_ti.m_nalu_size_lengths[-1]);
 
   unsigned char *private_data = packet_data[0]->get_buffer() + 1 + sizeof(stream_header);
   int private_size            = packet_data[0]->get_size()   - 1 - sizeof(stream_header);
@@ -1285,7 +1285,7 @@ ogm_v_mscomp_demuxer_c::process_page(int64_t granulepos) {
     int64_t timecode = (last_granulepos + frames_since_granulepos_change) * default_duration;
     ++frames_since_granulepos_change;
 
-    reader->reader_packetizers[ptzr]->process(new packet_t(frame.mem, timecode, frame.duration, frame.flags & PACKET_IS_SYNCPOINT ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC));
+    reader->m_reader_packetizers[ptzr]->process(new packet_t(frame.mem, timecode, frame.duration, frame.flags & PACKET_IS_SYNCPOINT ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC));
 
     units_processed += duration;
   }
@@ -1314,7 +1314,7 @@ ogm_v_theora_demuxer_c::initialize() {
     display_width  = theora.display_width;
     display_height = theora.display_height;
   } catch (error_c &e) {
-    mxerror_tid(reader->ti.m_fname, track_id, boost::format(Y("The Theora identifaction header could not be parsed (%1%).\n")) % e.get_error());
+    mxerror_tid(reader->m_ti.m_fname, track_id, boost::format(Y("The Theora identifaction header could not be parsed (%1%).\n")) % e.get_error());
   }
 }
 
@@ -1354,7 +1354,7 @@ ogm_v_theora_demuxer_c::process_page(int64_t granulepos) {
 
     ++units_processed;
 
-    reader->reader_packetizers[ptzr]->process(new packet_t(new memory_c(op.packet, op.bytes, false), timecode, duration, bref, VFT_NOBFRAME));
+    reader->m_reader_packetizers[ptzr]->process(new packet_t(new memory_c(op.packet, op.bytes, false), timecode, duration, bref, VFT_NOBFRAME));
 
     mxverb(3,
            boost::format("Theora track %1% kfgshift %2% granulepos 0x%|3$08x| %|4$08x|%5%\n")
@@ -1385,7 +1385,7 @@ ogm_s_kate_demuxer_c::initialize() {
     kate_parse_identification_header(mem->get_buffer(), mem->get_size(), kate);
     num_header_packets = kate.nheaders;
   } catch (error_c &e) {
-    mxerror_tid(reader->ti.m_fname, track_id, boost::format(Y("The Kate identifaction header could not be parsed (%1%).\n")) % e.get_error());
+    mxerror_tid(reader->m_ti.m_fname, track_id, boost::format(Y("The Kate identifaction header could not be parsed (%1%).\n")) % e.get_error());
   }
 }
 
@@ -1414,7 +1414,7 @@ ogm_s_kate_demuxer_c::process_page(int64_t granulepos) {
     if ((0 == op.bytes) || (0 != (op.packet[0] & 0x80)))
       continue;
 
-    reader->reader_packetizers[ptzr]->process(new packet_t(new memory_c(op.packet, op.bytes, false)));
+    reader->m_reader_packetizers[ptzr]->process(new packet_t(new memory_c(op.packet, op.bytes, false)));
 
     ++units_processed;
 

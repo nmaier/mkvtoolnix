@@ -121,7 +121,7 @@ qtmp4_reader_c::qtmp4_reader_c(track_info_c &_ti)
   main_dmx(-1) {
 
   try {
-    io = new mm_file_io_c(ti.m_fname);
+    io = new mm_file_io_c(m_ti.m_fname);
     io->setFilePointer(0, seek_end);
     file_size = io->getFilePointer();
     io->setFilePointer(0, seek_beginning);
@@ -129,7 +129,7 @@ qtmp4_reader_c::qtmp4_reader_c(track_info_c &_ti)
       throw error_c(Y("Quicktime/MP4 reader: Source is not a valid Quicktime/MP4 file."));
 
     if (verbose)
-      mxinfo_fn(ti.m_fname, Y("Using the Quicktime/MP4 demultiplexer.\n"));
+      mxinfo_fn(m_ti.m_fname, Y("Using the Quicktime/MP4 demultiplexer.\n"));
 
     parse_headers();
 
@@ -139,7 +139,7 @@ qtmp4_reader_c::qtmp4_reader_c(track_info_c &_ti)
 }
 
 qtmp4_reader_c::~qtmp4_reader_c() {
-  ti.m_private_data = NULL;
+  m_ti.m_private_data = NULL;
 
   delete io;
 }
@@ -343,7 +343,7 @@ qtmp4_reader_c::calculate_timecodes() {
     mxforeach(idmx, demuxers)
       (*idmx)->adjust_timecodes(min_timecode);
 
-    mxwarn_fn(ti.m_fname,
+    mxwarn_fn(m_ti.m_fname,
               boost::format(Y("This file contains at least one frame with a negative timecode. "
                               "All timecodes will be adjusted by %1% so that none is negative anymore.\n"))
               % format_timecode(min_timecode, 3));
@@ -768,7 +768,7 @@ qtmp4_reader_c::handle_udta_atom(qt_atom_t parent,
 void
 qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
                                  int level) {
-  if (ti.m_no_chapters || (NULL != chapters))
+  if (m_ti.m_no_chapters || (NULL != m_chapters))
     return;
 
   io->skip(1 + 3 + 4);          // Version, flags, zero
@@ -799,7 +799,7 @@ qtmp4_reader_c::handle_chpl_atom(qt_atom_t atom,
 
 void
 qtmp4_reader_c::read_chapter_track() {
-  if (ti.m_no_chapters || (NULL != chapters) || !chapter_dmx.is_set())
+  if (m_ti.m_no_chapters || (NULL != m_chapters) || !chapter_dmx.is_set())
     return;
 
   chapter_dmx->update_tables(time_scale);
@@ -844,7 +844,7 @@ qtmp4_reader_c::process_chapter_entries(int level,
   stable_sort(entries.begin(), entries.end());
 
   mm_mem_io_c out(NULL, 0, 1000);
-  out.set_file_name(ti.m_fname);
+  out.set_file_name(m_ti.m_fname);
   out.write_bom("UTF-8");
 
   unsigned int i = 0;
@@ -864,8 +864,8 @@ qtmp4_reader_c::process_chapter_entries(int level,
   }
 
   mm_text_io_c text_out(&out, false);
-  chapters = parse_chapters(&text_out, 0, -1, 0, ti.m_chapter_language);
-  align_chapter_edition_uids(chapters);
+  m_chapters = parse_chapters(&text_out, 0, -1, 0, m_ti.m_chapter_language);
+  align_chapter_edition_uids(m_chapters);
 }
 
 void
@@ -1456,14 +1456,14 @@ qtmp4_reader_c::create_audio_packetizer_ac3(qtmp4_demuxer_cptr &dmx) {
   memory_cptr buf = memory_c::alloc(64);
 
   if (!dmx->read_first_bytes(buf, 64, io) || (-1 == find_ac3_header(buf->get_buffer(), buf->get_size(), &dmx->m_ac3_header, false))) {
-    mxwarn_tid(ti.m_fname, dmx->id, Y("No AC3 header found in first frame; track will be skipped.\n"));
+    mxwarn_tid(m_ti.m_fname, dmx->id, Y("No AC3 header found in first frame; track will be skipped.\n"));
     dmx->ok = false;
 
     return false;
   }
 
-  dmx->ptzr = add_packetizer(new ac3_packetizer_c(this, ti, dmx->m_ac3_header.sample_rate, dmx->m_ac3_header.channels, dmx->m_ac3_header.bsid));
-  mxinfo_tid(ti.m_fname, dmx->id, Y("Using the AC3 output module.\n"));
+  dmx->ptzr = add_packetizer(new ac3_packetizer_c(this, m_ti, dmx->m_ac3_header.sample_rate, dmx->m_ac3_header.channels, dmx->m_ac3_header.bsid));
+  mxinfo_tid(m_ti.m_fname, dmx->id, Y("Using the AC3 output module.\n"));
 
   return true;
 }
@@ -1472,92 +1472,92 @@ void
 qtmp4_reader_c::create_video_packetizer_svq1(qtmp4_demuxer_cptr &dmx) {
   memory_cptr bih(create_bitmap_info_header(dmx, "SVQ1"));
 
-  ti.m_private_size = bih->get_size();
-  ti.m_private_data = (unsigned char *)bih->get_buffer();
+  m_ti.m_private_size = bih->get_size();
+  m_ti.m_private_data = (unsigned char *)bih->get_buffer();
 
-  dmx->ptzr         = add_packetizer(new video_packetizer_c(this, ti, MKV_V_MSCOMP, 0.0, dmx->v_width, dmx->v_height));
-  ti.m_private_data = NULL;
+  dmx->ptzr         = add_packetizer(new video_packetizer_c(this, m_ti, MKV_V_MSCOMP, 0.0, dmx->v_width, dmx->v_height));
+  m_ti.m_private_data = NULL;
 
-  mxinfo_tid(ti.m_fname, dmx->id, boost::format(Y("Using the video output module (FourCC: %|1$.4s|).\n")) % dmx->fourcc);
+  mxinfo_tid(m_ti.m_fname, dmx->id, boost::format(Y("Using the video output module (FourCC: %|1$.4s|).\n")) % dmx->fourcc);
 }
 
 void
 qtmp4_reader_c::create_video_packetizer_mpeg4_p2(qtmp4_demuxer_cptr &dmx) {
   memory_cptr bih(create_bitmap_info_header(dmx, "DIVX"));
 
-  ti.m_private_size = bih->get_size();
-  ti.m_private_data = (unsigned char *)bih->get_buffer();
-  dmx->ptzr         = add_packetizer(new mpeg4_p2_video_packetizer_c(this, ti, 0.0, dmx->v_width, dmx->v_height, false));
-  ti.m_private_data = NULL;
+  m_ti.m_private_size = bih->get_size();
+  m_ti.m_private_data = (unsigned char *)bih->get_buffer();
+  dmx->ptzr         = add_packetizer(new mpeg4_p2_video_packetizer_c(this, m_ti, 0.0, dmx->v_width, dmx->v_height, false));
+  m_ti.m_private_data = NULL;
 
-  mxinfo_tid(ti.m_fname, dmx->id, Y("Using the MPEG-4 part 2 video output module.\n"));
+  mxinfo_tid(m_ti.m_fname, dmx->id, Y("Using the MPEG-4 part 2 video output module.\n"));
 }
 
 void
 qtmp4_reader_c::create_video_packetizer_mpeg1_2(qtmp4_demuxer_cptr &dmx) {
   int version = dmx->fourcc[3] - '0';
-  dmx->ptzr   = add_packetizer(new mpeg1_2_video_packetizer_c(this, ti, version, -1.0, dmx->v_width, dmx->v_height, 0, 0, false));
+  dmx->ptzr   = add_packetizer(new mpeg1_2_video_packetizer_c(this, m_ti, version, -1.0, dmx->v_width, dmx->v_height, 0, 0, false));
 
-  mxinfo_tid(ti.m_fname, dmx->id, boost::format(Y("Using the MPEG-%1% video output module.\n")) % version);
+  mxinfo_tid(m_ti.m_fname, dmx->id, boost::format(Y("Using the MPEG-%1% video output module.\n")) % version);
 }
 
 void
 qtmp4_reader_c::create_video_packetizer_mpeg4_p10(qtmp4_demuxer_cptr &dmx) {
   if (dmx->frame_offset_table.empty())
-    mxwarn_tid(ti.m_fname, dmx->id,
+    mxwarn_tid(m_ti.m_fname, dmx->id,
                Y("The AVC video track is missing the 'CTTS' atom for frame timecode offsets. "
                  "However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. "
                  "The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. "
                  "As it is missing the timecodes for this track might be wrong. "
                  "You should watch the resulting file and make sure that it looks like you expected it to.\n"));
 
-  ti.m_private_size = dmx->priv_size;
-  ti.m_private_data = dmx->priv;
-  dmx->ptzr         = add_packetizer(new mpeg4_p10_video_packetizer_c(this, ti, dmx->fps, dmx->v_width, dmx->v_height));
-  ti.m_private_data = NULL;
+  m_ti.m_private_size = dmx->priv_size;
+  m_ti.m_private_data = dmx->priv;
+  dmx->ptzr         = add_packetizer(new mpeg4_p10_video_packetizer_c(this, m_ti, dmx->fps, dmx->v_width, dmx->v_height));
+  m_ti.m_private_data = NULL;
 
-  mxinfo_tid(ti.m_fname, dmx->id, Y("Using the MPEG-4 part 10 (AVC) video output module.\n"));
+  mxinfo_tid(m_ti.m_fname, dmx->id, Y("Using the MPEG-4 part 10 (AVC) video output module.\n"));
 }
 
 void
 qtmp4_reader_c::create_video_packetizer_standard(qtmp4_demuxer_cptr &dmx) {
-  ti.m_private_size = dmx->v_stsd->get_size();
-  ti.m_private_data = dmx->v_stsd->get_buffer();
-  dmx->ptzr         = add_packetizer(new video_packetizer_c(this, ti, MKV_V_QUICKTIME, 0.0, dmx->v_width, dmx->v_height));
-  ti.m_private_data = NULL;
+  m_ti.m_private_size = dmx->v_stsd->get_size();
+  m_ti.m_private_data = dmx->v_stsd->get_buffer();
+  dmx->ptzr         = add_packetizer(new video_packetizer_c(this, m_ti, MKV_V_QUICKTIME, 0.0, dmx->v_width, dmx->v_height));
+  m_ti.m_private_data = NULL;
 
-  mxinfo_tid(ti.m_fname, dmx->id, boost::format(Y("Using the video output module (FourCC: %|1$.4s|).\n")) % dmx->fourcc);
+  mxinfo_tid(m_ti.m_fname, dmx->id, boost::format(Y("Using the video output module (FourCC: %|1$.4s|).\n")) % dmx->fourcc);
 }
 
 void
 qtmp4_reader_c::create_audio_packetizer_aac(qtmp4_demuxer_cptr &dmx) {
-  ti.m_private_data = dmx->esds.decoder_config;
-  ti.m_private_size = dmx->esds.decoder_config_len;
-  dmx->ptzr         = add_packetizer(new aac_packetizer_c(this, ti, AAC_ID_MPEG4, dmx->a_aac_profile, (int)dmx->a_samplerate, dmx->a_channels, false, true));
-  ti.m_private_data = NULL;
-  ti.m_private_size = 0;
+  m_ti.m_private_data = dmx->esds.decoder_config;
+  m_ti.m_private_size = dmx->esds.decoder_config_len;
+  dmx->ptzr         = add_packetizer(new aac_packetizer_c(this, m_ti, AAC_ID_MPEG4, dmx->a_aac_profile, (int)dmx->a_samplerate, dmx->a_channels, false, true));
+  m_ti.m_private_data = NULL;
+  m_ti.m_private_size = 0;
 
   if (dmx->a_aac_is_sbr)
     PTZR(dmx->ptzr)->set_audio_output_sampling_freq(dmx->a_aac_output_sample_rate);
 
-  mxinfo_tid(ti.m_fname, dmx->id, Y("Using the AAC output module.\n"));
+  mxinfo_tid(m_ti.m_fname, dmx->id, Y("Using the AAC output module.\n"));
 }
 
 void
 qtmp4_reader_c::create_audio_packetizer_mp3(qtmp4_demuxer_cptr &dmx) {
-  dmx->ptzr = add_packetizer(new mp3_packetizer_c(this, ti, (int32_t)dmx->a_samplerate, dmx->a_channels, true));
-  mxinfo_tid(ti.m_fname, dmx->id, Y("Using the MPEG audio output module.\n"));
+  dmx->ptzr = add_packetizer(new mp3_packetizer_c(this, m_ti, (int32_t)dmx->a_samplerate, dmx->a_channels, true));
+  mxinfo_tid(m_ti.m_fname, dmx->id, Y("Using the MPEG audio output module.\n"));
 }
 
 void
 qtmp4_reader_c::create_audio_packetizer_pcm(qtmp4_demuxer_cptr &dmx) {
-  dmx->ptzr = add_packetizer(new pcm_packetizer_c(this, ti, (int32_t)dmx->a_samplerate, dmx->a_channels, dmx->a_bitdepth, (8 < dmx->a_bitdepth) && ('t' == dmx->fourcc[0])));
-  mxinfo_tid(ti.m_fname, dmx->id, Y("Using the PCM output module.\n"));
+  dmx->ptzr = add_packetizer(new pcm_packetizer_c(this, m_ti, (int32_t)dmx->a_samplerate, dmx->a_channels, dmx->a_bitdepth, (8 < dmx->a_bitdepth) && ('t' == dmx->fourcc[0])));
+  mxinfo_tid(m_ti.m_fname, dmx->id, Y("Using the PCM output module.\n"));
 }
 
 void
 qtmp4_reader_c::create_audio_packetizer_passthrough(qtmp4_demuxer_cptr &dmx) {
-  passthrough_packetizer_c *ptzr = new passthrough_packetizer_c(this, ti);
+  passthrough_packetizer_c *ptzr = new passthrough_packetizer_c(this, m_ti);
   dmx->ptzr                      = add_packetizer(ptzr);
 
   ptzr->set_track_type(track_audio);
@@ -1566,7 +1566,7 @@ qtmp4_reader_c::create_audio_packetizer_passthrough(qtmp4_demuxer_cptr &dmx) {
   ptzr->set_audio_sampling_freq(dmx->a_samplerate);
   ptzr->set_audio_channels(dmx->a_channels);
 
-  mxinfo_tid(ti.m_fname, dmx->id, boost::format(Y("Using the generic audio output module (FourCC: %|1$.4s|).\n")) % dmx->fourcc);
+  mxinfo_tid(m_ti.m_fname, dmx->id, boost::format(Y("Using the generic audio output module (FourCC: %|1$.4s|).\n")) % dmx->fourcc);
 }
 
 void
@@ -1583,8 +1583,8 @@ qtmp4_reader_c::create_packetizer(int64_t tid) {
   if (!dmx.is_set() || !dmx->ok || !demuxing_requested(dmx->type, dmx->id) || (-1 != dmx->ptzr))
     return;
 
-  ti.m_id            = dmx->id;
-  ti.m_language      = dmx->language;
+  m_ti.m_id          = dmx->id;
+  m_ti.m_language    = dmx->language;
 
   bool packetizer_ok = true;
 
@@ -1672,8 +1672,8 @@ qtmp4_reader_c::identify() {
                     (boost::format("%|1$.4s|") %  dmx->fourcc).str(), verbose_info);
   }
 
-  if (NULL != chapters)
-    id_result_chapters(count_chapter_atoms(*chapters));
+  if (NULL != m_chapters)
+    id_result_chapters(count_chapter_atoms(*m_chapters));
 }
 
 void
@@ -1681,7 +1681,7 @@ qtmp4_reader_c::add_available_track_ids() {
   unsigned int i;
 
   for (i = 0; i < demuxers.size(); ++i)
-    available_track_ids.push_back(demuxers[i]->id);
+    add_available_track_id(demuxers[i]->id);
 }
 
 std::string
@@ -1708,8 +1708,8 @@ qtmp4_reader_c::recode_chapter_entries(std::vector<qtmp4_chapter_entry_t> &entri
     return;
   }
 
-  std::string charset              = ti.m_chapter_charset.empty() ? "UTF-8" : ti.m_chapter_charset;
-  charset_converter_cptr converter = charset_converter_c::init(ti.m_chapter_charset);
+  std::string charset              = m_ti.m_chapter_charset.empty() ? "UTF-8" : m_ti.m_chapter_charset;
+  charset_converter_cptr converter = charset_converter_c::init(m_ti.m_chapter_charset);
   converter->enable_byte_order_marker_detection(true);
 
   foreach(qtmp4_chapter_entry_t &entry, entries)

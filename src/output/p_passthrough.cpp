@@ -25,7 +25,7 @@ passthrough_packetizer_c::passthrough_packetizer_c(generic_reader_c *p_reader,
   throw (error_c)
   : generic_packetizer_c(p_reader, p_ti)
 {
-  timecode_factory_application_mode = TFA_FULL_QUEUEING;
+  m_timecode_factory_application_mode = TFA_FULL_QUEUEING;
 }
 
 void
@@ -49,37 +49,37 @@ passthrough_packetizer_c::can_connect_to(generic_packetizer_c *src,
   if (NULL == psrc)
     return CAN_CONNECT_NO_FORMAT;
 
-  connect_check_codec_id(hcodec_id, psrc->hcodec_id);
+  connect_check_codec_id(m_hcodec_id, psrc->m_hcodec_id);
 
-  if (CMP(htrack_type) || CMP(hcodec_id))
+  if (CMP(m_htrack_type) || CMP(m_hcodec_id))
     return CAN_CONNECT_NO_PARAMETERS;
 
-  if (   ((NULL == ti.m_private_data) && (NULL != psrc->ti.m_private_data))
-      || ((NULL != ti.m_private_data) && (NULL == psrc->ti.m_private_data))
-      || (ti.m_private_size != psrc->ti.m_private_size)
-      || (   (NULL != ti.m_private_data)
-          && (NULL != psrc->ti.m_private_data)
-          && (ti.m_private_size == psrc->ti.m_private_size)
-          && memcmp(ti.m_private_data, psrc->ti.m_private_data, ti.m_private_size))) {
-    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % ti.m_private_size % psrc->ti.m_private_size).str();
+  if (   ((NULL == m_ti.m_private_data) && (NULL != psrc->m_ti.m_private_data))
+      || ((NULL != m_ti.m_private_data) && (NULL == psrc->m_ti.m_private_data))
+      || (m_ti.m_private_size != psrc->m_ti.m_private_size)
+      || (   (NULL != m_ti.m_private_data)
+          && (NULL != psrc->m_ti.m_private_data)
+          && (m_ti.m_private_size == psrc->m_ti.m_private_size)
+          && memcmp(m_ti.m_private_data, psrc->m_ti.m_private_data, m_ti.m_private_size))) {
+    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % m_ti.m_private_size % psrc->m_ti.m_private_size).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }
 
-  switch (htrack_type) {
+  switch (m_htrack_type) {
     case track_video:
-      connect_check_v_width(hvideo_pixel_width,      psrc->hvideo_pixel_width);
-      connect_check_v_height(hvideo_pixel_height,    psrc->hvideo_pixel_height);
-      connect_check_v_dwidth(hvideo_display_width,   psrc->hvideo_display_width);
-      connect_check_v_dheight(hvideo_display_height, psrc->hvideo_display_height);
-      if (CMP(htrack_min_cache) || CMP(htrack_max_cache) || CMP(htrack_default_duration))
+      connect_check_v_width(m_hvideo_pixel_width,      psrc->m_hvideo_pixel_width);
+      connect_check_v_height(m_hvideo_pixel_height,    psrc->m_hvideo_pixel_height);
+      connect_check_v_dwidth(m_hvideo_display_width,   psrc->m_hvideo_display_width);
+      connect_check_v_dheight(m_hvideo_display_height, psrc->m_hvideo_display_height);
+      if (CMP(m_htrack_min_cache) || CMP(m_htrack_max_cache) || CMP(m_htrack_default_duration))
         return CAN_CONNECT_NO_PARAMETERS;
       break;
 
     case track_audio:
-      connect_check_a_samplerate(haudio_sampling_freq, psrc->haudio_sampling_freq);
-      connect_check_a_channels(haudio_channels,        psrc->haudio_channels);
-      connect_check_a_bitdepth(haudio_bit_depth,       psrc->haudio_bit_depth);
-      if (CMP(htrack_default_duration))
+      connect_check_a_samplerate(m_haudio_sampling_freq, psrc->m_haudio_sampling_freq);
+      connect_check_a_channels(m_haudio_channels,        psrc->m_haudio_channels);
+      connect_check_a_bitdepth(m_haudio_bit_depth,       psrc->m_haudio_bit_depth);
+      if (CMP(m_htrack_default_duration))
         return CAN_CONNECT_NO_PARAMETERS;
       break;
 

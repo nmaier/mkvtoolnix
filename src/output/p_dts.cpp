@@ -97,7 +97,7 @@ dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
     m_previous_header        = dtsheader;
     m_get_first_header_later = false;
 
-    if (!reader->appending)
+    if (!m_reader->m_appending)
       set_headers();
 
     rerender_track_headers();
@@ -120,7 +120,7 @@ dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
       }
 
     if (!all_zeroes)
-      mxwarn_tid(ti.m_fname, ti.m_id, boost::format(Y("Skipping %1% bytes (no valid DTS header found). This might cause audio/video desynchronisation.\n")) % pos);
+      mxwarn_tid(m_ti.m_fname, m_ti.m_id, boost::format(Y("Skipping %1% bytes (no valid DTS header found). This might cause audio/video desynchronisation.\n")) % pos);
   }
 
   unsigned char *buf = (unsigned char *)safememdup(m_packet_buffer + pos, dtsheader.frame_byte_size);

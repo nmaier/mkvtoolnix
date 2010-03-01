@@ -33,7 +33,7 @@ mp3_reader_c::mp3_reader_c(track_info_c &_ti)
   unsigned char buf[16384];
 
   try {
-    io   = new mm_file_io_c(ti.m_fname);
+    io   = new mm_file_io_c(m_ti.m_fname);
     size = io->get_size();
 
     int pos = find_valid_headers(io, 2 * 1024 * 1024, 5);
@@ -48,13 +48,13 @@ mp3_reader_c::mp3_reader_c(track_info_c &_ti)
     io->setFilePointer(pos, seek_beginning);
 
     if (verbose)
-      mxinfo_fn(ti.m_fname, Y("Using the MP2/MP3 demultiplexer.\n"));
+      mxinfo_fn(m_ti.m_fname, Y("Using the MP2/MP3 demultiplexer.\n"));
 
     if ((0 < pos) && verbose)
-      mxwarn_fn(ti.m_fname, boost::format(Y("Skipping %1% bytes at the beginning (no valid MP3 header found).\n")) % pos);
+      mxwarn_fn(m_ti.m_fname, boost::format(Y("Skipping %1% bytes at the beginning (no valid MP3 header found).\n")) % pos);
 
     bytes_processed = 0;
-    ti.m_id         = 0;        // ID for this track.
+    m_ti.m_id       = 0;        // ID for this track.
   } catch (...) {
     throw error_c(Y("mp3_reader: Could not open the source file."));
   }
@@ -69,8 +69,8 @@ mp3_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  mxinfo_tid(ti.m_fname, 0, Y("Using the MPEG audio output module.\n"));
-  add_packetizer(new mp3_packetizer_c(this, ti, mp3header.sampling_frequency, mp3header.channels, false));
+  mxinfo_tid(m_ti.m_fname, 0, Y("Using the MPEG audio output module.\n"));
+  add_packetizer(new mp3_packetizer_c(this, m_ti, mp3header.sampling_frequency, mp3header.channels, false));
 }
 
 file_status_e

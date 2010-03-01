@@ -54,7 +54,7 @@ dts_reader_c::dts_reader_c(track_info_c &_ti)
   swap_bytes(false) {
 
   try {
-    io     = new mm_file_io_c(ti.m_fname);
+    io     = new mm_file_io_c(m_ti.m_fname);
     size   = io->get_size();
     buf[0] = (unsigned short *)safemalloc(READ_SIZE);
     buf[1] = (unsigned short *)safemalloc(READ_SIZE);
@@ -78,10 +78,10 @@ dts_reader_c::dts_reader_c(track_info_c &_ti)
     throw error_c(boost::format(Y("dts_reader: No valid DTS packet found in the first %1% bytes.\n")) % READ_SIZE);
 
   bytes_processed = 0;
-  ti.m_id         = 0;          // ID for this track.
+  m_ti.m_id       = 0;          // ID for this track.
 
   if (verbose)
-    mxinfo_fn(ti.m_fname, Y("Using the DTS demultiplexer.\n"));
+    mxinfo_fn(m_ti.m_fname, Y("Using the DTS demultiplexer.\n"));
 }
 
 dts_reader_c::~dts_reader_c() {
@@ -111,8 +111,8 @@ dts_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  add_packetizer(new dts_packetizer_c(this, ti, dtsheader));
-  mxinfo_tid(ti.m_fname, 0, Y("Using the DTS output module.\n"));
+  add_packetizer(new dts_packetizer_c(this, m_ti, dtsheader));
+  mxinfo_tid(m_ti.m_fname, 0, Y("Using the DTS output module.\n"));
 
   if (1 < verbose)
     print_dts_header(&dtsheader);

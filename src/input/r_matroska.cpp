@@ -162,7 +162,7 @@ kax_reader_c::kax_reader_c(track_info_c &_ti)
   if (!read_headers())
     throw error_c(Y("matroska_reader: Failed to read the headers."));
   if (verbose)
-    mxinfo_fn(ti.m_fname, Y("Using the Matroska demultiplexer.\n"));
+    mxinfo_fn(m_ti.m_fname, Y("Using the Matroska demultiplexer.\n"));
 }
 
 kax_reader_c::~kax_reader_c() {
@@ -577,12 +577,12 @@ kax_reader_c::handle_chapters(mm_io_c *io,
 
     tmp_chapters->Read(*m_es, KaxChapters::ClassInfos.Context, upper_lvl_el, l2, true);
 
-    if (NULL == chapters)
-      chapters = new KaxChapters;
+    if (NULL == m_chapters)
+      m_chapters = new KaxChapters;
 
     int i;
     for (i = 0; i < tmp_chapters->ListSize(); i++)
-      chapters->PushElement(*(*tmp_chapters)[i]);
+      m_chapters->PushElement(*(*tmp_chapters)[i]);
     tmp_chapters->RemoveAll();
 
   }
@@ -724,7 +724,7 @@ kax_reader_c::read_headers_info(EbmlElement *&l1,
     // helper be a bit more imprecise in what it accepts when
     // looking for referenced packets.
     if (m_muxing_app == "DirectShow Matroska Muxer")
-      reference_timecode_tolerance = 1000000;
+      m_reference_timecode_tolerance = 1000000;
   }
 }
 
@@ -1080,7 +1080,7 @@ kax_reader_c::read_headers() {
 
   KaxCluster *cluster = NULL;
   try {
-    m_in        = mm_io_cptr(new mm_file_io_c(ti.m_fname));
+    m_in        = mm_io_cptr(new mm_file_io_c(m_ti.m_fname));
     m_file_size = m_in->get_size();
     m_es        = counted_ptr<EbmlStream>(new EbmlStream(*m_in));
     m_in_file   = kax_file_cptr(new kax_file_c(m_in));
@@ -1176,12 +1176,12 @@ kax_reader_c::read_headers() {
     foreach(int64_t position, m_deferred_l1_positions[dl1t_tracks])
       read_headers_tracks(m_in.get_object(), l0, position);
 
-    if (!ti.m_no_attachments) {
+    if (!m_ti.m_no_attachments) {
       foreach(int64_t position, m_deferred_l1_positions[dl1t_attachments])
         handle_attachments(m_in.get_object(), l0, position);
     }
 
-    if (!ti.m_no_chapters) {
+    if (!m_ti.m_no_chapters) {
       foreach(int64_t position, m_deferred_l1_positions[dl1t_chapters])
         handle_chapters(m_in.get_object(), l0, position);
     }
@@ -1189,7 +1189,7 @@ kax_reader_c::read_headers() {
     foreach(int64_t position, m_deferred_l1_positions[dl1t_tags])
       handle_tags(m_in.get_object(), l0, position);
 
-    if (!ti.m_no_global_tags)
+    if (!m_ti.m_no_global_tags)
       process_global_tags();
 
   } catch (...) {
@@ -1222,9 +1222,9 @@ kax_reader_c::process_global_tags() {
 void
 kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
   passthrough_packetizer_c *ptzr;
-  track_info_c nti(ti);
+  track_info_c nti(m_ti);
 
-  mxinfo_tid(ti.m_fname, t->tnum, boost::format(Y("Using the passthrough output module for this %1% track.\n")) % MAP_TRACK_TYPE_STRING(t->type));
+  mxinfo_tid(m_ti.m_fname, t->tnum, boost::format(Y("Using the passthrough output module for this %1% track.\n")) % MAP_TRACK_TYPE_STRING(t->type));
 
   nti.m_id                  = t->tnum;
   nti.m_language            = t->language;
@@ -1274,16 +1274,16 @@ kax_reader_c::init_passthrough_packetizer(kax_track_t *t) {
 
 void
 kax_reader_c::set_packetizer_headers(kax_track_t *t) {
-  if (appending)
+  if (m_appending)
     return;
 
   if (t->default_track)
     PTZR(t->ptzr)->set_as_default_track(t->type == 'v' ? DEFTRACK_TYPE_VIDEO : t->type == 'a' ? DEFTRACK_TYPE_AUDIO : DEFTRACK_TYPE_SUBS, DEFAULT_TRACK_PRIORITY_FROM_SOURCE);
 
-  else if (!boost::logic::indeterminate(t->default_track) && boost::logic::indeterminate(PTZR(t->ptzr)->ti.m_default_track))
-    PTZR(t->ptzr)->ti.m_default_track = false;
+  else if (!boost::logic::indeterminate(t->default_track) && boost::logic::indeterminate(PTZR(t->ptzr)->m_ti.m_default_track))
+    PTZR(t->ptzr)->m_ti.m_default_track = false;
 
-  if (t->forced_track && boost::logic::indeterminate(PTZR(t->ptzr)->ti.m_forced_track))
+  if (t->forced_track && boost::logic::indeterminate(PTZR(t->ptzr)->m_ti.m_forced_track))
     PTZR(t->ptzr)->set_track_forced_flag(true);
 
   if ((0 != t->tuid) && !PTZR(t->ptzr)->set_uid(t->tuid))
@@ -1306,11 +1306,11 @@ kax_reader_c::create_video_packetizer(kax_track_t *t,
            || (t->codec_id == MKV_V_DIRAC)) {
     if ((t->codec_id == MKV_V_MPEG1) || (t->codec_id == MKV_V_MPEG2)) {
       int version = t->codec_id[6] - '0';
-      mxinfo_tid(ti.m_fname, t->tnum, boost::format(Y("Using the MPEG-%1% video output module.\n")) % version);
+      mxinfo_tid(m_ti.m_fname, t->tnum, boost::format(Y("Using the MPEG-%1% video output module.\n")) % version);
       t->ptzr = add_packetizer(new mpeg1_2_video_packetizer_c(this, nti, version, t->v_frate, t->v_width, t->v_height, t->v_dwidth, t->v_dheight, true));
 
     } else if (IS_MPEG4_L2_CODECID(t->codec_id) || IS_MPEG4_L2_FOURCC(t->v_fourcc)) {
-      mxinfo_tid(ti.m_fname, t->tnum, Y("Using the MPEG-4 part 2 video output module.\n"));
+      mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the MPEG-4 part 2 video output module.\n"));
       bool is_native = IS_MPEG4_L2_CODECID(t->codec_id);
       t->ptzr = add_packetizer(new mpeg4_p2_video_packetizer_c(this, nti, t->v_frate, t->v_width, t->v_height, is_native));
 
@@ -1318,15 +1318,15 @@ kax_reader_c::create_video_packetizer(kax_track_t *t,
       create_mpeg4_p10_video_packetizer(t, nti);
 
     else if (t->codec_id == MKV_V_THEORA) {
-      mxinfo_tid(ti.m_fname, t->tnum, Y("Using the Theora video output module.\n"));
+      mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the Theora video output module.\n"));
       t->ptzr = add_packetizer(new theora_video_packetizer_c(this, nti, t->v_frate, t->v_width, t->v_height));
 
     } else if (t->codec_id == MKV_V_DIRAC) {
-      mxinfo_tid(ti.m_fname, t->tnum, Y("Using the Dirac video output module.\n"));
+      mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the Dirac video output module.\n"));
       t->ptzr = add_packetizer(new dirac_video_packetizer_c(this, nti));
 
     } else {
-      mxinfo_tid(ti.m_fname, t->tnum, Y("Using the video output module.\n"));
+      mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the video output module.\n"));
       t->ptzr = add_packetizer(new video_packetizer_c(this, nti, t->codec_id.c_str(), t->v_frate, t->v_width, t->v_height));
     }
 
@@ -1345,11 +1345,11 @@ kax_reader_c::create_audio_packetizer(kax_track_t *t,
                                       track_info_c &nti) {
   if ((0x0001 == t->a_formattag) || (0x0003 == t->a_formattag)) {
     t->ptzr = add_packetizer(new pcm_packetizer_c(this, nti, (int32_t)t->a_sfreq, t->a_channels, t->a_bps, false, t->a_formattag==0x0003));
-    mxinfo_tid(ti.m_fname, t->tnum, Y("Using the PCM output module.\n"));
+    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the PCM output module.\n"));
 
   } else if (0x0055 == t->a_formattag) {
     t->ptzr = add_packetizer(new mp3_packetizer_c(this, nti, (int32_t)t->a_sfreq, t->a_channels, true));
-    mxinfo_tid(ti.m_fname, t->tnum, Y("Using the MPEG audio output module.\n"));
+    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the MPEG audio output module.\n"));
 
   } else if (0x2000 == t->a_formattag) {
     int bsid = t->codec_id == "A_AC3/BSID9"  ?  9
@@ -1358,7 +1358,7 @@ kax_reader_c::create_audio_packetizer(kax_track_t *t,
              :                                  0;
 
     t->ptzr = add_packetizer(new ac3_packetizer_c(this, nti, (int32_t)t->a_sfreq, t->a_channels, bsid));
-    mxinfo_tid(ti.m_fname, t->tnum, boost::format(Y("Using the %1%AC3 output module.\n")) % (16 == bsid ? "E" : ""));
+    mxinfo_tid(m_ti.m_fname, t->tnum, boost::format(Y("Using the %1%AC3 output module.\n")) % (16 == bsid ? "E" : ""));
 
   } else if (0x2001 == t->a_formattag) {
     dts_header_t dtsheader;
@@ -1367,11 +1367,11 @@ kax_reader_c::create_audio_packetizer(kax_track_t *t,
     dtsheader.audio_channels          = t->a_channels;
 
     t->ptzr = add_packetizer(new dts_packetizer_c(this, nti, dtsheader, true));
-    mxinfo_tid(ti.m_fname, t->tnum, Y("Using the DTS output module.\n"));
+    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the DTS output module.\n"));
 
   } else if (0xFFFE == t->a_formattag) {
     t->ptzr = add_packetizer(new vorbis_packetizer_c(this, nti, t->headers[0], t->header_sizes[0], t->headers[1], t->header_sizes[1], t->headers[2], t->header_sizes[2]));
-    mxinfo_tid(ti.m_fname, t->tnum, Y("Using the Vorbis output module.\n"));
+    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the Vorbis output module.\n"));
 
   } else if ((FOURCC('M', 'P', '4', 'A') == t->a_formattag) || (0x00ff == t->a_formattag)) {
     // A_AAC/MPEG2/MAIN
@@ -1386,7 +1386,7 @@ kax_reader_c::create_audio_packetizer(kax_track_t *t,
         bool sbr;
 
         if (!parse_aac_data((unsigned char *)t->private_data, t->private_size, profile, channels, sfreq, osfreq, sbr))
-          mxerror_tid(ti.m_fname, t->tnum, Y("Malformed AAC codec initialization data found.\n"));
+          mxerror_tid(m_ti.m_fname, t->tnum, Y("Malformed AAC codec initialization data found.\n"));
 
         detected_profile = profile;
         id               = AAC_ID_MPEG4;
@@ -1394,14 +1394,14 @@ kax_reader_c::create_audio_packetizer(kax_track_t *t,
           profile        = AAC_PROFILE_SBR;
 
       } else if (!parse_aac_codec_id(std::string(t->codec_id), id, profile))
-        mxerror_tid(ti.m_fname, t->tnum, boost::format(Y("Malformed codec id '%1%'.\n")) % t->codec_id);
+        mxerror_tid(m_ti.m_fname, t->tnum, boost::format(Y("Malformed codec id '%1%'.\n")) % t->codec_id);
 
     } else {
       int channels, sfreq, osfreq;
       bool sbr;
 
       if (!parse_aac_data(((unsigned char *)t->private_data) + sizeof(alWAVEFORMATEX), t->private_size - sizeof(alWAVEFORMATEX), profile, channels, sfreq, osfreq, sbr))
-        mxerror_tid(ti.m_fname, t->tnum, Y("Malformed AAC codec initialization data found.\n"));
+        mxerror_tid(m_ti.m_fname, t->tnum, Y("Malformed AAC codec initialization data found.\n"));
 
       detected_profile = profile;
       id               = AAC_ID_MPEG4;
@@ -1409,14 +1409,14 @@ kax_reader_c::create_audio_packetizer(kax_track_t *t,
         profile        = AAC_PROFILE_SBR;
     }
 
-    if ((map_has_key(ti.m_all_aac_is_sbr, t->tnum) &&  ti.m_all_aac_is_sbr[t->tnum]) || (map_has_key(ti.m_all_aac_is_sbr, -1) &&  ti.m_all_aac_is_sbr[-1]))
+    if ((map_has_key(m_ti.m_all_aac_is_sbr, t->tnum) &&  m_ti.m_all_aac_is_sbr[t->tnum]) || (map_has_key(m_ti.m_all_aac_is_sbr, -1) &&  m_ti.m_all_aac_is_sbr[-1]))
       profile = AAC_PROFILE_SBR;
 
-    if ((map_has_key(ti.m_all_aac_is_sbr, t->tnum) && !ti.m_all_aac_is_sbr[t->tnum]) || (map_has_key(ti.m_all_aac_is_sbr, -1) && !ti.m_all_aac_is_sbr[-1]))
+    if ((map_has_key(m_ti.m_all_aac_is_sbr, t->tnum) && !m_ti.m_all_aac_is_sbr[t->tnum]) || (map_has_key(m_ti.m_all_aac_is_sbr, -1) && !m_ti.m_all_aac_is_sbr[-1]))
       profile = detected_profile;
 
     t->ptzr = add_packetizer(new aac_packetizer_c(this, nti, id, profile, (int32_t)t->a_sfreq, t->a_channels, false, true));
-    mxinfo_tid(ti.m_fname, t->tnum, Y("Using the AAC output module.\n"));
+    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the AAC output module.\n"));
 
  #if defined(HAVE_FLAC_FORMAT_H)
   } else if ((FOURCC('f', 'L', 'a', 'C') == t->a_formattag) || (0xf1ac == t->a_formattag)) {
@@ -1431,7 +1431,7 @@ kax_reader_c::create_audio_packetizer(kax_track_t *t,
       t->ptzr             = add_packetizer(p);
     }
 
-    mxinfo_tid(ti.m_fname, t->tnum, Y("Using the FLAC output module.\n"));
+    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the FLAC output module.\n"));
  #endif
 
   } else if (FOURCC('T', 'T', 'A', '1') == t->a_formattag) {
@@ -1440,7 +1440,7 @@ kax_reader_c::create_audio_packetizer(kax_track_t *t,
     nti.m_private_size = 0;
 
     t->ptzr            = add_packetizer(new tta_packetizer_c(this, nti, t->a_channels, t->a_bps, (int32_t)t->a_sfreq));
-    mxinfo_tid(ti.m_fname, t->tnum, Y("Using the TTA output module.\n"));
+    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the TTA output module.\n"));
 
   } else if (FOURCC('W', 'V', 'P', '4') == t->a_formattag) {
     wavpack_meta_t meta;
@@ -1460,7 +1460,7 @@ kax_reader_c::create_audio_packetizer(kax_track_t *t,
     nti.m_private_data = NULL;
     nti.m_private_size = 0;
 
-    mxinfo_tid(ti.m_fname, t->tnum, Y("Using the WAVPACK output module.\n"));
+    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the WAVPACK output module.\n"));
 
   } else
     init_passthrough_packetizer(t);
@@ -1474,7 +1474,7 @@ kax_reader_c::create_subtitle_packetizer(kax_track_t *t,
                                          track_info_c &nti) {
   if (t->codec_id == MKV_S_VOBSUB) {
     t->ptzr = add_packetizer(new vobsub_packetizer_c(this, t->private_data, t->private_size, nti));
-    mxinfo_tid(ti.m_fname, t->tnum, Y("Using the VobSub output module.\n"));
+    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the VobSub output module.\n"));
 
     t->sub_type = 'v';
 
@@ -1482,7 +1482,7 @@ kax_reader_c::create_subtitle_packetizer(kax_track_t *t,
     std::string new_codec_id = ((t->codec_id == "S_SSA") || (t->codec_id == "S_ASS")) ? std::string("S_TEXT/") + std::string(&t->codec_id[2]) : t->codec_id;
 
     t->ptzr = add_packetizer(new textsubs_packetizer_c(this, nti, new_codec_id.c_str(), t->private_data, t->private_size, false, true));
-    mxinfo_tid(ti.m_fname, t->tnum, Y("Using the text subtitle output module.\n"));
+    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the text subtitle output module.\n"));
 
     t->sub_type = 't';
 
@@ -1490,7 +1490,7 @@ kax_reader_c::create_subtitle_packetizer(kax_track_t *t,
     t->ptzr     = add_packetizer(new kate_packetizer_c(this, nti, t->private_data, t->private_size));
     t->sub_type = 'k';
 
-    mxinfo_tid(ti.m_fname, t->tnum, Y("Using the Kate output module.\n"));
+    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the Kate output module.\n"));
 
   } else
     init_passthrough_packetizer(t);
@@ -1501,7 +1501,7 @@ void
 kax_reader_c::create_button_packetizer(kax_track_t *t,
                                        track_info_c &nti) {
   if (t->codec_id == MKV_B_VOBBTN) {
-    mxinfo_tid(ti.m_fname, t->tnum, Y("Using the VobBtn output module.\n"));
+    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the VobBtn output module.\n"));
 
     safefree(nti.m_private_data);
     nti.m_private_data = NULL;
@@ -1521,7 +1521,7 @@ kax_reader_c::create_packetizer(int64_t tid) {
   if ((NULL == t) || (-1 != t->ptzr) || !t->ok || !demuxing_requested(t->type, t->tnum))
     return;
 
-  track_info_c nti(ti);
+  track_info_c nti(m_ti);
   nti.m_private_data = (unsigned char *)safememdup(t->private_data, t->private_size);
   nti.m_private_size = t->private_size;
   nti.m_id           = t->tnum; // ID for this track.
@@ -1558,12 +1558,12 @@ kax_reader_c::create_packetizer(int64_t tid) {
       break;
 
     default:
-      mxerror_tid(ti.m_fname, t->tnum, Y("Unsupported track type for this track.\n"));
+      mxerror_tid(m_ti.m_fname, t->tnum, Y("Unsupported track type for this track.\n"));
       break;
   }
 
   set_packetizer_headers(t);
-  m_ptzr_to_track_map[reader_packetizers[t->ptzr]] = t;
+  m_ptzr_to_track_map[ m_reader_packetizers[t->ptzr] ] = t;
 }
 
 void
@@ -1586,10 +1586,10 @@ kax_reader_c::parse_first_mpeg4_p10_frame(kax_track_t *t,
     avc_es_parser_cptr parser(new avc_es_parser_c);
 
     parser->ignore_nalu_size_length_errors();
-    if (map_has_key(ti.m_nalu_size_lengths, t->tnum))
-      parser->set_nalu_size_length(ti.m_nalu_size_lengths[t->tnum]);
-    else if (map_has_key(ti.m_nalu_size_lengths, -1))
-      parser->set_nalu_size_length(ti.m_nalu_size_lengths[-1]);
+    if (map_has_key(m_ti.m_nalu_size_lengths, t->tnum))
+      parser->set_nalu_size_length(m_ti.m_nalu_size_lengths[t->tnum]);
+    else if (map_has_key(m_ti.m_nalu_size_lengths, -1))
+      parser->set_nalu_size_length(m_ti.m_nalu_size_lengths[-1]);
 
     if (sizeof(alBITMAPINFOHEADER) < t->private_size)
       parser->add_bytes((unsigned char *)t->private_data + sizeof(alBITMAPINFOHEADER), t->private_size - sizeof(alBITMAPINFOHEADER));
@@ -1602,7 +1602,7 @@ kax_reader_c::parse_first_mpeg4_p10_frame(kax_track_t *t,
 
     return parser;
   } catch (...) {
-    mxerror_tid(ti.m_fname, t->tnum, Y("Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"));
+    mxerror_tid(m_ti.m_fname, t->tnum, Y("Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"));
   }
 
   return avc_es_parser_cptr(NULL);
@@ -1614,7 +1614,7 @@ kax_reader_c::create_mpeg4_p10_es_video_packetizer(kax_track_t *t,
   avc_es_parser_cptr parser = parse_first_mpeg4_p10_frame(t, nti);
 
   if (verbose)
-    mxinfo_tid(ti.m_fname, t->tnum, Y("Using the MPEG-4 part 10 ES video output module.\n"));
+    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the MPEG-4 part 10 ES video output module.\n"));
 
   mpeg4_p10_es_video_packetizer_c *ptzr = new mpeg4_p10_es_video_packetizer_c(this, nti, parser->get_avcc(), t->v_width, t->v_height);
   t->ptzr                               = add_packetizer(ptzr);
@@ -1634,7 +1634,7 @@ kax_reader_c::create_mpeg4_p10_video_packetizer(kax_track_t *t,
   }
 
   if (verbose)
-    mxinfo_tid(ti.m_fname, t->tnum, Y("Using the MPEG-4 part 10 (AVC) video output module.\n"));
+    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the MPEG-4 part 10 (AVC) video output module.\n"));
 
   t->ptzr = add_packetizer(new mpeg4_p10_video_packetizer_c(this, nti, t->v_frate, t->v_width, t->v_height));
 }
@@ -1753,8 +1753,8 @@ kax_reader_c::read(generic_packetizer_c *requested_ptzr,
 
       // If we're appending this file to another one then the core
       // needs the timecodes shifted to zero.
-      if (appending && (NULL != chapters) && (0 < m_first_timecode))
-        adjust_chapter_timecodes(*chapters, -m_first_timecode);
+      if (m_appending && (NULL != m_chapters) && (0 < m_first_timecode))
+        adjust_chapter_timecodes(*m_chapters, -m_first_timecode);
     }
 
     int bgidx;
@@ -1793,7 +1793,7 @@ kax_reader_c::process_simple_block(KaxCluster *cluster,
   kax_track_t *block_track = find_track_by_num(block_simple->TrackNum());
 
   if (NULL == block_track) {
-    mxwarn_fn(ti.m_fname,
+    mxwarn_fn(m_ti.m_fname,
               boost::format(Y("A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. "
                               "The block will be skipped.\n")) % format_timecode(block_simple->GlobalTimecode()) % block_simple->TrackNum());
     return;
@@ -1826,7 +1826,7 @@ kax_reader_c::process_simple_block(KaxCluster *cluster,
 
   // If we're appending this file to another one then the core
   // needs the timecodes shifted to zero.
-  if (appending)
+  if (m_appending)
     m_last_timecode -= m_first_timecode;
 
   if ((-1 != block_track->ptzr) && block_track->passthrough) {
@@ -1893,7 +1893,7 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
 
   KaxBlock *block = static_cast<KaxBlock *>(block_group->FindFirstElt(KaxBlock::ClassInfos, false));
   if (NULL == block) {
-    mxwarn_fn(ti.m_fname,
+    mxwarn_fn(m_ti.m_fname,
               boost::format(Y("A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"))
               % block_group->GetElementPosition());
     return;
@@ -1903,7 +1903,7 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
   kax_track_t *block_track = find_track_by_num(block->TrackNum());
 
   if (NULL == block_track) {
-    mxwarn_fn(ti.m_fname,
+    mxwarn_fn(m_ti.m_fname,
               boost::format(Y("A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. "
                               "The block will be skipped.\n")) % format_timecode(block->GlobalTimecode()) % block->TrackNum());
     return;
@@ -1930,12 +1930,12 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
   m_last_timecode = block->GlobalTimecode();
   // If we're appending this file to another one then the core
   // needs the timecodes shifted to zero.
-  if (appending)
+  if (m_appending)
     m_last_timecode -= m_first_timecode;
 
   KaxCodecState *codec_state = static_cast<KaxCodecState *>(block_group->FindFirstElt(KaxCodecState::ClassInfos));
   if ((NULL != codec_state) && !hack_engaged(ENGAGE_USE_CODEC_STATE))
-    mxerror_tid(ti.m_fname, block_track->tnum,
+    mxerror_tid(m_ti.m_fname, block_track->tnum,
                 Y("This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but "
                   "this feature has not been turned on with the option '--engage use_codec_state'.\n"));
 
@@ -2101,8 +2101,8 @@ kax_reader_c::identify() {
   foreach(attachment_t &attachment, g_attachments)
     id_result_attachment(attachment.ui_id, attachment.mime_type, attachment.data->get_size(), attachment.name, attachment.description);
 
-  if (NULL != chapters)
-    id_result_chapters(count_chapter_atoms(*chapters));
+  if (NULL != m_chapters)
+    id_result_chapters(count_chapter_atoms(*m_chapters));
 
   if (m_tags.is_set())
     id_result_tags(ID_RESULT_GLOBAL_TAGS_ID, count_simple_tags(*m_tags));
@@ -2115,6 +2115,6 @@ kax_reader_c::identify() {
 void
 kax_reader_c::add_available_track_ids() {
   foreach(kax_track_cptr &track, m_tracks)
-    available_track_ids.push_back(track->tnum);
+    add_available_track_id(track->tnum);
 }
 

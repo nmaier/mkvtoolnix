@@ -51,19 +51,19 @@ video_packetizer_c::video_packetizer_c(generic_reader_c *p_reader,
   else
     set_codec_id(MKV_V_MSCOMP);
 
-  set_codec_private(ti.m_private_data, ti.m_private_size);
+  set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
   check_fourcc();
 }
 
 void
 video_packetizer_c::check_fourcc() {
-  if (   (hcodec_id == MKV_V_MSCOMP)
-      && (NULL != ti.m_private_data)
-      && (sizeof(alBITMAPINFOHEADER) <= ti.m_private_size)
-      && !ti.m_fourcc.empty()) {
+  if (   (m_hcodec_id                == MKV_V_MSCOMP)
+      && (NULL                       != m_ti.m_private_data)
+      && (sizeof(alBITMAPINFOHEADER) <= m_ti.m_private_size)
+      && !m_ti.m_fourcc.empty()) {
 
-    memcpy(&((alBITMAPINFOHEADER *)ti.m_private_data)->bi_compression, ti.m_fourcc.c_str(), 4);
-    set_codec_private(ti.m_private_data, ti.m_private_size);
+    memcpy(&((alBITMAPINFOHEADER *)m_ti.m_private_data)->bi_compression, m_ti.m_fourcc.c_str(), 4);
+    set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
   }
 }
 
@@ -77,7 +77,7 @@ video_packetizer_c::set_headers() {
 
   generic_packetizer_c::set_headers();
 
-  track_entry->EnableLacing(false);
+  m_track_entry->EnableLacing(false);
 }
 
 // Semantics:
@@ -91,7 +91,7 @@ video_packetizer_c::set_headers() {
 int
 video_packetizer_c::process(packet_cptr packet) {
   if ((0.0 == m_fps) && (-1 == packet->timecode))
-    mxerror_tid(ti.m_fname, ti.m_id, boost::format(Y("The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n")) % BUGMSG);
+    mxerror_tid(m_ti.m_fname, m_ti.m_id, boost::format(Y("The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n")) % BUGMSG);
 
   if (-1 == packet->timecode)
     packet->timecode = (int64_t)(1000000000.0 * m_frames_output / m_fps) + m_duration_shift;
@@ -132,14 +132,14 @@ video_packetizer_c::can_connect_to(generic_packetizer_c *src,
   if (NULL == vsrc)
     return CAN_CONNECT_NO_FORMAT;
 
-  connect_check_v_width(m_width, vsrc->m_width);
-  connect_check_v_height(m_height, vsrc->m_height);
-  connect_check_codec_id(hcodec_id, vsrc->hcodec_id);
+  connect_check_v_width(m_width,      vsrc->m_width);
+  connect_check_v_height(m_height,    vsrc->m_height);
+  connect_check_codec_id(m_hcodec_id, vsrc->m_hcodec_id);
 
-  if (   ((NULL == ti.m_private_data) && (NULL != vsrc->ti.m_private_data))
-      || ((NULL != ti.m_private_data) && (NULL == vsrc->ti.m_private_data))
-      || (ti.m_private_size != vsrc->ti.m_private_size)) {
-    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % ti.m_private_size % vsrc->ti.m_private_size).str();
+  if (   ((NULL == m_ti.m_private_data) && (NULL != vsrc->m_ti.m_private_data))
+      || ((NULL != m_ti.m_private_data) && (NULL == vsrc->m_ti.m_private_data))
+      || (m_ti.m_private_size != vsrc->m_ti.m_private_size)) {
+    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % m_ti.m_private_size % vsrc->m_ti.m_private_size).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }
 

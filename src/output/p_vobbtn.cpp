@@ -51,7 +51,7 @@ vobbtn_packetizer_c::set_headers() {
 
   generic_packetizer_c::set_headers();
 
-  track_entry->EnableLacing(false);
+  m_track_entry->EnableLacing(false);
 }
 
 int

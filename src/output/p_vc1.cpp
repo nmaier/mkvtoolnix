@@ -31,7 +31,7 @@ vc1_video_packetizer_c::vc1_video_packetizer_c(generic_reader_c *n_reader, track
   : generic_packetizer_c(n_reader, n_ti)
   , m_previous_timecode(-1)
 {
-  relaxed_timecode_checking = true;
+  m_relaxed_timecode_checking = true;
 
   if (get_cue_creation() == CUE_STRATEGY_UNSPECIFIED)
     set_cue_creation(CUE_STRATEGY_IFRAMES);
@@ -82,7 +82,7 @@ vc1_video_packetizer_c::set_headers() {
       set_video_display_height(m_seqhdr.pixel_height);
     }
 
-    if (default_duration_forced)
+    if (m_default_duration_forced)
       m_parser.set_default_duration(get_track_default_duration());
     else
       set_track_default_duration(m_parser.get_default_duration());
@@ -96,7 +96,7 @@ vc1_video_packetizer_c::set_headers() {
 
   generic_packetizer_c::set_headers();
 
-  track_entry->EnableLacing(false);
+  m_track_entry->EnableLacing(false);
 }
 
 void
@@ -142,7 +142,7 @@ vc1_video_packetizer_c::headers_found() {
   memcpy(m_raw_headers->get_buffer(),                          raw_seqhdr->get_buffer(),     raw_seqhdr->get_size());
   memcpy(m_raw_headers->get_buffer() + raw_seqhdr->get_size(), raw_entrypoint->get_buffer(), raw_entrypoint->get_size());
 
-  if (!reader->appending)
+  if (!m_reader->m_appending)
     set_headers();
 }
 

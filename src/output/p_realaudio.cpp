@@ -52,7 +52,7 @@ ra_packetizer_c::set_headers() {
   set_codec_private(m_private_data->get_buffer(), m_private_data->get_size());
 
   generic_packetizer_c::set_headers();
-  track_entry->EnableLacing(false);
+  m_track_entry->EnableLacing(false);
 }
 
 int

@@ -47,7 +47,7 @@ mpeg1_2_video_packetizer_c(generic_reader_c *p_reader,
       m_aspect_ratio_extracted = false;
   }
 
-  timecode_factory_application_mode = TFA_SHORT_QUEUEING;
+  m_timecode_factory_application_mode = TFA_SHORT_QUEUEING;
 
   if (hack_engaged(ENGAGE_USE_CODEC_STATE))
     m_parser.SeparateSequenceHeaders();
@@ -59,7 +59,7 @@ mpeg1_2_video_packetizer_c::process_framed(packet_cptr packet) {
     return FILE_STATUS_MOREDATA;
 
   if (   (   !hack_engaged(ENGAGE_USE_CODEC_STATE)
-           && (NULL != hcodec_private))
+          && (NULL != m_hcodec_private))
       || (4 > packet->data->get_size()))
     return video_packetizer_c::process(packet);
 
@@ -93,7 +93,7 @@ mpeg1_2_video_packetizer_c::process_framed(packet_cptr packet) {
   pos         -= 4;
   int sh_size  = pos - start;
 
-  if (NULL == hcodec_private) {
+  if (NULL == m_hcodec_private) {
     set_codec_private(&buf[start], sh_size);
     rerender_track_headers();
   }
@@ -145,7 +145,7 @@ mpeg1_2_video_packetizer_c::process(packet_cptr packet) {
       if (NULL == frame)
         break;
 
-      if (NULL == hcodec_private)
+      if (NULL == m_hcodec_private)
         create_private_data();
 
       packet_t *new_packet    = new packet_t(new memory_c(frame->data, frame->size, true), frame->timecode, frame->duration, frame->firstRef, frame->secondRef);

@@ -31,9 +31,9 @@ kate_packetizer_c::kate_packetizer_c(generic_reader_c *p_reader,
                                      int global_size)
   throw (error_c)
   : generic_packetizer_c(p_reader, p_ti)
-  , m_global_data(new memory_c((unsigned char *)safememdup(global_data ? global_data : ti.m_private_data,
-                                                           global_data ? global_size : ti.m_private_size),
-                               global_data ? global_size : ti.m_private_size, true))
+  , m_global_data(new memory_c((unsigned char *)safememdup(global_data ? global_data : m_ti.m_private_data,
+                                                           global_data ? global_size : m_ti.m_private_size),
+                               global_data ? global_size : m_ti.m_private_size, true))
   , m_previous_timecode(0)
 {
   set_track_type(track_subtitle);
@@ -76,7 +76,7 @@ kate_packetizer_c::process(packet_cptr packet) {
       add_packet(packet);
 
     } else
-      mxwarn_tid(ti.m_fname, ti.m_id, Y("Kate packet is too small and is being skipped.\n"));
+      mxwarn_tid(m_ti.m_fname, m_ti.m_id, Y("Kate packet is too small and is being skipped.\n"));
 
     return FILE_STATUS_MOREDATA;
   }
@@ -108,10 +108,10 @@ kate_packetizer_c::can_connect_to(generic_packetizer_c *src,
   if (NULL == psrc)
     return CAN_CONNECT_NO_FORMAT;
 
-  if (   ((NULL == ti.m_private_data) && (NULL != src->ti.m_private_data))
-      || ((NULL != ti.m_private_data) && (NULL == src->ti.m_private_data))
-      || (ti.m_private_size != src->ti.m_private_size)) {
-    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % ti.m_private_size % src->ti.m_private_size).str();
+  if (   ((NULL == m_ti.m_private_data) && (NULL != src->m_ti.m_private_data))
+      || ((NULL != m_ti.m_private_data) && (NULL == src->m_ti.m_private_data))
+      || (m_ti.m_private_size != src->m_ti.m_private_size)) {
+    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % m_ti.m_private_size % src->m_ti.m_private_size).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }
 

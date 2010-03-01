@@ -498,7 +498,7 @@ add_packetizer_globally(generic_packetizer_c *packetizer) {
 
   int idx = 0;
   foreach(filelist_t &file, g_files)
-    if (file.reader == packetizer->reader) {
+    if (file.reader == packetizer->m_reader) {
       pack.file      = idx;
       pack.orig_file = pack.file;
       break;
@@ -827,14 +827,14 @@ check_append_mapping() {
       if (amap->src_file_id == file_id)
         count++;
 
-    if ((0 < count) && (src_file->reader->used_track_ids.size() > count))
+    if ((0 < count) && (src_file->reader->m_used_track_ids.size() > count))
       mxerror(boost::format(Y("Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the "
                               "default mapping will be used) or specify a mapping for all tracks that are to be copied.\n")) % file_id % src_file->name);
     else if (0 == count) {
       std::string missing_mappings;
 
       // Default mapping.
-      mxforeach(id, src_file->reader->used_track_ids) {
+      mxforeach(id, src_file->reader->m_used_track_ids) {
         append_spec_t new_amap;
 
         new_amap.src_file_id  = file_id;
@@ -860,13 +860,13 @@ check_append_mapping() {
 
     // 5. Does the "source" file have a track with the src_track_id, and is
     // that track selected for copying?
-    if (!mxfind2(id, amap->src_track_id, src_file->reader->used_track_ids))
+    if (!mxfind2(id, amap->src_track_id, src_file->reader->m_used_track_ids))
       mxerror(boost::format(Y("The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. "
                               "The argument for '--append-to' was invalid.\n")) % amap->src_file_id % src_file->name % amap->src_track_id);
 
     // 6. Does the "destination" file have a track with the dst_track_id, and
     // that track selected for copying?
-    if (!mxfind2(id, amap->dst_track_id, dst_file->reader->used_track_ids))
+    if (!mxfind2(id, amap->dst_track_id, dst_file->reader->m_used_track_ids))
       mxerror(boost::format(Y("The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. Therefore no "
                               "track can be appended to it. The argument for '--append-to' was invalid.\n")) % amap->dst_file_id % dst_file->name % amap->dst_track_id);
 
@@ -903,16 +903,16 @@ check_append_mapping() {
 
     src_file = g_files.begin() + amap->src_file_id;
     src_ptzr = NULL;
-    mxforeach(gptzr, src_file->reader->reader_packetizers)
-      if ((*gptzr)->ti.m_id == amap->src_track_id) {
+    mxforeach(gptzr, src_file->reader->m_reader_packetizers)
+      if ((*gptzr)->m_ti.m_id == amap->src_track_id) {
         src_ptzr = (*gptzr);
         break;
       }
 
     dst_file = g_files.begin() + amap->dst_file_id;
     dst_ptzr = NULL;
-    mxforeach(gptzr, dst_file->reader->reader_packetizers)
-      if ((*gptzr)->ti.m_id == amap->dst_track_id) {
+    mxforeach(gptzr, dst_file->reader->m_reader_packetizers)
+      if ((*gptzr)->m_ti.m_id == amap->dst_track_id) {
         dst_ptzr = (*gptzr);
         break;
       }
@@ -994,7 +994,7 @@ calc_max_chapter_size() {
     if (file.appending)
       continue;
 
-    KaxChapters *chapters = file.reader->chapters;
+    KaxChapters *chapters = file.reader->m_chapters;
     if (NULL == chapters)
       continue;
 
@@ -1003,7 +1003,7 @@ calc_max_chapter_size() {
 
     move_chapters_by_edition(*g_kax_chapters, *chapters);
     delete chapters;
-    file.reader->chapters = NULL;
+    file.reader->m_chapters = NULL;
   }
 
   // Step 2: Fix the mandatory elements and count the size of all chapters.
@@ -1015,7 +1015,7 @@ calc_max_chapter_size() {
   }
 
   foreach(filelist_t &file, g_files) {
-    KaxChapters *chapters = file.reader->chapters;
+    KaxChapters *chapters = file.reader->m_chapters;
     if (NULL == chapters)
       continue;
 
@@ -1126,14 +1126,14 @@ create_readers() {
   if (!g_identifying) {
     // Create the packetizers.
     foreach(filelist_t &file, g_files) {
-      file.reader->appending = file.appending;
+      file.reader->m_appending = file.appending;
       file.reader->create_packetizers();
     }
     // Check if all track IDs given on the command line are actually
     // present.
     foreach(filelist_t &file, g_files) {
       file.reader->check_track_ids_and_packetizers();
-      file.num_unfinished_packetizers     = file.reader->reader_packetizers.size();
+      file.num_unfinished_packetizers     = file.reader->m_reader_packetizers.size();
       file.old_num_unfinished_packetizers = file.num_unfinished_packetizers;
     }
 
@@ -1511,16 +1511,16 @@ append_track(packetizer_t &ptzr,
   filelist_t &dst_file = g_files[amap.dst_file_id];
 
   if (NULL != deferred_file)
-    src_file.deferred_max_timecode_seen = deferred_file->reader->max_timecode_seen;
+    src_file.deferred_max_timecode_seen = deferred_file->reader->m_max_timecode_seen;
 
   // Find the generic_packetizer_c that we will be appending to the one
   // stored in ptzr.
   std::vector<generic_packetizer_c *>::const_iterator gptzr;
-  mxforeach(gptzr, src_file.reader->reader_packetizers)
-    if (amap.src_track_id == (*gptzr)->ti.m_id)
+  mxforeach(gptzr, src_file.reader->m_reader_packetizers)
+    if (amap.src_track_id == (*gptzr)->m_ti.m_id)
       break;
 
-  if (src_file.reader->reader_packetizers.end() == gptzr)
+  if (src_file.reader->m_reader_packetizers.end() == gptzr)
     mxerror(boost::format(Y("Could not find gptzr when appending. %1%\n")) % BUGMSG);
 
   // If we're dealing with a subtitle track or if the appending file contains
@@ -1529,7 +1529,7 @@ append_track(packetizer_t &ptzr,
   if (   !dst_file.done
       && (   (APPEND_MODE_FILE_BASED     == g_append_mode)
           || ((*gptzr)->get_track_type() == track_subtitle)
-          || (NULL                       != src_file.reader->chapters))) {
+          || (NULL                       != src_file.reader->m_chapters))) {
     dst_file.reader->read_all();
     dst_file.num_unfinished_packetizers     = 0;
     dst_file.old_num_unfinished_packetizers = 0;
@@ -1539,35 +1539,35 @@ append_track(packetizer_t &ptzr,
 
   if (   !ptzr.deferred
       && (track_subtitle == (*gptzr)->get_track_type())
-      && (             0 == dst_file.reader->num_video_tracks)
+      && (             0 == dst_file.reader->m_num_video_tracks)
       && (            -1 == src_file.deferred_max_timecode_seen)
       && (          NULL != g_video_packetizer)) {
 
-    std::vector<filelist_t>::iterator file;
-    mxforeach(file, g_files) {
-      if (file->done)
+    foreach(filelist_t &file, g_files) {
+      if (file.done)
         continue;
 
       std::vector<generic_packetizer_c *>::const_iterator vptzr;
-      mxforeach(vptzr, file->reader->reader_packetizers)
+      mxforeach(vptzr, file.reader->m_reader_packetizers)
         if ((*vptzr)->get_track_type() == track_video)
           break;
 
-      if (vptzr != file->reader->reader_packetizers.end()) {
-        deferred_connection_t new_def_con;
+      if (vptzr == file.reader->m_reader_packetizers.end())
+        continue;
 
-        ptzr.deferred    = true;
-        new_def_con.amap = amap;
-        new_def_con.ptzr = &ptzr;
-        file->deferred_connections.push_back(new_def_con);
+      deferred_connection_t new_def_con;
 
-        return;
-      }
+      ptzr.deferred    = true;
+      new_def_con.amap = amap;
+      new_def_con.ptzr = &ptzr;
+      file.deferred_connections.push_back(new_def_con);
+
+      return;
     }
   }
 
   mxinfo(boost::format(Y("Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"))
-         % (*gptzr)->ti.m_id % amap.src_file_id % (*gptzr)->ti.m_fname % ptzr.packetizer->ti.m_id % amap.dst_file_id % ptzr.packetizer->ti.m_fname);
+         % (*gptzr)->m_ti.m_id % amap.src_file_id % (*gptzr)->m_ti.m_fname % ptzr.packetizer->m_ti.m_id % amap.dst_file_id % ptzr.packetizer->m_ti.m_fname);
 
   // Is the current file currently used for displaying the progress? If yes
   // then replace it with the next one.
@@ -1596,7 +1596,7 @@ append_track(packetizer_t &ptzr,
   // (e.g. AVI and Quicktime). Those files will not work correctly for this.
   // But then again I don't expect that people will try to concatenate such
   // files if they've been split before.
-  int64_t timecode_adjustment = dst_file.reader->max_timecode_seen;
+  int64_t timecode_adjustment = dst_file.reader->m_max_timecode_seen;
   if ((track_subtitle != ptzr.packetizer->get_track_type()) && (APPEND_MODE_FILE_BASED == g_append_mode))
     // Intentionally left empty.
     ;
@@ -1609,22 +1609,22 @@ append_track(packetizer_t &ptzr,
     timecode_adjustment = src_file.deferred_max_timecode_seen;
 
   else if (   (ptzr.packetizer->get_track_type() == track_subtitle)
-           || (NULL != src_file.reader->chapters)) {
-    if (NULL == src_file.reader->ptzr_first_packet)
+           || (NULL != src_file.reader->m_chapters)) {
+    if (NULL == src_file.reader->m_ptzr_first_packet)
       ptzr.status = ptzr.packetizer->read();
 
-    if (src_file.reader->ptzr_first_packet != NULL) {
+    if (NULL != src_file.reader->m_ptzr_first_packet) {
       std::vector<append_spec_t>::const_iterator cmp_amap;
       mxforeach(cmp_amap, g_append_mapping)
         if (   (cmp_amap->src_file_id  == amap.src_file_id)
-            && (cmp_amap->src_track_id == src_file.reader->ptzr_first_packet->ti.m_id)
+            && (cmp_amap->src_track_id == src_file.reader->m_ptzr_first_packet->m_ti.m_id)
             && (cmp_amap->dst_file_id  == amap.dst_file_id))
           break;
 
       if (g_append_mapping.end() != cmp_amap)
-        mxforeach(gptzr, dst_file.reader->reader_packetizers)
-          if ((*gptzr)->ti.m_id == cmp_amap->dst_track_id) {
-            timecode_adjustment = (*gptzr)->max_timecode_seen;
+        mxforeach(gptzr, dst_file.reader->m_reader_packetizers)
+          if ((*gptzr)->m_ti.m_id == cmp_amap->dst_track_id) {
+            timecode_adjustment = (*gptzr)->m_max_timecode_seen;
             break;
           }
     }
@@ -1632,13 +1632,13 @@ append_track(packetizer_t &ptzr,
 
   if ((APPEND_MODE_FILE_BASED == g_append_mode) || (ptzr.packetizer->get_track_type() == track_subtitle)) {
     mxverb(2, boost::format("append_track: new timecode_adjustment for append_mode == FILE_BASED or subtitle track: %1% for %2%\n")
-           % format_timecode(timecode_adjustment) % ptzr.packetizer->ti.m_id);
+           % format_timecode(timecode_adjustment) % ptzr.packetizer->m_ti.m_id);
     // The actual connection.
     ptzr.packetizer->connect(old_packetizer, timecode_adjustment);
 
   } else {
     mxverb(2, boost::format("append_track: new timecode_adjustment for append_mode == TRACK_BASED and NON subtitle track: %1% for %2%\n")
-           % format_timecode(timecode_adjustment) % ptzr.packetizer->ti.m_id);
+           % format_timecode(timecode_adjustment) % ptzr.packetizer->m_ti.m_id);
     // The actual connection.
     ptzr.packetizer->connect(old_packetizer);
   }
@@ -1646,13 +1646,14 @@ append_track(packetizer_t &ptzr,
   // Append some more chapters and adjust their timecodes by the highest
   // timecode seen in the previous file/the track that we've been searching
   // for above.
-  if (NULL != src_file.reader->chapters) {
+  KaxChapters *chapters = src_file.reader->m_chapters;
+  if (NULL != chapters) {
     if (NULL == g_kax_chapters)
       g_kax_chapters = new KaxChapters;
-    adjust_chapter_timecodes(*src_file.reader->chapters, timecode_adjustment);
-    move_chapters_by_edition(*g_kax_chapters, *src_file.reader->chapters);
-    delete src_file.reader->chapters;
-    src_file.reader->chapters = NULL;
+    adjust_chapter_timecodes(*chapters, timecode_adjustment);
+    move_chapters_by_edition(*g_kax_chapters, *chapters);
+    delete chapters;
+    src_file.reader->m_chapters = NULL;
   }
 
   ptzr.deferred = false;
@@ -1682,7 +1683,7 @@ append_tracks_maybe() {
 
     append_spec_t *amap = NULL;
     foreach(append_spec_t &amap_idx, g_append_mapping)
-      if ((amap_idx.dst_file_id == ptzr.file) && (amap_idx.dst_track_id == ptzr.packetizer->ti.m_id)) {
+      if ((amap_idx.dst_file_id == ptzr.file) && (amap_idx.dst_track_id == ptzr.packetizer->m_ti.m_id)) {
         amap = &amap_idx;
         break;
       }

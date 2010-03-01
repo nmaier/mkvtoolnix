@@ -66,7 +66,7 @@ corepicture_reader_c::corepicture_reader_c(track_info_c &_ti)
   m_height(-1) {
 
   try {
-    m_xml_source = new mm_text_io_c(new mm_file_io_c(ti.m_fname));
+    m_xml_source = new mm_text_io_c(new mm_file_io_c(m_ti.m_fname));
 
     if (!corepicture_reader_c::probe_file(m_xml_source, 0))
       throw error_c(Y("corepicture_reader: Source is not a valid CorePanorama file."));
@@ -86,7 +86,7 @@ corepicture_reader_c::corepicture_reader_c(track_info_c &_ti)
   }
 
   if (verbose)
-    mxinfo_fn(ti.m_fname, Y("Using the CorePanorama subtitle reader.\n"));
+    mxinfo_fn(m_ti.m_fname, Y("Using the CorePanorama subtitle reader.\n"));
 }
 
 corepicture_reader_c::~corepicture_reader_c() {
@@ -135,7 +135,7 @@ corepicture_reader_c::start_element_cb(const char *name,
           new_picture.m_pic_type = COREPICTURE_TYPE_PNG;
 
         else
-          mxwarn_tid(ti.m_fname, 0, boost::format(Y("The picture type '%1%' is not recognized.\n")) % atts[i + 1]);
+          mxwarn_tid(m_ti.m_fname, 0, boost::format(Y("The picture type '%1%' is not recognized.\n")) % atts[i + 1]);
 
       } else if (!strcasecmp(atts[i], "panorama") && (0 != atts[i + 1][0])) {
         if (!strcasecmp(atts[i + 1], "flat"))
@@ -151,7 +151,7 @@ corepicture_reader_c::start_element_cb(const char *name,
           new_picture.m_pan_type = COREPICTURE_PAN_SPHERICAL;
 
         else
-          mxwarn_tid(ti.m_fname, 0, boost::format(Y("The panoramic mode '%1%' is not recognized.\n")) % atts[i + 1]);
+          mxwarn_tid(m_ti.m_fname, 0, boost::format(Y("The panoramic mode '%1%' is not recognized.\n")) % atts[i + 1]);
 
       } else if (!strcasecmp(atts[i], "url") && (0 != atts[i + 1][0]))
         new_picture.m_url = escape_xml(atts[i + 1]);
@@ -193,9 +193,9 @@ corepicture_reader_c::create_packetizer(int64_t tid) {
   }
   put_uint32_be(&private_buffer[1], codec_used);
 
-  ti.m_private_data = (unsigned char *)safememdup(private_buffer, sizeof(private_buffer));
-  ti.m_private_size = sizeof(private_buffer);
-  m_ptzr            = add_packetizer(new video_packetizer_c(this, ti, MKV_V_COREPICTURE, 0.0, m_width, m_height));
+  m_ti.m_private_data = (unsigned char *)safememdup(private_buffer, sizeof(private_buffer));
+  m_ti.m_private_size = sizeof(private_buffer);
+  m_ptzr              = add_packetizer(new video_packetizer_c(this, m_ti, MKV_V_COREPICTURE, 0.0, m_width, m_height));
 }
 
 file_status_e
@@ -220,7 +220,7 @@ corepicture_reader_c::read(generic_packetizer_c *ptzr,
       }
 
     } catch(...) {
-      mxerror_tid(ti.m_fname, 0, boost::format(Y("Impossible to use file '%1%': The file could not be opened for reading.\n")) % m_current_picture->m_url);
+      mxerror_tid(m_ti.m_fname, 0, boost::format(Y("Impossible to use file '%1%': The file could not be opened for reading.\n")) % m_current_picture->m_url);
     }
     m_current_picture++;
   }

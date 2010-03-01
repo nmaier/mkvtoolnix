@@ -37,7 +37,7 @@ ssa_reader_c::ssa_reader_c(track_info_c &_ti)
   counted_ptr<mm_text_io_c> io;
 
   try {
-    io = counted_ptr<mm_text_io_c>(new mm_text_io_c(new mm_file_io_c(ti.m_fname)));
+    io = counted_ptr<mm_text_io_c>(new mm_text_io_c(new mm_file_io_c(m_ti.m_fname)));
   } catch (...) {
     throw error_c(Y("ssa_reader: Could not open the source file."));
   }
@@ -45,19 +45,19 @@ ssa_reader_c::ssa_reader_c(track_info_c &_ti)
   if (!ssa_reader_c::probe_file(io.get_object(), 0))
     throw error_c(Y("ssa_reader: Source is not a valid SSA/ASS file."));
 
-  charset_converter_cptr cc_utf8 = map_has_key(ti.m_sub_charsets,  0) ? charset_converter_c::init(ti.m_sub_charsets[ 0])
-                                 : map_has_key(ti.m_sub_charsets, -1) ? charset_converter_c::init(ti.m_sub_charsets[-1])
-                                 : io->get_byte_order() != BO_NONE    ? charset_converter_c::init("UTF-8")
-                                 :                                      g_cc_local_utf8;
+  charset_converter_cptr cc_utf8 = map_has_key(m_ti.m_sub_charsets,  0) ? charset_converter_c::init(m_ti.m_sub_charsets[ 0])
+                                 : map_has_key(m_ti.m_sub_charsets, -1) ? charset_converter_c::init(m_ti.m_sub_charsets[-1])
+                                 : io->get_byte_order() != BO_NONE      ? charset_converter_c::init("UTF-8")
+                                 :                                        g_cc_local_utf8;
 
-  ti.m_id = 0;
-  m_subs  = ssa_parser_cptr(new ssa_parser_c(this, io.get_object(), ti.m_fname, 0));
+  m_ti.m_id = 0;
+  m_subs    = ssa_parser_cptr(new ssa_parser_c(this, io.get_object(), m_ti.m_fname, 0));
 
   m_subs->set_charset_converter(cc_utf8);
   m_subs->parse();
 
   if (verbose)
-    mxinfo_fn(ti.m_fname, Y("Using the SSA/ASS subtitle reader.\n"));
+    mxinfo_fn(m_ti.m_fname, Y("Using the SSA/ASS subtitle reader.\n"));
 }
 
 ssa_reader_c::~ssa_reader_c() {
@@ -69,8 +69,8 @@ ssa_reader_c::create_packetizer(int64_t) {
     return;
 
   std::string global = m_subs->get_global();
-  add_packetizer(new textsubs_packetizer_c(this, ti, m_subs->is_ass() ?  MKV_S_TEXTASS : MKV_S_TEXTSSA, global.c_str(), global.length(), false, false));
-  mxinfo_tid(ti.m_fname, 0, Y("Using the text subtitle output module.\n"));
+  add_packetizer(new textsubs_packetizer_c(this, m_ti, m_subs->is_ass() ?  MKV_S_TEXTASS : MKV_S_TEXTSSA, global.c_str(), global.length(), false, false));
+  mxinfo_tid(m_ti.m_fname, 0, Y("Using the text subtitle output module.\n"));
 }
 
 file_status_e

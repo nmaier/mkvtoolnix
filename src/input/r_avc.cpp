@@ -88,17 +88,17 @@ avc_es_reader_c::avc_es_reader_c(track_info_c &n_ti)
   , m_buffer(memory_c::alloc(READ_SIZE))
 {
   try {
-    m_io   = counted_ptr<mm_io_c>(new mm_file_io_c(ti.m_fname));
+    m_io   = counted_ptr<mm_io_c>(new mm_file_io_c(m_ti.m_fname));
     m_size = m_io->get_size();
 
     avc_es_parser_c parser;
     parser.ignore_nalu_size_length_errors();
     parser.enable_timecode_generation(40000000);
 
-    if (map_has_key(ti.m_nalu_size_lengths, 0))
-      parser.set_nalu_size_length(ti.m_nalu_size_lengths[0]);
-    else if (map_has_key(ti.m_nalu_size_lengths, -1))
-      parser.set_nalu_size_length(ti.m_nalu_size_lengths[-1]);
+    if (map_has_key(m_ti.m_nalu_size_lengths, 0))
+      parser.set_nalu_size_length(m_ti.m_nalu_size_lengths[0]);
+    else if (map_has_key(m_ti.m_nalu_size_lengths, -1))
+      parser.set_nalu_size_length(m_ti.m_nalu_size_lengths[-1]);
 
     int num_read, i;
 
@@ -125,7 +125,7 @@ avc_es_reader_c::avc_es_reader_c(track_info_c &n_ti)
   }
 
   if (verbose)
-    mxinfo_fn(ti.m_fname, Y("Using the AVC/h.264 ES demultiplexer.\n"));
+    mxinfo_fn(m_ti.m_fname, Y("Using the AVC/h.264 ES demultiplexer.\n"));
 }
 
 void
@@ -133,9 +133,9 @@ avc_es_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, ti, m_avcc, m_width, m_height));
+  add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, m_ti, m_avcc, m_width, m_height));
 
-  mxinfo_tid(ti.m_fname, 0, Y("Using the MPEG-4 part 10 ES video output module.\n"));
+  mxinfo_tid(m_ti.m_fname, 0, Y("Using the MPEG-4 part 10 ES video output module.\n"));
 }
 
 file_status_e

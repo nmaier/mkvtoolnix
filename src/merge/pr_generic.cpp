@@ -46,10 +46,10 @@
    : track_video == track_type ? DEFTRACK_TYPE_VIDEO \
    :                             DEFTRACK_TYPE_SUBS)
 
-#define LOOKUP_TRACK_ID(container)              \
-      map_has_key(container, ti.m_id) ? ti.m_id \
-    : map_has_key(container, -1)      ? -1      \
-    :                                   -2
+#define LOOKUP_TRACK_ID(container)                  \
+      map_has_key(container, m_ti.m_id) ? m_ti.m_id \
+    : map_has_key(container, -1)        ? -1        \
+    :                                     -2
 
 
 int64_t packet_t::sm_packet_number_counter = 0;
@@ -61,204 +61,204 @@ packet_t::~packet_t() {
 
 std::vector<generic_packetizer_c *> ptzrs_in_header_order;
 
-generic_packetizer_c::generic_packetizer_c(generic_reader_c *p_reader,
-                                           track_info_c &p_ti)
+generic_packetizer_c::generic_packetizer_c(generic_reader_c *reader,
+                                           track_info_c &ti)
   throw(error_c)
   : m_num_packets(0)
-  , next_packet_wo_assigned_timecode(0)
+  , m_next_packet_wo_assigned_timecode(0)
   , m_free_refs(-1)
   , m_next_free_refs(-1)
-  , enqueued_bytes(0)
-  , safety_last_timecode(0)
-  , safety_last_duration(0)
-  , track_entry(NULL)
-  , hserialno(-1)
-  , htrack_type(-1)
-  , htrack_min_cache(0)
-  , htrack_max_cache(-1)
-  , htrack_default_duration(-1)
-  , default_duration_forced(true)
-  , default_track_warning_printed(false)
-  , huid(0)
-  , htrack_max_add_block_ids(-1)
-  , hcodec_private(NULL)
-  , hcodec_private_length(0)
-  , haudio_sampling_freq(-1.0)
-  , haudio_output_sampling_freq(-1.0)
-  , haudio_channels(-1)
-  , haudio_bit_depth(-1)
-  , hvideo_pixel_width(-1)
-  , hvideo_pixel_height(-1)
-  , hvideo_display_width(-1)
-  , hvideo_display_height(-1)
-  , hcompression(COMPRESSION_UNSPECIFIED)
-  , timecode_factory_application_mode(TFA_AUTOMATIC)
-  , last_cue_timecode(-1)
-  , has_been_flushed(false)
-  , ti(p_ti)
-  , reader(p_reader)
-  , connected_to(0)
-  , correction_timecode_offset(0)
-  , append_timecode_offset(0)
-  , max_timecode_seen(0)
-  , relaxed_timecode_checking(false)
+  , m_enqueued_bytes(0)
+  , m_safety_last_timecode(0)
+  , m_safety_last_duration(0)
+  , m_track_entry(NULL)
+  , m_hserialno(-1)
+  , m_htrack_type(-1)
+  , m_htrack_min_cache(0)
+  , m_htrack_max_cache(-1)
+  , m_htrack_default_duration(-1)
+  , m_default_duration_forced(true)
+  , m_default_track_warning_printed(false)
+  , m_huid(0)
+  , m_htrack_max_add_block_ids(-1)
+  , m_hcodec_private(NULL)
+  , m_hcodec_private_length(0)
+  , m_haudio_sampling_freq(-1.0)
+  , m_haudio_output_sampling_freq(-1.0)
+  , m_haudio_channels(-1)
+  , m_haudio_bit_depth(-1)
+  , m_hvideo_pixel_width(-1)
+  , m_hvideo_pixel_height(-1)
+  , m_hvideo_display_width(-1)
+  , m_hvideo_display_height(-1)
+  , m_hcompression(COMPRESSION_UNSPECIFIED)
+  , m_timecode_factory_application_mode(TFA_AUTOMATIC)
+  , m_last_cue_timecode(-1)
+  , m_has_been_flushed(false)
+  , m_ti(ti)
+  , m_reader(reader)
+  , m_connected_to(0)
+  , m_correction_timecode_offset(0)
+  , m_append_timecode_offset(0)
+  , m_max_timecode_seen(0)
+  , m_relaxed_timecode_checking(false)
 {
   // Let's see if the user specified timecode sync for this track.
-  if (map_has_key(ti.m_timecode_syncs, ti.m_id))
-    ti.m_tcsync = ti.m_timecode_syncs[ti.m_id];
-  else if (map_has_key(ti.m_timecode_syncs, -1))
-    ti.m_tcsync = ti.m_timecode_syncs[-1];
-  if (0 == ti.m_tcsync.numerator)
-    ti.m_tcsync.numerator = 1;
-  if (0 == ti.m_tcsync.denominator)
-    ti.m_tcsync.denominator = 1;
+  if (map_has_key(m_ti.m_timecode_syncs, m_ti.m_id))
+    m_ti.m_tcsync = m_ti.m_timecode_syncs[m_ti.m_id];
+  else if (map_has_key(m_ti.m_timecode_syncs, -1))
+    m_ti.m_tcsync = m_ti.m_timecode_syncs[-1];
+  if (0 == m_ti.m_tcsync.numerator)
+    m_ti.m_tcsync.numerator = 1;
+  if (0 == m_ti.m_tcsync.denominator)
+    m_ti.m_tcsync.denominator = 1;
 
   // Let's see if the user specified "reset timecodes" for this track.
-  ti.m_reset_timecodes = map_has_key(ti.m_reset_timecodes_specs, ti.m_id) || map_has_key(ti.m_reset_timecodes_specs, -1);
+  m_ti.m_reset_timecodes = map_has_key(m_ti.m_reset_timecodes_specs, m_ti.m_id) || map_has_key(m_ti.m_reset_timecodes_specs, -1);
 
   // Let's see if the user has specified which cues he wants for this track.
-  if (map_has_key(ti.m_cue_creations, ti.m_id))
-    ti.m_cues = ti.m_cue_creations[ti.m_id];
-  else if (map_has_key(ti.m_cue_creations, -1))
-    ti.m_cues = ti.m_cue_creations[-1];
+  if (map_has_key(m_ti.m_cue_creations, m_ti.m_id))
+    m_ti.m_cues = m_ti.m_cue_creations[m_ti.m_id];
+  else if (map_has_key(m_ti.m_cue_creations, -1))
+    m_ti.m_cues = m_ti.m_cue_creations[-1];
 
   // Let's see if the user has given a default track flag for this track.
-  if (map_has_key(ti.m_default_track_flags, ti.m_id))
-    ti.m_default_track = ti.m_default_track_flags[ti.m_id];
-  else if (map_has_key(ti.m_default_track_flags, -1))
-    ti.m_default_track = ti.m_default_track_flags[-1];
+  if (map_has_key(m_ti.m_default_track_flags, m_ti.m_id))
+    m_ti.m_default_track = m_ti.m_default_track_flags[m_ti.m_id];
+  else if (map_has_key(m_ti.m_default_track_flags, -1))
+    m_ti.m_default_track = m_ti.m_default_track_flags[-1];
 
   // Let's see if the user has given a forced track flag for this track.
-  if (map_has_key(ti.m_forced_track_flags, ti.m_id))
-    ti.m_forced_track = ti.m_forced_track_flags[ti.m_id];
-  else if (map_has_key(ti.m_forced_track_flags, -1))
-    ti.m_forced_track = ti.m_forced_track_flags[-1];
+  if (map_has_key(m_ti.m_forced_track_flags, m_ti.m_id))
+    m_ti.m_forced_track = m_ti.m_forced_track_flags[m_ti.m_id];
+  else if (map_has_key(m_ti.m_forced_track_flags, -1))
+    m_ti.m_forced_track = m_ti.m_forced_track_flags[-1];
 
   // Let's see if the user has specified a language for this track.
-  if (map_has_key(ti.m_languages, ti.m_id))
-    ti.m_language = ti.m_languages[ti.m_id];
-  else if (map_has_key(ti.m_languages, -1))
-    ti.m_language = ti.m_languages[-1];
+  if (map_has_key(m_ti.m_languages, m_ti.m_id))
+    m_ti.m_language = m_ti.m_languages[m_ti.m_id];
+  else if (map_has_key(m_ti.m_languages, -1))
+    m_ti.m_language = m_ti.m_languages[-1];
 
   // Let's see if the user has specified a sub charset for this track.
-  if (map_has_key(ti.m_sub_charsets, ti.m_id))
-    ti.m_sub_charset = ti.m_sub_charsets[ti.m_id];
-  else if (map_has_key(ti.m_sub_charsets, -1))
-    ti.m_sub_charset = ti.m_sub_charsets[-1];
+  if (map_has_key(m_ti.m_sub_charsets, m_ti.m_id))
+    m_ti.m_sub_charset = m_ti.m_sub_charsets[m_ti.m_id];
+  else if (map_has_key(m_ti.m_sub_charsets, -1))
+    m_ti.m_sub_charset = m_ti.m_sub_charsets[-1];
 
   // Let's see if the user has specified a sub charset for this track.
-  if (map_has_key(ti.m_all_tags, ti.m_id))
-    ti.m_tags_file_name = ti.m_all_tags[ti.m_id];
-  else if (map_has_key(ti.m_all_tags, -1))
-    ti.m_tags_file_name = ti.m_all_tags[-1];
-  if (ti.m_tags_file_name != "") {
-    delete ti.m_tags;
-    ti.m_tags = new KaxTags;
-    parse_xml_tags(ti.m_tags_file_name, ti.m_tags);
+  if (map_has_key(m_ti.m_all_tags, m_ti.m_id))
+    m_ti.m_tags_file_name = m_ti.m_all_tags[m_ti.m_id];
+  else if (map_has_key(m_ti.m_all_tags, -1))
+    m_ti.m_tags_file_name = m_ti.m_all_tags[-1];
+  if (m_ti.m_tags_file_name != "") {
+    delete m_ti.m_tags;
+    m_ti.m_tags = new KaxTags;
+    parse_xml_tags(m_ti.m_tags_file_name, m_ti.m_tags);
   }
 
   // Let's see if the user has specified how this track should be compressed.
-  if (map_has_key(ti.m_compression_list, ti.m_id))
-    ti.m_compression = ti.m_compression_list[ti.m_id];
-  else if (map_has_key(ti.m_compression_list, -1))
-    ti.m_compression = ti.m_compression_list[-1];
+  if (map_has_key(m_ti.m_compression_list, m_ti.m_id))
+    m_ti.m_compression = m_ti.m_compression_list[m_ti.m_id];
+  else if (map_has_key(m_ti.m_compression_list, -1))
+    m_ti.m_compression = m_ti.m_compression_list[-1];
 
   // Let's see if the user has specified a name for this track.
-  if (map_has_key(ti.m_track_names, ti.m_id))
-    ti.m_track_name = ti.m_track_names[ti.m_id];
-  else if (map_has_key(ti.m_track_names, -1))
-    ti.m_track_name = ti.m_track_names[-1];
+  if (map_has_key(m_ti.m_track_names, m_ti.m_id))
+    m_ti.m_track_name = m_ti.m_track_names[m_ti.m_id];
+  else if (map_has_key(m_ti.m_track_names, -1))
+    m_ti.m_track_name = m_ti.m_track_names[-1];
 
   // Let's see if the user has specified external timecodes for this track.
-  if (map_has_key(ti.m_all_ext_timecodes, ti.m_id))
-    ti.m_ext_timecodes = ti.m_all_ext_timecodes[ti.m_id];
-  else if (map_has_key(ti.m_all_ext_timecodes, -1))
-    ti.m_ext_timecodes = ti.m_all_ext_timecodes[-1];
+  if (map_has_key(m_ti.m_all_ext_timecodes, m_ti.m_id))
+    m_ti.m_ext_timecodes = m_ti.m_all_ext_timecodes[m_ti.m_id];
+  else if (map_has_key(m_ti.m_all_ext_timecodes, -1))
+    m_ti.m_ext_timecodes = m_ti.m_all_ext_timecodes[-1];
 
   // Let's see if the user has specified an aspect ratio or display dimensions
   // for this track.
-  int i = LOOKUP_TRACK_ID(ti.m_display_properties);
+  int i = LOOKUP_TRACK_ID(m_ti.m_display_properties);
   if (-2 != i) {
-    display_properties_t &dprop = ti.m_display_properties[i];
+    display_properties_t &dprop = m_ti.m_display_properties[i];
     if (0 > dprop.aspect_ratio) {
       set_video_display_dimensions(dprop.width, dprop.height, PARAMETER_SOURCE_CMDLINE);
     } else {
       set_video_aspect_ratio(dprop.aspect_ratio, dprop.ar_factor, PARAMETER_SOURCE_CMDLINE);
-      ti.m_aspect_ratio_given = true;
+      m_ti.m_aspect_ratio_given = true;
     }
   }
 
-  if (ti.m_aspect_ratio_given && ti.m_display_dimensions_given) {
-    if (ti.m_aspect_ratio_is_factor)
-      mxerror_tid(ti.m_fname, ti.m_id, boost::format(Y("Both the aspect ratio factor and '--display-dimensions' were given.\n")));
+  if (m_ti.m_aspect_ratio_given && m_ti.m_display_dimensions_given) {
+    if (m_ti.m_aspect_ratio_is_factor)
+      mxerror_tid(m_ti.m_fname, m_ti.m_id, boost::format(Y("Both the aspect ratio factor and '--display-dimensions' were given.\n")));
     else
-      mxerror_tid(ti.m_fname, ti.m_id, boost::format(Y("Both the aspect ratio and '--display-dimensions' were given.\n")));
+      mxerror_tid(m_ti.m_fname, m_ti.m_id, boost::format(Y("Both the aspect ratio and '--display-dimensions' were given.\n")));
   }
 
   // Let's see if the user has specified a FourCC for this track.
-  if (map_has_key(ti.m_all_fourccs, ti.m_id))
-    ti.m_fourcc = ti.m_all_fourccs[ti.m_id];
-  else if (map_has_key(ti.m_all_fourccs, -1))
-    ti.m_fourcc = ti.m_all_fourccs[-1];
+  if (map_has_key(m_ti.m_all_fourccs, m_ti.m_id))
+    m_ti.m_fourcc = m_ti.m_all_fourccs[m_ti.m_id];
+  else if (map_has_key(m_ti.m_all_fourccs, -1))
+    m_ti.m_fourcc = m_ti.m_all_fourccs[-1];
 
   // Let's see if the user has specified a FourCC for this track.
-  i = LOOKUP_TRACK_ID(ti.m_pixel_crop_list);
+  i = LOOKUP_TRACK_ID(m_ti.m_pixel_crop_list);
   if (-2 != i)
-    set_video_pixel_cropping(ti.m_pixel_crop_list[i], PARAMETER_SOURCE_CMDLINE);
+    set_video_pixel_cropping(m_ti.m_pixel_crop_list[i], PARAMETER_SOURCE_CMDLINE);
 
   // Let's see if the user has specified a stereo mode for this track.
-  i = LOOKUP_TRACK_ID(ti.m_stereo_mode_list);
+  i = LOOKUP_TRACK_ID(m_ti.m_stereo_mode_list);
   if (-2 != i)
-    set_video_stereo_mode(ti.m_stereo_mode_list[ti.m_id], PARAMETER_SOURCE_CMDLINE);
+    set_video_stereo_mode(m_ti.m_stereo_mode_list[m_ti.m_id], PARAMETER_SOURCE_CMDLINE);
 
   // Let's see if the user has specified a default duration for this track.
-  if (map_has_key(ti.m_default_durations, ti.m_id))
-    htrack_default_duration = ti.m_default_durations[ti.m_id];
-  else if (map_has_key(ti.m_default_durations, -1))
-    htrack_default_duration = ti.m_default_durations[-1];
+  if (map_has_key(m_ti.m_default_durations, m_ti.m_id))
+    m_htrack_default_duration = m_ti.m_default_durations[m_ti.m_id];
+  else if (map_has_key(m_ti.m_default_durations, -1))
+    m_htrack_default_duration = m_ti.m_default_durations[-1];
   else
-    default_duration_forced = false;
+    m_default_duration_forced = false;
 
   // Let's see if the user has set a max_block_add_id
-  if (map_has_key(ti.m_max_blockadd_ids, ti.m_id))
-    htrack_max_add_block_ids = ti.m_max_blockadd_ids[ti.m_id];
-  else if (map_has_key(ti.m_max_blockadd_ids, -1))
-    htrack_max_add_block_ids = ti.m_max_blockadd_ids[-1];
+  if (map_has_key(m_ti.m_max_blockadd_ids, m_ti.m_id))
+    m_htrack_max_add_block_ids = m_ti.m_max_blockadd_ids[m_ti.m_id];
+  else if (map_has_key(m_ti.m_max_blockadd_ids, -1))
+    m_htrack_max_add_block_ids = m_ti.m_max_blockadd_ids[-1];
 
   // Let's see if the user has specified a NALU size length for this track.
-  if (map_has_key(ti.m_nalu_size_lengths, ti.m_id))
-    ti.m_nalu_size_length = ti.m_nalu_size_lengths[ti.m_id];
-  else if (map_has_key(ti.m_nalu_size_lengths, -1))
-    ti.m_nalu_size_length = ti.m_nalu_size_lengths[-1];
+  if (map_has_key(m_ti.m_nalu_size_lengths, m_ti.m_id))
+    m_ti.m_nalu_size_length = m_ti.m_nalu_size_lengths[m_ti.m_id];
+  else if (map_has_key(m_ti.m_nalu_size_lengths, -1))
+    m_ti.m_nalu_size_length = m_ti.m_nalu_size_lengths[-1];
 
   // Set default header values to 'unset'.
-  if (!reader->appending)
-    hserialno = create_track_number(reader, ti.m_id);
+  if (!m_reader->m_appending)
+    m_hserialno = create_track_number(m_reader, m_ti.m_id);
 
-  timecode_factory = timecode_factory_c::create(ti.m_ext_timecodes, ti.m_fname, ti.m_id);
+  m_timecode_factory = timecode_factory_c::create(m_ti.m_ext_timecodes, m_ti.m_fname, m_ti.m_id);
 
   // If no external timecode file but a default duration has been
   // given then create a simple timecode factory that generates the
   // timecodes for the given FPS.
-  if (!timecode_factory.is_set() && (-1 != htrack_default_duration))
-    timecode_factory = timecode_factory_c::create_fps_factory(htrack_default_duration, ti.m_fname, ti.m_id);
+  if (!m_timecode_factory.is_set() && (-1 != m_htrack_default_duration))
+    m_timecode_factory = timecode_factory_c::create_fps_factory(m_htrack_default_duration, m_ti.m_fname, m_ti.m_id);
 }
 
 generic_packetizer_c::~generic_packetizer_c() {
-  safefree(hcodec_private);
-  if (!packet_queue.empty())
-    mxerror_tid(ti.m_fname, ti.m_id, boost::format(Y("Packet queue not empty (flushed: %1%). Frames have been lost during remux. %2%\n")) % has_been_flushed % BUGMSG);
+  safefree(m_hcodec_private);
+  if (!m_packet_queue.empty())
+    mxerror_tid(m_ti.m_fname, m_ti.m_id, boost::format(Y("Packet queue not empty (flushed: %1%). Frames have been lost during remux. %2%\n")) % m_has_been_flushed % BUGMSG);
 }
 
 void
 generic_packetizer_c::set_tag_track_uid() {
-  if (NULL == ti.m_tags)
+  if (NULL == m_ti.m_tags)
     return;
 
-  convert_old_tags(*ti.m_tags);
+  convert_old_tags(*m_ti.m_tags);
   int idx_tags;
-  for (idx_tags = 0; ti.m_tags->ListSize() > idx_tags; ++idx_tags) {
-    KaxTag *tag = (KaxTag *)(*ti.m_tags)[idx_tags];
+  for (idx_tags = 0; m_ti.m_tags->ListSize() > idx_tags; ++idx_tags) {
+    KaxTag *tag = (KaxTag *)(*m_ti.m_tags)[idx_tags];
 
     int idx_tag;
     for (idx_tag = 0; tag->ListSize() > idx_tag; idx_tag++) {
@@ -281,13 +281,13 @@ generic_packetizer_c::set_tag_track_uid() {
       }
     }
 
-    GetChildAs<KaxTagTrackUID, EbmlUInteger>(GetChild<KaxTagTargets>(tag)) = huid;
+    GetChildAs<KaxTagTrackUID, EbmlUInteger>(GetChild<KaxTagTargets>(tag)) = m_huid;
 
     fix_mandatory_tag_elements(tag);
 
     if (!tag->CheckMandatory())
       mxerror(boost::format(Y("The tags in '%1%' could not be parsed: some mandatory elements are missing.\n"))
-              % (ti.m_tags_file_name != "" ? ti.m_tags_file_name : ti.m_fname));
+              % (m_ti.m_tags_file_name != "" ? m_ti.m_tags_file_name : m_ti.m_fname));
   }
 }
 
@@ -295,9 +295,9 @@ int
 generic_packetizer_c::set_uid(uint32_t uid) {
   if (is_unique_uint32(uid, UNIQUE_TRACK_IDS)) {
     add_unique_uint32(uid, UNIQUE_TRACK_IDS);
-    huid = uid;
-    if (NULL != track_entry)
-      GetChildAs<KaxTrackUID, EbmlUInteger>(track_entry) = huid;
+    m_huid = uid;
+    if (NULL != m_track_entry)
+      GetChildAs<KaxTrackUID, EbmlUInteger>(m_track_entry) = m_huid;
 
     return 1;
   }
@@ -308,181 +308,181 @@ generic_packetizer_c::set_uid(uint32_t uid) {
 void
 generic_packetizer_c::set_track_type(int type,
                                      timecode_factory_application_e tfa_mode) {
-  htrack_type = type;
+  m_htrack_type = type;
 
-  if ((track_audio == type) && (CUE_STRATEGY_UNSPECIFIED == ti.m_cues))
-    ti.m_cues = CUE_STRATEGY_SPARSE;
+  if ((track_audio == type) && (CUE_STRATEGY_UNSPECIFIED == m_ti.m_cues))
+    m_ti.m_cues = CUE_STRATEGY_SPARSE;
 
   if (track_audio == type)
-    reader->num_audio_tracks++;
+    m_reader->m_num_audio_tracks++;
 
   else if (track_video == type) {
-    reader->num_video_tracks++;
+    m_reader->m_num_video_tracks++;
     if (NULL == g_video_packetizer)
       g_video_packetizer = this;
 
   } else
-    reader->num_subtitle_tracks++;
+    m_reader->m_num_subtitle_tracks++;
 
   if (   (TFA_AUTOMATIC == tfa_mode)
-      && (TFA_AUTOMATIC == timecode_factory_application_mode))
-    timecode_factory_application_mode
+      && (TFA_AUTOMATIC == m_timecode_factory_application_mode))
+    m_timecode_factory_application_mode
       = (track_video    == type) ? TFA_FULL_QUEUEING
       : (track_subtitle == type) ? TFA_IMMEDIATE
       : (track_buttons  == type) ? TFA_IMMEDIATE
       :                            TFA_FULL_QUEUEING;
 
   else if (TFA_AUTOMATIC != tfa_mode)
-    timecode_factory_application_mode = tfa_mode;
+    m_timecode_factory_application_mode = tfa_mode;
 
-  if (timecode_factory.is_set() && (track_video != type) && (track_audio != type))
-    timecode_factory->set_preserve_duration(true);
+  if (m_timecode_factory.is_set() && (track_video != type) && (track_audio != type))
+    m_timecode_factory->set_preserve_duration(true);
 }
 
 void
 generic_packetizer_c::set_track_name(const std::string &name) {
-  ti.m_track_name = name;
-  if ((NULL != track_entry) && !name.empty())
-    GetChildAs<KaxTrackName, EbmlUnicodeString>(track_entry) = cstrutf8_to_UTFstring(ti.m_track_name);
+  m_ti.m_track_name = name;
+  if ((NULL != m_track_entry) && !name.empty())
+    GetChildAs<KaxTrackName, EbmlUnicodeString>(m_track_entry) = cstrutf8_to_UTFstring(m_ti.m_track_name);
 }
 
 void
 generic_packetizer_c::set_codec_id(const std::string &id) {
-  hcodec_id = id;
-  if ((NULL != track_entry) && !id.empty())
-    GetChildAs<KaxCodecID, EbmlString>(track_entry) = hcodec_id;
+  m_hcodec_id = id;
+  if ((NULL != m_track_entry) && !id.empty())
+    GetChildAs<KaxCodecID, EbmlString>(m_track_entry) = m_hcodec_id;
 }
 
 void
 generic_packetizer_c::set_codec_private(const unsigned char *cp,
                                         int length) {
-  safefree(hcodec_private);
+  safefree(m_hcodec_private);
 
   if (NULL == cp) {
-    hcodec_private        = NULL;
-    hcodec_private_length = 0;
+    m_hcodec_private        = NULL;
+    m_hcodec_private_length = 0;
     return;
   }
 
-  hcodec_private        = (unsigned char *)safememdup(cp, length);
-  hcodec_private_length = length;
+  m_hcodec_private        = (unsigned char *)safememdup(cp, length);
+  m_hcodec_private_length = length;
 
-  if (NULL != track_entry)
-    GetChild<KaxCodecPrivate>(*track_entry).CopyBuffer((binary *)hcodec_private, hcodec_private_length);
+  if (NULL != m_track_entry)
+    GetChild<KaxCodecPrivate>(*m_track_entry).CopyBuffer((binary *)m_hcodec_private, m_hcodec_private_length);
 }
 
 void
 generic_packetizer_c::set_track_min_cache(int min_cache) {
-  htrack_min_cache = min_cache;
-  if (NULL != track_entry)
-    GetChildAs<KaxTrackMinCache, EbmlUInteger>(track_entry) = min_cache;
+  m_htrack_min_cache = min_cache;
+  if (NULL != m_track_entry)
+    GetChildAs<KaxTrackMinCache, EbmlUInteger>(m_track_entry) = min_cache;
 }
 
 void
 generic_packetizer_c::set_track_max_cache(int max_cache) {
-  htrack_max_cache = max_cache;
-  if (NULL != track_entry)
-    GetChildAs<KaxTrackMaxCache, EbmlUInteger>(track_entry) = max_cache;
+  m_htrack_max_cache = max_cache;
+  if (NULL != m_track_entry)
+    GetChildAs<KaxTrackMaxCache, EbmlUInteger>(m_track_entry) = max_cache;
 }
 
 void
 generic_packetizer_c::set_track_default_duration(int64_t def_dur) {
-  if (default_duration_forced)
+  if (m_default_duration_forced)
     return;
 
-  htrack_default_duration = (int64_t)(def_dur * ti.m_tcsync.numerator / ti.m_tcsync.denominator);
+  m_htrack_default_duration = (int64_t)(def_dur * m_ti.m_tcsync.numerator / m_ti.m_tcsync.denominator);
 
-  if (NULL != track_entry)
-    GetChildAs<KaxTrackDefaultDuration, EbmlUInteger>(track_entry) = htrack_default_duration;
+  if (NULL != m_track_entry)
+    GetChildAs<KaxTrackDefaultDuration, EbmlUInteger>(m_track_entry) = m_htrack_default_duration;
 }
 
 void
 generic_packetizer_c::set_track_max_additionals(int max_add_block_ids) {
-  htrack_max_add_block_ids = max_add_block_ids;
-  if (NULL != track_entry)
-    GetChildAs<KaxMaxBlockAdditionID, EbmlUInteger>(track_entry) = max_add_block_ids;
+  m_htrack_max_add_block_ids = max_add_block_ids;
+  if (NULL != m_track_entry)
+    GetChildAs<KaxMaxBlockAdditionID, EbmlUInteger>(m_track_entry) = max_add_block_ids;
 }
 
 int64_t
 generic_packetizer_c::get_track_default_duration() {
-  return htrack_default_duration;
+  return m_htrack_default_duration;
 }
 
 void
 generic_packetizer_c::set_track_forced_flag(bool forced_track) {
-  ti.m_forced_track = forced_track;
-  if (NULL != track_entry)
-    GetChildAs<KaxTrackFlagForced, EbmlUInteger>(track_entry) = forced_track ? 1 : 0;
+  m_ti.m_forced_track = forced_track;
+  if (NULL != m_track_entry)
+    GetChildAs<KaxTrackFlagForced, EbmlUInteger>(m_track_entry) = forced_track ? 1 : 0;
 }
 
 void
 generic_packetizer_c::set_audio_sampling_freq(float freq) {
-  haudio_sampling_freq = freq;
-  if (NULL != track_entry)
-    GetChildAs<KaxAudioSamplingFreq, EbmlFloat>(GetChild<KaxTrackAudio>(track_entry)) = haudio_sampling_freq;
+  m_haudio_sampling_freq = freq;
+  if (NULL != m_track_entry)
+    GetChildAs<KaxAudioSamplingFreq, EbmlFloat>(GetChild<KaxTrackAudio>(m_track_entry)) = m_haudio_sampling_freq;
 }
 
 void
 generic_packetizer_c::set_audio_output_sampling_freq(float freq) {
-  haudio_output_sampling_freq = freq;
-  if (NULL != track_entry)
-    GetChildAs<KaxAudioOutputSamplingFreq, EbmlFloat>(GetChild<KaxTrackAudio>(track_entry)) = haudio_output_sampling_freq;
+  m_haudio_output_sampling_freq = freq;
+  if (NULL != m_track_entry)
+    GetChildAs<KaxAudioOutputSamplingFreq, EbmlFloat>(GetChild<KaxTrackAudio>(m_track_entry)) = m_haudio_output_sampling_freq;
 }
 
 void
 generic_packetizer_c::set_audio_channels(int channels) {
-  haudio_channels = channels;
-  if (NULL != track_entry)
-    GetChildAs<KaxAudioChannels, EbmlUInteger>(GetChild<KaxTrackAudio>(*track_entry)) = haudio_channels;
+  m_haudio_channels = channels;
+  if (NULL != m_track_entry)
+    GetChildAs<KaxAudioChannels, EbmlUInteger>(GetChild<KaxTrackAudio>(*m_track_entry)) = m_haudio_channels;
 }
 
 void
 generic_packetizer_c::set_audio_bit_depth(int bit_depth) {
-  haudio_bit_depth = bit_depth;
-  if (NULL != track_entry)
-    GetChildAs<KaxAudioBitDepth, EbmlUInteger>(GetChild<KaxTrackAudio>(*track_entry)) = haudio_bit_depth;
+  m_haudio_bit_depth = bit_depth;
+  if (NULL != m_track_entry)
+    GetChildAs<KaxAudioBitDepth, EbmlUInteger>(GetChild<KaxTrackAudio>(*m_track_entry)) = m_haudio_bit_depth;
 }
 
 void
 generic_packetizer_c::set_video_pixel_width(int width) {
-  hvideo_pixel_width = width;
-  if (NULL != track_entry)
-    GetChildAs<KaxVideoPixelWidth, EbmlUInteger>(GetChild<KaxTrackVideo>(*track_entry)) = hvideo_pixel_width;
+  m_hvideo_pixel_width = width;
+  if (NULL != m_track_entry)
+    GetChildAs<KaxVideoPixelWidth, EbmlUInteger>(GetChild<KaxTrackVideo>(*m_track_entry)) = m_hvideo_pixel_width;
 }
 
 void
 generic_packetizer_c::set_video_pixel_height(int height) {
-  hvideo_pixel_height = height;
-  if (NULL != track_entry)
-    GetChildAs<KaxVideoPixelHeight, EbmlUInteger>(GetChild<KaxTrackVideo>(*track_entry)) = hvideo_pixel_height;
+  m_hvideo_pixel_height = height;
+  if (NULL != m_track_entry)
+    GetChildAs<KaxVideoPixelHeight, EbmlUInteger>(GetChild<KaxTrackVideo>(*m_track_entry)) = m_hvideo_pixel_height;
 }
 
 void
 generic_packetizer_c::set_video_display_width(int width) {
-  hvideo_display_width = width;
-  if (NULL != track_entry)
-    GetChildAs<KaxVideoDisplayWidth, EbmlUInteger>(GetChild<KaxTrackVideo>(*track_entry)) = hvideo_display_width;
+  m_hvideo_display_width = width;
+  if (NULL != m_track_entry)
+    GetChildAs<KaxVideoDisplayWidth, EbmlUInteger>(GetChild<KaxTrackVideo>(*m_track_entry)) = m_hvideo_display_width;
 }
 
 void
 generic_packetizer_c::set_video_display_height(int height) {
-  hvideo_display_height = height;
-  if (NULL != track_entry)
-    GetChildAs<KaxVideoDisplayHeight, EbmlUInteger>(GetChild<KaxTrackVideo>(*track_entry)) = hvideo_display_height;
+  m_hvideo_display_height = height;
+  if (NULL != m_track_entry)
+    GetChildAs<KaxVideoDisplayHeight, EbmlUInteger>(GetChild<KaxTrackVideo>(*m_track_entry)) = m_hvideo_display_height;
 }
 
 void
 generic_packetizer_c::set_video_display_dimensions(int width,
                                                    int height,
                                                    parameter_source_e source) {
-  if (display_dimensions_or_aspect_ratio_set() && (ti.m_display_dimensions_source >= source))
+  if (display_dimensions_or_aspect_ratio_set() && (m_ti.m_display_dimensions_source >= source))
     return;
 
-  ti.m_display_width             = width;
-  ti.m_display_height            = height;
-  ti.m_display_dimensions_source = source;
-  ti.m_display_dimensions_given  = true;
-  ti.m_aspect_ratio_given        = false;
+  m_ti.m_display_width             = width;
+  m_ti.m_display_height            = height;
+  m_ti.m_display_dimensions_source = source;
+  m_ti.m_display_dimensions_given  = true;
+  m_ti.m_aspect_ratio_given        = false;
 
   set_video_display_width(width);
   set_video_display_height(height);
@@ -493,14 +493,14 @@ void
 generic_packetizer_c::set_video_aspect_ratio(double aspect_ratio,
                                              bool is_factor,
                                              parameter_source_e source) {
-  if (display_dimensions_or_aspect_ratio_set() && (ti.m_display_dimensions_source >= source))
+  if (display_dimensions_or_aspect_ratio_set() && (m_ti.m_display_dimensions_source >= source))
     return;
 
-  ti.m_aspect_ratio              = aspect_ratio;
-  ti.m_aspect_ratio_is_factor    = is_factor;
-  ti.m_display_dimensions_source = source;
-  ti.m_display_dimensions_given  = false;
-  ti.m_aspect_ratio_given        = true;
+  m_ti.m_aspect_ratio              = aspect_ratio;
+  m_ti.m_aspect_ratio_is_factor    = is_factor;
+  m_ti.m_display_dimensions_source = source;
+  m_ti.m_display_dimensions_given  = false;
+  m_ti.m_aspect_ratio_given        = true;
 }
 
 void
@@ -508,22 +508,22 @@ generic_packetizer_c::set_as_default_track(int type,
                                            int priority) {
   if (g_default_tracks_priority[type] < priority) {
     g_default_tracks_priority[type] = priority;
-    g_default_tracks[type]          = hserialno;
+    g_default_tracks[type]          = m_hserialno;
 
   } else if (   (DEFAULT_TRACK_PRIORITY_CMDLINE == priority)
-             && (g_default_tracks[type] != hserialno)
-             && !default_track_warning_printed) {
+             && (g_default_tracks[type] != m_hserialno)
+             && !m_default_track_warning_printed) {
     mxwarn(boost::format(Y("Another default track for %1% tracks has already been set. The 'default' flag for track %2% of '%3%' will not be set.\n"))
-           % (DEFTRACK_TYPE_AUDIO == type ? "audio" : DEFTRACK_TYPE_VIDEO == type ? "video" : "subtitle") % ti.m_id % ti.m_fname);
-    default_track_warning_printed = true;
+           % (DEFTRACK_TYPE_AUDIO == type ? "audio" : DEFTRACK_TYPE_VIDEO == type ? "video" : "subtitle") % m_ti.m_id % m_ti.m_fname);
+    m_default_track_warning_printed = true;
   }
 }
 
 void
 generic_packetizer_c::set_language(const std::string &language) {
-  ti.m_language = language;
-  if (NULL != track_entry)
-    GetChildAs<KaxTrackLanguage, EbmlString>(track_entry) = ti.m_language;
+  m_ti.m_language = language;
+  if (NULL != m_track_entry)
+    GetChildAs<KaxTrackLanguage, EbmlString>(m_track_entry) = m_ti.m_language;
 }
 
 void
@@ -532,22 +532,22 @@ generic_packetizer_c::set_video_pixel_cropping(int left,
                                                int right,
                                                int bottom,
                                                parameter_source_e source) {
-  if (source <= ti.m_pixel_cropping_source)
+  if (source <= m_ti.m_pixel_cropping_source)
     return;
 
-  ti.m_pixel_cropping.left   = left;
-  ti.m_pixel_cropping.top    = top;
-  ti.m_pixel_cropping.right  = right;
-  ti.m_pixel_cropping.bottom = bottom;
-  ti.m_pixel_cropping_source = source;
+  m_ti.m_pixel_cropping.left   = left;
+  m_ti.m_pixel_cropping.top    = top;
+  m_ti.m_pixel_cropping.right  = right;
+  m_ti.m_pixel_cropping.bottom = bottom;
+  m_ti.m_pixel_cropping_source = source;
 
-  if (NULL != track_entry) {
-    KaxTrackVideo &video = GetChild<KaxTrackVideo>(track_entry);
+  if (NULL != m_track_entry) {
+    KaxTrackVideo &video = GetChild<KaxTrackVideo>(m_track_entry);
 
-    GetChildAs<KaxVideoPixelCropLeft,   EbmlUInteger>(video) = ti.m_pixel_cropping.left;
-    GetChildAs<KaxVideoPixelCropTop,    EbmlUInteger>(video) = ti.m_pixel_cropping.top;
-    GetChildAs<KaxVideoPixelCropRight,  EbmlUInteger>(video) = ti.m_pixel_cropping.right;
-    GetChildAs<KaxVideoPixelCropBottom, EbmlUInteger>(video) = ti.m_pixel_cropping.bottom;
+    GetChildAs<KaxVideoPixelCropLeft,   EbmlUInteger>(video) = m_ti.m_pixel_cropping.left;
+    GetChildAs<KaxVideoPixelCropTop,    EbmlUInteger>(video) = m_ti.m_pixel_cropping.top;
+    GetChildAs<KaxVideoPixelCropRight,  EbmlUInteger>(video) = m_ti.m_pixel_cropping.right;
+    GetChildAs<KaxVideoPixelCropBottom, EbmlUInteger>(video) = m_ti.m_pixel_cropping.bottom;
   }
 }
 
@@ -560,19 +560,19 @@ generic_packetizer_c::set_video_pixel_cropping(const pixel_crop_t &cropping,
 void
 generic_packetizer_c::set_video_stereo_mode(stereo_mode_e stereo_mode,
                                             parameter_source_e source) {
-  if (source <= ti.m_stereo_mode_source)
+  if (source <= m_ti.m_stereo_mode_source)
     return;
 
-  ti.m_stereo_mode        = stereo_mode;
-  ti.m_stereo_mode_source = source;
+  m_ti.m_stereo_mode        = stereo_mode;
+  m_ti.m_stereo_mode_source = source;
 
-  if ((NULL != track_entry) && (STEREO_MODE_UNSPECIFIED != stereo_mode))
-    GetChildAs<KaxVideoStereoMode, EbmlUInteger>(GetChild<KaxTrackVideo>(*track_entry)) = ti.m_stereo_mode;
+  if ((NULL != m_track_entry) && (STEREO_MODE_UNSPECIFIED != stereo_mode))
+    GetChildAs<KaxVideoStereoMode, EbmlUInteger>(GetChild<KaxTrackVideo>(*m_track_entry)) = m_ti.m_stereo_mode;
 }
 
 void
 generic_packetizer_c::set_headers() {
-  if (0 < connected_to) {
+  if (0 < m_connected_to) {
     mxerror(boost::format("generic_packetizer_c::set_headers(): connected_to > 0 (type: %1%). %2%\n") % typeid(*this).name() % BUGMSG);
     return;
   }
@@ -588,188 +588,188 @@ generic_packetizer_c::set_headers() {
   if (!found)
     ptzrs_in_header_order.push_back(this);
 
-  if (NULL == track_entry) {
-    track_entry      = NULL == g_kax_last_entry ? &GetChild<KaxTrackEntry>(g_kax_tracks) : &GetNextChild<KaxTrackEntry>(g_kax_tracks, *g_kax_last_entry);
-    g_kax_last_entry = track_entry;
-    track_entry->SetGlobalTimecodeScale((int64_t)g_timecode_scale);
+  if (NULL == m_track_entry) {
+    m_track_entry    = NULL == g_kax_last_entry ? &GetChild<KaxTrackEntry>(g_kax_tracks) : &GetNextChild<KaxTrackEntry>(g_kax_tracks, *g_kax_last_entry);
+    g_kax_last_entry = m_track_entry;
+    m_track_entry->SetGlobalTimecodeScale((int64_t)g_timecode_scale);
   }
 
-  GetChildAs<KaxTrackNumber, EbmlUInteger>(track_entry) = hserialno;
+  GetChildAs<KaxTrackNumber, EbmlUInteger>(m_track_entry) = m_hserialno;
 
-  if (0 == huid)
-    huid = create_unique_uint32(UNIQUE_TRACK_IDS);
+  if (0 == m_huid)
+    m_huid = create_unique_uint32(UNIQUE_TRACK_IDS);
 
-  GetChildAs<KaxTrackUID, EbmlUInteger>(track_entry)    = huid;
+  GetChildAs<KaxTrackUID, EbmlUInteger>(m_track_entry)    = m_huid;
 
-  if (-1 != htrack_type)
-    GetChildAs<KaxTrackType, EbmlUInteger>(track_entry) = htrack_type;
+  if (-1 != m_htrack_type)
+    GetChildAs<KaxTrackType, EbmlUInteger>(m_track_entry) = m_htrack_type;
 
-  if (!hcodec_id.empty())
-    GetChildAs<KaxCodecID, EbmlString>(track_entry)     = hcodec_id;
+  if (!m_hcodec_id.empty())
+    GetChildAs<KaxCodecID, EbmlString>(m_track_entry)     = m_hcodec_id;
 
-  if (NULL != hcodec_private)
-    GetChild<KaxCodecPrivate>(*track_entry).CopyBuffer((binary *)hcodec_private, hcodec_private_length);
+  if (NULL != m_hcodec_private)
+    GetChild<KaxCodecPrivate>(*m_track_entry).CopyBuffer((binary *)m_hcodec_private, m_hcodec_private_length);
 
-  if (-1 != htrack_min_cache)
-    GetChildAs<KaxTrackMinCache, EbmlUInteger>(track_entry)      = htrack_min_cache;
+  if (-1 != m_htrack_min_cache)
+    GetChildAs<KaxTrackMinCache, EbmlUInteger>(m_track_entry)      = m_htrack_min_cache;
 
-  if (-1 != htrack_max_cache)
-    GetChildAs<KaxTrackMaxCache, EbmlUInteger>(track_entry)      = htrack_max_cache;
+  if (-1 != m_htrack_max_cache)
+    GetChildAs<KaxTrackMaxCache, EbmlUInteger>(m_track_entry)      = m_htrack_max_cache;
 
-  if (-1 != htrack_max_add_block_ids)
-    GetChildAs<KaxMaxBlockAdditionID, EbmlUInteger>(track_entry) = htrack_max_add_block_ids;
+  if (-1 != m_htrack_max_add_block_ids)
+    GetChildAs<KaxMaxBlockAdditionID, EbmlUInteger>(m_track_entry) = m_htrack_max_add_block_ids;
 
-  if (timecode_factory.is_set())
-    htrack_default_duration = (int64_t)timecode_factory->get_default_duration(htrack_default_duration);
-  if (-1.0 != htrack_default_duration)
-    GetChildAs<KaxTrackDefaultDuration, EbmlUInteger>(track_entry) = htrack_default_duration;
+  if (m_timecode_factory.is_set())
+    m_htrack_default_duration = (int64_t)m_timecode_factory->get_default_duration(m_htrack_default_duration);
+  if (-1.0 != m_htrack_default_duration)
+    GetChildAs<KaxTrackDefaultDuration, EbmlUInteger>(m_track_entry) = m_htrack_default_duration;
 
-  idx = TRACK_TYPE_TO_DEFTRACK_TYPE(htrack_type);
+  idx = TRACK_TYPE_TO_DEFTRACK_TYPE(m_htrack_type);
 
-  if (boost::logic::indeterminate(ti.m_default_track))
+  if (boost::logic::indeterminate(m_ti.m_default_track))
     set_as_default_track(idx, DEFAULT_TRACK_PRIORITY_FROM_TYPE);
-  else if (ti.m_default_track)
+  else if (m_ti.m_default_track)
     set_as_default_track(idx, DEFAULT_TRACK_PRIORITY_CMDLINE);
-  else if (g_default_tracks[idx] == hserialno)
+  else if (g_default_tracks[idx] == m_hserialno)
     g_default_tracks[idx] = 0;
 
-  GetChildAs<KaxTrackLanguage, EbmlString>(track_entry) = ti.m_language != "" ? ti.m_language : g_default_language.c_str();
+  GetChildAs<KaxTrackLanguage, EbmlString>(m_track_entry) = m_ti.m_language != "" ? m_ti.m_language : g_default_language.c_str();
 
-  if (!ti.m_track_name.empty())
-    GetChildAs<KaxTrackName, EbmlUnicodeString>(track_entry) = cstrutf8_to_UTFstring(ti.m_track_name);
+  if (!m_ti.m_track_name.empty())
+    GetChildAs<KaxTrackName, EbmlUnicodeString>(m_track_entry) = cstrutf8_to_UTFstring(m_ti.m_track_name);
 
-  if (!boost::logic::indeterminate(ti.m_forced_track))
-    GetChildAs<KaxTrackFlagForced, EbmlUInteger>(track_entry) = ti.m_forced_track ? 1 : 0;
+  if (!boost::logic::indeterminate(m_ti.m_forced_track))
+    GetChildAs<KaxTrackFlagForced, EbmlUInteger>(m_track_entry) = m_ti.m_forced_track ? 1 : 0;
 
-  if (track_video == htrack_type) {
-    KaxTrackVideo &video = GetChild<KaxTrackVideo>(track_entry);
+  if (track_video == m_htrack_type) {
+    KaxTrackVideo &video = GetChild<KaxTrackVideo>(m_track_entry);
 
-    if ((-1 != hvideo_pixel_height) && (-1 != hvideo_pixel_width)) {
-      if ((-1 == hvideo_display_width) || (-1 == hvideo_display_height) || ti.m_aspect_ratio_given || ti.m_display_dimensions_given) {
-        if (ti.m_display_dimensions_given) {
-          hvideo_display_width  = ti.m_display_width;
-          hvideo_display_height = ti.m_display_height;
+    if ((-1 != m_hvideo_pixel_height) && (-1 != m_hvideo_pixel_width)) {
+      if ((-1 == m_hvideo_display_width) || (-1 == m_hvideo_display_height) || m_ti.m_aspect_ratio_given || m_ti.m_display_dimensions_given) {
+        if (m_ti.m_display_dimensions_given) {
+          m_hvideo_display_width  = m_ti.m_display_width;
+          m_hvideo_display_height = m_ti.m_display_height;
 
         } else {
-          if (!ti.m_aspect_ratio_given)
-            ti.m_aspect_ratio = (float)hvideo_pixel_width                   / (float)hvideo_pixel_height;
+          if (!m_ti.m_aspect_ratio_given)
+            m_ti.m_aspect_ratio = (float)m_hvideo_pixel_width                       / (float)m_hvideo_pixel_height;
 
-          else if (ti.m_aspect_ratio_is_factor)
-            ti.m_aspect_ratio = (float)hvideo_pixel_width * ti.m_aspect_ratio / (float)hvideo_pixel_height;
+          else if (m_ti.m_aspect_ratio_is_factor)
+            m_ti.m_aspect_ratio = (float)m_hvideo_pixel_width * m_ti.m_aspect_ratio / (float)m_hvideo_pixel_height;
 
-          if (ti.m_aspect_ratio > ((float)hvideo_pixel_width / (float)hvideo_pixel_height)) {
-            hvideo_display_width  = irnd(hvideo_pixel_height * ti.m_aspect_ratio);
-            hvideo_display_height = hvideo_pixel_height;
+          if (m_ti.m_aspect_ratio > ((float)m_hvideo_pixel_width / (float)m_hvideo_pixel_height)) {
+            m_hvideo_display_width  = irnd(m_hvideo_pixel_height * m_ti.m_aspect_ratio);
+            m_hvideo_display_height = m_hvideo_pixel_height;
 
           } else {
-            hvideo_display_width  = hvideo_pixel_width;
-            hvideo_display_height = irnd(hvideo_pixel_width / ti.m_aspect_ratio);
+            m_hvideo_display_width  = m_hvideo_pixel_width;
+            m_hvideo_display_height = irnd(m_hvideo_pixel_width / m_ti.m_aspect_ratio);
           }
         }
       }
 
-      GetChildAs<KaxVideoPixelWidth,    EbmlUInteger>(video) = hvideo_pixel_width;
-      GetChildAs<KaxVideoPixelHeight,   EbmlUInteger>(video) = hvideo_pixel_height;
+      GetChildAs<KaxVideoPixelWidth,    EbmlUInteger>(video) = m_hvideo_pixel_width;
+      GetChildAs<KaxVideoPixelHeight,   EbmlUInteger>(video) = m_hvideo_pixel_height;
 
-      GetChildAs<KaxVideoDisplayWidth,  EbmlUInteger>(video) = hvideo_display_width;
-      GetChildAs<KaxVideoDisplayHeight, EbmlUInteger>(video) = hvideo_display_height;
+      GetChildAs<KaxVideoDisplayWidth,  EbmlUInteger>(video) = m_hvideo_display_width;
+      GetChildAs<KaxVideoDisplayHeight, EbmlUInteger>(video) = m_hvideo_display_height;
 
       GetChild<KaxVideoDisplayWidth>(video).SetDefaultSize(4);
       GetChild<KaxVideoDisplayHeight>(video).SetDefaultSize(4);
 
-      if (PARAMETER_SOURCE_NONE != ti.m_pixel_cropping_source) {
-        GetChildAs<KaxVideoPixelCropLeft,   EbmlUInteger>(video) = ti.m_pixel_cropping.left;
-        GetChildAs<KaxVideoPixelCropTop,    EbmlUInteger>(video) = ti.m_pixel_cropping.top;
-        GetChildAs<KaxVideoPixelCropRight,  EbmlUInteger>(video) = ti.m_pixel_cropping.right;
-        GetChildAs<KaxVideoPixelCropBottom, EbmlUInteger>(video) = ti.m_pixel_cropping.bottom;
+      if (PARAMETER_SOURCE_NONE != m_ti.m_pixel_cropping_source) {
+        GetChildAs<KaxVideoPixelCropLeft,   EbmlUInteger>(video) = m_ti.m_pixel_cropping.left;
+        GetChildAs<KaxVideoPixelCropTop,    EbmlUInteger>(video) = m_ti.m_pixel_cropping.top;
+        GetChildAs<KaxVideoPixelCropRight,  EbmlUInteger>(video) = m_ti.m_pixel_cropping.right;
+        GetChildAs<KaxVideoPixelCropBottom, EbmlUInteger>(video) = m_ti.m_pixel_cropping.bottom;
       }
 
-      if ((PARAMETER_SOURCE_NONE != ti.m_stereo_mode_source) && (STEREO_MODE_UNSPECIFIED != ti.m_stereo_mode))
-        GetChildAs<KaxVideoStereoMode, EbmlUInteger>(video) = ti.m_stereo_mode;
+      if ((PARAMETER_SOURCE_NONE != m_ti.m_stereo_mode_source) && (STEREO_MODE_UNSPECIFIED != m_ti.m_stereo_mode))
+        GetChildAs<KaxVideoStereoMode, EbmlUInteger>(video) = m_ti.m_stereo_mode;
     }
 
-  } else if (track_audio == htrack_type) {
-    KaxTrackAudio &audio = GetChild<KaxTrackAudio>(track_entry);
+  } else if (track_audio == m_htrack_type) {
+    KaxTrackAudio &audio = GetChild<KaxTrackAudio>(m_track_entry);
 
-    if (-1   != haudio_sampling_freq)
-      GetChildAs<KaxAudioSamplingFreq, EbmlFloat>(audio)       = haudio_sampling_freq;
+    if (-1   != m_haudio_sampling_freq)
+      GetChildAs<KaxAudioSamplingFreq, EbmlFloat>(audio)       = m_haudio_sampling_freq;
 
-    if (-1.0 != haudio_output_sampling_freq)
-      GetChildAs<KaxAudioOutputSamplingFreq, EbmlFloat>(audio) = haudio_output_sampling_freq;
+    if (-1.0 != m_haudio_output_sampling_freq)
+      GetChildAs<KaxAudioOutputSamplingFreq, EbmlFloat>(audio) = m_haudio_output_sampling_freq;
 
-    if (-1   != haudio_channels)
-      GetChildAs<KaxAudioChannels, EbmlUInteger>(audio)        = haudio_channels;
+    if (-1   != m_haudio_channels)
+      GetChildAs<KaxAudioChannels, EbmlUInteger>(audio)        = m_haudio_channels;
 
-    if (-1   != haudio_bit_depth)
-      GetChildAs<KaxAudioBitDepth, EbmlUInteger>(audio)        = haudio_bit_depth;
+    if (-1   != m_haudio_bit_depth)
+      GetChildAs<KaxAudioBitDepth, EbmlUInteger>(audio)        = m_haudio_bit_depth;
 
-  } else if (track_buttons == htrack_type) {
-    if ((-1 != hvideo_pixel_height) && (-1 != hvideo_pixel_width)) {
-      KaxTrackVideo &video = GetChild<KaxTrackVideo>(track_entry);
+  } else if (track_buttons == m_htrack_type) {
+    if ((-1 != m_hvideo_pixel_height) && (-1 != m_hvideo_pixel_width)) {
+      KaxTrackVideo &video = GetChild<KaxTrackVideo>(m_track_entry);
 
-      GetChildAs<KaxVideoPixelWidth,  EbmlUInteger>(video) = hvideo_pixel_width;
-      GetChildAs<KaxVideoPixelHeight, EbmlUInteger>(video) = hvideo_pixel_height;
+      GetChildAs<KaxVideoPixelWidth,  EbmlUInteger>(video) = m_hvideo_pixel_width;
+      GetChildAs<KaxVideoPixelHeight, EbmlUInteger>(video) = m_hvideo_pixel_height;
     }
 
   }
 
-  if (COMPRESSION_UNSPECIFIED != ti.m_compression)
-    hcompression = ti.m_compression;
-  if ((COMPRESSION_UNSPECIFIED != hcompression) && (COMPRESSION_NONE != hcompression)) {
-    KaxContentEncoding &c_encoding = GetChild<KaxContentEncoding>(GetChild<KaxContentEncodings>(track_entry));
+  if (COMPRESSION_UNSPECIFIED != m_ti.m_compression)
+    m_hcompression = m_ti.m_compression;
+  if ((COMPRESSION_UNSPECIFIED != m_hcompression) && (COMPRESSION_NONE != m_hcompression)) {
+    KaxContentEncoding &c_encoding = GetChild<KaxContentEncoding>(GetChild<KaxContentEncodings>(m_track_entry));
 
     GetChildAs<KaxContentEncodingOrder, EbmlUInteger>(c_encoding) = 0; // First modification.
     GetChildAs<KaxContentEncodingType,  EbmlUInteger>(c_encoding) = 0; // It's a compression.
     GetChildAs<KaxContentEncodingScope, EbmlUInteger>(c_encoding) = 1; // Only the frame contents have been compresed.
 
-    compressor = compressor_c::create(hcompression);
-    compressor->set_track_headers(c_encoding);
+    m_compressor = compressor_c::create(m_hcompression);
+    m_compressor->set_track_headers(c_encoding);
   }
 
   if (g_no_lacing)
-    track_entry->EnableLacing(false);
+    m_track_entry->EnableLacing(false);
 
   set_tag_track_uid();
-  if (NULL != ti.m_tags) {
-    while (ti.m_tags->ListSize() != 0) {
-      KaxTag *tag = (KaxTag *)(*ti.m_tags)[0];
+  if (NULL != m_ti.m_tags) {
+    while (m_ti.m_tags->ListSize() != 0) {
+      KaxTag *tag = (KaxTag *)(*m_ti.m_tags)[0];
       add_tags(tag);
-      ti.m_tags->Remove(0);
+      m_ti.m_tags->Remove(0);
     }
   }
 }
 
 void
 generic_packetizer_c::fix_headers() {
-  GetChildAs<KaxTrackFlagDefault, EbmlUInteger>(track_entry) = g_default_tracks[TRACK_TYPE_TO_DEFTRACK_TYPE(htrack_type)] == hserialno ? 1 : 0;
+  GetChildAs<KaxTrackFlagDefault, EbmlUInteger>(m_track_entry) = g_default_tracks[TRACK_TYPE_TO_DEFTRACK_TYPE(m_htrack_type)] == m_hserialno ? 1 : 0;
 
-  track_entry->SetGlobalTimecodeScale((int64_t)g_timecode_scale);
+  m_track_entry->SetGlobalTimecodeScale((int64_t)g_timecode_scale);
 }
 
 void
 generic_packetizer_c::add_packet(packet_cptr pack) {
-  if ((0 == m_num_packets) && ti.m_reset_timecodes)
-    ti.m_tcsync.displacement = -pack->timecode;
+  if ((0 == m_num_packets) && m_ti.m_reset_timecodes)
+    m_ti.m_tcsync.displacement = -pack->timecode;
 
   ++m_num_packets;
 
-  if (NULL == reader->ptzr_first_packet)
-    reader->ptzr_first_packet = this;
+  if (NULL == m_reader->m_ptzr_first_packet)
+    m_reader->m_ptzr_first_packet = this;
 
   // strip elements to be removed
-  if (   (-1                     != htrack_max_add_block_ids)
-      && (pack->data_adds.size()  > htrack_max_add_block_ids))
-    pack->data_adds.resize(htrack_max_add_block_ids);
+  if (   (-1                     != m_htrack_max_add_block_ids)
+      && (pack->data_adds.size()  > m_htrack_max_add_block_ids))
+    pack->data_adds.resize(m_htrack_max_add_block_ids);
 
-  if (compressor.is_set()) {
+  if (m_compressor.is_set()) {
     try {
-      compressor->compress(pack->data);
+      m_compressor->compress(pack->data);
       int i;
       for (i = 0; pack->data_adds.size() > i; ++i)
-        compressor->compress(pack->data_adds[i]);
+        m_compressor->compress(pack->data_adds[i]);
 
     } catch (compression_error_c &e) {
-      mxerror_tid(ti.m_fname, ti.m_id, boost::format(Y("Compression failed: %1%\n")) % e.get_error());
+      mxerror_tid(m_ti.m_fname, m_ti.m_id, boost::format(Y("Compression failed: %1%\n")) % e.get_error());
     }
 
   } else {
@@ -780,7 +780,7 @@ generic_packetizer_c::add_packet(packet_cptr pack) {
   }
   pack->source = this;
 
-  enqueued_bytes += pack->data->get_size();
+  m_enqueued_bytes += pack->data->get_size();
 
   if ((0 > pack->bref) && (0 <= pack->fref)) {
     int64_t tmp = pack->bref;
@@ -788,13 +788,13 @@ generic_packetizer_c::add_packet(packet_cptr pack) {
     pack->fref  = tmp;
   }
 
-  if (1 != connected_to)
+  if (1 != m_connected_to)
     add_packet2(pack);
   else
-    deferred_packets.push_back(pack);
+    m_deferred_packets.push_back(pack);
 }
 
-#define ADJUST_TIMECODE(x) (int64_t)((x + correction_timecode_offset + append_timecode_offset) * ti.m_tcsync.numerator / ti.m_tcsync.denominator) + ti.m_tcsync.displacement
+#define ADJUST_TIMECODE(x) (int64_t)((x + m_correction_timecode_offset + m_append_timecode_offset) * m_ti.m_tcsync.numerator / m_ti.m_tcsync.denominator) + m_ti.m_tcsync.displacement
 
 void
 generic_packetizer_c::add_packet2(packet_cptr pack) {
@@ -804,13 +804,13 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
   if (0 <= pack->fref)
     pack->fref     = ADJUST_TIMECODE(pack->fref);
   if (0 < pack->duration)
-    pack->duration = (int64_t)(pack->duration * ti.m_tcsync.numerator / ti.m_tcsync.denominator);
+    pack->duration = (int64_t)(pack->duration * m_ti.m_tcsync.numerator / m_ti.m_tcsync.denominator);
 
-  if ((2 > htrack_min_cache) && (0 <= pack->fref)) {
+  if ((2 > m_htrack_min_cache) && (0 <= pack->fref)) {
     set_track_min_cache(2);
     rerender_track_headers();
 
-  } else if ((1 > htrack_min_cache) && (0 <= pack->bref)) {
+  } else if ((1 > m_htrack_min_cache) && (0 <= pack->bref)) {
     set_track_min_cache(1);
     rerender_track_headers();
   }
@@ -821,17 +821,17 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
   // 'timecode < safety_last_timecode' may only occur for B frames. In this
   // case we have the coding order, e.g. IPB1B2 and the timecodes
   // I: 0, P: 120, B1: 40, B2: 80.
-  if (!relaxed_timecode_checking && (pack->timecode < safety_last_timecode) && (0 > pack->fref) && hack_engaged(ENGAGE_ENABLE_TIMECODE_WARNING)) {
-    if (track_audio == htrack_type) {
-      int64_t needed_timecode_offset  = safety_last_timecode + safety_last_duration - pack->timecode;
-      correction_timecode_offset     += needed_timecode_offset;
+  if (!m_relaxed_timecode_checking && (pack->timecode < m_safety_last_timecode) && (0 > pack->fref) && hack_engaged(ENGAGE_ENABLE_TIMECODE_WARNING)) {
+    if (track_audio == m_htrack_type) {
+      int64_t needed_timecode_offset  = m_safety_last_timecode + m_safety_last_duration - pack->timecode;
+      m_correction_timecode_offset   += needed_timecode_offset;
       pack->timecode                 += needed_timecode_offset;
       if (0 <= pack->bref)
         pack->bref += needed_timecode_offset;
       if (0 <= pack->fref)
         pack->fref += needed_timecode_offset;
 
-      mxwarn_tid(ti.m_fname, ti.m_id,
+      mxwarn_tid(m_ti.m_fname, m_ti.m_id,
                  boost::format(Y("The current packet's timecode is smaller than that of the previous packet. "
                                  "This usually means that the source file is a Matroska file that has not been created 100%% correctly. "
                                  "The timecodes of all packets will be adjusted by %1%ms in order not to lose any data. "
@@ -843,17 +843,17 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
                  % ((needed_timecode_offset + 500000) / 1000000));
 
     } else
-      mxwarn_tid(ti.m_fname, ti.m_id,
+      mxwarn_tid(m_ti.m_fname, m_ti.m_id,
                  boost::format(Y("pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < last_timecode (%1% < %2%). %3%\n"))
-                 % format_timecode(pack->timecode) % format_timecode(safety_last_timecode) % BUGMSG);
+                 % format_timecode(pack->timecode) % format_timecode(m_safety_last_timecode) % BUGMSG);
   }
 
-  safety_last_timecode          = pack->timecode;
-  safety_last_duration          = pack->duration;
+  m_safety_last_timecode        = pack->timecode;
+  m_safety_last_duration        = pack->duration;
   pack->timecode_before_factory = pack->timecode;
 
-  packet_queue.push_back(pack);
-  if (!timecode_factory.is_set() || (TFA_IMMEDIATE == timecode_factory_application_mode))
+  m_packet_queue.push_back(pack);
+  if (!m_timecode_factory.is_set() || (TFA_IMMEDIATE == m_timecode_factory_application_mode))
     apply_factory_once(pack);
   else
     apply_factory();
@@ -863,35 +863,35 @@ void
 generic_packetizer_c::process_deferred_packets() {
   std::deque<packet_cptr>::iterator packet;
 
-  mxforeach(packet, deferred_packets)
+  mxforeach(packet, m_deferred_packets)
     add_packet2(*packet);
-  deferred_packets.clear();
+  m_deferred_packets.clear();
 }
 
 packet_cptr
 generic_packetizer_c::get_packet() {
-  if (packet_queue.empty() || !packet_queue.front()->factory_applied)
+  if (m_packet_queue.empty() || !m_packet_queue.front()->factory_applied)
     return packet_cptr(NULL);
 
-  packet_cptr pack = packet_queue.front();
-  packet_queue.pop_front();
+  packet_cptr pack = m_packet_queue.front();
+  m_packet_queue.pop_front();
 
-  enqueued_bytes -= pack->data->get_size();
+  m_enqueued_bytes -= pack->data->get_size();
 
-  --next_packet_wo_assigned_timecode;
-  if (0 > next_packet_wo_assigned_timecode)
-    next_packet_wo_assigned_timecode = 0;
+  --m_next_packet_wo_assigned_timecode;
+  if (0 > m_next_packet_wo_assigned_timecode)
+    m_next_packet_wo_assigned_timecode = 0;
 
   return pack;
 }
 
 void
 generic_packetizer_c::apply_factory_once(packet_cptr &packet) {
-  if (!timecode_factory.is_set()) {
+  if (!m_timecode_factory.is_set()) {
     packet->assigned_timecode = packet->timecode;
     packet->gap_following     = false;
   } else
-    packet->gap_following     = timecode_factory->get_next(packet);
+    packet->gap_following     = m_timecode_factory->get_next(packet);
 
   packet->factory_applied     = true;
 
@@ -899,27 +899,27 @@ generic_packetizer_c::apply_factory_once(packet_cptr &packet) {
          boost::format("apply_factory_once(): source %1% t %2% tbf %3% at %4%\n")
          % packet->source->get_source_track_num() % packet->timecode % packet->timecode_before_factory % packet->assigned_timecode);
 
-  max_timecode_seen         = std::max(max_timecode_seen, packet->assigned_timecode + packet->duration);
-  reader->max_timecode_seen = std::max(max_timecode_seen, reader->max_timecode_seen);
+  m_max_timecode_seen           = std::max(m_max_timecode_seen, packet->assigned_timecode + packet->duration);
+  m_reader->m_max_timecode_seen = std::max(m_max_timecode_seen, m_reader->m_max_timecode_seen);
 
-  ++next_packet_wo_assigned_timecode;
+  ++m_next_packet_wo_assigned_timecode;
 }
 
 void
 generic_packetizer_c::apply_factory() {
-  if (packet_queue.empty())
+  if (m_packet_queue.empty())
     return;
 
   // Find the first packet to which the factory hasn't been applied yet.
-  packet_cptr_di p_start = packet_queue.begin() + next_packet_wo_assigned_timecode;
+  packet_cptr_di p_start = m_packet_queue.begin() + m_next_packet_wo_assigned_timecode;
 
-  while ((packet_queue.end() != p_start) && (*p_start)->factory_applied)
+  while ((m_packet_queue.end() != p_start) && (*p_start)->factory_applied)
     ++p_start;
 
-  if (packet_queue.end() == p_start)
+  if (m_packet_queue.end() == p_start)
     return;
 
-  if (TFA_SHORT_QUEUEING == timecode_factory_application_mode)
+  if (TFA_SHORT_QUEUEING == m_timecode_factory_application_mode)
     apply_factory_short_queueing(p_start);
 
   else
@@ -928,17 +928,17 @@ generic_packetizer_c::apply_factory() {
 
 void
 generic_packetizer_c::apply_factory_short_queueing(packet_cptr_di &p_start) {
-  while (packet_queue.end() != p_start) {
+  while (m_packet_queue.end() != p_start) {
     // Find the next packet with a timecode bigger than the start packet's
     // timecode. All packets between those two including the start packet
     // and excluding the end packet can be timestamped.
     packet_cptr_di p_end = p_start + 1;
-    while ((packet_queue.end() != p_end) && ((*p_end)->timecode_before_factory < (*p_start)->timecode_before_factory))
+    while ((m_packet_queue.end() != p_end) && ((*p_end)->timecode_before_factory < (*p_start)->timecode_before_factory))
       ++p_end;
 
     // Abort if no such packet was found, but keep on assigning if the
     // packetizer has been flushed already.
-    if (!has_been_flushed && (packet_queue.end() == p_end))
+    if (!m_has_been_flushed && (m_packet_queue.end() == p_end))
       return;
 
     // Now assign timecodes to the ones between p_start and p_end...
@@ -970,18 +970,18 @@ std::deque<packet_cptr> *packet_sorter_t::m_packet_queue = NULL;
 
 void
 generic_packetizer_c::apply_factory_full_queueing(packet_cptr_di &p_start) {
-  packet_sorter_t::m_packet_queue = &packet_queue;
+  packet_sorter_t::m_packet_queue = &m_packet_queue;
 
-  while (packet_queue.end() != p_start) {
+  while (m_packet_queue.end() != p_start) {
     // Find the next I frame packet.
     packet_cptr_di p_end = p_start + 1;
-    while ((packet_queue.end() != p_end) &&
+    while ((m_packet_queue.end() != p_end) &&
            ((0 <= (*p_end)->fref) || (0 <= (*p_end)->bref)))
       ++p_end;
 
     // Abort if no such packet was found, but keep on assigning if the
     // packetizer has been flushed already.
-    if (!has_been_flushed && (packet_queue.end() == p_end))
+    if (!m_has_been_flushed && (m_packet_queue.end() == p_end))
       return;
 
     // Now sort the frames by their timecode as the factory has to be
@@ -989,14 +989,14 @@ generic_packetizer_c::apply_factory_full_queueing(packet_cptr_di &p_start) {
     std::vector<packet_sorter_t> sorter;
     bool needs_sorting        = false;
     int64_t previous_timecode = 0;
-    int                       i = distance(packet_queue.begin(), p_start);
+    int i                     = distance(m_packet_queue.begin(), p_start);
 
     packet_cptr_di p_current;
     for (p_current = p_start; p_current != p_end; ++i, ++p_current) {
       sorter.push_back(packet_sorter_t(i));
-      if (packet_queue[i]->timecode < previous_timecode)
+      if (m_packet_queue[i]->timecode < previous_timecode)
         needs_sorting = true;
-      previous_timecode = packet_queue[i]->timecode;
+      previous_timecode = m_packet_queue[i]->timecode;
     }
 
     if (needs_sorting)
@@ -1004,7 +1004,7 @@ generic_packetizer_c::apply_factory_full_queueing(packet_cptr_di &p_start) {
 
     // Finally apply the factory.
     for (i = 0; sorter.size() > i; ++i)
-      apply_factory_once(packet_queue[sorter[i].m_index]);
+      apply_factory_once(m_packet_queue[sorter[i].m_index]);
 
     p_start = p_end;
   }
@@ -1012,38 +1012,38 @@ generic_packetizer_c::apply_factory_full_queueing(packet_cptr_di &p_start) {
 
 void
 generic_packetizer_c::force_duration_on_last_packet() {
-  if (packet_queue.empty()) {
-    mxverb_tid(2, ti.m_fname, ti.m_id, "force_duration_on_last_packet: packet queue is empty\n");
+  if (m_packet_queue.empty()) {
+    mxverb_tid(2, m_ti.m_fname, m_ti.m_id, "force_duration_on_last_packet: packet queue is empty\n");
     return;
   }
-  packet_cptr &packet        = packet_queue.back();
+  packet_cptr &packet        = m_packet_queue.back();
   packet->duration_mandatory = true;
-  mxverb_tid(2, ti.m_fname, ti.m_id,
+  mxverb_tid(2, m_ti.m_fname, m_ti.m_id,
              boost::format("force_duration_on_last_packet: forcing at %1% with %|2$.3f|ms\n") % format_timecode(packet->timecode) % (packet->duration / 1000.0));
 }
 
 int64_t
 generic_packetizer_c::handle_avi_audio_sync(int64_t num_bytes,
                                             bool vbr) {
-  if ((0 == ti.m_avi_samples_per_sec) || (0 == ti.m_avi_block_align) || (0 == ti.m_avi_avg_bytes_per_sec) || !ti.m_avi_audio_sync_enabled) {
+  if ((0 == m_ti.m_avi_samples_per_sec) || (0 == m_ti.m_avi_block_align) || (0 == m_ti.m_avi_avg_bytes_per_sec) || !m_ti.m_avi_audio_sync_enabled) {
     enable_avi_audio_sync(false);
     return -1;
   }
 
   int64_t duration;
   if (!vbr)
-     duration = num_bytes * 1000000000 / ti.m_avi_avg_bytes_per_sec;
+     duration = num_bytes * 1000000000 / m_ti.m_avi_avg_bytes_per_sec;
 
   else {
     int num_blocks = 0;
     int i;
-    for (i = 0; (ti.m_avi_block_sizes.size() > i) && (0 < num_bytes); ++i) {
-      int64_t block_size  = ti.m_avi_block_sizes[i];
-      num_blocks         += (block_size + ti.m_avi_block_align - 1) / ti.m_avi_block_align;
+    for (i = 0; (m_ti.m_avi_block_sizes.size() > i) && (0 < num_bytes); ++i) {
+      int64_t block_size  = m_ti.m_avi_block_sizes[i];
+      num_blocks         += (block_size + m_ti.m_avi_block_align - 1) / m_ti.m_avi_block_align;
       num_bytes          -= std::min(num_bytes, block_size);
     }
 
-    duration = static_cast<int64_t>(num_blocks * 1000000000ll * static_cast<double>(ti.m_avi_samples_per_chunk) / static_cast<double>(ti.m_avi_sample_scale));
+    duration = static_cast<int64_t>(num_blocks * 1000000000ll * static_cast<double>(m_ti.m_avi_samples_per_chunk) / static_cast<double>(m_ti.m_avi_sample_scale));
   }
 
   enable_avi_audio_sync(false);
@@ -1053,72 +1053,72 @@ generic_packetizer_c::handle_avi_audio_sync(int64_t num_bytes,
 
 void
 generic_packetizer_c::connect(generic_packetizer_c *src,
-                              int64_t p_append_timecode_offset) {
-  m_free_refs                = src->m_free_refs;
-  m_next_free_refs           = src->m_next_free_refs;
-  track_entry                = src->track_entry;
-  hserialno                  = src->hserialno;
-  htrack_type                = src->htrack_type;
-  htrack_default_duration    = src->htrack_default_duration;
-  huid                       = src->huid;
-  hcompression               = src->hcompression;
-  compressor                 = compressor_c::create(hcompression);
-  last_cue_timecode          = src->last_cue_timecode;
-  timecode_factory           = src->timecode_factory;
-  correction_timecode_offset = 0;
+                              int64_t append_timecode_offset) {
+  m_free_refs                  = src->m_free_refs;
+  m_next_free_refs             = src->m_next_free_refs;
+  m_track_entry                = src->m_track_entry;
+  m_hserialno                  = src->m_hserialno;
+  m_htrack_type                = src->m_htrack_type;
+  m_htrack_default_duration    = src->m_htrack_default_duration;
+  m_huid                       = src->m_huid;
+  m_hcompression               = src->m_hcompression;
+  m_compressor                 = compressor_c::create(m_hcompression);
+  m_last_cue_timecode          = src->m_last_cue_timecode;
+  m_timecode_factory           = src->m_timecode_factory;
+  m_correction_timecode_offset = 0;
 
-  if (-1 == p_append_timecode_offset)
-    append_timecode_offset   = src->max_timecode_seen;
+  if (-1 == append_timecode_offset)
+    m_append_timecode_offset   = src->m_max_timecode_seen;
   else
-    append_timecode_offset   = p_append_timecode_offset;
+    m_append_timecode_offset   = append_timecode_offset;
 
-  connected_to++;
-  if (2 == connected_to)
+  m_connected_to++;
+  if (2 == m_connected_to)
     process_deferred_packets();
 }
 
 void
 generic_packetizer_c::set_displacement_maybe(int64_t displacement) {
-  if ((1 == ti.m_tcsync.numerator) && (1 == ti.m_tcsync.denominator) && (0 == ti.m_tcsync.displacement))
-    ti.m_tcsync.displacement = displacement;
+  if ((1 == m_ti.m_tcsync.numerator) && (1 == m_ti.m_tcsync.denominator) && (0 == m_ti.m_tcsync.displacement))
+    m_ti.m_tcsync.displacement = displacement;
 }
 
 bool
 generic_packetizer_c::contains_gap() {
-  return timecode_factory.is_set() ? timecode_factory->contains_gap() : false;
+  return m_timecode_factory.is_set() ? m_timecode_factory->contains_gap() : false;
 }
 
 void
 generic_packetizer_c::flush() {
-  has_been_flushed = true;
+  m_has_been_flushed = true;
   apply_factory();
 }
 
 bool
 generic_packetizer_c::display_dimensions_or_aspect_ratio_set() {
-  return ti.display_dimensions_or_aspect_ratio_set();
+  return m_ti.display_dimensions_or_aspect_ratio_set();
 }
 
 //--------------------------------------------------------------------
 
 #define add_all_requested_track_ids(type, container)                                              \
-  for (std::map<int64_t, type>::const_iterator i = ti.container.begin(); ti.container.end() != i; ++i) \
+  for (std::map<int64_t, type>::const_iterator i = m_ti.container.begin(); m_ti.container.end() != i; ++i) \
     add_requested_track_id(i->first);
 
 #define add_all_requested_track_ids2(container) \
-  for (int i = 0; i < ti.container.size(); i++) \
-    add_requested_track_id(ti.container[i]);
+  for (int i = 0; i < m_ti.container.size(); i++) \
+    add_requested_track_id(m_ti.container[i]);
 
-generic_reader_c::generic_reader_c(track_info_c &_ti)
-  : ti(_ti)
-  , ptzr_first_packet(NULL)
-  , max_timecode_seen(0)
-  , chapters(NULL)
-  , appending(false)
-  , num_video_tracks(0)
-  , num_audio_tracks(0)
-  , num_subtitle_tracks(0)
-  , reference_timecode_tolerance(0)
+generic_reader_c::generic_reader_c(track_info_c &ti)
+  : m_ti(ti)
+  , m_ptzr_first_packet(NULL)
+  , m_max_timecode_seen(0)
+  , m_chapters(NULL)
+  , m_appending(false)
+  , m_num_video_tracks(0)
+  , m_num_audio_tracks(0)
+  , m_num_subtitle_tracks(0)
+  , m_reference_timecode_tolerance(0)
 {
 
   add_all_requested_track_ids2(m_atracks);
@@ -1144,18 +1144,18 @@ generic_reader_c::generic_reader_c(track_info_c &_ti)
 generic_reader_c::~generic_reader_c() {
   int i;
 
-  for (i = 0; i < reader_packetizers.size(); i++)
-    delete reader_packetizers[i];
+  for (i = 0; i < m_reader_packetizers.size(); i++)
+    delete m_reader_packetizers[i];
 
-  delete chapters;
+  delete m_chapters;
 }
 
 void
 generic_reader_c::read_all() {
   int i;
 
-  for (i = 0; reader_packetizers.size() > i; ++i) {
-    while (read(reader_packetizers[i], true) != 0)
+  for (i = 0; m_reader_packetizers.size() > i; ++i) {
+    while (read(m_reader_packetizers[i], true) != 0)
       ;
   }
 }
@@ -1166,29 +1166,29 @@ generic_reader_c::demuxing_requested(char type,
   std::vector<int64_t> *tracks = NULL;
 
   if ('v' == type) {
-    if (ti.m_no_video)
+    if (m_ti.m_no_video)
       return false;
-    tracks = &ti.m_vtracks;
+    tracks = &m_ti.m_vtracks;
 
   } else if ('a' == type) {
-    if (ti.m_no_audio)
+    if (m_ti.m_no_audio)
       return false;
-    tracks = &ti.m_atracks;
+    tracks = &m_ti.m_atracks;
 
   } else if ('s' == type) {
-    if (ti.m_no_subs)
+    if (m_ti.m_no_subs)
       return false;
-    tracks = &ti.m_stracks;
+    tracks = &m_ti.m_stracks;
 
   } else if ('b' == type) {
-    if (ti.m_no_buttons)
+    if (m_ti.m_no_buttons)
       return false;
-    tracks = &ti.m_btracks;
+    tracks = &m_ti.m_btracks;
 
   } else if ('T' == type) {
-    if (ti.m_no_track_tags)
+    if (m_ti.m_no_track_tags)
       return false;
-    tracks = &ti.m_track_tags;
+    tracks = &m_ti.m_track_tags;
 
   } else
     mxerror(boost::format(Y("pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%.")) % type);
@@ -1206,55 +1206,50 @@ generic_reader_c::demuxing_requested(char type,
 
 attach_mode_e
 generic_reader_c::attachment_requested(int64_t id) {
-  if (ti.m_no_attachments)
+  if (m_ti.m_no_attachments)
     return ATTACH_MODE_SKIP;
 
-  if (ti.m_attach_mode_list.empty())
+  if (m_ti.m_attach_mode_list.empty())
     return ATTACH_MODE_TO_ALL_FILES;
 
-  if (map_has_key(ti.m_attach_mode_list, id))
-    return ti.m_attach_mode_list[id];
+  if (map_has_key(m_ti.m_attach_mode_list, id))
+    return m_ti.m_attach_mode_list[id];
 
-  if (map_has_key(ti.m_attach_mode_list, -1))
-    return ti.m_attach_mode_list[-1];
+  if (map_has_key(m_ti.m_attach_mode_list, -1))
+    return m_ti.m_attach_mode_list[-1];
 
   return ATTACH_MODE_SKIP;
 }
 
 int
 generic_reader_c::add_packetizer(generic_packetizer_c *ptzr) {
-  reader_packetizers.push_back(ptzr);
-  used_track_ids.push_back(ptzr->ti.m_id);
-  if (!appending)
+  m_reader_packetizers.push_back(ptzr);
+  m_used_track_ids.push_back(ptzr->m_ti.m_id);
+  if (!m_appending)
     add_packetizer_globally(ptzr);
 
-  return reader_packetizers.size() - 1;
+  return m_reader_packetizers.size() - 1;
 }
 
 void
 generic_reader_c::set_timecode_offset(int64_t offset) {
-  max_timecode_seen = offset;
+  m_max_timecode_seen = offset;
 
-  std::vector<generic_packetizer_c *>::const_iterator it;
-  mxforeach(it, reader_packetizers)
-    (*it)->correction_timecode_offset = offset;
+  foreach(generic_packetizer_c *ptzr, m_reader_packetizers)
+    ptzr->m_correction_timecode_offset = offset;
 }
 
 void
 generic_reader_c::set_headers() {
-  std::vector<generic_packetizer_c *>::const_iterator it;
-
-  mxforeach(it, reader_packetizers)
-    (*it)->set_headers();
+  foreach(generic_packetizer_c *ptzr, m_reader_packetizers)
+    ptzr->set_headers();
 }
 
 void
 generic_reader_c::set_headers_for_track(int64_t tid) {
-  std::vector<generic_packetizer_c *>::const_iterator it;
-
-  mxforeach(it, reader_packetizers)
-    if ((*it)->ti.m_id == tid) {
-      (*it)->set_headers();
+  foreach(generic_packetizer_c *ptzr, m_reader_packetizers)
+    if (ptzr->m_ti.m_id == tid) {
+      ptzr->set_headers();
       break;
     }
 }
@@ -1264,19 +1259,19 @@ generic_reader_c::check_track_ids_and_packetizers() {
   add_available_track_ids();
 
   int r;
-  for (r = 0; requested_track_ids.size() > r; ++r) {
+  for (r = 0; m_requested_track_ids.size() > r; ++r) {
     bool found = false;
     int a;
-    for (a = 0; available_track_ids.size() > a; ++a)
-      if (requested_track_ids[r] == available_track_ids[a]) {
+    for (a = 0; m_available_track_ids.size() > a; ++a)
+      if (m_requested_track_ids[r] == m_available_track_ids[a]) {
         found = true;
         break;
       }
 
     if (!found)
-      mxwarn_fn(ti.m_fname,
+      mxwarn_fn(m_ti.m_fname,
                 boost::format(Y("A track with the ID %1% was requested but not found in the file. The corresponding option will be ignored.\n"))
-                % requested_track_ids[r]);
+                % m_requested_track_ids[r]);
   }
 }
 
@@ -1287,23 +1282,22 @@ generic_reader_c::add_requested_track_id(int64_t id) {
 
   bool found = false;
   int i;
-  for (i = 0; i < requested_track_ids.size(); i++)
-    if (requested_track_ids[i] == id) {
+  for (i = 0; i < m_requested_track_ids.size(); i++)
+    if (m_requested_track_ids[i] == id) {
       found = true;
       break;
     }
 
   if (!found)
-    requested_track_ids.push_back(id);
+    m_requested_track_ids.push_back(id);
 }
 
 int64_t
 generic_reader_c::get_queued_bytes() {
-  int64_t  bytes = 0;
+  int64_t bytes = 0;
 
-  std::vector<generic_packetizer_c *>::const_iterator it;
-  mxforeach(it, reader_packetizers)
-    bytes += (*it)->get_queued_bytes();
+  foreach(generic_packetizer_c *ptzr, m_reader_packetizers)
+    bytes += ptzr->get_queued_bytes();
 
   return bytes;
 }
@@ -1312,7 +1306,7 @@ void
 generic_reader_c::flush_packetizers() {
   std::vector<generic_packetizer_c *>::const_iterator it;
 
-  mxforeach(it, reader_packetizers)
+  mxforeach(it, m_reader_packetizers)
     (*it)->flush();
 }
 
@@ -1333,17 +1327,17 @@ generic_reader_c::id_result_container_unsupported(const std::string &filename,
 void
 generic_reader_c::id_result_container(const std::string &info,
                                       const std::string &verbose_info) {
-  id_results_container.info = info;
-  id_results_container.verbose_info.clear();
+  m_id_results_container.info = info;
+  m_id_results_container.verbose_info.clear();
   if (!verbose_info.empty())
-    id_results_container.verbose_info.push_back(verbose_info);
+    m_id_results_container.verbose_info.push_back(verbose_info);
 }
 
 void
 generic_reader_c::id_result_container(const std::string &info,
                                       const std::vector<std::string> &verbose_info) {
-  id_results_container.info         = info;
-  id_results_container.verbose_info = verbose_info;
+  m_id_results_container.info         = info;
+  m_id_results_container.verbose_info = verbose_info;
 }
 
 void
@@ -1354,7 +1348,7 @@ generic_reader_c::id_result_track(int64_t track_id,
   id_result_t result(track_id, type, info, empty_string, 0);
   if (!verbose_info.empty())
     result.verbose_info.push_back(verbose_info);
-  id_results_tracks.push_back(result);
+  m_id_results_tracks.push_back(result);
 }
 
 void
@@ -1364,7 +1358,7 @@ generic_reader_c::id_result_track(int64_t track_id,
                                   const std::vector<std::string> &verbose_info) {
   id_result_t result(track_id, type, info, empty_string, 0);
   result.verbose_info = verbose_info;
-  id_results_tracks.push_back(result);
+  m_id_results_tracks.push_back(result);
 }
 
 void
@@ -1374,20 +1368,20 @@ generic_reader_c::id_result_attachment(int64_t attachment_id,
                                        const std::string &file_name,
                                        const std::string &description) {
   id_result_t result(attachment_id, type, file_name, description, size);
-  id_results_attachments.push_back(result);
+  m_id_results_attachments.push_back(result);
 }
 
 void
 generic_reader_c::id_result_chapters(int num_entries) {
   id_result_t result(0, ID_RESULT_CHAPTERS, empty_string, empty_string, num_entries);
-  id_results_chapters.push_back(result);
+  m_id_results_chapters.push_back(result);
 }
 
 void
 generic_reader_c::id_result_tags(int64_t track_id,
                                  int num_entries) {
   id_result_t result(track_id, ID_RESULT_TAGS, empty_string, empty_string, num_entries);
-  id_results_tags.push_back(result);
+  m_id_results_tags.push_back(result);
 }
 
 void
@@ -1415,17 +1409,14 @@ generic_reader_c::display_identification_results() {
     format_tags_track      = Y("Tags for track ID %1%: %2% entries");
   }
 
-  mxinfo(boost::format(format_file) % ti.m_fname % id_results_container.info);
+  mxinfo(boost::format(format_file) % m_ti.m_fname % m_id_results_container.info);
 
-  if (g_identify_verbose && !id_results_container.verbose_info.empty())
-    mxinfo(boost::format(" [%1%]") % join(" ", id_results_container.verbose_info));
+  if (g_identify_verbose && !m_id_results_container.verbose_info.empty())
+    mxinfo(boost::format(" [%1%]") % join(" ", m_id_results_container.verbose_info));
 
   mxinfo("\n");
 
-  int i;
-  for (i = 0; id_results_tracks.size() > i; ++i) {
-    id_result_t &result = id_results_tracks[i];
-
+  foreach(id_result_t &result, m_id_results_tracks) {
     mxinfo(boost::format(format_track) % result.id % result.type % result.info);
 
     if (g_identify_verbose && !result.verbose_info.empty())
@@ -1434,9 +1425,7 @@ generic_reader_c::display_identification_results() {
     mxinfo("\n");
   }
 
-  for (i = 0; id_results_attachments.size() > i; ++i) {
-    id_result_t &result = id_results_attachments[i];
-
+  foreach(id_result_t &result, m_id_results_attachments) {
     mxinfo(boost::format(format_attachment) % result.id % id_escape_string(result.type) % result.size);
 
     if (!result.description.empty())
@@ -1448,14 +1437,12 @@ generic_reader_c::display_identification_results() {
     mxinfo("\n");
   }
 
-  for (i = 0; id_results_chapters.size() > i; ++i) {
-    mxinfo(boost::format(format_chapters) % id_results_chapters[i].size);
+  foreach(id_result_t &result, m_id_results_chapters) {
+    mxinfo(boost::format(format_chapters) % result.size);
     mxinfo("\n");
   }
 
-  for (i = 0; id_results_tags.size() > i; ++i) {
-    id_result_t &result = id_results_tags[i];
-
+  foreach(id_result_t &result, m_id_results_tags) {
     if (ID_RESULT_GLOBAL_TAGS_ID == result.id)
       mxinfo(boost::format(format_tags_global) % result.size);
     else
@@ -1468,6 +1455,16 @@ generic_reader_c::display_identification_results() {
 std::string
 generic_reader_c::id_escape_string(const std::string &s) {
   return g_identify_for_mmg ? escape(s) : s;
+}
+
+void
+generic_reader_c::add_available_track_id(int64_t id) {
+  m_available_track_ids.push_back(id);
+}
+
+void
+generic_reader_c::add_available_track_ids() {
+  add_available_track_id(0);
 }
 
 //

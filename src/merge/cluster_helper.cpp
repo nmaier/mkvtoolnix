@@ -84,8 +84,8 @@ cluster_helper_c::add_packet(packet_cptr packet) {
   mxverb(4,
          boost::format("cluster_helper_c::add_packet(): new packet { source %1%/%2% "
                        "timecode: %3% duration: %4% bref: %5% fref: %6% assigned_timecode: %7% timecode_delay: %8% }\n")
-         % packet->source->ti.m_id % packet->source->ti.m_fname % packet->timecode          % packet->duration
-         % packet->bref            % packet->fref               % packet->assigned_timecode % format_timecode(timecode_delay));
+         % packet->source->m_ti.m_id % packet->source->m_ti.m_fname % packet->timecode          % packet->duration
+         % packet->bref              % packet->fref                 % packet->assigned_timecode % format_timecode(timecode_delay));
 
   if (   (SHRT_MAX < timecode_delay)
       || (SHRT_MIN > timecode_delay)

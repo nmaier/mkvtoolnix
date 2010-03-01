@@ -238,15 +238,15 @@ ogm_a_flac_demuxer_c::process_page(int64_t granulepos) {
 
     for (int i = 0; i < (int)nh_packet_data.size(); i++) {
       memory_c *mem = nh_packet_data[i]->clone();
-      reader->reader_packetizers[ptzr]->process(new packet_t(mem, 0));
+      reader->m_reader_packetizers[ptzr]->process(new packet_t(mem, 0));
     }
 
     nh_packet_data.clear();
 
     if (-1 == last_granulepos)
-      reader->reader_packetizers[ptzr]->process(new packet_t(new memory_c(op.packet, op.bytes, false), -1));
+      reader->m_reader_packetizers[ptzr]->process(new packet_t(new memory_c(op.packet, op.bytes, false), -1));
     else {
-      reader->reader_packetizers[ptzr]->process(new packet_t(new memory_c(op.packet, op.bytes, false), last_granulepos * 1000000000 / sample_rate));
+      reader->m_reader_packetizers[ptzr]->process(new packet_t(new memory_c(op.packet, op.bytes, false), last_granulepos * 1000000000 / sample_rate));
       last_granulepos = granulepos;
     }
   }
@@ -271,10 +271,10 @@ ogm_a_flac_demuxer_c::process_header_page() {
 
 void
 ogm_a_flac_demuxer_c::initialize() {
-  flac_header_extractor_c fhe(reader->ti.m_fname, serialno);
+  flac_header_extractor_c fhe(reader->m_ti.m_fname, serialno);
 
   if (!fhe.extract())
-    mxerror_tid(reader->ti.m_fname, track_id, Y("Could not read the FLAC header packets.\n"));
+    mxerror_tid(reader->m_ti.m_fname, track_id, Y("Could not read the FLAC header packets.\n"));
 
   flac_header_packets = fhe.num_header_packets;
   sample_rate         = fhe.sample_rate;
