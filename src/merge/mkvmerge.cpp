@@ -259,7 +259,7 @@ set_usage() {
                   "                           with this factor and calculates the display\n"
                   "                           dimensions from this factor.\n");
   usage_text += Y("  --display-dimensions <TID:width>x<height>\n"
-                  "                           Explicitely set the display dimensions.\n");
+                  "                           Explicitly set the display dimensions.\n");
   usage_text += Y("  --cropping <TID:left,top,right,bottom>\n"
                   "                           Sets the cropping parameters.\n");
   usage_text += Y("  --stereo-mode <TID:n|none|left|right|both>\n"
@@ -269,8 +269,8 @@ set_usage() {
   usage_text +=   "\n";
   usage_text += Y(" Options that only apply to text subtitle tracks:\n");
   usage_text += Y("  --sub-charset <TID:charset>\n"
-                  "                           Sets the charset the text subtitles are\n"
-                  "                           written in for the conversion to UTF-8.\n");
+                  "                           Determines the charset the text subtitles are\n"
+                  "                           read as for the conversion to UTF-8.\n");
   usage_text +=   "\n";
   usage_text += Y(" Options that only apply to VobSub subtitle tracks:\n");
   usage_text += Y("  --compression <TID:method>\n"
