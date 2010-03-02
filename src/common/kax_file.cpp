@@ -41,6 +41,9 @@ kax_file_c::read_next_level1_element(uint32_t wanted_id) {
   }
 }
 
+kax_file_c::~kax_file_c() {
+}
+
 EbmlElement *
 kax_file_c::read_next_level1_element_internal(uint32_t wanted_id) {
   m_resynced         = false;

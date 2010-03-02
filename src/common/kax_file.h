@@ -36,6 +36,7 @@ protected:
 
 public:
   kax_file_c(mm_io_cptr &in);
+  virtual ~kax_file_c();
 
   virtual bool was_resynced() const;
   virtual int64_t get_resync_start_pos() const;
