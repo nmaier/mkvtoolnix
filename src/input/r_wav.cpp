@@ -223,9 +223,9 @@ wav_ac3acm_demuxer_c::decode_buffer(int len) {
 
 generic_packetizer_c *
 wav_ac3acm_demuxer_c::create_packetizer() {
-  m_ptzr = new ac3_packetizer_c(m_reader, m_reader->ti, m_ac3header.sample_rate, m_ac3header.channels, m_ac3header.bsid);
+  m_ptzr = new ac3_packetizer_c(m_reader, m_reader->m_ti, m_ac3header.sample_rate, m_ac3header.channels, m_ac3header.bsid);
 
-  mxinfo_tid(m_reader->ti.fname, 0, Y("Using the AC3 output module.\n"));
+  mxinfo_tid(m_reader->m_ti.m_fname, 0, Y("Using the AC3 output module.\n"));
 
   return m_ptzr;
 }
@@ -349,12 +349,12 @@ wav_dts_demuxer_c::decode_buffer(int len) {
 
 generic_packetizer_c *
 wav_dts_demuxer_c::create_packetizer() {
-  m_ptzr = new dts_packetizer_c(m_reader, m_reader->ti, m_dtsheader);
+  m_ptzr = new dts_packetizer_c(m_reader, m_reader->m_ti, m_dtsheader);
 
   // .wav with DTS are always filled up with other stuff to match the bitrate.
   ((dts_packetizer_c *)m_ptzr)->set_skipping_is_normal(true);
 
-  mxinfo_tid(m_reader->ti.fname, 0, Y("Using the DTS output module.\n"));
+  mxinfo_tid(m_reader->m_ti.m_fname, 0, Y("Using the DTS output module.\n"));
 
   if (1 < verbose)
     print_dts_header(&m_dtsheader);
@@ -389,13 +389,13 @@ wav_pcm_demuxer_c::~wav_pcm_demuxer_c() {
 
 generic_packetizer_c *
 wav_pcm_demuxer_c::create_packetizer() {
-  m_ptzr = new pcm_packetizer_c(m_reader, m_reader->ti,
+  m_ptzr = new pcm_packetizer_c(m_reader, m_reader->m_ti,
                                 get_uint32_le(&m_wheader->common.dwSamplesPerSec),
                                 get_uint16_le(&m_wheader->common.wChannels),
                                 get_uint16_le(&m_wheader->common.wBitsPerSample),
                                 false, ieee_float);
 
-  mxinfo_tid(m_reader->ti.fname, 0, Y("Using the PCM output module.\n"));
+  mxinfo_tid(m_reader->m_ti.m_fname, 0, Y("Using the PCM output module.\n"));
 
   return m_ptzr;
 }
@@ -444,7 +444,7 @@ wav_reader_c::wav_reader_c(track_info_c &ti_)
   int64_t size;
 
   try {
-    m_io = mm_io_cptr(new mm_file_io_c(ti.fname));
+    m_io = mm_io_cptr(new mm_file_io_c(m_ti.m_fname));
     m_io->setFilePointer(0, seek_end);
     size = m_io->getFilePointer();
     m_io->setFilePointer(0, seek_beginning);
@@ -505,7 +505,7 @@ wav_reader_c::dump_headers() {
                        "    dwAvgBytesPerSec: %14%\n"
                        "    wBlockAlign:      %15%\n"
                        "    wBitsPerSample:   %16%\n")
-         % ti.fname
+         % m_ti.m_fname
          % char(m_wheader.riff.id[0]) % char(m_wheader.riff.id[1]) % char(m_wheader.riff.id[2]) % char(m_wheader.riff.id[3])
          % get_uint32_le(&m_wheader.riff.len)
          % char(m_wheader.riff.wave_id[0]) % char(m_wheader.riff.wave_id[1]) % char(m_wheader.riff.wave_id[2]) % char(m_wheader.riff.wave_id[3])
@@ -519,7 +519,7 @@ wav_reader_c::dump_headers() {
 
 void
 wav_reader_c::create_demuxer() {
-  ti.id = 0;                    // ID for this track.
+  m_ti.m_id = 0;                    // ID for this track.
 
   uint16_t format_tag = get_uint16_le(&m_wheader.common.wFormatTag);
   bool ieee_float     = 0x0003 == format_tag;
@@ -546,7 +546,7 @@ wav_reader_c::create_demuxer() {
     m_demuxer = wav_demuxer_cptr(new wav_pcm_demuxer_c(this, &m_wheader, ieee_float));
 
   if (verbose)
-    mxinfo_fn(ti.fname, Y("Using the WAV demultiplexer.\n"));
+    mxinfo_fn(m_ti.m_fname, Y("Using the WAV demultiplexer.\n"));
 }
 
 void

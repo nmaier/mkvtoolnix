@@ -184,102 +184,98 @@ enum attach_mode_e {
 
 class track_info_c {
 protected:
-  bool initialized;
+  bool m_initialized;
 
 public:
   // The track ID.
-  int64_t id;
+  int64_t m_id;
 
   // Options used by the readers.
-  std::string fname;
-  bool no_audio, no_video, no_subs, no_buttons, no_track_tags;
-  std::vector<int64_t> atracks, vtracks, stracks, btracks, track_tags;
+  std::string m_fname;
+  bool m_no_audio, m_no_video, m_no_subs, m_no_buttons, m_no_track_tags;
+  std::vector<int64_t> m_atracks, m_vtracks, m_stracks, m_btracks, m_track_tags;
 
   // Options used by the packetizers.
-  unsigned char *private_data;
-  int private_size;
+  unsigned char *m_private_data;
+  int m_private_size;
 
-  std::map<int64_t, std::string> all_fourccs;
-  std::string fourcc;
-  std::map<int64_t, display_properties_t> display_properties;
-  float aspect_ratio;
-  int display_width, display_height;
-  bool aspect_ratio_given, aspect_ratio_is_factor, display_dimensions_given;
-  parameter_source_e display_dimensions_source;
+  std::map<int64_t, std::string> m_all_fourccs;
+  std::string m_fourcc;
+  std::map<int64_t, display_properties_t> m_display_properties;
+  float m_aspect_ratio;
+  int m_display_width, m_display_height;
+  bool m_aspect_ratio_given, m_aspect_ratio_is_factor, m_display_dimensions_given;
+  parameter_source_e m_display_dimensions_source;
 
-  std::map<int64_t, timecode_sync_t> timecode_syncs; // As given on the command line
-  timecode_sync_t tcsync;                       // For this very track
+  std::map<int64_t, timecode_sync_t> m_timecode_syncs; // As given on the command line
+  timecode_sync_t m_tcsync;                       // For this very track
 
-  std::map<int64_t, bool> reset_timecodes_specs;
-  bool reset_timecodes;
+  std::map<int64_t, bool> m_reset_timecodes_specs;
+  bool m_reset_timecodes;
 
-  std::map<int64_t, cue_strategy_e> cue_creations; // As given on the command line
-  cue_strategy_e cues;          // For this very track
+  std::map<int64_t, cue_strategy_e> m_cue_creations; // As given on the command line
+  cue_strategy_e m_cues;          // For this very track
 
-  std::map<int64_t, bool> default_track_flags; // As given on the command line
-  boost::logic::tribool default_track;    // For this very track
+  std::map<int64_t, bool> m_default_track_flags; // As given on the command line
+  boost::logic::tribool m_default_track;    // For this very track
 
-  std::map<int64_t, bool> forced_track_flags; // As given on the command line
-  boost::logic::tribool forced_track;    // For this very track
+  std::map<int64_t, bool> m_forced_track_flags; // As given on the command line
+  boost::logic::tribool m_forced_track;    // For this very track
 
-  std::map<int64_t, std::string> languages; // As given on the command line
-  std::string language;              // For this very track
+  std::map<int64_t, std::string> m_languages; // As given on the command line
+  std::string m_language;              // For this very track
 
-  std::map<int64_t, std::string> sub_charsets; // As given on the command line
-  std::string sub_charset;           // For this very track
+  std::map<int64_t, std::string> m_sub_charsets; // As given on the command line
+  std::string m_sub_charset;           // For this very track
 
-  std::map<int64_t, std::string> all_tags;     // As given on the command line
-  std::string tags_file_name;        // For this very track
-  KaxTags *tags;                // For this very track
+  std::map<int64_t, std::string> m_all_tags;     // As given on the command line
+  std::string m_tags_file_name;        // For this very track
+  KaxTags *m_tags;                // For this very track
 
-  std::map<int64_t, bool> all_aac_is_sbr; // For AAC+/HE-AAC/SBR
+  std::map<int64_t, bool> m_all_aac_is_sbr; // For AAC+/HE-AAC/SBR
 
-  std::map<int64_t, compression_method_e> compression_list; // As given on the cmd line
-  compression_method_e compression; // For this very track
+  std::map<int64_t, compression_method_e> m_compression_list; // As given on the cmd line
+  compression_method_e m_compression; // For this very track
 
-  std::map<int64_t, std::string> track_names; // As given on the command line
-  std::string track_name;            // For this very track
+  std::map<int64_t, std::string> m_track_names; // As given on the command line
+  std::string m_track_name;            // For this very track
 
-  std::map<int64_t, std::string> all_ext_timecodes; // As given on the command line
-  std::string ext_timecodes;         // For this very track
+  std::map<int64_t, std::string> m_all_ext_timecodes; // As given on the command line
+  std::string m_ext_timecodes;         // For this very track
 
-  std::map<int64_t, pixel_crop_t> pixel_crop_list; // As given on the command line
-  pixel_crop_t pixel_cropping;  // For this very track
-  parameter_source_e pixel_cropping_source;
+  std::map<int64_t, pixel_crop_t> m_pixel_crop_list; // As given on the command line
+  pixel_crop_t m_pixel_cropping;  // For this very track
+  parameter_source_e m_pixel_cropping_source;
 
-  std::map<int64_t, stereo_mode_e> stereo_mode_list; // As given on the command line
-  stereo_mode_e stereo_mode;                    // For this very track
-  parameter_source_e stereo_mode_source;
+  std::map<int64_t, stereo_mode_e> m_stereo_mode_list; // As given on the command line
+  stereo_mode_e m_stereo_mode;                    // For this very track
+  parameter_source_e m_stereo_mode_source;
 
-  std::map<int64_t, int64_t> default_durations; // As given on the command line
-  std::map<int64_t, int> max_blockadd_ids; // As given on the command line
+  std::map<int64_t, int64_t> m_default_durations; // As given on the command line
+  std::map<int64_t, int> m_max_blockadd_ids; // As given on the command line
 
-  std::map<int64_t, int> nalu_size_lengths;
-  int nalu_size_length;
+  std::map<int64_t, int> m_nalu_size_lengths;
+  int m_nalu_size_length;
 
-  std::map<int64_t, attach_mode_e> attach_mode_list; // As given on the command line
+  std::map<int64_t, attach_mode_e> m_attach_mode_list; // As given on the command line
 
-  bool no_chapters, no_attachments, no_global_tags;
+  bool m_no_chapters, m_no_attachments, m_no_global_tags;
 
   // Some file formats can contain chapters, but for some the charset
   // cannot be identified unambiguously (*cough* OGM *cough*).
-  std::string chapter_charset, chapter_language;
+  std::string m_chapter_charset, m_chapter_language;
 
   // The following variables are needed for the broken way of
   // syncing audio in AVIs: by prepending it with trash. Thanks to
   // the nandub author for this really, really sucky implementation.
-  uint16_t avi_block_align;
-  uint32_t avi_samples_per_sec;
-  uint32_t avi_avg_bytes_per_sec;
-  uint32_t avi_samples_per_chunk;
-  uint32_t avi_sample_scale;
-  std::vector<int64_t> avi_block_sizes;
-  bool avi_audio_sync_enabled;
+  uint16_t m_avi_block_align, m_avi_samples_per_sec, m_avi_avg_bytes_per_sec, m_avi_samples_per_chunk,  m_avi_sample_scale;
+  std::vector<int64_t> m_avi_block_sizes;
+  bool m_avi_audio_sync_enabled;
 
 public:
   track_info_c();
   track_info_c(const track_info_c &src)
-    : initialized(false)
+    : m_initialized(false)
   {
     *this = src;
   }
@@ -292,33 +288,32 @@ public:
   virtual bool display_dimensions_or_aspect_ratio_set();
 };
 
-#define PTZR(i) reader_packetizers[i]
+#define PTZR(i) m_reader_packetizers[i]
 #define PTZR0   PTZR(0)
-#define NPTZR() reader_packetizers.size()
+#define NPTZR() m_reader_packetizers.size()
 
 class generic_reader_c {
 public:
-  track_info_c ti;
-  std::vector<generic_packetizer_c *> reader_packetizers;
-  generic_packetizer_c *ptzr_first_packet;
-  std::vector<int64_t> requested_track_ids, available_track_ids, used_track_ids;
-  int64_t max_timecode_seen;
-  KaxChapters *chapters;
-  bool appending;
-  int num_video_tracks, num_audio_tracks, num_subtitle_tracks;
+  track_info_c m_ti;
+  std::vector<generic_packetizer_c *> m_reader_packetizers;
+  generic_packetizer_c *m_ptzr_first_packet;
+  std::vector<int64_t> m_requested_track_ids, m_available_track_ids, m_used_track_ids;
+  int64_t m_max_timecode_seen;
+  KaxChapters *m_chapters;
+  bool m_appending;
+  int m_num_video_tracks, m_num_audio_tracks, m_num_subtitle_tracks;
 
-  int64_t reference_timecode_tolerance;
+  int64_t m_reference_timecode_tolerance;
 
 private:
-  id_result_t id_results_container;
-  std::vector<id_result_t> id_results_tracks, id_results_attachments, id_results_chapters, id_results_tags;
+  id_result_t m_id_results_container;
+  std::vector<id_result_t> m_id_results_tracks, m_id_results_attachments, m_id_results_chapters, m_id_results_tags;
 
 public:
-  generic_reader_c(track_info_c &p_ti);
+  generic_reader_c(track_info_c &ti);
   virtual ~generic_reader_c();
 
-  virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false)
-    = 0;
+  virtual file_status_e read(generic_packetizer_c *ptzr, bool force = false) = 0;
   virtual void read_all();
   virtual int get_progress() = 0;
   virtual void set_headers();
@@ -334,9 +329,8 @@ public:
 
   virtual void check_track_ids_and_packetizers();
   virtual void add_requested_track_id(int64_t id);
-  virtual void add_available_track_ids() {
-    available_track_ids.push_back(0);
-  }
+  virtual void add_available_track_id(int64_t id);
+  virtual void add_available_track_ids();
 
   virtual int64_t get_queued_bytes();
 
@@ -415,60 +409,58 @@ typedef std::deque<packet_cptr>::iterator packet_cptr_di;
 class generic_packetizer_c {
 protected:
   int m_num_packets;
-  std::deque<packet_cptr> packet_queue, deferred_packets;
-  int next_packet_wo_assigned_timecode;
+  std::deque<packet_cptr> m_packet_queue, m_deferred_packets;
+  int m_next_packet_wo_assigned_timecode;
 
-  int64_t m_free_refs, m_next_free_refs, enqueued_bytes;
-  int64_t safety_last_timecode, safety_last_duration;
+  int64_t m_free_refs, m_next_free_refs, m_enqueued_bytes;
+  int64_t m_safety_last_timecode, m_safety_last_duration;
 
-  KaxTrackEntry *track_entry;
+  KaxTrackEntry *m_track_entry;
 
   // Header entries. Can be set via set_XXX and will be 'rendered'
   // by set_headers().
-  int hserialno, htrack_type, htrack_min_cache, htrack_max_cache;
-  int64_t htrack_default_duration;
-  bool default_duration_forced;
-  bool default_track_warning_printed;
-  uint32_t huid;
-  int htrack_max_add_block_ids;
+  int m_hserialno, m_htrack_type, m_htrack_min_cache, m_htrack_max_cache;
+  int64_t m_htrack_default_duration;
+  bool m_default_duration_forced;
+  bool m_default_track_warning_printed;
+  uint32_t m_huid;
+  int m_htrack_max_add_block_ids;
 
-  std::string hcodec_id;
-  unsigned char *hcodec_private;
-  int hcodec_private_length;
+  std::string m_hcodec_id;
+  unsigned char *m_hcodec_private;
+  int m_hcodec_private_length;
 
-  float haudio_sampling_freq, haudio_output_sampling_freq;
-  int haudio_channels, haudio_bit_depth;
+  float m_haudio_sampling_freq, m_haudio_output_sampling_freq;
+  int m_haudio_channels, m_haudio_bit_depth;
 
-  int hvideo_pixel_width, hvideo_pixel_height;
-  int hvideo_display_width, hvideo_display_height;
+  int m_hvideo_pixel_width, m_hvideo_pixel_height, m_hvideo_display_width, m_hvideo_display_height;
 
-  compression_method_e hcompression;
-  compressor_ptr compressor;
+  compression_method_e m_hcompression;
+  compressor_ptr m_compressor;
 
-  timecode_factory_cptr timecode_factory;
-  timecode_factory_application_e timecode_factory_application_mode;
+  timecode_factory_cptr m_timecode_factory;
+  timecode_factory_application_e m_timecode_factory_application_mode;
 
-  int64_t last_cue_timecode;
+  int64_t m_last_cue_timecode;
 
-  bool has_been_flushed;
-
-public:
-  track_info_c ti;
-  generic_reader_c *reader;
-  int connected_to;
-  int64_t correction_timecode_offset;
-  int64_t append_timecode_offset, max_timecode_seen;
-  bool relaxed_timecode_checking;
+  bool m_has_been_flushed;
 
 public:
-  generic_packetizer_c(generic_reader_c *p_reader, track_info_c &p_ti)
-    throw (error_c);
+  track_info_c m_ti;
+  generic_reader_c *m_reader;
+  int m_connected_to;
+  int64_t m_correction_timecode_offset;
+  int64_t m_append_timecode_offset, m_max_timecode_seen;
+  bool m_relaxed_timecode_checking;
+
+public:
+  generic_packetizer_c(generic_reader_c *reader, track_info_c &ti) throw (error_c);
   virtual ~generic_packetizer_c();
 
   virtual bool contains_gap();
 
   virtual file_status_e read() {
-    return reader->read(this);
+    return m_reader->read(this);
   }
 
   inline void add_packet(packet_t *packet) {
@@ -480,18 +472,18 @@ public:
 
   virtual packet_cptr get_packet();
   inline bool packet_available() {
-    return !packet_queue.empty() && packet_queue.front()->factory_applied;
+    return !m_packet_queue.empty() && m_packet_queue.front()->factory_applied;
   }
   virtual void flush();
   virtual int64_t get_smallest_timecode() {
-    return packet_queue.empty() ? 0x0FFFFFFF : packet_queue.front()->timecode;
+    return m_packet_queue.empty() ? 0x0FFFFFFF : m_packet_queue.front()->timecode;
   }
   inline int64_t get_queued_bytes() {
-    return enqueued_bytes;
+    return m_enqueued_bytes;
   }
 
   inline void set_free_refs(int64_t free_refs) {
-    m_free_refs = m_next_free_refs;
+    m_free_refs      = m_next_free_refs;
     m_next_free_refs = free_refs;
   }
   inline int64_t get_free_refs() {
@@ -505,37 +497,35 @@ public:
   virtual int process(packet_cptr packet) = 0;
 
   virtual void set_cue_creation(cue_strategy_e create_cue_data) {
-    ti.cues = create_cue_data;
+    m_ti.m_cues = create_cue_data;
   }
   virtual cue_strategy_e get_cue_creation() {
-    return ti.cues;
+    return m_ti.m_cues;
   }
   virtual int64_t get_last_cue_timecode() {
-    return last_cue_timecode;
+    return m_last_cue_timecode;
   }
   virtual void set_last_cue_timecode(int64_t timecode) {
-    last_cue_timecode = timecode;
+    m_last_cue_timecode = timecode;
   }
 
   virtual KaxTrackEntry *get_track_entry() {
-    return track_entry;
+    return m_track_entry;
   }
   virtual int get_track_num() {
-    return hserialno;
+    return m_hserialno;
   }
   virtual int64_t get_source_track_num() {
-    return ti.id;
+    return m_ti.m_id;
   }
 
   virtual int set_uid(uint32_t uid);
   virtual int get_uid() {
-    return huid;
+    return m_huid;
   }
-  virtual void set_track_type(int type,
-                              timecode_factory_application_e tfa_mode =
-                              TFA_AUTOMATIC);
+  virtual void set_track_type(int type, timecode_factory_application_e tfa_mode = TFA_AUTOMATIC);
   virtual int get_track_type() {
-    return htrack_type;
+    return m_htrack_type;
   }
   virtual void set_language(const std::string &language);
 
@@ -551,7 +541,7 @@ public:
 
   virtual void set_audio_sampling_freq(float freq);
   virtual float get_audio_sampling_freq() {
-    return haudio_sampling_freq;
+    return m_haudio_sampling_freq;
   }
   virtual void set_audio_output_sampling_freq(float freq);
   virtual void set_audio_channels(int channels);
@@ -574,24 +564,22 @@ public:
   virtual void set_track_name(const std::string &name);
 
   virtual void set_default_compression_method(compression_method_e method) {
-    hcompression = method;
+    m_hcompression = method;
   }
 
   virtual void force_duration_on_last_packet();
 
   virtual const char *get_format_name() = 0;
-  virtual connection_result_e can_connect_to(generic_packetizer_c *src,
-                                             std::string &error_message) = 0;
-  virtual void connect(generic_packetizer_c *src,
-                       int64_t p_append_timecode_offset = -1);
+  virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message) = 0;
+  virtual void connect(generic_packetizer_c *src, int64_t append_timecode_offset = -1);
 
   virtual void enable_avi_audio_sync(bool enable) {
-    ti.avi_audio_sync_enabled = enable;
+    m_ti.m_avi_audio_sync_enabled = enable;
   }
   virtual int64_t handle_avi_audio_sync(int64_t num_bytes, bool vbr);
   virtual void add_avi_block_size(int64_t block_size) {
-    if (ti.avi_audio_sync_enabled)
-      ti.avi_block_sizes.push_back(block_size);
+    if (m_ti.m_avi_audio_sync_enabled)
+      m_ti.m_avi_block_sizes.push_back(block_size);
   }
 
   virtual void set_displacement_maybe(int64_t displacement);

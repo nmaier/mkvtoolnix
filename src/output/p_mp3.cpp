@@ -54,18 +54,18 @@ mp3_packetizer_c::handle_garbage(int64_t bytes) {
   bool warning_printed = false;
 
   if (0 == m_packetno) {
-    int64_t offset = handle_avi_audio_sync(bytes, !(ti.avi_block_align % 384) || !(ti.avi_block_align % 576));
+    int64_t offset = handle_avi_audio_sync(bytes, !(m_ti.m_avi_block_align % 384) || !(m_ti.m_avi_block_align % 576));
     if (-1 != offset) {
-      mxinfo_tid(ti.fname, ti.id,
+      mxinfo_tid(m_ti.m_fname, m_ti.m_id,
                  boost::format(Y("This MPEG audio track contains %1% bytes of non-MP3 data at the beginning. "
                                  "This corresponds to a delay of %2%ms. This delay will be used instead of the garbage data.\n")) % bytes % (offset / 1000000));
-      warning_printed         = true;
-      ti.tcsync.displacement += offset;
+      warning_printed             = true;
+      m_ti.m_tcsync.displacement += offset;
     }
   }
 
   if (!warning_printed)
-    mxwarn_tid(ti.fname, ti.id,
+    mxwarn_tid(m_ti.m_fname, m_ti.m_id,
                boost::format(Y("This MPEG audio track contains %1% bytes of non-MP3 data which were skipped. "
                                "The audio/video synchronization may have been lost.\n")) % bytes);
 }

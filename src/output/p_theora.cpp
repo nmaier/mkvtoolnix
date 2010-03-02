@@ -52,10 +52,10 @@ theora_video_packetizer_c::process(packet_cptr packet) {
 
 void
 theora_video_packetizer_c::extract_aspect_ratio() {
-  if (display_dimensions_or_aspect_ratio_set() || (NULL == ti.private_data) || (0 == ti.private_size))
+  if (display_dimensions_or_aspect_ratio_set() || (NULL == m_ti.m_private_data) || (0 == m_ti.m_private_size))
     return;
 
-  memory_cptr private_data         = memory_cptr(new memory_c(ti.private_data, ti.private_size, false));
+  memory_cptr private_data         = memory_cptr(new memory_c(m_ti.m_private_data, m_ti.m_private_size, false));
   std::vector<memory_cptr> packets = unlace_memory_xiph(private_data);
 
   foreach(memory_cptr &packet, packets) {
@@ -71,7 +71,7 @@ theora_video_packetizer_c::extract_aspect_ratio() {
 
       set_video_display_dimensions(theora.display_width, theora.display_height, PARAMETER_SOURCE_BITSTREAM);
 
-      mxinfo_tid(ti.fname, ti.id,
+      mxinfo_tid(m_ti.m_fname, m_ti.m_id,
                  boost::format(Y("Extracted the aspect ratio information from the Theora video headers and set the display dimensions to %1%/%2%.\n"))
                  % theora.display_width % theora.display_height);
     } catch (...) {

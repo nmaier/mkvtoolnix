@@ -70,7 +70,7 @@ aac_packetizer_c::get_aac_packet(unsigned long *header,
 
   m_bytes_skipped += pos;
   if (verbose && (0 < m_bytes_skipped))
-    mxwarn_tid(ti.fname, ti.id, boost::format(Y("Skipping %1% bytes (no valid AAC header found). This might cause audio/video desynchronisation.\n")) % m_bytes_skipped);
+    mxwarn_tid(m_ti.m_fname, m_ti.m_id, boost::format(Y("Skipping %1% bytes (no valid AAC header found). This might cause audio/video desynchronisation.\n")) % m_bytes_skipped);
   m_bytes_skipped = 0;
 
   unsigned char *buf;
@@ -115,7 +115,7 @@ aac_packetizer_c::set_headers() {
     else if (AAC_PROFILE_SBR == m_profile)
       set_codec_id(MKV_A_AAC_4SBR);
     else
-      mxerror_tid(ti.fname, ti.id, boost::format(Y("Unknown AAC MPEG-4 object type %1%.")) % m_profile);
+      mxerror_tid(m_ti.m_fname, m_ti.m_id, boost::format(Y("Unknown AAC MPEG-4 object type %1%.")) % m_profile);
 
   } else {
     if (AAC_PROFILE_MAIN == m_profile)
@@ -127,14 +127,14 @@ aac_packetizer_c::set_headers() {
     else if (AAC_PROFILE_SBR == m_profile)
       set_codec_id(MKV_A_AAC_2SBR);
     else
-      mxerror_tid(ti.fname, ti.id, boost::format(Y("Unknown AAC MPEG-2 profile %1%.")) % m_profile);
+      mxerror_tid(m_ti.m_fname, m_ti.m_id, boost::format(Y("Unknown AAC MPEG-2 profile %1%.")) % m_profile);
   }
 
   set_audio_sampling_freq((float)m_samples_per_sec);
   set_audio_channels(m_channels);
 
-  if ((NULL != ti.private_data) && (0 < ti.private_size))
-    set_codec_private(ti.private_data, ti.private_size);
+  if ((NULL != m_ti.m_private_data) && (0 < m_ti.m_private_size))
+    set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
 
   else if (!hack_engaged(ENGAGE_OLD_AAC_CODECID)) {
     unsigned char buffer[5];

@@ -31,7 +31,7 @@ wavpack_packetizer_c::wavpack_packetizer_c(generic_reader_c *p_reader,
   , m_bits_per_sample(meta.bits_per_sample)
   , m_samples_per_block(meta.samples_per_block)
   , m_samples_output(0)
-  , m_has_correction(meta.has_correction && (htrack_max_add_block_ids != 0))
+  , m_has_correction(meta.has_correction && (0 != m_htrack_max_add_block_ids))
 {
   set_track_type(track_audio);
 }
@@ -39,7 +39,7 @@ wavpack_packetizer_c::wavpack_packetizer_c(generic_reader_c *p_reader,
 void
 wavpack_packetizer_c::set_headers() {
   set_codec_id(MKV_A_WAVPACK4);
-  set_codec_private(ti.private_data, ti.private_size);
+  set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
   set_audio_sampling_freq((float)m_sample_rate);
   set_audio_channels(m_channels);
   set_audio_bit_depth(m_bits_per_sample);
@@ -48,7 +48,7 @@ wavpack_packetizer_c::set_headers() {
 
   generic_packetizer_c::set_headers();
 
-  track_entry->EnableLacing(!m_has_correction);
+  m_track_entry->EnableLacing(!m_has_correction);
 }
 
 int

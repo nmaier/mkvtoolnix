@@ -48,7 +48,7 @@ ac3_reader_c::ac3_reader_c(track_info_c &_ti)
   chunk(memory_c::alloc(AC3_READ_SIZE)) {
 
   try {
-    io                 = new mm_file_io_c(ti.fname);
+    io                 = new mm_file_io_c(m_ti.m_fname);
     size               = io->get_size();
 
     int tag_size_start = skip_id3v2_tag(*io);
@@ -74,10 +74,10 @@ ac3_reader_c::ac3_reader_c(track_info_c &_ti)
     throw error_c(boost::format(Y("ac3_reader: No valid AC3 packet found in the first %1% bytes.\n")) % AC3_READ_SIZE);
 
   bytes_processed = 0;
-  ti.id           = 0;          // ID for this track.
+  m_ti.m_id       = 0;          // ID for this track.
 
   if (verbose)
-    mxinfo_fn(ti.fname, Y("Using the AC3 demultiplexer.\n"));
+    mxinfo_fn(m_ti.m_fname, Y("Using the AC3 demultiplexer.\n"));
 }
 
 ac3_reader_c::~ac3_reader_c() {
@@ -89,8 +89,8 @@ ac3_reader_c::create_packetizer(int64_t) {
   if (NPTZR() != 0)
     return;
 
-  add_packetizer(new ac3_packetizer_c(this, ti, ac3header.sample_rate, ac3header.channels, ac3header.bsid));
-  mxinfo_tid(ti.fname, 0, boost::format(Y("Using the %1%AC3 output module.\n")) % (16 == ac3header.bsid ? "E" : ""));
+  add_packetizer(new ac3_packetizer_c(this, m_ti, ac3header.sample_rate, ac3header.channels, ac3header.bsid));
+  mxinfo_tid(m_ti.m_fname, 0, boost::format(Y("Using the %1%AC3 output module.\n")) % (16 == ac3header.bsid ? "E" : ""));
 }
 
 file_status_e

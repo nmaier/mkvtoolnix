@@ -58,7 +58,7 @@ dirac_video_packetizer_c::set_headers() {
     set_video_display_width(display_width);
     set_video_display_height(display_height);
 
-    if (default_duration_forced)
+    if (m_default_duration_forced)
       m_parser.set_default_duration(get_track_default_duration());
     else
       set_track_default_duration(m_parser.get_default_duration());
@@ -68,7 +68,7 @@ dirac_video_packetizer_c::set_headers() {
 
   generic_packetizer_c::set_headers();
 
-  track_entry->EnableLacing(false);
+  m_track_entry->EnableLacing(false);
 }
 
 int
@@ -92,7 +92,7 @@ dirac_video_packetizer_c::headers_found() {
 
   m_parser.get_sequence_header(m_seqhdr);
 
-  if (!reader->appending)
+  if (!m_reader->m_appending)
     set_headers();
 }
 

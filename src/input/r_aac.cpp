@@ -40,7 +40,7 @@ aac_reader_c::aac_reader_c(track_info_c &_ti)
   int adif, detected_profile;
 
   try {
-    io                 = new mm_file_io_c(ti.fname);
+    io                 = new mm_file_io_c(m_ti.m_fname);
     size               = io->get_size();
 
     int tag_size_start = skip_id3v2_tag(*io);
@@ -70,23 +70,23 @@ aac_reader_c::aac_reader_c(track_info_c &_ti)
       adif = 0;
     }
 
-    ti.id            = 0;       // ID for this track.
+    m_ti.m_id        = 0;       // ID for this track.
     bytes_processed  = 0;
     detected_profile = aacheader.profile;
 
     if (24000 >= aacheader.sample_rate)
       aacheader.profile = AAC_PROFILE_SBR;
 
-    if (   (map_has_key(ti.all_aac_is_sbr,  0) && ti.all_aac_is_sbr[ 0])
-        || (map_has_key(ti.all_aac_is_sbr, -1) && ti.all_aac_is_sbr[-1]))
+    if (   (map_has_key(m_ti.m_all_aac_is_sbr,  0) && m_ti.m_all_aac_is_sbr[ 0])
+        || (map_has_key(m_ti.m_all_aac_is_sbr, -1) && m_ti.m_all_aac_is_sbr[-1]))
       aacheader.profile = AAC_PROFILE_SBR;
 
-    if (   (map_has_key(ti.all_aac_is_sbr,  0) && !ti.all_aac_is_sbr[ 0])
-        || (map_has_key(ti.all_aac_is_sbr, -1) && !ti.all_aac_is_sbr[-1]))
+    if (   (map_has_key(m_ti.m_all_aac_is_sbr,  0) && !m_ti.m_all_aac_is_sbr[ 0])
+        || (map_has_key(m_ti.m_all_aac_is_sbr, -1) && !m_ti.m_all_aac_is_sbr[-1]))
       aacheader.profile = detected_profile;
 
-    if (   map_has_key(ti.all_aac_is_sbr,  0)
-        || map_has_key(ti.all_aac_is_sbr, -1))
+    if (   map_has_key(m_ti.m_all_aac_is_sbr,  0)
+        || map_has_key(m_ti.m_all_aac_is_sbr, -1))
       sbr_status_set = true;
 
   } catch (...) {
@@ -94,7 +94,7 @@ aac_reader_c::aac_reader_c(track_info_c &_ti)
   }
 
   if (verbose)
-    mxinfo_fn(ti.fname, Y("Using the AAC demultiplexer.\n"));
+    mxinfo_fn(m_ti.m_fname, Y("Using the AAC demultiplexer.\n"));
 }
 
 aac_reader_c::~aac_reader_c() {
@@ -115,13 +115,13 @@ aac_reader_c::create_packetizer(int64_t) {
              "file actually contains SBR AAC. The file will be muxed in the "
              "WRONG way otherwise. Also read mkvmerge's documentation.\n"));
 
-  aacpacketizer = new aac_packetizer_c(this, ti, aacheader.id, aacheader.profile, aacheader.sample_rate, aacheader.channels, emphasis_present);
+  aacpacketizer = new aac_packetizer_c(this, m_ti, aacheader.id, aacheader.profile, aacheader.sample_rate, aacheader.channels, emphasis_present);
   add_packetizer(aacpacketizer);
 
   if (AAC_PROFILE_SBR == aacheader.profile)
     aacpacketizer->set_audio_output_sampling_freq(aacheader.sample_rate * 2);
 
-  mxinfo_tid(ti.fname, 0, Y("Using the AAC output module.\n"));
+  mxinfo_tid(m_ti.m_fname, 0, Y("Using the AAC output module.\n"));
 }
 
 // Try to guess if the MPEG4 header contains the emphasis field (2 bits)

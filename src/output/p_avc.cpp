@@ -40,10 +40,10 @@ mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader,
   , m_first_frame(true)
 {
 
-  relaxed_timecode_checking = true;
+  m_relaxed_timecode_checking = true;
 
-  if (0 != ti.nalu_size_length)
-    m_parser.set_nalu_size_length(ti.nalu_size_length);
+  if (0 != m_ti.m_nalu_size_length)
+    m_parser.set_nalu_size_length(m_ti.m_nalu_size_length);
 
   if (get_cue_creation() == CUE_STRATEGY_UNSPECIFIED)
     set_cue_creation(CUE_STRATEGY_IFRAMES);
@@ -61,16 +61,16 @@ mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader,
   // command line argument. This factory must be disabled for the AVC
   // packetizer because it takes care of handling the default
   // duration/FPS itself.
-  if (ti.ext_timecodes.empty())
-    timecode_factory = timecode_factory_cptr(NULL);
+  if (m_ti.m_ext_timecodes.empty())
+    m_timecode_factory.clear();
 }
 
 void
 mpeg4_p10_es_video_packetizer_c::set_headers() {
   if (m_allow_timecode_generation) {
-    if (-1 == htrack_default_duration)
-      htrack_default_duration = 40000000;
-    m_parser.enable_timecode_generation(htrack_default_duration);
+    if (-1 == m_htrack_default_duration)
+      m_htrack_default_duration = 40000000;
+    m_parser.enable_timecode_generation(m_htrack_default_duration);
   }
 
   set_video_pixel_width(m_width);
@@ -78,7 +78,7 @@ mpeg4_p10_es_video_packetizer_c::set_headers() {
 
   generic_packetizer_c::set_headers();
 
-  track_entry->EnableLacing(false);
+  m_track_entry->EnableLacing(false);
 }
 
 void
@@ -95,14 +95,14 @@ mpeg4_p10_es_video_packetizer_c::process(packet_cptr packet) {
     flush_frames();
 
   } catch (nalu_size_length_error_c &error) {
-    mxerror_tid(ti.fname, ti.id,
+    mxerror_tid(m_ti.m_fname, m_ti.m_id,
                 boost::format(Y("This AVC/h.264 contains frames that are too big for the current maximum NALU size. "
                                 "You have to re-run mkvmerge and set the maximum NALU size to %1% for this track "
                                 "(command line parameter '--nalu-size-length %2%:%1%').\n"))
-                % error.get_required_length() % ti.id);
+                % error.get_required_length() % m_ti.m_id);
 
   } catch (error_c &error) {
-    mxerror_tid(ti.fname, ti.id,
+    mxerror_tid(m_ti.m_fname, m_ti.m_id,
                 boost::format(Y("mkvmerge encountered broken or unparsable data in this AVC/h.264 video track. "
                                 "Either your file is damaged (which mkvmerge cannot cope with yet) or this is a bug in mkvmerge itself. "
                                 "The error message was:\n%1%\n")) % error.get_error());
@@ -114,9 +114,9 @@ mpeg4_p10_es_video_packetizer_c::process(packet_cptr packet) {
 void
 mpeg4_p10_es_video_packetizer_c::extract_aspect_ratio() {
   uint32_t num, den;
-  unsigned char *priv = hcodec_private;
+  unsigned char *priv = m_hcodec_private;
 
-  if (mpeg4::p10::extract_par(hcodec_private, hcodec_private_length, num, den) && (0 != num) && (0 != den)) {
+  if (mpeg4::p10::extract_par(m_hcodec_private, m_hcodec_private_length, num, den) && (0 != num) && (0 != den)) {
     if (!display_dimensions_or_aspect_ratio_set()) {
       double par = (double)num / (double)den;
 
@@ -124,13 +124,13 @@ mpeg4_p10_es_video_packetizer_c::extract_aspect_ratio() {
                                    1 <= par ? m_height            : irnd(m_height / par),
                                    PARAMETER_SOURCE_BITSTREAM);
 
-      mxinfo_tid(ti.fname, ti.id,
+      mxinfo_tid(m_ti.m_fname, m_ti.m_id,
                  boost::format(Y("Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data "
-                                 "and set the display dimensions to %1%/%2%.\n")) % ti.display_width % ti.display_height);
+                                 "and set the display dimensions to %1%/%2%.\n")) % m_ti.m_display_width % m_ti.m_display_height);
     }
   }
 
-  if (priv != hcodec_private)
+  if (priv != m_hcodec_private)
     safefree(priv);
 }
 
@@ -146,10 +146,10 @@ mpeg4_p10_es_video_packetizer_c::flush_frames() {
   while (m_parser.frame_available()) {
     avc_frame_t frame(m_parser.get_frame());
     if (m_first_frame && (0 < m_parser.get_num_skipped_frames()))
-      mxwarn_tid(ti.fname, ti.id,
+      mxwarn_tid(m_ti.m_fname, m_ti.m_id,
                  boost::format(Y("This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n")) % m_parser.get_num_skipped_frames());
     add_packet(new packet_t(frame.m_data, frame.m_start,
-                            frame.m_end > frame.m_start ? frame.m_end - frame.m_start : htrack_default_duration,
+                            frame.m_end > frame.m_start ? frame.m_end - frame.m_start : m_htrack_default_duration,
                             frame.m_keyframe            ? -1                          : frame.m_start + frame.m_ref1));
     m_first_frame = false;
   }
@@ -170,17 +170,17 @@ mpeg4_p10_es_video_packetizer_c::connect(generic_packetizer_c *src,
                                          int64_t p_append_timecode_offset) {
   generic_packetizer_c::connect(src, p_append_timecode_offset);
 
-  if (2 != connected_to)
+  if (2 != m_connected_to)
     return;
 
   mpeg4_p10_es_video_packetizer_c *real_src = dynamic_cast<mpeg4_p10_es_video_packetizer_c *>(src);
   assert(NULL != real_src);
 
   m_allow_timecode_generation = real_src->m_allow_timecode_generation;
-  htrack_default_duration     = real_src->htrack_default_duration;
+  m_htrack_default_duration   = real_src->m_htrack_default_duration;
 
   if (m_allow_timecode_generation)
-    m_parser.enable_timecode_generation(htrack_default_duration);
+    m_parser.enable_timecode_generation(m_htrack_default_duration);
 }
 
 connection_result_e
@@ -192,12 +192,12 @@ mpeg4_p10_es_video_packetizer_c::can_connect_to(generic_packetizer_c *src,
 
   connect_check_v_width(m_width, vsrc->m_width);
   connect_check_v_height(m_height, vsrc->m_height);
-  connect_check_codec_id(hcodec_id, vsrc->hcodec_id);
+  connect_check_codec_id(m_hcodec_id, vsrc->m_hcodec_id);
 
-  if (((NULL == ti.private_data) && (NULL != vsrc->ti.private_data)) ||
-      ((NULL != ti.private_data) && (NULL == vsrc->ti.private_data)) ||
-      (ti.private_size != vsrc->ti.private_size)) {
-    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % ti.private_size % vsrc->ti.private_size).str();
+  if (((NULL == m_ti.m_private_data) && (NULL != vsrc->m_ti.m_private_data)) ||
+      ((NULL != m_ti.m_private_data) && (NULL == vsrc->m_ti.m_private_data)) ||
+      (m_ti.m_private_size != vsrc->m_ti.m_private_size)) {
+    error_message = (boost::format(Y("The codec's private data does not match (lengths: %1% and %2%).")) % m_ti.m_private_size % vsrc->m_ti.m_private_size).str();
     return CAN_CONNECT_MAYBE_CODECPRIVATE;
   }
 

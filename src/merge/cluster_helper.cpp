@@ -84,8 +84,8 @@ cluster_helper_c::add_packet(packet_cptr packet) {
   mxverb(4,
          boost::format("cluster_helper_c::add_packet(): new packet { source %1%/%2% "
                        "timecode: %3% duration: %4% bref: %5% fref: %6% assigned_timecode: %7% timecode_delay: %8% }\n")
-         % packet->source->ti.id     % packet->source->ti.fname % packet->timecode          % packet->duration
-         % packet->bref              % packet->fref             % packet->assigned_timecode % format_timecode(timecode_delay));
+         % packet->source->m_ti.m_id % packet->source->m_ti.m_fname % packet->timecode          % packet->duration
+         % packet->bref              % packet->fref                 % packet->assigned_timecode % format_timecode(timecode_delay));
 
   if (   (SHRT_MAX < timecode_delay)
       || (SHRT_MIN > timecode_delay)
@@ -214,30 +214,30 @@ cluster_helper_c::set_output(mm_io_c *out) {
 
 void
 cluster_helper_c::set_duration(render_groups_c *rg) {
-  if (rg->durations.empty())
+  if (rg->m_durations.empty())
     return;
 
-  kax_block_blob_c *group = rg->groups.back().get_object();
-  int64_t def_duration    = rg->source->get_track_default_duration();
+  kax_block_blob_c *group = rg->m_groups.back().get_object();
+  int64_t def_duration    = rg->m_source->get_track_default_duration();
   int64_t block_duration  = 0;
 
   int i;
-  for (i = 0; rg->durations.size() > i; ++i)
-    block_duration += rg->durations[i];
+  for (i = 0; rg->m_durations.size() > i; ++i)
+    block_duration += rg->m_durations[i];
   mxverb(3,
-         boost::format("cluster_helper::set_duration: block_duration %1% rounded duration %2% def_duration %3% use_durations %4% rg->duration_mandatory %5%\n")
-         % block_duration % RND_TIMECODE_SCALE(block_duration) % def_duration % (g_use_durations ? 1 : 0) % (rg->duration_mandatory ? 1 : 0));
+         boost::format("cluster_helper::set_duration: block_duration %1% rounded duration %2% def_duration %3% use_durations %4% rg->m_duration_mandatory %5%\n")
+         % block_duration % RND_TIMECODE_SCALE(block_duration) % def_duration % (g_use_durations ? 1 : 0) % (rg->m_duration_mandatory ? 1 : 0));
 
-  if (rg->duration_mandatory) {
+  if (rg->m_duration_mandatory) {
     if (   (0 == block_duration)
         || (   (0 < block_duration)
-            && (block_duration != (rg->durations.size() * def_duration))))
+            && (block_duration != (rg->m_durations.size() * def_duration))))
       group->set_block_duration(RND_TIMECODE_SCALE(block_duration));
 
   } else if (   (   g_use_durations
                  || (0 < def_duration))
              && (0 < block_duration)
-             && (RND_TIMECODE_SCALE(block_duration) != RND_TIMECODE_SCALE(rg->durations.size() * def_duration)))
+             && (RND_TIMECODE_SCALE(block_duration) != RND_TIMECODE_SCALE(rg->m_durations.size() * def_duration)))
     group->set_block_duration(RND_TIMECODE_SCALE(block_duration));
 }
 
@@ -246,22 +246,22 @@ cluster_helper_c::must_duration_be_set(render_groups_c *rg,
                                        packet_cptr &new_packet) {
   int i;
   int64_t block_duration = 0;
-  int64_t def_duration   = rg->source->get_track_default_duration();
+  int64_t def_duration   = rg->m_source->get_track_default_duration();
 
-  for (i = 0; rg->durations.size() > i; ++i)
-    block_duration += rg->durations[i];
+  for (i = 0; rg->m_durations.size() > i; ++i)
+    block_duration += rg->m_durations[i];
   block_duration += new_packet->duration;
 
-  if (rg->duration_mandatory || new_packet->duration_mandatory) {
+  if (rg->m_duration_mandatory || new_packet->duration_mandatory) {
     if (   (0 == block_duration)
         || (   (0 < block_duration)
-            && (block_duration != ((rg->durations.size() + 1) * def_duration))))
+            && (block_duration != ((rg->m_durations.size() + 1) * def_duration))))
       return true;
 
   } else if (   (   g_use_durations
                  || (0 < def_duration))
              && (0 < block_duration)
-             && (RND_TIMECODE_SCALE(block_duration) != RND_TIMECODE_SCALE((rg->durations.size() + 1) * def_duration)))
+             && (RND_TIMECODE_SCALE(block_duration) != RND_TIMECODE_SCALE((rg->m_durations.size() + 1) * def_duration)))
     return true;
 
   return false;
@@ -277,7 +277,6 @@ cluster_helper_c::must_duration_be_set(render_groups_c *rg,
 int
 cluster_helper_c::render() {
   std::vector<render_groups_cptr> render_groups;
-  std::vector<render_groups_cptr>::iterator rg_it;
 
   bool use_simpleblock              = !hack_engaged(ENGAGE_NO_SIMPLE_BLOCKS);
 
@@ -310,9 +309,9 @@ cluster_helper_c::render() {
       m_cluster->SetSilentTrackUsed();
 
     render_groups_c *render_group = NULL;
-    mxforeach(rg_it, render_groups)
-      if ((*rg_it)->source == source) {
-        render_group = (*rg_it).get_object();
+    foreach(render_groups_cptr &rg, render_groups)
+      if (rg->m_source == source) {
+        render_group = rg.get_object();
         break;
       }
 
@@ -328,16 +327,16 @@ cluster_helper_c::render() {
 
     KaxTrackEntry &track_entry             = static_cast<KaxTrackEntry &>(*source->get_track_entry());
 
-    kax_block_blob_c *previous_block_group = !render_group->groups.empty() ? render_group->groups.back().get_object() : NULL;
+    kax_block_blob_c *previous_block_group = !render_group->m_groups.empty() ? render_group->m_groups.back().get_object() : NULL;
     kax_block_blob_c *new_block_group      = previous_block_group;
 
     if ((-1 != pack->bref) || has_codec_state)
-      render_group->more_data = false;
+      render_group->m_more_data = false;
 
-    if (!render_group->more_data) {
+    if (!render_group->m_more_data) {
       set_duration(render_group);
-      render_group->durations.clear();
-      render_group->duration_mandatory = false;
+      render_group->m_durations.clear();
+      render_group->m_duration_mandatory = false;
 
       BlockBlobType this_block_blob_type
         = !use_simpleblock                         ? std_block_blob_type
@@ -347,8 +346,8 @@ cluster_helper_c::render() {
       if (has_codec_state)
         this_block_blob_type = BLOCK_BLOB_NO_SIMPLE;
 
-      render_group->groups.push_back(kax_block_blob_cptr(new kax_block_blob_c(this_block_blob_type)));
-      new_block_group = render_group->groups.back().get_object();
+      render_group->m_groups.push_back(kax_block_blob_cptr(new kax_block_blob_c(this_block_blob_type)));
+      new_block_group = render_group->m_groups.back().get_object();
       m_cluster->AddBlockBlob(new_block_group);
       new_block_group->SetParent(*m_cluster);
 
@@ -356,9 +355,9 @@ cluster_helper_c::render() {
     }
 
     // Now put the packet into the cluster.
-    render_group->more_data = new_block_group->add_frame_auto(track_entry, pack->assigned_timecode - m_timecode_offset, *data_buffer, lacing_type,
-                                                              (-1 == pack->bref) ? -1 : pack->bref - m_timecode_offset,
-                                                              (-1 == pack->fref) ? -1 : pack->fref - m_timecode_offset);
+    render_group->m_more_data = new_block_group->add_frame_auto(track_entry, pack->assigned_timecode - m_timecode_offset, *data_buffer, lacing_type,
+                                                                (-1 == pack->bref) ? -1 : pack->bref - m_timecode_offset,
+                                                                (-1 == pack->fref) ? -1 : pack->fref - m_timecode_offset);
 
     if (has_codec_state) {
       KaxBlockGroup &bgroup = (KaxBlockGroup &)*new_block_group;
@@ -374,10 +373,10 @@ cluster_helper_c::render() {
       m_max_timecode_and_duration = pack->assigned_timecode + pack->duration;
 
     if ((-1 != pack->bref) || (-1 != pack->fref) || !track_entry.LacingEnabled())
-      render_group->more_data = false;
+      render_group->m_more_data = false;
 
-    render_group->durations.push_back(pack->unmodified_duration);
-    render_group->duration_mandatory |= pack->duration_mandatory;
+    render_group->m_durations.push_back(pack->unmodified_duration);
+    render_group->m_duration_mandatory |= pack->duration_mandatory;
 
     if (NULL != new_block_group) {
       // Set the reference priority if it was wanted.
@@ -437,8 +436,8 @@ cluster_helper_c::render() {
   }
 
   if (0 < elements_in_cluster) {
-    mxforeach(rg_it, render_groups)
-      set_duration((*rg_it).get_object());
+    foreach(render_groups_cptr &rg, render_groups)
+      set_duration(rg.get_object());
 
     m_cluster->SetPreviousTimecode(min_cl_timecode - m_timecode_offset - 1, (int64_t)g_timecode_scale);
     m_cluster->set_min_timecode(min_cl_timecode - m_timecode_offset);
