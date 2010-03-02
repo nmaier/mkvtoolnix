@@ -36,10 +36,10 @@
 #include "common/locale.h"
 #include "common/memory.h"
 #include "common/mm_io.h"
+#include "common/strings/parsing.h"
 #ifdef SYS_WINDOWS
 # include "common/fs_sys_helpers.h"
 # include "common/strings/formatting.h"
-# include "common/strings/parsing.h"
 #endif
 
 charset_converter_cptr g_cc_local_utf8;
