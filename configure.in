@@ -80,5 +80,5 @@ AC_OUTPUT(
 
 echo ''
 echo 'The mkvtoolnix configuration is complete.'
-echo -e 'Optional features that are built: '"$opt_features_yes"
-echo -e 'Optional features that are NOT built: '"$opt_features_no"
+printf 'Optional features that are built: '"$opt_features_yes"'\n'
+printf 'Optional features that are NOT built: '"$opt_features_no"'\n'
