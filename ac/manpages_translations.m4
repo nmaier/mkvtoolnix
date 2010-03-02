@@ -1,7 +1,10 @@
 AC_MSG_CHECKING(the manpage translation languages to install)
-MANPAGES_TRANSLATIONS_POS="`echo $srcdir/doc/man/po4a/po/*.po`"
-MANPAGES_TRANSLATIONS="`echo "$MANPAGES_TRANSLATIONS_POS" | \
-  sed -e 's/\S*\/\(\w*\).po/\1/g'`"
+MANPAGES_TRANSLATIONS=""
+MANPAGES_TRANSLATIONS_POS=""
+for file in $srcdir/doc/man/po4a/po/*.po; do
+  MANPAGES_TRANSLATIONS="$MANPAGES_TRANSLATIONS`basename $file .po` "
+  MANPAGES_TRANSLATIONS_POS="$MANPAGES_TRANSLATIONS$file "
+done
 AC_MSG_RESULT($MANPAGES_TRANSLATIONS)
 
 MANPAGES_TRANSLATED="`for lang in $MANPAGES_TRANSLATIONS; do \
