@@ -44,8 +44,11 @@ bool
 srt_parser_c::probe(mm_text_io_c *io) {
   try {
     io->setFilePointer(0, seek_beginning);
-    std::string s = io->getline();
-    strip(s);
+    std::string s;
+    do {
+      s = io->getline();
+      strip(s);
+    } while (s.empty());
 
     int64_t dummy;
     if (!parse_int(s, dummy))
