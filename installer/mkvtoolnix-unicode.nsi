@@ -210,13 +210,14 @@ Section "Program files" SEC01
 
   # Shortcuts
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+  Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\mkvmerge GUI guide.lnk"
+
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
   SetOutPath "$INSTDIR"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\mkvmerge GUI.lnk" "$INSTDIR\mmg.exe" "" "$INSTDIR\matroskalogo_big.ico"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\mkvinfo GUI.lnk" "$INSTDIR\mkvinfo.exe" "-g" "$INSTDIR\matroskalogo_big.ico"
   SetOutPath "$INSTDIR\Doc"
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP\Documentation"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\mkvmerge GUI guide.lnk" "$INSTDIR\doc\mkvmerge-gui.html"
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\mkvmerge CLI reference.lnk" "$INSTDIR\doc\en\mkvmerge.html"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\mkvinfo CLI reference.lnk" "$INSTDIR\doc\en\mkvinfo.html"
@@ -232,6 +233,9 @@ Section "Program files" SEC01
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\Japanese\mkvinfo CLI reference.lnk" "$INSTDIR\doc\ja\mkvinfo.html"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\Japanese\mkvextract CLI reference.lnk" "$INSTDIR\doc\ja\mkvextract.html"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\Japanese\mkvpropedit CLI reference.lnk" "$INSTDIR\doc\ja\mkvpropedit.html"
+  CreateDirectory "$SMPROGRAMS\$ICONS_GROUP\Documentation\mkvmerge GUI guide"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\mkvmerge GUI guide\mkvmerge GUI guide.lnk" "$INSTDIR\doc\en\mkvmerge-gui.html"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\mkvmerge GUI guide\Chinese Simplified\mkvmerge GUI guide.lnk" "$INSTDIR\doc\zh_CN\mkvmerge-gui.html"
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation\ChangeLog - What is new.lnk" "$INSTDIR\doc\ChangeLog.txt"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation\README.lnk" "$INSTDIR\doc\README.txt"
