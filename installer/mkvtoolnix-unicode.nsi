@@ -235,6 +235,7 @@ Section "Program files" SEC01
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\Japanese\mkvpropedit CLI reference.lnk" "$INSTDIR\doc\ja\mkvpropedit.html"
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP\Documentation\mkvmerge GUI guide"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\mkvmerge GUI guide\mkvmerge GUI guide.lnk" "$INSTDIR\doc\en\mkvmerge-gui.html"
+  CreateDirectory "$SMPROGRAMS\$ICONS_GROUP\Documentation\mkvmerge GUI guide\Chinese Simplified"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\mkvmerge GUI guide\Chinese Simplified\mkvmerge GUI guide.lnk" "$INSTDIR\doc\zh_CN\mkvmerge-gui.html"
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation\ChangeLog - What is new.lnk" "$INSTDIR\doc\ChangeLog.txt"
