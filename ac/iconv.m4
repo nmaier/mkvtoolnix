@@ -8,6 +8,7 @@ dnl
 dnl Some systems have iconv in libc, some have it in libiconv (OSF/1 and
 dnl those with the standalone portable GNU libiconv installed).
 dnl
+  AC_CHECK_HEADERS(iconv.h)
   AC_CACHE_CHECK(for iconv, am_cv_func_iconv, [
     am_cv_func_iconv="no, consider installing GNU libiconv"
     am_cv_lib_iconv=no

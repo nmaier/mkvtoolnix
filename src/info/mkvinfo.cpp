@@ -456,18 +456,32 @@ format_binary(EbmlBinary &bin,
                                  EbmlElement *&l4, \
                                  EbmlElement *&l5, \
                                  EbmlElement *&l6)
-#define handle2(f, args...) \
-  handle_##f(in, es, upper_lvl_el, l1, l2, l3, l4, l5, l6, ##args)
-#define def_handle2(f, args...) handle_##f(mm_io_c *&in, \
-                                           EbmlStream *&es, \
-                                           int &upper_lvl_el, \
-                                           EbmlElement *&l1, \
-                                           EbmlElement *&l2, \
-                                           EbmlElement *&l3, \
-                                           EbmlElement *&l4, \
-                                           EbmlElement *&l5, \
-                                           EbmlElement *&l6, \
-                                           ##args)
+
+#define handle2(f, arg1) \
+  handle_##f(in, es, upper_lvl_el, l1, l2, l3, l4, l5, l6, arg1)
+#define handle3(f, arg1, arg2) \
+  handle_##f(in, es, upper_lvl_el, l1, l2, l3, l4, l5, l6, arg1, arg2)
+#define def_handle2(f, arg1) handle_##f(mm_io_c *&in,      \
+                                        EbmlStream *&es,   \
+                                        int &upper_lvl_el, \
+                                        EbmlElement *&l1,  \
+                                        EbmlElement *&l2,  \
+                                        EbmlElement *&l3,  \
+                                        EbmlElement *&l4,  \
+                                        EbmlElement *&l5,  \
+                                        EbmlElement *&l6,  \
+                                        arg1)
+#define def_handle3(f, arg1, arg2) handle_##f(mm_io_c *&in,      \
+                                              EbmlStream *&es,   \
+                                              int &upper_lvl_el, \
+                                              EbmlElement *&l1,  \
+                                              EbmlElement *&l2,  \
+                                              EbmlElement *&l3,  \
+                                              EbmlElement *&l4,  \
+                                              EbmlElement *&l5,  \
+                                              EbmlElement *&l6,  \
+                                              arg1,              \
+                                              arg2)
 
 void
 def_handle(chaptertranslate) {
@@ -1606,7 +1620,7 @@ def_handle2(simple_block,
 }
 
 void
-def_handle2(cluster,
+def_handle3(cluster,
             KaxCluster *&cluster,
             int64_t file_size) {
   cluster = (KaxCluster *)l1;
@@ -1866,7 +1880,7 @@ process_file(const std::string &file_name) {
 
           return true;
         }
-        handle2(cluster, cluster, file_size);
+        handle3(cluster, cluster, file_size);
 
       } else if (is_id(l1, KaxCues))
         handle(cues);

@@ -19,7 +19,9 @@
 #include "common/os.h"
 
 #include <errno.h>
-#include <iconv.h>
+#if defined(HAVE_ICONV_H)
+# include <iconv.h>
+#endif
 #if HAVE_NL_LANGINFO
 # include <langinfo.h>
 #elif HAVE_LOCALE_CHARSET
@@ -28,7 +30,7 @@
 #include <locale.h>
 #include <string>
 #include <vector>
-#ifdef SYS_WINDOWS
+#if defined(SYS_WINDOWS)
 # include <windows.h>
 #endif
 
@@ -78,15 +80,16 @@ charset_converter_c::init(const std::string &charset) {
   if (converter != s_converters.end())
     return (*converter).second;
 
-#if defined(SYS_WINDOWS)
+#if defined(HAVE_ICONV_H) && defined(SYS_WINDOWS)
   if (iconv_charset_converter_c::is_available(actual_charset) || !windows_charset_converter_c::is_available(actual_charset))
     return charset_converter_cptr(new iconv_charset_converter_c(actual_charset));
 
-  return charset_converter_cptr(new windows_charset_converter_c(actual_charset));
-
-#else  // defined(SYS_WINDOWS)
+#elif defined(HAVE_ICONV_H)
   return charset_converter_cptr(new iconv_charset_converter_c(actual_charset));
-#endif // defined(SYS_WINDOWS)
+
+#else
+  return charset_converter_cptr(new windows_charset_converter_c(actual_charset));
+#endif
 }
 
 bool
@@ -118,7 +121,7 @@ charset_converter_c::handle_string_with_bom(const std::string &source,
 }
 
 // ------------------------------------------------------------
-
+#if defined(HAVE_ICONV_H)
 iconv_charset_converter_c::iconv_charset_converter_c(const std::string &charset)
   : charset_converter_c(charset)
   , m_is_utf8(false)
@@ -206,6 +209,7 @@ iconv_charset_converter_c::is_available(const std::string &charset) {
 
   return true;
 }
+#endif //HAVE_ICONV_H
 
 // ------------------------------------------------------------
 
@@ -317,7 +321,7 @@ get_local_console_charset() {
 #endif
 }
 
-#ifdef SYS_WINDOWS
+#if defined(SYS_WINDOWS)
 unsigned
 Utf8ToUtf16(const char *utf8,
             int utf8len,
@@ -432,4 +436,4 @@ win32_utf8_to_utf16(const char *s) {
   return wbuffer;
 }
 
-#endif
+#endif  // SYS_WINDOWS

@@ -33,11 +33,7 @@ using namespace libebml;
 
 static std::string
 space(int num) {
-  char s[num + 1];
-  memset(s, ' ', num);
-  s[num] = 0;
-
-  return std::string(s);
+  return std::string(num, ' ');
 }
 
 static void

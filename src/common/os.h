@@ -26,6 +26,7 @@
 #  define COMP_CYGWIN
 # else
 #  define COMP_MSC
+#  define NOMINMAX
 # endif
 #elif defined(__APPLE__)
 # define SYS_APPLE
@@ -45,7 +46,6 @@
 # define strncasecmp _strnicmp
 # define strcasecmp _stricmp
 # define nice(a)
-# define vsnprintf _vsnprintf
 typedef __int64 int64_t;
 typedef __int32 int32_t;
 typedef __int16 int16_t;
