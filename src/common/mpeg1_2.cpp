@@ -90,7 +90,7 @@ mpeg1_2::extract_ar(const unsigned char *buffer,
   mxverb(3, boost::format("mpeg_video_ar: start search in %1% bytes\n") % buffer_size);
   if (buffer_size < 8) {
     mxverb(3, "mpeg_video_ar: sequence header too small\n");
-    return -1;
+    return false;
   }
   marker = get_uint32_be(buffer);
   idx = 4;
@@ -101,14 +101,14 @@ mpeg1_2::extract_ar(const unsigned char *buffer,
   }
   if (idx >= buffer_size) {
     mxverb(3, "mpeg_video_ar: no sequence header start code found\n");
-    return -1;
+    return false;
   }
 
   mxverb(3, boost::format("mpeg_video_ar: found sequence header start code at %1%\n") % (idx - 4));
   idx += 3;                     // width and height
   if (idx >= buffer_size) {
     mxverb(3, "mpeg_video_ar: sequence header too small\n");
-    return -1;
+    return false;
   }
 
   switch (buffer[idx] & 0xf0) {
