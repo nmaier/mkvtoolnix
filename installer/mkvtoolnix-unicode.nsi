@@ -340,6 +340,9 @@ Section Uninstall
   Delete "$INSTDIR\doc\ja\*.*"
   Delete "$INSTDIR\doc\zh_CN\*.*"
 
+  RMDir "$INSTDIR\doc\ja"
+  RMDir "$INSTDIR\doc\zh_CN"
+
   Delete "$INSTDIR\doc\guide\en\images\*.gif"
   Delete "$INSTDIR\doc\guide\en\mkvmerge-gui*.*"
   RMDir "$INSTDIR\doc\guide\en\images"
@@ -352,7 +355,10 @@ Section Uninstall
   RMDir "$INSTDIR\doc\guide"
 
   Delete "$INSTDIR\doc\*.*"
+  RMDir "$INSTDIR\doc"
+
   Delete "$INSTDIR\examples\*.*"
+  RMDir "$INSTDIR\examples"
 
   Delete "$INSTDIR\locale\de\LC_MESSAGES\mkvtoolnix.mo"
   RMDir "$INSTDIR\locale\de\LC_MESSAGES"
@@ -377,10 +383,6 @@ Section Uninstall
 
   RMDir "$INSTDIR\locale"
   RMDir "$INSTDIR\data"
-  RMDir "$INSTDIR\doc\images"
-  RMDir "$INSTDIR\doc\ja"
-  RMDir "$INSTDIR\doc"
-  RMDir "$INSTDIR\examples"
 
   StrCmp $unRemoveJobs "Yes" 0 +8
   Delete "$INSTDIR\jobs\*.mmg"
