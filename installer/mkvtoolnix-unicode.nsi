@@ -95,13 +95,14 @@ Section "Program files" SEC01
   SetOutPath "$INSTDIR\doc"
   File "doc\ChangeLog.txt"
   File "doc\COPYING.txt"
+  File "doc\README.txt"
+  File "doc\README.Windows.txt"
+  SetOutPath "$INSTDIR\doc\en"
   File "doc\mkvextract.html"
   File "doc\mkvinfo.html"
   File "doc\mkvmerge.html"
   File "doc\mkvpropedit.html"
   File "doc\mmg.html"
-  File "doc\README.txt"
-  File "doc\README.Windows.txt"
   SetOutPath "$INSTDIR\doc\ja"
   File "doc\ja\mkvextract.html"
   File "doc\ja\mkvinfo.html"
@@ -190,7 +191,13 @@ Section "Program files" SEC01
   RMDir "$INSTDIR\locale\zh\LC_MESSAGES"
   RMDir "$INSTDIR\locale\zh"
 
-  # The guide to mmg was moved to locale specific subfolders.
+  # The docs have been moved to locale specific subfolders.
+  Delete "$INSTDIR\doc\mkvextract.html"
+  Delete "$INSTDIR\doc\mkvinfo.html"
+  Delete "$INSTDIR\doc\mkvmerge.html"
+  Delete "$INSTDIR\doc\mkvpropedit.html"
+  Delete "$INSTDIR\doc\mmg.html"
+
   Delete "$INSTDIR\doc\mkvmerge-gui.*"
   Delete "$INSTDIR\doc\images\*.gif"
   RMDir "$INSTDIR\doc\images"
@@ -211,10 +218,10 @@ Section "Program files" SEC01
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP\Documentation"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\mkvmerge GUI guide.lnk" "$INSTDIR\doc\mkvmerge-gui.html"
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\mkvmerge CLI reference.lnk" "$INSTDIR\doc\mkvmerge.html"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\mkvinfo CLI reference.lnk" "$INSTDIR\doc\mkvinfo.html"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\mkvextract CLI reference.lnk" "$INSTDIR\doc\mkvextract.html"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\mkvpropedit CLI reference.lnk" "$INSTDIR\doc\mkvpropedit.html"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\mkvmerge CLI reference.lnk" "$INSTDIR\doc\en\mkvmerge.html"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\mkvinfo CLI reference.lnk" "$INSTDIR\doc\en\mkvinfo.html"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\mkvextract CLI reference.lnk" "$INSTDIR\doc\en\mkvextract.html"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\mkvpropedit CLI reference.lnk" "$INSTDIR\doc\en\mkvpropedit.html"
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\Chinese Simplified"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\Chinese Simplified\mkvmerge CLI reference.lnk" "$INSTDIR\doc\zh_CN\mkvmerge.html"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\Chinese Simplified\mkvinfo CLI reference.lnk" "$INSTDIR\doc\zh_CN\mkvinfo.html"
@@ -337,9 +344,11 @@ Section Uninstall
   Delete "$INSTDIR\data\magic"
   Delete "$INSTDIR\data\magic.mgc"
 
+  Delete "$INSTDIR\doc\en\*.*"
   Delete "$INSTDIR\doc\ja\*.*"
   Delete "$INSTDIR\doc\zh_CN\*.*"
 
+  RMDir "$INSTDIR\doc\en"
   RMDir "$INSTDIR\doc\ja"
   RMDir "$INSTDIR\doc\zh_CN"
 
