@@ -217,7 +217,7 @@ namespace mpeg4 {
       ~avc_es_parser_c();
 
       void enable_timecode_generation(int64_t default_duration) {
-        m_default_duration = default_duration;
+        m_default_duration   = default_duration;
         m_generate_timecodes = true;
       };
 
