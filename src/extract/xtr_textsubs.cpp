@@ -333,7 +333,7 @@ xtr_usf_c::create_file(xtr_base_c *master,
       m_formatter->write_header();
       m_formatter->format(codec_private_mod + "\n");
 
-    } catch (mm_io_error_c &error) {
+    } catch (mm_io_error_c &) {
       mxerror(boost::format(Y("Failed to create the file '%1%': %2% (%3%)\n")) % m_file_name % errno % strerror(errno));
 
     } catch (xml_formatter_error_c &error) {
