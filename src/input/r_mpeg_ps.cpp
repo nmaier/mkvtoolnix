@@ -1034,7 +1034,7 @@ mpeg_ps_reader_c::found_new_stream(mpeg_ps_id_t id) {
     id2idx[id.idx()] = tracks.size();
     tracks.push_back(track);
 
-  } catch (bool err) {
+  } catch (bool) {
     blacklisted_ids[id.idx()] = true;
 
   } catch (const char *msg) {

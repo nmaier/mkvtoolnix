@@ -87,7 +87,7 @@ translation_c::look_up_translation(const std::string &locale) {
       ++idx;
     }
 
-  } catch (locale_string_format_error_c &error) {
+  } catch (locale_string_format_error_c &) {
   }
 
   return -1;

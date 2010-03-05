@@ -81,7 +81,7 @@ corepicture_reader_c::corepicture_reader_c(track_info_c &_ti)
   } catch (xml_parser_error_c &error) {
     throw error_c(error.get_error());
 
-  } catch (mm_io_error_c &error) {
+  } catch (mm_io_error_c &) {
     throw error_c(Y("corepicture_reader: Could not open the source file."));
   }
 
