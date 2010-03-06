@@ -33,15 +33,15 @@ LOG_DIR=${INSTALL_DIR}/log
 
 # Package versions
 BOOST_VER=1_42_0
-BZIP2_MSYS_VER=1.0.11
 BZIP2_VER=1.0.5-1
 EXPAT_VER=2.0.1-1
 FLAC_VER=1.2.1
+GETTEXT_VER=0.17-1
 ICONV_VER=1.13
 LIBEBML_VER=0.7.8
 LIBMATROSKA_VER=0.8.1
-MAGIC_MSYS_VER=1.0.11
 MAGIC_VER=5.03-1
+MSYS_VER=1.0.11
 OGG_VER=1.1.4
 VORBIS_VER=1.2.3
 WXWIDGETS_VER=2.8.10
@@ -246,8 +246,8 @@ function install_file {
   echo Installing file/magic
   test -f $ID_LIB/libmagic.a -a -f $ID_INCLUDE/magic.h && return
 
-  local dll_tar=libmagic-${MAGIC_VER}-msys-${MAGIC_MSYS_VER}-dll-1.tar.lzma
-  local dev_tar=libmagic-${MAGIC_VER}-msys-${MAGIC_MSYS_VER}-dev.tar.lzma
+  local dll_tar=libmagic-${MAGIC_VER}-msys-${MSYS_VER}-dll-1.tar.lzma
+  local dev_tar=libmagic-${MAGIC_VER}-msys-${MSYS_VER}-dev.tar.lzma
   local base_url=http://downloads.sourceforge.net/project/mingw/MSYS%20file/file-${MAGIC_VER}
 
   cd $SRC_DIR || exit 1
@@ -265,13 +265,32 @@ function install_file {
   cp -R . $INSTALL_DIR >> $log 2>&1 || fail
 }
 
+function install_gettext {
+  local log=$LOG_DIR/gettext.log
+  echo Installing gettext
+  test -f $ID_LIB/libintl.a -a -f $ID_INCLUDE/libintl.h && return
+
+  local dev_tar=gettext-${GETTEXT_VER}-msys-${MSYS_VER}-dev.tar.lzma
+  local base_url=http://downloads.sourceforge.net/project/mingw/MSYS%20gettext/gettext-${GETTEXT_VER}
+
+  cd $SRC_DIR || exit 1
+  if [ ! -f ${dev_tar} ]; then
+    wget "${base_url}/${dev_tar}?use_mirror=${SOURCEFORGE_MIRROR}" >> $log 2>&1 || fail
+  fi
+
+  test -d gettext || { mkdir gettext >> $log 2>&1 || fail ; }
+  cd gettext >> $log 2>&1 || fail
+  lzma -d < ../${dev_tar} | tar xf - >> $log 2>&1 || fail
+  cp -R . $INSTALL_DIR >> $log 2>&1 || fail
+}
+
 function install_bzip2 {
   local log=$LOG_DIR/bzip2.log
   echo Installing bzip2
   test -f $ID_LIB/libbz2.a -a -f $ID_INCLUDE/bzlib.h && return
 
-  local dll_tar=libbz2-${BZIP2_VER}-msys-${BZIP2_MSYS_VER}-dll-1.tar.gz
-  local dev_tar=libbz2-${BZIP2_VER}-msys-${BZIP2_MSYS_VER}-dev.tar.gz
+  local dll_tar=libbz2-${BZIP2_VER}-msys-${MSYS_VER}-dll-1.tar.gz
+  local dev_tar=libbz2-${BZIP2_VER}-msys-${MSYS_VER}-dev.tar.gz
   local base_url=http://downloads.sourceforge.net/project/mingw/MSYS%20bzip2/bzip2-${BZIP2_VER}
 
   cd $SRC_DIR || exit 1
@@ -368,6 +387,7 @@ install_iconv
 install_ogg
 install_vorbis
 install_flac
+install_gettext
 install_file
 install_bzip2
 install_wxwidgets

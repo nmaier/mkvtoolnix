@@ -323,7 +323,20 @@ Get the full wxWidgets source archive from http://www.wxwidgets.org/
   make
   make install
 
-2.3.9. file/libmagic (optional)
+2.3.9. gettext (optional)
+
+Get precompiled gettext binaries for mingw from
+http://sourceforge.net/projects/mingw/files/ You only need the
+"gettext...-dev-..." package.
+
+  cd $HOME/mingw/src
+  wget 'http://downloads.sourceforge.net/project/mingw/MSYS%20gettext/gettext-0.17-1/gettext-0.17-1-msys-1.0.11-dev.tar.lzma?use_mirror=heanet'
+  mkdir gettext
+  cd gettext
+  lzma -d < ../gettext-0.17-1-msys-1.0.11-dev.tar.lzma | tar xf -
+  cp -R . $HOME/mingw
+
+2.3.10. file/libmagic (optional)
 
 Get precompiled libmagic binaries for mingw from
 http://sourceforge.net/projects/mingw/files/ You need both the
@@ -338,7 +351,7 @@ http://sourceforge.net/projects/mingw/files/ You need both the
   lzma -d < ../libmagic-5.03-1-msys-1.0.11-dev.tar.lzma | tar xf -
   cp -R . $HOME/mingw
 
-2.3.10. bzip2 (optional)
+2.3.11. bzip2 (optional)
 
 Get precompiled bzip2 binaries for mingw from
 http://sourceforge.net/projects/mingw/files/ You need both the
@@ -362,7 +375,7 @@ http://sourceforge.net/projects/mingw/files/ You need both the
     $_' include/bzlib.h
   cp -R . $HOME/mingw
 
-2.3.11. mkvtoolnix itself
+2.3.12. mkvtoolnix itself
 
 Change back into the mkvtoolnix source code directory and execute the
 following commands:
