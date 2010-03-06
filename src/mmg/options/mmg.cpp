@@ -163,8 +163,9 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   siz_all->Add(new wxStaticLine(this),                             0, wxGROW | wxLEFT | wxRIGHT, 5);
   siz_all->AddSpacer(5);
 
+  wxBoxSizer *siz_line;
 #if defined(HAVE_LIBINTL_H)
-  wxBoxSizer *siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
   siz_line->Add(st_ui_language, 0, wxALIGN_CENTER_VERTICAL);
   siz_line->Add(cob_ui_language, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
 
@@ -249,7 +250,11 @@ optdlg_mmg_tab::enable_output_filename_controls(bool enable) {
 
 std::string
 optdlg_mmg_tab::get_selected_ui_language() {
+#if defined(HAVE_LIBINTL_H)
   return m_sorted_locales[cob_ui_language->GetSelection()];
+#else
+  return empty_string;
+#endif
 }
 
 void
