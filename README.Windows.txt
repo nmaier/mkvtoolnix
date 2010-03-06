@@ -124,9 +124,15 @@ needs:
 Path and name of the "bjam" Boost.Build system tool (see section
 2.1.3.)
 
-  MINGW_PREFIX=i586-mingw32msvc-
+  HOST=i586-mingw32msvc
 
-Path and prefix of the cross compiler executables
+The 'host' specification for the standard configure scripts.
+
+  MINGW_PREFIX=${HOST}-
+
+Path and prefix of the cross compiler executables. Defaults to the
+'host' specification followed by '-'. These settings are correct if
+your cross compiler has a standard name, e.g. i586-mingw32msvc-gcc.
 
   INSTALL_DIR=$HOME/mingw
 

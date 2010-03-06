@@ -9,7 +9,8 @@
 #
 
 BJAM=bjam
-MINGW_PREFIX=i586-mingw32msvc-
+HOST=i586-mingw32msvc
+MINGW_PREFIX=${HOST}-
 INSTALL_DIR=$HOME/2
 SOURCEFORGE_MIRROR=heanet
 PARALLEL=2
@@ -192,7 +193,7 @@ function install_ogg {
   rm -rf libogg-${OGG_VER} >> $log 2>&1 || fail
   tar xzf ${dev_tar} >> $log 2>&1 || fail
   cd libogg-${OGG_VER} >> $log 2>&1 || fail
-  ./configure --host=i586-mingw32msvc --prefix=${INSTALL_DIR} >> $log 2>&1 || fail
+  ./configure --host=${HOST} --prefix=${INSTALL_DIR} >> $log 2>&1 || fail
   make >> $log 2>&1 || fail
   make install >> $log 2>&1 || fail
 }
@@ -213,7 +214,7 @@ function install_vorbis {
   rm -rf libvorbis-${VORBIS_VER} >> $log 2>&1 || fail
   tar xzf ${dev_tar} >> $log 2>&1 || fail
   cd libvorbis-${VORBIS_VER} >> $log 2>&1 || fail
-  ./configure --host=i586-mingw32msvc --prefix=${INSTALL_DIR} >> $log 2>&1 || fail
+  ./configure --host=${HOST} --prefix=${INSTALL_DIR} >> $log 2>&1 || fail
   make >> $log 2>&1 || fail
   make install >> $log 2>&1 || fail
 }
@@ -235,7 +236,7 @@ function install_flac {
   tar xzf ${dev_tar} >> $log 2>&1 || fail
   cd flac-${FLAC_VER} >> $log 2>&1 || fail
   set_xyzflags " -DSIZE_T_MAX=UINT_MAX"
-  ./configure --host=i586-mingw32msvc --prefix=${INSTALL_DIR} >> $log 2>&1 || fail
+  ./configure --host=${HOST} --prefix=${INSTALL_DIR} >> $log 2>&1 || fail
   make >> $log 2>&1 || fail
   make install >> $log 2>&1 || fail
   set_xyzflags
@@ -336,7 +337,7 @@ function install_wxwidgets {
   cd wxWidgets-${WXWIDGETS_VER} >> $log 2>&1 || fail
   if [ ! -f config.log ]; then
     ./configure --enable-gif --enable-unicode --disable-compat24 --disable-compat26 \
-      --host=i586-mingw32msvc --prefix=${INSTALL_DIR} >> $log 2>&1 || fail
+      --host=${HOST} --prefix=${INSTALL_DIR} >> $log 2>&1 || fail
   fi
   make >> $log 2>&1 || fail
   make install >> $log 2>&1 || fail
@@ -372,7 +373,45 @@ function install_boost {
     -j ${PARALLEL} install >> $log 2>&1 || fail
   cd ${ID_BOOST}/lib >> $log 2>&1 || fail
   for i in *.lib ; do mv $i $(basename $i .lib).a ; done
-  for i in *.a ; do i586-mingw32msvc-ranlib $i ; done
+  for i in *.a ; do ${RANLIB} $i ; done
+}
+
+function create_run_configure_script {
+  echo Creating \'run_configure.sh\' script
+  cat > run_configure.sh <<EOF
+#!/bin/bash
+
+./configure \\
+  --host=${HOST} \\
+  --with-extra-includes=${ID_INCLUDE} \\
+  --with-extra-libs=${ID_LIB} \\
+  --with-boost=${ID_BOOST} \\
+  --with-wx-config=${ID_BIN}/wx-config "\$@"
+
+exit \$?
+EOF
+  chmod 755 run_configure.sh
+}
+
+function configure_mkvtoolnix {
+  echo Configuring mkvtoolnix
+  local log=${LOG_DIR}/configure.log
+  ./run_configure.sh >> $log 2>&1
+  local result=$?
+
+  echo
+  if [ $result -eq 0 ]; then
+    echo 'Configuration went well. Congratulations. You can now run "make".'
+    echo "You can find the output of configure in the file ${log}."
+  else
+    echo "Configuration failed. Take a look at the files"
+    echo "${log} and, if that doesn't help, ./config.log."
+  fi
+
+  echo
+  echo 'If you need to re-configure mkvtoolnix then you can do that with'
+  echo 'the script ./run_configure.sh. Any parameter you pass to run_configure.sh'
+  echo 'will be passed to ./configure as well.'
 }
 
 # main
@@ -392,3 +431,5 @@ install_file
 install_bzip2
 install_wxwidgets
 install_boost
+create_run_configure_script
+configure_mkvtoolnix
