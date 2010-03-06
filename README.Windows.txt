@@ -63,7 +63,7 @@ Section 2 -- Building with a mingw cross compiler
 You need:
 
 - a mingw cross compiler
-- roughly 1.6 to 2.0 GB of free space available
+- roughly 2 GB of free space available
 - the "bjam" build utility for the Boost library (see 2.1.3.)
 
 You usually don't need root access unless you have to install mingw
@@ -124,14 +124,19 @@ needs:
 Path and name of the "bjam" Boost.Build system tool (see section
 2.1.3.)
 
-  MINGW_CC=i586-mingw32msvc-gcc
-  MINGW_CXX=i586-mingw32msvc-g++
+  MINGW_PREFIX=i586-mingw32msvc-
 
-Paths and names of the cross compiler executables
+Path and prefix of the cross compiler executables
 
   INSTALL_DIR=$HOME/mingw
 
 Base installation directory
+
+  PARALLEL=1
+
+Number of processes to execute in parallel. If you have a multi-core
+CPU or multiple CPUs installed set this value to the total number of
+cores you want to use, e.g. for a dual-core CPU use PARALLEL=2.
 
 2.2.2. Execution
 
@@ -169,34 +174,7 @@ Create the directories:
 
   mkdir $HOME/mingw $HOME/mingw/src $HOME/mingw/include $HOME/mingw/lib
 
-2.3.2. boost
-
-Get the Boost source code archive from http://www.boost.org/
-
-Building Boost requires tht you tell the "bjam" build utility which
-gcc to use. Note that you also need a working "bjam" binary before
-building this library. See section 2.1.3 for details.
-
-  cd $HOME/mingw/src
-  wget 'http://downloads.sourceforge.net/project/boost/boost/1.42.0/boost_1_42_0.tar.bz2?use_mirror=heanet'
-  bunzip2 < boost_1_42_0.tar.bz2 | tar xf -
-  cd boost_1_42_0
-  echo "using gcc : : i586-mingw32msvc-g++ ;" > user-config.jam
-  bjam \
-    target-os=windows threading=single threadapi=win32 \
-    link=static runtime-link=static variant=release \
-    --user-config=user-config.jam --prefix=$HOME/mingw/boost \
-    install
-
-It's possible that bjam says that it couldn't update some targets. As
-long as this number is rather low this shouldn't be a problem.
-
-Check if $HOME/prog/mingw/lib contains the filesystem, system and
-regex libraries:
-
-  ls $HOME/mingw/boost/lib/libboost_{filesystem,system,regex}*
-
-2.3.3. libebml and libmatroska
+2.3.2. libebml and libmatroska
 
 Get the source code libraries from
 http://dl.matroska.org/downloads/libebml/ and
@@ -219,7 +197,7 @@ http://dl.matroska.org/downloads/libmatroska/
   cp libmatroska.a $HOME/mingw/lib/
   cp -R ../../matroska $HOME/mingw/include/matroska
 
-2.3.4. expat
+2.3.3. expat
 
 Get precompiled expat binaries for mingw from
 http://sourceforge.net/projects/mingw/files/ You need both the
@@ -234,7 +212,7 @@ http://sourceforge.net/projects/mingw/files/ You need both the
   tar xzf ../libexpat-2.0.1-1-mingw32-dev.tar.gz
   cp -R . $HOME/mingw
 
-2.3.5. zlib
+2.3.4. zlib
 
 Get precompiled zlib binaries for mingw from
 http://sourceforge.net/projects/mingw/files/ You need both the
@@ -249,7 +227,7 @@ http://sourceforge.net/projects/mingw/files/ You need both the
   tar xzf ../libz-1.2.3-1-mingw32-dev.tar.gz
   cp -R . $HOME/mingw
 
-2.3.6. iconv
+2.3.5. iconv
 
 Get precompiled iconv binaries for mingw from
 http://sourceforge.net/projects/mingw/files/ You need both the
@@ -264,7 +242,7 @@ http://sourceforge.net/projects/mingw/files/ You need both the
   tar xzf ../libiconv-1.13-mingw32-dev.tar.gz
   cp -R . $HOME/mingw
 
-2.3.7. libogg, libvorbis and libFLAC
+2.3.6. libogg, libvorbis and libFLAC
 
 Get the source code archives from
 http://downloads.xiph.org/releases/ogg/
@@ -295,6 +273,39 @@ http://downloads.xiph.org/releases/flac/
   ./configure --host=i586-mingw32msvc --prefix=$HOME/mingw
   make
   make install
+
+2.3.7. boost
+
+Get the Boost source code archive from http://www.boost.org/
+
+Building Boost requires tht you tell the "bjam" build utility which
+gcc to use. Note that you also need a working "bjam" binary before
+building this library. See section 2.1.3 for details.
+
+  cd $HOME/mingw/src
+  wget 'http://downloads.sourceforge.net/project/boost/boost/1.42.0/boost_1_42_0.tar.bz2?use_mirror=heanet'
+  bunzip2 < boost_1_42_0.tar.bz2 | tar xf -
+  cd boost_1_42_0
+  ./bootstrap.sh --with-bjam=/usr/bin/bjam --without-libraries=python,mpi \
+    --without-icu --prefix=$HOME/mingw/boost
+  echo "using gcc : : i586-mingw32msvc-g++ ;" > user-config.jam
+  bjam \
+    target-os=windows threading=single threadapi=win32 \
+    link=static runtime-link=static variant=release \
+    include=$HOME/mingw/include \
+    --user-config=user-config.jam --prefix=$HOME/mingw/boost \
+    install
+  cd $HOME/mingw/boost/lib
+  for i in *.lib ; do mv $i $(basename $i .lib).a ; done
+  for i in *.a ; do i586-mingw32msvc-ranlib $i ; done
+
+It's possible that bjam says that it couldn't update some targets. As
+long as this number is rather low this shouldn't be a problem.
+
+Check if $HOME/prog/mingw/lib contains the filesystem, system and
+regex libraries:
+
+  ls $HOME/mingw/boost/lib/libboost_{filesystem,system,regex}*
 
 2.3.8. wxWidgets
 
@@ -340,6 +351,15 @@ http://sourceforge.net/projects/mingw/files/ You need both the
   cd libbz2
   tar xzf ../libbz2-1.0.5-1-msys-1.0.11-dll-1.tar.gz
   tar xzf ../libbz2-1.0.5-1-msys-1.0.11-dev.tar.gz
+  perl -pi -e 'if (m/Core.*low.*level.*library.*functions/) {
+      $_ .= qq|
+#undef BZ_API
+#undef BZ_EXTERN
+#define BZ_API(func) func
+#define BZ_EXTERN extern
+|;
+    }
+    $_' include/bzlib.h
   cp -R . $HOME/mingw
 
 2.3.11. mkvtoolnix itself
