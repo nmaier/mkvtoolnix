@@ -84,6 +84,8 @@ charset_converter_c::init(const std::string &charset) {
   if (iconv_charset_converter_c::is_available(actual_charset) || !windows_charset_converter_c::is_available(actual_charset))
     return charset_converter_cptr(new iconv_charset_converter_c(actual_charset));
 
+  return charset_converter_cptr(new windows_charset_converter_c(actual_charset));
+
 #elif defined(HAVE_ICONV_H)
   return charset_converter_cptr(new iconv_charset_converter_c(actual_charset));
 
