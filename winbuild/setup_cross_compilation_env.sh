@@ -154,8 +154,9 @@ function unpack {
 
 function init {
   local module="$1"
+  local action="${2:-Installing}"
   LOG=${LOG_DIR}/${module}.log
-  echo Installing ${module}
+  echo ${action} ${module}
 }
 
 function run_configure {
@@ -421,8 +422,7 @@ EOF
 }
 
 function configure_mkvtoolnix {
-  echo Configuring mkvtoolnix
-  local log=${LOG_DIR}/configure.log
+  init mkvtoolnix Configuring
   ./run_configure.sh >> ${LOG} 2>&1
   local result=$?
 
