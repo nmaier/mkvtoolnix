@@ -150,8 +150,9 @@ From the mkvtoolnix source directory run:
 
   ./winbuild/setup_cross_compilation_env.sh
 
-If everything works fine you'll end up with a compiled mkvtoolnix
-source tree. Log files of everything can be found in INSTALL_DIR/logs.
+If everything works fine you'll end up with a configured mkvtoolnix
+source tree. You just have to run 'make' afterwards. Log files of
+everything can be found in $INSTALL_DIR/logs.
 
 2.3. Manual installation
 
@@ -191,6 +192,7 @@ http://dl.matroska.org/downloads/libmatroska/
     http://dl.matroska.org/downloads/libmatroska/libmatroska-0.8.1.tar.bz2
   bunzip2 < libebml-0.7.8.tar.bz2 | tar xf -
   bunzip2 < libmatroska-0.8.1.tar.bz2 | tar xf -
+
   cd libebml-0.7.8/make/linux
   perl -pi -e 's/error/info/' Makefile
   make CXX=i586-mingw32msvc-g++ AR="i586-mingw32msvc-ar rcvu" RANLIB=i586-mingw32msvc-ranlib SHARED=no staticlib
@@ -199,7 +201,9 @@ http://dl.matroska.org/downloads/libmatroska/
 
   cd ../../../libmatroska-0.8.1/make/linux
   perl -pi -e 's/error/info/' Makefile
-  make CXX=i586-mingw32msvc-g++ AR="i586-mingw32msvc-ar rcvu" RANLIB=i586-mingw32msvc-ranlib SHARED=no EBML_DIR=$HOME/mingw/src/libebml-0.7.8 staticlib
+  export CXXFLAGS=-I$HOME/mingw/include
+  export LDFLAGS=-L$HOME/mingw/lib
+  make CXX=i586-mingw32msvc-g++ AR="i586-mingw32msvc-ar rcvu" RANLIB=i586-mingw32msvc-ranlib SHARED=no staticlib
   cp libmatroska.a $HOME/mingw/lib/
   cp -R ../../matroska $HOME/mingw/include/matroska
 
@@ -236,16 +240,19 @@ http://sourceforge.net/projects/mingw/files/ You need both the
 2.3.5. iconv
 
 Get precompiled iconv binaries for mingw from
-http://sourceforge.net/projects/mingw/files/ You need both the
-"libiconv...-dll-..." and the "libiconv...-dev-..." packages.
+http://sourceforge.net/projects/mingw/files/ You need the
+"libiconv...-dll-...", the "libiconv...-dev-..." and the
+"libcharset...-dll-..." packages.
 
   cd $HOME/mingw/src
-  wget 'http://downloads.sourceforge.net/project/mingw/MinGW%20libiconv/release%201.13/libiconv-1.13-mingw32-dll-2.tar.gz?use_mirror=heanet' \
-    'http://downloads.sourceforge.net/project/mingw/MinGW%20libiconv/release%201.13/libiconv-1.13-mingw32-dev.tar.gz?use_mirror=heanet'
+  wget 'http://downloads.sourceforge.net/project/mingw/MinGW%20libiconv/libiconv-1.13.1-1/libiconv-1.13.1-1-mingw32-dll-2.tar.lzma?use_mirror=heanet' \
+    'http://downloads.sourceforge.net/project/mingw/MinGW%20libiconv/libiconv-1.13.1-1/libcharset-1.13.1-1-mingw32-dll-1.tar.lzma?use_mirror=heanet' \
+    'http://downloads.sourceforge.net/project/mingw/MinGW%20libiconv/libiconv-1.13.1-1/libiconv-1.13.1-1-mingw32-dev.tar.lzma?use_mirror=heanet'
   mkdir iconv
   cd iconv
-  tar xzf ../libiconv-1.13-mingw32-dll-2.tar.gz
-  tar xzf ../libiconv-1.13-mingw32-dev.tar.gz
+  lzma -d < ../libiconv-1.13.1-1-mingw32-dll-2.tar.lzma | tar xf -
+  lzma -d < ../libcharset-1.13.1-1-mingw32-dll-1.tar.lzma | tar xf -
+  lzma -d < ../libiconv-1.13.1-1-mingw32-dev.tar.lzma | tar xf -
   cp -R . $HOME/mingw
 
 2.3.6. libogg, libvorbis and libFLAC
@@ -305,9 +312,6 @@ building this library. See section 2.1.3 for details.
   for i in *.lib ; do mv $i $(basename $i .lib).a ; done
   for i in *.a ; do i586-mingw32msvc-ranlib $i ; done
 
-It's possible that bjam says that it couldn't update some targets. As
-long as this number is rather low this shouldn't be a problem.
-
 Check if $HOME/prog/mingw/lib contains the filesystem, system and
 regex libraries:
 
@@ -317,7 +321,7 @@ regex libraries:
 
 Get the full wxWidgets source archive from http://www.wxwidgets.org/
 
-  cd $HOME/prog/mingw
+  cd $HOME/mingw/src
   wget 'http://downloads.sourceforge.net/project/wxwindows/wxAll/2.8.10/wxWidgets-2.8.10.tar.bz2?use_mirror=ovh'
   bunzip2 < wxWidgets-2.8.10.tar.bz2 | tar xf -
   cd wxWidgets-2.8.10
@@ -332,29 +336,35 @@ Get the full wxWidgets source archive from http://www.wxwidgets.org/
 2.3.9. gettext (optional)
 
 Get precompiled gettext binaries for mingw from
-http://sourceforge.net/projects/mingw/files/ You only need the
-"gettext...-dev-..." package.
+http://sourceforge.net/projects/mingw/files/ You need both the
+"libintl...-dll-..." and the "gettext...-dev-..." packages.
 
   cd $HOME/mingw/src
-  wget 'http://downloads.sourceforge.net/project/mingw/MSYS%20gettext/gettext-0.17-1/gettext-0.17-1-msys-1.0.11-dev.tar.lzma?use_mirror=heanet'
+  wget 'http://downloads.sourceforge.net/project/mingw/MinGW%20gettext/gettext-0.17-1/libintl-0.17-1-mingw32-dll-8.tar.lzma?use_mirror=heanet' \
+    'http://downloads.sourceforge.net/project/mingw/MinGW%20gettext/gettext-0.17-1/gettext-0.17-1-mingw32-dev.tar.lzma?use_mirror=heanet'
   mkdir gettext
   cd gettext
-  lzma -d < ../gettext-0.17-1-msys-1.0.11-dev.tar.lzma | tar xf -
+  lzma -d < ../libintl-0.17-1-mingw32-dll-8.tar.lzma | tar xf -
+  lzma -d < ../gettext-0.17-1-mingw32-dev.tar.lzma | tar xf -
   cp -R . $HOME/mingw
 
 2.3.10. file/libmagic (optional)
 
-Get precompiled libmagic binaries for mingw from
-http://sourceforge.net/projects/mingw/files/ You need both the
-"libmagic...-dll-..." and the "libmagic...-dev-..." packages.
+Get precompiled binaries for 'regex' and 'file' for mingw from
+http://gnuwin32.sourceforge.net/packages.html You need both the
+"...-bin.zip" and the "...-lib.zip" packages.
 
   cd $HOME/mingw/src
-  wget 'http://downloads.sourceforge.net/project/mingw/MSYS%20file/file-5.03-1/libmagic-5.03-1-msys-1.0.11-dll-1.tar.lzma?use_mirror=heanet' \
-    'http://downloads.sourceforge.net/project/mingw/MSYS%20file/file-5.03-1/libmagic-5.03-1-msys-1.0.11-dev.tar.lzma?use_mirror=heanet'
-  mkdir libmagic
-  cd libmagic
-  lzma -d < ../libmagic-5.03-1-msys-1.0.11-dll-1.tar.lzma | tar xf -
-  lzma -d < ../libmagic-5.03-1-msys-1.0.11-dev.tar.lzma | tar xf -
+  wget 'http://downloads.sourceforge.net/project/gnuwin32/regex/2.7/regex-2.7-bin.zip' \
+    'http://downloads.sourceforge.net/project/gnuwin32/regex/2.7/regex-2.7-lib.zip' \
+    'http://downloads.sourceforge.net/project/gnuwin32/file/5.03/file-5.03-bin.zip' \
+    'http://downloads.sourceforge.net/project/gnuwin32/file/5.03/file-5.03-lib.zip'
+  mkdir file
+  cd file
+  unzip -o ../regex-2.7-bin.zip
+  unzip -o ../regex-2.7-lib.zip
+  unzip -o ../file-5.03-bin.zip
+  unzip -o ../file-5.03-lib.zip
   cp -R . $HOME/mingw
 
 2.3.11. bzip2 (optional)
@@ -364,12 +374,12 @@ http://sourceforge.net/projects/mingw/files/ You need both the
 "libbz2...-dll-..." and the "libbz2...-dev-..." packages.
 
   cd $HOME/mingw/src
-  wget 'http://downloads.sourceforge.net/project/mingw/MSYS%20bzip2/bzip2-1.0.5-1/libbz2-1.0.5-1-msys-1.0.11-dll-1.tar.gz?use_mirror=heanet' \
-    'http://downloads.sourceforge.net/project/mingw/MSYS%20bzip2/bzip2-1.0.5-1/libbz2-1.0.5-1-msys-1.0.11-dev.tar.gz?use_mirror=heanet'
+  wget 'http://downloads.sourceforge.net/project/mingw/MinGW%20bzip2/release%201.0.5-2/libbz2-1.0.5-2-mingw32-dll-2.tar.gz' \
+   'http://downloads.sourceforge.net/project/mingw/MinGW%20bzip2/release%201.0.5-2/bzip2-1.0.5-2-mingw32-dev.tar.gz'
   mkdir libbz2
   cd libbz2
-  tar xzf ../libbz2-1.0.5-1-msys-1.0.11-dll-1.tar.gz
-  tar xzf ../libbz2-1.0.5-1-msys-1.0.11-dev.tar.gz
+  tar xzf ../libbz2-1.0.5-2-mingw32-dll-2.tar.gz
+  tar xzf ../bzip2-1.0.5-2-mingw32-dev.tar.gz
   perl -pi -e 'if (m/Core.*low.*level.*library.*functions/) {
       $_ .= qq|
 #undef BZ_API
