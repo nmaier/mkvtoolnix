@@ -62,10 +62,12 @@ using namespace libebml;
 #define MXMSG_INFO    15
 #define MXMSG_DEBUG   20
 
+#if !defined(FOURCC)
 #define FOURCC(a, b, c, d) (uint32_t)((((unsigned char)a) << 24) + \
                                       (((unsigned char)b) << 16) + \
                                       (((unsigned char)c) <<  8) + \
                                        ((unsigned char)d))
+#endif
 #define isblanktab(c) (((c) == ' ')  || ((c) == '\t'))
 #define iscr(c)       (((c) == '\n') || ((c) == '\r'))
 

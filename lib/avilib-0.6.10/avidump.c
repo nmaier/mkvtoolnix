@@ -80,6 +80,7 @@ typedef unsigned char boolean;
 /* Macro to convert expressions of form 'F','O','U','R' to
    numbers of type FOURCC: */
 
+#undef MAKEFOURCC
 #if defined(BYTE_ORDER) && (BYTE_ORDER == BIG_ENDIAN)
 # define MAKEFOURCC(a,b,c,d) ((((DWORD)a)<<24) | (((DWORD)b)<<16) | \
                               (((DWORD)c)<< 8) | ( (DWORD)d)      )
