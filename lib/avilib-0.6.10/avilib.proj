@@ -1,0 +1,18 @@
+#include "*/*.proj"
+
+LIB avilib
+{
+  USEINCLUDE mktcommon
+  USE boost_foreach
+  USE libiconv
+  DEFINE _CRT_SECURE_NO_DEPRECATE
+  INCLUDE ../../src
+  INCLUDE ../..
+  EXPINCLUDE .
+  SOURCE avilib.c
+  SOURCE avidump.c
+  SOURCE avimisc.c
+  SOURCE xio.cpp
+  HEADER avilib.h
+  HEADER xio.h
+}

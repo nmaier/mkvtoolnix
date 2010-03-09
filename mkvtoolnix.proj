@@ -1,0 +1,8 @@
+#include "*/*.proj"
+
+WORKSPACE mkvtoolnix
+{
+  USE mkvmerge
+  USE mkvextract
+  USE mkvinfo
+}
