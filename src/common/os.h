@@ -28,6 +28,23 @@
 # include <inttypes.h>
 #endif // HAVE_INTTYPES_H
 
+#if defined(HAVE_COREC_H)
+#include "corec.h"
+
+#if defined(TARGET_WIN)
+# define SYS_WINDOWS
+#elif defined(TARGET_OSX)
+# define SYS_APPLE
+#elif defined(TARGET_LINUX)
+# define SYS_UNIX
+# if defined(__sun) && defined(__SVR4)
+#  define SYS_SOLARIS
+# else
+#  define SYS_LINUX
+# endif
+#endif
+
+#else // HAVE_COREC_H
 #if defined(_WIN32) || defined(WIN32) || defined(__CYGWIN__) || defined(__MINGW32__)
 # define SYS_WINDOWS
 #elif defined(__APPLE__)
@@ -44,6 +61,8 @@
 # endif
 #endif
 
+#endif // HAVE_COREC_H
+
 #if defined(SYS_WINDOWS)
 # if defined __MINGW32__
 #  define COMP_MINGW
@@ -56,6 +75,8 @@
 #endif
 
 #if defined(COMP_MSC)
+
+#if !defined(HAVE_COREC_H)
 # define strncasecmp _strnicmp
 # define strcasecmp _stricmp
 typedef __int64 int64_t;
@@ -66,6 +87,8 @@ typedef unsigned __int64 uint64_t;
 typedef unsigned __int32 uint32_t;
 typedef unsigned __int16 uint16_t;
 typedef unsigned __int8 uint8_t;
+#endif // HAVE_COREC_H
+
 # define nice(a)
 #include <io.h>
 typedef _fsize_t ssize_t;
