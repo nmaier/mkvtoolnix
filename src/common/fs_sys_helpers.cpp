@@ -80,7 +80,7 @@ get_registry_key_value(const std::string &key,
   std::vector<std::string> key_parts = split(key, "\\", 2);
   HKEY hkey;
   HKEY hkey_base = key_parts[0] == "HKEY_CURRENT_USER" ? HKEY_CURRENT_USER : HKEY_LOCAL_MACHINE;
-  DWORD error    = RegOpenKeyEx(hkey_base, key_parts[1].c_str(), 0, KEY_READ, &hkey);
+  DWORD error    = RegOpenKeyExA(hkey_base, key_parts[1].c_str(), 0, KEY_READ, &hkey);
 
   if (ERROR_SUCCESS != error)
     return false;
@@ -88,11 +88,11 @@ get_registry_key_value(const std::string &key,
   bool ok        = false;
   DWORD data_len = 0;
   DWORD dwDisp;
-  if (ERROR_SUCCESS == RegQueryValueEx(hkey, value_name.c_str(), NULL, &dwDisp, NULL, &data_len)) {
+  if (ERROR_SUCCESS == RegQueryValueExA(hkey, value_name.c_str(), NULL, &dwDisp, NULL, &data_len)) {
     char *data = new char[data_len + 1];
     memset(data, 0, data_len + 1);
 
-    if (ERROR_SUCCESS == RegQueryValueEx(hkey, value_name.c_str(), NULL, &dwDisp, (BYTE *)data, &data_len)) {
+    if (ERROR_SUCCESS == RegQueryValueExA(hkey, value_name.c_str(), NULL, &dwDisp, (BYTE *)data, &data_len)) {
       value = data;
       ok    = true;
     }
@@ -109,7 +109,7 @@ std::string
 get_current_exe_path() {
   char file_name[4000];
   memset(file_name, 0, sizeof(file_name));
-  if (!GetModuleFileName(NULL, file_name, 3999))
+  if (!GetModuleFileNameA(NULL, file_name, 3999))
     return "";
 
   std::string path           = file_name;
@@ -138,7 +138,7 @@ get_installation_path() {
 void
 set_environment_variable(const std::string &key,
                          const std::string &value) {
-  SetEnvironmentVariable(key.c_str(), value.c_str());
+  SetEnvironmentVariableA(key.c_str(), value.c_str());
   std::string env_buf = (boost::format("%1%=%2%") % key % value).str();
   _putenv(env_buf.c_str());
 }
@@ -148,7 +148,7 @@ get_environment_variable(const std::string &key) {
   char buffer[100];
   memset(buffer, 0, 100);
 
-  if (0 == GetEnvironmentVariable(key.c_str(), buffer, 99))
+  if (0 == GetEnvironmentVariableA(key.c_str(), buffer, 99))
     return "";
 
   return buffer;
