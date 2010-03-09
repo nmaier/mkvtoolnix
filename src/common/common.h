@@ -14,6 +14,11 @@
 #ifndef __MTX_COMMON_H
 #define __MTX_COMMON_H
 
+#include <boost/foreach.hpp>
+#include <boost/format.hpp>
+#include <boost/regex.hpp>
+#include <string>
+
 #include "common/os.h"
 
 // Compilation with mingw gcc fails with Boost's format library if
@@ -22,11 +27,6 @@
 
 #include <ebml/EbmlElement.h>
 #include <ebml/EbmlMaster.h>
-#undef min
-
-#include <boost/foreach.hpp>
-#include <boost/format.hpp>
-#include <string>
 
 /* i18n stuff */
 #if defined(HAVE_LIBINTL_H)
