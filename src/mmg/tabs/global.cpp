@@ -66,6 +66,8 @@ tab_global::tab_global(wxWindow *parent):
   cob_split_by_size->Append(wxT("703M"));
   cob_split_by_size->Append(wxT("800M"));
   cob_split_by_size->Append(wxT("1000M"));
+  cob_split_by_size->Append(wxT("4483M"));
+  cob_split_by_size->Append(wxT("8142M"));
   cob_split_by_size->Enable(false);
   siz_line2->Add(cob_split_by_size, 1, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxGROW, 10);
 
