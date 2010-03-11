@@ -1,6 +1,7 @@
 Makefile
 lib*.a
 *.o
+*~
 .deps
 autom4te.cache
 config.cache
@@ -29,4 +30,4 @@ data
 /debian-upstream/mkvtoolnix-gui.substvars
 /src/mkvinfo-gui
 /src/mmg/mmg-gui
-*~
+/doc/man/*/*.xml
