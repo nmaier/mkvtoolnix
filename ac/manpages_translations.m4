@@ -11,8 +11,8 @@ MANPAGES_TRANSLATED="`for lang in $MANPAGES_TRANSLATIONS; do \
   echo '$(subst doc/man, doc/man/'$lang', $(MANPAGES)) '; done | tr -d '\n\r'`"
 
 MANPAGES_TRANSLATED_XML_RULE="`for lang in $MANPAGES_TRANSLATIONS; do \
-  echo 'doc/man/$lang/%.xml: doc/man/%.xml doc/man/po4a/po/'$lang'.po'
-  echo '	@echo '\''    PO4A '\'' $<'
+  echo 'doc/man/'$lang'/%.xml: doc/man/%.xml doc/man/po4a/po/'$lang'.po'
+  echo '	@echo '\''    PO4A '\'' $< '\''('$lang')'\'
   echo '	$(Q)$(PO4A_TRANSLATE) $(PO4A_TRANSLATE_FLAGS) -m $< -p doc/man/po4a/po/'$lang'.po -l $@'; done`"
 
 
