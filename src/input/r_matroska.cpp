@@ -1062,7 +1062,7 @@ kax_reader_c::read_headers_seek_head(EbmlElement *&l0,
           :    id == EBML_ID(KaxChapters)    ? dl1t_chapters
           :    id == EBML_ID(KaxTags)        ? dl1t_tags
           :    id == EBML_ID(KaxTracks)      ? dl1t_tracks
-          :                                                dl1t_unknown;
+          :                                    dl1t_unknown;
 
       } else if (EbmlId(*seek[k]) == EBML_ID(KaxSeekPosition))
         pos = uint64(*static_cast<KaxSeekPosition *>(seek[k]));

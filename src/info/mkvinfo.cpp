@@ -1138,7 +1138,7 @@ def_handle(seek_head) {
                           : EBML_ID(KaxChapters)    == id ? "KaxChapters"
                           : EBML_ID(KaxTags)        == id ? "KaxTags"
                           : EBML_ID(KaxSeekHead)    == id ? "KaxSeekHead"
-                          :                                             "unknown"));
+                          :                                 "unknown"));
 
         } else if (is_id(l3, KaxSeekPosition)) {
           KaxSeekPosition &seek_pos = static_cast<KaxSeekPosition &>(*l3);
