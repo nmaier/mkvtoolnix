@@ -97,7 +97,7 @@ write_xml_element_rec(int level,
   while ((element_map[elt_idx].name != NULL) &&
          (element_map[elt_idx].level >=
           element_map[parent_idx].level)) {
-    if (element_map[elt_idx].id == e->Generic().GlobalId) {
+    if (element_map[elt_idx].id == EbmlId(*e)) {
       found = true;
       break;
     }

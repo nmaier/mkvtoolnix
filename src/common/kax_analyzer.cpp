@@ -233,7 +233,7 @@ kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode,
   // We've got our segment, so let's find all level 1 elements.
   EbmlElement *l1 = m_stream->FindNextElement(m_segment->Generic().Context, upper_lvl_el, 0xFFFFFFFFFFFFFFFFLL, true, 1);
   while ((NULL != l1) && (0 >= upper_lvl_el)) {
-    m_data.push_back(kax_analyzer_data_c::create(l1->Generic().GlobalId, l1->GetElementPosition(), l1->ElementSize(true)));
+    m_data.push_back(kax_analyzer_data_c::create(EbmlId(*l1), l1->GetElementPosition(), l1->ElementSize(true)));
 
     cluster_found   |= is_id(l1, KaxCluster);
     meta_seek_found |= is_id(l1, KaxSeekHead);
@@ -306,14 +306,14 @@ kax_analyzer_c::update_element(EbmlElement *e,
   fix_mandatory_elements(e);
 
   try {
-    call_and_validate({},                                             "update_element_0");
-    call_and_validate(overwrite_all_instances(e->Generic().GlobalId), "update_element_1");
-    call_and_validate(merge_void_elements(),                          "update_element_2");
-    call_and_validate(write_element(e, write_defaults),               "update_element_3");
-    call_and_validate(remove_from_meta_seeks(e->Generic().GlobalId),  "update_element_4");
-    call_and_validate(merge_void_elements(),                          "update_element_5");
-    call_and_validate(add_to_meta_seek(e),                            "update_element_6");
-    call_and_validate(merge_void_elements(),                          "update_element_7");
+    call_and_validate({},                                 "update_element_0");
+    call_and_validate(overwrite_all_instances(EbmlId(*e)), "update_element_1");
+    call_and_validate(merge_void_elements(),               "update_element_2");
+    call_and_validate(write_element(e, write_defaults),    "update_element_3");
+    call_and_validate(remove_from_meta_seeks(EbmlId(*e)),  "update_element_4");
+    call_and_validate(merge_void_elements(),               "update_element_5");
+    call_and_validate(add_to_meta_seek(e),                 "update_element_6");
+    call_and_validate(merge_void_elements(),               "update_element_7");
 
   } catch (kax_analyzer_c::update_element_result_e result) {
     debug_dump_elements_maybe("update_element_exception");
@@ -465,7 +465,7 @@ kax_analyzer_c::handle_void_elements(int data_idx) {
     // Update meta seek indices for m_data[data_idx]'s new position.
     e = read_element(m_data[data_idx + 1]);
 
-    remove_from_meta_seeks(e->Generic().GlobalId);
+    remove_from_meta_seeks(EbmlId(*e));
     merge_void_elements();
     add_to_meta_seek(e);
     merge_void_elements();
@@ -528,7 +528,7 @@ kax_analyzer_c::remove_from_meta_seeks(EbmlId id) {
     bool modified = false;
     int sh_idx    = 0;
     while (seek_head->ListSize() > sh_idx) {
-      if ((*seek_head)[sh_idx]->Generic().GlobalId != KaxSeek::ClassInfos.GlobalId) {
+      if (EbmlId(*(*seek_head)[sh_idx]) != KaxSeek::ClassInfos.GlobalId) {
         ++sh_idx;
         continue;
       }
@@ -894,7 +894,7 @@ kax_analyzer_c::read_all(const EbmlCallbacks &callbacks) {
     if (NULL == element)
       continue;
 
-    if (element->Generic().GlobalId != callbacks.GlobalId) {
+    if (EbmlId(*element) != callbacks.GlobalId) {
       delete element;
       continue;
     }

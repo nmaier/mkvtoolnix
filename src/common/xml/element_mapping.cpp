@@ -24,7 +24,7 @@
 
 using namespace libmatroska;
 
-static EbmlId no_id((uint32_t)0, 0);
+static EbmlId no_id((uint32)0, 0);
 
 parser_element_t *chapter_elements = NULL;
 parser_element_t *tag_elements = NULL;
@@ -86,7 +86,7 @@ xml_element_map_init() {
     {"ChapterLanguage",       EBMLT_STRING,  4,  0,            0, no_id,                  NULL, NULL, NULL},
     {"ChapterCountry",        EBMLT_STRING,  4,  0,            0, no_id,                  NULL, NULL, NULL},
 
-    {NULL,                    EBMLT_MASTER,  0,  0,            0, EbmlId((uint32_t)0, 0), NULL, NULL, NULL}
+    {NULL,                    EBMLT_MASTER,  0,  0,            0, EbmlId((uint32)0, 0), NULL, NULL, NULL}
   };
 
   static parser_element_t _tag_elements[] = {
@@ -109,7 +109,7 @@ xml_element_map_init() {
     {"TagLanguage"    , EBMLT_STRING,  3, 0,            0, no_id,                  NULL, NULL, "TagLanguage"},
     {"DefaultLanguage", EBMLT_BOOL,    3, 0,            1, no_id,                  NULL, NULL, "TagDefault"},
 
-    {NULL,              EBMLT_MASTER,  0, 0,            0, EbmlId((uint32_t)0, 0), NULL, NULL, NULL}
+    {NULL,              EBMLT_MASTER,  0, 0,            0, EbmlId((uint32)0, 0), NULL, NULL, NULL}
   };
 
   static parser_element_t _segmentinfo_elements[] = {
@@ -126,7 +126,7 @@ xml_element_map_init() {
     {"ChapterTranslateCodec",      EBMLT_UINT,   2,  0, NO_MAX_VALUE, no_id,                  NULL, NULL, NULL},
     {"ChapterTranslateID",         EBMLT_BINARY, 2,  0,            0, no_id,                  NULL, NULL, NULL},
 
-    {NULL,                         EBMLT_MASTER, 0,  0,            0, EbmlId((uint32_t)0, 0), NULL, NULL, NULL}
+    {NULL,                         EBMLT_MASTER, 0,  0,            0, EbmlId((uint32)0, 0), NULL, NULL, NULL}
   };
 
   chapter_elements = _chapter_elements;

@@ -52,7 +52,7 @@ xmlp_parent_name(parser_data_t *pdata,
   int i;
 
   for (i = 0; NULL != pdata->mapping[i].name; i++)
-    if (pdata->mapping[i].id == e->Generic().GlobalId)
+    if (pdata->mapping[i].id == EbmlId(*e))
       return pdata->mapping[i].name;
 
   return Y("(none)");
@@ -293,7 +293,7 @@ add_new_element(parser_data_t *pdata,
 
       int i;
       for (i = 0; i < m->ListSize(); i++)
-        if ((*m)[i]->Generic().GlobalId == pdata->mapping[elt_idx].id)
+        if (EbmlId(*(*m)[i]) == pdata->mapping[elt_idx].id)
           xmlp_error(pdata, boost::format(Y("Only one instance of <%1%> is allowed beneath <%2%>.")) % name % pdata->mapping[parent_idx].name);
     }
   }

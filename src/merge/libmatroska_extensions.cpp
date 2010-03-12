@@ -28,7 +28,7 @@ kax_reference_block_c::UpdateSize(bool bSaveDefault,
                                   bool bForceRender) {
   if (!bTimecodeSet) {
     assert(-1 != m_value);
-    Value = (m_value - int64(ParentBlock->GlobalTimecode())) / int64(ParentBlock->GlobalTimecodeScale());
+    *static_cast<EbmlSInteger*>(this) = (m_value - int64(ParentBlock->GlobalTimecode())) / int64(ParentBlock->GlobalTimecodeScale());
   }
 
   return EbmlSInteger::UpdateSize(bSaveDefault, bForceRender);

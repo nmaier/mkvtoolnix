@@ -255,7 +255,7 @@ create_ebml_element(const EbmlCallbacks &callbacks,
   const EbmlSemanticContext &context = callbacks.Context;
   int i;
 
-//   if (id == parent->Generic().GlobalId)
+//   if (id == EbmlId(*parent))
 //     return empty_ebml_master(&parent->Generic().Create());
 
   for (i = 0; i < context.Size; i++)
@@ -576,7 +576,7 @@ find_ebml_element_by_id(EbmlMaster *master,
                         const EbmlId &id) {
   int i;
   for (i = 0; master->ListSize() > i; ++i)
-    if ((*master)[i]->Generic().GlobalId == id)
+    if (EbmlId(*((*master)[i])) == id)
       return (*master)[i];
 
   return NULL;

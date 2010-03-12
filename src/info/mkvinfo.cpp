@@ -1677,7 +1677,7 @@ handle_elements_rec(EbmlStream *es,
   bool found = false;
   int elt_idx;
   for (elt_idx = 0; NULL != mapping[elt_idx].name; ++elt_idx)
-    if (e->Generic().GlobalId == mapping[elt_idx].id) {
+    if (EbmlId(*e) == mapping[elt_idx].id) {
       found = true;
       break;
     }
