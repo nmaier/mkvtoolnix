@@ -81,10 +81,10 @@ static void
 end_chapter_atom(void *pdata) {
   EbmlMaster *m = static_cast<EbmlMaster *>(xmlp_pelt);
 
-  if (m->FindFirstElt(KaxChapterTimeStart::ClassInfos, false) == NULL)
+  if (m->FindFirstElt(CLASS_INFO(KaxChapterTimeStart), false) == NULL)
     xmlp_error(CPDATA, Y("<ChapterAtom> is missing the <ChapterTimeStart> child."));
 
-  if (m->FindFirstElt(KaxChapterUID::ClassInfos, false) == NULL) {
+  if (m->FindFirstElt(CLASS_INFO(KaxChapterUID), false) == NULL) {
     KaxChapterUID *cuid = new KaxChapterUID;
     *static_cast<EbmlUInteger *>(cuid) = create_unique_uint32(UNIQUE_CHAPTER_IDS);
     m->PushElement(*cuid);
@@ -95,7 +95,7 @@ static void
 end_chapter_track(void *pdata) {
   EbmlMaster *m = static_cast<EbmlMaster *>(xmlp_pelt);
 
-  if (m->FindFirstElt(KaxChapterTrackNumber::ClassInfos, false) == NULL)
+  if (m->FindFirstElt(CLASS_INFO(KaxChapterTrackNumber), false) == NULL)
     xmlp_error(CPDATA, Y("<ChapterTrack> is missing the <ChapterTrackNumber> child."));
 }
 
@@ -103,10 +103,10 @@ static void
 end_chapter_display(void *pdata) {
   EbmlMaster *m = static_cast<EbmlMaster *>(xmlp_pelt);
 
-  if (m->FindFirstElt(KaxChapterString::ClassInfos, false) == NULL)
+  if (m->FindFirstElt(CLASS_INFO(KaxChapterString), false) == NULL)
     xmlp_error(CPDATA, Y("<ChapterDisplay> is missing the <ChapterString> child."));
 
-  if (m->FindFirstElt(KaxChapterLanguage::ClassInfos, false) == NULL) {
+  if (m->FindFirstElt(CLASS_INFO(KaxChapterLanguage), false) == NULL) {
     KaxChapterLanguage *cl         = new KaxChapterLanguage;
     *static_cast<EbmlString *>(cl) = "und";
     m->PushElement(*cl);

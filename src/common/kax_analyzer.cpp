@@ -43,10 +43,10 @@ operator <(const kax_analyzer_data_cptr &d1,
 
 std::string
 kax_analyzer_data_c::to_string() const {
-  const EbmlCallbacks *callbacks = find_ebml_callbacks(KaxSegment::ClassInfos, m_id);
+  const EbmlCallbacks *callbacks = find_ebml_callbacks(CLASS_INFO(KaxSegment), m_id);
 
   if ((NULL == callbacks) && (EbmlVoid::ClassInfos.GlobalId == m_id))
-    callbacks = &EbmlVoid::ClassInfos;
+    callbacks = &CLASS_INFO(EbmlVoid);
 
   std::string name;
   if (NULL != callbacks)
@@ -203,7 +203,7 @@ kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode,
   m_stream = new EbmlStream(*m_file);
 
   // Find the EbmlHead element. Must be the first one.
-  EbmlElement *l0 = m_stream->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
+  EbmlElement *l0 = m_stream->FindNextID(CLASS_INFO(EbmlHead), 0xFFFFFFFFL);
   if (NULL == l0)
     throw error_c(Y("Not a valid Matroska file (no EBML head found)"));
 
@@ -213,7 +213,7 @@ kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode,
 
   while (1) {
     // Next element must be a segment
-    l0 = m_stream->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFFFFFFFFFLL);
+    l0 = m_stream->FindNextID(CLASS_INFO(KaxSegment), 0xFFFFFFFFFFFFFFFFLL);
     if (NULL == l0)
       throw error_c(Y("Not a valid Matroska file (no segment/level 0 element found)"));
 
@@ -278,7 +278,7 @@ kax_analyzer_c::read_element(kax_analyzer_data_c *element_data) {
 
   int upper_lvl_el               = 0;
   EbmlElement *e                 = es.FindNextElement(m_segment->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true, 1);
-  const EbmlCallbacks *callbacks = find_ebml_callbacks(KaxSegment::ClassInfos, element_data->m_id);
+  const EbmlCallbacks *callbacks = find_ebml_callbacks(CLASS_INFO(KaxSegment), element_data->m_id);
 
   if ((NULL == e) || (NULL == callbacks) || (EbmlId(*e) != callbacks->GlobalId)) {
     delete e;
@@ -699,7 +699,7 @@ kax_analyzer_c::write_element(EbmlElement *e,
     e->Render(*m_file, write_defaults);
 
     // Update the internal records.
-    m_data[data_idx]->m_id   = e->Generic().GlobalId;
+    m_data[data_idx]->m_id   = EbmlId(*e);
     m_data[data_idx]->m_size = e->ElementSize(write_defaults);
 
     // Create a new void element after the element we've just written.
@@ -890,7 +890,7 @@ kax_analyzer_c::read_all(const EbmlCallbacks &callbacks) {
 
     m_file->setFilePointer(data.m_pos);
     int upper_lvl_el     = 0;
-    EbmlElement *element = es.FindNextElement(KaxSegment::ClassInfos.Context, upper_lvl_el, 0xFFFFFFFFL, true);
+    EbmlElement *element = es.FindNextElement(CLASS_INFO(KaxSegment).Context, upper_lvl_el, 0xFFFFFFFFL, true);
     if (NULL == element)
       continue;
 

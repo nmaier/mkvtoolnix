@@ -326,7 +326,7 @@ extract_tracks(const std::string &file_name,
     EbmlStream *es = new EbmlStream(*in);
 
     // Find the EbmlHead element. Must be the first one.
-    EbmlElement *l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
+    EbmlElement *l0 = es->FindNextID(CLASS_INFO(EbmlHead), 0xFFFFFFFFL);
     if (NULL == l0) {
       show_error(Y("Error: No EBML head found."));
       delete es;
@@ -340,7 +340,7 @@ extract_tracks(const std::string &file_name,
 
     while (1) {
       // Next element must be a segment
-      l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFFFFFFFFFLL);
+      l0 = es->FindNextID(CLASS_INFO(KaxSegment), 0xFFFFFFFFFFFFFFFFLL);
 
       if (NULL == l0) {
         show_error(Y("No segment/level 0 element found."));

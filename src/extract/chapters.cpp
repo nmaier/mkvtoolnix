@@ -53,7 +53,7 @@ extract_chapters(const std::string &file_name,
     return;
   }
 
-  EbmlMaster *master = analyzer->read_all(KaxChapters::ClassInfos);
+  EbmlMaster *master = analyzer->read_all(CLASS_INFO(KaxChapters));
   if (NULL == master)
     return;
 

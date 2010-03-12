@@ -41,7 +41,7 @@ init_mapping_table(parser_element_t *table) {
       continue;
     debug_name = table[i].debug_name != NULL ? table[i].debug_name :
       table[i].name;
-    result = find_ebml_callbacks(KaxSegment::ClassInfos, debug_name);
+    result = find_ebml_callbacks(CLASS_INFO(KaxSegment), debug_name);
     if (NULL == result)
       mxerror(boost::format(Y("Error initializing the tables for the chapter, tag and segment info elements: "
                               "Could not find the element with the debug name '%1%'. %2%\n")) % debug_name % BUGMSG);

@@ -211,8 +211,8 @@ extract_cuesheet(const std::string &file_name,
   }
 
   KaxChapters all_chapters;
-  KaxChapters *chapters = dynamic_cast<KaxChapters *>(analyzer->read_all(KaxChapters::ClassInfos));
-  KaxTags *all_tags     = dynamic_cast<KaxTags *>(analyzer->read_all(KaxTags::ClassInfos));
+  KaxChapters *chapters = dynamic_cast<KaxChapters *>(analyzer->read_all(CLASS_INFO(KaxChapters)));
+  KaxTags *all_tags     = dynamic_cast<KaxTags *>(analyzer->read_all(CLASS_INFO(KaxTags)));
 
   if ((NULL != chapters) && (NULL != all_tags)) {
     int i;

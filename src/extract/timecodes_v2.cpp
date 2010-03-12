@@ -178,7 +178,7 @@ extract_timecodes(const std::string &file_name,
     EbmlStream *es    = new EbmlStream(*in);
 
     // Find the EbmlHead element. Must be the first one.
-    EbmlElement *l0 = es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFL);
+    EbmlElement *l0 = es->FindNextID(CLASS_INFO(EbmlHead), 0xFFFFFFFFL);
     if (l0 == NULL) {
       show_error(Y("Error: No EBML head found."));
       delete es;
@@ -192,7 +192,7 @@ extract_timecodes(const std::string &file_name,
 
     while (1) {
       // Next element must be a segment
-      l0 = es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFFFFFFFFFLL);
+      l0 = es->FindNextID(CLASS_INFO(KaxSegment), 0xFFFFFFFFFFFFFFFFLL);
       if (NULL == l0) {
         show_error(Y("No segment/level 0 element found."));
         return;
@@ -255,7 +255,7 @@ extract_timecodes(const std::string &file_name,
         show_element(l1, 1, Y("Segment tracks"));
 
         tracks_found = true;
-        l1->Read(*es, KaxTracks::ClassInfos.Context, upper_lvl_el, l2, true);
+        l1->Read(*es, CLASS_INFO(KaxTracks).Context, upper_lvl_el, l2, true);
         create_timecode_files(*dynamic_cast<KaxTracks *>(l1), tspecs, version);
 
       } else if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
@@ -280,13 +280,13 @@ extract_timecodes(const std::string &file_name,
           } else if (EbmlId(*l2) == KaxBlockGroup::ClassInfos.GlobalId) {
             show_element(l2, 2, Y("Block group"));
 
-            l2->Read(*es, KaxBlockGroup::ClassInfos.Context, upper_lvl_el, l3, true);
+            l2->Read(*es, CLASS_INFO(KaxBlockGroup).Context, upper_lvl_el, l3, true);
             handle_blockgroup(*static_cast<KaxBlockGroup *>(l2), *cluster, tc_scale);
 
           } else if (EbmlId(*l2) == KaxSimpleBlock::ClassInfos.GlobalId) {
             show_element(l2, 2, Y("Simple block"));
 
-            l2->Read(*es, KaxSimpleBlock::ClassInfos.Context, upper_lvl_el, l3, true);
+            l2->Read(*es, CLASS_INFO(KaxSimpleBlock).Context, upper_lvl_el, l3, true);
             handle_simpleblock(*static_cast<KaxSimpleBlock *>(l2), *cluster);
 
           } else

@@ -53,7 +53,7 @@ extract_tags(const std::string &file_name,
     return;
   }
 
-  EbmlMaster *m = analyzer->read_all(KaxTags::ClassInfos);
+  EbmlMaster *m = analyzer->read_all(CLASS_INFO(KaxTags));
   if (NULL != m) {
     KaxTags *tags = dynamic_cast<KaxTags *>(m);
     assert(NULL != tags);

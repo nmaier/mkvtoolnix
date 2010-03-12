@@ -120,7 +120,7 @@ extract_attachments(const std::string &file_name,
     return;
   }
 
-  KaxAttachments *attachments = dynamic_cast<KaxAttachments *>(analyzer->read_all(KaxAttachments::ClassInfos));
+  KaxAttachments *attachments = dynamic_cast<KaxAttachments *>(analyzer->read_all(CLASS_INFO(KaxAttachments)));
   if (NULL != attachments) {
     handle_attachments(attachments, tracks);
     delete attachments;

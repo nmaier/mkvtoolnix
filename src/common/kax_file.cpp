@@ -105,14 +105,14 @@ kax_file_c::read_next_level1_element_internal(uint32_t wanted_id) {
 EbmlElement *
 kax_file_c::read_one_element() {
   int upper_lvl_el = 0;
-  EbmlElement *l1  = m_es->FindNextElement(KaxSegment::ClassInfos.Context, upper_lvl_el, 0xFFFFFFFFL, true);
+  EbmlElement *l1  = m_es->FindNextElement(CLASS_INFO(KaxSegment).Context, upper_lvl_el, 0xFFFFFFFFL, true);
 
   if (NULL == l1)
     return NULL;
 
-  const EbmlCallbacks *callbacks = find_ebml_callbacks(KaxSegment::ClassInfos, EbmlId(*l1));
+  const EbmlCallbacks *callbacks = find_ebml_callbacks(CLASS_INFO(KaxSegment), EbmlId(*l1));
   if (NULL == callbacks)
-    callbacks = &KaxSegment::ClassInfos;
+    callbacks = &CLASS_INFO(KaxSegment);
 
   EbmlElement *l2 = NULL;
   l1->Read(*m_es.get_object(), callbacks->Context, upper_lvl_el, l2, true);
@@ -123,7 +123,7 @@ kax_file_c::read_one_element() {
 
 bool
 kax_file_c::is_level1_element_id(vint_c id) const {
-  const EbmlSemanticContext &context = KaxSegment::ClassInfos.Context;
+  const EbmlSemanticContext &context = CLASS_INFO(KaxSegment).Context;
   for (int segment_idx = 0; context.Size > segment_idx; ++segment_idx)
     if (context.MyTable[segment_idx].GetCallbacks.GlobalId.Value == id.m_value)
       return true;

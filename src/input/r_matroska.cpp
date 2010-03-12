@@ -494,7 +494,7 @@ kax_reader_c::handle_attachments(mm_io_c *io,
     EbmlElement *l2      = NULL;
     upper_lvl_el         = 0;
 
-    atts->Read(*m_es, KaxAttachments::ClassInfos.Context, upper_lvl_el, l2, true);
+    atts->Read(*m_es, CLASS_INFO(KaxAttachments).Context, upper_lvl_el, l2, true);
 
     int i;
     for (i = 0; i < atts->ListSize(); i++) {
@@ -575,7 +575,7 @@ kax_reader_c::handle_chapters(mm_io_c *io,
     EbmlElement *l2           = NULL;
     upper_lvl_el              = 0;
 
-    tmp_chapters->Read(*m_es, KaxChapters::ClassInfos.Context, upper_lvl_el, l2, true);
+    tmp_chapters->Read(*m_es, CLASS_INFO(KaxChapters).Context, upper_lvl_el, l2, true);
 
     if (NULL == m_chapters)
       m_chapters = new KaxChapters;
@@ -608,7 +608,7 @@ kax_reader_c::handle_tags(mm_io_c *io,
     EbmlElement *l2 = NULL;
     upper_lvl_el    = 0;
 
-    tags->Read(*m_es, KaxTags::ClassInfos.Context, upper_lvl_el, l2, true);
+    tags->Read(*m_es, CLASS_INFO(KaxTags).Context, upper_lvl_el, l2, true);
 
     while (tags->ListSize() > 0) {
       if (!(EbmlId(*(*tags)[0]) == KaxTag::ClassInfos.GlobalId)) {
@@ -674,7 +674,7 @@ kax_reader_c::read_headers_info(EbmlElement *&l1,
   // General info about this Matroska file
   mxverb(2, "matroska_reader: |+ segment information...\n");
 
-  l1->Read(*m_es, KaxInfo::ClassInfos.Context, upper_lvl_el, l2, true);
+  l1->Read(*m_es, CLASS_INFO(KaxInfo).Context, upper_lvl_el, l2, true);
 
   KaxTimecodeScale *ktc_scale = FINDFIRST(l1, KaxTimecodeScale);
   if (NULL != ktc_scale) {
@@ -906,7 +906,7 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
 
   EbmlElement *l2 = NULL;
   upper_lvl_el    = 0;
-  l1->Read(*m_es, KaxTracks::ClassInfos.Context, upper_lvl_el, l2, true);
+  l1->Read(*m_es, CLASS_INFO(KaxTracks).Context, upper_lvl_el, l2, true);
 
   KaxTrackEntry *ktentry = FINDFIRST(l1, KaxTrackEntry);
   while (ktentry != NULL) {
@@ -1042,7 +1042,7 @@ kax_reader_c::read_headers_seek_head(EbmlElement *&l0,
   KaxSeekHead &seek_head = *static_cast<KaxSeekHead *>(l1);
 
   int i = 0;
-  seek_head.Read(*m_es, KaxSeekHead::ClassInfos.Context, i, el, true);
+  seek_head.Read(*m_es, CLASS_INFO(KaxSeekHead).Context, i, el, true);
 
   for (i = 0; i < seek_head.ListSize(); i++) {
     if (EbmlId(*seek_head[i]) != KaxSeek::ClassInfos.GlobalId)
@@ -1086,7 +1086,7 @@ kax_reader_c::read_headers() {
     m_in_file   = kax_file_cptr(new kax_file_c(m_in));
 
     // Find the EbmlHead element. Must be the first one.
-    EbmlElement *l0 = m_es->FindNextID(EbmlHead::ClassInfos, 0xFFFFFFFFFFFFFFFFLL);
+    EbmlElement *l0 = m_es->FindNextID(CLASS_INFO(EbmlHead), 0xFFFFFFFFFFFFFFFFLL);
     if (NULL == l0) {
       mxwarn(Y("matroska_reader: no EBML head found.\n"));
       return false;
@@ -1098,7 +1098,7 @@ kax_reader_c::read_headers() {
     mxverb(2, "matroska_reader: Found the head...\n");
 
     // Next element must be a segment
-    l0 = m_es->FindNextID(KaxSegment::ClassInfos, 0xFFFFFFFFFFFFFFFFLL);
+    l0 = m_es->FindNextID(CLASS_INFO(KaxSegment), 0xFFFFFFFFFFFFFFFFLL);
     if (NULL == l0) {
       if (verbose)
         mxwarn(Y("matroska_reader: No segment found.\n"));
@@ -1655,7 +1655,7 @@ kax_reader_c::read_first_frames(kax_track_t *t,
       if (NULL == cluster)
         return;
 
-      KaxClusterTimecode *ctc = static_cast<KaxClusterTimecode *> (cluster->FindFirstElt(KaxClusterTimecode::ClassInfos, false));
+      KaxClusterTimecode *ctc = static_cast<KaxClusterTimecode *> (cluster->FindFirstElt(CLASS_INFO(KaxClusterTimecode), false));
       if (NULL != ctc)
         cluster->InitTimecode(uint64(*ctc), m_tc_scale);
 
@@ -1684,7 +1684,7 @@ kax_reader_c::read_first_frames(kax_track_t *t,
 
         } else if ((EbmlId(*(*cluster)[bgidx]) == KaxBlockGroup::ClassInfos.GlobalId)) {
           KaxBlockGroup *block_group = static_cast<KaxBlockGroup *>((*cluster)[bgidx]);
-          KaxBlock *block            = static_cast<KaxBlock *>(block_group->FindFirstElt(KaxBlock::ClassInfos, false));
+          KaxBlock *block            = static_cast<KaxBlock *>(block_group->FindFirstElt(CLASS_INFO(KaxBlock), false));
 
           if (NULL == block)
             continue;
@@ -1742,7 +1742,7 @@ kax_reader_c::read(generic_packetizer_c *requested_ptzr,
       return FILE_STATUS_DONE;
     }
 
-    KaxClusterTimecode *ctc = static_cast<KaxClusterTimecode *>(cluster->FindFirstElt(KaxClusterTimecode::ClassInfos, false));
+    KaxClusterTimecode *ctc = static_cast<KaxClusterTimecode *>(cluster->FindFirstElt(CLASS_INFO(KaxClusterTimecode), false));
     if (NULL == ctc)
       mxerror(Y("r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"));
 
@@ -1877,7 +1877,7 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
   int64_t block_fref           = VFT_NOBFRAME;
   bool bref_found              = false;
   bool fref_found              = false;
-  KaxReferenceBlock *ref_block = static_cast<KaxReferenceBlock *>(block_group->FindFirstElt(KaxReferenceBlock::ClassInfos, false));
+  KaxReferenceBlock *ref_block = static_cast<KaxReferenceBlock *>(block_group->FindFirstElt(CLASS_INFO(KaxReferenceBlock), false));
 
   while (NULL != ref_block) {
     if (0 >= int64(*ref_block)) {
@@ -1891,7 +1891,7 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
     ref_block = static_cast<KaxReferenceBlock *>(block_group->FindNextElt(*ref_block, false));
   }
 
-  KaxBlock *block = static_cast<KaxBlock *>(block_group->FindFirstElt(KaxBlock::ClassInfos, false));
+  KaxBlock *block = static_cast<KaxBlock *>(block_group->FindFirstElt(CLASS_INFO(KaxBlock), false));
   if (NULL == block) {
     mxwarn_fn(m_ti.m_fname,
               boost::format(Y("A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"))
@@ -1909,8 +1909,8 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
     return;
   }
 
-  KaxBlockAdditions *blockadd = static_cast<KaxBlockAdditions *>(block_group->FindFirstElt(KaxBlockAdditions::ClassInfos, false));
-  KaxBlockDuration *duration  = static_cast<KaxBlockDuration *>(block_group->FindFirstElt(KaxBlockDuration::ClassInfos, false));
+  KaxBlockAdditions *blockadd = static_cast<KaxBlockAdditions *>(block_group->FindFirstElt(CLASS_INFO(KaxBlockAdditions), false));
+  KaxBlockDuration *duration  = static_cast<KaxBlockDuration *>(block_group->FindFirstElt(CLASS_INFO(KaxBlockDuration), false));
 
   if (NULL != duration)
     block_duration = (int64_t)uint64(*duration) * m_tc_scale / block->NumberFrames();
@@ -1933,7 +1933,7 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
   if (m_appending)
     m_last_timecode -= m_first_timecode;
 
-  KaxCodecState *codec_state = static_cast<KaxCodecState *>(block_group->FindFirstElt(KaxCodecState::ClassInfos));
+  KaxCodecState *codec_state = static_cast<KaxCodecState *>(block_group->FindFirstElt(CLASS_INFO(KaxCodecState)));
   if ((NULL != codec_state) && !hack_engaged(ENGAGE_USE_CODEC_STATE))
     mxerror_tid(m_ti.m_fname, block_track->tnum,
                 Y("This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but "

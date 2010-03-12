@@ -46,8 +46,11 @@ int MTX_DLL_API kt_get_v_pixel_width(KaxTrackEntry &track);
 int MTX_DLL_API kt_get_v_pixel_height(KaxTrackEntry &track);
 
 #define is_id(e, ref) (EbmlId(*e) == ref::ClassInfos.GlobalId)
+#if !defined(CLASS_INFO)
+#define CLASS_INFO(ref)  ref::ClassInfos
+#endif
 
-#define FINDFIRST(p, c)   (static_cast<c *>(((EbmlMaster *)p)->FindFirstElt(c::ClassInfos, false)))
+#define FINDFIRST(p, c)   (static_cast<c *>(((EbmlMaster *)p)->FindFirstElt(CLASS_INFO(c), false)))
 #define FINDNEXT(p, c, e) (static_cast<c *>(((EbmlMaster *)p)->FindNextElt(*e, false)))
 
 template <typename type>type &
@@ -55,7 +58,7 @@ GetEmptyChild(EbmlMaster &master) {
   EbmlElement *e;
   EbmlMaster *m;
 
-  e = master.FindFirstElt(type::ClassInfos, true);
+  e = master.FindFirstElt(CLASS_INFO(type), true);
   if ((m = dynamic_cast<EbmlMaster *>(e)) != NULL) {
     while (m->ListSize() > 0) {
       delete (*m)[0];
