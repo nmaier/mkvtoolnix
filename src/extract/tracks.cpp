@@ -347,7 +347,7 @@ extract_tracks(const std::string &file_name,
         return false;
       }
 
-      if (EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId) {
+      if (EbmlId(*l0) == CLASS_ID(KaxSegment)) {
         show_element(l0, 0, Y("Segment"));
         break;
       }
@@ -366,7 +366,7 @@ extract_tracks(const std::string &file_name,
     while (NULL != (l1 = file->read_next_level1_element())) {
       int64_t element_end_pos = l1->GetElementPosition() + l1->ElementSize();
 
-      if (EbmlId(*l1) == KaxInfo::ClassInfos.GlobalId) {
+      if (EbmlId(*l1) == CLASS_ID(KaxInfo)) {
         // General info about this Matroska file
         show_element(l1, 1, Y("Segment information"));
 
@@ -376,7 +376,7 @@ extract_tracks(const std::string &file_name,
           show_element(ktc_scale, 2, boost::format(Y("Timecode scale: %1%")) % tc_scale);
         }
 
-      } else if ((EbmlId(*l1) == KaxTracks::ClassInfos.GlobalId) && !tracks_found) {
+      } else if ((EbmlId(*l1) == CLASS_ID(KaxTracks)) && !tracks_found) {
 
         // Yep, we've found our KaxTracks element. Now find all tracks
         // contained in this segment.
@@ -386,7 +386,7 @@ extract_tracks(const std::string &file_name,
         find_track_uids(*dynamic_cast<KaxTracks *>(l1), tspecs);
         create_extractors(*dynamic_cast<KaxTracks *>(l1), tspecs);
 
-      } else if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
+      } else if (EbmlId(*l1) == CLASS_ID(KaxCluster)) {
         show_element(l1, 1, Y("Cluster"));
         KaxCluster *cluster = static_cast<KaxCluster *>(l1);
 
@@ -403,24 +403,24 @@ extract_tracks(const std::string &file_name,
         int i;
         for (i = 0; cluster->ListSize() > i; ++i) {
           EbmlElement *el = (*cluster)[i];
-          if (EbmlId(*el) == KaxBlockGroup::ClassInfos.GlobalId) {
+          if (EbmlId(*el) == CLASS_ID(KaxBlockGroup)) {
             show_element(el, 2, Y("Block group"));
             handle_blockgroup(*static_cast<KaxBlockGroup *>(el), *cluster, tc_scale);
 
-          } else if (EbmlId(*el) == KaxSimpleBlock::ClassInfos.GlobalId) {
+          } else if (EbmlId(*el) == CLASS_ID(KaxSimpleBlock)) {
             show_element(el, 2, Y("SimpleBlock"));
             handle_simpleblock(*static_cast<KaxSimpleBlock *>(el), *cluster);
           }
         }
 
-      } else if (EbmlId(*l1) == KaxChapters::ClassInfos.GlobalId) {
+      } else if (EbmlId(*l1) == CLASS_ID(KaxChapters)) {
         KaxChapters &chapters = *static_cast<KaxChapters *>(l1);
 
         while (chapters.ListSize() > 0) {
-          if (EbmlId(*chapters[0]) == KaxEditionEntry::ClassInfos.GlobalId) {
+          if (EbmlId(*chapters[0]) == CLASS_ID(KaxEditionEntry)) {
             KaxEditionEntry &entry = *static_cast<KaxEditionEntry *>(chapters[0]);
             while (entry.ListSize() > 0) {
-              if (EbmlId(*entry[0]) == KaxChapterAtom::ClassInfos.GlobalId)
+              if (EbmlId(*entry[0]) == CLASS_ID(KaxChapterAtom))
                 all_chapters.PushElement(*entry[0]);
               entry.Remove(0);
             }
@@ -428,7 +428,7 @@ extract_tracks(const std::string &file_name,
           chapters.Remove(0);
         }
 
-      } else if (EbmlId(*l1) == KaxTags::ClassInfos.GlobalId) {
+      } else if (EbmlId(*l1) == CLASS_ID(KaxTags)) {
         KaxTags &tags = *static_cast<KaxTags *>(l1);
 
         while (tags.ListSize() > 0) {

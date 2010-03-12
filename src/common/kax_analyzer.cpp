@@ -45,7 +45,7 @@ std::string
 kax_analyzer_data_c::to_string() const {
   const EbmlCallbacks *callbacks = find_ebml_callbacks(CLASS_INFO(KaxSegment), m_id);
 
-  if ((NULL == callbacks) && (EbmlVoid::ClassInfos.GlobalId == m_id))
+  if ((NULL == callbacks) && (CLASS_ID(EbmlVoid) == m_id))
     callbacks = &CLASS_INFO(EbmlVoid);
 
   std::string name;
@@ -217,7 +217,7 @@ kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode,
     if (NULL == l0)
       throw error_c(Y("Not a valid Matroska file (no segment/level 0 element found)"));
 
-    if (EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId)
+    if (EbmlId(*l0) == CLASS_ID(KaxSegment))
       break;
 
     l0->SkipData(*m_stream, l0->Generic().Context);
@@ -413,7 +413,7 @@ kax_analyzer_c::handle_void_elements(int data_idx) {
 
   // Are the following elements EbmlVoid elements?
   int end_idx = data_idx + 1;
-  while ((m_data.size() > end_idx) && (m_data[end_idx]->m_id == EbmlVoid::ClassInfos.GlobalId))
+  while ((m_data.size() > end_idx) && (m_data[end_idx]->m_id == CLASS_ID(EbmlVoid)))
     ++end_idx;
 
   if (end_idx > data_idx + 1)
@@ -484,7 +484,7 @@ kax_analyzer_c::handle_void_elements(int data_idx) {
   evoid.SetSize(void_size - evoid.HeadSize());
   evoid.Render(*m_file);
 
-  m_data.insert(m_data.begin() + data_idx + 1, kax_analyzer_data_c::create(EbmlVoid::ClassInfos.GlobalId, void_pos, void_size));
+  m_data.insert(m_data.begin() + data_idx + 1, kax_analyzer_data_c::create(CLASS_ID(EbmlVoid), void_pos, void_size));
 
   // Now check if we should overwrite the current element with the
   // EbmlVoid element. That is the case if the current element's size
@@ -512,7 +512,7 @@ kax_analyzer_c::remove_from_meta_seeks(EbmlId id) {
 
   for (data_idx = 0; m_data.size() > data_idx; ++data_idx) {
     // We only have to do work on SeekHead elements. Skip the others.
-    if (m_data[data_idx]->m_id != KaxSeekHead::ClassInfos.GlobalId)
+    if (m_data[data_idx]->m_id != CLASS_ID(KaxSeekHead))
       continue;
 
     // Read the element from the m_file. Remember its size so that a new
@@ -528,7 +528,7 @@ kax_analyzer_c::remove_from_meta_seeks(EbmlId id) {
     bool modified = false;
     int sh_idx    = 0;
     while (seek_head->ListSize() > sh_idx) {
-      if (EbmlId(*(*seek_head)[sh_idx]) != KaxSeek::ClassInfos.GlobalId) {
+      if (EbmlId(*(*seek_head)[sh_idx]) != CLASS_ID(KaxSeek)) {
         ++sh_idx;
         continue;
       }
@@ -609,7 +609,7 @@ kax_analyzer_c::merge_void_elements() {
 
   while (m_data.size() > start_idx) {
     // We only have to do work on EbmlVoid elements. Skip the others.
-    if (m_data[start_idx]->m_id != EbmlVoid::ClassInfos.GlobalId) {
+    if (m_data[start_idx]->m_id != CLASS_ID(EbmlVoid)) {
       ++start_idx;
       continue;
     }
@@ -618,7 +618,7 @@ kax_analyzer_c::merge_void_elements() {
     // there are at this position and calculate the combined size.
     int end_idx  = start_idx + 1;
     int new_size = m_data[start_idx]->m_size;
-    while ((m_data.size() > end_idx) && (m_data[end_idx]->m_id == EbmlVoid::ClassInfos.GlobalId)) {
+    while ((m_data.size() > end_idx) && (m_data[end_idx]->m_id == CLASS_ID(EbmlVoid))) {
       new_size += m_data[end_idx]->m_size;
       ++end_idx;
     }
@@ -648,7 +648,7 @@ kax_analyzer_c::merge_void_elements() {
   // See how many void elements there are at the end of the m_file.
   start_idx = m_data.size() - 1;
 
-  while ((0 <= start_idx) && (EbmlVoid::ClassInfos.GlobalId == m_data[start_idx]->m_id))
+  while ((0 <= start_idx) && (CLASS_ID(EbmlVoid) == m_data[start_idx]->m_id))
     --start_idx;
   ++start_idx;
 
@@ -687,7 +687,7 @@ kax_analyzer_c::write_element(EbmlElement *e,
   int data_idx;
   for (data_idx = 0; m_data.size() > data_idx; ++data_idx) {
     // We're only interested in EbmlVoid elements. Skip the others.
-    if (m_data[data_idx]->m_id != EbmlVoid::ClassInfos.GlobalId)
+    if (m_data[data_idx]->m_id != CLASS_ID(EbmlVoid))
       continue;
 
     // Skip the element if it doesn't provide enough space.
@@ -713,7 +713,7 @@ kax_analyzer_c::write_element(EbmlElement *e,
   // and update the internal records.
   m_file->setFilePointer(0, seek_end);
   e->Render(*m_file, write_defaults);
-  m_data.push_back(kax_analyzer_data_c::create(e->Generic().GlobalId, m_file->getFilePointer() - e->ElementSize(write_defaults), e->ElementSize(write_defaults)));
+  m_data.push_back(kax_analyzer_data_c::create(EbmlId(*e), m_file->getFilePointer() - e->ElementSize(write_defaults), e->ElementSize(write_defaults)));
 
   // Adjust the m_segment's size.
   adjust_segment_size();
@@ -737,7 +737,7 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
 
   for (data_idx = 0; m_data.size() > data_idx; ++data_idx) {
     // We only have to do work on SeekHead elements. Skip the others.
-    if (m_data[data_idx]->m_id != KaxSeekHead::ClassInfos.GlobalId)
+    if (m_data[data_idx]->m_id != CLASS_ID(KaxSeekHead))
       continue;
 
     // Calculate how much free space there is behind the seek head.
@@ -746,7 +746,7 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
     // have been merged into a single element.
     int available_space = m_data[data_idx]->m_size;
     bool void_present   = false;
-    if (((data_idx + 1) < m_data.size()) && (m_data[data_idx + 1]->m_id == EbmlVoid::ClassInfos.GlobalId)) {
+    if (((data_idx + 1) < m_data.size()) && (m_data[data_idx + 1]->m_id == CLASS_ID(EbmlVoid))) {
       available_space += m_data[data_idx + 1]->m_size;
       void_present     = true;
     }
@@ -813,7 +813,7 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
     seek_head->Render(*m_file, true);
 
     // ...and update the internal records.
-    m_data.push_back(kax_analyzer_data_c::create(KaxSeekHead::ClassInfos.GlobalId, seek_head->GetElementPosition(), seek_head->ElementSize(true)));
+    m_data.push_back(kax_analyzer_data_c::create(CLASS_ID(KaxSeekHead), seek_head->GetElementPosition(), seek_head->ElementSize(true)));
 
     // Update the m_segment size.
     adjust_segment_size();
@@ -846,7 +846,7 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
 
   for (data_idx = 0; m_data.size() > data_idx; ++data_idx) {
     // We can only overwrite void elements. Skip the others.
-    if (m_data[data_idx]->m_id != EbmlVoid::ClassInfos.GlobalId)
+    if (m_data[data_idx]->m_id != CLASS_ID(EbmlVoid))
       continue;
 
     // Skip the element if it doesn't offer enough space for the seek head.
@@ -859,7 +859,7 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
 
     // Adjust the internal records for the new seek head.
     m_data[data_idx]->m_size = new_seek_head->ElementSize(true);
-    m_data[data_idx]->m_id   = KaxSeekHead::ClassInfos.GlobalId;
+    m_data[data_idx]->m_id   = CLASS_ID(KaxSeekHead);
 
     // Write a void element after the newly written seek head in order to
     // cover the space previously occupied by the old void element.
@@ -933,7 +933,7 @@ kax_analyzer_c::read_all_meta_seeks() {
     positions_found[m_data[i]->m_pos] = true;
 
   for (i = 0; i < num_entries; i++)
-    if (KaxSeekHead::ClassInfos.GlobalId == m_data[i]->m_id)
+    if (CLASS_ID(KaxSeekHead) == m_data[i]->m_id)
       read_meta_seek(m_data[i]->m_pos, positions_found);
 
   sort(m_data.begin(), m_data.end());
@@ -983,7 +983,7 @@ kax_analyzer_c::read_meta_seek(int64_t pos,
     m_data.push_back(kax_analyzer_data_c::create(the_id, seek_pos, -1));
     positions_found[seek_pos] = true;
 
-    if (KaxSeekHead::ClassInfos.GlobalId == the_id)
+    if (CLASS_ID(KaxSeekHead) == the_id)
       read_meta_seek(seek_pos, positions_found);
   }
 

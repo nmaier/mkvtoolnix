@@ -231,8 +231,8 @@ _show_unknown_element(EbmlStream *es,
 
   int i;
   std::string element_id;
-  for (i = e->Generic().GlobalId.Length - 1; 0 <= i; --i)
-    element_id += (s_bf_show_unknown_element % ((e->Generic().GlobalId.Value >> (i * 8)) & 0xff)).str();
+  for (i = EbmlId(*e).Length - 1; 0 <= i; --i)
+    element_id += (s_bf_show_unknown_element % ((EbmlId(*e).Value >> (i * 8)) & 0xff)).str();
 
   std::string s = (BF_SHOW_UNKNOWN_ELEMENT % e->Generic().DebugName % element_id % (e->GetSize() + e->HeadSize())).str();
   _show_element(e, es, true, level, s);
@@ -1130,14 +1130,14 @@ def_handle(seek_head) {
           show_element(l3, 3,
                        boost::format(Y("Seek ID:%1% (%2%)"))
                        % to_hex(seek_id.GetBuffer(), seek_id.GetSize())
-                       % (  KaxInfo::ClassInfos.GlobalId        == id ? "KaxInfo"
-                          : KaxCluster::ClassInfos.GlobalId     == id ? "KaxCluster"
-                          : KaxTracks::ClassInfos.GlobalId      == id ? "KaxTracks"
-                          : KaxCues::ClassInfos.GlobalId        == id ? "KaxCues"
-                          : KaxAttachments::ClassInfos.GlobalId == id ? "KaxAttachments"
-                          : KaxChapters::ClassInfos.GlobalId    == id ? "KaxChapters"
-                          : KaxTags::ClassInfos.GlobalId        == id ? "KaxTags"
-                          : KaxSeekHead::ClassInfos.GlobalId    == id ? "KaxSeekHead"
+                       % (  CLASS_ID(KaxInfo)        == id ? "KaxInfo"
+                          : CLASS_ID(KaxCluster)     == id ? "KaxCluster"
+                          : CLASS_ID(KaxTracks)      == id ? "KaxTracks"
+                          : CLASS_ID(KaxCues)        == id ? "KaxCues"
+                          : CLASS_ID(KaxAttachments) == id ? "KaxAttachments"
+                          : CLASS_ID(KaxChapters)    == id ? "KaxChapters"
+                          : CLASS_ID(KaxTags)        == id ? "KaxTags"
+                          : CLASS_ID(KaxSeekHead)    == id ? "KaxSeekHead"
                           :                                             "unknown"));
 
         } else if (is_id(l3, KaxSeekPosition)) {

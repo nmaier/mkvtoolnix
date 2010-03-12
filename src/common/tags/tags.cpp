@@ -116,14 +116,14 @@ find_simple_tag(const UTFstring &name,
   int i;
   std::string rvalue;
 
-  if (EbmlId(m) == KaxTagSimple::ClassInfos.GlobalId) {
+  if (EbmlId(m) == CLASS_ID(KaxTagSimple)) {
     KaxTagName *tname = FINDFIRST(&m, KaxTagName);
     if ((NULL != tname) && (name == UTFstring(*tname)))
       return *static_cast<KaxTagSimple *>(&m);
   }
 
   for (i = 0; i < m.ListSize(); i++)
-    if ((EbmlId(*m[i]) == KaxTag::ClassInfos.GlobalId) || (EbmlId(*m[i]) == KaxTagSimple::ClassInfos.GlobalId)) {
+    if ((EbmlId(*m[i]) == CLASS_ID(KaxTag)) || (EbmlId(*m[i]) == CLASS_ID(KaxTagSimple))) {
       try {
         return find_simple_tag(name, *static_cast<EbmlMaster *>(m[i]));
       } catch (...) {

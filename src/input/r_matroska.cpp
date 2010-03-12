@@ -95,7 +95,7 @@ using namespace libmatroska;
 #define in_parent(p) \
   (!p->IsFiniteSize() || (m_in->getFilePointer() < (p->GetElementPosition() + p->HeadSize() + p->GetSize())))
 
-#define is_ebmlvoid(e) (EbmlId(*e) == EbmlVoid::ClassInfos.GlobalId)
+#define is_ebmlvoid(e) (EbmlId(*e) == CLASS_ID(EbmlVoid))
 
 #define MAGIC_MKV 0x1a45dfa3
 
@@ -489,7 +489,7 @@ kax_reader_c::handle_attachments(mm_io_c *io,
   int upper_lvl_el;
   EbmlElement *l1 = m_es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
 
-  if ((NULL != l1) && (EbmlId(*l1) == KaxAttachments::ClassInfos.GlobalId)) {
+  if ((NULL != l1) && (EbmlId(*l1) == CLASS_ID(KaxAttachments))) {
     KaxAttachments *atts = (KaxAttachments *)l1;
     EbmlElement *l2      = NULL;
     upper_lvl_el         = 0;
@@ -500,7 +500,7 @@ kax_reader_c::handle_attachments(mm_io_c *io,
     for (i = 0; i < atts->ListSize(); i++) {
       KaxAttached *att = (KaxAttached *)(*atts)[i];
 
-      if (EbmlId(*att) == KaxAttached::ClassInfos.GlobalId) {
+      if (EbmlId(*att) == CLASS_ID(KaxAttached)) {
         UTFstring name        = L"";
         UTFstring description = L"";
         std::string mime_type =  "";
@@ -512,23 +512,23 @@ kax_reader_c::handle_attachments(mm_io_c *io,
         for (k = 0; k < att->ListSize(); k++) {
           l2 = (*att)[k];
 
-          if (EbmlId(*l2) == KaxFileName::ClassInfos.GlobalId) {
+          if (EbmlId(*l2) == CLASS_ID(KaxFileName)) {
             KaxFileName &fname = *static_cast<KaxFileName *>(l2);
             name               = UTFstring(fname);
 
-          } else if (EbmlId(*l2) == KaxFileDescription::ClassInfos.GlobalId) {
+          } else if (EbmlId(*l2) == CLASS_ID(KaxFileDescription)) {
             KaxFileDescription &fdesc = *static_cast<KaxFileDescription *>(l2);
             description               = UTFstring(fdesc);
 
-          } else if (EbmlId(*l2) == KaxMimeType::ClassInfos.GlobalId) {
+          } else if (EbmlId(*l2) == CLASS_ID(KaxMimeType)) {
             KaxMimeType &mtype = *static_cast<KaxMimeType *>(l2);
             mime_type          = std::string(mtype);
 
-          } else if (EbmlId(*l2) == KaxFileUID::ClassInfos.GlobalId) {
+          } else if (EbmlId(*l2) == CLASS_ID(KaxFileUID)) {
             KaxFileUID &fuid = *static_cast<KaxFileUID *>(l2);
             id               = uint64(fuid);
 
-          } else if (EbmlId(*l2) == KaxFileData::ClassInfos.GlobalId) {
+          } else if (EbmlId(*l2) == CLASS_ID(KaxFileData)) {
             KaxFileData &fdata = *static_cast<KaxFileData *>(l2);
             size               = fdata.GetSize();
             data               = (unsigned char *)fdata.GetBuffer();
@@ -603,7 +603,7 @@ kax_reader_c::handle_tags(mm_io_c *io,
   io->save_pos(pos);
   EbmlElement *l1 = m_es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
 
-  if ((NULL != l1) && (EbmlId(*l1) == KaxTags::ClassInfos.GlobalId)) {
+  if ((NULL != l1) && (EbmlId(*l1) == CLASS_ID(KaxTags))) {
     KaxTags *tags   = (KaxTags *)l1;
     EbmlElement *l2 = NULL;
     upper_lvl_el    = 0;
@@ -611,7 +611,7 @@ kax_reader_c::handle_tags(mm_io_c *io,
     tags->Read(*m_es, CLASS_INFO(KaxTags).Context, upper_lvl_el, l2, true);
 
     while (tags->ListSize() > 0) {
-      if (!(EbmlId(*(*tags)[0]) == KaxTag::ClassInfos.GlobalId)) {
+      if (!(EbmlId(*(*tags)[0]) == CLASS_ID(KaxTag))) {
         delete (*tags)[0];
         tags->Remove(0);
         continue;
@@ -1045,7 +1045,7 @@ kax_reader_c::read_headers_seek_head(EbmlElement *&l0,
   seek_head.Read(*m_es, CLASS_INFO(KaxSeekHead).Context, i, el, true);
 
   for (i = 0; i < seek_head.ListSize(); i++) {
-    if (EbmlId(*seek_head[i]) != KaxSeek::ClassInfos.GlobalId)
+    if (EbmlId(*seek_head[i]) != CLASS_ID(KaxSeek))
       continue;
 
     KaxSeek &seek           = *static_cast<KaxSeek *>(seek_head[i]);
@@ -1054,17 +1054,17 @@ kax_reader_c::read_headers_seek_head(EbmlElement *&l0,
     int k;
 
     for (k = 0; k < seek.ListSize(); k++)
-      if (EbmlId(*seek[k]) == KaxSeekID::ClassInfos.GlobalId) {
+      if (EbmlId(*seek[k]) == CLASS_ID(KaxSeekID)) {
         KaxSeekID &sid = *static_cast<KaxSeekID *>(seek[k]);
         EbmlId id(sid.GetBuffer(), sid.GetSize());
 
-        type = id == KaxAttachments::ClassInfos.GlobalId ? dl1t_attachments
-          :    id == KaxChapters::ClassInfos.GlobalId    ? dl1t_chapters
-          :    id == KaxTags::ClassInfos.GlobalId        ? dl1t_tags
-          :    id == KaxTracks::ClassInfos.GlobalId      ? dl1t_tracks
+        type = id == CLASS_ID(KaxAttachments) ? dl1t_attachments
+          :    id == CLASS_ID(KaxChapters)    ? dl1t_chapters
+          :    id == CLASS_ID(KaxTags)        ? dl1t_tags
+          :    id == CLASS_ID(KaxTracks)      ? dl1t_tracks
           :                                                dl1t_unknown;
 
-      } else if (EbmlId(*seek[k]) == KaxSeekPosition::ClassInfos.GlobalId)
+      } else if (EbmlId(*seek[k]) == CLASS_ID(KaxSeekPosition))
         pos = uint64(*static_cast<KaxSeekPosition *>(seek[k]));
 
     if ((-1 != pos) && (dl1t_unknown != type)) {
@@ -1104,7 +1104,7 @@ kax_reader_c::read_headers() {
         mxwarn(Y("matroska_reader: No segment found.\n"));
       return false;
     }
-    if (!(EbmlId(*l0) == KaxSegment::ClassInfos.GlobalId)) {
+    if (!(EbmlId(*l0) == CLASS_ID(KaxSegment))) {
       if (verbose)
         mxwarn(Y("matroska_reader: No segment found.\n"));
       return false;
@@ -1119,25 +1119,25 @@ kax_reader_c::read_headers() {
     while ((NULL != l1) && (0 >= upper_lvl_el)) {
       EbmlElement *l2;
 
-      if (EbmlId(*l1) == KaxInfo::ClassInfos.GlobalId)
+      if (EbmlId(*l1) == CLASS_ID(KaxInfo))
         read_headers_info(l1, l2, upper_lvl_el);
 
-      else if (EbmlId(*l1) == KaxTracks::ClassInfos.GlobalId)
+      else if (EbmlId(*l1) == CLASS_ID(KaxTracks))
         m_deferred_l1_positions[dl1t_tracks].push_back(l1->GetElementPosition());
 
-      else if (EbmlId(*l1) == KaxAttachments::ClassInfos.GlobalId)
+      else if (EbmlId(*l1) == CLASS_ID(KaxAttachments))
         m_deferred_l1_positions[dl1t_attachments].push_back(l1->GetElementPosition());
 
-      else if (EbmlId(*l1) == KaxChapters::ClassInfos.GlobalId)
+      else if (EbmlId(*l1) == CLASS_ID(KaxChapters))
         m_deferred_l1_positions[dl1t_chapters].push_back(l1->GetElementPosition());
 
-      else if (EbmlId(*l1) == KaxTags::ClassInfos.GlobalId)
+      else if (EbmlId(*l1) == CLASS_ID(KaxTags))
         m_deferred_l1_positions[dl1t_tags].push_back(l1->GetElementPosition());
 
-      else if (EbmlId(*l1) == KaxSeekHead::ClassInfos.GlobalId)
+      else if (EbmlId(*l1) == CLASS_ID(KaxSeekHead))
         read_headers_seek_head(l0, l1);
 
-      else if (EbmlId(*l1) == KaxCluster::ClassInfos.GlobalId) {
+      else if (EbmlId(*l1) == CLASS_ID(KaxCluster)) {
         mxverb(2, "matroska_reader: |+ found cluster, headers are parsed completely\n");
         cluster = static_cast<KaxCluster *>(l1);
 
@@ -1661,7 +1661,7 @@ kax_reader_c::read_first_frames(kax_track_t *t,
 
       int bgidx;
       for (bgidx = 0; bgidx < cluster->ListSize(); bgidx++) {
-        if ((EbmlId(*(*cluster)[bgidx]) == KaxSimpleBlock::ClassInfos.GlobalId)) {
+        if ((EbmlId(*(*cluster)[bgidx]) == CLASS_ID(KaxSimpleBlock))) {
           KaxSimpleBlock *block_simple = static_cast<KaxSimpleBlock *>((*cluster)[bgidx]);
 
           block_simple->SetParent(*cluster);
@@ -1682,7 +1682,7 @@ kax_reader_c::read_first_frames(kax_track_t *t,
             block_track->first_frames_data.back()->grab();
           }
 
-        } else if ((EbmlId(*(*cluster)[bgidx]) == KaxBlockGroup::ClassInfos.GlobalId)) {
+        } else if ((EbmlId(*(*cluster)[bgidx]) == CLASS_ID(KaxBlockGroup))) {
           KaxBlockGroup *block_group = static_cast<KaxBlockGroup *>((*cluster)[bgidx]);
           KaxBlock *block            = static_cast<KaxBlock *>(block_group->FindFirstElt(CLASS_INFO(KaxBlock), false));
 
@@ -1761,10 +1761,10 @@ kax_reader_c::read(generic_packetizer_c *requested_ptzr,
     for (bgidx = 0; bgidx < cluster->ListSize(); bgidx++) {
       EbmlElement *element = (*cluster)[bgidx];
 
-      if (EbmlId(*element) == KaxSimpleBlock::ClassInfos.GlobalId)
+      if (EbmlId(*element) == CLASS_ID(KaxSimpleBlock))
         process_simple_block(cluster, static_cast<KaxSimpleBlock *>(element));
 
-      else if (EbmlId(*element) == KaxBlockGroup::ClassInfos.GlobalId)
+      else if (EbmlId(*element) == CLASS_ID(KaxBlockGroup))
         process_block_group(cluster, static_cast<KaxBlockGroup *>(element));
     }
 

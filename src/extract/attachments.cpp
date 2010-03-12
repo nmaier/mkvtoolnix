@@ -57,16 +57,16 @@ handle_attachments(KaxAttachments *atts,
     for (k = 0; att->ListSize() > k; ++k) {
       EbmlElement *e = (*att)[k];
 
-      if (EbmlId(*e) == KaxFileName::ClassInfos.GlobalId)
+      if (EbmlId(*e) == CLASS_ID(KaxFileName))
         name = UTFstring_to_cstrutf8(UTFstring(*static_cast<KaxFileName *>(e)));
 
-      else if (EbmlId(*e) == KaxMimeType::ClassInfos.GlobalId)
+      else if (EbmlId(*e) == CLASS_ID(KaxMimeType))
         type = std::string(*static_cast<KaxMimeType *>(e));
 
-      else if (EbmlId(*e) == KaxFileUID::ClassInfos.GlobalId)
+      else if (EbmlId(*e) == CLASS_ID(KaxFileUID))
         id = uint32(*static_cast<KaxFileUID *>(e));
 
-      else if (EbmlId(*e) == KaxFileData::ClassInfos.GlobalId) {
+      else if (EbmlId(*e) == CLASS_ID(KaxFileData)) {
         fdata = (KaxFileData *)e;
         size  = fdata->GetSize();
       }

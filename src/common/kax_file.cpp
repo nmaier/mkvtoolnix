@@ -133,8 +133,8 @@ kax_file_c::is_level1_element_id(vint_c id) const {
 
 bool
 kax_file_c::is_global_element_id(vint_c id) const {
-  return (EbmlVoid::ClassInfos.GlobalId.Value  == id.m_value)
-    ||   (EbmlCrc32::ClassInfos.GlobalId.Value == id.m_value);
+  return (CLASS_ID(EbmlVoid).Value() == id.m_value)
+    ||   (CLASS_ID(EbmlCrc32).Value() == id.m_value);
 }
 
 EbmlElement *
@@ -210,12 +210,12 @@ kax_file_c::resync_to_level1_element_internal(uint32_t wanted_id) {
 
 KaxCluster *
 kax_file_c::resync_to_cluster() {
-  return static_cast<KaxCluster *>(resync_to_level1_element(KaxCluster::ClassInfos.GlobalId.Value));
+  return static_cast<KaxCluster *>(resync_to_level1_element(CLASS_ID(KaxCluster).Value));
 }
 
 KaxCluster *
 kax_file_c::read_next_cluster() {
-  return static_cast<KaxCluster *>(read_next_level1_element(KaxCluster::ClassInfos.GlobalId.Value));
+  return static_cast<KaxCluster *>(read_next_level1_element(CLASS_ID(KaxCluster).Value));
 }
 
 bool

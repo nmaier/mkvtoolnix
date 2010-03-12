@@ -49,7 +49,7 @@ find_tag_for_track(int idx,
 
   int i;
   for (i = 0; i < m.ListSize(); i++) {
-    if (EbmlId(*m[i]) != KaxTag::ClassInfos.GlobalId)
+    if (EbmlId(*m[i]) != CLASS_ID(KaxTag))
       continue;
 
     int64_t tag_cuid = get_tag_cuid(*static_cast<KaxTag *>(m[i]));
@@ -84,7 +84,7 @@ get_chapter_index(int idx,
   int i;
   std::string sidx = (boost::format("INDEX %|1$02d|") % idx).str();
   for (i = 0; i < atom.ListSize(); i++)
-    if ((EbmlId(*atom[i]) == KaxChapterAtom::ClassInfos.GlobalId) &&
+    if ((EbmlId(*atom[i]) == CLASS_ID(KaxChapterAtom)) &&
         (get_chapter_name(*static_cast<KaxChapterAtom *>(atom[i])) == sidx))
       return get_chapter_start(*static_cast<KaxChapterAtom *>(atom[i]));
 

@@ -1348,7 +1348,7 @@ finish_file(bool last_file) {
   } else if (!last_file && g_no_linking) {
     int i;
     for (i = 0; s_kax_infos->ListSize() > i; ++i)
-      if (EbmlId(*(*s_kax_infos)[i]) == KaxNextUID::ClassInfos.GlobalId) {
+      if (EbmlId(*(*s_kax_infos)[i]) == CLASS_ID(KaxNextUID)) {
         delete (*s_kax_infos)[i];
         s_kax_infos->Remove(i);
         changed = 2;

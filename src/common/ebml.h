@@ -45,9 +45,12 @@ int MTX_DLL_API kt_get_a_bps(KaxTrackEntry &track);
 int MTX_DLL_API kt_get_v_pixel_width(KaxTrackEntry &track);
 int MTX_DLL_API kt_get_v_pixel_height(KaxTrackEntry &track);
 
-#define is_id(e, ref) (EbmlId(*e) == ref::ClassInfos.GlobalId)
+#define is_id(e, ref) (EbmlId(*e) == CLASS_ID(ref))
 #if !defined(CLASS_INFO)
 #define CLASS_INFO(ref)  ref::ClassInfos
+#endif
+#if !defined(CLASS_ID)
+#define CLASS_ID(ref)  ref::ClassInfos.GlobalId
 #endif
 
 #define FINDFIRST(p, c)   (static_cast<c *>(((EbmlMaster *)p)->FindFirstElt(CLASS_INFO(c), false)))
