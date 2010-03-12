@@ -260,7 +260,7 @@ _show_element(EbmlElement *l,
       show_unknown_element((*m)[i], level + 1);
   }
 
-  l->SkipData(*es, l->Generic().Context);
+  l->SkipData(*es, EBML_CONTEXT(l));
 }
 
 inline void
@@ -516,7 +516,7 @@ def_handle(info) {
 
   upper_lvl_el   = 0;
   EbmlMaster *m1 = static_cast<EbmlMaster *>(l1);
-  read_master(m1, es, l1->Generic().Context, upper_lvl_el, l3);
+  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, l3);
 
   int i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
@@ -890,7 +890,7 @@ def_handle(tracks) {
 
   upper_lvl_el = 0;
   EbmlMaster *m1 = static_cast<EbmlMaster *>(l1);
-  read_master(m1, es, l1->Generic().Context, upper_lvl_el, l3);
+  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, l3);
 
   int i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
@@ -1109,7 +1109,7 @@ def_handle(seek_head) {
 
   upper_lvl_el   = 0;
   EbmlMaster *m1 = static_cast<EbmlMaster *>(l1);
-  read_master(m1, es, l1->Generic().Context, upper_lvl_el, l3);
+  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, l3);
 
   int i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
@@ -1166,7 +1166,7 @@ def_handle(cues) {
 
   upper_lvl_el   = 0;
   EbmlMaster *m1 = static_cast<EbmlMaster *>(l1);
-  read_master(m1, es, l1->Generic().Context, upper_lvl_el, l3);
+  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, l3);
 
   int i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
@@ -1261,7 +1261,7 @@ def_handle(attachments) {
 
   upper_lvl_el   = 0;
   EbmlMaster *m1 = static_cast<EbmlMaster *>(l1);
-  read_master(m1, es, l1->Generic().Context, upper_lvl_el, l3);
+  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, l3);
 
   int i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
@@ -1630,7 +1630,7 @@ def_handle3(cluster,
 
   upper_lvl_el   = 0;
   EbmlMaster *m1 = static_cast<EbmlMaster *>(l1);
-  read_master(m1, es, l1->Generic().Context, upper_lvl_el, l3);
+  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, l3);
 
   int i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
@@ -1733,7 +1733,7 @@ def_handle(chapters) {
 
   upper_lvl_el   = 0;
   EbmlMaster *m1 = static_cast<EbmlMaster *>(l1);
-  read_master(m1, es, l1->Generic().Context, upper_lvl_el, l3);
+  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, l3);
 
   int i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++)
@@ -1746,7 +1746,7 @@ def_handle(tags) {
 
   upper_lvl_el   = 0;
   EbmlMaster *m1 = static_cast<EbmlMaster *>(l1);
-  read_master(m1, es, l1->Generic().Context, upper_lvl_el, l3);
+  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, l3);
 
   int i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++)
@@ -1761,7 +1761,7 @@ handle_ebml_head(EbmlElement *l0,
 
   while (in_parent(l0)) {
     int upper_lvl_el = 0;
-    EbmlElement *e   = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
+    EbmlElement *e   = es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true);
 
     if (NULL == e)
       return;
@@ -1792,7 +1792,7 @@ handle_ebml_head(EbmlElement *l0,
     else
       show_unknown_element(e, 1);
 
-    e->SkipData(*es, e->Generic().Context);
+    e->SkipData(*es, EBML_CONTEXT(e));
     delete e;
   }
 }
@@ -1831,7 +1831,7 @@ process_file(const std::string &file_name) {
     }
 
     handle_ebml_head(l0, in, es);
-    l0->SkipData(*es, l0->Generic().Context);
+    l0->SkipData(*es, EBML_CONTEXT(l0));
     delete l0;
 
     while (1) {
@@ -1852,13 +1852,13 @@ process_file(const std::string &file_name) {
 
       show_element(l0, 0, boost::format(Y("Next level 0 element is not a segment but %1%")) % typeid(*l0).name());
 
-      l0->SkipData(*es, l0->Generic().Context);
+      l0->SkipData(*es, EBML_CONTEXT(l0));
       delete l0;
     }
 
     upper_lvl_el = 0;
     // We've got our segment, so let's find the tracks
-    l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
+    l1 = es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true);
 
     while ((NULL != l1) && (0 >= upper_lvl_el)) {
       if (is_id(l1, KaxInfo))
@@ -1919,9 +1919,9 @@ process_file(const std::string &file_name) {
 
       }
 
-      l1->SkipData(*es, l1->Generic().Context);
+      l1->SkipData(*es, EBML_CONTEXT(l1));
       delete l1;
-      l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
+      l1 = es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true);
 
     } // while (l1 != NULL)
 

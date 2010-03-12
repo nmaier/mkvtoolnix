@@ -335,7 +335,7 @@ extract_tracks(const std::string &file_name,
     }
 
     // Don't verify its data for now.
-    l0->SkipData(*es, l0->Generic().Context);
+    l0->SkipData(*es, EBML_CONTEXT(l0));
     delete l0;
 
     while (1) {
@@ -352,7 +352,7 @@ extract_tracks(const std::string &file_name,
         break;
       }
 
-      l0->SkipData(*es, l0->Generic().Context);
+      l0->SkipData(*es, EBML_CONTEXT(l0));
       delete l0;
     }
 

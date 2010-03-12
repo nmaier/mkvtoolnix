@@ -208,7 +208,7 @@ kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode,
     throw error_c(Y("Not a valid Matroska file (no EBML head found)"));
 
   // Don't verify its data for now.
-  l0->SkipData(*m_stream, l0->Generic().Context);
+  l0->SkipData(*m_stream, EBML_CONTEXT(l0));
   delete l0;
 
   while (1) {
@@ -220,7 +220,7 @@ kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode,
     if (EbmlId(*l0) == EBML_ID(KaxSegment))
       break;
 
-    l0->SkipData(*m_stream, l0->Generic().Context);
+    l0->SkipData(*m_stream, EBML_CONTEXT(l0));
     delete l0;
   }
 
@@ -231,14 +231,14 @@ kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode,
   bool meta_seek_found = false;
 
   // We've got our segment, so let's find all level 1 elements.
-  EbmlElement *l1 = m_stream->FindNextElement(m_segment->Generic().Context, upper_lvl_el, 0xFFFFFFFFFFFFFFFFLL, true, 1);
+  EbmlElement *l1 = m_stream->FindNextElement(EBML_CONTEXT(m_segment), upper_lvl_el, 0xFFFFFFFFFFFFFFFFLL, true, 1);
   while ((NULL != l1) && (0 >= upper_lvl_el)) {
     m_data.push_back(kax_analyzer_data_c::create(EbmlId(*l1), l1->GetElementPosition(), l1->ElementSize(true)));
 
     cluster_found   |= is_id(l1, KaxCluster);
     meta_seek_found |= is_id(l1, KaxSeekHead);
 
-    l1->SkipData(*m_stream, l1->Generic().Context);
+    l1->SkipData(*m_stream, EBML_CONTEXT(l1));
     delete l1;
     l1 = NULL;
 
@@ -247,7 +247,7 @@ kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode,
     if (!in_parent(m_segment) || aborted || (cluster_found && meta_seek_found && !parse_fully))
       break;
 
-    l1 = m_stream->FindNextElement(m_segment->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
+    l1 = m_stream->FindNextElement(EBML_CONTEXT(m_segment), upper_lvl_el, 0xFFFFFFFFL, true);
   } // while (l1 != NULL)
 
   if (NULL != l1)
@@ -277,7 +277,7 @@ kax_analyzer_c::read_element(kax_analyzer_data_c *element_data) {
   m_file->setFilePointer(element_data->m_pos);
 
   int upper_lvl_el               = 0;
-  EbmlElement *e                 = es.FindNextElement(m_segment->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true, 1);
+  EbmlElement *e                 = es.FindNextElement(EBML_CONTEXT(m_segment), upper_lvl_el, 0xFFFFFFFFL, true, 1);
   const EbmlCallbacks *callbacks = find_ebml_callbacks(EBML_INFO(KaxSegment), element_data->m_id);
 
   if ((NULL == e) || (NULL == callbacks) || (EbmlId(*e) != callbacks->GlobalId)) {
@@ -950,7 +950,7 @@ kax_analyzer_c::read_meta_seek(int64_t pos,
   m_file->setFilePointer(pos, seek_beginning);
 
   int upper_lvl_el = 0;
-  EbmlElement *l1  = m_stream->FindNextElement(m_segment->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true, 1);
+  EbmlElement *l1  = m_stream->FindNextElement(EBML_CONTEXT(m_segment), upper_lvl_el, 0xFFFFFFFFL, true, 1);
 
   if (NULL == l1)
     return;
@@ -962,7 +962,7 @@ kax_analyzer_c::read_meta_seek(int64_t pos,
 
   EbmlElement *l2    = NULL;
   EbmlMaster *master = static_cast<EbmlMaster *>(l1);
-  master->Read(*m_stream, l1->Generic().Context, upper_lvl_el, l2, true);
+  master->Read(*m_stream, EBML_CONTEXT(l1), upper_lvl_el, l2, true);
 
   unsigned int i;
   for (i = 0; master->ListSize() > i; i++) {

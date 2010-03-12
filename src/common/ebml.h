@@ -52,6 +52,9 @@ int MTX_DLL_API kt_get_v_pixel_height(KaxTrackEntry &track);
 #if !defined(EBML_ID)
 #define EBML_ID(ref)  ref::ClassInfos.GlobalId
 #endif
+#if !defined(EBML_CONTEXT)
+#define EBML_CONTEXT(e)  e->Generic().Context
+#endif
 
 #define FINDFIRST(p, c)   (static_cast<c *>(((EbmlMaster *)p)->FindFirstElt(EBML_INFO(c), false)))
 #define FINDNEXT(p, c, e) (static_cast<c *>(((EbmlMaster *)p)->FindNextElt(*e, false)))

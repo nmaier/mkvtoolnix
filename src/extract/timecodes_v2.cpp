@@ -187,7 +187,7 @@ extract_timecodes(const std::string &file_name,
     }
 
     // Don't verify its data for now.
-    l0->SkipData(*es, l0->Generic().Context);
+    l0->SkipData(*es, EBML_CONTEXT(l0));
     delete l0;
 
     while (1) {
@@ -202,7 +202,7 @@ extract_timecodes(const std::string &file_name,
         break;
       }
 
-      l0->SkipData(*es, l0->Generic().Context);
+      l0->SkipData(*es, EBML_CONTEXT(l0));
       delete l0;
     }
 
@@ -211,7 +211,7 @@ extract_timecodes(const std::string &file_name,
     uint64_t tc_scale = TIMECODE_SCALE;
 
     // We've got our segment, so let's find the tracks
-    EbmlElement *l1   = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true, 1);
+    EbmlElement *l1   = es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true, 1);
     EbmlElement *l2   = NULL;
     EbmlElement *l3   = NULL;
 
@@ -221,7 +221,7 @@ extract_timecodes(const std::string &file_name,
         show_element(l1, 1, Y("Segment information"));
 
         upper_lvl_el = 0;
-        l2           = es->FindNextElement(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true, 1);
+        l2           = es->FindNextElement(EBML_CONTEXT(l1), upper_lvl_el, 0xFFFFFFFFL, true, 1);
         while ((NULL != l2) && (0 >= upper_lvl_el)) {
           if (EbmlId(*l2) == EBML_ID(KaxTimecodeScale)) {
             KaxTimecodeScale &ktc_scale = *static_cast<KaxTimecodeScale *>(l2);
@@ -229,7 +229,7 @@ extract_timecodes(const std::string &file_name,
             tc_scale = uint64(ktc_scale);
             show_element(l2, 2, boost::format(Y("Timecode scale: %1%")) % tc_scale);
           } else
-            l2->SkipData(*es, l2->Generic().Context);
+            l2->SkipData(*es, EBML_CONTEXT(l2));
 
           if (!in_parent(l1)) {
             delete l2;
@@ -243,9 +243,9 @@ extract_timecodes(const std::string &file_name,
 
           }
 
-          l2->SkipData(*es, l2->Generic().Context);
+          l2->SkipData(*es, EBML_CONTEXT(l2));
           delete l2;
-          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
+          l2 = es->FindNextElement(EBML_CONTEXT(l1), upper_lvl_el, 0xFFFFFFFFL, true);
         }
 
       } else if ((EbmlId(*l1) == EBML_ID(KaxTracks)) && !tracks_found) {
@@ -267,7 +267,7 @@ extract_timecodes(const std::string &file_name,
           mxinfo(boost::format(Y("Progress: %1%%%%2%")) % (int)(in->getFilePointer() * 100 / file_size) % "\r");
 
         upper_lvl_el = 0;
-        l2           = es->FindNextElement(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true, 1);
+        l2           = es->FindNextElement(EBML_CONTEXT(l1), upper_lvl_el, 0xFFFFFFFFL, true, 1);
         while ((NULL != l2) && (0 >= upper_lvl_el)) {
 
           if (EbmlId(*l2) == EBML_ID(KaxClusterTimecode)) {
@@ -290,7 +290,7 @@ extract_timecodes(const std::string &file_name,
             handle_simpleblock(*static_cast<KaxSimpleBlock *>(l2), *cluster);
 
           } else
-            l2->SkipData(*es, l2->Generic().Context);
+            l2->SkipData(*es, EBML_CONTEXT(l2));
 
           if (!in_parent(l1)) {
             delete l2;
@@ -312,14 +312,14 @@ extract_timecodes(const std::string &file_name,
 
           }
 
-          l2->SkipData(*es, l2->Generic().Context);
+          l2->SkipData(*es, EBML_CONTEXT(l2));
           delete l2;
-          l2 = es->FindNextElement(l1->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
+          l2 = es->FindNextElement(EBML_CONTEXT(l1), upper_lvl_el, 0xFFFFFFFFL, true);
 
         } // while (l2 != NULL)
 
       } else
-        l1->SkipData(*es, l1->Generic().Context);
+        l1->SkipData(*es, EBML_CONTEXT(l1));
 
       if (!in_parent(l0)) {
         delete l1;
@@ -341,9 +341,9 @@ extract_timecodes(const std::string &file_name,
 
       }
 
-      l1->SkipData(*es, l1->Generic().Context);
+      l1->SkipData(*es, EBML_CONTEXT(l1));
       delete l1;
-      l1 = es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
+      l1 = es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true);
 
     } // while (l1 != NULL)
 

@@ -487,7 +487,7 @@ kax_reader_c::handle_attachments(mm_io_c *io,
 
   io->save_pos(pos);
   int upper_lvl_el;
-  EbmlElement *l1 = m_es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
+  EbmlElement *l1 = m_es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true);
 
   if ((NULL != l1) && (EbmlId(*l1) == EBML_ID(KaxAttachments))) {
     KaxAttachments *atts = (KaxAttachments *)l1;
@@ -568,7 +568,7 @@ kax_reader_c::handle_chapters(mm_io_c *io,
 
   int upper_lvl_el = 0;
   io->save_pos(pos);
-  EbmlElement *l1 = m_es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
+  EbmlElement *l1 = m_es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true);
 
   if ((l1 != NULL) && is_id(l1, KaxChapters)) {
     KaxChapters *tmp_chapters = static_cast<KaxChapters *>(l1);
@@ -601,7 +601,7 @@ kax_reader_c::handle_tags(mm_io_c *io,
 
   int upper_lvl_el = 0;
   io->save_pos(pos);
-  EbmlElement *l1 = m_es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
+  EbmlElement *l1 = m_es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true);
 
   if ((NULL != l1) && (EbmlId(*l1) == EBML_ID(KaxTags))) {
     KaxTags *tags   = (KaxTags *)l1;
@@ -895,7 +895,7 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
 
   int upper_lvl_el = 0;
   io->save_pos(position);
-  EbmlElement *l1 = m_es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
+  EbmlElement *l1 = m_es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true);
 
   if ((l1 == NULL) || !is_id(l1, KaxTracks)) {
     delete l1;
@@ -1093,7 +1093,7 @@ kax_reader_c::read_headers() {
     }
 
     // Don't verify its data for now.
-    l0->SkipData(*m_es, l0->Generic().Context);
+    l0->SkipData(*m_es, EBML_CONTEXT(l0));
     delete l0;
     mxverb(2, "matroska_reader: Found the head...\n");
 
@@ -1114,7 +1114,7 @@ kax_reader_c::read_headers() {
     // We've got our segment, so let's find the m_tracks
     int upper_lvl_el = 0;
     m_tc_scale         = TIMECODE_SCALE;
-    EbmlElement *l1  = m_es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true, 1);
+    EbmlElement *l1  = m_es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true, 1);
 
     while ((NULL != l1) && (0 >= upper_lvl_el)) {
       EbmlElement *l2;
@@ -1142,7 +1142,7 @@ kax_reader_c::read_headers() {
         cluster = static_cast<KaxCluster *>(l1);
 
       } else
-        l1->SkipData(*m_es, l1->Generic().Context);
+        l1->SkipData(*m_es, EBML_CONTEXT(l1));
 
       if (NULL != cluster)      // we've found the first cluster, so get out
         break;
@@ -1167,9 +1167,9 @@ kax_reader_c::read_headers() {
 
       }
 
-      l1->SkipData(*m_es, l1->Generic().Context);
+      l1->SkipData(*m_es, EBML_CONTEXT(l1));
       delete l1;
-      l1 = m_es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
+      l1 = m_es->FindNextElement(EBML_CONTEXT(l0), upper_lvl_el, 0xFFFFFFFFL, true);
 
     } // while (l1 != NULL)
 
