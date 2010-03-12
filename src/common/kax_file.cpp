@@ -133,8 +133,8 @@ kax_file_c::is_level1_element_id(vint_c id) const {
 
 bool
 kax_file_c::is_global_element_id(vint_c id) const {
-  return (EBML_ID(EbmlVoid).Value() == id.m_value)
-    ||   (EBML_ID(EbmlCrc32).Value() == id.m_value);
+  return (EBML_ID(EbmlVoid).Value  == id.m_value)
+    ||   (EBML_ID(EbmlCrc32).Value == id.m_value);
 }
 
 EbmlElement *
