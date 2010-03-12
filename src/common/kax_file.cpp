@@ -105,14 +105,14 @@ kax_file_c::read_next_level1_element_internal(uint32_t wanted_id) {
 EbmlElement *
 kax_file_c::read_one_element() {
   int upper_lvl_el = 0;
-  EbmlElement *l1  = m_es->FindNextElement(CLASS_INFO(KaxSegment).Context, upper_lvl_el, 0xFFFFFFFFL, true);
+  EbmlElement *l1  = m_es->FindNextElement(EBML_INFO(KaxSegment).Context, upper_lvl_el, 0xFFFFFFFFL, true);
 
   if (NULL == l1)
     return NULL;
 
-  const EbmlCallbacks *callbacks = find_ebml_callbacks(CLASS_INFO(KaxSegment), EbmlId(*l1));
+  const EbmlCallbacks *callbacks = find_ebml_callbacks(EBML_INFO(KaxSegment), EbmlId(*l1));
   if (NULL == callbacks)
-    callbacks = &CLASS_INFO(KaxSegment);
+    callbacks = &EBML_INFO(KaxSegment);
 
   EbmlElement *l2 = NULL;
   l1->Read(*m_es.get_object(), callbacks->Context, upper_lvl_el, l2, true);
@@ -123,7 +123,7 @@ kax_file_c::read_one_element() {
 
 bool
 kax_file_c::is_level1_element_id(vint_c id) const {
-  const EbmlSemanticContext &context = CLASS_INFO(KaxSegment).Context;
+  const EbmlSemanticContext &context = EBML_INFO(KaxSegment).Context;
   for (int segment_idx = 0; context.Size > segment_idx; ++segment_idx)
     if (context.MyTable[segment_idx].GetCallbacks.GlobalId.Value == id.m_value)
       return true;
@@ -133,8 +133,8 @@ kax_file_c::is_level1_element_id(vint_c id) const {
 
 bool
 kax_file_c::is_global_element_id(vint_c id) const {
-  return (CLASS_ID(EbmlVoid).Value() == id.m_value)
-    ||   (CLASS_ID(EbmlCrc32).Value() == id.m_value);
+  return (EBML_ID(EbmlVoid).Value() == id.m_value)
+    ||   (EBML_ID(EbmlCrc32).Value() == id.m_value);
 }
 
 EbmlElement *
@@ -210,12 +210,12 @@ kax_file_c::resync_to_level1_element_internal(uint32_t wanted_id) {
 
 KaxCluster *
 kax_file_c::resync_to_cluster() {
-  return static_cast<KaxCluster *>(resync_to_level1_element(CLASS_ID(KaxCluster).Value));
+  return static_cast<KaxCluster *>(resync_to_level1_element(EBML_ID(KaxCluster).Value));
 }
 
 KaxCluster *
 kax_file_c::read_next_cluster() {
-  return static_cast<KaxCluster *>(read_next_level1_element(CLASS_ID(KaxCluster).Value));
+  return static_cast<KaxCluster *>(read_next_level1_element(EBML_ID(KaxCluster).Value));
 }
 
 bool

@@ -585,12 +585,12 @@ remove_entries(int64_t min_tc,
     last_atom_at       = i;
     entries[i].is_atom = true;
 
-    KaxChapterTimeStart *cts = static_cast<KaxChapterTimeStart *>(atom->FindFirstElt(CLASS_INFO(KaxChapterTimeStart), false));
+    KaxChapterTimeStart *cts = static_cast<KaxChapterTimeStart *>(atom->FindFirstElt(EBML_INFO(KaxChapterTimeStart), false));
 
     if (NULL != cts)
       entries[i].start = uint64(*cts);
 
-    KaxChapterTimeEnd *cte = static_cast<KaxChapterTimeEnd *>(atom->FindFirstElt(CLASS_INFO(KaxChapterTimeEnd), false));
+    KaxChapterTimeEnd *cte = static_cast<KaxChapterTimeEnd *>(atom->FindFirstElt(EBML_INFO(KaxChapterTimeEnd), false));
 
     if (NULL != cte)
       entries[i].end = uint64(*cte);
@@ -638,8 +638,8 @@ remove_entries(int64_t min_tc,
     if (entries[i].remove && !entries[i].spans)
       continue;
 
-    KaxChapterTimeStart *cts = static_cast<KaxChapterTimeStart *>(atom->FindFirstElt(CLASS_INFO(KaxChapterTimeStart), false));
-    KaxChapterTimeEnd *cte   = static_cast<KaxChapterTimeEnd *>(atom->FindFirstElt(CLASS_INFO(KaxChapterTimeEnd), false));
+    KaxChapterTimeStart *cts = static_cast<KaxChapterTimeStart *>(atom->FindFirstElt(EBML_INFO(KaxChapterTimeStart), false));
+    KaxChapterTimeEnd *cte   = static_cast<KaxChapterTimeEnd *>(atom->FindFirstElt(EBML_INFO(KaxChapterTimeEnd), false));
 
     if (entries[i].spans)
       *static_cast<EbmlUInteger *>(cts) = min_tc;

@@ -40,10 +40,10 @@ end_segmentinfo_data(void *) {
   EbmlMaster *m;
 
   m = static_cast<EbmlMaster *>(xmlp_pelt);
-  if (m->FindFirstElt(CLASS_INFO(KaxChapterString), false) == NULL)
+  if (m->FindFirstElt(EBML_INFO(KaxChapterString), false) == NULL)
     xmlp_error(CPDATA, "<ChapterDisplay> is missing the <ChapterString> "
                "child.");
-  if (m->FindFirstElt(CLASS_INFO(KaxChapterLanguage), false) == NULL) {
+  if (m->FindFirstElt(EBML_INFO(KaxChapterLanguage), false) == NULL) {
     KaxChapterLanguage *cl;
 
     cl = new KaxChapterLanguage;

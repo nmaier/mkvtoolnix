@@ -57,16 +57,16 @@ handle_attachments(KaxAttachments *atts,
     for (k = 0; att->ListSize() > k; ++k) {
       EbmlElement *e = (*att)[k];
 
-      if (EbmlId(*e) == CLASS_ID(KaxFileName))
+      if (EbmlId(*e) == EBML_ID(KaxFileName))
         name = UTFstring_to_cstrutf8(UTFstring(*static_cast<KaxFileName *>(e)));
 
-      else if (EbmlId(*e) == CLASS_ID(KaxMimeType))
+      else if (EbmlId(*e) == EBML_ID(KaxMimeType))
         type = std::string(*static_cast<KaxMimeType *>(e));
 
-      else if (EbmlId(*e) == CLASS_ID(KaxFileUID))
+      else if (EbmlId(*e) == EBML_ID(KaxFileUID))
         id = uint32(*static_cast<KaxFileUID *>(e));
 
-      else if (EbmlId(*e) == CLASS_ID(KaxFileData)) {
+      else if (EbmlId(*e) == EBML_ID(KaxFileData)) {
         fdata = (KaxFileData *)e;
         size  = fdata->GetSize();
       }
@@ -120,7 +120,7 @@ extract_attachments(const std::string &file_name,
     return;
   }
 
-  KaxAttachments *attachments = dynamic_cast<KaxAttachments *>(analyzer->read_all(CLASS_INFO(KaxAttachments)));
+  KaxAttachments *attachments = dynamic_cast<KaxAttachments *>(analyzer->read_all(EBML_INFO(KaxAttachments)));
   if (NULL != attachments) {
     handle_attachments(attachments, tracks);
     delete attachments;

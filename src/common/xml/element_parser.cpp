@@ -270,7 +270,7 @@ add_new_element(parser_data_t *pdata,
     xmlp_error(pdata, boost::format(Y("<%1%> is not a valid child element of <%2%>.")) % name % pdata->mapping[parent_idx].name);
 
   if (0 < pdata->depth) {
-    const EbmlCallbacks *callbacks = find_ebml_callbacks(CLASS_INFO(KaxSegment), pdata->mapping[parent_idx].id);
+    const EbmlCallbacks *callbacks = find_ebml_callbacks(EBML_INFO(KaxSegment), pdata->mapping[parent_idx].id);
     bool found                     = false;
 
     if (NULL != callbacks) {
@@ -286,7 +286,7 @@ add_new_element(parser_data_t *pdata,
     if (!found)
       xmlp_error(pdata, boost::format(Y("<%1%> is not a valid child element of <%2%>.")) % name % pdata->mapping[parent_idx].name);
 
-    const EbmlSemantic *semantic = find_ebml_semantic(CLASS_INFO(KaxSegment), pdata->mapping[elt_idx].id);
+    const EbmlSemantic *semantic = find_ebml_semantic(EBML_INFO(KaxSegment), pdata->mapping[elt_idx].id);
     if ((NULL != semantic) && semantic->Unique) {
       EbmlMaster *m = dynamic_cast<EbmlMaster *>(xmlp_pelt);
       assert(NULL != m);
@@ -298,7 +298,7 @@ add_new_element(parser_data_t *pdata,
     }
   }
 
-  EbmlElement *e = create_ebml_element(CLASS_INFO(KaxSegment), pdata->mapping[elt_idx].id);
+  EbmlElement *e = create_ebml_element(EBML_INFO(KaxSegment), pdata->mapping[elt_idx].id);
   assert(NULL != e);
 
   if (0 == pdata->depth) {

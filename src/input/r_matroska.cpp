@@ -95,7 +95,7 @@ using namespace libmatroska;
 #define in_parent(p) \
   (!p->IsFiniteSize() || (m_in->getFilePointer() < (p->GetElementPosition() + p->HeadSize() + p->GetSize())))
 
-#define is_ebmlvoid(e) (EbmlId(*e) == CLASS_ID(EbmlVoid))
+#define is_ebmlvoid(e) (EbmlId(*e) == EBML_ID(EbmlVoid))
 
 #define MAGIC_MKV 0x1a45dfa3
 
@@ -489,18 +489,18 @@ kax_reader_c::handle_attachments(mm_io_c *io,
   int upper_lvl_el;
   EbmlElement *l1 = m_es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
 
-  if ((NULL != l1) && (EbmlId(*l1) == CLASS_ID(KaxAttachments))) {
+  if ((NULL != l1) && (EbmlId(*l1) == EBML_ID(KaxAttachments))) {
     KaxAttachments *atts = (KaxAttachments *)l1;
     EbmlElement *l2      = NULL;
     upper_lvl_el         = 0;
 
-    atts->Read(*m_es, CLASS_INFO(KaxAttachments).Context, upper_lvl_el, l2, true);
+    atts->Read(*m_es, EBML_INFO(KaxAttachments).Context, upper_lvl_el, l2, true);
 
     int i;
     for (i = 0; i < atts->ListSize(); i++) {
       KaxAttached *att = (KaxAttached *)(*atts)[i];
 
-      if (EbmlId(*att) == CLASS_ID(KaxAttached)) {
+      if (EbmlId(*att) == EBML_ID(KaxAttached)) {
         UTFstring name        = L"";
         UTFstring description = L"";
         std::string mime_type =  "";
@@ -512,23 +512,23 @@ kax_reader_c::handle_attachments(mm_io_c *io,
         for (k = 0; k < att->ListSize(); k++) {
           l2 = (*att)[k];
 
-          if (EbmlId(*l2) == CLASS_ID(KaxFileName)) {
+          if (EbmlId(*l2) == EBML_ID(KaxFileName)) {
             KaxFileName &fname = *static_cast<KaxFileName *>(l2);
             name               = UTFstring(fname);
 
-          } else if (EbmlId(*l2) == CLASS_ID(KaxFileDescription)) {
+          } else if (EbmlId(*l2) == EBML_ID(KaxFileDescription)) {
             KaxFileDescription &fdesc = *static_cast<KaxFileDescription *>(l2);
             description               = UTFstring(fdesc);
 
-          } else if (EbmlId(*l2) == CLASS_ID(KaxMimeType)) {
+          } else if (EbmlId(*l2) == EBML_ID(KaxMimeType)) {
             KaxMimeType &mtype = *static_cast<KaxMimeType *>(l2);
             mime_type          = std::string(mtype);
 
-          } else if (EbmlId(*l2) == CLASS_ID(KaxFileUID)) {
+          } else if (EbmlId(*l2) == EBML_ID(KaxFileUID)) {
             KaxFileUID &fuid = *static_cast<KaxFileUID *>(l2);
             id               = uint64(fuid);
 
-          } else if (EbmlId(*l2) == CLASS_ID(KaxFileData)) {
+          } else if (EbmlId(*l2) == EBML_ID(KaxFileData)) {
             KaxFileData &fdata = *static_cast<KaxFileData *>(l2);
             size               = fdata.GetSize();
             data               = (unsigned char *)fdata.GetBuffer();
@@ -575,7 +575,7 @@ kax_reader_c::handle_chapters(mm_io_c *io,
     EbmlElement *l2           = NULL;
     upper_lvl_el              = 0;
 
-    tmp_chapters->Read(*m_es, CLASS_INFO(KaxChapters).Context, upper_lvl_el, l2, true);
+    tmp_chapters->Read(*m_es, EBML_INFO(KaxChapters).Context, upper_lvl_el, l2, true);
 
     if (NULL == m_chapters)
       m_chapters = new KaxChapters;
@@ -603,15 +603,15 @@ kax_reader_c::handle_tags(mm_io_c *io,
   io->save_pos(pos);
   EbmlElement *l1 = m_es->FindNextElement(l0->Generic().Context, upper_lvl_el, 0xFFFFFFFFL, true);
 
-  if ((NULL != l1) && (EbmlId(*l1) == CLASS_ID(KaxTags))) {
+  if ((NULL != l1) && (EbmlId(*l1) == EBML_ID(KaxTags))) {
     KaxTags *tags   = (KaxTags *)l1;
     EbmlElement *l2 = NULL;
     upper_lvl_el    = 0;
 
-    tags->Read(*m_es, CLASS_INFO(KaxTags).Context, upper_lvl_el, l2, true);
+    tags->Read(*m_es, EBML_INFO(KaxTags).Context, upper_lvl_el, l2, true);
 
     while (tags->ListSize() > 0) {
-      if (!(EbmlId(*(*tags)[0]) == CLASS_ID(KaxTag))) {
+      if (!(EbmlId(*(*tags)[0]) == EBML_ID(KaxTag))) {
         delete (*tags)[0];
         tags->Remove(0);
         continue;
@@ -674,7 +674,7 @@ kax_reader_c::read_headers_info(EbmlElement *&l1,
   // General info about this Matroska file
   mxverb(2, "matroska_reader: |+ segment information...\n");
 
-  l1->Read(*m_es, CLASS_INFO(KaxInfo).Context, upper_lvl_el, l2, true);
+  l1->Read(*m_es, EBML_INFO(KaxInfo).Context, upper_lvl_el, l2, true);
 
   KaxTimecodeScale *ktc_scale = FINDFIRST(l1, KaxTimecodeScale);
   if (NULL != ktc_scale) {
@@ -906,7 +906,7 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
 
   EbmlElement *l2 = NULL;
   upper_lvl_el    = 0;
-  l1->Read(*m_es, CLASS_INFO(KaxTracks).Context, upper_lvl_el, l2, true);
+  l1->Read(*m_es, EBML_INFO(KaxTracks).Context, upper_lvl_el, l2, true);
 
   KaxTrackEntry *ktentry = FINDFIRST(l1, KaxTrackEntry);
   while (ktentry != NULL) {
@@ -1042,10 +1042,10 @@ kax_reader_c::read_headers_seek_head(EbmlElement *&l0,
   KaxSeekHead &seek_head = *static_cast<KaxSeekHead *>(l1);
 
   int i = 0;
-  seek_head.Read(*m_es, CLASS_INFO(KaxSeekHead).Context, i, el, true);
+  seek_head.Read(*m_es, EBML_INFO(KaxSeekHead).Context, i, el, true);
 
   for (i = 0; i < seek_head.ListSize(); i++) {
-    if (EbmlId(*seek_head[i]) != CLASS_ID(KaxSeek))
+    if (EbmlId(*seek_head[i]) != EBML_ID(KaxSeek))
       continue;
 
     KaxSeek &seek           = *static_cast<KaxSeek *>(seek_head[i]);
@@ -1054,17 +1054,17 @@ kax_reader_c::read_headers_seek_head(EbmlElement *&l0,
     int k;
 
     for (k = 0; k < seek.ListSize(); k++)
-      if (EbmlId(*seek[k]) == CLASS_ID(KaxSeekID)) {
+      if (EbmlId(*seek[k]) == EBML_ID(KaxSeekID)) {
         KaxSeekID &sid = *static_cast<KaxSeekID *>(seek[k]);
         EbmlId id(sid.GetBuffer(), sid.GetSize());
 
-        type = id == CLASS_ID(KaxAttachments) ? dl1t_attachments
-          :    id == CLASS_ID(KaxChapters)    ? dl1t_chapters
-          :    id == CLASS_ID(KaxTags)        ? dl1t_tags
-          :    id == CLASS_ID(KaxTracks)      ? dl1t_tracks
+        type = id == EBML_ID(KaxAttachments) ? dl1t_attachments
+          :    id == EBML_ID(KaxChapters)    ? dl1t_chapters
+          :    id == EBML_ID(KaxTags)        ? dl1t_tags
+          :    id == EBML_ID(KaxTracks)      ? dl1t_tracks
           :                                                dl1t_unknown;
 
-      } else if (EbmlId(*seek[k]) == CLASS_ID(KaxSeekPosition))
+      } else if (EbmlId(*seek[k]) == EBML_ID(KaxSeekPosition))
         pos = uint64(*static_cast<KaxSeekPosition *>(seek[k]));
 
     if ((-1 != pos) && (dl1t_unknown != type)) {
@@ -1086,7 +1086,7 @@ kax_reader_c::read_headers() {
     m_in_file   = kax_file_cptr(new kax_file_c(m_in));
 
     // Find the EbmlHead element. Must be the first one.
-    EbmlElement *l0 = m_es->FindNextID(CLASS_INFO(EbmlHead), 0xFFFFFFFFFFFFFFFFLL);
+    EbmlElement *l0 = m_es->FindNextID(EBML_INFO(EbmlHead), 0xFFFFFFFFFFFFFFFFLL);
     if (NULL == l0) {
       mxwarn(Y("matroska_reader: no EBML head found.\n"));
       return false;
@@ -1098,13 +1098,13 @@ kax_reader_c::read_headers() {
     mxverb(2, "matroska_reader: Found the head...\n");
 
     // Next element must be a segment
-    l0 = m_es->FindNextID(CLASS_INFO(KaxSegment), 0xFFFFFFFFFFFFFFFFLL);
+    l0 = m_es->FindNextID(EBML_INFO(KaxSegment), 0xFFFFFFFFFFFFFFFFLL);
     if (NULL == l0) {
       if (verbose)
         mxwarn(Y("matroska_reader: No segment found.\n"));
       return false;
     }
-    if (!(EbmlId(*l0) == CLASS_ID(KaxSegment))) {
+    if (!(EbmlId(*l0) == EBML_ID(KaxSegment))) {
       if (verbose)
         mxwarn(Y("matroska_reader: No segment found.\n"));
       return false;
@@ -1119,25 +1119,25 @@ kax_reader_c::read_headers() {
     while ((NULL != l1) && (0 >= upper_lvl_el)) {
       EbmlElement *l2;
 
-      if (EbmlId(*l1) == CLASS_ID(KaxInfo))
+      if (EbmlId(*l1) == EBML_ID(KaxInfo))
         read_headers_info(l1, l2, upper_lvl_el);
 
-      else if (EbmlId(*l1) == CLASS_ID(KaxTracks))
+      else if (EbmlId(*l1) == EBML_ID(KaxTracks))
         m_deferred_l1_positions[dl1t_tracks].push_back(l1->GetElementPosition());
 
-      else if (EbmlId(*l1) == CLASS_ID(KaxAttachments))
+      else if (EbmlId(*l1) == EBML_ID(KaxAttachments))
         m_deferred_l1_positions[dl1t_attachments].push_back(l1->GetElementPosition());
 
-      else if (EbmlId(*l1) == CLASS_ID(KaxChapters))
+      else if (EbmlId(*l1) == EBML_ID(KaxChapters))
         m_deferred_l1_positions[dl1t_chapters].push_back(l1->GetElementPosition());
 
-      else if (EbmlId(*l1) == CLASS_ID(KaxTags))
+      else if (EbmlId(*l1) == EBML_ID(KaxTags))
         m_deferred_l1_positions[dl1t_tags].push_back(l1->GetElementPosition());
 
-      else if (EbmlId(*l1) == CLASS_ID(KaxSeekHead))
+      else if (EbmlId(*l1) == EBML_ID(KaxSeekHead))
         read_headers_seek_head(l0, l1);
 
-      else if (EbmlId(*l1) == CLASS_ID(KaxCluster)) {
+      else if (EbmlId(*l1) == EBML_ID(KaxCluster)) {
         mxverb(2, "matroska_reader: |+ found cluster, headers are parsed completely\n");
         cluster = static_cast<KaxCluster *>(l1);
 
@@ -1655,13 +1655,13 @@ kax_reader_c::read_first_frames(kax_track_t *t,
       if (NULL == cluster)
         return;
 
-      KaxClusterTimecode *ctc = static_cast<KaxClusterTimecode *> (cluster->FindFirstElt(CLASS_INFO(KaxClusterTimecode), false));
+      KaxClusterTimecode *ctc = static_cast<KaxClusterTimecode *> (cluster->FindFirstElt(EBML_INFO(KaxClusterTimecode), false));
       if (NULL != ctc)
         cluster->InitTimecode(uint64(*ctc), m_tc_scale);
 
       int bgidx;
       for (bgidx = 0; bgidx < cluster->ListSize(); bgidx++) {
-        if ((EbmlId(*(*cluster)[bgidx]) == CLASS_ID(KaxSimpleBlock))) {
+        if ((EbmlId(*(*cluster)[bgidx]) == EBML_ID(KaxSimpleBlock))) {
           KaxSimpleBlock *block_simple = static_cast<KaxSimpleBlock *>((*cluster)[bgidx]);
 
           block_simple->SetParent(*cluster);
@@ -1682,9 +1682,9 @@ kax_reader_c::read_first_frames(kax_track_t *t,
             block_track->first_frames_data.back()->grab();
           }
 
-        } else if ((EbmlId(*(*cluster)[bgidx]) == CLASS_ID(KaxBlockGroup))) {
+        } else if ((EbmlId(*(*cluster)[bgidx]) == EBML_ID(KaxBlockGroup))) {
           KaxBlockGroup *block_group = static_cast<KaxBlockGroup *>((*cluster)[bgidx]);
-          KaxBlock *block            = static_cast<KaxBlock *>(block_group->FindFirstElt(CLASS_INFO(KaxBlock), false));
+          KaxBlock *block            = static_cast<KaxBlock *>(block_group->FindFirstElt(EBML_INFO(KaxBlock), false));
 
           if (NULL == block)
             continue;
@@ -1742,7 +1742,7 @@ kax_reader_c::read(generic_packetizer_c *requested_ptzr,
       return FILE_STATUS_DONE;
     }
 
-    KaxClusterTimecode *ctc = static_cast<KaxClusterTimecode *>(cluster->FindFirstElt(CLASS_INFO(KaxClusterTimecode), false));
+    KaxClusterTimecode *ctc = static_cast<KaxClusterTimecode *>(cluster->FindFirstElt(EBML_INFO(KaxClusterTimecode), false));
     if (NULL == ctc)
       mxerror(Y("r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"));
 
@@ -1761,10 +1761,10 @@ kax_reader_c::read(generic_packetizer_c *requested_ptzr,
     for (bgidx = 0; bgidx < cluster->ListSize(); bgidx++) {
       EbmlElement *element = (*cluster)[bgidx];
 
-      if (EbmlId(*element) == CLASS_ID(KaxSimpleBlock))
+      if (EbmlId(*element) == EBML_ID(KaxSimpleBlock))
         process_simple_block(cluster, static_cast<KaxSimpleBlock *>(element));
 
-      else if (EbmlId(*element) == CLASS_ID(KaxBlockGroup))
+      else if (EbmlId(*element) == EBML_ID(KaxBlockGroup))
         process_block_group(cluster, static_cast<KaxBlockGroup *>(element));
     }
 
@@ -1877,7 +1877,7 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
   int64_t block_fref           = VFT_NOBFRAME;
   bool bref_found              = false;
   bool fref_found              = false;
-  KaxReferenceBlock *ref_block = static_cast<KaxReferenceBlock *>(block_group->FindFirstElt(CLASS_INFO(KaxReferenceBlock), false));
+  KaxReferenceBlock *ref_block = static_cast<KaxReferenceBlock *>(block_group->FindFirstElt(EBML_INFO(KaxReferenceBlock), false));
 
   while (NULL != ref_block) {
     if (0 >= int64(*ref_block)) {
@@ -1891,7 +1891,7 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
     ref_block = static_cast<KaxReferenceBlock *>(block_group->FindNextElt(*ref_block, false));
   }
 
-  KaxBlock *block = static_cast<KaxBlock *>(block_group->FindFirstElt(CLASS_INFO(KaxBlock), false));
+  KaxBlock *block = static_cast<KaxBlock *>(block_group->FindFirstElt(EBML_INFO(KaxBlock), false));
   if (NULL == block) {
     mxwarn_fn(m_ti.m_fname,
               boost::format(Y("A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"))
@@ -1909,8 +1909,8 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
     return;
   }
 
-  KaxBlockAdditions *blockadd = static_cast<KaxBlockAdditions *>(block_group->FindFirstElt(CLASS_INFO(KaxBlockAdditions), false));
-  KaxBlockDuration *duration  = static_cast<KaxBlockDuration *>(block_group->FindFirstElt(CLASS_INFO(KaxBlockDuration), false));
+  KaxBlockAdditions *blockadd = static_cast<KaxBlockAdditions *>(block_group->FindFirstElt(EBML_INFO(KaxBlockAdditions), false));
+  KaxBlockDuration *duration  = static_cast<KaxBlockDuration *>(block_group->FindFirstElt(EBML_INFO(KaxBlockDuration), false));
 
   if (NULL != duration)
     block_duration = (int64_t)uint64(*duration) * m_tc_scale / block->NumberFrames();
@@ -1933,7 +1933,7 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
   if (m_appending)
     m_last_timecode -= m_first_timecode;
 
-  KaxCodecState *codec_state = static_cast<KaxCodecState *>(block_group->FindFirstElt(CLASS_INFO(KaxCodecState)));
+  KaxCodecState *codec_state = static_cast<KaxCodecState *>(block_group->FindFirstElt(EBML_INFO(KaxCodecState)));
   if ((NULL != codec_state) && !hack_engaged(ENGAGE_USE_CODEC_STATE))
     mxerror_tid(m_ti.m_fname, block_track->tnum,
                 Y("This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but "

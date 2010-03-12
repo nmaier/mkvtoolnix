@@ -1130,14 +1130,14 @@ def_handle(seek_head) {
           show_element(l3, 3,
                        boost::format(Y("Seek ID:%1% (%2%)"))
                        % to_hex(seek_id.GetBuffer(), seek_id.GetSize())
-                       % (  CLASS_ID(KaxInfo)        == id ? "KaxInfo"
-                          : CLASS_ID(KaxCluster)     == id ? "KaxCluster"
-                          : CLASS_ID(KaxTracks)      == id ? "KaxTracks"
-                          : CLASS_ID(KaxCues)        == id ? "KaxCues"
-                          : CLASS_ID(KaxAttachments) == id ? "KaxAttachments"
-                          : CLASS_ID(KaxChapters)    == id ? "KaxChapters"
-                          : CLASS_ID(KaxTags)        == id ? "KaxTags"
-                          : CLASS_ID(KaxSeekHead)    == id ? "KaxSeekHead"
+                       % (  EBML_ID(KaxInfo)        == id ? "KaxInfo"
+                          : EBML_ID(KaxCluster)     == id ? "KaxCluster"
+                          : EBML_ID(KaxTracks)      == id ? "KaxTracks"
+                          : EBML_ID(KaxCues)        == id ? "KaxCues"
+                          : EBML_ID(KaxAttachments) == id ? "KaxAttachments"
+                          : EBML_ID(KaxChapters)    == id ? "KaxChapters"
+                          : EBML_ID(KaxTags)        == id ? "KaxTags"
+                          : EBML_ID(KaxSeekHead)    == id ? "KaxSeekHead"
                           :                                             "unknown"));
 
         } else if (is_id(l3, KaxSeekPosition)) {
@@ -1822,7 +1822,7 @@ process_file(const std::string &file_name) {
     EbmlStream *es = new EbmlStream(*in);
 
     // Find the EbmlHead element. Must be the first one.
-    l0 = es->FindNextID(CLASS_INFO(EbmlHead), 0xFFFFFFFFL);
+    l0 = es->FindNextID(EBML_INFO(EbmlHead), 0xFFFFFFFFL);
     if (NULL == l0) {
       show_error(Y("No EBML head found."));
       delete es;
@@ -1836,7 +1836,7 @@ process_file(const std::string &file_name) {
 
     while (1) {
       // Next element must be a segment
-      l0 = es->FindNextID(CLASS_INFO(KaxSegment), 0xFFFFFFFFFFFFFFFFLL);
+      l0 = es->FindNextID(EBML_INFO(KaxSegment), 0xFFFFFFFFFFFFFFFFLL);
       if (NULL == l0) {
         show_error(Y("No segment/level 0 element found."));
         return false;
