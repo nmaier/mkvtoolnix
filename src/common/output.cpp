@@ -270,7 +270,7 @@ dump_ebml_elements(EbmlElement *element,
     value_str = " " + value_str;
   }
 
-  mxinfo(boost::format("%1%%2%%3%\n") % indent_str % element->Generic().DebugName % value_str);
+  mxinfo(boost::format("%1%%2%%3%\n") % indent_str % EBML_NAME(element) % value_str);
 
   EbmlMaster *master = dynamic_cast<EbmlMaster *>(element);
   if (NULL == master)

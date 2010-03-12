@@ -107,7 +107,7 @@ write_xml_element_rec(int level,
   out->puts(space(level * 2));
 
   if (!found) {
-    out->puts(boost::format(Y("<!-- Unknown element '%1%' -->\n")) % e->Generic().DebugName);
+    out->puts(boost::format(Y("<!-- Unknown element '%1%' -->\n")) % EBML_NAME(e));
     return;
   }
 

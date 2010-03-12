@@ -86,7 +86,7 @@ kax_file_c::read_next_level1_element_internal(uint32_t wanted_id) {
 
       if (m_debug_read_next)
         mxinfo(boost::format("kax_file::read_next_level1_element(): other level 1 element %1% new pos %2% fsize %3% epos %4% esize %5%\n")
-               % l1->Generic().DebugName  % (l1->GetElementPosition() + l1->ElementSize()) % m_file_size
+               % EBML_NAME(l1)  % (l1->GetElementPosition() + l1->ElementSize()) % m_file_size
                % l1->GetElementPosition() % l1->ElementSize());
 
       delete l1;

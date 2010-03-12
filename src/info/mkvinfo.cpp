@@ -234,7 +234,7 @@ _show_unknown_element(EbmlStream *es,
   for (i = EbmlId(*e).Length - 1; 0 <= i; --i)
     element_id += (s_bf_show_unknown_element % ((EbmlId(*e).Value >> (i * 8)) & 0xff)).str();
 
-  std::string s = (BF_SHOW_UNKNOWN_ELEMENT % e->Generic().DebugName % element_id % (e->GetSize() + e->HeadSize())).str();
+  std::string s = (BF_SHOW_UNKNOWN_ELEMENT % EBML_NAME(e) % element_id % (e->GetSize() + e->HeadSize())).str();
   _show_element(e, es, true, level, s);
 }
 
@@ -1683,7 +1683,7 @@ handle_elements_rec(EbmlStream *es,
     }
 
   if (!found) {
-    show_element(e, level, BF_HANDLE_ELEMENTS_REC_UNKNOWN % e->Generic().DebugName);
+    show_element(e, level, BF_HANDLE_ELEMENTS_REC_UNKNOWN % EBML_NAME(e));
     return;
   }
 
