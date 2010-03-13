@@ -21,7 +21,6 @@
 #include <algorithm>
 #include <deque>
 #include <list>
-#include <memory>
 
 #include "common/byte_buffer.h"
 #include "common/error.h"

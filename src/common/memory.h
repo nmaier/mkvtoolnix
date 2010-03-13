@@ -16,7 +16,6 @@
 
 #include <cassert>
 #include <deque>
-#include <memory>
 
 #include "common/common.h"
 
