@@ -13,10 +13,10 @@
    Vegard Pettersen <vegard_p@broadpark.no>
 */
 
+#include "common/common.h"
+
 #include <ctype.h>
 #include <stdarg.h>
-
-#include <string>
 
 #include <matroska/KaxChapters.h>
 #include <matroska/KaxTag.h>

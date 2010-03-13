@@ -11,11 +11,11 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "common/common.h"
+
 #include <expat.h>
 #include <ctype.h>
 #include <stdarg.h>
-
-#include <string>
 
 #include <matroska/KaxChapters.h>
 

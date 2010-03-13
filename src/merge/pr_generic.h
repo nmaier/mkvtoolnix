@@ -15,12 +15,10 @@
 #ifndef __PR_GENERIC_H
 #define __PR_GENERIC_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <boost/logic/tribool.hpp>
 #include <deque>
-#include <map>
-#include <vector>
 
 #include <matroska/KaxAttachments.h>
 #include <matroska/KaxBlock.h>
