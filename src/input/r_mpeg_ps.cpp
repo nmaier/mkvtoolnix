@@ -20,7 +20,6 @@
 #include "common/mp3.h"
 #include "common/mpeg1_2.h"
 #include "common/mpeg4_p2.h"
-#include "common/smart_pointers.h"
 #include "common/truehd.h"
 #include "input/r_mpeg_ps.h"
 #include "merge/output_control.h"

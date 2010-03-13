@@ -18,7 +18,6 @@
 
 #include "common/compression.h"
 #include "merge/pr_generic.h"
-#include "common/smart_pointers.h"
 
 class vobsub_packetizer_c: public generic_packetizer_c {
 private:

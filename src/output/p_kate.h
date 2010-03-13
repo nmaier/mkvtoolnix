@@ -18,7 +18,6 @@
 #include "common/common.h"
 
 #include "merge/pr_generic.h"
-#include "common/smart_pointers.h"
 #include "common/kate.h"
 
 class kate_packetizer_c: public generic_packetizer_c {

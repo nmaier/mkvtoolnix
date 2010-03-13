@@ -17,7 +17,6 @@
 #include "common/common.h"
 
 #include "merge/pr_generic.h"
-#include "common/smart_pointers.h"
 
 class ra_packetizer_c: public generic_packetizer_c {
 private:

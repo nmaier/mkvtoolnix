@@ -24,7 +24,6 @@
 #include "common/mm_io.h"
 #include "output/p_video.h"
 #include "input/qtmp4_atoms.h"
-#include "common/smart_pointers.h"
 
 struct qt_durmap_t {
   uint32_t number;
