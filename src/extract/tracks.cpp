@@ -13,7 +13,6 @@
 #include "common/common.h"
 
 #include <cassert>
-#include <string>
 #include <vector>
 
 #include <ebml/EbmlHead.h>

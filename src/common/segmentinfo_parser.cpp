@@ -17,8 +17,6 @@
 #include <expat.h>
 #include <ctype.h>
 
-#include <string>
-
 #include <matroska/KaxInfo.h>
 #include <matroska/KaxInfoData.h>
 #include <matroska/KaxSegment.h>

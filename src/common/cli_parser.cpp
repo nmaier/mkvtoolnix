@@ -12,7 +12,6 @@
 #include "common/common.h"
 
 #include <boost/bind.hpp>
-#include <string>
 
 #include "common/cli_parser.h"
 #include "common/command_line.h"

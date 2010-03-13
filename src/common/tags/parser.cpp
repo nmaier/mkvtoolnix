@@ -13,8 +13,6 @@
 
 #include "common/common.h"
 
-#include <string>
-
 #include "common/ebml.h"
 #include "common/error.h"
 #include "common/mm_io.h"

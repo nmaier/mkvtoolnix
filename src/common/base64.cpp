@@ -42,8 +42,6 @@
 
 #include <ctype.h>
 
-#include <string>
-
 #include "common/common.h"
 
 #include "common/base64.h"

@@ -16,7 +16,6 @@
 #include <algorithm>
 #include <boost/bind.hpp>
 #include <stdexcept>
-#include <string>
 #include <typeinfo>
 #include <vector>
 

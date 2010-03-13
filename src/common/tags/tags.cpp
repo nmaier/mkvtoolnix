@@ -17,11 +17,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <string>
 #include <vector>
 
-#include "common/chapters/chapters.h"
 #include "common/common.h"
+#include "common/chapters/chapters.h"
 #include "common/ebml.h"
 #include "common/matroska.h"
 #include "common/tags/tags.h"

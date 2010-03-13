@@ -14,7 +14,6 @@
 
 #include <cassert>
 #include <algorithm>
-#include <string>
 #include <vector>
 
 #include <ebml/EbmlHead.h>

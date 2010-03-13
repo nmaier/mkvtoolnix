@@ -15,8 +15,6 @@
 
 #include "common/common.h"
 
-#include <string>
-
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxTracks.h>
 

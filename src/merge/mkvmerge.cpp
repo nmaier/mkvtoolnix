@@ -34,7 +34,6 @@
 #include <algorithm>
 #include <iostream>
 #include <list>
-#include <string>
 #include <typeinfo>
 #include <vector>
 

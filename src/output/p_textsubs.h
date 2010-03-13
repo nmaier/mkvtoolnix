@@ -16,8 +16,6 @@
 
 #include "common/common.h"
 
-#include <string>
-
 #include "merge/pr_generic.h"
 #include "common/smart_pointers.h"
 

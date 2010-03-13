@@ -15,7 +15,6 @@
 #include <cassert>
 #include <iostream>
 #include <stdlib.h>
-#include <string>
 #include <vector>
 
 #include "common/chapters/chapters.h"

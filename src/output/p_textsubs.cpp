@@ -13,8 +13,6 @@
 
 #include "common/common.h"
 
-#include <string>
-
 #include "common/locale.h"
 #include "common/matroska.h"
 #include "merge/pr_generic.h"

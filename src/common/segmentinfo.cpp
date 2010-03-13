@@ -19,7 +19,6 @@
 #include <stdarg.h>
 
 #include <cassert>
-#include <string>
 
 #include <ebml/EbmlVersion.h>
 

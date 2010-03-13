@@ -14,7 +14,6 @@
 #include "common/common.h"
 
 #include <cstring>
-#include <string>
 #include <vector>
 #ifdef SYS_WINDOWS
 # include <windows.h>

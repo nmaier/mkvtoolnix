@@ -28,7 +28,6 @@
 # include <libcharset.h>
 #endif
 #include <locale.h>
-#include <string>
 #include <vector>
 #if defined(SYS_WINDOWS)
 # include <windows.h>

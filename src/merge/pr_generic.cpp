@@ -16,7 +16,6 @@
 
 #include <algorithm>
 #include <map>
-#include <string>
 #include <typeinfo>
 
 #include <matroska/KaxContentEncoding.h>
