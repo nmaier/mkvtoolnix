@@ -16,7 +16,6 @@
 
 #include "common/common.h"
 
-#include <boost/regex.hpp>
 #include <string>
 
 #include "merge/pr_generic.h"

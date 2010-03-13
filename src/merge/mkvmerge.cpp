@@ -15,7 +15,6 @@
 
 #include "common/common.h"
 
-#include <boost/regex.hpp>
 #include <errno.h>
 #include <ctype.h>
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)

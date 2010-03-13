@@ -13,7 +13,6 @@
 
 #include "common/common.h"
 
-#include <boost/regex.hpp>
 #include <string>
 
 #include "common/locale.h"

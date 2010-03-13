@@ -18,8 +18,6 @@
 #include <string>
 #include <vector>
 
-#include <boost/regex.hpp>
-
 #include "common/chapters/chapters.h"
 #include "common/command_line.h"
 #include "common/locale.h"

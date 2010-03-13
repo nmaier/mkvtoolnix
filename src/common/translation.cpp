@@ -14,7 +14,6 @@
 #include "common/common.h"
 
 #include <algorithm>
-#include <boost/regex.hpp>
 #if HAVE_NL_LANGINFO
 # include <langinfo.h>
 #elif HAVE_LOCALE_CHARSET

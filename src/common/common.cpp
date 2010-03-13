@@ -13,7 +13,6 @@
 
 #include "common/common.h"
 
-#include <boost/regex.hpp>
 #include <stdlib.h>
 #include <string>
 #ifdef SYS_WINDOWS

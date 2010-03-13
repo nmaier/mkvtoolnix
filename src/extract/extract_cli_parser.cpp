@@ -15,7 +15,6 @@
 
 #include <algorithm>
 #include <boost/bind.hpp>
-#include <boost/regex.hpp>
 #include <stdexcept>
 #include <string>
 #include <typeinfo>
