@@ -19,9 +19,6 @@
 #include "common/common.h"
 
 #include <errno.h>
-#if defined(HAVE_ICONV_H)
-# include <iconv.h>
-#endif
 #if HAVE_NL_LANGINFO
 # include <langinfo.h>
 #elif HAVE_LOCALE_CHARSET
