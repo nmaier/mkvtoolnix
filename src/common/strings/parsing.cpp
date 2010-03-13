@@ -17,7 +17,6 @@
 #include <locale.h>
 #include <stdarg.h>
 
-#include "common/output.h"
 #include "common/strings/formatting.h"
 #include "common/strings/parsing.h"
 
