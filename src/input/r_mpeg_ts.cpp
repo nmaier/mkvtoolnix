@@ -11,9 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
 #include "common/common.h"
+
 #include "input/r_mpeg_ts.h"
 
 #define TS_CONSECUTIVE_PACKETS 16

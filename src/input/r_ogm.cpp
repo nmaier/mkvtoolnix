@@ -11,8 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-#include "common/os.h"
+#include "common/common.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,7 +27,6 @@
 
 #include "common/aac.h"
 #include "common/chapters/chapters.h"
-#include "common/common.h"
 #include "common/ebml.h"
 #include "common/endian.h"
 #include "common/hacks.h"

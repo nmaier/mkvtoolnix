@@ -12,9 +12,8 @@
    Modified by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
 #include "common/common.h"
+
 #include "common/endian.h"
 #include "common/mm_io.h"
 #include "common/strings/formatting.h"

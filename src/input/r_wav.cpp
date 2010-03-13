@@ -13,7 +13,7 @@
      modified by Moritz Bunkus.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <algorithm>
 
@@ -27,7 +27,6 @@
 #endif
 
 #include "common/ac3.h"
-#include "common/common.h"
 #include "common/dts.h"
 #include "common/endian.h"
 #include "common/error.h"

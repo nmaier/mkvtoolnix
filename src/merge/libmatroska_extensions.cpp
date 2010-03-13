@@ -12,11 +12,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <cassert>
 
-#include "common/common.h"
 #include "merge/libmatroska_extensions.h"
 
 kax_reference_block_c::kax_reference_block_c():

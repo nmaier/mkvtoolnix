@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <string.h>
 
@@ -19,7 +19,6 @@
 #include <vector>
 
 #include "common/base64.h"
-#include "common/common.h"
 #include "common/hacks.h"
 #include "common/strings/editing.h"
 

@@ -10,7 +10,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <errno.h>
 #include <ctype.h>
@@ -70,7 +70,6 @@
 #include "common/chapters/chapters.h"
 #include "common/checksums.h"
 #include "common/command_line.h"
-#include "common/common.h"
 #include "common/ebml.h"
 #include "common/endian.h"
 #include "common/locale.h"

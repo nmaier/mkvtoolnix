@@ -10,12 +10,11 @@
    Written by Moritz Bunkus and Mike Chen.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <algorithm>
 #include <matroska/KaxBlock.h>
 
-#include "common/common.h"
 #include "common/ebml.h"
 #include "common/endian.h"
 #include "extract/xtr_pgs.h"

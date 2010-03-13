@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <algorithm>
 
@@ -22,7 +22,6 @@
 #include <matroska/KaxSeekHead.h>
 #include <matroska/KaxSegment.h>
 
-#include "common/common.h"
 #include "common/ebml.h"
 #include "common/error.h"
 #include "common/kax_analyzer.h"

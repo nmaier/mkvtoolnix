@@ -14,9 +14,8 @@
 #ifndef __P_VOBSUB_H
 #define __P_VOBSUB_H
 
-#include "common/os.h"
-
 #include "common/common.h"
+
 #include "common/compression.h"
 #include "merge/pr_generic.h"
 #include "common/smart_pointers.h"

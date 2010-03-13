@@ -14,13 +14,12 @@
 #ifndef __MTX_COMMON_XML_ELEMENT_PARSER_H
 #define __MTX_COMMON_XML_ELEMENT_PARSER_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <expat.h>
 #include <string>
 #include <vector>
 
-#include "common/common.h"
 #include "common/xml/element_mapping.h"
 
 namespace libebml {

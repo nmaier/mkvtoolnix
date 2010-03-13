@@ -14,11 +14,10 @@
 #ifndef __P_TRUEHD_H
 #define __P_TRUEHD_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <vector>
 
-#include "common/common.h"
 #include "merge/pr_generic.h"
 #include "common/samples_timecode_conv.h"
 #include "common/truehd.h"

@@ -14,12 +14,11 @@
 #ifndef __P_TEXTSUBS_H
 #define __P_TEXTSUBS_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <boost/regex.hpp>
 #include <string>
 
-#include "common/common.h"
 #include "merge/pr_generic.h"
 #include "common/smart_pointers.h"
 

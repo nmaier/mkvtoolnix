@@ -11,11 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <cstring>
 
-#include "common/common.h"
 #include "common/math.h"
 #include "common/matroska.h"
 #include "merge/output_control.h"

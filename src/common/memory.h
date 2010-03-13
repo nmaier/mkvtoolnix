@@ -14,8 +14,6 @@
 #ifndef __MTX_COMMON_MEMORY_H
 #define __MTX_COMMON_MEMORY_H
 
-#include "common/os.h"
-
 #include <cassert>
 #include <deque>
 #include <memory>

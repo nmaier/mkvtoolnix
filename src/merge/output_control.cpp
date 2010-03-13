@@ -13,7 +13,7 @@
    \author Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <errno.h>
 #include <ctype.h>
@@ -63,7 +63,6 @@
 #include <matroska/KaxVersion.h>
 
 #include "common/chapters/chapters.h"
-#include "common/common.h"
 #include "common/ebml.h"
 #include "common/fs_sys_helpers.h"
 #include "common/hacks.h"

@@ -13,7 +13,7 @@
    \author Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <ctype.h>
 #include <stdarg.h>
@@ -27,7 +27,6 @@
 #include <matroska/KaxInfoData.h>
 #include <matroska/KaxVersion.h>
 
-#include "common/common.h"
 #include "common/ebml.h"
 #include "common/error.h"
 #include "common/hacks.h"

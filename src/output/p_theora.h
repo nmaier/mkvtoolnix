@@ -14,9 +14,8 @@
 #ifndef __P_THEORA_H
 #define __P_THEORA_H
 
-#include "common/os.h"
-
 #include "common/common.h"
+
 #include "output/p_video.h"
 
 class theora_video_packetizer_c: public video_packetizer_c {

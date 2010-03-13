@@ -12,7 +12,7 @@
    Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <avilib.h>   // for BITMAPINFOHEADER
 
@@ -41,7 +41,6 @@
 #include <matroska/KaxTrackVideo.h>
 
 #include "common/chapters/chapters.h"
-#include "common/common.h"
 #include "common/ebml.h"
 #include "common/endian.h"
 #include "common/hacks.h"

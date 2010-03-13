@@ -14,9 +14,8 @@
 #ifndef __P_VIDEO_H
 #define __P_VIDEO_H
 
-#include "common/os.h"
-
 #include "common/common.h"
+
 #include "merge/pr_generic.h"
 
 #define VFT_IFRAME          -1

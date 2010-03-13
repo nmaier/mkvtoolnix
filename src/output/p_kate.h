@@ -15,9 +15,8 @@
 #ifndef __P_KATE_H
 #define __P_KATE_H
 
-#include "common/os.h"
-
 #include "common/common.h"
+
 #include "merge/pr_generic.h"
 #include "common/smart_pointers.h"
 #include "common/kate.h"

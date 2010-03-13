@@ -11,17 +11,14 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
 #ifndef __P_VORBIS_H
 #define __P_VORBIS_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <ogg/ogg.h>
 #include <vorbis/codec.h>
 
-#include "common/common.h"
 #include "merge/pr_generic.h"
 #include "merge/pr_generic.h"
 

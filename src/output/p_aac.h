@@ -14,11 +14,10 @@
 #ifndef __P_AAC_H
 #define __P_AAC_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include "common/aac.h"
 #include "common/byte_buffer.h"
-#include "common/common.h"
 #include "common/samples_timecode_conv.h"
 #include "merge/pr_generic.h"
 

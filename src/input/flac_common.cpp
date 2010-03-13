@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #if defined(HAVE_FLAC_FORMAT_H)
 
@@ -25,7 +25,6 @@
 #endif
 
 #include "common/bit_cursor.h"
-#include "common/common.h"
 #include "input/flac_common.h"
 
 static bool

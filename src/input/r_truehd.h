@@ -14,11 +14,10 @@
 #ifndef __R_TRUEHD_H
 #define __R_TRUEHD_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <stdio.h>
 
-#include "common/common.h"
 #include "common/error.h"
 #include "common/mm_io.h"
 #include "merge/pr_generic.h"

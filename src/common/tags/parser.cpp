@@ -11,11 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <string>
 
-#include "common/common.h"
 #include "common/ebml.h"
 #include "common/error.h"
 #include "common/mm_io.h"

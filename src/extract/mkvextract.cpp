@@ -10,7 +10,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <cassert>
 #include <iostream>
@@ -22,7 +22,6 @@
 
 #include "common/chapters/chapters.h"
 #include "common/command_line.h"
-#include "common/common.h"
 #include "common/locale.h"
 #include "common/matroska.h"
 #include "common/mm_io.h"

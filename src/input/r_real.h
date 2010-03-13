@@ -14,13 +14,12 @@
 #ifndef __R_REAL_H
 #define __R_REAL_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <stdio.h>
 
 #include <vector>
 
-#include "common/common.h"
 #include "common/error.h"
 #include "librmff/librmff.h"
 #include "output/p_video.h"

@@ -11,13 +11,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <cstring>
 
 #include <avilib.h>
 
-#include "common/common.h"
 #include "common/endian.h"
 #include "common/hacks.h"
 #include "common/matroska.h"

@@ -11,11 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/common.h"
 
 #include <boost/format.hpp>
 
-#include "common/common.h"
 #include "common/version.h"
 
 #define VERSIONNAME "Beginnings"

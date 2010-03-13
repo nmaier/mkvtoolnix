@@ -14,8 +14,6 @@
 #ifndef __MTX_MERGE_DEBUGGING_H
 #define __MTX_MERGE_DEBUGGING_H
 
-#include "common/os.h"
-
 void debug_run_main_loop_hooks();
 
 #endif // __MTX_MERGE_DEBUGGING_H

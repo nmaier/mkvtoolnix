@@ -11,12 +11,11 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <cassert>
 #include <vector>
 
-#include "common/common.h"
 #include "common/hacks.h"
 #include "common/random.h"
 #include "common/unique_numbers.h"

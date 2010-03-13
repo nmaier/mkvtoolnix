@@ -10,7 +10,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <cassert>
 #include <string>
@@ -34,7 +34,6 @@
 #include <matroska/KaxTrackAudio.h>
 #include <matroska/KaxTrackVideo.h>
 
-#include "common/common.h"
 #include "common/ebml.h"
 #include "common/kax_file.h"
 #include "common/matroska.h"

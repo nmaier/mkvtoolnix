@@ -14,11 +14,10 @@
      project, files "libavutil/crc.h" and "libavutil/crc.c".
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include "common/bswap.h"
 #include "common/checksums.h"
-#include "common/common.h"
 #include "common/endian.h"
 
 #define BASE 65521

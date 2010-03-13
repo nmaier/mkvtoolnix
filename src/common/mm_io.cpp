@@ -12,7 +12,7 @@
    Modifications by Peter Niemayer <niemayer@isg.de>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <errno.h>
 #if HAVE_POSIX_FADVISE
@@ -33,7 +33,6 @@
 # include <sys/types.h>
 #endif // SYS_WINDOWS
 
-#include "common/common.h"
 #include "common/endian.h"
 #include "common/error.h"
 #include "common/fs_sys_helpers.h"

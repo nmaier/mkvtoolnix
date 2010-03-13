@@ -11,9 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>
 */
 
-#include "common/os.h"
-
 #include "common/common.h"
+
 #include "common/error.h"
 #include "common/fs_sys_helpers.h"
 #include "common/strings/editing.h"

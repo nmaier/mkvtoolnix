@@ -14,8 +14,6 @@
 #ifndef __MTX_COMMON_ERROR_H
 #define __MTX_COMMON_ERROR_H
 
-#include "os.h"
-
 #include "common/common.h"
 
 

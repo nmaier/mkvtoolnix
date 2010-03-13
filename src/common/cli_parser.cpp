@@ -9,14 +9,13 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <boost/bind.hpp>
 #include <string>
 
 #include "common/cli_parser.h"
 #include "common/command_line.h"
-#include "common/common.h"
 #include "common/strings/editing.h"
 #include "common/strings/formatting.h"
 #include "common/translation.h"

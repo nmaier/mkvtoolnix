@@ -14,10 +14,9 @@
 #ifndef __P_MP3_H
 #define __P_MP3_H
 
-#include "common/os.h"
-#include "common/byte_buffer.h"
-
 #include "common/common.h"
+
+#include "common/byte_buffer.h"
 #include "common/mp3.h"
 #include "common/samples_timecode_conv.h"
 #include "merge/pr_generic.h"

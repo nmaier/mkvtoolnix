@@ -15,9 +15,8 @@
 #ifndef __P_VOBBTN_H
 #define __P_VOBBTN_H
 
-#include "common/os.h"
-
 #include "common/common.h"
+
 #include "common/compression.h"
 #include "merge/pr_generic.h"
 

@@ -14,14 +14,13 @@
 #ifndef __R_QTMP4_H
 #define __R_QTMP4_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <stdio.h>
 
 #include <vector>
 
 #include "common/ac3.h"
-#include "common/common.h"
 #include "common/mm_io.h"
 #include "output/p_video.h"
 #include "input/qtmp4_atoms.h"

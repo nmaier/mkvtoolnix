@@ -11,9 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
 #include "common/common.h"
+
 #include "common/error.h"
 #include "common/hacks.h"
 #include "input/r_mp3.h"

@@ -11,12 +11,11 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <map>
 #include <string>
 
-#include "common/common.h"
 #include "common/strings/editing.h"
 
 static std::string s_debug_options;

@@ -15,11 +15,10 @@
 #ifndef __R_WAV_H
 #define __R_WAV_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <stdio.h>
 
-#include "common/common.h"
 #include "common/dts.h"
 #include "common/error.h"
 #include "common/mm_io.h"

@@ -10,7 +10,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <cassert>
 #include <iostream>
@@ -29,7 +29,6 @@
 #include <matroska/KaxAttachments.h>
 #include <matroska/KaxSegment.h>
 
-#include "common/common.h"
 #include "common/ebml.h"
 #include "common/kax_analyzer.h"
 #include "extract/mkvextract.h"

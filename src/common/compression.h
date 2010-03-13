@@ -14,12 +14,11 @@
 #ifndef __MTX_COMMON_COMPRESSION_H
 #define __MTX_COMMON_COMPRESSION_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <matroska/KaxContentEncoding.h>
 #include <matroska/KaxTracks.h>
 
-#include "common/common.h"
 #include "common/memory.h"
 #include "common/error.h"
 

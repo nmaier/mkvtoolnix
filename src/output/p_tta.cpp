@@ -11,9 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
 #include "common/common.h"
+
 #include "common/math.h"
 #include "common/matroska.h"
 #include "common/tta.h"

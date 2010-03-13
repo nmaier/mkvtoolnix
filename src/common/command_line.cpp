@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <cstring>
 #include <string>
@@ -21,7 +21,6 @@
 #endif
 
 #include "common/command_line.h"
-#include "common/common.h"
 #include "common/locale.h"
 #include "common/mm_io.h"
 #include "common/strings/editing.h"

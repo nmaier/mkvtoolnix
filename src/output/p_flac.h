@@ -14,13 +14,12 @@
 #ifndef __P_FLAC_H
 #define __P_FLAC_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #if defined(HAVE_FLAC_FORMAT_H)
 
 #include <FLAC/format.h>
 
-#include "common/common.h"
 #include "merge/pr_generic.h"
 
 class flac_packetizer_c: public generic_packetizer_c {

@@ -11,12 +11,11 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <string>
 #include <vector>
 
-#include "common/common.h"
 #include "common/memory.h"
 #include "common/strings/editing.h"
 

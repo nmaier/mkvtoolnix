@@ -11,9 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
 #include "common/common.h"
+
 #include "common/matroska.h"
 #include "merge/pr_generic.h"
 #include "output/p_passthrough.h"

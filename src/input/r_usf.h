@@ -14,14 +14,13 @@
 #ifndef __R_USF_H
 #define __R_USF_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <expat.h>
 
 #include <vector>
 
 #include "common/mm_io.h"
-#include "common/common.h"
 #include "merge/pr_generic.h"
 #include "common/xml/element_parser.h"
 

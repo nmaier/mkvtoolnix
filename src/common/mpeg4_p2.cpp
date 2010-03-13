@@ -17,10 +17,9 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include "common/bit_cursor.h"
-#include "common/common.h"
 #include "common/endian.h"
 #include "common/math.h"
 #include "common/mm_io.h"

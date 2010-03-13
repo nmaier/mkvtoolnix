@@ -44,9 +44,9 @@
 
 #include <string>
 
-#include "common/os.h"
-#include "common/base64.h"
 #include "common/common.h"
+
+#include "common/base64.h"
 #include "common/error.h"
 
 static const char base64_encoding[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";

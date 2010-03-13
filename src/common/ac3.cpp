@@ -11,14 +11,13 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <cstring>
 
 #include "common/ac3.h"
 #include "common/bswap.h"
 #include "common/checksums.h"
-#include "common/common.h"
 #include "common/endian.h"
 
 ac3_header_t::ac3_header_t() {

@@ -11,7 +11,7 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <algorithm>
 #include <boost/bind.hpp>
@@ -21,7 +21,6 @@
 #include <typeinfo>
 #include <vector>
 
-#include "common/common.h"
 #include "common/ebml.h"
 #include "common/strings/formatting.h"
 #include "common/strings/parsing.h"

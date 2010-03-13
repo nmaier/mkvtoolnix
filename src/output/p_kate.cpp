@@ -12,11 +12,10 @@
    Adapted from code by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <ogg/ogg.h>
 
-#include "common/common.h"
 #include "common/endian.h"
 #include "common/kate.h"
 #include "common/matroska.h"

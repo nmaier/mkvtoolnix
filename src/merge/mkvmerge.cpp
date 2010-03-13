@@ -13,7 +13,7 @@
    \author Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <boost/regex.hpp>
 #include <errno.h>
@@ -47,7 +47,6 @@
 
 #include "common/chapters/chapters.h"
 #include "common/command_line.h"
-#include "common/common.h"
 #include "common/ebml.h"
 #include "common/extern_data.h"
 #include "common/fs_sys_helpers.h"

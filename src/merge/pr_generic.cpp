@@ -12,7 +12,7 @@
    Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <algorithm>
 #include <map>
@@ -27,7 +27,6 @@
 #include <matroska/KaxTrackVideo.h>
 
 #include "common/base64.h"
-#include "common/common.h"
 #include "common/compression.h"
 #include "common/ebml.h"
 #include "common/hacks.h"

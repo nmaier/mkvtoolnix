@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -24,7 +24,6 @@
 #include <memory>
 
 #include "common/byte_buffer.h"
-#include "common/common.h"
 #include "common/error.h"
 #include "common/memory.h"
 #include "input/r_avc.h"

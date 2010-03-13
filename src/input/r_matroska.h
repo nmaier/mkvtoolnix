@@ -15,13 +15,12 @@
 #ifndef __R_MATROSKA_H
 #define __R_MATROSKA_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <boost/logic/tribool.hpp>
 #include <map>
 #include <vector>
 
-#include "common/common.h"
 #include "common/compression.h"
 #include "common/error.h"
 #include "common/kax_file.h"

@@ -17,12 +17,11 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include "common/bit_cursor.h"
 #include "common/byte_buffer.h"
 #include "common/checksums.h"
-#include "common/common.h"
 #include "common/endian.h"
 #include "common/hacks.h"
 #include "common/math.h"

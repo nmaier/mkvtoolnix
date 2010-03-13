@@ -10,9 +10,8 @@
    Written by Matt Rice <topquark@sluggy.net>.
 */
 
-#include "common/os.h"
-
 #include "common/common.h"
+
 #include "common/ebml.h"
 #include "common/endian.h"
 #include "common/mpeg1_2.h"

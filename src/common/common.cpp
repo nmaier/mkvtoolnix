@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <boost/regex.hpp>
 #include <stdlib.h>
@@ -20,7 +20,6 @@
 # include <windows.h>
 #endif
 
-#include "common/common.h"
 #include "common/mm_io.h"
 #include "common/random.h"
 #include "common/strings/editing.h"

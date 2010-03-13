@@ -14,11 +14,10 @@
 #ifndef __P_MPEG4_P2_H
 #define __P_MPEG4_P2_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <deque>
 
-#include "common/common.h"
 #include "common/mpeg4_p2.h"
 #include "output/p_video.h"
 

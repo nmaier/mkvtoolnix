@@ -10,11 +10,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <algorithm>
 
-#include "common/common.h"
 #include "common/ebml.h"
 #include "common/locale.h"
 #include "common/matroska.h"

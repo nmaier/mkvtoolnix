@@ -11,11 +11,10 @@
    and Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <matroska/KaxBlock.h>
 
-#include "common/common.h"
 #include "common/ebml.h"
 #include "common/endian.h"
 #include "extract/xtr_wav.h"

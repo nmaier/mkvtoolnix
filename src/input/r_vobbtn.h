@@ -15,11 +15,10 @@
 #ifndef __R_VOBBTN_H
 #define __R_VOBBTN_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <stdio.h>
 
-#include "common/common.h"
 #include "common/mm_io.h"
 #include "merge/pr_generic.h"
 #include "output/p_vobbtn.h"

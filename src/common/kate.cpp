@@ -12,10 +12,9 @@
    Adapted from code by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include "common/bit_cursor.h"
-#include "common/common.h"
 #include "common/kate.h"
 
 kate_identification_header_t::kate_identification_header_t() {

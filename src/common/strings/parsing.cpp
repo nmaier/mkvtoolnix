@@ -11,14 +11,13 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <errno.h>
 #include <locale.h>
 #include <stdarg.h>
 #include <string>
 
-#include "common/common.h"
 #include "common/output.h"
 #include "common/strings/formatting.h"
 #include "common/strings/parsing.h"

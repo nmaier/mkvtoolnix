@@ -14,9 +14,8 @@
 #ifndef __P_TTA_H
 #define __P_TTA_H
 
-#include "common/os.h"
-
 #include "common/common.h"
+
 #include "merge/pr_generic.h"
 
 class tta_packetizer_c: public generic_packetizer_c {

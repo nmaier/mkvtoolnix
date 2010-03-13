@@ -14,9 +14,8 @@
 #ifndef __MTX_COMMON_MTX_BITVALUE_H
 #define __MTX_COMMON_MTX_BITVALUE_H
 
-#include "common/os.h"
-
 #include "common/common.h"
+
 #include "common/memory.h"
 
 #include <ebml/EbmlBinary.h>

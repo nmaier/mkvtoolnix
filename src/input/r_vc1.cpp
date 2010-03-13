@@ -11,10 +11,9 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include "common/byte_buffer.h"
-#include "common/common.h"
 #include "common/endian.h"
 #include "common/error.h"
 #include "input/r_vc1.h"

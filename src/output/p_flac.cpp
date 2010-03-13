@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #if defined(HAVE_FLAC_FORMAT_H)
 
@@ -19,7 +19,6 @@
 #include <vorbis/codec.h>
 
 #include "common/checksums.h"
-#include "common/common.h"
 #include "common/matroska.h"
 #include "input/flac_common.h"
 #include "merge/pr_generic.h"

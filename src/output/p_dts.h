@@ -15,9 +15,8 @@
 #ifndef __P_DTS_H
 #define __P_DTS_H
 
-#include "common/os.h"
-
 #include "common/common.h"
+
 #include "merge/pr_generic.h"
 #include "common/dts.h"
 

@@ -15,11 +15,10 @@
 #ifndef __MTX_COMMON_SEGMENTINFO_H
 #define __MTX_COMMON_SEGMENTINFO_H
 
-#include "os.h"
+#include "common/common.h"
 
 #include <matroska/KaxInfo.h>
 
-#include "common/common.h"
 #include "common/mm_io.h"
 
 using namespace libebml;

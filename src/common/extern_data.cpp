@@ -12,7 +12,7 @@
    Changes by Robert Millan <rmh@aybabtu.com>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <algorithm>
 #if HAVE_MAGIC_H
@@ -21,7 +21,6 @@ extern "C" {
 };
 #endif
 
-#include "common/common.h"
 #include "common/extern_data.h"
 #include "common/fs_sys_helpers.h"
 #include "common/mm_io.h"

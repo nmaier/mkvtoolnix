@@ -16,7 +16,7 @@
      Additional code by Alexander Noé <alexander.noe@s2001.tu-chemnitz.de>
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <errno.h>
 #if defined(HAVE_ICONV_H)
@@ -34,7 +34,6 @@
 # include <windows.h>
 #endif
 
-#include "common/common.h"
 #include "common/locale.h"
 #include "common/memory.h"
 #include "common/mm_io.h"

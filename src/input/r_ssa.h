@@ -14,10 +14,9 @@
 #ifndef __R_SSA_H
 #define __R_SSA_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include "common/mm_io.h"
-#include "common/common.h"
 #include "merge/pr_generic.h"
 #include "input/subtitles.h"
 

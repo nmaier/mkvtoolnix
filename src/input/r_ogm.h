@@ -14,7 +14,7 @@
 #ifndef __R_OGM_H
 #define __R_OGM_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <stdio.h>
 
@@ -23,7 +23,6 @@
 #include <vector>
 
 #include "common/mm_io.h"
-#include "common/common.h"
 #include "merge/pr_generic.h"
 #include "common/theora.h"
 #include "common/kate.h"

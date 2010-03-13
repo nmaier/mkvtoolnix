@@ -11,11 +11,10 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <matroska/KaxContentEncoding.h>
 
-#include "common/common.h"
 #include "common/compression.h"
 #include "common/matroska.h"
 #include "common/mm_io.h"

@@ -14,7 +14,7 @@
 #ifndef __R_AVI_H
 #define __R_AVI_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <stdio.h>
 
@@ -24,7 +24,6 @@
 
 #include "common/mm_io.h"
 #include "merge/pr_generic.h"
-#include "common/common.h"
 #include "common/error.h"
 #include "input/subtitles.h"
 

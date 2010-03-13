@@ -11,9 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
 #include "common/common.h"
+
 #include "common/strings/formatting.h"
 #include "common/strings/utf8.h"
 #include "common/terminal.h"

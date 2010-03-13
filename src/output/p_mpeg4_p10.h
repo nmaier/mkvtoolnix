@@ -14,9 +14,8 @@
 #ifndef __P_MPEG4_P10_H
 #define __P_MPEG4_P10_H
 
-#include "common/os.h"
-
 #include "common/common.h"
+
 #include "output/p_video.h"
 
 class mpeg4_p10_video_packetizer_c: public video_packetizer_c {

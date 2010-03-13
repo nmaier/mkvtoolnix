@@ -12,7 +12,7 @@
    Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <expat.h>
 #include <ctype.h>
@@ -23,7 +23,6 @@
 #include <matroska/KaxInfoData.h>
 #include <matroska/KaxSegment.h>
 
-#include "common/common.h"
 #include "common/ebml.h"
 #include "common/error.h"
 #include "common/iso639.h"
