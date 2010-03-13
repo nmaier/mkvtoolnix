@@ -12,8 +12,6 @@ CON mkvmerge
   USE mpegparser
   OPTIMIZE_GLOBALLY .
   
-  DEFINE(COREMAKE_STATIC) FLAC__NO_DLL
-
   PRECOMPILED_HEADER(CONFIG_PRECOMPILED) common/common.h
   PRECOMPILED_HEADER_FORCED no
 
@@ -219,15 +217,36 @@ CON mkvextract
   HEADER extract/xtr_vobsub.h
 }
 
+LIB mktcommon_strings
+{
+  USE matroska
+  USE utf8-cpp
+  OPTIMIZE_GLOBALLY .
+  INCLUDE .
+  INCLUDE .. // for config.h
+
+  PRECOMPILED_HEADER(CONFIG_PRECOMPILED) common/os.h
+  PRECOMPILED_HEADER_FORCED no
+  
+  SOURCE common/strings/editing.cpp
+  SOURCE common/strings/formatting.cpp
+  SOURCE common/strings/parsing.cpp
+  SOURCE common/strings/utf8.cpp
+
+  HEADER common/strings/editing.h
+  HEADER common/strings/formatting.h
+  HEADER common/strings/parsing.h
+  HEADER common/strings/utf8.h
+}
+
 LIB mktcommon_chapters
 {
   USE matroska
   USE expat
   USE libiconv
-  DEFINE XML_STATIC
   OPTIMIZE_GLOBALLY .
   INCLUDE .
-  INCLUDE ..
+  INCLUDE .. // for config.h
 
   PRECOMPILED_HEADER(CONFIG_PRECOMPILED) common/common.h
   PRECOMPILED_HEADER_FORCED no
@@ -244,13 +263,12 @@ LIB mktcommon
   USE libiconv
   USE expat
   USE zlib1
-  USE utf8-cpp
   USE mktcommon_chapters
+  USE mktcommon_strings
 
   OPTIMIZE_GLOBALLY .
-  DEFINE XML_STATIC
   INCLUDE .
-  INCLUDE ..
+  INCLUDE .. // for config.h
   EXPINCLUDE .
   EXPINCLUDE ..
   
@@ -296,10 +314,6 @@ LIB mktcommon
   SOURCE common/segment_tracks.cpp
   SOURCE common/segmentinfo.cpp
   SOURCE common/segmentinfo_parser.cpp
-  SOURCE common/strings/editing.cpp
-  SOURCE common/strings/formatting.cpp
-  SOURCE common/strings/parsing.cpp
-  SOURCE common/strings/utf8.cpp
   SOURCE common/tags/tags.cpp
   SOURCE common/tags/parser.cpp
   SOURCE common/tags/writer.cpp
@@ -359,10 +373,6 @@ LIB mktcommon
   HEADER common/segment_tracks.h
   HEADER common/segmentinfo.h
   HEADER common/smart_pointers.h
-  HEADER common/strings/editing.h
-  HEADER common/strings/formatting.h
-  HEADER common/strings/parsing.h
-  HEADER common/strings/utf8.h
   HEADER common/terminal.h
   HEADER common/tags/tags.h
   HEADER common/tags/parser.h
