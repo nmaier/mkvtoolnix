@@ -11,8 +11,9 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "common/common.h"
+
 #include <ebml/EbmlBinary.h>
-#include <ebml/EbmlMaster.h>
 #include <ebml/EbmlSInteger.h>
 #include <ebml/EbmlString.h>
 #include <ebml/EbmlUInteger.h>
@@ -20,7 +21,6 @@
 #include <ebml/EbmlDate.h>
 
 #include "common/base64.h"
-#include "common/common.h"
 #include "common/ebml.h"
 #include "common/locale.h"
 #include "common/mm_io.h"

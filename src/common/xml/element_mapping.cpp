@@ -12,12 +12,12 @@
    Modified by Steve Lhomme <steve.lhomm@free.fr>.
 */
 
-#include <ebml/EbmlElement.h>
+#include "common/common.h"
+
 #include <matroska/KaxConfig.h>
 #include <matroska/KaxSegment.h>
 
 #include "common/chapters/chapters.h"
-#include "common/common.h"
 #include "common/ebml.h"
 #include "common/tags/parser.h"
 #include "common/xml/element_mapping.h"

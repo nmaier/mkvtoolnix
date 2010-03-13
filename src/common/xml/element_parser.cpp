@@ -15,7 +15,6 @@
 
 #include <cctype>
 
-#include <ebml/EbmlMaster.h>
 #include <ebml/EbmlUInteger.h>
 #include <ebml/EbmlString.h>
 #include <ebml/EbmlUnicodeString.h>
