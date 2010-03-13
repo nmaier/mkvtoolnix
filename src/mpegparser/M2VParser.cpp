@@ -20,10 +20,9 @@
 
  **/
 
-#include "M2VParser.h"
-
 #include "common/common.h"
 #include "common/memory.h"
+#include "M2VParser.h"
 
 #define BUFF_SIZE 2*1024*1024
 

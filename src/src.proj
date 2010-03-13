@@ -225,7 +225,7 @@ LIB mktcommon_strings
   INCLUDE .
   INCLUDE .. // for config.h
 
-  PRECOMPILED_HEADER(CONFIG_PRECOMPILED) common/os.h
+  PRECOMPILED_HEADER(CONFIG_PRECOMPILED) common/common.h
   PRECOMPILED_HEADER_FORCED no
   
   SOURCE common/strings/editing.cpp

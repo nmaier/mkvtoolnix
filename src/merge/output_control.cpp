@@ -104,6 +104,7 @@
 #include "merge/cluster_helper.h"
 #include "merge/mkvmerge.h"
 #include "merge/output_control.h"
+#include "merge/debugging.h"
 
 using namespace libmatroska;
 
