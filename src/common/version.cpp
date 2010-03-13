@@ -13,8 +13,6 @@
 
 #include "common/common.h"
 
-#include <boost/format.hpp>
-
 #include "common/version.h"
 
 #define VERSIONNAME "Beginnings"
