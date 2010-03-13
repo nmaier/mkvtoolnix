@@ -17,7 +17,6 @@
 #include "common/common.h"
 
 #include <expat.h>
-#include <vector>
 
 #include "common/xml/element_mapping.h"
 

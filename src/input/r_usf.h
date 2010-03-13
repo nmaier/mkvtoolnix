@@ -18,8 +18,6 @@
 
 #include <expat.h>
 
-#include <vector>
-
 #include "common/mm_io.h"
 #include "merge/pr_generic.h"
 #include "common/xml/element_parser.h"

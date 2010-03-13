@@ -16,8 +16,6 @@
 
 #include "common/common.h"
 
-#include <vector>
-
 #include "common/corepicture.h"
 #include "common/mm_io.h"
 #include "common/xml/element_parser.h"

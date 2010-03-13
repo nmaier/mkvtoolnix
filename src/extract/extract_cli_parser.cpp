@@ -17,7 +17,6 @@
 #include <boost/bind.hpp>
 #include <stdexcept>
 #include <typeinfo>
-#include <vector>
 
 #include "common/ebml.h"
 #include "common/strings/formatting.h"

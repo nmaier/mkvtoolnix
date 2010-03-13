@@ -18,8 +18,6 @@
 
 #include <stdio.h>
 
-#include <vector>
-
 #include "common/ac3.h"
 #include "common/mm_io.h"
 #include "output/p_video.h"

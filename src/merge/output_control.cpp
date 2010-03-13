@@ -34,7 +34,6 @@
 #include <algorithm>
 #include <iostream>
 #include <typeinfo>
-#include <vector>
 
 #include <ebml/EbmlHead.h>
 #include <ebml/EbmlSubHead.h>

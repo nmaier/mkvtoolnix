@@ -16,8 +16,6 @@
 
 #include "common/common.h"
 
-#include <vector>
-
 #include "merge/pr_generic.h"
 #include "common/samples_timecode_conv.h"
 #include "common/truehd.h"

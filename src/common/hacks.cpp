@@ -15,8 +15,6 @@
 
 #include <string.h>
 
-#include <vector>
-
 #include "common/base64.h"
 #include "common/hacks.h"
 #include "common/strings/editing.h"

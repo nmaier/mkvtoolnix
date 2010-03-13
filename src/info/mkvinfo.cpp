@@ -30,7 +30,6 @@
 #include <algorithm>
 #include <iostream>
 #include <typeinfo>
-#include <vector>
 
 #include <avilib.h>
 

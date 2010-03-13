@@ -35,7 +35,6 @@
 #include <iostream>
 #include <list>
 #include <typeinfo>
-#include <vector>
 
 #include <matroska/KaxChapters.h>
 #include <matroska/KaxInfoData.h>

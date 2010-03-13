@@ -18,8 +18,6 @@
 
 #include <stdio.h>
 
-#include <vector>
-
 #include <avilib.h>
 
 #include "common/mm_io.h"

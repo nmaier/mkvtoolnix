@@ -14,7 +14,6 @@
 #include "common/common.h"
 
 #include <cassert>
-#include <vector>
 
 #include "common/hacks.h"
 #include "common/random.h"

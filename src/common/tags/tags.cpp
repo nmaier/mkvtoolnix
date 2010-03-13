@@ -17,8 +17,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <vector>
-
 #include "common/common.h"
 #include "common/chapters/chapters.h"
 #include "common/ebml.h"

@@ -13,7 +13,6 @@
 
 #include <cassert>
 #include <iostream>
-#include <vector>
 
 #include <avilib.h>
 

@@ -17,7 +17,6 @@
 #include <algorithm>
 #include <cassert>
 #include <limits.h>
-#include <vector>
 
 #include "common/ebml.h"
 #include "common/hacks.h"

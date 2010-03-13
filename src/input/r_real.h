@@ -18,8 +18,6 @@
 
 #include <stdio.h>
 
-#include <vector>
-
 #include "common/error.h"
 #include "librmff/librmff.h"
 #include "output/p_video.h"

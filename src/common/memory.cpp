@@ -13,8 +13,6 @@
 
 #include "common/common.h"
 
-#include <vector>
-
 #include "common/memory.h"
 #include "common/error.h"
 
