@@ -17,7 +17,6 @@
 #include <errno.h>
 #if HAVE_POSIX_FADVISE
 # include <fcntl.h>
-# include <map>
 # include <sys/utsname.h>
 #endif
 #include <string.h>

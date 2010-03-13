@@ -15,7 +15,6 @@
 #include "common/common.h"
 
 #include <algorithm>
-#include <map>
 #include <typeinfo>
 
 #include <matroska/KaxContentEncoding.h>

@@ -14,8 +14,6 @@
 
 #include "common/common.h"
 
-#include <map>
-
 #include "common/mm_io.h"
 #include "common/strings/formatting.h"
 #include "common/strings/parsing.h"

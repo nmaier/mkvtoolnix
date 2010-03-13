@@ -16,8 +16,6 @@
 
 #include "common/common.h"
 
-#include <map>
-
 #include <matroska/KaxSegment.h>
 
 #include "common/matroska.h"

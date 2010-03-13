@@ -13,8 +13,6 @@
 
 #include "common/common.h"
 
-#include <map>
-
 #include "common/strings/editing.h"
 
 static std::string s_debug_options;

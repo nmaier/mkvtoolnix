@@ -18,7 +18,6 @@
 #include "common/common.h"
 
 #include <boost/logic/tribool.hpp>
-#include <map>
 #include <vector>
 
 #include "common/compression.h"
