@@ -33,7 +33,6 @@
 #include "common/iso639.h"
 #include "common/matroska.h"
 #include "common/mpeg4_p2.h"
-#include "common/locale.h"
 #include "common/ogmstreams.h"
 #include "input/r_ogm.h"
 #include "input/r_ogm_flac.h"

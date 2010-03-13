@@ -36,7 +36,6 @@
 #include "common/endian.h"
 #include "common/error.h"
 #include "common/fs_sys_helpers.h"
-#include "common/locale.h"
 #include "common/mm_io.h"
 #include "common/strings/editing.h"
 #include "common/strings/parsing.h"

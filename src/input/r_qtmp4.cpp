@@ -31,7 +31,6 @@
 #include "common/endian.h"
 #include "common/hacks.h"
 #include "common/iso639.h"
-#include "common/locale.h"
 #include "common/matroska.h"
 #include "common/strings/formatting.h"
 #include "input/r_qtmp4.h"

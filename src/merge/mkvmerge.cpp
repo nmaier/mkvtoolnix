@@ -50,7 +50,6 @@
 #include "common/fs_sys_helpers.h"
 #include "common/hacks.h"
 #include "common/iso639.h"
-#include "common/locale.h"
 #include "common/mm_io.h"
 #include "common/segmentinfo.h"
 #include "common/strings/parsing.h"

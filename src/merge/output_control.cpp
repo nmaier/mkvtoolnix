@@ -65,7 +65,6 @@
 #include "common/ebml.h"
 #include "common/fs_sys_helpers.h"
 #include "common/hacks.h"
-#include "common/locale.h"
 #include "common/math.h"
 #include "common/mm_io.h"
 #include "common/strings/formatting.h"

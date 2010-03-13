@@ -22,7 +22,6 @@
 
 #include "common/base64.h"
 #include "common/ebml.h"
-#include "common/locale.h"
 #include "common/mm_io.h"
 #include "common/strings/editing.h"
 #include "common/strings/formatting.h"

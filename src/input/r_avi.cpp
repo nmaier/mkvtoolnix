@@ -27,7 +27,6 @@
 #include "common/endian.h"
 #include "common/error.h"
 #include "common/hacks.h"
-#include "common/locale.h"
 #include "common/math.h"
 #include "common/matroska.h"
 #include "common/mpeg1_2.h"

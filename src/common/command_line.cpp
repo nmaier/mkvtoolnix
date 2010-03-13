@@ -20,7 +20,6 @@
 #endif
 
 #include "common/command_line.h"
-#include "common/locale.h"
 #include "common/mm_io.h"
 #include "common/strings/editing.h"
 #include "common/translation.h"

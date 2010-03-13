@@ -19,7 +19,6 @@
 
 #include "common/chapters/chapters.h"
 #include "common/command_line.h"
-#include "common/locale.h"
 #include "common/matroska.h"
 #include "common/mm_io.h"
 #include "common/strings/parsing.h"

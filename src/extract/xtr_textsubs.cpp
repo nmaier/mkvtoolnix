@@ -15,7 +15,6 @@
 #include <algorithm>
 
 #include "common/ebml.h"
-#include "common/locale.h"
 #include "common/matroska.h"
 #include "common/strings/editing.h"
 #include "common/strings/formatting.h"

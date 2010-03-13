@@ -33,7 +33,6 @@
 # include <windows.h>
 #endif
 
-#include "common/locale.h"
 #include "common/memory.h"
 #include "common/mm_io.h"
 #include "common/strings/parsing.h"
