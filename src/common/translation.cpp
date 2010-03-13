@@ -19,9 +19,6 @@
 #elif HAVE_LOCALE_CHARSET
 # include <libcharset.h>
 #endif
-#if defined(HAVE_LIBINTL_H)
-# include <libintl.h>
-#endif
 #include <locale.h>
 #include <stdlib.h>
 
