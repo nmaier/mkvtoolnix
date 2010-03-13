@@ -25,6 +25,9 @@
  *
  */
 
+#ifndef AVILIB_H
+#define AVILIB_H
+
 #include "common/os.h"
 
 #include <sys/types.h>
@@ -42,8 +45,9 @@
 #include <string.h>
 #include <errno.h>
 
-#ifndef AVILIB_H
-#define AVILIB_H
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define AVI_MAX_TRACKS 8
 
@@ -474,5 +478,9 @@ struct AVIStreamHeader {
   long  dwQuality;
   long  dwSampleSize;
 };
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

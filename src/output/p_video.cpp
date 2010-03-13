@@ -21,9 +21,7 @@
 #include "merge/output_control.h"
 #include "output/p_video.h"
 
-extern "C" {
 #include <avilib.h>
-}
 
 using namespace libmatroska;
 

@@ -13,9 +13,7 @@
 #ifndef __MKVEXTRACT_H
 #define __MKVEXTRACT_H
 
-extern "C" {
 #include <avilib.h>
-}
 
 #include <ogg/ogg.h>
 #include <vector>

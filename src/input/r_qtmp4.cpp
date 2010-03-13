@@ -24,9 +24,7 @@
 #include <zlib.h>
 #endif
 
-extern "C" {
-#include "avilib.h"
-}
+#include <avilib.h>
 
 #include "common/aac.h"
 #include "common/chapters/chapters.h"

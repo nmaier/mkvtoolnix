@@ -15,9 +15,7 @@
 
 #include <algorithm>
 
-extern "C" {
 #include <avilib.h>
-}
 
 #include "common/common.h"
 #include "common/error.h"

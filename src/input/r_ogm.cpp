@@ -24,9 +24,7 @@
 #include <time.h>
 #endif
 
-extern "C" {                    // for BITMAPINFOHEADER
-#include "avilib.h"
-}
+#include <avilib.h>   // for BITMAPINFOHEADER
 
 #include "common/aac.h"
 #include "common/chapters/chapters.h"

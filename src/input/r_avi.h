@@ -20,9 +20,7 @@
 
 #include <vector>
 
-extern "C" {
 #include <avilib.h>
-}
 
 #include "common/mm_io.h"
 #include "merge/pr_generic.h"

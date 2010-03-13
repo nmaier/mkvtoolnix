@@ -36,9 +36,7 @@
 #include "output/p_dts.h"
 #include "output/p_pcm.h"
 
-extern "C" {
 #include <avilib.h> // for wave_header
-}
 
 #define AC3ACM_READ_SIZE 100000
 

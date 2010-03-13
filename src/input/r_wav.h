@@ -25,9 +25,7 @@
 #include "common/mm_io.h"
 #include "merge/pr_generic.h"
 
-extern "C" {
-#include "avilib.h"
-}
+#include <avilib.h>
 
 class wav_reader_c;
 

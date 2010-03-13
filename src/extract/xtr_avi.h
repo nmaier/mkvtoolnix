@@ -15,9 +15,7 @@
 
 #include "common/os.h"
 
-extern "C" {
 #include <avilib.h>
-}
 
 #include "extract/xtr_base.h"
 

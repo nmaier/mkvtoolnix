@@ -14,9 +14,7 @@
 
 #include "common/os.h"
 
-extern "C" {                    // for BITMAPINFOHEADER
-#include "avilib.h"
-}
+#include <avilib.h>   // for BITMAPINFOHEADER
 
 #include <ebml/EbmlContexts.h>
 #include <ebml/EbmlHead.h>

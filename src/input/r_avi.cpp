@@ -21,9 +21,7 @@
 // This one goes out to haali ;)
 #include <sys/types.h>
 
-extern "C" {
 #include <avilib.h>
-}
 
 #include "common/aac.h"
 #include "common/common.h"

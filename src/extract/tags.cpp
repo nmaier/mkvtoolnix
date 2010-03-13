@@ -17,9 +17,7 @@
 #include <string>
 #include <vector>
 
-extern "C" {
 #include <avilib.h>
-}
 
 #include <ebml/EbmlHead.h>
 #include <ebml/EbmlSubHead.h>

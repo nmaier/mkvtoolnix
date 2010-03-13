@@ -22,9 +22,7 @@
 #include "merge/output_control.h"
 #include "output/p_mpeg4_p2.h"
 
-extern "C" {
 #include <avilib.h>
-}
 
 mpeg4_p2_video_packetizer_c::
 mpeg4_p2_video_packetizer_c(generic_reader_c *p_reader,
