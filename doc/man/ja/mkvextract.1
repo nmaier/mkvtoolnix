@@ -35,6 +35,11 @@ Matroska(TM)
 .PP
 以下のオプションは、全てのmodeで使用できるので、このセクションで一括して説明します。
 .PP
+\fB\-f\fR, \fB\-\-parse\-fully\fR
+.RS 4
+Sets the parse mode to \'full\'\&. The default mode does not parse the whole file but uses the meta seek elements for locating the required elements of a source file\&. In 99% of all cases this is enough\&. But for files that do not contain meta seek elements or which are damaged the user might have to use this mode\&. A full scan of a file can take a couple of minutes while a fast scan only takes seconds\&.
+.RE
+.PP
 \fB\-\-command\-line\-charset\fR \fIcharacter\-set\fR
 .RS 4
 コマンドライン文字列の文字コードを指定します。デフォルトは、システムの現在のロケールの文字コードになります。

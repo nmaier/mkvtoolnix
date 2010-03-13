@@ -44,6 +44,11 @@ file\&. All following arguments are options and extraction specifications; both 
 .PP
 The following options are available in all modes and only described once in this section\&.
 .PP
+\fB\-f\fR, \fB\-\-parse\-fully\fR
+.RS 4
+Sets the parse mode to \'full\'\&. The default mode does not parse the whole file but uses the meta seek elements for locating the required elements of a source file\&. In 99% of all cases this is enough\&. But for files that do not contain meta seek elements or which are damaged the user might have to use this mode\&. A full scan of a file can take a couple of minutes while a fast scan only takes seconds\&.
+.RE
+.PP
 \fB\-\-command\-line\-charset\fR \fIcharacter\-set\fR
 .RS 4
 Sets the character set to convert strings given on the command line from\&. It defaults to the character set given by system\'s current locale\&.
