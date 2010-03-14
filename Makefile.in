@@ -211,6 +211,8 @@ ALL_HEADERS=$(wildcard lib/avilib-0.6.10/*.h) $(wildcard lib/librmff/*.h) \
 		$(wildcard src/merge/*.h) $(wildcard src/info/*.h) \
 		$(wildcard src/mpegparser/*.h) $(wildcard src/common/*/*.h)
 
+ALL_OBJECTS=$(patsubst %.cpp,%.o,$(patsubst %.c,%.o,$(patsubst %.h,%.o,$(ALL_SOURCES))))
+
 ifeq ($(V),1)
   Q =
   SQ = echo
@@ -306,7 +308,7 @@ update-manpage-po update-man-po:
 
 # Some general rules
 ifeq (1,$(LIBMTXCOMMONDLL))
-%.o: %.cpp src/common/common.h.gch
+%.o: %.cpp
 	@echo '     CXX ' $<
 	@if echo $@ | $(GREP) src.common > /dev/null 2>&1; then \
 		test x$(V) = "x1" && echo $(CXXCOMPILE) $(CXXFLAGS_SRC_COMMON) -c -o $@ $< ; \
@@ -318,18 +320,20 @@ ifeq (1,$(LIBMTXCOMMONDLL))
 		./handle_deps $@ $$? ; \
 	fi
 else
-%.o: %.cpp src/common/common.h.gch
+%.o: %.cpp
 	@echo '     CXX ' $<
 	$(Q)$(CXXCOMPILE) -MMD -c -o $@ $< ; ./handle_deps $@ $$?
 endif
 
-%.o: %.c src/common/common.h.gch
+%.o: %.c
 	@echo '      CC ' $<
 	$(Q)$(CCOMPILE) -MMD -c -o $@ $< ; ./handle_deps $@ $$?
 
 %.o: %.rc
 	@echo ' WINDRES ' $<
 	$(Q)$(RCCOMPILE) -o $@ $<
+
+$(ALL_OBJECTS): src/common/common.h.gch
 
 %.h.gch: %.h
 	@echo '     CXX ' $<
