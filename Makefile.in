@@ -306,7 +306,7 @@ update-manpage-po update-man-po:
 
 # Some general rules
 ifeq (1,$(LIBMTXCOMMONDLL))
-%.o: %.cpp
+%.o: %.cpp src/common/common.h.gch
 	@echo '     CXX ' $<
 	@if echo $@ | $(GREP) src.common > /dev/null 2>&1; then \
 		test x$(V) = "x1" && echo $(CXXCOMPILE) $(CXXFLAGS_SRC_COMMON) -c -o $@ $< ; \
@@ -318,18 +318,30 @@ ifeq (1,$(LIBMTXCOMMONDLL))
 		./handle_deps $@ $$? ; \
 	fi
 else
-%.o: %.cpp
+%.o: %.cpp src/common/common.h.gch
 	@echo '     CXX ' $<
 	$(Q)$(CXXCOMPILE) -MMD -c -o $@ $< ; ./handle_deps $@ $$?
 endif
 
-%.o: %.c
+%.o: %.c src/common/common.h.gch
 	@echo '      CC ' $<
 	$(Q)$(CCOMPILE) -MMD -c -o $@ $< ; ./handle_deps $@ $$?
 
 %.o: %.rc
 	@echo ' WINDRES ' $<
 	$(Q)$(RCCOMPILE) -o $@ $<
+
+%.h.gch: %.h
+	@echo '     CXX ' $<
+	@if echo $@ | $(GREP) src.common > /dev/null 2>&1; then \
+		test x$(V) = "x1" && echo $(CXXCOMPILE) $(CXXFLAGS_SRC_COMMON) -c -o $@ $< ; \
+		$(CXXCOMPILE) $(CXXFLAGS_SRC_COMMON) -c -MMD -o $@ $< ; \
+		./handle_deps $@ $$? ; \
+	else \
+		test x$(V) = "x1" && echo $(CXXCOMPILE) $(CXXFLAGS_NO_SRC_COMMON) -c -o $@ $< ; \
+		$(CXXCOMPILE) $(CXXFLAGS_NO_SRC_COMMON)-MMD -c -o $@ $< ; \
+		./handle_deps $@ $$? ; \
+	fi
 
 %.mo: %.po
 	@echo '  MSGFMT ' $<
@@ -361,7 +373,7 @@ clean:
 	rm -f *.o */*.o */*/*.o */lib*.a */*/lib*.a po/*.mo $(APPLICATIONS) \
 		*/*.exe */*/*.exe */*/*.dll */*/*.dll.a doc/*.hhk \
 		src/info/ui/*.h src/info/*.moc.cpp src/common/*/*.o \
-		src/mmg/*/*.o
+		src/mmg/*/*.o src/*/*.gch
 
 distclean dist-clean: clean
 	rm -f config.h config.log config.cache Makefile */Makefile */*/Makefile TAGS
@@ -579,31 +591,31 @@ mmg_LDADD = -lmtxcommon $(MAGIC_LIBS) -lmatroska -lebml -lexpat $(ICONV_LIBS) \
 
 mkvmerge: src/mkvmerge@EXEEXT@
 
-src/mkvmerge@EXEEXT@: $(mkvmerge_OBJECTS) $(mkvmerge_DEPENDENCIES)
+src/mkvmerge@EXEEXT@: $(mkvmerge_DEPENDENCIES) $(mkvmerge_OBJECTS)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(mkvmerge_OBJECTS) $(mkvmerge_LDADD)
 
 mkvinfo: src/mkvinfo@EXEEXT@
 
-src/mkvinfo@EXEEXT@: $(mkvinfo_UIFILES) $(mkvinfo_OBJECTS) $(mkvinfo_DEPENDENCIES)
+src/mkvinfo@EXEEXT@: $(mkvinfo_DEPENDENCIES) $(mkvinfo_UIFILES) $(mkvinfo_OBJECTS)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(mkvinfo_OBJECTS) $(mkvinfo_LDADD)
 
 mkvextract: src/mkvextract@EXEEXT@
 
-src/mkvextract@EXEEXT@: $(mkvextract_OBJECTS) $(mkvextract_DEPENDENCIES)
+src/mkvextract@EXEEXT@: $(mkvextract_DEPENDENCIES) $(mkvextract_OBJECTS)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(mkvextract_OBJECTS) $(mkvextract_LDADD)
 
 mkvpropedit: src/mkvpropedit@EXEEXT@
 
-src/mkvpropedit@EXEEXT@: $(mkvpropedit_OBJECTS) $(mkvpropedit_DEPENDENCIES)
+src/mkvpropedit@EXEEXT@: $(mkvpropedit_DEPENDENCIES) $(mkvpropedit_OBJECTS)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(mkvpropedit_OBJECTS) $(mkvpropedit_LDADD)
 
 mmg: src/mmg/mmg@EXEEXT@
 
-src/mmg/mmg@EXEEXT@: $(mmg_OBJECTS) $(mmg_DEPENDENCIES)
+src/mmg/mmg@EXEEXT@: $(mmg_DEPENDENCIES) $(mmg_OBJECTS)
 	@echo '    LINK ' $@
 	$(Q)$(LINK) -o $@ $(mmg_OBJECTS) $(mmg_LDADD)
 
