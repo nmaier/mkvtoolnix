@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #if defined(HAVE_FLAC_FORMAT_H)
 
