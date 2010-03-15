@@ -14,7 +14,7 @@
 #ifndef __R_AVC_H
 #define __R_AVC_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include "common/mpeg4_p10.h"
 #include "merge/pr_generic.h"

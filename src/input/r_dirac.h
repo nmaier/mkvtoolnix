@@ -14,7 +14,7 @@
 #ifndef __R_DIRAC_H
 #define __R_DIRAC_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include "merge/pr_generic.h"
 #include "common/dirac.h"

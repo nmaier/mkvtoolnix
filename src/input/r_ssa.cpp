@@ -11,9 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
-#include <string>
+#include "common/common.h"
 
 #include "common/base64.h"
 #include "common/extern_data.h"

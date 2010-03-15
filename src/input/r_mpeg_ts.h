@@ -14,7 +14,7 @@
 #ifndef __R_MPEG_TS_H
 #define __R_MPEG_TS_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include "merge/pr_generic.h"
 

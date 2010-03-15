@@ -14,7 +14,7 @@
 #ifndef __R_MPEG_ES_H
 #define __R_MPEG_ES_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include "common/dts.h"
 #include "common/mpeg1_2.h"
