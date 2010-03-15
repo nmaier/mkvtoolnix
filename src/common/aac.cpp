@@ -11,11 +11,12 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
+#include "common/common.h"
+
 #include <stdio.h>
 #include <string.h>
 
 #include "common/bit_cursor.h"
-#include "common/common.h"
 #include "common/aac.h"
 #include "common/matroska.h"
 

@@ -15,8 +15,9 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "common/bit_cursor.h"
 #include "common/common.h"
+
+#include "common/bit_cursor.h"
 #include "common/dts.h"
 #include "common/endian.h"
 
