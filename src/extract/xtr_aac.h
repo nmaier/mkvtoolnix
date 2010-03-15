@@ -13,7 +13,7 @@
 #ifndef __XTR_AAC_H
 #define __XTR_AAC_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include "extract/xtr_base.h"
 

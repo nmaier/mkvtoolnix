@@ -13,7 +13,7 @@
 #ifndef __XTR_AVI_H
 #define __XTR_AVI_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <avilib.h>
 
