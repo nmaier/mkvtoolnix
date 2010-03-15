@@ -12,7 +12,7 @@ CON mkvmerge
   USE mpegparser
   OPTIMIZE_GLOBALLY .
   
-  PRECOMPILED_HEADER(CONFIG_PRECOMPILED) common/common.h
+  PRECOMPILED_HEADER(USE_PRECOMPILED_HEADERS) common/common.h
   PRECOMPILED_HEADER_FORCED no
 
   SOURCE input/flac_common.cpp
@@ -153,7 +153,7 @@ CON mkvinfo
   USE libiconv
   OPTIMIZE_GLOBALLY .
 
-  PRECOMPILED_HEADER(CONFIG_PRECOMPILED) common/common.h
+  PRECOMPILED_HEADER(USE_PRECOMPILED_HEADERS) common/common.h
   PRECOMPILED_HEADER_FORCED no
   
   SOURCE info/mkvinfo.cpp
@@ -172,7 +172,7 @@ CON mkvextract
   USE vorbis
   OPTIMIZE_GLOBALLY .
 
-  PRECOMPILED_HEADER(CONFIG_PRECOMPILED) common/common.h
+  PRECOMPILED_HEADER(USE_PRECOMPILED_HEADERS) common/common.h
   PRECOMPILED_HEADER_FORCED no
 
   SOURCE extract/attachments.cpp
@@ -225,8 +225,8 @@ LIB mktcommon_strings
   INCLUDE .
   INCLUDE .. // for config.h
 
-  PRECOMPILED_HEADER(CONFIG_PRECOMPILED) common/common.h
-  PRECOMPILED_HEADER_FORCED no
+  PRECOMPILED_HEADER(USE_PRECOMPILED_HEADERS) common/common.h
+  //PRECOMPILED_HEADER_FORCED no
   
   SOURCE common/strings/editing.cpp
   SOURCE common/strings/formatting.cpp
@@ -248,7 +248,7 @@ LIB mktcommon_chapters
   INCLUDE .
   INCLUDE .. // for config.h
 
-  PRECOMPILED_HEADER(CONFIG_PRECOMPILED) common/common.h
+  PRECOMPILED_HEADER(USE_PRECOMPILED_HEADERS) common/common.h
   PRECOMPILED_HEADER_FORCED no
   
   SOURCE common/chapters/chapters.cpp
@@ -272,8 +272,8 @@ LIB mktcommon
   EXPINCLUDE .
   EXPINCLUDE ..
   
-  PRECOMPILED_HEADER(CONFIG_PRECOMPILED) common/common.h
-  PRECOMPILED_HEADER_FORCED no
+  PRECOMPILED_HEADER(USE_PRECOMPILED_HEADERS) common/common.h
+  //PRECOMPILED_HEADER_FORCED no
 
   LIBS(TARGET_WIN) rpcrt4.lib
 
