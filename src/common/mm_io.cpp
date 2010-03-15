@@ -1223,26 +1223,40 @@ mm_text_io_c::read_next_char(char *buffer) {
 
 std::string
 mm_text_io_c::getline() {
-  std::string s;
-  char utf8char[8];
-
   if (eof())
     throw error_c(Y("end-of-file"));
 
+  std::string s;
+  char utf8char[9];
+  bool previous_was_carriage_return = false;
+
   while (1) {
-    memset(utf8char, 0, 8);
+    memset(utf8char, 0, 9);
 
     int len = read_next_char(utf8char);
     if (0 == len)
       return s;
 
-    if ((1 == len) && (utf8char[0] == '\r'))
+    if ((1 == len) && (utf8char[0] == '\r')) {
+      if (previous_was_carriage_return) {
+        setFilePointer(-1, seek_current);
+        return s;
+      }
+
+      previous_was_carriage_return = true;
       continue;
+    }
 
     if ((1 == len) && (utf8char[0] == '\n'))
       return s;
 
-    s += utf8char;
+    if (previous_was_carriage_return) {
+      setFilePointer(-len, seek_current);
+      return s;
+    }
+
+    previous_was_carriage_return  = false;
+    s                            += utf8char;
   }
 }
 
@@ -1254,7 +1268,7 @@ mm_text_io_c::get_byte_order() {
 void
 mm_text_io_c::setFilePointer(int64 offset,
                              seek_mode mode) {
-  mm_proxy_io_c::setFilePointer(((0 == offset) && (seek_beginning == mode)) ? bom_len : offset, seek_beginning);
+  mm_proxy_io_c::setFilePointer(((0 == offset) && (seek_beginning == mode)) ? bom_len : offset, mode);
 }
 
 /*
