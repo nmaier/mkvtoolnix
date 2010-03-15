@@ -225,8 +225,8 @@ _show_unknown_element(EbmlStream *es,
 
   int i;
   std::string element_id;
-  for (i = EbmlId(*e).Length - 1; 0 <= i; --i)
-    element_id += (s_bf_show_unknown_element % ((EbmlId(*e).Value >> (i * 8)) & 0xff)).str();
+  for (i = EBML_ID_LENGTH(EbmlId(*e)) - 1; 0 <= i; --i)
+    element_id += (s_bf_show_unknown_element % ((EBML_ID_VALUE(EbmlId(*e)) >> (i * 8)) & 0xff)).str();
 
   std::string s = (BF_SHOW_UNKNOWN_ELEMENT % EBML_NAME(e) % element_id % (e->GetSize() + e->HeadSize())).str();
   _show_element(e, es, true, level, s);

@@ -125,7 +125,7 @@ bool
 kax_file_c::is_level1_element_id(vint_c id) const {
   const EbmlSemanticContext &context = EBML_INFO(KaxSegment).Context;
   for (int segment_idx = 0; context.Size > segment_idx; ++segment_idx)
-    if (context.MyTable[segment_idx].GetCallbacks.GlobalId.Value == id.m_value)
+    if (EBML_ID_VALUE(context.MyTable[segment_idx].GetCallbacks.GlobalId) == id.m_value)
       return true;
 
   return false;
@@ -133,8 +133,8 @@ kax_file_c::is_level1_element_id(vint_c id) const {
 
 bool
 kax_file_c::is_global_element_id(vint_c id) const {
-  return (EBML_ID(EbmlVoid).Value  == id.m_value)
-    ||   (EBML_ID(EbmlCrc32).Value == id.m_value);
+  return (EBML_ID_VALUE(EBML_ID(EbmlVoid))  == id.m_value)
+    ||   (EBML_ID_VALUE(EBML_ID(EbmlCrc32)) == id.m_value);
 }
 
 EbmlElement *
@@ -210,12 +210,12 @@ kax_file_c::resync_to_level1_element_internal(uint32_t wanted_id) {
 
 KaxCluster *
 kax_file_c::resync_to_cluster() {
-  return static_cast<KaxCluster *>(resync_to_level1_element(EBML_ID(KaxCluster).Value));
+  return static_cast<KaxCluster *>(resync_to_level1_element(EBML_ID_VALUE(EBML_ID(KaxCluster))));
 }
 
 KaxCluster *
 kax_file_c::read_next_cluster() {
-  return static_cast<KaxCluster *>(read_next_level1_element(EBML_ID(KaxCluster).Value));
+  return static_cast<KaxCluster *>(read_next_level1_element(EBML_ID_VALUE(EBML_ID(KaxCluster))));
 }
 
 bool

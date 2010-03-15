@@ -52,8 +52,8 @@ kax_analyzer_data_c::to_string() const {
     name = callbacks->DebugName;
 
   else {
-    std::string format = (boost::format("0x%%|0%1%x|") % (m_id.Length * 2)).str();
-    name               = (boost::format(format)        %  m_id.Value).str();
+    std::string format = (boost::format("0x%%|0%1%x|") % (EBML_ID_LENGTH(m_id) * 2)).str();
+    name               = (boost::format(format)        %  EBML_ID_VALUE(m_id)).str();
   }
 
   return (boost::format("%1% size %2% at %3%") % name % m_size % m_pos).str();
@@ -446,7 +446,7 @@ kax_analyzer_c::handle_void_elements(int data_idx) {
       return false;
 
     binary head[4 + 8];         // Class D + 64 bits coded size
-    unsigned int head_size = EbmlId(*e).Length;
+    unsigned int head_size = EBML_ID_LENGTH(EbmlId(*e));
     EbmlId(*e).Fill(head);
 
     int coded_size = CodedSizeLength(e->GetSize(), e->GetSizeLength() + 1, true);
