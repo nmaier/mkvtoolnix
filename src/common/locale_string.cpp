@@ -11,9 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
-
-#include <boost/regex.hpp>
+#include "common/common.h"
 
 #include "common/locale_string.h"
 

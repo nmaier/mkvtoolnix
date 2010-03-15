@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "os.h"
+#include "common/common.h"
 
 #include <ebml/EbmlCrc32.h>
 #include <ebml/EbmlStream.h>

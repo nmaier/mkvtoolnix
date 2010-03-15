@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/mp3.h"
 #include "common/common.h"
+#include "common/mp3.h"
 
 // Synch word for a frame is 0xFFE0 (first 11 bits must be set)
 // Frame valuable information (for parsing) are stored in the first 4 bytes :
