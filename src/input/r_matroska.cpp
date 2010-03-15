@@ -212,6 +212,28 @@ kax_reader_c::find_track_by_uid(uint64_t uid,
 }
 
 bool
+kax_reader_c::unlace_vorbis_private_data(kax_track_t *t,
+                                         unsigned char *buffer,
+                                         int size) {
+  try {
+    memory_cptr temp(new memory_c(buffer, size, false));
+    std::vector<memory_cptr> blocks = unlace_memory_xiph(temp);
+    if (blocks.size() != 3)
+      return false;
+
+    for (unsigned int i = 0; 3 > i; ++i) {
+      t->headers[i]      = blocks[i]->get_buffer();
+      t->header_sizes[i] = blocks[i]->get_size();
+    }
+
+  } catch (...) {
+    return false;
+  }
+
+  return true;
+}
+
+bool
 kax_reader_c::verify_acm_audio_track(kax_track_t *t) {
   if ((NULL == t->private_data) || (sizeof(alWAVEFORMATEX) > t->private_size)) {
     if (verbose)
@@ -221,10 +243,18 @@ kax_reader_c::verify_acm_audio_track(kax_track_t *t) {
 
   }
 
-  t->ms_compat        = 1;
   alWAVEFORMATEX *wfe = (alWAVEFORMATEX *)t->private_data;
   t->a_formattag      = get_uint16_le(&wfe->w_format_tag);
-  uint32_t u          = get_uint32_le(&wfe->n_samples_per_sec);
+
+  if ((0xfffe == t->a_formattag) && (!unlace_vorbis_private_data(t, static_cast<unsigned char *>(t->private_data) + sizeof(alWAVEFORMATEX), t->private_size - sizeof(alWAVEFORMATEX)))) {
+    // Force the passthrough packetizer to be used if the data behind
+    // the WAVEFORMATEX does not contain valid laced Vorbis headers.
+    t->a_formattag = 0;
+    return true;
+  }
+
+  t->ms_compat = 1;
+  uint32_t u   = get_uint32_le(&wfe->n_samples_per_sec);
 
   if (((uint32_t)t->a_sfreq) != u) {
     if (verbose)
@@ -275,20 +305,10 @@ kax_reader_c::verify_vorbis_audio_track(kax_track_t *t) {
     return false;
   }
 
-  try {
-    memory_cptr temp(new memory_c((unsigned char *)t->private_data, t->private_size, false));
-    std::vector<memory_cptr> blocks = unlace_memory_xiph(temp);
-    if (blocks.size() != 3)
-      throw false;
-
-    for (unsigned int i = 0; 3 > i; ++i) {
-      t->headers[i]      = blocks[i]->get_buffer();
-      t->header_sizes[i] = blocks[i]->get_size();
-    }
-
-  } catch (...) {
+  if (!unlace_vorbis_private_data(t, static_cast<unsigned char *>(t->private_data), t->private_size)) {
     if (verbose)
       mxwarn(Y("matroska_reader: Vorbis track does not contain valid headers.\n"));
+
     return false;
   }
 

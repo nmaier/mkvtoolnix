@@ -1,5 +1,9 @@
 2010-03-15  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Fixed a crash when reading Matroska files
+	that contain Vorbis audio with in MS compatibility mode (CodecID
+	A_MS/ACM). Fix for bug 477.
+
 	* all: enhancement: Added support for old Mac-style line endings
 	(only '\r' without '\n') in text files.
 

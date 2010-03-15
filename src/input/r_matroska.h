@@ -226,6 +226,8 @@ protected:
   virtual void handle_tags(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void process_global_tags();
 
+  virtual bool unlace_vorbis_private_data(kax_track_t *t, unsigned char *buffer, int size);
+
   virtual void create_video_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_audio_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_subtitle_packetizer(kax_track_t *t, track_info_c &nti);
