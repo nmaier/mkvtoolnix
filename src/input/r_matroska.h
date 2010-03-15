@@ -217,6 +217,19 @@ protected:
   virtual void create_audio_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_subtitle_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_button_packetizer(kax_track_t *t, track_info_c &nti);
+
+  virtual void create_aac_audio_packetizer(kax_track_t *t, track_info_c &nti);
+  virtual void create_ac3_audio_packetizer(kax_track_t *t, track_info_c &nti);
+  virtual void create_dts_audio_packetizer(kax_track_t *t, track_info_c &nti);
+#if defined(HAVE_FLAC_FORMAT_H)
+  virtual void create_flac_audio_packetizer(kax_track_t *t, track_info_c &nti);
+#endif
+  virtual void create_mp3_audio_packetizer(kax_track_t *t, track_info_c &nti);
+  virtual void create_pcm_audio_packetizer(kax_track_t *t, track_info_c &nti);
+  virtual void create_tta_audio_packetizer(kax_track_t *t, track_info_c &nti);
+  virtual void create_vorbis_audio_packetizer(kax_track_t *t, track_info_c &nti);
+  virtual void create_wavpack_audio_packetizer(kax_track_t *t, track_info_c &nti);
+
   virtual void create_mpeg4_p10_video_packetizer(kax_track_t *t, track_info_c &nti);
   virtual void create_mpeg4_p10_es_video_packetizer(kax_track_t *t, track_info_c &nti);
 

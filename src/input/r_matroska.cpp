@@ -1338,128 +1338,184 @@ kax_reader_c::create_video_packetizer(kax_track_t *t,
 }
 
 void
-kax_reader_c::create_audio_packetizer(kax_track_t *t,
-                                      track_info_c &nti) {
-  if ((0x0001 == t->a_formattag) || (0x0003 == t->a_formattag)) {
-    t->ptzr = add_packetizer(new pcm_packetizer_c(this, nti, (int32_t)t->a_sfreq, t->a_channels, t->a_bps, false, t->a_formattag==0x0003));
-    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the PCM output module.\n"));
+kax_reader_c::create_aac_audio_packetizer(kax_track_t *t,
+                                          track_info_c &nti) {
+  // A_AAC/MPEG2/MAIN
+  // 0123456789012345
+  int id               = 0;
+  int profile          = 0;
+  int detected_profile = AAC_PROFILE_MAIN;
 
-  } else if (0x0055 == t->a_formattag) {
-    t->ptzr = add_packetizer(new mp3_packetizer_c(this, nti, (int32_t)t->a_sfreq, t->a_channels, true));
-    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the MPEG audio output module.\n"));
-
-  } else if (0x2000 == t->a_formattag) {
-    int bsid = t->codec_id == "A_AC3/BSID9"  ?  9
-             : t->codec_id == "A_AC3/BSID10" ? 10
-             : t->codec_id == MKV_A_EAC3     ? 16
-             :                                  0;
-
-    t->ptzr = add_packetizer(new ac3_packetizer_c(this, nti, (int32_t)t->a_sfreq, t->a_channels, bsid));
-    mxinfo_tid(m_ti.m_fname, t->tnum, boost::format(Y("Using the %1%AC3 output module.\n")) % (16 == bsid ? "E" : ""));
-
-  } else if (0x2001 == t->a_formattag) {
-    dts_header_t dtsheader;
-
-    dtsheader.core_sampling_frequency = (unsigned int)t->a_sfreq;
-    dtsheader.audio_channels          = t->a_channels;
-
-    t->ptzr = add_packetizer(new dts_packetizer_c(this, nti, dtsheader, true));
-    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the DTS output module.\n"));
-
-  } else if (0xFFFE == t->a_formattag) {
-    t->ptzr = add_packetizer(new vorbis_packetizer_c(this, nti, t->headers[0], t->header_sizes[0], t->headers[1], t->header_sizes[1], t->headers[2], t->header_sizes[2]));
-    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the Vorbis output module.\n"));
-
-  } else if ((FOURCC('M', 'P', '4', 'A') == t->a_formattag) || (0x00ff == t->a_formattag)) {
-    // A_AAC/MPEG2/MAIN
-    // 0123456789012345
-    int id               = 0;
-    int profile          = 0;
-    int detected_profile = AAC_PROFILE_MAIN;
-
-    if (FOURCC('M', 'P', '4', 'A') == t->a_formattag) {
-      if ((NULL != t->private_data) && (2 <= t->private_size)) {
-        int channels, sfreq, osfreq;
-        bool sbr;
-
-        if (!parse_aac_data((unsigned char *)t->private_data, t->private_size, profile, channels, sfreq, osfreq, sbr))
-          mxerror_tid(m_ti.m_fname, t->tnum, Y("Malformed AAC codec initialization data found.\n"));
-
-        detected_profile = profile;
-        id               = AAC_ID_MPEG4;
-        if (sbr)
-          profile        = AAC_PROFILE_SBR;
-
-      } else if (!parse_aac_codec_id(std::string(t->codec_id), id, profile))
-        mxerror_tid(m_ti.m_fname, t->tnum, boost::format(Y("Malformed codec id '%1%'.\n")) % t->codec_id);
-
-    } else {
+  if (FOURCC('M', 'P', '4', 'A') == t->a_formattag) {
+    if ((NULL != t->private_data) && (2 <= t->private_size)) {
       int channels, sfreq, osfreq;
       bool sbr;
 
-      if (!parse_aac_data(((unsigned char *)t->private_data) + sizeof(alWAVEFORMATEX), t->private_size - sizeof(alWAVEFORMATEX), profile, channels, sfreq, osfreq, sbr))
+      if (!parse_aac_data((unsigned char *)t->private_data, t->private_size, profile, channels, sfreq, osfreq, sbr))
         mxerror_tid(m_ti.m_fname, t->tnum, Y("Malformed AAC codec initialization data found.\n"));
 
       detected_profile = profile;
       id               = AAC_ID_MPEG4;
       if (sbr)
         profile        = AAC_PROFILE_SBR;
-    }
 
-    if ((map_has_key(m_ti.m_all_aac_is_sbr, t->tnum) &&  m_ti.m_all_aac_is_sbr[t->tnum]) || (map_has_key(m_ti.m_all_aac_is_sbr, -1) &&  m_ti.m_all_aac_is_sbr[-1]))
-      profile = AAC_PROFILE_SBR;
+    } else if (!parse_aac_codec_id(std::string(t->codec_id), id, profile))
+      mxerror_tid(m_ti.m_fname, t->tnum, boost::format(Y("Malformed codec id '%1%'.\n")) % t->codec_id);
 
-    if ((map_has_key(m_ti.m_all_aac_is_sbr, t->tnum) && !m_ti.m_all_aac_is_sbr[t->tnum]) || (map_has_key(m_ti.m_all_aac_is_sbr, -1) && !m_ti.m_all_aac_is_sbr[-1]))
-      profile = detected_profile;
+  } else {
+    int channels, sfreq, osfreq;
+    bool sbr;
 
-    t->ptzr = add_packetizer(new aac_packetizer_c(this, nti, id, profile, (int32_t)t->a_sfreq, t->a_channels, false, true));
-    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the AAC output module.\n"));
+    if (!parse_aac_data(((unsigned char *)t->private_data) + sizeof(alWAVEFORMATEX), t->private_size - sizeof(alWAVEFORMATEX), profile, channels, sfreq, osfreq, sbr))
+      mxerror_tid(m_ti.m_fname, t->tnum, Y("Malformed AAC codec initialization data found.\n"));
+
+    detected_profile = profile;
+    id               = AAC_ID_MPEG4;
+    if (sbr)
+      profile        = AAC_PROFILE_SBR;
+  }
+
+  if ((map_has_key(m_ti.m_all_aac_is_sbr, t->tnum) &&  m_ti.m_all_aac_is_sbr[t->tnum]) || (map_has_key(m_ti.m_all_aac_is_sbr, -1) &&  m_ti.m_all_aac_is_sbr[-1]))
+    profile = AAC_PROFILE_SBR;
+
+  if ((map_has_key(m_ti.m_all_aac_is_sbr, t->tnum) && !m_ti.m_all_aac_is_sbr[t->tnum]) || (map_has_key(m_ti.m_all_aac_is_sbr, -1) && !m_ti.m_all_aac_is_sbr[-1]))
+    profile = detected_profile;
+
+  t->ptzr = add_packetizer(new aac_packetizer_c(this, nti, id, profile, (int32_t)t->a_sfreq, t->a_channels, false, true));
+  mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the AAC output module.\n"));
+}
+
+void
+kax_reader_c::create_ac3_audio_packetizer(kax_track_t *t,
+                                          track_info_c &nti) {
+  unsigned int bsid = t->codec_id == "A_AC3/BSID9"  ?  9
+                    : t->codec_id == "A_AC3/BSID10" ? 10
+                    : t->codec_id == MKV_A_EAC3     ? 16
+                    :                                  0;
+
+  t->ptzr = add_packetizer(new ac3_packetizer_c(this, nti, (int32_t)t->a_sfreq, t->a_channels, bsid));
+  mxinfo_tid(m_ti.m_fname, t->tnum, boost::format(Y("Using the %1%AC3 output module.\n")) % (16 == bsid ? "E" : ""));
+}
+
+void
+kax_reader_c::create_dts_audio_packetizer(kax_track_t *t,
+                                          track_info_c &nti) {
+  dts_header_t dtsheader;
+
+  dtsheader.core_sampling_frequency = (unsigned int)t->a_sfreq;
+  dtsheader.audio_channels          = t->a_channels;
+
+  t->ptzr = add_packetizer(new dts_packetizer_c(this, nti, dtsheader, true));
+  mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the DTS output module.\n"));
+}
+
+#if defined(HAVE_FLAC_FORMAT_H)
+void
+kax_reader_c::create_flac_audio_packetizer(kax_track_t *t,
+                                           track_info_c &nti) {
+  safefree(nti.m_private_data);
+  nti.m_private_data = NULL;
+  nti.m_private_size = 0;
+
+  if (FOURCC('f', 'L', 'a', 'C') == t->a_formattag)
+    t->ptzr = add_packetizer(new flac_packetizer_c(this, nti, (unsigned char *) t->private_data, t->private_size));
+  else {
+    flac_packetizer_c *p= new flac_packetizer_c(this, nti, ((unsigned char *)t->private_data) + sizeof(alWAVEFORMATEX), t->private_size - sizeof(alWAVEFORMATEX));
+    t->ptzr             = add_packetizer(p);
+  }
+
+  mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the FLAC output module.\n"));
+}
+#endif  // HAVE_FLAC_FORMAT_H
+
+void
+kax_reader_c::create_mp3_audio_packetizer(kax_track_t *t,
+                                          track_info_c &nti) {
+  t->ptzr = add_packetizer(new mp3_packetizer_c(this, nti, (int32_t)t->a_sfreq, t->a_channels, true));
+  mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the MPEG audio output module.\n"));
+}
+
+void
+kax_reader_c::create_pcm_audio_packetizer(kax_track_t *t,
+                                          track_info_c &nti) {
+  t->ptzr = add_packetizer(new pcm_packetizer_c(this, nti, (int32_t)t->a_sfreq, t->a_channels, t->a_bps, false, t->a_formattag==0x0003));
+  mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the PCM output module.\n"));
+}
+
+void
+kax_reader_c::create_tta_audio_packetizer(kax_track_t *t,
+                                          track_info_c &nti) {
+  safefree(nti.m_private_data);
+  nti.m_private_data = NULL;
+  nti.m_private_size = 0;
+
+  t->ptzr            = add_packetizer(new tta_packetizer_c(this, nti, t->a_channels, t->a_bps, (int32_t)t->a_sfreq));
+  mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the TTA output module.\n"));
+}
+
+void
+kax_reader_c::create_vorbis_audio_packetizer(kax_track_t *t,
+                                             track_info_c &nti) {
+  t->ptzr = add_packetizer(new vorbis_packetizer_c(this, nti, t->headers[0], t->header_sizes[0], t->headers[1], t->header_sizes[1], t->headers[2], t->header_sizes[2]));
+  mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the Vorbis output module.\n"));
+}
+
+void
+kax_reader_c::create_wavpack_audio_packetizer(kax_track_t *t,
+                                              track_info_c &nti) {
+  wavpack_meta_t meta;
+
+  nti.m_private_data   = (unsigned char *)t->private_data;
+  nti.m_private_size   = t->private_size;
+
+  meta.bits_per_sample = t->a_bps;
+  meta.channel_count   = t->a_channels;
+  meta.sample_rate     = (uint32_t)t->a_sfreq;
+  meta.has_correction  = t->max_blockadd_id != 0;
+
+  if (0.0 < t->v_frate)
+    meta.samples_per_block = (uint32_t)(t->a_sfreq / t->v_frate);
+
+  t->ptzr            = add_packetizer(new wavpack_packetizer_c(this, nti, meta));
+  nti.m_private_data = NULL;
+  nti.m_private_size = 0;
+
+  mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the WAVPACK output module.\n"));
+}
+
+void
+kax_reader_c::create_audio_packetizer(kax_track_t *t,
+                                      track_info_c &nti) {
+  if ((0x0001 == t->a_formattag) || (0x0003 == t->a_formattag))
+    create_pcm_audio_packetizer(t, nti);
+
+  else if (0x0055 == t->a_formattag)
+    create_mp3_audio_packetizer(t, nti);
+
+  else if (0x2000 == t->a_formattag)
+    create_ac3_audio_packetizer(t, nti);
+
+  else if (0x2001 == t->a_formattag)
+    create_dts_audio_packetizer(t, nti);
+
+  else if (0xFFFE == t->a_formattag)
+    create_vorbis_audio_packetizer(t, nti);
+
+  else if ((FOURCC('M', 'P', '4', 'A') == t->a_formattag) || (0x00ff == t->a_formattag))
+    create_aac_audio_packetizer(t, nti);
 
  #if defined(HAVE_FLAC_FORMAT_H)
-  } else if ((FOURCC('f', 'L', 'a', 'C') == t->a_formattag) || (0xf1ac == t->a_formattag)) {
-    safefree(nti.m_private_data);
-    nti.m_private_data = NULL;
-    nti.m_private_size = 0;
-
-    if (FOURCC('f', 'L', 'a', 'C') == t->a_formattag)
-      t->ptzr = add_packetizer(new flac_packetizer_c(this, nti, (unsigned char *) t->private_data, t->private_size));
-    else {
-      flac_packetizer_c *p= new flac_packetizer_c(this, nti, ((unsigned char *)t->private_data) + sizeof(alWAVEFORMATEX), t->private_size - sizeof(alWAVEFORMATEX));
-      t->ptzr             = add_packetizer(p);
-    }
-
-    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the FLAC output module.\n"));
+  else if ((FOURCC('f', 'L', 'a', 'C') == t->a_formattag) || (0xf1ac == t->a_formattag))
+    create_flac_audio_packetizer(t, nti);
  #endif
 
-  } else if (FOURCC('T', 'T', 'A', '1') == t->a_formattag) {
-    safefree(nti.m_private_data);
-    nti.m_private_data = NULL;
-    nti.m_private_size = 0;
+  else if (FOURCC('T', 'T', 'A', '1') == t->a_formattag)
+    create_tta_audio_packetizer(t, nti);
 
-    t->ptzr            = add_packetizer(new tta_packetizer_c(this, nti, t->a_channels, t->a_bps, (int32_t)t->a_sfreq));
-    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the TTA output module.\n"));
+  else if (FOURCC('W', 'V', 'P', '4') == t->a_formattag)
+    create_wavpack_audio_packetizer(t, nti);
 
-  } else if (FOURCC('W', 'V', 'P', '4') == t->a_formattag) {
-    wavpack_meta_t meta;
-
-    nti.m_private_data   = (unsigned char *)t->private_data;
-    nti.m_private_size   = t->private_size;
-
-    meta.bits_per_sample = t->a_bps;
-    meta.channel_count   = t->a_channels;
-    meta.sample_rate     = (uint32_t)t->a_sfreq;
-    meta.has_correction  = t->max_blockadd_id != 0;
-
-    if (0.0 < t->v_frate)
-      meta.samples_per_block = (uint32_t)(t->a_sfreq / t->v_frate);
-
-    t->ptzr            = add_packetizer(new wavpack_packetizer_c(this, nti, meta));
-    nti.m_private_data = NULL;
-    nti.m_private_size = 0;
-
-    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the WAVPACK output module.\n"));
-
-  } else
+  else
     init_passthrough_packetizer(t);
 
   if (0.0 != t->a_osfreq)
