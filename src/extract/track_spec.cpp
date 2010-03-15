@@ -10,7 +10,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include "extract/track_spec.h"
 
@@ -24,4 +24,3 @@ track_spec_t::track_spec_t()
   , done(false)
 {
 }
-
