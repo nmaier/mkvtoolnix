@@ -14,7 +14,7 @@
 #ifndef __R_OGM_FLAC_H
 #define __R_OGM_FLAC_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #if defined(HAVE_FLAC_FORMAT_H)
 

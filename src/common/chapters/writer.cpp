@@ -11,11 +11,9 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <expat.h>
-
-#include <string>
 
 #include <matroska/KaxChapters.h>
 

@@ -14,10 +14,9 @@
 #ifndef __MTX_COMMON_XML_ELEMENT_WRITER_H
 #define __MTX_COMMON_XML_ELEMENT_WRITER_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <expat.h>
-#include <string>
 
 #include "common/mm_io.h"
 #include "common/xml/element_parser.h"

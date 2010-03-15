@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/os.h"
+#include "common/common.h"
 
 #if !defined(SYS_WINDOWS)
 # include <sys/time.h>

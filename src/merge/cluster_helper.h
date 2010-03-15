@@ -14,9 +14,7 @@
 #ifndef __CLUSTER_HELPER_C
 #define __CLUSTER_HELPER_C
 
-#include "common/os.h"
-
-#include <vector>
+#include "common/common.h"
 
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxCluster.h>

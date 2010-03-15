@@ -14,7 +14,7 @@
 #ifndef __MTX_COMMON_KAX_FILE_H
 #define __MTX_COMMON_KAX_FILE_H
 
-#include "os.h"
+#include "common.h"
 
 #include <matroska/KaxSegment.h>
 #include <matroska/KaxCluster.h>

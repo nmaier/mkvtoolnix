@@ -21,7 +21,8 @@
  *
  */
 
-#include "common/os.h"
+#include "common/common.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -34,7 +35,7 @@
 
 #include "common/mm_io.h"
 
-extern "C" {
+#include "xio.h"
 
 #define MAX_INSTANCES 4000
 
@@ -164,6 +165,4 @@ xio_fstat(int fd,
           struct stat *buf) {
   // Not implemented for mkvtoolnix.
   return -1;
-}
-
 }

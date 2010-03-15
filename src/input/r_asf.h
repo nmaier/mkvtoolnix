@@ -14,7 +14,7 @@
 #ifndef __R_ASF_H
 #define __R_ASF_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include "common/mm_io.h"
 #include "merge/pr_generic.h"

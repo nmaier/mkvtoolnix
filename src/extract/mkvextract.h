@@ -13,12 +13,11 @@
 #ifndef __MKVEXTRACT_H
 #define __MKVEXTRACT_H
 
+#include "common/common.h"
+
 #include <avilib.h>
 
 #include <ogg/ogg.h>
-#include <vector>
-
-#include <ebml/EbmlElement.h>
 
 #include <matroska/KaxChapters.h>
 #include <matroska/KaxTags.h>

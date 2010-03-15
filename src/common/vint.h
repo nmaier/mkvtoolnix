@@ -14,7 +14,7 @@
 #ifndef __MTX_COMMON_VINT_H
 #define __MTX_COMMON_VINT_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include <ebml/EbmlId.h>
 

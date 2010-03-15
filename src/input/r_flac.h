@@ -14,13 +14,12 @@
 #ifndef __R_FLAC_H
 #define __R_FLAC_H
 
-#include "common/os.h"
+#include "common/common.h"
 
 #include "common/mm_io.h"
 #include "merge/pr_generic.h"
 
 #if defined(HAVE_FLAC_FORMAT_H)
-#include <vector>
 
 #include <FLAC/export.h>
 #if !defined(FLAC_API_VERSION_CURRENT) || FLAC_API_VERSION_CURRENT < 8
