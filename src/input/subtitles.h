@@ -14,10 +14,7 @@
 #ifndef __SUBTITLES_H
 #define __SUBTITLES_H
 
-#include "common/os.h"
-
-#include <string>
-#include <vector>
+#include "common/common.h"
 
 #include "merge/output_control.h"
 #include "output/p_textsubs.h"
