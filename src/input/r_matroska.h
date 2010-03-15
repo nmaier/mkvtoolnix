@@ -206,7 +206,20 @@ protected:
   virtual kax_track_t *new_kax_track();
   virtual kax_track_t *find_track_by_num(uint64_t num, kax_track_t *c = NULL);
   virtual kax_track_t *find_track_by_uid(uint64_t uid, kax_track_t *c = NULL);
+
+  virtual bool verify_acm_audio_track(kax_track_t *t);
+  virtual bool verify_flac_audio_track(kax_track_t *t);
+  virtual bool verify_vorbis_audio_track(kax_track_t *t);
+  virtual void verify_audio_track(kax_track_t *t);
+  virtual bool verify_mscomp_video_track(kax_track_t *t);
+  virtual bool verify_theora_video_track(kax_track_t *t);
+  virtual void verify_video_track(kax_track_t *t);
+  virtual bool verify_kate_subtitle_track(kax_track_t *t);
+  virtual bool verify_vobsub_subtitle_track(kax_track_t *t);
+  virtual void verify_subtitle_track(kax_track_t *t);
+  virtual void verify_button_track(kax_track_t *t);
   virtual void verify_tracks();
+
   virtual int packets_available();
   virtual void handle_attachments(mm_io_c *io, EbmlElement *l0, int64_t pos);
   virtual void handle_chapters(mm_io_c *io, EbmlElement *l0, int64_t pos);

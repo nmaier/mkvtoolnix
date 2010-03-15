@@ -211,9 +211,282 @@ kax_reader_c::find_track_by_uid(uint64_t uid,
   return NULL;
 }
 
+bool
+kax_reader_c::verify_acm_audio_track(kax_track_t *t) {
+  if ((NULL == t->private_data) || (sizeof(alWAVEFORMATEX) > t->private_size)) {
+    if (verbose)
+      mxwarn(boost::format(Y("matroska_reader: The CodecID for track %1% is '%2%', but there was no WAVEFORMATEX struct present. "
+                             "Therefore we don't have a format ID to identify the audio codec used.\n")) % t->tnum % MKV_A_ACM);
+    return false;
+
+  }
+
+  t->ms_compat        = 1;
+  alWAVEFORMATEX *wfe = (alWAVEFORMATEX *)t->private_data;
+  t->a_formattag      = get_uint16_le(&wfe->w_format_tag);
+  uint32_t u          = get_uint32_le(&wfe->n_samples_per_sec);
+
+  if (((uint32_t)t->a_sfreq) != u) {
+    if (verbose)
+      mxwarn(boost::format(Y("matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% samples per second, "
+                             "but WAVEFORMATEX says that there are %3%.\n")) % t->tnum % (int)t->a_sfreq % u);
+    if (0.0 == t->a_sfreq)
+      t->a_sfreq = (float)u;
+  }
+
+  u = get_uint16_le(&wfe->n_channels);
+  if (t->a_channels != u) {
+    if (verbose)
+      mxwarn(boost::format(Y("matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% channels, "
+                             "but the WAVEFORMATEX says that there are %3%.\n")) % t->tnum % t->a_channels % u);
+    if (0 == t->a_channels)
+      t->a_channels = u;
+  }
+
+  u = get_uint16_le(&wfe->w_bits_per_sample);
+  if (t->a_bps != u) {
+    if (verbose && ((0x0001 == t->a_formattag) || (0x0003 == t->a_formattag)))
+      mxwarn(boost::format(Y("matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% bits per sample, "
+                             "but the WAVEFORMATEX says that there are %3%.\n")) % t->tnum % t->a_bps % u);
+    if (0 == t->a_bps)
+      t->a_bps = u;
+  }
+
+  return true;
+}
+
+bool
+kax_reader_c::verify_flac_audio_track(kax_track_t *t) {
+#if defined(HAVE_FLAC_FORMAT_H)
+  t->a_formattag = FOURCC('f', 'L', 'a', 'C');
+  return true;
+
+#else
+  mxwarn(boost::format(Y("matroska_reader: mkvmerge was not compiled with FLAC support. Ignoring track %1%.\n")) % t->tnum);
+  return false;
+#endif
+}
+
+bool
+kax_reader_c::verify_vorbis_audio_track(kax_track_t *t) {
+  if (NULL == t->private_data) {
+    if (verbose)
+      mxwarn(boost::format(Y("matroska_reader: The CodecID for track %1% is 'A_VORBIS', but there are no header packets present.\n")) % t->tnum);
+    return false;
+  }
+
+  try {
+    memory_cptr temp(new memory_c((unsigned char *)t->private_data, t->private_size, false));
+    std::vector<memory_cptr> blocks = unlace_memory_xiph(temp);
+    if (blocks.size() != 3)
+      throw false;
+
+    for (unsigned int i = 0; 3 > i; ++i) {
+      t->headers[i]      = blocks[i]->get_buffer();
+      t->header_sizes[i] = blocks[i]->get_size();
+    }
+
+  } catch (...) {
+    if (verbose)
+      mxwarn(Y("matroska_reader: Vorbis track does not contain valid headers.\n"));
+    return false;
+  }
+
+  t->a_formattag = 0xFFFE;
+
+  // mkvmerge around 0.6.x had a bug writing a default duration
+  // for Vorbis m_tracks but not the correct durations for the
+  // individual packets. This comes back to haunt us because
+  // when regenerating the timestamps from lacing those durations
+  // are used and add up to too large a value. The result is the
+  // usual "timecode < m_last_timecode" message.
+  // Workaround: do not use durations for such m_tracks.
+  if ((m_writing_app == "mkvmerge") && (-1 != m_writing_app_ver) && (0x07000000 > m_writing_app_ver))
+    t->ignore_duration_hack = true;
+
+  return true;
+}
+
+void
+kax_reader_c::verify_audio_track(kax_track_t *t) {
+  if (t->codec_id.empty())
+    return;
+
+  bool is_ok = true;
+  if (t->codec_id == MKV_A_ACM)
+    is_ok = verify_acm_audio_track(t);
+  else if (starts_with(t->codec_id, MKV_A_MP3, strlen(MKV_A_MP3) - 1))
+    t->a_formattag = 0x0055;
+  else if (starts_with(t->codec_id, MKV_A_AC3, strlen(MKV_A_AC3)) || (t->codec_id == MKV_A_EAC3))
+    t->a_formattag = 0x2000;
+  else if (t->codec_id == MKV_A_DTS)
+    t->a_formattag = 0x2001;
+  else if (t->codec_id == MKV_A_PCM)
+    t->a_formattag = 0x0001;
+  else if (t->codec_id == MKV_A_PCM_FLOAT)
+    t->a_formattag = 0x0003;
+  else if (t->codec_id == MKV_A_VORBIS)
+    is_ok = verify_vorbis_audio_track(t);
+  else if (   (t->codec_id == MKV_A_AAC_2MAIN)
+           || (t->codec_id == MKV_A_AAC_2LC)
+           || (t->codec_id == MKV_A_AAC_2SSR)
+           || (t->codec_id == MKV_A_AAC_4MAIN)
+           || (t->codec_id == MKV_A_AAC_4LC)
+           || (t->codec_id == MKV_A_AAC_4SSR)
+           || (t->codec_id == MKV_A_AAC_4LTP)
+           || (t->codec_id == MKV_A_AAC_2SBR)
+           || (t->codec_id == MKV_A_AAC_4SBR)
+           || (t->codec_id == MKV_A_AAC))
+    t->a_formattag = FOURCC('M', 'P', '4', 'A');
+  else if (starts_with(t->codec_id, MKV_A_REAL_COOK, strlen("A_REAL/")))
+    t->a_formattag = FOURCC('r', 'e', 'a', 'l');
+  else if (t->codec_id == MKV_A_FLAC)
+    is_ok = verify_flac_audio_track(t);
+  else if (t->codec_id == MKV_A_TTA)
+    t->a_formattag = FOURCC('T', 'T', 'A', '1');
+  else if (t->codec_id == MKV_A_WAVPACK4)
+    t->a_formattag = FOURCC('W', 'V', 'P', '4');
+
+  if (!is_ok)
+    return;
+
+  if (0.0 == t->a_sfreq)
+    t->a_sfreq = 8000.0;
+
+  if (0 == t->a_channels)
+    t->a_channels = 1;
+
+  // This track seems to be ok.
+  t->ok = 1;
+}
+
+bool
+kax_reader_c::verify_mscomp_video_track(kax_track_t *t) {
+  if ((NULL == t->private_data) || (sizeof(alBITMAPINFOHEADER) > t->private_size)) {
+    if (verbose)
+      mxwarn(boost::format(Y("matroska_reader: The CodecID for track %1% is '%2%', but there was no BITMAPINFOHEADER struct present. "
+                             "Therefore we don't have a FourCC to identify the video codec used.\n"))
+             % t->tnum % MKV_V_MSCOMP);
+      return false;
+  }
+
+  t->ms_compat            = 1;
+  alBITMAPINFOHEADER *bih = (alBITMAPINFOHEADER *)t->private_data;
+  uint32_t u              = get_uint32_le(&bih->bi_width);
+
+  if (t->v_width != u) {
+    if (verbose)
+      mxwarn(boost::format(Y("matroska_reader: (MS compatibility mode, track %1%) Matrosa says video width is %2%, but the BITMAPINFOHEADER says %3%.\n"))
+             % t->tnum % t->v_width % u);
+    if (0 == t->v_width)
+      t->v_width = u;
+  }
+
+  u = get_uint32_le(&bih->bi_height);
+  if (t->v_height != u) {
+    if (verbose)
+      mxwarn(boost::format(Y("matroska_reader: (MS compatibility mode, track %1%) Matrosa video height is %2%, but the BITMAPINFOHEADER says %3%.\n"))
+             % t->tnum % t->v_height % u);
+    if (0 == t->v_height)
+      t->v_height = u;
+  }
+
+  memcpy(t->v_fourcc, &bih->bi_compression, 4);
+
+  return true;
+}
+
+bool
+kax_reader_c::verify_theora_video_track(kax_track_t *t) {
+  if (NULL != t->private_data)
+    return true;
+
+  if (verbose)
+    mxwarn(boost::format(Y("matroska_reader: The CodecID for track %1% is '%2%', but there was no codec private headers.\n")) % t->tnum % MKV_V_THEORA);
+
+  return false;
+}
+
+void
+kax_reader_c::verify_video_track(kax_track_t *t) {
+  if (t->codec_id == "")
+    return;
+
+  bool is_ok = true;
+  if (t->codec_id == MKV_V_MSCOMP)
+    is_ok = verify_mscomp_video_track(t);
+
+  else if (t->codec_id == MKV_V_THEORA)
+    is_ok = verify_theora_video_track(t);
+
+  if (!is_ok)
+    return;
+
+  if (0 == t->v_width) {
+    if (verbose)
+      mxwarn(boost::format(Y("matroska_reader: The width for track %1% was not set.\n")) % t->tnum);
+    return;
+  }
+
+  if (0 == t->v_height) {
+    if (verbose)
+      mxwarn(boost::format(Y("matroska_reader: The height for track %1% was not set.\n")) % t->tnum);
+    return;
+  }
+
+  // This track seems to be ok.
+  t->ok = 1;
+}
+
+bool
+kax_reader_c::verify_kate_subtitle_track(kax_track_t *t) {
+  if (NULL != t->private_data)
+    return true;
+
+  if (verbose)
+    mxwarn(boost::format(Y("matroska_reader: The CodecID for track %1% is '%2%', but there was no private data found.\n")) % t->tnum % t->codec_id);
+
+  return false;
+}
+
+bool
+kax_reader_c::verify_vobsub_subtitle_track(kax_track_t *t) {
+  if (NULL != t->private_data)
+    return true;
+
+  if (verbose)
+    mxwarn(boost::format(Y("matroska_reader: The CodecID for track %1% is '%2%', but there was no private data found.\n")) % t->tnum % t->codec_id);
+
+  return false;
+}
+
+void
+kax_reader_c::verify_subtitle_track(kax_track_t *t) {
+  bool is_ok = true;
+
+  if (t->codec_id == MKV_S_VOBSUB)
+    is_ok = verify_vobsub_subtitle_track(t);
+
+  else if (t->codec_id == MKV_S_KATE)
+    is_ok = verify_kate_subtitle_track(t);
+
+  t->ok = is_ok ? 1 : 0;
+}
+
+void
+kax_reader_c::verify_button_track(kax_track_t *t) {
+  if (t->codec_id != MKV_B_VOBBTN) {
+    if (verbose)
+      mxwarn(boost::format(Y("matroska_reader: The CodecID '%1%' for track %2% is unknown.\n")) % t->codec_id % t->tnum);
+    return;
+  }
+
+  t->ok = 1;
+}
+
 void
 kax_reader_c::verify_tracks() {
-  int tnum, u;
+  int tnum;
   kax_track_t *t;
 
   for (tnum = 0; tnum < m_tracks.size(); tnum++) {
@@ -235,221 +508,19 @@ kax_reader_c::verify_tracks() {
 
     switch (t->type) {
       case 'v':                 // video track
-        if (t->codec_id == "")
-          continue;
-        if (t->codec_id == MKV_V_MSCOMP) {
-          if ((NULL == t->private_data) || (sizeof(alBITMAPINFOHEADER) > t->private_size)) {
-            if (verbose)
-              mxwarn(boost::format(Y("matroska_reader: The CodecID for track %1% is '%2%', but there was no BITMAPINFOHEADER struct present. "
-                                     "Therefore we don't have a FourCC to identify the video codec used.\n"))
-                     % t->tnum % MKV_V_MSCOMP);
-            continue;
-
-          } else {
-            t->ms_compat            = 1;
-            alBITMAPINFOHEADER *bih = (alBITMAPINFOHEADER *)t->private_data;
-            u                       = get_uint32_le(&bih->bi_width);
-
-            if (t->v_width != u) {
-              if (verbose)
-                mxwarn(boost::format(Y("matroska_reader: (MS compatibility mode, track %1%) Matrosa says video width is %2%, but the BITMAPINFOHEADER says %3%.\n"))
-                       % t->tnum % t->v_width % u);
-              if (0 == t->v_width)
-                t->v_width = u;
-            }
-
-            u = get_uint32_le(&bih->bi_height);
-            if (t->v_height != u) {
-              if (verbose)
-                mxwarn(boost::format(Y("matroska_reader: (MS compatibility mode, track %1%) Matrosa video height is %2%, but the BITMAPINFOHEADER says %3%.\n"))
-                       % t->tnum % t->v_height % u);
-              if (0 == t->v_height)
-                t->v_height = u;
-            }
-
-            memcpy(t->v_fourcc, &bih->bi_compression, 4);
-          }
-
-        } else if (t->codec_id == MKV_V_THEORA) {
-          if (NULL == t->private_data) {
-            if (verbose)
-              mxwarn(boost::format(Y("matroska_reader: The CodecID for track %1% is '%2%', but there was no codec private headers.\n")) % t->tnum % MKV_V_THEORA);
-            continue;
-          }
-        }
-
-        if (0 == t->v_width) {
-          if (verbose)
-            mxwarn(boost::format(Y("matroska_reader: The width for track %1% was not set.\n")) % t->tnum);
-          continue;
-        }
-
-        if (0 == t->v_height) {
-          if (verbose)
-            mxwarn(boost::format(Y("matroska_reader: The height for track %1% was not set.\n")) % t->tnum);
-          continue;
-        }
-
-        // This track seems to be ok.
-        t->ok = 1;
-
+        verify_video_track(t);
         break;
 
       case 'a':                 // audio track
-        if (t->codec_id == "")
-          continue;
-
-        if (t->codec_id == MKV_A_ACM) {
-          if ((NULL == t->private_data) || (sizeof(alWAVEFORMATEX) > t->private_size)) {
-            if (verbose)
-              mxwarn(boost::format(Y("matroska_reader: The CodecID for track %1% is '%2%', but there was no WAVEFORMATEX struct present. "
-                                     "Therefore we don't have a format ID to identify the audio codec used.\n")) % t->tnum % MKV_A_ACM);
-            continue;
-
-          } else {
-            t->ms_compat        = 1;
-            alWAVEFORMATEX *wfe = (alWAVEFORMATEX *)t->private_data;
-            t->a_formattag      = get_uint16_le(&wfe->w_format_tag);
-            u                   = get_uint32_le(&wfe->n_samples_per_sec);
-
-            if (((uint32_t)t->a_sfreq) != u) {
-              if (verbose)
-                mxwarn(boost::format(Y("matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% samples per second, "
-                                       "but WAVEFORMATEX says that there are %3%.\n")) % t->tnum % (int)t->a_sfreq % u);
-              if (0.0 == t->a_sfreq)
-                t->a_sfreq = (float)u;
-            }
-
-            u = get_uint16_le(&wfe->n_channels);
-            if (t->a_channels != u) {
-              if (verbose)
-                mxwarn(boost::format(Y("matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% channels, "
-                                       "but the WAVEFORMATEX says that there are %3%.\n")) % t->tnum % t->a_channels % u);
-              if (0 == t->a_channels)
-                t->a_channels = u;
-            }
-
-            u = get_uint16_le(&wfe->w_bits_per_sample);
-            if (t->a_bps != u) {
-              if (verbose && ((0x0001 == t->a_formattag) || (0x0003 == t->a_formattag)))
-                mxwarn(boost::format(Y("matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% bits per sample, "
-                                       "but the WAVEFORMATEX says that there are %3%.\n")) % t->tnum % t->a_bps % u);
-              if (0 == t->a_bps)
-                t->a_bps = u;
-            }
-          }
-
-        } else {
-          if (starts_with(t->codec_id, MKV_A_MP3, strlen(MKV_A_MP3) - 1))
-            t->a_formattag = 0x0055;
-          else if (starts_with(t->codec_id, MKV_A_AC3, strlen(MKV_A_AC3)) || (t->codec_id == MKV_A_EAC3))
-            t->a_formattag = 0x2000;
-          else if (t->codec_id == MKV_A_DTS)
-            t->a_formattag = 0x2001;
-          else if (t->codec_id == MKV_A_PCM)
-            t->a_formattag = 0x0001;
-          else if (t->codec_id == MKV_A_PCM_FLOAT)
-            t->a_formattag = 0x0003;
-          else if (t->codec_id == MKV_A_VORBIS) {
-            if (NULL == t->private_data) {
-              if (verbose)
-                mxwarn(boost::format(Y("matroska_reader: The CodecID for track %1% is 'A_VORBIS', but there are no header packets present.\n")) % t->tnum);
-              continue;
-            }
-
-            try {
-              memory_cptr temp(new memory_c((unsigned char *)t->private_data, t->private_size, false));
-              std::vector<memory_cptr> blocks = unlace_memory_xiph(temp);
-              if (blocks.size() != 3)
-                throw false;
-
-              t->headers[0]      = blocks[0]->get_buffer();
-              t->headers[1]      = blocks[1]->get_buffer();
-              t->headers[2]      = blocks[2]->get_buffer();
-              t->header_sizes[0] = blocks[0]->get_size();
-              t->header_sizes[1] = blocks[1]->get_size();
-              t->header_sizes[2] = blocks[2]->get_size();
-
-            } catch (...) {
-              if (verbose)
-                mxwarn(Y("matroska_reader: Vorbis track does not contain valid headers.\n"));
-              continue;
-            }
-
-            t->a_formattag = 0xFFFE;
-
-            // mkvmerge around 0.6.x had a bug writing a default duration
-            // for Vorbis m_tracks but not the correct durations for the
-            // individual packets. This comes back to haunt us because
-            // when regenerating the timestamps from lacing those durations
-            // are used and add up to too large a value. The result is the
-            // usual "timecode < m_last_timecode" message.
-            // Workaround: do not use durations for such m_tracks.
-            if ((m_writing_app == "mkvmerge") && (-1 != m_writing_app_ver) && (0x07000000 > m_writing_app_ver))
-              t->ignore_duration_hack = true;
-
-          } else if (   (t->codec_id == MKV_A_AAC_2MAIN)
-                     || (t->codec_id == MKV_A_AAC_2LC)
-                     || (t->codec_id == MKV_A_AAC_2SSR)
-                     || (t->codec_id == MKV_A_AAC_4MAIN)
-                     || (t->codec_id == MKV_A_AAC_4LC)
-                     || (t->codec_id == MKV_A_AAC_4SSR)
-                     || (t->codec_id == MKV_A_AAC_4LTP)
-                     || (t->codec_id == MKV_A_AAC_2SBR)
-                     || (t->codec_id == MKV_A_AAC_4SBR)
-                     || (t->codec_id == MKV_A_AAC))
-            t->a_formattag = FOURCC('M', 'P', '4', 'A');
-          else if (starts_with(t->codec_id, MKV_A_REAL_COOK, strlen("A_REAL/")))
-            t->a_formattag = FOURCC('r', 'e', 'a', 'l');
-          else if (t->codec_id == MKV_A_FLAC) {
-#if defined(HAVE_FLAC_FORMAT_H)
-            t->a_formattag = FOURCC('f', 'L', 'a', 'C');
-#else
-            mxwarn(boost::format(Y("matroska_reader: mkvmerge was not compiled with FLAC support. Ignoring track %1%.\n")) % t->tnum);
-            continue;
-#endif
-          } else if (t->codec_id == MKV_A_TTA)
-            t->a_formattag = FOURCC('T', 'T', 'A', '1');
-          else if (t->codec_id == MKV_A_WAVPACK4)
-            t->a_formattag = FOURCC('W', 'V', 'P', '4');
-        }
-
-        if (0.0 == t->a_sfreq)
-          t->a_sfreq = 8000.0;
-
-        if (0 == t->a_channels)
-          t->a_channels = 1;
-
-        // This track seems to be ok.
-        t->ok = 1;
-
+        verify_audio_track(t);
         break;
 
       case 's':
-        if (t->codec_id == MKV_S_VOBSUB) {
-          if (NULL == t->private_data) {
-            if (verbose)
-              mxwarn(boost::format(Y("matroska_reader: The CodecID for track %1% is '%2%', but there was no private data found.\n")) % t->tnum % t->codec_id);
-            continue;
-          }
-
-        } else if (t->codec_id == MKV_S_KATE) {
-          if (NULL == t->private_data) {
-            if (verbose)
-              mxwarn(boost::format(Y("matroska_reader: The CodecID for track %1% is '%2%', but there was no private data found.\n")) % t->tnum % t->codec_id);
-            continue;
-          }
-        }
-        t->ok = 1;
+        verify_subtitle_track(t);
         break;
 
       case 'b':
-        if (t->codec_id != MKV_B_VOBBTN) {
-          if (verbose)
-            mxwarn(boost::format(Y("matroska_reader: The CodecID '%1%' for track %2% is unknown.\n")) % t->codec_id % t->tnum);
-          continue;
-        }
-        t->ok = 1;
+        verify_button_track(t);
         break;
 
       default:                  // unknown track type!? error in demuxer...
