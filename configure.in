@@ -14,10 +14,12 @@ opt_features_no=""
 
 m4_include(ac/initialization.m4)
 m4_include(ac/check_version.m4)
+m4_include(ac/gcc_version.m4)
 m4_include(ac/endianess.m4)
 m4_include(ac/mingw.m4)
 m4_include(ac/extra_inc_lib.m4)
 m4_include(ac/debugging_profiling.m4)
+m4_include(ac/precompiled_headers.m4)
 m4_include(ac/build_timestamp_in_version.m4)
 m4_include(ac/inttypes.m4)
 m4_include(ac/pri64d.m4)
