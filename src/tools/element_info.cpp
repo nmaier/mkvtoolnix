@@ -157,7 +157,7 @@ init_element_names() {
   g_element_names[0x4EC7]     = "TagCommercial";
   g_element_names[0x4987]     = "TagCropped";
   g_element_names[0x4EC8]     = "TagDate";
-  g_element_names[0x44B4]     = "TagDefault";
+  g_element_names[0x4484]     = "TagDefault";
   g_element_names[0x41B6]     = "TagDiscTrack";
   g_element_names[0x63C9]     = "TagEditionUID";
   g_element_names[0x4431]     = "TagEncoder";
