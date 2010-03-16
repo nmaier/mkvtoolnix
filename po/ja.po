@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-03-02 02:25+0900\n"
+"PO-Revision-Date: 2010-03-17 01:05+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -1025,15 +1025,15 @@ msgstr "'%1%'はファイル名がありません。\n"
 
 #: src/merge/mkvmerge.cpp:1433
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code in '--chapter-language %1%'. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
-msgstr "'--chapter-language %1%'の'%1%'は正しいISO639-2またはISO639-1コードではありません。全ての言語とそのISO639-2コードは'mkvmerge --list-languages'を参照してください。\n"
+msgstr "'--chapter-language %1%'の'%1%'は正しいISO639-2またはISO639-1コードではありません。全ての言語とそのISO639-2コードのリストは'mkvmerge --list-languages'を参照してください。\n"
 
 #: src/merge/mkvmerge.cpp:1501
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code in '--default-language %1%'. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
-msgstr "'--default-language %1%'の'%1%'は正しいISO639-2またはISO639-1コードではありません。全ての言語とそのISO639-2コードは'mkvmerge --list-languages'を参照してください。\n"
+msgstr "'--default-language %1%'の'%1%'は正しいISO639-2またはISO639-1コードではありません。全ての言語とそのISO639-2コードのリストは'mkvmerge --list-languages'を参照してください。\n"
 
 #: src/merge/mkvmerge.cpp:1055
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
-msgstr "'%1%'は正しいISO639-2またはISO639-1コードではありません。全ての言語とそのISO639-2コードは'mkvmerge --list-languages'を参照してください。\n"
+msgstr "'%1%'は正しいISO639-2またはISO639-1コードではありません。全ての言語とそのISO639-2コードのリストは'mkvmerge --list-languages'を参照してください。\n"
 
 #: src/common/chapters/chapters.cpp:186 src/common/chapters/chapters.cpp:203
 msgid "'%1%' is not a CHAPTERxx=... line."
@@ -1081,7 +1081,7 @@ msgstr "'--track-order %2%'の'%1%'は正しいファイルIDとトラックID�
 
 #: src/merge/mkvmerge.cpp:1282
 msgid "'%1%' is not a valid pair of track ID and block additional in '--blockadd %1%'.\n"
-msgstr "'--blockadd %1%'の'%1%'は正しいトラックIDとBlockAdditionの組み合わせではありません。.\n"
+msgstr "'--blockadd %1%'の'%1%'は正しいトラックIDとBlockAdditionの組み合わせではありません。\n"
 
 #: src/merge/mkvmerge.cpp:1327
 msgid "'%1%' is not a valid priority class.\n"
@@ -1125,7 +1125,7 @@ msgstr "'%1%'に引数がありません。\n"
 
 #: src/merge/mkvmerge.cpp:1909
 msgid "'%1%' lacks the FourCC.\n"
-msgstr "'%1%'にFourCCが指定されていません。.\n"
+msgstr "'%1%'にFourCCが指定されていません。\n"
 
 #: src/merge/mkvmerge.cpp:1951
 msgid "'%1%' lacks the delay.\n"
@@ -1584,7 +1584,7 @@ msgstr "AAC（Advanced Audio Coding）"
 
 #: src/input/r_aac.cpp:112
 msgid "AAC files may contain HE-AAC / AAC+ / SBR AAC audio. This can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr 0' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
-msgstr "AACファイルは、HE-AAC/AAC+/SBR AACのどれかを含んでる可能性があります。これは自動検知できません。そのため実際にファイルがSBR AACを含んでいる場合、'--aac-is-sbr 0'オプションを手動で指定なければなりません。そうしなければ、間違ってMUXされてしまいます。mkvmergeのドキュメントも読んでください。\n"
+msgstr "AACファイルは、HE-AAC/AAC+/SBR AACのどれかを含んでいる可能性があります。これは自動検知できません。そのため実際にファイルがSBR AACを含んでいる場合、'--aac-is-sbr 0'オプションを手動で指定なければなりません。そうしなければ、間違ってMUXされてしまいます。mkvmergeのドキュメントも読んでください。\n"
 
 #: src/mmg/tabs/input_format.cpp:253
 msgid "AAC is SBR/HE-AAC/AAC+"
@@ -2090,7 +2090,7 @@ msgstr "チャプタパーサー：チャプタUID %1%がユニークではな�
 
 #: src/common/chapters/xml_parser.cpp:65
 msgid "Chapter parser: The EditionUID %1% is not unique and could not be reused. A new one will be created.\n"
-msgstr "チャプタパーサー：エディションUID %1%がユニークではなく、再使用されるこもできません。新しいUIDが生成されます。\n"
+msgstr "チャプタパーサー：エディションUID %1%がユニークではなく、再使用されることもできません。新しいUIDが生成されます。\n"
 
 #: src/mmg/tabs/chapters.cpp:759 src/mmg/tabs/chapters.cpp:767
 #: src/mmg/tabs/chapters.cpp:773 src/mmg/tabs/chapters.cpp:780
@@ -2214,11 +2214,11 @@ msgstr "クラスタ"
 
 #: src/merge/mkvmerge.cpp:1383
 msgid "Cluster length '%1%' out of range (0..65535).\n"
-msgstr "クラスタの長さ'%1%'が範囲（0～65535）から外れています。.\n"
+msgstr "クラスタの長さ'%1%'が範囲（0～65535）から外れています。\n"
 
 #: src/merge/mkvmerge.cpp:1376
 msgid "Cluster length '%1%' out of range (100..32000).\n"
-msgstr "クラスタの長さ'%1%'が範囲（100～32000）から外れています。.\n"
+msgstr "クラスタの長さ'%1%'が範囲（100～32000）から外れています。\n"
 
 #: src/info/mkvinfo.cpp:174
 msgid "Cluster position: %1%"
@@ -3462,7 +3462,7 @@ msgstr "AVIのオーディオトラックのVorbisヘッダが不正です。"
 
 #: src/extract/extract_cli_parser.cpp:249
 msgid "Invalid attachment ID/file name specification in argument '%1%'.\n"
-msgstr "引数'%1%'で指定されている添付ファイルID・ファイル名が不正です。.\n"
+msgstr "引数'%1%'で指定されている添付ファイルID・ファイル名が不正です。\n"
 
 #: src/common/xml/element_parser.cpp:213
 msgid "Invalid binary data format '%1%' specified. Supported are 'Base64', 'ASCII' and 'hex'."
