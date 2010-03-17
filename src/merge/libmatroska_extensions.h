@@ -17,6 +17,7 @@
 
 #include "common/os.h"
 
+#include <ebml/EbmlVersion.h>
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxBlockData.h>
 #include <matroska/KaxCluster.h>
@@ -52,7 +53,11 @@ public:
 
   void set_value(int64_t value) {
     m_value     = value;
+#if LIBEBML_VERSION < 0x000800
     bValueIsSet = true;
+#else
+    SetValueIsSet();
+#endif
   }
 
   virtual uint64 UpdateSize(bool bSaveDefault, bool bForceRender);
