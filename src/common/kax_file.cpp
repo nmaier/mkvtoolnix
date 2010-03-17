@@ -125,7 +125,7 @@ bool
 kax_file_c::is_level1_element_id(vint_c id) const {
   const EbmlSemanticContext &context = EBML_INFO_CONTEXT(EBML_INFO(KaxSegment));
   for (int segment_idx = 0; EBML_CTX_SIZE(context) > segment_idx; ++segment_idx)
-    if (EBML_ID_VALUE(EBML_INFO_ID(EBML_SEM_INFO(context.MyTable[segment_idx]))) == id.m_value)
+    if (EBML_ID_VALUE(EBML_SEM_ID(context.MyTable[segment_idx])) == id.m_value)
       return true;
 
   return false;

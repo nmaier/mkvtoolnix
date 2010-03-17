@@ -275,7 +275,7 @@ add_new_element(parser_data_t *pdata,
       const EbmlSemanticContext &context = EBML_INFO_CONTEXT(*callbacks);
       int i;
       for (i = 0; i < EBML_CTX_SIZE(context); i++)
-        if (pdata->mapping[elt_idx].id == EBML_INFO_ID(EBML_SEM_INFO(context.MyTable[i]))) {
+        if (pdata->mapping[elt_idx].id == EBML_SEM_ID(context.MyTable[i])) {
           found = true;
           break;
         }
