@@ -49,7 +49,7 @@ kax_analyzer_data_c::to_string() const {
 
   std::string name;
   if (NULL != callbacks)
-    name = callbacks->DebugName;
+    name = EBML_INFO_NAME(*callbacks);
 
   else {
     std::string format = (boost::format("0x%%|0%1%x|") % (EBML_ID_LENGTH(m_id) * 2)).str();
@@ -279,13 +279,13 @@ kax_analyzer_c::read_element(kax_analyzer_data_c *element_data) {
   EbmlElement *e                 = es.FindNextElement(EBML_CONTEXT(m_segment), upper_lvl_el, 0xFFFFFFFFL, true, 1);
   const EbmlCallbacks *callbacks = find_ebml_callbacks(EBML_INFO(KaxSegment), element_data->m_id);
 
-  if ((NULL == e) || (NULL == callbacks) || (EbmlId(*e) != callbacks->GlobalId)) {
+  if ((NULL == e) || (NULL == callbacks) || (EbmlId(*e) != EBML_INFO_ID(*callbacks))) {
     delete e;
     return NULL;
   }
 
   upper_lvl_el = 0;
-  e->Read(*m_stream, callbacks->Context, upper_lvl_el, e, true);
+  e->Read(*m_stream, EBML_INFO_CONTEXT(*callbacks), upper_lvl_el, e, true);
 
   return e;
 }
@@ -884,22 +884,22 @@ kax_analyzer_c::read_all(const EbmlCallbacks &callbacks) {
 
   for (i = 0; m_data.size() > i; ++i) {
     kax_analyzer_data_c &data = *m_data[i].get_object();
-    if (callbacks.GlobalId != data.m_id)
+    if (EBML_INFO_ID(callbacks) != data.m_id)
       continue;
 
     m_file->setFilePointer(data.m_pos);
     int upper_lvl_el     = 0;
-    EbmlElement *element = es.FindNextElement(EBML_INFO(KaxSegment).Context, upper_lvl_el, 0xFFFFFFFFL, true);
+    EbmlElement *element = es.FindNextElement(EBML_INFO_CONTEXT(EBML_INFO(KaxSegment)), upper_lvl_el, 0xFFFFFFFFL, true);
     if (NULL == element)
       continue;
 
-    if (EbmlId(*element) != callbacks.GlobalId) {
+    if (EbmlId(*element) != EBML_INFO_ID(callbacks)) {
       delete element;
       continue;
     }
 
     EbmlElement *l2 = NULL;
-    element->Read(*m_stream, callbacks.Context, upper_lvl_el, l2, true);
+    element->Read(*m_stream, EBML_INFO_CONTEXT(callbacks), upper_lvl_el, l2, true);
 
     if (NULL == master)
       master = static_cast<EbmlMaster *>(element);

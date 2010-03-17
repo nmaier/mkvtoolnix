@@ -272,10 +272,10 @@ add_new_element(parser_data_t *pdata,
     bool found                     = false;
 
     if (NULL != callbacks) {
-      const EbmlSemanticContext &context = callbacks->Context;
+      const EbmlSemanticContext &context = EBML_INFO_CONTEXT(*callbacks);
       int i;
-      for (i = 0; i < context.Size; i++)
-        if (pdata->mapping[elt_idx].id == context.MyTable[i].GetCallbacks.GlobalId) {
+      for (i = 0; i < EBML_CTX_SIZE(context); i++)
+        if (pdata->mapping[elt_idx].id == EBML_INFO_ID(EBML_SEM_INFO(context.MyTable[i]))) {
           found = true;
           break;
         }
@@ -285,7 +285,7 @@ add_new_element(parser_data_t *pdata,
       xmlp_error(pdata, boost::format(Y("<%1%> is not a valid child element of <%2%>.")) % name % pdata->mapping[parent_idx].name);
 
     const EbmlSemantic *semantic = find_ebml_semantic(EBML_INFO(KaxSegment), pdata->mapping[elt_idx].id);
-    if ((NULL != semantic) && semantic->Unique) {
+    if ((NULL != semantic) && EBML_SEM_UNIQUE(*semantic)) {
       EbmlMaster *m = dynamic_cast<EbmlMaster *>(xmlp_pelt);
       assert(NULL != m);
 

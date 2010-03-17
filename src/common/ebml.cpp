@@ -251,23 +251,23 @@ empty_ebml_master(EbmlElement *e) {
 EbmlElement *
 create_ebml_element(const EbmlCallbacks &callbacks,
                     const EbmlId &id) {
-  const EbmlSemanticContext &context = callbacks.Context;
+  const EbmlSemanticContext &context = EBML_INFO_CONTEXT(callbacks);
   int i;
 
 //   if (id == EbmlId(*parent))
 //     return empty_ebml_master(&parent->Generic().Create());
 
-  for (i = 0; i < context.Size; i++)
-    if (id == context.MyTable[i].GetCallbacks.GlobalId)
-      return empty_ebml_master(&context.MyTable[i].GetCallbacks.Create());
+  for (i = 0; i < EBML_CTX_SIZE(context); i++)
+    if (id == EBML_INFO_ID(EBML_SEM_INFO(context.MyTable[i])))
+      return empty_ebml_master(&context.MyTable[i].Create());
 
-  for (i = 0; i < context.Size; i++) {
+  for (i = 0; i < EBML_CTX_SIZE(context); i++) {
     EbmlElement *e;
 
-    if (!(context != context.MyTable[i].GetCallbacks.Context))
+    if (!(context != EBML_INFO_CONTEXT(EBML_SEM_INFO(context.MyTable[i]))))
       continue;
 
-    e = create_ebml_element(context.MyTable[i].GetCallbacks, id);
+    e = create_ebml_element(EBML_SEM_INFO(context.MyTable[i]), id);
     if (e != NULL)
       return e;
   }
@@ -278,21 +278,21 @@ create_ebml_element(const EbmlCallbacks &callbacks,
 const EbmlCallbacks *
 find_ebml_callbacks(const EbmlCallbacks &base,
                     const EbmlId &id) {
-  const EbmlSemanticContext &context = base.Context;
+  const EbmlSemanticContext &context = EBML_INFO_CONTEXT(base);
   const EbmlCallbacks *result;
   int i;
 
-  if (base.GlobalId == id)
+  if (EBML_INFO_ID(base) == id)
     return &base;
 
-  for (i = 0; i < context.Size; i++)
-    if (id == context.MyTable[i].GetCallbacks.GlobalId)
-      return &context.MyTable[i].GetCallbacks;
+  for (i = 0; i < EBML_CTX_SIZE(context); i++)
+    if (id == EBML_INFO_ID(EBML_SEM_INFO(context.MyTable[i])))
+      return &EBML_SEM_INFO(context.MyTable[i]);
 
-  for (i = 0; i < context.Size; i++) {
-    if (!(context != context.MyTable[i].GetCallbacks.Context))
+  for (i = 0; i < EBML_CTX_SIZE(context); i++) {
+    if (!(context != EBML_INFO_CONTEXT(EBML_SEM_INFO(context.MyTable[i]))))
       continue;
-    result = find_ebml_callbacks(context.MyTable[i].GetCallbacks, id);
+    result = find_ebml_callbacks(EBML_SEM_INFO(context.MyTable[i]), id);
     if (NULL != result)
       return result;
   }
@@ -303,21 +303,21 @@ find_ebml_callbacks(const EbmlCallbacks &base,
 const EbmlCallbacks *
 find_ebml_callbacks(const EbmlCallbacks &base,
                     const char *debug_name) {
-  const EbmlSemanticContext &context = base.Context;
+  const EbmlSemanticContext &context = EBML_INFO_CONTEXT(base);
   const EbmlCallbacks *result;
   int i;
 
-  if (!strcmp(debug_name, base.DebugName))
+  if (!strcmp(debug_name, EBML_INFO_NAME(base)))
     return &base;
 
-  for (i = 0; i < context.Size; i++)
-    if (!strcmp(debug_name, context.MyTable[i].GetCallbacks.DebugName))
-      return &context.MyTable[i].GetCallbacks;
+  for (i = 0; i < EBML_CTX_SIZE(context); i++)
+    if (!strcmp(debug_name, EBML_INFO_NAME(EBML_SEM_INFO(context.MyTable[i]))))
+      return &EBML_SEM_INFO(context.MyTable[i]);
 
-  for (i = 0; i < context.Size; i++) {
-    if (!(context != context.MyTable[i].GetCallbacks.Context))
+  for (i = 0; i < EBML_CTX_SIZE(context); i++) {
+    if (!(context != EBML_INFO_CONTEXT(EBML_SEM_INFO(context.MyTable[i]))))
       continue;
-    result = find_ebml_callbacks(context.MyTable[i].GetCallbacks, debug_name);
+    result = find_ebml_callbacks(EBML_SEM_INFO(context.MyTable[i]), debug_name);
     if (NULL != result)
       return result;
   }
@@ -328,18 +328,18 @@ find_ebml_callbacks(const EbmlCallbacks &base,
 const EbmlCallbacks *
 find_ebml_parent_callbacks(const EbmlCallbacks &base,
                            const EbmlId &id) {
-  const EbmlSemanticContext &context = base.Context;
+  const EbmlSemanticContext &context = EBML_INFO_CONTEXT(base);
   const EbmlCallbacks *result;
   int i;
 
-  for (i = 0; i < context.Size; i++)
-    if (id == context.MyTable[i].GetCallbacks.GlobalId)
+  for (i = 0; i < EBML_CTX_SIZE(context); i++)
+    if (id == EBML_INFO_ID(EBML_SEM_INFO(context.MyTable[i])))
       return &base;
 
-  for (i = 0; i < context.Size; i++) {
-    if (!(context != context.MyTable[i].GetCallbacks.Context))
+  for (i = 0; i < EBML_CTX_SIZE(context); i++) {
+    if (!(context != EBML_INFO_CONTEXT(EBML_SEM_INFO(context.MyTable[i]))))
       continue;
-    result = find_ebml_parent_callbacks(context.MyTable[i].GetCallbacks, id);
+    result = find_ebml_parent_callbacks(EBML_SEM_INFO(context.MyTable[i]), id);
     if (NULL != result)
       return result;
   }
@@ -350,18 +350,18 @@ find_ebml_parent_callbacks(const EbmlCallbacks &base,
 const EbmlSemantic *
 find_ebml_semantic(const EbmlCallbacks &base,
                    const EbmlId &id) {
-  const EbmlSemanticContext &context = base.Context;
+  const EbmlSemanticContext &context = EBML_INFO_CONTEXT(base);
   const EbmlSemantic *result;
   int i;
 
-  for (i = 0; i < context.Size; i++)
-    if (id == context.MyTable[i].GetCallbacks.GlobalId)
+  for (i = 0; i < EBML_CTX_SIZE(context); i++)
+    if (id == EBML_INFO_ID(EBML_SEM_INFO(context.MyTable[i])))
       return &context.MyTable[i];
 
-  for (i = 0; i < context.Size; i++) {
-    if (!(context != context.MyTable[i].GetCallbacks.Context))
+  for (i = 0; i < EBML_CTX_SIZE(context); i++) {
+    if (!(context != EBML_INFO_CONTEXT(EBML_SEM_INFO(context.MyTable[i]))))
       continue;
-    result = find_ebml_semantic(context.MyTable[i].GetCallbacks, id);
+    result = find_ebml_semantic(EBML_SEM_INFO(context.MyTable[i]), id);
     if (NULL != result)
       return result;
   }

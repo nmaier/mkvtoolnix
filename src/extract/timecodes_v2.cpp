@@ -252,7 +252,7 @@ extract_timecodes(const std::string &file_name,
         show_element(l1, 1, Y("Segment tracks"));
 
         tracks_found = true;
-        l1->Read(*es, EBML_INFO(KaxTracks).Context, upper_lvl_el, l2, true);
+        l1->Read(*es, EBML_INFO_CONTEXT(EBML_INFO(KaxTracks)), upper_lvl_el, l2, true);
         create_timecode_files(*dynamic_cast<KaxTracks *>(l1), tspecs, version);
 
       } else if (EbmlId(*l1) == EBML_ID(KaxCluster)) {
@@ -277,13 +277,13 @@ extract_timecodes(const std::string &file_name,
           } else if (EbmlId(*l2) == EBML_ID(KaxBlockGroup)) {
             show_element(l2, 2, Y("Block group"));
 
-            l2->Read(*es, EBML_INFO(KaxBlockGroup).Context, upper_lvl_el, l3, true);
+            l2->Read(*es, EBML_INFO_CONTEXT(EBML_INFO(KaxBlockGroup)), upper_lvl_el, l3, true);
             handle_blockgroup(*static_cast<KaxBlockGroup *>(l2), *cluster, tc_scale);
 
           } else if (EbmlId(*l2) == EBML_ID(KaxSimpleBlock)) {
             show_element(l2, 2, Y("Simple block"));
 
-            l2->Read(*es, EBML_INFO(KaxSimpleBlock).Context, upper_lvl_el, l3, true);
+            l2->Read(*es, EBML_INFO_CONTEXT(EBML_INFO(KaxSimpleBlock)), upper_lvl_el, l3, true);
             handle_simpleblock(*static_cast<KaxSimpleBlock *>(l2), *cluster);
 
           } else

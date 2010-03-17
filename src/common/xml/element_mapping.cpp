@@ -45,7 +45,7 @@ init_mapping_table(parser_element_t *table) {
     if (NULL == result)
       mxerror(boost::format(Y("Error initializing the tables for the chapter, tag and segment info elements: "
                               "Could not find the element with the debug name '%1%'. %2%\n")) % debug_name % BUGMSG);
-    table[i].id = result->GlobalId;
+    table[i].id = EBML_INFO_ID(*result);
   }
 }
 

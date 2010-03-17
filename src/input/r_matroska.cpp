@@ -582,7 +582,7 @@ kax_reader_c::handle_attachments(mm_io_c *io,
     EbmlElement *l2      = NULL;
     upper_lvl_el         = 0;
 
-    atts->Read(*m_es, EBML_INFO(KaxAttachments).Context, upper_lvl_el, l2, true);
+    atts->Read(*m_es, EBML_INFO_CONTEXT(EBML_INFO(KaxAttachments)), upper_lvl_el, l2, true);
 
     int i;
     for (i = 0; i < atts->ListSize(); i++) {
@@ -663,7 +663,7 @@ kax_reader_c::handle_chapters(mm_io_c *io,
     EbmlElement *l2           = NULL;
     upper_lvl_el              = 0;
 
-    tmp_chapters->Read(*m_es, EBML_INFO(KaxChapters).Context, upper_lvl_el, l2, true);
+    tmp_chapters->Read(*m_es, EBML_INFO_CONTEXT(EBML_INFO(KaxChapters)), upper_lvl_el, l2, true);
 
     if (NULL == m_chapters)
       m_chapters = new KaxChapters;
@@ -696,7 +696,7 @@ kax_reader_c::handle_tags(mm_io_c *io,
     EbmlElement *l2 = NULL;
     upper_lvl_el    = 0;
 
-    tags->Read(*m_es, EBML_INFO(KaxTags).Context, upper_lvl_el, l2, true);
+    tags->Read(*m_es, EBML_INFO_CONTEXT(EBML_INFO(KaxTags)), upper_lvl_el, l2, true);
 
     while (tags->ListSize() > 0) {
       if (!(EbmlId(*(*tags)[0]) == EBML_ID(KaxTag))) {
@@ -762,7 +762,7 @@ kax_reader_c::read_headers_info(EbmlElement *&l1,
   // General info about this Matroska file
   mxverb(2, "matroska_reader: |+ segment information...\n");
 
-  l1->Read(*m_es, EBML_INFO(KaxInfo).Context, upper_lvl_el, l2, true);
+  l1->Read(*m_es, EBML_INFO_CONTEXT(EBML_INFO(KaxInfo)), upper_lvl_el, l2, true);
 
   KaxTimecodeScale *ktc_scale = FINDFIRST(l1, KaxTimecodeScale);
   if (NULL != ktc_scale) {
@@ -994,7 +994,7 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
 
   EbmlElement *l2 = NULL;
   upper_lvl_el    = 0;
-  l1->Read(*m_es, EBML_INFO(KaxTracks).Context, upper_lvl_el, l2, true);
+  l1->Read(*m_es, EBML_INFO_CONTEXT(EBML_INFO(KaxTracks)), upper_lvl_el, l2, true);
 
   KaxTrackEntry *ktentry = FINDFIRST(l1, KaxTrackEntry);
   while (ktentry != NULL) {
@@ -1130,7 +1130,7 @@ kax_reader_c::read_headers_seek_head(EbmlElement *&l0,
   KaxSeekHead &seek_head = *static_cast<KaxSeekHead *>(l1);
 
   int i = 0;
-  seek_head.Read(*m_es, EBML_INFO(KaxSeekHead).Context, i, el, true);
+  seek_head.Read(*m_es, EBML_INFO_CONTEXT(EBML_INFO(KaxSeekHead)), i, el, true);
 
   for (i = 0; i < seek_head.ListSize(); i++) {
     if (EbmlId(*seek_head[i]) != EBML_ID(KaxSeek))
