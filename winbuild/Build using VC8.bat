@@ -42,17 +42,6 @@ del bh2.bat
 md lib >NUL
 md lib\debug >NUL
 if not exist "expat\expat.sln" devenv expat\expat.dsw
-if exist "zlib\projects\visualc6\zlib.sln" goto build
-
-if exist zlib-1.2.3 goto zlib-fix
-echo -------------
-echo Zlib needs to be manually fixed. Convert everything,
-echo then set Runtime Library under Release configuration to /MT.
-echo Project properties, C++, Code Generation.
-devenv zlib\projects\visualc6\zlib.dsw
-goto build
-
-:zlib-fix
 copy /y mkvtoolnix\winbuild\zlib.* zlib\projects\visualc6\ >NUL
 
 :build
