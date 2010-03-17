@@ -138,7 +138,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libebml.lib libmatroska.lib libogg_static.lib zlib.lib libexpat.lib Rpcrt4.lib"
+				AdditionalDependencies="common.lib libebml.lib libexpat.lib libvorbis_static.lib  libvorbisfile_static.lib  zlib.lib libmatroska.lib avi.lib input.lib mpegparser.lib rmff.lib libogg_static.lib Rpcrt4.lib"
 				OutputFile="$(OutDir)\mkv$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\Release;..\..\lib"
