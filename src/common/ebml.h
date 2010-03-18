@@ -70,9 +70,6 @@ int MTX_DLL_API kt_get_v_pixel_height(KaxTrackEntry &track);
 #if !defined(EBML_INFO_NAME)
 #define EBML_INFO_NAME(cb)    (cb).DebugName
 #endif
-#if !defined(EBML_INFO_CREATE)
-#define EBML_INFO_CREATE(cb)  (cb).Create()
-#endif
 #if !defined(EBML_INFO_CONTEXT)
 #define EBML_INFO_CONTEXT(cb) (cb).Context
 #endif
