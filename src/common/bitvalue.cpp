@@ -89,7 +89,7 @@ bitvalue_c::bitvalue_c(std::string s,
 }
 
 bitvalue_c::bitvalue_c(const EbmlBinary &elt)
-  : m_value(clone_memory(elt.GetBuffer(), elt.GetSize()))
+  : m_value(clone_memory(static_cast<const void *>(elt.GetBuffer()), elt.GetSize()))
 {
 }
 

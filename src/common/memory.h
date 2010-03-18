@@ -286,7 +286,7 @@ class MTX_DLL_API memory_slice_cursor_c {
 };
 
 inline memory_cptr
-clone_memory(void *buffer,
+clone_memory(const void *buffer,
              int size) {
   return memory_cptr(new memory_c(static_cast<unsigned char *>(safememdup(buffer, size)), size, true));
 }
