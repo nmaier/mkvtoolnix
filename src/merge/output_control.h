@@ -207,7 +207,7 @@ void add_packetizer_globally(generic_packetizer_c *packetizer);
 void add_tags(KaxTag *tags);
 
 void create_next_output_file();
-void finish_file(bool last_file = false);
+int64_t finish_file(bool last_file = false);
 void rerender_track_headers();
 std::string create_output_name();
 

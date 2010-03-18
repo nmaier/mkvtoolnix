@@ -1296,7 +1296,7 @@ create_next_output_file() {
    file and rendered at the front.  The segment duration and the
    segment size are set to their actual values.
 */
-void
+int64_t
 finish_file(bool last_file) {
   mxinfo("\n");
 
@@ -1466,7 +1466,8 @@ finish_file(bool last_file) {
   }
 
   // Set the correct size for the segment.
-  if (g_kax_segment->ForceSize(s_out->getFilePointer() - g_kax_segment->GetElementPosition() - g_kax_segment->HeadSize()))
+  int64_t final_file_size = s_out->getFilePointer();
+  if (g_kax_segment->ForceSize(final_file_size - g_kax_segment->GetElementPosition() - g_kax_segment->HeadSize()))
     g_kax_segment->OverwriteHead(*s_out);
 
   delete s_out;
@@ -1485,6 +1486,8 @@ finish_file(bool last_file) {
   delete s_void_after_track_headers;
   if (NULL != g_kax_sh_cues)
     delete g_kax_sh_cues;
+
+  return final_file_size;
 }
 
 static void establish_deferred_connections(filelist_t &file);

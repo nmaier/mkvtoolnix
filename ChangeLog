@@ -1,5 +1,9 @@
 2010-03-18  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: enhancement: Added a message in verbosity level 2 to
+	the splitting code. It reports before which timecode and after
+	what file size a new file is started.
+
 	* All: A lot of changes preparing mkvtoolnix for use with the
 	upcoming libebml2/libmatroska2 versions were applied. Patches by
 	Steve Lhomme (see AUTHORS).

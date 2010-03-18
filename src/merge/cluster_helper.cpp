@@ -144,8 +144,10 @@ cluster_helper_c::add_packet(packet_cptr packet) {
 
       m_num_cue_elements = 0;
 
-      mxinfo("\n");
-      finish_file();
+      int64_t final_file_size = finish_file();
+      mxverb(2, boost::format("Splitting: Creating a new file before timecode %1% and after size %2%.\n")
+             % format_timecode(packet->assigned_timecode) % final_file_size);
+
       create_next_output_file();
       if (g_no_linking)
         m_previous_cluster_tc = 0;
