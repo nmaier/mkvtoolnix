@@ -259,7 +259,7 @@ create_ebml_element(const EbmlCallbacks &callbacks,
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++)
     if (id == EBML_SEM_ID(context.MyTable[i]))
-      return empty_ebml_master(&context.MyTable[i].GetCallbacks.Create());
+      return empty_ebml_master(&EBML_SEM_CREATE(context.MyTable[i]));
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++) {
     EbmlElement *e;
