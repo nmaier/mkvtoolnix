@@ -213,4 +213,8 @@ std::string create_output_name();
 
 int64_t add_attachment(attachment_t attachment);
 
+#if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
+void sighandler(int signum);
+#endif
+
 #endif // __OUTPUT_CONTROL_H

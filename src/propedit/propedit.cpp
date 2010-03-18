@@ -13,9 +13,10 @@
 #include <matroska/KaxInfo.h>
 #include <matroska/KaxTracks.h>
 
-#include "propedit/propedit_cli_parser.h"
-#include "common/version.h"
 #include "common/command_line.h"
+#include "common/unique_numbers.h"
+#include "common/version.h"
+#include "propedit/propedit_cli_parser.h"
 
 static void
 display_update_element_result(const EbmlCallbacks &callbacks,
@@ -112,7 +113,7 @@ run(options_cptr &options) {
 static
 void setup() {
   mtx_common_init();
-  init_globals();
+  clear_list_of_unique_uint32(UNIQUE_ALL_IDS);
   version_info = get_version_info("mkvpropedit", true);
 }
 
