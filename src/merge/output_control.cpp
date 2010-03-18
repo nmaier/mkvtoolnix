@@ -1813,24 +1813,6 @@ main_loop() {
     mxinfo(boost::format(Y("Progress: 100%%%1%")) % "\r");
 }
 
-/** \brief Global program initialization
-
-   Both platform dependant and independant initialization is done here.
-   For Unix like systems a signal handler is installed. The locale's
-   \c LC_MESSAGES is set.
-*/
-void
-setup() {
-  mtx_common_init();
-
-#if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
-  signal(SIGUSR1, sighandler);
-  signal(SIGINT, sighandler);
-#endif
-
-  g_cluster_helper = new cluster_helper_c();
-}
-
 /** \brief Deletes the file readers and other associated objects
 */
 static void

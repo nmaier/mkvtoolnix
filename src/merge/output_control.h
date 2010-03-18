@@ -200,7 +200,6 @@ extern append_mode_e g_append_mode;
 void get_file_type(filelist_t &file);
 void create_readers();
 
-void setup();
 void cleanup();
 void main_loop();
 

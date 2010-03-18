@@ -2146,6 +2146,24 @@ init_globals() {
   clear_list_of_unique_uint32(UNIQUE_ALL_IDS);
 }
 
+/** \brief Global program initialization
+
+   Both platform dependant and independant initialization is done here.
+   For Unix like systems a signal handler is installed. The locale's
+   \c LC_MESSAGES is set.
+*/
+static void
+setup() {
+  mtx_common_init();
+
+#if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
+  signal(SIGUSR1, sighandler);
+  signal(SIGINT, sighandler);
+#endif
+
+  g_cluster_helper = new cluster_helper_c();
+}
+
 /** \brief Setup and high level program control
 
    Calls the functions for setup, handling the command line arguments,
