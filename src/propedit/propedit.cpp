@@ -14,7 +14,8 @@
 #include <matroska/KaxTracks.h>
 
 #include "propedit/propedit_cli_parser.h"
-#include "propedit/setup.h"
+#include "common/version.h"
+#include "common/command_line.h"
 
 static void
 display_update_element_result(const EbmlCallbacks &callbacks,
@@ -107,6 +108,14 @@ run(options_cptr &options) {
 
   mxexit(0);
 }
+
+static
+void setup() {
+  mtx_common_init();
+  init_globals();
+  version_info = get_version_info("mkvpropedit", true);
+}
+
 
 /** \brief Setup and high level program control
 
