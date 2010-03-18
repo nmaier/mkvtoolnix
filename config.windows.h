@@ -4,15 +4,12 @@
 #define PACKAGE "mkvtoolnix"
 #define VERSION "3.2.0"
 
-#pragma warning(disable:4018)
-#pragma warning(disable:4244)
-#pragma warning(disable:4146)
-#pragma warning(disable:4996)
-#pragma warning(disable:4805)
-#pragma warning(disable:4334)
-#pragma warning(disable:4800)
-#pragma warning(disable:4290)
-#pragma warning(disable:4305)
+#pragma warning(disable:4018)	//signed/unsigned mismatch
+#pragma warning(disable:4244)	//conversion; possible loss of data
+#pragma warning(disable:4290)	//C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
+#pragma warning(disable:4334)	//'operator' : result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
+#pragma warning(disable:4800)	//forcing value to bool 'true' or 'false' (performance warning)
+#pragma warning(disable:4996)	//'function': was declared deprecated
 
 #define HAVE_BOOST 1
 #define HAVE_BOOST_FILESYSTEM 1

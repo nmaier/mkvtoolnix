@@ -75,6 +75,9 @@ static struct {
   { 1, 32, 0xEDB88320 },
 };
 static uint32_t s_crc_table[CRC_MAX][257];
+#ifdef COMP_MSC
+#pragma warning(disable:4146)	//unary minus operator applied to unsigned type, result still unsigned
+#endif
 
 int
 crc_init(uint32_t *ctx,

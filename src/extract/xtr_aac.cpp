@@ -100,6 +100,10 @@ xtr_aac_c::create_file(xtr_base_c *master,
     m_srate_idx = 11;
 }
 
+#ifdef COMP_MSC
+#pragma warning(disable:4309)	//truncation of constant data. 0xff is an int.
+#endif
+
 void
 xtr_aac_c::handle_frame(memory_cptr &frame,
                         KaxBlockAdditions *additions,

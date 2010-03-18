@@ -384,26 +384,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\common\tags\writer.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\writer_collision.obj"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\writer_collision.obj"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\src\common\chapters\writer.cpp"
 				>
 				<FileConfiguration
@@ -420,6 +400,26 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						ObjectFile="$(IntDir)\writer_collision2.obj"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\common\tags\writer.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\writer_collision.obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\writer_collision.obj"
 					/>
 				</FileConfiguration>
 			</File>
@@ -728,10 +728,6 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
-		<File
-			RelativePath="..\src\common\Makefile.in"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
