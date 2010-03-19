@@ -63,15 +63,16 @@ private:
   //Added to allow reading the header's raw data, contains first found seq hdr.
   MPEGChunk* seqHdrChunk, *gopChunk;
   MPEG2SequenceHeader m_seqHdr; //current sequence header
-  MediaTime currentStampingTime;
   MediaTime firstRef;
   bool needInit;
   bool m_eos;
   bool notReachedFirstGOP;
   bool keepSeqHdrsInBitstream;
-  MediaTime nextSkip;
-  MediaTime nextSkipDuration;
   MediaTime secondRef;
+  MediaTime frameNum;
+  MediaTime gopPts;
+  MediaTime highestPts;
+  bool usePictureFrames;
   uint8_t mpegVersion;
   MPEG2ParserState_e parserState;
   MPEGVideoBuffer * mpgBuf;
@@ -79,7 +80,6 @@ private:
   int32_t InitParser();
   void DumpQueues();
   int32_t FillQueues();
-  MediaTime CountBFrames();
   void ShoveRef(MediaTime ref);
   MediaTime GetFrameDuration(MPEG2PictureHeader picHdr);
   int32_t QueueFrame(MPEGChunk* chunk, MediaTime timecode, MPEG2PictureHeader picHdr);

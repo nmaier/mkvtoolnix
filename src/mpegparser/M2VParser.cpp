@@ -100,21 +100,11 @@ void M2VParser::DumpQueues(){
   }
 }
 
-/*Fraction ConvertFramerateToFraction(float frameRate){
-  if(frameRate == 24000/1001.0f)
-  return Fraction(24000,1001);
-  else if(frameRate == 30000/1001.0f)
-  return Fraction(30000,1001);
-  else
-  return Fraction(frameRate);
-  }*/
-
 M2VParser::M2VParser(){
 
   mpgBuf = new MPEGVideoBuffer(BUFF_SIZE);
 
   notReachedFirstGOP = true;
-  currentStampingTime = 0;
   position = 0;
   m_eos = false;
   mpegVersion = 1;
@@ -122,8 +112,10 @@ M2VParser::M2VParser(){
   parserState = MPV_PARSER_STATE_NEED_DATA;
   firstRef = -1;
   secondRef = -1;
-  nextSkip = -1;
-  nextSkipDuration = -1;
+  frameNum = 0;
+  gopPts = 0;
+  highestPts = 0;
+  usePictureFrames = false;
   seqHdrChunk = NULL;
   gopChunk = NULL;
   keepSeqHdrsInBitstream = true;
@@ -196,26 +188,6 @@ MPEG2ParserState_e M2VParser::GetState(){
   if(m_eos && parserState == MPV_PARSER_STATE_NEED_DATA)
     parserState = MPV_PARSER_STATE_EOS;
   return parserState;
-}
-
-MediaTime M2VParser::CountBFrames(){
-  //We count after the first chunk.
-  MediaTime count = 0;
-  if(m_eos) return 0;
-  if(notReachedFirstGOP) return 0;
-  for(size_t i = 1; i < chunks.size(); i++){
-    MPEGChunk* c = chunks[i];
-    if(c->GetType() == MPEG_VIDEO_PICTURE_START_CODE){
-      MPEG2PictureHeader h;
-      ParsePictureHeader(c, h);
-      if(h.frameType == MPEG2_B_FRAME){
-        count += GetFrameDuration(h);
-      }else{
-        return count;
-      }
-    }
-  }
-  return -1;
 }
 
 int32_t M2VParser::QueueFrame(MPEGChunk* chunk, MediaTime timecode, MPEG2PictureHeader picHdr){
@@ -298,20 +270,24 @@ void M2VParser::ShoveRef(MediaTime ref){
   }
 }
 
-//Reads frames until it can timestamp them, usually reads until it has
-//an I, P, B+, P...this way it can stamp them all and set references.
-//NOTE: references aren't yet used by our system but they are kept up
-//with in this plugin.
+//Maintains the time of the last start of GOP and uses the temporal_reference
+//field as an offset.
 int32_t M2VParser::FillQueues(){
   if(chunks.empty()){
     return -1;
   }
   bool done = false;
   while(!done){
-    MediaTime myTime = currentStampingTime;
+    MediaTime myTime;
     MPEGChunk* chunk = chunks.front();
     while (chunk->GetType() != MPEG_VIDEO_PICTURE_START_CODE) {
       if (chunk->GetType() == MPEG_VIDEO_GOP_START_CODE) {
+        if (frameNum != 0) {
+          if (usePictureFrames)
+            gopPts = highestPts + 2;
+          else
+            gopPts = highestPts + 1;
+        }
         if (gopChunk)
           delete gopChunk;
         gopChunk = chunk;
@@ -331,46 +307,33 @@ int32_t M2VParser::FillQueues(){
     }
     MPEG2PictureHeader picHdr;
     ParsePictureHeader(chunk, picHdr);
-    MediaTime bcount;
-    if(myTime == nextSkip){
-      myTime+=nextSkipDuration;
-      currentStampingTime=myTime;
+
+    if (picHdr.pictureStructure == 0x03) {
+      usePictureFrames = true;
+      myTime = gopPts + 2 * picHdr.temporalReference;
+    } else {
+      myTime = gopPts + (2 * picHdr.temporalReference) + (frameNum % 2);
     }
+
+    if (myTime > highestPts)
+      highestPts = myTime;
+
     switch(picHdr.frameType){
       case MPEG2_I_FRAME:
-        bcount = CountBFrames();
-        if(bcount > 0){ //..BBIBB..
-          myTime += bcount;
-          nextSkip = myTime;
-          nextSkipDuration = GetFrameDuration(picHdr);
-        }else{ //IPBB..
-          if(bcount == -1 && !m_eos)
-            return -1;
-          currentStampingTime += GetFrameDuration(picHdr);;
-        }
-        ShoveRef(myTime);
         QueueFrame(chunk, myTime, picHdr);
+        ShoveRef(myTime);
         notReachedFirstGOP = false;
         break;
       case MPEG2_P_FRAME:
-        bcount = CountBFrames();
         if(firstRef == -1) break;
-        if(bcount > 0){ //..PBB..
-          myTime += bcount;
-          nextSkip = myTime;
-          nextSkipDuration = GetFrameDuration(picHdr);
-        }else{ //..PPBB..
-          if(bcount == -1 && !m_eos) return -1;
-          currentStampingTime+=GetFrameDuration(picHdr);
-        }
-        ShoveRef(myTime);
         QueueFrame(chunk, myTime, picHdr);
+        ShoveRef(myTime);
         break;
       default: //B-frames
         if(firstRef == -1 || secondRef == -1) break;
         QueueFrame(chunk, myTime, picHdr);
-        currentStampingTime+=GetFrameDuration(picHdr);
     }
+    frameNum++;
     chunks.erase(chunks.begin());
     delete chunk;
     if (chunks.empty())
