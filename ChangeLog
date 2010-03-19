@@ -1,3 +1,9 @@
+2010-03-19  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Timecodes for MPEG-1/2 tracks are calculated
+	properly, especially for B frames. Patch by Xavier Duret (see
+	AUTHORS). Fix for bug 475.
+
 2010-03-18  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: Added a message in verbosity level 2 to
