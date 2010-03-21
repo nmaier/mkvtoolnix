@@ -84,6 +84,7 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *reader,
   , m_haudio_output_sampling_freq(-1.0)
   , m_haudio_channels(-1)
   , m_haudio_bit_depth(-1)
+  , m_hvideo_interlaced_flag(-1)
   , m_hvideo_pixel_width(-1)
   , m_hvideo_pixel_height(-1)
   , m_hvideo_display_width(-1)
@@ -441,6 +442,13 @@ generic_packetizer_c::set_audio_bit_depth(int bit_depth) {
 }
 
 void
+generic_packetizer_c::set_video_interlaced_flag(bool interlaced) {
+  m_hvideo_interlaced_flag = interlaced ? 1 : 0;
+  if (NULL != m_track_entry)
+    GetChildAs<KaxVideoFlagInterlaced, EbmlUInteger>(GetChild<KaxTrackVideo>(*m_track_entry)) = m_hvideo_interlaced_flag;
+}
+
+void
 generic_packetizer_c::set_video_pixel_width(int width) {
   m_hvideo_pixel_width = width;
   if (NULL != m_track_entry)
@@ -640,6 +648,9 @@ generic_packetizer_c::set_headers() {
 
   if (track_video == m_htrack_type) {
     KaxTrackVideo &video = GetChild<KaxTrackVideo>(m_track_entry);
+
+    if (-1 != m_hvideo_interlaced_flag)
+      GetChildAs<KaxVideoFlagInterlaced, EbmlUInteger>(GetChild<KaxTrackVideo>(*m_track_entry)) = m_hvideo_interlaced_flag;
 
     if ((-1 != m_hvideo_pixel_height) && (-1 != m_hvideo_pixel_width)) {
       if ((-1 == m_hvideo_display_width) || (-1 == m_hvideo_display_height) || m_ti.m_aspect_ratio_given || m_ti.m_display_dimensions_given) {

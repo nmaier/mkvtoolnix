@@ -431,7 +431,7 @@ protected:
   float m_haudio_sampling_freq, m_haudio_output_sampling_freq;
   int m_haudio_channels, m_haudio_bit_depth;
 
-  int m_hvideo_pixel_width, m_hvideo_pixel_height, m_hvideo_display_width, m_hvideo_display_height;
+  int m_hvideo_interlaced_flag, m_hvideo_pixel_width, m_hvideo_pixel_height, m_hvideo_display_width, m_hvideo_display_height;
 
   compression_method_e m_hcompression;
   compressor_ptr m_compressor;
@@ -545,6 +545,7 @@ public:
   virtual void set_audio_channels(int channels);
   virtual void set_audio_bit_depth(int bit_depth);
 
+  virtual void set_video_interlaced_flag(bool interlaced);
   virtual void set_video_pixel_width(int width);
   virtual void set_video_pixel_height(int height);
   virtual void set_video_display_width(int width);

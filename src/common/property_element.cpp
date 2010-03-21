@@ -134,6 +134,7 @@ property_element_c::init_tables() {
 
   sub_master_callbacks = &KaxTrackVideo::ClassInfos;
 
+  ELE("interlaced",        KaxVideoFlagInterlaced::ClassInfos,  Y("Video interlaced flag"),   Y("Set if the video is interlaced."));
   ELE("pixel-width",       KaxVideoPixelWidth::ClassInfos,      Y("Video pixel width"),       Y("Width of the encoded video frames in pixels."));
   ELE("pixel-height",      KaxVideoPixelHeight::ClassInfos,     Y("Video pixel height"),      Y("Height of the encoded video frames in pixels."));
   ELE("display-width",     KaxVideoDisplayWidth::ClassInfos,    Y("Video display width"),     Y("Width of the video frames to display."));
