@@ -37,6 +37,7 @@
 #include <ebml/EbmlSubHead.h>
 #include <ebml/EbmlStream.h>
 #include <ebml/EbmlVoid.h>
+#include <ebml/EbmlCrc32.h>
 #include <matroska/FileKax.h>
 
 #include <matroska/KaxAttached.h>
