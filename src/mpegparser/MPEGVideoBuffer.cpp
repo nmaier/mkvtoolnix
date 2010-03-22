@@ -114,7 +114,6 @@ int32_t MPEGVideoBuffer::Feed(binary* data, uint32_t numBytes){
 
 void ParseSequenceHeader(MPEGChunk* chunk, MPEG2SequenceHeader & hdr){
   binary* pos = chunk->GetPointer();
-  uint8_t haveSeqExt = 0;
   //Parse out the resolution info, horizontal first
   pos+=4; //Skip the start code
   hdr.width = (((unsigned int)pos[0]) << 4) | (((unsigned int) pos[1])>>4);  //xx x0 00
@@ -130,9 +129,6 @@ void ParseSequenceHeader(MPEGChunk* chunk, MPEG2SequenceHeader & hdr){
       break;
     case 0x30:
       hdr.aspectRatio = (16.0f / 9.0f);
-      //playuing with AR
-      /*pos[0] &=0x0F;
-        pos[0] |= 0x20;*/
       break;
     case 0x40:
       hdr.aspectRatio = 2.21f;
@@ -174,23 +170,17 @@ void ParseSequenceHeader(MPEGChunk* chunk, MPEG2SequenceHeader & hdr){
   }
 
   //Seek to picturecoding extension
-  while(pos < (chunk->GetPointer() + chunk->GetSize() - 4)){
+  hdr.progressiveSequence = 0;
+  while(pos < (chunk->GetPointer() + chunk->GetSize() - 6)){
     if((pos[0] == 0x00) && (pos[1] == 0x00) && (pos[2] == 0x01) && (pos[3] == MPEG_VIDEO_EXT_START_CODE)){
-      if((pos[4] & 0xF0) == 0x01){ //Picture coding extension
-        //printf("Found a picture_coding_extension\n");
-        haveSeqExt = 1;
-        pos+=4;
+      if((pos[4] & 0xF0) == 0x10){ // Sequence extension
+        hdr.profileLevelIndication = ((pos[4] & 0x0F) << 4) | ((pos[5] & 0xF0) >> 4);
+        hdr.progressiveSequence = (pos[5] & 0x08) >> 3;
+        pos+=6;
         break;
       }
     }
     pos++;
-  }
-
-  if(haveSeqExt){
-    pos++;
-    hdr.progressiveSequence = (pos[0] & 0x80);
-  }else{
-    hdr.progressiveSequence = 0;
   }
 }
 
