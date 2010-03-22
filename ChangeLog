@@ -1,3 +1,8 @@
+2010-03-22  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Specifying a FourCC with spaces at the end
+	will not result in an error anymore. Fix for bug 480.
+
 2010-03-19  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Timecodes for MPEG-1/2 tracks are calculated

@@ -1113,7 +1113,6 @@ parse_arg_fourcc(const std::string &s,
                  track_info_c &ti) {
   std::string orig               = s;
   std::vector<std::string> parts = split(s, ":", 2);
-  strip(parts);
 
   if (parts.size() != 2)
     mxerror(boost::format(Y("FourCC: Missing track ID in '%1% %2%'.\n")) % opt % orig);
