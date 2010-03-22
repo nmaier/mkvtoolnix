@@ -22,7 +22,7 @@ kax_reference_block_c::kax_reference_block_c():
   KaxReferenceBlock(), m_value(-1) {
 }
 
-uint64
+filepos_t
 kax_reference_block_c::UpdateSize(bool bSaveDefault,
                                   bool bForceRender) {
   if (!bTimecodeSet) {

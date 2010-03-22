@@ -26,6 +26,10 @@
 using namespace libebml;
 using namespace libmatroska;
 
+#if LIBEBML_VERSION < 0x000800
+typedef uint64 filepos_t;
+#endif
+
 class kax_cluster_c: public KaxCluster {
 public:
   kax_cluster_c(): KaxCluster() {
@@ -60,7 +64,7 @@ public:
 #endif
   }
 
-  virtual uint64 UpdateSize(bool bSaveDefault, bool bForceRender);
+  virtual filepos_t UpdateSize(bool bSaveDefault, bool bForceRender);
 };
 
 class kax_block_group_c: public KaxBlockGroup {
