@@ -50,6 +50,7 @@ struct mpeg_ps_track_t {
   bool provide_timecodes;
   int64_t timecode_offset;
 
+  bool v_interlaced;
   int v_version, v_width, v_height, v_dwidth, v_dheight;
   double v_frame_rate, v_aspect_ratio;
   memory_cptr v_avcc;
@@ -71,6 +72,7 @@ struct mpeg_ps_track_t {
     fourcc(0),
     provide_timecodes(false),
     timecode_offset(-1),
+    v_interlaced(false),
     v_version(0),
     v_width(0),
     v_height(0),

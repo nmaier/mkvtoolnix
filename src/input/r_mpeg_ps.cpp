@@ -637,10 +637,11 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
     throw false;
 
   track->fourcc         = FOURCC('M', 'P', 'G', '0' + m2v_parser->GetMPEGVersion());
+  track->v_interlaced   = !seq_hdr.progressiveSequence;
   track->v_version      = m2v_parser->GetMPEGVersion();
   track->v_width        = seq_hdr.width;
   track->v_height       = seq_hdr.height;
-  track->v_frame_rate   = seq_hdr.frameRate;
+  track->v_frame_rate   = seq_hdr.progressiveSequence ? seq_hdr.frameOrFieldRate : seq_hdr.frameOrFieldRate * 2.0f;
   track->v_aspect_ratio = seq_hdr.aspectRatio;
 
   if ((0 >= track->v_aspect_ratio) || (1 == track->v_aspect_ratio))
@@ -1190,13 +1191,16 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
   } else {                      // if (track->type == 'a')
     if (   (FOURCC('M', 'P', 'G', '1') == track->fourcc)
         || (FOURCC('M', 'P', 'G', '2') == track->fourcc)) {
+      generic_packetizer_c *m2vpacketizer;
       if (verbose)
         mxinfo_tid(m_ti.m_fname, id, Y("Using the MPEG-1/2 video output module.\n"));
 
       m_ti.m_private_data = track->raw_seq_hdr;
       m_ti.m_private_size = track->raw_seq_hdr_size;
-      track->ptzr         = add_packetizer(new mpeg1_2_video_packetizer_c(this, m_ti, track->v_version, track->v_frame_rate, track->v_width, track->v_height,
-                                                                          track->v_dwidth, track->v_dheight, false));
+      m2vpacketizer       = new mpeg1_2_video_packetizer_c(this, m_ti, track->v_version, track->v_frame_rate, track->v_width, track->v_height,
+                                                           track->v_dwidth, track->v_dheight, false);
+      track->ptzr         = add_packetizer(m2vpacketizer);
+      m2vpacketizer->set_video_interlaced_flag(track->v_interlaced);
       m_ti.m_private_data = NULL;
       m_ti.m_private_size = 0;
 

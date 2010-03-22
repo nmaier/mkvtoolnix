@@ -48,7 +48,7 @@ typedef struct MPEG2SequenceHeader{
   uint32_t width;
   uint32_t height;
   float aspectRatio;
-  float frameRate;
+  float frameOrFieldRate;
   uint8_t profileLevelIndication;
   uint8_t progressiveSequence;
 }MPEG2SequenceHeader;

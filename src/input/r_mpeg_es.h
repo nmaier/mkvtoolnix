@@ -32,7 +32,7 @@ private:
   mm_io_c *io;
   int64_t bytes_processed, size;
 
-  int version, width, height, dwidth, dheight;
+  int version, interlaced, width, height, dwidth, dheight;
   double frame_rate, aspect_ratio;
 
 public:

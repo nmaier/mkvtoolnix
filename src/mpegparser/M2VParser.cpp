@@ -193,6 +193,7 @@ MPEG2ParserState_e M2VParser::GetState(){
 int32_t M2VParser::QueueFrame(MPEGChunk* chunk, MediaTime timecode, MPEG2PictureHeader picHdr){
   MPEGFrame* outBuf;
   bool bCopy = true;
+  MediaTime timeunit;
   binary* pData = chunk->GetPointer();
   uint32_t dataLen = chunk->GetSize();
 
@@ -242,14 +243,15 @@ int32_t M2VParser::QueueFrame(MPEGChunk* chunk, MediaTime timecode, MPEG2Picture
     outBuf->frameType = 'B';
   }
 
-  outBuf->timecode = (MediaTime)(timecode * (1000000000/(m_seqHdr.frameRate*2)));
-  outBuf->duration = (MediaTime)(duration * (1000000000/(m_seqHdr.frameRate*2)));
+  timeunit = 1000000000/(m_seqHdr.frameOrFieldRate*2);
+  outBuf->timecode = (MediaTime)(timecode * timeunit);
+  outBuf->duration = (MediaTime)(duration * timeunit);
 
   if(outBuf->frameType == 'P'){
-    outBuf->firstRef = (MediaTime)(firstRef * (1000000000/(m_seqHdr.frameRate*2)));
+    outBuf->firstRef = (MediaTime)(firstRef * timeunit);
   }else if(outBuf->frameType == 'B'){
-    outBuf->firstRef = (MediaTime)(firstRef * (1000000000/(m_seqHdr.frameRate*2)));
-    outBuf->secondRef = (MediaTime)(secondRef * (1000000000/(m_seqHdr.frameRate*2)));
+    outBuf->firstRef = (MediaTime)(firstRef * timeunit);
+    outBuf->secondRef = (MediaTime)(secondRef * timeunit);
   }
   outBuf->rff = (picHdr.repeatFirstField != 0);
   outBuf->tff = (picHdr.topFieldFirst != 0);

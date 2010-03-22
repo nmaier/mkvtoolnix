@@ -135,9 +135,10 @@ mpeg_es_reader_c::mpeg_es_reader_c(track_info_c &_ti)
 
     MPEG2SequenceHeader seq_hdr = parser.GetSequenceHeader();
     version                     = parser.GetMPEGVersion();
+    interlaced                  = !seq_hdr.progressiveSequence;
     width                       = seq_hdr.width;
     height                      = seq_hdr.height;
-    frame_rate                  = seq_hdr.frameRate;
+    frame_rate                  = seq_hdr.progressiveSequence ? seq_hdr.frameOrFieldRate : seq_hdr.frameOrFieldRate * 2.0f;
     aspect_ratio                = seq_hdr.aspectRatio;
 
     if ((0 >= aspect_ratio) || (1 == aspect_ratio))
@@ -167,11 +168,14 @@ mpeg_es_reader_c::~mpeg_es_reader_c() {
 
 void
 mpeg_es_reader_c::create_packetizer(int64_t) {
+  generic_packetizer_c *m2vpacketizer;
   if (NPTZR() != 0)
     return;
 
   mxinfo_tid(m_ti.m_fname, 0, Y("Using the MPEG-1/2 video output module.\n"));
-  add_packetizer(new mpeg1_2_video_packetizer_c(this, m_ti, version, frame_rate, width, height, dwidth, dheight, false));
+  m2vpacketizer = new mpeg1_2_video_packetizer_c(this, m_ti, version, frame_rate, width, height, dwidth, dheight, false);
+  add_packetizer(m2vpacketizer);
+  m2vpacketizer->set_video_interlaced_flag(interlaced);
 }
 
 file_status_e
