@@ -14,7 +14,7 @@
 #ifndef __FLAC_COMMON_H
 #define __FLAC_COMMON_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #if defined(HAVE_FLAC_FORMAT_H)
 

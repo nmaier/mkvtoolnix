@@ -16,7 +16,7 @@
      Additional code by Alexander Noé <alexander.noe@s2001.tu-chemnitz.de>
 */
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <errno.h>
 #if HAVE_NL_LANGINFO

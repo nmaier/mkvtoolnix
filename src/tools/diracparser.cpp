@@ -13,7 +13,7 @@
 #include "common/bit_cursor.h"
 #include "common/byte_buffer.h"
 #include "common/checksums.h"
-#include "common/common.h"
+#include "common/common_pch.h"
 #include "common/mm_io.h"
 #include "common/dirac.h"
 #include "common/translation.h"

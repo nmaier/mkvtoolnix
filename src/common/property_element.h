@@ -27,7 +27,7 @@
 #include <matroska/KaxTrackEntryData.h>
 #include <matroska/KaxTrackVideo.h>
 
-#include "common/common.h"
+#include "common/common_pch.h"
 #include "common/ebml.h"
 #include "common/translation.h"
 #include "common/xml/element_mapping.h"

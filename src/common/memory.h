@@ -17,7 +17,7 @@
 #include <cassert>
 #include <deque>
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 void MTX_DLL_API safefree(void *p);
 

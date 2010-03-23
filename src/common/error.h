@@ -14,7 +14,7 @@
 #ifndef __MTX_COMMON_ERROR_H
 #define __MTX_COMMON_ERROR_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 
 class MTX_DLL_API error_c {

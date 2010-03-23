@@ -14,7 +14,7 @@
 #ifndef __P_PCM_H
 #define __P_PCM_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "common/byte_buffer.h"
 #include "common/samples_timecode_conv.h"

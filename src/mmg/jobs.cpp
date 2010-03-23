@@ -35,7 +35,7 @@
 # include "common/fs_sys_helpers.h"
 #endif
 
-#include "common/common.h"
+#include "common/common_pch.h"
 #include "mmg/jobs.h"
 #include "mmg/mmg.h"
 #include "mmg/mmg_dialog.h"

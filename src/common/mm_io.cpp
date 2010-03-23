@@ -12,7 +12,7 @@
    Modifications by Peter Niemayer <niemayer@isg.de>.
 */
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <errno.h>
 #if HAVE_POSIX_FADVISE

@@ -17,7 +17,7 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "common/bit_cursor.h"
 #include "common/byte_buffer.h"

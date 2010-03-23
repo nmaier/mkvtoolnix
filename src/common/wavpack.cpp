@@ -15,7 +15,7 @@
 
 #include <cctype>
 
-#include "common/common.h"
+#include "common/common_pch.h"
 #include "common/wavpack.h"
 
 const uint32_t sample_rates [] = {

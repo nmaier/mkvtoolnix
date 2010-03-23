@@ -12,7 +12,7 @@
    Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <expat.h>
 #include <ctype.h>

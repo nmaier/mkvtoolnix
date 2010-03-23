@@ -12,7 +12,7 @@
    Modified by Steve Lhomme <steve.lhomm@free.fr>.
 */
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <matroska/KaxConfig.h>
 #include <matroska/KaxSegment.h>

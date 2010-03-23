@@ -12,7 +12,7 @@
    Changes by Robert Millan <rmh@aybabtu.com>.
 */
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <algorithm>
 #if HAVE_MAGIC_H

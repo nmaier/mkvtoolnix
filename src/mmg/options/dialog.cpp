@@ -26,7 +26,7 @@
 #include <wx/process.h>
 #include <wx/statline.h>
 
-#include "common/common.h"
+#include "common/common_pch.h"
 #include "common/strings/editing.h"
 #include "common/translation.h"
 #include "common/wx.h"

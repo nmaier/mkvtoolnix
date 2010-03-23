@@ -18,7 +18,7 @@
 #include <ebml/EbmlUnicodeString.h>
 #include <matroska/KaxSegment.h>
 
-#include "common/common.h"
+#include "common/common_pch.h"
 #include "common/ebml.h"
 #include "common/output.h"
 #include "common/strings/parsing.h"

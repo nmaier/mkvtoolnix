@@ -14,7 +14,7 @@
 #ifndef __P_TRUEHD_H
 #define __P_TRUEHD_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "merge/pr_generic.h"
 #include "common/samples_timecode_conv.h"

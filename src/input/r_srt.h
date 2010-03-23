@@ -14,7 +14,7 @@
 #ifndef __R_SRT_H
 #define __R_SRT_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "common/mm_io.h"
 #include "merge/pr_generic.h"

@@ -21,7 +21,7 @@
 #include <matroska/KaxTrackEntryData.h>
 #include <matroska/KaxTrackVideo.h>
 
-#include "common/common.h"
+#include "common/common_pch.h"
 #include "common/strings/editing.h"
 #include "common/strings/parsing.h"
 #include "propedit/propedit.h"

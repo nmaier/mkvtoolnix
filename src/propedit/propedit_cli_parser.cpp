@@ -21,7 +21,7 @@
 #include <typeinfo>
 #include <vector>
 
-#include "common/common.h"
+#include "common/common_pch.h"
 #include "common/ebml.h"
 #include "common/strings/formatting.h"
 #include "common/translation.h"

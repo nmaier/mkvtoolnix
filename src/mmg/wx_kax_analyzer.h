@@ -19,7 +19,7 @@
 #include <wx/progdlg.h>
 #include <wx/window.h>
 
-#include "common/common.h"
+#include "common/common_pch.h"
 #include "common/kax_analyzer.h"
 
 #define ID_B_ANALYZER_ABORT 11000

@@ -21,7 +21,7 @@
 #include <ebml/EbmlVersion.h>
 #include <matroska/KaxVersion.h>
 
-#include "common/common.h"
+#include "common/common_pch.h"
 #if !defined(SYS_WINDOWS)
 #include "common/matroska.xpm"
 #endif

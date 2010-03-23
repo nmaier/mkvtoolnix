@@ -13,7 +13,7 @@
 
 #include "common/os.h"
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #define FILE_NOT_MODIFIED Y("The file has not been modified.")
 

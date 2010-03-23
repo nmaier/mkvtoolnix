@@ -14,7 +14,7 @@
 #ifndef __R_WAVPACK_H
 #define __R_WAVPACK_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <stdio.h>
 

@@ -13,7 +13,7 @@
 #ifndef __XTR_VOBSUB_H
 #define __XTR_VOBSUB_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "common/smart_pointers.h"
 #include "extract/xtr_base.h"

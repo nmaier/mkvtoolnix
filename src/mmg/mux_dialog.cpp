@@ -34,7 +34,7 @@
 #include <windows.h>
 #endif
 
-#include "common/common.h"
+#include "common/common_pch.h"
 #include "mmg/mmg.h"
 #include "mmg/mmg_dialog.h"
 #include "mmg/mux_dialog.h"

@@ -14,7 +14,7 @@
 #ifndef __R_USF_H
 #define __R_USF_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <expat.h>
 

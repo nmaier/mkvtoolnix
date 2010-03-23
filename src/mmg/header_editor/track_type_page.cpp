@@ -20,7 +20,7 @@
 
 #include <matroska/KaxTrackEntryData.h>
 
-#include "common/common.h"
+#include "common/common_pch.h"
 #include "common/wx.h"
 #include "mmg/header_editor/track_type_page.h"
 

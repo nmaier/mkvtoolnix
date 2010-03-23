@@ -15,7 +15,7 @@
 #include <ebml/EbmlVersion.h>
 #include <matroska/KaxVersion.h>
 
-#include "common/common.h"
+#include "common/common_pch.h"
 #include "common/locale.h"
 #include "common/qt.h"
 #include "common/version.h"

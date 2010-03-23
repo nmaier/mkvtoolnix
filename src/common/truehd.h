@@ -14,7 +14,7 @@
 #ifndef __MTX_COMMON_TRUEHD_COMMON_H
 #define __MTX_COMMON_TRUEHD_COMMON_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <deque>
 

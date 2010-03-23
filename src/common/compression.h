@@ -14,7 +14,7 @@
 #ifndef __MTX_COMMON_COMPRESSION_H
 #define __MTX_COMMON_COMPRESSION_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <matroska/KaxContentEncoding.h>
 #include <matroska/KaxTracks.h>

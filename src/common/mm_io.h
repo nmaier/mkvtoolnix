@@ -14,7 +14,7 @@
 #ifndef __MTX_COMMON_MM_IO_H
 #define __MTX_COMMON_MM_IO_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <stack>
 #if HAVE_POSIX_FADVISE

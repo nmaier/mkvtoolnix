@@ -15,7 +15,7 @@
 #ifndef __MTX_COMMON_BIT_CURSOR_H
 #define __MTX_COMMON_BIT_CURSOR_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "common/mm_io.h"
 

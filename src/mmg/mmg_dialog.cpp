@@ -29,7 +29,7 @@
 
 #include "common/chapters/chapters.h"
 #include "common/command_line.h"
-#include "common/common.h"
+#include "common/common_pch.h"
 #include "common/ebml.h"
 #include "common/extern_data.h"
 #include "common/locale.h"

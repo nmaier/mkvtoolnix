@@ -13,7 +13,7 @@
 #ifndef __XTR_RMFF_H
 #define __XTR_RMFF_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "librmff/librmff.h"
 

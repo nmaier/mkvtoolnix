@@ -14,7 +14,7 @@
 #ifndef __P_VORBIS_H
 #define __P_VORBIS_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <ogg/ogg.h>
 #include <vorbis/codec.h>

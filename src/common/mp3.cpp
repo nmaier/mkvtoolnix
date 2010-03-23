@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/common.h"
+#include "common/common_pch.h"
 #include "common/mp3.h"
 
 // Synch word for a frame is 0xFFE0 (first 11 bits must be set)

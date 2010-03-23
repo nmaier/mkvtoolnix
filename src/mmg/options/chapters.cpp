@@ -26,7 +26,7 @@
 #include <wx/statline.h>
 
 #include "common/chapters/chapters.h"
-#include "common/common.h"
+#include "common/common_pch.h"
 #include "common/extern_data.h"
 #include "common/iso639.h"
 #include "common/wx.h"

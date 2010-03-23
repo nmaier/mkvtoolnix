@@ -11,7 +11,7 @@
    \author Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <algorithm>
 #include <boost/bind.hpp>

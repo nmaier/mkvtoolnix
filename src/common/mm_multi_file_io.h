@@ -14,7 +14,7 @@
 #ifndef __MTX_COMMON_MM_MULTI_FILE_IO_H
 #define __MTX_COMMON_MM_MULTI_FILE_IO_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <boost/filesystem.hpp>
 #include <string>

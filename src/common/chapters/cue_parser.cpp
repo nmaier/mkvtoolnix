@@ -13,7 +13,7 @@
    Vegard Pettersen <vegard_p@broadpark.no>
 */
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <ctype.h>
 #include <stdarg.h>

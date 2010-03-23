@@ -12,7 +12,7 @@
    Modifications by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "common/mm_io.h"
 #include "common/strings/formatting.h"

@@ -15,7 +15,7 @@
 #ifndef __R_MATROSKA_H
 #define __R_MATROSKA_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <boost/logic/tribool.hpp>
 

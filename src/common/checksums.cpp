@@ -14,7 +14,7 @@
      project, files "libavutil/crc.h" and "libavutil/crc.c".
 */
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "common/bswap.h"
 #include "common/checksums.h"

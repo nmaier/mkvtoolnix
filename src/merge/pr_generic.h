@@ -15,7 +15,7 @@
 #ifndef __PR_GENERIC_H
 #define __PR_GENERIC_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <boost/logic/tribool.hpp>
 #include <deque>

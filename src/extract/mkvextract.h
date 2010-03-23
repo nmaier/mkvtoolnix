@@ -13,7 +13,7 @@
 #ifndef __MKVEXTRACT_H
 #define __MKVEXTRACT_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <avilib.h>
 

@@ -14,7 +14,7 @@
 #ifndef __P_MP3_H
 #define __P_MP3_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "common/byte_buffer.h"
 #include "common/mp3.h"

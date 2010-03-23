@@ -15,7 +15,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "common/bit_cursor.h"
 #include "common/dts.h"

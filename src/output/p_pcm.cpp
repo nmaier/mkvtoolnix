@@ -12,7 +12,7 @@
    Patches by Robert Millan <rmh@aybabtu.com>.
 */
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "common/matroska.h"
 #include "merge/pr_generic.h"

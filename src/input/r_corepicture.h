@@ -14,7 +14,7 @@
 #ifndef __R_COREPICTURE_H
 #define __R_COREPICTURE_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "common/corepicture.h"
 #include "common/mm_io.h"

@@ -24,7 +24,7 @@
 #include <wx/config.h>
 #include <wx/regex.h>
 
-#include "common/common.h"
+#include "common/common_pch.h"
 #include "common/strings/editing.h"
 #include "common/strings/parsing.h"
 #include "mmg/mmg.h"

@@ -22,7 +22,7 @@
 #include <ebml/EbmlVersion.h>
 #include <matroska/KaxVersion.h>
 
-#include "common/common.h"
+#include "common/common_pch.h"
 #include "common/translation.h"
 #include "common/version.h"
 #include "common/wx.h"

@@ -13,7 +13,7 @@
 #ifndef __XTR_MPEG1_2_H
 #define __XTR_MPEG1_2_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "extract/xtr_base.h"
 

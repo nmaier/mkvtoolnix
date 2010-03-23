@@ -14,7 +14,7 @@
 #ifndef __R_MPEG_PS_H
 #define __R_MPEG_PS_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "common/bit_cursor.h"
 #include "common/dts.h"

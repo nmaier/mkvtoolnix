@@ -14,7 +14,7 @@
 #ifndef __SUBTITLES_H
 #define __SUBTITLES_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "merge/output_control.h"
 #include "output/p_textsubs.h"

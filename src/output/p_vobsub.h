@@ -14,7 +14,7 @@
 #ifndef __P_VOBSUB_H
 #define __P_VOBSUB_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "common/compression.h"
 #include "merge/pr_generic.h"

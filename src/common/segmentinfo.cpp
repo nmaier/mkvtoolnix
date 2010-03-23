@@ -13,7 +13,7 @@
    \author Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <ctype.h>
 #include <stdarg.h>

@@ -10,7 +10,7 @@
    Written by Moritz Bunkus and Mike Chen.
 */
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <algorithm>
 #include <matroska/KaxBlock.h>

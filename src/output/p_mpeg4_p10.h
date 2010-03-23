@@ -14,7 +14,7 @@
 #ifndef __P_MPEG4_P10_H
 #define __P_MPEG4_P10_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "output/p_video.h"
 

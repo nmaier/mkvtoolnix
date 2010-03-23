@@ -12,7 +12,7 @@
    Modified by Steve Lhomme <steve.lhomme@free.fr>.
 */
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <avilib.h>   // for BITMAPINFOHEADER
 

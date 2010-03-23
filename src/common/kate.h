@@ -15,7 +15,7 @@
 #ifndef __MTX_COMMON_KATE_COMMON_H
 #define __MTX_COMMON_KATE_COMMON_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "common/error.h"
 

@@ -13,7 +13,7 @@
 #ifndef __XTR_BASE_H
 #define __XTR_BASE_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <matroska/KaxBlock.h>
 #include <matroska/KaxTracks.h>

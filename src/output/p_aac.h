@@ -14,7 +14,7 @@
 #ifndef __P_AAC_H
 #define __P_AAC_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "common/aac.h"
 #include "common/byte_buffer.h"

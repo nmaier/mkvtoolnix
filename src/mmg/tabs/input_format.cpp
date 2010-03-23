@@ -23,7 +23,7 @@
 #include <wx/regex.h>
 #include <wx/statline.h>
 
-#include "common/common.h"
+#include "common/common_pch.h"
 #include "common/extern_data.h"
 #include "common/iso639.h"
 #include "merge/mkvmerge.h"

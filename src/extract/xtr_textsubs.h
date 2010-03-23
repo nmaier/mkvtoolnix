@@ -13,7 +13,7 @@
 #ifndef __XTR_TEXTSUBS_H
 #define __XTR_TEXTSUBS_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "common/xml/element_writer.h"
 #include "extract/xtr_base.h"

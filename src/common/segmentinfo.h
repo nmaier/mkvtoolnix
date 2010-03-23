@@ -15,7 +15,7 @@
 #ifndef __MTX_COMMON_SEGMENTINFO_H
 #define __MTX_COMMON_SEGMENTINFO_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <matroska/KaxInfo.h>
 

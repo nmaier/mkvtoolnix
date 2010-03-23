@@ -12,7 +12,7 @@
    Mike Matsnev <mike@po.cs.msu.su>.
 */
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "common/checksums.h"
 #include "common/ebml.h"

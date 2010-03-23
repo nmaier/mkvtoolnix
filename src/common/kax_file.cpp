@@ -11,7 +11,7 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <ebml/EbmlCrc32.h>
 #include <ebml/EbmlStream.h>

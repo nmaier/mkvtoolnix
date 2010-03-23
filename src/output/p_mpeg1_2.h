@@ -14,7 +14,7 @@
 #ifndef __P_MPEG1_2_H
 #define __P_MPEG1_2_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "common/mpeg1_2.h"
 #include "output/p_video.h"

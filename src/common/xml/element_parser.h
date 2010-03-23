@@ -14,7 +14,7 @@
 #ifndef __MTX_COMMON_XML_ELEMENT_PARSER_H
 #define __MTX_COMMON_XML_ELEMENT_PARSER_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <expat.h>
 

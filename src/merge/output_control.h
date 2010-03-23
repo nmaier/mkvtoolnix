@@ -15,7 +15,7 @@
 #ifndef __OUTPUT_CONTROL_H
 #define __OUTPUT_CONTROL_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include <deque>
 

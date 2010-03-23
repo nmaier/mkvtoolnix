@@ -19,7 +19,7 @@
 #include <wx/file.h>
 
 #include "mmg/mmg.h"
-#include "common/common.h"
+#include "common/common_pch.h"
 #include "common/strings/formatting.h"
 #include "common/wx.h"
 

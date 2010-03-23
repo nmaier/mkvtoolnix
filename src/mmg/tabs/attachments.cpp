@@ -20,7 +20,7 @@
 #include <wx/notebook.h>
 #include <wx/statline.h>
 
-#include "common/common.h"
+#include "common/common_pch.h"
 #include "common/extern_data.h"
 #include "mmg/mmg.h"
 #include "mmg/tabs/attachments.h"

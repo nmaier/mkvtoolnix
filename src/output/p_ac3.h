@@ -14,7 +14,7 @@
 #ifndef __P_AC3_H
 #define __P_AC3_H
 
-#include "common/common.h"
+#include "common/common_pch.h"
 
 #include "common/ac3.h"
 #include "common/byte_buffer.h"
