@@ -1,3 +1,9 @@
+2010-03-23  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed the default duration for interlaced
+	MPEG-1/2 video tracks. Also added the 'interlaced' flag for such
+	tracks. Patches by Xavier Duret (see AUTHORS). Fix for bug 479.
+
 2010-03-22  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Specifying a FourCC with spaces at the end
