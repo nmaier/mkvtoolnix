@@ -389,6 +389,12 @@ distclean dist-clean: clean
 maintainer-clean: distclean
 	rm -f configure config.h.in
 
+clean-libs:
+	rm -f */lib*.a */*/lib*.a */*/*.dll */*/*.dll.a
+
+clean-apps clean-applications clean-exe:
+	rm -f $(APPLICATIONS) */*.exe */*/*.exe
+
 create-pot:
 	@echo 'XGETTEXT'
 	$(Q)xgettext --keyword=YT --keyword=Y --keyword=Z --keyword=TIP \
