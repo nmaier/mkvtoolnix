@@ -995,7 +995,7 @@ mm_mem_io_c::~mm_mem_io_c() {
   close();
 }
 
-uint64_t
+uint64
 mm_mem_io_c::getFilePointer() {
   return pos;
 }
