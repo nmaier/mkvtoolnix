@@ -8,7 +8,7 @@ AC_ARG_ENABLE([precompiled_headers],
   [enable_precompiled_headers=auto])
 
 if test x"$enable_precompiled_headers" = x"auto"; then
-  if ! check_version 4.4.0 $ac_cv_gcc_version ; then
+  if ! check_version 4.2.0 $ac_cv_gcc_version ; then
     enable_precompiled_headers=no
   else
     enable_precompiled_headers=yes
