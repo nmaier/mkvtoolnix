@@ -243,7 +243,7 @@ int32_t M2VParser::QueueFrame(MPEGChunk* chunk, MediaTime timecode, MPEG2Picture
     outBuf->frameType = 'B';
   }
 
-  timeunit = 1000000000/(m_seqHdr.frameOrFieldRate*2);
+  timeunit = (MediaTime)(1000000000/(m_seqHdr.frameOrFieldRate*2));
   outBuf->timecode = (MediaTime)(timecode * timeunit);
   outBuf->duration = (MediaTime)(duration * timeunit);
 
