@@ -11,8 +11,8 @@
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_COMMON_H
-#define __MTX_COMMON_H
+#ifndef __MTX_COMMON_COMMON_H
+#define __MTX_COMMON_COMMON_H
 
 #include <boost/foreach.hpp>
 #include <boost/format.hpp>
@@ -27,6 +27,8 @@
 
 #include <ebml/EbmlElement.h>
 #include <ebml/EbmlMaster.h>
+#undef min
+#undef max
 
 /* i18n stuff */
 #if defined(HAVE_LIBINTL_H)
@@ -87,4 +89,4 @@ extern int MTX_DLL_API verbose;
 
 void MTX_DLL_API mtx_common_init();
 
-#endif // __MTX_COMMON_H
+#endif // __MTX_COMMON_COMMON_H
