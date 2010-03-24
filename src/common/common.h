@@ -14,6 +14,9 @@
 #ifndef __MTX_COMMON_COMMON_H
 #define __MTX_COMMON_COMMON_H
 
+#undef min
+#undef max
+
 #include <boost/foreach.hpp>
 #include <boost/format.hpp>
 #include <boost/regex.hpp>
@@ -21,14 +24,12 @@
 
 #include "common/os.h"
 
-// Compilation with mingw gcc fails with Boost's format library if
-// "min" is defined. The libebml headers define "min", so make sure
-// that it isn't before including boost/format.hpp.
+#include <ebml/c/libebml_t.h>
+#undef min
+#undef max
 
 #include <ebml/EbmlElement.h>
 #include <ebml/EbmlMaster.h>
-#undef min
-#undef max
 
 /* i18n stuff */
 #if defined(HAVE_LIBINTL_H)
