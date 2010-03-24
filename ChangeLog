@@ -1,5 +1,7 @@
 2010-03-24  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Fixed a tiny memory leak. Fix for bug 481.
+
 	* Released v3.3.0.
 
 	* Build system: Sped up builds by using pre-compiled
