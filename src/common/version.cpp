@@ -15,7 +15,7 @@
 
 #include "common/version.h"
 
-#define VERSIONNAME "Beginnings"
+#define VERSIONNAME "Language"
 
 std::string
 get_version_info(const std::string &program,
