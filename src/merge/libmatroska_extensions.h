@@ -36,9 +36,7 @@ public:
     PreviousTimecode = 0;
   }
 
-  virtual ~kax_cluster_c() {
-    RemoveAll();
-  }
+  void delete_non_blocks();
 
   void set_min_timecode(int64_t min_timecode) {
     MinTimecode = min_timecode;

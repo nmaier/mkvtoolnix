@@ -139,3 +139,20 @@ kax_block_blob_c::set_block_duration(uint64_t time_length) {
   if (replace_simple_by_group())
     Block.group->SetBlockDuration(time_length);
 }
+
+// The kax_block_group_c objects are stored in counted_ptrs outside of
+// the cluster structure as well. KaxSimpleBlock objects are deleted
+// when they're replaced with kax_block_group_c. All other object
+// types must be deleted explicitely. This applies to
+// e.g. KaxClusterTimecodes.
+void
+kax_cluster_c::delete_non_blocks() {
+  unsigned idx;
+  for (idx = 0; ListSize() > idx; ++idx) {
+    EbmlElement *e = (*this)[idx];
+    if ((NULL == dynamic_cast<kax_block_group_c *>(e)) && (NULL == dynamic_cast<KaxSimpleBlock *>(e)))
+      delete e;
+  }
+
+  RemoveAll();
+}

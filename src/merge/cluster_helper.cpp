@@ -456,6 +456,8 @@ cluster_helper_c::render() {
   m_min_timecode_in_cluster = -1;
   m_max_timecode_in_cluster = -1;
 
+  m_cluster->delete_non_blocks();
+
   return 1;
 }
 
