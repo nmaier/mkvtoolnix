@@ -18,11 +18,19 @@
 # include <windows.h>
 #endif
 
+#include <matroska/KaxVersion.h>
+#include <matroska/FileKax.h>
+
 #include "common/mm_io.h"
 #include "common/random.h"
 #include "common/strings/editing.h"
 #include "common/translation.h"
 #include "common/xml/element_mapping.h"
+
+#if LIBMATROSKA_VERSION < 0x000900
+#define libmatroska_init()
+#define libmatroska_done()
+#endif
 
 // Global and static variables
 
@@ -34,6 +42,7 @@ extern bool g_warning_issued;
 
 void
 mxexit(int code) {
+  matroska_done();
   if (code != -1)
     exit(code);
 
@@ -88,6 +97,8 @@ mtx_common_cleanup() {
 
 void
 mtx_common_init() {
+  matroska_init();
+
   atexit(mtx_common_cleanup);
 
   srand(time(NULL));

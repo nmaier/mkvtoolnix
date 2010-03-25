@@ -2143,7 +2143,6 @@ parse_args(std::vector<std::string> args) {
 static void
 init_globals() {
   clear_list_of_unique_uint32(UNIQUE_ALL_IDS);
-  g_kax_tracks = new KaxTracks();
 }
 
 /** \brief Global program initialization
@@ -2155,6 +2154,7 @@ init_globals() {
 static void
 setup() {
   mtx_common_init();
+  g_kax_tracks = new KaxTracks();
 
 #if defined(SYS_UNIX) || defined(COMP_CYGWIN) || defined(SYS_APPLE)
   signal(SIGUSR1, sighandler);
