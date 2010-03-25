@@ -168,7 +168,7 @@ extern std::string g_segmentinfo_file_name;
 extern KaxTags *g_tags_from_cue_chapters;
 
 extern KaxSegment *g_kax_segment;
-extern KaxTracks g_kax_tracks;
+extern KaxTracks *g_kax_tracks;
 extern KaxTrackEntry *g_kax_last_entry;
 extern KaxCues *g_kax_cues;
 extern KaxSeekHead *g_kax_sh_main, *g_kax_sh_cues;

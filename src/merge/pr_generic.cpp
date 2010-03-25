@@ -594,7 +594,7 @@ generic_packetizer_c::set_headers() {
     ptzrs_in_header_order.push_back(this);
 
   if (NULL == m_track_entry) {
-    m_track_entry    = NULL == g_kax_last_entry ? &GetChild<KaxTrackEntry>(g_kax_tracks) : &GetNextChild<KaxTrackEntry>(g_kax_tracks, *g_kax_last_entry);
+    m_track_entry    = NULL == g_kax_last_entry ? &GetChild<KaxTrackEntry>(g_kax_tracks) : &GetNextChild<KaxTrackEntry>(*g_kax_tracks, *g_kax_last_entry);
     g_kax_last_entry = m_track_entry;
     m_track_entry->SetGlobalTimecodeScale((int64_t)g_timecode_scale);
   }

@@ -155,7 +155,7 @@ bool g_identify_verbose                     = false;
 bool g_identify_for_mmg                     = false;
 
 KaxSegment *g_kax_segment                   = NULL;
-KaxTracks g_kax_tracks;
+KaxTracks *g_kax_tracks                     = NULL;
 KaxTrackEntry *g_kax_last_entry             = NULL;
 KaxCues *g_kax_cues                         = NULL;
 KaxSeekHead *g_kax_sh_main                  = NULL;
@@ -686,9 +686,9 @@ render_headers(mm_io_c *out) {
     g_kax_sh_main->IndexThis(*s_kax_infos, *g_kax_segment);
 
     if (!g_packetizers.empty()) {
-      g_kax_segment->PushElement(g_kax_tracks);
-      g_kax_tracks.Render(*out, !hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
-      g_kax_sh_main->IndexThis(g_kax_tracks, *g_kax_segment);
+      g_kax_segment->PushElement(*g_kax_tracks);
+      g_kax_tracks->Render(*out, !hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
+      g_kax_sh_main->IndexThis(*g_kax_tracks, *g_kax_segment);
 
       // Reserve some small amount of space for header changes by the
       // packetizers.
@@ -709,13 +709,13 @@ render_headers(mm_io_c *out) {
 */
 void
 rerender_track_headers() {
-  g_kax_tracks.UpdateSize(!hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
+  g_kax_tracks->UpdateSize(!hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
 
   int64_t new_void_size = s_void_after_track_headers->GetElementPosition() + s_void_after_track_headers->GetSize()
-    - g_kax_tracks.GetElementPosition() - g_kax_tracks.ElementSize();
+    - g_kax_tracks->GetElementPosition() - g_kax_tracks->ElementSize();
 
-  s_out->save_pos(g_kax_tracks.GetElementPosition());
-  g_kax_tracks.Render(*s_out, !hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
+  s_out->save_pos(g_kax_tracks->GetElementPosition());
+  g_kax_tracks->Render(*s_out, !hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
 
   delete s_void_after_track_headers;
   s_void_after_track_headers = new EbmlVoid;
@@ -1302,7 +1302,7 @@ finish_file(bool last_file) {
 
   // Render the track headers a second time if the user has requested that.
   if (hack_engaged(ENGAGE_WRITE_HEADERS_TWICE)) {
-    EbmlElement *second_tracks = g_kax_tracks.Clone();
+    EbmlElement *second_tracks = g_kax_tracks->Clone();
     second_tracks->Render(*s_out);
     g_kax_sh_main->IndexThis(*second_tracks, *g_kax_segment);
     delete second_tracks;
@@ -1857,4 +1857,8 @@ cleanup() {
   g_kax_info_chap = NULL;
 
   g_forced_seguids.clear();
+
+  delete g_kax_tracks;
+  g_kax_tracks = NULL;
+
 }

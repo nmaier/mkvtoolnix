@@ -2143,6 +2143,7 @@ parse_args(std::vector<std::string> args) {
 static void
 init_globals() {
   clear_list_of_unique_uint32(UNIQUE_ALL_IDS);
+  g_kax_tracks = new KaxTracks();
 }
 
 /** \brief Global program initialization
