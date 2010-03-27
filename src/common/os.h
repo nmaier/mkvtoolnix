@@ -54,6 +54,10 @@
 # define SYS_UNIX
 # if defined(__bsdi__) || defined(__FreeBSD__)
 #  define SYS_BSD
+# elif defined(__sun) && defined(__SUNPRO_CC)
+#  undef COMP_GCC
+#  define COMP_SUNPRO
+#  define SYS_SOLARIS
 # elif defined(__sun) && defined(__SVR4)
 #  define SYS_SOLARIS
 # else
