@@ -75,7 +75,7 @@ corepicture_reader_c::corepicture_reader_c(track_info_c &_ti)
 
     delete m_xml_source;
 
-    stable_sort(m_pictures.begin(), m_pictures.end());
+    std::stable_sort(m_pictures.begin(), m_pictures.end());
     m_current_picture = m_pictures.begin();
 
   } catch (xml_parser_error_c &error) {
@@ -237,7 +237,7 @@ int
 corepicture_reader_c::get_progress() {
   if (m_pictures.size() == 0)
     return 0;
-  return 100 - distance(m_current_picture, (std::vector<corepicture_pic_t>::const_iterator)m_pictures.end()) * 100 / m_pictures.size();
+  return 100 - std::distance(m_current_picture, (std::vector<corepicture_pic_t>::const_iterator)m_pictures.end()) * 100 / m_pictures.size();
 }
 
 int64_t

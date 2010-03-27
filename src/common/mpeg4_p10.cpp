@@ -1104,7 +1104,7 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
     return;
   }
 
-  sort(poc.begin(), poc.end(), compare_poc_by_poc);
+  std::sort(poc.begin(), poc.end(), compare_poc_by_poc);
 
   int num_frames    = m_frames.size();
   int num_timecodes = m_timecodes.size();
@@ -1116,7 +1116,7 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
                     :                              0;
   }
 
-  sort(poc.begin(), poc.end(), compare_poc_by_dec);
+  std::sort(poc.begin(), poc.end(), compare_poc_by_dec);
 
   i          = m_frames.begin();
   i->m_start = poc[0].timecode;

@@ -833,7 +833,7 @@ qtmp4_reader_c::process_chapter_entries(int level,
 
   mxverb(3, boost::format("Quicktime/MP4 reader:%1%%2% chapter(s):\n") % space((level + 1) * 2 + 1) % entries.size());
 
-  stable_sort(entries.begin(), entries.end());
+  std::stable_sort(entries.begin(), entries.end());
 
   mm_mem_io_c out(NULL, 0, 1000);
   out.set_file_name(m_ti.m_fname);
@@ -1107,7 +1107,7 @@ qtmp4_reader_c::handle_stss_atom(qtmp4_demuxer_cptr &new_dmx,
   for (i = 0; i < count; ++i)
     new_dmx->keyframe_table.push_back(io->read_uint32_be());
 
-  sort(new_dmx->keyframe_table.begin(), new_dmx->keyframe_table.end());
+  std::sort(new_dmx->keyframe_table.begin(), new_dmx->keyframe_table.end());
 
   mxverb(2, boost::format("Quicktime/MP4 reader:%1%Sync/keyframe table: %2% entries\n") % space(level * 2 + 1) % count);
   for (i = 0; i < count; ++i)

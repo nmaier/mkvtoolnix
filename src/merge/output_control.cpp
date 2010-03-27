@@ -814,7 +814,7 @@ check_append_mapping() {
   // available (in which case we fill in default ones) or if there are fewer
   // mappings than tracks that are to be copied (which is an error).
   mxforeach(src_file, g_files) {
-    file_id = distance(g_files.begin(), src_file);
+    file_id = std::distance(g_files.begin(), src_file);
     if (!src_file->appending)
       continue;
 

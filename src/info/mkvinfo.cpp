@@ -399,7 +399,7 @@ sort_master(EbmlMaster &m) {
 
   for (i = 0; m.ListSize() > i; ++i)
     sort_me.push_back(master_sorter_t(i, m[i]->GetElementPosition()));
-  sort(sort_me.begin(), sort_me.end());
+  std::sort(sort_me.begin(), sort_me.end());
 
   for (i = 0; sort_me.size() > i; ++i)
     tmp.push_back(m[sort_me[i].m_index]);

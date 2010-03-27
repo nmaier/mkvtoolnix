@@ -130,7 +130,7 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
   if (m_ranges.size() == 0)
     t.start_frame = 0;
   else {
-    sort(m_ranges.begin(), m_ranges.end());
+    std::sort(m_ranges.begin(), m_ranges.end());
     bool done;
     do {
       done = true;

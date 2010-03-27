@@ -1008,7 +1008,7 @@ generic_packetizer_c::apply_factory_full_queueing(packet_cptr_di &p_start) {
     }
 
     if (needs_sorting)
-      sort(sorter.begin(), sorter.end());
+      std::sort(sorter.begin(), sorter.end());
 
     // Finally apply the factory.
     for (i = 0; sorter.size() > i; ++i)

@@ -195,7 +195,7 @@ mpeg_ps_reader_c::sort_tracks() {
                            :                          0x30000)
       + tracks[i]->id.idx();
 
-  sort(tracks.begin(), tracks.end());
+  std::sort(tracks.begin(), tracks.end());
 
   for (i = 0; tracks.size() > i; ++i)
     id2idx[tracks[i]->id.idx()] = i;

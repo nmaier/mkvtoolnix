@@ -199,7 +199,7 @@ vobsub_reader_c::parse_headers() {
           tracks.push_back(track);
           if (sort_required) {
             mxverb(2, boost::format("vobsub_reader: Sorting track %1%\n") % tracks.size());
-            stable_sort(track->entries.begin(), track->entries.end());
+            std::stable_sort(track->entries.begin(), track->entries.end());
           }
         }
       }
@@ -297,7 +297,7 @@ vobsub_reader_c::parse_headers() {
       tracks.push_back(track);
       if (sort_required) {
         mxverb(2, boost::format("vobsub_reader: Sorting track %1%\n") % tracks.size());
-        stable_sort(track->entries.begin(), track->entries.end());
+        std::stable_sort(track->entries.begin(), track->entries.end());
       }
     }
   }

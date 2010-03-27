@@ -80,7 +80,7 @@ usf_reader_c::usf_reader_c(track_info_c &_ti)
     delete m_xml_source;
 
     for (i = 0; m_tracks.size() > i; ++i) {
-      stable_sort(m_tracks[i].m_entries.begin(), m_tracks[i].m_entries.end());
+      std::stable_sort(m_tracks[i].m_entries.begin(), m_tracks[i].m_entries.end());
       m_tracks[i].m_current_entry = m_tracks[i].m_entries.begin();
       if ((-1 == m_longest_track) || (m_tracks[m_longest_track].m_entries.size() < m_tracks[i].m_entries.size()))
         m_longest_track = i;
@@ -308,7 +308,7 @@ usf_reader_c::get_progress() {
   usf_track_t &track = m_tracks[m_longest_track];
   if (track.m_entries.size() == 0)
     return 0;
-  return 100 - distance(track.m_current_entry, (std::vector<usf_entry_t>::const_iterator)track.m_entries.end()) * 100 / track.m_entries.size();
+  return 100 - std::distance(track.m_current_entry, (std::vector<usf_entry_t>::const_iterator)track.m_entries.end()) * 100 / track.m_entries.size();
 }
 
 int64_t

@@ -935,7 +935,7 @@ kax_analyzer_c::read_all_meta_seeks() {
     if (EBML_ID(KaxSeekHead) == m_data[i]->m_id)
       read_meta_seek(m_data[i]->m_pos, positions_found);
 
-  sort(m_data.begin(), m_data.end());
+  std::sort(m_data.begin(), m_data.end());
 }
 
 void

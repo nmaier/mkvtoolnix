@@ -219,7 +219,7 @@ mm_multi_file_io_c::open_multi(const std::string &display_file_name) {
     paths.push_back(path_sorter_t(itr->path(), current_number));
   }
 
-  sort(paths.begin(), paths.end());
+  std::sort(paths.begin(), paths.end());
 
   std::vector<bfs::path> file_names;
   foreach(const path_sorter_t &path, paths)

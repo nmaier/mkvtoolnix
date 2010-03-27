@@ -62,7 +62,7 @@ close_timecode_files() {
     std::vector<int64_t> &timecodes = extractor->m_timecodes;
     std::vector<int64_t>::const_iterator timecode;
 
-    sort(timecodes.begin(), timecodes.end());
+    std::sort(timecodes.begin(), timecodes.end());
     mxforeach(timecode, timecodes)
       extractor->m_file->puts(to_string(*timecode, 1000000, 6) + "\n");
     delete extractor->m_file;

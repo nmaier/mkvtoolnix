@@ -265,7 +265,7 @@ xtr_ssa_c::finish_file() {
 
   // Sort the SSA lines according to their ReadOrder number and
   // write them.
-  sort(m_lines.begin(), m_lines.end());
+  std::sort(m_lines.begin(), m_lines.end());
   for (i = 0; i < m_lines.size(); i++)
     m_out->puts(m_lines[i].m_line.c_str());
 }
