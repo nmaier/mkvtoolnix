@@ -160,7 +160,7 @@ wavpack_reader_c::read(generic_packetizer_c *ptzr,
       put_uint32_le(databuffer, block_size);
       databuffer += 4;
     }
-    if (io->read(databuffer, block_size) < 0) {
+    if (io->read(databuffer, block_size) != block_size) {
       PTZR0->flush();
       return FILE_STATUS_DONE;
     }
@@ -221,7 +221,7 @@ wavpack_reader_c::read(generic_packetizer_c *ptzr,
           put_uint32_le(databuffer, block_size);
           databuffer += 4;
         }
-        if (io_correc->read(databuffer, block_size) < 0) {
+        if (io_correc->read(databuffer, block_size) != block_size) {
           delete io_correc;
           io_correc = NULL;
         }

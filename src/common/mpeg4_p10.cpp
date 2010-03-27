@@ -205,12 +205,10 @@ mpeg4::p10::parse_sps(memory_cptr &buffer,
   w.copy_bits(3, r);            // forbidden_zero_bit, nal_ref_idc
   if (w.copy_bits(5, r) != 7)   // nal_unit_type
     return false;
-  sps.profile_idc = w.copy_bits(8, r); // profile_idc
-  if (sps.profile_idc < 0)
-    return false;
+  sps.profile_idc    = w.copy_bits(8, r); // profile_idc
   sps.profile_compat = w.copy_bits(8, r); // constraints
-  sps.level_idc = w.copy_bits(8, r);      // level_idc
-  sps.id = gecopy(r, w);                  // sps id
+  sps.level_idc      = w.copy_bits(8, r); // level_idc
+  sps.id             = gecopy(r, w);      // sps id
   if (sps.profile_idc >= 100) {           // high profile
     if (gecopy(r, w) == 3)                // chroma_format_idc
       w.copy_bits(1, r);                  // residue_transform_flag

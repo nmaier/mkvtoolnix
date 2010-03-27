@@ -142,7 +142,7 @@ find_dts_header_internal(const unsigned char *buf,
 
   t = bc.get_bits(4);
   dts_header->core_sampling_frequency = core_samplefreqs[t];
-  if (dts_header->core_sampling_frequency < 0) {
+  if (core_samplefreqs[t] < 0) {
     mxwarn(Y("DTS_Header problem: invalid core sampling frequency\n"));
     return -1;
   }
