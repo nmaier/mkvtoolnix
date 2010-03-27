@@ -77,7 +77,6 @@ engage_hacks(const std::string &hacks) {
 
   for (aidx = 0; engage_args.size() > aidx; aidx++) {
     bool valid_hack = false;
-    int hidx;
     for (hidx = 0; s_available_hacks[hidx].name != NULL; hidx++)
       if (engage_args[aidx] == s_available_hacks[hidx].name) {
         valid_hack = true;

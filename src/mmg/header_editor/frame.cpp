@@ -357,12 +357,12 @@ header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
   if (NULL == e)
     return;
 
-  m_e_tracks        = e;
-  KaxTracks *tracks = static_cast<KaxTracks *>(e);
-  int track_type    = -1;
+  m_e_tracks            = e;
+  KaxTracks *kax_tracks = static_cast<KaxTracks *>(e);
+  int track_type        = -1;
   int i;
-  for (i = 0; tracks->ListSize() > i; ++i) {
-    KaxTrackEntry *k_track_entry = dynamic_cast<KaxTrackEntry *>((*tracks)[i]);
+  for (i = 0; kax_tracks->ListSize() > i; ++i) {
+    KaxTrackEntry *k_track_entry = dynamic_cast<KaxTrackEntry *>((*kax_tracks)[i]);
     if (NULL == k_track_entry)
       continue;
 
@@ -378,7 +378,7 @@ header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
     wxString title;
     track_type = uint64(*k_track_type);
 
-    he_track_type_page_c *page = new he_track_type_page_c(this, track_type, track_number, tracks);
+    he_track_type_page_c *page = new he_track_type_page_c(this, track_type, track_number, kax_tracks);
     page->init();
 
     he_value_page_c *child_page;
