@@ -75,8 +75,8 @@ set_process_priority(int priority) {
 
   // Avoid a compiler warning due to glibc having flagged 'nice' with
   // 'warn if return value is ignored'.
-  if (!nice(s_nice_levels[priority + 2]))
-    ;
+  if (!nice(s_nice_levels[priority + 2])) {
+  }
 #endif
 }
 
