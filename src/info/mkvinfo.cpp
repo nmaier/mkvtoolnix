@@ -134,6 +134,7 @@ std::vector<boost::format> g_common_boost_formats;
 #define BF_CLUSTER_TIMECODE                  BF_DO(28)
 #define BF_CLUSTER_POSITION                  BF_DO(29)
 #define BF_CLUSTER_PREVIOUS_SIZE             BF_DO(30)
+#define BF_CODEC_STATE                       BF_DO(31)
 
 void
 init_common_boost_formats() {
@@ -168,6 +169,7 @@ init_common_boost_formats() {
   BF_ADD(Y("Cluster timecode: %|1$.3f|s"));                                                                     // 28 -- BF_CLUSTER_TIMECODE
   BF_ADD(Y("Cluster position: %1%"));                                                                           // 29 -- BF_CLUSTER_POSITION
   BF_ADD(Y("Cluster previous size: %1%"));                                                                      // 30 -- BF_CLUSTER_PREVIOUS_SIZE
+  BF_ADD(Y("Codec state: %1%"));                                                                                // 31 -- BF_CODEC_STATE
 }
 
 void
@@ -1411,6 +1413,9 @@ def_handle2(block_group,
     } else if (is_id(l3, KaxReferenceVirtual)) {
       KaxReferenceVirtual &ref_virt = *static_cast<KaxReferenceVirtual *>(l3);
       show_element(l3, 3, BF_BLOCK_GROUP_REFERENCE_VIRTUAL % int64(ref_virt));
+
+    } else if (is_id(l3, KaxCodecState)) {
+      show_element(l3, 3, BF_CODEC_STATE % format_binary(*static_cast<KaxCodecState *>(l3)));
 
 #endif // MATROSKA_VERSION >= 2
     } else if (is_id(l3, KaxBlockAdditions)) {
