@@ -85,8 +85,8 @@ mm_multi_file_io_c::setFilePointer(int64 offset,
 }
 
 uint32
-mm_multi_file_io_c::read(void *buffer,
-                         size_t size) {
+mm_multi_file_io_c::_read(void *buffer,
+                          size_t size) {
   size_t num_read_total     = 0;
   unsigned char *buffer_ptr = static_cast<unsigned char *>(buffer);
 
@@ -116,8 +116,8 @@ mm_multi_file_io_c::read(void *buffer,
 }
 
 size_t
-mm_multi_file_io_c::write(const void *buffer,
-                          size_t size) {
+mm_multi_file_io_c::_write(const void *buffer,
+                           size_t size) {
   throw mm_io_error_c("write-to-multi-file-io-object");
 }
 

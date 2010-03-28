@@ -69,7 +69,7 @@ public:
   virtual uint64 getFilePointer() = 0;
   virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning) = 0;
   virtual bool setFilePointer2(int64 offset, seek_mode mode = seek_beginning);
-  virtual uint32 read(void *buffer, size_t size) = 0;
+  virtual uint32 read(void *buffer, size_t size);
   virtual uint32_t read(std::string &buffer, size_t size);
   virtual uint32_t read(memory_cptr &buffer, size_t size, int offset = 0);
   virtual unsigned char read_uint8();
@@ -89,7 +89,7 @@ public:
   virtual int write_uint32_be(uint32_t value);
   virtual int write_uint64_be(uint64_t value);
   virtual void skip(int64 numbytes);
-  virtual size_t write(const void *buffer, size_t size) = 0;
+  virtual size_t write(const void *buffer, size_t size);
   virtual uint32_t write(const memory_cptr &buffer, int size = -1, int offset = 0);
   virtual bool eof() = 0;
   virtual void flush() {
@@ -116,6 +116,10 @@ public:
   virtual void use_dos_style_newlines(bool yes) {
     dos_style_newlines = yes;
   }
+
+protected:
+  virtual uint32 _read(void *buffer, size_t size) = 0;
+  virtual size_t _write(const void *buffer, size_t size) = 0;
 };
 
 typedef counted_ptr<mm_io_c> mm_io_cptr;
@@ -167,8 +171,6 @@ public:
   virtual uint64 get_real_file_pointer();
 #endif
   virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning);
-  virtual uint32 read(void *buffer, size_t size);
-  virtual size_t write(const void *buffer, size_t size);
   virtual void close();
   virtual bool eof();
 
@@ -184,6 +186,10 @@ public:
 
   static void setup();
   static void cleanup();
+
+protected:
+  virtual uint32 _read(void *buffer, size_t size);
+  virtual size_t _write(const void *buffer, size_t size);
 };
 
 typedef counted_ptr<mm_file_io_c> mm_file_io_cptr;
@@ -208,12 +214,6 @@ public:
   virtual uint64 getFilePointer() {
     return proxy_io->getFilePointer();
   }
-  virtual uint32 read(void *buffer, size_t size) {
-    return proxy_io->read(buffer, size);
-  }
-  virtual size_t write(const void *buffer, size_t size) {
-    return proxy_io->write(buffer, size);
-  }
   virtual bool eof() {
     return proxy_io->eof();
   }
@@ -221,6 +221,10 @@ public:
   virtual std::string get_file_name() const {
     return proxy_io->get_file_name();
   }
+
+protected:
+  virtual uint32 _read(void *buffer, size_t size);
+  virtual size_t _write(const void *buffer, size_t size);
 };
 
 typedef counted_ptr<mm_proxy_io_c> mm_proxy_io_cptr;
@@ -234,9 +238,11 @@ public:
 
   virtual uint64 getFilePointer();
   virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning);
-  virtual uint32 read(void *buffer, size_t size);
-  virtual size_t write(const void *buffer, size_t size);
   virtual void close();
+
+protected:
+  virtual uint32 _read(void *buffer, size_t size);
+  virtual size_t _write(const void *buffer, size_t size);
 };
 
 typedef counted_ptr<mm_null_io_c> mm_null_io_cptr;
@@ -256,14 +262,6 @@ public:
 
   virtual uint64 getFilePointer();
   virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning);
-  virtual uint32 read(void *buffer, size_t size);
-  virtual uint32_t read(memory_cptr &buffer, size_t size, int offset = 0) {
-    return mm_io_c::read(buffer, size, offset);
-  }
-  virtual size_t write(const void *buffer, size_t size);
-  virtual uint32_t write(const memory_cptr &buffer, int size = -1, int offset = 0) {
-    return mm_io_c::write(buffer, size, offset);
-  }
   virtual void close();
   virtual bool eof();
   virtual std::string get_file_name() const {
@@ -274,6 +272,10 @@ public:
   }
 
   virtual unsigned char *get_and_lock_buffer();
+
+protected:
+  virtual uint32 _read(void *buffer, size_t size);
+  virtual size_t _write(const void *buffer, size_t size);
 };
 
 typedef counted_ptr<mm_mem_io_c> mm_mem_io_cptr;
@@ -309,8 +311,6 @@ public:
 
   virtual uint64 getFilePointer();
   virtual void setFilePointer(int64 offset, seek_mode mode=seek_beginning);
-  virtual uint32 read(void *buffer, size_t size);
-  virtual size_t write(const void *buffer, size_t size);
   virtual void close();
   virtual bool eof() {
     return false;
@@ -319,6 +319,10 @@ public:
     return "";
   }
   virtual void flush();
+
+protected:
+  virtual uint32 _read(void *buffer, size_t size);
+  virtual size_t _write(const void *buffer, size_t size);
 };
 
 typedef counted_ptr<mm_stdio_c> mm_stdio_cptr;

@@ -83,7 +83,7 @@ kax_analyzer_c::~kax_analyzer_c() {
 }
 
 void
-kax_analyzer_c::log_debug_message(const std::string &message) {
+kax_analyzer_c::_log_debug_message(const std::string &message) {
   mxinfo(message);
 }
 

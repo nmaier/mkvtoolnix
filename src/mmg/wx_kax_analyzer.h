@@ -37,8 +37,10 @@ public:
   virtual bool show_progress_running(int percentage);
   virtual void show_progress_done();
 
-  virtual void log_debug_message(const std::string &message);
   virtual void debug_abort_process();
+
+protected:
+  virtual void _log_debug_message(const std::string &message);
 };
 
 #endif // __WX_KAX_ANALYZER_H

@@ -178,8 +178,8 @@ mm_file_io_c::setFilePointer(int64 offset,
 }
 
 size_t
-mm_file_io_c::write(const void *buffer,
-                    size_t size) {
+mm_file_io_c::_write(const void *buffer,
+                     size_t size) {
   size_t bwritten = fwrite(buffer, 1, size, (FILE *)file);
   if (ferror((FILE *)file) != 0)
     mxerror(boost::format(Y("Could not write to the output file: %1% (%2%)\n")) % errno % get_errno_msg());
@@ -204,8 +204,8 @@ mm_file_io_c::write(const void *buffer,
 }
 
 uint32
-mm_file_io_c::read(void *buffer,
-                   size_t size) {
+mm_file_io_c::_read(void *buffer,
+                    size_t size) {
   int64_t bread = fread(buffer, 1, size, (FILE *)file);
 
 # if HAVE_POSIX_FADVISE
@@ -374,8 +374,8 @@ mm_file_io_c::setFilePointer(int64 offset,
 }
 
 uint32
-mm_file_io_c::read(void *buffer,
-                   size_t size) {
+mm_file_io_c::_read(void *buffer,
+                    size_t size) {
   DWORD bytes_read;
 
   if (!ReadFile((HANDLE)file, buffer, size, &bytes_read, NULL)) {
@@ -394,8 +394,8 @@ mm_file_io_c::read(void *buffer,
 }
 
 size_t
-mm_file_io_c::write(const void *buffer,
-                    size_t size) {
+mm_file_io_c::_write(const void *buffer,
+                     size_t size) {
   DWORD bytes_written;
 
   if (!WriteFile((HANDLE)file, buffer, size, &bytes_written, NULL))
@@ -618,6 +618,12 @@ mm_io_c::puts(const std::string &s) {
 }
 
 uint32_t
+mm_io_c::read(void *buffer,
+              size_t size) {
+  return _read(buffer, size);
+}
+
+uint32_t
 mm_io_c::read(std::string &buffer,
               size_t size) {
   char *cbuffer = new char[size + 1];
@@ -795,6 +801,12 @@ mm_io_c::write_uint64_be(uint64_t value) {
   return write(&buffer, sizeof(uint64_t));
 }
 
+size_t
+mm_io_c::write(const void *buffer,
+               size_t size) {
+  return _write(buffer, size);
+}
+
 uint32_t
 mm_io_c::write(const memory_cptr &buffer,
                int size,
@@ -906,6 +918,19 @@ mm_proxy_io_c::close() {
   proxy_io = NULL;
 }
 
+
+uint32
+mm_proxy_io_c::_read(void *buffer,
+                     size_t size) {
+  return proxy_io->read(buffer, size);
+}
+
+size_t
+mm_proxy_io_c::_write(const void *buffer,
+                      size_t size) {
+  return proxy_io->write(buffer, size);
+}
+
 /*
    Dummy class for output to /dev/null. Needed for two pass stuff.
 */
@@ -928,8 +953,8 @@ mm_null_io_c::setFilePointer(int64 offset,
 }
 
 uint32
-mm_null_io_c::read(void *buffer,
-                   size_t size) {
+mm_null_io_c::_read(void *buffer,
+                    size_t size) {
   memset(buffer, 0, size);
   pos += size;
 
@@ -937,8 +962,8 @@ mm_null_io_c::read(void *buffer,
 }
 
 size_t
-mm_null_io_c::write(const void *buffer,
-                    size_t size) {
+mm_null_io_c::_write(const void *buffer,
+                     size_t size) {
   pos += size;
 
   return size;
@@ -1018,8 +1043,8 @@ mm_mem_io_c::setFilePointer(int64 offset,
 }
 
 uint32
-mm_mem_io_c::read(void *buffer,
-                  size_t size) {
+mm_mem_io_c::_read(void *buffer,
+                   size_t size) {
   int64_t rbytes = (pos + size) >= mem_size ? mem_size - pos : size;
   if (read_only)
     memcpy(buffer, &ro_mem[pos], rbytes);
@@ -1031,8 +1056,8 @@ mm_mem_io_c::read(void *buffer,
 }
 
 size_t
-mm_mem_io_c::write(const void *buffer,
-                   size_t size) {
+mm_mem_io_c::_write(const void *buffer,
+                    size_t size) {
   if (read_only)
     throw error_c(Y("wrong usage: writing to read-only memory"));
 
@@ -1289,14 +1314,14 @@ mm_stdio_c::setFilePointer(int64,
 }
 
 uint32
-mm_stdio_c::read(void *buffer,
-                 size_t size) {
+mm_stdio_c::_read(void *buffer,
+                  size_t size) {
   return fread(buffer, 1, size, stdin);
 }
 
 size_t
-mm_stdio_c::write(const void *buffer,
-                  size_t size) {
+mm_stdio_c::_write(const void *buffer,
+                   size_t size) {
 #if defined(SYS_WINDOWS)
   int i;
   int bytes_written = 0;

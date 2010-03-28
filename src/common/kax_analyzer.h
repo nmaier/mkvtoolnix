@@ -118,15 +118,19 @@ public:
   virtual void show_progress_done() {
   }
 
-  virtual void log_debug_message(const std::string &message);
+  virtual void log_debug_message(const std::string &message) {
+    _log_debug_message(message);
+  }
   virtual void log_debug_message(const boost::format &message) {
-    log_debug_message(message.str());
+    _log_debug_message(message.str());
   }
   virtual void debug_abort_process() {
     mxexit(1);
   }
 
 protected:
+  virtual void _log_debug_message(const std::string &message);
+
   virtual void remove_from_meta_seeks(EbmlId id);
   virtual void overwrite_all_instances(EbmlId id);
   virtual void merge_void_elements();

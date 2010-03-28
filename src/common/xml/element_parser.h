@@ -47,7 +47,7 @@ public:
     , m_column(-1) {
   }
 
-  virtual std::string get_error() {
+  virtual std::string get_error() const {
     return (boost::format(Y("Line %1%, column %2%: %3%")) % m_line % m_column % error).str();
   }
 };

@@ -48,8 +48,6 @@ public:
 
   virtual uint64 getFilePointer();
   virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning);
-  virtual uint32 read(void *buffer, size_t size);
-  virtual size_t write(const void *buffer, size_t size);
   virtual void close();
   virtual bool eof();
 
@@ -61,6 +59,10 @@ public:
   virtual void display_other_file_info();
 
   static mm_multi_file_io_cptr open_multi(const std::string &display_file_name);
+
+protected:
+  virtual uint32 _read(void *buffer, size_t size);
+  virtual size_t _write(const void *buffer, size_t size);
 };
 
 #endif  // __MTX_COMMON_MM_MULTI_FILE_IO_H

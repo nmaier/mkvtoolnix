@@ -55,8 +55,8 @@ wx_kax_analyzer_c::show_progress_done() {
 }
 
 void
-wx_kax_analyzer_c::log_debug_message(const std::string &message) {
-  kax_analyzer_c::log_debug_message(message);
+wx_kax_analyzer_c::_log_debug_message(const std::string &message) {
+  kax_analyzer_c::_log_debug_message(message);
 
   std::string msg_no_nl = message;
   strip_back(msg_no_nl, true);
