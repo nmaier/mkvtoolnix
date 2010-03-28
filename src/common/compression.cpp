@@ -296,13 +296,11 @@ header_removal_compressor_c::compress(memory_cptr &buffer) {
 }
 
 void
-header_removal_compressor_c::set_track_headers(KaxContentEncoding
-                                               &c_encoding) {
+header_removal_compressor_c::set_track_headers(KaxContentEncoding &c_encoding) {
   compressor_c::set_track_headers(c_encoding);
 
-  KaxContentCompression *c_comp = &GetChild<KaxContentCompression>(c_encoding);
   // Set compression parameters.
-  static_cast<EbmlBinary *>(&GetChild<KaxContentCompSettings>(*c_comp))->SetBuffer(m_bytes->get_buffer(), m_bytes->get_size());
+  GetChild<KaxContentCompSettings>(GetChild<KaxContentCompression>(c_encoding)).SetBuffer(m_bytes->get_buffer(), m_bytes->get_size());
 }
 
 mpeg4_p2_compressor_c::mpeg4_p2_compressor_c() {
@@ -329,7 +327,7 @@ void
 compressor_c::set_track_headers(KaxContentEncoding &c_encoding) {
   KaxContentCompression *c_comp = &GetChild<KaxContentCompression>(c_encoding);
   // Set compression method.
-  *static_cast<EbmlUInteger *>(&GetChild<KaxContentCompAlgo>(*c_comp)) = compression_method_map[method];
+  GetChildAs<KaxContentCompAlgo, EbmlUInteger>(*c_comp) = compression_method_map[method];
 }
 
 compressor_ptr

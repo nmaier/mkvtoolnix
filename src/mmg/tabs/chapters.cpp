@@ -877,18 +877,12 @@ tab_chapters::on_add_chapter(wxCommandEvent &evt) {
     chapter->Remove(0);
   }
   KaxChapterDisplay &display = GetEmptyChild<KaxChapterDisplay>(*chapter);
-  *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(display)) = cstrutf8_to_UTFstring(Y("(unnamed)"));
-  if ((g_default_chapter_language.length() > 0) ||
-      (g_default_chapter_country.length() > 0)) {
-    if (g_default_chapter_language.length() > 0)
-      *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(display)) =
-        g_default_chapter_language.c_str();
-    if (g_default_chapter_country.length() > 0)
-      *static_cast<EbmlString *>(&GetChild<KaxChapterCountry>(display)) =
-        g_default_chapter_country.c_str();
-  }
-  *static_cast<EbmlUInteger *>(&GetChild<KaxChapterUID>(*chapter)) =
-    create_unique_uint32(UNIQUE_CHAPTER_IDS);
+  GetChildAs<KaxChapterString, EbmlUnicodeString>(display) = cstrutf8_to_UTFstring(Y("(unnamed)"));
+  if (!g_default_chapter_language.empty())
+    GetChildAs<KaxChapterLanguage, EbmlString>(display) = g_default_chapter_language.c_str();
+  if (!g_default_chapter_country.empty())
+    GetChildAs<KaxChapterCountry, EbmlString>(display) = g_default_chapter_country.c_str();
+  GetChildAs<KaxChapterUID, EbmlUInteger>(*chapter) = create_unique_uint32(UNIQUE_CHAPTER_IDS);
   s = create_chapter_label(*chapter);
 
   if (d->is_atom) {
@@ -958,17 +952,11 @@ tab_chapters::on_add_subchapter(wxCommandEvent &evt) {
     chapter->Remove(0);
   }
   KaxChapterDisplay &display = GetEmptyChild<KaxChapterDisplay>(*chapter);
-  *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(display)) =
-    cstrutf8_to_UTFstring(Y("(unnamed)"));
-  if ((g_default_chapter_language.length() > 0) ||
-      (g_default_chapter_country.length() > 0)) {
-    if (g_default_chapter_language.length() > 0)
-      *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(display)) =
-        g_default_chapter_language.c_str();
-    if (g_default_chapter_country.length() > 0)
-      *static_cast<EbmlString *>(&GetChild<KaxChapterCountry>(display)) =
-        g_default_chapter_country.c_str();
-  }
+  GetChildAs<KaxChapterString, EbmlUnicodeString>(display) = cstrutf8_to_UTFstring(Y("(unnamed)"));
+  if (!g_default_chapter_language.empty())
+    GetChildAs<KaxChapterLanguage, EbmlString>(display) = g_default_chapter_language.c_str();
+  if (!g_default_chapter_country.empty())
+    GetChildAs<KaxChapterCountry, EbmlString>(display)  = g_default_chapter_country.c_str();
   m->PushElement(*chapter);
   s = create_chapter_label(*chapter);
   tc_chapters->AppendItem(id, s, -1, -1,
@@ -1229,7 +1217,7 @@ tab_chapters::on_chapter_name_changed(wxCommandEvent &evt) {
   if (cdisplay == NULL)
     return;
 
-  *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(*cdisplay)) = cstrutf8_to_UTFstring(wxMB(tc_chapter_name->GetValue()));
+  GetChildAs<KaxChapterString, EbmlUnicodeString>(*cdisplay) = cstrutf8_to_UTFstring(wxMB(tc_chapter_name->GetValue()));
 
   label = create_chapter_label(*t->chapter);
   tc_chapters->SetItemText(id, label);
@@ -1539,11 +1527,9 @@ tab_chapters::copy_values(wxTreeItemId id) {
     }
 
     if (ts_start >= 0)
-      *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeStart>(*chapter)) =
-        ts_start;
+      GetChildAs<KaxChapterTimeStart, EbmlUInteger>(*chapter) = ts_start;
     if (ts_end >= 0)
-      *static_cast<EbmlUInteger *>(&GetChild<KaxChapterTimeEnd>(*chapter)) =
-        ts_end;
+      GetChildAs<KaxChapterTimeEnd,   EbmlUInteger>(*chapter) = ts_end;
 
     label = create_chapter_label(*chapter);
     tc_chapters->SetItemText(id, label);
@@ -1581,16 +1567,14 @@ tab_chapters::on_add_chapter_name(wxCommandEvent &evt) {
     return;
 
   cdisplay = new KaxChapterDisplay;
-  *static_cast<EbmlUnicodeString *>(&GetChild<KaxChapterString>(*cdisplay)) = cstrutf8_to_UTFstring(Y("(unnamed)"));
+  GetChildAs<KaxChapterString, EbmlUnicodeString>(*cdisplay) = cstrutf8_to_UTFstring(Y("(unnamed)"));
   if (g_default_chapter_language.length() > 0)
     s = wxU(g_default_chapter_language);
   else
     s = wxT("eng");
-  *static_cast<EbmlString *>(&GetChild<KaxChapterLanguage>(*cdisplay)) =
-    wxMB(s);
+  GetChildAs<KaxChapterLanguage, EbmlString>(*cdisplay) = wxMB(s);
   if (g_default_chapter_country.length() > 0)
-    *static_cast<EbmlString *>(&GetChild<KaxChapterCountry>(*cdisplay)) =
-      g_default_chapter_country.c_str();
+    GetChildAs<KaxChapterCountry, EbmlString>(*cdisplay) = g_default_chapter_country.c_str();
   // Workaround for a bug in libebml
   if (i == (t->chapter->ListSize() - 1))
     t->chapter->PushElement(*cdisplay);
