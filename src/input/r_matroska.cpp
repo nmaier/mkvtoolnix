@@ -2078,10 +2078,6 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
     m_last_timecode -= m_first_timecode;
 
   KaxCodecState *codec_state = static_cast<KaxCodecState *>(block_group->FindFirstElt(EBML_INFO(KaxCodecState)));
-  if ((NULL != codec_state) && !hack_engaged(ENGAGE_USE_CODEC_STATE))
-    mxerror_tid(m_ti.m_fname, block_track->tnum,
-                Y("This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but "
-                  "this feature has not been turned on with the option '--engage use_codec_state'.\n"));
 
   if ((-1 != block_track->ptzr) && block_track->passthrough) {
     // The handling for passthrough is a bit different. We don't have

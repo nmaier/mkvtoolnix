@@ -37,6 +37,7 @@ protected:
   virtual void extract_aspect_ratio(const unsigned char *buffer, int size);
   virtual void create_private_data();
   virtual int process_framed(packet_cptr packet);
+  virtual bool put_sequence_headers_into_codec_state(packet_cptr packet);
 };
 
 #endif  // __P_MPEG1_2_H
