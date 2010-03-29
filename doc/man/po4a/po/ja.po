@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 2.9.9\n"
-"POT-Creation-Date: 2010-03-13 11:42+0100\n"
-"PO-Revision-Date: 2010-03-13 11:45+0100\n"
+"POT-Creation-Date: 2010-03-29 13:34+0300\n"
+"PO-Revision-Date: 2010-03-29 13:37+0200\n"
 "Last-Translator: Katsuhiko Nishimra <kat841@hotmail.com>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
@@ -30,7 +30,7 @@ msgstr "3.3.0"
 #. type: Content of the date entity
 #: doc/man/mkvextract.xml:7 doc/man/mkvinfo.xml:7 doc/man/mkvmerge.xml:7
 #: doc/man/mkvpropedit.xml:7 doc/man/mmg.xml:7
-msgid "2010-02-11"
+msgid "2010-03-24"
 msgstr ""
 
 #. type: Content of the mkvmerge entity
@@ -244,9 +244,8 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:79
-#, fuzzy
 msgid "<option>-f</option>, <option>--parse-fully</option>"
-msgstr "<option>-h</option>, <option>--help</option>"
+msgstr "<option>-f</option>, <option>--parse-fully</option>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:82
@@ -1130,7 +1129,7 @@ msgstr ""
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
 #: doc/man/mkvextract.xml:598
 msgid ""
-"<constant>2</constant> -- This exit code is used after an error occured.  "
+"<constant>2</constant> -- This exit code is used after an error occurred.  "
 "&mkvextract; aborts right after outputting the error message.  Error "
 "messages range from wrong command line arguments over read/write errors to "
 "broken files."
@@ -1405,7 +1404,7 @@ msgstr ""
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
 #: doc/man/mkvinfo.xml:247
 msgid ""
-"<constant>2</constant> -- This exit code is used after an error occured.  "
+"<constant>2</constant> -- This exit code is used after an error occurred.  "
 "&mkvinfo; aborts right after outputting the error message.  Error messages "
 "range from wrong command line arguments over read/write errors to broken "
 "files."
@@ -2059,7 +2058,7 @@ msgstr ""
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><orderedlist><listitem><para>
 #: doc/man/mkvmerge.xml:418
 msgid ""
-"The paramter must either have the form <parameter>HH:MM:SS.nnnnnnnnn</"
+"The parameter must either have the form <parameter>HH:MM:SS.nnnnnnnnn</"
 "parameter> for specifying the duration in up to nano-second precision or be "
 "a number <parameter>d</parameter> followed by the letter '<literal>s</"
 "literal>' for the duration in seconds. <parameter>HH</parameter> is the "
@@ -5112,7 +5111,7 @@ msgstr ""
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
 #: doc/man/mkvmerge.xml:2057
 msgid ""
-"<constant>2</constant> -- This exit code is used after an error occured.  "
+"<constant>2</constant> -- This exit code is used after an error occurred.  "
 "&mkvmerge; aborts right after outputting the error message.  Error messages "
 "range from wrong command line arguments over read/write errors to broken "
 "files."
@@ -5283,9 +5282,9 @@ msgstr ""
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvpropedit.xml:130
 msgid ""
-"Sets all occurences of the property <parameter>name</parameter> to the value "
-"<parameter>value</parameter>. If no such property exists then it will be "
-"added."
+"Sets all occurrences of the property <parameter>name</parameter> to the "
+"value <parameter>value</parameter>. If no such property exists then it will "
+"be added."
 msgstr ""
 "見付けた全ての、プロパティ名が<parameter>name</parameter>であるプロパティの値"
 "を、<parameter>value</parameter>に設定します。そのようなプロパティが存在しな"
@@ -5301,7 +5300,7 @@ msgstr ""
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvpropedit.xml:140
 msgid ""
-"Deletes all occurences of the property <parameter>name</parameter>. Note "
+"Deletes all occurrences of the property <parameter>name</parameter>. Note "
 "that some properties are required and cannot be deleted."
 msgstr ""
 "見付けた全ての、プロパティ名が<parameter>name</parameter>であるプロパティを削"
@@ -5556,12 +5555,12 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><screen>
 #: doc/man/mkvpropedit.xml:351
-#, fuzzy, no-wrap
+#, no-wrap
 msgid ""
 "$ mkvpropedit movie.mkv --edit tracks:s1 --set flag-default=0 --edit tracks:s2 --set flag-default=1\n"
 "  "
 msgstr ""
-"$ mkvpropedit movie.mkv --edit info --set \"title=The movie\" --edit track:a1 --set language=fre --edit track:a2 --set language=ita\n"
+"$ mkvpropedit movie.mkv --edit tracks:s1 --set flag-default=0 --edit tracks:s2 --set flag-default=1\n"
 "  "
 
 #. type: Content of: <refentry><refsect1><para>
@@ -5593,7 +5592,7 @@ msgstr ""
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
 #: doc/man/mkvpropedit.xml:379
 msgid ""
-"<constant>2</constant> -- This exit code is used after an error occured.  "
+"<constant>2</constant> -- This exit code is used after an error occurred.  "
 "&mkvpropedit; aborts right after outputting the error message.  Error "
 "messages range from wrong command line arguments over read/write errors to "
 "broken files."

@@ -127,7 +127,7 @@
     <term><option>-s</option>, <option>--set</option> <parameter>name</parameter>=<parameter>value</parameter></term>
     <listitem>
      <para>
-      Sets all occurences of the property <parameter>name</parameter> to the value <parameter>value</parameter>. If no such property exists
+      Sets all occurrences of the property <parameter>name</parameter> to the value <parameter>value</parameter>. If no such property exists
       then it will be added.
      </para>
     </listitem>
@@ -137,7 +137,7 @@
     <term><option>-d</option>, <option>--delete</option> <parameter>name</parameter></term>
     <listitem>
      <para>
-      Deletes all occurences of the property <parameter>name</parameter>. Note that some properties are required and cannot be deleted.
+      Deletes all occurrences of the property <parameter>name</parameter>. Note that some properties are required and cannot be deleted.
      </para>
     </listitem>
    </varlistentry>
@@ -376,7 +376,7 @@ $ mkvpropedit movie.mkv --edit tracks:s1 --set flag-default=0 --edit tracks:s2 -
 
    <listitem>
     <para>
-     <constant>2</constant> -- This exit code is used after an error occured.  &mkvpropedit; aborts right after outputting the error message.
+     <constant>2</constant> -- This exit code is used after an error occurred.  &mkvpropedit; aborts right after outputting the error message.
      Error messages range from wrong command line arguments over read/write errors to broken files.
     </para>
    </listitem>

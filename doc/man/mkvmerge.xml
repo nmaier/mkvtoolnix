@@ -415,7 +415,7 @@
        </para>
 
        <para>
-        The paramter must either have the form <parameter>HH:MM:SS.nnnnnnnnn</parameter> for specifying the duration in up to nano-second
+        The parameter must either have the form <parameter>HH:MM:SS.nnnnnnnnn</parameter> for specifying the duration in up to nano-second
         precision or be a number <parameter>d</parameter> followed by the letter '<literal>s</literal>' for the duration in
         seconds. <parameter>HH</parameter> is the number of hours, <parameter>MM</parameter> the number of minutes,
         <parameter>SS</parameter> the number of seconds and <parameter>nnnnnnnnn</parameter> the number of nanoseconds.  Both the number of
@@ -2054,7 +2054,7 @@ gap, 10.050
 
    <listitem>
     <para>
-     <constant>2</constant> -- This exit code is used after an error occured.  &mkvmerge; aborts right after outputting the error message.
+     <constant>2</constant> -- This exit code is used after an error occurred.  &mkvmerge; aborts right after outputting the error message.
      Error messages range from wrong command line arguments over read/write errors to broken files.
     </para>
    </listitem>

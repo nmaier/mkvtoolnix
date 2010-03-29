@@ -595,7 +595,7 @@ $ mkvextract tags source.mkv --redirect-output tags.xml
 
    <listitem>
     <para>
-     <constant>2</constant> -- This exit code is used after an error occured.  &mkvextract; aborts right after outputting the error message.
+     <constant>2</constant> -- This exit code is used after an error occurred.  &mkvextract; aborts right after outputting the error message.
      Error messages range from wrong command line arguments over read/write errors to broken files.
     </para>
    </listitem>
