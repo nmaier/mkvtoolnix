@@ -1,10 +1,19 @@
 AC_MSG_CHECKING(the manpage translation languages to install)
 MANPAGES_TRANSLATIONS=""
 MANPAGES_TRANSLATIONS_POS=""
-for file in $srcdir/doc/man/po4a/po/*.po; do
-  MANPAGES_TRANSLATIONS="$MANPAGES_TRANSLATIONS`basename $file .po` "
-  MANPAGES_TRANSLATIONS_POS="$MANPAGES_TRANSLATIONS$file "
-done
+if test x"$LINGUAS" = x ; then
+  for file in $srcdir/doc/man/po4a/po/*.po; do
+    MANPAGES_TRANSLATIONS="$MANPAGES_TRANSLATIONS`basename $file .po` "
+    MANPAGES_TRANSLATIONS_POS="$MANPAGES_TRANSLATIONS$file "
+  done
+else
+  for i in $LINGUAS; do
+    if test -f "$srcdir/doc/man/po4a/po/$i.po"; then
+      MANPAGES_TRANSLATIONS="$MANPAGES_TRANSLATIONS$i "
+      MANPAGES_TRANSLATIONS_POS="$MANPAGES_TRANSLATIONS$srcdir/doc/man/po4a/po/$i.po "
+    fi
+  done
+fi
 AC_MSG_RESULT($MANPAGES_TRANSLATIONS)
 
 MANPAGES_TRANSLATED="`for lang in $MANPAGES_TRANSLATIONS; do \
