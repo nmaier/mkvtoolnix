@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-03-17 01:05+0900\n"
+"PO-Revision-Date: 2010-04-03 17:49+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -4972,9 +4972,8 @@ msgid "Set if the track is used."
 msgstr "トラックが使用されるかどうかを設定します。"
 
 #: src/common/property_element.cpp:137
-#, fuzzy
 msgid "Set if the video is interlaced."
-msgstr "トラックが使用されるかどうかを設定します。"
+msgstr "ビデオがインターレースかどうかを設定します。"
 
 #: src/mmg/tabs/chapters.cpp:109
 msgid "Set language to:"
@@ -6977,9 +6976,8 @@ msgid "Video display width"
 msgstr "横表示解像度"
 
 #: src/common/property_element.cpp:137
-#, fuzzy
 msgid "Video interlaced flag"
-msgstr "ビデオトラック%u"
+msgstr "ビデオインターレース化フラグ"
 
 #: src/input/r_real.cpp:652
 msgid "Video packet assembly failed. Error code: %1% (%2%)\n"
