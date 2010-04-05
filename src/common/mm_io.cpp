@@ -153,13 +153,9 @@ mm_file_io_c::setup_fadvise(const std::string &local_path) {
 }
 #endif  // HAVE_POSIX_FADVISE
 
-int charlie = 0;
-
 void
 mm_file_io_c::setFilePointer(int64 offset,
                              seek_mode mode) {
-  if (charlie == 1)
-    mxinfo("SEEK\n");
   int whence = mode == seek_beginning ? SEEK_SET
              : mode == seek_end       ? SEEK_END
              :                          SEEK_CUR;
@@ -178,8 +174,6 @@ mm_file_io_c::setFilePointer(int64 offset,
 size_t
 mm_file_io_c::_write(const void *buffer,
                      size_t size) {
-  if (charlie == 1)
-    mxinfo(boost::format("WRITE %1%\n") % size);
   size_t bwritten = fwrite(buffer, 1, size, (FILE *)file);
   if (ferror((FILE *)file) != 0)
     mxerror(boost::format(Y("Could not write to the output file: %1% (%2%)\n")) % errno % get_errno_msg());
