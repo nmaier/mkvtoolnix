@@ -303,6 +303,7 @@ LIB mktcommon
   SOURCE common/locale_string.cpp
   SOURCE common/math.cpp
   SOURCE common/memory.cpp
+  SOURCE(TARGET_WIN) common/mm_io_win.cpp
   SOURCE common/mm_io.cpp
   SOURCE common/mm_multi_file_io.cpp
   SOURCE common/mp3.cpp
