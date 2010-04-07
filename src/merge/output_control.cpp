@@ -558,7 +558,7 @@ render_headers(mm_io_c *out) {
       GetChildAs<EDocTypeReadVersion, EbmlUInteger>(head) = 2;
     }
 
-    head.Render(*out);
+    head.Render(*out, true);
 
     s_kax_infos = &GetChild<KaxInfo>(*g_kax_segment);
 
