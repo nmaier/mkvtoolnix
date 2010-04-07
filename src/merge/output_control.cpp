@@ -550,11 +550,11 @@ render_headers(mm_io_c *out) {
 
     GetChildAs<EDocType, EbmlString>(head)                = "matroska";
     if (hack_engaged(ENGAGE_NO_SIMPLE_BLOCKS)) {
-      GetChildAs<EDocTypeVersion, EbmlUInteger>(head)     = 1;
+      GetChildAs<EDocTypeVersion,     EbmlUInteger>(head) = 1;
       GetChildAs<EDocTypeReadVersion, EbmlUInteger>(head) = 1;
 
     } else {
-      GetChildAs<EDocTypeVersion, EbmlUInteger>(head)     = 2;
+      GetChildAs<EDocTypeVersion,     EbmlUInteger>(head) = 2;
       GetChildAs<EDocTypeReadVersion, EbmlUInteger>(head) = 2;
     }
 
