@@ -82,7 +82,7 @@ kax_file_c::read_next_level1_element_internal(uint32_t wanted_id) {
     EbmlElement *l1 = read_one_element();
 
     if (NULL != l1) {
-      bool ok = m_in->setFilePointer2(l1->GetElementPosition() + l1->ElementSize(), seek_beginning);
+      bool ok = (0 != l1->ElementSize()) && m_in->setFilePointer2(l1->GetElementPosition() + l1->ElementSize(), seek_beginning);
 
       if (m_debug_read_next)
         mxinfo(boost::format("kax_file::read_next_level1_element(): other level 1 element %1% new pos %2% fsize %3% epos %4% esize %5%\n")

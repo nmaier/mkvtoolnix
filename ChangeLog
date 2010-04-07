@@ -1,3 +1,8 @@
+2010-04-07  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed a segfault when reading Matroska files
+	containing level 1 elements other than clusters with a size of 0.
+
 2010-04-03  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Build system: The LINGUAS environment variable determines which
