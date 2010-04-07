@@ -58,6 +58,9 @@ int MTX_DLL_API kt_get_v_pixel_height(KaxTrackEntry &track);
 #if !defined(EBML_ID_LENGTH)
 #define EBML_ID_LENGTH(id)  id.Length
 #endif
+#if !defined(EBML_CLASS_CONTEXT)
+#define EBML_CLASS_CONTEXT(ref) ref::ClassInfos.Context
+#endif
 #if !defined(EBML_CONTEXT)
 #define EBML_CONTEXT(e)  e->Generic().Context
 #endif

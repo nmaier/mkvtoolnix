@@ -889,7 +889,7 @@ kax_analyzer_c::read_all(const EbmlCallbacks &callbacks) {
 
     m_file->setFilePointer(data.m_pos);
     int upper_lvl_el     = 0;
-    EbmlElement *element = es.FindNextElement(EBML_INFO_CONTEXT(EBML_INFO(KaxSegment)), upper_lvl_el, 0xFFFFFFFFL, true);
+    EbmlElement *element = es.FindNextElement(EBML_CLASS_CONTEXT(KaxSegment), upper_lvl_el, 0xFFFFFFFFL, true);
     if (NULL == element)
       continue;
 

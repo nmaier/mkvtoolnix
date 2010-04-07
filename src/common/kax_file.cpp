@@ -105,7 +105,7 @@ kax_file_c::read_next_level1_element_internal(uint32_t wanted_id) {
 EbmlElement *
 kax_file_c::read_one_element() {
   int upper_lvl_el = 0;
-  EbmlElement *l1  = m_es->FindNextElement(EBML_INFO_CONTEXT(EBML_INFO(KaxSegment)), upper_lvl_el, 0xFFFFFFFFL, true);
+  EbmlElement *l1  = m_es->FindNextElement(EBML_CLASS_CONTEXT(KaxSegment), upper_lvl_el, 0xFFFFFFFFL, true);
 
   if (NULL == l1)
     return NULL;
@@ -123,7 +123,7 @@ kax_file_c::read_one_element() {
 
 bool
 kax_file_c::is_level1_element_id(vint_c id) const {
-  const EbmlSemanticContext &context = EBML_INFO_CONTEXT(EBML_INFO(KaxSegment));
+  const EbmlSemanticContext &context = EBML_CLASS_CONTEXT(KaxSegment);
   for (int segment_idx = 0; EBML_CTX_SIZE(context) > segment_idx; ++segment_idx)
     if (EBML_ID_VALUE(EBML_SEM_ID(context.MyTable[segment_idx])) == id.m_value)
       return true;
