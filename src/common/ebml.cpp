@@ -258,16 +258,16 @@ create_ebml_element(const EbmlCallbacks &callbacks,
 //     return empty_ebml_master(&parent->Generic().Create());
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++)
-    if (id == EBML_SEM_ID(context.MyTable[i]))
-      return empty_ebml_master(&EBML_SEM_CREATE(context.MyTable[i]));
+    if (id == EBML_SEM_ID(EBML_CTX_IDX(context,i)))
+      return empty_ebml_master(&EBML_SEM_CREATE(EBML_CTX_IDX(context,i)));
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++) {
     EbmlElement *e;
 
-    if (!(context != EBML_SEM_CONTEXT(context.MyTable[i])))
+    if (!(context != EBML_SEM_CONTEXT(EBML_CTX_IDX(context,i))))
       continue;
 
-    e = create_ebml_element(EBML_SEM_INFO(context.MyTable[i]), id);
+    e = create_ebml_element(EBML_SEM_INFO(EBML_CTX_IDX(context,i)), id);
     if (e != NULL)
       return e;
   }
@@ -286,13 +286,13 @@ find_ebml_callbacks(const EbmlCallbacks &base,
     return &base;
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++)
-    if (id == EBML_SEM_ID(context.MyTable[i]))
-      return &EBML_SEM_INFO(context.MyTable[i]);
+    if (id == EBML_SEM_ID(EBML_CTX_IDX(context,i)))
+      return &EBML_SEM_INFO(EBML_CTX_IDX(context,i));
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++) {
-    if (!(context != EBML_SEM_CONTEXT(context.MyTable[i])))
+    if (!(context != EBML_SEM_CONTEXT(EBML_CTX_IDX(context,i))))
       continue;
-    result = find_ebml_callbacks(EBML_SEM_INFO(context.MyTable[i]), id);
+    result = find_ebml_callbacks(EBML_SEM_INFO(EBML_CTX_IDX(context,i)), id);
     if (NULL != result)
       return result;
   }
@@ -311,13 +311,13 @@ find_ebml_callbacks(const EbmlCallbacks &base,
     return &base;
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++)
-    if (!strcmp(debug_name, EBML_INFO_NAME(EBML_SEM_INFO(context.MyTable[i]))))
-      return &EBML_SEM_INFO(context.MyTable[i]);
+    if (!strcmp(debug_name, EBML_INFO_NAME(EBML_SEM_INFO(EBML_CTX_IDX(context,i)))))
+      return &EBML_SEM_INFO(EBML_CTX_IDX(context,i));
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++) {
-    if (!(context != EBML_SEM_CONTEXT(context.MyTable[i])))
+    if (!(context != EBML_SEM_CONTEXT(EBML_CTX_IDX(context,i))))
       continue;
-    result = find_ebml_callbacks(EBML_SEM_INFO(context.MyTable[i]), debug_name);
+    result = find_ebml_callbacks(EBML_SEM_INFO(EBML_CTX_IDX(context,i)), debug_name);
     if (NULL != result)
       return result;
   }
@@ -333,13 +333,13 @@ find_ebml_parent_callbacks(const EbmlCallbacks &base,
   int i;
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++)
-    if (id == EBML_SEM_ID(context.MyTable[i]))
+    if (id == EBML_SEM_ID(EBML_CTX_IDX(context,i)))
       return &base;
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++) {
-    if (!(context != EBML_SEM_CONTEXT(context.MyTable[i])))
+    if (!(context != EBML_SEM_CONTEXT(EBML_CTX_IDX(context,i))))
       continue;
-    result = find_ebml_parent_callbacks(EBML_SEM_INFO(context.MyTable[i]), id);
+    result = find_ebml_parent_callbacks(EBML_SEM_INFO(EBML_CTX_IDX(context,i)), id);
     if (NULL != result)
       return result;
   }
@@ -355,13 +355,13 @@ find_ebml_semantic(const EbmlCallbacks &base,
   int i;
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++)
-    if (id == EBML_SEM_ID(context.MyTable[i]))
-      return &context.MyTable[i];
+    if (id == EBML_SEM_ID(EBML_CTX_IDX(context,i)))
+      return &EBML_CTX_IDX(context,i);
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++) {
-    if (!(context != EBML_SEM_CONTEXT(context.MyTable[i])))
+    if (!(context != EBML_SEM_CONTEXT(EBML_CTX_IDX(context,i))))
       continue;
-    result = find_ebml_semantic(EBML_SEM_INFO(context.MyTable[i]), id);
+    result = find_ebml_semantic(EBML_SEM_INFO(EBML_CTX_IDX(context,i)), id);
     if (NULL != result)
       return result;
   }
