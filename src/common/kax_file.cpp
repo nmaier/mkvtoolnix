@@ -112,7 +112,7 @@ kax_file_c::read_one_element() {
 
   const EbmlCallbacks *callbacks = find_ebml_callbacks(EBML_INFO(KaxSegment), EbmlId(*l1));
   if (NULL == callbacks)
-    callbacks = &EBML_INFO(KaxSegment);
+    callbacks = &EBML_CLASS_CALLBACK(KaxSegment);
 
   EbmlElement *l2 = NULL;
   l1->Read(*m_es.get_object(), EBML_INFO_CONTEXT(*callbacks), upper_lvl_el, l2, true);

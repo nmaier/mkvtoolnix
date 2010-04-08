@@ -45,7 +45,7 @@ kax_analyzer_data_c::to_string() const {
   const EbmlCallbacks *callbacks = find_ebml_callbacks(EBML_INFO(KaxSegment), m_id);
 
   if ((NULL == callbacks) && (EBML_ID(EbmlVoid) == m_id))
-    callbacks = &EBML_INFO(EbmlVoid);
+    callbacks = &EBML_CLASS_CALLBACK(EbmlVoid);
 
   std::string name;
   if (NULL != callbacks)
