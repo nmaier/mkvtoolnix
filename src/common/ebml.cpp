@@ -267,7 +267,7 @@ create_ebml_element(const EbmlCallbacks &callbacks,
     if (!(context != EBML_SEM_CONTEXT(EBML_CTX_IDX(context,i))))
       continue;
 
-    e = create_ebml_element(EBML_SEM_INFO(EBML_CTX_IDX(context,i)), id);
+    e = create_ebml_element(EBML_CTX_IDX_INFO(context, i), id);
     if (e != NULL)
       return e;
   }
@@ -287,12 +287,12 @@ find_ebml_callbacks(const EbmlCallbacks &base,
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++)
     if (id == EBML_SEM_ID(EBML_CTX_IDX(context,i)))
-      return &EBML_SEM_INFO(EBML_CTX_IDX(context,i));
+      return &EBML_CTX_IDX_INFO(context, i);
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++) {
     if (!(context != EBML_SEM_CONTEXT(EBML_CTX_IDX(context,i))))
       continue;
-    result = find_ebml_callbacks(EBML_SEM_INFO(EBML_CTX_IDX(context,i)), id);
+    result = find_ebml_callbacks(EBML_CTX_IDX_INFO(context, i), id);
     if (NULL != result)
       return result;
   }
@@ -311,13 +311,13 @@ find_ebml_callbacks(const EbmlCallbacks &base,
     return &base;
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++)
-    if (!strcmp(debug_name, EBML_INFO_NAME(EBML_SEM_INFO(EBML_CTX_IDX(context,i)))))
-      return &EBML_SEM_INFO(EBML_CTX_IDX(context,i));
+    if (!strcmp(debug_name, EBML_INFO_NAME(EBML_CTX_IDX_INFO(context, i))))
+      return &EBML_CTX_IDX_INFO(context, i);
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++) {
     if (!(context != EBML_SEM_CONTEXT(EBML_CTX_IDX(context,i))))
       continue;
-    result = find_ebml_callbacks(EBML_SEM_INFO(EBML_CTX_IDX(context,i)), debug_name);
+    result = find_ebml_callbacks(EBML_CTX_IDX_INFO(context, i), debug_name);
     if (NULL != result)
       return result;
   }
@@ -339,7 +339,7 @@ find_ebml_parent_callbacks(const EbmlCallbacks &base,
   for (i = 0; i < EBML_CTX_SIZE(context); i++) {
     if (!(context != EBML_SEM_CONTEXT(EBML_CTX_IDX(context,i))))
       continue;
-    result = find_ebml_parent_callbacks(EBML_SEM_INFO(EBML_CTX_IDX(context,i)), id);
+    result = find_ebml_parent_callbacks(EBML_CTX_IDX_INFO(context, i), id);
     if (NULL != result)
       return result;
   }
@@ -361,7 +361,7 @@ find_ebml_semantic(const EbmlCallbacks &base,
   for (i = 0; i < EBML_CTX_SIZE(context); i++) {
     if (!(context != EBML_SEM_CONTEXT(EBML_CTX_IDX(context,i))))
       continue;
-    result = find_ebml_semantic(EBML_SEM_INFO(EBML_CTX_IDX(context,i)), id);
+    result = find_ebml_semantic(EBML_CTX_IDX_INFO(context, i), id);
     if (NULL != result)
       return result;
   }

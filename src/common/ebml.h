@@ -82,9 +82,6 @@ int MTX_DLL_API kt_get_v_pixel_height(KaxTrackEntry &track);
 #if !defined(EBML_SEM_UNIQUE)
 #define EBML_SEM_UNIQUE(s)  (s).Unique
 #endif
-#if !defined(EBML_SEM_INFO)
-#define EBML_SEM_INFO(s)  (s).GetCallbacks
-#endif
 #if !defined(EBML_SEM_ID)
 #define EBML_SEM_ID(s)    (s).GetCallbacks.GlobalId
 #endif
@@ -99,6 +96,9 @@ int MTX_DLL_API kt_get_v_pixel_height(KaxTrackEntry &track);
 #endif
 #if !defined(EBML_CTX_IDX)
 #define EBML_CTX_IDX(c,i)   (c).MyTable[(i)]
+#endif
+#if !defined(EBML_CTX_IDX_INFO)
+#define EBML_CTX_IDX_INFO(c,i)   (c).MyTable[(i)].GetCallbacks
 #endif
 
 #define FINDFIRST(p, c)   (static_cast<c *>(((EbmlMaster *)p)->FindFirstElt(EBML_INFO(c), false)))
