@@ -27,9 +27,9 @@
 #include "common/translation.h"
 #include "common/xml/element_mapping.h"
 
-#if LIBMATROSKA_VERSION < 0x000900
-#define libmatroska_init()
-#define libmatroska_done()
+#if !defined(LIBMATROSKA_VERSION) || (LIBMATROSKA_VERSION <= 0x000801)
+#define matroska_init()
+#define matroska_done()
 #endif
 
 // Global and static variables
