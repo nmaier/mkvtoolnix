@@ -105,23 +105,15 @@ xtr_ssa_c::create_file(xtr_base_c *master,
   xtr_base_c::create_file(master, track);
   m_out->write_bom(m_sub_charset);
 
-  memory_cptr mpriv = decode_codec_private(priv);
+  memory_cptr mpriv       = decode_codec_private(priv);
 
   const unsigned char *pd = mpriv->get_buffer();
   int priv_size           = mpriv->get_size();
-  int bom_len             = 0;
+  unsigned int bom_len    = 0;
+  byte_order_e byte_order = BO_NONE;
 
   // Skip any BOM that might be present.
-  if ((3 < priv_size) && (0xef == pd[0]) && (0xbb == pd[1]) && (0xbf == pd[2]))
-    bom_len = 3;
-  else if ((4 < priv_size) && (0xff == pd[0]) && (0xfe == pd[1]) && (0x00 == pd[2]) && (0x00 == pd[3]))
-    bom_len = 4;
-  else if ((4 < priv_size) && (0x00 == pd[0]) && (0x00 == pd[1]) && (0xfe == pd[2]) && (0x0ff == pd[3]))
-    bom_len = 4;
-  else if ((2 < priv_size) && (0xff == pd[0]) && (0xfe == pd[1]))
-    bom_len = 2;
-  else if ((2 < priv_size) && (0xfe == pd[0]) && (0xff == pd[1]))
-    bom_len = 2;
+  mm_text_io_c::detect_byte_order_marker(pd, priv_size, byte_order, bom_len);
 
   pd                += bom_len;
   priv_size         -= bom_len;
