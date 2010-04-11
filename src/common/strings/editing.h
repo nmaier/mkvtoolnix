@@ -19,6 +19,8 @@
 #include <string>
 #include <vector>
 
+#include <stdarg.h>
+
 std::vector<std::string> MTX_DLL_API split(const char *src, const char *pattern = ",", int max_num = -1);
 inline std::vector<std::string>
 split(const std::string &src,

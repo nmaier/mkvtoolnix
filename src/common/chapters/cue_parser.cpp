@@ -18,6 +18,8 @@
 #include <ctype.h>
 #include <stdarg.h>
 
+#include <stdio.h>
+
 #include <matroska/KaxChapters.h>
 #include <matroska/KaxTag.h>
 #include <matroska/KaxTags.h>
