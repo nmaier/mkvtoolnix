@@ -1,3 +1,9 @@
+2010-04-11  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: bug fix: Extracting SSA/ASS files which miss the
+	"Text" column specifier in the "Format:" line are handled
+	correctly. Fix for bug 483.
+
 2010-04-07  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed a segfault when reading Matroska files

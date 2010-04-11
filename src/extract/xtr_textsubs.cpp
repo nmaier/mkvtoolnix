@@ -144,10 +144,19 @@ xtr_ssa_c::create_file(xtr_base_c *master,
   if (0 > pos2)
     pos2 = sconv.length();
 
-  m_ssa_format = split(sconv.substr(pos1 + 7, pos2 - pos1 - 7), ",");
+  std::string format_line = downcase(sconv.substr(pos1 + 7, pos2 - pos1 - 7));
+  if (std::string::npos == format_line.find("text")) {
+    if (format_line[format_line.length() - 1] == '\r') {
+      format_line.erase(format_line.length() - 1);
+      --pos2;
+    }
+
+    format_line += ",text";
+    sconv.insert(pos2, ", Text");
+  }
+
+  m_ssa_format = split(format_line, ",");
   strip(m_ssa_format, true);
-  for (pos1 = 0; m_ssa_format.size() > pos1; ++pos1)
-    m_ssa_format[pos1] = downcase(m_ssa_format[pos1]);
 
   sconv = m_conv->native(sconv);
   m_out->puts(sconv);
