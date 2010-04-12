@@ -305,7 +305,7 @@ kax_analyzer_c::update_element(EbmlElement *e,
   fix_mandatory_elements(e);
 
   try {
-    call_and_validate({},                                 "update_element_0");
+    call_and_validate({},                                  "update_element_0");
     call_and_validate(overwrite_all_instances(EbmlId(*e)), "update_element_1");
     call_and_validate(merge_void_elements(),               "update_element_2");
     call_and_validate(write_element(e, write_defaults),    "update_element_3");
