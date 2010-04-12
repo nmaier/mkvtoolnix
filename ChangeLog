@@ -1,3 +1,9 @@
+2010-04-12  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg's header editor, mkvpropedit: Fixed crashes with files
+	created by Haali's GS Muxer containing "content encoding" header
+	elements.
+
 2010-04-11  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract: bug fix: Extracting SSA/ASS files which miss the

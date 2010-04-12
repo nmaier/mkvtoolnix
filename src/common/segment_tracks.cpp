@@ -14,6 +14,7 @@
 
 #include "common/common_pch.h"
 
+#include <matroska/KaxContentEncoding.h>
 #include <matroska/KaxTracks.h>
 #include <matroska/KaxTrackAudio.h>
 #include <matroska/KaxTrackEntryData.h>
@@ -35,6 +36,37 @@ static void
 fix_mandatory_track_audio_elements(KaxTrackAudio *track_audio) {
   GetChild<KaxAudioSamplingFreq>(track_audio);
   GetChild<KaxAudioChannels>(track_audio);
+}
+
+static void
+fix_mandatory_content_compression_elements(KaxContentCompression *compression) {
+  GetChild<KaxContentCompAlgo>(compression);
+}
+
+static void
+fix_mandatory_content_encoding_elements(KaxContentEncoding *encoding) {
+  GetChild<KaxContentEncodingOrder>(encoding);
+  GetChild<KaxContentEncodingScope>(encoding);
+  GetChild<KaxContentEncodingType>(encoding);
+
+  int i;
+  for (i = 0; encoding->ListSize() > i; ++i) {
+    EbmlElement *e = (*encoding)[i];
+
+    if (dynamic_cast<KaxContentCompression *>(e) != NULL)
+      fix_mandatory_content_compression_elements(static_cast<KaxContentCompression *>(e));
+  }
+}
+
+static void
+fix_mandatory_content_encodings_elements(KaxContentEncodings *encodings) {
+  int i;
+  for (i = 0; encodings->ListSize() > i; ++i) {
+    EbmlElement *e = (*encodings)[i];
+
+    if (dynamic_cast<KaxContentEncoding *>(e) != NULL)
+      fix_mandatory_content_encoding_elements(static_cast<KaxContentEncoding *>(e));
+  }
 }
 
 static void
@@ -61,6 +93,9 @@ fix_mandatory_track_entry_elements(KaxTrackEntry *track_entry) {
 
     else if (dynamic_cast<KaxTrackAudio *>(e) != NULL)
       fix_mandatory_track_audio_elements(static_cast<KaxTrackAudio *>(e));
+
+    else if (dynamic_cast<KaxContentEncodings *>(e) != NULL)
+      fix_mandatory_content_encodings_elements(static_cast<KaxContentEncodings *>(e));
   }
 }
 
