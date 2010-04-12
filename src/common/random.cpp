@@ -119,6 +119,7 @@ random_c::generate_bytes(void *destination,
 
 #endif // defined(SYS_WINDOWS)
 
+#if defined(DEBUG)
 void
 random_c::test() {
   uint32_t ranges[16];
@@ -172,6 +173,7 @@ random_c::test() {
 
   exit(0);
 }
+#endif  // defined(DEBUG)
 
 void
 random_c::cleanup() {

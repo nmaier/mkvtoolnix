@@ -73,7 +73,9 @@ public:
     return b;
   }
 
+#if defined(DEBUG)
   static void test();
+#endif
   static void cleanup();
 };
 
