@@ -1786,7 +1786,7 @@ qtmp4_demuxer_c::calculate_timecodes() {
   for (frame = 0; sample_table.size() > frame; ++frame) {
     int64_t timecode;
 
-    if (('v' == type) && !editlist_table.empty()) {
+    if (!editlist_table.empty()) {
       int editlist_pos = 0;
       int real_frame   = frame;
 
@@ -1980,13 +1980,14 @@ qtmp4_demuxer_c::update_editlist_table(int64_t global_time_scale) {
     qt_editlist_t &el = editlist_table[i];
     int sample = 0, pts = el.pos;
 
-    pts -= pts_offset;
+    pts   -= pts_offset;
+    e_pts += el.duration;
 
     el.start_frame = frame;
 
     if (pts < 0) {
       // skip!
-      el.frames = 0;
+      el.frames  = 0;
       continue;
     }
 
@@ -1998,7 +1999,6 @@ qtmp4_demuxer_c::update_editlist_table(int64_t global_time_scale) {
     el.start_sample  = sample;
     el.pts_offset    = ((int64_t)e_pts       * (int64_t)time_scale) / (int64_t)global_time_scale - (int64_t)sample_table[sample].pts;
     pts             += ((int64_t)el.duration * (int64_t)time_scale) / (int64_t)global_time_scale;
-    e_pts           += el.duration;
 
     // find end sample
     for (; sample_table.size() > sample; ++sample)
