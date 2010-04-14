@@ -1980,14 +1980,13 @@ qtmp4_demuxer_c::update_editlist_table(int64_t global_time_scale) {
     qt_editlist_t &el = editlist_table[i];
     int sample = 0, pts = el.pos;
 
-    pts   -= pts_offset;
-    e_pts += el.duration;
-
-    el.start_frame = frame;
+    pts            -= pts_offset;
+    el.start_frame  = frame;
 
     if (pts < 0) {
       // skip!
       el.frames  = 0;
+      e_pts     += el.duration;
       continue;
     }
 
@@ -1999,6 +1998,7 @@ qtmp4_demuxer_c::update_editlist_table(int64_t global_time_scale) {
     el.start_sample  = sample;
     el.pts_offset    = ((int64_t)e_pts       * (int64_t)time_scale) / (int64_t)global_time_scale - (int64_t)sample_table[sample].pts;
     pts             += ((int64_t)el.duration * (int64_t)time_scale) / (int64_t)global_time_scale;
+    e_pts           += el.duration;
 
     // find end sample
     for (; sample_table.size() > sample; ++sample)
