@@ -1,6 +1,24 @@
 MKVToolNix 3.3.0
 ================
 
+Table of contents
+-----------------
+
+1. Introduction
+2. Installation
+2.1. Requirements
+2.2. Optional components
+2.3. Building libmatroska and libebml
+2.4. Building MKVtoolNix
+2.5. Notes for compilation on (Open)Solaris
+3. Examples
+4. Reporting bugs
+
+
+
+1. Introduction
+---------------
+
 With these tools one can get information about (mkvinfo) Matroska
 files, extract tracks/data from (mkvextract) Matroska files and create
 (mkvmerge) Matroska files from other media files. Matroska is a new
@@ -21,8 +39,10 @@ http://www.bunkus.org/videotools/mkvtoolnix/
 
 Moritz Bunkus <moritz@bunkus.org>
 
-Installation
-------------
+
+
+2. Installation
+---------------
 
 If you want to compile the tools yourself then you must first decide
 if you want to use a 'proper' release version or the current
@@ -31,7 +51,7 @@ development there might be features available in the Subversion
 repository that are not available in the releases. On the other hand
 the Subversion repository version might not even compile.
 
-* Requirements
+2.1. Requirements
 
 In order to compile MKVToolNix you need a couple of libraries. Most of
 them should be available pre-compiled for your distribution. The
@@ -46,7 +66,10 @@ libraries you absolutely need are:
   ( http://downloads.xiph.org/releases/vorbis/ ) for access to Ogg/OGM
   files and Vorbis support
 - zlib ( http://www.zlib.net/ ) -- a compression library
-- Boost's "format" and "RegEx" libraries ( http://www.boost.org/ )
+- Several of Boost's libraries: "format", "RegEx", "filesystem",
+  "system", "foreach" ( http://www.boost.org/ )
+
+2.2. Optional components
 
 Other libraries are optional and only limit the features that are
 built. These include:
@@ -64,7 +87,7 @@ built. These include:
 - libMagic from the "file" package ( http://www.darwinsys.com/file/ )
   for automatic content type detection
 
-* Building libmatroska and libebml
+2.3. Building libmatroska and libebml
 
 Start with the two libraries. Either get libebml 0.7.7 from
 http://dl.matroska.org/downloads/libebml/ and libmatroska 0.8.0 from
@@ -88,7 +111,7 @@ alter the prefix (which defaults to /usr/local) by adding an argument
 
 make prefix=/usr install_headers install_staticlib
 
-* Building MKVtoolNix
+2.4. Building MKVtoolNix
 
 Either download the current release from
 http://www.bunkus.org/videotools/mkvtoolnix/ and unpack it or get a
@@ -116,12 +139,29 @@ library files are:
 
 ./configure \
   --with-extra-includes=/where/i/put/libebml\;/where/i/put/libmatroska \
-  --with-extra-libs=/where/i/put/libebml/make/linux\;/where/i/put/libmatroska/make/linue
+  --with-extra-libs=/where/i/put/libebml/make/linux\;/where/i/put/libmatroska/make/linux
 
 Now run "make" and, as "root", "make install".
 
-Example
--------
+2.5. Notes for compilation on (Open)Solaris
+
+You can compile mkvtoolnix with Sun's sunstudio compiler, but you need
+additional options for "configure":
+
+./configure --prefix=/usr \
+   CXX="/opt/sunstudio12.1/bin/CC -library=stlport4" \
+   CXXFLAGS="-D_POSIX_PTHREAD_SEMANTICS" \
+  --with-extra-includes=/where/i/put/libebml\;/where/i/put/libmatroska \
+  --with-extra-libs=/where/i/put/libebml/make/linux\;/where/i/put/libmatroska/make/linux
+
+Also make sure to call the GNU "make" utility instead of Sun's:
+
+gmake WARNING_CFLAGS=
+
+
+
+3. Examples
+-----------
 
 Here's a *very* brief example of how you could use mkvmerge
 with mencoder in order to rip a DVD:
@@ -167,8 +207,10 @@ mkvmerge -o movie.mkv -A movie.avi audio-q3.ogg
 
 -A is necessary in order to avoid copying the raw PCM (or MP3) audio as well.
 
-Bug reports
------------
+
+
+4. Reporting bugs
+-----------------
 
 If you're sure you've found a bug - e.g. if one of my programs crashes
 with an obscur error message, or if the resulting file is missing part
