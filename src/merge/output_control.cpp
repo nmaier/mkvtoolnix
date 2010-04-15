@@ -270,7 +270,7 @@ sighandler(int signum) {
 
   if ((g_kax_sh_main->ListSize() > 0) && !hack_engaged(ENGAGE_NO_META_SEEK)) {
     g_kax_sh_main->UpdateSize();
-    if (s_kax_sh_void->ReplaceWith(*g_kax_sh_main, *s_out, true) == 0)
+    if (s_kax_sh_void->ReplaceWith(*g_kax_sh_main, *s_out, true) == INVALID_FILEPOS_T)
       mxwarn(boost::format(Y("This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n")) % BUGMSG);
   }
   mxinfo(Y(" done\n"));
@@ -1460,7 +1460,7 @@ finish_file(bool last_file) {
 
   if ((g_kax_sh_main->ListSize() > 0) && !hack_engaged(ENGAGE_NO_META_SEEK)) {
     g_kax_sh_main->UpdateSize();
-    if (s_kax_sh_void->ReplaceWith(*g_kax_sh_main, *s_out, true) == 0)
+    if (s_kax_sh_void->ReplaceWith(*g_kax_sh_main, *s_out, true) == INVALID_FILEPOS_T)
       mxwarn(boost::format(Y("This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"))
              % g_kax_sh_main->ElementSize() % BUGMSG);
   }

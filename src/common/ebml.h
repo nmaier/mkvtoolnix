@@ -100,6 +100,9 @@ int MTX_DLL_API kt_get_v_pixel_height(KaxTrackEntry &track);
 #if !defined(EBML_CTX_IDX_INFO)
 #define EBML_CTX_IDX_INFO(c,i)   (c).MyTable[(i)].GetCallbacks
 #endif
+#if !defined(INVALID_FILEPOS_T)
+#define INVALID_FILEPOS_T 0
+#endif
 
 #define FINDFIRST(p, c)   (static_cast<c *>(((EbmlMaster *)p)->FindFirstElt(EBML_INFO(c), false)))
 #define FINDNEXT(p, c, e) (static_cast<c *>(((EbmlMaster *)p)->FindNextElt(*e, false)))
