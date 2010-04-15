@@ -446,7 +446,7 @@ kax_analyzer_c::handle_void_elements(int data_idx) {
       return false;
 
     binary head[4 + 8];         // Class D + 64 bits coded size
-    unsigned int head_size = EBML_ID_LENGTH(EbmlId(*e));
+    unsigned int head_size = EBML_ID_LENGTH((const EbmlId&)*e);
     EbmlId(*e).Fill(head);
 
     int coded_size = CodedSizeLength(e->GetSize(), e->GetSizeLength() + 1, true);
