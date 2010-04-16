@@ -139,9 +139,9 @@ xtr_wavpack4_c::handle_frame(memory_cptr &frame,
   wv_header[15] = 0xFF;
   put_uint32_le(&wv_header[16], m_number_of_samples); // block_index
 
-  const binary *mybuffer     = frame->get_buffer();
-  int data_size        = frame->get_size();
-  m_number_of_samples += get_uint32_le(mybuffer);
+  const binary *mybuffer  = frame->get_buffer();
+  int data_size           = frame->get_size();
+  m_number_of_samples    += get_uint32_le(mybuffer);
 
   // rest of the header:
   memcpy(&wv_header[20], mybuffer, 3 * sizeof(uint32_t));
