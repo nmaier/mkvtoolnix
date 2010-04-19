@@ -52,7 +52,6 @@ mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader,
   set_codec_id(MKV_V_MPEG4_AVC);
 
   set_codec_private(m_avcc->get_buffer(), m_avcc->get_size());
-  extract_aspect_ratio();
   m_parser.set_keep_ar_info(false);
 
   // If no external timecode file has been specified then mkvmerge
@@ -66,6 +65,8 @@ mpeg4_p10_es_video_packetizer_c(generic_reader_c *p_reader,
 
 void
 mpeg4_p10_es_video_packetizer_c::set_headers() {
+  extract_aspect_ratio();
+
   if (m_allow_timecode_generation) {
     if (-1 == m_htrack_default_duration)
       m_htrack_default_duration = 40000000;

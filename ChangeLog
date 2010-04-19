@@ -1,3 +1,10 @@
+2010-04-19  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: mkvmerge will not output a message that it
+	has extracted the display dimensions from AVC/h.264 bitstream if
+	the source container (e.g. Matroska) overrides that setting. Fix
+	for bug 485.
+
 2010-04-12  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg's header editor, mkvpropedit: Fixed crashes with files

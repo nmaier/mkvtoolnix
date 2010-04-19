@@ -37,15 +37,22 @@ mpeg4_p10_video_packetizer_c(generic_reader_c *p_reader,
   m_relaxed_timecode_checking = true;
 
   if ((NULL != m_ti.m_private_data) && (0 < m_ti.m_private_size)) {
-    extract_aspect_ratio();
     setup_nalu_size_len_change();
+    set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
   }
+}
+
+void
+mpeg4_p10_video_packetizer_c::set_headers() {
+  if ((NULL != m_ti.m_private_data) && (0 < m_ti.m_private_size))
+    extract_aspect_ratio();
+
+  video_packetizer_c::set_headers();
 }
 
 void
 mpeg4_p10_video_packetizer_c::extract_aspect_ratio() {
   uint32_t num, den;
-  unsigned char *priv = m_ti.m_private_data;
 
   if (mpeg4::p10::extract_par(m_ti.m_private_data, m_ti.m_private_size, num, den) && (0 != num) && (0 != den)) {
     if (!display_dimensions_or_aspect_ratio_set()) {
@@ -59,12 +66,7 @@ mpeg4_p10_video_packetizer_c::extract_aspect_ratio() {
                  boost::format(Y("Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"))
                  % m_ti.m_display_width % m_ti.m_display_height);
     }
-
-    set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
   }
-
-  if (priv != m_ti.m_private_data)
-    safefree(priv);
 }
 
 int
