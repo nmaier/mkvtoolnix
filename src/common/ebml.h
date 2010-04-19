@@ -82,9 +82,6 @@ int MTX_DLL_API kt_get_v_pixel_height(KaxTrackEntry &track);
 #if !defined(EBML_SEM_UNIQUE)
 #define EBML_SEM_UNIQUE(s)  (s).Unique
 #endif
-#if !defined(EBML_SEM_ID)
-#define EBML_SEM_ID(s)    (s).GetCallbacks.GlobalId
-#endif
 #if !defined(EBML_SEM_CONTEXT)
 #define EBML_SEM_CONTEXT(s) (s).GetCallbacks.Context
 #endif
@@ -98,7 +95,10 @@ int MTX_DLL_API kt_get_v_pixel_height(KaxTrackEntry &track);
 #define EBML_CTX_IDX(c,i)   (c).MyTable[(i)]
 #endif
 #if !defined(EBML_CTX_IDX_INFO)
-#define EBML_CTX_IDX_INFO(c,i)   (c).MyTable[(i)].GetCallbacks
+#define EBML_CTX_IDX_INFO(c,i) (c).MyTable[(i)].GetCallbacks
+#endif
+#if !defined(EBML_CTX_IDX_ID)
+#define EBML_CTX_IDX_ID(c,i)   (c).MyTable[(i)].GetCallbacks.GlobalId
 #endif
 #if !defined(INVALID_FILEPOS_T)
 #define INVALID_FILEPOS_T 0

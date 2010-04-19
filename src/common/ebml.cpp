@@ -258,7 +258,7 @@ create_ebml_element(const EbmlCallbacks &callbacks,
 //     return empty_ebml_master(&parent->Generic().Create());
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++)
-    if (id == EBML_SEM_ID(EBML_CTX_IDX(context,i)))
+    if (id == EBML_CTX_IDX_ID(context,i))
       return empty_ebml_master(&EBML_SEM_CREATE(EBML_CTX_IDX(context,i)));
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++) {
@@ -286,7 +286,7 @@ find_ebml_callbacks(const EbmlCallbacks &base,
     return &base;
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++)
-    if (id == EBML_SEM_ID(EBML_CTX_IDX(context,i)))
+    if (id == EBML_CTX_IDX_ID(context,i))
       return &EBML_CTX_IDX_INFO(context, i);
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++) {
@@ -333,7 +333,7 @@ find_ebml_parent_callbacks(const EbmlCallbacks &base,
   int i;
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++)
-    if (id == EBML_SEM_ID(EBML_CTX_IDX(context,i)))
+    if (id == EBML_CTX_IDX_ID(context,i))
       return &base;
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++) {
@@ -355,7 +355,7 @@ find_ebml_semantic(const EbmlCallbacks &base,
   int i;
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++)
-    if (id == EBML_SEM_ID(EBML_CTX_IDX(context,i)))
+    if (id == EBML_CTX_IDX_ID(context,i))
       return &EBML_CTX_IDX(context,i);
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++) {
