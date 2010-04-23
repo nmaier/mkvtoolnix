@@ -157,7 +157,7 @@ int32_t M2VParser::InitParser(){
 M2VParser::~M2VParser(){
   DumpQueues();
   if (!probing && !waitQueue.empty()) {
-    mxwarn(Y("Video ended with a shortened group of pictures. Some frames have been dropped. You want want to fix the MPEG2 video stream before attempting to multiplex it.\n"));
+    mxwarn(Y("Video ended with a shortened group of pictures. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"));
   }
   FlushWaitQueue();
   delete seqHdrChunk;
@@ -379,7 +379,7 @@ int32_t M2VParser::FillQueues(){
           mxerror(Y("Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"));
         }
         if(!waitQueue.empty()){
-          mxwarn(Y("Shortened GOP detected. Some frames have been dropped. You want want to fix the MPEG2 video stream before attempting to multiplex it.\n"));
+          mxwarn(Y("Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"));
           FlushWaitQueue();
         }
 
