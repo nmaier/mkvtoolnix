@@ -25,6 +25,8 @@ Matroska video utilities.
 %{_datadir}/mkvtoolnix
 %{_datadir}/locale/de/LC_MESSAGES/mkvtoolnix.mo
 %{_datadir}/locale/ja/LC_MESSAGES/mkvtoolnix.mo
+%{_datadir}/locale/ja/LC_MESSAGES/mkvtoolnix.mo
+%{_datadir}/locale/ru/LC_MESSAGES/mkvtoolnix.mo
 %{_datadir}/locale/zh_CN/LC_MESSAGES/mkvtoolnix.mo
 %{_datadir}/locale/zh_TW/LC_MESSAGES/mkvtoolnix.mo
 
