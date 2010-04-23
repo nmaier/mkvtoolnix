@@ -63,6 +63,7 @@ private:
   //Added to allow reading the header's raw data, contains first found seq hdr.
   MPEGChunk* seqHdrChunk, *gopChunk;
   MPEG2SequenceHeader m_seqHdr; //current sequence header
+  MPEG2GOPHeader m_gopHdr; //current GOP header
   MediaTime firstRef;
   bool needInit;
   bool m_eos;

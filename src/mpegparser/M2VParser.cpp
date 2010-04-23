@@ -22,6 +22,7 @@
 
 #include "common/common_pch.h"
 #include "common/memory.h"
+#include "common/output.h"
 #include "M2VParser.h"
 
 #define BUFF_SIZE 2*1024*1024
@@ -284,6 +285,7 @@ int32_t M2VParser::FillQueues(){
     MPEGChunk* chunk = chunks.front();
     while (chunk->GetType() != MPEG_VIDEO_PICTURE_START_CODE) {
       if (chunk->GetType() == MPEG_VIDEO_GOP_START_CODE) {
+        ParseGOPHeader(chunk, m_gopHdr);
         if (frameNum != 0) {
           if (usePictureFrames)
             gopPts = highestPts + 2;
@@ -332,7 +334,11 @@ int32_t M2VParser::FillQueues(){
         ShoveRef(myTime);
         break;
       default: //B-frames
-        if(firstRef == -1 || secondRef == -1) break;
+        if(firstRef == -1 || secondRef == -1){
+          if(!m_gopHdr.closedGOP){
+            mxerror(Y("Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"));
+          }
+        }
         QueueFrame(chunk, myTime, picHdr);
     }
     frameNum++;
