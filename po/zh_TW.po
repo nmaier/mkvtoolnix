@@ -1419,10 +1419,10 @@ msgid "(unnamed chapter)"
 msgstr "(未命名章節)"
 
 #: src/mmg/tabs/chapters.cpp:880
-#: src/mmg/tabs/chapters.cpp:962
-#: src/mmg/tabs/chapters.cpp:1081
-#: src/mmg/tabs/chapters.cpp:1584
-#: src/mmg/tabs/chapters.cpp:1599
+#: src/mmg/tabs/chapters.cpp:955
+#: src/mmg/tabs/chapters.cpp:1069
+#: src/mmg/tabs/chapters.cpp:1570
+#: src/mmg/tabs/chapters.cpp:1583
 msgid "(unnamed)"
 msgstr "(未命名)"
 
@@ -1719,7 +1719,7 @@ msgstr "以此數值加入屬性，即使這個屬性已經存在"
 msgid "Adds the current settings as a new job entry to the job queue"
 msgstr "將目前設定作為新任務項加入到任務佇列"
 
-#: src/mmg/tabs/chapters.cpp:1366
+#: src/mmg/tabs/chapters.cpp:1354
 msgid "Adjust chapter timecodes"
 msgstr "調整章節時間碼"
 
@@ -1804,7 +1804,7 @@ msgid ""
 msgstr "轉義的檔名，對應上一剪輯。"
 
 #: src/mmg/header_editor/frame.cpp:706
-#: src/mmg/tabs/chapters.cpp:1921
+#: src/mmg/tabs/chapters.cpp:1905
 #: src/propedit/propedit.cpp:43
 msgid "An unknown error occured. The file has been modified."
 msgstr "發生未知錯誤。檔案已修改。"
@@ -2024,13 +2024,13 @@ msgstr "無法將不同類型的軌道提取至同一檔案。軌道 %1% 和 %2%
 msgid "Cannot start second muxing job"
 msgstr "不能啟動其他合成任務"
 
-#: src/extract/xtr_textsubs.cpp:311
+#: src/extract/xtr_textsubs.cpp:312
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file, and their CodecPrivate data (the USF styles etc) do not match.\n"
 msgstr "無法寫入軌道 %1%（CodecID「%2%」）至檔案「%3%」，因為軌道 %4%（CodecID「%5%」）已被寫入同一檔案，且它們的 CodecPrivate 編解碼器私有資料 (如 USF 樣式) 不相符。\n"
 
 #: src/extract/xtr_avi.cpp:46
 #: src/extract/xtr_base.cpp:63
-#: src/extract/xtr_textsubs.cpp:306
+#: src/extract/xtr_textsubs.cpp:307
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file.\n"
 msgstr "無法寫入軌道 %1%（CodecID「%2%」）至檔案「%3%」，因為軌道 %4%（CodecID「%5%」）已被寫入同一檔案。\n"
 
@@ -2172,7 +2172,7 @@ msgid "Chapters loaded."
 msgstr "章節已載入。"
 
 #: src/mmg/tabs/chapters.cpp:721
-#: src/mmg/tabs/chapters.cpp:1898
+#: src/mmg/tabs/chapters.cpp:1882
 msgid "Chapters written."
 msgstr "章節已寫入。"
 
@@ -2436,14 +2436,14 @@ msgstr "無法建立指定的檔案。"
 msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "無法解碼以 Base64 編碼的資料 - 似乎是不正常的。"
 
-#: src/input/r_avi.cpp:326
+#: src/input/r_avi.cpp:327
 #: src/input/r_matroska.cpp:1749
 #: src/input/r_ogm.cpp:1131
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "無法從該 AVC/h.264 軌道提取解碼器特有設定資料 (AVCC)。\n"
 
-#: src/input/r_avi.cpp:276
-#: src/input/r_avi.cpp:281
+#: src/input/r_avi.cpp:277
+#: src/input/r_avi.cpp:282
 msgid "Could not extract the sequence header from this MPEG-1/2 track.\n"
 msgstr "無法從該 MPEG-1/2 軌道提取序列表頭。\n"
 
@@ -2451,7 +2451,7 @@ msgstr "無法從該 MPEG-1/2 軌道提取序列表頭。\n"
 msgid "Could not find a valid MP3 packet."
 msgstr "未找到有效的 MP3 套件。"
 
-#: src/input/r_avi.cpp:486
+#: src/input/r_avi.cpp:487
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "找不到音軌 %1% 的索引 (avilib 錯誤訊息: %2%)。正在跳過此軌。\n"
 
@@ -2514,8 +2514,8 @@ msgstr "無法解析章節自「%1%」: %2%\n"
 msgid "Could not read the FLAC header packets.\n"
 msgstr "無法讀取 FLAC 表頭套件。\n"
 
-#: src/common/mm_io.cpp:185
-#: src/common/mm_io.cpp:423
+#: src/common/mm_io.cpp:181
+#: src/common/mm_io_win.cpp:166
 msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr "無法寫入輸出檔: %1% (%2%)\n"
 
@@ -2580,15 +2580,15 @@ msgstr "Cue 參考時間: %|1$.3f|s"
 msgid "Cue reference"
 msgstr "Cue 參考"
 
-#: src/common/chapters/cue_parser.cpp:396
+#: src/common/chapters/cue_parser.cpp:398
 msgid "Cue sheet parser: Invalid INDEX entry in line %1%.\n"
 msgstr "Cue 表單解析器: 無效的 INDEX 索引，於第 %1% 行。\n"
 
-#: src/common/chapters/cue_parser.cpp:415
+#: src/common/chapters/cue_parser.cpp:417
 msgid "Cue sheet parser: Invalid INDEX number (got %1%, expected %2%) in line %3%,\n"
 msgstr "Cue 表單解析器: 無效的 INDEX 索引數 (已得 %1%, 預期 %2%) 於第 %3% 行,\n"
 
-#: src/common/chapters/cue_parser.cpp:277
+#: src/common/chapters/cue_parser.cpp:279
 msgid "Cue sheet parser: No INDEX entry found for the previous TRACK entry (current line: %1%)\n"
 msgstr "Cue 表單解析器: 未發現上一個 TRACK 軌道的 INDEX 索引 (目前行編號: %1%)\n"
 
@@ -2885,7 +2885,7 @@ msgid "Edition %d"
 msgstr "版本 %d"
 
 #: src/mmg/tabs/chapters.cpp:870
-#: src/mmg/tabs/chapters.cpp:948
+#: src/mmg/tabs/chapters.cpp:942
 #, c-format
 msgid "EditionEntry %u"
 msgstr "版本 %u"
@@ -2951,7 +2951,7 @@ msgstr "在第 %1% 行處發生錯誤: 預期為 SRT 時間碼行，但發現的
 msgid "Error in line %1%: expected subtitle number and found some text.\n"
 msgstr "在第 %1% 行處發生錯誤: 預期為字幕編號但發現一些文字。\n"
 
-#: src/common/xml/element_mapping.cpp:46
+#: src/common/xml/element_mapping.cpp:43
 msgid "Error initializing the tables for the chapter, tag and segment info elements: Could not find the element with the debug name '%1%'. %2%\n"
 msgstr "初始化章節, 標籤及剪輯資訊元件表時發生錯誤: 無法找到除錯名稱為「%1%」的元件。%2%\n"
 
@@ -2965,7 +2965,7 @@ msgstr "載入設定發生錯誤"
 msgid "Error opening file"
 msgstr "開啟檔案時發生錯誤"
 
-#: src/input/r_mpeg_ps.cpp:1043
+#: src/input/r_mpeg_ps.cpp:1044
 msgid "Error parsing a MPEG PS packet during the header reading phase. This stream seems to be badly damaged.\n"
 msgstr "在表頭讀取階段解析 MPEG PS 套件時發生錯誤。媒體流似乎已被嚴重損壞。\n"
 
@@ -2983,8 +2983,8 @@ msgstr "儲存資訊發生錯誤"
 
 #: src/mmg/header_editor/frame.cpp:690
 #: src/mmg/header_editor/frame.cpp:696
-#: src/mmg/tabs/chapters.cpp:1904
-#: src/mmg/tabs/chapters.cpp:1910
+#: src/mmg/tabs/chapters.cpp:1888
+#: src/mmg/tabs/chapters.cpp:1894
 msgid "Error writing Matroska file"
 msgstr "寫入 Matroska 檔時發生錯誤"
 
@@ -3072,8 +3072,8 @@ msgstr "提取資料到 raw 檔案，包括 CodecPrivate 作為表頭。"
 msgid "Extract the data to a raw file."
 msgstr "提取資料到 raw 檔案。"
 
-#: src/output/p_avc.cpp:127
-#: src/output/p_mpeg4_p10.cpp:59
+#: src/output/p_avc.cpp:128
+#: src/output/p_mpeg4_p10.cpp:66
 msgid "Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"
 msgstr "從 MPEG-4 layer 10 (AVC) 視訊資料中提取外觀比例資訊並設定顯示尺寸為 %1%/%2%。\n"
 
@@ -3110,7 +3110,7 @@ msgid "Failed to create the VobSub data file '%1%': %2% (%3%)\n"
 msgstr "建立 VobSub 資料檔案「%1%」失敗: %2% (%3%)\n"
 
 #: src/extract/xtr_base.cpp:71
-#: src/extract/xtr_textsubs.cpp:335
+#: src/extract/xtr_textsubs.cpp:336
 #: src/extract/xtr_vobsub.cpp:235
 msgid "Failed to create the file '%1%': %2% (%3%)\n"
 msgstr "建立檔案失敗「%1%」: %2% (%3%)\n"
@@ -3119,15 +3119,15 @@ msgstr "建立檔案失敗「%1%」: %2% (%3%)\n"
 msgid "Failed to create the temporary file '%1%': %2% (%3%)\n"
 msgstr "建立暫存檔案「%1%」失敗: %2% (%3%)\n"
 
-#: src/extract/xtr_textsubs.cpp:377
+#: src/extract/xtr_textsubs.cpp:378
 msgid "Failed to parse an USF subtitle entry for track %1%: %2%\n"
 msgstr "解析軌道 %1% 的一個 USF 字幕項目失敗: %2%\n"
 
-#: src/extract/xtr_textsubs.cpp:338
+#: src/extract/xtr_textsubs.cpp:339
 msgid "Failed to parse the USF codec private data for track %1%: %2%\n"
 msgstr "解析軌道 %1% 的 USF 編解碼器專有資料失敗: %2%\n"
 
-#: src/extract/xtr_textsubs.cpp:389
+#: src/extract/xtr_textsubs.cpp:390
 msgid "Failed to parse the USF end tag for track %1%: %2%\n"
 msgstr "解析軌道 %1% 的 USF 終止標記失敗: %2%\n"
 
@@ -3151,8 +3151,8 @@ msgstr "檔案「%1%」: 不支援的容器: %2%\n"
 msgid "File UID: %1%"
 msgstr "檔案 UID: %1%"
 
-#: src/input/r_real.cpp:470
-#: src/input/r_real.cpp:480
+#: src/input/r_real.cpp:471
+#: src/input/r_real.cpp:481
 msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n"
 msgstr "檔案包含的畫格數比預期的少，或者檔在 %1% 畫格後被破壞。\n"
 
@@ -3211,7 +3211,7 @@ msgid "File removal not possible"
 msgstr "檔案不能移除"
 
 #: src/mmg/header_editor/frame.cpp:702
-#: src/mmg/tabs/chapters.cpp:1917
+#: src/mmg/tabs/chapters.cpp:1901
 msgid "File structure warning"
 msgstr "檔案結構警告"
 
@@ -3293,6 +3293,10 @@ msgstr "強制時間碼縮放係數為 REPLACEME。您得用 1000 至 10000000 �
 #: src/mmg/tabs/input.cpp:190
 msgid "Format specific options"
 msgstr "格式特殊選項"
+
+#: src/mpegparser/M2VParser.cpp:424
+msgid "Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"
+msgstr ""
 
 #: src/common/xml/element_parser.cpp:131
 msgid "Found no encoded data nor '@file' to read binary data from."
@@ -3490,7 +3494,7 @@ msgstr "匯入的圖片，自 %1%"
 msgid "Impossible to use file '%1%': The file could not be opened for reading.\n"
 msgstr "無法使用檔案「%1%」: 無法開啟要讀取的檔案。\n"
 
-#: src/input/r_real.cpp:609
+#: src/input/r_real.cpp:610
 msgid "Inconsistent AAC audio packet (length: %1% != len_check %2%)\n"
 msgstr "不相容的 AAC 音訊套件 (長度: %1% != len_check %2%)\n"
 
@@ -3502,12 +3506,12 @@ msgstr "增強詳細程度。"
 msgid "Input"
 msgstr "輸入"
 
-#: src/mmg/tabs/chapters.cpp:1386
-#: src/mmg/tabs/chapters.cpp:1479
-#: src/mmg/tabs/chapters.cpp:1488
-#: src/mmg/tabs/chapters.cpp:1502
-#: src/mmg/tabs/chapters.cpp:1518
-#: src/mmg/tabs/chapters.cpp:1526
+#: src/mmg/tabs/chapters.cpp:1374
+#: src/mmg/tabs/chapters.cpp:1467
+#: src/mmg/tabs/chapters.cpp:1476
+#: src/mmg/tabs/chapters.cpp:1490
+#: src/mmg/tabs/chapters.cpp:1506
+#: src/mmg/tabs/chapters.cpp:1514
 msgid "Input data error"
 msgstr "輸入資料錯誤"
 
@@ -3527,12 +3531,12 @@ msgstr "介面語言:"
 msgid "Interlaced: %1%"
 msgstr "交錯的: %1%"
 
-#: src/extract/xtr_textsubs.cpp:149
+#: src/extract/xtr_textsubs.cpp:141
 msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "內部錯誤: tracks.cpp SSA #1。 %1%"
 
 #: src/mmg/header_editor/frame.cpp:706
-#: src/mmg/tabs/chapters.cpp:1921
+#: src/mmg/tabs/chapters.cpp:1905
 msgid "Internal program error"
 msgstr "內部程式錯誤"
 
@@ -3548,21 +3552,21 @@ msgstr "遇到無效的 Base64 字元"
 msgid "Invalid BlockAddition level in argument '%1%'.\n"
 msgstr "無效的附加區塊層級，在參數「%1%」中。\n"
 
-#: src/mmg/tabs/chapters.cpp:1479
+#: src/mmg/tabs/chapters.cpp:1467
 msgid "Invalid UID. A UID is simply a number."
 msgstr "無效 UID。UID 僅僅是個數位。"
 
-#: src/mmg/tabs/chapters.cpp:1488
+#: src/mmg/tabs/chapters.cpp:1476
 msgid "Invalid UID. This chapter UID is already in use. The original UID has not been changed."
 msgstr "無效 UID。該章節 UID 已被使用。原 UID 沒有被改變。"
 
-#: src/mmg/tabs/chapters.cpp:1502
+#: src/mmg/tabs/chapters.cpp:1490
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "無效 UID。該版本 UID 已被使用。原 UID 沒有被改變。"
 
-#: src/input/r_avi.cpp:637
-#: src/input/r_avi.cpp:642
-#: src/input/r_avi.cpp:659
+#: src/input/r_avi.cpp:638
+#: src/input/r_avi.cpp:643
+#: src/input/r_avi.cpp:660
 msgid "Invalid Vorbis headers in AVI audio track."
 msgstr "有無效的 Vorbis 表頭，在 AVI 音軌中。"
 
@@ -3618,24 +3622,24 @@ msgstr "無效的檔名"
 msgid "Invalid format for '--split' in '--split %1%'.\n"
 msgstr "「--split」格式無效，在「--split %1%」中。\n"
 
-#: src/extract/xtr_textsubs.cpp:209
+#: src/extract/xtr_textsubs.cpp:210
 msgid "Invalid format for a SSA line ('%1%') at timecode %2%: The first field is not an integer. This entry will be skipped.\n"
 msgstr "SSA 這一行 (「%1%」) 於時間碼 %2% 格式無效: 第一個欄位不是整數。該條將被跳過。\n"
 
-#: src/extract/xtr_textsubs.cpp:198
+#: src/extract/xtr_textsubs.cpp:199
 msgid "Invalid format for a SSA line ('%1%') at timecode %2%: Too many fields found (%3% instead of 9). This entry will be skipped.\n"
 msgstr "SSA 這一行 (「%1%」) 於時間碼 %2% 格式無效: 發現過多欄位 (%3% 而不是 9)。該條將被跳過。\n"
 
-#: src/mmg/tabs/chapters.cpp:1386
+#: src/mmg/tabs/chapters.cpp:1374
 msgid "Invalid format used for the adjustment."
 msgstr "調整功能使用的格式無效。"
 
-#: src/mmg/tabs/chapters.cpp:1526
+#: src/mmg/tabs/chapters.cpp:1514
 #, c-format
 msgid "Invalid format used for the end time for '%s'. Setting value to 0."
 msgstr "終止時間「%s」格式無效。設定值為 0。"
 
-#: src/mmg/tabs/chapters.cpp:1518
+#: src/mmg/tabs/chapters.cpp:1506
 #, c-format
 msgid "Invalid format used for the start time for '%s'. Setting value to 0."
 msgstr "起始時間「%s」格式無效。設定值為 0。"
@@ -3685,7 +3689,7 @@ msgid "Invalid hexadecimal data encountered: '%1%' is neither white space nor a 
 msgstr "遇到無效的十六進位資料:「%1%」既不是空格也不是十六進位數。"
 
 #: src/mmg/options/chapters.cpp:114
-#: src/mmg/tabs/chapters.cpp:1314
+#: src/mmg/tabs/chapters.cpp:1302
 msgid "Invalid language selected"
 msgstr "無效的語言選擇"
 
@@ -4167,11 +4171,11 @@ msgstr "合成程式: %1%"
 msgid "Muxing in progress."
 msgstr "合成進行中。"
 
-#: src/merge/mkvmerge.cpp:2195
+#: src/merge/mkvmerge.cpp:2196
 msgid "Muxing took %1% seconds.\n"
 msgstr "合成花費 %1% 秒。\n"
 
-#: src/merge/mkvmerge.cpp:2197
+#: src/merge/mkvmerge.cpp:2198
 msgid "Muxing took 1 second.\n"
 msgstr "合成花費 1 秒。\n"
 
@@ -4318,7 +4322,7 @@ msgstr "未指定輸出檔名，將使用附件名。\n"
 msgid "No segment/level 0 element found."
 msgstr "未發現剪輯/0 層級元件。"
 
-#: src/merge/mkvmerge.cpp:2186
+#: src/merge/mkvmerge.cpp:2187
 msgid "No streams to output were found. Aborting.\n"
 msgstr "未發現待輸出媒體流。終止。\n"
 
@@ -4812,7 +4816,7 @@ msgstr "RealMedia 音視訊"
 msgid "RealMedia audio/video files"
 msgstr "RealMedia 音訊/視訊檔"
 
-#: src/input/r_real.cpp:376
+#: src/input/r_real.cpp:377
 msgid "RealMedia files may contain HE-AAC / AAC+ / SBR AAC audio. In some cases this can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr %1%' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
 msgstr "RealMedia 檔可能包含 HE-AAC / AAC+ / SBR AAC 音訊。某些情況下這 *無法* 自動偵測。因此您需要為輸入檔手動指定「--aac-is-sbr %1%」如果檔案確實含有 SBR AAC。否則檔案會被 *錯誤地* 合成。參考閱讀 mkvmerge 的使用說明。\n"
 
@@ -5195,13 +5199,17 @@ msgstr "設定: %1%"
 msgid "Several options that control the overall output that mkvmerge creates."
 msgstr "控制 mkvmerge 整體輸出的一些選項。"
 
-#: src/input/r_real.cpp:596
+#: src/input/r_real.cpp:597
 msgid "Short AAC audio packet (length: %1% < %2%)\n"
 msgstr "短的 AAC 音訊套件 (長: %1% < %2%)\n"
 
-#: src/input/r_real.cpp:589
+#: src/input/r_real.cpp:590
 msgid "Short AAC audio packet (length: %1% < 2)\n"
 msgstr "短的 AAC 音訊套件 (長: %1% < 2)\n"
+
+#: src/mpegparser/M2VParser.cpp:382
+msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
+msgstr ""
 
 #: src/info/wxwidgets_ui.cpp:133
 msgid "Show &all elements\tCtrl-A"
@@ -5278,6 +5286,10 @@ msgstr "簡單區塊"
 #: src/info/mkvinfo.cpp:164
 msgid "SimpleBlock (%1%track number %2%, %3% frame(s), timecode %|4$.3f|s = %5%)"
 msgstr "簡單區塊 (%1%軌道編號 %2%, %3% 畫格, 時間碼 %|4$.3f|s = %5%)"
+
+#: src/mpegparser/M2VParser.cpp:379
+msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
+msgstr ""
 
 #: src/output/p_aac.cpp:73
 msgid "Skipping %1% bytes (no valid AAC header found). This might cause audio/video desynchronisation.\n"
@@ -5423,7 +5435,7 @@ msgstr "延展此軌的時間碼。本項支援兩種格式。既可以是正的
 msgid "String"
 msgstr "字串"
 
-#: src/extract/xtr_textsubs.cpp:178
+#: src/extract/xtr_textsubs.cpp:179
 msgid "Subtitle track %1% is missing some duration elements. Please check the resulting SSA/ASS file for entries that have the same start and end time.\n"
 msgstr "字幕軌 %1% 缺少持續時間元件。請檢查輸出的 SSA/ASS 檔中有相同起始和終止時間的項目。\n"
 
@@ -5546,7 +5558,7 @@ msgstr "軌道 %s（自檔案「%s」）的 FourCC 設定非四字元長。"
 msgid "The Kate identifaction header could not be parsed (%1%).\n"
 msgstr "無法解析 Kate 識別表頭 (%1%)。\n"
 
-#: src/common/compression.cpp:310
+#: src/common/compression.cpp:308
 msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
 msgstr "MPEG-4 part 2 壓縮僅適用於原生 MPEG-4。然而，您未使用「--engage native_mpeg4」選擇原生 MPEG-4 模式。\n"
 
@@ -5559,7 +5571,7 @@ msgstr "正在分析 Matroska 檔。"
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 msgstr "Matroska 檔已修改，但變換定位項無法更新。這意味著播放器可能很難找到該元件。請使用您最喜歡的播放器檢查此檔。\n"
 
-#: src/mmg/tabs/chapters.cpp:1914
+#: src/mmg/tabs/chapters.cpp:1898
 msgid ""
 "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 "\n"
@@ -5650,11 +5662,11 @@ msgstr ""
 "\n"
 "提示: 本警告可以在「設定」選項頁停用。取消選中「對...用法發出警告」項即可。"
 
-#: src/output/p_mpeg4_p10.cpp:151
+#: src/output/p_mpeg4_p10.cpp:153
 msgid "The chosen NALU size length of %1% is too small. Try using '4'.\n"
 msgstr "選擇的 NALU 長度大小 %1% 過小。請嘗試使用「4」。\n"
 
-#: src/output/p_avc.cpp:199
+#: src/output/p_avc.cpp:200
 #: src/output/p_kate.cpp:113
 #: src/output/p_passthrough.cpp:63
 #: src/output/p_textsubs.cpp:98
@@ -5662,7 +5674,7 @@ msgstr "選擇的 NALU 長度大小 %1% 過小。請嘗試使用「4」。\n"
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "編解碼器專有資料不符 (長度: %1% 與 %2%)。"
 
-#: src/output/p_mpeg4_p10.cpp:99
+#: src/output/p_mpeg4_p10.cpp:101
 msgid "The codec's private data does not match. Both have the same length (%1%) but different content."
 msgstr "編解碼器專有資料不符。長度相同 (%1%) 但內容不同。"
 
@@ -5736,7 +5748,7 @@ msgid "The edit specifications '%1%' and '%2%' resolve to the same track with th
 msgstr "此編輯規格「%1%」和「%2%」決定 UID %3% 為相同軌道。\n"
 
 #: src/mmg/header_editor/frame.cpp:688
-#: src/mmg/tabs/chapters.cpp:1902
+#: src/mmg/tabs/chapters.cpp:1886
 #: src/propedit/propedit.cpp:28
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "元件已被寫至檔案結尾部，但剪輯大小無法更新。因此這些元件將不可見。處理處理程序將被中止。檔已被修改!"
@@ -5986,7 +5998,7 @@ msgstr ""
 "(問題出在 tab_input::load(), #3)"
 
 #: src/mmg/options/chapters.cpp:113
-#: src/mmg/tabs/chapters.cpp:1314
+#: src/mmg/tabs/chapters.cpp:1302
 #, c-format
 msgid "The language '%s' is not a valid language and cannot be selected."
 msgstr "語言「%s」不是有效的語言，不可選。"
@@ -5999,7 +6011,7 @@ msgstr "語言碼「%1%」不是有效的 ISO639-2 語言碼，將被忽略。\n
 msgid "The line %1% of the timecode file '%2%' does not contain a valid floating point number.\n"
 msgstr "時間碼檔案「%2%」的第 %1% 行不包含有效的浮點數。\n"
 
-#: src/common/translation.cpp:278
+#: src/common/translation.cpp:279
 msgid "The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"
 msgstr "地區無法正常設定。請檢查 LANG, LC_ALL 和 LC_MESSAGES 環境變數。\n"
 
@@ -6019,7 +6031,7 @@ msgstr ""
 "如果設為 0, 將不使用參考偽快取系統。"
 
 #: src/mmg/header_editor/frame.cpp:694
-#: src/mmg/tabs/chapters.cpp:1908
+#: src/mmg/tabs/chapters.cpp:1892
 #: src/propedit/propedit.cpp:33
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "變換定位元件已被寫至檔案結尾部，但剪輯大小無法更新。因此這些元件不可見。處理處理程序將被中止。檔案已有改動！"
@@ -6358,12 +6370,12 @@ msgstr "有警告資訊"
 msgid "There were warnings, or the process was terminated."
 msgstr "有警告資訊，或者處理處理程序被中止。"
 
-#: src/input/r_avi.cpp:608
-#: src/input/r_real.cpp:325
+#: src/input/r_avi.cpp:609
+#: src/input/r_real.cpp:326
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr "此 AAC 軌道不含有效的表頭。無法解析 AAC 資訊。\n"
 
-#: src/input/r_avi.cpp:605
+#: src/input/r_avi.cpp:606
 msgid "This AAC track does not contain valid headers. The extra header size is %1% bytes, expected were 2 or 5 bytes.\n"
 msgstr "此 AAC 軌道不含有效的頭。超額的表頭大小為 %1% 位元組, 預期為 2 或 5 位元組。\n"
 
@@ -6375,11 +6387,11 @@ msgstr "此 AC3 軌道的開頭包含 %1% 位元組的 非-AC3 資料。這相�
 msgid "This AC3 track contains %1% bytes of non-AC3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr "此 AC3 軌道包含 %1% 位元組的 非-AC3 資料，已跳過。音/視訊同步可能已喪失。\n"
 
-#: src/output/p_avc.cpp:98
+#: src/output/p_avc.cpp:99
 msgid "This AVC/h.264 contains frames that are too big for the current maximum NALU size. You have to re-run mkvmerge and set the maximum NALU size to %1% for this track (command line parameter '--nalu-size-length %2%:%1%').\n"
 msgstr "此 AVC/h.264 包含大於目前最大 NALU 長的畫格。您需要重新啟動 mkvmerge 並設定此軌的最大 NALU 大小為 %1% (命令列參數「--nalu-size-length %2%:%1%」)。\n"
 
-#: src/output/p_avc.cpp:149
+#: src/output/p_avc.cpp:150
 msgid "This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n"
 msgstr "此 AVC/h.264 軌道未以關鍵畫格開頭。已跳過開頭 %1% 畫格。\n"
 
@@ -6483,10 +6495,6 @@ msgstr "這不該發生。請聯繫作者 Moritz Bunkus <moritz@bunkus.org>，�
 msgid "This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for these files. Not needed for AAC tracks read from MP4 or Matroska files."
 msgstr "此軌道包含 SBR AAC/HE-AAC/AAC+ 資料。本選項只對 AAC 輸入檔有必要，因為這類檔案的 SBR AAC 不能被自動偵測。對於從 MP4 或 Matroska 檔案讀取的 AAC 軌道，不必在意本選項。"
 
-#: src/input/r_matroska.cpp:2083
-msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
-msgstr "此軌道使用了叫做「編解碼態元件」的 Matroska 特性。mkvmerge 支援該特性，但您尚未透過「--engage use_codec_state」來啟用該特性。\n"
-
 #: src/info/mkvinfo.cpp:1464
 msgid "Time slice"
 msgstr "時間切面"
@@ -6537,19 +6545,19 @@ msgstr "十六進位位數過少。位數必須 > 0 且能被 2 整除。"
 msgid "Track %1% CodecPrivate is too small.\n"
 msgstr "軌道 %1% CodecPrivate 過小。\n"
 
-#: src/common/compression.cpp:509
+#: src/common/compression.cpp:507
 msgid "Track %1% has been compressed with an unknown/unsupported compression algorithm (%2%).\n"
 msgstr "軌道 %1% 被未知/不支援的壓縮演算法壓縮 (%2%)。\n"
 
-#: src/common/compression.cpp:489
+#: src/common/compression.cpp:487
 msgid "Track %1% was compressed with bzlib but mkvmerge has not been compiled with support for bzlib compression.\n"
 msgstr "軌道 %1% 以 bzlib 壓縮，但 mkvmerge 編譯時未包含 bzlib 壓縮支援。\n"
 
-#: src/common/compression.cpp:497
+#: src/common/compression.cpp:495
 msgid "Track %1% was compressed with lzo1x but mkvmerge has not been compiled with support for lzo1x compression.\n"
 msgstr "軌道 %1% 以 lzo1x 壓縮，但 mkvmerge 編譯時未包含 lzo1x 壓縮支援。\n"
 
-#: src/common/compression.cpp:481
+#: src/common/compression.cpp:479
 msgid "Track %1% was compressed with zlib but mkvmerge has not been compiled with support for zlib compression.\n"
 msgstr "軌道 %1% 以 zlib 壓縮，但 mkvmerge 編譯時未包含 zlib 壓縮支援。\n"
 
@@ -6576,7 +6584,7 @@ msgstr "軌道 %1%（CodecID 為「%2%」）缺少 \"codec private \" 編解碼�
 #: src/extract/xtr_ogg.cpp:72
 #: src/extract/xtr_ogg.cpp:219
 #: src/extract/xtr_rmff.cpp:31
-#: src/extract/xtr_textsubs.cpp:290
+#: src/extract/xtr_textsubs.cpp:291
 #: src/extract/xtr_vobsub.cpp:64
 #: src/extract/xtr_wav.cpp:94
 msgid "Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n"
@@ -6643,7 +6651,7 @@ msgstr "軌道名稱:"
 msgid "Track number"
 msgstr "軌道編號"
 
-#: src/common/compression.cpp:468
+#: src/common/compression.cpp:466
 msgid "Track number %1% has been encrypted and decryption has not yet been implemented.\n"
 msgstr "軌道編號 %1% 已被加密，且尚未實行解密。\n"
 
@@ -6704,6 +6712,10 @@ msgstr "USF 文字字幕"
 msgid "UTFstring_to_cstrutf8: Invalid wide character. Please contact moritz@bunkus.org if you think that this is not true."
 msgstr "UTFstring_to_cstrutf8: 無效的寬字元。如果您認為本次判斷有誤，請聯繫 moritz@bunkus.org。"
 
+#: src/mpegparser/M2VParser.cpp:231
+msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video stream before attempting to multiplex it.\n"
+msgstr ""
+
 #: src/output/p_aac.cpp:130
 msgid "Unknown AAC MPEG-2 profile %1%."
 msgstr "未知的 AAC MPEG-2 profile %1%。"
@@ -6720,7 +6732,7 @@ msgstr "未知音訊流類型 0x%|1$04x|。流 ID %2% 將被忽略。\n"
 msgid "Unknown chapter file format in '%1%'. It does not contain a supported chapter format.\n"
 msgstr "未知章節檔案格式於「%1%」。它不含支援的章節格式。\n"
 
-#: src/common/compression.cpp:474
+#: src/common/compression.cpp:472
 msgid "Unknown content encoding type %1% for track %2%.\n"
 msgstr "未知內容編碼類型 %1%，用於軌道 %2%。\n"
 
@@ -6744,8 +6756,8 @@ msgstr "未知的表頭 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
 msgid "Unknown mode '%1%'.\n"
 msgstr "未知的模式「%1%」。\n"
 
-#: src/common/mm_io.cpp:116
-#: src/common/mm_io.cpp:325
+#: src/common/mm_io.cpp:112
+#: src/common/mm_io_win.cpp:68
 msgid "Unknown open mode"
 msgstr "未知的開啟模式"
 
@@ -6757,7 +6769,7 @@ msgstr "未知的選項「%1%」。\n"
 msgid "Unknown parse mode in '%1% %2%'.\n"
 msgstr "未知的解析模式「%1% %2%」。\n"
 
-#: src/input/r_avi.cpp:562
+#: src/input/r_avi.cpp:563
 msgid "Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n"
 msgstr "此音軌的格式 0x%|1$04x| 未知或不支援。\n"
 
@@ -6860,11 +6872,11 @@ msgstr "使用 3 位元組的 NALU 長可能會導致某些 AVC/h.264 編解碼�
 
 #: src/input/r_ac3.cpp:90
 #: src/input/r_matroska.cpp:1488
-#: src/input/r_mpeg_ps.cpp:1175
+#: src/input/r_mpeg_ps.cpp:1176
 msgid "Using the %1%AC3 output module.\n"
 msgstr "使用 %1%AC3 輸出模組。\n"
 
-#: src/input/r_avi.cpp:628
+#: src/input/r_avi.cpp:629
 msgid "Using the AAC audio output module.\n"
 msgstr "使用 AAC 音訊輸出模組。\n"
 
@@ -6872,7 +6884,7 @@ msgstr "使用 AAC 音訊輸出模組。\n"
 msgid "Using the AAC demultiplexer.\n"
 msgstr "使用 AAC 分離器。\n"
 
-#: src/input/r_real.cpp:370
+#: src/input/r_real.cpp:371
 msgid "Using the AAC output module (FourCC: %1%).\n"
 msgstr "使用 AAC 輸出模組 (FourCC: %1%)。\n"
 
@@ -6887,11 +6899,11 @@ msgstr "使用 AAC 輸出模組。\n"
 msgid "Using the AC3 demultiplexer.\n"
 msgstr "使用 AC3 分離器。\n"
 
-#: src/input/r_real.cpp:304
+#: src/input/r_real.cpp:305
 msgid "Using the AC3 output module (FourCC: %1%).\n"
 msgstr "使用 AC3 輸出模組 (FourCC: %1%)。\n"
 
-#: src/input/r_avi.cpp:537
+#: src/input/r_avi.cpp:538
 #: src/input/r_ogm.cpp:986
 #: src/input/r_qtmp4.cpp:1458
 #: src/input/r_wav.cpp:225
@@ -6914,10 +6926,10 @@ msgstr "使用 CorePanorama 字幕讀取器。\n"
 msgid "Using the DTS demultiplexer.\n"
 msgstr "使用 DTS 分離器。\n"
 
-#: src/input/r_avi.cpp:548
+#: src/input/r_avi.cpp:549
 #: src/input/r_dts.cpp:114
 #: src/input/r_matroska.cpp:1500
-#: src/input/r_mpeg_ps.cpp:1180
+#: src/input/r_mpeg_ps.cpp:1181
 #: src/input/r_wav.cpp:354
 msgid "Using the DTS output module.\n"
 msgstr "使用 DTS 輸出模組。\n"
@@ -6953,7 +6965,7 @@ msgstr "使用 Kate 字幕輸出模組。\n"
 msgid "Using the MP2/MP3 demultiplexer.\n"
 msgstr "使用 MP2/MP3 分離器。\n"
 
-#: src/input/r_mpeg_es.cpp:162
+#: src/input/r_mpeg_es.cpp:164
 msgid "Using the MPEG ES demultiplexer.\n"
 msgstr "使用 MPEG ES 分離器。\n"
 
@@ -6961,10 +6973,10 @@ msgstr "使用 MPEG ES 分離器。\n"
 msgid "Using the MPEG PS demultiplexer.\n"
 msgstr "使用 MPEG PS 分離器。\n"
 
-#: src/input/r_avi.cpp:530
+#: src/input/r_avi.cpp:531
 #: src/input/r_matroska.cpp:1526
 #: src/input/r_mp3.cpp:71
-#: src/input/r_mpeg_ps.cpp:1170
+#: src/input/r_mpeg_ps.cpp:1171
 #: src/input/r_ogm.cpp:1004
 #: src/input/r_qtmp4.cpp:1541
 msgid "Using the MPEG audio output module.\n"
@@ -6975,9 +6987,9 @@ msgstr "使用 MPEG 音訊輸出模組。\n"
 msgid "Using the MPEG-%1% video output module.\n"
 msgstr "使用 MPEG-%1% 視訊輸出模組。\n"
 
-#: src/input/r_avi.cpp:298
-#: src/input/r_mpeg_es.cpp:175
-#: src/input/r_mpeg_ps.cpp:1196
+#: src/input/r_avi.cpp:299
+#: src/input/r_mpeg_es.cpp:177
+#: src/input/r_mpeg_ps.cpp:1197
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "使用 MPEG-1/2 視訊輸出模組。\n"
 
@@ -6987,14 +6999,14 @@ msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "使用 MPEG-4 part 10 (AVC) 視訊輸出模組。\n"
 
 #: src/input/r_avc.cpp:136
-#: src/input/r_avi.cpp:323
+#: src/input/r_avi.cpp:324
 #: src/input/r_matroska.cpp:1761
-#: src/input/r_mpeg_ps.cpp:1209
+#: src/input/r_mpeg_ps.cpp:1210
 #: src/input/r_ogm.cpp:1128
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "使用 MPEG-4 part 10 ES 視訊輸出模組。\n"
 
-#: src/input/r_avi.cpp:306
+#: src/input/r_avi.cpp:307
 #: src/input/r_matroska.cpp:1401
 #: src/input/r_ogm.cpp:1232
 #: src/input/r_qtmp4.cpp:1485
@@ -7009,7 +7021,7 @@ msgstr "使用 Matroska 分離器。\n"
 msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr "使用 OGG/OGM 分離器。\n"
 
-#: src/input/r_avi.cpp:522
+#: src/input/r_avi.cpp:523
 #: src/input/r_matroska.cpp:1533
 #: src/input/r_ogm.cpp:1023
 #: src/input/r_qtmp4.cpp:1547
@@ -7021,11 +7033,11 @@ msgstr "使用 PCM 輸出模組。\n"
 msgid "Using the Quicktime/MP4 demultiplexer.\n"
 msgstr "使用 Quicktime/MP4 分離器。\n"
 
-#: src/input/r_real.cpp:400
+#: src/input/r_real.cpp:401
 msgid "Using the RealAudio output module (FourCC: %1%).\n"
 msgstr "使用 RealAudio 輸出模組 (FourCC: %1%)。\n"
 
-#: src/input/r_real.cpp:157
+#: src/input/r_real.cpp:158
 msgid "Using the RealMedia demultiplexer.\n"
 msgstr "使用 RealMedia 分離器。\n"
 
@@ -7033,7 +7045,7 @@ msgstr "使用 RealMedia 分離器。\n"
 msgid "Using the SRT subtitle reader.\n"
 msgstr "使用 SRT 字幕讀取器。\n"
 
-#: src/input/r_avi.cpp:403
+#: src/input/r_avi.cpp:404
 msgid "Using the SSA/ASS subtitle output module.\n"
 msgstr "使用 SSA/ASS 字幕輸出模組。\n"
 
@@ -7055,7 +7067,7 @@ msgstr "使用 TTA 輸出模組。\n"
 msgid "Using the Theora video output module.\n"
 msgstr "使用 Theora 視訊輸出模組。\n"
 
-#: src/input/r_mpeg_ps.cpp:1185
+#: src/input/r_mpeg_ps.cpp:1186
 msgid "Using the TrueHD output module.\n"
 msgstr "使用 TrueHD 輸出模組。\n"
 
@@ -7075,7 +7087,7 @@ msgstr "使用 USF 字幕讀取器。\n"
 msgid "Using the VC1 ES demultiplexer.\n"
 msgstr "使用 VC1 ES 分離器。\n"
 
-#: src/input/r_mpeg_ps.cpp:1214
+#: src/input/r_mpeg_ps.cpp:1215
 #: src/input/r_vc1.cpp:96
 msgid "Using the VC1 video output module.\n"
 msgstr "使用 VC1 視訊輸出模組。\n"
@@ -7100,7 +7112,7 @@ msgstr "使用 VobSub 字幕輸出模組 (語言: %1%)。\n"
 msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
 msgstr "使用 VobSub 字幕讀取器 (SUB 檔「%1%」)。\n"
 
-#: src/input/r_avi.cpp:677
+#: src/input/r_avi.cpp:678
 #: src/input/r_matroska.cpp:1551
 #: src/input/r_ogm.cpp:1044
 msgid "Using the Vorbis output module.\n"
@@ -7131,7 +7143,7 @@ msgstr "使用一般音訊輸出模組 (FourCC: %|1$.4s|)。\n"
 msgid "Using the passthrough output module for this %1% track.\n"
 msgstr "對軌道 %1% 使用呈遞輸出模組。\n"
 
-#: src/input/r_avi.cpp:380
+#: src/input/r_avi.cpp:381
 #: src/input/r_matroska.cpp:1629
 #: src/input/r_ogm.cpp:1075
 #: src/input/r_srt.cpp:60
@@ -7140,7 +7152,7 @@ msgstr "對軌道 %1% 使用呈遞輸出模組。\n"
 msgid "Using the text subtitle output module.\n"
 msgstr "使用文字字幕輸出模組。\n"
 
-#: src/input/r_real.cpp:298
+#: src/input/r_real.cpp:299
 msgid "Using the video output module (FourCC: %1%).\n"
 msgstr "使用視訊輸出模組 (FourCC: %1%)。\n"
 
@@ -7149,7 +7161,7 @@ msgstr "使用視訊輸出模組 (FourCC: %1%)。\n"
 msgid "Using the video output module (FourCC: %|1$.4s|).\n"
 msgstr "使用視訊輸出模組 (FourCC: %|1$.4s|)。\n"
 
-#: src/input/r_avi.cpp:335
+#: src/input/r_avi.cpp:336
 #: src/input/r_matroska.cpp:1417
 #: src/input/r_ogm.cpp:1237
 msgid "Using the video output module.\n"
@@ -7215,12 +7227,16 @@ msgstr "視訊顯示單位"
 msgid "Video display width"
 msgstr "視訊顯示寬度"
 
+#: src/mpegparser/M2VParser.cpp:160
+msgid "Video ended with a shortened group of pictures. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
+msgstr ""
+
 #: src/common/property_element.cpp:137
 #, fuzzy
 msgid "Video interlaced flag"
 msgstr "視訊軌 %u"
 
-#: src/input/r_real.cpp:652
+#: src/input/r_real.cpp:653
 msgid "Video packet assembly failed. Error code: %1% (%2%)\n"
 msgstr "視訊套件彙編失敗。錯誤碼: %1% (%2%)\n"
 
@@ -7394,7 +7410,7 @@ msgstr "XML 解析器發生錯誤，於「%2%」的第 %1% 行: %3%。%4%%5%"
 msgid "XML parser error at line %1%: %2%."
 msgstr "XML 解析器發生錯誤，於第 %1% 行: %2%。"
 
-#: src/mmg/tabs/chapters.cpp:1358
+#: src/mmg/tabs/chapters.cpp:1346
 msgid ""
 "You can use this function for adjusting the timecodes\n"
 "of the selected chapter and all its children by a fixed amount.\n"
@@ -7666,17 +7682,17 @@ msgstr "加密"
 #: src/input/r_qtmp4.cpp:1234
 #: src/input/r_qtmp4.cpp:1396
 #: src/input/r_qtmp4.cpp:1412
-#: src/common/mm_io.cpp:648
-#: src/common/mm_io.cpp:658
-#: src/common/mm_io.cpp:668
-#: src/common/mm_io.cpp:678
-#: src/common/mm_io.cpp:688
-#: src/common/mm_io.cpp:698
-#: src/common/mm_io.cpp:708
-#: src/common/mm_io.cpp:718
-#: src/common/mm_io.cpp:728
-#: src/common/mm_io.cpp:828
-#: src/common/mm_io.cpp:1252
+#: src/common/mm_io.cpp:471
+#: src/common/mm_io.cpp:481
+#: src/common/mm_io.cpp:491
+#: src/common/mm_io.cpp:501
+#: src/common/mm_io.cpp:511
+#: src/common/mm_io.cpp:521
+#: src/common/mm_io.cpp:531
+#: src/common/mm_io.cpp:541
+#: src/common/mm_io.cpp:551
+#: src/common/mm_io.cpp:651
+#: src/common/mm_io.cpp:1075
 msgid "end-of-file"
 msgstr "檔案結尾"
 
@@ -8136,7 +8152,7 @@ msgstr "mkvmerge 能夠從音訊 CD 中讀取 CUE 表單，並自動轉換為章
 msgid "mkvmerge can read and use timecodes from an external text file. This feature is a very advanced feature. Almost all users should leave this entry empty."
 msgstr "mkvmerge 可以讀取並使用外部純文字檔中的時間碼。這是項非常超前的功能，幾乎所有使用者應該留空。"
 
-#: src/output/p_avc.cpp:105
+#: src/output/p_avc.cpp:106
 msgid ""
 "mkvmerge encountered broken or unparsable data in this AVC/h.264 video track. Either your file is damaged (which mkvmerge cannot cope with yet) or this is a bug in mkvmerge itself. The error message was:\n"
 "%1%\n"
@@ -8201,11 +8217,11 @@ msgstr "mkvmerge 編譯時沒有使用 zlib。因此不支援 QuickTime/MP4 檔�
 msgid "mkvpropedit [options] <file> <actions>"
 msgstr "mkvpropedit [選項] <檔案> <動作>"
 
-#: src/common/mm_io.cpp:1244
+#: src/common/mm_io.cpp:1067
 msgid "mm_text_io_c: UTF32_* is not supported at the moment.\n"
 msgstr "mm_text_io_c: 目前尚不支援 UTF32_*。\n"
 
-#: src/common/mm_io.cpp:1197
+#: src/common/mm_io.cpp:1020
 msgid "mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "mm_text_io_c::read_next_char(): 無效 UTF-8 字元。第一位元組: 0x%|1$02x|"
 
@@ -8229,7 +8245,7 @@ msgstr "如果沒有選擇任何項目 mmg 將會重設為預設值。"
 msgid "mp3_reader: Could not open the source file."
 msgstr "mp3_reader: 無法開啟來源檔案。"
 
-#: src/input/r_mpeg_es.cpp:159
+#: src/input/r_mpeg_es.cpp:161
 msgid "mpeg_es_reader: Could not open the file."
 msgstr "mpeg_es_reader: 無法開啟檔案。"
 
@@ -8237,11 +8253,11 @@ msgstr "mpeg_es_reader: 無法開啟檔案。"
 msgid "mpeg_ps_reader: Could not open the file."
 msgstr "mpeg_ps_reader: 無法開啟檔案。"
 
-#: src/input/r_mpeg_ps.cpp:1189
+#: src/input/r_mpeg_ps.cpp:1190
 msgid "mpeg_ps_reader: Should not have happened #1. %1%"
 msgstr "mpeg_ps_reader: 不該發生 #1。 %1%"
 
-#: src/input/r_mpeg_ps.cpp:1218
+#: src/input/r_mpeg_ps.cpp:1219
 msgid "mpeg_ps_reader: Should not have happened #2. %1%"
 msgstr "mpeg_ps_reader: 不該發生 #2。 %1%"
 
@@ -8301,7 +8317,7 @@ msgstr "ogm_reader: 無法讀取所有表頭套件。"
 msgid "ogm_reader: Source is not a valid OGG media file."
 msgstr "ogm_reader: 來源非有效的 OGG 媒體檔案。"
 
-#: src/mmg/tabs/chapters.cpp:1073
+#: src/mmg/tabs/chapters.cpp:1061
 msgid "on_entry_selected: display == NULL. Should not have happened."
 msgstr "on_entry_selected: display == NULL。不該出現。"
 
@@ -8363,19 +8379,19 @@ msgstr "raw 資料"
 msgid "ready"
 msgstr "準備就緒"
 
-#: src/input/r_real.cpp:148
+#: src/input/r_real.cpp:149
 msgid "real_reader: Could not read the source file."
 msgstr "real_reader: 無法讀取來源檔案。"
 
-#: src/input/r_real.cpp:245
+#: src/input/r_real.cpp:246
 msgid "real_reader: Couldn't find RealAudio FourCC for id %1% (description length: %2%) Skipping track.\n"
 msgstr "real_reader: 無法為軌 id %1% (描述資訊長度: %2%) 找到 RealAudio FourCC。正在跳過該軌道。\n"
 
-#: src/input/r_real.cpp:273
+#: src/input/r_real.cpp:274
 msgid "real_reader: Only audio header versions 3, 4 and 5 are supported. Track ID %1% uses version %2% and will be skipped.\n"
 msgstr "real_reader: 僅支援第 3, 4 和 5 版的音訊頭。軌道 ID %1% 所用版本為 %2% ，將被跳過。\n"
 
-#: src/input/r_real.cpp:146
+#: src/input/r_real.cpp:147
 msgid "real_reader: Source is not a valid RealMedia file."
 msgstr "real_reader: 來源非有效的 RealMedia 檔案。"
 
@@ -8420,7 +8436,7 @@ msgstr "ssa_reader: 無效格式。\"[Events]\" 區段中未找到 \"Format\" �
 msgid "ssa_reader: Source is not a valid SSA/ASS file."
 msgstr "ssa_reader: 來來源非有效的 SSA/ASS 檔。"
 
-#: src/mmg/tabs/chapters.cpp:911
+#: src/mmg/tabs/chapters.cpp:905
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
 msgstr "start >= m->ListSize()。這不該發生。請提交錯誤報告。感謝。"
 
@@ -8466,10 +8482,10 @@ msgid "und (Undetermined)"
 msgstr "und (未定)"
 
 #: src/input/r_matroska.cpp:86
-#: src/input/r_matroska.cpp:2234
-#: src/input/r_matroska.cpp:2241
-#: src/input/r_mpeg_ps.cpp:1393
-#: src/common/mm_io.cpp:421
+#: src/input/r_matroska.cpp:2230
+#: src/input/r_matroska.cpp:2237
+#: src/input/r_mpeg_ps.cpp:1394
+#: src/common/mm_io_win.cpp:164
 #: src/mmg/mmg.cpp:59
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/tabs/input.cpp:372
@@ -8565,16 +8581,16 @@ msgstr "wavpack_reader: 未發現音訊區塊\n"
 msgid "wavpack_reader: unknown sample rate!\n"
 msgstr "wavpack_reader: 未知取樣頻率!\n"
 
-#: src/common/mm_io.cpp:991
+#: src/common/mm_io.cpp:814
 msgid "wrong usage: increase < 0"
 msgstr "錯誤用法: 增加值 < 0"
 
-#: src/common/mm_io.cpp:1016
-#: src/common/mm_io.cpp:1032
+#: src/common/mm_io.cpp:839
+#: src/common/mm_io.cpp:855
 msgid "wrong usage: read-only with NULL memory"
 msgstr "錯誤用法: 對 *空* 記憶體使用唯讀模式"
 
-#: src/common/mm_io.cpp:1062
+#: src/common/mm_io.cpp:885
 msgid "wrong usage: writing to read-only memory"
 msgstr "錯誤用法: 寫入至唯讀記憶體"
 
@@ -8652,6 +8668,8 @@ msgstr "是"
 #~ msgstr "設定預設值(&D)"
 #~ msgid "Subtitle charset:"
 #~ msgstr "字幕字元集:"
+#~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
+#~ msgstr "此軌道使用了叫做「編解碼態元件」的 Matroska 特性。mkvmerge 支援該特性，但您尚未透過「--engage use_codec_state」來啟用該特性。\n"
 #~ msgid "Tracks:"
 #~ msgstr "軌道列表:"
 #~ msgid "Unrecognized command line option '%1%'. Maybe you put a mode specific option before the input file name?\n"
