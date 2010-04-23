@@ -45,6 +45,7 @@ public:
   MediaTime timecode;
   MediaTime firstRef;
   MediaTime secondRef;
+  bool stamped;
   bool rff;
   bool tff;
   bool progressive;
@@ -57,13 +58,19 @@ public:
 
 class M2VParser {
 private:
-  std::vector<MPEGChunk*> chunks; //Hold the chunks until we can stamp them
+  std::vector<MPEGChunk*> chunks; //Hold the chunks until we can order them
+  std::queue<MPEGFrame*> waitQueue; //Holds unstamped buffers until we can stamp them.
   std::queue<MPEGFrame*> buffers; //Holds stamped buffers until they are requested.
-  MediaTime position;
+  MediaTime previousTimecode;
+  MediaTime previousDuration;
   //Added to allow reading the header's raw data, contains first found seq hdr.
   MPEGChunk* seqHdrChunk, *gopChunk;
   MPEG2SequenceHeader m_seqHdr; //current sequence header
   MPEG2GOPHeader m_gopHdr; //current GOP header
+  MediaTime queueTime;
+  MediaTime waitExpectedTime;
+  bool      waitSecondField;
+  bool      probing;
   MediaTime firstRef;
   bool needInit;
   bool m_eos;
@@ -83,13 +90,13 @@ private:
   int32_t FillQueues();
   void ShoveRef(MediaTime ref);
   MediaTime GetFrameDuration(MPEG2PictureHeader picHdr);
-  int32_t QueueFrame(MPEGChunk* chunk, MediaTime timecode, MPEG2PictureHeader picHdr);
+  void FlushWaitQueue();
+  int32_t OrderFrame(MPEGFrame* frame);
+  void StampFrame(MPEGFrame* frame);
+  int32_t PrepareFrame(MPEGChunk* chunk, MediaTime timecode, MPEG2PictureHeader picHdr);
 public:
   M2VParser();
   virtual ~M2VParser();
-
-  //Returns the current media position
-  virtual const MediaTime GetPosition();
 
   MPEG2SequenceHeader GetSequenceHeader(){
     return m_seqHdr;
@@ -124,6 +131,11 @@ public:
 
   void SeparateSequenceHeaders() {
     keepSeqHdrsInBitstream = false;
+  }
+
+  //Using this method if the M2VParser will process only the beginning of the file.
+  void SetProbeMode() {
+    probing = true;
   }
 };
 

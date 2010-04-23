@@ -106,7 +106,12 @@ M2VParser::M2VParser(){
   mpgBuf = new MPEGVideoBuffer(BUFF_SIZE);
 
   notReachedFirstGOP = true;
-  position = 0;
+  previousTimecode = 0;
+  previousDuration = 0;
+  queueTime = 0;
+  waitExpectedTime = 0;
+  probing = false;
+  waitSecondField = false;
   m_eos = false;
   mpegVersion = 1;
   needInit = true;
@@ -151,13 +156,13 @@ int32_t M2VParser::InitParser(){
 
 M2VParser::~M2VParser(){
   DumpQueues();
+  if (!probing && !waitQueue.empty()) {
+    mxwarn(Y("Video ended with a shortened group of pictures. Some frames have been dropped. You want want to fix the MPEG2 video stream before attempting to multiplex it.\n"));
+  }
+  FlushWaitQueue();
   delete seqHdrChunk;
   delete gopChunk;
   delete mpgBuf;
-}
-
-const MediaTime M2VParser::GetPosition(){
-  return position;
 }
 
 MediaTime M2VParser::GetFrameDuration(MPEG2PictureHeader picHdr){
@@ -191,10 +196,92 @@ MPEG2ParserState_e M2VParser::GetState(){
   return parserState;
 }
 
-int32_t M2VParser::QueueFrame(MPEGChunk* chunk, MediaTime timecode, MPEG2PictureHeader picHdr){
+void M2VParser::FlushWaitQueue(){
+  waitSecondField = false;
+
+  while(!waitQueue.empty()){
+    delete waitQueue.front();
+    waitQueue.pop();
+  }
+}
+
+void M2VParser::StampFrame(MPEGFrame* frame){
+  MediaTime timeunit;
+
+  timeunit = (MediaTime)(1000000000/(m_seqHdr.frameOrFieldRate*2));
+  frame->timecode = previousTimecode + previousDuration;
+  previousTimecode = frame->timecode;
+  frame->duration = (MediaTime)(frame->duration * timeunit);
+  previousDuration = frame->duration;
+
+  if(frame->frameType == 'P'){
+    frame->firstRef = (MediaTime)(frame->firstRef * timeunit);
+  }else if(frame->frameType == 'B'){
+    frame->firstRef = (MediaTime)(frame->firstRef * timeunit);
+    frame->secondRef = (MediaTime)(frame->secondRef * timeunit);
+  }
+  frame->stamped = true;
+}
+
+int32_t M2VParser::OrderFrame(MPEGFrame* frame){
+  MPEGFrame *p = frame;
+  bool flushQueue = false;
+
+  if (waitSecondField && (p->pictureStructure == MPEG2_PICTURE_TYPE_FRAME)){
+    mxerror(Y("Unexpected picture frame after single field frame. Fix the MPEG2 video stream before attempting to multiplex it.\n"));
+  }
+
+  if((p->timecode == queueTime) && waitQueue.empty()){
+    if((p->pictureStructure == MPEG2_PICTURE_TYPE_FRAME) || waitSecondField)
+      queueTime++;
+    StampFrame(p);
+    buffers.push(p);
+  }else if((p->timecode > queueTime) && waitQueue.empty()){
+    waitExpectedTime = p->timecode - 1;
+    p->stamped = false;
+    waitQueue.push(p);
+  }else if(p->timecode > waitExpectedTime){
+    p->stamped = false;
+    waitQueue.push(p);
+  }else if(p->timecode == waitExpectedTime){
+    StampFrame(p);
+    waitQueue.push(p);
+    if((p->pictureStructure == MPEG2_PICTURE_TYPE_FRAME) || waitSecondField)
+      flushQueue = true;
+  }else{
+    StampFrame(p);
+    waitQueue.push(p);
+  }
+
+  if(flushQueue){
+    int i,l;
+    waitSecondField = false;
+
+    l = waitQueue.size();
+    for(i=0;i<l;i++){
+      p = waitQueue.front();
+      waitQueue.pop();
+      if(!p->stamped) {
+        StampFrame(p);
+      }
+      buffers.push(p);
+      if((p->pictureStructure == MPEG2_PICTURE_TYPE_FRAME) || waitSecondField){
+        queueTime++;
+      }
+      if(p->pictureStructure != MPEG2_PICTURE_TYPE_FRAME)
+        waitSecondField = !waitSecondField;
+    }
+    waitSecondField = false;
+  }else if (p->pictureStructure != MPEG2_PICTURE_TYPE_FRAME){
+    waitSecondField = !waitSecondField;
+  }
+
+  return 0;
+}
+
+int32_t M2VParser::PrepareFrame(MPEGChunk* chunk, MediaTime timecode, MPEG2PictureHeader picHdr){
   MPEGFrame* outBuf;
   bool bCopy = true;
-  MediaTime timeunit;
   binary* pData = chunk->GetPointer();
   uint32_t dataLen = chunk->GetSize();
 
@@ -222,8 +309,6 @@ int32_t M2VParser::QueueFrame(MPEGChunk* chunk, MediaTime timecode, MPEG2Picture
     memcpy(pData + pos, chunk->GetPointer(), chunk->GetSize());
   }
 
-  MediaTime duration = GetFrameDuration(picHdr);
-
   outBuf = new MPEGFrame(pData, dataLen, bCopy);
 
   if (seqHdrChunk && !keepSeqHdrsInBitstream &&
@@ -244,21 +329,17 @@ int32_t M2VParser::QueueFrame(MPEGChunk* chunk, MediaTime timecode, MPEG2Picture
     outBuf->frameType = 'B';
   }
 
-  timeunit = (MediaTime)(1000000000/(m_seqHdr.frameOrFieldRate*2));
-  outBuf->timecode = (MediaTime)(timecode * timeunit);
-  outBuf->duration = (MediaTime)(duration * timeunit);
+  outBuf->timecode = timecode; // Still the sequence number
+  outBuf->firstRef = firstRef;
+  outBuf->secondRef = secondRef;
 
-  if(outBuf->frameType == 'P'){
-    outBuf->firstRef = (MediaTime)(firstRef * timeunit);
-  }else if(outBuf->frameType == 'B'){
-    outBuf->firstRef = (MediaTime)(firstRef * timeunit);
-    outBuf->secondRef = (MediaTime)(secondRef * timeunit);
-  }
+  outBuf->duration = GetFrameDuration(picHdr);
   outBuf->rff = (picHdr.repeatFirstField != 0);
   outBuf->tff = (picHdr.topFieldFirst != 0);
   outBuf->progressive = (picHdr.progressive != 0);
   outBuf->pictureStructure = (uint8_t) picHdr.pictureStructure;
-  buffers.push(outBuf);
+
+  OrderFrame(outBuf);
   return 0;
 }
 
@@ -287,14 +368,20 @@ int32_t M2VParser::FillQueues(){
       if (chunk->GetType() == MPEG_VIDEO_GOP_START_CODE) {
         ParseGOPHeader(chunk, m_gopHdr);
         if (frameNum != 0) {
-          if (usePictureFrames)
-            gopPts = highestPts + 2;
-          else
-            gopPts = highestPts + 1;
+          gopPts = highestPts + 1;
         }
         if (gopChunk)
           delete gopChunk;
         gopChunk = chunk;
+
+        /* Perform some sanity checks */
+        if(waitSecondField){
+          mxerror(Y("Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"));
+        }
+        if(!waitQueue.empty()){
+          mxwarn(Y("Shortened GOP detected. Some frames have been dropped. You want want to fix the MPEG2 video stream before attempting to multiplex it.\n"));
+          FlushWaitQueue();
+        }
 
       } else if (chunk->GetType() == MPEG_VIDEO_SEQUENCE_START_CODE) {
         if (seqHdrChunk)
@@ -314,23 +401,21 @@ int32_t M2VParser::FillQueues(){
 
     if (picHdr.pictureStructure == 0x03) {
       usePictureFrames = true;
-      myTime = gopPts + 2 * picHdr.temporalReference;
-    } else {
-      myTime = gopPts + (2 * picHdr.temporalReference) + (frameNum % 2);
     }
+    myTime = gopPts + picHdr.temporalReference;
 
     if (myTime > highestPts)
       highestPts = myTime;
 
     switch(picHdr.frameType){
       case MPEG2_I_FRAME:
-        QueueFrame(chunk, myTime, picHdr);
+        PrepareFrame(chunk, myTime, picHdr);
         ShoveRef(myTime);
         notReachedFirstGOP = false;
         break;
       case MPEG2_P_FRAME:
         if(firstRef == -1) break;
-        QueueFrame(chunk, myTime, picHdr);
+        PrepareFrame(chunk, myTime, picHdr);
         ShoveRef(myTime);
         break;
       default: //B-frames
@@ -339,7 +424,7 @@ int32_t M2VParser::FillQueues(){
             mxerror(Y("Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"));
           }
         }
-        QueueFrame(chunk, myTime, picHdr);
+        PrepareFrame(chunk, myTime, picHdr);
     }
     frameNum++;
     chunks.erase(chunks.begin());

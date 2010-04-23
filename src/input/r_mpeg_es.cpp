@@ -104,6 +104,7 @@ mpeg_es_reader_c::probe_file(mm_io_c *io,
 
     // Let's try to read one frame.
     M2VParser parser;
+    parser.SetProbeMode();
     if (!read_frame(parser, *io, READ_SIZE, true))
       return 0;
 
@@ -126,6 +127,7 @@ mpeg_es_reader_c::mpeg_es_reader_c(track_info_c &_ti)
 
     // Let's find the first frame. We need its information like
     // resolution, MPEG version etc.
+    parser.SetProbeMode();
     if (!read_frame(parser, *io, 1024 * 1024)) {
       delete io;
       throw "";

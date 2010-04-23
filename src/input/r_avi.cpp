@@ -244,6 +244,7 @@ void
 avi_reader_c::create_mpeg1_2_packetizer() {
   counted_ptr<M2VParser> m2v_parser(new M2VParser);
 
+  m2v_parser->SetProbeMode();
   if ((0 != m_ti.m_private_size) && (m_ti.m_private_size < sizeof(alBITMAPINFOHEADER)))
     m2v_parser->WriteData(m_ti.m_private_data + sizeof(alBITMAPINFOHEADER), m_ti.m_private_size - sizeof(alBITMAPINFOHEADER));
 

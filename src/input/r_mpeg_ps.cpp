@@ -604,6 +604,7 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
                                         mpeg_ps_track_ptr &track) {
   counted_ptr<M2VParser> m2v_parser(new M2VParser);
 
+  m2v_parser->SetProbeMode();
   m2v_parser->WriteData(buf, length);
 
   int state = m2v_parser->GetState();
