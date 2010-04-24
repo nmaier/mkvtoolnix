@@ -46,6 +46,7 @@ public:
   MediaTime firstRef;
   MediaTime secondRef;
   bool stamped;
+  bool invisible;
   bool rff;
   bool tff;
   bool progressive;
@@ -77,6 +78,8 @@ private:
   bool notReachedFirstGOP;
   bool keepSeqHdrsInBitstream;
   MediaTime secondRef;
+  bool invisible;
+  int32_t   gopNum;
   MediaTime frameNum;
   MediaTime gopPts;
   MediaTime highestPts;

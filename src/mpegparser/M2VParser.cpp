@@ -36,6 +36,7 @@ MPEGFrame::MPEGFrame(binary *n_data, uint32_t n_size, bool n_bCopy):
   } else {
     data = n_data;
   }
+  invisible      = false;
   firstRef       = -1;
   secondRef      = -1;
   seqHdrData     = NULL;
@@ -118,6 +119,7 @@ M2VParser::M2VParser(){
   parserState = MPV_PARSER_STATE_NEED_DATA;
   firstRef = -1;
   secondRef = -1;
+  gopNum = -1;
   frameNum = 0;
   gopPts = 0;
   highestPts = 0;
@@ -333,6 +335,7 @@ int32_t M2VParser::PrepareFrame(MPEGChunk* chunk, MediaTime timecode, MPEG2Pictu
   outBuf->firstRef = firstRef;
   outBuf->secondRef = secondRef;
 
+  outBuf->invisible = invisible;
   outBuf->duration = GetFrameDuration(picHdr);
   outBuf->rff = (picHdr.repeatFirstField != 0);
   outBuf->tff = (picHdr.topFieldFirst != 0);
@@ -373,7 +376,7 @@ int32_t M2VParser::FillQueues(){
         if (gopChunk)
           delete gopChunk;
         gopChunk = chunk;
-
+        gopNum++;
         /* Perform some sanity checks */
         if(waitSecondField){
           mxerror(Y("Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"));
@@ -403,6 +406,7 @@ int32_t M2VParser::FillQueues(){
       usePictureFrames = true;
     }
     myTime = gopPts + picHdr.temporalReference;
+    invisible = false;
 
     if (myTime > highestPts)
       highestPts = myTime;
@@ -421,8 +425,13 @@ int32_t M2VParser::FillQueues(){
       default: //B-frames
         if(firstRef == -1 || secondRef == -1){
           if(!m_gopHdr.closedGOP){
-            mxerror(Y("Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"));
+            if(gopNum > 0){
+              mxerror(Y("Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"));
+            } else if (!probing){
+              mxwarn(Y("Found B frame without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"));
+            }
           }
+          invisible = true;
         }
         PrepareFrame(chunk, myTime, picHdr);
     }
