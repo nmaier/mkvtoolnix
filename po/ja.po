@@ -3204,13 +3204,17 @@ msgstr "タイムコードスケールの係数をこの値に強制設定しま
 msgid "Format specific options"
 msgstr "フォーマット詳細オプション"
 
-#: src/mpegparser/M2VParser.cpp:424
+#: src/mpegparser/M2VParser.cpp:430
 msgid "Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr ""
 
 #: src/common/xml/element_parser.cpp:131
 msgid "Found no encoded data nor '@file' to read binary data from."
 msgstr "エンコードされたデータもしくはバイナリデータを読み込むための'@file'が見つかりませんでした。"
+
+#: src/mpegparser/M2VParser.cpp:432
+msgid "Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"
+msgstr ""
 
 #: src/mmg/tabs/input_format.cpp:226
 msgid "FourCC:"
@@ -5061,7 +5065,7 @@ msgstr "短いAACオーディオパケットです（長さ：%1% < %2%）\n"
 msgid "Short AAC audio packet (length: %1% < 2)\n"
 msgstr "短いAACオーディオパケットです（長さ：%1% < 2）\n"
 
-#: src/mpegparser/M2VParser.cpp:382
+#: src/mpegparser/M2VParser.cpp:386
 msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr ""
 
@@ -5141,7 +5145,7 @@ msgstr "シンプルブロック"
 msgid "SimpleBlock (%1%track number %2%, %3% frame(s), timecode %|4$.3f|s = %5%)"
 msgstr "シンプルブロック (%1%トラック番号 %2%、%3% フレーム、タイムコード %|4$.3f|s = %5%)"
 
-#: src/mpegparser/M2VParser.cpp:379
+#: src/mpegparser/M2VParser.cpp:383
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr ""
 
@@ -6514,7 +6518,7 @@ msgstr "USFテキスト字幕"
 msgid "UTFstring_to_cstrutf8: Invalid wide character. Please contact moritz@bunkus.org if you think that this is not true."
 msgstr "UTFstring_to_cstrutf8：不正なUnicode文字です。そうではないと考えられる場合はmoritz@bunkus.orgに連絡してください。"
 
-#: src/mpegparser/M2VParser.cpp:231
+#: src/mpegparser/M2VParser.cpp:234
 msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr ""
 
@@ -6987,7 +6991,7 @@ msgstr "表示解像度単位"
 msgid "Video display width"
 msgstr "横表示解像度"
 
-#: src/mpegparser/M2VParser.cpp:160
+#: src/mpegparser/M2VParser.cpp:163
 msgid "Video ended with a shortened group of pictures. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr ""
 
