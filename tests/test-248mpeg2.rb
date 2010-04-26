@@ -6,9 +6,9 @@ class T_248mpeg2 < Test
   end
 
   def run
-    merge("data/mpeg12/1080i60.m2v")
+    merge("data/mpeg12/1080i60.m2v", 1)
     hash = hash_tmp
-    merge("data/mpeg12/changing_sequence_headers.m2v")
+    merge("data/mpeg12/changing_sequence_headers.m2v", 1)
     return hash + "-" + hash_tmp
   end
 end
