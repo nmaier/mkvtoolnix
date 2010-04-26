@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-03-29 18:32+0800\n"
+"PO-Revision-Date: 2010-04-25 13:57+0800\n"
 "Last-Translator: Dean Lee <xslidian@lidian.info>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -3293,7 +3293,7 @@ msgstr "格式细节选项"
 
 #: src/mpegparser/M2VParser.cpp:424
 msgid "Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr ""
+msgstr "在未闭合的 GOP 画面组中发现无第二参考帧的 B 帧。尝试混流前请先修复 MPEG2 视频流。\n"
 
 #: src/common/xml/element_parser.cpp:131
 msgid "Found no encoded data nor '@file' to read binary data from."
@@ -4461,7 +4461,7 @@ msgstr "选项"
 
 #: src/mmg/cli_options_dlg.cpp:106
 msgid "Options meant ONLY for developpers. Do not use them. If something is considered to be an officially supported option then it's NOT in this list!"
-msgstr "*仅* 为开发者设计的选项。不要用它们。凡是被官方支持的东西都 *不在* 这个列表中！"
+msgstr "*仅* 为开发者设计的选项。不要用它们。凡是被官方支持的选项都 *不在* 这个列表中!"
 
 #: src/info/mkvinfo.cpp:762
 msgid "Order: %1%"
@@ -5203,7 +5203,7 @@ msgstr "短的 AAC 音频包 (长: %1% < 2)\n"
 
 #: src/mpegparser/M2VParser.cpp:382
 msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr ""
+msgstr "侦测到短缺的 GOP 画面组。已丢弃一些帧。您可能需要考虑在尝试混流之前修复该 MPEG2 视频流。\n"
 
 #: src/info/wxwidgets_ui.cpp:133
 msgid "Show &all elements\tCtrl-A"
@@ -5283,7 +5283,7 @@ msgstr "简单块 (%1%轨道号 %2%, %3% 帧, 时间码 %|4$.3f|s = %5%)"
 
 #: src/mpegparser/M2VParser.cpp:379
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr ""
+msgstr "在 GOP 画面组头前侦测到单场帧。尝试混流前请先修复 MPEG2 视频流。\n"
 
 #: src/output/p_aac.cpp:73
 msgid "Skipping %1% bytes (no valid AAC header found). This might cause audio/video desynchronisation.\n"
@@ -5303,15 +5303,15 @@ msgstr "切片"
 
 #: src/mmg/header_editor/frame.cpp:576
 msgid "Some header values have been modified. Do you really want to close without saving the file?"
-msgstr "一些头部值已被修改。您确实要在不保存文件的情况下关闭？"
+msgstr "一些头部值已被修改。您确实要在不保存文件的情况下关闭?"
 
 #: src/mmg/header_editor/frame.cpp:782
 msgid "Some header values have been modified. Do you really want to load a new file without saving the current one?"
-msgstr "一些头部值已被修改。您确实要在不保存当前文件的情况下载入一个新的文件？"
+msgstr "一些头部值已被修改。您确实要在不保存当前文件的情况下载入一个新的文件?"
 
 #: src/mmg/header_editor/frame.cpp:566
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
-msgstr "一些头部值已被修改。您确实要在不保存文件的情况下重新载入？"
+msgstr "一些头部值已被修改。您确实要在不保存文件的情况下重新载入?"
 
 #: src/merge/output_control.cpp:1282
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
@@ -5348,7 +5348,7 @@ msgstr "已选择按时间码/播放时长切割，但未输入任何数值。"
 #: src/mmg/mmg_dialog.cpp:526
 #, c-format
 msgid "Splitting is active, and at least one of the potential output files '%s%s*%s' already exists. Do you want to overwrite them?"
-msgstr "正在执行切割操作，但至少有一个潜在的输出文件 '%s%s*%s' 已存在。是否覆写？"
+msgstr "正在执行切割操作，但至少有一个潜在的输出文件 '%s%s*%s' 已存在。是否覆写?"
 
 #: src/mmg/mmg_dialog.cpp:292
 msgid "Sta&rt muxing"
@@ -6028,7 +6028,7 @@ msgstr ""
 #: src/mmg/tabs/chapters.cpp:1892
 #: src/propedit/propedit.cpp:33
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
-msgstr "元定位元素已被写至文件尾部，但剪辑尺寸无法更新。因此这些元素不可见。处理进程将被中止。文件已有改动！"
+msgstr "元定位元素已被写至文件尾部，但剪辑尺寸无法更新。因此这些元素不可见。处理进程将被中止。文件已被更改!"
 
 #: src/common/property_element.cpp:123
 #: src/mmg/header_editor/frame.cpp:408
@@ -6123,7 +6123,7 @@ msgstr "即将输出的文件 '%1%' 无法打开写入(%2%)。\n"
 #: src/mmg/mmg_dialog.cpp:1349
 #, c-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
-msgstr "即将输出的文件 '%s' 已存在。是否覆盖？"
+msgstr "即将输出的文件 '%s' 已存在。是否覆盖?"
 
 #: src/mmg/mmg_dialog.cpp:563
 msgid "The output file name is invalid, e.g. it might contain invalid characters like ':'."
@@ -6708,7 +6708,7 @@ msgstr "UTFstring_to_cstrutf8: 无效的宽位字符。如果您认为本次判�
 
 #: src/mpegparser/M2VParser.cpp:231
 msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr ""
+msgstr "单场帧后出现意外的画面帧。尝试混流前请先修复 MPEG2 视频流。\n"
 
 #: src/output/p_aac.cpp:130
 msgid "Unknown AAC MPEG-2 profile %1%."
@@ -7223,7 +7223,7 @@ msgstr "视频显示宽度"
 
 #: src/mpegparser/M2VParser.cpp:160
 msgid "Video ended with a shortened group of pictures. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr ""
+msgstr "视频以短缺的画面组结尾。丢弃了一些帧。您可能需要考虑在尝试混流之前修复该 MPEG2 视频流。\n"
 
 #: src/common/property_element.cpp:137
 msgid "Video interlaced flag"
