@@ -87,6 +87,7 @@ private:
   uint8_t mpegVersion;
   MPEG2ParserState_e parserState;
   MPEGVideoBuffer * mpgBuf;
+  bool bFrameMissingReferenceWarning;
 
   int32_t InitParser();
   void DumpQueues();

@@ -127,6 +127,7 @@ M2VParser::M2VParser(){
   seqHdrChunk = NULL;
   gopChunk = NULL;
   keepSeqHdrsInBitstream = true;
+  bFrameMissingReferenceWarning = false;
 }
 
 int32_t M2VParser::InitParser(){
@@ -427,8 +428,9 @@ int32_t M2VParser::FillQueues(){
           if(!m_gopHdr.closedGOP){
             if(gopNum > 0){
               mxerror(Y("Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"));
-            } else if (!probing){
-              mxwarn(Y("Found B frame without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"));
+            } else if (!probing && !bFrameMissingReferenceWarning){
+              mxwarn(Y("Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"));
+              bFrameMissingReferenceWarning = true;
             }
           }
           invisible = true;
