@@ -386,7 +386,9 @@ int32_t M2VParser::FillQueues(){
           mxwarn(Y("Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"));
           FlushWaitQueue();
         }
-
+        if(m_gopHdr.brokenLink){
+          mxinfo(Y("Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"));
+        }
       } else if (chunk->GetType() == MPEG_VIDEO_SEQUENCE_START_CODE) {
         if (seqHdrChunk)
           delete seqHdrChunk;
@@ -425,7 +427,7 @@ int32_t M2VParser::FillQueues(){
         break;
       default: //B-frames
         if(firstRef == -1 || secondRef == -1){
-          if(!m_gopHdr.closedGOP){
+          if(!m_gopHdr.closedGOP && !m_gopHdr.brokenLink){
             if(gopNum > 0){
               mxerror(Y("Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"));
             } else if (!probing && !bFrameMissingReferenceWarning){

@@ -193,16 +193,13 @@ bool ParseGOPHeader(MPEGChunk* chunk, MPEG2GOPHeader & hdr){
     ((uint32_t)pos[1] << 16) |
     ((uint32_t)pos[2] << 8) |
     ((uint32_t)pos[3]);
-  hdr.timeHours = (timecode << 1) >> 27;
-  hdr.timeMinutes= (timecode << 6)>>26;
+  hdr.timeHours   = (timecode << 1) >> 27;
+  hdr.timeMinutes = (timecode << 6)>>26;
   hdr.timeSeconds = (timecode << 13) >> 26;
-  hdr.timeFrames = (timecode << 19) >> 26;
+  hdr.timeFrames  = (timecode << 19) >> 26;
   pos+=3;
-  if(pos[0] & 0x40){ //Check second bit
-    hdr.closedGOP = 1;
-  }else{
-    hdr.closedGOP = 0;
-  }
+  hdr.closedGOP   = (pos[0] & 0x40) >> 6;
+  hdr.brokenLink  = (pos[0] & 0x20) >> 5;;
   return true;
 }
 

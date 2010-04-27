@@ -55,6 +55,7 @@ typedef struct MPEG2SequenceHeader{
 
 typedef struct MPEG2GOPHeader{
   uint8_t closedGOP;
+  uint8_t brokenLink;
   uint32_t timeFrames;
   uint32_t timeSeconds;
   uint32_t timeMinutes;
