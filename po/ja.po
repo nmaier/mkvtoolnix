@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-04-03 17:49+0900\n"
+"PO-Revision-Date: 2010-04-27 16:30+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -3206,7 +3206,7 @@ msgstr "フォーマット詳細オプション"
 
 #: src/mpegparser/M2VParser.cpp:430
 msgid "Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr ""
+msgstr "非クローズドGOPで二つめの参照先がないBフレームが見つかりました。MUXしようとする前にこのMPEG2ビデオストリームを修復してください。\n"
 
 #: src/common/xml/element_parser.cpp:131
 msgid "Found no encoded data nor '@file' to read binary data from."
@@ -3214,7 +3214,7 @@ msgstr "エンコードされたデータもしくはバイナリデータを読
 
 #: src/mpegparser/M2VParser.cpp:432
 msgid "Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"
-msgstr ""
+msgstr "最初のGOPで二つめの参照先がないBフレームが1つ以上見つかりました。MUXしようとする前にこのMPEG2ビデオストリームを修復もしくはsmart reencodeを使いたいと思うかもしれません。\n"
 
 #: src/mmg/tabs/input_format.cpp:226
 msgid "FourCC:"
@@ -5067,7 +5067,7 @@ msgstr "短いAACオーディオパケットです（長さ：%1% < 2）\n"
 
 #: src/mpegparser/M2VParser.cpp:386
 msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr ""
+msgstr "短くカットされたGOPが検出されました。ドロップされたフレームがあります。MUXしようとする前にこのMPEG2ビデオストリームを修復したいと思うかもしれません。\n"
 
 #: src/info/wxwidgets_ui.cpp:133
 msgid "Show &all elements\tCtrl-A"
@@ -5147,7 +5147,7 @@ msgstr "シンプルブロック (%1%トラック番号 %2%、%3% フレーム�
 
 #: src/mpegparser/M2VParser.cpp:383
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr ""
+msgstr "GOPヘッダの前に片フィールドのフレームが検出されました。MUXしようとする前にこのMPEG2ビデオストリームを修復してください。\n"
 
 #: src/output/p_aac.cpp:73
 msgid "Skipping %1% bytes (no valid AAC header found). This might cause audio/video desynchronisation.\n"
@@ -6520,7 +6520,7 @@ msgstr "UTFstring_to_cstrutf8：不正なUnicode文字です。そうではな�
 
 #: src/mpegparser/M2VParser.cpp:234
 msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr ""
+msgstr "片フィールドフレームの後に予期せぬピクチャフレームがありました。MUXしようとする前にこのMPEG2ビデオストリームを修復してください。\n"
 
 #: src/output/p_aac.cpp:130
 msgid "Unknown AAC MPEG-2 profile %1%."
@@ -6993,7 +6993,7 @@ msgstr "横表示解像度"
 
 #: src/mpegparser/M2VParser.cpp:163
 msgid "Video ended with a shortened group of pictures. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr ""
+msgstr "ビデオが短くカットされたGOPで終わっています。ドロップされたフレームがあります。MUXする前にこのMPEG2ビデオストリームを修復したいと思うかもしれません。\n"
 
 #: src/common/property_element.cpp:137
 msgid "Video interlaced flag"
