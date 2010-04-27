@@ -207,7 +207,7 @@ namespace mpeg4 {
       bool m_have_incomplete_frame;
       std::deque<memory_cptr> m_unhandled_nalus;
 
-      bool m_ignore_nalu_size_length_errors;
+      bool m_ignore_nalu_size_length_errors, m_discard_actual_frames;
 
       std::vector<int> m_num_slices_by_type;
       bool m_debug_keyframe_detection;
@@ -276,6 +276,8 @@ namespace mpeg4 {
       void ignore_nalu_size_length_errors() {
         m_ignore_nalu_size_length_errors = true;
       };
+
+      void discard_actual_frames(bool discard = true);
 
       int get_num_skipped_frames() {
         return m_num_skipped_frames;

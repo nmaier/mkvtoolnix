@@ -1,3 +1,9 @@
+2010-04-27  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed the handling of non-spec compliant
+	AVC/h.264 elementary streams in Matroska files with the CodecID
+	V_ISO/MPEG4/AVC. Fix for bug 486.
+
 2010-04-23  Moritz Bunkus  <moritz@bunkus.org>
 
 	* all: Added a translation into Russian by rusguy6 (see AUTHORS).
