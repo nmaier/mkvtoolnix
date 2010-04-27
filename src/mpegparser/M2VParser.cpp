@@ -218,10 +218,13 @@ void M2VParser::StampFrame(MPEGFrame* frame){
   previousDuration = frame->duration;
 
   if(frame->frameType == 'P'){
-    frame->firstRef = (MediaTime)(frame->firstRef * timeunit);
+    frame->firstRef = firstRef;
+    ShoveRef(previousTimecode);
   }else if(frame->frameType == 'B'){
-    frame->firstRef = (MediaTime)(frame->firstRef * timeunit);
-    frame->secondRef = (MediaTime)(frame->secondRef * timeunit);
+    frame->firstRef = firstRef;
+    frame->secondRef = secondRef;
+  } else{
+    ShoveRef(previousTimecode);
   }
   frame->stamped = true;
 }
@@ -333,8 +336,6 @@ int32_t M2VParser::PrepareFrame(MPEGChunk* chunk, MediaTime timecode, MPEG2Pictu
   }
 
   outBuf->timecode = timecode; // Still the sequence number
-  outBuf->firstRef = firstRef;
-  outBuf->secondRef = secondRef;
 
   outBuf->invisible = invisible;
   outBuf->duration = GetFrameDuration(picHdr);
@@ -356,6 +357,11 @@ void M2VParser::ShoveRef(MediaTime ref){
     firstRef = secondRef;
     secondRef = ref;
   }
+}
+
+void M2VParser::ClearRef(){
+  firstRef  = -1;
+  secondRef = -1;
 }
 
 //Maintains the time of the last start of GOP and uses the temporal_reference
@@ -389,6 +395,12 @@ int32_t M2VParser::FillQueues(){
         if(m_gopHdr.brokenLink){
           mxinfo(Y("Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"));
         }
+        // There are too many broken videos to do the following so ReferenceBlock will be wrong for broken videos.
+        /*
+        if(m_gopHdr.closedGOP){
+          ClearRef();
+        }
+        */
       } else if (chunk->GetType() == MPEG_VIDEO_SEQUENCE_START_CODE) {
         if (seqHdrChunk)
           delete seqHdrChunk;
@@ -417,13 +429,11 @@ int32_t M2VParser::FillQueues(){
     switch(picHdr.frameType){
       case MPEG2_I_FRAME:
         PrepareFrame(chunk, myTime, picHdr);
-        ShoveRef(myTime);
         notReachedFirstGOP = false;
         break;
       case MPEG2_P_FRAME:
         if(firstRef == -1) break;
         PrepareFrame(chunk, myTime, picHdr);
-        ShoveRef(myTime);
         break;
       default: //B-frames
         if(firstRef == -1 || secondRef == -1){

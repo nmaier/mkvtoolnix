@@ -93,6 +93,7 @@ private:
   void DumpQueues();
   int32_t FillQueues();
   void ShoveRef(MediaTime ref);
+  void ClearRef();
   MediaTime GetFrameDuration(MPEG2PictureHeader picHdr);
   void FlushWaitQueue();
   int32_t OrderFrame(MPEGFrame* frame);
