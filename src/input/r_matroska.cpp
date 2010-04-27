@@ -1730,6 +1730,7 @@ kax_reader_c::parse_first_mpeg4_p10_frame(kax_track_t *t,
     avc_es_parser_cptr parser(new avc_es_parser_c);
 
     parser->ignore_nalu_size_length_errors();
+    parser->discard_actual_frames();
     if (map_has_key(m_ti.m_nalu_size_lengths, t->tnum))
       parser->set_nalu_size_length(m_ti.m_nalu_size_lengths[t->tnum]);
     else if (map_has_key(m_ti.m_nalu_size_lengths, -1))
@@ -1772,7 +1773,7 @@ void
 kax_reader_c::create_mpeg4_p10_video_packetizer(kax_track_t *t,
                                                 track_info_c &nti) {
   if ((0 == nti.m_private_size) || (NULL == nti.m_private_data)) {
-    avc_es_parser_cptr parser = parse_first_mpeg4_p10_frame(t, nti);
+    // avc_es_parser_cptr parser = parse_first_mpeg4_p10_frame(t, nti);
     create_mpeg4_p10_es_video_packetizer(t, nti);
     return;
   }

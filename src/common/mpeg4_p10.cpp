@@ -535,6 +535,7 @@ mpeg4::p10::avc_es_parser_c::avc_es_parser_c()
   , m_generate_timecodes(false)
   , m_have_incomplete_frame(false)
   , m_ignore_nalu_size_length_errors(false)
+  , m_discard_actual_frames(false)
   , m_num_slices_by_type(11, 0)
   , m_debug_keyframe_detection(debugging_requested("avc_debug_keyframe_detection"))
 {
@@ -555,6 +556,11 @@ mpeg4::p10::avc_es_parser_c::~avc_es_parser_c() {
   for (i = 0; 10 >= i; ++i)
     if (0 != m_num_slices_by_type[i])
       mxinfo(boost::format("  %1%: %2%\n") % s_type_names[i] % m_num_slices_by_type[i]);
+}
+
+void
+mpeg4::p10::avc_es_parser_c::discard_actual_frames(bool discard) {
+  m_discard_actual_frames = discard;
 }
 
 void
@@ -1033,6 +1039,12 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
 
   if (m_frames.empty())
     return;
+
+  if (m_discard_actual_frames) {
+    m_frames.clear();
+    m_timecodes.clear();
+    return;
+  }
 
   // This may be wrong but is needed for mkvmerge to work correctly
   // (cluster_helper etc).
