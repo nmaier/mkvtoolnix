@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the mkvtoolnix package.
 #
 # Katsuhiko Nishimra <kat841@hotmail.com> 2009.
+# Hiroki Taniura <zuntakapokoten@gmail.com> 2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: 2.9.9\n"
-"POT-Creation-Date: 2010-04-29 15:50+0300\n"
-"PO-Revision-Date: 2010-04-29 16:01+0200\n"
-"Last-Translator: Katsuhiko Nishimra <kat841@hotmail.com>\n"
+"POT-Creation-Date: 2010-03-29 13:34+0300\n"
+"PO-Revision-Date: 2010-04-29 23:27+0900\n"
+"Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1945,11 +1946,11 @@ msgid ""
 "but allows precise seeking and extraction."
 msgstr ""
 "通常&mkvmerge;は<constant>1000000</constant>を使用します。これはタイムコード"
-"とフレーム長が1ミリ秒単位の精度を持つことを意味します。ビデオトラックを含ま"
-"ず、1つ以上のオーディオトラックを含むファイルでは、&mkvmerge;は全てのタイム"
-"コードとフレーム持続時間がサンプリング音1つ分の精度を持つようタイムコードス"
-"ケールの係数を自動的に選択します。これによってオーバーヘッドは大きくなります"
-"が、正確なシークと展開が可能になります。"
+"とフレーム持続期間が1ミリ秒単位の精度を持つことを意味します。ビデオトラック"
+"を含まず、1つ以上のオーディオトラックを含むファイルでは、&mkvmerge;は全ての"
+"タイムコードとフレーム持続時間がサンプリング音1つ分の精度を持つようタイムコ"
+"ードスケールの係数を自動的に選択します。これによってオーバーヘッドは大きくな"
+"りますが、正確なシークと展開が可能になります。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:354
