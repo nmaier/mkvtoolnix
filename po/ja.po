@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-04-27 16:30+0900\n"
+"PO-Revision-Date: 2010-04-29 22:40+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -208,7 +208,7 @@ msgid ""
 "                           X can be a floating point number or a fraction.\n"
 msgstr ""
 "  --default-duration <TID:Xs|ms|us|ns|fps>\n"
-"                           トラックのデフォルトのフレーム長をXに設定します。\n"
+"                           トラックのデフォルトのフレーム持続期間をXに設定します。\n"
 "                           Xは浮動小数点数や分数を取ることができます。\n"
 
 #: src/merge/mkvmerge.cpp:129
@@ -1105,7 +1105,7 @@ msgstr "'--nalu-size-length %1%'の'%1%'は正しいトラックIDとNALUサイ�
 
 #: src/merge/mkvmerge.cpp:1227
 msgid "'%1%' is not a valid tuple of track ID and default duration in '--default-duration %1%'.\n"
-msgstr "'--default-duration %1%'の'%1%'は正しいトラックIDとデフォルトのフレーム長の組み合わせではありません。\n"
+msgstr "'--default-duration %1%'の'%1%'は正しいトラックIDとデフォルトのフレーム持続期間の組み合わせではありません。\n"
 
 #: src/extract/extract_cli_parser.cpp:138
 msgid "'%1%' is only allowed when extracting chapters.\n"
@@ -2625,11 +2625,11 @@ msgstr "デフォルト"
 
 #: src/common/property_element.cpp:127 src/mmg/header_editor/frame.cpp:417
 msgid "Default duration"
-msgstr "デフォルトのフレーム長"
+msgstr "デフォルトのフレーム持続期間"
 
 #: src/info/mkvinfo.cpp:1039
 msgid "Default duration: %|1$.3f|ms (%|2$.3f| fps for a video track)"
-msgstr "デフォルトのフレーム長：%|1$.3f|ms (ビデオトラックの場合 %|2$.3f| fps)"
+msgstr "デフォルトのフレーム持続期間：%|1$.3f|ms (ビデオトラックの場合 %|2$.3f| fps)"
 
 #: src/info/mkvinfo.cpp:1053
 msgid "Default flag: %1%"
@@ -3198,7 +3198,7 @@ msgstr "NALUサイズ長を特定の値に強制設定します。このパラ�
 
 #: src/mmg/cli_options_dlg.cpp:99
 msgid "Forces the timecode scale factor to REPLACEME. You have to replace REPLACEME with a value between 1000 and 10000000 or with -1. Normally mkvmerge will use a value of 1000000 which means that timecodes and durations will have a precision of 1ms. For files that will not contain a video track but at least one audio track mkvmerge will automatically choose a timecode scale factor so that all timecodes and durations have a precision of one sample. This causes bigger overhead but allows precise seeking and extraction. If the magical value -1 is used then mkvmerge will use sample precision even if a video track is present."
-msgstr "タイムコードスケールの係数をこの値に強制設定します。この値は1000～10000000、もしくは-1に設定しなければなりません。通常mkvmergeは1000000を使用します。これはタイムコードとフレーム長が1ミリ秒単位の精度を持つことを意味します。ビデオトラックを含まず、1つ以上のオーディオトラックを含むファイルでは、mkvmergeは全てのタイムコードとフレーム持続時間がサンプリング音1つ分の精度を持つようタイムコードスケールの係数を自動的に選択します。これによってオーバーヘッドは大きくなりますが、正確なシークと展開が可能になります。-1が指定された場合は、たとえビデオトラックが存在していても、mkvmergeはサンプリング音の精度を使用します。"
+msgstr "タイムコードスケールの係数をこの値に強制設定します。この値は1000～10000000、もしくは-1に設定しなければなりません。通常mkvmergeは1000000を使用します。これはタイムコードとフレーム持続期間が1ミリ秒単位の精度を持つことを意味します。ビデオトラックを含まず、1つ以上のオーディオトラックを含むファイルでは、mkvmergeは全てのタイムコードとフレーム持続時間がサンプリング音1つ分の精度を持つようタイムコードスケールの係数を自動的に選択します。これによってオーバーヘッドは大きくなりますが、正確なシークと展開が可能になります。-1が指定された場合は、たとえビデオトラックが存在していても、mkvmergeはサンプリング音の精度を使用します。"
 
 #: src/mmg/tabs/input.cpp:190
 msgid "Format specific options"
@@ -3796,7 +3796,7 @@ msgstr "コマンドラインに任意のオプションを追加できます"
 
 #: src/merge/timecode_factory.cpp:349
 msgid "Line %1% of the timecode file '%2%' contains inconsistent data (e.g. the duration or the FPS are smaller than zero).\n"
-msgstr "タイムコードファイル'%2%'の%1%行目が矛盾したデータを含んでいます（例：フレーム長やFPSが負の数）。\n"
+msgstr "タイムコードファイル'%2%'の%1%行目が矛盾したデータを含んでいます（例：フレーム持続期間やFPSが負の数）。\n"
 
 #: src/merge/timecode_factory.cpp:120
 msgid "Line %1% of the timecode file '%2%' contains inconsistent data (e.g. the start frame number is bigger than the end frame number, or some values are smaller than zero).\n"
@@ -4263,7 +4263,7 @@ msgstr "何もすることがありません。\n"
 
 #: src/common/property_element.cpp:127 src/mmg/header_editor/frame.cpp:418
 msgid "Number of nanoseconds (not scaled) per frame."
-msgstr "フレーム当たりのナノ秒数です。"
+msgstr "フレーム当たりのナノ秒数（スケールされていない）です。"
 
 #: src/common/property_element.cpp:155 src/mmg/header_editor/frame.cpp:505
 msgid "Numbers of channels in the track."
@@ -4540,7 +4540,7 @@ msgstr "Quicktime/MP4リーダ：'%1%' atomが小さすぎます。期待され�
 
 #: src/input/r_qtmp4.cpp:1913
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
-msgstr "Quicktime/MP4リーダ：一定サンプルサイズと可変フレーム長はまだサポートされていません。そのようなサンプルを持っているなら作者に連絡してください。\n"
+msgstr "Quicktime/MP4リーダ：一定サンプルサイズかつ可変フレーム持続期間はまだサポートされていません。そのようなサンプルを持っているなら作者に連絡してください。\n"
 
 #: src/input/r_qtmp4.cpp:1306
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
@@ -5017,7 +5017,7 @@ msgstr "クロッピングのパラメータを指定します。左、上、右
 
 #: src/mmg/tabs/input_format.cpp:233
 msgid "Sets the default duration or number of frames per second for a track. This is only possible for video tracks. For AVC/h.264 elementary streams this option must be given. This can either be a floating point number or a fraction."
-msgstr "トラックのデフォルトのフレーム長もしくはフレームレートを指定します。これはビデオトラックでのみ指定できます。AVC/h.264エレメンタリストリームではこのオプションは必ず指定されなければなりません。この値は浮動小数点数または分数を取ることができます。"
+msgstr "トラックのデフォルトのフレーム持続期間もしくはフレームレートを指定します。これはビデオトラックでのみ指定できます。AVC/h.264エレメンタリストリームではこのオプションは必ず指定されなければなりません。この値は浮動小数点数または分数を取ることができます。"
 
 #: src/mmg/tabs/input_format.cpp:221
 msgid "Sets the display aspect ratio of the track. The format can be either 'a/b' in which case both numbers must be integer (e.g. 16/9) or just a single floting point number 'f' (e.g. 2.35)."
@@ -7358,7 +7358,7 @@ msgstr "デフォルト"
 
 #: src/info/mkvinfo.cpp:1042
 msgid "default duration: %|1$.3f|ms (%|2$.3f| fps for a video track)"
-msgstr "デフォルトフレーム長：%|1$.3f|ms (ビデオトラックの場合 %|2$.3f| fps)"
+msgstr "デフォルトのフレーム持続期間：%|1$.3f|ms (ビデオトラックの場合 %|2$.3f| fps)"
 
 #: src/common/compression.cpp:152
 msgid "deflateInit() failed. Result: %1%\n"
