@@ -1555,12 +1555,12 @@ msgstr "<ChapterDisplay> отсутствует <ChapterString>."
 msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr "<ChapterTrack> отсутствует <ChapterTrackNumber>."
 
-#: src/input/r_matroska.cpp:2041
+#: src/input/r_matroska.cpp:2042
 msgid "A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"
 msgstr "Блока группа оказалась в положении %1%, но не блок элемент был найден внутри него. Это может сделать mkvmerge аварию.\n"
 
-#: src/input/r_matroska.cpp:1941
-#: src/input/r_matroska.cpp:2051
+#: src/input/r_matroska.cpp:1942
+#: src/input/r_matroska.cpp:2052
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr "Блок был найден на метку %1% за номер трека %2%. Тем не менее, заголовки не найдены для этого номера трека. Блока будут пропущены.\n"
 
@@ -2464,7 +2464,7 @@ msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "Не удалось декодировать Base64 кодированные данные - это, кажется, неправильно."
 
 #: src/input/r_avi.cpp:327
-#: src/input/r_matroska.cpp:1749
+#: src/input/r_matroska.cpp:1750
 #: src/input/r_ogm.cpp:1131
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "Невозможно получить декодер конкретных данных конфигурации (AVCC) из этого AVC/H.264 трек.\n"
@@ -3321,15 +3321,20 @@ msgstr "Принудительный таймкод фактор масштаб�
 msgid "Format specific options"
 msgstr "Формат конкретные параметры"
 
-#: src/mpegparser/M2VParser.cpp:430
+#: src/mpegparser/M2VParser.cpp:442
 msgid "Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Найден B кадр без второй ссылки в не закрытых GOP. Установите видео поток MPEG2 прежде чем попытаться мультиплексировать.\n"
+
+#: src/mpegparser/M2VParser.cpp:396
+#, fuzzy
+msgid "Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"
+msgstr "Найден один или более B кадров без второй ссылки в первый GOP. Вы можете исправить MPEG2 поток видео или использовать смарт-перекодировать, прежде чем пытаться его мультиплексировать.\n"
 
 #: src/common/xml/element_parser.cpp:131
 msgid "Found no encoded data nor '@file' to read binary data from."
 msgstr "Found no encoded data nor '@file' для чтения бинарных данных."
 
-#: src/mpegparser/M2VParser.cpp:432
+#: src/mpegparser/M2VParser.cpp:444
 msgid "Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"
 msgstr "Найден один или более B кадров без второй ссылки в первый GOP. Вы можете исправить MPEG2 поток видео или использовать смарт-перекодировать, прежде чем пытаться его мультиплексировать.\n"
 
@@ -5242,7 +5247,7 @@ msgstr "Краткий AAC аудио пакет (длина: %1% < %2%)\n"
 msgid "Short AAC audio packet (length: %1% < 2)\n"
 msgstr "Краткий AAC аудио пакет (длина: %1% < 2)\n"
 
-#: src/mpegparser/M2VParser.cpp:386
+#: src/mpegparser/M2VParser.cpp:392
 msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Сокращенное GOP обнаружено. Некоторые кадры были сняты. Вы можете исправить MPEG2 видео поток, прежде чем пытаться его мультиплексировать.\n"
 
@@ -5322,7 +5327,7 @@ msgstr "Простой блок"
 msgid "SimpleBlock (%1%track number %2%, %3% frame(s), timecode %|4$.3f|s = %5%)"
 msgstr "Простой блок (%1% номер дорожки %2%, %3% кадр(ы), тайм-код %|4$.3f|s = %5%)"
 
-#: src/mpegparser/M2VParser.cpp:383
+#: src/mpegparser/M2VParser.cpp:389
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Покадровая область до GOP заголовка обнаружена. Установите видео поток MPEG2 прежде чем попытаться мультиплексировать.\n"
 
@@ -6765,7 +6770,7 @@ msgstr "USF текстовые субтитры"
 msgid "UTFstring_to_cstrutf8: Invalid wide character. Please contact moritz@bunkus.org if you think that this is not true."
 msgstr "UTFstring_to_cstrutf8: Неверный символ. Пожалуйста, свяжитесь с moritz@bunkus.org если вы думаете, что это не так."
 
-#: src/mpegparser/M2VParser.cpp:234
+#: src/mpegparser/M2VParser.cpp:237
 msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "Неожиданная рамка кадра после единственной полевой структуры. Установите видео поток MPEG2 прежде чем попытаться мультиплексировать.\n"
 
@@ -7046,14 +7051,14 @@ msgstr "Использование MPEG-%1% видео выходного мод
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "Использование MPEG-1/2 видео выходного модуля.\n"
 
-#: src/input/r_matroska.cpp:1781
+#: src/input/r_matroska.cpp:1782
 #: src/input/r_qtmp4.cpp:1511
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "Использование MPEG-4 Part 10 (AVC) видео выводного модуля.\n"
 
 #: src/input/r_avc.cpp:136
 #: src/input/r_avi.cpp:324
-#: src/input/r_matroska.cpp:1761
+#: src/input/r_matroska.cpp:1762
 #: src/input/r_mpeg_ps.cpp:1210
 #: src/input/r_ogm.cpp:1128
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
@@ -8034,7 +8039,7 @@ msgid "matroska_reader: Vorbis track does not contain valid headers.\n"
 msgstr "matroska_reader: Vorbis дорожка, не содержит нужных заголовков.\n"
 
 #: src/input/r_matroska.cpp:1284
-#: src/input/r_matroska.cpp:1919
+#: src/input/r_matroska.cpp:1920
 msgid "matroska_reader: caught exception\n"
 msgstr "matroska_reader: поймал исключение\n"
 
@@ -8420,7 +8425,7 @@ msgstr "pr_generic.cpp/generic_packetizer_c::add_packet(): тайм-код < п�
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr "pr_generic.cpp/generic_reader_c::demuxing_requested(): Неверный тип дорожки %1%."
 
-#: src/input/r_matroska.cpp:1891
+#: src/input/r_matroska.cpp:1892
 msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 msgstr "r_matroska: Кластер не содержат кластера тайм-кода. Файл не работает. Прерывание.\n"
 
@@ -8536,8 +8541,8 @@ msgid "und (Undetermined)"
 msgstr "und (Неопределенный)"
 
 #: src/input/r_matroska.cpp:86
-#: src/input/r_matroska.cpp:2230
-#: src/input/r_matroska.cpp:2237
+#: src/input/r_matroska.cpp:2231
+#: src/input/r_matroska.cpp:2238
 #: src/input/r_mpeg_ps.cpp:1394
 #: src/common/mm_io_win.cpp:164
 #: src/mmg/mmg.cpp:59
@@ -8656,3 +8661,4 @@ msgstr "Да"
 
 #~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
 #~ msgstr "Эта дорожка использует особенность Matroska, названную 'запоминающие элементы Codec'. mkvmerge поддерживает их, но эта особенность не была включена с опцией '--engage use_codec_state'.\n"
+

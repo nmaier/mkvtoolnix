@@ -1537,12 +1537,12 @@ msgstr "<ChapterDisplay> 缺少 <ChapterString> 子元件。"
 msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr "<ChapterTrack> 缺少 <ChapterTrackNumber> 子元件。"
 
-#: src/input/r_matroska.cpp:2041
+#: src/input/r_matroska.cpp:2042
 msgid "A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"
 msgstr "在 %1% 找到了一個區塊群組，但裡面沒有區塊元件。這可能會導致 mkvmerge 不正常關閉。\n"
 
-#: src/input/r_matroska.cpp:1941
-#: src/input/r_matroska.cpp:2051
+#: src/input/r_matroska.cpp:1942
+#: src/input/r_matroska.cpp:2052
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr "在時間戳記 %1% 處找到了軌道編號為 %2% 的區塊。然而，沒有找到符合該軌道編號的表頭資訊。此區塊將被跳過。\n"
 
@@ -2437,7 +2437,7 @@ msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "無法解碼以 Base64 編碼的資料 - 似乎是不正常的。"
 
 #: src/input/r_avi.cpp:327
-#: src/input/r_matroska.cpp:1749
+#: src/input/r_matroska.cpp:1750
 #: src/input/r_ogm.cpp:1131
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "無法從該 AVC/h.264 軌道提取解碼器特有設定資料 (AVCC)。\n"
@@ -3294,15 +3294,19 @@ msgstr "強制時間碼縮放係數為 REPLACEME。您得用 1000 至 10000000 �
 msgid "Format specific options"
 msgstr "格式特殊選項"
 
-#: src/mpegparser/M2VParser.cpp:430
+#: src/mpegparser/M2VParser.cpp:442
 msgid "Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"
+msgstr ""
+
+#: src/mpegparser/M2VParser.cpp:396
+msgid "Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"
 msgstr ""
 
 #: src/common/xml/element_parser.cpp:131
 msgid "Found no encoded data nor '@file' to read binary data from."
 msgstr "既沒發現已編碼資料，也沒發現引用讀取二位元資料的「@file」。"
 
-#: src/mpegparser/M2VParser.cpp:432
+#: src/mpegparser/M2VParser.cpp:444
 msgid "Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"
 msgstr ""
 
@@ -5211,7 +5215,7 @@ msgstr "短的 AAC 音訊套件 (長: %1% < %2%)\n"
 msgid "Short AAC audio packet (length: %1% < 2)\n"
 msgstr "短的 AAC 音訊套件 (長: %1% < 2)\n"
 
-#: src/mpegparser/M2VParser.cpp:386
+#: src/mpegparser/M2VParser.cpp:392
 msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr ""
 
@@ -5291,7 +5295,7 @@ msgstr "簡單區塊"
 msgid "SimpleBlock (%1%track number %2%, %3% frame(s), timecode %|4$.3f|s = %5%)"
 msgstr "簡單區塊 (%1%軌道編號 %2%, %3% 畫格, 時間碼 %|4$.3f|s = %5%)"
 
-#: src/mpegparser/M2VParser.cpp:383
+#: src/mpegparser/M2VParser.cpp:389
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr ""
 
@@ -6716,7 +6720,7 @@ msgstr "USF 文字字幕"
 msgid "UTFstring_to_cstrutf8: Invalid wide character. Please contact moritz@bunkus.org if you think that this is not true."
 msgstr "UTFstring_to_cstrutf8: 無效的寬字元。如果您認為本次判斷有誤，請聯繫 moritz@bunkus.org。"
 
-#: src/mpegparser/M2VParser.cpp:234
+#: src/mpegparser/M2VParser.cpp:237
 msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr ""
 
@@ -6997,14 +7001,14 @@ msgstr "使用 MPEG-%1% 視訊輸出模組。\n"
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "使用 MPEG-1/2 視訊輸出模組。\n"
 
-#: src/input/r_matroska.cpp:1781
+#: src/input/r_matroska.cpp:1782
 #: src/input/r_qtmp4.cpp:1511
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "使用 MPEG-4 part 10 (AVC) 視訊輸出模組。\n"
 
 #: src/input/r_avc.cpp:136
 #: src/input/r_avi.cpp:324
-#: src/input/r_matroska.cpp:1761
+#: src/input/r_matroska.cpp:1762
 #: src/input/r_mpeg_ps.cpp:1210
 #: src/input/r_ogm.cpp:1128
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
@@ -7984,7 +7988,7 @@ msgid "matroska_reader: Vorbis track does not contain valid headers.\n"
 msgstr "matroska_reader: Vorbis 軌道不含有效表頭。\n"
 
 #: src/input/r_matroska.cpp:1284
-#: src/input/r_matroska.cpp:1919
+#: src/input/r_matroska.cpp:1920
 msgid "matroska_reader: caught exception\n"
 msgstr "matroska_reader: 發生異常\n"
 
@@ -8370,7 +8374,7 @@ msgstr "pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < last_timec
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr "pr_generic.cpp/generic_reader_c::demuxing_requested(): 無效軌道類型 %1%。"
 
-#: src/input/r_matroska.cpp:1891
+#: src/input/r_matroska.cpp:1892
 msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 msgstr "r_matroska: 叢集不含叢集時間碼。檔案已損壞。正在中止操作。\n"
 
@@ -8486,8 +8490,8 @@ msgid "und (Undetermined)"
 msgstr "und (未定)"
 
 #: src/input/r_matroska.cpp:86
-#: src/input/r_matroska.cpp:2230
-#: src/input/r_matroska.cpp:2237
+#: src/input/r_matroska.cpp:2231
+#: src/input/r_matroska.cpp:2238
 #: src/input/r_mpeg_ps.cpp:1394
 #: src/common/mm_io_win.cpp:164
 #: src/mmg/mmg.cpp:59

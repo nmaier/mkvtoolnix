@@ -1515,11 +1515,11 @@ msgstr "<ChapterDisplay>には<ChapterString>子要素がありません。"
 msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr "<ChapterTrack>には<ChapterTrackNumber>子要素がありません。"
 
-#: src/input/r_matroska.cpp:2041
+#: src/input/r_matroska.cpp:2042
 msgid "A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"
 msgstr "%1%の位置でブロックグループが見つかりましたが、その中にブロック要素は見つかりませんでした。mkvmergeのクラッシュを引き起こす可能性があります。\n"
 
-#: src/input/r_matroska.cpp:1941 src/input/r_matroska.cpp:2051
+#: src/input/r_matroska.cpp:1942 src/input/r_matroska.cpp:2052
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr "トラック番号%2%のタイムスタンプ%1%でブロックが見つかりましが、そのトラック番号のヘッダが見つかりませんでした。このブロックはスキップされます。\n"
 
@@ -2369,7 +2369,7 @@ msgstr "指定されたファイルを作成できませんでした。"
 msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "Base64にエンコードされたデータをデコードすることができませんでした。恐らく不正な形式です。"
 
-#: src/input/r_avi.cpp:327 src/input/r_matroska.cpp:1749
+#: src/input/r_avi.cpp:327 src/input/r_matroska.cpp:1750
 #: src/input/r_ogm.cpp:1131
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "このAVC/h.264トラックからデコーダ詳細設定データ（AVCC）を展開することができませんでした。\n"
@@ -3204,15 +3204,20 @@ msgstr "タイムコードスケールの係数をこの値に強制設定しま
 msgid "Format specific options"
 msgstr "フォーマット詳細オプション"
 
-#: src/mpegparser/M2VParser.cpp:430
+#: src/mpegparser/M2VParser.cpp:442
 msgid "Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "非クローズドGOPで二つめの参照先がないBフレームが見つかりました。MUXしようとする前にこのMPEG2ビデオストリームを修復してください。\n"
+
+#: src/mpegparser/M2VParser.cpp:396
+#, fuzzy
+msgid "Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"
+msgstr "最初のGOPで二つめの参照先がないBフレームが1つ以上見つかりました。MUXしようとする前にこのMPEG2ビデオストリームを修復もしくはsmart reencodeを使いたいと思うかもしれません。\n"
 
 #: src/common/xml/element_parser.cpp:131
 msgid "Found no encoded data nor '@file' to read binary data from."
 msgstr "エンコードされたデータもしくはバイナリデータを読み込むための'@file'が見つかりませんでした。"
 
-#: src/mpegparser/M2VParser.cpp:432
+#: src/mpegparser/M2VParser.cpp:444
 msgid "Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"
 msgstr "最初のGOPで二つめの参照先がないBフレームが1つ以上見つかりました。MUXしようとする前にこのMPEG2ビデオストリームを修復もしくはsmart reencodeを使いたいと思うかもしれません。\n"
 
@@ -5065,7 +5070,7 @@ msgstr "短いAACオーディオパケットです（長さ：%1% < %2%）\n"
 msgid "Short AAC audio packet (length: %1% < 2)\n"
 msgstr "短いAACオーディオパケットです（長さ：%1% < 2）\n"
 
-#: src/mpegparser/M2VParser.cpp:386
+#: src/mpegparser/M2VParser.cpp:392
 msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "短くカットされたGOPが検出されました。ドロップされたフレームがあります。MUXしようとする前にこのMPEG2ビデオストリームを修復したいと思うかもしれません。\n"
 
@@ -5145,7 +5150,7 @@ msgstr "シンプルブロック"
 msgid "SimpleBlock (%1%track number %2%, %3% frame(s), timecode %|4$.3f|s = %5%)"
 msgstr "シンプルブロック (%1%トラック番号 %2%、%3% フレーム、タイムコード %|4$.3f|s = %5%)"
 
-#: src/mpegparser/M2VParser.cpp:383
+#: src/mpegparser/M2VParser.cpp:389
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "GOPヘッダの前に片フィールドのフレームが検出されました。MUXしようとする前にこのMPEG2ビデオストリームを修復してください。\n"
 
@@ -6518,7 +6523,7 @@ msgstr "USFテキスト字幕"
 msgid "UTFstring_to_cstrutf8: Invalid wide character. Please contact moritz@bunkus.org if you think that this is not true."
 msgstr "UTFstring_to_cstrutf8：不正なUnicode文字です。そうではないと考えられる場合はmoritz@bunkus.orgに連絡してください。"
 
-#: src/mpegparser/M2VParser.cpp:234
+#: src/mpegparser/M2VParser.cpp:237
 msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "片フィールドフレームの後に予期せぬピクチャフレームがありました。MUXしようとする前にこのMPEG2ビデオストリームを修復してください。\n"
 
@@ -6783,12 +6788,12 @@ msgstr "MPEG-%1%ビデオ出力モジュールを使用しています。\n"
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "MPEG-1/2ビデオ出力モジュールを使用しています。\n"
 
-#: src/input/r_matroska.cpp:1781 src/input/r_qtmp4.cpp:1511
+#: src/input/r_matroska.cpp:1782 src/input/r_qtmp4.cpp:1511
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "MPEG-4 part 10 (AVC)ビデオ出力モジュールを使用しています。\n"
 
 #: src/input/r_avc.cpp:136 src/input/r_avi.cpp:324
-#: src/input/r_matroska.cpp:1761 src/input/r_mpeg_ps.cpp:1210
+#: src/input/r_matroska.cpp:1762 src/input/r_mpeg_ps.cpp:1210
 #: src/input/r_ogm.cpp:1128
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "MPEG-4 part 10 ESビデオ出力モジュールを使用しています。\n"
@@ -7711,7 +7716,7 @@ msgstr "matroska_reader：トラックタイプが見つかりませんでした
 msgid "matroska_reader: Vorbis track does not contain valid headers.\n"
 msgstr "matroska_reader：Vorbisトラックは正しいヘッダを含んでいません。\n"
 
-#: src/input/r_matroska.cpp:1284 src/input/r_matroska.cpp:1919
+#: src/input/r_matroska.cpp:1284 src/input/r_matroska.cpp:1920
 msgid "matroska_reader: caught exception\n"
 msgstr "matroska_reader：例外をキャッチしました\n"
 
@@ -8081,7 +8086,7 @@ msgstr "pr_generic.cpp/generic_packetizer_c::add_packet()：timecode < last_time
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr "pr_generic.cpp/generic_reader_c::demuxing_requested()：不正なトラックタイプ%1%."
 
-#: src/input/r_matroska.cpp:1891
+#: src/input/r_matroska.cpp:1892
 msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 msgstr "r_matroska：クラスタにクラスタタイムコードが含まれていません。ファイルは壊れています。中断します。\n"
 
@@ -8193,8 +8198,8 @@ msgstr "tta_reader：c'tor内でtag_sizeが負になりました。 %1%\n"
 msgid "und (Undetermined)"
 msgstr "und (Undetermined)"
 
-#: src/input/r_matroska.cpp:86 src/input/r_matroska.cpp:2230
-#: src/input/r_matroska.cpp:2237 src/input/r_mpeg_ps.cpp:1394
+#: src/input/r_matroska.cpp:86 src/input/r_matroska.cpp:2231
+#: src/input/r_matroska.cpp:2238 src/input/r_mpeg_ps.cpp:1394
 #: src/common/mm_io_win.cpp:164 src/mmg/mmg.cpp:59
 #: src/mmg/header_editor/value_page.cpp:150 src/mmg/tabs/input.cpp:372
 #: src/info/mkvinfo.cpp:775 src/info/mkvinfo.cpp:785 src/info/mkvinfo.cpp:804
