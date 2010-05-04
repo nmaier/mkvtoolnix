@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-04-26 16:19+0200\n"
+"PO-Revision-Date: 2010-05-04 22:38+0200\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -3235,9 +3235,8 @@ msgid "Found B frame without second reference in a non closed GOP. Fix the MPEG2
 msgstr "B-Frame ohne zweites Referenzbild innerhalb einer nicht-geschlossenen Bildgruppe gefunden. Bitte diesen Fehler im MPEG2-Videostrom beheben und danach erneut versuchen, ihn zu muxen.\n"
 
 #: src/mpegparser/M2VParser.cpp:396
-#, fuzzy
 msgid "Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"
-msgstr "Einer oder mehrere B-Frames ohne zweites Referenzbild innerhalb der ersten Bildgruppe gefunden. Bitte diesen Fehler im MPEG2-Videostrom beheben und danach erneut versuchen, ihn zu muxen.\n"
+msgstr "Bildgruppe mit defektem Link gefunden. Bitte diesen Fehler im MPEG2-Videostrom beheben und danach erneut versuchen, ihn zu muxen.\n"
 
 #: src/common/xml/element_parser.cpp:131
 msgid "Found no encoded data nor '@file' to read binary data from."
