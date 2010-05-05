@@ -853,6 +853,20 @@ $ mkvmerge -o full.mkv file1.mkv +file2.mkv
    </varlistentry>
 
    <varlistentry>
+    <term><option>--forced-track</option> <parameter>TID<optional>:bool</optional></parameter></term>
+    <listitem>
+     <para>
+      Sets the 'forced' flag for the given track (see section <link linkend="mkvmerge.track_ids">track IDs</link>) if the optional argument
+      <parameter>bool</parameter> is not present. A player must play all tracks for which this flag is set to <constant>1</constant>.
+     </para>
+
+     <para>
+      This option can be used multiple times for an input file applying to several tracks by selecting different track IDs each time.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
     <term><option>--blockadd</option> <parameter>TID:level</parameter></term>
     <listitem>
      <para>

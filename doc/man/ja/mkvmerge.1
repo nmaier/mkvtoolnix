@@ -485,6 +485,17 @@ Don\'t copy any button track from this file\&.
 このオプションは異るトラックIDを指定することで複数の入力トラックに対して使用することができます。
 .RE
 .PP
+\fB\-\-forced\-track\fR \fITID\fR\fI[:bool]\fR
+.RS 4
+Sets the \'forced\' flag for the given track (see section
+track IDs) if the optional argument
+\fIbool\fR
+is not present\&. A player must play all tracks for which this flag is set to
+\fB1\fR\&.
+.sp
+このオプションは異るトラックIDを指定することで複数の入力トラックに対して使用することができます。
+.RE
+.PP
 \fB\-\-blockadd\fR \fITID:level\fR
 .RS 4
 指定したトラックで、レベル\fIlevel\fRまでのBlockAdditionを保持します。デフォルトでは全て保持します。このオプションはWAVPACK4などの特定のコーデックにのみ有効です。
