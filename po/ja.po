@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-04-29 22:40+0900\n"
+"PO-Revision-Date: 2010-05-05 09:57+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -3209,9 +3209,8 @@ msgid "Found B frame without second reference in a non closed GOP. Fix the MPEG2
 msgstr "非クローズドGOPで二つめの参照先がないBフレームが見つかりました。MUXしようとする前にこのMPEG2ビデオストリームを修復してください。\n"
 
 #: src/mpegparser/M2VParser.cpp:396
-#, fuzzy
 msgid "Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"
-msgstr "最初のGOPで二つめの参照先がないBフレームが1つ以上見つかりました。MUXしようとする前にこのMPEG2ビデオストリームを修復もしくはsmart reencodeを使いたいと思うかもしれません。\n"
+msgstr "broken linkフラグのあるGOPが見つかりました。MUXしようとする前にsmart reencodeを使いたいと思うかもしれません。\n"
 
 #: src/common/xml/element_parser.cpp:131
 msgid "Found no encoded data nor '@file' to read binary data from."
