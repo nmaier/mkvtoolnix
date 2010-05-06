@@ -19,9 +19,9 @@ SetCompressor /SOLID lzma
 !define MUI_ICON "matroskalogo_big.ico"
 
 # Language Selection Dialog Settings
-!define MUI_LANGDLL_REGISTRY_ROOT "${PRODUCT_UNINST_ROOT_KEY}"
-!define MUI_LANGDLL_REGISTRY_KEY "${PRODUCT_UNINST_KEY}"
-!define MUI_LANGDLL_REGISTRY_VALUENAME "NSIS:Language"
+!define MUI_LANGDLL_REGISTRY_ROOT "HKCU"
+!define MUI_LANGDLL_REGISTRY_KEY "${MTX_REGKEY}"
+!define MUI_LANGDLL_REGISTRY_VALUENAME "Installer Language"
 
 # Settings for the start menu group page
 var ICONS_GROUP
@@ -36,6 +36,9 @@ var ICONS_GROUP
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_STARTMENU Application $ICONS_GROUP
 !insertmacro MUI_PAGE_INSTFILES
+
+!define MUI_FINISHPAGE_NOREBOOTSUPPORT
+
 !insertmacro MUI_PAGE_FINISH
 
 # Uninstaller pages
@@ -43,6 +46,14 @@ var ICONS_GROUP
 
 # Language files
 !insertmacro MUI_LANGUAGE "English"
+!insertmacro MUI_LANGUAGE "German"
+!insertmacro MUI_LANGUAGE "Japanese"
+!insertmacro MUI_LANGUAGE "Russian"
+!insertmacro MUI_LANGUAGE "SimpChinese"
+!insertmacro MUI_LANGUAGE "TradChinese"
+!define MUI_LANGDLL_ALLLANGUAGES
+
+!insertmacro MUI_RESERVEFILE_LANGDLL
 
 # MUI end ------
 
@@ -58,7 +69,11 @@ InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
 
+RequestExecutionLevel admin
+
 Function .onInit
+  !insertmacro MUI_LANGDLL_DISPLAY
+
   # Check if we're running on a Unicode capable Windows.
   # If not, abort.
   ${IfNot} ${AtLeastWinNT4}
