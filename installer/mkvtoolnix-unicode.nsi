@@ -317,6 +317,9 @@ Section Uninstall
   Delete "$SMPROGRAMS\$ICONS_GROUP\mkvmerge GUI.lnk"
   Delete "$SMPROGRAMS\$ICONS_GROUP\mkvinfo GUI.lnk"
   Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\mkvmerge GUI guide.lnk"
+  Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\mkvmerge GUI guide\mkvmerge GUI guide.lnk"
+  Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\mkvmerge GUI guide\Chinese Simplified\mkvmerge GUI guide.lnk"
+
   Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\Chinese Simplified\mkvpropedit CLI reference.lnk"
   Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\Chinese Simplified\mkvmerge CLI reference.lnk"
   Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\Chinese Simplified\mkvinfo CLI reference.lnk"
@@ -333,6 +336,8 @@ Section Uninstall
   Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation\README.lnk"
   Delete "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation\The GNU GPL.lnk"
 
+  RMDir "$SMPROGRAMS\$ICONS_GROUP\Documentation\mkvmerge GUI guide\Chinese Simplified"
+  RMDir "$SMPROGRAMS\$ICONS_GROUP\Documentation\mkvmerge GUI guide"
   RMDir "$SMPROGRAMS\$ICONS_GROUP\Documentation\Other documentation"
   RMDir "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\Chinese Simplified"
   RMDir "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference\Japanese"
