@@ -32,6 +32,7 @@ var ICONS_GROUP
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "${PRODUCT_STARTMENU_REGVAL}"
 
 # Welcome page
+!define MUI_WELCOMEFINISHPAGE_BITMAP "welcome_finish_page.bmp"
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_STARTMENU Application $ICONS_GROUP
