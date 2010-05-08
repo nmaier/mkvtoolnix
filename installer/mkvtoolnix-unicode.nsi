@@ -69,7 +69,7 @@ InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
 
-RequestExecutionLevel admin
+RequestExecutionLevel none
 
 Function .onInit
   !insertmacro MUI_LANGDLL_DISPLAY
