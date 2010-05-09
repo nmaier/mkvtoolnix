@@ -285,7 +285,7 @@ init_element_names() {
   g_element_names[0x54BB]     = "VideoPixelCropTop";
   g_element_names[0xBA]       = "VideoPixelHeight";
   g_element_names[0xB0]       = "VideoPixelWidth";
-  g_element_names[0x53B9]     = "VideoStereoMode";
+  g_element_names[0x53B8]     = "VideoStereoMode";
   g_element_names[0x5741]     = "WritingApp";
 }
 
