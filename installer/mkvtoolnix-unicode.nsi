@@ -11,6 +11,7 @@
 !define MTX_REGKEY "Software\mkvmergeGUI"
 
 SetCompressor /SOLID lzma
+#SetCompress off
 
 !include "MUI2.nsh"
 
@@ -30,15 +31,16 @@ var ICONS_GROUP
 !define MUI_STARTMENUPAGE_REGISTRY_KEY "${PRODUCT_UNINST_KEY}"
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "${PRODUCT_STARTMENU_REGVAL}"
 
+# Settings for the finish page
+!define MUI_FINISHPAGE_NOREBOOTSUPPORT
+
 # Welcome page
 !define MUI_WELCOMEFINISHPAGE_BITMAP "welcome_finish_page.bmp"
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_STARTMENU Application $ICONS_GROUP
 !insertmacro MUI_PAGE_INSTFILES
-
-!define MUI_FINISHPAGE_NOREBOOTSUPPORT
-
+Page custom showExternalLinks
 !insertmacro MUI_PAGE_FINISH
 
 # Uninstaller pages
@@ -80,6 +82,9 @@ Function .onInit
     MessageBox MB_OK|MB_ICONSTOP "You are trying to install MKVToolNix on a Windows version that does not support Unicode (95, 98 or ME). These old Windows versions are not supported anymore. You can still get an older version (v2.2.0) for Windows 95, 98 and ME from http://www.bunkus.org/videotools/mkvtoolnix/"
     Quit
   ${EndIf}
+
+  InitPluginsDir
+  File /oname=$PLUGINSDIR\external_links.ini "external_links.ini"
 FunctionEnd
 
 Section "Program files" SEC01
@@ -287,6 +292,12 @@ Section -Post
 
   ${EnvVarUpdate} $0 "PATH" "A" "HKLM" "$INSTDIR"
 SectionEnd
+
+Function showExternalLinks
+  Push $R0
+  InstallOptions::dialog $PLUGINSDIR\external_links.ini
+  Pop $R0
+FunctionEnd
 
 var unRemoveJobs
 
