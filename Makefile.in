@@ -145,6 +145,7 @@ mmg_RESOURCES = src/mmg/mmg-resources.rc
 mkvmerge_RESOURCES = src/merge/resources.rc
 mkvinfo_RESOURCES = src/info/resources.rc
 mkvextract_RESOURCES = src/extract/resources.rc
+mkvpropedit_RESOURCES = src/propedit/resources.rc
 LIBRPCRT = -lrpcrt4
 LIBS_WINGUI = -lole32 -lshell32
 LDFLAGS += -Wl,--enable-auto-import
