@@ -53,6 +53,7 @@ Page custom showExternalLinks
 !insertmacro MUI_LANGUAGE "Russian"
 !insertmacro MUI_LANGUAGE "SimpChinese"
 !insertmacro MUI_LANGUAGE "TradChinese"
+!insertmacro MUI_LANGUAGE "Ukrainian"
 !define MUI_LANGDLL_ALLLANGUAGES
 
 !insertmacro MUI_RESERVEFILE_LANGDLL
@@ -200,6 +201,8 @@ Section "Program files" SEC01
   File "/oname=mkvtoolnix.mo" "po\ja.mo"
   SetOutPath "$INSTDIR\locale\ru\LC_MESSAGES"
   File "/oname=mkvtoolnix.mo" "po\ru.mo"
+  SetOutPath "$INSTDIR\locale\uk\LC_MESSAGES"
+  File "/oname=mkvtoolnix.mo" "po\uk.mo"
   SetOutPath "$INSTDIR\locale\zh_CN\LC_MESSAGES"
   File "/oname=mkvtoolnix.mo" "po\zh_CN.mo"
   SetOutPath "$INSTDIR\locale\zh_TW\LC_MESSAGES"
@@ -426,6 +429,10 @@ Section Uninstall
   Delete "$INSTDIR\locale\ru\LC_MESSAGES\mkvtoolnix.mo"
   RMDir "$INSTDIR\locale\ru\LC_MESSAGES"
   RMDir "$INSTDIR\locale\ru"
+
+  Delete "$INSTDIR\locale\uk\LC_MESSAGES\mkvtoolnix.mo"
+  RMDir "$INSTDIR\locale\uk\LC_MESSAGES"
+  RMDir "$INSTDIR\locale\uk"
 
   Delete "$INSTDIR\locale\zh_CN\LC_MESSAGES\mkvtoolnix.mo"
   RMDir "$INSTDIR\locale\zh_CN\LC_MESSAGES"
