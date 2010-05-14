@@ -15,7 +15,7 @@
 
 #include "common/version.h"
 
-#define VERSIONNAME "Language"
+#define VERSIONNAME "Rapunzel"
 
 std::string
 get_version_info(const std::string &program,
