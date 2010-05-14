@@ -33,9 +33,12 @@ var ICONS_GROUP
 
 # Settings for the finish page
 !define MUI_FINISHPAGE_NOREBOOTSUPPORT
+!define MUI_FINISHPAGE_TITLE_3LINES
 
 # Welcome page
 !define MUI_WELCOMEFINISHPAGE_BITMAP "welcome_finish_page.bmp"
+!define MUI_WELCOMEPAGE_TITLE_3LINES
+
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_STARTMENU Application $ICONS_GROUP
