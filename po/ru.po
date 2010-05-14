@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-05-06 00:56+0300\n"
+"PO-Revision-Date: 2010-05-09 22:56+0300\n"
 "Last-Translator: rusguy6 rusguy6 <rusguy6@gmail.com>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -2472,7 +2472,7 @@ msgstr "Невозможно получить декодер конкретны�
 #: src/input/r_avi.cpp:277
 #: src/input/r_avi.cpp:282
 msgid "Could not extract the sequence header from this MPEG-1/2 track.\n"
-msgstr "Невозможно получить последовательность заголовок этого MPEG-1 / 2 трека.\n"
+msgstr "Невозможно получить последовательность заголовок этого MPEG-1/2 трека.\n"
 
 #: src/input/r_mp3.cpp:40
 msgid "Could not find a valid MP3 packet."
@@ -2561,7 +2561,7 @@ msgstr "Создать новый файл главы"
 
 #: src/merge/mkvmerge.cpp:705
 msgid "Cropping parameters: not given in the form <TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 (argument was '%1%').\n"
-msgstr "Подрезание параметров: не данный в форме <TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 (параметр был '%1%').\n"
+msgstr "Подрезание параметров: не данный в форме <TID>:<left>,<top>,<right>,<bottom> например 0:10,5,10,5 (параметр был '%1%').\n"
 
 #: src/mmg/tabs/input_format.cpp:251
 msgid "Cropping:"
@@ -2796,7 +2796,7 @@ msgstr "Отключение сшивание на всех направлени
 #: src/merge/mkvmerge.cpp:680
 #: src/merge/mkvmerge.cpp:686
 msgid "Display dimensions: not given in the form <TID>:<width>x<height>, e.g. 1:640x480 (argument was '%1%').\n"
-msgstr "Размеры дисплея: не заданы в виде <TID>:<width>x<height>, e.g. 1:640x480 (параметр был '%1%').\n"
+msgstr "Размеры дисплея: не заданы в виде <TID>:<width>x<height>, например 1:640x480 (параметр был '%1%').\n"
 
 #: src/info/mkvinfo.cpp:666
 msgid "Display height: %1%"
@@ -3331,7 +3331,7 @@ msgstr "Найдена группа картин со сломанной свя�
 
 #: src/common/xml/element_parser.cpp:131
 msgid "Found no encoded data nor '@file' to read binary data from."
-msgstr "Found no encoded data nor '@file' для чтения бинарных данных."
+msgstr "Найдены не закодированные данные или '@file' для чтения бинарных данных."
 
 #: src/mpegparser/M2VParser.cpp:444
 msgid "Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"
@@ -3718,7 +3718,7 @@ msgstr "Недопустимый формат: неизвестный симво
 
 #: src/input/r_vobsub.cpp:514
 msgid "Invalid header length: %1% (total length: %2%, idx: %3%, dataidx: %4%)\n"
-msgstr "Недопустимая длина заголовка: %1% (полная длина: %2%, idx: %3%, dataidx: %4%)\n"
+msgstr "Недопустимая длина заголовка: %1% (полная длина: %2%, idx: %3%, idx данных: %4%)\n"
 
 #: src/common/xml/element_parser.cpp:170
 msgid "Invalid hexadecimal data encountered: '%1%' is neither white space nor a hexadecimal number."
@@ -3947,15 +3947,15 @@ msgstr "Строка %1% тайм-код файла '%2%' не мог быть �
 
 #: src/common/xml/element_parser.h:51
 msgid "Line %1%, column %2%: %3%"
-msgstr "Выровняйте %1%, столбец %2%: %3%"
+msgstr "Строка %1%, столбец %2%: %3%"
 
 #: src/input/subtitles.cpp:181
 msgid "Line %1%: Negative timestamp encountered. The entry will be adjusted to start from 00:00:00.000.\n"
-msgstr "Строка %1%: Негатив timestamp столкнутый. Вход будет откорректирован, чтобы начаться с 00:00:00.000 anfängt.\n"
+msgstr "Строка %1%: негатив временной метки столкнутый. Вход будет откорректирован, чтобы начаться с 00:00:00.000.\n"
 
 #: src/input/r_vobsub.cpp:277
 msgid "Line %1%: The current timestamp (%2%) is smaller than the previous one (%3%). The entries will be sorted according to their timestamps. This might result in the wrong order for some subtitle entries. If this is the case then you have to fix the .idx file manually.\n"
-msgstr "Строка %1%: электрический ток timestamp (%2%) меньше чем предыдущий (%3 %). Входы будут сортированы согласно их timestamps. Это могло бы привести к неправильному заказу относительно некоторых входов подзаголовка. Если дело обстоит так тогда Вы должны установить .idx файл вручную.\n"
+msgstr "Строка %1%: текущая временная метка (%2%) меньше чем предыдущий (%3%). Входы будут сортированы согласно их временным меткам. Это могло бы привести к неправильному заказу относительно некоторых входов подзаголовка. Если дело обстоит так тогда Вы должны установить .idx файл вручную.\n"
 
 #: src/input/r_vobsub.cpp:234
 #: src/input/r_vobsub.cpp:257
@@ -4087,16 +4087,16 @@ msgstr "Matroska файлы (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|Все фай�
 
 #: src/info/mkvinfo.cpp:1070
 msgid "Max BlockAddition ID: %1%"
-msgstr "Макс BlockAddition ID: %1%"
+msgstr "Максимальное блочное суммирование ID: %1%"
 
 #: src/info/mkvinfo.cpp:1034
 msgid "MaxCache: %1%"
-msgstr "MaxCache: %1%"
+msgstr "Максимальный кэш: %1%"
 
 #: src/common/property_element.cpp:125
 #: src/mmg/header_editor/frame.cpp:412
 msgid "Maximum cache"
-msgstr "Maximum cache"
+msgstr "Максимальный кэш"
 
 #: src/extract/xtr_rmff.cpp:47
 msgid "Memory allocation error: %1% (%2%).\n"
@@ -4112,12 +4112,12 @@ msgstr "MIME тип: %1%"
 
 #: src/info/mkvinfo.cpp:1030
 msgid "MinCache: %1%"
-msgstr "MinCache: %1%"
+msgstr "Минимальный кэш: %1%"
 
 #: src/common/property_element.cpp:123
 #: src/mmg/header_editor/frame.cpp:407
 msgid "Minimum cache"
-msgstr "Minimum cache"
+msgstr "Минимальный кэш"
 
 #: src/common/command_line.cpp:188
 msgid "Missing argument for '--output-charset'.\n"
@@ -4273,11 +4273,11 @@ msgstr "Следующий уникальный ID сегмент"
 
 #: src/merge/mkvmerge.cpp:1036
 msgid "No %1% specified in '--%2% %3%'.\n"
-msgstr "Номер %1%, определенных в '--%2% %3%'.\n"
+msgstr "Нет %1%, определенных в '--%2% %3%'.\n"
 
 #: src/input/r_qtmp4.cpp:1451
 msgid "No AC3 header found in first frame; track will be skipped.\n"
-msgstr "Номер AC3 заголовка найден в первом кадре; дорожка будет пропущена.\n"
+msgstr "Не найден AC3 заголовок в первом кадре; дорожка будет пропущена.\n"
 
 #: src/info/mkvinfo.cpp:1827
 msgid "No EBML head found."
