@@ -272,6 +272,7 @@ install-translated-mans:
 	  $(mkinstalldirs) $(DESTDIR)$(mandir)/$$lang/man1; \
 	  for manpage in $(MANPAGES); do \
 	    inst=`echo $$manpage | sed -e 's/^.*\///'`; \
+	    manpage=`echo $$manpage | sed -e "s/doc\/man/doc\/man\/$$lang/"`; \
 	    echo " $(INSTALL_DATA) $$manpage $(DESTDIR)$(mandir)/$$lang/man1/$$inst"; \
 	    $(INSTALL_DATA) $$manpage $(DESTDIR)$(mandir)/$$lang/man1/$$inst; \
 	  done; \
