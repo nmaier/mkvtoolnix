@@ -428,9 +428,9 @@ read_master(EbmlMaster *m,
 std::string
 format_binary(EbmlBinary &bin,
               int max_len = 10) {
-  int len            = std::max(max_len, (int)bin.GetSize());
+  int len            = std::min(max_len, (int)bin.GetSize());
   const binary *b    = bin.GetBuffer();
-  std::string result = (BF_FORMAT_BINARY_1 % bin.GetSize() % to_hex(b, std::max(max_len, (int)bin.GetSize()))).str();
+  std::string result = (BF_FORMAT_BINARY_1 % bin.GetSize() % to_hex(b, len)).str();
 
   if (len < bin.GetSize())
     result += "...";
