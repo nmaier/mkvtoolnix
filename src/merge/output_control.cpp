@@ -105,6 +105,7 @@
 #include "merge/mkvmerge.h"
 #include "merge/output_control.h"
 #include "merge/debugging.h"
+#include "merge/webmedia.h"
 
 using namespace libmatroska;
 
@@ -207,8 +208,6 @@ static bitvalue_c s_seguid_prev(128), s_seguid_current(128), s_seguid_next(128);
 static int s_display_files_done           = 0;
 static int s_display_path_length          = 1;
 static generic_reader_c *s_display_reader = NULL;
-
-output_compatibility_e g_output_compatibility = OC_MATROSKA;
 
 /** \brief Add a segment family UID to the list if it doesn't exist already.
 
@@ -548,11 +547,10 @@ render_headers(mm_io_c *out) {
   try {
     EbmlHead head;
 
-    bool is_webmedia                                      = OC_WEBMEDIA == g_output_compatibility;
     bool first_file                                       = (1 == g_file_num);
 
-    GetChildAs<EDocType, EbmlString>(head)                = is_webmedia ? "webm" : "matroska";
-    if (hack_engaged(ENGAGE_NO_SIMPLE_BLOCKS) && !is_webmedia) {
+    GetChildAs<EDocType, EbmlString>(head)                = outputting_webmedia() ? "webm" : "matroska";
+    if (hack_engaged(ENGAGE_NO_SIMPLE_BLOCKS) && !outputting_webmedia()) {
       GetChildAs<EDocTypeVersion,     EbmlUInteger>(head) = 1;
       GetChildAs<EDocTypeReadVersion, EbmlUInteger>(head) = 1;
 

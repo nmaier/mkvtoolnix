@@ -36,7 +36,7 @@
 #include "merge/mkvmerge.h"
 #include "merge/output_control.h"
 #include "merge/pr_generic.h"
-
+#include "merge/webmedia.h"
 
 #define TRACK_TYPE_TO_DEFTRACK_TYPE(track_type)      \
   (  track_audio == track_type ? DEFTRACK_TYPE_AUDIO \
@@ -1236,7 +1236,7 @@ generic_reader_c::attachment_requested(int64_t id) {
 
 int
 generic_reader_c::add_packetizer(generic_packetizer_c *ptzr) {
-  if ((OC_WEBMEDIA == g_output_compatibility) && !ptzr->is_compatible_with(OC_WEBMEDIA))
+  if (outputting_webmedia() && !ptzr->is_compatible_with(OC_WEBMEDIA))
     mxerror(boost::format(Y("The codec type '%1%' cannot be used in a WebMedia compatible file.\n")) % ptzr->get_format_name());
 
   m_reader_packetizers.push_back(ptzr);

@@ -197,8 +197,6 @@ extern int g_split_max_num_files;
 
 extern append_mode_e g_append_mode;
 
-extern output_compatibility_e g_output_compatibility;
-
 void get_file_type(filelist_t &file);
 void create_readers();
 

@@ -1623,7 +1623,7 @@ parse_args(std::vector<std::string> args) {
       sit++;
 
     } else if ((this_arg == "--webm") || (this_arg == "--web-media"))
-      g_output_compatibility = OC_WEBMEDIA;
+      set_output_compatibility(OC_WEBMEDIA);
   }
 
   if (g_outfile.empty()) {

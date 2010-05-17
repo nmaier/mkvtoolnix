@@ -35,6 +35,7 @@
 #include "common/strings/editing.h"
 #include "merge/packet.h"
 #include "merge/timecode_factory.h"
+#include "merge/webmedia.h"
 
 using namespace libmatroska;
 
@@ -178,11 +179,6 @@ enum attach_mode_e {
   ATTACH_MODE_SKIP,
   ATTACH_MODE_TO_FIRST_FILE,
   ATTACH_MODE_TO_ALL_FILES,
-};
-
-enum output_compatibility_e {
-  OC_MATROSKA,
-  OC_WEBMEDIA,
 };
 
 class track_info_c {
