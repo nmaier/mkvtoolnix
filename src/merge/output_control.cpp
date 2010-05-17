@@ -208,6 +208,8 @@ static int s_display_files_done           = 0;
 static int s_display_path_length          = 1;
 static generic_reader_c *s_display_reader = NULL;
 
+output_compatibility_e g_output_compatibility = OC_MATROSKA;
+
 /** \brief Add a segment family UID to the list if it doesn't exist already.
 
   \param family This segment family element is converted to a 128 bit

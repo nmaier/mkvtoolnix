@@ -116,6 +116,7 @@ set_usage() {
   usage_text += Y("  -v, --verbose            verbose status\n");
   usage_text += Y("  -q, --quiet              suppress status output\n");
   usage_text += Y("  -o, --output out         Write to the file 'out'.\n");
+  usage_text += Y("  --webm, --web-media      Create WebMedia compliant file.\n");
   usage_text += Y("  --title <title>          Title for this output file.\n");
   usage_text += Y("  --global-tags <file>     Read global tags from a XML file.\n");
   usage_text +=   "\n";
@@ -1621,7 +1622,9 @@ parse_args(std::vector<std::string> args) {
         mxerror(Y("'--engage' lacks its argument.\n"));
       engage_hacks(next_arg);
       sit++;
-    }
+
+    } else if ((this_arg == "--webm") || (this_arg == "--web-media"))
+      g_output_compatibility = OC_WEBMEDIA;
   }
 
   if (g_outfile.empty()) {
@@ -1648,6 +1651,10 @@ parse_args(std::vector<std::string> args) {
       sit++;
       continue;
     }
+
+    if (   (this_arg == "--webm")
+        || (this_arg == "--web-media"))
+      continue;
 
     // Global options
     if ((this_arg == "--priority")) {
