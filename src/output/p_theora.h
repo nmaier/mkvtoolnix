@@ -24,6 +24,10 @@ public:
   virtual void set_headers();
   virtual int process(packet_cptr packet);
 
+  virtual const char *get_format_name() {
+    return "Theora";
+  }
+
 protected:
   virtual void extract_aspect_ratio();
 };

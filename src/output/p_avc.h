@@ -42,7 +42,7 @@ public:
   virtual void extract_aspect_ratio();
 
   virtual const char *get_format_name() {
-    return "video";
+    return "AVC/h.264";
   };
 
   virtual void connect(generic_packetizer_c *src, int64_t p_append_timecode_offset = -1);

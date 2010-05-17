@@ -36,7 +36,7 @@ public:
   virtual void set_headers();
 
   virtual const char *get_format_name() {
-    return "Flac";
+    return "FLAC";
   }
 
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);

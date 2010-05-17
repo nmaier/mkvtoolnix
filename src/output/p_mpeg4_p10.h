@@ -31,6 +31,10 @@ public:
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
   virtual bool is_compatible_with(output_compatibility_e compatibility);
 
+  virtual const char *get_format_name() {
+    return "AVC/h.264";
+  }
+
 protected:
   virtual void extract_aspect_ratio();
   virtual void setup_nalu_size_len_change();

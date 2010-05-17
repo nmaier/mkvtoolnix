@@ -32,6 +32,10 @@ public:
   virtual int process(packet_cptr packet);
   virtual void flush();
 
+  virtual const char *get_format_name() {
+    return "MPEG-1/2";
+  }
+
 protected:
   virtual void extract_fps(const unsigned char *buffer, int size);
   virtual void extract_aspect_ratio(const unsigned char *buffer, int size);

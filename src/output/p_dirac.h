@@ -37,7 +37,7 @@ public:
   virtual void flush();
 
   virtual const char *get_format_name() {
-    return "video";
+    return "Dirac";
   };
 
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);

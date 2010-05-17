@@ -62,6 +62,10 @@ public:
   virtual int process(packet_cptr packet);
   virtual void flush();
 
+  virtual const char *get_format_name() {
+    return "MPEG-4";
+  }
+
 protected:
   virtual int process_native(packet_cptr packet);
   virtual int process_non_native(packet_cptr packet);
