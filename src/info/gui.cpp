@@ -55,7 +55,7 @@ mi_app::OnInit() {
 
   parse_args(args, initial_file);
 
-  if (!use_gui) {
+  if (!g_use_gui) {
     console_main(args);
     return false;
   }

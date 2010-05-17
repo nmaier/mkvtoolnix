@@ -88,14 +88,14 @@ typedef struct {
   int64_t size;
 } kax_track_t;
 
-std::vector<kax_track_t *> tracks;
-std::map<unsigned int, kax_track_t *> tracks_by_number, tracks_by_uid;
-bool use_gui         = false;
-bool calc_checksums  = false;
-bool show_summary    = false;
-bool show_hexdump    = false;
-int hexdump_max_size = 16;
-uint64_t tc_scale    = TIMECODE_SCALE;
+std::vector<kax_track_t *> s_tracks;
+std::map<unsigned int, kax_track_t *> s_tracks_by_number, s_tracks_by_uid;
+bool g_use_gui                = false;
+static bool s_calc_checksums  = false;
+static bool s_show_summary    = false;
+static bool s_show_hexdump    = false;
+static int s_hexdump_max_size = 16;
+static uint64_t s_tc_scale    = TIMECODE_SCALE;
 std::vector<boost::format> g_common_boost_formats;
 
 #define BF_DO(n)                             g_common_boost_formats[n]
@@ -174,19 +174,19 @@ init_common_boost_formats() {
 
 void
 add_track(kax_track_t *t) {
-  tracks.push_back(t);
-  tracks_by_number[t->tnum] = t;
-  tracks_by_uid[t->tuid]    = t;
+  s_tracks.push_back(t);
+  s_tracks_by_number[t->tnum] = t;
+  s_tracks_by_uid[t->tuid]    = t;
 }
 
 kax_track_t *
 find_track(int tnum) {
-  return tracks_by_number[tnum];
+  return s_tracks_by_number[tnum];
 }
 
 kax_track_t *
 find_track_by_uid(int tuid) {
-  return tracks_by_uid[tuid];
+  return s_tracks_by_uid[tuid];
 }
 
 void
@@ -241,7 +241,7 @@ _show_element(EbmlElement *l,
               bool skip,
               int level,
               const std::string &info) {
-  if (show_summary)
+  if (s_show_summary)
     return;
 
   ui_show_element(level, info, NULL != l ? (int64_t)l->GetElementPosition() : -1);
@@ -275,7 +275,7 @@ create_hexdump(const unsigned char *buf,
   static boost::format s_bf_create_hexdump(" %|1$02x|");
 
   std::string hex(" hexdump");
-  int bmax = std::max(size, hexdump_max_size);
+  int bmax = std::max(size, s_hexdump_max_size);
   int b;
 
   for (b = 0; b < bmax; ++b)
@@ -305,7 +305,7 @@ parse_args(std::vector<std::string> args,
   verbose = 0;
   file_name = "";
 
-  use_gui = false;
+  g_use_gui = false;
 
   set_usage();
   while (handle_common_cli_args(args, "-o"))
@@ -316,20 +316,20 @@ parse_args(std::vector<std::string> args,
     if ((args[i] == "-g") || (args[i] == "--gui")) {
       if (!ui_graphical_available())
         mxerror("mkvinfo was compiled without GUI support.\n");
-      use_gui = true;
+      g_use_gui = true;
     } else if ((args[i] == "-c") || (args[i] == "--checksum"))
-      calc_checksums = true;
+      s_calc_checksums = true;
     else if ((args[i] == "-C") || (args[i] == "--check-mode")) {
-      calc_checksums = true;
+      s_calc_checksums = true;
       verbose = 4;
     } else if ((args[i] == "-s") || (args[i] == "--summary")) {
-      calc_checksums = true;
-      show_summary = true;
+      s_calc_checksums = true;
+      s_show_summary = true;
     } else if ((args[i] == "-x") || (args[i] == "--hexdump"))
-      show_hexdump = true;
+      s_show_hexdump = true;
     else if ((args[i] == "-X") || (args[i] == "--full-hexdump")) {
-      show_hexdump = true;
-      hexdump_max_size = INT_MAX;
+      s_show_hexdump = true;
+      s_hexdump_max_size = INT_MAX;
     } else if (file_name != "")
       mxerror(Y("Only one input file is allowed.\n"));
     else
@@ -435,7 +435,7 @@ format_binary(EbmlBinary &bin,
   if (len < bin.GetSize())
     result += "...";
 
-  if (calc_checksums)
+  if (s_calc_checksums)
     result += (BF_FORMAT_BINARY_2 % calc_adler32(bin.GetBuffer(), bin.GetSize())).str();
 
   strip(result);
@@ -521,15 +521,15 @@ def_handle(info) {
 
     if (is_id(l2, KaxTimecodeScale)) {
       KaxTimecodeScale &ktc_scale = *static_cast<KaxTimecodeScale *>(l2);
-      tc_scale = uint64(ktc_scale);
-      show_element(l2, 2, boost::format(Y("Timecode scale: %1%")) % tc_scale);
+      s_tc_scale = uint64(ktc_scale);
+      show_element(l2, 2, boost::format(Y("Timecode scale: %1%")) % s_tc_scale);
 
     } else if (is_id(l2, KaxDuration)) {
       KaxDuration &duration = *static_cast<KaxDuration *>(l2);
       show_element(l2, 2,
                    boost::format(Y("Duration: %|1$.3f|s (%2%)"))
-                   % (double(duration) * tc_scale / 1000000000.0)
-                   % format_timecode((uint64_t)(double(duration) * tc_scale), 3));
+                   % (double(duration) * s_tc_scale / 1000000000.0)
+                   % format_timecode((uint64_t)(double(duration) * s_tc_scale), 3));
 
     } else if (is_id(l2, KaxMuxingApp)) {
       KaxMuxingApp &muxingapp = *static_cast<KaxMuxingApp *>(l2);
@@ -990,10 +990,10 @@ def_handle(tracks) {
             fourcc_buffer           = (boost::format(Y(" (format tag: 0x%|1$04x|)")) % get_uint16_le(&wfe->w_format_tag)).str();
           }
 
-          if (calc_checksums && !show_summary)
+          if (s_calc_checksums && !s_show_summary)
             fourcc_buffer += (boost::format(Y(" (adler: 0x%|1$08x|)")) % calc_adler32(c_priv.GetBuffer(), c_priv.GetSize())).str();
 
-          if (show_hexdump)
+          if (s_show_hexdump)
             fourcc_buffer += create_hexdump(c_priv.GetBuffer(), c_priv.GetSize());
 
           show_element(l3, 3, boost::format(Y("CodecPrivate, length %1%%2%")) % c_priv.GetSize() % fourcc_buffer);
@@ -1077,7 +1077,7 @@ def_handle(tracks) {
 
       }
 
-      if (show_summary)
+      if (s_show_summary)
         mxinfo(boost::format(Y("Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"))
                % kax_track_number
                % (  'a' == kax_track_type ? Y("audio")
@@ -1097,7 +1097,7 @@ def_handle(tracks) {
 
 void
 def_handle(seek_head) {
-  if ((verbose < 2) && !use_gui) {
+  if ((verbose < 2) && !g_use_gui) {
     show_element(l1, 1, Y("Seek head (subentries will be skipped)"));
     return;
   }
@@ -1179,7 +1179,7 @@ def_handle(cues) {
 
         if (is_id(l3, KaxCueTime)) {
           KaxCueTime &cue_time = *static_cast<KaxCueTime *>(l3);
-          show_element(l3, 3, boost::format(Y("Cue time: %|1$.3f|s")) % (tc_scale * ((float)uint64(cue_time)) / 1000000000.0));
+          show_element(l3, 3, boost::format(Y("Cue time: %|1$.3f|s")) % (s_tc_scale * ((float)uint64(cue_time)) / 1000000000.0));
 
         } else if (is_id(l3, KaxCueTrackPositions)) {
           show_element(l3, 3, Y("Cue track positions"));
@@ -1216,7 +1216,7 @@ def_handle(cues) {
 
                 if (is_id(l5, KaxCueRefTime)) {
                   KaxCueRefTime &cue_rt = *static_cast<KaxCueRefTime *>(l5);
-                  show_element(l5, 5, boost::format(Y("Cue ref time: %|1$.3f|s")) % tc_scale % (((float)uint64(cue_rt)) / 1000000000.0));
+                  show_element(l5, 5, boost::format(Y("Cue ref time: %|1$.3f|s")) % s_tc_scale % (((float)uint64(cue_rt)) / 1000000000.0));
 
                 } else if (is_id(l5, KaxCueRefCluster)) {
                   KaxCueRefCluster &cue_rc = *static_cast<KaxCueRefCluster *>(l5);
@@ -1367,11 +1367,11 @@ def_handle2(block_group,
         uint32_t adler   = calc_adler32(data.Buffer(), data.Size());
 
         std::string adler_str;
-        if (calc_checksums)
+        if (s_calc_checksums)
           adler_str = (BF_BLOCK_GROUP_BLOCK_ADLER % adler).str();
 
         std::string hex;
-        if (show_hexdump)
+        if (s_show_hexdump)
           hex = create_hexdump(data.Buffer(), data.Size());
 
         show_element(NULL, 4, BF_BLOCK_GROUP_BLOCK_FRAME % data.Size() % adler_str % hex);
@@ -1384,12 +1384,12 @@ def_handle2(block_group,
 
     } else if (is_id(l3, KaxBlockDuration)) {
       KaxBlockDuration &duration = *static_cast<KaxBlockDuration *>(l3);
-      bduration = ((float)uint64(duration)) * tc_scale / 1000000.0;
-      show_element(l3, 3, BF_BLOCK_GROUP_DURATION % (uint64(duration) * tc_scale / 1000000) % (uint64(duration) * tc_scale % 1000000));
+      bduration = ((float)uint64(duration)) * s_tc_scale / 1000000.0;
+      show_element(l3, 3, BF_BLOCK_GROUP_DURATION % (uint64(duration) * s_tc_scale / 1000000) % (uint64(duration) * s_tc_scale % 1000000));
 
     } else if (is_id(l3, KaxReferenceBlock)) {
       KaxReferenceBlock &k_reference = *static_cast<KaxReferenceBlock *>(l3);
-      int reference                  = int64(k_reference) * tc_scale;
+      int reference                  = int64(k_reference) * s_tc_scale;
 
       if (0 >= reference) {
         bref_found  = true;
@@ -1478,11 +1478,11 @@ def_handle2(block_group,
 
             } else if (is_id(l5, KaxSliceDelay)) {
               KaxSliceDelay &sdelay = *static_cast<KaxSliceDelay *>(l5);
-              show_element(l5, 5, BF_BLOCK_GROUP_SLICE_DELAY % (((float)uint64(sdelay)) * tc_scale / 1000000.0));
+              show_element(l5, 5, BF_BLOCK_GROUP_SLICE_DELAY % (((float)uint64(sdelay)) * s_tc_scale / 1000000.0));
 
             } else if (is_id(l5, KaxSliceDuration)) {
               KaxSliceDuration &sduration = *static_cast<KaxSliceDuration *>(l5);
-              show_element(l5, 5, BF_BLOCK_GROUP_SLICE_DURATION % (((float)uint64(sduration)) * tc_scale / 1000000.0));
+              show_element(l5, 5, BF_BLOCK_GROUP_SLICE_DURATION % (((float)uint64(sduration)) * s_tc_scale / 1000000.0));
 
             } else if (is_id(l5, KaxSliceBlockAddID)) {
               KaxSliceBlockAddID &sbaid = *static_cast<KaxSliceBlockAddID *>(l5);
@@ -1503,7 +1503,7 @@ def_handle2(block_group,
 
   } // while (l3 != NULL)
 
-  if (show_summary) {
+  if (s_show_summary) {
     std::string position;
     int fidx;
 
@@ -1577,11 +1577,11 @@ def_handle2(simple_block,
     uint32_t adler   = calc_adler32(data.Buffer(), data.Size());
 
     std::string adler_str;
-    if (calc_checksums)
+    if (s_calc_checksums)
       adler_str = (BF_SIMPLE_BLOCK_ADLER % adler).str();
 
     std::string hex;
-    if (show_hexdump)
+    if (s_show_hexdump)
       hex = create_hexdump(data.Buffer(), data.Size());
 
     show_element(NULL, 4, BF_SIMPLE_BLOCK_FRAME % data.Size() % adler_str % hex);
@@ -1591,7 +1591,7 @@ def_handle2(simple_block,
     frame_pos -= data.Size();
   }
 
-  if (show_summary) {
+  if (s_show_summary) {
     std::string position;
     int fidx;
 
@@ -1625,7 +1625,7 @@ def_handle3(cluster,
             int64_t file_size) {
   cluster = (KaxCluster *)l1;
 
-  if (use_gui)
+  if (g_use_gui)
     ui_show_progress(100 * cluster->GetElementPosition() / file_size, Y("Parsing file"));
 
   upper_lvl_el   = 0;
@@ -1639,9 +1639,9 @@ def_handle3(cluster,
     if (is_id(l2, KaxClusterTimecode)) {
       KaxClusterTimecode &ctc = *static_cast<KaxClusterTimecode *>(l2);
       int64_t cluster_tc     = uint64(ctc);
-      cluster->InitTimecode(cluster_tc, tc_scale);
+      cluster->InitTimecode(cluster_tc, s_tc_scale);
 
-      show_element(l2, 2, BF_CLUSTER_TIMECODE % ((float)cluster_tc * (float)tc_scale / 1000000000.0));
+      show_element(l2, 2, BF_CLUSTER_TIMECODE % ((float)cluster_tc * (float)s_tc_scale / 1000000000.0));
 
     } else if (is_id(l2, KaxClusterPosition)) {
       KaxClusterPosition &c_pos = *static_cast<KaxClusterPosition *>(l2);
@@ -1872,7 +1872,7 @@ process_file(const std::string &file_name) {
 
       else if (is_id(l1, KaxCluster)) {
         show_element(l1, 1, Y("Cluster"));
-        if ((verbose == 0) && !show_summary) {
+        if ((verbose == 0) && !s_show_summary) {
           delete l1;
           delete l0;
           delete es;
@@ -1978,7 +1978,7 @@ main(int argc,
   args = command_line_utf8(argc, argv);
   parse_args(args, initial_file);
 
-  if (use_gui)
+  if (g_use_gui)
     return ui_run(argc, argv);
   else
     return console_main(args);

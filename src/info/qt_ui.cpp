@@ -248,7 +248,7 @@ rightclick_tree_widget::mousePressEvent(QMouseEvent *event) {
 
 void
 ui_show_error(const std::string &error) {
-  if (use_gui)
+  if (g_use_gui)
     gui->show_error(Q(error.c_str()));
   else
     console_show_error(error);
@@ -258,7 +258,7 @@ void
 ui_show_element(int level,
                 const std::string &text,
                 int64_t position) {
-  if (!use_gui)
+  if (!g_use_gui)
     console_show_element(level, text, position);
 
   else if (0 <= position)

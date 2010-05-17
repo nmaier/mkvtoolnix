@@ -27,7 +27,7 @@ bool process_file(const std::string &file_name);
 void setup(const std::string &locale = "");
 void cleanup();
 
-extern bool use_gui;
+extern bool g_use_gui;
 
 void ui_show_error(const std::string &error);
 void ui_show_element(int level, const std::string &text, int64_t position);

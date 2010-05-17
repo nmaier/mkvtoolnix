@@ -83,7 +83,7 @@ mi_app::OnInit() {
 
   parse_args(args, initial_file);
 
-  if (!use_gui) {
+  if (!g_use_gui) {
     console_main(args);
     return false;
   }
@@ -402,7 +402,7 @@ IMPLEMENT_APP_NO_MAIN(mi_app)
 
 void
 ui_show_error(const std::string &error) {
-  if (use_gui)
+  if (g_use_gui)
     frame->show_error(wxU(error.c_str()));
   else
     console_show_error(error);
@@ -412,7 +412,7 @@ void
 ui_show_element(int level,
                 const std::string &text,
                 int64_t position) {
-  if (!use_gui)
+  if (!g_use_gui)
     console_show_element(level, text, position);
 
   else if (0 <= position)
