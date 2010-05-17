@@ -1603,9 +1603,8 @@ parse_args(std::vector<std::string> args) {
   // Now parse options that are needed right at the beginning.
   mxforeach(sit, args) {
     const std::string &this_arg = *sit;
-    std::string next_arg        = ((sit + 1) == args.end()) ? "" : *(sit + 1);
-
-    bool no_next_arg       = (sit + 1) == args.end();
+    bool no_next_arg            = (sit + 1) == args.end();
+    std::string next_arg        = no_next_arg ? "" : *(sit + 1);
 
     if ((this_arg == "-o") || (this_arg == "--output")) {
       if (no_next_arg)
@@ -1639,9 +1638,8 @@ parse_args(std::vector<std::string> args) {
 
   mxforeach(sit, args) {
     const std::string &this_arg = *sit;
-    std::string next_arg        = ((sit + 1) == args.end()) ? "" : *(sit + 1);
-
-    bool no_next_arg       = (sit + 1) == args.end();
+    bool no_next_arg            = (sit + 1) == args.end();
+    std::string next_arg        = no_next_arg ? "" : *(sit + 1);
 
     // Ignore the options we took care of in the first step.
     if (   (this_arg == "-o")
