@@ -186,3 +186,7 @@ mpeg4_p10_video_packetizer_c::change_nalu_size_len(packet_cptr packet) {
   packet->data->set_size(dst_pos);
 }
 
+bool
+mpeg4_p10_video_packetizer_c::is_compatible_with(output_compatibility_e) {
+  return true;
+}

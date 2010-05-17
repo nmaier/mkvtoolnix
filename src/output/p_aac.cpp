@@ -210,3 +210,9 @@ aac_packetizer_c::can_connect_to(generic_packetizer_c *src,
 
   return CAN_CONNECT_YES;
 }
+
+bool
+aac_packetizer_c::is_compatible_with(output_compatibility_e) {
+  return true;
+}
+

@@ -180,6 +180,11 @@ enum attach_mode_e {
   ATTACH_MODE_TO_ALL_FILES,
 };
 
+enum output_compatibility_e {
+  OC_MATROSKA,
+  OC_WEBMEDIA,
+};
+
 class track_info_c {
 protected:
   bool m_initialized;
@@ -589,6 +594,8 @@ public:
   virtual void apply_factory_full_queueing(packet_cptr_di &p_start);
 
   virtual bool display_dimensions_or_aspect_ratio_set();
+
+  virtual bool is_compatible_with(output_compatibility_e compatibility);
 };
 
 extern std::vector<generic_packetizer_c *> ptzrs_in_header_order;

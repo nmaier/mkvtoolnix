@@ -1107,6 +1107,11 @@ generic_packetizer_c::display_dimensions_or_aspect_ratio_set() {
   return m_ti.display_dimensions_or_aspect_ratio_set();
 }
 
+bool
+generic_packetizer_c::is_compatible_with(output_compatibility_e compatibility) {
+  return OC_MATROSKA == compatibility;
+}
+
 //--------------------------------------------------------------------
 
 #define add_all_requested_track_ids(type, container)                                              \
