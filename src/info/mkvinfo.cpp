@@ -1805,6 +1805,8 @@ process_file(const std::string &file_name) {
   EbmlElement *l5 = NULL, *l6 = NULL;
   KaxCluster *cluster;
 
+  s_tc_scale = TIMECODE_SCALE;
+
   // open input file
   mm_io_c *in;
   try {

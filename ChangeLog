@@ -1,3 +1,9 @@
+2010-05-17  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvinfo GUI: bug fix: Opening more than one file without
+	restarting mkvinfo GUI could result in wrong timecodes due to
+	variables not being reinitialized.
+
 2010-05-16  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvinfo: bug fix: Binary elements shorter than 10 bytes were not
