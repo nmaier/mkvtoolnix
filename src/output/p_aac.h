@@ -44,7 +44,6 @@ public:
   }
 
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
-  virtual bool is_compatible_with(output_compatibility_e compatibility);
 
 private:
   virtual unsigned char *get_aac_packet(unsigned long *header, aac_header_t *aacheader);
