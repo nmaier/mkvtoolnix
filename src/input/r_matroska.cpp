@@ -1300,13 +1300,14 @@ kax_reader_c::read_headers() {
     mxerror(Y("matroska_reader: caught exception\n"));
   }
 
-  if (NULL == cluster)          // We have NOT found a cluster!
-    return false;
-
   verify_tracks();
 
-  m_in->setFilePointer(cluster->GetElementPosition(), seek_beginning);
-  delete cluster;
+  if (NULL != cluster) {
+    m_in->setFilePointer(cluster->GetElementPosition(), seek_beginning);
+    delete cluster;
+
+  } else
+    m_in->setFilePointer(0, seek_end);
 
   return true;
 }

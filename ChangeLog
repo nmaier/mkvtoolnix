@@ -1,5 +1,8 @@
 2010-05-18  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Matroska files without clusters are accepted
+	as valid input files again.
+
 	* mmg: enhancement: Added "WebMedia" with the extension "webm" to
 	the list of known file types.
 
