@@ -550,7 +550,7 @@ render_headers(mm_io_c *out) {
     bool first_file                                       = (1 == g_file_num);
 
     GetChildAs<EDocType, EbmlString>(head)                = outputting_webmedia() ? "webm" : "matroska";
-    if (hack_engaged(ENGAGE_NO_SIMPLE_BLOCKS) && !outputting_webmedia()) {
+    if (hack_engaged(ENGAGE_NO_SIMPLE_BLOCKS)) {
       GetChildAs<EDocTypeVersion,     EbmlUInteger>(head) = 1;
       GetChildAs<EDocTypeReadVersion, EbmlUInteger>(head) = 1;
 
