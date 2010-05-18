@@ -250,10 +250,10 @@ tab_input::setup_file_type_filter() {
   file_types.push_back(file_type_t(Z("TTA (The lossless True Audio codec)"), wxU("tta")));
   file_types.push_back(file_type_t(Z("USF text subtitles"),                  wxU("usf xml")));
   file_types.push_back(file_type_t(Z("VC1 elementary streams"),              wxU("vc1")));
+  file_types.push_back(file_type_t(Z("VobButtons"),                          wxU("btn")));
   file_types.push_back(file_type_t(Z("VobSub subtitles"),                    wxU("idx")));
   file_types.push_back(file_type_t(Z("WAVE (uncompressed PCM audio)"),       wxU("wav")));
   file_types.push_back(file_type_t(Z("WAVPACK v4 audio"),                    wxU("wv")));
-  file_types.push_back(file_type_t(Z("VobButtons"),                          wxU("btn")));
   file_types.push_back(file_type_t(Z("WebMedia audio/video files"),          wxU("webm")));
 
   std::map<wxString, bool> all_extensions_map;
