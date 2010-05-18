@@ -39,9 +39,14 @@ mkvmerge \- マルチメディアストリームをMatroska(TM)ファイルに�
 ステータス情報の出力を抑制します。
 .RE
 .PP
-\fB\-o\fR, \fB\-\-out\fR \fIfile\-name\fR
+\fB\-o\fR, \fB\-\-output\fR \fIfile\-name\fR
 .RS 4
 \fIfile\-name\fRで指定したファイルに書き込みます。もし、ファイル分割が有効な場合このオプションは若干解釈が違います。詳細は\fB\-\-split\fRオプションの説明を参照してください。
+.RE
+.PP
+\fB\-\-webm\fR, \fB\-\-web\-media\fR
+.RS 4
+Create a WebMedia compliant file\&. This enforces several restrictions\&. The only allowed codecs are VP8 video and Vorbis audio tracks\&. Neither chapters nor tags are allowed\&. The DocType header item is changed to "webm"\&.
 .RE
 .PP
 \fB\-\-title\fR \fItitle\fR
@@ -187,9 +192,12 @@ Sets the segment UIDs to use\&. This is a comma\-separated list of 128bit segmen
 キューデータ(AVIファイルにおけるインデックスのようなもの)を作成しません。キューデータなしでもファイルは再生できますが、シークは不正確かつ遅くなるでしょう。このオプションは、少しでもファイルサイズを小さくしようと必死なとき、またはテスト目的以外には使用しないでください。\fB\-\-cues\fRオプションは各入力ファイルごとに指定できます。
 .RE
 .PP
-\fB\-\-no\-clusters\-in\-meta\-seek\fR
+\fB\-\-clusters\-in\-meta\-seek\fR
 .RS 4
-ファイル末尾に、クラスタ全てを含むメタシークエレメントを追加しません。Matroska(TM)ファイルレイアウトのセクションも参照してください。
+Tells
+\fBmkvmerge\fR(1)
+to create a meta seek element at the end of the file containing all clusters\&. See also the section about the
+Matroska(TM) file layout\&.
 .RE
 .PP
 \fB\-\-disable\-lacing\fR

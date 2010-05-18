@@ -42,12 +42,17 @@ Increase verbosity\&.
 Suppress status output\&.
 .RE
 .PP
-\fB\-o\fR, \fB\-\-out\fR \fIfile\-name\fR
+\fB\-o\fR, \fB\-\-output\fR \fIfile\-name\fR
 .RS 4
 Write to the file
 \fIfile\-name\fR\&. If splitting is used then this parameter is treated a bit differently\&. See the explanation for the
 \fB\-\-split\fR
 option for details\&.
+.RE
+.PP
+\fB\-\-webm\fR, \fB\-\-web\-media\fR
+.RS 4
+Create a WebMedia compliant file\&. This enforces several restrictions\&. The only allowed codecs are VP8 video and Vorbis audio tracks\&. Neither chapters nor tags are allowed\&. The DocType header item is changed to "webm"\&.
 .RE
 .PP
 \fB\-\-title\fR \fItitle\fR
@@ -256,11 +261,11 @@ files can be played back without the cue data, but seeking will probably be impr
 which can be specified for each input file\&.
 .RE
 .PP
-\fB\-\-no\-clusters\-in\-meta\-seek\fR
+\fB\-\-clusters\-in\-meta\-seek\fR
 .RS 4
 Tells
 \fBmkvmerge\fR(1)
-not to create a meta seek element at the end of the file containing all clusters\&. See also the section about the
+to create a meta seek element at the end of the file containing all clusters\&. See also the section about the
 Matroska(TM) file layout\&.
 .RE
 .PP

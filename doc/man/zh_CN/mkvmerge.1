@@ -42,12 +42,17 @@ Matroska(TM)
 取消状态输出。
 .RE
 .PP
-\fB\-o\fR, \fB\-\-out\fR \fI文件名\fR
+\fB\-o\fR, \fB\-\-output\fR \fIfile\-name\fR
 .RS 4
 写至文件
 \fI文件名\fR。如果使用了切割功能，对此参数的处理将有所不同。 详情请参阅关于
 \fB\-\-split\fR
 选项的说明。
+.RE
+.PP
+\fB\-\-webm\fR, \fB\-\-web\-media\fR
+.RS 4
+Create a WebMedia compliant file\&. This enforces several restrictions\&. The only allowed codecs are VP8 video and Vorbis audio tracks\&. Neither chapters nor tags are allowed\&. The DocType header item is changed to "webm"\&.
 .RE
 .PP
 \fB\-\-title\fR \fI标题\fR
@@ -251,13 +256,12 @@ Matroska(TM)
 选项。
 .RE
 .PP
-\fB\-\-no\-clusters\-in\-meta\-seek\fR
+\fB\-\-clusters\-in\-meta\-seek\fR
 .RS 4
-告诉
+Tells
 \fBmkvmerge\fR(1)
-在文件末尾不要创建包含所有簇的元定位元素。参阅关于
-Matroska(TM) 文件规划
-的段落。
+to create a meta seek element at the end of the file containing all clusters\&. See also the section about the
+Matroska(TM) file layout\&.
 .RE
 .PP
 \fB\-\-disable\-lacing\fR

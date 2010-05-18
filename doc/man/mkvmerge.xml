@@ -88,10 +88,19 @@
    </varlistentry>
 
    <varlistentry>
-    <term><option>-o</option>, <option>--out</option> <parameter>file-name</parameter></term>
+    <term><option>-o</option>, <option>--output</option> <parameter>file-name</parameter></term>
     <listitem>
      <para>Write to the file <parameter>file-name</parameter>.  If splitting is used then this parameter is treated a bit differently.  See
      the explanation for the <link linkend="mkvmerge.description.split"><option>--split</option></link> option for details.</para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>--webm</option>, <option>--web-media</option></term>
+    <listitem>
+     <para>Create a WebMedia compliant file. This enforces several restrictions. The only allowed codecs are VP8 video and Vorbis audio
+     tracks. Neither chapters nor tags are allowed. The DocType header item is changed to &quot;webm&quot;.
+     </para>
     </listitem>
    </varlistentry>
 
@@ -307,10 +316,10 @@
    </varlistentry>
 
    <varlistentry>
-    <term><option>--no-clusters-in-meta-seek</option></term>
+    <term><option>--clusters-in-meta-seek</option></term>
     <listitem>
      <para>
-      Tells &mkvmerge; not to create a meta seek element at the end of the file containing all clusters. See also the section about the
+      Tells &mkvmerge; to create a meta seek element at the end of the file containing all clusters. See also the section about the
       <link linkend="mkvmerge.file_layout">&matroska; file layout</link>.
      </para>
     </listitem>
