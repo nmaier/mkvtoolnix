@@ -1634,7 +1634,7 @@ parse_args(std::vector<std::string> args) {
 
   if (!outputting_webmedia() && is_webmedia_file_name(g_outfile)) {
     set_output_compatibility(OC_WEBMEDIA);
-    mxinfo(boost::format(Y("Automatically enabling WebMedia compatibility mode due to output file name extension.\n")));
+    mxinfo(boost::format(Y("Automatically enabling WebMedia compliance mode due to output file name extension.\n")));
   }
 
   track_info_c *ti      = new track_info_c;

@@ -1237,7 +1237,7 @@ generic_reader_c::attachment_requested(int64_t id) {
 int
 generic_reader_c::add_packetizer(generic_packetizer_c *ptzr) {
   if (outputting_webmedia() && !ptzr->is_compatible_with(OC_WEBMEDIA))
-    mxerror(boost::format(Y("The codec type '%1%' cannot be used in a WebMedia compatible file.\n")) % ptzr->get_format_name());
+    mxerror(boost::format(Y("The codec type '%1%' cannot be used in a WebMedia compliant file.\n")) % ptzr->get_format_name());
 
   m_reader_packetizers.push_back(ptzr);
   m_used_track_ids.push_back(ptzr->m_ti.m_id);
