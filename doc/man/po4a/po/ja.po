@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 2.9.9\n"
-"POT-Creation-Date: 2010-05-18 19:42+0300\n"
+"POT-Creation-Date: 2010-05-18 20:36+0300\n"
 "PO-Revision-Date: 2010-04-29 23:31+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: none\n"
@@ -269,7 +269,7 @@ msgstr ""
 "ますが、'<literal>fast</literal>'スキャンには数秒しかかかりません。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:91 doc/man/mkvinfo.xml:93 doc/man/mkvmerge.xml:1184
+#: doc/man/mkvextract.xml:91 doc/man/mkvinfo.xml:93 doc/man/mkvmerge.xml:1185
 #: doc/man/mkvpropedit.xml:152
 msgid ""
 "<option>--command-line-charset</option> <parameter>character-set</parameter>"
@@ -288,13 +288,13 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:101 doc/man/mkvinfo.xml:103
-#: doc/man/mkvmerge.xml:1197 doc/man/mkvpropedit.xml:162
+#: doc/man/mkvmerge.xml:1198 doc/man/mkvpropedit.xml:162
 msgid "<option>--output-charset</option> <parameter>character-set</parameter>"
 msgstr "<option>--output-charset</option> <parameter>character-set</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:104 doc/man/mkvinfo.xml:106
-#: doc/man/mkvmerge.xml:1200 doc/man/mkvpropedit.xml:165
+#: doc/man/mkvmerge.xml:1201 doc/man/mkvpropedit.xml:165
 msgid ""
 "Sets the character set to which strings are converted that are to be "
 "output.  It defaults to the character set given by system's current locale."
@@ -304,7 +304,7 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:111 doc/man/mkvinfo.xml:113
-#: doc/man/mkvmerge.xml:1207 doc/man/mkvpropedit.xml:172
+#: doc/man/mkvmerge.xml:1208 doc/man/mkvpropedit.xml:172
 msgid ""
 "<option>-r</option>, <option>--redirect-output</option> <parameter>file-"
 "name</parameter>"
@@ -331,7 +331,7 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:123 doc/man/mkvinfo.xml:125
-#: doc/man/mkvmerge.xml:1218 doc/man/mkvpropedit.xml:184
+#: doc/man/mkvmerge.xml:1219 doc/man/mkvpropedit.xml:184
 msgid "<option>--ui-language</option> <parameter>code</parameter>"
 msgstr "<option>--ui-language</option> <parameter>code</parameter>"
 
@@ -367,37 +367,37 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:144 doc/man/mkvinfo.xml:147
-#: doc/man/mkvmerge.xml:1290 doc/man/mkvpropedit.xml:205
+#: doc/man/mkvmerge.xml:1291 doc/man/mkvpropedit.xml:205
 msgid "<option>-h</option>, <option>--help</option>"
 msgstr "<option>-h</option>, <option>--help</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:147 doc/man/mkvinfo.xml:150
-#: doc/man/mkvmerge.xml:1293 doc/man/mkvpropedit.xml:208
+#: doc/man/mkvmerge.xml:1294 doc/man/mkvpropedit.xml:208
 msgid "Show usage information and exit."
 msgstr "コマンド書式情報を出力して終了します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:153 doc/man/mkvinfo.xml:156
-#: doc/man/mkvmerge.xml:1299 doc/man/mkvpropedit.xml:214
+#: doc/man/mkvmerge.xml:1300 doc/man/mkvpropedit.xml:214
 msgid "<option>-V</option>, <option>--version</option>"
 msgstr "<option>-V</option>, <option>--version</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:156 doc/man/mkvinfo.xml:159
-#: doc/man/mkvmerge.xml:1302 doc/man/mkvpropedit.xml:217
+#: doc/man/mkvmerge.xml:1303 doc/man/mkvpropedit.xml:217
 msgid "Show version information and exit."
 msgstr "バージョン情報を出力して終了します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:162 doc/man/mkvinfo.xml:165
-#: doc/man/mkvmerge.xml:1230 doc/man/mkvpropedit.xml:223
+#: doc/man/mkvmerge.xml:1231 doc/man/mkvpropedit.xml:223
 msgid "<option>@</option>options-file"
 msgstr "<option>@</option>options-file"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:165 doc/man/mkvinfo.xml:168
-#: doc/man/mkvmerge.xml:1233 doc/man/mkvpropedit.xml:226
+#: doc/man/mkvmerge.xml:1234 doc/man/mkvpropedit.xml:226
 msgid ""
 "Reads additional command line arguments from the file <parameter>options-"
 "file</parameter>.  Lines whose first non-whitespace character is a hash mark "
@@ -1036,7 +1036,7 @@ msgstr ""
 "テナに格納されます。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:535 doc/man/mkvmerge.xml:1825
+#: doc/man/mkvextract.xml:535 doc/man/mkvmerge.xml:1826
 msgid "Tags"
 msgstr "タグ"
 
@@ -1050,7 +1050,7 @@ msgstr ""
 "読み込む際のフォーマットと同じです。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:544 doc/man/mkvmerge.xml:1693
+#: doc/man/mkvextract.xml:544 doc/man/mkvmerge.xml:1694
 msgid "Attachments"
 msgstr "添付ファイル"
 
@@ -1064,7 +1064,7 @@ msgstr ""
 "く行われません。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:553 doc/man/mkvmerge.xml:1718
+#: doc/man/mkvextract.xml:553 doc/man/mkvmerge.xml:1719
 msgid "Chapters"
 msgstr "チャプタ"
 
@@ -1097,7 +1097,7 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvextract.xml:575 doc/man/mkvinfo.xml:225
-#: doc/man/mkvmerge.xml:2057 doc/man/mkvpropedit.xml:356
+#: doc/man/mkvmerge.xml:2058 doc/man/mkvpropedit.xml:356
 msgid "Exit codes"
 msgstr "返り値"
 
@@ -1141,7 +1141,7 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvextract.xml:606 doc/man/mkvinfo.xml:255
-#: doc/man/mkvmerge.xml:2088 doc/man/mkvpropedit.xml:387 doc/man/mmg.xml:90
+#: doc/man/mkvmerge.xml:2089 doc/man/mkvpropedit.xml:387 doc/man/mmg.xml:90
 msgid "See also"
 msgstr "関連項目"
 
@@ -1152,13 +1152,13 @@ msgstr "&mkvmerge;, &mkvinfo;, &mkvpropedit;, &mmg;"
 
 #. type: Content of: <refentry><refsect1><title>
 #: doc/man/mkvextract.xml:613 doc/man/mkvinfo.xml:262
-#: doc/man/mkvmerge.xml:2095 doc/man/mkvpropedit.xml:394 doc/man/mmg.xml:97
+#: doc/man/mkvmerge.xml:2096 doc/man/mkvpropedit.xml:394 doc/man/mmg.xml:97
 msgid "WWW"
 msgstr "ウェブ"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvextract.xml:615 doc/man/mkvinfo.xml:264
-#: doc/man/mkvmerge.xml:2097 doc/man/mkvpropedit.xml:396 doc/man/mmg.xml:99
+#: doc/man/mkvmerge.xml:2098 doc/man/mkvpropedit.xml:396 doc/man/mmg.xml:99
 msgid ""
 "The latest version can always be found at <ulink url=\"http://www.bunkus.org/"
 "videotools/mkvtoolnix/\">the MKVToolNix homepage</ulink>."
@@ -1505,28 +1505,30 @@ msgstr "<option>-v</option>, <option>--verbose</option>"
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:101
 msgid ""
-"Create a WebMedia compliant file. This enforces several restrictions. The "
-"only allowed codecs are VP8 video and Vorbis audio tracks. Neither chapters "
-"nor tags are allowed. The DocType header item is changed to &quot;webm&quot;."
+"Create a WebMedia compliant file. This is also turned on if the output file "
+"name's extension is &quot;webm&quot;. This mode enforces several "
+"restrictions. The only allowed codecs are VP8 video and Vorbis audio tracks. "
+"Neither chapters nor tags are allowed. The DocType header item is changed to "
+"&quot;webm&quot;."
 msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:108
+#: doc/man/mkvmerge.xml:109
 msgid "<option>--title</option> <parameter>title</parameter>"
 msgstr "<option>--title</option> <parameter>title</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:110
+#: doc/man/mkvmerge.xml:111
 msgid "Sets the general title for the output file, e.g. the movie name."
 msgstr "出力ファイル全体のタイトルを指定します(例:映画のタイトルなど)。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:115
+#: doc/man/mkvmerge.xml:116
 msgid "<option>--tags</option> <parameter>file-name</parameter>"
 msgstr "<option>--tags</option> <parameter>file-name</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:117
+#: doc/man/mkvmerge.xml:118
 msgid ""
 "Read global tags from the &xml; file <parameter>file-name</parameter>. See "
 "the section about tags below for details."
@@ -1535,14 +1537,14 @@ msgstr ""
 "み込みます。詳細はタグについてのセクションを参照してください。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:123
+#: doc/man/mkvmerge.xml:124
 msgid ""
 "<option>--default-language</option> <parameter>language-code</parameter>"
 msgstr ""
 "<option>--default-language</option> <parameter>language-code</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:125
+#: doc/man/mkvmerge.xml:126
 msgid ""
 "Sets the default language code that will be used for all tracks unless "
 "overwritten with the <link linkend=\"mkvmerge.description.language"
@@ -1555,17 +1557,17 @@ msgstr ""
 "literal>'、つまり'未定義'です。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:133
+#: doc/man/mkvmerge.xml:134
 msgid "Segment info handling: (global options)"
 msgstr "セグメント情報の扱い: (グローバルオプション)"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:138
+#: doc/man/mkvmerge.xml:139
 msgid "<option>--segmentinfo</option> <parameter>filename.xml</parameter>"
 msgstr "<option>--segmentinfo</option> <parameter>filename.xml</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:141
+#: doc/man/mkvmerge.xml:142
 #, fuzzy
 msgid ""
 "Read segment information from a <abbrev>XML</abbrev> file. This file can "
@@ -1580,12 +1582,12 @@ msgstr ""
 "す。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:149
+#: doc/man/mkvmerge.xml:150
 msgid "<option>--segment-uid</option> <parameter>SID1,SID2,...</parameter>"
 msgstr "<option>--segment-uid</option> <parameter>SID1,SID2,...</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:152
+#: doc/man/mkvmerge.xml:153
 #, fuzzy
 msgid ""
 "Sets the segment UIDs to use. This is a comma-separated list of 128bit "
@@ -1597,7 +1599,7 @@ msgstr ""
 "32桁の16進数)128ビットセグメントUIDのリストです。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:157
+#: doc/man/mkvmerge.xml:158
 msgid ""
 "Each file created contains one segment, and each segment has one segment "
 "UID. If more segment UIDs are specified than segments are created then the "
@@ -1611,19 +1613,19 @@ msgstr ""
 "されます。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:166
+#: doc/man/mkvmerge.xml:167
 msgid "Chapter and tag handling: (global options)"
 msgstr "チャプタ及びタグの扱い: (グローバルオプション)"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:171 doc/man/mkvmerge.xml:790
+#: doc/man/mkvmerge.xml:172 doc/man/mkvmerge.xml:791
 msgid ""
 "<option>--chapter-language</option> <parameter>language-code</parameter>"
 msgstr ""
 "<option>--chapter-language</option> <parameter>language-code</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:174
+#: doc/man/mkvmerge.xml:175
 msgid ""
 "Sets the ISO639-2 language code that is written for each chapter entry.  "
 "Defaults to '<literal>eng</literal>'.  See the section about <link linkend="
@@ -1634,7 +1636,7 @@ msgstr ""
 "チャプタ</link>のセクションを参照してください。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:179
+#: doc/man/mkvmerge.xml:180
 msgid ""
 "This option can be used both for simple chapter files and for source files "
 "that contain chapters but no information about the chapters' language, e.g. "
@@ -1645,13 +1647,13 @@ msgstr ""
 "に適用されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:186 doc/man/mkvmerge.xml:779
+#: doc/man/mkvmerge.xml:187 doc/man/mkvmerge.xml:780
 msgid "<option>--chapter-charset</option> <parameter>character-set</parameter>"
 msgstr ""
 "<option>--chapter-charset</option> <parameter>character-set</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:189
+#: doc/man/mkvmerge.xml:190
 msgid ""
 "Sets the character set that is used for the conversion to UTF-8 for simple "
 "chapter files. See the section about <link linkend=\"mkvmerge."
@@ -1664,7 +1666,7 @@ msgstr ""
 "照してください。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:195
+#: doc/man/mkvmerge.xml:196
 msgid ""
 "This switch does also apply to chapters that are copied from certain "
 "container types, e.g. Ogg/OGM and MP4 files.  See the section about chapters "
@@ -1675,14 +1677,14 @@ msgstr ""
 "い。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:202
+#: doc/man/mkvmerge.xml:203
 msgid ""
 "<option>--cue-chapter-name-format</option> <parameter>format</parameter>"
 msgstr ""
 "<option>--cue-chapter-name-format</option> <parameter>format</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:205
+#: doc/man/mkvmerge.xml:206
 msgid ""
 "&mkvmerge; supports reading <abbrev>CUE</abbrev> sheets for audio files as "
 "the input for chapters. <abbrev>CUE</abbrev> sheets usually contain the "
@@ -1697,7 +1699,7 @@ msgstr ""
 "用します。このフォーマットをこのオプションで指定することができます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:211
+#: doc/man/mkvmerge.xml:212
 msgid ""
 "If this option is not given then &mkvmerge; defaults to the format '<code>%p "
 "- %t</code>' (the performer, followed by a space, a dash, another space and "
@@ -1707,7 +1709,7 @@ msgstr ""
 "うフォーマットが使用されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:216
+#: doc/man/mkvmerge.xml:217
 msgid ""
 "If the format is given then everything except the following meta characters "
 "is copied as-is, and the meta characters are replaced like this:"
@@ -1716,7 +1718,7 @@ msgstr ""
 "は以下のように置換されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:222
+#: doc/man/mkvmerge.xml:223
 msgid ""
 "<parameter>%p</parameter> is replaced by the current entry's "
 "<varname>PERFORMER</varname> string,"
@@ -1725,7 +1727,7 @@ msgstr ""
 "置換されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:225
+#: doc/man/mkvmerge.xml:226
 msgid ""
 "<parameter>%t</parameter> is replaced by the current entry's <varname>TITLE</"
 "varname> string,"
@@ -1734,12 +1736,12 @@ msgstr ""
 "されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:228
+#: doc/man/mkvmerge.xml:229
 msgid "<parameter>%n</parameter> is replaced by the current track number and"
 msgstr "<parameter>%n</parameter>はそのエントリのトラック番号で置換されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:231
+#: doc/man/mkvmerge.xml:232
 msgid ""
 "<parameter>%N</parameter> is replaced by the current track number padded "
 "with a leading zero if it is &lt; 10."
@@ -1748,12 +1750,12 @@ msgstr ""
 "して二桁にした数字で置換されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:239
+#: doc/man/mkvmerge.xml:240
 msgid "<option>--chapters</option> <parameter>file-name</parameter>"
 msgstr "<option>--chapters</option> <parameter>file-name</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:242
+#: doc/man/mkvmerge.xml:243
 msgid ""
 "Read chapter information from the file <parameter>file-name</parameter>. See "
 "the section about <link linkend=\"mkvmerge.chapters\">chapters</link> below "
@@ -1764,12 +1766,12 @@ msgstr ""
 "参照してください。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:249
+#: doc/man/mkvmerge.xml:250
 msgid "<option>--global-tags</option> <parameter>file-name</parameter>"
 msgstr "<option>--global-tags</option> <parameter>file-name</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:252
+#: doc/man/mkvmerge.xml:253
 msgid ""
 "Read global tags from the file <parameter>file-name</parameter>. See the "
 "section about <link linkend=\"mkvmerge.tags\">tags</link> below for details."
@@ -1779,19 +1781,19 @@ msgstr ""
 "てください。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:260
+#: doc/man/mkvmerge.xml:261
 msgid "General output control (advanced global options):"
 msgstr "出力一般のコントロール（グローバルオプションの続き）:"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:265
+#: doc/man/mkvmerge.xml:266
 msgid ""
 "<option>--track-order</option> <parameter>FID1:TID1,FID2:TID2,...</parameter>"
 msgstr ""
 "<option>--track-order</option> <parameter>FID1:TID1,FID2:TID2,...</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:268
+#: doc/man/mkvmerge.xml:269
 msgid ""
 "This option changes the order in which the tracks for an input file are "
 "created. The argument is a comma separated list of pairs IDs. Each pair "
@@ -1809,12 +1811,12 @@ msgstr ""
 "指定されたトラックの後に配置されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:277
+#: doc/man/mkvmerge.xml:278
 msgid "<option>--cluster-length</option> <parameter>spec</parameter>"
 msgstr "<option>--cluster-length</option> <parameter>spec</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:280
+#: doc/man/mkvmerge.xml:281
 msgid ""
 "Limit the number of data blocks or the duration of data in each cluster. The "
 "<parameter>spec</parameter> parameter can either be a number <parameter>n</"
@@ -1827,7 +1829,7 @@ msgstr ""
 "parameter>を指定することができます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:285
+#: doc/man/mkvmerge.xml:286
 msgid ""
 "If no unit is used then &mkvmerge; will put at most <parameter>n</parameter> "
 "data blocks into each cluster. The maximum number of blocks is 65535."
@@ -1836,7 +1838,7 @@ msgstr ""
 "<parameter>n</parameter>に設定されます。上限は65535です。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:290
+#: doc/man/mkvmerge.xml:291
 msgid ""
 "If the number <parameter>d</parameter> is postfixed with '<literal>ms</"
 "literal>' then &mkvmerge; puts at most <parameter>d</parameter> milliseconds "
@@ -1849,7 +1851,7 @@ msgstr ""
 "literal>'、最大値は'<literal>32000ms</literal>'です。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:296
+#: doc/man/mkvmerge.xml:297
 msgid ""
 "&mkvmerge; defaults to putting at most 65535 data blocks and 2000ms of data "
 "into a cluster."
@@ -1858,7 +1860,7 @@ msgstr ""
 "書き込みます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:300
+#: doc/man/mkvmerge.xml:301
 msgid ""
 "Programs trying to find a certain frame can only seek directly to a cluster "
 "and have to read the whole cluster afterwards. Therefore creating larger "
@@ -1869,12 +1871,12 @@ msgstr ""
 "が不正確かつ遅くなるかもしれません。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:307
+#: doc/man/mkvmerge.xml:308
 msgid "<option>--no-cues</option>"
 msgstr "<option>--no-cues</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:310
+#: doc/man/mkvmerge.xml:311
 msgid ""
 "Tells &mkvmerge; not to create and write the cue data which can be compared "
 "to an index in an AVI. &matroska; files can be played back without the cue "
@@ -1891,13 +1893,13 @@ msgstr ""
 "とに指定できます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:319
+#: doc/man/mkvmerge.xml:320
 #, fuzzy
 msgid "<option>--clusters-in-meta-seek</option>"
 msgstr "<option>--no-clusters-in-meta-seek</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:322
+#: doc/man/mkvmerge.xml:323
 #, fuzzy
 msgid ""
 "Tells &mkvmerge; to create a meta seek element at the end of the file "
@@ -1909,12 +1911,12 @@ msgstr ""
 "ションも参照してください。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:329
+#: doc/man/mkvmerge.xml:330
 msgid "<option>--disable-lacing</option>"
 msgstr "<option>--disable-lacing</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:332
+#: doc/man/mkvmerge.xml:333
 msgid ""
 "Disables lacing for all tracks. This will increase the file's size, "
 "especially if there are many audio tracks. This option is not intended for "
@@ -1925,12 +1927,12 @@ msgstr ""
 "み使用してください。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:339
+#: doc/man/mkvmerge.xml:340
 msgid "<option>--enable-durations</option>"
 msgstr "<option>--enable-durations</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:342
+#: doc/man/mkvmerge.xml:343
 msgid ""
 "Write durations for all blocks. This will increase file size and does not "
 "offer any additional value for players at the moment."
@@ -1939,12 +1941,12 @@ msgstr ""
 "のところプレーヤには何のメリットももたらしません。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:348
+#: doc/man/mkvmerge.xml:349
 msgid "<option>--timecode-scale</option> <parameter>factor</parameter>"
 msgstr "<option>--timecode-scale</option> <parameter>factor</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:351
+#: doc/man/mkvmerge.xml:352
 msgid ""
 "Forces the timecode scale factor to <parameter>factor</parameter>. Valid "
 "values are in the range <constant>1000</constant>..<constant>10000000</"
@@ -1954,7 +1956,7 @@ msgstr ""
 "の値は1000～10000000、もしくは-1に設定しなければなりません。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:356
+#: doc/man/mkvmerge.xml:357
 msgid ""
 "Normally &mkvmerge; will use a value of <constant>1000000</constant> which "
 "means that timecodes and durations will have a precision of 1ms. For files "
@@ -1971,7 +1973,7 @@ msgstr ""
 "が、正確なシークと展開が可能になります。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:363
+#: doc/man/mkvmerge.xml:364
 msgid ""
 "If the special value <constant>-1</constant> is used then &mkvmerge; will "
 "use sample precision even if a video track is present."
@@ -1980,17 +1982,17 @@ msgstr ""
 "ていてもサンプリング音の精度を使用します。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:370
+#: doc/man/mkvmerge.xml:371
 msgid "File splitting, linking and appending (more global options):"
 msgstr "ファイルの分割と紐付け(グローバルオプションの続き):"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:375
+#: doc/man/mkvmerge.xml:376
 msgid "<option>--split</option> <parameter>specification</parameter>"
 msgstr "<option>--split</option> <parameter>specification</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:379
+#: doc/man/mkvmerge.xml:380
 msgid ""
 "Splits the output file after a given size or a given time.  Please note that "
 "tracks can only be split right before a key frame.  Due to buffering "
@@ -2004,17 +2006,17 @@ msgstr ""
 "よって、分割点はユーザが指定した点よりも若干後ろになります。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:385
+#: doc/man/mkvmerge.xml:386
 msgid "At the moment &mkvmerge; supports three different modes."
 msgstr "現時点では、&mkvmerge;は三つのモードをサポートしています。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:391
+#: doc/man/mkvmerge.xml:392
 msgid "Splitting by size."
 msgstr "指定サイズで分割します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:395
+#: doc/man/mkvmerge.xml:396
 msgid ""
 "Syntax: <option>--split</option> <optional>size:</optional><parameter>d</"
 "parameter><optional>k|m|g</optional>"
@@ -2023,13 +2025,13 @@ msgstr ""
 "parameter><optional>k|m|g</optional>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:399
+#: doc/man/mkvmerge.xml:400
 msgid ""
 "Examples: <code>--split size:700m</code> or <code>--split 150000000</code>"
 msgstr "例: <code>--split size:700m</code> or <code>--split 150000000</code>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:403
+#: doc/man/mkvmerge.xml:404
 msgid ""
 "The parameter <parameter>d</parameter> may end with '<literal>k</literal>', "
 "'<literal>m</literal>' or '<literal>g</literal>' to indicate that the size "
@@ -2044,7 +2046,7 @@ msgstr ""
 "されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:409
+#: doc/man/mkvmerge.xml:410
 msgid ""
 "The '<literal>size:</literal>' prefix may be omitted for compatibility "
 "reasons."
@@ -2053,12 +2055,12 @@ msgstr ""
 "ています。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:415
+#: doc/man/mkvmerge.xml:416
 msgid "Splitting after a duration."
 msgstr "指定時間で分割します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:419
+#: doc/man/mkvmerge.xml:420
 msgid ""
 "Syntax: <option>--split</option> <optional>duration:</optional><parameter>HH:"
 "MM:SS.nnnnnnnnn</parameter>|<parameter>d</parameter>s"
@@ -2067,7 +2069,7 @@ msgstr ""
 "MM:SS.nnnnnnnnn</parameter>|<parameter>d</parameter>s"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:423
+#: doc/man/mkvmerge.xml:424
 msgid ""
 "Examples: <code>--split duration:00:60:00.000</code> or <code>--split 3600s</"
 "code>"
@@ -2075,7 +2077,7 @@ msgstr ""
 "例: <code>--split duration:00:60:00.000</code> or <code>--split 3600s</code>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:427
+#: doc/man/mkvmerge.xml:428
 msgid ""
 "The parameter must either have the form <parameter>HH:MM:SS.nnnnnnnnn</"
 "parameter> for specifying the duration in up to nano-second precision or be "
@@ -2097,7 +2099,7 @@ msgstr ""
 "れたら、次のファイルへの出力が開始されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:436
+#: doc/man/mkvmerge.xml:437
 msgid ""
 "The '<literal>duration:</literal>' prefix may be omitted for compatibility "
 "reasons."
@@ -2106,12 +2108,12 @@ msgstr ""
 "なっています。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:442
+#: doc/man/mkvmerge.xml:443
 msgid "Splitting after specific timecodes."
 msgstr "指定した各タイムコードで分割します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:446
+#: doc/man/mkvmerge.xml:447
 msgid ""
 "Syntax: <option>--split</option> timecodes:<parameter>A</"
 "parameter><optional>,<parameter>B</parameter><optional>,<parameter>C</"
@@ -2122,12 +2124,12 @@ msgstr ""
 "optional>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:450
+#: doc/man/mkvmerge.xml:451
 msgid "Example: <code>--split timecodes:00:45:00.000,01:20:00.250,6300s</code>"
 msgstr "例: <code>--split timecodes:00:45:00.000,01:20:00.250,6300s</code>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:454
+#: doc/man/mkvmerge.xml:455
 msgid ""
 "The parameters <parameter>A</parameter>, <parameter>B</parameter>, "
 "<parameter>C</parameter> etc must all have the same format as the ones used "
@@ -2142,14 +2144,14 @@ msgstr ""
 "用されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:460
+#: doc/man/mkvmerge.xml:461
 msgid "The '<literal>timecodes:</literal>' prefix must not be omitted."
 msgstr ""
 "'<literal>timecodes:</literal>'という接頭辞は、互換性のために省略できるように"
 "なっています。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:465
+#: doc/man/mkvmerge.xml:466
 msgid ""
 "For this splitting mode the output filename is treated differently than for "
 "the normal operation. It may contain a <function>printf</function> like "
@@ -2173,12 +2175,12 @@ msgstr ""
 "存在しない場合、'<literal>-%03d</literal>'はファイル名の末尾に追加されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:476
+#: doc/man/mkvmerge.xml:477
 msgid "<option>--link</option>"
 msgstr "<option>--link</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:479
+#: doc/man/mkvmerge.xml:480
 msgid ""
 "Link files to one another when splitting the output file. See the section on "
 "<link linkend=\"mkvmerge.file_linking\">file linking</link> below for "
@@ -2188,12 +2190,12 @@ msgstr ""
 "file_linking\">ファイル紐付け</link>のセクションを参照してください。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:486
+#: doc/man/mkvmerge.xml:487
 msgid "<option>--link-to-previous</option> <parameter>segment-UID</parameter>"
 msgstr "<option>--link-to-previous</option> <parameter>segment-UID</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:489
+#: doc/man/mkvmerge.xml:490
 msgid ""
 "Links the first output file to the segment with the segment UID given by the "
 "<parameter>segment-UID</parameter> parameter. See the section on <link "
@@ -2204,12 +2206,12 @@ msgstr ""
 "</link>のセクションを参照してください。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:496
+#: doc/man/mkvmerge.xml:497
 msgid "<option>--link-to-next</option> <parameter>segment-UID</parameter>"
 msgstr "<option>--link-to-next</option> <parameter>segment-UID</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:499
+#: doc/man/mkvmerge.xml:500
 msgid ""
 "Links the last output file to the segment with the segment UID given by the "
 "<parameter>segment-UID</parameter> parameter. See the section on <link "
@@ -2220,12 +2222,12 @@ msgstr ""
 "</link>のセクションを参照してください。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:506
+#: doc/man/mkvmerge.xml:507
 msgid "<option>--append-mode</option> <parameter>mode</parameter>"
 msgstr "<option>--append-mode</option> <parameter>mode</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:509
+#: doc/man/mkvmerge.xml:510
 msgid ""
 "Determines how timecodes are calculated when appending files.  The parameter "
 "<parameter>mode</parameter> can have two values: '<literal>file</literal>' "
@@ -2236,7 +2238,7 @@ msgstr ""
 "ト)、'<literal>track</literal>の二つの値を取り得ます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:514
+#: doc/man/mkvmerge.xml:515
 msgid ""
 "When mkvmerge appends a track (called '<literal>track2_1</literal>' from now "
 "on) from a second file (called '<literal>file2</literal>') to a track "
@@ -2259,7 +2261,7 @@ msgstr ""
 "一番大きいタイムコードの値になります。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:522
+#: doc/man/mkvmerge.xml:523
 msgid ""
 "Unfortunately mkvmerge cannot detect which mode to use reliably. Therefore "
 "it defaults to '<literal>file</literal>' mode. '<literal>file</literal>' "
@@ -2278,7 +2280,7 @@ msgstr ""
 "く働くかもしれません。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:529
+#: doc/man/mkvmerge.xml:530
 msgid ""
 "Subtitle tracks are always treated as if '<literal>file</literal>' mode were "
 "active even if '<literal>track</literal>' mode actually is."
@@ -2287,7 +2289,7 @@ msgstr ""
 "に'<literal>file</literal>'が指定されたかのように処理されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:536
+#: doc/man/mkvmerge.xml:537
 msgid ""
 "<option>--append-to</option> <parameter>SFID1:STID1:DFID1:DTID1<optional>,..."
 "</optional></parameter>"
@@ -2296,7 +2298,7 @@ msgstr ""
 "</optional></parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:539
+#: doc/man/mkvmerge.xml:540
 #, fuzzy
 msgid ""
 "This option controls to which track another track is appended.  Each spec "
@@ -2313,7 +2315,7 @@ msgstr ""
 "れるトラックを指定します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:545
+#: doc/man/mkvmerge.xml:546
 msgid ""
 "If this option has been omitted then a standard mapping is used.  This "
 "standard mapping appends each track from the current file to a track from "
@@ -2329,12 +2331,12 @@ msgstr ""
 "mkv</command>のようにして簡単に結合することができます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:553
+#: doc/man/mkvmerge.xml:554
 msgid "<option>+</option>"
 msgstr "<option>+</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:556
+#: doc/man/mkvmerge.xml:557
 msgid ""
 "A single '+' causes the next file to be appended instead of added. The '+' "
 "can also be put in front of the next file name. Therefore the following two "
@@ -2345,7 +2347,7 @@ msgstr ""
 "は等価です。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><screen>
-#: doc/man/mkvmerge.xml:561
+#: doc/man/mkvmerge.xml:562
 #, no-wrap
 msgid ""
 "$ mkvmerge -o full.mkv file1.mkv + file2.mkv\n"
@@ -2357,19 +2359,19 @@ msgstr ""
 "     "
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:569
+#: doc/man/mkvmerge.xml:570
 msgid "Attachment support (more global options):"
 msgstr "添付ファイルのサポート（グローバルオプションの続き）:"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:574
+#: doc/man/mkvmerge.xml:575
 msgid ""
 "<option>--attachment-description</option> <parameter>description</parameter>"
 msgstr ""
 "<option>--attachment-description</option> <parameter>description</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:577
+#: doc/man/mkvmerge.xml:578
 msgid ""
 "Plain text description of the following attachment. Applies to the next "
 "<link linkend=\"mkvmerge.description.attach_file\"><option>--attach-file</"
@@ -2381,14 +2383,14 @@ msgstr ""
 "ルに適用されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:585
+#: doc/man/mkvmerge.xml:586
 msgid ""
 "<option>--attachment-mime-type</option> <parameter>MIME type</parameter>"
 msgstr ""
 "<option>--attachment-mime-type</option> <parameter>MIME type</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:588
+#: doc/man/mkvmerge.xml:589
 msgid ""
 "<abbrev >MIME</abbrev> type of the following attachment. Applies to the next "
 "<link linkend=\"mkvmerge.description.attach_file\"><option>--attach-file</"
@@ -2407,12 +2409,12 @@ msgstr ""
 "<abbrev>MIME</abbrev>タイプは添付ファイルに必須です。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:598
+#: doc/man/mkvmerge.xml:599
 msgid "<option>--attachment-name</option> <parameter>name</parameter>"
 msgstr "<option>--attachment-name</option> <parameter>name</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:601
+#: doc/man/mkvmerge.xml:602
 msgid ""
 "Sets the name that will be stored in the output file for this attachment.  "
 "If this option is not given then the name will be derived from the file name "
@@ -2428,7 +2430,7 @@ msgstr ""
 "れたファイル名がそのまま使用されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:611
+#: doc/man/mkvmerge.xml:612
 msgid ""
 "<option>--attach-file</option> <parameter>file-name</parameter>, <option>--"
 "attach-file-once</option> <parameter>file-name</parameter>"
@@ -2437,7 +2439,7 @@ msgstr ""
 "attach-file-once</option> <parameter>file-name</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:616
+#: doc/man/mkvmerge.xml:617
 msgid ""
 "Creates a file attachment inside the &matroska; file. The <abbrev>MIME</"
 "abbrev> type must have been set before this option can used. The difference "
@@ -2454,19 +2456,19 @@ msgstr ""
 "ない点です。分割が使用されない場合、二つは等価です。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:623
+#: doc/man/mkvmerge.xml:624
 msgid ""
 "&mkvextract; can be used to extract attached files from a &matroska; file."
 msgstr ""
 "&mkvextract;で&matroska;ファイルから添付ファイルを抽出することができます。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:630
+#: doc/man/mkvmerge.xml:631
 msgid "Options that can be used for each input file:"
 msgstr "各入力ファイルに指定できるオプション:"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:635
+#: doc/man/mkvmerge.xml:636
 msgid ""
 "<option>-a</option>, <option>--audio-tracks</option> <parameter>n,m,...</"
 "parameter>"
@@ -2475,7 +2477,7 @@ msgstr ""
 "parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:638
+#: doc/man/mkvmerge.xml:639
 msgid ""
 "Copy the audio tracks <parameter>n</parameter>, <parameter>m</parameter> "
 "etc. The numbers are track IDs which can be obtained with the <link linkend="
@@ -2491,7 +2493,7 @@ msgstr ""
 "トラックをコピーします。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:646
+#: doc/man/mkvmerge.xml:647
 msgid ""
 "<option>-d</option>, <option>--video-tracks</option> <parameter>n,m,...</"
 "parameter>"
@@ -2500,7 +2502,7 @@ msgstr ""
 "parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:649
+#: doc/man/mkvmerge.xml:650
 msgid ""
 "Copy the video tracks <parameter>n</parameter>, <parameter>m</parameter> "
 "etc. The numbers are track IDs which can be obtained with the <link linkend="
@@ -2516,7 +2518,7 @@ msgstr ""
 "ラックをコピーします。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:657
+#: doc/man/mkvmerge.xml:658
 msgid ""
 "<option>-s</option>, <option>--subtitle-tracks</option> <parameter>n,m,...</"
 "parameter>"
@@ -2525,7 +2527,7 @@ msgstr ""
 "parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:660
+#: doc/man/mkvmerge.xml:661
 msgid ""
 "Copy the subtitle tracks <parameter>n</parameter>, <parameter>m</parameter> "
 "etc. The numbers are track IDs which can be obtained with the <link linkend="
@@ -2541,7 +2543,7 @@ msgstr ""
 "クをコピーします。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:668
+#: doc/man/mkvmerge.xml:669
 msgid ""
 "<option>-b</option>, <option>--button-tracks</option> <parameter>n,m,...</"
 "parameter>"
@@ -2550,7 +2552,7 @@ msgstr ""
 "parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:671
+#: doc/man/mkvmerge.xml:672
 msgid ""
 "Copy the button tracks <parameter>n</parameter>, <parameter>m</parameter> "
 "etc. The numbers are track IDs which can be obtained with the <link linkend="
@@ -2566,12 +2568,12 @@ msgstr ""
 "ラックをコピーします。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:679
+#: doc/man/mkvmerge.xml:680
 msgid "<option>--track-tags</option> <parameter>n,m,...</parameter>"
 msgstr "<option>--track-tags</option> <parameter>n,m,...</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:682
+#: doc/man/mkvmerge.xml:683
 msgid ""
 "Copy the tags for tracks <parameter>n</parameter>, <parameter>m</parameter> "
 "etc.  The numbers are track IDs which can be obtained with the <link linkend="
@@ -2587,7 +2589,7 @@ msgstr ""
 "タグをコピーします。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:690
+#: doc/man/mkvmerge.xml:691
 msgid ""
 "<option>-m</option>, <option>--attachments</option> <parameter>n<optional>:"
 "all|first</optional>,m<optional>:all|first</optional>,...</parameter>"
@@ -2596,7 +2598,7 @@ msgstr ""
 "all|first</optional>,m<optional>:all|first</optional>,...</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:693
+#: doc/man/mkvmerge.xml:694
 msgid ""
 "Copy the attachments with the IDs <parameter>n</parameter>, <parameter>m</"
 "parameter> etc to all or only the first output file. Each ID can be followed "
@@ -2616,94 +2618,94 @@ msgstr ""
 "等です。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:701
+#: doc/man/mkvmerge.xml:702
 msgid "The default is to copy all attachments to all output files."
 msgstr ""
 "デフォルトでは、全ての添付ファイルが全ての出力ファイルにコピーされます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:707
+#: doc/man/mkvmerge.xml:708
 msgid "<option>-A</option>, <option>--no-audio</option>"
 msgstr "<option>-A</option>, <option>--no-audio</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:710
+#: doc/man/mkvmerge.xml:711
 msgid "Don't copy any audio track from this file."
 msgstr "このファイルからオーディオトラックをコピーしません。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:716
+#: doc/man/mkvmerge.xml:717
 msgid "<option>-D</option>, <option>--no-video</option>"
 msgstr "<option>-D</option>, <option>--no-video</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:719
+#: doc/man/mkvmerge.xml:720
 msgid "Don't copy any video track from this file."
 msgstr "このファイルからビデオトラックをコピーしません。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:725
+#: doc/man/mkvmerge.xml:726
 msgid "<option>-S</option>, <option>--no-subtitles</option>"
 msgstr "<option>-S</option>, <option>--no-subtitles</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:728
+#: doc/man/mkvmerge.xml:729
 msgid "Don't copy any subtitle track from this file."
 msgstr "このファイルから字幕トラックをコピーしません。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:734
+#: doc/man/mkvmerge.xml:735
 msgid "<option>-B</option>, <option>--no-buttons</option>"
 msgstr "<option>-B</option>, <option>--no-buttons</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:737
+#: doc/man/mkvmerge.xml:738
 #, fuzzy
 msgid "Don't copy any button track from this file."
 msgstr "このファイルからボタントラックをコピーしません。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:743
+#: doc/man/mkvmerge.xml:744
 msgid "<option>-T</option>, <option>--no-track-tags</option>"
 msgstr "<option>-T</option>, <option>--no-track-tags</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:746
+#: doc/man/mkvmerge.xml:747
 msgid "Don't copy any track specific tags from this file."
 msgstr "このファイルからオーディオトラックをコピーしません。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:752
+#: doc/man/mkvmerge.xml:753
 msgid "<option>--no-chapters</option>"
 msgstr "<option>--no-chapters</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:755
+#: doc/man/mkvmerge.xml:756
 msgid "Don't copy chapters from this file."
 msgstr "このファイルからチャプタをコピーしません。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:761
+#: doc/man/mkvmerge.xml:762
 msgid "<option>-M</option>, <option>--no-attachments</option>"
 msgstr "<option>-M</option>, <option>--no-attachments</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:764
+#: doc/man/mkvmerge.xml:765
 msgid "Don't copy attachments from this file."
 msgstr "このファイルから添付ファイルをコピーしません。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:770
+#: doc/man/mkvmerge.xml:771
 msgid "<option>--no-global-tags</option>"
 msgstr "<option>--no-global-tags</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:773
+#: doc/man/mkvmerge.xml:774
 msgid "Don't copy global tags from this file."
 msgstr "このファイルからグローバルタグを引き継ぎません。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:782
+#: doc/man/mkvmerge.xml:783
 msgid ""
 "Sets the charset that is used for the conversion to UTF-8 for chapter "
 "information contained in the source file. See the section about <link "
@@ -2716,7 +2718,7 @@ msgstr ""
 "照してください。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:793
+#: doc/man/mkvmerge.xml:794
 msgid ""
 "Sets the ISO639-2 language code that is written for each chapter entry.  "
 "This option can be used for source files that contain chapters but no "
@@ -2727,7 +2729,7 @@ msgstr ""
 "ファイル)に使用されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:800
+#: doc/man/mkvmerge.xml:801
 msgid ""
 "<option>-y</option>, <option>--sync</option> <parameter>TID:d<optional>,"
 "o<optional>/p</optional></optional></parameter>"
@@ -2736,7 +2738,7 @@ msgstr ""
 "o<optional>/p</optional></optional></parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:803
+#: doc/man/mkvmerge.xml:804
 msgid ""
 "Adjust the timecodes of the track with the id <parameter>TID</parameter> by "
 "<parameter>d</parameter> ms. The track IDs are the same as the ones given "
@@ -2751,7 +2753,7 @@ msgstr ""
 "link>のセクションを参照してください)。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:809
+#: doc/man/mkvmerge.xml:810
 msgid ""
 "<parameter>o</parameter>/<parameter>p</parameter>: adjust the timestamps by "
 "<parameter>o</parameter>/<parameter>p</parameter> to fix linear drifts. "
@@ -2765,7 +2767,7 @@ msgstr ""
 "できます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:815
+#: doc/man/mkvmerge.xml:816
 msgid ""
 "Defaults: no manual sync correction (which is the same as <parameter>d</"
 "parameter> = <constant>0</constant> and <parameter>o</parameter>/"
@@ -2776,8 +2778,8 @@ msgstr ""
 "constant>の場合と同じです)。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:820 doc/man/mkvmerge.xml:842 doc/man/mkvmerge.xml:859
-#: doc/man/mkvmerge.xml:873 doc/man/mkvmerge.xml:909 doc/man/mkvmerge.xml:1130
+#: doc/man/mkvmerge.xml:821 doc/man/mkvmerge.xml:843 doc/man/mkvmerge.xml:860
+#: doc/man/mkvmerge.xml:874 doc/man/mkvmerge.xml:910 doc/man/mkvmerge.xml:1131
 msgid ""
 "This option can be used multiple times for an input file applying to several "
 "tracks by selecting different track IDs each time."
@@ -2786,12 +2788,12 @@ msgstr ""
 "することができます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:826
+#: doc/man/mkvmerge.xml:827
 msgid "<option>--cues</option> <parameter>TID:none|iframes|all</parameter>"
 msgstr "<option>--cues</option> <parameter>TID:none|iframes|all</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:829
+#: doc/man/mkvmerge.xml:830
 msgid ""
 "Controls for which tracks cue (index) entries are created for the given "
 "track (see section <link linkend=\"mkvmerge.track_ids\">track IDs</link>). "
@@ -2810,7 +2812,7 @@ msgstr ""
 "きなファイルを出力するでしょう。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:836
+#: doc/man/mkvmerge.xml:837
 msgid ""
 "The default is '<literal>iframes</literal>' for video tracks and "
 "'<literal>none</literal>' for all others.  See also option <link linkend="
@@ -2825,7 +2827,7 @@ msgstr ""
 "ださい。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:848
+#: doc/man/mkvmerge.xml:849
 msgid ""
 "<option>--default-track</option> <parameter>TID<optional>:bool</optional></"
 "parameter>"
@@ -2834,7 +2836,7 @@ msgstr ""
 "parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:851
+#: doc/man/mkvmerge.xml:852
 msgid ""
 "Sets the 'default' flag for the given track (see section <link linkend="
 "\"mkvmerge.track_ids\">track IDs</link>) if the optional argument "
@@ -2855,7 +2857,7 @@ msgstr ""
 "<constant>0</constant>にすれば可能です。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:865
+#: doc/man/mkvmerge.xml:866
 #, fuzzy
 msgid ""
 "<option>--forced-track</option> <parameter>TID<optional>:bool</optional></"
@@ -2865,7 +2867,7 @@ msgstr ""
 "parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:868
+#: doc/man/mkvmerge.xml:869
 #, fuzzy
 msgid ""
 "Sets the 'forced' flag for the given track (see section <link linkend="
@@ -2877,12 +2879,12 @@ msgstr ""
 "linkend=\"mkvmerge.track_ids\">トラックID</link>のセクションも参照)。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:879
+#: doc/man/mkvmerge.xml:880
 msgid "<option>--blockadd</option> <parameter>TID:level</parameter>"
 msgstr "<option>--blockadd</option> <parameter>TID:level</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:882
+#: doc/man/mkvmerge.xml:883
 msgid ""
 "Keep only the <classname>BlockAdditions</classname> up to the level "
 "<parameter>level</parameter> for the given track.  The default is to keep "
@@ -2893,12 +2895,12 @@ msgstr ""
 "す。このオプションはWAVPACK4などの特定のコーデックにのみ有効です。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:889
+#: doc/man/mkvmerge.xml:890
 msgid "<option>--track-name</option> <parameter>TID:name</parameter>"
 msgstr "<option>--track-name</option> <parameter>TID:name</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:892
+#: doc/man/mkvmerge.xml:893
 msgid ""
 "Sets the track name for the given track (see section <link linkend="
 "\"mkvmerge.track_ids\">track IDs</link>) to <parameter>name</parameter>."
@@ -2907,12 +2909,12 @@ msgstr ""
 "linkend=\"mkvmerge.track_ids\">トラックID</link>のセクションも参照)。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:899
+#: doc/man/mkvmerge.xml:900
 msgid "<option>--language</option> <parameter>TID:language</parameter>"
 msgstr "<option>--language</option> <parameter>TID:language</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:902
+#: doc/man/mkvmerge.xml:903
 msgid ""
 "Sets the language for the given track (see section <link linkend=\"mkvmerge."
 "track_ids\">track IDs</link>). Both ISO639-2 language codes and ISO639-1 "
@@ -2928,7 +2930,7 @@ msgstr ""
 "\"><option>--list-languages</option></link>オプションで一覧できます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:915
+#: doc/man/mkvmerge.xml:916
 msgid ""
 "<option>-t</option>, <option>--tags</option> <parameter>TID:file-name</"
 "parameter>"
@@ -2937,7 +2939,7 @@ msgstr ""
 "parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:918
+#: doc/man/mkvmerge.xml:919
 msgid ""
 "Read tags for the track with the number <parameter>TID</parameter> from the "
 "file <parameter>file-name</parameter>. See the section about <link linkend="
@@ -2948,7 +2950,7 @@ msgstr ""
 "てください。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:925
+#: doc/man/mkvmerge.xml:926
 msgid ""
 "<option>--aac-is-sbr</option> <parameter>TID<optional>:0|1</optional></"
 "parameter>"
@@ -2957,7 +2959,7 @@ msgstr ""
 "parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:928
+#: doc/man/mkvmerge.xml:929
 msgid ""
 "Tells &mkvmerge; that the track with the ID <parameter>TID</parameter> is "
 "<abbrev>SBR AAC</abbrev> (also known as <abbrev>HE-AAC</abbrev> or "
@@ -2986,7 +2988,7 @@ msgstr ""
 "出力ファイルは正常に再生ができなくなるか、完全に再生不能になるでしょう。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:938
+#: doc/man/mkvmerge.xml:939
 msgid ""
 "If the source file is a &matroska; file then the <classname>CodecID</"
 "classname> should be enough to detect <abbrev>SBR AAC</abbrev>. However, if "
@@ -2998,7 +3000,7 @@ msgstr ""
 "classname>が不正な場合、このスイッチで修正することができます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:943
+#: doc/man/mkvmerge.xml:944
 msgid ""
 "If mkvmerge wrongfully detects that an <abbrev>AAC</abbrev> file is "
 "<abbrev>SBR</abbrev> then you can add '<literal>:0</literal>' to the track "
@@ -3008,12 +3010,12 @@ msgstr ""
 "認識してしまった場合、トラックIDに'<literal>:0</literal>'を指定できます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:950
+#: doc/man/mkvmerge.xml:951
 msgid "<option>--timecodes</option> <parameter>TID:file-name</parameter>"
 msgstr "<option>--timecodes</option> <parameter>TID:file-name</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:953
+#: doc/man/mkvmerge.xml:954
 msgid ""
 "Read the timecodes to be used for the specific track ID from <parameter>file-"
 "name</parameter>.  These timecodes forcefully override the timecodes that "
@@ -3026,12 +3028,12 @@ msgstr ""
 "コードファイル</link>のセクションを参照してください。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:961
+#: doc/man/mkvmerge.xml:962
 msgid "<option>--default-duration</option> <parameter>TID:x</parameter>"
 msgstr "<option>--default-duration</option> <parameter>TID:x</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:964
+#: doc/man/mkvmerge.xml:965
 msgid ""
 "Forces the default duration of a given track to the specified value.  Also "
 "modifies the track's timecodes to match the default duration.  The argument "
@@ -3051,7 +3053,7 @@ msgstr ""
 "たは分数で指定できます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:972
+#: doc/man/mkvmerge.xml:973
 msgid ""
 "If the default duration is not forced then mkvmerge will try to derive the "
 "track's default duration from the container and/or codec used.  One case in "
@@ -3070,7 +3072,7 @@ msgstr ""
 "を'<literal>25fps</literal>'と仮定します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:979
+#: doc/man/mkvmerge.xml:980
 msgid ""
 "This option can also be used to change the <abbrev>FPS</abbrev> of video "
 "tracks without having to use an external timecode file."
@@ -3079,12 +3081,12 @@ msgstr ""
 "<abbrev>FPS</abbrev>を変更するのにも使えます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:985
+#: doc/man/mkvmerge.xml:986
 msgid "<option>--nalu-size-length</option> <parameter>TID:n</parameter>"
 msgstr "<option>--nalu-size-length</option> <parameter>TID:n</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:988
+#: doc/man/mkvmerge.xml:989
 msgid ""
 "Forces the <abbrev>NALU</abbrev> size length to <parameter>n</parameter> "
 "bytes.  This parameter is only used if the <foreignphrase>AVC/h.264</"
@@ -3101,12 +3103,12 @@ msgstr ""
 "サイズ長を2に減らすことができます。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:998
+#: doc/man/mkvmerge.xml:999
 msgid "Options that only apply to video tracks:"
 msgstr "ビデオトラックにのみ適用されるオプション:"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:1003
+#: doc/man/mkvmerge.xml:1004
 msgid ""
 "<option>-f</option>, <option>--fourcc</option> <parameter>TID:FourCC</"
 "parameter>"
@@ -3115,7 +3117,7 @@ msgstr ""
 "parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1006
+#: doc/man/mkvmerge.xml:1007
 msgid ""
 "Forces the <classname>FourCC</classname> to the specified value. Works only "
 "for video tracks in the '<foreignphrase>MS compatibility mode</"
@@ -3125,14 +3127,14 @@ msgstr ""
 "が'<foreignphrase>MS互換モード</foreignphrase>'である場合にのみ有効です。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:1013
+#: doc/man/mkvmerge.xml:1014
 msgid ""
 "<option>--display-dimensions</option> <parameter>TID:widthxheight</parameter>"
 msgstr ""
 "<option>--display-dimensions</option> <parameter>TID:widthxheight</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1016
+#: doc/man/mkvmerge.xml:1017
 msgid ""
 "&matroska; files contain two values that set the display properties that a "
 "player should scale the image on playback to: display width and display "
@@ -3144,7 +3146,7 @@ msgstr ""
 "ば'<literal>1:640x480</literal>'のように指定できます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1021
+#: doc/man/mkvmerge.xml:1022
 msgid ""
 "Another way to specify the values is to use the <link linkend=\"mkvmerge."
 "description.aspect_ratio\"><option>--aspect-ratio</option></link> or the "
@@ -3159,14 +3161,14 @@ msgstr ""
 "排他的です。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:1030
+#: doc/man/mkvmerge.xml:1031
 msgid ""
 "<option>--aspect-ratio</option> <parameter>TID:ratio|width/height</parameter>"
 msgstr ""
 "<option>--aspect-ratio</option> <parameter>TID:ratio|width/height</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1033
+#: doc/man/mkvmerge.xml:1034
 msgid ""
 "&matroska; files contain two values that set the display properties that a "
 "player should scale the image on playback to: display width and display "
@@ -3187,7 +3189,7 @@ msgstr ""
 "ます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1041
+#: doc/man/mkvmerge.xml:1042
 msgid ""
 "Another way to specify the values is to use the <link linkend=\"mkvmerge."
 "description.aspect_ratio_factor\"><option>--aspect-ratio-factor</option></"
@@ -3202,14 +3204,14 @@ msgstr ""
 "のオプションは互いに排他的です。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:1050
+#: doc/man/mkvmerge.xml:1051
 msgid ""
 "<option>--aspect-ratio-factor</option> <parameter>TID:factor|n/d</parameter>"
 msgstr ""
 "<option>--aspect-ratio-factor</option> <parameter>TID:factor|n/d</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1053
+#: doc/man/mkvmerge.xml:1054
 msgid ""
 "Another way to set the aspect ratio is to specify a <parameter>factor</"
 "parameter>. The original aspect ratio is first multiplied with this "
@@ -3220,7 +3222,7 @@ msgstr ""
 "しいアスペクト比として使用されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1058
+#: doc/man/mkvmerge.xml:1059
 msgid ""
 "Another way to specify the values is to use the <link linkend=\"mkvmerge."
 "description.aspect_ratio\"><option>--aspect-ratio</option></link> or <link "
@@ -3235,26 +3237,26 @@ msgstr ""
 "排他的です。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:1067
+#: doc/man/mkvmerge.xml:1068
 msgid ""
 "<option>--cropping</option> <parameter>TID:left,top,right,bottom</parameter>"
 msgstr ""
 "<option>--cropping</option> <parameter>TID:left,top,right,bottom</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1070
+#: doc/man/mkvmerge.xml:1071
 msgid ""
 "Sets the pixel cropping parameters of a video track to the given values."
 msgstr ""
 "ビデオトラックのピクセルクロッピングのパラメータを指定した値に設定します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:1076
+#: doc/man/mkvmerge.xml:1077
 msgid "<option>--stereo-mode</option> <parameter>TID:n|keyword</parameter>"
 msgstr "<option>--stereo-mode</option> <parameter>TID:n|keyword</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1079
+#: doc/man/mkvmerge.xml:1080
 msgid ""
 "Sets the stereo mode for the video track with the track ID <parameter>TID</"
 "parameter>.  The mode can either be a number <parameter>n</parameter> "
@@ -3277,12 +3279,12 @@ msgstr ""
 "parameter>として指定しなければなりません。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:1089
+#: doc/man/mkvmerge.xml:1090
 msgid "<option>--compression</option> <parameter>TID:method</parameter>"
 msgstr "<option>--compression</option> <parameter>TID:method</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1092
+#: doc/man/mkvmerge.xml:1093
 msgid ""
 "Selects the compression method to be used for the VobSub track. Note that "
 "the player also has to support this method. Valid values are '<literal>none</"
@@ -3307,7 +3309,7 @@ msgstr ""
 "ブラリのサポート付きでコンパイルされたときのみ使用できます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1101
+#: doc/man/mkvmerge.xml:1102
 msgid ""
 "The compression method '<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</"
 "literal>' is a special compression method called '<foreignphrase>header "
@@ -3321,7 +3323,7 @@ msgstr ""
 "法で、どんな種類のトラックに適用できます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1107
+#: doc/man/mkvmerge.xml:1108
 msgid ""
 "The default is '<literal>zlib</literal>' compression. This compression "
 "method is also the one that most if not all playback applications support. "
@@ -3333,18 +3335,18 @@ msgstr ""
 "圧縮法については、サポートされているとは限りません。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1115
+#: doc/man/mkvmerge.xml:1116
 msgid "Options that only apply to text subtitle tracks:"
 msgstr "テキスト字幕トラックにのみ適用されるオプション:"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:1120
+#: doc/man/mkvmerge.xml:1121
 msgid "<option>--sub-charset</option> <parameter>TID:character-set</parameter>"
 msgstr ""
 "<option>--sub-charset</option> <parameter>TID:character-set</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1123
+#: doc/man/mkvmerge.xml:1124
 msgid ""
 "Sets the character set for the conversion to UTF-8 for UTF-8 subtitles for "
 "the given track ID. If not specified the charset will be derived from the "
@@ -3360,12 +3362,12 @@ msgstr ""
 "ファイルと文字コード</link>のセクションを参照してください。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1137 doc/man/mkvpropedit.xml:147
+#: doc/man/mkvmerge.xml:1138 doc/man/mkvpropedit.xml:147
 msgid "Other options:"
 msgstr "その他のオプション:"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:1142
+#: doc/man/mkvmerge.xml:1143
 msgid ""
 "<option>-i</option>, <option>--identify</option> <parameter>file-name</"
 "parameter>"
@@ -3374,7 +3376,7 @@ msgstr ""
 "parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1145
+#: doc/man/mkvmerge.xml:1146
 msgid ""
 "Will let &mkvmerge; probe the single file and report its type, the tracks "
 "contained in the file and their track IDs. If this option is used then the "
@@ -3385,22 +3387,22 @@ msgstr ""
 "るのはファイル名のみです。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:1152
+#: doc/man/mkvmerge.xml:1153
 msgid "<option>-l</option>, <option>--list-types</option>"
 msgstr "<option>-l</option>, <option>--list-types</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1155
+#: doc/man/mkvmerge.xml:1156
 msgid "Lists supported input file types."
 msgstr "サポートされている入力ファイルの種類を列挙します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:1161
+#: doc/man/mkvmerge.xml:1162
 msgid "<option>--list-languages</option>"
 msgstr "<option>--list-languages</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1164
+#: doc/man/mkvmerge.xml:1165
 msgid ""
 "Lists all languages and their ISO639-2 code which can be used with the <link "
 "linkend=\"mkvmerge.description.language\"><option>--language</option></link> "
@@ -3410,12 +3412,12 @@ msgstr ""
 "link>オプションに指定できる、ISO639-2言語コードの一覧を出力します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:1171
+#: doc/man/mkvmerge.xml:1172
 msgid "<option>--priority</option> <parameter>priority</parameter>"
 msgstr "<option>--priority</option> <parameter>priority</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1174
+#: doc/man/mkvmerge.xml:1175
 msgid ""
 "Sets the process priority that &mkvmerge; runs with. Valid values are "
 "'<literal>lowest</literal>', '<literal>lower</literal>', '<literal>normal</"
@@ -3437,7 +3439,7 @@ msgstr ""
 "ザのみが使用可能です。Windowsでは全てのユーザが全優先度を使用可能です。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1187
+#: doc/man/mkvmerge.xml:1188
 msgid ""
 "Sets the character set to convert strings given on the command line from. It "
 "defaults to the character set given by system's current locale. This "
@@ -3455,7 +3457,7 @@ msgstr ""
 "attachment-description</option></link>の三つのオプションの引数に影響します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1210
+#: doc/man/mkvmerge.xml:1211
 msgid ""
 "Writes all messages to the file <parameter>file-name</parameter> instead of "
 "to the console.  While this can be done easily with output redirection there "
@@ -3472,7 +3474,7 @@ msgstr ""
 "字コードは尊重されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1221
+#: doc/man/mkvmerge.xml:1222
 msgid ""
 "Forces the translations for the language <parameter>code</parameter> to be "
 "used (e.g.  '<literal>de_DE</literal>' for the German translations). It is "
@@ -3488,7 +3490,7 @@ msgstr ""
 "<literal>list</literal>と指定すると、指定できる言語コードの一覧を出力します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1239
+#: doc/man/mkvmerge.xml:1240
 msgid ""
 "The command line '<command>mkvmerge -o \"my file.mkv\" -A \"a movie.avi\" "
 "sound.ogg</command>' could be converted into the following option file:"
@@ -3498,7 +3500,7 @@ msgstr ""
 "て指定できます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><programlisting>
-#: doc/man/mkvmerge.xml:1244
+#: doc/man/mkvmerge.xml:1245
 #, no-wrap
 msgid ""
 "# Write to the file \"my file.mkv\".\n"
@@ -3520,12 +3522,12 @@ msgstr ""
 "     "
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvmerge.xml:1256
+#: doc/man/mkvmerge.xml:1257
 msgid "<option>--capabilities</option>"
 msgstr "<option>--capabilities</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvmerge.xml:1259
+#: doc/man/mkvmerge.xml:1260
 msgid ""
 "Lists information about optional features that have been compiled in and "
 "exit. The first line output will be the version information. All following "
@@ -3537,7 +3539,7 @@ msgstr ""
 "ことを示す一単語のみを含みます。オプション機能の一覧を下に示します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1267
+#: doc/man/mkvmerge.xml:1268
 msgid ""
 "'<literal>BZ2</literal>' -- the <productname>bzlib</productname> compression "
 "library. Affects the available compression methods for the <link linkend="
@@ -3549,7 +3551,7 @@ msgstr ""
 "compression</option></link>オプションに指定できる圧縮メソッドに影響します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1274
+#: doc/man/mkvmerge.xml:1275
 msgid ""
 "'<literal>LZO</literal>' -- the <productname>lzo</productname> compression "
 "library. Affects the available compression methods for the <link linkend="
@@ -3561,7 +3563,7 @@ msgstr ""
 "option></link>オプションに指定できる圧縮メソッドに影響します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1281
+#: doc/man/mkvmerge.xml:1282
 msgid ""
 "'<literal>FLAC</literal>' -- reading raw <abbrev>FLAC</abbrev> files and "
 "handling <abbrev>FLAC</abbrev> tracks in other containers, e.g. "
@@ -3572,12 +3574,12 @@ msgstr ""
 "<abbrev>FLAC</abbrev>トラックの処理。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvmerge.xml:1310
+#: doc/man/mkvmerge.xml:1311
 msgid "Usage"
 msgstr "使用法"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1312
+#: doc/man/mkvmerge.xml:1313
 msgid ""
 "For each file the user can select which tracks &mkvmerge; should take.  They "
 "are all put into the file specified with <option>-o</option>. A list of "
@@ -3590,12 +3592,12 @@ msgstr ""
 "プションで取得できます。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvmerge.xml:1318 doc/man/mkvpropedit.xml:332
+#: doc/man/mkvmerge.xml:1319 doc/man/mkvpropedit.xml:332
 msgid "Examples"
 msgstr "例"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1320
+#: doc/man/mkvmerge.xml:1321
 msgid ""
 "Let's assume you have a file called MyMovie.avi and the audio track in a "
 "separate file, e.g. '<literal>MyMovie.wav</literal>'. First you want to "
@@ -3606,24 +3608,24 @@ msgstr ""
 "す。あなたは、まず音声を&oggvorbis;でエンコードしたいと思います。"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1324
+#: doc/man/mkvmerge.xml:1325
 #, no-wrap
 msgid "$ oggenc -q4 -oMyMovie.ogg MyMovie.wav"
 msgstr "$ oggenc -q4 -oMyMovie.ogg MyMovie.wav"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1327
+#: doc/man/mkvmerge.xml:1328
 msgid "After a couple of minutes you can join video and audio:"
 msgstr "数分後、ビデオとオーディオを結合できます。"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1330
+#: doc/man/mkvmerge.xml:1331
 #, no-wrap
 msgid "$ mkvmerge -o MyMovie-with-sound.mkv MyMovie.avi MyMovie.ogg"
 msgstr "$ mkvmerge -o MyMovie-with-sound.mkv MyMovie.avi MyMovie.ogg"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1333
+#: doc/man/mkvmerge.xml:1334
 msgid ""
 "If your <abbrev>AVI</abbrev> already contains an audio track then it will be "
 "copied as well (if &mkvmerge; supports the audio format). To avoid that "
@@ -3634,13 +3636,13 @@ msgstr ""
 "す。これを避けるには、下のようにしてください。"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1337
+#: doc/man/mkvmerge.xml:1338
 #, no-wrap
 msgid "$ mkvmerge -o MyMovie-with-sound.mkv -A MyMovie.avi MyMovie.ogg"
 msgstr "$ mkvmerge -o MyMovie-with-sound.mkv -A MyMovie.avi MyMovie.ogg"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1340
+#: doc/man/mkvmerge.xml:1341
 msgid ""
 "After some minutes of consideration you rip another audio track, e.g.  the "
 "director's comments or another language to '<literal>MyMovie-add-audio.wav</"
@@ -3651,7 +3653,7 @@ msgstr ""
 "した。再びエンコードして、新しいファイルにまとめます。"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1345
+#: doc/man/mkvmerge.xml:1346
 #, no-wrap
 msgid ""
 "$ oggenc -q4 -oMyMovie-add-audio.ogg MyMovie-add-audio.wav\n"
@@ -3663,18 +3665,18 @@ msgstr ""
 "  "
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1350
+#: doc/man/mkvmerge.xml:1351
 msgid "The same result can be achieved with"
 msgstr "同じことは、次のようにしても可能です。"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1353
+#: doc/man/mkvmerge.xml:1354
 #, no-wrap
 msgid "$ mkvmerge -o MM-complete.mkv -A MyMovie.avi MyMovie.ogg MyMovie-add-audio.ogg"
 msgstr "$ mkvmerge -o MM-complete.mkv -A MyMovie.avi MyMovie.ogg MyMovie-add-audio.ogg"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1356
+#: doc/man/mkvmerge.xml:1357
 msgid ""
 "Now fire up <productname>mplayer</productname> and enjoy. If you have "
 "multiple audio tracks (or even video tracks) then you can tell "
@@ -3689,7 +3691,7 @@ msgstr ""
 "ディオの区別をしないIDを指定します。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1362
+#: doc/man/mkvmerge.xml:1363
 msgid ""
 "If you need an audio track synchronized you can do that easily. First find "
 "out which track ID the Vorbis track has with"
@@ -3698,24 +3700,24 @@ msgstr ""
 "す。まず、次のようにしてVorbisトラックのトラックIDを取得します。"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1365
+#: doc/man/mkvmerge.xml:1366
 #, no-wrap
 msgid "$ mkvmerge --identify outofsync.ogg"
 msgstr "$ mkvmerge --identify outofsync.ogg"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1368
+#: doc/man/mkvmerge.xml:1369
 msgid "Now you can use that ID in the following command line:"
 msgstr "次に、このIDを使って、次のようなコマンドラインを実行します。"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1371
+#: doc/man/mkvmerge.xml:1372
 #, no-wrap
 msgid "$ mkvmerge -o goodsync.mkv -A source.avi -y 12345:200 outofsync.ogg"
 msgstr "$ mkvmerge -o goodsync.mkv -A source.avi -y 12345:200 outofsync.ogg"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1374
+#: doc/man/mkvmerge.xml:1375
 msgid ""
 "This would add 200ms of silence at the beginning of the audio track with the "
 "ID <constant>12345</constant> taken from '<literal>outofsync.ogg</literal>'."
@@ -3725,7 +3727,7 @@ msgstr ""
 "す。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1379
+#: doc/man/mkvmerge.xml:1380
 msgid ""
 "Some movies start synced correctly but slowly drift out of sync. For these "
 "kind of movies you can specify a delay factor that is applied to all "
@@ -3746,23 +3748,23 @@ msgstr ""
 "実行しました。"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1386
+#: doc/man/mkvmerge.xml:1387
 #, no-wrap
 msgid "$ mkvmerge -o goodsync.mkv -y 23456:0,77346/77340 outofsync.mkv"
 msgstr "$ mkvmerge -o goodsync.mkv -y 23456:0,77346/77340 outofsync.mkv"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1389
+#: doc/man/mkvmerge.xml:1390
 msgid "The result was fine."
 msgstr "結果は良好でした。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1393
+#: doc/man/mkvmerge.xml:1394
 msgid "The sync options can also be used for subtitles in the same manner."
 msgstr "同期オプションは字幕にも同様に使用できます。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1397
+#: doc/man/mkvmerge.xml:1398
 msgid ""
 "For text subtitles you can either use some Windows software (like "
 "<productname>SubRipper</productname>) or the <productname>subrip</"
@@ -3777,62 +3779,62 @@ msgstr ""
 "productname>パッケージが使用できます。一般的なプロセスは以下の通りです。"
 
 #. type: Content of: <refentry><refsect1><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1405
+#: doc/man/mkvmerge.xml:1406
 msgid "extract a raw subtitle stream from the source:"
 msgstr "ソースから生字幕を抽出:"
 
 #. type: Content of: <refentry><refsect1><orderedlist><listitem><screen>
-#: doc/man/mkvmerge.xml:1406
+#: doc/man/mkvmerge.xml:1407
 #, no-wrap
 msgid "$ tccat -i /path/to/copied/dvd/ -T 1 -L | tcextract -x ps1 -t vob -a 0x20 | subtitle2pgm -o mymovie"
 msgstr "$ tccat -i /path/to/copied/dvd/ -T 1 -L | tcextract -x ps1 -t vob -a 0x20 | subtitle2pgm -o mymovie"
 
 #. type: Content of: <refentry><refsect1><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1410
+#: doc/man/mkvmerge.xml:1411
 msgid "convert the resulting PGM images to text with gocr:"
 msgstr "出力されたPGMイメージをgocrでテキスト化:"
 
 #. type: Content of: <refentry><refsect1><orderedlist><listitem><screen>
-#: doc/man/mkvmerge.xml:1411
+#: doc/man/mkvmerge.xml:1412
 #, no-wrap
 msgid "$ pgm2txt mymovie"
 msgstr "$ pgm2txt mymovie"
 
 #. type: Content of: <refentry><refsect1><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1415
+#: doc/man/mkvmerge.xml:1416
 msgid "spell-check the resulting text files:"
 msgstr "出力されたテキストファイルを校正:"
 
 #. type: Content of: <refentry><refsect1><orderedlist><listitem><screen>
-#: doc/man/mkvmerge.xml:1416
+#: doc/man/mkvmerge.xml:1417
 #, no-wrap
 msgid "$ ispell -d american *txt"
 msgstr "$ ispell -d american *txt"
 
 #. type: Content of: <refentry><refsect1><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1420
+#: doc/man/mkvmerge.xml:1421
 msgid "convert the text files to a SRT file:"
 msgstr "テキストファイルをSRTファイルに変換:"
 
 #. type: Content of: <refentry><refsect1><orderedlist><listitem><screen>
-#: doc/man/mkvmerge.xml:1421
+#: doc/man/mkvmerge.xml:1422
 #, no-wrap
 msgid "$ srttool -s -w -i mymovie.srtx -o mymovie.srt"
 msgstr "$ srttool -s -w -i mymovie.srtx -o mymovie.srt"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1426
+#: doc/man/mkvmerge.xml:1427
 msgid "The resulting file can be used as another input file for &mkvmerge;:"
 msgstr "出力されたファイルを&mkvmerge;の入力ファイルとして使用する:"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1429
+#: doc/man/mkvmerge.xml:1430
 #, no-wrap
 msgid "$ mkvmerge -o mymovie.mkv mymovie.avi mymovie.srt"
 msgstr "$ mkvmerge -o mymovie.mkv mymovie.avi mymovie.srt"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1432
+#: doc/man/mkvmerge.xml:1433
 msgid ""
 "If you want to specify the language for a given track then this is easily "
 "done. First find out the ISO639-2 code for your language. &mkvmerge; can "
@@ -3843,13 +3845,13 @@ msgstr ""
 "語コードを一覧表示させることができます。"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1436
+#: doc/man/mkvmerge.xml:1437
 #, no-wrap
 msgid "$ mkvmerge --list-languages"
 msgstr "$ mkvmerge --list-languages"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1439
+#: doc/man/mkvmerge.xml:1440
 msgid ""
 "Search the list for the languages you need. Let's assume you have put two "
 "audio tracks into a &matroska; file and want to set their language codes and "
@@ -3860,13 +3862,13 @@ msgstr ""
 "指定するには、次のようにします。"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1443
+#: doc/man/mkvmerge.xml:1444
 #, no-wrap
 msgid "$ mkvmerge -o with-lang-codes.mkv --language 2:ger --language 3:dut without-lang-codes.mkv"
 msgstr "$ mkvmerge -o with-lang-codes.mkv --language 2:ger --language 3:dut without-lang-codes.mkv"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1446
+#: doc/man/mkvmerge.xml:1447
 msgid ""
 "As you can see you can use the <link linkend=\"mkvmerge.description.language"
 "\"><option>--language</option></link> switch multiple times."
@@ -3875,7 +3877,7 @@ msgstr ""
 "language</option></link>スイッチを複数回使うことができます。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1450
+#: doc/man/mkvmerge.xml:1451
 msgid ""
 "Maybe you'd also like to have the player use the Dutch language as the "
 "default language. You also have extra subtitles, e.g. in English and French, "
@@ -3887,13 +3889,13 @@ msgstr ""
 "仮定します。これは、次のようにすれば可能です。"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1454
+#: doc/man/mkvmerge.xml:1455
 #, no-wrap
 msgid "$ mkvmerge -o with-lang-codes.mkv --language 2:ger --language 3:dut --default-track 3 without-lang-codes.mkv --language 0:eng english.srt --default-track 0 --language 0:fre french.srt"
 msgstr "$ mkvmerge -o with-lang-codes.mkv --language 2:ger --language 3:dut --default-track 3 without-lang-codes.mkv --language 0:eng english.srt --default-track 0 --language 0:fre french.srt"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1457
+#: doc/man/mkvmerge.xml:1458
 msgid ""
 "If you do not see the language or default track flags that you've specified "
 "in &mkvinfo;'s output then please read the section about <link linkend="
@@ -3904,12 +3906,12 @@ msgstr ""
 "を参照してください。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvmerge.xml:1463
+#: doc/man/mkvmerge.xml:1464
 msgid "Track IDs"
 msgstr "トラックID"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1466
+#: doc/man/mkvmerge.xml:1467
 msgid ""
 "Some of the options for &mkvmerge; need a track ID to specify which track "
 "they should be applied to.  Those track IDs are printed by the readers when "
@@ -3924,7 +3926,7 @@ msgstr ""
 "ともできます。この場合の出力は次のようになります。"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1472
+#: doc/man/mkvmerge.xml:1473
 #, no-wrap
 msgid ""
 "$ mkvmerge -i v.mkv\n"
@@ -3940,12 +3942,12 @@ msgstr ""
 "  "
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1479
+#: doc/man/mkvmerge.xml:1480
 msgid "Track IDs are assigned like this:"
 msgstr "トラックIDは次のように割り当てられます:"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1485
+#: doc/man/mkvmerge.xml:1486
 msgid ""
 "<abbrev>AVI</abbrev> files: The video track has the ID 0. The audio tracks "
 "get IDs in ascending order starting at 1."
@@ -3954,7 +3956,7 @@ msgstr ""
 "ラックのIDは1から昇順に割り当てられます。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1491
+#: doc/man/mkvmerge.xml:1492
 msgid ""
 "<abbrev>AAC</abbrev>, <abbrev>AC3</abbrev>, <abbrev>MP3</abbrev>, "
 "<abbrev>SRT</abbrev> and <abbrev>WAV</abbrev> files: The one 'track' in that "
@@ -3965,7 +3967,7 @@ msgstr ""
 "ラックがID 0 を割り当てられます。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1498
+#: doc/man/mkvmerge.xml:1499
 msgid ""
 "Ogg/<abbrev>OGM</abbrev> files: The track IDs are assigned in order the "
 "tracks are found in the file starting at 0."
@@ -3974,7 +3976,7 @@ msgstr ""
 "り当てられます。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1504
+#: doc/man/mkvmerge.xml:1505
 msgid ""
 "&matroska; files: The track's ID is the track number as reported by "
 "&mkvinfo;. It is <emphasis>not</emphasis> the track UID."
@@ -3983,7 +3985,7 @@ msgstr ""
 "れます。これはトラックUIDでは<emphasis>ありません</emphasis>。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1510
+#: doc/man/mkvmerge.xml:1511
 msgid ""
 "The special track ID '<constant>-1</constant>' is a wild card and applies "
 "the given switch to all tracks that are read from an input file."
@@ -3992,7 +3994,7 @@ msgstr ""
 "全てのトラックに適用されることを示します。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1515
+#: doc/man/mkvmerge.xml:1516
 msgid ""
 "The options that use the track IDs are the ones whose description contains "
 "'<literal>TID</literal>'.  The following options use track IDs as well: "
@@ -4005,12 +4007,12 @@ msgstr ""
 "IDを使用します。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvmerge.xml:1522
+#: doc/man/mkvmerge.xml:1523
 msgid "Text files and character set conversions"
 msgstr "テキストファイルと文字コード変換"
 
 #. type: Content of: <refentry><refsect1><note><para>
-#: doc/man/mkvmerge.xml:1525
+#: doc/man/mkvmerge.xml:1526
 #, fuzzy
 msgid ""
 "This section applies to all programs in MkvToolNix even if it only mentions "
@@ -4020,7 +4022,7 @@ msgstr ""
 "ムにあてはまります。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1530
+#: doc/man/mkvmerge.xml:1531
 msgid ""
 "All text in a &matroska; file is encoded in UTF-8. This means that "
 "&mkvmerge; has to convert every text file it reads as well as every text "
@@ -4038,7 +4040,7 @@ msgstr ""
 "には、UTF-8から指定された文字コードに変換すればよいということになります。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1537
+#: doc/man/mkvmerge.xml:1538
 msgid ""
 "&mkvmerge; does this conversion automatically based on the presence of a "
 "<foreignphrase>byte order marker</foreignphrase> (short: <abbrev>BOM</"
@@ -4051,7 +4053,7 @@ msgstr ""
 "システムに依存します。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1543
+#: doc/man/mkvmerge.xml:1544
 msgid ""
 "Text files that start with a BOM are already encoded in one representation "
 "of UTF. &mkvmerge; supports the following five modes: UTF-8, UTF-16 Little "
@@ -4070,7 +4072,7 @@ msgstr ""
 "れます。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1550
+#: doc/man/mkvmerge.xml:1551
 msgid ""
 "On Unix-like systems &mkvmerge; uses the "
 "<citerefentry><refentrytitle>setlocale</refentrytitle><manvolnum>3</"
@@ -4088,7 +4090,7 @@ msgstr ""
 "コードとして使用される。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1557
+#: doc/man/mkvmerge.xml:1558
 msgid ""
 "On Windows there are actually two different character sets that &mkvmerge; "
 "uses due to the way the Windows shell program <command>cmd.exe</command> is "
@@ -4111,12 +4113,12 @@ msgstr ""
 "コンソールへの出力のデフォルト文字コードです。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1566
+#: doc/man/mkvmerge.xml:1567
 msgid "The following options exist that allow specifying the character sets:"
 msgstr "次のような文字コードを指定するオプションがあります。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1572
+#: doc/man/mkvmerge.xml:1573
 msgid ""
 "<link linkend=\"mkvmerge.description.sub_charset\"><option>--sub-charset</"
 "option></link> for text subtitle files and for text subtitle tracks stored "
@@ -4129,7 +4131,7 @@ msgstr ""
 "ル)の文字コードを指定します。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1579
+#: doc/man/mkvmerge.xml:1580
 msgid ""
 "<link linkend=\"mkvmerge.description.chapter_charset\"><option>--chapter-"
 "charset</option></link> for chapter text files and for chapters and file "
@@ -4144,7 +4146,7 @@ msgstr ""
 "等、及びMP4ファイルのチャプタ情報)の文字コードを指定します。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1587
+#: doc/man/mkvmerge.xml:1588
 msgid ""
 "<link linkend=\"mkvmerge.description.command_line_charset\"><option>--"
 "command-line-charset</option></link> for all strings on the command line,"
@@ -4154,7 +4156,7 @@ msgstr ""
 "を指定します。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1594
+#: doc/man/mkvmerge.xml:1595
 msgid ""
 "<link linkend=\"mkvmerge.description.output_charset\"><option>--output-"
 "charset</option></link> for all strings written to the console or to a file "
@@ -4169,12 +4171,12 @@ msgstr ""
 "のファイルの文字列の文字コードを指定します。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvmerge.xml:1603
+#: doc/man/mkvmerge.xml:1604
 msgid "Subtitles"
 msgstr "字幕"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1605
+#: doc/man/mkvmerge.xml:1606
 msgid ""
 "There are several text subtitle formats that can be embedded into "
 "&matroska;.  At the moment &mkvmerge; supports only text, VobSub and Kate "
@@ -4193,37 +4195,37 @@ msgstr ""
 "要はありません。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1612
+#: doc/man/mkvmerge.xml:1613
 msgid "The following subtitle formats are supported at the moment:"
 msgstr "現在、次の字幕フォーマットがサポートされています。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1618
+#: doc/man/mkvmerge.xml:1619
 msgid "Subtitle Ripper (SRT) files"
 msgstr "SubRipテキスト字幕形式(SRT)ファイル"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1624
+#: doc/man/mkvmerge.xml:1625
 msgid "Substation Alpha (SSA) / Advanced Substation Alpha scripts (ASS)"
 msgstr "Substation Alpha (SSA) / Advanced Substation (ASS) 字幕"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1630
+#: doc/man/mkvmerge.xml:1631
 msgid "OggKate streams"
 msgstr "OggKateストリーム"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1636
+#: doc/man/mkvmerge.xml:1637
 msgid "VobSub bitmap subtitle files"
 msgstr "VobSubビットマップ字幕"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvmerge.xml:1643
+#: doc/man/mkvmerge.xml:1644
 msgid "File linking"
 msgstr "ファイル紐付け"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1645
+#: doc/man/mkvmerge.xml:1646
 msgid ""
 "&matroska; supports file linking which simply says that a specific file is "
 "the predecessor or successor of the current file. To be precise, it's not "
@@ -4239,7 +4241,7 @@ msgstr ""
 "ト紐付け'という用語ではなく、'ファイル紐付け'という用語を使用します。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1651
+#: doc/man/mkvmerge.xml:1652
 msgid ""
 "Each segment is identified by a unique 128 bit wide segment UID. This UID is "
 "automatically generated by &mkvmerge;. The linking is done primarily via "
@@ -4253,7 +4255,7 @@ msgstr ""
 "この<abbrev>SID</abbrev>を、存在する場合は表示します。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1657
+#: doc/man/mkvmerge.xml:1658
 msgid ""
 "If a file is split into several smaller ones and linking is used then the "
 "timecodes will not start at 0 again but will continue where the last file "
@@ -4273,7 +4275,7 @@ msgstr ""
 "このオプションはファイル分割が有効な場合以外には無効です。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1664
+#: doc/man/mkvmerge.xml:1665
 msgid ""
 "Regardless of whether splitting is active or not the user can tell "
 "&mkvmerge; to link the produced files to specific <abbrev>SIDs</abbrev>. "
@@ -4300,7 +4302,7 @@ msgstr ""
 "literal>')を指定することもできます。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1674
+#: doc/man/mkvmerge.xml:1675
 msgid ""
 "If splitting is used then the first file is linked to the <abbrev>SID</"
 "abbrev> given with <option>--link-to-previous</option> and the last file is "
@@ -4315,12 +4317,12 @@ msgstr ""
 "abbrev>に紐付けされます。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvmerge.xml:1681
+#: doc/man/mkvmerge.xml:1682
 msgid "Default values"
 msgstr "デフォルト値"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1683
+#: doc/man/mkvmerge.xml:1684
 #, fuzzy
 msgid ""
 "The &matroska; specification states that some elements have a default value. "
@@ -4344,7 +4346,7 @@ msgstr ""
 "の出力には現れません。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1695
+#: doc/man/mkvmerge.xml:1696
 msgid ""
 "Maybe you also want to keep some photos along with your &matroska; file, or "
 "you're using <abbrev>SSA</abbrev> subtitles and need a special "
@@ -4363,7 +4365,7 @@ msgstr ""
 "ントの場合)できます。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1702
+#: doc/man/mkvmerge.xml:1703
 msgid ""
 "Here's an example how to attach a photo and a <productname>TrueType</"
 "productname> font to the output file:"
@@ -4372,7 +4374,7 @@ msgstr ""
 "る方法の例を示します。"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1706
+#: doc/man/mkvmerge.xml:1707
 #, no-wrap
 msgid ""
 "$ mkvmerge -o output.mkv -A video.avi sound.ogg --attachment-description \"Me and the band behind the stage in a small get-together\" --attachment-mime-type image/jpeg --attach-file me_and_the_band.jpg --attachment-description \"The real rare and unbelievably good looking font\" --attachment-type application/octet-stream --attach-file really_cool_font.ttf\n"
@@ -4382,7 +4384,7 @@ msgstr ""
 "  "
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1710
+#: doc/man/mkvmerge.xml:1711
 msgid ""
 "If a &matroska; containing attachments file is used as an input file then "
 "&mkvmerge; will copy the attachments into the new file. The selection which "
@@ -4399,7 +4401,7 @@ msgstr ""
 "attachment-description</option></link>の三つのオプションの引数に影響します。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1720
+#: doc/man/mkvmerge.xml:1721
 msgid ""
 "The &matroska; chapter system is more powerful than the old known system "
 "used by <abbrev>OGM</abbrev> files. The full specifications can be found at "
@@ -4410,7 +4412,7 @@ msgstr ""
 "org\">&matroska;のウェブサイト</ulink>に記されています。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1725
+#: doc/man/mkvmerge.xml:1726
 msgid ""
 "&mkvmerge; supports two kinds of chapter files as its input. The first "
 "format, called '<foreignphrase>simple chapter format</foreignphrase>', is "
@@ -4425,12 +4427,12 @@ msgstr ""
 "しています。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:1731
+#: doc/man/mkvmerge.xml:1732
 msgid "The simple chapter format"
 msgstr "シンプルチャプタフォーマット"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1734
+#: doc/man/mkvmerge.xml:1735
 msgid ""
 "This formmat consists of pairs of lines that start with "
 "'<literal>CHAPTERxx=</literal>' and '<literal>CHAPTERxxNAME=</literal>' "
@@ -4442,7 +4444,7 @@ msgstr ""
 "開始タイムコードを含み、後者はタイトルを含みます。下に例を示します。"
 
 #. type: Content of: <refentry><refsect1><refsect2><screen>
-#: doc/man/mkvmerge.xml:1739
+#: doc/man/mkvmerge.xml:1740
 #, no-wrap
 msgid ""
 "CHAPTER01=00:00:00.000\n"
@@ -4462,7 +4464,7 @@ msgstr ""
 "   "
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1748
+#: doc/man/mkvmerge.xml:1749
 msgid ""
 "&mkvmerge; will transform every pair or lines into one &matroska; "
 "<classname>ChapterAtom</classname>. It does not set any "
@@ -4474,7 +4476,7 @@ msgstr ""
 "ので、全てのトラックにチャプタは適用されます。"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1753
+#: doc/man/mkvmerge.xml:1754
 msgid ""
 "As this is a text file character set conversion may need to be done. See the "
 "section about <link linkend=\"mkvmerge.text_files_and_charsets\"> text files "
@@ -4486,17 +4488,17 @@ msgstr ""
 "ファイルと文字コード</link>のセクションを参照してください。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:1760
+#: doc/man/mkvmerge.xml:1761
 msgid "The &xml; based chapter format"
 msgstr "&xml;チャプタフォーマット"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1762
+#: doc/man/mkvmerge.xml:1763
 msgid "The &xml; based chapter format looks like this example:"
 msgstr "&xml;チャプタフォーマットの例を以下に示します。"
 
 #. type: Content of: <refentry><refsect1><refsect2><screen>
-#: doc/man/mkvmerge.xml:1766
+#: doc/man/mkvmerge.xml:1767
 #, no-wrap
 msgid ""
 "&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;\n"
@@ -4548,7 +4550,7 @@ msgstr ""
 "   "
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1791
+#: doc/man/mkvmerge.xml:1792
 msgid ""
 "With this format three things are possible that are not possible with the "
 "simple chapter format:"
@@ -4557,22 +4559,22 @@ msgstr ""
 "能です。"
 
 #. type: Content of: <refentry><refsect1><refsect2><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1795
+#: doc/man/mkvmerge.xml:1796
 msgid "The timestamp for the end of the chapter can be set,"
 msgstr "チャプタの終了タイムコードを指定できます。"
 
 #. type: Content of: <refentry><refsect1><refsect2><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1796
+#: doc/man/mkvmerge.xml:1797
 msgid "chapters can be nested,"
 msgstr "ネストしたチャプタを作成できます。"
 
 #. type: Content of: <refentry><refsect1><refsect2><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1797
+#: doc/man/mkvmerge.xml:1798
 msgid "the language and country can be set."
 msgstr "言語及び国を設定できます。"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1801
+#: doc/man/mkvmerge.xml:1802
 msgid ""
 "The mkvtoolnix distribution contains some sample files in the <filename>doc</"
 "filename> subdirectory which can be used as a basis."
@@ -4581,12 +4583,12 @@ msgstr ""
 "ンプルファイルは<filename>doc</filename>サブディレクトリの中にあります。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:1806
+#: doc/man/mkvmerge.xml:1807
 msgid "General notes"
 msgstr "注意"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1808
+#: doc/man/mkvmerge.xml:1809
 msgid ""
 "When splitting files &mkvmerge; will correctly adjust the chapters as well. "
 "This means that each file only includes the chapter entries that apply to "
@@ -4598,7 +4600,7 @@ msgstr ""
 "は適切なオフセットがかかります。"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1813
+#: doc/man/mkvmerge.xml:1814
 msgid ""
 "&mkvmerge; is able to copy chapters from &matroska; source files unless this "
 "is explicitly disabled with the <link linkend=\"mkvmerge.description."
@@ -4624,12 +4626,12 @@ msgstr ""
 "マージした後にMUXを行なわなければなりません。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:1828
+#: doc/man/mkvmerge.xml:1829
 msgid "Introduction"
 msgstr "はじめに"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1831
+#: doc/man/mkvmerge.xml:1832
 msgid ""
 "&matroska; supports an extensive set of tags that is deprecated and a new, "
 "simpler system like it is is used in most other containers: "
@@ -4646,12 +4648,12 @@ msgstr ""
 "filename>がこの新しいシステムの使い方の例を示しています。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:1839
+#: doc/man/mkvmerge.xml:1840
 msgid "Scope of the tags"
 msgstr "タグのスコープ"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1842
+#: doc/man/mkvmerge.xml:1843
 msgid ""
 "&matroska; tags do not automatically apply to the complete file. They can, "
 "but they also may apply to different parts of the file: to one or more "
@@ -4666,7 +4668,7 @@ msgstr ""
 "\">&matroska;の仕様</ulink>に、このことの詳細が記述されています。"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1848
+#: doc/man/mkvmerge.xml:1849
 msgid ""
 "One important fact is that tags are linked to tracks or chapters with the "
 "<classname>Targets</classname> &matroska; tag element, and that the UIDs "
@@ -4687,7 +4689,7 @@ msgstr ""
 "です。"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1856
+#: doc/man/mkvmerge.xml:1857
 msgid ""
 "&mkvmerge; knows two options with which you can add tags to &matroska; "
 "files: The <link linkend=\"mkvmerge.description.global_tags\"><option>--"
@@ -4715,12 +4717,12 @@ msgstr ""
 "たUIDを挿入します。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:1868
+#: doc/man/mkvmerge.xml:1869
 msgid "Example"
 msgstr "例"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1870
+#: doc/man/mkvmerge.xml:1871
 msgid ""
 "Let's say that you want to add tags to a video track read from an "
 "<abbrev>AVI</abbrev>. <command>mkvmerge --identify file.avi</command> tells "
@@ -4735,7 +4737,7 @@ msgstr ""
 "トを記入しないタグファイルを作成し、&mkvmerge;を以下のように実行します。"
 
 #. type: Content of: <refentry><refsect1><refsect2><screen>
-#: doc/man/mkvmerge.xml:1876
+#: doc/man/mkvmerge.xml:1877
 #, no-wrap
 msgid ""
 "$ mkvmerge -o file.mkv --tags 0:tags.xml file.avi\n"
@@ -4745,12 +4747,12 @@ msgstr ""
 "   "
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:1881
+#: doc/man/mkvmerge.xml:1882
 msgid "Tag file format"
 msgstr "タグファイルフォーマット"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1883
+#: doc/man/mkvmerge.xml:1884
 msgid ""
 "&mkvmerge; supports a &xml; based tag file format. The format is very "
 "closely modeled after <ulink url=\"http://matroska.org/technical/specs/index."
@@ -4767,20 +4769,20 @@ msgstr ""
 "tags-2.xml</filename>というサンプルファイルを含んでいます。"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1890
+#: doc/man/mkvmerge.xml:1891
 #, fuzzy
 msgid "The basics are:"
 msgstr "基本的には、以下の様な構成です。"
 
 #. type: Content of: <refentry><refsect1><refsect2><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1894
+#: doc/man/mkvmerge.xml:1895
 msgid "The outermost element must be <classname>&lt;Tags&gt;</classname>."
 msgstr ""
 "最も外側のエレメントは<classname>&lt;Tags&gt;</classname>でなければなりませ"
 "ん。"
 
 #. type: Content of: <refentry><refsect1><refsect2><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1896
+#: doc/man/mkvmerge.xml:1897
 msgid ""
 "One logical tag is contained inside one pair of <classname>&lt;Tag&gt;</"
 "classname> &xml; tags."
@@ -4789,17 +4791,17 @@ msgstr ""
 "す。"
 
 #. type: Content of: <refentry><refsect1><refsect2><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1898
+#: doc/man/mkvmerge.xml:1899
 msgid "White spaces directly before and after tag contents are ignored."
 msgstr "タグの中身の直前・直後のスペースは無視されます。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:1903
+#: doc/man/mkvmerge.xml:1904
 msgid "Data types"
 msgstr "データタイプ"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1905
+#: doc/man/mkvmerge.xml:1906
 msgid ""
 "The new &matroska; tagging system only knows two data types, a UTF-8 string "
 "and a binary type. The first is used for the tag's name and the "
@@ -4812,7 +4814,7 @@ msgstr ""
 "れます。"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1910
+#: doc/man/mkvmerge.xml:1911
 msgid ""
 "As binary data itself would not fit into a &xml; file &mkvmerge; supports "
 "two other methods of storing binary data. If the contents of a &xml; tag "
@@ -4826,7 +4828,7 @@ msgstr ""
 "われ、対応するファイルの中身が&matroska;エレメントにコピーされます。"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1916
+#: doc/man/mkvmerge.xml:1917
 msgid ""
 "Otherwise the data is expected to be <foreignphrase>Base64</foreignphrase> "
 "encoded. This is an encoding that transforms binary data into a limited set "
@@ -4841,7 +4843,7 @@ msgstr ""
 "コードされたデータとして出力します。"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1922
+#: doc/man/mkvmerge.xml:1923
 msgid ""
 "The deprecated tagging system knows some more data types which can be found "
 "in the official &matroska; tag specs. As &mkvmerge; does not support this "
@@ -4852,12 +4854,12 @@ msgstr ""
 "いので、それらのタイプについてはここでは説明しません。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvmerge.xml:1929
+#: doc/man/mkvmerge.xml:1930
 msgid "&matroska; file layout"
 msgstr "&matroska;ファイルのレイアウト"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1931
+#: doc/man/mkvmerge.xml:1932
 msgid ""
 "The &matroska; file layout is quite flexible. &mkvmerge; will render a file "
 "in a predefined way. The resulting file looks like this:"
@@ -4867,7 +4869,7 @@ msgstr ""
 "なります。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1935
+#: doc/man/mkvmerge.xml:1936
 msgid ""
 "[EBML head] [segment {meta seek #1} [segment information] [track "
 "information] {attachments} {chapters} [cluster 1] {cluster 2} ...  {cluster "
@@ -4878,7 +4880,7 @@ msgstr ""
 "タシーク #2} {タグ}]"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1940
+#: doc/man/mkvmerge.xml:1941
 #, fuzzy
 msgid ""
 "The elements in curly braces are optional and depend on the contents and "
@@ -4888,7 +4890,7 @@ msgstr ""
 "依存します。いくつか注釈があります。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1946
+#: doc/man/mkvmerge.xml:1947
 msgid ""
 "meta seek #1 includes only a small number of level 1 elements, and only if "
 "they actually exist: attachments, chapters, cues, tags, meta seek #2. Older "
@@ -4905,7 +4907,7 @@ msgstr ""
 "シーク #1がメタシークエレメント #2を参照しています。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1954
+#: doc/man/mkvmerge.xml:1955
 msgid ""
 "Attachment, chapter and tag elements are only present if they were added."
 msgstr ""
@@ -4913,28 +4915,28 @@ msgstr ""
 "れます。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1959
+#: doc/man/mkvmerge.xml:1960
 msgid "The shortest possible Matroska file would look like this:"
 msgstr "最小構成のMatroskaファイルはこのような構成になります。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1963
+#: doc/man/mkvmerge.xml:1964
 msgid ""
 "[EBML head] [segment [segment information] [track information] [cluster 1]]"
 msgstr "[EBMLヘッダ] [セグメント [セグメント情報] [トラック情報] [クラスタ1]]"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1967
+#: doc/man/mkvmerge.xml:1968
 msgid "This might be the case for audio-only files."
 msgstr "音声のみのファイルはこのようになるでしょう。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvmerge.xml:1972
+#: doc/man/mkvmerge.xml:1973
 msgid "External timecode files"
 msgstr "外部タイムコードファイル"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1974
+#: doc/man/mkvmerge.xml:1975
 msgid ""
 "&mkvmerge; allows the user to chose the timecodes for a specific track "
 "himself. This can be used in order to create files with variable frame rate "
@@ -4953,7 +4955,7 @@ msgstr ""
 "ケットとなります。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1981
+#: doc/man/mkvmerge.xml:1982
 msgid ""
 "Timecode files that are used when tracks are appended to each other must "
 "only be specified for the first part in a chain of tracks.  For example if "
@@ -4966,7 +4968,7 @@ msgstr ""
 "ります。"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1986
+#: doc/man/mkvmerge.xml:1987
 #, no-wrap
 msgid ""
 "mkvmerge ... --timecodes 0:my_timecodes.txt v1.avi +v2.avi\n"
@@ -4976,7 +4978,7 @@ msgstr ""
 "  "
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1990
+#: doc/man/mkvmerge.xml:1991
 msgid ""
 "There are four formats that are recognized by &mkvmerge;. The first line "
 "always contains the version number. Empty lines, lines containing only "
@@ -4987,12 +4989,12 @@ msgstr ""
 "視されます。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:1995
+#: doc/man/mkvmerge.xml:1996
 msgid "Timecode file format v1"
 msgstr "タイムコードファイルフォーマット v1"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1997
+#: doc/man/mkvmerge.xml:1998
 msgid ""
 "This format starts with the version line. The second line declares the "
 "default number of frames per second.  All following lines contain three "
@@ -5010,7 +5012,7 @@ msgstr ""
 "abbrev>が使用されるギャップを含むこともあります。例を下に示します。"
 
 #. type: Content of: <refentry><refsect1><refsect2><screen>
-#: doc/man/mkvmerge.xml:2004
+#: doc/man/mkvmerge.xml:2005
 #, no-wrap
 msgid ""
 "# timecode format v1\n"
@@ -5026,12 +5028,12 @@ msgstr ""
 "   "
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:2012
+#: doc/man/mkvmerge.xml:2013
 msgid "Timecode file format v2"
 msgstr "タイムコードファイルフォーマット v2"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:2015
+#: doc/man/mkvmerge.xml:2016
 msgid ""
 "In this format each line contains a timecode for the corresponding frame.  "
 "This timecode must be given in millisecond precision.  It can be a floating "
@@ -5047,7 +5049,7 @@ msgstr ""
 "下のようになります。"
 
 #. type: Content of: <refentry><refsect1><refsect2><screen>
-#: doc/man/mkvmerge.xml:2021
+#: doc/man/mkvmerge.xml:2022
 #, no-wrap
 msgid ""
 "# timecode format v2\n"
@@ -5063,12 +5065,12 @@ msgstr ""
 "   "
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:2029
+#: doc/man/mkvmerge.xml:2030
 msgid "Timecode file format v3"
 msgstr "タイムコードファイルフォーマット v3"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:2031
+#: doc/man/mkvmerge.xml:2032
 msgid ""
 "In this format each line contains a duration in seconds followed by an "
 "optional number of frames per second.  Both can be floating point numbers.  "
@@ -5088,7 +5090,7 @@ msgstr ""
 "します。"
 
 #. type: Content of: <refentry><refsect1><refsect2><screen>
-#: doc/man/mkvmerge.xml:2038
+#: doc/man/mkvmerge.xml:2039
 #, no-wrap
 msgid ""
 "# timecode format v3\n"
@@ -5108,12 +5110,12 @@ msgstr ""
 "   "
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:2048
+#: doc/man/mkvmerge.xml:2049
 msgid "Timecode file format v4"
 msgstr "タイムコードファイルフォーマット v4"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:2050
+#: doc/man/mkvmerge.xml:2051
 msgid ""
 "This format is identical to the v2 format.  The only difference is that the "
 "timecodes do not have to be sorted.  This format should almost never be used."
@@ -5123,12 +5125,12 @@ msgstr ""
 "しょう。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:2060
+#: doc/man/mkvmerge.xml:2061
 msgid "&mkvmerge; exits with one of three exit codes:"
 msgstr "&mkvmerge;は下の3つの返り値を返します。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:2066
+#: doc/man/mkvmerge.xml:2067
 msgid ""
 "<constant>0</constant> -- This exit codes means that muxing has completed "
 "successfully."
@@ -5136,7 +5138,7 @@ msgstr ""
 "<constant>0</constant> -- この返り値はMUXが正常に終了したことを示します。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:2072
+#: doc/man/mkvmerge.xml:2073
 msgid ""
 "<constant>1</constant> -- In this case &mkvmerge; has output at least one "
 "warning, but muxing did continue.  A warning is prefixed with the text "
@@ -5150,7 +5152,7 @@ msgstr ""
 "ます。出力ファイルを確認することを強く推奨します。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:2080
+#: doc/man/mkvmerge.xml:2081
 msgid ""
 "<constant>2</constant> -- This exit code is used after an error occurred.  "
 "&mkvmerge; aborts right after outputting the error message.  Error messages "
@@ -5162,7 +5164,7 @@ msgstr ""
 "コマンドラインやファイルI/Oエラー、壊れたファイルなど様々です。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:2090
+#: doc/man/mkvmerge.xml:2091
 msgid "&mkvinfo;, &mkvextract;, &mkvpropedit;, &mmg;"
 msgstr "&mkvinfo;, &mkvextract;, &mkvpropedit;, &mmg;"
 
