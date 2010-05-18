@@ -56,6 +56,7 @@
 #include "common/tags/parser.h"
 #include "common/unique_numbers.h"
 #include "common/version.h"
+#include "common/webmedia.h"
 #include "merge/cluster_helper.h"
 #include "merge/mkvmerge.h"
 #include "merge/output_control.h"
@@ -1629,6 +1630,11 @@ parse_args(std::vector<std::string> args) {
   if (g_outfile.empty()) {
     mxinfo(Y("Error: no output file name was given.\n\n"));
     usage(2);
+  }
+
+  if (!outputting_webmedia() && is_webmedia_file_name(g_outfile)) {
+    set_output_compatibility(OC_WEBMEDIA);
+    mxinfo(boost::format(Y("Automatically enabling WebMedia compatibility mode due to output file name extension.\n")));
   }
 
   track_info_c *ti      = new track_info_c;

@@ -1,5 +1,9 @@
 2010-05-18  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: enhancement: WebMedia compatibility mode will be
+	turned on automatically if the output file name's extension is
+	'.webm', '.webma' or '.webmv'.
+
 	* mkvinfo GUI: enhancement: Added "webm" to the list of known file
 	name extensions for WebMedia files both for the "Open file" dialog
 	and the drag & drop support.
