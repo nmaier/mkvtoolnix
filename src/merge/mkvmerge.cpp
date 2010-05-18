@@ -146,8 +146,7 @@ set_usage() {
                   "                           put at most n milliseconds of data into each\n"
                   "                           cluster.\n");
   usage_text += Y("  --no-cues                Do not write the cue data (the index).\n");
-  usage_text += Y("  --no-clusters-in-meta-seek\n"
-                  "                           Do not write meta seek data for clusters.\n");
+  usage_text += Y("  --clusters-in-meta-seek  Write meta seek data for clusters.\n");
   usage_text += Y("  --disable-lacing         Do not Use lacing.\n");
   usage_text += Y("  --enable-durations       Enable block durations for all blocks.\n");
   usage_text += Y("  --append-to <SFID1:STID1:DFID1:DTID1,SFID2:STID2:DFID2:DTID2,...>\n"
@@ -1732,8 +1731,8 @@ parse_args(std::vector<std::string> args) {
     } else if (this_arg == "--no-cues")
       g_write_cues = false;
 
-    else if (this_arg == "--no-clusters-in-meta-seek")
-      g_write_meta_seek_for_clusters = false;
+    else if (this_arg == "--clusters-in-meta-seek")
+      g_write_meta_seek_for_clusters = true;
 
     else if (this_arg == "--disable-lacing")
       g_no_lacing = true;

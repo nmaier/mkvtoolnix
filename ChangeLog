@@ -1,5 +1,10 @@
 2010-05-18  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: enhancement: mkvmerge will no longer put all clusters
+	into a meta seek element resulting in smaller file size. The
+	parameter "--no-clusters-in-meta-seek" has been renamed to
+	"--clusters-in-meta-seek" and its meaning reverted.
+
 	* mkvmerge: enhancement: WebMedia compatibility mode will be
 	turned on automatically if the output file name's extension is
 	'.webm', '.webma' or '.webmv'.
