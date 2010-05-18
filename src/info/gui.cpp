@@ -267,7 +267,7 @@ void
 mi_frame::on_file_open(wxCommandEvent &WXUNUSED(event)) {
   wxFileDialog file_dialog(this, wxT("Select Matroska file"), wxT(""), wxT(""),
                            wxT("Matroska files (*.mkv;*.mka;*.mks)|"
-                               "*.mkv;*.mka;*.mks|All files|*.*"));
+                               "*.mkv;*.mka;*.mks|WebMedia files (*.webm)|*.webm|All files|*.*"));
   file_dialog.SetDirectory(last_dir);
   if (file_dialog.ShowModal() == wxID_OK) {
     open_file(file_dialog.GetPath().c_str());
@@ -364,7 +364,8 @@ mi_dndfile::OnDropFiles(wxCoord x,
     dnd_file = filenames[i];
     if ((dnd_file.Right(3).Lower() == wxT("mka")) ||
         (dnd_file.Right(3).Lower() == wxT("mkv")) ||
-        (dnd_file.Right(3).Lower() == wxT("mks"))) {
+        (dnd_file.Right(3).Lower() == wxT("mks")) ||
+        (dnd_file.Right(3).Lower() == wxT("webm"))) {
       frame->open_file(dnd_file);
     } else {
       wxString msg;
