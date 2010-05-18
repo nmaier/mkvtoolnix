@@ -103,6 +103,7 @@ init_input_file_type_list() {
   s_input_file_types.push_back(ext_file_type_t("tta",  Y("TTA lossless audio")));
   s_input_file_types.push_back(ext_file_type_t("vc1",  Y("VC1 video elementary stream")));
   s_input_file_types.push_back(ext_file_type_t("wav",  Y("WAVE (uncompressed PCM)")));
+  s_input_file_types.push_back(ext_file_type_t("webm", Y("WebMedia audio/video files")));
   s_input_file_types.push_back(ext_file_type_t("wv",   Y("WAVPACK lossless audio")));
 }
 
