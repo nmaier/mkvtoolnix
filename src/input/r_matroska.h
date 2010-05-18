@@ -145,6 +145,8 @@ struct kax_track_t {
   void handle_packetizer_display_dimensions();
   void handle_packetizer_pixel_cropping();
   void handle_packetizer_stereo_mode();
+  void handle_packetizer_pixel_dimensions();
+  void handle_packetizer_default_duration();
 };
 typedef counted_ptr<kax_track_t> kax_track_cptr;
 
@@ -200,6 +202,7 @@ public:
   static int probe_file(mm_io_c *io, int64_t size);
 
 protected:
+  virtual void set_track_packetizer(kax_track_t *t, generic_packetizer_c *ptzr);
   virtual void init_passthrough_packetizer(kax_track_t *t);
   virtual void set_packetizer_headers(kax_track_t *t);
   virtual void read_first_frames(kax_track_t *t, unsigned num_wanted = 1);

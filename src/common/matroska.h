@@ -65,6 +65,7 @@
 #define MKV_V_THEORA      "V_THEORA"
 #define MKV_V_COREPICTURE "V_CIPC"
 #define MKV_V_DIRAC       "V_DIRAC"
+#define MKV_V_VP8         "V_VP8"
 
 #define MKV_S_TEXTUTF8   "S_TEXT/UTF8"
 #define MKV_S_TEXTSSA    "S_TEXT/SSA"

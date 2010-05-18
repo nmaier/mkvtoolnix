@@ -75,6 +75,7 @@
 #include "output/p_vobbtn.h"
 #include "output/p_vobsub.h"
 #include "output/p_vorbis.h"
+#include "output/p_vp8.h"
 #include "output/p_wavpack.h"
 
 using namespace libmatroska;
@@ -118,6 +119,21 @@ void
 kax_track_t::handle_packetizer_stereo_mode() {
   if (STEREO_MODE_UNSPECIFIED != v_stereo_mode)
     ptzr_ptr->set_video_stereo_mode(v_stereo_mode, PARAMETER_SOURCE_CONTAINER);
+}
+
+void
+kax_track_t::handle_packetizer_pixel_dimensions() {
+  if ((0 == v_width) || (0 == v_height))
+    return;
+
+  ptzr_ptr->set_video_pixel_width(v_width);
+  ptzr_ptr->set_video_pixel_height(v_height);
+}
+
+void
+kax_track_t::handle_packetizer_default_duration() {
+  if (0 != default_duration)
+    ptzr_ptr->set_track_default_duration(default_duration);
 }
 
 /*
@@ -1391,34 +1407,39 @@ kax_reader_c::create_video_packetizer(kax_track_t *t,
            || (t->codec_id == MKV_V_MPEG1)
            || (t->codec_id == MKV_V_MPEG2)
            || (t->codec_id == MKV_V_THEORA)
-           || (t->codec_id == MKV_V_DIRAC)) {
+           || (t->codec_id == MKV_V_DIRAC)
+           || (t->codec_id == MKV_V_VP8)) {
     if ((t->codec_id == MKV_V_MPEG1) || (t->codec_id == MKV_V_MPEG2)) {
       int version = t->codec_id[6] - '0';
       mxinfo_tid(m_ti.m_fname, t->tnum, boost::format(Y("Using the MPEG-%1% video output module.\n")) % version);
-      t->ptzr = add_packetizer(new mpeg1_2_video_packetizer_c(this, nti, version, t->v_frate, t->v_width, t->v_height, t->v_dwidth, t->v_dheight, true));
+      set_track_packetizer(t, new mpeg1_2_video_packetizer_c(this, nti, version, t->v_frate, t->v_width, t->v_height, t->v_dwidth, t->v_dheight, true));
 
     } else if (IS_MPEG4_L2_CODECID(t->codec_id) || IS_MPEG4_L2_FOURCC(t->v_fourcc)) {
       mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the MPEG-4 part 2 video output module.\n"));
       bool is_native = IS_MPEG4_L2_CODECID(t->codec_id);
-      t->ptzr = add_packetizer(new mpeg4_p2_video_packetizer_c(this, nti, t->v_frate, t->v_width, t->v_height, is_native));
+      set_track_packetizer(t, new mpeg4_p2_video_packetizer_c(this, nti, t->v_frate, t->v_width, t->v_height, is_native));
 
     } else if (t->codec_id == MKV_V_MPEG4_AVC)
       create_mpeg4_p10_video_packetizer(t, nti);
 
     else if (t->codec_id == MKV_V_THEORA) {
       mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the Theora video output module.\n"));
-      t->ptzr = add_packetizer(new theora_video_packetizer_c(this, nti, t->v_frate, t->v_width, t->v_height));
+      set_track_packetizer(t, new theora_video_packetizer_c(this, nti, t->v_frate, t->v_width, t->v_height));
 
     } else if (t->codec_id == MKV_V_DIRAC) {
       mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the Dirac video output module.\n"));
-      t->ptzr = add_packetizer(new dirac_video_packetizer_c(this, nti));
+      set_track_packetizer(t, new dirac_video_packetizer_c(this, nti));
+
+    } else if (t->codec_id == MKV_V_VP8) {
+      mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the VP8 video output module.\n"));
+      set_track_packetizer(t, new vp8_video_packetizer_c(this, nti));
+      t->handle_packetizer_pixel_dimensions();
+      t->handle_packetizer_default_duration();
 
     } else {
       mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the video output module.\n"));
-      t->ptzr = add_packetizer(new video_packetizer_c(this, nti, t->codec_id.c_str(), t->v_frate, t->v_width, t->v_height));
+      set_track_packetizer(t, new video_packetizer_c(this, nti, t->codec_id.c_str(), t->v_frate, t->v_width, t->v_height));
     }
-
-    t->ptzr_ptr = PTZR(t->ptzr);
 
     t->handle_packetizer_display_dimensions();
     t->handle_packetizer_pixel_cropping();
@@ -1762,7 +1783,7 @@ kax_reader_c::create_mpeg4_p10_es_video_packetizer(kax_track_t *t,
     mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the MPEG-4 part 10 ES video output module.\n"));
 
   mpeg4_p10_es_video_packetizer_c *ptzr = new mpeg4_p10_es_video_packetizer_c(this, nti, parser->get_avcc(), t->v_width, t->v_height);
-  t->ptzr                               = add_packetizer(ptzr);
+  set_track_packetizer(t, ptzr);
 
   ptzr->enable_timecode_generation(false);
   if (t->default_duration)
@@ -1781,7 +1802,7 @@ kax_reader_c::create_mpeg4_p10_video_packetizer(kax_track_t *t,
   if (verbose)
     mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the MPEG-4 part 10 (AVC) video output module.\n"));
 
-  t->ptzr = add_packetizer(new mpeg4_p10_video_packetizer_c(this, nti, t->v_frate, t->v_width, t->v_height));
+  set_track_packetizer(t, new mpeg4_p10_video_packetizer_c(this, nti, t->v_frate, t->v_width, t->v_height));
 }
 
 void
@@ -2257,5 +2278,12 @@ void
 kax_reader_c::add_available_track_ids() {
   foreach(kax_track_cptr &track, m_tracks)
     add_available_track_id(track->tnum);
+}
+
+void
+kax_reader_c::set_track_packetizer(kax_track_t *t,
+                                   generic_packetizer_c *ptzr) {
+  t->ptzr     = add_packetizer(ptzr);
+  t->ptzr_ptr = PTZR(t->ptzr);
 }
 

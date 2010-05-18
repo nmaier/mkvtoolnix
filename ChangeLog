@@ -1,5 +1,8 @@
 2010-05-18  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: new feature: Added support for muxing VP8 video
+	tracks.
+
 	* mkvmerge: enhancement: mkvmerge will no longer put all clusters
 	into a meta seek element resulting in smaller file size. The
 	parameter "--no-clusters-in-meta-seek" has been renamed to
