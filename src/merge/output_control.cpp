@@ -1240,6 +1240,36 @@ add_tags_from_cue_chapters() {
   g_tags_from_cue_chapters = NULL;
 }
 
+/** \brief Render an EbmlVoid element as a placeholder for chapters
+
+    Chapters cannot be rendered at the start of the file until the
+    file's actual length is known during \c finish_file(). However,
+    the maximum size of chapters is know. So we reserve space at the
+    beginning of the file for all of the chapters.
+
+    WebMedia compliant files must not contain chapters. This function
+    issues a warning and invalidates the chapters if this is the case.
+ */
+static void
+render_chapter_void_placeholder() {
+  if (0 >= s_max_chapter_size)
+    return;
+
+  if (outputting_webmedia()) {
+    mxwarn(boost::format(Y("Chapters are not allowed in WebMedia compliant files. No chapters will be written into any output file.\n")));
+
+    delete g_kax_chapters;
+    g_kax_chapters     = NULL;
+    s_max_chapter_size = 0;
+
+    return;
+  }
+
+  s_kax_chapters_void = new EbmlVoid;
+  s_kax_chapters_void->SetSize(s_max_chapter_size + 100);
+  s_kax_chapters_void->Render(*s_out);
+}
+
 /** \brief Creates the next output file
 
    Creates a new file name depending on the split settings. Opens that
@@ -1267,13 +1297,7 @@ create_next_output_file() {
   g_cluster_helper->set_output(s_out);
   render_headers(s_out);
   render_attachments(s_out);
-
-  if (0 < s_max_chapter_size) {
-    s_kax_chapters_void = new EbmlVoid;
-    s_kax_chapters_void->SetSize(s_max_chapter_size + 100);
-    s_kax_chapters_void->Render(*s_out);
-  }
-
+  render_chapter_void_placeholder();
   add_tags_from_cue_chapters();
 
   if (NULL != s_kax_tags) {
