@@ -1270,6 +1270,39 @@ render_chapter_void_placeholder() {
   s_kax_chapters_void->Render(*s_out);
 }
 
+/** \brief Prepare tag elements for rendering
+
+    Adds missing mandatory elements to the tag structures and sorts
+    them. Also determines the maximum size needed for rendering the
+    tags.
+
+    WebMedia compliant files must not contain tags. This function
+    issues a warning and invalidates the tags if this is the case.
+ */
+static void
+prepare_tags_for_rendering() {
+  if (NULL == s_kax_tags)
+    return;
+
+  if (outputting_webmedia()) {
+    mxwarn(boost::format(Y("Tags are not allowed in WebMedia compliant files. No tags will be written into any output file.\n")));
+
+    delete s_kax_tags;
+    s_kax_tags  = NULL;
+    g_tags_size = 0;
+
+    return;
+  }
+
+  fix_mandatory_tag_elements(s_kax_tags);
+  sort_ebml_master(s_kax_tags);
+  if (!s_kax_tags->CheckMandatory())
+    mxerror(boost::format(Y("Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n")) % BUGMSG);
+
+  s_kax_tags->UpdateSize();
+  g_tags_size = s_kax_tags->ElementSize();
+}
+
 /** \brief Creates the next output file
 
    Creates a new file name depending on the split settings. Opens that
@@ -1299,16 +1332,7 @@ create_next_output_file() {
   render_attachments(s_out);
   render_chapter_void_placeholder();
   add_tags_from_cue_chapters();
-
-  if (NULL != s_kax_tags) {
-    fix_mandatory_tag_elements(s_kax_tags);
-    sort_ebml_master(s_kax_tags);
-    if (!s_kax_tags->CheckMandatory())
-      mxerror(boost::format(Y("Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n")) % BUGMSG);
-
-    s_kax_tags->UpdateSize();
-    g_tags_size = s_kax_tags->ElementSize();
-  }
+  prepare_tags_for_rendering();
 
   g_file_num++;
 }

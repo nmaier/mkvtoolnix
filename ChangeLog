@@ -1,5 +1,9 @@
 2010-05-18  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: new feature: Neither chapters nor tags will be written
+	to WebMedia compliant files. Warnings are issued if chapters or
+	tags are found and not disabled.
+
 	* mkvmerge: bug fix: Matroska files without clusters are accepted
 	as valid input files again.
 
