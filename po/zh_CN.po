@@ -413,7 +413,7 @@ msgid "  --ui-language <code>     Force the translations for 'code' to be used.\
 msgstr "  --ui-language <code>     强制使用 'code' 代表的翻译版本。\n"
 
 #: src/merge/mkvmerge.cpp:121
-msgid "  --webm, --web-media      Create WebMedia compliant file.\n"
+msgid "  --webm, --web-media      Create WebM compliant file.\n"
 msgstr ""
 
 #: src/merge/mkvmerge.cpp:192
@@ -1076,7 +1076,7 @@ msgstr "'%1%' 不是有效的 ccTLD 国家代码。"
 msgid "'%1%' is not a valid file ID in '--track-order %2%'.\n"
 msgstr "'%1%' 不是有效的文件 ID，在 '--track-order %2%'。\n"
 
-#: src/common/hacks.cpp:88
+#: src/common/hacks.cpp:87
 msgid "'%1%' is not a valid hack.\n"
 msgstr "'%1%' 不是有效的小补缀。\n"
 
@@ -1757,7 +1757,7 @@ msgid "All known property names and their meaning\n"
 msgstr "已知的所有属性名及其含义\n"
 
 #: src/info/wxwidgets_ui.cpp:286
-msgid "All supported files|*.mkv;*.mka;*.mks;*.webm;*.webma;*.webmv|Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|WebMedia files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|All files|*.*"
+msgid "All supported files|*.mkv;*.mka;*.mks;*.webm;*.webma;*.webmv|Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|WebM files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|All files|*.*"
 msgstr ""
 
 #: src/mmg/tabs/input.cpp:288
@@ -1765,11 +1765,11 @@ msgstr ""
 msgid "All supported media files|%s%s|%s"
 msgstr "所有支持的媒体文件|%s%s|%s"
 
-#: src/mmg/cli_options_dlg.cpp:130
+#: src/mmg/cli_options_dlg.cpp:127
 msgid "Allows storing AVC/h.264 video in Video-for-Windows compatibility mode, e.g. when it is read from an AVI"
 msgstr "允许以 Video-for-Windows 兼容模式存储的 AVC/h.264 视频，例如从 AVI 文件中读取的"
 
-#: src/mmg/cli_options_dlg.cpp:136
+#: src/mmg/cli_options_dlg.cpp:133
 msgid "Allows the use of the CodecState element. This is used for e.g. MPEG-1/-2 video tracks for storing the sequence headers."
 msgstr "允许 CodecState 元素的使用。它被用于 MPEG-1/-2 视频轨等的序列头存储。"
 
@@ -1835,7 +1835,7 @@ msgstr "另一个混流任务仍在处理中。要启动一项新任务，请等
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "不允许将一个文件的轨道追加合并到同一个文件的其他轨道。出现问题的轨道号为 %u 与 %u。"
 
-#: src/merge/output_control.cpp:1617
+#: src/merge/output_control.cpp:1621
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "正在追加合并轨道 %1%（自文件 %2% ('%3%')）到轨道 %4%（自文件 %5% ('%6%')）。\n"
 
@@ -1927,7 +1927,7 @@ msgid "Automatic MIME type recognition for '%1%': %2%\n"
 msgstr "对 '%1%' 的 MIME 类型的自动识别结果: %2%\n"
 
 #: src/merge/mkvmerge.cpp:1637
-msgid "Automatically enabling WebMedia compliance mode due to output file name extension.\n"
+msgid "Automatically enabling WebM compliance mode due to output file name extension.\n"
 msgstr ""
 
 #: src/mmg/cli_options_dlg.cpp:36
@@ -2053,7 +2053,7 @@ msgstr "类别未以 NUL 收尾"
 msgid "Caught exception"
 msgstr "发生异常"
 
-#: src/mmg/cli_options_dlg.cpp:144
+#: src/mmg/cli_options_dlg.cpp:141
 msgid "Causes mkvmerge to add 'stop display' commands to VobSub subtitle packets that do not contain a duration field."
 msgstr "让 mkvmerge 向不包含时长字段的 VobSub 字幕包添加 '停止显示' 命令。"
 
@@ -2176,8 +2176,8 @@ msgstr "章节"
 msgid "Chapters (%d entries) from %s"
 msgstr "章节 (%d 项) 自 %s"
 
-#: src/merge/output_control.cpp:1259
-msgid "Chapters are not allowed in WebMedia compliant files. No chapters will be written into any output file.\n"
+#: src/merge/output_control.cpp:1263
+msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:607
@@ -2467,7 +2467,7 @@ msgstr "未找到有效的 MP3 包。"
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "找不到音频轨 %1% 的索引 (avilib 错误消息: %2%)。正在跳过此轨。\n"
 
-#: src/merge/output_control.cpp:1572
+#: src/merge/output_control.cpp:1576
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "追加合并时找不到 gptzr。 %1%\n"
 
@@ -2770,7 +2770,7 @@ msgstr "Dirac 基本流"
 msgid "Disable the selected job(s) and sets their status to 'done'"
 msgstr "禁用选中的任务并设置其状态为“完成”"
 
-#: src/mmg/cli_options_dlg.cpp:132
+#: src/mmg/cli_options_dlg.cpp:129
 msgid "Disable the use of SimpleBlocks instead of BlockGroups."
 msgstr "禁止使用 SimpleBlocks 简单块 替代 BlockGroups 块组。"
 
@@ -2810,10 +2810,6 @@ msgstr "不要在元定位元素中添加章节项。"
 #: src/mmg/cli_options_dlg.cpp:113
 msgid "Do not write meta seek elements at all."
 msgstr "不要写入任何元定位元素。"
-
-#: src/mmg/cli_options_dlg.cpp:125
-msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
-msgstr "不要写入值与 Matroska 规范中的默认值相同的头元素。"
 
 #: src/info/mkvinfo.cpp:1790
 msgid "Doc type read version: %1%"
@@ -2871,7 +2867,7 @@ msgstr "EBML 读取版本: %1%"
 msgid "EBML version: %1%"
 msgstr "EBML 版本: %1%"
 
-#: src/merge/output_control.cpp:1115
+#: src/merge/output_control.cpp:1119
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "*罪恶的* 内部错误! (未知文件类型)。 %1%\n"
 
@@ -3239,7 +3235,7 @@ msgstr "文件/剪辑标题"
 msgid "File/segment title:"
 msgstr "文件/剪辑标题:"
 
-#: src/merge/output_control.cpp:811
+#: src/merge/output_control.cpp:815
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "文件不能被追加合并到文件自己。'--append-to' 的参数无效。\n"
 
@@ -3290,7 +3286,7 @@ msgstr "“强制轨”标记:"
 msgid "Forces the FourCC of the video track to this value. Note that this only works for video tracks that use the AVI compatibility mode or for QuickTime video tracks. This option CANNOT be used to change Matroska's CodecID."
 msgstr "强制该视频轨的 FourCC 为此值。注意，这只对使用 AVI 兼容模式的视频轨或 QuickTime 视频轨有效。本选项 *不能* 用于更改 Matroska 的 CodecID。"
 
-#: src/mmg/cli_options_dlg.cpp:128
+#: src/mmg/cli_options_dlg.cpp:125
 msgid "Forces the Matroska reader to use the generic passthrough packetizer even for known and supported track types."
 msgstr "强制 Matroska 读取器使用通用呈递分组器即使轨道类型已知或受支持。"
 
@@ -4163,7 +4159,7 @@ msgstr "单个附件被指定了多于一个名称。'%1%' 将被废弃，并用
 msgid "More than one root element found."
 msgstr "根元素多于一个。"
 
-#: src/merge/output_control.cpp:888
+#: src/merge/output_control.cpp:892
 msgid "More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"
 msgstr "被追加合并至轨道 %1%（自文件 %2% ('%3%')）的轨道多于一条。'--append-to' 的参数无效。\n"
 
@@ -4276,7 +4272,7 @@ msgstr "附件 '%s' 的 MIME 类型尚未选择。"
 msgid "No MIME type has been set for the attachment '%1%', and it could not be guessed.\n"
 msgstr "附件 '%1%' 的 MIME 类型尚未设定，且不可猜。\n"
 
-#: src/merge/output_control.cpp:847
+#: src/merge/output_control.cpp:851
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr "没有为文件 %1% ('%2%') 指定追加映射。将使用默认映射 %3%。如果 mkvmerge 异常中止并输出关于无效的 '--append-to' 选项的错误消息，请留心。\n"
 
@@ -4316,7 +4312,7 @@ msgstr "未给定文件名。\n"
 msgid "No filename found after the '@'."
 msgstr "在 '@' 后未找到文件名。"
 
-#: src/mmg/cli_options_dlg.cpp:146
+#: src/mmg/cli_options_dlg.cpp:143
 msgid "No help available."
 msgstr "无可用帮助。"
 
@@ -4366,7 +4362,7 @@ msgstr "单视角"
 msgid "None of the header fields has been modified. Nothing has been saved."
 msgstr "头部字段未被修改。未保存任何改动。"
 
-#: src/mmg/cli_options_dlg.cpp:138
+#: src/mmg/cli_options_dlg.cpp:135
 msgid "Normally mkvmerge keeps aspect ratio information in MPEG4 video bitstreams and puts the information into the container. This option causes mkvmerge to remove the aspect ratio information from the bitstream."
 msgstr "通常 mkvmerge 保留 MPEG4 视频位流中的宽高比信息并将信息置于容器中。此选项使 mkvmerge 从位流中移除宽高比信息。"
 
@@ -4436,7 +4432,7 @@ msgstr "仅允许有一个输出文件。\n"
 msgid "Only one segment info file allowed in '%1% %2%'.\n"
 msgstr "仅允许有一个剪辑文件，在 '%1% %2%'。\n"
 
-#: src/merge/output_control.cpp:828
+#: src/merge/output_control.cpp:832
 msgid "Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the default mapping will be used) or specify a mapping for all tracks that are to be copied.\n"
 msgstr "只给出了文件 %1% ('%2%') 的部分追加映射。只有不指定任何映射 (此时将使用默认映射) 或为所有轨道指定映射时，才会复制所有轨道。\n"
 
@@ -4652,7 +4648,7 @@ msgstr "进度: %1%%%%2%"
 msgid "Progress: 100%\n"
 msgstr "进度: 100%\n"
 
-#: src/merge/output_control.cpp:1865
+#: src/merge/output_control.cpp:1869
 msgid "Progress: 100%%%1%"
 msgstr "进度: 100%%%1%"
 
@@ -5332,7 +5328,7 @@ msgstr "一些头部值已被修改。您确实要在不保存当前文件的情
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "一些头部值已被修改。您确实要在不保存文件的情况下重新载入?"
 
-#: src/merge/output_control.cpp:1300
+#: src/merge/output_control.cpp:1304
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "缺某些标签元素 (不该发生此错误 - 另一个类似的错误应该在早些时候发生过)。%1%\n"
 
@@ -5487,8 +5483,8 @@ msgstr "标签文件 (*.xml;*.txt)|*.xml;*.txt|%s"
 msgid "Tags"
 msgstr "标签"
 
-#: src/merge/output_control.cpp:1288
-msgid "Tags are not allowed in WebMedia compliant files. No tags will be written into any output file.\n"
+#: src/merge/output_control.cpp:1292
+msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr ""
 
 #: src/merge/pr_generic.cpp:1425
@@ -5684,7 +5680,7 @@ msgid "The chosen NALU size length of %1% is too small. Try using '4'.\n"
 msgstr "选择的 NALU 长 %1% 过小。请尝试使用 '4'。\n"
 
 #: src/merge/pr_generic.cpp:1240
-msgid "The codec type '%1%' cannot be used in a WebMedia compliant file.\n"
+msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr ""
 
 #: src/output/p_avc.cpp:200
@@ -5708,7 +5704,7 @@ msgstr "校正文件未能正常读取。\n"
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "国家 '%s' 不是有效的 ccTLD，不能选择。"
 
-#: src/merge/output_control.cpp:1363
+#: src/merge/output_control.cpp:1367
 msgid "The cue entries (the index) are being written..."
 msgstr "正在写入 cue 索引..."
 
@@ -5730,7 +5726,7 @@ msgstr "默认语言码 '%1%' 不是有效的 ISO639-2 语言代码，将被忽�
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "对文件 '%s' 的 %s 轨的延时设置无效。"
 
-#: src/merge/output_control.cpp:1119
+#: src/merge/output_control.cpp:1123
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
 "%2%\n"
@@ -5814,7 +5810,7 @@ msgstr "文件 '%1%' 无法打开以写入 (%2%)。\n"
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "文件 '%1%' 无法打开以写入 (%2%, %3%)。\n"
 
-#: src/merge/output_control.cpp:1328
+#: src/merge/output_control.cpp:1332
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "文件 '%1%' 已打开以写入。\n"
 
@@ -5894,15 +5890,15 @@ msgstr "正在固定文件，第 4/4 步..."
 msgid "The file name for this segment."
 msgstr "此剪辑的文件名。"
 
-#: src/merge/output_control.cpp:861
+#: src/merge/output_control.cpp:865
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. The argument for '--append-to' was invalid.\n"
 msgstr "文件 %1% ('%2%') 不含 ID 为 %3% 的轨道，或者没选择复制该轨道。选项 '--append-to' 的参数无效。\n"
 
-#: src/merge/output_control.cpp:867
+#: src/merge/output_control.cpp:871
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. Therefore no track can be appended to it. The argument for '--append-to' was invalid.\n"
 msgstr "文件 %1% ('%2%') 不含 ID 为 %3% 的轨道，或者没选择复制该轨道。因此没有轨道可以追加给它。选项 '--append-to' 的参数无效。\n"
 
-#: src/merge/output_control.cpp:803
+#: src/merge/output_control.cpp:807
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr "文件 %1% ('%2%') 未被追加合并。选项 '--append-to' 的参数无效。\n"
 
@@ -5943,7 +5939,7 @@ msgstr "切割尺寸格式无效。"
 msgid "The format of the split timecode/duration is invalid."
 msgstr "切割时间码/时长格式无效。"
 
-#: src/merge/output_control.cpp:931
+#: src/merge/output_control.cpp:935
 msgid "The formats do not match."
 msgstr "格式不匹配。"
 
@@ -6142,7 +6138,7 @@ msgstr "选项 '--meta-seek-size' 不再受支持。请阅读 mkvmerge 的自述
 msgid "The order of the various options is not important."
 msgstr "不必在意各选项的顺序。"
 
-#: src/merge/output_control.cpp:1324
+#: src/merge/output_control.cpp:1328
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "即将输出的文件 '%1%' 无法打开写入(%2%)。\n"
 
@@ -6192,7 +6188,7 @@ msgstr "'%1%' 中的属性值不是有效的带符号整数。%2%\n"
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr "'%1%' 中的属性值不是有效的无符号整数。%2%\n"
 
-#: src/merge/output_control.cpp:933
+#: src/merge/output_control.cpp:937
 msgid "The reason is unknown."
 msgstr "原因未知。"
 
@@ -6332,11 +6328,11 @@ msgstr "此流的时间码在文件中途重置。这是不支持的。当前数
 msgid "The title for the whole movie."
 msgstr "整部影片的标题。"
 
-#: src/merge/output_control.cpp:877
+#: src/merge/output_control.cpp:881
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
 msgstr "轨道 %1% （自文件 %2% ('%3%')）被超过一次追加合并。'--append-to' 的参数无效。\n"
 
-#: src/merge/output_control.cpp:702
+#: src/merge/output_control.cpp:706
 msgid "The track headers could not be rendered correctly. %1%\n"
 msgstr "轨道头无法正确呈递。%1%\n"
 
@@ -6344,11 +6340,11 @@ msgstr "轨道头无法正确呈递。%1%\n"
 msgid "The track number %1% does not have a valid CodecID.\n"
 msgstr "轨道号 %1% 无有效的 CodecID。\n"
 
-#: src/merge/output_control.cpp:923
+#: src/merge/output_control.cpp:927
 msgid "The track number %1% from the file '%2%' can probably not be appended correctly to the track number %3% from the file '%4%': %5% Please make sure that the resulting file plays correctly the whole time. The author of this program will probably not give support for playback issues with the resulting file.\n"
 msgstr "轨道号 %1% （自文件 '%2%'）可能无法被正确追加到轨道号 %3% （自文件 '%4%'）: %5% 请证实生成的文件是否可以完整地正常播放。本程序的作者可能无法提供关于播放生成的文件的支持。\n"
 
-#: src/merge/output_control.cpp:934
+#: src/merge/output_control.cpp:938
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
 msgstr "轨道号 %1% （自文件 '%2%'）无法追加到轨道号 %3% （自文件 '%4%'）。%5%\n"
 
@@ -6357,7 +6353,7 @@ msgstr "轨道号 %1% （自文件 '%2%'）无法追加到轨道号 %3% （自�
 msgid "The track number as used in the Block Header."
 msgstr "块头部使用的轨道号。"
 
-#: src/merge/output_control.cpp:932
+#: src/merge/output_control.cpp:936
 msgid "The track parameters do not match."
 msgstr "轨道参数不匹配。"
 
@@ -6365,8 +6361,8 @@ msgstr "轨道参数不匹配。"
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "两轨宽度不同: %1% 与 %2%"
 
-#: src/merge/output_control.cpp:797
-#: src/merge/output_control.cpp:807
+#: src/merge/output_control.cpp:801
+#: src/merge/output_control.cpp:811
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr "没有文件的 ID 为 '%1%'。参数 '--append-to' 无效。\n"
 
@@ -6504,7 +6500,7 @@ msgstr "此属性是唯一的。不能在 '%1%' 增加其他实例。%2%\n"
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "这 *真的* 不该发生。为首个元定位元素预留的空间过小。%1%\n"
 
-#: src/merge/output_control.cpp:1513
+#: src/merge/output_control.cpp:1517
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "这 *真的* 不该发生。为首个元定位元素预留的空间过小。需要的尺寸: %1%. %2%\n"
 
@@ -6696,7 +6692,7 @@ msgstr "使用不支持的内容编码（压缩或加密）方案的轨道不能
 msgid "Tracks, chapters and tags:"
 msgstr "轨道、章节与标签:"
 
-#: src/mmg/cli_options_dlg.cpp:141
+#: src/mmg/cli_options_dlg.cpp:138
 msgid "TrueHD audio streams know two frame types: sync frames and non-sync frames. With this switch mkvmerge will put one sync frame and all following non-sync frames into a single Matroska block. Without it each non-sync frame is put into its own Matroska block."
 msgstr "TrueHD 音频流支持两种帧类：同步帧和非同步帧。启用本开关时，mkvmerge 将一个同步帧及其后的所有非同步帧置于单个 Matroska 块中。未使用本开关时每个非同步帧将被置于各自的 Matroska 块中。"
 
@@ -6870,7 +6866,7 @@ msgstr "为生成的文件使用 '剪辑链接'。关于此特性的深入解释
 msgid "Use fixed values for the elements that change with each file otherwise (muxing date, segment UID, track UIDs etc.). Two files muxed with the same settings and this switch activated will be identical."
 msgstr "对随文件改变而变动的元素 (混流日期, 剪辑 UID, 轨道 UID 等) 使用固定值。在激活本开关的情况下，使用相同配置混流的两个文件会完全一样。"
 
-#: src/mmg/cli_options_dlg.cpp:134
+#: src/mmg/cli_options_dlg.cpp:131
 msgid "Use the old AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') instead of the new one ('A_AAC')."
 msgstr "使用旧的 AAC 编解码器 ID (如 'A_AAC/MPEG4/SBR') 代替新的 ('A_AAC')。"
 
@@ -7200,7 +7196,7 @@ msgstr "VC1 基本流"
 msgid "VC1 video elementary stream"
 msgstr "VC1 视频基本流"
 
-#: src/common/hacks.cpp:61
+#: src/common/hacks.cpp:60
 msgid "Valid hacks are:\n"
 msgstr "有效的小补缀有:\n"
 
@@ -7352,7 +7348,7 @@ msgstr "警告信息:"
 #: src/mmg/tabs/input.cpp:257
 #: src/merge/mkvmerge.cpp:106
 #, fuzzy
-msgid "WebMedia audio/video files"
+msgid "WebM audio/video files"
 msgstr "RealMedia 音/视频文件"
 
 #: src/mmg/options/mmg.cpp:82
@@ -8670,6 +8666,8 @@ msgstr "是"
 #~ msgstr "不要从此文件中复制章节。仅适用于部分格式（如 Matroska 文件）。"
 #~ msgid "Do not copy tags from this file. Only applies to a couple of formats (e.g. Matroska files)."
 #~ msgstr "不要从此文件中复制标签。仅适用于部分格式（如 Matroska 文件）。"
+#~ msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
+#~ msgstr "不要写入值与 Matroska 规范中的默认值相同的头元素。"
 #~ msgid "During MPEG-4 part 2 B frame handling: The frame queue contains more frames than timecodes are available that can be assigned to them (reason: %1%). Therefore %2% frame(s) had to be dropped. The video might be broken around timecode %3%.\n"
 #~ msgstr "MPEG-4 part 2 B 帧处理过程中: 帧列包含了超过可分配时间码的帧 (原因: %1%)。因此 %2% 帧将被丢弃。视频在时间码 %3% 附近可能已损坏。\n"
 #~ msgid "File options:"

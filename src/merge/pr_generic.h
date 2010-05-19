@@ -35,7 +35,7 @@
 #include "common/strings/editing.h"
 #include "merge/packet.h"
 #include "merge/timecode_factory.h"
-#include "merge/webmedia.h"
+#include "merge/webm.h"
 
 using namespace libmatroska;
 

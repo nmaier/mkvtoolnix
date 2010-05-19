@@ -430,7 +430,7 @@ msgid "  --ui-language <code>     Force the translations for 'code' to be used.\
 msgstr "  --ui-language <code>     Примусове переведення для 'код', який буде використовуватися.\n"
 
 #: src/merge/mkvmerge.cpp:121
-msgid "  --webm, --web-media      Create WebMedia compliant file.\n"
+msgid "  --webm, --web-media      Create WebM compliant file.\n"
 msgstr ""
 
 #: src/merge/mkvmerge.cpp:192
@@ -1080,7 +1080,7 @@ msgstr "'%1%' не є допустимим ccTLD код країни."
 msgid "'%1%' is not a valid file ID in '--track-order %2%'.\n"
 msgstr "'%1%' не є допустимим ID файлом в '--track-order %2%'.\n"
 
-#: src/common/hacks.cpp:88
+#: src/common/hacks.cpp:87
 msgid "'%1%' is not a valid hack.\n"
 msgstr "'%1%' не повний працівник.\n"
 
@@ -1740,7 +1740,7 @@ msgid "All known property names and their meaning\n"
 msgstr "Всі відомі імена властивостей та їх значення\n"
 
 #: src/info/wxwidgets_ui.cpp:286
-msgid "All supported files|*.mkv;*.mka;*.mks;*.webm;*.webma;*.webmv|Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|WebMedia files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|All files|*.*"
+msgid "All supported files|*.mkv;*.mka;*.mks;*.webm;*.webma;*.webmv|Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|WebM files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|All files|*.*"
 msgstr ""
 
 #: src/mmg/tabs/input.cpp:288
@@ -1748,11 +1748,11 @@ msgstr ""
 msgid "All supported media files|%s%s|%s"
 msgstr "Всі підтримувані медіа-файли|%s%s|%s"
 
-#: src/mmg/cli_options_dlg.cpp:130
+#: src/mmg/cli_options_dlg.cpp:127
 msgid "Allows storing AVC/h.264 video in Video-for-Windows compatibility mode, e.g. when it is read from an AVI"
 msgstr "Дозволяє зберігати AVC/h.264 у відео для Windows в режимі сумісності, наприклад, коли читав з AVI"
 
-#: src/mmg/cli_options_dlg.cpp:136
+#: src/mmg/cli_options_dlg.cpp:133
 msgid "Allows the use of the CodecState element. This is used for e.g. MPEG-1/-2 video tracks for storing the sequence headers."
 msgstr "Дозволяє використовувати елемент CodecState. Це використовується для MPEG-1/-2 відеодоріжки для зберігання послідовності заголовків."
 
@@ -1818,7 +1818,7 @@ msgstr "Інший мультиплексування роботу в ще тр�
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Додавання доріжки з файлу в інший трек з того ж файлу, не допускається. Це має місце для треків число %u і %u."
 
-#: src/merge/output_control.cpp:1617
+#: src/merge/output_control.cpp:1621
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "Додавання доріжки %1% з файлу немає. %2% ('%3%') до доріжки %4% з файлу немає. %5% ('%6%').\n"
 
@@ -1905,7 +1905,7 @@ msgid "Automatic MIME type recognition for '%1%': %2%\n"
 msgstr "Автоматичне розпізнавання MIME типу для '%1%': %2%\n"
 
 #: src/merge/mkvmerge.cpp:1637
-msgid "Automatically enabling WebMedia compliance mode due to output file name extension.\n"
+msgid "Automatically enabling WebM compliance mode due to output file name extension.\n"
 msgstr ""
 
 #: src/mmg/cli_options_dlg.cpp:36
@@ -2022,7 +2022,7 @@ msgstr "Категорія не завершену нулем"
 msgid "Caught exception"
 msgstr "Спіймана виключення"
 
-#: src/mmg/cli_options_dlg.cpp:144
+#: src/mmg/cli_options_dlg.cpp:141
 msgid "Causes mkvmerge to add 'stop display' commands to VobSub subtitle packets that do not contain a duration field."
 msgstr "Причини mkvmerge додати 'зупинити відображення' команди субтитрів VobSub пакунки, які не містять поле Тривалість."
 
@@ -2141,8 +2141,8 @@ msgstr "Глави"
 msgid "Chapters (%d entries) from %s"
 msgstr "Глави (%d записи) з %s"
 
-#: src/merge/output_control.cpp:1259
-msgid "Chapters are not allowed in WebMedia compliant files. No chapters will be written into any output file.\n"
+#: src/merge/output_control.cpp:1263
+msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:607
@@ -2417,7 +2417,7 @@ msgstr "Не вдалося знайти дійсний MP3 пакет."
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "Не знайшов індекс для звукової доріжки %1% (avilib повідомлення про помилку: %2%). Пропуск треку.\n"
 
-#: src/merge/output_control.cpp:1572
+#: src/merge/output_control.cpp:1576
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "Не знайшов gptzr, коли додавання. %1%\n"
 
@@ -2713,7 +2713,7 @@ msgstr "Dirac елементарний потік"
 msgid "Disable the selected job(s) and sets their status to 'done'"
 msgstr "Вимкнути вибраний роботу (и) та встановлює статус на 'Готово'"
 
-#: src/mmg/cli_options_dlg.cpp:132
+#: src/mmg/cli_options_dlg.cpp:129
 msgid "Disable the use of SimpleBlocks instead of BlockGroups."
 msgstr "Заборонити використання SimpleBlocks замість BlockGroups."
 
@@ -2752,10 +2752,6 @@ msgstr "Не додати запис, за головами в мета-пошу
 #: src/mmg/cli_options_dlg.cpp:113
 msgid "Do not write meta seek elements at all."
 msgstr "Не писати мета шукати елементи на всіх."
-
-#: src/mmg/cli_options_dlg.cpp:125
-msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
-msgstr "Не пишіть заголовок тих елементів, значення яких збігаються з їхніми значеннями за замовчуванням відповідно до Matroska критеріям."
 
 #: src/info/mkvinfo.cpp:1790
 msgid "Doc type read version: %1%"
@@ -2813,7 +2809,7 @@ msgstr "EBML читати версію: %1%"
 msgid "EBML version: %1%"
 msgstr "EBML версія: %1%"
 
-#: src/merge/output_control.cpp:1115
+#: src/merge/output_control.cpp:1119
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "Зло внутрішньої помилки! (Невідомий тип файлу). %1%\n"
 
@@ -3165,7 +3161,7 @@ msgstr "Файл/сегмент назву"
 msgid "File/segment title:"
 msgstr "Файл/сегмент назва:"
 
-#: src/merge/output_control.cpp:811
+#: src/merge/output_control.cpp:815
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "Файли не можуть бути включені до себе. Аргументом на користь '--append-to' є недійсним.\n"
 
@@ -3215,7 +3211,7 @@ msgstr "Примусовий прапор треку:"
 msgid "Forces the FourCC of the video track to this value. Note that this only works for video tracks that use the AVI compatibility mode or for QuickTime video tracks. This option CANNOT be used to change Matroska's CodecID."
 msgstr "римусовий FourCC на треку відео до цього значення. Зверніть увагу, що це працює тільки для відео-треків, які використовують режим сумісності або AVI для треків QuickTime відео. Цей параметр не може бути використана для зміни CodecID Matroska's."
 
-#: src/mmg/cli_options_dlg.cpp:128
+#: src/mmg/cli_options_dlg.cpp:125
 msgid "Forces the Matroska reader to use the generic passthrough packetizer even for known and supported track types."
 msgstr "Примусовий читача Matroska використовувати загальний packetizer передачу навіть для відомих і підтримує трек типів."
 
@@ -4065,7 +4061,7 @@ msgstr "Більше ніж одне назва була дана для єди�
 msgid "More than one root element found."
 msgstr "Більше ніж один кореневий елемент знайдений."
 
-#: src/merge/output_control.cpp:888
+#: src/merge/output_control.cpp:892
 msgid "More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"
 msgstr "Більше ніж одна доріжка повинна бути додана до доріжці %1% від файлу номер %2% (%3%). Параметр для '--append-to' було неприпустимо.\n"
 
@@ -4174,7 +4170,7 @@ msgstr "Ніякої MIME тип не був обраний для вкладе�
 msgid "No MIME type has been set for the attachment '%1%', and it could not be guessed.\n"
 msgstr "Ніякої MIME тип не був встановлений для вкладення '%1%', і воно не могло бути припущено.\n"
 
-#: src/merge/output_control.cpp:847
+#: src/merge/output_control.cpp:851
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr "Ні не прикладіть відображення, було дано для файлу номер %1% (%2%). Задане за замовчуванням відображення %3% буде використовуватися замість цього. Будь ласка пам'ятайте це, якщо mkvmerge переривається з повідомленням про помилки щодо неприпустимого '--append-to' опції.\n"
 
@@ -4214,7 +4210,7 @@ msgstr "Не дано ім'я файлу.\n"
 msgid "No filename found after the '@'."
 msgstr "Не вказано назву файлу, знайдені після '@'."
 
-#: src/mmg/cli_options_dlg.cpp:146
+#: src/mmg/cli_options_dlg.cpp:143
 msgid "No help available."
 msgstr "Допомога недоступна."
 
@@ -4263,7 +4259,7 @@ msgstr "жоден"
 msgid "None of the header fields has been modified. Nothing has been saved."
 msgstr "Ні одне з полів заголовка не було змінено. Ніщо не було збережено."
 
-#: src/mmg/cli_options_dlg.cpp:138
+#: src/mmg/cli_options_dlg.cpp:135
 msgid "Normally mkvmerge keeps aspect ratio information in MPEG4 video bitstreams and puts the information into the container. This option causes mkvmerge to remove the aspect ratio information from the bitstream."
 msgstr "Зазвичай mkvmerge зберігає інформацію коефіцієнта пропорційності у відео MPEG4 bitstreams і поміщає інформацію в контейнер. Ця опція змушує mkvmerge видаляти інформацію коефіцієнта пропорційності з bitstream."
 
@@ -4331,7 +4327,7 @@ msgstr "Тільки один вихідний файл дозволено.\n"
 msgid "Only one segment info file allowed in '%1% %2%'.\n"
 msgstr "Тільки одному файлу інформації сегмента дозволяють ввійти '%1% %2%'.\n"
 
-#: src/merge/output_control.cpp:828
+#: src/merge/output_control.cpp:832
 msgid "Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the default mapping will be used) or specify a mapping for all tracks that are to be copied.\n"
 msgstr "Тільки небайдужий докладають відображення, були дані для файлу номер %1% (%2%). Будь-який не визначає відображення (коли задане за замовчуванням відображення буде використовуватися), або визначте відображення для всіх доріжок, які повинні бути скопійовані.\n"
 
@@ -4541,7 +4537,7 @@ msgstr "Прогрес: %1%%%%2%"
 msgid "Progress: 100%\n"
 msgstr "Прогрес: 100%\n"
 
-#: src/merge/output_control.cpp:1865
+#: src/merge/output_control.cpp:1869
 msgid "Progress: 100%%%1%"
 msgstr "Прогрес: 100%%%1%"
 
@@ -5203,7 +5199,7 @@ msgstr "Деякі заголовка значення були змінені. 
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "Деякі заголовка значення були змінені. Ви дійсно хочете перезавантажити без збереження файлу?"
 
-#: src/merge/output_control.cpp:1300
+#: src/merge/output_control.cpp:1304
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "Деякі теги елементи відсутні (ця помилка не повинна мати місце - ще Подібна помилка повинна була мати місце раніше). %1%\n"
 
@@ -5356,8 +5352,8 @@ msgstr "Тег файли (*.xml;*.txt)|*.xml;*.txt|%s"
 msgid "Tags"
 msgstr "Теги"
 
-#: src/merge/output_control.cpp:1288
-msgid "Tags are not allowed in WebMedia compliant files. No tags will be written into any output file.\n"
+#: src/merge/output_control.cpp:1292
+msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr ""
 
 #: src/merge/pr_generic.cpp:1425
@@ -5552,7 +5548,7 @@ msgid "The chosen NALU size length of %1% is too small. Try using '4'.\n"
 msgstr "Вибрали NALU розмір довжини %1% дуже малий. Спробуйте використовувати '4'.\n"
 
 #: src/merge/pr_generic.cpp:1240
-msgid "The codec type '%1%' cannot be used in a WebMedia compliant file.\n"
+msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr ""
 
 #: src/output/p_avc.cpp:200 src/output/p_kate.cpp:113
@@ -5574,7 +5570,7 @@ msgstr "Заголовок корекції файл не був правиль�
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "Країна '%s' не є дійсним ccTLD і не може бути обрана."
 
-#: src/merge/output_control.cpp:1363
+#: src/merge/output_control.cpp:1367
 msgid "The cue entries (the index) are being written..."
 msgstr "cue для запису (індекс) пишеться..."
 
@@ -5596,7 +5592,7 @@ msgstr "Код мови за замовчуванням '%1%' не є припу
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "Встановлення затримки на номер треку. %s у файлі '%s' є недійсним."
 
-#: src/merge/output_control.cpp:1119
+#: src/merge/output_control.cpp:1123
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
 "%2%\n"
@@ -5672,7 +5668,7 @@ msgstr "Файл '%1%' не може бути відкритий для запи
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "Файл '%1%' не може бути відкритий для запису (%2%, %3%).\n"
 
-#: src/merge/output_control.cpp:1328
+#: src/merge/output_control.cpp:1332
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "Файл '%1%' був відкритий для запису.\n"
 
@@ -5751,15 +5747,15 @@ msgstr "Файл займається ремонтом, частина 4/4..."
 msgid "The file name for this segment."
 msgstr "Ім'я файлу для даного сегмента."
 
-#: src/merge/output_control.cpp:861
+#: src/merge/output_control.cpp:865
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. The argument for '--append-to' was invalid.\n"
 msgstr "Файл no. %1% ('%2%') не містить доріжку з ID %3%, або на тому, що трек не повинен бути скопійований. Аргументом на користь '--append-to' є недійсним.\n"
 
-#: src/merge/output_control.cpp:867
+#: src/merge/output_control.cpp:871
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. Therefore no track can be appended to it. The argument for '--append-to' was invalid.\n"
 msgstr "Файл no. %1% ('%2%') не містить доріжку з ID %3%, або на тому, що трек не повинен бути скопійований. Тому доріжка не може бути включені до нього. Аргументом на користь '--append-to' є недійсним.\n"
 
-#: src/merge/output_control.cpp:803
+#: src/merge/output_control.cpp:807
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr "Файл no. %1% ('%2%') не є додатком. Аргументом на користь '--append-to' є недійсним.\n"
 
@@ -5799,7 +5795,7 @@ msgstr "Формат розділити неправильний розмір."
 msgid "The format of the split timecode/duration is invalid."
 msgstr "Формат розділити тайм-код/продолжітельность є недійсним."
 
-#: src/merge/output_control.cpp:931
+#: src/merge/output_control.cpp:935
 msgid "The formats do not match."
 msgstr "Формати не збігаються."
 
@@ -6001,7 +5997,7 @@ msgstr "Опція '--meta-seek-size' більше не підтримуєтьс
 msgid "The order of the various options is not important."
 msgstr "Для різних варіантів не має значення."
 
-#: src/merge/output_control.cpp:1324
+#: src/merge/output_control.cpp:1328
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "Вихідний файл '%1%' не може бути відкритий для запис (%2%).\n"
 
@@ -6050,7 +6046,7 @@ msgstr "Значення властивості не правильне ціле
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr "Значення властивості не правильне ціле число без знака в '%1%'. %2%\n"
 
-#: src/merge/output_control.cpp:933
+#: src/merge/output_control.cpp:937
 msgid "The reason is unknown."
 msgstr "Причини цього поки невідомі."
 
@@ -6185,11 +6181,11 @@ msgstr "Тайм-коди для цього потоку були скинуті
 msgid "The title for the whole movie."
 msgstr "Заголовок для цілого фільму."
 
-#: src/merge/output_control.cpp:877
+#: src/merge/output_control.cpp:881
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
 msgstr "Доріжка %1% від файлу номер %2% (%3%) повинна бути додана не раз. Параметр для '--append-to' було неприпустимо.\n"
 
-#: src/merge/output_control.cpp:702
+#: src/merge/output_control.cpp:706
 msgid "The track headers could not be rendered correctly. %1%\n"
 msgstr "Заголовки доріжки не можуть бути виконані правильно. %1%\n"
 
@@ -6197,11 +6193,11 @@ msgstr "Заголовки доріжки не можуть бути викон�
 msgid "The track number %1% does not have a valid CodecID.\n"
 msgstr "У числа доріжки %1% немає правильного CodecID.\n"
 
-#: src/merge/output_control.cpp:923
+#: src/merge/output_control.cpp:927
 msgid "The track number %1% from the file '%2%' can probably not be appended correctly to the track number %3% from the file '%4%': %5% Please make sure that the resulting file plays correctly the whole time. The author of this program will probably not give support for playback issues with the resulting file.\n"
 msgstr "Номер доріжки %1% від файлу '%2%' не може ймовірно додається правильно до номера доріжки %3% від файлу '%4%': %5% Будь ласка впевніться, що отримує файл запускає правильно весь час. Автор цієї програми не буде ймовірно надавати підтримку для проблем відтворення з отримуваного файлом.\n"
 
-#: src/merge/output_control.cpp:934
+#: src/merge/output_control.cpp:938
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
 msgstr "Номер доріжки %1% від файлу '%2%' не може бути прикладений до номера доріжки %3% від файлу '%4%'. %5%\n"
 
@@ -6209,7 +6205,7 @@ msgstr "Номер доріжки %1% від файлу '%2%' не може бу
 msgid "The track number as used in the Block Header."
 msgstr "Номер доріжки як використовується в заголовку блоку."
 
-#: src/merge/output_control.cpp:932
+#: src/merge/output_control.cpp:936
 msgid "The track parameters do not match."
 msgstr "Параметри доріжки не відповідають."
 
@@ -6217,7 +6213,7 @@ msgstr "Параметри доріжки не відповідають."
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "Ширина двох доріжок є різною: %1% i %2%"
 
-#: src/merge/output_control.cpp:797 src/merge/output_control.cpp:807
+#: src/merge/output_control.cpp:801 src/merge/output_control.cpp:811
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr "Немає ніякого файлу з ID '%1%'. Параметр для '--append-to' було неприпустимо.\n"
 
@@ -6355,7 +6351,7 @@ msgstr "Це властивість унікально. Більше примі�
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "Це не повинно було дійсно статися. Простір, зарезервоване для першого елемента мета пошуку доріжки, було надто малим. %1%\n"
 
-#: src/merge/output_control.cpp:1513
+#: src/merge/output_control.cpp:1517
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "Це не повинно було дійсно статися. Простір, зарезервоване для першого елемента мета пошуку доріжки, було надто малим. Розміру необхідно: %1%. %2%\n"
 
@@ -6534,7 +6530,7 @@ msgstr "Доріжки з непідтримуваними схемами код
 msgid "Tracks, chapters and tags:"
 msgstr "Доріжки, голови i теги:"
 
-#: src/mmg/cli_options_dlg.cpp:141
+#: src/mmg/cli_options_dlg.cpp:138
 msgid "TrueHD audio streams know two frame types: sync frames and non-sync frames. With this switch mkvmerge will put one sync frame and all following non-sync frames into a single Matroska block. Without it each non-sync frame is put into its own Matroska block."
 msgstr "Потоки аудіо TrueHD знають два типи кадру: синхронізуючі кадри і несінхронізірующіе кадри. З цим вимикачем mkvmerge помістить одного синхронізуючого кадру і весь після несінхронізірующіх кадрів в єдиний блок Matroska. Без цього кожен несінхронізірующій кадр поміщений в його власний блок Matroska."
 
@@ -6706,7 +6702,7 @@ msgstr "Використовуйте 'сегмент зв'язку' для ре�
 msgid "Use fixed values for the elements that change with each file otherwise (muxing date, segment UID, track UIDs etc.). Two files muxed with the same settings and this switch activated will be identical."
 msgstr "Використовуйте постійні значення для елементів, які змінюються з кожним файлом інакше (мультиплексування дата, сегментують UID, простежте UIDs і т.д.). Два файлу muxed з тими ж самими параметрами налаштування і цим активізованим вимикачем будуть ідентичні."
 
-#: src/mmg/cli_options_dlg.cpp:134
+#: src/mmg/cli_options_dlg.cpp:131
 msgid "Use the old AAC codec IDs (e.g. 'A_AAC/MPEG4/SBR') instead of the new one ('A_AAC')."
 msgstr "Використовуйте старі IDs кодека AAC (наприклад, 'A_AAC/MPEG4/SBR') замість нового ('A_AAC')."
 
@@ -7003,7 +6999,7 @@ msgstr "VC1 елементарні потоки"
 msgid "VC1 video elementary stream"
 msgstr "VC1 відео елементарний потік"
 
-#: src/common/hacks.cpp:61
+#: src/common/hacks.cpp:60
 msgid "Valid hacks are:\n"
 msgstr "Дійсні хакі:\n"
 
@@ -7142,7 +7138,7 @@ msgstr "Попередження:"
 
 #: src/mmg/tabs/input.cpp:257 src/merge/mkvmerge.cpp:106
 #, fuzzy
-msgid "WebMedia audio/video files"
+msgid "WebM audio/video files"
 msgstr "RealMedia Audio/Video файли"
 
 #: src/mmg/options/mmg.cpp:82
@@ -8355,6 +8351,9 @@ msgstr "неправильне використання: писати тільк
 #: src/mmg/tabs/input_general.cpp:107 src/mmg/tabs/input_general.cpp:125
 msgid "yes"
 msgstr "Так"
+
+#~ msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
+#~ msgstr "Не пишіть заголовок тих елементів, значення яких збігаються з їхніми значеннями за замовчуванням відповідно до Matroska критеріям."
 
 #~ msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
 #~ msgstr "Matroska файли (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|Все файлы|*.*"

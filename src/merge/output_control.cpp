@@ -105,7 +105,7 @@
 #include "merge/mkvmerge.h"
 #include "merge/output_control.h"
 #include "merge/debugging.h"
-#include "merge/webmedia.h"
+#include "merge/webm.h"
 
 using namespace libmatroska;
 
@@ -549,7 +549,7 @@ render_headers(mm_io_c *out) {
 
     bool first_file                                       = (1 == g_file_num);
 
-    GetChildAs<EDocType, EbmlString>(head)                = outputting_webmedia() ? "webm" : "matroska";
+    GetChildAs<EDocType, EbmlString>(head)                = outputting_webm() ? "webm" : "matroska";
     if (hack_engaged(ENGAGE_NO_SIMPLE_BLOCKS)) {
       GetChildAs<EDocTypeVersion,     EbmlUInteger>(head) = 1;
       GetChildAs<EDocTypeReadVersion, EbmlUInteger>(head) = 1;
@@ -1251,7 +1251,7 @@ add_tags_from_cue_chapters() {
     the maximum size of chapters is know. So we reserve space at the
     beginning of the file for all of the chapters.
 
-    WebMedia compliant files must not contain chapters. This function
+    WebM compliant files must not contain chapters. This function
     issues a warning and invalidates the chapters if this is the case.
  */
 static void
@@ -1259,8 +1259,8 @@ render_chapter_void_placeholder() {
   if (0 >= s_max_chapter_size)
     return;
 
-  if (outputting_webmedia()) {
-    mxwarn(boost::format(Y("Chapters are not allowed in WebMedia compliant files. No chapters will be written into any output file.\n")));
+  if (outputting_webm()) {
+    mxwarn(boost::format(Y("Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n")));
 
     delete g_kax_chapters;
     g_kax_chapters     = NULL;
@@ -1280,7 +1280,7 @@ render_chapter_void_placeholder() {
     them. Also determines the maximum size needed for rendering the
     tags.
 
-    WebMedia compliant files must not contain tags. This function
+    WebM compliant files must not contain tags. This function
     issues a warning and invalidates the tags if this is the case.
  */
 static void
@@ -1288,8 +1288,8 @@ prepare_tags_for_rendering() {
   if (NULL == s_kax_tags)
     return;
 
-  if (outputting_webmedia()) {
-    mxwarn(boost::format(Y("Tags are not allowed in WebMedia compliant files. No tags will be written into any output file.\n")));
+  if (outputting_webm()) {
+    mxwarn(boost::format(Y("Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n")));
 
     delete s_kax_tags;
     s_kax_tags  = NULL;

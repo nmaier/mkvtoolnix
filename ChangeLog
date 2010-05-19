@@ -6,13 +6,13 @@
 2010-05-18  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Neither chapters nor tags will be written
-	to WebMedia compliant files. Warnings are issued if chapters or
+	to WebM compliant files. Warnings are issued if chapters or
 	tags are found and not disabled.
 
 	* mkvmerge: bug fix: Matroska files without clusters are accepted
 	as valid input files again.
 
-	* mmg: enhancement: Added "WebMedia" with the extension "webm" to
+	* mmg: enhancement: Added "WebM" with the extension "webm" to
 	the list of known file types.
 
 	* mkvmerge: new feature: Added support for muxing VP8 video
@@ -23,18 +23,18 @@
 	parameter "--no-clusters-in-meta-seek" has been renamed to
 	"--clusters-in-meta-seek" and its meaning reverted.
 
-	* mkvmerge: enhancement: WebMedia compatibility mode will be
+	* mkvmerge: enhancement: WebM compatibility mode will be
 	turned on automatically if the output file name's extension is
 	'.webm', '.webma' or '.webmv'.
 
 	* mkvinfo GUI: enhancement: Added "webm" to the list of known file
-	name extensions for WebMedia files both for the "Open file" dialog
+	name extensions for WebM files both for the "Open file" dialog
 	and the drag & drop support.
 
 2010-05-17  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Added options "--webm"/"--web-media" that
-	enable the WebMedia compatibility mode. In this mode only Vorbis
+	enable the WebM compatibility mode. In this mode only Vorbis
 	audio tracks and VP8 video tracks are allowed. Neither chapters
 	nor tracks are allowed. The DocType element is set to "webm".
 

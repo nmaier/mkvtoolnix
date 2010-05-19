@@ -56,7 +56,7 @@
 #include "common/tags/parser.h"
 #include "common/unique_numbers.h"
 #include "common/version.h"
-#include "common/webmedia.h"
+#include "common/webm.h"
 #include "merge/cluster_helper.h"
 #include "merge/mkvmerge.h"
 #include "merge/output_control.h"
@@ -103,7 +103,7 @@ init_input_file_type_list() {
   s_input_file_types.push_back(ext_file_type_t("tta",  Y("TTA lossless audio")));
   s_input_file_types.push_back(ext_file_type_t("vc1",  Y("VC1 video elementary stream")));
   s_input_file_types.push_back(ext_file_type_t("wav",  Y("WAVE (uncompressed PCM)")));
-  s_input_file_types.push_back(ext_file_type_t("webm", Y("WebMedia audio/video files")));
+  s_input_file_types.push_back(ext_file_type_t("webm", Y("WebM audio/video files")));
   s_input_file_types.push_back(ext_file_type_t("wv",   Y("WAVPACK lossless audio")));
 }
 
@@ -118,7 +118,7 @@ set_usage() {
   usage_text += Y("  -v, --verbose            verbose status\n");
   usage_text += Y("  -q, --quiet              suppress status output\n");
   usage_text += Y("  -o, --output out         Write to the file 'out'.\n");
-  usage_text += Y("  --webm, --web-media      Create WebMedia compliant file.\n");
+  usage_text += Y("  --webm, --web-media      Create WebM compliant file.\n");
   usage_text += Y("  --title <title>          Title for this output file.\n");
   usage_text += Y("  --global-tags <file>     Read global tags from a XML file.\n");
   usage_text +=   "\n";
@@ -1624,7 +1624,7 @@ parse_args(std::vector<std::string> args) {
       sit++;
 
     } else if ((this_arg == "--webm") || (this_arg == "--web-media"))
-      set_output_compatibility(OC_WEBMEDIA);
+      set_output_compatibility(OC_WEBM);
   }
 
   if (g_outfile.empty()) {
@@ -1632,9 +1632,9 @@ parse_args(std::vector<std::string> args) {
     usage(2);
   }
 
-  if (!outputting_webmedia() && is_webmedia_file_name(g_outfile)) {
-    set_output_compatibility(OC_WEBMEDIA);
-    mxinfo(boost::format(Y("Automatically enabling WebMedia compliance mode due to output file name extension.\n")));
+  if (!outputting_webm() && is_webm_file_name(g_outfile)) {
+    set_output_compatibility(OC_WEBM);
+    mxinfo(boost::format(Y("Automatically enabling WebM compliance mode due to output file name extension.\n")));
   }
 
   track_info_c *ti      = new track_info_c;

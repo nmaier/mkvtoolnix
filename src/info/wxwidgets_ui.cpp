@@ -285,7 +285,7 @@ mi_frame::on_file_open(wxCommandEvent &WXUNUSED(event)) {
   wxFileDialog file_dialog(this, Z("Select Matroska file"), wxT(""), wxT(""),
                            Z("All supported files|*.mkv;*.mka;*.mks;*.webm;*.webma;*.webmv|"
                              "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|"
-                             "WebMedia files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|"
+                             "WebM files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|"
                              "All files|*.*"));
   file_dialog.SetDirectory(last_dir);
   if (file_dialog.ShowModal() == wxID_OK) {

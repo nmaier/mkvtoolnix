@@ -148,5 +148,5 @@ vorbis_packetizer_c::can_connect_to(generic_packetizer_c *src,
 
 bool
 vorbis_packetizer_c::is_compatible_with(output_compatibility_e compatibility) {
-  return (OC_MATROSKA == compatibility) || (OC_WEBMEDIA == compatibility);
+  return (OC_MATROSKA == compatibility) || (OC_WEBM == compatibility);
 }

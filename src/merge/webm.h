@@ -6,23 +6,23 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   definitions and helper functions for WebMedia in mkvmerge
+   definitions and helper functions for Webm in mkvmerge
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
-#ifndef __MTX_MERGE_WEBMEDIA_H
-#define __MTX_MERGE_WEBMEDIA_H
+#ifndef __MTX_MERGE_WEBM_H
+#define __MTX_MERGE_WEBM_H
 
 #include "common/os.h"
 
 enum output_compatibility_e {
   OC_MATROSKA,
-  OC_WEBMEDIA,
+  OC_WEBM,
 };
 
-bool MTX_DLL_API outputting_webmedia();
+bool MTX_DLL_API outputting_webm();
 void MTX_DLL_API set_output_compatibility(output_compatibility_e compatibility);
 output_compatibility_e MTX_DLL_API get_output_compatbility();
 
-#endif // __MTX_MERGE_WEBMEDIA_H
+#endif // __MTX_MERGE_WEBM_H

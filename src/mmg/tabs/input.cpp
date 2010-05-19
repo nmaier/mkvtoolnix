@@ -254,7 +254,7 @@ tab_input::setup_file_type_filter() {
   file_types.push_back(file_type_t(Z("VobSub subtitles"),                    wxU("idx")));
   file_types.push_back(file_type_t(Z("WAVE (uncompressed PCM audio)"),       wxU("wav")));
   file_types.push_back(file_type_t(Z("WAVPACK v4 audio"),                    wxU("wv")));
-  file_types.push_back(file_type_t(Z("WebMedia audio/video files"),          wxU("webm webmv webma")));
+  file_types.push_back(file_type_t(Z("WebM audio/video files"),              wxU("webm webmv webma")));
 
   std::map<wxString, bool> all_extensions_map;
   wxString filters;

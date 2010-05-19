@@ -6,20 +6,20 @@
    see the file COPYING for details
    or visit http://www.gnu.org/copyleft/gpl.html
 
-   helper functions for WebMedia in mkvmerge
+   helper functions for WebM in mkvmerge
 
    Written by Moritz Bunkus <moritz@bunkus.org>.
 */
 
 #include "common/os.h"
 
-#include "merge/webmedia.h"
+#include "merge/webm.h"
 
 static output_compatibility_e s_output_compatibility = OC_MATROSKA;
 
 bool
-outputting_webmedia() {
-  return OC_WEBMEDIA == s_output_compatibility;
+outputting_webm() {
+  return OC_WEBM == s_output_compatibility;
 }
 
 void
