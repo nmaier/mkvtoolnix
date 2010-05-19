@@ -357,21 +357,16 @@ bool
 mi_dndfile::OnDropFiles(wxCoord x,
                         wxCoord y,
                         const wxArrayString &filenames) {
-  wxString dnd_file;
   unsigned int i;
 
   for (i = 0; i < filenames.GetCount(); i++) {
-    dnd_file = filenames[i];
-    if ((dnd_file.Right(3).Lower() == wxT("mka")) ||
-        (dnd_file.Right(3).Lower() == wxT("mkv")) ||
-        (dnd_file.Right(3).Lower() == wxT("mks")) ||
-        (dnd_file.Right(3).Lower() == wxT("webm"))) {
-      frame->open_file(dnd_file);
-    } else {
-      wxString msg;
-      msg.Printf(wxT("The dragged file '%s'\nis not a Matroska file."),
-                 dnd_file.c_str());
-      frame->show_error(msg.c_str());
+    wxString extension = filenames[i].AfterLast(wxT(".")).Lower();
+
+    if ((extension == wxT("mka")) || (extension == wxT("mkv")) || (extension == wxT("mks")) || (extension == wxT("webm")))
+      frame->open_file(filenames[i]);
+
+    else {
+      frame->show_error(wxString.Format(wxT("The dragged file '%s'\nis not a Matroska file."), filenames[i].c_str()));
       break;
     }
   }
