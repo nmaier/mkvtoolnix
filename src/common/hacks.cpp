@@ -30,7 +30,6 @@ static const struct {
   { ENGAGE_LACING_EBML,                  "lacing_ebml"                  },
   { ENGAGE_NATIVE_MPEG4,                 "native_mpeg4"                 },
   { ENGAGE_NO_VARIABLE_DATA,             "no_variable_data"             },
-  { ENGAGE_NO_DEFAULT_HEADER_VALUES,     "no_default_header_values"     },
   { ENGAGE_FORCE_PASSTHROUGH_PACKETIZER, "force_passthrough_packetizer" },
   { ENGAGE_WRITE_HEADERS_TWICE,          "write_headers_twice"          },
   { ENGAGE_ALLOW_AVC_IN_VFW_MODE,        "allow_avc_in_vfw_mode"        },

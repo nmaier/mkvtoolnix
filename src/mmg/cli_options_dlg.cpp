@@ -121,9 +121,6 @@ cli_options_dlg::init_cli_option_list() {
   all_cli_options.push_back(cli_option_t(wxU("--engage no_variable_data"),
                                            Z("Use fixed values for the elements that change with each file otherwise (muxing date, segment UID, track UIDs etc.). "
                                              "Two files muxed with the same settings and this switch activated will be identical.")));
-  all_cli_options.push_back(cli_option_t(wxU("--engage no_default_header_values"),
-                                           Z("Do not write those header elements whose values are the same "
-                                             "as their default values according to the Matroska specs.")));
   all_cli_options.push_back(cli_option_t(wxU("--engage force_passthrough_packetizer"),
                                            Z("Forces the Matroska reader to use the generic passthrough packetizer even for known and supported track types.")));
   all_cli_options.push_back(cli_option_t(wxU("--engage allow_avc_in_vfw_mode"),

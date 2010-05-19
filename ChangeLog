@@ -1,3 +1,8 @@
+2010-05-19  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: change: mkvmerge will not write track header elements
+	whose actual value equals their default value anymore.
+
 2010-05-18  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Neither chapters nor tags will be written

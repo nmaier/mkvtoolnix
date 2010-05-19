@@ -687,14 +687,18 @@ render_headers(mm_io_c *out) {
     g_kax_sh_main->IndexThis(*s_kax_infos, *g_kax_segment);
 
     if (!g_packetizers.empty()) {
+      g_kax_tracks->UpdateSize(true);
+      uint64_t full_header_size = g_kax_tracks->ElementSize(true);
+      g_kax_tracks->UpdateSize(false);
+
       g_kax_segment->PushElement(*g_kax_tracks);
-      g_kax_tracks->Render(*out, !hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
+      g_kax_tracks->Render(*out, false);
       g_kax_sh_main->IndexThis(*g_kax_tracks, *g_kax_segment);
 
       // Reserve some small amount of space for header changes by the
       // packetizers.
       s_void_after_track_headers = new EbmlVoid;
-      s_void_after_track_headers->SetSize(1024);
+      s_void_after_track_headers->SetSize(1024 + full_header_size - g_kax_tracks->ElementSize(false));
       s_void_after_track_headers->Render(*out);
     }
 
@@ -710,13 +714,13 @@ render_headers(mm_io_c *out) {
 */
 void
 rerender_track_headers() {
-  g_kax_tracks->UpdateSize(!hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
+  g_kax_tracks->UpdateSize(false);
 
   int64_t new_void_size = s_void_after_track_headers->GetElementPosition() + s_void_after_track_headers->GetSize()
     - g_kax_tracks->GetElementPosition() - g_kax_tracks->ElementSize();
 
   s_out->save_pos(g_kax_tracks->GetElementPosition());
-  g_kax_tracks->Render(*s_out, !hack_engaged(ENGAGE_NO_DEFAULT_HEADER_VALUES));
+  g_kax_tracks->Render(*s_out, false);
 
   delete s_void_after_track_headers;
   s_void_after_track_headers = new EbmlVoid;
