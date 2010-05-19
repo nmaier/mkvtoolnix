@@ -282,7 +282,11 @@ mi_frame::save_elements(wxTreeItemId &root,
 
 void
 mi_frame::on_file_open(wxCommandEvent &WXUNUSED(event)) {
-  wxFileDialog file_dialog(this, Z("Select Matroska file"), wxT(""), wxT(""), Z("Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"));
+  wxFileDialog file_dialog(this, Z("Select Matroska file"), wxT(""), wxT(""),
+                           Z("All supported files|*.mkv;*.mka;*.mks;*.webm;*.webma;*.webmv|"
+                             "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|"
+                             "WebMedia files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|"
+                             "All files|*.*"));
   file_dialog.SetDirectory(last_dir);
   if (file_dialog.ShowModal() == wxID_OK) {
     open_file(file_dialog.GetPath().c_str());
@@ -369,22 +373,21 @@ bool
 mi_dndfile::OnDropFiles(wxCoord x,
                         wxCoord y,
                         const wxArrayString &filenames) {
-  wxString dnd_file;
   unsigned int i;
 
   for (i = 0; i < filenames.GetCount(); i++) {
-    dnd_file = filenames[i];
-    if ((dnd_file.Right(3).Lower() == wxT("mka")) ||
-        (dnd_file.Right(3).Lower() == wxT("mkv")) ||
-        (dnd_file.Right(3).Lower() == wxT("mks"))) {
-      frame->open_file(dnd_file);
-    } else {
-      wxString msg;
-      msg.Printf(Z("The dragged file '%s'\nis not a Matroska file."), dnd_file.c_str());
-      frame->show_error(msg.c_str());
+    wxString extension = filenames[i].AfterLast(wxT('.')).Lower();
+
+    if (   (extension == wxT("mkv"))  || (extension == wxT("mka"))   || (extension == wxT("mks"))
+        || (extension == wxT("webm")) || (extension == wxT("webmv")) || (extension == wxT("webma")))
+      frame->open_file(filenames[i]);
+
+    else {
+      frame->show_error(wxString::Format(Z("The dragged file '%s'\nis not a Matroska file."), filenames[i].c_str()));
       break;
     }
   }
+
   return true;
 }
 
