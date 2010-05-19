@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mkvtoolnix-man\n"
-"POT-Creation-Date: 2010-05-18 20:36+0300\n"
+"POT-Creation-Date: 2010-05-19 19:23+0300\n"
 "PO-Revision-Date: 2010-05-05 19:02+0800\n"
 "Last-Translator: Dean Lee <xslidian@lidian.info>\n"
 "Language-Team: chinese simp <xslidian+mkvtoolnix@gmail.com>\n"
@@ -1440,13 +1440,13 @@ msgstr ""
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:99
 #, fuzzy
-msgid "<option>--webm</option>, <option>--web-media</option>"
-msgstr "<option>-v</option>, <option>--verbose</option>"
+msgid "<option>-w</option>, <option>--webm</option>"
+msgstr "<option>-h</option>, <option>--help</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:101
 msgid ""
-"Create a WebMedia compliant file. This is also turned on if the output file "
+"Create a WebM compliant file. This is also turned on if the output file "
 "name's extension is &quot;webm&quot;. This mode enforces several "
 "restrictions. The only allowed codecs are VP8 video and Vorbis audio tracks. "
 "Neither chapters nor tags are allowed. The DocType header item is changed to "
@@ -5450,6 +5450,10 @@ msgstr ""
 #: doc/man/mmg.xml:92
 msgid "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
 msgstr "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
+
+#, fuzzy
+#~ msgid "<option>--webm</option>, <option>--web-media</option>"
+#~ msgstr "<option>-v</option>, <option>--verbose</option>"
 
 #~ msgid "January 2010"
 #~ msgstr "2010 年 1 月"

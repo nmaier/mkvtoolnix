@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-05-19 18:58+0200\n"
+"PO-Revision-Date: 2010-05-19 19:23+0200\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -435,10 +435,6 @@ msgstr ""
 msgid "  --ui-language <code>     Force the translations for 'code' to be used.\n"
 msgstr "  --ui-language <code>     Die Übersetzung für Sprache 'code' benutzen.\n"
 
-#: src/merge/mkvmerge.cpp:121
-msgid "  --webm, --web-media      Create WebM compliant file.\n"
-msgstr "  --webm, --web-media      Eine WebM-konforme Datei erzeugen.\n"
-
 #: src/merge/mkvmerge.cpp:192
 msgid "  -A, --no-audio           Don't copy any audio track from this file.\n"
 msgstr "  -A, --no-audio           Keine Audiotracks aus dieser Datei kopieren.\n"
@@ -564,6 +560,10 @@ msgstr "  -t, --tags <TID:Datei>   Tags für einen Track aus einer XML-Datei les
 #: src/merge/mkvmerge.cpp:118
 msgid "  -v, --verbose            verbose status\n"
 msgstr "  -v, --verbose            Gesprächigkeit erhöhen\n"
+
+#: src/merge/mkvmerge.cpp:121
+msgid "  -w, --webm               Create WebM compliant file.\n"
+msgstr "  -w, --webm               Eine WebM-konforme Datei erzeugen.\n"
 
 #: src/merge/mkvmerge.cpp:216
 msgid ""

@@ -414,10 +414,6 @@ msgstr ""
 msgid "  --ui-language <code>     Force the translations for 'code' to be used.\n"
 msgstr "  --ui-language <code>     強制使用「code」代表的翻譯版本。\n"
 
-#: src/merge/mkvmerge.cpp:121
-msgid "  --webm, --web-media      Create WebM compliant file.\n"
-msgstr ""
-
 #: src/merge/mkvmerge.cpp:192
 msgid "  -A, --no-audio           Don't copy any audio track from this file.\n"
 msgstr "  -A, --no-audio           不要從這個檔案中複製任何音軌。\n"
@@ -541,6 +537,11 @@ msgstr "  -t, --tags <TID:file>    從 XML 檔案讀取用於指定軌道的標�
 #: src/merge/mkvmerge.cpp:118
 msgid "  -v, --verbose            verbose status\n"
 msgstr "  -v, --verbose            “詳細”狀態\n"
+
+#: src/merge/mkvmerge.cpp:121
+#, fuzzy
+msgid "  -w, --webm               Create WebM compliant file.\n"
+msgstr "  --link                   連接已分割的檔案。\n"
 
 #: src/merge/mkvmerge.cpp:216
 msgid ""
