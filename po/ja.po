@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-05-18 19:37+0200\n"
+"PO-Revision-Date: 2010-05-20 21:14+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -155,11 +155,8 @@ msgstr ""
 "                           各クラスタに最大nミリ秒のデータを配置します。\n"
 
 #: src/merge/mkvmerge.cpp:150
-#, fuzzy
 msgid "  --clusters-in-meta-seek  Write meta seek data for clusters.\n"
-msgstr ""
-"  --no-clusters-in-meta-seek\n"
-"                           クラスタのメタシークデータを記録しません。\n"
+msgstr "  --clusters-in-meta-seek  クラスタにメタシークデータを書き込みます。\n"
 
 #: src/merge/mkvmerge.cpp:284
 msgid ""
@@ -250,7 +247,7 @@ msgstr ""
 
 #: src/merge/mkvmerge.cpp:152
 msgid "  --enable-durations       Enable block durations for all blocks.\n"
-msgstr "  --enable-durations       全てのブロックの長さを記録します。\n"
+msgstr "  --enable-durations       全てのブロックの持続時間を記録します。\n"
 
 #: src/merge/mkvmerge.cpp:226
 msgid ""
@@ -544,9 +541,8 @@ msgid "  -v, --verbose            verbose status\n"
 msgstr "  -v, --verbose            詳細なステータス情報を出力します。\n"
 
 #: src/merge/mkvmerge.cpp:121
-#, fuzzy
 msgid "  -w, --webm               Create WebM compliant file.\n"
-msgstr "  --link                   分割ファイルを紐付けします。\n"
+msgstr "  -w, --webm               WebMの規格に準拠したファイルを作成します。\n"
 
 #: src/merge/mkvmerge.cpp:216
 msgid ""
@@ -729,7 +725,7 @@ msgstr "%1% ビルド日時 %2% %3%"
 
 #: src/info/mkvinfo.cpp:161
 msgid "%1% frame, track %2%, timecode %3% (%4%), duration %|5$.3f|, size %6%, adler 0x%|7$08x|%8%%9%\n"
-msgstr "%1% フレーム、トラック %2%、タイムコード %3% (%4%)、長さ %|5$.3f|、サイズ %6%、adler 0x%|7$08x|%8%%9%\n"
+msgstr "%1% フレーム、トラック %2%、タイムコード %3% (%4%)、持続時間 %|5$.3f|、サイズ %6%、adler 0x%|7$08x|%8%%9%\n"
 
 #: src/info/mkvinfo.cpp:166
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%\n"
@@ -1728,7 +1724,7 @@ msgstr "全ての既知のプロパティ名とその意味\n"
 
 #: src/info/wxwidgets_ui.cpp:286
 msgid "All supported files|*.mkv;*.mka;*.mks;*.webm;*.webma;*.webmv|Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|WebM files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|All files|*.*"
-msgstr ""
+msgstr "全てのサポートされたファイル|*.mkv;*.mka;*.mks;*.webm;*.webma;*.webmv|Matroskaファイル (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|WebMファイル (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|全てのファイル|*.*"
 
 #: src/mmg/tabs/input.cpp:288
 #, c-format
@@ -1889,7 +1885,7 @@ msgstr "'%1%'のMIMEタイプ自動認識：%2%\n"
 
 #: src/merge/mkvmerge.cpp:1637
 msgid "Automatically enabling WebM compliance mode due to output file name extension.\n"
-msgstr ""
+msgstr "出力ファイル名の拡張子に従って、WebM規格準拠モードを自動的に有効化します。\n"
 
 #: src/mmg/cli_options_dlg.cpp:36
 msgid "Available options:"
@@ -1929,7 +1925,7 @@ msgstr "BlockAddition：%1%"
 
 #: src/info/mkvinfo.cpp:147
 msgid "Block duration: %1%.%|2$06d|ms"
-msgstr "ブロック長：%1%.%|2$06d|ms"
+msgstr "ブロックの持続時間：%1%.%|2$06d|ms"
 
 #: src/extract/timecodes_v2.cpp:278 src/extract/tracks.cpp:404
 #: src/info/mkvinfo.cpp:1328
@@ -2007,7 +2003,7 @@ msgstr "例外をキャッチしました"
 
 #: src/mmg/cli_options_dlg.cpp:141
 msgid "Causes mkvmerge to add 'stop display' commands to VobSub subtitle packets that do not contain a duration field."
-msgstr "mkvmergeが表示時間フィールドを含んでいないVobSub字幕パケットに「表示停止」コマンドを付加するようにします。"
+msgstr "mkvmergeが、持続時間フィールドを含んでいないVobSub字幕パケットに、「表示停止」コマンドを付加するようにします。"
 
 #: src/propedit/change.cpp:207
 msgid "Change for '%1%' executed. No property of this type found. One entry added.\n"
@@ -2126,7 +2122,7 @@ msgstr "チャプタ（%d個のエントリ）%sのチャプタ"
 
 #: src/merge/output_control.cpp:1263
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
-msgstr ""
+msgstr "チャプタはWebMの規格に準拠したファイルでは使用することができません。どの出力ファイルにもチャプタは書き込まれません。\n"
 
 #: src/mmg/tabs/chapters.cpp:607
 msgid "Chapters loaded."
@@ -5342,7 +5338,7 @@ msgstr "タグ"
 
 #: src/merge/output_control.cpp:1292
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
-msgstr ""
+msgstr "タグはWebMの規格に準拠したファイルでは使用することができません。どの出力ファイルにもタグは書き込まれません。\n"
 
 #: src/merge/pr_generic.cpp:1425
 msgid "Tags for track ID %1%: %2% entries"
@@ -5537,7 +5533,7 @@ msgstr "選択されたNALUサイズ長'%1%'は小さすぎます。'4'を試し
 
 #: src/merge/pr_generic.cpp:1240
 msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
-msgstr ""
+msgstr "コーデックタイプ'%1%'はWebMの規格に準拠したファイルでは使用することができません。\n"
 
 #: src/output/p_avc.cpp:200 src/output/p_kate.cpp:113
 #: src/output/p_passthrough.cpp:63 src/output/p_textsubs.cpp:98
@@ -7109,9 +7105,8 @@ msgid "Warnings:"
 msgstr "警告： "
 
 #: src/mmg/tabs/input.cpp:257 src/merge/mkvmerge.cpp:106
-#, fuzzy
 msgid "WebM audio/video files"
-msgstr "RealMediaオーディオ/ビデオファイル"
+msgstr "WebMオーディオ/ビデオファイル"
 
 #: src/mmg/options/mmg.cpp:82
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
@@ -7127,7 +7122,7 @@ msgstr "ビデオフレームの横表示解像度です。"
 
 #: src/mmg/cli_options_dlg.cpp:97
 msgid "Write durations for all blocks. This will increase file size and does not offer any additional value for players at the moment."
-msgstr "全てのブロックの長さを記録します。これはファイルサイズを増大させますが、現在のところプレーヤには何のメリットももたらしません。"
+msgstr "全てのブロックの持続時間を記録します。これはファイルサイズを増大させますが、現在のところプレーヤには何のメリットももたらしません。"
 
 #: src/extract/extract_cli_parser.cpp:74
 msgid "Write raw FLAC files (default: write OggFLAC files)."
