@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-05-18 19:37+0200\n"
+"PO-Revision-Date: 2010-05-20 12:59+0800\n"
 "Last-Translator: Dean Lee <xslidian@lidian.info>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -151,11 +151,8 @@ msgstr ""
 "                           n 毫秒的数据。\n"
 
 #: src/merge/mkvmerge.cpp:150
-#, fuzzy
 msgid "  --clusters-in-meta-seek  Write meta seek data for clusters.\n"
-msgstr ""
-"  --no-clusters-in-meta-seek\n"
-"                           不要为簇写入元定位数据。\n"
+msgstr "  --clusters-in-meta-seek  为簇写入元定位数据。\n"
 
 #: src/merge/mkvmerge.cpp:284
 msgid ""
@@ -537,9 +534,8 @@ msgid "  -v, --verbose            verbose status\n"
 msgstr "  -v, --verbose            “详细”状态\n"
 
 #: src/merge/mkvmerge.cpp:121
-#, fuzzy
 msgid "  -w, --webm               Create WebM compliant file.\n"
-msgstr "  --link                   连接已切割的文件。\n"
+msgstr "  -w, --webm               创建 WebM 兼容文件。\n"
 
 #: src/merge/mkvmerge.cpp:216
 msgid ""
@@ -1759,7 +1755,7 @@ msgstr "已知的所有属性名及其含义\n"
 
 #: src/info/wxwidgets_ui.cpp:286
 msgid "All supported files|*.mkv;*.mka;*.mks;*.webm;*.webma;*.webmv|Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|WebM files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|All files|*.*"
-msgstr ""
+msgstr "所有受支持的文件|*.mkv;*.mka;*.mks;*.webm;*.webma;*.webmv|Matroska 文件 (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|WebM 文件 (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|所有文件|*.*"
 
 #: src/mmg/tabs/input.cpp:288
 #, c-format
@@ -1929,7 +1925,7 @@ msgstr "对 '%1%' 的 MIME 类型的自动识别结果: %2%\n"
 
 #: src/merge/mkvmerge.cpp:1637
 msgid "Automatically enabling WebM compliance mode due to output file name extension.\n"
-msgstr ""
+msgstr "根据输出文件扩展名自动启用 WebM 兼容模式。\n"
 
 #: src/mmg/cli_options_dlg.cpp:36
 msgid "Available options:"
@@ -2179,7 +2175,7 @@ msgstr "章节 (%d 项) 自 %s"
 
 #: src/merge/output_control.cpp:1263
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
-msgstr ""
+msgstr "WebM 兼容文件中不允许有章节。输出文件中不会写入任何章节。\n"
 
 #: src/mmg/tabs/chapters.cpp:607
 msgid "Chapters loaded."
@@ -5338,7 +5334,7 @@ msgstr "缺某些标签元素 (不该发生此错误 - 另一个类似的错误�
 msgid ""
 "Specifies the language of the track in the\n"
 "Matroska languages form."
-msgstr "指定此轨在 Matroska 语言表单中的语言。"
+msgstr "指定此轨的语言，使用 Matroska 的语言格式。"
 
 #: src/common/property_element.cpp:147
 #: src/mmg/header_editor/frame.cpp:486
@@ -5486,7 +5482,7 @@ msgstr "标签"
 
 #: src/merge/output_control.cpp:1292
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
-msgstr ""
+msgstr "WebM 兼容文件中不允许有标签。输出文件中不会写入任何标签。\n"
 
 #: src/merge/pr_generic.cpp:1425
 msgid "Tags for track ID %1%: %2% entries"
@@ -5682,7 +5678,7 @@ msgstr "选择的 NALU 长 %1% 过小。请尝试使用 '4'。\n"
 
 #: src/merge/pr_generic.cpp:1240
 msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
-msgstr ""
+msgstr "编解码器类型 '%1%' 不可以在 WebM 兼容文件中使用。\n"
 
 #: src/output/p_avc.cpp:200
 #: src/output/p_kate.cpp:113
@@ -7348,9 +7344,8 @@ msgstr "警告信息:"
 
 #: src/mmg/tabs/input.cpp:257
 #: src/merge/mkvmerge.cpp:106
-#, fuzzy
 msgid "WebM audio/video files"
-msgstr "RealMedia 音/视频文件"
+msgstr "WebM 音/视频文件"
 
 #: src/mmg/options/mmg.cpp:82
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."

@@ -42,7 +42,7 @@ Matroska(TM)
 取消状态输出。
 .RE
 .PP
-\fB\-o\fR, \fB\-\-output\fR \fIfile\-name\fR
+\fB\-o\fR, \fB\-\-output\fR \fI文件名\fR
 .RS 4
 写至文件
 \fI文件名\fR。如果使用了切割功能，对此参数的处理将有所不同。 详情请参阅关于
@@ -52,7 +52,7 @@ Matroska(TM)
 .PP
 \fB\-w\fR, \fB\-\-webm\fR
 .RS 4
-Create a WebM compliant file\&. This is also turned on if the output file name\'s extension is "webm"\&. This mode enforces several restrictions\&. The only allowed codecs are VP8 video and Vorbis audio tracks\&. Neither chapters nor tags are allowed\&. The DocType header item is changed to "webm"\&.
+创建 WebM 兼容文件。如果输出文件扩展名为 "webm" 则将自动开启本选项。此模式将实施一些限制。只允许使用编解码器为 VP8 视频与 Vorbis 音频的轨道。章节与标签功能都不允许使用。DocType 文档类型头项将更改为 "webm"。
 .RE
 .PP
 \fB\-\-title\fR \fI标题\fR
@@ -258,10 +258,11 @@ Matroska(TM)
 .PP
 \fB\-\-clusters\-in\-meta\-seek\fR
 .RS 4
-Tells
+告诉
 \fBmkvmerge\fR(1)
-to create a meta seek element at the end of the file containing all clusters\&. See also the section about the
-Matroska(TM) file layout\&.
+在文件末尾创建包含所有簇的元定位元素。参阅关于
+Matroska(TM) 文件规划
+的段落。
 .RE
 .PP
 \fB\-\-disable\-lacing\fR
