@@ -958,8 +958,14 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
 void
 tab_input::on_track_enabled(wxCommandEvent &evt) {
   unsigned int i;
-  for (i = 0; i < tracks.size(); i++)
+  for (i = 0; i < tracks.size(); i++) {
+    if (mdlg->global_page->cb_webm_mode->IsChecked() && clb_tracks->IsChecked(i) && !tracks[i]->is_webm_compatible()) {
+      wxMessageBox(Z("This track is not compatible with the WebM mode and cannot be enabled."), Z("Incompatible track"), wxOK | wxCENTER | wxICON_ERROR);
+      clb_tracks->Check(i, false);
+    }
+
     tracks[i]->enabled = clb_tracks->IsChecked(i);
+  }
 }
 
 void
