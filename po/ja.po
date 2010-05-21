@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-05-20 21:14+0900\n"
+"PO-Revision-Date: 2010-05-22 03:04+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -2469,13 +2469,12 @@ msgid "Create &option file"
 msgstr "オプションファイルを作成(&O)"
 
 #: src/mmg/tabs/global.cpp:300
-#, fuzzy
 msgid "Create WebM compliant file"
-msgstr "オプションファイルを作成(&O)"
+msgstr "WebMの規格に準拠したファイルを作成する"
 
 #: src/mmg/tabs/global.cpp:301
 msgid "Create a WebM compliant file. mkvmerge also turns this on if the output file name's extension is \"webm\". This mode enforces several restrictions. The only allowed codecs are VP8 video and Vorbis audio tracks. Neither chapters nor tags are allowed. The DocType header item is changed to \"webm\"."
-msgstr ""
+msgstr "WebMの規格に準拠したファイルを作成します。mkvmergeは出力ファイル名の拡張子が\"webm\"であった場合にもこれをオンにします。このモードではいくつかの制限が実施されます。使用できるコーデックはVP8ビデオとVorbisオーディオのトラックのみです。チャプタとタグは使用することができません。DocTypeヘッダアイテムは\"webm\"へと変更されます。"
 
 #: src/mmg/mmg_dialog.cpp:266
 msgid "Create a new chapter file"
@@ -3422,7 +3421,7 @@ msgstr "ファイル'%1%'を使用することができません：ファイル�
 
 #: src/mmg/tabs/input.cpp:960
 msgid "Incompatible track"
-msgstr ""
+msgstr "互換性のないトラック"
 
 #: src/input/r_real.cpp:610
 msgid "Inconsistent AAC audio packet (length: %1% != len_check %2%)\n"
@@ -6338,7 +6337,7 @@ msgstr "このトラックがSBR AAC/HE-AAC/AAC+のデータを含んでいる�
 
 #: src/mmg/tabs/input.cpp:960
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
-msgstr ""
+msgstr "このトラックはWebMと互換性がないため、有効化することはできません。"
 
 #: src/info/mkvinfo.cpp:1464
 msgid "Time slice"
