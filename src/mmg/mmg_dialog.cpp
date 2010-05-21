@@ -1294,16 +1294,6 @@ mmg_dialog::set_output_maybe(const wxString &new_output) {
   if (!options.autoset_output_filename || new_output.empty())
     return;
 
-  bool has_video = false, has_audio = false;
-
-  foreach(mmg_track_t *t, tracks) {
-    if (t->is_video()) {
-      has_video = true;
-      break;
-    } else if (t->is_audio())
-      has_audio = true;
-  }
-
   wxFileName source_file_name(tc_output->GetValue().IsEmpty() ? new_output : tc_output->GetValue());
   wxString output_dir;
   if (ODM_PREVIOUS == options.output_directory_mode)
@@ -1320,7 +1310,7 @@ mmg_dialog::set_output_maybe(const wxString &new_output) {
   while (true) {
     output_file_name = dir;
     output_file_name.SetName(source_file_name.GetName() + (0 == idx ? wxT("") : wxString::Format(wxT(" (%u)"), idx)));
-    output_file_name.SetExt(global_page->cb_webm_mode->IsChecked() ? wxU("webm") : has_video ? wxU("mkv") : has_audio ? wxU("mka") : wxU("mks"));
+    output_file_name.SetExt(suggest_file_name_extension());
 
     if (!output_file_name.FileExists())
       break;
@@ -1329,6 +1319,24 @@ mmg_dialog::set_output_maybe(const wxString &new_output) {
   }
 
   tc_output->SetValue(output_file_name.GetFullPath());
+}
+
+wxString
+mmg_dialog::suggest_file_name_extension() {
+  bool has_video = false, has_audio = false;
+
+  foreach(mmg_track_t *t, tracks) {
+    if (t->is_video()) {
+      has_video = true;
+      break;
+    } else if (t->is_audio())
+      has_audio = true;
+  }
+
+  return global_page->cb_webm_mode->IsChecked() ? wxU("webm")
+       : has_video                              ? wxU("mkv")
+       : has_audio                              ? wxU("mka")
+       :                                          wxU("mks");
 }
 
 void
@@ -1629,8 +1637,8 @@ mmg_dialog::set_on_top(bool on_top) {
 
 void
 mmg_dialog::handle_webm_mode(bool enabled) {
-  if (enabled && !tc_output->IsEmpty())
-    tc_output->SetValue(tc_output->GetValue().BeforeLast(wxT('.')) + wxT(".webm"));
+  if (!tc_output->IsEmpty())
+    tc_output->SetValue(tc_output->GetValue().BeforeLast(wxT('.')) + wxT(".") + suggest_file_name_extension());
 
   input_page->handle_webm_mode(enabled);
   global_page->handle_webm_mode(enabled);

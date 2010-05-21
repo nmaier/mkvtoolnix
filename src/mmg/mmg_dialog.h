@@ -216,6 +216,8 @@ public:
 
   void display_help(int id);
 
+  wxString suggest_file_name_extension();
+
 protected:
 #if defined(SYS_WINDOWS)
   virtual WXLRESULT MSWWindowProc(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam);
