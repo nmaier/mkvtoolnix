@@ -769,7 +769,7 @@ msgstr ""
 "源码及最新程序总会在下面的地址提供：\n"
 "http://www.bunkus.org/videotools/mkvtoolnix/"
 
-#: src/mmg/mmg_dialog.cpp:708
+#: src/mmg/mmg_dialog.cpp:710
 #, c-format
 msgid ""
 "%s\n"
@@ -796,7 +796,7 @@ msgstr ""
 msgid "%s (MIME type %s, size %ld) from %s (%s)"
 msgstr "%s (MIME 类型 %s, 尺寸 %ld) 自 %s (%s)"
 
-#: src/mmg/mmg.cpp:55
+#: src/mmg/mmg.cpp:56
 #, c-format
 msgid "%s%s (ID %lld, type: %s) from %s"
 msgstr "%s%s (ID %lld, 类型: %s) 自 %s"
@@ -1169,7 +1169,7 @@ msgid "'%1%': %2%"
 msgstr "'%1%': %2%"
 
 #: src/common/mm_multi_file_io.cpp:165
-#: src/mmg/tabs/input.cpp:724
+#: src/mmg/tabs/input.cpp:723
 msgid "'%1%': Processing the following files as well: %2%\n"
 msgstr "'%1%': 将同时处理以下文件: %2%\n"
 
@@ -1485,15 +1485,15 @@ msgstr "---常用---"
 msgid "--timecode-scale REPLACEME"
 msgstr "--timecode-scale REPLACEME"
 
-#: src/mmg/tabs/global.cpp:225
+#: src/mmg/tabs/global.cpp:239
 msgid "...after this duration:"
 msgstr "...按时长:"
 
-#: src/mmg/tabs/global.cpp:222
+#: src/mmg/tabs/global.cpp:236
 msgid "...after this size:"
 msgstr "...按尺寸:"
 
-#: src/mmg/tabs/global.cpp:230
+#: src/mmg/tabs/global.cpp:244
 msgid "...after timecodes:"
 msgstr "...按特定时间码:"
 
@@ -1554,7 +1554,7 @@ msgstr "一个人类可读的字串，描述编解码器。"
 msgid "A human-readable track name."
 msgstr "一个人类可读的字串，描述轨道名称。"
 
-#: src/mmg/mmg_dialog.cpp:1369
+#: src/mmg/mmg_dialog.cpp:1382
 #, c-format
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "描述为 '%s' 的任务已存在。是否添加描述相同的任务?"
@@ -1661,7 +1661,7 @@ msgstr "已中断对 %s 的处理"
 msgid "About mkvinfo"
 msgstr "关于 mkvinfo"
 
-#: src/mmg/mmg_dialog.cpp:717
+#: src/mmg/mmg_dialog.cpp:719
 msgid "About mkvmerge's GUI"
 msgstr "关于 mkvmerge's GUI"
 
@@ -1823,11 +1823,11 @@ msgstr "分析 MPEG4 位流，将每一帧置于单独的 Matroska 块中，使�
 msgid "Another default track for %1% tracks has already been set. The 'default' flag for track %2% of '%3%' will not be set.\n"
 msgstr "轨道 %1% 的另一个默认轨已设置。'%3%' 的 %2% 轨道的 '默认轨' 标记将不被设置。\n"
 
-#: src/mmg/mmg_dialog.cpp:555
+#: src/mmg/mmg_dialog.cpp:557
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr "另一个混流任务仍在处理中。要启动一项新任务，请等待先前任务完成或手动中断它。"
 
-#: src/mmg/tabs/input.cpp:1279
+#: src/mmg/tabs/input.cpp:1284
 #, c-format
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "不允许将一个文件的轨道追加合并到同一个文件的其他轨道。出现问题的轨道号为 %u 与 %u。"
@@ -2006,9 +2006,9 @@ msgstr "调出任务队列编辑器"
 #: src/mmg/mmg_dialog.cpp:291
 #: src/mmg/options/mkvmerge.cpp:59
 #: src/mmg/options/mmg.cpp:68
-#: src/mmg/tabs/global.cpp:262
-#: src/mmg/tabs/global.cpp:280
-#: src/mmg/tabs/global.cpp:284
+#: src/mmg/tabs/global.cpp:276
+#: src/mmg/tabs/global.cpp:293
+#: src/mmg/tabs/global.cpp:297
 #: src/mmg/tabs/input_general.cpp:188
 #: src/mmg/tabs/input_general.cpp:191
 msgid "Browse"
@@ -2026,7 +2026,7 @@ msgstr "在源容器不提供时间码或帧率值的情况下，无法将非原
 msgid "Cannot extract tracks of different kinds to the same file. This was requested for the tracks %1% and %2%.\n"
 msgstr "无法将不同类型的轨道提取到一个文件。轨道 %1% 和 %2% 被要求这样提取。\n"
 
-#: src/mmg/mmg_dialog.cpp:556
+#: src/mmg/mmg_dialog.cpp:558
 msgid "Cannot start second muxing job"
 msgstr "不能启动其他混流任务"
 
@@ -2106,7 +2106,7 @@ msgstr "章节翻译版本 UID: %1%"
 msgid "Chapter Translate ID: %1%"
 msgstr "章节翻译 ID: %1%"
 
-#: src/mmg/mmg_dialog.cpp:584
+#: src/mmg/mmg_dialog.cpp:586
 msgid "Chapter editor is not empty"
 msgstr "章节编辑器非空"
 
@@ -2114,7 +2114,7 @@ msgstr "章节编辑器非空"
 msgid "Chapter extraction"
 msgstr "章节提取"
 
-#: src/mmg/tabs/global.cpp:260
+#: src/mmg/tabs/global.cpp:274
 msgid "Chapter file:"
 msgstr "章节文件:"
 
@@ -2123,7 +2123,7 @@ msgstr "章节文件:"
 msgid "Chapter files (*.xml)|*.xml|%s"
 msgstr "章节文件 (*.xml)|*.xml|%s"
 
-#: src/mmg/tabs/global.cpp:312
+#: src/mmg/tabs/global.cpp:329
 #, c-format
 msgid "Chapter files (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
 msgstr "章节文件 (*.xml;*.txt;*.cue)|*.xml;*.txt;*.cue|%s"
@@ -2163,12 +2163,12 @@ msgid "Chapter verification succeeded"
 msgstr "章节验证成功"
 
 #: src/mmg/options/chapters.cpp:130
-#: src/mmg/tabs/global.cpp:259
+#: src/mmg/tabs/global.cpp:273
 #: src/info/mkvinfo.cpp:1732
 msgid "Chapters"
 msgstr "章节"
 
-#: src/mmg/mmg.cpp:43
+#: src/mmg/mmg.cpp:44
 #, c-format
 msgid "Chapters (%d entries) from %s"
 msgstr "章节 (%d 项) 自 %s"
@@ -2198,7 +2198,7 @@ msgstr "章节: %1% 条记录"
 msgid "Charset for strings on the command line"
 msgstr "命令行字符的字符集"
 
-#: src/mmg/tabs/global.cpp:268
+#: src/mmg/tabs/global.cpp:282
 #: src/mmg/tabs/input_format.cpp:248
 msgid "Charset:"
 msgstr "字符集:"
@@ -2233,20 +2233,20 @@ msgstr "选择要追加合并的文件"
 
 #: src/mmg/jobs.cpp:350
 #: src/mmg/mmg_dialog.cpp:314
-#: src/mmg/mmg_dialog.cpp:408
-#: src/mmg/mmg_dialog.cpp:733
-#: src/mmg/mmg_dialog.cpp:754
+#: src/mmg/mmg_dialog.cpp:410
+#: src/mmg/mmg_dialog.cpp:735
+#: src/mmg/mmg_dialog.cpp:756
 #: src/mmg/mux_dialog.cpp:231
 #: src/mmg/tabs/chapters.cpp:633
 #: src/mmg/tabs/chapters.cpp:675
 msgid "Choose an output file"
 msgstr "选择输出文件"
 
-#: src/mmg/tabs/global.cpp:311
+#: src/mmg/tabs/global.cpp:328
 msgid "Choose the chapter file"
 msgstr "选择章节文件"
 
-#: src/mmg/mmg_dialog.cpp:618
+#: src/mmg/mmg_dialog.cpp:620
 msgid "Choose the location of the mkvmerge GUI help files"
 msgstr "选择 mkvmerge GUI 帮助文件的路径"
 
@@ -2258,11 +2258,11 @@ msgstr "选择 mkvmerge 可执行程序"
 msgid "Choose the output directory"
 msgstr "选择输出目录"
 
-#: src/mmg/tabs/global.cpp:301
+#: src/mmg/tabs/global.cpp:318
 msgid "Choose the segment info file"
 msgstr "选择剪辑信息文件"
 
-#: src/mmg/tabs/global.cpp:291
+#: src/mmg/tabs/global.cpp:308
 msgid "Choose the tags file"
 msgstr "选择标签文件"
 
@@ -2356,7 +2356,7 @@ msgstr "收起所有条目，这样它们的子条目将不被显示"
 msgid "Colour space: %1%"
 msgstr "色彩空间: %1%"
 
-#: src/mmg/mmg_dialog.cpp:785
+#: src/mmg/mmg_dialog.cpp:787
 msgid "Command line copied to clipboard."
 msgstr "命令行已复制到剪贴板。"
 
@@ -2364,7 +2364,7 @@ msgstr "命令行已复制到剪贴板。"
 msgid "Command line options:"
 msgstr "命令行选项:"
 
-#: src/mmg/mmg_dialog.cpp:743
+#: src/mmg/mmg_dialog.cpp:745
 msgid "Command line saved."
 msgstr "命令行已保存。"
 
@@ -2385,11 +2385,11 @@ msgstr "压缩方式:"
 msgid "Configuration cleared."
 msgstr "配置已清空。"
 
-#: src/mmg/mmg_dialog.cpp:402
+#: src/mmg/mmg_dialog.cpp:404
 msgid "Configuration loaded."
 msgstr "配置已加载。"
 
-#: src/mmg/mmg_dialog.cpp:437
+#: src/mmg/mmg_dialog.cpp:439
 msgid "Configuration saved."
 msgstr "配置已保存。"
 
@@ -2437,7 +2437,7 @@ msgstr "无法为 mkvmerge 的命令行选项创建临时文件 '%s' (错误代�
 msgid "Could not create the file '%s'."
 msgstr "无法创建文件 '%s'。"
 
-#: src/mmg/mmg_dialog.cpp:763
+#: src/mmg/mmg_dialog.cpp:765
 msgid "Could not create the specified file."
 msgstr "无法创建指定文件。"
 
@@ -2490,7 +2490,7 @@ msgstr "无法初始化 iconv 库以供从 UTF-8 至 %1% 的转换。某些字�
 msgid "Could not open '%1%' for reading.\n"
 msgstr "无法打开 '%1%' 以读取。\n"
 
-#: src/mmg/mmg_dialog.cpp:787
+#: src/mmg/mmg_dialog.cpp:789
 msgid "Could not open the clipboard."
 msgstr "无法打开剪贴板。"
 
@@ -2537,6 +2537,15 @@ msgstr "国家:"
 msgid "Create &option file"
 msgstr "创建选项文件(&O)"
 
+#: src/mmg/tabs/global.cpp:300
+#, fuzzy
+msgid "Create WebM compliant file"
+msgstr "创建选项文件(&O)"
+
+#: src/mmg/tabs/global.cpp:301
+msgid "Create a WebM compliant file. mkvmerge also turns this on if the output file name's extension is \"webm\". This mode enforces several restrictions. The only allowed codecs are VP8 video and Vorbis audio tracks. Neither chapters nor tags are allowed. The DocType header item is changed to \"webm\"."
+msgstr ""
+
 #: src/mmg/mmg_dialog.cpp:266
 msgid "Create a new chapter file"
 msgstr "创建一个新的章节文件"
@@ -2561,7 +2570,7 @@ msgstr "Cue 簇位: %1%"
 msgid "Cue codec state: %1%"
 msgstr "Cue 编解码态: %1%"
 
-#: src/mmg/tabs/global.cpp:272
+#: src/mmg/tabs/global.cpp:286
 msgid "Cue name format:"
 msgstr "Cue 表单命名格式:"
 
@@ -2626,7 +2635,7 @@ msgstr "索引:"
 msgid "Current and past jobs:"
 msgstr "当前和过去的任务:"
 
-#: src/mmg/mmg_dialog.cpp:725
+#: src/mmg/mmg_dialog.cpp:727
 msgid "Current command line"
 msgstr "当前命令行"
 
@@ -2745,7 +2754,7 @@ msgstr "从任务队列中删除所选任务"
 msgid "Description"
 msgstr "描述"
 
-#: src/mmg/mmg_dialog.cpp:1370
+#: src/mmg/mmg_dialog.cpp:1383
 msgid "Description already exists"
 msgstr "描述已存在"
 
@@ -2911,7 +2920,7 @@ msgstr "元素"
 msgid "Elements in the category '%1%' ('--edit %2%'):\n"
 msgstr "类别 '%1%' 中的元素 ('--edit %2%'):\n"
 
-#: src/mmg/tabs/global.cpp:219
+#: src/mmg/tabs/global.cpp:233
 msgid "Enable splitting..."
 msgstr "启用切割..."
 
@@ -2919,7 +2928,7 @@ msgstr "启用切割..."
 msgid "Enabled: %1%"
 msgstr "已启用: %1%"
 
-#: src/mmg/tabs/global.cpp:220
+#: src/mmg/tabs/global.cpp:234
 msgid "Enables splitting of the output into more than one file. You can split after a given size, after a given amount of time has passed in each file or after a list of timecodes."
 msgstr "启用切割，将输出文件切割为多个文件。可以在给定尺寸、给定每文件包含的时间量或一系列时间码后切割。"
 
@@ -2960,7 +2969,7 @@ msgstr "在行 %1% 处出错: 预期为字幕号码但发现一些文字。\n"
 msgid "Error initializing the tables for the chapter, tag and segment info elements: Could not find the element with the debug name '%1%'. %2%\n"
 msgstr "初始化章节, 标签及剪辑信息元素表时出错: 无法找到调试名为 '%1%' 的元素。%2%\n"
 
-#: src/mmg/mmg.cpp:209
+#: src/mmg/mmg.cpp:217
 #: src/mmg/mmg_dialog.cpp:369
 #: src/mmg/mmg_dialog.cpp:388
 msgid "Error loading settings"
@@ -3161,7 +3170,7 @@ msgstr "文件 UID: %1%"
 msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n"
 msgstr "文件包含的帧数比预期的少，或者文件在 %1% 帧后被破坏。\n"
 
-#: src/mmg/mmg_dialog.cpp:763
+#: src/mmg/mmg_dialog.cpp:765
 #: src/mmg/mux_dialog.cpp:120
 #: src/mmg/tabs/input.cpp:348
 msgid "File creation failed"
@@ -3211,7 +3220,7 @@ msgstr "文件名: %1%"
 msgid "File parsing failed"
 msgstr "解析文件失败"
 
-#: src/mmg/tabs/input.cpp:750
+#: src/mmg/tabs/input.cpp:749
 msgid "File removal not possible"
 msgstr "文件不能移除"
 
@@ -3220,15 +3229,11 @@ msgstr "文件不能移除"
 msgid "File structure warning"
 msgstr "文件结构警告"
 
-#: src/mmg/tabs/global.cpp:247
+#: src/mmg/tabs/global.cpp:261
 msgid "File/segment linking"
 msgstr "文件/剪辑链接"
 
-#: src/mmg/tabs/global.cpp:214
-msgid "File/segment title"
-msgstr "文件/剪辑标题"
-
-#: src/mmg/tabs/global.cpp:215
+#: src/mmg/tabs/global.cpp:229
 msgid "File/segment title:"
 msgstr "文件/剪辑标题:"
 
@@ -3254,8 +3259,8 @@ msgstr "已完成对 %s 的处理"
 msgid "Floating point number"
 msgstr "浮点数"
 
-#: src/mmg/tabs/global.cpp:256
-#: src/mmg/tabs/global.cpp:258
+#: src/mmg/tabs/global.cpp:270
+#: src/mmg/tabs/global.cpp:272
 msgid "For an in-depth explanantion of file/segment linking and this feature please read mkvmerge's documentation."
 msgstr "要深入了解文件/剪辑链接功能，请阅读 mkvmerge 文档。"
 
@@ -3357,11 +3362,12 @@ msgstr "轨道常规选项"
 msgid "Global"
 msgstr "全局"
 
+#: src/mmg/tabs/global.cpp:228
 #: src/extract/extract_cli_parser.cpp:65
 msgid "Global options"
 msgstr "全局选项"
 
-#: src/mmg/mmg.cpp:46
+#: src/mmg/mmg.cpp:47
 #, c-format
 msgid "Global tags (%d entries) from %s"
 msgstr "全局标签 (%d 项) 自 %s"
@@ -3417,8 +3423,8 @@ msgstr "编码后的视频帧的高度，单位：像素。"
 msgid "Height of the video frames to display."
 msgstr "视频帧的显示高度。"
 
-#: src/mmg/mmg_dialog.cpp:684
-#: src/mmg/mmg_dialog.cpp:690
+#: src/mmg/mmg_dialog.cpp:686
+#: src/mmg/mmg_dialog.cpp:692
 msgid "Help file not found"
 msgstr "找不到帮助文件"
 
@@ -3506,6 +3512,10 @@ msgstr "导入的图片，自 %1%"
 #: src/input/r_corepicture.cpp:223
 msgid "Impossible to use file '%1%': The file could not be opened for reading.\n"
 msgstr "无法使用文件 '%1%': 文件无法打开以读取。\n"
+
+#: src/mmg/tabs/input.cpp:960
+msgid "Incompatible track"
+msgstr ""
 
 #: src/input/r_real.cpp:610
 msgid "Inconsistent AAC audio packet (length: %1% != len_check %2%)\n"
@@ -3627,7 +3637,7 @@ msgstr "无效的索引选项指定，在 '--cues %1%' 中。\n"
 msgid "Invalid cues option. No track ID specified in '--cues %1%'.\n"
 msgstr "无效的索引选项。未在 '--cues %1%' 指定轨道 ID。\n"
 
-#: src/mmg/mmg_dialog.cpp:563
+#: src/mmg/mmg_dialog.cpp:565
 msgid "Invalid file name"
 msgstr "无效的文件名"
 
@@ -3710,7 +3720,7 @@ msgstr "无效的语言选择"
 msgid "Invalid minute: %1%"
 msgstr "无效分数: %1%"
 
-#: src/mmg/tabs/global.cpp:584
+#: src/mmg/tabs/global.cpp:610
 msgid "Invalid number of max. split files given."
 msgstr "给出的最大切割文件数无效。"
 
@@ -3823,11 +3833,11 @@ msgstr "无效的轨道 ID 指定，在 '--sub-charset %1%'。\n"
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "无效的轨道 ID 或文件名指定，在参数 '%1%' 中。\n"
 
-#: src/mmg/mmg_dialog.cpp:1405
+#: src/mmg/mmg_dialog.cpp:1418
 msgid "Job added to job queue"
 msgstr "任务已添加到任务队列"
 
-#: src/mmg/mmg_dialog.cpp:1358
+#: src/mmg/mmg_dialog.cpp:1371
 msgid "Job description"
 msgstr "任务描述"
 
@@ -3884,7 +3894,7 @@ msgstr "语言未以 NUL 收尾"
 
 #: src/mmg/options/chapters.cpp:86
 #: src/mmg/tabs/chapters.cpp:348
-#: src/mmg/tabs/global.cpp:264
+#: src/mmg/tabs/global.cpp:278
 #: src/mmg/tabs/input_general.cpp:181
 msgid "Language:"
 msgstr "语言:"
@@ -4104,11 +4114,11 @@ msgstr "'--ui-language' 缺参数。\n"
 msgid "Missing argument to '%1%'.\n"
 msgstr "缺 '%1%' 的参数。\n"
 
-#: src/mmg/mmg.cpp:197
+#: src/mmg/mmg.cpp:205
 msgid "Missing file name"
 msgstr "缺文件名"
 
-#: src/mmg/mmg.cpp:197
+#: src/mmg/mmg.cpp:205
 msgid "Missing file name after for the option '--edit-headers'."
 msgstr "选项 '--edit-headers' 后缺文件名。"
 
@@ -4231,7 +4241,7 @@ msgstr "下一文件名: %1%"
 msgid "Next level 0 element is not a segment but %1%"
 msgstr "下一个 0 层级元素不是剪辑而是 %1%"
 
-#: src/mmg/tabs/global.cpp:257
+#: src/mmg/tabs/global.cpp:271
 msgid "Next segment UID:"
 msgstr "下一剪辑 UID:"
 
@@ -4256,7 +4266,7 @@ msgstr "首帧未发现 AC3 头; 此轨将被跳过。\n"
 msgid "No EBML head found."
 msgstr "未找到 EBML 头。"
 
-#: src/mmg/tabs/input.cpp:1355
+#: src/mmg/tabs/input.cpp:1360
 msgid "No FPS selected for AVC/h.264 track"
 msgstr "AVC/h.264 轨道的帧率尚未选择"
 
@@ -4343,7 +4353,7 @@ msgstr "未指定轨道 ID，在 '--%1% %2%'。\n"
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "未发现与编辑指定 '%1%' 相应的轨道。%2%\n"
 
-#: src/mmg/tabs/input.cpp:628
+#: src/mmg/tabs/input.cpp:627
 msgid "No tracks found"
 msgstr "未发现轨道"
 
@@ -4375,7 +4385,7 @@ msgstr "不是有效的 Matroska 文件 (未发现 EBML 头)"
 msgid "Not a valid Matroska file (no segment/level 0 element found)"
 msgstr "不是有效的 Matroska 文件 (未发现有效的 剪辑/0 层级元素)"
 
-#: src/mmg/tabs/input.cpp:725
+#: src/mmg/tabs/input.cpp:724
 msgid "Note"
 msgstr "注意"
 
@@ -4462,7 +4472,7 @@ msgstr "打开现有的 Matroska 文件"
 msgid "Open folder"
 msgstr "打开文件夹"
 
-#: src/mmg/mmg_dialog.cpp:775
+#: src/mmg/mmg_dialog.cpp:777
 msgid "Option file created."
 msgstr "选项文件已创建。"
 
@@ -4482,10 +4492,6 @@ msgstr "编码指令: %1%"
 #: src/mmg/header_editor/value_page.cpp:176
 msgid "Original value:"
 msgstr "原值:"
-
-#: src/mmg/tabs/global.cpp:278
-msgid "Other global options"
-msgstr "其他全局选项"
 
 #: src/propedit/propedit_cli_parser.cpp:153
 msgid "Other options"
@@ -4511,12 +4517,12 @@ msgstr "所选任务的输出信息:"
 msgid "Output sampling frequency: %1%"
 msgstr "输出采样率: %1%"
 
-#: src/mmg/mmg_dialog.cpp:528
+#: src/mmg/mmg_dialog.cpp:530
 msgid "Overwrite existing file(s)?"
 msgstr "覆写所有现有文件?"
 
-#: src/mmg/mmg_dialog.cpp:509
-#: src/mmg/mmg_dialog.cpp:1352
+#: src/mmg/mmg_dialog.cpp:511
+#: src/mmg/mmg_dialog.cpp:1365
 msgid "Overwrite existing file?"
 msgstr "覆写现有的文件?"
 
@@ -4572,7 +4578,7 @@ msgstr "像素宽度: %1%"
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "请不要把 'mmg' 自己当作 'mkvmerge' 可执行程序选择。"
 
-#: src/mmg/mmg_dialog.cpp:1358
+#: src/mmg/mmg_dialog.cpp:1371
 msgid "Please enter a description for the new job:"
 msgstr "请输入新任务的描述:"
 
@@ -4603,7 +4609,7 @@ msgstr "上一文件名"
 msgid "Previous filename: %1%"
 msgstr "上一文件名: %1%"
 
-#: src/mmg/tabs/global.cpp:255
+#: src/mmg/tabs/global.cpp:269
 msgid "Previous segment UID:"
 msgstr "上一剪辑 UID:"
 
@@ -4653,7 +4659,7 @@ msgstr "进度: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "进度: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1660
+#: src/mmg/mmg_dialog.cpp:1682
 msgid "Querying mkvmerge's capabilities"
 msgstr "正向 mkvmerge 询问处理能力"
 
@@ -5003,7 +5009,7 @@ msgstr "剪辑"
 msgid "Segment UID:%1%"
 msgstr "剪辑 UID:%1%"
 
-#: src/mmg/tabs/global.cpp:248
+#: src/mmg/tabs/global.cpp:262
 msgid "Segment UIDs:"
 msgstr "剪辑 UID:"
 
@@ -5016,11 +5022,11 @@ msgstr "剪辑文件名"
 msgid "Segment filename: %1%"
 msgstr "剪辑文件名: %1%"
 
-#: src/mmg/tabs/global.cpp:283
+#: src/mmg/tabs/global.cpp:296
 msgid "Segment info file:"
 msgstr "剪辑信息文件:"
 
-#: src/mmg/tabs/global.cpp:301
+#: src/mmg/tabs/global.cpp:318
 #, c-format
 msgid "Segment info files (*.xml)|*.xml|%s"
 msgstr "剪辑信息文件 (*.xml)|*.xml|%s"
@@ -5183,7 +5189,7 @@ msgstr "设置轨道的显示宽度。必须同时设置高度，否则此字段
 msgid "Sets the priority that mkvmerge will run with."
 msgstr "选择 mkvmerge 运行时的优先级。"
 
-#: src/mmg/tabs/global.cpp:249
+#: src/mmg/tabs/global.cpp:263
 msgid ""
 "Sets the segment UIDs to use. This is a comma-separated list of 128bit segment UIDs in the usual UID form: hex numbers with or without the \"0x\" prefix, with or without spaces, exactly 32 digits.\n"
 "\n"
@@ -5345,19 +5351,19 @@ msgstr ""
 "指定对宽高比的可行修正\n"
 "(0: 自由调整, 1: 保持宽高比, 2: 固定)。"
 
-#: src/mmg/tabs/global.cpp:218
+#: src/mmg/tabs/global.cpp:232
 msgid "Splitting"
 msgstr "切割"
 
-#: src/mmg/tabs/global.cpp:506
+#: src/mmg/tabs/global.cpp:532
 msgid "Splitting by size was selected, but no size has been given."
 msgstr "已选择按尺寸切割，但未给出尺寸。"
 
-#: src/mmg/tabs/global.cpp:539
+#: src/mmg/tabs/global.cpp:565
 msgid "Splitting by timecode/duration was selected, but nothing was entered."
 msgstr "已选择按时间码/播放时长切割，但未输入任何数值。"
 
-#: src/mmg/mmg_dialog.cpp:526
+#: src/mmg/mmg_dialog.cpp:528
 #, c-format
 msgid "Splitting is active, and at least one of the potential output files '%s%s*%s' already exists. Do you want to overwrite them?"
 msgstr "正在执行切割操作，但至少有一个潜在的输出文件 '%s%s*%s' 已存在。是否覆写?"
@@ -5462,11 +5468,11 @@ msgstr "TTA 无损音频"
 msgid "Tag extraction"
 msgstr "标签提取"
 
-#: src/mmg/tabs/global.cpp:279
+#: src/mmg/tabs/global.cpp:292
 msgid "Tag file:"
 msgstr "标签文件:"
 
-#: src/mmg/tabs/global.cpp:291
+#: src/mmg/tabs/global.cpp:308
 #, c-format
 msgid "Tag files (*.xml)|*.xml|%s"
 msgstr "标签文件 (*.xml)|*.xml|%s"
@@ -5488,7 +5494,7 @@ msgstr "WebM 兼容文件中不允许有标签。输出文件中不会写入任�
 msgid "Tags for track ID %1%: %2% entries"
 msgstr "轨道 %1% 的标签: %2% 条记录"
 
-#: src/mmg/mmg.cpp:50
+#: src/mmg/mmg.cpp:51
 #, c-format
 msgid "Tags for track ID %lld (%d entries) from %s"
 msgstr "轨道 ID %lld 的标签 (%d 项) 自 %s"
@@ -5550,7 +5556,7 @@ msgstr "无法解析 FLAC 头: 找不到流信息结构。\n"
 msgid "The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n"
 msgstr "FPS 为 0.0 且读取器未提供包的时间码。%1%\n"
 
-#: src/mmg/tabs/input.cpp:1339
+#: src/mmg/tabs/input.cpp:1344
 #, c-format
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
 msgstr "轨 %s（自文件 '%s'）的 FPS 设置无效。"
@@ -5559,7 +5565,7 @@ msgstr "轨 %s（自文件 '%s'）的 FPS 设置无效。"
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "FourCC 值必须为四个字符的长度，在 '%1% %2%'。\n"
 
-#: src/mmg/tabs/input.cpp:1327
+#: src/mmg/tabs/input.cpp:1332
 #, c-format
 msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
 msgstr "轨道 %s（自文件 '%s'）的 FourCC 设置非四字符长。"
@@ -5619,7 +5625,7 @@ msgstr "'%2%' 的 '%1%' 参数无效: 元素 '%3%' 的冒号过多。\n"
 msgid "The argument to '--timecode-scale' must be a number.\n"
 msgstr "'--timecode-scale' 的参数必须为数字。\n"
 
-#: src/mmg/tabs/input.cpp:1395
+#: src/mmg/tabs/input.cpp:1400
 #, c-format
 msgid "The aspect ratio setting for track nr. %s in file '%s' is invalid."
 msgstr "轨道号 %s（文件 '%s'）的宽高比设置无效。"
@@ -5658,7 +5664,7 @@ msgstr "章节 '%s' 缺语言。"
 msgid "The chapter '%s' is missing the start time."
 msgstr "章节 '%s' 缺起始时间。"
 
-#: src/mmg/mmg_dialog.cpp:576
+#: src/mmg/mmg_dialog.cpp:578
 msgid ""
 "The chapter editor has been used and contains data. However, no chapter file has been selected on the global page. In mmg, the chapter editor is independant of the muxing process. The chapters present in the editor will NOT be muxed into the output file. Only the various 'save' functions from the chapter editor menu will cause the chapters to be written to the hard disk.\n"
 "\n"
@@ -5705,7 +5711,7 @@ msgstr "国家 '%s' 不是有效的 ccTLD，不能选择。"
 msgid "The cue entries (the index) are being written..."
 msgstr "正在写入 cue 索引..."
 
-#: src/mmg/tabs/input.cpp:746
+#: src/mmg/tabs/input.cpp:745
 #, c-format
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr "当前文件 (序号 %d) 不能移除。有其他文件 -- 至少文件号为 %d 的文件 -- 有要追加合并到此文件某轨道的轨道。请先移除那些文件。"
@@ -5718,7 +5724,7 @@ msgstr "当前包的时间码比前一包的小。这通常表明源文件是未
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr "默认语言码 '%1%' 不是有效的 ISO639-2 语言代码，将被忽略。\n"
 
-#: src/mmg/tabs/input.cpp:1306
+#: src/mmg/tabs/input.cpp:1311
 #, c-format
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "对文件 '%s' 的 %s 轨的延时设置无效。"
@@ -5731,8 +5737,8 @@ msgstr ""
 "文件 '%1%' 的分离器无法初始化:\n"
 "%2%\n"
 
-#: src/mmg/tabs/global.cpp:281
-#: src/mmg/tabs/global.cpp:285
+#: src/mmg/tabs/global.cpp:294
+#: src/mmg/tabs/global.cpp:298
 msgid "The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."
 msgstr "关于关联至轨道的标签与全局标签的区别已在 mkvmerge 文档中作出解释。简而言之: 全局标签应用于整个文件，而您能在 '输入' 选项卡中添加的标签仅能应用于单个轨道。"
 
@@ -5753,7 +5759,7 @@ msgstr ""
 "拖入的文件 '%s'\n"
 "不是 Matroska 文件。"
 
-#: src/mmg/tabs/global.cpp:226
+#: src/mmg/tabs/global.cpp:240
 msgid "The duration after which a new output file is started. The time can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH' and the number of nanoseconds 'nnnnnnnnn'. If given then you may use up to nine digits after the decimal point. Examples: 01:00:00 (after one hour) or 1800s (after 1800 seconds)."
 msgstr "在指定时长后开始输出新文件。时间可以以 HH:MM:SS.nnnnnnnnn 的形式或者后接 's' 的秒数给定。时数 'HH' 与毫微秒数 'nnnnnnnnn' 可省略。如果要给出，您可以在小数点后使用多达九位数。示例: 01:00:00 (一小时后) 或 1800s (1800 秒后)。"
 
@@ -5823,7 +5829,7 @@ msgstr "文件 '%1%' 类型不支持 (%2%)。\n"
 msgid "The file '%1%' is empty."
 msgstr "文件 '%1%' 为空。"
 
-#: src/mmg/mmg.cpp:209
+#: src/mmg/mmg.cpp:217
 #, c-format
 msgid "The file '%s' does not exist."
 msgstr "文件 '%s' 不存在。"
@@ -5923,16 +5929,16 @@ msgstr "第一个模式将把指定轨道提取为外部文件。"
 msgid "The first word tells mkvextract what to extract. The second must be the source file. There are few global options that can be used with all modes. All other options depend on the mode."
 msgstr "第一个单词告诉 mkvextract 要提取什么。第二个必须是源文件。全局选项可在所有模式下使用。其他选项依模式决定。"
 
-#: src/mmg/tabs/global.cpp:528
+#: src/mmg/tabs/global.cpp:554
 msgid "The format of the split size is invalid (size too small)."
 msgstr "切割尺寸格式无效 (尺寸太小)。"
 
-#: src/mmg/tabs/global.cpp:520
-#: src/mmg/tabs/global.cpp:524
+#: src/mmg/tabs/global.cpp:546
+#: src/mmg/tabs/global.cpp:550
 msgid "The format of the split size is invalid."
 msgstr "切割尺寸格式无效。"
 
-#: src/mmg/tabs/global.cpp:547
+#: src/mmg/tabs/global.cpp:573
 msgid "The format of the split timecode/duration is invalid."
 msgstr "切割时间码/时长格式无效。"
 
@@ -5958,12 +5964,12 @@ msgstr "头部已被写入。"
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "两轨高度不同: %1% 与 %2%"
 
-#: src/mmg/tabs/input.cpp:628
+#: src/mmg/tabs/input.cpp:627
 #, c-format
 msgid "The input file '%s' does not contain any tracks."
 msgstr "输入文件 '%s' 不包含任何轨道。"
 
-#: src/mmg/tabs/input.cpp:1230
+#: src/mmg/tabs/input.cpp:1235
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -5979,7 +5985,7 @@ msgstr ""
 "\n"
 "(问题出在 tab_input::load(), #1)"
 
-#: src/mmg/tabs/input.cpp:1237
+#: src/mmg/tabs/input.cpp:1242
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -5995,7 +6001,7 @@ msgstr ""
 "\n"
 "(问题出在 tab_input::load(), #2)"
 
-#: src/mmg/tabs/input.cpp:1250
+#: src/mmg/tabs/input.cpp:1255
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -6029,7 +6035,7 @@ msgstr "时间码文件 '%2%' 的 %1% 行不包含有效的浮点数。\n"
 msgid "The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"
 msgstr "地区无法正常设定。请检查 LANG, LC_ALL 和 LC_MESSAGES 环境变量。\n"
 
-#: src/mmg/tabs/global.cpp:244
+#: src/mmg/tabs/global.cpp:258
 msgid "The maximum number of files that will be created even if the last file might contain more bytes/time than wanted. Useful e.g. when you want exactly two files. If you leave this empty then there is no limit for the number of files mkvmerge might create."
 msgstr "将创建的最大文件数，即使最后一个文件包含的字节数/时间多于您想要的。本功能有时很有用，例如当您想要恰恰两个文件时。如果此处留空，mkvmerge 将创建的文件数目将不受限制。"
 
@@ -6061,11 +6067,11 @@ msgstr ""
 "播放器播放过程中应该缓存的最小帧数。\n"
 "如果设为 0, 将不使用参考伪缓存系统。"
 
-#: src/mmg/mmg_dialog.cpp:688
+#: src/mmg/mmg_dialog.cpp:690
 msgid "The mkvmerge GUI help file was not found in the path you've selected. Please try again, or abort by pressing the 'abort' button."
 msgstr "在您选择的路径找不到 mkvmerge GUI 帮助文件。请再试一次，或者按 '取消' 按钮放弃。"
 
-#: src/mmg/mmg_dialog.cpp:681
+#: src/mmg/mmg_dialog.cpp:683
 msgid ""
 "The mkvmerge GUI help file was not found. This indicates that it has never before been opened, or that the installation path has since been changed.\n"
 "\n"
@@ -6139,13 +6145,13 @@ msgstr "不必在意各选项的顺序。"
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "即将输出的文件 '%1%' 无法打开写入(%2%)。\n"
 
-#: src/mmg/mmg_dialog.cpp:509
-#: src/mmg/mmg_dialog.cpp:1349
+#: src/mmg/mmg_dialog.cpp:511
+#: src/mmg/mmg_dialog.cpp:1362
 #, c-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr "即将输出的文件 '%s' 已存在。是否覆盖?"
 
-#: src/mmg/mmg_dialog.cpp:563
+#: src/mmg/mmg_dialog.cpp:565
 msgid "The output file name is invalid, e.g. it might contain invalid characters like ':'."
 msgstr "输出文件名无效，可能含有 ':' 一类的无效字符。"
 
@@ -6224,7 +6230,7 @@ msgstr "选定的语言 '%s' （章节 '%s'）不是有效的语言代码。请�
 msgid "The sixth mode finds the timecodes of all blocks for a track and outputs a timecode v2 file with these timecodes."
 msgstr "第六个模式将查找指定轨道所有块的时间码，并将其输出为时间码 v2 文件。"
 
-#: src/mmg/tabs/global.cpp:223
+#: src/mmg/tabs/global.cpp:237
 msgid "The size after which a new output file is started. The letters 'G', 'M' and 'K' can be used to indicate giga/mega/kilo bytes respectively. All units are based on 1024 (G = 1024^3, M = 1024^2, K = 1024)."
 msgstr "在此尺寸后开始新的输出文件。字母 'G', 'M' 和 'K' 分别可以用来代表吉/兆/千比特。所有单位换算均基于 1024 (G = 1024^3, M = 1024^2, K = 1024)。"
 
@@ -6237,7 +6243,7 @@ msgstr "附件 '%1%' 的尺寸为 0。\n"
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "源文件 '%1%' 无法成功打开，或者无法通过定位至末端检索。\n"
 
-#: src/mmg/tabs/input.cpp:1317
+#: src/mmg/tabs/input.cpp:1322
 #, c-format
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr "轨道 %s（自文件 '%s'）的伸展设置无效。"
@@ -6312,7 +6318,7 @@ msgstr ""
 "\n"
 "如果您确实要指定未排序的时间码，请使用时间码格式 v4。它与格式 v2 完全一致，但允许未排序的时间码。\n"
 
-#: src/mmg/tabs/global.cpp:231
+#: src/mmg/tabs/global.cpp:245
 msgid "The timecodes after which a new output file is started. The timecodes refer to the whole stream and not to each individual output file. The timecodes can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH'. You can specify up to nine digits for the number of nanoseconds 'nnnnnnnnn' or none at all. If given then you may use up to nine digits after the decimal point. If two or more timecodes are used then you have to separate them with commas. The formats can be mixed, too. Examples: 01:00:00,01:30:00 (after one hour and after one hour and thirty minutes) or 1800s,3000s,00:10:00 (after three, five and ten minutes)."
 msgstr "在这些时间码后开始创建新的输出文件。这些时间码以整个流而不是分割开的各输出文件为准。时间码可以以 HH:MM:SS.nnnnnnnnn 的形式或紧跟 's' 的秒数给出。小时数 'HH' 可省略。您可以指定多达九位的毫微秒数 'nnnnnnnnn' 或者不指定小数点后的数。如果要给出，您可以在小数点后使用多达九位数字。如果使用的时间码超过一个，请使用逗号分隔。格式也可以混用。示例: 01:00:00,01:30:00 (在一小时后和一个半小时后切割) 或者 1800s,3000s,00:10:00 (在第 3 分钟，第 5 分钟和第 10 分钟后切割)。"
 
@@ -6477,7 +6483,7 @@ msgstr "此文件不包含有效章节。"
 msgid "This is the name that will be stored in the output file for this attachment. It defaults to the file name of the original file but can be changed."
 msgstr "这是附件在输出文件中存储的名称。默认为原文件的名称，但可以修改。"
 
-#: src/mmg/tabs/global.cpp:216
+#: src/mmg/tabs/global.cpp:230
 msgid "This is the title that players may show as the 'main title' for this movie."
 msgstr "这是播放器将作为此影片的“主标题”显示的标题。"
 
@@ -6508,6 +6514,10 @@ msgstr "这不该发生。请联系作者 Moritz Bunkus <moritz@bunkus.org>，�
 #: src/mmg/tabs/input_format.cpp:254
 msgid "This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for these files. Not needed for AAC tracks read from MP4 or Matroska files."
 msgstr "此轨道包含 SBR AAC/HE-AAC/AAC+ 数据。本选项只对 AAC 输入文件有必要，因为这类文件的 SBR AAC 不能被自动侦测。对于从 MP4 或 Matroska 文件读取的 AAC 轨道，不必在意本选项。"
+
+#: src/mmg/tabs/input.cpp:960
+msgid "This track is not compatible with the WebM mode and cannot be enabled."
+msgstr ""
 
 #: src/info/mkvinfo.cpp:1464
 msgid "Time slice"
@@ -6855,7 +6865,7 @@ msgstr ""
 "  -h, --help     显示本帮助。\n"
 "  -V, --version  显示版本信息。\n"
 
-#: src/mmg/tabs/global.cpp:242
+#: src/mmg/tabs/global.cpp:256
 msgid "Use 'segment linking' for the resulting files. For an in-depth explanation of this feature consult the mkvmerge documentation."
 msgstr "为生成的文件使用 '剪辑链接'。关于此特性的深入解释请参见 mkvmerge 文档。"
 
@@ -7450,7 +7460,7 @@ msgstr ""
 "还可以是通常的 HH:MM:SS.mmm 或 HH:MM:SS 格式。\n"
 "示例: -00:05:23 将使所有章节比现在提前 5 分 23 秒开始。"
 
-#: src/mmg/tabs/input.cpp:1349
+#: src/mmg/tabs/input.cpp:1354
 #, c-format
 msgid ""
 "You haven't selected a number of frames per second for track %lld of file '%s'. mkvmerge cannot determine the number of frames per second for such files itself. Therefore you have to set this parameter yourself on the 'format specific options' page.\n"
@@ -7465,7 +7475,7 @@ msgstr ""
 "\n"
 "是否继续?"
 
-#: src/mmg/tabs/input.cpp:508
+#: src/mmg/tabs/input.cpp:507
 msgid ""
 "You're adding an AVC/h.264 elementary stream to the output file. mkvmerge cannot determine the number of frames per second for such files itself. Therefore you have to set this parameter yourself on the 'format specific options' page.\n"
 "\n"
@@ -7537,7 +7547,7 @@ msgid "append"
 msgstr "追加合并"
 
 #: src/input/r_matroska.cpp:88
-#: src/mmg/mmg.cpp:56
+#: src/mmg/mmg.cpp:57
 #: src/info/mkvinfo.cpp:1083
 msgid "audio"
 msgstr "音频"
@@ -7879,7 +7889,7 @@ msgstr "长 %1%, 数据: %2%"
 msgid "line %1%: The 'delay' timestamp could not be parsed.\n"
 msgstr "行 %1%: '延时' 时间戳无法解析。\n"
 
-#: src/mmg/tabs/global.cpp:241
+#: src/mmg/tabs/global.cpp:255
 msgid "link files"
 msgstr "连接文件"
 
@@ -8026,7 +8036,7 @@ msgstr "matroska_reader: |  + 有超过一个轨道使用了 UID %1%。\n"
 msgid "matroska_reader: |  + There's more than one track with the number %1%.\n"
 msgstr "matroska_reader: |  + 有超过一个轨道使用了数字 %1%。\n"
 
-#: src/mmg/tabs/global.cpp:243
+#: src/mmg/tabs/global.cpp:257
 msgid "max. number of files:"
 msgstr "最大文件数:"
 
@@ -8136,13 +8146,13 @@ msgstr "mkvmerge -o out [全局选项] [选项1] <file1> [@optionsfile ...]\n"
 msgid "mkvmerge FAILED with a return code of %d. %s"
 msgstr "mkvmerge 执行 *失败* ，返回代码 %d。 %s"
 
-#: src/mmg/tabs/global.cpp:506
-#: src/mmg/tabs/global.cpp:520
-#: src/mmg/tabs/global.cpp:524
-#: src/mmg/tabs/global.cpp:528
-#: src/mmg/tabs/global.cpp:539
-#: src/mmg/tabs/global.cpp:547
-#: src/mmg/tabs/global.cpp:584
+#: src/mmg/tabs/global.cpp:532
+#: src/mmg/tabs/global.cpp:546
+#: src/mmg/tabs/global.cpp:550
+#: src/mmg/tabs/global.cpp:554
+#: src/mmg/tabs/global.cpp:565
+#: src/mmg/tabs/global.cpp:573
+#: src/mmg/tabs/global.cpp:610
 msgid "mkvmerge GUI error"
 msgstr "mkvmerge GUI 发生错误"
 
@@ -8151,21 +8161,21 @@ msgid "mkvmerge GUI ready"
 msgstr "mkvmerge GUI 准备就绪"
 
 #: src/mmg/mmg_dialog.cpp:364
-#: src/mmg/mmg_dialog.cpp:408
+#: src/mmg/mmg_dialog.cpp:410
 #, c-format
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "mkvmerge GUI 配置文件 (*.mmg)|*.mmg|%s"
 
-#: src/mmg/tabs/input.cpp:1282
-#: src/mmg/tabs/input.cpp:1307
-#: src/mmg/tabs/input.cpp:1318
-#: src/mmg/tabs/input.cpp:1328
-#: src/mmg/tabs/input.cpp:1340
-#: src/mmg/tabs/input.cpp:1396
+#: src/mmg/tabs/input.cpp:1287
+#: src/mmg/tabs/input.cpp:1312
+#: src/mmg/tabs/input.cpp:1323
+#: src/mmg/tabs/input.cpp:1333
+#: src/mmg/tabs/input.cpp:1345
+#: src/mmg/tabs/input.cpp:1401
 msgid "mkvmerge GUI: error"
 msgstr "mkvmerge GUI: 出错"
 
-#: src/mmg/tabs/global.cpp:273
+#: src/mmg/tabs/global.cpp:287
 msgid "mkvmerge can read CUE sheets for audio CDs and automatically convert them to chapters. This option controls how the chapter names are created. The sequence '%p' is replaced by the track's PERFORMER, the sequence '%t' by the track's TITLE, '%n' by the track's number and '%N' by the track's number padded with a leading 0 for track numbers < 10. The rest is copied as is. If nothing is entered then '%p - %t' will be used."
 msgstr "mkvmerge 能够从音频 CD 中读取 CUE 表单，并自动转换为章节。此选项控制章节名称的创建方式。'%p' 将被轨道的 *表演者* 替换，'%t' 被轨道的 *标题* 替换，'%n' 被轨道的序号替换，'%N' 被轨道的衬式序号替换（若序号 < 10 则在前面补 0）。其余的照抄不误。若此处留空则默认使用 '%p - %t'。"
 
@@ -8213,16 +8223,16 @@ msgstr "mkvmerge 选项"
 msgid "mkvmerge output:"
 msgstr "mkvmerge 输出信息:"
 
-#: src/mmg/tabs/global.cpp:261
-#: src/mmg/tabs/global.cpp:263
+#: src/mmg/tabs/global.cpp:275
+#: src/mmg/tabs/global.cpp:277
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format."
 msgstr "mkvmerge 支持两种章节格式：类似 OGM 的文本格式和全功能的 XML 格式。"
 
-#: src/mmg/tabs/global.cpp:269
+#: src/mmg/tabs/global.cpp:283
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format. If the OGM format is used and the file's charset is not recognized correctly then this option can be used to correct that. This option is ignored for XML chapter files."
 msgstr "mkvmerge 支持两种章节格式：类似 OGM 的文本格式和全功能的 XML 格式。如果使用 OGM 格式且文件的字符集识别错误，此选项可以用以修正。对于 XML 章节文件，此选项会被忽略。"
 
-#: src/mmg/tabs/global.cpp:265
+#: src/mmg/tabs/global.cpp:279
 msgid "mkvmerge supports two chapter formats: The OGM like text format and the full featured XML format. This option specifies the language to be associated with chapters if the OGM chapter format is used. It is ignored for XML chapter files."
 msgstr "mkvmerge 支持两种章节格式：类似 OGM 的文本格式和全功能的 XML 格式。此选项指定 OGM 章节格式所关联的语言。对于 XML 章节文件，此选项将被忽略。"
 
@@ -8466,7 +8476,7 @@ msgstr "start >= m->ListSize()。这不该发生。请提交错误报告。多�
 msgid "subtitle"
 msgstr "字幕"
 
-#: src/mmg/mmg.cpp:58
+#: src/mmg/mmg.cpp:59
 #: src/info/mkvinfo.cpp:1085
 msgid "subtitles"
 msgstr "字幕"
@@ -8508,7 +8518,7 @@ msgstr "und (未定)"
 #: src/input/r_matroska.cpp:2260
 #: src/input/r_mpeg_ps.cpp:1394
 #: src/common/mm_io_win.cpp:164
-#: src/mmg/mmg.cpp:59
+#: src/mmg/mmg.cpp:60
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/tabs/input.cpp:373
 #: src/info/mkvinfo.cpp:775
@@ -8546,7 +8556,7 @@ msgid "verify failed: chapters->CheckMandatory() is false. This should not have 
 msgstr "verify failed: chapters->CheckMandatory() 为非。这不该发生。请提交错误报告。\n"
 
 #: src/input/r_matroska.cpp:90
-#: src/mmg/mmg.cpp:57
+#: src/mmg/mmg.cpp:58
 #: src/info/mkvinfo.cpp:1084
 msgid "video"
 msgstr "视频"
@@ -8668,6 +8678,8 @@ msgstr "是"
 #~ msgstr "MPEG-4 part 2 B 帧处理过程中: 帧列包含了超过可分配时间码的帧 (原因: %1%)。因此 %2% 帧将被丢弃。视频在时间码 %3% 附近可能已损坏。\n"
 #~ msgid "File options:"
 #~ msgstr "文件选项:"
+#~ msgid "File/segment title"
+#~ msgstr "文件/剪辑标题"
 #~ msgid "Global tags"
 #~ msgstr "全局标签"
 #~ msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
@@ -8688,6 +8700,8 @@ msgstr "是"
 #~ msgstr ""
 #~ "无事可做。\n"
 #~ "\n"
+#~ msgid "Other global options"
+#~ msgstr "其他全局选项"
 #~ msgid "Restart required"
 #~ msgstr "需要重新运行"
 #~ msgid "Set &default values"

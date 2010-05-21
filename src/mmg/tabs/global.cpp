@@ -298,7 +298,7 @@ tab_global::translate_ui() {
   tc_segmentinfo->SetToolTip(TIP("The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. "
                                  "In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."));
   cb_webm_mode->SetLabel(Z("Create WebM compliant file"));
-  cb_webm_mode->SetToolTip(TIP("Create a WebM compliant file. This is also turned on if the output file name's extension is \"webm\". This mode "
+  cb_webm_mode->SetToolTip(TIP("Create a WebM compliant file. mkvmerge also turns this on if the output file name's extension is \"webm\". This mode "
                                "enforces several restrictions. The only allowed codecs are VP8 video and Vorbis audio tracks. Neither chapters nor tags are "
                                "allowed. The DocType header item is changed to \"webm\"."));
 }
