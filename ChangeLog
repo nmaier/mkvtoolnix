@@ -1,3 +1,11 @@
+2010-05-21  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: new feature: Added a checkbox for enabling "WebM"
+	mode. This will also enable the same limitations that mkvmerge
+	enables: Only VP8 and Vorbis tracks, no chapters, no tags. The
+	output file name extension will be changed to ".webm" upon
+	enabling the mode.
+
 2010-05-19  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: change: mkvmerge will not write track header elements
