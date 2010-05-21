@@ -433,8 +433,7 @@ tab_input::add_file(const wxString &file_name,
         track->type = '?';
 
       parse_int(wxMB(id), track->id);
-      track->ctype   = exact;
-      track->enabled = true;
+      track->ctype = exact;
 
       if ('a' == track->type)
         track->delay = delay_from_file_name;
@@ -724,6 +723,9 @@ tab_input::add_file(const wxString &file_name,
     wxMessageBox(wxU(boost::wformat(Z("'%1%': Processing the following files as well: %2%\n").c_str()) % file_name.c_str() % join(L", ", other_file_names).c_str()),
                  Z("Note"), wxOK | wxCENTER | wxICON_INFORMATION, this);
   }
+
+  for (i = 0; i < file->tracks.size(); i++)
+    tracks[i]->enabled = !mdlg->global_page->cb_webm_mode->IsChecked() || tracks[i]->is_webm_compatible();
 }
 
 void
@@ -1401,6 +1403,20 @@ tab_input::validate_settings() {
   }
 
   return true;
+}
+
+void
+tab_input::handle_webm_mode(bool enabled) {
+  if (enabled) {
+    unsigned int i;
+    for (i = 0; tracks.size() > i; ++i) {
+      if (tracks[i]->is_webm_compatible())
+        continue;
+
+      tracks[i]->enabled = false;
+      clb_tracks->Check(i, false);
+    }
+  }
 }
 
 IMPLEMENT_CLASS(tab_input, wxPanel);

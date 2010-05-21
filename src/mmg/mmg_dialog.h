@@ -182,6 +182,7 @@ public:
   void set_title_maybe(const wxString &new_title);
   void set_output_maybe(const wxString &new_output);
   void remove_output_filename();
+  void handle_webm_mode(bool enabled);
 
   void on_add_to_jobqueue(wxCommandEvent &evt);
   void on_manage_jobs(wxCommandEvent &evt);

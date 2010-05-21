@@ -28,12 +28,12 @@
 #include "common/strings/editing.h"
 #include "common/strings/parsing.h"
 #include "mmg/mmg.h"
+#include "mmg/mmg_dialog.h"
 #include "mmg/tabs/global.h"
 
 tab_global::tab_global(wxWindow *parent):
   wxPanel(parent, -1, wxDefaultPosition, wxSize(100, 400), wxTAB_TRAVERSAL) {
   wxStaticBoxSizer *siz_fs_title, *siz_split, *siz_linking_box, *siz_chapters;
-  wxStaticBoxSizer *siz_gl_tags;
   wxFlexGridSizer *siz_linking, *siz_chap_l1_l2, *siz_fg;
   wxBoxSizer *siz_all, *siz_line, *siz_line2;
   wxBoxSizer *siz_chap_l1, *siz_chap_l2, *siz_chap_l3, *siz_col;
@@ -41,11 +41,39 @@ tab_global::tab_global(wxWindow *parent):
 
   sb_file_segment_title = new wxStaticBox(this,  -1, wxEmptyString);
   st_file_segment_title = new wxStaticText(this, -1, wxEmptyString);
-  siz_fs_title          = new wxStaticBoxSizer(sb_file_segment_title, wxHORIZONTAL);
   tc_title              = new wxTextCtrl(this, ID_TC_SEGMENTTITLE, wxEmptyString);
 
-  siz_fs_title->Add(st_file_segment_title, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
-  siz_fs_title->Add(tc_title, 1, wxALIGN_CENTER_VERTICAL | wxGROW | wxLEFT | wxRIGHT, 5);
+  st_tag_file           = new wxStaticText(this, -1, wxEmptyString);
+  tc_global_tags        = new wxTextCtrl(this, ID_TC_GLOBALTAGS, wxEmptyString);
+  b_browse_global_tags  = new wxButton(this, ID_B_BROWSEGLOBALTAGS);
+
+  st_segmentinfo_file   = new wxStaticText(this, -1, wxEmptyString);
+  tc_segmentinfo        = new wxTextCtrl(this, ID_TC_SEGMENTINFO, wxEmptyString);
+  b_browse_segmentinfo  = new wxButton(this, ID_B_BROWSESEGMENTINFO);
+
+  cb_webm_mode          = new wxCheckBox(this, ID_CB_WEBM_MODE, wxEmptyString);
+
+  siz_fg = new wxFlexGridSizer(3, 2, 2, 5);
+  siz_fg->AddGrowableCol(1);
+
+  siz_fg->Add(st_file_segment_title, 0, wxALIGN_CENTER_VERTICAL);
+  siz_fg->Add(tc_title,              1, wxALIGN_CENTER_VERTICAL | wxGROW);
+
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_fg->Add(st_tag_file, 0, wxALIGN_CENTER_VERTICAL);
+  siz_line->Add(tc_global_tags,       1, wxALIGN_CENTER_VERTICAL | wxGROW);
+  siz_line->Add(b_browse_global_tags, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
+  siz_fg->Add(siz_line, 1, wxALIGN_CENTER_VERTICAL | wxGROW);
+
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_fg->Add(st_segmentinfo_file, 0, wxALIGN_CENTER_VERTICAL);
+  siz_line->Add(tc_segmentinfo,       1, wxALIGN_CENTER_VERTICAL | wxGROW);
+  siz_line->Add(b_browse_segmentinfo, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
+  siz_fg->Add(siz_line, 1, wxALIGN_CENTER_VERTICAL | wxGROW);
+
+  siz_fs_title = new wxStaticBoxSizer(sb_file_segment_title, wxVERTICAL);
+  siz_fs_title->Add(siz_fg,       1, wxLEFT | wxRIGHT | wxGROW, 5);
+  siz_fs_title->Add(cb_webm_mode, 0, wxLEFT | wxRIGHT,          5);
 
   sb_splitting = new wxStaticBox(this, -1, wxEmptyString);
   siz_split    = new wxStaticBoxSizer(sb_splitting, wxVERTICAL);
@@ -136,8 +164,8 @@ tab_global::tab_global(wxWindow *parent):
   siz_linking_box->Add(siz_linking, 1, wxGROW, 0);
 
   sb_chapters     = new wxStaticBox(this,  -1, wxEmptyString);
-  st_chapter_file = new wxStaticText(this, -1, wxEmptyString);
   siz_chapters    = new wxStaticBoxSizer(sb_chapters, wxVERTICAL);
+  st_chapter_file = new wxStaticText(this, -1, wxEmptyString);
   siz_chap_l1_l2  = new wxFlexGridSizer(2, 2);
   siz_chap_l1_l2->AddGrowableCol(1);
   siz_chap_l1_l2->Add(st_chapter_file, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
@@ -177,16 +205,6 @@ tab_global::tab_global(wxWindow *parent):
   siz_chap_l3->Add(tc_cue_name_format, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
   siz_chapters->Add(siz_chap_l3, 0, wxTOP, 2);
 
-  st_tag_file             = new wxStaticText(this, -1, wxEmptyString);
-  tc_global_tags          = new wxTextCtrl(this, ID_TC_GLOBALTAGS, wxEmptyString);
-  b_browse_global_tags    = new wxButton(this, ID_B_BROWSEGLOBALTAGS);
-
-  st_segmentinfo_file     = new wxStaticText(this, -1, wxEmptyString);
-  tc_segmentinfo          = new wxTextCtrl(this, ID_TC_SEGMENTINFO, wxEmptyString);
-  b_browse_segmentinfo    = new wxButton(this, ID_B_BROWSESEGMENTINFO);
-
-  sb_other_global_options = new wxStaticBox(this,  -1, wxEmptyString);
-
   siz_fg = new wxFlexGridSizer(3, 2);
   siz_fg->AddGrowableCol(1);
 
@@ -197,21 +215,17 @@ tab_global::tab_global(wxWindow *parent):
   siz_fg->Add(tc_segmentinfo,       1, wxALIGN_CENTER_VERTICAL | wxLEFT | wxGROW,  5);
   siz_fg->Add(b_browse_segmentinfo, 0, wxALIGN_CENTER_VERTICAL | wxLEFT | wxRIGHT, 5);
 
-  siz_gl_tags = new wxStaticBoxSizer(sb_other_global_options, wxHORIZONTAL);
-  siz_gl_tags->Add(siz_fg, 1, wxTOP | wxBOTTOM, 2);
-
   siz_all = new wxBoxSizer(wxVERTICAL);
   siz_all->Add(siz_fs_title,    0, wxGROW | wxALL,                       5);
   siz_all->Add(siz_split,       0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5);
   siz_all->Add(siz_linking_box, 0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5);
   siz_all->Add(siz_chapters,    0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5);
-  siz_all->Add(siz_gl_tags,     0, wxGROW | wxLEFT | wxRIGHT | wxBOTTOM, 5);
   SetSizer(siz_all);
 }
 
 void
 tab_global::translate_ui() {
-  sb_file_segment_title->SetLabel(Z("File/segment title"));
+  sb_file_segment_title->SetLabel(Z("Global options"));
   st_file_segment_title->SetLabel(Z("File/segment title:"));
   tc_title->SetToolTip(TIP("This is the title that players may show as the 'main title' for this movie."));
 
@@ -275,7 +289,6 @@ tab_global::translate_ui() {
                                      "PERFORMER, the sequence '%t' by the track's TITLE, '%n' by the track's number and '%N' by the track's number "
                                      "padded with a leading 0 for track numbers < 10. "
                                      "The rest is copied as is. If nothing is entered then '%p - %t' will be used."));
-  sb_other_global_options->SetLabel(Z("Other global options"));
   st_tag_file->SetLabel(Z("Tag file:"));
   b_browse_global_tags->SetLabel(Z("Browse"));
   tc_global_tags->SetToolTip(TIP("The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. "
@@ -284,6 +297,10 @@ tab_global::translate_ui() {
   b_browse_segmentinfo->SetLabel(Z("Browse"));
   tc_segmentinfo->SetToolTip(TIP("The difference between tags associated with a track and global tags is explained in mkvmerge's documentation. "
                                  "In short: global tags apply to the complete file while the tags you can add on the 'input' tab apply to only one track."));
+  cb_webm_mode->SetLabel(Z("Create WebM compliant file"));
+  cb_webm_mode->SetToolTip(TIP("Create a WebM compliant file. This is also turned on if the output file name's extension is \"webm\". This mode "
+                               "enforces several restrictions. The only allowed codecs are VP8 video and Vorbis audio tracks. Neither chapters nor tags are "
+                               "allowed. The DocType header item is changed to \"webm\"."));
 }
 
 void
@@ -335,6 +352,11 @@ tab_global::on_split_clicked(wxCommandEvent &evt) {
 
   rb_split_after_timecodes->Enable(ec);
   tc_split_after_timecodes->Enable(ec && !es && !et);
+}
+
+void
+tab_global::on_webm_mode_clicked(wxCommandEvent &evt) {
+  mdlg->handle_webm_mode(cb_webm_mode->IsChecked());
 }
 
 void
@@ -459,6 +481,9 @@ tab_global::load(wxConfigBase *cfg,
   cfg->Read(wxT("segmentinfo"), &s);
   tc_segmentinfo->SetValue(s);
 
+  cfg->Read(wxT("webm_mode"), &b, false);
+  cb_webm_mode->SetValue(b);
+
   cfg->Read(wxT("title_was_present"), &title_was_present, false);
 }
 
@@ -491,6 +516,7 @@ tab_global::save(wxConfigBase *cfg) {
 
   cfg->Write(wxT("global_tags"), tc_global_tags->GetValue());
   cfg->Write(wxT("segmentinfo"), tc_segmentinfo->GetValue());
+  cfg->Write(wxT("webm_mode"), cb_webm_mode->IsChecked());
 
   cfg->Write(wxT("title_was_present"), title_was_present);
 }
@@ -589,12 +615,36 @@ tab_global::validate_settings() {
   return true;
 }
 
+void
+tab_global::handle_webm_mode(bool enabled) {
+  if (enabled) {
+    tc_chapters->SetValue(wxEmptyString);
+    tc_global_tags->SetValue(wxEmptyString);
+  }
+
+  b_browse_chapters->Enable(!enabled);
+  cob_chap_charset->Enable(!enabled);
+  cob_chap_language->Enable(!enabled);
+  sb_chapters->Enable(!enabled);
+  st_chapter_file->Enable(!enabled);
+  st_charset->Enable(!enabled);
+  st_cue_name_format->Enable(!enabled);
+  st_language->Enable(!enabled);
+  tc_chapters->Enable(!enabled);
+  tc_cue_name_format->Enable(!enabled);
+
+  b_browse_global_tags->Enable(!enabled);
+  st_tag_file->Enable(!enabled);
+  tc_global_tags->Enable(!enabled);
+}
+
 IMPLEMENT_CLASS(tab_global, wxPanel);
 BEGIN_EVENT_TABLE(tab_global, wxPanel)
   EVT_BUTTON(ID_B_BROWSEGLOBALTAGS,          tab_global::on_browse_global_tags)
   EVT_BUTTON(ID_B_BROWSESEGMENTINFO,         tab_global::on_browse_segmentinfo)
   EVT_BUTTON(ID_B_BROWSECHAPTERS,            tab_global::on_browse_chapters)
   EVT_CHECKBOX(ID_CB_SPLIT,                  tab_global::on_split_clicked)
+  EVT_CHECKBOX(ID_CB_WEBM_MODE,              tab_global::on_webm_mode_clicked)
   EVT_RADIOBUTTON(ID_RB_SPLITBYSIZE,         tab_global::on_splitby_size_clicked)
   EVT_RADIOBUTTON(ID_RB_SPLITBYTIME,         tab_global::on_splitby_time_clicked)
   EVT_RADIOBUTTON(ID_RB_SPLITAFTERTIMECODES, tab_global::on_splitafter_timecodes_clicked)

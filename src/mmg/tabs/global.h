@@ -41,6 +41,7 @@
 #define ID_TC_SEGMENTUID                  13022
 #define ID_TC_SEGMENTINFO                 13023
 #define ID_B_BROWSESEGMENTINFO            13024
+#define ID_CB_WEBM_MODE                   13025
 
 class tab_global: public wxPanel {
   DECLARE_CLASS(tab_global);
@@ -56,8 +57,9 @@ public:
   wxMTX_COMBOBOX_TYPE *cob_split_by_size, *cob_split_by_time, *cob_chap_language, *cob_chap_charset;
   wxStaticText *st_split_max_files, *st_file_segment_title, *st_segment_uid, *st_previous_segment_uid, *st_next_segment_uid, *st_chapter_file, *st_language, *st_charset;
   wxStaticText *st_cue_name_format, *st_tag_file, *st_segmentinfo_file;
-  wxStaticBox *sb_splitting, *sb_file_segment_title, *sb_file_segment_linking, *sb_chapters, *sb_other_global_options;
+  wxStaticBox *sb_splitting, *sb_file_segment_title, *sb_file_segment_linking, *sb_chapters;
   wxButton *b_browse_chapters, *b_browse_global_tags, *b_browse_segmentinfo;
+  wxCheckBox *cb_webm_mode;
 
 public:
   tab_global(wxWindow *parent);
@@ -69,6 +71,7 @@ public:
   void on_splitby_size_clicked(wxCommandEvent &evt);
   void on_splitby_time_clicked(wxCommandEvent &evt);
   void on_splitafter_timecodes_clicked(wxCommandEvent &evt);
+  void on_webm_mode_clicked(wxCommandEvent &evt);
 
   void save(wxConfigBase *cfg);
   void load(wxConfigBase *cfg, int version);
@@ -79,6 +82,7 @@ public:
   bool is_valid_split_timecode_list();
 
   void translate_ui();
+  void handle_webm_mode(bool enabled);
 };
 
 #endif // __TAB_GLOBAL_H

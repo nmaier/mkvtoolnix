@@ -15,6 +15,7 @@
 
 #include <wx/wx.h>
 #include <wx/config.h>
+#include <wx/regex.h>
 
 #include "common/chapters/chapters.h"
 #include "common/command_line.h"
@@ -59,6 +60,13 @@ mmg_track_t::create_label() {
                     :               Z("unknown");
 
   return wxString::Format(wxU(format), appending ? wxT("++> ") : wxEmptyString, ctype.c_str(), id, type_str.c_str(), file_name.c_str());
+}
+
+bool
+mmg_track_t::is_webm_compatible() {
+  static wxRegEx re_valid_webm_codecs(wxT("VP8|Vorbis"), wxRE_ICASE);
+
+  return (is_audio() || is_video()) && re_valid_webm_codecs.Matches(ctype);
 }
 
 void

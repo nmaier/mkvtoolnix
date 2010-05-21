@@ -129,6 +129,8 @@ struct mmg_track_t {
   bool is_tags() {
     return 't' == type;
   }
+
+  bool is_webm_compatible();
 };
 typedef counted_ptr<mmg_track_t> mmg_track_cptr;
 

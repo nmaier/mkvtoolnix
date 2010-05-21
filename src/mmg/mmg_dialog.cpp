@@ -397,6 +397,8 @@ mmg_dialog::load(wxString file_name,
   attachments_page->load(&cfg, version);
   global_page->load(&cfg, version);
 
+  handle_webm_mode(global_page->cb_webm_mode->IsChecked());
+
   if (!used_for_jobs) {
     set_last_settings_in_menu(file_name);
     set_status_bar(Z("Configuration loaded."));
@@ -826,6 +828,9 @@ mmg_dialog::update_command_line() {
     clargs.Add(wxT("--priority"));
     clargs.Add(options.priority);
   }
+
+  if (global_page->cb_webm_mode->IsChecked())
+    clargs.Add(wxT("--webm"));
 
   unsigned int fidx;
   for (fidx = 0; files.size() > fidx; fidx++) {
@@ -1315,7 +1320,7 @@ mmg_dialog::set_output_maybe(const wxString &new_output) {
   while (true) {
     output_file_name = dir;
     output_file_name.SetName(source_file_name.GetName() + (0 == idx ? wxT("") : wxString::Format(wxT(" (%u)"), idx)));
-    output_file_name.SetExt(has_video ? wxU("mkv") : has_audio ? wxU("mka") : wxU("mks"));
+    output_file_name.SetExt(global_page->cb_webm_mode->IsChecked() ? wxU("webm") : has_video ? wxU("mkv") : has_audio ? wxU("mka") : wxU("mks"));
 
     if (!output_file_name.FileExists())
       break;
@@ -1620,6 +1625,15 @@ mmg_dialog::set_on_top(bool on_top) {
   else
     style &= ~wxSTAY_ON_TOP;
   SetWindowStyleFlag(style);
+}
+
+void
+mmg_dialog::handle_webm_mode(bool enabled) {
+  if (enabled && !tc_output->IsEmpty())
+    tc_output->SetValue(tc_output->GetValue().BeforeLast(wxT('.')) + wxT(".webm"));
+
+  input_page->handle_webm_mode(enabled);
+  global_page->handle_webm_mode(enabled);
 }
 
 void

@@ -216,6 +216,7 @@ public:
   wxString setup_file_type_filter();
 
   void translate_ui();
+  void handle_webm_mode(bool enabled);
 };
 
 #endif // __TAB_INPUT_H
