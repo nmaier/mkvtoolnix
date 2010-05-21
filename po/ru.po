@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-05-18 19:37+0200\n"
+"PO-Revision-Date: 2010-05-21 14:07+0300\n"
 "Last-Translator: rusguy6 rusguy6 <rusguy6@gmail.com>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -163,11 +163,8 @@ msgstr ""
 "                           группу.\n"
 
 #: src/merge/mkvmerge.cpp:150
-#, fuzzy
 msgid "  --clusters-in-meta-seek  Write meta seek data for clusters.\n"
-msgstr ""
-"  --no-clusters-in-meta-seek\n"
-"                           Не писать meta искатель данных для кластеров.\n"
+msgstr "  --clusters-in-meta-seek  Создать мета поиск данных для кластеров.\n"
 
 #: src/merge/mkvmerge.cpp:284
 msgid ""
@@ -554,9 +551,8 @@ msgid "  -v, --verbose            verbose status\n"
 msgstr "  -v, --verbose            Подробный статус\n"
 
 #: src/merge/mkvmerge.cpp:121
-#, fuzzy
 msgid "  -w, --webm               Create WebM compliant file.\n"
-msgstr "  --link                   Ссылка разделенных файлов.\n"
+msgstr "  -w, --webm               Создать WebM совместимый файл.\n"
 
 #: src/merge/mkvmerge.cpp:216
 msgid ""
@@ -917,7 +913,7 @@ msgstr "&Глобальные опции\tAlt-3"
 
 #: src/mmg/mmg_dialog.cpp:256
 msgid "&Header editor\tCtrl-E"
-msgstr "&Заголовочный редактор\tCtrl-E"
+msgstr "&Редактор заголовка\tCtrl-E"
 
 #: src/mmg/mmg_dialog.cpp:283
 #: src/mmg/header_editor/frame.cpp:153
@@ -1017,7 +1013,7 @@ msgstr "&Вверх"
 
 #: src/mmg/header_editor/frame.cpp:149
 msgid "&Validate\tCtrl-T"
-msgstr "&Утвердить\tCtrl-T"
+msgstr "&Проверить правильность\tCtrl-T"
 
 #: src/mmg/mmg_dialog.cpp:271
 msgid "&Verify"
@@ -1785,7 +1781,7 @@ msgstr "Все известные имена свойств и их значен
 
 #: src/info/wxwidgets_ui.cpp:286
 msgid "All supported files|*.mkv;*.mka;*.mks;*.webm;*.webma;*.webmv|Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|WebM files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|All files|*.*"
-msgstr ""
+msgstr "Все поддерживаемые файлы|*.mkv;*.mka;*.mks;*.webm;*.webma;*.webmv|Matroska файлы (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|WebM файлы (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|Все файлы|*.*"
 
 #: src/mmg/tabs/input.cpp:288
 #, c-format
@@ -1959,7 +1955,7 @@ msgstr "Автоматическое распознавание MIME типа д
 
 #: src/merge/mkvmerge.cpp:1637
 msgid "Automatically enabling WebM compliance mode due to output file name extension.\n"
-msgstr ""
+msgstr "Автоматически предоставление режима согласия WebM из-за выходного файла с расширением.\n"
 
 #: src/mmg/cli_options_dlg.cpp:36
 msgid "Available options:"
@@ -2173,7 +2169,7 @@ msgstr "Названия главы и языки"
 
 #: src/mmg/options/chapters.cpp:70
 msgid "Chapter options"
-msgstr "Варианты главы"
+msgstr "Опции главы"
 
 #: src/common/chapters/xml_parser.cpp:75
 msgid "Chapter parser: The ChapterUID %1% is not unique and could not be reused. A new one will be created.\n"
@@ -2209,7 +2205,7 @@ msgstr "Главы (%d записи) из %s"
 
 #: src/merge/output_control.cpp:1263
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
-msgstr ""
+msgstr "Главы, не допускаются в WebM совместимых файлах. Нет главы будут написаны в любой выходной файл.\n"
 
 #: src/mmg/tabs/chapters.cpp:607
 msgid "Chapters loaded."
@@ -3331,7 +3327,7 @@ msgstr "Принудительный таймкод фактор масштаб�
 
 #: src/mmg/tabs/input.cpp:190
 msgid "Format specific options"
-msgstr "Формат конкретные опции"
+msgstr "Формат и конкретные опции"
 
 #: src/mpegparser/M2VParser.cpp:442
 msgid "Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"
@@ -4129,31 +4125,31 @@ msgstr "Минимальный кэш"
 
 #: src/common/command_line.cpp:188
 msgid "Missing argument for '--output-charset'.\n"
-msgstr "Недостающий параметр для '--output-charset'.\n"
+msgstr "Отсутствует параметр для '--output-charset'.\n"
 
 #: src/common/command_line.cpp:222
 msgid "Missing argument for '--ui-language'.\n"
-msgstr "Недостающий параметр для '--ui-language'.\n"
+msgstr "Отсутствует параметр для '--ui-language'.\n"
 
 #: src/common/cli_parser.cpp:106
 msgid "Missing argument to '%1%'.\n"
-msgstr "Недостающий параметр к '%1%'.\n"
+msgstr "Отсутствует параметр в '%1%'.\n"
 
 #: src/mmg/mmg.cpp:197
 msgid "Missing file name"
-msgstr "Недостающее имя файла"
+msgstr "Отсутствует имя файла"
 
 #: src/mmg/mmg.cpp:197
 msgid "Missing file name after for the option '--edit-headers'."
-msgstr "Недостающее имя файла после для опции '--edit-headers'."
+msgstr "Отсутствует имя файла после опции '--edit-headers'."
 
 #: src/input/r_ogm.cpp:915
 msgid "Missing header/comment packets for stream. This file is broken but should be muxed correctly. If not please contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
-msgstr "Недостающие пакеты заголовка/комментария для потока. Этот файл сломан, не может правильно мультиплексироваться. Пожалуйста войдите в контакт с автором Moritz Bunkus <moritz@bunkus.org>.\n"
+msgstr "Отсутствуют пакеты заголовка/комментария для потока. Этот файл сломан, не может правильно мультиплексироваться. Пожалуйста войдите в контакт с автором Moritz Bunkus <moritz@bunkus.org>.\n"
 
 #: src/mmg/tabs/attachments.cpp:387
 msgid "Missing input"
-msgstr "Отсутствует входной"
+msgstr "Отсутствует вход"
 
 #: src/common/bitvalue.cpp:82
 msgid "Missing one hex digit"
@@ -4329,12 +4325,12 @@ msgid ""
 "No file has been loaded yet. You can open a file by selecting\n"
 "'Open' from the 'File' menu."
 msgstr ""
-"Никакой файл еще не был загружен. Вы можете открыть файл, выбирая\n"
+"Файл еще не был загружен. Вы можете открыть файл, выбрав\n"
 "'Открыть' из меню 'Файл'."
 
 #: src/mmg/header_editor/frame.cpp:218
 msgid "No file loaded"
-msgstr "Никакой файл не загружался"
+msgstr "Нет загруженного файла"
 
 #: src/propedit/options.cpp:27
 msgid "No file name given.\n"
@@ -5525,7 +5521,7 @@ msgstr "Теги"
 
 #: src/merge/output_control.cpp:1292
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
-msgstr ""
+msgstr "Теги не допускаются в WebM совместимых файлах. Нет теги будут написаны в любой выходной файл.\n"
 
 #: src/merge/pr_generic.cpp:1425
 msgid "Tags for track ID %1%: %2% entries"
@@ -5721,7 +5717,7 @@ msgstr "Выбрали NALU размер длины %1% слишком мал. �
 
 #: src/merge/pr_generic.cpp:1240
 msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
-msgstr ""
+msgstr "Тип кодека '%1%' не может быть использован в WebM совместимом файле.\n"
 
 #: src/output/p_avc.cpp:200
 #: src/output/p_kate.cpp:113
@@ -7403,9 +7399,8 @@ msgstr "Предупреждения:"
 
 #: src/mmg/tabs/input.cpp:257
 #: src/merge/mkvmerge.cpp:106
-#, fuzzy
 msgid "WebM audio/video files"
-msgstr "RealMedia Audio/Video файлы"
+msgstr "WebM Audio/Video файлы"
 
 #: src/mmg/options/mmg.cpp:82
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
@@ -7943,7 +7938,7 @@ msgstr "строка %1%: метка 'задержка' не может быть
 
 #: src/mmg/tabs/global.cpp:241
 msgid "link files"
-msgstr "файлы связей"
+msgstr "связать файлы"
 
 #: src/mmg/options/mkvmerge.cpp:51
 msgid "lower"
@@ -8686,8 +8681,9 @@ msgstr "Да"
 
 #~ msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
 #~ msgstr "Не пишите заголовок тех элементов, значения которых совпадают с их значениями по умолчанию в соответствии с Matroska критериям."
+
 #~ msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
 #~ msgstr "Matroska файлы (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|Все файлы|*.*"
+
 #~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
 #~ msgstr "Эта дорожка использует особенность Matroska, названную 'запоминающие элементы Codec'. mkvmerge поддерживает их, но эта особенность не была включена с опцией '--engage use_codec_state'.\n"
-
