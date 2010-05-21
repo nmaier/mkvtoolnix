@@ -667,7 +667,7 @@ tab_input::add_file(const wxString &file_name,
     int new_track_pos;
 
     mmg_track_cptr &t = file->tracks[i];
-    t->enabled        = true;
+    t->enabled        = !mdlg->global_page->cb_webm_mode->IsChecked() || t->is_webm_compatible();
     t->source         = new_file_pos;
 
     // Look for a place to insert this new track. If the file is "added" then
@@ -700,7 +700,7 @@ tab_input::add_file(const wxString &file_name,
 
     tracks.insert(tracks.begin() + new_track_pos, t.get_object());
     clb_tracks->Insert(t->create_label(), new_track_pos);
-    clb_tracks->Check(new_track_pos, true);
+    clb_tracks->Check(new_track_pos, t->enabled);
   }
 
   if (!file->attached_files.empty())
@@ -723,9 +723,6 @@ tab_input::add_file(const wxString &file_name,
     wxMessageBox(wxU(boost::wformat(Z("'%1%': Processing the following files as well: %2%\n").c_str()) % file_name.c_str() % join(L", ", other_file_names).c_str()),
                  Z("Note"), wxOK | wxCENTER | wxICON_INFORMATION, this);
   }
-
-  for (i = 0; i < file->tracks.size(); i++)
-    tracks[i]->enabled = !mdlg->global_page->cb_webm_mode->IsChecked() || tracks[i]->is_webm_compatible();
 }
 
 void
