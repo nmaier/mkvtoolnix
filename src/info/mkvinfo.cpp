@@ -91,6 +91,7 @@ typedef struct {
 std::vector<kax_track_t *> s_tracks;
 std::map<unsigned int, kax_track_t *> s_tracks_by_number, s_tracks_by_uid;
 bool g_use_gui                = false;
+bool g_show_size              = false;
 static bool s_calc_checksums  = false;
 static bool s_show_summary    = false;
 static bool s_show_hexdump    = false;
@@ -172,6 +173,25 @@ init_common_boost_formats() {
   BF_ADD(Y("Codec state: %1%"));                                                                                // 31 -- BF_CODEC_STATE
 }
 
+std::string
+create_element_text(const std::string &text,
+                    int64_t position,
+                    int64_t size) {
+  std::string additional_text;
+
+  if ((0 < verbose) && (0 <= position))
+    additional_text += (boost::format(Y(" at %1%")) % position).str();
+
+  if (g_show_size && (-1 != size)) {
+    if (-2 != size)
+      additional_text += (boost::format(Y(" size %1%")) % size).str();
+    else
+      additional_text += Y(" size is unknown");
+  }
+
+  return text + additional_text;
+}
+
 void
 add_track(kax_track_t *t) {
   s_tracks.push_back(t);
@@ -201,6 +221,9 @@ set_usage() {
       "  -c, --checksum Calculate and display checksums of frame contents.\n"
       "  -s, --summary  Only show summaries of the contents, not each element.\n"
       "  -x, --hexdump  Show the first 16 bytes of each frame as a hex dump.\n"
+      "  -X, --full-hexdump\n"
+      "                 Show all bytes of each frame as a hex dump.\n"
+      "  -z, --size     Show the size of each element including its header.\n"
       "  --output-charset <charset>\n"
       "                 Output messages in this charset\n"
       "  -r, -o, --redirect-output file.ext\n"
@@ -244,7 +267,12 @@ _show_element(EbmlElement *l,
   if (s_show_summary)
     return;
 
-  ui_show_element(level, info, NULL != l ? (int64_t)l->GetElementPosition() : -1);
+  ui_show_element(level, info,
+                    NULL == l          ? -1
+                  :                      static_cast<int64_t>(l->GetElementPosition()),
+                    NULL == l          ? -1
+                  : !l->IsFiniteSize() ? -2
+                  :                      static_cast<int64_t>(l->GetSizeLength() + EBML_ID_LENGTH(reinterpret_cast<const EbmlId &>(*l)) + l->GetSize()));
 
   if ((NULL == l) || !skip)
     return;
@@ -330,7 +358,9 @@ parse_args(std::vector<std::string> args,
     else if ((args[i] == "-X") || (args[i] == "--full-hexdump")) {
       s_show_hexdump = true;
       s_hexdump_max_size = INT_MAX;
-    } else if (file_name != "")
+    } else if ((args[i] == "-z") || (args[i] == "--size"))
+      g_show_size = true;
+    else if (file_name != "")
       mxerror(Y("Only one input file is allowed.\n"));
     else
       file_name = args[i];

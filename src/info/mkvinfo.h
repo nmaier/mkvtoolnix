@@ -27,15 +27,16 @@ bool process_file(const std::string &file_name);
 void setup(const std::string &locale = "");
 void cleanup();
 
-extern bool g_use_gui;
+extern bool g_use_gui, g_show_size;
 
+std::string create_element_text(const std::string &text, int64_t position, int64_t size);
 void ui_show_error(const std::string &error);
-void ui_show_element(int level, const std::string &text, int64_t position);
+void ui_show_element(int level, const std::string &text, int64_t position, int64_t size);
 void ui_show_progress(int percentage, const std::string &text);
 int ui_run(int argc, char **argv);
 bool ui_graphical_available();
 
 void console_show_error(const std::string &text);
-void console_show_element(int level, const std::string &text, int64_t position);
+void console_show_element(int level, const std::string &text, int64_t position, int64_t size);
 
 #endif // __MKVINFO_H

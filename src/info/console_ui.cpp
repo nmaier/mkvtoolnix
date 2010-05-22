@@ -17,17 +17,15 @@
 void
 console_show_element(int level,
                      const std::string &text,
-                     int64_t position) {
+                     int64_t position,
+                     int64_t size) {
   char *level_buffer;
 
   level_buffer = new char[level + 1];
   memset(&level_buffer[1], ' ', level);
   level_buffer[0] = '|';
   level_buffer[level] = 0;
-  mxinfo(boost::format("%1%+ %2%") % level_buffer % text);
-  if ((1 < verbose) && (0 <= position))
-    mxinfo(boost::format(Y(" at %1%")) % position);
-  mxinfo("\n");
+  mxinfo(boost::format("%1%+ %2%\n") % level_buffer % create_element_text(text, position, size));
   delete []level_buffer;
 }
 
@@ -40,8 +38,9 @@ console_show_error(const std::string &error) {
 void
 ui_show_element(int level,
                 const std::string &text,
-                int64_t position) {
-  console_show_element(level, text, position);
+                int64_t position,
+                int64_t size) {
+  console_show_element(level, text, position, size);
 }
 
 void

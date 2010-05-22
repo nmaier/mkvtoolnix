@@ -89,6 +89,33 @@
     </listitem>
    </varlistentry>
 
+   <varlistentry>
+    <term><option>-x</option>, <option>--hexdump</option></term>
+    <listitem>
+     <para>
+      Show the first 16 bytes of each frame as a hex dump.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-X</option>, <option>--full-hexdump</option></term>
+    <listitem>
+     <para>
+      Show all bytes of each frame as a hex dump.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term><option>-z</option>, <option>--size</option></term>
+    <listitem>
+     <para>
+      Show the size of each element including its header.
+     </para>
+    </listitem>
+   </varlistentry>
+
    <varlistentry id="mkvinfo.description.command_line_charset">
     <term><option>--command-line-charset</option> <parameter>character-set</parameter></term>
     <listitem>

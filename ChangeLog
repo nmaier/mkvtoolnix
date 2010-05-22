@@ -1,3 +1,9 @@
+2010-05-22  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvinfo: new feature: Added an option ("-z" / "--size") for
+	displaying each element's size property. Elements with an
+	unknown/infinite size are shown as "size is unknown".
+
 2010-05-21  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: new feature: Added a checkbox for enabling "WebM"

@@ -414,12 +414,13 @@ ui_show_error(const std::string &error) {
 void
 ui_show_element(int level,
                 const std::string &text,
-                int64_t position) {
+                int64_t position,
+                int64_t size) {
   if (!g_use_gui)
-    console_show_element(level, text, position);
+    console_show_element(level, text, position, size);
 
   else if (0 <= position)
-    frame->add_item(level, wxU((boost::format(Y("%1% at %2%")) % text % position).str().c_str()));
+    frame->add_item(level, wxU(create_element_text(text, position, size).c_str()));
 
   else
     frame->add_item(level, wxU(text.c_str()));
