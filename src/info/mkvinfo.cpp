@@ -543,9 +543,10 @@ def_handle(info) {
   // General info about this Matroska file
   show_element(l1, 1, Y("Segment information"));
 
-  upper_lvl_el   = 0;
-  EbmlMaster *m1 = static_cast<EbmlMaster *>(l1);
-  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, l3);
+  upper_lvl_el               = 0;
+  EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
+  EbmlElement *element_found = NULL;
+  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
   int i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
@@ -622,6 +623,8 @@ def_handle(info) {
 
     }
   }
+
+  l2 = element_found;
 }
 
 void
@@ -917,9 +920,10 @@ def_handle(tracks) {
   // contained in this segment.
   show_element(l1, 1, Y("Segment tracks"));
 
-  upper_lvl_el = 0;
-  EbmlMaster *m1 = static_cast<EbmlMaster *>(l1);
-  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, l3);
+  upper_lvl_el               = 0;
+  EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
+  EbmlElement *element_found = NULL;
+  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
   int i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
@@ -1125,6 +1129,8 @@ def_handle(tracks) {
     } else if (!is_global(es, l2, 2))
       show_unknown_element(l2, 2);
   }
+
+  l2 = element_found;
 }
 
 void
@@ -1136,9 +1142,10 @@ def_handle(seek_head) {
 
   show_element(l1, 1, Y("Seek head"));
 
-  upper_lvl_el   = 0;
-  EbmlMaster *m1 = static_cast<EbmlMaster *>(l1);
-  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, l3);
+  upper_lvl_el               = 0;
+  EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
+  EbmlElement *element_found = NULL;
+  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
   int i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
@@ -1182,6 +1189,8 @@ def_handle(seek_head) {
       show_unknown_element(l2, 2);
 
   } // while (l2 != NULL)
+
+  l2 = element_found;
 }
 
 void
@@ -1193,9 +1202,10 @@ def_handle(cues) {
 
   show_element(l1, 1, "Cues");
 
-  upper_lvl_el   = 0;
-  EbmlMaster *m1 = static_cast<EbmlMaster *>(l1);
-  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, l3);
+  upper_lvl_el               = 0;
+  EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
+  EbmlElement *element_found = NULL;
+  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
   int i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
@@ -1282,15 +1292,18 @@ def_handle(cues) {
       show_unknown_element(l2, 2);
 
   } // while (l2 != NULL)
+
+  l2 = element_found;
 }
 
 void
 def_handle(attachments) {
   show_element(l1, 1, Y("Attachments"));
 
-  upper_lvl_el   = 0;
-  EbmlMaster *m1 = static_cast<EbmlMaster *>(l1);
-  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, l3);
+  upper_lvl_el               = 0;
+  EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
+  EbmlElement *element_found = NULL;
+  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
   int i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
@@ -1333,6 +1346,8 @@ def_handle(attachments) {
       show_unknown_element(l2, 2);
 
   } // while (l2 != NULL)
+
+  l2 = element_found;
 }
 
 void
@@ -1660,9 +1675,10 @@ def_handle3(cluster,
   if (g_use_gui)
     ui_show_progress(100 * cluster->GetElementPosition() / file_size, Y("Parsing file"));
 
-  upper_lvl_el   = 0;
-  EbmlMaster *m1 = static_cast<EbmlMaster *>(l1);
-  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, l3);
+  upper_lvl_el               = 0;
+  EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
+  EbmlElement *element_found = NULL;
+  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
   int i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
@@ -1697,7 +1713,7 @@ def_handle3(cluster,
 
   } // while (l2 != NULL)
 
-  // mxinfo(boost::format("cluster done.... l3 is %|1$p| name %3% at %4% upper %2%\n") % reinterpret_cast<void *>(l3) % upper_lvl_el % typeid(*l3).name() % l1->GetElementPosition());
+  l2 = element_found;
 }
 
 void
@@ -1765,26 +1781,32 @@ void
 def_handle(chapters) {
   show_element(l1, 1, Y("Chapters"));
 
-  upper_lvl_el   = 0;
-  EbmlMaster *m1 = static_cast<EbmlMaster *>(l1);
-  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, l3);
+  upper_lvl_el               = 0;
+  EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
+  EbmlElement *element_found = NULL;
+  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
   int i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++)
     handle_elements_rec(es, 2, 0, (*m1)[i1], chapter_elements);
+
+  l2 = element_found;
 }
 
 void
 def_handle(tags) {
   show_element(l1, 1, Y("Tags"));
 
-  upper_lvl_el   = 0;
-  EbmlMaster *m1 = static_cast<EbmlMaster *>(l1);
-  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, l3);
+  upper_lvl_el               = 0;
+  EbmlMaster *m1             = static_cast<EbmlMaster *>(l1);
+  EbmlElement *element_found = NULL;
+  read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
   int i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++)
     handle_elements_rec(es, 2, 0, (*m1)[i1], tag_elements);
+
+  l2 = element_found;
 }
 
 void

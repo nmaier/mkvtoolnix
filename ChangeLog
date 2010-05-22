@@ -1,5 +1,7 @@
 2010-05-22  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvinfo: bug fix: Fixed handling clusters with an unknown size.
+
 	* mkvinfo: new feature: Added an option ("-z" / "--size") for
 	displaying each element's size property. Elements with an
 	unknown/infinite size are shown as "size is unknown".
