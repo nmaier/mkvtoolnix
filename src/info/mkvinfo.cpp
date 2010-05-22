@@ -136,6 +136,8 @@ std::vector<boost::format> g_common_boost_formats;
 #define BF_CLUSTER_POSITION                  BF_DO(29)
 #define BF_CLUSTER_PREVIOUS_SIZE             BF_DO(30)
 #define BF_CODEC_STATE                       BF_DO(31)
+#define BF_AT                                BF_DO(32)
+#define BF_SIZE                              BF_DO(33)
 
 void
 init_common_boost_formats() {
@@ -171,6 +173,8 @@ init_common_boost_formats() {
   BF_ADD(Y("Cluster position: %1%"));                                                                           // 29 -- BF_CLUSTER_POSITION
   BF_ADD(Y("Cluster previous size: %1%"));                                                                      // 30 -- BF_CLUSTER_PREVIOUS_SIZE
   BF_ADD(Y("Codec state: %1%"));                                                                                // 31 -- BF_CODEC_STATE
+  BF_ADD(Y(" at %1%"));                                                                                         // 32 -- BF_AT
+  BF_ADD(Y(" size %1%"));                                                                                       // 33 -- BF_SIZE
 }
 
 std::string
@@ -180,11 +184,11 @@ create_element_text(const std::string &text,
   std::string additional_text;
 
   if ((1 < verbose) && (0 <= position))
-    additional_text += (boost::format(Y(" at %1%")) % position).str();
+    additional_text += (BF_AT % position).str();
 
   if (g_show_size && (-1 != size)) {
     if (-2 != size)
-      additional_text += (boost::format(Y(" size %1%")) % size).str();
+      additional_text += (BF_SIZE % size).str();
     else
       additional_text += Y(" size is unknown");
   }
