@@ -166,7 +166,7 @@ class Results
   def date_added?(name)
     raise "No such result" unless (exist?(name))
     return @results[name]['date_added']
-  end    
+  end
 
   def add(name, hash)
     raise "Test does already exist" if (exist?(name))
