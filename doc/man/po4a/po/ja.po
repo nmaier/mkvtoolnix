@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 2.9.9\n"
-"POT-Creation-Date: 2010-05-19 19:23+0300\n"
+"POT-Creation-Date: 2010-05-22 21:47+0300\n"
 "PO-Revision-Date: 2010-04-29 23:31+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: none\n"
@@ -269,7 +269,7 @@ msgstr ""
 "ますが、'<literal>fast</literal>'スキャンには数秒しかかかりません。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:91 doc/man/mkvinfo.xml:93 doc/man/mkvmerge.xml:1185
+#: doc/man/mkvextract.xml:91 doc/man/mkvinfo.xml:120 doc/man/mkvmerge.xml:1185
 #: doc/man/mkvpropedit.xml:152
 msgid ""
 "<option>--command-line-charset</option> <parameter>character-set</parameter>"
@@ -277,7 +277,7 @@ msgstr ""
 "<option>--command-line-charset</option> <parameter>character-set</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:94 doc/man/mkvinfo.xml:96
+#: doc/man/mkvextract.xml:94 doc/man/mkvinfo.xml:123
 #: doc/man/mkvpropedit.xml:155
 msgid ""
 "Sets the character set to convert strings given on the command line from. It "
@@ -287,13 +287,13 @@ msgstr ""
 "ロケールの文字コードになります。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:101 doc/man/mkvinfo.xml:103
+#: doc/man/mkvextract.xml:101 doc/man/mkvinfo.xml:130
 #: doc/man/mkvmerge.xml:1198 doc/man/mkvpropedit.xml:162
 msgid "<option>--output-charset</option> <parameter>character-set</parameter>"
 msgstr "<option>--output-charset</option> <parameter>character-set</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:104 doc/man/mkvinfo.xml:106
+#: doc/man/mkvextract.xml:104 doc/man/mkvinfo.xml:133
 #: doc/man/mkvmerge.xml:1201 doc/man/mkvpropedit.xml:165
 msgid ""
 "Sets the character set to which strings are converted that are to be "
@@ -303,7 +303,7 @@ msgstr ""
 "コードになります。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:111 doc/man/mkvinfo.xml:113
+#: doc/man/mkvextract.xml:111 doc/man/mkvinfo.xml:140
 #: doc/man/mkvmerge.xml:1208 doc/man/mkvpropedit.xml:172
 msgid ""
 "<option>-r</option>, <option>--redirect-output</option> <parameter>file-"
@@ -330,7 +330,7 @@ msgstr ""
 "字コードは尊重されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:123 doc/man/mkvinfo.xml:125
+#: doc/man/mkvextract.xml:123 doc/man/mkvinfo.xml:152
 #: doc/man/mkvmerge.xml:1219 doc/man/mkvpropedit.xml:184
 msgid "<option>--ui-language</option> <parameter>code</parameter>"
 msgstr "<option>--ui-language</option> <parameter>code</parameter>"
@@ -352,7 +352,7 @@ msgstr ""
 "<literal>list</literal>と指定すると、指定できる言語コードの一覧を出力します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:135 doc/man/mkvinfo.xml:137 doc/man/mkvmerge.xml:77
+#: doc/man/mkvextract.xml:135 doc/man/mkvinfo.xml:164 doc/man/mkvmerge.xml:77
 #: doc/man/mkvpropedit.xml:196
 msgid "<option>-v</option>, <option>--verbose</option>"
 msgstr "<option>-v</option>, <option>--verbose</option>"
@@ -366,37 +366,37 @@ msgstr ""
 "るつどに表示していきます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:144 doc/man/mkvinfo.xml:147
+#: doc/man/mkvextract.xml:144 doc/man/mkvinfo.xml:174
 #: doc/man/mkvmerge.xml:1291 doc/man/mkvpropedit.xml:205
 msgid "<option>-h</option>, <option>--help</option>"
 msgstr "<option>-h</option>, <option>--help</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:147 doc/man/mkvinfo.xml:150
+#: doc/man/mkvextract.xml:147 doc/man/mkvinfo.xml:177
 #: doc/man/mkvmerge.xml:1294 doc/man/mkvpropedit.xml:208
 msgid "Show usage information and exit."
 msgstr "コマンド書式情報を出力して終了します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:153 doc/man/mkvinfo.xml:156
+#: doc/man/mkvextract.xml:153 doc/man/mkvinfo.xml:183
 #: doc/man/mkvmerge.xml:1300 doc/man/mkvpropedit.xml:214
 msgid "<option>-V</option>, <option>--version</option>"
 msgstr "<option>-V</option>, <option>--version</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:156 doc/man/mkvinfo.xml:159
+#: doc/man/mkvextract.xml:156 doc/man/mkvinfo.xml:186
 #: doc/man/mkvmerge.xml:1303 doc/man/mkvpropedit.xml:217
 msgid "Show version information and exit."
 msgstr "バージョン情報を出力して終了します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:162 doc/man/mkvinfo.xml:165
+#: doc/man/mkvextract.xml:162 doc/man/mkvinfo.xml:192
 #: doc/man/mkvmerge.xml:1231 doc/man/mkvpropedit.xml:223
 msgid "<option>@</option>options-file"
 msgstr "<option>@</option>options-file"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:165 doc/man/mkvinfo.xml:168
+#: doc/man/mkvextract.xml:165 doc/man/mkvinfo.xml:195
 #: doc/man/mkvmerge.xml:1234 doc/man/mkvpropedit.xml:226
 msgid ""
 "Reads additional command line arguments from the file <parameter>options-"
@@ -1096,7 +1096,7 @@ msgstr ""
 "ポートされていません。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:575 doc/man/mkvinfo.xml:225
+#: doc/man/mkvextract.xml:575 doc/man/mkvinfo.xml:252
 #: doc/man/mkvmerge.xml:2058 doc/man/mkvpropedit.xml:356
 msgid "Exit codes"
 msgstr "返り値"
@@ -1140,7 +1140,7 @@ msgstr ""
 "なコマンドラインやファイルI/Oエラー、壊れたファイルなど様々です。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:606 doc/man/mkvinfo.xml:255
+#: doc/man/mkvextract.xml:606 doc/man/mkvinfo.xml:282
 #: doc/man/mkvmerge.xml:2089 doc/man/mkvpropedit.xml:387 doc/man/mmg.xml:90
 msgid "See also"
 msgstr "関連項目"
@@ -1151,13 +1151,13 @@ msgid "&mkvmerge;, &mkvinfo;, &mkvpropedit;, &mmg;"
 msgstr "&mkvmerge;, &mkvinfo;, &mkvpropedit;, &mmg;"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:613 doc/man/mkvinfo.xml:262
+#: doc/man/mkvextract.xml:613 doc/man/mkvinfo.xml:289
 #: doc/man/mkvmerge.xml:2096 doc/man/mkvpropedit.xml:394 doc/man/mmg.xml:97
 msgid "WWW"
 msgstr "ウェブ"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:615 doc/man/mkvinfo.xml:264
+#: doc/man/mkvextract.xml:615 doc/man/mkvinfo.xml:291
 #: doc/man/mkvmerge.xml:2098 doc/man/mkvpropedit.xml:396 doc/man/mmg.xml:99
 msgid ""
 "The latest version can always be found at <ulink url=\"http://www.bunkus.org/"
@@ -1237,8 +1237,41 @@ msgstr ""
 "全てのエレメントについて表示するのではなく、&mkvinfo;の見つけたものの簡潔なサ"
 "マリを表示します。"
 
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: doc/man/mkvinfo.xml:93
+#, fuzzy
+msgid "<option>-x</option>, <option>--hexdump</option>"
+msgstr "<option>-h</option>, <option>--help</option>"
+
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:116
+#: doc/man/mkvinfo.xml:96
+msgid "Show the first 16 bytes of each frame as a hex dump."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: doc/man/mkvinfo.xml:102
+#, fuzzy
+msgid "<option>-X</option>, <option>--full-hexdump</option>"
+msgstr "<option>-h</option>, <option>--help</option>"
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvinfo.xml:105
+msgid "Show all bytes of each frame as a hex dump."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: doc/man/mkvinfo.xml:111
+#, fuzzy
+msgid "<option>-z</option>, <option>--size</option>"
+msgstr "<option>-s</option>, <option>--simple</option>"
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvinfo.xml:114
+msgid "Show the size of each element including its header."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvinfo.xml:143
 msgid ""
 "Writes all messages to the file <parameter>file-name</parameter> instead of "
 "to the console.  While this can be done easily with output redirection there "
@@ -1255,7 +1288,7 @@ msgstr ""
 "字コードは尊重されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:128
+#: doc/man/mkvinfo.xml:155
 msgid ""
 "Forces the translations for the language <parameter>code</parameter> to be "
 "used (e.g.  '<literal>de_DE</literal>' for the German translations). It is "
@@ -1271,7 +1304,7 @@ msgstr ""
 "<literal>list</literal>と指定すると、指定できる言語コードの一覧を出力します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:140
+#: doc/man/mkvinfo.xml:167
 msgid ""
 "Be more verbose. See the section about <link linkend=\"mkvinfo."
 "verbosity_levels\">verbosity levels</link> for a description which "
@@ -1281,7 +1314,7 @@ msgstr ""
 "link>セクションに、どの冗長レベルでどの情報が出力されるかの説明があります。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:174
+#: doc/man/mkvinfo.xml:201
 msgid ""
 "The command line '<command>mkvinfo -v -v input.mkv --redirect-output info."
 "txt</command>' could be converted into the following option file:"
@@ -1290,7 +1323,7 @@ msgstr ""
 "コマンドラインと同じことは、次のようなオプションファイルで指定できます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><programlisting>
-#: doc/man/mkvinfo.xml:179
+#: doc/man/mkvinfo.xml:206
 #, no-wrap
 msgid ""
 "# Be more verbose\n"
@@ -1314,12 +1347,12 @@ msgstr ""
 "     "
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvinfo.xml:194
+#: doc/man/mkvinfo.xml:221
 msgid "Verbosity levels"
 msgstr "冗長レベル"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:197
+#: doc/man/mkvinfo.xml:224
 msgid ""
 "The <link linkend=\"mkvinfo.description.verbose\"><option>-v</option></link> "
 "option can be used to increase &mkvinfo;'s verbosity level and print more "
@@ -1330,7 +1363,7 @@ msgstr ""
 "報を出力させることができます。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:202
+#: doc/man/mkvinfo.xml:229
 msgid ""
 "At level 0 &mkvinfo; will print only the track headers it finds and their "
 "types. &mkvinfo; will exit as soon as the headers are parsed completely "
@@ -1344,7 +1377,7 @@ msgstr ""
 "に格納されていたとしても表示されません。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:208
+#: doc/man/mkvinfo.xml:235
 msgid ""
 "At level 1 &mkvinfo; will also print all &matroska; elements encountered for "
 "the complete file but the seek head entries and the cue entries. If the "
@@ -1356,7 +1389,7 @@ msgstr ""
 "す。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:213
+#: doc/man/mkvinfo.xml:240
 msgid ""
 "At level 2 &mkvinfo; will also print the seek head entries, the cue entries "
 "and the file position at which each &matroska; element can be found at."
@@ -1365,7 +1398,7 @@ msgstr ""
 "内位置も表示します。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:218
+#: doc/man/mkvinfo.xml:245
 msgid ""
 "At level 3 and above &mkvinfo; will print some information that is not "
 "directly connected to a &matroska; element. All other elements only print "
@@ -1380,19 +1413,19 @@ msgstr ""
 "す。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:228
+#: doc/man/mkvinfo.xml:255
 msgid "&mkvinfo; exits with one of three exit codes:"
 msgstr "&mkvinfo;は下の3つの返り値を返します。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvinfo.xml:234
+#: doc/man/mkvinfo.xml:261
 msgid ""
 "<constant>0</constant> -- This exit codes means that the run has completed "
 "successfully."
 msgstr "<constant>0</constant> -- この返り値は正常に終了したことを示します。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvinfo.xml:240
+#: doc/man/mkvinfo.xml:267
 msgid ""
 "<constant>1</constant> -- In this case &mkvinfo; has output at least one "
 "warning, but the run did continue.  A warning is prefixed with the text "
@@ -1403,7 +1436,7 @@ msgstr ""
 "う文字列を先頭につけて出力されます。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvinfo.xml:247
+#: doc/man/mkvinfo.xml:274
 msgid ""
 "<constant>2</constant> -- This exit code is used after an error occurred.  "
 "&mkvinfo; aborts right after outputting the error message.  Error messages "
@@ -1415,7 +1448,7 @@ msgstr ""
 "ラー、壊れたファイルなど様々です。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:257
+#: doc/man/mkvinfo.xml:284
 msgid "&mkvmerge;, &mkvextract;, &mkvpropedit;, &mmg;"
 msgstr "&mkvmerge;, &mkvextract;, &mkvpropedit;, &mmg;"
 
