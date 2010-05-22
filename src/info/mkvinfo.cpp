@@ -179,7 +179,7 @@ create_element_text(const std::string &text,
                     int64_t size) {
   std::string additional_text;
 
-  if ((0 < verbose) && (0 <= position))
+  if ((1 < verbose) && (0 <= position))
     additional_text += (boost::format(Y(" at %1%")) % position).str();
 
   if (g_show_size && (-1 != size)) {
