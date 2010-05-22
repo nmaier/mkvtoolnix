@@ -131,13 +131,12 @@ std::vector<boost::format> g_common_boost_formats;
 #define BF_SIMPLE_BLOCK_POSITION             BF_DO(19) // Intentional -- same format.
 #define BF_SIMPLE_BLOCK_SUMMARY              BF_DO(25)
 #define BF_SIMPLE_BLOCK_SUMMARY_V2           BF_DO(26)
-#define BF_HANDLE_ELEMENTS_REC_UNKNOWN       BF_DO(27)
-#define BF_CLUSTER_TIMECODE                  BF_DO(28)
-#define BF_CLUSTER_POSITION                  BF_DO(29)
-#define BF_CLUSTER_PREVIOUS_SIZE             BF_DO(30)
-#define BF_CODEC_STATE                       BF_DO(31)
-#define BF_AT                                BF_DO(32)
-#define BF_SIZE                              BF_DO(33)
+#define BF_CLUSTER_TIMECODE                  BF_DO(27)
+#define BF_CLUSTER_POSITION                  BF_DO(28)
+#define BF_CLUSTER_PREVIOUS_SIZE             BF_DO(29)
+#define BF_CODEC_STATE                       BF_DO(30)
+#define BF_AT                                BF_DO(31)
+#define BF_SIZE                              BF_DO(32)
 
 void
 init_common_boost_formats() {
@@ -168,13 +167,12 @@ init_common_boost_formats() {
   BF_ADD(Y("Frame with size %1%%2%%3%"));                                                                       // 24 -- BF_SIMPLE_BLOCK_FRAME
   BF_ADD(Y("%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%\n"));                       // 25 -- BF_SIMPLE_BLOCK_SUMMARY
   BF_ADD(Y("[%1% frame for track %2%, timecode %3%]"));                                                         // 26 -- BF_SIMPLE_BLOCK_SUMMARY_V2
-  BF_ADD(Y("(Unknown element: %1%)"));                                                                          // 27 -- BF_HANDLE_ELEMENTS_REC_UNKNOWN
-  BF_ADD(Y("Cluster timecode: %|1$.3f|s"));                                                                     // 28 -- BF_CLUSTER_TIMECODE
-  BF_ADD(Y("Cluster position: %1%"));                                                                           // 29 -- BF_CLUSTER_POSITION
-  BF_ADD(Y("Cluster previous size: %1%"));                                                                      // 30 -- BF_CLUSTER_PREVIOUS_SIZE
-  BF_ADD(Y("Codec state: %1%"));                                                                                // 31 -- BF_CODEC_STATE
-  BF_ADD(Y(" at %1%"));                                                                                         // 32 -- BF_AT
-  BF_ADD(Y(" size %1%"));                                                                                       // 33 -- BF_SIZE
+  BF_ADD(Y("Cluster timecode: %|1$.3f|s"));                                                                     // 27 -- BF_CLUSTER_TIMECODE
+  BF_ADD(Y("Cluster position: %1%"));                                                                           // 28 -- BF_CLUSTER_POSITION
+  BF_ADD(Y("Cluster previous size: %1%"));                                                                      // 29 -- BF_CLUSTER_PREVIOUS_SIZE
+  BF_ADD(Y("Codec state: %1%"));                                                                                // 30 -- BF_CODEC_STATE
+  BF_ADD(Y(" at %1%"));                                                                                         // 31 -- BF_AT
+  BF_ADD(Y(" size %1%"));                                                                                       // 32 -- BF_SIZE
 }
 
 std::string
@@ -1698,6 +1696,8 @@ def_handle3(cluster,
       show_unknown_element(l2, 2);
 
   } // while (l2 != NULL)
+
+  // mxinfo(boost::format("cluster done.... l3 is %|1$p| name %3% at %4% upper %2%\n") % reinterpret_cast<void *>(l3) % upper_lvl_el % typeid(*l3).name() % l1->GetElementPosition());
 }
 
 void
@@ -1717,7 +1717,7 @@ handle_elements_rec(EbmlStream *es,
     }
 
   if (!found) {
-    show_element(e, level, BF_HANDLE_ELEMENTS_REC_UNKNOWN % EBML_NAME(e));
+    show_unknown_element(e, level);
     return;
   }
 
