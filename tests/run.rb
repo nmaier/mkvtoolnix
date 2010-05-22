@@ -189,7 +189,7 @@ class Results
 end
 
 def main
-  ENV['LC_ALL'] = "en_US.ISO-8859-1"
+  ENV['LC_ALL'] = "en_US.UTF-8"
 
   results = Results.new
 
