@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-05-21 23:56+0800\n"
+"PO-Revision-Date: 2010-05-23 00:01+0800\n"
 "Last-Translator: Dean Lee <xslidian@lidian.info>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -707,14 +707,12 @@ msgid " done\n"
 msgstr " 完成\n"
 
 #: src/info/mkvinfo.cpp:187
-#, fuzzy
 msgid " size %1%"
-msgstr "剪辑, 尺寸 %1%"
+msgstr " 尺寸 %1%"
 
 #: src/info/mkvinfo.cpp:189
-#, fuzzy
 msgid " size is unknown"
-msgstr "剪辑, 尺寸未知"
+msgstr " 尺寸未知"
 
 #: src/mmg/cli_options_dlg.cpp:80
 msgid "### Global output control ###"
@@ -6834,7 +6832,6 @@ msgid "Usage"
 msgstr "用法"
 
 #: src/info/mkvinfo.cpp:215
-#, fuzzy
 msgid ""
 "Usage: mkvinfo [options] inname\n"
 "\n"
@@ -6865,7 +6862,10 @@ msgstr ""
 "                 mkvinfo 输出什么的详尽说明。\n"
 "  -c, --checksum 计算并显示帧内容的校验码。\n"
 "  -s, --summary  仅显示内容的摘要，而非所有元素。\n"
-"  -x, --hexdump  以十六进制转储形式显示每帧的前 16 字节。\n"
+"  -x, --hexdump  以十六进制转储形式显示各帧的前 16 字节。\n"
+"  -X, --full-hexdump\n"
+"                 以十六进制转储形式显示各帧的所有字节。\n"
+"  -z, --size     显示各元素的尺寸，包括头部尺寸。\n"
 "  --output-charset <charset>\n"
 "                 以 charset 指定的字符集输出消息\n"
 "  -r, -o, --redirect-output file.ext\n"

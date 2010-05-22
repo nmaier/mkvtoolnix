@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-05-21 14:07+0300\n"
+"PO-Revision-Date: 2010-05-22 20:56+0300\n"
 "Last-Translator: rusguy6 rusguy6 <rusguy6@gmail.com>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -726,14 +726,12 @@ msgid " done\n"
 msgstr " Сделанный\n"
 
 #: src/info/mkvinfo.cpp:187
-#, fuzzy
 msgid " size %1%"
-msgstr "Сегмент, размер %1%"
+msgstr " размер %1%"
 
 #: src/info/mkvinfo.cpp:189
-#, fuzzy
 msgid " size is unknown"
-msgstr "Сегмент, неизвестного размера"
+msgstr " неизвестный размер"
 
 #: src/mmg/cli_options_dlg.cpp:80
 msgid "### Global output control ###"
@@ -2573,13 +2571,12 @@ msgid "Create &option file"
 msgstr "&Создать файл конфигурации"
 
 #: src/mmg/tabs/global.cpp:300
-#, fuzzy
 msgid "Create WebM compliant file"
-msgstr "&Создать файл конфигурации"
+msgstr "Создать WebM совместимый файл"
 
 #: src/mmg/tabs/global.cpp:301
 msgid "Create a WebM compliant file. mkvmerge also turns this on if the output file name's extension is \"webm\". This mode enforces several restrictions. The only allowed codecs are VP8 video and Vorbis audio tracks. Neither chapters nor tags are allowed. The DocType header item is changed to \"webm\"."
-msgstr ""
+msgstr "Создать WebM совместимый файл. mkvmerge также включается, если это на расширение имя выходного файла является \"webm\". Этот режим обеспечивает ряд ограничений. Допускается только кодеки VP8 видео и Vorbis аудио треков. Ни главы, ни теги не разрешены. Doc тип пункт заголовок изменен на \"webm\"."
 
 #: src/mmg/mmg_dialog.cpp:266
 msgid "Create a new chapter file"
@@ -3551,7 +3548,7 @@ msgstr "Невозможно использовать файл '%1%': файл �
 
 #: src/mmg/tabs/input.cpp:960
 msgid "Incompatible track"
-msgstr ""
+msgstr "Несовместимый трек"
 
 #: src/input/r_real.cpp:610
 msgid "Inconsistent AAC audio packet (length: %1% != len_check %2%)\n"
@@ -6577,7 +6574,7 @@ msgstr "Эта дорожка содержит SBR AAC/HE-AAC/AAC + данные
 
 #: src/mmg/tabs/input.cpp:960
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
-msgstr ""
+msgstr "Этот трек не совместим с режимом WebM и не может быть включен."
 
 #: src/info/mkvinfo.cpp:1494
 msgid "Time slice"
@@ -6890,7 +6887,6 @@ msgid "Usage"
 msgstr "Использование"
 
 #: src/info/mkvinfo.cpp:215
-#, fuzzy
 msgid ""
 "Usage: mkvinfo [options] inname\n"
 "\n"
@@ -6922,12 +6918,15 @@ msgstr ""
 "  -c, --checksum Вычисляет и отображает контрольные суммы информационных наполнений кадра.\n"
 "  -s, --summary  Только показывают резюме информационных наполнений, не каждому элементу.\n"
 "  -x, --hexdump  Показ первые 16 байтов каждого кадра как шестнадцатеричный дамп.\n"
+"  -X, --full-hexdump\n"
+"                 Показать всем байтам каждого кадра как шестнадцатеричный дамп.\n"
+"  -z, --size     Показать размер каждого элемента включая его заголовок.\n"
 "  --output-charset <charset>\n"
 "                 Сообщения вывода в этой кодировке\n"
 "  -r,-o,  --redirect-output  файл.ext переадрес-вывода\n"
 "                 Переадресуйте все сообщения к этому файлу.\n"
-"  -h, --help     Показу эта справку.\n"
-"  -V, --version  Показ информации версии.\n"
+"  -h, --help     Показать справку.\n"
+"  -V, --version  Показать информацию о версии.\n"
 
 #: src/mmg/tabs/global.cpp:256
 msgid "Use 'segment linking' for the resulting files. For an in-depth explanation of this feature consult the mkvmerge documentation."
@@ -8700,14 +8699,18 @@ msgstr "Да"
 
 #~ msgid "%1% at %2%"
 #~ msgstr "%1% в %2%"
+
 #~ msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
 #~ msgstr "Не пишите заголовок тех элементов, значения которых совпадают с их значениями по умолчанию в соответствии с Matroska критериям."
+
 #~ msgid "File/segment title"
 #~ msgstr "Файл/сегмент название"
+
 #~ msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
 #~ msgstr "Matroska файлы (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|Все файлы|*.*"
+
 #~ msgid "Other global options"
 #~ msgstr "Другие глобальные опции"
+
 #~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
 #~ msgstr "Эта дорожка использует особенность Matroska, названную 'запоминающие элементы Codec'. mkvmerge поддерживает их, но эта особенность не была включена с опцией '--engage use_codec_state'.\n"
-
