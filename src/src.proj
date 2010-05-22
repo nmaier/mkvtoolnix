@@ -70,6 +70,7 @@ CON mkvmerge
   SOURCE output/p_vobbtn.cpp
   SOURCE output/p_vobsub.cpp
   SOURCE output/p_vorbis.cpp
+  SOURCE output/p_vp8.cpp
   SOURCE output/p_wavpack.cpp
   SOURCE merge/debugging.cpp
   SOURCE merge/cluster_helper.cpp
@@ -78,6 +79,7 @@ CON mkvmerge
   SOURCE merge/output_control.cpp
   SOURCE merge/pr_generic.cpp
   SOURCE merge/timecode_factory.cpp
+  SOURCE merge/webm.cpp
   
   HEADER input/flac_common.h
   HEADER input/qtmp4_atoms.h
@@ -135,6 +137,7 @@ CON mkvmerge
   HEADER output/p_vobbtn.h
   HEADER output/p_vobsub.h
   HEADER output/p_vorbis.h
+  HEADER output/p_vp8.h
   HEADER output/p_wavpack.h
   HEADER merge/debugging.h
   HEADER merge/cluster_helper.h
@@ -144,6 +147,7 @@ CON mkvmerge
   HEADER merge/packet.h
   HEADER merge/pr_generic.h
   HEADER merge/timecode_factory.h
+  HEADER merge/webm.h
 }
 
 CON mkvinfo
@@ -327,6 +331,7 @@ LIB mktcommon
   SOURCE common/version.cpp
   SOURCE common/vint.cpp
   SOURCE common/wavpack.cpp
+  SOURCE common/webm.cpp
   SOURCE common/xml/element_mapping.cpp
   SOURCE common/xml/element_parser.cpp
   SOURCE common/xml/element_writer.cpp
@@ -388,6 +393,7 @@ LIB mktcommon
   HEADER common/version.h
   HEADER common/vint.h
   HEADER common/wavpack.h
+  HEADER common/webm.h
   HEADER common/wxcommon.h
   HEADER common/xml/element_mapping.h
   HEADER common/xml/element_parser.h
