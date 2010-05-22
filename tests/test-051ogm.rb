@@ -6,7 +6,7 @@ class T_051ogm < Test
   end
 
   def run
-    merge("data/ogg/v.ogm")
+    merge "--subtitle-charset -1:ISO-8859-15 data/ogg/v.ogm"
     return hash_tmp
   end
 end

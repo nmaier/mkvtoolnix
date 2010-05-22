@@ -6,8 +6,7 @@ class T_210splitting_and_chapters < Test
   end
 
   def run
-    merge(tmp + "-%03d ", "--split-max-files 2 --split 4m data/avi/v.avi " +
-           "--chapters data/text/shortchaps.txt")
+    merge tmp + "-%03d ", "--split-max-files 2 --split 4m data/avi/v.avi --chapter-charset ISO-8859-15 --chapters data/text/shortchaps.txt"
     if (!FileTest.exist?(tmp + "-001"))
       error("First split file does not exist.")
     end
@@ -19,8 +18,7 @@ class T_210splitting_and_chapters < Test
     File.unlink(tmp + "-001")
     File.unlink(tmp + "-002")
 
-    merge(tmp + "-%03d ", "--split-max-files 2 --split 4m data/avi/v.avi " +
-           "--chapters data/text/shortchaps.txt --link")
+    merge tmp + "-%03d ", "--split-max-files 2 --split 4m data/avi/v.avi --chapter-charset ISO-8859-15 --chapters data/text/shortchaps.txt --link"
     if (!FileTest.exist?(tmp + "-001"))
       error("First split file does not exist.")
     end
