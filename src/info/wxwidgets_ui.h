@@ -65,6 +65,7 @@ protected:
   void on_file_savetext(wxCommandEvent &event);
   void on_file_quit(wxCommandEvent &event);
   void on_options_showall(wxCommandEvent &event);
+  void on_options_show_sizes(wxCommandEvent &event);
   void on_options_expandimportant(wxCommandEvent &event);
   void on_help_about(wxCommandEvent &event);
   void on_right_click(wxTreeEvent &event);

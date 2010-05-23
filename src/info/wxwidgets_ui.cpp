@@ -43,6 +43,7 @@ enum {
   mi_file_savetext = 3,
   mi_options_showall = 101,
   mi_options_expandimportant = 102,
+  mi_options_show_sizes = 103,
   mi_help_about = wxID_ABOUT
 };
 
@@ -131,8 +132,10 @@ mi_frame::mi_frame(const wxString &title,
   menu_file->AppendSeparator();
   menu_file->Append(mi_file_quit, Z("E&xit\tCtrl-Q"), Z("Quits mkvinfo"));
   menu_options->AppendCheckItem(mi_options_showall, Z("Show &all elements\tCtrl-A"), Z("Parse the file completely and show all elements"));
-  menu_options->Check(mi_options_showall, show_all_elements);
+  menu_options->AppendCheckItem(mi_options_show_sizes, Z("Show element si&zes\tCtrl-Z"), Z("Show the size of each element including its header"));
   menu_options->AppendCheckItem(mi_options_expandimportant, Z("&Expand important elements\tCtrl-E"), Z("After loading a file expand the most important elements"));
+  menu_options->Check(mi_options_showall, show_all_elements);
+  menu_options->Check(mi_options_show_sizes, g_show_size);
   menu_options->Check(mi_options_expandimportant, expand_important_elements);
   menu_help->Append(mi_help_about, Z("&About\tF1"), Z("Show about dialog"));
 
@@ -340,6 +343,15 @@ mi_frame::on_options_showall(wxCommandEvent &WXUNUSED(event)) {
 }
 
 void
+mi_frame::on_options_show_sizes(wxCommandEvent &WXUNUSED(event)) {
+  g_show_size = !g_show_size;
+  menu_options->Check(mi_options_show_sizes, g_show_size);
+
+  if (file_open)
+    open_file(current_file);
+}
+
+void
 mi_frame::on_options_expandimportant(wxCommandEvent &WXUNUSED(event)) {
   expand_important_elements = !expand_important_elements;
   menu_options->Check(mi_options_expandimportant,
@@ -396,6 +408,7 @@ BEGIN_EVENT_TABLE(mi_frame, wxFrame)
   EVT_MENU(mi_file_savetext, mi_frame::on_file_savetext)
   EVT_MENU(mi_file_quit, mi_frame::on_file_quit)
   EVT_MENU(mi_options_showall, mi_frame::on_options_showall)
+  EVT_MENU(mi_options_show_sizes, mi_frame::on_options_show_sizes)
   EVT_MENU(mi_options_expandimportant, mi_frame::on_options_expandimportant)
   EVT_MENU(mi_help_about, mi_frame::on_help_about)
   EVT_TREE_ITEM_RIGHT_CLICK(4254, mi_frame::on_right_click)
