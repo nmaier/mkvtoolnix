@@ -38,13 +38,13 @@ using namespace libmatroska;
 static mi_frame *frame;
 
 enum {
-  mi_file_quit = 1,
-  mi_file_open = 2,
-  mi_file_savetext = 3,
-  mi_options_showall = 101,
+  mi_file_quit               = 1,
+  mi_file_open               = 2,
+  mi_file_savetext           = 3,
+  mi_options_showall         = 101,
   mi_options_expandimportant = 102,
-  mi_options_show_sizes = 103,
-  mi_help_about = wxID_ABOUT
+  mi_options_show_sizes      = 103,
+  mi_help_about              = wxID_ABOUT
 };
 
 std::string
@@ -105,80 +105,77 @@ mi_app::OnInit() {
 mi_frame::mi_frame(const wxString &title,
                    const wxPoint &pos,
                    const wxSize &size,
-                   long style) :
-  wxFrame(NULL, -1, title, pos, size, style) {
-  wxMenu *menu_help;
-  wxMenuBar *menu_bar;
-
-  file_open = false;
-  tree = NULL;
-
-  if (verbose == 0)
-    show_all_elements = false;
-  else
-    show_all_elements = true;
-  expand_important_elements = true;
-
+                   long style)
+  : wxFrame(NULL, -1, title, pos, size, style)
+  , dnd_load(new mi_dndfile)
+  , show_all_elements(0 != verbose)
+  , expand_important_elements(true)
+  , file_open(false)
+  , tree(new wxTreeCtrl(this, 4254))
+{
   SetIcon(wxICON(matroska));
 
-  menu_file = new wxMenu();
-  menu_options = new wxMenu();
-  menu_help = new wxMenu();
-  menu_bar = new wxMenuBar();
+  menu_file           = new wxMenu();
+  menu_options        = new wxMenu();
+  wxMenu *menu_help   = new wxMenu();
+  wxMenuBar *menu_bar = new wxMenuBar();
 
-  menu_file->Append(mi_file_open, Z("&Open\tCtrl-O"), Z("Open a Matroska file"));
+  menu_file->Append(mi_file_open,     Z("&Open\tCtrl-O"),              Z("Open a Matroska file"));
   menu_file->Append(mi_file_savetext, Z("&Save info as text\tCtrl-S"), Z("Saves the information from the current file to a text file"));
   menu_file->Enable(mi_file_savetext, false);
   menu_file->AppendSeparator();
-  menu_file->Append(mi_file_quit, Z("E&xit\tCtrl-Q"), Z("Quits mkvinfo"));
-  menu_options->AppendCheckItem(mi_options_showall, Z("Show &all elements\tCtrl-A"), Z("Parse the file completely and show all elements"));
-  menu_options->AppendCheckItem(mi_options_show_sizes, Z("Show element si&zes\tCtrl-Z"), Z("Show the size of each element including its header"));
+  menu_file->Append(mi_file_quit,     Z("E&xit\tCtrl-Q"),              Z("Quits mkvinfo"));
+
+  menu_options->AppendCheckItem(mi_options_showall,         Z("Show &all elements\tCtrl-A"),         Z("Parse the file completely and show all elements"));
+  menu_options->AppendCheckItem(mi_options_show_sizes,      Z("Show element si&zes\tCtrl-Z"),        Z("Show the size of each element including its header"));
   menu_options->AppendCheckItem(mi_options_expandimportant, Z("&Expand important elements\tCtrl-E"), Z("After loading a file expand the most important elements"));
-  menu_options->Check(mi_options_showall, show_all_elements);
-  menu_options->Check(mi_options_show_sizes, g_show_size);
+
+  menu_options->Check(mi_options_showall,         show_all_elements);
+  menu_options->Check(mi_options_show_sizes,      g_show_size);
   menu_options->Check(mi_options_expandimportant, expand_important_elements);
+
   menu_help->Append(mi_help_about, Z("&About\tF1"), Z("Show about dialog"));
 
-  menu_bar->Append(menu_file, Z("&File"));
+  menu_bar->Append(menu_file,    Z("&File"));
   menu_bar->Append(menu_options, Z("&Options"));
-  menu_bar->Append(menu_help, Z("&Help"));
+  menu_bar->Append(menu_help,    Z("&Help"));
 
   SetMenuBar(menu_bar);
 
-  tree = new wxTreeCtrl(this, 4254);
-  dnd_load = new mi_dndfile();
   tree->SetDropTarget(dnd_load);
 
   CreateStatusBar(1);
   SetStatusText(Z("ready"));
-
-  last_dir = wxGetCwd();
 }
 
 void
 mi_frame::open_file(wxString file_name) {
   std::string cfile_name;
 
-  cfile_name = wxMB(file_name);
   tree->DeleteAllItems();
-  item_ids[0] = tree->AddRoot(file_name);
+
+  cfile_name   = wxMB(file_name);
+  item_ids[0]  = tree->AddRoot(file_name);
   last_percent = -1;
   num_elements = 0;
-  menu_file->Enable(mi_file_open, false);
-  menu_file->Enable(mi_file_savetext, false);
+
+  menu_file->Enable(mi_file_open,          false);
+  menu_file->Enable(mi_file_savetext,      false);
   menu_options->Enable(mi_options_showall, false);
 
   if (process_file(cfile_name)) {
-    file_open = true;
     menu_file->Enable(mi_file_savetext, true);
+    file_open    = true;
     current_file = file_name;
     if (expand_important_elements)
       expand_elements();
+
   } else {
     tree->DeleteAllItems();
     menu_file->Enable(mi_file_savetext, false);
   }
-  menu_file->Enable(mi_file_open, true);
+
+  menu_file->Enable(mi_file_open,          true);
   menu_options->Enable(mi_options_showall, true);
   SetStatusText(Z("ready"));
   tree->Refresh();
@@ -187,11 +184,8 @@ mi_frame::open_file(wxString file_name) {
 void
 mi_frame::show_progress(int percent,
                         wxString msg) {
-  wxString s;
-
   if ((percent / 5) != (last_percent / 5)) {
-    s.Printf(wxT("%s: %d%%"), msg.c_str(), percent);
-    SetStatusText(s);
+    SetStatusText(wxString::Format(wxT("%s: %d%%"), msg.c_str(), percent));
     last_percent = percent;
   }
   wxYield();
@@ -200,14 +194,13 @@ mi_frame::show_progress(int percent,
 void
 mi_frame::expand_all_elements(wxTreeItemId &root,
                               bool expand) {
-  wxTreeItemId child;
-  wxTreeItemIdValue cookie;
-
   if (expand)
     tree->Expand(root);
   else
     tree->Collapse(root);
-  child = tree->GetFirstChild(root, cookie);
+
+  wxTreeItemIdValue cookie;
+  wxTreeItemId child = tree->GetFirstChild(root, cookie);
   while (child > 0) {
     expand_all_elements(child, expand);
     child = tree->GetNextChild(root, cookie);
@@ -216,22 +209,19 @@ mi_frame::expand_all_elements(wxTreeItemId &root,
 
 void
 mi_frame::expand_elements() {
-  wxTreeItemId l0, l1;
-  wxTreeItemIdValue cl0, cl1;
-
   Freeze();
 
   expand_all_elements(item_ids[0], false);
   tree->Expand(item_ids[0]);
 
-  l0 = tree->GetFirstChild(item_ids[0], cl0);
+  wxTreeItemIdValue cl0, cl1;
+  wxTreeItemId l0 = tree->GetFirstChild(item_ids[0], cl0);
   while (l0 > 0) {
     tree->Expand(l0);
     if (tree->GetItemText(l0).find(Z("Segment")) == 0) {
-      l1 = tree->GetFirstChild(l0, cl1);
+      wxTreeItemId l1 = tree->GetFirstChild(l0, cl1);
       while (l1 > 0) {
-        if ((tree->GetItemText(l1).find(Z("Segment information")) == 0) ||
-            (tree->GetItemText(l1).find(Z("Segment tracks")) == 0))
+        if ((tree->GetItemText(l1).find(Z("Segment information")) == 0) || (tree->GetItemText(l1).find(Z("Segment tracks")) == 0))
           expand_all_elements(l1);
         l1 = tree->GetNextChild(l0, cl1);
       }
@@ -259,25 +249,26 @@ void
 mi_frame::save_elements(wxTreeItemId &root,
                         int level,
                         FILE *f) {
-  wxTreeItemId child;
-  wxTreeItemIdValue cookie;
-  char level_buffer[10];
-  int pcnt_before, pcnt_now;
-
-  if (level >= 0) {
+  if (0 <= level) {
+    char level_buffer[10];
     memset(&level_buffer[1], ' ', 9);
-    level_buffer[0] = '|';
+
+    level_buffer[0]     = '|';
     level_buffer[level] = 0;
-    fprintf(f, "(%s) %s+ %s\n", NAME, level_buffer,
-            wxMB(tree->GetItemText(root)));
-    pcnt_before = elements_saved * 100 / num_elements;
-    pcnt_now = (elements_saved + 1) * 100 / num_elements;
+    int pcnt_before     =  elements_saved      * 100 / num_elements;
+    int pcnt_now        = (elements_saved + 1) * 100 / num_elements;
+
+    fprintf(f, "(%s) %s+ %s\n", NAME, level_buffer, wxMB(tree->GetItemText(root)));
+
     if ((pcnt_before / 5) != (pcnt_now / 5))
       show_progress(pcnt_now, Z("Writing info"));
+
     elements_saved++;
   }
-  child = tree->GetFirstChild(root, cookie);
-  while (child > 0) {
+
+  wxTreeItemIdValue cookie;
+  wxTreeItemId child = tree->GetFirstChild(root, cookie);
+  while (0 < child) {
     save_elements(child, level + 1, f);
     child = tree->GetNextChild(root, cookie);
   }
@@ -299,26 +290,22 @@ mi_frame::on_file_open(wxCommandEvent &WXUNUSED(event)) {
 
 void
 mi_frame::on_file_savetext(wxCommandEvent &WXUNUSED(event)) {
-  FILE *f;
-
   wxFileDialog file_dialog(this, Z("Select output file"), wxT(""), wxT(""), Z("Text files (*.txt)|*.txt|All files|*.*"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
   file_dialog.SetDirectory(last_dir);
   if (file_dialog.ShowModal() == wxID_OK) {
     last_dir = file_dialog.GetDirectory();
-    f = fopen(wxMB(file_dialog.GetPath()), "w");
-    if (f == NULL) {
-      wxString s;
-      s.Printf(Z("Could not create the file '%s'."), file_dialog.GetPath().c_str());
-      show_error(s);
+    FILE *f = fopen(wxMB(file_dialog.GetPath()), "w");
+    if (NULL == f) {
+      show_error(wxString::Format(Z("Could not create the file '%s'."), file_dialog.GetPath().c_str()));
       return;
     }
 
-    menu_file->Enable(mi_file_open, false);
-    menu_file->Enable(mi_file_savetext, false);
+    menu_file->Enable(mi_file_open,          false);
+    menu_file->Enable(mi_file_savetext,      false);
     menu_options->Enable(mi_options_showall, false);
-    save_elements(item_ids[0], -1, f);
-    menu_file->Enable(mi_file_open, true);
-    menu_file->Enable(mi_file_savetext, true);
+    save_elements(item_ids[0], -1,           f);
+    menu_file->Enable(mi_file_open,          true);
+    menu_file->Enable(mi_file_savetext,      true);
     menu_options->Enable(mi_options_showall, true);
 
     fclose(f);
@@ -333,11 +320,9 @@ mi_frame::on_file_quit(wxCommandEvent &WXUNUSED(event)) {
 void
 mi_frame::on_options_showall(wxCommandEvent &WXUNUSED(event)) {
   show_all_elements = !show_all_elements;
+  verbose           = show_all_elements ? 2 : 0;
   menu_options->Check(mi_options_showall, show_all_elements);
-  if (show_all_elements)
-    verbose = 2;
-  else
-    verbose = 0;
+
   if (file_open)
     open_file(current_file);
 }
@@ -354,30 +339,27 @@ mi_frame::on_options_show_sizes(wxCommandEvent &WXUNUSED(event)) {
 void
 mi_frame::on_options_expandimportant(wxCommandEvent &WXUNUSED(event)) {
   expand_important_elements = !expand_important_elements;
-  menu_options->Check(mi_options_expandimportant,
-                      expand_important_elements);
+  menu_options->Check(mi_options_expandimportant, expand_important_elements);
 }
 
 void
 mi_frame::on_help_about(wxCommandEvent &WXUNUSED(event)) {
   wxString msg;
-  msg.Printf(Z("%s.\nCompiled with libebml %s + "
-               "libmatroska %s.\n\nThis program is licensed under the "
-               "GPL v2 (see COPYING).\nIt was written by Moritz Bunkus "
-               "<moritz@bunkus.org>.\nSources and the latest binaries are "
-               "always available at\nhttp://www.bunkus.org/videotools/"
-               "mkvtoolnix/"),
+  msg.Printf(Z("%s.\nCompiled with libebml %s + libmatroska %s.\n\n"
+               "This program is licensed under the GPL v2 (see COPYING).\n"
+               "It was written by Moritz Bunkus <moritz@bunkus.org>.\n"
+               "Sources and the latest binaries are always available at\n"
+               "http://www.bunkus.org/videotools/mkvtoolnix/"),
              wxUCS(get_version_info("mkvinfo GUI")), wxUCS(EbmlCodeVersion), wxUCS(KaxCodeVersion));
   wxMessageBox(msg, Z("About mkvinfo"), wxOK | wxICON_INFORMATION, this);
 }
 
 void
 mi_frame::on_right_click(wxTreeEvent &event) {
-  wxTreeItemId item;
-
-  item = event.GetItem();
+  wxTreeItemId item = event.GetItem();
   if (tree->GetChildrenCount(item) == 0)
     return;
+
   expand_all_elements(item, !tree->IsExpanded(item));
 }
 
@@ -404,14 +386,14 @@ mi_dndfile::OnDropFiles(wxCoord x,
 }
 
 BEGIN_EVENT_TABLE(mi_frame, wxFrame)
-  EVT_MENU(mi_file_open, mi_frame::on_file_open)
-  EVT_MENU(mi_file_savetext, mi_frame::on_file_savetext)
-  EVT_MENU(mi_file_quit, mi_frame::on_file_quit)
-  EVT_MENU(mi_options_showall, mi_frame::on_options_showall)
-  EVT_MENU(mi_options_show_sizes, mi_frame::on_options_show_sizes)
+  EVT_MENU(mi_file_open,               mi_frame::on_file_open)
+  EVT_MENU(mi_file_savetext,           mi_frame::on_file_savetext)
+  EVT_MENU(mi_file_quit,               mi_frame::on_file_quit)
+  EVT_MENU(mi_options_showall,         mi_frame::on_options_showall)
+  EVT_MENU(mi_options_show_sizes,      mi_frame::on_options_show_sizes)
   EVT_MENU(mi_options_expandimportant, mi_frame::on_options_expandimportant)
-  EVT_MENU(mi_help_about, mi_frame::on_help_about)
-  EVT_TREE_ITEM_RIGHT_CLICK(4254, mi_frame::on_right_click)
+  EVT_MENU(mi_help_about,              mi_frame::on_help_about)
+  EVT_TREE_ITEM_RIGHT_CLICK(4254,      mi_frame::on_right_click)
 END_EVENT_TABLE()
 
 IMPLEMENT_APP_NO_MAIN(mi_app)
