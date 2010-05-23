@@ -274,7 +274,7 @@ _show_element(EbmlElement *l,
                   :                      static_cast<int64_t>(l->GetElementPosition()),
                     NULL == l          ? -1
                   : !l->IsFiniteSize() ? -2
-                  :                      static_cast<int64_t>(l->GetSizeLength() + EBML_ID_LENGTH(reinterpret_cast<const EbmlId &>(*l)) + l->GetSize()));
+                  :                      static_cast<int64_t>(l->GetSizeLength() + EBML_ID_LENGTH(static_cast<const EbmlId &>(*l)) + l->GetSize()));
 
   if ((NULL == l) || !skip)
     return;
