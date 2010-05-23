@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-05-22 20:56+0300\n"
+"PO-Revision-Date: 2010-05-23 02:40+0300\n"
 "Last-Translator: rusguy6 rusguy6 <rusguy6@gmail.com>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -2576,7 +2576,7 @@ msgstr "Создать WebM совместимый файл"
 
 #: src/mmg/tabs/global.cpp:301
 msgid "Create a WebM compliant file. mkvmerge also turns this on if the output file name's extension is \"webm\". This mode enforces several restrictions. The only allowed codecs are VP8 video and Vorbis audio tracks. Neither chapters nor tags are allowed. The DocType header item is changed to \"webm\"."
-msgstr "Создать WebM совместимый файл. mkvmerge также включается, если это на расширение имя выходного файла является \"webm\". Этот режим обеспечивает ряд ограничений. Допускается только кодеки VP8 видео и Vorbis аудио треков. Ни главы, ни теги не разрешены. Doc тип пункт заголовок изменен на \"webm\"."
+msgstr "Создать WebM совместимый файл. mkvmerge также включается, если это на расширение имя выходного файла является \"webm\". Этот режим обеспечивает ряд ограничений. Допускается только кодеки VP8 видео и Vorbis аудио треков. Ни главы, ни теги не разрешены. Doctype пункт заголовок изменен на \"webm\"."
 
 #: src/mmg/mmg_dialog.cpp:266
 msgid "Create a new chapter file"
@@ -6925,7 +6925,7 @@ msgstr ""
 "                 Сообщения вывода в этой кодировке\n"
 "  -r,-o,  --redirect-output  файл.ext переадрес-вывода\n"
 "                 Переадресуйте все сообщения к этому файлу.\n"
-"  -h, --help     Показать справку.\n"
+"  -h, --help     Показать эту справку.\n"
 "  -V, --version  Показать информацию о версии.\n"
 
 #: src/mmg/tabs/global.cpp:256
