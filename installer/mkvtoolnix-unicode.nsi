@@ -12,6 +12,7 @@
 
 SetCompressor /SOLID lzma
 #SetCompress off
+SetCompressorDictSize 64
 
 !include "MUI2.nsh"
 
@@ -26,7 +27,7 @@ SetCompressor /SOLID lzma
 
 # Settings for the start menu group page
 var ICONS_GROUP
-!define MUI_STARTMENUPAGE_DEFAULTFOLDER "MKVtoolnix"
+!define MUI_STARTMENUPAGE_DEFAULTFOLDER "${PRODUCT_NAME}"
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "${PRODUCT_UNINST_ROOT_KEY}"
 !define MUI_STARTMENUPAGE_REGISTRY_KEY "${PRODUCT_UNINST_KEY}"
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "${PRODUCT_STARTMENU_REGVAL}"
@@ -59,8 +60,6 @@ Page custom showExternalLinks
 !insertmacro MUI_LANGUAGE "Ukrainian"
 !define MUI_LANGDLL_ALLLANGUAGES
 
-!insertmacro MUI_RESERVEFILE_LANGDLL
-
 # MUI end ------
 
 !include "WinVer.nsh"
@@ -70,7 +69,7 @@ Page custom showExternalLinks
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}${PRODUCT_VERSION_BUILD}"
 BrandingText "${PRODUCT_NAME} ${PRODUCT_VERSION}${PRODUCT_VERSION_BUILD} by ${PRODUCT_PUBLISHER}"
 OutFile "mkvtoolnix-unicode-${PRODUCT_VERSION}-setup.exe"
-InstallDir "$PROGRAMFILES\MKVtoolnix"
+InstallDir "$PROGRAMFILES\${PRODUCT_NAME}"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
@@ -113,7 +112,6 @@ Section "Program files" SEC01
   File "mingwm10.dll"
   File "regex2.dll"
   File "zlib1.dll"
-  File "matroskalogo_big.ico"
   File "mkvextract.exe"
   File "mkvinfo.exe"
   File "mkvmerge.exe"
@@ -219,6 +217,7 @@ Section "Program files" SEC01
   Delete "$INSTDIR\cygz.dll"
   Delete "$INSTDIR\libcharset.dll"
   Delete "$INSTDIR\libiconv.dll"
+  Delete "$INSTDIR\matroskalogo_big.ico"
 
   Delete "$INSTDIR\locale\german\LC_MESSAGES\mkvtoolnix.mo"
   RMDir "$INSTDIR\locale\german\LC_MESSAGES"
@@ -251,8 +250,8 @@ Section "Program files" SEC01
 
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
   SetOutPath "$INSTDIR"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\mkvmerge GUI.lnk" "$INSTDIR\mmg.exe" "" "$INSTDIR\matroskalogo_big.ico"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\mkvinfo GUI.lnk" "$INSTDIR\mkvinfo.exe" "-g" "$INSTDIR\matroskalogo_big.ico"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\mkvmerge GUI.lnk" "$INSTDIR\mmg.exe" "" "$INSTDIR\mmg.exe"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\mkvinfo GUI.lnk" "$INSTDIR\mkvinfo.exe" "-g" "$INSTDIR\mkvinfo.exe"
   SetOutPath "$INSTDIR\Doc"
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP\Documentation"
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP\Documentation\Command line reference"
@@ -283,7 +282,7 @@ Section "Program files" SEC01
   SetOutPath "$INSTDIR"
   IfSilent +3 0
   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Should a shortcut be placed on the desktop?" IDNO +2
-  CreateShortCut "$DESKTOP\mkvmerge GUI.lnk" "$INSTDIR\mmg.exe" "" "$INSTDIR\matroskalogo_big.ico"
+  CreateShortCut "$DESKTOP\mkvmerge GUI.lnk" "$INSTDIR\mmg.exe" "" "$INSTDIR\mmg.exe"
 SectionEnd
 
 Section -AdditionalIcons
@@ -380,7 +379,6 @@ Section Uninstall
   Delete "$INSTDIR\libiconv-2.dll"
   Delete "$INSTDIR\libintl-8.dll"
   Delete "$INSTDIR\libmatroska.dll"
-  Delete "$INSTDIR\matroskalogo_big.ico"
   Delete "$INSTDIR\mkvextract.exe"
   Delete "$INSTDIR\mkvinfo.exe"
   Delete "$INSTDIR\mkvmerge.exe"
