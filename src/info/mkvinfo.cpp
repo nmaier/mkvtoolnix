@@ -1631,7 +1631,7 @@ def_handle2(simple_block,
     if (s_show_hexdump)
       hex = create_hexdump(data.Buffer(), data.Size());
 
-    show_element(NULL, 4, BF_SIMPLE_BLOCK_FRAME % data.Size() % adler_str % hex);
+    show_element(NULL, 3, BF_SIMPLE_BLOCK_FRAME % data.Size() % adler_str % hex);
 
     frame_sizes.push_back(data.Size());
     frame_adlers.push_back(adler);
