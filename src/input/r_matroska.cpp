@@ -1935,7 +1935,6 @@ kax_reader_c::read(generic_packetizer_c *requested_ptzr,
         process_block_group(cluster, static_cast<KaxBlockGroup *>(element));
     }
 
-    m_in->setFilePointer(cluster->GetElementPosition() + cluster->ElementSize(), seek_beginning);
     delete cluster;
 
   } catch (...) {

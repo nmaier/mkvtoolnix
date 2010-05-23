@@ -361,8 +361,6 @@ extract_tracks(const std::string &file_name,
     KaxTags all_tags;
 
     while (NULL != (l1 = file->read_next_level1_element())) {
-      int64_t element_end_pos = l1->GetElementPosition() + l1->ElementSize();
-
       if (EbmlId(*l1) == EBML_ID(KaxInfo)) {
         // General info about this Matroska file
         show_element(l1, 1, Y("Segment information"));
@@ -435,7 +433,6 @@ extract_tracks(const std::string &file_name,
 
       }
 
-      in->setFilePointer(element_end_pos, seek_beginning);
       delete l1;
 
     } // while (l1 != NULL)

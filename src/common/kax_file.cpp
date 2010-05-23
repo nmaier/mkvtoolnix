@@ -82,12 +82,13 @@ kax_file_c::read_next_level1_element_internal(uint32_t wanted_id) {
     EbmlElement *l1 = read_one_element();
 
     if (NULL != l1) {
-      bool ok = (0 != l1->ElementSize()) && m_in->setFilePointer2(l1->GetElementPosition() + l1->ElementSize(), seek_beginning);
+      int64_t element_size = get_element_size(l1);
+      bool ok              = (0 != element_size) && m_in->setFilePointer2(l1->GetElementPosition() + element_size, seek_beginning);
 
       if (m_debug_read_next)
         mxinfo(boost::format("kax_file::read_next_level1_element(): other level 1 element %1% new pos %2% fsize %3% epos %4% esize %5%\n")
-               % EBML_NAME(l1)  % (l1->GetElementPosition() + l1->ElementSize()) % m_file_size
-               % l1->GetElementPosition() % l1->ElementSize());
+               % EBML_NAME(l1)  % (l1->GetElementPosition() + element_size) % m_file_size
+               % l1->GetElementPosition() % element_size);
 
       delete l1;
 
@@ -117,6 +118,11 @@ kax_file_c::read_one_element() {
   EbmlElement *l2 = NULL;
   l1->Read(*m_es.get_object(), EBML_INFO_CONTEXT(*callbacks), upper_lvl_el, l2, true);
   delete l2;
+
+  unsigned long element_size = get_element_size(l1);
+  if (m_debug_resync)
+    mxinfo(boost::format("kax_file::read_one_element(): read element at %1% size %2%\n") % l1->GetElementPosition() % element_size);
+  m_in->setFilePointer(l1->GetElementPosition() + element_size, seek_beginning);
 
   return l1;
 }
@@ -165,6 +171,7 @@ kax_file_c::resync_to_level1_element_internal(uint32_t wanted_id) {
     int64_t current_start_pos = m_in->getFilePointer() - 4;
     int64_t element_pos       = current_start_pos;
     unsigned int num_headers  = 1;
+    bool valid_unknown_size   = false;
 
     if (m_debug_resync)
       mxinfo(boost::format("kax_file::resync_to_level1_element(): byte-for-byte search, found level 1 ID %|2$x| at %1%\n") % current_start_pos % actual_id);
@@ -175,7 +182,13 @@ kax_file_c::resync_to_level1_element_internal(uint32_t wanted_id) {
         vint_c length = vint_c::read(m_in);
 
         if (m_debug_resync)
-          mxinfo(boost::format("kax_file::resync_to_level1_element():   read ebml length %1%/%2% valid? %3%\n") % length.m_value % length.m_coded_size % length.is_valid());
+          mxinfo(boost::format("kax_file::resync_to_level1_element():   read ebml length %1%/%2% valid? %3% unknown? %4%\n")
+                 % length.m_value % length.m_coded_size % length.is_valid() % length.is_unknown());
+
+        if (length.is_unknown()) {
+          valid_unknown_size = true;
+          break;
+        }
 
         if (   !length.is_valid()
             || ((element_pos + length.m_value + length.m_coded_size + 2 * 4) >= m_file_size)
@@ -197,7 +210,7 @@ kax_file_c::resync_to_level1_element_internal(uint32_t wanted_id) {
     } catch (...) {
     }
 
-    if (4 == num_headers) {
+    if ((4 == num_headers) || valid_unknown_size) {
       m_in->setFilePointer(current_start_pos, seek_beginning);
       return read_next_level1_element(wanted_id);
     }
@@ -226,4 +239,19 @@ kax_file_c::was_resynced() const {
 int64_t
 kax_file_c::get_resync_start_pos() const {
   return m_resync_start_pos;
+}
+
+unsigned long
+kax_file_c::get_element_size(EbmlElement *e) {
+  EbmlMaster *m = dynamic_cast<EbmlMaster *>(e);
+
+  if ((NULL == m) || e->IsFiniteSize())
+    return e->GetSizeLength() + EBML_ID_LENGTH(static_cast<const EbmlId &>(*e)) + e->GetSize();
+
+  unsigned long max_end_pos = e->GetElementPosition() + EBML_ID_LENGTH(static_cast<const EbmlId &>(*e));
+  unsigned int idx;
+  for (idx = 0; m->ListSize() > idx; ++idx)
+    max_end_pos = std::max(max_end_pos, (*m)[idx]->GetElementPosition() + get_element_size((*m)[idx]));
+
+  return max_end_pos - e->GetElementPosition();
 }

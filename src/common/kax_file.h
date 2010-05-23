@@ -54,6 +54,8 @@ protected:
 
   virtual EbmlElement *read_next_level1_element_internal(uint32_t wanted_id = 0);
   virtual EbmlElement *resync_to_level1_element_internal(uint32_t wanted_id = 0);
+
+  static unsigned long get_element_size(EbmlElement *e);
 };
 typedef counted_ptr<kax_file_c> kax_file_cptr;
 
