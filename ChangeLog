@@ -1,7 +1,7 @@
 2010-05-24  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvinfo: bug fix: Fixed handling of clusters missing a cluster
-	timecode element.
+	* mkvmerge & mkvinfo: bug fix: Fixed handling of clusters missing
+	a cluster timecode element.
 
 	* mkvinfo GUI: bug fix: Frames for simple blocks were shown at the
 	wrong place in the element tree.

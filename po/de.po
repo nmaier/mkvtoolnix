@@ -1535,11 +1535,11 @@ msgstr "Dem Element <ChapterDisplay> fehlt das Unterelement <ChapterString>."
 msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr "Dem Element <ChapterTrack> fehlt das Unterelement <ChapterTrackNumber>."
 
-#: src/input/r_matroska.cpp:2063
+#: src/input/r_matroska.cpp:2061
 msgid "A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"
 msgstr "An Position %1% wurde eine Blockgruppe gefunden, die kein Block-Element enthält. Dieses kann zu einem Abstürz von mkvmerge führen.\n"
 
-#: src/input/r_matroska.cpp:1963 src/input/r_matroska.cpp:2073
+#: src/input/r_matroska.cpp:1961 src/input/r_matroska.cpp:2071
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr "Es wurde ein Block für Track Nummer %2% bei Zeitstempel %1% gefunden. Allerdings wurden bisher noch keine Track-Header gefunden. Der Block wird ausgelassen.\n"
 
@@ -7834,7 +7834,7 @@ msgstr "matroska_reader: Der Tracktyp wurde nicht gefunden.\n"
 msgid "matroska_reader: Vorbis track does not contain valid headers.\n"
 msgstr "matroska_reader: Der Vorbis-Track enthält keine gültigen Kopfdaten.\n"
 
-#: src/input/r_matroska.cpp:1300 src/input/r_matroska.cpp:1941
+#: src/input/r_matroska.cpp:1300 src/input/r_matroska.cpp:1939
 msgid "matroska_reader: caught exception\n"
 msgstr "matroska_reader: Ausnahme abgefangen\n"
 
@@ -8204,10 +8204,6 @@ msgstr "pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < last_timec
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr "pr_generic.cpp/generic_reader_c::demuxing_requested(): Ungültiger Tracktyp %1%."
 
-#: src/input/r_matroska.cpp:1914
-msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
-msgstr "r_matroska: Der Cluster enthält keinen Clusterzeitstempel. Die Datei ist beschädigt bzw. ungültig. Abbruch.\n"
-
 #: src/extract/xtr_base.cpp:45
 msgid "raw data"
 msgstr "Rohdaten"
@@ -8316,8 +8312,8 @@ msgstr "tta_reader: tag_size < 0 im Konstruktor. %1%\n"
 msgid "und (Undetermined)"
 msgstr "und (nicht festgelegt)"
 
-#: src/input/r_matroska.cpp:87 src/input/r_matroska.cpp:2252
-#: src/input/r_matroska.cpp:2259 src/input/r_mpeg_ps.cpp:1394
+#: src/input/r_matroska.cpp:87 src/input/r_matroska.cpp:2250
+#: src/input/r_matroska.cpp:2257 src/input/r_mpeg_ps.cpp:1394
 #: src/common/mm_io_win.cpp:164 src/mmg/mmg.cpp:60
 #: src/mmg/header_editor/value_page.cpp:150 src/mmg/tabs/input.cpp:373
 #: src/info/mkvinfo.cpp:810 src/info/mkvinfo.cpp:820 src/info/mkvinfo.cpp:839
@@ -8756,6 +8752,9 @@ msgstr "ja"
 
 #~ msgid "mkvmerge GUI v%s ('%s')"
 #~ msgstr "mkvmerge GUI v%s ('%s')"
+
+#~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
+#~ msgstr "r_matroska: Der Cluster enthält keinen Clusterzeitstempel. Die Datei ist beschädigt bzw. ungültig. Abbruch.\n"
 
 #~ msgid "start_element: pdata->bin != NULL"
 #~ msgstr "start_element: pdata->bin != NULL"

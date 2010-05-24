@@ -1910,11 +1910,9 @@ kax_reader_c::read(generic_packetizer_c *requested_ptzr,
     }
 
     KaxClusterTimecode *ctc = static_cast<KaxClusterTimecode *>(cluster->FindFirstElt(EBML_INFO(KaxClusterTimecode), false));
-    if (NULL == ctc)
-      mxerror(Y("r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"));
-
-    uint64_t cluster_tc = uint64(*ctc);
+    uint64_t cluster_tc = NULL != ctc ? uint64(*ctc) : 0;
     cluster->InitTimecode(cluster_tc, m_tc_scale);
+
     if (-1 == m_first_timecode) {
       m_first_timecode = cluster_tc * m_tc_scale;
 

@@ -1534,12 +1534,12 @@ msgstr "<ChapterDisplay> 缺 <ChapterString> 子元素。"
 msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr "<ChapterTrack> 缺 <ChapterTrackNumber> 子元素。"
 
-#: src/input/r_matroska.cpp:2063
+#: src/input/r_matroska.cpp:2061
 msgid "A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"
 msgstr "在 %1% 找到了一个块组，但里面没有块元。这可能会导致 mkvmerge 崩溃。\n"
 
-#: src/input/r_matroska.cpp:1963
-#: src/input/r_matroska.cpp:2073
+#: src/input/r_matroska.cpp:1961
+#: src/input/r_matroska.cpp:2071
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr "在时间戳 %1% 处找到了轨道号为 %2% 的块。然而，没有找到符合该轨道号的头部信息。此块将被跳过。\n"
 
@@ -8024,7 +8024,7 @@ msgid "matroska_reader: Vorbis track does not contain valid headers.\n"
 msgstr "matroska_reader: Vorbis 轨道不含有效头。\n"
 
 #: src/input/r_matroska.cpp:1300
-#: src/input/r_matroska.cpp:1941
+#: src/input/r_matroska.cpp:1939
 msgid "matroska_reader: caught exception\n"
 msgstr "matroska_reader: 发生异常\n"
 
@@ -8410,10 +8410,6 @@ msgstr "pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < last_timec
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr "pr_generic.cpp/generic_reader_c::demuxing_requested(): 无效轨道类型 %1%。"
 
-#: src/input/r_matroska.cpp:1914
-msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
-msgstr "r_matroska: 簇不含簇时间码。文件已损坏。正在中断操作。\n"
-
 #: src/extract/xtr_base.cpp:45
 msgid "raw data"
 msgstr "原始数据"
@@ -8526,8 +8522,8 @@ msgid "und (Undetermined)"
 msgstr "und (未定)"
 
 #: src/input/r_matroska.cpp:87
-#: src/input/r_matroska.cpp:2252
-#: src/input/r_matroska.cpp:2259
+#: src/input/r_matroska.cpp:2250
+#: src/input/r_matroska.cpp:2257
 #: src/input/r_mpeg_ps.cpp:1394
 #: src/common/mm_io_win.cpp:164
 #: src/mmg/mmg.cpp:60
@@ -8874,6 +8870,8 @@ msgstr "是"
 #~ msgstr "locale.cpp/to_utf8(): 无效的转换名号 %1% (数字: %2%)。\n"
 #~ msgid "mkvmerge GUI v%s ('%s')"
 #~ msgstr "mkvmerge GUI v%s ('%s')"
+#~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
+#~ msgstr "r_matroska: 簇不含簇时间码。文件已损坏。正在中断操作。\n"
 #~ msgid "start_element: pdata->bin != NULL"
 #~ msgstr "start_element: pdata->bin != NULL"
 

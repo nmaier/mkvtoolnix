@@ -1524,11 +1524,11 @@ msgstr "<ChapterDisplay> відсутня <ChapterString>."
 msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr "<ChapterTrack> відсутня <ChapterTrackNumber>."
 
-#: src/input/r_matroska.cpp:2063
+#: src/input/r_matroska.cpp:2061
 msgid "A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"
 msgstr "Блоку група опинилася в положенні %1%, але не блок елемент був знайдений усередині нього. Це може зробити mkvmerge аварію.\n"
 
-#: src/input/r_matroska.cpp:1963 src/input/r_matroska.cpp:2073
+#: src/input/r_matroska.cpp:1961 src/input/r_matroska.cpp:2071
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr "Блок був знайдений на мітку %1% за номер треку %2%. Тим не менше, заголовки не знайдені для цього номеру треку. Блоку будуть пропущені.\n"
 
@@ -7782,7 +7782,7 @@ msgstr "matroska_reader: Тип доріжки не знайдено.\n"
 msgid "matroska_reader: Vorbis track does not contain valid headers.\n"
 msgstr "matroska_reader: Vorbis доріжка, не містить потрібних заголовків.\n"
 
-#: src/input/r_matroska.cpp:1300 src/input/r_matroska.cpp:1941
+#: src/input/r_matroska.cpp:1300 src/input/r_matroska.cpp:1939
 msgid "matroska_reader: caught exception\n"
 msgstr "matroska_reader: зловив виключення\n"
 
@@ -8152,10 +8152,6 @@ msgstr "pr_generic.cpp/generic_packetizer_c::add_packet(): тайм-код < п�
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr "pr_generic.cpp/generic_reader_c::demuxing_requested(): Невірний тип доріжки %1%."
 
-#: src/input/r_matroska.cpp:1914
-msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
-msgstr "r_matroska: Кластер не містять кластеру тайм-коду. Файл не працює. Переривання.\n"
-
 #: src/extract/xtr_base.cpp:45
 msgid "raw data"
 msgstr "raw дані"
@@ -8264,8 +8260,8 @@ msgstr "tta_reader: tag_size < 0 в конструкторі. %1%\n"
 msgid "und (Undetermined)"
 msgstr "und (Невизначений)"
 
-#: src/input/r_matroska.cpp:87 src/input/r_matroska.cpp:2252
-#: src/input/r_matroska.cpp:2259 src/input/r_mpeg_ps.cpp:1394
+#: src/input/r_matroska.cpp:87 src/input/r_matroska.cpp:2250
+#: src/input/r_matroska.cpp:2257 src/input/r_mpeg_ps.cpp:1394
 #: src/common/mm_io_win.cpp:164 src/mmg/mmg.cpp:60
 #: src/mmg/header_editor/value_page.cpp:150 src/mmg/tabs/input.cpp:373
 #: src/info/mkvinfo.cpp:810 src/info/mkvinfo.cpp:820 src/info/mkvinfo.cpp:839
@@ -8391,3 +8387,6 @@ msgstr "Так"
 
 #~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
 #~ msgstr "Эта дорожка использует особенность Matroska, названную 'запоминающие элементы Codec'. mkvmerge поддерживает их, но эта особенность не была включена с опцией '--engage use_codec_state'.\n"
+
+#~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
+#~ msgstr "r_matroska: Кластер не містять кластеру тайм-коду. Файл не працює. Переривання.\n"
