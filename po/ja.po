@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-05-22 03:04+0900\n"
+"PO-Revision-Date: 2010-05-24 22:45+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -712,14 +712,12 @@ msgid " done\n"
 msgstr " 終了\n"
 
 #: src/info/mkvinfo.cpp:175
-#, fuzzy
 msgid " size %1%"
-msgstr "セグメント、サイズ %1%"
+msgstr " サイズ %1%"
 
 #: src/info/mkvinfo.cpp:191
-#, fuzzy
 msgid " size is unknown"
-msgstr "セグメント、不明なサイズ"
+msgstr " サイズが不明です"
 
 #: src/mmg/cli_options_dlg.cpp:80
 msgid "### Global output control ###"
@@ -5092,9 +5090,8 @@ msgid "Show about dialog"
 msgstr "mkvinfoについてのダイアログを表示します"
 
 #: src/info/wxwidgets_ui.cpp:130
-#, fuzzy
 msgid "Show element si&zes\tCtrl-Z"
-msgstr "全ての要素を表示(&A)\tCtrl-A"
+msgstr "要素のサイズを表示(&Z)\tCtrl-Z"
 
 #: src/mmg/options/mmg.cpp:99
 msgid "Show mmg's debug window"
