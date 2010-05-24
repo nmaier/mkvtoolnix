@@ -393,7 +393,8 @@ extract_tracks(const std::string &file_name,
           uint64_t cluster_tc = uint64(*ctc);
           show_element(ctc, 2, boost::format(Y("Cluster timecode: %|1$.3f|s")) % ((float)cluster_tc * (float)tc_scale / 1000000000.0));
           cluster->InitTimecode(cluster_tc, tc_scale);
-        }
+        } else
+          cluster->InitTimecode(0, tc_scale);
 
         int i;
         for (i = 0; cluster->ListSize() > i; ++i) {
