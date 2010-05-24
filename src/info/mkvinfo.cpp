@@ -1680,16 +1680,16 @@ def_handle3(cluster,
   EbmlElement *element_found = NULL;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
+  KaxClusterTimecode *cluster_tc = FINDFIRST(m1, KaxClusterTimecode);
+  cluster->InitTimecode(NULL == cluster_tc ? 0 : uint64(*cluster_tc), s_tc_scale);
+
   int i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
     l2 = (*m1)[i1];
 
     if (is_id(l2, KaxClusterTimecode)) {
       KaxClusterTimecode &ctc = *static_cast<KaxClusterTimecode *>(l2);
-      int64_t cluster_tc     = uint64(ctc);
-      cluster->InitTimecode(cluster_tc, s_tc_scale);
-
-      show_element(l2, 2, BF_CLUSTER_TIMECODE % ((float)cluster_tc * (float)s_tc_scale / 1000000000.0));
+      show_element(l2, 2, BF_CLUSTER_TIMECODE % ((float)uint64(ctc) * (float)s_tc_scale / 1000000000.0));
 
     } else if (is_id(l2, KaxClusterPosition)) {
       KaxClusterPosition &c_pos = *static_cast<KaxClusterPosition *>(l2);
