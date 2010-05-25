@@ -10,6 +10,8 @@ CON mkvmerge
   USE ogg
   USE vorbis
   USE mpegparser
+  USE boost_filesystem
+  USE boost_system
   OPTIMIZE_GLOBALLY .
   
   PRECOMPILED_HEADER(USE_PRECOMPILED_HEADERS) common/common_pch.h
@@ -225,6 +227,7 @@ LIB mktcommon_strings
 {
   USE matroska
   USE utf8-cpp
+  USE boost_foreach
   OPTIMIZE_GLOBALLY .
   INCLUDE .
   INCLUDE .. // for config.h
@@ -248,6 +251,7 @@ LIB mktcommon_chapters
   USE matroska
   USE expat
   USE libiconv
+  USE boost_foreach
   OPTIMIZE_GLOBALLY .
   INCLUDE .
   INCLUDE .. // for config.h
@@ -269,6 +273,7 @@ LIB mktcommon
   USE zlib1
   USE mktcommon_chapters
   USE mktcommon_strings
+  USE boost_regex
 
   OPTIMIZE_GLOBALLY .
   INCLUDE .
