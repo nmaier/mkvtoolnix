@@ -36,7 +36,7 @@
   <manvolnum>1</manvolnum>
   <refmiscinfo class="version">&version;</refmiscinfo>
   <refmiscinfo class="date">&date;</refmiscinfo>
-  <refmiscinfo class="source">MkvToolNix</refmiscinfo>
+  <refmiscinfo class="source">MKVToolNix</refmiscinfo>
   <refmiscinfo class="manual">User Commands</refmiscinfo>
  </refmeta>
 
@@ -141,7 +141,7 @@
      <para>
       Read segment information from a <abbrev>XML</abbrev> file. This file can contain the segment family <abbrev>UID</abbrev>, segment
       <abbrev>UID</abbrev>, previous and next segment <abbrev>UID</abbrev> elements. An example file and a <abbrev>DTD</abbrev> are included
-      in the MkvToolNix distribution.
+      in the MKVToolNix distribution.
      </para>
     </listitem>
    </varlistentry>
@@ -1523,7 +1523,7 @@ Track ID 2: audio (A_MPEG/L3)
   <title>Text files and character set conversions</title>
   <note>
    <para>
-    This section applies to all programs in MkvToolNix even if it only mentions &mkvmerge;.
+    This section applies to all programs in MKVToolNix even if it only mentions &mkvmerge;.
    </para>
   </note>
 
@@ -1558,7 +1558,7 @@ Track ID 2: audio (A_MPEG/L3)
    On Windows there are actually two different character sets that &mkvmerge; uses due to the way the Windows shell program
    <command>cmd.exe</command> is implemented. The first character set is determined by a call to the <function>GetCP()</function> system
    call. This character set is used as the default for text file conversions and for all elements displayed by the <abbrev>GUI</abbrev>
-   programs in the MkvToolNix package. <command>cmd.exe</command> uses another character set which is determined by a call to the
+   programs in the MKVToolNix package. <command>cmd.exe</command> uses another character set which is determined by a call to the
    <function>GetACP()</function> system call. This is the default character set for all strings read from the command line and for all
    strings output to the console.
   </para>
@@ -1883,7 +1883,7 @@ $ mkvmerge -o file.mkv --tags 0:tags.xml file.avi
    <para>
     &mkvmerge; supports a &xml; based tag file format. The format is very closely modeled after <ulink
     url="http://matroska.org/technical/specs/index.html">the &matroska; specification</ulink>. Both the binary and the source distributions
-    of MkvToolNix come with a sample file called <filename>example-tags-2.xml</filename> which simply lists all known tags and which can be
+    of MKVToolNix come with a sample file called <filename>example-tags-2.xml</filename> which simply lists all known tags and which can be
     used as a basis for real life tag files.
    </para>
 

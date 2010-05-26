@@ -343,7 +343,7 @@ $ mkvpropedit movie.mkv --edit info --set "title=The movie" --edit track:a1 --se
 
   <para>
    The second example removes the 'default track flag' from the first subtitle track and sets it for the second one. Note that
-   &mkvpropedit;, unlike &mkvmerge;, does not set the 'default track flag' of other flags to '0' if it is set to '1' for a different track
+   &mkvpropedit;, unlike &mkvmerge;, does not set the 'default track flag' of other tracks to '0' if it is set to '1' for a different track
    automatically.
   </para>
 

@@ -1,13 +1,22 @@
 '\" t
 .\"     Title: mkvpropedit
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.1 <http://docbook.sf.net/>
+.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
 .\"      Date: 2010-05-14
 .\"    Manual: User Commands
 .\"    Source: MkvToolNix 3.4.0
 .\"  Language: English
 .\"
 .TH "MKVPROPEDIT" "1" "2010\-05\-14" "MkvToolNix 3\&.4\&.0" "User Commands"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -27,7 +36,7 @@ mkvpropedit \- Modify properties of existing Matroska(TM) files without a comple
 .PP
 This program analyses an existing
 Matroska(TM)
-file and modifies some of its properties\&. Then it writes those modifications to the existing file\&. Among the properties that can be changed are the segment information elements (e\&.g\&. the title) and the track headers (e\&.g\&. the language code, \'default track\' flag or the name)\&.
+file and modifies some of its properties\&. Then it writes those modifications to the existing file\&. Among the properties that can be changed are the segment information elements (e\&.g\&. the title) and the track headers (e\&.g\&. the language code, \*(Aqdefault track\*(Aq flag or the name)\&.
 .PP
 Options:
 .PP
@@ -40,7 +49,7 @@ parameter does not have to be supplied\&.
 .PP
 \fB\-p\fR, \fB\-\-parse\-mode\fR \fImode\fR
 .RS 4
-Sets the parse mode\&. The parameter \'\fImode\fR\' can either be \'fast\' (which is also the default) or \'full\'\&. The \'fast\' mode does not parse the whole file but uses the meta seek elements for locating the required elements of a source file\&. In 99% of all cases this is enough\&. But for files that do not contain meta seek elements or which are damaged the user might have to set the \'full\' parse mode\&. A full scan of a file can take a couple of minutes while a fast scan only takes seconds\&.
+Sets the parse mode\&. The parameter \*(Aq\fImode\fR\*(Aq can either be \*(Aqfast\*(Aq (which is also the default) or \*(Aqfull\*(Aq\&. The \*(Aqfast\*(Aq mode does not parse the whole file but uses the meta seek elements for locating the required elements of a source file\&. In 99% of all cases this is enough\&. But for files that do not contain meta seek elements or which are damaged the user might have to set the \*(Aqfull\*(Aq parse mode\&. A full scan of a file can take a couple of minutes while a fast scan only takes seconds\&.
 .RE
 .PP
 Actions:
@@ -49,7 +58,7 @@ Actions:
 .RS 4
 Sets the
 Matroska(TM)
-file section (segment information or a certain track\'s headers) that all following
+file section (segment information or a certain track\*(Aqs headers) that all following
 add,
 set
 and
@@ -87,12 +96,12 @@ Other options:
 .PP
 \fB\-\-command\-line\-charset\fR \fIcharacter\-set\fR
 .RS 4
-Sets the character set to convert strings given on the command line from\&. It defaults to the character set given by system\'s current locale\&.
+Sets the character set to convert strings given on the command line from\&. It defaults to the character set given by system\*(Aqs current locale\&.
 .RE
 .PP
 \fB\-\-output\-charset\fR \fIcharacter\-set\fR
 .RS 4
-Sets the character set to which strings are converted that are to be output\&. It defaults to the character set given by system\'s current locale\&.
+Sets the character set to which strings are converted that are to be output\&. It defaults to the character set given by system\*(Aqs current locale\&.
 .RE
 .PP
 \fB\-r\fR, \fB\-\-redirect\-output\fR \fIfile\-name\fR
@@ -108,12 +117,12 @@ is honored\&.
 .RS 4
 Forces the translations for the language
 \fIcode\fR
-to be used (e\&.g\&. \'de_DE\' for the German translations)\&. It is preferable to use the environment variables
+to be used (e\&.g\&. \*(Aqde_DE\*(Aq for the German translations)\&. It is preferable to use the environment variables
 \fILANG\fR,
 \fILC_MESSAGES\fR
 and
 \fILC_ALL\fR
-though\&. Entering \'list\' as the
+though\&. Entering \*(Aqlist\*(Aq as the
 \fIcode\fR
 will cause
 \fBmkvextract\fR(1)
@@ -124,7 +133,7 @@ to output a list of available translations\&.
 .RS 4
 Be verbose and show all the important
 Matroska(TM)
-elements as they\'re read\&.
+elements as they\*(Aqre read\&.
 .RE
 .PP
 \fB\-h\fR, \fB\-\-help\fR
@@ -140,9 +149,9 @@ Show version information and exit\&.
 \fB@\fRoptions\-file
 .RS 4
 Reads additional command line arguments from the file
-\fIoptions\-file\fR\&. Lines whose first non\-whitespace character is a hash mark (\'#\') are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&. There is no meta character escaping\&.
+\fIoptions\-file\fR\&. Lines whose first non\-whitespace character is a hash mark (\*(Aq#\*(Aq) are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&. There is no meta character escaping\&.
 .sp
-The command line \'\fBmkvpropedit source\&.mkv \-\-edit track:a2 \-\-set name=Comments\fR\' could be converted into the following option file:
+The command line \*(Aq\fBmkvpropedit source\&.mkv \-\-edit track:a2 \-\-set name=Comments\fR\*(Aq could be converted into the following option file:
 .sp
 .if n \{\
 .RS 4
@@ -153,7 +162,7 @@ source\&.mkv
 # Edit the second audio track
 \-\-edit
 track:a2
-# and set the title to \'Comments\'
+# and set the title to \*(AqComments\*(Aq
 \-\-set
 title=Comments
      
@@ -168,7 +177,7 @@ The
 \fB\-\-edit\fR
 option sets the
 Matroska(TM)
-file section (segment information or a certain track\'s headers) that all following
+file section (segment information or a certain track\*(Aqs headers) that all following
 add,
 set
 and
@@ -178,11 +187,11 @@ actions operate on\&. This stays valid until the next
 option is found\&. The argument to this option is called the edit selector\&.
 .SS "Segment information"
 .PP
-The segment information can be selected with one of these three words: \'info\', \'segment_info\' or \'segmentinfo\'\&. It contains properties like the segment title or the segment
+The segment information can be selected with one of these three words: \*(Aqinfo\*(Aq, \*(Aqsegment_info\*(Aq or \*(Aqsegmentinfo\*(Aq\&. It contains properties like the segment title or the segment
 UID\&.
 .SS "Track headers"
 .PP
-Track headers can be selected with a slightly more complex selector\&. All variations start with \'track:\'\&. The track header properties include elements like the language code, \'default track\' flag or the track\'s name\&.
+Track headers can be selected with a slightly more complex selector\&. All variations start with \*(Aqtrack:\*(Aq\&. The track header properties include elements like the language code, \*(Aqdefault track\*(Aq flag or the track\*(Aqs name\&.
 .PP
 \fBtrack:\fR\fIn\fR
 .RS 4
@@ -190,7 +199,7 @@ If the parameter
 \fIn\fR
 is a number then the
 \fIn\fRth track will be selected\&. The track order is the same that
-\fBmkvmerge\fR(1)\'s
+\fBmkvmerge\fR(1)\*(Aqs
 \fB\-\-identify\fR
 option outputs\&.
 .RE
@@ -204,15 +213,15 @@ followed by a
 then the
 \fIn\fRth track of a specific track type will be selected\&. The track type parameter
 \fIt\fR
-must be one of these four characters: \'a\' for an audio track, \'b\' for a button track, \'s\' for a subtitle track and \'v\' for a video track\&. The track order is the same that
-\fBmkvmerge\fR(1)\'s
+must be one of these four characters: \*(Aqa\*(Aq for an audio track, \*(Aqb\*(Aq for a button track, \*(Aqs\*(Aq for a subtitle track and \*(Aqv\*(Aq for a video track\&. The track order is the same that
+\fBmkvmerge\fR(1)\*(Aqs
 \fB\-\-identify\fR
 option outputs\&.
 .RE
 .PP
 \fBtrack:\fR=\fIuid\fR
 .RS 4
-If the parameter starts with a \'=\' followed by a number
+If the parameter starts with a \*(Aq=\*(Aq followed by a number
 \fIuid\fR
 then the track whose track
 UID
@@ -225,7 +234,7 @@ can be obtained with
 .PP
 \fBtrack:\fR@\fInumber\fR
 .RS 4
-If the parameter starts with a \'@\' followed by a number
+If the parameter starts with a \*(Aq@\*(Aq followed by a number
 \fInumber\fR
 then the track whose track number element equals this
 \fInumber\fR\&. Track number can be obtained with
@@ -233,10 +242,10 @@ then the track whose track number element equals this
 .RE
 .SS "Notes"
 .PP
-Due to the nature of the track edit selectors it is possible that several selectors actually match the same track headers\&. In such cases all actions for those edit selectors will be combined and executed in the order in which they\'re given on the command line\&.
+Due to the nature of the track edit selectors it is possible that several selectors actually match the same track headers\&. In such cases all actions for those edit selectors will be combined and executed in the order in which they\*(Aqre given on the command line\&.
 .SH "EXAMPLES"
 .PP
-The following example edits a file called \'movie\&.mkv\'\&. It sets the segment title and modifies the language code of an audio and a subtitle track\&. Note that this example can be shortened by leaving out the first
+The following example edits a file called \*(Aqmovie\&.mkv\*(Aq\&. It sets the segment title and modifies the language code of an audio and a subtitle track\&. Note that this example can be shortened by leaving out the first
 \fB\-\-edit\fR
 option because editing the segment information element is the default for all options found before the first
 \fB\-\-edit\fR
@@ -253,9 +262,9 @@ $ mkvpropedit movie\&.mkv \-\-edit info \-\-set "title=The movie" \-\-edit track
 .RE
 .\}
 .PP
-The second example removes the \'default track flag\' from the first subtitle track and sets it for the second one\&. Note that
+The second example removes the \*(Aqdefault track flag\*(Aq from the first subtitle track and sets it for the second one\&. Note that
 \fBmkvpropedit\fR(1), unlike
-\fBmkvmerge\fR(1), does not set the \'default track flag\' of other flags to \'0\' if it is set to \'1\' for a different track automatically\&.
+\fBmkvmerge\fR(1), does not set the \*(Aqdefault track flag\*(Aq of other tracks to \*(Aq0\*(Aq if it is set to \*(Aq1\*(Aq for a different track automatically\&.
 .sp
 .if n \{\
 .RS 4
@@ -298,7 +307,7 @@ exits with one of three exit codes:
 \fB1\fR
 \-\- In this case
 \fBmkvpropedit\fR(1)
-has output at least one warning, but the modification did continue\&. A warning is prefixed with the text \'Warning:\'\&. Depending on the issues involved the resulting files might be ok or not\&. The user is urged to check both the warning and the resulting files\&.
+has output at least one warning, but the modification did continue\&. A warning is prefixed with the text \*(AqWarning:\*(Aq\&. Depending on the issues involved the resulting files might be ok or not\&. The user is urged to check both the warning and the resulting files\&.
 .RE
 .sp
 .RS 4

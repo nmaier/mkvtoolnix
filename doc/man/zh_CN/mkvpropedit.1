@@ -271,10 +271,9 @@ $ mkvpropedit 电影\&.mkv \-\-edit info \-\-set "title=影片" \-\-edit track:a
 .RE
 .\}
 .PP
-第二个示例，将 \*(Aq默认轨标记\*(Aq 从第一条字幕轨移除并设置到第二条字幕轨上。注意
-\fBmkvpropedit\fR(1), 与
-\fBmkvmerge\fR(1)
-不同，不会在将另一个轨道的 \*(Aq默认轨标记\*(Aq设为 \*(Aq1\*(Aq 的时候自动将其他轨道的标记设为 \*(Aq0\*(Aq。
+The second example removes the \*(Aqdefault track flag\*(Aq from the first subtitle track and sets it for the second one\&. Note that
+\fBmkvpropedit\fR(1), unlike
+\fBmkvmerge\fR(1), does not set the \*(Aqdefault track flag\*(Aq of other tracks to \*(Aq0\*(Aq if it is set to \*(Aq1\*(Aq for a different track automatically\&.
 .sp
 .if n \{\
 .RS 4

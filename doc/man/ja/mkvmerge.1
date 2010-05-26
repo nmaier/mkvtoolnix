@@ -4,10 +4,10 @@
 .\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
 .\"      Date: 2010-05-14
 .\"    Manual:  
-.\"    Source: MkvToolNix 3.4.0
+.\"    Source: MKVToolNix 3.4.0
 .\"  Language: Japanese
 .\"
-.TH "MKVMERGE" "1" "2010\-05\-14" "MkvToolNix 3\&.4\&.0" ""
+.TH "MKVMERGE" "1" "2010\-05\-14" "MKVToolNix 3\&.4\&.0" ""
 .\" -----------------------------------------------------------------
 .\" * Define some portability stuff
 .\" -----------------------------------------------------------------
@@ -85,7 +85,7 @@ UID, previous and next segment
 UID
 elements\&. An example file and a
 DTD
-are included in the MkvToolNix distribution\&.
+are included in the MKVToolNix distribution\&.
 .RE
 .PP
 \fB\-\-segment\-uid\fR \fISID1,SID2,\&.\&.\&.\fR
@@ -1087,7 +1087,7 @@ Matroska(TM)
 .ps -1
 .br
 .PP
-This section applies to all programs in MkvToolNix even if it only mentions
+This section applies to all programs in MKVToolNix even if it only mentions
 \fBmkvmerge\fR(1)\&.
 .sp .5v
 .RE
@@ -1103,7 +1103,19 @@ BOMで始まるテキストファイルは、既にUTFエンコーディング�
 .PP
 UNIX系システム上では、\fBmkvmerge\fR(1)は\fBsetlocale\fR(3)システムコールを使うので、\fILANG\fR、\fILC_ALL\fR及び\fILC_CYPE\fR環境変数を使用する。大抵は、UTF\-8かISO\-8859\-*ファミリのどれかが全てのテキストファイルとコマンドライン文字列の処理、及びコンソールへの出力の文字コードとして使用される。
 .PP
-Windowsでは、\fBcmd\&.exe\fRWindowsシェルプログラムの実装方式のために、\fBmkvmerge\fR(1)は二つの異なる文字コードを使用します。一つ目は\fBGetCP()\fRシステムコールによって決定される文字コードです。この文字コードはテキストファイル変換にデフォルトで使用され、MkvToolNixパッケージに含まれるGUIプログラムで表示される全ての文字列に適用されます。\fBcmd\&.exe\fRはもう一つの、\fBGetACP()\fRシステムコールにより決定される文字コードを使用します。これはコマンドライン文字列及びコンソールへの出力のデフォルト文字コードです。
+On Windows there are actually two different character sets that
+\fBmkvmerge\fR(1)
+uses due to the way the Windows shell program
+\fBcmd\&.exe\fR
+is implemented\&. The first character set is determined by a call to the
+\fBGetCP()\fR
+system call\&. This character set is used as the default for text file conversions and for all elements displayed by the
+GUI
+programs in the MKVToolNix package\&.
+\fBcmd\&.exe\fR
+uses another character set which is determined by a call to the
+\fBGetACP()\fR
+system call\&. This is the default character set for all strings read from the command line and for all strings output to the console\&.
 .PP
 次のような文字コードを指定するオプションがあります。
 .sp
@@ -1397,7 +1409,13 @@ $ mkvmerge \-o file\&.mkv \-\-tags 0:tags\&.xml file\&.avi
 .SS "タグファイルフォーマット"
 .PP
 
-\fBmkvmerge\fR(1)はXMLベースのタグファイルフォーマットをサポートします。このフォーマットは\m[blue]\fBMatroska(TM)の仕様\fR\m[]\&\s-2\u[4]\d\s+2に非常に近いデザインになっています。MkvToolNixのバイナリ、及びソースディストリビューションはどちらも、既知のタグをただリストしただけの、実際のタグファイルのテンプレートとして使用できるexample\-tags\-2\&.xmlというサンプルファイルを含んでいます。
+\fBmkvmerge\fR(1)
+supports a
+XML
+based tag file format\&. The format is very closely modeled after
+\m[blue]\fBthe Matroska(TM) specification\fR\m[]\&\s-2\u[4]\d\s+2\&. Both the binary and the source distributions of MKVToolNix come with a sample file called
+example\-tags\-2\&.xml
+which simply lists all known tags and which can be used as a basis for real life tag files\&.
 .PP
 The basics are:
 .sp
