@@ -55,7 +55,7 @@ mkvmerge \- マルチメディアストリームをMatroska(TM)ファイルに�
 .PP
 \fB\-w\fR, \fB\-\-webm\fR
 .RS 4
-Create a WebM compliant file\&. This is also turned on if the output file name\*(Aqs extension is "webm"\&. This mode enforces several restrictions\&. The only allowed codecs are VP8 video and Vorbis audio tracks\&. Neither chapters nor tags are allowed\&. The DocType header item is changed to "webm"\&.
+WebMの規格に準拠したファイルを作成します。mkvmergeは出力ファイル名の拡張子が"webm"であった場合にもこれをオンにします。このモードではいくつかの制限が実施されます。使用できるコーデックはVP8ビデオとVorbisオーディオのトラックのみです。チャプタとタグは使用することができません。DocTypeヘッダアイテムは"webm"へと変更されます。
 .RE
 .PP
 \fB\-\-title\fR \fItitle\fR
@@ -90,7 +90,7 @@ are included in the MKVToolNix distribution\&.
 .PP
 \fB\-\-segment\-uid\fR \fISID1,SID2,\&.\&.\&.\fR
 .RS 4
-Sets the segment UIDs to use\&. This is a comma\-separated list of 128bit segment UIDs in the usual UID form: hex numbers with or without the "0x" prefix, with or without spaces, exactly 32 digits\&.
+使用するセグメントUIDを設定します。これはコンマで区切られた、通常のUID形式("0x"を前置する、またはしない、空白を含む、または含まない、ちょうど32桁の16進数)128ビットセグメントUIDのリストです。
 .sp
 作成される各ファイルは一つのセグメントを含み、そして各セグメントは一つのセグメントUIDを持ちます。もし、作成されたセグメントよりも多数のセグメントUIDが指定された場合、余ったセグメントUIDは無視されます。また、もし指定されたセグメントUIDよりも多数のセグメントが作成された場合は、ランダムなUIDが作成されて使用されます。
 .RE
@@ -203,10 +203,7 @@ Sets the segment UIDs to use\&. This is a comma\-separated list of 128bit segmen
 .PP
 \fB\-\-clusters\-in\-meta\-seek\fR
 .RS 4
-Tells
-\fBmkvmerge\fR(1)
-to create a meta seek element at the end of the file containing all clusters\&. See also the section about the
-Matroska(TM) file layout\&.
+ファイルの終端に全てのクラスタを含むメタシーク要素を作成します。Matroska(TM)ファイルレイアウトのセクションも参照してください。
 .RE
 .PP
 \fB\-\-disable\-lacing\fR
@@ -337,7 +334,7 @@ mkvmergeが二つめのファイル(以後\*(Aqfile2\*(Aqと呼ぶ)のトラッ�
 .PP
 \fB\-\-append\-to\fR \fISFID1:STID1:DFID1:DTID1\fR\fI[,\&.\&.\&.]\fR
 .RS 4
-This option controls to which track another track is appended\&. Each spec contains four IDs: a file ID, a track ID, a second file ID and a second track ID\&. The first pair, "source file ID" and "source track ID", identifies the track that is to be appended\&. The second pair, "destination file ID" and "destination track ID", identifies the track the first one is appended to\&.
+このオプションは、どのトラックがどのトラックに追加されるのかを制御します。ファイルID、トラックID、追加するファイルID、追加するトラックIDの4つのIDで一組の指定を構成します。最初のファイルIDとトラックIDの組み合わせは、追加される対象のトラックを指定します。次のファイルIDとトラックIDは、そのトラックに追加されるトラックを指定します。
 .sp
 このオプションが指定されない場合、標準のマッピングが使用されます。この場合、前のファイルのトラックに、現在のファイルのトラックIDが同じであるトラックが追加されます。これにより、動画が二つのファイルに分割されており、かつ同じトラック数とトラックIDを持つ場合、\fBmkvmerge \-o output\&.mkv part1\&.mkv +part2\&.mkv\fRのようにして簡単に結合することができます。
 .RE
@@ -436,7 +433,7 @@ IDが\fIn\fR、\fIm\fR\&...の添付ファイルを全ての、または最初�
 .PP
 \fB\-B\fR, \fB\-\-no\-buttons\fR
 .RS 4
-Don\*(Aqt copy any button track from this file\&.
+このファイルからボタントラックをコピーしません。
 .RE
 .PP
 \fB\-T\fR, \fB\-\-no\-track\-tags\fR
@@ -504,11 +501,7 @@ Don\*(Aqt copy any button track from this file\&.
 .PP
 \fB\-\-forced\-track\fR \fITID\fR\fI[:bool]\fR
 .RS 4
-Sets the \*(Aqforced\*(Aq flag for the given track (see section
-track IDs) if the optional argument
-\fIbool\fR
-is not present\&. A player must play all tracks for which this flag is set to
-\fB1\fR\&.
+省略可能な引数\fIbool\fRが指定されなかった場合、指定されたトラックに\*(Aq強制表示\*(Aqフラグを付与します（トラックIDのセクションも参照。）プレーヤはこのフラグが\fB1\fRに設定されている全てのトラックを再生しなければなりません。
 .sp
 このオプションは異るトラックIDを指定することで複数の入力トラックに対して使用することができます。
 .RE
@@ -1230,22 +1223,8 @@ Matroska(TM)はファイル紐付けをサポートします。ファイル紐�
 もしファイル分割が有効の場合、最初のファイルが\fB\-\-link\-to\-previous\fRオプションで指定したSIDに紐付けされ、最後のファイルが\fB\-\-link\-to\-next\fRオプションで指定したSIDに紐付けされます。ファイル分割が無効の場合、一つの出力ファイルが両方のSIDに紐付けされます。
 .SH "デフォルト値"
 .PP
-The
-Matroska(TM)
-specification states that some elements have a default value\&. Usually an element is not written to the file if its value is equal to its default value in order to save space\&. The elements that the user might miss in
-\fBmkvinfo\fR(1)\*(Aqs output are the
-\fIlanguage\fR
-and the
-\fIdefault track flag\fR
-elements\&. The default value for the
-\fIlanguage\fR
-is English (\*(Aqeng\*(Aq), and the default value for the
-\fIdefault track flag\fR
-is
-\fItrue\fR\&. Therefore if you used
-\fB\-\-language 0:eng\fR
-for a track then it will not show up in
-\fBmkvinfo\fR(1)\*(Aqs output\&.
+
+Matroska(TM)ファイルの仕様には、デフォルト値を持つエレメントの存在が明記されています。通常、デフォルト値と等しい値をもつエレメントはファイルサイズを抑えるためファイルに書き込まれません。\fBmkvinfo\fR(1)では表示されないかもしれないエレメントは、\fI言語\fRと\fIデフォルトトラックフラグ\fRエレメントです。\fI言語\fRエレメントのデフォルト値は英語(\*(Aqeng\*(Aq)で、\fIデフォルトトラックフラグ\fRエレメントのデフォルト値は\fItrue\fRです。よって、あるトラックに\fB\-\-language: 0:eng\fRを指定した場合には、\fBmkvinfo\fR(1)の出力には現れません。
 .SH "添付ファイル"
 .PP
 
@@ -1417,7 +1396,7 @@ based tag file format\&. The format is very closely modeled after
 example\-tags\-2\&.xml
 which simply lists all known tags and which can be used as a basis for real life tag files\&.
 .PP
-The basics are:
+基本的には、以下の様な構成です。
 .sp
 .RS 4
 .ie n \{\
@@ -1465,9 +1444,9 @@ The basics are:
 
 Matroska(TM)ファイルのレイアウトは非常に柔軟性に富んでいます。\fBmkvmerge\fR(1)はあらかじめ定義された方法でファイルを書き出します。出力されたファイルはこのようになります。
 .PP
-[EBMLヘッダ] [セグメント {メタシーク #1} {添付ファイル} {チャプタ} [セグメント情報] [トラック情報] [クラスタ 1] {クラスタ 2} \&.\&.\&. {クラスタ n} {CUE} {メタシーク #2} {タグ}]
+[EBMLヘッダ] [セグメント {メタシーク #1} [セグメント情報] [トラック情報] {添付ファイル} {チャプタ} [クラスタ 1] {クラスタ 2} \&.\&.\&. {クラスタ n} {CUE} {メタシーク #2} {タグ}]
 .PP
-The elements in curly braces are optional and depend on the contents and options used\&. A couple of notes:
+波括弧でくくられたエレメントは省略可能で、コンテンツと指定されたオプションに依存します。いくつか注釈があります。
 .sp
 .RS 4
 .ie n \{\
