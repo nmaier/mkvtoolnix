@@ -1901,7 +1901,7 @@ process_file(const std::string &file_name) {
       }
 
       if (is_id(l0, KaxSegment)) {
-        if (l0->GetSize() == -1)
+        if (!l0->IsFiniteSize())
           show_element(l0, 0, Y("Segment, size unknown"));
         else
           show_element(l0, 0, boost::format(Y("Segment, size %1%")) % l0->GetSize());
