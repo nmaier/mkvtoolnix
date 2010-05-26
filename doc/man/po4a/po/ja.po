@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.9.9\n"
 "POT-Creation-Date: 2010-05-22 21:47+0300\n"
-"PO-Revision-Date: 2010-04-29 23:31+0900\n"
+"PO-Revision-Date: 2010-05-27 00:29+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
@@ -250,7 +250,6 @@ msgstr "<option>-f</option>, <option>--parse-fully</option>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:82
-#, fuzzy
 msgid ""
 "Sets the parse mode to 'full'. The default mode does not parse the whole "
 "file but uses the meta seek elements for locating the required elements of a "
@@ -259,14 +258,12 @@ msgid ""
 "this mode. A full scan of a file can take a couple of minutes while a fast "
 "scan only takes seconds."
 msgstr ""
-"解析モードを設定します。'<parameter>mode</parameter>'パラメータ"
-"は'<literal>fast</literal>'(デフォルト)と'<literal>full</literal>'のどちらか"
-"を指定できます。'<literal>fast</literal>'モードはファイル全体を解析するのでは"
-"なく、メタシークエレメントを使ってソースファイル内の必要なエレメントを探しま"
-"す。99%の場合これで十分です。しかし、メタシークエレメントを含まないファイルや"
-"破損したファイルに対しては'<literal>full</literal>'解析モードを指定する必要が"
-"あるかもしれません。'<literal>full</literal>'スキャンには数分かかることがあり"
-"ますが、'<literal>fast</literal>'スキャンには数秒しかかかりません。"
+"解析モードを'full'に設定します。デフォルトのモードでは、ソースファイルの必要"
+"な要素を見つけるのにファイル全体を解析せずにメタシーク要素を使用します。99%の"
+"ケースではこれで十分ですが、メタシーク要素が含まれていなかったり壊れていたり"
+"するファイルにはこのモードを使用しなければならないかもしれません。高速スキャ"
+"ンが数秒しかかからないのに対して、ファイルをフルスキャンするのには数分かかる"
+"ことがあります。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:91 doc/man/mkvinfo.xml:120 doc/man/mkvmerge.xml:1185
@@ -1231,7 +1228,6 @@ msgstr "<option>-s</option>, <option>--summary</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvinfo.xml:87
-#, fuzzy
 msgid "Only show a terse summary of what &mkvinfo; finds and not each element."
 msgstr ""
 "全てのエレメントについて表示するのではなく、&mkvinfo;の見つけたものの簡潔なサ"
@@ -1239,36 +1235,33 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvinfo.xml:93
-#, fuzzy
 msgid "<option>-x</option>, <option>--hexdump</option>"
-msgstr "<option>-h</option>, <option>--help</option>"
+msgstr "<option>-x</option>, <option>--hexdump</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvinfo.xml:96
 msgid "Show the first 16 bytes of each frame as a hex dump."
-msgstr ""
+msgstr "各フレームの最初の16バイトを16進数のダンプとして表示します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvinfo.xml:102
-#, fuzzy
 msgid "<option>-X</option>, <option>--full-hexdump</option>"
-msgstr "<option>-h</option>, <option>--help</option>"
+msgstr "<option>-X</option>, <option>--full-hexdump</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvinfo.xml:105
 msgid "Show all bytes of each frame as a hex dump."
-msgstr ""
+msgstr "各フレームの全てのバイトを16進数のダンプとして表示します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvinfo.xml:111
-#, fuzzy
 msgid "<option>-z</option>, <option>--size</option>"
-msgstr "<option>-s</option>, <option>--simple</option>"
+msgstr "<option>-z</option>, <option>--size</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvinfo.xml:114
 msgid "Show the size of each element including its header."
-msgstr ""
+msgstr "ヘッダも含めた各要素のサイズを表示します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvinfo.xml:143
@@ -1509,12 +1502,12 @@ msgstr "ステータス情報の出力を抑制します。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:91
-#, fuzzy
 msgid ""
 "<option>-o</option>, <option>--output</option> <parameter>file-name</"
 "parameter>"
 msgstr ""
-"<option>-o</option>, <option>--out</option> <parameter>file-name</parameter>"
+"<option>-o</option>, <option>--output</option> <parameter>file-name</"
+"parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:93
@@ -1531,9 +1524,8 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:99
-#, fuzzy
 msgid "<option>-w</option>, <option>--webm</option>"
-msgstr "<option>-h</option>, <option>--help</option>"
+msgstr "<option>-w</option>, <option>--webm</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:101
@@ -1544,6 +1536,11 @@ msgid ""
 "Neither chapters nor tags are allowed. The DocType header item is changed to "
 "&quot;webm&quot;."
 msgstr ""
+"WebMの規格に準拠したファイルを作成します。mkvmergeは出力ファイル名の拡張子が"
+"&quot;webm&quot;であった場合にもこれをオンにします。このモードではいくつかの"
+"制限が実施されます。使用できるコーデックはVP8ビデオとVorbisオーディオのトラッ"
+"クのみです。チャプタとタグは使用することができません。DocTypeヘッダアイテムは"
+"&quot;webm&quot;へと変更されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:109
@@ -1601,7 +1598,6 @@ msgstr "<option>--segmentinfo</option> <parameter>filename.xml</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:142
-#, fuzzy
 msgid ""
 "Read segment information from a <abbrev>XML</abbrev> file. This file can "
 "contain the segment family <abbrev>UID</abbrev>, segment <abbrev>UID</"
@@ -1621,7 +1617,6 @@ msgstr "<option>--segment-uid</option> <parameter>SID1,SID2,...</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:153
-#, fuzzy
 msgid ""
 "Sets the segment UIDs to use. This is a comma-separated list of 128bit "
 "segment UIDs in the usual UID form: hex numbers with or without the "
@@ -1927,19 +1922,17 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:320
-#, fuzzy
 msgid "<option>--clusters-in-meta-seek</option>"
-msgstr "<option>--no-clusters-in-meta-seek</option>"
+msgstr "<option>--clusters-in-meta-seek</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:323
-#, fuzzy
 msgid ""
 "Tells &mkvmerge; to create a meta seek element at the end of the file "
 "containing all clusters. See also the section about the <link linkend="
 "\"mkvmerge.file_layout\">&matroska; file layout</link>."
 msgstr ""
-"ファイル末尾に、クラスタ全てを含むメタシークエレメントを追加しません。<link "
+"ファイルの終端に全てのクラスタを含むメタシーク要素を作成します。<link "
 "linkend=\"mkvmerge.file_layout\">&matroska;ファイルレイアウト</link>のセク"
 "ションも参照してください。"
 
@@ -2332,7 +2325,6 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:540
-#, fuzzy
 msgid ""
 "This option controls to which track another track is appended.  Each spec "
 "contains four IDs: a file ID, a track ID, a second file ID and a second "
@@ -2693,7 +2685,6 @@ msgstr "<option>-B</option>, <option>--no-buttons</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:738
-#, fuzzy
 msgid "Don't copy any button track from this file."
 msgstr "このファイルからボタントラックをコピーしません。"
 
@@ -2891,25 +2882,25 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:866
-#, fuzzy
 msgid ""
 "<option>--forced-track</option> <parameter>TID<optional>:bool</optional></"
 "parameter>"
 msgstr ""
-"<option>--default-track</option> <parameter>TID<optional>:bool</optional></"
+"<option>--forced-track</option> <parameter>TID<optional>:bool</optional></"
 "parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:869
-#, fuzzy
 msgid ""
 "Sets the 'forced' flag for the given track (see section <link linkend="
 "\"mkvmerge.track_ids\">track IDs</link>) if the optional argument "
 "<parameter>bool</parameter> is not present. A player must play all tracks "
 "for which this flag is set to <constant>1</constant>."
 msgstr ""
-"指定したトラックのトラック名を<parameter>name</parameter>にします(<link "
-"linkend=\"mkvmerge.track_ids\">トラックID</link>のセクションも参照)。"
+"省略可能な引数<parameter>bool</parameter>が指定されなかった場合、指定されたト"
+"ラックに'強制表示'フラグを付与します（<link linkend=\"mkvmerge.track_ids\">"
+"トラックID</link>のセクションも参照。）プレーヤはこのフラグが<constant>1</constant>"
+"に設定されている全てのトラックを再生しなければなりません。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:880
@@ -4046,7 +4037,6 @@ msgstr "テキストファイルと文字コード変換"
 
 #. type: Content of: <refentry><refsect1><note><para>
 #: doc/man/mkvmerge.xml:1526
-#, fuzzy
 msgid ""
 "This section applies to all programs in MkvToolNix even if it only mentions "
 "&mkvmerge;."
@@ -4356,7 +4346,6 @@ msgstr "デフォルト値"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1684
-#, fuzzy
 msgid ""
 "The &matroska; specification states that some elements have a default value. "
 "Usually an element is not written to the file if its value is equal to its "
@@ -4803,7 +4792,6 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvmerge.xml:1891
-#, fuzzy
 msgid "The basics are:"
 msgstr "基本的には、以下の様な構成です。"
 
@@ -4908,13 +4896,12 @@ msgid ""
 "information] {attachments} {chapters} [cluster 1] {cluster 2} ...  {cluster "
 "n} {cues} {meta seek #2} {tags}]"
 msgstr ""
-"[EBMLヘッダ] [セグメント {メタシーク #1} {添付ファイル} {チャプタ} [セグメン"
-"ト情報] [トラック情報] [クラスタ 1] {クラスタ 2} ...  {クラスタ n} {CUE} {メ"
-"タシーク #2} {タグ}]"
+"[EBMLヘッダ] [セグメント {メタシーク #1} [セグメント情報] [トラック情報] "
+"{添付ファイル} {チャプタ} [クラスタ 1] {クラスタ 2} ...  {クラスタ n} "
+"{CUE} {メタシーク #2} {タグ}]"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1941
-#, fuzzy
 msgid ""
 "The elements in curly braces are optional and depend on the contents and "
 "options used. A couple of notes:"
@@ -5628,6 +5615,10 @@ msgid ""
 "&mkvmerge;, does not set the 'default track flag' of other flags to '0' if "
 "it is set to '1' for a different track automatically."
 msgstr ""
+"二番目の例は、最初の字幕トラックから'デフォルトトラックフラグ'を削除し二番目"
+"の字幕トラックに設定します。&mkvpropedit;は&mkvmerge;とは違い、'デフォルトト"
+"ラックフラグ'が違うトラックで'1'に設定されているからといって自動的に他のトラ"
+"ックの'デフォルトトラックフラグ'を'0'に設定はしない、という点に注意してください。"
 
 #. type: Content of: <refentry><refsect1><screen>
 #: doc/man/mkvpropedit.xml:351
@@ -5763,16 +5754,3 @@ msgstr ""
 #: doc/man/mmg.xml:92
 msgid "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
 msgstr "&mkvmerge; &mkvextract;, &mkvinfo;, &mkvpropedit;"
-
-#, fuzzy
-#~ msgid "<option>--webm</option>, <option>--web-media</option>"
-#~ msgstr "<option>-v</option>, <option>--verbose</option>"
-
-#~ msgid "January 2010"
-#~ msgstr "2010年1月"
-
-#~ msgid "December 2009"
-#~ msgstr "2009年12月"
-
-#~ msgid "2.9.9"
-#~ msgstr "2.9.9"
