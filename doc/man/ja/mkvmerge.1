@@ -1,13 +1,22 @@
 '\" t
 .\"     Title: mkvmerge
 .\"    Author: Bunkus Moritz[FAMILY Given] <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.1 <http://docbook.sf.net/>
+.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
 .\"      Date: 2010-05-14
 .\"    Manual:  
 .\"    Source: MkvToolNix 3.4.0
 .\"  Language: Japanese
 .\"
 .TH "MKVMERGE" "1" "2010\-05\-14" "MkvToolNix 3\&.4\&.0" ""
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -46,7 +55,7 @@ mkvmerge \- マルチメディアストリームをMatroska(TM)ファイルに�
 .PP
 \fB\-w\fR, \fB\-\-webm\fR
 .RS 4
-Create a WebM compliant file\&. This is also turned on if the output file name\'s extension is "webm"\&. This mode enforces several restrictions\&. The only allowed codecs are VP8 video and Vorbis audio tracks\&. Neither chapters nor tags are allowed\&. The DocType header item is changed to "webm"\&.
+Create a WebM compliant file\&. This is also turned on if the output file name\*(Aqs extension is "webm"\&. This mode enforces several restrictions\&. The only allowed codecs are VP8 video and Vorbis audio tracks\&. Neither chapters nor tags are allowed\&. The DocType header item is changed to "webm"\&.
 .RE
 .PP
 \fB\-\-title\fR \fItitle\fR
@@ -61,7 +70,7 @@ Create a WebM compliant file\&. This is also turned on if the output file name\'
 .PP
 \fB\-\-default\-language\fR \fIlanguage\-code\fR
 .RS 4
-デフォルトの言語コードを指定します。\fB\-\-language\fRオプションで指定しなかったトラックはすべてここで指定した言語コードになります。デフォルトは\'und\'、つまり\'未定義\'です。
+デフォルトの言語コードを指定します。\fB\-\-language\fRオプションで指定しなかったトラックはすべてここで指定した言語コードになります。デフォルトは\*(Aqund\*(Aq、つまり\*(Aq未定義\*(Aqです。
 .RE
 .PP
 セグメント情報の扱い: (グローバルオプション)
@@ -90,7 +99,7 @@ Sets the segment UIDs to use\&. This is a comma\-separated list of 128bit segmen
 .PP
 \fB\-\-chapter\-language\fR \fIlanguage\-code\fR
 .RS 4
-各チャプタのエントリに書き込むISO639\-2言語コードを指定します。デフォルトは\'eng\'です。詳細はチャプタのセクションを参照してください。
+各チャプタのエントリに書き込むISO639\-2言語コードを指定します。デフォルトは\*(Aqeng\*(Aqです。詳細はチャプタのセクションを参照してください。
 .sp
 このオプションはシンプルチャプタファイルを読み込んだ場合、そしてソースファイルがチャプタを含むがチャプタの言語情報を含まなかった場合(例:MP4,OGMファイル)に適用されます。
 .RE
@@ -107,7 +116,7 @@ Sets the segment UIDs to use\&. This is a comma\-separated list of 128bit segmen
 
 \fBmkvmerge\fR(1)は音声ファイル向けのCUEシートからチャプタ情報を読み込むことができます。CUEシートには通常\fIPERFORMER\fRエントリ及び\fITITLE\fRエントリが各インデックスエントリに存在します。\fBmkvmerge\fR(1)はこれら二つの文字列をチャプタの名前を生成するのに使用します。このフォーマットをこのオプションで指定することができます。
 .sp
-このオプションが指定されていない場合、デフォルトで\'%p \- %t\'というフォーマットが使用されます。
+このオプションが指定されていない場合、デフォルトで\*(Aq%p \- %t\*(Aqというフォーマットが使用されます。
 .sp
 フォーマットが指定された場合、下のメタ文字以外はそのままコピーされ、メタ文字は以下のように置換されます。
 .sp
@@ -176,11 +185,11 @@ Sets the segment UIDs to use\&. This is a comma\-separated list of 128bit segmen
 .PP
 \fB\-\-cluster\-length\fR \fIspec\fR
 .RS 4
-クラスタごとの、データブロック個数の上限または持続時間を指定します。\fIspec\fRパラメータには単位なしの数字\fIn\fRもしくは、\'ms\'を後ろに付けた数字\fId\fRを指定することができます。
+クラスタごとの、データブロック個数の上限または持続時間を指定します。\fIspec\fRパラメータには単位なしの数字\fIn\fRもしくは、\*(Aqms\*(Aqを後ろに付けた数字\fId\fRを指定することができます。
 .sp
 単位が指定されなかった場合、クラスタごとのデータブロックの最大個数は\fIn\fRに設定されます。上限は65535です。
 .sp
-数字\fId\fRに\'ms\'が後置されていた場合、\fBmkvmerge\fR(1)は各データクラスタ毎に最大でも\fId\fRミリ秒分のデータしか格納しません。\fId\fRの最小値は\'100ms\'、最大値は\'32000ms\'です。
+数字\fId\fRに\*(Aqms\*(Aqが後置されていた場合、\fBmkvmerge\fR(1)は各データクラスタ毎に最大でも\fId\fRミリ秒分のデータしか格納しません。\fId\fRの最小値は\*(Aq100ms\*(Aq、最大値は\*(Aq32000ms\*(Aqです。
 .sp
 デフォルトは、データクラスタ毎に65535データブロック以下、2000ms以下のデータを書き込みます。
 .sp
@@ -246,9 +255,9 @@ Matroska(TM) file layout\&.
 or
 \-\-split 150000000
 .sp
-パラメータ\fId\fRの後ろには\'k\'・\'m\'・\'g\'を付けて、単位がそれぞれKB・MB・GBであることを示すことができます。付けない場合はバイト単位になります。出力中のファイルがこの上限に達したら、次の新しいファイルへの出力が開始されます。
+パラメータ\fId\fRの後ろには\*(Aqk\*(Aq・\*(Aqm\*(Aq・\*(Aqg\*(Aqを付けて、単位がそれぞれKB・MB・GBであることを示すことができます。付けない場合はバイト単位になります。出力中のファイルがこの上限に達したら、次の新しいファイルへの出力が開始されます。
 .sp
-\'size:\'という接頭辞は、互換性のために省略できるようになっています。
+\*(Aqsize:\*(Aqという接頭辞は、互換性のために省略できるようになっています。
 .RE
 .sp
 .RS 4
@@ -270,9 +279,9 @@ or
 or
 \-\-split 3600s
 .sp
-パラメータは\fIHH:MM:SS\&.nnnnnnnnn\fRという形式でナノ秒精度で長さを指定するか、数字\fId\fRのあとに\'s\'と書いて秒数で長さを指定しなければなりません。\fIHH\fRは時間、\fIMM\fRは分、\fISS\fRは秒数で\fInnnnnnnnn\fRナノ秒を示します。時間及びナノ秒は省略できます。小数点の後ろには9桁までの数字を指定できます。指定した長さだけ出力されたら、次のファイルへの出力が開始されます。
+パラメータは\fIHH:MM:SS\&.nnnnnnnnn\fRという形式でナノ秒精度で長さを指定するか、数字\fId\fRのあとに\*(Aqs\*(Aqと書いて秒数で長さを指定しなければなりません。\fIHH\fRは時間、\fIMM\fRは分、\fISS\fRは秒数で\fInnnnnnnnn\fRナノ秒を示します。時間及びナノ秒は省略できます。小数点の後ろには9桁までの数字を指定できます。指定した長さだけ出力されたら、次のファイルへの出力が開始されます。
 .sp
-\'duration:\'という接頭辞は、互換性のために省略できるようになっています。
+\*(Aqduration:\*(Aqという接頭辞は、互換性のために省略できるようになっています。
 .RE
 .sp
 .RS 4
@@ -294,10 +303,10 @@ timecodes:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
 .sp
 パラメータ\fIA\fR、\fIB\fR、\fIC\fR\&...は、durationで使用されるものと同じフォーマットで指定しなければなりません(上記参照)。タイムコードのリストはコンマで区切られます。入力ストリームが現在の分割点に達すると次のファイルが作成され、このリストから次の分割点が使用されます。
 .sp
-\'timecodes:\'という接頭辞は、互換性のために省略できるようになっています。
+\*(Aqtimecodes:\*(Aqという接頭辞は、互換性のために省略できるようになっています。
 .RE
-.RS 4
-この分割モードでは、出力ファイル名は通常の操作とは異る扱いを受けます。このモードでは出力ファイル名は\fBprintf\fRのように\'%d\'というパターンを含むことができます。\'%02d\'のように幅指定を追加することもできます。出力ファイル名がこのパターンを含む場合、ファイル番号が適切なフォーマットで指定された位置に挿入されます。含まない場合、\'\-%03d\'というパターンがファイルの拡張子の直前に指定されたものとみなされ、例えば\'\-o output\&.mkv\'を指定した場合、\'output\-001\&.mkv\'等のファイル名に出力されます。拡張子が存在しない場合、\'\-%03d\'はファイル名の末尾に追加されます。
+.sp
+この分割モードでは、出力ファイル名は通常の操作とは異る扱いを受けます。このモードでは出力ファイル名は\fBprintf\fRのように\*(Aq%d\*(Aqというパターンを含むことができます。\*(Aq%02d\*(Aqのように幅指定を追加することもできます。出力ファイル名がこのパターンを含む場合、ファイル番号が適切なフォーマットで指定された位置に挿入されます。含まない場合、\*(Aq\-%03d\*(Aqというパターンがファイルの拡張子の直前に指定されたものとみなされ、例えば\*(Aq\-o output\&.mkv\*(Aqを指定した場合、\*(Aqoutput\-001\&.mkv\*(Aq等のファイル名に出力されます。拡張子が存在しない場合、\*(Aq\-%03d\*(Aqはファイル名の末尾に追加されます。
 .RE
 .PP
 \fB\-\-link\fR
@@ -317,13 +326,13 @@ timecodes:\fIA\fR[,\fIB\fR[,\fIC\fR\&.\&.\&.]]
 .PP
 \fB\-\-append\-mode\fR \fImode\fR
 .RS 4
-ファイルを結合する際に、タイムコードがどのように計算されるかを決定します。パラメータ\fImode\fRは\'file\'(デフォルト)、\'trackの二つの値を取り得ます。
+ファイルを結合する際に、タイムコードがどのように計算されるかを決定します。パラメータ\fImode\fRは\*(Aqfile\*(Aq(デフォルト)、\*(Aqtrackの二つの値を取り得ます。
 .sp
-mkvmergeが二つめのファイル(以後\'file2\'と呼ぶ)のトラック(以後\'track2_1\'と呼ぶ)を、一つめのファイル(以後\'file1\'と呼ぶ)のトラック(以後\'track1_1\'と呼ぶ)と結合する際、\'track2_1\'のタイムコードは一定量だけずらす必要があります。\'file\'モードでは、ずらす量は\'file1\'の中の\'track1_1\'以外のトラックを含む全てのトラックの中で一番大きいタイムコードの値になります。\'track\'モードでは、\'track1_1\'の中で一番大きいタイムコードの値になります。
+mkvmergeが二つめのファイル(以後\*(Aqfile2\*(Aqと呼ぶ)のトラック(以後\*(Aqtrack2_1\*(Aqと呼ぶ)を、一つめのファイル(以後\*(Aqfile1\*(Aqと呼ぶ)のトラック(以後\*(Aqtrack1_1\*(Aqと呼ぶ)と結合する際、\*(Aqtrack2_1\*(Aqのタイムコードは一定量だけずらす必要があります。\*(Aqfile\*(Aqモードでは、ずらす量は\*(Aqfile1\*(Aqの中の\*(Aqtrack1_1\*(Aq以外のトラックを含む全てのトラックの中で一番大きいタイムコードの値になります。\*(Aqtrack\*(Aqモードでは、\*(Aqtrack1_1\*(Aqの中で一番大きいタイムコードの値になります。
 .sp
-残念ながら、mkvmergeはどちらのモードが適切であるか判断はできません。デフォルトは\'file\'モードになっています。\'file\'モードは独立に作られたファイル同士を結合する際、例えばAVI又はMP4ファイルを結合する際に、通常はより上手く働きます。\'tracks\'モードは、例えばVOBやEVOファイルなどの大きなファイルの一部がソースの場合より上手く働くかもしれません。
+残念ながら、mkvmergeはどちらのモードが適切であるか判断はできません。デフォルトは\*(Aqfile\*(Aqモードになっています。\*(Aqfile\*(Aqモードは独立に作られたファイル同士を結合する際、例えばAVI又はMP4ファイルを結合する際に、通常はより上手く働きます。\*(Aqtracks\*(Aqモードは、例えばVOBやEVOファイルなどの大きなファイルの一部がソースの場合より上手く働くかもしれません。
 .sp
-字幕トラックは\'track\'モードが指定された場合でも、常に\'file\'が指定されたかのように処理されます。
+字幕トラックは\*(Aqtrack\*(Aqモードが指定された場合でも、常に\*(Aqfile\*(Aqが指定されたかのように処理されます。
 .RE
 .PP
 \fB\-\-append\-to\fR \fISFID1:STID1:DFID1:DTID1\fR\fI[,\&.\&.\&.]\fR
@@ -335,7 +344,7 @@ This option controls to which track another track is appended\&. Each spec conta
 .PP
 \fB+\fR
 .RS 4
-\'+\'一文字を指定すると、次に指定されたファイルは追加ではなく結合されます。\'+\'は次のファイル名の直前に置くこともできます。よって、次の二つのコマンドは等価です。
+\*(Aq+\*(Aq一文字を指定すると、次に指定されたファイルは追加ではなく結合されます。\*(Aq+\*(Aqは次のファイル名の直前に置くこともできます。よって、次の二つのコマンドは等価です。
 .sp
 .if n \{\
 .RS 4
@@ -405,7 +414,7 @@ Matroska(TM)ファイルの内部に添付ファイルを作成します。こ�
 .PP
 \fB\-m\fR, \fB\-\-attachments\fR \fIn\fR\fI[:all|first]\fR\fI,m\fR\fI[:all|first]\fR\fI,\&.\&.\&.\fR
 .RS 4
-IDが\fIn\fR、\fIm\fR\&...の添付ファイルを全ての、または最初の出力ファイルにコピーします。各IDの後ろには、\':all\'(デフォルト)又は\':first\'を指定することができます。出力ファイル分割が有効の場合、\':all\'をつけたIDの添付ファイルは全ての出力ファイルにコピーされ、\':first\'をつけた場合は最初の出力ファイルにのみコピーされます。分割が有効でない場合は二つは同等です。
+IDが\fIn\fR、\fIm\fR\&...の添付ファイルを全ての、または最初の出力ファイルにコピーします。各IDの後ろには、\*(Aq:all\*(Aq(デフォルト)又は\*(Aq:first\*(Aqを指定することができます。出力ファイル分割が有効の場合、\*(Aq:all\*(AqをつけたIDの添付ファイルは全ての出力ファイルにコピーされ、\*(Aq:first\*(Aqをつけた場合は最初の出力ファイルにのみコピーされます。分割が有効でない場合は二つは同等です。
 .sp
 デフォルトでは、全ての添付ファイルが全ての出力ファイルにコピーされます。
 .RE
@@ -427,7 +436,7 @@ IDが\fIn\fR、\fIm\fR\&...の添付ファイルを全ての、または最初�
 .PP
 \fB\-B\fR, \fB\-\-no\-buttons\fR
 .RS 4
-Don\'t copy any button track from this file\&.
+Don\*(Aqt copy any button track from this file\&.
 .RE
 .PP
 \fB\-T\fR, \fB\-\-no\-track\-tags\fR
@@ -479,23 +488,23 @@ Don\'t copy any button track from this file\&.
 .PP
 \fB\-\-cues\fR \fITID:none|iframes|all\fR
 .RS 4
-指定されたトラックについて、どのトラックCUE(インデックス)エントリが作成されるのかを指定します(トラックIDのセクションを参照)。\'none\'はCUEエントリを作成しません。\'iframesは前方参照及び後方参照を含まないブロック(ビデオトラックでは I frame)のみがCUEシートに挿入されます。\'all\'では\fBmkvmerge\fR(1)は全てのブロックに対してCUEエントリを作成し、非常に大きなファイルを出力するでしょう。
+指定されたトラックについて、どのトラックCUE(インデックス)エントリが作成されるのかを指定します(トラックIDのセクションを参照)。\*(Aqnone\*(AqはCUEエントリを作成しません。\*(Aqiframesは前方参照及び後方参照を含まないブロック(ビデオトラックでは I frame)のみがCUEシートに挿入されます。\*(Aqall\*(Aqでは\fBmkvmerge\fR(1)は全てのブロックに対してCUEエントリを作成し、非常に大きなファイルを出力するでしょう。
 .sp
-デフォルトはビデオトラックは\'iframesで、その他のトラックは\'none\'です。\fB\-\-cues\fRが使用されているかどうかに関わらずCUEエントリの作成を抑制する、\fB\-\-no\-cues\fRオプションも参照してください。
+デフォルトはビデオトラックは\*(Aqiframesで、その他のトラックは\*(Aqnone\*(Aqです。\fB\-\-cues\fRが使用されているかどうかに関わらずCUEエントリの作成を抑制する、\fB\-\-no\-cues\fRオプションも参照してください。
 .sp
 このオプションは異るトラックIDを指定することで複数の入力トラックに対して使用することができます。
 .RE
 .PP
 \fB\-\-default\-track\fR \fITID\fR\fI[:bool]\fR
 .RS 4
-省略可能な引数\fIbool\fRが指定されなかった場合、指定されたトラックに\'デフォルト\'フラグを付与します(トラックIDのセクションも参照)。ユーザが明示的にトラックを選択しなかった場合、プレイヤーは\'デフォルト\'フラグの付いたトラックを優先的に再生します。各トラックの種類(オーディオ、ビデオ、字幕、ボタン)ごとに、一つだけのトラックにだけ\'デフォルト\'フラグは付与できます。もし、デフォルトフラグをどのトラックにも付けたくない場合は、全てのトラックで\fIbool\fRを\fB0\fRにすれば可能です。
+省略可能な引数\fIbool\fRが指定されなかった場合、指定されたトラックに\*(Aqデフォルト\*(Aqフラグを付与します(トラックIDのセクションも参照)。ユーザが明示的にトラックを選択しなかった場合、プレイヤーは\*(Aqデフォルト\*(Aqフラグの付いたトラックを優先的に再生します。各トラックの種類(オーディオ、ビデオ、字幕、ボタン)ごとに、一つだけのトラックにだけ\*(Aqデフォルト\*(Aqフラグは付与できます。もし、デフォルトフラグをどのトラックにも付けたくない場合は、全てのトラックで\fIbool\fRを\fB0\fRにすれば可能です。
 .sp
 このオプションは異るトラックIDを指定することで複数の入力トラックに対して使用することができます。
 .RE
 .PP
 \fB\-\-forced\-track\fR \fITID\fR\fI[:bool]\fR
 .RS 4
-Sets the \'forced\' flag for the given track (see section
+Sets the \*(Aqforced\*(Aq flag for the given track (see section
 track IDs) if the optional argument
 \fIbool\fR
 is not present\&. A player must play all tracks for which this flag is set to
@@ -536,7 +545,7 @@ AACファイルがSBR AACデータを含む場合に必要です。このスイ�
 .sp
 ソースファイルがMatroska(TM)ファイルの場合、CodecIDによりSBR AACを検知できます。しかし、CodecIDが不正な場合、このスイッチで修正することができます。
 .sp
-もし、mkvmergeがAACファイルを間違ってSBRと認識してしまった場合、トラックIDに\':0\'を指定できます。
+もし、mkvmergeがAACファイルを間違ってSBRと認識してしまった場合、トラックIDに\*(Aq:0\*(Aqを指定できます。
 .RE
 .PP
 \fB\-\-timecodes\fR \fITID:file\-name\fR
@@ -546,9 +555,9 @@ AACファイルがSBR AACデータを含む場合に必要です。このスイ�
 .PP
 \fB\-\-default\-duration\fR \fITID:x\fR
 .RS 4
-指定したトラックの default duration を強制的に設定します。トラックのタイムコードも、 default duration に合うように変更されます。引数\fIx\fRは\'s\'、\'ms\'、\'us\'、\'ns\'、\'fps\'のうちどれか一つを後置されていなければなりません。それぞれ、 default duration は秒、ミリ秒、マイクロ秒、ナノ秒、\'fps\'単位で指定されます。\fIx\fRは小数または分数で指定できます。
+指定したトラックの default duration を強制的に設定します。トラックのタイムコードも、 default duration に合うように変更されます。引数\fIx\fRは\*(Aqs\*(Aq、\*(Aqms\*(Aq、\*(Aqus\*(Aq、\*(Aqns\*(Aq、\*(Aqfps\*(Aqのうちどれか一つを後置されていなければなりません。それぞれ、 default duration は秒、ミリ秒、マイクロ秒、ナノ秒、\*(Aqfps\*(Aq単位で指定されます。\fIx\fRは小数または分数で指定できます。
 .sp
-default duration が強制的に指定されない場合、mkvmergeはトラックの default duration をコンテナ又は使用されているコーデックから取得して使用します。このオプションの使用例の一つとして、AVC/h\&.264エレメンタリストリームを追加する場合があげられます。なぜなら、これは、フレーム数やフレーム毎の default duration の情報を格納していないためです。このようなファイルに対しては、指定されないかぎり\fBmkvmerge\fR(1)は default duration を\'25fps\'と仮定します。
+default duration が強制的に指定されない場合、mkvmergeはトラックの default duration をコンテナ又は使用されているコーデックから取得して使用します。このオプションの使用例の一つとして、AVC/h\&.264エレメンタリストリームを追加する場合があげられます。なぜなら、これは、フレーム数やフレーム毎の default duration の情報を格納していないためです。このようなファイルに対しては、指定されないかぎり\fBmkvmerge\fR(1)は default duration を\*(Aq25fps\*(Aqと仮定します。
 .sp
 このオプションは、外部タイムコードファイルを使用せずにビデオトラックのFPSを変更するのにも使えます。
 .RE
@@ -564,13 +573,13 @@ NALUサイズ長を\fIn\fRバイトに強制設定します。このパラメー
 \fB\-f\fR, \fB\-\-fourcc\fR \fITID:FourCC\fR
 .RS 4
 
-FourCCを指定した値に強制設定します。ビデオトラックが\'MS互換モード\'である場合にのみ有効です。
+FourCCを指定した値に強制設定します。ビデオトラックが\*(AqMS互換モード\*(Aqである場合にのみ有効です。
 .RE
 .PP
 \fB\-\-display\-dimensions\fR \fITID:widthxheight\fR
 .RS 4
 
-Matroska(TM)ファイルは再生時の画像スケールを決定するための二つの値を持ちます。表示幅と表示高さです。これらの値をこのオプションで、例えば\'1:640x480\'のように指定できます。
+Matroska(TM)ファイルは再生時の画像スケールを決定するための二つの値を持ちます。表示幅と表示高さです。これらの値をこのオプションで、例えば\*(Aq1:640x480\*(Aqのように指定できます。
 .sp
 これらの値を設定する別の方法として、\fB\-\-aspect\-ratio\fR又は\fB\-\-aspect\-ratio\-factor\fRオプションが使用できます(下記参照)。これらのオプションは互いに排他的です。
 .RE
@@ -578,7 +587,7 @@ Matroska(TM)ファイルは再生時の画像スケールを決定するため�
 \fB\-\-aspect\-ratio\fR \fITID:ratio|width/height\fR
 .RS 4
 
-Matroska(TM)ファイルは再生時の画像スケールを決定するための二つの値を持ちます。表示幅と表示高さです。これらの値をこのオプションで、例えば\'1:640x480\'のように指定できます。このオプションを指定すると、\fBmkvmerge\fR(1)は自動的に表示幅及び表示高さを、画像の元の幅と高さ、そして指定されたアスペクト比から自動的に計算します。アスペクト比は、小数\fIratio\fRまたは分数\'\fIwidth\fR/\fIheight\fR\'(例: \'16/9\')の形式で指定できます。
+Matroska(TM)ファイルは再生時の画像スケールを決定するための二つの値を持ちます。表示幅と表示高さです。これらの値をこのオプションで、例えば\*(Aq1:640x480\*(Aqのように指定できます。このオプションを指定すると、\fBmkvmerge\fR(1)は自動的に表示幅及び表示高さを、画像の元の幅と高さ、そして指定されたアスペクト比から自動的に計算します。アスペクト比は、小数\fIratio\fRまたは分数\*(Aq\fIwidth\fR/\fIheight\fR\*(Aq(例: \*(Aq16/9\*(Aq)の形式で指定できます。
 .sp
 これらの値を設定する別の方法として、\fB\-\-aspect\-ratio\-factor\fR又は\fB\-\-display\-dimensions\fRオプションが使用できます(上記及び下記参照)。これらのオプションは互いに排他的です。
 .RE
@@ -597,16 +606,16 @@ Matroska(TM)ファイルは再生時の画像スケールを決定するため�
 .PP
 \fB\-\-stereo\-mode\fR \fITID:n|keyword\fR
 .RS 4
-トラックIDが\fITID\fRのビデオトラックのステレオモードを設定します。モードは\fB0\fRから\fB3\fRまでの数字\fIn\fR、又は\'none\'(\fIn\fR=\fB0\fRと同等)、\'right\'(\fIn\fR=\fB1\fRと同等)、\'left\'(\fIn\fR=\fB2\fRと同等)、及び\'both\'(\fIn\fR=\fB3\fRと同等)のうちのどれかを\fIkeyword\fRとして指定しなければなりません。
+トラックIDが\fITID\fRのビデオトラックのステレオモードを設定します。モードは\fB0\fRから\fB3\fRまでの数字\fIn\fR、又は\*(Aqnone\*(Aq(\fIn\fR=\fB0\fRと同等)、\*(Aqright\*(Aq(\fIn\fR=\fB1\fRと同等)、\*(Aqleft\*(Aq(\fIn\fR=\fB2\fRと同等)、及び\*(Aqboth\*(Aq(\fIn\fR=\fB3\fRと同等)のうちのどれかを\fIkeyword\fRとして指定しなければなりません。
 .RE
 .PP
 \fB\-\-compression\fR \fITID:method\fR
 .RS 4
-VobSubトラックの圧縮法を選択します。プレイヤーが選択した圧縮法をサポートしている必要があることに注意してください。指定できる圧縮法は、\'none\'、\'zlib\'、\'lzo\'/\'lxo1x\'、\'bz2\'/\'bzlib\'及び\'mpeg4_p2\'/\'mpeg4p2\'です。\'lzo\'/\'lxo1x\'と\'bz2\'/\'bzlib\'は\fBmkvmerge\fR(1)がそれぞれ、liblzo(TM)及びbzlib(TM)圧縮ライブラリのサポート付きでコンパイルされたときのみ使用できます。
+VobSubトラックの圧縮法を選択します。プレイヤーが選択した圧縮法をサポートしている必要があることに注意してください。指定できる圧縮法は、\*(Aqnone\*(Aq、\*(Aqzlib\*(Aq、\*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aq、\*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aq及び\*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aqです。\*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aqと\*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aqは\fBmkvmerge\fR(1)がそれぞれ、liblzo(TM)及びbzlib(TM)圧縮ライブラリのサポート付きでコンパイルされたときのみ使用できます。
 .sp
-\'mpeg4_p2\'/\'mpeg4p2\'圧縮法は、\'header removal\'と呼ばれる特殊な圧縮法で、MPEG4 part2 ビデオトラックにのみ適用できます。それ以外の圧縮法は一般的な圧縮法で、どんな種類のトラックに適用できます。
+\*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq圧縮法は、\*(Aqheader removal\*(Aqと呼ばれる特殊な圧縮法で、MPEG4 part2 ビデオトラックにのみ適用できます。それ以外の圧縮法は一般的な圧縮法で、どんな種類のトラックに適用できます。
 .sp
-デフォルトは\'zlib\'圧縮法です。この圧縮法はほとんど全ての再生アプリケーションでサポートされています。\'none\'以外の他の圧縮法については、サポートされているとは限りません。
+デフォルトは\*(Aqzlib\*(Aq圧縮法です。この圧縮法はほとんど全ての再生アプリケーションでサポートされています。\*(Aqnone\*(Aq以外の他の圧縮法については、サポートされているとは限りません。
 .RE
 .PP
 テキスト字幕トラックにのみ適用されるオプション:
@@ -640,7 +649,7 @@ VobSubトラックの圧縮法を選択します。プレイヤーが選択し�
 \fB\-\-priority\fR \fIpriority\fR
 .RS 4
 
-\fBmkvmerge\fR(1)を実行する際のプロセス優先度を指定します。指定できるのは\'lowest\'、\'lower\'、\'normal\'、\'higher\'、及び\'highest\'です。指定されない場合、\'normal\'が使用されます。UNIX系のシステムでは、\fBmkvmerge\fR(1)は\fBnice\fR(2)関数を使用するので、\'higher\'及び\'highest\'はスーパーユーザのみが使用可能です。Windowsでは全てのユーザが全優先度を使用可能です。
+\fBmkvmerge\fR(1)を実行する際のプロセス優先度を指定します。指定できるのは\*(Aqlowest\*(Aq、\*(Aqlower\*(Aq、\*(Aqnormal\*(Aq、\*(Aqhigher\*(Aq、及び\*(Aqhighest\*(Aqです。指定されない場合、\*(Aqnormal\*(Aqが使用されます。UNIX系のシステムでは、\fBmkvmerge\fR(1)は\fBnice\fR(2)関数を使用するので、\*(Aqhigher\*(Aq及び\*(Aqhighest\*(Aqはスーパーユーザのみが使用可能です。Windowsでは全てのユーザが全優先度を使用可能です。
 .RE
 .PP
 \fB\-\-command\-line\-charset\fR \fIcharacter\-set\fR
@@ -660,15 +669,15 @@ VobSubトラックの圧縮法を選択します。プレイヤーが選択し�
 .PP
 \fB\-\-ui\-language\fR \fIcode\fR
 .RS 4
-指定した\fIcode\fRを強制的に言語コード(例: 日本語ならば\'ja_JP\')として使用します。しかし、環境変数\fILANG\fRや\fILC_MESSAGES\fR、\fILC_ALL\fRを使用したほうが好ましいでしょう。\fIcode\fRにlistと指定すると、指定できる言語コードの一覧を出力します。
+指定した\fIcode\fRを強制的に言語コード(例: 日本語ならば\*(Aqja_JP\*(Aq)として使用します。しかし、環境変数\fILANG\fRや\fILC_MESSAGES\fR、\fILC_ALL\fRを使用したほうが好ましいでしょう。\fIcode\fRにlistと指定すると、指定できる言語コードの一覧を出力します。
 .RE
 .PP
 \fB@\fRoptions\-file
 .RS 4
 
-\fIoptions\-file\fRで指定されたファイルから追加のコマンドラインオプションを読み込みます。行で最初の空白文字でない文字がハッシュマーク(\'#\')である行はコメントとして扱われ、無視されます。行頭、及び行末の空白文字は取り除かれます。各行には一つずつしかオプションを指定できません。メタキャラクタのエスケープは必要ありません。
+\fIoptions\-file\fRで指定されたファイルから追加のコマンドラインオプションを読み込みます。行で最初の空白文字でない文字がハッシュマーク(\*(Aq#\*(Aq)である行はコメントとして扱われ、無視されます。行頭、及び行末の空白文字は取り除かれます。各行には一つずつしかオプションを指定できません。メタキャラクタのエスケープは必要ありません。
 .sp
-\'\fBmkvmerge \-o "my file\&.mkv" \-A "a movie\&.avi" sound\&.ogg\fR\'というコマンドラインと同じことは、次のようなオプションファイルによって指定できます。
+\*(Aq\fBmkvmerge \-o "my file\&.mkv" \-A "a movie\&.avi" sound\&.ogg\fR\*(Aqというコマンドラインと同じことは、次のようなオプションファイルによって指定できます。
 .sp
 .if n \{\
 .RS 4
@@ -700,7 +709,7 @@ sound\&.ogg
 .sp -1
 .IP \(bu 2.3
 .\}
-"\'BZ2\' \-\-
+"\*(AqBZ2\*(Aq \-\-
 bzlib(TM)圧縮ライブラリ。\fB\-\-compression\fRオプションに指定できる圧縮メソッドに影響します。
 .RE
 .sp
@@ -712,7 +721,7 @@ bzlib(TM)圧縮ライブラリ。\fB\-\-compression\fRオプションに指定�
 .sp -1
 .IP \(bu 2.3
 .\}
-\'LZO\' \-\-
+\*(AqLZO\*(Aq \-\-
 lzo(TM)圧縮ライブラリ。\fB\-\-compression\fRオプションに指定できる圧縮メソッドに影響します。
 .RE
 .sp
@@ -724,7 +733,7 @@ lzo(TM)圧縮ライブラリ。\fB\-\-compression\fRオプションに指定で�
 .sp -1
 .IP \(bu 2.3
 .\}
-\'FLAC\' \-\- 生FLACファイルの読み込み及び、他のコンテナ(例:
+\*(AqFLAC\*(Aq \-\- 生FLACファイルの読み込み及び、他のコンテナ(例:
 Ogg(TM)、Matroska(TM)など)に格納されたFLACトラックの処理。
 .RE
 .RE
@@ -743,7 +752,7 @@ Ogg(TM)、Matroska(TM)など)に格納されたFLACトラックの処理。
 各ファイルについて、ユーザは\fBmkvmerge\fR(1)が取り出すべきトラックを選択できます。取り出されたトラックは、すべて\fB\-o\fRで指定されたファイルに書き出されます。既知の(サポート済の)入力ファイルフォーマットは\fB\-l\fRオプションで取得できます。
 .SH "例"
 .PP
-あなたは、 MyMovie\&.avi というファイルを持っていて、またオーディオトラックが別の、例えば \'MyMovie\&.wav\'というファイルに入っているとします。あなたは、まず音声をOggVorbis(TM)でエンコードしたいと思います。
+あなたは、 MyMovie\&.avi というファイルを持っていて、またオーディオトラックが別の、例えば \*(AqMyMovie\&.wav\*(Aqというファイルに入っているとします。あなたは、まず音声をOggVorbis(TM)でエンコードしたいと思います。
 .sp
 .if n \{\
 .RS 4
@@ -780,7 +789,7 @@ $ mkvmerge \-o MyMovie\-with\-sound\&.mkv \-A MyMovie\&.avi MyMovie\&.ogg
 .RE
 .\}
 .PP
-ちょっと考えて、あなたはもうひとつのオーディオトラック(例えばオーディオコメンタリや吹替えなど)を\'MyMovie\-add\-audio\&.wavにリッピングしました。再びエンコードして、新しいファイルにまとめます。
+ちょっと考えて、あなたはもうひとつのオーディオトラック(例えばオーディオコメンタリや吹替えなど)を\*(AqMyMovie\-add\-audio\&.wavにリッピングしました。再びエンコードして、新しいファイルにまとめます。
 .sp
 .if n \{\
 .RS 4
@@ -806,7 +815,7 @@ $ mkvmerge \-o MM\-complete\&.mkv \-A MyMovie\&.avi MyMovie\&.ogg MyMovie\-add\-
 .RE
 .\}
 .PP
-あとはmplayer(TM)を立ち上げて動画を楽しむだけです。もし、複数のオーディオトラック(もしかするとビデオトラックも)がある場合は、再生するトラックを\'\fB\-vid\fR\'と\'\fB\-aid\fR\'オプションでmplayer(TM)に指定できます。ゼロベースで、ビデオとオーディオの区別をしないIDを指定します。
+あとはmplayer(TM)を立ち上げて動画を楽しむだけです。もし、複数のオーディオトラック(もしかするとビデオトラックも)がある場合は、再生するトラックを\*(Aq\fB\-vid\fR\*(Aqと\*(Aq\fB\-aid\fR\*(Aqオプションでmplayer(TM)に指定できます。ゼロベースで、ビデオとオーディオの区別をしないIDを指定します。
 .PP
 もし、オーディオトラックの同期をとる必要がある場合も、簡単にとることができます。まず、次のようにしてVorbisトラックのトラックIDを取得します。
 .sp
@@ -832,7 +841,7 @@ $ mkvmerge \-o goodsync\&.mkv \-A source\&.avi \-y 12345:200 outofsync\&.ogg
 .RE
 .\}
 .PP
-上のようにすると、\'outofsync\&.ogg\'に入っている、IDが
+上のようにすると、\*(Aqoutofsync\&.ogg\*(Aqに入っている、IDが
 \fB12345\fR
 のオーディオトラックの最初に200msの無音を挿入します。
 .PP
@@ -852,7 +861,7 @@ $ mkvmerge \-o goodsync\&.mkv \-y 23456:0,77346/77340 outofsync\&.mkv
 .PP
 同期オプションは字幕にも同様に使用できます。
 .PP
-テキスト字幕を生成するには、SubRipper(TM)のようなWindowsソフトウェアを使用するか、\fBtranscode\fR(1)のソースコードの、contrib/subrip\'ディレクトリの中にあるsubrip(TM)パッケージが使用できます。一般的なプロセスは以下の通りです。
+テキスト字幕を生成するには、SubRipper(TM)のようなWindowsソフトウェアを使用するか、\fBtranscode\fR(1)のソースコードの、contrib/subrip\*(Aqディレクトリの中にあるsubrip(TM)パッケージが使用できます。一般的なプロセスは以下の通りです。
 .sp
 .RS 4
 .ie n \{\
@@ -999,7 +1008,7 @@ $ mkvmerge \-o with\-lang\-codes\&.mkv \-\-language 2:ger \-\-language 3:dut \-\
 .\}
 .nf
 $ mkvmerge \-i v\&.mkv
-File \'v\&.mkv\': container: Matroska(TM)
+File \*(Aqv\&.mkv\*(Aq: container: Matroska(TM)
 Track ID 1: video (V_MS/VFW/FOURCC, DIV3)
 Track ID 2: audio (A_MPEG/L3)
   
@@ -1061,9 +1070,9 @@ Matroska(TM)
 \fBmkvinfo\fR(1)が表示するトラック番号がトラックIDとして使用されます。これはトラックUIDでは\fIありません\fR。
 .RE
 .PP
-\'\fB\-1\fR\'は特殊で、そのスイッチが入力ファイルから読み込まれる全てのトラックに適用されることを示します。
+\*(Aq\fB\-1\fR\*(Aqは特殊で、そのスイッチが入力ファイルから読み込まれる全てのトラックに適用されることを示します。
 .PP
-トラックIDを使用するオプションの説明には、\'TID\'が含まれています。また、\fB\-\-atracks\fR、\fB\-\-vtracks\fR、\fB\-\-stracks\fR及び\fB\-\-btracks\fRオプションもトラックIDを使用します。
+トラックIDを使用するオプションの説明には、\*(AqTID\*(Aqが含まれています。また、\fB\-\-atracks\fR、\fB\-\-vtracks\fR、\fB\-\-stracks\fR及び\fB\-\-btracks\fRオプションもトラックIDを使用します。
 .SH "テキストファイルと文字コード変換"
 .if n \{\
 .sp
@@ -1074,7 +1083,7 @@ Matroska(TM)
 .nr an-break-flag 1
 .br
 .ps +1
-\fB注意\fR
+\fB注記\fR
 .ps -1
 .br
 .PP
@@ -1198,13 +1207,13 @@ VobSubビットマップ字幕
 .SH "ファイル紐付け"
 .PP
 
-Matroska(TM)はファイル紐付けをサポートします。ファイル紐付けとは、単純に現在のファイルの前の、又は次のファイルを指定する機能です。正確に言うと、本当に紐付けされるのはファイルではなくMatroska(TM)セグメントです。ほとんどのファイルはMatroska(TM)セグメントを一つしか持たないので、以降の説明ではより正確な\'セグメント紐付け\'という用語ではなく、\'ファイル紐付け\'という用語を使用します。
+Matroska(TM)はファイル紐付けをサポートします。ファイル紐付けとは、単純に現在のファイルの前の、又は次のファイルを指定する機能です。正確に言うと、本当に紐付けされるのはファイルではなくMatroska(TM)セグメントです。ほとんどのファイルはMatroska(TM)セグメントを一つしか持たないので、以降の説明ではより正確な\*(Aqセグメント紐付け\*(Aqという用語ではなく、\*(Aqファイル紐付け\*(Aqという用語を使用します。
 .PP
 各セグメントはユニークな128bit幅のセグメントUIDを持ちます。このUIDは\fBmkvmerge\fR(1)が自動的に生成します。紐付けは基本的にセグメントUID(略してSID)をヘッダ情報の中に挿入することで行われます。\fBmkvinfo\fR(1)はこのSIDを、存在する場合は表示します。
 .PP
 もしひとつのファイルがいくつかの小さなファイルに分割されて紐付けされる場合、タイムコードは0から始まらず、前のファイルの続きから始まります。この方式では、前のファイルが無い場合も絶対時間が保たれます(例: ストリーミングを使用している際)。もし、紐付けが使用されない場合、タイムコードは各ファイルで0から始まります。デフォルトでは\fBmkvmerge\fR(1)はファイル紐付けを使用しません。ファイル紐付けを使用したい場合は、\fB\-\-link\fRオプションを使用する必要があります。このオプションはファイル分割が有効な場合以外には無効です。
 .PP
-ファイル分割が有効か無効かに関わらず、ユーザは\fBmkvmerge\fR(1)に、生成したファイルを特定のSIDに紐付けすることができます。これは\fB\-\-link\-to\-previous\fRオプションと\fB\-\-link\-to\-next\fRオプションにより可能です。これらのオプションは\fBmkvinfo\fR(1)が出力するフォーマット(16個の\fB0x00\fRから\fB0xff\fRまでの、\'0x\'を頭につけた16進数)のSIDを受け付けます(例: \'0x41 0xda 0x73 0x66 0xd9 0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3 0x93\')。もしくは、\'0x\'及び数字の間のスペースを省いた短形式(例: \'41da7366d9cfb21eae78ebb45ecab393\')を指定することもできます。
+ファイル分割が有効か無効かに関わらず、ユーザは\fBmkvmerge\fR(1)に、生成したファイルを特定のSIDに紐付けすることができます。これは\fB\-\-link\-to\-previous\fRオプションと\fB\-\-link\-to\-next\fRオプションにより可能です。これらのオプションは\fBmkvinfo\fR(1)が出力するフォーマット(16個の\fB0x00\fRから\fB0xff\fRまでの、\*(Aq0x\*(Aqを頭につけた16進数)のSIDを受け付けます(例: \*(Aq0x41 0xda 0x73 0x66 0xd9 0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3 0x93\*(Aq)。もしくは、\*(Aq0x\*(Aq及び数字の間のスペースを省いた短形式(例: \*(Aq41da7366d9cfb21eae78ebb45ecab393\*(Aq)を指定することもできます。
 .PP
 もしファイル分割が有効の場合、最初のファイルが\fB\-\-link\-to\-previous\fRオプションで指定したSIDに紐付けされ、最後のファイルが\fB\-\-link\-to\-next\fRオプションで指定したSIDに紐付けされます。ファイル分割が無効の場合、一つの出力ファイルが両方のSIDに紐付けされます。
 .SH "デフォルト値"
@@ -1212,19 +1221,19 @@ Matroska(TM)はファイル紐付けをサポートします。ファイル紐�
 The
 Matroska(TM)
 specification states that some elements have a default value\&. Usually an element is not written to the file if its value is equal to its default value in order to save space\&. The elements that the user might miss in
-\fBmkvinfo\fR(1)\'s output are the
+\fBmkvinfo\fR(1)\*(Aqs output are the
 \fIlanguage\fR
 and the
 \fIdefault track flag\fR
 elements\&. The default value for the
 \fIlanguage\fR
-is English (\'eng\'), and the default value for the
+is English (\*(Aqeng\*(Aq), and the default value for the
 \fIdefault track flag\fR
 is
 \fItrue\fR\&. Therefore if you used
 \fB\-\-language 0:eng\fR
 for a track then it will not show up in
-\fBmkvinfo\fR(1)\'s output\&.
+\fBmkvinfo\fR(1)\*(Aqs output\&.
 .SH "添付ファイル"
 .PP
 
@@ -1250,11 +1259,11 @@ $ mkvmerge \-o output\&.mkv \-A video\&.avi sound\&.ogg \-\-attachment\-descript
 Matroska(TM)チャプタシステムは、OGMファイルで使用されていた従来のシステムより強力です。その仕様の全ては、\m[blue]\fBMatroska(TM)のウェブサイト\fR\m[]\&\s-2\u[3]\d\s+2に記されています。
 .PP
 
-\fBmkvmerge\fR(1)は2種類のチャプタファイルを入力としてサポートしています。一つ目は\'シンプルチャプタファイル\'と呼ばれるもので、OGM
+\fBmkvmerge\fR(1)は2種類のチャプタファイルを入力としてサポートしています。一つ目は\*(Aqシンプルチャプタファイル\*(Aqと呼ばれるもので、OGM
 toolsが想定しているものと同じフォーマットです。二つ目はXMLベースのチャプタフォーマットで、Matroska(TM)のチャプタ機能の全てをサポートしています。
 .SS "シンプルチャプタフォーマット"
 .PP
-このフォーマットは、\'CHAPTERxx=\'で始まる行と\'ChapterxxNAME=\'で始まる行のペアから成ります。前者の行は開始タイムコードを含み、後者はタイトルを含みます。下に例を示します。
+このフォーマットは、\*(AqCHAPTERxx=\*(Aqで始まる行と\*(AqChapterxxNAME=\*(Aqで始まる行のペアから成ります。前者の行は開始タイムコードを含み、後者はタイトルを含みます。下に例を示します。
 .sp
 .if n \{\
 .RS 4
@@ -1428,7 +1437,7 @@ The basics are:
 .PP
 新しいMatroska(TM)タグシステムは、UTF\-8文字列とバイナリの二つのデータタイプしか認識しません。前者はタグの名前と<Strings>エレメントに使用され、後者は<Binary>エレメントに使用されます。
 .PP
-バイナリデーは、そのままではXMLファイルに格納できないので、\fBmkvmerge\fR(1)は二つのバイナリデータを格納する方法をサポートします。XMLタグの中身が\'@\'で始まる場合、そのあとのテキストはファイル名として扱われ、対応するファイルの中身がMatroska(TM)エレメントにコピーされます。
+バイナリデーは、そのままではXMLファイルに格納できないので、\fBmkvmerge\fR(1)は二つのバイナリデータを格納する方法をサポートします。XMLタグの中身が\*(Aq@\*(Aqで始まる場合、そのあとのテキストはファイル名として扱われ、対応するファイルの中身がMatroska(TM)エレメントにコピーされます。
 .PP
 もう一つの方法では、データはBase64エンコードされる必要があります。これは、バイナリデータをASCIIキャラクタの一部だけで表現するためのエンコードで、例えばEメールなどに使用されています。\fBmkvextract\fR(1)は、バイナリエレメントをBase64エンコードされたデータとして出力します。
 .PP
@@ -1487,10 +1496,10 @@ mkvmerge \&.\&.\&. \-\-timecodes 0:my_timecodes\&.txt v1\&.avi +v2\&.avi
 .\}
 .PP
 
-\fBmkvmerge\fR(1)は、4つのファオーマットを認識します。最初の1行は常にバージョン番号を含みます。空行、空白のみを含む行、及び\'#\'で始まる行は無視されます。
+\fBmkvmerge\fR(1)は、4つのファオーマットを認識します。最初の1行は常にバージョン番号を含みます。空行、空白のみを含む行、及び\*(Aq#\*(Aqで始まる行は無視されます。
 .SS "タイムコードファイルフォーマット v1"
 .PP
-このフォーマットはバージョン行から始まります。2行目はデフォルトフレームレートを宣言します。残りの全ての行は、コンマで区切られた3つの数字を含みます。開始フレーム(\fB0\fRが最初のフレームです)、終了フレーム、そしてこの範囲で適用されるフレームレートです。FPSは、ドット\'\&.\'を小数点として持つ小数です。フレーム範囲はデフォルトFPSが使用されるギャップを含むこともあります。例を下に示します。
+このフォーマットはバージョン行から始まります。2行目はデフォルトフレームレートを宣言します。残りの全ての行は、コンマで区切られた3つの数字を含みます。開始フレーム(\fB0\fRが最初のフレームです)、終了フレーム、そしてこの範囲で適用されるフレームレートです。FPSは、ドット\*(Aq\&.\*(Aqを小数点として持つ小数です。フレーム範囲はデフォルトFPSが使用されるギャップを含むこともあります。例を下に示します。
 .sp
 .if n \{\
 .RS 4
@@ -1524,7 +1533,7 @@ assume 27\&.930
 .\}
 .SS "タイムコードファイルフォーマット v3"
 .PP
-このフォーマットでは、各行は秒単位の持続時間と、省略可能なフレームレートを含みます。この二つは両方とも小数を指定できます。もし、フレームレートが指定されない場合はデフォルトの値が使用されます。オーディオではコーデックにタイムコードを計算させるべきです。このためには、フレームレートとして\fB0\&.0\fRを指定してください。また、\'gap\'キーワードの後に持続時間を指定して、無音を指定することもできます。オーディオファイル用の例を示します。
+このフォーマットでは、各行は秒単位の持続時間と、省略可能なフレームレートを含みます。この二つは両方とも小数を指定できます。もし、フレームレートが指定されない場合はデフォルトの値が使用されます。オーディオではコーデックにタイムコードを計算させるべきです。このためには、フレームレートとして\fB0\&.0\fRを指定してください。また、\*(Aqgap\*(Aqキーワードの後に持続時間を指定して、無音を指定することもできます。オーディオファイル用の例を示します。
 .sp
 .if n \{\
 .RS 4
@@ -1572,7 +1581,7 @@ gap, 10\&.050
 .\}
 
 \fB1\fR
-\-\- この返り値は、一つ以上の警告が出力されましたが、抽出が続行されたことを意味します。警告は \'警告:\' という文字列を先頭につけて出力されます。出力ファイルが無事であるかどうかは、場合によります。出力ファイルを確認することを強く推奨します。
+\-\- この返り値は、一つ以上の警告が出力されましたが、抽出が続行されたことを意味します。警告は \*(Aq警告:\*(Aq という文字列を先頭につけて出力されます。出力ファイルが無事であるかどうかは、場合によります。出力ファイルを確認することを強く推奨します。
 .RE
 .sp
 .RS 4
@@ -1603,7 +1612,7 @@ gap, 10\&.050
 .RS 4
 開発者
 .RE
-.SH "注意"
+.SH "注記"
 .IP " 1." 4
 Matroska(TM)
 .RS 4
