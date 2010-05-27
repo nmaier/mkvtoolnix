@@ -1,5 +1,9 @@
 2010-05-27  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: enhancement: The "mkvmerge executable" input in the
+	preferences dialog is not read-only anymore. Final part of a fix
+	for bug 490.
+
 	* mmg: bug fix: mmg will output a warning if it is used with a
 	mkvmerge executable whose version differs from mmg's version. Part
 	of a fix for bug 490.

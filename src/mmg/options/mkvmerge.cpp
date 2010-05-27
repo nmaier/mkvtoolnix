@@ -55,7 +55,7 @@ optdlg_mkvmerge_tab::optdlg_mkvmerge_tab(wxWindow *parent,
   // Create the controls.
 
   wxStaticText *st_mkvmerge = new wxStaticText(this, -1, Z("mkvmerge executable"));
-  tc_mkvmerge               = new wxTextCtrl(this, ID_TC_MKVMERGE, m_options.mkvmerge, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
+  tc_mkvmerge               = new wxTextCtrl(this, ID_TC_MKVMERGE, m_options.mkvmerge);
   wxButton *b_browse        = new wxButton(this, ID_B_BROWSEMKVMERGE, Z("Browse"));
 
   wxStaticText *st_priority = new wxStaticText(this, -1, Z("Process priority:"));
