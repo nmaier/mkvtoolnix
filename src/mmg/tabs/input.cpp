@@ -33,6 +33,7 @@
 #include "common/strings/editing.h"
 #include "common/strings/formatting.h"
 #include "common/strings/parsing.h"
+#include "mmg/message_dialog.h"
 #include "mmg/mmg.h"
 #include "mmg/mmg_dialog.h"
 #include "mmg/tabs/attachments.h"
@@ -370,6 +371,8 @@ tab_input::add_file(const wxString &file_name,
 
   wxRemoveFile(opt_file_name);
 
+  wxString error_message, error_heading;
+
   if (3 == result) {
     wxString container = Z("unknown");
 
@@ -384,20 +387,32 @@ tab_input::add_file(const wxString &file_name,
     return;
 
   } else if ((0 > result) || (1 < result)) {
-    name.Printf(Z("File identification failed for '%s'. Return code: %d\n\n"), file_name.c_str(), result);
     for (i = 0; i < output.Count(); i++)
-      name += break_line(output[i]) + wxT("\n");
-    name += wxT("\n");
+      error_message += output[i] + wxT("\n");
+    error_message += wxT("\n");
     for (i = 0; i < errors.Count(); i++)
-      name += break_line(errors[i]) + wxT("\n");
-    wxMessageBox(name, Z("File identification failed"), wxOK | wxCENTER | wxICON_ERROR);
-    return;
+      error_message += errors[i] + wxT("\n");
+
+    error_heading.Printf(Z("File identification failed for '%s'. Return code: %d"), file_name.c_str(), result);
 
   } else if (0 < result) {
-    name.Printf(Z("File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable in the settings dialog."),
-                result, errno, wxUCS(strerror(errno)));
-    break_line(name, 60);
-    wxMessageBox(name, Z("File identification failed"), wxOK | wxCENTER | wxICON_ERROR);
+    error_message.Printf(Z("File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable in the settings dialog."),
+                         result, errno, wxUCS(strerror(errno)));
+    error_heading = Z("File identification failed");
+  }
+
+  if (!error_message.IsEmpty()) {
+    error_message =
+        Z("Command line used:")
+      + wxT("\n\n")
+      + wxString::Format(wxT("\"%s\" --output-charset UTF-8 --identify-for-mmg \"%s\""), mdlg->options.mkvmerge.c_str(), file_name.c_str())
+      + wxT("\n\n")
+      + Z("Output:")
+      + wxT("\n\n")
+      + error_message;
+
+    message_dialog::show(this, Z("File identification failed"), error_heading, error_message);
+
     return;
   }
 

@@ -1,5 +1,9 @@
 2010-05-27  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: If adding a file fails mkvmerge's error message
+	will be shown in a scrollable dialog instead of a normal message
+	box. Fix for bug 490.
+
 	* mmg: Added 'IVF' files to the list of known input file types.
 
 	* mkvmerge: Added support for reading IVF files with VP8 video
