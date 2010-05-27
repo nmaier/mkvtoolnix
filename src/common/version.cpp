@@ -13,6 +13,9 @@
 
 #include "common/common_pch.h"
 
+#include <boost/regex.hpp>
+
+#include "common/strings/parsing.h"
 #include "common/version.h"
 
 #define VERSIONNAME "Rapunzel"
@@ -29,4 +32,35 @@ get_version_info(const std::string &program,
 
   return (boost::format(Y("%1% built on %2% %3%")) % short_version_info % __DATE__ % __TIME__).str();
 #endif  // !defined(HAVE_BUILD_TIMESTAMP)
+}
+
+static unsigned int
+_parse_version_number(const std::string &version_str) {
+  static boost::regex s_version_number_re("(\\d+)\\.(\\d+)\\.(\\d+)\(?:\\.(\\d+))?", boost::regex::perl);
+
+  boost::match_results<std::string::const_iterator> matches;
+  if (!boost::regex_search(version_str, matches, s_version_number_re))
+    return 0;
+
+  unsigned int version = 0, idx;
+  for (idx = 1; 4 >= idx; ++idx) {
+    version <<= 8;
+    if (!matches[idx].str().empty()) {
+      uint32_t number = 0;
+      parse_uint(matches[idx].str(), number);
+      version += number;
+    }
+  }
+
+  return version;
+}
+
+int
+compare_current_version_to(const std::string &other_version_str) {
+  unsigned int my_version    = _parse_version_number(VERSION);
+  unsigned int other_version = _parse_version_number(other_version_str);
+
+  return my_version < other_version ? -1
+       : my_version > other_version ? +1
+       :                               0;
 }
