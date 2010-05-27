@@ -83,6 +83,7 @@
 #include "input/r_dts.h"
 #include "input/r_flac.h"
 #include "input/r_flv.h"
+#include "input/r_ivf.h"
 #include "input/r_matroska.h"
 #include "input/r_mp3.h"
 #include "input/r_mpeg_es.h"
@@ -333,6 +334,8 @@ get_file_type(filelist_t &file) {
     type = FILE_TYPE_VC1;
   else if (wavpack_reader_c::probe_file(io, size))
     type = FILE_TYPE_WAVPACK4;
+  else if (ivf_reader_c::probe_file(io, size))
+    type = FILE_TYPE_IVF;
   else if (dirac_es_reader_c::probe_file(io, size))
     type = FILE_TYPE_DIRAC;
   // File types that are misdetected sometimes
@@ -1061,6 +1064,9 @@ create_readers() {
           file.reader = new flac_reader_c(*file.ti);
           break;
 #endif
+        case FILE_TYPE_IVF:
+          file.reader = new ivf_reader_c(*file.ti);
+          break;
         case FILE_TYPE_MATROSKA:
           file.reader = new kax_reader_c(*file.ti);
           break;

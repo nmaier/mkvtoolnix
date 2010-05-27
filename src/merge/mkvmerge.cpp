@@ -89,6 +89,7 @@ init_input_file_type_list() {
 #endif
   s_input_file_types.push_back(ext_file_type_t("h264", Y("AVC/h.264 elementary streams")));
   s_input_file_types.push_back(ext_file_type_t("idx",  Y("VobSub subtitles")));
+  s_input_file_types.push_back(ext_file_type_t("ivf",  Y("IVF with VP8")));
   s_input_file_types.push_back(ext_file_type_t("m1v",  Y("MPEG-1 video elementary stream")));
   s_input_file_types.push_back(ext_file_type_t("m2v",  Y("MPEG-2 video elementary stream")));
   s_input_file_types.push_back(ext_file_type_t("mkv",  Y("general Matroska files")));
