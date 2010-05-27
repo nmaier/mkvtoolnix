@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.9.9\n"
 "POT-Creation-Date: 2010-05-26 18:08+0300\n"
-"PO-Revision-Date: 2010-05-27 00:29+0900\n"
+"PO-Revision-Date: 2010-05-27 22:24+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
@@ -1452,10 +1452,8 @@ msgstr "mkvmerge"
 
 #. type: Content of: <refentry><refmeta><refmiscinfo>
 #: doc/man/mkvmerge.xml:39
-#, fuzzy
-#| msgid "MkvToolNix"
 msgid "MKVToolNix"
-msgstr "MkvToolNix"
+msgstr "MKVToolNix"
 
 #. type: Content of: <refentry><refnamediv><refpurpose>
 #: doc/man/mkvmerge.xml:45
@@ -1605,13 +1603,6 @@ msgstr "<option>--segmentinfo</option> <parameter>filename.xml</parameter>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:142
-#, fuzzy
-#| msgid ""
-#| "Read segment information from a <abbrev>XML</abbrev> file. This file can "
-#| "contain the segment family <abbrev>UID</abbrev>, segment <abbrev>UID</"
-#| "abbrev>, previous and next segment <abbrev>UID</abbrev> elements. An "
-#| "example file and a <abbrev>DTD</abbrev> are included in the MkvToolNix "
-#| "distribution."
 msgid ""
 "Read segment information from a <abbrev>XML</abbrev> file. This file can "
 "contain the segment family <abbrev>UID</abbrev>, segment <abbrev>UID</"
@@ -1621,7 +1612,7 @@ msgstr ""
 "<abbrev>XML</abbrev>ファイルからセグメント情報を読み取ります。このファイル"
 "は、セグメントファミリ<abbrev>UID</abbrev>、セグメント<abbrev>UID</abbrev>、"
 "前、及び、後セグメント<abbrev>UID</abbrev>エレメントを含むことができます。"
-"MkvToolNixは、サンプルファイルと<abbrev>DTD</abbrev>を含んで配布されていま"
+"MKVToolNixは、サンプルファイルと<abbrev>DTD</abbrev>を含んで配布されていま"
 "す。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
@@ -4051,15 +4042,11 @@ msgstr "テキストファイルと文字コード変換"
 
 #. type: Content of: <refentry><refsect1><note><para>
 #: doc/man/mkvmerge.xml:1526
-#, fuzzy
-#| msgid ""
-#| "This section applies to all programs in MkvToolNix even if it only "
-#| "mentions &mkvmerge;."
 msgid ""
 "This section applies to all programs in MKVToolNix even if it only mentions "
 "&mkvmerge;."
 msgstr ""
-"このセクションは、暗黙のうちに&mkvmerge;だけでなくMkvToolNixの全てのプログラ"
+"このセクションは、暗黙のうちに&mkvmerge;だけでなくMKVToolNixの全てのプログラ"
 "ムにあてはまります。"
 
 #. type: Content of: <refentry><refsect1><para>
@@ -4132,18 +4119,6 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1558
-#, fuzzy
-#| msgid ""
-#| "On Windows there are actually two different character sets that "
-#| "&mkvmerge; uses due to the way the Windows shell program <command>cmd."
-#| "exe</command> is implemented. The first character set is determined by a "
-#| "call to the <function>GetCP()</function> system call. This character set "
-#| "is used as the default for text file conversions and for all elements "
-#| "displayed by the <abbrev>GUI</abbrev> programs in the MkvToolNix package. "
-#| "<command>cmd.exe</command> uses another character set which is determined "
-#| "by a call to the <function>GetACP()</function> system call. This is the "
-#| "default character set for all strings read from the command line and for "
-#| "all strings output to the console."
 msgid ""
 "On Windows there are actually two different character sets that &mkvmerge; "
 "uses due to the way the Windows shell program <command>cmd.exe</command> is "
@@ -4159,7 +4134,7 @@ msgstr ""
 "Windowsでは、<command>cmd.exe</command>Windowsシェルプログラムの実装方式のた"
 "めに、&mkvmerge;は二つの異なる文字コードを使用します。一つ目は<function>GetCP"
 "()</function>システムコールによって決定される文字コードです。この文字コードは"
-"テキストファイル変換にデフォルトで使用され、MkvToolNixパッケージに含まれる"
+"テキストファイル変換にデフォルトで使用され、MKVToolNixパッケージに含まれる"
 "<abbrev>GUI</abbrev>プログラムで表示される全ての文字列に適用されます。"
 "<command>cmd.exe</command>はもう一つの、<function>GetACP()</function>システム"
 "コールにより決定される文字コードを使用します。これはコマンドライン文字列及び"
@@ -4805,14 +4780,6 @@ msgstr "タグファイルフォーマット"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvmerge.xml:1884
-#, fuzzy
-#| msgid ""
-#| "&mkvmerge; supports a &xml; based tag file format. The format is very "
-#| "closely modeled after <ulink url=\"http://matroska.org/technical/specs/"
-#| "index.html\">the &matroska; specification</ulink>. Both the binary and "
-#| "the source distributions of MkvToolNix come with a sample file called "
-#| "<filename>example-tags-2.xml</filename> which simply lists all known tags "
-#| "and which can be used as a basis for real life tag files."
 msgid ""
 "&mkvmerge; supports a &xml; based tag file format. The format is very "
 "closely modeled after <ulink url=\"http://matroska.org/technical/specs/index."
@@ -4823,7 +4790,7 @@ msgid ""
 msgstr ""
 "&mkvmerge;は&xml;ベースのタグファイルフォーマットをサポートします。このフォー"
 "マットは<ulink url=\"http://matroska.org/technical/specs/index.html"
-"\">&matroska;の仕様</ulink>に非常に近いデザインになっています。MkvToolNixのバ"
+"\">&matroska;の仕様</ulink>に非常に近いデザインになっています。MKVToolNixのバ"
 "イナリ、及びソースディストリビューションはどちらも、既知のタグをただリストし"
 "ただけの、実際のタグファイルのテンプレートとして使用できる<filename>example-"
 "tags-2.xml</filename>というサンプルファイルを含んでいます。"
@@ -5647,12 +5614,6 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvpropedit.xml:345
-#, fuzzy
-#| msgid ""
-#| "The second example removes the 'default track flag' from the first "
-#| "subtitle track and sets it for the second one. Note that &mkvpropedit;, "
-#| "unlike &mkvmerge;, does not set the 'default track flag' of other flags "
-#| "to '0' if it is set to '1' for a different track automatically."
 msgid ""
 "The second example removes the 'default track flag' from the first subtitle "
 "track and sets it for the second one. Note that &mkvpropedit;, unlike "
