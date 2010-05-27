@@ -1,8 +1,12 @@
 2010-05-27  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: mmg will output a warning if it is used with a
+	mkvmerge executable whose version differs from mmg's version. Part
+	of a fix for bug 490.
+
 	* mmg: bug fix: If adding a file fails mkvmerge's error message
 	will be shown in a scrollable dialog instead of a normal message
-	box. Fix for bug 490.
+	box. Part of a fix for bug 490.
 
 	* mmg: Added 'IVF' files to the list of known input file types.
 
