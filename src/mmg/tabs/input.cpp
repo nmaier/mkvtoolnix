@@ -237,6 +237,7 @@ tab_input::setup_file_type_filter() {
   file_types.push_back(file_type_t(Z("DTS/DTS-HD (Digital Theater System)"), wxU("dts dtshd dts-hd")));
   if (capabilities[wxT("FLAC")] == wxT("true"))
     file_types.push_back(file_type_t(Z("FLAC (Free Lossless Audio Codec)"),  wxU("flac ogg")));
+  file_types.push_back(file_type_t(Z("IVF with VP8 video files"),            wxU("ivf")));
   file_types.push_back(file_type_t(Z("MP4 audio/video files"),               wxU("mp4")));
   file_types.push_back(file_type_t(Z("MPEG audio files"),                    wxU("mp2 mp3")));
   file_types.push_back(file_type_t(Z("MPEG program streams"),                wxU("mpg mpeg m2v evo evob vob")));
@@ -533,6 +534,8 @@ tab_input::add_file(const wxString &file_name,
         file->container = FILE_TYPE_DIRAC;
       else if (container == wxT("DTS"))
         file->container = FILE_TYPE_DTS;
+      else if (container == wxT("IVF"))
+        file->container = FILE_TYPE_IVF;
       else if (container == wxT("Matroska"))
         file->container = FILE_TYPE_MATROSKA;
       else if (container == wxT("MP2/MP3"))
