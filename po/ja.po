@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-05-27 01:02+0900\n"
+"PO-Revision-Date: 2010-05-27 23:41+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -3375,11 +3375,11 @@ msgstr "ISO639-2コード"
 
 #: src/merge/mkvmerge.cpp:92
 msgid "IVF with VP8"
-msgstr ""
+msgstr "VP8入りのIVF"
 
 #: src/mmg/tabs/input.cpp:240
 msgid "IVF with VP8 video files"
-msgstr ""
+msgstr "VP8入りのIVFビデオファイル"
 
 #: src/mmg/tabs/chapters.cpp:340
 msgid "If a chapter is marked 'hidden' then the player should not show this chapter entry to the user. Such entries could still be used by the menu system."
@@ -6796,9 +6796,8 @@ msgid "Using the FLAC output module.\n"
 msgstr "FLAC出力モジュールを使用しています。\n"
 
 #: src/input/r_ivf.cpp:66
-#, fuzzy
 msgid "Using the IVF demultiplexer.\n"
-msgstr "WAVデマルチプレクサを使用しています。\n"
+msgstr "IVFデマルチプレクサを使用しています。\n"
 
 #: src/input/r_matroska.cpp:1659
 msgid "Using the Kate output module.\n"
@@ -7636,9 +7635,8 @@ msgid "inflateInit() failed. Result: %1%\n"
 msgstr "inflateInit()が失敗しました。結果：%1%\n"
 
 #: src/input/r_ivf.cpp:62
-#, fuzzy
 msgid "ivf_reader: Could not open the file."
-msgstr "aac_reader：ファイルを開くことができませんでした。"
+msgstr "ivf_reader：ファイルを開くことができませんでした。"
 
 #: src/info/mkvinfo.cpp:1609
 msgid "key, "
