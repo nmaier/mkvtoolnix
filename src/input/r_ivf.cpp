@@ -84,7 +84,7 @@ ivf_reader_c::create_packetizer(int64_t) {
   if (default_duration >= 1000000)
     packetizer->set_track_default_duration(default_duration);
 
-  mxinfo_tid(m_ti.m_fname, 0, Y("Using the IVF output module.\n"));
+  mxinfo_tid(m_ti.m_fname, 0, Y("Using the VP8 video output module.\n"));
 }
 
 file_status_e

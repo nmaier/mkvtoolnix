@@ -7003,11 +7003,6 @@ msgstr "使用 FLAC 输出模块。\n"
 msgid "Using the IVF demultiplexer.\n"
 msgstr "使用 WAV 分离器。\n"
 
-#: src/input/r_ivf.cpp:87
-#, fuzzy
-msgid "Using the IVF output module.\n"
-msgstr "使用 FLAC 输出模块。\n"
-
 #: src/input/r_matroska.cpp:1659
 msgid "Using the Kate output module.\n"
 msgstr "使用 Kate 输出模块。\n"
@@ -7147,6 +7142,7 @@ msgstr "使用 VC1 ES 分离器。\n"
 msgid "Using the VC1 video output module.\n"
 msgstr "使用 VC1 视频输出模块。\n"
 
+#: src/input/r_ivf.cpp:87
 #: src/input/r_matroska.cpp:1435
 msgid "Using the VP8 video output module.\n"
 msgstr "使用 VP8 视频输出模块。\n"
@@ -8882,6 +8878,9 @@ msgstr "是"
 #~ "  -v, --verbose  提高“详细”程度。\n"
 #~ "  -h, --help     显示本帮助。\n"
 #~ "  -V, --version  显示版本信息。\n"
+#, fuzzy
+#~ msgid "Using the IVF output module.\n"
+#~ msgstr "使用 FLAC 输出模块。\n"
 #~ msgid "You have not yet selected an output file."
 #~ msgstr "您尚未选择任何输入文件。"
 #~ msgid "You have not yet selected any input file and/or no tracks."
