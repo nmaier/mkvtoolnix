@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-05-22 20:33+0300\n"
+"PO-Revision-Date: 2010-05-28 00:05+0200\n"
 "Last-Translator: rusguy6 rusguy6 <rusguy6@gmail.com>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -733,7 +733,7 @@ msgstr " розмір невідомий"
 msgid "### Global output control ###"
 msgstr "### Глобальний вихідний контроль ###"
 
-#: src/common/version.cpp:30
+#: src/common/version.cpp:33
 msgid "%1% built on %2% %3%"
 msgstr "%1% збірка від %2% %3%"
 
@@ -1169,7 +1169,7 @@ msgstr "'%1%' доріжка %2%: %3%"
 msgid "'%1%': %2%"
 msgstr "'%1%': %2%"
 
-#: src/common/mm_multi_file_io.cpp:165 src/mmg/tabs/input.cpp:726
+#: src/common/mm_multi_file_io.cpp:165 src/mmg/tabs/input.cpp:741
 msgid "'%1%': Processing the following files as well: %2%\n"
 msgstr "'%1%': Обробка наступні файли, а також: %2%\n"
 
@@ -1587,11 +1587,11 @@ msgstr ""
 "Унікальний ID для визначення попереднього\n"
 "сегмента (128 bits)."
 
-#: src/mmg/tabs/input.cpp:231 src/merge/mkvmerge.cpp:82
+#: src/mmg/tabs/input.cpp:232 src/merge/mkvmerge.cpp:82
 msgid "A/52 (aka AC3)"
 msgstr "A/52 (aka AC3)"
 
-#: src/mmg/tabs/input.cpp:232 src/merge/mkvmerge.cpp:81
+#: src/mmg/tabs/input.cpp:233 src/merge/mkvmerge.cpp:81
 msgid "AAC (Advanced Audio Coding)"
 msgstr "AAC (Advanced Audio Coding)"
 
@@ -1611,11 +1611,11 @@ msgstr ""
 "ASCII рядок (без спеціальних символів, як\n"
 "Umlaute і т.д.)"
 
-#: src/mmg/tabs/input.cpp:233 src/merge/mkvmerge.cpp:90
+#: src/mmg/tabs/input.cpp:234 src/merge/mkvmerge.cpp:90
 msgid "AVC/h.264 elementary streams"
 msgstr "AVC/H.264 елементарні потоки"
 
-#: src/mmg/tabs/input.cpp:234 src/merge/mkvmerge.cpp:83
+#: src/mmg/tabs/input.cpp:235 src/merge/mkvmerge.cpp:83
 msgid "AVI (Audio/Video Interleaved)"
 msgstr "AVI (Audio/Video Interleaved)"
 
@@ -1740,7 +1740,7 @@ msgstr "Всі відомі імена властивостей та їх зна
 msgid "All supported files|*.mkv;*.mka;*.mks;*.webm;*.webma;*.webmv|Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|WebM files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|All files|*.*"
 msgstr "Всі підтримувані файли|*.mkv;*.mka;*.mks;*.webm;*.webma;*.webmv|Matroska файли (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|WebM файли (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|Всі файли|*.*"
 
-#: src/mmg/tabs/input.cpp:289
+#: src/mmg/tabs/input.cpp:290
 #, c-format
 msgid "All supported media files|%s%s|%s"
 msgstr "Всі підтримувані медіа-файли|%s%s|%s"
@@ -1810,7 +1810,7 @@ msgstr "Інша доріжка за замовчуванням для %1% до�
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr "Інший мультиплексування роботу в ще триває. Будь ласка, почекайте, поки вона не завершена, або перервати її уручну, перш ніж починати нове."
 
-#: src/mmg/tabs/input.cpp:1287
+#: src/mmg/tabs/input.cpp:1302
 #, c-format
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Додавання доріжки з файлу в інший трек з того ж файлу, не допускається. Це має місце для треків число %u і %u."
@@ -2186,11 +2186,11 @@ msgstr "Виберіть файл вкладення"
 msgid "Choose an input file"
 msgstr "Вибір вхідного файлу"
 
-#: src/mmg/tabs/input.cpp:296
+#: src/mmg/tabs/input.cpp:297
 msgid "Choose an input file to add"
 msgstr "Оберіть вхідний файл щоб додати"
 
-#: src/mmg/tabs/input.cpp:296
+#: src/mmg/tabs/input.cpp:297
 msgid "Choose an input file to append"
 msgstr "Оберіть вхідний файл щоб докласти"
 
@@ -2323,6 +2323,11 @@ msgstr "Параметри командного рядка:"
 msgid "Command line saved."
 msgstr "Командний рядок збережена."
 
+#: src/mmg/tabs/input.cpp:406
+#, fuzzy
+msgid "Command line used:"
+msgstr "Командний рядок збережена."
+
 #: src/mmg/options/languages.cpp:79
 msgid "Common languages"
 msgstr "Загальні мови"
@@ -2379,7 +2384,7 @@ msgstr "CorePicture кадр %1% недійсний розмір заголов�
 msgid "CorePicture frame %1% not supported.\n"
 msgstr "CorePicture кадр %1% не підтримується.\n"
 
-#: src/mmg/jobs.cpp:155 src/mmg/mux_dialog.cpp:119 src/mmg/tabs/input.cpp:348
+#: src/mmg/jobs.cpp:155 src/mmg/mux_dialog.cpp:119 src/mmg/tabs/input.cpp:349
 #, c-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
 msgstr "Не вдалося створити тимчасовий файл для команди mkvmerge лінія варіант називається '%s' (помилка коду %d, %s)."
@@ -2609,7 +2614,7 @@ msgstr "DTS (Digital Theater System)"
 msgid "DTS header information changed! - New format:\n"
 msgstr "DTS заголовок змінився! - Новий формат:\n"
 
-#: src/mmg/tabs/input.cpp:237
+#: src/mmg/tabs/input.cpp:238
 msgid "DTS/DTS-HD (Digital Theater System)"
 msgstr "DTS/DTS-HD (Digital Theater System)"
 
@@ -2706,7 +2711,7 @@ msgstr "Опис вже існує"
 msgid "Description:"
 msgstr "Опис:"
 
-#: src/mmg/tabs/input.cpp:235
+#: src/mmg/tabs/input.cpp:236
 msgid "Dirac"
 msgstr "Dirac"
 
@@ -2770,7 +2775,7 @@ msgstr "Версія типу документа: %1%"
 msgid "Doc type: %1%"
 msgstr "Тип документа: %1%"
 
-#: src/mmg/tabs/input.cpp:236
+#: src/mmg/tabs/input.cpp:237
 msgid "Dolby TrueHD"
 msgstr "Dolby TrueHD"
 
@@ -3006,7 +3011,7 @@ msgstr "Очікувані беззнаковое ціле число, але з
 msgid "Exports the chapter infomartion in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
 msgstr "Експорт чолі інформації в простий формат, що використовується в інструменти OGM (CHAPTER01=... CHAPTER01NAME=...)."
 
-#: src/mmg/tabs/input.cpp:191
+#: src/mmg/tabs/input.cpp:192
 msgid "Extra options"
 msgstr "Додаткові опції"
 
@@ -3038,7 +3043,7 @@ msgstr "Витяг трек %1% з CodecID '%2%' файл '%3%'. Контейн�
 msgid "Extraction of track number %1% with the CodecID '%2%' is not supported.\n"
 msgstr "Отримання номер треку %1% з CodecID '%2%' не підтримується.\n"
 
-#: src/mmg/tabs/input.cpp:239
+#: src/mmg/tabs/input.cpp:240
 msgid "FLAC (Free Lossless Audio Codec)"
 msgstr "FLAC (Free Lossless Audio Codec)"
 
@@ -3100,7 +3105,7 @@ msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n
 msgstr "Файл містить меншу кількість кадрів, ніж очікувалося, або пошкоджений кадр %1%.\n"
 
 #: src/mmg/mmg_dialog.cpp:765 src/mmg/mux_dialog.cpp:120
-#: src/mmg/tabs/input.cpp:349
+#: src/mmg/tabs/input.cpp:350
 msgid "File creation failed"
 msgstr "Помилка створення файлу"
 
@@ -3112,25 +3117,21 @@ msgstr "Файл даних, розмір: %1%"
 msgid "File description: %1%"
 msgstr "Опис файлу: %1%"
 
-#: src/mmg/tabs/input.cpp:393 src/mmg/tabs/input.cpp:400
+#: src/mmg/tabs/input.cpp:401 src/mmg/tabs/input.cpp:414
 msgid "File identification failed"
 msgstr "Ідентифікувати файл не вдалося"
 
-#: src/mmg/tabs/input.cpp:387
+#: src/mmg/tabs/input.cpp:396
 #, c-format
-msgid ""
-"File identification failed for '%s'. Return code: %d\n"
-"\n"
-msgstr ""
-"Ідентифікувати файл не вдалося для '%s'. Код повернення: %d\n"
-"\n"
+msgid "File identification failed for '%s'. Return code: %d"
+msgstr "Ідентифікувати файл не вдалося для '%s'. Код повернення: %d"
 
-#: src/mmg/tabs/input.cpp:397
+#: src/mmg/tabs/input.cpp:399
 #, c-format
 msgid "File identification failed. Return code: %d. Errno: %d (%s). Make sure that you've selected a mkvmerge executable in the settings dialog."
 msgstr "Ідентифікувати файл не вдалося. Код повернення: %d. Помилка: %d (%s). Переконайтеся, що ви вибрали mkvmerge що виконується в діалозі налаштувань."
 
-#: src/mmg/tabs/input.cpp:335
+#: src/mmg/tabs/input.cpp:336
 msgid "File is already processed"
 msgstr "Файл вже оброблений"
 
@@ -3146,7 +3147,7 @@ msgstr "Файл: %1%"
 msgid "File parsing failed"
 msgstr "Не вдалося виконати розбір файлу"
 
-#: src/mmg/tabs/input.cpp:752
+#: src/mmg/tabs/input.cpp:767
 msgid "File removal not possible"
 msgstr "Файл видалення не представляється можливим"
 
@@ -3224,7 +3225,7 @@ msgstr "Примусовий довжина NALU розмір певну кіл�
 msgid "Forces the timecode scale factor to REPLACEME. You have to replace REPLACEME with a value between 1000 and 10000000 or with -1. Normally mkvmerge will use a value of 1000000 which means that timecodes and durations will have a precision of 1ms. For files that will not contain a video track but at least one audio track mkvmerge will automatically choose a timecode scale factor so that all timecodes and durations have a precision of one sample. This causes bigger overhead but allows precise seeking and extraction. If the magical value -1 is used then mkvmerge will use sample precision even if a video track is present."
 msgstr "Примусовий таймкод фактор масштабу REPLACEME. Ви повинні замінити REPLACEME на суму від 1000 до 10000000 або -1. Зазвичай mkvmerge буде використовувати значення 1000000 Це означає, що таймкодов і тривалість буде мати точність 1 мс. Для файлів, які не будуть містити відео-трек, но по крайней мере один звуковий mkvmerge трек буде автоматично вибирати коефіцієнт масштабу тимчасової код так, щоб усі таймкодов і тривалість мають точність одного зразка. Це викликає великі накладні витрати, але дозволяє точно пошуку та вилучення. Якщо магічне значення -1, то використовується mkvmerge буде використовувати зразок точності, навіть якщо відео доріжки присутня."
 
-#: src/mmg/tabs/input.cpp:190
+#: src/mmg/tabs/input.cpp:191
 msgid "Format specific options"
 msgstr "Формат конкретні опції"
 
@@ -3276,7 +3277,7 @@ msgstr "Вільній формі текстове поле для призна�
 msgid "Gamma: %1%"
 msgstr "Гамма: %1%"
 
-#: src/mmg/tabs/input.cpp:189
+#: src/mmg/tabs/input.cpp:190
 msgid "General track options"
 msgstr "Загальні опції доріжки"
 
@@ -3390,7 +3391,7 @@ msgstr "ISO639-2 код"
 msgid "IVF with VP8"
 msgstr ""
 
-#: src/mmg/tabs/input.cpp:240
+#: src/mmg/tabs/input.cpp:241
 msgid "IVF with VP8 video files"
 msgstr ""
 
@@ -3438,7 +3439,11 @@ msgstr "Імпорт зображення з %1%"
 msgid "Impossible to use file '%1%': The file could not be opened for reading.\n"
 msgstr "Неможливо використовувати файл '%1%': файл не може бути відкритий для читання.\n"
 
-#: src/mmg/tabs/input.cpp:963
+#: src/mmg/mmg_dialog.cpp:1739
+msgid "Incompatible mkvmerge version"
+msgstr ""
+
+#: src/mmg/tabs/input.cpp:978
 msgid "Incompatible track"
 msgstr "Несумісні трек"
 
@@ -3460,7 +3465,7 @@ msgstr "Вхід"
 msgid "Input data error"
 msgstr "Вхідна помилка в даних"
 
-#: src/mmg/tabs/input.cpp:181
+#: src/mmg/tabs/input.cpp:182
 msgid "Input files:"
 msgstr "Вхідні файли:"
 
@@ -3898,11 +3903,11 @@ msgstr "MIME Тип для цієї доріжки. Виберіть один з
 msgid "MIME type:"
 msgstr "MIME Тип:"
 
-#: src/mmg/tabs/input.cpp:241
+#: src/mmg/tabs/input.cpp:242
 msgid "MP4 audio/video files"
 msgstr "MP4 Audio/Video файли"
 
-#: src/mmg/tabs/input.cpp:242
+#: src/mmg/tabs/input.cpp:243
 msgid "MPEG audio files"
 msgstr "MPEG Audio файли"
 
@@ -3910,11 +3915,11 @@ msgstr "MPEG Audio файли"
 msgid "MPEG program stream"
 msgstr "MPEG програмний потік"
 
-#: src/mmg/tabs/input.cpp:243
+#: src/mmg/tabs/input.cpp:244
 msgid "MPEG program streams"
 msgstr "MPEG програмні потоки"
 
-#: src/mmg/tabs/input.cpp:244
+#: src/mmg/tabs/input.cpp:245
 msgid "MPEG video elementary streams"
 msgstr "MPEG Video елементарний потік"
 
@@ -3960,7 +3965,7 @@ msgstr "Позначте цю доріжку як 'викликано'. Плеє
 msgid "Matroska A/V files (*.mka;*.mkv)|*.mkv;*.mka|%s"
 msgstr "Matroska Audio/Video файли (*.mka;*.mkv)|*.mkv;*.mka|%s"
 
-#: src/mmg/tabs/input.cpp:245
+#: src/mmg/tabs/input.cpp:246
 msgid "Matroska audio/video files"
 msgstr "Matroska Audio/Video файли"
 
@@ -4170,7 +4175,7 @@ msgstr "Ніякої AC3 заголовка знайдений в першому
 msgid "No EBML head found."
 msgstr "Ніякої заголовок EBML не знайдений."
 
-#: src/mmg/tabs/input.cpp:1363
+#: src/mmg/tabs/input.cpp:1378
 msgid "No FPS selected for AVC/h.264 track"
 msgstr "Ніякої FPS не вибрано для доріжки AVC/h.264"
 
@@ -4256,7 +4261,7 @@ msgstr "Ні ID доріжки, визначеної в '--%1% %2%'.\n"
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "Ні доріжки, відповідної специфікації редагування '%1%', не була знайдена. %2%\n"
 
-#: src/mmg/tabs/input.cpp:630
+#: src/mmg/tabs/input.cpp:645
 msgid "No tracks found"
 msgstr "Доріжки не знайдені"
 
@@ -4288,7 +4293,7 @@ msgstr "Не правильний файл Matroska (не знайдений з�
 msgid "Not a valid Matroska file (no segment/level 0 element found)"
 msgstr "Не правильний файл Matroska (нема сегмент/рівень 0 знайдених елементів)"
 
-#: src/mmg/tabs/input.cpp:727
+#: src/mmg/tabs/input.cpp:742
 msgid "Note"
 msgstr "Замітка"
 
@@ -4304,11 +4309,11 @@ msgstr "Кількість наносекунд (не в перерахунку)
 msgid "Numbers of channels in the track."
 msgstr "Число каналів в доріжці."
 
-#: src/mmg/tabs/input.cpp:247
+#: src/mmg/tabs/input.cpp:248
 msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM Audio/Video файли"
 
-#: src/mmg/mux_dialog.cpp:90
+#: src/mmg/message_dialog.cpp:31 src/mmg/mux_dialog.cpp:90
 msgid "Ok"
 msgstr "OK"
 
@@ -4415,6 +4420,11 @@ msgstr "Висновок вибраних завдань:"
 #: src/info/mkvinfo.cpp:649
 msgid "Output sampling frequency: %1%"
 msgstr "Вихідна частота дискретизації: %1%"
+
+#: src/mmg/tabs/input.cpp:410
+#, fuzzy
+msgid "Output:"
+msgstr "Вихідний"
 
 #: src/mmg/mmg_dialog.cpp:530
 msgid "Overwrite existing file(s)?"
@@ -4558,7 +4568,7 @@ msgstr "Прогрес: [%1%%2%] %3%%%"
 msgid "Querying mkvmerge's capabilities"
 msgstr "Запит можливостей mkvmerge"
 
-#: src/mmg/tabs/input.cpp:246
+#: src/mmg/tabs/input.cpp:247
 msgid "QuickTime audio/video files"
 msgstr "QuickTime Audio/Video файли"
 
@@ -4718,7 +4728,7 @@ msgstr "Реальна частота дискретизації на виход
 msgid "RealMedia audio and video"
 msgstr "RealMedia Audio i Video"
 
-#: src/mmg/tabs/input.cpp:248
+#: src/mmg/tabs/input.cpp:249
 msgid "RealMedia audio/video files"
 msgstr "RealMedia Audio/Video файли"
 
@@ -4790,11 +4800,11 @@ msgstr "&Початок вибраного"
 msgid "SHA1-160"
 msgstr "SHA1-160"
 
-#: src/mmg/tabs/input.cpp:249 src/merge/mkvmerge.cpp:102
+#: src/mmg/tabs/input.cpp:250 src/merge/mkvmerge.cpp:102
 msgid "SRT text subtitles"
 msgstr "SRT текстові субтитри"
 
-#: src/mmg/tabs/input.cpp:250 src/merge/mkvmerge.cpp:103
+#: src/mmg/tabs/input.cpp:251 src/merge/mkvmerge.cpp:103
 msgid "SSA/ASS text subtitles"
 msgstr "SSA/ASS текстові субтитри"
 
@@ -5340,7 +5350,7 @@ msgstr "Субтитри доріжки %1% відсутні деякі елем
 msgid "Subtitle track %u"
 msgstr "Субтитри доріжки %u"
 
-#: src/mmg/tabs/input.cpp:251
+#: src/mmg/tabs/input.cpp:252
 msgid "TTA (The lossless True Audio codec)"
 msgstr "TTA (The lossless True Audio codec)"
 
@@ -5440,7 +5450,7 @@ msgstr "FLAC заголовки не може бути розібрано: ст�
 msgid "The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n"
 msgstr "FPS це 0.0 але читач не передбачає тимчасового коду для пакета. %1%\n"
 
-#: src/mmg/tabs/input.cpp:1347
+#: src/mmg/tabs/input.cpp:1362
 #, c-format
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
 msgstr "FPS налаштування для номера доріжки. %s у файлі '%s' є недійсним."
@@ -5449,10 +5459,15 @@ msgstr "FPS налаштування для номера доріжки. %s у �
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "FourCC повинно бути рівно чотири символів в '%1% %2%'.\n"
 
-#: src/mmg/tabs/input.cpp:1335
+#: src/mmg/tabs/input.cpp:1350
 #, c-format
 msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
 msgstr "Установка для FourCC номер доріжки. %s в файл '%s' не чотири символи."
+
+#: src/mmg/mmg_dialog.cpp:1735
+#, c-format
+msgid "The GUI is configured to use the mkvmerge executable from a different version (%s) than the GUI itself (%s). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
+msgstr ""
 
 #: src/input/r_ogm.cpp:1383
 msgid "The Kate identifaction header could not be parsed (%1%).\n"
@@ -5508,7 +5523,7 @@ msgstr "Аргумент '%1%' у '%2%' недопустимий: надто б�
 msgid "The argument to '--timecode-scale' must be a number.\n"
 msgstr "Аргумент '--timecode-scale' повинен бути цілим числом.\n"
 
-#: src/mmg/tabs/input.cpp:1403
+#: src/mmg/tabs/input.cpp:1418
 #, c-format
 msgid "The aspect ratio setting for track nr. %s in file '%s' is invalid."
 msgstr "Пропорції налаштування для номера треку. %s у файлі '%s' є недійсним."
@@ -5592,7 +5607,7 @@ msgstr "Країна '%s' не є дійсним ccTLD і не може бути
 msgid "The cue entries (the index) are being written..."
 msgstr "cue для запису (індекс) пишеться..."
 
-#: src/mmg/tabs/input.cpp:748
+#: src/mmg/tabs/input.cpp:763
 #, c-format
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr "Поточного файлу (номер %d) не може бути вилучена. Є й інші файли - принаймні файл %d - чиї треки повинні бути включені треки з цього файлу. Будь ласка, видаліть ці файли."
@@ -5605,7 +5620,7 @@ msgstr "Тайм-код поточного пакету є менше, ніж у
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr "Код мови за замовчуванням '%1%' не є припустимим кодом ISO639-2 мови і будуть проігноровані.\n"
 
-#: src/mmg/tabs/input.cpp:1314
+#: src/mmg/tabs/input.cpp:1329
 #, c-format
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "Встановлення затримки на номер треку. %s у файлі '%s' є недійсним."
@@ -5707,7 +5722,7 @@ msgstr "Файл '%1%' порожній."
 msgid "The file '%s' does not exist."
 msgstr "Файл '%s' не існує."
 
-#: src/mmg/tabs/input.cpp:333
+#: src/mmg/tabs/input.cpp:334
 #, c-format
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
 msgstr "Файл '%s' вже оброблений у поєднанні з файлом '%s'. Вона не може бути доданий другий раз."
@@ -5736,7 +5751,7 @@ msgstr "Файл заголовка є занадто коротким.\n"
 msgid "The file header was not read correctly.\n"
 msgstr "Файл заголовка не правильно прочитаний.\n"
 
-#: src/mmg/tabs/input.cpp:380
+#: src/mmg/tabs/input.cpp:383
 #, c-format
 msgid "The file is an unsupported container format (%s)."
 msgstr "Файл непідтримуваний формат контейнера (%s)."
@@ -5834,12 +5849,12 @@ msgstr "Заголовок вже був написаний."
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "Висота двох доріжок є різною: %1% i %2%"
 
-#: src/mmg/tabs/input.cpp:630
+#: src/mmg/tabs/input.cpp:645
 #, c-format
 msgid "The input file '%s' does not contain any tracks."
 msgstr "Вхідний файл '%s' не містить ніяких доріжок."
 
-#: src/mmg/tabs/input.cpp:1238
+#: src/mmg/tabs/input.cpp:1253
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -5855,7 +5870,7 @@ msgstr ""
 "\n"
 "(Проблема виникла в tab_input::load(), #1)"
 
-#: src/mmg/tabs/input.cpp:1245
+#: src/mmg/tabs/input.cpp:1260
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -5871,7 +5886,7 @@ msgstr ""
 "\n"
 "(Проблема виникла в tab_input::load(), #2)"
 
-#: src/mmg/tabs/input.cpp:1258
+#: src/mmg/tabs/input.cpp:1273
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -6115,7 +6130,7 @@ msgstr "Розмір вкладення '%1%' є 0.\n"
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "Вихідний файл '%1%' не може бути відкритий успішно, або отримання його розмір, пошук до кінця не працює.\n"
 
-#: src/mmg/tabs/input.cpp:1325
+#: src/mmg/tabs/input.cpp:1340
 #, c-format
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr "Установка протягу для доріжки номер %s у файлі '%s' є неприпустимою."
@@ -6381,7 +6396,7 @@ msgstr "Це не повинно було статися. Будь ласка у
 msgid "This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for these files. Not needed for AAC tracks read from MP4 or Matroska files."
 msgstr "Ця стежка містить SBR AAC/HE-AAC/AAC+ дані. Тільки необхідний для вхідних файлів AAC, тому що SBR AAC не може бути виявлений автоматично для цих файлів. Чи не необхідний для читання доріжок AAC від MP4 або файлів Matroska."
 
-#: src/mmg/tabs/input.cpp:963
+#: src/mmg/tabs/input.cpp:978
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
 msgstr "Цей трек не сумісний з режимом WebM і не може бути включений."
 
@@ -6548,7 +6563,7 @@ msgstr "Тип доріжки: %1%"
 msgid "Tracks with unsupported content encoding schemes (compression or encryption) cannot be extracted.\n"
 msgstr "Доріжки з непідтримуваними схемами кодування інформаційного наповнення (стиснення або кодування) не можуть бути вилучені.\n"
 
-#: src/mmg/tabs/input.cpp:186
+#: src/mmg/tabs/input.cpp:187
 msgid "Tracks, chapters and tags:"
 msgstr "Доріжки, голови i теги:"
 
@@ -6580,7 +6595,7 @@ msgstr "Тип: %1% (%2%)"
 msgid "UID:"
 msgstr "UID:"
 
-#: src/mmg/tabs/input.cpp:252
+#: src/mmg/tabs/input.cpp:253
 msgid "USF text subtitles"
 msgstr "USF текстові субтитри"
 
@@ -6664,7 +6679,7 @@ msgstr "Беззнаковое ціле число (%1%) занадто мало
 msgid "Unsupported MPEG mpeg_version: 0x%|1$02x| in packet %2% for timecode %3%, assuming MPEG2. No further warnings will be printed for this track.\n"
 msgstr "Не підтримується MPEG mpeg_version: 0x%|1$02x| в пакеті %2% для тайм-коду %3%, беручи MPEG2. Ніякі подальші попередження не будуть надруковані для цієї доріжки.\n"
 
-#: src/mmg/tabs/input.cpp:383
+#: src/mmg/tabs/input.cpp:386
 msgid "Unsupported format"
 msgstr "Невірний формат"
 
@@ -7024,7 +7039,7 @@ msgstr "Використання відео вихідного модуля (Fou
 msgid "Using the video output module.\n"
 msgstr "Використання відео вихідного модуля.\n"
 
-#: src/mmg/tabs/input.cpp:253
+#: src/mmg/tabs/input.cpp:254
 msgid "VC1 elementary streams"
 msgstr "VC1 елементарні потоки"
 
@@ -7117,15 +7132,15 @@ msgstr "Розгляньте висновок, який mkvmerge згенеру�
 msgid "VobBtn buttons"
 msgstr "VobBtn кнопки"
 
-#: src/mmg/tabs/input.cpp:254
+#: src/mmg/tabs/input.cpp:255
 msgid "VobButtons"
 msgstr "VobButtons"
 
-#: src/mmg/tabs/input.cpp:255 src/merge/mkvmerge.cpp:91
+#: src/mmg/tabs/input.cpp:256 src/merge/mkvmerge.cpp:91
 msgid "VobSub subtitles"
 msgstr "VobSub субтитри"
 
-#: src/mmg/tabs/input.cpp:256
+#: src/mmg/tabs/input.cpp:257
 msgid "WAVE (uncompressed PCM audio)"
 msgstr "WAVE (незжатий аудіо PCM)"
 
@@ -7137,7 +7152,7 @@ msgstr "WAVE (незжатий PCM)"
 msgid "WAVPACK lossless audio"
 msgstr "WAVPACK аудіо без втрат"
 
-#: src/mmg/tabs/input.cpp:257
+#: src/mmg/tabs/input.cpp:258
 msgid "WAVPACK v4 audio"
 msgstr "WAVPACK v4 Audio"
 
@@ -7169,7 +7184,7 @@ msgstr "Попередження: Там більше, ніж одна дорі�
 msgid "Warnings:"
 msgstr "Попередження:"
 
-#: src/mmg/tabs/input.cpp:258 src/merge/mkvmerge.cpp:107
+#: src/mmg/tabs/input.cpp:259 src/merge/mkvmerge.cpp:107
 msgid "WebM audio/video files"
 msgstr "WebM Audio/Video файли"
 
@@ -7274,7 +7289,7 @@ msgstr ""
 "Приклад: -00:05:23 дозволив би всім головам починатися\n"
 "5 хвилин і на 23 секунди раніше ніж тепер."
 
-#: src/mmg/tabs/input.cpp:1357
+#: src/mmg/tabs/input.cpp:1372
 #, c-format
 msgid ""
 "You haven't selected a number of frames per second for track %lld of file '%s'. mkvmerge cannot determine the number of frames per second for such files itself. Therefore you have to set this parameter yourself on the 'format specific options' page.\n"
@@ -7289,7 +7304,7 @@ msgstr ""
 "\n"
 "Ви все ще хочете продовжити?"
 
-#: src/mmg/tabs/input.cpp:508
+#: src/mmg/tabs/input.cpp:523
 msgid ""
 "You're adding an AVC/h.264 elementary stream to the output file. mkvmerge cannot determine the number of frames per second for such files itself. Therefore you have to set this parameter yourself on the 'format specific options' page.\n"
 "\n"
@@ -7347,11 +7362,11 @@ msgstr "ac3_reader: Не вдалося прочитати %1% байт."
 msgid "ac3_reader: No valid AC3 packet found in the first %1% bytes.\n"
 msgstr "ac3_reader: Ні дійсний AC3 пакет у перших %1% байтах.\n"
 
-#: src/mmg/tabs/attachments.cpp:156 src/mmg/tabs/input.cpp:182
+#: src/mmg/tabs/attachments.cpp:156 src/mmg/tabs/input.cpp:183
 msgid "add"
 msgstr "Додати"
 
-#: src/mmg/tabs/input.cpp:184
+#: src/mmg/tabs/input.cpp:185
 msgid "append"
 msgstr "Приєднати"
 
@@ -7480,7 +7495,7 @@ msgstr "Зроблений"
 msgid "done/warnings"
 msgstr "зробити/попередження"
 
-#: src/mmg/tabs/input.cpp:188
+#: src/mmg/tabs/input.cpp:189
 msgid "down"
 msgstr "Вниз"
 
@@ -7949,9 +7964,9 @@ msgstr "mkvmerge GUI готовий"
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "mkvmerge GUI налаштування (*.mmg)|*.mmg|%s"
 
-#: src/mmg/tabs/input.cpp:1290 src/mmg/tabs/input.cpp:1315
-#: src/mmg/tabs/input.cpp:1326 src/mmg/tabs/input.cpp:1336
-#: src/mmg/tabs/input.cpp:1348 src/mmg/tabs/input.cpp:1404
+#: src/mmg/tabs/input.cpp:1305 src/mmg/tabs/input.cpp:1330
+#: src/mmg/tabs/input.cpp:1341 src/mmg/tabs/input.cpp:1351
+#: src/mmg/tabs/input.cpp:1363 src/mmg/tabs/input.cpp:1419
 msgid "mkvmerge GUI: error"
 msgstr "mkvmerge GUI: помилка"
 
@@ -8194,11 +8209,11 @@ msgstr "real_reader: Тільки аудіо заголовок версії 3, 
 msgid "real_reader: Source is not a valid RealMedia file."
 msgstr "real_reader: Джерело не є допустимим RealMedia файлом."
 
-#: src/mmg/tabs/attachments.cpp:157 src/mmg/tabs/input.cpp:183
+#: src/mmg/tabs/attachments.cpp:157 src/mmg/tabs/input.cpp:184
 msgid "remove"
 msgstr "Видалити"
 
-#: src/mmg/tabs/input.cpp:185
+#: src/mmg/tabs/input.cpp:186
 msgid "remove all"
 msgstr "Видалити всі"
 
@@ -8281,14 +8296,14 @@ msgstr "und (Невизначений)"
 #: src/input/r_matroska.cpp:87 src/input/r_matroska.cpp:2250
 #: src/input/r_matroska.cpp:2257 src/input/r_mpeg_ps.cpp:1394
 #: src/common/mm_io_win.cpp:164 src/mmg/mmg.cpp:60
-#: src/mmg/header_editor/value_page.cpp:150 src/mmg/tabs/input.cpp:374
+#: src/mmg/header_editor/value_page.cpp:150 src/mmg/tabs/input.cpp:377
 #: src/info/mkvinfo.cpp:810 src/info/mkvinfo.cpp:820 src/info/mkvinfo.cpp:839
 #: src/info/mkvinfo.cpp:868 src/info/mkvinfo.cpp:881 src/info/mkvinfo.cpp:891
 #: src/info/mkvinfo.cpp:1123
 msgid "unknown"
 msgstr "невідомий"
 
-#: src/mmg/tabs/input.cpp:187
+#: src/mmg/tabs/input.cpp:188
 msgid "up"
 msgstr "На початок"
 
