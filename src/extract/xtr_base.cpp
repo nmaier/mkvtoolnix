@@ -25,6 +25,7 @@
 #include "extract/xtr_avi.h"
 #include "extract/xtr_base.h"
 #include "extract/xtr_cpic.h"
+#include "extract/xtr_ivf.h"
 #include "extract/xtr_mpeg1_2.h"
 #include "extract/xtr_ogg.h"
 #include "extract/xtr_pgs.h"
@@ -172,6 +173,8 @@ xtr_base_c::create_extractor(const std::string &new_codec_id,
     return new xtr_mpeg1_2_video_c(new_codec_id, new_tid, tspec);
   else if (new_codec_id == MKV_V_THEORA)
     return new xtr_oggtheora_c(new_codec_id, new_tid, tspec);
+  else if (new_codec_id == MKV_V_VP8)
+    return new xtr_ivf_c(new_codec_id, new_tid, tspec);
 
   // Subtitle formats
   else if ((new_codec_id == MKV_S_TEXTUTF8) || (new_codec_id == MKV_S_TEXTASCII))
