@@ -1136,11 +1136,11 @@ msgstr "'%1%' не является допустимым кортеж дорож
 msgid "'%1%' is not a valid tuple of track ID and default duration in '--default-duration %1%'.\n"
 msgstr "'%1%' не является допустимым кортеж дорожек ID и по умолчанию продолжительность в '--default-duration %1%'.\n"
 
-#: src/extract/extract_cli_parser.cpp:138
+#: src/extract/extract_cli_parser.cpp:136
 msgid "'%1%' is only allowed when extracting chapters.\n"
 msgstr "'%1%' допускается только при извлечении главы.\n"
 
-#: src/extract/extract_cli_parser.cpp:135
+#: src/extract/extract_cli_parser.cpp:133
 msgid "'%1%' is only allowed when extracting tracks.\n"
 msgstr "'%1%' допускается только при извлечении треков.\n"
 
@@ -1443,15 +1443,15 @@ msgstr "(безымянные главы)"
 msgid "(unnamed)"
 msgstr "(безымянный)"
 
-#: src/input/r_flac.cpp:257
+#: src/input/r_flac.cpp:179
 msgid "+-> Parsing the FLAC file. This can take a LONG time.\n"
 msgstr "+-> Разбор FLAC файла. Это может занять много времени.\n"
 
-#: src/input/r_flac.cpp:340
+#: src/input/r_flac.cpp:214
 msgid "+-> Pre-parsing FLAC file: %1%%%%2%"
 msgstr "+-> Предварительный анализ FLAC файла: %1%%%%2%"
 
-#: src/input/r_flac.cpp:384
+#: src/input/r_flac.cpp:235
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr "+-> Предварительный анализ FLAC файла: 100%\n"
 
@@ -1795,7 +1795,7 @@ msgstr "Позволяет хранить AVC/h.264 в видео для Windows
 msgid "Allows the use of the CodecState element. This is used for e.g. MPEG-1/-2 video tracks for storing the sequence headers."
 msgstr "Позволяет использовать элемент CodecState. Это используется для MPEG-1/-2 видеодорожки для хранения последовательности заголовков."
 
-#: src/extract/extract_cli_parser.cpp:75
+#: src/extract/extract_cli_parser.cpp:73
 msgid "Also try to extract the CUE sheet from the chapter information and tags for this track."
 msgstr "Кроме того, попробуйте извлечь CUE лист из информации главы и метки для этой дорожки."
 
@@ -1893,7 +1893,7 @@ msgstr "По крайней мере, один <ChapterAtom> элемент тр
 msgid "At least one <EditionEntry> element is needed."
 msgstr "По крайней мере, один <EditionEntry> элемент требуется."
 
-#: src/extract/extract_cli_parser.cpp:93
+#: src/extract/extract_cli_parser.cpp:91
 msgid "Atatchment extraction"
 msgstr "Извлечение приложения"
 
@@ -2043,7 +2043,7 @@ msgstr "Открывает редактор очереди заданий"
 msgid "Browse"
 msgstr "Обзор"
 
-#: src/extract/extract_cli_parser.cpp:110
+#: src/extract/extract_cli_parser.cpp:108
 msgid "CUE sheet extraction"
 msgstr "CUE листовое извлечение"
 
@@ -2140,7 +2140,7 @@ msgstr "ID Переводчика глав: %1%"
 msgid "Chapter editor is not empty"
 msgstr "Редактор глав не пустой"
 
-#: src/extract/extract_cli_parser.cpp:102
+#: src/extract/extract_cli_parser.cpp:100
 msgid "Chapter extraction"
 msgstr "Извлечение главы"
 
@@ -2444,7 +2444,7 @@ msgstr "Кодирование содержания"
 msgid "Content encryption"
 msgstr "Шифрование содержания"
 
-#: src/extract/extract_cli_parser.cpp:73
+#: src/extract/extract_cli_parser.cpp:72
 msgid "Convert text subtitles to this charset (default: UTF-8)."
 msgstr "Конвертировать текстовые субтитры на эту кодировку (по умолчанию: UTF-8)."
 
@@ -2482,7 +2482,7 @@ msgstr "Не удалось декодировать Base64 кодированн
 
 #: src/input/r_avi.cpp:327
 #: src/input/r_matroska.cpp:1772
-#: src/input/r_ogm.cpp:1131
+#: src/input/r_ogm.cpp:1132
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "Невозможно получить декодер конкретных данных конфигурации (AVCC) из этого AVC/H.264 трек.\n"
 
@@ -2554,7 +2554,7 @@ msgstr "Не могу открыть/прочитать файл '%1%'."
 msgid "Could not parse the chapters in '%1%': %2%\n"
 msgstr "Не удалось разобрать главы в '%1%': %2%\n"
 
-#: src/input/r_ogm_flac.cpp:277
+#: src/input/r_ogm_flac.cpp:255
 msgid "Could not read the FLAC header packets.\n"
 msgstr "Не удалось прочитать заголовок FLAC пакетов.\n"
 
@@ -2867,7 +2867,7 @@ msgstr "Тип документа: %1%"
 msgid "Dolby TrueHD"
 msgstr "Dolby TrueHD"
 
-#: src/extract/extract_cli_parser.cpp:67
+#: src/extract/extract_cli_parser.cpp:66
 msgid "Don't write variable parts to output files (only for debugging)."
 msgstr "Не пишите переменной частей для вывода файлов (только для отладки)."
 
@@ -3078,12 +3078,12 @@ msgstr "Ошибки:"
 msgid "Everything went fine."
 msgstr "Все прошло отлично."
 
-#: src/extract/extract_cli_parser.cpp:81
-#: src/extract/extract_cli_parser.cpp:89
-#: src/extract/extract_cli_parser.cpp:98
-#: src/extract/extract_cli_parser.cpp:106
-#: src/extract/extract_cli_parser.cpp:115
-#: src/extract/extract_cli_parser.cpp:123
+#: src/extract/extract_cli_parser.cpp:79
+#: src/extract/extract_cli_parser.cpp:87
+#: src/extract/extract_cli_parser.cpp:96
+#: src/extract/extract_cli_parser.cpp:104
+#: src/extract/extract_cli_parser.cpp:113
+#: src/extract/extract_cli_parser.cpp:121
 msgid "Example"
 msgstr "Пример"
 
@@ -3104,7 +3104,7 @@ msgstr "Ожидаемое время в следующем формате: HH:M
 msgid "Expected an unsigned integer but found '%1%'."
 msgstr "Ожидаемые беззнаковое целое число, но нашли '%1%'."
 
-#: src/extract/extract_cli_parser.cpp:104
+#: src/extract/extract_cli_parser.cpp:102
 msgid "Exports the chapter infomartion in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
 msgstr "Экспорт главе информации в простой формат, используемый в инструменты OGM (CHAPTER01=... CHAPTER01NAME=...)."
 
@@ -3112,11 +3112,11 @@ msgstr "Экспорт главе информации в простой фор�
 msgid "Extra options"
 msgstr "Дополнительные опции"
 
-#: src/extract/extract_cli_parser.cpp:78
+#: src/extract/extract_cli_parser.cpp:76
 msgid "Extract the data to a raw file including the CodecPrivate as a header."
 msgstr "Извлечение данных в файл в том числе сырой CodecPrivate в качестве заголовка."
 
-#: src/extract/extract_cli_parser.cpp:77
+#: src/extract/extract_cli_parser.cpp:75
 msgid "Extract the data to a raw file."
 msgstr "Извлечение данных в сырой файл."
 
@@ -3393,7 +3393,7 @@ msgid "Global"
 msgstr "Глобальные"
 
 #: src/mmg/tabs/global.cpp:228
-#: src/extract/extract_cli_parser.cpp:65
+#: src/extract/extract_cli_parser.cpp:64
 msgid "Global options"
 msgstr "Глобальные опции"
 
@@ -3614,7 +3614,7 @@ msgstr "Неверный %1%, указанных в '--%2% %3%'.\n"
 msgid "Invalid Base64 character encountered"
 msgstr "Встречаются неверный Base64 характер"
 
-#: src/extract/extract_cli_parser.cpp:168
+#: src/extract/extract_cli_parser.cpp:160
 msgid "Invalid BlockAddition level in argument '%1%'.\n"
 msgstr "Недопустимый уровень BlockAddition в параметре '%1%'.\n"
 
@@ -3636,7 +3636,7 @@ msgstr "Неверный UID. Это издание UID уже использу�
 msgid "Invalid Vorbis headers in AVI audio track."
 msgstr "Неверный Vorbis заголовки AVI звуковой дорожки."
 
-#: src/extract/extract_cli_parser.cpp:245
+#: src/extract/extract_cli_parser.cpp:237
 msgid "Invalid attachment ID/file name specification in argument '%1%'.\n"
 msgstr "Недопустимая спецификация ID/имени файла вложения в параметре '%1%'.\n"
 
@@ -3872,7 +3872,7 @@ msgstr "Недопустимый ID дорожки, определенный в 
 msgid "Invalid track ID specified in '--sub-charset %1%'.\n"
 msgstr "Недопустимый ID дорожки, определенный в '--sub-charset %1%'.\n"
 
-#: src/extract/extract_cli_parser.cpp:247
+#: src/extract/extract_cli_parser.cpp:239
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "Недопустимая спецификация ID/имени файла дорожки в параметре '%1%'.\n"
 
@@ -3896,7 +3896,7 @@ msgstr "Управление очереди задания"
 msgid "Kate packet is too small and is being skipped.\n"
 msgstr "Пакет Кейт является слишком маленьким и пропускается.\n"
 
-#: src/extract/extract_cli_parser.cpp:76
+#: src/extract/extract_cli_parser.cpp:74
 msgid "Keep only the BlockAdditions up to this level (default: keep all levels)"
 msgstr "Сохраните только BlockAdditions до этого уровня (значение по умолчанию: сохраните все уровни)"
 
@@ -4165,7 +4165,7 @@ msgstr "Отсутствует имя файла"
 msgid "Missing file name after for the option '--edit-headers'."
 msgstr "Отсутствует имя файла после опции '--edit-headers'."
 
-#: src/input/r_ogm.cpp:915
+#: src/input/r_ogm.cpp:916
 msgid "Missing header/comment packets for stream. This file is broken but should be muxed correctly. If not please contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
 msgstr "Отсутствуют пакеты заголовка/комментария для потока. Этот файл сломан, не может правильно мультиплексироваться. Пожалуйста войдите в контакт с автором Moritz Bunkus <moritz@bunkus.org>.\n"
 
@@ -4177,7 +4177,7 @@ msgstr "Отсутствует вход"
 msgid "Missing one hex digit"
 msgstr "Отсутствует одно шестнадцатеричное число"
 
-#: src/extract/extract_cli_parser.cpp:262
+#: src/extract/extract_cli_parser.cpp:254
 msgid "Missing output file name in argument '%1%'.\n"
 msgstr "Отсутствует имя выходного файла в параметре '%1%'.\n"
 
@@ -4370,11 +4370,11 @@ msgstr "Помощь недоступна."
 msgid "No input files were given. No output will be created.\n"
 msgstr "Никакие входные файлы не были даны. Никакой вывод не будет создан.\n"
 
-#: src/input/r_flac.cpp:304
+#: src/input/r_flac.cpp:194
 msgid "No metadata block found. This file is broken.\n"
 msgstr "Никакой блок метаданных не найден. Этот файл сломан.\n"
 
-#: src/extract/extract_cli_parser.cpp:260
+#: src/extract/extract_cli_parser.cpp:252
 msgid "No output file name specified, will use attachment name.\n"
 msgstr "Не указано имя результирующего файла будет использовать имя вложения.\n"
 
@@ -4591,7 +4591,7 @@ msgstr "Очередь пакета, не пустая (сброшенный н�
 msgid "Parse the file completely and show all elements"
 msgstr "Анализировать файл полностью и показывать всем элементам"
 
-#: src/extract/extract_cli_parser.cpp:66
+#: src/extract/extract_cli_parser.cpp:65
 msgid "Parse the whole file instead of relying on the index."
 msgstr "Анализировать целый файл вместо того, чтобы положиться на индекс."
 
@@ -5530,7 +5530,7 @@ msgstr "TTA (The lossless True Audio codec)"
 msgid "TTA lossless audio"
 msgstr "TTA аудио без потерь"
 
-#: src/extract/extract_cli_parser.cpp:86
+#: src/extract/extract_cli_parser.cpp:84
 msgid "Tag extraction"
 msgstr "Извлечение тега"
 
@@ -5641,7 +5641,7 @@ msgstr "Установка для FourCC номер дорожки. %s в фай
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%s) than the GUI itself (%s). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr ""
 
-#: src/input/r_ogm.cpp:1383
+#: src/input/r_ogm.cpp:1384
 msgid "The Kate identifaction header could not be parsed (%1%).\n"
 msgstr "Заголовок Кейт identifaction не может быть обработан (%1%).\n"
 
@@ -5672,7 +5672,7 @@ msgstr ""
 msgid "The NALU size length must be a number between 2 and 4 inclusively in '--nalu-size-length %1%'.\n"
 msgstr "Длина NALU размер должен быть целым числом от 2 до 4 включительно '--nalu-size-length %1%'.\n"
 
-#: src/input/r_ogm.cpp:1312
+#: src/input/r_ogm.cpp:1313
 msgid "The Theora identifaction header could not be parsed (%1%).\n"
 msgstr "Заголовок Theora identifaction не может быть обработан (%1%).\n"
 
@@ -5848,7 +5848,7 @@ msgstr "Элемент был написан в конце файла, но ра
 msgid "The extracted values for video width and height from the MPEG4 layer 2 video data bitstream differ from what the values in the source container. The ones from the video data bitstream (%1%x%2%) will be used.\n"
 msgstr "Извлеченные значения для видео ширину и высоту с MPEG4 слоя 2 видео поток битов данных отличаются от того, что значения в исходном контейнере. Те из битов видеоданных (%1%x%2%) будет использоваться.\n"
 
-#: src/extract/extract_cli_parser.cpp:112
+#: src/extract/extract_cli_parser.cpp:110
 msgid "The fifth mode tries to extract chapter information and tags and outputs them as a CUE sheet. This is the reverse of using a CUE sheet with mkvmerge's '--chapters' option."
 msgstr "Пятый режим пытается извлечь информацию главы и теги и выводит их в качестве CUE листа. Это обратная использованием CUE листа с mkvmerge '--chapters' вариант."
 
@@ -5992,11 +5992,11 @@ msgstr "Файл, который вы пытались сохранить в э�
 msgid "The first file cannot be appended because there are no files to append to.\n"
 msgstr "Первый файл не может быть добавлен, поскольку нет файлов для добавления.\n"
 
-#: src/extract/extract_cli_parser.cpp:72
+#: src/extract/extract_cli_parser.cpp:71
 msgid "The first mode extracts some tracks to external files."
 msgstr "Первый режим экстракты некоторые треки на внешние файлы."
 
-#: src/extract/extract_cli_parser.cpp:61
+#: src/extract/extract_cli_parser.cpp:60
 msgid "The first word tells mkvextract what to extract. The second must be the source file. There are few global options that can be used with all modes. All other options depend on the mode."
 msgstr "Первое слово говорит mkvextract, что необходимо извлечь. Второе должно быть в исходном файле. Есть несколько глобальных опций, которые могут быть использованы для всех видов транспорта. Все остальные параметры зависят от модификаций."
 
@@ -6017,7 +6017,7 @@ msgstr "Формат разделить тайм-код/продолжитель
 msgid "The formats do not match."
 msgstr "Форматы не совпадают."
 
-#: src/extract/extract_cli_parser.cpp:103
+#: src/extract/extract_cli_parser.cpp:101
 msgid "The fourth mode extracts the chapters and converts them to XML. The output is written to the standard output. The output can be used as a source for mkvmerge."
 msgstr "Четвертый режим извлекает главы и преобразует их в XML. Печатает на стандартный вывод. Вывод может быть использован в качестве источника для mkvmerge."
 
@@ -6297,7 +6297,7 @@ msgstr ""
 "скоростях по отношению с другими дорожками (в основном используется\n"
 "для регулировки скорости видео-аудио, когда длина отличается)."
 
-#: src/extract/extract_cli_parser.cpp:87
+#: src/extract/extract_cli_parser.cpp:85
 msgid "The second mode extracts the tags and converts them to XML. The output is written to the standard output. The output can be used as a source for mkvmerge."
 msgstr "Второй режим извлекает теги и преобразует их в XML. Печатает на стандартный вывод. Вывод может быть использован в качестве источника для mkvmerge."
 
@@ -6310,7 +6310,7 @@ msgstr "Таблица поиска дорожки в этом файле TTA с
 msgid "The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."
 msgstr "Выбранного языка '%s' к главе '%s' не является допустимым кодом языка. Пожалуйста, выберите один из предопределенных."
 
-#: src/extract/extract_cli_parser.cpp:121
+#: src/extract/extract_cli_parser.cpp:119
 msgid "The sixth mode finds the timecodes of all blocks for a track and outputs a timecode v2 file with these timecodes."
 msgstr "Шестой режим считает тайм-кодов всех блоков на трек и выходы тайм-кода v2 файл с этими тайм-кодами."
 
@@ -6360,7 +6360,7 @@ msgstr "Теги в '%1%' не могли быть анализированы: �
 msgid "The temporary file '%1%' could not be opened for reading (%2%).\n"
 msgstr "Временный файл '%1%' не мог быть открыт для того, чтобы читать (%2%).\n"
 
-#: src/extract/extract_cli_parser.cpp:95
+#: src/extract/extract_cli_parser.cpp:93
 msgid "The third mode extracts attachments from the source file."
 msgstr "Третий режим извлекает вложения из исходного файла."
 
@@ -6406,7 +6406,7 @@ msgstr ""
 msgid "The timecodes after which a new output file is started. The timecodes refer to the whole stream and not to each individual output file. The timecodes can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH'. You can specify up to nine digits for the number of nanoseconds 'nnnnnnnnn' or none at all. If given then you may use up to nine digits after the decimal point. If two or more timecodes are used then you have to separate them with commas. The formats can be mixed, too. Examples: 01:00:00,01:30:00 (after one hour and after one hour and thirty minutes) or 1800s,3000s,00:10:00 (after three, five and ten minutes)."
 msgstr "Тайм-коды, после которого начат новый выходной файл. Тайм-коды обращаются к целому потоку а не к каждому индивидуальному выходному файлу. Тайм-коды может быть дан или в форме HH:MM:SS.nnnnnnnnn или как число секунд, сопровождаемых 's'. Вы можете опустить число часов 'ГД'. Вы можете определить до девяти цифр для числа наносекунд 'nnnnnnnnn' или ни одного вообще. Если дано тогда Вы можете использовать до девяти цифр после десятичной точки. Если два или больше тайм-коды используются тогда, Вы должны отделить их с запятыми. Форматы могут быть смешаны, также. Примеры: 01:00:00,01:30:00 (после одного часа и после одного часа и тридцати минут) или 1800-ые, 3000, 00:10:00 (после три, пяти и десяти минут)."
 
-#: src/input/r_ogm.cpp:569
+#: src/input/r_ogm.cpp:570
 msgid "The timecodes for this stream have been reset in the middle of the file. This is not supported. The current packet will be discarded.\n"
 msgstr "Тайм-коды для этого потока были сброшены в середине файла. Это не поддержано. От текущего пакета откажутся.\n"
 
@@ -6507,7 +6507,7 @@ msgstr "Эта дорожка звукового канала MPEG содерж�
 msgid "This MPEG audio track contains %1% bytes of non-MP3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr "Эта дорожка звукового канала MPEG содержит байты на %1% данных не-MP3, которые были пропущены. Звуковая/видео синхронизация, возможно, была потеряна.\n"
 
-#: src/input/r_ogm.cpp:821
+#: src/input/r_ogm.cpp:822
 msgid "This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can be overridden with the '--chapter-charset <charset>' switch.\n"
 msgstr "Этот файл Ogg/OGM содержит информация заголовка или глава. К сожалению кодировка, чтобы хранить эту информацию в файле, не может быть идентифицирован однозначно. Программа предполагает, что электрический ток Вашей системы кодировки является соответствующим. Это может быть отменено с '--chapter-charset <charset>' переключатель.\n"
 
@@ -6610,7 +6610,7 @@ msgstr "Этот трек не совместим с режимом WebM и не
 msgid "Time slice"
 msgstr "Интервал времени"
 
-#: src/extract/extract_cli_parser.cpp:119
+#: src/extract/extract_cli_parser.cpp:117
 msgid "Timecode extraction"
 msgstr "Извлечение тайм-кода"
 
@@ -6693,7 +6693,6 @@ msgstr "Дорожка %1% с CodecID '%2%' отсутствует \"codec priva
 #: src/extract/xtr_avi.cpp:37
 #: src/extract/xtr_ogg.cpp:37
 #: src/extract/xtr_ogg.cpp:72
-#: src/extract/xtr_ogg.cpp:219
 #: src/extract/xtr_rmff.cpp:31
 #: src/extract/xtr_textsubs.cpp:291
 #: src/extract/xtr_vobsub.cpp:64
@@ -6743,7 +6742,7 @@ msgstr "Дорожка UID"
 msgid "Track UID: %1%"
 msgstr "Дорожка UID: %1%"
 
-#: src/extract/extract_cli_parser.cpp:71
+#: src/extract/extract_cli_parser.cpp:70
 msgid "Track extraction"
 msgstr "Извлечение дорожки"
 
@@ -6835,7 +6834,7 @@ msgstr "Неизвестный AAC MPEG-2 профиль %1%."
 msgid "Unknown AAC MPEG-4 object type %1%."
 msgstr "Неизвестный AAC MPEG-4 тип объекта %1%."
 
-#: src/input/r_ogm.cpp:519
+#: src/input/r_ogm.cpp:520
 msgid "Unknown audio stream type 0x%|1$04x|. Stream ID %2% will be ignored.\n"
 msgstr "Неизвестный тип аудио потока 0x%|1$04x|. Stream ID %2% будут игнорироваться.\n"
 
@@ -6863,7 +6862,7 @@ msgstr "Неизвестный формат сегмента UID '%3%' в '%1% %
 msgid "Unknown header 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
 msgstr "Неизвестный заголовок 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
 
-#: src/extract/extract_cli_parser.cpp:230
+#: src/extract/extract_cli_parser.cpp:222
 msgid "Unknown mode '%1%'.\n"
 msgstr "Неизвестный режим '%1%'.\n"
 
@@ -6884,7 +6883,7 @@ msgstr "Неизвестный режим синтаксического ана�
 msgid "Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n"
 msgstr "Неизвестный/неподдерживаемый формат аудио 0x%|1$04x| для этой звуковой дорожки.\n"
 
-#: src/extract/extract_cli_parser.cpp:238
+#: src/extract/extract_cli_parser.cpp:230
 msgid "Unrecognized command line option '%1%'.\n"
 msgstr "Непризнанные опции командной строки '%1%'.\n"
 
@@ -6912,7 +6911,7 @@ msgstr "Неподдерживаемый тип дорожки для этой �
 msgid "Updating the '%1%' element failed. Reason:\n"
 msgstr "Обновление элемента '%1%' не удалось. Причина:\n"
 
-#: src/extract/extract_cli_parser.cpp:50
+#: src/extract/extract_cli_parser.cpp:49
 msgid "Usage"
 msgstr "Использование"
 
@@ -7007,7 +7006,7 @@ msgstr "Использование AAC выходного модуля (FourCC: 
 
 #: src/input/r_aac.cpp:123
 #: src/input/r_matroska.cpp:1498
-#: src/input/r_ogm.cpp:968
+#: src/input/r_ogm.cpp:969
 #: src/input/r_qtmp4.cpp:1535
 msgid "Using the AAC output module.\n"
 msgstr "Использование AAC выходного модуля.\n"
@@ -7021,7 +7020,7 @@ msgid "Using the AC3 output module (FourCC: %1%).\n"
 msgstr "Использование AC3 выходного модуля (FourCC: %1%).\n"
 
 #: src/input/r_avi.cpp:538
-#: src/input/r_ogm.cpp:986
+#: src/input/r_ogm.cpp:987
 #: src/input/r_qtmp4.cpp:1458
 #: src/input/r_wav.cpp:225
 msgid "Using the AC3 output module.\n"
@@ -7060,13 +7059,13 @@ msgstr "Использование Dirac демультиплексора.\n"
 msgid "Using the Dirac video output module.\n"
 msgstr "Использование Dirac видео выходного модуля.\n"
 
-#: src/input/r_flac.cpp:197
+#: src/input/r_flac.cpp:124
 msgid "Using the FLAC demultiplexer.\n"
 msgstr "Использование FLAC демультиплексора.\n"
 
-#: src/input/r_flac.cpp:237
+#: src/input/r_flac.cpp:164
 #: src/input/r_matroska.cpp:1540
-#: src/input/r_ogm_flac.cpp:306
+#: src/input/r_ogm_flac.cpp:287
 msgid "Using the FLAC output module.\n"
 msgstr "Использование FLAC выходного модуля.\n"
 
@@ -7079,7 +7078,7 @@ msgstr "Использование WAV демультиплексора.\n"
 msgid "Using the Kate output module.\n"
 msgstr "Использование Kate выходного модуля.\n"
 
-#: src/input/r_ogm.cpp:1395
+#: src/input/r_ogm.cpp:1396
 msgid "Using the Kate subtitle output module.\n"
 msgstr "Использование Kate выходного модуля субтитров.\n"
 
@@ -7099,7 +7098,7 @@ msgstr "Использование MPEG PS демультиплексора.\n"
 #: src/input/r_matroska.cpp:1548
 #: src/input/r_mp3.cpp:71
 #: src/input/r_mpeg_ps.cpp:1171
-#: src/input/r_ogm.cpp:1004
+#: src/input/r_ogm.cpp:1005
 #: src/input/r_qtmp4.cpp:1541
 msgid "Using the MPEG audio output module.\n"
 msgstr "Использование MPEG аудио выходного модуля.\n"
@@ -7124,13 +7123,13 @@ msgstr "Использование MPEG-4 Part 10 (AVC) видео выводн�
 #: src/input/r_avi.cpp:324
 #: src/input/r_matroska.cpp:1784
 #: src/input/r_mpeg_ps.cpp:1210
-#: src/input/r_ogm.cpp:1128
+#: src/input/r_ogm.cpp:1129
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "Использование MPEG-4 Part 10 ES видео выводного модуля.\n"
 
 #: src/input/r_avi.cpp:307
 #: src/input/r_matroska.cpp:1419
-#: src/input/r_ogm.cpp:1232
+#: src/input/r_ogm.cpp:1233
 #: src/input/r_qtmp4.cpp:1485
 msgid "Using the MPEG-4 part 2 video output module.\n"
 msgstr "Использование MPEG-4 Part 2 видео выходного модуля.\n"
@@ -7145,7 +7144,7 @@ msgstr "Использование OGG/OGM демультиплексора.\n"
 
 #: src/input/r_avi.cpp:523
 #: src/input/r_matroska.cpp:1555
-#: src/input/r_ogm.cpp:1023
+#: src/input/r_ogm.cpp:1024
 #: src/input/r_qtmp4.cpp:1547
 #: src/input/r_wav.cpp:395
 msgid "Using the PCM output module.\n"
@@ -7185,7 +7184,7 @@ msgid "Using the TTA output module.\n"
 msgstr "Использование TTA выходного модуля.\n"
 
 #: src/input/r_matroska.cpp:1427
-#: src/input/r_ogm.cpp:1325
+#: src/input/r_ogm.cpp:1326
 msgid "Using the Theora video output module.\n"
 msgstr "Использование Theora видео выходного модуля.\n"
 
@@ -7241,7 +7240,7 @@ msgstr "Использование VobSub читателя субтитров. (
 
 #: src/input/r_avi.cpp:678
 #: src/input/r_matroska.cpp:1573
-#: src/input/r_ogm.cpp:1044
+#: src/input/r_ogm.cpp:1045
 msgid "Using the Vorbis output module.\n"
 msgstr "Использование Vorbis выходного модуля.\n"
 
@@ -7272,7 +7271,7 @@ msgstr "Использование передачи результата мод�
 
 #: src/input/r_avi.cpp:381
 #: src/input/r_matroska.cpp:1651
-#: src/input/r_ogm.cpp:1075
+#: src/input/r_ogm.cpp:1076
 #: src/input/r_srt.cpp:60
 #: src/input/r_ssa.cpp:71
 #: src/input/r_usf.cpp:259
@@ -7290,7 +7289,7 @@ msgstr "Использование видео выходного модуля (F
 
 #: src/input/r_avi.cpp:336
 #: src/input/r_matroska.cpp:1441
-#: src/input/r_ogm.cpp:1237
+#: src/input/r_ogm.cpp:1238
 msgid "Using the video output module.\n"
 msgstr "Использование видео выходного модуля.\n"
 
@@ -7474,15 +7473,11 @@ msgstr "Ширина видео кадров, чтобы отобразить."
 msgid "Write durations for all blocks. This will increase file size and does not offer any additional value for players at the moment."
 msgstr "Создать продолжительность для всех блоков. Это позволит увеличить размер файла, и не предлагает дополнительные преимущества для плееров на данный момент."
 
-#: src/extract/extract_cli_parser.cpp:74
-msgid "Write raw FLAC files (default: write OggFLAC files)."
-msgstr "Создать исходные файлы FLAC (по умолчанию: написать OggFLAC файлы)."
-
-#: src/extract/extract_cli_parser.cpp:96
+#: src/extract/extract_cli_parser.cpp:94
 msgid "Write the attachment with the ID 'AID' to 'outname'."
 msgstr "Записать вложение с ID 'AID' в 'outname'."
 
-#: src/extract/extract_cli_parser.cpp:79
+#: src/extract/extract_cli_parser.cpp:77
 msgid "Write track with the ID TID to the file 'out'."
 msgstr "Записать дорожку с ID TID в файл 'out'."
 
@@ -7838,106 +7833,55 @@ msgstr "Не удалось"
 msgid "filelist_t not found for generic_packetizer_c. %1%\n"
 msgstr "filelist_t не найдется generic_packetizer_c. %1%\n"
 
-#: src/input/r_ogm_flac.cpp:151
-#: src/input/r_ogm_flac.cpp:155
+#: src/input/r_ogm_flac.cpp:132
 msgid "flac_header_extraction: Could not initialize the FLAC decoder.\n"
 msgstr "flac_header_extraction: Не удалось инициализировать декодер FLAC.\n"
 
-#: src/input/r_ogm_flac.cpp:146
+#: src/input/r_ogm_flac.cpp:130
 msgid "flac_header_extraction: Could not set metadata_respond_all.\n"
 msgstr "flac_header_extraction: Не мог установить metadata_respond_all.\n"
 
-#: src/input/r_ogm_flac.cpp:142
-msgid "flac_header_extraction: Could not set the error callback.\n"
-msgstr "flac_header_extraction: Не удалось установить ошибки обратного вызова.\n"
-
-#: src/input/r_ogm_flac.cpp:140
-msgid "flac_header_extraction: Could not set the metadata callback.\n"
-msgstr "flac_header_extraction: Не удалось установить метаданных обратного вызова.\n"
-
-#: src/input/r_ogm_flac.cpp:136
-msgid "flac_header_extraction: Could not set the read callback.\n"
-msgstr "flac_header_extraction: Не удалось установить читать обратного вызова.\n"
-
-#: src/input/r_ogm_flac.cpp:138
-msgid "flac_header_extraction: Could not set the write callback.\n"
-msgstr "flac_header_extraction: Не удалось установить написать обратного вызова.\n"
-
-#: src/input/r_ogm_flac.cpp:131
+#: src/input/r_ogm_flac.cpp:128
 msgid "flac_header_extraction: FLAC__stream_decoder_new() failed.\n"
 msgstr "flac_header_extraction: FLAC__stream_decoder_new() не удалось.\n"
 
-#: src/input/r_ogm_flac.cpp:53
+#: src/input/r_ogm_flac.cpp:42
 msgid "flac_header_extraction: bytes (%1%) < op.bytes (%2%). Could not read the FLAC headers.\n"
 msgstr "flac_header_extraction: bytes (%1%) < op.bytes (%2%). Не удалось прочитать заголовки FLAC.\n"
 
-#: src/input/r_flac.cpp:286
-#: src/input/r_flac.cpp:292
+#: src/input/r_flac.cpp:187
 msgid "flac_reader: Could not initialize the FLAC decoder.\n"
 msgstr "flac_reader: Не удалось инициализировать декодер FLAC.\n"
 
-#: src/input/r_flac.cpp:191
+#: src/input/r_flac.cpp:118
 msgid "flac_reader: Could not open the source file."
 msgstr "flac_reader: Не удалось открыть исходный файл."
 
-#: src/input/r_flac.cpp:214
+#: src/input/r_flac.cpp:141
 msgid "flac_reader: Could not read a header packet.\n"
 msgstr "flac_reader: Не удалось прочитать заголовок пакета.\n"
 
-#: src/input/r_flac.cpp:200
+#: src/input/r_flac.cpp:127
 msgid "flac_reader: Could not read all header packets."
 msgstr "flac_reader: Не удалось прочитать заголовок всех пакетов."
 
-#: src/input/r_flac.cpp:389
+#: src/input/r_flac.cpp:240
 msgid "flac_reader: Could not read all header packets.\n"
 msgstr "flac_reader: Не удалось прочитать заголовок всех пакетов.\n"
 
-#: src/input/r_flac.cpp:276
-#: src/input/r_flac.cpp:289
+#: src/input/r_flac.cpp:184
 msgid "flac_reader: Could not set metadata_respond_all.\n"
 msgstr "flac_reader: Не мог установить metadata_respond_all.\n"
 
-#: src/input/r_flac.cpp:284
-msgid "flac_reader: Could not set the eof callback.\n"
-msgstr "flac_reader: Не удалось установить конец файла обратного вызова.\n"
-
-#: src/input/r_flac.cpp:274
-msgid "flac_reader: Could not set the error callback.\n"
-msgstr "flac_reader: Не удалось установить ошибки обратного вызова.\n"
-
-#: src/input/r_flac.cpp:282
-msgid "flac_reader: Could not set the length callback.\n"
-msgstr "flac_reader: Не удалось установить длину обратного вызова.\n"
-
-#: src/input/r_flac.cpp:272
-msgid "flac_reader: Could not set the metadata callback.\n"
-msgstr "flac_reader: Не удалось установить метаданных обратного вызова.\n"
-
-#: src/input/r_flac.cpp:268
-msgid "flac_reader: Could not set the read callback.\n"
-msgstr "flac_reader: Не удалось установить читать обратного вызова.\n"
-
-#: src/input/r_flac.cpp:278
-msgid "flac_reader: Could not set the seek callback.\n"
-msgstr "flac_reader: Не удалось установить возвратный вызов поиска.\n"
-
-#: src/input/r_flac.cpp:280
-msgid "flac_reader: Could not set the tell callback.\n"
-msgstr "flac_reader: Не удалось установить сказать обратного вызова.\n"
-
-#: src/input/r_flac.cpp:270
-msgid "flac_reader: Could not set the write callback.\n"
-msgstr "flac_reader: Не удалось установить написать обратного вызова.\n"
-
-#: src/input/r_flac.cpp:495
+#: src/input/r_flac.cpp:331
 msgid "flac_reader: Error parsing the file: %1%\n"
 msgstr "flac_reader: Ошибка при разборе файла: %1%\n"
 
-#: src/input/r_flac.cpp:264
+#: src/input/r_flac.cpp:182
 msgid "flac_reader: FLAC__stream_decoder_new() failed.\n"
 msgstr "flac_reader: FLAC__stream_decoder_new() не удалось.\n"
 
-#: src/input/r_flac.cpp:222
+#: src/input/r_flac.cpp:149
 msgid "flac_reader: could not initialize the FLAC packetizer.\n"
 msgstr "flac_reader: Не удалось инициализировать FLAC packetizer.\n"
 
@@ -8175,59 +8119,59 @@ msgstr "отсутствует значение"
 msgid "mkdir(%1%) failed; errno = %2% (%3%)"
 msgstr "mkdir(%1%) не удалось; ошибка = %2% (%3%)"
 
-#: src/extract/extract_cli_parser.cpp:57
+#: src/extract/extract_cli_parser.cpp:56
 msgid "mkvextract <-h|-V>"
 msgstr "mkvextract <-h|-V>"
 
-#: src/extract/extract_cli_parser.cpp:48
+#: src/extract/extract_cli_parser.cpp:47
 msgid "mkvextract <mode> <source-filename> [options] <extraction-spec>"
 msgstr "mkvextract <режим> <исходное имя файла> [опции] <спецификации извлечения>"
 
-#: src/extract/extract_cli_parser.cpp:100
+#: src/extract/extract_cli_parser.cpp:98
 msgid "mkvextract attachments \"a movie.mkv\" 4:cover.jpg"
 msgstr "mkvextract вложения \"фильм.mkv\" 4:обложка.jpg"
 
-#: src/extract/extract_cli_parser.cpp:53
+#: src/extract/extract_cli_parser.cpp:52
 msgid "mkvextract attachments <inname> [options] [AID1:out1 [AID2:out2 ...]]"
 msgstr "mkvextract вложения <inname> [опции] [AID1:out1 [AID2:out2 ...]]"
 
-#: src/extract/extract_cli_parser.cpp:108
+#: src/extract/extract_cli_parser.cpp:106
 msgid "mkvextract chapters \"a movie.mkv\" > movie_chapters.xml"
 msgstr "mkvextract главы \"фильм.mkv\" > главы_фильма.xml"
 
-#: src/extract/extract_cli_parser.cpp:54
+#: src/extract/extract_cli_parser.cpp:53
 msgid "mkvextract chapters <inname> [options]"
 msgstr "mkvextract главы <inname> [опции]"
 
-#: src/extract/extract_cli_parser.cpp:117
+#: src/extract/extract_cli_parser.cpp:115
 msgid "mkvextract cuesheet \"audiofile.mka\" > audiofile.cue"
 msgstr "mkvextract cuesheet \"аудиофайл.mka\" > аудиофайл.cue"
 
-#: src/extract/extract_cli_parser.cpp:55
+#: src/extract/extract_cli_parser.cpp:54
 msgid "mkvextract cuesheet <inname> [options]"
 msgstr "mkvextract cuesheet <inname> [опции]"
 
-#: src/extract/extract_cli_parser.cpp:91
+#: src/extract/extract_cli_parser.cpp:89
 msgid "mkvextract tags \"a movie.mkv\" > movie_tags.xml"
 msgstr "mkvextract теги \"фильм.mkv\" > теги_фильма.xml"
 
-#: src/extract/extract_cli_parser.cpp:52
+#: src/extract/extract_cli_parser.cpp:51
 msgid "mkvextract tags <inname> [options]"
 msgstr "mkvextract теги <inname> [опции]"
 
-#: src/extract/extract_cli_parser.cpp:125
+#: src/extract/extract_cli_parser.cpp:123
 msgid "mkvextract timecodes_v2 \"a movie.mkv\" 1:timecodes_track1.txt"
 msgstr "mkvextract тайм-коды_v2 \"фильм.mkv\" 1:тайм-коды_дорожки1.txt"
 
-#: src/extract/extract_cli_parser.cpp:56
+#: src/extract/extract_cli_parser.cpp:55
 msgid "mkvextract timecodes_v2 <inname> [TID1:out1 [TID2:out2 ...]]"
 msgstr "mkvextract тайм-коды_v2 <inname> [TID1:out1 [TID2:out2 ...]]"
 
-#: src/extract/extract_cli_parser.cpp:83
+#: src/extract/extract_cli_parser.cpp:81
 msgid "mkvextract tracks \"a movie.mkv\" 2:audio.ogg -c ISO8859-1 3:subs.srt"
 msgstr "mkvextract дорожки \"фильм.mkv\" 2:аудио.ogg -c ISO8859-1 3:субтитры.srt"
 
-#: src/extract/extract_cli_parser.cpp:51
+#: src/extract/extract_cli_parser.cpp:50
 msgid "mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]"
 msgstr "mkvextract дорожки <inname> [опции] [TID1:out1 [TID2:out2 ...]]"
 
@@ -8312,7 +8256,7 @@ msgstr "mkvmerge закончил код возврата %d. %s"
 msgid "mkvmerge has finished"
 msgstr "mkvmerge закончил"
 
-#: src/input/r_ogm.cpp:474
+#: src/input/r_ogm.cpp:475
 msgid "mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"
 msgstr "mkvmerge не был скомпилирован с поддержкой FLAC, но обработка этого потока было предложено.\n"
 
@@ -8751,6 +8695,32 @@ msgstr "Да"
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "Использование FLAC выходного модуля.\n"
+#~ msgid "Write raw FLAC files (default: write OggFLAC files)."
+#~ msgstr "Создать исходные файлы FLAC (по умолчанию: написать OggFLAC файлы)."
+#~ msgid "flac_header_extraction: Could not set the error callback.\n"
+#~ msgstr "flac_header_extraction: Не удалось установить ошибки обратного вызова.\n"
+#~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
+#~ msgstr "flac_header_extraction: Не удалось установить метаданных обратного вызова.\n"
+#~ msgid "flac_header_extraction: Could not set the read callback.\n"
+#~ msgstr "flac_header_extraction: Не удалось установить читать обратного вызова.\n"
+#~ msgid "flac_header_extraction: Could not set the write callback.\n"
+#~ msgstr "flac_header_extraction: Не удалось установить написать обратного вызова.\n"
+#~ msgid "flac_reader: Could not set the eof callback.\n"
+#~ msgstr "flac_reader: Не удалось установить конец файла обратного вызова.\n"
+#~ msgid "flac_reader: Could not set the error callback.\n"
+#~ msgstr "flac_reader: Не удалось установить ошибки обратного вызова.\n"
+#~ msgid "flac_reader: Could not set the length callback.\n"
+#~ msgstr "flac_reader: Не удалось установить длину обратного вызова.\n"
+#~ msgid "flac_reader: Could not set the metadata callback.\n"
+#~ msgstr "flac_reader: Не удалось установить метаданных обратного вызова.\n"
+#~ msgid "flac_reader: Could not set the read callback.\n"
+#~ msgstr "flac_reader: Не удалось установить читать обратного вызова.\n"
+#~ msgid "flac_reader: Could not set the seek callback.\n"
+#~ msgstr "flac_reader: Не удалось установить возвратный вызов поиска.\n"
+#~ msgid "flac_reader: Could not set the tell callback.\n"
+#~ msgstr "flac_reader: Не удалось установить сказать обратного вызова.\n"
+#~ msgid "flac_reader: Could not set the write callback.\n"
+#~ msgstr "flac_reader: Не удалось установить написать обратного вызова.\n"
 #~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 #~ msgstr "r_matroska: Кластер не содержат кластера тайм-кода. Файл не работает. Прерывание.\n"
 

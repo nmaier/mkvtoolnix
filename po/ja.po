@@ -1111,11 +1111,11 @@ msgstr "'--nalu-size-length %1%'の'%1%'は正しいトラックIDとNALUサイ�
 msgid "'%1%' is not a valid tuple of track ID and default duration in '--default-duration %1%'.\n"
 msgstr "'--default-duration %1%'の'%1%'は正しいトラックIDとデフォルトのフレーム持続期間の組み合わせではありません。\n"
 
-#: src/extract/extract_cli_parser.cpp:138
+#: src/extract/extract_cli_parser.cpp:136
 msgid "'%1%' is only allowed when extracting chapters.\n"
 msgstr "'%1%'はチャプタ展開にのみ使用することができます。\n"
 
-#: src/extract/extract_cli_parser.cpp:135
+#: src/extract/extract_cli_parser.cpp:133
 msgid "'%1%' is only allowed when extracting tracks.\n"
 msgstr "'%1%'はトラック展開時にのみ使用することができます。\n"
 
@@ -1405,15 +1405,15 @@ msgstr "（名前の無いチャプタ）"
 msgid "(unnamed)"
 msgstr "（名前をつけてください）"
 
-#: src/input/r_flac.cpp:257
+#: src/input/r_flac.cpp:179
 msgid "+-> Parsing the FLAC file. This can take a LONG time.\n"
 msgstr "+-> FLACファイルを解析中です。長い時間がかかることがあります。\n"
 
-#: src/input/r_flac.cpp:340
+#: src/input/r_flac.cpp:214
 msgid "+-> Pre-parsing FLAC file: %1%%%%2%"
 msgstr "+-> FLACファイルを事前解析中です: %1%%%%2%"
 
-#: src/input/r_flac.cpp:384
+#: src/input/r_flac.cpp:235
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr "+-> FLACファイルを事前解析中です: 100%\n"
 
@@ -1739,7 +1739,7 @@ msgstr "AVC/h.264ビデオがAVIから読み込まれたときなどに、Video-
 msgid "Allows the use of the CodecState element. This is used for e.g. MPEG-1/-2 video tracks for storing the sequence headers."
 msgstr "CodecState要素の使用を許可します。これは例えばMPEG-1/-2ビデオトラックがシーケンスヘッダを格納するのに使用されます。"
 
-#: src/extract/extract_cli_parser.cpp:75
+#: src/extract/extract_cli_parser.cpp:73
 msgid "Also try to extract the CUE sheet from the chapter information and tags for this track."
 msgstr "このトラックのチャプタ情報とタグからCUEシートの展開も試みます。"
 
@@ -1829,7 +1829,7 @@ msgstr "最低でも1つの<ChapterAtom>要素が必要です。"
 msgid "At least one <EditionEntry> element is needed."
 msgstr "最低でも1つの<EditionEntry>要素が必要です。"
 
-#: src/extract/extract_cli_parser.cpp:93
+#: src/extract/extract_cli_parser.cpp:91
 msgid "Atatchment extraction"
 msgstr "添付ファイルの展開"
 
@@ -1967,7 +1967,7 @@ msgstr "ジョブキューエディタを起動します"
 msgid "Browse"
 msgstr "参照"
 
-#: src/extract/extract_cli_parser.cpp:110
+#: src/extract/extract_cli_parser.cpp:108
 msgid "CUE sheet extraction"
 msgstr "CUEシートの展開"
 
@@ -2061,7 +2061,7 @@ msgstr ""
 msgid "Chapter editor is not empty"
 msgstr "チャプタエディタは空ではありません"
 
-#: src/extract/extract_cli_parser.cpp:102
+#: src/extract/extract_cli_parser.cpp:100
 msgid "Chapter extraction"
 msgstr "チャプタの展開"
 
@@ -2351,7 +2351,7 @@ msgstr "コンテンツエンコーディング"
 msgid "Content encryption"
 msgstr "コンテンツ暗号化"
 
-#: src/extract/extract_cli_parser.cpp:73
+#: src/extract/extract_cli_parser.cpp:72
 msgid "Convert text subtitles to this charset (default: UTF-8)."
 msgstr "テキスト字幕をこの文字セットに変換します（デフォルト：UTF-8。）"
 
@@ -2386,7 +2386,7 @@ msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "Base64にエンコードされたデータをデコードすることができませんでした。恐らく不正な形式です。"
 
 #: src/input/r_avi.cpp:327 src/input/r_matroska.cpp:1772
-#: src/input/r_ogm.cpp:1131
+#: src/input/r_ogm.cpp:1132
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "このAVC/h.264トラックからデコーダ詳細設定データ（AVCC）を展開することができませんでした。\n"
 
@@ -2456,7 +2456,7 @@ msgstr "ファイル'%1%'を開く・読み込むことができませんでし�
 msgid "Could not parse the chapters in '%1%': %2%\n"
 msgstr "'%1%'のチャプタを解析することができませんでした：%2%\n"
 
-#: src/input/r_ogm_flac.cpp:277
+#: src/input/r_ogm_flac.cpp:255
 msgid "Could not read the FLAC header packets.\n"
 msgstr "FLACのヘッダパケットを読み取ることができませんでした。\n"
 
@@ -2764,7 +2764,7 @@ msgstr ""
 msgid "Dolby TrueHD"
 msgstr "Dolby TrueHD"
 
-#: src/extract/extract_cli_parser.cpp:67
+#: src/extract/extract_cli_parser.cpp:66
 msgid "Don't write variable parts to output files (only for debugging)."
 msgstr "変数部分を出力ファイルに書き込みません（デバッグ専用。）"
 
@@ -2967,11 +2967,11 @@ msgstr "エラー："
 msgid "Everything went fine."
 msgstr "全て正常に終了しました。"
 
-#: src/extract/extract_cli_parser.cpp:81 src/extract/extract_cli_parser.cpp:89
-#: src/extract/extract_cli_parser.cpp:98
-#: src/extract/extract_cli_parser.cpp:106
-#: src/extract/extract_cli_parser.cpp:115
-#: src/extract/extract_cli_parser.cpp:123
+#: src/extract/extract_cli_parser.cpp:79 src/extract/extract_cli_parser.cpp:87
+#: src/extract/extract_cli_parser.cpp:96
+#: src/extract/extract_cli_parser.cpp:104
+#: src/extract/extract_cli_parser.cpp:113
+#: src/extract/extract_cli_parser.cpp:121
 msgid "Example"
 msgstr "例"
 
@@ -2992,7 +2992,7 @@ msgstr "時間は次のフォーマットで指定されなければなりませ
 msgid "Expected an unsigned integer but found '%1%'."
 msgstr "符号無しの整数が見つかるべきところですが、'%1%'が見つかりました。"
 
-#: src/extract/extract_cli_parser.cpp:104
+#: src/extract/extract_cli_parser.cpp:102
 msgid "Exports the chapter infomartion in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
 msgstr "チャプタ情報をOGM toolsで使用されるシンプルフォーマット（CHAPTER01=... CHAPTER01NAME=...）でエクスポートします。"
 
@@ -3000,11 +3000,11 @@ msgstr "チャプタ情報をOGM toolsで使用されるシンプルフォーマ
 msgid "Extra options"
 msgstr "追加オプション"
 
-#: src/extract/extract_cli_parser.cpp:78
+#: src/extract/extract_cli_parser.cpp:76
 msgid "Extract the data to a raw file including the CodecPrivate as a header."
 msgstr "CodecPrivateをヘッダとして含むrawファイルへとデータを展開します。"
 
-#: src/extract/extract_cli_parser.cpp:77
+#: src/extract/extract_cli_parser.cpp:75
 msgid "Extract the data to a raw file."
 msgstr "rawファイルへとデータを展開します。"
 
@@ -3272,7 +3272,7 @@ msgstr "一般トラックオプション"
 msgid "Global"
 msgstr "グローバルオプション"
 
-#: src/mmg/tabs/global.cpp:228 src/extract/extract_cli_parser.cpp:65
+#: src/mmg/tabs/global.cpp:228 src/extract/extract_cli_parser.cpp:64
 msgid "Global options"
 msgstr " グローバルオプション"
 
@@ -3485,7 +3485,7 @@ msgstr "'--%2% %3%'で不正な%1%が指定されました。\n"
 msgid "Invalid Base64 character encountered"
 msgstr "不正なBase64文字に遭遇しました"
 
-#: src/extract/extract_cli_parser.cpp:168
+#: src/extract/extract_cli_parser.cpp:160
 msgid "Invalid BlockAddition level in argument '%1%'.\n"
 msgstr "引数'%1%'で不正なBlockAdditionレベルがあります。\n"
 
@@ -3505,7 +3505,7 @@ msgstr "不正なUIDです。このエディションUIDは既に使用されて
 msgid "Invalid Vorbis headers in AVI audio track."
 msgstr "AVIのオーディオトラックのVorbisヘッダが不正です。"
 
-#: src/extract/extract_cli_parser.cpp:245
+#: src/extract/extract_cli_parser.cpp:237
 msgid "Invalid attachment ID/file name specification in argument '%1%'.\n"
 msgstr "引数'%1%'で指定されている添付ファイルID・ファイル名が不正です。\n"
 
@@ -3739,7 +3739,7 @@ msgstr "'--forced-track %1%'で不正なトラックIDが指定されました�
 msgid "Invalid track ID specified in '--sub-charset %1%'.\n"
 msgstr "'--sub-charset %1%'で不正なトラックIDが指定されました。\n"
 
-#: src/extract/extract_cli_parser.cpp:247
+#: src/extract/extract_cli_parser.cpp:239
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "引数'%1%'で不正なトラックID・ファイル名が指定されました。\n"
 
@@ -3763,7 +3763,7 @@ msgstr "ジョブキューの管理"
 msgid "Kate packet is too small and is being skipped.\n"
 msgstr "カラオケ・テキストのパケットは小さすぎるのでスキップされます。\n"
 
-#: src/extract/extract_cli_parser.cpp:76
+#: src/extract/extract_cli_parser.cpp:74
 msgid "Keep only the BlockAdditions up to this level (default: keep all levels)"
 msgstr "このレベルまでのBlockAdditionのみを保持します（デフォルト：全てのレベルを保持）"
 
@@ -4023,7 +4023,7 @@ msgstr "ファイル名がありません"
 msgid "Missing file name after for the option '--edit-headers'."
 msgstr "'--edit-headers'オプションの後ろにファイル名がありません。"
 
-#: src/input/r_ogm.cpp:915
+#: src/input/r_ogm.cpp:916
 msgid "Missing header/comment packets for stream. This file is broken but should be muxed correctly. If not please contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
 msgstr "ストリームのヘッダ/コメントパケットがありません。このファイルは壊れていますが正しくMUXされているはずです。もしそうでない場合は作者のMoritz Bunkus <moritz@bunkus.org>に連絡してください。\n"
 
@@ -4035,7 +4035,7 @@ msgstr "入力がありません"
 msgid "Missing one hex digit"
 msgstr "16進数の桁が1つ足りません"
 
-#: src/extract/extract_cli_parser.cpp:262
+#: src/extract/extract_cli_parser.cpp:254
 msgid "Missing output file name in argument '%1%'.\n"
 msgstr "引数'%1%'で出力ファイル名が指定されていません。\n"
 
@@ -4224,11 +4224,11 @@ msgstr "ヘルプが利用できません。"
 msgid "No input files were given. No output will be created.\n"
 msgstr "入力ファイルが指定されていません。出力ファイルは作成されません。\n"
 
-#: src/input/r_flac.cpp:304
+#: src/input/r_flac.cpp:194
 msgid "No metadata block found. This file is broken.\n"
 msgstr "メタデータブロックが見つかりませんでした。このファイルは壊れています。\n"
 
-#: src/extract/extract_cli_parser.cpp:260
+#: src/extract/extract_cli_parser.cpp:252
 msgid "No output file name specified, will use attachment name.\n"
 msgstr "出力ファイル名が指定されなかったので、添付ファイル名を使用します。\n"
 
@@ -4438,7 +4438,7 @@ msgstr "パケットキューが空ではありません（フラッシュ：%1%
 msgid "Parse the file completely and show all elements"
 msgstr "ファイルを完全に解析し全ての要素を表示します"
 
-#: src/extract/extract_cli_parser.cpp:66
+#: src/extract/extract_cli_parser.cpp:65
 msgid "Parse the whole file instead of relying on the index."
 msgstr "インデックスを信頼する代わりにファイルの全体を解析します。"
 
@@ -5342,7 +5342,7 @@ msgstr "TTA（The lossless True Audio codec）"
 msgid "TTA lossless audio"
 msgstr "TTAロスレスオーディオ"
 
-#: src/extract/extract_cli_parser.cpp:86
+#: src/extract/extract_cli_parser.cpp:84
 msgid "Tag extraction"
 msgstr "タグの展開"
 
@@ -5453,7 +5453,7 @@ msgstr "トラックID %s（ファイル'%s'）のFourCC指定が4文字ちょ�
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%s) than the GUI itself (%s). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "このGUIは、GUI自体（%s）とは違うバージョン（%s）のmkvmerge実行ファイルを使用するように設定されました。これはサポートされてはいませんが、妨げられることもありません。設定ダイアログでmkvmerge実行ファイルを変更するべきです。"
 
-#: src/input/r_ogm.cpp:1383
+#: src/input/r_ogm.cpp:1384
 msgid "The Kate identifaction header could not be parsed (%1%).\n"
 msgstr "カラオケ・テキスト判別ヘッダを解析できませんでした（%1%）。\n"
 
@@ -5483,7 +5483,7 @@ msgstr ""
 msgid "The NALU size length must be a number between 2 and 4 inclusively in '--nalu-size-length %1%'.\n"
 msgstr "'--nalu-size-length %1%'で包括的にNALUサイズ長は2から4の間である必要があります。\n"
 
-#: src/input/r_ogm.cpp:1312
+#: src/input/r_ogm.cpp:1313
 msgid "The Theora identifaction header could not be parsed (%1%).\n"
 msgstr "Theora判別ヘッダが解析できませんでした（%1%）。\n"
 
@@ -5656,7 +5656,7 @@ msgstr "要素はファイルの終端に書き込まれましたが、セグメ
 msgid "The extracted values for video width and height from the MPEG4 layer 2 video data bitstream differ from what the values in the source container. The ones from the video data bitstream (%1%x%2%) will be used.\n"
 msgstr "MPEG4 layer 2ビデオデータビットストリームから展開された解像度の値が、ソースコンテナの値と異なっています。ビデオデータビットストリームの値（%1%x%2%）が使用されます。\n"
 
-#: src/extract/extract_cli_parser.cpp:112
+#: src/extract/extract_cli_parser.cpp:110
 msgid "The fifth mode tries to extract chapter information and tags and outputs them as a CUE sheet. This is the reverse of using a CUE sheet with mkvmerge's '--chapters' option."
 msgstr "5番目のモードでは、チャプタ情報とタグを展開しCUEシートとして出力することを試みます。これはmkvmergeの'--chapters'オプションでCUEシートを使用することの逆です。"
 
@@ -5793,11 +5793,11 @@ msgstr "チャプタを保存しようとしたファイルはMatroskaファイ�
 msgid "The first file cannot be appended because there are no files to append to.\n"
 msgstr "追加結合先のファイルがないため、最初のファイルを追加結合することができません。\n"
 
-#: src/extract/extract_cli_parser.cpp:72
+#: src/extract/extract_cli_parser.cpp:71
 msgid "The first mode extracts some tracks to external files."
 msgstr "1番目のモードではトラックを外部ファイルに展開します。"
 
-#: src/extract/extract_cli_parser.cpp:61
+#: src/extract/extract_cli_parser.cpp:60
 msgid "The first word tells mkvextract what to extract. The second must be the source file. There are few global options that can be used with all modes. All other options depend on the mode."
 msgstr "1つ目の単語でmkvextractが何を展開するのかを指定します。2つ目にはソースファイルを指定しなければなりません。全てのモードで使用できるグローバルオプションは僅かしかありません。他のオプションは全てモードに依存します。"
 
@@ -5817,7 +5817,7 @@ msgstr "タイムコードで分割・指定時間で分割のフォーマット
 msgid "The formats do not match."
 msgstr "フォーマットが一致しません。"
 
-#: src/extract/extract_cli_parser.cpp:103
+#: src/extract/extract_cli_parser.cpp:101
 msgid "The fourth mode extracts the chapters and converts them to XML. The output is written to the standard output. The output can be used as a source for mkvmerge."
 msgstr "4番目のモードではチャプタを展開しXMLに変換します。出力は標準出力に出力されます。その出力はmkvmergeのソースとして使用することができます。"
 
@@ -6072,7 +6072,7 @@ msgstr ""
 "（オーディオトラックと長さが異なるときに\n"
 "ビデオのスピードを調整するのに最もよく使われます）。"
 
-#: src/extract/extract_cli_parser.cpp:87
+#: src/extract/extract_cli_parser.cpp:85
 msgid "The second mode extracts the tags and converts them to XML. The output is written to the standard output. The output can be used as a source for mkvmerge."
 msgstr "2番目のモードではタグを展開しXMLに変換します。出力は標準出力に出力されます。その出力はmkvmergeのソースとして使用することができます。"
 
@@ -6085,7 +6085,7 @@ msgstr "このTTAファイルのシークテーブルは壊れているようで
 msgid "The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."
 msgstr "選択された言語'%s'（チャプタ'%s'）は正しい言語コードではありません。予め定義された中から選択してください。"
 
-#: src/extract/extract_cli_parser.cpp:121
+#: src/extract/extract_cli_parser.cpp:119
 msgid "The sixth mode finds the timecodes of all blocks for a track and outputs a timecode v2 file with these timecodes."
 msgstr "6番目のモードではトラックの全てのブロックのタイムコードを検出し、timecode v2ファイルにこれらのタイムコードを出力します。"
 
@@ -6134,7 +6134,7 @@ msgstr "'%1%'のタグを解析することができません：いくつかの�
 msgid "The temporary file '%1%' could not be opened for reading (%2%).\n"
 msgstr "一時ファイル'%1%'を開いて読み込むことができませんでした（%2%）。\n"
 
-#: src/extract/extract_cli_parser.cpp:95
+#: src/extract/extract_cli_parser.cpp:93
 msgid "The third mode extracts attachments from the source file."
 msgstr "3番目のモードではソースファイルから添付ファイルを展開します。"
 
@@ -6177,7 +6177,7 @@ msgstr ""
 msgid "The timecodes after which a new output file is started. The timecodes refer to the whole stream and not to each individual output file. The timecodes can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH'. You can specify up to nine digits for the number of nanoseconds 'nnnnnnnnn' or none at all. If given then you may use up to nine digits after the decimal point. If two or more timecodes are used then you have to separate them with commas. The formats can be mixed, too. Examples: 01:00:00,01:30:00 (after one hour and after one hour and thirty minutes) or 1800s,3000s,00:10:00 (after three, five and ten minutes)."
 msgstr "ここで指定したタイムコードで出力ファイルが分割されます。タイムコードはストリーム全体のもので、個々の出力ファイルのものではありません。タイムコードはHH:MM:SS.nnnnnnnnnのフォーマットまたは's'を後ろにつけて秒数で指定します。何時間かを指定する'HH'は省略することができます。ナノ秒を指定する場合は小数第9位まで指定することができ、ナノ秒を省略することもできます。2つ以上のタイムコードを指定する場合はコンマで区切る必要があります。2つのフォーマットを混ぜて使用することもできます。例：01:00:00,01:30:00（1時間と1時間30分で分割）　1800s,3000s,00:10:00（3分、5分、10分で分割）"
 
-#: src/input/r_ogm.cpp:569
+#: src/input/r_ogm.cpp:570
 msgid "The timecodes for this stream have been reset in the middle of the file. This is not supported. The current packet will be discarded.\n"
 msgstr "このストリームのタイムコードはファイルの中間でリセットされています。これはサポート外です。現在のパケットは破棄されます。\n"
 
@@ -6273,7 +6273,7 @@ msgstr "このMPEGオーディオトラックは%1%バイトのMP3ではない�
 msgid "This MPEG audio track contains %1% bytes of non-MP3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr "このMPEGオーディオトラックは%1%バイトのMP3ではないデータを含んでおり、それはスキップされました。オーディオ・ビデオの同期は失われました。\n"
 
-#: src/input/r_ogm.cpp:821
+#: src/input/r_ogm.cpp:822
 msgid "This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can be overridden with the '--chapter-charset <charset>' switch.\n"
 msgstr "このOgg/OGMファイルはチャプタやタイトルの情報を含んでいます。残念ながらこの情報を格納するのに使用された文字セットをはっきりと特定することはできません。このプログラムはシステムの現在の文字セットが適切だと推測します。これは'--chapter-charset <charset>'スイッチで上書きすることができます。\n"
 
@@ -6372,7 +6372,7 @@ msgstr "このトラックはWebMと互換性がないため、有効化する�
 msgid "Time slice"
 msgstr "タイムスライス"
 
-#: src/extract/extract_cli_parser.cpp:119
+#: src/extract/extract_cli_parser.cpp:117
 msgid "Timecode extraction"
 msgstr "タイムコードの抽出"
 
@@ -6448,9 +6448,9 @@ msgstr "コーデックID '%2%'のトラック%1%は\"codec private \"要素が�
 
 #: src/extract/xtr_aac.cpp:42 src/extract/xtr_avc.cpp:54
 #: src/extract/xtr_avi.cpp:37 src/extract/xtr_ogg.cpp:37
-#: src/extract/xtr_ogg.cpp:72 src/extract/xtr_ogg.cpp:219
-#: src/extract/xtr_rmff.cpp:31 src/extract/xtr_textsubs.cpp:291
-#: src/extract/xtr_vobsub.cpp:64 src/extract/xtr_wav.cpp:94
+#: src/extract/xtr_ogg.cpp:72 src/extract/xtr_rmff.cpp:31
+#: src/extract/xtr_textsubs.cpp:291 src/extract/xtr_vobsub.cpp:64
+#: src/extract/xtr_wav.cpp:94
 msgid "Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n"
 msgstr "コーデックID '%2%'のトラック%1%は\"codec private\"要素がなく、展開することができません。\n"
 
@@ -6494,7 +6494,7 @@ msgstr "トラックUID"
 msgid "Track UID: %1%"
 msgstr "トラックUID：%1%"
 
-#: src/extract/extract_cli_parser.cpp:71
+#: src/extract/extract_cli_parser.cpp:70
 msgid "Track extraction"
 msgstr "トラックの展開"
 
@@ -6583,7 +6583,7 @@ msgstr "未知のAAC MPEG-2プロファイル%1%。"
 msgid "Unknown AAC MPEG-4 object type %1%."
 msgstr "未知のAAC MPEG-4オブジェクトタイプ%1%。"
 
-#: src/input/r_ogm.cpp:519
+#: src/input/r_ogm.cpp:520
 msgid "Unknown audio stream type 0x%|1$04x|. Stream ID %2% will be ignored.\n"
 msgstr "未知のオーディオストリームタイプ 0x%|1$04x|です。ストリームID %2%は無視されます。\n"
 
@@ -6611,7 +6611,7 @@ msgstr "'%1% %2%'でセグメントIDが未知のフォーマットです。\n"
 msgid "Unknown header 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
 msgstr "未知のヘッダ 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
 
-#: src/extract/extract_cli_parser.cpp:230
+#: src/extract/extract_cli_parser.cpp:222
 msgid "Unknown mode '%1%'.\n"
 msgstr "'%1%'は未知のモードです。\n"
 
@@ -6631,7 +6631,7 @@ msgstr "'%1% %2%'で未知のパースモードが指定されました。\n"
 msgid "Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n"
 msgstr "このトラックのオーディオフォーマット 0x%|1$04x|は未知もしくはサポートされていません。\n"
 
-#: src/extract/extract_cli_parser.cpp:238
+#: src/extract/extract_cli_parser.cpp:230
 msgid "Unrecognized command line option '%1%'.\n"
 msgstr "'%1%'は認識できないコマンドラインオプションです。\n"
 
@@ -6659,7 +6659,7 @@ msgstr "このトラックはサポートされているトラックタイプで
 msgid "Updating the '%1%' element failed. Reason:\n"
 msgstr "'%1%'の要素の更新に失敗しました。理由：\n"
 
-#: src/extract/extract_cli_parser.cpp:50
+#: src/extract/extract_cli_parser.cpp:49
 msgid "Usage"
 msgstr "使用法"
 
@@ -6752,7 +6752,7 @@ msgid "Using the AAC output module (FourCC: %1%).\n"
 msgstr "AAC出力モジュールを使用しています（FourCC：%1%）。\n"
 
 #: src/input/r_aac.cpp:123 src/input/r_matroska.cpp:1498
-#: src/input/r_ogm.cpp:968 src/input/r_qtmp4.cpp:1535
+#: src/input/r_ogm.cpp:969 src/input/r_qtmp4.cpp:1535
 msgid "Using the AAC output module.\n"
 msgstr "AAC出力モジュールを使用しています。\n"
 
@@ -6764,7 +6764,7 @@ msgstr "AC3デマルチプレクサを使用しています。\n"
 msgid "Using the AC3 output module (FourCC: %1%).\n"
 msgstr "AC3出力モジュールを使用しています（FourCC：%1%）。\n"
 
-#: src/input/r_avi.cpp:538 src/input/r_ogm.cpp:986 src/input/r_qtmp4.cpp:1458
+#: src/input/r_avi.cpp:538 src/input/r_ogm.cpp:987 src/input/r_qtmp4.cpp:1458
 #: src/input/r_wav.cpp:225
 msgid "Using the AC3 output module.\n"
 msgstr "AC3出力モジュールを使用しています。\n"
@@ -6799,12 +6799,12 @@ msgstr "Diracデマルチプレクサを使用しています。\n"
 msgid "Using the Dirac video output module.\n"
 msgstr "Diracビデオ出力モジュールを使用しています。\n"
 
-#: src/input/r_flac.cpp:197
+#: src/input/r_flac.cpp:124
 msgid "Using the FLAC demultiplexer.\n"
 msgstr "FLACデマルチプレクサを使用しています。\n"
 
-#: src/input/r_flac.cpp:237 src/input/r_matroska.cpp:1540
-#: src/input/r_ogm_flac.cpp:306
+#: src/input/r_flac.cpp:164 src/input/r_matroska.cpp:1540
+#: src/input/r_ogm_flac.cpp:287
 msgid "Using the FLAC output module.\n"
 msgstr "FLAC出力モジュールを使用しています。\n"
 
@@ -6816,7 +6816,7 @@ msgstr "IVFデマルチプレクサを使用しています。\n"
 msgid "Using the Kate output module.\n"
 msgstr "カラオケ・テキスト出力モジュールを使用しています。\n"
 
-#: src/input/r_ogm.cpp:1395
+#: src/input/r_ogm.cpp:1396
 msgid "Using the Kate subtitle output module.\n"
 msgstr "カラオケ・テキスト字幕出力モジュールを使用しています。\n"
 
@@ -6834,7 +6834,7 @@ msgstr "MPEG PSデマルチプレクサを使用しています。\n"
 
 #: src/input/r_avi.cpp:531 src/input/r_matroska.cpp:1548
 #: src/input/r_mp3.cpp:71 src/input/r_mpeg_ps.cpp:1171
-#: src/input/r_ogm.cpp:1004 src/input/r_qtmp4.cpp:1541
+#: src/input/r_ogm.cpp:1005 src/input/r_qtmp4.cpp:1541
 msgid "Using the MPEG audio output module.\n"
 msgstr "MPEGオーディオ出力モジュールを使用しています。\n"
 
@@ -6853,12 +6853,12 @@ msgstr "MPEG-4 part 10 (AVC)ビデオ出力モジュールを使用していま�
 
 #: src/input/r_avc.cpp:136 src/input/r_avi.cpp:324
 #: src/input/r_matroska.cpp:1784 src/input/r_mpeg_ps.cpp:1210
-#: src/input/r_ogm.cpp:1128
+#: src/input/r_ogm.cpp:1129
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "MPEG-4 part 10 ESビデオ出力モジュールを使用しています。\n"
 
 #: src/input/r_avi.cpp:307 src/input/r_matroska.cpp:1419
-#: src/input/r_ogm.cpp:1232 src/input/r_qtmp4.cpp:1485
+#: src/input/r_ogm.cpp:1233 src/input/r_qtmp4.cpp:1485
 msgid "Using the MPEG-4 part 2 video output module.\n"
 msgstr "MPEG-4 part 2ビデオ出力モジュールを使用しています。\n"
 
@@ -6871,7 +6871,7 @@ msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr "OGG/OGMデマルチプレクサを使用しています。\n"
 
 #: src/input/r_avi.cpp:523 src/input/r_matroska.cpp:1555
-#: src/input/r_ogm.cpp:1023 src/input/r_qtmp4.cpp:1547 src/input/r_wav.cpp:395
+#: src/input/r_ogm.cpp:1024 src/input/r_qtmp4.cpp:1547 src/input/r_wav.cpp:395
 msgid "Using the PCM output module.\n"
 msgstr "PCM出力モジュールを使用しています。\n"
 
@@ -6907,7 +6907,7 @@ msgstr "TTAデマルチプレクサを使用しています。\n"
 msgid "Using the TTA output module.\n"
 msgstr "TTA出力モジュールを使用しています。\n"
 
-#: src/input/r_matroska.cpp:1427 src/input/r_ogm.cpp:1325
+#: src/input/r_matroska.cpp:1427 src/input/r_ogm.cpp:1326
 msgid "Using the Theora video output module.\n"
 msgstr "Theoraビデオ出力モジュールを使用しています。\n"
 
@@ -6960,7 +6960,7 @@ msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
 msgstr "VobSub字幕リーダを使用しています（字幕ファイル'%1%'）。\n"
 
 #: src/input/r_avi.cpp:678 src/input/r_matroska.cpp:1573
-#: src/input/r_ogm.cpp:1044
+#: src/input/r_ogm.cpp:1045
 msgid "Using the Vorbis output module.\n"
 msgstr "Vorbis出力モジュールを使用しています。\n"
 
@@ -6989,7 +6989,7 @@ msgid "Using the passthrough output module for this %1% track.\n"
 msgstr "この%1%トラックにパススルー出力モジュールを使用しています。\n"
 
 #: src/input/r_avi.cpp:381 src/input/r_matroska.cpp:1651
-#: src/input/r_ogm.cpp:1075 src/input/r_srt.cpp:60 src/input/r_ssa.cpp:71
+#: src/input/r_ogm.cpp:1076 src/input/r_srt.cpp:60 src/input/r_ssa.cpp:71
 #: src/input/r_usf.cpp:259
 msgid "Using the text subtitle output module.\n"
 msgstr "テキスト字幕出力モジュールを使用しています。\n"
@@ -7003,7 +7003,7 @@ msgid "Using the video output module (FourCC: %|1$.4s|).\n"
 msgstr "ビデオ出力モジュールを使用しています（FourCC：%|1$.4s|）。\n"
 
 #: src/input/r_avi.cpp:336 src/input/r_matroska.cpp:1441
-#: src/input/r_ogm.cpp:1237
+#: src/input/r_ogm.cpp:1238
 msgid "Using the video output module.\n"
 msgstr "ビデオ出力モジュールを使用しています。\n"
 
@@ -7172,15 +7172,11 @@ msgstr "ビデオフレームの横表示解像度です。"
 msgid "Write durations for all blocks. This will increase file size and does not offer any additional value for players at the moment."
 msgstr "全てのブロックの持続時間を記録します。これはファイルサイズを増大させますが、現在のところプレーヤには何のメリットももたらしません。"
 
-#: src/extract/extract_cli_parser.cpp:74
-msgid "Write raw FLAC files (default: write OggFLAC files)."
-msgstr "raw FLACファイルを書き込みます（デフォルト：OggFLACファイルを書き込みます。）"
-
-#: src/extract/extract_cli_parser.cpp:96
+#: src/extract/extract_cli_parser.cpp:94
 msgid "Write the attachment with the ID 'AID' to 'outname'."
 msgstr "IDが'AID'の添付ファイルを'outname'に書き込みます。"
 
-#: src/extract/extract_cli_parser.cpp:79
+#: src/extract/extract_cli_parser.cpp:77
 msgid "Write track with the ID TID to the file 'out'."
 msgstr "IDがTIDのトラックをファイル'out'に書き込みます。"
 
@@ -7511,107 +7507,57 @@ msgstr "失敗"
 msgid "filelist_t not found for generic_packetizer_c. %1%\n"
 msgstr "generic_packetizer_c 用の filelist_t が見つかりませんでした。 %1%\n"
 
-#: src/input/r_ogm_flac.cpp:151 src/input/r_ogm_flac.cpp:155
+#: src/input/r_ogm_flac.cpp:132
 msgid "flac_header_extraction: Could not initialize the FLAC decoder.\n"
 msgstr "flac_header_extraction：FLACデコーダを初期化できませんでした。\n"
 
-#: src/input/r_ogm_flac.cpp:146
+#: src/input/r_ogm_flac.cpp:130
 msgid "flac_header_extraction: Could not set metadata_respond_all.\n"
 msgstr "flac_header_extraction: metadata_respond_all をセットできませんでした。\n"
 
-#: src/input/r_ogm_flac.cpp:142
-msgid "flac_header_extraction: Could not set the error callback.\n"
-msgstr "flac_header_extraction: エラーコールバックをセットできませんでした。\n"
-
-#: src/input/r_ogm_flac.cpp:140
-msgid "flac_header_extraction: Could not set the metadata callback.\n"
-msgstr "flac_header_extraction: メタデータコールバックをセットできませんでした。\n"
-
-#: src/input/r_ogm_flac.cpp:136
-msgid "flac_header_extraction: Could not set the read callback.\n"
-msgstr "flac_header_extraction: 読み込みコールバックをセットできませんでした。\n"
-
-#: src/input/r_ogm_flac.cpp:138
-msgid "flac_header_extraction: Could not set the write callback.\n"
-msgstr "flac_header_extraction: 書き込みコールバックをセットできませんでした。\n"
-
-#: src/input/r_ogm_flac.cpp:131
+#: src/input/r_ogm_flac.cpp:128
 msgid "flac_header_extraction: FLAC__stream_decoder_new() failed.\n"
 msgstr "flac_header_extraction: FLAC__stream_decoder_new() が失敗しました。\n"
 
-#: src/input/r_ogm_flac.cpp:53
+#: src/input/r_ogm_flac.cpp:42
 msgid "flac_header_extraction: bytes (%1%) < op.bytes (%2%). Could not read the FLAC headers.\n"
 msgstr ""
 "flac_header_extraction: bytes (%1%) が op.bytes (%2%) より小さいため、FLAC\n"
 "ヘッダを読み込めません。\n"
 
-#: src/input/r_flac.cpp:286 src/input/r_flac.cpp:292
+#: src/input/r_flac.cpp:187
 msgid "flac_reader: Could not initialize the FLAC decoder.\n"
 msgstr "flac_reader：FLACデコーダを初期化できませんでした。\n"
 
-#: src/input/r_flac.cpp:191
+#: src/input/r_flac.cpp:118
 msgid "flac_reader: Could not open the source file."
 msgstr "flac_reader：ソースファイルを開けませんでした。"
 
-#: src/input/r_flac.cpp:214
+#: src/input/r_flac.cpp:141
 msgid "flac_reader: Could not read a header packet.\n"
 msgstr "flac_reader：ヘッダパケットを読み込むことができませんでした。\n"
 
-#: src/input/r_flac.cpp:200
+#: src/input/r_flac.cpp:127
 msgid "flac_reader: Could not read all header packets."
 msgstr "flac_reader：全てのヘッダパケットを読み込むことはできませんでした。"
 
-#: src/input/r_flac.cpp:389
+#: src/input/r_flac.cpp:240
 msgid "flac_reader: Could not read all header packets.\n"
 msgstr "flac_reader：全てのヘッダパケットを読み込むことはできませんでした。\n"
 
-#: src/input/r_flac.cpp:276 src/input/r_flac.cpp:289
+#: src/input/r_flac.cpp:184
 msgid "flac_reader: Could not set metadata_respond_all.\n"
 msgstr "flac_reader: metadata_respond_allをセットできませんでした。\n"
 
-#: src/input/r_flac.cpp:284
-msgid "flac_reader: Could not set the eof callback.\n"
-msgstr "flac_reader: EOFコールバックをセットできませんでした。\n"
-
-#: src/input/r_flac.cpp:274
-msgid "flac_reader: Could not set the error callback.\n"
-msgstr "flac_reader: エラーコールバックをセットできませんでした。\n"
-
-#: src/input/r_flac.cpp:282
-#, fuzzy
-msgid "flac_reader: Could not set the length callback.\n"
-msgstr "flac_reader: 長さコールバックをセットできませんでした。\n"
-
-#: src/input/r_flac.cpp:272
-msgid "flac_reader: Could not set the metadata callback.\n"
-msgstr "flac_reader: メタデータコールバックをセットできませんでした。\n"
-
-#: src/input/r_flac.cpp:268
-msgid "flac_reader: Could not set the read callback.\n"
-msgstr "flac_reader: 読み込みコールバックをセットできませんでした。\n"
-
-#: src/input/r_flac.cpp:278
-msgid "flac_reader: Could not set the seek callback.\n"
-msgstr "flac_reader: シークコールバックをセットできませんでした。\n"
-
-#: src/input/r_flac.cpp:280
-#, fuzzy
-msgid "flac_reader: Could not set the tell callback.\n"
-msgstr "flac_reader: tellコールバックをセットできませんでした。\n"
-
-#: src/input/r_flac.cpp:270
-msgid "flac_reader: Could not set the write callback.\n"
-msgstr "flac_reader: 書き込みコールバックをセットできませんでした。\n"
-
-#: src/input/r_flac.cpp:495
+#: src/input/r_flac.cpp:331
 msgid "flac_reader: Error parsing the file: %1%\n"
 msgstr "flac_reader：ファイル解析エラー：%1%\n"
 
-#: src/input/r_flac.cpp:264
+#: src/input/r_flac.cpp:182
 msgid "flac_reader: FLAC__stream_decoder_new() failed.\n"
 msgstr "flac_reader：FLAC__stream_decoder_new()が失敗しました。\n"
 
-#: src/input/r_flac.cpp:222
+#: src/input/r_flac.cpp:149
 msgid "flac_reader: could not initialize the FLAC packetizer.\n"
 msgstr "flac_reader：FLACパケッタイザを初期化できませんでした。\n"
 
@@ -7843,59 +7789,59 @@ msgstr "値がありません"
 msgid "mkdir(%1%) failed; errno = %2% (%3%)"
 msgstr "mkdir(%1%)が失敗しました；エラーコード%2%（%3%）"
 
-#: src/extract/extract_cli_parser.cpp:57
+#: src/extract/extract_cli_parser.cpp:56
 msgid "mkvextract <-h|-V>"
 msgstr "mkvextract <-h|-V>"
 
-#: src/extract/extract_cli_parser.cpp:48
+#: src/extract/extract_cli_parser.cpp:47
 msgid "mkvextract <mode> <source-filename> [options] <extraction-spec>"
 msgstr "mkvextract <モード> <ソースファイル名> [オプション] <展開先指定>"
 
-#: src/extract/extract_cli_parser.cpp:100
+#: src/extract/extract_cli_parser.cpp:98
 msgid "mkvextract attachments \"a movie.mkv\" 4:cover.jpg"
 msgstr "mkvextract attachments \"a movie.mkv\" 4:cover.jpg"
 
-#: src/extract/extract_cli_parser.cpp:53
+#: src/extract/extract_cli_parser.cpp:52
 msgid "mkvextract attachments <inname> [options] [AID1:out1 [AID2:out2 ...]]"
 msgstr "mkvextract attachments <入力ファイル名> [オプション] [AID1:出力1 [AID2:出力2 ...]]"
 
-#: src/extract/extract_cli_parser.cpp:108
+#: src/extract/extract_cli_parser.cpp:106
 msgid "mkvextract chapters \"a movie.mkv\" > movie_chapters.xml"
 msgstr "mkvextract chapters \"a movie.mkv\" > movie_chapters.xml"
 
-#: src/extract/extract_cli_parser.cpp:54
+#: src/extract/extract_cli_parser.cpp:53
 msgid "mkvextract chapters <inname> [options]"
 msgstr "mkvextract chapters <入力ファイル名> [オプション]"
 
-#: src/extract/extract_cli_parser.cpp:117
+#: src/extract/extract_cli_parser.cpp:115
 msgid "mkvextract cuesheet \"audiofile.mka\" > audiofile.cue"
 msgstr "mkvextract cuesheet \"audiofile.mka\" > audiofile.cue"
 
-#: src/extract/extract_cli_parser.cpp:55
+#: src/extract/extract_cli_parser.cpp:54
 msgid "mkvextract cuesheet <inname> [options]"
 msgstr "mkvextract cuesheet <入力ファイル名> [オプション]"
 
-#: src/extract/extract_cli_parser.cpp:91
+#: src/extract/extract_cli_parser.cpp:89
 msgid "mkvextract tags \"a movie.mkv\" > movie_tags.xml"
 msgstr "mkvextract tags \"a movie.mkv\" > movie_tags.xml"
 
-#: src/extract/extract_cli_parser.cpp:52
+#: src/extract/extract_cli_parser.cpp:51
 msgid "mkvextract tags <inname> [options]"
 msgstr "mkvextract tags <入力ファイル名> [オプション]"
 
-#: src/extract/extract_cli_parser.cpp:125
+#: src/extract/extract_cli_parser.cpp:123
 msgid "mkvextract timecodes_v2 \"a movie.mkv\" 1:timecodes_track1.txt"
 msgstr "mkvextract timecodes_v2 \"a movie.mkv\" 1:timecodes_track1.txt"
 
-#: src/extract/extract_cli_parser.cpp:56
+#: src/extract/extract_cli_parser.cpp:55
 msgid "mkvextract timecodes_v2 <inname> [TID1:out1 [TID2:out2 ...]]"
 msgstr "mkvextract timecodes_v2 <入力ファイル名> [TID1:出力1 [TID2:出力2 ...]]"
 
-#: src/extract/extract_cli_parser.cpp:83
+#: src/extract/extract_cli_parser.cpp:81
 msgid "mkvextract tracks \"a movie.mkv\" 2:audio.ogg -c ISO8859-1 3:subs.srt"
 msgstr "mkvextract tracks \"a movie.mkv\" 2:audio.ogg -c ISO8859-1 3:subs.srt"
 
-#: src/extract/extract_cli_parser.cpp:51
+#: src/extract/extract_cli_parser.cpp:50
 msgid "mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]"
 msgstr "mkvextract tracks <入力ファイル名> [オプション] [TID1:出力1 [TID2:出力2 ...]]"
 
@@ -7971,7 +7917,7 @@ msgstr "mkvmergeはリターンコード%dで終了しました。%s"
 msgid "mkvmerge has finished"
 msgstr "mkvmergeは処理を完了しました"
 
-#: src/input/r_ogm.cpp:474
+#: src/input/r_ogm.cpp:475
 msgid "mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"
 msgstr "mkvmergeはFLACをサポートしてコンパイルされていませんが、このストリームを処理することを要求されました。\n"
 
@@ -8402,6 +8348,47 @@ msgstr "はい"
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "FLAC出力モジュールを使用しています。\n"
+
+#~ msgid "Write raw FLAC files (default: write OggFLAC files)."
+#~ msgstr "raw FLACファイルを書き込みます（デフォルト：OggFLACファイルを書き込みます。）"
+
+#~ msgid "flac_header_extraction: Could not set the error callback.\n"
+#~ msgstr "flac_header_extraction: エラーコールバックをセットできませんでした。\n"
+
+#~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
+#~ msgstr "flac_header_extraction: メタデータコールバックをセットできませんでした。\n"
+
+#~ msgid "flac_header_extraction: Could not set the read callback.\n"
+#~ msgstr "flac_header_extraction: 読み込みコールバックをセットできませんでした。\n"
+
+#~ msgid "flac_header_extraction: Could not set the write callback.\n"
+#~ msgstr "flac_header_extraction: 書き込みコールバックをセットできませんでした。\n"
+
+#~ msgid "flac_reader: Could not set the eof callback.\n"
+#~ msgstr "flac_reader: EOFコールバックをセットできませんでした。\n"
+
+#~ msgid "flac_reader: Could not set the error callback.\n"
+#~ msgstr "flac_reader: エラーコールバックをセットできませんでした。\n"
+
+#, fuzzy
+#~ msgid "flac_reader: Could not set the length callback.\n"
+#~ msgstr "flac_reader: 長さコールバックをセットできませんでした。\n"
+
+#~ msgid "flac_reader: Could not set the metadata callback.\n"
+#~ msgstr "flac_reader: メタデータコールバックをセットできませんでした。\n"
+
+#~ msgid "flac_reader: Could not set the read callback.\n"
+#~ msgstr "flac_reader: 読み込みコールバックをセットできませんでした。\n"
+
+#~ msgid "flac_reader: Could not set the seek callback.\n"
+#~ msgstr "flac_reader: シークコールバックをセットできませんでした。\n"
+
+#, fuzzy
+#~ msgid "flac_reader: Could not set the tell callback.\n"
+#~ msgstr "flac_reader: tellコールバックをセットできませんでした。\n"
+
+#~ msgid "flac_reader: Could not set the write callback.\n"
+#~ msgstr "flac_reader: 書き込みコールバックをセットできませんでした。\n"
 
 #~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 #~ msgstr "r_matroska：クラスタにクラスタタイムコードが含まれていません。ファイルは壊れています。中断します。\n"

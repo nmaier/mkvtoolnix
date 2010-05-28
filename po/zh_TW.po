@@ -1124,11 +1124,11 @@ msgstr "「%1%」不是有效的 軌道 ID - NALU 長度大小 組，在「--nal
 msgid "'%1%' is not a valid tuple of track ID and default duration in '--default-duration %1%'.\n"
 msgstr "「%1%」不是有效的 軌道 ID - 預設持續時間 組，在「--default-duration %1%」。\n"
 
-#: src/extract/extract_cli_parser.cpp:138
+#: src/extract/extract_cli_parser.cpp:136
 msgid "'%1%' is only allowed when extracting chapters.\n"
 msgstr "「%1%」僅允許在提取章節時使用。\n"
 
-#: src/extract/extract_cli_parser.cpp:135
+#: src/extract/extract_cli_parser.cpp:133
 msgid "'%1%' is only allowed when extracting tracks.\n"
 msgstr "「%1%」僅允許在提取軌道時使用。\n"
 
@@ -1431,15 +1431,15 @@ msgstr "(未命名章節)"
 msgid "(unnamed)"
 msgstr "(未命名)"
 
-#: src/input/r_flac.cpp:257
+#: src/input/r_flac.cpp:179
 msgid "+-> Parsing the FLAC file. This can take a LONG time.\n"
 msgstr "+-> 正在解析 FLAC 檔案。這可能要 *很長* 時間。\n"
 
-#: src/input/r_flac.cpp:340
+#: src/input/r_flac.cpp:214
 msgid "+-> Pre-parsing FLAC file: %1%%%%2%"
 msgstr "+-> 預先解析 FLAC 檔案: %1%%%%2%"
 
-#: src/input/r_flac.cpp:384
+#: src/input/r_flac.cpp:235
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr "+-> 預先解析 FLAC 檔案: 100%\n"
 
@@ -1777,7 +1777,7 @@ msgstr "允許以 Video-for-Windows 相容模式存儲的 AVC/h.264 視訊，例
 msgid "Allows the use of the CodecState element. This is used for e.g. MPEG-1/-2 video tracks for storing the sequence headers."
 msgstr "允許 CodecState 元件的使用。它被用於 MPEG-1/-2 視訊軌等的序列表頭存儲。"
 
-#: src/extract/extract_cli_parser.cpp:75
+#: src/extract/extract_cli_parser.cpp:73
 msgid "Also try to extract the CUE sheet from the chapter information and tags for this track."
 msgstr "也試著從這個軌道的章節資訊和標籤中提取 CUE 表單。"
 
@@ -1871,7 +1871,7 @@ msgstr "至少需要一個 <ChapterAtom> 元件。"
 msgid "At least one <EditionEntry> element is needed."
 msgstr "至少需要一個 <EditionEntry> 元件。"
 
-#: src/extract/extract_cli_parser.cpp:93
+#: src/extract/extract_cli_parser.cpp:91
 msgid "Atatchment extraction"
 msgstr "提取附件"
 
@@ -2021,7 +2021,7 @@ msgstr "調出任務佇列編輯器"
 msgid "Browse"
 msgstr "瀏覽"
 
-#: src/extract/extract_cli_parser.cpp:110
+#: src/extract/extract_cli_parser.cpp:108
 msgid "CUE sheet extraction"
 msgstr "提取 CUE 表單"
 
@@ -2118,7 +2118,7 @@ msgstr "章節翻譯 ID: %1%"
 msgid "Chapter editor is not empty"
 msgstr "章節編輯器不是空的"
 
-#: src/extract/extract_cli_parser.cpp:102
+#: src/extract/extract_cli_parser.cpp:100
 msgid "Chapter extraction"
 msgstr "提取章節"
 
@@ -2423,7 +2423,7 @@ msgstr "內容編碼"
 msgid "Content encryption"
 msgstr "內容加密"
 
-#: src/extract/extract_cli_parser.cpp:73
+#: src/extract/extract_cli_parser.cpp:72
 msgid "Convert text subtitles to this charset (default: UTF-8)."
 msgstr "將文字字幕轉換成這個字元集 (預設: UTF-8)。"
 
@@ -2461,7 +2461,7 @@ msgstr "無法解碼以 Base64 編碼的資料 - 似乎是不正常的。"
 
 #: src/input/r_avi.cpp:327
 #: src/input/r_matroska.cpp:1772
-#: src/input/r_ogm.cpp:1131
+#: src/input/r_ogm.cpp:1132
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "無法從該 AVC/h.264 軌道提取解碼器特有設定資料 (AVCC)。\n"
 
@@ -2533,7 +2533,7 @@ msgstr "無法開啟/讀取檔案「%1%」。"
 msgid "Could not parse the chapters in '%1%': %2%\n"
 msgstr "無法解析章節自「%1%」: %2%\n"
 
-#: src/input/r_ogm_flac.cpp:277
+#: src/input/r_ogm_flac.cpp:255
 msgid "Could not read the FLAC header packets.\n"
 msgstr "無法讀取 FLAC 表頭套件。\n"
 
@@ -2847,7 +2847,7 @@ msgstr "文件檔類型: %1%"
 msgid "Dolby TrueHD"
 msgstr "Dolby TrueHD"
 
-#: src/extract/extract_cli_parser.cpp:67
+#: src/extract/extract_cli_parser.cpp:66
 msgid "Don't write variable parts to output files (only for debugging)."
 msgstr "不寫入變動部份到輸出檔 (只用於除錯)。"
 
@@ -3058,12 +3058,12 @@ msgstr "錯誤資訊:"
 msgid "Everything went fine."
 msgstr "一切正常。"
 
-#: src/extract/extract_cli_parser.cpp:81
-#: src/extract/extract_cli_parser.cpp:89
-#: src/extract/extract_cli_parser.cpp:98
-#: src/extract/extract_cli_parser.cpp:106
-#: src/extract/extract_cli_parser.cpp:115
-#: src/extract/extract_cli_parser.cpp:123
+#: src/extract/extract_cli_parser.cpp:79
+#: src/extract/extract_cli_parser.cpp:87
+#: src/extract/extract_cli_parser.cpp:96
+#: src/extract/extract_cli_parser.cpp:104
+#: src/extract/extract_cli_parser.cpp:113
+#: src/extract/extract_cli_parser.cpp:121
 msgid "Example"
 msgstr "範例"
 
@@ -3084,7 +3084,7 @@ msgstr "預期為如下格式的時間: HH:MM:SS.nnn (HH = 時, MM = 分, SS = �
 msgid "Expected an unsigned integer but found '%1%'."
 msgstr "預期為不帶正負號的整數，但發現了「%1%」。"
 
-#: src/extract/extract_cli_parser.cpp:104
+#: src/extract/extract_cli_parser.cpp:102
 msgid "Exports the chapter infomartion in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
 msgstr "使用 OGM 工具的簡單格式來匯出章節資訊 (CHAPTER01=... CHAPTER01名稱=...)。"
 
@@ -3092,11 +3092,11 @@ msgstr "使用 OGM 工具的簡單格式來匯出章節資訊 (CHAPTER01=... CHA
 msgid "Extra options"
 msgstr "額外選項"
 
-#: src/extract/extract_cli_parser.cpp:78
+#: src/extract/extract_cli_parser.cpp:76
 msgid "Extract the data to a raw file including the CodecPrivate as a header."
 msgstr "提取資料到 raw 檔案，包括 CodecPrivate 作為表頭。"
 
-#: src/extract/extract_cli_parser.cpp:77
+#: src/extract/extract_cli_parser.cpp:75
 msgid "Extract the data to a raw file."
 msgstr "提取資料到 raw 檔案。"
 
@@ -3373,7 +3373,7 @@ msgid "Global"
 msgstr "整體"
 
 #: src/mmg/tabs/global.cpp:228
-#: src/extract/extract_cli_parser.cpp:65
+#: src/extract/extract_cli_parser.cpp:64
 msgid "Global options"
 msgstr " 整體選項"
 
@@ -3593,7 +3593,7 @@ msgstr "無效的 %1% 指定，在「--%2% %3%」。\n"
 msgid "Invalid Base64 character encountered"
 msgstr "遇到無效的 Base64 字元"
 
-#: src/extract/extract_cli_parser.cpp:168
+#: src/extract/extract_cli_parser.cpp:160
 msgid "Invalid BlockAddition level in argument '%1%'.\n"
 msgstr "無效的附加區塊層級，在參數「%1%」中。\n"
 
@@ -3615,7 +3615,7 @@ msgstr "無效 UID。該版本 UID 已被使用。原 UID 沒有被改變。"
 msgid "Invalid Vorbis headers in AVI audio track."
 msgstr "有無效的 Vorbis 表頭，在 AVI 音軌中。"
 
-#: src/extract/extract_cli_parser.cpp:245
+#: src/extract/extract_cli_parser.cpp:237
 msgid "Invalid attachment ID/file name specification in argument '%1%'.\n"
 msgstr "指定無效的附件 ID/檔名，在參數「%1%」中。\n"
 
@@ -3851,7 +3851,7 @@ msgstr "無效的軌道 ID 指定，在「--forced-track %1%」。\n"
 msgid "Invalid track ID specified in '--sub-charset %1%'.\n"
 msgstr "無效的軌道 ID 指定，在「--sub-charset %1%」。\n"
 
-#: src/extract/extract_cli_parser.cpp:247
+#: src/extract/extract_cli_parser.cpp:239
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "在參數「%1%」中指定的軌道 ID 或檔名無效。\n"
 
@@ -3875,7 +3875,7 @@ msgstr "任務佇列管理"
 msgid "Kate packet is too small and is being skipped.\n"
 msgstr "Kate 套件過小，跳過。\n"
 
-#: src/extract/extract_cli_parser.cpp:76
+#: src/extract/extract_cli_parser.cpp:74
 msgid "Keep only the BlockAdditions up to this level (default: keep all levels)"
 msgstr "只維持 BlockAdditions 高於這個層級 (預設: 維持所有層級)"
 
@@ -4144,7 +4144,7 @@ msgstr "缺少檔名"
 msgid "Missing file name after for the option '--edit-headers'."
 msgstr "選項「--edit-headers」後缺少檔名。"
 
-#: src/input/r_ogm.cpp:915
+#: src/input/r_ogm.cpp:916
 msgid "Missing header/comment packets for stream. This file is broken but should be muxed correctly. If not please contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
 msgstr "缺少串流的表頭/註釋封包。檔案已損壞但應該能正常合成。如果確定檔案沒有損壞，請聯繫作者 Moritz Bunkus <moritz@bunkus.org>。\n"
 
@@ -4156,7 +4156,7 @@ msgstr "尚未輸入"
 msgid "Missing one hex digit"
 msgstr "缺少一十六進位位"
 
-#: src/extract/extract_cli_parser.cpp:262
+#: src/extract/extract_cli_parser.cpp:254
 msgid "Missing output file name in argument '%1%'.\n"
 msgstr "參數「%1%」缺少輸出檔名。\n"
 
@@ -4349,11 +4349,11 @@ msgstr "無可用的說明。"
 msgid "No input files were given. No output will be created.\n"
 msgstr "未給定任何輸入檔。將不建立輸出檔。\n"
 
-#: src/input/r_flac.cpp:304
+#: src/input/r_flac.cpp:194
 msgid "No metadata block found. This file is broken.\n"
 msgstr "未發現中繼資料區塊。檔案已損壞。\n"
 
-#: src/extract/extract_cli_parser.cpp:260
+#: src/extract/extract_cli_parser.cpp:252
 msgid "No output file name specified, will use attachment name.\n"
 msgstr "未指定輸出檔名，將使用附件名。\n"
 
@@ -4570,7 +4570,7 @@ msgstr "套件佇列不是空的 (已緩衝: %1%)。畫格已在重新合成時�
 msgid "Parse the file completely and show all elements"
 msgstr "完整解析檔案並顯示所有元件"
 
-#: src/extract/extract_cli_parser.cpp:66
+#: src/extract/extract_cli_parser.cpp:65
 msgid "Parse the whole file instead of relying on the index."
 msgstr "解析整個檔案而不是依靠索引。"
 
@@ -5504,7 +5504,7 @@ msgstr "TTA (The True Audio 無損音訊編解碼)"
 msgid "TTA lossless audio"
 msgstr "TTA 無損音訊"
 
-#: src/extract/extract_cli_parser.cpp:86
+#: src/extract/extract_cli_parser.cpp:84
 msgid "Tag extraction"
 msgstr "提取標籤"
 
@@ -5615,7 +5615,7 @@ msgstr "軌道 %s（自檔案「%s」）的 FourCC 設定非四字元長。"
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%s) than the GUI itself (%s). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr ""
 
-#: src/input/r_ogm.cpp:1383
+#: src/input/r_ogm.cpp:1384
 msgid "The Kate identifaction header could not be parsed (%1%).\n"
 msgstr "無法解析 Kate 識別表頭 (%1%)。\n"
 
@@ -5646,7 +5646,7 @@ msgstr ""
 msgid "The NALU size length must be a number between 2 and 4 inclusively in '--nalu-size-length %1%'.\n"
 msgstr "NALU 長度大小必須為 2 與 4 之間（含 2 與 4）的數字，在「--nalu-size-length %1%」中。\n"
 
-#: src/input/r_ogm.cpp:1312
+#: src/input/r_ogm.cpp:1313
 msgid "The Theora identifaction header could not be parsed (%1%).\n"
 msgstr "Theora 識別表頭無法解析 (%1%)。\n"
 
@@ -5822,7 +5822,7 @@ msgstr "元件已被寫至檔案結尾部，但剪輯大小無法更新。因此
 msgid "The extracted values for video width and height from the MPEG4 layer 2 video data bitstream differ from what the values in the source container. The ones from the video data bitstream (%1%x%2%) will be used.\n"
 msgstr "從 MPEG4 layer 2 視訊資料位元流中提取的視訊寬度和高度值與來源容器中的不同。將使用視訊資料位元流中的 (%1%x%2%)。\n"
 
-#: src/extract/extract_cli_parser.cpp:112
+#: src/extract/extract_cli_parser.cpp:110
 msgid "The fifth mode tries to extract chapter information and tags and outputs them as a CUE sheet. This is the reverse of using a CUE sheet with mkvmerge's '--chapters' option."
 msgstr "第五種模式可試著提取章節資訊和標籤並將這些匯出成一個 CUE 表單。這和用 mkvmerge 的「--chapters」選項使用 CUE 表單相反。"
 
@@ -5966,11 +5966,11 @@ msgstr "您試著儲存至的檔案是個 Matroska 檔。要這樣做的話，�
 msgid "The first file cannot be appended because there are no files to append to.\n"
 msgstr "第一個檔案不能作為添加檔，因為沒有檔案可供其添加。\n"
 
-#: src/extract/extract_cli_parser.cpp:72
+#: src/extract/extract_cli_parser.cpp:71
 msgid "The first mode extracts some tracks to external files."
 msgstr "第一種模式會提取一些軌道到外部檔案。"
 
-#: src/extract/extract_cli_parser.cpp:61
+#: src/extract/extract_cli_parser.cpp:60
 msgid "The first word tells mkvextract what to extract. The second must be the source file. There are few global options that can be used with all modes. All other options depend on the mode."
 msgstr "第一個單字可告訴 mkvextract 提取什麼。第二個必須是來源檔。有一些整體選項可以在所有模式中使用。全部其他選項取決於使用的模式。"
 
@@ -5991,7 +5991,7 @@ msgstr "分割時間碼/持續時間格式無效。"
 msgid "The formats do not match."
 msgstr "格式不符。"
 
-#: src/extract/extract_cli_parser.cpp:103
+#: src/extract/extract_cli_parser.cpp:101
 msgid "The fourth mode extracts the chapters and converts them to XML. The output is written to the standard output. The output can be used as a source for mkvmerge."
 msgstr "第四種模式可提取章節並將章節轉換成 XML。此輸出會寫入到標準輸出。此輸出可以用來作為 mkvmerge 的來源。"
 
@@ -6258,7 +6258,7 @@ msgstr ""
 "要應用至此軌的延展比率，可用於與其他軌道同步 \n"
 "(多用於音訊長度不一致時調整視訊速度)。"
 
-#: src/extract/extract_cli_parser.cpp:87
+#: src/extract/extract_cli_parser.cpp:85
 msgid "The second mode extracts the tags and converts them to XML. The output is written to the standard output. The output can be used as a source for mkvmerge."
 msgstr "第二種模式可提取標籤並將標籤轉換成 XML。此輸出會寫入到標準輸出。此輸出可以用來作為 mkvmerge 的來源。"
 
@@ -6271,7 +6271,7 @@ msgstr "此 TTA 檔案中的定位表似乎已損壞。\n"
 msgid "The selected language '%s' for the chapter '%s' is not a valid language code. Please select one of the predefined ones."
 msgstr "選定的語言「%s」（章節「%s」）不是有效的語言碼。請選擇預定義碼中的一項。"
 
-#: src/extract/extract_cli_parser.cpp:121
+#: src/extract/extract_cli_parser.cpp:119
 msgid "The sixth mode finds the timecodes of all blocks for a track and outputs a timecode v2 file with these timecodes."
 msgstr "第六種模式可尋找軌道所有區塊的時間碼並輸出一個含有這些時間碼的時間碼 v2 檔案。"
 
@@ -6321,7 +6321,7 @@ msgstr "無法解析「%1%」中的標籤: 缺少某些必要元件。\n"
 msgid "The temporary file '%1%' could not be opened for reading (%2%).\n"
 msgstr "暫存檔案「%1%」無法開啟以讀取 (%2%)。\n"
 
-#: src/extract/extract_cli_parser.cpp:95
+#: src/extract/extract_cli_parser.cpp:93
 msgid "The third mode extracts attachments from the source file."
 msgstr "第三種模式可從來源檔提取附件。"
 
@@ -6367,7 +6367,7 @@ msgstr ""
 msgid "The timecodes after which a new output file is started. The timecodes refer to the whole stream and not to each individual output file. The timecodes can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH'. You can specify up to nine digits for the number of nanoseconds 'nnnnnnnnn' or none at all. If given then you may use up to nine digits after the decimal point. If two or more timecodes are used then you have to separate them with commas. The formats can be mixed, too. Examples: 01:00:00,01:30:00 (after one hour and after one hour and thirty minutes) or 1800s,3000s,00:10:00 (after three, five and ten minutes)."
 msgstr "在這些時間碼後開始建立新的輸出檔。這些時間碼以整個媒體流而不是分割開的各輸出檔為準。時間碼可以以 HH:MM:SS.nnnnnnnnn 的形式或緊跟「s」的秒數給出。小時數「HH」可省略。您可以指定多達九位的毫微秒數「nnnnnnnnn」或者不指定小數點後的數。如果要給出，您可以在小數點後使用多達九位元數位。如果使用的時間碼超過一個，請使用逗號分隔。格式也可以混合使用。示例: 01:00:00,01:30:00 (在一小時後和一個半小時後分割) 或者 1800s,3000s,00:10:00 (在第 3 分鐘，第 5 分鐘和第 10 分鐘後分割)。"
 
-#: src/input/r_ogm.cpp:569
+#: src/input/r_ogm.cpp:570
 msgid "The timecodes for this stream have been reset in the middle of the file. This is not supported. The current packet will be discarded.\n"
 msgstr "此媒體流的時間碼在檔案中途重置。這是不支援的。目前資料包將被廢除。\n"
 
@@ -6468,7 +6468,7 @@ msgstr "此 MPEG 音軌的開頭包含 %1% 位元組的 非-MP3 資料。這相�
 msgid "This MPEG audio track contains %1% bytes of non-MP3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr "此 MPEG 音軌包含 %1% 位元組的 非-MP3 資料，已跳過。音/視訊同步可能已喪失。\n"
 
-#: src/input/r_ogm.cpp:821
+#: src/input/r_ogm.cpp:822
 msgid "This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can be overridden with the '--chapter-charset <charset>' switch.\n"
 msgstr "此 Ogg/OGM 檔包含章節或標題資訊。不幸的是此檔中存儲這些資訊使用的字元集無法準確識別。程式假定以您系統的目前字元集為準。您可以透過「--chapter-charset <charset>」開關替代該假定值。\n"
 
@@ -6568,7 +6568,7 @@ msgstr ""
 msgid "Time slice"
 msgstr "時間切面"
 
-#: src/extract/extract_cli_parser.cpp:119
+#: src/extract/extract_cli_parser.cpp:117
 msgid "Timecode extraction"
 msgstr "提取時間碼"
 
@@ -6651,7 +6651,6 @@ msgstr "軌道 %1%（CodecID 為「%2%」）缺少 \"codec private \" 編解碼�
 #: src/extract/xtr_avi.cpp:37
 #: src/extract/xtr_ogg.cpp:37
 #: src/extract/xtr_ogg.cpp:72
-#: src/extract/xtr_ogg.cpp:219
 #: src/extract/xtr_rmff.cpp:31
 #: src/extract/xtr_textsubs.cpp:291
 #: src/extract/xtr_vobsub.cpp:64
@@ -6701,7 +6700,7 @@ msgstr "軌道 UID"
 msgid "Track UID: %1%"
 msgstr "軌道 UID: %1%"
 
-#: src/extract/extract_cli_parser.cpp:71
+#: src/extract/extract_cli_parser.cpp:70
 msgid "Track extraction"
 msgstr "提取軌道"
 
@@ -6793,7 +6792,7 @@ msgstr "未知的 AAC MPEG-2 profile %1%。"
 msgid "Unknown AAC MPEG-4 object type %1%."
 msgstr "未知的 AAC MPEG-4 物件類型 %1%。"
 
-#: src/input/r_ogm.cpp:519
+#: src/input/r_ogm.cpp:520
 msgid "Unknown audio stream type 0x%|1$04x|. Stream ID %2% will be ignored.\n"
 msgstr "未知音訊流類型 0x%|1$04x|。流 ID %2% 將被忽略。\n"
 
@@ -6821,7 +6820,7 @@ msgstr "此剪輯 UID「%3%」的格式不明，在「%1% %2%」。\n"
 msgid "Unknown header 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
 msgstr "未知的表頭 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
 
-#: src/extract/extract_cli_parser.cpp:230
+#: src/extract/extract_cli_parser.cpp:222
 msgid "Unknown mode '%1%'.\n"
 msgstr "未知的模式「%1%」。\n"
 
@@ -6842,7 +6841,7 @@ msgstr "未知的解析模式「%1% %2%」。\n"
 msgid "Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n"
 msgstr "此音軌的格式 0x%|1$04x| 未知或不支援。\n"
 
-#: src/extract/extract_cli_parser.cpp:238
+#: src/extract/extract_cli_parser.cpp:230
 msgid "Unrecognized command line option '%1%'.\n"
 msgstr "無法辨識的命令列選項「%1%」。\n"
 
@@ -6870,7 +6869,7 @@ msgstr "不支援此軌道的軌道類型。\n"
 msgid "Updating the '%1%' element failed. Reason:\n"
 msgstr "更新「%1%」元件失敗。原因:\n"
 
-#: src/extract/extract_cli_parser.cpp:50
+#: src/extract/extract_cli_parser.cpp:49
 msgid "Usage"
 msgstr "用法"
 
@@ -6963,7 +6962,7 @@ msgstr "使用 AAC 輸出模組 (FourCC: %1%)。\n"
 
 #: src/input/r_aac.cpp:123
 #: src/input/r_matroska.cpp:1498
-#: src/input/r_ogm.cpp:968
+#: src/input/r_ogm.cpp:969
 #: src/input/r_qtmp4.cpp:1535
 msgid "Using the AAC output module.\n"
 msgstr "使用 AAC 輸出模組。\n"
@@ -6977,7 +6976,7 @@ msgid "Using the AC3 output module (FourCC: %1%).\n"
 msgstr "使用 AC3 輸出模組 (FourCC: %1%)。\n"
 
 #: src/input/r_avi.cpp:538
-#: src/input/r_ogm.cpp:986
+#: src/input/r_ogm.cpp:987
 #: src/input/r_qtmp4.cpp:1458
 #: src/input/r_wav.cpp:225
 msgid "Using the AC3 output module.\n"
@@ -7016,13 +7015,13 @@ msgstr "使用 Dirac 分離器。\n"
 msgid "Using the Dirac video output module.\n"
 msgstr "使用 Dirac 視訊輸出模組。\n"
 
-#: src/input/r_flac.cpp:197
+#: src/input/r_flac.cpp:124
 msgid "Using the FLAC demultiplexer.\n"
 msgstr "使用 FLAC 分離器。\n"
 
-#: src/input/r_flac.cpp:237
+#: src/input/r_flac.cpp:164
 #: src/input/r_matroska.cpp:1540
-#: src/input/r_ogm_flac.cpp:306
+#: src/input/r_ogm_flac.cpp:287
 msgid "Using the FLAC output module.\n"
 msgstr "使用 FLAC 輸出模組。\n"
 
@@ -7035,7 +7034,7 @@ msgstr "使用 WAV 分離器。\n"
 msgid "Using the Kate output module.\n"
 msgstr "使用 Kate 輸出模組。\n"
 
-#: src/input/r_ogm.cpp:1395
+#: src/input/r_ogm.cpp:1396
 msgid "Using the Kate subtitle output module.\n"
 msgstr "使用 Kate 字幕輸出模組。\n"
 
@@ -7055,7 +7054,7 @@ msgstr "使用 MPEG PS 分離器。\n"
 #: src/input/r_matroska.cpp:1548
 #: src/input/r_mp3.cpp:71
 #: src/input/r_mpeg_ps.cpp:1171
-#: src/input/r_ogm.cpp:1004
+#: src/input/r_ogm.cpp:1005
 #: src/input/r_qtmp4.cpp:1541
 msgid "Using the MPEG audio output module.\n"
 msgstr "使用 MPEG 音訊輸出模組。\n"
@@ -7080,13 +7079,13 @@ msgstr "使用 MPEG-4 part 10 (AVC) 視訊輸出模組。\n"
 #: src/input/r_avi.cpp:324
 #: src/input/r_matroska.cpp:1784
 #: src/input/r_mpeg_ps.cpp:1210
-#: src/input/r_ogm.cpp:1128
+#: src/input/r_ogm.cpp:1129
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "使用 MPEG-4 part 10 ES 視訊輸出模組。\n"
 
 #: src/input/r_avi.cpp:307
 #: src/input/r_matroska.cpp:1419
-#: src/input/r_ogm.cpp:1232
+#: src/input/r_ogm.cpp:1233
 #: src/input/r_qtmp4.cpp:1485
 msgid "Using the MPEG-4 part 2 video output module.\n"
 msgstr "使用 MPEG-4 part 2 視訊輸出模組。\n"
@@ -7101,7 +7100,7 @@ msgstr "使用 OGG/OGM 分離器。\n"
 
 #: src/input/r_avi.cpp:523
 #: src/input/r_matroska.cpp:1555
-#: src/input/r_ogm.cpp:1023
+#: src/input/r_ogm.cpp:1024
 #: src/input/r_qtmp4.cpp:1547
 #: src/input/r_wav.cpp:395
 msgid "Using the PCM output module.\n"
@@ -7141,7 +7140,7 @@ msgid "Using the TTA output module.\n"
 msgstr "使用 TTA 輸出模組。\n"
 
 #: src/input/r_matroska.cpp:1427
-#: src/input/r_ogm.cpp:1325
+#: src/input/r_ogm.cpp:1326
 msgid "Using the Theora video output module.\n"
 msgstr "使用 Theora 視訊輸出模組。\n"
 
@@ -7197,7 +7196,7 @@ msgstr "使用 VobSub 字幕讀取器 (SUB 檔「%1%」)。\n"
 
 #: src/input/r_avi.cpp:678
 #: src/input/r_matroska.cpp:1573
-#: src/input/r_ogm.cpp:1044
+#: src/input/r_ogm.cpp:1045
 msgid "Using the Vorbis output module.\n"
 msgstr "使用 Vorbis 輸出模組。\n"
 
@@ -7228,7 +7227,7 @@ msgstr "對軌道 %1% 使用呈遞輸出模組。\n"
 
 #: src/input/r_avi.cpp:381
 #: src/input/r_matroska.cpp:1651
-#: src/input/r_ogm.cpp:1075
+#: src/input/r_ogm.cpp:1076
 #: src/input/r_srt.cpp:60
 #: src/input/r_ssa.cpp:71
 #: src/input/r_usf.cpp:259
@@ -7246,7 +7245,7 @@ msgstr "使用視訊輸出模組 (FourCC: %|1$.4s|)。\n"
 
 #: src/input/r_avi.cpp:336
 #: src/input/r_matroska.cpp:1441
-#: src/input/r_ogm.cpp:1237
+#: src/input/r_ogm.cpp:1238
 msgid "Using the video output module.\n"
 msgstr "使用視訊輸出模組。\n"
 
@@ -7432,15 +7431,11 @@ msgstr "視訊畫格的顯示寬度。"
 msgid "Write durations for all blocks. This will increase file size and does not offer any additional value for players at the moment."
 msgstr "為所有區塊寫入持續時間。這將增大檔案大小，而且目前對播放器來說提供任何額外的益處。"
 
-#: src/extract/extract_cli_parser.cpp:74
-msgid "Write raw FLAC files (default: write OggFLAC files)."
-msgstr "寫入 raw FLAC 檔案 (預設：寫入 OggFLAC 檔案)。"
-
-#: src/extract/extract_cli_parser.cpp:96
+#: src/extract/extract_cli_parser.cpp:94
 msgid "Write the attachment with the ID 'AID' to 'outname'."
 msgstr "以 ID「AID」將附件寫入到「輸出檔名」。"
 
-#: src/extract/extract_cli_parser.cpp:79
+#: src/extract/extract_cli_parser.cpp:77
 msgid "Write track with the ID TID to the file 'out'."
 msgstr "以 ID TID 將軌道寫入到檔案「out」。"
 
@@ -7794,106 +7789,55 @@ msgstr "失敗"
 msgid "filelist_t not found for generic_packetizer_c. %1%\n"
 msgstr "filelist_t 未找到以供給 generic_packetizer_c。 %1%\n"
 
-#: src/input/r_ogm_flac.cpp:151
-#: src/input/r_ogm_flac.cpp:155
+#: src/input/r_ogm_flac.cpp:132
 msgid "flac_header_extraction: Could not initialize the FLAC decoder.\n"
 msgstr "flac_header_extraction: 無法初始化 FLAC 解碼器。\n"
 
-#: src/input/r_ogm_flac.cpp:146
+#: src/input/r_ogm_flac.cpp:130
 msgid "flac_header_extraction: Could not set metadata_respond_all.\n"
 msgstr "flac_header_extraction: 無法設定 metadata_respond_all。\n"
 
-#: src/input/r_ogm_flac.cpp:142
-msgid "flac_header_extraction: Could not set the error callback.\n"
-msgstr "flac_header_extraction: 無法設定錯誤回呼。\n"
-
-#: src/input/r_ogm_flac.cpp:140
-msgid "flac_header_extraction: Could not set the metadata callback.\n"
-msgstr "flac_header_extraction: 無法設定中繼資料回呼。\n"
-
-#: src/input/r_ogm_flac.cpp:136
-msgid "flac_header_extraction: Could not set the read callback.\n"
-msgstr "flac_header_extraction: 無法設定讀取回呼。\n"
-
-#: src/input/r_ogm_flac.cpp:138
-msgid "flac_header_extraction: Could not set the write callback.\n"
-msgstr "flac_header_extraction: 無法設定寫入回呼。\n"
-
-#: src/input/r_ogm_flac.cpp:131
+#: src/input/r_ogm_flac.cpp:128
 msgid "flac_header_extraction: FLAC__stream_decoder_new() failed.\n"
 msgstr "flac_header_extraction: FLAC__stream_decoder_new() 失敗。\n"
 
-#: src/input/r_ogm_flac.cpp:53
+#: src/input/r_ogm_flac.cpp:42
 msgid "flac_header_extraction: bytes (%1%) < op.bytes (%2%). Could not read the FLAC headers.\n"
 msgstr "flac_header_extraction: bytes (%1%) < op.bytes (%2%)。無法讀取 FLAC 表頭。\n"
 
-#: src/input/r_flac.cpp:286
-#: src/input/r_flac.cpp:292
+#: src/input/r_flac.cpp:187
 msgid "flac_reader: Could not initialize the FLAC decoder.\n"
 msgstr "flac_reader: 無法初始化 FLAC 解碼器。\n"
 
-#: src/input/r_flac.cpp:191
+#: src/input/r_flac.cpp:118
 msgid "flac_reader: Could not open the source file."
 msgstr "flac_reader: 無法開啟來源檔案。"
 
-#: src/input/r_flac.cpp:214
+#: src/input/r_flac.cpp:141
 msgid "flac_reader: Could not read a header packet.\n"
 msgstr "flac_reader: 無法讀取表頭套件。\n"
 
-#: src/input/r_flac.cpp:200
+#: src/input/r_flac.cpp:127
 msgid "flac_reader: Could not read all header packets."
 msgstr "flac_reader: 無法讀取全部表頭套件。"
 
-#: src/input/r_flac.cpp:389
+#: src/input/r_flac.cpp:240
 msgid "flac_reader: Could not read all header packets.\n"
 msgstr "flac_reader: 無法讀取全部表頭套件。\n"
 
-#: src/input/r_flac.cpp:276
-#: src/input/r_flac.cpp:289
+#: src/input/r_flac.cpp:184
 msgid "flac_reader: Could not set metadata_respond_all.\n"
 msgstr "flac_reader: 無法設定 metadata_respond_all。\n"
 
-#: src/input/r_flac.cpp:284
-msgid "flac_reader: Could not set the eof callback.\n"
-msgstr "flac_reader: 無法設定檔尾回呼。\n"
-
-#: src/input/r_flac.cpp:274
-msgid "flac_reader: Could not set the error callback.\n"
-msgstr "flac_reader: 無法設定錯誤回呼。\n"
-
-#: src/input/r_flac.cpp:282
-msgid "flac_reader: Could not set the length callback.\n"
-msgstr "flac_reader: 無法設定長度回呼。\n"
-
-#: src/input/r_flac.cpp:272
-msgid "flac_reader: Could not set the metadata callback.\n"
-msgstr "flac_reader: 無法設定中繼資料回呼。\n"
-
-#: src/input/r_flac.cpp:268
-msgid "flac_reader: Could not set the read callback.\n"
-msgstr "flac_reader: 無法設定讀取回呼。\n"
-
-#: src/input/r_flac.cpp:278
-msgid "flac_reader: Could not set the seek callback.\n"
-msgstr "flac_reader: 無法設定定位回呼。\n"
-
-#: src/input/r_flac.cpp:280
-msgid "flac_reader: Could not set the tell callback.\n"
-msgstr "flac_reader: 無法設定通告回呼。\n"
-
-#: src/input/r_flac.cpp:270
-msgid "flac_reader: Could not set the write callback.\n"
-msgstr "flac_reader: 無法設定寫入回呼。\n"
-
-#: src/input/r_flac.cpp:495
+#: src/input/r_flac.cpp:331
 msgid "flac_reader: Error parsing the file: %1%\n"
 msgstr "flac_reader: 解析檔案發生錯誤: %1%\n"
 
-#: src/input/r_flac.cpp:264
+#: src/input/r_flac.cpp:182
 msgid "flac_reader: FLAC__stream_decoder_new() failed.\n"
 msgstr "flac_reader: FLAC__stream_decoder_new() 失敗。\n"
 
-#: src/input/r_flac.cpp:222
+#: src/input/r_flac.cpp:149
 msgid "flac_reader: could not initialize the FLAC packetizer.\n"
 msgstr "flac_reader: 無法初始化 FLAC 分組器。\n"
 
@@ -8131,59 +8075,59 @@ msgstr "缺少數值"
 msgid "mkdir(%1%) failed; errno = %2% (%3%)"
 msgstr "mkdir(%1%) 建立資料夾失敗; 錯誤號 = %2% (%3%)"
 
-#: src/extract/extract_cli_parser.cpp:57
+#: src/extract/extract_cli_parser.cpp:56
 msgid "mkvextract <-h|-V>"
 msgstr "mkvextract <-h|-V>"
 
-#: src/extract/extract_cli_parser.cpp:48
+#: src/extract/extract_cli_parser.cpp:47
 msgid "mkvextract <mode> <source-filename> [options] <extraction-spec>"
 msgstr "mkvextract <模式> <來源-檔名> [選項] <額外規格>"
 
-#: src/extract/extract_cli_parser.cpp:100
+#: src/extract/extract_cli_parser.cpp:98
 msgid "mkvextract attachments \"a movie.mkv\" 4:cover.jpg"
 msgstr "mkvextract attachments \"電影.mkv\" 4:封面.jpg"
 
-#: src/extract/extract_cli_parser.cpp:53
+#: src/extract/extract_cli_parser.cpp:52
 msgid "mkvextract attachments <inname> [options] [AID1:out1 [AID2:out2 ...]]"
 msgstr "mkvextract attachments <輸入檔名> [選項] [AID1:out1 [AID2:out2 ...]]"
 
-#: src/extract/extract_cli_parser.cpp:108
+#: src/extract/extract_cli_parser.cpp:106
 msgid "mkvextract chapters \"a movie.mkv\" > movie_chapters.xml"
 msgstr "mkvextract chapters \"電影.mkv\" > 電影_章節.xml"
 
-#: src/extract/extract_cli_parser.cpp:54
+#: src/extract/extract_cli_parser.cpp:53
 msgid "mkvextract chapters <inname> [options]"
 msgstr "mkvextract chapters <輸入檔名> [選項]"
 
-#: src/extract/extract_cli_parser.cpp:117
+#: src/extract/extract_cli_parser.cpp:115
 msgid "mkvextract cuesheet \"audiofile.mka\" > audiofile.cue"
 msgstr "mkvextract cuesheet \"音訊檔.mka\" > 音訊檔.cue"
 
-#: src/extract/extract_cli_parser.cpp:55
+#: src/extract/extract_cli_parser.cpp:54
 msgid "mkvextract cuesheet <inname> [options]"
 msgstr "mkvextract cuesheet <輸入檔名> [選項]"
 
-#: src/extract/extract_cli_parser.cpp:91
+#: src/extract/extract_cli_parser.cpp:89
 msgid "mkvextract tags \"a movie.mkv\" > movie_tags.xml"
 msgstr "mkvextract tags \"電影.mkv\" > 電影_標籤.xml"
 
-#: src/extract/extract_cli_parser.cpp:52
+#: src/extract/extract_cli_parser.cpp:51
 msgid "mkvextract tags <inname> [options]"
 msgstr "mkvextract tags <輸入檔名> [選項]"
 
-#: src/extract/extract_cli_parser.cpp:125
+#: src/extract/extract_cli_parser.cpp:123
 msgid "mkvextract timecodes_v2 \"a movie.mkv\" 1:timecodes_track1.txt"
 msgstr "mkvextract timecodes_v2 \"電影.mkv\" 1:時間碼_軌道1.txt"
 
-#: src/extract/extract_cli_parser.cpp:56
+#: src/extract/extract_cli_parser.cpp:55
 msgid "mkvextract timecodes_v2 <inname> [TID1:out1 [TID2:out2 ...]]"
 msgstr "mkvextract timecodes_v2 <輸入檔名> [TID1:out1 [TID2:out2 ...]]"
 
-#: src/extract/extract_cli_parser.cpp:83
+#: src/extract/extract_cli_parser.cpp:81
 msgid "mkvextract tracks \"a movie.mkv\" 2:audio.ogg -c ISO8859-1 3:subs.srt"
 msgstr "mkvextract tracks \"電影.mkv\" 2:音訊.ogg -c ISO8859-1 3:字幕.srt"
 
-#: src/extract/extract_cli_parser.cpp:51
+#: src/extract/extract_cli_parser.cpp:50
 msgid "mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]"
 msgstr "mkvextract tracks <輸入檔名> [選項] [TID1:out1 [TID2:out2 ...]]"
 
@@ -8268,7 +8212,7 @@ msgstr "mkvmerge 執行完畢，返回碼 %d。%s"
 msgid "mkvmerge has finished"
 msgstr "mkvmerge 已經執行完畢"
 
-#: src/input/r_ogm.cpp:474
+#: src/input/r_ogm.cpp:475
 msgid "mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"
 msgstr "mkvmerge 編譯時未包含 FLAC 支援，但收到了對此類媒體流的處理請求。\n"
 
@@ -8911,10 +8855,36 @@ msgstr "是"
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "使用 FLAC 輸出模組。\n"
+#~ msgid "Write raw FLAC files (default: write OggFLAC files)."
+#~ msgstr "寫入 raw FLAC 檔案 (預設：寫入 OggFLAC 檔案)。"
 #~ msgid "You have not yet selected an output file."
 #~ msgstr "您尚未選擇任何輸入檔。"
 #~ msgid "You have not yet selected any input file and/or no tracks."
 #~ msgstr "您尚未選擇任何輸入檔和/或未發現軌道。"
+#~ msgid "flac_header_extraction: Could not set the error callback.\n"
+#~ msgstr "flac_header_extraction: 無法設定錯誤回呼。\n"
+#~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
+#~ msgstr "flac_header_extraction: 無法設定中繼資料回呼。\n"
+#~ msgid "flac_header_extraction: Could not set the read callback.\n"
+#~ msgstr "flac_header_extraction: 無法設定讀取回呼。\n"
+#~ msgid "flac_header_extraction: Could not set the write callback.\n"
+#~ msgstr "flac_header_extraction: 無法設定寫入回呼。\n"
+#~ msgid "flac_reader: Could not set the eof callback.\n"
+#~ msgstr "flac_reader: 無法設定檔尾回呼。\n"
+#~ msgid "flac_reader: Could not set the error callback.\n"
+#~ msgstr "flac_reader: 無法設定錯誤回呼。\n"
+#~ msgid "flac_reader: Could not set the length callback.\n"
+#~ msgstr "flac_reader: 無法設定長度回呼。\n"
+#~ msgid "flac_reader: Could not set the metadata callback.\n"
+#~ msgstr "flac_reader: 無法設定中繼資料回呼。\n"
+#~ msgid "flac_reader: Could not set the read callback.\n"
+#~ msgstr "flac_reader: 無法設定讀取回呼。\n"
+#~ msgid "flac_reader: Could not set the seek callback.\n"
+#~ msgstr "flac_reader: 無法設定定位回呼。\n"
+#~ msgid "flac_reader: Could not set the tell callback.\n"
+#~ msgstr "flac_reader: 無法設定通告回呼。\n"
+#~ msgid "flac_reader: Could not set the write callback.\n"
+#~ msgstr "flac_reader: 無法設定寫入回呼。\n"
 #~ msgid "found_what == 0. Should not have happened. Please file a bug report.\n"
 #~ msgstr "found_what == 0。這不該發生。請提交錯誤報告。\n"
 #~ msgid "locale.cpp/from_utf8(): Invalid conversion handle %1% (num: %2%).\n"

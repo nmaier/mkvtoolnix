@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 2.9.9\n"
-"POT-Creation-Date: 2010-05-26 18:08+0300\n"
+"POT-Creation-Date: 2010-05-28 17:17+0300\n"
 "PO-Revision-Date: 2010-05-27 22:24+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: none\n"
@@ -558,27 +558,11 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:256
-msgid "<option>--no-ogg</option>"
-msgstr "<option>--no-ogg</option>"
-
-#. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:259
-msgid ""
-"Only valid for <abbrev>FLAC</abbrev> tracks. Normally <abbrev>FLAC</abbrev> "
-"tracks are embedded in an Ogg transport stream. With this switch they are "
-"extracted to raw <abbrev>FLAC</abbrev> files instead."
-msgstr ""
-"<abbrev>FLAC</abbrev>トラックに以外には無効です。通常、<abbrev>FLAC</abbrev>"
-"トラックはOgg transport streamに埋め込まれますが、このスイッチを指定すると、"
-"生の<abbrev>FLAC</abbrev>ファイルが代わりに抽出されます。"
-
-#. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:266
 msgid "<parameter>TID:outname</parameter>"
 msgstr "<parameter>TID:outname</parameter>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:269
+#: doc/man/mkvextract.xml:259
 msgid ""
 "Causes extraction of the track with the ID <parameter>TID</parameter> into "
 "the file <parameter>outname</parameter> if such a track exists in the source "
@@ -591,7 +575,7 @@ msgstr ""
 "の出力に表示されるものと同じです。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:276
+#: doc/man/mkvextract.xml:266
 msgid ""
 "Each output name should be used only once. The exception are RealAudio and "
 "RealVideo tracks. If you use the same name for different tracks then those "
@@ -602,7 +586,7 @@ msgstr ""
 "ファイルに保存されます。例:"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><screen>
-#: doc/man/mkvextract.xml:281
+#: doc/man/mkvextract.xml:271
 #, no-wrap
 msgid ""
 "$ mkvextract tracks input.mkv 1:output-two-tracks.rm 2:output-two-tracks.rm\n"
@@ -612,12 +596,12 @@ msgstr ""
 "      "
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvextract.xml:289
+#: doc/man/mkvextract.xml:279
 msgid "Tags extraction mode"
 msgstr "タグ抽出モード"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvextract.xml:292
+#: doc/man/mkvextract.xml:282
 msgid ""
 "Syntax: <command>mkvextract</command> <option>tags</option> "
 "<parameter>source-filename</parameter> <optional><parameter>options</"
@@ -627,7 +611,7 @@ msgstr ""
 "filename</parameter> <optional><parameter>options</parameter></optional>"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvextract.xml:296
+#: doc/man/mkvextract.xml:286
 msgid ""
 "The extracted tags are written to the console unless the output is "
 "redirected (see the section about <link linkend=\"mkvextract."
@@ -638,12 +622,12 @@ msgstr ""
 "クト</link>についてのセクションを参照ください。)"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvextract.xml:302
+#: doc/man/mkvextract.xml:292
 msgid "Attachments extraction mode"
 msgstr "添付ファイル抽出モード"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvextract.xml:305
+#: doc/man/mkvextract.xml:295
 msgid ""
 "Syntax: <command>mkvextract</command> <option>attachments</option> "
 "<parameter>source-filename</parameter> <optional><parameter>options</"
@@ -656,12 +640,12 @@ msgstr ""
 "<optional><parameter>AID2:outname2</parameter> ...</optional>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:310
+#: doc/man/mkvextract.xml:300
 msgid "AID:outname"
 msgstr "AID:outname"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:313
+#: doc/man/mkvextract.xml:303
 msgid ""
 "Causes extraction of the attachment with the ID <parameter>AID</parameter> "
 "into the file <parameter>outname</parameter> if such an attachment exists in "
@@ -678,12 +662,12 @@ msgstr ""
 "定したときに出力されるものと同じです。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvextract.xml:324
+#: doc/man/mkvextract.xml:314
 msgid "Chapters extraction mode"
 msgstr "チャプタ抽出モード"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvextract.xml:327
+#: doc/man/mkvextract.xml:317
 msgid ""
 "Syntax: <command>mkvextract</command> <option>chapters</option> "
 "<parameter>source-filename</parameter> <optional><parameter>options</"
@@ -694,12 +678,12 @@ msgstr ""
 "parameter></optional>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:332
+#: doc/man/mkvextract.xml:322
 msgid "<option>-s</option>, <option>--simple</option>"
 msgstr "<option>-s</option>, <option>--simple</option>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:335
+#: doc/man/mkvextract.xml:325
 msgid ""
 "Exports the chapter information in the simple format used in the "
 "<abbrev>OGM</abbrev> tools (CHAPTER01=..., CHAPTER01NAME=...). In this mode "
@@ -711,7 +695,7 @@ msgstr ""
 "破棄されます。デフォルトでは、チャプタは&xml;フォーマットで出力されます。"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvextract.xml:344
+#: doc/man/mkvextract.xml:334
 msgid ""
 "The extracted chapters are written to the console unless the output is "
 "redirected (see the section about <link linkend=\"mkvextract."
@@ -722,12 +706,12 @@ msgstr ""
 "イレクト</link>についてのセクションを参照ください。)"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvextract.xml:350
+#: doc/man/mkvextract.xml:340
 msgid "Cue sheet extraction mode"
 msgstr "CUEシート抽出モード"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvextract.xml:353
+#: doc/man/mkvextract.xml:343
 msgid ""
 "Syntax: <command>mkvextract</command> <option>cuesheet</option> "
 "<parameter>source-filename</parameter> <optional><parameter>options</"
@@ -738,7 +722,7 @@ msgstr ""
 "parameter></optional>"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvextract.xml:357
+#: doc/man/mkvextract.xml:347
 msgid ""
 "The extracted cue sheet is written to the console unless the output is "
 "redirected (see the section about <link linkend=\"mkvextract."
@@ -749,12 +733,12 @@ msgstr ""
 "イレクト</link>についてのセクションを参照ください。)"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvextract.xml:363
+#: doc/man/mkvextract.xml:353
 msgid "Timecode extraction mode"
 msgstr "タイムコード抽出モード"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvextract.xml:366
+#: doc/man/mkvextract.xml:356
 msgid ""
 "Syntax: <command>mkvextract</command> <option>timecodes_v2</option> "
 "<parameter>source-filename</parameter> <optional><parameter>options</"
@@ -765,7 +749,7 @@ msgstr ""
 "parameter></optional>"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvextract.xml:370
+#: doc/man/mkvextract.xml:360
 msgid ""
 "The extracted timecodes are written to the console unless the output is "
 "redirected (see the section about <link linkend=\"mkvextract."
@@ -776,12 +760,12 @@ msgstr ""
 "リダイレクト</link>についてのセクションを参照ください。)"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:377
+#: doc/man/mkvextract.xml:367
 msgid "Output redirection"
 msgstr "出力リダイレクト"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:380
+#: doc/man/mkvextract.xml:370
 msgid ""
 "Several extraction modes cause &mkvextract; to write the extracted data to "
 "the console. There are generally two ways of writing this data into a file: "
@@ -792,7 +776,7 @@ msgstr ""
 "シェルによって提供され、もう一つは&mkvextract;自体によって提供されます。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:385
+#: doc/man/mkvextract.xml:375
 msgid ""
 "The shell's builtin redirection mechanism is used by appending "
 "'<literal>&gt; output-filename.ext</literal>' to the command line. Example:"
@@ -801,7 +785,7 @@ msgstr ""
 "filename.ext</literal>'を追加することで使用できます。例:"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvextract.xml:390
+#: doc/man/mkvextract.xml:380
 #, no-wrap
 msgid ""
 "$ mkvextract tags source.mkv &gt; tags.xml\n"
@@ -811,7 +795,7 @@ msgstr ""
 "  "
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:394
+#: doc/man/mkvextract.xml:384
 msgid ""
 "&mkvextract;'s own redirection is invoked with the <link linkend="
 "\"mkvextract.description.common.redirect_output\"><option>--redirect-output</"
@@ -822,7 +806,7 @@ msgstr ""
 "を指定することで使用できます。例:"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvextract.xml:399
+#: doc/man/mkvextract.xml:389
 #, no-wrap
 msgid ""
 "$ mkvextract tags source.mkv --redirect-output tags.xml\n"
@@ -832,7 +816,7 @@ msgstr ""
 "  "
 
 #. type: Content of: <refentry><refsect1><note><para>
-#: doc/man/mkvextract.xml:404
+#: doc/man/mkvextract.xml:394
 msgid ""
 "On Windows you should probably use the <link linkend=\"mkvextract."
 "description.common.redirect_output\"><option>--redirect-output</option></"
@@ -846,12 +830,12 @@ msgstr ""
 "てしまい、出力が壊れる虞があります。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:413
+#: doc/man/mkvextract.xml:403
 msgid "Output file formats"
 msgstr "出力ファイルフォーマット"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:416
+#: doc/man/mkvextract.xml:406
 msgid ""
 "The decision about the output format is based on the track type, not on the "
 "extension used for the output file name. The following track types are "
@@ -862,12 +846,12 @@ msgstr ""
 "す。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:422
+#: doc/man/mkvextract.xml:412
 msgid "V_MPEG4/ISO/AVC"
 msgstr "V_MPEG4/ISO/AVC"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:425
+#: doc/man/mkvextract.xml:415
 msgid ""
 "<abbrev>H.264</abbrev> / <abbrev>AVC</abbrev> video tracks are written to "
 "<abbrev>H.264</abbrev> elementary streams which can be processed further "
@@ -880,12 +864,12 @@ msgstr ""
 "productname>などにより処理できます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:432
+#: doc/man/mkvextract.xml:422
 msgid "V_MS/VFW/FOURCC"
 msgstr "V_MS/VFW/FOURCC"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:435
+#: doc/man/mkvextract.xml:425
 msgid ""
 "Fixed <abbrev>FPS</abbrev> video tracks with this <classname>CodecID</"
 "classname> are written to <abbrev>AVI</abbrev> files."
@@ -894,12 +878,12 @@ msgstr ""
 "ラックは<abbrev>AVI</abbrev>ファイルに書き出されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:441
+#: doc/man/mkvextract.xml:431
 msgid "V_REAL/*"
 msgstr "V_REAL/*"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:444
+#: doc/man/mkvextract.xml:434
 msgid ""
 "<productname>RealVideo</productname> tracks are written to "
 "<productname>RealMedia</productname> files."
@@ -908,12 +892,12 @@ msgstr ""
 "productname>ファイルに書き出されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:450
+#: doc/man/mkvextract.xml:440
 msgid "A_MPEG/L3, A_AC3"
 msgstr "A_MPEG/L3, A_AC3"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:453
+#: doc/man/mkvextract.xml:443
 msgid ""
 "These will be extracted to raw <abbrev>MP3</abbrev> and <abbrev>AC3</abbrev> "
 "files."
@@ -922,12 +906,12 @@ msgstr ""
 "抽出されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:459
+#: doc/man/mkvextract.xml:449
 msgid "A_PCM/INT/LIT"
 msgstr "A_PCM/INT/LIT"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:462
+#: doc/man/mkvextract.xml:452
 msgid ""
 "Raw <abbrev>PCM</abbrev> data will be written to a <abbrev>WAV</abbrev> file."
 msgstr ""
@@ -935,12 +919,12 @@ msgstr ""
 "す。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:468
+#: doc/man/mkvextract.xml:458
 msgid "A_AAC/MPEG2/*, A_AAC/MPEG4/*, A_AAC"
 msgstr "A_AAC/MPEG2/*, A_AAC/MPEG4/*, A_AAC"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:471
+#: doc/man/mkvextract.xml:461
 msgid ""
 "All <abbrev>AAC</abbrev> files will be written into an <abbrev>AAC</abbrev> "
 "file with <abbrev>ADTS</abbrev> headers before each packet. The "
@@ -952,22 +936,22 @@ msgstr ""
 "ん。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:478
+#: doc/man/mkvextract.xml:468
 msgid "A_VORBIS"
 msgstr "A_VORBIS"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:481
+#: doc/man/mkvextract.xml:471
 msgid "Vorbis audio will be written into an &oggvorbis; file."
 msgstr "Vorbis audioは&oggvorbis;ファイルに書き出されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:487
+#: doc/man/mkvextract.xml:477
 msgid "A_REAL/*"
 msgstr "A_REAL/*"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:490
+#: doc/man/mkvextract.xml:480
 msgid ""
 "<productname>RealAudio</productname> tracks are written to "
 "<productname>RealMedia</productname> files."
@@ -976,12 +960,12 @@ msgstr ""
 "productname>ファイルに書き出されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:496
+#: doc/man/mkvextract.xml:486
 msgid "A_TTA1"
 msgstr "A_TTA1"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:499
+#: doc/man/mkvextract.xml:489
 msgid ""
 "<productname>TrueAudio</productname> tracks are written to <abbrev>TTA</"
 "abbrev> files. Please note that due to &matroska;'s limited timecode "
@@ -995,22 +979,22 @@ msgstr ""
 "プル数)と<abbrev>CRC</abbrev>については不正確になります。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:507
+#: doc/man/mkvextract.xml:497
 msgid "S_TEXT/UTF8"
 msgstr "S_TEXT/UTF8"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:510
+#: doc/man/mkvextract.xml:500
 msgid "Simple text subtitles will be written as <abbrev>SRT</abbrev> files."
 msgstr "シンプル・テキスト字幕は<abbrev>SRT</abbrev>ファイルに書き出されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:516
+#: doc/man/mkvextract.xml:506
 msgid "S_TEXT/SSA, S_TEXT/ASS"
 msgstr "S_TEXT/SSA, S_TEXT/ASS"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:519
+#: doc/man/mkvextract.xml:509
 msgid ""
 "<abbrev>SSA</abbrev> and <abbrev>ASS</abbrev> text subtitles will be written "
 "as <abbrev>SSA</abbrev>/<abbrev>ASS</abbrev> files respectively."
@@ -1019,12 +1003,12 @@ msgstr ""
 "<abbrev>SSA</abbrev>、<abbrev>ASS</abbrev>ファイルに書き出されます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:526
+#: doc/man/mkvextract.xml:516
 msgid "S_KATE"
 msgstr "S_KATE"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:529
+#: doc/man/mkvextract.xml:519
 msgid ""
 "<productname>Kate</productname> streams will be written within an "
 "<productname>Ogg</productname> container."
@@ -1033,12 +1017,12 @@ msgstr ""
 "テナに格納されます。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:535 doc/man/mkvmerge.xml:1826
+#: doc/man/mkvextract.xml:525 doc/man/mkvmerge.xml:1826
 msgid "Tags"
 msgstr "タグ"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:538
+#: doc/man/mkvextract.xml:528
 msgid ""
 "Tags are converted to a &xml; format. This format is the same that "
 "&mkvmerge; supports for reading tags."
@@ -1047,12 +1031,12 @@ msgstr ""
 "読み込む際のフォーマットと同じです。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:544 doc/man/mkvmerge.xml:1694
+#: doc/man/mkvextract.xml:534 doc/man/mkvmerge.xml:1694
 msgid "Attachments"
 msgstr "添付ファイル"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:547
+#: doc/man/mkvextract.xml:537
 msgid ""
 "Attachments are written to they output file as they are. No conversion "
 "whatsoever is done."
@@ -1061,12 +1045,12 @@ msgstr ""
 "く行われません。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:553 doc/man/mkvmerge.xml:1719
+#: doc/man/mkvextract.xml:543 doc/man/mkvmerge.xml:1719
 msgid "Chapters"
 msgstr "チャプタ"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:556
+#: doc/man/mkvextract.xml:546
 msgid ""
 "Chapters are converted to a &xml; format. This format is the same that "
 "&mkvmerge; supports for reading chapters. Alternatively a stripped-down "
@@ -1077,12 +1061,12 @@ msgstr ""
 "abbrev>スタイルのフォーマットで出力することもできます。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:563
+#: doc/man/mkvextract.xml:553
 msgid "Timecodes"
 msgstr "タイムコード"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:566
+#: doc/man/mkvextract.xml:556
 msgid ""
 "Timecodes are first sorted and then output as a timecode v2 format compliant "
 "file ready to be fed to &mkvmerge;.  The extraction to other formats (v1, v3 "
@@ -1093,25 +1077,25 @@ msgstr ""
 "ポートされていません。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:575 doc/man/mkvinfo.xml:252
+#: doc/man/mkvextract.xml:565 doc/man/mkvinfo.xml:252
 #: doc/man/mkvmerge.xml:2058 doc/man/mkvpropedit.xml:356
 msgid "Exit codes"
 msgstr "返り値"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:578
+#: doc/man/mkvextract.xml:568
 msgid "&mkvextract; exits with one of three exit codes:"
 msgstr "&mkvextract;は下の3つの返り値を返します。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvextract.xml:584
+#: doc/man/mkvextract.xml:574
 msgid ""
 "<constant>0</constant> -- This exit codes means that extraction has "
 "completed successfully."
 msgstr "<constant>0</constant> -- この返り値は抽出が成功したことを意味します。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvextract.xml:590
+#: doc/man/mkvextract.xml:580
 msgid ""
 "<constant>1</constant> -- In this case &mkvextract; has output at least one "
 "warning, but extraction did continue.  A warning is prefixed with the text "
@@ -1125,7 +1109,7 @@ msgstr ""
 "ます。出力ファイルを確認することを強く推奨します。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvextract.xml:598
+#: doc/man/mkvextract.xml:588
 msgid ""
 "<constant>2</constant> -- This exit code is used after an error occurred.  "
 "&mkvextract; aborts right after outputting the error message.  Error "
@@ -1137,24 +1121,24 @@ msgstr ""
 "なコマンドラインやファイルI/Oエラー、壊れたファイルなど様々です。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:606 doc/man/mkvinfo.xml:282
+#: doc/man/mkvextract.xml:596 doc/man/mkvinfo.xml:282
 #: doc/man/mkvmerge.xml:2089 doc/man/mkvpropedit.xml:387 doc/man/mmg.xml:90
 msgid "See also"
 msgstr "関連項目"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:608
+#: doc/man/mkvextract.xml:598
 msgid "&mkvmerge;, &mkvinfo;, &mkvpropedit;, &mmg;"
 msgstr "&mkvmerge;, &mkvinfo;, &mkvpropedit;, &mmg;"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:613 doc/man/mkvinfo.xml:289
+#: doc/man/mkvextract.xml:603 doc/man/mkvinfo.xml:289
 #: doc/man/mkvmerge.xml:2096 doc/man/mkvpropedit.xml:394 doc/man/mmg.xml:97
 msgid "WWW"
 msgstr "ウェブ"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:615 doc/man/mkvinfo.xml:291
+#: doc/man/mkvextract.xml:605 doc/man/mkvinfo.xml:291
 #: doc/man/mkvmerge.xml:2098 doc/man/mkvpropedit.xml:396 doc/man/mmg.xml:99
 msgid ""
 "The latest version can always be found at <ulink url=\"http://www.bunkus.org/"
@@ -5760,3 +5744,15 @@ msgstr ""
 #: doc/man/mmg.xml:92
 msgid "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
 msgstr "&mkvmerge; &mkvextract;, &mkvinfo;, &mkvpropedit;"
+
+#~ msgid "<option>--no-ogg</option>"
+#~ msgstr "<option>--no-ogg</option>"
+
+#~ msgid ""
+#~ "Only valid for <abbrev>FLAC</abbrev> tracks. Normally <abbrev>FLAC</"
+#~ "abbrev> tracks are embedded in an Ogg transport stream. With this switch "
+#~ "they are extracted to raw <abbrev>FLAC</abbrev> files instead."
+#~ msgstr ""
+#~ "<abbrev>FLAC</abbrev>トラックに以外には無効です。通常、<abbrev>FLAC</"
+#~ "abbrev>トラックはOgg transport streamに埋め込まれますが、このスイッチを指"
+#~ "定すると、生の<abbrev>FLAC</abbrev>ファイルが代わりに抽出されます。"

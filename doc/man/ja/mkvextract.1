@@ -145,12 +145,6 @@ source\&.mkv
 コンテナ情報を含まない、rawデータをファイルに抽出します。トラックがCodecPrivate要素のヘッダ情報を含む場合、その内容はファイルの先頭に書き出されます。このモードは、\fBmkvextract\fR(1)がサポートしないCodecIDにも使用できますが、出力されたファイルは使用できないかもしれません。
 .RE
 .PP
-\fB\-\-no\-ogg\fR
-.RS 4
-
-FLACトラックに以外には無効です。通常、FLACトラックはOgg transport streamに埋め込まれますが、このスイッチを指定すると、生のFLACファイルが代わりに抽出されます。
-.RE
-.PP
 \fITID:outname\fR
 .RS 4
 IDが\fITID\fRであるトラックがソースファイルに存在すれば、\fIoutname\fRに抽出します。このオプションは複数回指定できます。トラックIDは、\fBmkvmerge\fR(1)に\fB\-\-identify\fRを指定して実行した際の出力に表示されるものと同じです。

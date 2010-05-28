@@ -1,13 +1,22 @@
 '\" t
 .\"     Title: mkvextract
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.1 <http://docbook.sf.net/>
+.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
 .\"      Date: 2010-05-14
 .\"    Manual: User Commands
 .\"    Source: MkvToolNix 3.4.0
 .\"  Language: English
 .\"
 .TH "MKVEXTRACT" "1" "2010\-05\-14" "MkvToolNix 3\&.4\&.0" "User Commands"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -46,17 +55,17 @@ The following options are available in all modes and only described once in this
 .PP
 \fB\-f\fR, \fB\-\-parse\-fully\fR
 .RS 4
-Sets the parse mode to \'full\'\&. The default mode does not parse the whole file but uses the meta seek elements for locating the required elements of a source file\&. In 99% of all cases this is enough\&. But for files that do not contain meta seek elements or which are damaged the user might have to use this mode\&. A full scan of a file can take a couple of minutes while a fast scan only takes seconds\&.
+Sets the parse mode to \*(Aqfull\*(Aq\&. The default mode does not parse the whole file but uses the meta seek elements for locating the required elements of a source file\&. In 99% of all cases this is enough\&. But for files that do not contain meta seek elements or which are damaged the user might have to use this mode\&. A full scan of a file can take a couple of minutes while a fast scan only takes seconds\&.
 .RE
 .PP
 \fB\-\-command\-line\-charset\fR \fIcharacter\-set\fR
 .RS 4
-Sets the character set to convert strings given on the command line from\&. It defaults to the character set given by system\'s current locale\&.
+Sets the character set to convert strings given on the command line from\&. It defaults to the character set given by system\*(Aqs current locale\&.
 .RE
 .PP
 \fB\-\-output\-charset\fR \fIcharacter\-set\fR
 .RS 4
-Sets the character set to which strings are converted that are to be output\&. It defaults to the character set given by system\'s current locale\&.
+Sets the character set to which strings are converted that are to be output\&. It defaults to the character set given by system\*(Aqs current locale\&.
 .RE
 .PP
 \fB\-r\fR, \fB\-\-redirect\-output\fR \fIfile\-name\fR
@@ -72,12 +81,12 @@ is honored\&.
 .RS 4
 Forces the translations for the language
 \fIcode\fR
-to be used (e\&.g\&. \'de_DE\' for the German translations)\&. It is preferable to use the environment variables
+to be used (e\&.g\&. \*(Aqde_DE\*(Aq for the German translations)\&. It is preferable to use the environment variables
 \fILANG\fR,
 \fILC_MESSAGES\fR
 and
 \fILC_ALL\fR
-though\&. Entering \'list\' as the
+though\&. Entering \*(Aqlist\*(Aq as the
 \fIcode\fR
 will cause
 \fBmkvextract\fR(1)
@@ -88,7 +97,7 @@ to output a list of available translations\&.
 .RS 4
 Be verbose and show all the important
 Matroska(TM)
-elements as they\'re read\&.
+elements as they\*(Aqre read\&.
 .RE
 .PP
 \fB\-h\fR, \fB\-\-help\fR
@@ -104,9 +113,9 @@ Show version information and exit\&.
 \fB@\fRoptions\-file
 .RS 4
 Reads additional command line arguments from the file
-\fIoptions\-file\fR\&. Lines whose first non\-whitespace character is a hash mark (\'#\') are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&. There is no meta character escaping\&.
+\fIoptions\-file\fR\&. Lines whose first non\-whitespace character is a hash mark (\*(Aq#\*(Aq) are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&. There is no meta character escaping\&.
 .sp
-The command line \'\fBmkvextract tracks source\&.mkv \-\-raw 1:destination\&.raw\fR\' could be converted into the following option file:
+The command line \*(Aq\fBmkvextract tracks source\&.mkv \-\-raw 1:destination\&.raw\fR\*(Aq could be converted into the following option file:
 .sp
 .if n \{\
 .RS 4
@@ -134,7 +143,7 @@ Syntax:
 \fITID1:dest\-filename1\fR
 [\fITID2:dest\-filename2\fR \&.\&.\&.]
 .PP
-The following command line options are available for each track in the \'tracks\' extraction mode\&. They have to appear in front of the track specification (see below) they should be applied to\&.
+The following command line options are available for each track in the \*(Aqtracks\*(Aq extraction mode\&. They have to appear in front of the track specification (see below) they should be applied to\&.
 .PP
 \fB\-c\fR \fIcharacter\-set\fR
 .RS 4
@@ -152,7 +161,7 @@ Causes
 \fBmkvextract\fR(1)
 to extract a
 CUE
-sheet from the chapter information and tag data for the following track into a file whose name is the track\'s output name with \'\&.cue\' appended to it\&.
+sheet from the chapter information and tag data for the following track into a file whose name is the track\*(Aqs output name with \*(Aq\&.cue\*(Aq appended to it\&.
 .RE
 .PP
 \fB\-\-raw\fR
@@ -164,7 +173,7 @@ CodecPrivate
 element to be written to the file\&. This mode works with all
 CodecIDs, even the ones that
 \fBmkvextract\fR(1)
-doesn\'t support otherwise, but the resulting files might not be usable\&.
+doesn\*(Aqt support otherwise, but the resulting files might not be usable\&.
 .RE
 .PP
 \fB\-\-fullraw\fR
@@ -174,18 +183,7 @@ CodecPrivate
 element will be written to the file first if the track contains such a header element\&. This mode works with all
 CodecIDs, even the ones that
 \fBmkvextract\fR(1)
-doesn\'t support otherwise, but the resulting files might not be usable\&.
-.RE
-.PP
-\fB\-\-no\-ogg\fR
-.RS 4
-Only valid for
-FLAC
-tracks\&. Normally
-FLAC
-tracks are embedded in an Ogg transport stream\&. With this switch they are extracted to raw
-FLAC
-files instead\&.
+doesn\*(Aqt support otherwise, but the resulting files might not be usable\&.
 .RE
 .PP
 \fITID:outname\fR
@@ -195,7 +193,7 @@ Causes extraction of the track with the ID
 into the file
 \fIoutname\fR
 if such a track exists in the source file\&. This option can be given multiple times\&. The track IDs are the same as the ones output by
-\fBmkvmerge\fR(1)\'s
+\fBmkvmerge\fR(1)\*(Aqs
 \fB\-\-identify\fR
 option\&.
 .sp
@@ -244,7 +242,7 @@ if such an attachment exists in the source file\&. If the
 is left empty then the name of the attachment inside the source
 Matroska(TM)
 file is used instead\&. This option can be given multiple times\&. The attachment IDs are the same as the ones output by
-\fBmkvmerge\fR(1)\'s
+\fBmkvmerge\fR(1)\*(Aqs
 \fB\-\-identify\fR
 option\&.
 .RE
@@ -298,7 +296,7 @@ to write the extracted data to the console\&. There are generally two ways of wr
 \fBmkvextract\fR(1)
 itself\&.
 .PP
-The shell\'s builtin redirection mechanism is used by appending \'> output\-filename\&.ext\' to the command line\&. Example:
+The shell\*(Aqs builtin redirection mechanism is used by appending \*(Aq> output\-filename\&.ext\*(Aq to the command line\&. Example:
 .sp
 .if n \{\
 .RS 4
@@ -312,7 +310,7 @@ $ mkvextract tags source\&.mkv > tags\&.xml
 .\}
 .PP
 
-\fBmkvextract\fR(1)\'s own redirection is invoked with the
+\fBmkvextract\fR(1)\*(Aqs own redirection is invoked with the
 \fB\-\-redirect\-output\fR
 option\&. Example:
 .sp
@@ -343,7 +341,7 @@ On Windows you should probably use the
 \fB\-\-redirect\-output\fR
 option because
 \fBcmd\&.exe\fR
-sometimes interpretes special characters before they\'re written into the output file resulting in broken output\&.
+sometimes interpretes special characters before they\*(Aqre written into the output file resulting in broken output\&.
 .sp .5v
 .RE
 .SH "OUTPUT FILE FORMATS"
@@ -439,7 +437,7 @@ TrueAudio(TM)
 tracks are written to
 TTA
 files\&. Please note that due to
-Matroska(TM)\'s limited timecode precision the extracted file\'s header will be different regarding two fields:
+Matroska(TM)\*(Aqs limited timecode precision the extracted file\*(Aqs header will be different regarding two fields:
 \fIdata_length\fR
 (the total number of samples in the file) and the
 CRC\&.
@@ -533,7 +531,7 @@ exits with one of three exit codes:
 \fB1\fR
 \-\- In this case
 \fBmkvextract\fR(1)
-has output at least one warning, but extraction did continue\&. A warning is prefixed with the text \'Warning:\'\&. Depending on the issues involved the resulting files might be ok or not\&. The user is urged to check both the warning and the resulting files\&.
+has output at least one warning, but extraction did continue\&. A warning is prefixed with the text \*(AqWarning:\*(Aq\&. Depending on the issues involved the resulting files might be ok or not\&. The user is urged to check both the warning and the resulting files\&.
 .RE
 .sp
 .RS 4
