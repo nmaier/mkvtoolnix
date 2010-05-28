@@ -1,3 +1,9 @@
+2010-05-28  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed support for reading FLAC tracks from
+	Ogg files following the FLAC-in-Ogg-mapping established with FLAC
+	v1.1.1. Fix for bug 488.
+
 2010-05-27  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: enhancement: The "mkvmerge executable" input in the

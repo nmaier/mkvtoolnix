@@ -23,6 +23,11 @@
 
 #include "common/mm_io.h"
 
+enum oggflac_mode_e {
+  ofm_pre_1_1_1,
+  ofm_post_1_1_1,
+};
+
 class flac_header_extractor_c {
 public:
   FLAC__StreamDecoder *decoder;
@@ -34,9 +39,10 @@ public:
   ogg_page og;
   int64_t sid, num_packets, num_header_packets;
   bool done;
+  oggflac_mode_e mode;
 
 public:
-  flac_header_extractor_c(const std::string &file_name, int64_t _sid);
+  flac_header_extractor_c(const std::string &file_name, int64_t p_sid, oggflac_mode_e p_mode);
   ~flac_header_extractor_c();
   bool extract();
   bool read_page();
@@ -45,9 +51,10 @@ public:
 class ogm_a_flac_demuxer_c: public ogm_demuxer_c {
 public:
   int flac_header_packets, sample_rate, channels, bits_per_sample;
+  oggflac_mode_e mode;
 
 public:
-  ogm_a_flac_demuxer_c(ogm_reader_c *p_reader);
+  ogm_a_flac_demuxer_c(ogm_reader_c *p_reader, oggflac_mode_e p_mode);
 
   virtual const char *get_type() {
     return "audio";

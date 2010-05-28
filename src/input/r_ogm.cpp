@@ -468,7 +468,8 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
     dmx = new ogm_s_kate_demuxer_c(this);
 
   // FLAC
-  else if ((4 <= op.bytes) && !strncmp((char *)op.packet, "fLaC", 4)) {
+  else if (   ((4 <= op.bytes) && !strncmp(reinterpret_cast<char *>(&op.packet[0]), "fLaC", 4))
+           || ((5 <= op.bytes) && !strncmp(reinterpret_cast<char *>(&op.packet[1]), "FLAC", 4) && (0x7f == op.packet[0]))) {
 #if !defined(HAVE_FLAC_FORMAT_H)
     if (demuxing_requested('a', sdemuxers.size()))
       mxerror_fn(m_ti.m_fname, Y("mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"));
@@ -480,7 +481,7 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
     }
 
 #else
-    dmx = new ogm_a_flac_demuxer_c(this);
+    dmx = new ogm_a_flac_demuxer_c(this, 0x7f == op.packet[0] ? ofm_post_1_1_1 : ofm_pre_1_1_1);
 #endif
 
   } else if (((*op.packet & PACKET_TYPE_BITS ) == PACKET_TYPE_HEADER) && (op.bytes >= ((int)sizeof(stream_header) + 1))) {

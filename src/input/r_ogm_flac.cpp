@@ -52,10 +52,16 @@ fhe_read_cb(const FLAC__StreamDecoder *decoder,
   if (*bytes < op.bytes)
     mxerror(boost::format(Y("flac_header_extraction: bytes (%1%) < op.bytes (%2%). Could not read the FLAC headers.\n")) % *bytes % op.bytes);
 
-  memcpy(buffer, op.packet, op.bytes);
-  *bytes = op.bytes;
+  int offset = 0;
+
+  if ((0 == fhe->num_packets) && (ofm_post_1_1_1 == fhe->mode) && (13 < op.bytes))
+    offset = 9;
+
+  memcpy(buffer, &op.packet[offset], op.bytes - offset);
+  *bytes = op.bytes - offset;
+
   fhe->num_packets++;
-  mxverb(2, boost::format("flac_header_extraction: read packet number %1% with %2% bytes\n") % fhe->num_packets % op.bytes);
+  mxverb(2, boost::format("flac_header_extraction: read packet number %1% with %2% bytes and offset %3%\n") % fhe->num_packets % op.bytes % offset);
 
   return FLAC__STREAM_DECODER_READ_STATUS_CONTINUE;
 }
@@ -117,13 +123,15 @@ fhe_error_cb(const FLAC__StreamDecoder *,
 }
 
 flac_header_extractor_c::flac_header_extractor_c(const std::string &file_name,
-                                                 int64_t _sid):
-  metadata_parsed(false),
-  sid(_sid),
-  num_packets(0),
-  num_header_packets(0),
-  done(false) {
-
+                                                 int64_t p_sid,
+                                                 oggflac_mode_e p_mode)
+  : metadata_parsed(false)
+  , sid(p_sid)
+  , num_packets(0)
+  , num_header_packets(0)
+  , done(false)
+  , mode(p_mode)
+{
   file    = new mm_file_io_c(file_name);
   decoder = FLAC__stream_decoder_new();
 
@@ -215,13 +223,15 @@ flac_header_extractor_c::read_page() {
 
 // ------------------------------------------
 
-ogm_a_flac_demuxer_c::ogm_a_flac_demuxer_c(ogm_reader_c *p_reader):
-  ogm_demuxer_c(p_reader),
-  flac_header_packets(0),
-  sample_rate(0),
-  channels(0),
-  bits_per_sample(0) {
-
+ogm_a_flac_demuxer_c::ogm_a_flac_demuxer_c(ogm_reader_c *p_reader,
+                                           oggflac_mode_e p_mode)
+  : ogm_demuxer_c(p_reader)
+  , flac_header_packets(0)
+  , sample_rate(0)
+  , channels(0)
+  , bits_per_sample(0)
+  , mode(p_mode)
+{
   stype = OGM_STREAM_TYPE_A_FLAC;
 }
 
@@ -271,7 +281,7 @@ ogm_a_flac_demuxer_c::process_header_page() {
 
 void
 ogm_a_flac_demuxer_c::initialize() {
-  flac_header_extractor_c fhe(reader->m_ti.m_fname, serialno);
+  flac_header_extractor_c fhe(reader->m_ti.m_fname, serialno, mode);
 
   if (!fhe.extract())
     mxerror_tid(reader->m_ti.m_fname, track_id, Y("Could not read the FLAC header packets.\n"));
@@ -282,20 +292,23 @@ ogm_a_flac_demuxer_c::initialize() {
   bits_per_sample     = fhe.bits_per_sample;
   last_granulepos     = 0;
   units_processed     = 1;
+
+  if ((ofm_post_1_1_1 == mode) && !packet_data.empty() && (13 < packet_data.front()->get_size()))
+    packet_data.front()->set_offset(9);
 }
 
 generic_packetizer_c *
 ogm_a_flac_demuxer_c::create_packetizer(track_info_c &ti) {
-  int size = 0;
+  int size = 0, start_at_header = ofm_post_1_1_1 == mode ? 0 : 1;
   int i;
 
-  for (i = 1; i < (int)packet_data.size(); i++)
+  for (i = start_at_header; i < (int)packet_data.size(); i++)
     size += packet_data[i]->get_size();
 
   unsigned char *buf = (unsigned char *)safemalloc(size);
   size               = 0;
 
-  for (i = 1; i < (int)packet_data.size(); i++) {
+  for (i = start_at_header; i < (int)packet_data.size(); i++) {
     memcpy(&buf[size], packet_data[i]->get_buffer(), packet_data[i]->get_size());
     size += packet_data[i]->get_size();
   }
