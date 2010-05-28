@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-05-28 00:04+0200\n"
+"PO-Revision-Date: 2010-05-28 20:36+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -2308,9 +2308,8 @@ msgid "Command line saved."
 msgstr "コマンドラインが保存されました。"
 
 #: src/mmg/tabs/input.cpp:406
-#, fuzzy
 msgid "Command line used:"
-msgstr "コマンドラインが保存されました。"
+msgstr "使用されたコマンドライン："
 
 #: src/mmg/options/languages.cpp:79
 msgid "Common languages"
@@ -3430,7 +3429,7 @@ msgstr "ファイル'%1%'を使用することができません：ファイル�
 
 #: src/mmg/mmg_dialog.cpp:1739
 msgid "Incompatible mkvmerge version"
-msgstr ""
+msgstr "互換性のないmkvmergeのバージョン"
 
 #: src/mmg/tabs/input.cpp:978
 msgid "Incompatible track"
@@ -4412,9 +4411,8 @@ msgid "Output sampling frequency: %1%"
 msgstr "出力サンプル周波数：%1%"
 
 #: src/mmg/tabs/input.cpp:410
-#, fuzzy
 msgid "Output:"
-msgstr "出力"
+msgstr "出力："
 
 #: src/mmg/mmg_dialog.cpp:530
 msgid "Overwrite existing file(s)?"
@@ -5453,7 +5451,7 @@ msgstr "トラックID %s（ファイル'%s'）のFourCC指定が4文字ちょ�
 #: src/mmg/mmg_dialog.cpp:1735
 #, c-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%s) than the GUI itself (%s). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
-msgstr ""
+msgstr "このGUIは、GUI自体（%s）とは違うバージョン（%s）のmkvmerge実行ファイルを使用するように設定されました。これはサポートされてはいませんが、妨げられることもありません。設定ダイアログでmkvmerge実行ファイルを変更するべきです。"
 
 #: src/input/r_ogm.cpp:1383
 msgid "The Kate identifaction header could not be parsed (%1%).\n"
