@@ -26,7 +26,6 @@ protected:
   int m_num_unknown_args;
 
   std::string m_charset;
-  bool m_embed_in_ogg;
   bool m_extract_cuesheet;
   int m_extract_blockadd_level;
   track_spec_t::target_mode_e m_target_mode;
@@ -44,7 +43,6 @@ protected:
 
   void set_parse_fully();
   void set_charset();
-  void set_no_ogg();
   void set_cuesheet();
   void set_blockadd();
   void set_raw();

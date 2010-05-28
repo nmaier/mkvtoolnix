@@ -17,7 +17,6 @@
 track_spec_t::track_spec_t()
   : tid(0)
   , tuid(0)
-  , embed_in_ogg(false)
   , extract_cuesheet(false)
   , target_mode(track_spec_t::tm_normal)
   , extract_blockadd_level(-1)

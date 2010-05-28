@@ -204,61 +204,6 @@ xtr_oggbase_c::write_queued_frame(bool eos) {
 
 // ------------------------------------------------------------------------
 
-xtr_oggflac_c::xtr_oggflac_c(const std::string &codec_id,
-                             int64_t tid,
-                             track_spec_t &tspec)
-  : xtr_oggbase_c(codec_id, tid, tspec)
-{
-}
-
-void
-xtr_oggflac_c::create_file(xtr_base_c *master,
-                           KaxTrackEntry &track) {
-  KaxCodecPrivate *priv = FINDFIRST(&track, KaxCodecPrivate);
-  if (NULL == priv)
-    mxerror(boost::format(Y("Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n")) % m_tid % m_codec_id);
-
-  m_sfreq = (int)kt_get_a_sfreq(track);
-
-  xtr_base_c::create_file(master, track);
-
-  memory_cptr mpriv = decode_codec_private(priv);
-
-  ogg_stream_init(&m_os, g_no_variable_data ? 1804289383 : random_c::generate_31bits());
-
-  // Handle the three header packets: Headers, comments, codec
-  // setup data.
-  ogg_packet op;
-  op.b_o_s      = 1;
-  op.e_o_s      = 0;
-  op.packetno   = 0;
-  op.packet     = (unsigned char *)"fLaC";
-  op.bytes      = 4;
-  op.granulepos = 0;
-
-  ogg_stream_packetin(&m_os, &op);
-  flush_pages();
-
-  const binary *ptr = mpriv->get_buffer();
-  if ((mpriv->get_size() >= 4) && !memcmp(ptr, "fLaC", 4)) {
-    ptr      += 4;
-    op.bytes  = mpriv->get_size() - 4;
-  } else
-    op.bytes  = mpriv->get_size();
-
-  op.b_o_s    = 0;
-  op.packetno = 1;
-  op.packet   = (unsigned char *)safememdup(ptr, op.bytes);
-  m_packetno  = 2;
-
-  ogg_stream_packetin(&m_os, &op);
-  safefree(op.packet);
-
-  flush_pages();
-}
-
-// ------------------------------------------------------------------------
-
 xtr_oggvorbis_c::xtr_oggvorbis_c(const std::string &codec_id,
                                  int64_t tid,
                                  track_spec_t &tspec)

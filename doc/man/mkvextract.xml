@@ -253,16 +253,6 @@ source.mkv
     </varlistentry>
 
     <varlistentry>
-     <term><option>--no-ogg</option></term>
-     <listitem>
-      <para>
-       Only valid for <abbrev>FLAC</abbrev> tracks. Normally <abbrev>FLAC</abbrev> tracks are embedded in an Ogg transport stream. With this
-       switch they are extracted to raw <abbrev>FLAC</abbrev> files instead.
-      </para>
-     </listitem>
-    </varlistentry>
-
-    <varlistentry>
      <term><parameter>TID:outname</parameter></term>
      <listitem>
       <para>

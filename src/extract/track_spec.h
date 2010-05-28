@@ -28,7 +28,6 @@ struct track_spec_t {
   std::string out_name;
 
   std::string sub_charset;
-  bool embed_in_ogg;
   bool extract_cuesheet;
 
   target_mode_e target_mode;

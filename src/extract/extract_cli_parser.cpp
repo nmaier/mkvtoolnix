@@ -35,7 +35,6 @@ extract_cli_parser_c::extract_cli_parser_c(const std::vector<std::string> &args)
 void
 extract_cli_parser_c::set_default_values() {
   m_charset                = "UTF-8";
-  m_embed_in_ogg           = true;
   m_extract_cuesheet       = false;
   m_extract_blockadd_level = -1;
   m_target_mode            = track_spec_t::tm_normal;
@@ -71,7 +70,6 @@ extract_cli_parser_c::init_parser() {
   add_section_header(YT("Track extraction"));
   add_information(YT("The first mode extracts some tracks to external files."));
   OPT("c=charset",      set_charset,  YT("Convert text subtitles to this charset (default: UTF-8)."));
-  OPT("no-ogg",         set_no_ogg,   YT("Write raw FLAC files (default: write OggFLAC files)."));
   OPT("cuesheet",       set_cuesheet, YT("Also try to extract the CUE sheet from the chapter information and tags for this track."));
   OPT("blockadd=level", set_blockadd, YT("Keep only the BlockAdditions up to this level (default: keep all levels)"));
   OPT("raw",            set_raw,      YT("Extract the data to a raw file."));
@@ -147,12 +145,6 @@ void
 extract_cli_parser_c::set_charset() {
   assert_mode(options_c::em_tracks);
   m_charset = m_next_arg;
-}
-
-void
-extract_cli_parser_c::set_no_ogg() {
-  assert_mode(options_c::em_tracks);
-  m_embed_in_ogg = false;
 }
 
 void
@@ -264,7 +256,6 @@ extract_cli_parser_c::add_extraction_spec() {
 
   track.out_name               = output_file_name;
   track.sub_charset            = m_charset;
-  track.embed_in_ogg           = m_embed_in_ogg;
   track.extract_cuesheet       = m_extract_cuesheet;
   track.extract_blockadd_level = m_extract_blockadd_level;
   track.target_mode            = m_target_mode;

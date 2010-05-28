@@ -58,17 +58,6 @@ protected:
   virtual void write_queued_frame(bool eos);
 };
 
-class xtr_oggflac_c: public xtr_oggbase_c {
-public:
-  xtr_oggflac_c(const std::string &codec_id, int64_t tid, track_spec_t &tspec);
-
-  virtual void create_file(xtr_base_c *master, KaxTrackEntry &track);
-
-  virtual const char *get_container_name() {
-    return "Ogg (FLAC in Ogg)";
-  };
-};
-
 class xtr_oggvorbis_c: public xtr_oggbase_c {
 protected:
   vorbis_info m_vorbis_info;
