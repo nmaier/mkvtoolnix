@@ -18,11 +18,6 @@
 #include <stdarg.h>
 
 #include <FLAC/stream_decoder.h>
-#if !defined(FLAC_API_VERSION_CURRENT) || FLAC_API_VERSION_CURRENT < 8
-# define LEGACY_FLAC
-#else
-# undef LEGACY_FLAC
-#endif
 
 #include "common/bit_cursor.h"
 #include "input/flac_common.h"
@@ -144,11 +139,7 @@ typedef struct {
 static FLAC__StreamDecoderReadStatus
 flac_read_cb(const FLAC__StreamDecoder *,
              FLAC__byte buffer[],
-#ifdef LEGACY_FLAC
-             unsigned *bytes,
-#else
              size_t *bytes,
-#endif
              void *client_data) {
   flac_header_extractor_t *fhe = (flac_header_extractor_t *)client_data;
 
@@ -211,32 +202,13 @@ flac_decode_headers(unsigned char *mem,
 
   if (NULL == decoder)
     mxerror(FPFX "FLAC__stream_decoder_new() failed.\n");
-#ifdef LEGACY_FLAC
-  FLAC__stream_decoder_set_client_data(decoder, &fhe);
-  if (!FLAC__stream_decoder_set_read_callback(decoder, flac_read_cb))
-    mxerror(FPFX "Could not set the read callback.\n");
-  if (!FLAC__stream_decoder_set_write_callback(decoder, flac_write_cb))
-    mxerror(FPFX "Could not set the write callback.\n");
-  if (!FLAC__stream_decoder_set_metadata_callback(decoder, flac_metadata_cb))
-    mxerror(FPFX "Could not set the metadata callback.\n");
-  if (!FLAC__stream_decoder_set_error_callback(decoder, flac_error_cb))
-    mxerror(FPFX "Could not set the error callback.\n");
-#endif
-
   if (!FLAC__stream_decoder_set_metadata_respond_all(decoder))
     mxerror(FPFX "Could not set metadata_respond_all.\n");
-
-#ifdef LEGACY_FLAC
-  if (FLAC__stream_decoder_init(decoder) !=
-      FLAC__STREAM_DECODER_SEARCH_FOR_METADATA)
-    mxerror(FPFX "Could not initialize the FLAC decoder.\n");
-#else
   if (FLAC__stream_decoder_init_stream(decoder, flac_read_cb,
                                        NULL, NULL, NULL, NULL, flac_write_cb,
                                        flac_metadata_cb, flac_error_cb, &fhe)
       != FLAC__STREAM_DECODER_INIT_STATUS_OK)
     mxerror(FPFX "Could not initialize the FLAC decoder.\n");
-#endif
 
   FLAC__stream_decoder_process_until_end_of_stream(decoder);
 

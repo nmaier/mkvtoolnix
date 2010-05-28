@@ -22,16 +22,7 @@
 #if defined(HAVE_FLAC_FORMAT_H)
 
 #include <FLAC/export.h>
-#if !defined(FLAC_API_VERSION_CURRENT) || FLAC_API_VERSION_CURRENT < 8
-# define LEGACY_FLAC
-#else
-# undef LEGACY_FLAC
-#endif
-#ifdef LEGACY_FLAC
-# include <FLAC/seekable_stream_decoder.h>
-#else
-# include <FLAC/stream_decoder.h>
-#endif
+#include <FLAC/stream_decoder.h>
 
 #include "output/p_flac.h"
 
@@ -67,31 +58,17 @@ public:
 
   static int probe_file(mm_io_c *io, int64_t size);
 
-#ifdef LEGACY_FLAC
-  virtual FLAC__SeekableStreamDecoderReadStatus
-  read_cb(FLAC__byte buffer[], unsigned *bytes);
-#else
   virtual FLAC__StreamDecoderReadStatus
   read_cb(FLAC__byte buffer[], size_t *bytes);
-#endif
 
   virtual FLAC__StreamDecoderWriteStatus
   write_cb(const FLAC__Frame *frame, const FLAC__int32 * const data[]);
 
   virtual void metadata_cb(const FLAC__StreamMetadata *metadata);
   virtual void error_cb(FLAC__StreamDecoderErrorStatus status);
-#ifdef LEGACY_FLAC
-  virtual FLAC__SeekableStreamDecoderSeekStatus
-  seek_cb(uint64_t new_pos);
-  virtual FLAC__SeekableStreamDecoderTellStatus
-  tell_cb(uint64_t &absolute_byte_offset);
-  virtual FLAC__SeekableStreamDecoderLengthStatus
-  length_cb(uint64_t &stream_length);
-#else
   virtual FLAC__StreamDecoderSeekStatus seek_cb(uint64_t new_pos);
   virtual FLAC__StreamDecoderTellStatus tell_cb(uint64_t &absolute_byte_offset);
   virtual FLAC__StreamDecoderLengthStatus length_cb(uint64_t &stream_length);
-#endif
   virtual FLAC__bool eof_cb();
 
 protected:

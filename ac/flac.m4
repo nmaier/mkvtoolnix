@@ -33,12 +33,13 @@ dnl
                  [ flac_decoder_skip_found=no ],
                  $FLAC_LIBS)
     if test x"$flac_decoder_skip_found" = xyes; then
-      opt_features_yes="$opt_features_yes\n   * FLAC audio (1.1.1 or newer)"
+      opt_features_yes="$opt_features_yes\n   * FLAC audio"
       AC_DEFINE(HAVE_FLAC_DECODER_SKIP, [1], [Define if FLAC__stream_decoder_skip_single_frame exists])
+      AC_DEFINE(HAVE_FLAC_FORMAT_H, [1], [Define if the FLAC headers are present])
     else
-      opt_features_yes="$opt_features_yes\n   * FLAC audio (1.1.0 or older)"
+      FLAC_LIBS=""
+      opt_features_no="$opt_features_no\n   * FLAC audio (version too old)"
     fi
-    AC_DEFINE(HAVE_FLAC_FORMAT_H, [1], [Define if the FLAC headers are present])
   else
     FLAC_LIBS=""
     opt_features_no="$opt_features_no\n   * FLAC audio"

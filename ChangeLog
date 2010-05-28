@@ -1,5 +1,7 @@
 2010-05-28  Moritz Bunkus  <moritz@bunkus.org>
 
+	* all: Removed support for the FLAC library older than v1.1.1.
+
 	* mkvmerge: bug fix: Fixed support for reading FLAC tracks from
 	Ogg files following the FLAC-in-Ogg-mapping established with FLAC
 	v1.1.1. Fix for bug 488.
