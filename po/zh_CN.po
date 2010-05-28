@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-05-28 00:05+0200\n"
+"PO-Revision-Date: 2010-05-28 13:44+0800\n"
 "Last-Translator: Dean Lee <xslidian@lidian.info>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -2369,9 +2369,8 @@ msgid "Command line saved."
 msgstr "命令行已保存。"
 
 #: src/mmg/tabs/input.cpp:406
-#, fuzzy
 msgid "Command line used:"
-msgstr "命令行已保存。"
+msgstr "所用命令行:"
 
 #: src/mmg/options/languages.cpp:79
 msgid "Common languages"
@@ -3471,11 +3470,11 @@ msgstr "ISO639-2 代码"
 
 #: src/merge/mkvmerge.cpp:92
 msgid "IVF with VP8"
-msgstr ""
+msgstr "含 VP8 的 IVF"
 
 #: src/mmg/tabs/input.cpp:241
 msgid "IVF with VP8 video files"
-msgstr ""
+msgstr "含 VP8 的 IVF 视频文件"
 
 #: src/mmg/tabs/chapters.cpp:340
 msgid "If a chapter is marked 'hidden' then the player should not show this chapter entry to the user. Such entries could still be used by the menu system."
@@ -3523,7 +3522,7 @@ msgstr "无法使用文件 '%1%': 文件无法打开以读取。\n"
 
 #: src/mmg/mmg_dialog.cpp:1739
 msgid "Incompatible mkvmerge version"
-msgstr ""
+msgstr "mkvmerge 版本不兼容"
 
 #: src/mmg/tabs/input.cpp:978
 msgid "Incompatible track"
@@ -4531,9 +4530,8 @@ msgid "Output sampling frequency: %1%"
 msgstr "输出采样率: %1%"
 
 #: src/mmg/tabs/input.cpp:410
-#, fuzzy
 msgid "Output:"
-msgstr "输出"
+msgstr "输出:"
 
 #: src/mmg/mmg_dialog.cpp:530
 msgid "Overwrite existing file(s)?"
@@ -5599,7 +5597,7 @@ msgstr "轨道 %s（自文件 '%s'）的 FourCC 设置非四字符长。"
 #: src/mmg/mmg_dialog.cpp:1735
 #, c-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%s) than the GUI itself (%s). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
-msgstr ""
+msgstr "为本 GUI 配置的 mkvmerge 可执行程序的版本 (%s) 与 GUI 自身的版本 (%s) 不同。这不受支持，但也不会被阻止。您应当在“选项”对话框中更改 mkvmerge 可执行程序。"
 
 #: src/input/r_ogm.cpp:1383
 msgid "The Kate identifaction header could not be parsed (%1%).\n"
@@ -7015,9 +7013,8 @@ msgid "Using the FLAC output module.\n"
 msgstr "使用 FLAC 输出模块。\n"
 
 #: src/input/r_ivf.cpp:66
-#, fuzzy
 msgid "Using the IVF demultiplexer.\n"
-msgstr "使用 WAV 分离器。\n"
+msgstr "使用 IVF 分离器。\n"
 
 #: src/input/r_matroska.cpp:1659
 msgid "Using the Kate output module.\n"
@@ -7917,9 +7914,8 @@ msgid "inflateInit() failed. Result: %1%\n"
 msgstr "inflateInit() 失败。结果: %1%\n"
 
 #: src/input/r_ivf.cpp:62
-#, fuzzy
 msgid "ivf_reader: Could not open the file."
-msgstr "aac_reader: 无法打开文件。"
+msgstr "ivf_reader: 无法打开文件。"
 
 #: src/info/mkvinfo.cpp:1609
 msgid "key, "
@@ -8894,6 +8890,7 @@ msgstr "是"
 #~ "  -v, --verbose  提高“详细”程度。\n"
 #~ "  -h, --help     显示本帮助。\n"
 #~ "  -V, --version  显示版本信息。\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "使用 FLAC 输出模块。\n"

@@ -89,15 +89,15 @@ XML
 .PP
 \fB\-\-segmentinfo\fR \fI文件名\&.xml\fR
 .RS 4
-Read segment information from a
+从
 XML
-file\&. This file can contain the segment family
-UID, segment
-UID, previous and next segment
+文件中读取剪辑信息。此文件可以包含剪辑族的
+UID、剪辑的
+UID、上一剪辑以及下一剪辑的
 UID
-elements\&. An example file and a
+元素。示例文件以及
 DTD
-are included in the MKVToolNix distribution\&.
+已包含在 MKVToolNix 发布包中。
 .RE
 .PP
 \fB\-\-segment\-uid\fR \fISID1,SID2,\&.\&.\&.\fR
@@ -1502,8 +1502,8 @@ Matroska(TM)
 .ps -1
 .br
 .PP
-This section applies to all programs in MKVToolNix even if it only mentions
-\fBmkvmerge\fR(1)\&.
+此段落可应用到 MKVToolNix 中的所有程序，尽管该段仅提及了
+\fBmkvmerge\fR(1)。
 .sp .5v
 .RE
 .PP
@@ -1541,19 +1541,17 @@ BOM) 出现以及系统的当前区域来进行自动转换。如何根据区域
 及
 \fILC_CYPE\fR。输出的字符集通常是 UTF\-8 或 ISO\-8859\-* 家族之一，将被用于所有文本文件操作以及编码命令行上的字符串和输出到命令行。
 .PP
-On Windows there are actually two different character sets that
+在 Windows 上
 \fBmkvmerge\fR(1)
-uses due to the way the Windows shell program
-\fBcmd\&.exe\fR
-is implemented\&. The first character set is determined by a call to the
+实际上使用两种不同的字符集，因为要执行 Windows shell 程序
+\fBcmd\&.exe\fR。第一个字符集由
 \fBGetCP()\fR
-system call\&. This character set is used as the default for text file conversions and for all elements displayed by the
+系统指令决定。此字符集用作文本文件转换和 MKVToolNix 工具包中
 GUI
-programs in the MKVToolNix package\&.
-\fBcmd\&.exe\fR
-uses another character set which is determined by a call to the
+程序所显示的所有元素的默认字符集。\fBcmd\&.exe\fR
+使用另一个字符集，由
 \fBGetACP()\fR
-system call\&. This is the default character set for all strings read from the command line and for all strings output to the console\&.
+系统指令决定。这是命令行读入的所有字符串以及输出到命令行的所有字符串的默认字符集。
 .PP
 现有下述选项支持指定字符集:
 .sp
@@ -2006,12 +2004,13 @@ $ mkvmerge \-o 文件\&.mkv \-\-tags 0:标签\&.xml 文件\&.avi
 .PP
 
 \fBmkvmerge\fR(1)
-supports a
+支持基于
 XML
-based tag file format\&. The format is very closely modeled after
-\m[blue]\fBthe Matroska(TM) specification\fR\m[]\&\s-2\u[3]\d\s+2\&. Both the binary and the source distributions of MKVToolNix come with a sample file called
+的标签文件格式。此格式是以
+\m[blue]\fBMatroska(TM) 规范\fR\m[]\&\s-2\u[3]\d\s+2
+为依据严格制定的。MKVToolNix 的程序以及源码分发包都含有名为
 example\-tags\-2\&.xml
-which simply lists all known tags and which can be used as a basis for real life tag files\&.
+的示例文件，该文件已简明地列出了所有已知的可用作实际处理的基本标签。
 .PP
 基本要点有：
 .sp
