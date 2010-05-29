@@ -14,6 +14,8 @@ SetCompressor /SOLID lzma
 #SetCompress off
 SetCompressorDictSize 64
 
+!packhdr tmp.dat "upx -9 tmp.dat"
+
 !include "MUI2.nsh"
 
 # MUI Settings
