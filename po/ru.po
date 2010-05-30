@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-05-28 00:05+0200\n"
+"PO-Revision-Date: 2010-05-29 21:47+0300\n"
 "Last-Translator: rusguy6 rusguy6 <rusguy6@gmail.com>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -2399,9 +2399,8 @@ msgid "Command line saved."
 msgstr "Командная строка сохранена."
 
 #: src/mmg/tabs/input.cpp:406
-#, fuzzy
 msgid "Command line used:"
-msgstr "Командная строка сохранена."
+msgstr "Командная строка используется:"
 
 #: src/mmg/options/languages.cpp:79
 msgid "Common languages"
@@ -3502,11 +3501,11 @@ msgstr "ISO639-2 код"
 
 #: src/merge/mkvmerge.cpp:92
 msgid "IVF with VP8"
-msgstr ""
+msgstr "IVF с VP8"
 
 #: src/mmg/tabs/input.cpp:241
 msgid "IVF with VP8 video files"
-msgstr ""
+msgstr "IVF с VP8 видео файлами"
 
 #: src/mmg/tabs/chapters.cpp:340
 msgid "If a chapter is marked 'hidden' then the player should not show this chapter entry to the user. Such entries could still be used by the menu system."
@@ -3554,7 +3553,7 @@ msgstr "Невозможно использовать файл '%1%': файл �
 
 #: src/mmg/mmg_dialog.cpp:1739
 msgid "Incompatible mkvmerge version"
-msgstr ""
+msgstr "Несовместимая версия mkvmerge"
 
 #: src/mmg/tabs/input.cpp:978
 msgid "Incompatible track"
@@ -4562,9 +4561,8 @@ msgid "Output sampling frequency: %1%"
 msgstr "Выходная частота дискретизации: %1%"
 
 #: src/mmg/tabs/input.cpp:410
-#, fuzzy
 msgid "Output:"
-msgstr "Выходной"
+msgstr "Выход:"
 
 #: src/mmg/mmg_dialog.cpp:530
 msgid "Overwrite existing file(s)?"
@@ -5287,9 +5285,8 @@ msgid "Show about dialog"
 msgstr "Показать диалог о mmg's"
 
 #: src/info/wxwidgets_ui.cpp:130
-#, fuzzy
 msgid "Show element si&zes\tCtrl-Z"
-msgstr "&Показать все элементы\tCtrl-A"
+msgstr "&Показать размеры элемента\tCtrl-Z"
 
 #: src/mmg/options/mmg.cpp:99
 msgid "Show mmg's debug window"
@@ -5309,7 +5306,7 @@ msgstr "Показать руководство mkvmerge GUI"
 
 #: src/info/wxwidgets_ui.cpp:130
 msgid "Show the size of each element including its header"
-msgstr ""
+msgstr "Показать размер каждого элемента в том числе его заголовок"
 
 #: src/common/cli_parser.cpp:181
 msgid "Show this help."
@@ -5639,7 +5636,7 @@ msgstr "Установка для FourCC номер дорожки. %s в фай
 #: src/mmg/mmg_dialog.cpp:1735
 #, c-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%s) than the GUI itself (%s). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
-msgstr ""
+msgstr "GUI настроен на использование mkvmerge исполняемый файл из другой версии (%s), чем сам GUI (%s). Это не поддерживается, но не будет препятствовать. Вы должны изменить mkvmerge исполняемый в диалоговом окне настройки."
 
 #: src/input/r_ogm.cpp:1384
 msgid "The Kate identifaction header could not be parsed (%1%).\n"
@@ -7070,9 +7067,8 @@ msgid "Using the FLAC output module.\n"
 msgstr "Использование FLAC выходного модуля.\n"
 
 #: src/input/r_ivf.cpp:66
-#, fuzzy
 msgid "Using the IVF demultiplexer.\n"
-msgstr "Использование WAV демультиплексора.\n"
+msgstr "Использование IVF демультиплексора.\n"
 
 #: src/input/r_matroska.cpp:1659
 msgid "Using the Kate output module.\n"
@@ -7919,9 +7915,8 @@ msgid "inflateInit() failed. Result: %1%\n"
 msgstr "inflateInit() не удалось. Результат: %1%\n"
 
 #: src/input/r_ivf.cpp:62
-#, fuzzy
 msgid "ivf_reader: Could not open the file."
-msgstr "aac_reader: Не удалось открыть файл."
+msgstr "ivf_reader: Не могу открыть файл."
 
 #: src/info/mkvinfo.cpp:1609
 msgid "key, "
@@ -8129,19 +8124,19 @@ msgstr "mkvextract <режим> <исходное имя файла> [опции
 
 #: src/extract/extract_cli_parser.cpp:98
 msgid "mkvextract attachments \"a movie.mkv\" 4:cover.jpg"
-msgstr "mkvextract вложения \"фильм.mkv\" 4:обложка.jpg"
+msgstr "mkvextract attachments \"фильм.mkv\" 4:обложка.jpg"
 
 #: src/extract/extract_cli_parser.cpp:52
 msgid "mkvextract attachments <inname> [options] [AID1:out1 [AID2:out2 ...]]"
-msgstr "mkvextract вложения <inname> [опции] [AID1:out1 [AID2:out2 ...]]"
+msgstr "mkvextract attachments <inname> [опции] [AID1:out1 [AID2:out2 ...]]"
 
 #: src/extract/extract_cli_parser.cpp:106
 msgid "mkvextract chapters \"a movie.mkv\" > movie_chapters.xml"
-msgstr "mkvextract главы \"фильм.mkv\" > главы_фильма.xml"
+msgstr "mkvextract chapters \"фильм.mkv\" > главы_фильма.xml"
 
 #: src/extract/extract_cli_parser.cpp:53
 msgid "mkvextract chapters <inname> [options]"
-msgstr "mkvextract главы <inname> [опции]"
+msgstr "mkvextract chapters <inname> [опции]"
 
 #: src/extract/extract_cli_parser.cpp:115
 msgid "mkvextract cuesheet \"audiofile.mka\" > audiofile.cue"
@@ -8153,27 +8148,27 @@ msgstr "mkvextract cuesheet <inname> [опции]"
 
 #: src/extract/extract_cli_parser.cpp:89
 msgid "mkvextract tags \"a movie.mkv\" > movie_tags.xml"
-msgstr "mkvextract теги \"фильм.mkv\" > теги_фильма.xml"
+msgstr "mkvextract tags \"фильм.mkv\" > теги_фильма.xml"
 
 #: src/extract/extract_cli_parser.cpp:51
 msgid "mkvextract tags <inname> [options]"
-msgstr "mkvextract теги <inname> [опции]"
+msgstr "mkvextract tags <inname> [опции]"
 
 #: src/extract/extract_cli_parser.cpp:123
 msgid "mkvextract timecodes_v2 \"a movie.mkv\" 1:timecodes_track1.txt"
-msgstr "mkvextract тайм-коды_v2 \"фильм.mkv\" 1:тайм-коды_дорожки1.txt"
+msgstr "mkvextract timecodes_v2 \"фильм.mkv\" 1:тайм-коды_дорожки1.txt"
 
 #: src/extract/extract_cli_parser.cpp:55
 msgid "mkvextract timecodes_v2 <inname> [TID1:out1 [TID2:out2 ...]]"
-msgstr "mkvextract тайм-коды_v2 <inname> [TID1:out1 [TID2:out2 ...]]"
+msgstr "mkvextract timecodes_v2 <inname> [TID1:out1 [TID2:out2 ...]]"
 
 #: src/extract/extract_cli_parser.cpp:81
 msgid "mkvextract tracks \"a movie.mkv\" 2:audio.ogg -c ISO8859-1 3:subs.srt"
-msgstr "mkvextract дорожки \"фильм.mkv\" 2:аудио.ogg -c ISO8859-1 3:субтитры.srt"
+msgstr "mkvextract tracks \"фильм.mkv\" 2:аудио.ogg -c ISO8859-1 3:субтитры.srt"
 
 #: src/extract/extract_cli_parser.cpp:50
 msgid "mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]"
-msgstr "mkvextract дорожки <inname> [опции] [TID1:out1 [TID2:out2 ...]]"
+msgstr "mkvextract tracks <inname> [опции] [TID1:out1 [TID2:out2 ...]]"
 
 #: src/extract/mkvextract.cpp:51
 msgid "mkvextract.cpp/show_element(): level > 9: %1%"
@@ -8680,47 +8675,67 @@ msgstr "Да"
 
 #~ msgid "%1% at %2%"
 #~ msgstr "%1% в %2%"
+
 #~ msgid "(Unknown element: %1%)"
 #~ msgstr "(Неизвестный элемент: %1%)"
+
 #~ msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
 #~ msgstr "Не пишите заголовок тех элементов, значения которых совпадают с их значениями по умолчанию в соответствии с Matroska критериям."
+
 #~ msgid "File/segment title"
 #~ msgstr "Файл/сегмент название"
+
 #~ msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
 #~ msgstr "Matroska файлы (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|Все файлы|*.*"
+
 #~ msgid "Other global options"
 #~ msgstr "Другие глобальные опции"
+
 #~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
 #~ msgstr "Эта дорожка использует особенность Matroska, названную 'запоминающие элементы Codec'. mkvmerge поддерживает их, но эта особенность не была включена с опцией '--engage use_codec_state'.\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "Использование FLAC выходного модуля.\n"
+
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "Создать исходные файлы FLAC (по умолчанию: написать OggFLAC файлы)."
+
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить ошибки обратного вызова.\n"
+
 #~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить метаданных обратного вызова.\n"
+
 #~ msgid "flac_header_extraction: Could not set the read callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить читать обратного вызова.\n"
+
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить написать обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_reader: Не удалось установить конец файла обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the error callback.\n"
 #~ msgstr "flac_reader: Не удалось установить ошибки обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the length callback.\n"
 #~ msgstr "flac_reader: Не удалось установить длину обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the metadata callback.\n"
 #~ msgstr "flac_reader: Не удалось установить метаданных обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the read callback.\n"
 #~ msgstr "flac_reader: Не удалось установить читать обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the seek callback.\n"
 #~ msgstr "flac_reader: Не удалось установить возвратный вызов поиска.\n"
+
 #~ msgid "flac_reader: Could not set the tell callback.\n"
 #~ msgstr "flac_reader: Не удалось установить сказать обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the write callback.\n"
 #~ msgstr "flac_reader: Не удалось установить написать обратного вызова.\n"
+
 #~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 #~ msgstr "r_matroska: Кластер не содержат кластера тайм-кода. Файл не работает. Прерывание.\n"
-
