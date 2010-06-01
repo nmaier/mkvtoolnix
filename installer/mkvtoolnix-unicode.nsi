@@ -57,6 +57,7 @@ Page custom showExternalLinks
 !insertmacro MUI_UNPAGE_INSTFILES
 
 # Language files
+!insertmacro MUI_LANGUAGE "Dutch"
 !insertmacro MUI_LANGUAGE "English"
 !insertmacro MUI_LANGUAGE "German"
 !insertmacro MUI_LANGUAGE "Japanese"
