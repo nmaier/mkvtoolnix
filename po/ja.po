@@ -5547,12 +5547,13 @@ msgid "The chapter '%s' is missing the start time."
 msgstr "チャプタ'%s'には開始時間が指定されていません。"
 
 #: src/mmg/mmg_dialog.cpp:578
+#, fuzzy
 msgid ""
 "The chapter editor has been used and contains data. However, no chapter file has been selected on the global page. In mmg, the chapter editor is independant of the muxing process. The chapters present in the editor will NOT be muxed into the output file. Only the various 'save' functions from the chapter editor menu will cause the chapters to be written to the hard disk.\n"
 "\n"
 "Do you really want to continue muxing?\n"
 "\n"
-"Note: This warning can be deactivated on the 'settings' page. Turn off the 'Warn about usage...' option."
+"Note: This warning can be deactivated in the 'options' dialog. Turn off the 'Warn about usage...' option."
 msgstr ""
 "チャプタエディタが使用され、データがあります。しかし、グローバルページでチャプタファイルが指定されていません。mmgでは、チャプタエディタはMUX処理とは独立しています。チャプタエディタに存在するチャプタは出力ファイルにMUXされません。チャプタエディタのメニューの保存機能を使用することでのみ、チャプタをハードディスクに書き込むことができます。\n"
 "\n"
@@ -5897,7 +5898,7 @@ msgstr "言語コード'%1%'は正しいISO639-2言語コードではないの�
 msgid "The line %1% of the timecode file '%2%' does not contain a valid floating point number.\n"
 msgstr "タイムコードファイル'%2%'の%1%行目は正しい浮動小数点数を含んでいません。\n"
 
-#: src/common/translation.cpp:280
+#: src/common/translation.cpp:281
 msgid "The locale could not be set properly. Check the LANG, LC_ALL and LC_MESSAGES environment variables.\n"
 msgstr "ロケールを正しく設定することができませんでした。環境変数LANG・LC_ALL・LC_MESSAGESを確認してください。\n"
 

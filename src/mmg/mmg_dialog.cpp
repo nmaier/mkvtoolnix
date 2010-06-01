@@ -581,7 +581,7 @@ mmg_dialog::on_run(wxCommandEvent &evt) {
                        "The chapters present in the editor will NOT be muxed into the output file. "
                        "Only the various 'save' functions from the chapter editor menu will cause the chapters to be written to the hard disk.\n\n"
                        "Do you really want to continue muxing?\n\n"
-                       "Note: This warning can be deactivated on the 'settings' page. "
+                       "Note: This warning can be deactivated in the 'options' dialog. "
                        "Turn off the 'Warn about usage...' option."),
                      Z("Chapter editor is not empty"),
                      wxYES_NO | wxICON_QUESTION) != wxYES)
