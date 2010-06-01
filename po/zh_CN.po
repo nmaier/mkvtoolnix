@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-05-28 13:44+0800\n"
+"PO-Revision-Date: 2010-06-01 19:26+0800\n"
 "Last-Translator: Dean Lee <xslidian@lidian.info>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -5694,7 +5694,6 @@ msgid "The chapter '%s' is missing the start time."
 msgstr "章节 '%s' 缺起始时间。"
 
 #: src/mmg/mmg_dialog.cpp:578
-#, fuzzy
 msgid ""
 "The chapter editor has been used and contains data. However, no chapter file has been selected on the global page. In mmg, the chapter editor is independant of the muxing process. The chapters present in the editor will NOT be muxed into the output file. Only the various 'save' functions from the chapter editor menu will cause the chapters to be written to the hard disk.\n"
 "\n"
@@ -5702,11 +5701,11 @@ msgid ""
 "\n"
 "Note: This warning can be deactivated in the 'options' dialog. Turn off the 'Warn about usage...' option."
 msgstr ""
-"章节编辑器已被使用过，且包含有数据。然而，在“全局”选项页没有选择任何章节文件。在 mmg 中，章节编辑器是独立于混流过程的。编辑器中显示的章节 *不会* 被混流到输出文件中。只有章节编辑器菜单中的各 '保存' 功能会使章节被写入硬盘。\n"
+"章节编辑器已被使用过，且包含有数据。然而，在“全局”选项页没有选择任何章节文件。在 mmg 中，章节编辑器是独立于混流过程的。编辑器中显示的章节 *不会* 被混入输出文件中。只有章节编辑器菜单中的各 '保存' 功能可以将章节写入硬盘。\n"
 "\n"
 "您确实要继续混流吗?\n"
 "\n"
-"提示: 本警告可以在 '设置' 选项页禁用。取消选中 '对...用法发出警告' 项即可。"
+"提示: 本警告可以在 '选项' 对话框中禁用。关闭 '对...用法发出警告' 项即可。"
 
 #: src/output/p_mpeg4_p10.cpp:153
 msgid "The chosen NALU size length of %1% is too small. Try using '4'.\n"
@@ -8835,6 +8834,7 @@ msgstr "是"
 #~ "  -v, --verbose  提高“详细”程度。\n"
 #~ "  -h, --help     显示本帮助。\n"
 #~ "  -V, --version  显示版本信息。\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "使用 FLAC 输出模块。\n"
