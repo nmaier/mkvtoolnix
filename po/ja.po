@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-05-28 20:36+0900\n"
+"PO-Revision-Date: 2010-06-01 20:53+0900\n"
 "Last-Translator: Hiroki Taniura <zuntakapokoten@gmail.com>\n"
 "Language-Team: Japanese <zuntakapokoten@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -5547,7 +5547,6 @@ msgid "The chapter '%s' is missing the start time."
 msgstr "チャプタ'%s'には開始時間が指定されていません。"
 
 #: src/mmg/mmg_dialog.cpp:578
-#, fuzzy
 msgid ""
 "The chapter editor has been used and contains data. However, no chapter file has been selected on the global page. In mmg, the chapter editor is independant of the muxing process. The chapters present in the editor will NOT be muxed into the output file. Only the various 'save' functions from the chapter editor menu will cause the chapters to be written to the hard disk.\n"
 "\n"
@@ -5559,7 +5558,7 @@ msgstr ""
 "\n"
 "本当にMUX処理を続行しますか？\n"
 "\n"
-"メモ：この警告は設定ページでオフにすることができます。'mmgの使い方が～'のチェックを外してください。"
+"メモ：この警告は'オプション'ダイアログでオフにすることができます。'mmgの使い方が～'のチェックを外してください。"
 
 #: src/output/p_mpeg4_p10.cpp:153
 msgid "The chosen NALU size length of %1% is too small. Try using '4'.\n"
