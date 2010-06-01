@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-06-01 22:32+0900\n"
+"PO-Revision-Date: 2010-06-02 00:01+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -1486,7 +1486,6 @@ msgid "2 bytes"
 msgstr "2バイト"
 
 #: src/info/mkvinfo.cpp:806
-#, fuzzy
 msgid "2: codec private data"
 msgstr "2: コーデックプライベートデータ"
 
@@ -1545,7 +1544,6 @@ msgstr ""
 "ランダムに生成される固有のIDです（128ビット）。"
 
 #: src/info/mkvinfo.cpp:934
-#, fuzzy
 msgid "A track"
 msgstr "トラック"
 
@@ -1674,7 +1672,6 @@ msgid "AdditionalID: %1%"
 msgstr "追加ID：%1%"
 
 #: src/info/mkvinfo.cpp:1469
-#, fuzzy
 msgid "Additions"
 msgstr "追加情報"
 
@@ -2262,7 +2259,6 @@ msgid "Codec download URL: %1%"
 msgstr "コーデックダウンロードURL：%1%"
 
 #: src/info/mkvinfo.cpp:1048
-#, fuzzy
 msgid "Codec info URL: %1%"
 msgstr "コーデック情報URL：%1%"
 
@@ -2279,9 +2275,8 @@ msgid "Codec settings: %1%"
 msgstr "コーデック設定：%1%"
 
 #: src/info/mkvinfo.cpp:173
-#, fuzzy
 msgid "Codec state: %1%"
-msgstr "CUEコーデック状態：%1%"
+msgstr "コーデック状態：%1%"
 
 #: src/info/mkvinfo.cpp:1035
 msgid "CodecPrivate, length %1%%2%"
@@ -2521,7 +2516,6 @@ msgid "Cue ref codec state: %1%"
 msgstr "CUE参照状態：%1%"
 
 #: src/info/mkvinfo.cpp:1269
-#, fuzzy
 msgid "Cue ref number: %1%"
 msgstr "CUE参照番号：%1%"
 
@@ -2546,7 +2540,6 @@ msgid "Cue sheet parser: No INDEX entry found for the previous TRACK entry (curr
 msgstr "CUEシートパーサ：前のトラックエントリのインデックスエントリが見つかりませんでした（現在%1%行目）\n"
 
 #: src/info/mkvinfo.cpp:1224
-#, fuzzy
 msgid "Cue time: %|1$.3f|s"
 msgstr "CUE時間：%|1$.3f|s"
 
@@ -3070,7 +3063,6 @@ msgid "Family UID:%1%"
 msgstr "ファミリUID：%1%"
 
 #: src/merge/mkvmerge.cpp:429
-#, fuzzy
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "ファイル%1%は未知のファイルタイプです。サポートされているファイルタイプ一覧（'mkvmerge --list-types'）を参照し、もしそのファイルタイプがサポートされているのに正しく認識されない場合は、作者のMoritz Bunkus <moritz@bunkus.org>に連絡してください。\n"
 
@@ -3188,7 +3180,6 @@ msgid "Force the translations for 'code' to be used."
 msgstr "使用される翻訳を'code'に強制設定します。"
 
 #: src/info/mkvinfo.cpp:1093
-#, fuzzy
 msgid "Forced flag: %1%"
 msgstr "強制表示フラグ：%1%"
 
@@ -4378,7 +4369,6 @@ msgid "Options meant ONLY for developpers. Do not use them. If something is cons
 msgstr "これらのオプションは開発者「専用」です。使わないでください。公式にサポートされているオプションだと考えられるものはこのリストにはありません！"
 
 #: src/info/mkvinfo.cpp:797
-#, fuzzy
 msgid "Order: %1%"
 msgstr "順番：%1%"
 
@@ -4735,7 +4725,6 @@ msgid "Reference block: -%1%.%|2$06d|ms"
 msgstr "参照ブロック：-%1%.%|2$06d|ms"
 
 #: src/info/mkvinfo.cpp:152
-#, fuzzy
 msgid "Reference priority: %1%"
 msgstr "参照優先度：%1%"
 
@@ -4872,7 +4861,6 @@ msgid "Seek entry"
 msgstr "シークエントリ"
 
 #: src/info/mkvinfo.cpp:1143
-#, fuzzy
 msgid "Seek head"
 msgstr "シークヘッダ"
 
@@ -6664,7 +6652,6 @@ msgid "Usage"
 msgstr "使用法"
 
 #: src/info/mkvinfo.cpp:217
-#, fuzzy
 msgid ""
 "Usage: mkvinfo [options] inname\n"
 "\n"
@@ -6695,10 +6682,10 @@ msgstr ""
 "                 詳細な説明はman pageを参照してください。\n"
 "  -c, --checksum フレームの内容のチェックサムを計算し表示します。\n"
 "  -s, --summary  内容の概要だけを表示し、個々の要素を表示しません。\n"
+"  -x, --hexdump  各フレームの最初の16バイトを16進数のダンプとして表示します。\n"
 "  -X, --full-hexdump\n"
 "                 各フレームの全てのバイトを16進数のダンプとして表示します。\n"
 "  -z, --size     ヘッダも含めた各要素のサイズを表示します。\n"
-"  -x, --hexdump  各フレームの最初の16バイトを16進数のダンプとして表示します。\n"
 "  --output-charset <charset>\n"
 "                 出力メッセージの文字セットを指定します。\n"
 "  -r, -o, --redirect-output file.ext\n"
@@ -7285,7 +7272,6 @@ msgid "Zlib decompression failed. Result: %1%\n"
 msgstr "Zlib展開が失敗しました。結果：%1%\n"
 
 #: src/info/mkvinfo.cpp:165 src/info/mkvinfo.cpp:169
-#, fuzzy
 msgid "[%1% frame for track %2%, timecode %3%]"
 msgstr "[トラック%2%の%1%フレーム、タイムコード %3%]"
 
@@ -7309,10 +7295,8 @@ msgstr "aac_reader：最初の%1%バイトで正しいAACパケットが見つ�
 msgid "aborted"
 msgstr "中断"
 
-# Should translators' address be written here?
 #: src/output/p_ac3.cpp:212
-#, fuzzy
-msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"
+msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org."
 msgstr "ac3_bs_packetizer::add_to_buffer(): テストされていないコードです('size'が奇数)。mkvmergeがクラッシュしたり、出力されたファイルのオーディオトラックが完全で正しいものでなかった場合、作者 Moritz Bunkus に moritz@bunkus.org 宛で連絡をお願いします。"
 
 #: src/input/r_ac3.cpp:67
@@ -8317,81 +8301,3 @@ msgstr "間違った使用法：読み込み専用メモリへの書き込み"
 #: src/mmg/tabs/input_general.cpp:107 src/mmg/tabs/input_general.cpp:125
 msgid "yes"
 msgstr "はい"
-
-#~ msgid "(Unknown element: %1%)"
-#~ msgstr "(未知のエレメント：%1%)"
-
-#~ msgid "Changing the interface language requires a restart to take effect."
-#~ msgstr "インターフェイス言語の変更は、再起動しないと反映されません。"
-
-#~ msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
-#~ msgstr "Matroskaの仕様のデフォルト値と同じ値を取るヘッダ要素を記録しません。"
-
-#~ msgid "File/segment title"
-#~ msgstr "ファイル/セグメントタイトル"
-
-#~ msgid "Global tags"
-#~ msgstr "グローバルタグ"
-
-#~ msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
-#~ msgstr "Matroskaファイル (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
-
-#~ msgid "Other global options"
-#~ msgstr "その他のグローバルオプション"
-
-#~ msgid "Restart required"
-#~ msgstr "再起動が必要です"
-
-#~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
-#~ msgstr "このトラックは'Codec state elements'というMatroskaの機能を使用しています。mkvmergeはこれをサポートしていますが、'--engage use_codec_state'オプションでこの機能がオンになったわけではありません。\n"
-
-#, fuzzy
-#~ msgid "Using the IVF output module.\n"
-#~ msgstr "FLAC出力モジュールを使用しています。\n"
-
-#~ msgid "Write raw FLAC files (default: write OggFLAC files)."
-#~ msgstr "raw FLACファイルを書き込みます（デフォルト：OggFLACファイルを書き込みます。）"
-
-#~ msgid "flac_header_extraction: Could not set the error callback.\n"
-#~ msgstr "flac_header_extraction: エラーコールバックをセットできませんでした。\n"
-
-#~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
-#~ msgstr "flac_header_extraction: メタデータコールバックをセットできませんでした。\n"
-
-#~ msgid "flac_header_extraction: Could not set the read callback.\n"
-#~ msgstr "flac_header_extraction: 読み込みコールバックをセットできませんでした。\n"
-
-#~ msgid "flac_header_extraction: Could not set the write callback.\n"
-#~ msgstr "flac_header_extraction: 書き込みコールバックをセットできませんでした。\n"
-
-#~ msgid "flac_reader: Could not set the eof callback.\n"
-#~ msgstr "flac_reader: EOFコールバックをセットできませんでした。\n"
-
-#~ msgid "flac_reader: Could not set the error callback.\n"
-#~ msgstr "flac_reader: エラーコールバックをセットできませんでした。\n"
-
-#, fuzzy
-#~ msgid "flac_reader: Could not set the length callback.\n"
-#~ msgstr "flac_reader: 長さコールバックをセットできませんでした。\n"
-
-#~ msgid "flac_reader: Could not set the metadata callback.\n"
-#~ msgstr "flac_reader: メタデータコールバックをセットできませんでした。\n"
-
-#~ msgid "flac_reader: Could not set the read callback.\n"
-#~ msgstr "flac_reader: 読み込みコールバックをセットできませんでした。\n"
-
-#~ msgid "flac_reader: Could not set the seek callback.\n"
-#~ msgstr "flac_reader: シークコールバックをセットできませんでした。\n"
-
-#, fuzzy
-#~ msgid "flac_reader: Could not set the tell callback.\n"
-#~ msgstr "flac_reader: tellコールバックをセットできませんでした。\n"
-
-#~ msgid "flac_reader: Could not set the write callback.\n"
-#~ msgstr "flac_reader: 書き込みコールバックをセットできませんでした。\n"
-
-#~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
-#~ msgstr "r_matroska：クラスタにクラスタタイムコードが含まれていません。ファイルは壊れています。中断します。\n"
-
-#~ msgid "start_element: pdata->bin != NULL"
-#~ msgstr "start_element: pdata->bin != NULL"
