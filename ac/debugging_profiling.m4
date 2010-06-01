@@ -13,9 +13,11 @@ AC_ARG_ENABLE(
   [debug],
   AC_HELP_STRING([--enable-debug],[compile with debug information (no)]),
   [
-    DEBUG_CFLAGS="-g -DDEBUG"
-    if test x"$enable_optimization" = x"no"; then
-      OPTIMIZATION_CFLAGS=""
+    if test x"$enable_debug" = xyes ; then
+      DEBUG_CFLAGS="-g -DDEBUG"
+      if test x"$enable_optimization" = x"no"; then
+        OPTIMIZATION_CFLAGS=""
+      fi
     fi
   ])
 AC_ARG_ENABLE(
