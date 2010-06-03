@@ -67,6 +67,8 @@ Page custom showExternalLinks
 !insertmacro MUI_LANGUAGE "Ukrainian"
 !define MUI_LANGDLL_ALLLANGUAGES
 
+!insertmacro MUI_RESERVEFILE_LANGDLL
+
 # MUI end ------
 
 !include "WinVer.nsh"
