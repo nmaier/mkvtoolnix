@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-05-29 21:47+0300\n"
+"PO-Revision-Date: 2010-06-03 18:13+0300\n"
 "Last-Translator: rusguy6 rusguy6 <rusguy6@gmail.com>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -796,7 +796,7 @@ msgstr ""
 #: src/mmg/mux_dialog.cpp:248
 #, c-format
 msgid "%d minute(s) %d second(s)"
-msgstr ""
+msgstr "%d минут(ы) %d секунд(ы)"
 
 #: src/mmg/mmg_dialog.cpp:710
 #, c-format
@@ -4919,7 +4919,7 @@ msgstr "Перезагрузить текущий файл без сохране
 #: src/mmg/jobs.cpp:73
 #: src/mmg/mux_dialog.cpp:75
 msgid "Remaining time:"
-msgstr ""
+msgstr "Оставшееся время:"
 
 #: src/common/xml/element_parser.cpp:565
 msgid "Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
@@ -5746,7 +5746,6 @@ msgid "The chapter '%s' is missing the start time."
 msgstr "Главе '%s' не хватает времени старта."
 
 #: src/mmg/mmg_dialog.cpp:578
-#, fuzzy
 msgid ""
 "The chapter editor has been used and contains data. However, no chapter file has been selected on the global page. In mmg, the chapter editor is independant of the muxing process. The chapters present in the editor will NOT be muxed into the output file. Only the various 'save' functions from the chapter editor menu will cause the chapters to be written to the hard disk.\n"
 "\n"
@@ -5754,7 +5753,7 @@ msgid ""
 "\n"
 "Note: This warning can be deactivated in the 'options' dialog. Turn off the 'Warn about usage...' option."
 msgstr ""
-"Глава редактор был использован, с данными. Однако ни глава файл был выбран на мировом страницы. В mmg, глава редактор не зависит от процесса мультиплексирования. Главы присутствуют в редакторе не при объединении в один выходной файл. Только различных 'спасти' функций из меню редактора главе вызовет те разделы, которые записываются на жесткий диск.\n"
+"Глава редактор был использован, с данными. Однако ни глава файл был выбран на мировом страницы. В mmg, глава редактор не зависит от процесса мультиплексирования. Главы присутствуют в редакторе не при объединении в один выходной файл. Только различных 'сохранить' функций из меню редактора главе вызовет те разделы, которые записываются на жесткий диск.\n"
 "\n"
 "Вы действительно хотите продолжить мультиплексирование?\n"
 "\n"
@@ -7933,7 +7932,7 @@ msgstr "inflateInit() не удалось. Результат: %1%\n"
 #: src/mmg/jobs.cpp:157
 #: src/mmg/mux_dialog.cpp:76
 msgid "is being estimated"
-msgstr ""
+msgstr "в настоящее время оценка"
 
 #: src/input/r_ivf.cpp:62
 msgid "ivf_reader: Could not open the file."
@@ -8696,47 +8695,67 @@ msgstr "Да"
 
 #~ msgid "%1% at %2%"
 #~ msgstr "%1% в %2%"
+
 #~ msgid "(Unknown element: %1%)"
 #~ msgstr "(Неизвестный элемент: %1%)"
+
 #~ msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
 #~ msgstr "Не пишите заголовок тех элементов, значения которых совпадают с их значениями по умолчанию в соответствии с Matroska критериям."
+
 #~ msgid "File/segment title"
 #~ msgstr "Файл/сегмент название"
+
 #~ msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
 #~ msgstr "Matroska файлы (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|Все файлы|*.*"
+
 #~ msgid "Other global options"
 #~ msgstr "Другие глобальные опции"
+
 #~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
 #~ msgstr "Эта дорожка использует особенность Matroska, названную 'запоминающие элементы Codec'. mkvmerge поддерживает их, но эта особенность не была включена с опцией '--engage use_codec_state'.\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "Использование FLAC выходного модуля.\n"
+
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "Создать исходные файлы FLAC (по умолчанию: написать OggFLAC файлы)."
+
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить ошибки обратного вызова.\n"
+
 #~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить метаданных обратного вызова.\n"
+
 #~ msgid "flac_header_extraction: Could not set the read callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить читать обратного вызова.\n"
+
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить написать обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_reader: Не удалось установить конец файла обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the error callback.\n"
 #~ msgstr "flac_reader: Не удалось установить ошибки обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the length callback.\n"
 #~ msgstr "flac_reader: Не удалось установить длину обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the metadata callback.\n"
 #~ msgstr "flac_reader: Не удалось установить метаданных обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the read callback.\n"
 #~ msgstr "flac_reader: Не удалось установить читать обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the seek callback.\n"
 #~ msgstr "flac_reader: Не удалось установить возвратный вызов поиска.\n"
+
 #~ msgid "flac_reader: Could not set the tell callback.\n"
 #~ msgstr "flac_reader: Не удалось установить сказать обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the write callback.\n"
 #~ msgstr "flac_reader: Не удалось установить написать обратного вызова.\n"
+
 #~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 #~ msgstr "r_matroska: Кластер не содержат кластера тайм-кода. Файл не работает. Прерывание.\n"
-
