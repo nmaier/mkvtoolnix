@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-06-03 20:30+0900\n"
+"PO-Revision-Date: 2010-06-03 22:27+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -780,7 +780,7 @@ msgstr ""
 #: src/mmg/jobs.cpp:291 src/mmg/jobs.cpp:299 src/mmg/mux_dialog.cpp:248
 #, c-format
 msgid "%d minute(s) %d second(s)"
-msgstr ""
+msgstr "%d分%d秒"
 
 #: src/mmg/mmg_dialog.cpp:710
 #, c-format
@@ -4743,7 +4743,7 @@ msgstr "保存しないで現在のファイルをリロードします"
 
 #: src/mmg/jobs.cpp:71 src/mmg/jobs.cpp:73 src/mmg/mux_dialog.cpp:75
 msgid "Remaining time:"
-msgstr ""
+msgstr "残り時間："
 
 #: src/common/xml/element_parser.cpp:565
 msgid "Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
@@ -7589,7 +7589,7 @@ msgstr "inflateInit()が失敗しました。結果：%1%\n"
 #: src/mmg/jobs.cpp:72 src/mmg/jobs.cpp:74 src/mmg/jobs.cpp:157
 #: src/mmg/mux_dialog.cpp:76
 msgid "is being estimated"
-msgstr ""
+msgstr "計算中です"
 
 #: src/input/r_ivf.cpp:62
 msgid "ivf_reader: Could not open the file."
