@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-06-01 19:26+0800\n"
+"PO-Revision-Date: 2010-06-03 22:31+0800\n"
 "Last-Translator: Dean Lee <xslidian@lidian.info>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -777,7 +777,7 @@ msgstr ""
 #: src/mmg/mux_dialog.cpp:248
 #, c-format
 msgid "%d minute(s) %d second(s)"
-msgstr ""
+msgstr "%d 分 %d 秒"
 
 #: src/mmg/mmg_dialog.cpp:710
 #, c-format
@@ -4886,7 +4886,7 @@ msgstr "在不保存的情况下重新载入当前文件"
 #: src/mmg/jobs.cpp:73
 #: src/mmg/mux_dialog.cpp:75
 msgid "Remaining time:"
-msgstr ""
+msgstr "剩余时间:"
 
 #: src/common/xml/element_parser.cpp:565
 msgid "Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
@@ -7875,7 +7875,7 @@ msgstr "inflateInit() 失败。结果: %1%\n"
 #: src/mmg/jobs.cpp:157
 #: src/mmg/mux_dialog.cpp:76
 msgid "is being estimated"
-msgstr ""
+msgstr "正在估算"
 
 #: src/input/r_ivf.cpp:62
 msgid "ivf_reader: Could not open the file."
@@ -8854,6 +8854,7 @@ msgstr "是"
 #~ "  -v, --verbose  提高“详细”程度。\n"
 #~ "  -h, --help     显示本帮助。\n"
 #~ "  -V, --version  显示版本信息。\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "使用 FLAC 输出模块。\n"
