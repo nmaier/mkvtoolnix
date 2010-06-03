@@ -35,7 +35,7 @@ class mux_dialog: public wxDialog {
   DECLARE_EVENT_TABLE();
 protected:
   long pid;
-  wxStaticText *st_label;
+  wxStaticText *st_label, *st_remaining_time_label, *st_remaining_time;
   wxGauge *g_progress;
   mux_process *process;
   wxString log, opt_file_name;
@@ -47,7 +47,8 @@ protected:
   bool m_abort_button_changed;
 #endif  // SYS_WINDOWS
 
-  int m_exit_code;
+  int m_exit_code, m_progress;
+  int64_t m_next_remaining_time_update, m_start_time;
 public:
 
   mux_dialog(wxWindow *parent);
@@ -55,6 +56,7 @@ public:
 
   void update_window(wxString text);
   void update_gauge(long value);
+  void update_remaining_time();
 
   void on_ok(wxCommandEvent &evt);
   void on_save_log(wxCommandEvent &evt);

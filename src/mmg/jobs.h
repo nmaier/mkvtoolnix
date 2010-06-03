@@ -67,7 +67,7 @@ class job_run_dialog: public wxDialog {
   DECLARE_EVENT_TABLE();
 protected:
   wxGauge *g_jobs, *g_progress;
-  wxStaticText *st_jobs, *st_current;
+  wxStaticText *st_jobs, *st_current, *st_remaining_time_total, *st_remaining_time;
   wxButton *b_ok, *b_abort;
   wxCheckBox *cb_abort_after_current;
   wxTextCtrl *tc_log;
@@ -81,6 +81,9 @@ protected:
   long pid;
   std::vector<int> jobs_to_start;
   int current_job;
+
+  int m_progress;
+  int64_t m_next_remaining_time_update, m_next_remaining_time_update_total, m_start_time, m_start_time_total;
 
 #if defined(SYS_WINDOWS)
   taskbar_progress_c *m_taskbar_progress;
@@ -98,6 +101,7 @@ public:
   void process_input();
   void add_to_log(wxString text);
   void set_progress_value(long value);
+  void update_remaining_time();
 };
 
 class jobdlg_list_view: public wxListView {

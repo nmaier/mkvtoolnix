@@ -35,6 +35,7 @@
 #endif
 
 #include "common/common_pch.h"
+#include "common/fs_sys_helpers.h"
 #include "mmg/mmg.h"
 #include "mmg/mmg_dialog.h"
 #include "mmg/mux_dialog.h"
@@ -53,6 +54,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
   , m_abort_button_changed(false)
 #endif  // SYS_WINDOWS
   , m_exit_code(0)
+  , m_progress(0)
 {
   char c;
   std::string arg_utf8, line;
@@ -62,7 +64,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
   wxFile *opt_file;
   uint32_t i;
   wxArrayString *arg_list;
-  wxBoxSizer *siz_all, *siz_buttons;
+  wxBoxSizer *siz_all, *siz_buttons, *siz_line;
   wxStaticBoxSizer *siz_status, *siz_output;
 
   m_window_disabler = new wxWindowDisabler(this);
@@ -70,7 +72,15 @@ mux_dialog::mux_dialog(wxWindow *parent):
   c = 0;
   siz_status = new wxStaticBoxSizer(new wxStaticBox(this, -1, Z("Status and progress")), wxVERTICAL);
   st_label = new wxStaticText(this, -1, wxEmptyString);
-  siz_status->Add(st_label, 0, wxGROW | wxALIGN_LEFT | wxALL, 5);
+  st_remaining_time_label = new wxStaticText(this, -1, Z("Remaining time:"));
+  st_remaining_time       = new wxStaticText(this, -1, Z("is being estimated"));
+  siz_line = new wxBoxSizer(wxHORIZONTAL);
+  siz_line->Add(st_label);
+  siz_line->AddSpacer(5);
+  siz_line->Add(st_remaining_time_label);
+  siz_line->AddSpacer(5);
+  siz_line->Add(st_remaining_time);
+  siz_status->Add(siz_line, 0, wxGROW | wxALIGN_LEFT | wxALL, 5);
   g_progress = new wxGauge(this, -1, 100, wxDefaultPosition, wxSize(250, 15));
   siz_status->Add(g_progress, 1, wxALL | wxGROW, 5);
 
@@ -140,6 +150,9 @@ mux_dialog::mux_dialog(wxWindow *parent):
   }
 #endif  // SYS_WINDOWS
 
+  m_start_time                 = get_current_time_millis();
+  m_next_remaining_time_update = m_start_time + 8000;
+
   wxString command_line = wxString::Format(wxT("\"%s\" \"@%s\""), (*arg_list)[0].c_str(), opt_file_name.c_str());
   pid = wxExecute(command_line, wxEXEC_ASYNC, process);
   if (0 == pid) {
@@ -185,6 +198,9 @@ mux_dialog::mux_dialog(wxWindow *parent):
       } else if (wx_line.Length() > 0)
         tc_output->AppendText(wx_line + wxT("\n"));
       line = "";
+
+      update_remaining_time();
+
     } else if ((unsigned char)c != 0xff)
       line += c;
 
@@ -212,11 +228,26 @@ mux_dialog::update_window(wxString text) {
 
 void
 mux_dialog::update_gauge(long value) {
+  m_progress = value;
   g_progress->SetValue(value);
 #if defined(SYS_WINDOWS)
   if (NULL != m_taskbar_progress)
     m_taskbar_progress->set_value(value, 100);
 #endif  // SYS_WINDOWS
+}
+
+void
+mux_dialog::update_remaining_time() {
+  int64_t now = get_current_time_millis();
+
+  if ((0 == m_progress) || (now < m_next_remaining_time_update))
+    return;
+
+  int64_t total_time     = (now - m_start_time) * 100 / m_progress;
+  int64_t remaining_time = total_time - now + m_start_time;
+  st_remaining_time->SetLabel(wxString::Format(Z("%d minute(s) %d second(s)"), remaining_time / 60000, (remaining_time / 1000) % 60));
+
+  m_next_remaining_time_update = now + 1000;
 }
 
 void
@@ -271,6 +302,8 @@ mux_dialog::on_close(wxCloseEvent &evt) {
 void
 mux_dialog::done(int status) {
   SetTitle(Z("mkvmerge has finished"));
+  st_remaining_time_label->SetLabel(wxEmptyString);
+  st_remaining_time->SetLabel(wxEmptyString);
 
   pid = 0;
   b_ok->Enable(true);

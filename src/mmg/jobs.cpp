@@ -32,10 +32,10 @@
 
 #if defined(SYS_WINDOWS)
 # include <windows.h>
-# include "common/fs_sys_helpers.h"
 #endif
 
 #include "common/common_pch.h"
+#include "common/fs_sys_helpers.h"
 #include "mmg/jobs.h"
 #include "mmg/mmg.h"
 #include "mmg/mmg_dialog.h"
@@ -46,13 +46,14 @@
 
 job_run_dialog::job_run_dialog(wxWindow *parent,
                                std::vector<int> &n_jobs_to_start)
-  : wxDialog(NULL, -1, Z("mkvmerge is running"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX)
+  : wxDialog(NULL, -1, Z("mkvmerge is running"), wxDefaultPosition, wxSize(400, 700), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX)
   , t_update(new wxTimer(this, 1))
   , out(NULL)
   , process(NULL)
   , abort(false)
   , jobs_to_start(n_jobs_to_start)
   , current_job(-1)
+  , m_progress(0)
 #if defined(SYS_WINDOWS)
   , m_taskbar_progress(NULL)
 #endif
@@ -60,17 +61,29 @@ job_run_dialog::job_run_dialog(wxWindow *parent,
   wxBoxSizer *siz_all      = new wxBoxSizer(wxVERTICAL);
   wxStaticBoxSizer *siz_sb = new wxStaticBoxSizer(new wxStaticBox(this, -1, Z("Status and progress")), wxVERTICAL);
 
-  wxFlexGridSizer *siz_fg  = new wxFlexGridSizer(2);
+  wxFlexGridSizer *siz_fg  = new wxFlexGridSizer(2, 0, 10);
   siz_fg->AddGrowableCol(1);
   st_jobs = new wxStaticText(this, -1, Z("Processing 1000/1000"));
-  siz_fg->Add(st_jobs, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT | wxBOTTOM, 10);
-  g_jobs = new wxGauge(this, -1, jobs_to_start.size());
-  siz_fg->Add(g_jobs, 1, wxALIGN_CENTER_VERTICAL | wxGROW | wxBOTTOM, 10);
+  siz_fg->Add(st_jobs, 0, wxALIGN_CENTER_VERTICAL, 0);
+  g_jobs = new wxGauge(this, -1, jobs_to_start.size() * 100);
+  siz_fg->Add(g_jobs, 1, wxALIGN_CENTER_VERTICAL | wxGROW, 0);
+
+  wxStaticText *st_remaining_time_label       = new wxStaticText(this, -1, Z("Remaining time:"));
+  st_remaining_time                           = new wxStaticText(this, -1, Z("is being estimated"));
+  wxStaticText *st_remaining_time_label_total = new wxStaticText(this, -1, Z("Remaining time:"));
+  st_remaining_time_total                     = new wxStaticText(this, -1, Z("is being estimated"));
+
+  siz_fg->Add(st_remaining_time_label_total, 0, wxALIGN_CENTER_VERTICAL | wxTOP | wxBOTTOM,          10);
+  siz_fg->Add(st_remaining_time_total,       1, wxALIGN_CENTER_VERTICAL | wxTOP | wxBOTTOM | wxGROW, 10);
 
   st_current = new wxStaticText(this, -1, Z("Current job ID 1000:"));
-  siz_fg->Add(st_current, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+  siz_fg->Add(st_current, 0, wxALIGN_CENTER_VERTICAL, 10);
   g_progress = new wxGauge(this, -1, 100);
   siz_fg->Add(g_progress, 1, wxALIGN_CENTER_VERTICAL | wxGROW, 0);
+
+  siz_fg->Add(st_remaining_time_label, 0, wxALIGN_CENTER_VERTICAL | wxTOP | wxBOTTOM,          10);
+  siz_fg->Add(st_remaining_time,       1, wxALIGN_CENTER_VERTICAL | wxTOP | wxBOTTOM | wxGROW, 10);
+
   siz_sb->Add(siz_fg, 0, wxGROW | wxLEFT | wxRIGHT | wxTOP, 10);
   siz_sb->AddSpacer(10);
 
@@ -105,6 +118,9 @@ job_run_dialog::job_run_dialog(wxWindow *parent,
     m_taskbar_progress = new taskbar_progress_c(this);
 #endif
 
+  m_start_time_total                 = get_current_time_millis();
+  m_next_remaining_time_update_total = m_start_time_total + 8000;
+
   start_next_job();
 
   ShowModal();
@@ -130,8 +146,15 @@ job_run_dialog::start_next_job() {
     b_ok->SetFocus();
     SetTitle(Z("mkvmerge has finished"));
 
+    st_remaining_time->SetLabel(wxT("---"));
+    st_remaining_time_total->SetLabel(wxT("---"));
+
     return;
   }
+
+  m_start_time                 = get_current_time_millis();
+  m_next_remaining_time_update = m_start_time + 8000;
+  st_remaining_time->SetLabel(Z("is being estimated"));
 
 #if defined(SYS_WINDOWS)
   if (NULL != m_taskbar_progress) {
@@ -234,6 +257,8 @@ job_run_dialog::process_input() {
     } else if ((unsigned char)c != 0xff)
       line += c;
 
+    update_remaining_time();
+
     if (out->Eof())
       break;
   }
@@ -241,12 +266,38 @@ job_run_dialog::process_input() {
 
 void
 job_run_dialog::set_progress_value(long value) {
+  m_progress = current_job * 100 + value;
   g_progress->SetValue(value);
+  g_jobs->SetValue(m_progress);
 
 #if defined(SYS_WINDOWS)
   if (NULL != m_taskbar_progress)
     m_taskbar_progress->set_value(current_job * 100 + value, jobs_to_start.size() * 100);
 #endif
+}
+
+void
+job_run_dialog::update_remaining_time() {
+  if (0 == m_progress)
+    return;
+
+  int64_t now = get_current_time_millis();
+
+  if ((0 != (m_progress % 100)) && (now >= m_next_remaining_time_update)) {
+    int64_t total_time           = (now - m_start_time) * 100 / (m_progress % 100);
+    int64_t remaining_time       = total_time - now + m_start_time;
+    m_next_remaining_time_update = now + 1000;
+
+    st_remaining_time->SetLabel(wxString::Format(Z("%d minute(s) %d second(s)"), remaining_time / 60000, (remaining_time / 1000) % 60));
+  }
+
+  if (now >= m_next_remaining_time_update_total) {
+    int64_t total_time                 = (now - m_start_time_total) * 100 / (m_progress / jobs_to_start.size());
+    int64_t remaining_time             = total_time - now + m_start_time_total;
+    m_next_remaining_time_update_total = now + 1000;
+
+    st_remaining_time_total->SetLabel(wxString::Format(Z("%d minute(s) %d second(s)"), remaining_time / 60000, (remaining_time / 1000) % 60));
+  }
 }
 
 void
@@ -305,7 +356,7 @@ job_run_dialog::on_end_process(wxProcessEvent &evt) {
   wxRemoveFile(opt_file_name);
 
   if (!abort)
-    g_jobs->SetValue(current_job + 1);
+    g_jobs->SetValue((current_job + 1) * 100);
 
   start_next_job();
 }
