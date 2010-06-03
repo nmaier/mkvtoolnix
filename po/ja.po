@@ -777,6 +777,11 @@ msgstr ""
 "ソースや最新のバイナリは、いつでも以下のURLから入手できます。\n"
 "http://www.bunkus.org/videotools/mkvtoolnix/"
 
+#: src/mmg/jobs.cpp:291 src/mmg/jobs.cpp:299 src/mmg/mux_dialog.cpp:248
+#, c-format
+msgid "%d minute(s) %d second(s)"
+msgstr ""
+
 #: src/mmg/mmg_dialog.cpp:710
 #, c-format
 msgid ""
@@ -829,7 +834,7 @@ msgstr ""
 "ソースや最新のバイナリは、いつでも以下のURLから入手できます。\n"
 "http://www.bunkus.org/videotools/mkvtoolnix/"
 
-#: src/mmg/jobs.cpp:89
+#: src/mmg/jobs.cpp:102
 msgid "&Abort"
 msgstr "中断(&A)"
 
@@ -873,11 +878,11 @@ msgstr "コマンドラインをクリップボードにコピー(&C)"
 msgid "&Copy to clipboard"
 msgstr "クリップボードにコピー(&C)"
 
-#: src/mmg/jobs.cpp:419
+#: src/mmg/jobs.cpp:470
 msgid "&Disable"
 msgstr "無効化(&D)"
 
-#: src/mmg/jobs.cpp:411
+#: src/mmg/jobs.cpp:462
 msgid "&Down"
 msgstr "下へ(&D)"
 
@@ -939,7 +944,7 @@ msgstr "新規作成(&N)\tCtrl-N"
 msgid "&New chapters"
 msgstr "チャプタを新規作成(&N)"
 
-#: src/mmg/jobs.cpp:87 src/mmg/jobs.cpp:334 src/mmg/jobs.cpp:438
+#: src/mmg/jobs.cpp:100 src/mmg/jobs.cpp:385 src/mmg/jobs.cpp:489
 msgid "&Ok"
 msgstr "&OK"
 
@@ -955,7 +960,7 @@ msgstr "オプション(&O)"
 msgid "&Quit\tCtrl-Q"
 msgstr "終了(&Q)\tCtrl-Q"
 
-#: src/mmg/jobs.cpp:416
+#: src/mmg/jobs.cpp:467
 msgid "&Re-enable"
 msgstr "&再有効化(&R)"
 
@@ -967,7 +972,7 @@ msgstr "&リロード(&R)\tCtrl-R"
 msgid "&Reset"
 msgstr "リセット(&R)"
 
-#: src/mmg/jobs.cpp:339 src/mmg/mmg_dialog.cpp:268
+#: src/mmg/jobs.cpp:390 src/mmg/mmg_dialog.cpp:268
 msgid "&Save"
 msgstr "保存(&S)"
 
@@ -983,11 +988,11 @@ msgstr "情報をテキストとして保存(&S)\tCtrl-S"
 msgid "&Save settings\tCtrl-S"
 msgstr "設定を保存(&S)\tCtrl-S"
 
-#: src/mmg/jobs.cpp:443
+#: src/mmg/jobs.cpp:494
 msgid "&Start"
 msgstr "開始(&S)"
 
-#: src/mmg/jobs.cpp:408
+#: src/mmg/jobs.cpp:459
 msgid "&Up"
 msgstr "上へ(&U)"
 
@@ -999,7 +1004,7 @@ msgstr "バリデーション(&V)\tCtrl-T"
 msgid "&Verify"
 msgstr "ベリファイ(&V)"
 
-#: src/mmg/jobs.cpp:429
+#: src/mmg/jobs.cpp:480
 msgid "&View log"
 msgstr "ログを見る(&V)"
 
@@ -1425,7 +1430,7 @@ msgstr ", 説明 '%1%'"
 msgid ", file name '%1%'"
 msgstr ", ファイル名 '%1%'"
 
-#: src/mmg/jobs.cpp:683
+#: src/mmg/jobs.cpp:734
 #, c-format
 msgid ", finished on %s"
 msgstr ", %sが完了しました"
@@ -1434,22 +1439,22 @@ msgstr ", %sが完了しました"
 msgid ", position %1%"
 msgstr ", 位置：%1%"
 
-#: src/mmg/jobs.cpp:673
+#: src/mmg/jobs.cpp:724
 #, c-format
 msgid ", started on %s"
 msgstr ",%sを開始しました"
 
-#: src/mmg/jobs.cpp:671
+#: src/mmg/jobs.cpp:722
 #, c-format
 msgid "--- BEGIN job %d (%s, added on %s)"
 msgstr "--- ジョブ%dを開始（%s, 追加日時 %s）"
 
-#: src/mmg/jobs.cpp:681
+#: src/mmg/jobs.cpp:732
 #, c-format
 msgid "--- END job %d"
 msgstr "--- ジョブ%dを終了"
 
-#: src/mmg/jobs.cpp:676
+#: src/mmg/jobs.cpp:727
 msgid "--- No job output found.\n"
 msgstr "--- ジョブ出力が見つかりませんでした。\n"
 
@@ -1602,23 +1607,23 @@ msgstr "AVC/h.264エレメンタリストリーム"
 msgid "AVI (Audio/Video Interleaved)"
 msgstr "AVI（Audio/Video Interleaved）"
 
-#: src/mmg/mux_dialog.cpp:94
+#: src/mmg/mux_dialog.cpp:104
 msgid "Abort"
 msgstr "中断"
 
-#: src/mmg/jobs.cpp:83
+#: src/mmg/jobs.cpp:96
 msgid "Abort after current job"
 msgstr "現在のジョブ終了後に中断"
 
-#: src/mmg/jobs.cpp:84
+#: src/mmg/jobs.cpp:97
 msgid "Abort processing after the current job"
 msgstr "現在のジョブ終了後に処理中断"
 
-#: src/mmg/jobs.cpp:90
+#: src/mmg/jobs.cpp:103
 msgid "Abort the muxing process right now"
 msgstr "MUX処理を今すぐ中断"
 
-#: src/mmg/jobs.cpp:123
+#: src/mmg/jobs.cpp:139
 #, c-format
 msgid "Aborted processing on %s"
 msgstr "%sを処理中に中断されました"
@@ -1663,7 +1668,7 @@ msgstr "名前を追加"
 msgid "Add subchapter"
 msgstr "サブチャプタを追加"
 
-#: src/mmg/jobs.cpp:381
+#: src/mmg/jobs.cpp:432
 msgid "Added on"
 msgstr "追加日時"
 
@@ -2173,9 +2178,9 @@ msgstr "追加する入力ファイルを選んでください"
 msgid "Choose an input file to append"
 msgstr "追加結合する入力ファイルを選んでください"
 
-#: src/mmg/jobs.cpp:350 src/mmg/mmg_dialog.cpp:314 src/mmg/mmg_dialog.cpp:410
+#: src/mmg/jobs.cpp:401 src/mmg/mmg_dialog.cpp:314 src/mmg/mmg_dialog.cpp:410
 #: src/mmg/mmg_dialog.cpp:735 src/mmg/mmg_dialog.cpp:756
-#: src/mmg/mux_dialog.cpp:231 src/mmg/tabs/chapters.cpp:633
+#: src/mmg/mux_dialog.cpp:262 src/mmg/tabs/chapters.cpp:633
 #: src/mmg/tabs/chapters.cpp:675
 msgid "Choose an output file"
 msgstr "出力ファイルを選んでください"
@@ -2362,7 +2367,7 @@ msgstr "コアピクチャフレーム%1%のヘッダサイズ（%2%）が不正
 msgid "CorePicture frame %1% not supported.\n"
 msgstr "コアピクチャフレーム%1%はサポートされていません。\n"
 
-#: src/mmg/jobs.cpp:155 src/mmg/mux_dialog.cpp:119 src/mmg/tabs/input.cpp:349
+#: src/mmg/jobs.cpp:178 src/mmg/mux_dialog.cpp:129 src/mmg/tabs/input.cpp:349
 #, c-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
 msgstr "'%s'と呼ばれるmkvmergeのコマンドラインオプションの一時ファイルを作成できませんでした (エラーコード %d, %s)。"
@@ -2559,7 +2564,7 @@ msgstr "CUE (サブエントリはスキップされます)"
 msgid "Cues:"
 msgstr "キュー："
 
-#: src/mmg/jobs.cpp:369
+#: src/mmg/jobs.cpp:420
 msgid "Current and past jobs:"
 msgstr "現在のジョブと過去のジョブ:"
 
@@ -2567,12 +2572,12 @@ msgstr "現在のジョブと過去のジョブ:"
 msgid "Current command line"
 msgstr "現在のコマンドライン"
 
-#: src/mmg/jobs.cpp:145
+#: src/mmg/jobs.cpp:168
 #, c-format
 msgid "Current job ID %d:"
 msgstr "現在のジョブID %d:"
 
-#: src/mmg/jobs.cpp:70
+#: src/mmg/jobs.cpp:79
 msgid "Current job ID 1000:"
 msgstr "現在のジョブID 1000:"
 
@@ -2580,7 +2585,7 @@ msgstr "現在のジョブID 1000:"
 msgid "Current value:"
 msgstr "現在の値："
 
-#: src/mmg/jobs.cpp:424
+#: src/mmg/jobs.cpp:475
 msgid "D&elete"
 msgstr "削除(&D)"
 
@@ -2672,11 +2677,11 @@ msgstr "遅延：%|1$.3f|ms"
 msgid "Delete all occurences of a property"
 msgstr "そのプロパティを全て削除します"
 
-#: src/mmg/jobs.cpp:425
+#: src/mmg/jobs.cpp:476
 msgid "Delete the selected job(s) from the job queue"
 msgstr "ジョブキューから選択したジョブを削除します"
 
-#: src/mmg/jobs.cpp:379
+#: src/mmg/jobs.cpp:430
 msgid "Description"
 msgstr "説明"
 
@@ -2697,7 +2702,7 @@ msgstr "Dirac"
 msgid "Dirac elementary stream"
 msgstr "Diracエレメンタリストリーム"
 
-#: src/mmg/jobs.cpp:420
+#: src/mmg/jobs.cpp:471
 msgid "Disable the selected job(s) and sets their status to 'done'"
 msgstr "選択したジョブを無効化し、そのステータスを'終了'にします。"
 
@@ -2920,7 +2925,7 @@ msgstr "情報の保存中にエラーが発生しました"
 msgid "Error writing Matroska file"
 msgstr "Matroskaファイルの書き込み中にエラーが発生しました"
 
-#: src/common/output.cpp:68 src/mmg/mux_dialog.cpp:175
+#: src/common/output.cpp:68 src/mmg/mux_dialog.cpp:188
 msgid "Error:"
 msgstr "エラー："
 
@@ -2952,11 +2957,11 @@ msgstr ""
 msgid "Error: vorbis_packetizer: Could not extract the stream's parameters from the first packets.\n"
 msgstr "エラー：vorbisパケッタイザ：最初のパケットからストリームのパラメータを展開することができませんでした。\n"
 
-#: src/mmg/mux_dialog.cpp:84
+#: src/mmg/mux_dialog.cpp:94
 msgid "Errors:"
 msgstr "エラー："
 
-#: src/mmg/mux_dialog.cpp:326
+#: src/mmg/mux_dialog.cpp:359
 msgid "Everything went fine."
 msgstr "全て正常に終了しました。"
 
@@ -3082,7 +3087,7 @@ msgstr "ファイルUID：%1%"
 msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n"
 msgstr "ファイルが予測されたよりも少ないフレームしか含んでいないか、フレーム%1%の後ろが壊れています。\n"
 
-#: src/mmg/mmg_dialog.cpp:765 src/mmg/mux_dialog.cpp:120
+#: src/mmg/mmg_dialog.cpp:765 src/mmg/mux_dialog.cpp:130
 #: src/mmg/tabs/input.cpp:350
 msgid "File creation failed"
 msgstr "ファイルの作成に失敗しました"
@@ -3145,16 +3150,16 @@ msgstr "ファイル/セグメントタイトル:"
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "ファイルをそのファイル自身に追加結合することはできません。'--append-to'の引数が不正です。\n"
 
-#: src/mmg/jobs.cpp:298
+#: src/mmg/jobs.cpp:349
 #, c-format
 msgid "Finished job ID %d on %s: status '%s'"
 msgstr "ジョブID %d（%s）が終了しました：ステータス'%s'"
 
-#: src/mmg/jobs.cpp:385
+#: src/mmg/jobs.cpp:436
 msgid "Finished on"
 msgstr "完了日時"
 
-#: src/mmg/jobs.cpp:125
+#: src/mmg/jobs.cpp:141
 #, c-format
 msgid "Finished processing on %s"
 msgstr "%sの処理が終了しました"
@@ -3352,7 +3357,7 @@ msgstr ""
 msgid "Here you can set the values for the language and the country that you want to apply to all the chapters below and including the currently selected entry."
 msgstr "ここでは現在選択しているエントリ以下の全てのチャプタに対して言語と国の値を設定できます。"
 
-#: src/mmg/jobs.cpp:374
+#: src/mmg/jobs.cpp:425
 msgid "ID"
 msgstr "ID"
 
@@ -3742,11 +3747,11 @@ msgstr "ジョブはジョブキューに追加されました"
 msgid "Job description"
 msgstr "ジョブの説明"
 
-#: src/mmg/jobs.cpp:325
+#: src/mmg/jobs.cpp:376
 msgid "Job output"
 msgstr "ジョブの出力"
 
-#: src/mmg/jobs.cpp:366
+#: src/mmg/jobs.cpp:417
 msgid "Job queue management"
 msgstr "ジョブキューの管理"
 
@@ -3861,12 +3866,12 @@ msgstr "チャプタファイル（シンプル/OGMフォーマットもしく�
 msgid "Load muxing settings from a file"
 msgstr "MUXの設定をファイルからロードします"
 
-#: src/mmg/mux_dialog.cpp:231
+#: src/mmg/mux_dialog.cpp:262
 #, c-format
 msgid "Log files (*.txt)|*.txt|%s"
 msgstr "ログファイル (*.txt)|*.txt|%s"
 
-#: src/mmg/jobs.cpp:77
+#: src/mmg/jobs.cpp:90
 msgid "Log output:"
 msgstr "ログ出力："
 
@@ -4066,11 +4071,11 @@ msgstr "トラック%1%にファイル番号%2%のファイル（'%3%'）から�
 msgid "More than one track with the track number %1% found.\n"
 msgstr "トラック番号%1%のトラックが複数見つかりました。\n"
 
-#: src/mmg/jobs.cpp:412
+#: src/mmg/jobs.cpp:463
 msgid "Move the selected job(s) down"
 msgstr "選択したジョブを下に移動します"
 
-#: src/mmg/jobs.cpp:409
+#: src/mmg/jobs.cpp:460
 msgid "Move the selected job(s) up"
 msgstr "選択したジョブを上に移動します"
 
@@ -4078,7 +4083,7 @@ msgstr "選択したジョブを上に移動します"
 msgid "Muxing application: %1%"
 msgstr "MUXに使用されたアプリケーション：%1%"
 
-#: src/mmg/mux_dialog.cpp:107
+#: src/mmg/mux_dialog.cpp:117
 msgid "Muxing in progress."
 msgstr "MUXが進行中です。"
 
@@ -4292,7 +4297,7 @@ msgstr "トラックのチャンネル数です。"
 msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM オーディオ/ビデオファイル"
 
-#: src/mmg/message_dialog.cpp:31 src/mmg/mux_dialog.cpp:90
+#: src/mmg/message_dialog.cpp:31 src/mmg/mux_dialog.cpp:100
 msgid "Ok"
 msgstr "OK"
 
@@ -4352,7 +4357,7 @@ msgstr "Matroskaファイルを開きます"
 msgid "Open an existing Matroska file"
 msgstr "既存のMatroskaファイルを開きます"
 
-#: src/mmg/mux_dialog.cpp:294
+#: src/mmg/mux_dialog.cpp:327
 msgid "Open folder"
 msgstr "フォルダを開く"
 
@@ -4380,7 +4385,7 @@ msgstr "元の値："
 msgid "Other options"
 msgstr "その他のオプション"
 
-#: src/mmg/mux_dialog.cpp:77
+#: src/mmg/mux_dialog.cpp:87
 msgid "Output"
 msgstr "出力"
 
@@ -4392,7 +4397,7 @@ msgstr "出力ファイル名"
 msgid "Output messages in this charset"
 msgstr "この文字セットでメッセージを出力します"
 
-#: src/mmg/jobs.cpp:329
+#: src/mmg/jobs.cpp:380
 msgid "Output of the selected jobs:"
 msgstr "選択したジョブの出力"
 
@@ -4510,16 +4515,16 @@ msgstr "前のセグメントの固有ID"
 msgid "Process priority:"
 msgstr "プロセスの優先度："
 
-#: src/mmg/jobs.cpp:65
+#: src/mmg/jobs.cpp:66
 msgid "Processing 1000/1000"
 msgstr "処理中 1000/1000"
 
-#: src/mmg/jobs.cpp:144
+#: src/mmg/jobs.cpp:167
 #, c-format
 msgid "Processing job %d/%d"
 msgstr "ジョブ%d/%dを処理中"
 
-#: src/mmg/jobs.cpp:220 src/mmg/mux_dialog.cpp:177
+#: src/mmg/jobs.cpp:243 src/mmg/mux_dialog.cpp:190
 msgid "Progress"
 msgstr "進行状況"
 
@@ -4680,7 +4685,7 @@ msgstr "mkvinfoを終了します"
 msgid "RSA"
 msgstr "RSA"
 
-#: src/mmg/jobs.cpp:417
+#: src/mmg/jobs.cpp:468
 msgid "Re-enable the selected job(s)"
 msgstr "選択したジョブを再有効化します"
 
@@ -4736,6 +4741,10 @@ msgstr ""
 msgid "Reload the current file without saving"
 msgstr "保存しないで現在のファイルをリロードします"
 
+#: src/mmg/jobs.cpp:71 src/mmg/jobs.cpp:73 src/mmg/mux_dialog.cpp:75
+msgid "Remaining time:"
+msgstr ""
+
 #: src/common/xml/element_parser.cpp:565
 msgid "Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
 msgstr " &、<、>、\"のような特殊な文字は通常のHTMLにおける方法でエスケープされなければならないことに注意してください。:'&'は&amp;、'<'は&lt;、'>'は&gt;、'\"'は&quot;。"
@@ -4768,7 +4777,7 @@ msgstr "ヘッダフィールドエディタを起動します"
 msgid "S&how the command line"
 msgstr "コマンドラインを表示(&S)"
 
-#: src/mmg/jobs.cpp:447
+#: src/mmg/jobs.cpp:498
 msgid "S&tart selected"
 msgstr "選択したジョブを開始(&T)"
 
@@ -4808,7 +4817,7 @@ msgstr "名前をつけて保存(&A)"
 msgid "Save information as"
 msgstr "情報を名前をつけて保存します"
 
-#: src/mmg/mux_dialog.cpp:97
+#: src/mmg/mux_dialog.cpp:107
 msgid "Save log"
 msgstr "ログを保存"
 
@@ -5244,11 +5253,11 @@ msgstr "MUX開始(&R)"
 msgid "Sta&rt muxing (run mkvmerge)\tCtrl-R"
 msgstr "MUX開始（mkvmergeを実行）(&R)\tCtrl-R"
 
-#: src/mmg/jobs.cpp:444
+#: src/mmg/jobs.cpp:495
 msgid "Start the jobs whose status is 'pending'"
 msgstr "ステータスが'未処理'のジョブを開始します"
 
-#: src/mmg/jobs.cpp:448
+#: src/mmg/jobs.cpp:499
 msgid "Start the selected job(s) regardless of their status"
 msgstr "ステータスが何であろうと関係なく選択したジョブを開始します"
 
@@ -5260,20 +5269,20 @@ msgstr "設定を空にして新規作成します"
 msgid "Start:"
 msgstr "開始時間："
 
-#: src/mmg/jobs.cpp:383
+#: src/mmg/jobs.cpp:434
 msgid "Started on"
 msgstr "開始日時"
 
-#: src/mmg/jobs.cpp:199
+#: src/mmg/jobs.cpp:222
 #, c-format
 msgid "Starting job ID %d (%s) on %s"
 msgstr "ジョブID %d（%s）の処理を開始します　開始日時：%s"
 
-#: src/mmg/jobs.cpp:377
+#: src/mmg/jobs.cpp:428
 msgid "Status"
 msgstr "ステータス"
 
-#: src/mmg/jobs.cpp:61 src/mmg/mux_dialog.cpp:71
+#: src/mmg/jobs.cpp:62 src/mmg/mux_dialog.cpp:73
 msgid "Status and progress"
 msgstr "ステータスと進行状況"
 
@@ -5381,7 +5390,7 @@ msgstr "mkvmergeがAVIのインデックスに対応するキューデータを�
 msgid "Text files (*.txt);;All files (*.*)"
 msgstr "テキストファイル (*.txt);;全てのファイル (*.*)"
 
-#: src/mmg/jobs.cpp:350
+#: src/mmg/jobs.cpp:401
 #, c-format
 msgid "Text files (*.txt)|*.txt|%s"
 msgstr "テキストファイル (*.txt)|*.txt|%s"
@@ -6213,7 +6222,7 @@ msgstr "ID'%1%'のファイルはありません。'--append-to'の引数が不�
 msgid "There is no translation available for '%1%'.\n"
 msgstr "'%1%'の翻訳は利用できません。\n"
 
-#: src/mmg/mux_dialog.cpp:328
+#: src/mmg/mux_dialog.cpp:361
 msgid "There were ERRORs."
 msgstr "エラーが発生しました。"
 
@@ -6221,11 +6230,11 @@ msgstr "エラーが発生しました。"
 msgid "There were errors in the header values preventing the headers from being saved. The first error has been selected."
 msgstr "ヘッダの値にエラーがあり、ヘッダを保存することができませんでした。最初のエラーが選択されています。"
 
-#: src/mmg/mux_dialog.cpp:323
+#: src/mmg/mux_dialog.cpp:356
 msgid "There were warnings"
 msgstr "警告が発せられました"
 
-#: src/mmg/mux_dialog.cpp:321
+#: src/mmg/mux_dialog.cpp:354
 msgid "There were warnings, or the process was terminated."
 msgstr "警告が発せられるか、プロセスが終了されました。"
 
@@ -7079,7 +7088,7 @@ msgstr "ビデオトラック"
 msgid "Video track %u"
 msgstr "ビデオトラック%u"
 
-#: src/mmg/jobs.cpp:430
+#: src/mmg/jobs.cpp:481
 msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
 msgstr "選択したジョブをMUX処理中のmkvmergeの出力を見ます"
 
@@ -7119,7 +7128,7 @@ msgstr "mmgの使い方が間違っていそうな場合に警告する"
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
 msgstr "%1%行目で警告：開始時間のタイムコードが前のエントリのタイムコードよりも小さいです。このファイルの全てのエントリは開始時間でソートされます。\n"
 
-#: src/mmg/mux_dialog.cpp:173
+#: src/mmg/mux_dialog.cpp:186
 msgid "Warning:"
 msgstr "警告："
 
@@ -7135,7 +7144,7 @@ msgstr "警告：UID %1%のトラックが複数あります。"
 msgid "Warning: There's more than one track with the number %1%."
 msgstr "警告：番号%1%のトラックが複数あります。"
 
-#: src/mmg/mux_dialog.cpp:81
+#: src/mmg/mux_dialog.cpp:91
 msgid "Warnings:"
 msgstr "警告： "
 
@@ -7291,7 +7300,7 @@ msgstr "aac_reader：%1%バイトを読み込むことができませんでし�
 msgid "aac_reader: No valid AAC packet found in the first %1% bytes.\n"
 msgstr "aac_reader：最初の%1%バイトで正しいAACパケットが見つかりませんでした。\n"
 
-#: src/mmg/jobs.cpp:284 src/mmg/jobs.cpp:393 src/mmg/jobs.cpp:471
+#: src/mmg/jobs.cpp:335 src/mmg/jobs.cpp:444 src/mmg/jobs.cpp:522
 msgid "aborted"
 msgstr "中断"
 
@@ -7375,11 +7384,11 @@ msgstr "cet_index：'%1%'が見つかりませんでした\n"
 msgid "channels: %1%"
 msgstr "チャンネル数：%1%"
 
-#: src/mmg/jobs.cpp:287
+#: src/mmg/jobs.cpp:338
 msgid "completed OK"
 msgstr "正常に完了しました"
 
-#: src/mmg/jobs.cpp:290
+#: src/mmg/jobs.cpp:341
 msgid "completed with warnings"
 msgstr "完了しましたが、警告があります"
 
@@ -7436,11 +7445,11 @@ msgstr "表示高さ：%1%"
 msgid "display width: %1%"
 msgstr "表示幅：%1%"
 
-#: src/mmg/jobs.cpp:469 src/mmg/jobs.cpp:657
+#: src/mmg/jobs.cpp:520 src/mmg/jobs.cpp:708
 msgid "done"
 msgstr "完了"
 
-#: src/mmg/jobs.cpp:470
+#: src/mmg/jobs.cpp:521
 msgid "done/warnings"
 msgstr "完了/警告有り"
 
@@ -7483,7 +7492,7 @@ msgstr "暗号化"
 msgid "end-of-file"
 msgstr "ファイル終端"
 
-#: src/mmg/jobs.cpp:293 src/mmg/jobs.cpp:472
+#: src/mmg/jobs.cpp:344 src/mmg/jobs.cpp:523
 msgid "failed"
 msgstr "失敗"
 
@@ -7576,6 +7585,11 @@ msgstr "最高"
 #: src/common/compression.cpp:115
 msgid "inflateInit() failed. Result: %1%\n"
 msgstr "inflateInit()が失敗しました。結果：%1%\n"
+
+#: src/mmg/jobs.cpp:72 src/mmg/jobs.cpp:74 src/mmg/jobs.cpp:157
+#: src/mmg/mux_dialog.cpp:76
+msgid "is being estimated"
+msgstr ""
 
 #: src/input/r_ivf.cpp:62
 msgid "ivf_reader: Could not open the file."
@@ -7845,7 +7859,7 @@ msgstr "mkvmerge"
 msgid "mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]\n"
 msgstr "mkvmerge -o 出力ファイル [グローバルオプション] [オプション1] <ファイル1> [@オプションファイル...]\n"
 
-#: src/mmg/mux_dialog.cpp:316
+#: src/mmg/mux_dialog.cpp:349
 #, c-format
 msgid "mkvmerge FAILED with a return code of %d. %s"
 msgstr "mkvmergeはリターンコード%dで異常終了しました。%s"
@@ -7892,12 +7906,12 @@ msgstr ""
 msgid "mkvmerge executable"
 msgstr "mkvmergeの実行ファイル"
 
-#: src/mmg/mux_dialog.cpp:318
+#: src/mmg/mux_dialog.cpp:351
 #, c-format
 msgid "mkvmerge finished with a return code of %d. %s"
 msgstr "mkvmergeはリターンコード%dで終了しました。%s"
 
-#: src/mmg/jobs.cpp:131 src/mmg/mux_dialog.cpp:273
+#: src/mmg/jobs.cpp:147 src/mmg/mux_dialog.cpp:304
 msgid "mkvmerge has finished"
 msgstr "mkvmergeは処理を完了しました"
 
@@ -7905,7 +7919,7 @@ msgstr "mkvmergeは処理を完了しました"
 msgid "mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"
 msgstr "mkvmergeはFLACをサポートしてコンパイルされていませんが、このストリームを処理することを要求されました。\n"
 
-#: src/mmg/jobs.cpp:49 src/mmg/mux_dialog.cpp:43
+#: src/mmg/jobs.cpp:49 src/mmg/mux_dialog.cpp:44
 msgid "mkvmerge is running"
 msgstr "mkvmergeが実行中です"
 
@@ -7913,7 +7927,7 @@ msgstr "mkvmergeが実行中です"
 msgid "mkvmerge options"
 msgstr "mkvmergeのオプション"
 
-#: src/mmg/mux_dialog.cpp:78
+#: src/mmg/mux_dialog.cpp:88
 msgid "mkvmerge output:"
 msgstr "mkvmergeの出力："
 
@@ -8051,7 +8065,7 @@ msgstr "Iフレームのみ"
 msgid "output sampling freq: %1%"
 msgstr "出力サンプル周波数：%1%"
 
-#: src/mmg/jobs.cpp:468 src/mmg/jobs.cpp:642
+#: src/mmg/jobs.cpp:519 src/mmg/jobs.cpp:693
 msgid "pending"
 msgstr "未処理"
 

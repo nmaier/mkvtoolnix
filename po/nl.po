@@ -786,6 +786,11 @@ msgstr ""
 "Bronnen en de laats binaries altijd beschikbaar bij\n"
 "http://www.bunkus.org/videotools/mkvtoolnix/"
 
+#: src/mmg/jobs.cpp:291 src/mmg/jobs.cpp:299 src/mmg/mux_dialog.cpp:248
+#, c-format
+msgid "%d minute(s) %d second(s)"
+msgstr ""
+
 #: src/mmg/mmg_dialog.cpp:710
 #, c-format
 msgid ""
@@ -838,7 +843,7 @@ msgstr ""
 "Bronnen en laatste binaries zijn altijd beschikbaar bij\n"
 "http://www.bunkus.org/videotools/mkvtoolnix/"
 
-#: src/mmg/jobs.cpp:89
+#: src/mmg/jobs.cpp:102
 msgid "&Abort"
 msgstr "&Afbreken"
 
@@ -882,11 +887,11 @@ msgstr "&Kopieer commando regel naar klembord"
 msgid "&Copy to clipboard"
 msgstr "&Kopieer naar klembord"
 
-#: src/mmg/jobs.cpp:419
+#: src/mmg/jobs.cpp:470
 msgid "&Disable"
 msgstr "&Uitzetten"
 
-#: src/mmg/jobs.cpp:411
+#: src/mmg/jobs.cpp:462
 msgid "&Down"
 msgstr "&Omlaag"
 
@@ -948,7 +953,7 @@ msgstr "&Nieuw\tCtrl-N"
 msgid "&New chapters"
 msgstr "&Nieuw hoofdstuk"
 
-#: src/mmg/jobs.cpp:87 src/mmg/jobs.cpp:334 src/mmg/jobs.cpp:438
+#: src/mmg/jobs.cpp:100 src/mmg/jobs.cpp:385 src/mmg/jobs.cpp:489
 msgid "&Ok"
 msgstr "&Ok"
 
@@ -964,7 +969,7 @@ msgstr "&Opties"
 msgid "&Quit\tCtrl-Q"
 msgstr "&Afsluiten\tCtrl-Q"
 
-#: src/mmg/jobs.cpp:416
+#: src/mmg/jobs.cpp:467
 msgid "&Re-enable"
 msgstr "&Herinstellen"
 
@@ -976,7 +981,7 @@ msgstr "&Opnieuw inladen\tCtrl-R"
 msgid "&Reset"
 msgstr "&Resetten"
 
-#: src/mmg/jobs.cpp:339 src/mmg/mmg_dialog.cpp:268
+#: src/mmg/jobs.cpp:390 src/mmg/mmg_dialog.cpp:268
 msgid "&Save"
 msgstr "&Opslaan"
 
@@ -992,11 +997,11 @@ msgstr "&Info opslaan als tekst\tCtrl-S"
 msgid "&Save settings\tCtrl-S"
 msgstr "&Bewaar instellingen\tCtrl-S"
 
-#: src/mmg/jobs.cpp:443
+#: src/mmg/jobs.cpp:494
 msgid "&Start"
 msgstr "&Start"
 
-#: src/mmg/jobs.cpp:408
+#: src/mmg/jobs.cpp:459
 msgid "&Up"
 msgstr "&Omhoog"
 
@@ -1008,7 +1013,7 @@ msgstr "&Valideren\tCtrl-T"
 msgid "&Verify"
 msgstr "&Verifiëren"
 
-#: src/mmg/jobs.cpp:429
+#: src/mmg/jobs.cpp:480
 msgid "&View log"
 msgstr "&Toon log"
 
@@ -1434,7 +1439,7 @@ msgstr ", beschrijving '%1%'"
 msgid ", file name '%1%'"
 msgstr ", bestandsnaam '%1%'"
 
-#: src/mmg/jobs.cpp:683
+#: src/mmg/jobs.cpp:734
 #, c-format
 msgid ", finished on %s"
 msgstr ", voltooid op %s"
@@ -1443,22 +1448,22 @@ msgstr ", voltooid op %s"
 msgid ", position %1%"
 msgstr ", positie %1%"
 
-#: src/mmg/jobs.cpp:673
+#: src/mmg/jobs.cpp:724
 #, c-format
 msgid ", started on %s"
 msgstr ",gestart op %s"
 
-#: src/mmg/jobs.cpp:671
+#: src/mmg/jobs.cpp:722
 #, c-format
 msgid "--- BEGIN job %d (%s, added on %s)"
 msgstr "--- BEGIN taak %d (%s, toegevoegd op %s)"
 
-#: src/mmg/jobs.cpp:681
+#: src/mmg/jobs.cpp:732
 #, c-format
 msgid "--- END job %d"
 msgstr "--- EINDE taak %d"
 
-#: src/mmg/jobs.cpp:676
+#: src/mmg/jobs.cpp:727
 msgid "--- No job output found.\n"
 msgstr "--- Geen uitvoertaak gevonden.\n"
 
@@ -1618,23 +1623,23 @@ msgstr "AVC/h.264 basis stroom"
 msgid "AVI (Audio/Video Interleaved)"
 msgstr "AVI (Audio/Video Interleaved)"
 
-#: src/mmg/mux_dialog.cpp:94
+#: src/mmg/mux_dialog.cpp:104
 msgid "Abort"
 msgstr "Afbreken"
 
-#: src/mmg/jobs.cpp:83
+#: src/mmg/jobs.cpp:96
 msgid "Abort after current job"
 msgstr "Breek af na huidige taak"
 
-#: src/mmg/jobs.cpp:84
+#: src/mmg/jobs.cpp:97
 msgid "Abort processing after the current job"
 msgstr "Breek uitvoering af na huidige taak"
 
-#: src/mmg/jobs.cpp:90
+#: src/mmg/jobs.cpp:103
 msgid "Abort the muxing process right now"
 msgstr "Breek het samenvoeg proces nu af"
 
-#: src/mmg/jobs.cpp:123
+#: src/mmg/jobs.cpp:139
 #, c-format
 msgid "Aborted processing on %s"
 msgstr "Proces afbreken over %s"
@@ -1679,7 +1684,7 @@ msgstr "Voeg naam toe"
 msgid "Add subchapter"
 msgstr "Voeg sub hoofdstuk toe"
 
-#: src/mmg/jobs.cpp:381
+#: src/mmg/jobs.cpp:432
 msgid "Added on"
 msgstr "Toegevoegd op"
 
@@ -2193,9 +2198,9 @@ msgstr "Kies een toe te voegen invoer bestand"
 msgid "Choose an input file to append"
 msgstr "Kies een invoer bestand om toe te voegen"
 
-#: src/mmg/jobs.cpp:350 src/mmg/mmg_dialog.cpp:314 src/mmg/mmg_dialog.cpp:410
+#: src/mmg/jobs.cpp:401 src/mmg/mmg_dialog.cpp:314 src/mmg/mmg_dialog.cpp:410
 #: src/mmg/mmg_dialog.cpp:735 src/mmg/mmg_dialog.cpp:756
-#: src/mmg/mux_dialog.cpp:231 src/mmg/tabs/chapters.cpp:633
+#: src/mmg/mux_dialog.cpp:262 src/mmg/tabs/chapters.cpp:633
 #: src/mmg/tabs/chapters.cpp:675
 msgid "Choose an output file"
 msgstr "Kies een uitvoer bestand"
@@ -2382,7 +2387,7 @@ msgstr "HoofdPlaatje beeld %1% heeft een ongeldige grootte %2%.\n"
 msgid "CorePicture frame %1% not supported.\n"
 msgstr "HoofdPlaatje beeld %1% niet ondersteund.\n"
 
-#: src/mmg/jobs.cpp:155 src/mmg/mux_dialog.cpp:119 src/mmg/tabs/input.cpp:349
+#: src/mmg/jobs.cpp:178 src/mmg/mux_dialog.cpp:129 src/mmg/tabs/input.cpp:349
 #, c-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
 msgstr "Kon geen tijdelijk bestand creëren voor mkvmerge's commando regel optie genaamd '%s' (fout code %d, %s)."
@@ -2579,7 +2584,7 @@ msgstr "Geleidde richting (sub ingangen worden overgeslagen)"
 msgid "Cues:"
 msgstr "Geleidde richting:"
 
-#: src/mmg/jobs.cpp:369
+#: src/mmg/jobs.cpp:420
 msgid "Current and past jobs:"
 msgstr "Huidige en verleden taken:"
 
@@ -2587,12 +2592,12 @@ msgstr "Huidige en verleden taken:"
 msgid "Current command line"
 msgstr "Huidige commando regel"
 
-#: src/mmg/jobs.cpp:145
+#: src/mmg/jobs.cpp:168
 #, c-format
 msgid "Current job ID %d:"
 msgstr "Huidige taak ID %d:"
 
-#: src/mmg/jobs.cpp:70
+#: src/mmg/jobs.cpp:79
 msgid "Current job ID 1000:"
 msgstr "Huidige taak ID 1000:"
 
@@ -2600,7 +2605,7 @@ msgstr "Huidige taak ID 1000:"
 msgid "Current value:"
 msgstr "Huidige waardee:"
 
-#: src/mmg/jobs.cpp:424
+#: src/mmg/jobs.cpp:475
 msgid "D&elete"
 msgstr "V&erwijder"
 
@@ -2692,11 +2697,11 @@ msgstr "Vertraging: %|1$.3f|ms"
 msgid "Delete all occurences of a property"
 msgstr "Verwijder alle gebeurtenissen van een eigendom"
 
-#: src/mmg/jobs.cpp:425
+#: src/mmg/jobs.cpp:476
 msgid "Delete the selected job(s) from the job queue"
 msgstr "Verwijder geselecteerde taken uit taken wachtrij"
 
-#: src/mmg/jobs.cpp:379
+#: src/mmg/jobs.cpp:430
 msgid "Description"
 msgstr "Beschrijving"
 
@@ -2717,7 +2722,7 @@ msgstr "Dirac"
 msgid "Dirac elementary stream"
 msgstr "Dirac basis stroom"
 
-#: src/mmg/jobs.cpp:420
+#: src/mmg/jobs.cpp:471
 msgid "Disable the selected job(s) and sets their status to 'done'"
 msgstr "Zet geselecteerde taken uit en zet hun status op 'klaar'"
 
@@ -2940,7 +2945,7 @@ msgstr "Fout bij informatie opslaan"
 msgid "Error writing Matroska file"
 msgstr "Fout bij schrijven MATROSKA bestand"
 
-#: src/common/output.cpp:68 src/mmg/mux_dialog.cpp:175
+#: src/common/output.cpp:68 src/mmg/mux_dialog.cpp:188
 msgid "Error:"
 msgstr "Fout:"
 
@@ -2972,11 +2977,11 @@ msgstr ""
 msgid "Error: vorbis_packetizer: Could not extract the stream's parameters from the first packets.\n"
 msgstr "Fout: vorbis_packetizer: Kon de de stroom parameters niet achterhalen uit het eerste pakket.\n"
 
-#: src/mmg/mux_dialog.cpp:84
+#: src/mmg/mux_dialog.cpp:94
 msgid "Errors:"
 msgstr "Fouten:"
 
-#: src/mmg/mux_dialog.cpp:326
+#: src/mmg/mux_dialog.cpp:359
 msgid "Everything went fine."
 msgstr "Alles ging goed"
 
@@ -3102,7 +3107,7 @@ msgstr "Bestand UID: %1%"
 msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n"
 msgstr "Bestand bevat minder beelden dan verwacht of is beschadigd na beeld %1%.\n"
 
-#: src/mmg/mmg_dialog.cpp:765 src/mmg/mux_dialog.cpp:120
+#: src/mmg/mmg_dialog.cpp:765 src/mmg/mux_dialog.cpp:130
 #: src/mmg/tabs/input.cpp:350
 msgid "File creation failed"
 msgstr "Aanmaken bestand mislukt"
@@ -3165,16 +3170,16 @@ msgstr "Bestand/segment titel:"
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "Bestanden kunnen niet aanzichzel tiegeveogd worden. Het argument voor '--voeg toe-aan' is ongeldig.\n"
 
-#: src/mmg/jobs.cpp:298
+#: src/mmg/jobs.cpp:349
 #, c-format
 msgid "Finished job ID %d on %s: status '%s'"
 msgstr "Voltooid met taak ID %d op %s: status '%s'"
 
-#: src/mmg/jobs.cpp:385
+#: src/mmg/jobs.cpp:436
 msgid "Finished on"
 msgstr "Voltooid op"
 
-#: src/mmg/jobs.cpp:125
+#: src/mmg/jobs.cpp:141
 #, c-format
 msgid "Finished processing on %s"
 msgstr "Voltooide uitvoer op %s"
@@ -3373,7 +3378,7 @@ msgstr ""
 msgid "Here you can set the values for the language and the country that you want to apply to all the chapters below and including the currently selected entry."
 msgstr "Hier kan je de waarde instellen van de taal en land die je wilt toevoegen aan alle hoofdstukken hieronder incl. de huige geselecteerde."
 
-#: src/mmg/jobs.cpp:374
+#: src/mmg/jobs.cpp:425
 msgid "ID"
 msgstr "ID"
 
@@ -3761,11 +3766,11 @@ msgstr "Taak toegevoegd aan taak wachtrij"
 msgid "Job description"
 msgstr "Taak beschrijving"
 
-#: src/mmg/jobs.cpp:325
+#: src/mmg/jobs.cpp:376
 msgid "Job output"
 msgstr "Taak uitvoer"
 
-#: src/mmg/jobs.cpp:366
+#: src/mmg/jobs.cpp:417
 msgid "Job queue management"
 msgstr "Taak rij beheren"
 
@@ -3880,12 +3885,12 @@ msgstr "Laad hoofdstuk bestand (simpel/OGM format of XML format)"
 msgid "Load muxing settings from a file"
 msgstr "Laad samenvoeg instellingen vanuit een bestand"
 
-#: src/mmg/mux_dialog.cpp:231
+#: src/mmg/mux_dialog.cpp:262
 #, c-format
 msgid "Log files (*.txt)|*.txt|%s"
 msgstr "Log bestanden (*.txt)|*.txt|%s"
 
-#: src/mmg/jobs.cpp:77
+#: src/mmg/jobs.cpp:90
 msgid "Log output:"
 msgstr "Log uitvoer:"
 
@@ -4085,11 +4090,11 @@ msgstr "Meer dan één spoor wordt toegevoed aan het spoor %1% van bestand no. %
 msgid "More than one track with the track number %1% found.\n"
 msgstr "Meer dan één spoor met spoor nummer %1% gevonden.\n"
 
-#: src/mmg/jobs.cpp:412
+#: src/mmg/jobs.cpp:463
 msgid "Move the selected job(s) down"
 msgstr "Verplaats geselecteerde ta(a)k(en) omlaag"
 
-#: src/mmg/jobs.cpp:409
+#: src/mmg/jobs.cpp:460
 msgid "Move the selected job(s) up"
 msgstr "Verplaats geselecteerde ta(a)k(en) omhoog"
 
@@ -4097,7 +4102,7 @@ msgstr "Verplaats geselecteerde ta(a)k(en) omhoog"
 msgid "Muxing application: %1%"
 msgstr "Applicatie samenvoegen: %1%"
 
-#: src/mmg/mux_dialog.cpp:107
+#: src/mmg/mux_dialog.cpp:117
 msgid "Muxing in progress."
 msgstr "Samenvoegen in uitvoering."
 
@@ -4311,7 +4316,7 @@ msgstr "Aantal kanalen in het spoor."
 msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM audio/video bestanden"
 
-#: src/mmg/message_dialog.cpp:31 src/mmg/mux_dialog.cpp:90
+#: src/mmg/message_dialog.cpp:31 src/mmg/mux_dialog.cpp:100
 msgid "Ok"
 msgstr "Ok"
 
@@ -4371,7 +4376,7 @@ msgstr "Open een Matroska bestand"
 msgid "Open an existing Matroska file"
 msgstr "Open bestaand Matroska bestand"
 
-#: src/mmg/mux_dialog.cpp:294
+#: src/mmg/mux_dialog.cpp:327
 msgid "Open folder"
 msgstr "Open map"
 
@@ -4399,7 +4404,7 @@ msgstr "Originele waarde:"
 msgid "Other options"
 msgstr "Overige opties"
 
-#: src/mmg/mux_dialog.cpp:77
+#: src/mmg/mux_dialog.cpp:87
 msgid "Output"
 msgstr "Uitvoer"
 
@@ -4411,7 +4416,7 @@ msgstr "Bestandsnaam uitvoer"
 msgid "Output messages in this charset"
 msgstr "Uitvoer bericht van deze karakterset"
 
-#: src/mmg/jobs.cpp:329
+#: src/mmg/jobs.cpp:380
 msgid "Output of the selected jobs:"
 msgstr "Uitvoer van geselecteerde taken:"
 
@@ -4531,16 +4536,16 @@ msgstr "Vorige segment's unieke ID"
 msgid "Process priority:"
 msgstr "Proces prioriteit:"
 
-#: src/mmg/jobs.cpp:65
+#: src/mmg/jobs.cpp:66
 msgid "Processing 1000/1000"
 msgstr "Uitvoerende 1000/1000"
 
-#: src/mmg/jobs.cpp:144
+#: src/mmg/jobs.cpp:167
 #, c-format
 msgid "Processing job %d/%d"
 msgstr "Uitvoerende taken %d/%d"
 
-#: src/mmg/jobs.cpp:220 src/mmg/mux_dialog.cpp:177
+#: src/mmg/jobs.cpp:243 src/mmg/mux_dialog.cpp:190
 msgid "Progress"
 msgstr "Voortgang"
 
@@ -4701,7 +4706,7 @@ msgstr "Verlaat mkvinfo"
 msgid "RSA"
 msgstr "RSA"
 
-#: src/mmg/jobs.cpp:417
+#: src/mmg/jobs.cpp:468
 msgid "Re-enable the selected job(s)"
 msgstr "Geselecteerde taken opnieuw aanzetten"
 
@@ -4757,6 +4762,10 @@ msgstr "Virtuele referentie: %1%"
 msgid "Reload the current file without saving"
 msgstr "Herlaad het huidige bestand zonder bewaren"
 
+#: src/mmg/jobs.cpp:71 src/mmg/jobs.cpp:73 src/mmg/mux_dialog.cpp:75
+msgid "Remaining time:"
+msgstr ""
+
 #: src/common/xml/element_parser.cpp:565
 msgid "Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
 msgstr "Onthou dat spciale karakters zoals &, <, > en \" moeten worden opgegeven in op de gebruikelije HTML manier: &amp; voor '&', &lt; voor '<', &gt; voor '>' en &quot; voor '\"'."
@@ -4789,7 +4798,7 @@ msgstr "Start de kopveld bewerker"
 msgid "S&how the command line"
 msgstr "T&oon de commando regel"
 
-#: src/mmg/jobs.cpp:447
+#: src/mmg/jobs.cpp:498
 msgid "S&tart selected"
 msgstr "S&tart selectie"
 
@@ -4829,7 +4838,7 @@ msgstr "Bewaar &als"
 msgid "Save information as"
 msgstr "Bewaar informatie als"
 
-#: src/mmg/mux_dialog.cpp:97
+#: src/mmg/mux_dialog.cpp:107
 msgid "Save log"
 msgstr "Bewaar log"
 
@@ -5266,11 +5275,11 @@ msgstr "Sta&rt samenvoegen"
 msgid "Sta&rt muxing (run mkvmerge)\tCtrl-R"
 msgstr "Sta&rt samenvoegen (start mkvmerge)\tCtrl-R"
 
-#: src/mmg/jobs.cpp:444
+#: src/mmg/jobs.cpp:495
 msgid "Start the jobs whose status is 'pending'"
 msgstr "Start de taken met de status 'wachtend'"
 
-#: src/mmg/jobs.cpp:448
+#: src/mmg/jobs.cpp:499
 msgid "Start the selected job(s) regardless of their status"
 msgstr "Start de geselecteerde ta(a)k(en) ongeacht hun status"
 
@@ -5282,20 +5291,20 @@ msgstr "Start met leg instellingen"
 msgid "Start:"
 msgstr "Start:"
 
-#: src/mmg/jobs.cpp:383
+#: src/mmg/jobs.cpp:434
 msgid "Started on"
 msgstr "Gestart op"
 
-#: src/mmg/jobs.cpp:199
+#: src/mmg/jobs.cpp:222
 #, c-format
 msgid "Starting job ID %d (%s) on %s"
 msgstr "Start taak ID %d (%s) op %s"
 
-#: src/mmg/jobs.cpp:377
+#: src/mmg/jobs.cpp:428
 msgid "Status"
 msgstr "Status"
 
-#: src/mmg/jobs.cpp:61 src/mmg/mux_dialog.cpp:71
+#: src/mmg/jobs.cpp:62 src/mmg/mux_dialog.cpp:73
 msgid "Status and progress"
 msgstr "Status en voortgang"
 
@@ -5403,7 +5412,7 @@ msgstr "Vertelt mkvmerge niet te creëren en schrijven de volg data welke vergel
 msgid "Text files (*.txt);;All files (*.*)"
 msgstr "Tekst bestanden (*.txt);;All files (*.*)"
 
-#: src/mmg/jobs.cpp:350
+#: src/mmg/jobs.cpp:401
 #, c-format
 msgid "Text files (*.txt)|*.txt|%s"
 msgstr "Tekst bestanden (*.txt)|*.txt|%s"
@@ -6248,7 +6257,7 @@ msgstr "Er is geen bestand met ID '%1%'. Het argument voor '--append-to' is onge
 msgid "There is no translation available for '%1%'.\n"
 msgstr "Geen vertaling beschikbaar voor '%1%'.\n"
 
-#: src/mmg/mux_dialog.cpp:328
+#: src/mmg/mux_dialog.cpp:361
 msgid "There were ERRORs."
 msgstr "Er waren FOUTEN."
 
@@ -6256,11 +6265,11 @@ msgstr "Er waren FOUTEN."
 msgid "There were errors in the header values preventing the headers from being saved. The first error has been selected."
 msgstr "Er waren fouten in de kop waardes waardoor deze niet bewaard kondenworden. De eerste fout is geselecteerd."
 
-#: src/mmg/mux_dialog.cpp:323
+#: src/mmg/mux_dialog.cpp:356
 msgid "There were warnings"
 msgstr "Er waren waarschuwingen"
 
-#: src/mmg/mux_dialog.cpp:321
+#: src/mmg/mux_dialog.cpp:354
 msgid "There were warnings, or the process was terminated."
 msgstr "Er waren waarchuwingen, of het proces is geëindigdg."
 
@@ -7117,7 +7126,7 @@ msgstr "Video spoor"
 msgid "Video track %u"
 msgstr "Video spoor %u"
 
-#: src/mmg/jobs.cpp:430
+#: src/mmg/jobs.cpp:481
 msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
 msgstr "Bekijk de uitvoer welke mkvmerge maakt gedurende het samenvoeg proces voor de geselecteerde ta(a)k(en)"
 
@@ -7157,7 +7166,7 @@ msgstr "Waarschuw over mogelijk onjuist gebruik van MMG"
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
 msgstr "Waarschuwing in regel %1%: De start tijdcode is kleiner dan de vorige ingave. Alle ingangen van dit bestand worden gesorteerd op hun start tijd.\n"
 
-#: src/mmg/mux_dialog.cpp:173
+#: src/mmg/mux_dialog.cpp:186
 msgid "Warning:"
 msgstr "Waarschuwing:"
 
@@ -7173,7 +7182,7 @@ msgstr "Waarschuwing: Er zijn meer dan één sporen met UID %1%."
 msgid "Warning: There's more than one track with the number %1%."
 msgstr "Waarschuwing: Er is meer dan één spoor met het nummer %1%."
 
-#: src/mmg/mux_dialog.cpp:81
+#: src/mmg/mux_dialog.cpp:91
 msgid "Warnings:"
 msgstr "Waarschuwingen:"
 
@@ -7330,7 +7339,7 @@ msgstr "aac_lezer: Kan%1% bytes niet lezen."
 msgid "aac_reader: No valid AAC packet found in the first %1% bytes.\n"
 msgstr "aac_reader: No valid AAC packet found in the first %1% bytes.\n"
 
-#: src/mmg/jobs.cpp:284 src/mmg/jobs.cpp:393 src/mmg/jobs.cpp:471
+#: src/mmg/jobs.cpp:335 src/mmg/jobs.cpp:444 src/mmg/jobs.cpp:522
 msgid "aborted"
 msgstr "afgebroken"
 
@@ -7414,11 +7423,11 @@ msgstr "cet_index: '%1%' niet gevonden\n"
 msgid "channels: %1%"
 msgstr "kanalen: %1%"
 
-#: src/mmg/jobs.cpp:287
+#: src/mmg/jobs.cpp:338
 msgid "completed OK"
 msgstr "voltooid OK"
 
-#: src/mmg/jobs.cpp:290
+#: src/mmg/jobs.cpp:341
 msgid "completed with warnings"
 msgstr "voltooid met waarschuwingen"
 
@@ -7475,11 +7484,11 @@ msgstr "scherm hoogte: %1%"
 msgid "display width: %1%"
 msgstr "scherm breedte: %1%"
 
-#: src/mmg/jobs.cpp:469 src/mmg/jobs.cpp:657
+#: src/mmg/jobs.cpp:520 src/mmg/jobs.cpp:708
 msgid "done"
 msgstr "gedaan"
 
-#: src/mmg/jobs.cpp:470
+#: src/mmg/jobs.cpp:521
 msgid "done/warnings"
 msgstr "gedaan/waarschuwingen"
 
@@ -7522,7 +7531,7 @@ msgstr "versleuteling"
 msgid "end-of-file"
 msgstr "einde van bestand"
 
-#: src/mmg/jobs.cpp:293 src/mmg/jobs.cpp:472
+#: src/mmg/jobs.cpp:344 src/mmg/jobs.cpp:523
 msgid "failed"
 msgstr "mislukt"
 
@@ -7613,6 +7622,11 @@ msgstr "hoogst"
 #: src/common/compression.cpp:115
 msgid "inflateInit() failed. Result: %1%\n"
 msgstr "inflateInit() gefaald. Resultaat: %1%\n"
+
+#: src/mmg/jobs.cpp:72 src/mmg/jobs.cpp:74 src/mmg/jobs.cpp:157
+#: src/mmg/mux_dialog.cpp:76
+msgid "is being estimated"
+msgstr ""
 
 #: src/input/r_ivf.cpp:62
 msgid "ivf_reader: Could not open the file."
@@ -7882,7 +7896,7 @@ msgstr "Mkvmerge"
 msgid "mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]\n"
 msgstr "mkvmerge -o out [globale opties] [opties1] <bestand1> [@optie bestand ...]\n"
 
-#: src/mmg/mux_dialog.cpp:316
+#: src/mmg/mux_dialog.cpp:349
 #, c-format
 msgid "mkvmerge FAILED with a return code of %d. %s"
 msgstr "mkvmerge GEFAALD met terugkoppel code %d. %s"
@@ -7929,12 +7943,12 @@ msgstr ""
 msgid "mkvmerge executable"
 msgstr "Mkvmerge programma"
 
-#: src/mmg/mux_dialog.cpp:318
+#: src/mmg/mux_dialog.cpp:351
 #, c-format
 msgid "mkvmerge finished with a return code of %d. %s"
 msgstr "mkvmerge voltooide met terugkoppel code van %d. %s"
 
-#: src/mmg/jobs.cpp:131 src/mmg/mux_dialog.cpp:273
+#: src/mmg/jobs.cpp:147 src/mmg/mux_dialog.cpp:304
 msgid "mkvmerge has finished"
 msgstr "mkvmerge is voltooid"
 
@@ -7942,7 +7956,7 @@ msgstr "mkvmerge is voltooid"
 msgid "mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"
 msgstr "mkvmerge is niet gecompileerd met FLAC ondersteuning maar het behandelen van deze stoorm is gevraagd.\n"
 
-#: src/mmg/jobs.cpp:49 src/mmg/mux_dialog.cpp:43
+#: src/mmg/jobs.cpp:49 src/mmg/mux_dialog.cpp:44
 msgid "mkvmerge is running"
 msgstr "mkvmerge is uitgevoerd"
 
@@ -7950,7 +7964,7 @@ msgstr "mkvmerge is uitgevoerd"
 msgid "mkvmerge options"
 msgstr "Mkvmerge opties"
 
-#: src/mmg/mux_dialog.cpp:78
+#: src/mmg/mux_dialog.cpp:88
 msgid "mkvmerge output:"
 msgstr "mkvmerge uitvoer:"
 
@@ -8088,7 +8102,7 @@ msgstr "alleen voor I beelden"
 msgid "output sampling freq: %1%"
 msgstr "uitvoer voorbeeld frequentie: %1%"
 
-#: src/mmg/jobs.cpp:468 src/mmg/jobs.cpp:642
+#: src/mmg/jobs.cpp:519 src/mmg/jobs.cpp:693
 msgid "pending"
 msgstr "wachtend"
 

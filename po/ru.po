@@ -791,6 +791,13 @@ msgstr ""
 "Исходники и последние файлы всегда доступны на\n"
 "http://www.bunkus.org/videotools/mkvtoolnix/"
 
+#: src/mmg/jobs.cpp:291
+#: src/mmg/jobs.cpp:299
+#: src/mmg/mux_dialog.cpp:248
+#, c-format
+msgid "%d minute(s) %d second(s)"
+msgstr ""
+
 #: src/mmg/mmg_dialog.cpp:710
 #, c-format
 msgid ""
@@ -843,7 +850,7 @@ msgstr ""
 "Исходники и последние файлы всегда доступны на\n"
 "http://www.bunkus.org/videotools/mkvtoolnix/"
 
-#: src/mmg/jobs.cpp:89
+#: src/mmg/jobs.cpp:102
 msgid "&Abort"
 msgstr "&Прервать"
 
@@ -888,11 +895,11 @@ msgstr "&Копировать командную строку в буфер об
 msgid "&Copy to clipboard"
 msgstr "&Скопировать в буфер обмена"
 
-#: src/mmg/jobs.cpp:419
+#: src/mmg/jobs.cpp:470
 msgid "&Disable"
 msgstr "&Выключить"
 
-#: src/mmg/jobs.cpp:411
+#: src/mmg/jobs.cpp:462
 msgid "&Down"
 msgstr "&Вниз"
 
@@ -957,9 +964,9 @@ msgstr "&Новый\tCtrl-N"
 msgid "&New chapters"
 msgstr "&Новые главы"
 
-#: src/mmg/jobs.cpp:87
-#: src/mmg/jobs.cpp:334
-#: src/mmg/jobs.cpp:438
+#: src/mmg/jobs.cpp:100
+#: src/mmg/jobs.cpp:385
+#: src/mmg/jobs.cpp:489
 msgid "&Ok"
 msgstr "&OK"
 
@@ -977,7 +984,7 @@ msgstr "&Опции"
 msgid "&Quit\tCtrl-Q"
 msgstr "&Выход\tCtrl-Q"
 
-#: src/mmg/jobs.cpp:416
+#: src/mmg/jobs.cpp:467
 msgid "&Re-enable"
 msgstr "&Повторно включить"
 
@@ -989,7 +996,7 @@ msgstr "&Перезагрузить\tCtrl-R"
 msgid "&Reset"
 msgstr "&Сбросить"
 
-#: src/mmg/jobs.cpp:339
+#: src/mmg/jobs.cpp:390
 #: src/mmg/mmg_dialog.cpp:268
 msgid "&Save"
 msgstr "&Сохранить"
@@ -1006,11 +1013,11 @@ msgstr "&Сохранить информацию как текст\tCtrl-S"
 msgid "&Save settings\tCtrl-S"
 msgstr "&Сохранить настройки\tCtrl-S"
 
-#: src/mmg/jobs.cpp:443
+#: src/mmg/jobs.cpp:494
 msgid "&Start"
 msgstr "&Запустить"
 
-#: src/mmg/jobs.cpp:408
+#: src/mmg/jobs.cpp:459
 msgid "&Up"
 msgstr "&Вверх"
 
@@ -1022,7 +1029,7 @@ msgstr "&Проверить правильность\tCtrl-T"
 msgid "&Verify"
 msgstr "&Проверить"
 
-#: src/mmg/jobs.cpp:429
+#: src/mmg/jobs.cpp:480
 msgid "&View log"
 msgstr "&Просмотр журнала"
 
@@ -1463,7 +1470,7 @@ msgstr ", описание '%1%'"
 msgid ", file name '%1%'"
 msgstr ", имя файла '%1%'"
 
-#: src/mmg/jobs.cpp:683
+#: src/mmg/jobs.cpp:734
 #, c-format
 msgid ", finished on %s"
 msgstr ", завершено %s"
@@ -1472,22 +1479,22 @@ msgstr ", завершено %s"
 msgid ", position %1%"
 msgstr ", позиция %1%"
 
-#: src/mmg/jobs.cpp:673
+#: src/mmg/jobs.cpp:724
 #, c-format
 msgid ", started on %s"
 msgstr ", начался %s"
 
-#: src/mmg/jobs.cpp:671
+#: src/mmg/jobs.cpp:722
 #, c-format
 msgid "--- BEGIN job %d (%s, added on %s)"
 msgstr "--- Начать работу %d (%s, добавлено %s)"
 
-#: src/mmg/jobs.cpp:681
+#: src/mmg/jobs.cpp:732
 #, c-format
 msgid "--- END job %d"
 msgstr "--- Закончить работу %d"
 
-#: src/mmg/jobs.cpp:676
+#: src/mmg/jobs.cpp:727
 msgid "--- No job output found.\n"
 msgstr "--- Нет работы нашли выход.\n"
 
@@ -1660,23 +1667,23 @@ msgstr "AVC/H.264 элементарные потоки"
 msgid "AVI (Audio/Video Interleaved)"
 msgstr "AVI (Audio/Video Interleaved)"
 
-#: src/mmg/mux_dialog.cpp:94
+#: src/mmg/mux_dialog.cpp:104
 msgid "Abort"
 msgstr "Прервать"
 
-#: src/mmg/jobs.cpp:83
+#: src/mmg/jobs.cpp:96
 msgid "Abort after current job"
 msgstr "Прервать после текущего задания"
 
-#: src/mmg/jobs.cpp:84
+#: src/mmg/jobs.cpp:97
 msgid "Abort processing after the current job"
 msgstr "Прервать после обработки текущего задания"
 
-#: src/mmg/jobs.cpp:90
+#: src/mmg/jobs.cpp:103
 msgid "Abort the muxing process right now"
 msgstr "Прервать процесс мультиплексирования прямо сейчас"
 
-#: src/mmg/jobs.cpp:123
+#: src/mmg/jobs.cpp:139
 #, c-format
 msgid "Aborted processing on %s"
 msgstr "Прервать обработку %s"
@@ -1722,7 +1729,7 @@ msgstr "Добавить имя"
 msgid "Add subchapter"
 msgstr "Добавить подраздел"
 
-#: src/mmg/jobs.cpp:381
+#: src/mmg/jobs.cpp:432
 msgid "Added on"
 msgstr "Добавлено"
 
@@ -2261,12 +2268,12 @@ msgstr "Выберите входной файл чтобы добавить"
 msgid "Choose an input file to append"
 msgstr "Выберите входной файл чтобы приложить"
 
-#: src/mmg/jobs.cpp:350
+#: src/mmg/jobs.cpp:401
 #: src/mmg/mmg_dialog.cpp:314
 #: src/mmg/mmg_dialog.cpp:410
 #: src/mmg/mmg_dialog.cpp:735
 #: src/mmg/mmg_dialog.cpp:756
-#: src/mmg/mux_dialog.cpp:231
+#: src/mmg/mux_dialog.cpp:262
 #: src/mmg/tabs/chapters.cpp:633
 #: src/mmg/tabs/chapters.cpp:675
 msgid "Choose an output file"
@@ -2459,8 +2466,8 @@ msgstr "CorePicture кадр %1% недействительный размер �
 msgid "CorePicture frame %1% not supported.\n"
 msgstr "CorePicture кадр %1% не поддерживается.\n"
 
-#: src/mmg/jobs.cpp:155
-#: src/mmg/mux_dialog.cpp:119
+#: src/mmg/jobs.cpp:178
+#: src/mmg/mux_dialog.cpp:129
 #: src/mmg/tabs/input.cpp:349
 #, c-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
@@ -2664,7 +2671,7 @@ msgstr "Cues (подстатьи будут пропущены)"
 msgid "Cues:"
 msgstr "Cues:"
 
-#: src/mmg/jobs.cpp:369
+#: src/mmg/jobs.cpp:420
 msgid "Current and past jobs:"
 msgstr "Текущие и прошлые задания:"
 
@@ -2672,12 +2679,12 @@ msgstr "Текущие и прошлые задания:"
 msgid "Current command line"
 msgstr "Текущая командная строка"
 
-#: src/mmg/jobs.cpp:145
+#: src/mmg/jobs.cpp:168
 #, c-format
 msgid "Current job ID %d:"
 msgstr "ID текущий работы %d:"
 
-#: src/mmg/jobs.cpp:70
+#: src/mmg/jobs.cpp:79
 msgid "Current job ID 1000:"
 msgstr "ID текущий работы 1000:"
 
@@ -2685,7 +2692,7 @@ msgstr "ID текущий работы 1000:"
 msgid "Current value:"
 msgstr "Текущее значение:"
 
-#: src/mmg/jobs.cpp:424
+#: src/mmg/jobs.cpp:475
 msgid "D&elete"
 msgstr "&Удалить"
 
@@ -2779,11 +2786,11 @@ msgstr "Задержка: %|1$.3f|ms"
 msgid "Delete all occurences of a property"
 msgstr "Удалите все вхождения свойства"
 
-#: src/mmg/jobs.cpp:425
+#: src/mmg/jobs.cpp:476
 msgid "Delete the selected job(s) from the job queue"
 msgstr "Удалите выбранное задание(я) из очереди задания"
 
-#: src/mmg/jobs.cpp:379
+#: src/mmg/jobs.cpp:430
 msgid "Description"
 msgstr "Описание"
 
@@ -2805,7 +2812,7 @@ msgstr "Dirac"
 msgid "Dirac elementary stream"
 msgstr "Dirac элементарный поток"
 
-#: src/mmg/jobs.cpp:420
+#: src/mmg/jobs.cpp:471
 msgid "Disable the selected job(s) and sets their status to 'done'"
 msgstr "Отключить выбранный работу(ы) и устанавливает статус на 'Готово'"
 
@@ -3036,7 +3043,7 @@ msgid "Error writing Matroska file"
 msgstr "Ошибка записи в файл Matroska"
 
 #: src/common/output.cpp:68
-#: src/mmg/mux_dialog.cpp:175
+#: src/mmg/mux_dialog.cpp:188
 msgid "Error:"
 msgstr "Ошибка:"
 
@@ -3069,11 +3076,11 @@ msgstr ""
 msgid "Error: vorbis_packetizer: Could not extract the stream's parameters from the first packets.\n"
 msgstr "Ошибка: vorbis_packetizer: Невозможно получить параметры потока из первого пакета.\n"
 
-#: src/mmg/mux_dialog.cpp:84
+#: src/mmg/mux_dialog.cpp:94
 msgid "Errors:"
 msgstr "Ошибки:"
 
-#: src/mmg/mux_dialog.cpp:326
+#: src/mmg/mux_dialog.cpp:359
 msgid "Everything went fine."
 msgstr "Все прошло отлично."
 
@@ -3204,7 +3211,7 @@ msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n
 msgstr "Файл содержит меньшее количество кадров, чем ожидалось, или поврежден кадр %1%.\n"
 
 #: src/mmg/mmg_dialog.cpp:765
-#: src/mmg/mux_dialog.cpp:120
+#: src/mmg/mux_dialog.cpp:130
 #: src/mmg/tabs/input.cpp:350
 msgid "File creation failed"
 msgstr "Ошибка создания файла"
@@ -3270,16 +3277,16 @@ msgstr "Файл/сегмент название:"
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "Файлы не могут быть приложены к себе. Аргументом в пользу '--append-to' является недействительным.\n"
 
-#: src/mmg/jobs.cpp:298
+#: src/mmg/jobs.cpp:349
 #, c-format
 msgid "Finished job ID %d on %s: status '%s'"
 msgstr "Законченное задание ID %d на %s: статус '%s'"
 
-#: src/mmg/jobs.cpp:385
+#: src/mmg/jobs.cpp:436
 msgid "Finished on"
 msgstr "Законченный на"
 
-#: src/mmg/jobs.cpp:125
+#: src/mmg/jobs.cpp:141
 #, c-format
 msgid "Finished processing on %s"
 msgstr "Готовые обработки на %s"
@@ -3487,7 +3494,7 @@ msgstr ""
 msgid "Here you can set the values for the language and the country that you want to apply to all the chapters below and including the currently selected entry."
 msgstr "Здесь вы можете задать значения для языка и страны, которые вы хотите применить ко всем главам ниже, и в том числе выбранный элемент."
 
-#: src/mmg/jobs.cpp:374
+#: src/mmg/jobs.cpp:425
 msgid "ID"
 msgstr "ID"
 
@@ -3883,11 +3890,11 @@ msgstr "Задание, добавленное к очереди задания"
 msgid "Job description"
 msgstr "Описание задания"
 
-#: src/mmg/jobs.cpp:325
+#: src/mmg/jobs.cpp:376
 msgid "Job output"
 msgstr "Задание выведено"
 
-#: src/mmg/jobs.cpp:366
+#: src/mmg/jobs.cpp:417
 msgid "Job queue management"
 msgstr "Управление очереди задания"
 
@@ -4007,12 +4014,12 @@ msgstr "Загрузите файл главы (simple/OGM формат или �
 msgid "Load muxing settings from a file"
 msgstr "Загрузить мультиплексированые настройки из файла"
 
-#: src/mmg/mux_dialog.cpp:231
+#: src/mmg/mux_dialog.cpp:262
 #, c-format
 msgid "Log files (*.txt)|*.txt|%s"
 msgstr "Log файлы (*.txt)|*.txt|%s"
 
-#: src/mmg/jobs.cpp:77
+#: src/mmg/jobs.cpp:90
 msgid "Log output:"
 msgstr "Log вывод:"
 
@@ -4216,11 +4223,11 @@ msgstr "Больше чем одна дорожка должна быть при
 msgid "More than one track with the track number %1% found.\n"
 msgstr "Больше чем одна дорожка с номером дорожки %1% найдена.\n"
 
-#: src/mmg/jobs.cpp:412
+#: src/mmg/jobs.cpp:463
 msgid "Move the selected job(s) down"
 msgstr "Переместите выбранное задание(я) вниз"
 
-#: src/mmg/jobs.cpp:409
+#: src/mmg/jobs.cpp:460
 msgid "Move the selected job(s) up"
 msgstr "Переместите выбранное задание(я) вверх"
 
@@ -4228,7 +4235,7 @@ msgstr "Переместите выбранное задание(я) вверх"
 msgid "Muxing application: %1%"
 msgstr "Мультиплексирование приложение: %1%"
 
-#: src/mmg/mux_dialog.cpp:107
+#: src/mmg/mux_dialog.cpp:117
 msgid "Muxing in progress."
 msgstr "Мультиплексирование в процессе."
 
@@ -4450,7 +4457,7 @@ msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM Audio/Video файлы"
 
 #: src/mmg/message_dialog.cpp:31
-#: src/mmg/mux_dialog.cpp:90
+#: src/mmg/mux_dialog.cpp:100
 msgid "Ok"
 msgstr "OK"
 
@@ -4511,7 +4518,7 @@ msgstr "Открыть Matroska файл"
 msgid "Open an existing Matroska file"
 msgstr "Открыть существующий файл Matroska"
 
-#: src/mmg/mux_dialog.cpp:294
+#: src/mmg/mux_dialog.cpp:327
 msgid "Open folder"
 msgstr "Открыть папку"
 
@@ -4540,7 +4547,7 @@ msgstr "Оригинальное значение:"
 msgid "Other options"
 msgstr "Другие опции"
 
-#: src/mmg/mux_dialog.cpp:77
+#: src/mmg/mux_dialog.cpp:87
 msgid "Output"
 msgstr "Выходной"
 
@@ -4552,7 +4559,7 @@ msgstr "Выходной файл"
 msgid "Output messages in this charset"
 msgstr "Выходные сообщения в этой кодировке"
 
-#: src/mmg/jobs.cpp:329
+#: src/mmg/jobs.cpp:380
 msgid "Output of the selected jobs:"
 msgstr "Вывод выбранных заданий:"
 
@@ -4675,17 +4682,17 @@ msgstr "Уникальный ID предыдущего сегмента"
 msgid "Process priority:"
 msgstr "Приоритет процесса:"
 
-#: src/mmg/jobs.cpp:65
+#: src/mmg/jobs.cpp:66
 msgid "Processing 1000/1000"
 msgstr "Обработка 1000/1000"
 
-#: src/mmg/jobs.cpp:144
+#: src/mmg/jobs.cpp:167
 #, c-format
 msgid "Processing job %d/%d"
 msgstr "Обработка задания %d/%d"
 
-#: src/mmg/jobs.cpp:220
-#: src/mmg/mux_dialog.cpp:177
+#: src/mmg/jobs.cpp:243
+#: src/mmg/mux_dialog.cpp:190
 msgid "Progress"
 msgstr "Прогресс"
 
@@ -4851,7 +4858,7 @@ msgstr "Закрыть mkvinfo"
 msgid "RSA"
 msgstr "RSA"
 
-#: src/mmg/jobs.cpp:417
+#: src/mmg/jobs.cpp:468
 msgid "Re-enable the selected job(s)"
 msgstr "Вновь дать возможность выбранному заданию(ям)"
 
@@ -4908,6 +4915,12 @@ msgstr "Отношение виртуальное: %1%"
 msgid "Reload the current file without saving"
 msgstr "Перезагрузить текущий файл без сохранения"
 
+#: src/mmg/jobs.cpp:71
+#: src/mmg/jobs.cpp:73
+#: src/mmg/mux_dialog.cpp:75
+msgid "Remaining time:"
+msgstr ""
+
 #: src/common/xml/element_parser.cpp:565
 msgid "Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
 msgstr "Помните, что специальные символы, такие как &, <, > и \" должны быть замаскированы в обычный HTML: &amp; для '&', &lt; для '<', &gt; для '>' и &quot; для '\"'."
@@ -4940,7 +4953,7 @@ msgstr "Выполнить в поле заголовка редактора"
 msgid "S&how the command line"
 msgstr "&Показать в командной строке"
 
-#: src/mmg/jobs.cpp:447
+#: src/mmg/jobs.cpp:498
 msgid "S&tart selected"
 msgstr "&Начало выбранного"
 
@@ -4983,7 +4996,7 @@ msgstr "&Сохранить как"
 msgid "Save information as"
 msgstr "Сохранить информацию как"
 
-#: src/mmg/mux_dialog.cpp:97
+#: src/mmg/mux_dialog.cpp:107
 msgid "Save log"
 msgstr "Сохранить журнал"
 
@@ -5439,11 +5452,11 @@ msgstr "&Начать мультиплексирование"
 msgid "Sta&rt muxing (run mkvmerge)\tCtrl-R"
 msgstr "&Начать мультиплексирование (запустить mkvmerge)\tCtrl-R"
 
-#: src/mmg/jobs.cpp:444
+#: src/mmg/jobs.cpp:495
 msgid "Start the jobs whose status is 'pending'"
 msgstr "Начало работы с состоянием 'отложены'"
 
-#: src/mmg/jobs.cpp:448
+#: src/mmg/jobs.cpp:499
 msgid "Start the selected job(s) regardless of their status"
 msgstr "Начало выбранного задания(ий) независимо от их статуса"
 
@@ -5455,21 +5468,21 @@ msgstr "Начать с пустой настройки"
 msgid "Start:"
 msgstr "Начало:"
 
-#: src/mmg/jobs.cpp:383
+#: src/mmg/jobs.cpp:434
 msgid "Started on"
 msgstr "Процесс начался"
 
-#: src/mmg/jobs.cpp:199
+#: src/mmg/jobs.cpp:222
 #, c-format
 msgid "Starting job ID %d (%s) on %s"
 msgstr "Начало работы ID %d (%s) в %s"
 
-#: src/mmg/jobs.cpp:377
+#: src/mmg/jobs.cpp:428
 msgid "Status"
 msgstr "Статус"
 
-#: src/mmg/jobs.cpp:61
-#: src/mmg/mux_dialog.cpp:71
+#: src/mmg/jobs.cpp:62
+#: src/mmg/mux_dialog.cpp:73
 msgid "Status and progress"
 msgstr "Статус и прогресс"
 
@@ -5578,7 +5591,7 @@ msgstr "Сообщает mkvmerge, чтобы не создавать и зап�
 msgid "Text files (*.txt);;All files (*.*)"
 msgstr "Текстовые файлы (*.txt);;Все файлы (*.*)"
 
-#: src/mmg/jobs.cpp:350
+#: src/mmg/jobs.cpp:401
 #, c-format
 msgid "Text files (*.txt)|*.txt|%s"
 msgstr "Текстовые файлы (*.txt)|*.txt|%s"
@@ -6455,7 +6468,7 @@ msgstr "Нет никакого файла с ID '%1%'. Параметр для 
 msgid "There is no translation available for '%1%'.\n"
 msgstr "Нет никакой трансляции, доступной для '%1%'.\n"
 
-#: src/mmg/mux_dialog.cpp:328
+#: src/mmg/mux_dialog.cpp:361
 msgid "There were ERRORs."
 msgstr "Были ошибки."
 
@@ -6464,11 +6477,11 @@ msgstr "Были ошибки."
 msgid "There were errors in the header values preventing the headers from being saved. The first error has been selected."
 msgstr "Были ошибки в значениях заголовка, препятствующих тому заголовкам быть сохраненными. Первая ошибка была выбрана."
 
-#: src/mmg/mux_dialog.cpp:323
+#: src/mmg/mux_dialog.cpp:356
 msgid "There were warnings"
 msgstr "Были предупреждения"
 
-#: src/mmg/mux_dialog.cpp:321
+#: src/mmg/mux_dialog.cpp:354
 msgid "There were warnings, or the process was terminated."
 msgstr "Были предупреждения, или процесс был закончен."
 
@@ -7386,7 +7399,7 @@ msgstr "Видео дорожка"
 msgid "Video track %u"
 msgstr "Видео дорожка %u"
 
-#: src/mmg/jobs.cpp:430
+#: src/mmg/jobs.cpp:481
 msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
 msgstr "Рассмотрите вывод, который mkvmerge сгенерировал во время мультиплексирования обрабатывает для выбранного задания(й)"
 
@@ -7427,7 +7440,7 @@ msgstr "Предупреждения о возможном неправильн�
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
 msgstr "Предупреждение в строке %1%: начать тайм-кода меньше, чем в предыдущем посте. Все записи из этого файла будут отсортированы по времени их начала.\n"
 
-#: src/mmg/mux_dialog.cpp:173
+#: src/mmg/mux_dialog.cpp:186
 msgid "Warning:"
 msgstr "Предупреждение:"
 
@@ -7443,7 +7456,7 @@ msgstr "Предупреждение: Там больше, чем одна до�
 msgid "Warning: There's more than one track with the number %1%."
 msgstr "Предупреждение: Там больше, чем одна дорожка с номером %1%."
 
-#: src/mmg/mux_dialog.cpp:81
+#: src/mmg/mux_dialog.cpp:91
 msgid "Warnings:"
 msgstr "Предупреждения:"
 
@@ -7608,9 +7621,9 @@ msgstr "aac_reader: Не удалось прочитать %1% байт."
 msgid "aac_reader: No valid AAC packet found in the first %1% bytes.\n"
 msgstr "aac_reader: Не найден пакет AAC в первых %1% байтах.\n"
 
-#: src/mmg/jobs.cpp:284
-#: src/mmg/jobs.cpp:393
-#: src/mmg/jobs.cpp:471
+#: src/mmg/jobs.cpp:335
+#: src/mmg/jobs.cpp:444
+#: src/mmg/jobs.cpp:522
 msgid "aborted"
 msgstr "Прерванный"
 
@@ -7699,11 +7712,11 @@ msgstr "cet_index: '%1%' не найден\n"
 msgid "channels: %1%"
 msgstr "Каналы: %1%"
 
-#: src/mmg/jobs.cpp:287
+#: src/mmg/jobs.cpp:338
 msgid "completed OK"
 msgstr "Завершено OK"
 
-#: src/mmg/jobs.cpp:290
+#: src/mmg/jobs.cpp:341
 msgid "completed with warnings"
 msgstr "Завершено с предупреждениями"
 
@@ -7762,12 +7775,12 @@ msgstr "высота дисплея: %1%"
 msgid "display width: %1%"
 msgstr "ширина дисплея: %1%"
 
-#: src/mmg/jobs.cpp:469
-#: src/mmg/jobs.cpp:657
+#: src/mmg/jobs.cpp:520
+#: src/mmg/jobs.cpp:708
 msgid "done"
 msgstr "Сделанный"
 
-#: src/mmg/jobs.cpp:470
+#: src/mmg/jobs.cpp:521
 msgid "done/warnings"
 msgstr "сделать/предупреждения"
 
@@ -7821,8 +7834,8 @@ msgstr "Шифрование"
 msgid "end-of-file"
 msgstr "Конец файла"
 
-#: src/mmg/jobs.cpp:293
-#: src/mmg/jobs.cpp:472
+#: src/mmg/jobs.cpp:344
+#: src/mmg/jobs.cpp:523
 msgid "failed"
 msgstr "Не удалось"
 
@@ -7914,6 +7927,13 @@ msgstr "наивысший"
 #: src/common/compression.cpp:115
 msgid "inflateInit() failed. Result: %1%\n"
 msgstr "inflateInit() не удалось. Результат: %1%\n"
+
+#: src/mmg/jobs.cpp:72
+#: src/mmg/jobs.cpp:74
+#: src/mmg/jobs.cpp:157
+#: src/mmg/mux_dialog.cpp:76
+msgid "is being estimated"
+msgstr ""
 
 #: src/input/r_ivf.cpp:62
 msgid "ivf_reader: Could not open the file."
@@ -8187,7 +8207,7 @@ msgstr "mkvmerge"
 msgid "mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]\n"
 msgstr "mkvmerge -o out [глобальные опции] [опции1] <файл1> [@параметры файла ...]\n"
 
-#: src/mmg/mux_dialog.cpp:316
+#: src/mmg/mux_dialog.cpp:349
 #, c-format
 msgid "mkvmerge FAILED with a return code of %d. %s"
 msgstr "mkvmerge Ошибка с кодом возврата %d. %s"
@@ -8242,13 +8262,13 @@ msgstr ""
 msgid "mkvmerge executable"
 msgstr "mkvmerge исполняемый"
 
-#: src/mmg/mux_dialog.cpp:318
+#: src/mmg/mux_dialog.cpp:351
 #, c-format
 msgid "mkvmerge finished with a return code of %d. %s"
 msgstr "mkvmerge закончил код возврата %d. %s"
 
-#: src/mmg/jobs.cpp:131
-#: src/mmg/mux_dialog.cpp:273
+#: src/mmg/jobs.cpp:147
+#: src/mmg/mux_dialog.cpp:304
 msgid "mkvmerge has finished"
 msgstr "mkvmerge закончил"
 
@@ -8257,7 +8277,7 @@ msgid "mkvmerge has not been compiled with FLAC support but handling of this str
 msgstr "mkvmerge не был скомпилирован с поддержкой FLAC, но обработка этого потока было предложено.\n"
 
 #: src/mmg/jobs.cpp:49
-#: src/mmg/mux_dialog.cpp:43
+#: src/mmg/mux_dialog.cpp:44
 msgid "mkvmerge is running"
 msgstr "mkvmerge работает"
 
@@ -8265,7 +8285,7 @@ msgstr "mkvmerge работает"
 msgid "mkvmerge options"
 msgstr "mkvmerge опции"
 
-#: src/mmg/mux_dialog.cpp:78
+#: src/mmg/mux_dialog.cpp:88
 msgid "mkvmerge output:"
 msgstr "mkvmerge вывод:"
 
@@ -8407,8 +8427,8 @@ msgstr "только для I кадров"
 msgid "output sampling freq: %1%"
 msgstr "частота дискретизации на выходе: %1%"
 
-#: src/mmg/jobs.cpp:468
-#: src/mmg/jobs.cpp:642
+#: src/mmg/jobs.cpp:519
+#: src/mmg/jobs.cpp:693
 msgid "pending"
 msgstr "ожидание"
 
