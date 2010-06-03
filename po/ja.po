@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-06-02 00:01+0900\n"
+"PO-Revision-Date: 2010-06-03 20:30+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -7296,9 +7296,8 @@ msgid "aborted"
 msgstr "中断"
 
 #: src/output/p_ac3.cpp:212
-#, fuzzy
 msgid "ac3_bs_packetizer::add_to_buffer(): Untested code ('size' is odd). If mkvmerge crashes or if the resulting file does not contain the complete and correct audio track, then please contact the author Moritz Bunkus at moritz@bunkus.org.\n"
-msgstr "ac3_bs_packetizer::add_to_buffer(): テストされていないコードです('size'が奇数)。mkvmergeがクラッシュしたり、出力されたファイルのオーディオトラックが完全で正しいものでなかった場合、作者 Moritz Bunkus に moritz@bunkus.org 宛で連絡をお願いします。"
+msgstr "ac3_bs_packetizer::add_to_buffer(): テストされていないコードです('size'が奇数)。mkvmergeがクラッシュしたり、出力されたファイルのオーディオトラックが完全で正しいものでなかった場合、作者 Moritz Bunkus に moritz@bunkus.org 宛で連絡をお願いします。\n"
 
 #: src/input/r_ac3.cpp:67
 msgid "ac3_reader: Could not open the source file."
