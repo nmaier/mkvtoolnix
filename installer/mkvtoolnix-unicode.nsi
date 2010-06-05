@@ -110,7 +110,6 @@ Section "Program files" SEC01
   SetShellVarContext all
 
   SetOutPath "$INSTDIR"
-  SetOverwrite ifnewer
 ;   File "libebml.dll"
   File "libiconv-2.dll"
   File "libintl-8.dll"
