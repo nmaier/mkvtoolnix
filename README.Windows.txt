@@ -188,18 +188,18 @@ http://dl.matroska.org/downloads/libebml/ and
 http://dl.matroska.org/downloads/libmatroska/
 
   cd $HOME/mingw/src
-  wget http://dl.matroska.org/downloads/libebml/libebml-0.8.0.tar.bz2 \
-    http://dl.matroska.org/downloads/libmatroska/libmatroska-0.9.0.tar.bz2
-  bunzip2 < libebml-0.8.0.tar.bz2 | tar xf -
-  bunzip2 < libmatroska-0.9.0.tar.bz2 | tar xf -
+  wget http://dl.matroska.org/downloads/libebml/libebml-1.0.0.tar.bz2 \
+    http://dl.matroska.org/downloads/libmatroska/libmatroska-1.0.0.tar.bz2
+  bunzip2 < libebml-1.0.0.tar.bz2 | tar xf -
+  bunzip2 < libmatroska-1.0.0.tar.bz2 | tar xf -
 
-  cd libebml-0.8.0/make/linux
+  cd libebml-1.0.0/make/linux
   perl -pi -e 's/error/info/' Makefile
   make CXX=i586-mingw32msvc-g++ AR="i586-mingw32msvc-ar rcvu" RANLIB=i586-mingw32msvc-ranlib SHARED=no staticlib
   cp libebml.a $HOME/mingw/lib/
   cp -R ../../ebml $HOME/mingw/include/ebml
 
-  cd ../../../libmatroska-0.9.0/make/linux
+  cd ../../../libmatroska-1.0.0/make/linux
   perl -pi -e 's/error/info/' Makefile
   export CXXFLAGS=-I$HOME/mingw/include
   export LDFLAGS=-L$HOME/mingw/lib
