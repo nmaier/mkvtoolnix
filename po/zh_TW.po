@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh-TW\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-05-28 00:05+0200\n"
+"PO-Revision-Date: 2010-06-04 19:13+0200\n"
 "Last-Translator: Dong-Jun Wu <ziyawu@gmail.com>\n"
 "Language-Team: Chinese Traditional <zh-l10n@linux.org.tw>\n"
 "MIME-Version: 1.0\n"
@@ -152,11 +152,10 @@ msgstr ""
 "                           n 毫秒的資料。\n"
 
 #: src/merge/mkvmerge.cpp:151
-#, fuzzy
 msgid "  --clusters-in-meta-seek  Write meta seek data for clusters.\n"
 msgstr ""
 "  --no-clusters-in-meta-seek\n"
-"                           不要為叢集寫入變換定位資料。\n"
+"  將變換定位資料寫入叢集。\n"
 
 #: src/merge/mkvmerge.cpp:285
 msgid ""
@@ -539,9 +538,8 @@ msgid "  -v, --verbose            verbose status\n"
 msgstr "  -v, --verbose            “詳細”狀態\n"
 
 #: src/merge/mkvmerge.cpp:122
-#, fuzzy
 msgid "  -w, --webm               Create WebM compliant file.\n"
-msgstr "  --link                   連接已分割的檔案。\n"
+msgstr "  -w, --webm               建立 WebM 遵循檔。\n"
 
 #: src/merge/mkvmerge.cpp:217
 msgid ""
@@ -713,14 +711,12 @@ msgid " done\n"
 msgstr " 完成\n"
 
 #: src/info/mkvinfo.cpp:175
-#, fuzzy
 msgid " size %1%"
-msgstr "剪輯, 大小 %1%"
+msgstr " 大小 %1%"
 
 #: src/info/mkvinfo.cpp:191
-#, fuzzy
 msgid " size is unknown"
-msgstr "剪輯, 未知大小"
+msgstr "大小不明"
 
 #: src/mmg/cli_options_dlg.cpp:80
 msgid "### Global output control ###"
@@ -785,7 +781,7 @@ msgstr ""
 #: src/mmg/mux_dialog.cpp:248
 #, c-format
 msgid "%d minute(s) %d second(s)"
-msgstr ""
+msgstr "%d 分鐘 %d 秒"
 
 #: src/mmg/mmg_dialog.cpp:710
 #, c-format
@@ -1769,7 +1765,7 @@ msgstr "所有已知的屬性名稱和代表意義\n"
 
 #: src/info/wxwidgets_ui.cpp:280
 msgid "All supported files|*.mkv;*.mka;*.mks;*.webm;*.webma;*.webmv|Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|WebM files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|All files|*.*"
-msgstr ""
+msgstr "所有支援的檔案|*.mkv;*.mka;*.mks;*.webm;*.webma;*.webmv|Matroska 檔案 (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|WebM 檔案 (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|所有檔案|*.*"
 
 #: src/mmg/tabs/input.cpp:290
 #, c-format
@@ -1939,7 +1935,7 @@ msgstr "對「%1%」的 MIME 類型的自動識別結果: %2%\n"
 
 #: src/merge/mkvmerge.cpp:1638
 msgid "Automatically enabling WebM compliance mode due to output file name extension.\n"
-msgstr ""
+msgstr "由輸出檔的副檔名自動啟用 WebM 遵循模式。\n"
 
 #: src/mmg/cli_options_dlg.cpp:36
 msgid "Available options:"
@@ -2190,7 +2186,7 @@ msgstr "章節 (%d 個項目) 自 %s"
 
 #: src/merge/output_control.cpp:1269
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
-msgstr ""
+msgstr "在 WebM 遵循檔裡不能有章節。不會將章節寫進任何輸出檔。\n"
 
 #: src/mmg/tabs/chapters.cpp:607
 msgid "Chapters loaded."
@@ -2356,9 +2352,8 @@ msgid "Codec settings: %1%"
 msgstr "編解碼器設定: %1%"
 
 #: src/info/mkvinfo.cpp:173
-#, fuzzy
 msgid "Codec state: %1%"
-msgstr "Cue 編解碼器狀態: %1%"
+msgstr "編解碼器狀態: %1%"
 
 #: src/info/mkvinfo.cpp:1035
 msgid "CodecPrivate, length %1%%2%"
@@ -2385,9 +2380,8 @@ msgid "Command line saved."
 msgstr "命令列已儲存。"
 
 #: src/mmg/tabs/input.cpp:406
-#, fuzzy
 msgid "Command line used:"
-msgstr "命令列已儲存。"
+msgstr "使用命令列:"
 
 #: src/mmg/options/languages.cpp:79
 msgid "Common languages"
@@ -2559,13 +2553,12 @@ msgid "Create &option file"
 msgstr "建立選項檔(&O)"
 
 #: src/mmg/tabs/global.cpp:300
-#, fuzzy
 msgid "Create WebM compliant file"
-msgstr "建立選項檔(&O)"
+msgstr "建立 WebM 遵循檔"
 
 #: src/mmg/tabs/global.cpp:301
 msgid "Create a WebM compliant file. mkvmerge also turns this on if the output file name's extension is \"webm\". This mode enforces several restrictions. The only allowed codecs are VP8 video and Vorbis audio tracks. Neither chapters nor tags are allowed. The DocType header item is changed to \"webm\"."
-msgstr ""
+msgstr "建立 WebM 遵循檔。若輸出檔的副檔名是『webm』則 mkvmerge 也會開啟這項。這個模式會強制實行一些限制。編碼器只能是 VP8 視訊和 Vorbis 音軌。也不能使用章節和標籤。此 DocType 表頭項目已變更為『webm』。"
 
 #: src/mmg/mmg_dialog.cpp:266
 msgid "Create a new chapter file"
@@ -3323,11 +3316,11 @@ msgstr "格式特殊選項"
 
 #: src/mpegparser/M2VParser.cpp:442
 msgid "Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr ""
+msgstr "在非關閉的 GOP 裡找到沒有秒數參考的 B 畫格。在分離前請修復 MPEG2 視訊串流。\n"
 
 #: src/mpegparser/M2VParser.cpp:396
 msgid "Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"
-msgstr ""
+msgstr "找到含有連結損壞的群組圖片。您可能在分離前會想使用智慧型重新編碼。\n"
 
 #: src/common/xml/element_parser.cpp:131
 msgid "Found no encoded data nor '@file' to read binary data from."
@@ -3335,7 +3328,7 @@ msgstr "既沒發現已編碼資料，也沒發現引用讀取二位元資料的
 
 #: src/mpegparser/M2VParser.cpp:444
 msgid "Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"
-msgstr ""
+msgstr "在第一個 GOP 裡找到一個或多個沒有秒數參考的 B 畫格。您可能在分離前會想修復此 MPEG2 視訊串流或使用智慧型重新編碼。\n"
 
 #: src/mmg/tabs/input_format.cpp:226
 msgid "FourCC:"
@@ -3488,11 +3481,11 @@ msgstr "ISO639-2 碼"
 
 #: src/merge/mkvmerge.cpp:92
 msgid "IVF with VP8"
-msgstr ""
+msgstr "含 VP8 的 IVF"
 
 #: src/mmg/tabs/input.cpp:241
 msgid "IVF with VP8 video files"
-msgstr ""
+msgstr "含 VP8 視訊檔的 IVF"
 
 #: src/mmg/tabs/chapters.cpp:340
 msgid "If a chapter is marked 'hidden' then the player should not show this chapter entry to the user. Such entries could still be used by the menu system."
@@ -3540,11 +3533,11 @@ msgstr "無法使用檔案「%1%」: 無法開啟要讀取的檔案。\n"
 
 #: src/mmg/mmg_dialog.cpp:1739
 msgid "Incompatible mkvmerge version"
-msgstr ""
+msgstr "不相容的 mkvmerge 版本"
 
 #: src/mmg/tabs/input.cpp:978
 msgid "Incompatible track"
-msgstr ""
+msgstr "不相容的軌道"
 
 #: src/input/r_real.cpp:610
 msgid "Inconsistent AAC audio packet (length: %1% != len_check %2%)\n"
@@ -4479,7 +4472,7 @@ msgstr "僅附加至第一個檔案"
 
 #: src/input/r_vobsub.cpp:99
 msgid "Only v7 and newer VobSub files are supported. If you have an older version then use the VSConv utility from http://sourceforge.net/projects/guliverkli/ to convert these files to v7 files.\n"
-msgstr "只支援 v7 和更高版本的 VobSub 檔。如果你使用的是舊版檔，請使用 VSConv 實用程式（可在 http://sourceforge.net/projects/guliverkli/ 獲取）將這些檔轉換為 v7 檔。\n"
+msgstr "只支援 v7 和更高版本的 VobSub 檔。如果您使用的是舊版檔，請使用 VSConv 實用程式（可在 http://sourceforge.net/projects/guliverkli/ 獲取）將這些檔轉換為 v7 檔。\n"
 
 #: src/mmg/mmg_dialog.cpp:255
 msgid "Op&tions\tCtrl-P"
@@ -4548,9 +4541,8 @@ msgid "Output sampling frequency: %1%"
 msgstr "輸出取樣頻率: %1%"
 
 #: src/mmg/tabs/input.cpp:410
-#, fuzzy
 msgid "Output:"
-msgstr "輸出"
+msgstr "輸出:"
 
 #: src/mmg/mmg_dialog.cpp:530
 msgid "Overwrite existing file(s)?"
@@ -4898,7 +4890,7 @@ msgstr "在不儲存的情況下重新載入目前檔案"
 #: src/mmg/jobs.cpp:73
 #: src/mmg/mux_dialog.cpp:75
 msgid "Remaining time:"
-msgstr ""
+msgstr "剩餘時間: "
 
 #: src/common/xml/element_parser.cpp:565
 msgid "Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
@@ -5122,7 +5114,7 @@ msgid ""
 "Select the languages you want to be shown at the top\n"
 "of language drop down boxes."
 msgstr ""
-"選擇你想要顯示在語言下拉式選單最上面\n"
+"選擇您想要顯示在語言下拉式選單最上面\n"
 "的語言。"
 
 #: src/mmg/tabs/chapters.cpp:99
@@ -5176,9 +5168,8 @@ msgid "Set if the track is used."
 msgstr "設定軌道是否可用。"
 
 #: src/common/property_element.cpp:137
-#, fuzzy
 msgid "Set if the video is interlaced."
-msgstr "設定軌道是否可用。"
+msgstr "若視訊為交錯式請設定。"
 
 #: src/mmg/tabs/chapters.cpp:109
 msgid "Set language to:"
@@ -5265,7 +5256,7 @@ msgstr "短的 AAC 音訊套件 (長: %1% < 2)\n"
 
 #: src/mpegparser/M2VParser.cpp:392
 msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr ""
+msgstr "偵測到縮短的 GOP。某些畫格已遺失。您可能在分離前會想修復 MPEG2 視訊串流。\n"
 
 #: src/info/wxwidgets_ui.cpp:129
 msgid "Show &all elements\tCtrl-A"
@@ -5276,9 +5267,8 @@ msgid "Show about dialog"
 msgstr "顯示“關於”對話窗"
 
 #: src/info/wxwidgets_ui.cpp:130
-#, fuzzy
 msgid "Show element si&zes\tCtrl-Z"
-msgstr "顯示所有分支(&A)\tCtrl-A"
+msgstr "顯示元件大小(&Z)\tCtrl-Z"
 
 #: src/mmg/options/mmg.cpp:99
 msgid "Show mmg's debug window"
@@ -5298,7 +5288,7 @@ msgstr "顯示 mkvmerge GUI 指南"
 
 #: src/info/wxwidgets_ui.cpp:130
 msgid "Show the size of each element including its header"
-msgstr ""
+msgstr "顯示每個元件的大小 (包含項目的表頭)"
 
 #: src/common/cli_parser.cpp:181
 msgid "Show this help."
@@ -5354,7 +5344,7 @@ msgstr "簡單區塊 (%1%軌道編號 %2%, %3% 畫格, 時間碼 %|4$.3f|s = %5%
 
 #: src/mpegparser/M2VParser.cpp:389
 msgid "Single field frame before GOP header detected. Fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr ""
+msgstr "在 GOP 表頭前偵測到單圖場畫格。在分離前請修復 MPEG2 視訊串流。\n"
 
 #: src/output/p_aac.cpp:73
 msgid "Skipping %1% bytes (no valid AAC header found). This might cause audio/video desynchronisation.\n"
@@ -5541,7 +5531,7 @@ msgstr "標籤"
 
 #: src/merge/output_control.cpp:1298
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
-msgstr ""
+msgstr "在 WebM 遵循檔裡不能有標籤。不會將標籤寫進任何輸出檔。\n"
 
 #: src/merge/pr_generic.cpp:1425
 msgid "Tags for track ID %1%: %2% entries"
@@ -5626,7 +5616,7 @@ msgstr "軌道 %s（自檔案「%s」）的 FourCC 設定非四字元長。"
 #: src/mmg/mmg_dialog.cpp:1735
 #, c-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%s) than the GUI itself (%s). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
-msgstr ""
+msgstr "此 GUI 設定成使用 mkvmerge 可執行檔版本 (%s) 不同於 GUI 自己的版本 (%s)。不支援這種情形，但也不會阻止。您應該在偏好設定對話窗裡變更 mkvmerge 可執行檔。"
 
 #: src/input/r_ogm.cpp:1384
 msgid "The Kate identifaction header could not be parsed (%1%).\n"
@@ -5723,7 +5713,6 @@ msgid "The chapter '%s' is missing the start time."
 msgstr "章節「%s」遺失起始時間。"
 
 #: src/mmg/mmg_dialog.cpp:578
-#, fuzzy
 msgid ""
 "The chapter editor has been used and contains data. However, no chapter file has been selected on the global page. In mmg, the chapter editor is independant of the muxing process. The chapters present in the editor will NOT be muxed into the output file. Only the various 'save' functions from the chapter editor menu will cause the chapters to be written to the hard disk.\n"
 "\n"
@@ -5731,11 +5720,11 @@ msgid ""
 "\n"
 "Note: This warning can be deactivated in the 'options' dialog. Turn off the 'Warn about usage...' option."
 msgstr ""
-"章節編輯器已被使用過，且包含有資料。然而，在“整體”選項頁沒有選擇任何章節檔。在 mmg 中，章節編輯器是獨立於合成過程的。編輯器中顯示的章節 *不會* 被合成至輸出檔中。只有章節編輯器功能表中的各「儲存」功能會使章節被寫入硬碟。\n"
+"已使用過章節編輯器，並且包含資料。然而，在『整體』選項頁沒有選擇任何章節檔。在 mmg 中，章節編輯器是獨立於合成過程的。編輯器中顯示的章節 *不會* 被合成至輸出檔中。只有章節編輯器功能表中的各「儲存」功能會使章節被寫入硬碟。\n"
 "\n"
-"您確實要繼續合成嗎?\n"
+"您確定要繼續合成嗎?\n"
 "\n"
-"提示: 本警告可以在「設定」選項頁停用。取消選中「對...用法發出警告」項即可。"
+"備註: 本警告可以在「設定」選項頁停用。關閉「對...用法發出警告」選項即可。"
 
 #: src/output/p_mpeg4_p10.cpp:153
 msgid "The chosen NALU size length of %1% is too small. Try using '4'.\n"
@@ -5743,7 +5732,7 @@ msgstr "選擇的 NALU 長度大小 %1% 過小。請嘗試使用「4」。\n"
 
 #: src/merge/pr_generic.cpp:1240
 msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
-msgstr ""
+msgstr "此編解碼器類型「%1%」無法用在 WebM 遵循檔。\n"
 
 #: src/output/p_avc.cpp:200
 #: src/output/p_kate.cpp:113
@@ -6576,7 +6565,7 @@ msgstr "此軌道包含 SBR AAC/HE-AAC/AAC+ 資料。本選項只對 AAC 輸入�
 
 #: src/mmg/tabs/input.cpp:978
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
-msgstr ""
+msgstr "此軌道不能和 WebM 模式相容且無法啟用。"
 
 #: src/info/mkvinfo.cpp:1511
 msgid "Time slice"
@@ -6796,7 +6785,7 @@ msgstr "UTFstring_to_cstrutf8: 無效的寬字元。如果您認為本次判斷�
 
 #: src/mpegparser/M2VParser.cpp:237
 msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr ""
+msgstr "單圖場畫格之後意外的圖片畫格。在分離前請修復 MPEG2 視訊串流。\n"
 
 #: src/output/p_aac.cpp:130
 msgid "Unknown AAC MPEG-2 profile %1%."
@@ -6888,7 +6877,6 @@ msgid "Usage"
 msgstr "用法"
 
 #: src/info/mkvinfo.cpp:217
-#, fuzzy
 msgid ""
 "Usage: mkvinfo [options] inname\n"
 "\n"
@@ -6913,15 +6901,17 @@ msgstr ""
 "用法:  mkvinfo [選項] 輸入檔名\n"
 "\n"
 " 選項:\n"
-"  -g, --gui      啟動 GUI (如果是給定的檔案則開啟輸入檔名稱)。\n"
-"  inname         使用「輸入檔名」作為來來源檔案。\n"
-"  -v, --verbose  增強 “詳細” 程度。詳見使用說明文件中關於 \n"
-"                 mkvinfo 輸出什麼的詳盡說明。\n"
+"  -g, --gui      啟動 GUI (若是給定的檔案則開啟輸入檔名稱)。\n"
+"  inname         使用「輸入檔名」作為來源。\n"
+"  -v, --verbose  增強 “詳細” 程度。請見使用說明文件中關於 \n"
+"                 mkvinfo 輸出的詳細說明。\n"
 "  -c, --checksum 計算並顯示畫格內容的校驗碼。\n"
 "  -s, --summary  僅顯示內容的摘要，而非所有元件。\n"
-"  -x, --hexdump  以十六進位轉儲形式顯示每畫格的前 16 位元組。\n"
+"  -x, --hexdump\n"
+"                 以十六進位轉儲形式顯示每畫格的前 16 位元組。\n"
+"  -z, --size     顯示每個元件包含表頭的大小。\n"
 "  --output-charset <字元集>\n"
-"                 以指定的字元集輸出訊息\n"
+"                 用指定的字元集輸出訊息\n"
 "  -r, -o, --redirect-output 檔案.ext\n"
 "                 重定向（轉儲）所有訊息至此檔案。\n"
 "  -h, --help     顯示這個説明。\n"
@@ -7040,9 +7030,8 @@ msgid "Using the FLAC output module.\n"
 msgstr "使用 FLAC 輸出模組。\n"
 
 #: src/input/r_ivf.cpp:66
-#, fuzzy
 msgid "Using the IVF demultiplexer.\n"
-msgstr "使用 WAV 分離器。\n"
+msgstr "使用 IVF 分離器。\n"
 
 #: src/input/r_matroska.cpp:1659
 msgid "Using the Kate output module.\n"
@@ -7325,12 +7314,11 @@ msgstr "視訊顯示寬度"
 
 #: src/mpegparser/M2VParser.cpp:163
 msgid "Video ended with a shortened group of pictures. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr ""
+msgstr "用縮短群組圖片啟用視訊。某些畫格已遺失。您可能在分離前會想修復 MPEG2 視訊串流。\n"
 
 #: src/common/property_element.cpp:137
-#, fuzzy
 msgid "Video interlaced flag"
-msgstr "視訊軌 %u"
+msgstr "視訊交錯標記"
 
 #: src/input/r_real.cpp:653
 msgid "Video packet assembly failed. Error code: %1% (%2%)\n"
@@ -7423,9 +7411,8 @@ msgstr "警告:"
 
 #: src/mmg/tabs/input.cpp:259
 #: src/merge/mkvmerge.cpp:107
-#, fuzzy
 msgid "WebM audio/video files"
-msgstr "RealMedia 音訊/視訊檔"
+msgstr "WebM 音訊/視訊檔"
 
 #: src/mmg/options/mmg.cpp:82
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
@@ -7893,12 +7880,11 @@ msgstr "inflateInit() 失敗。結果: %1%\n"
 #: src/mmg/jobs.cpp:157
 #: src/mmg/mux_dialog.cpp:76
 msgid "is being estimated"
-msgstr ""
+msgstr "正在估計"
 
 #: src/input/r_ivf.cpp:62
-#, fuzzy
 msgid "ivf_reader: Could not open the file."
-msgstr "aac_reader: 無法開啟檔案。"
+msgstr "ivf_reader: 無法開啟檔案。"
 
 #: src/info/mkvinfo.cpp:1609
 msgid "key, "
@@ -8661,86 +8647,125 @@ msgstr "是"
 #~ msgstr ""
 #~ "                                        英文語言名稱 | ISO639-2 碼 | ISO639-1 碼\n"
 #~ "---------------------------------------------------+---------------+--------------\n"
+
 #~ msgid "%1% at %2%"
 #~ msgstr "%1% 於 %2%"
+
 #~ msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|\n"
 #~ msgstr "%1% 畫格, 軌道 %2%, 時間碼 %3% (%4%), 大小 %5%, adler 0x%|6$08x|\n"
+
 #~ msgid "'%1%' is only allowed for chapter extraction.\n"
 #~ msgstr "'%1%' 僅限提取章節時使用。\n"
+
 #~ msgid "'--blockadd' is only allowed when extracting tracks.\n"
 #~ msgstr "'--blockadd' 僅允許在提取軌道時使用。\n"
+
 #~ msgid "'--blockadd' lacks a level.\n"
 #~ msgstr "'--blockadd' 缺少層級。\n"
+
 #~ msgid "'--cuesheet' is only allowed when extracting tracks.\n"
 #~ msgstr "'--cuesheet' 只能在提取軌道時使用。\n"
+
 #~ msgid "'--fullraw' is only allowed when extracting tracks.\n"
 #~ msgstr "'--fullraw' 只能在提取軌道時使用。\n"
+
 #~ msgid "'--no-ogg' is only allowed when extracting tracks.\n"
 #~ msgstr "'--no-ogg' 只能在提取軌道時使用。\n"
+
 #~ msgid "'--raw' is only allowed when extracting tracks.\n"
 #~ msgstr "'--raw' 只能在提取軌道時使用。\n"
+
 #~ msgid "'-c' lacks a charset.\n"
 #~ msgstr "'-c' 缺少字元集。\n"
+
 #~ msgid "(Unknown element: %1%)"
 #~ msgstr "(未知元件: %1%)"
+
 #~ msgid "A single '+' is not a valid command line option. If you want to append a file use '+' directly followed by the file name, e.g. '+movie_part_2.avi'."
 #~ msgstr "單獨的 '+' 不是有效的命令列選項。如果您希望用 '+' 直接添加檔，請確保檔案名緊跟著它，例如 '+movie_part_2.avi'。"
+
 #~ msgid "Always adds '--engage use_simpleblock' to the command line. That way Matroska's new 'simple blocks' will be used which save a bit of overhead at the cost of not being backwards compatible."
 #~ msgstr "總在命令列中添加 '--engage use_simpleblock'。這樣將使用 Matroska 的新 '簡單區塊'，可以省下一些額外開銷，代價是將無法向下相容。"
+
 #~ msgid "Always use simple blocks"
 #~ msgstr "總使用簡單區塊"
+
 #~ msgid "Change the default values"
 #~ msgstr "修改預設值"
+
 #~ msgid "Changing the interface language requires a restart to take effect."
 #~ msgstr "變更介面語言需要重新啟動才會生效。"
+
 #~ msgid "Could not open the file '%1%'."
 #~ msgstr "無法開啟檔案 '%1%'。"
+
 #~ msgid "Do not copy chapters from this file. Only applies to a couple of formats (e.g. Matroska files)."
 #~ msgstr "不要從此檔中複製章節。僅適用於部分格式（如 Matroska 檔）。"
+
 #~ msgid "Do not copy tags from this file. Only applies to a couple of formats (e.g. Matroska files)."
 #~ msgstr "不要從此檔中複製標籤。僅適用於部分格式（如 Matroska 檔）。"
+
 #~ msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
 #~ msgstr "不要寫入值與 Matroska 規範中的預設值相同的表頭元件。"
+
 #~ msgid "During MPEG-4 part 2 B frame handling: The frame queue contains more frames than timecodes are available that can be assigned to them (reason: %1%). Therefore %2% frame(s) had to be dropped. The video might be broken around timecode %3%.\n"
 #~ msgstr "MPEG-4 part 2 B 畫格處理過程中: 畫格列包含了超過可分配時間碼的畫格 (原因: %1%)。因此 %2% 畫格將被丟棄。視訊在時間碼 %3% 附近可能已損壞。\n"
+
 #~ msgid "File options:"
 #~ msgstr "檔案選項:"
+
 #~ msgid "File/segment title"
 #~ msgstr "檔案/剪輯標題"
+
 #~ msgid "Global tags"
 #~ msgstr "整體標籤"
+
 #~ msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
 #~ msgstr "Matroska 檔案 (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|所有檔案|*.*"
+
 #~ msgid "No chapters"
 #~ msgstr "不讀取章節"
+
 #~ msgid "No further options allowed when extracting %1%.\n"
 #~ msgstr "提取 %1% 時不允許其他額外選項。\n"
+
 #~ msgid "No further options allowed when regenerating the CUE sheet.\n"
 #~ msgstr "重新生成 CUE 表單時不允許其他額外選項。\n"
+
 #~ msgid "No tags"
 #~ msgstr "不讀取標籤"
+
 #~ msgid "No tracks will be copied from this file. This usually indicates a mistake in the command line.\n"
 #~ msgstr "此檔中沒有待複製的軌道。這通常是因為命令列中的差錯。\n"
+
 #~ msgid ""
 #~ "Nothing to do.\n"
 #~ "\n"
 #~ msgstr ""
 #~ "沒有事情可做。\n"
 #~ "\n"
+
 #~ msgid "Other global options"
 #~ msgstr "其他整體選項"
+
 #~ msgid "Restart required"
 #~ msgstr "需要重新啟動"
+
 #~ msgid "Set &default values"
 #~ msgstr "設定預設值(&D)"
+
 #~ msgid "Subtitle charset:"
 #~ msgstr "字幕字元集:"
+
 #~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
 #~ msgstr "此軌道使用了叫做「編解碼態元件」的 Matroska 特性。mkvmerge 支援該特性，但您尚未透過「--engage use_codec_state」來啟用該特性。\n"
+
 #~ msgid "Tracks:"
 #~ msgstr "軌道列表:"
+
 #~ msgid "Unrecognized command line option '%1%'. Maybe you put a mode specific option before the input file name?\n"
 #~ msgstr "無法識別命令列選項 '%1%'。您是否將模式細節選項放在了輸入檔名的前面？\n"
+
 #~ msgid ""
 #~ "Usage: mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]\n"
 #~ "   or  mkvextract tags <inname> [options]\n"
@@ -8873,49 +8898,70 @@ msgstr "是"
 #~ "  -v, --verbose  提高“詳細”程度。\n"
 #~ "  -h, --help     顯示這個説明。\n"
 #~ "  -V, --version  顯示版本資訊。\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "使用 FLAC 輸出模組。\n"
+
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "寫入 raw FLAC 檔案 (預設：寫入 OggFLAC 檔案)。"
+
 #~ msgid "You have not yet selected an output file."
 #~ msgstr "您尚未選擇任何輸入檔。"
+
 #~ msgid "You have not yet selected any input file and/or no tracks."
 #~ msgstr "您尚未選擇任何輸入檔和/或未發現軌道。"
+
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: 無法設定錯誤回呼。\n"
+
 #~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
 #~ msgstr "flac_header_extraction: 無法設定中繼資料回呼。\n"
+
 #~ msgid "flac_header_extraction: Could not set the read callback.\n"
 #~ msgstr "flac_header_extraction: 無法設定讀取回呼。\n"
+
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: 無法設定寫入回呼。\n"
+
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_reader: 無法設定檔尾回呼。\n"
+
 #~ msgid "flac_reader: Could not set the error callback.\n"
 #~ msgstr "flac_reader: 無法設定錯誤回呼。\n"
+
 #~ msgid "flac_reader: Could not set the length callback.\n"
 #~ msgstr "flac_reader: 無法設定長度回呼。\n"
+
 #~ msgid "flac_reader: Could not set the metadata callback.\n"
 #~ msgstr "flac_reader: 無法設定中繼資料回呼。\n"
+
 #~ msgid "flac_reader: Could not set the read callback.\n"
 #~ msgstr "flac_reader: 無法設定讀取回呼。\n"
+
 #~ msgid "flac_reader: Could not set the seek callback.\n"
 #~ msgstr "flac_reader: 無法設定定位回呼。\n"
+
 #~ msgid "flac_reader: Could not set the tell callback.\n"
 #~ msgstr "flac_reader: 無法設定通告回呼。\n"
+
 #~ msgid "flac_reader: Could not set the write callback.\n"
 #~ msgstr "flac_reader: 無法設定寫入回呼。\n"
+
 #~ msgid "found_what == 0. Should not have happened. Please file a bug report.\n"
 #~ msgstr "found_what == 0。這不該發生。請提交錯誤報告。\n"
+
 #~ msgid "locale.cpp/from_utf8(): Invalid conversion handle %1% (num: %2%).\n"
 #~ msgstr "locale.cpp/from_utf8(): 無效的轉換名號 %1% (數位: %2%)。\n"
+
 #~ msgid "locale.cpp/to_utf8(): Invalid conversion handle %1% (num: %2%).\n"
 #~ msgstr "locale.cpp/to_utf8(): 無效的轉換名號 %1% (數位: %2%)。\n"
+
 #~ msgid "mkvmerge GUI v%s ('%s')"
 #~ msgstr "mkvmerge GUI v%s ('%s')"
+
 #~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 #~ msgstr "r_matroska: 叢集不含叢集時間碼。檔案已損壞。正在中止操作。\n"
+
 #~ msgid "start_element: pdata->bin != NULL"
 #~ msgstr "start_element: pdata->bin != NULL"
-
