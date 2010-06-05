@@ -1,8 +1,8 @@
 dnl
 dnl Test for libebml, and define EBML_CFLAGS and EBML_LIBS
 dnl
-  ebml_ver_req_major=0
-  ebml_ver_req_minor=8
+  ebml_ver_req_major=1
+  ebml_ver_req_minor=0
   ebml_ver_req_micro=0
 
   AC_CACHE_CHECK([for libEBML headers version >= ${ebml_ver_req_major}.${ebml_ver_req_minor}.${ebml_ver_req_micro}],

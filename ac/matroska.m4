@@ -1,8 +1,8 @@
 dnl
 dnl Test for libmatroska, and define MATROSKA_CFLAGS and MATROSKA_LIBS
 dnl
-  kax_ver_req_major=0
-  kax_ver_req_minor=9
+  kax_ver_req_major=1
+  kax_ver_req_minor=0
   kax_ver_req_micro=0
 
   AC_CACHE_CHECK([for libMatroska headers version >= ${kax_ver_req_major}.${kax_ver_req_minor}.${kax_ver_req_micro}],
