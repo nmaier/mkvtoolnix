@@ -1,9 +1,9 @@
-diff -ur mkvtoolnix-2.9.8.orig/Makefile.in mkvtoolnix-2.9.8/Makefile.in
---- mkvtoolnix-2.9.8.orig/Makefile.in	2009-08-13 12:32:50.000000000 +0200
-+++ mkvtoolnix-2.9.8/Makefile.in	2009-08-13 18:46:57.462879372 +0200
-@@ -160,8 +160,8 @@
- APPLICATIONS = src/mkvmerge@EXEEXT@ src/mkvinfo@EXEEXT@ src/mkvextract@EXEEXT@
- MANPAGES = doc/man/mkvmerge.1 doc/man/mkvinfo.1 doc/man/mkvextract.1
+diff -ur mkvtoolnix-4.0.0.orig/Makefile.in mkvtoolnix-4.0.0/Makefile.in
+--- mkvtoolnix-4.0.0.orig/Makefile.in	2010-06-05 14:24:39.000000000 +0200
++++ mkvtoolnix-4.0.0/Makefile.in	2010-06-05 18:17:19.987445645 +0200
+@@ -164,8 +164,8 @@
+ APPLICATIONS = src/mkvmerge@EXEEXT@ src/mkvinfo@EXEEXT@ src/mkvextract@EXEEXT@ src/mkvpropedit@EXEEXT@
+ MANPAGES = doc/man/mkvmerge.1 doc/man/mkvinfo.1 doc/man/mkvextract.1 doc/man/mkvpropedit.1
  ifeq (yes,$(USE_WXWIDGETS))
 -APPLICATIONS += src/mmg/mmg@EXEEXT@
 -MANPAGES += doc/man/mmg.1
@@ -12,7 +12,7 @@ diff -ur mkvtoolnix-2.9.8.orig/Makefile.in mkvtoolnix-2.9.8/Makefile.in
  endif
  
  TRANSLATIONS = @TRANSLATIONS@
-@@ -235,6 +235,7 @@
+@@ -250,6 +250,7 @@
  
  install-programs: $(APPLICATIONS)
  	$(mkinstalldirs) $(DESTDIR)$(bindir)
@@ -20,7 +20,7 @@ diff -ur mkvtoolnix-2.9.8.orig/Makefile.in mkvtoolnix-2.9.8/Makefile.in
  	@list='$(APPLICATIONS)'; for p in $$list; do \
  	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
  	  if test -f $$p ; then \
-@@ -246,6 +247,7 @@
+@@ -261,6 +262,7 @@
  
  install-mans:
  	$(mkinstalldirs) $(DESTDIR)$(man1dir)
@@ -28,7 +28,15 @@ diff -ur mkvtoolnix-2.9.8.orig/Makefile.in mkvtoolnix-2.9.8/Makefile.in
  	@for i in $(MANPAGES); do \
  	  inst=`echo $$i | sed -e 's/^.*\///'`; \
  	  echo " $(INSTALL_DATA) $$i $(DESTDIR)$(man1dir)/$$inst"; \
-@@ -549,6 +551,8 @@
+@@ -269,6 +271,7 @@
+ 
+ install-translated-mans:
+ 	@for lang in $(MANPAGES_TRANSLATIONS); do \
++	  mv doc/man/$$lang/mmg.1 doc/man/$$lang/mkvmerge-gui.1 ; \
+ 	  $(mkinstalldirs) $(DESTDIR)$(mandir)/$$lang/man1; \
+ 	  for manpage in $(MANPAGES); do \
+ 	    inst=`echo $$manpage | sed -e 's/^.*\///'`; \
+@@ -632,6 +635,8 @@
  	@echo '    LINK ' $@
  	$(Q)$(LINK) -o $@ $(mmg_OBJECTS) $(mmg_LDADD)
  
@@ -37,3 +45,4 @@ diff -ur mkvtoolnix-2.9.8.orig/Makefile.in mkvtoolnix-2.9.8/Makefile.in
  .SECONDARY:
  
  #
+Only in mkvtoolnix-4.0.0: Makefile.in.orig
