@@ -1,13 +1,22 @@
 '\" t
 .\"     Title: mkvinfo
 .\"    Author: Moritz Bunkus <moritz@bunkus.org>
-.\" Generator: DocBook XSL Stylesheets v1.75.1 <http://docbook.sf.net/>
-.\"      Date: 2010-05-14
+.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
+.\"      Date: 2010-06-05
 .\"    Manual: User Commands
-.\"    Source: MkvToolNix 3.4.0
+.\"    Source: MkvToolNix 4.0.0
 .\"  Language: English
 .\"
-.TH "MKVINFO" "1" "2010\-05\-14" "MkvToolNix 3\&.4\&.0" "User Commands"
+.TH "MKVINFO" "1" "2010\-06\-05" "MkvToolNix 4\&.0\&.0" "User Commands"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
 .\" -----------------------------------------------------------------
 .\" * set default formatting
 .\" -----------------------------------------------------------------
@@ -67,12 +76,12 @@ Show the size of each element including its header\&.
 .PP
 \fB\-\-command\-line\-charset\fR \fIcharacter\-set\fR
 .RS 4
-Sets the character set to convert strings given on the command line from\&. It defaults to the character set given by system\'s current locale\&.
+Sets the character set to convert strings given on the command line from\&. It defaults to the character set given by system\*(Aqs current locale\&.
 .RE
 .PP
 \fB\-\-output\-charset\fR \fIcharacter\-set\fR
 .RS 4
-Sets the character set to which strings are converted that are to be output\&. It defaults to the character set given by system\'s current locale\&.
+Sets the character set to which strings are converted that are to be output\&. It defaults to the character set given by system\*(Aqs current locale\&.
 .RE
 .PP
 \fB\-r\fR, \fB\-\-redirect\-output\fR \fIfile\-name\fR
@@ -88,12 +97,12 @@ is honored\&.
 .RS 4
 Forces the translations for the language
 \fIcode\fR
-to be used (e\&.g\&. \'de_DE\' for the German translations)\&. It is preferable to use the environment variables
+to be used (e\&.g\&. \*(Aqde_DE\*(Aq for the German translations)\&. It is preferable to use the environment variables
 \fILANG\fR,
 \fILC_MESSAGES\fR
 and
 \fILC_ALL\fR
-though\&. Entering \'list\' as the
+though\&. Entering \*(Aqlist\*(Aq as the
 \fIcode\fR
 will cause
 \fBmkvinfo\fR(1)
@@ -120,9 +129,9 @@ Show version information and exit\&.
 \fB@\fRoptions\-file
 .RS 4
 Reads additional command line arguments from the file
-\fIoptions\-file\fR\&. Lines whose first non\-whitespace character is a hash mark (\'#\') are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&. There is no meta character escaping\&.
+\fIoptions\-file\fR\&. Lines whose first non\-whitespace character is a hash mark (\*(Aq#\*(Aq) are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&. There is no meta character escaping\&.
 .sp
-The command line \'\fBmkvinfo \-v \-v input\&.mkv \-\-redirect\-output info\&.txt\fR\' could be converted into the following option file:
+The command line \*(Aq\fBmkvinfo \-v \-v input\&.mkv \-\-redirect\-output info\&.txt\fR\*(Aq could be converted into the following option file:
 .sp
 .if n \{\
 .RS 4
@@ -147,13 +156,13 @@ info\&.txt
 The
 \fB\-v\fR
 option can be used to increase
-\fBmkvinfo\fR(1)\'s verbosity level and print more information about the current file\&.
+\fBmkvinfo\fR(1)\*(Aqs verbosity level and print more information about the current file\&.
 .PP
 At level 0
 \fBmkvinfo\fR(1)
 will print only the track headers it finds and their types\&.
 \fBmkvinfo\fR(1)
-will exit as soon as the headers are parsed completely (more technical: as soon as the first cluster is encountered)\&. In this level the seek head entries and the cues will not be displayed \-\- even if they\'re located in front of the track information\&.
+will exit as soon as the headers are parsed completely (more technical: as soon as the first cluster is encountered)\&. In this level the seek head entries and the cues will not be displayed \-\- even if they\*(Aqre located in front of the track information\&.
 .PP
 At level 1
 \fBmkvinfo\fR(1)
@@ -173,7 +182,7 @@ At level 3 and above
 \fBmkvinfo\fR(1)
 will print some information that is not directly connected to a
 Matroska(TM)
-element\&. All other elements only print stuff about the elements that were just found\&. Level 3 adds meta information to ease debugging (read: it\'s intended for developers only)\&. All lines written by level 3 are enclosed in square brackets to make filtering them out easy\&.
+element\&. All other elements only print stuff about the elements that were just found\&. Level 3 adds meta information to ease debugging (read: it\*(Aqs intended for developers only)\&. All lines written by level 3 are enclosed in square brackets to make filtering them out easy\&.
 .SH "EXIT CODES"
 .PP
 
@@ -205,7 +214,7 @@ exits with one of three exit codes:
 \fB1\fR
 \-\- In this case
 \fBmkvinfo\fR(1)
-has output at least one warning, but the run did continue\&. A warning is prefixed with the text \'Warning:\'\&.
+has output at least one warning, but the run did continue\&. A warning is prefixed with the text \*(AqWarning:\*(Aq\&.
 .RE
 .sp
 .RS 4
