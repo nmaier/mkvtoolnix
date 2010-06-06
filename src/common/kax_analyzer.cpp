@@ -94,7 +94,7 @@ kax_analyzer_c::analyzer_debugging_requested(const std::string &section) {
 
 void
 kax_analyzer_c::debug_dump_elements() {
-  int i;
+  size_t i;
   for (i = 0; i < m_data.size(); i++)
     log_debug_message(boost::format("%1%: %2%\n") % i % m_data[i]->to_string());
 }
@@ -111,8 +111,8 @@ kax_analyzer_c::debug_dump_elements_maybe(const std::string &hook_name) {
 void
 kax_analyzer_c::validate_data_structures(const std::string &hook_name) {
   bool gap_debugging = analyzer_debugging_requested("gaps");
-  int i;
-  bool ok = true;
+  bool ok            = true;
+  size_t i;
 
   for (i = 0; m_data.size() -1 > i; i++) {
     if ((m_data[i]->m_pos + m_data[i]->m_size) > m_data[i + 1]->m_pos) {
@@ -135,17 +135,17 @@ kax_analyzer_c::verify_data_structures_against_file(const std::string &hook_name
   kax_analyzer_c actual_content(m_file);
   actual_content.process();
 
-  int num_items    = std::max(m_data.size(), actual_content.m_data.size());
-  bool ok          = m_data.size() == actual_content.m_data.size();
-  int max_info_len = 0;
+  unsigned int num_items = std::max(m_data.size(), actual_content.m_data.size());
+  bool ok                = m_data.size() == actual_content.m_data.size();
+  size_t max_info_len    = 0;
   std::vector<std::string> info_this, info_actual, info_markings;
-  int i;
+  size_t i;
 
   for (i = 0; num_items > i; ++i) {
     info_this.push_back(                 m_data.size() > i ?                m_data[i]->to_string() : empty_string);
     info_actual.push_back(actual_content.m_data.size() > i ? actual_content.m_data[i]->to_string() : empty_string);
 
-    max_info_len           = std::max(max_info_len, static_cast<int>(info_this.back().length()));
+    max_info_len           = std::max(max_info_len, info_this.back().length());
 
     bool row_is_identical  = info_this.back() == info_actual.back();
     ok                    &= row_is_identical;
@@ -398,7 +398,7 @@ kax_analyzer_c::adjust_segment_size() {
       space.
  */
 bool
-kax_analyzer_c::handle_void_elements(int data_idx) {
+kax_analyzer_c::handle_void_elements(size_t data_idx) {
   // Is the element at the end of the file? If so truncate the file
   // and remove the element from the m_data structure if that was
   // requested. Then we're done.
@@ -411,7 +411,7 @@ kax_analyzer_c::handle_void_elements(int data_idx) {
   }
 
   // Are the following elements EbmlVoid elements?
-  int end_idx = data_idx + 1;
+  size_t end_idx = data_idx + 1;
   while ((m_data.size() > end_idx) && (m_data[end_idx]->m_id == EBML_ID(EbmlVoid)))
     ++end_idx;
 
@@ -507,7 +507,7 @@ kax_analyzer_c::handle_void_elements(int data_idx) {
  */
 void
 kax_analyzer_c::remove_from_meta_seeks(EbmlId id) {
-  int data_idx;
+  size_t data_idx;
 
   for (data_idx = 0; m_data.size() > data_idx; ++data_idx) {
     // We only have to do work on SeekHead elements. Skip the others.
@@ -525,7 +525,7 @@ kax_analyzer_c::remove_from_meta_seeks(EbmlId id) {
 
     // Iterate over its children and delete the ones we're looking for.
     bool modified = false;
-    int sh_idx    = 0;
+    size_t sh_idx = 0;
     while (seek_head->ListSize() > sh_idx) {
       if (EbmlId(*(*seek_head)[sh_idx]) != EBML_ID(KaxSeek)) {
         ++sh_idx;
@@ -581,7 +581,7 @@ kax_analyzer_c::remove_from_meta_seeks(EbmlId id) {
  */
 void
 kax_analyzer_c::overwrite_all_instances(EbmlId id) {
-  int data_idx;
+  size_t data_idx;
 
   for (data_idx = 0; m_data.size() > data_idx; ++data_idx) {
     // We only have to do work on specific elements. Skip the others.
@@ -604,7 +604,7 @@ kax_analyzer_c::overwrite_all_instances(EbmlId id) {
  */
 void
 kax_analyzer_c::merge_void_elements() {
-  int start_idx = 0;
+  size_t start_idx = 0;
 
   while (m_data.size() > start_idx) {
     // We only have to do work on EbmlVoid elements. Skip the others.
@@ -615,8 +615,8 @@ kax_analyzer_c::merge_void_elements() {
 
     // Found an EbmlVoid element. See how many consecutive EbmlVoid elements
     // there are at this position and calculate the combined size.
-    int end_idx  = start_idx + 1;
-    int new_size = m_data[start_idx]->m_size;
+    size_t end_idx  = start_idx + 1;
+    size_t new_size = m_data[start_idx]->m_size;
     while ((m_data.size() > end_idx) && (m_data[end_idx]->m_id == EBML_ID(EbmlVoid))) {
       new_size += m_data[end_idx]->m_size;
       ++end_idx;
@@ -681,9 +681,9 @@ void
 kax_analyzer_c::write_element(EbmlElement *e,
                               bool write_defaults) {
   e->UpdateSize(write_defaults);
-  int element_size = e->ElementSize(write_defaults);
+  int64_t element_size = e->ElementSize(write_defaults);
 
-  int data_idx;
+  size_t data_idx;
   for (data_idx = 0; m_data.size() > data_idx; ++data_idx) {
     // We're only interested in EbmlVoid elements. Skip the others.
     if (m_data[data_idx]->m_id != EBML_ID(EbmlVoid))
@@ -732,7 +732,8 @@ kax_analyzer_c::write_element(EbmlElement *e,
  */
 void
 kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
-  int data_idx, first_seek_head_idx = -1;
+  size_t data_idx;
+  int first_seek_head_idx = -1;
 
   for (data_idx = 0; m_data.size() > data_idx; ++data_idx) {
     // We only have to do work on SeekHead elements. Skip the others.
@@ -743,8 +744,8 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
     // merge_void_elemens() guarantees that there is no EbmlVoid element
     // at the end of the m_file and that all consecutive EbmlVoid elements
     // have been merged into a single element.
-    int available_space = m_data[data_idx]->m_size;
-    bool void_present   = false;
+    size_t available_space = m_data[data_idx]->m_size;
+    bool void_present      = false;
     if (((data_idx + 1) < m_data.size()) && (m_data[data_idx + 1]->m_id == EBML_ID(EbmlVoid))) {
       available_space += m_data[data_idx + 1]->m_size;
       void_present     = true;
@@ -849,7 +850,7 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
       continue;
 
     // Skip the element if it doesn't offer enough space for the seek head.
-    if (m_data[data_idx]->m_size < new_seek_head->ElementSize(true))
+    if (m_data[data_idx]->m_size < static_cast<int64_t>(new_seek_head->ElementSize(true)))
       continue;
 
     // We've found a suitable spot. Write the seek head.
@@ -880,7 +881,7 @@ EbmlMaster *
 kax_analyzer_c::read_all(const EbmlCallbacks &callbacks) {
   EbmlMaster *master = NULL;
   EbmlStream es(*m_file);
-  int i;
+  size_t i;
 
   for (i = 0; m_data.size() > i; ++i) {
     kax_analyzer_data_c &data = *m_data[i].get_object();
@@ -939,7 +940,7 @@ kax_analyzer_c::read_all_meta_seeks() {
 }
 
 void
-kax_analyzer_c::read_meta_seek(int64_t pos,
+kax_analyzer_c::read_meta_seek(uint64_t pos,
                                std::map<int64_t, bool> &positions_found) {
   if (m_meta_seeks_by_position[pos])
     return;
@@ -990,7 +991,7 @@ kax_analyzer_c::read_meta_seek(int64_t pos,
 }
 
 void
-kax_analyzer_c::fix_element_sizes(int64_t file_size) {
+kax_analyzer_c::fix_element_sizes(uint64_t file_size) {
   unsigned int i;
   for (i = 0; m_data.size() > i; ++i)
     if (-1 == m_data[i]->m_size)

@@ -40,8 +40,8 @@ CircBuffer::~CircBuffer(){
 int32_t CircBuffer::Skip(uint32_t numBytes){
   assert(numBytes > 0);
   if(can_read(numBytes)){
-    int32_t bbw = bytes_before_wrap_read(); //how many bytes we have before the buffer must be wrapped
-    if(bbw >= numBytes){
+    unsigned int bbw = bytes_before_wrap_read(); //how many bytes we have before the buffer must be wrapped
+    if (bbw >= numBytes) {
       move_pointer(&read_ptr, numBytes);
       bytes_in_buf -= numBytes;
     }else{
@@ -61,8 +61,8 @@ int32_t CircBuffer::Skip(uint32_t numBytes){
 
 int32_t CircBuffer::Read(binary* dest, uint32_t numBytes){
   if(can_read(numBytes)){
-    int32_t bbw = bytes_before_wrap_read(); //how many bytes we have before the buffer must be wrapped
-    if(bbw >= numBytes){
+    unsigned int bbw = bytes_before_wrap_read(); //how many bytes we have before the buffer must be wrapped
+    if (bbw >= numBytes) {
       memcpy(dest, read_ptr, numBytes);
       move_pointer(&read_ptr, numBytes);
       bytes_in_buf -= numBytes;
@@ -86,8 +86,8 @@ int32_t CircBuffer::Read(binary* dest, uint32_t numBytes){
 
 int32_t CircBuffer::Write(binary* data, uint32_t length){
   if(can_write(length)){
-    int32_t bbw = bytes_before_wrap_write();
-    if(bbw >= length){
+    unsigned int bbw = bytes_before_wrap_write();
+    if (bbw >= length) {
       memcpy(write_ptr, data, length);
       move_pointer(&write_ptr, length);
       bytes_in_buf += length;

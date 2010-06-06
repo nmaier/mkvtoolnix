@@ -26,7 +26,7 @@
 
 int
 dirac_es_reader_c::probe_file(mm_io_c *io,
-                              int64_t size) {
+                              uint64_t size) {
   try {
     if (PROBESIZE > size)
       return 0;

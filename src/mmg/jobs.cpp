@@ -132,10 +132,10 @@ job_run_dialog::start_next_job() {
 
   ++current_job;
 
-  if ((jobs_to_start.size() <= current_job) || cb_abort_after_current->IsChecked() || abort) {
+  if ((static_cast<int>(jobs_to_start.size()) <= current_job) || cb_abort_after_current->IsChecked() || abort) {
     if (   abort
         || (   cb_abort_after_current->IsChecked()
-            && (current_job < jobs_to_start.size())))
+            && (current_job < static_cast<int>(jobs_to_start.size()))))
       add_to_log(wxString::Format(Z("Aborted processing on %s"), format_date_time(wxGetUTCTime()).c_str()));
     else
       add_to_log(wxString::Format(Z("Finished processing on %s"), format_date_time(wxGetUTCTime()).c_str()));
@@ -193,7 +193,7 @@ job_run_dialog::start_next_job() {
   mdlg->update_command_line();
   wxArrayString *arg_list = &mdlg->get_command_line_args();
 
-  int i;
+  size_t i;
   for (i = 1; i < arg_list->Count(); i++) {
     if ((*arg_list)[i].Length() == 0)
       opt_file->Write(wxT("#EMPTY#"));
@@ -436,7 +436,7 @@ job_dialog::job_dialog(wxWindow *parent):
   item.m_text  = Z("Finished on");
   lv_jobs->InsertColumn(5, item);
 
-  int i;
+  size_t i;
   for (i = 0; i < jobs.size(); i++)
     create_list_item(i);
 
@@ -557,7 +557,7 @@ job_dialog::enable_buttons(bool enable,
 
 void
 job_dialog::on_start(wxCommandEvent &evt) {
-  int i;
+  size_t i;
   std::vector<int> jobs_to_start;
 
   for (i = 0; jobs.size() > i; ++i)
@@ -570,7 +570,7 @@ job_dialog::on_start(wxCommandEvent &evt) {
 
 void
 job_dialog::on_start_selected(wxCommandEvent &evt) {
-  int i;
+  size_t i;
   std::vector<int> jobs_to_start;
 
   for (i = 0; jobs.size() > i; ++i)
@@ -583,14 +583,14 @@ job_dialog::on_start_selected(wxCommandEvent &evt) {
 
 void
 job_dialog::on_delete(wxCommandEvent &evt) {
-  int i;
+  size_t i;
   std::vector<bool> selected;
 
-  for (i = 0; lv_jobs->GetItemCount() > i; ++i)
+  for (i = 0; static_cast<size_t>(lv_jobs->GetItemCount()) > i; ++i)
     selected.push_back(lv_jobs->IsSelected(i));
 
-  i     = 0;
-  int k = 0;
+  i        = 0;
+  size_t k = 0;
   while (jobs.size() > i) {
     if (selected[k]) {
       wxRemoveFile(wxString::Format(wxT("%s/%d.mmg"), app->get_jobs_folder().c_str(), jobs[i].id));
@@ -606,8 +606,8 @@ job_dialog::on_delete(wxCommandEvent &evt) {
 }
 
 void
-job_dialog::swap_rows(int lower,
-                      int higher,
+job_dialog::swap_rows(unsigned int lower,
+                      unsigned int higher,
                       bool up) {
   if ((lower == higher) || (0 > lower) || (0 > higher) || (jobs.size() <= lower) || (jobs.size() <= higher))
     return;
@@ -636,9 +636,9 @@ job_dialog::on_up(wxCommandEvent &evt) {
   std::vector<bool> selected;
 
   bool first = true;
-  int i      = 0;
-  int k;
-  for (k = 0; lv_jobs->GetItemCount() > k; ++k) {
+  size_t i   = 0;
+  size_t k;
+  for (k = 0; static_cast<size_t>(lv_jobs->GetItemCount()) > k; ++k) {
     selected.push_back(lv_jobs->IsSelected(k));
     if (lv_jobs->IsSelected(k) && first)
       ++i;
@@ -714,7 +714,7 @@ job_dialog::on_disable(wxCommandEvent &evt) {
 void
 job_dialog::on_view_log(wxCommandEvent &evt) {
   wxString log;
-  int i;
+  size_t i;
 
   for (i = 0; i < jobs.size(); i++) {
     if (!lv_jobs->IsSelected(i))
@@ -762,7 +762,7 @@ job_dialog::start_jobs(std::vector<int> &jobs_to_start) {
   mdlg->load(temp_settings, true);
   wxRemoveFile(temp_settings);
 
-  int i;
+  size_t i;
   for (i = 0; i < jobs_to_start.size(); i++) {
     lv_jobs->DeleteItem(jobs_to_start[i]);
     create_list_item(jobs_to_start[i]);

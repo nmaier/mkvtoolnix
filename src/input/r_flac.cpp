@@ -85,7 +85,7 @@ flac_eof_cb(const FLAC__StreamDecoder *,
 
 int
 flac_reader_c::probe_file(mm_io_c *io,
-                          int64_t size) {
+                          uint64_t size) {
   unsigned char data[4];
 
   if (4 > size)
@@ -253,7 +253,7 @@ file_status_e
 flac_reader_c::read(generic_packetizer_c *,
                     bool) {
   unsigned char *buf;
-  int samples_here;
+  unsigned int samples_here;
 
   if (current_block == blocks.end())
     return FILE_STATUS_DONE;

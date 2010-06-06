@@ -75,7 +75,7 @@ create_timecode_files(KaxTracks &kax_tracks,
                       std::vector<track_spec_t> &tracks,
                       int version) {
   std::vector<track_spec_t>::iterator tspec;
-  int i;
+  size_t i;
   int64_t default_duration;
 
   mxforeach(tspec, tracks) {
@@ -130,7 +130,7 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
   int64_t duration            = NULL == kduration ? extractor->m_default_duration * block->NumberFrames() : uint64(*kduration) * tc_scale;
 
   // Pass the block to the extractor.
-  int i;
+  size_t i;
   for (i = 0; block->NumberFrames() > i; ++i)
     extractor->m_timecodes.push_back((int64_t)(block->GlobalTimecode() + i * (double)duration / block->NumberFrames()));
 }
@@ -152,7 +152,7 @@ handle_simpleblock(KaxSimpleBlock &simpleblock,
     return;
 
   // Pass the block to the extractor.
-  int i;
+  size_t i;
   for (i = 0; simpleblock.NumberFrames() > i; ++i)
     extractor->m_timecodes.push_back((int64_t)(simpleblock.GlobalTimecode() + i * (double)extractor->m_default_duration));
 }

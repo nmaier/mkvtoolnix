@@ -26,18 +26,18 @@ private:
 public:
   bitvalue_c(int size);
   bitvalue_c(const bitvalue_c &src);
-  bitvalue_c(std::string s, int allowed_bitlength = -1);
+  bitvalue_c(std::string s, unsigned int allowed_bitlength = 0);
   bitvalue_c(const EbmlBinary &elt);
   virtual ~bitvalue_c();
 
   bitvalue_c &operator =(const bitvalue_c &src);
   bool operator ==(const bitvalue_c &cmp) const;
-  unsigned char operator [](int index) const;
+  unsigned char operator [](size_t index) const;
 
   inline bool empty() const {
     return 0 == m_value->get_size();
   }
-  inline int size() const {
+  inline size_t size() const {
     return m_value->get_size() * 8;
   }
   void generate_random();

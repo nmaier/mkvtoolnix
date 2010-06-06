@@ -44,7 +44,8 @@ he_language_value_page_c::translate_ui() {
   if (NULL == m_cb_language)
     return;
 
-  int i, selection = m_cb_language->GetSelection();
+  size_t i;
+  int selection = m_cb_language->GetSelection();
   for (i = 0; i < sorted_iso_codes.Count(); i++)
     m_cb_language->SetString(i, sorted_iso_codes[i]);
   m_cb_language->SetSelection(selection);
@@ -57,7 +58,7 @@ he_language_value_page_c::create_input_control() {
 
   m_cb_language = new wxMTX_COMBOBOX_TYPE(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
 
-  int i;
+  size_t i;
   for (i = 0; i < sorted_iso_codes.Count(); i++)
     m_cb_language->Append(sorted_iso_codes[i]);
 
@@ -78,7 +79,7 @@ he_language_value_page_c::get_current_value_as_string() {
 
 void
 he_language_value_page_c::reset_value() {
-  int i;
+  size_t i;
   for (i = 0; sorted_iso_codes.size() > i; ++i)
     if (extract_language_code(sorted_iso_codes[i]) == m_original_value) {
       set_combobox_selection(m_cb_language, sorted_iso_codes[i]);

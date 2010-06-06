@@ -43,7 +43,7 @@ vobsub_entry_c::operator < (const vobsub_entry_c &cmp) const {
 
 int
 vobsub_reader_c::probe_file(mm_io_c *io,
-                            int64_t size) {
+                            uint64_t size) {
   char chunk[80];
 
   try {
@@ -71,8 +71,8 @@ vobsub_reader_c::vobsub_reader_c(track_info_c &_ti)
   }
 
   std::string sub_name = m_ti.m_fname;
-  int len              = sub_name.rfind(".");
-  if (0 <= len)
+  size_t len           = sub_name.rfind(".");
+  if (std::string::npos != len)
     sub_name.erase(len);
   sub_name += ".sub";
 
@@ -120,7 +120,7 @@ vobsub_reader_c::~vobsub_reader_c() {
 
 void
 vobsub_reader_c::create_packetizer(int64_t tid) {
-  if ((tracks.size() <= tid) || !demuxing_requested('s', tid) || (-1 != tracks[tid]->ptzr))
+  if ((tracks.size() <= static_cast<size_t>(tid)) || !demuxing_requested('s', tid) || (-1 != tracks[tid]->ptzr))
     return;
 
   vobsub_track_c *track = tracks[tid];
@@ -131,7 +131,7 @@ vobsub_reader_c::create_packetizer(int64_t tid) {
   int64_t avg_duration;
   if (!track->entries.empty()) {
     avg_duration = 0;
-    int k;
+    size_t k;
     for (k = 0; k < (track->entries.size() - 1); k++) {
       int64_t duration            = track->entries[k + 1].timestamp - track->entries[k].timestamp;
       track->entries[k].duration  = duration;
@@ -303,7 +303,7 @@ vobsub_reader_c::parse_headers() {
   }
 
   if (!g_identifying && (1 < verbose)) {
-    int i, k, tsize = tracks.size();
+    size_t i, k, tsize = tracks.size();
     for (i = 0; i < tsize; i++) {
       mxinfo(boost::format("vobsub_reader: Track number %1%\n") % i);
       for (k = 0; k < tracks[i]->entries.size(); k++)
@@ -407,23 +407,24 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
   const unsigned char wanted[] = { 0, 0, 1 };
   unsigned char buf[5];
 
-  vobsub_track_c *track        = tracks[track_id];
-  int64_t timecode             = track->entries[track->idx].timestamp;
-  int64_t duration             = track->entries[track->idx].duration;
-  int64_t extraction_start_pos = track->entries[track->idx].position;
-  int64_t extraction_end_pos   = track->idx >= track->entries.size() - 1 ? sub_file->get_size() : track->entries[track->idx + 1].position;
+  vobsub_track_c *track         = tracks[track_id];
+  int64_t timecode              = track->entries[track->idx].timestamp;
+  int64_t duration              = track->entries[track->idx].duration;
+  uint64_t extraction_start_pos = track->entries[track->idx].position;
+  uint64_t extraction_end_pos   = track->idx >= track->entries.size() - 1 ? sub_file->get_size() : track->entries[track->idx + 1].position;
 
-  int64_t pts                  = 0;
-  unsigned char *dst_buf       = NULL;
-  uint32_t dst_size            = 0;
-  uint32_t packet_size         = 0;
-  int spu_len                  = -1;
+  int64_t pts                   = 0;
+  unsigned char *dst_buf        = NULL;
+  uint32_t dst_size             = 0;
+  uint32_t packet_size          = 0;
+  unsigned int spu_len          = 0;
+  bool spu_len_valid            = false;
 
   sub_file->setFilePointer(extraction_start_pos);
   track->packet_num++;
 
   while (1) {
-    if ((spu_len >= 0) && ((dst_size >= spu_len) || (sub_file->getFilePointer() >= extraction_end_pos))) {
+    if (spu_len_valid && ((dst_size >= spu_len) || (sub_file->getFilePointer() >= extraction_end_pos))) {
       if (dst_size != spu_len)
         mxverb(3,
                boost::format("r_vobsub.cpp: stddeliver spu_len different from dst_size; pts %5% spu_len %1% dst_size %2% curpos %3% endpos %4%\n")
@@ -558,8 +559,10 @@ vobsub_reader_c::extract_one_spu_packet(int64_t track_id) {
             mxwarn(Y("vobsub_reader: sub_file->read failure"));
             return deliver();
           }
-          if (-1 == spu_len)
-            spu_len = get_uint16_be(dst_buf);
+          if (!spu_len_valid) {
+            spu_len       = get_uint16_be(dst_buf);
+            spu_len_valid = true;
+          }
 
           dst_size        += packet_size;
           track->spu_size += packet_size;
@@ -631,7 +634,7 @@ vobsub_reader_c::get_progress() {
 void
 vobsub_reader_c::identify() {
   std::vector<std::string> verbose_info;
-  int i;
+  size_t i;
 
   id_result_container("VobSub");
 
@@ -656,7 +659,7 @@ vobsub_reader_c::flush_packetizers() {
 
 void
 vobsub_reader_c::add_available_track_ids() {
-  int i;
+  size_t i;
 
   for (i = 0; i < tracks.size(); i++)
     add_available_track_id(i);

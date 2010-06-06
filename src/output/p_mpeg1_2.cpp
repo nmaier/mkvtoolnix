@@ -66,10 +66,10 @@ mpeg1_2_video_packetizer_c::process_framed(packet_cptr packet) {
 
 bool
 mpeg1_2_video_packetizer_c::put_sequence_headers_into_codec_state(packet_cptr packet) {
-  unsigned char *buf = packet->data->get_buffer();
-  int pos            = 4;
-  int size           = packet->data->get_size();
-  int marker         = get_uint32_be(buf);
+  unsigned char *buf  = packet->data->get_buffer();
+  size_t  pos         = 4;
+  size_t  size        = packet->data->get_size();
+  unsigned int marker = get_uint32_be(buf);
 
   while ((pos < size) && (MPEGVIDEO_SEQUENCE_START_CODE != marker)) {
     marker <<= 8;
@@ -80,9 +80,9 @@ mpeg1_2_video_packetizer_c::put_sequence_headers_into_codec_state(packet_cptr pa
   if ((MPEGVIDEO_SEQUENCE_START_CODE != marker) || ((pos + 4) >= size))
     return false;
 
-  int start  = pos - 4;
-  marker     = get_uint32_be(&buf[pos]);
-  pos       += 4;
+  size_t start  = pos - 4;
+  marker        = get_uint32_be(&buf[pos]);
+  pos          += 4;
 
   while ((pos < size) && ((MPEGVIDEO_EXT_START_CODE == marker) || (0x00000100 != (marker & 0xffffff00)))) {
     marker <<= 8;
@@ -93,8 +93,8 @@ mpeg1_2_video_packetizer_c::put_sequence_headers_into_codec_state(packet_cptr pa
   if (pos >= size)
     return false;
 
-  pos         -= 4;
-  int sh_size  = pos - start;
+  pos            -= 4;
+  size_t sh_size  = pos - start;
 
   if (NULL == m_hcodec_private) {
     set_codec_private(&buf[start], sh_size);

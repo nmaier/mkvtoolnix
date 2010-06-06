@@ -203,10 +203,10 @@ target_c::set_level1_element(EbmlMaster *level1_element) {
   if (target_c::tt_track != m_type)
     assert(false);
 
-  std::map<uint8, int> num_tracks_by_type;
-  int num_tracks_total = 0;
+  std::map<uint8, unsigned int> num_tracks_by_type;
+  unsigned int num_tracks_total = 0;
 
-  int i;
+  size_t i;
   for (i = 0; level1_element->ListSize() > i; ++i) {
     if (!is_id((*level1_element)[i], KaxTrackEntry))
       continue;

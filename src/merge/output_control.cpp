@@ -622,7 +622,7 @@ render_headers(mm_io_c *out) {
 
     // Set the segment family
     if (!g_segfamily_uids.empty()) {
-      int i;
+      size_t i;
       for (i = 0; i < g_segfamily_uids.size(); i++)
         AddNewChild<KaxSegmentFamily>(*s_kax_infos).CopyBuffer(g_segfamily_uids[i].data(), 128 / 8);
     }
@@ -668,9 +668,9 @@ render_headers(mm_io_c *out) {
     if (first_file) {
       g_kax_last_entry = NULL;
 
-      int i;
+      size_t i;
       for (i = 0; i < g_track_order.size(); i++)
-        if ((g_track_order[i].file_id >= 0) && (g_track_order[i].file_id < g_files.size()) && !g_files[g_track_order[i].file_id].appending)
+        if ((g_track_order[i].file_id >= 0) && (g_track_order[i].file_id < static_cast<int>(g_files.size())) && !g_files[g_track_order[i].file_id].appending)
           g_files[g_track_order[i].file_id].reader->set_headers_for_track(g_track_order[i].track_id);
 
       for (i = 0; i < g_files.size(); i++)
@@ -794,13 +794,13 @@ check_append_mapping() {
   std::vector<append_spec_t>::iterator amap, cmp_amap, trav_amap;
   std::vector<int64_t>::iterator id;
   std::vector<filelist_t>::iterator src_file, dst_file;
-  int count, file_id;
+  int file_id;
 
   mxforeach(amap, g_append_mapping) {
     // Check each mapping entry for validity.
 
     // 1. Is there a file with the src_file_id?
-    if ((0 > amap->src_file_id) || (g_files.size() <= amap->src_file_id))
+    if ((0 > amap->src_file_id) || (g_files.size() <= static_cast<size_t>(amap->src_file_id)))
       mxerror(boost::format(Y("There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n")) % amap->src_file_id);
 
     // 2. Is the "source" file in "append mode", meaning does its file name
@@ -810,7 +810,7 @@ check_append_mapping() {
       mxerror(boost::format(Y("The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n")) % amap->src_file_id % src_file->name);
 
     // 3. Is there a file with the dst_file_id?
-    if ((0 > amap->dst_file_id) || (g_files.size() <= amap->dst_file_id))
+    if ((0 > amap->dst_file_id) || (g_files.size() <= static_cast<size_t>(amap->dst_file_id)))
       mxerror(boost::format(Y("There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n")) % amap->dst_file_id);
 
     // 4. G_Files cannot be appended to itself.
@@ -826,7 +826,7 @@ check_append_mapping() {
     if (!src_file->appending)
       continue;
 
-    count = 0;
+    unsigned int count = 0;
     mxforeach(amap, g_append_mapping)
       if (amap->src_file_id == file_id)
         count++;
@@ -1215,7 +1215,7 @@ add_tags_from_cue_chapters() {
 
   bool found = false;
   int tuid   = 0;
-  int i;
+  size_t i;
   for (i = 0; ptzrs_in_header_order.size() > i; ++i)
     if (ptzrs_in_header_order[i]->get_track_type() == 'v') {
       found = true;
@@ -1401,7 +1401,7 @@ finish_file(bool last_file) {
     changed = 1;
 
   } else if (!last_file && g_no_linking) {
-    int i;
+    size_t i;
     for (i = 0; s_kax_infos->ListSize() > i; ++i)
       if (EbmlId(*(*s_kax_infos)[i]) == EBML_ID(KaxNextUID)) {
         delete (*s_kax_infos)[i];
@@ -1532,7 +1532,7 @@ finish_file(bool last_file) {
   delete s_out;
 
   // The tracks element must not be deleted.
-  int i;
+  size_t i;
   for (i = 0; i < g_kax_segment->ListSize(); ++i)
     if (NULL == dynamic_cast<KaxTracks *>((*g_kax_segment)[i]))
       delete (*g_kax_segment)[i];

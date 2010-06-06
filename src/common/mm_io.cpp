@@ -330,7 +330,7 @@ mm_file_io_c::prepare_path(const std::string &path) {
   // The file name is the last element -- remove it.
   parts.pop_back();
 
-  for (int i = 0; parts.size() > i; ++i) {
+  for (size_t i = 0; parts.size() > i; ++i) {
     // Ignore empty path components.
     if (parts[i].empty())
       continue;
@@ -560,7 +560,7 @@ mm_io_c::read(memory_cptr &buffer,
   if (-1 == offset)
     offset = buffer->get_size();
 
-  if (buffer->get_size() <= (size + offset))
+  if (buffer->get_size() <= (size + static_cast<size_t>(offset)))
     buffer->resize(size + offset);
 
   if (read(buffer->get_buffer() + offset, size) != size)
@@ -630,12 +630,12 @@ mm_io_c::write(const void *buffer,
   return _write(buffer, size);
 }
 
-uint32_t
+size_t
 mm_io_c::write(const memory_cptr &buffer,
-               int size,
-               int offset) {
-  if (-1 == size)
-    size = buffer->get_size();
+               size_t size,
+               size_t offset) {
+  size = std::min(buffer->get_size() - offset, size);
+
   if (write(buffer->get_buffer() + offset, size) != size)
     throw mm_io_eof_error_c();
   return size;
@@ -643,9 +643,7 @@ mm_io_c::write(const memory_cptr &buffer,
 
 void
 mm_io_c::skip(int64 num_bytes) {
-  int64_t pos;
-
-  pos = getFilePointer();
+  uint64_t pos = getFilePointer();
   setFilePointer(pos + num_bytes);
   if ((pos + num_bytes) != getFilePointer())
     throw error_c(Y("end-of-file"));
@@ -678,7 +676,7 @@ mm_io_c::write_bom(const std::string &charset) {
   static const unsigned char utf32le_bom[4] = {0xff, 0xfe, 0x00, 0x00};
   static const unsigned char utf32be_bom[4] = {0x00, 0x00, 0xff, 0xfe};
   const unsigned char *bom;
-  int bom_len;
+  unsigned int bom_len;
 
   if (charset.empty())
     return false;
@@ -859,7 +857,7 @@ mm_mem_io_c::setFilePointer(int64 offset,
     : seek_end       == mode ? mem_size - offset
     :                          pos      + offset;
 
-  if ((0 <= new_pos) && (mem_size >= new_pos))
+  if ((0 <= new_pos) && (static_cast<int64_t>(mem_size) >= new_pos))
     pos = new_pos;
   else
     throw mm_io_seek_error_c();
@@ -868,7 +866,7 @@ mm_mem_io_c::setFilePointer(int64 offset,
 uint32
 mm_mem_io_c::_read(void *buffer,
                    size_t size) {
-  int64_t rbytes = (pos + size) >= mem_size ? mem_size - pos : size;
+  size_t rbytes = std::min(size, mem_size - pos);
   if (read_only)
     memcpy(buffer, &ro_mem[pos], rbytes);
   else
@@ -998,12 +996,11 @@ mm_text_io_c::has_byte_order_marker(const std::string &string) {
 int
 mm_text_io_c::read_next_char(char *buffer) {
   unsigned char stream[6];
-  int i;
 
   if (byte_order == BO_NONE)
     return read(buffer, 1);
 
-  int size = 0;
+  size_t size = 0;
   if (byte_order == BO_UTF8) {
     if (read(stream, 1) != 1)
       return 0;
@@ -1014,9 +1011,9 @@ mm_text_io_c::read_next_char(char *buffer) {
          : ((stream[0] & 0xf8) == 0xf0) ?  4
          : ((stream[0] & 0xfc) == 0xf8) ?  5
          : ((stream[0] & 0xfe) == 0xfc) ?  6
-         :                                -1;
+         :                                99;
 
-    if (-1 == size)
+    if (99 == size)
       mxerror(boost::format(Y("mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|")) % (unsigned int)stream[0]);
 
     if ((1 < size) && (read(&stream[1], size - 1) != (size - 1)))
@@ -1035,6 +1032,7 @@ mm_text_io_c::read_next_char(char *buffer) {
     return 0;
 
   unsigned long data = 0;
+  size_t i;
   if ((byte_order == BO_UTF16_LE) || (byte_order == BO_UTF32_LE))
     for (i = 0; i < size; i++) {
       data <<= 8;

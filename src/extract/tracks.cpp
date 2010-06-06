@@ -48,7 +48,7 @@ static std::vector<xtr_base_c *> extractors;
 static void
 create_extractors(KaxTracks &kax_tracks,
                   std::vector<track_spec_t> &tracks) {
-  int i;
+  size_t i;
 
   for (i = 0; i < kax_tracks.ListSize(); i++) {
     if (!is_id(kax_tracks[i], KaxTrackEntry))
@@ -63,7 +63,7 @@ create_extractors(KaxTracks &kax_tracks,
 
     // Is there more than one track with the same track number?
     xtr_base_c *extractor = NULL;
-    int k;
+    size_t k;
     for (k = 0; k < extractors.size(); k++)
       if (extractors[k]->m_tid == tnum) {
         mxwarn(boost::format(Y("More than one track with the track number %1% found.\n")) % tnum);
@@ -128,7 +128,7 @@ handle_blockgroup(KaxBlockGroup &blockgroup,
 
   // Do we need this block group?
   xtr_base_c *extractor = NULL;
-  int i;
+  size_t i;
   for (i = 0; i < extractors.size(); i++)
     if (block->TrackNum() == extractors[i]->m_tid) {
       extractor = extractors[i];
@@ -224,7 +224,7 @@ handle_simpleblock(KaxSimpleBlock &simpleblock,
 
 static void
 close_extractors() {
-  int i;
+  size_t i;
 
   for (i = 0; i < extractors.size(); i++)
     extractors[i]->finish_track();
@@ -246,7 +246,7 @@ static void
 write_all_cuesheets(KaxChapters &chapters,
                     KaxTags &tags,
                     std::vector<track_spec_t> &tspecs) {
-  int i;
+  size_t i;
   mm_io_c *out = NULL;
 
   for (i = 0; i < tspecs.size(); i++) {
@@ -285,7 +285,7 @@ write_all_cuesheets(KaxChapters &chapters,
 static void
 find_track_uids(KaxTracks &tracks,
                 std::vector<track_spec_t> &tspecs) {
-  int t;
+  size_t t;
 
   for (t = 0; t < tracks.ListSize(); t++) {
     KaxTrackEntry *track_entry = dynamic_cast<KaxTrackEntry *>(tracks[t]);
@@ -294,7 +294,7 @@ find_track_uids(KaxTracks &tracks,
 
     int64_t track_number = kt_get_number(*track_entry);
 
-    int s;
+    size_t s;
     for (s = 0; tspecs.size() > s; ++s)
       if (tspecs[s].tid == track_number) {
         tspecs[s].tuid = kt_get_uid(*track_entry);
@@ -396,7 +396,7 @@ extract_tracks(const std::string &file_name,
         } else
           cluster->InitTimecode(0, tc_scale);
 
-        int i;
+        size_t i;
         for (i = 0; cluster->ListSize() > i; ++i) {
           EbmlElement *el = (*cluster)[i];
           if (EbmlId(*el) == EBML_ID(KaxBlockGroup)) {

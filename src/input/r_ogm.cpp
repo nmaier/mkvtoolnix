@@ -270,7 +270,7 @@ extract_vorbis_comments(const memory_cptr &mem) {
 */
 int
 ogm_reader_c::probe_file(mm_io_c *io,
-                         int64_t size) {
+                         uint64_t size) {
   unsigned char data[4];
 
   if (4 > size)
@@ -322,7 +322,7 @@ ogm_reader_c::~ogm_reader_c() {
 
 ogm_demuxer_cptr
 ogm_reader_c::find_demuxer(int serialno) {
-  int i;
+  size_t i;
 
   for (i = 0; i < sdemuxers.size(); i++)
     if (sdemuxers[i]->serialno == serialno) {
@@ -375,7 +375,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
   ogm_demuxer_cptr dmx;
   generic_packetizer_c *ptzr;
 
-  if ((0 > tid) || (sdemuxers.size() <= tid))
+  if ((0 > tid) || (sdemuxers.size() <= static_cast<size_t>(tid)))
     return;
   dmx = sdemuxers[tid];
 
@@ -399,7 +399,7 @@ ogm_reader_c::create_packetizer(int64_t tid) {
 
 void
 ogm_reader_c::create_packetizers() {
-  int i;
+  size_t i;
 
   for (i = 0; i < sdemuxers.size(); i++)
     create_packetizer(i);
@@ -410,11 +410,10 @@ ogm_reader_c::create_packetizers() {
 */
 int
 ogm_reader_c::packet_available() {
-  int i;
-
-  if (sdemuxers.size() == 0)
+  if (sdemuxers.empty())
     return 0;
 
+  size_t i;
   for (i = 0; i < sdemuxers.size(); i++)
     if ((-1 != sdemuxers[i]->ptzr) && !PTZR(sdemuxers[i]->ptzr)->packet_available())
       return 0;
@@ -624,7 +623,7 @@ ogm_reader_c::read_headers() {
 
       done = true;
 
-      int i;
+      size_t i;
       for (i = 0; i < sdemuxers.size(); i++) {
         ogm_demuxer_cptr &dmx = sdemuxers[i];
         if (!dmx->headers_read && dmx->in_use) {
@@ -667,7 +666,7 @@ ogm_reader_c::read(generic_packetizer_c *,
       process_page(&og);
   } while (ogg_page_bos(&og));
 
-  int i;
+  size_t i;
   // Are there streams that have not finished yet?
   for (i = 0; i < sdemuxers.size(); i++)
     if (!sdemuxers[i]->eos && sdemuxers[i]->in_use)
@@ -686,7 +685,7 @@ ogm_reader_c::get_progress() {
 void
 ogm_reader_c::identify() {
   std::vector<std::string> verbose_info;
-  int i;
+  size_t i;
 
   // Check if a video track has a TITLE comment. If yes we use this as the
   // new segment title / global file title.
@@ -724,7 +723,7 @@ ogm_reader_c::handle_stream_comments() {
 
   bool charset_warning_printed = false;
   charset_converter_cptr cch   = charset_converter_c::init(m_ti.m_chapter_charset);
-  int i;
+  size_t i;
 
   for (i = 0; i < sdemuxers.size(); i++) {
     ogm_demuxer_cptr &dmx = sdemuxers[i];
@@ -737,7 +736,7 @@ ogm_reader_c::handle_stream_comments() {
 
     std::vector<std::string> chapter_strings;
 
-    int j;
+    size_t j;
     for (j = 0; comments->size() > j; j++) {
       mxverb(2, boost::format("ogm_reader: commment for #%1% for %2%: %3%\n") % j % i % (*comments)[j]);
       std::vector<std::string> comment = split((*comments)[j], "=", 2);
@@ -829,7 +828,7 @@ ogm_reader_c::handle_stream_comments() {
 
 void
 ogm_reader_c::add_available_track_ids() {
-  int i;
+  size_t i;
 
   for (i = 0; i < sdemuxers.size(); i++)
     add_available_track_id(i);
@@ -1271,10 +1270,10 @@ ogm_v_mscomp_demuxer_c::process_page(int64_t granulepos) {
   }
 
   // Is there a gap in the granulepos values?
-  if ((granulepos - last_granulepos) > frames.size())
+  if (static_cast<size_t>(granulepos - last_granulepos) > frames.size())
     last_granulepos = granulepos - frames.size();
 
-  int i;
+  size_t i;
   for (i = 0; i < frames.size(); ++i) {
     ogm_frame_t &frame = frames[i];
 

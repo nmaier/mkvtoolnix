@@ -142,7 +142,7 @@ kax_track_t::handle_packetizer_default_duration() {
 */
 int
 kax_reader_c::probe_file(mm_io_c *io,
-                         int64_t size) {
+                         uint64_t size) {
   unsigned char data[4];
 
   if (4 > size)
@@ -522,7 +522,7 @@ kax_reader_c::verify_button_track(kax_track_t *t) {
 
 void
 kax_reader_c::verify_tracks() {
-  int tnum;
+  size_t tnum;
   kax_track_t *t;
 
   for (tnum = 0; tnum < m_tracks.size(); tnum++) {
@@ -600,7 +600,7 @@ kax_reader_c::handle_attachments(mm_io_c *io,
 
     atts->Read(*m_es, EBML_CLASS_CONTEXT(KaxAttachments), upper_lvl_el, l2, true);
 
-    int i;
+    size_t i;
     for (i = 0; i < atts->ListSize(); i++) {
       KaxAttached *att = (KaxAttached *)(*atts)[i];
 
@@ -611,7 +611,7 @@ kax_reader_c::handle_attachments(mm_io_c *io,
         int64_t size          = -1;
         int64_t id            = -1;
         unsigned char *data   = NULL;
-        int k;
+        size_t k;
 
         for (k = 0; k < att->ListSize(); k++) {
           l2 = (*att)[k];
@@ -684,7 +684,7 @@ kax_reader_c::handle_chapters(mm_io_c *io,
     if (NULL == m_chapters)
       m_chapters = new KaxChapters;
 
-    int i;
+    size_t i;
     for (i = 0; i < tmp_chapters->ListSize(); i++)
       m_chapters->PushElement(*(*tmp_chapters)[i]);
     tmp_chapters->RemoveAll();
@@ -736,7 +736,7 @@ kax_reader_c::handle_tags(mm_io_c *io,
           if (NULL != track) {
             bool contains_tag = false;
 
-            int i;
+            size_t i;
             for (i = 0; i < tag->ListSize(); i++)
               if (dynamic_cast<KaxTagSimple *>((*tag)[i]) != NULL) {
                 contains_tag = true;
@@ -834,7 +834,7 @@ kax_reader_c::read_headers_info(EbmlElement *&l1,
 
 void
 kax_reader_c::read_headers_info_writing_app(KaxWritingApp *&km_writing_app) {
-  int idx;
+  size_t idx;
 
   std::string s = UTFstring_to_cstrutf8(UTFstring(*km_writing_app));
   strip(s);
@@ -1148,14 +1148,14 @@ kax_reader_c::read_headers_seek_head(EbmlElement *&l0,
   int i = 0;
   seek_head.Read(*m_es, EBML_CLASS_CONTEXT(KaxSeekHead), i, el, true);
 
-  for (i = 0; i < seek_head.ListSize(); i++) {
+  for (i = 0; i < static_cast<int>(seek_head.ListSize()); i++) {
     if (EbmlId(*seek_head[i]) != EBML_ID(KaxSeek))
       continue;
 
     KaxSeek &seek           = *static_cast<KaxSeek *>(seek_head[i]);
     int64_t pos             = -1;
     deferred_l1_type_e type = dl1t_unknown;
-    int k;
+    size_t k;
 
     for (k = 0; k < seek.ListSize(); k++)
       if (EbmlId(*seek[k]) == EBML_ID(KaxSeekID)) {
@@ -1317,7 +1317,7 @@ kax_reader_c::process_global_tags() {
   if (!m_tags.is_set() || g_identifying)
     return;
 
-  int i;
+  size_t i;
   for (i = 0; m_tags->ListSize() > i; ++i)
     add_tags(static_cast<KaxTag *>((*m_tags)[i]));
 
@@ -1812,7 +1812,7 @@ kax_reader_c::read_first_frames(kax_track_t *t,
   if (t->first_frames_data.size() >= num_wanted)
     return;
 
-  std::map<int64_t, int> frames_by_track_id;
+  std::map<int64_t, unsigned int> frames_by_track_id;
 
   m_in->save_pos();
 
@@ -1826,7 +1826,7 @@ kax_reader_c::read_first_frames(kax_track_t *t,
       if (NULL != ctc)
         cluster->InitTimecode(uint64(*ctc), m_tc_scale);
 
-      int bgidx;
+      size_t bgidx;
       for (bgidx = 0; bgidx < cluster->ListSize(); bgidx++) {
         if ((EbmlId(*(*cluster)[bgidx]) == EBML_ID(KaxSimpleBlock))) {
           KaxSimpleBlock *block_simple = static_cast<KaxSimpleBlock *>((*cluster)[bgidx]);
@@ -1837,7 +1837,7 @@ kax_reader_c::read_first_frames(kax_track_t *t,
           if ((NULL == block_track) || (0 == block_simple->NumberFrames()))
             continue;
 
-          for (int frame_idx = 0; block_simple->NumberFrames() > frame_idx; ++frame_idx) {
+          for (size_t frame_idx = 0; block_simple->NumberFrames() > frame_idx; ++frame_idx) {
             frames_by_track_id[ block_simple->TrackNum() ]++;
 
             if (frames_by_track_id[ block_simple->TrackNum() ] <= block_track->first_frames_data.size())
@@ -1862,7 +1862,7 @@ kax_reader_c::read_first_frames(kax_track_t *t,
           if ((NULL == block_track) || (0 == block->NumberFrames()))
             continue;
 
-          for (int frame_idx = 0; block->NumberFrames() > frame_idx; ++frame_idx) {
+          for (size_t frame_idx = 0; block->NumberFrames() > frame_idx; ++frame_idx) {
             frames_by_track_id[ block->TrackNum() ]++;
 
             if (frames_by_track_id[ block->TrackNum() ] <= block_track->first_frames_data.size())
@@ -1922,7 +1922,7 @@ kax_reader_c::read(generic_packetizer_c *requested_ptzr,
         adjust_chapter_timecodes(*m_chapters, -m_first_timecode);
     }
 
-    int bgidx;
+    size_t bgidx;
     for (bgidx = 0; bgidx < cluster->ListSize(); bgidx++) {
       EbmlElement *element = (*cluster)[bgidx];
 
@@ -2157,7 +2157,7 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
           packet->codec_state = clone_memory(codec_state->GetBuffer(), codec_state->GetSize());
 
         if (blockadd) {
-          int k;
+          size_t k;
           for (k = 0; k < blockadd->ListSize(); k++) {
             if (!(is_id((*blockadd)[k], KaxBlockMore)))
               continue;

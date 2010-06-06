@@ -34,8 +34,9 @@ struct real_demuxer_t {
   int ptzr;
   rmff_track_t *track;
 
-  int bsid, channels, samples_per_second, bits_per_sample;
-  int width, height;
+  int bsid;
+  unsigned int channels, samples_per_second, bits_per_sample;
+  unsigned int width, height;
   char fourcc[5];
   bool is_aac;
   bool rv_dimensions;
@@ -48,11 +49,12 @@ struct real_demuxer_t {
   real_audio_v5_props_t *ra5p;
 
   unsigned char *private_data, *extra_data;
-  int private_size, extra_data_size;
+  unsigned int private_size, extra_data_size;
 
   bool first_frame;
   int num_packets;
-  int64_t last_timecode, ref_timecode;
+  uint64_t last_timecode;
+  int64_t ref_timecode;         // can be negative
 
   std::vector<rv_segment_cptr> segments;
 
@@ -106,11 +108,11 @@ public:
   virtual void create_packetizer(int64_t tid);
   virtual void add_available_track_ids();
 
-  static int probe_file(mm_io_c *io, int64_t size);
+  static int probe_file(mm_io_c *io, uint64_t size);
 
 protected:
   virtual void parse_headers();
-  virtual real_demuxer_cptr find_demuxer(int id);
+  virtual real_demuxer_cptr find_demuxer(unsigned int id);
   virtual void assemble_video_packet(real_demuxer_cptr dmx, rmff_frame_t *frame);
   virtual file_status_e finish();
   virtual bool get_rv_dimensions(unsigned char *buf, int size, uint32_t &width, uint32_t &height);

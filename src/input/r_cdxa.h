@@ -20,7 +20,7 @@
 
 class cdxa_reader_c: public generic_reader_c {
 public:
-  static bool probe_file(mm_io_c *io, int64_t size);
+  static bool probe_file(mm_io_c *io, uint64_t size);
 
 public:
   cdxa_reader_c(track_info_c &n_ti): generic_reader_c(n_ti) { };

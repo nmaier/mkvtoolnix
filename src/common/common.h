@@ -79,7 +79,7 @@ using namespace libebml;
 void MTX_DLL_API mxexit(int code = -1);
 void MTX_DLL_API set_process_priority(int priority);
 
-extern int MTX_DLL_API verbose;
+extern unsigned int MTX_DLL_API verbose;
 
 #define foreach                  BOOST_FOREACH
 #define reverse_foreach          BOOST_REVERSE_FOREACH

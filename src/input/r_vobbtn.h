@@ -39,7 +39,7 @@ public:
   virtual void create_packetizer(int64_t tid);
   virtual int get_progress();
 
-  static int probe_file(mm_io_c *io, int64_t size);
+  static int probe_file(mm_io_c *io, uint64_t size);
 };
 
 #endif  // __R_VOBBTN_H

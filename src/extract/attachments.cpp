@@ -38,7 +38,7 @@ handle_attachments(KaxAttachments *atts,
                    std::vector<track_spec_t> &tracks) {
   static int64_t attachment_ui_id = 0;
 
-  int i;
+  size_t i;
   for (i = 0; atts->ListSize() > i; ++i) {
     KaxAttached  *att = dynamic_cast<KaxAttached *>((*atts)[i]);
     assert(NULL != att);
@@ -48,7 +48,7 @@ handle_attachments(KaxAttachments *atts,
     int64_t id         = -1;
     KaxFileData *fdata = NULL;
 
-    int k;
+    size_t k;
     for (k = 0; att->ListSize() > k; ++k) {
       EbmlElement *e = (*att)[k];
 
@@ -121,7 +121,7 @@ extract_attachments(const std::string &file_name,
     delete attachments;
   }
 
-  int i;
+  size_t i;
   for (i = 0; i < tracks.size(); i++)
     if (!tracks[i].done)
       mxinfo(boost::format(Y("An attachment with the ID %1% was not found.\n")) % tracks[i].tid);

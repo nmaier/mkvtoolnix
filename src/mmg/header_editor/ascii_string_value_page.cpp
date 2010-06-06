@@ -45,7 +45,7 @@ he_ascii_string_value_page_c::create_input_control() {
   static const wxString s_valid_chars = wxT(" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
 
   wxArrayString includes;
-  int i;
+  size_t i;
   for (i = 0; s_valid_chars.Length() > i; ++i)
     includes.Add(s_valid_chars.Mid(i, 1));
 

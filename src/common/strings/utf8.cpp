@@ -237,11 +237,14 @@ get_width_in_em(wchar_t c) {
           || ((0x00ff01 <= c) && (0x00ff60 >= c))
           || ((0x00ffe0 <= c) && (0x00ffe6 >= c))
           ||  (0x00fffd == c)
+#if !defined(SYS_WINDOWS)
           || ((0x020000 <= c) && (0x02a6d7 >= c))
           || ((0x02f800 <= c) && (0x02fa1e >= c))
           || ((0x030000 <= c) && (0x03fffd >= c))
           || ((0x0e0100 <= c) && (0x0e01ef >= c))
           || ((0x0f0000 <= c) && (0x0ffffd >= c))
-          || ((0x100000 <= c) && (0x10fffd >= c)))
+          || ((0x100000 <= c) && (0x10fffd >= c))
+#endif
+              )
     ? 2 : 1;
 }

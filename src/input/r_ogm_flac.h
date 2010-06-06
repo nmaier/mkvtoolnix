@@ -50,7 +50,7 @@ public:
 
 class ogm_a_flac_demuxer_c: public ogm_demuxer_c {
 public:
-  int flac_header_packets, sample_rate, channels, bits_per_sample;
+  unsigned int flac_header_packets, sample_rate, channels, bits_per_sample;
   oggflac_mode_e mode;
 
 public:

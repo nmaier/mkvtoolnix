@@ -2612,11 +2612,11 @@ const char *cctlds[] = {
 static std::string
 guess_mime_type_by_ext(std::string ext) {
   std::vector<std::string> extensions;
-  int i, j;
+  size_t i, j;
 
   /* chop off basename */
   i = ext.rfind('.');
-  if (i < 0)
+  if (std::string::npos == i)
     return "";
   ext.erase(0, i + 1);
   ext = downcase(ext);
@@ -2640,13 +2640,13 @@ guess_mime_type_by_content(magic_t &m,
                            const std::string &file_name) {
   try {
     mm_file_io_c file(file_name);
-    int64_t file_size = file.get_size();
-    int buffer_size   = 0;
-    memory_cptr buf   = memory_c::alloc(1024 * 1024);
-    int i;
+    uint64_t file_size = file.get_size();
+    size_t buffer_size = 0;
+    memory_cptr buf    = memory_c::alloc(1024 * 1024);
+    size_t i;
 
     for (i = 1; 3 >= i; ++i) {
-      int64_t bytes_to_read = std::min(file_size - buffer_size, (int64_t)1024 * 1024);
+      uint64_t bytes_to_read = std::min(file_size - buffer_size, static_cast<uint64_t>(1024 * 1024));
 
       if (0 == bytes_to_read)
         break;

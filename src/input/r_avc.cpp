@@ -38,7 +38,7 @@ using namespace mpeg4::p10;
 
 int
 avc_es_reader_c::probe_file(mm_io_c *io,
-                            int64_t size) {
+                            uint64_t size) {
   try {
     if (PROBESIZE > size)
       return 0;

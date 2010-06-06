@@ -17,7 +17,7 @@
 
 int
 flv_reader_c::probe_file(mm_io_c *io,
-                         int64_t size) {
+                         uint64_t size) {
   try {
     if (3 > size)
       return 0;

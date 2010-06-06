@@ -25,7 +25,7 @@
 
 int
 vobbtn_reader_c::probe_file(mm_io_c *io,
-                            int64_t size) {
+                            uint64_t size) {
   unsigned char chunk[23];
 
   try {

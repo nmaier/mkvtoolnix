@@ -323,7 +323,7 @@ create_track_number(generic_reader_c *reader,
 
   bool found   = false;
   int file_num = -1;
-  int i;
+  size_t i;
   for (i = 0; i < g_files.size(); i++)
     if (g_files[i].reader == reader) {
       found = true;
@@ -545,7 +545,7 @@ parse_arg_tracks(std::string s,
   std::vector<std::string> elements = split(s, ",");
   strip(elements);
 
-  int i;
+  size_t i;
   for (i = 0; i < elements.size(); i++) {
     int64_t tid;
     if (!parse_int(elements[i], tid))
@@ -1141,7 +1141,7 @@ parse_arg_track_order(const std::string &s) {
   std::vector<std::string> parts = split(s, ",");
   strip(parts);
 
-  int i;
+  size_t i;
   for (i = 0; i < parts.size(); i++) {
     std::vector<std::string> pair = split(parts[i].c_str(), ":");
 
@@ -1507,7 +1507,7 @@ parse_arg_attachments(const std::string &param,
                       track_info_c &ti) {
   std::vector<std::string> elements = split(arg, ",");
 
-  int i;
+  size_t i;
   for (i = 0; elements.size() > i; ++i) {
     std::vector<std::string> pair = split(elements[i], ":");
 

@@ -32,7 +32,7 @@ public:
 class xtr_oggbase_c: public xtr_base_c {
 public:
   ogg_stream_state m_os;
-  int m_packetno;
+  unsigned int m_packetno;
   memory_cptr m_queued_frame;
   int64_t m_queued_granulepos;
   int m_sfreq;

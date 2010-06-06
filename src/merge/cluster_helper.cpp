@@ -179,7 +179,7 @@ cluster_helper_c::add_packet(packet_cptr packet) {
 
   // Render the cluster if it is full (according to my many criteria).
   timecode = get_timecode();
-  if (((packet->assigned_timecode - timecode) > g_max_ns_per_cluster) || (m_packets.size() > g_max_blocks_per_cluster) || (get_cluster_content_size() > 1500000)) {
+  if (((packet->assigned_timecode - timecode) > g_max_ns_per_cluster) || (m_packets.size() > static_cast<size_t>(g_max_blocks_per_cluster)) || (get_cluster_content_size() > 1500000)) {
     render();
     prepare_new_cluster();
   }
@@ -221,7 +221,7 @@ cluster_helper_c::set_duration(render_groups_c *rg) {
   int64_t def_duration    = rg->m_source->get_track_default_duration();
   int64_t block_duration  = 0;
 
-  int i;
+  size_t i;
   for (i = 0; rg->m_durations.size() > i; ++i)
     block_duration += rg->m_durations[i];
   mxverb(3,
@@ -231,7 +231,7 @@ cluster_helper_c::set_duration(render_groups_c *rg) {
   if (rg->m_duration_mandatory) {
     if (   (0 == block_duration)
         || (   (0 < block_duration)
-            && (block_duration != (rg->m_durations.size() * def_duration))))
+            && (block_duration != (static_cast<int64_t>(rg->m_durations.size()) * def_duration))))
       group->set_block_duration(RND_TIMECODE_SCALE(block_duration));
 
   } else if (   (   g_use_durations
@@ -244,7 +244,7 @@ cluster_helper_c::set_duration(render_groups_c *rg) {
 bool
 cluster_helper_c::must_duration_be_set(render_groups_c *rg,
                                        packet_cptr &new_packet) {
-  int i;
+  size_t i;
   int64_t block_duration = 0;
   int64_t def_duration   = rg->m_source->get_track_default_duration();
 
@@ -255,7 +255,7 @@ cluster_helper_c::must_duration_be_set(render_groups_c *rg,
   if (rg->m_duration_mandatory || new_packet->duration_mandatory) {
     if (   (0 == block_duration)
         || (   (0 < block_duration)
-            && (block_duration != ((rg->m_durations.size() + 1) * def_duration))))
+            && (block_duration != ((static_cast<int64_t>(rg->m_durations.size()) + 1) * def_duration))))
       return true;
 
   } else if (   (   g_use_durations
@@ -387,7 +387,7 @@ cluster_helper_c::render() {
       if (!pack->data_adds.empty() && new_block_group->ReplaceSimpleByGroup()) {
         KaxBlockAdditions &additions = AddEmptyChild<KaxBlockAdditions>(*new_block_group);
 
-        int data_add_idx;
+        size_t data_add_idx;
         for (data_add_idx = 0; pack->data_adds.size() > data_add_idx; ++data_add_idx) {
           KaxBlockMore &block_more                                           = AddEmptyChild<KaxBlockMore>(additions);
           GetChildAs<KaxBlockAddID, EbmlUInteger>(block_more) = data_add_idx + 1;

@@ -19,7 +19,7 @@
 
 int
 srt_reader_c::probe_file(mm_text_io_c *io,
-                         int64_t) {
+                         uint64_t) {
   return srt_parser_c::probe(io);
 }
 

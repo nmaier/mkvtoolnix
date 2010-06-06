@@ -108,7 +108,7 @@ change_c::parse_value() {
 
 void
 change_c::parse_ascii_string() {
-  int i;
+  size_t i;
   for (i = 0; m_value.length() > i; ++i)
     if (127 < static_cast<unsigned char>(m_value[i]))
       mxerror(boost::format(Y("The property value contains non-ASCII characters, but the property is not a Unicode string in '%1%'. %2%\n")) % get_spec() % FILE_NOT_MODIFIED);
@@ -173,8 +173,8 @@ change_c::execute(EbmlMaster *master,
 
 void
 change_c::execute_delete() {
-  int idx         = 0;
-  int num_deleted = 0;
+  size_t idx               = 0;
+  unsigned int num_deleted = 0;
   while (m_master->ListSize() > idx) {
     if (m_property.m_callbacks->GlobalId == (*m_master)[idx]->Generic().GlobalId) {
       m_master->Remove(idx);
@@ -189,8 +189,8 @@ change_c::execute_delete() {
 
 void
 change_c::execute_add_or_set() {
-  int idx;
-  int num_found = 0;
+  size_t idx;
+  unsigned int num_found = 0;
   for (idx = 0; m_master->ListSize() > idx; ++idx) {
     if (m_property.m_callbacks->GlobalId != (*m_master)[idx]->Generic().GlobalId)
       continue;

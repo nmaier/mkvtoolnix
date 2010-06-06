@@ -20,7 +20,7 @@
 
 int
 mp3_reader_c::probe_file(mm_io_c *io,
-                         int64_t,
+                         uint64_t,
                          int64_t probe_range,
                          int num_headers) {
   return (find_valid_headers(io, probe_range, num_headers) != -1) ? 1 : 0;

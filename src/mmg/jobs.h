@@ -136,7 +136,7 @@ public:
   void on_key_pressed(wxKeyEvent &evt);
 
   void enable_buttons(bool enable, bool enable_up_down = true);
-  void swap_rows(int lower, int higher, bool up);
+  void swap_rows(unsigned int lower, unsigned int higher, bool up);
   void create_list_item(int i);
   void start_jobs(std::vector<int> &jobs_to_start);
 };

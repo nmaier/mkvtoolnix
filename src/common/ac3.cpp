@@ -71,7 +71,7 @@ parse_eac3_header(const unsigned char *buf,
 
 static bool
 parse_eac3_header_full(const unsigned char *buf,
-                       int size,
+                       size_t size,
                        ac3_header_t &header,
                        bool look_for_second_header) {
   if (!parse_eac3_header(buf, header))
@@ -188,11 +188,11 @@ parse_ac3_header(const unsigned char *buf,
 
 int
 find_ac3_header(const unsigned char *buf,
-                int size,
+                size_t size,
                 ac3_header_t *ac3_header,
                 bool look_for_second_header) {
   ac3_header_t header;
-  int i;
+  size_t i;
 
   for (i = 0; (size - 7) > i; ++i) {
     if ((0x0b != buf[i]) || (0x77 != buf[i + 1]))
@@ -221,8 +221,8 @@ find_ac3_header(const unsigned char *buf,
 
 int
 find_consecutive_ac3_headers(const unsigned char *buf,
-                             int size,
-                             int num) {
+                             size_t size,
+                             unsigned int num) {
   ac3_header_t ac3header, new_header;
 
   int pos = find_ac3_header(buf, size, &ac3header, true);
@@ -234,12 +234,12 @@ find_consecutive_ac3_headers(const unsigned char *buf,
   if (1 == num)
     return pos;
 
-  int base = pos;
+  unsigned int base = pos;
   do {
     mxverb(4, boost::format("find_cons_ac3_h: starting with base at %1%\n") % base);
 
-    int offset = ac3header.bytes;
-    int i;
+    unsigned int offset = ac3header.bytes;
+    size_t i;
     for (i = 0; (num - 1) > i; ++i) {
       if ((size - base - offset) < 4)
         break;
@@ -321,7 +321,7 @@ pow_poly(unsigned int a,
 
 bool
 verify_ac3_checksum(const unsigned char *buf,
-                    int size) {
+                    size_t size) {
   ac3_header_t ac3_header;
 
   if (0 != find_ac3_header(buf, size, &ac3_header, false))

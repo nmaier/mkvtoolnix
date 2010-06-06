@@ -206,7 +206,7 @@ add_tag_for_cue_entry(cue_parser_args_t &a,
   create_tag1(a.isrc, "ISRC");
   create_tag1(a.flags, "CDAUDIO_TRACK_FLAGS");
 
-  int i;
+  size_t i;
   for (i = 0; i < a.global_comment.size(); i++)
     create_tag1(a.global_comment[i], "COMMENT");
 
@@ -240,7 +240,7 @@ add_tag_for_global_cue_settings(cue_parser_args_t &a,
   create_tag1(a.global_disc_id,   "DISCID");
   create_tag1(a.global_catalog,   "CATALOG_NUMBER");
 
-  int i;
+  size_t i;
   for (i = 0; i < a.global_rem.size(); i++)
     create_tag1(a.global_rem[i], "COMMENT");
 
@@ -256,8 +256,8 @@ add_subchapters_for_index_entries(cue_parser_args_t &a) {
     return;
 
   KaxChapterAtom *atom = NULL;
-  int offset           = a.index00_missing ? 1 : 0;
-  int i;
+  size_t offset        = a.index00_missing ? 1 : 0;
+  size_t i;
   for (i = 0; i < a.start_indices.size(); i++) {
     atom                                                             = &GetFirstOrNextChild<KaxChapterAtom>(a.atom, atom);
 
@@ -320,8 +320,8 @@ get_quoted(std::string src,
 
 static std::string
 erase_colon(std::string &s,
-            int skip) {
-  int i = skip + 1;
+            size_t skip) {
+  size_t i = skip + 1;
 
   while ((s.length() > i) && (s[i] == ' '))
     i++;
@@ -390,11 +390,11 @@ parse_cue_chapters(mm_text_io_c *in,
           a.title        = get_quoted(line, 6);
 
       } else if (starts_with_case(line, "index ")) {
-        int index, min, sec, frames;
+        unsigned int index, min, sec, frames;
 
         line.erase(0, 6);
         strip(line);
-        if (sscanf(line.c_str(), "%d %d:%d:%d", &index, &min, &sec, &frames) < 4)
+        if (sscanf(line.c_str(), "%u %u:%u:%u", &index, &min, &sec, &frames) < 4)
           mxerror(boost::format(Y("Cue sheet parser: Invalid INDEX entry in line %1%.\n")) % a.line_num);
 
         bool index_ok = false;

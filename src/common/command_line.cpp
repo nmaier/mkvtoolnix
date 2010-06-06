@@ -161,7 +161,7 @@ std::string usage_text, version_info;
 bool
 handle_common_cli_args(std::vector<std::string> &args,
                        const std::string &redirect_output_short) {
-  int i                    = 0;
+  size_t i                 = 0;
   bool debug_options_found = false;
 
   while (args.size() > i) {

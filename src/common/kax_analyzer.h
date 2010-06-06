@@ -30,15 +30,16 @@ typedef counted_ptr<kax_analyzer_data_c> kax_analyzer_data_cptr;
 class kax_analyzer_data_c {
 public:
   EbmlId m_id;
-  int64_t m_pos, m_size;
+  uint64_t m_pos;
+  int64_t m_size;
 
 public:                         // Static functions
-  static kax_analyzer_data_cptr create(const EbmlId id, int64_t pos, int64_t size) {
+  static kax_analyzer_data_cptr create(const EbmlId id, uint64_t pos, int64_t size) {
     return kax_analyzer_data_cptr(new kax_analyzer_data_c(id, pos, size));
   }
 
 public:
-  kax_analyzer_data_c(const EbmlId id, int64_t pos, int64_t size)
+  kax_analyzer_data_c(const EbmlId id, uint64_t pos, int64_t size)
     : m_id(id)
     , m_pos(pos)
     , m_size(size)
@@ -138,7 +139,7 @@ protected:
   virtual void add_to_meta_seek(EbmlElement *e);
 
   virtual void adjust_segment_size();
-  virtual bool handle_void_elements(int data_idx);
+  virtual bool handle_void_elements(size_t data_idx);
 
   virtual bool analyzer_debugging_requested(const std::string &section);
   virtual void debug_dump_elements();
@@ -147,8 +148,8 @@ protected:
   virtual void verify_data_structures_against_file(const std::string &hook_name);
 
   virtual void read_all_meta_seeks();
-  virtual void read_meta_seek(int64_t pos, std::map<int64_t, bool> &positions_found);
-  virtual void fix_element_sizes(int64_t file_size);
+  virtual void read_meta_seek(uint64_t pos, std::map<int64_t, bool> &positions_found);
+  virtual void fix_element_sizes(uint64_t file_size);
 };
 typedef counted_ptr<kax_analyzer_c> kax_analyzer_cptr;
 

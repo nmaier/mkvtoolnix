@@ -30,7 +30,7 @@ UTFstring_to_wxString(const UTFstring &u) {
 
 wxString &
 break_line(wxString &line,
-           int break_after) {
+           unsigned int break_after) {
   uint32_t i, chars;
   wxString broken;
 
@@ -75,13 +75,13 @@ wxString
 shell_escape(wxString source,
              bool cmd_exe_mode) {
 
-  int i;
   wxString escaped;
 
 #if !defined(SYS_WINDOWS)
   cmd_exe_mode = false;
 #endif
 
+  size_t i;
   for (i = 0; i < source.Length(); i++) {
 #if defined(SYS_WINDOWS)
     if (cmd_exe_mode && (source[i] == wxT('\\')) && ((i + 1) < source.Length()) && (source[i + 1] == wxT('"'))) {
@@ -216,7 +216,7 @@ strip(wxString &s,
 std::vector<wxString> &
 strip(std::vector<wxString> &v,
       bool newlines) {
-  int i;
+  size_t i;
 
   for (i = 0; i < v.size(); i++)
     strip(v[i], newlines);
@@ -227,12 +227,11 @@ strip(std::vector<wxString> &v,
 wxString
 unescape(const wxString &src) {
   wxString dst;
-  int current_char, next_char;
 
   if (src.length() <= 1)
     return src;
-  next_char = 1;
-  current_char = 0;
+  size_t current_char = 0;
+  size_t next_char    = 1;
   while (current_char < src.length()) {
     if (src[current_char] == wxT('\\')) {
       if (next_char == src.length()) // This is an error...
@@ -298,47 +297,47 @@ get_installation_dir() {
 
 wxString
 create_track_order(bool all) {
-  int i;
-  wxString s, format;
+  size_t i;
+  wxString result;
   std::string temp;
 
   fix_format("%d:" LLD, temp);
-  format = wxU(temp);
+  wxString format = wxU(temp);
   for (i = 0; i < tracks.size(); i++) {
     if (!all && (!tracks[i]->enabled || tracks[i]->appending || ('c' == tracks[i]->type) || ('t' == tracks[i]->type)))
       continue;
 
-    if (s.length() > 0)
-      s += wxT(",");
-    s += wxString::Format(format, tracks[i]->source, tracks[i]->id);
+    if (!result.IsEmpty())
+      result += wxT(",");
+    result += wxString::Format(format, tracks[i]->source, tracks[i]->id);
   }
 
-  return s;
+  return result;
 }
 
 wxString
 create_append_mapping() {
-  int i;
-  wxString s, format;
+  size_t i;
+  wxString result;
   std::string temp;
 
   fix_format("%d:" LLD ":%d:" LLD, temp);
-  format = wxU(temp);
+  wxString format = wxU(temp);
   for (i = 1; i < tracks.size(); i++) {
     if (!tracks[i]->enabled || !tracks[i]->appending || ('c' == tracks[i]->type) || ('t' == tracks[i]->type))
       continue;
 
-    if (s.length() > 0)
-      s += wxT(",");
-    s += wxString::Format(format, tracks[i]->source, tracks[i]->id, tracks[i - 1]->source, tracks[i - 1]->id);
+    if (!result.IsEmpty())
+      result += wxT(",");
+    result += wxString::Format(format, tracks[i]->source, tracks[i]->id, tracks[i - 1]->source, tracks[i - 1]->id);
   }
 
-  return s;
+  return result;
 }
 
 int
 default_track_checked(char type) {
-  int i;
+  size_t i;
 
   for (i = 0; i < tracks.size(); i++)
     if ((tracks[i]->type == type) && (1 == tracks[i]->default_track))

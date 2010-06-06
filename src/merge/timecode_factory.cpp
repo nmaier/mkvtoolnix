@@ -108,8 +108,8 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
 
     std::vector<std::string> parts = split(line, ",", 3);
     if (   (parts.size() != 3)
-        || !parse_int(parts[0], t.start_frame)
-        || !parse_int(parts[1], t.end_frame)
+        || !parse_uint(parts[0], t.start_frame)
+        || !parse_uint(parts[1], t.end_frame)
         || !parse_double(parts[2], t.fps)) {
       mxwarn(boost::format(Y("Line %1% of the timecode file '%2%' could not be parsed.\n")) % line_no % m_file_name);
       continue;
@@ -135,7 +135,7 @@ timecode_factory_v1_c::parse(mm_io_c &in) {
     do {
       done = true;
       iit  = m_ranges.begin();
-      int i;
+      size_t i;
       for (i = 0; i < (m_ranges.size() - 1); i++) {
         iit++;
         if (m_ranges[i].end_frame < (m_ranges[i + 1].start_frame - 1)) {
@@ -186,7 +186,7 @@ timecode_factory_v1_c::get_next(packet_cptr &packet) {
 }
 
 int64_t
-timecode_factory_v1_c::get_at(int64_t frame) {
+timecode_factory_v1_c::get_at(uint64_t frame) {
   timecode_range_c *t = &m_ranges[m_current_range];
   if ((frame > t->end_frame) && (m_current_range < (m_ranges.size() - 1)))
     t = &m_ranges[m_current_range + 1];
@@ -257,7 +257,7 @@ timecode_factory_v2_c::parse(mm_io_c &in) {
 
 bool
 timecode_factory_v2_c::get_next(packet_cptr &packet) {
-  if ((m_frameno >= m_timecodes.size()) && !m_warning_printed) {
+  if ((static_cast<size_t>(m_frameno) >= m_timecodes.size()) && !m_warning_printed) {
     mxwarn_tid(m_source_name, m_tid,
                boost::format(Y("The number of external timecodes %1% is smaller than the number of frames in this track. "
                                "The remaining frames of this track might not be timestamped the way you intended them to be. mkvmerge might even crash.\n"))

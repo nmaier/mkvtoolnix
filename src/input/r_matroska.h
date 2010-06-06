@@ -199,7 +199,7 @@ public:
   virtual void create_packetizer(int64_t tid);
   virtual void add_available_track_ids();
 
-  static int probe_file(mm_io_c *io, int64_t size);
+  static int probe_file(mm_io_c *io, uint64_t size);
 
 protected:
   virtual void set_track_packetizer(kax_track_t *t, generic_packetizer_c *ptzr);

@@ -74,7 +74,7 @@ public:
   input_drop_target_c(tab_input *n_owner):
     owner(n_owner) {}
   virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString &dropped_files) {
-    int i;
+    size_t i;
 
     for (i = 0; i < dropped_files.Count(); i++)
       owner->add_file(dropped_files[i], false);
@@ -299,7 +299,7 @@ tab_input::select_file(bool append) {
     return;
 
   wxArrayString selected_files;
-  int i;
+  size_t i;
 
   dlg.GetPaths(selected_files);
   for (i = 0; i < selected_files.Count(); i++)
@@ -322,7 +322,8 @@ tab_input::add_file(const wxString &file_name,
   wxString name, command, video_track_name, opt_file_name;
   wxArrayString output, errors;
   std::vector<wxString> args, pair;
-  int result, pos, new_file_pos;
+  size_t pos;
+  int new_file_pos, result;
   unsigned int i, k;
   wxFile *opt_file;
   std::string arg_utf8;
@@ -658,7 +659,7 @@ tab_input::add_file(const wxString &file_name,
     else {
       do {
         ++new_file_pos;
-      } while ((files.size() > new_file_pos) && files[new_file_pos]->appending);
+      } while ((files.size() > static_cast<size_t>(new_file_pos)) && files[new_file_pos]->appending);
     }
   }
 
@@ -697,9 +698,9 @@ tab_input::add_file(const wxString &file_name,
     // Then I have to skip over all the other tracks that are already appended
     // to that n'th track. The insertion point is right after that.
     if (append) {
-      int nth_old_track = 0;
-      new_track_pos     = 0;
-      while ((tracks.size() > new_track_pos) && (nth_old_track < (i + 1))) {
+      unsigned int nth_old_track = 0;
+      new_track_pos              = 0;
+      while ((tracks.size() > static_cast<size_t>(new_track_pos)) && (nth_old_track < (i + 1))) {
         if (tracks[new_track_pos]->source == (new_file_pos - 1))
           ++nth_old_track;
         ++new_track_pos;
@@ -710,7 +711,7 @@ tab_input::add_file(const wxString &file_name,
       // at the end and let the user figure out which track he really wants
       // to append it to.
       if (nth_old_track == (i + 1))
-        while ((tracks.size() > new_track_pos) && tracks[new_track_pos]->appending)
+        while ((tracks.size() > static_cast<size_t>(new_track_pos)) && tracks[new_track_pos]->appending)
           ++new_track_pos;
 
     } else
@@ -873,7 +874,7 @@ tab_input::on_move_track_up(wxCommandEvent &evt) {
 
 void
 tab_input::on_move_track_down(wxCommandEvent &evt) {
-  if ((0 > selected_track) || (selected_track >= tracks.size() - 1))
+  if ((0 > selected_track) || (static_cast<size_t>(selected_track) >= tracks.size() - 1))
     return;
 
   // Appended tracks may not be at the top.
@@ -897,7 +898,7 @@ tab_input::on_move_track_down(wxCommandEvent &evt) {
   current_track++;
 
   b_track_up->Enable(true);
-  b_track_down->Enable(current_track < (tracks.size() - 1));
+  b_track_down->Enable(current_track < static_cast<int>(tracks.size() - 1));
 
   selected_track       = current_track;
   dont_copy_values_now = false;
@@ -929,7 +930,7 @@ tab_input::on_track_selected(wxCommandEvent &evt) {
   mmg_track_t *t = tracks[new_sel];
 
   b_track_up->Enable(new_sel > 0);
-  b_track_down->Enable(new_sel < (tracks.size() - 1));
+  b_track_down->Enable(new_sel < static_cast<int>(tracks.size() - 1));
 
   set_track_mode(t);
 
@@ -1246,7 +1247,7 @@ tab_input::load(wxConfigBase *cfg,
   strip(s);
   if (s.length() > 0) {
     std::vector<wxString> entries = split(s, (wxString)wxT(","));
-    int i;
+    size_t i;
     for (i = 0; i < entries.size(); i++) {
       std::vector<wxString> pair = split(entries[i], (wxString)wxT(":"));
       if (pair.size() != 2)
@@ -1256,14 +1257,14 @@ tab_input::load(wxConfigBase *cfg,
                 "Moritz Bunkus <moritz@bunkus.org>\n\n"
                 "(Problem occured in tab_input::load(), #1)"));
       long tidx;
-      if (!pair[0].ToLong(&fidx) || !pair[1].ToLong(&tidx) || (fidx >= files.size()))
+      if (!pair[0].ToLong(&fidx) || !pair[1].ToLong(&tidx) || (fidx >= static_cast<long>(files.size())))
         wxdie(Z("The job file could not have been parsed correctly.\n"
                 "Either it is invalid / damaged, or you've just found\n"
                 "a bug in mmg. Please report this to the author\n"
                 "Moritz Bunkus <moritz@bunkus.org>\n\n"
                 "(Problem occured in tab_input::load(), #2)"));
       bool found = false;
-      int j;
+      size_t j;
       for (j = 0; j < files[fidx]->tracks.size(); j++)
         if (files[fidx]->tracks[j]->id == tidx) {
           found = true;
@@ -1383,7 +1384,7 @@ tab_input::validate_settings() {
       strip(s);
       if (s.length() > 0) {
         bool dot_present = false;
-        int i            = 0;
+        size_t i         = 0;
         bool ok          = true;
         while (i < s.length()) {
           if (isdigit(s[i]) || (!dot_present && ((s[i] == '.') || (s[i] == ',')))) {

@@ -25,7 +25,7 @@ private:
   int64_t m_samples_written, m_bytes_written;
 
   unsigned char *m_packet_buffer;
-  int m_buffer_size;
+  size_t m_buffer_size;
 
   bool m_get_first_header_later;
   dts_header_t m_first_header, m_previous_header;

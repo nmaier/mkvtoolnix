@@ -49,7 +49,7 @@ fix_mandatory_content_encoding_elements(KaxContentEncoding *encoding) {
   GetChild<KaxContentEncodingScope>(encoding);
   GetChild<KaxContentEncodingType>(encoding);
 
-  int i;
+  size_t i;
   for (i = 0; encoding->ListSize() > i; ++i) {
     EbmlElement *e = (*encoding)[i];
 
@@ -60,7 +60,7 @@ fix_mandatory_content_encoding_elements(KaxContentEncoding *encoding) {
 
 static void
 fix_mandatory_content_encodings_elements(KaxContentEncodings *encodings) {
-  int i;
+  size_t i;
   for (i = 0; encodings->ListSize() > i; ++i) {
     EbmlElement *e = (*encodings)[i];
 
@@ -84,7 +84,7 @@ fix_mandatory_track_entry_elements(KaxTrackEntry *track_entry) {
   GetChild<KaxCodecID>(track_entry);
   GetChild<KaxCodecDecodeAll>(track_entry);
 
-  int i;
+  size_t i;
   for (i = 0; track_entry->ListSize() > i; ++i) {
     EbmlElement *e = (*track_entry)[i];
 
@@ -119,7 +119,7 @@ fix_mandatory_segment_tracks_elements(EbmlElement *e) {
   if (NULL == tracks)
     return;
 
-  int i;
+  size_t i;
   for (i = 0; tracks->ListSize() > i; ++i) {
     e = (*tracks)[i];
 

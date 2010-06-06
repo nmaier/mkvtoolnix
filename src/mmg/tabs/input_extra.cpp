@@ -93,12 +93,12 @@ tab_input_extra::setup_cues() {
   cob_cues_translations.add(wxT("for all frames"),    Z("for all frames"));
   cob_cues_translations.add(wxT("none"),              Z("none"));
 
-  int i;
+  size_t i;
   if (0 == cob_cues->GetCount())
     for (i = 0; cob_cues_translations.entries.size() > i; ++i)
       cob_cues->Append(cob_cues_translations.entries[i].translated);
   else {
-    int selection = cob_cues->GetSelection();
+    size_t selection = cob_cues->GetSelection();
     for (i = 0; cob_cues_translations.entries.size() > i; ++i)
       cob_cues->SetString(i, cob_cues_translations.entries[i].translated);
     cob_cues->SetSelection(selection);

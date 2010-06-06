@@ -21,7 +21,7 @@
 
 void
 mmg_options_t::init_popular_languages(const wxString &list) {
-  int i;
+  size_t i;
 
   popular_languages.clear();
 

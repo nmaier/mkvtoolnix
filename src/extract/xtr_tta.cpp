@@ -104,7 +104,7 @@ xtr_tta_c::finish_file() {
   m_out->write(&tta_header, sizeof(tta_file_header_t));
 
   unsigned char *buffer = (unsigned char *)safemalloc(m_frame_sizes.size() * 4);
-  int k;
+  size_t k;
   for (k = 0; m_frame_sizes.size() > k; ++k)
     put_uint32_le(buffer + 4 * k, m_frame_sizes[k]);
 

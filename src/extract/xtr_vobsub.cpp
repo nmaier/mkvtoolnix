@@ -114,7 +114,7 @@ xtr_vobsub_c::handle_frame(memory_cptr &frame,
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
   unsigned char *data = frame->get_buffer();
-  int size            = frame->get_size();
+  size_t size         = frame->get_size();
 
   m_positions.push_back(vmaster->m_out->getFilePointer());
   m_timecodes.push_back(timecode);
@@ -227,7 +227,7 @@ xtr_vobsub_c::finish_file() {
     idx.write(m_private_data->get_buffer(), m_private_data->get_size());
 
     write_idx(idx, 0);
-    int slave;
+    size_t slave;
     for (slave = 0; slave < m_slaves.size(); slave++)
       m_slaves[slave]->write_idx(idx, slave + 1);
 
@@ -242,7 +242,7 @@ xtr_vobsub_c::write_idx(mm_io_c &idx,
   const char *iso639_1 = map_iso639_2_to_iso639_1(m_language.c_str());
   idx.puts(boost::format("\nid: %1%, index: %2%\n") % (NULL == iso639_1 ? "en" : iso639_1) %index);
 
-  int i;
+  size_t i;
   for (i = 0; i < m_positions.size(); i++) {
     int64_t timecode = m_timecodes[i] / 1000000;
 

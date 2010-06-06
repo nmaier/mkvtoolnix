@@ -51,31 +51,31 @@
 namespace mpeg4 {
   namespace p10 {
     struct sps_info_t {
-      unsigned id;
+      unsigned int id;
 
-      unsigned profile_idc;
-      unsigned profile_compat;
-      unsigned level_idc;
-      unsigned log2_max_frame_num;
-      unsigned pic_order_cnt_type;
-      unsigned log2_max_pic_order_cnt_lsb;
-      int offset_for_non_ref_pic;
-      int offset_for_top_to_bottom_field;
-      unsigned num_ref_frames_in_pic_order_cnt_cycle;
+      unsigned int profile_idc;
+      unsigned int profile_compat;
+      unsigned int level_idc;
+      unsigned int log2_max_frame_num;
+      unsigned int pic_order_cnt_type;
+      unsigned int log2_max_pic_order_cnt_lsb;
+      unsigned int offset_for_non_ref_pic;
+      unsigned int offset_for_top_to_bottom_field;
+      unsigned int num_ref_frames_in_pic_order_cnt_cycle;
       bool delta_pic_order_always_zero_flag;
       bool frame_mbs_only;
 
       // vui:
       bool vui_present, ar_found;
-      unsigned par_num, par_den;
+      unsigned int par_num, par_den;
 
       // timing_info:
       bool timing_info_present;
-      unsigned num_units_in_tick, time_scale;
+      unsigned int num_units_in_tick, time_scale;
       bool fixed_frame_rate;
 
-      unsigned crop_left, crop_top, crop_right, crop_bottom;
-      unsigned width, height;
+      unsigned int crop_left, crop_top, crop_right, crop_bottom;
+      unsigned int width, height;
 
       uint32_t checksum;
 
@@ -102,16 +102,16 @@ namespace mpeg4 {
       unsigned char nal_ref_idc;
       unsigned char type;
       unsigned char pps_id;
-      unsigned frame_num;
+      unsigned int frame_num;
       bool field_pic_flag, bottom_field_flag;
-      unsigned idr_pic_id;
-      unsigned pic_order_cnt_lsb;
-      int delta_pic_order_cnt_bottom;
-      int delta_pic_order_cnt[2];
-      int first_mb_in_slice;
+      unsigned int idr_pic_id;
+      unsigned int pic_order_cnt_lsb;
+      unsigned int delta_pic_order_cnt_bottom;
+      unsigned int delta_pic_order_cnt[2];
+      unsigned int first_mb_in_slice;
 
-      int sps;
-      int pps;
+      unsigned int sps;
+      unsigned int pps;
 
       slice_info_t() {
         memset(this, 0, sizeof(*this));
@@ -124,9 +124,9 @@ namespace mpeg4 {
     bool MTX_DLL_API parse_sps(memory_cptr &buffer, sps_info_t &sps, bool keep_ar_info = false);
     bool MTX_DLL_API parse_pps(memory_cptr &buffer, pps_info_t &pps);
 
-    bool MTX_DLL_API extract_par(uint8_t *&buffer, int &buffer_size, uint32_t &par_num, uint32_t &par_den);
+    bool MTX_DLL_API extract_par(uint8_t *&buffer, size_t &buffer_size, uint32_t &par_num, uint32_t &par_den);
     bool MTX_DLL_API is_avc_fourcc(const char *fourcc);
-    memory_cptr MTX_DLL_API avcc_to_nalus(const unsigned char *buffer, int size);
+    memory_cptr MTX_DLL_API avcc_to_nalus(const unsigned char *buffer, size_t size);
 
     struct avc_frame_t {
       memory_cptr m_data;
@@ -296,7 +296,7 @@ namespace mpeg4 {
       bool flush_decision(slice_info_t &si, slice_info_t &ref);
       void flush_incomplete_frame();
       void flush_unhandled_nalus();
-      void write_nalu_size(unsigned char *buffer, int size, int nalu_size_length = -1);
+      void write_nalu_size(unsigned char *buffer, size_t size, int this_nalu_size_length = -1);
       memory_cptr create_nalu_with_size(const memory_cptr &src, bool add_extra_data = false);
     };
     typedef counted_ptr<avc_es_parser_c> avc_es_parser_cptr;

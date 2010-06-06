@@ -87,7 +87,7 @@ write_xml_element_rec(int level,
                       mm_io_c *out,
                       const parser_element_t *element_map) {
   EbmlMaster *m;
-  int elt_idx, i;
+  size_t elt_idx, i;
   bool found;
   std::string s;
 

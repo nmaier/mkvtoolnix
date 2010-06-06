@@ -31,7 +31,7 @@
 
 typedef struct {
   int64_t filepos;
-  int type, len;
+  unsigned int type, len;
 } flac_block_t;
 
 class flac_reader_c: public generic_reader_c {
@@ -39,7 +39,7 @@ private:
   mm_io_c *file;
   int sample_rate;
   bool metadata_parsed;
-  int64_t samples, file_size;
+  uint64_t samples, file_size;
   unsigned char *header;
   int header_size;
   std::vector<flac_block_t> blocks;
@@ -56,7 +56,7 @@ public:
 
   virtual int get_progress();
 
-  static int probe_file(mm_io_c *io, int64_t size);
+  static int probe_file(mm_io_c *io, uint64_t size);
 
   virtual FLAC__StreamDecoderReadStatus
   read_cb(FLAC__byte buffer[], size_t *bytes);
@@ -79,7 +79,7 @@ protected:
 
 class flac_reader_c: public generic_reader_c {
 public:
-  static int probe_file(mm_io_c *file, int64_t size);
+  static int probe_file(mm_io_c *file, uint64_t size);
 
 public:
   flac_reader_c(track_info_c &n_ti): generic_reader_c(n_ti) { };

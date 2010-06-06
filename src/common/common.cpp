@@ -34,7 +34,7 @@
 
 // Global and static variables
 
-int verbose = 1;
+unsigned int verbose = 1;
 
 extern bool g_warning_issued;
 

@@ -59,7 +59,7 @@ public:
   typedef unsigned char X;
 
   explicit memory_c(void *p = NULL,
-                    int s = 0,
+                    size_t s = 0,
                     bool f = false) // allocate a new counter
     : its_counter(NULL)
   {
@@ -87,16 +87,16 @@ public:
     return its_counter ? its_counter->ptr + its_counter->offset : NULL;
   }
 
-  int get_size() const throw() {
+  size_t get_size() const throw() {
     return its_counter ? its_counter->size - its_counter->offset: 0;
   }
 
-  void set_size(int new_size) throw() {
+  void set_size(size_t new_size) throw() {
     if (its_counter)
       its_counter->size = new_size;
   }
 
-  void set_offset(unsigned new_offset) {
+  void set_offset(size_t new_offset) {
     if (!its_counter || (new_offset > its_counter->size))
       throw false;
     its_counter->offset = new_offset;
@@ -129,22 +129,23 @@ public:
       its_counter->is_free = false;
   }
 
-  void resize(int new_size) throw();
+  void resize(size_t new_size) throw();
 
 public:
-  static memory_cptr alloc(int size) {
+  static memory_cptr alloc(size_t size) {
     return memory_cptr(new memory_c(static_cast<unsigned char *>(safemalloc(size)), size, true));
   };
 
 private:
   struct counter {
     X *ptr;
-    int size;
+    size_t size;
     bool is_free;
-    unsigned count, offset;
+    unsigned count;
+    size_t offset;
 
     counter(X *p = NULL,
-            int s = 0,
+            size_t s = 0,
             bool f = false,
             unsigned c = 1)
       : ptr(p)
@@ -175,7 +176,7 @@ private:
 
 class MTX_DLL_API memory_slice_cursor_c {
  protected:
-  int m_pos, m_pos_in_slice, m_size;
+  size_t m_pos, m_pos_in_slice, m_size;
   std::deque<memory_cptr> m_slices;
   std::deque<memory_cptr>::iterator m_slice;
 
@@ -205,7 +206,7 @@ class MTX_DLL_API memory_slice_cursor_c {
       m_slice = m_slices.begin();
   }
 
-  void add_slice(unsigned char *buffer, int size) {
+  void add_slice(unsigned char *buffer, size_t size) {
     if (0 == size)
       return;
 
@@ -234,15 +235,15 @@ class MTX_DLL_API memory_slice_cursor_c {
     return m_pos < m_size;
   };
 
-  inline int get_remaining_size() {
+  inline size_t get_remaining_size() {
     return m_size - m_pos;
   };
 
-  inline int get_size() {
+  inline size_t get_size() {
     return m_size;
   };
 
-  inline int get_position() {
+  inline size_t get_position() {
     return m_pos;
   };
 
@@ -256,7 +257,7 @@ class MTX_DLL_API memory_slice_cursor_c {
     m_slice        = m_slices.begin();
   };
 
-  void copy(unsigned char *dest, int start, int size) {
+  void copy(unsigned char *dest, size_t start, size_t size) {
     assert((start + size) <= m_size);
 
     std::deque<memory_cptr>::iterator curr = m_slices.begin();
@@ -270,7 +271,7 @@ class MTX_DLL_API memory_slice_cursor_c {
     offset = start - offset;
 
     while (0 < size) {
-      int num_bytes = (*curr)->get_size() - offset;
+      size_t num_bytes = (*curr)->get_size() - offset;
       if (num_bytes > size)
         num_bytes = size;
 
@@ -287,7 +288,7 @@ class MTX_DLL_API memory_slice_cursor_c {
 
 inline memory_cptr
 clone_memory(const void *buffer,
-             int size) {
+             size_t size) {
   return memory_cptr(new memory_c(static_cast<unsigned char *>(safememdup(buffer, size)), size, true));
 }
 
@@ -298,10 +299,10 @@ clone_memory(memory_cptr data) {
 
 struct buffer_t {
   unsigned char *m_buffer;
-  int m_size;
+  size_t m_size;
 
   buffer_t();
-  buffer_t(unsigned char *buffer, int m_size);
+  buffer_t(unsigned char *buffer, size_t m_size);
   ~buffer_t();
 };
 

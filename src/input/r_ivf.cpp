@@ -23,7 +23,7 @@
 
 int
 ivf_reader_c::probe_file(mm_io_c *io,
-                         int64_t size) {
+                         uint64_t size) {
   if (sizeof(ivf_file_header_t) > size)
     return 0;
 
@@ -90,7 +90,7 @@ ivf_reader_c::create_packetizer(int64_t) {
 file_status_e
 ivf_reader_c::read(generic_packetizer_c *,
                    bool) {
-  int remaining_bytes = m_size - m_in->getFilePointer();
+  size_t remaining_bytes = m_size - m_in->getFilePointer();
 
   ivf_frame_header_t header;
   if ((sizeof(ivf_frame_header_t) > remaining_bytes) || (m_in->read(&header, sizeof(ivf_frame_header_t)) != sizeof(ivf_frame_header_t)))

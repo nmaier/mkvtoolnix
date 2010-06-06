@@ -21,7 +21,7 @@
 
 class flv_reader_c: public generic_reader_c {
 public:
-  static int probe_file(mm_io_c *io, int64_t size);
+  static int probe_file(mm_io_c *io, uint64_t size);
 
 public:
   flv_reader_c(track_info_c &n_ti): generic_reader_c(n_ti) { };

@@ -67,12 +67,12 @@ mm_multi_file_io_c::setFilePointer(int64 offset,
     : seek_end       == mode ? m_total_size  - offset
     :                          m_current_pos + offset;
 
-  if ((0 > new_pos) || (m_total_size < new_pos))
+  if ((0 > new_pos) || (static_cast<int64_t>(m_total_size) < new_pos))
     throw mm_io_seek_error_c();
 
   m_current_file = 0;
   foreach(const mm_multi_file_io_c::file_t &file, m_files) {
-    if ((file.m_global_start + file.m_size) < new_pos) {
+    if ((file.m_global_start + file.m_size) < static_cast<uint64_t>(new_pos)) {
       ++m_current_file;
       continue;
     }

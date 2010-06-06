@@ -409,7 +409,7 @@ wav_pcm_demuxer_c::process(int64_t len) {
 
 int
 wav_reader_c::probe_file(mm_io_c *io,
-                         int64_t size) {
+                         uint64_t size) {
   wave_header wheader;
 
   if (sizeof(wave_header) > size)
@@ -638,7 +638,7 @@ int
 wav_reader_c::find_chunk(const char *id,
                          int start_idx,
                          bool allow_empty) {
-  int idx;
+  size_t idx;
 
   for (idx = start_idx; idx < m_chunks.size(); ++idx)
     if (!strncasecmp(m_chunks[idx].id, id, 4) && (allow_empty || m_chunks[idx].len))

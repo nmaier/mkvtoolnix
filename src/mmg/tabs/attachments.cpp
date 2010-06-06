@@ -35,7 +35,7 @@ public:
   attachments_drop_target_c(tab_attachments *n_owner):
     owner(n_owner) {};
   virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString &dropped_files) {
-    int i;
+    size_t i;
 
     for (i = 0; i < dropped_files.Count(); i++)
       owner->add_attachment(dropped_files[i]);
@@ -194,7 +194,7 @@ tab_attachments::on_add_attachment(wxCommandEvent &evt) {
 
   if(dlg.ShowModal() == wxID_OK) {
     wxArrayString selected_files;
-    int i;
+    size_t i;
 
     last_open_dir = dlg.GetDirectory();
     dlg.GetPaths(selected_files);
@@ -319,7 +319,8 @@ tab_attachments::derive_stored_name_from_file_name(const wxString &file_name) {
 void
 tab_attachments::load(wxConfigBase *cfg,
                       int version) {
-  int num, i;
+  size_t i;
+  int num;
 
   enable(false);
   selected_attachment = -1;
@@ -427,14 +428,14 @@ tab_attachments::remove_all_attached_files() {
 
 void
 tab_attachments::on_attached_file_enabled(wxCommandEvent &evt) {
-  int idx = evt.GetSelection();
+  size_t idx = evt.GetSelection();
   if ((0 <= idx) && (m_attached_files.size() > idx))
     m_attached_files[idx]->enabled = clb_attached_files->IsChecked(idx);
 }
 
 void
 tab_attachments::on_enable_all(wxCommandEvent &evt) {
-  int idx;
+  size_t idx;
   for (idx = 0; m_attached_files.size() > idx; ++idx) {
     clb_attached_files->Check(idx, true);
     m_attached_files[idx]->enabled = true;
@@ -443,7 +444,7 @@ tab_attachments::on_enable_all(wxCommandEvent &evt) {
 
 void
 tab_attachments::on_disable_all(wxCommandEvent &evt) {
-  int idx;
+  size_t idx;
   for (idx = 0; m_attached_files.size() > idx; ++idx) {
     clb_attached_files->Check(idx, false);
     m_attached_files[idx]->enabled = false;

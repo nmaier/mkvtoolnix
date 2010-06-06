@@ -129,8 +129,8 @@ flac_get_num_samples(unsigned char *mem,
 
 typedef struct {
   unsigned char *mem;
-  int size;
-  int nread;
+  unsigned int size;
+  unsigned int nread;
 
   FLAC__StreamMetadata_StreamInfo stream_info;
   bool stream_info_found;
@@ -146,7 +146,7 @@ flac_read_cb(const FLAC__StreamDecoder *,
   if (fhe->nread == fhe->size)
     return FLAC__STREAM_DECODER_READ_STATUS_ABORT;
 
-  int num_bytes = *bytes > (fhe->size - fhe->nread) ? (fhe->size - fhe->nread) : *bytes;
+  size_t num_bytes = *bytes > (fhe->size - fhe->nread) ? (fhe->size - fhe->nread) : *bytes;
   memcpy(buffer, &fhe->mem[fhe->nread], num_bytes);
   fhe->nread += num_bytes;
   *bytes      = num_bytes;

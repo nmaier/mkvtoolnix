@@ -99,7 +99,7 @@ namespace dirac {
     es_parser_c();
     virtual ~es_parser_c();
 
-    virtual void add_bytes(unsigned char *buf, int size);
+    virtual void add_bytes(unsigned char *buf, size_t size);
     virtual void add_bytes(memory_cptr &buf) {
       add_bytes(buf->get_buffer(), buf->get_size());
     };

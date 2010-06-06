@@ -86,10 +86,7 @@ dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
     return NULL;
 
   int pos = find_dts_header(m_packet_buffer, m_buffer_size, &dtsheader, m_get_first_header_later ? false : !m_first_header.dts_hd);
-  if (0 > pos)
-    return NULL;
-
-  if ((pos + dtsheader.frame_byte_size) > m_buffer_size)
+  if ((0 > pos) || (static_cast<size_t>(pos + dtsheader.frame_byte_size) > m_buffer_size))
     return NULL;
 
   if (m_get_first_header_later) {

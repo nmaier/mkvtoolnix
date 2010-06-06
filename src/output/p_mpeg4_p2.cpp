@@ -358,7 +358,7 @@ mpeg4_p2_video_packetizer_c::extract_size(const unsigned char *buffer,
   if (mpeg4::p2::extract_size(buffer, size, xtr_width, xtr_height)) {
     m_size_extracted = true;
 
-    if (!m_reader->m_appending && ((xtr_width != m_hvideo_pixel_width) || (xtr_height != m_hvideo_pixel_height))) {
+    if (!m_reader->m_appending && ((xtr_width != static_cast<uint32_t>(m_hvideo_pixel_width)) || (xtr_height != static_cast<uint32_t>(m_hvideo_pixel_height)))) {
       set_video_pixel_width(xtr_width);
       set_video_pixel_height(xtr_height);
 

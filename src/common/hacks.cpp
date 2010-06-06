@@ -53,7 +53,7 @@ hack_engaged(unsigned int id) {
 void
 engage_hacks(const std::string &hacks) {
   std::vector<std::string> engage_args = split(hacks, ",");
-  int aidx, hidx;
+  size_t aidx, hidx;
 
   for (aidx = 0; engage_args.size() > aidx; aidx++)
     if (engage_args[aidx] == "list") {

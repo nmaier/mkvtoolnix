@@ -176,7 +176,7 @@ header_editor_frame_c::set_window_title() {
 
 bool
 header_editor_frame_c::have_been_modified() {
-  for (int i = 0; m_top_level_pages.size() > i; ++i)
+  for (size_t i = 0; m_top_level_pages.size() > i; ++i)
     if (m_top_level_pages[i]->has_been_modified())
       return true;
 
@@ -185,13 +185,13 @@ header_editor_frame_c::have_been_modified() {
 
 void
 header_editor_frame_c::do_modifications() {
-  for (int i = 0; m_top_level_pages.size() > i; ++i)
+  for (size_t i = 0; m_top_level_pages.size() > i; ++i)
     m_top_level_pages[i]->do_modifications();
 }
 
 wxTreeItemId
 header_editor_frame_c::validate_pages() {
-  for (int i = 0; m_top_level_pages.size() > i; ++i) {
+  for (size_t i = 0; m_top_level_pages.size() > i; ++i) {
     wxTreeItemId result = m_top_level_pages[i]->validate();
     if (result.IsOk())
       return result;
@@ -204,7 +204,7 @@ void
 header_editor_frame_c::clear_pages() {
   m_ignore_tree_selection_changes = true;
 
-  for (int i = 0; m_pages.size() > i; ++i)
+  for (size_t i = 0; m_pages.size() > i; ++i)
     if (m_pages[i]->IsShown())
       m_pages[i]->Hide();
 
@@ -275,7 +275,7 @@ header_editor_frame_c::open_file(wxFileName file_name) {
 
   m_bs_main->Hide(m_tc_tree);
 
-  int i;
+  size_t i;
   for (i = 0; m_pages.size() > i; ++i)
     if (m_pages[i]->IsShown())
       m_pages[i]->Hide();
@@ -360,7 +360,7 @@ header_editor_frame_c::handle_tracks(kax_analyzer_data_c *data) {
   m_e_tracks            = e;
   KaxTracks *kax_tracks = static_cast<KaxTracks *>(e);
   int track_type        = -1;
-  int i;
+  size_t i;
   for (i = 0; kax_tracks->ListSize() > i; ++i) {
     KaxTrackEntry *k_track_entry = dynamic_cast<KaxTrackEntry *>((*kax_tracks)[i]);
     if (NULL == k_track_entry)
@@ -541,7 +541,7 @@ header_editor_frame_c::on_file_save(wxCommandEvent &evt) {
 
   do_modifications();
 
-  int i;
+  size_t i;
   bool tracks_written = false;
   for (i = 0; m_top_level_pages.size() > i; ++i) {
     if (m_top_level_pages[i]->has_been_modified()) {
@@ -605,7 +605,7 @@ header_editor_frame_c::on_file_quit(wxCommandEvent &evt) {
 void
 header_editor_frame_c::on_headers_expand_all(wxCommandEvent &evt) {
   m_tc_tree->Freeze();
-  int i;
+  size_t i;
   for (i = 0; m_pages.size() > i; ++i)
     m_tc_tree->Expand(m_pages[i]->m_page_id);
   m_tc_tree->Thaw();
@@ -614,7 +614,7 @@ header_editor_frame_c::on_headers_expand_all(wxCommandEvent &evt) {
 void
 header_editor_frame_c::on_headers_collapse_all(wxCommandEvent &evt) {
   m_tc_tree->Freeze();
-  int i;
+  size_t i;
   for (i = 0; m_pages.size() > i; ++i)
     m_tc_tree->Collapse(m_pages[i]->m_page_id);
   m_tc_tree->Thaw();
@@ -727,7 +727,7 @@ header_editor_frame_c::append_page(he_page_base_c *page) {
 
 he_page_base_c *
 header_editor_frame_c::find_page_for_item(wxTreeItemId id) {
-  for (int i = 0; m_pages.size() > i; ++i)
+  for (size_t i = 0; m_pages.size() > i; ++i)
     if (m_pages[i]->m_page_id == id)
       return m_pages[i];
 
@@ -748,7 +748,7 @@ header_editor_frame_c::on_tree_sel_changed(wxTreeEvent &evt) {
 
   m_page_panel->Freeze();
 
-  int i;
+  size_t i;
   for (i = 0; m_pages.size() > i; ++i)
     if (m_pages[i]->IsShown())
       m_pages[i]->Hide();

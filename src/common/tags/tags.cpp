@@ -54,7 +54,7 @@ fix_mandatory_tag_elements(EbmlElement *e) {
   }
 
   if (dynamic_cast<EbmlMaster *>(e) != NULL) {
-    int i;
+    size_t i;
 
     EbmlMaster *m = static_cast<EbmlMaster *>(e);
     for (i = 0; m->ListSize() > i; i++)
@@ -66,7 +66,7 @@ KaxTags *
 select_tags_for_chapters(KaxTags &tags,
                          KaxChapters &chapters) {
   KaxTags *new_tags = NULL;
-  int tags_idx;
+  size_t tags_idx;
   for (tags_idx = 0; tags_idx < tags.ListSize(); tags_idx++) {
     if (dynamic_cast<KaxTag *>(tags[tags_idx]) == NULL)
       continue;
@@ -75,7 +75,7 @@ select_tags_for_chapters(KaxTags &tags,
     KaxTagTargets *targets = FINDFIRST(static_cast<EbmlMaster *>(tags[tags_idx]), KaxTagTargets);
 
     if (NULL != targets) {
-      int targets_idx;
+      size_t targets_idx;
       for (targets_idx = 0; targets_idx < targets->ListSize(); targets_idx++) {
         KaxTagEditionUID *t_euid = dynamic_cast<KaxTagEditionUID *>((*targets)[targets_idx]);
         if ((NULL != t_euid) && (find_edition_with_uid(chapters, uint64(*t_euid)) == NULL)) {
@@ -110,7 +110,6 @@ find_simple_tag(const std::string &name,
 KaxTagSimple &
 find_simple_tag(const UTFstring &name,
                 EbmlMaster &m) {
-  int i;
   std::string rvalue;
 
   if (EbmlId(m) == EBML_ID(KaxTagSimple)) {
@@ -119,6 +118,7 @@ find_simple_tag(const UTFstring &name,
       return *static_cast<KaxTagSimple *>(&m);
   }
 
+  size_t i;
   for (i = 0; i < m.ListSize(); i++)
     if ((EbmlId(*m[i]) == EBML_ID(KaxTag)) || (EbmlId(*m[i]) == EBML_ID(KaxTagSimple))) {
       try {
@@ -219,7 +219,7 @@ convert_old_tags(KaxTags &tags) {
   } catch (...) {
   }
 
-  int tags_idx;
+  size_t tags_idx;
   for (tags_idx = 0; tags_idx < tags.ListSize(); tags_idx++) {
     if (!is_id(tags[tags_idx], KaxTag))
       continue;
@@ -227,7 +227,7 @@ convert_old_tags(KaxTags &tags) {
     KaxTag &tag = *static_cast<KaxTag *>(tags[tags_idx]);
 
     int target_type_value = TAG_TARGETTYPE_TRACK;
-    int tag_idx = 0;
+    size_t tag_idx        = 0;
     while (tag_idx < tag.ListSize()) {
       tag_idx++;
       if (!is_id(tag[tag_idx - 1], KaxTagSimple))
@@ -264,7 +264,7 @@ convert_old_tags(KaxTags &tags) {
 static int
 count_simple_tags_recursively(EbmlMaster &master,
                               int count) {
-  int master_idx;
+  size_t master_idx;
 
   for (master_idx = 0; master.ListSize() > master_idx; ++master_idx)
     if (is_id(master[master_idx], KaxTagSimple))

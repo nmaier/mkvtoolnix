@@ -130,7 +130,7 @@ kax_file_c::read_one_element() {
 bool
 kax_file_c::is_level1_element_id(vint_c id) const {
   const EbmlSemanticContext &context = EBML_CLASS_CONTEXT(KaxSegment);
-  for (int segment_idx = 0; EBML_CTX_SIZE(context) > segment_idx; ++segment_idx)
+  for (size_t segment_idx = 0; EBML_CTX_SIZE(context) > segment_idx; ++segment_idx)
     if (EBML_ID_VALUE(EBML_CTX_IDX_ID(context,segment_idx)) == id.m_value)
       return true;
 
@@ -168,10 +168,10 @@ kax_file_c::resync_to_level1_element_internal(uint32_t wanted_id) {
         || ((0 == wanted_id) && !is_level1_element_id(vint_c(actual_id, 4))))
       continue;
 
-    int64_t current_start_pos = m_in->getFilePointer() - 4;
-    int64_t element_pos       = current_start_pos;
-    unsigned int num_headers  = 1;
-    bool valid_unknown_size   = false;
+    uint64_t current_start_pos = m_in->getFilePointer() - 4;
+    uint64_t element_pos       = current_start_pos;
+    unsigned int num_headers   = 1;
+    bool valid_unknown_size    = false;
 
     if (m_debug_resync)
       mxinfo(boost::format("kax_file::resync_to_level1_element(): byte-for-byte search, found level 1 ID %|2$x| at %1%\n") % current_start_pos % actual_id);

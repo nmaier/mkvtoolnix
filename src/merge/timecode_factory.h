@@ -34,7 +34,7 @@ enum timecode_factory_application_e {
 
 class timecode_range_c {
 public:
-  int64_t start_frame, end_frame;
+  uint64_t start_frame, end_frame;
   double fps, base_timecode;
 
   bool operator <(const timecode_range_c &cmp) const {
@@ -101,7 +101,7 @@ class timecode_factory_v1_c: public timecode_factory_c {
 protected:
   std::vector<timecode_range_c> m_ranges;
   uint32_t m_current_range;
-  int64_t m_frameno;
+  uint64_t m_frameno;
   double m_default_fps;
 
 public:
@@ -124,7 +124,7 @@ public:
   }
 
 protected:
-  virtual int64_t get_at(int64_t frame);
+  virtual int64_t get_at(uint64_t frame);
 };
 
 class timecode_factory_v2_c: public timecode_factory_c {

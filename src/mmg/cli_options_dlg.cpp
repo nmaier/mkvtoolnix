@@ -39,7 +39,7 @@ cli_options_dlg::cli_options_dlg(wxWindow *parent)
   wxBoxSizer *siz_line = new wxBoxSizer(wxHORIZONTAL);
   cob_option           = new wxMTX_COMBOBOX_TYPE(this, ID_CLIOPTIONS_COB, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
 
-  int i;
+  size_t i;
   for (i = 0; i < all_cli_options.size(); i++)
     cob_option->Append(all_cli_options[i].option);
   cob_option->SetSelection(0);

@@ -32,7 +32,7 @@ bool random_c::m_use_uuidcreate   = false;
 
 void
 random_c::generate_bytes(void *destination,
-                         int num_bytes) {
+                         size_t num_bytes) {
   UUID uuid;
 
   if (!m_seeded) {
@@ -64,7 +64,7 @@ random_c::generate_bytes(void *destination,
     m_tried_uuidcreate = true;
   }
 
-  int num_written = 0;
+  size_t num_written = 0;
   while (num_written < num_bytes) {
     if (m_use_uuidcreate) {
       RPC_STATUS status = UuidCreate(&uuid);
@@ -92,9 +92,7 @@ bool random_c::m_tried_dev_urandom = false;
 
 void
 random_c::generate_bytes(void *destination,
-                         int num_bytes) {
-  int i;
-
+                         size_t num_bytes) {
   try {
     if (!m_tried_dev_urandom) {
       m_tried_dev_urandom = true;
@@ -113,6 +111,7 @@ random_c::generate_bytes(void *destination,
     m_seeded = true;
   }
 
+  unsigned int i;
   for (i = 0; i < num_bytes; ++i)
     ((unsigned char *)destination)[i] = (unsigned char)(256.0 * rand() / (RAND_MAX + 1.0));
 }
@@ -123,16 +122,16 @@ random_c::generate_bytes(void *destination,
 void
 random_c::test() {
   uint32_t ranges[16];
-  const int num = 1000000;
+  const unsigned int num = 1000000;
 
-  int i;
+  unsigned int i;
   for (i = 0; 16 > i; ++i)
     ranges[i] = 0;
 
   for (i = 0; num > i; ++i) {
     uint32_t n = random_c::generate_32bits();
     bool found = false;
-    int k;
+    unsigned int k;
     for (k = 1; 15 >= k; ++k)
       if (n < (k * 0x10000000)) {
         ++ranges[k - 1];
@@ -156,7 +155,7 @@ random_c::test() {
   for (i = 0; num > i; i++) {
     uint32_t n = random_c::generate_32bits();
     bool found = false;
-    int k;
+    unsigned int k;
     for (k = 1; 15 >= k; ++k)
       if (n < (k * 0x10000000)) {
         ++ranges[k - 1];

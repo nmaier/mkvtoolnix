@@ -18,7 +18,7 @@
 
 bool
 cdxa_reader_c::probe_file(mm_io_c *io,
-                          int64_t size) {
+                          uint64_t size) {
   try {
     if (12 > size)
       return false;

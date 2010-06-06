@@ -82,7 +82,7 @@ public:
 
   virtual int get_progress();
 
-  static int probe_file(mm_io_c *io, int64_t size);
+  static int probe_file(mm_io_c *io, uint64_t size);
 
 protected:
   void scan_chunks();

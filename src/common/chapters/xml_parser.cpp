@@ -36,8 +36,8 @@ static void
 end_edition_entry(void *pdata) {
   KaxEditionUID *euid = NULL;
   EbmlMaster *m       = static_cast<EbmlMaster *>(xmlp_pelt);
-  int num             = 0;
-  int i;
+  size_t num           = 0;
+  size_t i;
 
   for (i = 0; i < m->ListSize(); i++) {
     if (is_id((*m)[i], KaxEditionUID))

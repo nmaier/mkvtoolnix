@@ -49,12 +49,11 @@ split(const char *src,
 std::string
 join(const char *pattern,
      const std::vector<std::string> &strings) {
-  std::string dst;
-  int i;
-
   if (strings.empty())
     return "";
-  dst = strings[0];
+
+  std::string dst = strings[0];
+  size_t i;
   for (i = 1; i < strings.size(); i++) {
     dst += pattern;
     dst += strings[i];
@@ -103,7 +102,7 @@ strip(std::string &s,
 void
 strip(std::vector<std::string> &v,
       bool newlines) {
-  int i;
+  size_t i;
 
   for (i = 0; i < v.size(); i++)
     strip(v[i], newlines);
@@ -111,11 +110,8 @@ strip(std::vector<std::string> &v,
 
 std::string &
 shrink_whitespace(std::string &s) {
-  int i;
-  bool previous_was_whitespace;
-
-  i = 0;
-  previous_was_whitespace = false;
+  size_t i                     = 0;
+  bool previous_was_whitespace = false;
   while (s.length() > i) {
     if (!isblanktab(s[i])) {
       previous_was_whitespace = false;
@@ -218,7 +214,7 @@ starts_with_case(const std::string &s,
 std::string
 upcase(const std::string &s) {
   std::string dst;
-  int i;
+  size_t i;
 
   dst.reserve(s.size());
   for (i = 0; i < s.size(); i++)
@@ -230,7 +226,7 @@ upcase(const std::string &s) {
 std::string
 downcase(const std::string &s) {
   std::string dst;
-  int i;
+  size_t i;
 
   dst.reserve(s.size());
   for (i = 0; i < s.size(); i++)
@@ -264,9 +260,9 @@ utf8_strlen(const std::string &s) {
                      : ((c & 0xf8) == 0xf0) ?  4
                      : ((c & 0xfc) == 0xf8) ?  5
                      : ((c & 0xfe) == 0xfc) ?  6
-                     :                        -1;
+                     :                        99;
 
-    if (-1 == num_bytes)
+    if (99 == num_bytes)
       mxerror(boost::format(Y("utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|")) % static_cast<unsigned int>(c));
 
     ++length;

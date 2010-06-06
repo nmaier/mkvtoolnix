@@ -52,7 +52,7 @@ stdio_redirected() {
 }
 
 void
-mxmsg(int level,
+mxmsg(unsigned int level,
       std::string message) {
   static bool s_saw_cr_after_nl = false;
 
@@ -74,9 +74,12 @@ mxmsg(int level,
   else if (level == MXMSG_DEBUG)
     g_mm_stdio->puts(g_cc_stdio->native(Y("Debug> ")));
 
-  int idx_cr = message.rfind('\r');
-  if ((0 <= idx_cr) && (message.rfind('\n') < idx_cr))
-    s_saw_cr_after_nl = true;
+  size_t idx_cr = message.rfind('\r');
+  if (std::string::npos != idx_cr) {
+    size_t idx_nl = message.rfind('\n');
+    if ((std::string::npos != idx_nl) && (idx_nl < idx_cr))
+      s_saw_cr_after_nl = true;
+  }
 
   std::string output = g_cc_stdio->native(message);
   g_mm_stdio->puts(output);
@@ -154,7 +157,7 @@ mxerror_tid(const std::string &file_name,
 }
 
 void
-mxverb_fn(int level,
+mxverb_fn(unsigned int level,
           const std::string &file_name,
           const std::string &message) {
   if (verbose < level)
@@ -164,7 +167,7 @@ mxverb_fn(int level,
 }
 
 void
-mxverb_tid(int level,
+mxverb_tid(unsigned int level,
            const std::string &file_name,
            int64_t track_id,
            const std::string &message) {
@@ -186,9 +189,9 @@ set_cc_stdio(const std::string &charset) {
 }
 
 void
-mxhexdump(int level,
+mxhexdump(unsigned int level,
           const void *buffer_to_dump,
-          int length) {
+          size_t length) {
   if (verbose < level)
     return;
 
@@ -234,9 +237,9 @@ mxhexdump(int level,
 void
 dump_ebml_elements(EbmlElement *element,
                    bool with_values,
-                   int level) {
+                   unsigned int level) {
   std::string indent_str, value_str;
-  int i;
+  size_t i;
 
   for (i = 1; i <= level; ++i)
     indent_str += " ";

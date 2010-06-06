@@ -23,7 +23,7 @@
 
 int
 tta_reader_c::probe_file(mm_io_c *io,
-                         int64_t size) {
+                         uint64_t size) {
   unsigned char buf[4];
 
   if (26 > size)

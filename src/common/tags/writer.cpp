@@ -21,7 +21,7 @@ using namespace libmatroska;
 void
 write_tags_xml(KaxTags &tags,
                mm_io_c *out) {
-  int i;
+  size_t i;
 
   for (i = 0; NULL != tag_elements[i].name; i++) {
     tag_elements[i].start_hook = NULL;

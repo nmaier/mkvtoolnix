@@ -23,7 +23,7 @@
 
 int
 aac_reader_c::probe_file(mm_io_c *io,
-                         int64_t size,
+                         uint64_t size,
                          int64_t probe_range,
                          int num_headers) {
   return (find_valid_headers(io, probe_range, num_headers) != -1) ? 1 : 0;
@@ -50,8 +50,8 @@ aac_reader_c::aac_reader_c(track_info_c &_ti)
     if (0 < tag_size_end)
       size -= tag_size_end;
 
-    int init_read_len = std::min(size - tag_size_start, (int64_t)INITCHUNKSIZE);
-    chunk             = (unsigned char *)safemalloc(INITCHUNKSIZE);
+    size_t init_read_len = std::min(size - tag_size_start, (int64_t)INITCHUNKSIZE);
+    chunk                = (unsigned char *)safemalloc(INITCHUNKSIZE);
 
     if (io->read(chunk, init_read_len) != init_read_len)
       throw error_c(boost::format(Y("aac_reader: Could not read %1% bytes.")) % init_read_len);

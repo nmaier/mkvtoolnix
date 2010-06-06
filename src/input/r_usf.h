@@ -76,7 +76,7 @@ public:
   virtual void create_packetizers();
   virtual int get_progress();
 
-  static int probe_file(mm_text_io_c *io, int64_t size);
+  static int probe_file(mm_text_io_c *io, uint64_t size);
 
   virtual void start_element_cb(const char *name, const char **atts);
   virtual void end_element_cb(const char *name);

@@ -70,7 +70,7 @@ std::string
 to_string(double value,
           unsigned int precision) {
   int64_t scale = 1;
-  for (int i = 0; i < precision; ++i)
+  for (size_t i = 0; i < precision; ++i)
     scale *= 10;
 
   return to_string((int64_t)(value * scale), scale, precision);
@@ -193,9 +193,9 @@ format_paragraph(const std::wstring &text_to_wrap,
     size_t word_length   = get_width_in_em(word);
     size_t new_column    = current_column + (needs_space_now ? 0 : 1) + word_length;
 
-    if (break_anywhere && (new_column >= wrap_column)) {
+    if (break_anywhere && (new_column >= static_cast<size_t>(wrap_column))) {
       size_t offset = 0;
-      while (((word_end - 1) > word_start) && ((128 > text_to_wrap[word_end - 1]) || ((new_column - offset) >= wrap_column))) {
+      while (((word_end - 1) > word_start) && ((128 > text_to_wrap[word_end - 1]) || ((new_column - offset) >= static_cast<size_t>(wrap_column)))) {
         offset   += get_width_in_em(text_to_wrap[word_end - 1]);
         word_end -= 1;
       }
@@ -208,7 +208,7 @@ format_paragraph(const std::wstring &text_to_wrap,
       word.erase(word_end - word_start);
     }
 
-    if (!first_word_in_line && (new_column >= wrap_column)) {
+    if (!first_word_in_line && (new_column >= static_cast<size_t>(wrap_column))) {
       text               += L"\n" + indent_following_lines;
       current_column      = indent_column;
       first_word_in_line  = true;

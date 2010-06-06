@@ -24,7 +24,7 @@
 
 int
 ssa_reader_c::probe_file(mm_text_io_c *io,
-                         int64_t) {
+                         uint64_t) {
   return ssa_parser_c::probe(io);
 }
 
@@ -99,7 +99,7 @@ ssa_reader_c::identify() {
   id_result_container("SSA/ASS");
   id_result_track(0, ID_RESULT_TRACK_SUBTITLES, "SSA/ASS");
 
-  int i;
+  size_t i;
   for (i = 0; i < g_attachments.size(); i++)
     id_result_attachment(g_attachments[i].ui_id, g_attachments[i].mime_type, g_attachments[i].data->get_size(), g_attachments[i].name, g_attachments[i].description);
 }

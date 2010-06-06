@@ -68,8 +68,7 @@ read_next_header(mm_io_c *mm_io,
     } else
       bleft = 0;
 
-    if (mm_io->read(buffer + bleft, sizeof(*wphdr) - bleft) !=
-        (long)sizeof(*wphdr) - bleft)
+    if (mm_io->read(buffer + bleft, sizeof(*wphdr) - bleft) != static_cast<unsigned int>(sizeof(*wphdr) - bleft))
       return -1;
 
     sp = buffer;

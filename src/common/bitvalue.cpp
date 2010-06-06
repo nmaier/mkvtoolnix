@@ -34,16 +34,16 @@ bitvalue_c::bitvalue_c(const bitvalue_c &src) {
 #define hextodec(c)   (isdigit(c) ? ((c) - '0') : ((c) - 'a' + 10))
 
 bitvalue_c::bitvalue_c(std::string s,
-                       int allowed_bitlength) {
-  if ((allowed_bitlength != -1) && ((allowed_bitlength % 8) != 0))
+                       unsigned int allowed_bitlength) {
+  if ((allowed_bitlength != 0) && ((allowed_bitlength % 8) != 0))
     throw error_c("wrong usage: invalid allowed_bitlength");
 
-  int len                 = s.size();
+  unsigned int len        = s.size();
   bool previous_was_space = true;
   s                       = downcase(s);
   std::string s2;
 
-  int i;
+  unsigned int i;
   for (i = 0; i < len; i++) {
     // Space or tab?
     if (isblanktab(s[i])) {
@@ -78,7 +78,7 @@ bitvalue_c::bitvalue_c(std::string s,
   len = s2.length();
   if (((len % 2) != 0)
       ||
-      ((allowed_bitlength != -1) && ((len * 4) < allowed_bitlength)))
+      ((allowed_bitlength != 0) && ((len * 4) < allowed_bitlength)))
     throw error_c(Y("Missing one hex digit"));
 
   m_value = memory_c::alloc(len / 2);
@@ -110,7 +110,7 @@ bitvalue_c::operator ==(const bitvalue_c &cmp)
 }
 
 unsigned char
-bitvalue_c::operator [](int index)
+bitvalue_c::operator [](size_t index)
   const {
   assert((0 <= index) && (m_value->get_size() > index));
   return m_value->get_buffer()[index];

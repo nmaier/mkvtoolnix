@@ -68,7 +68,7 @@ space(int num) {
 
 int
 qtmp4_reader_c::probe_file(mm_io_c *in,
-                           int64_t size) {
+                           uint64_t size) {
   uint32_t atom;
   uint64_t atom_size;
 
@@ -350,7 +350,7 @@ qtmp4_reader_c::calculate_timecodes() {
 void
 qtmp4_reader_c::parse_video_header_priv_atoms(qtmp4_demuxer_cptr &dmx,
                                               unsigned char *mem,
-                                              int size,
+                                              size_t size,
                                               int level) {
   if (!dmx->v_is_avc && strncasecmp(dmx->fourcc, "mp4v", 4) && strncasecmp(dmx->fourcc, "xvid", 4) && (0 != size)) {
     dmx->priv_size = size;
@@ -404,7 +404,7 @@ qtmp4_reader_c::parse_video_header_priv_atoms(qtmp4_demuxer_cptr &dmx,
 void
 qtmp4_reader_c::parse_audio_header_priv_atoms(qtmp4_demuxer_cptr &dmx,
                                               unsigned char *mem,
-                                              int size,
+                                              size_t size,
                                               int level) {
   mm_mem_io_c mio(mem, size);
 
@@ -566,7 +566,7 @@ qtmp4_reader_c::handle_ctts_atom(qtmp4_demuxer_cptr &new_dmx,
   uint32_t count = io->read_uint32_be();
   mxverb(2, boost::format("Quicktime/MP4 reader:%1%Frame offset table: %2% raw entries\n") % space(level * 2 + 1) % count);
 
-  int i;
+  size_t i;
   for (i = 0; i < count; ++i) {
     qt_frame_offset_t frame_offset;
 
@@ -906,7 +906,7 @@ qtmp4_reader_c::handle_stco_atom(qtmp4_demuxer_cptr &new_dmx,
 
   mxverb(2, boost::format("Quicktime/MP4 reader:%1%Chunk offset table: %2% entries\n") % space(level * 2 + 1) % count);
 
-  int i;
+  size_t i;
   for (i = 0; i < count; ++i) {
     qt_chunk_t chunk;
 
@@ -925,7 +925,7 @@ qtmp4_reader_c::handle_co64_atom(qtmp4_demuxer_cptr &new_dmx,
 
   mxverb(2, boost::format("Quicktime/MP4 reader:%1%64bit chunk offset table: %2% entries\n") % space(level * 2 + 1) % count);
 
-  int i;
+  size_t i;
   for (i = 0; i < count; ++i) {
     qt_chunk_t chunk;
 
@@ -941,7 +941,7 @@ qtmp4_reader_c::handle_stsc_atom(qtmp4_demuxer_cptr &new_dmx,
                                  int level) {
   io->skip(1 + 3);        // version & flags
   uint32_t count = io->read_uint32_be();
-  int i;
+  size_t i;
   for (i = 0; i < count; ++i) {
     qt_chunkmap_t chunkmap;
 
@@ -962,7 +962,7 @@ qtmp4_reader_c::handle_stsd_atom(qtmp4_demuxer_cptr &new_dmx,
   io->skip(1 + 3);        // version & flags
   uint32_t count = io->read_uint32_be();
 
-  int i;
+  size_t i;
   for (i = 0; i < count; ++i) {
     int64_t pos   = io->getFilePointer();
     uint32_t size = io->read_uint32_be();
@@ -1103,7 +1103,7 @@ qtmp4_reader_c::handle_stss_atom(qtmp4_demuxer_cptr &new_dmx,
   io->skip(1 + 3);        // version & flags
   uint32_t count = io->read_uint32_be();
 
-  int i;
+  size_t i;
   for (i = 0; i < count; ++i)
     new_dmx->keyframe_table.push_back(io->read_uint32_be());
 
@@ -1123,7 +1123,7 @@ qtmp4_reader_c::handle_stsz_atom(qtmp4_demuxer_cptr &new_dmx,
   uint32_t count       = io->read_uint32_be();
 
   if (0 == sample_size) {
-    int i;
+    size_t i;
     for (i = 0; i < count; ++i) {
       qt_sample_t sample;
 
@@ -1146,7 +1146,7 @@ qtmp4_reader_c::handle_sttd_atom(qtmp4_demuxer_cptr &new_dmx,
   io->skip(1 + 3);        // version & flags
   uint32_t count = io->read_uint32_be();
 
-  int i;
+  size_t i;
   for (i = 0; i < count; ++i) {
     qt_durmap_t durmap;
 
@@ -1165,7 +1165,7 @@ qtmp4_reader_c::handle_stts_atom(qtmp4_demuxer_cptr &new_dmx,
   io->skip(1 + 3);        // version & flags
   uint32_t count = io->read_uint32_be();
 
-  int i;
+  size_t i;
   for (i = 0; i < count; ++i) {
     qt_durmap_t durmap;
 
@@ -1201,7 +1201,7 @@ qtmp4_reader_c::handle_elst_atom(qtmp4_demuxer_cptr &new_dmx,
   uint32_t count = io->read_uint32_be();
   new_dmx->editlist_table.resize(count);
 
-  int i;
+  size_t i;
   for (i = 0; i < count; ++i) {
     qt_editlist_t &editlist = new_dmx->editlist_table[i];
 
@@ -1263,7 +1263,7 @@ qtmp4_reader_c::handle_trak_atom(qtmp4_demuxer_cptr &new_dmx,
 file_status_e
 qtmp4_reader_c::read(generic_packetizer_c *ptzr,
                      bool force) {
-  int dmx_idx;
+  size_t dmx_idx;
 
   for (dmx_idx = 0; dmx_idx < demuxers.size(); ++dmx_idx) {
     qtmp4_demuxer_cptr &dmx = demuxers[dmx_idx];
@@ -1422,7 +1422,7 @@ qtmp4_reader_c::parse_esds_atom(mm_mem_io_c &memio,
 memory_cptr
 qtmp4_reader_c::create_bitmap_info_header(qtmp4_demuxer_cptr &dmx,
                                           const char *fourcc,
-                                          int extra_size,
+                                          size_t extra_size,
                                           const void *extra_data) {
   int full_size           = sizeof(alBITMAPINFOHEADER) + extra_size;
   memory_cptr bih_p       = memory_c::alloc(full_size);
@@ -1724,7 +1724,7 @@ qtmp4_demuxer_c::calculate_fps() {
   } else {
     std::map<int64_t, int> duration_map;
 
-    for (int i = 0; sample_table.size() > (i + 1); ++i) {
+    for (size_t i = 0; sample_table.size() > (i + 1); ++i) {
       int64_t this_duration = sample_table[i + 1].pts - sample_table[i].pts;
 
       if (duration_map.find(this_duration) == duration_map.end())
@@ -1762,7 +1762,7 @@ qtmp4_demuxer_c::to_nsecs(int64_t value) {
 
 void
 qtmp4_demuxer_c::calculate_timecodes() {
-  int frame;
+  unsigned int frame;
 
   if (0 != sample_size) {
     for (frame = 0; chunk_table.size() > frame; ++frame) {
@@ -1787,8 +1787,8 @@ qtmp4_demuxer_c::calculate_timecodes() {
     int64_t timecode;
 
     if (!editlist_table.empty()) {
-      int editlist_pos = 0;
-      int real_frame   = frame;
+      unsigned int editlist_pos = 0;
+      unsigned int real_frame   = frame;
 
       while (((editlist_table.size() - 1) > editlist_pos) && (frame >= editlist_table[editlist_pos + 1].start_frame))
         ++editlist_pos;
@@ -1858,7 +1858,7 @@ qtmp4_demuxer_c::calculate_timecodes() {
 
 void
 qtmp4_demuxer_c::adjust_timecodes(int64_t delta) {
-  int i;
+  size_t i;
 
   for (i = 0; timecodes.size() > i; ++i)
     timecodes[i] += delta;
@@ -1872,7 +1872,7 @@ qtmp4_demuxer_c::update_tables(int64_t global_time_scale) {
   uint64_t last = chunk_table.size();
 
   // process chunkmap:
-  int j, i = chunkmap_table.size();
+  size_t j, i = chunkmap_table.size();
   while (i > 0) {
     --i;
     for (j = chunkmap_table[i].first_chunk; j < last; ++j) {
@@ -1941,7 +1941,7 @@ qtmp4_demuxer_c::update_tables(int64_t global_time_scale) {
 
   // calc pts/dts offsets
   for (j = 0; j < raw_frame_offset_table.size(); ++j) {
-    int k;
+    size_t k;
 
     for (k = 0; k < raw_frame_offset_table[j].count; ++k)
       frame_offset_table.push_back(raw_frame_offset_table[j].offset);
@@ -1963,25 +1963,25 @@ qtmp4_demuxer_c::update_editlist_table(int64_t global_time_scale) {
   if (editlist_table.empty())
     return;
 
-  int frame = 0, e_pts = 0, i;
+  size_t frame = 0, e_pts = 0, i;
 
-  int min_editlist_pts = -1;
-  for (i = 0; editlist_table.size() > i; ++i)
-    if ((-1 == min_editlist_pts) || (editlist_table[i].pos < min_editlist_pts))
-      min_editlist_pts = editlist_table[i].pos;
+  int64_t min_editlist_pts = editlist_table.front().pos;
+  for (i = 1; editlist_table.size() > i; ++i)
+    min_editlist_pts = std::min(static_cast<int64_t>(editlist_table[i].pos), min_editlist_pts);
 
-  int pts_offset = 0;
+  uint64_t pts_offset = 0;
   if (('v' == type) && v_is_avc && !frame_offset_table.empty() && (frame_offset_table[0] <= min_editlist_pts))
     pts_offset = frame_offset_table[0];
 
   mxverb(4, boost::format("qtmp4: Updating edit list table for track %1%; pts_offset = %2%\n") % id % pts_offset);
 
   for (i = 0; editlist_table.size() > i; ++i) {
-    qt_editlist_t &el = editlist_table[i];
-    int sample = 0, pts = el.pos;
+    qt_editlist_t &el   = editlist_table[i];
+    uint64_t pts        = el.pos;
+    unsigned int sample = 0;
 
-    pts            -= pts_offset;
-    el.start_frame  = frame;
+    pts                -= pts_offset;
+    el.start_frame      = frame;
 
     if (pts < 0) {
       // skip!
@@ -2024,12 +2024,12 @@ qtmp4_demuxer_c::build_index() {
 
 void
 qtmp4_demuxer_c::build_index_constant_sample_size_mode() {
-  int keyframe_table_idx  = 0;
-  int keyframe_table_size = keyframe_table.size();
+  size_t keyframe_table_idx  = 0;
+  size_t keyframe_table_size = keyframe_table.size();
 
-  int frame_idx;
+  size_t frame_idx;
   for (frame_idx = 0; frame_idx < chunk_table.size(); ++frame_idx) {
-    int64_t frame_size;
+    uint64_t frame_size;
 
     if (1 != sample_size) {
       frame_size = chunk_table[frame_idx].size * sample_size;
@@ -2061,10 +2061,10 @@ qtmp4_demuxer_c::build_index_constant_sample_size_mode() {
 
 void
 qtmp4_demuxer_c::build_index_chunk_mode() {
-  int keyframe_table_idx  = 0;
-  int keyframe_table_size = keyframe_table.size();
+  size_t keyframe_table_idx  = 0;
+  size_t keyframe_table_size = keyframe_table.size();
 
-  int frame_idx;
+  size_t frame_idx;
   for (frame_idx = 0; frame_idx < frame_indices.size(); ++frame_idx) {
     int act_frame_idx = frame_indices[frame_idx];
 
@@ -2084,12 +2084,12 @@ bool
 qtmp4_demuxer_c::read_first_bytes(memory_cptr &buf,
                                   int num_bytes,
                                   mm_io_c *io) {
-  int buf_pos = 0;
-  int idx_pos = 0;
+  size_t buf_pos = 0;
+  size_t idx_pos = 0;
 
   while ((0 < num_bytes) && (idx_pos < m_index.size())) {
-    qt_index_t &index     = m_index[idx_pos];
-    int num_bytes_to_read = std::min((int64_t)num_bytes, index.size);
+    qt_index_t &index          = m_index[idx_pos];
+    uint64_t num_bytes_to_read = std::min((int64_t)num_bytes, index.size);
 
     io->setFilePointer(index.file_pos);
     if (io->read(buf->get_buffer() + buf_pos, num_bytes_to_read) < num_bytes_to_read)

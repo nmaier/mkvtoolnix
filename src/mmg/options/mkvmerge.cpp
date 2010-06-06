@@ -63,7 +63,7 @@ optdlg_mkvmerge_tab::optdlg_mkvmerge_tab(wxWindow *parent,
 
   cob_priority->SetToolTip(TIP("Sets the priority that mkvmerge will run with."));
 
-  int i;
+  size_t i;
   for (i = 0; cob_priority_translations.entries.size() > i; ++i)
     cob_priority->Append(cob_priority_translations.entries[i].translated);
 

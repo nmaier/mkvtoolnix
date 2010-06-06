@@ -22,13 +22,13 @@ int mpeg_ts_reader_c::potential_packet_sizes[] = { 188, 192, 204, 0 };
 
 bool
 mpeg_ts_reader_c::probe_file(mm_io_c *io,
-                             int64_t size) {
+                             uint64_t size) {
   try {
     std::vector<int> positions;
     size = size > TS_PROBE_SIZE ? TS_PROBE_SIZE : size;
     memory_cptr buffer(new memory_c(safemalloc(size), size, true));
     unsigned char *mem = buffer->get_buffer();
-    int i, k;
+    size_t i, k;
 
     io->setFilePointer(0, seek_beginning);
     size = io->read(mem, size);
@@ -39,9 +39,9 @@ mpeg_ts_reader_c::probe_file(mm_io_c *io,
 
     for (i = 0; positions.size() > i; ++i) {
       for (k = 0; 0 != potential_packet_sizes[k]; ++k) {
-        int pos            = positions[i];
-        int packet_size    = potential_packet_sizes[k];
-        int num_startcodes = 1;
+        unsigned int pos            = positions[i];
+        unsigned int packet_size    = potential_packet_sizes[k];
+        unsigned int num_startcodes = 1;
 
         while ((TS_CONSECUTIVE_PACKETS > num_startcodes) && (pos < size) && (0x47 == mem[pos])) {
           pos += packet_size;

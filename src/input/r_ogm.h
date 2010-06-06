@@ -53,8 +53,7 @@ public:
 
   ogm_stream_type_e stype;
   int serialno, eos;
-  int units_processed;
-  int num_header_packets, num_non_header_packets;
+  unsigned int units_processed, num_header_packets, num_non_header_packets;
   bool headers_read;
   std::string language, title;
   std::vector<memory_cptr> packet_data, nh_packet_data;
@@ -111,7 +110,7 @@ public:
 
   virtual int get_progress();
 
-  static int probe_file(mm_io_c *io, int64_t size);
+  static int probe_file(mm_io_c *io, uint64_t size);
 
 private:
   virtual ogm_demuxer_cptr find_demuxer(int serialno);

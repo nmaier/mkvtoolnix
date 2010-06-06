@@ -98,12 +98,12 @@ base64_encode(const unsigned char *src,
 int
 base64_decode(const std::string &src,
               unsigned char *dst) {
-  int pos     = 0;
-  int dst_pos = 0;
-  int pad     = 0;
+  unsigned int pos     = 0;
+  unsigned int dst_pos = 0;
+  unsigned int pad     = 0;
   while (pos < src.size()) {
     unsigned char in[3];
-    int in_pos = 0;
+    unsigned int in_pos = 0;
 
     while ((src.size() > pos) && (4 > in_pos)) {
       unsigned char c = (unsigned char)src[pos];
@@ -120,7 +120,7 @@ base64_decode(const std::string &src,
         return -1;
     }
 
-    int values_idx;
+    unsigned int values_idx;
     unsigned char values[4];
     for (values_idx = 0; values_idx < in_pos; values_idx++) {
       values[values_idx] =

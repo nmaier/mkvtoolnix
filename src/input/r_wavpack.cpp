@@ -22,7 +22,7 @@
 
 int
 wavpack_reader_c::probe_file(mm_io_c *io,
-                             int64_t size) {
+                             uint64_t size) {
   wavpack_header_t header;
 
   try {
@@ -160,7 +160,7 @@ wavpack_reader_c::read(generic_packetizer_c *ptzr,
       put_uint32_le(databuffer, block_size);
       databuffer += 4;
     }
-    if (io->read(databuffer, block_size) != block_size) {
+    if (io->read(databuffer, block_size) != static_cast<size_t>(block_size)) {
       PTZR0->flush();
       return FILE_STATUS_DONE;
     }
@@ -221,7 +221,7 @@ wavpack_reader_c::read(generic_packetizer_c *ptzr,
           put_uint32_le(databuffer, block_size);
           databuffer += 4;
         }
-        if (io_correc->read(databuffer, block_size) != block_size) {
+        if (io_correc->read(databuffer, block_size) != static_cast<size_t>(block_size)) {
           delete io_correc;
           io_correc = NULL;
         }

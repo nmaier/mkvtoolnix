@@ -322,7 +322,7 @@ ssa_parser_c::parse() {
         strip(m_format);
 
         // Let's see if "Actor" is used in the format instead of "Name".
-        int i;
+        size_t i;
         for (i = 0; m_format.size() > i; ++i)
           if (downcase(m_format[i]) == "actor") {
             name_field = "Actor";
@@ -418,7 +418,7 @@ ssa_parser_c::parse() {
 std::string
 ssa_parser_c::get_element(const char *index,
                           std::vector<std::string> &fields) {
-  int i;
+  size_t i;
 
   for (i = 0; i < m_format.size(); i++)
     if (m_format[i] == index)
@@ -490,12 +490,12 @@ ssa_parser_c::add_attachment_maybe(std::string &name,
   attachment_t attachment;
 
   std::string short_name = m_file_name;
-  int pos                = short_name.rfind('/');
+  size_t pos             = short_name.rfind('/');
 
-  if (0 < pos)
+  if (std::string::npos != pos)
     short_name.erase(0, pos + 1);
   pos = short_name.rfind('\\');
-  if (0 < pos)
+  if (std::string::npos != pos)
     short_name.erase(0, pos + 1);
 
   attachment.ui_id        = m_attachment_id;
@@ -503,7 +503,7 @@ ssa_parser_c::add_attachment_maybe(std::string &name,
   attachment.description  = (boost::format(SSA_SECTION_FONTS == section ? Y("Imported font from %1%") : Y("Imported picture from %1%")) % short_name).str();
   attachment.to_all_files = true;
 
-  int allocated           = 1024;
+  size_t allocated        = 1024;
   attachment.data         = memory_c::alloc(allocated);
   attachment.data->set_size(0);
 
@@ -537,8 +537,8 @@ ssa_parser_c::decode_chars(unsigned char c1,
                            unsigned char c3,
                            unsigned char c4,
                            memory_cptr &buffer,
-                           int bytes_to_add,
-                           int &allocated) {
+                           size_t bytes_to_add,
+                           size_t &allocated) {
   unsigned char bytes[3];
 
   uint32_t value = ((c1 - 33) << 18) + ((c2 - 33) << 12) + ((c3 - 33) << 6) + (c4 - 33);
@@ -561,7 +561,7 @@ ssa_parser_c::decode_chars(unsigned char c1,
 
 int64_t
 spu_extract_duration(unsigned char *data,
-                     int buf_size,
+                     size_t buf_size,
                      int64_t timecode) {
   uint32_t date, control_start, next_off, start_off, off;
   unsigned char type;

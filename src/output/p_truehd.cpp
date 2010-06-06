@@ -138,7 +138,7 @@ truehd_packetizer_c::flush_frames() {
 
 void
 truehd_packetizer_c::flush_frames_separate() {
-  int i;
+  size_t i;
   for (i = 0; m_frames.size() > i; ++i) {
     if (m_frames[i]->is_sync())
       m_current_samples_per_frame = m_frames[i]->m_samples_per_frame;
@@ -158,9 +158,9 @@ truehd_packetizer_c::flush_frames_separate() {
 
 void
 truehd_packetizer_c::flush_frames_merged() {
-  int full_size = 0;
-  int samples   = 0;
-  int i;
+  size_t full_size     = 0;
+  unsigned int samples = 0;
+  size_t i;
   for (i = 0; m_frames.size() > i; ++i) {
     if (m_frames[i]->is_sync())
       m_current_samples_per_frame = m_frames[i]->m_samples_per_frame;
@@ -171,7 +171,7 @@ truehd_packetizer_c::flush_frames_merged() {
 
   memory_cptr data = memory_c::alloc(full_size);
 
-  int offset = 0;
+  unsigned int offset = 0;
   for (i = 0; m_frames.size() > i; ++i) {
     memcpy(data->get_buffer() + offset, m_frames[i]->m_data->get_buffer(), m_frames[i]->m_data->get_size());
     offset += m_frames[i]->m_data->get_size();

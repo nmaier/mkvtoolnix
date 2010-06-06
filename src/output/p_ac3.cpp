@@ -60,14 +60,14 @@ unsigned char *
 ac3_packetizer_c::get_ac3_packet(unsigned long *header,
                                  ac3_header_t *ac3header) {
   unsigned char *packet_buffer = m_byte_buffer.get_buffer();
-  int size                     = m_byte_buffer.get_size();
+  size_t size                  = m_byte_buffer.get_size();
 
   if (NULL == packet_buffer)
     return NULL;
 
   int pos = find_ac3_header(packet_buffer, size, ac3header, m_first_packet || m_first_ac3_header.has_dependent_frames);
 
-  if ((0 > pos) || ((pos + ac3header->bytes) > size))
+  if ((0 > pos) || (static_cast<size_t>(pos + ac3header->bytes) > size))
     return NULL;
 
   m_bytes_skipped += pos;

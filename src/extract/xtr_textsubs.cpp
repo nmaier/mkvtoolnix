@@ -221,7 +221,7 @@ xtr_ssa_c::handle_frame(memory_cptr &frame,
   // that defines a different layout. So let's account for that.
 
   std::string line = "Dialogue: ";
-  int i;
+  size_t i;
   for (i = 0; i < m_ssa_format.size(); i++) {
     std::string format = m_ssa_format[i];
 
@@ -262,7 +262,7 @@ xtr_ssa_c::handle_frame(memory_cptr &frame,
 
 void
 xtr_ssa_c::finish_file() {
-  int i;
+  size_t i;
 
   // Sort the SSA lines according to their ReadOrder number and
   // write them.

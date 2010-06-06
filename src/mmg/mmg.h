@@ -235,7 +235,7 @@ extern wxArrayString sorted_iso_codes;
 extern bool title_was_present;
 extern std::map<wxString, wxString> capabilities;
 
-wxString &break_line(wxString &line, int break_after = 80);
+wxString &break_line(wxString &line, unsigned int break_after = 80);
 wxString extract_language_code(wxString source);
 wxString shell_escape(wxString source, bool cmd_exe_mode = false);
 std::vector<wxString> split(const wxString &src, const wxString &pattern, int max_num = -1);

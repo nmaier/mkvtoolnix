@@ -71,10 +71,10 @@ el_get_uint(parser_data_t *pdata,
             EbmlElement *el,
             uint64_t min_value = 0,
             bool is_bool = false) {
-  int64 value;
+  uint64_t value;
 
   strip(pdata->bin);
-  if (!parse_int(pdata->bin.c_str(), value))
+  if (!parse_uint(pdata->bin.c_str(), value))
     xmlp_error(pdata, boost::format(Y("Expected an unsigned integer but found '%1%'.")) % pdata->bin);
 
   if (value < min_value)
@@ -273,7 +273,7 @@ add_new_element(parser_data_t *pdata,
 
     if (NULL != callbacks) {
       const EbmlSemanticContext &context = EBML_INFO_CONTEXT(*callbacks);
-      int i;
+      size_t i;
       for (i = 0; i < EBML_CTX_SIZE(context); i++)
         if (pdata->mapping[elt_idx].id == EBML_CTX_IDX_ID(context,i)) {
           found = true;
@@ -289,7 +289,7 @@ add_new_element(parser_data_t *pdata,
       EbmlMaster *m = dynamic_cast<EbmlMaster *>(xmlp_pelt);
       assert(NULL != m);
 
-      int i;
+      size_t i;
       for (i = 0; i < m->ListSize(); i++)
         if (EbmlId(*(*m)[i]) == pdata->mapping[elt_idx].id)
           xmlp_error(pdata, boost::format(Y("Only one instance of <%1%> is allowed beneath <%2%>.")) % name % pdata->mapping[parent_idx].name);
@@ -574,12 +574,12 @@ xml_parser_c::handle_xml_encoding(std::string &line) {
   if ((XMLP_STATE_AFTER_HEADER == m_xml_parser_state) || (BO_NONE == m_xml_source->get_byte_order()))
     return;
 
-  int pos = 0;
+  size_t pos = 0;
   std::string new_line;
 
   if (XMLP_STATE_INITIAL == m_xml_parser_state) {
     pos = line.find("<?xml");
-    if (0 > pos)
+    if (std::string::npos == pos)
       return;
     m_xml_parser_state = XMLP_STATE_ATTRIBUTE_NAME;
     pos += 5;

@@ -502,7 +502,7 @@ mmg_dialog::check_before_overwriting() {
   wxFileName file_name(tc_output->GetValue());
   wxString dir, name, ext;
   wxArrayString files_in_output_dir;
-  int i;
+  size_t i;
 
   dir = file_name.GetPath(wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR);
 
@@ -543,7 +543,7 @@ mmg_dialog::is_output_file_name_valid() {
   wxFileName output_file_name(tc_output->GetValue());
   wxString check_name(output_file_name.GetFullName());
 
-  int i;
+  size_t i;
   for (i = 0; check_name.Length() > i; ++i)
     if (wxNOT_FOUND != forbidden_chars.Find(check_name[i]))
       return false;
@@ -1182,7 +1182,7 @@ mmg_dialog::update_command_line() {
 
 void
 mmg_dialog::on_file_load_last(wxCommandEvent &evt) {
-  if ((evt.GetId() < ID_M_FILE_LOADLAST1) || ((evt.GetId() - ID_M_FILE_LOADLAST1) >= last_settings.size()))
+  if ((evt.GetId() < ID_M_FILE_LOADLAST1) || (static_cast<size_t>(evt.GetId() - ID_M_FILE_LOADLAST1) >= last_settings.size()))
     return;
 
   load(last_settings[evt.GetId() - ID_M_FILE_LOADLAST1]);
@@ -1190,7 +1190,7 @@ mmg_dialog::on_file_load_last(wxCommandEvent &evt) {
 
 void
 mmg_dialog::on_chapters_load_last(wxCommandEvent &evt) {
-  if ((evt.GetId() < ID_M_CHAPTERS_LOADLAST1) || ((evt.GetId() - ID_M_CHAPTERS_LOADLAST1) >= last_chapters.size()))
+  if ((evt.GetId() < ID_M_CHAPTERS_LOADLAST1) || (static_cast<size_t>(evt.GetId() - ID_M_CHAPTERS_LOADLAST1) >= last_chapters.size()))
     return;
 
   notebook->SetSelection(4);
@@ -1351,7 +1351,8 @@ void
 mmg_dialog::on_add_to_jobqueue(wxCommandEvent &evt) {
   wxString description, line;
   job_t job;
-  int i, result;
+  size_t i;
+  int result;
   bool ok;
 
   if (!input_page->validate_settings() ||
@@ -1427,7 +1428,8 @@ mmg_dialog::on_manage_jobs(wxCommandEvent &evt) {
 
 void
 mmg_dialog::load_job_queue() {
-  int num, i, value;
+  size_t i;
+  int num, value;
   wxString s;
   wxConfigBase *cfg;
   job_t job;
@@ -1446,7 +1448,7 @@ mmg_dialog::load_job_queue() {
   }
   jobs.clear();
 
-  for (i = 0; i < num; i++) {
+  for (i = 0; i < static_cast<size_t>(num); i++) {
     cfg->SetPath(wxT("/jobs"));
     s.Printf(wxT("%u"), i);
     if (!cfg->HasGroup(s))
@@ -1677,7 +1679,8 @@ mmg_dialog::query_mkvmerge_capabilities() {
   wxString tmp;
   wxArrayString output;
   std::vector<wxString> parts;
-  int result, i;
+  size_t i;
+  int result;
 
   wxLogMessage(Z("Querying mkvmerge's capabilities"));
   tmp = wxT("\"") + options.mkvmerge + wxT("\" --capabilities");

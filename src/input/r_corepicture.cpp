@@ -43,7 +43,7 @@ public:
 
 int
 corepicture_reader_c::probe_file(mm_text_io_c *io,
-                                 int64_t) {
+                                 uint64_t) {
   try {
     corepicture_xml_find_root_c root_finder(io);
 

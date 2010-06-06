@@ -254,11 +254,11 @@ generic_packetizer_c::set_tag_track_uid() {
     return;
 
   convert_old_tags(*m_ti.m_tags);
-  int idx_tags;
+  size_t idx_tags;
   for (idx_tags = 0; m_ti.m_tags->ListSize() > idx_tags; ++idx_tags) {
     KaxTag *tag = (KaxTag *)(*m_ti.m_tags)[idx_tags];
 
-    int idx_tag;
+    size_t idx_tag;
     for (idx_tag = 0; tag->ListSize() > idx_tag; idx_tag++) {
       EbmlElement *el = (*tag)[idx_tag];
 
@@ -266,7 +266,7 @@ generic_packetizer_c::set_tag_track_uid() {
         continue;
 
       KaxTagTargets *targets = static_cast<KaxTagTargets *>(el);
-      int idx_target         = 0;
+      size_t idx_target      = 0;
 
       while (targets->ListSize() > idx_target) {
         EbmlElement *uid_el = (*targets)[idx_target];
@@ -583,7 +583,7 @@ generic_packetizer_c::set_headers() {
   }
 
   bool found = false;
-  int idx;
+  size_t idx;
   for (idx = 0; ptzrs_in_header_order.size() > idx; ++idx)
     if (this == ptzrs_in_header_order[idx]) {
       found = true;
@@ -766,13 +766,13 @@ generic_packetizer_c::add_packet(packet_cptr pack) {
 
   // strip elements to be removed
   if (   (-1                     != m_htrack_max_add_block_ids)
-      && (pack->data_adds.size()  > m_htrack_max_add_block_ids))
+      && (pack->data_adds.size()  > static_cast<size_t>(m_htrack_max_add_block_ids)))
     pack->data_adds.resize(m_htrack_max_add_block_ids);
 
   if (m_compressor.is_set()) {
     try {
       m_compressor->compress(pack->data);
-      int i;
+      size_t i;
       for (i = 0; pack->data_adds.size() > i; ++i)
         m_compressor->compress(pack->data_adds[i]);
 
@@ -782,7 +782,7 @@ generic_packetizer_c::add_packet(packet_cptr pack) {
 
   } else {
     pack->data->grab();
-    int i;
+    size_t i;
     for (i = 0; i < pack->data_adds.size(); i++)
       pack->data_adds[i]->grab();
   }
@@ -997,7 +997,7 @@ generic_packetizer_c::apply_factory_full_queueing(packet_cptr_di &p_start) {
     std::vector<packet_sorter_t> sorter;
     bool needs_sorting        = false;
     int64_t previous_timecode = 0;
-    int i                     = distance(m_packet_queue.begin(), p_start);
+    size_t i                  = distance(m_packet_queue.begin(), p_start);
 
     packet_cptr_di p_current;
     for (p_current = p_start; p_current != p_end; ++i, ++p_current) {
@@ -1043,8 +1043,8 @@ generic_packetizer_c::handle_avi_audio_sync(int64_t num_bytes,
      duration = num_bytes * 1000000000 / m_ti.m_avi_avg_bytes_per_sec;
 
   else {
-    int num_blocks = 0;
-    int i;
+    unsigned int num_blocks = 0;
+    size_t i;
     for (i = 0; (m_ti.m_avi_block_sizes.size() > i) && (0 < num_bytes); ++i) {
       int64_t block_size  = m_ti.m_avi_block_sizes[i];
       num_blocks         += (block_size + m_ti.m_avi_block_align - 1) / m_ti.m_avi_block_align;
@@ -1119,7 +1119,7 @@ generic_packetizer_c::is_compatible_with(output_compatibility_e compatibility) {
     add_requested_track_id(i->first);
 
 #define add_all_requested_track_ids2(container) \
-  for (int i = 0; i < m_ti.container.size(); i++) \
+  for (size_t i = 0; i < m_ti.container.size(); i++) \
     add_requested_track_id(m_ti.container[i]);
 
 generic_reader_c::generic_reader_c(track_info_c &ti)
@@ -1155,7 +1155,7 @@ generic_reader_c::generic_reader_c(track_info_c &ti)
 }
 
 generic_reader_c::~generic_reader_c() {
-  int i;
+  size_t i;
 
   for (i = 0; i < m_reader_packetizers.size(); i++)
     delete m_reader_packetizers[i];
@@ -1165,7 +1165,7 @@ generic_reader_c::~generic_reader_c() {
 
 void
 generic_reader_c::read_all() {
-  int i;
+  size_t i;
 
   for (i = 0; m_reader_packetizers.size() > i; ++i) {
     while (read(m_reader_packetizers[i], true) != 0)
@@ -1209,7 +1209,7 @@ generic_reader_c::demuxing_requested(char type,
   if (tracks->empty())
     return true;
 
-  int i;
+  size_t i;
   for (i = 0; i < tracks->size(); i++)
     if ((*tracks)[i] == id)
       return true;
@@ -1274,10 +1274,10 @@ void
 generic_reader_c::check_track_ids_and_packetizers() {
   add_available_track_ids();
 
-  int r;
+  size_t r;
   for (r = 0; m_requested_track_ids.size() > r; ++r) {
     bool found = false;
-    int a;
+    size_t a;
     for (a = 0; m_available_track_ids.size() > a; ++a)
       if (m_requested_track_ids[r] == m_available_track_ids[a]) {
         found = true;
@@ -1297,7 +1297,7 @@ generic_reader_c::add_requested_track_id(int64_t id) {
     return;
 
   bool found = false;
-  int i;
+  size_t i;
   for (i = 0; i < m_requested_track_ids.size(); i++)
     if (m_requested_track_ids[i] == id) {
       found = true;

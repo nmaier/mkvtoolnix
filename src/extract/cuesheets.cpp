@@ -46,7 +46,7 @@ find_tag_for_track(int idx,
                    EbmlMaster &m) {
   std::string sidx = to_string(idx);
 
-  int i;
+  size_t i;
   for (i = 0; i < m.ListSize(); i++) {
     if (EbmlId(*m[i]) != EBML_ID(KaxTag))
       continue;
@@ -80,7 +80,7 @@ get_global_tag(const char *name,
 static int64_t
 get_chapter_index(int idx,
                   KaxChapterAtom &atom) {
-  int i;
+  size_t i;
   std::string sidx = (boost::format("INDEX %|1$02d|") % idx).str();
   for (i = 0; i < atom.ListSize(); i++)
     if ((EbmlId(*atom[i]) == EBML_ID(KaxChapterAtom)) &&
@@ -122,7 +122,7 @@ static void
 print_comments(const char *prefix,
                KaxTag &tag,
                mm_io_c &out) {
-  int i;
+  size_t i;
 
   for (i = 0; i < tag.ListSize(); i++)
     if (is_id(tag[i], KaxTagSimple)
@@ -159,7 +159,7 @@ write_cuesheet(std::string file_name,
 
   out.puts(boost::format("FILE \"%1%\" WAVE\n") % file_name);
 
-  int i;
+  size_t i;
   for (i = 0; i < chapters.ListSize(); i++) {
     KaxChapterAtom &atom =  *static_cast<KaxChapterAtom *>(chapters[i]);
 
@@ -214,13 +214,13 @@ extract_cuesheet(const std::string &file_name,
   KaxTags *all_tags     = dynamic_cast<KaxTags *>(analyzer->read_all(EBML_INFO(KaxTags)));
 
   if ((NULL != chapters) && (NULL != all_tags)) {
-    int i;
+    size_t i;
     for (i = 0; i < chapters->ListSize(); i++) {
       if (dynamic_cast<KaxEditionEntry *>((*chapters)[i]) == NULL)
         continue;
 
       KaxEditionEntry *eentry = dynamic_cast<KaxEditionEntry *>((*chapters)[i]);
-      int k;
+      size_t k;
       for (k = 0; k < eentry->ListSize(); k++)
         if (dynamic_cast<KaxChapterAtom *>((*eentry)[k]) != NULL)
           all_chapters.PushElement(*(*eentry)[k]);

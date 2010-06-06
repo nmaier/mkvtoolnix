@@ -217,10 +217,11 @@ dirac::es_parser_c::~es_parser_c() {
 
 void
 dirac::es_parser_c::add_bytes(unsigned char *buffer,
-                             int size) {
+                              size_t size) {
   memory_slice_cursor_c cursor;
 
-  int previous_pos            = -1;
+  bool previous_found         = false;
+  size_t previous_pos         = 0;
   int64_t previous_stream_pos = m_stream_pos;
 
   if (m_unparsed_buffer.is_set() && (0 != m_unparsed_buffer->get_size()))
@@ -232,9 +233,10 @@ dirac::es_parser_c::add_bytes(unsigned char *buffer,
 
     while (1) {
       if (DIRAC_SYNC_WORD == marker) {
-        if (-1 == previous_pos) {
-          previous_pos = cursor.get_position() - 4;
-          m_stream_pos = previous_stream_pos + previous_pos;
+        if (!previous_found) {
+          previous_found = true;
+          previous_pos   = cursor.get_position() - 4;
+          m_stream_pos   = previous_stream_pos + previous_pos;
 
           if (!cursor.char_available())
             break;
@@ -270,10 +272,7 @@ dirac::es_parser_c::add_bytes(unsigned char *buffer,
     }
   }
 
-  if (-1 == previous_pos)
-    previous_pos = 0;
-
-  int new_size = cursor.get_size() - previous_pos;
+  unsigned int new_size = cursor.get_size() - previous_pos;
   if (0 != new_size) {
     memory_cptr new_unparsed_buffer = memory_c::alloc(new_size);
     cursor.copy(new_unparsed_buffer->get_buffer(), previous_pos, new_size);

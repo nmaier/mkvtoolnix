@@ -40,7 +40,7 @@ public:
 
   virtual int get_progress();
 
-  static int probe_file(mm_io_c *io, int64_t size, int64_t probe_range, int num_headers = 5);
+  static int probe_file(mm_io_c *io, uint64_t size, int64_t probe_range, int num_headers = 5);
 
 protected:
   static int find_valid_headers(mm_io_c *io, int64_t probe_range, int num_headers);

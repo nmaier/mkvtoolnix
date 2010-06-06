@@ -26,11 +26,11 @@ xtr_avc_c::xtr_avc_c(const std::string &codec_id,
 
 void
 xtr_avc_c::write_nal(const binary *data,
-                     int &pos,
-                     int data_size,
-                     int write_nal_size_size) {
-  int i;
-  int nal_size = 0;
+                     size_t &pos,
+                     size_t data_size,
+                     size_t write_nal_size_size) {
+  size_t i;
+  size_t nal_size = 0;
 
   for (i = 0; i < write_nal_size_size; ++i)
     nal_size = (nal_size << 8) | data[pos++];
@@ -61,16 +61,16 @@ xtr_avc_c::create_file(xtr_base_c *master,
   binary *buf     = mpriv->get_buffer();
   m_nal_size_size = 1 + (buf[4] & 3);
 
-  int pos    = 6;
-  int numsps = buf[5] & 0x1f;
-  int i;
+  size_t pos          = 6;
+  unsigned int numsps = buf[5] & 0x1f;
+  size_t i;
   for (i = 0; (i < numsps) && (mpriv->get_size() > pos); ++i)
     write_nal(buf, pos, mpriv->get_size(), 2);
 
   if (mpriv->get_size() <= pos)
     return;
 
-  int numpps = buf[pos++];
+  unsigned int numpps = buf[pos++];
 
   for (i = 0; (i < numpps) && (mpriv->get_size() > pos); ++i)
     write_nal(buf, pos, mpriv->get_size(), 2);
@@ -88,7 +88,7 @@ xtr_avc_c::handle_frame(memory_cptr &frame,
                         bool references_valid) {
   m_content_decoder.reverse(frame, CONTENT_ENCODING_SCOPE_BLOCK);
 
-  int pos     = 0;
+  size_t pos  = 0;
   binary *buf = (binary *)frame->get_buffer();
 
   while (frame->get_size() > pos)

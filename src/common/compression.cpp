@@ -270,7 +270,7 @@ header_removal_compressor_c::compress(memory_cptr &buffer) {
   if (!m_bytes.is_set() || (0 == m_bytes->get_size()))
     return;
 
-  int size = m_bytes->get_size();
+  size_t size = m_bytes->get_size();
   if (buffer->get_size() < size)
     throw compression_error_c(boost::format(Y("Header removal compression not possible because the buffer contained %1% bytes "
                                               "which is less than the size of the headers that should be removed, %2%.")) % buffer->get_size() % size);
@@ -280,7 +280,7 @@ header_removal_compressor_c::compress(memory_cptr &buffer) {
 
   if (memcmp(buffer_ptr, bytes_ptr, size)) {
     std::string b_buffer, b_bytes;
-    int i;
+    size_t i;
 
     for (i = 0; size > i; ++i) {
       b_buffer += (boost::format(" %|1$02x|") % buffer_ptr[i]).str();
@@ -403,7 +403,7 @@ content_decoder_c::initialize(KaxTrackEntry &ktentry) {
 
   int tid = kt_get_number(ktentry);
 
-  int kcenc_idx;
+  size_t kcenc_idx;
   for (kcenc_idx = 0; kcenc_idx < kcencodings->ListSize(); kcenc_idx++) {
     KaxContentEncoding *kcenc = dynamic_cast<KaxContentEncoding *>((*kcencodings)[kcenc_idx]);
     if (NULL == kcenc)

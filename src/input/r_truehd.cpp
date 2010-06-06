@@ -26,7 +26,7 @@
 
 int
 truehd_reader_c::probe_file(mm_io_c *io,
-                            int64_t size) {
+                            uint64_t size) {
   try {
     io->setFilePointer(0, seek_beginning);
     skip_id3v2_tag(*io);
@@ -57,7 +57,7 @@ truehd_reader_c::truehd_reader_c(track_info_c &_ti)
     if (0 < tag_size_end)
       m_file_size -= tag_size_end;
 
-    int init_read_len = std::min(m_file_size - tag_size_start, (int64_t)TRUEHD_READ_SIZE);
+    size_t init_read_len = std::min(m_file_size - tag_size_start, (int64_t)TRUEHD_READ_SIZE);
 
     if (m_io->read(m_chunk->get_buffer(), init_read_len) != init_read_len)
       throw error_c(boost::format(Y("truehd_reader: Could not read %1% bytes.")) % TRUEHD_READ_SIZE);

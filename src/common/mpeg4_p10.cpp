@@ -396,7 +396,7 @@ mpeg4::p10::parse_pps(memory_cptr &buffer,
 */
 bool
 mpeg4::p10::extract_par(uint8_t *&buffer,
-                        int &buffer_size,
+                        size_t &buffer_size,
                         uint32_t &par_num,
                         uint32_t &par_den) {
   try {
@@ -410,14 +410,14 @@ mpeg4::p10::extract_par(uint8_t *&buffer,
     avcc.read(nalu, 5);
     new_avcc.write(nalu);
 
-    int num_sps = avcc.read_uint8();
+    unsigned int num_sps = avcc.read_uint8();
     new_avcc.write_uint8(num_sps);
     num_sps &= 0x1f;
     mxverb(4, boost::format("mpeg4_p10_extract_par: num_sps %1%\n") % num_sps);
 
-    int sps;
+    unsigned int sps;
     for (sps = 0; sps < num_sps; sps++) {
-      int length = avcc.read_uint16_be();
+      unsigned int length = avcc.read_uint16_be();
       if ((length + avcc.getFilePointer()) >= buffer_size)
         length = buffer_size - avcc.getFilePointer();
       avcc.read(nalu, length);
@@ -478,7 +478,7 @@ mpeg4::p10::compare_poc_by_dec(const poc_t &poc1,
 
 memory_cptr
 mpeg4::p10::avcc_to_nalus(const unsigned char *buffer,
-                          int size) {
+                          size_t size) {
   try {
     if (6 > size)
       throw false;
@@ -490,17 +490,17 @@ mpeg4::p10::avcc_to_nalus(const unsigned char *buffer,
       throw false;
 
     mem.setFilePointer(4, seek_beginning);
-    int nal_size_size = 1 + (mem.read_uint8() & 3);
+    size_t nal_size_size = 1 + (mem.read_uint8() & 3);
     if (2 > nal_size_size)
       throw false;
 
-    int sps_or_pps;
+    size_t sps_or_pps;
     for (sps_or_pps = 0; 2 > sps_or_pps; ++sps_or_pps) {
-      int num = mem.read_uint8();
+      unsigned int num = mem.read_uint8();
       if (0 == sps_or_pps)
         num &= 0x1f;
 
-      int i;
+      size_t i;
       for (i = 0; num > i; ++i) {
         uint16_t element_size   = mem.read_uint16_be();
         memory_cptr copy_buffer = memory_c::alloc(element_size + 4);
@@ -648,21 +648,19 @@ mpeg4::p10::avc_es_parser_c::add_timecode(int64_t timecode) {
 
 void
 mpeg4::p10::avc_es_parser_c::write_nalu_size(unsigned char *buffer,
-                                             int size,
-                                             int nalu_size_length) {
-  int i;
-
-  if (-1 == nalu_size_length)
-    nalu_size_length = m_nalu_size_length;
+                                             size_t size,
+                                             int this_nalu_size_length) {
+  unsigned int nalu_size_length = -1 == this_nalu_size_length ? m_nalu_size_length : this_nalu_size_length;
 
   if (!m_ignore_nalu_size_length_errors && (size >= ((uint64_t)1 << (nalu_size_length * 8)))) {
-    int required_bytes = nalu_size_length + 1;
-    while (size >= (1 << (required_bytes * 8)))
+    unsigned int required_bytes = nalu_size_length + 1;
+    while (size >= (1u << (required_bytes * 8)))
       ++required_bytes;
 
     throw nalu_size_length_error_c(required_bytes);
   }
 
+  unsigned int i;
   for (i = 0; i < nalu_size_length; i++)
     buffer[i] = (size >> (8 * (nalu_size_length - 1 - i))) & 0xff;
 }
@@ -787,7 +785,7 @@ mpeg4::p10::avc_es_parser_c::handle_sps_nalu(memory_cptr &nalu) {
     return;
   rbsp_to_nalu(nalu);
 
-  int i;
+  size_t i;
   for (i = 0; m_sps_info_list.size() > i; ++i)
     if (m_sps_info_list[i].id == sps_info.id)
       break;
@@ -817,7 +815,7 @@ mpeg4::p10::avc_es_parser_c::handle_pps_nalu(memory_cptr &nalu) {
     return;
   rbsp_to_nalu(nalu);
 
-  int i;
+  size_t i;
   for (i = 0; m_pps_info_list.size() > i; ++i)
     if (m_pps_info_list[i].id == pps_info.id)
       break;
@@ -931,7 +929,6 @@ mpeg4::p10::avc_es_parser_c::parse_slice(memory_cptr &buffer,
                                          slice_info_t &si) {
   try {
     bit_cursor_c r(buffer->get_buffer(), buffer->get_size());
-    int sps_idx, pps_idx;
 
     memset(&si, 0, sizeof(si));
 
@@ -954,6 +951,7 @@ mpeg4::p10::avc_es_parser_c::parse_slice(memory_cptr &buffer,
 
     si.pps_id = geread(r);      // pps_id
 
+    size_t pps_idx;
     for (pps_idx = 0; m_pps_info_list.size() > pps_idx; ++pps_idx)
       if (m_pps_info_list[pps_idx].id == si.pps_id)
         break;
@@ -963,7 +961,7 @@ mpeg4::p10::avc_es_parser_c::parse_slice(memory_cptr &buffer,
     }
 
     pps_info_t &pps = m_pps_info_list[pps_idx];
-
+    size_t sps_idx;
     for (sps_idx = 0; m_sps_info_list.size() > sps_idx; ++sps_idx)
       if (m_sps_info_list[sps_idx].id == pps.sps_id)
         break;
@@ -1074,9 +1072,10 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
   if (0 == sps.pic_order_cnt_type) {
     j = 0;
 
-    int prev_pic_order_cnt_msb =  0;
-    int prev_pic_order_cnt_lsb =  0;
-    int pic_order_cnt_msb      = -1;
+    unsigned int prev_pic_order_cnt_msb = 0;
+    unsigned int prev_pic_order_cnt_lsb = 0;
+    unsigned int pic_order_cnt_msb      = 0;
+    bool first                          = true;
 
     while (m_frames.end() != i) {
       slice_info_t &si = i->m_si;
@@ -1086,13 +1085,13 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
         return;
       }
 
-      if (-1 == pic_order_cnt_msb)
-        pic_order_cnt_msb = 0;
+      if (first)
+        first = false;
 
-      else if ((si.pic_order_cnt_lsb < prev_pic_order_cnt_lsb) && ((prev_pic_order_cnt_lsb - si.pic_order_cnt_lsb) >= (1 << (sps.log2_max_pic_order_cnt_lsb - 1))))
+      else if ((si.pic_order_cnt_lsb < prev_pic_order_cnt_lsb) && ((prev_pic_order_cnt_lsb - si.pic_order_cnt_lsb) >= (1u << (sps.log2_max_pic_order_cnt_lsb - 1))))
         pic_order_cnt_msb = prev_pic_order_cnt_msb + (1 << sps.log2_max_pic_order_cnt_lsb);
 
-      else if ((si.pic_order_cnt_lsb > prev_pic_order_cnt_lsb) && ((si.pic_order_cnt_lsb - prev_pic_order_cnt_lsb) > (1 << (sps.log2_max_pic_order_cnt_lsb - 1))))
+      else if ((si.pic_order_cnt_lsb > prev_pic_order_cnt_lsb) && ((si.pic_order_cnt_lsb - prev_pic_order_cnt_lsb) > (1u << (sps.log2_max_pic_order_cnt_lsb - 1))))
         pic_order_cnt_msb = prev_pic_order_cnt_msb - (1 << sps.log2_max_pic_order_cnt_lsb);
 
       else
@@ -1116,8 +1115,8 @@ mpeg4::p10::avc_es_parser_c::cleanup() {
 
   std::sort(poc.begin(), poc.end(), compare_poc_by_poc);
 
-  int num_frames    = m_frames.size();
-  int num_timecodes = m_timecodes.size();
+  size_t num_frames    = m_frames.size();
+  size_t num_timecodes = m_timecodes.size();
 
   for (j = 0; num_frames > j; ++j, ++t) {
     poc[j].timecode = *t;

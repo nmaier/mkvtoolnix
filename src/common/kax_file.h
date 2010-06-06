@@ -29,7 +29,7 @@ class kax_file_c {
 protected:
   mm_io_cptr m_in;
   bool m_resynced;
-  int64_t m_resync_start_pos, m_file_size;
+  uint64_t m_resync_start_pos, m_file_size;
   counted_ptr<EbmlStream> m_es;
 
   bool m_debug_read_next, m_debug_resync;

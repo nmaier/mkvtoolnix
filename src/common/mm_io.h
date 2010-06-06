@@ -90,7 +90,7 @@ public:
   virtual int write_uint64_be(uint64_t value);
   virtual void skip(int64 numbytes);
   virtual size_t write(const void *buffer, size_t size);
-  virtual uint32_t write(const memory_cptr &buffer, int size = -1, int offset = 0);
+  virtual size_t write(const memory_cptr &buffer, size_t size = UINT_MAX, size_t offset = 0);
   virtual bool eof() = 0;
   virtual void flush() {
   }
@@ -249,7 +249,7 @@ typedef counted_ptr<mm_null_io_c> mm_null_io_cptr;
 
 class MTX_DLL_API mm_mem_io_c: public mm_io_c {
 protected:
-  int64_t pos, mem_size, allocated, increase;
+  size_t pos, mem_size, allocated, increase;
   unsigned char *mem;
   const unsigned char *ro_mem;
   bool free_mem, read_only;

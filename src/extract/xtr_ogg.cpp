@@ -315,7 +315,7 @@ xtr_oggkate_c::handle_frame(memory_cptr &frame,
   float f_timecode   = timecode / 1000000000.0;
   int64_t g_backlink = 0;
 
-  if (op.bytes >= (1 + 3 * sizeof(int64_t)))
+  if (op.bytes >= static_cast<long>(1 + 3 * sizeof(int64_t)))
     g_backlink = get_uint64_le(op.packet + 1 + 2 * sizeof(int64_t));
 
   float f_backlink = g_backlink * (float)m_kate_id_header.gden / m_kate_id_header.gnum;

@@ -40,8 +40,8 @@ optdlg_languages_tab::optdlg_languages_tab(wxWindow *parent,
   // Setup static variables.
 
   if (s_languages.IsEmpty()) {
-    int start = 0;
-    int sic_idx;
+    size_t start = 0;
+    size_t sic_idx;
     for (sic_idx = 0; sorted_iso_codes.Count() > sic_idx; ++sic_idx)
       if (sorted_iso_codes[sic_idx] == Z("---all---")) {
         start = sic_idx + 1;
@@ -58,9 +58,9 @@ optdlg_languages_tab::optdlg_languages_tab(wxWindow *parent,
 
   // Set the defaults.
 
-  int pl_idx;
+  size_t pl_idx;
   for (pl_idx = 0; m_options.popular_languages.Count() > pl_idx; ++pl_idx) {
-    int lang_idx;
+    size_t lang_idx;
     for (lang_idx = 0; s_languages.Count() > lang_idx; ++lang_idx)
       if (extract_language_code(s_languages[lang_idx]) == m_options.popular_languages[pl_idx]) {
         lb_popular_languages->SetSelection(lang_idx);
@@ -106,7 +106,7 @@ optdlg_languages_tab::save_options() {
 
   m_options.popular_languages.Clear();
 
-  int idx;
+  size_t idx;
   for (idx = 0; selections.Count() > idx; ++idx)
     m_options.popular_languages.Add(extract_language_code(lb_popular_languages->GetString(selections[idx])));
 }

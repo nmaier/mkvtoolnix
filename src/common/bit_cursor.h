@@ -99,7 +99,7 @@ public:
   uint64_t peek_bits(unsigned int n) {
     uint64_t r                             = 0;
     const unsigned char *tmp_byte_position = m_byte_position;
-    int tmp_bits_valid                     = m_bits_valid;
+    unsigned int tmp_bits_valid            = m_bits_valid;
 
     while (0 < n) {
       if (tmp_byte_position >= m_end_of_data)
@@ -140,7 +140,7 @@ public:
   }
 
   void set_bit_position(unsigned int pos) {
-    if (pos >= ((m_end_of_data - m_start_of_data) * 8)) {
+    if (pos >= (static_cast<unsigned int>(m_end_of_data - m_start_of_data) * 8)) {
       m_byte_position = m_end_of_data;
       m_out_of_data   = true;
 
@@ -218,7 +218,7 @@ public:
   }
 
   void set_bit_position(unsigned int pos) {
-    if (pos >= ((m_end_of_data - m_start_of_data) * 8)) {
+    if (pos >= (static_cast<unsigned int>(m_end_of_data - m_start_of_data) * 8)) {
       m_byte_position = m_end_of_data;
       m_out_of_data   = true;
 
@@ -230,10 +230,10 @@ public:
   }
 
   int get_bit_position() {
-    int i;
-    int pos = (m_byte_position - m_start_of_data) * 8;
+    unsigned int i;
+    unsigned int pos = (m_byte_position - m_start_of_data) * 8;
     for (i = 0; 8 > i; ++i)
-      if ((0x80 >> i) == m_mask) {
+      if ((0x80u >> i) == m_mask) {
         pos += i;
         break;
       }

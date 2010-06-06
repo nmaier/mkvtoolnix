@@ -220,7 +220,7 @@ he_value_page_c::modify_this() {
     actual_master = m_master;
 
   if (m_present && m_cb_add_or_remove->IsChecked()) {
-    int i;
+    size_t i;
     for (i = 0; actual_master->ListSize() > i; ++i) {
       if ((*actual_master)[i]->Generic().GlobalId != m_callbacks.GlobalId)
         continue;

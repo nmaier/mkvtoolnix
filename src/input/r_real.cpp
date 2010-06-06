@@ -115,7 +115,7 @@ mb_file_io_t mm_io_file_io = {
 
 int
 real_reader_c::probe_file(mm_io_c *io,
-                          int64_t size) {
+                          uint64_t size) {
   unsigned char data[4];
 
   if (4 > size)
@@ -162,7 +162,7 @@ real_reader_c::real_reader_c(track_info_c &_ti)
 }
 
 real_reader_c::~real_reader_c() {
-  int i;
+  size_t i;
 
   for (i = 0; i < demuxers.size(); i++) {
     real_demuxer_cptr &demuxer = demuxers[i];
@@ -251,7 +251,7 @@ real_reader_c::parse_headers() {
           dmx->fourcc[4]  = 0;
           p              += 4;
 
-          if (ts_size > (p - ts_data)) {
+          if (ts_size > static_cast<unsigned int>(p - ts_data)) {
             dmx->extra_data_size = ts_size - (p - ts_data);
             dmx->extra_data      = (unsigned char *)safememdup(p, dmx->extra_data_size);
           }
@@ -432,8 +432,8 @@ real_reader_c::create_packetizers() {
 }
 
 real_demuxer_cptr
-real_reader_c::find_demuxer(int id) {
-  int i;
+real_reader_c::find_demuxer(unsigned int id) {
+  size_t i;
 
   for (i = 0; i < demuxers.size(); i++)
     if (demuxers[i]->track->id == id)
@@ -444,7 +444,7 @@ real_reader_c::find_demuxer(int id) {
 
 file_status_e
 real_reader_c::finish() {
-  int i;
+  size_t i;
 
   for (i = 0; i < demuxers.size(); i++) {
     real_demuxer_cptr dmx = demuxers[i];
@@ -628,7 +628,7 @@ void
 real_reader_c::identify() {
   id_result_container("RealMedia");
 
-  int i;
+  size_t i;
   for (i = 0; i < demuxers.size(); i++) {
     real_demuxer_cptr demuxer = demuxers[i];
 
@@ -786,7 +786,7 @@ real_reader_c::get_information_from_data() {
   int64_t old_pos        = file->io->tell(file->handle);
   bool information_found = true;
 
-  int i;
+  size_t i;
   for (i = 0; i < demuxers.size(); i++) {
     real_demuxer_cptr dmx = demuxers[i];
     if (!strcasecmp(dmx->fourcc, "DNET")) {
@@ -824,7 +824,7 @@ real_reader_c::get_information_from_data() {
 
 void
 real_reader_c::add_available_track_ids() {
-  int i;
+  size_t i;
 
   for (i = 0; i < demuxers.size(); i++)
     add_available_track_id(demuxers[i]->track->id);

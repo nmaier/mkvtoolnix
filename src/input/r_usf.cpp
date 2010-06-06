@@ -44,7 +44,7 @@ public:
 
 int
 usf_reader_c::probe_file(mm_text_io_c *io,
-                         int64_t) {
+                         uint64_t) {
   try {
     usf_xml_find_root_c root_finder(io);
 
@@ -69,7 +69,7 @@ usf_reader_c::usf_reader_c(track_info_c &_ti)
 
   try {
     m_xml_source = new mm_text_io_c(new mm_file_io_c(m_ti.m_fname));
-    int i;
+    size_t i;
 
     if (!usf_reader_c::probe_file(m_xml_source, 0))
       throw error_c(Y("usf_reader: Source is not a valid USF file."));
@@ -106,7 +106,7 @@ usf_reader_c::~usf_reader_c() {
 void
 usf_reader_c::start_element_cb(const char *name,
                                const char **atts) {
-  int i;
+  size_t i;
   std::string node;
 
   m_previous_start = name;
@@ -195,7 +195,7 @@ usf_reader_c::start_element_cb(const char *name,
 
 void
 usf_reader_c::end_element_cb(const char *name) {
-  int i;
+  size_t i;
   std::string node;
 
   // Generate the full path to this node.
@@ -246,7 +246,7 @@ usf_reader_c::add_data_cb(const XML_Char *s,
 
 void
 usf_reader_c::create_packetizer(int64_t tid) {
-  if ((0 > tid) || (m_tracks.size() <= tid))
+  if ((0 > tid) || (m_tracks.size() <= static_cast<size_t>(tid)))
     return;
 
   usf_track_t &track = m_tracks[tid];
@@ -261,7 +261,7 @@ usf_reader_c::create_packetizer(int64_t tid) {
 
 void
 usf_reader_c::create_packetizers() {
-  int i;
+  size_t i;
 
   for (i = 0; m_tracks.size() > i; ++i)
     create_packetizer(i);
@@ -270,10 +270,8 @@ usf_reader_c::create_packetizers() {
 file_status_e
 usf_reader_c::read(generic_packetizer_c *ptzr,
                    bool) {
-  int i;
-  usf_track_t *track;
-
-  track = NULL;
+  size_t i;
+  usf_track_t *track = NULL;
   for (i = 0; m_tracks.size() > i; ++i)
     if ((-1 != m_tracks[i].m_ptzr) && (PTZR(m_tracks[i].m_ptzr) == ptzr)) {
       track = &m_tracks[i];
@@ -324,7 +322,7 @@ usf_reader_c::try_to_parse_timecode(const char *s) {
 void
 usf_reader_c::identify() {
   std::vector<std::string> verbose_info;
-  int i;
+  size_t i;
 
   id_result_container("USF");
 

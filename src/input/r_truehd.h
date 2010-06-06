@@ -39,7 +39,7 @@ public:
   virtual void identify();
   virtual void create_packetizer(int64_t id);
 
-  static int probe_file(mm_io_c *io, int64_t size);
+  static int probe_file(mm_io_c *io, uint64_t size);
 
 protected:
   static bool find_valid_headers(mm_io_c *io, int64_t probe_range, int num_headers);

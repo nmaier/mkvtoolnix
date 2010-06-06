@@ -72,7 +72,7 @@ private:
   std::vector<avi_demuxer_t> m_audio_demuxers;
   std::vector<avi_subs_demuxer_t> m_subtitle_demuxers;
   double m_fps;
-  int m_video_frames_read, m_max_video_frames, m_dropped_video_frames, m_act_wchar;
+  unsigned int m_video_frames_read, m_max_video_frames, m_dropped_video_frames, m_act_wchar;
   bool m_is_divx;
   memory_cptr m_avc_extra_nalus;
   int m_avc_nal_size_size;
@@ -90,7 +90,7 @@ public:
   virtual void create_packetizer(int64_t tid);
   virtual void add_available_track_ids();
 
-  static int probe_file(mm_io_c *io, int64_t size);
+  static int probe_file(mm_io_c *io, uint64_t size);
 
 protected:
   virtual void add_audio_demuxer(int aid);

@@ -141,10 +141,10 @@ protected:
   std::string get_element(const char *index, std::vector<std::string> &fields);
   std::string recode_text(std::vector<std::string> &fields);
   void add_attachment_maybe(std::string &name, std::string &data_uu, ssa_section_e section);
-  void decode_chars(unsigned char c1, unsigned char c2, unsigned char c3, unsigned char c4, memory_cptr &buffer, int bytes_to_add, int &allocated);
+  void decode_chars(unsigned char c1, unsigned char c2, unsigned char c3, unsigned char c4, memory_cptr &buffer, size_t bytes_to_add, size_t &allocated);
 };
 typedef counted_ptr<ssa_parser_c> ssa_parser_cptr;
 
-int64_t spu_extract_duration(unsigned char *data, int buf_size, int64_t timecode);
+int64_t spu_extract_duration(unsigned char *data, size_t buf_size, int64_t timecode);
 
 #endif // __SUBTITLES_H

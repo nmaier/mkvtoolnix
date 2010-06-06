@@ -159,7 +159,8 @@ tab_input_format::tab_input_format(wxWindow *parent,
 
 void
 tab_input_format::setup_control_contents() {
-  int i, selection;
+  size_t i;
+  int selection;
   if (0 == cob_fourcc->GetCount())
     for (i = 0; NULL != predefined_fourccs[i]; ++i)
       cob_fourcc->Append(predefined_fourccs[i]);

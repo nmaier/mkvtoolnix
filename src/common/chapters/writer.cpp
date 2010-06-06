@@ -56,7 +56,7 @@ static std::vector<chapter_entry_c> s_chapter_entries;
 static void
 handle_name(int level,
             const std::string &name) {
-  int i;
+  size_t i;
 
   for (i = 0; s_chapter_start_times.size() > i; i++) {
     chapter_entry_c &e = s_chapter_start_times[i];
@@ -73,7 +73,7 @@ handle_name(int level,
 static void
 handle_start_time(int level,
                   int64_t start_time) {
-  int i;
+  size_t i;
 
   for (i = 0; s_chapter_names.size() > i; i++) {
     chapter_entry_c &e = s_chapter_names[i];
@@ -92,7 +92,7 @@ static void write_chapter_atom_simple(KaxChapterAtom *atom, int level);
 static void
 write_chapter_display_simple(KaxChapterDisplay *display,
                              int level) {
-  int i;
+  size_t i;
 
   for (i = 0; i < display->ListSize(); i++) {
     EbmlElement *e = (*display)[i];
@@ -108,7 +108,7 @@ write_chapter_display_simple(KaxChapterDisplay *display,
 static void
 write_chapter_track_simple(KaxChapterTrack *track,
                            int level) {
-  int i;
+  size_t i;
 
   for (i = 0; i < track->ListSize(); i++) {
     EbmlElement *e = (*track)[i];
@@ -122,7 +122,7 @@ write_chapter_track_simple(KaxChapterTrack *track,
 static void
 write_chapter_atom_simple(KaxChapterAtom *atom,
                           int level) {
-  int i;
+  size_t i;
 
   for (i = 0; i < atom->ListSize(); i++) {
     EbmlElement *e = (*atom)[i];
@@ -150,12 +150,12 @@ write_chapters_simple(int &chapter_num,
   s_chapter_names.clear();
   s_chapter_entries.clear();
 
-  int chapter_idx;
+  size_t chapter_idx;
   for (chapter_idx = 0; chapters->ListSize() > chapter_idx; chapter_idx++) {
     if (is_id((*chapters)[chapter_idx], KaxEditionEntry)) {
       KaxEditionEntry *edition = static_cast<KaxEditionEntry *>((*chapters)[chapter_idx]);
 
-      int edition_idx;
+      size_t edition_idx;
       for (edition_idx = 0; edition->ListSize() > edition_idx; edition_idx++)
         if (is_id((*edition)[edition_idx], KaxChapterAtom))
           write_chapter_atom_simple(static_cast<KaxChapterAtom *>((*edition)[edition_idx]), 2);
@@ -226,7 +226,7 @@ end_write_chapter_display(void *data) {
 void
 write_chapters_xml(KaxChapters *chapters,
                    mm_io_c *out) {
-  int i;
+  size_t i;
 
   for (i = 0; NULL != chapter_elements[i].name; i++) {
     chapter_elements[i].start_hook = NULL;

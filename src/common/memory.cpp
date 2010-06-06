@@ -17,7 +17,7 @@
 #include "common/error.h"
 
 void
-memory_c::resize(int new_size) throw() {
+memory_c::resize(size_t new_size) throw() {
   if (!its_counter)
     its_counter = new counter(NULL, 0, false);
 
@@ -36,8 +36,7 @@ memory_c::resize(int new_size) throw() {
 
 memory_cptr
 lace_memory_xiph(const std::vector<memory_cptr> &blocks) {
-  int i;
-  int size = 1;
+  size_t i, size = 1;
   for (i = 0; (blocks.size() - 1) > i; ++i)
     size += blocks[i]->get_size() / 255 + 1 + blocks[i]->get_size();
   size += blocks.back()->get_size();
@@ -45,8 +44,8 @@ lace_memory_xiph(const std::vector<memory_cptr> &blocks) {
   memory_cptr mem       = memory_c::alloc(size);
   unsigned char *buffer = mem->get_buffer();
 
-  buffer[0]  = blocks.size() - 1;
-  int offset = 1;
+  buffer[0]             = blocks.size() - 1;
+  size_t offset         = 1;
   for (i = 0; (blocks.size() - 1) > i; ++i) {
     int n;
     for (n = blocks[i]->get_size(); n >= 255; n -= 255) {
@@ -73,9 +72,9 @@ unlace_memory_xiph(memory_cptr &buffer) {
   std::vector<int> sizes;
   unsigned char *ptr = buffer->get_buffer();
   unsigned char *end = buffer->get_buffer() + buffer->get_size();
-  int last_size      = buffer->get_size();
-  int num_blocks     = ptr[0] + 1;
-  int i;
+  size_t last_size   = buffer->get_size();
+  size_t num_blocks  = ptr[0] + 1;
+  size_t i;
   ++ptr;
 
   for (i = 0; (num_blocks - 1) > i; ++i) {

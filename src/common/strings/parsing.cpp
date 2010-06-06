@@ -131,8 +131,8 @@ parse_timecode(const std::string &src,
   // HH: is optional; HH, MM and SS can be either one or two digits.
   // 2. HH:MM:SS:nnnnnnnnn  with up to nine digits 'n' for ns precision;
   // HH: is optional; HH, MM and SS can be either one or two digits.
-  int h, m, s, n, i, values[4], num_values, num_digits, num_colons;
-  int offset = 0, negative = 1;
+  int h, m, s, n, values[4], num_values, num_digits, num_colons;
+  size_t offset = 0, negative = 1, i;
   bool decimal_point_found;
 
   if (src.empty())
@@ -152,8 +152,8 @@ parse_timecode(const std::string &src,
     std::string unit = src.substr(src.length() - 2, 2);
 
     int64_t multiplier = 1000000000;
-    int unit_length = 2;
-    int64_t value = 0;
+    size_t unit_length = 2;
+    int64_t value      = 0;
 
     if (unit == "ms")
       multiplier = 1000000;

@@ -97,8 +97,8 @@ kax_block_blob_c::add_frame_auto(const KaxTrackEntry &track,
 
     } else {
       Block.simpleblock->SetKeyframe(false);
-      if (   ((-1 == forw_block) || (forw_block <= timecode))
-          && ((-1 == past_block) || (past_block <= timecode)))
+      if (   ((-1 == forw_block) || (forw_block <= static_cast<int64_t>(timecode)))
+          && ((-1 == past_block) || (past_block <= static_cast<int64_t>(timecode))))
         Block.simpleblock->SetDiscardable(false);
       else
         Block.simpleblock->SetDiscardable(true);

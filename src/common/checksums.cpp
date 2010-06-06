@@ -84,7 +84,7 @@ crc_init(uint32_t *ctx,
          int le,
          int bits,
          uint32_t poly,
-         int ctx_size) {
+         unsigned int ctx_size) {
   int i, j;
   uint32_t c;
 

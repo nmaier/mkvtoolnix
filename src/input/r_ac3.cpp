@@ -26,7 +26,7 @@
 
 int
 ac3_reader_c::probe_file(mm_io_c *io,
-                         int64_t size,
+                         uint64_t size,
                          int64_t probe_size,
                          int num_headers) {
   try {
@@ -56,7 +56,7 @@ ac3_reader_c::ac3_reader_c(track_info_c &_ti)
     if (0 < tag_size_end)
       size -= tag_size_end;
 
-    int init_read_len = std::min(size - tag_size_start, (int64_t)AC3_READ_SIZE);
+    size_t init_read_len = std::min(size - tag_size_start, (int64_t)AC3_READ_SIZE);
 
     if (io->read(chunk->get_buffer(), init_read_len) != init_read_len)
       throw error_c(boost::format(Y("ac3_reader: Could not read %1% bytes.")) % AC3_READ_SIZE);

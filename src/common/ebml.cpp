@@ -252,7 +252,7 @@ EbmlElement *
 create_ebml_element(const EbmlCallbacks &callbacks,
                     const EbmlId &id) {
   const EbmlSemanticContext &context = EBML_INFO_CONTEXT(callbacks);
-  int i;
+  size_t i;
 
 //   if (id == EbmlId(*parent))
 //     return empty_ebml_master(&parent->Generic().Create());
@@ -280,7 +280,7 @@ find_ebml_callbacks(const EbmlCallbacks &base,
                     const EbmlId &id) {
   const EbmlSemanticContext &context = EBML_INFO_CONTEXT(base);
   const EbmlCallbacks *result;
-  int i;
+  size_t i;
 
   if (EBML_INFO_ID(base) == id)
     return &base;
@@ -305,7 +305,7 @@ find_ebml_callbacks(const EbmlCallbacks &base,
                     const char *debug_name) {
   const EbmlSemanticContext &context = EBML_INFO_CONTEXT(base);
   const EbmlCallbacks *result;
-  int i;
+  size_t i;
 
   if (!strcmp(debug_name, EBML_INFO_NAME(base)))
     return &base;
@@ -330,7 +330,7 @@ find_ebml_parent_callbacks(const EbmlCallbacks &base,
                            const EbmlId &id) {
   const EbmlSemanticContext &context = EBML_INFO_CONTEXT(base);
   const EbmlCallbacks *result;
-  int i;
+  size_t i;
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++)
     if (id == EBML_CTX_IDX_ID(context,i))
@@ -352,7 +352,7 @@ find_ebml_semantic(const EbmlCallbacks &base,
                    const EbmlId &id) {
   const EbmlSemanticContext &context = EBML_INFO_CONTEXT(base);
   const EbmlSemantic *result;
-  int i;
+  size_t i;
 
   for (i = 0; i < EBML_CTX_SIZE(context); i++)
     if (id == EBML_CTX_IDX_ID(context,i))
@@ -371,14 +371,12 @@ find_ebml_semantic(const EbmlCallbacks &base,
 
 EbmlMaster *
 sort_ebml_master(EbmlMaster *m) {
-  int first_element, first_master, i;
-  EbmlElement *e;
-
   if (m == NULL)
     return m;
 
-  first_element = -1;
-  first_master = -1;
+  int first_element = -1;
+  int first_master  = -1;
+  size_t i;
   for (i = 0; i < m->ListSize(); i++) {
     if ((dynamic_cast<EbmlMaster *>((*m)[i]) != NULL) &&
         (first_master == -1))
@@ -394,14 +392,14 @@ sort_ebml_master(EbmlMaster *m) {
     return m;
 
   while (first_element != -1) {
-    e = (*m)[first_element];
+    EbmlElement *e = (*m)[first_element];
     m->Remove(first_element);
     m->InsertElement(*e, first_master);
     first_master++;
-    for (first_element++; first_element < m->ListSize(); first_element++)
+    for (first_element++; first_element < static_cast<int>(m->ListSize()); first_element++)
       if (dynamic_cast<EbmlMaster *>((*m)[first_element]) == NULL)
         break;
-    if (first_element >= m->ListSize())
+    if (first_element >= static_cast<int>(m->ListSize()))
       first_element = -1;
   }
 
@@ -573,7 +571,7 @@ kt_get_v_pixel_height(KaxTrackEntry &track) {
 EbmlElement *
 find_ebml_element_by_id(EbmlMaster *master,
                         const EbmlId &id) {
-  int i;
+  size_t i;
   for (i = 0; master->ListSize() > i; ++i)
     if (EbmlId(*((*master)[i])) == id)
       return (*master)[i];

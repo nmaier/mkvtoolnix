@@ -31,7 +31,7 @@ private:
 #endif
 
 public:
-  static void generate_bytes(void *destination, int num_bytes);
+  static void generate_bytes(void *destination, size_t num_bytes);
 
   static uint8_t generate_8bits() {
     uint8_t b;

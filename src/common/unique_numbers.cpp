@@ -46,7 +46,7 @@ is_unique_uint32(uint32_t number,
   if (hack_engaged(ENGAGE_NO_VARIABLE_DATA))
     return true;
 
-  int i;
+  size_t i;
   for (i = 0; s_random_unique_numbers[category].size() > i; ++i)
     if (s_random_unique_numbers[category][i] == number)
       return false;

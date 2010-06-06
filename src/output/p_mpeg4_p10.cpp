@@ -169,7 +169,7 @@ mpeg4_p10_video_packetizer_c::change_nalu_size_len(packet_cptr packet) {
   src_pos            = 0;
   int dst_pos        = 0;
 
-  int i;
+  size_t i;
   for (i = 0; nalu_sizes.size() > i; ++i) {
     int nalu_size = nalu_sizes[i];
 

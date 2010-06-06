@@ -93,7 +93,7 @@ find_dts_header_internal(const unsigned char *buf,
     return -1;
   }
 
-  int offset;
+  unsigned int offset;
   for (offset = 0; offset < size_to_search; ++offset)
      // sync words appear aligned in the bit stream
     if (get_uint32_be(buf + offset) == DTS_HEADER_MAGIC)
@@ -241,7 +241,7 @@ find_dts_header_internal(const unsigned char *buf,
   dts_header->hd_type      = dts_header_t::DTSHD_NONE;
   dts_header->hd_part_size = 0;
 
-  int hd_offset            = offset + dts_header->frame_byte_size;
+  size_t hd_offset         = offset + dts_header->frame_byte_size;
 
   if ((hd_offset + 9) > size)
     return allow_no_hd_search ? offset : -1;

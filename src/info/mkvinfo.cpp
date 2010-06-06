@@ -282,7 +282,7 @@ _show_element(EbmlElement *l,
   // Dump unknown elements recursively.
   EbmlMaster *m = dynamic_cast<EbmlMaster *>(l);
   if (NULL != m) {
-    int i;
+    size_t i;
     for (i = 0; i < m->ListSize(); i++)
       show_unknown_element((*m)[i], level + 1);
   }
@@ -330,7 +330,7 @@ to_hex(const unsigned char *buf,
 void
 parse_args(std::vector<std::string> args,
            std::string &file_name) {
-  int i;
+  size_t i;
 
   verbose = 0;
   file_name = "";
@@ -427,7 +427,7 @@ struct master_sorter_t {
 
 void
 sort_master(EbmlMaster &m) {
-  int i;
+  size_t i;
   std::vector<EbmlElement *> tmp;
   std::vector<master_sorter_t> sort_me;
 
@@ -459,8 +459,8 @@ read_master(EbmlMaster *m,
 
 std::string
 format_binary(EbmlBinary &bin,
-              int max_len = 10) {
-  int len            = std::min(max_len, (int)bin.GetSize());
+              size_t max_len = 10) {
+  size_t len         = std::min(max_len, static_cast<size_t>(bin.GetSize()));
   const binary *b    = bin.GetBuffer();
   std::string result = (BF_FORMAT_BINARY_1 % bin.GetSize() % to_hex(b, len)).str();
 
@@ -514,12 +514,10 @@ format_binary(EbmlBinary &bin,
 
 void
 def_handle(chaptertranslate) {
-  EbmlMaster *m2;
-  int i2;
-
   show_element(l2, 2, Y("Chapter Translate"));
 
-  m2 = static_cast<EbmlMaster *>(l2);
+  size_t i2;
+  EbmlMaster *m2 = static_cast<EbmlMaster *>(l2);
   for (i2 = 0; i2 < m2->ListSize(); i2++) {
     l3 = (*m2)[i2];
 
@@ -548,7 +546,7 @@ def_handle(info) {
   EbmlElement *element_found = NULL;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
-  int i1;
+  size_t i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
     l2 = (*m1)[i1];
 
@@ -630,12 +628,10 @@ def_handle(info) {
 void
 def_handle2(audio_track,
             std::vector<std::string> &summary) {
-  EbmlMaster *m3;
-  int i3;
-
   show_element(l3, 3, "Audio track");
 
-  m3 = static_cast<EbmlMaster *>(l3);
+  size_t i3;
+  EbmlMaster *m3 = static_cast<EbmlMaster *>(l3);
   for (i3 = 0; i3 < m3->ListSize(); i3++) {
     l4 = (*m3)[i3];
 
@@ -677,7 +673,7 @@ def_handle2(video_track,
   show_element(l3, 3, Y("Video track"));
 
   EbmlMaster *m3 = static_cast<EbmlMaster *>(l3);
-  int i3;
+  size_t i3;
   for (i3 = 0; i3 < m3->ListSize(); i3++) {
     l4 = (*m3)[i3];
 
@@ -780,7 +776,7 @@ def_handle(content_encodings) {
   show_element(l3, 3, Y("Content encodings"));
 
   EbmlMaster *m3 = static_cast<EbmlMaster *>(l3);
-  int i3;
+  size_t i3;
   for (i3 = 0; i3 < m3->ListSize(); i3++) {
     l4 = (*m3)[i3];
 
@@ -788,7 +784,7 @@ def_handle(content_encodings) {
       show_element(l4, 4, Y("Content encoding"));
 
       EbmlMaster *m4 = static_cast<EbmlMaster *>(l4);
-      int i4;
+      size_t i4;
       for (i4 = 0; i4 < m4->ListSize(); i4++) {
         l5 = (*m4)[i4];
 
@@ -823,7 +819,7 @@ def_handle(content_encodings) {
           show_element(l5, 5, Y("Content compression"));
 
           EbmlMaster *m5 = static_cast<EbmlMaster *>(l5);
-          int i5;
+          size_t i5;
           for (i5 = 0; i5 < m5->ListSize(); i5++) {
             l6 = (*m5)[i5];
 
@@ -850,7 +846,7 @@ def_handle(content_encodings) {
           show_element(l5, 5, Y("Content encryption"));
 
           EbmlMaster *m5 = static_cast<EbmlMaster *>(l5);
-          int i5;
+          size_t i5;
           for (i5 = 0; i5 < m5->ListSize(); i5++) {
             l6 = (*m5)[i5];
 
@@ -925,7 +921,7 @@ def_handle(tracks) {
   EbmlElement *element_found = NULL;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
-  int i1;
+  size_t i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
     l2 = (*m1)[i1];
 
@@ -940,7 +936,7 @@ def_handle(tracks) {
       EbmlMaster *m2           = static_cast<EbmlMaster *>(l2);
       std::string kax_codec_id;
       std::string fourcc_buffer;
-      int i2;
+      size_t i2;
 
       for (i2 = 0; i2 < m2->ListSize(); i2++) {
         l3 = (*m2)[i2];
@@ -1147,7 +1143,7 @@ def_handle(seek_head) {
   EbmlElement *element_found = NULL;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
-  int i1;
+  size_t i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
     l2 = (*m1)[i1];
 
@@ -1155,7 +1151,7 @@ def_handle(seek_head) {
       show_element(l2, 2, Y("Seek entry"));
 
       EbmlMaster *m2 = static_cast<EbmlMaster *>(l2);
-      int i2;
+      size_t i2;
       for (i2 = 0; i2 < m2->ListSize(); i2++) {
         l3 = (*m2)[i2];
 
@@ -1207,7 +1203,7 @@ def_handle(cues) {
   EbmlElement *element_found = NULL;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
-  int i1;
+  size_t i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
     l2 = (*m1)[i1];
 
@@ -1215,7 +1211,7 @@ def_handle(cues) {
       show_element(l2, 2, Y("Cue point"));
 
       EbmlMaster *m2 = static_cast<EbmlMaster *>(l2);
-      int i2;
+      size_t i2;
       for (i2 = 0; i2 < m2->ListSize(); i2++) {
         l3 = (*m2)[i2];
 
@@ -1227,7 +1223,7 @@ def_handle(cues) {
           show_element(l3, 3, Y("Cue track positions"));
 
           EbmlMaster *m3 = static_cast<EbmlMaster *>(l3);
-          int i3;
+          size_t i3;
           for (i3 = 0; i3 < m3->ListSize(); i3++) {
             l4 = (*m3)[i3];
 
@@ -1252,7 +1248,7 @@ def_handle(cues) {
               show_element(l4, 4, Y("Cue reference"));
 
               EbmlMaster *m4 = static_cast<EbmlMaster *>(l4);
-              int i4;
+              size_t i4;
               for (i4 = 0; i4 < m4->ListSize(); i4++) {
                 l5 = (*m4)[i4];
 
@@ -1305,7 +1301,7 @@ def_handle(attachments) {
   EbmlElement *element_found = NULL;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
-  int i1;
+  size_t i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
     l2 = (*m1)[i1];
 
@@ -1313,7 +1309,7 @@ def_handle(attachments) {
       show_element(l2, 2, Y("Attached"));
 
       EbmlMaster *m2 = static_cast<EbmlMaster *>(l2);
-      int i2;
+      size_t i2;
       for (i2 = 0; i2 < m2->ListSize(); i2++) {
         l3 = (*m2)[i2];
 
@@ -1356,7 +1352,7 @@ def_handle2(silent_track,
   show_element(l2, 2, "Silent Tracks");
   EbmlMaster *m2 = static_cast<EbmlMaster *>(l2);
 
-  int i2;
+  size_t i2;
   for (i2 = 0; i2 < m2->ListSize(); i2++) {
     l3 = (*m2)[i2];
 
@@ -1389,7 +1385,7 @@ def_handle2(block_group,
 
   EbmlMaster *m2      = static_cast<EbmlMaster *>(l2);
 
-  int i2;
+  size_t i2;
   for (i2 = 0; i2 < m2->ListSize(); i2++) {
     l3 = (*m2)[i2];
 
@@ -1469,7 +1465,7 @@ def_handle2(block_group,
       show_element(l3, 3, Y("Additions"));
 
       EbmlMaster *m3 = static_cast<EbmlMaster *>(l3);
-      int i3;
+      size_t i3;
       for (i3 = 0; i3 < m3->ListSize(); i3++) {
         l4 = (*m3)[i3];
 
@@ -1477,7 +1473,7 @@ def_handle2(block_group,
           show_element(l4, 4, Y("More"));
 
           EbmlMaster *m4 = static_cast<EbmlMaster *>(l4);
-          int i4;
+          size_t i4;
           for (i4 = 0; i4 < m4->ListSize(); i4++) {
             l5 = (*m4)[i4];
 
@@ -1503,7 +1499,7 @@ def_handle2(block_group,
       show_element(l3, 3, Y("Slices"));
 
       EbmlMaster *m3 = static_cast<EbmlMaster *>(l3);
-      int i3;
+      size_t i3;
       for (i3 = 0; i3 < m3->ListSize(); i3++) {
         l4 = (*m3)[i3];
 
@@ -1511,7 +1507,7 @@ def_handle2(block_group,
           show_element(l4, 4, Y("Time slice"));
 
           EbmlMaster *m4 = static_cast<EbmlMaster *>(l4);
-          int i4;
+          size_t i4;
           for (i4 = 0; i4 < m4->ListSize(); i4++) {
             l5 = (*m4)[i4];
 
@@ -1552,7 +1548,7 @@ def_handle2(block_group,
 
   if (s_show_summary) {
     std::string position;
-    int fidx;
+    size_t fidx;
 
     for (fidx = 0; fidx < frame_sizes.size(); fidx++) {
       if (1 <= verbose) {
@@ -1640,7 +1636,7 @@ def_handle2(simple_block,
 
   if (s_show_summary) {
     std::string position;
-    int fidx;
+    size_t fidx;
 
     for (fidx = 0; fidx < frame_sizes.size(); fidx++) {
       if (1 <= verbose) {
@@ -1683,7 +1679,7 @@ def_handle3(cluster,
   KaxClusterTimecode *cluster_tc = FINDFIRST(m1, KaxClusterTimecode);
   cluster->InitTimecode(NULL == cluster_tc ? 0 : uint64(*cluster_tc), s_tc_scale);
 
-  int i1;
+  size_t i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++) {
     l2 = (*m1)[i1];
 
@@ -1746,7 +1742,7 @@ handle_elements_rec(EbmlStream *es,
       m = dynamic_cast<EbmlMaster *>(e);
       assert(m != NULL);
 
-      int i;
+      size_t i;
       for (i = 0; m->ListSize() > i; ++i)
         handle_elements_rec(es, level + 1, elt_idx, (*m)[i], mapping);
       break;
@@ -1786,7 +1782,7 @@ def_handle(chapters) {
   EbmlElement *element_found = NULL;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
-  int i1;
+  size_t i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++)
     handle_elements_rec(es, 2, 0, (*m1)[i1], chapter_elements);
 
@@ -1802,7 +1798,7 @@ def_handle(tags) {
   EbmlElement *element_found = NULL;
   read_master(m1, es, EBML_CONTEXT(l1), upper_lvl_el, element_found);
 
-  int i1;
+  size_t i1;
   for (i1 = 0; i1 < m1->ListSize(); i1++)
     handle_elements_rec(es, 2, 0, (*m1)[i1], tag_elements);
 

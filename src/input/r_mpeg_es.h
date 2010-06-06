@@ -46,7 +46,7 @@ public:
 
   static bool read_frame(M2VParser &parser, mm_io_c &in, int64_t max_size = -1, bool flush_parser = false);
 
-  static int probe_file(mm_io_c *io, int64_t size);
+  static int probe_file(mm_io_c *io, uint64_t size);
 };
 
 #endif // __R_MPEG_ES_H

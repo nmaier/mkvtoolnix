@@ -187,8 +187,8 @@ mmg_app::handle_command_line_arguments() {
     return;
 
   std::vector<std::string> args;
-  int i;
-  for (i = 1; app->argc > i; ++i)
+  size_t i;
+  for (i = 1; static_cast<size_t>(app->argc) > i; ++i)
     args.push_back(wxMB(wxString(app->argv[i])));
 
   handle_common_cli_args(args, "");

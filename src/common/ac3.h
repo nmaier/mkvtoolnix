@@ -37,25 +37,25 @@
 #define EAC3_FRAME_TYPE_RESERVED     3
 
 struct ac3_header_t {
-  int sample_rate;
-  int bit_rate;
-  int channels;
-  int flags;
-  int bytes;
-  int bsid;
-  int samples;
+  unsigned int sample_rate;
+  unsigned int bit_rate;
+  unsigned int channels;
+  unsigned int flags;
+  unsigned int bytes;
+  unsigned int bsid;
+  unsigned int samples;
 
-  int frame_type;
-  int sub_stream_id;
+  unsigned int frame_type;
+  unsigned int sub_stream_id;
 
   bool has_dependent_frames;
 
   ac3_header_t();
 };
 
-int MTX_DLL_API find_ac3_header(const unsigned char *buf, int size, ac3_header_t *ac3_header, bool look_for_second_header);
-int MTX_DLL_API find_consecutive_ac3_headers(const unsigned char *buf, int size, int num);
+int MTX_DLL_API find_ac3_header(const unsigned char *buf, size_t size, ac3_header_t *ac3_header, bool look_for_second_header);
+int MTX_DLL_API find_consecutive_ac3_headers(const unsigned char *buf, size_t size, unsigned int num);
 bool MTX_DLL_API parse_ac3_header(const unsigned char *buf, ac3_header_t &header);
-bool MTX_DLL_API verify_ac3_checksum(const unsigned char *buf, int size);
+bool MTX_DLL_API verify_ac3_checksum(const unsigned char *buf, size_t size);
 
 #endif // __MTX_COMMON_AC3COMMON_H

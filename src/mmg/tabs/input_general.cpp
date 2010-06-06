@@ -107,12 +107,12 @@ tab_input_general::setup_default_track() {
   cob_default_translations.add(wxT("yes"),     Z("yes"));
   cob_default_translations.add(wxT("no"),      Z("no"));
 
-  int i;
+  size_t i;
   if (0 == cob_default->GetCount())
     for (i = 0; cob_default_translations.entries.size() > i; ++i)
       cob_default->Append(wxEmptyString);
 
-  int selection = cob_default->GetSelection();
+  size_t selection = cob_default->GetSelection();
   for (i = 0; cob_default_translations.entries.size() > i; ++i)
     cob_default->SetString(i, cob_default_translations.entries[i].translated);
   cob_default->SetSelection(selection);
@@ -124,12 +124,12 @@ tab_input_general::setup_forced_track() {
   cob_forced_translations.add(wxT("no"),  Z("no"));
   cob_forced_translations.add(wxT("yes"), Z("yes"));
 
-  int i;
+  size_t i;
   if (0 == cob_forced->GetCount())
     for (i = 0; cob_forced_translations.entries.size() > i; ++i)
       cob_forced->Append(wxEmptyString);
 
-  int selection = cob_forced->GetSelection();
+  size_t selection = cob_forced->GetSelection();
   for (i = 0; cob_forced_translations.entries.size() > i; ++i)
     cob_forced->SetString(i, cob_forced_translations.entries[i].translated);
   cob_forced->SetSelection(selection);
@@ -137,7 +137,7 @@ tab_input_general::setup_forced_track() {
 
 void
 tab_input_general::setup_languages() {
-  int i;
+  size_t i;
 
   sorted_iso_codes.Clear();
   sorted_iso_codes.Add(Z("und (Undetermined)"));
@@ -167,7 +167,7 @@ tab_input_general::setup_languages() {
     if ((0 == i) || (temp[i - 1].Lower() != temp[i].Lower()))
       sorted_iso_codes.Add(temp[i]);
 
-  int selection = cob_language->GetSelection();
+  size_t selection = cob_language->GetSelection();
   cob_language->Clear();
   for (i = 0; i < sorted_iso_codes.Count(); i++)
     cob_language->Append(sorted_iso_codes[i]);

@@ -18,7 +18,6 @@
 int
 skip_id3v2_tag(mm_io_c &io) {
   unsigned char buffer[10];
-  int tag_size;
 
   io.setFilePointer(0, seek_beginning);
   if (io.read(buffer, 10) != 10) {
@@ -34,9 +33,8 @@ skip_id3v2_tag(mm_io_c &io) {
     return 0;
   }
 
-  tag_size = (buffer[6] << 21) | (buffer[7] << 14) | (buffer[8] << 7) |
-    buffer[9];
-  tag_size += 10;               // tag header
+  size_t tag_size  = (buffer[6] << 21) | (buffer[7] << 14) | (buffer[8] << 7) | buffer[9];
+  tag_size        += 10;        // tag header
   if ((buffer[5] & 0x10) != 0)
     tag_size += 10;             // footer present
 

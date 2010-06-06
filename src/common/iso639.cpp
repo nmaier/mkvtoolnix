@@ -636,7 +636,7 @@ is_popular_language_code(const char *code) {
 int
 map_to_iso639_2_code(const char *s,
                      bool allow_short_english_name) {
-  int i, j, len;
+  size_t i;
   std::vector<std::string> names;
 
   for (i = 0; NULL != iso639_languages[i].iso639_2_code; ++i)
@@ -648,6 +648,7 @@ map_to_iso639_2_code(const char *s,
   for (i = 0; NULL != iso639_languages[i].iso639_2_code; ++i) {
     names = split(iso639_languages[i].english_name, ";");
     strip(names);
+    size_t j;
     for (j = 0; names.size() > j; ++j)
       if (!strcasecmp(s, names[j].c_str()))
         return i;
@@ -656,10 +657,11 @@ map_to_iso639_2_code(const char *s,
   if (!allow_short_english_name)
     return -1;
 
-  len = strlen(s);
+  size_t len = strlen(s);
   for (i = 0; NULL != iso639_languages[i].iso639_2_code; ++i) {
     names = split(iso639_languages[i].english_name, ";");
     strip(names);
+    size_t j;
     for (j = 0; names.size() > j; ++j)
       if (!strncasecmp(s, names[j].c_str(), len))
         return i;

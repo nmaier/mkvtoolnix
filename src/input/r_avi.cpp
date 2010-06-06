@@ -59,7 +59,7 @@ avi_subs_demuxer_t::avi_subs_demuxer_t()
 
 int
 avi_reader_c::probe_file(mm_io_c *io,
-                         int64_t size) {
+                         uint64_t size) {
   unsigned char data[12];
 
   if (12 > size)
@@ -160,7 +160,7 @@ avi_reader_c::parse_subtitle_chunks() {
 
       io.skip(1);
 
-      while (!io.eof() && (io.getFilePointer() < chunk_size)) {
+      while (!io.eof() && (io.getFilePointer() < static_cast<size_t>(chunk_size))) {
         uint16_t id = io.read_uint16_le();
         int len     = io.read_uint32_le();
 
@@ -192,7 +192,7 @@ avi_reader_c::parse_subtitle_chunks() {
 void
 avi_reader_c::create_packetizer(int64_t tid) {
   if ((0 == tid) && demuxing_requested('v', 0) && (-1 == m_vptzr)) {
-    int i;
+    size_t i;
 
     mxverb_tid(4, m_ti.m_fname, 0, "frame sizes:\n");
 
@@ -248,9 +248,9 @@ avi_reader_c::create_mpeg1_2_packetizer() {
   if ((0 != m_ti.m_private_size) && (m_ti.m_private_size < sizeof(alBITMAPINFOHEADER)))
     m2v_parser->WriteData(m_ti.m_private_data + sizeof(alBITMAPINFOHEADER), m_ti.m_private_size - sizeof(alBITMAPINFOHEADER));
 
-  int frame_number = 0;
-  int state        = m2v_parser->GetState();
-  while ((frame_number < std::min(m_max_video_frames, 100)) && (MPV_PARSER_STATE_FRAME != state)) {
+  unsigned int frame_number = 0;
+  unsigned int state        = m2v_parser->GetState();
+  while ((frame_number < std::min(m_max_video_frames, 100u)) && (MPV_PARSER_STATE_FRAME != state)) {
     ++frame_number;
 
     int size = AVI_frame_size(m_avi, frame_number - 1);
@@ -345,7 +345,7 @@ avi_reader_c::create_packetizers() {
   for (i = 0; i < AVI_audio_tracks(m_avi); i++)
     create_packetizer(i + 1);
 
-  for (i = 0; m_subtitle_demuxers.size() > i; ++i)
+  for (i = 0; static_cast<int>(m_subtitle_demuxers.size()) > i; ++i)
     create_subs_packetizer(i);
 }
 
@@ -423,7 +423,7 @@ avi_reader_c::extract_avcc() {
     }
   }
 
-  int i;
+  size_t i;
   for (i = 0; i < m_max_video_frames; ++i) {
     int size = AVI_frame_size(m_avi, i);
     if (0 == size)
@@ -721,7 +721,7 @@ avi_reader_c::read_video() {
     // This is only the case if the AVI contains dropped frames only.
     return FILE_STATUS_DONE;
 
-  int i;
+  size_t i;
   for (i = m_video_frames_read; i < m_max_video_frames; ++i) {
     if (0 != AVI_frame_size(m_avi, i))
       break;
@@ -929,7 +929,7 @@ avi_reader_c::identify_audio() {
 
 void
 avi_reader_c::identify_subtitles() {
-  int i;
+  size_t i;
   for (i = 0; m_subtitle_demuxers.size() > i; ++i)
     id_result_track(1 + AVI_audio_tracks(m_avi) + i, ID_RESULT_TRACK_SUBTITLES,
                       avi_subs_demuxer_t::TYPE_SRT == m_subtitle_demuxers[i].m_type ? "SRT"
@@ -939,7 +939,7 @@ avi_reader_c::identify_subtitles() {
 
 void
 avi_reader_c::identify_attachments() {
-  int i;
+  size_t i;
 
   for (i = 0; m_subtitle_demuxers.size() > i; ++i) {
     try {
@@ -960,7 +960,7 @@ avi_reader_c::identify_attachments() {
 
 void
 avi_reader_c::add_available_track_ids() {
-  int i;
+  size_t i;
 
   // Yes, '>=' is correct. Don't forget the video track!
   for (i = 0; (AVI_audio_tracks(m_avi) + m_subtitle_demuxers.size()) >= i; i++)

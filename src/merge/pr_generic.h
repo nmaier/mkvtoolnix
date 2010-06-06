@@ -196,7 +196,7 @@ public:
 
   // Options used by the packetizers.
   unsigned char *m_private_data;
-  int m_private_size;
+  size_t m_private_size;
 
   std::map<int64_t, std::string> m_all_fourccs;
   std::string m_fourcc;
@@ -427,7 +427,7 @@ protected:
 
   std::string m_hcodec_id;
   unsigned char *m_hcodec_private;
-  int m_hcodec_private_length;
+  size_t m_hcodec_private_length;
 
   float m_haudio_sampling_freq, m_haudio_output_sampling_freq;
   int m_haudio_channels, m_haudio_bit_depth;

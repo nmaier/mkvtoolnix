@@ -42,7 +42,7 @@ operator <(const mpeg_ps_track_ptr &a,
 
 int
 mpeg_ps_reader_c::probe_file(mm_io_c *io,
-                             int64_t size) {
+                             uint64_t size) {
   try {
     memory_c af_buf((unsigned char *)safemalloc(PS_PROBE_SIZE), 0, true);
     unsigned char *buf = af_buf.get_buffer();
@@ -186,7 +186,7 @@ mpeg_ps_reader_c::~mpeg_ps_reader_c() {
 
 void
 mpeg_ps_reader_c::sort_tracks() {
-  int i;
+  size_t i;
 
   for (i = 0; tracks.size() > i; ++i)
     tracks[i]->sort_key = (  'v' == tracks[i]->type ? 0x00000
@@ -212,7 +212,7 @@ mpeg_ps_reader_c::calculate_global_timecode_offset() {
   if (tracks.empty())
     return;
 
-  int i;
+  size_t i;
   global_timecode_offset = tracks[0]->timecode_offset;
   for (i = 1; i < tracks.size(); i++)
     if ((-1 == global_timecode_offset) || (tracks[i]->timecode_offset < global_timecode_offset))
@@ -332,8 +332,8 @@ mpeg_ps_reader_c::parse_program_stream_map() {
 bool
 mpeg_ps_reader_c::parse_packet(mpeg_ps_id_t &id,
                                int64_t &timestamp,
-                               int &length,
-                               int &full_length) {
+                               unsigned int &length,
+                               unsigned int &full_length) {
   length      = io->read_uint16_be();
   full_length = length;
 
@@ -403,9 +403,9 @@ mpeg_ps_reader_c::parse_packet(mpeg_ps_id_t &id,
     if ((c & 0x30) != 0x00)
       mxerror_fn(m_ti.m_fname, Y("Reading encrypted VOBs is not supported.\n"));
 
-    int flags   = io->read_uint8();
-    int hdrlen  = io->read_uint8();
-    length     -= 2;
+    unsigned int flags   = io->read_uint8();
+    unsigned int hdrlen  = io->read_uint8();
+    length              -= 2;
 
     if (hdrlen > length)
       return false;
@@ -494,7 +494,7 @@ mpeg_ps_reader_c::parse_packet(mpeg_ps_id_t &id,
 void
 mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(mpeg_ps_id_t id,
                                                unsigned char *buf,
-                                               int length,
+                                               unsigned int length,
                                                mpeg_ps_track_ptr &track) {
   try {
     io->save_pos();
@@ -580,7 +580,7 @@ mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(mpeg_ps_id_t id,
         throw false;
 
       int64_t timecode;
-      int full_length, new_length;
+      unsigned int full_length, new_length;
       if (!parse_packet(id, timecode, new_length, full_length))
         continue;
 
@@ -600,7 +600,7 @@ mpeg_ps_reader_c::new_stream_v_avc_or_mpeg_1_2(mpeg_ps_id_t id,
 void
 mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
                                         unsigned char *buf,
-                                        int length,
+                                        unsigned int length,
                                         mpeg_ps_track_ptr &track) {
   counted_ptr<M2VParser> m2v_parser(new M2VParser);
 
@@ -613,7 +613,7 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
       break;
 
     int64_t timecode;
-    int full_length;
+    unsigned int full_length;
     if (!parse_packet(id, timecode, length, full_length))
       break;
 
@@ -663,7 +663,7 @@ mpeg_ps_reader_c::new_stream_v_mpeg_1_2(mpeg_ps_id_t id,
 void
 mpeg_ps_reader_c::new_stream_v_avc(mpeg_ps_id_t id,
                                    unsigned char *buf,
-                                   int length,
+                                   unsigned int length,
                                    mpeg_ps_track_ptr &track) {
   mpeg4::p10::avc_es_parser_c parser;
 
@@ -679,7 +679,7 @@ mpeg_ps_reader_c::new_stream_v_avc(mpeg_ps_id_t id,
     if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
       break;
 
-    int full_length;
+    unsigned int full_length;
     int64_t timecode;
     if (!parse_packet(id, timecode, length, full_length))
       break;
@@ -765,7 +765,7 @@ mpeg_ps_reader_c::new_stream_v_avc(mpeg_ps_id_t id,
 void
 mpeg_ps_reader_c::new_stream_v_vc1(mpeg_ps_id_t id,
                                    unsigned char *buf,
-                                   int length,
+                                   unsigned int length,
                                    mpeg_ps_track_ptr &track) {
   vc1::es_parser_c parser;
 
@@ -775,7 +775,7 @@ mpeg_ps_reader_c::new_stream_v_vc1(mpeg_ps_id_t id,
     if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
       break;
 
-    int full_length;
+    unsigned int full_length;
     int64_t timecode;
     if (!parse_packet(id, timecode, length, full_length))
       break;
@@ -804,7 +804,7 @@ mpeg_ps_reader_c::new_stream_v_vc1(mpeg_ps_id_t id,
 void
 mpeg_ps_reader_c::new_stream_a_mpeg(mpeg_ps_id_t id,
                                     unsigned char *buf,
-                                    int length,
+                                    unsigned int length,
                                     mpeg_ps_track_ptr &track) {
   mp3_header_t header;
 
@@ -820,7 +820,7 @@ mpeg_ps_reader_c::new_stream_a_mpeg(mpeg_ps_id_t id,
 void
 mpeg_ps_reader_c::new_stream_a_ac3(mpeg_ps_id_t id,
                                    unsigned char *buf,
-                                   int length,
+                                   unsigned int length,
                                    mpeg_ps_track_ptr &track) {
   ac3_header_t header;
 
@@ -839,7 +839,7 @@ mpeg_ps_reader_c::new_stream_a_ac3(mpeg_ps_id_t id,
 void
 mpeg_ps_reader_c::new_stream_a_dts(mpeg_ps_id_t id,
                                    unsigned char *buf,
-                                   int length,
+                                   unsigned int length,
                                    mpeg_ps_track_ptr &track) {
   byte_buffer_c buffer;
 
@@ -849,7 +849,7 @@ mpeg_ps_reader_c::new_stream_a_dts(mpeg_ps_id_t id,
     if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
       throw false;
 
-    int full_length;
+    unsigned int full_length;
     int64_t timecode;
     mpeg_ps_id_t new_id(id.id);
     if (!parse_packet(new_id, timecode, length, full_length))
@@ -869,7 +869,7 @@ mpeg_ps_reader_c::new_stream_a_dts(mpeg_ps_id_t id,
 void
 mpeg_ps_reader_c::new_stream_a_truehd(mpeg_ps_id_t id,
                                       unsigned char *buf,
-                                      int length,
+                                      unsigned int length,
                                       mpeg_ps_track_ptr &track) {
   truehd_parser_c parser;
 
@@ -897,7 +897,7 @@ mpeg_ps_reader_c::new_stream_a_truehd(mpeg_ps_id_t id,
     if (!find_next_packet_for_id(id, PS_PROBE_SIZE))
       throw false;
 
-    int full_length;
+    unsigned int full_length;
     int64_t timecode;
     mpeg_ps_id_t new_id(id.id);
     if (!parse_packet(new_id, timecode, length, full_length))
@@ -940,7 +940,7 @@ mpeg_ps_reader_c::found_new_stream(mpeg_ps_id_t id) {
 
   try {
     int64_t timecode;
-    int length, full_length;
+    unsigned int length, full_length;
 
     if (!parse_packet(id, timecode, length, full_length))
       throw false;
@@ -1055,7 +1055,7 @@ mpeg_ps_reader_c::find_next_packet(mpeg_ps_id_t &id,
     while (1) {
       uint8_t byte;
 
-      if ((-1 != max_file_pos) && (io->getFilePointer() > max_file_pos))
+      if ((-1 != max_file_pos) && (io->getFilePointer() > static_cast<size_t>(max_file_pos)))
         return false;
 
       switch (header) {
@@ -1154,7 +1154,7 @@ mpeg_ps_reader_c::resync_stream(uint32_t &header) {
 
 void
 mpeg_ps_reader_c::create_packetizer(int64_t id) {
-  if ((0 > id) || (tracks.size() <= id))
+  if ((0 > id) || (tracks.size() <= static_cast<size_t>(id)))
     return;
   if (0 == tracks[id]->ptzr)
     return;
@@ -1225,7 +1225,7 @@ mpeg_ps_reader_c::create_packetizer(int64_t id) {
 
 void
 mpeg_ps_reader_c::create_packetizers() {
-  int i;
+  size_t i;
 
   for (i = 0; i < tracks.size(); i++)
     create_packetizer(i);
@@ -1233,7 +1233,7 @@ mpeg_ps_reader_c::create_packetizers() {
 
 void
 mpeg_ps_reader_c::add_available_track_ids() {
-  int i;
+  size_t i;
 
   for (i = 0; i < tracks.size(); i++)
     add_available_track_id(i);
@@ -1243,7 +1243,7 @@ file_status_e
 mpeg_ps_reader_c::read(generic_packetizer_c *,
                        bool) {
   int64_t timecode, packet_pos;
-  int length, full_length;
+  unsigned int length, full_length;
   unsigned char *buf;
 
   if (file_done)
@@ -1333,14 +1333,9 @@ mpeg_ps_reader_c::finish() {
   if (file_done)
     return FILE_STATUS_DONE;
 
-  std::vector<mpeg_ps_track_ptr>::iterator track;
-
-  mxforeach(track, tracks) {
-    if (0 < (*track)->buffer_usage) {
-      memory_c *mem = new memory_c((*track)->buffer, (*track)->buffer_usage);
-      PTZR((*track)->ptzr)->process(new packet_t(mem));
-    }
-  }
+  foreach(mpeg_ps_track_ptr &track, tracks)
+    if (0 < track->buffer_usage)
+      PTZR(track->ptzr)->process(new packet_t(clone_memory(track->buffer, track->buffer_usage)));
 
   file_done = true;
   flush_packetizers();
@@ -1356,12 +1351,12 @@ mpeg_ps_reader_c::get_progress() {
 void
 mpeg_ps_reader_c::identify() {
   std::vector<std::string> verbose_info;
-  int i;
 
   io->create_verbose_identification_info(verbose_info);
 
   id_result_container((boost::format("MPEG %1% program stream (PS)") % version).str(), verbose_info);
 
+  size_t i;
   for (i = 0; i < tracks.size(); i++) {
     mpeg_ps_track_ptr &track = tracks[i];
 

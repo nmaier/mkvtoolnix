@@ -44,7 +44,8 @@ he_bool_value_page_c::translate_ui() {
   m_values.Add(Z("yes"));
 
   if (NULL != m_cb_bool) {
-    int i, selection = m_cb_bool->GetSelection();
+    size_t i;
+    int selection = m_cb_bool->GetSelection();
     for (i = 0; m_values.size() > i; ++i)
       m_cb_bool->SetString(i, m_values[i]);
     m_cb_bool->SetSelection(selection);

@@ -17,8 +17,8 @@
 
 uint32_t
 round_to_nearest_pow2(uint32_t value) {
-  int64_t best_value = 0;
-  int64_t test_value = 1;
+  uint64_t best_value = 0;
+  uint64_t test_value = 1;
 
   while (0x80000000ul >= test_value) {
     if (iabs(value - test_value) < iabs(value - best_value))

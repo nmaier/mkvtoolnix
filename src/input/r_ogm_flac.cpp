@@ -38,7 +38,7 @@ fhe_read_cb(const FLAC__StreamDecoder *decoder,
     if (!fhe->read_page() || (ogg_stream_packetout(&fhe->os, &op) != 1))
       return FLAC__STREAM_DECODER_READ_STATUS_ABORT;
 
-  if (*bytes < op.bytes)
+  if (*bytes < static_cast<size_t>(op.bytes))
     mxerror(boost::format(Y("flac_header_extraction: bytes (%1%) < op.bytes (%2%). Could not read the FLAC headers.\n")) % *bytes % op.bytes);
 
   int offset = 0;

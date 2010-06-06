@@ -37,9 +37,9 @@ bool MTX_DLL_API stdio_redirected();
 void MTX_DLL_API init_cc_stdio();
 void MTX_DLL_API set_cc_stdio(const std::string &charset);
 
-void MTX_DLL_API mxmsg(int level, std::string message);
+void MTX_DLL_API mxmsg(unsigned int level, std::string message);
 inline void
-mxmsg(int level,
+mxmsg(unsigned int level,
       const boost::format &message) {
   mxmsg(level, message.str());
 }
@@ -112,24 +112,24 @@ mxerror_tid(const std::string &file_name,
   mxerror_tid(file_name, track_id, error.str());
 }
 
-void MTX_DLL_API mxverb_fn(int level, const std::string &file_name, const std::string &message);
+void MTX_DLL_API mxverb_fn(unsigned int level, const std::string &file_name, const std::string &message);
 inline void
-mxverb_fn(int level,
+mxverb_fn(unsigned int level,
           const std::string &file_name,
           const boost::format &message) {
   mxverb_fn(level, file_name, message.str());
 }
 
-void MTX_DLL_API mxverb_tid(int level, const std::string &file_name, int64_t track_id, const std::string &message);
+void MTX_DLL_API mxverb_tid(unsigned int level, const std::string &file_name, int64_t track_id, const std::string &message);
 inline void
-mxverb_tid(int level,
+mxverb_tid(unsigned int level,
            const std::string &file_name,
            int64_t track_id,
            const boost::format &message) {
   mxverb_tid(level, file_name, track_id, message.str());
 }
 
-void MTX_DLL_API mxhexdump(int level, const void *buffer_to_dump, int lenth);
+void MTX_DLL_API mxhexdump(unsigned int level, const void *buffer_to_dump, size_t lenth);
 
 void MTX_DLL_API dump_ebml_elements(EbmlElement *element, bool with_values = false, int level = 0);
 
