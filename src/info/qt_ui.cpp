@@ -260,7 +260,7 @@ ui_show_element(int level,
                 int64_t position,
                 int64_t size) {
   if (!g_use_gui)
-    console_show_element(level, text, position);
+    console_show_element(level, text, position, size);
 
   else if (0 <= position)
     gui->add_item(level, Q(create_element_text(text, position, size).c_str()));
