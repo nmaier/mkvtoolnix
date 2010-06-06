@@ -122,7 +122,7 @@
 	* mkvmerge: new feature: Added options "--webm"/"--web-media" that
 	enable the WebM compatibility mode. In this mode only Vorbis
 	audio tracks and VP8 video tracks are allowed. Neither chapters
-	nor tracks are allowed. The DocType element is set to "webm".
+	nor tags are allowed. The DocType element is set to "webm".
 
 	* mkvinfo GUI: bug fix: Opening more than one file without
 	restarting mkvinfo GUI could result in wrong timecodes due to
