@@ -300,7 +300,7 @@ header_removal_compressor_c::set_track_headers(KaxContentEncoding &c_encoding) {
   compressor_c::set_track_headers(c_encoding);
 
   // Set compression parameters.
-  GetChild<KaxContentCompSettings>(GetChild<KaxContentCompression>(c_encoding)).SetBuffer(m_bytes->get_buffer(), m_bytes->get_size());
+  GetChild<KaxContentCompSettings>(GetChild<KaxContentCompression>(c_encoding)).CopyBuffer(m_bytes->get_buffer(), m_bytes->get_size());
 }
 
 mpeg4_p2_compressor_c::mpeg4_p2_compressor_c() {
