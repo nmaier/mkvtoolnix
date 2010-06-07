@@ -1108,8 +1108,7 @@ kax_reader_c::read_headers_tracks(mm_io_c *io,
     if (NULL != ktflacing) {
       mxverb(2, boost::format("matroska_reader: |  + Lacing flag: %1%\n") % uint64(*ktflacing));
       track->lacing_flag = uint64(*ktflacing);
-    } else
-      track->lacing_flag = true;
+    }
 
     KaxMaxBlockAdditionID *ktmax_blockadd_id = FINDFIRST(ktentry, KaxMaxBlockAdditionID);
     if (NULL != ktmax_blockadd_id) {
