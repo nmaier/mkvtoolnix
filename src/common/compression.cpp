@@ -17,6 +17,7 @@
 #include <matroska/KaxTracks.h>
 
 #include "common/compression.h"
+#include "common/dirac.h"
 #include "common/ebml.h"
 #include "common/endian.h"
 #include "common/hacks.h"
@@ -24,7 +25,7 @@
 using namespace libmatroska;
 
 const char *compression_methods[] = {
-  "unspecified", "zlib", "bz2", "lzo", "header_removal", "mpeg4_p2", "none"
+  "unspecified", "zlib", "bz2", "lzo", "header_removal", "mpeg4_p2", "dirac", "none"
 };
 
 static const int compression_method_map[] = {
@@ -34,6 +35,7 @@ static const int compression_method_map[] = {
   2,                            // lzo1x
   3,                            // header removal
   3,                            // mpeg4_p2 is header removal
+  3,                            // dirac is header removal
   0                             // none
 };
 
@@ -312,6 +314,12 @@ mpeg4_p2_compressor_c::mpeg4_p2_compressor_c() {
   set_bytes(bytes);
 }
 
+dirac_compressor_c::dirac_compressor_c() {
+  memory_cptr bytes = memory_c::alloc(4);
+  put_uint32_be(bytes->get_buffer(), DIRAC_SYNC_WORD);
+  set_bytes(bytes);
+}
+
 // ---------------------------------------------------------------------
 
 compressor_c::~compressor_c() {
@@ -357,6 +365,9 @@ compressor_c::create(const char *method) {
 
   if (!strcasecmp(method, compression_methods[COMPRESSION_MPEG4_P2]))
     return compressor_ptr(new mpeg4_p2_compressor_c());
+
+  if (!strcasecmp(method, compression_methods[COMPRESSION_DIRAC]))
+    return compressor_ptr(new dirac_compressor_c());
 
   if (!strcasecmp(method, "none"))
     return compressor_ptr(new compressor_c(COMPRESSION_NONE));
