@@ -21,9 +21,6 @@
 #include "common/dts.h"
 #include "common/endian.h"
 
-#define DTS_HEADER_MAGIC    0x7ffe8001
-#define DTS_HD_HEADER_MAGIC 0x64582025
-
 // ---------------------------------------------------------------------------
 
 struct channel_arrangement {

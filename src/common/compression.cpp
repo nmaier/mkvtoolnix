@@ -18,6 +18,7 @@
 
 #include "common/compression.h"
 #include "common/dirac.h"
+#include "common/dts.h"
 #include "common/ebml.h"
 #include "common/endian.h"
 #include "common/hacks.h"
@@ -25,7 +26,7 @@
 using namespace libmatroska;
 
 const char *compression_methods[] = {
-  "unspecified", "zlib", "bz2", "lzo", "header_removal", "mpeg4_p2", "dirac", "none"
+  "unspecified", "zlib", "bz2", "lzo", "header_removal", "mpeg4_p2", "dirac", "dts", "none"
 };
 
 static const int compression_method_map[] = {
@@ -36,6 +37,7 @@ static const int compression_method_map[] = {
   3,                            // header removal
   3,                            // mpeg4_p2 is header removal
   3,                            // dirac is header removal
+  3,                            // dts is header removal
   0                             // none
 };
 
@@ -320,6 +322,12 @@ dirac_compressor_c::dirac_compressor_c() {
   set_bytes(bytes);
 }
 
+dts_compressor_c::dts_compressor_c() {
+  memory_cptr bytes = memory_c::alloc(4);
+  put_uint32_be(bytes->get_buffer(), DTS_HEADER_MAGIC);
+  set_bytes(bytes);
+}
+
 // ---------------------------------------------------------------------
 
 compressor_c::~compressor_c() {
@@ -368,6 +376,9 @@ compressor_c::create(const char *method) {
 
   if (!strcasecmp(method, compression_methods[COMPRESSION_DIRAC]))
     return compressor_ptr(new dirac_compressor_c());
+
+  if (!strcasecmp(method, compression_methods[COMPRESSION_DTS]))
+    return compressor_ptr(new dts_compressor_c());
 
   if (!strcasecmp(method, "none"))
     return compressor_ptr(new compressor_c(COMPRESSION_NONE));

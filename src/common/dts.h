@@ -15,6 +15,9 @@
 #ifndef __MTX_COMMON_DTSCOMMON_H
 #define __MTX_COMMON_DTSCOMMON_H
 
+#define DTS_HEADER_MAGIC    0x7ffe8001
+#define DTS_HD_HEADER_MAGIC 0x64582025
+
 static const int64_t max_dts_packet_size = 15384;
 
 /* The following code looks a little odd as it was written in C++

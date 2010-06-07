@@ -33,6 +33,7 @@ enum compression_method_e {
   COMPRESSION_HEADER_REMOVAL,
   COMPRESSION_MPEG4_P2,
   COMPRESSION_DIRAC,
+  COMPRESSION_DTS,
   COMPRESSION_NONE,
   COMPRESSION_NUM = COMPRESSION_NONE
 };
@@ -149,6 +150,11 @@ public:
 class MTX_DLL_API dirac_compressor_c: public header_removal_compressor_c {
 public:
   dirac_compressor_c();
+};
+
+class MTX_DLL_API dts_compressor_c: public header_removal_compressor_c {
+public:
+  dts_compressor_c();
 };
 
 // ------------------------------------------------------------------
