@@ -35,6 +35,7 @@ enum compression_method_e {
   COMPRESSION_DIRAC,
   COMPRESSION_DTS,
   COMPRESSION_AC3,
+  COMPRESSION_MP3,
   COMPRESSION_NONE,
   COMPRESSION_NUM = COMPRESSION_NONE
 };
@@ -161,6 +162,11 @@ public:
 class MTX_DLL_API ac3_compressor_c: public header_removal_compressor_c {
 public:
   ac3_compressor_c();
+};
+
+class MTX_DLL_API mp3_compressor_c: public header_removal_compressor_c {
+public:
+  mp3_compressor_c();
 };
 
 // ------------------------------------------------------------------
