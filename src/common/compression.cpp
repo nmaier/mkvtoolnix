@@ -16,6 +16,7 @@
 #include <matroska/KaxContentEncoding.h>
 #include <matroska/KaxTracks.h>
 
+#include "common/ac3.h"
 #include "common/compression.h"
 #include "common/dirac.h"
 #include "common/dts.h"
@@ -26,7 +27,7 @@
 using namespace libmatroska;
 
 const char *compression_methods[] = {
-  "unspecified", "zlib", "bz2", "lzo", "header_removal", "mpeg4_p2", "dirac", "dts", "none"
+  "unspecified", "zlib", "bz2", "lzo", "header_removal", "mpeg4_p2", "dirac", "dts", "ac3", "none"
 };
 
 static const int compression_method_map[] = {
@@ -38,6 +39,7 @@ static const int compression_method_map[] = {
   3,                            // mpeg4_p2 is header removal
   3,                            // dirac is header removal
   3,                            // dts is header removal
+  3,                            // ac3 is header removal
   0                             // none
 };
 
@@ -328,6 +330,12 @@ dts_compressor_c::dts_compressor_c() {
   set_bytes(bytes);
 }
 
+ac3_compressor_c::ac3_compressor_c() {
+  memory_cptr bytes = memory_c::alloc(2);
+  put_uint16_be(bytes->get_buffer(), AC3_SYNC_WORD);
+  set_bytes(bytes);
+}
+
 // ---------------------------------------------------------------------
 
 compressor_c::~compressor_c() {
@@ -379,6 +387,9 @@ compressor_c::create(const char *method) {
 
   if (!strcasecmp(method, compression_methods[COMPRESSION_DTS]))
     return compressor_ptr(new dts_compressor_c());
+
+  if (!strcasecmp(method, compression_methods[COMPRESSION_AC3]))
+    return compressor_ptr(new ac3_compressor_c());
 
   if (!strcasecmp(method, "none"))
     return compressor_ptr(new compressor_c(COMPRESSION_NONE));
