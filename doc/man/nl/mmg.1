@@ -1,0 +1,94 @@
+'\" t
+.\"     Title: mmg
+.\"    Author: Moritz Bunkus <moritz@bunkus.org>
+.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
+.\"      Date: 2010-06-05
+.\"    Manual: Gebruiker kommando\*(Aqs
+.\"    Source: MkvToolNix 4.0.0
+.\"  Language: Dutch
+.\"
+.TH "MMG" "1" "2010\-06\-05" "MkvToolNix 4\&.0\&.0" "Gebruiker kommando\*(Aqs"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "REFERENTIENAAM"
+mmg \- een grafisch schil voor \fBmkvmerge\fR(1) inclusief een hoofdstuk en kop bewerker
+.SH "BEKNOPTE INHOUDSBESCHRIJVING"
+.HP \w'\fBmmg\fR\ 'u
+\fBmmg\fR [[{\-\-edit\-headers}\ {filename\&.mkv}] | [preferences\-file\&.mmg] | [source\-file\&.ext]]
+.SH "BESCHRIJVING"
+.PP
+
+\fBmmg\fR(1)
+is een
+wxWindows(TM)
+gebasseerde
+GUI
+voor
+\fBmkvmerge\fR(1)\&. Het biedt een makkelijke toegang van alle
+\fBmkvmerge\fR(1)\*(Aqs opties\&. Alle instellingen (b\&.v\&. bronbestanden, spoor opties etc,) kunnen bewaard en hersteld worden\&. Ingesloten is een hoofdstuk bewerker welke kan lezen
+OGM
+stijl en
+XML
+stijl hoofdstuk bestanden, schrijven
+XML
+stijl hoofdstuk bestanden en zelfs het lezen van hoofdstukken van een
+Matroska(TM)
+bestand en direct schrijven naar
+Matroska(TM)
+bestanden\&. Tevens is ingesloten een kopstuk bewerker welke gebruikt kan worden om snel hoofdstukken te veranderen van bestaande
+Matroska(TM)
+bestanden zonder een volledige samenvoeging\&.
+.PP
+
+\fBmmg\fR(1)
+kent een paar opties\&. De eerste, de mogelijkheid om op te starten met een enkele bestandnaam\&. Als die bestandsnaam de extensie \*(Aq\&.mmg\*(Aq bevat, dan zal het behandeld worden als instellingen bestand en zal
+\fBmmg\fR(1)
+de instellingen laden wanneer het wordt opgestart\&. Anders wordt de naam ge\(:intepreteerd als een invoer bestand welke zal worden toegvoegd\&.
+.PP
+De tweede werkingsmode wordt aangehaald met de optie
+\fB\-\-edit\-headers\fR
+en een bastandsnaam\&. Dit staat
+\fBmmg\fR(1)
+toe zijn kopbewerker te starten en het bestand te laden\&.
+.PP
+De volledige documentatie is beschikbaar in HTML format (doc/mkvmerge\-gui\&.html)\&.
+.SH "ZIE OOK"
+.PP
+
+\fBmkvmerge\fR(1),
+\fBmkvextract\fR(1),
+\fBmkvinfo\fR(1),
+\fBmkvpropedit\fR(1)
+.SH "WWW"
+.PP
+De laatste versie kan altijd gevonden worden op
+\m[blue]\fBde MKVToolNix thuis basis\fR\m[]\&\s-2\u[1]\d\s+2\&.
+.SH "AUTEUR"
+.PP
+\fBMoritz Bunkus\fR <\&moritz@bunkus\&.org\&>
+.RS 4
+Ontwikkelaar
+.RE
+.SH "NOTEN"
+.IP " 1." 4
+de MKVToolNix thuis basis
+.RS 4
+\%http://www.bunkus.org/videotools/mkvtoolnix/
+.RE
