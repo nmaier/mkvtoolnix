@@ -330,6 +330,10 @@ translated-manpages: $(MANPAGES_TRANSLATED)
 
 update-manpage-po update-man-po:
 	$(PO4A) $(PO4A_FLAGS) doc/man/po4a/po4a.cfg
+	@for i in nl ; do \
+		perl -ni -e 'if (m/^#:/) { s/(\d) /$$1\n#: /g; print; } elsif (m/^#~/) { $$nonl = 1; print; } elsif (!($$nonl && m/^\s*$$/)) { print; }' doc/man/po4a/po/$$i.po ; \
+		echo >> doc/man/po4a/po/$$i.po ; \
+	done
 
 # Some general rules
 ifeq (1,$(LIBMTXCOMMONDLL))
