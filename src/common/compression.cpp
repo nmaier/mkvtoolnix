@@ -311,11 +311,8 @@ header_removal_compressor_c::set_track_headers(KaxContentEncoding &c_encoding) {
 }
 
 mpeg4_p2_compressor_c::mpeg4_p2_compressor_c() {
-  if (!hack_engaged(ENGAGE_NATIVE_MPEG4))
-    mxerror(Y("The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"));
-
-  memory_cptr bytes = memory_c::alloc(4);
-  put_uint32_be(bytes->get_buffer(), 0x000001b6);
+  memory_cptr bytes = memory_c::alloc(3);
+  put_uint24_be(bytes->get_buffer(), 0x000001);
   set_bytes(bytes);
 }
 

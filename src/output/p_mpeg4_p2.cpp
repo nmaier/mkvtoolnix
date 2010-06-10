@@ -68,6 +68,8 @@ mpeg4_p2_video_packetizer_c(generic_reader_c *p_reader,
 
     m_timecode_factory_application_mode = TFA_FULL_QUEUEING;
   }
+
+  set_default_compression_method(COMPRESSION_MPEG4_P2);
 }
 
 mpeg4_p2_video_packetizer_c::~mpeg4_p2_video_packetizer_c() {

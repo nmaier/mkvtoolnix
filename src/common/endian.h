@@ -28,9 +28,11 @@ uint32_t MTX_DLL_API get_uint32_be(const void *buf);
 uint64_t MTX_DLL_API get_uint64_be(const void *buf);
 uint64_t MTX_DLL_API get_uint_be(const void *buf, int max_bytes);
 void MTX_DLL_API put_uint16_le(void *buf, uint16_t value);
+void MTX_DLL_API put_uint24_le(void *buf, uint32_t value);
 void MTX_DLL_API put_uint32_le(void *buf, uint32_t value);
 void MTX_DLL_API put_uint64_le(void *buf, uint64_t value);
 void MTX_DLL_API put_uint16_be(void *buf, uint16_t value);
+void MTX_DLL_API put_uint24_be(void *buf, uint32_t value);
 void MTX_DLL_API put_uint32_be(void *buf, uint32_t value);
 void MTX_DLL_API put_uint64_be(void *buf, uint64_t value);
 
