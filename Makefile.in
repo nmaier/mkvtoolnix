@@ -335,6 +335,19 @@ update-manpage-po update-man-po:
 		echo >> doc/man/po4a/po/$$i.po ; \
 	done
 
+manpages-html man2html: manpages translated-manpages
+	@for lang in '' $(MANPAGES_TRANSLATIONS) ; do \
+		test "$$lang" != "" && lang="/$$lang" ; \
+		for file in doc/man$$lang/*.xml ; do \
+			echo 'XSLTPROC ' $$file ; \
+			test x$(V) = "x1" && echo xsltproc --nonet -o `dirname $$file`/`basename $$file .xml`.html /usr/share/xml/docbook/stylesheet/nwalsh/html/docbook.xsl $$file ; \
+			xsltproc --nonet -o `dirname $$file`/`basename $$file .xml`.html /usr/share/xml/docbook/stylesheet/nwalsh/html/docbook.xsl $$file ; \
+		done ; \
+	done
+
+clean-manpages-html clean-man2html:
+	rm -f doc/man/*.html doc/man/*/*.html
+
 # Some general rules
 ifeq (1,$(LIBMTXCOMMONDLL))
 %.o: %.cpp
