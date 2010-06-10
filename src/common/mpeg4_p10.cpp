@@ -537,8 +537,11 @@ mpeg4::p10::avc_es_parser_c::avc_es_parser_c()
   , m_ignore_nalu_size_length_errors(false)
   , m_discard_actual_frames(false)
   , m_num_slices_by_type(11, 0)
-  , m_debug_keyframe_detection(debugging_requested("avc_debug_keyframe_detection"))
+  , m_debug_keyframe_detection(debugging_requested("avc_keyframe_detection") || debugging_requested("avc_parser"))
+  , m_debug_nalu_types(debugging_requested("avc_nalu_types") || debugging_requested("avc_parser"))
 {
+  if (m_debug_nalu_types)
+    init_nalu_names();
 }
 
 mpeg4::p10::avc_es_parser_c::~avc_es_parser_c() {
@@ -875,6 +878,9 @@ mpeg4::p10::avc_es_parser_c::handle_nalu(memory_cptr nalu) {
     return;
 
   int type = *(nalu->get_buffer()) & 0x1f;
+
+  if (m_debug_nalu_types)
+    mxinfo(boost::format("NALU type 0x%|1$02x| (%2%) size %3%\n") % type % get_nalu_type_name(type) % nalu->get_size());
 
   switch (type) {
     case NALU_TYPE_SEQ_PARAM:
@@ -1228,4 +1234,29 @@ mpeg4::p10::avc_es_parser_c::dump_info() {
            % format_timecode(frame.m_ref1)
            % calc_adler32(frame.m_data->get_buffer(), frame.m_data->get_size()));
   }
+}
+
+std::string
+mpeg4::p10::avc_es_parser_c::get_nalu_type_name(int type) {
+  std::string name = m_nalu_names_by_type[type];
+  if (name.empty())
+    return "unknown";
+
+  return name;
+}
+
+void
+mpeg4::p10::avc_es_parser_c::init_nalu_names() {
+  m_nalu_names_by_type[NALU_TYPE_NON_IDR_SLICE] = "non IDR slice";
+  m_nalu_names_by_type[NALU_TYPE_DP_A_SLICE]    = "DP A slice";
+  m_nalu_names_by_type[NALU_TYPE_DP_B_SLICE]    = "DP B slice";
+  m_nalu_names_by_type[NALU_TYPE_DP_C_SLICE]    = "DP C slice";
+  m_nalu_names_by_type[NALU_TYPE_IDR_SLICE]     = "IDR slice";
+  m_nalu_names_by_type[NALU_TYPE_SEI]           = "SEI";
+  m_nalu_names_by_type[NALU_TYPE_SEQ_PARAM]     = "SEQ param";
+  m_nalu_names_by_type[NALU_TYPE_PIC_PARAM]     = "PIC param";
+  m_nalu_names_by_type[NALU_TYPE_ACCESS_UNIT]   = "access unit";
+  m_nalu_names_by_type[NALU_TYPE_END_OF_SEQ]    = "end of sequence";
+  m_nalu_names_by_type[NALU_TYPE_END_OF_STREAM] = "end of stream";
+  m_nalu_names_by_type[NALU_TYPE_FILLER_DATA]   = "filler";
 }

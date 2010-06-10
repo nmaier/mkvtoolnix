@@ -210,7 +210,8 @@ namespace mpeg4 {
       bool m_ignore_nalu_size_length_errors, m_discard_actual_frames;
 
       std::vector<int> m_num_slices_by_type;
-      bool m_debug_keyframe_detection;
+      bool m_debug_keyframe_detection, m_debug_nalu_types;
+      std::map<int, std::string> m_nalu_names_by_type;
 
     public:
       avc_es_parser_c();
@@ -285,6 +286,8 @@ namespace mpeg4 {
 
       void dump_info();
 
+      std::string get_nalu_type_name(int type);
+
     protected:
       bool parse_slice(memory_cptr &buffer, slice_info_t &si);
       void handle_sps_nalu(memory_cptr &nalu);
@@ -298,6 +301,7 @@ namespace mpeg4 {
       void flush_unhandled_nalus();
       void write_nalu_size(unsigned char *buffer, size_t size, int this_nalu_size_length = -1);
       memory_cptr create_nalu_with_size(const memory_cptr &src, bool add_extra_data = false);
+      void init_nalu_names();
     };
     typedef counted_ptr<avc_es_parser_c> avc_es_parser_cptr;
   };
