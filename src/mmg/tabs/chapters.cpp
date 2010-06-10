@@ -330,7 +330,7 @@ tab_chapters::translate_ui() {
   b_set_values->SetToolTip(TIP("Here you can set the values for the language and the country that you want to apply to all the "
                                "chapters below and including the currently selected entry."));
   b_adjust_timecodes->SetLabel(Z("Adjust timecodes"));
-  b_adjust_timecodes->SetToolTip(TIP("Here you can adjust all the timcdoes of the selected chapter and all its childrend by a specific amount either increasing or decreasing it."));
+  b_adjust_timecodes->SetToolTip(TIP("Here you can adjust all the timcodes of the selected chapter and of all its sub-chapters by a specific amount either increasing or decreasing them."));
   st_start->SetLabel(Z("Start:"));
   st_end->SetLabel(Z("End:"));
   st_uid->SetLabel(Z("UID:"));
