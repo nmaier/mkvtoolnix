@@ -36,7 +36,7 @@ mkvinfo \- Informatie uitprinten over elementen in Matroska(TM) bestanden
 .PP
 Dit programma lijst alle elementen die een
 Matroska(TM)
-bestand bevat\&. De uitvoer kan gelimiteerd worden naar een lijst sporen inclusief de informatie over de gebruikte codecs\&.
+bestand bevat\&. De uitvoer kan gelimiteerd worden naar een lijst van sporen inclusief de informatie over de gebruikte codecs\&.
 .PP
 \fB\-g\fR, \fB\-\-gui\fR
 .RS 4
@@ -77,34 +77,34 @@ Toon de grootte van elk element inclusief kophoofd
 .PP
 \fB\-\-command\-line\-charset\fR \fIkarakter\-set\fR
 .RS 4
-Plaatst het karakter set om de reeksen om te zetten die vanaf de comando regel worden opgegeven\&. Standaard word gebruikt de karakter set die afhankelijk is van wat er in uw systeem staat aangegeven (lokatie)\&.
+Plaatst het karakter set om de reeksen om te zetten die vanaf de comando regel worden opgegeven\&. Standaard wordt gebruikt de karakter set die afhankelijk is van wat er in uw besturingssysteem staat aangegeven (lokatie)\&.
 .RE
 .PP
 \fB\-\-output\-charset\fR \fIkarakter\-set\fR
 .RS 4
-Stelt de karakter set in waarnaar de reeksen dienen te worden geconverteerd naar de uitvoer\&. Standaard word gebruikt de karakter set die afhankelijk is van wat er in uw systeem staat aangegeven (lokatie)\&.
+Stelt de karakter set in waarnaar de reeksen dienen te worden geconverteerd naar de uitvoer\&. Standaard wordt gebruikt de karakter set die afhankelijk is van wat er in uw besturingssysteem staat aangegeven (lokatie)\&.
 .RE
 .PP
 \fB\-r\fR, \fB\-\-redirect\-output\fR \fIbestands\-naam\fR
 .RS 4
 Schrijft alle berichten naar een bestand
-\fIbestands\-naam\fR
-i\&.p\&.v naar het \*(Aqapparaat/houder\*(Aq\&. Terwijl dit gemakkelijk met uitvoer omleiden kan worden gedaan er zijn gevallen waarin deze optie nodig is: wanneer de verwerker e\&.e\&.a her\-intepreteerd voordat het geschreven wordt naar het uitvoer bestand\&. De karakter set met
-\fB\-\-output\-charset\fR
+\fIfile\-name\fR
+i\&.p\&.v naar het \*(Aqapparaat/houder\*(Aq\&. Terwijl dit gemakkelijk met uitvoer omleiden kan worden gedaan er zijn gevallen waarin deze optie nodig is: wanneer de verwerker e\&.e\&.a her\-interpreteert voordat het geschreven wordt naar het uitvoer bestand\&. De karakter set met
+\fB\-\-uitvoer\-karakter set\fR
 is toegewezen\&.
 .RE
 .PP
 \fB\-\-ui\-language\fR \fIcode\fR
 .RS 4
-Forceert de vertaling voor de taal
+Forceert de vertaling voor de te gebruiken taal
 \fIcode\fR
-te gebruiken (b\&.v\&. \*(Aqde_DE\*(Aq voor de Duitse taal)\&. Hoewel het de voorkeur heeft de \*(Aqomgevings variabelen\*(Aq te gebruiken
+(b\&.v\&. \*(Aqde_DE\*(Aq voor de Duitse taal)\&. Hoewel het de voorkeur heeft de \*(Aqomgevings variabelen\*(Aq te gebruiken
 \fILANG\fR,
 \fILC_MESSAGES\fR
 en
-\fILC_ALL\fR\&. Opgeven van een \*(Aqlijst\*(Aq als de
+\fILC_ALL\fR\&. Opvragen van een \*(Aqlist\*(Aq als de
 \fIcode\fR
-zal veroorzaken dat
+zal er voor zorgen dat
 \fBmkvextract\fR(1)
 een lijst zal uitvoeren van alle beschikbaren vertalingen\&.
 .RE
@@ -113,7 +113,7 @@ een lijst zal uitvoeren van alle beschikbaren vertalingen\&.
 .RS 4
 Wees uitgebreider\&. Zie sectie over
 uitgebreide niveaus
-voor een beschriving welke informatie wordt uitgevoerd op welk niveau\&.
+voor een beschrijving welke informatie wordt uitgevoerd op welk niveau\&.
 .RE
 .PP
 \fB\-h\fR, \fB\-\-help\fR
@@ -126,23 +126,23 @@ Toon gebruik informatie en sluit af\&.
 Toon versie informatie en sluit af\&.
 .RE
 .PP
-\fB@\fRoptie(s)\-bestand
+\fB@\fRoptie\*(Aqs\-bestand
 .RS 4
 Leest extra commando regel argumenten in van een bestand
-\fIoptions\-file\fR\&. Regels met een (lege ruimte) spatie als eerste karakter worden gemarkeerd als een hash (\*(Aq#\*(Aq) worden behandeld als commentaar en worden genegeerd\&. Een spatie aan het begin en einde van een regel worden verwijderd\&. Elke regel mag precies \('e\('en optie bevatten\&. Een meta karakter negeren is niet mogelijk\&.
+\fIoptions\-file\fR\&. Regels met een spatie (lege ruimte) als eerste karakter, worden gemarkeerd als een hash (\*(Aq#\*(Aq) worden behandeld als commentaar en worden genegeerd\&. Een spatie aan het begin en einde van een regel worden verwijderd\&. Elke regel mag precies \('e\('en optie bevatten\&. Een meta karakter negeren is niet mogelijk\&.
 .sp
-De commando regel \*(Aq\fBmkvinfo \-v \-v input\&.mkv \-\-redirect\-output info\&.txt\fR\*(Aq kon geconverteerd worden naar het volgende optie bestand:
+De commando regel \*(Aq\fBmkvinfo \-v \-v input\&.mkv \-\-redirect\-output info\&.txt\fR\*(Aq kon worden geconverteert naar het volgende optie bestand:
 .sp
 .if n \{\
 .RS 4
 .\}
 .nf
-# Wees uitgebreider
+# Be more verbose
 \-v
 \-v
-# Ontleed invoer\&.mkv
-invoert\&.mkv
-# en schrijf uitvoer naar info\&.txt
+# Parse input\&.mkv
+input\&.mkv
+# and write the output to info\&.txt
 \-\-redirect\-output
 info\&.txt
      
@@ -151,38 +151,38 @@ info\&.txt
 .RE
 .\}
 .RE
-.SH "EXTRA NIVEAU'S"
+.SH "UITGEBREIDE NIVEAU'S"
 .PP
-De
+De optie
 \fB\-v\fR
-optie kan worden gebruikt om
+kan worden gebruikt om
 \fBmkvinfo\fR(1)\*(Aqs uitgebreide niveau te verhogen en meer informatie te printen over het huidige bestand\&.
 .PP
 Op niveau 0 print
 \fBmkvinfo\fR(1)
 de spoor koppen die het vindt en hun typen\&.
 \fBmkvinfo\fR(1)
-verlaat zo snel mogelijk wanneer de koppen volledig zijn ontleed (meer technisch: zo snel mogelijk wanneer de eerste cluster wordt tegengekomen)\&. Op dit niveau worden de zoek kop ingangen en volg vellen niet getoond \-\- zelfs niet wanneer die aan het begin bevinden van de spoor informatie\&.
+verlaat zo snel mogelijk wanneer de koppen volledig zijn ontleed (meer technisch: zo snel mogelijk wanneer de eerste cluster wordt tegengekomen)\&. Op dit niveau worden de zoek kop ingangen en volg documen(en) (cue) niet getoond \-\- zelfs niet wanneer die aan het begin bevinden van de spoor informatie\&.
 .PP
 Op niveau 1 print
 \fBmkvinfo\fR(1)
 ook alle
 Matroska(TM)
-tegengekomen elementen van het complete bestand elementen behalve de zoek koppen en de volg vel ingangen\&. Als de samenvattingsmode aan is dan zal
+tegengekomen elementen van het complete bestand elementen behalve de zoek koppen en de volg documen(en) (cue) ingangen\&. Als de samenvattingsmode aan is dan zal
 \fBmkvinfo\fR(1)
 het beeld positie eveneens uitvoeren\&.
 .PP
 Op niveau 2 print
 \fBmkvinfo\fR(1)
-tevens de zoek kop ingangen, de volg vel ingangen en de bestandspositie waarbij elk
+tevens de zoek kop ingangen, de volg documen(en) (cue)l ingangen en de bestandspositie waarbij elk
 Matroska(TM)
-element gevonden kan worden\&.
+element kan worden gevonden\&.
 .PP
 Op niveau 3 en hoger zal
 \fBmkvinfo\fR(1)
-wat informatie printen wwelke niet direct aan een
+enige informatie printen welke niet direct aan een
 Matroska(TM)
-element is gekoppeld\&. Alle overige elementen print alleen info over de elementen die enkel werden gevonden\&. Niveau 3 voegt meta dat toe voor een makkelijkere fout opsporing (lees als: bedoelt voor ontwikkelaars)\&. Alle niveau 3 geschreven regels bevatten zich tussen [ ] om ze makkelijker te herkennen\&.\&.
+element is gekoppeld\&. Alle overige elementen printen alleen info over de elementen die zojuist werden gevonden\&. Niveau 3 voegt meta dat toe voor een makkelijkere fout opsporing (lees als: bedoelt voor ontwikkelaars)\&. Alle niveau 3 geschreven regels bevatten zich tussen [ ] om ze makkelijker te herkennen\&.\&.
 .SH "VERLAAT CODES"
 .PP
 
@@ -214,7 +214,7 @@ verlaat met \('e\('en van de drie afsluit codes:
 \fB1\fR
 \-\- In dit geval heeft
 \fBmkvinfo\fR(1)
-minimaal \('e\('en waarschuwing doen uitgaan, maar ging door\&. Een waarschuing wordt voorafgegaan met de tekst \*(AqWaarschuwing:\*(Aq\&.
+minimaal \('e\('en waarschuwing doen uitgaan, maar ging door\&. Een waarschuing wordt voorafgegaan met de tekst \*(AqWarning:\*(Aq\&.
 .RE
 .sp
 .RS 4
@@ -229,7 +229,7 @@ minimaal \('e\('en waarschuwing doen uitgaan, maar ging door\&. Een waarschuing 
 \fB2\fR
 \-\- Deze fout code wordt gegeven nadat er een fout optrad\&.
 \fBmkvinfo\fR(1)
-breekt direct af na het geven van dit waarschuw bericht\&. Fout bericht bereik van een verkeerd commando regel argument over lees/schrijf fouten naar een \*(Aqgebroken\*(Aq bestanden\&.
+breekt direct af na het geven van dit waarschuw bericht\&. Fout berichten, bereik van een verkeerd commando regel argument over lees/schrijf fouten naar een \*(Aqgebroken\*(Aq bestanden\&.
 .RE
 .SH "ZIE OOK"
 .PP
@@ -240,8 +240,9 @@ breekt direct af na het geven van dit waarschuw bericht\&. Fout bericht bereik v
 \fBmmg\fR(1)
 .SH "WWW"
 .PP
-De laatste versie kan altijd gevonden worden op
-\m[blue]\fBde MKVToolNix thuis basis\fR\m[]\&\s-2\u[1]\d\s+2\&.
+De laatste versie kan altijd gevonden worden op de
+\m[blue]\fBMKVToolNix\fR\m[]\&\s-2\u[1]\d\s+2
+thuis basis\&.
 .SH "AUTEUR"
 .PP
 \fBMoritz Bunkus\fR <\&moritz@bunkus\&.org\&>
@@ -250,7 +251,7 @@ Ontwikkelaar
 .RE
 .SH "NOTEN"
 .IP " 1." 4
-de MKVToolNix thuis basis
+MKVToolNix
 .RS 4
 \%http://www.bunkus.org/videotools/mkvtoolnix/
 .RE
