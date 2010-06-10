@@ -2011,9 +2011,10 @@ kax_reader_c::process_simple_block(KaxCluster *cluster,
     // and stuff. Just pass everything through as it is.
     int i;
     for (i = 0; i < (int)block_simple->NumberFrames(); i++) {
-      DataBuffer &data = block_simple->GetBuffer(i);
-      packet_t *packet = new packet_t(new memory_c((unsigned char *)data.Buffer(), data.Size(), false),
-                                      m_last_timecode + i * frame_duration, block_duration, block_bref, block_fref);
+      DataBuffer &data_buffer = block_simple->GetBuffer(i);
+      memory_cptr data(new memory_c(data_buffer.Buffer(), data_buffer.Size(), false));
+      block_track->content_decoder.reverse(data, CONTENT_ENCODING_SCOPE_BLOCK);
+      packet_t *packet = new packet_t(data, m_last_timecode + i * frame_duration, block_duration, block_bref, block_fref);
 
       ((passthrough_packetizer_c *)PTZR(block_track->ptzr))->process(packet_cptr(packet));
     }
@@ -2122,9 +2123,10 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
 
     int i;
     for (i = 0; i < (int)block->NumberFrames(); i++) {
-      DataBuffer &data           = block->GetBuffer(i);
-      packet_t *packet           = new packet_t(new memory_c((unsigned char *)data.Buffer(), data.Size(), false),
-                                                m_last_timecode + i * frame_duration, block_duration, block_bref, block_fref);
+      DataBuffer &data_buffer = block->GetBuffer(i);
+      memory_cptr data(new memory_c(data_buffer.Buffer(), data_buffer.Size(), false));
+      block_track->content_decoder.reverse(data, CONTENT_ENCODING_SCOPE_BLOCK);
+      packet_t *packet           = new packet_t(data, m_last_timecode + i * frame_duration, block_duration, block_bref, block_fref);
       packet->duration_mandatory = duration != NULL;
 
       if (NULL != codec_state)
