@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Nederlands 4.0.0.\n"
 "POT-Creation-Date: 2010-06-08 10:26+0300\n"
-"PO-Revision-Date: 2010-06-10 14:28+0100\n"
+"PO-Revision-Date: 2010-06-10 16:09+0200\n"
 "Last-Translator: René Maassen <bmom43@hotmail.com>\n"
 "Language-Team: Nederlands rc1 <bmom43@hotmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -28,7 +28,6 @@ msgstr "mkvextract"
 #: doc/man/mkvmerge.xml:6
 #: doc/man/mkvpropedit.xml:6
 #: doc/man/mmg.xml:6
-#| msgid "3.4.0"
 msgid "4.0.0"
 msgstr "4.0.0"
 
@@ -1154,7 +1153,7 @@ msgstr "<option>--default-language</option> <parameter>language-code</parameter>
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:126
 msgid "Sets the default language code that will be used for all tracks unless overwritten with the <link linkend=\"mkvmerge.description.language\"><option>--language</option></link> option. The default language code is '<literal>und</literal>' for 'undefined'."
-msgstr "Stelt de standaard land code in voor alle sporen tenzij die wordt overschreven met <link linkend=\"mkvmerge.description.language\"><option>--Taal</option></link> optie. De standaard code is '<literal>onb</literal>' voor 'onbekend'."
+msgstr "Stelt de standaard land code in voor alle sporen tenzij die wordt overschreven met <link linkend=\"mkvmerge.description.language\"><option>--language</option></link> optie. De standaard code is '<literal>onb</literal>' voor 'onbekend'."
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:134
@@ -1663,7 +1662,7 @@ msgstr "<option>-s</option>, <option>--subtitle-tracks</option> <parameter>n,m,.
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:661
 msgid "Copy the subtitle tracks <parameter>n</parameter>, <parameter>m</parameter> etc. The numbers are track IDs which can be obtained with the <link linkend=\"mkvmerge.description.identify\"><option>--identify</option></link> switch. They're not simply the track numbers (see section <link linkend=\"mkvmerge.track_ids\">track IDs</link>). Default: copy all subtitle tracks."
-msgstr "Copieer de ondertitel sporen <parameter>n</parameter>, <parameter>m</parameter> etc. De nummers zijn track ID's welke kunnen worden verkregen met de <link linkend=\"mkvmerge.description.identificeer\"><option>--identify</option></link> schakelaar. Zij zijn simpelweg niet de spoor nummers (zie sectie <link linkend=\"mkvmerge.track_ids\">spoor ID's</link>). Standaard: copieer alle ondertitel sporen."
+msgstr "Copieer de ondertitel sporen <parameter>n</parameter>, <parameter>m</parameter> etc. De nummers zijn track ID's welke kunnen worden verkregen met de <link linkend=\"mkvmerge.description.identify\"><option>--identify</option></link> schakelaar. Zij zijn simpelweg niet de spoor nummers (zie sectie <link linkend=\"mkvmerge.track_ids\">spoor ID's</link>). Standaard: copieer alle ondertitel sporen."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:669
@@ -1798,7 +1797,7 @@ msgstr "<option>-y</option>, <option>--sync</option> <parameter>TID:d<optional>,
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:804
 msgid "Adjust the timecodes of the track with the id <parameter>TID</parameter> by <parameter>d</parameter> ms. The track IDs are the same as the ones given with <link linkend=\"mkvmerge.description.identify\"><option>--identify</option></link> (see section <link linkend=\"mkvmerge.track_ids\">track IDs</link>)."
-msgstr "Stelt de tijd code's bij van het spoor met het id <parameter>TID</parameter> door <parameter>d</parameter> ms. De spoor ID's zijn hetzelfde als degene gegeven met <link linkend=\"mkvmerge.description.identificeer\"><option>--identify</option></link> (zie sectie <link linkend=\"mkvmerge.track_ids\">spoor ID's</link>)."
+msgstr "Stelt de tijd code's bij van het spoor met het id <parameter>TID</parameter> door <parameter>d</parameter> ms. De spoor ID's zijn hetzelfde als degene gegeven met <link linkend=\"mkvmerge.description.identify\"><option>--identify</option></link> (zie sectie <link linkend=\"mkvmerge.track_ids\">spoor ID's</link>)."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:810
@@ -1883,7 +1882,7 @@ msgstr "<option>--language</option> <parameter>TID:language</parameter>"
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:903
 msgid "Sets the language for the given track (see section <link linkend=\"mkvmerge.track_ids\">track IDs</link>). Both ISO639-2 language codes and ISO639-1 country codes are allowed. The country codes will be converted to language codes automatically.  All languages including their ISO639-2 codes can be listed with the <link linkend=\"mkvmerge.description.list_languages\"><option>--list-languages</option></link> option."
-msgstr "Stelt de taal in voor het opgegeven spoor (zie sectie <link linkend=\"mkvmerge.track_ids\">spoor ID's</link>). Beide ISO639-2 taal codes en ISO639-1 land codes zijn toegestaan. De land code wordt automatisch vertaald naar taal code.  Alle talen inclusief hun ISO639-2 codes kunnen uitgelijst worden met <link linkend=\"mkvmerge.description.list_languages\"><option>--lijst-taal</option></link> optie."
+msgstr "Stelt de taal in voor het opgegeven spoor (zie sectie <link linkend=\"mkvmerge.track_ids\">spoor ID's</link>). Beide ISO639-2 taal codes en ISO639-1 land codes zijn toegestaan. De land code wordt automatisch vertaald naar taal code.  Alle talen inclusief hun ISO639-2 codes kunnen uitgelijst worden met <link linkend=\"mkvmerge.description.list_languages\"><option>--list-languages</option></link> optie."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:916
@@ -2104,7 +2103,7 @@ msgstr "<option>--list-languages</option>"
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:1165
 msgid "Lists all languages and their ISO639-2 code which can be used with the <link linkend=\"mkvmerge.description.language\"><option>--language</option></link> option."
-msgstr "Somt alle talen en hun ISO639-2 code's op welke gebruikt kunnen worden met de <link linkend=\"mkvmerge.description.language\"><option>--taal</option></link> optie."
+msgstr "Somt alle talen en hun ISO639-2 code's op welke gebruikt kunnen worden met de <link linkend=\"mkvmerge.description.language\"><option>--language</option></link> optie."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvmerge.xml:1172
@@ -2490,7 +2489,7 @@ msgstr "Deze sectie is van toepassing op alle programma's in MKVToolNix zelfs wa
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1531
 msgid "All text in a &matroska; file is encoded in UTF-8. This means that &mkvmerge; has to convert every text file it reads as well as every text given on the command line from one character set into UTF-8. In return this also means that &mkvmerge;'s output has to be converted back to that character set from UTF-8, e.g. if a non-English translation is used with <link linkend=\"mkvmerge.description.ui_language\"><option>--ui-language</option></link> or for text originating from a &matroska; file."
-msgstr "Alle teksten in &matroska; bestanden zijn gecodeerd in UTF-8. Dit betekent, dat &mkvmerge; alle de te lezen tekst bestanden moet converteren en evenals elke ingegeven tekst op de commando regel  om elke karakter te zetten naar UTF-8. Teruggekoppeld betekend dit ook, dat &mkvmerge;'s uitvoer terug geconverterd moet worden naar die karakter set van UTF-8, b.v. als een niet Engelse vertaling is gebruikt met <link linkend=\"mkvmerge.description.ui_language\"><option>--ui-taal</option></link> of voor de orginele tekst uit een &matroska; bestand."
+msgstr "Alle teksten in &matroska; bestanden zijn gecodeerd in UTF-8. Dit betekent, dat &mkvmerge; alle de te lezen tekst bestanden moet converteren en evenals elke ingegeven tekst op de commando regel  om elke karakter te zetten naar UTF-8. Teruggekoppeld betekend dit ook, dat &mkvmerge;'s uitvoer terug geconverterd moet worden naar die karakter set van UTF-8, b.v. als een niet Engelse vertaling is gebruikt met <link linkend=\"mkvmerge.description.ui_language\"><option>--ui-language</option></link> of voor de orginele tekst uit een &matroska; bestand."
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1538
@@ -2520,7 +2519,7 @@ msgstr "Als de volgende optie aanwezig is dan is het toegestaan de karakter set 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
 #: doc/man/mkvmerge.xml:1573
 msgid "<link linkend=\"mkvmerge.description.sub_charset\"><option>--sub-charset</option></link> for text subtitle files and for text subtitle tracks stored in container formats for which the character set cannot be determined unambiguously (e.g. Ogg files),"
-msgstr "<link linkend=\"mkvmerge.description.sub_karakterset\"><option>--sub-charset</option></link> voor tekst ondertitels en tekst ondertitel sporen opgeslagen in de houder formaat waarvan de karakter set niet onomtstotelijk kan worden vastgesteld (b.v. Ogg bestanden),"
+msgstr "<link linkend=\"mkvmerge.description.sub_charset\"><option>--sub-charset</option></link> voor tekst ondertitels en tekst ondertitel sporen opgeslagen in de houder formaat waarvan de karakter set niet onomtstotelijk kan worden vastgesteld (b.v. Ogg bestanden),"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
 #: doc/man/mkvmerge.xml:1580
@@ -2610,7 +2609,7 @@ msgstr "Standaard waarden"
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1684
 msgid "The &matroska; specification states that some elements have a default value. Usually an element is not written to the file if its value is equal to its default value in order to save space. The elements that the user might miss in &mkvinfo;'s output are the <parameter>language</parameter> and the <parameter>default track flag</parameter> elements.  The default value for the <parameter>language</parameter> is English ('<literal>eng</literal>'), and the default value for the <parameter>default track flag</parameter> is <parameter>true</parameter>. Therefore if you used <option>--language 0:eng</option> for a track then it will not show up in &mkvinfo;'s output."
-msgstr "De &matroska; de specificatie verklaart dat sommige elementen een standaard waarde hebben. Gewoonlijk wordt een element niet naar het bestand geschreven als het niet gelijk is aan de standaard waarde, dit om ruimte te besparen. De elementen die gebruiker zou kunnen missen in &mkvinfo;'s uitvoer, zijn de <parameter<taal</parameter> en de <parameter>standaard spoor markering</parameter> elementen.  De standaard waarde voor de <parameter>taal</parameter> is Engels ('<literal>eng</literal>'), en de standaard waarde voor de <parameter>standaard spoor markering</parameter> is <parameter>waar</parameter>. Als je daarom gebruikt de <option>--language 0:eng</option> voor een spoor, dan zal deze niet verschijnen in de &mkvinfo;'s uitvoer."
+msgstr "De &matroska; de specificatie verklaart dat sommige elementen een standaard waarde hebben. Gewoonlijk wordt een element niet naar het bestand geschreven als het niet gelijk is aan de standaard waarde, dit om ruimte te besparen. De elementen die gebruiker zou kunnen missen in &mkvinfo;'s uitvoer, zijn de <parameter>taal</parameter> en de <parameter>standaard spoor markering</parameter> elementen.  De standaard waarde voor de <parameter>taal</parameter> is Engels ('<literal>eng</literal>'), en de standaard waarde voor de <parameter>standaard spoor markering</parameter> is <parameter>waar</parameter>. Als je daarom gebruikt de <option>--language 0:eng</option> voor een spoor, dan zal deze niet verschijnen in de &mkvinfo;'s uitvoer."
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1696
@@ -2847,7 +2846,7 @@ msgstr "Markeer bestandsformaat"
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvmerge.xml:1884
 msgid "&mkvmerge; supports a &xml; based tag file format. The format is very closely modeled after <ulink url=\"http://matroska.org/technical/specs/index.html\">the &matroska; specification</ulink>. Both the binary and the source distributions of MKVToolNix come with a sample file called <filename>example-tags-2.xml</filename> which simply lists all known tags and which can be used as a basis for real life tag files."
-msgstr "&mkvmerge; ondersteunt een &xml; gebasseerde markeer bestand format. Het format is rijkelijk gedocumenteerd op de <ulink url=\"http://matroska.org/technical/specs/index.html\" &matroska;</ulink> specificaties. Beide, zowel het binaire alsmede de bron distributies van MKVToolNix komen met een voorbeeld bestand genaamd <filename>example-tags-2.xml</filename> welke simpelweg alle bekende markeringen opsomt en welke kunnen worden gebrukt als basis voor 'echte leven' markeer bestanden."
+msgstr "&mkvmerge; ondersteunt een &xml; gebasseerde markeer bestand format. Het format is rijkelijk gedocumenteerd op de <ulink url=\"http://matroska.org/technical/specs/index.html\">&matroska;</ulink> specificaties. Beide, zowel het binaire alsmede de bron distributies van MKVToolNix komen met een voorbeeld bestand genaamd <filename>example-tags-2.xml</filename> welke simpelweg alle bekende markeringen opsomt en welke kunnen worden gebrukt als basis voor 'echte leven' markeer bestanden."
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
 #: doc/man/mkvmerge.xml:1891
