@@ -351,7 +351,7 @@ kax_reader_c::verify_audio_track(kax_track_t *t) {
   bool is_ok = true;
   if (t->codec_id == MKV_A_ACM)
     is_ok = verify_acm_audio_track(t);
-  else if (starts_with(t->codec_id, MKV_A_MP3, strlen(MKV_A_MP3) - 1))
+  else if ((t->codec_id == MKV_A_MP3) || (t->codec_id == MKV_A_MP2))
     t->a_formattag = 0x0055;
   else if (starts_with(t->codec_id, MKV_A_AC3, strlen(MKV_A_AC3)) || (t->codec_id == MKV_A_EAC3))
     t->a_formattag = 0x2000;

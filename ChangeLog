@@ -11,6 +11,9 @@
 
 2010-06-10  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The Matroska reader will use the MPEG audio
+	packetizer for MP2 tracks instead of the passthrough packetizer.
+
 	* mkvmerge: bug fix: The Matroska reader did not handle compressed
 	tracks correctly if the passthrough packetizer was used.
 
