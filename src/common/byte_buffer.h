@@ -64,6 +64,10 @@ public:
     size += new_size;
   };
 
+  void add(memory_cptr &new_buffer) {
+    add(new_buffer->get_buffer(), new_buffer->get_size());
+  }
+
   void remove(int num) {
     if ((pos + num) > size)
       mxerror(Y("byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"));
