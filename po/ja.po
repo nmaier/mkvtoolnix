@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-06-11 07:17+0900\n"
+"PO-Revision-Date: 2010-06-11 22:59+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -2416,7 +2416,7 @@ msgstr "次のOGGページを見つけられませんでした。これはOGG/OG
 
 #: src/input/r_avi.cpp:659 src/input/r_matroska.cpp:1532
 msgid "Could not find valid DTS headers in this track's first frames.\n"
-msgstr ""
+msgstr "トラックの最初のフレームに正しいDTSヘッダが見つかりませんでした。\n"
 
 #: src/common/locale.cpp:133
 msgid "Could not initialize the iconv library for the conversion from %1% to UFT-8. Some strings will not be converted to UTF-8 and the resulting Matroska file might not comply with the Matroska specs (error: %2%, %3%).\n"
