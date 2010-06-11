@@ -1519,11 +1519,11 @@ msgstr "<ChapterDisplay>には<ChapterString>子要素がありません。"
 msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr "<ChapterTrack>には<ChapterTrackNumber>子要素がありません。"
 
-#: src/input/r_matroska.cpp:2060
+#: src/input/r_matroska.cpp:2072
 msgid "A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"
 msgstr "%1%の位置でブロックグループが見つかりましたが、その中にブロック要素は見つかりませんでした。mkvmergeのクラッシュを引き起こす可能性があります。\n"
 
-#: src/input/r_matroska.cpp:1960 src/input/r_matroska.cpp:2070
+#: src/input/r_matroska.cpp:1972 src/input/r_matroska.cpp:2082
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr "トラック番号%2%のタイムスタンプ%1%でブロックが見つかりましが、そのトラック番号のヘッダが見つかりませんでした。このブロックはスキップされます。\n"
 
@@ -2385,7 +2385,7 @@ msgstr "指定されたファイルを作成できませんでした。"
 msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "Base64にエンコードされたデータをデコードすることができませんでした。恐らく不正な形式です。"
 
-#: src/input/r_avi.cpp:327 src/input/r_matroska.cpp:1771
+#: src/input/r_avi.cpp:327 src/input/r_matroska.cpp:1783
 #: src/input/r_ogm.cpp:1131
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "このAVC/h.264トラックからデコーダ詳細設定データ（AVCC）を展開することができませんでした。\n"
@@ -2413,6 +2413,10 @@ msgstr "最初のMPEG-4 part 2ビデオフレームのコーデック設定デ�
 #: src/input/r_ogm.cpp:354
 msgid "Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n"
 msgstr "次のOGGページを見つけられませんでした。これはOGG/OGMファイルが壊れていることを意味します。処理続行を試みます。\n"
+
+#: src/input/r_avi.cpp:659 src/input/r_matroska.cpp:1532
+msgid "Could not find valid DTS headers in this track's first frames.\n"
+msgstr ""
 
 #: src/common/locale.cpp:133
 msgid "Could not initialize the iconv library for the conversion from %1% to UFT-8. Some strings will not be converted to UTF-8 and the resulting Matroska file might not comply with the Matroska specs (error: %2%, %3%).\n"
@@ -3497,7 +3501,7 @@ msgstr "不正なUIDです。このチャプタUIDは既に使用されていま
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "不正なUIDです。このエディションUIDは既に使用されています。元のUIDは変更されませんでした。"
 
-#: src/input/r_avi.cpp:638 src/input/r_avi.cpp:643 src/input/r_avi.cpp:660
+#: src/input/r_avi.cpp:668 src/input/r_avi.cpp:673 src/input/r_avi.cpp:690
 msgid "Invalid Vorbis headers in AVI audio track."
 msgstr "AVIのオーディオトラックのVorbisヘッダが不正です。"
 
@@ -6238,11 +6242,11 @@ msgstr "警告が発せられました"
 msgid "There were warnings, or the process was terminated."
 msgstr "警告が発せられるか、プロセスが終了されました。"
 
-#: src/input/r_avi.cpp:609 src/input/r_real.cpp:326
+#: src/input/r_avi.cpp:601 src/input/r_real.cpp:326
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr "このAACトラックは正しいヘッダを含んでいません。AACの情報を解析することができませんでした。\n"
 
-#: src/input/r_avi.cpp:606
+#: src/input/r_avi.cpp:598
 msgid "This AAC track does not contain valid headers. The extra header size is %1% bytes, expected were 2 or 5 bytes.\n"
 msgstr "このAACトラックは正しいヘッダを含んでいません。追加ヘッダのサイズは%1%ですが、期待されるサイズは2～5バイトです。\n"
 
@@ -6624,7 +6628,7 @@ msgstr "'%1%'は未知のオプションです。\n"
 msgid "Unknown parse mode in '%1% %2%'.\n"
 msgstr "'%1% %2%'で未知のパースモードが指定されました。\n"
 
-#: src/input/r_avi.cpp:563
+#: src/input/r_avi.cpp:555
 msgid "Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n"
 msgstr "このトラックのオーディオフォーマット 0x%|1$04x|は未知もしくはサポートされていません。\n"
 
@@ -6648,7 +6652,7 @@ msgstr "サポートされていないMPEGバージョンです：0x%|1$02x|（�
 msgid "Unsupported format"
 msgstr "サポートされていないフォーマットです"
 
-#: src/input/r_matroska.cpp:1726
+#: src/input/r_matroska.cpp:1738
 msgid "Unsupported track type for this track.\n"
 msgstr "このトラックはサポートされているトラックタイプではありません。\n"
 
@@ -6735,7 +6739,7 @@ msgstr "NALUサイズを3バイトにすると、特定のAVC/h.264コーデッ�
 msgid "Using the %1%AC3 output module.\n"
 msgstr "%1%AC3出力モジュールを使用しています。\n"
 
-#: src/input/r_avi.cpp:629
+#: src/input/r_avi.cpp:621
 msgid "Using the AAC audio output module.\n"
 msgstr "AACオーディオ出力モジュールを使用しています。\n"
 
@@ -6781,8 +6785,8 @@ msgstr "CorePanorama字幕リーダを使用しています。\n"
 msgid "Using the DTS demultiplexer.\n"
 msgstr "DTSデマルチプレクサを使用しています。\n"
 
-#: src/input/r_avi.cpp:549 src/input/r_dts.cpp:114
-#: src/input/r_matroska.cpp:1521 src/input/r_mpeg_ps.cpp:1181
+#: src/input/r_avi.cpp:654 src/input/r_dts.cpp:114
+#: src/input/r_matroska.cpp:1529 src/input/r_mpeg_ps.cpp:1181
 #: src/input/r_wav.cpp:354
 msgid "Using the DTS output module.\n"
 msgstr "DTS出力モジュールを使用しています。\n"
@@ -6799,7 +6803,7 @@ msgstr "Diracビデオ出力モジュールを使用しています。\n"
 msgid "Using the FLAC demultiplexer.\n"
 msgstr "FLACデマルチプレクサを使用しています。\n"
 
-#: src/input/r_flac.cpp:164 src/input/r_matroska.cpp:1539
+#: src/input/r_flac.cpp:164 src/input/r_matroska.cpp:1551
 #: src/input/r_ogm_flac.cpp:287
 msgid "Using the FLAC output module.\n"
 msgstr "FLAC出力モジュールを使用しています。\n"
@@ -6808,7 +6812,7 @@ msgstr "FLAC出力モジュールを使用しています。\n"
 msgid "Using the IVF demultiplexer.\n"
 msgstr "IVFデマルチプレクサを使用しています。\n"
 
-#: src/input/r_matroska.cpp:1658
+#: src/input/r_matroska.cpp:1670
 msgid "Using the Kate output module.\n"
 msgstr "カラオケ・テキスト出力モジュールを使用しています。\n"
 
@@ -6828,7 +6832,7 @@ msgstr "MPEG ESデマルチプレクサを使用しています。\n"
 msgid "Using the MPEG PS demultiplexer.\n"
 msgstr "MPEG PSデマルチプレクサを使用しています。\n"
 
-#: src/input/r_avi.cpp:531 src/input/r_matroska.cpp:1547
+#: src/input/r_avi.cpp:531 src/input/r_matroska.cpp:1559
 #: src/input/r_mp3.cpp:71 src/input/r_mpeg_ps.cpp:1171
 #: src/input/r_ogm.cpp:1004 src/input/r_qtmp4.cpp:1541
 msgid "Using the MPEG audio output module.\n"
@@ -6843,12 +6847,12 @@ msgstr "MPEG-%1%ビデオ出力モジュールを使用しています。\n"
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "MPEG-1/2ビデオ出力モジュールを使用しています。\n"
 
-#: src/input/r_matroska.cpp:1803 src/input/r_qtmp4.cpp:1511
+#: src/input/r_matroska.cpp:1815 src/input/r_qtmp4.cpp:1511
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "MPEG-4 part 10 (AVC)ビデオ出力モジュールを使用しています。\n"
 
 #: src/input/r_avc.cpp:136 src/input/r_avi.cpp:324
-#: src/input/r_matroska.cpp:1783 src/input/r_mpeg_ps.cpp:1210
+#: src/input/r_matroska.cpp:1795 src/input/r_mpeg_ps.cpp:1210
 #: src/input/r_ogm.cpp:1128
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "MPEG-4 part 10 ESビデオ出力モジュールを使用しています。\n"
@@ -6866,7 +6870,7 @@ msgstr "Matroskaデマルチプレクサを使用しています。\n"
 msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr "OGG/OGMデマルチプレクサを使用しています。\n"
 
-#: src/input/r_avi.cpp:523 src/input/r_matroska.cpp:1554
+#: src/input/r_avi.cpp:523 src/input/r_matroska.cpp:1566
 #: src/input/r_ogm.cpp:1023 src/input/r_qtmp4.cpp:1547 src/input/r_wav.cpp:395
 msgid "Using the PCM output module.\n"
 msgstr "PCM出力モジュールを使用しています。\n"
@@ -6899,7 +6903,7 @@ msgstr "SSA/ASS字幕リーダを使用しています。\n"
 msgid "Using the TTA demultiplexer.\n"
 msgstr "TTAデマルチプレクサを使用しています。\n"
 
-#: src/input/r_matroska.cpp:1565 src/input/r_tta.cpp:109
+#: src/input/r_matroska.cpp:1577 src/input/r_tta.cpp:109
 msgid "Using the TTA output module.\n"
 msgstr "TTA出力モジュールを使用しています。\n"
 
@@ -6939,11 +6943,11 @@ msgstr "VP8ビデオ出力モジュールを使用しています。\n"
 msgid "Using the VobBtn button reader.\n"
 msgstr "VobBtnボタンリーダを使用しています。\n"
 
-#: src/input/r_matroska.cpp:1669
+#: src/input/r_matroska.cpp:1681
 msgid "Using the VobBtn output module.\n"
 msgstr "VobBtn出力モジュールを使用しています。\n"
 
-#: src/input/r_matroska.cpp:1642
+#: src/input/r_matroska.cpp:1654
 msgid "Using the VobSub output module.\n"
 msgstr "VobSub出力モジュールを使用しています。\n"
 
@@ -6955,7 +6959,7 @@ msgstr "VobSub字幕出力モジュールを使用しています（言語：%1%
 msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
 msgstr "VobSub字幕リーダを使用しています（字幕ファイル'%1%'）。\n"
 
-#: src/input/r_avi.cpp:678 src/input/r_matroska.cpp:1572
+#: src/input/r_avi.cpp:708 src/input/r_matroska.cpp:1584
 #: src/input/r_ogm.cpp:1044
 msgid "Using the Vorbis output module.\n"
 msgstr "Vorbis出力モジュールを使用しています。\n"
@@ -6972,7 +6976,7 @@ msgstr "WAVPACK訂正ファイル付きデマルチプレクサを使用して�
 msgid "Using the WAVPACK demultiplexer.\n"
 msgstr "WAVPACKデマルチプレクサを使用しています。\n"
 
-#: src/input/r_matroska.cpp:1595 src/input/r_wavpack.cpp:108
+#: src/input/r_matroska.cpp:1607 src/input/r_wavpack.cpp:108
 msgid "Using the WAVPACK output module.\n"
 msgstr "WAVPACK出力モジュールを使用しています。\n"
 
@@ -6984,7 +6988,7 @@ msgstr "一般オーディオ出力モジュールを使用しています（Fou
 msgid "Using the passthrough output module for this %1% track.\n"
 msgstr "この%1%トラックにパススルー出力モジュールを使用しています。\n"
 
-#: src/input/r_avi.cpp:381 src/input/r_matroska.cpp:1650
+#: src/input/r_avi.cpp:381 src/input/r_matroska.cpp:1662
 #: src/input/r_ogm.cpp:1075 src/input/r_srt.cpp:60 src/input/r_ssa.cpp:71
 #: src/input/r_usf.cpp:259
 msgid "Using the text subtitle output module.\n"
@@ -7364,7 +7368,7 @@ msgstr "サンプルあたりビット数：%1%"
 msgid "buttons"
 msgstr "ボタン"
 
-#: src/common/byte_buffer.h:69
+#: src/common/byte_buffer.h:73
 msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"
 msgstr "byte_buffer_c: (pos + num) > sizeです。発生するべきではありません。バグレポートを提出してください。\n"
 
@@ -7731,7 +7735,7 @@ msgstr "matroska_reader：トラックタイプが見つかりませんでした
 msgid "matroska_reader: Vorbis track does not contain valid headers.\n"
 msgstr "matroska_reader：Vorbisトラックは正しいヘッダを含んでいません。\n"
 
-#: src/input/r_matroska.cpp:1299 src/input/r_matroska.cpp:1938
+#: src/input/r_matroska.cpp:1299 src/input/r_matroska.cpp:1950
 msgid "matroska_reader: caught exception\n"
 msgstr "matroska_reader：例外をキャッチしました\n"
 
@@ -8209,8 +8213,8 @@ msgstr "tta_reader：c'tor内でtag_sizeが負になりました。 %1%\n"
 msgid "und (Undetermined)"
 msgstr "und (Undetermined)"
 
-#: src/input/r_matroska.cpp:87 src/input/r_matroska.cpp:2249
-#: src/input/r_matroska.cpp:2256 src/input/r_mpeg_ps.cpp:1389
+#: src/input/r_matroska.cpp:87 src/input/r_matroska.cpp:2261
+#: src/input/r_matroska.cpp:2268 src/input/r_mpeg_ps.cpp:1389
 #: src/common/mm_io_win.cpp:165 src/mmg/mmg.cpp:60
 #: src/mmg/header_editor/value_page.cpp:150 src/mmg/tabs/input.cpp:378
 #: src/info/mkvinfo.cpp:806 src/info/mkvinfo.cpp:816 src/info/mkvinfo.cpp:835

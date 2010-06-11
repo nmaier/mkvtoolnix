@@ -1545,12 +1545,12 @@ msgstr "<ChapterDisplay> 缺少 <ChapterString> 子元件。"
 msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr "<ChapterTrack> 缺少 <ChapterTrackNumber> 子元件。"
 
-#: src/input/r_matroska.cpp:2060
+#: src/input/r_matroska.cpp:2072
 msgid "A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"
 msgstr "在 %1% 找到了一個區塊群組，但裡面沒有區塊元件。這可能會導致 mkvmerge 不正常關閉。\n"
 
-#: src/input/r_matroska.cpp:1960
-#: src/input/r_matroska.cpp:2070
+#: src/input/r_matroska.cpp:1972
+#: src/input/r_matroska.cpp:2082
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr "在時間戳記 %1% 處找到了軌道編號為 %2% 的區塊。然而，沒有找到符合該軌道編號的表頭資訊。此區塊將被跳過。\n"
 
@@ -2461,7 +2461,7 @@ msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "無法解碼以 Base64 編碼的資料 - 似乎是不正常的。"
 
 #: src/input/r_avi.cpp:327
-#: src/input/r_matroska.cpp:1771
+#: src/input/r_matroska.cpp:1783
 #: src/input/r_ogm.cpp:1131
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "無法從該 AVC/h.264 軌道提取解碼器特有設定資料 (AVCC)。\n"
@@ -2490,6 +2490,11 @@ msgstr "在第一個 MPEG-4 part 2 視訊畫格中找不到編解碼器設定資
 #: src/input/r_ogm.cpp:354
 msgid "Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n"
 msgstr "找不到 Ogg 的下一頁。這表示 Ogg/Ogm 檔案可能已損壞。將試著繼續。\n"
+
+#: src/input/r_avi.cpp:659
+#: src/input/r_matroska.cpp:1532
+msgid "Could not find valid DTS headers in this track's first frames.\n"
+msgstr ""
 
 #: src/common/locale.cpp:133
 msgid "Could not initialize the iconv library for the conversion from %1% to UFT-8. Some strings will not be converted to UTF-8 and the resulting Matroska file might not comply with the Matroska specs (error: %2%, %3%).\n"
@@ -3610,9 +3615,9 @@ msgstr "無效 UID。該章節 UID 已被使用。原 UID 沒有被改變。"
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "無效 UID。該版本 UID 已被使用。原 UID 沒有被改變。"
 
-#: src/input/r_avi.cpp:638
-#: src/input/r_avi.cpp:643
-#: src/input/r_avi.cpp:660
+#: src/input/r_avi.cpp:668
+#: src/input/r_avi.cpp:673
+#: src/input/r_avi.cpp:690
 msgid "Invalid Vorbis headers in AVI audio track."
 msgstr "有無效的 Vorbis 表頭，在 AVI 音軌中。"
 
@@ -6439,12 +6444,12 @@ msgstr "有警告資訊"
 msgid "There were warnings, or the process was terminated."
 msgstr "有警告資訊，或者處理處理程序被中止。"
 
-#: src/input/r_avi.cpp:609
+#: src/input/r_avi.cpp:601
 #: src/input/r_real.cpp:326
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr "此 AAC 軌道不含有效的表頭。無法解析 AAC 資訊。\n"
 
-#: src/input/r_avi.cpp:606
+#: src/input/r_avi.cpp:598
 msgid "This AAC track does not contain valid headers. The extra header size is %1% bytes, expected were 2 or 5 bytes.\n"
 msgstr "此 AAC 軌道不含有效的頭。超額的表頭大小為 %1% 位元組, 預期為 2 或 5 位元組。\n"
 
@@ -6841,7 +6846,7 @@ msgstr "未知的選項「%1%」。\n"
 msgid "Unknown parse mode in '%1% %2%'.\n"
 msgstr "未知的解析模式「%1% %2%」。\n"
 
-#: src/input/r_avi.cpp:563
+#: src/input/r_avi.cpp:555
 msgid "Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n"
 msgstr "此音軌的格式 0x%|1$04x| 未知或不支援。\n"
 
@@ -6865,7 +6870,7 @@ msgstr "不支援 MPEG mpeg_version: 0x%|1$02x| 於資料套件 %2% 時間碼 %3
 msgid "Unsupported format"
 msgstr "不支援的格式"
 
-#: src/input/r_matroska.cpp:1726
+#: src/input/r_matroska.cpp:1738
 msgid "Unsupported track type for this track.\n"
 msgstr "不支援此軌道的軌道類型。\n"
 
@@ -6953,7 +6958,7 @@ msgstr "使用 3 位元組的 NALU 長可能會導致某些 AVC/h.264 編解碼�
 msgid "Using the %1%AC3 output module.\n"
 msgstr "使用 %1%AC3 輸出模組。\n"
 
-#: src/input/r_avi.cpp:629
+#: src/input/r_avi.cpp:621
 msgid "Using the AAC audio output module.\n"
 msgstr "使用 AAC 音訊輸出模組。\n"
 
@@ -7003,9 +7008,9 @@ msgstr "使用 CorePanorama 字幕讀取器。\n"
 msgid "Using the DTS demultiplexer.\n"
 msgstr "使用 DTS 分離器。\n"
 
-#: src/input/r_avi.cpp:549
+#: src/input/r_avi.cpp:654
 #: src/input/r_dts.cpp:114
-#: src/input/r_matroska.cpp:1521
+#: src/input/r_matroska.cpp:1529
 #: src/input/r_mpeg_ps.cpp:1181
 #: src/input/r_wav.cpp:354
 msgid "Using the DTS output module.\n"
@@ -7025,7 +7030,7 @@ msgid "Using the FLAC demultiplexer.\n"
 msgstr "使用 FLAC 分離器。\n"
 
 #: src/input/r_flac.cpp:164
-#: src/input/r_matroska.cpp:1539
+#: src/input/r_matroska.cpp:1551
 #: src/input/r_ogm_flac.cpp:287
 msgid "Using the FLAC output module.\n"
 msgstr "使用 FLAC 輸出模組。\n"
@@ -7034,7 +7039,7 @@ msgstr "使用 FLAC 輸出模組。\n"
 msgid "Using the IVF demultiplexer.\n"
 msgstr "使用 IVF 分離器。\n"
 
-#: src/input/r_matroska.cpp:1658
+#: src/input/r_matroska.cpp:1670
 msgid "Using the Kate output module.\n"
 msgstr "使用 Kate 輸出模組。\n"
 
@@ -7055,7 +7060,7 @@ msgid "Using the MPEG PS demultiplexer.\n"
 msgstr "使用 MPEG PS 分離器。\n"
 
 #: src/input/r_avi.cpp:531
-#: src/input/r_matroska.cpp:1547
+#: src/input/r_matroska.cpp:1559
 #: src/input/r_mp3.cpp:71
 #: src/input/r_mpeg_ps.cpp:1171
 #: src/input/r_ogm.cpp:1004
@@ -7074,14 +7079,14 @@ msgstr "使用 MPEG-%1% 視訊輸出模組。\n"
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "使用 MPEG-1/2 視訊輸出模組。\n"
 
-#: src/input/r_matroska.cpp:1803
+#: src/input/r_matroska.cpp:1815
 #: src/input/r_qtmp4.cpp:1511
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "使用 MPEG-4 part 10 (AVC) 視訊輸出模組。\n"
 
 #: src/input/r_avc.cpp:136
 #: src/input/r_avi.cpp:324
-#: src/input/r_matroska.cpp:1783
+#: src/input/r_matroska.cpp:1795
 #: src/input/r_mpeg_ps.cpp:1210
 #: src/input/r_ogm.cpp:1128
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
@@ -7103,7 +7108,7 @@ msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr "使用 OGG/OGM 分離器。\n"
 
 #: src/input/r_avi.cpp:523
-#: src/input/r_matroska.cpp:1554
+#: src/input/r_matroska.cpp:1566
 #: src/input/r_ogm.cpp:1023
 #: src/input/r_qtmp4.cpp:1547
 #: src/input/r_wav.cpp:395
@@ -7138,7 +7143,7 @@ msgstr "使用 SSA/ASS 字幕讀取器。\n"
 msgid "Using the TTA demultiplexer.\n"
 msgstr "使用 TTA 分離器。\n"
 
-#: src/input/r_matroska.cpp:1565
+#: src/input/r_matroska.cpp:1577
 #: src/input/r_tta.cpp:109
 msgid "Using the TTA output module.\n"
 msgstr "使用 TTA 輸出模組。\n"
@@ -7182,11 +7187,11 @@ msgstr "使用 VP8 視訊輸出模組。\n"
 msgid "Using the VobBtn button reader.\n"
 msgstr "使用 VobBtn 按鈕讀取器。\n"
 
-#: src/input/r_matroska.cpp:1669
+#: src/input/r_matroska.cpp:1681
 msgid "Using the VobBtn output module.\n"
 msgstr "使用 VobBtn 輸出模組。\n"
 
-#: src/input/r_matroska.cpp:1642
+#: src/input/r_matroska.cpp:1654
 msgid "Using the VobSub output module.\n"
 msgstr "使用 VobSub 輸出模組。\n"
 
@@ -7198,8 +7203,8 @@ msgstr "使用 VobSub 字幕輸出模組 (語言: %1%)。\n"
 msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
 msgstr "使用 VobSub 字幕讀取器 (SUB 檔「%1%」)。\n"
 
-#: src/input/r_avi.cpp:678
-#: src/input/r_matroska.cpp:1572
+#: src/input/r_avi.cpp:708
+#: src/input/r_matroska.cpp:1584
 #: src/input/r_ogm.cpp:1044
 msgid "Using the Vorbis output module.\n"
 msgstr "使用 Vorbis 輸出模組。\n"
@@ -7216,7 +7221,7 @@ msgstr "使用附帶了校正檔的 WAVPACK 分離器。\n"
 msgid "Using the WAVPACK demultiplexer.\n"
 msgstr "使用 WAVPACK 分離器。\n"
 
-#: src/input/r_matroska.cpp:1595
+#: src/input/r_matroska.cpp:1607
 #: src/input/r_wavpack.cpp:108
 msgid "Using the WAVPACK output module.\n"
 msgstr "使用 WAVPACK 輸出模組。\n"
@@ -7230,7 +7235,7 @@ msgid "Using the passthrough output module for this %1% track.\n"
 msgstr "對軌道 %1% 使用呈遞輸出模組。\n"
 
 #: src/input/r_avi.cpp:381
-#: src/input/r_matroska.cpp:1650
+#: src/input/r_matroska.cpp:1662
 #: src/input/r_ogm.cpp:1075
 #: src/input/r_srt.cpp:60
 #: src/input/r_ssa.cpp:71
@@ -7639,7 +7644,7 @@ msgstr "每次取樣多少位元: %1%"
 msgid "buttons"
 msgstr "按鈕"
 
-#: src/common/byte_buffer.h:69
+#: src/common/byte_buffer.h:73
 msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"
 msgstr "byte_buffer_c: (pos + num) > size。不該發生。請提交錯誤報告。\n"
 
@@ -8026,7 +8031,7 @@ msgid "matroska_reader: Vorbis track does not contain valid headers.\n"
 msgstr "matroska_reader: Vorbis 軌道不含有效表頭。\n"
 
 #: src/input/r_matroska.cpp:1299
-#: src/input/r_matroska.cpp:1938
+#: src/input/r_matroska.cpp:1950
 msgid "matroska_reader: caught exception\n"
 msgstr "matroska_reader: 發生異常\n"
 
@@ -8524,8 +8529,8 @@ msgid "und (Undetermined)"
 msgstr "und (未定)"
 
 #: src/input/r_matroska.cpp:87
-#: src/input/r_matroska.cpp:2249
-#: src/input/r_matroska.cpp:2256
+#: src/input/r_matroska.cpp:2261
+#: src/input/r_matroska.cpp:2268
 #: src/input/r_mpeg_ps.cpp:1389
 #: src/common/mm_io_win.cpp:165
 #: src/mmg/mmg.cpp:60

@@ -1561,12 +1561,12 @@ msgstr "<ChapterDisplay> отсутствует <ChapterString>."
 msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr "<ChapterTrack> отсутствует <ChapterTrackNumber>."
 
-#: src/input/r_matroska.cpp:2060
+#: src/input/r_matroska.cpp:2072
 msgid "A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"
 msgstr "Блока группа оказалась в положении %1%, но не блок элемент был найден внутри него. Это может сделать mkvmerge аварию.\n"
 
-#: src/input/r_matroska.cpp:1960
-#: src/input/r_matroska.cpp:2070
+#: src/input/r_matroska.cpp:1972
+#: src/input/r_matroska.cpp:2082
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr "Блок был найден на метку %1% за номер трека %2%. Тем не менее, заголовки не найдены для этого номера трека. Блока будут пропущены.\n"
 
@@ -2487,7 +2487,7 @@ msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "Не удалось декодировать Base64 кодированные данные - это, кажется, неправильно."
 
 #: src/input/r_avi.cpp:327
-#: src/input/r_matroska.cpp:1771
+#: src/input/r_matroska.cpp:1783
 #: src/input/r_ogm.cpp:1131
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "Невозможно получить декодер конкретных данных конфигурации (AVCC) из этого AVC/H.264 трек.\n"
@@ -2516,6 +2516,11 @@ msgstr "Не удается найти кодек данных конфигур�
 #: src/input/r_ogm.cpp:354
 msgid "Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n"
 msgstr "Не удалось найти на следующей странице Ogg. Это указывает на поврежденный OGG/OGM файл. Постараюсь продолжить.\n"
+
+#: src/input/r_avi.cpp:659
+#: src/input/r_matroska.cpp:1532
+msgid "Could not find valid DTS headers in this track's first frames.\n"
+msgstr ""
 
 #: src/common/locale.cpp:133
 msgid "Could not initialize the iconv library for the conversion from %1% to UFT-8. Some strings will not be converted to UTF-8 and the resulting Matroska file might not comply with the Matroska specs (error: %2%, %3%).\n"
@@ -3637,9 +3642,9 @@ msgstr "Неверный UID. В этой главе UID уже использу
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
 msgstr "Неверный UID. Это издание UID уже используется. Оригинальные UID не был изменен."
 
-#: src/input/r_avi.cpp:638
-#: src/input/r_avi.cpp:643
-#: src/input/r_avi.cpp:660
+#: src/input/r_avi.cpp:668
+#: src/input/r_avi.cpp:673
+#: src/input/r_avi.cpp:690
 msgid "Invalid Vorbis headers in AVI audio track."
 msgstr "Неверный Vorbis заголовки AVI звуковой дорожки."
 
@@ -6485,12 +6490,12 @@ msgstr "Были предупреждения"
 msgid "There were warnings, or the process was terminated."
 msgstr "Были предупреждения, или процесс был закончен."
 
-#: src/input/r_avi.cpp:609
+#: src/input/r_avi.cpp:601
 #: src/input/r_real.cpp:326
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr "Эта дорожка AAC не содержит правильные заголовки. Не мог анализировать информацию AAC.\n"
 
-#: src/input/r_avi.cpp:606
+#: src/input/r_avi.cpp:598
 msgid "This AAC track does not contain valid headers. The extra header size is %1% bytes, expected were 2 or 5 bytes.\n"
 msgstr "Эта дорожка AAC не содержит правильные заголовки. Дополнительный размер заголовка - байты на %1%, ожидаемый были 2 или 5 байтов.\n"
 
@@ -6890,7 +6895,7 @@ msgstr "Неизвестный параметр '%1%'.\n"
 msgid "Unknown parse mode in '%1% %2%'.\n"
 msgstr "Неизвестный режим синтаксического анализа в '%1% %2%'.\n"
 
-#: src/input/r_avi.cpp:563
+#: src/input/r_avi.cpp:555
 msgid "Unknown/unsupported audio format 0x%|1$04x| for this audio track.\n"
 msgstr "Неизвестный/неподдерживаемый формат аудио 0x%|1$04x| для этой звуковой дорожки.\n"
 
@@ -6914,7 +6919,7 @@ msgstr "Не поддерживается MPEG mpeg_version: 0x%|1$02x| в па�
 msgid "Unsupported format"
 msgstr "Неподдерживаемый формат"
 
-#: src/input/r_matroska.cpp:1726
+#: src/input/r_matroska.cpp:1738
 msgid "Unsupported track type for this track.\n"
 msgstr "Неподдерживаемый тип дорожки для этой дорожки.\n"
 
@@ -7003,7 +7008,7 @@ msgstr "Использование длина NALU размер 3 байт мо�
 msgid "Using the %1%AC3 output module.\n"
 msgstr "Использование %1%AC3 выходного модуля.\n"
 
-#: src/input/r_avi.cpp:629
+#: src/input/r_avi.cpp:621
 msgid "Using the AAC audio output module.\n"
 msgstr "Использование AAC аудио выходного модуля.\n"
 
@@ -7053,9 +7058,9 @@ msgstr "Использование CorePanorama читателя субтитр�
 msgid "Using the DTS demultiplexer.\n"
 msgstr "Использование DTS демультиплексора.\n"
 
-#: src/input/r_avi.cpp:549
+#: src/input/r_avi.cpp:654
 #: src/input/r_dts.cpp:114
-#: src/input/r_matroska.cpp:1521
+#: src/input/r_matroska.cpp:1529
 #: src/input/r_mpeg_ps.cpp:1181
 #: src/input/r_wav.cpp:354
 msgid "Using the DTS output module.\n"
@@ -7075,7 +7080,7 @@ msgid "Using the FLAC demultiplexer.\n"
 msgstr "Использование FLAC демультиплексора.\n"
 
 #: src/input/r_flac.cpp:164
-#: src/input/r_matroska.cpp:1539
+#: src/input/r_matroska.cpp:1551
 #: src/input/r_ogm_flac.cpp:287
 msgid "Using the FLAC output module.\n"
 msgstr "Использование FLAC выходного модуля.\n"
@@ -7084,7 +7089,7 @@ msgstr "Использование FLAC выходного модуля.\n"
 msgid "Using the IVF demultiplexer.\n"
 msgstr "Использование IVF демультиплексора.\n"
 
-#: src/input/r_matroska.cpp:1658
+#: src/input/r_matroska.cpp:1670
 msgid "Using the Kate output module.\n"
 msgstr "Использование Kate выходного модуля.\n"
 
@@ -7105,7 +7110,7 @@ msgid "Using the MPEG PS demultiplexer.\n"
 msgstr "Использование MPEG PS демультиплексора.\n"
 
 #: src/input/r_avi.cpp:531
-#: src/input/r_matroska.cpp:1547
+#: src/input/r_matroska.cpp:1559
 #: src/input/r_mp3.cpp:71
 #: src/input/r_mpeg_ps.cpp:1171
 #: src/input/r_ogm.cpp:1004
@@ -7124,14 +7129,14 @@ msgstr "Использование MPEG-%1% видео выходного мод
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "Использование MPEG-1/2 видео выходного модуля.\n"
 
-#: src/input/r_matroska.cpp:1803
+#: src/input/r_matroska.cpp:1815
 #: src/input/r_qtmp4.cpp:1511
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "Использование MPEG-4 Part 10 (AVC) видео выводного модуля.\n"
 
 #: src/input/r_avc.cpp:136
 #: src/input/r_avi.cpp:324
-#: src/input/r_matroska.cpp:1783
+#: src/input/r_matroska.cpp:1795
 #: src/input/r_mpeg_ps.cpp:1210
 #: src/input/r_ogm.cpp:1128
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
@@ -7153,7 +7158,7 @@ msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr "Использование OGG/OGM демультиплексора.\n"
 
 #: src/input/r_avi.cpp:523
-#: src/input/r_matroska.cpp:1554
+#: src/input/r_matroska.cpp:1566
 #: src/input/r_ogm.cpp:1023
 #: src/input/r_qtmp4.cpp:1547
 #: src/input/r_wav.cpp:395
@@ -7188,7 +7193,7 @@ msgstr "Использование SSA/ASS читателя субтитров.\
 msgid "Using the TTA demultiplexer.\n"
 msgstr "Использование TTA демультиплексора.\n"
 
-#: src/input/r_matroska.cpp:1565
+#: src/input/r_matroska.cpp:1577
 #: src/input/r_tta.cpp:109
 msgid "Using the TTA output module.\n"
 msgstr "Использование TTA выходного модуля.\n"
@@ -7232,11 +7237,11 @@ msgstr "Использование VP8 видео выводного модул�
 msgid "Using the VobBtn button reader.\n"
 msgstr "Использование VobBtn читателя кнопок.\n"
 
-#: src/input/r_matroska.cpp:1669
+#: src/input/r_matroska.cpp:1681
 msgid "Using the VobBtn output module.\n"
 msgstr "Использование VobBtn выходного модуля.\n"
 
-#: src/input/r_matroska.cpp:1642
+#: src/input/r_matroska.cpp:1654
 msgid "Using the VobSub output module.\n"
 msgstr "Использование VobSub выходного модуля.\n"
 
@@ -7248,8 +7253,8 @@ msgstr "Использование VobSub выходного модуля суб
 msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
 msgstr "Использование VobSub читателя субтитров. (SUB файл '%1%').\n"
 
-#: src/input/r_avi.cpp:678
-#: src/input/r_matroska.cpp:1572
+#: src/input/r_avi.cpp:708
+#: src/input/r_matroska.cpp:1584
 #: src/input/r_ogm.cpp:1044
 msgid "Using the Vorbis output module.\n"
 msgstr "Использование Vorbis выходного модуля.\n"
@@ -7266,7 +7271,7 @@ msgstr "Использование WavPack демультиплексора с �
 msgid "Using the WAVPACK demultiplexer.\n"
 msgstr "Использование WavPack демультиплексора.\n"
 
-#: src/input/r_matroska.cpp:1595
+#: src/input/r_matroska.cpp:1607
 #: src/input/r_wavpack.cpp:108
 msgid "Using the WAVPACK output module.\n"
 msgstr "Использование WavPack выходного модуля.\n"
@@ -7280,7 +7285,7 @@ msgid "Using the passthrough output module for this %1% track.\n"
 msgstr "Использование передачи результата модуля этой %1% дорожке.\n"
 
 #: src/input/r_avi.cpp:381
-#: src/input/r_matroska.cpp:1650
+#: src/input/r_matroska.cpp:1662
 #: src/input/r_ogm.cpp:1075
 #: src/input/r_srt.cpp:60
 #: src/input/r_ssa.cpp:71
@@ -7691,7 +7696,7 @@ msgstr "Разрядность: %1%"
 msgid "buttons"
 msgstr "Кнопки"
 
-#: src/common/byte_buffer.h:69
+#: src/common/byte_buffer.h:73
 msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"
 msgstr "byte_buffer_c: (pos + num) > size. Не должен был случиться. Пожалуйста подайте сообщение об ошибках.\n"
 
@@ -8078,7 +8083,7 @@ msgid "matroska_reader: Vorbis track does not contain valid headers.\n"
 msgstr "matroska_reader: Vorbis дорожка, не содержит нужных заголовков.\n"
 
 #: src/input/r_matroska.cpp:1299
-#: src/input/r_matroska.cpp:1938
+#: src/input/r_matroska.cpp:1950
 msgid "matroska_reader: caught exception\n"
 msgstr "matroska_reader: поймал исключение\n"
 
@@ -8576,8 +8581,8 @@ msgid "und (Undetermined)"
 msgstr "und (Неопределенный)"
 
 #: src/input/r_matroska.cpp:87
-#: src/input/r_matroska.cpp:2249
-#: src/input/r_matroska.cpp:2256
+#: src/input/r_matroska.cpp:2261
+#: src/input/r_matroska.cpp:2268
 #: src/input/r_mpeg_ps.cpp:1389
 #: src/common/mm_io_win.cpp:165
 #: src/mmg/mmg.cpp:60
