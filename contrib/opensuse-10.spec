@@ -84,6 +84,7 @@ rm -rf $RPM_BUILD_ROOT
 /usr/share/man/zh_CN/man1/mkvpropedit.1.gz
 /usr/share/mkvtoolnix/*
 /usr/share/locale/de/LC_MESSAGES/mkvtoolnix.mo
+/usr/share/locale/es/LC_MESSAGES/mkvtoolnix.mo
 /usr/share/locale/ja/LC_MESSAGES/mkvtoolnix.mo
 /usr/share/locale/nl/LC_MESSAGES/mkvtoolnix.mo
 /usr/share/locale/ru/LC_MESSAGES/mkvtoolnix.mo

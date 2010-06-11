@@ -56,6 +56,7 @@ translation_c::initialize_available_translations() {
   ms_available_translations.push_back(translation_c("en_US", "en",    "english",   "English",             "English",     false));
 #if defined(HAVE_LIBINTL_H)
   ms_available_translations.push_back(translation_c("de_DE", "de",    "german",    "German",              "Deutsch",     false));
+  ms_available_translations.push_back(translation_c("es_ES", "es",    "spanish",   "Spanish",             "Español",     false));
   ms_available_translations.push_back(translation_c("ja_JP", "ja",    "japanese",  "Japanese",            "日本語",      true));
   ms_available_translations.push_back(translation_c("nl_NL", "nl",    "dutch",     "Dutch",               "Nederlands",  false));
   ms_available_translations.push_back(translation_c("ru_RU", "ru",    "russian",   "Russian",             "Русский",     false));
