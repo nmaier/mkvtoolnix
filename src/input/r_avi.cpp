@@ -538,17 +538,9 @@ avi_reader_c::add_audio_demuxer(int aid) {
         mxinfo_tid(m_ti.m_fname, aid + 1, Y("Using the AC3 output module.\n"));
       break;
 
-    case 0x2001: {              // DTS
-      dts_header_t dtsheader;
-
-      dtsheader.core_sampling_frequency = demuxer.m_samples_per_second;
-      dtsheader.audio_channels          = demuxer.m_channels;
-      packetizer                        = new dts_packetizer_c(this, m_ti, dtsheader, true);
-
-      if (verbose)
-        mxinfo_tid(m_ti.m_fname, aid + 1, Y("Using the DTS output module.\n"));
+    case 0x2001:                // DTS
+      packetizer = create_dts_packetizer(aid);
       break;
-    }
 
     case 0x00ff:
     case 0x706d:                // AAC
@@ -629,6 +621,44 @@ avi_reader_c::create_aac_packetizer(int aid,
     mxinfo_tid(m_ti.m_fname, aid + 1, Y("Using the AAC audio output module.\n"));
 
   return packetizer;
+}
+
+generic_packetizer_c *
+avi_reader_c::create_dts_packetizer(int aid) {
+  try {
+    AVI_set_audio_track(m_avi, aid);
+
+    long audio_position   = AVI_get_audio_position_index(m_avi);
+    unsigned int num_read = 0;
+    int dts_position      = -1;
+    byte_buffer_c buffer;
+    dts_header_t dtsheader;
+
+    while ((-1 == dts_position) && (10 > num_read)) {
+      memory_cptr chunk = memory_c::alloc(AVI_read_audio_chunk(m_avi, NULL));
+      if (AVI_read_audio_chunk(m_avi, reinterpret_cast<char *>(chunk->get_buffer())) < 0)
+        throw false;
+
+      buffer.add(chunk);
+      dts_position = find_dts_header(buffer.get_buffer(), buffer.get_size(), &dtsheader);
+    }
+
+    if (-1 == dts_position)
+      throw false;
+
+    AVI_set_audio_position_index(m_avi, audio_position);
+
+    generic_packetizer_c *packetizer = new dts_packetizer_c(this, m_ti, dtsheader, true);
+
+    if (verbose)
+      mxinfo_tid(m_ti.m_fname, aid + 1, Y("Using the DTS output module.\n"));
+
+    return packetizer;
+
+  } catch (...) {
+    mxerror_tid(m_ti.m_fname, aid + 1, Y("Could not find valid DTS headers in this track's first frames.\n"));
+    return NULL;
+  }
 }
 
 generic_packetizer_c *

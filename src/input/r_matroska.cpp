@@ -1512,13 +1512,25 @@ kax_reader_c::create_ac3_audio_packetizer(kax_track_t *t,
 void
 kax_reader_c::create_dts_audio_packetizer(kax_track_t *t,
                                           track_info_c &nti) {
-  dts_header_t dtsheader;
+  try {
+    read_first_frames(t, 5);
 
-  dtsheader.core_sampling_frequency = (unsigned int)t->a_sfreq;
-  dtsheader.audio_channels          = t->a_channels;
+    byte_buffer_c buffer;
+    foreach(memory_cptr &frame, t->first_frames_data)
+      buffer.add(frame);
 
-  t->ptzr = add_packetizer(new dts_packetizer_c(this, nti, dtsheader, true));
-  mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the DTS output module.\n"));
+    dts_header_t dtsheader;
+    int position = find_dts_header(buffer.get_buffer(), buffer.get_size(), &dtsheader);
+
+    if (-1 == position)
+      throw false;
+
+    t->ptzr = add_packetizer(new dts_packetizer_c(this, nti, dtsheader, true));
+    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the DTS output module.\n"));
+
+  } catch (...) {
+    mxerror_tid(m_ti.m_fname, t->tnum, Y("Could not find valid DTS headers in this track's first frames.\n"));
+  }
 }
 
 #if defined(HAVE_FLAC_FORMAT_H)

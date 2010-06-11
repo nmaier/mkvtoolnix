@@ -100,6 +100,7 @@ protected:
   virtual memory_cptr extract_avcc();
 
   virtual generic_packetizer_c *create_aac_packetizer(int aid, avi_demuxer_t &demuxer);
+  virtual generic_packetizer_c *create_dts_packetizer(int aid);
   virtual generic_packetizer_c *create_vorbis_packetizer(int aid);
   virtual void create_subs_packetizer(int idx);
   virtual void create_srt_packetizer(int idx);

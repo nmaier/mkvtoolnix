@@ -1,3 +1,8 @@
+2010-06-11  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed access to uninitialized memory when
+	reading DTS tracks from AVI and Matroska files.
+
 2010-06-07  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: The handling of Matroska files in which the
