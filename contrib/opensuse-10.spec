@@ -60,6 +60,13 @@ rm -rf $RPM_BUILD_ROOT
 /usr/bin/mkvmerge
 /usr/bin/mkvmerge-gui
 /usr/bin/mkvpropedit
+/usr/share/applications/mkvmergeGUI.desktop
+/usr/share/applications/mkvinfo.desktop
+/usr/share/mime/packages/mkvtoolnix.xml
+/usr/share/icons/hicolor/32x32/apps/mkvmergeGUI.png
+/usr/share/icons/hicolor/32x32/apps/mkvinfo.png
+/usr/share/icons/hicolor/64x64/apps/mkvmergeGUI.png
+/usr/share/icons/hicolor/64x64/apps/mkvinfo.png
 /usr/share/man/man1/mkvextract.1.gz
 /usr/share/man/man1/mkvinfo.1.gz
 /usr/share/man/man1/mkvmerge.1.gz

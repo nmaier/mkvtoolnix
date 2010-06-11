@@ -1,7 +1,7 @@
 diff -ur mkvtoolnix-4.0.0.orig/Makefile.in mkvtoolnix-4.0.0/Makefile.in
---- mkvtoolnix-4.0.0.orig/Makefile.in	2010-06-05 14:24:39.000000000 +0200
-+++ mkvtoolnix-4.0.0/Makefile.in	2010-06-05 18:17:19.987445645 +0200
-@@ -164,8 +164,8 @@
+--- mkvtoolnix-4.0.0.orig/Makefile.in	2010-06-12 11:38:15.000000000 +0200
++++ mkvtoolnix-4.0.0/Makefile.in	2010-06-12 11:41:05.683978927 +0200
+@@ -167,8 +167,8 @@
  APPLICATIONS = src/mkvmerge@EXEEXT@ src/mkvinfo@EXEEXT@ src/mkvextract@EXEEXT@ src/mkvpropedit@EXEEXT@
  MANPAGES = doc/man/mkvmerge.1 doc/man/mkvinfo.1 doc/man/mkvextract.1 doc/man/mkvpropedit.1
  ifeq (yes,$(USE_WXWIDGETS))
@@ -9,10 +9,10 @@ diff -ur mkvtoolnix-4.0.0.orig/Makefile.in mkvtoolnix-4.0.0/Makefile.in
 -MANPAGES += doc/man/mmg.1
 +APPLICATIONS += src/mmg/mkvmerge-gui@EXEEXT@
 +MANPAGES += doc/man/mkvmerge-gui.1
+ TARGET_INSTALL_SHARED = install-shared
  endif
  
- TRANSLATIONS = @TRANSLATIONS@
-@@ -250,6 +250,7 @@
+@@ -254,6 +254,7 @@
  
  install-programs: $(APPLICATIONS)
  	$(mkinstalldirs) $(DESTDIR)$(bindir)
@@ -20,7 +20,7 @@ diff -ur mkvtoolnix-4.0.0.orig/Makefile.in mkvtoolnix-4.0.0/Makefile.in
  	@list='$(APPLICATIONS)'; for p in $$list; do \
  	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
  	  if test -f $$p ; then \
-@@ -261,6 +262,7 @@
+@@ -285,6 +286,7 @@
  
  install-mans:
  	$(mkinstalldirs) $(DESTDIR)$(man1dir)
@@ -28,7 +28,7 @@ diff -ur mkvtoolnix-4.0.0.orig/Makefile.in mkvtoolnix-4.0.0/Makefile.in
  	@for i in $(MANPAGES); do \
  	  inst=`echo $$i | sed -e 's/^.*\///'`; \
  	  echo " $(INSTALL_DATA) $$i $(DESTDIR)$(man1dir)/$$inst"; \
-@@ -269,6 +271,7 @@
+@@ -293,6 +295,7 @@
  
  install-translated-mans:
  	@for lang in $(MANPAGES_TRANSLATIONS); do \
@@ -36,7 +36,7 @@ diff -ur mkvtoolnix-4.0.0.orig/Makefile.in mkvtoolnix-4.0.0/Makefile.in
  	  $(mkinstalldirs) $(DESTDIR)$(mandir)/$$lang/man1; \
  	  for manpage in $(MANPAGES); do \
  	    inst=`echo $$manpage | sed -e 's/^.*\///'`; \
-@@ -632,6 +635,8 @@
+@@ -656,6 +659,8 @@
  	@echo '    LINK ' $@
  	$(Q)$(LINK) -o $@ $(mmg_OBJECTS) $(mmg_LDADD)
  
@@ -45,4 +45,15 @@ diff -ur mkvtoolnix-4.0.0.orig/Makefile.in mkvtoolnix-4.0.0/Makefile.in
  .SECONDARY:
  
  #
-Only in mkvtoolnix-4.0.0: Makefile.in.orig
+diff -ur mkvtoolnix-4.0.0.orig/share/desktop/mkvmergeGUI.desktop mkvtoolnix-4.0.0/share/desktop/mkvmergeGUI.desktop
+--- mkvtoolnix-4.0.0.orig/share/desktop/mkvmergeGUI.desktop	2010-06-12 11:38:15.000000000 +0200
++++ mkvtoolnix-4.0.0/share/desktop/mkvmergeGUI.desktop	2010-06-12 11:40:36.423978502 +0200
+@@ -6,7 +6,7 @@
+ GenericName[es]=Creador de ficheros MKV
+ GenericName[fr]=Créateur de fichiers MKV
+ Icon=mkvmergeGUI
+-Exec=mmg
++Exec=mkvmerge-gui
+ Terminal=false
+ MimeType=application/x-mmg-settings;video/x-matroska;audio/x-matroska;
+ Categories=GNOME;AudioVideo;AudioVideoEditing;

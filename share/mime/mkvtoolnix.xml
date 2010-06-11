@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="application/x-mmg-settings">
+    <comment>mkvmerge GUI settings</comment>
+    <comment xml:lang="de">Einstellungen für mkvmerge GUI</comment>
+    <comment xml:lang="es">ajustes de mkvmerge GUI</comment>
+    <glob pattern="*.mmg"/>
+    <magic>
+      <match type="string" offset="0" value="[mkvmergeGUI]"/>
+    </magic>
+    <sub-class-of type="text/plain"/>
+  </mime-type>
+</mime-info>

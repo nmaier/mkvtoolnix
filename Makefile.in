@@ -32,6 +32,9 @@ pkgincludedir = $(includedir)/@PACKAGE@
 top_builddir = .
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 localedir = $(datadir)/locale
+desktopdir = $(datadir)/applications
+mimepackagesdir = $(datadir)/mime/packages
+icondir = $(datadir)/icons/hicolor
 
 # Common programs
 AR = @AR@
@@ -166,6 +169,7 @@ MANPAGES = doc/man/mkvmerge.1 doc/man/mkvinfo.1 doc/man/mkvextract.1 doc/man/mkv
 ifeq (yes,$(USE_WXWIDGETS))
 APPLICATIONS += src/mmg/mmg@EXEEXT@
 MANPAGES += doc/man/mmg.1
+TARGET_INSTALL_SHARED = install-shared
 endif
 
 TRANSLATIONS = @TRANSLATIONS@
@@ -246,7 +250,7 @@ endif
 
 all: $(MANPAGES_DEP) $(TAGSFILE) $(APPLICATIONS) $(TRANSLATIONS_MOS) $(HTMLHELPBOOKS)
 
-install: install-programs install-mans install-translated-mans install-trans install-guide
+install: install-programs $(TARGET_INSTALL_SHARED) install-mans install-translated-mans install-trans install-guide
 
 install-programs: $(APPLICATIONS)
 	$(mkinstalldirs) $(DESTDIR)$(bindir)
@@ -257,6 +261,26 @@ install-programs: $(APPLICATIONS)
 	   echo " $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/$$f"; \
 	   $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/$$f; \
 	  else :; fi; \
+	done
+
+install-shared:
+	$(mkinstalldirs) $(DESTDIR)$(desktopdir) $(DESTDIR)$(mimepackagesdir)
+	@for file in share/desktop/*.desktop ; do \
+		echo " $(INSTALL_DATA) $$file $(DESTDIR)$(desktopdir)/" ; \
+		$(INSTALL_DATA) $$file $(DESTDIR)$(desktopdir)/ ; \
+	done
+	@for file in share/mime/*.xml ; do \
+		echo " $(INSTALL_DATA) $$file $(DESTDIR)$(mimepackagesdir)/" ; \
+		$(INSTALL_DATA) $$file $(DESTDIR)$(mimepackagesdir)/ ; \
+	done
+	@for dir in share/icons/* ; do \
+		dir=`echo "$$dir" | sed 's,.*/,,'` ; \
+		echo "$(mkinstalldirs) $(DESTDIR)$(icondir)/$$dir/apps" ; \
+		$(mkinstalldirs) $(DESTDIR)$(icondir)/$$dir/apps ; \
+		for file in share/icons/$$dir/*.png ; do \
+			echo " $(INSTALL_DATA) $$file $(DESTDIR)$(icondir)/$$dir/apps/" ; \
+			$(INSTALL_DATA) $$file $(DESTDIR)$(icondir)/$$dir/apps/ ; \
+		done ; \
 	done
 
 install-mans:

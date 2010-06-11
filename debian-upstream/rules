@@ -88,7 +88,6 @@ binary-arch: build install
 	dh_installman --language=ja -pmkvtoolnix-gui doc/man/ja/mmg.1
 	dh_installman --language=zh_CN doc/man/zh_CN/mkvextract.1 doc/man/zh_CN/mkvinfo.1 doc/man/zh_CN/mkvmerge.1 doc/man/zh_CN/mkvpropedit.1
 	dh_installman --language=zh_CN -pmkvtoolnix-gui doc/man/zh_CN/mmg.1
-	dh_desktop -pmkvtoolnix-gui
 
 	dh_link -pmkvtoolnix usr/share/man/man1/mkvinfo.1.gz usr/share/man/man1/mkvinfo-text.1.gz
 	dh_link -pmkvtoolnix-gui usr/share/man/man1/mkvinfo.1.gz usr/share/man/man1/mkvinfo-gui.1.gz
