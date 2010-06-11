@@ -94,22 +94,22 @@ Verwijdert alle voorgekomen eigenschappen
 .PP
 Andere opties:
 .PP
-\fB\-\-command\-line\-charset\fR \fIkarakter\-set\fR
+\fB\-\-command\-line\-charset\fR \fI(karakter\-set)\fR
 .RS 4
 Plaatst het karakter set om de reeksen om te zetten die vanaf de comando regel worden opgegeven\&. Standaard wordt gebruikt de karakter set die afhankelijk is van wat er in uw besturingssysteem staat aangegeven (lokatie)\&.
 .RE
 .PP
-\fB\-\-output\-charset\fR \fIkarakter\-set\fR
+\fB\-\-output\-charset\fR \fI(karakter\-set)\fR
 .RS 4
 Stelt de karakter set in waarnaar de reeksen dienen te worden geconverteerd naar de uitvoer\&. Standaard wordt gebruikt de karakter set die afhankelijk is van wat er in uw besturingssysteem staat aangegeven (lokatie)\&.
 .RE
 .PP
-\fB\-r\fR, \fB\-\-redirect\-output\fR \fIbestands\-naam\fR
+\fB\-r\fR, \fB\-\-redirect\-output\fR \fI(bestands\-naam)\fR
 .RS 4
 Schrijft alle berichten naar een bestand
 \fIfile\-name\fR
 i\&.p\&.v naar het \*(Aqapparaat/houder\*(Aq\&. Terwijl dit gemakkelijk met uitvoer omleiden kan worden gedaan er zijn gevallen waarin deze optie nodig is: wanneer de verwerker e\&.e\&.a her\-interpreteert voordat het geschreven wordt naar het uitvoer bestand\&. De karakter set met
-\fB\-\-uitvoer\-karakter set\fR
+\fB\-\-output\-charset\fR
 is toegewezen\&.
 .RE
 .PP
@@ -121,7 +121,7 @@ Forceert de vertaling voor de te gebruiken taal
 \fILANG\fR,
 \fILC_MESSAGES\fR
 en
-\fILC_ALL\fR\&. Opvragen van een \*(Aqlist\*(Aq als de
+\fILC_ALL\fR\&. Opvragen van een \*(Aqlist\*(Aq als een
 \fIcode\fR
 zal voor zorgen dat
 \fBmkvextract\fR(1)
@@ -148,7 +148,7 @@ Toon versie informatie en sluit af\&.
 \fB@\fRoptie\*(Aqs\-bestand
 .RS 4
 Leest extra commando regel argumenten in van een bestand
-\fIoptions\-file\fR\&. Regels met een spatie (lege ruimte) als eerste karakter, worden gemarkeerd als een hash (\*(Aq#\*(Aq) worden behandeld als commentaar en worden genegeerd\&. Een spatie aan het begin en einde van een regel worden verwijderd\&. Elke regel mag precies \('e\('en optie bevatten\&. Een meta karakter negeren is niet mogelijk\&.
+\fIoptions\-file\fR\&. Regels met een spatie (lege ruimte) als eerste karakter, worden gemarkeerd als een hash (waarde) (\*(Aq#\*(Aq) worden behandeld als commentaar en worden genegeerd\&. Een spatie aan het begin en einde van een regel worden verwijderd\&. Elke regel mag precies \('e\('en optie bevatten\&. Een meta karakter negeren is niet mogelijk\&.
 .sp
 De commando regel \*(Aq\fBmkvpropedit source\&.mkv \-\-edit track:a2 \-\-set name=Comments\fR\*(Aq kon niet worden geconverteerd naar het volgende optie bestand:
 .sp
@@ -222,7 +222,7 @@ de optie uitvoert\&.
 .RS 4
 Als de parameter start met een \*(Aq=\*(Aq gevolgd door een nummer
 \fIuid\fR
-dan het spoor het van wie het spoor
+dan het spoor van wie het spoor
 UID
 element gelijk is met
 \fIuid\fR\&. Spoor
