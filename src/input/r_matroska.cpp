@@ -1202,6 +1202,7 @@ kax_reader_c::read_headers() {
 
     // Next element must be a segment
     l0 = m_es->FindNextID(EBML_INFO(KaxSegment), 0xFFFFFFFFFFFFFFFFLL);
+    counted_ptr<EbmlElement> l0_cptr(l0);
     if (NULL == l0) {
       if (verbose)
         mxwarn(Y("matroska_reader: No segment found.\n"));
