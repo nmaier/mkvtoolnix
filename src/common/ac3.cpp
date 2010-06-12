@@ -80,7 +80,7 @@ parse_eac3_header_full(const unsigned char *buf,
   if (!look_for_second_header)
     return true;
 
-  if (((header.bytes + 5) > size) || (0x0b != buf[header.bytes]) || (0x77 != buf[header.bytes + 1]))
+  if (((header.bytes + 5) > size) || (get_uint16_be(&buf[header.bytes]) != AC3_SYNC_WORD))
     return false;
 
   ac3_header_t second_header;
@@ -195,7 +195,7 @@ find_ac3_header(const unsigned char *buf,
   size_t i;
 
   for (i = 0; (size - 7) > i; ++i) {
-    if ((0x0b != buf[i]) || (0x77 != buf[i + 1]))
+    if (get_uint16_be(&buf[i]) != AC3_SYNC_WORD)
       continue;
 
     header.bsid = (buf[i + 5] >> 3);

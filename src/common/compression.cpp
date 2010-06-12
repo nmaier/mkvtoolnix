@@ -16,7 +16,10 @@
 #include <matroska/KaxContentEncoding.h>
 #include <matroska/KaxTracks.h>
 
+#include "common/ac3.h"
 #include "common/compression.h"
+#include "common/dirac.h"
+#include "common/dts.h"
 #include "common/ebml.h"
 #include "common/endian.h"
 #include "common/hacks.h"
@@ -24,7 +27,7 @@
 using namespace libmatroska;
 
 const char *compression_methods[] = {
-  "unspecified", "zlib", "bz2", "lzo", "header_removal", "mpeg4_p2", "none"
+  "unspecified", "zlib", "bz2", "lzo", "header_removal", "mpeg4_p2", "dirac", "dts", "ac3", "mp3", "analyze_header_removal", "none"
 };
 
 static const int compression_method_map[] = {
@@ -34,6 +37,11 @@ static const int compression_method_map[] = {
   2,                            // lzo1x
   3,                            // header removal
   3,                            // mpeg4_p2 is header removal
+  3,                            // dirac is header removal
+  3,                            // dts is header removal
+  3,                            // ac3 is header removal
+  3,                            // mp3 is header removal
+  999999999,                    // analyze_header_removal
   0                             // none
 };
 
@@ -300,15 +308,88 @@ header_removal_compressor_c::set_track_headers(KaxContentEncoding &c_encoding) {
   compressor_c::set_track_headers(c_encoding);
 
   // Set compression parameters.
-  GetChild<KaxContentCompSettings>(GetChild<KaxContentCompression>(c_encoding)).SetBuffer(m_bytes->get_buffer(), m_bytes->get_size());
+  GetChild<KaxContentCompSettings>(GetChild<KaxContentCompression>(c_encoding)).CopyBuffer(m_bytes->get_buffer(), m_bytes->get_size());
 }
 
-mpeg4_p2_compressor_c::mpeg4_p2_compressor_c() {
-  if (!hack_engaged(ENGAGE_NATIVE_MPEG4))
-    mxerror(Y("The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"));
+// ------------------------------------------------------------
 
+analyze_header_removal_compressor_c::analyze_header_removal_compressor_c()
+  : compressor_c(COMPRESSION_ANALYZE_HEADER_REMOVAL)
+  , m_packet_counter(0)
+{
+}
+
+analyze_header_removal_compressor_c::~analyze_header_removal_compressor_c() {
+  if (!m_bytes.is_set())
+    mxinfo("Analysis failed: no packet encountered\n");
+
+  else if (m_bytes->get_size() == 0)
+    mxinfo("Analysis complete but no similarities found.\n");
+
+  else {
+    mxinfo(boost::format("Analysis complete. %1% identical byte(s) at the start of each of the %2% packet(s). Hex dump of the content:\n") % m_bytes->get_size() % m_packet_counter);
+    mxhexdump(0, m_bytes->get_buffer(), m_bytes->get_size());
+  }
+}
+
+void
+analyze_header_removal_compressor_c::decompress(memory_cptr &buffer) {
+  mxerror("analyze_header_removal_compressor_c::decompress(): not supported\n");
+}
+
+void
+analyze_header_removal_compressor_c::compress(memory_cptr &buffer) {
+  ++m_packet_counter;
+
+  if (!m_bytes.is_set()) {
+    m_bytes = memory_cptr(buffer->clone());
+    return;
+  }
+
+  unsigned char *current = buffer->get_buffer();
+  unsigned char *saved   = m_bytes->get_buffer();
+  size_t i, new_size     = 0;
+
+  for (i = 0; i < std::min(buffer->get_size(), m_bytes->get_size()); ++i, ++new_size)
+    if (current[i] != saved[i])
+      break;
+
+  m_bytes->set_size(new_size);
+}
+
+void
+analyze_header_removal_compressor_c::set_track_headers(KaxContentEncoding &c_encoding) {
+}
+
+// ------------------------------------------------------------
+
+mpeg4_p2_compressor_c::mpeg4_p2_compressor_c() {
+  memory_cptr bytes = memory_c::alloc(3);
+  put_uint24_be(bytes->get_buffer(), 0x000001);
+  set_bytes(bytes);
+}
+
+dirac_compressor_c::dirac_compressor_c() {
   memory_cptr bytes = memory_c::alloc(4);
-  put_uint32_be(bytes->get_buffer(), 0x000001b6);
+  put_uint32_be(bytes->get_buffer(), DIRAC_SYNC_WORD);
+  set_bytes(bytes);
+}
+
+dts_compressor_c::dts_compressor_c() {
+  memory_cptr bytes = memory_c::alloc(4);
+  put_uint32_be(bytes->get_buffer(), DTS_HEADER_MAGIC);
+  set_bytes(bytes);
+}
+
+ac3_compressor_c::ac3_compressor_c() {
+  memory_cptr bytes = memory_c::alloc(2);
+  put_uint16_be(bytes->get_buffer(), AC3_SYNC_WORD);
+  set_bytes(bytes);
+}
+
+mp3_compressor_c::mp3_compressor_c() {
+  memory_cptr bytes = memory_c::alloc(1);
+  bytes->get_buffer()[0] = 0xff;
   set_bytes(bytes);
 }
 
@@ -357,6 +438,21 @@ compressor_c::create(const char *method) {
 
   if (!strcasecmp(method, compression_methods[COMPRESSION_MPEG4_P2]))
     return compressor_ptr(new mpeg4_p2_compressor_c());
+
+  if (!strcasecmp(method, compression_methods[COMPRESSION_DIRAC]))
+    return compressor_ptr(new dirac_compressor_c());
+
+  if (!strcasecmp(method, compression_methods[COMPRESSION_DTS]))
+    return compressor_ptr(new dts_compressor_c());
+
+  if (!strcasecmp(method, compression_methods[COMPRESSION_AC3]))
+    return compressor_ptr(new ac3_compressor_c());
+
+  if (!strcasecmp(method, compression_methods[COMPRESSION_MP3]))
+    return compressor_ptr(new mp3_compressor_c());
+
+  if (!strcasecmp(method, compression_methods[COMPRESSION_ANALYZE_HEADER_REMOVAL]))
+    return compressor_ptr(new analyze_header_removal_compressor_c());
 
   if (!strcasecmp(method, "none"))
     return compressor_ptr(new compressor_c(COMPRESSION_NONE));

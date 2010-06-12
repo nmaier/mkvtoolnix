@@ -95,6 +95,18 @@ put_uint16_le(void *buf,
 }
 
 void
+put_uint24_le(void *buf,
+              uint32_t value) {
+  unsigned char *tmp;
+
+  tmp = (unsigned char *) buf;
+
+  tmp[0] = value & 0xff;
+  tmp[1] = (value >>= 8) & 0xff;
+  tmp[2] = (value >>= 8) & 0xff;
+}
+
+void
 put_uint32_le(void *buf,
               uint32_t value) {
   unsigned char *tmp;
@@ -132,6 +144,18 @@ put_uint16_be(void *buf,
   tmp = (unsigned char *) buf;
 
   tmp[1] = value & 0xff;
+  tmp[0] = (value >>= 8) & 0xff;
+}
+
+void
+put_uint24_be(void *buf,
+              uint32_t value) {
+  unsigned char *tmp;
+
+  tmp = (unsigned char *) buf;
+
+  tmp[2] = value & 0xff;
+  tmp[1] = (value >>= 8) & 0xff;
   tmp[0] = (value >>= 8) & 0xff;
 }
 

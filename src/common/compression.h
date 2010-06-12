@@ -32,6 +32,11 @@ enum compression_method_e {
   COMPRESSION_LZO,
   COMPRESSION_HEADER_REMOVAL,
   COMPRESSION_MPEG4_P2,
+  COMPRESSION_DIRAC,
+  COMPRESSION_DTS,
+  COMPRESSION_AC3,
+  COMPRESSION_MP3,
+  COMPRESSION_ANALYZE_HEADER_REMOVAL,
   COMPRESSION_NONE,
   COMPRESSION_NUM = COMPRESSION_NONE
 };
@@ -140,9 +145,44 @@ public:
   virtual void set_track_headers(KaxContentEncoding &c_encoding);
 };
 
+class MTX_DLL_API analyze_header_removal_compressor_c: public compressor_c {
+protected:
+  memory_cptr m_bytes;
+  unsigned int m_packet_counter;
+
+public:
+  analyze_header_removal_compressor_c();
+  virtual ~analyze_header_removal_compressor_c();
+
+  virtual void decompress(memory_cptr &buffer);
+  virtual void compress(memory_cptr &buffer);
+
+  virtual void set_track_headers(KaxContentEncoding &c_encoding);
+};
+
 class MTX_DLL_API mpeg4_p2_compressor_c: public header_removal_compressor_c {
 public:
   mpeg4_p2_compressor_c();
+};
+
+class MTX_DLL_API dirac_compressor_c: public header_removal_compressor_c {
+public:
+  dirac_compressor_c();
+};
+
+class MTX_DLL_API dts_compressor_c: public header_removal_compressor_c {
+public:
+  dts_compressor_c();
+};
+
+class MTX_DLL_API ac3_compressor_c: public header_removal_compressor_c {
+public:
+  ac3_compressor_c();
+};
+
+class MTX_DLL_API mp3_compressor_c: public header_removal_compressor_c {
+public:
+  mp3_compressor_c();
 };
 
 // ------------------------------------------------------------------

@@ -997,24 +997,43 @@ parse_arg_compression(const std::string &s,
   if (parts[1].size() == 0)
     mxerror(boost::format(Y("Invalid compression option specified in '--compression %1%'.\n")) % s);
 
+  std::vector<std::string> available_compression_methods;
+  available_compression_methods.push_back("none");
+  available_compression_methods.push_back("zlib");
+  available_compression_methods.push_back("mpeg4_p2");
+  available_compression_methods.push_back("analyze_header_removal");
+
   ti.m_compression_list[id] = COMPRESSION_UNSPECIFIED;
   parts[1] = downcase(parts[1]);
+
+  if (parts[1] == "zlib")
+    ti.m_compression_list[id] = COMPRESSION_ZLIB;
+
+  if (parts[1] == "none")
+    ti.m_compression_list[id] = COMPRESSION_NONE;
+
+  if ((parts[1] == "mpeg4_p2") || (parts[1] == "mpeg4p2"))
+    ti.m_compression_list[id] = COMPRESSION_MPEG4_P2;
+
+  if (parts[1] == "analyze_header_removal")
+      ti.m_compression_list[id] = COMPRESSION_ANALYZE_HEADER_REMOVAL;
+
 #ifdef HAVE_LZO
   if ((parts[1] == "lzo") || (parts[1] == "lzo1x"))
     ti.m_compression_list[id] = COMPRESSION_LZO;
+  else
+    available_compression_methods.push_back("lzo");
 #endif
-  if (parts[1] == "zlib")
-    ti.m_compression_list[id] = COMPRESSION_ZLIB;
+
 #ifdef HAVE_BZLIB_H
   if ((parts[1] == "bz2") || (parts[1] == "bzlib"))
     ti.m_compression_list[id] = COMPRESSION_BZ2;
+  else
+    available_compression_methods.push_back("bz2");
 #endif
-  if ((parts[1] == "mpeg4_p2") || (parts[1] == "mpeg4p2"))
-    ti.m_compression_list[id] = COMPRESSION_MPEG4_P2;
-  if (parts[1] == "none")
-    ti.m_compression_list[id] = COMPRESSION_NONE;
+
   if (ti.m_compression_list[id] == COMPRESSION_UNSPECIFIED)
-    mxerror(boost::format(Y("'%1%' is an unsupported argument for --compression. Available compression methods are 'none' and 'zlib'.\n")) % s);
+    mxerror(boost::format(Y("'%1%' is an unsupported argument for --compression. Available compression methods are: %2%\n")) % s % join(", ", available_compression_methods));
 }
 
 /** \brief Parse the argument for a couple of options

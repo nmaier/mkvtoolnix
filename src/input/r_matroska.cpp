@@ -351,7 +351,7 @@ kax_reader_c::verify_audio_track(kax_track_t *t) {
   bool is_ok = true;
   if (t->codec_id == MKV_A_ACM)
     is_ok = verify_acm_audio_track(t);
-  else if (starts_with(t->codec_id, MKV_A_MP3, strlen(MKV_A_MP3) - 1))
+  else if ((t->codec_id == MKV_A_MP3) || (t->codec_id == MKV_A_MP2))
     t->a_formattag = 0x0055;
   else if (starts_with(t->codec_id, MKV_A_AC3, strlen(MKV_A_AC3)) || (t->codec_id == MKV_A_EAC3))
     t->a_formattag = 0x2000;
@@ -2011,9 +2011,10 @@ kax_reader_c::process_simple_block(KaxCluster *cluster,
     // and stuff. Just pass everything through as it is.
     int i;
     for (i = 0; i < (int)block_simple->NumberFrames(); i++) {
-      DataBuffer &data = block_simple->GetBuffer(i);
-      packet_t *packet = new packet_t(new memory_c((unsigned char *)data.Buffer(), data.Size(), false),
-                                      m_last_timecode + i * frame_duration, block_duration, block_bref, block_fref);
+      DataBuffer &data_buffer = block_simple->GetBuffer(i);
+      memory_cptr data(new memory_c(data_buffer.Buffer(), data_buffer.Size(), false));
+      block_track->content_decoder.reverse(data, CONTENT_ENCODING_SCOPE_BLOCK);
+      packet_t *packet = new packet_t(data, m_last_timecode + i * frame_duration, block_duration, block_bref, block_fref);
 
       ((passthrough_packetizer_c *)PTZR(block_track->ptzr))->process(packet_cptr(packet));
     }
@@ -2122,9 +2123,10 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
 
     int i;
     for (i = 0; i < (int)block->NumberFrames(); i++) {
-      DataBuffer &data           = block->GetBuffer(i);
-      packet_t *packet           = new packet_t(new memory_c((unsigned char *)data.Buffer(), data.Size(), false),
-                                                m_last_timecode + i * frame_duration, block_duration, block_bref, block_fref);
+      DataBuffer &data_buffer = block->GetBuffer(i);
+      memory_cptr data(new memory_c(data_buffer.Buffer(), data_buffer.Size(), false));
+      block_track->content_decoder.reverse(data, CONTENT_ENCODING_SCOPE_BLOCK);
+      packet_t *packet           = new packet_t(data, m_last_timecode + i * frame_duration, block_duration, block_bref, block_fref);
       packet->duration_mandatory = duration != NULL;
 
       if (NULL != codec_state)

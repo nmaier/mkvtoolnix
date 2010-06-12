@@ -16,6 +16,8 @@
 
 #include "common/os.h"
 
+#define AC3_SYNC_WORD           0x0b77
+
 #define AC3_CHANNEL                  0
 #define AC3_MONO                     1
 #define AC3_STEREO                   2

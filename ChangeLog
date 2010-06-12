@@ -12,6 +12,14 @@
 	* mkvmerge: bug fix: Fixed access to uninitialized memory when
 	reading DTS tracks from AVI and Matroska files.
 
+2010-06-10  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: The Matroska reader will use the MPEG audio
+	packetizer for MP2 tracks instead of the passthrough packetizer.
+
+	* mkvmerge: bug fix: The Matroska reader did not handle compressed
+	tracks correctly if the passthrough packetizer was used.
+
 2010-06-08  Moritz Bunkus  <moritz@bunkus.org>
 
 	* docs: Added a Dutch translation for the man pages by René
