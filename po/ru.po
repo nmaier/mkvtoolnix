@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-06-03 18:13+0300\n"
+"PO-Revision-Date: 2010-06-12 15:30+0300\n"
 "Last-Translator: rusguy6 rusguy6 <rusguy6@gmail.com>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -2520,7 +2520,7 @@ msgstr "Не удалось найти на следующей странице 
 #: src/input/r_avi.cpp:659
 #: src/input/r_matroska.cpp:1532
 msgid "Could not find valid DTS headers in this track's first frames.\n"
-msgstr ""
+msgstr "Не удалось найти действительные DTS заголовки в первых кадрах дорожки.\n"
 
 #: src/common/locale.cpp:133
 msgid "Could not initialize the iconv library for the conversion from %1% to UFT-8. Some strings will not be converted to UTF-8 and the resulting Matroska file might not comply with the Matroska specs (error: %2%, %3%).\n"
@@ -3480,9 +3480,8 @@ msgstr ""
 "списке и нажатия кнопки 'добавить'."
 
 #: src/mmg/tabs/chapters.cpp:333
-#, fuzzy
 msgid "Here you can adjust all the timecodes of the selected chapter and of all its sub-chapters by a specific amount either increasing or decreasing them."
-msgstr "Здесь вы можете настроить все timcdoes в отдельной главе, и все childrend ее на определенную величину, увеличивая или уменьшая ее."
+msgstr "Здесь вы можете настроить все тайм-коды от выбранной главы, а также все его подразделы на определенную величину, увеличивая или уменьшая их."
 
 #: src/mmg/options/chapters.cpp:76
 msgid ""
@@ -8701,47 +8700,67 @@ msgstr "Да"
 
 #~ msgid "%1% at %2%"
 #~ msgstr "%1% в %2%"
+
 #~ msgid "(Unknown element: %1%)"
 #~ msgstr "(Неизвестный элемент: %1%)"
+
 #~ msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
 #~ msgstr "Не пишите заголовок тех элементов, значения которых совпадают с их значениями по умолчанию в соответствии с Matroska критериям."
+
 #~ msgid "File/segment title"
 #~ msgstr "Файл/сегмент название"
+
 #~ msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
 #~ msgstr "Matroska файлы (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|Все файлы|*.*"
+
 #~ msgid "Other global options"
 #~ msgstr "Другие глобальные опции"
+
 #~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
 #~ msgstr "Эта дорожка использует особенность Matroska, названную 'запоминающие элементы Codec'. mkvmerge поддерживает их, но эта особенность не была включена с опцией '--engage use_codec_state'.\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "Использование FLAC выходного модуля.\n"
+
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "Создать исходные файлы FLAC (по умолчанию: написать OggFLAC файлы)."
+
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить ошибки обратного вызова.\n"
+
 #~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить метаданных обратного вызова.\n"
+
 #~ msgid "flac_header_extraction: Could not set the read callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить читать обратного вызова.\n"
+
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить написать обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_reader: Не удалось установить конец файла обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the error callback.\n"
 #~ msgstr "flac_reader: Не удалось установить ошибки обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the length callback.\n"
 #~ msgstr "flac_reader: Не удалось установить длину обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the metadata callback.\n"
 #~ msgstr "flac_reader: Не удалось установить метаданных обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the read callback.\n"
 #~ msgstr "flac_reader: Не удалось установить читать обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the seek callback.\n"
 #~ msgstr "flac_reader: Не удалось установить возвратный вызов поиска.\n"
+
 #~ msgid "flac_reader: Could not set the tell callback.\n"
 #~ msgstr "flac_reader: Не удалось установить сказать обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the write callback.\n"
 #~ msgstr "flac_reader: Не удалось установить написать обратного вызова.\n"
+
 #~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 #~ msgstr "r_matroska: Кластер не содержат кластера тайм-кода. Файл не работает. Прерывание.\n"
-
