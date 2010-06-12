@@ -1033,7 +1033,7 @@ parse_arg_compression(const std::string &s,
 #endif
 
   if (ti.m_compression_list[id] == COMPRESSION_UNSPECIFIED)
-    mxerror(boost::format(Y("'%1%' is an unsupported argument for --compression. Available compression methods are: %1%\n")) % s % join(", ", available_compression_methods));
+    mxerror(boost::format(Y("'%1%' is an unsupported argument for --compression. Available compression methods are: %2%\n")) % s % join(", ", available_compression_methods));
 }
 
 /** \brief Parse the argument for a couple of options
