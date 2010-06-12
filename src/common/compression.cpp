@@ -27,7 +27,7 @@
 using namespace libmatroska;
 
 const char *compression_methods[] = {
-  "unspecified", "zlib", "bz2", "lzo", "header_removal", "mpeg4_p2", "dirac", "dts", "ac3", "mp3", "none"
+  "unspecified", "zlib", "bz2", "lzo", "header_removal", "mpeg4_p2", "dirac", "dts", "ac3", "mp3", "analyze_header_removal", "none"
 };
 
 static const int compression_method_map[] = {
@@ -41,6 +41,7 @@ static const int compression_method_map[] = {
   3,                            // dts is header removal
   3,                            // ac3 is header removal
   3,                            // mp3 is header removal
+  999999999,                    // analyze_header_removal
   0                             // none
 };
 
@@ -310,6 +311,58 @@ header_removal_compressor_c::set_track_headers(KaxContentEncoding &c_encoding) {
   GetChild<KaxContentCompSettings>(GetChild<KaxContentCompression>(c_encoding)).CopyBuffer(m_bytes->get_buffer(), m_bytes->get_size());
 }
 
+// ------------------------------------------------------------
+
+analyze_header_removal_compressor_c::analyze_header_removal_compressor_c()
+  : compressor_c(COMPRESSION_ANALYZE_HEADER_REMOVAL)
+  , m_packet_counter(0)
+{
+}
+
+analyze_header_removal_compressor_c::~analyze_header_removal_compressor_c() {
+  if (!m_bytes.is_set())
+    mxinfo("Analysis failed: no packet encountered\n");
+
+  else if (m_bytes->get_size() == 0)
+    mxinfo("Analysis complete but no similarities found.\n");
+
+  else {
+    mxinfo(boost::format("Analysis complete. %1% identical byte(s) at the start of each of the %2% packet(s). Hex dump of the content:\n") % m_bytes->get_size() % m_packet_counter);
+    mxhexdump(0, m_bytes->get_buffer(), m_bytes->get_size());
+  }
+}
+
+void
+analyze_header_removal_compressor_c::decompress(memory_cptr &buffer) {
+  mxerror("analyze_header_removal_compressor_c::decompress(): not supported\n");
+}
+
+void
+analyze_header_removal_compressor_c::compress(memory_cptr &buffer) {
+  ++m_packet_counter;
+
+  if (!m_bytes.is_set()) {
+    m_bytes = memory_cptr(buffer->clone());
+    return;
+  }
+
+  unsigned char *current = buffer->get_buffer();
+  unsigned char *saved   = m_bytes->get_buffer();
+  size_t i, new_size     = 0;
+
+  for (i = 0; i < std::min(buffer->get_size(), m_bytes->get_size()); ++i, ++new_size)
+    if (current[i] != saved[i])
+      break;
+
+  m_bytes->set_size(new_size);
+}
+
+void
+analyze_header_removal_compressor_c::set_track_headers(KaxContentEncoding &c_encoding) {
+}
+
+// ------------------------------------------------------------
+
 mpeg4_p2_compressor_c::mpeg4_p2_compressor_c() {
   memory_cptr bytes = memory_c::alloc(3);
   put_uint24_be(bytes->get_buffer(), 0x000001);
@@ -397,6 +450,9 @@ compressor_c::create(const char *method) {
 
   if (!strcasecmp(method, compression_methods[COMPRESSION_MP3]))
     return compressor_ptr(new mp3_compressor_c());
+
+  if (!strcasecmp(method, compression_methods[COMPRESSION_ANALYZE_HEADER_REMOVAL]))
+    return compressor_ptr(new analyze_header_removal_compressor_c());
 
   if (!strcasecmp(method, "none"))
     return compressor_ptr(new compressor_c(COMPRESSION_NONE));

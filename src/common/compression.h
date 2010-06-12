@@ -36,6 +36,7 @@ enum compression_method_e {
   COMPRESSION_DTS,
   COMPRESSION_AC3,
   COMPRESSION_MP3,
+  COMPRESSION_ANALYZE_HEADER_REMOVAL,
   COMPRESSION_NONE,
   COMPRESSION_NUM = COMPRESSION_NONE
 };
@@ -137,6 +138,21 @@ public:
     m_bytes = bytes;
     m_bytes->grab();
   }
+
+  virtual void decompress(memory_cptr &buffer);
+  virtual void compress(memory_cptr &buffer);
+
+  virtual void set_track_headers(KaxContentEncoding &c_encoding);
+};
+
+class MTX_DLL_API analyze_header_removal_compressor_c: public compressor_c {
+protected:
+  memory_cptr m_bytes;
+  unsigned int m_packet_counter;
+
+public:
+  analyze_header_removal_compressor_c();
+  virtual ~analyze_header_removal_compressor_c();
 
   virtual void decompress(memory_cptr &buffer);
   virtual void compress(memory_cptr &buffer);
