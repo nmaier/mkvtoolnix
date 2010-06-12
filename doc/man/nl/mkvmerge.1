@@ -56,7 +56,7 @@ Onderdruk status uitvoer\&.
 .RS 4
 Schrijf naar het bestand
 \fIfile\-name\fR\&. Indien splitsen aanstaat, dan wordt dat iets anders verwerkt\&. Zie uitleg voor de
-\fB\-\-splitsen\fR
+\fB\-\-split\fR
 optie voor details\&.
 .RE
 .PP
@@ -135,9 +135,9 @@ Deze schakelaar is ook van toepassing op hoofdstukken die zijn gecopieerd van ee
 \fBmkvmerge\fR(1)
 ondersteunt lezen van
 CUE
-volg documen(en) (cue) voor audio bestanden als invoer voor hoofdstukken\&.
+volg document(en) (cue) voor audio bestanden als invoer voor hoofdstukken\&.
 CUE
-volg documen(en) (cue) bevatten gewoonlijk informatie over de
+volg document(en) (cue) bevatten gewoonlijk informatie over de
 \fIARTIEST\fR
 en
 \fITITEL\fR
@@ -264,10 +264,10 @@ Programma\*(Aqs die een bepaald beeld proberen te zoeken, kunnen alleen direct n
 .RS 4
 Vertelt
 \fBmkvmerge\fR(1)
-geen volg documen(en) (cue) te cre\(:eren en te schrijven wat vergelijkbaar is met een index in een AVI\&.
+geen volg document(en) (cue) te cre\(:eren en te schrijven wat vergelijkbaar is met een index in een AVI\&.
 Matroska(TM)
-bestanden kunnen worden afgespeeld zonder volg documen(en) (cue), maar dat kan leiden tot onnauwkeurigheid of traag zoeken\&. Gebruik dit alleen als je echt wanhopig bent qua ruimte of voor test doeleinden\&. Zie ook de optie
-\fBvolg documen(en) (cue)\fR
+bestanden kunnen worden afgespeeld zonder volg document(en) (cue), maar dat kan leiden tot onnauwkeurigheid of traag zoeken\&. Gebruik dit alleen als je echt wanhopig bent qua ruimte of voor test doeleinden\&. Zie ook de optie
+\fBvolg document(en) (cue)\fR
 welke opgegeven kan worden voor elk invoer bestand\&.
 .RE
 .PP
@@ -481,7 +481,7 @@ Een enkele \*(Aq+\*(Aq veroorzaakt dat het volgende bestand wordt bijgevoegd (be
 .nf
 $ mkvmerge \-o full\&.mkv file1\&.mkv + file2\&.mkv
 $ mkvmerge \-o full\&.mkv file1\&.mkv +file2\&.mkv
-     
+ 
 .fi
 .if n \{\
 .RE
@@ -700,13 +700,13 @@ Deze optie kan meerdere keren worden gebruikt voor een invoer bestand, is van to
 \fB\-\-cues\fR \fITID:none|iframes|all\fR
 .RS 4
 Controle voor welke sporen cue (index) ingangen worden gere\(:eerd voor een opgegeven spoor (zie sectie
-Spoor ID\*(Aqs)\&. \*(Aqnone\*(Aq remt het cre\(:eren van volg documen(en) (cue) af\&. Voor \*(Aqiframes\*(Aq all\('e\('en blokken zonder voor of achteruit referenties ( = I beelden in video sporen) worden ingevoerd in het \*(Aqvolg documen(en) (cue)\*(Aq\&. \*(Aqall\*(Aq zorgt ervoor dat
+Spoor ID\*(Aqs)\&. \*(Aqnone\*(Aq remt het cre\(:eren van volg document(en) (cue) af\&. Voor \*(Aqiframes\*(Aq all\('e\('en blokken zonder voor of achteruit referenties ( = I beelden in video sporen) worden ingevoerd in het \*(Aqvolg document(en) (cue)\*(Aq\&. \*(Aqall\*(Aq zorgt ervoor dat
 \fBmkvmerge\fR(1)
-aanmaakt, volg documen(en) (cue) voor alle blokken welke het bestand erg groot maakt\&.
+aanmaakt, volg document(en) (cue) voor alle blokken welke het bestand erg groot maakt\&.
 .sp
 Standaard is \*(Aqiframes\*(Aq voor video sporen en \*(Aqnone\*(Aq voor alle anderen\&. Zie ook opties
 \fB\-\-no\-cues\fR
-welke verwezenlijken het cre\(:eren van volg documen(en) (cue) ongeacht de
+welke verwezenlijken het cre\(:eren van volg document(en) (cue) ongeacht de
 \fB\-\-cues\fR
 gebruikte opties\&.
 .sp
@@ -826,11 +826,11 @@ is, dan kan je toevoegen \*(Aq:0\*(Aq aan het spoor ID\&.
 .PP
 \fB\-\-timecodes\fR \fITID:file\-name\fR
 .RS 4
-Leest de te gebruiken tijdcode\*(Aqs in voor een specifiek spoor ID van
-\fIfile\-name\fR\&. Deze krachtige tijdcode\*(Aqs heffen de tijdcode\*(Aqs die
+Leest de te gebruiken tijd code\*(Aqs in voor een specifiek spoor ID van
+\fIfile\-name\fR\&. Deze krachtige tijd code\*(Aqs heffen de tijd code\*(Aqs die
 \fBmkvmerge\fR(1)
 normaal berekent op\&. Lees de sectie over
-externe tijdcode\*(Aqs bestanden\&.
+externe tijd code bestanden\&.
 .RE
 .PP
 \fB\-\-default\-duration\fR \fITID:x\fR
@@ -1056,7 +1056,7 @@ my file\&.mkv
 \-A
 een film\&.avi
 geluid\&.ogg
-     
+ 
 .fi
 .if n \{\
 .RE
@@ -1130,7 +1130,7 @@ Toon versie informatie en sluit af\&.
 Voor elk bestand kan de gebruiker selecteren welke sporen
 \fBmkvmerge\fR(1)
 zou moeten nemen\&. Zij zitten allemaal in het bestand gespecificeerd met
-\fB\-o\fR\&. een lijst met bekende (en ondersteunde) born formaten kunnen verkregen worden met de
+\fB\-o\fR\&. Een lijst met bekende (en ondersteunde) bron formaten kunnen verkregen worden met de
 \fB\-l\fR
 optie\&.
 .SH "VOORBEELDEN"
@@ -1184,7 +1184,7 @@ Na een paar minuten van wikken en wegen rip je een ander audio spoor, b\&.v\&. d
 .nf
 $ oggenc \-q4 \-omijn film\-voegtoe\-geluid\&.ogg mijn film\-voegtoe\-geluid\&.wav
 $ mkvmerge \-o MM\-complete\&.mkv mijn film\-met\-geluid\&.mkv mijn film\-voegtoe\-geluid\&.ogg
-  
+ 
 .fi
 .if n \{\
 .RE
@@ -1236,7 +1236,7 @@ Dit zou toevoegen 200ms aan stilte aan het begin van het spoor met het ID
 \fB12345\fR
 genomen van \*(Aqoutofsync\&.ogg\*(Aq\&.
 .PP
-Sommige films starten correct gesynchroniseerd maar langzaam aan verloopt dat\&. Voor dit soort films kan je een vertraag factor opgeven die worden toegevoegd aan alle tijdcodes \-\- Er wordt g\('e\('en data toegvoegd of verwijderd\&. Dus, als je die factor te klein of te groot maakt dan krijg je een slecht resultaat\&. Een voorbeeld is, dat een episode die ik heb getranscodeerd met
+Sommige films starten correct gesynchroniseerd maar langzaam aan verloopt dat\&. Voor dit soort films kan je een vertraag factor opgeven die worden toegevoegd aan alle tijd codes \-\- Er wordt g\('e\('en data toegvoegd of verwijderd\&. Dus, als je die factor te klein of te groot maakt dan krijg je een slecht resultaat\&. Een voorbeeld is, dat een episode die ik heb getranscodeerd met
 \fB0\&.2\fR
 seconden uit sync aan het eind van de film, welke
 \fB77340\fR
@@ -1430,7 +1430,7 @@ $ mkvmerge \-i v\&.mkv
 File \*(Aqv\&.mkv\*(Aq: container: Matroska(TM)
 Track ID 1: video (V_MS/VFW/FOURCC, DIV3)
 Track ID 2: audio (A_MPEG/L3)
-  
+ 
 .fi
 .if n \{\
 .RE
@@ -1777,7 +1777,7 @@ lettertype aan het uitvoerbestand kan vast te maken:
 .\}
 .nf
 $ mkvmerge \-o output\&.mkv \-A video\&.avi sound\&.ogg \-\-attachment\-description "Me and the band behind the stage in a small get\-together" \-\-attachment\-mime\-type image/jpeg \-\-attach\-file me_and_the_band\&.jpg \-\-attachment\-description "The real rare and unbelievably good looking font" \-\-attachment\-type application/octet\-stream \-\-attach\-file really_cool_font\&.ttf
-  
+ 
 .fi
 .if n \{\
 .RE
@@ -1822,7 +1822,7 @@ CHAPTER02=00:02:30\&.000
 CHAPTER02NAME=Baby prepares to rock
 CHAPTER03=00:02:42\&.300
 CHAPTER03NAME=Baby rocks the house
-   
+ 
 .fi
 .if n \{\
 .RE
@@ -1873,7 +1873,7 @@ gebaseerde hoofdstuk formaat lijkt op dit voorbeeld:
     </ChapterAtom>
   </EditionEntry>
 </Chapters>
-   
+ 
 .fi
 .if n \{\
 .RE
@@ -1921,7 +1921,7 @@ sub map welke als basis gebruikt kan worden\&.
 .PP
 Bij het splitsen van bestanden dan zal
 \fBmkvmerge\fR(1)
-tevens de hoofdstukken juist bijstellen\&. Dit betekent, dat elk bestand slechts de hoofdstukingangen omvat waarop het van toepassing is, en dat de tijdcodes worden gecompenseerd om te voldoen aan de nieuwe tijdcodes van elk uitvoer bestand\&.
+tevens de hoofdstukken juist bijstellen\&. Dit betekent, dat elk bestand slechts de hoofdstukingangen omvat waarop het van toepassing is, en dat de tijd codes worden gecompenseerd om te voldoen aan de nieuwe tijd codes van elk uitvoer bestand\&.
 .PP
 
 \fBmkvmerge\fR(1)
@@ -2015,7 +2015,7 @@ op:
 .\}
 .nf
 $ mkvmerge \-o file\&.mkv \-\-tags 0:tags\&.xml file\&.avi
-   
+ 
 .fi
 .if n \{\
 .RE
@@ -2124,7 +2124,7 @@ De elementen in gekromde haakjes zijn optioneel en afhankelijk van de inhoud en 
 .sp -1
 .IP \(bu 2.3
 .\}
-meta zoek #1 bevat slechts een klein aantal aan niveau 1 elementen, en alleen als deze ook werkelijk bestaan: bijlagen, hoofdstukken, volg documen(en) (cue), markeringen, meta zoek #2\&. Oudere versies van
+meta zoek #1 bevat slechts een klein aantal aan niveau 1 elementen, en alleen als deze ook werkelijk bestaan: bijlagen, hoofdstukken, volg document(en) (cue), markeringen, meta zoek #2\&. Oudere versies van
 \fBmkvmerge\fR(1)
 zijn tevens gewend om clusters binnenin het meta zoek element te plaatsen\&. Daarom was het noodzakelijk ietwat onnauwkeurig te gokken om genoeg ruimte te reserveren\&. Het faalde vaak\&. Nu worden alleen clusters opgeslagen in het meta zoek #2, en meta zoek #1 verwijst naar het meta zoek element #2\&.
 .RE
@@ -2166,7 +2166,7 @@ Tijd code bestanden die worden gebruikt wanneer de sporen aan elkaar worden toeg
 .\}
 .nf
 mkvmerge \&.\&.\&. \-\-timecodes 0:my_timecodes\&.txt v1\&.avi +v2\&.avi
-  
+ 
 .fi
 .if n \{\
 .RE
@@ -2191,7 +2191,7 @@ is gebruikt\&. een voorbeeld:
 assume 27\&.930
 800,1000,25
 1500,1700,30
-   
+ 
 .fi
 .if n \{\
 .RE
@@ -2200,7 +2200,7 @@ assume 27\&.930
 .PP
 In dit format, bevat elke regel een tijd code voor het corresponderende beeld\&. Deze tijd code moet opgeven worden in milli seconden\&. Het mag een veranderbaar nummer zijn, maar het moet niet\&. Jij
 \fImoet\fR
-minstens zo veel tijd code regels opgeven als er aan beelden in het spoor zijn\&. De tijdcodes in dit bestand moeten gesorteerd zijn\&. Voorbeeld voor 25fps:
+minstens zo veel tijd code regels opgeven als er aan beelden in het spoor zijn\&. De tijd codes in dit bestand moeten gesorteerd zijn\&. Voorbeeld voor 25fps:
 .sp
 .if n \{\
 .RS 4
@@ -2210,7 +2210,7 @@ minstens zo veel tijd code regels opgeven als er aan beelden in het spoor zijn\&
 0
 40
 80
-   
+ 
 .fi
 .if n \{\
 .RE
@@ -2231,7 +2231,7 @@ assume 0\&.0
 7\&.530,38\&.236
 gap, 10\&.050
 2\&.000,38\&.236
-   
+ 
 .fi
 .if n \{\
 .RE
@@ -2285,7 +2285,7 @@ tenmiste \('e\('en waarschuwing uitgevaardigd, maar het samenvoegen ging door\&.
 \fB2\fR
 \-\- Deze afsluit code wordt gebruikt nadat er een fout ontstond\&.
 \fBmkvmerge\fR(1)
-breekt direct af na het geven van dit waarschuw bericht\&. Fout berichten, bereik van een verkeerd commando regel argument over lees/schrijf fouten naar een \*(Aqgebroken\*(Aq bestanden\&.
+breekt direct af na het geven van dit waarschuw bericht\&. Fout! bereik in berichten, van een verkeerd commando regel argument over lees/schrijf fouten naar een \*(Aqgebroken\*(Aq bestanden\&.
 .RE
 .SH "ZIE OOK"
 .PP

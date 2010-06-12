@@ -44,7 +44,7 @@ sporen,
 markeringen,
 bijlagen,
 hoofdstukken,
-volg documen(en) (cue)
+volg document(en) (cue)
 en
 tijd coderingen\&. Het tweede argument is de bron bestandsnaam\&. Het moet zijn een
 Matroska(TM)
@@ -126,7 +126,7 @@ source\&.mkv
 # Output the track as raw data\&.
 \-\-raw
 1:destination\&.raw
-      
+ 
 .fi
 .if n \{\
 .RE
@@ -151,7 +151,7 @@ Stelt de karakter set in waarna het volgende ondertitel tekst spoor geconverteer
 .PP
 \fB\-\-blockadd\fR \fIniveau\fR
 .RS 4
-Hou alleen de BlockAdditions tot aan dit niveau\&. Standaard is alle niveaus te houden \&. Deze optie heeft alleen effect op bepaalde codecs zoals WAVPACK4\&.
+Hou alleen de BlockAdditions tot aan dit niveau\&. Standaard is alle niveaus te houden\&. Deze optie heeft alleen effect op bepaalde codecs zoals WAVPACK4\&.
 .RE
 .PP
 \fB\-\-cuesheet\fR
@@ -203,7 +203,7 @@ Eke uitvoernaam zou slechts \('e\('enmaal mogen worden gebruikt\&. De uitzonderi
 .\}
 .nf
 $ mkvextract tracks input\&.mkv 1:output\-two\-tracks\&.rm 2:output\-two\-tracks\&.rm
-      
+ 
 .fi
 .if n \{\
 .RE
@@ -265,7 +265,7 @@ formaat\&.
 De ge\(:extraheerde hoofdstukken zijn geschreven naar het apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over
 uitvoer omleiden
 voor details)\&.
-.SS "Volg documen(en) (cue) extraheer mode"
+.SS "Volg document(en) (cue) extraheer mode"
 .PP
 Ingave:
 \fBmkvextract\fR
@@ -273,7 +273,7 @@ Ingave:
 \fIsource\-filename\fR
 [\fIoptions\fR]
 .PP
-De ge\(:extraheerde volg documen(en) (cue) zijn geschreven naar het apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over
+De ge\(:extraheerde volg document(en) (cue) zijn geschreven naar het apparaat/houder tenzij de uitvoer is omgeleid (zie de sectie over
 uitvoer omleiden
 voor details)\&.
 .SS "Tijd code extraheer mode"
@@ -302,7 +302,7 @@ De in het schil ingebouwde omleidingsmechanisme wordt gebruikt door het toevoege
 .\}
 .nf
 $ mkvextract tags source\&.mkv > tags\&.xml
-  
+ 
 .fi
 .if n \{\
 .RE
@@ -318,7 +318,7 @@ option\&. Voorbeeld:
 .\}
 .nf
 $ mkvextract tags source\&.mkv \-\-redirect\-output tags\&.xml
-  
+ 
 .fi
 .if n \{\
 .RE
