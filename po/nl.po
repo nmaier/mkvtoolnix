@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: nl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-05-25 23:42+0200\n"
-"PO-Revision-Date: 2010-06-12 19:59+0100\n"
+"PO-Revision-Date: 2010-06-12 23:47+0100\n"
 "Last-Translator: René Maassen <bmom43@hotmail.com>\n"
 "Language-Team: Dutch <bmom43@hotmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -1505,9 +1505,8 @@ msgid "---common---"
 msgstr "---gemeenschappelijk---"
 
 #: src/mmg/cli_options_dlg.cpp:82
-#, fuzzy
 msgid "--cluster-length REPLACEME"
-msgstr "--tijdcode-schaal VERVANGMIJ"
+msgstr "--cluster-length REPLACEME"
 
 #: src/mmg/cli_options_dlg.cpp:98
 msgid "--timecode-scale REPLACEME"
@@ -5589,9 +5588,8 @@ msgid "Tells mkvmerge not to create and write the cue data which can be compared
 msgstr "Vertelt mkvmerge niet te creëren en schrijven de volg data welke vergeleken kan worden met een index in een AVI. Matroska bestanden kunnen afgespeeld worrden zonder deze volg data, maar zoeken zal niet zo precies zijn en trager. Gebruik dit alleen voor test bedoelingen."
 
 #: src/mmg/cli_options_dlg.cpp:93
-#, fuzzy
 msgid "Tells mkvmerge to create a meta seek element at the end of the file containing all clusters."
-msgstr "Vertelt mkvmerge geen meta zoek data elementen te creëren aan het eind van het bestand bevattende alle clusters."
+msgstr "Vertelt mkvmerge een meta zoek data elementen te creëren aan het eind van het bestand, bevattende alle clusters."
 
 #: src/info/qt_ui.cpp:71
 msgid "Text files (*.txt);;All files (*.*)"
@@ -8696,30 +8694,42 @@ msgstr "ja"
 
 #~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
 #~ msgstr "Het MPEG-4 part 2 compressie werkt alleen met basis MPEG-4. Hoewel, basis MPEG-4 mode is niet geselecteerd met selected with '--aangaan basis_mpeg4'.\n"
+
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "Schrijf raw FLAC bestanden (standaard: schrijf OggFLAC bestanden)."
+
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: Kon niet instellen de fout terugkoppeling.\n"
+
 #~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
 #~ msgstr "flac_header_extraction: Kon niet instellen de metadata terugkoppeling\n"
+
 #~ msgid "flac_header_extraction: Could not set the read callback.\n"
 #~ msgstr "flac_header_extraction: Kon niet instellen de lees terugkoppeling.\n"
+
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: Kon niet instellen de schrijf terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de eof terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the error callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de fout terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the length callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de lengte terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the metadata callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de metadata terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the read callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de lees terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the seek callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de zoek terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the tell callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de vertel terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the write callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de schrijf terugkoppeling.\n"
-
