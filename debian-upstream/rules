@@ -28,7 +28,7 @@ build-stamp:
 	dh_testdir
 
 	CFLAGS="$(CFLAGS)" ./configure $(CONFIG_FLAGS) --enable-gui
-	$(MAKE)
+	$(MAKE) mkvinfo mmg
 	mv src/mkvinfo src/mkvinfo-gui
 	mv src/mmg/mmg src/mmg/mmg-gui
 
