@@ -30,14 +30,14 @@ msgid ""
 "mkvmerge received a SIGINT (probably because the user pressed Ctrl+C). Trying to sanitize the file. If mkvmerge hangs during this process you'll have to kill it manually.\n"
 msgstr ""
 "\n"
-"mkvmergeは割り込み信号を受信しました（恐らくユーザーがCtrl+Cを押したためです）。ファイルをきれいにしようとしています。もしこの処理中にmkvmergeがハングした場合、手動でプロセスを終了してください。\n"
+"mkvmergeはSIGINTを受信しました（恐らくユーザーがCtrl+Cを押したためです）。出力ファイルを正しく閉じようとしています。もしこの処理中にmkvmergeがハングアップした場合、手動でプロセスを終了してください。\n"
 
 #: src/merge/mkvmerge.cpp:238
 msgid ""
 "  --aac-is-sbr <TID[:0|1]> The track with the ID is HE-AAC/AAC+/SBR-AAC\n"
 "                           or not. The value ':1' can be omitted.\n"
 msgstr ""
-"  --aac-is-sbr <TID[:0|1]> そのトラックIDがHE-AAC/AAC+/SBR-AACかどうかを\n"
+"  --aac-is-sbr <TID[:0|1]> そのIDのトラックがHE-AAC/AAC+/SBR-AACか否かを\n"
 "                           指定します。値が':1'ならば省略できます。\n"
 
 #: src/merge/mkvmerge.cpp:159
@@ -70,7 +70,7 @@ msgid ""
 msgstr ""
 "  --aspect-ratio <TID:f|a/b>\n"
 "                           このアスペクト比で縦と横の大きさを\n"
-"                           計算して設定します。\n"
+"                           計算して表示解像度を設定します。\n"
 
 #: src/merge/mkvmerge.cpp:254
 msgid ""
@@ -212,7 +212,8 @@ msgid ""
 "                           X can be a floating point number or a fraction.\n"
 msgstr ""
 "  --default-duration <TID:Xs|ms|us|ns|fps>\n"
-"                           トラックのデフォルトのフレーム持続期間をXに設定します。\n"
+"                           トラックのデフォルトのフレーム持続期間をXに\n"
+"                           強制設定します。\n"
 "                           Xは浮動小数点数や分数を取ることができます。\n"
 
 #: src/merge/mkvmerge.cpp:133
@@ -273,15 +274,15 @@ msgstr ""
 
 #: src/merge/mkvmerge.cpp:172
 msgid "  --link                   Link splitted files.\n"
-msgstr "  --link                   分割ファイルを紐付けします。\n"
+msgstr "  --link                   分割ファイルをリンクします。\n"
 
 #: src/merge/mkvmerge.cpp:174
 msgid "  --link-to-next <SID>     Link the last file to the given SID.\n"
-msgstr "  --link-to-next <SID>     指定したSIDに最後の出力ファイルを紐付けします。\n"
+msgstr "  --link-to-next <SID>     指定したSIDに最後の出力ファイルをリンクします。\n"
 
 #: src/merge/mkvmerge.cpp:173
 msgid "  --link-to-previous <SID> Link the first file to the given SID.\n"
-msgstr "  --link-to-previous <SID> 指定したSIDに最初の出力ファイルを紐付けします。\n"
+msgstr "  --link-to-previous <SID> 指定したSIDに最初の出力ファイルをリンクします。\n"
 
 #: src/merge/mkvmerge.cpp:281
 msgid ""
@@ -492,7 +493,7 @@ msgstr "  -i, --identify <file>    ソースファイルの情報を表示しま
 
 #: src/merge/mkvmerge.cpp:280
 msgid "  -l, --list-types         Lists supported input file types.\n"
-msgstr "  -l, --list-types         サポートされている入力ファイルを列挙します。\n"
+msgstr "  -l, --list-types         サポートされている入力ファイルタイプを列挙します。\n"
 
 #: src/merge/mkvmerge.cpp:206
 msgid ""
@@ -664,7 +665,7 @@ msgstr " チャプタ操作：\n"
 
 #: src/merge/mkvmerge.cpp:164
 msgid " File splitting and linking (more global options):\n"
-msgstr " ファイルの分割と紐付け（グローバルオプションの続き）：\n"
+msgstr " ファイルの分割とリンク（グローバルオプションの続き）：\n"
 
 #: src/merge/mkvmerge.cpp:141
 msgid " General output control (advanced global options):\n"
@@ -888,7 +889,7 @@ msgstr "下へ(&D)"
 
 #: src/mmg/header_editor/frame.cpp:147
 msgid "&Expand all entries\tCtrl-E"
-msgstr "重要な要素を展開(&E)\tCtrl-E"
+msgstr "全てのエントリを展開(&E)\tCtrl-E"
 
 #: src/info/wxwidgets_ui.cpp:131
 msgid "&Expand important elements\tCtrl-E"
@@ -1021,9 +1022,8 @@ msgid "'%1%' does not contain a valid unit ('s', 'ms', 'us' or 'ns') in '%2% %3%
 msgstr "'%2% %3%'の'%1%'は正しい単位（'s'、'ms'、'us'、'ns'）を含んでいません。\n"
 
 #: src/merge/mkvmerge.cpp:1036
-#, fuzzy
 msgid "'%1%' is an unsupported argument for --compression. Available compression methods are: %2%\n"
-msgstr "'%1%'は--compressionの引数としてサポートされていません。使用可能な圧縮方法は'none'または'zlib'です。\n"
+msgstr "'%1%'は--compressionの引数としてサポートされていません。使用可能な圧縮方法は以下の通りです：%2%\n"
 
 #: src/merge/mkvmerge.cpp:977
 msgid "'%1%' is an unsupported argument for --cues.\n"
@@ -1311,7 +1311,7 @@ msgstr "'--priority'に引数がありません。\n"
 
 #: src/merge/mkvmerge.cpp:1740
 msgid "'--segment-uid' lacks the segment UID.\n"
-msgstr "'--segmentinfo'にセグメントUIDが指定されていません。\n"
+msgstr "'--segment-uid'にセグメントUIDが指定されていません。\n"
 
 #: src/merge/mkvmerge.cpp:1846
 msgid "'--segmentinfo' lacks the file name.\n"
@@ -2014,11 +2014,11 @@ msgstr "'%1%'への変更が実行されました。このタイプのプロパ�
 
 #: src/propedit/change.cpp:187
 msgid "Change for '%1%' executed. Number of entries deleted: %2%\n"
-msgstr "'%1%'への変更が実行されました。このタイプのプロパティは見つかりませんでした。削除されたエントリの数：%2%個\n"
+msgstr "'%1%'への変更が実行されました。削除されたエントリの数：%2%個\n"
 
 #: src/propedit/change.cpp:213
 msgid "Change for '%1%' executed. Number of entries set: %2%.\n"
-msgstr "'%1%'への変更が実行されました。このタイプのプロパティは見つかりませんでした。設定されたエントリの数：%2%個\n"
+msgstr "'%1%'への変更が実行されました。設定されたエントリの数：%2%個\n"
 
 #: src/propedit/change.cpp:224
 msgid "Change for '%1%' executed. One entry added.\n"
@@ -3145,7 +3145,7 @@ msgstr "ファイル構造警告"
 
 #: src/mmg/tabs/global.cpp:261
 msgid "File/segment linking"
-msgstr "ファイル/セグメント紐付け"
+msgstr "ファイル/セグメントリンク"
 
 #: src/mmg/tabs/global.cpp:229
 msgid "File/segment title:"
@@ -3175,7 +3175,7 @@ msgstr "浮動小数点数"
 
 #: src/mmg/tabs/global.cpp:270 src/mmg/tabs/global.cpp:272
 msgid "For an in-depth explanantion of file/segment linking and this feature please read mkvmerge's documentation."
-msgstr "ファイル/セグメント紐付けとこの機能についての詳しい説明は、mkvmergeのドキュメントを参照してください。"
+msgstr "ファイル/セグメントリンクとこの機能についての詳しい説明は、mkvmergeのドキュメントを参照してください。"
 
 #: src/mmg/cli_options_dlg.cpp:117
 msgid "Force EBML style lacing."
@@ -6705,7 +6705,7 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:256
 msgid "Use 'segment linking' for the resulting files. For an in-depth explanation of this feature consult the mkvmerge documentation."
-msgstr "出力ファイルにセグメント紐付けを使用します。この機能についての詳しい説明はmkvmergeのドキュメントを参照してください。"
+msgstr "出力ファイルにセグメントリンクを使用します。この機能についての詳しい説明はmkvmergeのドキュメントを参照してください。"
 
 #: src/mmg/cli_options_dlg.cpp:122
 msgid "Use fixed values for the elements that change with each file otherwise (muxing date, segment UID, track UIDs etc.). Two files muxed with the same settings and this switch activated will be identical."
@@ -7614,7 +7614,7 @@ msgstr "%1%行目：'delay'タイムスタンプを解析できませんでし�
 
 #: src/mmg/tabs/global.cpp:255
 msgid "link files"
-msgstr "ファイルを紐付けする"
+msgstr "ファイルをリンクする"
 
 #: src/mmg/options/mkvmerge.cpp:51
 msgid "lower"
@@ -8316,6 +8316,3 @@ msgstr "間違った使用法：読み込み専用メモリへの書き込み"
 #: src/mmg/tabs/input_general.cpp:107 src/mmg/tabs/input_general.cpp:125
 msgid "yes"
 msgstr "はい"
-
-#~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
-#~ msgstr "MPEG-4 part 2の圧縮はネイティブMPEG-4でのみ動作します。しかし'--engage native_mpeg4'でネイティブMPEG-4モードが選択されていません。\n"
