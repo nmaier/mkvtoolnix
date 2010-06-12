@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: nl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-05-25 23:42+0200\n"
-"PO-Revision-Date: 2010-06-12 11:33+0100\n"
+"PO-Revision-Date: 2010-06-12 19:59+0100\n"
 "Last-Translator: René Maassen <bmom43@hotmail.com>\n"
 "Language-Team: Dutch <bmom43@hotmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -1043,9 +1043,8 @@ msgid "'%1%' does not contain a valid unit ('s', 'ms', 'us' or 'ns') in '%2% %3%
 msgstr "'%1%' bevat geen geldige unit ('s', 'ms', 'us' of 'ns') in '%2% %3%'.\n"
 
 #: src/merge/mkvmerge.cpp:1036
-#, fuzzy
 msgid "'%1%' is an unsupported argument for --compression. Available compression methods are: %2%\n"
-msgstr "'%1%' een niet ondersteunt argument voor --compressie. Beschikbare compressie methodes zijn 'none en zlib'.\n"
+msgstr "'%1%' een niet ondersteunt argument voor --compressie. Beschikbare compressie methodes zijn %2%\n"
 
 #: src/merge/mkvmerge.cpp:977
 msgid "'%1%' is an unsupported argument for --cues.\n"
@@ -2518,7 +2517,7 @@ msgstr "Kan de volgende Ogg pagina niet vinden. Dit geeft een beschadigde Ogg/Og
 #: src/input/r_avi.cpp:659
 #: src/input/r_matroska.cpp:1533
 msgid "Could not find valid DTS headers in this track's first frames.\n"
-msgstr ""
+msgstr "Kon geen geldig DTS kopstuk vinden in dit spoor, eerste beeld.\n"
 
 #: src/common/locale.cpp:133
 msgid "Could not initialize the iconv library for the conversion from %1% to UFT-8. Some strings will not be converted to UTF-8 and the resulting Matroska file might not comply with the Matroska specs (error: %2%, %3%).\n"
@@ -3478,9 +3477,8 @@ msgstr ""
 "uitklaplijst en de  'voeg toe' knop te gebruiken."
 
 #: src/mmg/tabs/chapters.cpp:333
-#, fuzzy
 msgid "Here you can adjust all the timecodes of the selected chapter and of all its sub-chapters by a specific amount either increasing or decreasing them."
-msgstr "Here you can adjust all the timcdoes of the selected chapter and all its childrend by a specific amount either increasing or decreasing it."
+msgstr "Hier kan je de tijd codes bijstellen met een bepaalde hoeveelheid (verhogen of verlagen) van de geselecteerde hoofdstukken (en de bijbehorende)."
 
 #: src/mmg/options/chapters.cpp:76
 msgid ""
@@ -8692,30 +8690,42 @@ msgstr "ja"
 
 #~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
 #~ msgstr "Het MPEG-4 part 2 compressie werkt alleen met basis MPEG-4. Hoewel, basis MPEG-4 mode is niet geselecteerd met selected with '--aangaan basis_mpeg4'.\n"
+
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "Schrijf raw FLAC bestanden (standaard: schrijf OggFLAC bestanden)."
+
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: Kon niet instellen de fout terugkoppeling.\n"
+
 #~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
 #~ msgstr "flac_header_extraction: Kon niet instellen de metadata terugkoppeling\n"
+
 #~ msgid "flac_header_extraction: Could not set the read callback.\n"
 #~ msgstr "flac_header_extraction: Kon niet instellen de lees terugkoppeling.\n"
+
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: Kon niet instellen de schrijf terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de eof terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the error callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de fout terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the length callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de lengte terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the metadata callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de metadata terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the read callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de lees terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the seek callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de zoek terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the tell callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de vertel terugkoppeling.\n"
+
 #~ msgid "flac_reader: Could not set the write callback.\n"
 #~ msgstr "flac_lezer: Kon niet instellen de schrijf terugkoppeling.\n"
-
