@@ -18,7 +18,7 @@ SetCompressorDictSize 64
 
 # MUI Settings
 !define MUI_ABORTWARNING
-!define MUI_ICON "matroskalogo_big.ico"
+!define MUI_ICON "mkvmergeGUI.ico"
 
 # Language Selection Dialog Settings
 !define MUI_LANGDLL_REGISTRY_ROOT "HKCU"

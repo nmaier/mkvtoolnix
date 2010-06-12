@@ -275,6 +275,7 @@ install-shared:
 	done
 	@for dir in share/icons/* ; do \
 		dir=`echo "$$dir" | sed 's,.*/,,'` ; \
+		test "$$dir" = "windows" && continue ; \
 		echo "$(mkinstalldirs) $(DESTDIR)$(icondir)/$$dir/apps" ; \
 		$(mkinstalldirs) $(DESTDIR)$(icondir)/$$dir/apps ; \
 		for file in share/icons/$$dir/*.png ; do \

@@ -44,7 +44,6 @@
 #include "mmg/cli_options_dlg.h"
 #include "mmg/header_editor/frame.h"
 #include "mmg/jobs.h"
-#include "mmg/matroskalogo.xpm"
 #include "mmg/mmg_dialog.h"
 #include "mmg/mmg.h"
 #include "mmg/mux_dialog.h"
@@ -54,6 +53,7 @@
 #include "mmg/tabs/chapters.h"
 #include "mmg/tabs/global.h"
 #include "mmg/tabs/input.h"
+#include "share/icons/32x32/mkvmergeGUI.xpm"
 
 mmg_dialog *mdlg;
 wxString last_open_dir;
@@ -158,7 +158,7 @@ mmg_dialog::mmg_dialog()
 
   load_job_queue();
 
-  SetIcon(wxIcon(matroskalogo_xpm));
+  SetIcon(wxIcon(mkvmergeGUI_xpm));
 
   help = NULL;
 

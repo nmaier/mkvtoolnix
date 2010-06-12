@@ -27,10 +27,8 @@
 #include "common/version.h"
 #include "common/wx.h"
 #include "info/wxwidgets_ui.h"
-#if !defined(SYS_WINDOWS)
-#include "info/matroska.xpm"
-#endif
 #include "info/mkvinfo.h"
+#include "share/icons/32x32/mkvinfo.xpm"
 
 using namespace libebml;
 using namespace libmatroska;
@@ -113,7 +111,7 @@ mi_frame::mi_frame(const wxString &title,
   , file_open(false)
   , tree(new wxTreeCtrl(this, 4254))
 {
-  SetIcon(wxICON(matroska));
+  SetIcon(wxIcon(mkvinfo_xpm));
 
   menu_file           = new wxMenu();
   menu_options        = new wxMenu();
