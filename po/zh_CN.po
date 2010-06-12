@@ -811,7 +811,7 @@ msgstr "%s (MIME 类型 %s, 尺寸 %ld) 自 %s (%s)"
 msgid "%s%s (ID %lld, type: %s) from %s"
 msgstr "%s%s (ID %lld, 类型: %s) 自 %s"
 
-#: src/info/wxwidgets_ui.cpp:348
+#: src/info/wxwidgets_ui.cpp:346
 #, c-format
 msgid ""
 "%s.\n"
@@ -838,7 +838,7 @@ msgstr "中断(&A)"
 msgid "&About"
 msgstr "关于(&A)"
 
-#: src/info/wxwidgets_ui.cpp:137
+#: src/info/wxwidgets_ui.cpp:135
 msgid "&About\tF1"
 msgstr "关于(&A)\tF1"
 
@@ -859,11 +859,11 @@ msgstr "章节编辑器(&C)"
 msgid "&Chapter editor\tAlt-4"
 msgstr "章节编辑器(&C)\tAlt-4"
 
-#: src/mmg/header_editor/frame.cpp:145
+#: src/mmg/header_editor/frame.cpp:147
 msgid "&Close\tCtrl-W"
 msgstr "关闭(&C)\tCtrl-W"
 
-#: src/mmg/header_editor/frame.cpp:148
+#: src/mmg/header_editor/frame.cpp:150
 msgid "&Collapse all entries\tCtrl-P"
 msgstr "收起所有项(&C)\tCtrl-P"
 
@@ -883,17 +883,17 @@ msgstr "禁用(&D)"
 msgid "&Down"
 msgstr "下移(&D)"
 
-#: src/mmg/header_editor/frame.cpp:147
+#: src/mmg/header_editor/frame.cpp:149
 msgid "&Expand all entries\tCtrl-E"
 msgstr "展开所有项(&E)\tCtrl-E"
 
-#: src/info/wxwidgets_ui.cpp:131
+#: src/info/wxwidgets_ui.cpp:129
 msgid "&Expand important elements\tCtrl-E"
 msgstr "展开重要元素(&E)\tCtrl-E"
 
 #: src/mmg/mmg_dialog.cpp:279
-#: src/mmg/header_editor/frame.cpp:151
-#: src/info/wxwidgets_ui.cpp:139
+#: src/mmg/header_editor/frame.cpp:153
+#: src/info/wxwidgets_ui.cpp:137
 msgid "&File"
 msgstr "文件(&F)"
 
@@ -906,13 +906,13 @@ msgid "&Header editor\tCtrl-E"
 msgstr "头部编辑器(&H)\tCtrl-E"
 
 #: src/mmg/mmg_dialog.cpp:283
-#: src/mmg/header_editor/frame.cpp:153
-#: src/info/wxwidgets_ui.cpp:141
+#: src/mmg/header_editor/frame.cpp:155
+#: src/info/wxwidgets_ui.cpp:139
 msgid "&Help"
 msgstr "帮助(&H)"
 
 #: src/mmg/mmg_dialog.cpp:276
-#: src/mmg/header_editor/frame.cpp:150
+#: src/mmg/header_editor/frame.cpp:152
 msgid "&Help\tF1"
 msgstr "帮助(&H)\tF1"
 
@@ -950,17 +950,17 @@ msgstr "新建章节(&N)"
 msgid "&Ok"
 msgstr "确定(&O)"
 
-#: src/mmg/header_editor/frame.cpp:142
-#: src/info/wxwidgets_ui.cpp:123
+#: src/mmg/header_editor/frame.cpp:144
+#: src/info/wxwidgets_ui.cpp:121
 msgid "&Open\tCtrl-O"
 msgstr "打开(&O)\tCtrl-O"
 
-#: src/info/wxwidgets_ui.cpp:140
+#: src/info/wxwidgets_ui.cpp:138
 msgid "&Options"
 msgstr "选项(&O)"
 
 #: src/mmg/mmg_dialog.cpp:257
-#: src/mmg/header_editor/frame.cpp:146
+#: src/mmg/header_editor/frame.cpp:148
 msgid "&Quit\tCtrl-Q"
 msgstr "退出(&Q)\tCtrl-Q"
 
@@ -968,7 +968,7 @@ msgstr "退出(&Q)\tCtrl-Q"
 msgid "&Re-enable"
 msgstr "重新启用(&R)"
 
-#: src/mmg/header_editor/frame.cpp:144
+#: src/mmg/header_editor/frame.cpp:146
 msgid "&Reload\tCtrl-R"
 msgstr "重新加载(&R)\tCtrl-R"
 
@@ -981,11 +981,11 @@ msgstr "重置(&R)"
 msgid "&Save"
 msgstr "保存(&S)"
 
-#: src/mmg/header_editor/frame.cpp:143
+#: src/mmg/header_editor/frame.cpp:145
 msgid "&Save\tCtrl-S"
 msgstr "保存(&S)\tCtrl-S"
 
-#: src/info/wxwidgets_ui.cpp:124
+#: src/info/wxwidgets_ui.cpp:122
 msgid "&Save info as text\tCtrl-S"
 msgstr "将信息另存为文本(&S)\tCtrl-S"
 
@@ -1001,7 +1001,7 @@ msgstr "启动(&S)"
 msgid "&Up"
 msgstr "上移(&U)"
 
-#: src/mmg/header_editor/frame.cpp:149
+#: src/mmg/header_editor/frame.cpp:151
 msgid "&Validate\tCtrl-T"
 msgstr "检验(&V)\tCtrl-T"
 
@@ -1393,17 +1393,17 @@ msgid "'-S' and '-s' used on the same source file.\n"
 msgstr "'-S' 和 '-s' 使用在了相同的源文件上。\n"
 
 #: src/common/property_element.cpp:116
-#: src/mmg/header_editor/frame.cpp:394
+#: src/mmg/header_editor/frame.cpp:396
 msgid "'Default track' flag"
 msgstr "'默认轨' 标记"
 
 #: src/common/property_element.cpp:119
-#: src/mmg/header_editor/frame.cpp:401
+#: src/mmg/header_editor/frame.cpp:403
 msgid "'Forced display' flag"
 msgstr "'强制轨' 标记"
 
 #: src/common/property_element.cpp:118
-#: src/mmg/header_editor/frame.cpp:398
+#: src/mmg/header_editor/frame.cpp:400
 msgid "'Track enabled' flag"
 msgstr "'可用轨' 标记"
 
@@ -1488,6 +1488,11 @@ msgstr "---全部---"
 msgid "---common---"
 msgstr "---常用---"
 
+#: src/mmg/cli_options_dlg.cpp:82
+#, fuzzy
+msgid "--cluster-length REPLACEME"
+msgstr "--timecode-scale REPLACEME"
+
 #: src/mmg/cli_options_dlg.cpp:98
 msgid "--timecode-scale REPLACEME"
 msgstr "--timecode-scale REPLACEME"
@@ -1552,12 +1557,12 @@ msgid "A block was found at timestamp %1% for track number %2%. However, no head
 msgstr "在时间戳 %1% 处找到了轨道号为 %2% 的块。然而，没有找到符合该轨道号的头部信息。此块将被跳过。\n"
 
 #: src/common/property_element.cpp:133
-#: src/mmg/header_editor/frame.cpp:436
+#: src/mmg/header_editor/frame.cpp:438
 msgid "A human-readable string specifying the codec."
 msgstr "一个人类可读的字串，描述编解码器。"
 
 #: src/common/property_element.cpp:130
-#: src/mmg/header_editor/frame.cpp:426
+#: src/mmg/header_editor/frame.cpp:428
 msgid "A human-readable track name."
 msgstr "一个人类可读的字串，描述轨道名称。"
 
@@ -1567,7 +1572,7 @@ msgid "A job with the description '%s' already exists. Do you really want to add
 msgstr "描述为 '%s' 的任务已存在。是否添加描述相同的任务?"
 
 #: src/common/property_element.cpp:106
-#: src/mmg/header_editor/frame.cpp:340
+#: src/mmg/header_editor/frame.cpp:342
 msgid ""
 "A randomly generated unique ID to identify the current\n"
 "segment between many others (128 bits)."
@@ -1582,7 +1587,7 @@ msgid "A track with the ID %1% was requested but not found in the file. The corr
 msgstr "ID 为 %1% 的轨道被要求但在文件中没有找到。相应的选项将被忽略。\n"
 
 #: src/common/property_element.cpp:114
-#: src/mmg/header_editor/frame.cpp:391
+#: src/mmg/header_editor/frame.cpp:393
 msgid ""
 "A unique ID to identify the Track. This should be\n"
 "kept the same when making a direct stream copy\n"
@@ -1593,14 +1598,14 @@ msgstr ""
 "该 ID 会得以保留。"
 
 #: src/common/property_element.cpp:109
-#: src/mmg/header_editor/frame.cpp:348
+#: src/mmg/header_editor/frame.cpp:350
 msgid ""
 "A unique ID to identify the next chained\n"
 "segment (128 bits)."
 msgstr "识别链接的下一剪辑的唯一 ID (128 位)。"
 
 #: src/common/property_element.cpp:108
-#: src/mmg/header_editor/frame.cpp:344
+#: src/mmg/header_editor/frame.cpp:346
 msgid ""
 "A unique ID to identify the previous chained\n"
 "segment (128 bits)."
@@ -1664,7 +1669,7 @@ msgid "Aborted processing on %s"
 msgstr "已中断对 %s 的处理"
 
 #: src/info/qt_ui.cpp:125
-#: src/info/wxwidgets_ui.cpp:354
+#: src/info/wxwidgets_ui.cpp:352
 msgid "About mkvinfo"
 msgstr "关于 mkvinfo"
 
@@ -1732,7 +1737,7 @@ msgstr "调整章节时间码"
 msgid "Adjust timecodes"
 msgstr "调整时间码"
 
-#: src/info/wxwidgets_ui.cpp:131
+#: src/info/wxwidgets_ui.cpp:129
 msgid "After loading a file expand the most important elements"
 msgstr "载入文件后展开最重要的元素"
 
@@ -1752,7 +1757,7 @@ msgstr "所有文件 (*.*)|*.*"
 msgid "All chapter entries are valid."
 msgstr "所有章节条目都有效。"
 
-#: src/mmg/header_editor/frame.cpp:633
+#: src/mmg/header_editor/frame.cpp:635
 msgid "All header values are OK."
 msgstr "所有头部值都正常。"
 
@@ -1760,7 +1765,7 @@ msgstr "所有头部值都正常。"
 msgid "All known property names and their meaning\n"
 msgstr "已知的所有属性名及其含义\n"
 
-#: src/info/wxwidgets_ui.cpp:280
+#: src/info/wxwidgets_ui.cpp:278
 msgid "All supported files|*.mkv;*.mka;*.mks;*.webm;*.webma;*.webmv|Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|WebM files (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|All files|*.*"
 msgstr "所有受支持的文件|*.mkv;*.mka;*.mks;*.webm;*.webma;*.webmv|Matroska 文件 (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|WebM 文件 (*.webm;*.webma;*.webmv)|*.webm;*.webma;*.webmv|所有文件|*.*"
 
@@ -1786,7 +1791,7 @@ msgid "Always on top"
 msgstr "总在最前"
 
 #: src/common/property_element.cpp:132
-#: src/mmg/header_editor/frame.cpp:433
+#: src/mmg/header_editor/frame.cpp:435
 msgid "An ID corresponding to the codec."
 msgstr "对应编解码器的 ID。"
 
@@ -1799,20 +1804,20 @@ msgid "An empty file name is not valid.\n"
 msgstr "空文件名是无效的。\n"
 
 #: src/common/property_element.cpp:105
-#: src/mmg/header_editor/frame.cpp:336
+#: src/mmg/header_editor/frame.cpp:338
 msgid ""
 "An escaped filename corresponding to\n"
 "the next segment."
 msgstr "转义的文件名，对应下一剪辑。"
 
 #: src/common/property_element.cpp:104
-#: src/mmg/header_editor/frame.cpp:333
+#: src/mmg/header_editor/frame.cpp:335
 msgid ""
 "An escaped filename corresponding to\n"
 "the previous segment."
 msgstr "转义的文件名，对应上一剪辑。"
 
-#: src/mmg/header_editor/frame.cpp:706
+#: src/mmg/header_editor/frame.cpp:708
 #: src/mmg/tabs/chapters.cpp:1905
 #: src/propedit/propedit.cpp:43
 msgid "An unknown error occured. The file has been modified."
@@ -1898,22 +1903,22 @@ msgid "Attachments"
 msgstr "附件"
 
 #: src/common/property_element.cpp:156
-#: src/mmg/header_editor/frame.cpp:509
+#: src/mmg/header_editor/frame.cpp:511
 msgid "Audio bit depth"
 msgstr "音频位深"
 
 #: src/common/property_element.cpp:155
-#: src/mmg/header_editor/frame.cpp:505
+#: src/mmg/header_editor/frame.cpp:507
 msgid "Audio channels"
 msgstr "音频声道数"
 
 #: src/common/property_element.cpp:154
-#: src/mmg/header_editor/frame.cpp:501
+#: src/mmg/header_editor/frame.cpp:503
 msgid "Audio output sampling frequency"
 msgstr "音频输出采样率"
 
 #: src/common/property_element.cpp:153
-#: src/mmg/header_editor/frame.cpp:496
+#: src/mmg/header_editor/frame.cpp:498
 msgid "Audio sampling frequency"
 msgstr "音频采样率"
 
@@ -1956,7 +1961,7 @@ msgid "Bit depth: %1%"
 msgstr "位深: %1%"
 
 #: src/common/property_element.cpp:156
-#: src/mmg/header_editor/frame.cpp:509
+#: src/mmg/header_editor/frame.cpp:511
 msgid "Bits per sample, mostly used for PCM."
 msgstr "比特每采样，主要用于 PCM。"
 
@@ -2282,7 +2287,7 @@ msgstr "成功混流后清空输入文件列表"
 msgid "Clear inputs after adding a job to the job queue"
 msgstr "添加任务到任务列表后清空输入文件列表"
 
-#: src/mmg/header_editor/frame.cpp:145
+#: src/mmg/header_editor/frame.cpp:147
 msgid "Close the current file without saving"
 msgstr "在不保存的情况下关闭当前文件"
 
@@ -2315,7 +2320,7 @@ msgid "Cluster timecode: %|1$.3f|s"
 msgstr "簇时间码: %|1$.3f|s"
 
 #: src/common/property_element.cpp:132
-#: src/mmg/header_editor/frame.cpp:433
+#: src/mmg/header_editor/frame.cpp:435
 msgid "Codec ID"
 msgstr "编解码器 ID"
 
@@ -2336,7 +2341,7 @@ msgid "Codec info URL: %1%"
 msgstr "编解码器信息 URL: %1%"
 
 #: src/common/property_element.cpp:133
-#: src/mmg/header_editor/frame.cpp:436
+#: src/mmg/header_editor/frame.cpp:438
 msgid "Codec name"
 msgstr "编解码器名称"
 
@@ -2356,7 +2361,7 @@ msgstr "编解码态: %1%"
 msgid "CodecPrivate, length %1%%2%"
 msgstr "编解码器专有, 长 %1%%2%"
 
-#: src/mmg/header_editor/frame.cpp:148
+#: src/mmg/header_editor/frame.cpp:150
 msgid "Collapse all entries so that none of their sub-entries will be shown"
 msgstr "收起所有条目，这样它们的子条目将不被显示"
 
@@ -2444,7 +2449,7 @@ msgstr "不支持 CorePicture 帧 %1%。\n"
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
 msgstr "无法为 mkvmerge 的命令行选项创建临时文件 '%s' (错误代号 %d, %s)。"
 
-#: src/info/wxwidgets_ui.cpp:299
+#: src/info/wxwidgets_ui.cpp:297
 #, c-format
 msgid "Could not create the file '%s'."
 msgstr "无法创建文件 '%s'。"
@@ -2730,7 +2735,7 @@ msgid "Default"
 msgstr "默认"
 
 #: src/common/property_element.cpp:127
-#: src/mmg/header_editor/frame.cpp:417
+#: src/mmg/header_editor/frame.cpp:419
 msgid "Default duration"
 msgstr "默认时长"
 
@@ -2813,7 +2818,7 @@ msgstr "显示高度: %1%"
 msgid "Display unit: %1%%2%"
 msgstr "显示单位: %1%%2%"
 
-#: src/mmg/header_editor/frame.cpp:150
+#: src/mmg/header_editor/frame.cpp:152
 msgid "Display usage information"
 msgstr "显示用法信息"
 
@@ -2865,7 +2870,7 @@ msgstr "持续时长: %|1$.3f|ms"
 msgid "Duration: %|1$.3f|s (%2%)"
 msgstr "持续时长: %|1$.3f|s (%2%)"
 
-#: src/info/wxwidgets_ui.cpp:127
+#: src/info/wxwidgets_ui.cpp:125
 msgid "E&xit\tCtrl-Q"
 msgstr "退出(&X)\tCtrl-Q"
 
@@ -2965,7 +2970,7 @@ msgid "English language name"
 msgstr "英文语言名"
 
 #: src/info/qt_ui.cpp:130
-#: src/info/wxwidgets_ui.cpp:245
+#: src/info/wxwidgets_ui.cpp:243
 msgid "Error"
 msgstr "错误"
 
@@ -3011,8 +3016,8 @@ msgstr "解析 '%1%' 中的标签出错: 缺少一些必要元素。\n"
 msgid "Error saving the information"
 msgstr "保存信息出错"
 
-#: src/mmg/header_editor/frame.cpp:690
-#: src/mmg/header_editor/frame.cpp:696
+#: src/mmg/header_editor/frame.cpp:692
+#: src/mmg/header_editor/frame.cpp:698
 #: src/mmg/tabs/chapters.cpp:1888
 #: src/mmg/tabs/chapters.cpp:1894
 msgid "Error writing Matroska file"
@@ -3074,7 +3079,7 @@ msgstr "示例"
 msgid "Executable files (*.exe)|*.exe|%s"
 msgstr "可执行文件 (*.exe)|*.exe|%s"
 
-#: src/mmg/header_editor/frame.cpp:147
+#: src/mmg/header_editor/frame.cpp:149
 msgid "Expand all entries so that their sub-entries will be shown"
 msgstr "展开所有条目，这样它们的子条目都将被显示"
 
@@ -3219,7 +3224,7 @@ msgstr "文件识别失败。返回代码: %d。错误代号: %d (%s)。请确�
 msgid "File is already processed"
 msgstr "文件已在处理"
 
-#: src/mmg/header_editor/frame.cpp:525
+#: src/mmg/header_editor/frame.cpp:527
 msgid "File modified"
 msgstr "文件已修改"
 
@@ -3227,7 +3232,7 @@ msgstr "文件已修改"
 msgid "File name: %1%"
 msgstr "文件名: %1%"
 
-#: src/mmg/header_editor/frame.cpp:260
+#: src/mmg/header_editor/frame.cpp:262
 #: src/mmg/tabs/chapters.cpp:548
 msgid "File parsing failed"
 msgstr "解析文件失败"
@@ -3236,7 +3241,7 @@ msgstr "解析文件失败"
 msgid "File removal not possible"
 msgstr "文件不能移除"
 
-#: src/mmg/header_editor/frame.cpp:702
+#: src/mmg/header_editor/frame.cpp:704
 #: src/mmg/tabs/chapters.cpp:1901
 msgid "File structure warning"
 msgstr "文件结构警告"
@@ -3388,19 +3393,19 @@ msgstr "全局标签 (%d 项) 自 %s"
 msgid "Global tags: %1% entries"
 msgstr "全局标签: %1% 条记录"
 
-#: src/mmg/header_editor/frame.cpp:152
+#: src/mmg/header_editor/frame.cpp:154
 msgid "H&eaders"
 msgstr "头部(&E)"
 
-#: src/mmg/header_editor/frame.cpp:172
+#: src/mmg/header_editor/frame.cpp:174
 msgid "Header editor"
 msgstr "头部编辑器"
 
-#: src/mmg/header_editor/frame.cpp:131
+#: src/mmg/header_editor/frame.cpp:133
 msgid "Header editor ready."
 msgstr "头部编辑器准备就绪。"
 
-#: src/mmg/header_editor/frame.cpp:174
+#: src/mmg/header_editor/frame.cpp:176
 #, c-format
 msgid "Header editor: %s"
 msgstr "头部编辑器: %s"
@@ -3413,25 +3418,25 @@ msgstr "无法执行除头压缩，因为缓冲区包含小于要移除头部尺
 msgid "Header removal compression not possible because the buffer did not start with the bytes that should be removed. Wanted bytes:%1%; found:%2%."
 msgstr "无法执行除头压缩，因为缓冲区未以待移除的字节起始。需要的字节:%1%; 找到的是:%2%。"
 
-#: src/mmg/header_editor/frame.cpp:538
-#: src/mmg/header_editor/frame.cpp:633
-#: src/mmg/header_editor/frame.cpp:638
+#: src/mmg/header_editor/frame.cpp:540
+#: src/mmg/header_editor/frame.cpp:635
+#: src/mmg/header_editor/frame.cpp:640
 msgid "Header validation"
 msgstr "头部检验"
 
-#: src/mmg/header_editor/frame.cpp:566
-#: src/mmg/header_editor/frame.cpp:576
-#: src/mmg/header_editor/frame.cpp:782
+#: src/mmg/header_editor/frame.cpp:568
+#: src/mmg/header_editor/frame.cpp:578
+#: src/mmg/header_editor/frame.cpp:784
 msgid "Headers modified"
 msgstr "头部已修改"
 
 #: src/common/property_element.cpp:139
-#: src/mmg/header_editor/frame.cpp:446
+#: src/mmg/header_editor/frame.cpp:448
 msgid "Height of the encoded video frames in pixels."
 msgstr "编码后的视频帧的高度，单位：像素。"
 
 #: src/common/property_element.cpp:141
-#: src/mmg/header_editor/frame.cpp:456
+#: src/mmg/header_editor/frame.cpp:458
 msgid "Height of the video frames to display."
 msgstr "视频帧的显示高度。"
 
@@ -3582,7 +3587,7 @@ msgstr "交错扫描: %1%"
 msgid "Internal bug: tracks.cpp SSA #1. %1%"
 msgstr "内部错误: tracks.cpp SSA #1。 %1%"
 
-#: src/mmg/header_editor/frame.cpp:706
+#: src/mmg/header_editor/frame.cpp:708
 #: src/mmg/tabs/chapters.cpp:1905
 msgid "Internal program error"
 msgstr "内部程序错误"
@@ -3904,7 +3909,7 @@ msgid "Lacing flag: %1%"
 msgstr "“紧缩”标记: %1%"
 
 #: src/common/property_element.cpp:131
-#: src/mmg/header_editor/frame.cpp:429
+#: src/mmg/header_editor/frame.cpp:431
 msgid "Language"
 msgstr "语言"
 
@@ -4087,7 +4092,7 @@ msgstr "Matroska 文件 (*.mkv *.mka *.mks);;所有文件 (*.*)"
 msgid "Matroska files (*.mkv;*.mka)|*.mkv;*.mka|%s"
 msgstr "Matroska 文件 (*.mkv;*.mka)|*.mkv;*.mka|%s"
 
-#: src/mmg/header_editor/frame.cpp:238
+#: src/mmg/header_editor/frame.cpp:240
 #, c-format
 msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|%s"
 msgstr "Matroska 文件 (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|%s"
@@ -4101,7 +4106,7 @@ msgid "MaxCache: %1%"
 msgstr "最大缓存: %1%"
 
 #: src/common/property_element.cpp:125
-#: src/mmg/header_editor/frame.cpp:412
+#: src/mmg/header_editor/frame.cpp:414
 msgid "Maximum cache"
 msgstr "最大缓存"
 
@@ -4122,7 +4127,7 @@ msgid "MinCache: %1%"
 msgstr "最小缓存: %1%"
 
 #: src/common/property_element.cpp:123
-#: src/mmg/header_editor/frame.cpp:407
+#: src/mmg/header_editor/frame.cpp:409
 msgid "Minimum cache"
 msgstr "最小缓存"
 
@@ -4227,7 +4232,7 @@ msgid "NALU size length:"
 msgstr "NALU 长:"
 
 #: src/common/property_element.cpp:130
-#: src/mmg/header_editor/frame.cpp:426
+#: src/mmg/header_editor/frame.cpp:428
 msgid "Name"
 msgstr "名称"
 
@@ -4253,7 +4258,7 @@ msgid "New value:"
 msgstr "新值:"
 
 #: src/common/property_element.cpp:105
-#: src/mmg/header_editor/frame.cpp:336
+#: src/mmg/header_editor/frame.cpp:338
 msgid "Next filename"
 msgstr "下一文件名"
 
@@ -4274,7 +4279,7 @@ msgid "Next segment UID:%1%"
 msgstr "下一剪辑 UID:%1%"
 
 #: src/common/property_element.cpp:109
-#: src/mmg/header_editor/frame.cpp:347
+#: src/mmg/header_editor/frame.cpp:349
 msgid "Next segment's unique ID"
 msgstr "下段唯一 ID"
 
@@ -4319,11 +4324,11 @@ msgstr "未找到章节"
 msgid "No error"
 msgstr "无误"
 
-#: src/mmg/header_editor/frame.cpp:530
+#: src/mmg/header_editor/frame.cpp:532
 msgid "No fields modified"
 msgstr "未修改文件"
 
-#: src/mmg/header_editor/frame.cpp:218
+#: src/mmg/header_editor/frame.cpp:220
 msgid ""
 "No file has been loaded yet. You can open a file by selecting\n"
 "'Open' from the 'File' menu."
@@ -4331,7 +4336,7 @@ msgstr ""
 "尚未载入文件。\n"
 "您可以通过“文件”菜单中的“打开”命令打开一个文件。"
 
-#: src/mmg/header_editor/frame.cpp:218
+#: src/mmg/header_editor/frame.cpp:220
 msgid "No file loaded"
 msgstr "未载入文件"
 
@@ -4389,7 +4394,7 @@ msgstr "未发现版本号。\n"
 msgid "None"
 msgstr "单视角"
 
-#: src/mmg/header_editor/frame.cpp:530
+#: src/mmg/header_editor/frame.cpp:532
 msgid "None of the header fields has been modified. Nothing has been saved."
 msgstr "头部字段未被修改。未保存任何改动。"
 
@@ -4418,12 +4423,12 @@ msgid "Nothing to do.\n"
 msgstr "无事可做。\n"
 
 #: src/common/property_element.cpp:127
-#: src/mmg/header_editor/frame.cpp:418
+#: src/mmg/header_editor/frame.cpp:420
 msgid "Number of nanoseconds (not scaled) per frame."
 msgstr "每帧的毫微秒数 (未缩放前的)。"
 
 #: src/common/property_element.cpp:155
-#: src/mmg/header_editor/frame.cpp:505
+#: src/mmg/header_editor/frame.cpp:507
 msgid "Numbers of channels in the track."
 msgstr "此轨的声道数。"
 
@@ -4484,12 +4489,12 @@ msgstr "选项(&T)\tCtrl-P"
 msgid "Open File"
 msgstr "打开文件"
 
-#: src/mmg/header_editor/frame.cpp:238
-#: src/info/wxwidgets_ui.cpp:123
+#: src/mmg/header_editor/frame.cpp:240
+#: src/info/wxwidgets_ui.cpp:121
 msgid "Open a Matroska file"
 msgstr "打开 Matroska 文件"
 
-#: src/mmg/header_editor/frame.cpp:142
+#: src/mmg/header_editor/frame.cpp:144
 msgid "Open an existing Matroska file"
 msgstr "打开现有的 Matroska 文件"
 
@@ -4567,7 +4572,7 @@ msgstr "包号 %1% 包含无效的 FLAC 头，将被跳过。\n"
 msgid "Packet queue not empty (flushed: %1%). Frames have been lost during remux. %2%\n"
 msgstr "包队列非空 (已缓冲: %1%)。帧已在重混流时丢失。 %2%\n"
 
-#: src/info/wxwidgets_ui.cpp:129
+#: src/info/wxwidgets_ui.cpp:127
 msgid "Parse the file completely and show all elements"
 msgstr "完整解析文件并显示所有元素"
 
@@ -4630,7 +4635,7 @@ msgstr ""
 "它以大篇幅解释了本列表中不易看透的细节。\n"
 
 #: src/common/property_element.cpp:104
-#: src/mmg/header_editor/frame.cpp:333
+#: src/mmg/header_editor/frame.cpp:335
 msgid "Previous filename"
 msgstr "上一文件名"
 
@@ -4647,7 +4652,7 @@ msgid "Previous segment UID:%1%"
 msgstr "上一剪辑 UID:%1%"
 
 #: src/common/property_element.cpp:108
-#: src/mmg/header_editor/frame.cpp:343
+#: src/mmg/header_editor/frame.cpp:345
 msgid "Previous segment's unique ID"
 msgstr "上段唯一 ID"
 
@@ -4819,11 +4824,11 @@ msgstr "Quicktime/MP4 读取器: 未知/不支持的 FourCC '%|1$.4s|'，轨道 
 msgid "Quit the application"
 msgstr "退出本程序"
 
-#: src/mmg/header_editor/frame.cpp:146
+#: src/mmg/header_editor/frame.cpp:148
 msgid "Quit the header editor"
 msgstr "退出头部编辑器"
 
-#: src/info/wxwidgets_ui.cpp:127
+#: src/info/wxwidgets_ui.cpp:125
 msgid "Quits mkvinfo"
 msgstr "退出 mkvinfo"
 
@@ -4848,7 +4853,7 @@ msgid "Ready"
 msgstr "就绪"
 
 #: src/common/property_element.cpp:154
-#: src/mmg/header_editor/frame.cpp:501
+#: src/mmg/header_editor/frame.cpp:503
 msgid "Real output sampling frequency in Hz."
 msgstr "实际输出的采样率，单位 Hz。"
 
@@ -4884,7 +4889,7 @@ msgstr "参考优先级: %1%"
 msgid "Reference virtual: %1%"
 msgstr "参考实质: %1%"
 
-#: src/mmg/header_editor/frame.cpp:144
+#: src/mmg/header_editor/frame.cpp:146
 msgid "Reload the current file without saving"
 msgstr "在不保存的情况下重新载入当前文件"
 
@@ -4953,7 +4958,7 @@ msgid "Same directory as the first input file's"
 msgstr "与第一个输入文件同目录"
 
 #: src/common/property_element.cpp:153
-#: src/mmg/header_editor/frame.cpp:496
+#: src/mmg/header_editor/frame.cpp:498
 msgid "Sampling frequency in Hz."
 msgstr "采样率，单位 Hz。"
 
@@ -4997,7 +5002,7 @@ msgstr "将当前章节以另一名称保存"
 msgid "Save the current chapters to an existing Matroska file"
 msgstr "将当前章节存至现有 Matroska 文件"
 
-#: src/mmg/header_editor/frame.cpp:143
+#: src/mmg/header_editor/frame.cpp:145
 msgid "Save the header values"
 msgstr "保存头部字段值"
 
@@ -5005,7 +5010,7 @@ msgstr "保存头部字段值"
 msgid "Save to &Matroska file"
 msgstr "保存到 &Matroska 文件(&M)"
 
-#: src/info/wxwidgets_ui.cpp:124
+#: src/info/wxwidgets_ui.cpp:122
 msgid "Saves the information from the current file to a text file"
 msgstr "从当前文件保存信息至文本文件"
 
@@ -5036,7 +5041,7 @@ msgstr "定位位: %1%"
 #: src/extract/timecodes_v2.cpp:198
 #: src/extract/tracks.cpp:348
 #: src/info/qt_ui.cpp:177
-#: src/info/wxwidgets_ui.cpp:221
+#: src/info/wxwidgets_ui.cpp:219
 msgid "Segment"
 msgstr "剪辑"
 
@@ -5049,7 +5054,7 @@ msgid "Segment UIDs:"
 msgstr "剪辑 UID:"
 
 #: src/common/property_element.cpp:103
-#: src/mmg/header_editor/frame.cpp:330
+#: src/mmg/header_editor/frame.cpp:332
 msgid "Segment filename"
 msgstr "剪辑文件名"
 
@@ -5066,7 +5071,7 @@ msgstr "剪辑信息文件:"
 msgid "Segment info files (*.xml)|*.xml|%s"
 msgstr "剪辑信息文件 (*.xml)|*.xml|%s"
 
-#: src/mmg/header_editor/frame.cpp:320
+#: src/mmg/header_editor/frame.cpp:322
 #: src/extract/timecodes_v2.cpp:218
 #: src/extract/tracks.cpp:366
 #: src/propedit/options.cpp:152
@@ -5074,7 +5079,7 @@ msgstr "剪辑信息文件 (*.xml)|*.xml|%s"
 #: src/propedit/propedit_cli_parser.cpp:160
 #: src/info/mkvinfo.cpp:542
 #: src/info/qt_ui.cpp:178
-#: src/info/wxwidgets_ui.cpp:224
+#: src/info/wxwidgets_ui.cpp:222
 msgid "Segment information"
 msgstr "剪辑信息"
 
@@ -5082,12 +5087,12 @@ msgstr "剪辑信息"
 #: src/extract/tracks.cpp:378
 #: src/info/mkvinfo.cpp:917
 #: src/info/qt_ui.cpp:179
-#: src/info/wxwidgets_ui.cpp:224
+#: src/info/wxwidgets_ui.cpp:222
 msgid "Segment tracks"
 msgstr "剪辑轨道"
 
 #: src/common/property_element.cpp:106
-#: src/mmg/header_editor/frame.cpp:339
+#: src/mmg/header_editor/frame.cpp:341
 msgid "Segment unique ID"
 msgstr "剪辑唯一 ID"
 
@@ -5099,11 +5104,11 @@ msgstr "剪辑, 尺寸 %1%"
 msgid "Segment, size unknown"
 msgstr "剪辑, 尺寸未知"
 
-#: src/info/wxwidgets_ui.cpp:279
+#: src/info/wxwidgets_ui.cpp:277
 msgid "Select Matroska file"
 msgstr "选择 Matroska 文件"
 
-#: src/info/wxwidgets_ui.cpp:293
+#: src/info/wxwidgets_ui.cpp:291
 msgid "Select output file"
 msgstr "选择输出文件"
 
@@ -5139,7 +5144,7 @@ msgid "Set country to:"
 msgstr "设置国家为:"
 
 #: src/common/property_element.cpp:116
-#: src/mmg/header_editor/frame.cpp:395
+#: src/mmg/header_editor/frame.cpp:397
 msgid ""
 "Set if that track (audio, video or subs) SHOULD\n"
 "be used if no language found matches the\n"
@@ -5150,7 +5155,7 @@ msgstr ""
 "被使用。"
 
 #: src/common/property_element.cpp:119
-#: src/mmg/header_editor/frame.cpp:402
+#: src/mmg/header_editor/frame.cpp:404
 msgid ""
 "Set if that track MUST be used during playback.\n"
 "There can be many forced track for a kind (audio,\n"
@@ -5163,7 +5168,7 @@ msgstr ""
 "播放器应该选择符合用户首选项或默认且强制的轨。"
 
 #: src/common/property_element.cpp:118
-#: src/mmg/header_editor/frame.cpp:398
+#: src/mmg/header_editor/frame.cpp:400
 msgid "Set if the track is used."
 msgstr "设置轨道是否可用。"
 
@@ -5258,15 +5263,15 @@ msgstr "短的 AAC 音频包 (长: %1% < 2)\n"
 msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "侦测到短缺的 GOP 画面组。已丢弃一些帧。您可能需要考虑在尝试混流之前修复该 MPEG2 视频流。\n"
 
-#: src/info/wxwidgets_ui.cpp:129
+#: src/info/wxwidgets_ui.cpp:127
 msgid "Show &all elements\tCtrl-A"
 msgstr "显示所有元素(&A)\tCtrl-A"
 
-#: src/info/wxwidgets_ui.cpp:137
+#: src/info/wxwidgets_ui.cpp:135
 msgid "Show about dialog"
 msgstr "显示“关于”对话框"
 
-#: src/info/wxwidgets_ui.cpp:130
+#: src/info/wxwidgets_ui.cpp:128
 msgid "Show element si&zes\tCtrl-Z"
 msgstr "显示元素尺寸(&Z)\tCtrl-Z"
 
@@ -5286,7 +5291,7 @@ msgstr "显示 mmg 为 mkvmerge 创建的命令行"
 msgid "Show the guide to mkvmerge GUI"
 msgstr "显示 mkvmerge GUI 指南"
 
-#: src/info/wxwidgets_ui.cpp:130
+#: src/info/wxwidgets_ui.cpp:128
 msgid "Show the size of each element including its header"
 msgstr "显示各元素的尺寸，包括头部所占用的尺寸"
 
@@ -5362,15 +5367,15 @@ msgstr "跳过开头 %1% 字节 (未发现有效的 MP3 头)。\n"
 msgid "Slices"
 msgstr "切片"
 
-#: src/mmg/header_editor/frame.cpp:576
+#: src/mmg/header_editor/frame.cpp:578
 msgid "Some header values have been modified. Do you really want to close without saving the file?"
 msgstr "一些头部值已被修改。您确实要在不保存文件的情况下关闭?"
 
-#: src/mmg/header_editor/frame.cpp:782
+#: src/mmg/header_editor/frame.cpp:784
 msgid "Some header values have been modified. Do you really want to load a new file without saving the current one?"
 msgstr "一些头部值已被修改。您确实要在不保存当前文件的情况下载入一个新的文件?"
 
-#: src/mmg/header_editor/frame.cpp:566
+#: src/mmg/header_editor/frame.cpp:568
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "一些头部值已被修改。您确实要在不保存文件的情况下重新载入?"
 
@@ -5379,14 +5384,14 @@ msgid "Some tag elements are missing (this error should not have occured - anoth
 msgstr "缺某些标签元素 (不该发生此错误 - 另一个类似的错误应该在早些时候发生过)。%1%\n"
 
 #: src/common/property_element.cpp:131
-#: src/mmg/header_editor/frame.cpp:430
+#: src/mmg/header_editor/frame.cpp:432
 msgid ""
 "Specifies the language of the track in the\n"
 "Matroska languages form."
 msgstr "指定此轨的语言，使用 Matroska 的语言格式。"
 
 #: src/common/property_element.cpp:147
-#: src/mmg/header_editor/frame.cpp:486
+#: src/mmg/header_editor/frame.cpp:488
 msgid ""
 "Specify the possible modifications to the aspect ratio\n"
 "(0: free resizing, 1: keep aspect ratio, 2: fixed)."
@@ -5466,7 +5471,7 @@ msgid "Stereo mode: %1%%2%"
 msgstr "立体视法: %1%%2%"
 
 #: src/common/property_element.cpp:149
-#: src/mmg/header_editor/frame.cpp:491
+#: src/mmg/header_editor/frame.cpp:493
 msgid ""
 "Stereo-3D video mode (0: mono, 1: right eye,\n"
 "2: left eye, 3: both eyes)."
@@ -5546,13 +5551,14 @@ msgstr "轨道 ID %lld 的标签 (%d 项) 自 %s"
 msgid "Tags:"
 msgstr "标签:"
 
-#: src/mmg/cli_options_dlg.cpp:93
-msgid "Tells mkvmerge not to create a meta seek element at the end of the file containing all clusters."
-msgstr "告诉 mkvmerge 不要在文件尾部创建包含所有簇的元定位元素。"
-
 #: src/mmg/cli_options_dlg.cpp:89
 msgid "Tells mkvmerge not to create and write the cue data which can be compared to an index in an AVI. Matroska files can be played back without the cue data, but seeking will probably be imprecise and slower. Use this only for testing purposes."
 msgstr "告诉 mkvmerge 不要创建和写入类似 AVI 索引的 cue 索引数据。Matroska 文件可以在无 cue 索引数据的情况下播放，但定位可能会变得不精确且迟钝些。本功能仅供测试用途。"
+
+#: src/mmg/cli_options_dlg.cpp:93
+#, fuzzy
+msgid "Tells mkvmerge to create a meta seek element at the end of the file containing all clusters."
+msgstr "告诉 mkvmerge 不要在文件尾部创建包含所有簇的元定位元素。"
 
 #: src/info/qt_ui.cpp:71
 msgid "Text files (*.txt);;All files (*.*)"
@@ -5563,7 +5569,7 @@ msgstr "文本文件 (*.txt);;所有文件 (*.*)"
 msgid "Text files (*.txt)|*.txt|%s"
 msgstr "文本文件 (*.txt)|*.txt|%s"
 
-#: src/info/wxwidgets_ui.cpp:293
+#: src/info/wxwidgets_ui.cpp:291
 msgid "Text files (*.txt)|*.txt|All files|*.*"
 msgstr "文本文件 (*.txt)|*.txt|所有文件|*.*"
 
@@ -5626,7 +5632,7 @@ msgstr "无法解析 Kate 识别头 (%1%)。\n"
 msgid "The Matroska file is analyzed."
 msgstr "正在分析 Matroska 文件。"
 
-#: src/mmg/header_editor/frame.cpp:700
+#: src/mmg/header_editor/frame.cpp:702
 #: src/propedit/propedit.cpp:38
 msgid "The Matroska file was modified, but the meta seek entry could not be updated. This means that players might have a hard time finding this element. Please use your favorite player to check this file.\n"
 msgstr "Matroska 文件已修改，但元定位项无法更新。这意味着播放器可能很难找到该元素。请使用您最喜欢的播放器检查此文件。\n"
@@ -5794,7 +5800,7 @@ msgstr "两轨的显示高度不同: %1% 与 %2%"
 msgid "The display width of the two tracks is different: %1% and %2%"
 msgstr "两轨的显示宽度不同: %1% 与 %2%"
 
-#: src/info/wxwidgets_ui.cpp:380
+#: src/info/wxwidgets_ui.cpp:378
 #, c-format
 msgid ""
 "The dragged file '%s'\n"
@@ -5811,7 +5817,7 @@ msgstr "在指定时长后开始输出新文件。时间可以以 HH:MM:SS.nnnnn
 msgid "The edit specifications '%1%' and '%2%' resolve to the same track with the UID %3%.\n"
 msgstr "编辑指定 '%1%' 与 '%2%' 作用在了 UID 为 %3% 的同一轨道上。\n"
 
-#: src/mmg/header_editor/frame.cpp:688
+#: src/mmg/header_editor/frame.cpp:690
 #: src/mmg/tabs/chapters.cpp:1886
 #: src/propedit/propedit.cpp:28
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
@@ -5895,7 +5901,7 @@ msgstr "文件不存在。"
 msgid "The file does not seem to be a valid mkvmerge GUI settings file."
 msgstr "文件似乎不是有效的 mkvmerge GUI 配置文件。"
 
-#: src/mmg/header_editor/frame.cpp:524
+#: src/mmg/header_editor/frame.cpp:526
 msgid "The file has been changed by another program since it was read by the header editor. Therefore you have to re-load it. Unfortunately this means that all of your changes will be lost."
 msgstr "在头部编辑器读取此文件后，文件已被其他程序更改。因此您需要重新载入它。不幸的是这意味着您将丢失所有改动。"
 
@@ -5933,7 +5939,7 @@ msgid "The file is being fixed, part 4/4..."
 msgstr "正在固定文件，第 4/4 步..."
 
 #: src/common/property_element.cpp:103
-#: src/mmg/header_editor/frame.cpp:330
+#: src/mmg/header_editor/frame.cpp:332
 msgid "The file name for this segment."
 msgstr "此剪辑的文件名。"
 
@@ -5949,7 +5955,7 @@ msgstr "文件 %1% ('%2%') 不含 ID 为 %3% 的轨道，或者没选择复制�
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr "文件 %1% ('%2%') 未被追加合并。选项 '--append-to' 的参数无效。\n"
 
-#: src/mmg/header_editor/frame.cpp:248
+#: src/mmg/header_editor/frame.cpp:250
 msgid "The file you tried to open is not a Matroska file."
 msgstr "您试图打开的文件不是 Matroska 文件。"
 
@@ -6084,7 +6090,7 @@ msgid "The maximum number of files that will be created even if the last file mi
 msgstr "将创建的最大文件数，即使最后一个文件包含的字节数/时间多于您想要的。本功能有时很有用，例如当您想要恰恰两个文件时。如果此处留空，mkvmerge 将创建的文件数目将不受限制。"
 
 #: src/common/property_element.cpp:125
-#: src/mmg/header_editor/frame.cpp:413
+#: src/mmg/header_editor/frame.cpp:415
 msgid ""
 "The maximum number of frames a player\n"
 "should be able to cache during playback.\n"
@@ -6094,14 +6100,14 @@ msgstr ""
 "播放器播放过程中应该缓存的最大帧数。\n"
 "如果设为 0, 将不使用参考伪缓存系统。"
 
-#: src/mmg/header_editor/frame.cpp:694
+#: src/mmg/header_editor/frame.cpp:696
 #: src/mmg/tabs/chapters.cpp:1892
 #: src/propedit/propedit.cpp:33
 msgid "The meta seek element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "元定位元素已被写至文件尾部，但剪辑尺寸无法更新。因此这些元素不可见。处理进程将被中止。文件已被更改!"
 
 #: src/common/property_element.cpp:123
-#: src/mmg/header_editor/frame.cpp:408
+#: src/mmg/header_editor/frame.cpp:410
 msgid ""
 "The minimum number of frames a player\n"
 "should be able to cache during playback.\n"
@@ -6150,28 +6156,28 @@ msgid "The number of external timecodes %1% is smaller than the number of frames
 msgstr "外部时间码数 %1% 小于此轨的帧数。此轨的其余帧将可能不按您想要的方式标记时间戳。mkvmerge 甚至可能崩溃。\n"
 
 #: src/common/property_element.cpp:146
-#: src/mmg/header_editor/frame.cpp:481
+#: src/mmg/header_editor/frame.cpp:483
 msgid ""
 "The number of video pixels to remove\n"
 "on the bottom of the image."
 msgstr "视频画面下边要移除的像素数。"
 
 #: src/common/property_element.cpp:143
-#: src/mmg/header_editor/frame.cpp:466
+#: src/mmg/header_editor/frame.cpp:468
 msgid ""
 "The number of video pixels to remove\n"
 "on the left of the image."
 msgstr "视频画面左边要移除的像素数。"
 
 #: src/common/property_element.cpp:145
-#: src/mmg/header_editor/frame.cpp:476
+#: src/mmg/header_editor/frame.cpp:478
 msgid ""
 "The number of video pixels to remove\n"
 "on the right of the image."
 msgstr "视频画面右边要移除的像素数。"
 
 #: src/common/property_element.cpp:144
-#: src/mmg/header_editor/frame.cpp:471
+#: src/mmg/header_editor/frame.cpp:473
 msgid ""
 "The number of video pixels to remove\n"
 "on the top of the image."
@@ -6248,7 +6254,7 @@ msgid "The sample rate of the two audio tracks is different: %1% and %2%"
 msgstr "两音频轨的采样率不同: %1% 与 %2%"
 
 #: src/common/property_element.cpp:128
-#: src/mmg/header_editor/frame.cpp:422
+#: src/mmg/header_editor/frame.cpp:424
 msgid ""
 "The scale to apply on this track to work at normal\n"
 "speed in relation with other tracks (mostly used\n"
@@ -6371,7 +6377,7 @@ msgid "The timecodes for this stream have been reset in the middle of the file. 
 msgstr "此流的时间码在文件中途重置。这是不支持的。当前数据包将被废除。\n"
 
 #: src/common/property_element.cpp:102
-#: src/mmg/header_editor/frame.cpp:327
+#: src/mmg/header_editor/frame.cpp:329
 msgid "The title for the whole movie."
 msgstr "整部影片的标题。"
 
@@ -6396,7 +6402,7 @@ msgid "The track number %1% from the file '%2%' cannot be appended to the track 
 msgstr "轨道号 %1% （自文件 '%2%'）无法追加到轨道号 %3% （自文件 '%4%'）。%5%\n"
 
 #: src/common/property_element.cpp:113
-#: src/mmg/header_editor/frame.cpp:387
+#: src/mmg/header_editor/frame.cpp:389
 msgid "The track number as used in the Block Header."
 msgstr "块头部使用的轨道号。"
 
@@ -6421,8 +6427,8 @@ msgstr "尚无 '%1%' 的翻译。\n"
 msgid "There were ERRORs."
 msgstr "有 *错误* 发生。"
 
-#: src/mmg/header_editor/frame.cpp:538
-#: src/mmg/header_editor/frame.cpp:638
+#: src/mmg/header_editor/frame.cpp:540
+#: src/mmg/header_editor/frame.cpp:640
 msgid "There were errors in the header values preventing the headers from being saved. The first error has been selected."
 msgstr "出现一些影响头部信息保存的头部值错误。第一处错误已被选中。"
 
@@ -6506,7 +6512,7 @@ msgstr "此文件包含至少一个含有原生时间码的帧。全部时间码
 msgid "This file contains coordinates in the timecode lines. Such coordinates are not supported by the Matroska SRT subtitle format. The coordinates will be removed automatically.\n"
 msgstr "此文件含有交叉的时间轴。此类交叉不受 Matroska SRT 字幕格式的支持。交叉将被自动移除。\n"
 
-#: src/mmg/header_editor/frame.cpp:260
+#: src/mmg/header_editor/frame.cpp:262
 #: src/mmg/tabs/chapters.cpp:548
 msgid "This file could not be opened or parsed."
 msgstr "文件无法打开或解析。"
@@ -6584,7 +6590,7 @@ msgid "Timecode scale: %1%"
 msgstr "时间码缩放比例: %1%"
 
 #: src/common/property_element.cpp:128
-#: src/mmg/header_editor/frame.cpp:421
+#: src/mmg/header_editor/frame.cpp:423
 msgid "Timecode scaling"
 msgstr "时间码缩放比例"
 
@@ -6593,7 +6599,7 @@ msgid "Timecodes:"
 msgstr "时间码:"
 
 #: src/common/property_element.cpp:102
-#: src/mmg/header_editor/frame.cpp:327
+#: src/mmg/header_editor/frame.cpp:329
 msgid "Title"
 msgstr "标题"
 
@@ -6691,7 +6697,7 @@ msgid "Track ID %1%: %2% (%3%)"
 msgstr "轨道 ID %1%: %2% (%3%)"
 
 #: src/common/property_element.cpp:114
-#: src/mmg/header_editor/frame.cpp:390
+#: src/mmg/header_editor/frame.cpp:392
 msgid "Track UID"
 msgstr "轨道 UID"
 
@@ -6714,7 +6720,7 @@ msgid "Track name:"
 msgstr "轨道名称:"
 
 #: src/common/property_element.cpp:113
-#: src/mmg/header_editor/frame.cpp:386
+#: src/mmg/header_editor/frame.cpp:388
 msgid "Track number"
 msgstr "轨道号"
 
@@ -6751,7 +6757,7 @@ msgid "Two VobSub tracks can only be extracted into the same file if their Codec
 msgstr "两个 VobSub 轨道只能提取到同一个文件中，如果 CodecPrivate 数据相匹配的话。此问题只出在轨道 %1% 与 %2%。\n"
 
 #: src/common/property_element.cpp:142
-#: src/mmg/header_editor/frame.cpp:461
+#: src/mmg/header_editor/frame.cpp:463
 msgid ""
 "Type of the unit for DisplayWidth/Height\n"
 "(0: pixels, 1: centimeters, 2: inches)."
@@ -7261,7 +7267,7 @@ msgstr "VC1 视频基本流"
 msgid "Valid hacks are:\n"
 msgstr "有效的小补缀有:\n"
 
-#: src/mmg/header_editor/frame.cpp:149
+#: src/mmg/header_editor/frame.cpp:151
 msgid "Validates the content of all changeable headers"
 msgstr "检验所有可变头的内容"
 
@@ -7270,42 +7276,42 @@ msgid "Verify the current chapter entries to see if there are any errors"
 msgstr "验证当前章节条目有无错误"
 
 #: src/common/property_element.cpp:147
-#: src/mmg/header_editor/frame.cpp:485
+#: src/mmg/header_editor/frame.cpp:487
 msgid "Video aspect ratio type"
 msgstr "视频宽高比类型"
 
 #: src/common/property_element.cpp:146
-#: src/mmg/header_editor/frame.cpp:481
+#: src/mmg/header_editor/frame.cpp:483
 msgid "Video crop bottom"
 msgstr "视频下边裁减"
 
 #: src/common/property_element.cpp:143
-#: src/mmg/header_editor/frame.cpp:466
+#: src/mmg/header_editor/frame.cpp:468
 msgid "Video crop left"
 msgstr "视频左边裁减"
 
 #: src/common/property_element.cpp:145
-#: src/mmg/header_editor/frame.cpp:476
+#: src/mmg/header_editor/frame.cpp:478
 msgid "Video crop right"
 msgstr "视频右边裁减"
 
 #: src/common/property_element.cpp:144
-#: src/mmg/header_editor/frame.cpp:471
+#: src/mmg/header_editor/frame.cpp:473
 msgid "Video crop top"
 msgstr "视频上边裁减"
 
 #: src/common/property_element.cpp:141
-#: src/mmg/header_editor/frame.cpp:456
+#: src/mmg/header_editor/frame.cpp:458
 msgid "Video display height"
 msgstr "视频显示高度"
 
 #: src/common/property_element.cpp:142
-#: src/mmg/header_editor/frame.cpp:461
+#: src/mmg/header_editor/frame.cpp:463
 msgid "Video display unit"
 msgstr "视频显示单位"
 
 #: src/common/property_element.cpp:140
-#: src/mmg/header_editor/frame.cpp:451
+#: src/mmg/header_editor/frame.cpp:453
 msgid "Video display width"
 msgstr "视频显示宽度"
 
@@ -7322,17 +7328,17 @@ msgid "Video packet assembly failed. Error code: %1% (%2%)\n"
 msgstr "视频包汇编失败。错误代码: %1% (%2%)\n"
 
 #: src/common/property_element.cpp:139
-#: src/mmg/header_editor/frame.cpp:446
+#: src/mmg/header_editor/frame.cpp:448
 msgid "Video pixel height"
 msgstr "视频像素高度"
 
 #: src/common/property_element.cpp:138
-#: src/mmg/header_editor/frame.cpp:441
+#: src/mmg/header_editor/frame.cpp:443
 msgid "Video pixel width"
 msgstr "视频像素宽度"
 
 #: src/common/property_element.cpp:149
-#: src/mmg/header_editor/frame.cpp:491
+#: src/mmg/header_editor/frame.cpp:493
 msgid "Video stereo mode"
 msgstr "视频立体模式"
 
@@ -7416,12 +7422,12 @@ msgid "When a file is added its name is scanned. If it contains the word 'DELAY'
 msgstr "当文件被添加时它的名称会被扫描。如果包含单词“delay”且有一数字紧随其后，这个数字将被自动输入到已发现的该文件的所有音频轨的“延时”输入框。"
 
 #: src/common/property_element.cpp:138
-#: src/mmg/header_editor/frame.cpp:441
+#: src/mmg/header_editor/frame.cpp:443
 msgid "Width of the encoded video frames in pixels."
 msgstr "编码后的视频帧的宽度，单位：像素。"
 
 #: src/common/property_element.cpp:140
-#: src/mmg/header_editor/frame.cpp:451
+#: src/mmg/header_editor/frame.cpp:453
 msgid "Width of the video frames to display."
 msgstr "视频帧的显示宽度。"
 
@@ -7441,7 +7447,7 @@ msgstr "将 ID 为 TID 的轨道写入为文件 'out'。"
 msgid "Writing application: %1%"
 msgstr "写入程序: %1%"
 
-#: src/info/wxwidgets_ui.cpp:264
+#: src/info/wxwidgets_ui.cpp:262
 msgid "Writing info"
 msgstr "正在导出信息"
 
@@ -7465,7 +7471,7 @@ msgstr "'--split-max-files' 参数错误。\n"
 msgid "Wrong file chosen"
 msgstr "文件选错"
 
-#: src/mmg/header_editor/frame.cpp:248
+#: src/mmg/header_editor/frame.cpp:250
 #: src/mmg/tabs/chapters.cpp:639
 #: src/mmg/tabs/chapters.cpp:680
 msgid "Wrong file selected"
@@ -8412,8 +8418,8 @@ msgstr "pr_generic.cpp/generic_reader_c::demuxing_requested(): 无效轨道类�
 msgid "raw data"
 msgstr "原始数据"
 
-#: src/info/wxwidgets_ui.cpp:148
-#: src/info/wxwidgets_ui.cpp:180
+#: src/info/wxwidgets_ui.cpp:146
+#: src/info/wxwidgets_ui.cpp:178
 msgid "ready"
 msgstr "就绪"
 

@@ -79,7 +79,7 @@ cli_options_dlg::init_cli_option_list() {
   all_cli_options.clear();
   all_cli_options.push_back(cli_option_t(  Z("### Global output control ###"),
                                            Z("Several options that control the overall output that mkvmerge creates.")));
-  all_cli_options.push_back(cli_option_t(wxU("--cluster-length"),
+  all_cli_options.push_back(cli_option_t(  Z("--cluster-length REPLACEME"),
                                            Z("This option needs an additional argument 'n'. Tells mkvmerge to put at most 'n' data blocks into each cluster. "
                                              "If the number is postfixed with 'ms' then put at most 'n' milliseconds of data into each cluster. "
                                              "The maximum length for a cluster that mkvmerge accepts is 60000 blocks and 32000ms; the minimum length is 100ms. "
@@ -89,8 +89,8 @@ cli_options_dlg::init_cli_option_list() {
                                            Z("Tells mkvmerge not to create and write the cue data which can be compared to an index in an AVI. "
                                              "Matroska files can be played back without the cue data, but seeking will probably be imprecise and slower. "
                                              "Use this only for testing purposes.")));
-  all_cli_options.push_back(cli_option_t(wxU("--no-clusters-in-meta-seek"),
-                                           Z("Tells mkvmerge not to create a meta seek element at the end of the file containing all clusters.")));
+  all_cli_options.push_back(cli_option_t(wxU("--clusters-in-meta-seek"),
+                                           Z("Tells mkvmerge to create a meta seek element at the end of the file containing all clusters.")));
   all_cli_options.push_back(cli_option_t(wxU("--disable-lacing"),
                                            Z("Disables lacing for all tracks. This will increase the file's size, especially if there are many audio tracks. Use only for testing.")));
   all_cli_options.push_back(cli_option_t(wxU("--enable-durations"),
