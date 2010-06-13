@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-06-12 15:30+0300\n"
+"PO-Revision-Date: 2010-06-13 02:29+0300\n"
 "Last-Translator: rusguy6 rusguy6 <rusguy6@gmail.com>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -1046,9 +1046,8 @@ msgid "'%1%' does not contain a valid unit ('s', 'ms', 'us' or 'ns') in '%2% %3%
 msgstr "'%1%' не содержат действительный блок ('s', 'ms', 'us' или 'ns') в '%2% %3%'.\n"
 
 #: src/merge/mkvmerge.cpp:1036
-#, fuzzy
 msgid "'%1%' is an unsupported argument for --compression. Available compression methods are: %2%\n"
-msgstr "'%1%' является аргументом для неподдерживаемых --compression. Доступные методы сжатия 'none' и 'zlib'.\n"
+msgstr "'%1%' является аргументом для неподдерживаемых --compression. Доступные методы сжатия: %2%\n"
 
 #: src/merge/mkvmerge.cpp:977
 msgid "'%1%' is an unsupported argument for --cues.\n"
@@ -1509,9 +1508,8 @@ msgid "---common---"
 msgstr "---общий---"
 
 #: src/mmg/cli_options_dlg.cpp:82
-#, fuzzy
 msgid "--cluster-length REPLACEME"
-msgstr "--timecode-scale REPLACEME"
+msgstr "--cluster-length REPLACEME"
 
 #: src/mmg/cli_options_dlg.cpp:98
 msgid "--timecode-scale REPLACEME"
@@ -5595,9 +5593,8 @@ msgid "Tells mkvmerge not to create and write the cue data which can be compared
 msgstr "Сообщает mkvmerge, чтобы не создавать и записывать сигнал данных, которые можно сравнить с индексом в AVI. Matroska файлы могут быть воспроизведены без Кий данных, но ищет, возможно, будет неточным и медленнее. Использовать только для целей тестирования."
 
 #: src/mmg/cli_options_dlg.cpp:93
-#, fuzzy
 msgid "Tells mkvmerge to create a meta seek element at the end of the file containing all clusters."
-msgstr "Сообщает mkvmerge, чтобы не создавать мета поиск элемента в конец файла, содержащего все кластеры."
+msgstr "Сообщает mkvmerge создать мета поиск элемента в конец файла, содержащего все кластеры."
 
 #: src/info/qt_ui.cpp:71
 msgid "Text files (*.txt);;All files (*.*)"
@@ -8703,49 +8700,70 @@ msgstr "Да"
 
 #~ msgid "%1% at %2%"
 #~ msgstr "%1% в %2%"
+
 #~ msgid "(Unknown element: %1%)"
 #~ msgstr "(Неизвестный элемент: %1%)"
+
 #~ msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
 #~ msgstr "Не пишите заголовок тех элементов, значения которых совпадают с их значениями по умолчанию в соответствии с Matroska критериям."
+
 #~ msgid "File/segment title"
 #~ msgstr "Файл/сегмент название"
+
 #~ msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
 #~ msgstr "Matroska файлы (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|Все файлы|*.*"
+
 #~ msgid "Other global options"
 #~ msgstr "Другие глобальные опции"
+
 #~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
 #~ msgstr "MPEG-4 часть 2 сжатие работает только с родным MPEG-4. Тем не менее, родной MPEG-4 режим не был выбран с '--engage native_mpeg4'.\n"
+
 #~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
 #~ msgstr "Эта дорожка использует особенность Matroska, названную 'запоминающие элементы Codec'. mkvmerge поддерживает их, но эта особенность не была включена с опцией '--engage use_codec_state'.\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "Использование FLAC выходного модуля.\n"
+
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "Создать исходные файлы FLAC (по умолчанию: написать OggFLAC файлы)."
+
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить ошибки обратного вызова.\n"
+
 #~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить метаданных обратного вызова.\n"
+
 #~ msgid "flac_header_extraction: Could not set the read callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить читать обратного вызова.\n"
+
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить написать обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_reader: Не удалось установить конец файла обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the error callback.\n"
 #~ msgstr "flac_reader: Не удалось установить ошибки обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the length callback.\n"
 #~ msgstr "flac_reader: Не удалось установить длину обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the metadata callback.\n"
 #~ msgstr "flac_reader: Не удалось установить метаданных обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the read callback.\n"
 #~ msgstr "flac_reader: Не удалось установить читать обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the seek callback.\n"
 #~ msgstr "flac_reader: Не удалось установить возвратный вызов поиска.\n"
+
 #~ msgid "flac_reader: Could not set the tell callback.\n"
 #~ msgstr "flac_reader: Не удалось установить сказать обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the write callback.\n"
 #~ msgstr "flac_reader: Не удалось установить написать обратного вызова.\n"
+
 #~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 #~ msgstr "r_matroska: Кластер не содержат кластера тайм-кода. Файл не работает. Прерывание.\n"
-
