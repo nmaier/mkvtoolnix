@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-06-11 22:59+0900\n"
+"PO-Revision-Date: 2010-06-13 18:39+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -1468,13 +1468,12 @@ msgid "---common---"
 msgstr "---よく使用される言語---"
 
 #: src/mmg/cli_options_dlg.cpp:82
-#, fuzzy
 msgid "--cluster-length REPLACEME"
-msgstr "--timecode-scale （係数を指定）"
+msgstr "--cluster-length 値"
 
 #: src/mmg/cli_options_dlg.cpp:98
 msgid "--timecode-scale REPLACEME"
-msgstr "--timecode-scale （係数を指定）"
+msgstr "--timecode-scale 値"
 
 #: src/mmg/tabs/global.cpp:239
 msgid "...after this duration:"
@@ -5393,9 +5392,8 @@ msgid "Tells mkvmerge not to create and write the cue data which can be compared
 msgstr "mkvmergeがAVIのインデックスに対応するキューデータを作成して記録しないようにします。Matroskaファイルはキューデータ無しでも再生できますが、恐らくシークが不正確で遅くなります。これはテスト目的でのみ使用してください。"
 
 #: src/mmg/cli_options_dlg.cpp:93
-#, fuzzy
 msgid "Tells mkvmerge to create a meta seek element at the end of the file containing all clusters."
-msgstr "mkvmergeがファイルの終端で全てのクラスタを含むメタシーク要素を作成しないようにします。"
+msgstr "mkvmergeがファイルの終端で全てのクラスタを含むメタシーク要素を作成するようにします。"
 
 #: src/info/qt_ui.cpp:71
 msgid "Text files (*.txt);;All files (*.*)"
