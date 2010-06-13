@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-06-11 21:18+0800\n"
+"PO-Revision-Date: 2010-06-13 10:41+0800\n"
 "Last-Translator: Dean Lee <xslidian@lidian.info>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -1026,9 +1026,8 @@ msgid "'%1%' does not contain a valid unit ('s', 'ms', 'us' or 'ns') in '%2% %3%
 msgstr "'%1%' 不包含有效单位 ('s', 'ms', 'us' 或 'ns') 在  '%2% %3%' 中。\n"
 
 #: src/merge/mkvmerge.cpp:1036
-#, fuzzy
 msgid "'%1%' is an unsupported argument for --compression. Available compression methods are: %2%\n"
-msgstr "'%1%' 是 --compression 不支持的参数。可选的压缩方式为 'none' 和 'zlib'。\n"
+msgstr "'%1%' 是 --compression 不支持的参数。可用的压缩方式有: %2%\n"
 
 #: src/merge/mkvmerge.cpp:977
 msgid "'%1%' is an unsupported argument for --cues.\n"
@@ -1489,9 +1488,8 @@ msgid "---common---"
 msgstr "---常用---"
 
 #: src/mmg/cli_options_dlg.cpp:82
-#, fuzzy
 msgid "--cluster-length REPLACEME"
-msgstr "--timecode-scale REPLACEME"
+msgstr "--cluster-length REPLACEME"
 
 #: src/mmg/cli_options_dlg.cpp:98
 msgid "--timecode-scale REPLACEME"
@@ -5556,9 +5554,8 @@ msgid "Tells mkvmerge not to create and write the cue data which can be compared
 msgstr "告诉 mkvmerge 不要创建和写入类似 AVI 索引的 cue 索引数据。Matroska 文件可以在无 cue 索引数据的情况下播放，但定位可能会变得不精确且迟钝些。本功能仅供测试用途。"
 
 #: src/mmg/cli_options_dlg.cpp:93
-#, fuzzy
 msgid "Tells mkvmerge to create a meta seek element at the end of the file containing all clusters."
-msgstr "告诉 mkvmerge 不要在文件尾部创建包含所有簇的元定位元素。"
+msgstr "告诉 mkvmerge 在文件尾部创建包含所有簇的元定位元素。"
 
 #: src/info/qt_ui.cpp:71
 msgid "Text files (*.txt);;All files (*.*)"
@@ -8864,6 +8861,7 @@ msgstr "是"
 #~ "  -v, --verbose  提高“详细”程度。\n"
 #~ "  -h, --help     显示本帮助。\n"
 #~ "  -V, --version  显示版本信息。\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "使用 FLAC 输出模块。\n"
