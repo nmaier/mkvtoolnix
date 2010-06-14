@@ -73,6 +73,7 @@ DOCBOOK_MANPAGES_STYLESHEET = @DOCBOOK_MANPAGES_STYLESHEET@
 DOCBOOK_ROOT = @DOCBOOK_ROOT@
 EBML_CFLAGS = @EBML_CFLAGS@
 EBML_LIBS = @EBML_LIBS@
+EGREP = @EGREP@
 EXPAT_CFLAGS = @EXPAT_CFLAGS@
 EXPAT_LIBS = @EXPAT_LIBS@
 EXTRA_CFLAGS = @EXTRA_CFLAGS@
@@ -437,24 +438,26 @@ clean-libs:
 clean-apps clean-applications clean-exe:
 	rm -f $(APPLICATIONS) */*.exe */*/*.exe
 
-create-pot:
+create-pot: po/mkvtoolnix.pot
+
+po/mkvtoolnix.pot: $(ALL_SOURCES) $(ALL_HEADERS)
 	@echo 'XGETTEXT'
 	$(Q)xgettext --keyword=YT --keyword=Y --keyword=Z --keyword=TIP \
-		--default-domain=mkvtoolnix --from-code=UTF-8 -s --omit-header -o po/mkvtoolnix.pot \
+		--default-domain=mkvtoolnix --from-code=UTF-8 -s --omit-header -o $@ \
 		$(ALL_SOURCES) $(ALL_HEADERS)
 
-update-po: create-pot
-	@for i in po/*.po ; do \
-		echo 'MSGMERGE ' $$i ; \
-		$(SQ) msgmerge -q -s --no-wrap $$i po/mkvtoolnix.pot ; \
-		msgmerge -q -s --no-wrap $$i po/mkvtoolnix.pot > $$i.new ; \
-		mv $$i.new $$i ; \
-	done
-	@rm po/mkvtoolnix.pot
-	@for i in es nl ru uk zh_CN zh_TW ; do \
-		perl -ni -e 'if (m/^#:/) { s/(\d) /$$1\n#: /g; print; } elsif (m/^#~/) { $$nonl = 1; print; } elsif (!($$nonl && m/^\s*$$/)) { print; }' po/$$i.po ; \
-		echo >> po/$$i.po ; \
-	done
+update-po: po/mkvtoolnix.pot $(patsubst %,update-po-%,$(TRANSLATIONS))
+
+update-po-%: po/mkvtoolnix.pot
+	@po=po/`echo $@ | sed 's/update-po-//'`.po ; \
+	echo 'MSGMERGE ' $$po ; \
+	$(SQ) msgmerge -q -s --no-wrap $$po po/mkvtoolnix.pot > $$po.new ; \
+	msgmerge -q -s --no-wrap $$po po/mkvtoolnix.pot > $$po.new ; \
+	mv $$po.new $$po ; \
+	if echo $$po | $(EGREP) 'es|nl|ru|uk|zh_CN|zh_TW' > /dev/null 2>/dev/null ; then \
+	  perl -ni -e 'if (m/^#:/) { s/(\d) /$$1\n#: /g; print; } elsif (m/^#~/) { $$nonl = 1; print; } elsif (!($$nonl && m/^\s*$$/)) { print; }' $$po ; \
+	  echo >> $$po ; \
+	fi
 
 po-stats po-statistics:
 	@for i in po/*.po doc/man/po4a/po/*.po; do \
