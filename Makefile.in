@@ -451,7 +451,7 @@ update-po: create-pot
 		mv $$i.new $$i ; \
 	done
 	@rm po/mkvtoolnix.pot
-	@for i in ru uk nl zh_CN zh_TW ; do \
+	@for i in es nl ru uk zh_CN zh_TW ; do \
 		perl -ni -e 'if (m/^#:/) { s/(\d) /$$1\n#: /g; print; } elsif (m/^#~/) { $$nonl = 1; print; } elsif (!($$nonl && m/^\s*$$/)) { print; }' po/$$i.po ; \
 		echo >> po/$$i.po ; \
 	done
