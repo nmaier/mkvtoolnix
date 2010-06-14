@@ -75,8 +75,13 @@ cli_options_dlg::cli_options_dlg(wxWindow *parent)
 }
 
 void
-cli_options_dlg::init_cli_option_list() {
+cli_options_dlg::clear_cli_option_list() {
   all_cli_options.clear();
+}
+
+void
+cli_options_dlg::init_cli_option_list() {
+  clear_cli_option_list();
   all_cli_options.push_back(cli_option_t(  Z("### Global output control ###"),
                                            Z("Several options that control the overall output that mkvmerge creates.")));
   all_cli_options.push_back(cli_option_t(  Z("--cluster-length REPLACEME"),

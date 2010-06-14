@@ -1,3 +1,9 @@
+2010-06-14  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: Changing mmg's interface language did not change
+	the entries in the "command line options" dialog if that dialog
+	had been opened prior to the language change.
+
 2010-06-12  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: mkvmerge uses header removal compression

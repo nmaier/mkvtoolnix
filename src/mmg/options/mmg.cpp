@@ -30,6 +30,7 @@
 #include "common/strings/editing.h"
 #include "common/translation.h"
 #include "common/wx.h"
+#include "mmg/cli_options_dlg.h"
 #include "mmg/mmg_dialog.h"
 #include "mmg/mmg.h"
 #include "mmg/options/mmg.h"
@@ -284,6 +285,7 @@ optdlg_mmg_tab::save_options() {
 
     app->init_ui_locale();
     mdlg->translate_ui();
+    cli_options_dlg::clear_cli_option_list();
   }
 #endif  // HAVE_LIBINTL_H
 }

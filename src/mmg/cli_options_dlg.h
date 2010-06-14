@@ -53,6 +53,7 @@ public:
 
 public:
   static void init_cli_option_list();
+  static void clear_cli_option_list();
 };
 
 #endif  // __MMG_CLI_OPTIONS_DLG_H
