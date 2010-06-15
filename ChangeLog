@@ -1,3 +1,8 @@
+2010-06-15  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed an invalid memory access possibly
+	causing a crash in the AC3 detection code.
+
 2010-06-14  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: Changing mmg's interface language did not change

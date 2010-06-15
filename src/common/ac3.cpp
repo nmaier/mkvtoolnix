@@ -191,10 +191,13 @@ find_ac3_header(const unsigned char *buf,
                 size_t size,
                 ac3_header_t *ac3_header,
                 bool look_for_second_header) {
+  if (8 > size)
+    return -1;
+
   ac3_header_t header;
   size_t i;
 
-  for (i = 0; (size - 7) > i; ++i) {
+  for (i = 0; size > i + 7; ++i) {
     if (get_uint16_be(&buf[i]) != AC3_SYNC_WORD)
       continue;
 
@@ -241,7 +244,7 @@ find_consecutive_ac3_headers(const unsigned char *buf,
     unsigned int offset = ac3header.bytes;
     size_t i;
     for (i = 0; (num - 1) > i; ++i) {
-      if ((size - base - offset) < 4)
+      if (4 + base + offset > size)
         break;
 
       pos = find_ac3_header(&buf[base + offset], size - base - offset, &new_header, ac3header.has_dependent_frames);
@@ -251,6 +254,8 @@ find_consecutive_ac3_headers(const unsigned char *buf,
             && (new_header.channels    == ac3header.channels)
             && (new_header.sample_rate == ac3header.sample_rate)) {
           mxverb(4, boost::format("find_cons_ac3_h: found good header %1%\n") % i);
+          if ((offset + new_header.bytes) >= size)
+            break;
           offset += new_header.bytes;
           continue;
         } else
@@ -260,7 +265,7 @@ find_consecutive_ac3_headers(const unsigned char *buf,
         break;
     }
 
-    if (i == (num - 1))
+    if ((i + 1) == num)
       return base;
 
     ++base;
