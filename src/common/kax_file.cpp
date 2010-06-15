@@ -161,6 +161,9 @@ kax_file_c::resync_to_level1_element_internal(uint32_t wanted_id) {
 
   uint32_t actual_id = m_in->read_uint32_be();
 
+  if (m_debug_resync)
+    mxinfo(boost::format("kax_file::resync_to_level1_element(): starting at %1% potential ID %|2$08x|\n") % m_resync_start_pos % actual_id);
+
   while (m_in->getFilePointer() < m_file_size) {
     actual_id = (actual_id << 8) | m_in->read_uint8();
 
