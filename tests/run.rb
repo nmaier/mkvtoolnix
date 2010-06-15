@@ -1,4 +1,160 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby1.9
+
+def error_and_exit(text, exit_code = 2)
+  puts text
+  exit exit_code
+end
+
+class TestController
+  attr_accessor :test_failed, :test_new, :test_date_after, :teset_date_before, :update_failed, :num_failed
+  attr_reader   :num_threads
+
+  def initialize
+    @results          = Results.new
+    @test_failed      = false
+    @test_new         = false
+    @test_date_after  = nil
+    @test_date_before = nil
+    @update_failed    = false
+    @num_threads      = 1
+
+    @tests            = Array.new
+    @dir_entries      = Dir.entries(".")
+  end
+
+  def num_threads=(num)
+    error_and_exit "Invalid number of threads: must be > 0" if 0 >= num
+    @num_threads = num
+  end
+
+  def add_test(num)
+    @dir_entries.each { |entry| @tests.push(entry) if /^test-#{arg}/.match(entry) }
+  end
+
+  def get_tests_to_run
+    test_all = !@test_failed && !@test_new
+
+    return (@tests.empty? ? @dir_entries : @tests).collect do |entry|
+      if (FileTest.file?(entry) && (entry =~ /^test-.*\.rb$/))
+        class_name  = self.class.file_name_to_class_name entry
+        test_this   = test_all
+        test_this ||= (@results.exist?(class_name) && ((@test_failed      && (@results.status?(class_name) == "failed")) || (@test_new && (@results.status?(class_name) == "new"))) ||
+                                                       (@test_date_after  && (@results.date_added?(class_name) < @test_date_after)) ||
+                                                       (@test_date_before && (@results.date_added?(class_name) > @test_date_before)))
+        test_this ||= !@results.exist?(class_name) && (@test_new || @test_failed)
+
+        test_this ? class_name : nil
+      else
+        nil
+      end
+    end.compact.sort
+  end
+
+  def self.file_name_to_class_name(file_name)
+    "T_" + file_name.gsub(/^test-/, "").gsub(/\.rb$/, "")
+  end
+
+  def self.class_name_to_file_name(class_name)
+    class_name.gsub(/^T_/, "test-") + ".rb"
+  end
+
+  def go
+    @num_failed    = 0
+    @tests_to_run  = self.get_tests_to_run
+    num_tests      = @tests_to_run.size
+
+    @tests_mutex   = Mutex.new
+    @results_mutex = Mutex.new
+
+    start          = Time.now
+
+    self.run_threads
+    self.join_threads
+
+    duration = Time.now - start
+
+    puts "#{@num_failed}/#{num_tests} failed (" + (num_tests > 0 ? (@num_failed * 100 / num_tests).to_s : "0") + "%). " + "Tests took #{duration}s."
+  end
+
+  def run_threads
+    @threads = Array.new
+
+    (1..@num_threads).each do |number|
+      @threads << Thread.new(number) do |thread_number|
+        Thread.current[:number] = thread_number
+        # puts "tnum is #{thread_number} and #{Thread.current.object_id}"
+
+        while true
+          @tests_mutex.lock
+          class_name = @tests_to_run.shift
+          @tests_mutex.unlock
+
+          break unless class_name
+          self.run_test class_name
+        end
+      end
+    end
+  end
+
+  def join_threads
+    @threads.each &:join
+  end
+
+  def run_test(class_name)
+    file_name = self.class.class_name_to_file_name class_name
+
+    if (!require("./#{file_name}"))
+      self.add_result class_name, "failed", " Failed to load '#{file_name}'."
+      return
+    end
+
+    begin
+      current_test = eval "#{class_name}.new"
+    rescue
+      self.add_result class_name, "failed", " Failed to create an instance of class '#{class_name}'."
+      return
+    end
+
+    if (current_test.description == "INSERT DESCRIPTION")
+      puts "Skipping '#{class_name}': Not implemented yet"
+      return
+    end
+
+    puts "Running '#{class_name}': #{current_test.description}"
+    result = current_test.run_test
+    if (result)
+      if (!@results.exist? class_name)
+        self.add_result class_name, "passed", "  NEW test. Storing result '#{result}'.", result
+
+      elsif (@results.hash?(class_name) != result)
+        msg = "  FAILED: checksum is different. Commands:\n" +
+          "    " + current_test.commands.join("\n    ") + "\n"
+
+        if (update_failed)
+          self.add_result class_name, "passed", msg + "  UPDATING result\n", result
+        else
+          self.add_result class_name, "failed", msg
+        end
+      else
+        self.add_result class_name, "passed"
+      end
+
+    else
+      self.add_result class_name, "failed", "  FAILED: no result from test"
+    end
+  end
+
+  def add_result(class_name, result, message = nil, new_checksum = nil)
+    @results_mutex.lock
+
+    puts message                               if message
+    @results.set      class_name, result
+    @results.set_hash class_name, new_checksum if new_checksum
+    @num_failed += 1                           if result == "failed"
+
+    @results_mutex.unlock
+  end
+end
 
 class SubtestError < RuntimeError
 end
@@ -8,8 +164,9 @@ class Test
   attr_reader :debug_commands
 
   def initialize
-    @tmp_num = 0
-    @commands = Array.new
+    @tmp_num        = 0
+    @tmp_num_mutex  = Mutex.new
+    @commands       = Array.new
     @debug_commands = Array.new
   end
 
@@ -23,10 +180,9 @@ class Test
 
   def unlink_tmp_files
     return if (ENV["KEEP_TMPFILES"] == "1")
-    n = "mkvtoolnix-auto-test-" + $$.to_s + "-"
+    n = self.tmp_name_prefix
     Dir.entries("/tmp").each do |e|
-      File.unlink("/tmp/#{e}") if ((e =~ /^#{n}/) and
-                                    File.exists?("/tmp/#{e}"))
+      File.unlink("/tmp/#{e}") if ((e =~ /^#{n}/) and File.exists?("/tmp/#{e}"))
     end
   end
 
@@ -56,15 +212,22 @@ class Test
     end
   end
 
+  def tmp_name_prefix
+    ["/tmp/mkvtoolnix-auto-test-", $$.to_s, Thread.current[:number]].join "-"
+  end
+
   def tmp_name
+    @tmp_num_mutex.lock
     @tmp_num ||= 0
-    @tmp_num += 1
-    return "/tmp/mkvtoolnix-auto-test-" + $$.to_s + "-" + @tmp_num.to_s
+    @tmp_num  += 1
+    result = self.tmp_name_prefix + @tmp_num.to_s
+    @tmp_num_mutex.unlock
+
+    result
   end
 
   def tmp
     @tmp ||= tmp_name
-    return @tmp
   end
 
   def hash_file(name)
@@ -190,164 +353,33 @@ end
 
 def main
   ENV['LC_ALL'] = "en_US.UTF-8"
+  ENV['PATH']   = "../src:" + ENV['PATH']
 
-  results = Results.new
+  controller = TestController.new
 
-  test_failed = false
-  test_new = false
-  test_date_after = nil
-  test_date_before = nil
-  update_failed = false
-  tests = Array.new
-  dir_entries = Dir.entries(".")
   ARGV.each do |arg|
     if ((arg == "-f") or (arg == "--failed"))
-      test_failed = true
+      controller.test_failed = true
     elsif ((arg == "-n") or (arg == "--new"))
-      test_new = true
+      controller.test_new = true
     elsif ((arg == "-u") or (arg == "--update-failed"))
-      update_failed = true
+      controller.update_failed = true
     elsif (arg =~ /-d([0-9]{4})([0-9]{2})([0-9]{2})-([0-9]{2})([0-9]{2})/)
-      test_date_after = Time.local($1, $2, $3, $4, $5, $6)
+      controller.test_date_after = Time.local($1, $2, $3, $4, $5, $6)
     elsif (arg =~ /-D([0-9]{4})([0-9]{2})([0-9]{2})-([0-9]{2})([0-9]{2})/)
-      test_date_before = Time.local($1, $2, $3, $4, $5, $6)
+      controller.test_date_before = Time.local($1, $2, $3, $4, $5, $6)
     elsif (arg =~ /^[0-9]{3}$/)
-      dir_entries.each { |e| tests.push(e) if (e =~ /^test-#{arg}/) }
+      controller.add_test_case arg
+    elsif arg =~ /-j(\d+)/
+      controller.num_threads = $1.to_i
     else
-      puts("Unknown argument '#{arg}'.")
-      exit(2)
+      error_and_exit "Unknown argument '#{arg}'."
     end
   end
-  test_all = (!test_failed && !test_new)
-  tests = dir_entries unless (tests.size > 0)
 
-  ENV['PATH'] = "../src:" + ENV['PATH']
+  controller.go
 
-  if (ENV["DEBUG"] == "1")
-    $stderr.puts("#!/bin/bash\n\n")
-    $stderr.puts("export LD_LIBRARY_PATH=/usr/local/lib\n\n")
-    $stderr.puts("rm new_results.txt &> /dev/null")
-    $stderr.puts("touch new_results.txt\n\n")
-  end
-
-  num_tests = 0
-  num_failed = 0
-  start = Time.now
-  tests.sort.each do |entry|
-    next unless (FileTest.file?(entry) and (entry =~ /^test-.*\.rb$/))
-
-    class_name = "T_" + entry.gsub(/^test-/, "").gsub(/\.rb$/, "")
-    test_this = test_all
-    if (results.exist?(class_name))
-      if (test_failed and (results.status?(class_name) == "failed"))
-        test_this = true
-      elsif (test_new and (results.status?(class_name) == "new"))
-        test_this = true
-      end
-    elsif (test_new || test_failed)
-      test_this = true
-    end
-    if (results.exist?(class_name))
-      if (test_date_after and
-         (results.date_added?(class_name) < test_date_after))
-        test_this = false
-      elsif (test_date_before and
-            (results.date_added?(class_name) > test_date_before))
-        test_this = false
-      end
-    end
-    next unless (test_this)
-
-    num_tests += 1
-
-    if (!require("./" + entry))
-      puts(" Failed to load '#{entry}'.")
-      results.set(class_name, "failed")
-      num_failed += 1
-      next
-    end
-
-    begin
-      current_test = eval(class_name + ".new")
-    rescue
-      puts(" Failed to create an instance of class '#{class_name}'.")
-      results.set(class_name, "failed")
-      num_failed += 1
-      next
-    end
-
-    if (current_test.description == "INSERT DESCRIPTION")
-      puts("Skipping '#{class_name}': Not implemented yet")
-      next
-    end
-    puts("Running '#{class_name}': #{current_test.description}")
-    result = current_test.run_test
-    if (result)
-      if (!results.exist?(class_name))
-        puts("  NEW test. Storing result '#{result}'.")
-        results.add(class_name, result)
-      elsif (results.hash?(class_name) != result)
-        puts("  FAILED: checksum is different. Commands:")
-        puts("    " + current_test.commands.join("\n    "))
-        if (update_failed)
-          puts("  UPDATING result")
-          results.set_hash(class_name, result)
-          results.set(class_name, "passed")
-        else
-          results.set(class_name, "failed")
-          num_failed += 1
-        end
-      else
-        results.set(class_name, "passed")
-      end
-    else
-      puts("  FAILED: no result from test")
-      results.set(class_name, "failed")
-      num_failed += 1
-    end
-
-    if (ENV["DEBUG"] == "1")
-      $stderr.puts("echo -n Running #{class_name}")
-      $stderr.puts("FAILED=0")
-      $stderr.puts("echo -n #{class_name}: >> new_results.txt")
-      first = true
-      current_test.debug_commands.each do |c|
-        c.gsub!(/\/tmp\//, "$HOME/tmp/")
-        if (c =~ /^md5sum/)
-          $stderr.puts("echo -n - >> new_results.txt") unless (first)
-          first = false
-          $stderr.puts("SUM=`" + c + " | gawk '{print $1}'`")
-          $stderr.puts("echo -n $SUM >> new_results.txt")
-        else
-          if (c =~ />/)
-            $stderr.puts(c)
-          else
-            $stderr.puts(c + " >/dev/null 2>/dev/null")
-          end
-          $stderr.puts("if [ $? -ne 0 -a $? -ne 1 ]; then")
-          $stderr.puts("  FAILED=1")
-          $stderr.puts("fi")
-        end
-      end
-      da = results.date_added?(class_name).strftime("%Y%m%d-%H%M%S")
-      $stderr.puts("if [ $FAILED -eq 1 ]; then")
-      $stderr.puts("  echo :failed:#{da} >> new_results.txt")
-      $stderr.puts("  echo '  FAILED'")
-      $stderr.puts("else")
-      $stderr.puts("  echo :passed:#{da} >> new_results.txt")
-      $stderr.puts("  echo '  ok'")
-      $stderr.puts("fi")
-      $stderr.puts("rm ~/tmp/mkvtoolnix-auto-test-* >/dev/null 2>/dev/null\n\n")
-    end
-
-  end
-  duration = Time.now - start
-
-  puts("#{num_failed}/#{num_tests} failed (" +
-      (num_tests > 0 ? (num_failed * 100 / num_tests).to_s : "0") + "%). " +
-        "Tests took #{duration}s.")
-
-  exit(num_failed > 0 ? 1 : 0)
+  exit controller.num_failed > 0 ? 1 : 0
 end
 
 main
