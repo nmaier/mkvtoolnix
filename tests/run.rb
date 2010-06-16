@@ -16,10 +16,14 @@ class TestController
     @test_date_after  = nil
     @test_date_before = nil
     @update_failed    = false
-    @num_threads      = 1
+    @num_threads      = self.get_num_processors
 
     @tests            = Array.new
     @dir_entries      = Dir.entries(".")
+  end
+
+  def get_num_processors
+    IO.readlines("/proc/cpuinfo").collect { |line| /^processor\s+:\s+(\d+)/.match(line) ? $1.to_i : 0 }.max + 1
   end
 
   def num_threads=(num)
