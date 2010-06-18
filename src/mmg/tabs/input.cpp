@@ -323,7 +323,6 @@ tab_input::add_file(const wxString &file_name,
   wxString name, command, video_track_name, opt_file_name;
   wxArrayString output, errors;
   std::vector<wxString> args, pair;
-  size_t pos;
   int new_file_pos, result;
   unsigned int i, k;
   wxFile *opt_file;
@@ -378,7 +377,8 @@ tab_input::add_file(const wxString &file_name,
   if (3 == result) {
     wxString container = Z("unknown");
 
-    if (output.Count() && (0 <= (pos = output[0].Find(wxT("container:")))))
+    int pos;
+    if (output.Count() && (wxNOT_FOUND != (pos = output[0].Find(wxT("container:")))))
       container = output[0].Mid(pos + 11);
 
     wxString info;
@@ -433,6 +433,8 @@ tab_input::add_file(const wxString &file_name,
   default_track_found_for['s'] = -1 != default_track_checked('s');
 
   for (i = 0; i < output.Count(); i++) {
+    int pos;
+
     if (output[i].Find(wxT("Track")) == 0) {
       mmg_track_cptr track(new mmg_track_t);
 
@@ -535,7 +537,7 @@ tab_input::add_file(const wxString &file_name,
         cfg->Flush();
       }
 
-    } else if ((pos = output[i].Find(wxT("container:"))) > 0) {
+    } else if ((pos = output[i].Find(wxT("container:"))) != wxNOT_FOUND) {
       wxString container = output[i].Mid(pos + 11).BeforeFirst(wxT(' '));
       wxString info      = output[i].Mid(pos + 11).AfterFirst(wxT('[')).BeforeLast(wxT(']'));
 
