@@ -38,8 +38,8 @@ class TestController
     @num_threads = num
   end
 
-  def add_test(num)
-    @dir_entries.each { |entry| @tests.push(entry) if /^test-#{arg}/.match(entry) }
+  def add_test_case(num)
+    @tests += @dir_entries.select { |entry| /^test-#{num}/.match(entry) }
   end
 
   def get_tests_to_run
@@ -140,6 +140,8 @@ class TestController
       elsif (@results.hash?(class_name) != result)
         msg = "  FAILED: checksum is different. Commands:\n" +
           "    " + current_test.commands.join("\n    ") + "\n"
+        # msg += "ACTUAL: #{result}\n"
+        # msg += "CHECK:  #{@results.hash?(class_name)}\n"
 
         if (update_failed)
           self.add_result class_name, "passed", msg + "  UPDATING result\n", result
@@ -158,10 +160,15 @@ class TestController
   def add_result(class_name, result, message = nil, new_checksum = nil)
     @results_mutex.lock
 
-    show_message message                       if message
-    @results.set      class_name, result
-    @results.set_hash class_name, new_checksum if new_checksum
-    @num_failed += 1                           if result == "failed"
+    show_message message if message
+    @num_failed += 1     if result == "failed"
+
+    if !@results.exist? class_name
+      @results.add class_name, new_checksum
+    else
+      @results.set      class_name, result
+      @results.set_hash class_name, new_checksum if new_checksum
+    end
 
     @results_mutex.unlock
   end
