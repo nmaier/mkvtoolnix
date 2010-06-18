@@ -68,6 +68,7 @@
 #include "output/p_mpeg4_p10.h"
 #include "output/p_passthrough.h"
 #include "output/p_pcm.h"
+#include "output/p_pgs.h"
 #include "output/p_textsubs.h"
 #include "output/p_theora.h"
 #include "output/p_tta.h"
@@ -1669,6 +1670,12 @@ kax_reader_c::create_subtitle_packetizer(kax_track_t *t,
     t->sub_type = 'k';
 
     mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the Kate output module.\n"));
+
+  } else if (t->codec_id == MKV_S_HDMV_PGS) {
+    t->ptzr     = add_packetizer(new pgs_packetizer_c(this, nti));
+    t->sub_type = 'p';
+
+    mxinfo_tid(m_ti.m_fname, t->tnum, Y("Using the PGS output module.\n"));
 
   } else
     init_passthrough_packetizer(t);
