@@ -145,14 +145,13 @@ void
 tab_input_extra::set_track_mode(mmg_track_t *t) {
   bool enable       = (NULL != t) && !t->appending;
   bool normal_track = (NULL != t) && (('a' == t->type) || ('s' == t->type) || ('v' == t->type));
-  wxString ctype    = t ? t->ctype     : wxT("");
-
-  ctype.MakeLower();
+  wxString ctype    = t ? t->ctype.Lower() : wxT("");
+  bool compressable = (ctype.Find(wxT("vobsub")) >= 0) || (ctype.Find(wxT("pgs")) >= 0);
 
   st_cues->Enable(enable && normal_track);
   cob_cues->Enable(enable && normal_track);
-  st_compression->Enable((ctype.Find(wxT("vobsub")) >= 0) && !t->appending);
-  cob_compression->Enable((ctype.Find(wxT("vobsub")) >= 0) && !t->appending);
+  st_compression->Enable(compressable && !t->appending);
+  cob_compression->Enable(compressable && !t->appending);
   st_user_defined->Enable((NULL != t) && normal_track);
   tc_user_defined->Enable((NULL != t) && normal_track);
 

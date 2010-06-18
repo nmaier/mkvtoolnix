@@ -244,6 +244,7 @@ tab_input::setup_file_type_filter() {
   file_types.push_back(file_type_t(Z("MPEG program streams"),                wxU("mpg mpeg m2v evo evob vob")));
   file_types.push_back(file_type_t(Z("MPEG video elementary streams"),       wxU("m1v m2v")));
   file_types.push_back(file_type_t(Z("Matroska audio/video files"),          wxU("mka mks mkv webm webmv webma")));
+  file_types.push_back(file_type_t(Z("PGS/SUP subtitles"),                   wxU("sup")));
   file_types.push_back(file_type_t(Z("QuickTime audio/video files"),         wxU("mov")));
   file_types.push_back(file_type_t(Z("Ogg/OGM audio/video files"),           wxU("ogg ogm")));
   file_types.push_back(file_type_t(Z("RealMedia audio/video files"),         wxU("ra ram rm rmvb rv")));
