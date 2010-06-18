@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-06-13 10:41+0800\n"
+"PO-Revision-Date: 2010-06-18 19:10+0800\n"
 "Last-Translator: Dean Lee <xslidian@lidian.info>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -4559,9 +4559,8 @@ msgid "Overwrite existing file?"
 msgstr "覆写现有的文件?"
 
 #: src/mmg/tabs/input.cpp:247
-#, fuzzy
 msgid "PGS/SUP subtitles"
-msgstr "字幕"
+msgstr "PGS/SUP 字幕"
 
 #: src/input/r_vobsub.cpp:523
 msgid "PTS error: 0x%|1$02x| %|2$02x|%|3$02x| %|4$02x|%|5$02x|\n"
@@ -7115,14 +7114,12 @@ msgid "Using the PCM output module.\n"
 msgstr "使用 PCM 输出模块。\n"
 
 #: src/input/r_pgssup.cpp:72
-#, fuzzy
 msgid "Using the PGS output module.\n"
-msgstr "使用 DTS 输出模块。\n"
+msgstr "使用 PGS 输出模块。\n"
 
 #: src/input/r_pgssup.cpp:59
-#, fuzzy
 msgid "Using the PGSSUP demultiplexer.\n"
-msgstr "使用 MPEG ES 分离器。\n"
+msgstr "使用 PGSSUP 分离器。\n"
 
 #: src/input/r_qtmp4.cpp:124
 msgid "Using the Quicktime/MP4 demultiplexer.\n"
@@ -8395,9 +8392,8 @@ msgid "pending"
 msgstr "挂起"
 
 #: src/input/r_pgssup.cpp:55
-#, fuzzy
 msgid "pgssup_reader: Could not open the file."
-msgstr "mpeg_es_reader: 无法打开文件。"
+msgstr "pgssup_reader: 无法打开文件。"
 
 #: src/info/mkvinfo.cpp:718
 msgid "pixel crop bottom: %1%"
@@ -8881,6 +8877,7 @@ msgstr "是"
 #~ "  -v, --verbose  提高“详细”程度。\n"
 #~ "  -h, --help     显示本帮助。\n"
 #~ "  -V, --version  显示版本信息。\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "使用 FLAC 输出模块。\n"
