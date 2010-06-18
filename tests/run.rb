@@ -1,5 +1,12 @@
 #!/usr/bin/env ruby1.9
 
+$message_mutex = Mutex.new
+def show_message(message)
+  $message_mutex.lock
+  puts message
+  $message_mutex.unlock
+end
+
 def error_and_exit(text, exit_code = 2)
   puts text
   exit exit_code
@@ -77,7 +84,7 @@ class TestController
 
     duration = Time.now - start
 
-    puts "#{@num_failed}/#{num_tests} failed (" + (num_tests > 0 ? (@num_failed * 100 / num_tests).to_s : "0") + "%). " + "Tests took #{duration}s."
+    show_message "#{@num_failed}/#{num_tests} failed (" + (num_tests > 0 ? (@num_failed * 100 / num_tests).to_s : "0") + "%). " + "Tests took #{duration}s."
   end
 
   def run_threads
@@ -120,11 +127,11 @@ class TestController
     end
 
     if (current_test.description == "INSERT DESCRIPTION")
-      puts "Skipping '#{class_name}': Not implemented yet"
+      show_message "Skipping '#{class_name}': Not implemented yet"
       return
     end
 
-    puts "Running '#{class_name}': #{current_test.description}"
+    show_message "Running '#{class_name}': #{current_test.description}"
     result = current_test.run_test
     if (result)
       if (!@results.exist? class_name)
@@ -151,7 +158,7 @@ class TestController
   def add_result(class_name, result, message = nil, new_checksum = nil)
     @results_mutex.lock
 
-    puts message                               if message
+    show_message message                       if message
     @results.set      class_name, result
     @results.set_hash class_name, new_checksum if new_checksum
     @num_failed += 1                           if result == "failed"
@@ -195,13 +202,13 @@ class Test
       return run
     rescue RuntimeError => ex
       unlink_tmp_files
-      puts(ex.to_s)
+      show_message ex.to_s
       return nil
     end
   end
 
   def error(reason)
-    puts("  Failed. Reason: #{reason}")
+    show_message "  Failed. Reason: #{reason}"
     raise "test failed"
   end
 
