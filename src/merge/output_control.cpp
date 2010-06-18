@@ -90,6 +90,7 @@
 #include "input/r_mpeg_ps.h"
 #include "input/r_mpeg_ts.h"
 #include "input/r_ogm.h"
+#include "input/r_pgssup.h"
 #include "input/r_qtmp4.h"
 #include "input/r_real.h"
 #include "input/r_srt.h"
@@ -324,6 +325,8 @@ get_file_type(filelist_t &file) {
     type = FILE_TYPE_OGM;
   else if (flac_reader_c::probe_file(io, size))
     type = FILE_TYPE_FLAC;
+  else if (pgssup_reader_c::probe_file(io, size))
+    type = FILE_TYPE_PGSSUP;
   else if (real_reader_c::probe_file(io, size))
     type = FILE_TYPE_REAL;
   else if (qtmp4_reader_c::probe_file(io, size))
@@ -1081,6 +1084,9 @@ create_readers() {
           break;
         case FILE_TYPE_OGM:
           file.reader = new ogm_reader_c(*file.ti);
+          break;
+        case FILE_TYPE_PGSSUP:
+          file.reader = new pgssup_reader_c(*file.ti);
           break;
         case FILE_TYPE_QTMP4:
           file.reader = new qtmp4_reader_c(*file.ti);

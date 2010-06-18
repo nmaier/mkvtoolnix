@@ -1,5 +1,8 @@
 2010-06-18  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: new feature: Added support for reading PGS subtitles
+	from PGS/SUP files.
+
 	* mkvmerge: bug fix: Specifying an FPS with "--default-duration"
 	for AVC/h264 tracks in AVI files did not work. Fix for bug 492.
 
