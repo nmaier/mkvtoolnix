@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-06-13 18:39+0900\n"
+"PO-Revision-Date: 2010-06-18 22:36+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -4427,9 +4427,8 @@ msgid "Overwrite existing file?"
 msgstr "既存のファイルに上書きしますか？"
 
 #: src/mmg/tabs/input.cpp:247
-#, fuzzy
 msgid "PGS/SUP subtitles"
-msgstr "字幕"
+msgstr "PGS/SUP字幕"
 
 #: src/input/r_vobsub.cpp:523
 msgid "PTS error: 0x%|1$02x| %|2$02x|%|3$02x| %|4$02x|%|5$02x|\n"
@@ -6882,14 +6881,12 @@ msgid "Using the PCM output module.\n"
 msgstr "PCM出力モジュールを使用しています。\n"
 
 #: src/input/r_pgssup.cpp:72
-#, fuzzy
 msgid "Using the PGS output module.\n"
-msgstr "DTS出力モジュールを使用しています。\n"
+msgstr "PGS出力モジュールを使用しています。\n"
 
 #: src/input/r_pgssup.cpp:59
-#, fuzzy
 msgid "Using the PGSSUP demultiplexer.\n"
-msgstr "MPEG ESデマルチプレクサを使用しています。\n"
+msgstr "PGSSUPデマルチプレクサを使用しています。\n"
 
 #: src/input/r_qtmp4.cpp:124
 msgid "Using the Quicktime/MP4 demultiplexer.\n"
@@ -8092,7 +8089,7 @@ msgstr "未処理"
 #: src/input/r_pgssup.cpp:55
 #, fuzzy
 msgid "pgssup_reader: Could not open the file."
-msgstr "mpeg_es_reader：ファイルを開けませんでした。"
+msgstr "pgssup_reader：ファイルを開けませんでした。"
 
 #: src/info/mkvinfo.cpp:718
 msgid "pixel crop bottom: %1%"
