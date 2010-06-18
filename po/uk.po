@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-06-13 02:33+0300\n"
+"PO-Revision-Date: 2010-06-18 20:33+0300\n"
 "Last-Translator: rusguy6 rusguy6 <rusguy6@gmail.com>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -4590,9 +4590,8 @@ msgid "Overwrite existing file?"
 msgstr "Замінювати існуючий файл?"
 
 #: src/mmg/tabs/input.cpp:247
-#, fuzzy
 msgid "PGS/SUP subtitles"
-msgstr "субтитри"
+msgstr "PGS/SUP субтитри"
 
 #: src/input/r_vobsub.cpp:523
 msgid "PTS error: 0x%|1$02x| %|2$02x|%|3$02x| %|4$02x|%|5$02x|\n"
@@ -7170,14 +7169,12 @@ msgid "Using the PCM output module.\n"
 msgstr "Використання PCM вихідного модуля.\n"
 
 #: src/input/r_pgssup.cpp:72
-#, fuzzy
 msgid "Using the PGS output module.\n"
-msgstr "Використання DTS вихідного модуля.\n"
+msgstr "Використання PGS вихідного модуля.\n"
 
 #: src/input/r_pgssup.cpp:59
-#, fuzzy
 msgid "Using the PGSSUP demultiplexer.\n"
-msgstr "Використання MPEG ES демультиплексора.\n"
+msgstr "Використання PGSSUP демультиплексора.\n"
 
 #: src/input/r_qtmp4.cpp:124
 msgid "Using the Quicktime/MP4 demultiplexer.\n"
@@ -8452,9 +8449,8 @@ msgid "pending"
 msgstr "очікування"
 
 #: src/input/r_pgssup.cpp:55
-#, fuzzy
 msgid "pgssup_reader: Could not open the file."
-msgstr "mpeg_es_reader: Не вдалося відкрити файл."
+msgstr "pgssup_reader: Не вдалося відкрити файл."
 
 #: src/info/mkvinfo.cpp:718
 msgid "pixel crop bottom: %1%"
@@ -8720,49 +8716,70 @@ msgstr "Так"
 
 #~ msgid "%1% at %2%"
 #~ msgstr "%1% в %2%"
+
 #~ msgid "(Unknown element: %1%)"
 #~ msgstr "(Невідомий елемент: %1%)"
+
 #~ msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
 #~ msgstr "Не пишіть заголовок тих елементів, значення яких збігаються з їхніми значеннями за замовчуванням відповідно до Matroska критеріям."
+
 #~ msgid "File/segment title"
 #~ msgstr "Файл/сегмент назву"
+
 #~ msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
 #~ msgstr "Matroska файли (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|Все файлы|*.*"
+
 #~ msgid "Other global options"
 #~ msgstr "Інші глобальні опції"
+
 #~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
 #~ msgstr "MPEG-4 частина 2 стиск працює тільки з рідним MPEG-4. Тим не менше, рідний MPEG-4 режим не був обраний з '--engage native_mpeg4'.\n"
+
 #~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
 #~ msgstr "Эта дорожка использует особенность Matroska, названную 'запоминающие элементы Codec'. mkvmerge поддерживает их, но эта особенность не была включена с опцией '--engage use_codec_state'.\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "Використання FLAC вихідного модуля.\n"
+
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "Створити вихідні файли FLAC (за замовчуванням: написати OggFLAC файли)."
+
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: Не вдалося встановити помилки зворотного виклику.\n"
+
 #~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
 #~ msgstr "flac_header_extraction: Не вдалося встановити метаданих зворотного виклику.\n"
+
 #~ msgid "flac_header_extraction: Could not set the read callback.\n"
 #~ msgstr "flac_header_extraction: Не вдалося встановити читати зворотного виклику.\n"
+
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: Не вдалося встановити написати зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити кінець файлу зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the error callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити помилки зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the length callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити довжину зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the metadata callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити метаданих зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the read callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити читати зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the seek callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити зворотній виклик пошуку.\n"
+
 #~ msgid "flac_reader: Could not set the tell callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити сказати зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the write callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити написати зворотного виклику.\n"
+
 #~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 #~ msgstr "r_matroska: Кластер не містять кластеру тайм-коду. Файл не працює. Переривання.\n"
-
