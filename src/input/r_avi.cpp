@@ -219,6 +219,12 @@ avi_reader_c::create_packetizer(int64_t tid) {
     else if (mpeg4::p2::is_fourcc(codec))
       m_divx_type = DIVX_TYPE_MPEG4;
 
+    if (map_has_key(m_ti.m_default_durations, 0))
+      m_fps = 1000000000.0 / m_ti.m_default_durations[0];
+
+    else if (map_has_key(m_ti.m_default_durations, -1))
+      m_fps = 1000000000.0 / m_ti.m_default_durations[-1];
+
     m_ti.m_id = 0;                 // ID for the video track.
     if (DIVX_TYPE_MPEG4 == m_divx_type)
       create_mpeg4_p2_packetizer();
@@ -301,7 +307,7 @@ avi_reader_c::create_mpeg1_2_packetizer() {
 
 void
 avi_reader_c::create_mpeg4_p2_packetizer() {
-  m_vptzr = add_packetizer(new mpeg4_p2_video_packetizer_c(this, m_ti, AVI_frame_rate(m_avi), AVI_video_width(m_avi), AVI_video_height(m_avi), false));
+  m_vptzr = add_packetizer(new mpeg4_p2_video_packetizer_c(this, m_ti, m_fps, AVI_video_width(m_avi), AVI_video_height(m_avi), false));
 
   if (verbose)
     mxinfo_tid(m_ti.m_fname, 0, Y("Using the MPEG-4 part 2 video output module.\n"));
@@ -315,7 +321,7 @@ avi_reader_c::create_mpeg4_p10_packetizer() {
     m_vptzr                               = add_packetizer(ptzr);
 
     ptzr->enable_timecode_generation(false);
-    ptzr->set_track_default_duration((int64_t)(1000000000 / AVI_frame_rate(m_avi)));
+    ptzr->set_track_default_duration((int64_t)(1000000000 / m_fps));
 
     if (m_avc_extra_nalus.is_set())
       ptzr->add_extra_data(m_avc_extra_nalus);
@@ -330,7 +336,7 @@ avi_reader_c::create_mpeg4_p10_packetizer() {
 
 void
 avi_reader_c::create_standard_video_packetizer() {
-  m_vptzr = add_packetizer(new video_packetizer_c(this, m_ti, NULL, AVI_frame_rate(m_avi), AVI_video_width(m_avi), AVI_video_height(m_avi)));
+  m_vptzr = add_packetizer(new video_packetizer_c(this, m_ti, NULL, m_fps, AVI_video_width(m_avi), AVI_video_height(m_avi)));
 
   if (verbose)
     mxinfo_tid(m_ti.m_fname, 0, Y("Using the video output module.\n"));
@@ -1001,7 +1007,7 @@ void
 avi_reader_c::debug_dump_video_index() {
   int num_video_frames = AVI_video_frames(m_avi), i;
 
-  mxinfo(boost::format("AVI video index dump: %1% entries; frame rate: %2%\n") % num_video_frames % AVI_frame_rate(m_avi));
+  mxinfo(boost::format("AVI video index dump: %1% entries; frame rate: %2%\n") % num_video_frames % m_fps);
   for (i = 0; num_video_frames > i; ++i)
     mxinfo(boost::format("  %1%: %2% bytes\n") % i % AVI_frame_size(m_avi, i));
 }
