@@ -1336,7 +1336,7 @@ create_next_output_file() {
 
   // Open the output file.
   try {
-    s_out = new mm_write_cache_io_c(new mm_file_io_c(this_outfile, MODE_CREATE), 20000000, false);
+    s_out = new mm_write_cache_io_c(new mm_file_io_c(this_outfile, MODE_CREATE), 20 * 1024 * 1024, false);
   } catch (...) {
     mxerror(boost::format(Y("The output file '%1%' could not be opened for writing (%2%).\n")) % this_outfile % strerror(errno));
   }
