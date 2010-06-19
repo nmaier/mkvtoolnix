@@ -271,7 +271,7 @@ write_all_cuesheets(KaxChapters &chapters,
       cue_file_name += ".cue";
 
       try {
-        out = new mm_write_cache_io_c(new mm_file_io_c(cue_file_name.c_str(), MODE_CREATE), 128 * 1024);
+        out = mm_write_cache_io_c::open(cue_file_name, 128 * 1024);
       } catch(...) {
         mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % cue_file_name % strerror(errno));
       }

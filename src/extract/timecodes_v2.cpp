@@ -97,7 +97,7 @@ create_timecode_files(KaxTracks &kax_tracks,
     }
 
     try {
-      mm_io_c *file = new mm_write_cache_io_c(new mm_file_io_c(tspec->out_name, MODE_CREATE), 128 * 1024);
+      mm_io_c *file = mm_write_cache_io_c::open(tspec->out_name, 128 * 1024);
       timecode_extractors.push_back(timecode_extractor_t(tspec->tid, file, default_duration));
       file->puts(boost::format("# timecode format v%1%\n") % version);
 

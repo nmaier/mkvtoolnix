@@ -76,7 +76,7 @@ xtr_vobsub_c::create_file(xtr_base_c *master,
     std::string sub_file_name = m_base_name + ".sub";
 
     try {
-      m_out = new mm_write_cache_io_c(new mm_file_io_c(sub_file_name, MODE_CREATE), 128 * 1024);
+      m_out = mm_write_cache_io_c::open(sub_file_name, 128 * 1024);
     } catch (...) {
       mxerror(boost::format(Y("Failed to create the VobSub data file '%1%': %2% (%3%)\n")) % sub_file_name % errno % strerror(errno));
     }

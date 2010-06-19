@@ -84,7 +84,7 @@ main(int argc,
   }
 
   try {
-    out = new mm_write_cache_io_c(new mm_file_io_c(argv[3], MODE_CREATE), 128 * 1024);
+    out = mm_write_cache_io_c::open(argv[3], 128 * 1024);
   } catch(...) {
     mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%, %3%).\n")) % argv[3] % errno % strerror(errno));
   }

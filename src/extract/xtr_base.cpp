@@ -68,7 +68,7 @@ xtr_base_c::create_file(xtr_base_c *master,
 
   try {
     init_content_decoder(track);
-    m_out = new mm_write_cache_io_c(new mm_file_io_c(m_file_name, MODE_CREATE), 5 * 1024 * 1024);
+    m_out = mm_write_cache_io_c::open(m_file_name, 5 * 1024 * 1024);
   } catch(...) {
     mxerror(boost::format(Y("Failed to create the file '%1%': %2% (%3%)\n")) % m_file_name % errno % strerror(errno));
   }

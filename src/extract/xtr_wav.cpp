@@ -108,7 +108,7 @@ xtr_wavpack4_c::create_file(xtr_base_c *master,
     corr_name += "wvc";
 
     try {
-      m_corr_out = new mm_write_cache_io_c(new mm_file_io_c(corr_name, MODE_CREATE), 5 * 1024 * 1024);
+      m_corr_out = mm_write_cache_io_c::open(corr_name, 5 * 1024 * 1024);
     } catch (...) {
       mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % corr_name % strerror(errno));
     }
