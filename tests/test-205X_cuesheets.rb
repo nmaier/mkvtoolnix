@@ -11,7 +11,6 @@ class T_205X_cuesheets < Test
     hash = hash_tmp(false)
     sys("../src/mkvextract tracks #{tmp}-src --no-variable-data --cuesheet 1:#{tmp} > /dev/null 2>/dev/null")
     hash += "-" + hash_tmp("#{tmp}.cue")
-    unlink_tmp_files
     return hash
   end
 end

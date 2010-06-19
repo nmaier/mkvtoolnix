@@ -17,8 +17,6 @@ class T_273pgssup < Test
     xtr_tracks "#{tmp}-1", "1:#{tmp}-3"
     hashes << hash_file("#{tmp}-3")
 
-    unlink_tmp_files
-
     return hashes.join "-"
   end
 end

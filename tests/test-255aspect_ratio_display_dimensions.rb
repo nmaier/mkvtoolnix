@@ -17,8 +17,6 @@ class T_255aspect_ratio_display_dimensions < Test
       result += "-" + get_display_dimensions("#{tmp}#{idx}")
     end
 
-    unlink_tmp_files
-
     return result
   end
 

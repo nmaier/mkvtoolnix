@@ -10,7 +10,6 @@ class T_230h264_nalu_size_len_change < Test
     hash = hash_file(tmp) + "-"
     merge("#{tmp}.1", "--nalu-size-length 1:4 #{tmp}")
     hash += hash_file("#{tmp}.1")
-    unlink_tmp_files
     return hash
   end
 end

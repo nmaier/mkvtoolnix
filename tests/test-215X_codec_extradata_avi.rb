@@ -10,7 +10,6 @@ class T_215X_codec_extradata_avi < Test
     hash = hash_file(tmp) + "-"
     xtr_tracks(tmp, "1:#{tmp}-x.avi")
     hash += hash_file("#{tmp}-x.avi")
-    unlink_tmp_files
     return hash
   end
 end
