@@ -37,7 +37,7 @@ mm_write_cache_io_c::setFilePointer(int64 offset,
     : seek_end       == mode ? get_size()       - offset
     :                          getFilePointer() + offset;
 
-  if (new_pos == getFilePointer())
+  if (new_pos == static_cast<int64_t>(getFilePointer()))
     return;
 
   flush_cache();

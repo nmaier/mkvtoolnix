@@ -21,7 +21,7 @@
 class MTX_DLL_API mm_write_cache_io_c: public mm_proxy_io_c {
 protected:
   memory_cptr m_cache;
-  int m_cache_pos;
+  size_t m_cache_pos;
 
 public:
   mm_write_cache_io_c(mm_io_c *p_out, int cache_size, bool p_delete_out = true);
