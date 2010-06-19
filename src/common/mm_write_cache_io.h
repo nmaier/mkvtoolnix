@@ -26,6 +26,7 @@ protected:
 
 public:
   mm_write_cache_io_c(mm_io_c *p_out, size_t cache_size, bool p_delete_out = true);
+  virtual ~mm_write_cache_io_c();
 
   virtual uint64 getFilePointer();
   virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning);

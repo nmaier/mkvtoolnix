@@ -17,6 +17,7 @@
 #include "common/checksums.h"
 #include "common/ebml.h"
 #include "common/endian.h"
+#include "common/mm_write_cache_io.h"
 #include "common/tta.h"
 #include "extract/xtr_tta.h"
 
@@ -38,7 +39,7 @@ void
 xtr_tta_c::create_file(xtr_base_c *master,
                        KaxTrackEntry &track) {
   try {
-    m_out = new mm_file_io_c(m_temp_file_name.c_str(), MODE_CREATE);
+    m_out = new mm_write_cache_io_c(new mm_file_io_c(m_temp_file_name.c_str(), MODE_CREATE), 5 * 1024 * 1024);
   } catch (...) {
     mxerror(boost::format(Y("Failed to create the temporary file '%1%': %2% (%3%)\n")) % m_temp_file_name % errno % strerror(errno));
   }
@@ -80,7 +81,7 @@ xtr_tta_c::finish_file() {
   }
 
   try {
-    m_out = new mm_file_io_c(m_file_name, MODE_CREATE);
+    m_out = new mm_write_cache_io_c(new mm_file_io_c(m_file_name, MODE_CREATE), 5 * 1024 * 1024);
   } catch (...) {
     delete in;
     mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % m_file_name % strerror(errno));

@@ -26,6 +26,10 @@ mm_write_cache_io_c::mm_write_cache_io_c(mm_io_c *p_out,
 {
 }
 
+mm_write_cache_io_c::~mm_write_cache_io_c() {
+  close();
+}
+
 uint64
 mm_write_cache_io_c::getFilePointer() {
   return mm_proxy_io_c::getFilePointer() + m_cache_pos;
