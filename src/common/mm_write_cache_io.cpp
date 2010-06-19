@@ -16,11 +16,13 @@
 #include "common/mm_write_cache_io.h"
 
 mm_write_cache_io_c::mm_write_cache_io_c(mm_io_c *p_out,
-                                         int cache_size,
+                                         size_t cache_size,
                                          bool p_delete_out)
   : mm_proxy_io_c(p_out, p_delete_out)
-  , m_cache(memory_c::alloc(cache_size))
+  , m_af_cache(memory_c::alloc(cache_size))
   , m_cache_pos(0)
+  , m_cache_size(cache_size)
+  , m_cache(m_af_cache->get_buffer())
 {
 }
 
@@ -66,13 +68,21 @@ mm_write_cache_io_c::_read(void *buffer,
 size_t
 mm_write_cache_io_c::_write(const void *buffer,
                             size_t size) {
-  if ((size + m_cache_pos) > m_cache->get_size())
-    flush_cache();
+  size_t bytes_written = size;
+  size_t buffer_offset = 0;
 
-  memcpy(m_cache->get_buffer() + m_cache_pos, buffer, size);
-  m_cache_pos += size;
+  while (0 != size) {
+    size_t bytes_to_write = std::min(size, m_cache_size - m_cache_pos);
+    memcpy(m_cache + m_cache_pos, static_cast<const unsigned char *>(buffer) + buffer_offset, bytes_to_write);
+    buffer_offset += bytes_to_write;
+    m_cache_pos   += bytes_to_write;
+    size          -= bytes_to_write;
 
-  return size;
+    if (m_cache_pos == m_cache_size)
+      flush_cache();
+  }
+
+  return bytes_written;
 }
 
 void
@@ -80,7 +90,7 @@ mm_write_cache_io_c::flush_cache() {
   if (0 == m_cache_pos)
     return;
 
-  size_t bytes_written = mm_proxy_io_c::_write(m_cache->get_buffer(), m_cache_pos);
+  size_t bytes_written = mm_proxy_io_c::_write(m_cache, m_cache_pos);
   mxverb(2, boost::format("mm_write_cache_io_c::flush_cache(): requested %1% written %2%\n") % m_cache_pos % bytes_written);
   if (bytes_written != m_cache_pos)
     throw mm_io_error_c((boost::format("write-error: requested %1%, written %2%") % m_cache_pos % bytes_written).str());

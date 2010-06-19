@@ -20,11 +20,12 @@
 
 class MTX_DLL_API mm_write_cache_io_c: public mm_proxy_io_c {
 protected:
-  memory_cptr m_cache;
-  size_t m_cache_pos;
+  memory_cptr m_af_cache;
+  size_t m_cache_pos, m_cache_size;
+  unsigned char *m_cache;
 
 public:
-  mm_write_cache_io_c(mm_io_c *p_out, int cache_size, bool p_delete_out = true);
+  mm_write_cache_io_c(mm_io_c *p_out, size_t cache_size, bool p_delete_out = true);
 
   virtual uint64 getFilePointer();
   virtual void setFilePointer(int64 offset, seek_mode mode = seek_beginning);
