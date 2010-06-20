@@ -165,6 +165,7 @@ kax_reader_c::kax_reader_c(track_info_c &_ti)
   throw (error_c)
   : generic_reader_c(_ti)
   , m_segment_duration(0)
+  , m_last_timecode(0)
   , m_first_timecode(-1)
   , m_writing_app_ver(-1)
   , m_attachment_id(0)
@@ -2205,7 +2206,7 @@ kax_reader_c::process_block_group(KaxCluster *cluster,
 int
 kax_reader_c::get_progress() {
   if (0 != m_segment_duration)
-    return (m_last_timecode - m_first_timecode) * 100 / m_segment_duration;
+    return (m_last_timecode - std::max(m_first_timecode, static_cast<int64_t>(0))) * 100 / m_segment_duration;
 
   return 100 * m_in->getFilePointer() / m_file_size;
 }
