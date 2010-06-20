@@ -198,20 +198,22 @@ class Test
 
   def unlink_tmp_files
     return if (ENV["KEEP_TMPFILES"] == "1")
-    n = self.tmp_name_prefix
-    Dir.entries("/tmp").each do |e|
-      File.unlink("/tmp/#{e}") if ((e =~ /^#{n}/) and File.exists?("/tmp/#{e}"))
+    re = /^#{self.tmp_name_prefix}/
+    Dir.entries("/tmp").each do |entry|
+      file = "/tmp/#{entry}"
+      File.unlink(file) if re.match(file) and File.exists?(file)
     end
   end
 
   def run_test
+    result = nil
     begin
-      return run
+      result = run
     rescue RuntimeError => ex
-      unlink_tmp_files
       show_message ex.to_s
-      return nil
     end
+    unlink_tmp_files
+    result
   end
 
   def error(reason)
@@ -231,7 +233,7 @@ class Test
   end
 
   def tmp_name_prefix
-    ["/tmp/mkvtoolnix-auto-test-", $$.to_s, Thread.current[:number]].join "-"
+    ["/tmp/mkvtoolnix-auto-test", $$.to_s, Thread.current[:number]].join("-") + "-"
   end
 
   def tmp_name

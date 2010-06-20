@@ -29,6 +29,7 @@
 #include "common/error.h"
 #include "common/extern_data.h"
 #include "common/iso639.h"
+#include "common/mm_write_cache_io.h"
 #include "common/strings/editing.h"
 #include "common/strings/formatting.h"
 #include "common/strings/parsing.h"
@@ -694,7 +695,7 @@ tab_chapters::save() {
   wxString err;
 
   try {
-    out = new mm_file_io_c(wxMB(file_name), MODE_CREATE);
+    out = mm_write_cache_io_c::open(wxMB(file_name), 128 * 1024);
   } catch (...) {
     err.Printf(Z("Could not open the destination file '%s' for writing. Error code: %d (%s)."), file_name.c_str(), errno, wxUCS(strerror(errno)));
     wxMessageBox(err, Z("Error opening file"), wxCENTER | wxOK | wxICON_ERROR);

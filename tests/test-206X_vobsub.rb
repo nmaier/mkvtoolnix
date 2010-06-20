@@ -14,7 +14,6 @@ class T_206X_vobsub < Test
     hash += "-" + hash_file("#{tmp}.idx") + "-" + hash_file("#{tmp}.sub")
     merge("#{tmp}.idx")
     hash += "-" + hash_tmp
-    unlink_tmp_files
     return hash
   end
 end

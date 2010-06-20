@@ -87,10 +87,8 @@ class T_029link < Test
         (valid_next_uid?(nil, true, false))
     rescue SubtestError => e
       puts("  failed subtest: " + e.to_s)
-      unlink_tmp_files
       return e.to_s
     end
-    unlink_tmp_files
     return "all ok"
   end
 end

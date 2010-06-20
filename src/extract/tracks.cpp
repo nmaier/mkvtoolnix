@@ -36,6 +36,7 @@
 #include "common/kax_file.h"
 #include "common/matroska.h"
 #include "common/mm_io.h"
+#include "common/mm_write_cache_io.h"
 #include "extract/mkvextract.h"
 #include "extract/xtr_base.h"
 
@@ -270,7 +271,7 @@ write_all_cuesheets(KaxChapters &chapters,
       cue_file_name += ".cue";
 
       try {
-        out = new mm_file_io_c(cue_file_name.c_str(), MODE_CREATE);
+        out = mm_write_cache_io_c::open(cue_file_name, 128 * 1024);
       } catch(...) {
         mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%).\n")) % cue_file_name % strerror(errno));
       }

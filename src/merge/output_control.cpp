@@ -66,6 +66,7 @@
 #include "common/hacks.h"
 #include "common/math.h"
 #include "common/mm_io.h"
+#include "common/mm_write_cache_io.h"
 #include "common/strings/formatting.h"
 #include "common/tags/tags.h"
 #include "common/translation.h"
@@ -1335,7 +1336,7 @@ create_next_output_file() {
 
   // Open the output file.
   try {
-    s_out = new mm_file_io_c(this_outfile, MODE_CREATE);
+    s_out = mm_write_cache_io_c::open(this_outfile, 20 * 1024 * 1024);
   } catch (...) {
     mxerror(boost::format(Y("The output file '%1%' could not be opened for writing (%2%).\n")) % this_outfile % strerror(errno));
   }
