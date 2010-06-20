@@ -1,3 +1,8 @@
+2010-06-20  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: enhancement: Implemented write caching resulting in
+	faster muxes especially on Windows writing to network shares.
+
 2010-06-18  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Added support for reading PGS subtitles
