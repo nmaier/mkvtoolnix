@@ -324,6 +324,7 @@ public:
   }
 
   virtual int add_packetizer(generic_packetizer_c *ptzr);
+  virtual size_t get_num_packetizers() const;
   virtual void set_timecode_offset(int64_t offset);
 
   virtual void check_track_ids_and_packetizers();

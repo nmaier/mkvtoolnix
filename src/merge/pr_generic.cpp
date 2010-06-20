@@ -1247,6 +1247,13 @@ generic_reader_c::add_packetizer(generic_packetizer_c *ptzr) {
   return m_reader_packetizers.size() - 1;
 }
 
+size_t
+generic_reader_c::get_num_packetizers()
+  const
+{
+  return m_reader_packetizers.size();
+}
+
 void
 generic_reader_c::set_timecode_offset(int64_t offset) {
   m_max_timecode_seen = offset;

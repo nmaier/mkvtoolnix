@@ -419,10 +419,16 @@ display_progress() {
   if (NULL == s_display_reader) {
     std::vector<filelist_t>::const_iterator i;
 
-    const filelist_t *winner = &g_files[0];
-    for (i = g_files.begin() + 1; i != g_files.end(); ++i)
-      if (!i->appending && (i->size > winner->size))
-        winner = &(*i);
+    const filelist_t *winner = NULL;
+    foreach(const filelist_t &current, g_files)
+      if (!current.appending && (0 != current.reader->get_num_packetizers()) && ((NULL == winner) || (current.size > winner->size)))
+        winner = &current;
+
+    if (NULL == winner) {
+      foreach(const filelist_t &current, g_files)
+        if (!current.appending && ((NULL == winner) || (current.size > winner->size)))
+          winner = &current;
+    }
 
     s_display_reader = winner->reader;
   }
