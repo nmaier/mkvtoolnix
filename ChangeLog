@@ -1,5 +1,10 @@
 2010-06-20  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: mkvmerge will no longer report nonsensical
+	progress reports (e.g. -17239182%) when reading Matroska files
+	with all the flags "--no-audio --no-video --no-subtitles"
+	enabled. Fix for bug 505.
+
 	* mmg: bug fix: Fixed a crash in the job runner when the total
 	time was very big due to a division by zero.
 
