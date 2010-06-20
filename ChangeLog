@@ -1,5 +1,8 @@
 2010-06-20  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: Fixed a crash in the job runner when the total
+	time was very big due to a division by zero.
+
 	* mkvmerge: enhancement: Implemented write caching resulting in
 	faster muxes especially on Windows writing to network shares.
 

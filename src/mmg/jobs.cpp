@@ -292,11 +292,14 @@ job_run_dialog::update_remaining_time() {
   }
 
   if (now >= m_next_remaining_time_update_total) {
-    int64_t total_time                 = (now - m_start_time_total) * 100 / (m_progress / jobs_to_start.size());
-    int64_t remaining_time             = total_time - now + m_start_time_total;
-    m_next_remaining_time_update_total = now + 1000;
+    int64_t total_percentage = (m_progress + current_job * 100) / jobs_to_start.size();
+    if (0 != total_percentage) {
+      int64_t total_time                 = (now - m_start_time_total) * 100 / total_percentage;
+      int64_t remaining_time             = total_time - now + m_start_time_total;
+      m_next_remaining_time_update_total = now + 1000;
 
-    st_remaining_time_total->SetLabel(wxString::Format(Z("%d minute(s) %d second(s)"), static_cast<int>(remaining_time / 60000), static_cast<int>((remaining_time / 1000) % 60)));
+      st_remaining_time_total->SetLabel(wxString::Format(Z("%d minute(s) %d second(s)"), static_cast<int>(remaining_time / 60000), static_cast<int>((remaining_time / 1000) % 60)));
+    }
   }
 }
 
