@@ -88,7 +88,8 @@ cluster_helper_c::add_packet(packet_cptr packet) {
   if (   (SHRT_MAX < timecode_delay)
       || (SHRT_MIN > timecode_delay)
       || (packet->gap_following && !m_packets.empty())
-      || ((packet->assigned_timecode - timecode) > g_max_ns_per_cluster)) {
+      || ((packet->assigned_timecode - timecode) > g_max_ns_per_cluster)
+      || ((packet->source == g_video_packetizer) && packet->is_key_frame())) {
     render();
     prepare_new_cluster();
   }

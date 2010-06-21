@@ -1,7 +1,10 @@
 2010-06-21  Moritz Bunkus  <moritz@bunkus.org>
 
-	* mkvmerge: The default cluster length has been increased to five
-	seconds (up from two seconds).
+	* mkvmerge: enhancement: mkvmerge will start a new cluster before
+	a key frame of the first video track. Fix for bug 500.
+
+	* mkvmerge: enhancement: The default cluster length has been
+	increased to five seconds (up from two seconds).
 
 2010-06-20  Moritz Bunkus  <moritz@bunkus.org>
 
