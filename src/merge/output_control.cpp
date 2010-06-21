@@ -138,7 +138,7 @@ KaxInfo *g_kax_info_chap                    = NULL;
 std::string g_outfile;
 int64_t g_file_sizes                        = 0;
 int g_max_blocks_per_cluster                = 65535;
-int64_t g_max_ns_per_cluster                = 2000000000;
+int64_t g_max_ns_per_cluster                = 5000000000;
 bool g_write_cues                           = true;
 bool g_cue_writing_requested                = false;
 generic_packetizer_c *g_video_packetizer    = NULL;

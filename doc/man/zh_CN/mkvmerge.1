@@ -249,7 +249,7 @@ CUE
 .sp
 
 \fBmkvmerge\fR(1)
-默认每簇最多放置 65535 个数据块或 2000ms 的数据。
+defaults to putting at most 65535 data blocks and 5000ms of data into a cluster\&.
 .sp
 尝试定位到特定帧的程序只能直接定位到簇，然后需要读取整个簇（来完成定位）。因此创建较大的簇将导致定位不精确或缓慢。
 .RE
