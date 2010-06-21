@@ -147,6 +147,30 @@ struct packet_t {
   }
 
   ~packet_t();
+
+  bool has_bref() {
+    return 0 <= bref;
+  }
+
+  bool has_fref() {
+    return 0 <= fref;
+  }
+
+  bool has_duration() {
+    return 0 <= duration;
+  }
+
+  bool is_key_frame() {
+    return !has_bref() && !has_fref();
+  }
+
+  bool is_p_frame() {
+    return (has_bref() || has_fref()) && (has_bref() != has_fref());
+  }
+
+  bool is_b_frame() {
+    return has_bref() && has_fref();
+  }
 };
 typedef counted_ptr<packet_t> packet_cptr;
 
