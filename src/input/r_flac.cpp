@@ -371,7 +371,7 @@ flac_reader_c::identify() {
 
 int
 flac_reader_c::probe_file(mm_io_c *io,
-                          int64_t size) {
+                          uint64_t size) {
   unsigned char data[4];
 
   if (4 > size)
