@@ -203,11 +203,8 @@ mmg_app::handle_command_line_arguments() {
   if (wargs[0] == wxT("--edit-headers")) {
     if (wargs.size() == 1)
       wxMessageBox(Z("Missing file name after for the option '--edit-headers'."), Z("Missing file name"), wxOK | wxCENTER | wxICON_ERROR);
-    else {
-      header_editor_frame_c *window  = new header_editor_frame_c(mdlg);
-      window->Show();
-      window->open_file(wxFileName(wargs[1]));
-    }
+    else
+      mdlg->create_header_editor_window(wargs[1]);
 
     return;
   }

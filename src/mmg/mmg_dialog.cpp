@@ -1665,8 +1665,17 @@ mmg_dialog::on_file_options(wxCommandEvent &evt) {
 
 void
 mmg_dialog::on_run_header_editor(wxCommandEvent &evt) {
-  header_editor_frames.push_back(new header_editor_frame_c(this));
-  header_editor_frames.back()->Show();
+  create_header_editor_window();
+}
+
+void
+mmg_dialog::create_header_editor_window(const wxString &file_name) {
+  header_editor_frame_c *frame = new header_editor_frame_c(this);
+  header_editor_frames.push_back(frame);
+  frame->Show();
+
+  if (!file_name.IsEmpty())
+    frame->open_file(wxFileName(file_name));
 }
 
 void

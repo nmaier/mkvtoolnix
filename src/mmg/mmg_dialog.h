@@ -193,6 +193,7 @@ public:
 
   void on_run_header_editor(wxCommandEvent &evt);
   void header_editor_frame_closed(header_editor_frame_c *frame);
+  void create_header_editor_window(const wxString &file_name = wxEmptyString);
 
   void translate_ui();
 

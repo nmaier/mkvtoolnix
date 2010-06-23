@@ -1,3 +1,8 @@
+2010-06-23  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: If mmg was called with "--edit-headers
+	filename.mkv" then it crashed when the header editor was closed.
+
 2010-06-21  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: mkvmerge will start a new cluster before
