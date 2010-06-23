@@ -567,6 +567,8 @@ tab_chapters::load(wxString name) {
       source_is_kax_file = true;
       source_is_simple_format = false;
 
+      analyzer->close_file();
+
     } else {
       new_chapters = parse_chapters(wxMB(name), 0, -1, 0, "", "", true,
                                     &source_is_simple_format);
@@ -659,6 +661,8 @@ tab_chapters::on_save_chapters_to_kax_file(wxCommandEvent &evt) {
 
   write_chapters_to_matroska_file();
   mdlg->set_last_chapters_in_menu(file_name);
+
+  analyzer->close_file();
 }
 
 void

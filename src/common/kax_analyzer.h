@@ -129,6 +129,9 @@ public:
     mxexit(1);
   }
 
+  virtual void close_file();
+  virtual void reopen_file(const open_mode = MODE_WRITE);
+
 protected:
   virtual void _log_debug_message(const std::string &message);
 

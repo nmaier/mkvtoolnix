@@ -1,5 +1,9 @@
 2010-06-23  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: bug fix: Matroska files read from/written to by the header
+	and chapter editors will no longer be kept opened and locked. Fix
+	for bug 498.
+
 	* mmg: bug fix: If mmg was called with "--edit-headers
 	filename.mkv" then it crashed when the header editor was closed.
 

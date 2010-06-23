@@ -78,8 +78,27 @@ kax_analyzer_c::kax_analyzer_c(mm_file_io_c *file)
 }
 
 kax_analyzer_c::~kax_analyzer_c() {
-  if (m_close_file)
+  close_file();
+}
+
+void
+kax_analyzer_c::close_file() {
+  if (m_close_file) {
     delete m_file;
+    m_file = NULL;
+
+    delete m_stream;
+    m_stream = NULL;
+  }
+}
+
+void
+kax_analyzer_c::reopen_file(const open_mode mode) {
+  if (NULL != m_file)
+    return;
+
+  m_file   = new mm_file_io_c(m_file_name, mode);
+  m_stream = new EbmlStream(*m_file);
 }
 
 void
@@ -185,12 +204,11 @@ kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode,
                         const open_mode mode) {
   bool parse_fully = parse_mode_full == parse_mode;
 
-  if (NULL == m_file)
-    try {
-      m_file = new mm_file_io_c(m_file_name, mode);
-    } catch (...) {
-      return false;
-    }
+  try {
+    reopen_file(mode);
+  } catch (...) {
+    return false;
+  }
 
   int64_t file_size = m_file->get_size();
   show_progress_start(file_size);
@@ -272,6 +290,8 @@ kax_analyzer_c::process(kax_analyzer_c::parse_mode_e parse_mode,
 
 EbmlElement *
 kax_analyzer_c::read_element(kax_analyzer_data_c *element_data) {
+  reopen_file();
+
   EbmlStream es(*m_file);
   m_file->setFilePointer(element_data->m_pos);
 
@@ -302,6 +322,8 @@ kax_analyzer_c::read_element(kax_analyzer_data_c *element_data) {
 kax_analyzer_c::update_element_result_e
 kax_analyzer_c::update_element(EbmlElement *e,
                                bool write_defaults) {
+  reopen_file();
+
   fix_mandatory_elements(e);
 
   try {
@@ -324,6 +346,8 @@ kax_analyzer_c::update_element(EbmlElement *e,
 
 kax_analyzer_c::update_element_result_e
 kax_analyzer_c::remove_elements(EbmlId id) {
+  reopen_file();
+
   try {
     call_and_validate({},                          "remove_elements_0");
     call_and_validate(overwrite_all_instances(id), "remove_elements_1");
@@ -879,6 +903,8 @@ kax_analyzer_c::add_to_meta_seek(EbmlElement *e) {
 
 EbmlMaster *
 kax_analyzer_c::read_all(const EbmlCallbacks &callbacks) {
+  reopen_file();
+
   EbmlMaster *master = NULL;
   EbmlStream es(*m_file);
   size_t i;
