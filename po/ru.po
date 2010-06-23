@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-06-20 18:44+0300\n"
+"PO-Revision-Date: 2010-06-22 20:18+0300\n"
 "Last-Translator: rusguy6 rusguy6 <rusguy6@gmail.com>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -1711,7 +1711,7 @@ msgstr "Добавить"
 
 #: src/mmg/mmg_dialog.cpp:265
 msgid "Add &command line options"
-msgstr "&Добавить параметры командной строки"
+msgstr "&Добавить параметры к командной строке"
 
 #: src/mmg/tabs/chapters.cpp:326
 msgid "Add chapter"
@@ -1719,7 +1719,7 @@ msgstr "Добавить главу"
 
 #: src/mmg/cli_options_dlg.cpp:24
 msgid "Add command line options"
-msgstr "Добавить параметры командной строки"
+msgstr "Добавить параметры к командной строке"
 
 #: src/mmg/header_editor/value_page.cpp:162
 msgid "Add element"
@@ -4771,7 +4771,7 @@ msgstr "Quicktime/MP4 читатель: невозможно прочитать 
 
 #: src/input/r_qtmp4.cpp:1060
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
-msgstr "Quicktime/MP4 читатель: невозможно прочитать видео часть описания ID дорожки %1%.\n"
+msgstr "Quicktime/MP4 читатель: невозможно прочитать часть видео описания ID дорожки %1%.\n"
 
 #: src/input/r_qtmp4.cpp:212
 msgid "Quicktime/MP4 reader: Have not found any header atoms.\n"
@@ -4815,7 +4815,7 @@ msgstr "Quicktime/MP4 читатель: AAC дорожки %1% отсутств�
 
 #: src/input/r_qtmp4.cpp:245
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
-msgstr "Quicktime/MP4 читателя: аудио дорожка %1% использует неподдерживаемый 'объект типа id' %2% в 'esds' части. Пропуск этой дорожки.\n"
+msgstr "Quicktime/MP4 читатель: аудио дорожка %1% использует неподдерживаемый 'объект типа id' %2% в 'esds' части. Пропуск этой дорожки.\n"
 
 #: src/input/r_qtmp4.cpp:263
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
@@ -7450,7 +7450,7 @@ msgstr "WAVPACK v4 Audio"
 
 #: src/mmg/options/mmg.cpp:94
 msgid "Warn about possible incorrect usage of mmg"
-msgstr "Предупреждения о возможном неправильном использовании mmg"
+msgstr "Предупреждать о возможном неправильном использовании mmg"
 
 #: src/input/subtitles.cpp:193
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
@@ -7493,7 +7493,7 @@ msgstr "Ширина закодированных видео кадров в п�
 #: src/common/property_element.cpp:140
 #: src/mmg/header_editor/frame.cpp:451
 msgid "Width of the video frames to display."
-msgstr "Ширина видео кадров, чтобы отобразить."
+msgstr "Ширина видео кадров дисплея."
 
 #: src/mmg/cli_options_dlg.cpp:102
 msgid "Write durations for all blocks. This will increase file size and does not offer any additional value for players at the moment."
@@ -8281,12 +8281,12 @@ msgstr "mkvmerge исполняемый"
 #: src/mmg/mux_dialog.cpp:351
 #, c-format
 msgid "mkvmerge finished with a return code of %d. %s"
-msgstr "mkvmerge закончил код возврата %d. %s"
+msgstr "mkvmerge завершен с кодом возврата %d. %s"
 
 #: src/mmg/jobs.cpp:147
 #: src/mmg/mux_dialog.cpp:304
 msgid "mkvmerge has finished"
-msgstr "mkvmerge закончил"
+msgstr "mkvmerge завершен"
 
 #: src/input/r_ogm.cpp:474
 msgid "mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"
