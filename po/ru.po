@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-06-22 20:18+0300\n"
+"PO-Revision-Date: 2010-06-24 15:45+0300\n"
 "Last-Translator: rusguy6 rusguy6 <rusguy6@gmail.com>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -2589,11 +2589,11 @@ msgstr "&Создать файл конфигурации"
 
 #: src/mmg/tabs/global.cpp:300
 msgid "Create WebM compliant file"
-msgstr "Создать WebM совместимый файл"
+msgstr "Создать совместимый WebM файл"
 
 #: src/mmg/tabs/global.cpp:301
 msgid "Create a WebM compliant file. mkvmerge also turns this on if the output file name's extension is \"webm\". This mode enforces several restrictions. The only allowed codecs are VP8 video and Vorbis audio tracks. Neither chapters nor tags are allowed. The DocType header item is changed to \"webm\"."
-msgstr "Создать WebM совместимый файл. mkvmerge также включается, если это на расширение имя выходного файла является \"webm\". Этот режим обеспечивает ряд ограничений. Допускается только кодеки VP8 видео и Vorbis аудио треков. Ни главы, ни теги не разрешены. Doctype пункт заголовок изменен на \"webm\"."
+msgstr "Создать совместимый WebM файл. mkvmerge также включается, если это на расширение имя выходного файла является \"webm\". Этот режим обеспечивает ряд ограничений. Допускается только кодеки VP8 видео и Vorbis аудио треков. Ни главы, ни теги не разрешены. Doctype пункт заголовок изменен на \"webm\"."
 
 #: src/mmg/mmg_dialog.cpp:266
 msgid "Create a new chapter file"
@@ -2601,7 +2601,7 @@ msgstr "Создать новый файл главы"
 
 #: src/merge/mkvmerge.cpp:708
 msgid "Cropping parameters: not given in the form <TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 (argument was '%1%').\n"
-msgstr "Подрезание параметров: не данный в форме <TID>:<left>,<top>,<right>,<bottom> например 0:10,5,10,5 (параметр был '%1%').\n"
+msgstr "Обрезка параметров: не дан в форме <TID>:<left>,<top>,<right>,<bottom> например 0:10,5,10,5 (параметр был '%1%').\n"
 
 #: src/mmg/tabs/input_format.cpp:252
 msgid "Cropping:"
@@ -2617,7 +2617,7 @@ msgstr "Положение кластера Cue: %1%"
 
 #: src/info/mkvinfo.cpp:1245
 msgid "Cue codec state: %1%"
-msgstr "Cue кодек состояние: %1%"
+msgstr "Cue состояние кодека: %1%"
 
 #: src/mmg/tabs/global.cpp:286
 msgid "Cue name format:"
@@ -2793,11 +2793,11 @@ msgstr "Задержка: %|1$.3f|ms"
 
 #: src/propedit/propedit_cli_parser.cpp:151
 msgid "Delete all occurences of a property"
-msgstr "Удалите все вхождения свойства"
+msgstr "Удалить все вхождения свойства"
 
 #: src/mmg/jobs.cpp:476
 msgid "Delete the selected job(s) from the job queue"
-msgstr "Удалите выбранное задание(я) из очереди задания"
+msgstr "Удалить выбранное задание(я) из очереди"
 
 #: src/mmg/jobs.cpp:430
 msgid "Description"
@@ -3016,13 +3016,13 @@ msgstr "Ошибка в строке %1%: ожидаемое количеств�
 
 #: src/common/xml/element_mapping.cpp:43
 msgid "Error initializing the tables for the chapter, tag and segment info elements: Could not find the element with the debug name '%1%'. %2%\n"
-msgstr "Ошибка инициализации таблицы для главы теги и элементы сегмента, информация: Не удалось найти элемент с отладки имя '%1%'. %2%\n"
+msgstr "Ошибка при инициализации таблицы для главы, тега и информации элементов сегмента: Не удалось найти элемент с именем отладки '%1%'. %2%\n"
 
 #: src/mmg/mmg.cpp:217
 #: src/mmg/mmg_dialog.cpp:369
 #: src/mmg/mmg_dialog.cpp:388
 msgid "Error loading settings"
-msgstr "Ошибка, загружающая параметры настройки"
+msgstr "Ошибка при загрузке настроек"
 
 #: src/mmg/tabs/chapters.cpp:700
 msgid "Error opening file"
@@ -3038,7 +3038,7 @@ msgstr "Ошибка при разборе файла"
 
 #: src/merge/mkvmerge.cpp:525
 msgid "Error parsing the tags in '%1%': some mandatory elements are missing.\n"
-msgstr "Ошибка при разборе метки в '%1%': некоторые обязательные элементы отсутствуют.\n"
+msgstr "Ошибка при разборе тегов в '%1%': некоторые обязательные элементы отсутствуют.\n"
 
 #: src/info/qt_ui.cpp:77
 msgid "Error saving the information"
@@ -3071,7 +3071,7 @@ msgstr "Ошибка: не удалось открыть входной файл
 #: src/extract/timecodes_v2.cpp:180
 #: src/extract/tracks.cpp:328
 msgid "Error: No EBML head found."
-msgstr "Ошибка: не нашли глава EBML."
+msgstr "Ошибка: не найдена глава EBML."
 
 #: src/merge/mkvmerge.cpp:1651
 msgid ""
@@ -3117,11 +3117,11 @@ msgstr "Ожидаемое время в следующем формате: HH:M
 
 #: src/common/xml/element_parser.cpp:78
 msgid "Expected an unsigned integer but found '%1%'."
-msgstr "Ожидаемые беззнаковое целое число, но нашли '%1%'."
+msgstr "Ожидаемое беззнаковое целое число, но нашли '%1%'."
 
 #: src/extract/extract_cli_parser.cpp:102
 msgid "Exports the chapter infomartion in the simple format used in OGM tools (CHAPTER01=... CHAPTER01NAME=...)."
-msgstr "Экспорт главе информации в простой формат, используемый в инструменты OGM (CHAPTER01=... CHAPTER01NAME=...)."
+msgstr "Экспорт главы информации в простой формат, используемый в инструментах OGM (Глава01=... Глава01Имя=...)."
 
 #: src/mmg/tabs/input.cpp:192
 msgid "Extra options"
@@ -3150,11 +3150,11 @@ msgstr "Извлеченные информации пропорции из за
 
 #: src/extract/tracks.cpp:109
 msgid "Extracting track %1% with the CodecID '%2%' to the file '%3%'. Container format: %4%\n"
-msgstr "Извлечение трек %1% с CodecID '%2%' в файл '%3%'. Контейнер формат: %4%\n"
+msgstr "Извлечение трека %1% с CodecID '%2%' в файл '%3%'. Контейнер формата: %4%\n"
 
 #: src/extract/tracks.cpp:93
 msgid "Extraction of track number %1% with the CodecID '%2%' is not supported.\n"
-msgstr "Получение номер трека %1% с CodecID '%2%' не поддерживается.\n"
+msgstr "Получение номера трека %1% с CodecID '%2%' не поддерживается.\n"
 
 #: src/mmg/tabs/input.cpp:240
 msgid "FLAC (Free Lossless Audio Codec)"
@@ -4258,7 +4258,7 @@ msgstr "Обработка заняла 1 секунду.\n"
 
 #: src/mmg/tabs/input_format.cpp:237
 msgid "NALU size length:"
-msgstr "NALU длина размера:"
+msgstr "Длина NALU размера:"
 
 #: src/common/property_element.cpp:130
 #: src/mmg/header_editor/frame.cpp:426
@@ -4305,7 +4305,7 @@ msgstr "Следующий сегмент UID:"
 
 #: src/info/mkvinfo.cpp:607
 msgid "Next segment UID:%1%"
-msgstr "Следующий сегмент UID:%1%"
+msgstr "Следующий сегмент UID: %1%"
 
 #: src/common/property_element.cpp:109
 #: src/mmg/header_editor/frame.cpp:347
@@ -6432,7 +6432,7 @@ msgstr "Тайм-коды для этого потока были сброшен
 #: src/common/property_element.cpp:102
 #: src/mmg/header_editor/frame.cpp:327
 msgid "The title for the whole movie."
-msgstr "Заголовок для целого фильма."
+msgstr "Название для всего фильма."
 
 #: src/merge/output_control.cpp:887
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
@@ -6491,7 +6491,7 @@ msgstr "Были предупреждения"
 
 #: src/mmg/mux_dialog.cpp:354
 msgid "There were warnings, or the process was terminated."
-msgstr "Были предупреждения, или процесс был закончен."
+msgstr "Были предупреждения, или процесс был прекращен."
 
 #: src/input/r_avi.cpp:607
 #: src/input/r_real.cpp:326
@@ -8665,11 +8665,11 @@ msgstr "wav_reader: Не удалось открыть исходный файл
 
 #: src/input/r_wav.cpp:481
 msgid "wav_reader: No data chunk was found."
-msgstr "wav_reader: Никакой участок памяти данных не найден."
+msgstr "wav_reader: Участок памяти данных не найден."
 
 #: src/input/r_wav.cpp:472
 msgid "wav_reader: No format chunk found."
-msgstr "wav_reader: Никакой участок памяти формата не найден."
+msgstr "wav_reader: Участок памяти формата не найден."
 
 #: src/input/r_wav.cpp:453
 msgid "wav_reader: Source is not a valid WAVE file."
