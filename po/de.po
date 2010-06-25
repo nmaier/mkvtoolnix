@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-06-25 14:33+0200\n"
+"PO-Revision-Date: 2010-06-25 14:50+0200\n"
 "Last-Translator: Moritz Bunkus <moritz@bunkus.org>\n"
 "Language-Team: German <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -757,6 +757,10 @@ msgstr "%1% Frame, Track %2%, Zeitstempel %3% (%4%), Größe %5%, Adler 0x%|6$08
 #: src/info/mkvinfo.cpp:164
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"
 msgstr "%1% Frame, Track %2%, Zeitstempel %3% (%4%), Größe %5%, Adler 0x%|6$08x|%7%%8%\n"
+
+#: src/common/kax_file.cpp:166
+msgid "%1%: Error in the Matroska file structure at position %2%. Resyncing to the next level 1 element.\n"
+msgstr "%1%: Fehler in der Matroska-Dateistruktur an Position %2%. Versuche, das nächste Level-1-Element zu finden.\n"
 
 #: src/merge/mkvmerge.cpp:665
 msgid "%1%: divisor is 0 in '%2% %3%'.\n"
@@ -4808,6 +4812,14 @@ msgstr "Element entfernen"
 #: src/mmg/tabs/chapters.cpp:347
 msgid "Remove name"
 msgstr "Namen entfernen"
+
+#: src/common/kax_file.cpp:236
+msgid "Resync failed: no valid Matroska level 1 element found.\n"
+msgstr "Die Suche schlug fehl: es wurde kein gültiges Matroska-Level-1-Element gefunden.\n"
+
+#: src/common/kax_file.cpp:228
+msgid "Resyncing successful at position %1%.\n"
+msgstr "Die Suche war an Position %1% erfolgreich.\n"
 
 #: src/mmg/tabs/input_format.cpp:175
 msgid "Right eye"

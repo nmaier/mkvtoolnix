@@ -747,6 +747,10 @@ msgstr "%1% fotograma (frame), pista %2%, código de tiempo %3% (%4%), tamaño %
 msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|%7%%8%\n"
 msgstr "%1% fotograma (frame), pista %2%, código de tiempo %3% (%4%), tamaño %5%, adler 0x%|6$08x|%7%%8%\n"
 
+#: src/common/kax_file.cpp:166
+msgid "%1%: Error in the Matroska file structure at position %2%. Resyncing to the next level 1 element.\n"
+msgstr ""
+
 #: src/merge/mkvmerge.cpp:665
 msgid "%1%: divisor is 0 in '%2% %3%'.\n"
 msgstr "%1%: el divisor es 0 en '%2% %3%'.\n"
@@ -4817,6 +4821,15 @@ msgstr "Eliminar elemento"
 #: src/mmg/tabs/chapters.cpp:347
 msgid "Remove name"
 msgstr "Eliminar nombre"
+
+#: src/common/kax_file.cpp:236
+#, fuzzy
+msgid "Resync failed: no valid Matroska level 1 element found.\n"
+msgstr "No es un archivo Matroska válido (no se encontró ningún elemento del segmento/nivel 0)"
+
+#: src/common/kax_file.cpp:228
+msgid "Resyncing successful at position %1%.\n"
+msgstr ""
 
 #: src/mmg/tabs/input_format.cpp:175
 msgid "Right eye"
