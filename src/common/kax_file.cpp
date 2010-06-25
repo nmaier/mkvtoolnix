@@ -18,6 +18,7 @@
 #include <ebml/EbmlVoid.h>
 
 #include "common/ebml.h"
+#include "common/fs_sys_helpers.h"
 #include "common/kax_file.h"
 
 kax_file_c::kax_file_c(mm_io_cptr &in)
@@ -160,11 +161,21 @@ kax_file_c::resync_to_level1_element_internal(uint32_t wanted_id) {
   m_resync_start_pos = m_in->getFilePointer();
 
   uint32_t actual_id = m_in->read_uint32_be();
+  int64_t start_time = get_current_time_millis();
+
+  mxinfo(boost::format(Y("%1%: Error in the Matroska file structure at position %2%. Resyncing to the next level 1 element.\n"))
+         % m_in->get_file_name() % m_resync_start_pos);
 
   if (m_debug_resync)
     mxinfo(boost::format("kax_file::resync_to_level1_element(): starting at %1% potential ID %|2$08x|\n") % m_resync_start_pos % actual_id);
 
   while (m_in->getFilePointer() < m_file_size) {
+    int64_t now = get_current_time_millis();
+    if ((now - start_time) >= 10000) {
+      mxinfo(boost::format("Still resyncing at position %1%.\n") % m_in->getFilePointer());
+      start_time = now;
+    }
+
     actual_id = (actual_id << 8) | m_in->read_uint8();
 
     if (   ((0 != wanted_id) && (wanted_id != actual_id))
@@ -214,12 +225,15 @@ kax_file_c::resync_to_level1_element_internal(uint32_t wanted_id) {
     }
 
     if ((4 == num_headers) || valid_unknown_size) {
+      mxinfo(boost::format(Y("Resyncing successful at position %1%.\n")) % current_start_pos);
       m_in->setFilePointer(current_start_pos, seek_beginning);
       return read_next_level1_element(wanted_id);
     }
 
     m_in->setFilePointer(current_start_pos + 4, seek_beginning);
   }
+
+  mxinfo(Y("Resync failed: no valid Matroska level 1 element found.\n"));
 
   return NULL;
 }

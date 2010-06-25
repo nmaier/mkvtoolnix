@@ -1,5 +1,10 @@
 2010-06-25  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: enhancement: mkvmerge will report if it finds data
+	errors in a Matroska file (e.g. due to storage failure or bad
+	downloads). The position is reported as well as a periodic update
+	as long as mkvmerge re-syncs to the next Matroska element.
+
 	* mmg: enhancement: The "compression" drop down box is enabled for
 	all track types. That way "no compression" can be forced for those
 	tracks mkvmerge uses "header removal" compression for.
