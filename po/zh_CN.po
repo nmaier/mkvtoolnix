@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-06-18 19:10+0800\n"
+"PO-Revision-Date: 2010-06-25 23:34+0800\n"
 "Last-Translator: Dean Lee <xslidian@lidian.info>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -736,7 +736,7 @@ msgstr "%1% 帧, 轨道 %2%, 时间码 %3% (%4%), 尺寸 %5%, adler 0x%|6$08x|%7
 
 #: src/common/kax_file.cpp:166
 msgid "%1%: Error in the Matroska file structure at position %2%. Resyncing to the next level 1 element.\n"
-msgstr ""
+msgstr "%1%: Matroska 文件结构错误，位于 %2%。重新同步至下一 1 层级元素。\n"
 
 #: src/merge/mkvmerge.cpp:665
 msgid "%1%: divisor is 0 in '%2% %3%'.\n"
@@ -4921,13 +4921,12 @@ msgid "Remove name"
 msgstr "移除名称"
 
 #: src/common/kax_file.cpp:236
-#, fuzzy
 msgid "Resync failed: no valid Matroska level 1 element found.\n"
-msgstr "不是有效的 Matroska 文件 (未发现有效的 剪辑/0 层级元素)"
+msgstr "重新同步失败: 未发现有效的 Matroska 1 层级元素。\n"
 
 #: src/common/kax_file.cpp:228
 msgid "Resyncing successful at position %1%.\n"
-msgstr ""
+msgstr "重新同步成功，位于 %1%。\n"
 
 #: src/mmg/tabs/input_format.cpp:175
 msgid "Right eye"
@@ -5215,7 +5214,7 @@ msgstr "设定 Matroska 解析器的模式为 '快速' (默认) 或 '完全'"
 
 #: src/mmg/tabs/input_extra.cpp:127
 msgid "Sets the compression algorithm to be used for this track. If no option is selected mkvmerge will decide whether or not to compress and which algorithm to use based on the track type. Most track types are not compressed at all. "
-msgstr ""
+msgstr "为该轨道设置压缩算法。如果未选择任何选项，mkvmerge 将根据轨道类型决定是否压缩以及压缩算法。大多数类型的轨道不会被压缩。"
 
 #: src/mmg/tabs/input_format.cpp:253
 msgid "Sets the cropping parameters. Must be comma-separated list of four numbers for the cropping to be used at the left, top, right and bottom."
@@ -8891,6 +8890,7 @@ msgstr "是"
 #~ "  -v, --verbose  提高“详细”程度。\n"
 #~ "  -h, --help     显示本帮助。\n"
 #~ "  -V, --version  显示版本信息。\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "使用 FLAC 输出模块。\n"
