@@ -1,3 +1,9 @@
+2010-06-25  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: enhancement: The "compression" drop down box is enabled for
+	all track types. That way "no compression" can be forced for those
+	tracks mkvmerge uses "header removal" compression for.
+
 2010-06-23  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: Matroska files read from/written to by the header

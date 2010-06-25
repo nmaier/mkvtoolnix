@@ -986,9 +986,9 @@ mmg_dialog::update_command_line() {
         clargs.Add(wxString::Format(wxT("%s:%d"), sid.c_str(), t->stereo_mode - 1));
       }
 
-      if (!t->appending && (t->compression.Length() > 0)) {
+      if (!t->appending && !t->compression.IsEmpty()) {
         wxString compression = t->compression;
-        if (compression == wxT("none"))
+        if (compression == Z("none"))
           compression = wxT("none");
         clargs.Add(wxT("--compression"));
         clargs.Add(sid + wxT(":") + compression);
