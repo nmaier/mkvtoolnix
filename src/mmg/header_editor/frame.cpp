@@ -301,6 +301,8 @@ header_editor_frame_c::open_file(wxFileName file_name) {
     }
   }
 
+  m_analyzer->close_file();
+
   m_bs_main->Show(m_tc_tree);
   m_bs_main->Layout();
 

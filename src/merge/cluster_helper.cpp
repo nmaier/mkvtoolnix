@@ -65,11 +65,11 @@ cluster_helper_c::add_packet(packet_cptr packet) {
   packet->unmodified_duration          = packet->duration;
   packet->timecode                     = RND_TIMECODE_SCALE(packet->timecode);
   packet->assigned_timecode            = RND_TIMECODE_SCALE(packet->assigned_timecode);
-  if (0 < packet->duration)
+  if (packet->has_duration())
     packet->duration                   = RND_TIMECODE_SCALE(packet->duration);
-  if (0 < packet->bref)
+  if (packet->has_bref())
     packet->bref                       = RND_TIMECODE_SCALE(packet->bref);
-  if (0 < packet->fref)
+  if (packet->has_fref())
     packet->fref                       = RND_TIMECODE_SCALE(packet->fref);
 
   int64_t timecode        = get_timecode();
@@ -88,7 +88,8 @@ cluster_helper_c::add_packet(packet_cptr packet) {
   if (   (SHRT_MAX < timecode_delay)
       || (SHRT_MIN > timecode_delay)
       || (packet->gap_following && !m_packets.empty())
-      || ((packet->assigned_timecode - timecode) > g_max_ns_per_cluster)) {
+      || ((packet->assigned_timecode - timecode) > g_max_ns_per_cluster)
+      || ((packet->source == g_video_packetizer) && packet->is_key_frame())) {
     render();
     prepare_new_cluster();
   }
@@ -96,7 +97,7 @@ cluster_helper_c::add_packet(packet_cptr packet) {
   if (   splitting()
       && (m_split_points.end() != m_current_split_point)
       && (g_file_num <= g_split_max_num_files)
-      && (packet->bref == -1)
+      && packet->is_key_frame()
       && (   (packet->source->get_track_type() == track_video)
           || (NULL == g_video_packetizer))) {
     bool split_now = false;
@@ -113,7 +114,7 @@ cluster_helper_c::add_packet(packet_cptr packet) {
         std::vector<packet_cptr>::iterator p_it;
         mxforeach(p_it, m_packets) {
           packet_cptr &p   = *p_it;
-          additional_size += p->data->get_size() + ((-1 == p->bref) ? 10 : (-1 == p->fref) ? 13 : 16);
+          additional_size += p->data->get_size() + (p->is_key_frame() ? 10 : p->is_p_frame() ? 13 : 16);
         }
 
       } else
@@ -330,7 +331,7 @@ cluster_helper_c::render() {
     kax_block_blob_c *previous_block_group = !render_group->m_groups.empty() ? render_group->m_groups.back().get_object() : NULL;
     kax_block_blob_c *new_block_group      = previous_block_group;
 
-    if ((-1 != pack->bref) || has_codec_state)
+    if (!pack->is_key_frame() || has_codec_state)
       render_group->m_more_data = false;
 
     if (!render_group->m_more_data) {
@@ -356,8 +357,8 @@ cluster_helper_c::render() {
 
     // Now put the packet into the cluster.
     render_group->m_more_data = new_block_group->add_frame_auto(track_entry, pack->assigned_timecode - m_timecode_offset, *data_buffer, lacing_type,
-                                                                (-1 == pack->bref) ? -1 : pack->bref - m_timecode_offset,
-                                                                (-1 == pack->fref) ? -1 : pack->fref - m_timecode_offset);
+                                                                pack->has_bref() ? pack->bref - m_timecode_offset : -1,
+                                                                pack->has_fref() ? pack->fref - m_timecode_offset : -1);
 
     if (has_codec_state) {
       KaxBlockGroup &bgroup = (KaxBlockGroup &)*new_block_group;
@@ -372,7 +373,7 @@ cluster_helper_c::render() {
     if ((pack->assigned_timecode + pack->duration) > m_max_timecode_and_duration)
       m_max_timecode_and_duration = pack->assigned_timecode + pack->duration;
 
-    if ((-1 != pack->bref) || (-1 != pack->fref) || !track_entry.LacingEnabled())
+    if (!pack->is_key_frame() || !track_entry.LacingEnabled())
       render_group->m_more_data = false;
 
     render_group->m_durations.push_back(pack->unmodified_duration);
@@ -406,7 +407,7 @@ cluster_helper_c::render() {
       // Update the cues (index table) either if cue entries for
       // I frames were requested and this is an I frame...
       if ((   (CUE_STRATEGY_IFRAMES == source->get_cue_creation())
-           && (-1 == pack->bref))
+           && pack->is_key_frame())
           // ... or if a codec state change is present ...
           || has_codec_state
           // ... or if the user requested entries for all frames ...

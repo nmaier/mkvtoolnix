@@ -807,18 +807,18 @@ generic_packetizer_c::add_packet(packet_cptr pack) {
 void
 generic_packetizer_c::add_packet2(packet_cptr pack) {
   pack->timecode   = ADJUST_TIMECODE(pack->timecode);
-  if (0 <= pack->bref)
+  if (pack->has_bref())
     pack->bref     = ADJUST_TIMECODE(pack->bref);
-  if (0 <= pack->fref)
+  if (pack->has_fref())
     pack->fref     = ADJUST_TIMECODE(pack->fref);
-  if (0 < pack->duration)
+  if (pack->has_duration())
     pack->duration = (int64_t)(pack->duration * m_ti.m_tcsync.numerator / m_ti.m_tcsync.denominator);
 
-  if ((2 > m_htrack_min_cache) && (0 <= pack->fref)) {
+  if ((2 > m_htrack_min_cache) && pack->has_fref()) {
     set_track_min_cache(2);
     rerender_track_headers();
 
-  } else if ((1 > m_htrack_min_cache) && (0 <= pack->bref)) {
+  } else if ((1 > m_htrack_min_cache) && pack->has_bref()) {
     set_track_min_cache(1);
     rerender_track_headers();
   }
@@ -834,9 +834,9 @@ generic_packetizer_c::add_packet2(packet_cptr pack) {
       int64_t needed_timecode_offset  = m_safety_last_timecode + m_safety_last_duration - pack->timecode;
       m_correction_timecode_offset   += needed_timecode_offset;
       pack->timecode                 += needed_timecode_offset;
-      if (0 <= pack->bref)
+      if (pack->has_bref())
         pack->bref += needed_timecode_offset;
-      if (0 <= pack->fref)
+      if (pack->has_fref())
         pack->fref += needed_timecode_offset;
 
       mxwarn_tid(m_ti.m_fname, m_ti.m_id,
@@ -983,8 +983,7 @@ generic_packetizer_c::apply_factory_full_queueing(packet_cptr_di &p_start) {
   while (m_packet_queue.end() != p_start) {
     // Find the next I frame packet.
     packet_cptr_di p_end = p_start + 1;
-    while ((m_packet_queue.end() != p_end) &&
-           ((0 <= (*p_end)->fref) || (0 <= (*p_end)->bref)))
+    while ((m_packet_queue.end() != p_end) && !(*p_end)->is_key_frame())
       ++p_end;
 
     // Abort if no such packet was found, but keep on assigning if the

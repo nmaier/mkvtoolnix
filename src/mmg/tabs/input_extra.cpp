@@ -52,7 +52,6 @@ tab_input_extra::tab_input_extra(wxWindow *parent,
   siz_fg->Add(st_cues, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   cob_cues = new wxMTX_COMBOBOX_TYPE(this, ID_CB_CUES, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
-  cob_cues->SetToolTip(TIP("Selects for which blocks mkvmerge will produce index entries ( = cue entries). \"default\" is a good choice for almost all situations."));
   cob_cues->SetSizeHints(0, -1);
   siz_fg->Add(cob_cues, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
@@ -61,8 +60,6 @@ tab_input_extra::tab_input_extra(wxWindow *parent,
   siz_fg->Add(st_compression, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   cob_compression = new wxMTX_COMBOBOX_TYPE(this, ID_CB_COMPRESSION, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_DROPDOWN | wxCB_READONLY);
-  cob_compression->SetToolTip(TIP("Sets the compression used for VobSub subtitles. If nothing is chosen then the "
-                                  "VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."));
   cob_compression->SetSizeHints(0, -1);
   siz_fg->Add(cob_compression, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
@@ -71,9 +68,6 @@ tab_input_extra::tab_input_extra(wxWindow *parent,
   siz_fg->Add(st_user_defined, 0, wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
 
   tc_user_defined = new wxTextCtrl(this, ID_TC_USER_DEFINED, wxEmptyString);
-  tc_user_defined->SetToolTip(TIP("Free-form edit field for user defined options for this track. What you input here is added after all the other options "
-                                  "mmg adds so that you could overwrite any of mmg's options for this track. "
-                                  "All occurences of the string \"<TID>\" will be replaced by the track's track ID."));
   tc_user_defined->SetSizeHints(0, -1);
   tc_user_defined->Enable(false);
   siz_fg->Add(tc_user_defined, 1, wxGROW | wxALIGN_CENTER_VERTICAL | wxALL, STDSPACING);
@@ -130,8 +124,9 @@ tab_input_extra::translate_ui() {
   st_cues->SetLabel(Z("Cues:"));
   cob_cues->SetToolTip(TIP("Selects for which blocks mkvmerge will produce index entries ( = cue entries). \"default\" is a good choice for almost all situations."));
   st_compression->SetLabel(Z("Compression:"));
-  cob_compression->SetToolTip(TIP("Sets the compression used for VobSub subtitles. If nothing is chosen then the "
-                                  "VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."));
+  cob_compression->SetToolTip(TIP("Sets the compression algorithm to be used for this track. "
+                                  "If no option is selected mkvmerge will decide whether or not to compress and which algorithm to use based on the track type. "
+                                  "Most track types are not compressed at all. "));
   st_user_defined->SetLabel(Z("User defined options:"));
   tc_user_defined->SetToolTip(TIP("Free-form edit field for user defined options for this track. What you input here is added after all the other options "
                                   "mmg adds so that you could overwrite any of mmg's options for this track. "
@@ -143,17 +138,16 @@ tab_input_extra::translate_ui() {
 
 void
 tab_input_extra::set_track_mode(mmg_track_t *t) {
-  bool enable       = (NULL != t) && !t->appending;
-  bool normal_track = (NULL != t) && (('a' == t->type) || ('s' == t->type) || ('v' == t->type));
-  wxString ctype    = t ? t->ctype.Lower() : wxT("");
-  bool compressable = (ctype.Find(wxT("vobsub")) >= 0) || (ctype.Find(wxT("pgs")) >= 0);
+  bool not_appending = (NULL != t) && !t->appending;
+  bool normal_track  = (NULL != t) && (('a' == t->type) || ('s' == t->type) || ('v' == t->type));
+  wxString ctype     = t ? t->ctype.Lower() : wxT("");
 
-  st_cues->Enable(enable && normal_track);
-  cob_cues->Enable(enable && normal_track);
-  st_compression->Enable(compressable && !t->appending);
-  cob_compression->Enable(compressable && !t->appending);
-  st_user_defined->Enable((NULL != t) && normal_track);
-  tc_user_defined->Enable((NULL != t) && normal_track);
+  st_cues->Enable(not_appending && normal_track);
+  cob_cues->Enable(not_appending && normal_track);
+  st_compression->Enable(not_appending && normal_track);
+  cob_compression->Enable(not_appending && normal_track);
+  st_user_defined->Enable(normal_track);
+  tc_user_defined->Enable(normal_track);
 
   if (NULL != t)
     return;
