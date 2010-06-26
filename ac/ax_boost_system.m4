@@ -63,7 +63,7 @@ AC_DEFUN([AX_BOOST_SYSTEM],
     export LDFLAGS
 
     AC_CACHE_CHECK(
-      whether the Boost::System library is available,
+      whether the Boost::System library headers are available,
       ax_cv_boost_system,
       [ AC_LANG_PUSH([C++])
         CXXFLAGS_SAVE=$CXXFLAGS
@@ -78,8 +78,8 @@ AC_DEFUN([AX_BOOST_SYSTEM],
 
     if test "x$ax_cv_boost_system" = "xyes"; then
       AC_SUBST(BOOST_CPPFLAGS)
+      AC_DEFINE(HAVE_BOOST_SYSTEM,,[define if the Boost::System library headers are available])
 
-      AC_DEFINE(HAVE_BOOST_SYSTEM,,[define if the Boost::System library is available])
       BOOSTLIBDIR=`echo $BOOST_LDFLAGS | sed -e 's/@<:@^\/@:>@*//'`
       LDFLAGS_SAVE=$LDFLAGS
 
