@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-06-26 12:01+0900\n"
+"PO-Revision-Date: 2010-06-26 12:46+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -744,7 +744,7 @@ msgstr "%1% フレーム、トラック %2%、タイムコード %3% (%4%)、サ
 
 #: src/common/kax_file.cpp:166
 msgid "%1%: Error in the Matroska file structure at position %2%. Resyncing to the next level 1 element.\n"
-msgstr ""
+msgstr "%1%：%2%の位置でMatroskaファイル構造にエラーが発生しました。次のレベル1要素に再同期します。\n"
 
 #: src/merge/mkvmerge.cpp:665
 msgid "%1%: divisor is 0 in '%2% %3%'.\n"
@@ -4781,13 +4781,12 @@ msgid "Remove name"
 msgstr "名前を削除"
 
 #: src/common/kax_file.cpp:236
-#, fuzzy
 msgid "Resync failed: no valid Matroska level 1 element found.\n"
-msgstr "正しいMatroskaファイルではありません（セグメント/レベル0の要素が見つかりませんでした）"
+msgstr "再同期に失敗しました：有効なMatroskaのレベル1要素が見つかりませんでした。\n"
 
 #: src/common/kax_file.cpp:228
 msgid "Resyncing successful at position %1%.\n"
-msgstr ""
+msgstr "%1%の位置で再同期に成功しました。\n"
 
 #: src/mmg/tabs/input_format.cpp:175
 msgid "Right eye"
@@ -5062,7 +5061,7 @@ msgstr "Matroskaパーサのモードを'fast'（デフォルト）もしくは'
 
 #: src/mmg/tabs/input_extra.cpp:127
 msgid "Sets the compression algorithm to be used for this track. If no option is selected mkvmerge will decide whether or not to compress and which algorithm to use based on the track type. Most track types are not compressed at all. "
-msgstr ""
+msgstr "このトラックに使用される圧縮方式を指定します。どのオプションも選択されなければ、mkvmergeが、圧縮するかどうかと、そのトラックタイプにどのアルゴリズムを使用するかを決定します。殆どのトラックタイプは全く圧縮されません。"
 
 #: src/mmg/tabs/input_format.cpp:253
 msgid "Sets the cropping parameters. Must be comma-separated list of four numbers for the cropping to be used at the left, top, right and bottom."
