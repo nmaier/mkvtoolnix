@@ -483,6 +483,10 @@ mpeg4::p10::avcc_to_nalus(const unsigned char *buffer,
     if (6 > size)
       throw false;
 
+    uint32_t marker = get_uint32_be(buffer);
+    if (((marker & 0xffffff00) == 0x00000100) || (0x00000001 == marker))
+      return clone_memory(buffer, size);
+
     mm_mem_io_c mem(buffer, size);
     byte_buffer_c nalus(size * 2);
 
