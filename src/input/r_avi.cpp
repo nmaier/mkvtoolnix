@@ -424,7 +424,9 @@ avi_reader_c::extract_avcc() {
   if (0 < extra_data_size) {
     m_avc_extra_nalus = mpeg4::p10::avcc_to_nalus((unsigned char *)(m_avi->bitmap_info_header + 1), extra_data_size);
     if (m_avc_extra_nalus.is_set()) {
-      m_avc_nal_size_size = 1 + (((unsigned char *)(m_avi->bitmap_info_header + 1))[4] & 0x03);
+      uint32_t marker = get_uint32_be(m_avc_extra_nalus->get_buffer());
+      if ((0x00000001 != marker) && (0x00000100 != (marker & 0xffffff00)))
+        m_avc_nal_size_size = 1 + (((unsigned char *)(m_avi->bitmap_info_header + 1))[4] & 0x03);
       parser.add_bytes(m_avc_extra_nalus->get_buffer(), m_avc_extra_nalus->get_size());
     }
   }
