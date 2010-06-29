@@ -325,9 +325,7 @@ class Results
   def save
     f = File.new("results.txt", "w")
     @results.keys.sort.each do |key|
-      f.puts("#{key}:" + @results[key]['hash'] + ":" +
-              @results[key]['status'] + ":" +
-              @results[key]['date_added'].strftime("%Y%m%d-%H%M%S"))
+      f.puts [ key, @results[key]['hash'], @results[key]['status'], @results[key]['date_added'].strftime("%Y%m%d-%H%M%S") ].collect { |item| item.to_s }.join(":")
     end
     f.close
   end
