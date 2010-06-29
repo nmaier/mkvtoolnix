@@ -1,3 +1,8 @@
+2010-06-28  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed reading AVC/h.264 tracks from AVI files
+	if they're stored in NALUs inside the AVI.
+
 2010-06-26  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Build system: enhancement: Improved the error reporting if
