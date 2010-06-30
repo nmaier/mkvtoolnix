@@ -18,7 +18,7 @@
 #include "common/strings/parsing.h"
 #include "common/version.h"
 
-#define VERSIONNAME "The Stars were mine"
+#define VERSIONNAME "Boiling Point"
 
 std::string
 get_version_info(const std::string &program,
