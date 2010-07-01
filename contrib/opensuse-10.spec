@@ -55,48 +55,25 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr (-,root,root)
-/usr/bin/mkvextract
-/usr/bin/mkvinfo
-/usr/bin/mkvmerge
-/usr/bin/mkvmerge-gui
-/usr/bin/mkvpropedit
-/usr/share/applications/mkvmergeGUI.desktop
-/usr/share/applications/mkvinfo.desktop
-/usr/share/mime/packages/mkvtoolnix.xml
-/usr/share/icons/hicolor/32x32/apps/mkvmergeGUI.png
-/usr/share/icons/hicolor/32x32/apps/mkvinfo.png
-/usr/share/icons/hicolor/64x64/apps/mkvmergeGUI.png
-/usr/share/icons/hicolor/64x64/apps/mkvinfo.png
-/usr/share/man/man1/mkvextract.1.gz
-/usr/share/man/man1/mkvinfo.1.gz
-/usr/share/man/man1/mkvmerge.1.gz
-/usr/share/man/man1/mkvmerge-gui.1.gz
-/usr/share/man/man1/mkvpropedit.1.gz
-/usr/share/man/ja/man1/mkvextract.1.gz
-/usr/share/man/ja/man1/mkvinfo.1.gz
-/usr/share/man/ja/man1/mkvmerge.1.gz
-/usr/share/man/ja/man1/mkvmerge-gui.1.gz
-/usr/share/man/ja/man1/mkvpropedit.1.gz
-/usr/share/man/nl/man1/mkvextract.1.gz
-/usr/share/man/nl/man1/mkvinfo.1.gz
-/usr/share/man/nl/man1/mkvmerge.1.gz
-/usr/share/man/nl/man1/mkvmerge-gui.1.gz
-/usr/share/man/nl/man1/mkvpropedit.1.gz
-/usr/share/man/zh_CN/man1/mkvextract.1.gz
-/usr/share/man/zh_CN/man1/mkvinfo.1.gz
-/usr/share/man/zh_CN/man1/mkvmerge.1.gz
-/usr/share/man/zh_CN/man1/mkvmerge-gui.1.gz
-/usr/share/man/zh_CN/man1/mkvpropedit.1.gz
-/usr/share/mkvtoolnix/*
-/usr/share/locale/de/LC_MESSAGES/mkvtoolnix.mo
-/usr/share/locale/es/LC_MESSAGES/mkvtoolnix.mo
-/usr/share/locale/ja/LC_MESSAGES/mkvtoolnix.mo
-/usr/share/locale/nl/LC_MESSAGES/mkvtoolnix.mo
-/usr/share/locale/ru/LC_MESSAGES/mkvtoolnix.mo
-/usr/share/locale/uk/LC_MESSAGES/mkvtoolnix.mo
-/usr/share/locale/zh_CN/LC_MESSAGES/mkvtoolnix.mo
-/usr/share/locale/zh_TW/LC_MESSAGES/mkvtoolnix.mo
-%doc AUTHORS ChangeLog COPYING README
+%doc AUTHORS COPYING README ChangeLog NEWS TODO
+%{_bindir}/*
+%{_datadir}/man/man1/*
+%{_datadir}/man/ja/man1/*
+%{_datadir}/man/nl/man1/*
+%{_datadir}/man/zh_CN/man1/*
+%{_datadir}/mkvtoolnix
+%{_datadir}/applications/*.desktop
+%{_datadir}/icons/hicolor/32x32/apps/*.png
+%{_datadir}/icons/hicolor/64x64/apps/*.png
+%{_datadir}/mime/packages/*.xml
+%{_datadir}/locale/de/LC_MESSAGES/mkvtoolnix.mo
+%{_datadir}/locale/es/LC_MESSAGES/mkvtoolnix.mo
+%{_datadir}/locale/ja/LC_MESSAGES/mkvtoolnix.mo
+%{_datadir}/locale/nl/LC_MESSAGES/mkvtoolnix.mo
+%{_datadir}/locale/ru/LC_MESSAGES/mkvtoolnix.mo
+%{_datadir}/locale/uk/LC_MESSAGES/mkvtoolnix.mo
+%{_datadir}/locale/zh_CN/LC_MESSAGES/mkvtoolnix.mo
+%{_datadir}/locale/zh_TW/LC_MESSAGES/mkvtoolnix.mo
 
 %changelog -n mkvtoolnix
 * Mon Sep 13 2004 - seife@suse.de
