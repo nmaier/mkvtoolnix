@@ -21,6 +21,7 @@ Matroska video utilities.
 %{_bindir}/*
 %{_datadir}/man/man1/*
 %{_datadir}/man/ja/man1/*
+%{_datadir}/man/nl/man1/*
 %{_datadir}/man/zh_CN/man1/*
 %{_datadir}/mkvtoolnix
 %{_datadir}/applications/*.desktop
