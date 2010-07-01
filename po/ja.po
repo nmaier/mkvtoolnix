@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-06-26 12:46+0900\n"
+"PO-Revision-Date: 2010-07-01 18:08+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -5151,7 +5151,7 @@ msgstr "mkvmerge GUIのガイドを表示します"
 
 #: src/info/wxwidgets_ui.cpp:128
 msgid "Show the size of each element including its header"
-msgstr ""
+msgstr "ヘッダを含めた各エレメントのサイズを表示します"
 
 #: src/common/cli_parser.cpp:181
 msgid "Show this help."
@@ -7129,7 +7129,7 @@ msgstr "VobBtnボタン"
 
 #: src/mmg/tabs/input.cpp:256
 msgid "VobButtons"
-msgstr ""
+msgstr "VobButton"
 
 #: src/mmg/tabs/input.cpp:257 src/merge/mkvmerge.cpp:91
 msgid "VobSub subtitles"
@@ -8101,7 +8101,6 @@ msgid "pending"
 msgstr "未処理"
 
 #: src/input/r_pgssup.cpp:55
-#, fuzzy
 msgid "pgssup_reader: Could not open the file."
 msgstr "pgssup_reader：ファイルを開けませんでした。"
 
@@ -8171,7 +8170,7 @@ msgstr "全て削除"
 
 #: src/info/mkvinfo.cpp:804
 msgid "rest: unknown"
-msgstr ""
+msgstr "1でも2でもない：未知"
 
 #: src/info/mkvinfo.cpp:641
 msgid "sampling freq: %1%"
