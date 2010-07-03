@@ -1,3 +1,9 @@
+2010-07-03  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: mmg will no longer add .mmg files opened by the
+	job runner to the file menu's list of recently opened files. Fix
+	for bug 509.
+
 2010-07-01  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v4.1.0.

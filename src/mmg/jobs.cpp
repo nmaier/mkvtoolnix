@@ -167,7 +167,7 @@ job_run_dialog::start_next_job() {
   st_jobs->SetLabel(wxString::Format(Z("Processing job %d/%d"), current_job + 1, (int)jobs_to_start.size()));
   st_current->SetLabel(wxString::Format(Z("Current job ID %d:"), jobs[ndx].id));
 
-  mdlg->load(wxString::Format(wxT("%s/%d.mmg"), app->get_jobs_folder().c_str(), jobs[ndx].id));
+  mdlg->load(wxString::Format(wxT("%s/%d.mmg"), app->get_jobs_folder().c_str(), jobs[ndx].id), true);
 
   opt_file_name.Printf(wxT("%smmg-mkvmerge-options-%d-%d"), get_temp_dir().c_str(), (int)wxGetProcessId(), (int)wxGetUTCTime());
 
