@@ -114,6 +114,10 @@ public:
     return new memory_c(static_cast<unsigned char *>(safememdup(get_buffer(), get_size())), get_size(), true);
   }
 
+  bool is_free() const {
+    return its_counter && its_counter->is_free;
+  }
+
   void grab() {
     if (!its_counter || its_counter->is_free)
       return;

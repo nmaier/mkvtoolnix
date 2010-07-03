@@ -298,9 +298,13 @@ header_removal_compressor_c::compress(memory_cptr &buffer) {
                                               "Wanted bytes:%1%; found:%2%.")) % b_bytes % b_buffer);
   }
 
-  int new_size = buffer->get_size() - size;
-  memmove(buffer_ptr, buffer_ptr + size, new_size);
-  buffer->set_size(new_size);
+  size_t new_size = buffer->get_size() - size;
+
+  if (buffer->is_free()) {
+    memmove(buffer_ptr, buffer_ptr + size, new_size);
+    buffer->set_size(new_size);
+  } else
+    buffer = clone_memory(buffer_ptr + size, new_size);
 }
 
 void
