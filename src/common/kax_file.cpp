@@ -118,7 +118,6 @@ kax_file_c::read_one_element() {
 
   EbmlElement *l2 = NULL;
   l1->Read(*m_es.get_object(), EBML_INFO_CONTEXT(*callbacks), upper_lvl_el, l2, true);
-  delete l2;
 
   unsigned long element_size = get_element_size(l1);
   if (m_debug_resync)
