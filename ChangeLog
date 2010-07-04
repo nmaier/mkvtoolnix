@@ -1,5 +1,8 @@
 2010-07-04  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Fixed invalid memory access in the PCM
+	packetizer. Fix for bug 510.
+
 	* mmg: bug fix: When mmg starts it will check the entries in the
 	file and chapter menu's list of recently used files and remove
 	those entries that no longer exist. Fix for bug 509.
