@@ -153,10 +153,10 @@ mmg_app::OnInit() {
   cfg->Read(wxT("last_directory"), &last_open_dir, wxEmptyString);
   for (i = 0; i < 4; i++) {
     k.Printf(wxT("last_settings %u"), i);
-    if (cfg->Read(k, &v))
+    if (cfg->Read(k, &v) && wxFile::Exists(v))
       last_settings.push_back(v);
     k.Printf(wxT("last_chapters %u"), i);
-    if (cfg->Read(k, &v))
+    if (cfg->Read(k, &v) && wxFile::Exists(v))
       last_chapters.push_back(v);
   }
   cfg->SetPath(wxT("/chapter_editor"));
