@@ -239,7 +239,7 @@ tab_input::setup_file_type_filter() {
   if (capabilities[wxT("FLAC")] == wxT("true"))
     file_types.push_back(file_type_t(Z("FLAC (Free Lossless Audio Codec)"),  wxU("flac ogg")));
   file_types.push_back(file_type_t(Z("IVF with VP8 video files"),            wxU("ivf")));
-  file_types.push_back(file_type_t(Z("MP4 audio/video files"),               wxU("mp4")));
+  file_types.push_back(file_type_t(Z("MP4 audio/video files"),               wxU("mp4 m4v")));
   file_types.push_back(file_type_t(Z("MPEG audio files"),                    wxU("mp2 mp3")));
   file_types.push_back(file_type_t(Z("MPEG program streams"),                wxU("mpg mpeg m2v evo evob vob")));
   file_types.push_back(file_type_t(Z("MPEG video elementary streams"),       wxU("m1v m2v")));

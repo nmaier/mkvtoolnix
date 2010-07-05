@@ -37,7 +37,7 @@ main_window_c::setup_input_file_filter() {
   if (m_capabilities[Q("FLAC")] == "true")
     raw_list << file_type_and_ext_t(Q(Y("FLAC (Free Lossless Audio Codec)")),  Q("flac ogg"));
   raw_list << file_type_and_ext_t(Q(Y("Matroska audio/video files")),          Q("mka mks mkv"));
-  raw_list << file_type_and_ext_t(Q(Y("MP4 audio/video files")),               Q("mp4"));
+  raw_list << file_type_and_ext_t(Q(Y("MP4 audio/video files")),               Q("mp4 m4v"));
   raw_list << file_type_and_ext_t(Q(Y("MPEG audio files")),                    Q("mp2 mp3"));
   raw_list << file_type_and_ext_t(Q(Y("MPEG program streams")),                Q("mpg mpeg m2v evo evob vob"));
   raw_list << file_type_and_ext_t(Q(Y("MPEG video elementary streams")),       Q("m1v m2v"));
