@@ -29,6 +29,7 @@ CON mkvmerge
   SOURCE input/r_dts.cpp
   SOURCE input/r_flac.cpp
   SOURCE input/r_flv.cpp
+  SOURCE input/r_ivf.cpp
   SOURCE input/r_matroska.cpp
   SOURCE input/r_mp3.cpp
   SOURCE input/r_mpeg_es.cpp
@@ -36,6 +37,7 @@ CON mkvmerge
   SOURCE input/r_mpeg_ts.cpp
   SOURCE input/r_ogm.cpp
   SOURCE input/r_ogm_flac.cpp
+  SOURCE input/r_pgssup.cpp
   SOURCE input/r_qtmp4.cpp
   SOURCE input/r_real.cpp
   SOURCE input/r_srt.cpp
@@ -62,6 +64,7 @@ CON mkvmerge
   SOURCE output/p_mpeg4_p10.cpp
   SOURCE output/p_passthrough.cpp
   SOURCE output/p_pcm.cpp
+  SOURCE output/p_pgs.cpp
   SOURCE output/p_realaudio.cpp
   SOURCE output/p_textsubs.cpp
   SOURCE output/p_theora.cpp
@@ -96,6 +99,7 @@ CON mkvmerge
   HEADER input/r_dts.h
   HEADER input/r_flac.h
   HEADER input/r_flv.h
+  HEADER input/r_ivf.h
   HEADER input/r_matroska.h
   HEADER input/r_mp3.h
   HEADER input/r_mpeg_es.h
@@ -103,6 +107,7 @@ CON mkvmerge
   HEADER input/r_mpeg_ts.h
   HEADER input/r_ogm.h
   HEADER input/r_ogm_flac.h
+  HEADER input/r_pgssup.h
   HEADER input/r_qtmp4.h
   HEADER input/r_real.h
   HEADER input/r_srt.h
@@ -129,6 +134,7 @@ CON mkvmerge
   HEADER output/p_mpeg4_p10.h
   HEADER output/p_passthrough.h
   HEADER output/p_pcm.h
+  HEADER output/p_pgs.h
   HEADER output/p_realaudio.h
   HEADER output/p_textsubs.h
   HEADER output/p_theora.h
@@ -196,6 +202,7 @@ CON mkvextract
   SOURCE extract/xtr_avi.cpp
   SOURCE extract/xtr_base.cpp
   SOURCE extract/xtr_cpic.cpp
+  SOURCE extract/xtr_ivf.cpp
   SOURCE extract/xtr_mpeg1_2.cpp
   SOURCE extract/xtr_ogg.cpp
   SOURCE extract/xtr_pgs.cpp
@@ -214,6 +221,7 @@ CON mkvextract
   HEADER extract/xtr_avi.h
   HEADER extract/xtr_base.h
   HEADER extract/xtr_cpic.h
+  HEADER extract/xtr_ivf.h
   HEADER extract/xtr_mpeg1_2.h
   HEADER extract/xtr_ogg.h
   HEADER extract/xtr_pgs.h
@@ -305,6 +313,7 @@ LIB mktcommon
   SOURCE common/hacks.cpp
   SOURCE common/id3.cpp
   SOURCE common/iso639.cpp
+  SOURCE common/ivf.cpp
   SOURCE common/kate.cpp
   SOURCE common/kax_analyzer.cpp
   SOURCE common/kax_file.cpp
@@ -315,6 +324,7 @@ LIB mktcommon
   SOURCE(TARGET_WIN) common/mm_io_win.cpp
   SOURCE common/mm_io.cpp
   SOURCE common/mm_multi_file_io.cpp
+  SOURCE common/mm_write_cache_io.cpp
   SOURCE common/mp3.cpp
   SOURCE common/mpeg1_2.cpp
   SOURCE common/mpeg4_p2.cpp
@@ -361,9 +371,11 @@ LIB mktcommon
   HEADER common/dts.h
   HEADER common/error.h
   HEADER common/extern_data.h
+  HEADER common/file_types.h
   HEADER common/hacks.h
   HEADER common/id3.h
   HEADER common/iso639.h
+  HEADER common/ivf.h
   HEADER common/kate.h
   HEADER common/kax_analyzer.h
   HEADER common/kax_file.h
@@ -373,6 +385,7 @@ LIB mktcommon
   HEADER common/memory.h
   HEADER common/mm_io.h
   HEADER common/mm_multi_file_io.h
+  HEADER common/mm_write_cache_io.h
   HEADER common/mp3.h
   HEADER common/mpeg1_2.h
   HEADER common/mpeg4_p2.h

@@ -87,7 +87,7 @@ pgssup_reader_c::read(generic_packetizer_c *,
         return FILE_STATUS_DONE;
 
       if (0 == frame->get_size())
-        timestamp = static_cast<uint64_t>(m_in->read_uint32_be()) * 100000llu / 9;
+        timestamp = static_cast<uint64_t>(m_in->read_uint32_be()) * 100000Lu / 9;
       else
         m_in->skip(4);
       m_in->skip(4);
