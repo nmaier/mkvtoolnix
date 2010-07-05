@@ -46,6 +46,7 @@
 #include "common/command_line.h"
 #include "common/ebml.h"
 #include "common/extern_data.h"
+#include "common/file_types.h"
 #include "common/fs_sys_helpers.h"
 #include "common/hacks.h"
 #include "common/iso639.h"
@@ -62,51 +63,6 @@
 #include "merge/output_control.h"
 
 using namespace libmatroska;
-
-struct ext_file_type_t {
-  std::string ext, desc;
-
-  ext_file_type_t(const std::string &p_ext,
-                  const std::string &p_desc)
-    : ext(p_ext)
-    , desc(p_desc)
-  {
-  }
-};
-
-static std::list<ext_file_type_t> s_input_file_types;
-
-static void
-init_input_file_type_list() {
-  s_input_file_types.push_back(ext_file_type_t("aac",  Y("AAC (Advanced Audio Coding)")));
-  s_input_file_types.push_back(ext_file_type_t("ac3",  Y("A/52 (aka AC3)")));
-  s_input_file_types.push_back(ext_file_type_t("avi",  Y("AVI (Audio/Video Interleaved)")));
-  s_input_file_types.push_back(ext_file_type_t("btn",  Y("VobBtn buttons")));
-  s_input_file_types.push_back(ext_file_type_t("drc",  Y("Dirac elementary stream")));
-  s_input_file_types.push_back(ext_file_type_t("dts",  Y("DTS (Digital Theater System)")));
-#if defined(HAVE_FLAC_FORMAT_H)
-  s_input_file_types.push_back(ext_file_type_t("flac", Y("FLAC lossless audio")));
-#endif
-  s_input_file_types.push_back(ext_file_type_t("h264", Y("AVC/h.264 elementary streams")));
-  s_input_file_types.push_back(ext_file_type_t("idx",  Y("VobSub subtitles")));
-  s_input_file_types.push_back(ext_file_type_t("ivf",  Y("IVF with VP8")));
-  s_input_file_types.push_back(ext_file_type_t("m1v",  Y("MPEG-1 video elementary stream")));
-  s_input_file_types.push_back(ext_file_type_t("m2v",  Y("MPEG-2 video elementary stream")));
-  s_input_file_types.push_back(ext_file_type_t("mkv",  Y("general Matroska files")));
-  s_input_file_types.push_back(ext_file_type_t("mov",  Y("Quicktime/MP4 audio and video")));
-  s_input_file_types.push_back(ext_file_type_t("mp2",  Y("MPEG-1 layer II audio (CBR and VBR/ABR)")));
-  s_input_file_types.push_back(ext_file_type_t("mp3",  Y("MPEG-1 layer III audio (CBR and VBR/ABR)")));
-  s_input_file_types.push_back(ext_file_type_t("mpg",  Y("MPEG program stream")));
-  s_input_file_types.push_back(ext_file_type_t("ogg",  Y("audio/video/text subtitles embedded in OGG")));
-  s_input_file_types.push_back(ext_file_type_t("rm",   Y("RealMedia audio and video")));
-  s_input_file_types.push_back(ext_file_type_t("srt",  Y("SRT text subtitles")));
-  s_input_file_types.push_back(ext_file_type_t("ssa",  Y("SSA/ASS text subtitles")));
-  s_input_file_types.push_back(ext_file_type_t("tta",  Y("TTA lossless audio")));
-  s_input_file_types.push_back(ext_file_type_t("vc1",  Y("VC1 video elementary stream")));
-  s_input_file_types.push_back(ext_file_type_t("wav",  Y("WAVE (uncompressed PCM)")));
-  s_input_file_types.push_back(ext_file_type_t("webm", Y("WebM audio/video files")));
-  s_input_file_types.push_back(ext_file_type_t("wv",   Y("WAVPACK lossless audio")));
-}
 
 /** \brief Outputs usage information
 */
@@ -396,13 +352,12 @@ handle_segmentinfo() {
 
 static void
 list_file_types() {
-  mxinfo(Y("Known file types:\n"
-           "  ext   description\n"
-           "  ----  --------------------------\n"));
+  std::vector<file_type_t> &file_types = file_type_t::get_supported();
 
-  std::list<ext_file_type_t>::const_iterator i;
-  mxforeach(i, s_input_file_types)
-    mxinfo(boost::format("  %|1$-4s|  %2%\n") % i->ext % i->desc);
+  mxinfo(Y("Supported file types:\n"));
+
+  foreach(file_type_t &file_type, file_types)
+    mxinfo(boost::format("  %1% [%2%]\n") % file_type.title % file_type.extensions);
 }
 
 /** \brief Identify a file type and its contents
@@ -2206,7 +2161,6 @@ main(int argc,
      char **argv) {
   init_globals();
   setup();
-  init_input_file_type_list();
 
   parse_args(command_line_utf8(argc, argv));
 

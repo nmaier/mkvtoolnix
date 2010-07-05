@@ -213,57 +213,18 @@ tab_input::set_track_mode(mmg_track_t *t) {
   ti_extra->set_track_mode(t);
 }
 
-struct file_type_t {
-  wxString title, extensions;
-
-  file_type_t(const wxString &n_title, const wxString &n_extensions)
-    : title(n_title)
-    , extensions(n_extensions) {
-  }
-};
-
 wxString
 tab_input::setup_file_type_filter() {
   if (!media_files.empty())
     return media_files;
 
-  std::vector<file_type_t> file_types;
-
-  file_types.push_back(file_type_t(Z("A/52 (aka AC3)"),                      wxU("ac3")));
-  file_types.push_back(file_type_t(Z("AAC (Advanced Audio Coding)"),         wxU("aac m4a mp4")));
-  file_types.push_back(file_type_t(Z("AVC/h.264 elementary streams"),        wxU("264 avc h264 x264")));
-  file_types.push_back(file_type_t(Z("AVI (Audio/Video Interleaved)"),       wxU("avi")));
-  file_types.push_back(file_type_t(Z("Dirac"),                               wxU("drc")));
-  file_types.push_back(file_type_t(Z("Dolby TrueHD"),                        wxU("thd thd+ac3 truehd true-hd")));
-  file_types.push_back(file_type_t(Z("DTS/DTS-HD (Digital Theater System)"), wxU("dts dtshd dts-hd")));
-  if (capabilities[wxT("FLAC")] == wxT("true"))
-    file_types.push_back(file_type_t(Z("FLAC (Free Lossless Audio Codec)"),  wxU("flac ogg")));
-  file_types.push_back(file_type_t(Z("IVF with VP8 video files"),            wxU("ivf")));
-  file_types.push_back(file_type_t(Z("MP4 audio/video files"),               wxU("mp4 m4v")));
-  file_types.push_back(file_type_t(Z("MPEG audio files"),                    wxU("mp2 mp3")));
-  file_types.push_back(file_type_t(Z("MPEG program streams"),                wxU("mpg mpeg m2v evo evob vob")));
-  file_types.push_back(file_type_t(Z("MPEG video elementary streams"),       wxU("m1v m2v")));
-  file_types.push_back(file_type_t(Z("Matroska audio/video files"),          wxU("mka mks mkv webm webmv webma")));
-  file_types.push_back(file_type_t(Z("PGS/SUP subtitles"),                   wxU("sup")));
-  file_types.push_back(file_type_t(Z("QuickTime audio/video files"),         wxU("mov")));
-  file_types.push_back(file_type_t(Z("Ogg/OGM audio/video files"),           wxU("ogg ogm")));
-  file_types.push_back(file_type_t(Z("RealMedia audio/video files"),         wxU("ra ram rm rmvb rv")));
-  file_types.push_back(file_type_t(Z("SRT text subtitles"),                  wxU("srt")));
-  file_types.push_back(file_type_t(Z("SSA/ASS text subtitles"),              wxU("ass ssa")));
-  file_types.push_back(file_type_t(Z("TTA (The lossless True Audio codec)"), wxU("tta")));
-  file_types.push_back(file_type_t(Z("USF text subtitles"),                  wxU("usf xml")));
-  file_types.push_back(file_type_t(Z("VC1 elementary streams"),              wxU("vc1")));
-  file_types.push_back(file_type_t(Z("VobButtons"),                          wxU("btn")));
-  file_types.push_back(file_type_t(Z("VobSub subtitles"),                    wxU("idx")));
-  file_types.push_back(file_type_t(Z("WAVE (uncompressed PCM audio)"),       wxU("wav")));
-  file_types.push_back(file_type_t(Z("WAVPACK v4 audio"),                    wxU("wv")));
-  file_types.push_back(file_type_t(Z("WebM audio/video files"),              wxU("webm webmv webma")));
+  std::vector<file_type_t> &file_types = file_type_t::get_supported();
 
   std::map<wxString, bool> all_extensions_map;
   wxString filters;
 
   foreach(file_type_t &file_type, file_types) {
-    std::vector<wxString> extensions = split(wxString(file_type.extensions), wxU(" "));
+    std::vector<wxString> extensions = split(wxU(file_type.extensions), wxU(" "));
     std::vector<wxString> extensions_full;
 
     foreach(wxString &extension, extensions) {
@@ -279,7 +240,7 @@ tab_input::setup_file_type_filter() {
     }
 
     wxString filter_ext  = join(wxT(";"), extensions_full);
-    filters             += wxString::Format(wxT("|%s (%s)|%s"), file_type.title.c_str(), filter_ext.c_str(), filter_ext.c_str());
+    filters             += wxString::Format(wxT("|%s (%s)|%s"), wxU(file_type.title).c_str(), filter_ext.c_str(), filter_ext.c_str());
   }
 
   std::vector<wxString> all_extensions;

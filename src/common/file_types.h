@@ -14,6 +14,9 @@
 #ifndef __MTX_COMMON_FILE_TYPES_H
 #define __MTX_COMMON_FILE_TYPES_H
 
+#include <string>
+#include <vector>
+
 /* file types */
 enum file_type_e {
   FILE_TYPE_IS_UNKNOWN = 0,
@@ -51,6 +54,18 @@ enum file_type_e {
   FILE_TYPE_WAV,
   FILE_TYPE_WAVPACK4,
   FILE_TYPE_MAX = FILE_TYPE_WAVPACK4
+};
+
+struct file_type_t {
+  std::string title, extensions;
+
+  file_type_t(const std::string &p_title, const std::string &p_extensions)
+    : title(p_title)
+    , extensions(p_extensions)
+  {
+  }
+
+  static std::vector<file_type_t> &get_supported();
 };
 
 #endif // __MTX_COMMON_FILE_TYPES_H
