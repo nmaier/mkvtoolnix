@@ -286,6 +286,7 @@ class MTX_DLL_API mm_text_io_c: public mm_proxy_io_c {
 protected:
   byte_order_e byte_order;
   unsigned int bom_len;
+  bool uses_carriage_returns, uses_newlines, eol_style_detected;
 
 public:
   mm_text_io_c(mm_io_c *_in, bool _delete_in = true);
@@ -297,6 +298,9 @@ public:
   virtual void set_byte_order(byte_order_e new_byte_order) {
     byte_order = new_byte_order;
   }
+
+protected:
+  virtual void detect_eol_style();
 
 public:
   static bool has_byte_order_marker(const std::string &string);

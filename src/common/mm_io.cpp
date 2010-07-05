@@ -938,8 +938,11 @@ mm_text_io_c::mm_text_io_c(mm_io_c *_in,
                            bool _delete_in)
   : mm_proxy_io_c(_in, _delete_in)
   , byte_order(BO_NONE)
-  , bom_len(0) {
-
+  , bom_len(0)
+  , uses_carriage_returns(false)
+  , uses_newlines(false)
+  , eol_style_detected(false)
+{
   _in->setFilePointer(0, seek_beginning);
 
   unsigned char buffer[4];
@@ -952,6 +955,38 @@ mm_text_io_c::mm_text_io_c(mm_io_c *_in,
   detect_byte_order_marker(buffer, num_read, byte_order, bom_len);
 
   _in->setFilePointer(bom_len, seek_beginning);
+}
+
+void
+mm_text_io_c::detect_eol_style() {
+  if (eol_style_detected)
+    return;
+
+
+  eol_style_detected  = true;
+  bool found_cr_or_nl = false;
+
+  save_pos();
+
+  while (1) {
+    char utf8char[9];
+    size_t len = read_next_char(utf8char);
+    if (0 == len)
+      break;
+
+    if ((1 == len) && ('\r' == utf8char[0])) {
+      found_cr_or_nl        = true;
+      uses_carriage_returns = true;
+
+    } else if ((1 == len) && ('\n' == utf8char[0])) {
+      found_cr_or_nl = true;
+      uses_newlines  = true;
+
+    } else if (found_cr_or_nl)
+      break;
+  }
+
+  restore_pos();
 }
 
 bool
@@ -1072,6 +1107,9 @@ mm_text_io_c::getline() {
   if (eof())
     throw error_c(Y("end-of-file"));
 
+  if (!eol_style_detected)
+    detect_eol_style();
+
   std::string s;
   char utf8char[9];
   bool previous_was_carriage_return = false;
@@ -1084,7 +1122,7 @@ mm_text_io_c::getline() {
       return s;
 
     if ((1 == len) && (utf8char[0] == '\r')) {
-      if (previous_was_carriage_return) {
+      if (previous_was_carriage_return && !uses_newlines) {
         setFilePointer(-1, seek_current);
         return s;
       }
@@ -1093,7 +1131,7 @@ mm_text_io_c::getline() {
       continue;
     }
 
-    if ((1 == len) && (utf8char[0] == '\n'))
+    if ((1 == len) && (utf8char[0] == '\n') && (!uses_carriage_returns || previous_was_carriage_return))
       return s;
 
     if (previous_was_carriage_return) {
