@@ -135,6 +135,22 @@ public:
 
   void resize(size_t new_size) throw();
 
+  operator const unsigned char *() const {
+    return its_counter ? its_counter->ptr : NULL;
+  }
+
+  operator const void *() const {
+    return its_counter ? its_counter->ptr : NULL;
+  }
+
+  operator unsigned char *() const {
+    return its_counter ? its_counter->ptr : NULL;
+  }
+
+  operator void *() const {
+    return its_counter ? its_counter->ptr : NULL;
+  }
+
 public:
   static memory_cptr alloc(size_t size) {
     return memory_cptr(new memory_c(static_cast<unsigned char *>(safemalloc(size)), size, true));
