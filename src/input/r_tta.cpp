@@ -102,7 +102,7 @@ tta_reader_c::~tta_reader_c() {
 
 void
 tta_reader_c::create_packetizer(int64_t) {
-  if (NPTZR() != 0)
+  if (!demuxing_requested('a', 0) || (NPTZR() != 0))
     return;
 
   add_packetizer(new tta_packetizer_c(this, m_ti, get_uint16_le(&header.channels), get_uint16_le(&header.bits_per_sample), get_uint32_le(&header.sample_rate)));

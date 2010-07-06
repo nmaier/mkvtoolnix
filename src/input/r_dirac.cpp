@@ -88,7 +88,7 @@ dirac_es_reader_c::dirac_es_reader_c(track_info_c &n_ti)
 
 void
 dirac_es_reader_c::create_packetizer(int64_t) {
-  if (NPTZR() != 0)
+  if (!demuxing_requested('v', 0) || (NPTZR() != 0))
     return;
 
   add_packetizer(new dirac_video_packetizer_c(this, m_ti));

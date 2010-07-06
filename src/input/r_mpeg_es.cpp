@@ -171,7 +171,7 @@ mpeg_es_reader_c::~mpeg_es_reader_c() {
 void
 mpeg_es_reader_c::create_packetizer(int64_t) {
   generic_packetizer_c *m2vpacketizer;
-  if (NPTZR() != 0)
+  if (!demuxing_requested('v', 0) || (NPTZR() != 0))
     return;
 
   mxinfo_tid(m_ti.m_fname, 0, Y("Using the MPEG-1/2 video output module.\n"));

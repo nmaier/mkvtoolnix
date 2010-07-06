@@ -128,7 +128,7 @@ avc_es_reader_c::avc_es_reader_c(track_info_c &n_ti)
 
 void
 avc_es_reader_c::create_packetizer(int64_t) {
-  if (NPTZR() != 0)
+  if (!demuxing_requested('v', 0) || (NPTZR() != 0))
     return;
 
   add_packetizer(new mpeg4_p10_es_video_packetizer_c(this, m_ti, m_avcc, m_width, m_height));

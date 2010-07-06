@@ -63,7 +63,7 @@ ssa_reader_c::~ssa_reader_c() {
 
 void
 ssa_reader_c::create_packetizer(int64_t) {
-  if (NPTZR() != 0)
+  if (!demuxing_requested('a', 0) || (NPTZR() != 0))
     return;
 
   std::string global = m_subs->get_global();

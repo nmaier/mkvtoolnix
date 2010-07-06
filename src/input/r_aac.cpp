@@ -97,7 +97,7 @@ aac_reader_c::~aac_reader_c() {
 
 void
 aac_reader_c::create_packetizer(int64_t) {
-  if (NPTZR() != 0)
+  if (!demuxing_requested('a', 0) || (NPTZR() != 0))
     return;
 
   if (!m_sbr_status_set)

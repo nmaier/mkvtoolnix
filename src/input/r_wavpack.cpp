@@ -94,11 +94,10 @@ wavpack_reader_c::~wavpack_reader_c() {
 
 void
 wavpack_reader_c::create_packetizer(int64_t) {
-  uint16_t version_le;
-
-  if (NPTZR() != 0)
+  if (!demuxing_requested('a', 0) || (NPTZR() != 0))
     return;
 
+  uint16_t version_le;
   put_uint16_le(&version_le, header.version);
   m_ti.m_private_data = (unsigned char *)&version_le;
   m_ti.m_private_size = sizeof(uint16_t);

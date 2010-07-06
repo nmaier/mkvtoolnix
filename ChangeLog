@@ -1,3 +1,12 @@
+2010-07-06  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: All readers that only handled file formats
+	which do not contain more than one track did not respect the
+	"--no-audio / --no-video / --no-subtitles" options. This applied
+	to the following readers: AAC, AC3, AVC/h.264, CorePicture, Dirac,
+	DTS, FLAC, IVF, MP3, MPEG ES, PGS/SUP, SRT, SSA, TrueHD, TTA, VC1,
+	WAV and WavPack.
+
 2010-07-05  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: Improved reading text files that use

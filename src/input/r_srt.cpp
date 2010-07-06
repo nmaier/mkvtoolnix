@@ -51,7 +51,7 @@ srt_reader_c::~srt_reader_c() {
 
 void
 srt_reader_c::create_packetizer(int64_t) {
-  if (NPTZR() != 0)
+  if (!demuxing_requested('s', 0) || (NPTZR() != 0))
     return;
 
   bool is_utf8 = m_io->get_byte_order() != BO_NONE;

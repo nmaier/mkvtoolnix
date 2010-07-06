@@ -82,7 +82,7 @@ truehd_reader_c::~truehd_reader_c() {
 
 void
 truehd_reader_c::create_packetizer(int64_t) {
-  if (NPTZR() != 0)
+  if (!demuxing_requested('a', 0) || (NPTZR() != 0))
     return;
 
   add_packetizer(new truehd_packetizer_c(this, m_ti, m_header->m_codec, m_header->m_sampling_rate, m_header->m_channels));

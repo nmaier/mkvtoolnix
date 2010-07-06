@@ -83,7 +83,7 @@ ac3_reader_c::~ac3_reader_c() {
 
 void
 ac3_reader_c::create_packetizer(int64_t) {
-  if (NPTZR() != 0)
+  if (!demuxing_requested('a', 0) || (NPTZR() != 0))
     return;
 
   add_packetizer(new ac3_packetizer_c(this, m_ti, ac3header.sample_rate, ac3header.channels, ac3header.bsid));

@@ -157,7 +157,7 @@ flac_reader_c::~flac_reader_c() {
 
 void
 flac_reader_c::create_packetizer(int64_t) {
-  if (NPTZR() != 0)
+  if (!demuxing_requested('a', 0) || (NPTZR() != 0))
     return;
 
   add_packetizer(new flac_packetizer_c(this, m_ti, header, header_size));

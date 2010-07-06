@@ -88,7 +88,7 @@ vc1_es_reader_c::vc1_es_reader_c(track_info_c &n_ti)
 
 void
 vc1_es_reader_c::create_packetizer(int64_t) {
-  if (NPTZR() != 0)
+  if (!demuxing_requested('v', 0) || (NPTZR() != 0))
     return;
 
   add_packetizer(new vc1_video_packetizer_c(this, m_ti));

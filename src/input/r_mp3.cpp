@@ -65,7 +65,7 @@ mp3_reader_c::~mp3_reader_c() {
 
 void
 mp3_reader_c::create_packetizer(int64_t) {
-  if (NPTZR() != 0)
+  if (!demuxing_requested('a', 0) || (NPTZR() != 0))
     return;
 
   mxinfo_tid(m_ti.m_fname, 0, Y("Using the MPEG audio output module.\n"));

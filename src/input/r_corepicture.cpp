@@ -179,6 +179,9 @@ corepicture_reader_c::end_element_cb(const char *name) {
 
 void
 corepicture_reader_c::create_packetizer(int64_t tid) {
+  if (!demuxing_requested('v', 0) || (NPTZR() != 0))
+    return;
+
   uint8 private_buffer[5];
   uint32 codec_used = 0;
   std::vector<corepicture_pic_t>::const_iterator picture;

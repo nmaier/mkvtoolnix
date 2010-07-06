@@ -71,7 +71,7 @@ ivf_reader_c::~ivf_reader_c() {
 
 void
 ivf_reader_c::create_packetizer(int64_t) {
-  if (NPTZR() != 0)
+  if (!demuxing_requested('v', 0) || (NPTZR() != 0))
     return;
 
   vp8_video_packetizer_c *packetizer = new vp8_video_packetizer_c(this, m_ti);

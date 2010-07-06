@@ -64,7 +64,7 @@ pgssup_reader_c::~pgssup_reader_c() {
 
 void
 pgssup_reader_c::create_packetizer(int64_t) {
-  if (NPTZR() != 0)
+  if (!demuxing_requested('s', 0) || (NPTZR() != 0))
     return;
 
   add_packetizer(new pgs_packetizer_c(this, m_ti));
