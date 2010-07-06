@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-06-25 23:34+0800\n"
+"PO-Revision-Date: 2010-07-06 11:21+0800\n"
 "Last-Translator: Dean Lee <xslidian@lidian.info>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -1860,7 +1860,7 @@ msgstr "宽高比系数"
 
 #: src/info/mkvinfo.cpp:753
 msgid "Aspect ratio type: %1%%2%"
-msgstr "宽高比率类型: %1%%2%"
+msgstr "宽高比类型: %1%%2%"
 
 #: src/mmg/tabs/input_format.cpp:221
 msgid "Aspect ratio:"
@@ -5456,9 +5456,8 @@ msgid "Subtitle track %u"
 msgstr "字幕轨 %u"
 
 #: src/merge/mkvmerge.cpp:357
-#, fuzzy
 msgid "Supported file types:\n"
-msgstr "元素类型:\n"
+msgstr "受支持的文件类型:\n"
 
 #: src/common/file_types.cpp:47
 msgid "TTA (The lossless True Audio codec)"
@@ -7939,7 +7938,7 @@ msgstr "matroska_reader: 轨 %1% 的 CodecID 为 'A_VORBIS'，但没有出现头
 
 #: src/input/r_matroska.cpp:1073
 msgid "matroska_reader: The CodecID is missing.\n"
-msgstr "matroska_reader: 缺CodecID。\n"
+msgstr "matroska_reader: 缺 CodecID。\n"
 
 #: src/input/r_matroska.cpp:471
 msgid "matroska_reader: The height for track %1% was not set.\n"
@@ -8496,7 +8495,7 @@ msgstr "usf_reader: 源非有效的 USF 文件。"
 
 #: src/common/strings/editing.cpp:266
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
-msgstr "utf8_strlen(): 无效 UTF-8 字符。首个字节: 0x%|1$02x|"
+msgstr "utf8_strlen(): 无效的 UTF-8 字符。首个字节: 0x%|1$02x|"
 
 #: src/input/r_vc1.cpp:82
 msgid "vc1_es_reader: Could not open the source file."
@@ -8504,7 +8503,7 @@ msgstr "vc1_es_reader: 无法打开源文件。"
 
 #: src/mmg/tabs/chapters.cpp:839
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
-msgstr "verify failed: chapters->CheckMandatory() 为非。这不该发生。请提交错误报告。\n"
+msgstr "验证失败: chapters->CheckMandatory() 为非。这不该发生。请提交错误报告。\n"
 
 #: src/input/r_matroska.cpp:91
 #: src/mmg/mmg.cpp:59
@@ -8526,7 +8525,7 @@ msgstr "vobsub_reader: 无法打开源文件。"
 
 #: src/input/r_vobsub.cpp:559
 msgid "vobsub_reader: sub_file->read failure"
-msgstr "vobsub_reader: sub_file->读取失败"
+msgstr "vobsub_reader: sub_file->read 读取失败"
 
 #: src/input/r_wav.cpp:449
 msgid "wav_reader: Could not open the source file."
@@ -8837,6 +8836,7 @@ msgstr "是"
 #~ "  -v, --verbose  提高“详细”程度。\n"
 #~ "  -h, --help     显示本帮助。\n"
 #~ "  -V, --version  显示版本信息。\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "使用 FLAC 输出模块。\n"
