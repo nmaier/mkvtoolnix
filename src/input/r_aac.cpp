@@ -32,61 +32,57 @@ aac_reader_c::probe_file(mm_io_c *io,
 #define INITCHUNKSIZE 16384
 
 aac_reader_c::aac_reader_c(track_info_c &_ti)
-  throw (error_c):
-  generic_reader_c(_ti),
-  sbr_status_set(false) {
-
-  int adif, detected_profile;
-
+  throw (error_c)
+  : generic_reader_c(_ti)
+  , m_bytes_processed(0)
+  , m_emphasis_present(false)
+  , m_sbr_status_set(false)
+{
   try {
-    io                 = new mm_file_io_c(m_ti.m_fname);
-    size               = io->get_size();
+    m_io               = mm_io_cptr(new mm_file_io_c(m_ti.m_fname));
+    m_size             = m_io->get_size();
 
-    int tag_size_start = skip_id3v2_tag(*io);
-    int tag_size_end   = id3_tag_present_at_end(*io);
+    int tag_size_start = skip_id3v2_tag(*m_io);
+    int tag_size_end   = id3_tag_present_at_end(*m_io);
 
     if (0 > tag_size_start)
       tag_size_start = 0;
     if (0 < tag_size_end)
-      size -= tag_size_end;
+      m_size -= tag_size_end;
 
-    size_t init_read_len = std::min(size - tag_size_start, (int64_t)INITCHUNKSIZE);
-    chunk                = (unsigned char *)safemalloc(INITCHUNKSIZE);
+    size_t init_read_len = std::min(m_size - tag_size_start, (int64_t)INITCHUNKSIZE);
+    m_chunk              = memory_c::alloc(INITCHUNKSIZE);
 
-    if (io->read(chunk, init_read_len) != init_read_len)
+    if (m_io->read(m_chunk, init_read_len) != init_read_len)
       throw error_c(boost::format(Y("aac_reader: Could not read %1% bytes.")) % init_read_len);
 
-    io->setFilePointer(tag_size_start, seek_beginning);
+    m_io->setFilePointer(tag_size_start, seek_beginning);
 
-    if (parse_aac_adif_header(chunk, init_read_len, &aacheader)) {
+    if (parse_aac_adif_header(*m_chunk, init_read_len, &m_aacheader))
       throw error_c(Y("aac_reader: ADIF header files are not supported."));
-      adif = 1;
 
-    } else {
-      if (find_aac_header(chunk, init_read_len, &aacheader, emphasis_present) < 0)
-        throw error_c(boost::format(Y("aac_reader: No valid AAC packet found in the first %1% bytes.\n")) % init_read_len);
-      guess_adts_version();
-      adif = 0;
-    }
+    if (find_aac_header(*m_chunk, init_read_len, &m_aacheader, m_emphasis_present) < 0)
+      throw error_c(boost::format(Y("aac_reader: No valid AAC packet found in the first %1% bytes.\n")) % init_read_len);
 
-    m_ti.m_id        = 0;       // ID for this track.
-    bytes_processed  = 0;
-    detected_profile = aacheader.profile;
+    guess_adts_version();
 
-    if (24000 >= aacheader.sample_rate)
-      aacheader.profile = AAC_PROFILE_SBR;
+    m_ti.m_id            = 0;       // ID for this track.
+    int detected_profile = m_aacheader.profile;
+
+    if (24000 >= m_aacheader.sample_rate)
+      m_aacheader.profile = AAC_PROFILE_SBR;
 
     if (   (map_has_key(m_ti.m_all_aac_is_sbr,  0) && m_ti.m_all_aac_is_sbr[ 0])
         || (map_has_key(m_ti.m_all_aac_is_sbr, -1) && m_ti.m_all_aac_is_sbr[-1]))
-      aacheader.profile = AAC_PROFILE_SBR;
+      m_aacheader.profile = AAC_PROFILE_SBR;
 
     if (   (map_has_key(m_ti.m_all_aac_is_sbr,  0) && !m_ti.m_all_aac_is_sbr[ 0])
         || (map_has_key(m_ti.m_all_aac_is_sbr, -1) && !m_ti.m_all_aac_is_sbr[-1]))
-      aacheader.profile = detected_profile;
+      m_aacheader.profile = detected_profile;
 
     if (   map_has_key(m_ti.m_all_aac_is_sbr,  0)
         || map_has_key(m_ti.m_all_aac_is_sbr, -1))
-      sbr_status_set = true;
+      m_sbr_status_set = true;
 
   } catch (...) {
     throw error_c(Y("aac_reader: Could not open the file."));
@@ -97,28 +93,25 @@ aac_reader_c::aac_reader_c(track_info_c &_ti)
 }
 
 aac_reader_c::~aac_reader_c() {
-  delete io;
-  safefree(chunk);
 }
 
 void
 aac_reader_c::create_packetizer(int64_t) {
-  generic_packetizer_c *aacpacketizer;
-
   if (NPTZR() != 0)
     return;
-  if (!sbr_status_set)
+
+  if (!m_sbr_status_set)
     mxwarn(Y("AAC files may contain HE-AAC / AAC+ / SBR AAC audio. "
              "This can NOT be detected automatically. Therefore you have to "
              "specifiy '--aac-is-sbr 0' manually for this input file if the "
              "file actually contains SBR AAC. The file will be muxed in the "
              "WRONG way otherwise. Also read mkvmerge's documentation.\n"));
 
-  aacpacketizer = new aac_packetizer_c(this, m_ti, aacheader.id, aacheader.profile, aacheader.sample_rate, aacheader.channels, emphasis_present);
+  generic_packetizer_c *aacpacketizer = new aac_packetizer_c(this, m_ti, m_aacheader.id, m_aacheader.profile, m_aacheader.sample_rate, m_aacheader.channels, m_emphasis_present);
   add_packetizer(aacpacketizer);
 
-  if (AAC_PROFILE_SBR == aacheader.profile)
-    aacpacketizer->set_audio_output_sampling_freq(aacheader.sample_rate * 2);
+  if (AAC_PROFILE_SBR == m_aacheader.profile)
+    aacpacketizer->set_audio_output_sampling_freq(m_aacheader.sample_rate * 2);
 
   mxinfo_tid(m_ti.m_fname, 0, Y("Using the AAC output module.\n"));
 }
@@ -128,41 +121,39 @@ void
 aac_reader_c::guess_adts_version() {
   aac_header_t tmp_aacheader;
 
-  emphasis_present = false;
+  m_emphasis_present = false;
 
   // Due to the checks we do have an ADTS header at 0.
-  find_aac_header(chunk, INITCHUNKSIZE, &tmp_aacheader, emphasis_present);
+  find_aac_header(*m_chunk, INITCHUNKSIZE, &tmp_aacheader, m_emphasis_present);
   if (tmp_aacheader.id != 0)        // MPEG2
     return;
 
   // Now make some sanity checks on the size field.
   if (tmp_aacheader.bytes > 8192) {
-    emphasis_present = true;    // Looks like it's borked.
+    m_emphasis_present = true;    // Looks like it's borked.
     return;
   }
 
   // Looks ok so far. See if the next ADTS is right behind this packet.
-  int pos = find_aac_header(&chunk[tmp_aacheader.bytes], INITCHUNKSIZE - tmp_aacheader.bytes, &tmp_aacheader, emphasis_present);
-  if (0 != pos) {               // Not ok - what do we do now?
-    emphasis_present = true;
-    return;
-  }
+  int pos = find_aac_header(m_chunk->get_buffer() + tmp_aacheader.bytes, INITCHUNKSIZE - tmp_aacheader.bytes, &tmp_aacheader, m_emphasis_present);
+  if (0 != pos)                 // Not ok - what do we do now?
+    m_emphasis_present = true;
 }
 
 file_status_e
 aac_reader_c::read(generic_packetizer_c *,
                    bool) {
-  int remaining_bytes = size - io->getFilePointer();
+  int remaining_bytes = m_size - m_io->getFilePointer();
   int read_len        = std::min(INITCHUNKSIZE, remaining_bytes);
-  int num_read        = io->read(chunk, read_len);
+  int num_read        = m_io->read(m_chunk, read_len);
 
-  if (0 > num_read) {
+  if (0 >= num_read) {
     PTZR0->flush();
     return FILE_STATUS_DONE;
   }
 
-  PTZR0->process(new packet_t(new memory_c(chunk, num_read, false)));
-  bytes_processed += num_read;
+  PTZR0->process(new packet_t(new memory_c(*m_chunk, num_read, false)));
+  m_bytes_processed += num_read;
 
   if (0 < (remaining_bytes - num_read))
     return FILE_STATUS_MOREDATA;
@@ -174,12 +165,12 @@ aac_reader_c::read(generic_packetizer_c *,
 
 int
 aac_reader_c::get_progress() {
-  return 100 * bytes_processed / size;
+  return 100 * m_bytes_processed / m_size;
 }
 
 void
 aac_reader_c::identify() {
-  std::string verbose_info = std::string("aac_is_sbr:") + std::string(AAC_PROFILE_SBR == aacheader.profile ? "true" : "unknown");
+  std::string verbose_info = std::string("aac_is_sbr:") + std::string(AAC_PROFILE_SBR == m_aacheader.profile ? "true" : "unknown");
 
   id_result_container("AAC");
   id_result_track(0, ID_RESULT_TRACK_AUDIO, "AAC", verbose_info);

@@ -25,12 +25,11 @@
 
 class aac_reader_c: public generic_reader_c {
 private:
-  unsigned char *chunk;
-  mm_io_c *io;
-  int64_t bytes_processed, size;
-  bool emphasis_present;
-  aac_header_t aacheader;
-  bool sbr_status_set;
+  memory_cptr m_chunk;
+  mm_io_cptr m_io;
+  int64_t m_bytes_processed, m_size;
+  bool m_emphasis_present, m_sbr_status_set;
+  aac_header_t m_aacheader;
 
 public:
   aac_reader_c(track_info_c &_ti) throw (error_c);
