@@ -1,5 +1,9 @@
 2010-07-06  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Fixed reading AVC/h.264 tracks from AVI files
+	if they're stored without NALUs inside the AVI. Was broken by a
+	fix for handling AVC/h.264 in NALUs inside AVI.
+
 	* mkvmerge: bug fix: All readers that only handled file formats
 	which do not contain more than one track did not respect the
 	"--no-audio / --no-video / --no-subtitles" options. This applied
