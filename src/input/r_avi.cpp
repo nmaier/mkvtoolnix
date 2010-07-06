@@ -395,8 +395,8 @@ avi_reader_c::create_ssa_packetizer(int idx) {
   ssa_parser_c *parser           = new ssa_parser_c(this, demuxer.m_text_io.get_object(), m_ti.m_fname, id);
   demuxer.m_subs                 = subtitles_cptr(parser);
 
-  charset_converter_cptr cc_utf8 = map_has_key(m_ti.m_sub_charsets, id)               ? charset_converter_c::init(m_ti.m_sub_charsets[id])
-                                 : map_has_key(m_ti.m_sub_charsets, -1)               ? charset_converter_c::init(m_ti.m_sub_charsets[-1])
+  charset_converter_cptr cc_utf8 = map_has_key(m_ti.m_sub_charsets, id)           ? charset_converter_c::init(m_ti.m_sub_charsets[id])
+                                 : map_has_key(m_ti.m_sub_charsets, -1)           ? charset_converter_c::init(m_ti.m_sub_charsets[-1])
                                  : demuxer.m_text_io->get_byte_order() != BO_NONE ? charset_converter_c::init("UTF-8")
                                  :                                                  g_cc_local_utf8;
 
