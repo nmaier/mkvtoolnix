@@ -311,8 +311,8 @@ mux_dialog::done(int status) {
 
 #if defined(SYS_WINDOWS)
   change_abort_button();
-  if ((NULL != m_taskbar_progress) && (0 != status))
-    m_taskbar_progress->set_state(TBPF_ERROR);
+  if (NULL != m_taskbar_progress)
+    m_taskbar_progress->set_state(0 != status ? TBPF_ERROR : TBPF_NOPROGRESS);
 #else  // SYS_WINDOWS
   b_abort->Enable(false);
 #endif  // SYS_WINDOWS
