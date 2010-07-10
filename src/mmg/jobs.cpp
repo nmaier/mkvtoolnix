@@ -149,8 +149,10 @@ job_run_dialog::start_next_job() {
     st_remaining_time->SetLabel(wxT("---"));
     st_remaining_time_total->SetLabel(wxT("---"));
 
+#if defined(SYS_WINDOWS)
     if (NULL != m_taskbar_progress)
       m_taskbar_progress->set_state(TBPF_NOPROGRESS);
+#endif
 
     return;
   }
