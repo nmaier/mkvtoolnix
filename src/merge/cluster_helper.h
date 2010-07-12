@@ -67,7 +67,7 @@ private:
   int64_t m_max_timecode_and_duration, m_max_video_timecode_rendered;
   int64_t m_previous_cluster_tc, m_num_cue_elements, m_header_overhead;
   int64_t m_packet_num, m_timecode_offset, *m_previous_packets;
-  int64_t m_bytes_in_file, m_first_timecode_in_file;
+  int64_t m_bytes_in_file, m_first_timecode_in_file, m_attachments_size;
   int64_t m_min_timecode_in_cluster, m_max_timecode_in_cluster;
   mm_io_c *m_out;
 
@@ -99,6 +99,10 @@ public:
 
   int get_packet_count() {
     return m_packets.size();
+  }
+
+  void set_attachments_size(int64_t size) {
+    m_attachments_size = size;
   }
 
 private:

@@ -1,5 +1,9 @@
 2010-07-12  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: enhancement: Attachments will be rendered at the end
+	of the file instead of at the beginning. The attachments will be
+	placed after the cues but before the chapters. Fix for bug 516.
+
 	* mkvmerge: enhancement: Header removal compression has been
 	enabled by default for MPEG-4 part 10 (AVC/h.264) video tracks
 	with a NALU size field length of four bytes.

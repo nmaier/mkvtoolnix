@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 2.9.9\n"
-"POT-Creation-Date: 2010-05-28 17:17+0300\n"
-"PO-Revision-Date: 2010-06-21 19:38+0200\n"
+"POT-Creation-Date: 2010-07-12 15:58+0300\n"
+"PO-Revision-Date: 2010-07-12 16:04+0200\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
@@ -31,7 +31,7 @@ msgstr "4.1.1"
 #. type: Content of the date entity
 #: doc/man/mkvextract.xml:7 doc/man/mkvinfo.xml:7 doc/man/mkvmerge.xml:7
 #: doc/man/mkvpropedit.xml:7 doc/man/mmg.xml:7
-msgid "2010-05-14"
+msgid "2010-07-03"
 msgstr ""
 
 #. type: Content of the mkvmerge entity
@@ -1869,8 +1869,11 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:297
+#| msgid ""
+#| "&mkvmerge; defaults to putting at most 65535 data blocks and 2000ms of "
+#| "data into a cluster."
 msgid ""
-"&mkvmerge; defaults to putting at most 65535 data blocks and 2000ms of data "
+"&mkvmerge; defaults to putting at most 65535 data blocks and 5000ms of data "
 "into a cluster."
 msgstr "デフォルトは、データクラスタ毎に65535データブロック以下、5000ms以下のデータを書き込みます。"
 
@@ -4880,12 +4883,12 @@ msgstr ""
 #: doc/man/mkvmerge.xml:1936
 msgid ""
 "[EBML head] [segment {meta seek #1} [segment information] [track "
-"information] {attachments} {chapters} [cluster 1] {cluster 2} ...  {cluster "
-"n} {cues} {meta seek #2} {tags}]"
+"information] {chapters} [cluster 1] {cluster 2} ...  {cluster n} {cues} "
+"{attachments} {meta seek #2} {tags}]"
 msgstr ""
-"[EBMLヘッダ] [セグメント {メタシーク #1} [セグメント情報] [トラック情報] {添"
-"付ファイル} {チャプタ} [クラスタ 1] {クラスタ 2} ...  {クラスタ n} {CUE} {メ"
-"タシーク #2} {タグ}]"
+"[EBMLヘッダ] [セグメント {メタシーク #1} [セグメント情報] [トラック情報] "
+"{チャプタ} [クラスタ 1] {クラスタ 2} ...  {クラスタ n} {CUE} {添付ファイル} "
+"{メタシーク #2} {タグ}]"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1941
