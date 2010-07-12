@@ -746,7 +746,7 @@ rerender_track_headers() {
 /** \brief Render all attachments into the output file at the current position
 
    This function also makes sure that no duplicates are output. This might
-   happen when appending g_files.
+   happen when appending files.
 */
 static void
 render_attachments(IOCallback *out) {
@@ -796,7 +796,7 @@ render_attachments(IOCallback *out) {
 /** \brief Check the complete append mapping mechanism
 
    Each entry given with '--append-to' has to be checked for validity.
-   For g_files that aren't managed with '--append-to' default entries have
+   For files that aren't managed with '--append-to' default entries have
    to be created.
 */
 static void
@@ -959,7 +959,7 @@ check_append_mapping() {
   }
 
   // Calculate the "longest path" -- meaning the maximum number of
-  // concatenated g_files. This is needed for displaying the progress.
+  // concatenated files. This is needed for displaying the progress.
   mxforeach(amap, g_append_mapping) {
     // Is this the first in a chain?
     mxforeach(cmp_amap, g_append_mapping) {
@@ -1003,7 +1003,7 @@ check_append_mapping() {
 */
 void
 calc_max_chapter_size() {
-  // Step 1: Add all chapters from g_files that are not being appended.
+  // Step 1: Add all chapters from files that are not being appended.
   foreach(filelist_t &file, g_files) {
     if (file.appending)
       continue;
@@ -1771,9 +1771,9 @@ append_tracks_maybe() {
 
 /** \brief Establish deferred packetizer connections
 
-   In some cases (e.g. subtitle only g_files being appended) establishing the
+   In some cases (e.g. subtitle only files being appended) establishing the
    connections is deferred until a file containing a video track has
-   finished, too. This is necessary because the subtitle g_files themselves
+   finished, too. This is necessary because the subtitle files themselves
    are usually "shorter" than the movie they belong to. This is not the
    case if the subs are already embedded with a movie in a single file.
 
