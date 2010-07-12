@@ -33,13 +33,15 @@ mpeg4_p10_video_packetizer_c(generic_reader_c *p_reader,
   , m_nalu_size_len_dst(0)
   , m_max_nalu_size(0)
 {
-
   m_relaxed_timecode_checking = true;
 
-  if ((NULL != m_ti.m_private_data) && (0 < m_ti.m_private_size)) {
-    setup_nalu_size_len_change();
+  setup_nalu_size_len_change();
+
+  if ((NULL != m_ti.m_private_data) && (0 < m_ti.m_private_size))
     set_codec_private(m_ti.m_private_data, m_ti.m_private_size);
-  }
+
+  if (4 == m_nalu_size_len_dst)
+    set_default_compression_method(COMPRESSION_MPEG4_P10);
 }
 
 void
@@ -78,7 +80,7 @@ mpeg4_p10_video_packetizer_c::process(packet_cptr packet) {
 
   m_ref_timecode = packet->timecode;
 
-  if (m_nalu_size_len_dst)
+  if (m_nalu_size_len_dst && (m_nalu_size_len_dst != m_nalu_size_len_src))
     change_nalu_size_len(packet);
 
   add_packet(packet);
@@ -111,6 +113,7 @@ mpeg4_p10_video_packetizer_c::setup_nalu_size_len_change() {
     return;
 
   m_nalu_size_len_src = (m_ti.m_private_data[4] & 0x03) + 1;
+  m_nalu_size_len_dst = m_nalu_size_len_src;
 
   if (!m_ti.m_nalu_size_length || (m_ti.m_nalu_size_length == m_nalu_size_len_src))
     return;

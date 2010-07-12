@@ -1,5 +1,9 @@
 2010-07-12  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: enhancement: Header removal compression has been
+	enabled by default for MPEG-4 part 10 (AVC/h.264) video tracks
+	with a NALU size field length of four bytes.
+
 	* mkvmerge: bug fix: Header removal compression has been
 	deactivated for MPEG-4 part 2 (aka DivX/Xvid) video tracks due to
 	incompatibility with packed bitstreams.

@@ -27,7 +27,7 @@
 using namespace libmatroska;
 
 const char *compression_methods[] = {
-  "unspecified", "zlib", "bz2", "lzo", "header_removal", "mpeg4_p2", "dirac", "dts", "ac3", "mp3", "analyze_header_removal", "none"
+  "unspecified", "zlib", "bz2", "lzo", "header_removal", "mpeg4_p2", "mpeg4_p10", "dirac", "dts", "ac3", "mp3", "analyze_header_removal", "none"
 };
 
 static const int compression_method_map[] = {
@@ -37,6 +37,7 @@ static const int compression_method_map[] = {
   2,                            // lzo1x
   3,                            // header removal
   3,                            // mpeg4_p2 is header removal
+  3,                            // mpeg4_p10 is header removal
   3,                            // dirac is header removal
   3,                            // dts is header removal
   3,                            // ac3 is header removal
@@ -373,6 +374,12 @@ mpeg4_p2_compressor_c::mpeg4_p2_compressor_c() {
   set_bytes(bytes);
 }
 
+mpeg4_p10_compressor_c::mpeg4_p10_compressor_c() {
+  memory_cptr bytes      = memory_c::alloc(1);
+  bytes->get_buffer()[0] = 0;
+  set_bytes(bytes);
+}
+
 dirac_compressor_c::dirac_compressor_c() {
   memory_cptr bytes = memory_c::alloc(4);
   put_uint32_be(bytes->get_buffer(), DIRAC_SYNC_WORD);
@@ -442,6 +449,9 @@ compressor_c::create(const char *method) {
 
   if (!strcasecmp(method, compression_methods[COMPRESSION_MPEG4_P2]))
     return compressor_ptr(new mpeg4_p2_compressor_c());
+
+  if (!strcasecmp(method, compression_methods[COMPRESSION_MPEG4_P10]))
+    return compressor_ptr(new mpeg4_p10_compressor_c());
 
   if (!strcasecmp(method, compression_methods[COMPRESSION_DIRAC]))
     return compressor_ptr(new dirac_compressor_c());
