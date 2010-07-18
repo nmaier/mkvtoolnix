@@ -148,6 +148,9 @@ kax_track_t::handle_packetizer_default_duration() {
  */
 void
 kax_track_t::fix_display_dimension_parameters() {
+  if (0 != v_display_unit)
+    return;
+
   if (((8 * v_dwidth) > v_width) || ((8 * v_dheight) > v_height))
     return;
 
@@ -976,6 +979,14 @@ kax_reader_c::read_headers_track_video(kax_track_t *&track,
     mxverb(2, boost::format("matroska_reader: |   + Display height: %1%\n") % track->v_dheight);
   } else
     track->v_dheight = track->v_height;
+
+#if MATROSKA_VERSION >= 2
+  KaxVideoDisplayUnit *kv_dunit = FINDFIRST(ktvideo, KaxVideoDisplayUnit);
+  if (NULL != kv_dunit) {
+    track->v_display_unit = uint64(*kv_dunit);
+    mxverb(2, boost::format("matroska_reader: |   + Display unit: %1%\n") % track->v_display_unit);
+  }
+#endif
 
   track->fix_display_dimension_parameters();
 
