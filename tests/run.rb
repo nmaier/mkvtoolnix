@@ -15,17 +15,18 @@ def error_and_exit(text, exit_code = 2)
 end
 
 class TestController
-  attr_accessor :test_failed, :test_new, :test_date_after, :teset_date_before, :update_failed, :num_failed
+  attr_accessor :test_failed, :test_new, :test_date_after, :teset_date_before, :update_failed, :num_failed, :record_duration
   attr_reader   :num_threads
 
   def initialize
-    @results          = Results.new
+    @results          = Results.new(self)
     @test_failed      = false
     @test_new         = false
     @test_date_after  = nil
     @test_date_before = nil
     @update_failed    = false
     @num_threads      = self.get_num_processors
+    @record_duration  = false
 
     @tests            = Array.new
     @dir_entries      = Dir.entries(".")
@@ -60,7 +61,7 @@ class TestController
       else
         nil
       end
-    end.compact.sort
+    end.compact.sort_by { |class_name| @results.duration? class_name }.reverse
   end
 
   def self.file_name_to_class_name(file_name)
@@ -116,14 +117,14 @@ class TestController
     file_name = self.class.class_name_to_file_name class_name
 
     if (!require("./#{file_name}"))
-      self.add_result class_name, "failed", " Failed to load '#{file_name}'."
+      self.add_result class_name, :failed, :message => " Failed to load '#{file_name}'."
       return
     end
 
     begin
       current_test = eval "#{class_name}.new"
     rescue
-      self.add_result class_name, "failed", " Failed to create an instance of class '#{class_name}'."
+      self.add_result class_name, :failed, :message => " Failed to create an instance of class '#{class_name}'."
       return
     end
 
@@ -133,41 +134,47 @@ class TestController
     end
 
     show_message "Running '#{class_name}': #{current_test.description}"
-    result = current_test.run_test
+
+    start    = Time.now
+    result   = current_test.run_test
+    duration = Time.now - start
+
     if (result)
       if (!@results.exist? class_name)
-        self.add_result class_name, "passed", "  NEW test. Storing result '#{result}'.", result
+        self.add_result class_name, :passed, :message => "  NEW test. Storing result '#{result}'.", :checksum => result, :duration => duration
 
       elsif (@results.hash?(class_name) != result)
         msg =  "  FAILED: checksum is different. Commands:\n"
         msg << "    " + current_test.commands.join("\n    ") + "\n"
 
         if (update_failed)
-          self.add_result class_name, "passed", msg + "  UPDATING result\n", result
+          self.add_result class_name, :passed, :message => msg + "  UPDATING result\n", :checksum => result, :duration => duration
         else
-          self.add_result class_name, "failed", msg
+          self.add_result class_name, :failed, :message => msg
         end
       else
-        self.add_result class_name, "passed"
+        self.add_result class_name, :passed, :duration => duration
       end
 
     else
-      self.add_result class_name, "failed", "  FAILED: no result from test"
+      self.add_result class_name, :failed, :message => "  FAILED: no result from test"
     end
   end
 
-  def add_result(class_name, result, message = nil, new_checksum = nil)
+  def add_result(class_name, result, opts = {})
     @results_mutex.lock
 
-    show_message message if message
-    @num_failed += 1     if result == "failed"
+    show_message opts[:message] if opts[:message]
+    @num_failed += 1            if result == :failed
 
     if !@results.exist? class_name
-      @results.add class_name, new_checksum
+      @results.add class_name, opts[:checksum]
     else
       @results.set      class_name, result
-      @results.set_hash class_name, new_checksum if new_checksum
+      @results.set_hash class_name, opts[:checksum] if opts[:checksum]
     end
+
+    @results.set_duration class_name, opts[:duration] if opts[:duration] && (result == :passed)
 
     @results_mutex.unlock
   end
@@ -286,7 +293,9 @@ class Test
 end
 
 class Results
-  def initialize
+  def initialize(controller)
+    @controller = controller
+
     load
   end
 
@@ -297,10 +306,13 @@ class Results
     IO.readlines("results.txt").each do |line|
       parts    =  line.chomp.split(/:/)
       parts[3] =~ /([0-9]{4})([0-9]{2})([0-9]{2})-([0-9]{2})([0-9]{2})([0-9]{2})/
+      parts    << 0 if 4 <= parts.size
+
       @results[parts[0]] = {
         :hash            => parts[1],
         :status          => parts[2].to_sym,
-        :date_added      => Time.local($1, $2, $3, $4, $5, $6)
+        :date_added      => Time.local($1, $2, $3, $4, $5, $6),
+        :duration        => parts[4].to_f,
       }
     end
   end
@@ -308,7 +320,7 @@ class Results
   def save
     f = File.new "results.txt", "w"
     @results.keys.sort.each do |key|
-      f.puts [ key, @results[key][:hash], @results[key][:status], @results[key][:date_added].strftime("%Y%m%d-%H%M%S") ].collect { |item| item.to_s }.join(":")
+      f.puts [ key, @results[key][:hash], @results[key][:status], @results[key][:date_added].strftime("%Y%m%d-%H%M%S"), @results[key][:duration] ].collect { |item| item.to_s }.join(":")
     end
     f.close
   end
@@ -317,27 +329,27 @@ class Results
     @results.has_key? name
   end
 
-  def hash?(name)
-    raise "No such result" unless exist? name
-    @results[name][:hash]
+  def test_attr(name, attribute, default = nil)
+    if !exist? name
+      return default if default
+      raise "No such result #{name}"
+    end
+    @results[name][attribute]
   end
 
-  def status?(name)
-    raise "No such result" unless exist? name
-    @results[name][:status]
+  %w{hash status date_added duration}.each do |attribute|
+    define_method("#{attribute}?") do |name|
+      test_attr name, attribute.to_sym, attribute == "duration" ? 0 : nil
+    end
   end
 
-  def date_added?(name)
-    raise "No such result" unless exist? name
-    @results[name][:date_added]
-  end
-
-  def add(name, hash)
+  def add(name, hash, duration = 0)
     raise "Test does already exist" if exist? name
     @results[name] = {
       :hash        => hash,
       :status      => :new,
-      :date_added  => Time.now
+      :date_added  => Time.now,
+      :duration    => duration,
     }
     save
   end
@@ -351,6 +363,12 @@ class Results
   def set_hash(name, hash)
     raise "Test does not exist" unless exist? name
     @results[name][:hash] = hash
+    save
+  end
+
+  def set_duration(name, duration)
+    return unless exist?(name) && @controller.record_duration
+    @results[name][:duration] = duration
     save
   end
 end
@@ -368,6 +386,8 @@ def main
       controller.test_new = true
     elsif ((arg == "-u") or (arg == "--update-failed"))
       controller.update_failed = true
+    elsif ((arg == "-r") or (arg == "--record-duration"))
+      controller.record_duration = true
     elsif (arg =~ /-d([0-9]{4})([0-9]{2})([0-9]{2})-([0-9]{2})([0-9]{2})/)
       controller.test_date_after = Time.local($1, $2, $3, $4, $5, $6)
     elsif (arg =~ /-D([0-9]{4})([0-9]{2})([0-9]{2})-([0-9]{2})([0-9]{2})/)
