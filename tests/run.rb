@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby1.9
 
+require "pp"
+
 $message_mutex = Mutex.new
 def show_message(message)
   $message_mutex.lock
@@ -49,7 +51,7 @@ class TestController
       if (FileTest.file?(entry) && (entry =~ /^test-.*\.rb$/))
         class_name  = self.class.file_name_to_class_name entry
         test_this   = test_all
-        test_this ||= (@results.exist?(class_name) && ((@test_failed      && (@results.status?(class_name) == "failed")) || (@test_new && (@results.status?(class_name) == "new"))) ||
+        test_this ||= (@results.exist?(class_name) && ((@test_failed      && (@results.status?(class_name) == :failed)) || (@test_new && (@results.status?(class_name) == :new))) ||
                                                        (@test_date_after  && (@results.date_added?(class_name) < @test_date_after)) ||
                                                        (@test_date_before && (@results.date_added?(class_name) > @test_date_before)))
         test_this ||= !@results.exist?(class_name) && (@test_new || @test_failed)
@@ -93,7 +95,6 @@ class TestController
     (1..@num_threads).each do |number|
       @threads << Thread.new(number) do |thread_number|
         Thread.current[:number] = thread_number
-        # puts "tnum is #{thread_number} and #{Thread.current.object_id}"
 
         while true
           @tests_mutex.lock
@@ -138,10 +139,8 @@ class TestController
         self.add_result class_name, "passed", "  NEW test. Storing result '#{result}'.", result
 
       elsif (@results.hash?(class_name) != result)
-        msg = "  FAILED: checksum is different. Commands:\n" +
-          "    " + current_test.commands.join("\n    ") + "\n"
-        # msg += "ACTUAL: #{result}\n"
-        # msg += "CHECK:  #{@results.hash?(class_name)}\n"
+        msg =  "  FAILED: checksum is different. Commands:\n"
+        msg << "    " + current_test.commands.join("\n    ") + "\n"
 
         if (update_failed)
           self.add_result class_name, "passed", msg + "  UPDATING result\n", result
@@ -222,25 +221,22 @@ class Test
   end
 
   def sys(command, *arg)
-    @commands.push(command)
-    @debug_commands.push(command)
-    command += " >/dev/null 2>/dev/null " unless (/>/.match(command))
-    if (!system(command))
-      if ((arg.size == 0) || ((arg[0] << 8) != $?))
-        error("system command failed: #{command} (" + ($? >> 8).to_s + ")")
-      end
-    end
+    @commands       << command
+    @debug_commands << command
+    command         << " >/dev/null 2>/dev/null " unless (/>/.match(command))
+
+    error "system command failed: #{command} (" + ($? >> 8).to_s + ")" if !system(command) && ((arg.size == 0) || ((arg[0] << 8) != $?))
   end
 
   def tmp_name_prefix
-    ["/tmp/mkvtoolnix-auto-test", $$.to_s, Thread.current[:number]].join("-") + "-"
+    [ "/tmp/mkvtoolnix-auto-test", $$.to_s, Thread.current[:number] ].join("-") + "-"
   end
 
   def tmp_name
     @tmp_num_mutex.lock
     @tmp_num ||= 0
     @tmp_num  += 1
-    result = self.tmp_name_prefix + @tmp_num.to_s
+    result     = self.tmp_name_prefix + @tmp_num.to_s
     @tmp_num_mutex.unlock
 
     result
@@ -251,57 +247,41 @@ class Test
   end
 
   def hash_file(name)
-    @debug_commands.push("md5sum #{name}")
-    return `md5sum #{name}`.chomp.gsub(/\s+.*/, "")
+    @debug_commands << "md5sum #{name}"
+    `md5sum #{name}`.chomp.gsub(/\s+.*/, "")
   end
 
   def hash_tmp(erase = true)
-    output = hash_file(@tmp)
-    if (erase)
-      File.unlink(@tmp) if (File.exists?(@tmp) && (ENV["KEEP_TMPFILES"] != "1"))
-      @debug_commands.push("rm #{@tmp}")
+    output = hash_file @tmp
+
+    if erase
+      File.unlink(@tmp) if File.exists?(@tmp) && (ENV["KEEP_TMPFILES"] != "1")
+      @debug_commands << "rm #{@tmp}"
       @tmp = nil
     end
-    return output
+
+    output
   end
 
   def merge(*args)
-    command = "../src/mkvmerge --engage no_variable_data "
-    string_args = Array.new
-    retcode = 0
-    args.each do |a|
-      if (a.class == String)
-        string_args.push(a)
-      else
-        retcode = a
-      end
-    end
+    retcode = args.detect { |a| !a.is_a? String } || 0
+    args.reject!          { |a| !a.is_a? String }
 
-    if ((string_args.size == 0) or (string_args.size > 2))
-      raise "Wrong use of the 'merge' function."
-    elsif (string_args.size == 1)
-      command += "-o " + tmp + " " + string_args[0]
-    else
-      command += "-o " + string_args[0] + " " + string_args[1]
-    end
-    sys(command, retcode)
+    raise "Wrong use of the 'merge' function." if args.empty? || (2 < args.size)
+
+    command = "../src/mkvmerge --engage no_variable_data -o " + (args.size == 1 ? tmp : args.shift) + " " + args.shift
+    sys command, retcode
   end
 
   def xtr_tracks_s(*args)
-    command = "../src/mkvextract tracks data/mkv/complex.mkv " +
-      "--no-variable-data "
-    command += args.join(" ")
-    command += ":#{tmp}"
-    sys(command, 0)
-    return hash_tmp
+    command = "../src/mkvextract tracks data/mkv/complex.mkv --no-variable-data " + args.join(" ") + ":#{tmp}"
+    sys command, 0
+    hash_tmp
   end
 
   def xtr_tracks(*args)
-    command = "../src/mkvextract tracks "
-    command += args[0]
-    command += " --no-variable-data "
-    command += args[1..args.size - 1].join(" ")
-    sys(command, 0)
+    command = "../src/mkvextract tracks #{args.shift} --no-variable-data " + args.join(" ")
+    sys command, 0
   end
 end
 
@@ -312,59 +292,65 @@ class Results
 
   def load
     @results = Hash.new
-    return unless (FileTest.exist?("results.txt"))
+    return unless FileTest.exist?("results.txt")
+
     IO.readlines("results.txt").each do |line|
-      parts = line.chomp.split(/:/)
-      parts[3] =~
-        /([0-9]{4})([0-9]{2})([0-9]{2})-([0-9]{2})([0-9]{2})([0-9]{2})/
-      @results[parts[0]] = {"hash" => parts[1], "status" => parts[2],
-        "date_added" => Time.local($1, $2, $3, $4, $5, $6) }
+      parts    =  line.chomp.split(/:/)
+      parts[3] =~ /([0-9]{4})([0-9]{2})([0-9]{2})-([0-9]{2})([0-9]{2})([0-9]{2})/
+      @results[parts[0]] = {
+        :hash            => parts[1],
+        :status          => parts[2].to_sym,
+        :date_added      => Time.local($1, $2, $3, $4, $5, $6)
+      }
     end
   end
 
   def save
-    f = File.new("results.txt", "w")
+    f = File.new "results.txt", "w"
     @results.keys.sort.each do |key|
-      f.puts [ key, @results[key]['hash'], @results[key]['status'], @results[key]['date_added'].strftime("%Y%m%d-%H%M%S") ].collect { |item| item.to_s }.join(":")
+      f.puts [ key, @results[key][:hash], @results[key][:status], @results[key][:date_added].strftime("%Y%m%d-%H%M%S") ].collect { |item| item.to_s }.join(":")
     end
     f.close
   end
 
   def exist?(name)
-    return @results.has_key?(name)
+    @results.has_key? name
   end
 
   def hash?(name)
-    raise "No such result" unless (exist?(name))
-    return @results[name]['hash']
+    raise "No such result" unless exist? name
+    @results[name][:hash]
   end
 
   def status?(name)
-    raise "No such result" unless (exist?(name))
-    return @results[name]['status']
+    raise "No such result" unless exist? name
+    @results[name][:status]
   end
 
   def date_added?(name)
-    raise "No such result" unless (exist?(name))
-    return @results[name]['date_added']
+    raise "No such result" unless exist? name
+    @results[name][:date_added]
   end
 
   def add(name, hash)
-    raise "Test does already exist" if (exist?(name))
-    @results[name] = {"hash" => hash, "status" => "new",
-      "date_added" => Time.now }
+    raise "Test does already exist" if exist? name
+    @results[name] = {
+      :hash        => hash,
+      :status      => :new,
+      :date_added  => Time.now
+    }
     save
   end
 
   def set(name, status)
-    return unless (exist?(name))
-    @results[name]["status"] = status
+    return unless exist? name
+    @results[name][:status] = status
     save
   end
 
   def set_hash(name, hash)
-    raise "Test does not exist" unless (exist?(name))
-    @results[name]["hash"] = hash
+    raise "Test does not exist" unless exist? name
+    @results[name][:hash] = hash
     save
   end
 end
