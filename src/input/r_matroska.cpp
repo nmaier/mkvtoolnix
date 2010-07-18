@@ -15,6 +15,7 @@
 #include "common/common_pch.h"
 
 #include <avilib.h>   // for BITMAPINFOHEADER
+#include <boost/math/common_factor.hpp>
 
 #include <ebml/EbmlContexts.h>
 #include <ebml/EbmlHead.h>
@@ -135,6 +136,32 @@ void
 kax_track_t::handle_packetizer_default_duration() {
   if (0 != default_duration)
     ptzr_ptr->set_track_default_duration(default_duration);
+}
+
+/* Fix display dimension parameters
+
+   Certain Matroska muxers abuse the DisplayWidth/DisplayHeight
+   parameters for only storing an aspect ratio. These values are
+   usually very small, e.g. 16/9. Fix them so that the quotient is
+   kept but the values are in the range of the PixelWidth/PixelHeight
+   elements.
+ */
+void
+kax_track_t::fix_display_dimension_parameters() {
+  if (((8 * v_dwidth) > v_width) || ((8 * v_dheight) > v_height))
+    return;
+
+  if (boost::math::gcd(v_dwidth, v_dheight) == 1) { // max shrinking was applied, ie x264 style
+    if (v_dwidth > v_dheight) {
+      if (((v_height * v_dwidth) % v_dheight) == 0) { // only if we get get an exact count of pixels
+        v_dwidth  = v_height * v_dwidth / v_dheight;
+        v_dheight = v_height;
+      }
+    } else if (((v_width * v_dheight) % v_dwidth) == 0) {
+      v_dwidth  = v_width;
+      v_dheight = v_width * v_dheight / v_dwidth;
+    }
+  }
 }
 
 /*
@@ -949,6 +976,8 @@ kax_reader_c::read_headers_track_video(kax_track_t *&track,
     mxverb(2, boost::format("matroska_reader: |   + Display height: %1%\n") % track->v_dheight);
   } else
     track->v_dheight = track->v_height;
+
+  track->fix_display_dimension_parameters();
 
   // For older files.
   KaxVideoFrameRate *kv_frate = FINDFIRST(ktvideo, KaxVideoFrameRate);

@@ -147,6 +147,7 @@ struct kax_track_t {
   void handle_packetizer_stereo_mode();
   void handle_packetizer_pixel_dimensions();
   void handle_packetizer_default_duration();
+  void fix_display_dimension_parameters();
 };
 typedef counted_ptr<kax_track_t> kax_track_cptr;
 

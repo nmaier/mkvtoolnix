@@ -1,3 +1,12 @@
+2010-07-18  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: enhancement: Reading Matroska files: DisplayWidth &
+	DisplayHeight values that are obviously not meant to represent
+	pixels but only to be used for aspect ratio calculation (e.g.
+	16x9) are converted into proper ranges based on the track's
+	PixelWidth & PixelHeight values and the quotient of DisplayWidth /
+	DisplayHeight.
+
 2010-07-12  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: Attachments will be rendered at the end
