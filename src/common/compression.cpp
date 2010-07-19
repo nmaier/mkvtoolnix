@@ -292,8 +292,8 @@ header_removal_compressor_c::compress(memory_cptr &buffer) {
     size_t i;
 
     for (i = 0; size > i; ++i) {
-      b_buffer += (boost::format(" %|1$02x|") % buffer_ptr[i]).str();
-      b_bytes  += (boost::format(" %|1$02x|") % bytes_ptr[i]).str();
+      b_buffer += (boost::format(" %|1$02x|") % static_cast<unsigned int>(buffer_ptr[i])).str();
+      b_bytes  += (boost::format(" %|1$02x|") % static_cast<unsigned int>(bytes_ptr[i])).str();
     }
     throw compression_error_c(boost::format(Y("Header removal compression not possible because the buffer did not start with the bytes that should be removed. "
                                               "Wanted bytes:%1%; found:%2%.")) % b_bytes % b_buffer);
