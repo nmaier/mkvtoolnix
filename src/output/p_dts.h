@@ -17,15 +17,15 @@
 
 #include "common/common_pch.h"
 
-#include "merge/pr_generic.h"
+#include "common/byte_buffer.h"
 #include "common/dts.h"
+#include "merge/pr_generic.h"
 
 class dts_packetizer_c: public generic_packetizer_c {
 private:
   int64_t m_samples_written, m_bytes_written;
 
-  unsigned char *m_packet_buffer;
-  size_t m_buffer_size;
+  byte_buffer_c m_packet_buffer;
 
   bool m_get_first_header_later;
   dts_header_t m_first_header, m_previous_header;
@@ -49,10 +49,7 @@ public:
   virtual connection_result_e can_connect_to(generic_packetizer_c *src, std::string &error_message);
 
 private:
-  virtual void add_to_buffer(unsigned char *buf, int size);
   virtual unsigned char *get_dts_packet(dts_header_t &dts_header);
-  virtual bool dts_packet_available();
-  virtual void remove_dts_packet(int pos, int framesize);
 };
 
 #endif // __P_DTS_H

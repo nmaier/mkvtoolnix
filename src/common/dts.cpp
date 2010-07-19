@@ -79,24 +79,39 @@ enum source_pcm_resolution {
 };
 
 int
+find_dts_sync_word(const unsigned char *buf,
+                   unsigned int size) {
+  if (4 > size)
+    // not enough data for one header
+    return -1;
+
+  unsigned int offset = 0;
+  uint32_t sync_word  = get_uint32_be(buf);
+  while ((DTS_HEADER_MAGIC != sync_word) && ((offset + 4) < size)) {
+    sync_word = (sync_word << 8) | buf[offset + 4];
+    ++offset;
+  }
+
+  if (DTS_HEADER_MAGIC != sync_word)
+    // no header found
+    return -1;
+
+  return offset;
+}
+
+int
 find_dts_header_internal(const unsigned char *buf,
                          unsigned int size,
                          struct dts_header_s *dts_header,
                          bool allow_no_hd_search) {
-
   unsigned int size_to_search = size - 15;
   if (size_to_search > size) {
     // not enough data for one header
     return -1;
   }
 
-  unsigned int offset;
-  for (offset = 0; offset < size_to_search; ++offset)
-     // sync words appear aligned in the bit stream
-    if (get_uint32_be(buf + offset) == DTS_HEADER_MAGIC)
-      break;
-
-  if (offset >= size_to_search)
+  int offset = find_dts_sync_word(buf, size);
+  if (0 > offset)
     // no header found
     return -1;
 

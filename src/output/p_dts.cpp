@@ -30,8 +30,7 @@ dts_packetizer_c::dts_packetizer_c(generic_reader_c *p_reader,
   : generic_packetizer_c(p_reader, p_ti)
   , m_samples_written(0)
   , m_bytes_written(0)
-  , m_packet_buffer(NULL)
-  , m_buffer_size(0)
+  , m_packet_buffer(128 * 1024)
   , m_get_first_header_later(get_first_header_later)
   , m_first_header(dtsheader)
   , m_previous_header(dtsheader)
@@ -42,52 +41,32 @@ dts_packetizer_c::dts_packetizer_c(generic_reader_c *p_reader,
 }
 
 dts_packetizer_c::~dts_packetizer_c() {
-  safefree(m_packet_buffer);
-}
-
-void
-dts_packetizer_c::add_to_buffer(unsigned char *buf,
-                                int size) {
-  unsigned char *new_buffer = (unsigned char *)saferealloc(m_packet_buffer, m_buffer_size + size);
-
-  memcpy(new_buffer + m_buffer_size, buf, size);
-  m_packet_buffer  = new_buffer;
-  m_buffer_size   += size;
-}
-
-bool
-dts_packetizer_c::dts_packet_available() {
-  if (NULL == m_packet_buffer)
-    return false;
-
-  dts_header_t dtsheader;
-  int pos = find_dts_header(m_packet_buffer, m_buffer_size, &dtsheader, m_get_first_header_later ? false : !m_first_header.dts_hd);
-
-  return 0 <= pos;
-}
-
-void
-dts_packetizer_c::remove_dts_packet(int pos,
-                                    int framesize) {
-  unsigned char *temp_buf;
-
-  int new_size = m_buffer_size - (pos + framesize);
-  if (0 != new_size)
-    temp_buf = (unsigned char *)safememdup(&m_packet_buffer[pos + framesize], new_size);
-  else
-    temp_buf = NULL;
-  safefree(m_packet_buffer);
-  m_packet_buffer = temp_buf;
-  m_buffer_size   = new_size;
 }
 
 unsigned char *
 dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
-  if (NULL == m_packet_buffer)
+  if (0 == m_packet_buffer.get_size())
     return NULL;
 
-  int pos = find_dts_header(m_packet_buffer, m_buffer_size, &dtsheader, m_get_first_header_later ? false : !m_first_header.dts_hd);
-  if ((0 > pos) || (static_cast<size_t>(pos + dtsheader.frame_byte_size) > m_buffer_size))
+  const unsigned char *buf = m_packet_buffer.get_buffer();
+  int buf_size             = m_packet_buffer.get_size();
+  int pos                  = find_dts_sync_word(buf, buf_size);
+
+  if (0 > pos) {
+    if (4 < buf_size)
+      m_packet_buffer.remove(buf_size - 4);
+    return NULL;
+  }
+
+  if (0 < pos) {
+    m_packet_buffer.remove(pos);
+    buf      = m_packet_buffer.get_buffer();
+    buf_size = m_packet_buffer.get_size();
+  }
+
+  pos = find_dts_header(buf, buf_size, &dtsheader, m_get_first_header_later ? false : !m_first_header.dts_hd);
+
+  if ((0 > pos) || (static_cast<int>(pos + dtsheader.frame_byte_size) > buf_size))
     return NULL;
 
   if (m_get_first_header_later) {
@@ -112,7 +91,7 @@ dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
     bool all_zeroes = true;
 
     for (i = 0; i < pos; ++i)
-      if (m_packet_buffer[i]) {
+      if (buf[i]) {
         all_zeroes = false;
         break;
       }
@@ -121,11 +100,11 @@ dts_packetizer_c::get_dts_packet(dts_header_t &dtsheader) {
       mxwarn_tid(m_ti.m_fname, m_ti.m_id, boost::format(Y("Skipping %1% bytes (no valid DTS header found). This might cause audio/video desynchronisation.\n")) % pos);
   }
 
-  unsigned char *buf = (unsigned char *)safememdup(m_packet_buffer + pos, dtsheader.frame_byte_size);
+  unsigned char *packet_buf = (unsigned char *)safememdup(buf + pos, dtsheader.frame_byte_size);
 
-  remove_dts_packet(pos, dtsheader.frame_byte_size);
+  m_packet_buffer.remove(pos + dtsheader.frame_byte_size);
 
-  return buf;
+  return packet_buf;
 }
 
 void
@@ -146,7 +125,7 @@ dts_packetizer_c::process(packet_cptr packet) {
   dts_header_t dtsheader;
   unsigned char *dts_packet;
 
-  add_to_buffer(packet->data->get_buffer(), packet->data->get_size());
+  m_packet_buffer.add(packet->data->get_buffer(), packet->data->get_size());
   while ((dts_packet = get_dts_packet(dtsheader)) != NULL) {
     int64_t new_timecode = -1 == packet->timecode ? (int64_t)(((double)m_samples_written * 1000000000.0) / ((double)dtsheader.core_sampling_frequency)) : packet->timecode;
 
