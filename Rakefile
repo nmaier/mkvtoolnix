@@ -241,10 +241,10 @@ def run(cmdline, opts = {})
   exit code if (code != 0) && !opts[:allow_failure].to_bool
 end
 
-def runq(msg, cmdline)
+def runq(msg, cmdline, options = {})
   verbose = ENV['V'].to_bool
   puts msg if !verbose
-  run cmdline, :dont_echo => !verbose
+  run cmdline, options.clone.merge(:dont_echo => !verbose)
 end
 
 # main
@@ -283,7 +283,7 @@ cxx_compiler = lambda do |t|
              else                                  c(:CXXFLAGS_NO_SRC_COMMON)
              end
 
-  runq "     CXX #{t.source}", "#{c(:CXX)} #{c(:CXXFLAGS)} #{c(:INCLUDES)} #{$system_includes} #{cxxflags} -c -MMD -o #{t.name} #{t.prerequisites.join(" ")}"
+  runq "     CXX #{t.source}", "#{c(:CXX)} #{c(:CXXFLAGS)} #{c(:INCLUDES)} #{$system_includes} #{cxxflags} -c -MMD -o #{t.name} #{t.prerequisites.join(" ")}", :allow_failure => true
   run "#{c(:top_srcdir)}/handle_deps #{t.name} #{last_exit_code}", :dont_echo => true
 end
 
@@ -297,7 +297,7 @@ end
 rule '.o' => '.cpp', &cxx_compiler
 
 rule '.o' => '.c' do |t|
-  runq "      CC #{t.source}", "#{c(:CC)} #{c(:CFLAGS)} #{c(:INCLUDES)} #{$system_includes} -c -MMD -o #{t.name} #{t.prerequisites.join(" ")}"
+  runq "      CC #{t.source}", "#{c(:CC)} #{c(:CFLAGS)} #{c(:INCLUDES)} #{$system_includes} -c -MMD -o #{t.name} #{t.prerequisites.join(" ")}", :allow_failure => true
   run "#{c(:top_srcdir)}/handle_deps #{t.name} #{last_exit_code}", :dont_echo => true
 end
 
