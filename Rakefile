@@ -43,7 +43,10 @@ def define_default_task
     targets += c(:MANPAGES_TRANSLATIONS).split(/\s+/).collect { |language| $manpages.collect { |manpage| manpage.gsub(/man\//, "man/#{language}/") } }.flatten if c?(:PO4A_WORKS)
   end
 
-  task :default => [ targets, $translations_mos, $htmlhelpbooks ].flatten.compact
+  # Build translations for the programs
+  targets += c(:TRANSLATIONS).split(/\s+/).collect { |language| "po/#{language}.mo" }
+
+  task :default => [ targets, $htmlhelpbooks ].flatten.compact
 end
 
 # main
