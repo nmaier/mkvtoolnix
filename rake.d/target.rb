@@ -8,10 +8,16 @@ class Target
     @dependencies = []
     @only_if      = true
     @debug        = {}
+    @desc         = nil
   end
 
   def debug(category)
     @debug[category] = !@debug[category]
+    self
+  end
+
+  def description(description)
+    @desc = description
     self
   end
 
@@ -107,7 +113,10 @@ class Target
   end
 
   def create
-    @aliases.each { |name| task name => @target }
+    @aliases.each_with_index do |name, idx|
+      desc @desc if (0 == idx) && !@desc.empty?
+      task name => @target
+    end
     create_specific
     self
   end

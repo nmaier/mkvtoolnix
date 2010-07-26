@@ -39,7 +39,7 @@ setup_globals
 import_dependencies
 
 # Default task
-desc "Build all applications"
+desc "Build everything"
 task :default => [ $manpages_dep, $tagsfile, $applications, $translations_mos, $htmlhelpbooks ].flatten.compact
 
 # Installation tasks
@@ -106,6 +106,7 @@ rule '.moc.cpp' => '.h' do |t|
 end
 
 # Cleaning tasks
+desc "Remove all compiled files"
 task :clean do
   run <<-SHELL, :allow_failure => true
     rm -f *.o */*.o */*/*.o */lib*.a */*/lib*.a po/*.mo #{$applications.join(" ")}
@@ -115,22 +116,26 @@ task :clean do
   SHELL
 end
 
-[:distclean, :dist_clean].each do |name|
+[:distclean, :dist_clean].each_with_index do |name, idx|
+  desc "Remove all compiled and generated files ('tarball' clean)" if 0 == idx
   task name => :clean do
     run "rm -f config.h config.log config.cache build-config Makefile */Makefile */*/Makefile TAGS", :allow_failure => true
     run "rm -rf #{$dependency_dir}", :allow_failure => true
   end
 end
 
+desc "Remove all compiled and generated files ('git' clean)"
 task :maintainer_clean => :distclean do
   run "rm -f configure config.h.in", :allow_failure => true
 end
 
+desc "Remove all compiled libraries"
 task :clean_libs do
   run "rm -f */lib*.a */*/lib*.a */*/*.dll */*/*.dll.a", :allow_failure => true
 end
 
-[:clean_apps, :clean_applications, :clean_exe].each do |name|
+[:clean_apps, :clean_applications, :clean_exe].each_with_index do |name, idx|
+  desc "Remove all compiled applications" if 0 == idx
   task name do
     run "rm -f #{$applications.join(" ")} */*.exe */*/*.exe", :allow_failure => true
   end
@@ -165,6 +170,7 @@ end
 #
 
 Application.new("src/mkvmerge").
+  description("Build the mkvmerge executable").
   aliases(:mkvmerge).
   sources("src/merge", :type => :dir).
   sources("src/merge/resources.o", :if => c?(:MINGW)).
@@ -181,6 +187,7 @@ $mkvinfo_ui_files = FileList["src/info/ui/*.ui"].to_a
 file "src/info/qt_ui.o" => $mkvinfo_ui_files
 
 Application.new("src/mkvinfo").
+  description("Build the mkvinfo executable").
   aliases(:mkvinfo).
   sources(FileList["src/info/*.cpp"].exclude("src/info/qt_ui.cpp", "src/info/wxwidgets_ui.cpp")).
   sources("src/info/resources.o", :if => c?(:MINGW)).
@@ -198,6 +205,7 @@ Application.new("src/mkvinfo").
 #
 
 Application.new("src/mkvextract").
+  description("Build the mkvpropedit executable").
   aliases(:mkvextract).
   sources("src/extract", :type => :dir).
   sources("src/extract/resources.o", :if => c?(:MINGW)).
@@ -210,6 +218,7 @@ Application.new("src/mkvextract").
 #
 
 Application.new("src/mkvpropedit").
+  description("Build the mkvpropedit executable").
   aliases(:mkvpropedit).
   sources("src/propedit", :type => :dir).
   sources("src/propedit/resources.o", :if => c?(:MINGW)).
@@ -223,6 +232,7 @@ Application.new("src/mkvpropedit").
 
 if c?(:USE_WXWIDGETS)
   Application.new("src/mmg/mmg").
+    description("Build the mmg executable").
     aliases(:mmg).
     sources("src/mmg", "src/mmg/header_editor", "src/mmg/options", "src/mmg/tabs", :type => :dir).
     sources("src/propedit/mmg-resources.o", :if => c?(:MINGW)).

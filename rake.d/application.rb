@@ -4,6 +4,7 @@ class Application < Target
   end
 
   def create_specific
+    desc @desc if @aliases.empty? && !@desc.empty?
     file @target => @dependencies do |t|
       runq "    LINK #{t.name}", "#{c(:CXX)} #{c(:LDFLAGS)} #{c(:LIBDIRS)} #{$system_libdirs} -o #{t.name} #{@objects.join(" ")} #{@libraries.join(" ")}"
     end
