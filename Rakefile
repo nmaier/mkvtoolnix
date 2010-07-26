@@ -40,7 +40,9 @@ import_dependencies
 
 # Default task
 desc "Build everything"
-task :default => [ $manpages_dep, $tagsfile, $applications, $translations_mos, $htmlhelpbooks ].flatten.compact
+task :default => $applications
+task :default => "TAGS" if File.exist? "TAGS"
+task :default => [ $manpages_dep, $translations_mos, $htmlhelpbooks ]
 
 # Installation tasks
 desc "Install all applications and support files"
@@ -103,6 +105,14 @@ end
 
 rule '.moc.cpp' => '.h' do |t|
   runq "     MOC #{t.source}", "#{c(:MOC)} #{c(:QT_CFLAGS)} #{t.sources.join(" ")} > #{t.name}"
+end
+
+# Tag files
+desc "Create tags file for Emacs"
+task :tags => "TAGS"
+
+file "TAGS" => $all_sources do |t|
+  runq '   ETAGS', "#{c(:ETAGS)} -o #{t.name} #{t.prerequisites.join(" ")}"
 end
 
 # Cleaning tasks
