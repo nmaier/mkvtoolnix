@@ -10,27 +10,33 @@ require "rake.d/target"
 require "rake.d/application"
 require "rake.d/library"
 
+def setup_globals
+  $programs              =  %w{mkvmerge mkvinfo mkvextract mkvpropedit}
+  $programs              << "mmg" if c?(:USE_WXWIDGETS)
+
+  $application_subdirs   =  { "mmg" => "mmg/" }
+  $applications          =  $programs.collect { |name| "src/#{$application_subdirs[name]}#{name}" + c(:EXEEXT) }
+  $manpages              =  $programs.collect { |name| "doc/man/#{name}.1" }
+
+  $system_includes       = "-I. -Ilib -Ilib/avilib-0.6.10 -Ilib/utf8-cpp/source -Isrc"
+  $system_libdirs        = "-Llib/avilib-0.6.10 -Llib/librmff -Lsrc/common -Lsrc/input -Lsrc/output -Lsrc/mpegparser"
+
+  $target_install_shared =  c?(:USE_WXWIDGETS) ? :install_shared : nil
+
+  $source_directories    =  %w{lib/avilib-0.6.10 lib/librmff src src/input src/output src/common src/common/chapters src/common/strings src/common/tags src/common/xml
+                             src/mmg src/mmg/header_editor src/mmg/options src/mmg/tabs src/extract src/propedit src/merge src/info src/mpegparser}
+  $all_sources           =  $source_directories.collect { |dir| FileList[ "#{dir}/*.c", "#{dir}/*.cpp" ].to_a }.flatten
+  $all_headers           =  $source_directories.collect { |dir| FileList[ "#{dir}/*.h",                ].to_a }.flatten
+  $all_objects           =  $all_sources.collect { |file| file.ext('o') }
+
+  $dependency_dir        = "#{c(:top_srcdir)}/rake.d/dependecy.d"
+end
+
 # main
 read_config
 adjust_config
-
-$programs              =  %w{mkvmerge mkvinfo mkvextract mkvpropedit}
-$programs              << "mmg" if c?(:USE_WXWIDGETS)
-
-$application_subdirs   =  { "mmg" => "mmg/" }
-$applications          =  $programs.collect { |name| "src/#{$application_subdirs[name]}#{name}" + c(:EXEEXT) }
-$manpages              =  $programs.collect { |name| "doc/man/#{name}.1" }
-
-$system_includes       = "-I. -Ilib -Ilib/avilib-0.6.10 -Ilib/utf8-cpp/source -Isrc"
-$system_libdirs        = "-Llib/avilib-0.6.10 -Llib/librmff -Lsrc/common -Lsrc/input -Lsrc/output -Lsrc/mpegparser"
-
-$target_install_shared =  c?(:USE_WXWIDGETS) ? :install_shared : nil
-
-$source_directories    =  %w{lib/avilib-0.6.10 lib/librmff src src/input src/output src/common src/common/chapters src/common/strings src/common/tags src/common/xml
-                             src/mmg src/mmg/header_editor src/mmg/options src/mmg/tabs src/extract src/propedit src/merge src/info src/mpegparser}
-$all_sources           =  $source_directories.collect { |dir| FileList[ "#{dir}/*.c", "#{dir}/*.cpp" ].to_a }.flatten
-$all_headers           =  $source_directories.collect { |dir| FileList[ "#{dir}/*.h",                ].to_a }.flatten
-$all_objects           =  $all_sources.collect { |file| file.ext('o') }
+setup_globals
+import_dependencies
 
 # Default task
 desc "Build all applications"
@@ -48,8 +54,14 @@ cxx_compiler = lambda do |t|
              else                                  c(:CXXFLAGS_NO_SRC_COMMON)
              end
 
-  runq "     CXX #{t.source}", "#{c(:CXX)} #{c(:CXXFLAGS)} #{c(:INCLUDES)} #{$system_includes} #{cxxflags} -c -MMD -o #{t.name} #{t.prerequisites.join(" ")}", :allow_failure => true
-  run "#{c(:top_srcdir)}/handle_deps #{t.name} #{last_exit_code}", :dont_echo => true
+  if t.sources.empty?
+    puts "EMPTY SOURCES! #{t.name}"
+    pp t
+    exit 1
+  end
+
+  runq "     CXX #{t.source}", "#{c(:CXX)} #{c(:CXXFLAGS)} #{c(:INCLUDES)} #{$system_includes} #{cxxflags} -c -MMD -o #{t.name} #{t.sources.join(" ")}", :allow_failure => true
+  handle_deps t.name, last_exit_code
 end
 
 # Precompiled headers
@@ -62,26 +74,26 @@ end
 rule '.o' => '.cpp', &cxx_compiler
 
 rule '.o' => '.c' do |t|
-  runq "      CC #{t.source}", "#{c(:CC)} #{c(:CFLAGS)} #{c(:INCLUDES)} #{$system_includes} -c -MMD -o #{t.name} #{t.prerequisites.join(" ")}", :allow_failure => true
-  run "#{c(:top_srcdir)}/handle_deps #{t.name} #{last_exit_code}", :dont_echo => true
+  runq "      CC #{t.source}", "#{c(:CC)} #{c(:CFLAGS)} #{c(:INCLUDES)} #{$system_includes} -c -MMD -o #{t.name} #{t.sources.join(" ")}", :allow_failure => true
+  handle_deps t.name, last_exit_code
 end
 
 rule '.o' => '.rc' do |t|
-  runq " WINDRES #{t.source}", "#{c(:WINDRES)} #{c(:WXWIDGETS_INCLUDES)} -Isrc/mmg -o #{t.name} #{t.prerequisites.join(" ")}"
+  runq " WINDRES #{t.source}", "#{c(:WINDRES)} #{c(:WXWIDGETS_INCLUDES)} -Isrc/mmg -o #{t.name} #{t.sources.join(" ")}"
 end
 
 rule '.mo' => '.po' do |t|
-  runq "  MSGFMT #{t.source}", "msgfmt -o #{t.name} #{t.prerequisites.join(" ")}"
+  runq "  MSGFMT #{t.source}", "msgfmt -o #{t.name} #{t.sources.join(" ")}"
 end
 
 # HTML help book stuff
 rule '.hhk' => '.hhc' do |t|
-  runq "    GREP #{t.source}", "#{c(:GREP)} -v 'name=\"ID\"' #{t.prerequisites.join(" ")} > #{t.name}"
+  runq "    GREP #{t.source}", "#{c(:GREP)} -v 'name=\"ID\"' #{t.sources.join(" ")} > #{t.name}"
 end
 
 # man pages from DocBook XML
 rule '.1' => '.xml' do |t|
-  runq "XSLTPROC #{t.source}", "#{c(:XSLTPROC)} #{c(:XSLTPROC_FLAGS)} -o #{t.name} #{c(:DOCBOOK_MANPAGES_STYLESHEET)} #{t.prerequisites.join(" ")}"
+  runq "XSLTPROC #{t.source}", "#{c(:XSLTPROC)} #{c(:XSLTPROC_FLAGS)} -o #{t.name} #{c(:DOCBOOK_MANPAGES_STYLESHEET)} #{t.sources.join(" ")}"
 end
 
 # translated DocBook XML
@@ -89,41 +101,41 @@ end
 
 # Qt files
 rule '.h' => '.ui' do |t|
-  runq "     UIC #{t.source}", "#{c(:UIC)} #{t.prerequisites.join(" ")} > #{t.name}"
+  runq "     UIC #{t.source}", "#{c(:UIC)} #{t.sources.join(" ")} > #{t.name}"
 end
 
 rule '.moc.cpp' => '.h' do |t|
-  runq "     MOC #{t.source}", "#{c(:MOC)} #{c(:QT_CFLAGS)} #{t.prerequisites.join(" ")} > #{t.name}"
+  runq "     MOC #{t.source}", "#{c(:MOC)} #{c(:QT_CFLAGS)} #{t.sources.join(" ")} > #{t.name}"
 end
 
 # Cleaning tasks
 task :clean do
-  run <<-SHELL, true
+  run <<-SHELL, :allow_failure => true
     rm -f *.o */*.o */*/*.o */lib*.a */*/lib*.a po/*.mo #{$applications.join(" ")}
       */*.exe */*/*.exe */*/*.dll */*/*.dll.a doc/*.hhk
       src/info/ui/*.h src/info/*.moc.cpp src/common/*/*.o
-      src/mmg/*/*.o src/*/*.gch
+      src/mmg/*/*.o
   SHELL
 end
 
 [:distclean, :dist_clean].each do |name|
   task name => :clean do
-    run "rm -f config.h config.log config.cache Makefile */Makefile */*/Makefile TAGS", true
-    run "rm -rf .deps", true
+    run "rm -f config.h config.log config.cache build-config Makefile */Makefile */*/Makefile TAGS", :allow_failure => true
+    run "rm -rf #{$dependency_dir}", :allow_failure => true
   end
 end
 
 task :maintainer_clean => :distclean do
-  run "rm -f configure config.h.in", true
+  run "rm -f configure config.h.in", :allow_failure => true
 end
 
 task :clean_libs do
-  run "rm -f */lib*.a */*/lib*.a */*/*.dll */*/*.dll.a", true
+  run "rm -f */lib*.a */*/lib*.a */*/*.dll */*/*.dll.a", :allow_failure => true
 end
 
 [:clean_apps, :clean_applications, :clean_exe].each do |name|
   task name do
-    run "rm -f #{$applications.join(" ")} */*.exe */*/*.exe", true
+    run "rm -f #{$applications.join(" ")} */*.exe */*/*.exe", :allow_failure => true
   end
 end
 
