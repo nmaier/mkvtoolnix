@@ -34,7 +34,11 @@ end
 
 def define_default_task
   desc "Build everything"
+
+  # The applications themselves
   targets = $applications.clone
+
+  # The tags file -- but only if it exists already
   targets << "TAGS" if File.exist? "TAGS"
 
   # Build man pages and translations?
@@ -46,7 +50,10 @@ def define_default_task
   # Build translations for the programs
   targets += c(:TRANSLATIONS).split(/\s+/).collect { |language| "po/#{language}.mo" }
 
-  task :default => [ targets, $htmlhelpbooks ].flatten.compact
+  # The GUI help
+  targets += c(:GUIDE_TRANSLATIONS).split(/\s+/).collect { |language| "doc/guide/#{language}/mkvmerge-gui.hhk" }
+
+  task :default => targets
 end
 
 # main
@@ -134,7 +141,7 @@ desc "Remove all compiled files"
 task :clean do
   run <<-SHELL, :allow_failure => true
     rm -f *.o */*.o */*/*.o */lib*.a */*/lib*.a po/*.mo #{$applications.join(" ")}
-      */*.exe */*/*.exe */*/*.dll */*/*.dll.a doc/*.hhk
+      */*.exe */*/*.exe */*/*.dll */*/*.dll.a doc/guide/*/*.hhk
       src/info/ui/*.h src/info/*.moc.cpp src/common/*/*.o
       src/mmg/*/*.o
   SHELL
