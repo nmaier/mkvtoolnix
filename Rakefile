@@ -32,6 +32,20 @@ def setup_globals
   $dependency_dir        = "#{c(:top_srcdir)}/rake.d/dependecy.d"
 end
 
+def define_default_task
+  desc "Build everything"
+  targets = $applications.clone
+  targets << "TAGS" if File.exist? "TAGS"
+
+  # Build man pages and translations?
+  if c?(:XSLTPROC_WORKS)
+    targets += $manpages
+    targets += c(:MANPAGES_TRANSLATIONS).split(/\s+/).collect { |language| $manpages.collect { |manpage| manpage.gsub(/man\//, "man/#{language}/") } }.flatten if c?(:PO4A_WORKS)
+  end
+
+  task :default => [ targets, $translations_mos, $htmlhelpbooks ].flatten.compact
+end
+
 # main
 read_config
 adjust_config
@@ -39,10 +53,7 @@ setup_globals
 import_dependencies
 
 # Default task
-desc "Build everything"
-task :default => $applications
-task :default => "TAGS" if File.exist? "TAGS"
-task :default => [ $manpages_dep, $translations_mos, $htmlhelpbooks ]
+define_default_task
 
 # Installation tasks
 desc "Install all applications and support files"
