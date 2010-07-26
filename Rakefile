@@ -54,19 +54,16 @@ cxx_compiler = lambda do |t|
              else                                  c(:CXXFLAGS_NO_SRC_COMMON)
              end
 
-  if t.sources.empty?
-    puts "EMPTY SOURCES! #{t.name}"
-    pp t
-    exit 1
-  end
+  # t.sources is empty for a 'file' task (common_pch.h.o).
+  sources = t.sources.empty? ? [ t.prerequisites.first ] : t.sources
 
-  runq "     CXX #{t.source}", "#{c(:CXX)} #{c(:CXXFLAGS)} #{c(:INCLUDES)} #{$system_includes} #{cxxflags} -c -MMD -o #{t.name} #{t.sources.join(" ")}", :allow_failure => true
+  runq "     CXX #{sources.first}", "#{c(:CXX)} #{c(:CXXFLAGS)} #{c(:INCLUDES)} #{$system_includes} #{cxxflags} -c -MMD -o #{t.name} #{sources.join(" ")}", :allow_failure => true
   handle_deps t.name, last_exit_code
 end
 
 # Precompiled headers
 if c?(:USE_PRECOMPILED_HEADERS)
-  file $all_objects => "src/common/common_pch.h.o"
+  $all_objects.each { |name| file name => "src/common/common_pch.h.o" }
   file "src/common/common_pch.h.o" => "src/common/common_pch.h", &cxx_compiler
 end
 
