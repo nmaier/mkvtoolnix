@@ -68,6 +68,7 @@ libraries you absolutely need are:
 - zlib ( http://www.zlib.net/ ) -- a compression library
 - Several of Boost's libraries: "format", "RegEx", "filesystem",
   "system", "foreach" ( http://www.boost.org/ )
+- 'rake': a build program written in Ruby
 
 2.2. Optional components
 
@@ -141,7 +142,7 @@ library files are:
   --with-extra-includes=/where/i/put/libebml\;/where/i/put/libmatroska \
   --with-extra-libs=/where/i/put/libebml/make/linux\;/where/i/put/libmatroska/make/linux
 
-Now run "make" and, as "root", "make install".
+Now run "rake" and, as "root", "rake install".
 
 2.5. Notes for compilation on (Open)Solaris
 
@@ -154,9 +155,6 @@ additional options for "configure":
   --with-extra-includes=/where/i/put/libebml\;/where/i/put/libmatroska \
   --with-extra-libs=/where/i/put/libebml/make/linux\;/where/i/put/libmatroska/make/linux
 
-Also make sure to call the GNU "make" utility instead of Sun's:
-
-gmake WARNING_CFLAGS=
 
 
 

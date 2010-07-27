@@ -11,7 +11,7 @@ Basic Installation
 
    The `configure' shell script attempts to guess correct values for
 various system-dependent variables used during compilation.  It uses
-those values to create a `Makefile' in each directory of the package.
+those values to create a `build-config' file
 It may also create one or more `.h' files containing system-dependent
 definitions.  Finally, it creates a shell script `config.status' that
 you can run in the future to recreate the current configuration, and a
@@ -47,19 +47,16 @@ The simplest way to compile this package is:
      Running `configure' takes awhile.  While running, it prints some
      messages telling which features it is checking for.
 
-  2. Type `make' to compile the package.
+  2. Type `rake' to compile the package.
 
-  3. Optionally, type `make check' to run any self-tests that come with
-     the package.
-
-  4. Type `make install' to install the programs and any data files and
+  3. Type `rake install' to install the programs and any data files and
      documentation.
 
-  5. You can remove the program binaries and object files from the
-     source code directory by typing `make clean'.  To also remove the
+  4. You can remove the program binaries and object files from the
+     source code directory by typing `rake clean'.  To also remove the
      files that `configure' created (so you can compile the package for
-     a different kind of computer), type `make distclean'.  There is
-     also a `make maintainer-clean' target, but that is intended mainly
+     a different kind of computer), type `rake clean:dist'.  There is
+     also a `rake clean:maintainer' target, but that is intended mainly
      for the package's developers.  If you use it, you may have to get
      all sorts of other programs in order to regenerate files that came
      with the distribution.
@@ -79,27 +76,10 @@ is an example:
 
    *Note Defining Variables::, for more details.
 
-Compiling For Multiple Architectures
-====================================
-
-   You can compile the package for more than one kind of computer at the
-same time, by placing the object files for each architecture in their
-own directory.  To do this, you must use a version of `make' that
-supports the `VPATH' variable, such as GNU `make'.  `cd' to the
-directory where you want the object files and executables to go and run
-the `configure' script.  `configure' automatically checks for the
-source code in the directory that `configure' is in and in `..'.
-
-   If you have to use a `make' that does not support the `VPATH'
-variable, you have to compile the package for one architecture at a
-time in the source code directory.  After you have installed the
-package for one architecture, use `make distclean' before reconfiguring
-for another architecture.
-
 Installation Names
 ==================
 
-   By default, `make install' will install the package's files in
+   By default, `rake install' will install the package's files in
 `/usr/local/bin', `/usr/local/man', etc.  You can specify an
 installation prefix other than `/usr/local' by giving `configure' the
 option `--prefix=PATH'.
