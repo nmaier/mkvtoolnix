@@ -1,5 +1,8 @@
 2010-07-27  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The text subtitle packetizer was accessing
+	invalid memory areas under certain conditions.
+
 	* mkvmerge: bug fix: Splitting output files by size was basing its
 	decision when to create a new file on an uninitialized
 	variable. This caused effects like a lot of small files being
