@@ -55,7 +55,9 @@ def define_default_task
   # The GUI help
   targets += $guide_translations.collect { |language| "doc/guide/#{language}/mkvmerge-gui.hhk" }
 
-  task :default => targets
+  task :default => targets do
+    puts "Done. Enjoy :)"
+  end
 end
 
 # main
