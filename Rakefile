@@ -22,6 +22,7 @@ require "rake.d/library"
 def setup_globals
   $programs                =  %w{mkvmerge mkvinfo mkvextract mkvpropedit}
   $programs                << "mmg" if c?(:USE_WXWIDGETS)
+  $tools                   =  %w{base64tool diracparser ebml_validator vc1parser}
 
   $application_subdirs     =  { "mmg" => "mmg/" }
   $applications            =  $programs.collect { |name| "src/#{$application_subdirs[name]}#{name}" + c(:EXEEXT) }
@@ -56,6 +57,8 @@ def setup_globals
     :manpages              => FileList[ "#{$top_srcdir }/doc/man/po4a/po/*.po"          ].collect { |name| File.basename name, '.po'        },
     :guides                => FileList[ "#{$top_srcdir }/doc/guide/*/mkvmerge-gui.html" ].collect { |name| File.basename File.dirname(name) },
   }
+
+  $build_tools           ||=  c?(:TOOLS)
 end
 
 def define_default_task
@@ -63,6 +66,9 @@ def define_default_task
 
   # The applications themselves
   targets = $applications.clone
+
+  # Build the stuff in the 'src/tools' directory only if requested
+  targets << "apps:tools" if $build_tools
 
   # The tags file -- but only if it exists already
   targets << "TAGS" if File.exist? "TAGS"
@@ -314,11 +320,12 @@ end
 # Cleaning tasks
 desc "Remove all compiled files"
 task :clean do
+  tools = $tools.collect { |name| "src/tools/#{name}" }.join " "
   run <<-SHELL, :allow_failure => true
-    rm -f *.o */*.o */*/*.o */lib*.a */*/lib*.a po/*.mo #{$applications.join(" ")}
+    rm -f *.o */*.o */*/*.o */lib*.a */*/lib*.a po/*.mo
       */*.exe */*/*.exe */*/*.dll */*/*.dll.a doc/guide/*/*.hhk
       src/info/ui/*.h src/info/*.moc.cpp src/common/*/*.o
-      src/mmg/*/*.o
+      src/mmg/*/*.o #{$applications.join(" ")} #{tools}
   SHELL
 end
 
@@ -451,5 +458,58 @@ if c?(:USE_WXWIDGETS)
     libraries(:mtxcommon, :magic, :matroska, :ebml, :avi, :rmff, :vorbis, :ogg, :z, :compression, :expat, :iconv, :intl, :wxwidgets,
                :boost_regex, :boost_filesystem, :boost_system).
     libraries(:rpcrt4, :ole32, :shell32, "-mwindows", :if => c?(:MINGW)).
+    create
+end
+
+#
+# Applications in src/tools
+#
+if $build_tools
+  namespace :apps do
+    task :tools => $tools.collect { |name| "apps:tools:#{name}" }
+  end
+
+  #
+  # tools: base64tool
+  #
+  Application.new("src/tools/base64tool").
+    description("Build the base64tool executable").
+    aliases("tools:base64tool").
+    sources("src/tools/base64tool.cpp").
+    libraries(:mtxcommon, :magic, :matroska, :ebml, :expat, :iconv, :intl, :boost_regex).
+    libraries(:rpcrt4, :if => c?(:MINGW)).
+    create
+
+  #
+  # tools: diracparser
+  #
+  Application.new("src/tools/diracparser").
+    description("Build the diracparser executable").
+    aliases("tools:diracparser").
+    sources("src/tools/diracparser.cpp").
+    libraries(:mtxcommon, :magic, :matroska, :ebml, :expat, :iconv, :intl, :boost_regex).
+    libraries(:rpcrt4, :if => c?(:MINGW)).
+    create
+
+  #
+  # tools: ebml_validator
+  #
+  Application.new("src/tools/ebml_validator").
+    description("Build the ebml_validator executable").
+    aliases("tools:ebml_validator").
+    sources("src/tools/ebml_validator.cpp", "src/tools/element_info.cpp").
+    libraries(:mtxcommon, :magic, :matroska, :ebml, :expat, :iconv, :intl, :boost_regex).
+    libraries(:rpcrt4, :if => c?(:MINGW)).
+    create
+
+  #
+  # tools: vc1parser
+  #
+  Application.new("src/tools/vc1parser").
+    description("Build the vc1parser executable").
+    aliases("tools:vc1parser").
+    sources("src/tools/vc1parser.cpp").
+    libraries(:mtxcommon, :magic, :matroska, :ebml, :expat, :iconv, :intl, :boost_regex).
+    libraries(:rpcrt4, :if => c?(:MINGW)).
     create
 end

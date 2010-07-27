@@ -1,0 +1,6 @@
+#!/usr/bin/env rake
+# -*- mode: ruby; -*-
+
+$build_tools = true
+
+import File.dirname(__FILE__) + "/../../Rakefile"
