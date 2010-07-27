@@ -1,3 +1,11 @@
+$message_mutex = Mutex.new
+def puts(message)
+  $message_mutex.lock
+  $stdout.puts message
+  $stdout.flush
+  $message_mutex.unlock
+end
+
 def error(message)
   puts message
   exit 1

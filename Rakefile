@@ -217,6 +217,30 @@ namespace :translations do
   end
 end
 
+# HTMLO generation for the man pages
+targets = ([ 'en' ] + $languages[:manpages]).collect do |language|
+  dir = language == 'en' ? '' : "/#{language}"
+  FileList[ "doc/man#{dir}/*.xml" ].collect { |name| "man2html:#{language}:#{File.basename(name, '.xml')}" }
+end.flatten
+
+%w{manpages-html man2html}.each_with_index do |task_name, idx|
+  desc "Create HTML files for the man pages" if 0 == idx
+  task task_name => targets
+end
+
+namespace :man2html do
+  ([ 'en' ] + $languages[:manpages]).collect do |language|
+    namespace language do
+      dir = language == 'en' ? '' : "/#{language}"
+      FileList[ "doc/man#{dir}/*.xml" ].each do |name|
+        task File.basename(name, '.xml') => %w{manpages translations:manpages} do
+          runq "XSLTPROC #{name}", "xsltproc --nonet -o #{name.ext('html')} /usr/share/xml/docbook/stylesheet/nwalsh/html/docbook.xsl #{name}"
+        end
+      end
+    end
+  end
+end
+
 # Installation tasks
 desc "Install all applications and support files"
 targets  = [ "install:programs", "install:manpages", "install:translations:manpages", "install:translations:applications", "install:translations:guides" ]
@@ -303,6 +327,12 @@ namespace :clean do
     desc "Remove all compiled applications" if 0 == idx
     task name do
       run "rm -f #{$applications.join(" ")} */*.exe */*/*.exe", :allow_failure => true
+    end
+  end
+
+  %w{manpages-html man2html}.each do |name|
+    task name do
+      run "rm -f doc/man/*.html doc/man/*/*.html"
     end
   end
 end
