@@ -54,3 +54,28 @@ end
 def import_dependencies
   Dir.glob("#{$dependency_dir}/*.rb").each { |file| import file } if FileTest.directory?($dependency_dir)
 end
+
+def arrayify(*args)
+  args.collect { |arg| arg.respond_to?(:to_a) ? arg.to_a : arg }.flatten
+end
+
+def install_dir(*dirs)
+  arrayify(*dirs).each do |dir|
+    dir = c(dir) if dir.is_a? Symbol
+    run "#{c(:mkinstalldirs)} #{c(:DESTDIR)}#{dir}"
+  end
+end
+
+def install_program(destination, *files)
+  destination = c(destination) + '/' if destination.is_a? Symbol
+  arrayify(*files).each do |file|
+    run "#{c(:INSTALL_PROGRAM)} #{file} #{c(:DESTDIR)}#{destination}"
+  end
+end
+
+def install_data(destination, *files)
+  destination = c(destination) + '/' if destination.is_a? Symbol
+  arrayify(*files).each do |file|
+    run "#{c(:INSTALL_DATA)} #{file} #{c(:DESTDIR)}#{destination}"
+  end
+end

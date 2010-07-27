@@ -27,7 +27,8 @@ def setup_globals
   $all_headers           =  $source_directories.collect { |dir| FileList[ "#{dir}/*.h",                ].to_a }.flatten
   $all_objects           =  $all_sources.collect { |file| file.ext('o') }
 
-  $dependency_dir        = "#{c(:top_srcdir)}/rake.d/dependecy.d"
+  $top_srcdir            = c(:top_srcdir)
+  $dependency_dir        = "#{$top_srcdir}/rake.d/dependecy.d"
 
   $translations          = c(:TRANSLATIONS).split /\s+/
   $manpages_translations = c(:MANPAGES_TRANSLATIONS).split(/\s+/)
@@ -207,7 +208,57 @@ end
 
 # Installation tasks
 desc "Install all applications and support files"
-task :install => [ "install:programs", c?(:USE_WXWIDGETS) ? "install:shared" : nil, "install:manpages", "install:translations:manpages", "install:translations:apps", "install:translations:guide" ].compact
+targets  = [ "install:programs", "install:manpages", "install:translations:manpages", "install:translations:applications", "install:translations:guides" ]
+targets << "install:shared" if c?(:USE_WXWIDGETS)
+task :install => targets
+
+namespace :install do
+  task :programs => $applications do
+    install_dir :bindir
+    install_program :bindir, $applications
+  end
+
+  task :shared do
+    install_dir :desktopdir, :mimepackagesdir
+    install_data :desktopdir, FileList[ "#{$top_srcdir}/share/desktop/*.desktop" ]
+    install_data :mimepackagesdir, FileList[ "#{$top_srcdir}/share/mime/*.xml" ]
+
+    FileList[ "#{$top_srcdir}/share/icons/*" ].collect { |dir| File.basename dir }.select { |dir| dir != "windows" }.each do |dir|
+      install_dir "#{c(:icondir)}/#{dir}/apps"
+      install_data "#{c(:icondir)}/#{dir}/apps/", FileList[ "#{$top_srcdir}/share/icons/#{dir}/*.png" ]
+    end
+  end
+
+  task :manpages => $manpages do
+    install_dir :man1dir
+    install_data :man1dir, $manpages
+  end
+
+  namespace :translations do
+    task :applications do
+      install_dir $translations.collect { |language| "#{c(:localedir)}/#{language}/LC_MESSAGES" }
+      $translations.each do |language|
+        install_data "#{c(:localedir)}/#{language}/LC_MESSAGES/mkvtoolnix.mo", "po/#{language}.mo"
+      end
+    end
+
+    task :manpages do
+      install_dir $manpages_translations.collect { |language| "#{c(:mandir)}/#{language}/man1" }
+      $manpages_translations.each do |language|
+        install_data "#{c(:mandir)}/#{language}/man1/", $manpages.collect { |manpage| manpage.sub(/man\//, "man/#{language}/") }
+      end
+    end
+
+    task :guides do
+      install_dir :pkgdatadir, $guide_translations.collect { |language| "#{c(:pkgdatadir)}/guide/#{language}/images" }
+
+      $guide_translations.each do |language|
+        install_data "#{c(:pkgdatadir)}/guide/#{language}/",        FileList[ "#{$top_srcdir}/doc/guide/#{language}/mkvmerge-gui.*" ]
+        install_data "#{c(:pkgdatadir)}/guide/#{language}/images/", FileList[ "#{$top_srcdir}/doc/guide/#{language}/images/*.gif"   ]
+      end
+    end
+  end
+end
 
 # Cleaning tasks
 desc "Remove all compiled files"
