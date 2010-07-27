@@ -1,6 +1,8 @@
 #!/usr/bin/env rake
 # -*- mode: ruby; -*-
 
+chdir File.dirname(__FILE__) if FileUtils.pwd != File.dirname(__FILE__)
+
 require "pp"
 
 require "rake.d/extensions"
