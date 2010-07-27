@@ -21,8 +21,6 @@ def setup_globals
   $system_includes       = "-I. -Ilib -Ilib/avilib-0.6.10 -Ilib/utf8-cpp/source -Isrc"
   $system_libdirs        = "-Llib/avilib-0.6.10 -Llib/librmff -Lsrc/common -Lsrc/input -Lsrc/output -Lsrc/mpegparser"
 
-  $target_install_shared =  c?(:USE_WXWIDGETS) ? :install_shared : nil
-
   $source_directories    =  %w{lib/avilib-0.6.10 lib/librmff src src/input src/output src/common src/common/chapters src/common/strings src/common/tags src/common/xml
                              src/mmg src/mmg/header_editor src/mmg/options src/mmg/tabs src/extract src/propedit src/merge src/info src/mpegparser}
   $all_sources           =  $source_directories.collect { |dir| FileList[ "#{dir}/*.c", "#{dir}/*.cpp" ].to_a }.flatten
@@ -30,6 +28,10 @@ def setup_globals
   $all_objects           =  $all_sources.collect { |file| file.ext('o') }
 
   $dependency_dir        = "#{c(:top_srcdir)}/rake.d/dependecy.d"
+
+  $translations          = c(:TRANSLATIONS).split /\s+/
+  $manpages_translations = c(:MANPAGES_TRANSLATIONS).split(/\s+/)
+  $guide_translations    = c(:GUIDE_TRANSLATIONS).split(/\s+/)
 end
 
 def define_default_task
@@ -44,14 +46,14 @@ def define_default_task
   # Build man pages and translations?
   if c?(:XSLTPROC_WORKS)
     targets += $manpages
-    targets += c(:MANPAGES_TRANSLATIONS).split(/\s+/).collect { |language| $manpages.collect { |manpage| manpage.gsub(/man\//, "man/#{language}/") } }.flatten if c?(:PO4A_WORKS)
+    targets += $manpages_translations.collect { |language| $manpages.collect { |manpage| manpage.gsub(/man\//, "man/#{language}/") } }.flatten if c?(:PO4A_WORKS)
   end
 
   # Build translations for the programs
-  targets += c(:TRANSLATIONS).split(/\s+/).collect { |language| "po/#{language}.mo" }
+  targets += $translations.collect { |language| "po/#{language}.mo" }
 
   # The GUI help
-  targets += c(:GUIDE_TRANSLATIONS).split(/\s+/).collect { |language| "doc/guide/#{language}/mkvmerge-gui.hhk" }
+  targets += $guide_translations.collect { |language| "doc/guide/#{language}/mkvmerge-gui.hhk" }
 
   task :default => targets
 end
@@ -65,9 +67,8 @@ import_dependencies
 # Default task
 define_default_task
 
-# Installation tasks
-desc "Install all applications and support files"
-task :install => [ :install_programs, $target_install_shared, :install_mans, :install_translated_mans, :install_trans, :install_guide ].compact
+desc "Build all applications"
+task :apps => $applications
 
 # Store compiler block for re-use
 cxx_compiler = lambda do |t|
@@ -116,9 +117,6 @@ rule '.1' => '.xml' do |t|
   runq "XSLTPROC #{t.source}", "#{c(:XSLTPROC)} #{c(:XSLTPROC_FLAGS)} -o #{t.name} #{c(:DOCBOOK_MANPAGES_STYLESHEET)} #{t.sources.join(" ")}"
 end
 
-# translated DocBook XML
-# @MANPAGES_TRANSLATED_XML_RULE@
-
 # Qt files
 rule '.h' => '.ui' do |t|
   runq "     UIC #{t.source}", "#{c(:UIC)} #{t.sources.join(" ")} > #{t.name}"
@@ -136,6 +134,79 @@ file "TAGS" => $all_sources do |t|
   runq '   ETAGS', "#{c(:ETAGS)} -o #{t.name} #{t.prerequisites.join(" ")}"
 end
 
+# Translations for the programs
+namespace :translations do
+  desc "Create a template for translating the programs"
+  task :pot => "po/mkvtoolnix.pot"
+  file "po/mkvtoolnix.pot" => $all_sources + $all_headers do |t|
+    runq 'XGETTEXT', <<-COMMAND
+      xgettext --keyword=YT --keyword=Y --keyword=Z --keyword=TIP --default-domain=mkvtoolnix --from-code=UTF-8 -s --omit-header -o #{t.name} #{t.prerequisites.join(" ")}
+    COMMAND
+  end
+
+  desc "Update the program translation files"
+  task "update" => [ "po/mkvtoolnix.pot", ] + $translations.collect { |language| "translations:update:#{language}".to_sym }
+
+  namespace "update" do
+    $translations.each do |language|
+      task language.to_sym => "po/mkvtoolnix.pot" do |t|
+        po     = "po/#{language}.po"
+        new_po = "#{po}.new"
+        runq "MSGMERGE #{po}", "msgmerge -q -s --no-wrap #{po} po/mkvtoolnix.pot > #{new_po}", :allow_failure => true
+
+        exit_code = last_exit_code
+        if 0 != exit_code
+          File.unlink new_po
+          exit exit_code
+        end
+
+        File.open(po, "w") do |out|
+          lines = IO.readlines(new_po).collect { |line| line.chomp }
+
+          if %w{es nl ru uk zh_CN zh_TW}.include? language
+            no_nl = false
+
+            lines.each do |line|
+              if /^#:/.match(line)
+                out.puts line.gsub(/(\d) /, '\1' + "\n#: ")
+              elsif /^#~/.match(line)
+                no_nl = true
+                out.puts line
+              elsif !(no_nl && /^\s*$/.match(line))
+                out.puts line
+              end
+            end
+
+            out.puts
+          else
+            out.puts lines.join("\n")
+          end
+        end
+
+        File.unlink new_po
+      end
+    end
+  end
+
+  [ :stats, :statistics ].each_with_index do |name, idx|
+    desc "Generate statistics about translation coverage" if 0 == idx
+    task name do
+      FileList["po/*.po", "doc/man/po4a/po/*.po"].each do |name|
+        command = "msgfmt --statistics -o /dev/null #{name} 2>&1"
+        if ENV["V"].to_bool
+          runq "  MSGFMT #{name}", command, :allow_failure => true
+        else
+          puts "#{name} : " + `#{command}`.split(/\n/).first
+        end
+      end
+    end
+  end
+end
+
+# Installation tasks
+desc "Install all applications and support files"
+task :install => [ "install:programs", c?(:USE_WXWIDGETS) ? "install:shared" : nil, "install:manpages", "install:translations:manpages", "install:translations:apps", "install:translations:guide" ].compact
+
 # Cleaning tasks
 desc "Remove all compiled files"
 task :clean do
@@ -147,28 +218,28 @@ task :clean do
   SHELL
 end
 
-[:distclean, :dist_clean].each_with_index do |name, idx|
-  desc "Remove all compiled and generated files ('tarball' clean)" if 0 == idx
-  task name => :clean do
+namespace :clean do
+  desc "Remove all compiled and generated files ('tarball' clean)"
+  task :dist => :clean do
     run "rm -f config.h config.log config.cache build-config Makefile */Makefile */*/Makefile TAGS", :allow_failure => true
     run "rm -rf #{$dependency_dir}", :allow_failure => true
   end
-end
 
-desc "Remove all compiled and generated files ('git' clean)"
-task :maintainer_clean => :distclean do
-  run "rm -f configure config.h.in", :allow_failure => true
-end
+  desc "Remove all compiled and generated files ('git' clean)"
+  task :maintainer => "clean:dist" do
+    run "rm -f configure config.h.in", :allow_failure => true
+  end
 
-desc "Remove all compiled libraries"
-task :clean_libs do
-  run "rm -f */lib*.a */*/lib*.a */*/*.dll */*/*.dll.a", :allow_failure => true
-end
+  desc "Remove all compiled libraries"
+  task :libs do
+    run "rm -f */lib*.a */*/lib*.a */*/*.dll */*/*.dll.a", :allow_failure => true
+  end
 
-[:clean_apps, :clean_applications, :clean_exe].each_with_index do |name, idx|
-  desc "Remove all compiled applications" if 0 == idx
-  task name do
-    run "rm -f #{$applications.join(" ")} */*.exe */*/*.exe", :allow_failure => true
+  [:apps, :applications, :exe].each_with_index do |name, idx|
+    desc "Remove all compiled applications" if 0 == idx
+    task name do
+      run "rm -f #{$applications.join(" ")} */*.exe */*/*.exe", :allow_failure => true
+    end
   end
 end
 

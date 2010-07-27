@@ -9,6 +9,7 @@ class Target
     @only_if      = true
     @debug        = {}
     @desc         = nil
+    @namespace    = nil
   end
 
   def debug(category)
@@ -113,11 +114,21 @@ class Target
   end
 
   def create
-    @aliases.each_with_index do |name, idx|
-      desc @desc if (0 == idx) && !@desc.empty?
-      task name => @target
+    definition = Proc.new do
+      @aliases.each_with_index do |name, idx|
+        desc @desc if (0 == idx) && !@desc.empty?
+        task name => @target
+      end
     end
+
+    if @namespace
+      namespace @namespace, &definition
+    else
+      definition.call
+    end
+
     create_specific
+
     self
   end
 end
