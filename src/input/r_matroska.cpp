@@ -2076,11 +2076,11 @@ kax_reader_c::process_simple_block(KaxCluster *cluster,
 
       if (('s' == block_track->type) && ('t' == block_track->sub_type)) {
         if ((2 < data->get_size()) || ((0 < data->get_size()) && (' ' != *data->get_buffer()) && (0 != *data->get_buffer()) && !iscr(*data->get_buffer()))) {
-          char *lines             = (char *)safemalloc(data->get_size() + 1);
-          lines[data->get_size()] = 0;
-          memcpy(lines, data->get_buffer(), data->get_size());
+          memory_cptr lines = memory_c::alloc(data->get_size() + 1);
+          lines->get_buffer()[ data->get_size() ] = 0;
+          memcpy(lines->get_buffer(), data->get_buffer(), data->get_size());
 
-          PTZR(block_track->ptzr)-> process(new packet_t(new memory_c((unsigned char *)lines, 0, true), m_last_timecode, block_duration, block_bref, block_fref));
+          PTZR(block_track->ptzr)->process(new packet_t(lines, m_last_timecode, block_duration, block_bref, block_fref));
         }
 
       } else {
