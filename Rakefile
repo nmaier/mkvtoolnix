@@ -162,46 +162,42 @@ namespace :translations do
 
   [ :applications, :manpages, :guides ].each { |type| task type => $translations[type] }
 
-  desc "Update the program translation files"
-  task "update" => [ "po/mkvtoolnix.pot", ] + $languages[:applications].collect { |language| "translations:update:#{language}".to_sym }
+  desc "Update all translation files"
+  task :update => [ "translations:update:applications", "translations:update:manpages" ]
 
-  namespace "update" do
-    $available_languages[:applications].each do |language|
-      task language.to_sym => "po/mkvtoolnix.pot" do |t|
-        po     = "po/#{language}.po"
-        new_po = "#{po}.new"
-        runq "MSGMERGE #{po}", "msgmerge -q -s --no-wrap #{po} po/mkvtoolnix.pot > #{new_po}", :allow_failure => true
+  namespace :update do
+    desc "Update the program's translation files"
+    task :applications => [ "po/mkvtoolnix.pot", ] + $available_languages[:applications].collect { |language| "translations:update:applications:#{language}" }
 
-        exit_code = last_exit_code
-        if 0 != exit_code
-          File.unlink new_po
-          exit exit_code
-        end
+    namespace :applications do
+      $available_languages[:applications].each do |language|
+        task language => "po/mkvtoolnix.pot" do |t|
+          po       = "po/#{language}.po"
+          tmp_file = "#{po}.new"
+          runq "MSGMERGE #{po}", "msgmerge -q -s --no-wrap #{po} po/mkvtoolnix.pot > #{tmp_file}", :allow_failure => true
 
-        File.open(po, "w") do |out|
-          lines = IO.readlines(new_po).collect { |line| line.chomp }
+          exit_code = last_exit_code
+          if 0 != exit_code
+            File.unlink tmp_file
+            exit exit_code
+          end
 
           if %w{es nl ru uk zh_CN zh_TW}.include? language
-            no_nl = false
-
-            lines.each do |line|
-              if /^#:/.match(line)
-                out.puts line.gsub(/(\d) /, '\1' + "\n#: ")
-              elsif /^#~/.match(line)
-                no_nl = true
-                out.puts line
-              elsif !(no_nl && /^\s*$/.match(line))
-                out.puts line
-              end
-            end
-
-            out.puts
+            adjust_to_poedit_style tmp_file, po
           else
-            out.puts lines.join("\n")
+            FileUtils.mv tmp_file, po
           end
         end
+      end
+    end
 
-        File.unlink new_po
+    desc "Update the man pages' translation files"
+    task :manpages do
+      runq "    PO4A doc/man/po4a/po4a.cfg", "#{c(:PO4A)} #{c(:PO4A_FLAGS)} doc/man/po4a/po4a.cfg"
+      %w{nl}.each do |language|
+        name = "doc/man/po4a/po/#{language}.po"
+        FileUtils.cp name, "#{name}.tmp"
+        adjust_to_poedit_style "#{name}.tmp", name
       end
     end
   end

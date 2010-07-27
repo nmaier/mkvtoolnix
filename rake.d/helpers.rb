@@ -79,3 +79,26 @@ def install_data(destination, *files)
     run "#{c(:INSTALL_DATA)} #{file} #{c(:DESTDIR)}#{destination}"
   end
 end
+
+def adjust_to_poedit_style(in_name, out_name)
+  File.open(out_name, "w") do |out|
+    lines = IO.readlines(in_name).collect { |line| line.chomp }
+
+    no_nl = false
+
+    lines.each do |line|
+      if /^#:/.match(line)
+        out.puts line.gsub(/(\d) /, '\1' + "\n#: ")
+      elsif /^#~/.match(line)
+        no_nl = true
+        out.puts line
+      elsif !(no_nl && /^\s*$/.match(line))
+        out.puts line
+      end
+    end
+
+    out.puts
+  end
+
+  File.unlink in_name
+end
