@@ -1,7 +1,14 @@
 #!/usr/bin/env rake
 # -*- mode: ruby; -*-
 
+# Change to base directory before doing anything
 chdir File.dirname(__FILE__) if FileUtils.pwd != File.dirname(__FILE__)
+
+# Set number of threads to use if it is unset and we're running with
+# drake
+if Rake.application.options.respond_to?(:threads) && [nil, 0, 1].include?(Rake.application.options.threads) && !ENV['DRAKETHREADS'].nil?
+  Rake.application.options.threads = ENV['DRAKETHREADS'].to_i
+end
 
 require "pp"
 
