@@ -37,9 +37,9 @@ def setup_globals
   }
 
   $translations            =  {
-    :applications          =>                        $languages[:applications].collect { |language| "po/#{language}.mo" },
-    :guides                =>                        $languages[:guides].collect       { |language| "doc/guide/#{language}/mkvmerge-gui.hhk" },
-    :manpages              => c?(:PO4A_WORKS) ? [] : $languages[:manpages].collect    { |language| $manpages.collect { |manpage| manpage.gsub(/man\//, "man/#{language}/") } }.flatten,
+    :applications          =>                         $languages[:applications].collect { |language| "po/#{language}.mo" },
+    :guides                =>                         $languages[:guides].collect       { |language| "doc/guide/#{language}/mkvmerge-gui.hhk" },
+    :manpages              => !c?(:PO4A_WORKS) ? [] : $languages[:manpages].collect     { |language| $manpages.collect { |manpage| manpage.gsub(/man\//, "man/#{language}/") } }.flatten,
   }
 
   $available_languages     =  {
@@ -161,6 +161,13 @@ namespace :translations do
   end
 
   [ :applications, :manpages, :guides ].each { |type| task type => $translations[type] }
+
+  $available_languages[:manpages].each do |language|
+    $manpages.each do |manpage|
+      name = manpage.gsub(/man\//, "man/#{language}/")
+      file name => [ name.ext('xml'), "doc/man/po4a/po/#{language}.po" ]
+    end
+  end
 
   desc "Update all translation files"
   task :update => [ "translations:update:applications", "translations:update:manpages" ]
