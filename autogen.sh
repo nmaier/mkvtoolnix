@@ -74,6 +74,5 @@ echo "  autoconf" && autoconf
 echo "  automake --add-missing --copy" && automake --add-missing --copy 2> /dev/null
 
 echo
-echo "You can run './configure' now. If you need dependencies then"
-echo "run 'make depend' afterwards."
+echo "You can run './configure' followed by 'rake' now."
 cd $olddir
