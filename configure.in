@@ -52,34 +52,7 @@ m4_include(ac/translations.m4)
 m4_include(ac/manpages_translations.m4)
 m4_include(ac/guide_translations.m4)
 
-AC_OUTPUT(
-  build-config
-  Makefile
-  doc/Makefile
-  doc/man/Makefile
-  doc/guide/Makefile
-  doc/guide/en/Makefile
-  lib/avilib-0.6.10/Makefile
-  lib/librmff/Makefile
-  src/Makefile
-  src/common/Makefile
-  src/common/chapters/Makefile
-  src/common/strings/Makefile
-  src/common/tags/Makefile
-  src/common/xml/Makefile
-  src/input/Makefile
-  src/output/Makefile
-  src/mpegparser/Makefile
-  src/mmg/Makefile
-  src/mmg/header_editor/Makefile
-  src/mmg/options/Makefile
-  src/mmg/tabs/Makefile
-  src/extract/Makefile
-  src/merge/Makefile
-  src/info/Makefile
-  src/propedit/Makefile
-  po/Makefile
-)
+AC_OUTPUT(build-config)
 
 echo ''
 echo 'The mkvtoolnix configuration is complete.'
