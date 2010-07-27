@@ -17,6 +17,8 @@ endif
 
 CONFIG_FLAGS = --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info
 
+RAKE=rake
+
 #######################################################################
 # BUILD : Two versions: without and with GUI.
 #	  This impacts mmg which only exists in -GUI
@@ -28,14 +30,14 @@ build-stamp:
 	dh_testdir
 
 	CFLAGS="$(CFLAGS)" ./configure $(CONFIG_FLAGS) --enable-gui
-	$(MAKE) mkvinfo mmg
+	$(RAKE) apps:mkvinfo apps:mmg
 	mv src/mkvinfo src/mkvinfo-gui
 	mv src/mmg/mmg src/mmg/mmg-gui
 
-	$(MAKE) distclean
+	$(RAKE) clean:dist
 
 	CFLAGS="$(CFLAGS)" ./configure $(CONFIG_FLAGS) --disable-gui
-	$(MAKE)
+	$(RAKE)
 
 	touch build-stamp
 
@@ -49,8 +51,8 @@ clean:
 	rm -f src/mkvinfo-gui
 	rm -f src/mmg/mmg-gui
 
-	-$(MAKE) clean
-	rm -f Makefile config.h
+	-$(RAKE) clean
+	rm -f build-config config.h
 ifneq "$(wildcard /usr/share/misc/config.sub)" ""
 	cp -f /usr/share/misc/config.sub config.sub
 endif
@@ -67,7 +69,7 @@ install: build
 	dh_testroot
 	dh_clean -k
 
-	$(MAKE) install prefix=$(CURDIR)/debian/tmp
+	$(RAKE) install prefix=$(CURDIR)/debian/tmp
 
 
 binary-indep: build install
