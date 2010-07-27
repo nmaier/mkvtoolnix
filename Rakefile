@@ -11,28 +11,42 @@ require "rake.d/application"
 require "rake.d/library"
 
 def setup_globals
-  $programs              =  %w{mkvmerge mkvinfo mkvextract mkvpropedit}
-  $programs              << "mmg" if c?(:USE_WXWIDGETS)
+  $programs                =  %w{mkvmerge mkvinfo mkvextract mkvpropedit}
+  $programs                << "mmg" if c?(:USE_WXWIDGETS)
 
-  $application_subdirs   =  { "mmg" => "mmg/" }
-  $applications          =  $programs.collect { |name| "src/#{$application_subdirs[name]}#{name}" + c(:EXEEXT) }
-  $manpages              =  $programs.collect { |name| "doc/man/#{name}.1" }
+  $application_subdirs     =  { "mmg" => "mmg/" }
+  $applications            =  $programs.collect { |name| "src/#{$application_subdirs[name]}#{name}" + c(:EXEEXT) }
+  $manpages                =  $programs.collect { |name| "doc/man/#{name}.1" }
 
-  $system_includes       = "-I. -Ilib -Ilib/avilib-0.6.10 -Ilib/utf8-cpp/source -Isrc"
-  $system_libdirs        = "-Llib/avilib-0.6.10 -Llib/librmff -Lsrc/common -Lsrc/input -Lsrc/output -Lsrc/mpegparser"
+  $system_includes         = "-I. -Ilib -Ilib/avilib-0.6.10 -Ilib/utf8-cpp/source -Isrc"
+  $system_libdirs          = "-Llib/avilib-0.6.10 -Llib/librmff -Lsrc/common -Lsrc/input -Lsrc/output -Lsrc/mpegparser"
 
-  $source_directories    =  %w{lib/avilib-0.6.10 lib/librmff src src/input src/output src/common src/common/chapters src/common/strings src/common/tags src/common/xml
-                             src/mmg src/mmg/header_editor src/mmg/options src/mmg/tabs src/extract src/propedit src/merge src/info src/mpegparser}
-  $all_sources           =  $source_directories.collect { |dir| FileList[ "#{dir}/*.c", "#{dir}/*.cpp" ].to_a }.flatten
-  $all_headers           =  $source_directories.collect { |dir| FileList[ "#{dir}/*.h",                ].to_a }.flatten
-  $all_objects           =  $all_sources.collect { |file| file.ext('o') }
+  $source_directories      =  %w{lib/avilib-0.6.10 lib/librmff src src/input src/output src/common src/common/chapters src/common/strings src/common/tags src/common/xml
+                                 src/mmg src/mmg/header_editor src/mmg/options src/mmg/tabs src/extract src/propedit src/merge src/info src/mpegparser}
+  $all_sources             =  $source_directories.collect { |dir| FileList[ "#{dir}/*.c", "#{dir}/*.cpp" ].to_a }.flatten
+  $all_headers             =  $source_directories.collect { |dir| FileList[ "#{dir}/*.h",                ].to_a }.flatten
+  $all_objects             =  $all_sources.collect { |file| file.ext('o') }
 
-  $top_srcdir            = c(:top_srcdir)
-  $dependency_dir        = "#{$top_srcdir}/rake.d/dependecy.d"
+  $top_srcdir              = c(:top_srcdir)
+  $dependency_dir          = "#{$top_srcdir}/rake.d/dependecy.d"
 
-  $translations          = c(:TRANSLATIONS).split /\s+/
-  $manpages_translations = c(:MANPAGES_TRANSLATIONS).split(/\s+/)
-  $guide_translations    = c(:GUIDE_TRANSLATIONS).split(/\s+/)
+  $languages               =  {
+    :applications          => c(:TRANSLATIONS).split(/\s+/),
+    :manpages              => c(:MANPAGES_TRANSLATIONS).split(/\s+/),
+    :guides                => c(:GUIDE_TRANSLATIONS).split(/\s+/),
+  }
+
+  $translations            =  {
+    :applications          =>                        $languages[:applications].collect { |language| "po/#{language}.mo" },
+    :guides                =>                        $languages[:guides].collect       { |language| "doc/guide/#{language}/mkvmerge-gui.hhk" },
+    :manpages              => c?(:PO4A_WORKS) ? [] : $languages[:manpages].collect    { |language| $manpages.collect { |manpage| manpage.gsub(/man\//, "man/#{language}/") } }.flatten,
+  }
+
+  $available_languages     =  {
+    :applications          => FileList[ "#{$top_srcdir }/po/*.po"                       ].collect { |name| File.basename name, '.po'        },
+    :manpages              => FileList[ "#{$top_srcdir }/doc/man/po4a/po/*.po"          ].collect { |name| File.basename name, '.po'        },
+    :guides                => FileList[ "#{$top_srcdir }/doc/guide/*/mkvmerge-gui.html" ].collect { |name| File.basename File.dirname(name) },
+  }
 end
 
 def define_default_task
@@ -45,16 +59,13 @@ def define_default_task
   targets << "TAGS" if File.exist? "TAGS"
 
   # Build man pages and translations?
-  if c?(:XSLTPROC_WORKS)
-    targets += $manpages
-    targets += $manpages_translations.collect { |language| $manpages.collect { |manpage| manpage.gsub(/man\//, "man/#{language}/") } }.flatten if c?(:PO4A_WORKS)
-  end
+  targets += [ "manpages", "translations:manpages" ] if c?(:XSLTPROC_WORKS)
 
   # Build translations for the programs
-  targets += $translations.collect { |language| "po/#{language}.mo" }
+  targets << "translations:applications"
 
   # The GUI help
-  targets += $guide_translations.collect { |language| "doc/guide/#{language}/mkvmerge-gui.hhk" }
+  targets << "translations:guides"
 
   task :default => targets do
     puts "Done. Enjoy :)"
@@ -137,6 +148,8 @@ file "TAGS" => $all_sources do |t|
   runq '   ETAGS', "#{c(:ETAGS)} -o #{t.name} #{t.prerequisites.join(" ")}"
 end
 
+task :manpages => $manpages
+
 # Translations for the programs
 namespace :translations do
   desc "Create a template for translating the programs"
@@ -147,11 +160,13 @@ namespace :translations do
     COMMAND
   end
 
+  [ :applications, :manpages, :guides ].each { |type| task type => $translations[type] }
+
   desc "Update the program translation files"
-  task "update" => [ "po/mkvtoolnix.pot", ] + $translations.collect { |language| "translations:update:#{language}".to_sym }
+  task "update" => [ "po/mkvtoolnix.pot", ] + $languages[:applications].collect { |language| "translations:update:#{language}".to_sym }
 
   namespace "update" do
-    $translations.each do |language|
+    $available_languages[:applications].each do |language|
       task language.to_sym => "po/mkvtoolnix.pot" do |t|
         po     = "po/#{language}.po"
         new_po = "#{po}.new"
@@ -236,23 +251,23 @@ namespace :install do
 
   namespace :translations do
     task :applications do
-      install_dir $translations.collect { |language| "#{c(:localedir)}/#{language}/LC_MESSAGES" }
-      $translations.each do |language|
+      install_dir $languages[:applications].collect { |language| "#{c(:localedir)}/#{language}/LC_MESSAGES" }
+      $languages[:applications].each do |language|
         install_data "#{c(:localedir)}/#{language}/LC_MESSAGES/mkvtoolnix.mo", "po/#{language}.mo"
       end
     end
 
     task :manpages do
-      install_dir $manpages_translations.collect { |language| "#{c(:mandir)}/#{language}/man1" }
-      $manpages_translations.each do |language|
+      install_dir $languages[:manpages].collect { |language| "#{c(:mandir)}/#{language}/man1" }
+      $languages[:manpages].each do |language|
         install_data "#{c(:mandir)}/#{language}/man1/", $manpages.collect { |manpage| manpage.sub(/man\//, "man/#{language}/") }
       end
     end
 
     task :guides do
-      install_dir :pkgdatadir, $guide_translations.collect { |language| "#{c(:pkgdatadir)}/guide/#{language}/images" }
+      install_dir :pkgdatadir, $languages[:guides].collect { |language| "#{c(:pkgdatadir)}/guide/#{language}/images" }
 
-      $guide_translations.each do |language|
+      $languages[:guides].each do |language|
         install_data "#{c(:pkgdatadir)}/guide/#{language}/",        FileList[ "#{$top_srcdir}/doc/guide/#{language}/mkvmerge-gui.*" ]
         install_data "#{c(:pkgdatadir)}/guide/#{language}/images/", FileList[ "#{$top_srcdir}/doc/guide/#{language}/images/*.gif"   ]
       end
