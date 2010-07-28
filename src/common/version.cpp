@@ -18,7 +18,7 @@
 #include "common/strings/parsing.h"
 #include "common/version.h"
 
-#define VERSIONNAME "Bouncin' Back"
+#define VERSIONNAME "No Talking"
 
 std::string
 get_version_info(const std::string &program,
