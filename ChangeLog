@@ -1,3 +1,9 @@
+2010-07-28  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: mkvmerge was accessing invalid memory In
+	certain cases, e.g. when appending Matroska files that use
+	compression while turning compression off.
+
 2010-07-27  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Splitting output files by size was basing its
