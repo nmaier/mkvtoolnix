@@ -779,13 +779,12 @@ generic_packetizer_c::add_packet(packet_cptr pack) {
     } catch (compression_error_c &e) {
       mxerror_tid(m_ti.m_fname, m_ti.m_id, boost::format(Y("Compression failed: %1%\n")) % e.get_error());
     }
-
-  } else {
-    pack->data->grab();
-    size_t i;
-    for (i = 0; i < pack->data_adds.size(); i++)
-      pack->data_adds[i]->grab();
   }
+
+  pack->data->grab();
+  foreach(memory_cptr &data_add, pack->data_adds)
+    data_add->grab();
+
   pack->source = this;
 
   m_enqueued_bytes += pack->data->get_size();
