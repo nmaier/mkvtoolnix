@@ -78,7 +78,7 @@ textsubs_packetizer_c::process(packet_cptr packet) {
   if (m_recode)
     subs = m_cc_utf8->utf8(subs);
 
-  packet->data = clone_memory(subs.c_str(), subs.length());
+  packet->data = memory_cptr(new memory_c((unsigned char *)subs.c_str(), subs.length(), false));
 
   add_packet(packet);
 
