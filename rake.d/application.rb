@@ -5,6 +5,8 @@ class Application < Target
   end
 
   def create_specific
+    libraries :rpcrt4, :if => c?(:MINGW)
+
     namespace :apps do
       desc @desc if @aliases.empty? && !@desc.empty?
       file @target => @dependencies do |t|

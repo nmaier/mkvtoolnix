@@ -17,9 +17,9 @@ def adjust_config
     $config[:LIBMTXCOMMONEXT]         = 'a'
   end
 
-  $config[:LDFLAGS] += "-Wl,--enable-auto-import" if c?(:MINGW)
+  $config[:LDFLAGS] += " -Wl,--enable-auto-import" if c?(:MINGW)
   [:CFLAGS, :CXXFLAGS].each do |idx|
-    $config[idx] += '-DPACKAGE=\"$(PACKAGE)\" -DVERSION=\"$(VERSION)\" -DMTX_LOCALE_DIR=\"$(localedir)\" -DMTX_PKG_DATA_DIR=\"$(pkgdatadir)\"'
+    $config[idx] += ' -DPACKAGE=\"$(PACKAGE)\" -DVERSION=\"$(VERSION)\" -DMTX_LOCALE_DIR=\"$(localedir)\" -DMTX_PKG_DATA_DIR=\"$(pkgdatadir)\"'
   end
 end
 

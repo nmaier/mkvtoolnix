@@ -395,7 +395,6 @@ Application.new("src/mkvmerge").
   sources("src/merge/resources.o", :if => c?(:MINGW)).
   libraries(:mtxinput, :mtxoutput, :mtxcommon, :magic, :matroska, :ebml, :avi, :rmff, :mpegparser, :flac, :vorbis, :ogg, :z, :compression, :expat, :iconv, :intl,
              :boost_regex, :boost_filesystem, :boost_system).
-  libraries(:rpcrt4, :if => c?(:MINGW)).
   create
 
 #
@@ -410,7 +409,7 @@ Application.new("src/mkvinfo").
   aliases(:mkvinfo).
   sources(FileList["src/info/*.cpp"].exclude("src/info/qt_ui.cpp", "src/info/wxwidgets_ui.cpp")).
   sources("src/info/resources.o", :if => c?(:MINGW)).
-  libraries(:mtxcommon, :magic, :matroska, :ebml, :boost_regex, :boost_filesystem, :boost_system).
+  libraries(:mtxcommon, :magic, :matroska, :ebml, :expat, :intl, :iconv, :boost_regex, :boost_filesystem, :boost_system).
   only_if(c?(:USE_QT)).
   sources("src/info/qt_ui.cpp", "src/info/qt_ui.moc.cpp", "src/info/rightclick_tree_widget.moc.cpp", $mkvinfo_ui_files).
   libraries(:qt).
@@ -429,7 +428,6 @@ Application.new("src/mkvextract").
   sources("src/extract", :type => :dir).
   sources("src/extract/resources.o", :if => c?(:MINGW)).
   libraries(:mtxcommon, :magic, :matroska, :ebml, :avi, :rmff, :vorbis, :ogg, :z, :compression, :expat, :iconv, :intl, :boost_regex, :boost_filesystem, :boost_system).
-  libraries(:rpcrt4, :if => c?(:MINGW)).
   create
 
 #
@@ -442,7 +440,6 @@ Application.new("src/mkvpropedit").
   sources("src/propedit", :type => :dir).
   sources("src/propedit/resources.o", :if => c?(:MINGW)).
   libraries(:mtxcommon, :magic, :matroska, :ebml, :avi, :rmff, :vorbis, :ogg, :z, :compression, :expat, :iconv, :intl, :boost_regex, :boost_filesystem, :boost_system).
-  libraries(:rpcrt4, :if => c?(:MINGW)).
   create
 
 #
@@ -454,10 +451,10 @@ if c?(:USE_WXWIDGETS)
     description("Build the mmg executable").
     aliases(:mmg).
     sources("src/mmg", "src/mmg/header_editor", "src/mmg/options", "src/mmg/tabs", :type => :dir).
-    sources("src/propedit/mmg-resources.o", :if => c?(:MINGW)).
+    sources("src/mmg/mmg-resources.o", :if => c?(:MINGW)).
     libraries(:mtxcommon, :magic, :matroska, :ebml, :avi, :rmff, :vorbis, :ogg, :z, :compression, :expat, :iconv, :intl, :wxwidgets,
                :boost_regex, :boost_filesystem, :boost_system).
-    libraries(:rpcrt4, :ole32, :shell32, "-mwindows", :if => c?(:MINGW)).
+    libraries(:ole32, :shell32, "-mwindows", :if => c?(:MINGW)).
     create
 end
 
@@ -477,7 +474,6 @@ if $build_tools
     aliases("tools:base64tool").
     sources("src/tools/base64tool.cpp").
     libraries(:mtxcommon, :magic, :matroska, :ebml, :expat, :iconv, :intl, :boost_regex).
-    libraries(:rpcrt4, :if => c?(:MINGW)).
     create
 
   #
@@ -488,7 +484,6 @@ if $build_tools
     aliases("tools:diracparser").
     sources("src/tools/diracparser.cpp").
     libraries(:mtxcommon, :magic, :matroska, :ebml, :expat, :iconv, :intl, :boost_regex).
-    libraries(:rpcrt4, :if => c?(:MINGW)).
     create
 
   #
@@ -499,7 +494,6 @@ if $build_tools
     aliases("tools:ebml_validator").
     sources("src/tools/ebml_validator.cpp", "src/tools/element_info.cpp").
     libraries(:mtxcommon, :magic, :matroska, :ebml, :expat, :iconv, :intl, :boost_regex).
-    libraries(:rpcrt4, :if => c?(:MINGW)).
     create
 
   #
@@ -510,6 +504,5 @@ if $build_tools
     aliases("tools:vc1parser").
     sources("src/tools/vc1parser.cpp").
     libraries(:mtxcommon, :magic, :matroska, :ebml, :expat, :iconv, :intl, :boost_regex).
-    libraries(:rpcrt4, :if => c?(:MINGW)).
     create
 end
