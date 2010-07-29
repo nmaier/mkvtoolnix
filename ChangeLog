@@ -1,5 +1,12 @@
 2010-07-29  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvextract, mkvinfo, mkvpropedit: new feature: Added the option
+	"-q" and its long version "--quiet". With "--quiet" active only
+	warnings and errors are output. Fix for bug 527.
+
+	* mkvmerge: bug fix: The option "--quiet" was not working
+	properly.
+
 	* mkgmerge: bug fix: mkvmerge was treating SSA/ASS subtitle files
 	as audio files for the purpose of track selection (--no-subtitles
 	/ --no-audio). Fix for bug 526.

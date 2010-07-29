@@ -32,6 +32,7 @@
 
 using namespace libebml;
 
+bool g_suppress_info              = false;
 bool g_suppress_warnings          = false;
 bool g_warning_issued             = false;
 std::string g_stdio_charset;
@@ -55,6 +56,9 @@ void
 mxmsg(unsigned int level,
       std::string message) {
   static bool s_saw_cr_after_nl = false;
+
+  if (g_suppress_info && (MXMSG_INFO == level))
+    return;
 
   if ('\n' == message[0]) {
     message.erase(0, 1);

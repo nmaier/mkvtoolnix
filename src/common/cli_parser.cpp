@@ -173,6 +173,7 @@ cli_parser_c::add_separator() {
 void
 cli_parser_c::add_common_options() {
   OPT("v|verbose",                      YT("Increase verbosity."));
+  OPT("q|quiet",                        YT("Suppress status output."));
   OPT("ui-language=<code>",             YT("Force the translations for 'code' to be used."));
   OPT("command-line-charset=<charset>", YT("Charset for strings on the command line"));
   OPT("output-charset=<cset>",          YT("Output messages in this charset"));

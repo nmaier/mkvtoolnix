@@ -255,6 +255,11 @@ handle_common_cli_args(std::vector<std::string> &args,
       ++verbose;
       args.erase(args.begin() + i, args.begin() + i + 1);
 
+    } else if ((args[i] == "-q") || (args[i] == "--quiet")) {
+      verbose         = 0;
+      g_suppress_info = true;
+      args.erase(args.begin() + i, args.begin() + i + 1);
+
     } else if ((args[i] == "-h") || (args[i] == "-?") ||
              (args[i] == "--help"))
       usage();
