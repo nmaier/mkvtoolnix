@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-06-25 17:41+0300\n"
+"PO-Revision-Date: 2010-07-29 19:13+0200\n"
 "Last-Translator: rusguy6 rusguy6 <rusguy6@gmail.com>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -795,8 +795,8 @@ msgstr ""
 "Исходники и последние файлы всегда доступны на\n"
 "http://www.bunkus.org/videotools/mkvtoolnix/"
 
-#: src/mmg/jobs.cpp:291
-#: src/mmg/jobs.cpp:301
+#: src/mmg/jobs.cpp:296
+#: src/mmg/jobs.cpp:306
 #: src/mmg/mux_dialog.cpp:248
 #, c-format
 msgid "%d minute(s) %d second(s)"
@@ -899,11 +899,11 @@ msgstr "&Копировать командную строку в буфер об
 msgid "&Copy to clipboard"
 msgstr "&Скопировать в буфер обмена"
 
-#: src/mmg/jobs.cpp:473
+#: src/mmg/jobs.cpp:478
 msgid "&Disable"
 msgstr "&Выключить"
 
-#: src/mmg/jobs.cpp:465
+#: src/mmg/jobs.cpp:470
 msgid "&Down"
 msgstr "&Вниз"
 
@@ -969,8 +969,8 @@ msgid "&New chapters"
 msgstr "&Новая глава"
 
 #: src/mmg/jobs.cpp:100
-#: src/mmg/jobs.cpp:388
-#: src/mmg/jobs.cpp:492
+#: src/mmg/jobs.cpp:393
+#: src/mmg/jobs.cpp:497
 msgid "&Ok"
 msgstr "&OK"
 
@@ -988,7 +988,7 @@ msgstr "&Опции"
 msgid "&Quit\tCtrl-Q"
 msgstr "&Выход\tCtrl-Q"
 
-#: src/mmg/jobs.cpp:470
+#: src/mmg/jobs.cpp:475
 msgid "&Re-enable"
 msgstr "&Повторное включение"
 
@@ -1000,7 +1000,7 @@ msgstr "&Перезагрузить\tCtrl-R"
 msgid "&Reset"
 msgstr "&Сбросить"
 
-#: src/mmg/jobs.cpp:393
+#: src/mmg/jobs.cpp:398
 #: src/mmg/mmg_dialog.cpp:268
 msgid "&Save"
 msgstr "&Сохранить"
@@ -1017,11 +1017,11 @@ msgstr "&Сохранить информацию как текст\tCtrl-S"
 msgid "&Save settings\tCtrl-S"
 msgstr "&Сохранить настройки\tCtrl-S"
 
-#: src/mmg/jobs.cpp:497
+#: src/mmg/jobs.cpp:502
 msgid "&Start"
 msgstr "&Запустить"
 
-#: src/mmg/jobs.cpp:462
+#: src/mmg/jobs.cpp:467
 msgid "&Up"
 msgstr "&Вверх"
 
@@ -1033,7 +1033,7 @@ msgstr "&Проверить правильность\tCtrl-T"
 msgid "&Verify"
 msgstr "&Проверить"
 
-#: src/mmg/jobs.cpp:483
+#: src/mmg/jobs.cpp:488
 msgid "&View log"
 msgstr "&Просмотр журнала"
 
@@ -1188,17 +1188,17 @@ msgstr "'%1%' отсутствует ID дорожки.\n"
 msgid "'%1%' lacks the track number(s).\n"
 msgstr "'%1%' отсутствует номер(а) дорожки.\n"
 
-#: src/common/output.cpp:130
-#: src/common/output.cpp:143
-#: src/common/output.cpp:156
-#: src/common/output.cpp:177
+#: src/common/output.cpp:134
+#: src/common/output.cpp:147
+#: src/common/output.cpp:160
+#: src/common/output.cpp:181
 msgid "'%1%' track %2%: %3%"
 msgstr "'%1%' дорожка %2%: %3%"
 
-#: src/common/output.cpp:123
-#: src/common/output.cpp:136
-#: src/common/output.cpp:149
-#: src/common/output.cpp:166
+#: src/common/output.cpp:127
+#: src/common/output.cpp:140
+#: src/common/output.cpp:153
+#: src/common/output.cpp:170
 msgid "'%1%': %2%"
 msgstr "'%1%': %2%"
 
@@ -1466,15 +1466,15 @@ msgstr "+-> Предварительный анализ FLAC файла: %1%%%%2
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr "+-> Предварительный анализ FLAC файла: 100%\n"
 
-#: src/merge/pr_generic.cpp:1427
+#: src/merge/pr_generic.cpp:1426
 msgid ", description '%1%'"
 msgstr ", описание '%1%'"
 
-#: src/merge/pr_generic.cpp:1428
+#: src/merge/pr_generic.cpp:1427
 msgid ", file name '%1%'"
 msgstr ", имя файла '%1%'"
 
-#: src/mmg/jobs.cpp:737
+#: src/mmg/jobs.cpp:742
 #, c-format
 msgid ", finished on %s"
 msgstr ", завершено %s"
@@ -1483,22 +1483,22 @@ msgstr ", завершено %s"
 msgid ", position %1%"
 msgstr ", позиция %1%"
 
-#: src/mmg/jobs.cpp:727
+#: src/mmg/jobs.cpp:732
 #, c-format
 msgid ", started on %s"
 msgstr ", начался %s"
 
-#: src/mmg/jobs.cpp:725
+#: src/mmg/jobs.cpp:730
 #, c-format
 msgid "--- BEGIN job %d (%s, added on %s)"
 msgstr "--- Начало работы %d (%s, добавлено %s)"
 
-#: src/mmg/jobs.cpp:735
+#: src/mmg/jobs.cpp:740
 #, c-format
 msgid "--- END job %d"
 msgstr "--- Конец работы %d"
 
-#: src/mmg/jobs.cpp:730
+#: src/mmg/jobs.cpp:735
 msgid "--- No job output found.\n"
 msgstr "--- Нет работы найденной на выходе.\n"
 
@@ -1569,12 +1569,12 @@ msgstr "<ChapterDisplay> отсутствует <ChapterString>."
 msgid "<ChapterTrack> is missing the <ChapterTrackNumber> child."
 msgstr "<ChapterTrack> отсутствует <ChapterTrackNumber>."
 
-#: src/input/r_matroska.cpp:2082
+#: src/input/r_matroska.cpp:2122
 msgid "A block group was found at position %1%, but no block element was found inside it. This might make mkvmerge crash.\n"
 msgstr "Блок группы оказался в положении %1%, но не блок элемента был найден внутри него. Это может сделать mkvmerge крах.\n"
 
-#: src/input/r_matroska.cpp:1981
-#: src/input/r_matroska.cpp:2092
+#: src/input/r_matroska.cpp:2021
+#: src/input/r_matroska.cpp:2132
 msgid "A block was found at timestamp %1% for track number %2%. However, no headers where found for that track number. The block will be skipped.\n"
 msgstr "Блок был найден на метке %1% для номера дорожки %2%. Тем не менее, заголовки не найдены для этого номера дорожки. Блок будет пропущен.\n"
 
@@ -1606,7 +1606,7 @@ msgstr ""
 msgid "A track"
 msgstr "Дорожка"
 
-#: src/merge/pr_generic.cpp:1295
+#: src/merge/pr_generic.cpp:1294
 msgid "A track with the ID %1% was requested but not found in the file. The corresponding option will be ignored.\n"
 msgstr "Дорожка с ID %1% была запрошена, но не найдена в этом файле. Соответствующий параметр будет проигнорирован.\n"
 
@@ -1647,7 +1647,7 @@ msgstr "A/52 (aka AC3)"
 msgid "AAC (Advanced Audio Coding)"
 msgstr "AAC (Advanced Audio Coding)"
 
-#: src/input/r_aac.cpp:111
+#: src/input/r_aac.cpp:104
 msgid "AAC files may contain HE-AAC / AAC+ / SBR AAC audio. This can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr 0' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
 msgstr "AAC файлы могут содержать HE-AAC / AAC+ / SBR AAC аудио. Это не может быть определена автоматически. Поэтому вы должны указать '--aac-is-sbr 0' вручную, для этого исходного файла, если файл действительно содержит SBR AAC. Файл при объединении в неправильном направлении, в противном случае. Также читайте в документации mkvmerge.\n"
 
@@ -1733,7 +1733,7 @@ msgstr "Добавить имя"
 msgid "Add subchapter"
 msgstr "Добавить подраздел"
 
-#: src/mmg/jobs.cpp:435
+#: src/mmg/jobs.cpp:440
 msgid "Added on"
 msgstr "Добавлено"
 
@@ -1872,7 +1872,7 @@ msgstr "Другой мультиплексирования работу в ещ
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Добавление дорожки из файла в другой трек с того же файла, не допускается. Это имеет место для треков число %u и %u."
 
-#: src/merge/output_control.cpp:1640
+#: src/merge/output_control.cpp:1661
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "Добавление дорожки %1% из файла нет. %2% ('%3%') к дорожке %4% из файла нет. %5% ('%6%').\n"
 
@@ -1916,7 +1916,7 @@ msgstr "Прикрепленный"
 msgid "Attached files"
 msgstr "Прикрепленные файлы"
 
-#: src/merge/pr_generic.cpp:1426
+#: src/merge/pr_generic.cpp:1425
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
 msgstr "Прикреплений ID %1%: тип '%2%', размер %3% байт"
 
@@ -1975,8 +1975,8 @@ msgstr "Доступные опции:"
 msgid "Available translations:\n"
 msgstr "Доступные переводы:\n"
 
-#: src/common/compression.cpp:212
-#: src/common/compression.cpp:230
+#: src/common/compression.cpp:213
+#: src/common/compression.cpp:231
 msgid "BZ2_bzCompressInit() failed. Result: %1%\n"
 msgstr "BZ2_bzCompressInit() не удалось. Результат: %1%\n"
 
@@ -2058,7 +2058,7 @@ msgstr "Обзор"
 msgid "CUE sheet extraction"
 msgstr "CUE листовое извлечение"
 
-#: src/output/p_mpeg4_p2.cpp:119
+#: src/output/p_mpeg4_p2.cpp:117
 msgid "Cannot convert non-native MPEG4 video frames into native ones if the source container provides neither timecodes nor a number of frames per second.\n"
 msgstr "Не удалось преобразовать неместных MPEG4 видео кадров в родных, если исходный контейнер не обеспечивает ни тайм-кодов, ни количество кадров в секунду.\n"
 
@@ -2214,7 +2214,7 @@ msgstr "Главы"
 msgid "Chapters (%d entries) from %s"
 msgstr "Главы (%d записи) из %s"
 
-#: src/merge/output_control.cpp:1282
+#: src/merge/output_control.cpp:1300
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "Главы, не допускаются в WebM совместимых файлах. Нет главы будут написаны в любой выходной файл.\n"
 
@@ -2231,11 +2231,11 @@ msgstr "Главы написаны."
 msgid "Chapters:"
 msgstr "Главы:"
 
-#: src/merge/pr_generic.cpp:1429
+#: src/merge/pr_generic.cpp:1428
 msgid "Chapters: %1% entries"
 msgstr "Главы: %1% записи"
 
-#: src/common/cli_parser.cpp:177
+#: src/common/cli_parser.cpp:178
 msgid "Charset for strings on the command line"
 msgstr "Кодировка для строк в командной строке"
 
@@ -2272,7 +2272,7 @@ msgstr "Выберите входной файл чтобы добавить"
 msgid "Choose an input file to append"
 msgstr "Выберите входной файл чтобы приложить"
 
-#: src/mmg/jobs.cpp:404
+#: src/mmg/jobs.cpp:409
 #: src/mmg/mmg_dialog.cpp:314
 #: src/mmg/mmg_dialog.cpp:410
 #: src/mmg/mmg_dialog.cpp:735
@@ -2470,7 +2470,7 @@ msgstr "CorePicture кадр %1% недействительный размер �
 msgid "CorePicture frame %1% not supported.\n"
 msgstr "CorePicture кадр %1% не поддерживается.\n"
 
-#: src/mmg/jobs.cpp:178
+#: src/mmg/jobs.cpp:183
 #: src/mmg/mux_dialog.cpp:129
 #: src/mmg/tabs/input.cpp:311
 #, c-format
@@ -2491,7 +2491,7 @@ msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "Не удалось декодировать Base64 кодированные данные - это, кажется, неправильно."
 
 #: src/input/r_avi.cpp:333
-#: src/input/r_matroska.cpp:1792
+#: src/input/r_matroska.cpp:1832
 #: src/input/r_ogm.cpp:1131
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "Невозможно получить декодер конкретных данных конфигурации (AVCC) из этого AVC/H.264 трек.\n"
@@ -2509,11 +2509,11 @@ msgstr "Не удалось найти действительный MP3 паке
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "Не нашел индекс для звуковой дорожки %1% (avilib сообщение об ошибке: %2%). Пропуск трека.\n"
 
-#: src/merge/output_control.cpp:1595
+#: src/merge/output_control.cpp:1616
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "Не нашел gptzr, когда добавление. %1%\n"
 
-#: src/output/p_mpeg4_p2.cpp:183
+#: src/output/p_mpeg4_p2.cpp:181
 msgid "Could not find the codec configuration data in the first MPEG-4 part 2 video frame. This track cannot be stored in native mode.\n"
 msgstr "Не удается найти кодек данных конфигурации в первую MPEG-4, часть 2 видео кадр. Этот трек не могут быть сохранены в собственном режиме.\n"
 
@@ -2522,7 +2522,7 @@ msgid "Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. 
 msgstr "Не удалось найти на следующей странице Ogg. Это указывает на поврежденный OGG/OGM файл. Постараюсь продолжить.\n"
 
 #: src/input/r_avi.cpp:667
-#: src/input/r_matroska.cpp:1535
+#: src/input/r_matroska.cpp:1575
 msgid "Could not find valid DTS headers in this track's first frames.\n"
 msgstr "Не удалось найти действительные DTS заголовки в первых кадрах дорожки.\n"
 
@@ -2680,7 +2680,7 @@ msgstr "Cues (подстатьи будут пропущены)"
 msgid "Cues:"
 msgstr "Cues:"
 
-#: src/mmg/jobs.cpp:423
+#: src/mmg/jobs.cpp:428
 msgid "Current and past jobs:"
 msgstr "Текущие и прошлые задания:"
 
@@ -2688,7 +2688,7 @@ msgstr "Текущие и прошлые задания:"
 msgid "Current command line"
 msgstr "Текущая командная строка"
 
-#: src/mmg/jobs.cpp:168
+#: src/mmg/jobs.cpp:173
 #, c-format
 msgid "Current job ID %d:"
 msgstr "ID текущий работы %d:"
@@ -2701,11 +2701,11 @@ msgstr "ID текущий работы 1000:"
 msgid "Current value:"
 msgstr "Текущее значение:"
 
-#: src/mmg/jobs.cpp:478
+#: src/mmg/jobs.cpp:483
 msgid "D&elete"
 msgstr "&Удалить"
 
-#: src/output/p_dts.cpp:105
+#: src/output/p_dts.cpp:84
 msgid "DTS header information changed! - New format:\n"
 msgstr "DTS заголовок изменился! - Новый формат:\n"
 
@@ -2713,27 +2713,27 @@ msgstr "DTS заголовок изменился! - Новый формат:\n"
 msgid "DTS/DTS-HD (Digital Theater System)"
 msgstr "DTS/DTS-HD (Digital Theater System)"
 
-#: src/common/dts.cpp:179
+#: src/common/dts.cpp:194
 msgid "DTS_Header problem: encoded with an incompatible new encoder version\n"
 msgstr "DTS_Header проблема: закодированные с помощью новой версии несовместим кодировщик\n"
 
-#: src/common/dts.cpp:143
+#: src/common/dts.cpp:158
 msgid "DTS_Header problem: invalid core sampling frequency\n"
 msgstr "DTS_Header проблема: неверный основной частоты дискретизации\n"
 
-#: src/common/dts.cpp:125
+#: src/common/dts.cpp:140
 msgid "DTS_Header problem: invalid frame bytes size\n"
 msgstr "DTS_Header проблема: неверный байт кадра\n"
 
-#: src/common/dts.cpp:118
+#: src/common/dts.cpp:133
 msgid "DTS_Header problem: invalid number of blocks in frame\n"
 msgstr "DTS_Header проблема: неверное число блоков в кадре\n"
 
-#: src/common/dts.cpp:219
+#: src/common/dts.cpp:234
 msgid "DTS_Header problem: invalid source PCM resolution\n"
 msgstr "DTS_Header проблема: неверный резолюции PCM источник\n"
 
-#: src/common/dts.cpp:277
+#: src/common/dts.cpp:292
 msgid "DTS_Header problem: not enough data to read header\n"
 msgstr "DTS_Header проблема: не достаточно данных, чтобы прочитать заголовок\n"
 
@@ -2749,7 +2749,7 @@ msgstr "Дата (недопустимый, значение: %1%)"
 msgid "Date: %1% UTC"
 msgstr "Дата: %1% UTC"
 
-#: src/common/output.cpp:75
+#: src/common/output.cpp:79
 msgid "Debug> "
 msgstr "Отладка> "
 
@@ -2791,11 +2791,11 @@ msgstr "Задержка: %|1$.3f|ms"
 msgid "Delete all occurences of a property"
 msgstr "Удалить все вхождения свойства"
 
-#: src/mmg/jobs.cpp:479
+#: src/mmg/jobs.cpp:484
 msgid "Delete the selected job(s) from the job queue"
 msgstr "Удалить выбранное задание(я) из очереди"
 
-#: src/mmg/jobs.cpp:433
+#: src/mmg/jobs.cpp:438
 msgid "Description"
 msgstr "Описание"
 
@@ -2813,7 +2813,7 @@ msgstr "Описание:"
 msgid "Dirac"
 msgstr "Dirac"
 
-#: src/mmg/jobs.cpp:474
+#: src/mmg/jobs.cpp:479
 msgid "Disable the selected job(s) and sets their status to 'done'"
 msgstr "Отключить выбранный работу(ы) и устанавливает статус на 'Готово'"
 
@@ -2914,7 +2914,7 @@ msgstr "EBML читать версию: %1%"
 msgid "EBML version: %1%"
 msgstr "EBML версия: %1%"
 
-#: src/merge/output_control.cpp:1138
+#: src/merge/output_control.cpp:1156
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "Зло внутренней ошибки! (Неизвестный тип файла). %1%\n"
 
@@ -3043,12 +3043,12 @@ msgstr "Ошибка при сохранении информации"
 msgid "Error writing Matroska file"
 msgstr "Ошибка записи в файл Matroska"
 
-#: src/common/output.cpp:68
+#: src/common/output.cpp:72
 #: src/mmg/mux_dialog.cpp:188
 msgid "Error:"
 msgstr "Ошибка:"
 
-#: src/common/output.cpp:69
+#: src/common/output.cpp:73
 msgid "Error: "
 msgstr "Ошибка: "
 
@@ -3127,12 +3127,12 @@ msgstr "Извлечение данных в файл в том числе сы�
 msgid "Extract the data to a raw file."
 msgstr "Извлечение данных в сырой файл."
 
-#: src/output/p_avc.cpp:128
-#: src/output/p_mpeg4_p10.cpp:66
+#: src/output/p_avc.cpp:131
+#: src/output/p_mpeg4_p10.cpp:68
 msgid "Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"
 msgstr "Извлеченные информации пропорции с MPEG-4 layer 10 (AVC) видео-данных и установить дисплей с размерами %1%/%2%.\n"
 
-#: src/output/p_mpeg4_p2.cpp:340
+#: src/output/p_mpeg4_p2.cpp:338
 msgid "Extracted the aspect ratio information from the MPEG4 layer 2 video data and set the display dimensions to %1%/%2%.\n"
 msgstr "Извлеченные информации пропорции от MPEG4 layer 2 видео-данных и установить дисплей с размерами %1%/%2%.\n"
 
@@ -3190,11 +3190,11 @@ msgstr "Род UID:%1%"
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "Файл %1% неизвестного типа. Пожалуйста, посмотрите на поддерживаемых типов файлов ('mkvmerge --list-types') и связаться с автором Мориц Bunkus <moritz@bunkus.org>, если ваш тип файла поддерживается, но не признаются должным образом.\n"
 
-#: src/merge/pr_generic.cpp:1424
+#: src/merge/pr_generic.cpp:1423
 msgid "File '%1%': container: %2%"
 msgstr "Файл '%1%': контейнер: %2%"
 
-#: src/merge/pr_generic.cpp:1342
+#: src/merge/pr_generic.cpp:1341
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "Файл '%1%': неподдерживаемое контейнера: %2%\n"
 
@@ -3270,16 +3270,16 @@ msgstr "Файл/сегмент связи"
 msgid "File/segment title:"
 msgstr "Файл/сегмент название:"
 
-#: src/merge/output_control.cpp:828
+#: src/merge/output_control.cpp:846
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "Файлы не могут быть приложены к себе. Аргументом в пользу '--append-to' является недействительным.\n"
 
-#: src/mmg/jobs.cpp:352
+#: src/mmg/jobs.cpp:357
 #, c-format
 msgid "Finished job ID %d on %s: status '%s'"
 msgstr "Законченное задание ID %d на %s: статус '%s'"
 
-#: src/mmg/jobs.cpp:439
+#: src/mmg/jobs.cpp:444
 msgid "Finished on"
 msgstr "Законченный на"
 
@@ -3305,7 +3305,7 @@ msgstr "Заставлять EBML стиль сшивания."
 msgid "Force Xiph style lacing."
 msgstr "Заставлять Xiph стиль сшивания."
 
-#: src/common/cli_parser.cpp:176
+#: src/common/cli_parser.cpp:177
 msgid "Force the translations for 'code' to be used."
 msgstr "Заставлять переводы для 'код' использоваться."
 
@@ -3404,7 +3404,7 @@ msgstr "Глобальные опции"
 msgid "Global tags (%d entries) from %s"
 msgstr "Глобальные метки (%d записей) из %s"
 
-#: src/merge/pr_generic.cpp:1430
+#: src/merge/pr_generic.cpp:1429
 msgid "Global tags: %1% entries"
 msgstr "Глобальные метки: %1% записей"
 
@@ -3425,11 +3425,11 @@ msgstr "Редактор заголовка готов."
 msgid "Header editor: %s"
 msgstr "Редактор заголовка: %s"
 
-#: src/common/compression.cpp:283
+#: src/common/compression.cpp:284
 msgid "Header removal compression not possible because the buffer contained %1% bytes which is less than the size of the headers that should be removed, %2%."
 msgstr "Заголовок удаления сжатие невозможно, так как буфер, содержащиеся %1% байт, которые меньше, чем размер заголовков, которые должны быть устранены, %2%."
 
-#: src/common/compression.cpp:297
+#: src/common/compression.cpp:298
 msgid "Header removal compression not possible because the buffer did not start with the bytes that should be removed. Wanted bytes:%1%; found:%2%."
 msgstr "Заголовок удаления сжатие невозможно, так как буфер, не начинаются с байта, которые должны быть удалены. Требуются байт:%1%; найдено:%2%."
 
@@ -3490,7 +3490,7 @@ msgstr ""
 msgid "Here you can set the values for the language and the country that you want to apply to all the chapters below and including the currently selected entry."
 msgstr "Здесь вы можете задать значения для языка и страны, которые вы хотите применить ко всем главам ниже, и в том числе выбранный элемент."
 
-#: src/mmg/jobs.cpp:428
+#: src/mmg/jobs.cpp:433
 msgid "ID"
 msgstr "ID"
 
@@ -3546,7 +3546,7 @@ msgstr "Импорт шрифтов из %1%"
 msgid "Imported picture from %1%"
 msgstr "Импорт изображения из %1%"
 
-#: src/input/r_corepicture.cpp:223
+#: src/input/r_corepicture.cpp:226
 msgid "Impossible to use file '%1%': The file could not be opened for reading.\n"
 msgstr "Невозможно использовать файл '%1%': файл не может быть открыт для чтения.\n"
 
@@ -3789,7 +3789,7 @@ msgstr "Недопустимый размер разбиения в '--split %1%
 msgid "Invalid start or stop timecode"
 msgstr "Недопустимое начало или остановка тайм-кода"
 
-#: src/input/r_corepicture.cpp:248
+#: src/input/r_corepicture.cpp:251
 msgid "Invalid start timecode"
 msgstr "Недопустимое начало тайм-кода"
 
@@ -3882,11 +3882,11 @@ msgstr "Задание, добавленное к очереди задания"
 msgid "Job description"
 msgstr "Описание задания"
 
-#: src/mmg/jobs.cpp:379
+#: src/mmg/jobs.cpp:384
 msgid "Job output"
 msgstr "Задание выведено"
 
-#: src/mmg/jobs.cpp:420
+#: src/mmg/jobs.cpp:425
 msgid "Job queue management"
 msgstr "Управление очереди задания"
 
@@ -3898,7 +3898,7 @@ msgstr "Пакет Кейт является слишком маленьким �
 msgid "Keep only the BlockAdditions up to this level (default: keep all levels)"
 msgstr "Сохраните только BlockAdditions до этого уровня (значение по умолчанию: сохраните все уровни)"
 
-#: src/common/compression.cpp:87
+#: src/common/compression.cpp:88
 msgid "LZO compression failed. Result: %1%\n"
 msgstr "Сжатие LZO потерпело неудачу. Результат: %1%\n"
 
@@ -4037,12 +4037,12 @@ msgstr "MPEG Video элементарный поток"
 msgid "Make this track the default track for its type (audio, video, subtitles). Players should prefer tracks with the default track flag set."
 msgstr "Сделайте эту дорожку заданной по умолчанию дорожкой для ее типа (аудио, видео, подзаголовки). Игроки должны предпочесть дорожки с заданным по умолчанию набором флажка дорожки."
 
-#: src/input/r_matroska.cpp:1470
-#: src/input/r_matroska.cpp:1485
+#: src/input/r_matroska.cpp:1510
+#: src/input/r_matroska.cpp:1525
 msgid "Malformed AAC codec initialization data found.\n"
 msgstr "Неправильные данные инициализации кодер-декодера AAC найдены.\n"
 
-#: src/input/r_matroska.cpp:1478
+#: src/input/r_matroska.cpp:1518
 msgid "Malformed codec id '%1%'.\n"
 msgstr "Неправильный кодек ID '%1%'.\n"
 
@@ -4177,7 +4177,7 @@ msgstr "Больше чем одно название было дано для �
 msgid "More than one root element found."
 msgstr "Больше чем один корневой элемент найден."
 
-#: src/merge/output_control.cpp:905
+#: src/merge/output_control.cpp:923
 msgid "More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"
 msgstr "Больше чем одна дорожка должна быть приложена к дорожке %1% от файла номер %2% (%3%). Параметр для '--append-to' было недопустимо.\n"
 
@@ -4185,11 +4185,11 @@ msgstr "Больше чем одна дорожка должна быть при
 msgid "More than one track with the track number %1% found.\n"
 msgstr "Больше чем одна дорожка с номером дорожки %1% найдена.\n"
 
-#: src/mmg/jobs.cpp:466
+#: src/mmg/jobs.cpp:471
 msgid "Move the selected job(s) down"
 msgstr "Переместите выбранное задание(я) вниз"
 
-#: src/mmg/jobs.cpp:463
+#: src/mmg/jobs.cpp:468
 msgid "Move the selected job(s) up"
 msgstr "Переместите выбранное задание(я) вверх"
 
@@ -4290,7 +4290,7 @@ msgstr "MIME тип не был выбран для вложения '%s'."
 msgid "No MIME type has been set for the attachment '%1%', and it could not be guessed.\n"
 msgstr "MIME тип не был установлен для вложения '%1%', и оно не могло быть предположено.\n"
 
-#: src/merge/output_control.cpp:864
+#: src/merge/output_control.cpp:882
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr "Не приложено отображение, был дан для файла номер %1% (%2%). Заданное по умолчанию отображение %3% будет использоваться вместо этого. Пожалуйста помните это, если mkvmerge прерывается с сообщением об ошибках относительно недопустимой '--append-to' опции.\n"
 
@@ -4451,7 +4451,7 @@ msgstr "Только один выходной файл позволен.\n"
 msgid "Only one segment info file allowed in '%1% %2%'.\n"
 msgstr "Только одному файлу информации сегмента позволяют войти '%1% %2%'.\n"
 
-#: src/merge/output_control.cpp:845
+#: src/merge/output_control.cpp:863
 msgid "Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the default mapping will be used) or specify a mapping for all tracks that are to be copied.\n"
 msgstr "Только неравнодушный прилагают отображения, были даны для файла номер %1% (%2%). Любой не определяет отображения (когда заданное по умолчанию отображение будет использоваться), или определите отображение для всех дорожек, которые должны быть скопированы.\n"
 
@@ -4517,11 +4517,11 @@ msgstr "Выход"
 msgid "Output filename"
 msgstr "Выходное имя файла"
 
-#: src/common/cli_parser.cpp:178
+#: src/common/cli_parser.cpp:179
 msgid "Output messages in this charset"
 msgstr "Выходные сообщения в этой кодировке"
 
-#: src/mmg/jobs.cpp:383
+#: src/mmg/jobs.cpp:388
 msgid "Output of the selected jobs:"
 msgstr "Вывод выбранных заданий:"
 
@@ -4652,12 +4652,12 @@ msgstr "Приоритет процесса:"
 msgid "Processing 1000/1000"
 msgstr "Обработка 1000/1000"
 
-#: src/mmg/jobs.cpp:167
+#: src/mmg/jobs.cpp:172
 #, c-format
 msgid "Processing job %d/%d"
 msgstr "Обработка задания %d/%d"
 
-#: src/mmg/jobs.cpp:243
+#: src/mmg/jobs.cpp:248
 #: src/mmg/mux_dialog.cpp:190
 msgid "Progress"
 msgstr "Процесс"
@@ -4673,7 +4673,7 @@ msgstr "Процесс: %1%%%%2%"
 msgid "Progress: 100%\n"
 msgstr "Процесс: 100%\n"
 
-#: src/merge/output_control.cpp:1888
+#: src/merge/output_control.cpp:1909
 msgid "Progress: 100%%%1%"
 msgstr "Процесс: 100%%%1%"
 
@@ -4820,7 +4820,7 @@ msgstr "Закрыть mkvinfo"
 msgid "RSA"
 msgstr "RSA"
 
-#: src/mmg/jobs.cpp:471
+#: src/mmg/jobs.cpp:476
 msgid "Re-enable the selected job(s)"
 msgstr "Вновь дать возможность выбранному заданию(ям)"
 
@@ -4828,7 +4828,7 @@ msgstr "Вновь дать возможность выбранному зада
 msgid "Reading encrypted VOBs is not supported.\n"
 msgstr "Зашифрованный VOBs чтение не поддерживается.\n"
 
-#: src/common/cli_parser.cpp:180
+#: src/common/cli_parser.cpp:181
 msgid "Reads additional command line options from the specified file (see man page)."
 msgstr "Читает дополнительные опции командной строки из указанного файла (см. страницу помощи)."
 
@@ -4849,7 +4849,7 @@ msgstr "RealMedia Audio/Video файлы"
 msgid "RealMedia files may contain HE-AAC / AAC+ / SBR AAC audio. In some cases this can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr %1%' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
 msgstr "RealMedia файлы могут содержать HE-AAC / AAC+ / SBR AAC аудио. В некоторых случаях это не может быть определена автоматически. Поэтому вы должны указать '--aac-is-sbr %1%' вручную, для этого исходного файла, если файл действительно содержит SBR AAC. Файл при объединении в неправильном направлении, в противном случае. Также читайте в документации mkvmerge.\n"
 
-#: src/common/cli_parser.cpp:179
+#: src/common/cli_parser.cpp:180
 msgid "Redirects all messages into this file."
 msgstr "Перенаправлять все сообщения в этот файл."
 
@@ -4919,7 +4919,7 @@ msgstr "Выполнить в поле заголовка редактора"
 msgid "S&how the command line"
 msgstr "&Показать в командной строке"
 
-#: src/mmg/jobs.cpp:501
+#: src/mmg/jobs.cpp:506
 msgid "S&tart selected"
 msgstr "&Начало выбранного"
 
@@ -5283,11 +5283,11 @@ msgstr "Показать руководство mkvmerge GUI"
 msgid "Show the size of each element including its header"
 msgstr "Показать размер каждого элемента в том числе его заголовок"
 
-#: src/common/cli_parser.cpp:181
+#: src/common/cli_parser.cpp:182
 msgid "Show this help."
 msgstr "Показать эту помощь."
 
-#: src/common/cli_parser.cpp:182
+#: src/common/cli_parser.cpp:183
 msgid "Show version information."
 msgstr "Показать информацию о версии."
 
@@ -5343,7 +5343,7 @@ msgstr "Покадровая область до GOP заголовка обна
 msgid "Skipping %1% bytes (no valid AAC header found). This might cause audio/video desynchronisation.\n"
 msgstr "Пропуск %1% байт (не действительный заголовок AAC). Это может привести к аудио/видео рассинхронизации.\n"
 
-#: src/output/p_dts.cpp:121
+#: src/output/p_dts.cpp:100
 msgid "Skipping %1% bytes (no valid DTS header found). This might cause audio/video desynchronisation.\n"
 msgstr "Пропуск %1% байт (не действительный заголовок DTS). Это может привести к аудио/видео рассинхронизации.\n"
 
@@ -5367,7 +5367,7 @@ msgstr "Некоторые заголовка значения были изме
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "Некоторые заголовка значения были изменены. Вы действительно хотите перезагрузить без сохранения файла?"
 
-#: src/merge/output_control.cpp:1323
+#: src/merge/output_control.cpp:1341
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "Некоторые теги элементы отсутствуют (эта ошибка не должна иметь место - еще Подобная ошибка должна была иметь место ранее). %1%\n"
 
@@ -5414,11 +5414,11 @@ msgstr "&Начать обработку"
 msgid "Sta&rt muxing (run mkvmerge)\tCtrl-R"
 msgstr "&Начать обработку (запустить mkvmerge)\tCtrl-R"
 
-#: src/mmg/jobs.cpp:498
+#: src/mmg/jobs.cpp:503
 msgid "Start the jobs whose status is 'pending'"
 msgstr "Начало работы со статусом 'ожидание'"
 
-#: src/mmg/jobs.cpp:502
+#: src/mmg/jobs.cpp:507
 msgid "Start the selected job(s) regardless of their status"
 msgstr "Начало выбранного задания(ий) независимо от их статуса"
 
@@ -5430,16 +5430,16 @@ msgstr "Начать с пустой настройки"
 msgid "Start:"
 msgstr "Начало:"
 
-#: src/mmg/jobs.cpp:437
+#: src/mmg/jobs.cpp:442
 msgid "Started on"
 msgstr "Процесс начался"
 
-#: src/mmg/jobs.cpp:222
+#: src/mmg/jobs.cpp:227
 #, c-format
 msgid "Starting job ID %d (%s) on %s"
 msgstr "Начало работы ID %d (%s) в %s"
 
-#: src/mmg/jobs.cpp:431
+#: src/mmg/jobs.cpp:436
 msgid "Status"
 msgstr "Статус"
 
@@ -5499,6 +5499,10 @@ msgstr "Субтитры дорожки %u"
 msgid "Supported file types:\n"
 msgstr "Элемент типа:\n"
 
+#: src/common/cli_parser.cpp:176
+msgid "Suppress status output."
+msgstr "Скрыть вывод статуса."
+
 #: src/common/file_types.cpp:47
 msgid "TTA (The lossless True Audio codec)"
 msgstr "TTA (The lossless True Audio codec)"
@@ -5525,11 +5529,11 @@ msgstr "Тег файлы (*.xml;*.txt)|*.xml;*.txt|%s"
 msgid "Tags"
 msgstr "Теги"
 
-#: src/merge/output_control.cpp:1311
+#: src/merge/output_control.cpp:1329
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "Теги не допускаются в WebM совместимых файлах. Нет теги будут написаны в любой выходной файл.\n"
 
-#: src/merge/pr_generic.cpp:1431
+#: src/merge/pr_generic.cpp:1430
 msgid "Tags for track ID %1%: %2% entries"
 msgstr "Теги дорожки ID %1%: %2% записи"
 
@@ -5554,7 +5558,7 @@ msgstr "Сообщает mkvmerge создать мета поиск элеме�
 msgid "Text files (*.txt);;All files (*.*)"
 msgstr "Текстовые файлы (*.txt);;Все файлы (*.*)"
 
-#: src/mmg/jobs.cpp:404
+#: src/mmg/jobs.cpp:409
 #, c-format
 msgid "Text files (*.txt)|*.txt|%s"
 msgstr "Текстовые файлы (*.txt)|*.txt|%s"
@@ -5718,15 +5722,15 @@ msgstr ""
 "\n"
 "Примечание: Это предупреждение можно отключить на странице 'Настройки'. Выключите вариант 'Предупреждать об использовании...'."
 
-#: src/output/p_mpeg4_p10.cpp:153
+#: src/output/p_mpeg4_p10.cpp:156
 msgid "The chosen NALU size length of %1% is too small. Try using '4'.\n"
 msgstr "Выбрали NALU размер длины %1% слишком мал. Попробуйте использовать '4'.\n"
 
-#: src/merge/pr_generic.cpp:1239
+#: src/merge/pr_generic.cpp:1238
 msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "Тип кодека '%1%' не может быть использован в WebM совместимом файле.\n"
 
-#: src/output/p_avc.cpp:200
+#: src/output/p_avc.cpp:203
 #: src/output/p_kate.cpp:113
 #: src/output/p_passthrough.cpp:63
 #: src/output/p_textsubs.cpp:98
@@ -5734,7 +5738,7 @@ msgstr "Тип кодека '%1%' не может быть использова�
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "Личные данные кодека не соответствуют (длины: %1% и %2%)."
 
-#: src/output/p_mpeg4_p10.cpp:101
+#: src/output/p_mpeg4_p10.cpp:103
 msgid "The codec's private data does not match. Both have the same length (%1%) but different content."
 msgstr "Личные данные кодека не совпадают. Оба имеют одинаковую длину (%1%) но различное содержание."
 
@@ -5747,7 +5751,7 @@ msgstr "Заголовок коррекции файл не был правил�
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "Страна '%s' не является действительным ccTLD и не может быть выбрана."
 
-#: src/merge/output_control.cpp:1386
+#: src/merge/output_control.cpp:1404
 msgid "The cue entries (the index) are being written..."
 msgstr "cue для записи (индекс) пишется..."
 
@@ -5756,7 +5760,7 @@ msgstr "cue для записи (индекс) пишется..."
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr "Текущего файла (номер %d) не может быть удалена. Есть и другие файлы - по крайней мере файл %d - чьи треки должны быть приложены треки из этого файла. Пожалуйста, удалите эти файлы."
 
-#: src/merge/pr_generic.cpp:843
+#: src/merge/pr_generic.cpp:842
 msgid "The current packet's timecode is smaller than that of the previous packet. This usually means that the source file is a Matroska file that has not been created 100%% correctly. The timecodes of all packets will be adjusted by %1%ms in order not to lose any data. This may throw audio/video synchronization off, but that can be corrected with mkvmerge's \"--sync\" option. If you already use \"--sync\" and you still get this warning then do NOT worry -- this is normal. If this error happens more than once and you get this message more than once for a particular track then either is the source file badly mastered, or mkvmerge contains a bug. In this case you should contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
 msgstr "Тайм-код текущего пакета является меньше, чем у предыдущего пакета. Это обычно означает, что исходный файл представляет собой файл Matroska, которые не были созданы 100% правильно. Тайм-кодов всех пакетов, будет скорректирована %1%ms, чтобы не потерять какие-либо данные. Это может пролить аудио/видео синхронизацию с, но это может быть исправлено с помощью mkvmerge в '- синхронизировать' вариант. Если вы уже используете \" синхронизировать\", но вы получите это предупреждение, то не волнуйтесь - это нормально. Если эта ошибка происходит несколько раз, и вы получите это сообщение более одного раза за особый путь, то либо это исходный файл плохо освоили или mkvmerge содержит ошибку. В этом случае вам следует связаться с автором Moritz Bunkus <moritz@bunkus.org>.\n"
 
@@ -5769,7 +5773,7 @@ msgstr "Код языка по умолчанию '%1%' не является д
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "Установка задержки на номер трека. %s в файле '%s' является недействительным."
 
-#: src/merge/output_control.cpp:1142
+#: src/merge/output_control.cpp:1160
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
 "%2%\n"
@@ -5813,7 +5817,7 @@ msgstr "Править характеристики '%1%' и '%2%' решени�
 msgid "The element was written at the end of the file, but the segment size could not be updated. Therefore the element will not be visible. The process will be aborted. The file has been changed!"
 msgstr "Элемент был написан в конце файла, но размер сегмента не мог быть обновлен. Поэтому элемент не будет видим. Процесс будет прерван. Файл был изменен!"
 
-#: src/output/p_mpeg4_p2.cpp:381
+#: src/output/p_mpeg4_p2.cpp:379
 msgid "The extracted values for video width and height from the MPEG4 layer 2 video data bitstream differ from what the values in the source container. The ones from the video data bitstream (%1%x%2%) will be used.\n"
 msgstr "Извлеченные значения для видео ширину и высоту с MPEG4 слоя 2 видео поток битов данных отличаются от того, что значения в исходном контейнере. Те из битов видеоданных (%1%x%2%) будет использоваться.\n"
 
@@ -5853,7 +5857,7 @@ msgstr "Файл '%1%' не может быть открыт для записи
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "Файл '%1%' не может быть открыт для записи (%2%, %3%).\n"
 
-#: src/merge/output_control.cpp:1351
+#: src/merge/output_control.cpp:1369
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "Файл '%1%' был открыт для записи.\n"
 
@@ -5861,7 +5865,7 @@ msgstr "Файл '%1%' был открыт для записи.\n"
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "Файл '%1%' имеет неизвестен тип. Пожалуйста, посмотрите на поддерживаемых типов файлов ('mkvmerge --list-types') и связаться с автором Moritz Bunkus <moritz@bunkus.org>, если ваш тип файла поддерживается, но не признаются должным образом.\n"
 
-#: src/merge/pr_generic.cpp:1346
+#: src/merge/pr_generic.cpp:1345
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "Файл '%1%' не является поддерживаемым типом файлов (%2%).\n"
 
@@ -5933,15 +5937,15 @@ msgstr "Файл занимается ремонтом, часть 4/4..."
 msgid "The file name for this segment."
 msgstr "Имя файла для данного сегмента."
 
-#: src/merge/output_control.cpp:878
+#: src/merge/output_control.cpp:896
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. The argument for '--append-to' was invalid.\n"
 msgstr "Файл no. %1% ('%2%') не содержит дорожку с ID %3%, или на том, что трек не должен быть скопирован. Аргументом в пользу '--append-to' является недействительным.\n"
 
-#: src/merge/output_control.cpp:884
+#: src/merge/output_control.cpp:902
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. Therefore no track can be appended to it. The argument for '--append-to' was invalid.\n"
 msgstr "Файл no. %1% ('%2%') не содержит дорожку с ID %3%, или на том, что трек не должен быть скопирован. Поэтому дорожка не может быть приложены к нему. Аргументом в пользу '--append-to' является недействительным.\n"
 
-#: src/merge/output_control.cpp:820
+#: src/merge/output_control.cpp:838
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr "Файл no. %1% ('%2%') не является приложением. Аргументом в пользу '--append-to' является недействительным.\n"
 
@@ -5982,7 +5986,7 @@ msgstr "Формат разделить неправильный размер."
 msgid "The format of the split timecode/duration is invalid."
 msgstr "Формат разделить тайм-код/продолжительность является недействительным."
 
-#: src/merge/output_control.cpp:948
+#: src/merge/output_control.cpp:966
 msgid "The formats do not match."
 msgstr "Форматы не совпадают."
 
@@ -6193,7 +6197,7 @@ msgstr "Опция '--meta-seek-size' больше не поддерживает
 msgid "The order of the various options is not important."
 msgstr "Для различных вариантов не имеет значения."
 
-#: src/merge/output_control.cpp:1347
+#: src/merge/output_control.cpp:1365
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "Выходной файл '%1%' не может быть открыт для записи (%2%).\n"
 
@@ -6243,7 +6247,7 @@ msgstr "Значение свойства не правильное целое �
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr "Значение свойства не правильное целое число без знака в '%1%'. %2%\n"
 
-#: src/merge/output_control.cpp:950
+#: src/merge/output_control.cpp:968
 msgid "The reason is unknown."
 msgstr "Причины этого пока неизвестны."
 
@@ -6384,7 +6388,7 @@ msgstr "Тайм-коды для этого потока были сброшен
 msgid "The title for the whole movie."
 msgstr "Название для всего фильма."
 
-#: src/merge/output_control.cpp:894
+#: src/merge/output_control.cpp:912
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
 msgstr "Дорожка %1% от файла номер %2% (%3%) должна быть приложена не раз. Параметр для '--append-to' было недопустимо.\n"
 
@@ -6396,11 +6400,11 @@ msgstr "Заголовки дорожки не могут быть выполн�
 msgid "The track number %1% does not have a valid CodecID.\n"
 msgstr "У номера дорожки %1% нет правильного CodecID.\n"
 
-#: src/merge/output_control.cpp:940
+#: src/merge/output_control.cpp:958
 msgid "The track number %1% from the file '%2%' can probably not be appended correctly to the track number %3% from the file '%4%': %5% Please make sure that the resulting file plays correctly the whole time. The author of this program will probably not give support for playback issues with the resulting file.\n"
 msgstr "Номер дорожки %1% от файла '%2%' не может вероятно быть приложен правильно к номеру дорожки %3% от файла '%4%': %5% Пожалуйста удостоверьтесь, что получающийся файл запускает правильно все время. Автор этой программы не будет вероятно оказывать поддержку для проблем воспроизведения с получающимся файлом.\n"
 
-#: src/merge/output_control.cpp:951
+#: src/merge/output_control.cpp:969
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
 msgstr "Номер дорожки %1% от файла '%2%' не может быть приложен к номеру дорожки %3% от файла '%4%'. %5%\n"
 
@@ -6409,7 +6413,7 @@ msgstr "Номер дорожки %1% от файла '%2%' не может бы
 msgid "The track number as used in the Block Header."
 msgstr "Номер дорожки как использующийся в Заголовке блока."
 
-#: src/merge/output_control.cpp:949
+#: src/merge/output_control.cpp:967
 msgid "The track parameters do not match."
 msgstr "Параметры дорожки не соответствуют."
 
@@ -6417,8 +6421,8 @@ msgstr "Параметры дорожки не соответствуют."
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "Ширина двух дорожек является различной: %1% и %2%"
 
-#: src/merge/output_control.cpp:814
-#: src/merge/output_control.cpp:824
+#: src/merge/output_control.cpp:832
+#: src/merge/output_control.cpp:842
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr "Нет никакого файла с ID '%1%'. Параметр для '--append-to' было недопустимо.\n"
 
@@ -6460,11 +6464,11 @@ msgstr "Эта дорожка AC3 содержит байты на %1% данн�
 msgid "This AC3 track contains %1% bytes of non-AC3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr "Эта дорожка AC3 содержит байты на %1% данных не-AC3, которые были пропущены. Звуковая/видео синхронизация, возможно, была потеряна.\n"
 
-#: src/output/p_avc.cpp:99
+#: src/output/p_avc.cpp:102
 msgid "This AVC/h.264 contains frames that are too big for the current maximum NALU size. You have to re-run mkvmerge and set the maximum NALU size to %1% for this track (command line parameter '--nalu-size-length %2%:%1%').\n"
 msgstr "Этот AVC/h.264 содержит кадров, которые являются слишком большими для текущего максимального размера NALU. Вы должны повторно запустить mkvmerge и установить максимальный размер NALU в %1% для этой дорожки (параметр командной строки '--nalu-size-length %2%:%1%').\n"
 
-#: src/output/p_avc.cpp:150
+#: src/output/p_avc.cpp:153
 msgid "This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n"
 msgstr "Эта дорожка AVC/h.264 не начинается с ключевого кадра. Первые кадры на %1% были пропущены.\n"
 
@@ -6559,7 +6563,7 @@ msgstr "Это свойство уникально. Больше экземпл�
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "Это не должно было действительно случиться. Пространство, зарезервированное для первого мета элемента поиска дорожки, было слишком маленьким. %1%\n"
 
-#: src/merge/output_control.cpp:1536
+#: src/merge/output_control.cpp:1557
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "Это не должно было действительно случиться. Пространство, зарезервированное для первого мета элемента поиска дорожки, было слишком маленьким. Размера необходимо: %1%. %2%\n"
 
@@ -6625,19 +6629,19 @@ msgstr "Слишком мало найдено шестнадцатеричны�
 msgid "Track %1% CodecPrivate is too small.\n"
 msgstr "Дорожка CodecPrivate на %1% является слишком маленькой.\n"
 
-#: src/common/compression.cpp:607
+#: src/common/compression.cpp:617
 msgid "Track %1% has been compressed with an unknown/unsupported compression algorithm (%2%).\n"
 msgstr "Дорожка %1% была сжата с неизвестным/неподдерживаемым алгоритмом сжатия (%2%).\n"
 
-#: src/common/compression.cpp:587
+#: src/common/compression.cpp:597
 msgid "Track %1% was compressed with bzlib but mkvmerge has not been compiled with support for bzlib compression.\n"
 msgstr "Дорожка %1% была сжата с bzlib, но mkvmerge, не была откомпилирована с поддержкой bzlib сжатия.\n"
 
-#: src/common/compression.cpp:595
+#: src/common/compression.cpp:605
 msgid "Track %1% was compressed with lzo1x but mkvmerge has not been compiled with support for lzo1x compression.\n"
 msgstr "Дорожка %1% была сжата с lzo1x, но mkvmerge, не была откомпилирована с поддержкой lzo1x сжатия.\n"
 
-#: src/common/compression.cpp:579
+#: src/common/compression.cpp:589
 msgid "Track %1% was compressed with zlib but mkvmerge has not been compiled with support for zlib compression.\n"
 msgstr "Дорожка %1% была сжата с zlib, но mkvmerge, не была откомпилирована с поддержкой zlib сжатия.\n"
 
@@ -6698,7 +6702,7 @@ msgstr "Дорожка %1%: Информация AAC не может быть п
 msgid "Track ID %1% has an unknown AAC type.\n"
 msgstr "Дорожка ID %1% имеет неизвестный AAC тип.\n"
 
-#: src/merge/pr_generic.cpp:1425
+#: src/merge/pr_generic.cpp:1424
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "Дорожка ID %1%: %2% (%3%)"
 
@@ -6730,7 +6734,7 @@ msgstr "Имя дорожки:"
 msgid "Track number"
 msgstr "Номер дорожки"
 
-#: src/common/compression.cpp:566
+#: src/common/compression.cpp:576
 msgid "Track number %1% has been encrypted and decryption has not yet been implemented.\n"
 msgstr "Номер дорожки %1% был зашифрован и расшифровка еще не была осуществлена.\n"
 
@@ -6811,7 +6815,7 @@ msgstr "Неизвестный тип аудио потока 0x%|1$04x|. Stream
 msgid "Unknown chapter file format in '%1%'. It does not contain a supported chapter format.\n"
 msgstr "Неизвестный формат файла главы в '%1%'. Он не содержит поддержанный формат главы.\n"
 
-#: src/common/compression.cpp:572
+#: src/common/compression.cpp:582
 msgid "Unknown content encoding type %1% for track %2%.\n"
 msgstr "Неизвестный тип кодировки содержания %1% для дорожки %2%.\n"
 
@@ -6872,7 +6876,7 @@ msgstr "Не поддерживается MPEG mpeg_version: 0x%|1$02x| в па�
 msgid "Unsupported format"
 msgstr "Неподдерживаемый формат"
 
-#: src/input/r_matroska.cpp:1747
+#: src/input/r_matroska.cpp:1787
 msgid "Unsupported track type for this track.\n"
 msgstr "Неподдерживаемый тип дорожки для этой дорожки.\n"
 
@@ -6956,7 +6960,7 @@ msgid "Using a NALU size length of 3 bytes might result in tracks that won't be 
 msgstr "Использование длина NALU размер 3 байт может привести к тому, что дорожки не будут декодируемых с некоторыми AVC/H.264 кодеков.\n"
 
 #: src/input/r_ac3.cpp:90
-#: src/input/r_matroska.cpp:1512
+#: src/input/r_matroska.cpp:1552
 #: src/input/r_mpeg_ps.cpp:1176
 msgid "Using the %1%AC3 output module.\n"
 msgstr "Использование %1%AC3 выходного модуля.\n"
@@ -6965,7 +6969,7 @@ msgstr "Использование %1%AC3 выходного модуля.\n"
 msgid "Using the AAC audio output module.\n"
 msgstr "Использование AAC аудио выходного модуля.\n"
 
-#: src/input/r_aac.cpp:96
+#: src/input/r_aac.cpp:92
 msgid "Using the AAC demultiplexer.\n"
 msgstr "Использование AAC демультиплексора.\n"
 
@@ -6973,8 +6977,8 @@ msgstr "Использование AAC демультиплексора.\n"
 msgid "Using the AAC output module (FourCC: %1%).\n"
 msgstr "Использование AAC выходного модуля (FourCC: %1%).\n"
 
-#: src/input/r_aac.cpp:123
-#: src/input/r_matroska.cpp:1500
+#: src/input/r_aac.cpp:116
+#: src/input/r_matroska.cpp:1540
 #: src/input/r_ogm.cpp:968
 #: src/input/r_qtmp4.cpp:1535
 msgid "Using the AAC output module.\n"
@@ -7013,7 +7017,7 @@ msgstr "Использование DTS демультиплексора.\n"
 
 #: src/input/r_avi.cpp:662
 #: src/input/r_dts.cpp:114
-#: src/input/r_matroska.cpp:1532
+#: src/input/r_matroska.cpp:1572
 #: src/input/r_mpeg_ps.cpp:1181
 #: src/input/r_wav.cpp:354
 msgid "Using the DTS output module.\n"
@@ -7024,7 +7028,7 @@ msgid "Using the Dirac demultiplexer.\n"
 msgstr "Использование Dirac демультиплексора.\n"
 
 #: src/input/r_dirac.cpp:96
-#: src/input/r_matroska.cpp:1433
+#: src/input/r_matroska.cpp:1473
 msgid "Using the Dirac video output module.\n"
 msgstr "Использование Dirac видео выходного модуля.\n"
 
@@ -7033,7 +7037,7 @@ msgid "Using the FLAC demultiplexer.\n"
 msgstr "Использование FLAC демультиплексора.\n"
 
 #: src/input/r_flac.cpp:164
-#: src/input/r_matroska.cpp:1554
+#: src/input/r_matroska.cpp:1594
 #: src/input/r_ogm_flac.cpp:287
 msgid "Using the FLAC output module.\n"
 msgstr "Использование FLAC выходного модуля.\n"
@@ -7042,7 +7046,7 @@ msgstr "Использование FLAC выходного модуля.\n"
 msgid "Using the IVF demultiplexer.\n"
 msgstr "Использование IVF демультиплексора.\n"
 
-#: src/input/r_matroska.cpp:1673
+#: src/input/r_matroska.cpp:1713
 msgid "Using the Kate output module.\n"
 msgstr "Использование Kate выходного модуля.\n"
 
@@ -7063,7 +7067,7 @@ msgid "Using the MPEG PS demultiplexer.\n"
 msgstr "Использование MPEG PS демультиплексора.\n"
 
 #: src/input/r_avi.cpp:539
-#: src/input/r_matroska.cpp:1562
+#: src/input/r_matroska.cpp:1602
 #: src/input/r_mp3.cpp:71
 #: src/input/r_mpeg_ps.cpp:1171
 #: src/input/r_ogm.cpp:1004
@@ -7071,7 +7075,7 @@ msgstr "Использование MPEG PS демультиплексора.\n"
 msgid "Using the MPEG audio output module.\n"
 msgstr "Использование MPEG аудио выходного модуля.\n"
 
-#: src/input/r_matroska.cpp:1417
+#: src/input/r_matroska.cpp:1457
 #: src/input/r_qtmp4.cpp:1493
 msgid "Using the MPEG-%1% video output module.\n"
 msgstr "Использование MPEG-%1% видео выходного модуля.\n"
@@ -7082,27 +7086,27 @@ msgstr "Использование MPEG-%1% видео выходного мод
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "Использование MPEG-1/2 видео выходного модуля.\n"
 
-#: src/input/r_matroska.cpp:1824
+#: src/input/r_matroska.cpp:1864
 #: src/input/r_qtmp4.cpp:1511
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "Использование MPEG-4 Part 10 (AVC) видео выводного модуля.\n"
 
 #: src/input/r_avc.cpp:136
 #: src/input/r_avi.cpp:330
-#: src/input/r_matroska.cpp:1804
+#: src/input/r_matroska.cpp:1844
 #: src/input/r_mpeg_ps.cpp:1210
 #: src/input/r_ogm.cpp:1128
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "Использование MPEG-4 Part 10 ES видео выводного модуля.\n"
 
 #: src/input/r_avi.cpp:313
-#: src/input/r_matroska.cpp:1421
+#: src/input/r_matroska.cpp:1461
 #: src/input/r_ogm.cpp:1232
 #: src/input/r_qtmp4.cpp:1485
 msgid "Using the MPEG-4 part 2 video output module.\n"
 msgstr "Использование MPEG-4 Part 2 видео выходного модуля.\n"
 
-#: src/input/r_matroska.cpp:180
+#: src/input/r_matroska.cpp:210
 msgid "Using the Matroska demultiplexer.\n"
 msgstr "Использование Matroska демультиплексора.\n"
 
@@ -7111,14 +7115,14 @@ msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr "Использование OGG/OGM демультиплексора.\n"
 
 #: src/input/r_avi.cpp:531
-#: src/input/r_matroska.cpp:1569
+#: src/input/r_matroska.cpp:1609
 #: src/input/r_ogm.cpp:1023
 #: src/input/r_qtmp4.cpp:1547
 #: src/input/r_wav.cpp:395
 msgid "Using the PCM output module.\n"
 msgstr "Использование PCM выходного модуля.\n"
 
-#: src/input/r_matroska.cpp:1679
+#: src/input/r_matroska.cpp:1719
 #: src/input/r_pgssup.cpp:72
 msgid "Using the PGS output module.\n"
 msgstr "Использование PGS выходного модуля.\n"
@@ -7155,12 +7159,12 @@ msgstr "Использование SSA/ASS читателя субтитров.\
 msgid "Using the TTA demultiplexer.\n"
 msgstr "Использование TTA демультиплексора.\n"
 
-#: src/input/r_matroska.cpp:1580
+#: src/input/r_matroska.cpp:1620
 #: src/input/r_tta.cpp:109
 msgid "Using the TTA output module.\n"
 msgstr "Использование TTA выходного модуля.\n"
 
-#: src/input/r_matroska.cpp:1429
+#: src/input/r_matroska.cpp:1469
 #: src/input/r_ogm.cpp:1325
 msgid "Using the Theora video output module.\n"
 msgstr "Использование Theora видео выходного модуля.\n"
@@ -7191,7 +7195,7 @@ msgid "Using the VC1 video output module.\n"
 msgstr "Использование VC1 видео выводного модуля.\n"
 
 #: src/input/r_ivf.cpp:87
-#: src/input/r_matroska.cpp:1437
+#: src/input/r_matroska.cpp:1477
 msgid "Using the VP8 video output module.\n"
 msgstr "Использование VP8 видео выводного модуля.\n"
 
@@ -7199,11 +7203,11 @@ msgstr "Использование VP8 видео выводного модул�
 msgid "Using the VobBtn button reader.\n"
 msgstr "Использование VobBtn читателя кнопок.\n"
 
-#: src/input/r_matroska.cpp:1690
+#: src/input/r_matroska.cpp:1730
 msgid "Using the VobBtn output module.\n"
 msgstr "Использование VobBtn выходного модуля.\n"
 
-#: src/input/r_matroska.cpp:1657
+#: src/input/r_matroska.cpp:1697
 msgid "Using the VobSub output module.\n"
 msgstr "Использование VobSub выходного модуля.\n"
 
@@ -7216,7 +7220,7 @@ msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
 msgstr "Использование VobSub читателя субтитров. (SUB файл '%1%').\n"
 
 #: src/input/r_avi.cpp:716
-#: src/input/r_matroska.cpp:1587
+#: src/input/r_matroska.cpp:1627
 #: src/input/r_ogm.cpp:1044
 msgid "Using the Vorbis output module.\n"
 msgstr "Использование Vorbis выходного модуля.\n"
@@ -7233,8 +7237,8 @@ msgstr "Использование WavPack демультиплексора с �
 msgid "Using the WAVPACK demultiplexer.\n"
 msgstr "Использование WavPack демультиплексора.\n"
 
-#: src/input/r_matroska.cpp:1610
-#: src/input/r_wavpack.cpp:108
+#: src/input/r_matroska.cpp:1650
+#: src/input/r_wavpack.cpp:107
 msgid "Using the WAVPACK output module.\n"
 msgstr "Использование WavPack выходного модуля.\n"
 
@@ -7242,12 +7246,12 @@ msgstr "Использование WavPack выходного модуля.\n"
 msgid "Using the generic audio output module (FourCC: %|1$.4s|).\n"
 msgstr "Использование общего аудио выходного модуля (FourCC: %|1$.4s|).\n"
 
-#: src/input/r_matroska.cpp:1334
+#: src/input/r_matroska.cpp:1374
 msgid "Using the passthrough output module for this %1% track.\n"
 msgstr "Использование передачи результата модуля этой %1% дорожке.\n"
 
 #: src/input/r_avi.cpp:387
-#: src/input/r_matroska.cpp:1665
+#: src/input/r_matroska.cpp:1705
 #: src/input/r_ogm.cpp:1075
 #: src/input/r_srt.cpp:60
 #: src/input/r_ssa.cpp:71
@@ -7265,7 +7269,7 @@ msgid "Using the video output module (FourCC: %|1$.4s|).\n"
 msgstr "Использование видео выходного модуля (FourCC: %|1$.4s|).\n"
 
 #: src/input/r_avi.cpp:342
-#: src/input/r_matroska.cpp:1443
+#: src/input/r_matroska.cpp:1483
 #: src/input/r_ogm.cpp:1237
 msgid "Using the video output module.\n"
 msgstr "Использование видео выходного модуля.\n"
@@ -7362,7 +7366,7 @@ msgstr "Видео дорожка"
 msgid "Video track %u"
 msgstr "Видео дорожка %u"
 
-#: src/mmg/jobs.cpp:484
+#: src/mmg/jobs.cpp:489
 msgid "View the output that mkvmerge generated during the muxing process for the selected job(s)"
 msgstr "Рассмотрите вывод, который mkvmerge сгенерировал во время мультиплексирования обрабатывает для выбранного задания(й)"
 
@@ -7394,7 +7398,7 @@ msgstr "Предупреждение в строке %1%: начать тайм-
 msgid "Warning:"
 msgstr "Предупреждение:"
 
-#: src/common/output.cpp:72
+#: src/common/output.cpp:76
 msgid "Warning: "
 msgstr "Предупреждение: "
 
@@ -7544,8 +7548,8 @@ msgstr ""
 "\n"
 "Этому сообщению только покажут однажды, если Вы не допустили предупреждениям mmg на его странице 'параметров настройки'."
 
-#: src/common/compression.cpp:138
-#: src/common/compression.cpp:175
+#: src/common/compression.cpp:139
+#: src/common/compression.cpp:176
 msgid "Zlib decompression failed. Result: %1%\n"
 msgstr "Zlib декомпрессия не удалась. Результат: %1%\n"
 
@@ -7558,7 +7562,7 @@ msgstr "[%1% кадр для дорожки %2%, тайм-код %3%]"
 msgid "aac_reader: ADIF header files are not supported."
 msgstr "aac_reader: ADIF заголовочные файлы не поддерживаются."
 
-#: src/input/r_aac.cpp:92
+#: src/input/r_aac.cpp:88
 msgid "aac_reader: Could not open the file."
 msgstr "aac_reader: Не удалось открыть файл."
 
@@ -7566,13 +7570,13 @@ msgstr "aac_reader: Не удалось открыть файл."
 msgid "aac_reader: Could not read %1% bytes."
 msgstr "aac_reader: Не удалось прочитать %1% байт."
 
-#: src/input/r_aac.cpp:67
+#: src/input/r_aac.cpp:65
 msgid "aac_reader: No valid AAC packet found in the first %1% bytes.\n"
 msgstr "aac_reader: Не найден пакет AAC в первых %1% байтах.\n"
 
-#: src/mmg/jobs.cpp:338
-#: src/mmg/jobs.cpp:447
-#: src/mmg/jobs.cpp:525
+#: src/mmg/jobs.cpp:343
+#: src/mmg/jobs.cpp:452
+#: src/mmg/jobs.cpp:530
 msgid "aborted"
 msgstr "Прерванный"
 
@@ -7601,7 +7605,7 @@ msgstr "Добавить"
 msgid "append"
 msgstr "Присоединить"
 
-#: src/input/r_matroska.cpp:89
+#: src/input/r_matroska.cpp:90
 #: src/mmg/mmg.cpp:58
 #: src/info/mkvinfo.cpp:1115
 msgid "audio"
@@ -7631,7 +7635,7 @@ msgstr "avi_reader: Источник не является допустимым 
 msgid "bits per sample: %1%"
 msgstr "Разрядность: %1%"
 
-#: src/input/r_matroska.cpp:90
+#: src/input/r_matroska.cpp:91
 #: src/info/mkvinfo.cpp:1118
 msgid "buttons"
 msgstr "Кнопки"
@@ -7640,11 +7644,11 @@ msgstr "Кнопки"
 msgid "byte_buffer_c: (pos + num) > size. Should not have happened. Please file a bug report.\n"
 msgstr "byte_buffer_c: (pos + num) > size. Не должен был случиться. Пожалуйста подайте сообщение об ошибках.\n"
 
-#: src/common/compression.cpp:239
+#: src/common/compression.cpp:240
 msgid "bzip2 compression failed. Result: %1%\n"
 msgstr "bzip2 сжатие не удалось. Результат: %1%\n"
 
-#: src/common/compression.cpp:202
+#: src/common/compression.cpp:203
 msgid "bzlib_compressor_c::decompress() not implemented\n"
 msgstr "bzlib_compressor_c::decompress() не выполняется\n"
 
@@ -7657,11 +7661,11 @@ msgstr "cet_index: '%1%' не найден\n"
 msgid "channels: %1%"
 msgstr "Каналы: %1%"
 
-#: src/mmg/jobs.cpp:341
+#: src/mmg/jobs.cpp:346
 msgid "completed OK"
 msgstr "Завершено OK"
 
-#: src/mmg/jobs.cpp:344
+#: src/mmg/jobs.cpp:349
 msgid "completed with warnings"
 msgstr "Завершено с предупреждениями"
 
@@ -7696,7 +7700,7 @@ msgstr "По умолчанию"
 msgid "default duration: %|1$.3f|ms (%|2$.3f| fps for a video track)"
 msgstr "продолжительность по умолчанию: %|1$.3f|ms (%|2$.3f| кадров в секунду для видео дорожки)"
 
-#: src/common/compression.cpp:160
+#: src/common/compression.cpp:161
 msgid "deflateInit() failed. Result: %1%\n"
 msgstr "deflateInit() не удалось. Результат: %1%\n"
 
@@ -7720,12 +7724,12 @@ msgstr "высота дисплея: %1%"
 msgid "display width: %1%"
 msgstr "ширина дисплея: %1%"
 
-#: src/mmg/jobs.cpp:523
-#: src/mmg/jobs.cpp:711
+#: src/mmg/jobs.cpp:528
+#: src/mmg/jobs.cpp:716
 msgid "done"
 msgstr "Сделанный"
 
-#: src/mmg/jobs.cpp:524
+#: src/mmg/jobs.cpp:529
 msgid "done/warnings"
 msgstr "сделать/предупреждения"
 
@@ -7779,8 +7783,8 @@ msgstr "Шифрование"
 msgid "end-of-file"
 msgstr "Конец файла"
 
-#: src/mmg/jobs.cpp:347
-#: src/mmg/jobs.cpp:526
+#: src/mmg/jobs.cpp:352
+#: src/mmg/jobs.cpp:531
 msgid "failed"
 msgstr "Не удалось"
 
@@ -7865,13 +7869,13 @@ msgstr "выше"
 msgid "highest"
 msgstr "наивысший"
 
-#: src/common/compression.cpp:123
+#: src/common/compression.cpp:124
 msgid "inflateInit() failed. Result: %1%\n"
 msgstr "inflateInit() не удалось. Результат: %1%\n"
 
 #: src/mmg/jobs.cpp:72
 #: src/mmg/jobs.cpp:74
-#: src/mmg/jobs.cpp:157
+#: src/mmg/jobs.cpp:162
 #: src/mmg/mux_dialog.cpp:76
 msgid "is being estimated"
 msgstr "в настоящее время оценка"
@@ -7908,138 +7912,138 @@ msgstr "ниже"
 msgid "lowest"
 msgstr "низкий"
 
-#: src/common/compression.cpp:76
+#: src/common/compression.cpp:77
 msgid "lzo_compressor_c::decompress() not implemented\n"
 msgstr "lzo_compressor_c::decompress() не выполняется\n"
 
-#: src/common/compression.cpp:63
+#: src/common/compression.cpp:64
 msgid "lzo_init() failed. Result: %1%\n"
 msgstr "lzo_init() не удалось. Результат: %1%\n"
 
-#: src/common/compression.cpp:67
+#: src/common/compression.cpp:68
 msgid "lzo_malloc(LZO1X_999_MEM_COMPRESS) failed.\n"
 msgstr "lzo_malloc(LZO1X_999_MEM_COMPRESS) не удалось.\n"
 
-#: src/input/r_matroska.cpp:297
+#: src/input/r_matroska.cpp:327
 msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% bits per sample, but the WAVEFORMATEX says that there are %3%.\n"
 msgstr "matroska_reader: (MS режиме совместимости трек %1%) говорит, что Matroska %2% бит на сэмпл, но говорит, что WAVEFORMATEX %3%.\n"
 
-#: src/input/r_matroska.cpp:288
+#: src/input/r_matroska.cpp:318
 msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% channels, but the WAVEFORMATEX says that there are %3%.\n"
 msgstr "matroska_reader: (MS режиме совместимости трек %1%) говорит, что Matroska %2% каналов, но говорит, что WAVEFORMATEX %3%.\n"
 
-#: src/input/r_matroska.cpp:279
+#: src/input/r_matroska.cpp:309
 msgid "matroska_reader: (MS compatibility mode for track %1%) Matroska says that there are %2% samples per second, but WAVEFORMATEX says that there are %3%.\n"
 msgstr "matroska_reader: (MS режиме совместимости трек %1%) говорит, что Matroska %2% отсчетов в секунду, но говорит, что WAVEFORMATEX %3%.\n"
 
-#: src/input/r_matroska.cpp:417
+#: src/input/r_matroska.cpp:447
 msgid "matroska_reader: (MS compatibility mode, track %1%) Matrosa says video width is %2%, but the BITMAPINFOHEADER says %3%.\n"
 msgstr "matroska_reader: (MS в режиме совместимости, трек %1%) говорит Матроса видео ширина %2%, но говорит BITMAPINFOHEADER %3%.\n"
 
-#: src/input/r_matroska.cpp:426
+#: src/input/r_matroska.cpp:456
 msgid "matroska_reader: (MS compatibility mode, track %1%) Matrosa video height is %2%, but the BITMAPINFOHEADER says %3%.\n"
 msgstr "matroska_reader: (MS в режиме совместимости, трек %1%) Матроса видео высота %2%, но говорит BITMAPINFOHEADER %3%.\n"
 
-#: src/input/r_matroska.cpp:1037
+#: src/input/r_matroska.cpp:1077
 msgid "matroska_reader: A track is missing its track UID.\n"
 msgstr "matroska_reader: У дорожки отсутствует ее UID дорожки.\n"
 
-#: src/input/r_matroska.cpp:1028
+#: src/input/r_matroska.cpp:1068
 msgid "matroska_reader: A track is missing its track number.\n"
 msgstr "matroska_reader: У дорожки отсутствует ее номер дорожки.\n"
 
-#: src/input/r_matroska.cpp:1397
+#: src/input/r_matroska.cpp:1437
 msgid "matroska_reader: Could not keep the track UID %1% because it is already allocated for the new file.\n"
 msgstr "matroska_reader: Не удалось сохранить дорожку UID %1%, поскольку это уже выделено для нового файла.\n"
 
-#: src/input/r_matroska.cpp:178
+#: src/input/r_matroska.cpp:208
 msgid "matroska_reader: Failed to read the headers."
 msgstr "matroska_reader: Не удалось прочитать заголовки."
 
-#: src/input/r_matroska.cpp:1210
-#: src/input/r_matroska.cpp:1215
+#: src/input/r_matroska.cpp:1250
+#: src/input/r_matroska.cpp:1255
 msgid "matroska_reader: No segment found.\n"
 msgstr "matroska_reader: Не найден сегмент.\n"
 
-#: src/input/r_matroska.cpp:937
+#: src/input/r_matroska.cpp:967
 msgid "matroska_reader: Pixel height is missing.\n"
 msgstr "matroska_reader: Высота пикселя отсутствует.\n"
 
-#: src/input/r_matroska.cpp:930
+#: src/input/r_matroska.cpp:960
 msgid "matroska_reader: Pixel width is missing.\n"
 msgstr "matroska_reader: Ширина пикселя отсутствует.\n"
 
-#: src/input/r_matroska.cpp:518
+#: src/input/r_matroska.cpp:548
 msgid "matroska_reader: The CodecID '%1%' for track %2% is unknown.\n"
 msgstr "matroska_reader: CodecID '%1%' для выбора дорожки %2% неизвестно.\n"
 
-#: src/input/r_matroska.cpp:405
+#: src/input/r_matroska.cpp:435
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no BITMAPINFOHEADER struct present. Therefore we don't have a FourCC to identify the video codec used.\n"
 msgstr "matroska_reader: CodecID для дорожки %1% в '%2%', но не было BITMAPINFOHEADER структуры настоящее время. Поэтому мы не имеем FourCC для выявления видео кодека.\n"
 
-#: src/input/r_matroska.cpp:258
+#: src/input/r_matroska.cpp:288
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no WAVEFORMATEX struct present. Therefore we don't have a format ID to identify the audio codec used.\n"
 msgstr "matroska_reader: CodecID для дорожки %1% в '%2%', но не было WAVEFORMATEX структуры настоящее время. Поэтому мы не имеем формат ID для идентификации аудио кодека.\n"
 
-#: src/input/r_matroska.cpp:443
+#: src/input/r_matroska.cpp:473
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no codec private headers.\n"
 msgstr "matroska_reader: CodecID для дорожки %1% в '%2%', но не было частной кодек заголовки.\n"
 
-#: src/input/r_matroska.cpp:485
-#: src/input/r_matroska.cpp:496
+#: src/input/r_matroska.cpp:515
+#: src/input/r_matroska.cpp:526
 msgid "matroska_reader: The CodecID for track %1% is '%2%', but there was no private data found.\n"
 msgstr "matroska_reader: CodecID для дорожки %1% в '%2%', но не было найдено личные данные.\n"
 
-#: src/input/r_matroska.cpp:322
+#: src/input/r_matroska.cpp:352
 msgid "matroska_reader: The CodecID for track %1% is 'A_VORBIS', but there are no header packets present.\n"
 msgstr "matroska_reader: CodecID для дорожки %1% в 'A_VORBIS', но нет заголовка пакетов настоящих.\n"
 
-#: src/input/r_matroska.cpp:1073
+#: src/input/r_matroska.cpp:1113
 msgid "matroska_reader: The CodecID is missing.\n"
 msgstr "matroska_reader: CodecID отсутствует.\n"
 
-#: src/input/r_matroska.cpp:471
+#: src/input/r_matroska.cpp:501
 msgid "matroska_reader: The height for track %1% was not set.\n"
 msgstr "matroska_reader: Высота дорожки %1% не была установлена.\n"
 
-#: src/input/r_matroska.cpp:465
+#: src/input/r_matroska.cpp:495
 msgid "matroska_reader: The width for track %1% was not set.\n"
 msgstr "matroska_reader: Ширина дорожки %1% не была установлена.\n"
 
-#: src/input/r_matroska.cpp:571
+#: src/input/r_matroska.cpp:601
 msgid "matroska_reader: Track %1% seems to be ok.\n"
 msgstr "matroska_reader: Дорожка %1%, представляется ОК.\n"
 
-#: src/input/r_matroska.cpp:1052
+#: src/input/r_matroska.cpp:1092
 msgid "matroska_reader: Track type was not found.\n"
 msgstr "matroska_reader: Тип дорожки не найден.\n"
 
-#: src/input/r_matroska.cpp:328
+#: src/input/r_matroska.cpp:358
 msgid "matroska_reader: Vorbis track does not contain valid headers.\n"
 msgstr "matroska_reader: Vorbis дорожка, не содержит нужных заголовков.\n"
 
-#: src/input/r_matroska.cpp:1302
-#: src/input/r_matroska.cpp:1959
+#: src/input/r_matroska.cpp:1342
+#: src/input/r_matroska.cpp:1999
 msgid "matroska_reader: caught exception\n"
 msgstr "matroska_reader: поймал исключение\n"
 
-#: src/input/r_matroska.cpp:313
+#: src/input/r_matroska.cpp:343
 msgid "matroska_reader: mkvmerge was not compiled with FLAC support. Ignoring track %1%.\n"
 msgstr "matroska_reader: mkvmerge не была скомпилирована с поддержкой FLAC. Игнорирование дорожки %1%.\n"
 
-#: src/input/r_matroska.cpp:1196
+#: src/input/r_matroska.cpp:1236
 msgid "matroska_reader: no EBML head found.\n"
 msgstr "matroska_reader: Нет EBML главы.\n"
 
-#: src/input/r_matroska.cpp:566
+#: src/input/r_matroska.cpp:596
 msgid "matroska_reader: unknown demuxer type for track %1%: '%2%'\n"
 msgstr "matroska_reader: неизвестный тип демультиплексора для дорожки %1%: '%2%'\n"
 
-#: src/input/r_matroska.cpp:1041
+#: src/input/r_matroska.cpp:1081
 msgid "matroska_reader: |  + There's more than one track with the UID %1%.\n"
 msgstr "matroska_reader: |  + Там больше, чем один UID дорожки %1%.\n"
 
-#: src/input/r_matroska.cpp:1033
+#: src/input/r_matroska.cpp:1073
 msgid "matroska_reader: |  + There's more than one track with the number %1%.\n"
 msgstr "matroska_reader: |  + Там больше, чем один номер дорожки %1%.\n"
 
@@ -8059,7 +8063,7 @@ msgstr "memory.cpp/safememdup() называется из файла %1%, стр
 msgid "memory.cpp/saferealloc() called from file %1%, line %2%: realloc() returned NULL for a size of %3% bytes.\n"
 msgstr "memory.cpp/saferealloc() называется из файла %1%, строка %2%: malloc() вернула NULL размер %3% байт.\n"
 
-#: src/common/memory.h:197
+#: src/common/memory.h:213
 msgid "memory_slice_cursor_c copy c'tor: Must not be used!"
 msgstr "memory_slice_cursor_c copy c'tor: не должны использоваться!"
 
@@ -8191,7 +8195,7 @@ msgstr "mkvmerge можно читать CUE листы для аудио ком
 msgid "mkvmerge can read and use timecodes from an external text file. This feature is a very advanced feature. Almost all users should leave this entry empty."
 msgstr "mkvmerge можно читать и использовать тайм-кодов от внешних текстовых файлов. Эта функция очень продвинутые функции. Почти все пользователи должны оставить эту запись пуста."
 
-#: src/output/p_avc.cpp:106
+#: src/output/p_avc.cpp:109
 msgid ""
 "mkvmerge encountered broken or unparsable data in this AVC/h.264 video track. Either your file is damaged (which mkvmerge cannot cope with yet) or this is a bug in mkvmerge itself. The error message was:\n"
 "%1%\n"
@@ -8369,8 +8373,8 @@ msgstr "только для I кадров"
 msgid "output sampling freq: %1%"
 msgstr "частота дискретизации на выходе: %1%"
 
-#: src/mmg/jobs.cpp:522
-#: src/mmg/jobs.cpp:696
+#: src/mmg/jobs.cpp:527
+#: src/mmg/jobs.cpp:701
 msgid "pending"
 msgstr "ожидание"
 
@@ -8402,11 +8406,11 @@ msgstr "высота пикселя: %1%"
 msgid "pixel width: %1%"
 msgstr "ширина пикселя: %1%"
 
-#: src/merge/pr_generic.cpp:855
+#: src/merge/pr_generic.cpp:854
 msgid "pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < last_timecode (%1% < %2%). %3%\n"
 msgstr "pr_generic.cpp/generic_packetizer_c::add_packet(): тайм-код < последней_тайм-код (%1% < %2%). %3%\n"
 
-#: src/merge/pr_generic.cpp:1206
+#: src/merge/pr_generic.cpp:1205
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr "pr_generic.cpp/generic_reader_c::demuxing_requested(): Неверный тип дорожки %1%."
 
@@ -8480,7 +8484,7 @@ msgstr "ssa_reader: Источник не является допустимым 
 msgid "start >= m->ListSize(). This should not have happened. Please file a bug report. Thanks."
 msgstr "start >= m->ListSize(). Это не должно было случиться. Пожалуйста, сообщите об ошибке. Спасибо."
 
-#: src/input/r_matroska.cpp:92
+#: src/input/r_matroska.cpp:93
 msgid "subtitle"
 msgstr "подзаголовок"
 
@@ -8521,9 +8525,9 @@ msgstr "tta_reader: tag_size < 0 в конструкторе. %1%\n"
 msgid "und (Undetermined)"
 msgstr "und (Неопределенный)"
 
-#: src/input/r_matroska.cpp:88
-#: src/input/r_matroska.cpp:2272
-#: src/input/r_matroska.cpp:2279
+#: src/input/r_matroska.cpp:89
+#: src/input/r_matroska.cpp:2312
+#: src/input/r_matroska.cpp:2319
 #: src/input/r_mpeg_ps.cpp:1389
 #: src/common/mm_io_win.cpp:165
 #: src/mmg/mmg.cpp:61
@@ -8563,7 +8567,7 @@ msgstr "vc1_es_reader: Не удалось открыть исходный фа�
 msgid "verify failed: chapters->CheckMandatory() is false. This should not have happened. Please file a bug report.\n"
 msgstr "verify failed: chapters->CheckMandatory() ist false. Это не должно было случиться. Пожалуйста, сообщите об ошибке.\n"
 
-#: src/input/r_matroska.cpp:91
+#: src/input/r_matroska.cpp:92
 #: src/mmg/mmg.cpp:59
 #: src/info/mkvinfo.cpp:1116
 msgid "video"
