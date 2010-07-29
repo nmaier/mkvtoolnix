@@ -1,3 +1,9 @@
+2010-07-29  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkgmerge: bug fix: mkvmerge was treating SSA/ASS subtitle files
+	as audio files for the purpose of track selection (--no-subtitles
+	/ --no-audio). Fix for bug 526.
+
 2010-07-28  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v4.2.0.
