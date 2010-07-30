@@ -1,3 +1,12 @@
+2010-07-30  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg header editor: bug fix: If a file was loaded that did not
+	contain 'track language' elements and those elements were
+	unchanged then they would be set to 'und' upon saving. Now they're
+	left as-is, and when adding them to the file the drop-down box
+	defaults to 'eng' being selected as per Matroska default value
+	specifications. Fix for bug 525.
+
 2010-07-29  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract, mkvinfo, mkvpropedit: new feature: Added the option
