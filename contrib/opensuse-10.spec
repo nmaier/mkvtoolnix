@@ -39,10 +39,10 @@ rm -rf $RPM_BUILD_ROOT
 %build
 export CFLAGS="$RPM_OPT_FLAGS"
 ./configure --prefix=/usr --mandir=/usr/share/man
-make
+./drake
 
 %install
-make install DESTDIR=$RPM_BUILD_ROOT
+./drake DESTDIR=$RPM_BUILD_ROOT MMG_BIN=mkvmerge-gui install
 
 %clean
 rm -rf $RPM_BUILD_ROOT

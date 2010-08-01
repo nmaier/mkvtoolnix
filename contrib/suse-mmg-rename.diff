@@ -1,53 +1,6 @@
-diff -ur mkvtoolnix-4.0.0.orig/Makefile.in mkvtoolnix-4.0.0/Makefile.in
---- mkvtoolnix-4.0.0.orig/Makefile.in	2010-06-12 11:38:15.000000000 +0200
-+++ mkvtoolnix-4.0.0/Makefile.in	2010-06-12 11:41:05.683978927 +0200
-@@ -167,8 +167,8 @@
- APPLICATIONS = src/mkvmerge@EXEEXT@ src/mkvinfo@EXEEXT@ src/mkvextract@EXEEXT@ src/mkvpropedit@EXEEXT@
- MANPAGES = doc/man/mkvmerge.1 doc/man/mkvinfo.1 doc/man/mkvextract.1 doc/man/mkvpropedit.1
- ifeq (yes,$(USE_WXWIDGETS))
--APPLICATIONS += src/mmg/mmg@EXEEXT@
--MANPAGES += doc/man/mmg.1
-+APPLICATIONS += src/mmg/mkvmerge-gui@EXEEXT@
-+MANPAGES += doc/man/mkvmerge-gui.1
- TARGET_INSTALL_SHARED = install-shared
- endif
- 
-@@ -254,6 +254,7 @@
- 
- install-programs: $(APPLICATIONS)
- 	$(mkinstalldirs) $(DESTDIR)$(bindir)
-+	mv src/mmg/mmg@EXEEXT@ src/mmg/mkvmerge-gui@EXEEXT@
- 	@list='$(APPLICATIONS)'; for p in $$list; do \
- 	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
- 	  if test -f $$p ; then \
-@@ -285,6 +286,7 @@
- 
- install-mans:
- 	$(mkinstalldirs) $(DESTDIR)$(man1dir)
-+	mv doc/man/mmg.1 doc/man/mkvmerge-gui.1
- 	@for i in $(MANPAGES); do \
- 	  inst=`echo $$i | sed -e 's/^.*\///'`; \
- 	  echo " $(INSTALL_DATA) $$i $(DESTDIR)$(man1dir)/$$inst"; \
-@@ -293,6 +295,7 @@
- 
- install-translated-mans:
- 	@for lang in $(MANPAGES_TRANSLATIONS); do \
-+	  mv doc/man/$$lang/mmg.1 doc/man/$$lang/mkvmerge-gui.1 ; \
- 	  $(mkinstalldirs) $(DESTDIR)$(mandir)/$$lang/man1; \
- 	  for manpage in $(MANPAGES); do \
- 	    inst=`echo $$manpage | sed -e 's/^.*\///'`; \
-@@ -656,6 +659,8 @@
- 	@echo '    LINK ' $@
- 	$(Q)$(LINK) -o $@ $(mmg_OBJECTS) $(mmg_LDADD)
- 
-+src/mmg/mkvmerge-gui@EXEEXT@: src/mmg/mmg@EXEEXT@
-+
- .SECONDARY:
- 
- #
-diff -ur mkvtoolnix-4.0.0.orig/share/desktop/mkvmergeGUI.desktop mkvtoolnix-4.0.0/share/desktop/mkvmergeGUI.desktop
---- mkvtoolnix-4.0.0.orig/share/desktop/mkvmergeGUI.desktop	2010-06-12 11:38:15.000000000 +0200
-+++ mkvtoolnix-4.0.0/share/desktop/mkvmergeGUI.desktop	2010-06-12 11:40:36.423978502 +0200
+diff -ur mkvtoolnix-4.2.0.orig/share/desktop/mkvmergeGUI.desktop mkvtoolnix-4.2.0/share/desktop/mkvmergeGUI.desktop
+--- mkvtoolnix-4.2.0.orig/share/desktop/mkvmergeGUI.desktop	2010-08-01 13:39:31.000000000 +0200
++++ mkvtoolnix-4.2.0/share/desktop/mkvmergeGUI.desktop	2010-08-01 14:21:45.176881240 +0200
 @@ -6,7 +6,7 @@
  GenericName[es]=Creador de ficheros MKV
  GenericName[fr]=Créateur de fichiers MKV
