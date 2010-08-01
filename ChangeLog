@@ -1,3 +1,15 @@
+2010-08-01  Moritz Bunkus  <moritz@bunkus.org>
+
+	* build system: The build system has been changed from "make" to
+	"rake", the Ruby based build tool. MKVToolNix includes its own
+	copy of it so all you need is to have Ruby itself installed. The
+	build proecss has been tested with Ruby 1.8.6, 1.8.7 and
+	1.9.1. Building is pretty much the same as before: "./configure",
+	"./drake", "sudo ./drake install". Most of the build targets have
+	similar if not identical names, e.g. "./drake install". You can
+	override variables just like with make, e.g. "./drake
+	prefix=/somewhere install".
+
 2010-07-30  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg header editor: bug fix: If a file was loaded that did not
