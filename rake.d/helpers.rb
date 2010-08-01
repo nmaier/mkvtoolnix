@@ -1,9 +1,11 @@
-$message_mutex = Mutex.new
-def puts(message)
-  $message_mutex.lock
-  $stdout.puts message
-  $stdout.flush
-  $message_mutex.unlock
+if defined? Mutex
+  $message_mutex = Mutex.new
+  def puts(message)
+    $message_mutex.lock
+    $stdout.puts message
+    $stdout.flush
+    $message_mutex.unlock
+  end
 end
 
 def error(message)
