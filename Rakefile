@@ -23,6 +23,8 @@ def setup_globals
   $programs                =  %w{mkvmerge mkvinfo mkvextract mkvpropedit}
   $programs                << "mmg" if c?(:USE_WXWIDGETS)
   $tools                   =  %w{base64tool diracparser ebml_validator vc1parser}
+  $mmg_bin                 =  c(:MMG_BIN)
+  $mmg_bin                 =  "mmg" if $mmg_bin.empty?
 
   $application_subdirs     =  { "mmg" => "mmg/" }
   $applications            =  $programs.collect { |name| "src/#{$application_subdirs[name]}#{name}" + c(:EXEEXT) }
@@ -282,9 +284,14 @@ targets << "install:shared" if c?(:USE_WXWIDGETS)
 task :install => targets
 
 namespace :install do
+  application_name_mapper = lambda do |name|
+    base = File.basename name
+    base == "mmg" ? $mmg_bin : base
+  end
+
   task :programs => $applications do
     install_dir :bindir
-    install_program :bindir, $applications
+    $applications.each { |application| install_program "#{c(:bindir)}/#{application_name_mapper[application]}", application }
   end
 
   task :shared do
@@ -298,9 +305,14 @@ namespace :install do
     end
   end
 
+  man_page_name_mapper = lambda do |name|
+    base = File.basename name
+    base == "mmg.1" ? "#{$mmg_bin}.1" : base
+  end
+
   task :manpages => $manpages do
     install_dir :man1dir
-    install_data :man1dir, $manpages
+    $manpages.each { |manpage| install_data "#{c(:man1dir)}/#{man_page_name_mapper[manpage]}", manpage }
   end
 
   namespace :translations do
@@ -314,7 +326,7 @@ namespace :install do
     task :manpages do
       install_dir $languages[:manpages].collect { |language| "#{c(:mandir)}/#{language}/man1" }
       $languages[:manpages].each do |language|
-        install_data "#{c(:mandir)}/#{language}/man1/", $manpages.collect { |manpage| manpage.sub(/man\//, "man/#{language}/") }
+        $manpages.each { |manpage| install_data "#{c(:mandir)}/#{language}/man1/#{man_page_name_mapper[manpage]}", manpage.sub(/man\//, "man/#{language}/") }
       end
     end
 
