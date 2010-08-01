@@ -46,11 +46,11 @@ Matroska video utilities.
 %configure --prefix=%{_prefix}
 
 %build
-make
+./drake
 
 %install
 [ -n "$RPM_BUILD_ROOT" -a "$RPM_BUILD_ROOT" != / ] && rm -rf $RPM_BUILD_ROOT
-%makeinstall
+./drake DESTDIR=%{?buildroot} install
 
 %clean
 [ -n "$RPM_BUILD_ROOT" -a "$RPM_BUILD_ROOT" != / ] && rm -rf $RPM_BUILD_ROOT
