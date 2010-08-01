@@ -127,8 +127,8 @@ end
 
 # Precompiled headers
 if c?(:USE_PRECOMPILED_HEADERS)
-  $all_objects.each { |name| file name => "src/common/common_pch.h.o" }
-  file "src/common/common_pch.h.o" => "src/common/common_pch.h", &cxx_compiler
+  $all_objects.each { |name| file name => "src/common/common_pch.h.gch" }
+  file "src/common/common_pch.h.gch" => "src/common/common_pch.h", &cxx_compiler
 end
 
 # Pattern rules
@@ -346,7 +346,7 @@ desc "Remove all compiled files"
 task :clean do
   tools = $tools.collect { |name| "src/tools/#{name}" }.join " "
   run <<-SHELL, :allow_failure => true
-    rm -f *.o */*.o */*/*.o */lib*.a */*/lib*.a po/*.mo
+    rm -f *.o */*.o */*/*.o */lib*.a */*/lib*.a */*/*.gch po/*.mo
       */*.exe */*/*.exe */*/*.dll */*/*.dll.a doc/guide/*/*.hhk
       src/info/ui/*.h src/info/*.moc.cpp src/common/*/*.o
       src/mmg/*/*.o #{$applications.join(" ")} #{tools}
