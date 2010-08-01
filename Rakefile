@@ -59,6 +59,15 @@ def setup_globals
   }
 
   $build_tools           ||=  c?(:TOOLS)
+
+  cflags_common            = "-Wall -Wno-comment -Wno-strict-aliasing #{c(:OPTIMIZATION_CFLAGS)} -D_FILE_OFFSET_BITS=64 #{c(:EXTRA_CFLAGS)} #{c(:DEBUG_CFLAGS)} #{c(:PROFILING_CFLAGS)} #{c(:MATROSKA_CFLAGS)} #{c(:EBML_CFLAGS)} #{c(:USER_CPPFLAGS)} -DPACKAGE=\\\"#{c(:PACKAGE)}\\\" -DVERSION=\\\"#{c(:VERSION)}\\\" -DMTX_LOCALE_DIR=\\\"#{c(:localedir)}\\\" -DMTX_PKG_DATA_DIR=\\\"#{c(:pkgdatadir)}\\\""
+  ldflags_extra            = c?(:MINGW) ? '' : "-Wl,--enable-auto-import"
+  $flags                   = {
+    :cflags                => "#{cflags_common} #{c(:USER_CFLAGS)}",
+    :cxxflags              => "#{cflags_common} #{c(:WXWIDGETS_CFLAGS)} #{c(:QT_CFLAGS)} #{c(:BOOST_CPPFLAGS)} #{c(:USER_CXXFLAGS)}",
+    :cppflags              => "#{c(:USER_CPPFLAGS)}",
+    :ldflags               => "#{c(:EXTRA_LDFLAGS)} #{c(:PROFILING_LIBS)} #{c(:USER_LDFLAGS)} #{c(:LDFLAGS_RPATHS)} #{c(:BOOST_LDFLAGS)}",
+  }
 end
 
 def define_default_task
@@ -110,7 +119,7 @@ cxx_compiler = lambda do |t|
   # t.sources is empty for a 'file' task (common_pch.h.o).
   sources = t.sources.empty? ? [ t.prerequisites.first ] : t.sources
 
-  runq "     CXX #{sources.first}", "#{c(:CXX)} #{c(:CXXFLAGS)} #{c(:INCLUDES)} #{$system_includes} #{cxxflags} -c -MMD -o #{t.name} #{sources.join(" ")}", :allow_failure => true
+  runq "     CXX #{sources.first}", "#{c(:CXX)} #{$flags[:cxxflags]} #{$system_includes} #{cxxflags} -c -MMD -o #{t.name} #{sources.join(" ")}", :allow_failure => true
   handle_deps t.name, last_exit_code
 end
 
@@ -124,7 +133,7 @@ end
 rule '.o' => '.cpp', &cxx_compiler
 
 rule '.o' => '.c' do |t|
-  runq "      CC #{t.source}", "#{c(:CC)} #{c(:CFLAGS)} #{c(:INCLUDES)} #{$system_includes} -c -MMD -o #{t.name} #{t.sources.join(" ")}", :allow_failure => true
+  runq "      CC #{t.source}", "#{c(:CC)} #{$flags[:cflags]} #{$system_includes} -c -MMD -o #{t.name} #{t.sources.join(" ")}", :allow_failure => true
   handle_deps t.name, last_exit_code
 end
 

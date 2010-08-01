@@ -20,9 +20,7 @@ class Library < Target
 
     file "#{@target}.dll" => @objects do |t|
       runq "  LD/DLL #{t.name}", <<-COMMAND
-        #{c(:CXX)} #{c(:LDFLAGS)} #{c(:LIBDIRS)} #{$system_libdirs}
-           -shared -Wl,--export-all -Wl,--out-implib=#{t.name}.a
-           -o #{t.name} #{@objects.join(" ")} #{@libraries.join(" ")}
+        #{c(:CXX)} #{$flags[:ldflags]} #{$system_libdirs} -shared -Wl,--export-all -Wl,--out-implib=#{t.name}.a -o #{t.name} #{@objects.join(" ")} #{@libraries.join(" ")}
       COMMAND
     end
 
