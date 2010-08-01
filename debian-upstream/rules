@@ -17,7 +17,7 @@ endif
 
 CONFIG_FLAGS = --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info
 
-RAKE=rake
+RAKE=./drake
 
 #######################################################################
 # BUILD : Two versions: without and with GUI.
