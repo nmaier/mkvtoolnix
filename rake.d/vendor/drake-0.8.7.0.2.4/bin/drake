@@ -22,7 +22,8 @@
 # IN THE SOFTWARE.
 #++
 
-Dir.glob(File.dirname(File.dirname(File.dirname(File.readlink(__FILE__)))) + "/*/lib").each { |dir| $:.unshift dir }
+Dir.glob(File.dirname(File.dirname(File.dirname(__FILE__))) + "/*/lib").each { |dir| $:.unshift dir }
+Dir.glob(File.dirname(__FILE__) + "/rake.d/vendor/*/lib").each { |dir| $:.unshift dir }
 
 begin
   require 'rake'
