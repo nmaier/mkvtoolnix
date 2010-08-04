@@ -63,7 +63,7 @@ def handle_deps(target, exit_code)
 
   File.open("#{$dependency_dir}/" + dep_file.gsub(/\//, '_').ext('rb'), "w") do |out|
     line = IO.readlines(dep_file).collect { |line| line.chomp }.join(" ").gsub(/\\/, ' ').gsub(/\s+/, ' ')
-    if /(.*):\s*(.*)/.match(line)
+    if /(.+?):\s*([^\s].*)/.match(line)
       target  = $1
       sources = $2.gsub(/^\s+/, '').gsub(/\s+$/, '').split(/\s+/)
 
