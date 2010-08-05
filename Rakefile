@@ -2,7 +2,11 @@
 # -*- mode: ruby; -*-
 
 # Change to base directory before doing anything
-chdir File.dirname(__FILE__) if FileUtils.pwd != File.dirname(__FILE__)
+if FileUtils.pwd != File.dirname(__FILE__)
+  new_dir = File.absolute_path(File.dirname(__FILE__))
+  puts "Entering directory `#{new_dir}'"
+  Dir.chdir new_dir
+end
 
 # Set number of threads to use if it is unset and we're running with
 # drake
