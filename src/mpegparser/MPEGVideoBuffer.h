@@ -51,6 +51,8 @@ typedef struct MPEG2SequenceHeader{
   float frameOrFieldRate;
   uint8_t profileLevelIndication;
   uint8_t progressiveSequence;
+
+  MPEG2SequenceHeader();
 }MPEG2SequenceHeader;
 
 typedef struct MPEG2GOPHeader{
@@ -60,6 +62,8 @@ typedef struct MPEG2GOPHeader{
   uint32_t timeSeconds;
   uint32_t timeMinutes;
   uint32_t timeHours;
+
+  MPEG2GOPHeader();
 }MPEG2GOPHeader;
 
 #define MPEG2_PICTURE_TYPE_FRAME  0x03
@@ -73,6 +77,8 @@ typedef struct MPEG2PictureHeader{
   uint8_t repeatFirstField;
   uint8_t topFieldFirst;
   uint8_t progressive;
+
+  MPEG2PictureHeader();
 }MPEG2PictureHeader;
 
 class MPEGChunk{

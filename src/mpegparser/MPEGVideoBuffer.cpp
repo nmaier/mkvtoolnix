@@ -21,7 +21,20 @@
  **/
 
 #include "MPEGVideoBuffer.h"
+#include <cstring>
 #include <stddef.h>
+
+MPEG2SequenceHeader::MPEG2SequenceHeader() {
+  memset(this, 0, sizeof(*this));
+}
+
+MPEG2GOPHeader::MPEG2GOPHeader() {
+  memset(this, 0, sizeof(*this));
+}
+
+MPEG2PictureHeader::MPEG2PictureHeader() {
+  memset(this, 0, sizeof(*this));
+}
 
 int32_t MPEGVideoBuffer::FindStartCode(uint32_t startPos){
   //How many bytes can we look through?

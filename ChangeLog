@@ -1,3 +1,8 @@
+2010-08-05  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed access to uninitialized memory in the
+	MPEG-2 ES parser.
+
 2010-08-03  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mmg: bug fix: The 'total remaining time' shown by the job
