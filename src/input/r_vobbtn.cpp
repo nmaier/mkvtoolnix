@@ -85,17 +85,13 @@ vobbtn_reader_c::read(generic_packetizer_c *ptzr,
 
   // _todo_ add some tests on the header and size
   int nread = btn_file->read(tmp, 4);
-  if (0 >= nread) {
-    PTZR0->flush();
-    return FILE_STATUS_DONE;
-  }
+  if (0 >= nread)
+    return flush_packetizers();
 
   uint16_t frame_size = btn_file->read_uint16_be();
   nread               = btn_file->read(chunk, frame_size);
-  if (0 >= nread) {
-    PTZR0->flush();
-    return FILE_STATUS_DONE;
-  }
+  if (0 >= nread)
+    return flush_packetizers();
 
   PTZR0->process(new packet_t(new memory_c(chunk, nread, false)));
   return FILE_STATUS_MOREDATA;

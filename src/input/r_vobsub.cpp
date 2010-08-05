@@ -611,19 +611,17 @@ vobsub_reader_c::read(generic_packetizer_c *ptzr,
       break;
     }
 
-  if (!track || (track->idx >= track->entries.size()))
+  if (!track)
     return FILE_STATUS_DONE;
+
+  if (track->idx >= track->entries.size())
+    return flush_packetizers();
 
   extract_one_spu_packet(id);
   track->idx++;
   indices_processed++;
 
-  if (track->idx >= track->entries.size()) {
-    flush_packetizers();
-    return FILE_STATUS_DONE;
-  }
-
-  return FILE_STATUS_MOREDATA;
+  return track->idx >= track->entries.size() ? flush_packetizers() : FILE_STATUS_MOREDATA;
 }
 
 int
@@ -648,13 +646,13 @@ vobsub_reader_c::identify() {
   }
 }
 
-void
+file_status_e
 vobsub_reader_c::flush_packetizers() {
-  uint32_t i;
+  foreach(vobsub_track_c *track, tracks)
+    if (track->ptzr != -1)
+      PTZR(track->ptzr)->flush();
 
-  for (i = 0; i < tracks.size(); i++)
-    if (tracks[i]->ptzr != -1)
-      PTZR(tracks[i]->ptzr)->flush();
+  return FILE_STATUS_DONE;
 }
 
 void

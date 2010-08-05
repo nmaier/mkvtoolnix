@@ -123,22 +123,15 @@ dts_reader_c::read(generic_packetizer_c *,
   int nread  = io->read(buf[cur_buf], READ_SIZE);
   nread     &= ~0xf;
 
-  if (0 >= nread) {
-    PTZR0->flush();
-    return FILE_STATUS_DONE;
-  }
+  if (0 >= nread)
+    return flush_packetizers();
 
   nread = decode_buffer(nread);
 
   PTZR0->process(new packet_t(new memory_c(buf[cur_buf], nread, false)));
   bytes_processed += nread;
 
-  if ((nread < READ_SIZE) || io->eof()) {
-    PTZR0->flush();
-    return FILE_STATUS_DONE;
-  }
-
-  return FILE_STATUS_MOREDATA;
+  return ((nread < READ_SIZE) || io->eof()) ? flush_packetizers() : FILE_STATUS_MOREDATA;
 }
 
 int

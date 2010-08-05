@@ -454,16 +454,14 @@ real_reader_c::finish() {
 
   done = true;
 
-  flush_packetizers();
-
-  return FILE_STATUS_DONE;
+  return flush_packetizers();
 }
 
 file_status_e
 real_reader_c::read(generic_packetizer_c *,
                     bool) {
   if (done)
-    return FILE_STATUS_DONE;
+    return flush_packetizers();
 
   int size = rmff_get_next_frame_size(file);
   if (0 >= size) {

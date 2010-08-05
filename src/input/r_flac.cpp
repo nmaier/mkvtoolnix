@@ -252,31 +252,21 @@ flac_reader_c::parse_file() {
 file_status_e
 flac_reader_c::read(generic_packetizer_c *,
                     bool) {
-  unsigned char *buf;
-  unsigned int samples_here;
-
   if (current_block == blocks.end())
-    return FILE_STATUS_DONE;
+    return flush_packetizers();
 
-  buf = (unsigned char *)safemalloc(current_block->len);
+  memory_cptr buf = memory_c::alloc(current_block->len);
   file->setFilePointer(current_block->filepos);
-  if (file->read(buf, current_block->len) != current_block->len) {
-    safefree(buf);
-    PTZR0->flush();
-    return FILE_STATUS_DONE;
-  }
+  if (file->read(buf, current_block->len) != current_block->len)
+    return flush_packetizers();
 
-  samples_here = flac_get_num_samples(buf, current_block->len, stream_info);
-  PTZR0->process(new packet_t(new memory_c(buf, current_block->len, true), samples * 1000000000 / sample_rate));
+  unsigned int samples_here = flac_get_num_samples(buf->get_buffer(), current_block->len, stream_info);
+  PTZR0->process(new packet_t(buf, samples * 1000000000 / sample_rate));
 
   samples += samples_here;
   current_block++;
 
-  if (current_block == blocks.end()) {
-    PTZR0->flush();
-    return FILE_STATUS_DONE;
-  }
-  return FILE_STATUS_MOREDATA;
+  return (current_block == blocks.end()) ? flush_packetizers() : FILE_STATUS_MOREDATA;
 }
 
 FLAC__StreamDecoderReadStatus

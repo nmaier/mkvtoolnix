@@ -1247,7 +1247,7 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
   unsigned char *buf;
 
   if (file_done)
-    return FILE_STATUS_DONE;
+    return flush_packetizers();
 
   try {
     mpeg_ps_id_t new_id;
@@ -1331,16 +1331,15 @@ mpeg_ps_reader_c::read(generic_packetizer_c *,
 file_status_e
 mpeg_ps_reader_c::finish() {
   if (file_done)
-    return FILE_STATUS_DONE;
+    return flush_packetizers();
 
   foreach(mpeg_ps_track_ptr &track, tracks)
     if (0 < track->buffer_usage)
       PTZR(track->ptzr)->process(new packet_t(clone_memory(track->buffer, track->buffer_usage)));
 
   file_done = true;
-  flush_packetizers();
 
-  return FILE_STATUS_DONE;
+  return flush_packetizers();
 }
 
 int

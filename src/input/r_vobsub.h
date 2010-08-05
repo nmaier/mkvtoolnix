@@ -82,7 +82,7 @@ public:
 
 protected:
   virtual void parse_headers();
-  virtual void flush_packetizers();
+  virtual file_status_e flush_packetizers();
   virtual int deliver_packet(unsigned char *buf, int size, int64_t timecode, int64_t default_duration, generic_packetizer_c *ptzr);
 
   virtual int extract_one_spu_packet(int64_t track_id);

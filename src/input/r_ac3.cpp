@@ -97,20 +97,15 @@ ac3_reader_c::read(generic_packetizer_c *,
   int64_t read_len        = std::min((int64_t)AC3_READ_SIZE, remaining_bytes);
   int num_read            = io->read(chunk->get_buffer(), read_len);
 
-  if (0 > num_read) {
-    PTZR0->flush();
-    return FILE_STATUS_DONE;
+  if (0 < num_read) {
+    PTZR0->process(new packet_t(new memory_c(chunk->get_buffer(), num_read, false)));
+    bytes_processed += num_read;
+
+    if (0 < (remaining_bytes - num_read))
+      return FILE_STATUS_MOREDATA;
   }
 
-  PTZR0->process(new packet_t(new memory_c(chunk->get_buffer(), num_read, false)));
-  bytes_processed += num_read;
-
-  if (0 < (remaining_bytes - num_read))
-    return FILE_STATUS_MOREDATA;
-
-  PTZR0->flush();
-
-  return FILE_STATUS_DONE;
+  return flush_packetizers();
 }
 
 int

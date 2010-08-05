@@ -334,7 +334,9 @@ public:
 
   virtual int64_t get_queued_bytes();
 
-  virtual void flush_packetizers();
+  virtual file_status_e flush_packetizer(int num);
+  virtual file_status_e flush_packetizer(generic_packetizer_c *ptzr);
+  virtual file_status_e flush_packetizers();
 
   virtual attach_mode_e attachment_requested(int64_t id);
 

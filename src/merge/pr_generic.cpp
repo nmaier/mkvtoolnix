@@ -1323,12 +1323,24 @@ generic_reader_c::get_queued_bytes() {
   return bytes;
 }
 
-void
-generic_reader_c::flush_packetizers() {
-  std::vector<generic_packetizer_c *>::const_iterator it;
+file_status_e
+generic_reader_c::flush_packetizer(int num) {
+  return flush_packetizer(PTZR(num));
+}
 
-  mxforeach(it, m_reader_packetizers)
-    (*it)->flush();
+file_status_e
+generic_reader_c::flush_packetizer(generic_packetizer_c *ptzr) {
+  ptzr->flush();
+
+  return FILE_STATUS_DONE;
+}
+
+file_status_e
+generic_reader_c::flush_packetizers() {
+  foreach(generic_packetizer_c *ptzr, m_reader_packetizers)
+    ptzr->flush();
+
+  return FILE_STATUS_DONE;
 }
 
 void

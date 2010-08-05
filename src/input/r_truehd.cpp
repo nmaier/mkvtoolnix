@@ -96,20 +96,12 @@ truehd_reader_c::read(generic_packetizer_c *,
   int64_t read_len        = std::min((int64_t)TRUEHD_READ_SIZE, remaining_bytes);
   int num_read            = m_io->read(m_chunk->get_buffer(), read_len);
 
-  if (0 > num_read) {
-    PTZR0->flush();
-    return FILE_STATUS_DONE;
+  if (0 <= num_read) {
+    PTZR0->process(new packet_t(new memory_c(m_chunk->get_buffer(), num_read, false)));
+    m_bytes_processed += num_read;
   }
 
-  PTZR0->process(new packet_t(new memory_c(m_chunk->get_buffer(), num_read, false)));
-  m_bytes_processed += num_read;
-
-  if (0 < (remaining_bytes - num_read))
-    return FILE_STATUS_MOREDATA;
-
-  PTZR0->flush();
-
-  return FILE_STATUS_DONE;
+  return (0 >= (remaining_bytes - num_read)) ? flush_packetizers() : FILE_STATUS_MOREDATA;
 }
 
 int

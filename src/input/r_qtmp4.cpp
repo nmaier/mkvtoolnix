@@ -1275,10 +1275,8 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
       break;
   }
 
-  if (demuxers.size() == dmx_idx) {
-    flush_packetizers();
-    return FILE_STATUS_DONE;
-  }
+  if (demuxers.size() == dmx_idx)
+    return flush_packetizers();
 
   qtmp4_demuxer_cptr &dmx = demuxers[dmx_idx];
   qt_index_t &index       = dmx->m_index[dmx->pos];
@@ -1306,8 +1304,7 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
     mxwarn(boost::format(Y("Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"))
            % dmx->pos % dmx->m_index.size() % index.size % index.file_pos);
     safefree(buffer);
-    flush_packetizers();
-    return FILE_STATUS_DONE;
+    return flush_packetizers();
   }
 
   PTZR(dmx->ptzr)->process(new packet_t(new memory_c(buffer, index.size + buffer_offset, true), index.timecode, index.duration,
@@ -1317,8 +1314,7 @@ qtmp4_reader_c::read(generic_packetizer_c *ptzr,
   if (dmx->pos < dmx->m_index.size())
     return FILE_STATUS_MOREDATA;
 
-  flush_packetizers();
-  return FILE_STATUS_DONE;
+  return flush_packetizers();
 }
 
 uint32_t

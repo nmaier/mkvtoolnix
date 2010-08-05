@@ -113,15 +113,13 @@ file_status_e
 tta_reader_c::read(generic_packetizer_c *,
                    bool) {
   if (seek_points.size() <= pos)
-    return FILE_STATUS_DONE;
+    return flush_packetizers();
 
   unsigned char *buf = (unsigned char *)safemalloc(seek_points[pos]);
   int nread          = io->read(buf, seek_points[pos]);
 
-  if (0 >= nread) {
-    PTZR0->flush();
-    return FILE_STATUS_DONE;
-  }
+  if (0 >= nread)
+    return flush_packetizers();
   pos++;
 
   memory_cptr mem(new memory_c(buf, nread, true));
@@ -135,12 +133,7 @@ tta_reader_c::read(generic_packetizer_c *,
 
   bytes_processed += nread;
 
-  if (seek_points.size() <= pos) {
-    PTZR0->flush();
-    return FILE_STATUS_DONE;
-  }
-
-  return FILE_STATUS_MOREDATA;
+  return seek_points.size() <= pos ? flush_packetizers() : FILE_STATUS_MOREDATA;
 }
 
 int

@@ -100,20 +100,15 @@ file_status_e
 vc1_es_reader_c::read(generic_packetizer_c *,
                       bool) {
   if (m_bytes_processed >= m_size)
-    return FILE_STATUS_DONE;
+    return flush_packetizers();
 
   int num_read = m_io->read(m_buffer->get_buffer(), READ_SIZE);
-  if (0 >= num_read)
-    return FILE_STATUS_DONE;
+  if (0 < num_read) {
+    PTZR0->process(new packet_t(new memory_c(m_buffer->get_buffer(), num_read)));
+    m_bytes_processed += num_read;
+  }
 
-  PTZR0->process(new packet_t(new memory_c(m_buffer->get_buffer(), num_read)));
-
-  m_bytes_processed += num_read;
-
-  if ((READ_SIZE != num_read) || (m_bytes_processed >= m_size))
-    PTZR0->flush();
-
-  return READ_SIZE == num_read ? FILE_STATUS_MOREDATA : FILE_STATUS_DONE;
+  return ((READ_SIZE != num_read) || (m_bytes_processed >= m_size)) ? flush_packetizers() : FILE_STATUS_MOREDATA;
 }
 
 int

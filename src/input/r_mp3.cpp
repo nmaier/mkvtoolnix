@@ -76,10 +76,8 @@ file_status_e
 mp3_reader_c::read(generic_packetizer_c *,
                    bool) {
   int nread = io->read(chunk, 16384);
-  if (0 >= nread) {
-    PTZR0->flush();
-    return FILE_STATUS_DONE;
-  }
+  if (0 >= nread)
+    return flush_packetizers();
 
   PTZR0->process(new packet_t(new memory_c(chunk, nread, false)));
   bytes_processed += nread;

@@ -94,20 +94,20 @@ ivf_reader_c::read(generic_packetizer_c *,
 
   ivf_frame_header_t header;
   if ((sizeof(ivf_frame_header_t) > remaining_bytes) || (m_in->read(&header, sizeof(ivf_frame_header_t)) != sizeof(ivf_frame_header_t)))
-    return FILE_STATUS_DONE;
+    return flush_packetizers();
 
   remaining_bytes     -= sizeof(ivf_frame_header_t);
   uint32_t frame_size  = get_uint32_le(&header.frame_size);
 
   if (remaining_bytes < frame_size) {
     m_in->setFilePointer(0, seek_end);
-    return FILE_STATUS_DONE;
+    return flush_packetizers();
   }
 
   memory_cptr buffer = memory_c::alloc(frame_size);
   if (m_in->read(buffer->get_buffer(), frame_size) < frame_size) {
     m_in->setFilePointer(0, seek_end);
-    return FILE_STATUS_DONE;
+    return flush_packetizers();
   }
 
   int64_t timestamp = get_uint64_le(&header.timestamp) * 1000000000ull * m_frame_rate_den / m_frame_rate_num;

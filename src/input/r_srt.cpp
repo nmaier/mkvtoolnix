@@ -63,17 +63,10 @@ srt_reader_c::create_packetizer(int64_t) {
 file_status_e
 srt_reader_c::read(generic_packetizer_c *,
                    bool) {
-  if (m_subs->empty())
-    return FILE_STATUS_DONE;
+  if (!m_subs->empty())
+    m_subs->process(PTZR0);
 
-  m_subs->process(PTZR0);
-
-  if (m_subs->empty()) {
-    flush_packetizers();
-    return FILE_STATUS_DONE;
-  }
-
-  return FILE_STATUS_MOREDATA;
+  return m_subs->empty() ? flush_packetizers() : FILE_STATUS_MOREDATA;
 }
 
 int

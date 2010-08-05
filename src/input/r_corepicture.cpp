@@ -228,12 +228,7 @@ corepicture_reader_c::read(generic_packetizer_c *ptzr,
     m_current_picture++;
   }
 
-  if (m_current_picture == m_pictures.end()) {
-    PTZR(m_ptzr)->flush();
-    return FILE_STATUS_DONE;
-  }
-
-  return FILE_STATUS_MOREDATA;
+  return m_current_picture == m_pictures.end() ? flush_packetizer(m_ptzr) : FILE_STATUS_MOREDATA;
 }
 
 int

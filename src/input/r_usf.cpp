@@ -282,7 +282,7 @@ usf_reader_c::read(generic_packetizer_c *ptzr,
     return FILE_STATUS_DONE;
 
   if (track->m_entries.end() == track->m_current_entry)
-    return FILE_STATUS_DONE;
+    return flush_packetizer(track->m_ptzr);
 
   const usf_entry_t &entry = *(track->m_current_entry);
   // A length of 0 here is OK because the text subtitle packetizer assumes
@@ -291,10 +291,8 @@ usf_reader_c::read(generic_packetizer_c *ptzr,
   PTZR(track->m_ptzr)->process(new packet_t(mem, entry.m_start, entry.m_end - entry.m_start));
   ++(track->m_current_entry);
 
-  if (track->m_entries.end() == track->m_current_entry) {
-    PTZR(track->m_ptzr)->flush();
-    return FILE_STATUS_DONE;
-  }
+  if (track->m_entries.end() == track->m_current_entry)
+    return flush_packetizer(track->m_ptzr);
 
   return FILE_STATUS_MOREDATA;
 }

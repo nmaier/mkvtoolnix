@@ -147,20 +147,15 @@ aac_reader_c::read(generic_packetizer_c *,
   int read_len        = std::min(INITCHUNKSIZE, remaining_bytes);
   int num_read        = m_io->read(m_chunk, read_len);
 
-  if (0 >= num_read) {
-    PTZR0->flush();
-    return FILE_STATUS_DONE;
+  if (0 < num_read) {
+    PTZR0->process(new packet_t(new memory_c(*m_chunk, num_read, false)));
+    m_bytes_processed += num_read;
+
+    if (0 < (remaining_bytes - num_read))
+      return FILE_STATUS_MOREDATA;
   }
 
-  PTZR0->process(new packet_t(new memory_c(*m_chunk, num_read, false)));
-  m_bytes_processed += num_read;
-
-  if (0 < (remaining_bytes - num_read))
-    return FILE_STATUS_MOREDATA;
-
-  PTZR0->flush();
-
-  return FILE_STATUS_DONE;
+  return flush_packetizers();
 }
 
 int

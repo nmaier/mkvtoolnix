@@ -84,7 +84,7 @@ pgssup_reader_c::read(generic_packetizer_c *,
 
     while (1) {
       if (PGSSUP_FILE_MAGIC != m_in->read_uint16_be())
-        return FILE_STATUS_DONE;
+        return flush_packetizers();
 
       if (0 == frame->get_size())
         timestamp = static_cast<uint64_t>(m_in->read_uint32_be()) * 100000Lu / 9;
@@ -115,7 +115,7 @@ pgssup_reader_c::read(generic_packetizer_c *,
     if (m_debug)
       mxinfo("pgssup_reader_c::read(): exception\n");
 
-    return FILE_STATUS_DONE;
+    return flush_packetizers();
   }
 
   return FILE_STATUS_MOREDATA;

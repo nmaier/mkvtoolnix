@@ -1,5 +1,9 @@
 2010-08-05  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: Fixed an error with losing packets (error
+	message "packet queue not empty") when reading IVF (VP8) files
+	using --default-duration on it.
+
 	* mkvmerge: bug fix: Fixed access to uninitialized memory in the
 	MPEG-2 ES parser.
 

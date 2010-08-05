@@ -183,21 +183,20 @@ mpeg_es_reader_c::create_packetizer(int64_t) {
 file_status_e
 mpeg_es_reader_c::read(generic_packetizer_c *,
                        bool) {
-  unsigned char *chunk = (unsigned char *)safemalloc(20000);
-  int num_read         = io->read(chunk, 20000);
-  if (0 > num_read) {
-    safefree(chunk);
-    return FILE_STATUS_DONE;
+  int64_t bytes_to_read = std::min(static_cast<int64_t>(READ_SIZE), size - bytes_processed);
+  if (0 >= bytes_to_read)
+    return flush_packetizers();
+
+  memory_cptr chunk = memory_c::alloc(bytes_to_read);
+  int64_t num_read  = io->read(chunk, bytes_to_read);
+
+  if (0 < num_read) {
+    chunk->set_size(num_read);
+    PTZR0->process(new packet_t(chunk));
+    bytes_processed = io->getFilePointer();
   }
 
-  if (0 < num_read)
-    PTZR0->process(new packet_t(new memory_c(chunk, num_read, true)));
-  if (20000 > num_read)
-    PTZR0->flush();
-
-  bytes_processed = io->getFilePointer();
-
-  return 20000 > num_read ? FILE_STATUS_DONE : FILE_STATUS_MOREDATA;
+  return bytes_to_read > num_read ? flush_packetizers() : FILE_STATUS_MOREDATA;
 }
 
 bool

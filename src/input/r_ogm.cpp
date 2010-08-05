@@ -656,10 +656,8 @@ ogm_reader_c::read(generic_packetizer_c *,
 
   do {
     // Make sure we have a page that we can work with.
-    if (read_page(&og) == FILE_STATUS_DONE) {
-      flush_packetizers();
-      return FILE_STATUS_DONE;
-    }
+    if (read_page(&og) == FILE_STATUS_DONE)
+      return flush_packetizers();
 
     // Is this the first page of a new stream? No, so process it normally.
     if (!ogg_page_bos(&og))
@@ -673,8 +671,7 @@ ogm_reader_c::read(generic_packetizer_c *,
       return FILE_STATUS_MOREDATA;
 
   // No, we're done with this file.
-  flush_packetizers();
-  return FILE_STATUS_DONE;
+  return flush_packetizers();
 }
 
 int

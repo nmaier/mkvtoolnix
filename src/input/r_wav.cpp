@@ -563,10 +563,8 @@ wav_reader_c::read(generic_packetizer_c *,
 
   num_read = m_io->read(buffer, requested_bytes);
 
-  if (0 >= num_read) {
-    PTZR0->flush();
-    return FILE_STATUS_DONE;
-  }
+  if (0 >= num_read)
+    return flush_packetizers();
 
   m_demuxer->process(num_read);
 
@@ -576,10 +574,8 @@ wav_reader_c::read(generic_packetizer_c *,
   if (!m_remaining_bytes_in_current_data_chunk) {
     m_cur_data_chunk_idx = find_chunk("data", m_cur_data_chunk_idx + 1, false);
 
-    if (-1 == m_cur_data_chunk_idx) {
-      PTZR0->flush();
-      return FILE_STATUS_DONE;
-    }
+    if (-1 == m_cur_data_chunk_idx)
+      return flush_packetizers();
 
     m_io->setFilePointer(m_chunks[m_cur_data_chunk_idx].pos + sizeof(struct chunk_struct), seek_beginning);
 

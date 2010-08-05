@@ -728,7 +728,7 @@ avi_reader_c::create_vorbis_packetizer(int aid) {
 file_status_e
 avi_reader_c::read_video() {
   if (m_video_frames_read >= m_max_video_frames)
-    return FILE_STATUS_DONE;
+    return flush_packetizer(m_vptzr);
 
   memory_cptr chunk;
   int key                   = 0;
@@ -748,7 +748,7 @@ avi_reader_c::read_video() {
     if (0 > num_read) {
       // Error reading the frame: abort
       m_video_frames_read = m_max_video_frames;
-      return FILE_STATUS_DONE;
+      return flush_packetizer(m_vptzr);
 
     } else if (0 == num_read)
       ++dropped_frames_here;
@@ -757,7 +757,7 @@ avi_reader_c::read_video() {
 
   if (0 == num_read)
     // This is only the case if the AVI contains dropped frames only.
-    return FILE_STATUS_DONE;
+    return flush_packetizer(m_vptzr);
 
   size_t i;
   for (i = m_video_frames_read; i < m_max_video_frames; ++i) {
@@ -802,12 +802,7 @@ avi_reader_c::read_video() {
 
   m_bytes_processed += num_read;
 
-  if (m_video_frames_read >= m_max_video_frames) {
-    PTZR(m_vptzr)->flush();
-    return FILE_STATUS_DONE;
-  }
-
-  return FILE_STATUS_MOREDATA;
+  return m_video_frames_read >= m_max_video_frames ? flush_packetizer(m_vptzr) :  FILE_STATUS_MOREDATA;
 }
 
 file_status_e
@@ -815,18 +810,14 @@ avi_reader_c::read_audio(avi_demuxer_t &demuxer) {
   AVI_set_audio_track(m_avi, demuxer.m_aid);
   int size = AVI_read_audio_chunk(m_avi, NULL);
 
-  if (0 >= size) {
-    PTZR(demuxer.m_ptzr)->flush();
-    return FILE_STATUS_DONE;
-  }
+  if (0 >= size)
+    return flush_packetizer(demuxer.m_ptzr);
 
   memory_cptr chunk = memory_c::alloc(size);
   size              = AVI_read_audio_chunk(m_avi, (char *)chunk->get_buffer());
 
-  if (0 >= size) {
-    PTZR(demuxer.m_ptzr)->flush();
-    return FILE_STATUS_DONE;
-  }
+  if (0 >= size)
+    return flush_packetizer(demuxer.m_ptzr);
 
   bool need_more_data = 0 != AVI_read_audio_chunk(m_avi, NULL);
 
@@ -835,27 +826,15 @@ avi_reader_c::read_audio(avi_demuxer_t &demuxer) {
 
   m_bytes_processed += size;
 
-  if (need_more_data)
-    return FILE_STATUS_MOREDATA;
-  else {
-    PTZR(demuxer.m_ptzr)->flush();
-    return FILE_STATUS_DONE;
-  }
+  return need_more_data ? FILE_STATUS_MOREDATA : flush_packetizer(demuxer.m_ptzr);
 }
 
 file_status_e
 avi_reader_c::read_subtitles(avi_subs_demuxer_t &demuxer) {
-  if (demuxer.m_subs->empty())
-    return FILE_STATUS_DONE;
+  if (!demuxer.m_subs->empty())
+    demuxer.m_subs->process(PTZR(demuxer.m_ptzr));
 
-  demuxer.m_subs->process(PTZR(demuxer.m_ptzr));
-
-  if (demuxer.m_subs->empty()) {
-    PTZR(demuxer.m_ptzr)->flush();
-    return FILE_STATUS_DONE;
-  }
-
-  return FILE_STATUS_MOREDATA;
+  return demuxer.m_subs->empty() ? flush_packetizer(demuxer.m_ptzr) : FILE_STATUS_MOREDATA;
 }
 
 file_status_e
@@ -874,7 +853,7 @@ avi_reader_c::read(generic_packetizer_c *ptzr,
     if ((-1 != subs_demuxer->m_ptzr) && (PTZR(subs_demuxer->m_ptzr) == ptzr))
       return read_subtitles(*subs_demuxer);
 
-  return FILE_STATUS_DONE;
+  return flush_packetizers();
 }
 
 int
