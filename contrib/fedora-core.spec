@@ -43,7 +43,7 @@ Matroska video utilities.
 
 %prep
 %setup
-%configure --prefix=%{_prefix}
+%configure --prefix=%{_prefix} $EXTRA_CONFIGURE_ARGS
 
 %build
 ./drake

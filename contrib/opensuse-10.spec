@@ -38,7 +38,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %build
 export CFLAGS="$RPM_OPT_FLAGS"
-./configure --prefix=/usr --mandir=/usr/share/man
+./configure --prefix=/usr --mandir=/usr/share/man $EXTRA_CONFIGURE_ARGS
 ./drake
 
 %install
