@@ -93,6 +93,7 @@ avi_reader_c::avi_reader_c(track_info_c &_ti)
   , m_avc_nal_size_size(-1)
   , m_bytes_to_process(0)
   , m_bytes_processed(0)
+  , m_video_track_ok(false)
 {
   int64_t size;
 
@@ -115,6 +116,7 @@ avi_reader_c::avi_reader_c(track_info_c &_ti)
   m_fps              = AVI_frame_rate(m_avi);
   m_max_video_frames = AVI_video_frames(m_avi);
 
+  verify_video_track();
   parse_subtitle_chunks();
 
   if (debugging_requested("avi_dump_video_index"))
@@ -128,6 +130,21 @@ avi_reader_c::~avi_reader_c() {
   m_ti.m_private_data = NULL;
 
   mxverb(2, boost::format("avi_reader_c: Dropped video frames: %1%\n") % m_dropped_video_frames);
+}
+
+void
+avi_reader_c::verify_video_track() {
+  alBITMAPINFOHEADER *bih = m_avi->bitmap_info_header;
+  size_t size             = get_uint32_le(&bih->bi_size);
+
+  if (sizeof(alBITMAPINFOHEADER) > size)
+    return;
+
+  const char *codec = AVI_video_compressor(m_avi);
+  if ((0 == codec[0]) || (0 == AVI_video_width(m_avi)) || (0 == AVI_video_height(m_avi)))
+    return;
+
+  m_video_track_ok = true;
 }
 
 void
@@ -191,59 +208,60 @@ avi_reader_c::parse_subtitle_chunks() {
 
 void
 avi_reader_c::create_packetizer(int64_t tid) {
-  if ((0 == tid) && demuxing_requested('v', 0) && (-1 == m_vptzr)) {
-    size_t i;
+  if ((0 == tid) && demuxing_requested('v', 0) && (-1 == m_vptzr) && m_video_track_ok)
+    create_video_packetizer();
 
-    mxverb_tid(4, m_ti.m_fname, 0, "frame sizes:\n");
+  else if ((tid <= AVI_audio_tracks(m_avi)) && demuxing_requested('a', tid))
+    add_audio_demuxer(tid - 1);
+}
 
-    for (i = 0; i < m_max_video_frames; i++) {
-      m_bytes_to_process += AVI_frame_size(m_avi, i);
-      mxverb(4, boost::format("  %1%: %2%\n") % i % AVI_frame_size(m_avi, i));
-    }
+void
+avi_reader_c::create_video_packetizer() {
+  size_t i;
 
-    m_ti.m_private_data = (unsigned char *)m_avi->bitmap_info_header;
-    if (NULL != m_ti.m_private_data)
-      m_ti.m_private_size = get_uint32_le(&m_avi->bitmap_info_header->bi_size);
+  mxverb_tid(4, m_ti.m_fname, 0, "frame sizes:\n");
 
-    mxverb(4, boost::format("track extra data size: %1%\n") % (m_ti.m_private_size - sizeof(alBITMAPINFOHEADER)));
-    if (sizeof(alBITMAPINFOHEADER) < m_ti.m_private_size) {
-      mxverb(4, "  ");
-      for (i = sizeof(alBITMAPINFOHEADER); i < m_ti.m_private_size; ++i)
-        mxverb(4, boost::format("%|1$02x| ") % m_ti.m_private_data[i]);
-      mxverb(4, "\n");
-    }
-
-    const char *codec = AVI_video_compressor(m_avi);
-    if (mpeg4::p2::is_v3_fourcc(codec))
-      m_divx_type = DIVX_TYPE_V3;
-    else if (mpeg4::p2::is_fourcc(codec))
-      m_divx_type = DIVX_TYPE_MPEG4;
-
-    if (map_has_key(m_ti.m_default_durations, 0))
-      m_fps = 1000000000.0 / m_ti.m_default_durations[0];
-
-    else if (map_has_key(m_ti.m_default_durations, -1))
-      m_fps = 1000000000.0 / m_ti.m_default_durations[-1];
-
-    m_ti.m_id = 0;                 // ID for the video track.
-    if (DIVX_TYPE_MPEG4 == m_divx_type)
-      create_mpeg4_p2_packetizer();
-
-    else if (mpeg4::p10::is_avc_fourcc(codec) && !hack_engaged(ENGAGE_ALLOW_AVC_IN_VFW_MODE))
-      create_mpeg4_p10_packetizer();
-
-    else if (mpeg1_2::is_fourcc(get_uint32_le(codec)))
-      create_mpeg1_2_packetizer();
-
-    else
-      create_standard_video_packetizer();
+  for (i = 0; i < m_max_video_frames; i++) {
+    m_bytes_to_process += AVI_frame_size(m_avi, i);
+    mxverb(4, boost::format("  %1%: %2%\n") % i % AVI_frame_size(m_avi, i));
   }
 
-  if (0 == tid)
-    return;
+  m_ti.m_private_data = (unsigned char *)m_avi->bitmap_info_header;
+  if (NULL != m_ti.m_private_data)
+    m_ti.m_private_size = get_uint32_le(&m_avi->bitmap_info_header->bi_size);
 
-  if ((tid <= AVI_audio_tracks(m_avi)) && demuxing_requested('a', tid))
-    add_audio_demuxer(tid - 1);
+  mxverb(4, boost::format("track extra data size: %1%\n") % (m_ti.m_private_size - sizeof(alBITMAPINFOHEADER)));
+  if (sizeof(alBITMAPINFOHEADER) < m_ti.m_private_size) {
+    mxverb(4, "  ");
+    for (i = sizeof(alBITMAPINFOHEADER); i < m_ti.m_private_size; ++i)
+      mxverb(4, boost::format("%|1$02x| ") % m_ti.m_private_data[i]);
+    mxverb(4, "\n");
+  }
+
+  const char *codec = AVI_video_compressor(m_avi);
+  if (mpeg4::p2::is_v3_fourcc(codec))
+    m_divx_type = DIVX_TYPE_V3;
+  else if (mpeg4::p2::is_fourcc(codec))
+    m_divx_type = DIVX_TYPE_MPEG4;
+
+  if (map_has_key(m_ti.m_default_durations, 0))
+    m_fps = 1000000000.0 / m_ti.m_default_durations[0];
+
+  else if (map_has_key(m_ti.m_default_durations, -1))
+    m_fps = 1000000000.0 / m_ti.m_default_durations[-1];
+
+  m_ti.m_id = 0;                 // ID for the video track.
+  if (DIVX_TYPE_MPEG4 == m_divx_type)
+    create_mpeg4_p2_packetizer();
+
+  else if (mpeg4::p10::is_avc_fourcc(codec) && !hack_engaged(ENGAGE_ALLOW_AVC_IN_VFW_MODE))
+    create_mpeg4_p10_packetizer();
+
+  else if (mpeg1_2::is_fourcc(get_uint32_le(codec)))
+    create_mpeg1_2_packetizer();
+
+  else
+    create_standard_video_packetizer();
 }
 
 void
@@ -895,6 +913,7 @@ avi_reader_c::extended_identify_mpeg4_l2(std::vector<std::string> &extended_info
 
 void
 avi_reader_c::identify() {
+  id_result_container("AVI");
   identify_video();
   identify_audio();
   identify_subtitles();
@@ -903,9 +922,10 @@ avi_reader_c::identify() {
 
 void
 avi_reader_c::identify_video() {
-  std::vector<std::string> extended_info;
+  if (!m_video_track_ok)
+    return;
 
-  id_result_container("AVI");
+  std::vector<std::string> extended_info;
 
   const char *fourcc_str = AVI_video_compressor(m_avi);
   std::string type       = fourcc_str;

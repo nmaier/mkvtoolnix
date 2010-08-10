@@ -1,3 +1,8 @@
+2010-08-10  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Video tracks with a width or height of 0 are
+	not read from AVI files anymore. Fix for bug 538.
+
 2010-08-05  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Fixed an error with losing packets (error

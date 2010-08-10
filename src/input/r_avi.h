@@ -78,6 +78,7 @@ private:
   int m_avc_nal_size_size;
 
   int64_t m_bytes_to_process, m_bytes_processed;
+  bool m_video_track_ok;
 
 public:
   avi_reader_c(track_info_c &_ti) throw (error_c);
@@ -109,10 +110,12 @@ protected:
   virtual void create_mpeg1_2_packetizer();
   virtual void create_mpeg4_p2_packetizer();
   virtual void create_mpeg4_p10_packetizer();
+  virtual void create_video_packetizer();
 
   void extended_identify_mpeg4_l2(std::vector<std::string> &extended_info);
 
   void parse_subtitle_chunks();
+  void verify_video_track();
 
   virtual void identify_video();
   virtual void identify_audio();
