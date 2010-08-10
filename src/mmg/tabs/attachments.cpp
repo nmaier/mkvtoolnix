@@ -286,7 +286,7 @@ tab_attachments::on_style_changed(wxCommandEvent &evt) {
 
 void
 tab_attachments::save(wxConfigBase *cfg) {
-  uint32_t i, j;
+  unsigned int i;
   wxString s;
 
   cfg->SetPath(wxT("/attachments"));
@@ -298,6 +298,7 @@ tab_attachments::save(wxConfigBase *cfg) {
     cfg->Write(wxT("stored_name"), a->stored_name);
     cfg->Write(wxT("file_name"), a->file_name);
     s = wxEmptyString;
+    size_t j;
     for (j = 0; j < a->description.Length(); j++)
       if (a->description[j] == wxT('\n'))
         s += wxT("!\\N!");

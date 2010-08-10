@@ -31,7 +31,7 @@ UTFstring_to_wxString(const UTFstring &u) {
 wxString &
 break_line(wxString &line,
            unsigned int break_after) {
-  uint32_t i, chars;
+  size_t i, chars;
   wxString broken;
 
   for (i = 0, chars = 0; i < line.length(); i++) {
@@ -109,7 +109,7 @@ shell_escape(wxString source,
 
 wxString
 no_cr(wxString source) {
-  uint32_t i;
+  size_t i;
   wxString escaped;
 
   for (i = 0; i < source.Length(); i++) {
