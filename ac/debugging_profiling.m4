@@ -8,25 +8,31 @@ PROFILING_LIBS=""
 
 AC_ARG_ENABLE([optimization],
   AC_HELP_STRING([--enable-optimization],[compile with optimization: -O3 (yes)]),
-  , [ enable_optimization=no ])
-AC_ARG_ENABLE(
-  [debug],
+  [],
+  [enable_optimization=yes])
+
+AC_ARG_ENABLE([debug],
   AC_HELP_STRING([--enable-debug],[compile with debug information (no)]),
-  [
-    if test x"$enable_debug" = xyes ; then
-      DEBUG_CFLAGS="-g -DDEBUG"
-      if test x"$enable_optimization" = x"no"; then
-        OPTIMIZATION_CFLAGS=""
-      fi
-    fi
-  ])
-AC_ARG_ENABLE(
-  [profiling],
+  [],
+  [enable_debug=no])
+
+AC_ARG_ENABLE([profiling],
   AC_HELP_STRING([--enable-profiling],[compile with profiling information (no)]),
-  [
-    PROFILING_CFLAGS="-pg"
-    PROFILING_LIBS="-pg"
-  ])
+  [],
+  [enable_profiling=no])
+
+if test x"$enable_debug" = xyes ; then
+  DEBUG_CFLAGS="-g -DDEBUG"
+fi
+
+if test x"$enable_optimization" = x"no"; then
+  OPTIMIZATION_CFLAGS=""
+fi
+
+if test x"$enable_debug" = xyes ; then
+  PROFILING_CFLAGS="-pg"
+  PROFILING_LIBS="-pg"
+fi
 
 AC_SUBST(DEBUG_CFLAGS)
 AC_SUBST(PROFILING_CFLAGS)
