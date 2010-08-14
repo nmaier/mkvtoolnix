@@ -327,6 +327,46 @@ to_hex(const unsigned char *buf,
   return hex;
 }
 
+std::string
+create_codec_dependent_private_info(KaxCodecPrivate &c_priv,
+                                    char track_type,
+                                    const std::string &codec_id) {
+  if ((codec_id == MKV_V_MSCOMP) && ('v' == track_type) && (c_priv.GetSize() >= sizeof(alBITMAPINFOHEADER))) {
+    alBITMAPINFOHEADER *bih = reinterpret_cast<alBITMAPINFOHEADER *>(c_priv.GetBuffer());
+    unsigned char *fcc      = reinterpret_cast<unsigned char *>(&bih->bi_compression);
+    return (boost::format(Y(" (FourCC: %1%%2%%3%%4%, 0x%|5$08x|)"))
+            % fcc[0] % fcc[1] % fcc[2] % fcc[3] % get_uint32_le(&bih->bi_compression)).str();
+
+  } else if ((codec_id == MKV_A_ACM) && ('a' == track_type) && (c_priv.GetSize() >= sizeof(alWAVEFORMATEX))) {
+    alWAVEFORMATEX *wfe     = reinterpret_cast<alWAVEFORMATEX *>(c_priv.GetBuffer());
+    return (boost::format(Y(" (format tag: 0x%|1$04x|)")) % get_uint16_le(&wfe->w_format_tag)).str();
+
+  } else if ((codec_id == MKV_V_MPEG4_AVC) && ('v' == track_type) && (c_priv.GetSize() >= 4)) {
+    unsigned char *avcc      = c_priv.GetBuffer();
+    unsigned int profile_idc = avcc[1];
+    unsigned int level_idc   = avcc[3];
+
+    return (boost::format(Y(" (h.264 profile: %1% @L%2%.%3%)"))
+            % (  profile_idc ==  44 ? "CAVLC 4:4:4 Intra"
+               : profile_idc ==  66 ? "Baseline"
+               : profile_idc ==  77 ? "Main"
+               : profile_idc ==  83 ? "Scalable Baseline"
+               : profile_idc ==  86 ? "Scalable High"
+               : profile_idc ==  88 ? "Extended"
+               : profile_idc == 100 ? "High"
+               : profile_idc == 110 ? "High 10"
+               : profile_idc == 118 ? "Multiview High"
+               : profile_idc == 122 ? "High 4:2:2"
+               : profile_idc == 128 ? "Stereo High"
+               : profile_idc == 144 ? "High 4:4:4"
+               : profile_idc == 244 ? "High 4:4:4 Predictive"
+               :                      Y("Unknown"))
+            % (level_idc / 10) % (level_idc % 10)).str();
+  }
+
+  return "";
+}
+
 void
 parse_args(std::vector<std::string> args,
            std::string &file_name) {
@@ -1010,17 +1050,8 @@ def_handle(tracks) {
             ms_compat = true;
 
         } else if (is_id(l3, KaxCodecPrivate)) {
-          fourcc_buffer = "";
           KaxCodecPrivate &c_priv = *static_cast<KaxCodecPrivate *>(l3);
-          if (ms_compat && ('v' == kax_track_type) && (c_priv.GetSize() >= sizeof(alBITMAPINFOHEADER))) {
-            alBITMAPINFOHEADER *bih = (alBITMAPINFOHEADER *)c_priv.GetBuffer();
-            unsigned char *fcc      = (unsigned char *)&bih->bi_compression;
-            fourcc_buffer           = (boost::format(Y(" (FourCC: %1%%2%%3%%4%, 0x%|5$08x|)"))
-                                       % fcc[0] % fcc[1] % fcc[2] % fcc[3] % get_uint32_le(&bih->bi_compression)).str();
-          } else if (ms_compat && ('a' == kax_track_type) && (c_priv.GetSize() >= sizeof(alWAVEFORMATEX))) {
-            alWAVEFORMATEX *wfe     = (alWAVEFORMATEX *)c_priv.GetBuffer();
-            fourcc_buffer           = (boost::format(Y(" (format tag: 0x%|1$04x|)")) % get_uint16_le(&wfe->w_format_tag)).str();
-          }
+          fourcc_buffer = create_codec_dependent_private_info(c_priv, kax_track_type, kax_codec_id);
 
           if (s_calc_checksums && !s_show_summary)
             fourcc_buffer += (boost::format(Y(" (adler: 0x%|1$08x|)")) % calc_adler32(c_priv.GetBuffer(), c_priv.GetSize())).str();

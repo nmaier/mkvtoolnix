@@ -1,3 +1,8 @@
+2010-08-14  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvinfo: new feature: mkvinfo will show the h.264 profile and
+	level for AVC/h.264 tracks along with the CodecPrivate element.
+
 2010-08-10  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Video tracks with a width or height of 0 are
