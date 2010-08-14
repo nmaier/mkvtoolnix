@@ -4,7 +4,7 @@ dnl
 
 AC_ARG_ENABLE([precompiled_headers],
   AC_HELP_STRING([--enable-precompiled-headers],[enable the generation and use of precompiled headers (auto)]),
-  [enable_precompiled_headers=yes],
+  [],
   [enable_precompiled_headers=auto])
 
 if test x"$enable_precompiled_headers" = x"auto"; then
