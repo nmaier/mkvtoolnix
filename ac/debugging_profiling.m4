@@ -29,7 +29,7 @@ if test x"$enable_optimization" = x"no"; then
   OPTIMIZATION_CFLAGS=""
 fi
 
-if test x"$enable_debug" = xyes ; then
+if test x"$enable_profiling" = xyes ; then
   PROFILING_CFLAGS="-pg"
   PROFILING_LIBS="-pg"
 fi
