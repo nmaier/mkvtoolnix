@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: Israel Lucas Torrijos <lukillas.ole@gmail.com>\n"
 "POT-Creation-Date: 2010-06-08 10:00+0200\n"
-"PO-Revision-Date: 2010-08-17 20:43+0200\n"
+"PO-Revision-Date: 2010-08-17 22:08+0200\n"
 "Last-Translator: Israel Lucas Torrijos <lukillas.ole@gmail.com>\n"
 "Language-Team: Spanish <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -1892,7 +1892,7 @@ msgstr "Factor de relación de aspecto"
 
 #: src/info/mkvinfo.cpp:793
 msgid "Aspect ratio type: %1%%2%"
-msgstr "Tipo de relación de aspecto"
+msgstr "Tipo de relación de aspecto: %1%%2%"
 
 #: src/mmg/tabs/input_format.cpp:221
 msgid "Aspect ratio:"
@@ -2139,7 +2139,7 @@ msgstr "Traducir Capítulo"
 
 #: src/info/mkvinfo.cpp:570
 msgid "Chapter Translate Codec: %1%"
-msgstr "Códec de Traducción del Capítulo"
+msgstr "Códec de Traducción del Capítulo: %1%"
 
 #: src/info/mkvinfo.cpp:566
 msgid "Chapter Translate Edition UID: %1%"
@@ -2477,7 +2477,7 @@ msgstr "El núcleo de la imagen (CorePicture) del fotograma (frame) %1% tiene un
 # CorePicture traducido como núcleo de la imagen
 #: src/extract/xtr_cpic.cpp:47
 msgid "CorePicture frame %1% not supported.\n"
-msgstr "CorePicture traducido como núcleo de la imagen\n"
+msgstr "CorePicture frame %1% no es soportada.\n"
 
 #: src/mmg/jobs.cpp:183
 #: src/mmg/mux_dialog.cpp:129
@@ -3806,7 +3806,7 @@ msgstr "No es válido el selector en '%1% %2%'.\n"
 
 #: src/merge/mkvmerge.cpp:767
 msgid "Invalid split size in '--split %1%'.\n"
-msgstr "No es válido el tamaño de la división.\n"
+msgstr "No es válido el tamaño de la división: '--split %1%'.\n"
 
 #: src/input/r_usf.cpp:315
 msgid "Invalid start or stop timecode"
@@ -4871,7 +4871,7 @@ msgstr "Archivos de audio y video de RealMedia"
 
 #: src/input/r_real.cpp:377
 msgid "RealMedia files may contain HE-AAC / AAC+ / SBR AAC audio. In some cases this can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr %1%' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
-msgstr "Los archivos RealMedia pueden contener audio HE-AAC / AAC+ / SBR AAC. En algunos casos esto NO puede ser detectado automaticamente. Por lo tanto, si el archivo actual contiene SBR AAC, tiene que especificar  '--aac-is-sbr 0' manualmente para el archivo de entrada. De lo contrario el archivo será multiplexado de manera ERRÓNEA. También lea la documentación de Mkvmerge.\n"
+msgstr "Los archivos RealMedia pueden contener audio HE-AAC / AAC+ / SBR AAC. En algunos casos esto NO puede ser detectado automaticamente. Por lo tanto, si el archivo actual contiene SBR AAC, tiene que especificar  '--aac-is-sbr %1%' manualmente para el archivo de entrada. De lo contrario el archivo será multiplexado de manera ERRÓNEA. También lea la documentación de Mkvmerge.\n"
 
 #: src/common/cli_parser.cpp:180
 msgid "Redirects all messages into this file."
@@ -5790,7 +5790,7 @@ msgstr "El archivo actual (número %d) no puede ser eliminado. Hay otros archivo
 
 #: src/merge/pr_generic.cpp:842
 msgid "The current packet's timecode is smaller than that of the previous packet. This usually means that the source file is a Matroska file that has not been created 100%% correctly. The timecodes of all packets will be adjusted by %1%ms in order not to lose any data. This may throw audio/video synchronization off, but that can be corrected with mkvmerge's \"--sync\" option. If you already use \"--sync\" and you still get this warning then do NOT worry -- this is normal. If this error happens more than once and you get this message more than once for a particular track then either is the source file badly mastered, or mkvmerge contains a bug. In this case you should contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
-msgstr "El código de tiempo del paquete actual es mas pequeño que el del anterior paquete. Normalmente, significa que el archivo de origen es un archivo Matroska que no ha sido creado correctamente al 100%. Los códigos de tiempo de todos los paquetes serán ajustados por %1%ms a fin de no perder ningún dato. Esto puede deshacer la sincronizacion de audio/video, pero puede ser corregida con la opción de Mkvmerge \"--sync\". Si ya usaste \"--sync\" y todavía obtienes este aviso entonces NO te preocupes -- es normal.  Si el error sucede más de una vez vuelves a obtener este mensaje para una pista en particular, entonces el archivo de origen puede estar mal editado, o Mkvmerge tiene un fallo. En ese caso debería de contactar con el autor: Moritz Bunkus <moritz@bunkus.org>.\n"
+msgstr "El código de tiempo del paquete actual es mas pequeño que el del anterior paquete. Normalmente, significa que el archivo de origen es un archivo Matroska que no ha sido creado correctamente al 100%%. Los códigos de tiempo de todos los paquetes serán ajustados por %1%ms a fin de no perder ningún dato. Esto puede deshacer la sincronizacion de audio/video, pero puede ser corregida con la opción de Mkvmerge \"--sync\". Si ya usaste \"--sync\" y todavía obtienes este aviso entonces NO te preocupes -- es normal.  Si el error sucede más de una vez vuelves a obtener este mensaje para una pista en particular, entonces el archivo de origen puede estar mal editado, o Mkvmerge tiene un fallo. En ese caso debería de contactar con el autor: Moritz Bunkus <moritz@bunkus.org>.\n"
 
 #: src/input/r_usf.cpp:129
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"

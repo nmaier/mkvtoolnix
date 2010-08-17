@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: nl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-05-25 23:42+0200\n"
-"PO-Revision-Date: 2010-08-17 20:44+0200\n"
+"PO-Revision-Date: 2010-08-17 22:12+0200\n"
 "Last-Translator: René Maassen <bmom43@hotmail.com>\n"
 "Language-Team: Dutch <bmom43@hotmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -2630,7 +2630,7 @@ msgstr "Volg document(en) (cue) punt"
 
 #: src/info/mkvinfo.cpp:1292
 msgid "Cue ref cluster: %1%"
-msgstr "Volg document(en) (cue) referentie cluster"
+msgstr "Volg document(en) (cue) referentie cluster: %1%"
 
 #: src/info/mkvinfo.cpp:1300
 msgid "Cue ref codec state: %1%"
@@ -3173,7 +3173,7 @@ msgstr "Gefaald een tijdelijk bestand te creëren '%1%': %2% (%3%)\n"
 
 #: src/extract/xtr_textsubs.cpp:379
 msgid "Failed to parse an USF subtitle entry for track %1%: %2%\n"
-msgstr "Gefaald een USF ondertitel ingang te ontleden voor spoor 1%: %2%\n"
+msgstr "Gefaald een USF ondertitel ingang te ontleden voor spoor %1%: %2%\n"
 
 #: src/extract/xtr_textsubs.cpp:340
 msgid "Failed to parse the USF codec private data for track %1%: %2%\n"

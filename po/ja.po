@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-07-29 19:12+0200\n"
+"PO-Revision-Date: 2010-08-17 22:13+0200\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -5269,7 +5269,7 @@ msgstr "ステータス："
 
 #: src/merge/mkvmerge.cpp:694
 msgid "Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and 3 or one of the keywords 'none', 'right', 'left', 'both' (argument was '%1%').\n"
-msgstr "ステレオモードパラメータ：\"<TID>:<n|keyword>\"のnが0～3の数字ではないか、keywordが'none'、'right'、'left'もしくは'both'ではありません。\n"
+msgstr "ステレオモードパラメータ：\"<TID>:<n|keyword>\"のnが0～3の数字ではないか、keywordが'none'、'right'、'left'もしくは'both'ではありません（パラメータは'%1%'でした）。\n"
 
 #: src/info/mkvinfo.cpp:782
 msgid "Stereo mode: %1%%2%"
@@ -6589,7 +6589,7 @@ msgstr "'%1% %2%'で前のUIDが未知のフォーマットです。\n"
 
 #: src/merge/mkvmerge.cpp:1335
 msgid "Unknown format for the segment UID '%3%' in '%1% %2%'.\n"
-msgstr "'%1% %2%'でセグメントIDが未知のフォーマットです。\n"
+msgstr "'%1% %2%'でセグメントID'%3%'が未知のフォーマットです。\n"
 
 #: src/input/r_vobsub.cpp:593
 msgid "Unknown header 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
