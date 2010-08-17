@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-07-29 19:15+0200\n"
+"PO-Revision-Date: 2010-08-17 09:35+0800\n"
 "Last-Translator: Dean Lee <xslidian@lidian.info>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -620,7 +620,7 @@ msgstr " (自由调整)"
 
 #: src/info/mkvinfo.cpp:349
 msgid " (h.264 profile: %1% @L%2%.%3%)"
-msgstr ""
+msgstr " (h.264 profile: %1% @L%2%.%3%)"
 
 #: src/info/mkvinfo.cpp:768
 msgid " (inches)"
@@ -3297,7 +3297,7 @@ msgstr "强制该视频轨的 FourCC 为此值。注意，这只对使用 AVI �
 
 #: src/mmg/cli_options_dlg.cpp:130
 msgid "Forces the Matroska reader to use the generic passthrough packetizer even for known and supported track types."
-msgstr "强制 Matroska 读取器使用通用呈递分组器即使轨道类型已知或受支持。"
+msgstr "强制 Matroska 读取器使用通用呈递封装器，即使轨道类型已知或受支持。"
 
 #: src/mmg/tabs/input_format.cpp:238
 msgid "Forces the NALU size length to a certain number of bytes. This parameter is only available for AVC/h.264 elementary streams read from AVC/h.264 ES files, AVIs or Matroska files created with '--engage allow_avc_in_vwf_mode'. It defaults to 4 bytes, but there are files which do not contain a frame or slice that is bigger than 65535 bytes. For such files you can use this parameter and decrease the size to 2."
@@ -5864,9 +5864,8 @@ msgid "The file has been changed by another program since it was read by the hea
 msgstr "在头部编辑器读取此文件后，文件已被其他程序更改。因此您需要重新载入它。不幸的是这意味着您将丢失所有改动。"
 
 #: src/propedit/propedit.h:18
-#, fuzzy
 msgid "The file has not been modified."
-msgstr "文件不存在。"
+msgstr "文件未改动。"
 
 #: src/input/r_tta.cpp:64
 msgid "The file header is too short.\n"
@@ -6753,7 +6752,6 @@ msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video st
 msgstr "单场帧后出现意外的画面帧。尝试混流前请先修复 MPEG2 视频流。\n"
 
 #: src/info/mkvinfo.cpp:363
-#, fuzzy
 msgid "Unknown"
 msgstr "未知"
 
@@ -7798,7 +7796,7 @@ msgstr "flac_reader: FLAC__stream_decoder_new() 失败。\n"
 
 #: src/input/r_flac.cpp:149
 msgid "flac_reader: could not initialize the FLAC packetizer.\n"
-msgstr "flac_reader: 无法初始化 FLAC 分组器。\n"
+msgstr "flac_reader: 无法初始化 FLAC 封装器。\n"
 
 #: src/mmg/tabs/input_extra.cpp:87
 msgid "for all frames"
@@ -8854,6 +8852,7 @@ msgstr "是"
 #~ "  -v, --verbose  提高“详细”程度。\n"
 #~ "  -h, --help     显示本帮助。\n"
 #~ "  -V, --version  显示版本信息。\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "使用 FLAC 输出模块。\n"
