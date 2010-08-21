@@ -1,15 +1,6 @@
 dnl
 dnl Debugging, profiling and optimization options
 dnl
-DEBUG_CFLAGS=""
-OPTIMIZATION_CFLAGS="-O3"
-PROFILING_CFLAGS=""
-PROFILING_LIBS=""
-
-AC_ARG_ENABLE([optimization],
-  AC_HELP_STRING([--enable-optimization],[compile with optimization: -O3 (yes)]),
-  [],
-  [enable_optimization=yes])
 
 AC_ARG_ENABLE([debug],
   AC_HELP_STRING([--enable-debug],[compile with debug information (no)]),
@@ -21,12 +12,26 @@ AC_ARG_ENABLE([profiling],
   [],
   [enable_profiling=no])
 
+AC_ARG_ENABLE([optimization],
+  AC_HELP_STRING([--enable-optimization],[compile with optimization: -O3 (yes)]),
+  [],
+  [if test x"$enable_debug" = xyes ; then
+     enable_optimization=no
+   else
+     enable_optimization=yes
+   fi])
+
+DEBUG_CFLAGS=""
+OPTIMIZATION_CFLAGS=""
+PROFILING_CFLAGS=""
+PROFILING_LIBS=""
+
 if test x"$enable_debug" = xyes ; then
   DEBUG_CFLAGS="-g -DDEBUG"
 fi
 
-if test x"$enable_optimization" = x"no"; then
-  OPTIMIZATION_CFLAGS=""
+if test x"$enable_optimization" = xyes; then
+  OPTIMIZATION_CFLAGS="-O3"
 fi
 
 if test x"$enable_profiling" = xyes ; then
