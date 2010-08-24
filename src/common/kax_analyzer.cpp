@@ -469,6 +469,51 @@ kax_analyzer_c::handle_void_elements(size_t data_idx) {
     if (NULL == e)
       return false;
 
+    // However, this might not work if the element's size was already
+    // eight bytes long.
+    if (8 == e->GetSizeLength()) {
+      // In this case try doing the same with the previous
+      // element. The whole element has be moved one byte to the back.
+      delete e;
+
+      e = read_element(m_data[data_idx]);
+      if (NULL == e)
+        return false;
+
+      counted_ptr<EbmlElement> af_e(e);
+
+      // Again the test for maximum size length.
+      if (8 == e->GetSizeLength())
+        return false;
+
+      // Copy the content one byte to the back.
+      unsigned int id_length = EBML_ID_LENGTH(static_cast<const EbmlId &>(*e));
+      uint64_t content_pos   = m_data[data_idx]->m_pos + id_length + e->GetSizeLength();
+      uint64_t content_size  = m_data[data_idx + 1]->m_pos - content_pos - 1;
+      memory_cptr buffer     = memory_c::alloc(content_size);
+
+      m_file->setFilePointer(content_pos);
+      if (m_file->read(buffer, content_size) != content_size)
+        return false;
+
+      m_file->setFilePointer(content_pos + 1);
+      if (m_file->write(buffer) != content_size)
+        return false;
+
+      // Prepare the new codec size and write it.
+      binary head[8];           // Class D + 64 bits coded size
+      int coded_size = CodedSizeLength(content_size, e->GetSizeLength() + 1, true);
+      CodedValueLength(content_size, coded_size, head);
+      m_file->setFilePointer(m_data[data_idx]->m_pos + id_length);
+      if (m_file->write(head, coded_size) != static_cast<unsigned int>(coded_size))
+        return false;
+
+      // Update internal structures.
+      m_data[data_idx]->m_size += 1;
+
+      return true;
+    }
+
     binary head[4 + 8];         // Class D + 64 bits coded size
     unsigned int head_size = EBML_ID_LENGTH(static_cast<const EbmlId &>(*e));
     EbmlId(*e).Fill(head);
