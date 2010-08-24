@@ -1,3 +1,12 @@
+2010-08-24  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvpropedit, mmg's header editor: Fixed a crash corrupting files
+	in certain situations. If the updated header fields required
+	filling exactly one byte with an EbmlVoid element and if the next
+	Matroska element's "size" was already written with its maximum
+	length (8 bytes) then the crash would occur. Such files are
+	written by e.g. lavf. Fix for bug 536.
+
 2010-08-17  Moritz Bunkus  <moritz@bunkus.org>
 
 	* All: bug fix: Fixed a couple of format strings in translations
