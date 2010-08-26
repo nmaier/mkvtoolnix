@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mkvtoolnix-man\n"
-"POT-Creation-Date: 2010-07-12 15:58+0300\n"
-"PO-Revision-Date: 2010-07-12 16:05+0200\n"
+"POT-Creation-Date: 2010-08-26 10:38+0300\n"
+"PO-Revision-Date: 2010-08-26 10:39+0200\n"
 "Last-Translator: Dean Lee <xslidian@lidian.info>\n"
 "Language-Team: chinese simp <xslidian+mkvtoolnix@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -29,9 +29,9 @@ msgstr "4.2.0"
 #. type: Content of the date entity
 #: doc/man/mkvextract.xml:7 doc/man/mkvinfo.xml:7 doc/man/mkvmerge.xml:7
 #: doc/man/mkvpropedit.xml:7 doc/man/mmg.xml:7
-#| msgid "2010-05-14"
-msgid "2010-07-03"
-msgstr "2010-07-03"
+#| msgid "2010-07-03"
+msgid "2010-07-28"
+msgstr "2010-07-28"
 
 #. type: Content of the mkvmerge entity
 #: doc/man/mkvextract.xml:9 doc/man/mkvinfo.xml:9 doc/man/mkvmerge.xml:9
@@ -1791,9 +1791,6 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:297
-#| msgid ""
-#| "&mkvmerge; defaults to putting at most 65535 data blocks and 2000ms of "
-#| "data into a cluster."
 msgid ""
 "&mkvmerge; defaults to putting at most 65535 data blocks and 5000ms of data "
 "into a cluster."
@@ -4503,9 +4500,9 @@ msgstr ""
 "&mkvmerge; 支持两个为 &matroska; 文件添加标签的选项: <link linkend="
 "\"mkvmerge.description.global_tags\"><option>--global-tags</option></link> "
 "与 <link linkend=\"mkvmerge.description.tags\"><option>--tags</option></"
-"link> 选项。不同之处在于前者，<link linkend=\"mkvmerge.description.global_"
-"tags\"><option>--global-tags</option></link>，将通过移除上文提到的所有 "
-"<classname>Targets</classname> 元素使标签应用到整个文件。 而后者，<link "
+"link> 选项。不同之处在于前者，<link linkend=\"mkvmerge.description."
+"global_tags\"><option>--global-tags</option></link>，将通过移除上文提到的所"
+"有 <classname>Targets</classname> 元素使标签应用到整个文件。 而后者，<link "
 "linkend=\"mkvmerge.description.tags\"><option>--tags</option></link>，将使 "
 "&mkvmerge; 为通过 <link linkend=\"mkvmerge.description.tags\"><option>--"
 "tags</option></link> 选项的 <parameter>TID</parameter> 部分指定的标签自动插"
@@ -4656,11 +4653,11 @@ msgstr ""
 #: doc/man/mkvmerge.xml:1936
 msgid ""
 "[EBML head] [segment {meta seek #1} [segment information] [track "
-"information] {chapters} [cluster 1] {cluster 2} ...  {cluster n} {cues} "
-"{attachments} {meta seek #2} {tags}]"
+"information] {attachments} {chapters} [cluster 1] {cluster 2} ...  {cluster "
+"n} {cues} {meta seek #2} {tags}]"
 msgstr ""
-"[EBML 头] [剪辑 {元定位 #1} [剪辑信息] [轨道信息] {章节} [簇 1] {簇 2} ...  "
-"{簇 n} {索引} {附件} {元定位 #2} {标签}]"
+"[EBML 头] [剪辑 {元定位 #1} [剪辑信息] [轨道信息] {附件} {章节} [簇 1] {簇 "
+"2} ...  {簇 n} {索引} {元定位 #2} {标签}]"
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvmerge.xml:1941

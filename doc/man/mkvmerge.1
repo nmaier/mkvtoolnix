@@ -2111,7 +2111,7 @@ file layout is quite flexible\&.
 \fBmkvmerge\fR(1)
 will render a file in a predefined way\&. The resulting file looks like this:
 .PP
-[EBML head] [segment {meta seek #1} [segment information] [track information] {chapters} [cluster 1] {cluster 2} \&.\&.\&. {cluster n} {cues} {attachments} {meta seek #2} {tags}]
+[EBML head] [segment {meta seek #1} [segment information] [track information] {attachments} {chapters} [cluster 1] {cluster 2} \&.\&.\&. {cluster n} {cues} {meta seek #2} {tags}]
 .PP
 The elements in curly braces are optional and depend on the contents and options used\&. A couple of notes:
 .sp

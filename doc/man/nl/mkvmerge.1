@@ -255,7 +255,7 @@ is \*(Aq100ms\*(Aq, en het maximum is \*(Aq32000ms\*(Aq\&.
 .sp
 
 \fBmkvmerge\fR(1)
-defaults to putting at most 65535 data blocks and 5000ms of data into a cluster\&.
+plaatst standaard op zijn hoogst 65535 data blokken en 5000ms aan data in een cluster\&.
 .sp
 Programma\*(Aqs die een bepaald beeld proberen te zoeken, kunnen alleen direct naar een cluster zoeken en moeten daarna de gehele cluster lezen\&. Daarom kan het de oorzaak zijn, dat het maken van grote clusters kan leiden tot onnauwkeurigheid of traag zoeken\&.
 .RE
@@ -2112,7 +2112,7 @@ layout bestand is redelijk flexibel\&.
 \fBmkvmerge\fR(1)
 zal een bestand genereren op een vooraf gedefinieerde manier\&. Het resultaat zal er zo uitzien:
 .PP
-[EBML head] [segment {meta seek #1} [segment information] [track information] {chapters} [cluster 1] {cluster 2} \&.\&.\&. {cluster n} {cues} {attachments} {meta seek #2} {tags}]
+[EBML head] [segment {meta seek #1} [segment information] [track information] {attachments} {chapters} [cluster 1] {cluster 2} \&.\&.\&. {cluster n} {cues} {meta seek #2} {tags}]
 .PP
 De elementen in gekromde haakjes zijn optioneel en afhankelijk van de inhoud en de gebruikte opties\&. Een paar opmerkingen:
 .sp

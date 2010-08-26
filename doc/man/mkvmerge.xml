@@ -1933,8 +1933,8 @@ $ mkvmerge -o file.mkv --tags 0:tags.xml file.avi
   </para>
 
   <para>
-   [EBML head] [segment {meta seek #1} [segment information] [track information] {chapters} [cluster 1] {cluster 2} ...  {cluster n} {cues}
-   {attachments} {meta seek #2} {tags}]
+   [EBML head] [segment {meta seek #1} [segment information] [track information] {attachments} {chapters} [cluster 1] {cluster 2} ...
+   {cluster n} {cues} {meta seek #2} {tags}]
   </para>
 
   <para>

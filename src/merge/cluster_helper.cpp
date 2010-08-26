@@ -44,9 +44,9 @@ cluster_helper_c::cluster_helper_c()
   , m_previous_packets(NULL)
   , m_bytes_in_file(0)
   , m_first_timecode_in_file(-1)
-  , m_attachments_size(0)
   , m_min_timecode_in_cluster(-1)
   , m_max_timecode_in_cluster(-1)
+  , m_attachments_size(0)
   , m_out(NULL)
   , m_current_split_point(m_split_points.begin())
 {
@@ -105,11 +105,11 @@ cluster_helper_c::add_packet(packet_cptr packet) {
 
     // Maybe we want to start a new file now.
     if (split_point_t::SPT_SIZE == m_current_split_point->m_type) {
-      int64_t additional_size = m_attachments_size;
+      int64_t additional_size = 0;
 
       if (!m_packets.empty()) {
         // Cluster + Cluster timecode (roughly)
-        additional_size += 21;
+        additional_size = 21;
 
         // Add sizes for all frames.
         std::vector<packet_cptr>::iterator p_it;
@@ -117,7 +117,9 @@ cluster_helper_c::add_packet(packet_cptr packet) {
           packet_cptr &p   = *p_it;
           additional_size += p->data->get_size() + (p->is_key_frame() ? 10 : p->is_p_frame() ? 13 : 16);
         }
-      }
+
+      } else
+        additional_size = 0;
 
       if (0 < m_num_cue_elements) {
         g_kax_cues->UpdateSize();

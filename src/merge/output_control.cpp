@@ -743,13 +743,13 @@ rerender_track_headers() {
   s_out->restore_pos();
 }
 
-/** \brief Prepares attachments that will be rendered in the current output file
+/** \brief Render all attachments into the output file at the current position
 
    This function also makes sure that no duplicates are output. This might
    happen when appending files.
 */
 static void
-prepare_attachments_for_rendering() {
+render_attachments(IOCallback *out) {
   if (NULL != s_kax_as)
     delete s_kax_as;
 
@@ -757,50 +757,32 @@ prepare_attachments_for_rendering() {
   KaxAttached *kax_a = NULL;
 
   foreach(attachment_t &attch, g_attachments) {
-    if ((1 != g_file_num) && !attch.to_all_files)
-      continue;
+    if ((1 == g_file_num) || attch.to_all_files) {
+      kax_a = NULL == kax_a ? &GetChild<KaxAttached>(*s_kax_as) : &GetNextChild<KaxAttached>(*s_kax_as, *kax_a);
 
-    kax_a = NULL == kax_a ? &GetChild<KaxAttached>(*s_kax_as) : &GetNextChild<KaxAttached>(*s_kax_as, *kax_a);
+      if (attch.description != "")
+        GetChildAs<KaxFileDescription, EbmlUnicodeString>(kax_a) = cstrutf8_to_UTFstring(attch.description);
 
-    if (attch.description != "")
-      GetChildAs<KaxFileDescription, EbmlUnicodeString>(kax_a) = cstrutf8_to_UTFstring(attch.description);
+      if (attch.mime_type != "")
+        GetChildAs<KaxMimeType, EbmlString>(kax_a)               = attch.mime_type;
 
-    if (attch.mime_type != "")
-      GetChildAs<KaxMimeType, EbmlString>(kax_a)               = attch.mime_type;
+      std::string name;
+      if (attch.stored_name == "") {
+        int path_sep_idx = attch.name.rfind(PATHSEP);
+        if (-1 != path_sep_idx)
+          name = attch.name.substr(path_sep_idx + 1);
+        else
+          name = attch.name;
 
-    std::string name;
-    if (attch.stored_name == "") {
-      int path_sep_idx = attch.name.rfind(PATHSEP);
-      if (-1 != path_sep_idx)
-        name = attch.name.substr(path_sep_idx + 1);
-      else
-        name = attch.name;
+      } else
+        name = attch.stored_name;
 
-    } else
-      name = attch.stored_name;
+      GetChildAs<KaxFileName, EbmlUnicodeString>(kax_a) = cstrutf8_to_UTFstring(name);
+      GetChildAs<KaxFileUID, EbmlUInteger>(kax_a)       = attch.id;
 
-    GetChildAs<KaxFileName, EbmlUnicodeString>(kax_a) = cstrutf8_to_UTFstring(name);
-    GetChildAs<KaxFileUID, EbmlUInteger>(kax_a)       = attch.id;
-
-    GetChild<KaxFileData>(*kax_a).CopyBuffer(attch.data->get_buffer(), attch.data->get_size());
+      GetChild<KaxFileData>(*kax_a).CopyBuffer(attch.data->get_buffer(), attch.data->get_size());
+    }
   }
-
-  if (s_kax_as->ListSize() != 0) {
-    s_kax_as->UpdateSize();
-    g_cluster_helper->set_attachments_size(s_kax_as->ElementSize());
-  } else {
-    // Delete the kax_as pointer so that it won't be referenced in a seek head.
-    delete s_kax_as;
-    s_kax_as = NULL;
-  }
-}
-
-/** \brief Render prepared attachments at the current position
- */
-static void
-render_prepared_attachments(IOCallback *out) {
-  if (NULL == s_kax_as)
-    return;
 
   if (s_kax_as->ListSize() != 0)
     s_kax_as->Render(*out);
@@ -1370,7 +1352,7 @@ create_next_output_file() {
 
   g_cluster_helper->set_output(s_out);
   render_headers(s_out);
-  prepare_attachments_for_rendering();
+  render_attachments(s_out);
   render_chapter_void_placeholder();
   add_tags_from_cue_chapters();
   prepare_tags_for_rendering();
@@ -1494,9 +1476,6 @@ finish_file(bool last_file) {
     s_kax_chapters_void = NULL;
 
   }
-
-  // Render the attachments needed for this file.
-  render_prepared_attachments(s_out);
 
   // Render the meta seek information with the cues
   if (g_write_meta_seek_for_clusters && (g_kax_sh_cues->ListSize() > 0) && !hack_engaged(ENGAGE_NO_META_SEEK)) {
