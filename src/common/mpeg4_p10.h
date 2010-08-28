@@ -116,6 +116,8 @@ namespace mpeg4 {
       slice_info_t() {
         memset(this, 0, sizeof(*this));
       }
+
+      void dump();
     };
 
     void MTX_DLL_API nalu_to_rbsp(memory_cptr &buffer);

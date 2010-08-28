@@ -139,6 +139,39 @@ slcopy(bit_cursor_c &r,
 }
 
 void
+mpeg4::p10::slice_info_t::dump() {
+  mxinfo(boost::format("slice_info dump:\n"
+                       "  nalu_type:                  %1%\n"
+                       "  nal_ref_idc:                %2%\n"
+                       "  type:                       %3%\n"
+                       "  pps_id:                     %4%\n"
+                       "  frame_num:                  %5%\n"
+                       "  field_pic_flag:             %6%\n"
+                       "  bottom_field_flag:          %7%\n"
+                       "  idr_pic_id:                 %8%\n"
+                       "  pic_order_cnt_lsb:          %9%\n"
+                       "  delta_pic_order_cnt_bottom: %10%\n"
+                       "  delta_pic_order_cnt:        %11%\n"
+                       "  first_mb_in_slice:          %12%\n"
+                       "  sps:                        %13%\n"
+                       "  pps:                        %14%\n")
+         % static_cast<unsigned int>(nalu_type)
+         % static_cast<unsigned int>(nal_ref_idc)
+         % static_cast<unsigned int>(type)
+         % static_cast<unsigned int>(pps_id)
+         % frame_num
+         % field_pic_flag
+         % bottom_field_flag
+         % idr_pic_id
+         % pic_order_cnt_lsb
+         % delta_pic_order_cnt_bottom
+         % (delta_pic_order_cnt[0] << 8 | delta_pic_order_cnt[1])
+         % first_mb_in_slice
+         % sps
+         % pps);
+}
+
+void
 mpeg4::p10::nalu_to_rbsp(memory_cptr &buffer) {
   int pos, size = buffer->get_size();
   mm_mem_io_c d(NULL, size, 100);
