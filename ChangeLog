@@ -1,3 +1,11 @@
+2010-08-28  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Certain frames in certain h.264/AVC raw
+	tracks were handled wrong, e.g. files created by x264 versions
+	starting with revision 1665. The situation occured if an IDR slice
+	comes immedtiately after a non-IDR slice and the IDR slice has its
+	frame_num and pic_order_count_lsb fields set to 0.
+
 2010-08-26  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: Attachments will be rendered at the

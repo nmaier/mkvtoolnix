@@ -715,6 +715,9 @@ mpeg4::p10::avc_es_parser_c::flush_decision(slice_info_t &si,
 
     if ((NALU_TYPE_IDR_SLICE == ref.nalu_type) && (si.idr_pic_id != ref.idr_pic_id))
       return true;
+
+    if ((NALU_TYPE_IDR_SLICE != ref.nalu_type) && (0 == si.frame_num) && (0 == si.pic_order_cnt_lsb))
+      return true;
   }
 
   if (si.frame_num != ref.frame_num)
