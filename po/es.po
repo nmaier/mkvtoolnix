@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: Israel Lucas Torrijos <lukillas.ole@gmail.com>\n"
 "POT-Creation-Date: 2010-06-08 10:00+0200\n"
-"PO-Revision-Date: 2010-08-17 22:08+0200\n"
+"PO-Revision-Date: 2010-08-31 14:14+0100\n"
 "Last-Translator: Israel Lucas Torrijos <lukillas.ole@gmail.com>\n"
 "Language-Team: Spanish <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -637,7 +637,7 @@ msgstr " (cambio de tamaño sin restricción)"
 
 #: src/info/mkvinfo.cpp:349
 msgid " (h.264 profile: %1% @L%2%.%3%)"
-msgstr ""
+msgstr " (Perfil h.264: %1% @L%2%.%3%)"
 
 #: src/info/mkvinfo.cpp:768
 msgid " (inches)"
@@ -825,7 +825,7 @@ msgstr ""
 "http://www.bunkus.org/videotools/mkvtoolnix/\n"
 "\n"
 "La ayuda está disponible como herramienta de información, desde el\n"
-"menú 'Help' o presionando la tecla 'F1'."
+"menú 'Ayuda' o presionando la tecla 'F1'."
 
 #: src/mmg/tabs/attachments.cpp:401
 #, c-format
@@ -2508,7 +2508,7 @@ msgstr "No se pudo extraer los datos de configuración específicos del decodifi
 #: src/input/r_avi.cpp:301
 #: src/input/r_avi.cpp:306
 msgid "Could not extract the sequence header from this MPEG-1/2 track.\n"
-msgstr "No se pudo extraer el encabezado de la secuencia de esta pista  MPEG-1/2.\n"
+msgstr "No se pudo extraer el encabezado de la secuencia de esta pista MPEG-1/2.\n"
 
 #: src/input/r_mp3.cpp:40
 msgid "Could not find a valid MP3 packet."
@@ -2700,7 +2700,7 @@ msgstr "Línea de comandos actual"
 #: src/mmg/jobs.cpp:173
 #, c-format
 msgid "Current job ID %d:"
-msgstr "Id del actual trabajo %d:"
+msgstr "Trabajo actual con ID %d:"
 
 #: src/mmg/jobs.cpp:79
 msgid "Current job ID 1000:"
@@ -3298,7 +3298,9 @@ msgstr "Los archivos no pueden ser unidos así mismos. El argumento para '--appe
 #: src/mmg/jobs.cpp:357
 #, c-format
 msgid "Finished job ID %d on %s: status '%s'"
-msgstr "Trabajo finalizado %d on %s: estado '%s'"
+msgstr ""
+"Finalizado el trabajo con ID %d en %s. \n"
+"Estado '%s'"
 
 #: src/mmg/jobs.cpp:444
 msgid "Finished on"
@@ -4445,7 +4447,7 @@ msgstr "Archivos de audio/video ogg/OGM"
 #: src/mmg/message_dialog.cpp:31
 #: src/mmg/mux_dialog.cpp:100
 msgid "Ok"
-msgstr "Muy bien"
+msgstr "Listo"
 
 #: src/mmg/tabs/chapters.cpp:764
 msgid "One of the chapters does not have a name."
@@ -4760,7 +4762,7 @@ msgstr "Lector de Quicktime/MP4: Tamaño del fragmento de información (chunk) n
 
 #: src/input/r_qtmp4.cpp:290
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
-msgstr "Lector de Quicktime/MP4: La pista MPEG4 part 10/AVC track %1% está ausente de su configuración del decodificador. Omitiendo esta pista.\n"
+msgstr "Lector de Quicktime/MP4: A la pista MPEG4 part 10/AVC %1% le falta la configuración del decodificador. Omitiendo esta pista.\n"
 
 #: src/input/r_qtmp4.cpp:283
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
@@ -5522,9 +5524,8 @@ msgid "Subtitle track %u"
 msgstr "Pista del subtítulo %u"
 
 #: src/merge/mkvmerge.cpp:357
-#, fuzzy
 msgid "Supported file types:\n"
-msgstr "Clases de elementos:\n"
+msgstr "Tipos de archivos compatibles:\n"
 
 #: src/common/cli_parser.cpp:176
 msgid "Suppress status output."
@@ -5928,9 +5929,8 @@ msgid "The file has been changed by another program since it was read by the hea
 msgstr "El archivo ha sido cambiado por otro programa ya que fue leído por el editor del encabezado. Por lo tanto, tienes que recargarlo. Desafortunadamente esto significa que todos los cambios se perderán."
 
 #: src/propedit/propedit.h:18
-#, fuzzy
 msgid "The file has not been modified."
-msgstr "El archivo no existe."
+msgstr "El archivo no ha sido modificado."
 
 #: src/input/r_tta.cpp:64
 msgid "The file header is too short.\n"
@@ -6152,7 +6152,7 @@ msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:690
 msgid "The mkvmerge GUI help file was not found in the path you've selected. Please try again, or abort by pressing the 'abort' button."
-msgstr "El archivo de ayuda del Mkvmerge GUI no fue encontrado en la ruta que selecciono. Por favor, intentelo de nuevo o cancelelo presionando el boton 'cancelar'."
+msgstr "El archivo de ayuda de Mkvmerge GUI no se encontró en la ruta que usted ha seleccionado. Por favor, intentelo de nuevo o cancele la acción presionando el boton 'cancelar'."
 
 #: src/mmg/mmg_dialog.cpp:683
 msgid ""
@@ -6835,7 +6835,6 @@ msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video st
 msgstr "Fotograma de imagen inesperado después de un fotograma de un unico campo. Fije el archivo del video MPEG2 antes de intentar multiplexarlo.\n"
 
 #: src/info/mkvinfo.cpp:363
-#, fuzzy
 msgid "Unknown"
 msgstr "Desconocido"
 
@@ -7656,6 +7655,7 @@ msgid "avc_es_reader: Could not open the source file."
 msgstr "avc_es_reader: No se pudo abrir el archivo de origen."
 
 #: src/input/r_avc.cpp:106
+#, fuzzy
 msgid "avc_es_reader: Should not have happened."
 msgstr "avc_es_reader: No debería haber ocurrido."
 
@@ -8683,55 +8683,4 @@ msgstr "Uso extraño: escribiendo en la memoria de sólo lectura"
 #: src/mmg/tabs/input_general.cpp:125
 msgid "yes"
 msgstr "Si"
-
-# (Digital Theater System)
-#~ msgid "DTS (Digital Theater System)"
-#~ msgstr "DTS (Digital Theater System)"
-# Stream en el contexto de la video edicion podría significar flujo, respecto a los datos.
-#~ msgid "Dirac elementary stream"
-#~ msgstr "Archivo primario Dirac"
-#~ msgid "FLAC lossless audio"
-#~ msgstr "FLAC audio sin pérdidas"
-#~ msgid "IVF with VP8"
-#~ msgstr "IVF con VP8"
-#~ msgid ""
-#~ "Known file types:\n"
-#~ "  ext   description\n"
-#~ "  ----  --------------------------\n"
-#~ msgstr ""
-#~ "Tipo de archivos reconocidos:\n"
-#~ "  extensión   descripción\n"
-#~ "  ------------  -------------------------\n"
-#~ msgid "MPEG program stream"
-#~ msgstr "Archivo de programa MPEG"
-#~ msgid "MPEG-1 layer II audio (CBR and VBR/ABR)"
-#~ msgstr "MPEG-1 layer II audio (CBR y VBR/ABR)"
-#~ msgid "MPEG-1 layer III audio (CBR and VBR/ABR)"
-#~ msgstr "MPEG-1 layer III audio (CBR y VBR/ABR)"
-#~ msgid "MPEG-1 video elementary stream"
-#~ msgstr "Archivo primario de video MPEG-1"
-#~ msgid "MPEG-2 video elementary stream"
-#~ msgstr "Archivo primario de video MPEG-2"
-#~ msgid "Quicktime/MP4 audio and video"
-#~ msgstr "Archivos de audio/video QuickTime/MP4"
-#~ msgid "RealMedia audio and video"
-#~ msgstr "Audio y video de RealMedia"
-#~ msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
-#~ msgstr "Establece la compresión utilizada para los subtítulos VobSub. Si nada es elegido entonces los VobSubs serán automaticamente comprimidos con zlib. 'Ninguno', el resultado es archivos que son mucho más grandes."
-#~ msgid "TTA lossless audio"
-#~ msgstr "TTA sin pérdidas de audio"
-#~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
-#~ msgstr "El MPEG-4 parte 2 sólo funciona con la compresión nativa MPEG-4. Sin embargo, el modo nativo de MPEG-4  no ha sido seleccionado con '--engage native_mpeg4'.\n"
-#~ msgid "VC1 video elementary stream"
-#~ msgstr "Archivos primarios de video VC1"
-#~ msgid "VobBtn buttons"
-#~ msgstr "Botones VobBtn"
-#~ msgid "WAVE (uncompressed PCM)"
-#~ msgstr "WAVE (PCM sin comprimir)"
-#~ msgid "WAVPACK lossless audio"
-#~ msgstr "WAVPACK audio sin pérdidas (WAVPACK lossless audio)"
-#~ msgid "audio/video/text subtitles embedded in OGG"
-#~ msgstr "Audio/video/subtítulos de texto incrustados en OGG"
-#~ msgid "general Matroska files"
-#~ msgstr "Archivos generales de Matroska"
 
