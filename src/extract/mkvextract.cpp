@@ -66,7 +66,7 @@ show_element(EbmlElement *l,
 
 void
 show_error(const std::string &error) {
-  mxinfo(boost::format("(%1%) %2%\n") % NAME % error);
+  mxerror(boost::format("(%1%) %2%\n") % NAME % error);
 }
 
 static void

@@ -1,3 +1,9 @@
+2010-09-01  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvextract: bug fix: Errors such as 'file does not exist' did
+	not cause mkvextract to quit. Instead it continued and exited with
+	the result code 0.
+
 2010-08-28  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: bug fix: Certain frames in certain h.264/AVC raw
