@@ -16,12 +16,12 @@ cat > "$new_file" <<EOF
 
 class T_${next_num}${name} < Test
   def description
-    return "INSERT DESCRIPTION"
+    "INSERT DESCRIPTION"
   end
 
   def run
     # INSERT COMMANDS
-    return nil
+    hash_tmp
   end
 end
 
