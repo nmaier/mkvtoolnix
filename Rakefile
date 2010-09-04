@@ -14,14 +14,21 @@ if Rake.application.options.respond_to?(:threads) && [nil, 0, 1].include?(Rake.a
   Rake.application.options.threads = ENV['DRAKETHREADS'].to_i
 end
 
+# Ruby 1.9.x introduce "require_relative" for local requires. 1.9.2
+# removes "." from $: and forces us to use "require_relative". 1.8.x
+# does not know "require_relative" yet though.
+module Kernel
+  alias_method :require_relative, :require unless method_defined? :require_relative
+end
+
 require "pp"
 
-require "rake.d/extensions"
-require "rake.d/config"
-require "rake.d/helpers"
-require "rake.d/target"
-require "rake.d/application"
-require "rake.d/library"
+require_relative "rake.d/extensions"
+require_relative "rake.d/config"
+require_relative "rake.d/helpers"
+require_relative "rake.d/target"
+require_relative "rake.d/application"
+require_relative "rake.d/library"
 
 def setup_globals
   $programs                =  %w{mkvmerge mkvinfo mkvextract mkvpropedit}
