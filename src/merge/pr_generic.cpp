@@ -229,6 +229,10 @@ generic_packetizer_c::generic_packetizer_c(generic_reader_c *reader,
   else if (map_has_key(m_ti.m_nalu_size_lengths, -1))
     m_ti.m_nalu_size_length = m_ti.m_nalu_size_lengths[-1];
 
+  // Let's see if the user has specified a compression scheme for this track.
+  if (COMPRESSION_UNSPECIFIED != m_ti.m_compression)
+    m_hcompression = m_ti.m_compression;
+
   // Set default header values to 'unset'.
   if (!m_reader->m_appending)
     m_hserialno = create_track_number(m_reader, m_ti.m_id);
@@ -721,8 +725,6 @@ generic_packetizer_c::set_headers() {
 
   }
 
-  if (COMPRESSION_UNSPECIFIED != m_ti.m_compression)
-    m_hcompression = m_ti.m_compression;
   if ((COMPRESSION_UNSPECIFIED != m_hcompression) && (COMPRESSION_NONE != m_hcompression)) {
     KaxContentEncoding &c_encoding = GetChild<KaxContentEncoding>(GetChild<KaxContentEncodings>(m_track_entry));
 

@@ -567,7 +567,8 @@ public:
   virtual void set_track_name(const std::string &name);
 
   virtual void set_default_compression_method(compression_method_e method) {
-    m_hcompression = method;
+    if (COMPRESSION_UNSPECIFIED == m_hcompression)
+      m_hcompression = method;
   }
 
   virtual void force_duration_on_last_packet();

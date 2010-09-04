@@ -1,3 +1,11 @@
+2010-09-04  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Appending tracks which would normally be
+	compressed (e.g. with header removal compression) and turning off
+	compression for those tracks with "--compression TID:none" (or the
+	corresponsing option in mmg) was resulting in the second and all
+	following appended tracks to be compressed all the same.
+
 2010-09-01  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvextract: bug fix: Errors such as 'file does not exist' did
