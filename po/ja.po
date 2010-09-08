@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-08-17 22:13+0200\n"
+"PO-Revision-Date: 2010-09-05 20:13+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -631,7 +631,7 @@ msgstr " (可変アスペクト比)"
 
 #: src/info/mkvinfo.cpp:349
 msgid " (h.264 profile: %1% @L%2%.%3%)"
-msgstr ""
+msgstr " (h.264プロファイル：%1% @L%2%.%3%)"
 
 #: src/info/mkvinfo.cpp:768
 msgid " (inches)"
@@ -5703,9 +5703,8 @@ msgid "The file has been changed by another program since it was read by the hea
 msgstr "ヘッダエディタがファイルを読み込んだ以降に他のプログラムによってファイルは変更されました。よって再読み込みしなければなりません。残念ながら全ての変更が失われるということを意味します。"
 
 #: src/propedit/propedit.h:18
-#, fuzzy
 msgid "The file has not been modified."
-msgstr "ファイルがありません。"
+msgstr "ファイルは変更されませんでした。"
 
 #: src/input/r_tta.cpp:64
 msgid "The file header is too short.\n"
@@ -6555,7 +6554,6 @@ msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video st
 msgstr "片フィールドフレームの後に予期せぬピクチャフレームがありました。MUXしようとする前にこのMPEG2ビデオストリームを修復してください。\n"
 
 #: src/info/mkvinfo.cpp:363
-#, fuzzy
 msgid "Unknown"
 msgstr "未知"
 
