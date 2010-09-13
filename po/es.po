@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: Israel Lucas Torrijos <lukillas.ole@gmail.com>\n"
 "POT-Creation-Date: 2010-06-08 10:00+0200\n"
-"PO-Revision-Date: 2010-09-13 15:16+0100\n"
+"PO-Revision-Date: 2010-09-13 15:54+0100\n"
 "Last-Translator: Sergi Medina\n"
 "Language-Team: Spanish <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -1243,7 +1243,7 @@ msgstr "'--blockadd' carece de argumento.\n"
 
 #: src/merge/mkvmerge.cpp:1775
 msgid "'--chapter-charset' lacks the charset.\n"
-msgstr "'--chapter-charset' carece de la codificación de carácteres.\n"
+msgstr "'--chapter-charset' carece de la codificación de caracteres.\n"
 
 #: src/merge/mkvmerge.cpp:1415
 msgid "'--chapter-charset' may only be given once in '--chapter-charset %1%'.\n"
@@ -1671,7 +1671,7 @@ msgstr "Archivos primarios AVC/h.264"
 
 #: src/common/file_types.cpp:28
 msgid "AVI (Audio/Video Interleaved)"
-msgstr "AVI (Audio/vídeo intercalados)"
+msgstr "AVI (audio/vídeo intercalados)"
 
 #: src/mmg/mux_dialog.cpp:104
 msgid "Abort"
@@ -2239,12 +2239,12 @@ msgstr "Capítulos: %1% registros"
 
 #: src/common/cli_parser.cpp:178
 msgid "Charset for strings on the command line"
-msgstr "Código de carácteres para palabras en la línea de comandos"
+msgstr "Código de caracteres para palabras en la línea de comandos"
 
 #: src/mmg/tabs/global.cpp:282
 #: src/mmg/tabs/input_format.cpp:249
 msgid "Charset:"
-msgstr "Código de carácteres:"
+msgstr "Código de caracteres:"
 
 #: src/mmg/tabs/chapters.cpp:524
 msgid "Choose a chapter file"
@@ -2321,7 +2321,6 @@ msgstr "Borrar los registros después de añadir un trabajo a la lista de tareas
 msgid "Close the current file without saving"
 msgstr "Cierra el archivo actual sin guardar los cambios"
 
-# Su traducción literal es grupo, pero es un término infórmatico que por tanto es mejor dejar sin traducción
 #: src/extract/timecodes_v2.cpp:260
 #: src/extract/tracks.cpp:386
 #: src/info/mkvinfo.cpp:1959
@@ -2463,7 +2462,7 @@ msgstr "Contenido cifrado"
 
 #: src/extract/extract_cli_parser.cpp:72
 msgid "Convert text subtitles to this charset (default: UTF-8)."
-msgstr "Convertir subtítulos de texto a esta codificación de carácteres (charset). Predefinido: UTF-8."
+msgstr "Convertir subtítulos de texto a esta codificación de caracteres (charset). Predefinido: UTF-8."
 
 #: src/mmg/mmg_dialog.cpp:260
 msgid "Copy the command line to the clipboard"
@@ -3358,7 +3357,7 @@ msgstr "Establece el factor de escala del código de tiempo para REPLACEME. Tien
 
 #: src/mmg/tabs/input.cpp:191
 msgid "Format specific options"
-msgstr "Opciones especificas del formato"
+msgstr "Opciones específicas de formato"
 
 #: src/mpegparser/M2VParser.cpp:442
 msgid "Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"
@@ -3824,7 +3823,7 @@ msgstr "No es válida la opción de la subcodificación de caracteres. Ninguna I
 
 #: src/merge/mkvmerge.cpp:1054
 msgid "Invalid sub charset specified in '--sub-charset %1%'.\n"
-msgstr "No es válido la subcodificación de carácteres especificada en '--sub-charset %1%'.\n"
+msgstr "No es válido la subcodificación de caracteres especificada en '--sub-charset %1%'.\n"
 
 #: src/merge/mkvmerge.cpp:538
 msgid "Invalid sync option specified in '%1% %2%'.\n"
@@ -4545,7 +4544,7 @@ msgstr "Destino del archivo creado"
 
 #: src/common/cli_parser.cpp:179
 msgid "Output messages in this charset"
-msgstr "Mensajes creado en este código de carácteres"
+msgstr "Mensajes creado en este código de caracteres"
 
 #: src/mmg/jobs.cpp:388
 msgid "Output of the selected jobs:"
@@ -4869,7 +4868,7 @@ msgstr "Frecuencia real de muestreo creado en Hz."
 
 #: src/common/file_types.cpp:44
 msgid "RealMedia audio/video files"
-msgstr "Archivos de audio y video de RealMedia"
+msgstr "Archivos de audio y vídeo de RealMedia"
 
 #: src/input/r_real.cpp:377
 msgid "RealMedia files may contain HE-AAC / AAC+ / SBR AAC audio. In some cases this can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr %1%' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
@@ -6260,7 +6259,7 @@ msgstr "El anterior UID ya fue asignado en '%1% %2%'.\n"
 
 #: src/propedit/change.cpp:114
 msgid "The property value contains non-ASCII characters, but the property is not a Unicode string in '%1%'. %2%\n"
-msgstr "El valor de la propiedad contiene carácteres no ASCII, pero la propiedad no es una cadena de carácteres Unicode en '%1%'. %2%\n"
+msgstr "El valor de la propiedad contiene caracteres no ASCII, pero la propiedad no es una cadena de caracteres Unicode en '%1%'. %2%\n"
 
 #: src/propedit/change.cpp:156
 msgid "The property value is not a valid binary spec or it is not exactly 128 bits long in '%1%'. %2%\n"
@@ -6342,23 +6341,23 @@ msgstr "El tramo de ajuste para la pista n.º %s en el archivo '%s' no es válid
 
 #: src/propedit/propedit_cli_parser.cpp:165
 msgid "The string 'track:' followed by one of the chars 'a', 'b', 's' or 'v' followed by a number 'n' selects the nth audio, button, subtitle or video track (e.g. '--edit track:a2')."
-msgstr "La cadena de carácteres 'track:' seguida por uno de los carácteres  'a', 'b', 's' o 'v', y estos de un número 'n', selecciona el enésimo: audio, botón, subtítulo o pista de vídeo (p. ej., '--edit track:a2')."
+msgstr "La cadena de caracteres 'track:' seguida por uno de los caracteres  'a', 'b', 's' o 'v', y estos de un número 'n', selecciona el enésimo: audio, botón, subtítulo o pista de vídeo (p. ej., '--edit track:a2')."
 
 #: src/propedit/propedit_cli_parser.cpp:167
 msgid "The string 'track:=uid' with 'uid' being a number selects the track whose 'track UID' element equals 'uid'."
-msgstr "La cadena de carácteres 'track:=uid' con 'uid' siendo un número de la pista seleccionada cuyo 'track UID' es igual al elemento 'uid'."
+msgstr "La cadena de caracteres 'track:=uid' con 'uid' siendo un número de la pista seleccionada cuyo 'track UID' es igual al elemento 'uid'."
 
 #: src/propedit/propedit_cli_parser.cpp:168
 msgid "The string 'track:@number' with 'number' being a number selects the track whose 'track number' element equals 'number'."
-msgstr "La cadena de carácteres 'track:@number' con 'number' siendo un número de pista seleccionada cuyo 'track number' es igual al elemento 'number'."
+msgstr "La cadena de caracteres 'track:@number' con 'number' siendo un número de pista seleccionada cuyo 'track number' es igual al elemento 'number'."
 
 #: src/propedit/propedit_cli_parser.cpp:164
 msgid "The string 'track:n' with 'n' being a number selects the nth track."
-msgstr "La cadena de carácteres 'track:n' con 'n' siendo un número que selecciona la enésima pista."
+msgstr "La cadena de caracteres 'track:n' con 'n' siendo un número que selecciona la enésima pista."
 
 #: src/propedit/propedit_cli_parser.cpp:161
 msgid "The strings 'info', 'segment_info' or 'segmentinfo' select the segment information element. This is also the default until the first '--edit' option is found."
-msgstr "Las cadenas de carácteres  'info', 'segment_info' o 'segmentinfo' seleccionan el elemento de información del segmento. Esta es la opción predefinina hasta que '--edit' es encontrada."
+msgstr "Las cadenas de caracteres  'info', 'segment_info' o 'segmentinfo' seleccionan el elemento de información del segmento. Esta es la opción predefinina hasta que '--edit' es encontrada."
 
 #: src/merge/pr_generic.cpp:287
 msgid "The tags in '%1%' could not be parsed: some mandatory elements are missing.\n"
@@ -7206,7 +7205,7 @@ msgstr "Usando el módulo de salida TTA.\n"
 #: src/input/r_ogm.cpp:1322
 #: src/input/r_matroska.cpp:1469
 msgid "Using the Theora video output module.\n"
-msgstr "Usando el módulo de salida de video Theora.\n"
+msgstr "Usando el módulo de salida de vídeo Theora.\n"
 
 #: src/input/r_mpeg_ps.cpp:1186
 msgid "Using the TrueHD output module.\n"
@@ -7455,7 +7454,7 @@ msgstr "Advertencias:"
 
 #: src/common/file_types.cpp:54
 msgid "WebM audio/video files"
-msgstr "Archivos de audio/video WebM"
+msgstr "Archivos de audio/vídeo WebM"
 
 #: src/mmg/options/mmg.cpp:83
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
@@ -7524,11 +7523,11 @@ msgstr "Tipo de encabezado erróneo: 0x%|1$02x| != 0x%|2$02x|"
 
 #: src/common/theora.cpp:40
 msgid "Wrong identifaction string: '%|1$6s|' != 'theora'"
-msgstr "Cadena de carácteres de identificación errónea: '%|1$6s|' != 'theora'"
+msgstr "Cadena de caracteres de identificación errónea: '%|1$6s|' != 'theora'"
 
 #: src/common/kate.cpp:51
 msgid "Wrong identification string: '%|1$7s|' != 'kate\\0\\0\\0'"
-msgstr "Cadena de carácteres de identificación errónea: '%|1$7s|' != 'kate\\0\\0\\0'"
+msgstr "Cadena de caracteres de identificación errónea: '%|1$7s|' != 'kate\\0\\0\\0'"
 
 #: src/common/xml/element_parser.cpp:457
 msgid "XML parser error at line %1% of '%2%': %3%.%4%%5%"
@@ -7737,7 +7736,7 @@ msgstr "Predefinido"
 
 #: src/info/mkvinfo.cpp:1105
 msgid "default duration: %|1$.3f|ms (%|2$.3f| fps for a video track)"
-msgstr "Duración predefinida: %|1$.3f|ms (%|2$.3f| fps para una pista de video)"
+msgstr "Duración predefinida: %|1$.3f|ms (%|2$.3f| FPS para una pista de vídeo)"
 
 #: src/common/compression.cpp:161
 msgid "deflateInit() failed. Result: %1%\n"
@@ -7977,11 +7976,11 @@ msgstr "matroska_reader: (modo de compatibilidad MS para la pista %1%) Matroska 
 
 #: src/input/r_matroska.cpp:447
 msgid "matroska_reader: (MS compatibility mode, track %1%) Matrosa says video width is %2%, but the BITMAPINFOHEADER says %3%.\n"
-msgstr "matroska_reader: (modo de compatibilidad MS, pista %1%) la anchura del video Matrosa es %2%, pero el BITMAPINFOHEADER dice %3%.\n"
+msgstr "matroska_reader: (modo de compatibilidad MS, pista %1%) la anchura del vídeo Matrosa es %2%, pero el BITMAPINFOHEADER dice %3%.\n"
 
 #: src/input/r_matroska.cpp:456
 msgid "matroska_reader: (MS compatibility mode, track %1%) Matrosa video height is %2%, but the BITMAPINFOHEADER says %3%.\n"
-msgstr "matroska_reader: (modo de compatibilidad MS, pista %1%) la altura del video Matrosa es %2%, pero el BITMAPINFOHEADER dice %3%.\n"
+msgstr "matroska_reader: (modo de compatibilidad MS, pista %1%) la altura del vídeo Matrosa es %2%, pero el BITMAPINFOHEADER dice %3%.\n"
 
 #: src/input/r_matroska.cpp:1077
 msgid "matroska_reader: A track is missing its track UID.\n"
@@ -8239,7 +8238,7 @@ msgid ""
 "mkvmerge encountered broken or unparsable data in this AVC/h.264 video track. Either your file is damaged (which mkvmerge cannot cope with yet) or this is a bug in mkvmerge itself. The error message was:\n"
 "%1%\n"
 msgstr ""
-"MKVmerge ha encontrado datos corruptos o sin datos aptos para su procesamiento en esta pista de video AVC/h.264. Puede ser que tu archivo esté corrupto (al que MKVmerge todavía no puede hacer frente)\n"
+"MKVmerge ha encontrado datos corruptos o sin datos aptos para su procesamiento en esta pista de vídeo AVC/h.264. Puede ser que tu archivo esté corrupto (al que MKVmerge todavía no puede hacer frente)\n"
 "o se trata de un error del propio Mkvmerge. El mensaje del error fue: %1%\n"
 
 #: src/mmg/options/mkvmerge.cpp:57
@@ -8305,7 +8304,7 @@ msgstr "mm_text_io_c: UTF32_* no es compatible por el momento.\n"
 
 #: src/common/mm_io.cpp:1052
 msgid "mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
-msgstr "mm_text_io_c::read_next_char(): código de carácteres UTF-8 no válido. Primer byte: 0x%|1$02x|"
+msgstr "mm_text_io_c::read_next_char(): código de caracteres UTF-8 no válido. Primer byte: 0x%|1$02x|"
 
 #: src/mmg/options/mmg.cpp:295
 msgid "mmg"
@@ -8562,7 +8561,7 @@ msgstr "tta_reader: tamaño_etiqueta < 0 en el c'tor. %1%\n"
 
 #: src/mmg/tabs/input_general.cpp:143
 msgid "und (Undetermined)"
-msgstr "und (Indeterminado)"
+msgstr "und (sin determinar)"
 
 #: src/input/r_mpeg_ps.cpp:1388
 #: src/input/r_matroska.cpp:89
@@ -8596,7 +8595,7 @@ msgstr "usf_reader: El archivo de origen no es un USF válido."
 
 #: src/common/strings/editing.cpp:266
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
-msgstr "utf8_strlen(): Codificación de carácteres UTF-8 no válido. Primer byte: 0x%|1$02x|"
+msgstr "utf8_strlen(): Codificación de caracteres UTF-8 no válida. Primer byte: 0x%|1$02x|"
 
 #: src/input/r_vc1.cpp:82
 msgid "vc1_es_reader: Could not open the source file."
