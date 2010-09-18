@@ -8,9 +8,10 @@ msgstr ""
 "Project-Id-Version: zh-TW\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-08-17 22:15+0200\n"
+"PO-Revision-Date: 2010-09-18 11:41+0200\n"
 "Last-Translator: Dong-Jun Wu <ziyawu@gmail.com>\n"
 "Language-Team: Chinese Traditional <zh-l10n@linux.org.tw>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -624,7 +625,7 @@ msgstr " (任意調整大小)"
 
 #: src/info/mkvinfo.cpp:349
 msgid " (h.264 profile: %1% @L%2%.%3%)"
-msgstr ""
+msgstr " (h.264 描述檔: %1% @L%2%.%3%)"
 
 #: src/info/mkvinfo.cpp:768
 msgid " (inches)"
@@ -5466,9 +5467,8 @@ msgid "Subtitle track %u"
 msgstr "字幕軌 %u"
 
 #: src/merge/mkvmerge.cpp:357
-#, fuzzy
 msgid "Supported file types:\n"
-msgstr "元件類型:\n"
+msgstr "支援的檔案類型:\n"
 
 #: src/common/cli_parser.cpp:176
 msgid "Suppress status output."
@@ -5871,9 +5871,8 @@ msgid "The file has been changed by another program since it was read by the hea
 msgstr "在表頭編輯器讀取此檔案後，檔案已被其它程式更改。因此您需要重新載入它。不幸的是這意味著您將丟失所有變更。"
 
 #: src/propedit/propedit.h:18
-#, fuzzy
 msgid "The file has not been modified."
-msgstr "檔案不存在。"
+msgstr "此檔案並沒有被修改過。"
 
 #: src/input/r_tta.cpp:64
 msgid "The file header is too short.\n"
@@ -6760,7 +6759,6 @@ msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video st
 msgstr "單圖場畫格之後意外的圖片畫格。在分離前請修復 MPEG2 視訊串流。\n"
 
 #: src/info/mkvinfo.cpp:363
-#, fuzzy
 msgid "Unknown"
 msgstr "未知"
 
@@ -8607,67 +8605,122 @@ msgid "yes"
 msgstr "是"
 
 #~ msgid ""
-#~ "                             English language name | ISO639-2 code | ISO639-1 code\n"
-#~ "---------------------------------------------------+---------------+--------------\n"
+#~ "                             English language name | ISO639-2 code | "
+#~ "ISO639-1 code\n"
+#~ "---------------------------------------------------+---------------"
+#~ "+--------------\n"
 #~ msgstr ""
-#~ "                                        英文語言名稱 | ISO639-2 碼 | ISO639-1 碼\n"
-#~ "---------------------------------------------------+---------------+--------------\n"
+#~ "                                        英文語言名稱 | ISO639-2 碼 | "
+#~ "ISO639-1 碼\n"
+#~ "---------------------------------------------------+---------------"
+#~ "+--------------\n"
+
 #~ msgid "%1% at %2%"
 #~ msgstr "%1% 於 %2%"
-#~ msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|\n"
+
+#~ msgid ""
+#~ "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|\n"
 #~ msgstr "%1% 畫格, 軌道 %2%, 時間碼 %3% (%4%), 大小 %5%, adler 0x%|6$08x|\n"
+
 #~ msgid "'%1%' is only allowed for chapter extraction.\n"
 #~ msgstr "'%1%' 僅限提取章節時使用。\n"
+
 #~ msgid "'--blockadd' is only allowed when extracting tracks.\n"
 #~ msgstr "'--blockadd' 僅允許在提取軌道時使用。\n"
+
 #~ msgid "'--blockadd' lacks a level.\n"
 #~ msgstr "'--blockadd' 缺少層級。\n"
+
 #~ msgid "'--cuesheet' is only allowed when extracting tracks.\n"
 #~ msgstr "'--cuesheet' 只能在提取軌道時使用。\n"
+
 #~ msgid "'--fullraw' is only allowed when extracting tracks.\n"
 #~ msgstr "'--fullraw' 只能在提取軌道時使用。\n"
+
 #~ msgid "'--no-ogg' is only allowed when extracting tracks.\n"
 #~ msgstr "'--no-ogg' 只能在提取軌道時使用。\n"
+
 #~ msgid "'--raw' is only allowed when extracting tracks.\n"
 #~ msgstr "'--raw' 只能在提取軌道時使用。\n"
+
 #~ msgid "'-c' lacks a charset.\n"
 #~ msgstr "'-c' 缺少字元集。\n"
+
 #~ msgid "(Unknown element: %1%)"
 #~ msgstr "(未知元件: %1%)"
-#~ msgid "A single '+' is not a valid command line option. If you want to append a file use '+' directly followed by the file name, e.g. '+movie_part_2.avi'."
-#~ msgstr "單獨的 '+' 不是有效的命令列選項。如果您希望用 '+' 直接添加檔，請確保檔案名緊跟著它，例如 '+movie_part_2.avi'。"
-#~ msgid "Always adds '--engage use_simpleblock' to the command line. That way Matroska's new 'simple blocks' will be used which save a bit of overhead at the cost of not being backwards compatible."
-#~ msgstr "總在命令列中添加 '--engage use_simpleblock'。這樣將使用 Matroska 的新 '簡單區塊'，可以省下一些額外開銷，代價是將無法向下相容。"
+
+#~ msgid ""
+#~ "A single '+' is not a valid command line option. If you want to append a "
+#~ "file use '+' directly followed by the file name, e.g. '+movie_part_2.avi'."
+#~ msgstr ""
+#~ "單獨的 '+' 不是有效的命令列選項。如果您希望用 '+' 直接添加檔，請確保檔案名"
+#~ "緊跟著它，例如 '+movie_part_2.avi'。"
+
+#~ msgid ""
+#~ "Always adds '--engage use_simpleblock' to the command line. That way "
+#~ "Matroska's new 'simple blocks' will be used which save a bit of overhead "
+#~ "at the cost of not being backwards compatible."
+#~ msgstr ""
+#~ "總在命令列中添加 '--engage use_simpleblock'。這樣將使用 Matroska 的新 '簡"
+#~ "單區塊'，可以省下一些額外開銷，代價是將無法向下相容。"
+
 #~ msgid "Always use simple blocks"
 #~ msgstr "總使用簡單區塊"
+
 #~ msgid "Change the default values"
 #~ msgstr "修改預設值"
+
 #~ msgid "Changing the interface language requires a restart to take effect."
 #~ msgstr "變更介面語言需要重新啟動才會生效。"
+
 #~ msgid "Could not open the file '%1%'."
 #~ msgstr "無法開啟檔案 '%1%'。"
+
 #~ msgid "DTS (Digital Theater System)"
 #~ msgstr "DTS (數位電影院系統)"
+
 #~ msgid "Dirac elementary stream"
 #~ msgstr "Dirac 基本流"
-#~ msgid "Do not copy chapters from this file. Only applies to a couple of formats (e.g. Matroska files)."
+
+#~ msgid ""
+#~ "Do not copy chapters from this file. Only applies to a couple of formats "
+#~ "(e.g. Matroska files)."
 #~ msgstr "不要從此檔中複製章節。僅適用於部分格式（如 Matroska 檔）。"
-#~ msgid "Do not copy tags from this file. Only applies to a couple of formats (e.g. Matroska files)."
+
+#~ msgid ""
+#~ "Do not copy tags from this file. Only applies to a couple of formats (e."
+#~ "g. Matroska files)."
 #~ msgstr "不要從此檔中複製標籤。僅適用於部分格式（如 Matroska 檔）。"
-#~ msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
+
+#~ msgid ""
+#~ "Do not write those header elements whose values are the same as their "
+#~ "default values according to the Matroska specs."
 #~ msgstr "不要寫入值與 Matroska 規範中的預設值相同的表頭元件。"
-#~ msgid "During MPEG-4 part 2 B frame handling: The frame queue contains more frames than timecodes are available that can be assigned to them (reason: %1%). Therefore %2% frame(s) had to be dropped. The video might be broken around timecode %3%.\n"
-#~ msgstr "MPEG-4 part 2 B 畫格處理過程中: 畫格列包含了超過可分配時間碼的畫格 (原因: %1%)。因此 %2% 畫格將被丟棄。視訊在時間碼 %3% 附近可能已損壞。\n"
+
+#~ msgid ""
+#~ "During MPEG-4 part 2 B frame handling: The frame queue contains more "
+#~ "frames than timecodes are available that can be assigned to them (reason: "
+#~ "%1%). Therefore %2% frame(s) had to be dropped. The video might be broken "
+#~ "around timecode %3%.\n"
+#~ msgstr ""
+#~ "MPEG-4 part 2 B 畫格處理過程中: 畫格列包含了超過可分配時間碼的畫格 (原因: "
+#~ "%1%)。因此 %2% 畫格將被丟棄。視訊在時間碼 %3% 附近可能已損壞。\n"
+
 #~ msgid "FLAC lossless audio"
 #~ msgstr "FLAC 無損音訊"
+
 #~ msgid "File options:"
 #~ msgstr "檔案選項:"
+
 #~ msgid "File/segment title"
 #~ msgstr "檔案/剪輯標題"
+
 #~ msgid "Global tags"
 #~ msgstr "整體標籤"
+
 #~ msgid "IVF with VP8"
 #~ msgstr "含 VP8 的 IVF"
+
 #~ msgid ""
 #~ "Known file types:\n"
 #~ "  ext   description\n"
@@ -8676,88 +8729,137 @@ msgstr "是"
 #~ "已知的檔案類型:\n"
 #~ " 副檔名 描述\n"
 #~ "  ----  --------------------------\n"
+
 #~ msgid "MPEG program stream"
 #~ msgstr "MPEG PS 節目流"
+
 #~ msgid "MPEG-1 layer II audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 第 II 層音訊 (CBR 或 VBR/ABR)"
+
 #~ msgid "MPEG-1 layer III audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 第 III 層音訊 (CBR 或 VBR/ABR)"
+
 #~ msgid "MPEG-1 video elementary stream"
 #~ msgstr "MPEG-1 視訊基本流"
+
 #~ msgid "MPEG-2 video elementary stream"
 #~ msgstr "MPEG-2 視訊基本流"
+
 #~ msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
 #~ msgstr "Matroska 檔案 (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|所有檔案|*.*"
+
 #~ msgid "No chapters"
 #~ msgstr "不讀取章節"
+
 #~ msgid "No further options allowed when extracting %1%.\n"
 #~ msgstr "提取 %1% 時不允許其他額外選項。\n"
+
 #~ msgid "No further options allowed when regenerating the CUE sheet.\n"
 #~ msgstr "重新生成 CUE 表單時不允許其他額外選項。\n"
+
 #~ msgid "No tags"
 #~ msgstr "不讀取標籤"
-#~ msgid "No tracks will be copied from this file. This usually indicates a mistake in the command line.\n"
+
+#~ msgid ""
+#~ "No tracks will be copied from this file. This usually indicates a mistake "
+#~ "in the command line.\n"
 #~ msgstr "此檔中沒有待複製的軌道。這通常是因為命令列中的差錯。\n"
+
 #~ msgid ""
 #~ "Nothing to do.\n"
 #~ "\n"
 #~ msgstr ""
 #~ "沒有事情可做。\n"
 #~ "\n"
+
 #~ msgid "Other global options"
 #~ msgstr "其他整體選項"
+
 #~ msgid "Quicktime/MP4 audio and video"
 #~ msgstr "Quicktime/MP4 音訊和視訊"
+
 #~ msgid "RealMedia audio and video"
 #~ msgstr "RealMedia 音視訊"
+
 #~ msgid "Restart required"
 #~ msgstr "需要重新啟動"
+
 #~ msgid "Set &default values"
 #~ msgstr "設定預設值(&D)"
-#~ msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
-#~ msgstr "選擇 VobSub 字幕使用的壓縮方式。如果沒有選中任何方式，VobSub 字幕將自動使用 zlib 壓縮。選“無”將導致檔案變得很大。"
+
+#~ msgid ""
+#~ "Sets the compression used for VobSub subtitles. If nothing is chosen then "
+#~ "the VobSubs will be automatically compressed with zlib. 'none' results is "
+#~ "files that are a lot larger."
+#~ msgstr ""
+#~ "選擇 VobSub 字幕使用的壓縮方式。如果沒有選中任何方式，VobSub 字幕將自動使"
+#~ "用 zlib 壓縮。選“無”將導致檔案變得很大。"
+
 #~ msgid "Subtitle charset:"
 #~ msgstr "字幕字元集:"
+
 #~ msgid "TTA lossless audio"
 #~ msgstr "TTA 無損音訊"
-#~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
-#~ msgstr "MPEG-4 part 2 壓縮僅適用於原生 MPEG-4。然而，您未使用「--engage native_mpeg4」選擇原生 MPEG-4 模式。\n"
-#~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
-#~ msgstr "此軌道使用了叫做「編解碼態元件」的 Matroska 特性。mkvmerge 支援該特性，但您尚未透過「--engage use_codec_state」來啟用該特性。\n"
+
+#~ msgid ""
+#~ "The MPEG-4 part 2 compression only works with native MPEG-4. However, "
+#~ "native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
+#~ msgstr ""
+#~ "MPEG-4 part 2 壓縮僅適用於原生 MPEG-4。然而，您未使用「--engage "
+#~ "native_mpeg4」選擇原生 MPEG-4 模式。\n"
+
+#~ msgid ""
+#~ "This track uses a Matroska feature called 'Codec state elements'. "
+#~ "mkvmerge supports these but this feature has not been turned on with the "
+#~ "option '--engage use_codec_state'.\n"
+#~ msgstr ""
+#~ "此軌道使用了叫做「編解碼態元件」的 Matroska 特性。mkvmerge 支援該特性，但"
+#~ "您尚未透過「--engage use_codec_state」來啟用該特性。\n"
+
 #~ msgid "Tracks:"
 #~ msgstr "軌道列表:"
-#~ msgid "Unrecognized command line option '%1%'. Maybe you put a mode specific option before the input file name?\n"
-#~ msgstr "無法識別命令列選項 '%1%'。您是否將模式細節選項放在了輸入檔名的前面？\n"
+
+#~ msgid ""
+#~ "Unrecognized command line option '%1%'. Maybe you put a mode specific "
+#~ "option before the input file name?\n"
+#~ msgstr ""
+#~ "無法識別命令列選項 '%1%'。您是否將模式細節選項放在了輸入檔名的前面？\n"
+
 #~ msgid ""
 #~ "Usage: mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]\n"
 #~ "   or  mkvextract tags <inname> [options]\n"
-#~ "   or  mkvextract attachments <inname> [options] [AID1:out1 [AID2:out2 ...]]\n"
+#~ "   or  mkvextract attachments <inname> [options] [AID1:out1 [AID2:"
+#~ "out2 ...]]\n"
 #~ "   or  mkvextract chapters <inname> [options]\n"
 #~ "   or  mkvextract cuesheet <inname> [options]\n"
 #~ "   or  mkvextract timecodes_v2 <inname> [TID1:out1 [TID2:out2 ...]]\n"
 #~ "   or  mkvextract <-h|-V>\n"
 #~ "\n"
 #~ " The first word tells mkvextract what to extract. The second must be the\n"
-#~ " source file. The only 'global' option that can be used with all modes is\n"
+#~ " source file. The only 'global' option that can be used with all modes "
+#~ "is\n"
 #~ " '-v' or '--verbose' to increase the verbosity. All other options depend\n"
 #~ " on the mode.\n"
 #~ "\n"
 #~ " The first mode extracts some tracks to external files.\n"
-#~ "  -c charset       Convert text subtitles to this charset (default: UTF-8).\n"
+#~ "  -c charset       Convert text subtitles to this charset (default: "
+#~ "UTF-8).\n"
 #~ "  --no-ogg         Write raw FLAC files (default: write OggFLAC files).\n"
 #~ "  --cuesheet       Also try to extract the CUE sheet from the chapter\n"
 #~ "                   information and tags for this track.\n"
 #~ "  --blockadd level Keep only the BlockAdditions up to this level\n"
 #~ "                   (default: keep all levels)\n"
 #~ "  --raw            Extract the data to a raw file.\n"
-#~ "  --fullraw        Extract the data to a raw file including the CodecPrivate\n"
+#~ "  --fullraw        Extract the data to a raw file including the "
+#~ "CodecPrivate\n"
 #~ "                   as a header.\n"
 #~ "  TID:out          Write track with the ID TID to the file 'out'.\n"
 #~ "\n"
 #~ " Example:\n"
 #~ " mkvextract tracks \"a movie.mkv\" 2:audio.ogg -c ISO8859-1 3:subs.srt\n"
 #~ "\n"
-#~ " The second mode extracts the tags and converts them to XML. The output is\n"
+#~ " The second mode extracts the tags and converts them to XML. The output "
+#~ "is\n"
 #~ " written to the standard output. The output can be used as a source\n"
 #~ " for mkvmerge.\n"
 #~ "\n"
@@ -8779,7 +8881,8 @@ msgstr "是"
 #~ " Example:\n"
 #~ " mkvextract chapters \"a movie.mkv\" > movie_chapters.xml\n"
 #~ "\n"
-#~ " The fifth mode tries to extract chapter information and tags and outputs\n"
+#~ " The fifth mode tries to extract chapter information and tags and "
+#~ "outputs\n"
 #~ " them as a CUE sheet. This is the reverse of using a CUE sheet with\n"
 #~ " mkvmerge's '--chapters' option.\n"
 #~ "\n"
@@ -8800,7 +8903,8 @@ msgstr "是"
 #~ msgstr ""
 #~ "用法:  mkvextract tracks <inname> [選項] [TID1:out1 [TID2:out2 ...]]\n"
 #~ "   或  mkvextract tags <inname> [選項]\n"
-#~ "   或  mkvextract attachments <inname> [選項] [AID1:out1 [AID2:out2 ...]]\n"
+#~ "   或  mkvextract attachments <inname> [選項] [AID1:out1 [AID2:"
+#~ "out2 ...]]\n"
 #~ "   或  mkvextract chapters <inname> [選項]\n"
 #~ "   或  mkvextract cuesheet <inname> [選項]\n"
 #~ "   或  mkvextract timecodes_v2 <inname> [TID1:out1 [TID2:out2 ...]]\n"
@@ -8860,61 +8964,91 @@ msgstr "是"
 #~ "  -v, --verbose  提高“詳細”程度。\n"
 #~ "  -h, --help     顯示這個説明。\n"
 #~ "  -V, --version  顯示版本資訊。\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "使用 FLAC 輸出模組。\n"
+
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "VC1 視訊基本流"
+
 #~ msgid "VobBtn buttons"
 #~ msgstr "VobBtn 按鈕"
+
 #~ msgid "WAVE (uncompressed PCM)"
 #~ msgstr "WAVE (未壓縮的 PCM)"
+
 #~ msgid "WAVPACK lossless audio"
 #~ msgstr "WAVPACK 無損音訊"
+
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "寫入 raw FLAC 檔案 (預設：寫入 OggFLAC 檔案)。"
+
 #~ msgid "You have not yet selected an output file."
 #~ msgstr "您尚未選擇任何輸入檔。"
+
 #~ msgid "You have not yet selected any input file and/or no tracks."
 #~ msgstr "您尚未選擇任何輸入檔和/或未發現軌道。"
+
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "嵌入在 OGG 中的音訊/視訊/文字字幕"
+
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: 無法設定錯誤回呼。\n"
+
 #~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
 #~ msgstr "flac_header_extraction: 無法設定中繼資料回呼。\n"
+
 #~ msgid "flac_header_extraction: Could not set the read callback.\n"
 #~ msgstr "flac_header_extraction: 無法設定讀取回呼。\n"
+
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: 無法設定寫入回呼。\n"
+
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_reader: 無法設定檔尾回呼。\n"
+
 #~ msgid "flac_reader: Could not set the error callback.\n"
 #~ msgstr "flac_reader: 無法設定錯誤回呼。\n"
+
 #~ msgid "flac_reader: Could not set the length callback.\n"
 #~ msgstr "flac_reader: 無法設定長度回呼。\n"
+
 #~ msgid "flac_reader: Could not set the metadata callback.\n"
 #~ msgstr "flac_reader: 無法設定中繼資料回呼。\n"
+
 #~ msgid "flac_reader: Could not set the read callback.\n"
 #~ msgstr "flac_reader: 無法設定讀取回呼。\n"
+
 #~ msgid "flac_reader: Could not set the seek callback.\n"
 #~ msgstr "flac_reader: 無法設定定位回呼。\n"
+
 #~ msgid "flac_reader: Could not set the tell callback.\n"
 #~ msgstr "flac_reader: 無法設定通告回呼。\n"
+
 #~ msgid "flac_reader: Could not set the write callback.\n"
 #~ msgstr "flac_reader: 無法設定寫入回呼。\n"
-#~ msgid "found_what == 0. Should not have happened. Please file a bug report.\n"
+
+#~ msgid ""
+#~ "found_what == 0. Should not have happened. Please file a bug report.\n"
 #~ msgstr "found_what == 0。這不該發生。請提交錯誤報告。\n"
+
 #~ msgid "general Matroska files"
 #~ msgstr "一般 Matroska 檔"
+
 #~ msgid "locale.cpp/from_utf8(): Invalid conversion handle %1% (num: %2%).\n"
 #~ msgstr "locale.cpp/from_utf8(): 無效的轉換名號 %1% (數位: %2%)。\n"
+
 #~ msgid "locale.cpp/to_utf8(): Invalid conversion handle %1% (num: %2%).\n"
 #~ msgstr "locale.cpp/to_utf8(): 無效的轉換名號 %1% (數位: %2%)。\n"
+
 #~ msgid "mkvmerge GUI v%s ('%s')"
 #~ msgstr "mkvmerge GUI v%s ('%s')"
-#~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
+
+#~ msgid ""
+#~ "r_matroska: Cluster does not contain a cluster timecode. File is broken. "
+#~ "Aborting.\n"
 #~ msgstr "r_matroska: 叢集不含叢集時間碼。檔案已損壞。正在中止操作。\n"
+
 #~ msgid "start_element: pdata->bin != NULL"
 #~ msgstr "start_element: pdata->bin != NULL"
-
