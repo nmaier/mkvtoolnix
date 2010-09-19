@@ -79,5 +79,6 @@ void MTX_DLL_API merge_chapter_entries(EbmlMaster &master);
 int MTX_DLL_API count_chapter_atoms(EbmlMaster &master);
 
 void MTX_DLL_API align_chapter_edition_uids(KaxChapters *chapters);
+void MTX_DLL_API align_chapter_edition_uids(KaxChapters &reference, KaxChapters &modify);
 
 #endif // __MTX_COMMON_CHAPTERS_H

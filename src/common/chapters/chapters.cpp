@@ -1046,3 +1046,29 @@ align_chapter_edition_uids(KaxChapters *chapters) {
     GetChildAs<KaxEditionUID, EbmlUInteger>(*edition_entry) = s_shared_edition_uid;
   }
 }
+
+void
+align_chapter_edition_uids(KaxChapters &reference,
+                           KaxChapters &modify) {
+  size_t reference_idx = 0, modify_idx = 0;
+
+  while (1) {
+    KaxEditionEntry *ee_reference = NULL;;
+    while ((reference.ListSize() > reference_idx) && (NULL == (ee_reference = dynamic_cast<KaxEditionEntry *>(reference[reference_idx]))))
+      ++reference_idx;
+
+    if (NULL == ee_reference)
+      return;
+
+    KaxEditionEntry *ee_modify = NULL;;
+    while ((modify.ListSize() > modify_idx) && (NULL == (ee_modify = dynamic_cast<KaxEditionEntry *>(modify[modify_idx]))))
+      ++modify_idx;
+
+    if (NULL == ee_modify)
+      return;
+
+    GetChildAs<KaxEditionUID, EbmlUInteger>(*ee_modify) = GetChildAs<KaxEditionUID, EbmlUInteger>(*ee_reference);
+    ++reference_idx;
+    ++modify_idx;
+  }
+}
