@@ -1,5 +1,9 @@
 2010-09-19  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: bug fix: The MPEG ES reader was accessing
+	uninitialized data. This could lead to crashes or source files not
+	being read correctly.
+
 	* mkvmerge: bug fix: Using "--no-video" on AVI files caused the
 	video track to be mistaken for an audio track and included
 	anyway. Fix for bug 558.
