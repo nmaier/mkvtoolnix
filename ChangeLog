@@ -1,5 +1,8 @@
 2010-09-19  Moritz Bunkus  <moritz@bunkus.org>
 
+	* all: Added a translation of the programs into French by
+	Trinine (see AUTHORS).
+
 	* mkvmerge: bug fix: The MPEG ES reader was accessing
 	uninitialized data. This could lead to crashes or source files not
 	being read correctly.
