@@ -211,7 +211,7 @@ avi_reader_c::create_packetizer(int64_t tid) {
   if ((0 == tid) && demuxing_requested('v', 0) && (-1 == m_vptzr) && m_video_track_ok)
     create_video_packetizer();
 
-  else if ((tid <= AVI_audio_tracks(m_avi)) && demuxing_requested('a', tid))
+  else if ((0 != tid) && (tid <= AVI_audio_tracks(m_avi)) && demuxing_requested('a', tid))
     add_audio_demuxer(tid - 1);
 }
 
