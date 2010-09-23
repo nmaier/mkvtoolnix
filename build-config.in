@@ -2,7 +2,7 @@
 PACKAGE = @PACKAGE@
 VERSION = @VERSION@
 
-SHELL = @SHELL@
+shell = @SHELL@
 
 # Where to?
 srcdir = @srcdir@
@@ -29,7 +29,7 @@ pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 top_builddir = .
-mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+mkinstalldirs = $(shell) $(top_srcdir)/mkinstalldirs
 localedir = $(datadir)/locale
 desktopdir = $(datadir)/applications
 mimepackagesdir = $(datadir)/mime/packages
