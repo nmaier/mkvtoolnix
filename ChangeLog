@@ -1,3 +1,8 @@
+2010-09-23  Moritz Bunkus  <moritz@bunkus.org>
+
+	* Build system: bug fix: 'drake install' did not work if the login
+	shell was not POSIX compatible (e.g. fish). Fix for bug 559.
+
 2010-09-19  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: When appending two Matroska files which

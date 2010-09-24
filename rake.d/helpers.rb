@@ -81,7 +81,7 @@ def import_dependencies
 end
 
 def arrayify(*args)
-  args.collect { |arg| arg.respond_to?(:to_a) ? arg.to_a : arg }.flatten
+  args.collect { |arg| arg.is_a?(Array) ? arg.to_a : arg }.flatten
 end
 
 def install_dir(*dirs)
