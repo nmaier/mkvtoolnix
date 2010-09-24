@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mkvtoolnix-man\n"
-"POT-Creation-Date: 2010-08-26 10:38+0300\n"
-"PO-Revision-Date: 2010-08-26 10:39+0200\n"
+"POT-Creation-Date: 2010-09-24 08:49+0300\n"
+"PO-Revision-Date: 2010-09-24 08:50+0200\n"
 "Last-Translator: Dean Lee <xslidian@lidian.info>\n"
 "Language-Team: chinese simp <xslidian+mkvtoolnix@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -29,9 +29,9 @@ msgstr "4.3.0"
 #. type: Content of the date entity
 #: doc/man/mkvextract.xml:7 doc/man/mkvinfo.xml:7 doc/man/mkvmerge.xml:7
 #: doc/man/mkvpropedit.xml:7 doc/man/mmg.xml:7
-#| msgid "2010-07-03"
-msgid "2010-07-28"
-msgstr "2010-07-28"
+#| msgid "2010-07-28"
+msgid "2010-09-04"
+msgstr "2010-09-04"
 
 #. type: Content of the mkvmerge entity
 #: doc/man/mkvextract.xml:9 doc/man/mkvinfo.xml:9 doc/man/mkvmerge.xml:9
@@ -5342,11 +5342,14 @@ msgstr ""
 #. type: Content of: <refentry><refsect1><screen>
 #: doc/man/mkvpropedit.xml:351
 #, no-wrap
+#| msgid ""
+#| "$ mkvpropedit movie.mkv --edit tracks:s1 --set flag-default=0 --edit tracks:s2 --set flag-default=1\n"
+#| "  "
 msgid ""
-"$ mkvpropedit movie.mkv --edit tracks:s1 --set flag-default=0 --edit tracks:s2 --set flag-default=1\n"
+"$ mkvpropedit movie.mkv --edit track:s1 --set flag-default=0 --edit track:s2 --set flag-default=1\n"
 "  "
 msgstr ""
-"$ mkvpropedit 影片.mkv --edit tracks:s1 --set flag-default=0 --edit tracks:s2 --set flag-default=1\n"
+"$ mkvpropedit 影片.mkv --edit track:s1 --set flag-default=0 --edit track:s2 --set flag-default=1\n"
 "  "
 
 #. type: Content of: <refentry><refsect1><para>
