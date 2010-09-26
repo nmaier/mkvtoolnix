@@ -1721,6 +1721,8 @@ append_track(packetizer_t &ptzr,
   if (NULL != chapters) {
     if (NULL == g_kax_chapters)
       g_kax_chapters = new KaxChapters;
+    else
+      align_chapter_edition_uids(*g_kax_chapters, *chapters);
     adjust_chapter_timecodes(*chapters, timecode_adjustment);
     move_chapters_by_edition(*g_kax_chapters, *chapters);
     delete chapters;

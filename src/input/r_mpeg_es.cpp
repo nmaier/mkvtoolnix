@@ -116,8 +116,10 @@ mpeg_es_reader_c::probe_file(mm_io_c *io,
 }
 
 mpeg_es_reader_c::mpeg_es_reader_c(track_info_c &_ti)
-  throw (error_c):
-  generic_reader_c(_ti) {
+  throw (error_c)
+  : generic_reader_c(_ti)
+  , bytes_processed(0)
+{
 
   try {
     M2VParser parser;

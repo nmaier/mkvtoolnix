@@ -1,3 +1,30 @@
+2010-09-23  Moritz Bunkus  <moritz@bunkus.org>
+
+	* Build system: bug fix: 'drake install' did not work if the login
+	shell was not POSIX compatible (e.g. fish). Fix for bug 559.
+
+2010-09-19  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: enhancement: When appending two Matroska files which
+	both contain chapters the chapter entries of all editions will be
+	merged even if the edition's UIDs were different to begin
+	with. This is done based on the order of the edition. If both
+	files contain three editions each then the chapters from the first
+	edition in the second file will be put into the first edition from
+	the first file; the chapters from the second edition into the
+	second edition and so on.
+
+	* all: Added a translation of the programs into French by
+	Trinine (see AUTHORS).
+
+	* mkvmerge: bug fix: The MPEG ES reader was accessing
+	uninitialized data. This could lead to crashes or source files not
+	being read correctly.
+
+	* mkvmerge: bug fix: Using "--no-video" on AVI files caused the
+	video track to be mistaken for an audio track and included
+	anyway. Fix for bug 558.
+
 2010-09-04  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v4.3.0.
