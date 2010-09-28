@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-08-17 22:14+0200\n"
+"PO-Revision-Date: 2010-09-26 22:43+0200\n"
 "Last-Translator: rusguy6 rusguy6 <rusguy6@gmail.com>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -1004,8 +1004,8 @@ msgstr "&Перезагрузить\tCtrl-R"
 msgid "&Reset"
 msgstr "&Сбросить"
 
-#: src/mmg/mmg_dialog.cpp:268
 #: src/mmg/jobs.cpp:398
+#: src/mmg/mmg_dialog.cpp:268
 msgid "&Save"
 msgstr "&Сохранить"
 
@@ -1470,11 +1470,11 @@ msgstr "+-> Предварительный анализ FLAC файла: %1%%%%2
 msgid "+-> Pre-parsing FLAC file: 100%\n"
 msgstr "+-> Предварительный анализ FLAC файла: 100%\n"
 
-#: src/merge/pr_generic.cpp:1438
+#: src/merge/pr_generic.cpp:1440
 msgid ", description '%1%'"
 msgstr ", описание '%1%'"
 
-#: src/merge/pr_generic.cpp:1439
+#: src/merge/pr_generic.cpp:1441
 msgid ", file name '%1%'"
 msgstr ", имя файла '%1%'"
 
@@ -1610,7 +1610,7 @@ msgstr ""
 msgid "A track"
 msgstr "Дорожка"
 
-#: src/merge/pr_generic.cpp:1294
+#: src/merge/pr_generic.cpp:1296
 msgid "A track with the ID %1% was requested but not found in the file. The corresponding option will be ignored.\n"
 msgstr "Дорожка с ID %1% была запрошена, но не найдена в этом файле. Соответствующий параметр будет проигнорирован.\n"
 
@@ -1696,8 +1696,8 @@ msgstr "Прервать процесс обработки прямо сейча
 msgid "Aborted processing on %s"
 msgstr "Прервана обработка на %s"
 
-#: src/info/wxwidgets_ui.cpp:352
 #: src/info/qt_ui.cpp:125
+#: src/info/wxwidgets_ui.cpp:352
 msgid "About mkvinfo"
 msgstr "О mkvinfo"
 
@@ -1863,7 +1863,7 @@ msgstr "Выполняется анализ"
 msgid "Analyze MPEG4 bitstreams, put each frame into one Matroska block, use proper timestamping (I P B B = 0 120 40 80), use V_MPEG4/ISO/... CodecIDs."
 msgstr "Анализ MPEG4 потоки битов, положить каждый кадр в один блок Matroska, использовать надлежащие таймштампинг (I P B B = 0 120 40 80), использование V_MPEG4/ISO/... CodecIDs."
 
-#: src/merge/pr_generic.cpp:521
+#: src/merge/pr_generic.cpp:525
 msgid "Another default track for %1% tracks has already been set. The 'default' flag for track %2% of '%3%' will not be set.\n"
 msgstr "Другая дорожка по умолчанию для %1% дорожки уже были установлены. 'По умолчанию' флаг дорожки %2% из '%3%' не будут установлены.\n"
 
@@ -1876,7 +1876,7 @@ msgstr "Другой мультиплексирования работу в ещ
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Добавление дорожки из файла в другой трек с того же файла, не допускается. Это имеет место для треков число %u и %u."
 
-#: src/merge/output_control.cpp:1661
+#: src/merge/output_control.cpp:1640
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "Добавление дорожки %1% из файла нет. %2% ('%3%') к дорожке %4% из файла нет. %5% ('%6%').\n"
 
@@ -1920,7 +1920,7 @@ msgstr "Прикрепленный"
 msgid "Attached files"
 msgstr "Прикрепленные файлы"
 
-#: src/merge/pr_generic.cpp:1437
+#: src/merge/pr_generic.cpp:1439
 msgid "Attachment ID %1%: type '%2%', size %3% bytes"
 msgstr "Прикреплений ID %1%: тип '%2%', размер %3% байт"
 
@@ -2078,9 +2078,9 @@ msgstr "Не удается запустить вторую работу мул�
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file, and their CodecPrivate data (the USF styles etc) do not match.\n"
 msgstr "Невозможно записать трек %1% с CodecID '%2%' в файл '%3%' потому что трек %4% с CodecID '%5%' уже записываются в тот же файл, и их CodecPrivate данных (USF стилей и т.д.) не совпадают.\n"
 
+#: src/extract/xtr_avi.cpp:46
 #: src/extract/xtr_base.cpp:65
 #: src/extract/xtr_ivf.cpp:53
-#: src/extract/xtr_avi.cpp:46
 #: src/extract/xtr_textsubs.cpp:308
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file.\n"
 msgstr "Невозможно записать трек %1% с CodecID '%2%' в файл '%3%' потому что трек %4% с CodecID '%5%' уже записываются в тот же файл.\n"
@@ -2218,7 +2218,7 @@ msgstr "Главы"
 msgid "Chapters (%d entries) from %s"
 msgstr "Главы (%d записи) из %s"
 
-#: src/merge/output_control.cpp:1300
+#: src/merge/output_control.cpp:1282
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "Главы, не допускаются в WebM совместимых файлах. Нет главы будут написаны в любой выходной файл.\n"
 
@@ -2235,7 +2235,7 @@ msgstr "Главы написаны."
 msgid "Chapters:"
 msgstr "Главы:"
 
-#: src/merge/pr_generic.cpp:1440
+#: src/merge/pr_generic.cpp:1442
 msgid "Chapters: %1% entries"
 msgstr "Главы: %1% записи"
 
@@ -2276,11 +2276,11 @@ msgstr "Выберите входной файл чтобы добавить"
 msgid "Choose an input file to append"
 msgstr "Выберите входной файл чтобы приложить"
 
+#: src/mmg/jobs.cpp:409
 #: src/mmg/mmg_dialog.cpp:314
 #: src/mmg/mmg_dialog.cpp:410
 #: src/mmg/mmg_dialog.cpp:735
 #: src/mmg/mmg_dialog.cpp:756
-#: src/mmg/jobs.cpp:409
 #: src/mmg/mux_dialog.cpp:262
 #: src/mmg/tabs/chapters.cpp:636
 #: src/mmg/tabs/chapters.cpp:680
@@ -2421,7 +2421,7 @@ msgstr "Командная строка используется:"
 msgid "Common languages"
 msgstr "Общие языки"
 
-#: src/merge/pr_generic.cpp:780
+#: src/merge/pr_generic.cpp:782
 msgid "Compression failed: %1%\n"
 msgstr "Сжатие не удалось: %1%\n"
 
@@ -2494,9 +2494,9 @@ msgstr "Не удалось создать указанный файл."
 msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "Не удалось декодировать Base64 кодированные данные - это, кажется, неправильно."
 
-#: src/input/r_ogm.cpp:1128
-#: src/input/r_avi.cpp:351
 #: src/input/r_matroska.cpp:1832
+#: src/input/r_avi.cpp:351
+#: src/input/r_ogm.cpp:1128
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "Невозможно получить декодер конкретных данных конфигурации (AVCC) из этого AVC/H.264 трек.\n"
 
@@ -2513,7 +2513,7 @@ msgstr "Не удалось найти действительный MP3 паке
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "Не нашел индекс для звуковой дорожки %1% (avilib сообщение об ошибке: %2%). Пропуск трека.\n"
 
-#: src/merge/output_control.cpp:1616
+#: src/merge/output_control.cpp:1595
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "Не нашел gptzr, когда добавление. %1%\n"
 
@@ -2525,8 +2525,8 @@ msgstr "Не удается найти кодек данных конфигур�
 msgid "Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n"
 msgstr "Не удалось найти на следующей странице Ogg. Это указывает на поврежденный OGG/OGM файл. Постараюсь продолжить.\n"
 
-#: src/input/r_avi.cpp:685
 #: src/input/r_matroska.cpp:1575
+#: src/input/r_avi.cpp:685
 msgid "Could not find valid DTS headers in this track's first frames.\n"
 msgstr "Не удалось найти действительные DTS заголовки в первых кадрах дорожки.\n"
 
@@ -2918,7 +2918,7 @@ msgstr "EBML читать версию: %1%"
 msgid "EBML version: %1%"
 msgstr "EBML версия: %1%"
 
-#: src/merge/output_control.cpp:1156
+#: src/merge/output_control.cpp:1138
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "Зло внутренней ошибки! (Неизвестный тип файла). %1%\n"
 
@@ -2993,8 +2993,8 @@ msgstr "Конец:"
 msgid "English language name"
 msgstr "Английское название языка"
 
-#: src/info/wxwidgets_ui.cpp:243
 #: src/info/qt_ui.cpp:130
+#: src/info/wxwidgets_ui.cpp:243
 msgid "Error"
 msgstr "Ошибка"
 
@@ -3014,9 +3014,9 @@ msgstr "Ошибка в строке %1%: ожидаемое количеств�
 msgid "Error initializing the tables for the chapter, tag and segment info elements: Could not find the element with the debug name '%1%'. %2%\n"
 msgstr "Ошибка при инициализации таблицы для главы, тега и информации элементов сегмента: Не удалось найти элемент с именем отладки '%1%'. %2%\n"
 
+#: src/mmg/mmg.cpp:215
 #: src/mmg/mmg_dialog.cpp:369
 #: src/mmg/mmg_dialog.cpp:388
-#: src/mmg/mmg.cpp:215
 msgid "Error loading settings"
 msgstr "Ошибка при загрузке настроек"
 
@@ -3131,8 +3131,8 @@ msgstr "Извлечение данных в файл в том числе сы�
 msgid "Extract the data to a raw file."
 msgstr "Извлечение данных в сырой файл."
 
-#: src/output/p_mpeg4_p10.cpp:68
 #: src/output/p_avc.cpp:131
+#: src/output/p_mpeg4_p10.cpp:68
 msgid "Extracted the aspect ratio information from the MPEG-4 layer 10 (AVC) video data and set the display dimensions to %1%/%2%.\n"
 msgstr "Извлеченные информации пропорции с MPEG-4 layer 10 (AVC) видео-данных и установить дисплей с размерами %1%/%2%.\n"
 
@@ -3164,9 +3164,9 @@ msgstr "FPS:"
 msgid "Failed to create the VobSub data file '%1%': %2% (%3%)\n"
 msgstr "Не удалось создать файл данных VobSub '%1%': %2% (%3%)\n"
 
-#: src/extract/xtr_vobsub.cpp:236
 #: src/extract/xtr_base.cpp:73
 #: src/extract/xtr_textsubs.cpp:337
+#: src/extract/xtr_vobsub.cpp:236
 msgid "Failed to create the file '%1%': %2% (%3%)\n"
 msgstr "Не удалось создать файл '%1%': %2% (%3%)\n"
 
@@ -3194,11 +3194,11 @@ msgstr "Род UID:%1%"
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "Файл %1% неизвестного типа. Пожалуйста, посмотрите на поддерживаемых типов файлов ('mkvmerge --list-types') и связаться с автором Мориц Bunkus <moritz@bunkus.org>, если ваш тип файла поддерживается, но не признаются должным образом.\n"
 
-#: src/merge/pr_generic.cpp:1435
+#: src/merge/pr_generic.cpp:1437
 msgid "File '%1%': container: %2%"
 msgstr "Файл '%1%': контейнер: %2%"
 
-#: src/merge/pr_generic.cpp:1353
+#: src/merge/pr_generic.cpp:1355
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "Файл '%1%': неподдерживаемое контейнера: %2%\n"
 
@@ -3274,7 +3274,7 @@ msgstr "Файл/сегмент связи"
 msgid "File/segment title:"
 msgstr "Файл/сегмент название:"
 
-#: src/merge/output_control.cpp:846
+#: src/merge/output_control.cpp:828
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "Файлы не могут быть приложены к себе. Аргументом в пользу '--append-to' является недействительным.\n"
 
@@ -3408,7 +3408,7 @@ msgstr "Глобальные опции"
 msgid "Global tags (%d entries) from %s"
 msgstr "Глобальные метки (%d записей) из %s"
 
-#: src/merge/pr_generic.cpp:1441
+#: src/merge/pr_generic.cpp:1443
 msgid "Global tags: %1% entries"
 msgstr "Глобальные метки: %1% записей"
 
@@ -3538,9 +3538,9 @@ msgstr "Если оставить пустым, то mmg будет устано
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
 msgstr "Если расщепление файл может быть подключен либо все файлы, созданные или только на первый файл. Не имеет никакого эффекта, если не используется расщепление."
 
-#: src/output/p_textsubs.cpp:66
-msgid "Ignoring an entry which starts after it ends.\n"
-msgstr "Игнорирование запись, которая начинается после его окончания.\n"
+#: src/output/p_textsubs.cpp:68
+msgid "Ignoring an entry which starts after it ends (%1%).\n"
+msgstr "Игнорирование запись, которая начинается после его окончания (%1%).\n"
 
 #: src/input/subtitles.cpp:503
 msgid "Imported font from %1%"
@@ -3928,9 +3928,9 @@ msgid "Language is not NUL terminated"
 msgstr "Язык не должен завершаться нулем"
 
 #: src/mmg/options/chapters.cpp:86
+#: src/mmg/tabs/chapters.cpp:349
 #: src/mmg/tabs/global.cpp:278
 #: src/mmg/tabs/input_general.cpp:181
-#: src/mmg/tabs/chapters.cpp:349
 msgid "Language:"
 msgstr "Язык:"
 
@@ -4181,7 +4181,7 @@ msgstr "Больше чем одно название было дано для �
 msgid "More than one root element found."
 msgstr "Больше чем один корневой элемент найден."
 
-#: src/merge/output_control.cpp:923
+#: src/merge/output_control.cpp:905
 msgid "More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"
 msgstr "Больше чем одна дорожка должна быть приложена к дорожке %1% от файла номер %2% (%3%). Параметр для '--append-to' было недопустимо.\n"
 
@@ -4294,7 +4294,7 @@ msgstr "MIME тип не был выбран для вложения '%s'."
 msgid "No MIME type has been set for the attachment '%1%', and it could not be guessed.\n"
 msgstr "MIME тип не был установлен для вложения '%1%', и оно не могло быть предположено.\n"
 
-#: src/merge/output_control.cpp:882
+#: src/merge/output_control.cpp:864
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr "Не приложено отображение, был дан для файла номер %1% (%2%). Заданное по умолчанию отображение %3% будет использоваться вместо этого. Пожалуйста помните это, если mkvmerge прерывается с сообщением об ошибках относительно недопустимой '--append-to' опции.\n"
 
@@ -4455,7 +4455,7 @@ msgstr "Только один выходной файл позволен.\n"
 msgid "Only one segment info file allowed in '%1% %2%'.\n"
 msgstr "Только одному файлу информации сегмента позволяют войти '%1% %2%'.\n"
 
-#: src/merge/output_control.cpp:863
+#: src/merge/output_control.cpp:845
 msgid "Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the default mapping will be used) or specify a mapping for all tracks that are to be copied.\n"
 msgstr "Только неравнодушный прилагают отображения, были даны для файла номер %1% (%2%). Любой не определяет отображения (когда заданное по умолчанию отображение будет использоваться), или определите отображение для всех дорожек, которые должны быть скопированы.\n"
 
@@ -4558,7 +4558,7 @@ msgstr "PTS ошибка: 0x%|1$02x| %|2$02x|%|3$02x| %|4$02x|%|5$02x|\n"
 msgid "Packet number %1% contained an invalid FLAC header and is being skipped.\n"
 msgstr "Число пакета %1% содержали недопустимый заголовок FLAC и пропускаются.\n"
 
-#: src/merge/pr_generic.cpp:248
+#: src/merge/pr_generic.cpp:252
 msgid "Packet queue not empty (flushed: %1%). Frames have been lost during remux. %2%\n"
 msgstr "Очередь пакета, не пустая (сброшенный на диск: %1%). Кадры были потеряны во время remux. %2%\n"
 
@@ -4672,16 +4672,16 @@ msgstr "Процесс"
 msgid "Progress: %1%%%%2%"
 msgstr "Процесс: %1%%%%2%"
 
-#: src/extract/timecodes_v2.cpp:355
 #: src/extract/mkvextract.cpp:93
+#: src/extract/timecodes_v2.cpp:355
 msgid "Progress: 100%\n"
 msgstr "Процесс: 100%\n"
 
-#: src/merge/output_control.cpp:1909
+#: src/merge/output_control.cpp:1890
 msgid "Progress: 100%%%1%"
 msgstr "Процесс: 100%%%1%"
 
-#: src/common/kax_analyzer.cpp:1065
+#: src/common/kax_analyzer.cpp:1110
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "Процесс: [%1%%2%] %3%%%"
 
@@ -5030,8 +5030,8 @@ msgstr "Искать позицию: %1%"
 
 #: src/extract/timecodes_v2.cpp:199
 #: src/extract/tracks.cpp:349
-#: src/info/wxwidgets_ui.cpp:219
 #: src/info/qt_ui.cpp:177
+#: src/info/wxwidgets_ui.cpp:219
 msgid "Segment"
 msgstr "Сегмент"
 
@@ -5064,20 +5064,20 @@ msgstr "Файлы информации сегмента (*.xml)|*.xml|%s"
 #: src/mmg/header_editor/frame.cpp:322
 #: src/extract/timecodes_v2.cpp:219
 #: src/extract/tracks.cpp:367
+#: src/propedit/options.cpp:152
 #: src/propedit/propedit_cli_parser.cpp:87
 #: src/propedit/propedit_cli_parser.cpp:160
-#: src/propedit/options.cpp:152
-#: src/info/wxwidgets_ui.cpp:222
 #: src/info/mkvinfo.cpp:582
 #: src/info/qt_ui.cpp:178
+#: src/info/wxwidgets_ui.cpp:222
 msgid "Segment information"
 msgstr "Информация сегмента"
 
 #: src/extract/timecodes_v2.cpp:253
 #: src/extract/tracks.cpp:379
-#: src/info/wxwidgets_ui.cpp:222
 #: src/info/mkvinfo.cpp:957
 #: src/info/qt_ui.cpp:179
+#: src/info/wxwidgets_ui.cpp:222
 msgid "Segment tracks"
 msgstr "Дорожки сегмента"
 
@@ -5371,7 +5371,7 @@ msgstr "Некоторые заголовка значения были изме
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "Некоторые заголовка значения были изменены. Вы действительно хотите перезагрузить без сохранения файла?"
 
-#: src/merge/output_control.cpp:1341
+#: src/merge/output_control.cpp:1323
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "Некоторые теги элементы отсутствуют (эта ошибка не должна иметь место - еще Подобная ошибка должна была иметь место ранее). %1%\n"
 
@@ -5533,11 +5533,11 @@ msgstr "Тег файлы (*.xml;*.txt)|*.xml;*.txt|%s"
 msgid "Tags"
 msgstr "Теги"
 
-#: src/merge/output_control.cpp:1329
+#: src/merge/output_control.cpp:1311
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "Теги не допускаются в WebM совместимых файлах. Нет теги будут написаны в любой выходной файл.\n"
 
-#: src/merge/pr_generic.cpp:1442
+#: src/merge/pr_generic.cpp:1444
 msgid "Tags for track ID %1%: %2% entries"
 msgstr "Теги дорожки ID %1%: %2% записи"
 
@@ -5730,15 +5730,15 @@ msgstr ""
 msgid "The chosen NALU size length of %1% is too small. Try using '4'.\n"
 msgstr "Выбрали NALU размер длины %1% слишком мал. Попробуйте использовать '4'.\n"
 
-#: src/merge/pr_generic.cpp:1238
+#: src/merge/pr_generic.cpp:1240
 msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr "Тип кодека '%1%' не может быть использован в WebM совместимом файле.\n"
 
-#: src/output/p_textsubs.cpp:98
-#: src/output/p_video.cpp:139
 #: src/output/p_avc.cpp:203
-#: src/output/p_passthrough.cpp:63
 #: src/output/p_kate.cpp:113
+#: src/output/p_passthrough.cpp:63
+#: src/output/p_video.cpp:139
+#: src/output/p_textsubs.cpp:100
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "Личные данные кодека не соответствуют (длины: %1% и %2%)."
 
@@ -5755,7 +5755,7 @@ msgstr "Заголовок коррекции файл не был правил�
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "Страна '%s' не является действительным ccTLD и не может быть выбрана."
 
-#: src/merge/output_control.cpp:1404
+#: src/merge/output_control.cpp:1386
 msgid "The cue entries (the index) are being written..."
 msgstr "cue для записи (индекс) пишется..."
 
@@ -5764,7 +5764,7 @@ msgstr "cue для записи (индекс) пишется..."
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr "Текущего файла (номер %d) не может быть удалена. Есть и другие файлы - по крайней мере файл %d - чьи треки должны быть приложены треки из этого файла. Пожалуйста, удалите эти файлы."
 
-#: src/merge/pr_generic.cpp:842
+#: src/merge/pr_generic.cpp:844
 msgid "The current packet's timecode is smaller than that of the previous packet. This usually means that the source file is a Matroska file that has not been created 100%% correctly. The timecodes of all packets will be adjusted by %1%ms in order not to lose any data. This may throw audio/video synchronization off, but that can be corrected with mkvmerge's \"--sync\" option. If you already use \"--sync\" and you still get this warning then do NOT worry -- this is normal. If this error happens more than once and you get this message more than once for a particular track then either is the source file badly mastered, or mkvmerge contains a bug. In this case you should contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
 msgstr "Тайм-код текущего пакета является меньше, чем у предыдущего пакета. Это обычно означает, что исходный файл представляет собой файл Matroska, которые не были созданы 100%% правильно. Тайм-кодов всех пакетов, будет скорректирована %1%ms, чтобы не потерять какие-либо данные. Это может пролить аудио/видео синхронизацию с, но это может быть исправлено с помощью mkvmerge в '- синхронизировать' вариант. Если вы уже используете \" синхронизировать\", но вы получите это предупреждение, то не волнуйтесь - это нормально. Если эта ошибка происходит несколько раз, и вы получите это сообщение более одного раза за особый путь, то либо это исходный файл плохо освоили или mkvmerge содержит ошибку. В этом случае вам следует связаться с автором Moritz Bunkus <moritz@bunkus.org>.\n"
 
@@ -5777,7 +5777,7 @@ msgstr "Код языка по умолчанию '%1%' не является д
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "Установка задержки на номер трека. %s в файле '%s' является недействительным."
 
-#: src/merge/output_control.cpp:1160
+#: src/merge/output_control.cpp:1142
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
 "%2%\n"
@@ -5833,10 +5833,10 @@ msgstr "Пятый режим пытается извлечь информаци
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
 msgstr "Файл '%1%' не может быть присоединен потому что он не существует, или не может быть прочитаны.\n"
 
-#: src/extract/cuesheets.cpp:208
 #: src/extract/attachments.cpp:114
-#: src/extract/tags.cpp:47
 #: src/extract/chapters.cpp:47
+#: src/extract/cuesheets.cpp:208
+#: src/extract/tags.cpp:47
 msgid "The file '%1%' could not be opened for reading (%2%)."
 msgstr "Файл '%1%' не может быть открыт для чтения (%2%)."
 
@@ -5849,19 +5849,19 @@ msgstr "Файл '%1%' не может быть открыт для чтения
 msgid "The file '%1%' could not be opened for reading command line arguments.\n"
 msgstr "Файл '%1%' не может быть открыт для чтения аргументов командной строки.\n"
 
-#: src/extract/xtr_wav.cpp:113
 #: src/extract/xtr_tta.cpp:87
-#: src/extract/xtr_avi.cpp:52
 #: src/extract/tracks.cpp:276
+#: src/extract/xtr_avi.cpp:52
+#: src/extract/xtr_wav.cpp:113
 msgid "The file '%1%' could not be opened for writing (%2%).\n"
 msgstr "Файл '%1%' не может быть открыт для записи (%2%).\n"
 
-#: src/extract/xtr_rmff.cpp:40
 #: src/extract/attachments.cpp:92
+#: src/extract/xtr_rmff.cpp:40
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "Файл '%1%' не может быть открыт для записи (%2%, %3%).\n"
 
-#: src/merge/output_control.cpp:1369
+#: src/merge/output_control.cpp:1351
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "Файл '%1%' был открыт для записи.\n"
 
@@ -5869,7 +5869,7 @@ msgstr "Файл '%1%' был открыт для записи.\n"
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "Файл '%1%' имеет неизвестен тип. Пожалуйста, посмотрите на поддерживаемых типов файлов ('mkvmerge --list-types') и связаться с автором Moritz Bunkus <moritz@bunkus.org>, если ваш тип файла поддерживается, но не признаются должным образом.\n"
 
-#: src/merge/pr_generic.cpp:1357
+#: src/merge/pr_generic.cpp:1359
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
 msgstr "Файл '%1%' не является поддерживаемым типом файлов (%2%).\n"
 
@@ -5946,15 +5946,15 @@ msgstr "Файл занимается ремонтом, часть 4/4..."
 msgid "The file name for this segment."
 msgstr "Имя файла для данного сегмента."
 
-#: src/merge/output_control.cpp:896
+#: src/merge/output_control.cpp:878
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. The argument for '--append-to' was invalid.\n"
 msgstr "Файл no. %1% ('%2%') не содержит дорожку с ID %3%, или на том, что трек не должен быть скопирован. Аргументом в пользу '--append-to' является недействительным.\n"
 
-#: src/merge/output_control.cpp:902
+#: src/merge/output_control.cpp:884
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. Therefore no track can be appended to it. The argument for '--append-to' was invalid.\n"
 msgstr "Файл no. %1% ('%2%') не содержит дорожку с ID %3%, или на том, что трек не должен быть скопирован. Поэтому дорожка не может быть приложены к нему. Аргументом в пользу '--append-to' является недействительным.\n"
 
-#: src/merge/output_control.cpp:838
+#: src/merge/output_control.cpp:820
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr "Файл no. %1% ('%2%') не является приложением. Аргументом в пользу '--append-to' является недействительным.\n"
 
@@ -5995,7 +5995,7 @@ msgstr "Формат разделить неправильный размер."
 msgid "The format of the split timecode/duration is invalid."
 msgstr "Формат разделить тайм-код/продолжительность является недействительным."
 
-#: src/merge/output_control.cpp:966
+#: src/merge/output_control.cpp:948
 msgid "The formats do not match."
 msgstr "Форматы не совпадают."
 
@@ -6206,7 +6206,7 @@ msgstr "Опция '--meta-seek-size' больше не поддерживает
 msgid "The order of the various options is not important."
 msgstr "Для различных вариантов не имеет значения."
 
-#: src/merge/output_control.cpp:1365
+#: src/merge/output_control.cpp:1347
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "Выходной файл '%1%' не может быть открыт для записи (%2%).\n"
 
@@ -6256,7 +6256,7 @@ msgstr "Значение свойства не правильное целое �
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr "Значение свойства не правильное целое число без знака в '%1%'. %2%\n"
 
-#: src/merge/output_control.cpp:968
+#: src/merge/output_control.cpp:950
 msgid "The reason is unknown."
 msgstr "Причины этого пока неизвестны."
 
@@ -6334,7 +6334,7 @@ msgstr "Строка 'track:n' с 'n' быть числом выбирает э�
 msgid "The strings 'info', 'segment_info' or 'segmentinfo' select the segment information element. This is also the default until the first '--edit' option is found."
 msgstr "Строки 'информация', 'segment_info' или 'segmentinfo' выбирают информационный элемент сегмента. Это - также значение по умолчанию до первого '--edit' опция найдена."
 
-#: src/merge/pr_generic.cpp:287
+#: src/merge/pr_generic.cpp:291
 msgid "The tags in '%1%' could not be parsed: some mandatory elements are missing.\n"
 msgstr "Теги в '%1%' не могли быть анализированы: некоторые принудительные элементы отсутствуют.\n"
 
@@ -6397,7 +6397,7 @@ msgstr "Тайм-коды для этого потока были сброшен
 msgid "The title for the whole movie."
 msgstr "Название для всего фильма."
 
-#: src/merge/output_control.cpp:912
+#: src/merge/output_control.cpp:894
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
 msgstr "Дорожка %1% от файла номер %2% (%3%) должна быть приложена не раз. Параметр для '--append-to' было недопустимо.\n"
 
@@ -6409,11 +6409,11 @@ msgstr "Заголовки дорожки не могут быть выполн�
 msgid "The track number %1% does not have a valid CodecID.\n"
 msgstr "У номера дорожки %1% нет правильного CodecID.\n"
 
-#: src/merge/output_control.cpp:958
+#: src/merge/output_control.cpp:940
 msgid "The track number %1% from the file '%2%' can probably not be appended correctly to the track number %3% from the file '%4%': %5% Please make sure that the resulting file plays correctly the whole time. The author of this program will probably not give support for playback issues with the resulting file.\n"
 msgstr "Номер дорожки %1% от файла '%2%' не может вероятно быть приложен правильно к номеру дорожки %3% от файла '%4%': %5% Пожалуйста удостоверьтесь, что получающийся файл запускает правильно все время. Автор этой программы не будет вероятно оказывать поддержку для проблем воспроизведения с получающимся файлом.\n"
 
-#: src/merge/output_control.cpp:969
+#: src/merge/output_control.cpp:951
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
 msgstr "Номер дорожки %1% от файла '%2%' не может быть приложен к номеру дорожки %3% от файла '%4%'. %5%\n"
 
@@ -6422,7 +6422,7 @@ msgstr "Номер дорожки %1% от файла '%2%' не может бы
 msgid "The track number as used in the Block Header."
 msgstr "Номер дорожки как использующийся в Заголовке блока."
 
-#: src/merge/output_control.cpp:967
+#: src/merge/output_control.cpp:949
 msgid "The track parameters do not match."
 msgstr "Параметры дорожки не соответствуют."
 
@@ -6430,8 +6430,8 @@ msgstr "Параметры дорожки не соответствуют."
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "Ширина двух дорожек является различной: %1% и %2%"
 
-#: src/merge/output_control.cpp:832
-#: src/merge/output_control.cpp:842
+#: src/merge/output_control.cpp:814
+#: src/merge/output_control.cpp:824
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr "Нет никакого файла с ID '%1%'. Параметр для '--append-to' было недопустимо.\n"
 
@@ -6572,7 +6572,7 @@ msgstr "Это свойство уникально. Больше экземпл�
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "Это не должно было действительно случиться. Пространство, зарезервированное для первого мета элемента поиска дорожки, было слишком маленьким. %1%\n"
 
-#: src/merge/output_control.cpp:1557
+#: src/merge/output_control.cpp:1536
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "Это не должно было действительно случиться. Пространство, зарезервированное для первого мета элемента поиска дорожки, было слишком маленьким. Размера необходимо: %1%. %2%\n"
 
@@ -6670,15 +6670,15 @@ msgstr "Дорожка %1% с CodecID '%2%' отсутствует \"биты з
 msgid "Track %1% with the CodecID '%2%' is missing the \"codec private \" element and cannot be extracted.\n"
 msgstr "Дорожка %1% с CodecID '%2%' отсутствует \"codec private \" элемент, и не может быть извлечен.\n"
 
-#: src/extract/xtr_ogg.cpp:37
-#: src/extract/xtr_ogg.cpp:72
-#: src/extract/xtr_vobsub.cpp:65
 #: src/extract/xtr_aac.cpp:42
 #: src/extract/xtr_avc.cpp:54
-#: src/extract/xtr_wav.cpp:95
-#: src/extract/xtr_rmff.cpp:31
 #: src/extract/xtr_avi.cpp:37
+#: src/extract/xtr_ogg.cpp:37
+#: src/extract/xtr_ogg.cpp:72
+#: src/extract/xtr_rmff.cpp:31
 #: src/extract/xtr_textsubs.cpp:292
+#: src/extract/xtr_vobsub.cpp:65
+#: src/extract/xtr_wav.cpp:95
 msgid "Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n"
 msgstr "Дорожка %1% с CodecID '%2%' отсутствует \"codec private\" элемент, и не может быть извлечен.\n"
 
@@ -6711,7 +6711,7 @@ msgstr "Дорожка %1%: Информация AAC не может быть п
 msgid "Track ID %1% has an unknown AAC type.\n"
 msgstr "Дорожка ID %1% имеет неизвестный AAC тип.\n"
 
-#: src/merge/pr_generic.cpp:1436
+#: src/merge/pr_generic.cpp:1438
 msgid "Track ID %1%: %2% (%3%)"
 msgstr "Дорожка ID %1%: %2% (%3%)"
 
@@ -6728,9 +6728,9 @@ msgstr "Дорожка UID: %1%"
 msgid "Track extraction"
 msgstr "Извлечение дорожки"
 
+#: src/propedit/options.cpp:157
 #: src/propedit/propedit_cli_parser.cpp:88
 #: src/propedit/propedit_cli_parser.cpp:163
-#: src/propedit/options.cpp:157
 msgid "Track headers"
 msgstr "Заголовки дорожки"
 
@@ -6974,8 +6974,8 @@ msgid "Using a NALU size length of 3 bytes might result in tracks that won't be 
 msgstr "Использование длина NALU размер 3 байт может привести к тому, что дорожки не будут декодируемых с некоторыми AVC/H.264 кодеков.\n"
 
 #: src/input/r_ac3.cpp:90
-#: src/input/r_mpeg_ps.cpp:1176
 #: src/input/r_matroska.cpp:1552
+#: src/input/r_mpeg_ps.cpp:1176
 msgid "Using the %1%AC3 output module.\n"
 msgstr "Использование %1%AC3 выходного модуля.\n"
 
@@ -6991,10 +6991,10 @@ msgstr "Использование AAC демультиплексора.\n"
 msgid "Using the AAC output module (FourCC: %1%).\n"
 msgstr "Использование AAC выходного модуля (FourCC: %1%).\n"
 
-#: src/input/r_qtmp4.cpp:1531
 #: src/input/r_aac.cpp:116
-#: src/input/r_ogm.cpp:965
 #: src/input/r_matroska.cpp:1540
+#: src/input/r_ogm.cpp:965
+#: src/input/r_qtmp4.cpp:1531
 msgid "Using the AAC output module.\n"
 msgstr "Использование AAC выходного модуля.\n"
 
@@ -7006,10 +7006,10 @@ msgstr "Использование AC3 демультиплексора.\n"
 msgid "Using the AC3 output module (FourCC: %1%).\n"
 msgstr "Использование AC3 выходного модуля (FourCC: %1%).\n"
 
-#: src/input/r_qtmp4.cpp:1454
-#: src/input/r_ogm.cpp:983
 #: src/input/r_wav.cpp:225
 #: src/input/r_avi.cpp:564
+#: src/input/r_ogm.cpp:983
+#: src/input/r_qtmp4.cpp:1454
 msgid "Using the AC3 output module.\n"
 msgstr "Использование AC3 выходного модуля.\n"
 
@@ -7029,11 +7029,11 @@ msgstr "Использование CorePanorama читателя субтитр�
 msgid "Using the DTS demultiplexer.\n"
 msgstr "Использование DTS демультиплексора.\n"
 
-#: src/input/r_dts.cpp:114
-#: src/input/r_mpeg_ps.cpp:1181
 #: src/input/r_wav.cpp:354
-#: src/input/r_avi.cpp:680
+#: src/input/r_dts.cpp:114
 #: src/input/r_matroska.cpp:1572
+#: src/input/r_avi.cpp:680
+#: src/input/r_mpeg_ps.cpp:1181
 msgid "Using the DTS output module.\n"
 msgstr "Использование DTS выходного модуля.\n"
 
@@ -7072,7 +7072,7 @@ msgstr "Использование Kate выходного модуля субт
 msgid "Using the MP2/MP3 demultiplexer.\n"
 msgstr "Использование MP2/MP3 демультиплексора.\n"
 
-#: src/input/r_mpeg_es.cpp:164
+#: src/input/r_mpeg_es.cpp:166
 msgid "Using the MPEG ES demultiplexer.\n"
 msgstr "Использование MPEG ES демультиплексора.\n"
 
@@ -7080,43 +7080,43 @@ msgstr "Использование MPEG ES демультиплексора.\n"
 msgid "Using the MPEG PS demultiplexer.\n"
 msgstr "Использование MPEG PS демультиплексора.\n"
 
-#: src/input/r_mp3.cpp:71
-#: src/input/r_qtmp4.cpp:1537
-#: src/input/r_ogm.cpp:1001
-#: src/input/r_mpeg_ps.cpp:1171
-#: src/input/r_avi.cpp:557
 #: src/input/r_matroska.cpp:1602
+#: src/input/r_mp3.cpp:71
+#: src/input/r_avi.cpp:557
+#: src/input/r_mpeg_ps.cpp:1171
+#: src/input/r_ogm.cpp:1001
+#: src/input/r_qtmp4.cpp:1537
 msgid "Using the MPEG audio output module.\n"
 msgstr "Использование MPEG аудио выходного модуля.\n"
 
-#: src/input/r_qtmp4.cpp:1489
 #: src/input/r_matroska.cpp:1457
+#: src/input/r_qtmp4.cpp:1489
 msgid "Using the MPEG-%1% video output module.\n"
 msgstr "Использование MPEG-%1% видео выходного модуля.\n"
 
-#: src/input/r_mpeg_ps.cpp:1197
-#: src/input/r_mpeg_es.cpp:177
 #: src/input/r_avi.cpp:323
+#: src/input/r_mpeg_es.cpp:179
+#: src/input/r_mpeg_ps.cpp:1197
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "Использование MPEG-1/2 видео выходного модуля.\n"
 
-#: src/input/r_qtmp4.cpp:1507
 #: src/input/r_matroska.cpp:1864
+#: src/input/r_qtmp4.cpp:1507
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "Использование MPEG-4 Part 10 (AVC) видео выводного модуля.\n"
 
-#: src/input/r_ogm.cpp:1125
-#: src/input/r_mpeg_ps.cpp:1210
-#: src/input/r_avi.cpp:348
 #: src/input/r_avc.cpp:136
 #: src/input/r_matroska.cpp:1844
+#: src/input/r_avi.cpp:348
+#: src/input/r_mpeg_ps.cpp:1210
+#: src/input/r_ogm.cpp:1125
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "Использование MPEG-4 Part 10 ES видео выводного модуля.\n"
 
-#: src/input/r_qtmp4.cpp:1481
-#: src/input/r_ogm.cpp:1229
-#: src/input/r_avi.cpp:331
 #: src/input/r_matroska.cpp:1461
+#: src/input/r_avi.cpp:331
+#: src/input/r_ogm.cpp:1229
+#: src/input/r_qtmp4.cpp:1481
 msgid "Using the MPEG-4 part 2 video output module.\n"
 msgstr "Использование MPEG-4 Part 2 видео выходного модуля.\n"
 
@@ -7128,16 +7128,16 @@ msgstr "Использование Matroska демультиплексора.\n"
 msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr "Использование OGG/OGM демультиплексора.\n"
 
-#: src/input/r_qtmp4.cpp:1543
-#: src/input/r_ogm.cpp:1020
 #: src/input/r_wav.cpp:395
-#: src/input/r_avi.cpp:549
 #: src/input/r_matroska.cpp:1609
+#: src/input/r_avi.cpp:549
+#: src/input/r_ogm.cpp:1020
+#: src/input/r_qtmp4.cpp:1543
 msgid "Using the PCM output module.\n"
 msgstr "Использование PCM выходного модуля.\n"
 
-#: src/input/r_pgssup.cpp:72
 #: src/input/r_matroska.cpp:1719
+#: src/input/r_pgssup.cpp:72
 msgid "Using the PGS output module.\n"
 msgstr "Использование PGS выходного модуля.\n"
 
@@ -7178,8 +7178,8 @@ msgstr "Использование TTA демультиплексора.\n"
 msgid "Using the TTA output module.\n"
 msgstr "Использование TTA выходного модуля.\n"
 
-#: src/input/r_ogm.cpp:1322
 #: src/input/r_matroska.cpp:1469
+#: src/input/r_ogm.cpp:1322
 msgid "Using the Theora video output module.\n"
 msgstr "Использование Theora видео выходного модуля.\n"
 
@@ -7233,9 +7233,9 @@ msgstr "Использование VobSub выходного модуля суб
 msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
 msgstr "Использование VobSub читателя субтитров. (SUB файл '%1%').\n"
 
-#: src/input/r_ogm.cpp:1041
-#: src/input/r_avi.cpp:734
 #: src/input/r_matroska.cpp:1627
+#: src/input/r_avi.cpp:734
+#: src/input/r_ogm.cpp:1041
 msgid "Using the Vorbis output module.\n"
 msgstr "Использование Vorbis выходного модуля.\n"
 
@@ -7264,12 +7264,12 @@ msgstr "Использование общего аудио выходного м
 msgid "Using the passthrough output module for this %1% track.\n"
 msgstr "Использование передачи результата модуля этой %1% дорожке.\n"
 
-#: src/input/r_usf.cpp:259
-#: src/input/r_srt.cpp:60
-#: src/input/r_ogm.cpp:1072
-#: src/input/r_avi.cpp:405
 #: src/input/r_ssa.cpp:71
+#: src/input/r_usf.cpp:259
 #: src/input/r_matroska.cpp:1705
+#: src/input/r_avi.cpp:405
+#: src/input/r_ogm.cpp:1072
+#: src/input/r_srt.cpp:60
 msgid "Using the text subtitle output module.\n"
 msgstr "Использование текста выводного модуля субтитров.\n"
 
@@ -7282,9 +7282,9 @@ msgstr "Использование видео выходного модуля (F
 msgid "Using the video output module (FourCC: %|1$.4s|).\n"
 msgstr "Использование видео выходного модуля (FourCC: %|1$.4s|).\n"
 
-#: src/input/r_ogm.cpp:1234
-#: src/input/r_avi.cpp:360
 #: src/input/r_matroska.cpp:1483
+#: src/input/r_avi.cpp:360
+#: src/input/r_ogm.cpp:1234
 msgid "Using the video output module.\n"
 msgstr "Использование видео выходного модуля.\n"
 
@@ -7666,8 +7666,8 @@ msgstr "bzip2 сжатие не удалось. Результат: %1%\n"
 msgid "bzlib_compressor_c::decompress() not implemented\n"
 msgstr "bzlib_compressor_c::decompress() не выполняется\n"
 
-#: src/common/chapters/xml_parser.cpp:143
 #: src/common/chapters/writer.cpp:196
+#: src/common/chapters/xml_parser.cpp:143
 msgid "cet_index: '%1%' not found\n"
 msgstr "cet_index: '%1%' не найден\n"
 
@@ -8302,7 +8302,7 @@ msgstr "mmg будет сбрасываться в список по умолч�
 msgid "mp3_reader: Could not open the source file."
 msgstr "mp3_reader: Не удалось открыть исходный файл."
 
-#: src/input/r_mpeg_es.cpp:161
+#: src/input/r_mpeg_es.cpp:163
 msgid "mpeg_es_reader: Could not open the file."
 msgstr "mpeg_es_reader: Не удалось открыть файл."
 
@@ -8420,11 +8420,11 @@ msgstr "высота пикселя: %1%"
 msgid "pixel width: %1%"
 msgstr "ширина пикселя: %1%"
 
-#: src/merge/pr_generic.cpp:854
+#: src/merge/pr_generic.cpp:856
 msgid "pr_generic.cpp/generic_packetizer_c::add_packet(): timecode < last_timecode (%1% < %2%). %3%\n"
 msgstr "pr_generic.cpp/generic_packetizer_c::add_packet(): тайм-код < последней_тайм-код (%1% < %2%). %3%\n"
 
-#: src/merge/pr_generic.cpp:1205
+#: src/merge/pr_generic.cpp:1207
 msgid "pr_generic.cpp/generic_reader_c::demuxing_requested(): Invalid track type %1%."
 msgstr "pr_generic.cpp/generic_reader_c::demuxing_requested(): Неверный тип дорожки %1%."
 
@@ -8539,10 +8539,10 @@ msgstr "tta_reader: tag_size < 0 в конструкторе. %1%\n"
 msgid "und (Undetermined)"
 msgstr "und (Неопределенный)"
 
-#: src/input/r_mpeg_ps.cpp:1388
 #: src/input/r_matroska.cpp:89
 #: src/input/r_matroska.cpp:2312
 #: src/input/r_matroska.cpp:2319
+#: src/input/r_mpeg_ps.cpp:1388
 #: src/common/mm_io_win.cpp:165
 #: src/mmg/mmg.cpp:61
 #: src/mmg/header_editor/value_page.cpp:150

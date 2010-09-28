@@ -62,4 +62,25 @@ public:
 
 typedef counted_ptr<multiple_timecodes_packet_extension_c> multiple_timecodes_packet_extension_cptr;
 
+class subtitle_number_packet_extension_c: public packet_extension_c {
+private:
+  unsigned int m_number;
+
+public:
+  subtitle_number_packet_extension_c(unsigned int number)
+    : m_number(number)
+  {
+  }
+
+  virtual packet_extension_type_e get_type() {
+    return SUBTITLE_NUMBER;
+  }
+
+  unsigned int get_number() {
+    return m_number;
+  }
+};
+
+typedef counted_ptr<subtitle_number_packet_extension_c> subtitle_number_packet_extension_cptr;
+
 #endif  // __PACKET_EXTENSIONS_H

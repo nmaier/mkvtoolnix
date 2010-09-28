@@ -1,3 +1,9 @@
+2010-09-28  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: enhancement: The warning about subtitle entries that
+	are skipped because their start time is greater than their end
+	time now includes the subtitle number.
+
 2010-09-23  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Build system: bug fix: 'drake install' did not work if the login

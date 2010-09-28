@@ -14,6 +14,7 @@
 #include "common/common_pch.h"
 
 #include "common/matroska.h"
+#include "merge/packet_extensions.h"
 #include "merge/pr_generic.h"
 #include "output/p_textsubs.h"
 
@@ -62,8 +63,11 @@ textsubs_packetizer_c::set_headers() {
 
 int
 textsubs_packetizer_c::process(packet_cptr packet) {
+  ++m_packetno;
+
   if (0 > packet->duration) {
-    mxwarn_tid(m_ti.m_fname, m_ti.m_id, Y("Ignoring an entry which starts after it ends.\n"));
+    subtitle_number_packet_extension_c *extension = dynamic_cast<subtitle_number_packet_extension_c *>(packet->find_extension(packet_extension_c::SUBTITLE_NUMBER));
+    mxwarn_tid(m_ti.m_fname, m_ti.m_id, boost::format(Y("Ignoring an entry which starts after it ends (%1%).\n")) % (NULL != extension ? extension->get_number() : static_cast<unsigned int>(m_packetno)));
     return FILE_STATUS_MOREDATA;
   }
 

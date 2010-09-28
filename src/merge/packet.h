@@ -35,6 +35,7 @@ class packet_extension_c {
 public:
   enum packet_extension_type_e {
     MULTIPLE_TIMECODES,
+    SUBTITLE_NUMBER,
   };
 
 public:
@@ -170,6 +171,14 @@ struct packet_t {
 
   bool is_b_frame() {
     return has_bref() && has_fref();
+  }
+
+  packet_extension_c *find_extension(packet_extension_c::packet_extension_type_e type) {
+    foreach(packet_extension_cptr &extension, extensions)
+      if (extension->get_type() == type)
+        return extension.get_object();
+
+    return NULL;
   }
 };
 typedef counted_ptr<packet_t> packet_cptr;

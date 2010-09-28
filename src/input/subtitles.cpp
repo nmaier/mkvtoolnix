@@ -20,6 +20,7 @@
 #include "common/strings/parsing.h"
 #include "input/subtitles.h"
 #include "merge/output_control.h"
+#include "merge/packet_extensions.h"
 
 // ------------------------------------------------------------
 
@@ -28,7 +29,9 @@ subtitles_c::process(generic_packetizer_c *p) {
   if (empty() || (entries.end() == current))
     return;
 
-  p->process(new packet_t(new memory_c((unsigned char *)current->subs.c_str(), 0, false), current->start, current->end - current->start));
+  packet_cptr packet(new packet_t(new memory_c((unsigned char *)current->subs.c_str(), 0, false), current->start, current->end - current->start));
+  packet->extensions.push_back(packet_extension_cptr(new subtitle_number_packet_extension_c(current->number)));
+  p->process(packet);
   ++current;
 }
 
@@ -90,6 +93,8 @@ srt_parser_c::parse() {
   bool timecode_warning_printed = false;
   parser_state_e state          = STATE_INITIAL;
   int line_number               = 0;
+  unsigned int subtitle_number  = 0;
+  unsigned int timecode_number  = 0;
   std::string subtitles;
 
   m_io->setFilePointer(0, seek_beginning);
@@ -120,6 +125,7 @@ srt_parser_c::parse() {
         break;
       }
       state = STATE_TIME;
+      parse_uint(s, subtitle_number);
 
     } else if (STATE_TIME == state) {
       boost::match_results<std::string::const_iterator> matches;
@@ -154,7 +160,7 @@ srt_parser_c::parse() {
       // The previous entry is done now. Append it to the list of subtitles.
       if (!subtitles.empty()) {
         strip_back(subtitles, true);
-        add(start, end, subtitles.c_str());
+        add(start, end, timecode_number, subtitles.c_str());
       }
 
       // Calculate the start and end time in ns precision for the following entry.
@@ -195,19 +201,21 @@ srt_parser_c::parse() {
         timecode_warning_printed = true;
       }
 
-      previous_start = start;
-      subtitles      = "";
-      state          = STATE_SUBS;
+      previous_start  = start;
+      subtitles       = "";
+      state           = STATE_SUBS;
+      timecode_number = subtitle_number;
 
     } else if (STATE_SUBS == state) {
       if (!subtitles.empty())
         subtitles += "\n";
       subtitles += s;
 
-    } else if (boost::regex_match(s, number_re))
+    } else if (boost::regex_match(s, number_re)) {
       state = STATE_TIME;
+      parse_uint(s, subtitle_number);
 
-    else {
+    } else {
       if (!subtitles.empty())
         subtitles += "\n";
       subtitles += s;
@@ -216,7 +224,7 @@ srt_parser_c::parse() {
 
   if (!subtitles.empty()) {
     strip_back(subtitles, true);
-    add(start, end, subtitles.c_str());
+    add(start, end, timecode_number, subtitles.c_str());
   }
 
   sort();
@@ -379,7 +387,7 @@ ssa_parser_c::parse() {
           + get_element("Effect", fields)           + comma
           + recode_text(fields);
 
-        add(start, end, line);
+        add(start, end, num, line);
         num++;
 
         add_to_global = false;

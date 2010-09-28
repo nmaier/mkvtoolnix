@@ -21,10 +21,11 @@
 
 typedef struct sub_t {
   int64_t start, end;
+  unsigned int number;
   std::string subs;
 
-  sub_t(int64_t _start, int64_t _end, const std::string &_subs):
-    start(_start), end(_end), subs(_subs) {
+  sub_t(int64_t _start, int64_t _end, unsigned int _number, const std::string &_subs):
+    start(_start), end(_end), number(_number), subs(_subs) {
   }
 
   bool operator < (const sub_t &cmp) const {
@@ -41,8 +42,8 @@ public:
   subtitles_c() {
     current = entries.end();
   }
-  void add(int64_t start, int64_t end, const std::string &subs) {
-    entries.push_back(sub_t(start, end, subs));
+  void add(int64_t start, int64_t end, unsigned int number, const std::string &subs) {
+    entries.push_back(sub_t(start, end, number, subs));
   }
   void reset() {
     current = entries.begin();
