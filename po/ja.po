@@ -3411,9 +3411,8 @@ msgstr ""
 "分割しない場合は何も影響を与えません。"
 
 #: src/output/p_textsubs.cpp:68
-#, fuzzy
 msgid "Ignoring an entry which starts after it ends (%1%).\n"
-msgstr "終端以降に始まるエントリを無視します。(%1%)\n"
+msgstr "終端以降に始まるエントリ（%1%）を無視します。\n"
 
 #: src/input/subtitles.cpp:503
 msgid "Imported font from %1%"
