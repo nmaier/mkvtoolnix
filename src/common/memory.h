@@ -220,10 +220,17 @@ class MTX_DLL_API memory_slice_cursor_c {
     if (slice->get_size() == 0)
       return;
 
-    m_slices.push_back(slice);
-    m_size += slice->get_size();
-    if (m_slice == m_slices.end())
+    if (m_slices.end() == m_slice) {
+      m_slices.push_back(slice);
       m_slice = m_slices.begin();
+
+    } else {
+      size_t pos = std::distance(m_slices.begin(), m_slice);
+      m_slices.push_back(slice);
+      m_slice = m_slices.begin() + pos;
+    }
+
+    m_size += slice->get_size();
   }
 
   void add_slice(unsigned char *buffer, size_t size) {
