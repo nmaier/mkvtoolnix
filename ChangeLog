@@ -1,3 +1,11 @@
+2010-10-19  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: bug fix: Fixed the usage of iterators with the STL
+	"deque" template class. This caused mkvmerge to abort on systems
+	which did not use the GNU implementation of the standard template
+	library, e.g. OpenSolaris with the SunStudio compiler. Fix for bug
+	567.
+
 2010-09-28  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: enhancement: The warning about subtitle entries that
