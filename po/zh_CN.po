@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-09-26 22:44+0200\n"
+"PO-Revision-Date: 2010-09-30 00:29+0800\n"
 "Last-Translator: Dean Lee <xslidian@lidian.info>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -3508,9 +3508,8 @@ msgid "If splitting is a file can be attached either to all files created or onl
 msgstr "如果启用了文件切割，一个文件可以附加到创建的所有文件，或仅附加到创建的首个文件。如果未使用切割功能则无影响。"
 
 #: src/output/p_textsubs.cpp:68
-#, fuzzy
 msgid "Ignoring an entry which starts after it ends (%1%).\n"
-msgstr "忽略起始时间在结束时间之后的项目。(%1%)\n"
+msgstr "已忽略一处起始时间在结束时间之后的字幕 (%1%)。\n"
 
 #: src/input/subtitles.cpp:503
 msgid "Imported font from %1%"
@@ -8853,6 +8852,7 @@ msgstr "是"
 #~ "  -v, --verbose  提高“详细”程度。\n"
 #~ "  -h, --help     显示本帮助。\n"
 #~ "  -V, --version  显示版本信息。\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "使用 FLAC 输出模块。\n"
