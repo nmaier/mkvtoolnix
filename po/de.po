@@ -2927,11 +2927,11 @@ msgstr "Fehler"
 msgid "Error %1%\n"
 msgstr "Fehler %1%\n"
 
-#: src/input/subtitles.cpp:127
+#: src/input/subtitles.cpp:133
 msgid "Error in line %1%: expected a SRT timecode line but found something else. Aborting this file.\n"
 msgstr "Fehler in Zeile %1%: Es wurde eine Zeile mit einem SRT-Zeitstempel erwartet aber etwas anderes gefunden. Die Bearbeitung dieser Datei wird abgebrochen.\n"
 
-#: src/input/subtitles.cpp:119
+#: src/input/subtitles.cpp:124
 msgid "Error in line %1%: expected subtitle number and found some text.\n"
 msgstr "Fehler in Zeile %1%: Es wurde eine Untertitelnummer erwartet aber anderer Text gefunden.\n"
 
@@ -3441,15 +3441,15 @@ msgstr "Wird hier nichts eingetragen, dann setzt mmg den Zieldateinamen so, dass
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
 msgstr "Wenn das Aufteilen der Zieldatei aktiviert ist, so kann ein Dateianhang entweder nur an die erste Datei oder an alle Dateien angehängt werden. Diese Einstellung hat keine Auswirkung, wenn das Aufteilen nicht aktiviert ist."
 
-#: src/output/p_textsubs.cpp:68
+#: src/output/p_textsubs.cpp:70
 msgid "Ignoring an entry which starts after it ends (%1%).\n"
 msgstr "Ein Eintrag wird ignoriert, dessen End-Zeitstempel vor dem Start-Zeitstempel liegt (%1%).\n"
 
-#: src/input/subtitles.cpp:503
+#: src/input/subtitles.cpp:511
 msgid "Imported font from %1%"
 msgstr "Aus %1% importierte Schrit"
 
-#: src/input/subtitles.cpp:503
+#: src/input/subtitles.cpp:511
 msgid "Imported picture from %1%"
 msgstr "Aus %1% importiertes Bild"
 
@@ -3862,7 +3862,7 @@ msgstr "Zeile %1% der Zeitstempeldatei '%2%' konnte nicht geparst werden.\n"
 msgid "Line %1%, column %2%: %3%"
 msgstr "Zeile %1%, Spalte %2%: %3%"
 
-#: src/input/subtitles.cpp:181
+#: src/input/subtitles.cpp:187
 msgid "Line %1%: Negative timestamp encountered. The entry will be adjusted to start from 00:00:00.000.\n"
 msgstr "Zeile %1%: Negativer Zeitstempel gefunden. Der Eintrag wird so angepasst, dass er an 00:00:00.000 anfängt.\n"
 
@@ -3939,8 +3939,8 @@ msgstr "Ungültige AAC-Codec-Initialisierungsdaten gefunden.\n"
 msgid "Malformed codec id '%1%'.\n"
 msgstr "Ungültige CodecID '%1%'.\n"
 
-#: src/input/subtitles.cpp:349 src/input/subtitles.cpp:357
-#: src/input/subtitles.cpp:362
+#: src/input/subtitles.cpp:357 src/input/subtitles.cpp:365
+#: src/input/subtitles.cpp:370
 msgid "Malformed line? (%1%)\n"
 msgstr "Falsch formatierte Zeile? (%1%)\n"
 
@@ -5585,7 +5585,7 @@ msgstr "Der Codec-Typ '%1%' kann nicht in einer WebM-konformen Datei verwendet w
 
 #: src/output/p_avc.cpp:203 src/output/p_kate.cpp:113
 #: src/output/p_passthrough.cpp:63 src/output/p_video.cpp:139
-#: src/output/p_textsubs.cpp:100
+#: src/output/p_textsubs.cpp:102
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "Die privaten Codec-Konfigurationsdaten stimmen nicht überein (Längen: %1% und %2%)."
 
@@ -6352,7 +6352,7 @@ msgstr ""
 msgid "This file contains at least one frame with a negative timecode. All timecodes will be adjusted by %1% so that none is negative anymore.\n"
 msgstr "Diese Datei enthält mindestens einen Frame mit einem negativen Zeitstempel. Deshalb werden alle Zeitstempel um den Wert %1% verschoben, damit kein Zeitstempel mehr negativ ist.\n"
 
-#: src/input/subtitles.cpp:148
+#: src/input/subtitles.cpp:154
 msgid "This file contains coordinates in the timecode lines. Such coordinates are not supported by the Matroska SRT subtitle format. The coordinates will be removed automatically.\n"
 msgstr "Diese Datei enthält Anzeigekoordinaten zusammen in den Zeitstempeln. Solche Koordinaten werden vom Matroska SRT-Untertitelformat nicht unterstützt. Die Koordinaten werden automatisch entfernt.\n"
 
@@ -7185,7 +7185,7 @@ msgstr "WAVPACK v4 Audio"
 msgid "Warn about possible incorrect usage of mmg"
 msgstr "Wegen potenziell falscher Benutzung von mmg warnen"
 
-#: src/input/subtitles.cpp:193
+#: src/input/subtitles.cpp:199
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
 msgstr "Warnung in Zeile %1%: Der Start-Zeitstempel ist kleiner als der des vorhergehenden Eintrages. Alle Einträge aus dieser Datei werden nach ihrem Start-Zeitstempel sortiert.\n"
 
@@ -8204,7 +8204,7 @@ msgstr "Rest: unbekannt"
 msgid "sampling freq: %1%"
 msgstr "Abtastfrequenz: %1%"
 
-#: src/input/subtitles.cpp:581
+#: src/input/subtitles.cpp:589
 msgid "spu_extraction_duration: Encountered broken SPU packet (next_off < start_off) at timecode %1%. This packet might be displayed incorrectly or not at all.\n"
 msgstr "spu_extraction_duration: Es wurde ein beschädigtes SPU-Paket bei Zeitstempel %1% gefunden (next_off < start_off). Dieses Paket wird beim Abspielen eventuell falsch oder gar nicht angezeigt.\n"
 
@@ -8220,7 +8220,7 @@ msgstr "srt_reader: Die Quelldatei ist keine gültige SRT-Datei."
 msgid "ssa_reader: Could not open the source file."
 msgstr "ssa_reader: Die Quelldatei konnte nicht geöffnet werden."
 
-#: src/input/subtitles.cpp:334
+#: src/input/subtitles.cpp:342
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr "ssa_reader: Ungültiges Format. Es wurde keine \"Format\"-Zeile im Abschnitt \"[Events]\" gefunden."
 

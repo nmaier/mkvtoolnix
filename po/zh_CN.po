@@ -2972,11 +2972,11 @@ msgstr "错误"
 msgid "Error %1%\n"
 msgstr "错误 %1%\n"
 
-#: src/input/subtitles.cpp:127
+#: src/input/subtitles.cpp:133
 msgid "Error in line %1%: expected a SRT timecode line but found something else. Aborting this file.\n"
 msgstr "在行 %1% 处出错: 预期为 SRT 时间码行，但发现的是其他一些东西。放弃该文件。\n"
 
-#: src/input/subtitles.cpp:119
+#: src/input/subtitles.cpp:124
 msgid "Error in line %1%: expected subtitle number and found some text.\n"
 msgstr "在行 %1% 处出错: 预期为字幕号码但发现一些文字。\n"
 
@@ -3507,15 +3507,15 @@ msgstr "如果留空，mmg 将设置输出文件名与添加到此任务的首�
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
 msgstr "如果启用了文件切割，一个文件可以附加到创建的所有文件，或仅附加到创建的首个文件。如果未使用切割功能则无影响。"
 
-#: src/output/p_textsubs.cpp:68
+#: src/output/p_textsubs.cpp:70
 msgid "Ignoring an entry which starts after it ends (%1%).\n"
 msgstr "已忽略一处起始时间在结束时间之后的字幕 (%1%)。\n"
 
-#: src/input/subtitles.cpp:503
+#: src/input/subtitles.cpp:511
 msgid "Imported font from %1%"
 msgstr "导入的字体，自 %1%"
 
-#: src/input/subtitles.cpp:503
+#: src/input/subtitles.cpp:511
 msgid "Imported picture from %1%"
 msgstr "导入的图片，自 %1%"
 
@@ -3940,7 +3940,7 @@ msgstr "无法解析行 %1% 自时间码文件 '%2%'。\n"
 msgid "Line %1%, column %2%: %3%"
 msgstr "行 %1%, 列 %2%: %3%"
 
-#: src/input/subtitles.cpp:181
+#: src/input/subtitles.cpp:187
 msgid "Line %1%: Negative timestamp encountered. The entry will be adjusted to start from 00:00:00.000.\n"
 msgstr "行 %1%: 遇到负的时间戳。此项将被调整为起始于 00:00:00.000。\n"
 
@@ -4019,9 +4019,9 @@ msgstr "发现畸形的 AAC 编解码器初始化数据。\n"
 msgid "Malformed codec id '%1%'.\n"
 msgstr "畸形的编解码器 id '%1%'。\n"
 
-#: src/input/subtitles.cpp:349
 #: src/input/subtitles.cpp:357
-#: src/input/subtitles.cpp:362
+#: src/input/subtitles.cpp:365
+#: src/input/subtitles.cpp:370
 msgid "Malformed line? (%1%)\n"
 msgstr "畸形行? (%1%)\n"
 
@@ -5698,7 +5698,7 @@ msgstr "编解码器类型 '%1%' 不可以在 WebM 兼容文件中使用。\n"
 #: src/output/p_kate.cpp:113
 #: src/output/p_passthrough.cpp:63
 #: src/output/p_video.cpp:139
-#: src/output/p_textsubs.cpp:100
+#: src/output/p_textsubs.cpp:102
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "编解码器专有数据不匹配 (长: %1% 与 %2%)。"
 
@@ -6470,7 +6470,7 @@ msgstr ""
 msgid "This file contains at least one frame with a negative timecode. All timecodes will be adjusted by %1% so that none is negative anymore.\n"
 msgstr "此文件包含至少一个含有原生时间码的帧。全部时间码将以 %1% 调整以确保没有原生帧。\n"
 
-#: src/input/subtitles.cpp:148
+#: src/input/subtitles.cpp:154
 msgid "This file contains coordinates in the timecode lines. Such coordinates are not supported by the Matroska SRT subtitle format. The coordinates will be removed automatically.\n"
 msgstr "此文件含有交叉的时间轴。此类交叉不受 Matroska SRT 字幕格式的支持。交叉将被自动移除。\n"
 
@@ -7346,7 +7346,7 @@ msgstr "WAVPACK v4 音频"
 msgid "Warn about possible incorrect usage of mmg"
 msgstr "对 mmg 可能的错误用法发出警告"
 
-#: src/input/subtitles.cpp:193
+#: src/input/subtitles.cpp:199
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
 msgstr "行 %1% 处警告: 起始时间早于前一条的起始时间。此文件中的所有条目都将按起始时间重新排列。\n"
 
@@ -8410,7 +8410,7 @@ msgstr "其他: 未知"
 msgid "sampling freq: %1%"
 msgstr "采样率: %1%"
 
-#: src/input/subtitles.cpp:581
+#: src/input/subtitles.cpp:589
 msgid "spu_extraction_duration: Encountered broken SPU packet (next_off < start_off) at timecode %1%. This packet might be displayed incorrectly or not at all.\n"
 msgstr "spu_extraction_duration: 遇到损坏的 SPU 包 (next_off < start_off) 于时间码 %1%。该包可能会被错误显示或者根本不显示。\n"
 
@@ -8426,7 +8426,7 @@ msgstr "srt_reader: 源非有效的 SRT 文件。"
 msgid "ssa_reader: Could not open the source file."
 msgstr "ssa_reader: 无法打开源文件。"
 
-#: src/input/subtitles.cpp:334
+#: src/input/subtitles.cpp:342
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr "ssa_reader: 无效格式。\"[Events]\" 段中未找到 \"Format\" 行。"
 
@@ -8852,7 +8852,6 @@ msgstr "是"
 #~ "  -v, --verbose  提高“详细”程度。\n"
 #~ "  -h, --help     显示本帮助。\n"
 #~ "  -V, --version  显示版本信息。\n"
-
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "使用 FLAC 输出模块。\n"

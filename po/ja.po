@@ -2895,11 +2895,11 @@ msgstr "エラー"
 msgid "Error %1%\n"
 msgstr "エラー%1%\n"
 
-#: src/input/subtitles.cpp:127
+#: src/input/subtitles.cpp:133
 msgid "Error in line %1%: expected a SRT timecode line but found something else. Aborting this file.\n"
 msgstr "%1%行目でエラー発生：SRTタイムコードが見つかると予測される行で他の何かが見つかりました。このファイルを中断します。\n"
 
-#: src/input/subtitles.cpp:119
+#: src/input/subtitles.cpp:124
 msgid "Error in line %1%: expected subtitle number and found some text.\n"
 msgstr "%1%行目でエラー発生：サブタイトル番号が見つかると予測されるところで何かテキストが見つかりました。\n"
 
@@ -3410,15 +3410,15 @@ msgstr ""
 "ファイルを分割する場合、作成される全てのファイルに添付するか最初のファイルにのみ添付するかを選択できます。\n"
 "分割しない場合は何も影響を与えません。"
 
-#: src/output/p_textsubs.cpp:68
+#: src/output/p_textsubs.cpp:70
 msgid "Ignoring an entry which starts after it ends (%1%).\n"
 msgstr "終端以降に始まるエントリ（%1%）を無視します。\n"
 
-#: src/input/subtitles.cpp:503
+#: src/input/subtitles.cpp:511
 msgid "Imported font from %1%"
 msgstr "%1%からフォントをインポートしました。"
 
-#: src/input/subtitles.cpp:503
+#: src/input/subtitles.cpp:511
 msgid "Imported picture from %1%"
 msgstr "%1%から画像をインポートしました。"
 
@@ -3831,7 +3831,7 @@ msgstr "タイムコードファイル'%2%'の%1%行目を解析することが�
 msgid "Line %1%, column %2%: %3%"
 msgstr "%1%行目、%2%列目：%3%"
 
-#: src/input/subtitles.cpp:181
+#: src/input/subtitles.cpp:187
 msgid "Line %1%: Negative timestamp encountered. The entry will be adjusted to start from 00:00:00.000.\n"
 msgstr "%1%行目：負の数のタイムスタンプに遭遇しました。このエントリは00:00:00.000から始まるよう調整されます。\n"
 
@@ -3908,8 +3908,8 @@ msgstr "無効な形式のAACコーデック初期化データが見つかりま
 msgid "Malformed codec id '%1%'.\n"
 msgstr "無効な形式のコーデックID '%1%'です。\n"
 
-#: src/input/subtitles.cpp:349 src/input/subtitles.cpp:357
-#: src/input/subtitles.cpp:362
+#: src/input/subtitles.cpp:357 src/input/subtitles.cpp:365
+#: src/input/subtitles.cpp:370
 msgid "Malformed line? (%1%)\n"
 msgstr "無効な形式の行？（%1%）\n"
 
@@ -5544,7 +5544,7 @@ msgstr "コーデックタイプ'%1%'はWebMの規格に準拠したファイル
 
 #: src/output/p_avc.cpp:203 src/output/p_kate.cpp:113
 #: src/output/p_passthrough.cpp:63 src/output/p_video.cpp:139
-#: src/output/p_textsubs.cpp:100
+#: src/output/p_textsubs.cpp:102
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "コーデックのプライベートデータが一致しません（長さ：%1%と%2%）。"
 
@@ -6286,7 +6286,7 @@ msgstr ""
 msgid "This file contains at least one frame with a negative timecode. All timecodes will be adjusted by %1% so that none is negative anymore.\n"
 msgstr "このファイルは少なくとも1つ負の値のタイムコードを持つフレームを含んでいます。負の値にならないよう全てのタイムコードは%1%だけズラされます。\n"
 
-#: src/input/subtitles.cpp:148
+#: src/input/subtitles.cpp:154
 msgid "This file contains coordinates in the timecode lines. Such coordinates are not supported by the Matroska SRT subtitle format. The coordinates will be removed automatically.\n"
 msgstr "このファイルはタイムコードの行に座標を含んでいます。そのような座標はMatroska SRT字幕フォーマットではサポートされていません。座標は自動的に除去されます。\n"
 
@@ -7101,7 +7101,7 @@ msgstr "WAVPACK v4オーディオ"
 msgid "Warn about possible incorrect usage of mmg"
 msgstr "mmgの使い方が間違っていそうな場合に警告する"
 
-#: src/input/subtitles.cpp:193
+#: src/input/subtitles.cpp:199
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
 msgstr "%1%行目で警告：開始時間のタイムコードが前のエントリのタイムコードよりも小さいです。このファイルの全てのエントリは開始時間でソートされます。\n"
 
@@ -8114,7 +8114,7 @@ msgstr "1でも2でもない：未知"
 msgid "sampling freq: %1%"
 msgstr "サンプリング周波数：%1%"
 
-#: src/input/subtitles.cpp:581
+#: src/input/subtitles.cpp:589
 msgid "spu_extraction_duration: Encountered broken SPU packet (next_off < start_off) at timecode %1%. This packet might be displayed incorrectly or not at all.\n"
 msgstr "spu_extraction_duration：タイムコード%1%で壊れたSPUパケットに遭遇しました（next_off < start_off）。このパケットは正しく表示されないか、あるいは全く表示されないかもしれません。\n"
 
@@ -8130,7 +8130,7 @@ msgstr "srt_reader：ソースは有効なSRTファイルではありません�
 msgid "ssa_reader: Could not open the source file."
 msgstr "ssa_reader：ソースファイルを開けませんでした。"
 
-#: src/input/subtitles.cpp:334
+#: src/input/subtitles.cpp:342
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr "ssa_reader：無効なフォーマットです。\"[Events]\"セクションで\"Format\"行を見つけることができませんでした。"
 

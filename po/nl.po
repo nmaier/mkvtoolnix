@@ -2999,11 +2999,11 @@ msgstr "Fout"
 msgid "Error %1%\n"
 msgstr "Fout %1%\n"
 
-#: src/input/subtitles.cpp:127
+#: src/input/subtitles.cpp:133
 msgid "Error in line %1%: expected a SRT timecode line but found something else. Aborting this file.\n"
 msgstr "Fout in regel %1%: verwachtte een SRT tijd code maar vond iets anders. Breek dat bestand af.\n"
 
-#: src/input/subtitles.cpp:119
+#: src/input/subtitles.cpp:124
 msgid "Error in line %1%: expected subtitle number and found some text.\n"
 msgstr "Fout in regel %1%: verwachtte een ondertitel nummer maar vond een tekst.\n"
 
@@ -3535,15 +3535,15 @@ msgstr "Indien leeggelaten dan zal mmg de uitvoer in dezelfde map plaatsen vanwa
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
 msgstr "Als een bestand splitst, kan het aan alle gecreëerde bestanden of slechts aan het eerste bestand worden vastgemaakt. Heeft geen effect op hoe het splitsen wordt gebruikt."
 
-#: src/output/p_textsubs.cpp:68
+#: src/output/p_textsubs.cpp:70
 msgid "Ignoring an entry which starts after it ends (%1%).\n"
 msgstr "Negeer een ingang dat begint voordat het eindigd (%1%).\n"
 
-#: src/input/subtitles.cpp:503
+#: src/input/subtitles.cpp:511
 msgid "Imported font from %1%"
 msgstr "Geïmporteerde letter van %1%"
 
-#: src/input/subtitles.cpp:503
+#: src/input/subtitles.cpp:511
 msgid "Imported picture from %1%"
 msgstr "Geïmporteerd plaatje van %1%"
 
@@ -3968,7 +3968,7 @@ msgstr "Regel %1% van het tijdcode bestand '%2%' kon niet ontleed worden.\n"
 msgid "Line %1%, column %2%: %3%"
 msgstr "Regel %1%, kolom %2%: %3%"
 
-#: src/input/subtitles.cpp:181
+#: src/input/subtitles.cpp:187
 msgid "Line %1%: Negative timestamp encountered. The entry will be adjusted to start from 00:00:00.000.\n"
 msgstr "Regel %1%: Negatieve tijdwaarde tegengekomen. De ingang wordt bijgesteld naar start vanaf 00:00:00.000.\n"
 
@@ -4047,9 +4047,9 @@ msgstr "Misvormde AAC codec start data gevonden.\n"
 msgid "Malformed codec id '%1%'.\n"
 msgstr "Misvormde codec id '%1%'.\n"
 
-#: src/input/subtitles.cpp:349
 #: src/input/subtitles.cpp:357
-#: src/input/subtitles.cpp:362
+#: src/input/subtitles.cpp:365
+#: src/input/subtitles.cpp:370
 msgid "Malformed line? (%1%)\n"
 msgstr "Misvormde regel? (%1%)\n"
 
@@ -5735,7 +5735,7 @@ msgstr "Het codec type '%1%' kan niet gebruikt worden in een WebM herkenbaar bes
 #: src/output/p_kate.cpp:113
 #: src/output/p_passthrough.cpp:63
 #: src/output/p_video.cpp:139
-#: src/output/p_textsubs.cpp:100
+#: src/output/p_textsubs.cpp:102
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "De codec's privé data komen niet overeen (lengte: %1% en %2%)."
 
@@ -6524,7 +6524,7 @@ msgstr ""
 msgid "This file contains at least one frame with a negative timecode. All timecodes will be adjusted by %1% so that none is negative anymore.\n"
 msgstr "Dit bestand bevat tenminste één beeld met een negatieve tijd code. Alle tijd codes moeten bijgesteld worden met %1% zodat er geen enkele meer negatief is.\n"
 
-#: src/input/subtitles.cpp:148
+#: src/input/subtitles.cpp:154
 msgid "This file contains coordinates in the timecode lines. Such coordinates are not supported by the Matroska SRT subtitle format. The coordinates will be removed automatically.\n"
 msgstr "Dit bestand bevat coördinaten in de tijd code regels. Zulke coördinaten worden niet ondersteund door het Matroska SRT ondertitel formaat. De coördinaten worden automatisch verwijderd.\n"
 
@@ -7403,7 +7403,7 @@ msgstr "WAVPACK v4 audio"
 msgid "Warn about possible incorrect usage of mmg"
 msgstr "Waarschuw over mogelijk onjuist gebruik van MMG"
 
-#: src/input/subtitles.cpp:193
+#: src/input/subtitles.cpp:199
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
 msgstr "Waarschuwing in regel %1%: De start tijdcode is kleiner dan de vorige ingave. Alle ingangen van dit bestand worden gesorteerd op hun start tijd.\n"
 
@@ -8469,7 +8469,7 @@ msgstr "rest: onbekend"
 msgid "sampling freq: %1%"
 msgstr "voorbeeld frequentie: %1%"
 
-#: src/input/subtitles.cpp:581
+#: src/input/subtitles.cpp:589
 msgid "spu_extraction_duration: Encountered broken SPU packet (next_off < start_off) at timecode %1%. This packet might be displayed incorrectly or not at all.\n"
 msgstr "spu_extractie_duur: Een gebroken SPU pakket tegengekomen (next_off < start_off) bij tijdcode %1%. Dit pakket kan onjuist worden weergegeven of zelfs helemaal niet.\n"
 
@@ -8485,7 +8485,7 @@ msgstr "srt_lezer: Bron is geen geldig SRT bestand."
 msgid "ssa_reader: Could not open the source file."
 msgstr "ssa_lezer: Kon het bronbestand niet openen."
 
-#: src/input/subtitles.cpp:334
+#: src/input/subtitles.cpp:342
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr "ssa_lezer: Ongeldig formaat. Kon niet vinden \"Format\" regel in de \"[Events]\" sectie."
 

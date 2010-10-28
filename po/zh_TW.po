@@ -2977,11 +2977,11 @@ msgstr "錯誤"
 msgid "Error %1%\n"
 msgstr "錯誤 %1%\n"
 
-#: src/input/subtitles.cpp:127
+#: src/input/subtitles.cpp:133
 msgid "Error in line %1%: expected a SRT timecode line but found something else. Aborting this file.\n"
 msgstr "在第 %1% 行處發生錯誤: 預期為 SRT 時間碼行，但發現的是其他一些東西。放棄該檔案。\n"
 
-#: src/input/subtitles.cpp:119
+#: src/input/subtitles.cpp:124
 msgid "Error in line %1%: expected subtitle number and found some text.\n"
 msgstr "在第 %1% 行處發生錯誤: 預期為字幕編號但發現一些文字。\n"
 
@@ -3512,16 +3512,16 @@ msgstr "如果留空，mmg 將設定輸出檔名與添加至此任務的第一�
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
 msgstr "如果啟用了檔分割，一個檔可以附加至建立的所有檔，或僅附加至建立的第一個檔。如果未使用分割功能則無影響。"
 
-#: src/output/p_textsubs.cpp:68
+#: src/output/p_textsubs.cpp:70
 #, fuzzy
 msgid "Ignoring an entry which starts after it ends (%1%).\n"
 msgstr "忽略起始時間在結束時間之後的項目。(%1%)\n"
 
-#: src/input/subtitles.cpp:503
+#: src/input/subtitles.cpp:511
 msgid "Imported font from %1%"
 msgstr "匯入的字體，自 %1%"
 
-#: src/input/subtitles.cpp:503
+#: src/input/subtitles.cpp:511
 msgid "Imported picture from %1%"
 msgstr "匯入的圖片，自 %1%"
 
@@ -3946,7 +3946,7 @@ msgstr "無法解析時間碼檔案「%2%」中的第 %1% 行。\n"
 msgid "Line %1%, column %2%: %3%"
 msgstr "第 %1% 行, 第 %2% 列: %3%"
 
-#: src/input/subtitles.cpp:181
+#: src/input/subtitles.cpp:187
 msgid "Line %1%: Negative timestamp encountered. The entry will be adjusted to start from 00:00:00.000.\n"
 msgstr "第 %1% 行: 遇到負的時間戳。此項目會調整為從 00:00:00.000 開始。\n"
 
@@ -4025,9 +4025,9 @@ msgstr "發現不正常的 AAC 編解碼器初始化資料。\n"
 msgid "Malformed codec id '%1%'.\n"
 msgstr "不正常的編解碼器 id「%1%」。\n"
 
-#: src/input/subtitles.cpp:349
 #: src/input/subtitles.cpp:357
-#: src/input/subtitles.cpp:362
+#: src/input/subtitles.cpp:365
+#: src/input/subtitles.cpp:370
 msgid "Malformed line? (%1%)\n"
 msgstr "不正常的一行? (%1%)\n"
 
@@ -5706,7 +5706,7 @@ msgstr "此編解碼器類型「%1%」無法用在 WebM 遵循檔。\n"
 #: src/output/p_kate.cpp:113
 #: src/output/p_passthrough.cpp:63
 #: src/output/p_video.cpp:139
-#: src/output/p_textsubs.cpp:100
+#: src/output/p_textsubs.cpp:102
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "編解碼器專有資料不符 (長度: %1% 與 %2%)。"
 
@@ -6478,7 +6478,7 @@ msgstr ""
 msgid "This file contains at least one frame with a negative timecode. All timecodes will be adjusted by %1% so that none is negative anymore.\n"
 msgstr "此檔案包含至少一個含有原生時間碼的畫格。全部時間碼將以 %1% 調整以確保沒有原生畫格。\n"
 
-#: src/input/subtitles.cpp:148
+#: src/input/subtitles.cpp:154
 msgid "This file contains coordinates in the timecode lines. Such coordinates are not supported by the Matroska SRT subtitle format. The coordinates will be removed automatically.\n"
 msgstr "此檔案時間軸中含有坐標。此類坐標不受 Matroska SRT 字幕格式的支援。坐標將被自動移除。\n"
 
@@ -7353,7 +7353,7 @@ msgstr "WAVPACK v4 音訊"
 msgid "Warn about possible incorrect usage of mmg"
 msgstr "對 mmg 可能的錯誤用法發出警告"
 
-#: src/input/subtitles.cpp:193
+#: src/input/subtitles.cpp:199
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
 msgstr "第 %1% 行處警告: 起始時間早於前一條的起始時間。此檔案中的所有項目都將按起始時間重新排列。\n"
 
@@ -8417,7 +8417,7 @@ msgstr "其他: 未知"
 msgid "sampling freq: %1%"
 msgstr "取樣頻率: %1%"
 
-#: src/input/subtitles.cpp:581
+#: src/input/subtitles.cpp:589
 msgid "spu_extraction_duration: Encountered broken SPU packet (next_off < start_off) at timecode %1%. This packet might be displayed incorrectly or not at all.\n"
 msgstr "spu_extraction_duration: 遇到損壞的 SPU 套件 (next_off < start_off) 於時間碼 %1%。該套件可能會被錯誤顯示或者根本不顯示。\n"
 
@@ -8433,7 +8433,7 @@ msgstr "srt_reader: 來來源非有效的 SRT 檔。"
 msgid "ssa_reader: Could not open the source file."
 msgstr "ssa_reader: 無法開啟來源檔案。"
 
-#: src/input/subtitles.cpp:334
+#: src/input/subtitles.cpp:342
 msgid "ssa_reader: Invalid format. Could not find the \"Format\" line in the \"[Events]\" section."
 msgstr "ssa_reader: 無效格式。\"[Events]\" 區段中未找到 \"Format\" 這一行。"
 
