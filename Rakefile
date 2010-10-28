@@ -17,8 +17,13 @@ end
 # Ruby 1.9.x introduce "require_relative" for local requires. 1.9.2
 # removes "." from $: and forces us to use "require_relative". 1.8.x
 # does not know "require_relative" yet though.
-module Kernel
-  alias_method :require_relative, :require unless method_defined? :require_relative
+begin
+  require_relative()
+rescue NoMethodError
+  def require_relative *args
+    require *args
+  end
+rescue Exception
 end
 
 require "pp"
