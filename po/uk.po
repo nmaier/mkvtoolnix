@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-10-22 16:58+0200\n"
+"PO-Revision-Date: 2010-10-29 16:28+0200\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -1541,7 +1541,7 @@ msgstr "...після цього розміру:"
 
 #: src/mmg/tabs/global.cpp:244
 msgid "...after timecodes:"
-msgstr "...після таймкодів:"
+msgstr "...після тайм-кодів:"
 
 #: src/info/mkvinfo.cpp:840
 msgid "1: all frames"
@@ -1767,11 +1767,11 @@ msgstr "Додаються поточні налаштування як запи
 
 #: src/mmg/tabs/chapters.cpp:1359
 msgid "Adjust chapter timecodes"
-msgstr "Налаштувати таймкоди розділу"
+msgstr "Налаштувати тайм-коди розділу"
 
 #: src/mmg/tabs/chapters.cpp:333
 msgid "Adjust timecodes"
-msgstr "Налаштувати таймкоди"
+msgstr "Налаштувати тайм-коди"
 
 #: src/info/wxwidgets_ui.cpp:129
 msgid "After loading a file expand the most important elements"
@@ -1791,7 +1791,7 @@ msgstr "Всі файли (*.*)|*.*"
 
 #: src/mmg/tabs/chapters.cpp:843
 msgid "All chapter entries are valid."
-msgstr "Всі записи заголовку є коректними."
+msgstr "Всі записи розділу є коректними."
 
 #: src/mmg/header_editor/frame.cpp:635
 msgid "All header values are OK."
@@ -2960,7 +2960,7 @@ msgstr "Додаток %d"
 #: src/mmg/tabs/chapters.cpp:947
 #, c-format
 msgid "EditionEntry %u"
-msgstr "ЗаписДодатку %u"
+msgstr "Запис Додатку %u"
 
 #: src/propedit/propedit.cpp:63
 msgid "Element %1% is written.\n"
@@ -2988,7 +2988,7 @@ msgstr "Ввімкнено: %1%"
 
 #: src/mmg/tabs/global.cpp:234
 msgid "Enables splitting of the output into more than one file. You can split after a given size, after a given amount of time has passed in each file or after a list of timecodes."
-msgstr "Дозволяється розділення на виході на більш ніж один файл. Ви можете розділяти, спираючись на заданий розмір, задану кількість часу, що минув, для кожного файлу, або на заданий список таймкодів."
+msgstr "Дозволяється розділення на виході на більш ніж один файл. Ви можете розділяти, спираючись на заданий розмір, задану кількість часу, що минув, для кожного файлу, або на заданий список тайм-кодів."
 
 #: src/info/mkvinfo.cpp:896
 msgid "Encryption algorithm: %1% (%2%)"
@@ -3328,7 +3328,7 @@ msgstr "Примусово задавати використання перек�
 
 #: src/info/mkvinfo.cpp:1120
 msgid "Forced flag: %1%"
-msgstr "Прапор примусового використання: %1%"
+msgstr "Прапорець примусового використання: %1%"
 
 #: src/mmg/tabs/input_general.cpp:185
 msgid "Forced track flag:"
@@ -3348,7 +3348,7 @@ msgstr "Примусово задавати довжину NALU розміру �
 
 #: src/mmg/cli_options_dlg.cpp:104
 msgid "Forces the timecode scale factor to REPLACEME. You have to replace REPLACEME with a value between 1000 and 10000000 or with -1. Normally mkvmerge will use a value of 1000000 which means that timecodes and durations will have a precision of 1ms. For files that will not contain a video track but at least one audio track mkvmerge will automatically choose a timecode scale factor so that all timecodes and durations have a precision of one sample. This causes bigger overhead but allows precise seeking and extraction. If the magical value -1 is used then mkvmerge will use sample precision even if a video track is present."
-msgstr "Примусово встановлюється масштабний коефіцієнт таймкода для REPLACEME. Ви повинні замінити REPLACEME значенням в діапазоні від 1000 до 10000000 або -1. Зазвичай mkvmerge буде використовувати значення 1000000, тобто таймкоди і тривалості будуть задаватися з точністю до 1 мс. Для файлів, які не будуть містити жодної доріжки відео, але принаймні одну звукову доріжку, mkvmerge буде автоматично вибирати масштабний коефіцієнт таймкода так, що усі таймкоди і тривалості матимуть точність однієї вибірки (семплу). Це призводить до більших накладних витрат, але дозволяє здійснювати точний пошук і витягнення. Якщо використовується значення -1, то mkvmerge буде працювати з точністю до вибірки (семплу), навіть якщо доріжка відео присутня."
+msgstr "Примусово встановлюється масштабний коефіцієнт тайм-кода для REPLACEME. Ви повинні замінити REPLACEME значенням в діапазоні від 1000 до 10000000 або -1. Зазвичай mkvmerge буде використовувати значення 1000000, тобто тайм-коди і тривалості будуть задаватися з точністю до 1 мс. Для файлів, які не будуть містити жодної доріжки відео, але принаймні одну звукову доріжку, mkvmerge буде автоматично вибирати масштабний коефіцієнт тайм-кода так, що усі тайм-коди і тривалості матимуть точність однієї вибірки (семплу). Це призводить до більших накладних витрат, але дозволяє здійснювати точний пошук і витягнення. Якщо використовується значення -1, то mkvmerge буде працювати з точністю до вибірки (семплу), навіть якщо доріжка відео присутня."
 
 #: src/mmg/tabs/input.cpp:191
 msgid "Format specific options"
@@ -3356,19 +3356,19 @@ msgstr "Опції, спицифічні щодо вибраного форма�
 
 #: src/mpegparser/M2VParser.cpp:442
 msgid "Found B frame without second reference in a non closed GOP. Fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr "Знайдено B кадр без другого заслання в не закритих GOP. Встановіть відео потік MPEG2 перш ніж спробувати мультиплексованих.\n"
+msgstr "Знайдено B-кадр в не закритій GOP (групі зображень) без другого посилання. Необхідно виправити відео потік MPEG2 перш ніж намагатися мультиплексувати.\n"
 
 #: src/mpegparser/M2VParser.cpp:396
 msgid "Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"
-msgstr "Знайдена група картин зі зламаною зв'язком. Ви можете використовувати розумне перекодування, перш ніж спробувати це мультиплексованих.\n"
+msgstr "Знайдена група зображень із зіпсованим посиланням. Ви можете використати \"розумне\" перекодування, перш ніж намагатися мультиплексувати.\n"
 
 #: src/common/xml/element_parser.cpp:131
 msgid "Found no encoded data nor '@file' to read binary data from."
-msgstr "Не знайдені дані, закодовані або '@file' для читання бінарних даних."
+msgstr "Не знайдено ані жодних закодованих даних, ані '@file' для зчитування двійкових даних."
 
 #: src/mpegparser/M2VParser.cpp:444
 msgid "Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"
-msgstr "Знайдено одного або більше B кадрів без другого заслання в перший GOP. Ви можете виправити MPEG2 потік відео або використовувати смарт-перекодувати, перш ніж намагатися його мультиплексованих.\n"
+msgstr "Знайдено один або більше B-кадрів без другого посилання в першій GOP (групі зображень). Ви можете виправити MPEG2 потік відео або використати \"розумне\" перекодування, перш ніж намагатися  мультиплексувати.\n"
 
 #: src/mmg/tabs/input_format.cpp:227
 msgid "FourCC:"
@@ -3376,11 +3376,11 @@ msgstr "FourCC:"
 
 #: src/merge/mkvmerge.cpp:1099
 msgid "FourCC: Invalid track ID in '%1% %2%'.\n"
-msgstr "FourCC: Невірний трак ID в '%1% %2%'.\n"
+msgstr "FourCC: Невірний ID доріжки в '%1% %2%'.\n"
 
 #: src/merge/mkvmerge.cpp:1095
 msgid "FourCC: Missing track ID in '%1% %2%'.\n"
-msgstr "FourCC: Відсутній трак ID в '%1% %2%'.\n"
+msgstr "FourCC: Відсутній ID доріжки в '%1% %2%'.\n"
 
 #: src/info/mkvinfo.cpp:158
 msgid "Frame number: %1%"
@@ -3409,7 +3409,7 @@ msgstr "Загальні опції доріжки"
 
 #: src/mmg/mmg_dialog.cpp:287
 msgid "Global"
-msgstr "Глобально"
+msgstr "Загальні налаштування"
 
 #: src/mmg/tabs/global.cpp:228
 #: src/extract/extract_cli_parser.cpp:64
@@ -3419,11 +3419,11 @@ msgstr "Глобальні опції"
 #: src/mmg/mmg.cpp:48
 #, c-format
 msgid "Global tags (%d entries) from %s"
-msgstr "Глобальні мітки (%d записів) з %s"
+msgstr "Глобальні теги (%d записів) з %s"
 
 #: src/merge/pr_generic.cpp:1443
 msgid "Global tags: %1% entries"
-msgstr "Глобальні мітки: %1% записів"
+msgstr "Глобальні теги: %1% записів"
 
 #: src/mmg/header_editor/frame.cpp:152
 msgid "H&eaders"
@@ -3440,21 +3440,21 @@ msgstr "Редактор заголовків готовий до викорис
 #: src/mmg/header_editor/frame.cpp:174
 #, c-format
 msgid "Header editor: %s"
-msgstr "Редактор заголовка: %s"
+msgstr "Редактор заголовків: %s"
 
 #: src/common/compression.cpp:284
 msgid "Header removal compression not possible because the buffer contained %1% bytes which is less than the size of the headers that should be removed, %2%."
-msgstr "Заголовок видалення стиск неможливо, так як буфер, що містяться %1% байт, які менше, ніж розмір заголовків, які повинні бути усунені, %2%."
+msgstr "Стиснення з усуненням заголовку неможливо, так як буфер містить %1% байт, що менше, ніж розмір заголовків, які повинні бути усунені, %2%."
 
 #: src/common/compression.cpp:298
 msgid "Header removal compression not possible because the buffer did not start with the bytes that should be removed. Wanted bytes:%1%; found:%2%."
-msgstr "Заголовок видалення стиск неможливо, так як буфер, не починаються з байта, які повинні бути видалені. Потрібні байт:%1%; знайдено:%2%."
+msgstr "Стиснення з усуненням заголовку неможливо, так як буфер не починаються з байтів, які повинні бути усунені. Потрібні байти:%1%; знайдено:%2%."
 
 #: src/mmg/header_editor/frame.cpp:540
 #: src/mmg/header_editor/frame.cpp:635
 #: src/mmg/header_editor/frame.cpp:640
 msgid "Header validation"
-msgstr "Заголовок перевірки"
+msgstr "Перевірка заголовків"
 
 #: src/mmg/header_editor/frame.cpp:568
 #: src/mmg/header_editor/frame.cpp:578
@@ -3465,12 +3465,12 @@ msgstr "Заголовки змінені"
 #: src/common/property_element.cpp:139
 #: src/mmg/header_editor/frame.cpp:448
 msgid "Height of the encoded video frames in pixels."
-msgstr "Висота закодовані кадри відео в пікселях."
+msgstr "Висота закодованих кадрів відео в пікселях."
 
 #: src/common/property_element.cpp:141
 #: src/mmg/header_editor/frame.cpp:458
 msgid "Height of the video frames to display."
-msgstr "Висота кадрів відео для показу."
+msgstr "Висота кадрів відео для відображення."
 
 #: src/mmg/mmg_dialog.cpp:686
 #: src/mmg/mmg_dialog.cpp:692
@@ -3484,12 +3484,12 @@ msgid ""
 "down box and pressing the 'add' button."
 msgstr ""
 "Тут ви можете додати більше опцій командного рядка або\n"
-"введення їх нижче, або вибравши один з розкривного\n"
-"списку і натискання кнопки 'додати'."
+"ввівши їх в поле знизу, або вибравши ключ з випадаючого\n"
+"списку і натиснувши кнопку 'Додати'."
 
 #: src/mmg/tabs/chapters.cpp:334
 msgid "Here you can adjust all the timecodes of the selected chapter and of all its sub-chapters by a specific amount either increasing or decreasing them."
-msgstr "Тут ви можете налаштувати всі таймкодов від обраної голови, а також всіх його підрозділів на певну величину, збільшуючи або зменшуючи їх."
+msgstr "Тут ви можете скоригувати всі тайм-коди обраних розділів, а також їх підрозділів на певну величину."
 
 #: src/mmg/options/chapters.cpp:76
 msgid ""
@@ -3505,7 +3505,7 @@ msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:331
 msgid "Here you can set the values for the language and the country that you want to apply to all the chapters below and including the currently selected entry."
-msgstr "Тут ви можете задати значення для мови і країни, які ви хочете застосувати до всіх глав нижче, і в тому числі вибраного."
+msgstr "Тут ви можете задати значення для мови і країни, які ви хочете застосувати до всіх розділів, що йдуть після обраного, включаючи його."
 
 #: src/mmg/jobs.cpp:433
 msgid "ID"
@@ -3521,15 +3521,15 @@ msgstr "ISO639-2 код"
 
 #: src/common/file_types.cpp:35
 msgid "IVF with VP8 video files"
-msgstr "IVF з VP8 відеофайлів"
+msgstr "IVF з VP8 відеофайлами"
 
 #: src/mmg/tabs/chapters.cpp:341
 msgid "If a chapter is marked 'hidden' then the player should not show this chapter entry to the user. Such entries could still be used by the menu system."
-msgstr "Якщо глава позначку 'прихований', то гравець не повинен показувати цю главу запис для користувача. Такі елементи можуть ще бути використані в меню системи."
+msgstr "Якщо розділ позначено як 'Прихований', то плеєр не повинен показувати цей розділ користувачу. Такі записи можуть ще бути використані системою меню."
 
 #: src/mmg/tabs/chapters.cpp:344
 msgid "If a chapter is not marked 'enabled' then the player should skip the part of the file that this chapter occupies."
-msgstr "Якщо розділ не позначено 'дозволити', то гравець повинен пропустити частину файлу, що ця глава займає."
+msgstr "Якщо розділ не позначено як 'Задіяний', то плеєр повинен пропустити ту частину файлу, яку цей розділ охоплює."
 
 #: src/mmg/options/mmg.cpp:75
 msgid "If checked mmg will ask for confirmation before overwriting existing files, or before adding a new job if there's an old job whose description matches the new one."
@@ -3545,9 +3545,10 @@ msgstr "Якщо вибрано, то mmg буде попереджати, як�
 
 #: src/mmg/options/mmg.cpp:71
 msgid "If left empty then mmg will set the output file name to be in the same directory as the first file added to this job. Otherwise this directory will be used."
-msgstr "Якщо залишити порожнім, то mmg буде встановити ім'я вихідного файлу, щоб бути в тій же папці, що перший файл доданий у цю роботу. В іншому випадку цей каталог буде використовуватися."
+msgstr "Якщо залишити порожнім, то mmg задасть збереження вихідного файлу в тій же папці, що і перший файл, доданий до цього завдання. В іншому випадку даний каталог буде використовуватися."
 
 #: src/mmg/tabs/attachments.cpp:168
+#, fuzzy
 msgid "If splitting is a file can be attached either to all files created or only to the first file. Has no effect if no splitting is used."
 msgstr "Якщо розщеплення файл може бути підключений або всі файли, створені або тільки на перший файл. Не має жодного ефекту, якщо не використовується розщеплення."
 
@@ -3558,11 +3559,11 @@ msgstr "Ігнорування запис, який починається пі�
 
 #: src/input/subtitles.cpp:511
 msgid "Imported font from %1%"
-msgstr "Імпорт шрифтів з %1%"
+msgstr "Імпортовано шрифтів з %1%"
 
 #: src/input/subtitles.cpp:511
 msgid "Imported picture from %1%"
-msgstr "Імпорт зображення з %1%"
+msgstr "Імпортовано зображення з %1%"
 
 #: src/input/r_corepicture.cpp:226
 msgid "Impossible to use file '%1%': The file could not be opened for reading.\n"
@@ -3574,15 +3575,15 @@ msgstr "Несумісна версія mkvmerge"
 
 #: src/mmg/tabs/input.cpp:943
 msgid "Incompatible track"
-msgstr "Несумісні трек"
+msgstr "Несумісна доріжка"
 
 #: src/input/r_real.cpp:608
 msgid "Inconsistent AAC audio packet (length: %1% != len_check %2%)\n"
-msgstr "Непослідовність AAC аудіо пакета (довжина: %1% != len_check %2%)\n"
+msgstr "Несумісний AAC аудіопакет (довжина: %1% != len_check %2%)\n"
 
 #: src/common/cli_parser.cpp:175
 msgid "Increase verbosity."
-msgstr "Збільшення багатослівністю."
+msgstr "Збільшено багатослівність."
 
 #: src/mmg/mmg_dialog.cpp:285
 msgid "Input"
@@ -3603,7 +3604,7 @@ msgstr "Вхідні файли:"
 
 #: src/common/bitvalue.cpp:71
 msgid "Input too long: %1% > %2%"
-msgstr "Введення надто довгий: %1% > %2%"
+msgstr "Вхідні дані надто довгі: %1% > %2%"
 
 #: src/mmg/options/mmg.cpp:105
 msgid "Interface language:"
@@ -3624,11 +3625,11 @@ msgstr "Внутрішня помилка програми"
 
 #: src/merge/mkvmerge.cpp:1023
 msgid "Invalid %1% specified in '--%2% %3%'.\n"
-msgstr "Невірний %1%, зазначених в '--%2% %3%'.\n"
+msgstr "Невірно %1%, зазначено в '--%2% %3%'.\n"
 
 #: src/common/base64.cpp:135
 msgid "Invalid Base64 character encountered"
-msgstr "Зустрічаються невірний Base64 характер"
+msgstr "Зафіксовано некоректний символ Base64"
 
 #: src/extract/extract_cli_parser.cpp:160
 msgid "Invalid BlockAddition level in argument '%1%'.\n"
@@ -3636,73 +3637,73 @@ msgstr "Недопустимий рівень BlockAddition в параметр�
 
 #: src/mmg/tabs/chapters.cpp:1472
 msgid "Invalid UID. A UID is simply a number."
-msgstr "Невірний UID. цей UID просто число."
+msgstr "Невірний UID. UID є просто числом."
 
 #: src/mmg/tabs/chapters.cpp:1481
 msgid "Invalid UID. This chapter UID is already in use. The original UID has not been changed."
-msgstr "Невірний UID. У цій главі UID вже використовується. Оригінальні UID не був змінений."
+msgstr "Невірний UID. Цей UID розділу вже використовується. Оригінальний UID не був змінений."
 
 #: src/mmg/tabs/chapters.cpp:1495
 msgid "Invalid UID. This edition UID is already in use. The original UID has not been changed."
-msgstr "Невірний UID. Це видання UID вже використовується. Оригінальні UID не був змінений."
+msgstr "Невірний UID. Цей UID додатку вже використовується. Оригінальні UID не був змінений."
 
 #: src/input/r_avi.cpp:694
 #: src/input/r_avi.cpp:699
 #: src/input/r_avi.cpp:716
 msgid "Invalid Vorbis headers in AVI audio track."
-msgstr "Невірний Vorbis заголовки AVI звукової доріжки."
+msgstr "Невірні Vorbis заголовки звукової доріжки файлу AVI ."
 
 #: src/extract/extract_cli_parser.cpp:237
 msgid "Invalid attachment ID/file name specification in argument '%1%'.\n"
-msgstr "Неправильна специфікація ID/імені файлу вкладення в параметрі '%1%'.\n"
+msgstr "Неправильна специфікація ID/імені файлу приєднання в параметрі '%1%'.\n"
 
 #: src/common/xml/element_parser.cpp:211
 msgid "Invalid binary data format '%1%' specified. Supported are 'Base64', 'ASCII' and 'hex'."
-msgstr "Невірний двійковий формат даних '%1%' зазначено. Підтримуються 'Base64', 'ASCII' і 'hex'."
+msgstr "Задано невірний формат двійкових даних '%1%'. Підтримуються 'Base64', 'ASCII' і 'hex'."
 
 #: src/merge/mkvmerge.cpp:872
 msgid "Invalid boolean option specified in '--default-track %1%'.\n"
-msgstr "Невірний логічний варіант, зазначений в '--default-track %1%'.\n"
+msgstr "Задана невірна булєва опція в '--default-track %1%'.\n"
 
 #: src/merge/mkvmerge.cpp:898
 msgid "Invalid boolean option specified in '--forced-track %1%'.\n"
-msgstr "Невірний логічний варіант, зазначений в '--forced-track %1%'.\n"
+msgstr "Задана невірна булєва опція в '--forced-track %1%'.\n"
 
 #: src/merge/mkvmerge.cpp:1282
 msgid "Invalid boolean specified in '--aac-is-sbr %1%'.\n"
-msgstr "Невірний логічний, зазначених в '--aac-is-sbr %1%'.\n"
+msgstr "Задана невірна булєва змінна в '--aac-is-sbr %1%'.\n"
 
 #: src/propedit/propedit_cli_parser.cpp:63
 msgid "Invalid change spec (%3%) in '%1% %2%'.\n"
-msgstr "Невірне зміна спектру (%3%) в '%1% %2%'.\n"
+msgstr "Невірна зміна специфікації (%3%) в '%1% %2%'.\n"
 
 #: src/merge/mkvmerge.cpp:953
 msgid "Invalid compression option specified in '--compression %1%'.\n"
-msgstr "Невірний вибір стиснення, зазначені в '--compression %1%'.\n"
+msgstr "Невірно вибрано опції стиснення, зазначені в '--compression %1%'.\n"
 
 #: src/merge/mkvmerge.cpp:946
 msgid "Invalid compression option. No track ID specified in '--compression %1%'.\n"
-msgstr "Невірний стиснення варіант. Ні трек ID, зазначених в '--compression %1%'.\n"
+msgstr "Невірні опції стиснення. Жодного ID доріжки не зазначено в '--compression %1%'.\n"
 
 #: src/mmg/options/chapters.cpp:121
 msgid "Invalid country selected"
-msgstr "Вибрана неприпустима країна"
+msgstr "Некоректно вибрана країна"
 
 #: src/merge/mkvmerge.cpp:923
 msgid "Invalid cues option specified in '--cues %1%'.\n"
-msgstr "Невірний вибір сигналів, зазначених в '--cues %1%'.\n"
+msgstr "Невірно вибрано опції cue в '--cues %1%'.\n"
 
 #: src/merge/mkvmerge.cpp:916
 msgid "Invalid cues option. No track ID specified in '--cues %1%'.\n"
-msgstr "Невірний cues варіант. Ні трек ID, зазначених в '--cues %1%'.\n"
+msgstr "Невірні опції cue. Жодного ID доріжки не зазначено в '--cues %1%'.\n"
 
 #: src/mmg/mmg_dialog.cpp:565
 msgid "Invalid file name"
-msgstr "Неправильне ім'я файлу"
+msgstr "Неправильна назва файлу"
 
 #: src/merge/mkvmerge.cpp:813
 msgid "Invalid format for '--split' in '--split %1%'.\n"
-msgstr "Невірний формат '--split' в '--split %1%'.\n"
+msgstr "Невірний формат для '--split' в '--split %1%'.\n"
 
 #: src/extract/xtr_textsubs.cpp:211
 msgid "Invalid format for a SSA line ('%1%') at timecode %2%: The first field is not an integer. This entry will be skipped.\n"
@@ -4008,7 +4009,7 @@ msgstr "Перелічіть правильні назви властивост�
 
 #: src/mmg/mmg_dialog.cpp:267
 msgid "Load a chapter file (simple/OGM format or XML format)"
-msgstr "Завантажте файл голови (simple/OGM формат або формат XML)"
+msgstr "Завантажити файл розділу (простий/формату OGM або формату XML)"
 
 #: src/mmg/mmg_dialog.cpp:252
 msgid "Load muxing settings from a file"
@@ -4513,7 +4514,7 @@ msgstr "Опції"
 
 #: src/mmg/cli_options_dlg.cpp:111
 msgid "Options meant ONLY for developpers. Do not use them. If something is considered to be an officially supported option then it's NOT in this list!"
-msgstr "Опції, призначені лише для розробників. Не використовуйте їх. Якщо де-не-що, як вважають, є офіційно підтриманої опцією тоді, це не в цьому списку!"
+msgstr "Опції, призначені ЛИШЕ для розробників. Не використовуйте їх. Якщо є деяка опція, яку вважають офіційно підтримуваною опцією, тоді вона не в цьому списку!"
 
 #: src/info/mkvinfo.cpp:833
 msgid "Order: %1%"
@@ -4537,7 +4538,7 @@ msgstr "Вихідний файл"
 
 #: src/common/cli_parser.cpp:179
 msgid "Output messages in this charset"
-msgstr "Вихідні повідомлення у цій кодуванні"
+msgstr "Вихідні повідомлення з цим набором символів"
 
 #: src/mmg/jobs.cpp:388
 msgid "Output of the selected jobs:"
@@ -4628,7 +4629,7 @@ msgid ""
 msgstr ""
 "Будь ласка, введіть значення для мови і\n"
 "країни, які ви хочете застосувати до всіх розділів, що\n"
-"знаходяться перед поточним і включаючи його."
+"знаходяться після поточного, включаючи його."
 
 #: src/merge/mkvmerge.cpp:251
 msgid ""
@@ -5128,7 +5129,7 @@ msgstr "Оберіть мови, які ви хочете щоб відобра�
 
 #: src/mmg/tabs/chapters.cpp:100
 msgid "Select values to be applied"
-msgstr "Виберіть значення, які повинні застосовуватися"
+msgstr "Виберіть значення, які повинні бути застосовані"
 
 #: src/mmg/tabs/input_extra.cpp:125
 msgid "Selects for which blocks mkvmerge will produce index entries ( = cue entries). \"default\" is a good choice for almost all situations."
@@ -5144,7 +5145,7 @@ msgstr "&Встановити вихідний файл"
 
 #: src/mmg/tabs/chapters.cpp:117
 msgid "Set country to:"
-msgstr "Встановити країну:"
+msgstr "Задати країну:"
 
 #: src/common/property_element.cpp:116
 #: src/mmg/header_editor/frame.cpp:397
@@ -5183,7 +5184,7 @@ msgstr "Встановити, якщо відео з чергуванням ря
 
 #: src/mmg/tabs/chapters.cpp:110
 msgid "Set language to:"
-msgstr "Встановити мову:"
+msgstr "Задати мову:"
 
 #: src/mmg/options/mmg.cpp:82
 msgid "Set the delay input field from the file name"
@@ -5253,7 +5254,7 @@ msgstr "Налаштування: %1%"
 
 #: src/mmg/cli_options_dlg.cpp:86
 msgid "Several options that control the overall output that mkvmerge creates."
-msgstr "Кілька опцій, які управляють повним висновком, що mkvmerge створює."
+msgstr "Деякі опції, які контролюють створюваний mkvmerge на виході результуючий файл."
 
 #: src/input/r_real.cpp:595
 msgid "Short AAC audio packet (length: %1% < %2%)\n"
@@ -5293,7 +5294,7 @@ msgstr "Показати командний рядок, який mmg створ�
 
 #: src/mmg/mmg_dialog.cpp:276
 msgid "Show the guide to mkvmerge GUI"
-msgstr "Показати керівництво mkvmerge GUI"
+msgstr "Показати довідку по mkvmerge GUI"
 
 #: src/info/wxwidgets_ui.cpp:128
 msgid "Show the size of each element including its header"
@@ -5592,7 +5593,7 @@ msgstr "AAC профілі різні: %1% i %2%"
 
 #: src/input/r_qtmp4.cpp:1496
 msgid "The AVC video track is missing the 'CTTS' atom for frame timecode offsets. However, AVC/h.264 allows frames to have more than the traditional one (for P frames) or two (for B frames) references to other frames. The timecodes for such frames will be out-of-order, and the 'CTTS' atom is needed for getting the timecodes right. As it is missing the timecodes for this track might be wrong. You should watch the resulting file and make sure that it looks like you expected it to.\n"
-msgstr "Трек AVC відео відсутнє 'CTTS' для зсуву кадру тайм-коду. Тим не менше, AVC/H.264 дозволяє кадрів мати більш традиційним (для рам P) або два (для B кадрів) посилання на інші кадри. Тайм-кодів для таких кадрів буде поза порядком, і 'CTTS' необхідний для отримання таймкодов права. Як не вистачає таймкодов для цього рінгтону може бути неправильним. Ви повинні дивитися файл, що вийшов і переконайтеся, що він виглядає, як ви очікували, що це.\n"
+msgstr "Трек AVC відео відсутнє 'CTTS' для зсуву кадру тайм-коду. Тим не менше, AVC/H.264 дозволяє кадрів мати більш традиційним (для рам P) або два (для B кадрів) посилання на інші кадри. Тайм-кодів для таких кадрів буде поза порядком, і 'CTTS' необхідний для отримання тайм-кодів права. Як не вистачає тайм-кодов для цього рінгтону може бути неправильним. Ви повинні дивитися файл, що вийшов і переконайтеся, що він виглядає, як ви очікували, що це.\n"
 
 #: src/extract/tracks.cpp:279
 msgid "The CUE sheet for track %1% will be written to '%2%'.\n"
@@ -6358,31 +6359,31 @@ msgstr "Третій режим витягує вкладення з вихід�
 
 #: src/merge/timecode_factory.cpp:54
 msgid "The timecode file '%1%' contains an unsupported/unrecognized format (version %2%).\n"
-msgstr "Тайм-код файл '%1%' містить непідтримуваний/невизнаний формат (версія %2%).\n"
+msgstr "Файл тайм-коду '%1%' містить непідтримуваний/невизнаний формат (версія %2%).\n"
 
 #: src/merge/timecode_factory.cpp:40
 msgid "The timecode file '%1%' contains an unsupported/unrecognized format line. The very first line must look like '# timecode format v1'.\n"
-msgstr "Тайм-код файл '%1%' містить непідтримувані/невизнану рядок форматів. Найперша рядок має бути схожою '# тайм-код формат v1'.\n"
+msgstr "Файл тайм-коду '%1%' містить непідтримувані/невизнану рядок форматів. Найперша рядок має бути схожою '# тайм-код формат v1'.\n"
 
 #: src/merge/timecode_factory.cpp:34
 msgid "The timecode file '%1%' could not be opened for reading.\n"
-msgstr "Тайм-код файл '%1%' не міг бути відкритий для того, щоб читати.\n"
+msgstr "Файл тайм-коду '%1%' не міг бути відкритий для того, щоб читати.\n"
 
 #: src/merge/timecode_factory.cpp:87
 #: src/merge/timecode_factory.cpp:95
 #: src/merge/timecode_factory.cpp:101
 #: src/merge/timecode_factory.cpp:296
 msgid "The timecode file '%1%' does not contain a valid 'Assume' line with the default number of frames per second.\n"
-msgstr "Тайм-код файл '%1%' не містить правильне, 'Приймають' рядок з заданим за умовчанням числом кадрів в секунду.\n"
+msgstr "Файл тайм-коду '%1%' не містить правильне, 'Приймають' рядок з заданим за умовчанням числом кадрів в секунду.\n"
 
 #: src/merge/timecode_factory.cpp:331
 msgid "The timecode file '%1%' does not contain a valid 'Gap' line with the duration of the gap.\n"
-msgstr "Тайм-код файл '%1%' не містить правильний рядок 'Місця' з тривалістю проміжку.\n"
+msgstr "Файл тайм-коду '%1%' не містить коректний рядок 'Gap' з тривалістю проміжку.\n"
 
 #: src/merge/timecode_factory.cpp:241
 #: src/merge/timecode_factory.cpp:360
 msgid "The timecode file '%1%' does not contain any valid entry.\n"
-msgstr "Тайм-код файл '%1%' не містить правильного входу.\n"
+msgstr "Файл тайм-коду '%1%' не містить жодного коректного запису.\n"
 
 #: src/merge/timecode_factory.cpp:217
 msgid ""
@@ -6396,7 +6397,7 @@ msgstr ""
 
 #: src/mmg/tabs/global.cpp:245
 msgid "The timecodes after which a new output file is started. The timecodes refer to the whole stream and not to each individual output file. The timecodes can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH'. You can specify up to nine digits for the number of nanoseconds 'nnnnnnnnn' or none at all. If given then you may use up to nine digits after the decimal point. If two or more timecodes are used then you have to separate them with commas. The formats can be mixed, too. Examples: 01:00:00,01:30:00 (after one hour and after one hour and thirty minutes) or 1800s,3000s,00:10:00 (after three, five and ten minutes)."
-msgstr "Таймкоди, після яких починається новий вихідний файл. Таймкоди відносяться до всього потоку, а не до кожного індивідуального вихідного файлу. Таймкоди можуть бути задані або у формі HH:MM:SS.nnnnnnnnn або як число секунд 's'. Можна не вказуати число годин 'HH'. Також можна задавати до дев'яти цифр для вказання наносекунд 'nnnnnnnnn' або не вказувати жодної. Якщо ж буде задано  значення з точністю до  наносекунд, то можна використовувати до дев'яти цифр після коми. Якщо використовуються два або більше таймкодів, тоді необхідно відокремити їх комами. Формати можна комбінувати. Наприклад: 01:00:00,01:30:00 (після однієї години і після однієї години тридцяти хвилин) або 1800s, 3000s, 00:10:00 (після 3-х, 5-ти і 10-ти хвилин)."
+msgstr "Тайм-коди, після яких починається новий вихідний файл. Тайм-коди відносяться до всього потоку, а не до кожного індивідуального вихідного файлу. Тайм-коди можуть бути задані або у формі HH:MM:SS.nnnnnnnnn або як число секунд 's'. Можна не вказуати число годин 'HH'. Також можна задавати до дев'яти цифр для вказання наносекунд 'nnnnnnnnn' або не вказувати жодної. Якщо ж буде задано  значення з точністю до  наносекунд, то можна використовувати до дев'яти цифр після коми. Якщо використовуються два або більше тайм-кодів, тоді необхідно відокремити їх комами. Формати можна комбінувати. Наприклад: 01:00:00,01:30:00 (після однієї години і після однієї години тридцяти хвилин) або 1800s, 3000s, 00:10:00 (після 3-х, 5-ти і 10-ти хвилин)."
 
 #: src/input/r_ogm.cpp:569
 msgid "The timecodes for this stream have been reset in the middle of the file. This is not supported. The current packet will be discarded.\n"
@@ -6625,7 +6626,7 @@ msgstr "Масштабування тайм-коду"
 
 #: src/mmg/tabs/input_general.cpp:189
 msgid "Timecodes:"
-msgstr "Таймкоди:"
+msgstr "Тайм-коди:"
 
 #: src/common/property_element.cpp:102
 #: src/mmg/header_editor/frame.cpp:329
@@ -7295,7 +7296,7 @@ msgstr "Використання відео вихідного модуля (Fou
 #: src/input/r_avi.cpp:360
 #: src/input/r_ogm.cpp:1234
 msgid "Using the video output module.\n"
-msgstr "Використання відео вихідного модуля.\n"
+msgstr "Використання вихідного модуля для відео.\n"
 
 #: src/common/file_types.cpp:49
 msgid "VC1 elementary streams"
@@ -7303,7 +7304,7 @@ msgstr "VC1 елементарні потоки"
 
 #: src/common/hacks.cpp:60
 msgid "Valid hacks are:\n"
-msgstr "Дійсні хакі:\n"
+msgstr "Коректні зміни коду:\n"
 
 #: src/mmg/header_editor/frame.cpp:149
 msgid "Validates the content of all changeable headers"
@@ -7311,7 +7312,7 @@ msgstr "Перевірити складові всіх змінних загол
 
 #: src/mmg/mmg_dialog.cpp:271
 msgid "Verify the current chapter entries to see if there are any errors"
-msgstr "Перевірити поточні записи голови, є помилки"
+msgstr "Перевірити поточні записи заголовків на помилки"
 
 #: src/common/property_element.cpp:147
 #: src/mmg/header_editor/frame.cpp:487
@@ -7533,14 +7534,14 @@ msgid ""
 "Example: -00:05:23 would let all the chapters begin\n"
 "5minutes and 23seconds earlier than now."
 msgstr ""
-"Ви можете використовувати цю функцію для того, щоб коректувати тайм-коди\n"
-"з обраної голови і всіх її дочірніх записів встановленим кількістю.\n"
-"Кількість може бути позитивним чи негатив. Використовуваний формат може бути\n"
-"будь-який тільки число, коли це інтерпретується як число секунд,\n"
-"це може супроводжуватися модулем як 'ms' або 's' для мілісекунд і секунди відповідно,\n"
-"або у цього може бути звичайний формат HH:MM:SS.mmm або HH:MM:SS.\n"
-"Приклад: -00:05:23 дозволив би всім головам починатися\n"
-"5 хвилин і на 23 секунди раніше ніж тепер."
+"Ви можете використовувати цю функцію для коригування тайм-кодів\n"
+"обраних розділів і їх підрозділів на певне значення.\n"
+"Це значення може бути додатнім або від'ємним. Значення може бути\n"
+"тільки числом і тоді буде інтепретуватися як кількість секунд,\n"
+"а якщо супроводжується 'ms' або 's', то як кількість мілісекунд чи секунд відповідно,\n"
+"або може задаватися у звичайному форматі ГГ:ХХ:СС.мс або ГГ:ХХ:СС.\n"
+"Наприклад: -00:05:23 означає те, що всі розділи починатимуться\n"
+"на 5 хвилин і 23 секунди раніше."
 
 #: src/mmg/tabs/input.cpp:1337
 #, c-format
@@ -8669,20 +8670,28 @@ msgstr "Так"
 
 #~ msgid "%1% at %2%"
 #~ msgstr "%1% в %2%"
+
 #~ msgid "(Unknown element: %1%)"
 #~ msgstr "(Невідомий елемент: %1%)"
+
 #~ msgid "DTS (Digital Theater System)"
 #~ msgstr "DTS (Digital Theater System)"
+
 #~ msgid "Dirac elementary stream"
 #~ msgstr "Dirac елементарний потік"
+
 #~ msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
 #~ msgstr "Не пишіть заголовок тих елементів, значення яких збігаються з їхніми значеннями за замовчуванням відповідно до Matroska критеріям."
+
 #~ msgid "FLAC lossless audio"
 #~ msgstr "FLAC аудіо без втрат"
+
 #~ msgid "File/segment title"
 #~ msgstr "Файл/сегмент назву"
+
 #~ msgid "IVF with VP8"
 #~ msgstr "IVF з VP8"
+
 #~ msgid ""
 #~ "Known file types:\n"
 #~ "  ext   description\n"
@@ -8691,73 +8700,106 @@ msgstr "Так"
 #~ "Відомі типи файлу:\n"
 #~ "  опис розширення\n"
 #~ "  ----  --------------------------\n"
+
 #~ msgid "MPEG program stream"
 #~ msgstr "MPEG програмний потік"
+
 #~ msgid "MPEG-1 layer II audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 layer II audio (CBR и VBR/ABR)"
+
 #~ msgid "MPEG-1 layer III audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 layer III audio (CBR и VBR/ABR)"
+
 #~ msgid "MPEG-1 video elementary stream"
 #~ msgstr "MPEG-1 video елементарний потік"
+
 #~ msgid "MPEG-2 video elementary stream"
 #~ msgstr "MPEG-2 video елементарний потік"
+
 #~ msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
 #~ msgstr "Matroska файли (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|Все файлы|*.*"
+
 #~ msgid "Other global options"
 #~ msgstr "Інші глобальні опції"
+
 #~ msgid "Quicktime/MP4 audio and video"
 #~ msgstr "Quicktime/MP4 Audio і Video"
+
 #~ msgid "RealMedia audio and video"
 #~ msgstr "RealMedia Audio i Video"
+
 #~ msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
 #~ msgstr "Встановлює стиск, що використовується для субтитрів VobSub. Якщо нічого не вибрали, то VobSubs будуть автоматично стискати з zlib. Результати це файли, які багато більше."
+
 #~ msgid "TTA lossless audio"
 #~ msgstr "TTA аудіо без втрат"
+
 #~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
 #~ msgstr "MPEG-4 частина 2 стиск працює тільки з рідним MPEG-4. Тим не менше, рідний MPEG-4 режим не був обраний з '--engage native_mpeg4'.\n"
+
 #~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
 #~ msgstr "Эта дорожка использует особенность Matroska, названную 'запоминающие элементы Codec'. mkvmerge поддерживает их, но эта особенность не была включена с опцией '--engage use_codec_state'.\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "Використання FLAC вихідного модуля.\n"
+
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "VC1 відео елементарний потік"
+
 #~ msgid "VobBtn buttons"
 #~ msgstr "VobBtn кнопки"
+
 #~ msgid "WAVE (uncompressed PCM)"
 #~ msgstr "WAVE (незжатий PCM)"
+
 #~ msgid "WAVPACK lossless audio"
 #~ msgstr "WAVPACK аудіо без втрат"
+
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "Створити вихідні файли FLAC (за замовчуванням: написати OggFLAC файли)."
+
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "аудіо/відео/текст субтитрів впроваджених у OGG"
+
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: Не вдалося встановити помилки зворотного виклику.\n"
+
 #~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
 #~ msgstr "flac_header_extraction: Не вдалося встановити метаданих зворотного виклику.\n"
+
 #~ msgid "flac_header_extraction: Could not set the read callback.\n"
 #~ msgstr "flac_header_extraction: Не вдалося встановити читати зворотного виклику.\n"
+
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: Не вдалося встановити написати зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити кінець файлу зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the error callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити помилки зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the length callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити довжину зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the metadata callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити метаданих зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the read callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити читати зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the seek callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити зворотній виклик пошуку.\n"
+
 #~ msgid "flac_reader: Could not set the tell callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити сказати зворотного виклику.\n"
+
 #~ msgid "flac_reader: Could not set the write callback.\n"
 #~ msgstr "flac_reader: Не вдалося встановити написати зворотного виклику.\n"
+
 #~ msgid "general Matroska files"
 #~ msgstr "Загальні файли Matroska"
+
 #~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 #~ msgstr "r_matroska: Кластер не містять кластеру тайм-коду. Файл не працює. Переривання.\n"
-
