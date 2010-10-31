@@ -1211,7 +1211,7 @@ msgid "'%1%': %2%"
 msgstr "'%1%': %2%"
 
 #: src/common/mm_multi_file_io.cpp:165
-#: src/mmg/tabs/input.cpp:706
+#: src/mmg/tabs/input.cpp:711
 msgid "'%1%': Processing the following files as well: %2%\n"
 msgstr "'%1%': Обработка следующих файлов, а также: %2%\n"
 
@@ -1875,12 +1875,12 @@ msgstr "Другая дорожка по умолчанию для %1% доро�
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr "Другой мультиплексирования работу в еще продолжается. Пожалуйста, подождите, пока она не завершена, или прервать ее вручную, прежде чем начинать новое."
 
-#: src/mmg/tabs/input.cpp:1267
+#: src/mmg/tabs/input.cpp:1272
 #, c-format
 msgid "Appending a track from a file to another track from the same file is not allowed. This is the case for tracks number %u and %u."
 msgstr "Добавление дорожки из файла в другой трек с того же файла, не допускается. Это имеет место для треков число %u и %u."
 
-#: src/merge/output_control.cpp:1640
+#: src/merge/output_control.cpp:1655
 msgid "Appending track %1% from file no. %2% ('%3%') to track %4% from file no. %5% ('%6%').\n"
 msgstr "Добавление дорожки %1% из файла нет. %2% ('%3%') к дорожке %4% из файла нет. %5% ('%6%').\n"
 
@@ -2222,7 +2222,7 @@ msgstr "Главы"
 msgid "Chapters (%d entries) from %s"
 msgstr "Главы (%d записи) из %s"
 
-#: src/merge/output_control.cpp:1282
+#: src/merge/output_control.cpp:1297
 msgid "Chapters are not allowed in WebM compliant files. No chapters will be written into any output file.\n"
 msgstr "Главы, не допускаются в WebM совместимых файлах. Нет главы будут написаны в любой выходной файл.\n"
 
@@ -2303,7 +2303,7 @@ msgstr "Выберите расположение помощью mkvmerge GUI ф
 msgid "Choose the mkvmerge executable"
 msgstr "Выберите исполняемый mkvmerge"
 
-#: src/mmg/options/mmg.cpp:230
+#: src/mmg/options/mmg.cpp:238
 msgid "Choose the output directory"
 msgstr "Выберите выходной каталог"
 
@@ -2517,7 +2517,7 @@ msgstr "Не удалось найти действительный MP3 паке
 msgid "Could not find an index for audio track %1% (avilib error message: %2%). Skipping track.\n"
 msgstr "Не нашел индекс для звуковой дорожки %1% (avilib сообщение об ошибке: %2%). Пропуск трека.\n"
 
-#: src/merge/output_control.cpp:1595
+#: src/merge/output_control.cpp:1610
 msgid "Could not find gptzr when appending. %1%\n"
 msgstr "Не нашел gptzr, когда добавление. %1%\n"
 
@@ -2821,6 +2821,10 @@ msgstr "Описание:"
 msgid "Dirac"
 msgstr "Dirac"
 
+#: src/mmg/options/mmg.cpp:100
+msgid "Disable header removal compression for audio and video tracks by default"
+msgstr ""
+
 #: src/mmg/jobs.cpp:479
 msgid "Disable the selected job(s) and sets their status to 'done'"
 msgstr "Отключить выбранный работу(ы) и устанавливает статус на 'Готово'"
@@ -2922,7 +2926,7 @@ msgstr "EBML читать версию: %1%"
 msgid "EBML version: %1%"
 msgstr "EBML версия: %1%"
 
-#: src/merge/output_control.cpp:1138
+#: src/merge/output_control.cpp:1153
 msgid "EVIL internal bug! (unknown file type). %1%\n"
 msgstr "Зло внутренней ошибки! (Неизвестный тип файла). %1%\n"
 
@@ -3261,7 +3265,7 @@ msgstr "Имя файла: %1%"
 msgid "File parsing failed"
 msgstr "Не удалось выполнить разбор файла"
 
-#: src/mmg/tabs/input.cpp:732
+#: src/mmg/tabs/input.cpp:737
 msgid "File removal not possible"
 msgstr "Файл удаление не представляется возможным"
 
@@ -3278,7 +3282,7 @@ msgstr "Файл/сегмент связи"
 msgid "File/segment title:"
 msgstr "Файл/сегмент название:"
 
-#: src/merge/output_control.cpp:828
+#: src/merge/output_control.cpp:843
 msgid "Files cannot be appended to themselves. The argument for '--append-to' was invalid.\n"
 msgstr "Файлы не могут быть приложены к себе. Аргументом в пользу '--append-to' является недействительным.\n"
 
@@ -3530,6 +3534,10 @@ msgstr "При выборе mmg запрос на подтверждение п�
 msgid "If checked mmg will automatically set the output filename if it hasn't been set already. This happens when you add the first file. If unset mmg will not touch the output filename."
 msgstr "При выборе mmg будет автоматически устанавливать выходного файла, если он не был установлен уже. Это происходит, когда вы добавляете первый файл. Если не установлена, mmg не тронет выходного файла."
 
+#: src/mmg/options/mmg.cpp:101
+msgid "If checked mmg will set the 'compression' drop down box to 'none' for all audio and video tracks by default. The user can still change the compression setting afterwards."
+msgstr ""
+
 #: src/mmg/options/mmg.cpp:95
 msgid "If checked mmg will warn if it thinks that you're using it incorrectly. Such warnings are shown at least once even if you turn this feature off."
 msgstr "При выборе mmg будет предупреждать, если он думает, что вы используете его неправильно. Такие предупреждения показали по крайней мере один раз, даже если вы включите эту функцию."
@@ -3558,11 +3566,11 @@ msgstr "Импорт изображения из %1%"
 msgid "Impossible to use file '%1%': The file could not be opened for reading.\n"
 msgstr "Невозможно использовать файл '%1%': файл не может быть открыт для чтения.\n"
 
-#: src/mmg/mmg_dialog.cpp:1751
+#: src/mmg/mmg_dialog.cpp:1753
 msgid "Incompatible mkvmerge version"
 msgstr "Несовместимая версия mkvmerge"
 
-#: src/mmg/tabs/input.cpp:943
+#: src/mmg/tabs/input.cpp:948
 msgid "Incompatible track"
 msgstr "Несовместимый трек"
 
@@ -3595,7 +3603,7 @@ msgstr "Входные файлы:"
 msgid "Input too long: %1% > %2%"
 msgstr "Ввод слишком долгий: %1% > %2%"
 
-#: src/mmg/options/mmg.cpp:105
+#: src/mmg/options/mmg.cpp:109
 msgid "Interface language:"
 msgstr "Язык интерфейса:"
 
@@ -4185,7 +4193,7 @@ msgstr "Больше чем одно название было дано для �
 msgid "More than one root element found."
 msgstr "Больше чем один корневой элемент найден."
 
-#: src/merge/output_control.cpp:905
+#: src/merge/output_control.cpp:920
 msgid "More than one track is to be appended to the track %1% from file no. %2% ('%3%'). The argument for '--append-to' was invalid.\n"
 msgstr "Больше чем одна дорожка должна быть приложена к дорожке %1% от файла номер %2% (%3%). Параметр для '--append-to' было недопустимо.\n"
 
@@ -4285,7 +4293,7 @@ msgstr "Не найден AC3 заголовок в первом кадре; д�
 msgid "No EBML head found."
 msgstr "Заголовок EBML не найден."
 
-#: src/mmg/tabs/input.cpp:1343
+#: src/mmg/tabs/input.cpp:1348
 msgid "No FPS selected for AVC/h.264 track"
 msgstr "FPS не выбран для дорожки AVC/h.264"
 
@@ -4298,7 +4306,7 @@ msgstr "MIME тип не был выбран для вложения '%s'."
 msgid "No MIME type has been set for the attachment '%1%', and it could not be guessed.\n"
 msgstr "MIME тип не был установлен для вложения '%1%', и оно не могло быть предположено.\n"
 
-#: src/merge/output_control.cpp:864
+#: src/merge/output_control.cpp:879
 msgid "No append mapping was given for the file no. %1% ('%2%'). A default mapping of %3% will be used instead. Please keep that in mind if mkvmerge aborts with an error message regarding invalid '--append-to' options.\n"
 msgstr "Не приложено отображение, был дан для файла номер %1% (%2%). Заданное по умолчанию отображение %3% будет использоваться вместо этого. Пожалуйста помните это, если mkvmerge прерывается с сообщением об ошибках относительно недопустимой '--append-to' опции.\n"
 
@@ -4372,7 +4380,7 @@ msgstr "Нет ID дорожки, определенной в '--%1% %2%'.\n"
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "Нет дорожки, соответствующей спецификации редактирования '%1%', не была найдена. %2%\n"
 
-#: src/mmg/tabs/input.cpp:610
+#: src/mmg/tabs/input.cpp:615
 msgid "No tracks found"
 msgstr "Дорожки не найдены"
 
@@ -4404,7 +4412,7 @@ msgstr "Не правильный файл Matroska (не найден заго�
 msgid "Not a valid Matroska file (no segment/level 0 element found)"
 msgstr "Не правильный файл Matroska (нет сегмент/уровень 0 найденных элементов)"
 
-#: src/mmg/tabs/input.cpp:707
+#: src/mmg/tabs/input.cpp:712
 msgid "Note"
 msgstr "Записка"
 
@@ -4459,7 +4467,7 @@ msgstr "Только один выходной файл позволен.\n"
 msgid "Only one segment info file allowed in '%1% %2%'.\n"
 msgstr "Только одному файлу информации сегмента позволяют войти '%1% %2%'.\n"
 
-#: src/merge/output_control.cpp:845
+#: src/merge/output_control.cpp:860
 msgid "Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the default mapping will be used) or specify a mapping for all tracks that are to be copied.\n"
 msgstr "Только неравнодушный прилагают отображения, были даны для файла номер %1% (%2%). Любой не определяет отображения (когда заданное по умолчанию отображение будет использоваться), или определите отображение для всех дорожек, которые должны быть скопированы.\n"
 
@@ -4672,7 +4680,7 @@ msgstr "Процесс"
 
 #: src/extract/timecodes_v2.cpp:265
 #: src/extract/tracks.cpp:390
-#: src/merge/output_control.cpp:448
+#: src/merge/output_control.cpp:463
 msgid "Progress: %1%%%%2%"
 msgstr "Процесс: %1%%%%2%"
 
@@ -4681,7 +4689,7 @@ msgstr "Процесс: %1%%%%2%"
 msgid "Progress: 100%\n"
 msgstr "Процесс: 100%\n"
 
-#: src/merge/output_control.cpp:1890
+#: src/merge/output_control.cpp:1905
 msgid "Progress: 100%%%1%"
 msgstr "Процесс: 100%%%1%"
 
@@ -4689,7 +4697,7 @@ msgstr "Процесс: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "Процесс: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1694
+#: src/mmg/mmg_dialog.cpp:1696
 msgid "Querying mkvmerge's capabilities"
 msgstr "Запрос возможностей mkvmerge"
 
@@ -5271,7 +5279,7 @@ msgstr "Показать диалог о mmg"
 msgid "Show element si&zes\tCtrl-Z"
 msgstr "&Показать размеры элемента\tCtrl-Z"
 
-#: src/mmg/options/mmg.cpp:100
+#: src/mmg/options/mmg.cpp:104
 msgid "Show mmg's debug window"
 msgstr "Показать отладку mmg в окне"
 
@@ -5299,7 +5307,7 @@ msgstr "Показать эту помощь."
 msgid "Show version information."
 msgstr "Показать информацию о версии."
 
-#: src/mmg/options/mmg.cpp:101
+#: src/mmg/options/mmg.cpp:105
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "Показывает окно отладки mmg, в котором отладочные сообщения будут появляться. Это только полезно, если вы помогаете автору отладки проблемы в mmg."
 
@@ -5375,7 +5383,7 @@ msgstr "Некоторые заголовка значения были изме
 msgid "Some header values have been modified. Do you really want to reload without saving the file?"
 msgstr "Некоторые заголовка значения были изменены. Вы действительно хотите перезагрузить без сохранения файла?"
 
-#: src/merge/output_control.cpp:1323
+#: src/merge/output_control.cpp:1338
 msgid "Some tag elements are missing (this error should not have occured - another similar error should have occured earlier). %1%\n"
 msgstr "Некоторые теги элементы отсутствуют (эта ошибка не должна иметь место - еще Подобная ошибка должна была иметь место ранее). %1%\n"
 
@@ -5537,7 +5545,7 @@ msgstr "Тег файлы (*.xml;*.txt)|*.xml;*.txt|%s"
 msgid "Tags"
 msgstr "Теги"
 
-#: src/merge/output_control.cpp:1311
+#: src/merge/output_control.cpp:1326
 msgid "Tags are not allowed in WebM compliant files. No tags will be written into any output file.\n"
 msgstr "Теги не допускаются в WebM совместимых файлах. Нет теги будут написаны в любой выходной файл.\n"
 
@@ -5607,7 +5615,7 @@ msgstr "FLAC заголовки не может быть разобрано: с�
 msgid "The FPS is 0.0 but the reader did not provide a timecode for a packet. %1%\n"
 msgstr "FPS это 0.0 но читатель не предусматривает временного кода для пакета. %1%\n"
 
-#: src/mmg/tabs/input.cpp:1327
+#: src/mmg/tabs/input.cpp:1332
 #, c-format
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
 msgstr "FPS настройки для номера дорожки. %s в файле '%s' является недействительным."
@@ -5616,12 +5624,12 @@ msgstr "FPS настройки для номера дорожки. %s в фай�
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "FourCC должно быть ровно четыре символов в '%1% %2%'.\n"
 
-#: src/mmg/tabs/input.cpp:1315
+#: src/mmg/tabs/input.cpp:1320
 #, c-format
 msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
 msgstr "Установка для FourCC номер дорожки. %s в файл '%s' не четыре символа."
 
-#: src/mmg/mmg_dialog.cpp:1747
+#: src/mmg/mmg_dialog.cpp:1749
 #, c-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%s) than the GUI itself (%s). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "GUI настроен на использование mkvmerge исполняемый файл из другой версии (%s), чем сам GUI (%s). Это не поддерживается, но не будет препятствовать. Вы должны изменить mkvmerge исполняемый в диалоговом окне настройки."
@@ -5677,7 +5685,7 @@ msgstr "Аргумент '%1%' в '%2%' недопустим: слишком м�
 msgid "The argument to '--timecode-scale' must be a number.\n"
 msgstr "Аргумент '--timecode-scale' должен быть целым числом.\n"
 
-#: src/mmg/tabs/input.cpp:1383
+#: src/mmg/tabs/input.cpp:1388
 #, c-format
 msgid "The aspect ratio setting for track nr. %s in file '%s' is invalid."
 msgstr "Пропорции настройки для номера трека. %s в файле '%s' является недействительным."
@@ -5759,11 +5767,11 @@ msgstr "Заголовок коррекции файл не был правил�
 msgid "The country '%s' is not a valid ccTLD and cannot be selected."
 msgstr "Страна '%s' не является действительным ccTLD и не может быть выбрана."
 
-#: src/merge/output_control.cpp:1386
+#: src/merge/output_control.cpp:1401
 msgid "The cue entries (the index) are being written..."
 msgstr "cue для записи (индекс) пишется..."
 
-#: src/mmg/tabs/input.cpp:728
+#: src/mmg/tabs/input.cpp:733
 #, c-format
 msgid "The current file (number %d) cannot be removed. There are other files -- at least file number %d -- whose tracks are supposed to be appended to tracks from this file. Please remove those files first."
 msgstr "Текущего файла (номер %d) не может быть удалена. Есть и другие файлы - по крайней мере файл %d - чьи треки должны быть приложены треки из этого файла. Пожалуйста, удалите эти файлы."
@@ -5776,12 +5784,12 @@ msgstr "Тайм-код текущего пакета является мень�
 msgid "The default language code '%1%' is not a valid ISO639-2 language code and will be ignored.\n"
 msgstr "Код языка по умолчанию '%1%' не является допустимым кодом ISO639-2 языка и будут проигнорированы.\n"
 
-#: src/mmg/tabs/input.cpp:1294
+#: src/mmg/tabs/input.cpp:1299
 #, c-format
 msgid "The delay setting for track nr. %s in file '%s' is invalid."
 msgstr "Установка задержки на номер трека. %s в файле '%s' является недействительным."
 
-#: src/merge/output_control.cpp:1142
+#: src/merge/output_control.cpp:1157
 msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
 "%2%\n"
@@ -5865,7 +5873,7 @@ msgstr "Файл '%1%' не может быть открыт для записи
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "Файл '%1%' не может быть открыт для записи (%2%, %3%).\n"
 
-#: src/merge/output_control.cpp:1351
+#: src/merge/output_control.cpp:1366
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "Файл '%1%' был открыт для записи.\n"
 
@@ -5950,15 +5958,15 @@ msgstr "Файл занимается ремонтом, часть 4/4..."
 msgid "The file name for this segment."
 msgstr "Имя файла для данного сегмента."
 
-#: src/merge/output_control.cpp:878
+#: src/merge/output_control.cpp:893
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. The argument for '--append-to' was invalid.\n"
 msgstr "Файл no. %1% ('%2%') не содержит дорожку с ID %3%, или на том, что трек не должен быть скопирован. Аргументом в пользу '--append-to' является недействительным.\n"
 
-#: src/merge/output_control.cpp:884
+#: src/merge/output_control.cpp:899
 msgid "The file no. %1% ('%2%') does not contain a track with the ID %3%, or that track is not to be copied. Therefore no track can be appended to it. The argument for '--append-to' was invalid.\n"
 msgstr "Файл no. %1% ('%2%') не содержит дорожку с ID %3%, или на том, что трек не должен быть скопирован. Поэтому дорожка не может быть приложены к нему. Аргументом в пользу '--append-to' является недействительным.\n"
 
-#: src/merge/output_control.cpp:820
+#: src/merge/output_control.cpp:835
 msgid "The file no. %1% ('%2%') is not being appended. The argument for '--append-to' was invalid.\n"
 msgstr "Файл no. %1% ('%2%') не является приложением. Аргументом в пользу '--append-to' является недействительным.\n"
 
@@ -5999,7 +6007,7 @@ msgstr "Формат разделить неправильный размер."
 msgid "The format of the split timecode/duration is invalid."
 msgstr "Формат разделить тайм-код/продолжительность является недействительным."
 
-#: src/merge/output_control.cpp:948
+#: src/merge/output_control.cpp:963
 msgid "The formats do not match."
 msgstr "Форматы не совпадают."
 
@@ -6021,12 +6029,12 @@ msgstr "Заголовок уже был написан."
 msgid "The height of the two tracks is different: %1% and %2%"
 msgstr "Высота двух дорожек является различной: %1% и %2%"
 
-#: src/mmg/tabs/input.cpp:610
+#: src/mmg/tabs/input.cpp:615
 #, c-format
 msgid "The input file '%s' does not contain any tracks."
 msgstr "Входной файл '%s' не содержит никаких дорожек."
 
-#: src/mmg/tabs/input.cpp:1218
+#: src/mmg/tabs/input.cpp:1223
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -6042,7 +6050,7 @@ msgstr ""
 "\n"
 "(Проблема возникла в tab_input::load(), #1)"
 
-#: src/mmg/tabs/input.cpp:1225
+#: src/mmg/tabs/input.cpp:1230
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -6058,7 +6066,7 @@ msgstr ""
 "\n"
 "(Проблема возникла в tab_input::load(), #2)"
 
-#: src/mmg/tabs/input.cpp:1238
+#: src/mmg/tabs/input.cpp:1243
 msgid ""
 "The job file could not have been parsed correctly.\n"
 "Either it is invalid / damaged, or you've just found\n"
@@ -6210,7 +6218,7 @@ msgstr "Опция '--meta-seek-size' больше не поддерживает
 msgid "The order of the various options is not important."
 msgstr "Для различных вариантов не имеет значения."
 
-#: src/merge/output_control.cpp:1347
+#: src/merge/output_control.cpp:1362
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "Выходной файл '%1%' не может быть открыт для записи (%2%).\n"
 
@@ -6260,7 +6268,7 @@ msgstr "Значение свойства не правильное целое �
 msgid "The property value is not a valid unsigned integer in '%1%'. %2%\n"
 msgstr "Значение свойства не правильное целое число без знака в '%1%'. %2%\n"
 
-#: src/merge/output_control.cpp:950
+#: src/merge/output_control.cpp:965
 msgid "The reason is unknown."
 msgstr "Причины этого пока неизвестны."
 
@@ -6309,11 +6317,11 @@ msgid "The size of attachment '%1%' is 0.\n"
 msgstr "Размер вложения '%1%' является 0.\n"
 
 #: src/merge/output_control.cpp:307
-#: src/merge/output_control.cpp:385
+#: src/merge/output_control.cpp:400
 msgid "The source file '%1%' could not be opened successfully, or retrieving its size by seeking to the end did not work.\n"
 msgstr "Исходный файл '%1%' не может быть открыт успешно, или получение его размер, поиск до конца не работает.\n"
 
-#: src/mmg/tabs/input.cpp:1305
+#: src/mmg/tabs/input.cpp:1310
 #, c-format
 msgid "The stretch setting for track nr. %s in file '%s' is invalid."
 msgstr "Установка протяжения для дорожки номер %s в файле '%s' недопустима."
@@ -6401,11 +6409,11 @@ msgstr "Тайм-коды для этого потока были сброшен
 msgid "The title for the whole movie."
 msgstr "Название для всего фильма."
 
-#: src/merge/output_control.cpp:894
+#: src/merge/output_control.cpp:909
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
 msgstr "Дорожка %1% от файла номер %2% (%3%) должна быть приложена не раз. Параметр для '--append-to' было недопустимо.\n"
 
-#: src/merge/output_control.cpp:719
+#: src/merge/output_control.cpp:734
 msgid "The track headers could not be rendered correctly. %1%\n"
 msgstr "Заголовки дорожки не могут быть выполнены правильно. %1%\n"
 
@@ -6413,11 +6421,11 @@ msgstr "Заголовки дорожки не могут быть выполн�
 msgid "The track number %1% does not have a valid CodecID.\n"
 msgstr "У номера дорожки %1% нет правильного CodecID.\n"
 
-#: src/merge/output_control.cpp:940
+#: src/merge/output_control.cpp:955
 msgid "The track number %1% from the file '%2%' can probably not be appended correctly to the track number %3% from the file '%4%': %5% Please make sure that the resulting file plays correctly the whole time. The author of this program will probably not give support for playback issues with the resulting file.\n"
 msgstr "Номер дорожки %1% от файла '%2%' не может вероятно быть приложен правильно к номеру дорожки %3% от файла '%4%': %5% Пожалуйста удостоверьтесь, что получающийся файл запускает правильно все время. Автор этой программы не будет вероятно оказывать поддержку для проблем воспроизведения с получающимся файлом.\n"
 
-#: src/merge/output_control.cpp:951
+#: src/merge/output_control.cpp:966
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
 msgstr "Номер дорожки %1% от файла '%2%' не может быть приложен к номеру дорожки %3% от файла '%4%'. %5%\n"
 
@@ -6426,7 +6434,7 @@ msgstr "Номер дорожки %1% от файла '%2%' не может бы
 msgid "The track number as used in the Block Header."
 msgstr "Номер дорожки как использующийся в Заголовке блока."
 
-#: src/merge/output_control.cpp:949
+#: src/merge/output_control.cpp:964
 msgid "The track parameters do not match."
 msgstr "Параметры дорожки не соответствуют."
 
@@ -6434,8 +6442,8 @@ msgstr "Параметры дорожки не соответствуют."
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "Ширина двух дорожек является различной: %1% и %2%"
 
-#: src/merge/output_control.cpp:814
-#: src/merge/output_control.cpp:824
+#: src/merge/output_control.cpp:829
+#: src/merge/output_control.cpp:839
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
 msgstr "Нет никакого файла с ID '%1%'. Параметр для '--append-to' было недопустимо.\n"
 
@@ -6576,7 +6584,7 @@ msgstr "Это свойство уникально. Больше экземпл�
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. %1%\n"
 msgstr "Это не должно было действительно случиться. Пространство, зарезервированное для первого мета элемента поиска дорожки, было слишком маленьким. %1%\n"
 
-#: src/merge/output_control.cpp:1536
+#: src/merge/output_control.cpp:1551
 msgid "This should REALLY not have happened. The space reserved for the first meta seek element was too small. Size needed: %1%. %2%\n"
 msgstr "Это не должно было действительно случиться. Пространство, зарезервированное для первого мета элемента поиска дорожки, было слишком маленьким. Размера необходимо: %1%. %2%\n"
 
@@ -6588,7 +6596,7 @@ msgstr "Это не должно было случиться. Пожалуйст
 msgid "This track contains SBR AAC/HE-AAC/AAC+ data. Only needed for AAC input files, because SBR AAC cannot be detected automatically for these files. Not needed for AAC tracks read from MP4 or Matroska files."
 msgstr "Эта дорожка содержит SBR AAC/HE-AAC/AAC + данные. Только необходимый для входных файлов AAC, потому что SBR AAC не может быть обнаружен автоматически для этих файлов. Не необходимый для чтения дорожек AAC от MP4 или файлов Matroska."
 
-#: src/mmg/tabs/input.cpp:943
+#: src/mmg/tabs/input.cpp:948
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
 msgstr "Этот трек не совместим с режимом WebM и не может быть включен."
 
@@ -7537,7 +7545,7 @@ msgstr ""
 "Пример: -00:05:23 позволил бы всем главам начинаться\n"
 "5 минут и на 23 секунды ранее чем теперь."
 
-#: src/mmg/tabs/input.cpp:1337
+#: src/mmg/tabs/input.cpp:1342
 #, c-format
 msgid ""
 "You haven't selected a number of frames per second for track %lld of file '%s'. mkvmerge cannot determine the number of frames per second for such files itself. Therefore you have to set this parameter yourself on the 'format specific options' page.\n"
@@ -7806,7 +7814,7 @@ msgstr "Конец файла"
 msgid "failed"
 msgstr "Не удалось"
 
-#: src/merge/output_control.cpp:519
+#: src/merge/output_control.cpp:534
 msgid "filelist_t not found for generic_packetizer_c. %1%\n"
 msgstr "filelist_t не найдется generic_packetizer_c. %1%\n"
 
@@ -8195,12 +8203,12 @@ msgstr "mkvmerge GUI готов"
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "mkvmerge GUI настройки (*.mmg)|*.mmg|%s"
 
-#: src/mmg/tabs/input.cpp:1270
-#: src/mmg/tabs/input.cpp:1295
-#: src/mmg/tabs/input.cpp:1306
-#: src/mmg/tabs/input.cpp:1316
-#: src/mmg/tabs/input.cpp:1328
-#: src/mmg/tabs/input.cpp:1384
+#: src/mmg/tabs/input.cpp:1275
+#: src/mmg/tabs/input.cpp:1300
+#: src/mmg/tabs/input.cpp:1311
+#: src/mmg/tabs/input.cpp:1321
+#: src/mmg/tabs/input.cpp:1333
+#: src/mmg/tabs/input.cpp:1389
 msgid "mkvmerge GUI: error"
 msgstr "mkvmerge GUI: ошибка"
 
@@ -8286,7 +8294,7 @@ msgstr "mm_text_io_c: UTF32_* не поддерживается в настоя�
 msgid "mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "mm_text_io_c::read_next_char(): Неверный UTF-8 символ. Первый байт: 0x%|1$02x|"
 
-#: src/mmg/options/mmg.cpp:295
+#: src/mmg/options/mmg.cpp:304
 msgid "mmg"
 msgstr "mmg"
 
@@ -8294,7 +8302,7 @@ msgstr "mmg"
 msgid "mmg debug output"
 msgstr "mmg вывод отладки"
 
-#: src/mmg/options/mmg.cpp:162
+#: src/mmg/options/mmg.cpp:167
 msgid "mmg options"
 msgstr "mmg опции"
 

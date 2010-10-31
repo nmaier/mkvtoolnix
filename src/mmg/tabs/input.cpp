@@ -498,6 +498,11 @@ tab_input::add_file(const wxString &file_name,
         cfg->Flush();
       }
 
+      if (   mdlg->options.disable_a_v_compression
+          && !track->appending
+          && (('v' == track->type) || ('a' == track->type)))
+        track->compression = wxU("none");
+
     } else if ((pos = output[i].Find(wxT("container:"))) != wxNOT_FOUND) {
       wxString container = output[i].Mid(pos + 11).BeforeFirst(wxT(' '));
       wxString info      = output[i].Mid(pos + 11).AfterFirst(wxT('[')).BeforeLast(wxT(']'));

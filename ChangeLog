@@ -1,5 +1,8 @@
 2010-10-31  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mmg: new feature: Added an option to disable extra compression
+	when adding tracks by default.
+
 	* mkvmerge: bug fix: Made file type detection stricter for MP3,
 	AC3 and AAC files. This prevents mis-detection of other file types
 	as one of these for certain files. Fix for bug 574.

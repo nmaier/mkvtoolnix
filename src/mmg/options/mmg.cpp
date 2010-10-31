@@ -97,6 +97,10 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
                                 "are shown at least once even if you turn "
                                 "this feature off."));
 
+  cb_disable_header_removal_compression = new wxCheckBox(this, ID_CB_DISABLE_HRC, Z("Disable header removal compression for audio and video tracks by default"));
+  cb_disable_header_removal_compression->SetToolTip(TIP("If checked mmg will set the 'compression' drop down box to 'none' for all audio and video tracks by default. "
+                                                        "The user can still change the compression setting afterwards."));
+
   cb_gui_debugging = new wxCheckBox(this, ID_CB_GUI_DEBUGGING, Z("Show mmg's debug window"));
   cb_gui_debugging->SetToolTip(TIP("Shows mmg's debug window in which debug messages will appear. "
                                    "This is only useful if you're helping the author debug a problem in mmg."));
@@ -143,6 +147,7 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   cb_warn_usage->SetValue(m_options.warn_usage);
   cb_gui_debugging->SetValue(m_options.gui_debugging);
   cb_set_delay_from_filename->SetValue(m_options.set_delay_from_filename);
+  cb_disable_header_removal_compression->SetValue(m_options.disable_a_v_compression);
 
   rb_odm_input_file->SetValue(m_options.output_directory_mode == ODM_FROM_FIRST_INPUT_FILE);
   rb_odm_previous->SetValue(m_options.output_directory_mode == ODM_PREVIOUS);
@@ -219,6 +224,9 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   siz_all->Add(cb_warn_usage, 0, wxLEFT, 5);
   siz_all->AddSpacer(5);
 
+  siz_all->Add(cb_disable_header_removal_compression, 0, wxLEFT, 5);
+  siz_all->AddSpacer(5);
+
   siz_all->Add(cb_gui_debugging, 0, wxLEFT, 5);
   siz_all->AddSpacer(5);
 
@@ -269,6 +277,7 @@ optdlg_mmg_tab::save_options() {
   m_options.warn_usage                    = cb_warn_usage->IsChecked();
   m_options.gui_debugging                 = cb_gui_debugging->IsChecked();
   m_options.set_delay_from_filename       = cb_set_delay_from_filename->IsChecked();
+  m_options.disable_a_v_compression       = cb_disable_header_removal_compression->IsChecked();
   m_options.output_directory_mode         = rb_odm_input_file->GetValue() ? ODM_FROM_FIRST_INPUT_FILE
                                           : rb_odm_previous->GetValue()   ? ODM_PREVIOUS
                                           :                                 ODM_FIXED;

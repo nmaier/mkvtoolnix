@@ -199,6 +199,7 @@ struct mmg_options_t {
   bool warn_usage;
   bool gui_debugging;
   bool set_delay_from_filename;
+  bool disable_a_v_compression;
   wxString priority;
   wxArrayString popular_languages;
 
@@ -212,6 +213,7 @@ struct mmg_options_t {
     , warn_usage(false)
     , gui_debugging(false)
     , set_delay_from_filename(false)
+    , disable_a_v_compression(false)
   {
     init_popular_languages();
   }
