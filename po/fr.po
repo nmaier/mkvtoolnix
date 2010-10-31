@@ -609,6 +609,10 @@ msgstr ""
 msgid " size is unknown"
 msgstr ""
 
+#: src/mmg/cli_options_dlg.cpp:110
+msgid "### Development hacks ###"
+msgstr ""
+
 #: src/mmg/cli_options_dlg.cpp:85
 msgid "### Global output control ###"
 msgstr ""
@@ -2256,7 +2260,7 @@ msgstr ""
 msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr ""
 
-#: src/input/r_matroska.cpp:1832 src/input/r_avi.cpp:351
+#: src/input/r_avi.cpp:351 src/input/r_matroska.cpp:1832
 #: src/input/r_ogm.cpp:1128
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr ""
@@ -2285,7 +2289,7 @@ msgstr ""
 msgid "Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:1575 src/input/r_avi.cpp:685
+#: src/input/r_avi.cpp:685 src/input/r_matroska.cpp:1575
 msgid "Could not find valid DTS headers in this track's first frames.\n"
 msgstr ""
 
@@ -5359,7 +5363,7 @@ msgid "The codec type '%1%' cannot be used in a WebM compliant file.\n"
 msgstr ""
 
 #: src/output/p_avc.cpp:203 src/output/p_kate.cpp:113
-#: src/output/p_passthrough.cpp:63 src/output/p_video.cpp:139
+#: src/output/p_video.cpp:139 src/output/p_passthrough.cpp:63
 #: src/output/p_textsubs.cpp:102
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr ""
@@ -6524,9 +6528,8 @@ msgstr ""
 msgid "Using the DTS demultiplexer.\n"
 msgstr ""
 
-#: src/input/r_wav.cpp:354 src/input/r_dts.cpp:114
-#: src/input/r_matroska.cpp:1572 src/input/r_avi.cpp:680
-#: src/input/r_mpeg_ps.cpp:1181
+#: src/input/r_wav.cpp:354 src/input/r_avi.cpp:680 src/input/r_dts.cpp:114
+#: src/input/r_matroska.cpp:1572 src/input/r_mpeg_ps.cpp:1181
 msgid "Using the DTS output module.\n"
 msgstr ""
 
@@ -6571,8 +6574,8 @@ msgstr ""
 msgid "Using the MPEG PS demultiplexer.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:1602 src/input/r_mp3.cpp:71
-#: src/input/r_avi.cpp:557 src/input/r_mpeg_ps.cpp:1171
+#: src/input/r_avi.cpp:557 src/input/r_matroska.cpp:1602
+#: src/input/r_mp3.cpp:71 src/input/r_mpeg_ps.cpp:1171
 #: src/input/r_ogm.cpp:1001 src/input/r_qtmp4.cpp:1537
 msgid "Using the MPEG audio output module.\n"
 msgstr ""
@@ -6590,13 +6593,13 @@ msgstr ""
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr ""
 
-#: src/input/r_avc.cpp:136 src/input/r_matroska.cpp:1844
-#: src/input/r_avi.cpp:348 src/input/r_mpeg_ps.cpp:1210
+#: src/input/r_avc.cpp:136 src/input/r_avi.cpp:348
+#: src/input/r_matroska.cpp:1844 src/input/r_mpeg_ps.cpp:1210
 #: src/input/r_ogm.cpp:1125
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:1461 src/input/r_avi.cpp:331
+#: src/input/r_avi.cpp:331 src/input/r_matroska.cpp:1461
 #: src/input/r_ogm.cpp:1229 src/input/r_qtmp4.cpp:1481
 msgid "Using the MPEG-4 part 2 video output module.\n"
 msgstr ""
@@ -6609,12 +6612,13 @@ msgstr ""
 msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr ""
 
-#: src/input/r_wav.cpp:395 src/input/r_matroska.cpp:1609
-#: src/input/r_avi.cpp:549 src/input/r_ogm.cpp:1020 src/input/r_qtmp4.cpp:1543
+#: src/input/r_wav.cpp:395 src/input/r_avi.cpp:549
+#: src/input/r_matroska.cpp:1609 src/input/r_ogm.cpp:1020
+#: src/input/r_qtmp4.cpp:1543
 msgid "Using the PCM output module.\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:1719 src/input/r_pgssup.cpp:72
+#: src/input/r_pgssup.cpp:72 src/input/r_matroska.cpp:1719
 msgid "Using the PGS output module.\n"
 msgstr ""
 
@@ -6706,7 +6710,7 @@ msgstr ""
 msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:1627 src/input/r_avi.cpp:734
+#: src/input/r_avi.cpp:734 src/input/r_matroska.cpp:1627
 #: src/input/r_ogm.cpp:1041
 msgid "Using the Vorbis output module.\n"
 msgstr ""
@@ -6735,9 +6739,9 @@ msgstr ""
 msgid "Using the passthrough output module for this %1% track.\n"
 msgstr ""
 
-#: src/input/r_ssa.cpp:71 src/input/r_usf.cpp:259
-#: src/input/r_matroska.cpp:1705 src/input/r_avi.cpp:405
-#: src/input/r_ogm.cpp:1072 src/input/r_srt.cpp:60
+#: src/input/r_ssa.cpp:71 src/input/r_usf.cpp:259 src/input/r_avi.cpp:405
+#: src/input/r_matroska.cpp:1705 src/input/r_ogm.cpp:1072
+#: src/input/r_srt.cpp:60
 msgid "Using the text subtitle output module.\n"
 msgstr ""
 
@@ -6749,7 +6753,7 @@ msgstr ""
 msgid "Using the video output module (FourCC: %|1$.4s|).\n"
 msgstr ""
 
-#: src/input/r_matroska.cpp:1483 src/input/r_avi.cpp:360
+#: src/input/r_avi.cpp:360 src/input/r_matroska.cpp:1483
 #: src/input/r_ogm.cpp:1234
 msgid "Using the video output module.\n"
 msgstr ""
@@ -6944,7 +6948,7 @@ msgstr ""
 msgid "Wrong file selected"
 msgstr ""
 
-#: src/common/kate.cpp:46 src/common/theora.cpp:35
+#: src/common/theora.cpp:35 src/common/kate.cpp:46
 msgid "Wrong header type: 0x%|1$02x| != 0x%|2$02x|"
 msgstr ""
 

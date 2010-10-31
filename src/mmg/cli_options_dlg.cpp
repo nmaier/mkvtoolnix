@@ -107,7 +107,7 @@ cli_options_dlg::init_cli_option_list() {
                                              "so that all timecodes and durations have a precision of one sample. "
                                              "This causes bigger overhead but allows precise seeking and extraction. "
                                              "If the magical value -1 is used then mkvmerge will use sample precision even if a video track is present.")));
-  all_cli_options.push_back(cli_option_t(wxU("### Development hacks ###"),
+  all_cli_options.push_back(cli_option_t(  Z("### Development hacks ###"),
                                            Z("Options meant ONLY for developpers. Do not use them. If something is considered to be an officially supported option "
                                              "then it's NOT in this list!")));
   all_cli_options.push_back(cli_option_t(wxU("--engage space_after_chapters"),

@@ -723,6 +723,10 @@ msgstr " 大小 %1%"
 msgid " size is unknown"
 msgstr "大小不明"
 
+#: src/mmg/cli_options_dlg.cpp:110
+msgid "### Development hacks ###"
+msgstr ""
+
 #: src/mmg/cli_options_dlg.cpp:85
 msgid "### Global output control ###"
 msgstr "### 整體輸出控制 ###"
@@ -2469,8 +2473,8 @@ msgstr "無法建立指定的檔案。"
 msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "無法解碼以 Base64 編碼的資料 - 似乎是不正常的。"
 
-#: src/input/r_matroska.cpp:1832
 #: src/input/r_avi.cpp:351
+#: src/input/r_matroska.cpp:1832
 #: src/input/r_ogm.cpp:1128
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "無法從該 AVC/h.264 軌道提取解碼器特有設定資料 (AVCC)。\n"
@@ -2500,8 +2504,8 @@ msgstr "在第一個 MPEG-4 part 2 視訊畫格中找不到編解碼器設定資
 msgid "Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n"
 msgstr "找不到 Ogg 的下一頁。這表示 Ogg/Ogm 檔案可能已損壞。將試著繼續。\n"
 
-#: src/input/r_matroska.cpp:1575
 #: src/input/r_avi.cpp:685
+#: src/input/r_matroska.cpp:1575
 msgid "Could not find valid DTS headers in this track's first frames.\n"
 msgstr "在這軌道的第一個畫格裡找不到正確的 DTS 表頭。\n"
 
@@ -5704,8 +5708,8 @@ msgstr "此編解碼器類型「%1%」無法用在 WebM 遵循檔。\n"
 
 #: src/output/p_avc.cpp:203
 #: src/output/p_kate.cpp:113
-#: src/output/p_passthrough.cpp:63
 #: src/output/p_video.cpp:139
+#: src/output/p_passthrough.cpp:63
 #: src/output/p_textsubs.cpp:102
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "編解碼器專有資料不符 (長度: %1% 與 %2%)。"
@@ -6979,9 +6983,9 @@ msgid "Using the DTS demultiplexer.\n"
 msgstr "使用 DTS 分離器。\n"
 
 #: src/input/r_wav.cpp:354
+#: src/input/r_avi.cpp:680
 #: src/input/r_dts.cpp:114
 #: src/input/r_matroska.cpp:1572
-#: src/input/r_avi.cpp:680
 #: src/input/r_mpeg_ps.cpp:1181
 msgid "Using the DTS output module.\n"
 msgstr "使用 DTS 輸出模組。\n"
@@ -7029,9 +7033,9 @@ msgstr "使用 MPEG ES 分離器。\n"
 msgid "Using the MPEG PS demultiplexer.\n"
 msgstr "使用 MPEG PS 分離器。\n"
 
+#: src/input/r_avi.cpp:557
 #: src/input/r_matroska.cpp:1602
 #: src/input/r_mp3.cpp:71
-#: src/input/r_avi.cpp:557
 #: src/input/r_mpeg_ps.cpp:1171
 #: src/input/r_ogm.cpp:1001
 #: src/input/r_qtmp4.cpp:1537
@@ -7055,15 +7059,15 @@ msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "使用 MPEG-4 part 10 (AVC) 視訊輸出模組。\n"
 
 #: src/input/r_avc.cpp:136
-#: src/input/r_matroska.cpp:1844
 #: src/input/r_avi.cpp:348
+#: src/input/r_matroska.cpp:1844
 #: src/input/r_mpeg_ps.cpp:1210
 #: src/input/r_ogm.cpp:1125
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "使用 MPEG-4 part 10 ES 視訊輸出模組。\n"
 
-#: src/input/r_matroska.cpp:1461
 #: src/input/r_avi.cpp:331
+#: src/input/r_matroska.cpp:1461
 #: src/input/r_ogm.cpp:1229
 #: src/input/r_qtmp4.cpp:1481
 msgid "Using the MPEG-4 part 2 video output module.\n"
@@ -7078,15 +7082,15 @@ msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr "使用 OGG/OGM 分離器。\n"
 
 #: src/input/r_wav.cpp:395
-#: src/input/r_matroska.cpp:1609
 #: src/input/r_avi.cpp:549
+#: src/input/r_matroska.cpp:1609
 #: src/input/r_ogm.cpp:1020
 #: src/input/r_qtmp4.cpp:1543
 msgid "Using the PCM output module.\n"
 msgstr "使用 PCM 輸出模組。\n"
 
-#: src/input/r_matroska.cpp:1719
 #: src/input/r_pgssup.cpp:72
+#: src/input/r_matroska.cpp:1719
 msgid "Using the PGS output module.\n"
 msgstr "使用 PGS 輸出模組。\n"
 
@@ -7182,8 +7186,8 @@ msgstr "使用 VobSub 字幕輸出模組 (語言: %1%)。\n"
 msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
 msgstr "使用 VobSub 字幕讀取器 (SUB 檔「%1%」)。\n"
 
-#: src/input/r_matroska.cpp:1627
 #: src/input/r_avi.cpp:734
+#: src/input/r_matroska.cpp:1627
 #: src/input/r_ogm.cpp:1041
 msgid "Using the Vorbis output module.\n"
 msgstr "使用 Vorbis 輸出模組。\n"
@@ -7215,8 +7219,8 @@ msgstr "對軌道 %1% 使用呈遞輸出模組。\n"
 
 #: src/input/r_ssa.cpp:71
 #: src/input/r_usf.cpp:259
-#: src/input/r_matroska.cpp:1705
 #: src/input/r_avi.cpp:405
+#: src/input/r_matroska.cpp:1705
 #: src/input/r_ogm.cpp:1072
 #: src/input/r_srt.cpp:60
 msgid "Using the text subtitle output module.\n"
@@ -7231,8 +7235,8 @@ msgstr "使用視訊輸出模組 (FourCC: %1%)。\n"
 msgid "Using the video output module (FourCC: %|1$.4s|).\n"
 msgstr "使用視訊輸出模組 (FourCC: %|1$.4s|)。\n"
 
-#: src/input/r_matroska.cpp:1483
 #: src/input/r_avi.cpp:360
+#: src/input/r_matroska.cpp:1483
 #: src/input/r_ogm.cpp:1234
 msgid "Using the video output module.\n"
 msgstr "使用視訊輸出模組。\n"
@@ -7441,8 +7445,8 @@ msgstr "選擇錯誤的檔案"
 msgid "Wrong file selected"
 msgstr "選擇錯誤的檔案"
 
-#: src/common/kate.cpp:46
 #: src/common/theora.cpp:35
+#: src/common/kate.cpp:46
 msgid "Wrong header type: 0x%|1$02x| != 0x%|2$02x|"
 msgstr "錯誤的表頭類型: 0x%|1$02x| != 0x%|2$02x|"
 
