@@ -169,8 +169,10 @@ rule '.hhk' => '.hhc' do |t|
 end
 
 # man pages from DocBook XML
-rule '.1' => '.xml' do |t|
-  runq "XSLTPROC #{t.source}", "#{c(:XSLTPROC)} #{c(:XSLTPROC_FLAGS)} -o #{t.name} #{c(:DOCBOOK_MANPAGES_STYLESHEET)} #{t.sources.join(" ")}"
+if c?(:XSLTPROC_WORKS)
+  rule '.1' => '.xml' do |t|
+    runq "XSLTPROC #{t.source}", "#{c(:XSLTPROC)} #{c(:XSLTPROC_FLAGS)} -o #{t.name} #{c(:DOCBOOK_MANPAGES_STYLESHEET)} #{t.sources.join(" ")}"
+  end
 end
 
 # Qt files
