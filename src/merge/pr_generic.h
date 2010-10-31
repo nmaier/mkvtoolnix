@@ -193,6 +193,7 @@ public:
   std::string m_fname;
   bool m_no_audio, m_no_video, m_no_subs, m_no_buttons, m_no_track_tags;
   std::vector<int64_t> m_atracks, m_vtracks, m_stracks, m_btracks, m_track_tags;
+  bool m_disable_multi_file;
 
   // Options used by the packetizers.
   unsigned char *m_private_data;

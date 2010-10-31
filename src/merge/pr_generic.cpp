@@ -1513,6 +1513,7 @@ track_info_c::track_info_c()
   , m_no_subs(false)
   , m_no_buttons(false)
   , m_no_track_tags(false)
+  , m_disable_multi_file(false)
   , m_private_data(NULL)
   , m_private_size(0)
   , m_aspect_ratio(0.0)
@@ -1572,6 +1573,7 @@ track_info_c::operator =(const track_info_c &src) {
   m_stracks                    = src.m_stracks;
   m_vtracks                    = src.m_vtracks;
   m_track_tags                 = src.m_track_tags;
+  m_disable_multi_file         = src.m_disable_multi_file;
 
   m_private_size               = src.m_private_size;
   m_private_data               = (unsigned char *)safememdup(src.m_private_data, m_private_size);

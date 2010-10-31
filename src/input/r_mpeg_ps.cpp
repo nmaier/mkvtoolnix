@@ -75,7 +75,7 @@ mpeg_ps_reader_c::mpeg_ps_reader_c(track_info_c &_ti)
 void
 mpeg_ps_reader_c::init_reader() {
   try {
-    io   = mm_multi_file_io_c::open_multi(m_ti.m_fname);
+    io   = mm_multi_file_io_c::open_multi(m_ti.m_fname, m_ti.m_disable_multi_file);
     size = io->get_size();
 
   } catch (...) {

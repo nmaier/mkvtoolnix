@@ -487,6 +487,25 @@ $ mkvmerge \-o full\&.mkv file1\&.mkv +file2\&.mkv
 .\}
 .RE
 .PP
+\fB+\fR
+.RS 4
+Normally mkvmerge looks for files in the same directory as an input file that have the same base name and only differ in their running number (e\&.g\&. \*(AqVTS_01_1\&.VOB\*(Aq, \*(AqVTS_01_2\&.VOB\*(Aq, \*(AqVTS_01_3\&.VOB\*(Aq etc)\&. This option, a single \*(Aq=\*(Aq, causes mkvmerge not to look for those additional files\&.
+.sp
+The \*(Aq=\*(Aq can also be put in front of the next file name\&. Therefore the following two commands are equivalent:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o full\&.mkv = file1\&.mkv
+$ mkvmerge \-o full\&.mkv =file1\&.mkv
+     
+.fi
+.if n \{\
+.RE
+.\}
+.RE
+.PP
 Attachment support (more global options):
 .PP
 \fB\-\-attachment\-description\fR \fIdescription\fR

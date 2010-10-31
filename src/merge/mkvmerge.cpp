@@ -367,9 +367,14 @@ list_file_types() {
    and calls its identify function.
 */
 static void
-identify(const std::string &filename) {
+identify(std::string &filename) {
   track_info_c ti;
   filelist_t file;
+
+  if ('=' == filename[0]) {
+    ti.m_disable_multi_file = true;
+    filename                = filename.substr(1);
+  }
 
   verbose             = 0;
   g_suppress_warnings = true;
@@ -2061,6 +2066,9 @@ parse_args(std::vector<std::string> args) {
     else if (this_arg == "+")
       append_next_file = true;
 
+    else if (this_arg == "=")
+      ti->m_disable_multi_file = true;
+
     // The argument is an input file.
     else {
       if (g_outfile == this_arg)
@@ -2083,6 +2091,11 @@ parse_args(std::vector<std::string> args) {
       if ('+' == this_arg[0]) {
         append_next_file = true;
         file.name        = this_arg.substr(1);
+
+      } else if ('=' == this_arg[0]) {
+        ti->m_disable_multi_file = true;
+        file.name                = this_arg.substr(1);
+
       } else
         file.name        = this_arg;
 
