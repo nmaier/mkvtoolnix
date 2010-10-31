@@ -151,7 +151,7 @@ cli_options_dlg::init_cli_option_list() {
 void
 cli_options_dlg::on_option_changed(wxCommandEvent &evt) {
   int i = cob_option->GetSelection();
-  if (i > 0)
+  if (i >= 0)
     tc_description->SetValue(all_cli_options[i].description);
 }
 
