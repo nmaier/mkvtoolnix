@@ -2,6 +2,9 @@
 
 	* Released v4.4.0.
 
+	* build system: bug fix: Installation no longer fails if xsltproc
+	is available but the DocBook stylesheets aren't. Fix for bug 575.
+
 	* mkvmerge: new feature: If the name of an input file starts with
 	'=' then mkvmerge will not try to open other files with the same
 	name (e.g. 'VTS_01_1.VOB', 'VTS_01_2.VOB', 'VTS_01_3.VOB') from
