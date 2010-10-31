@@ -191,69 +191,46 @@ decode_mp3_header(const unsigned char *buf,
   }
 
   if ((buf[0] == 'T') && (buf[1] == 'A') && (buf[2] == 'G')) {
-    h->is_tag = true;
+    h->is_tag    = true;
     h->framesize = 128;
     return;
   }
 
   for (i = 0, header = 0; i < 4; i++) {
     header <<= 8;
-    header |= buf[i];
+    header  |= buf[i];
   }
 
-  h->is_tag = false;
   h->version = (header >> 19) & 3;
+  h->layer   = 4 - ((header >> 17) & 3);
+
   if (h->version == 1)
     mxerror("Invalid MP3 header value for the version.\n");
-  if (h->version == 0)
-    h->version = 3;             // Well... 2.5 actually
-  else if (h->version == 3)
-    h->version = 1;
-
-  h->layer = 4 - ((header >> 17) & 3);
   if (h->layer == 4)
     mxerror("Invalid MP3 header value for the layer.\n");
 
-  h->protection = ((header >> 16) & 1) ^ 1;
+  h->is_tag              = false;
+  h->version             = 0 == h->version ? 3 : 3 == h->version ? 1 : h->version;
+  h->protection          = ((header >> 16) & 1) ^ 1;
+  h->bitrate_index       = (header >> 12) & 15;
+  h->bitrate             = 1 == h->version ? mp3_bitrates_mpeg1[h->layer - 1][h->bitrate_index] : mp3_bitrates_mpeg2[h->layer - 1][h->bitrate_index];
+  h->sampling_frequency  = mp3_sampling_freqs[h->version - 1][(header >> 10) & 3];
+  h->padding             = (header >> 9) & 1;
+  h->is_private          = (header >> 8) & 1;
+  h->channel_mode        = (header >> 6) & 3;
+  h->channels            = 3 == h->channel_mode ? 1 : 2;
+  h->mode_extension      = (header >> 4) & 3;
+  h->copyright           = (header >> 3) & 1;
+  h->original            = (header >> 2) & 1;
+  h->emphasis            = header & 3;
+  h->samples_per_channel = mp3_samples_per_channel[h->version - 1][h->layer - 1];
 
-  h->bitrate_index = (header >> 12) & 15;
-  if (h->version == 1)          // MPEG-1
-    h->bitrate = mp3_bitrates_mpeg1[h->layer - 1][h->bitrate_index];
-  else                          // MPEG-2 or MPEG-2.5
-    h->bitrate = mp3_bitrates_mpeg2[h->layer - 1][h->bitrate_index];
-
-  h->sampling_frequency =
-    mp3_sampling_freqs[h->version - 1][(header >> 10) & 3];
-
-  h->padding = (header >> 9) & 1;
-  h->is_private = (header >> 8) & 1;
-
-  h->channel_mode = (header >> 6) & 3;
-  if (h->channel_mode == 3)
-    h->channels = 1;
-  else
-    h->channels = 2;
-
-  h->mode_extension = (header >> 4) & 3;
-  h->copyright = (header >> 3) & 1;
-  h->original = (header >> 2) & 1;
-  h->emphasis = header & 3;
-
-  if (h->layer == 3) {
-    if (h->version == 1)
-      h->framesize = 144000 * h->bitrate / h->sampling_frequency + h->padding;
-    else
-      h->framesize = 72000 * h->bitrate / h->sampling_frequency + h->padding;
-
-  } else if (h->layer == 2)
+  if (h->layer == 3)
+    h->framesize = (1 == h->version ? 144000 : 72000) * h->bitrate / h->sampling_frequency + h->padding;
+  else if (h->layer == 2)
     h->framesize = 144000 * h->bitrate / h->sampling_frequency + h->padding;
-
   else
-    h->framesize = (12000 * h->bitrate / h->sampling_frequency +
-                    h->padding) * 4;
-
-  h->samples_per_channel =
-    mp3_samples_per_channel[h->version - 1][h->layer - 1];
+    h->framesize = (12000 * h->bitrate / h->sampling_frequency + h->padding) * 4;
 }
 
 int
@@ -289,10 +266,10 @@ find_consecutive_mp3_headers(const unsigned char *buf,
       pos = find_mp3_header(&buf[base + offset], size - base - offset);
       if (pos == 0) {
         decode_mp3_header(&buf[base + offset], &new_header);
-        if ((new_header.version == mp3header.version) &&
-            (new_header.layer == mp3header.layer) &&
-            (new_header.channels == mp3header.channels) &&
-            (new_header.sampling_frequency == mp3header.sampling_frequency)) {
+        if (   (new_header.version            == mp3header.version)
+            && (new_header.layer              == mp3header.layer)
+            && (new_header.channels           == mp3header.channels)
+            && (new_header.sampling_frequency == mp3header.sampling_frequency)) {
           mxverb(4, boost::format("find_cons_mp3_h: found good header %1%\n") % i);
           offset += new_header.framesize;
           continue;
@@ -305,7 +282,7 @@ find_consecutive_mp3_headers(const unsigned char *buf,
       return base;
     base++;
     offset = 0;
-    pos = find_mp3_header(&buf[base], size - base);
+    pos    = find_mp3_header(&buf[base], size - base);
     if (pos == -1)
       return -1;
     decode_mp3_header(&buf[base + pos], &mp3header);
