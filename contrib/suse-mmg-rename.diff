@@ -1,9 +1,8 @@
-diff -ur mkvtoolnix-4.2.0.orig/share/desktop/mkvmergeGUI.desktop mkvtoolnix-4.2.0/share/desktop/mkvmergeGUI.desktop
---- mkvtoolnix-4.2.0.orig/share/desktop/mkvmergeGUI.desktop	2010-08-01 13:39:31.000000000 +0200
-+++ mkvtoolnix-4.2.0/share/desktop/mkvmergeGUI.desktop	2010-08-01 14:21:45.176881240 +0200
-@@ -6,7 +6,7 @@
- GenericName[es]=Creador de ficheros MKV
+--- mkvtoolnix-4.4.0.orig/share/desktop/mkvmergeGUI.desktop	2010-10-31 15:42:16.000000000 +0100
++++ mkvtoolnix-4.4.0/share/desktop/mkvmergeGUI.desktop	2010-10-31 20:04:07.076391913 +0100
+@@ -7,7 +7,7 @@
  GenericName[fr]=Créateur de fichiers MKV
+ GenericName[zh_TW]=MKV 檔製作軟體
  Icon=mkvmergeGUI
 -Exec=mmg
 +Exec=mkvmerge-gui
