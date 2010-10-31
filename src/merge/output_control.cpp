@@ -352,8 +352,8 @@ get_file_type(filelist_t &file) {
   else {
     // File types which are the same in raw format and in other container formats.
     // Detection requires 20 or more consecutive packets.
-    static const int s_probe_sizes[]                          = { 32 * 1024, 64 * 1024, 128 * 1024, 256 * 1024, 512 * 1024, 1024 * 1024, 0 };
-    static const int s_probe_num_required_consecutive_packets = 20;
+    static const int s_probe_sizes[]                          = { 128 * 1024, 256 * 1024, 512 * 1024, 1024 * 1024, 0 };
+    static const int s_probe_num_required_consecutive_packets = 64;
 
     int i;
     for (i = 0; (0 != s_probe_sizes[i]) && (FILE_TYPE_IS_UNKNOWN == type); ++i)
@@ -376,6 +376,21 @@ get_file_type(filelist_t &file) {
   else if (avc_es_reader_c::probe_file(io, size))
     type = FILE_TYPE_AVC_ES;
   else {
+    // File types which are the same in raw format and in other container formats.
+    // Detection requires 20 or more consecutive packets.
+    static const int s_probe_sizes[]                          = { 32 * 1024, 64 * 1024, 128 * 1024, 256 * 1024, 512 * 1024, 1024 * 1024, 0 };
+    static const int s_probe_num_required_consecutive_packets = 20;
+
+    int i;
+    for (i = 0; (0 != s_probe_sizes[i]) && (FILE_TYPE_IS_UNKNOWN == type); ++i)
+      if (mp3_reader_c::probe_file(io, size, s_probe_sizes[i], s_probe_num_required_consecutive_packets))
+        type = FILE_TYPE_MP3;
+      else if (ac3_reader_c::probe_file(io, size, s_probe_sizes[i], s_probe_num_required_consecutive_packets))
+        type = FILE_TYPE_AC3;
+      else if (aac_reader_c::probe_file(io, size, s_probe_sizes[i], s_probe_num_required_consecutive_packets))
+        type = FILE_TYPE_AAC;
+  }
+  if (FILE_TYPE_IS_UNKNOWN == type) {
     // All text file types (subtitles).
     mm_text_io_c *text_io = NULL;
     try {
