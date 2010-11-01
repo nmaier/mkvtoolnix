@@ -1,3 +1,9 @@
+2010-11-01  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mmg: bug fix: On Mac OS X the application type is set to a
+	foreground application preventing issues like the GUI never
+	getting focus.
+
 2010-10-31  Moritz Bunkus  <moritz@bunkus.org>
 
 	* Released v4.4.0.
