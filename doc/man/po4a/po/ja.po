@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.9.9\n"
 "POT-Creation-Date: 2010-10-31 13:38+0100\n"
-"PO-Revision-Date: 2010-09-24 08:49+0200\n"
+"PO-Revision-Date: 2010-11-01 06:48+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: none\n"
 "MIME-Version: 1.0\n"
@@ -2357,7 +2357,7 @@ msgid ""
 "commands are equivalent:"
 msgstr ""
 "'+'一文字を指定すると、次に指定されたファイルは追加ではなく結合されま"
-"す。'+'は次のファイル名の直前に置くこともできます。よって、次の二つのコマンド"
+"す。'+'は次のファイル名の直前に置くこともできます。よって、次の2つのコマンド"
 "は等価です。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><screen>
@@ -2380,36 +2380,29 @@ msgid ""
 "'VTS_01_1.VOB', 'VTS_01_2.VOB', 'VTS_01_3.VOB' etc). This option, a single "
 "'=', causes mkvmerge not to look for those additional files."
 msgstr ""
+"通常mkvmergeは、入力ファイルと同じディレクトリにあり、同じ基底名を持ち、通し番号"
+"だけが異なるファイル（例：'VTS_01_1.VOB', 'VTS_01_2.VOB', 'VTS_01_3.VOB' etc）"
+"を検索します。この'='一文字のオプションを使うと、mkvmergeはそういった追加ファイルを"
+"検索しません。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:578
-#, fuzzy
-#| msgid ""
-#| "A single '+' causes the next file to be appended instead of added. The "
-#| "'+' can also be put in front of the next file name. Therefore the "
-#| "following two commands are equivalent:"
 msgid ""
 "The '=' can also be put in front of the next file name. Therefore the "
 "following two commands are equivalent:"
 msgstr ""
-"'+'一文字を指定すると、次に指定されたファイルは追加ではなく結合されま"
-"す。'+'は次のファイル名の直前に置くこともできます。よって、次の二つのコマンド"
+"'='は次のファイル名の直前に置くこともできます。よって、次の2つのコマンド"
 "は等価です。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><screen>
 #: doc/man/mkvmerge.xml:582
-#, fuzzy, no-wrap
-#| msgid ""
-#| "$ mkvmerge -o full.mkv file1.mkv + file2.mkv\n"
-#| "$ mkvmerge -o full.mkv file1.mkv +file2.mkv\n"
-#| "     "
 msgid ""
 "$ mkvmerge -o full.mkv = file1.mkv\n"
 "$ mkvmerge -o full.mkv =file1.mkv\n"
 "     "
 msgstr ""
-"$ mkvmerge -o full.mkv file1.mkv + file2.mkv\n"
-"$ mkvmerge -o full.mkv file1.mkv +file2.mkv\n"
+"$ mkvmerge -o full.mkv file1.mkv = file2.mkv\n"
+"$ mkvmerge -o full.mkv file1.mkv =file2.mkv\n"
 "     "
 
 #. type: Content of: <refentry><refsect1><para>
@@ -2507,7 +2500,7 @@ msgstr ""
 "ばなりません。二つのオプションの違いは、出力ファイルを分割する際に、"
 "<option>--attach-file</option>では全ての出力ファイルに添付されますが、"
 "<option>--attach-file-once</option>では最初に作成されたファイルにしか添付され"
-"ない点です。分割が使用されない場合、二つは等価です。"
+"ない点です。分割が使用されない場合、2つは等価です。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvmerge.xml:644
