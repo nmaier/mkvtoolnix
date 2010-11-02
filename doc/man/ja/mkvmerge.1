@@ -334,7 +334,7 @@ mkvmergeが二つめのファイル(以後\*(Aqfile2\*(Aqと呼ぶ)のトラッ�
 .PP
 \fB+\fR
 .RS 4
-\*(Aq+\*(Aq一文字を指定すると、次に指定されたファイルは追加ではなく結合されます。\*(Aq+\*(Aqは次のファイル名の直前に置くこともできます。よって、次の二つのコマンドは等価です。
+\*(Aq+\*(Aq一文字を指定すると、次に指定されたファイルは追加ではなく結合されます。\*(Aq+\*(Aqは次のファイル名の直前に置くこともできます。よって、次の2つのコマンドは等価です。
 .sp
 .if n \{\
 .RS 4
@@ -351,16 +351,16 @@ $ mkvmerge \-o full\&.mkv file1\&.mkv +file2\&.mkv
 .PP
 \fB+\fR
 .RS 4
-Normally mkvmerge looks for files in the same directory as an input file that have the same base name and only differ in their running number (e\&.g\&. \*(AqVTS_01_1\&.VOB\*(Aq, \*(AqVTS_01_2\&.VOB\*(Aq, \*(AqVTS_01_3\&.VOB\*(Aq etc)\&. This option, a single \*(Aq=\*(Aq, causes mkvmerge not to look for those additional files\&.
+通常mkvmergeは、入力ファイルと同じディレクトリにあり、同じ基底名を持ち、通し番号だけが異なるファイル（例：\*(AqVTS_01_1\&.VOB\*(Aq, \*(AqVTS_01_2\&.VOB\*(Aq, \*(AqVTS_01_3\&.VOB\*(Aq etc）を検索します。この\*(Aq=\*(Aq一文字のオプションを使うと、mkvmergeはそういった追加ファイルを検索しません。
 .sp
-The \*(Aq=\*(Aq can also be put in front of the next file name\&. Therefore the following two commands are equivalent:
+\*(Aq=\*(Aqは次のファイル名の直前に置くこともできます。よって、次の2つのコマンドは等価です。
 .sp
 .if n \{\
 .RS 4
 .\}
 .nf
-$ mkvmerge \-o full\&.mkv = file1\&.mkv
-$ mkvmerge \-o full\&.mkv =file1\&.mkv
+$ mkvmerge \-o full\&.mkv file1\&.mkv = file2\&.mkv
+$ mkvmerge \-o full\&.mkv file1\&.mkv =file2\&.mkv
      
 .fi
 .if n \{\
@@ -388,7 +388,7 @@ $ mkvmerge \-o full\&.mkv =file1\&.mkv
 \fB\-\-attach\-file\fR \fIfile\-name\fR, \fB\-\-attach\-file\-once\fR \fIfile\-name\fR
 .RS 4
 
-Matroska(TM)ファイルの内部に添付ファイルを作成します。これらのオプションを使用するには、MIMEタイプをこれらのオプションより前に指定しなければなりません。二つのオプションの違いは、出力ファイルを分割する際に、\fB\-\-attach\-file\fRでは全ての出力ファイルに添付されますが、\fB\-\-attach\-file\-once\fRでは最初に作成されたファイルにしか添付されない点です。分割が使用されない場合、二つは等価です。
+Matroska(TM)ファイルの内部に添付ファイルを作成します。これらのオプションを使用するには、MIMEタイプをこれらのオプションより前に指定しなければなりません。二つのオプションの違いは、出力ファイルを分割する際に、\fB\-\-attach\-file\fRでは全ての出力ファイルに添付されますが、\fB\-\-attach\-file\-once\fRでは最初に作成されたファイルにしか添付されない点です。分割が使用されない場合、2つは等価です。
 .sp
 
 \fBmkvextract\fR(1)でMatroska(TM)ファイルから添付ファイルを抽出することができます。

@@ -473,16 +473,16 @@ $ mkvmerge \-o 完整\&.mkv 文件1\&.mkv +文件2\&.mkv
 .PP
 \fB+\fR
 .RS 4
-Normally mkvmerge looks for files in the same directory as an input file that have the same base name and only differ in their running number (e\&.g\&. \*(AqVTS_01_1\&.VOB\*(Aq, \*(AqVTS_01_2\&.VOB\*(Aq, \*(AqVTS_01_3\&.VOB\*(Aq etc)\&. This option, a single \*(Aq=\*(Aq, causes mkvmerge not to look for those additional files\&.
+通常情况下 mkvmerge 将在输入文件所在的目录中查找基本名称相同，仅在连续的数字方面有差异的文件 (如 \*(AqVTS_01_1\&.VOB\*(Aq, \*(AqVTS_01_2\&.VOB\*(Aq, \*(AqVTS_01_3\&.VOB\*(Aq 等等)。此选项，单个 \*(Aq=\*(Aq，将令 mkvmerge 不查找这些额外的文件。
 .sp
-The \*(Aq=\*(Aq can also be put in front of the next file name\&. Therefore the following two commands are equivalent:
+\*(Aq=\*(Aq 也可以放在下一个文件名的前面。因此以下两条命令等效:
 .sp
 .if n \{\
 .RS 4
 .\}
 .nf
-$ mkvmerge \-o full\&.mkv = file1\&.mkv
-$ mkvmerge \-o full\&.mkv =file1\&.mkv
+$ mkvmerge \-o 完整\&.mkv = 文件1\&.mkv
+$ mkvmerge \-o 完整\&.mkv =文件1\&.mkv
      
 .fi
 .if n \{\
