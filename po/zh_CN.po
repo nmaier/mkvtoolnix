@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: zh\n"
 "Report-Msgid-Bugs-To: Dean Lee <xslidian@gmail.com>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-09-30 00:29+0800\n"
-"Last-Translator: Dean Lee <xslidian@lidian.info>\n"
+"PO-Revision-Date: 2010-11-02 17:51+0800\n"
+"Last-Translator: Dean Lee <xslidian@gmail.com>\n"
 "Language-Team: Chinese Simplified <xslidian@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -720,7 +720,7 @@ msgstr " 尺寸未知"
 
 #: src/mmg/cli_options_dlg.cpp:110
 msgid "### Development hacks ###"
-msgstr ""
+msgstr "### 开发中 hack ###"
 
 #: src/mmg/cli_options_dlg.cpp:85
 msgid "### Global output control ###"
@@ -2793,7 +2793,7 @@ msgstr "Dirac"
 
 #: src/mmg/options/mmg.cpp:100
 msgid "Disable header removal compression for audio and video tracks by default"
-msgstr ""
+msgstr "默认禁用音频与视频轨道的去头压缩"
 
 #: src/mmg/jobs.cpp:479
 msgid "Disable the selected job(s) and sets their status to 'done'"
@@ -3505,7 +3505,7 @@ msgstr "如果选中该项，且输出文件名尚未设置，mmg 将会自动�
 
 #: src/mmg/options/mmg.cpp:101
 msgid "If checked mmg will set the 'compression' drop down box to 'none' for all audio and video tracks by default. The user can still change the compression setting afterwards."
-msgstr ""
+msgstr "若选中，mmg 将默认将音频与视频轨道的“压缩”下拉菜单设为“无”。此后用户仍可更改压缩设置。"
 
 #: src/mmg/options/mmg.cpp:95
 msgid "If checked mmg will warn if it thinks that you're using it incorrectly. Such warnings are shown at least once even if you turn this feature off."
@@ -8616,62 +8616,91 @@ msgstr "是"
 #~ msgstr ""
 #~ "                                        英文语言名 | ISO639-2 代码 | ISO639-1 代码\n"
 #~ "---------------------------------------------------+---------------+--------------\n"
+
 #~ msgid "%1% at %2%"
 #~ msgstr "%1% 于 %2%"
+
 #~ msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|\n"
 #~ msgstr "%1% 帧, 轨道 %2%, 时间码 %3% (%4%), 尺寸 %5%, adler 0x%|6$08x|\n"
+
 #~ msgid "'%1%' is only allowed for chapter extraction.\n"
 #~ msgstr "'%1%' 仅限提取章节时使用。\n"
+
 #~ msgid "'--blockadd' is only allowed when extracting tracks.\n"
 #~ msgstr "'--blockadd' 仅允许在提取轨道时使用。\n"
+
 #~ msgid "'--blockadd' lacks a level.\n"
 #~ msgstr "'--blockadd' 缺层级。\n"
+
 #~ msgid "'--cuesheet' is only allowed when extracting tracks.\n"
 #~ msgstr "'--cuesheet' 只能在提取轨道时使用。\n"
+
 #~ msgid "'--fullraw' is only allowed when extracting tracks.\n"
 #~ msgstr "'--fullraw' 只能在提取轨道时使用。\n"
+
 #~ msgid "'--no-ogg' is only allowed when extracting tracks.\n"
 #~ msgstr "'--no-ogg' 只能在提取轨道时使用。\n"
+
 #~ msgid "'--raw' is only allowed when extracting tracks.\n"
 #~ msgstr "'--raw' 只能在提取轨道时使用。\n"
+
 #~ msgid "'-c' lacks a charset.\n"
 #~ msgstr "'-c' 缺字符集。\n"
+
 #~ msgid "(Unknown element: %1%)"
 #~ msgstr "(未知元素: %1%)"
+
 #~ msgid "A single '+' is not a valid command line option. If you want to append a file use '+' directly followed by the file name, e.g. '+movie_part_2.avi'."
 #~ msgstr "单独的 '+' 不是有效的命令行选项。如果您希望用 '+' 直接追加文件，请确保文件名紧跟着它，例如 '+movie_part_2.avi'。"
+
 #~ msgid "Always adds '--engage use_simpleblock' to the command line. That way Matroska's new 'simple blocks' will be used which save a bit of overhead at the cost of not being backwards compatible."
 #~ msgstr "总在命令行中添加 '--engage use_simpleblock'。这样将使用 Matroska 的新 '简单块'，可以省下一些额外开销，代价是将无法向下兼容。"
+
 #~ msgid "Always use simple blocks"
 #~ msgstr "总使用简单块"
+
 #~ msgid "Change the default values"
 #~ msgstr "修改默认值"
+
 #~ msgid "Changing the interface language requires a restart to take effect."
 #~ msgstr "对界面语言的改动将在下次运行时生效。"
+
 #~ msgid "Could not open the file '%1%'."
 #~ msgstr "无法打开文件 '%1%'。"
+
 #~ msgid "DTS (Digital Theater System)"
 #~ msgstr "DTS (数字影院系统)"
+
 #~ msgid "Dirac elementary stream"
 #~ msgstr "Dirac 基本流"
+
 #~ msgid "Do not copy chapters from this file. Only applies to a couple of formats (e.g. Matroska files)."
 #~ msgstr "不要从此文件中复制章节。仅适用于部分格式（如 Matroska 文件）。"
+
 #~ msgid "Do not copy tags from this file. Only applies to a couple of formats (e.g. Matroska files)."
 #~ msgstr "不要从此文件中复制标签。仅适用于部分格式（如 Matroska 文件）。"
+
 #~ msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
 #~ msgstr "不要写入值与 Matroska 规范中的默认值相同的头元素。"
+
 #~ msgid "During MPEG-4 part 2 B frame handling: The frame queue contains more frames than timecodes are available that can be assigned to them (reason: %1%). Therefore %2% frame(s) had to be dropped. The video might be broken around timecode %3%.\n"
 #~ msgstr "MPEG-4 part 2 B 帧处理过程中: 帧列包含了超过可分配时间码的帧 (原因: %1%)。因此 %2% 帧将被丢弃。视频在时间码 %3% 附近可能已损坏。\n"
+
 #~ msgid "FLAC lossless audio"
 #~ msgstr "FLAC 无损音频"
+
 #~ msgid "File options:"
 #~ msgstr "文件选项:"
+
 #~ msgid "File/segment title"
 #~ msgstr "文件/剪辑标题"
+
 #~ msgid "Global tags"
 #~ msgstr "全局标签"
+
 #~ msgid "IVF with VP8"
 #~ msgstr "含 VP8 的 IVF"
+
 #~ msgid ""
 #~ "Known file types:\n"
 #~ "  ext   description\n"
@@ -8680,58 +8709,83 @@ msgstr "是"
 #~ "已知文件类型:\n"
 #~ " 扩展名 说明\n"
 #~ "  ----  --------------------------\n"
+
 #~ msgid "MPEG program stream"
 #~ msgstr "MPEG PS 程序流"
+
 #~ msgid "MPEG-1 layer II audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 第 II 层音频 (CBR 或 VBR/ABR)"
+
 #~ msgid "MPEG-1 layer III audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 第 III 层音频 (CBR 或 VBR/ABR)"
+
 #~ msgid "MPEG-1 video elementary stream"
 #~ msgstr "MPEG-1 视频基本流"
+
 #~ msgid "MPEG-2 video elementary stream"
 #~ msgstr "MPEG-2 视频基本流"
+
 #~ msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
 #~ msgstr "Matroska 文件 (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|所有文件|*.*"
+
 #~ msgid "No chapters"
 #~ msgstr "不读取章节"
+
 #~ msgid "No further options allowed when extracting %1%.\n"
 #~ msgstr "提取 %1% 时不允许其他额外选项。\n"
+
 #~ msgid "No further options allowed when regenerating the CUE sheet.\n"
 #~ msgstr "重新生成 CUE 表单时不允许其他额外选项。\n"
+
 #~ msgid "No tags"
 #~ msgstr "不读取标签"
+
 #~ msgid "No tracks will be copied from this file. This usually indicates a mistake in the command line.\n"
 #~ msgstr "此文件中没有待复制的轨道。这通常是因为命令行中的差错。\n"
+
 #~ msgid ""
 #~ "Nothing to do.\n"
 #~ "\n"
 #~ msgstr ""
 #~ "无事可做。\n"
 #~ "\n"
+
 #~ msgid "Other global options"
 #~ msgstr "其他全局选项"
+
 #~ msgid "Quicktime/MP4 audio and video"
 #~ msgstr "Quicktime/MP4 音视频"
+
 #~ msgid "RealMedia audio and video"
 #~ msgstr "RealMedia 音视频"
+
 #~ msgid "Restart required"
 #~ msgstr "需要重新运行"
+
 #~ msgid "Set &default values"
 #~ msgstr "设置默认值(&D)"
+
 #~ msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
 #~ msgstr "选择 VobSub 字幕使用的压缩方式。如果没有选中任何方式，VobSub 字幕将自动使用 zlib 压缩。选“无”将导致文件变得很大。"
+
 #~ msgid "Subtitle charset:"
 #~ msgstr "字幕字符集:"
+
 #~ msgid "TTA lossless audio"
 #~ msgstr "TTA 无损音频"
+
 #~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
 #~ msgstr "MPEG-4 part 2 压缩仅适用于原生 MPEG-4。然而，您未使用 '--engage native_mpeg4' 选择原生 MPEG-4 模式。\n"
+
 #~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
 #~ msgstr "此轨道使用了叫做 '编解码态元素' 的 Matroska 特性。mkvmerge 支持该特性，但您尚未通过 '--engage use_codec_state' 来启用该特性。\n"
+
 #~ msgid "Tracks:"
 #~ msgstr "轨道列表:"
+
 #~ msgid "Unrecognized command line option '%1%'. Maybe you put a mode specific option before the input file name?\n"
 #~ msgstr "无法识别命令行选项 '%1%'。您是否将模式细节选项放在了输入文件名的前面？\n"
+
 #~ msgid ""
 #~ "Usage: mkvextract tracks <inname> [options] [TID1:out1 [TID2:out2 ...]]\n"
 #~ "   or  mkvextract tags <inname> [options]\n"
@@ -8864,61 +8918,88 @@ msgstr "是"
 #~ "  -v, --verbose  提高“详细”程度。\n"
 #~ "  -h, --help     显示本帮助。\n"
 #~ "  -V, --version  显示版本信息。\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "使用 FLAC 输出模块。\n"
+
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "VC1 视频基本流"
+
 #~ msgid "VobBtn buttons"
 #~ msgstr "VobBtn 按钮"
+
 #~ msgid "WAVE (uncompressed PCM)"
 #~ msgstr "WAVE (未压缩的 PCM)"
+
 #~ msgid "WAVPACK lossless audio"
 #~ msgstr "WAVPACK 无损音频"
+
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "写入为原始 FLAC 文件 (默认: 写为 OggFLAC 文件)。"
+
 #~ msgid "You have not yet selected an output file."
 #~ msgstr "您尚未选择任何输入文件。"
+
 #~ msgid "You have not yet selected any input file and/or no tracks."
 #~ msgstr "您尚未选择任何输入文件和/或未发现轨道。"
+
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "嵌入在 OGG 中的音频/视频/文本字幕"
+
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: 无法设置错误回调。\n"
+
 #~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
 #~ msgstr "flac_header_extraction: 无法设置元数据回调。\n"
+
 #~ msgid "flac_header_extraction: Could not set the read callback.\n"
 #~ msgstr "flac_header_extraction: 无法设置读取回调。\n"
+
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: 无法设置写入回调。\n"
+
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_reader: 无法设置档尾回调。\n"
+
 #~ msgid "flac_reader: Could not set the error callback.\n"
 #~ msgstr "flac_reader: 无法设置错误回调。\n"
+
 #~ msgid "flac_reader: Could not set the length callback.\n"
 #~ msgstr "flac_reader: 无法设置长度回调。\n"
+
 #~ msgid "flac_reader: Could not set the metadata callback.\n"
 #~ msgstr "flac_reader: 无法设置元数据回调。\n"
+
 #~ msgid "flac_reader: Could not set the read callback.\n"
 #~ msgstr "flac_reader: 无法设置读取回调。\n"
+
 #~ msgid "flac_reader: Could not set the seek callback.\n"
 #~ msgstr "flac_reader: 无法设置定位回调。\n"
+
 #~ msgid "flac_reader: Could not set the tell callback.\n"
 #~ msgstr "flac_reader: 无法设置通告回调。\n"
+
 #~ msgid "flac_reader: Could not set the write callback.\n"
 #~ msgstr "flac_reader: 无法设置写入回调。\n"
+
 #~ msgid "found_what == 0. Should not have happened. Please file a bug report.\n"
 #~ msgstr "found_what == 0。这不该发生。请提交错误报告。\n"
+
 #~ msgid "general Matroska files"
 #~ msgstr "常规 Matroska 文件"
+
 #~ msgid "locale.cpp/from_utf8(): Invalid conversion handle %1% (num: %2%).\n"
 #~ msgstr "locale.cpp/from_utf8(): 无效的转换名号 %1% (数字: %2%)。\n"
+
 #~ msgid "locale.cpp/to_utf8(): Invalid conversion handle %1% (num: %2%).\n"
 #~ msgstr "locale.cpp/to_utf8(): 无效的转换名号 %1% (数字: %2%)。\n"
+
 #~ msgid "mkvmerge GUI v%s ('%s')"
 #~ msgstr "mkvmerge GUI v%s ('%s')"
+
 #~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 #~ msgstr "r_matroska: 簇不含簇时间码。文件已损坏。正在中断操作。\n"
+
 #~ msgid "start_element: pdata->bin != NULL"
 #~ msgstr "start_element: pdata->bin != NULL"
-
