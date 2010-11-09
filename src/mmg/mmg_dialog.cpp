@@ -626,23 +626,7 @@ mmg_dialog::display_help(int id) {
       potential_help_paths.push_back(installation_path + wxT("/doc"));
 
 #else
-    // Debian, probably others
-    potential_help_paths.push_back(wxT("/usr/share/doc/mkvtoolnix"));
-    potential_help_paths.push_back(wxT("/usr/share/doc/mkvtoolnix/doc"));
-    potential_help_paths.push_back(wxT("/usr/share/doc/mkvtoolnix-gui"));
-    // SuSE
-    potential_help_paths.push_back(wxT("/usr/share/doc/packages/mkvtoolnix"));
-    // Fedora Core
-    potential_help_paths.push_back(wxT("/usr/share/doc/mkvtoolnix-" VERSION));
-    potential_help_paths.push_back(wxT("/usr/share/doc/mkvtoolnix-gui-" VERSION));
-    // (Almost the) same for /usr/local
-    potential_help_paths.push_back(wxT("/usr/local/share/doc/mkvtoolnix"));
-    potential_help_paths.push_back(wxT("/usr/local/share/doc/packages/mkvtoolnix"));
-    potential_help_paths.push_back(wxT("/usr/local/share/doc/mkvtoolnix-" VERSION));
-    potential_help_paths.push_back(wxT("/usr/local/share/doc/mkvtoolnix-gui-" VERSION));
-    // New location
-    potential_help_paths.push_back(wxT(MTX_PKG_DATA_DIR));
-    potential_help_paths.push_back(wxT(MTX_PKG_DATA_DIR "-" VERSION));
+    potential_help_paths.push_back(wxT(MTX_DOC_DIR));
 #endif
 
     wxConfigBase *cfg = wxConfigBase::Get();
