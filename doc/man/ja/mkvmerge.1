@@ -573,6 +573,23 @@ default duration が強制的に指定されない場合、mkvmergeはトラッ�
 NALUサイズ長を\fIn\fRバイトに強制設定します。このパラメータはAVC/h\&.264エレメンタリストリームパケタイザが使用される場合にのみ使用されます。何も指定しなかった時のデフォルト値は4バイトですが、65535バイト以上のフレームやスライスが含まれていないファイルも存在します。そのようなファイルでは、このパラメータを使用してNALUサイズ長を2に減らすことができます。
 .RE
 .PP
+\fB\-\-compression\fR \fITID:n\fR
+.RS 4
+Selects the compression method to be used for the track\&. Note that the player also has to support this method\&. Valid values are \*(Aqnone\*(Aq, \*(Aqzlib\*(Aq, \*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aq, \*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aq and \*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq\&. The values \*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aq and \*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aq are only available if
+\fBmkvmerge\fR(1)
+has been compiled with support for the
+liblzo(TM)
+and
+bzlib(TM)
+compression libraries, respectively\&.
+.sp
+The compression method \*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq is a special compression method called \*(Aqheader removal\*(Aq that is only available for
+MPEG4
+part 2 video tracks\&.
+.sp
+The default for some subtitle tracks is \*(Aqzlib\*(Aq compression\&. This compression method is also the one that most if not all playback applications support\&. Support for other compression methods other than \*(Aqnone\*(Aq is not assured\&.
+.RE
+.PP
 ビデオトラックにのみ適用されるオプション:
 .PP
 \fB\-f\fR, \fB\-\-fourcc\fR \fITID:FourCC\fR
@@ -612,15 +629,6 @@ Matroska(TM)ファイルは再生時の画像スケールを決定するため�
 \fB\-\-stereo\-mode\fR \fITID:n|keyword\fR
 .RS 4
 トラックIDが\fITID\fRのビデオトラックのステレオモードを設定します。モードは\fB0\fRから\fB3\fRまでの数字\fIn\fR、又は\*(Aqnone\*(Aq(\fIn\fR=\fB0\fRと同等)、\*(Aqright\*(Aq(\fIn\fR=\fB1\fRと同等)、\*(Aqleft\*(Aq(\fIn\fR=\fB2\fRと同等)、及び\*(Aqboth\*(Aq(\fIn\fR=\fB3\fRと同等)のうちのどれかを\fIkeyword\fRとして指定しなければなりません。
-.RE
-.PP
-\fB\-\-compression\fR \fITID:method\fR
-.RS 4
-VobSubトラックの圧縮法を選択します。プレイヤーが選択した圧縮法をサポートしている必要があることに注意してください。指定できる圧縮法は、\*(Aqnone\*(Aq、\*(Aqzlib\*(Aq、\*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aq、\*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aq及び\*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aqです。\*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aqと\*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aqは\fBmkvmerge\fR(1)がそれぞれ、liblzo(TM)及びbzlib(TM)圧縮ライブラリのサポート付きでコンパイルされたときのみ使用できます。
-.sp
-\*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq圧縮法は、\*(Aqheader removal\*(Aqと呼ばれる特殊な圧縮法で、MPEG4 part2 ビデオトラックにのみ適用できます。それ以外の圧縮法は一般的な圧縮法で、どんな種類のトラックに適用できます。
-.sp
-デフォルトは\*(Aqzlib\*(Aq圧縮法です。この圧縮法はほとんど全ての再生アプリケーションでサポートされています。\*(Aqnone\*(Aq以外の他の圧縮法については、サポートされているとは限りません。
 .RE
 .PP
 テキスト字幕トラックにのみ適用されるオプション:
@@ -1003,6 +1011,18 @@ $ mkvmerge \-o with\-lang\-codes\&.mkv \-\-language 2:ger \-\-language 3:dut \-\
 .\}
 .PP
 もし、指定したはずの言語やデフォルトフラグが\fBmkvinfo\fR(1)の出力に見当たらない場合は、デフォルト値のセクションを参照してください。
+.PP
+Turn off the compression for an input file\&.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o no\-compression\&.mkv \-\-compression \-1:none MyMovie\&.avi \-\-compression \-1:none mymovie\&.srt
+.fi
+.if n \{\
+.RE
+.\}
 .SH "トラックID"
 .PP
 
@@ -1022,6 +1042,10 @@ Track ID 2: audio (A_MPEG/L3)
 .RE
 .\}
 .PP
+Do not confuse the track IDs that are assigned to the tracks that are placed in the output MKV file with the track IDs of the input files\&. Only the input file track IDs are used for options needing these values\&.
+.PP
+Also note that each input file has its own set of track IDs\&. Therefore the track IDs for file \*(Aqfile1\&.ext\*(Aq as reported by \*(Aqmkvmerge \-\-identify\*(Aq do not change no matter how many other input files are there or in which position \*(Aqfile1\&.ext\*(Aq is used\&.
+.PP
 トラックIDは次のように割り当てられます:
 .sp
 .RS 4
@@ -1035,6 +1059,19 @@ Track ID 2: audio (A_MPEG/L3)
 
 AVI
 ファイル: ビデオトラックのIDは0になります。オーディオトラックのIDは1から昇順に割り当てられます。
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+MP4
+files: As output from x264, the video track has the ID 1\&.
 .RE
 .sp
 .RS 4

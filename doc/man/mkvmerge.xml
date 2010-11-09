@@ -1013,6 +1013,28 @@ $ mkvmerge -o full.mkv =file1.mkv
      </para>
     </listitem>
    </varlistentry>
+
+   <varlistentry id="mkvmerge.description.compression">
+    <term><option>--compression</option> <parameter>TID:n</parameter></term>
+    <listitem>
+     <para>
+      Selects the compression method to be used for the track. Note that the player also has to support this method. Valid values are
+      '<literal>none</literal>', '<literal>zlib</literal>', '<literal>lzo</literal>'/'<literal>lxo1x</literal>',
+      '<literal>bz2</literal>'/'<literal>bzlib</literal>' and '<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>'.  The values
+      '<literal>lzo</literal>'/'<literal>lxo1x</literal>' and '<literal>bz2</literal>'/'<literal>bzlib</literal>' are only available if
+      &mkvmerge; has been compiled with support for the <productname>liblzo</productname> and <productname>bzlib</productname> compression libraries,
+      respectively.
+     </para>
+     <para>
+      The compression method '<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>' is a special compression method called
+      '<foreignphrase>header removal</foreignphrase>' that is only available for <abbrev>MPEG4</abbrev> part 2 video tracks.
+     </para>
+     <para>
+      The default for some subtitle tracks is '<literal>zlib</literal>' compression. This compression method is also the one that most if
+      not all playback applications support. Support for other compression methods other than '<literal>none</literal>' is not assured.
+     </para>
+    </listitem>
+   </varlistentry>
   </variablelist>
 
   <para>
@@ -1102,31 +1124,6 @@ $ mkvmerge -o full.mkv =file1.mkv
       (same as <parameter>n</parameter>=<constant>0</constant>), '<literal>right</literal>' (same as
       <parameter>n</parameter>=<constant>1</constant>), '<literal>left</literal>' (same as <parameter>n</parameter>=<constant>2</constant>)
       or '<literal>both</literal>' (same as <parameter>n</parameter>=<constant>3</constant>).
-     </para>
-    </listitem>
-   </varlistentry>
-
-   <varlistentry id="mkvmerge.description.compression">
-    <term><option>--compression</option> <parameter>TID:method</parameter></term>
-    <listitem>
-     <para>
-      Selects the compression method to be used for the VobSub track. Note that the player also has to support this method. Valid values are
-      '<literal>none</literal>', '<literal>zlib</literal>', '<literal>lzo</literal>'/'<literal>lxo1x</literal>',
-      '<literal>bz2</literal>'/'<literal>bzlib</literal>' and '<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>'.  The values
-      '<literal>lzo</literal>'/'<literal>lxo1x</literal>' and '<literal>bz2</literal>'/'<literal>bzlib</literal>' are only available if
-      &mkvmerge; has been compiled with support for the <productname>liblzo</productname> respectively <productname>bzlib</productname>
-      compression libraries.
-     </para>
-
-     <para>
-      The compression method '<literal>mpeg4_p2</literal>'/'<literal>mpeg4p2</literal>' is a special compression method called
-      '<foreignphrase>header removal</foreignphrase>' that is only available for MPEG4 part 2 video tracks. The other methods are general
-      compression methods that can be used with any type of track.
-     </para>
-
-     <para>
-      The default is '<literal>zlib</literal>' compression. This compression method is also the one that most if not all playback
-      applications support. Support for other compression methods other than '<literal>none</literal>' is not assured.
      </para>
     </listitem>
    </varlistentry>
@@ -1478,6 +1475,13 @@ $ mkvmerge -o MM-complete.mkv MyMovie-with-sound.mkv MyMovie-add-audio.ogg
    If you do not see the language or default track flags that you've specified in &mkvinfo;'s output then please read the
    section about <link linkend="mkvmerge.default_values">default values</link>.
   </para>
+
+  <para>
+   Turn off the compression for an input file.
+  </para>
+
+  <screen>$ mkvmerge -o no-compression.mkv --compression -1:none MyMovie.avi --compression -1:none mymovie.srt</screen>
+
  </refsect1>
 
  <refsect1 id="mkvmerge.track_ids">
@@ -1497,6 +1501,17 @@ Track ID 2: audio (A_MPEG/L3)
   </screen>
 
   <para>
+   Do not confuse the track IDs that are assigned to the tracks that are placed in the output MKV file with the track IDs of the input
+   files. Only the input file track IDs are used for options needing these values.
+  </para>
+
+  <para>
+   Also note that each input file has its own set of track IDs. Therefore the track IDs for file '<filename>file1.ext</filename>' as
+   reported by '<literal>mkvmerge --identify</literal>' do not change no matter how many other input files are there or in which position
+   '<filename>file1.ext</filename>' is used.
+  </para>
+
+  <para>
    Track IDs are assigned like this:
   </para>
 
@@ -1504,6 +1519,12 @@ Track ID 2: audio (A_MPEG/L3)
    <listitem>
     <para>
      <abbrev>AVI</abbrev> files: The video track has the ID 0. The audio tracks get IDs in ascending order starting at 1.
+    </para>
+   </listitem>
+
+   <listitem>
+    <para>
+     <abbrev>MP4</abbrev> files: As output from x264, the video track has the ID 1.
     </para>
    </listitem>
 

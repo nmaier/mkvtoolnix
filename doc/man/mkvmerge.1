@@ -882,6 +882,23 @@ AVC/h\&.264
 elementary stream packetizer is used\&. If left out it defaults to 4 bytes, but there are files that contain frames or slices that are all smaller than 65536 bytes\&. For such files you can use this parameter and decrease the size to 2\&.
 .RE
 .PP
+\fB\-\-compression\fR \fITID:n\fR
+.RS 4
+Selects the compression method to be used for the track\&. Note that the player also has to support this method\&. Valid values are \*(Aqnone\*(Aq, \*(Aqzlib\*(Aq, \*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aq, \*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aq and \*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq\&. The values \*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aq and \*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aq are only available if
+\fBmkvmerge\fR(1)
+has been compiled with support for the
+liblzo(TM)
+and
+bzlib(TM)
+compression libraries, respectively\&.
+.sp
+The compression method \*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq is a special compression method called \*(Aqheader removal\*(Aq that is only available for
+MPEG4
+part 2 video tracks\&.
+.sp
+The default for some subtitle tracks is \*(Aqzlib\*(Aq compression\&. This compression method is also the one that most if not all playback applications support\&. Support for other compression methods other than \*(Aqnone\*(Aq is not assured\&.
+.RE
+.PP
 Options that only apply to video tracks:
 .PP
 \fB\-f\fR, \fB\-\-fourcc\fR \fITID:FourCC\fR
@@ -954,21 +971,6 @@ or one of the keywords \*(Aqnone\*(Aq (same as
 \fIn\fR=\fB1\fR), \*(Aqleft\*(Aq (same as
 \fIn\fR=\fB2\fR) or \*(Aqboth\*(Aq (same as
 \fIn\fR=\fB3\fR)\&.
-.RE
-.PP
-\fB\-\-compression\fR \fITID:method\fR
-.RS 4
-Selects the compression method to be used for the VobSub track\&. Note that the player also has to support this method\&. Valid values are \*(Aqnone\*(Aq, \*(Aqzlib\*(Aq, \*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aq, \*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aq and \*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq\&. The values \*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aq and \*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aq are only available if
-\fBmkvmerge\fR(1)
-has been compiled with support for the
-liblzo(TM)
-respectively
-bzlib(TM)
-compression libraries\&.
-.sp
-The compression method \*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq is a special compression method called \*(Aqheader removal\*(Aq that is only available for MPEG4 part 2 video tracks\&. The other methods are general compression methods that can be used with any type of track\&.
-.sp
-The default is \*(Aqzlib\*(Aq compression\&. This compression method is also the one that most if not all playback applications support\&. Support for other compression methods other than \*(Aqnone\*(Aq is not assured\&.
 .RE
 .PP
 Options that only apply to text subtitle tracks:
@@ -1430,6 +1432,18 @@ $ mkvmerge \-o with\-lang\-codes\&.mkv \-\-language 2:ger \-\-language 3:dut \-\
 If you do not see the language or default track flags that you\*(Aqve specified in
 \fBmkvinfo\fR(1)\*(Aqs output then please read the section about
 default values\&.
+.PP
+Turn off the compression for an input file\&.
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvmerge \-o no\-compression\&.mkv \-\-compression \-1:none MyMovie\&.avi \-\-compression \-1:none mymovie\&.srt
+.fi
+.if n \{\
+.RE
+.\}
 .SH "TRACK IDS"
 .PP
 Some of the options for
@@ -1454,6 +1468,10 @@ Track ID 2: audio (A_MPEG/L3)
 .RE
 .\}
 .PP
+Do not confuse the track IDs that are assigned to the tracks that are placed in the output MKV file with the track IDs of the input files\&. Only the input file track IDs are used for options needing these values\&.
+.PP
+Also note that each input file has its own set of track IDs\&. Therefore the track IDs for file \*(Aqfile1\&.ext\*(Aq as reported by \*(Aqmkvmerge \-\-identify\*(Aq do not change no matter how many other input files are there or in which position \*(Aqfile1\&.ext\*(Aq is used\&.
+.PP
 Track IDs are assigned like this:
 .sp
 .RS 4
@@ -1467,6 +1485,19 @@ Track IDs are assigned like this:
 
 AVI
 files: The video track has the ID 0\&. The audio tracks get IDs in ascending order starting at 1\&.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.sp -1
+.IP \(bu 2.3
+.\}
+
+MP4
+files: As output from x264, the video track has the ID 1\&.
 .RE
 .sp
 .RS 4
