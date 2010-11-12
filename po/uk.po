@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-11-05 16:28+0200\n"
+"PO-Revision-Date: 2010-11-12 16:59+0200\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -3254,7 +3254,7 @@ msgstr "Ідентифікувати файл не вдалося"
 #: src/mmg/tabs/input.cpp:359
 #, c-format
 msgid "File identification failed for '%s'. Return code: %d"
-msgstr "Не вдалося ідентифікувати файл для '%s'. Код повернення: %d"
+msgstr "Не вдалося ідентифікувати файл '%s'. Код повернення: %d"
 
 #: src/mmg/tabs/input.cpp:362
 #, c-format
@@ -4460,31 +4460,31 @@ msgstr "Один із розділів не має назви."
 
 #: src/merge/mkvmerge.cpp:1428
 msgid "Only one chapter file allowed in '%1% %2%'.\n"
-msgstr "Тільки один файл в главі дозволено '%1% %2%'.\n"
+msgstr "Дозволено лише один файл розділу в '%1% %2%'.\n"
 
 #: src/info/mkvinfo.cpp:406
 msgid "Only one input file is allowed.\n"
-msgstr "Тільки один вхідний файл дозволено.\n"
+msgstr "Дозволено лише один вхідний файл.\n"
 
 #: src/common/xml/element_parser.cpp:295
 msgid "Only one instance of <%1%> is allowed beneath <%2%>."
-msgstr "Тільки один екземпляр <%1%> допускається під <%2%>."
+msgstr "Тільки один екземпляр <%1%> відводиться під <%2%>."
 
 #: src/common/tags/parser.cpp:48
 msgid "Only one of <String> and <Binary> may be used beneath <Simple> but not both at the same time."
-msgstr "Тільки одна з <String> і <Binary> може використовуватися нижче <Simple>, але не обидва в той же самий час."
+msgstr "Може використовуватися лише один з <String> або <Binary> під <Simple>, але не обидва одразу."
 
 #: src/merge/mkvmerge.cpp:1590
 msgid "Only one output file allowed.\n"
-msgstr "Тільки один вихідний файл дозволено.\n"
+msgstr "Дозволено лише один вихідний файл.\n"
 
 #: src/merge/mkvmerge.cpp:1440
 msgid "Only one segment info file allowed in '%1% %2%'.\n"
-msgstr "Тільки одному файлу інформації сегмента дозволяють ввійти '%1% %2%'.\n"
+msgstr "Лише один файл інформації сегмента дозволено в '%1% %2%'.\n"
 
 #: src/merge/output_control.cpp:860
 msgid "Only partial append mappings were given for the file no. %1% ('%2%'). Either don't specify any mapping (in which case the default mapping will be used) or specify a mapping for all tracks that are to be copied.\n"
-msgstr "Тільки небайдужий докладають відображення, були дані для файлу номер %1% (%2%). Будь-який не визначає відображення (коли задане за замовчуванням відображення буде використовуватися), або визначте відображення для всіх доріжок, які повинні бути скопійовані.\n"
+msgstr "Лише часткові розподілення для приєднання були означені для файла номер %1% (%2%). Необхідно, або не задавати ніякого розподілення (тоді буде використовуватись типове розподілення), або задати розподілення для всіх доріжок, які повинні бути скопійовані.\n"
 
 #: src/mmg/tabs/attachments.cpp:167
 msgid "Only to the first"
@@ -4492,7 +4492,7 @@ msgstr "Тільки до першого"
 
 #: src/input/r_vobsub.cpp:99
 msgid "Only v7 and newer VobSub files are supported. If you have an older version then use the VSConv utility from http://sourceforge.net/projects/guliverkli/ to convert these files to v7 files.\n"
-msgstr "Тільки v7 і більше нові файли VobSub підтримані. Якщо у Вас є старша версія, тоді використовують утиліту VSConv від http://sourceforge.net/projects/guliverkli/ щоб перетворити ці файли в v7 файли.\n"
+msgstr "Підтримуються лише файли VobSub версії 7 і вище. Якщо у вас більш старіша версія, тоді використовуйте утиліту VSConv з http://sourceforge.net/projects/guliverkli/ для конвертації цих файлів до версії 7.\n"
 
 #: src/mmg/mmg_dialog.cpp:255
 msgid "Op&tions\tCtrl-P"
@@ -4530,23 +4530,23 @@ msgstr "Опції, призначені ЛИШЕ для розробників.
 
 #: src/info/mkvinfo.cpp:833
 msgid "Order: %1%"
-msgstr "Замовлення: %1%"
+msgstr "Порядок: %1%"
 
 #: src/mmg/header_editor/value_page.cpp:176
 msgid "Original value:"
-msgstr "Отримати значення:"
+msgstr "Початкове значення:"
 
 #: src/propedit/propedit_cli_parser.cpp:153
 msgid "Other options"
-msgstr "Інші функції"
+msgstr "Інші опції"
 
 #: src/mmg/mux_dialog.cpp:87
 msgid "Output"
-msgstr "Вихідний"
+msgstr "Вихід"
 
 #: src/mmg/mmg_dialog.cpp:290
 msgid "Output filename"
-msgstr "Вихідний файл"
+msgstr "Назва вихідного файла"
 
 #: src/common/cli_parser.cpp:179
 msgid "Output messages in this charset"
@@ -4562,7 +4562,7 @@ msgstr "Вихідна частота дискретизації: %1%"
 
 #: src/mmg/tabs/input.cpp:373
 msgid "Output:"
-msgstr "Висновок:"
+msgstr "Вихідна інформація:"
 
 #: src/mmg/mmg_dialog.cpp:530
 msgid "Overwrite existing file(s)?"
@@ -4579,15 +4579,15 @@ msgstr "PGS/SUP субтитри"
 
 #: src/input/r_vobsub.cpp:523
 msgid "PTS error: 0x%|1$02x| %|2$02x|%|3$02x| %|4$02x|%|5$02x|\n"
-msgstr "PTS помилка: 0x%|1$02x| %|2$02x|%|3$02x| %|4$02x|%|5$02x|\n"
+msgstr "Помилка PTS: 0x%|1$02x| %|2$02x|%|3$02x| %|4$02x|%|5$02x|\n"
 
 #: src/output/p_flac.cpp:77
 msgid "Packet number %1% contained an invalid FLAC header and is being skipped.\n"
-msgstr "Число пакету %1% містили неприпустимий заголовок FLAC і пропускаються.\n"
+msgstr "Пакет номер %1% містив неприпустимий заголовок FLAC і тому пропускається.\n"
 
 #: src/merge/pr_generic.cpp:252
 msgid "Packet queue not empty (flushed: %1%). Frames have been lost during remux. %2%\n"
-msgstr "Черга пакету, не порожня (скинутий на диск: %1%). Кадри були втрачені під час remux. %2%\n"
+msgstr "Черга пакетів не порожня (очищено: %1%). Кадри були втрачені під час повторного мультиплексування. %2%\n"
 
 #: src/info/wxwidgets_ui.cpp:127
 msgid "Parse the file completely and show all elements"
@@ -4595,35 +4595,35 @@ msgstr "Аналізувати файл повністю і показувати
 
 #: src/extract/extract_cli_parser.cpp:65
 msgid "Parse the whole file instead of relying on the index."
-msgstr "Аналізувати цілий файл замість того, щоб покластися на індекс."
+msgstr "Аналізувати цілий файл замість того, щоб покладатися на індекс."
 
 #: src/info/mkvinfo.cpp:1703
 msgid "Parsing file"
-msgstr "Синтаксичний аналіз файлу"
+msgstr "Аналіз файлу"
 
 #: src/info/mkvinfo.cpp:757
 msgid "Pixel crop bottom: %1%"
-msgstr "Обрізати нижній піксель: %1%"
+msgstr "Обрізка пікселів знизу: %1%"
 
 #: src/info/mkvinfo.cpp:742
 msgid "Pixel crop left: %1%"
-msgstr "Обрізати лівий піксель: %1%"
+msgstr "Обрізка пікселів зліва: %1%"
 
 #: src/info/mkvinfo.cpp:752
 msgid "Pixel crop right: %1%"
-msgstr "Обрізати правий піксель: %1%"
+msgstr "Обрізка пікселів справа: %1%"
 
 #: src/info/mkvinfo.cpp:747
 msgid "Pixel crop top: %1%"
-msgstr "Обрізати верхній піксель: %1%"
+msgstr "Обрізка пікселів зверху: %1%"
 
 #: src/info/mkvinfo.cpp:727
 msgid "Pixel height: %1%"
-msgstr "Висота пікселя: %1%"
+msgstr "Висота в пікселях: %1%"
 
 #: src/info/mkvinfo.cpp:722
 msgid "Pixel width: %1%"
-msgstr "Ширина пікселя: %1%"
+msgstr "Ширина в пікселях: %1%"
 
 #: src/mmg/options/mkvmerge.cpp:117
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
@@ -4718,7 +4718,7 @@ msgstr "Запит можливостей mkvmerge"
 
 #: src/common/file_types.cpp:42
 msgid "QuickTime audio/video files"
-msgstr "QuickTime Audio/Video файли"
+msgstr "QuickTime аудіо/відео файли"
 
 #: src/input/r_qtmp4.cpp:473
 msgid "Quicktime/MP4 reader: '%1%' atom is too small. Expected size: >= %2%. Actual size: %3%.\n"
@@ -4726,114 +4726,114 @@ msgstr "Quicktime/MP4 зчитувач: '%1%' елемент є дуже мал�
 
 #: src/input/r_qtmp4.cpp:1909
 msgid "Quicktime/MP4 reader: Constant samplesize & variable duration not yet supported. Contact the author if you have such a sample file.\n"
-msgstr "Quicktime/MP4 зчитувач: постійний розмір семплу і змінна тривалість поки не підтримуються. Зв'яжіться з автором, якщо у вас є такий файл.\n"
+msgstr "Quicktime/MP4 зчитувач: Постійний розмір семплу і змінна тривалість поки не підтримуються. Зв'яжіться з автором, якщо у вас є такий файл.\n"
 
 #: src/input/r_qtmp4.cpp:1304
 msgid "Quicktime/MP4 reader: Could not read chunk number %1%/%2% with size %3% from position %4%. Aborting.\n"
-msgstr "Quicktime/MP4 зчитувач: неможливо прочитати комірки номер %1%/%2% з розміром %3% починаючи з позиції %4%. Переривання.\n"
+msgstr "Quicktime/MP4 зчитувач: Неможливо прочитати комірки номер %1%/%2% з розміром %3% починаючи з позиції %4%. Переривання.\n"
 
 #: src/input/r_qtmp4.cpp:1011
 #: src/input/r_qtmp4.cpp:1024
 msgid "Quicktime/MP4 reader: Could not read the extended sound description atom for track ID %1%.\n"
-msgstr "Quicktime/MP4 зчитувач: неможливо прочитати елемент розширеного звукового опису для доріжки ID %1%.\n"
+msgstr "Quicktime/MP4 зчитувач: Неможливо прочитати елемент розширеного звукового опису для ID доріжки %1%.\n"
 
 #: src/input/r_qtmp4.cpp:984
 msgid "Quicktime/MP4 reader: Could not read the sound description atom for track ID %1%.\n"
-msgstr "Quicktime/MP4 зчитувач: неможливо прочитати елемент опису аудіо для доріжки ID %1%.\n"
+msgstr "Quicktime/MP4 зчитувач: Неможливо прочитати елемент опису аудіо для ID доріжки %1%.\n"
 
 #: src/input/r_qtmp4.cpp:129
 msgid "Quicktime/MP4 reader: Could not read the source file."
-msgstr "Quicktime/MP4 зчитувач: неможливо прочитати вхідний файл."
+msgstr "Quicktime/MP4 зчитувач: Неможливо прочитати вхідний файл."
 
 #: src/input/r_qtmp4.cpp:978
 msgid "Quicktime/MP4 reader: Could not read the stream description atom for track ID %1%.\n"
-msgstr "Quicktime/MP4 зчитувач: неможливо прочитати елемент опису потоку для доріжки ID %1%.\n"
+msgstr "Quicktime/MP4 зчитувач: Неможливо прочитати елемент опису потоку для ID доріжки %1%.\n"
 
 #: src/input/r_qtmp4.cpp:1060
 msgid "Quicktime/MP4 reader: Could not read the video description atom for track ID %1%.\n"
-msgstr "Quicktime/MP4 зчитувач: неможливо прочитати елемент опису відео для доріжки ID доріжки %1%.\n"
+msgstr "Quicktime/MP4 зчитувач: Неможливо прочитати елемент опису відео для ID доріжки %1%.\n"
 
 #: src/input/r_qtmp4.cpp:212
 msgid "Quicktime/MP4 reader: Have not found any header atoms.\n"
-msgstr "Quicktime/MP4 зчитувач: не знайдено жодного елементу заголовка.\n"
+msgstr "Quicktime/MP4 зчитувач: Не знайдено жодного елементу заголовка.\n"
 
 #: src/input/r_qtmp4.cpp:214
 msgid "Quicktime/MP4 reader: Have not found the 'mdat' atom. No movie data found.\n"
-msgstr "Quicktime/MP4 зчитувач: не знайдено елементу 'mdat'. Жодного фільму не знайдено.\n"
+msgstr "Quicktime/MP4 зчитувач: Не знайдено елементу 'mdat'. Жодних даних відео не знайдено.\n"
 
 #: src/input/r_qtmp4.cpp:161
 msgid "Quicktime/MP4 reader: Invalid chunk size %1% at %2%.\n"
-msgstr "Quicktime/MP4 зчитувач: неприпустимий розмір комірки %1% в %2%.\n"
+msgstr "Quicktime/MP4 зчитувач: Невірний розмір комірки %1% в %2%.\n"
 
 #: src/input/r_qtmp4.cpp:290
 msgid "Quicktime/MP4 reader: MPEG4 part 10/AVC track %1% is missing its decoder config. Skipping this track.\n"
-msgstr "Quicktime/MP4 зчитувач: для доріжки MPEG4 part 10/AVC %1% відсутні налаштування декодера. Пропуск цієї доріжки.\n"
+msgstr "Quicktime/MP4 зчитувач: Для доріжки MPEG4 part 10/AVC %1% відсутні налаштування декодера. Пропуск цієї доріжки.\n"
 
 #: src/input/r_qtmp4.cpp:283
 msgid "Quicktime/MP4 reader: MPEG4 track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
-msgstr "Quicktime/MP4 зчитувач: для доріжки MPEG4 %1% відсутні елемент esds/налаштування декодера. Пропуск цієї доріжки.\n"
+msgstr "Quicktime/MP4 зчитувач: Для доріжки MPEG4 %1% відсутні елемент esds/налаштування декодера. Пропуск цієї доріжки.\n"
 
 #: src/input/r_qtmp4.cpp:121
 msgid "Quicktime/MP4 reader: Source is not a valid Quicktime/MP4 file."
-msgstr "Quicktime/MP4 зчитувач: джерело не є допустимим Quicktime/MP4 файлом."
+msgstr "Quicktime/MP4 зчитувач: Даний файл не є придатним Quicktime/MP4 файлом."
 
 #: src/input/r_qtmp4.cpp:651
 msgid "Quicktime/MP4 reader: The 'media header' atom ('mdhd') uses the unsupported version %1%.\n"
-msgstr "Quicktime/MP4 зчитувач: елемент 'media header' ('mdhd') використовує непідтримувану версію %1%.\n"
+msgstr "Quicktime/MP4 зчитувач: Елемент 'media header' ('mdhd') використовує непідтримувану версію %1%.\n"
 
 #: src/input/r_qtmp4.cpp:971
 msgid "Quicktime/MP4 reader: The 'size' field is too small in the stream description atom for track ID %1%.\n"
-msgstr "Quicktime/MP4 зчитувач: поле 'розмір' занадто маленьке в частині потоку опису ID доріжки %1%.\n"
+msgstr "Quicktime/MP4 зчитувач: Поле 'size' занадто маленьке для елементу опису потоку з ID доріжки %1%.\n"
 
 #: src/input/r_qtmp4.cpp:656
 msgid "Quicktime/MP4 reader: The 'time scale' parameter was 0. This is not supported.\n"
-msgstr "Quicktime/MP4 зчитувач: параметр 'масштаб часу' був 0. Це не підтримується.\n"
+msgstr "Quicktime/MP4 зчитувач: Параметр 'time scale' був нульовим, що не підтримується.\n"
 
 #: src/input/r_qtmp4.cpp:251
 msgid "Quicktime/MP4 reader: The AAC track %1% is missing the esds atom/the decoder config. Skipping this track.\n"
-msgstr "Quicktime/MP4 зчитувач: AAC доріжки %1% відсутня esds частини/декодера конфігурації. Пропуск цієї доріжки.\n"
+msgstr "Quicktime/MP4 зчитувач: Для доріжки AAC %1% відсутній елемент esds/конфігурація декодера. Пропуск цієї доріжки.\n"
 
 #: src/input/r_qtmp4.cpp:245
 msgid "Quicktime/MP4 reader: The audio track %1% is using an unsupported 'object type id' of %2% in the 'esds' atom. Skipping this track.\n"
-msgstr "Quicktime/MP4 зчитувач: аудіо доріжка %1% використовує непідтримуваний 'об'єкт типу id' %2% у 'esds' частини. Пропуск цієї доріжки.\n"
+msgstr "Quicktime/MP4 зчитувач: Для аудіо доріжки %1% використовується непідтримуваний ''object type id' %2%  елементу 'esds'. Пропуск цієї доріжки.\n"
 
 #: src/input/r_qtmp4.cpp:263
 msgid "Quicktime/MP4 reader: The video track %1% is missing the ESDS atom. Skipping this track.\n"
-msgstr "Quicktime/MP4 зчитувач: відео доріжка %1% відсутня ESDS частину. Пропуск цієї доріжки.\n"
+msgstr "Quicktime/MP4 зчитувач: Для відео доріжки %1% відсутній елемент ESDS. Пропуск цієї доріжки.\n"
 
 #: src/input/r_qtmp4.cpp:505
 msgid "Quicktime/MP4 reader: This file uses compressed headers with an unknown or unsupported compression algorithm '%1%%2%%3%%4%'. Aborting.\n"
-msgstr "Quicktime/MP4 зчитувач: цей файл використовує невідомий стислий заголовків або не підтримується алгоритм стиснення '%1%%2%%3%%4%'. Переривання.\n"
+msgstr "Quicktime/MP4 зчитувач: Цей файл використовує стиснуті заголовки, отримані невідомим або непідтримуваним методом стиснення '%1%%2%%3%%4%'. Переривання.\n"
 
 #: src/input/r_qtmp4.cpp:538
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the expected uncompressed size (%1%) was not what is available after uncompressing (%2%).\n"
-msgstr "Quicktime/MP4 зчитувач: цей файл використовує стислі заголовки, але очікується незжатий розмір (%1%) не те, що доступні після розпакування (%2%).\n"
+msgstr "Quicktime/MP4 зчитувач: Цей файл використовує стиснуті заголовки, але очікуваний нестиснутий розмір (%1%) не був отриманий після розпакування (%2%).\n"
 
 #: src/input/r_qtmp4.cpp:529
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but the zlib library could not be initialized. Error code from zlib: %1%. Aborting.\n"
-msgstr "Quicktime/MP4 зчитувач: цей файл використовує стислі заголовки, але zlib бібліотека не може бути ініціалізувати. Код помилки з zlib: %1%. Переривання.\n"
+msgstr "Quicktime/MP4 зчитувач: Цей файл використовує стиснуті заголовки, але бібліотека zlib не може бути ініціалізована. Код помилки zlib: %1%. Переривання.\n"
 
 #: src/input/r_qtmp4.cpp:534
 msgid "Quicktime/MP4 reader: This file uses compressed headers, but they could not be uncompressed. Error code from zlib: %1%. Aborting.\n"
-msgstr "Quicktime/MP4 зчитувач: цей файл використовує стислі заголовки, але вони не можуть бути розпаковані. Код помилки з zlib: %1%. Переривання.\n"
+msgstr "Quicktime/MP4 зчитувач: Цей файл використовує стиснуті заголовки, але вони не можуть бути розпаковані. Код помилки zlib: %1%. Переривання.\n"
 
 #: src/input/r_qtmp4.cpp:302
 msgid "Quicktime/MP4 reader: Track %1% has an unknown type.\n"
-msgstr "Quicktime/MP4 зчитувач: доріжка %1% невідомого типу.\n"
+msgstr "Quicktime/MP4 зчитувач: Доріжка %1% є невідомого типу.\n"
 
 #: src/input/r_qtmp4.cpp:258
 #: src/input/r_qtmp4.cpp:297
 msgid "Quicktime/MP4 reader: Track %1% is missing some data. Broken header atoms?\n"
-msgstr "Quicktime/MP4 зчитувач: доріжці %1% не вистачає деяких даних. Окремі частини заголовка?\n"
+msgstr "Quicktime/MP4 зчитувач: Для доріжки %1% пропущені деякі дані. Пошкоджені елементи заголовка?\n"
 
 #: src/input/r_qtmp4.cpp:992
 #: src/input/r_qtmp4.cpp:1066
 msgid "Quicktime/MP4 reader: Track ID %1% has more than one FourCC. Only using the first one (%|2$.4s|) and not this one (%|3$.4s|).\n"
-msgstr "Quicktime/MP4 зчитувач: доріжка ID %1% більше, ніж один FourCC. Тільки при допомогою один (%|2$.4s|) і не цій (%|3$.4s|).\n"
+msgstr "Quicktime/MP4 зчитувач: Доріжка з ID %1% містить більше, ніж один FourCC. Використовується тільки перший з них (%|2$.4s|) і не цей (%|3$.4s|).\n"
 
 #: src/input/r_qtmp4.cpp:237
 msgid "Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n"
-msgstr "Quicktime/MP4 зчитувач: невідомий/непідтримуваний FourCC '%|1$.4s|' для доріжки %2%.\n"
+msgstr "Quicktime/MP4 зчитувач: Невідомий/непідтримуваний FourCC '%|1$.4s|' для доріжки %2%.\n"
 
 #: src/mmg/mmg_dialog.cpp:257
 msgid "Quit the application"
@@ -4870,11 +4870,11 @@ msgstr "Готовий"
 #: src/common/property_element.cpp:154
 #: src/mmg/header_editor/frame.cpp:503
 msgid "Real output sampling frequency in Hz."
-msgstr "Реальна частота дискретизації на виході в Hz."
+msgstr "Реальна частота дискретизації на виході в Гц."
 
 #: src/common/file_types.cpp:44
 msgid "RealMedia audio/video files"
-msgstr "RealMedia Audio/Video файли"
+msgstr "RealMedia аудіо/відео файли"
 
 #: src/input/r_real.cpp:377
 msgid "RealMedia files may contain HE-AAC / AAC+ / SBR AAC audio. In some cases this can NOT be detected automatically. Therefore you have to specifiy '--aac-is-sbr %1%' manually for this input file if the file actually contains SBR AAC. The file will be muxed in the WRONG way otherwise. Also read mkvmerge's documentation.\n"
@@ -4886,19 +4886,19 @@ msgstr "Перенаправляти всі повідомлення в цей �
 
 #: src/info/mkvinfo.cpp:151
 msgid "Reference block: %1%.%|2$06d|ms"
-msgstr "Відношення блоку: %1%.%|2$06d|ms"
+msgstr "Блок звернення: %1%.%|2$06d|мс"
 
 #: src/info/mkvinfo.cpp:150
 msgid "Reference block: -%1%.%|2$06d|ms"
-msgstr "Відношення блоку: -%1%.%|2$06d|ms"
+msgstr "Блок звернення: -%1%.%|2$06d|мс"
 
 #: src/info/mkvinfo.cpp:152
 msgid "Reference priority: %1%"
-msgstr "Відношення пріоритету: %1%"
+msgstr "Пріоритет звернення: %1%"
 
 #: src/info/mkvinfo.cpp:154
 msgid "Reference virtual: %1%"
-msgstr "Відношення віртуальне: %1%"
+msgstr "Звернення віртуально: %1%"
 
 #: src/mmg/header_editor/frame.cpp:144
 msgid "Reload the current file without saving"
@@ -4912,7 +4912,7 @@ msgstr "Час, що залишився:"
 
 #: src/common/xml/element_parser.cpp:565
 msgid "Remember that special characters like &, <, > and \" must be escaped in the usual HTML way: &amp; for '&', &lt; for '<', &gt; for '>' and &quot; for '\"'."
-msgstr "Пам'ятайте, що спеціальні символи, такі як &, <, > и \" повинні бути замасковані в звичайний HTML: &amp; для '&', &lt; для '<', &gt; для '>' i &quot; для '\"'."
+msgstr "Пам'ятайте, що спеціальні символи, такі як &, <, > и \" повинні виділятися у звичайний HTML спосіб: &amp; для '&', &lt; для '<', &gt; для '>' i &quot; для '\"'."
 
 #: src/mmg/tabs/chapters.cpp:329
 msgid "Remove chapter"
@@ -5033,15 +5033,15 @@ msgstr "Зберігається інформація з поточного фа
 
 #: src/info/mkvinfo.cpp:847
 msgid "Scope: %1% (%2%)"
-msgstr "Область: %1% (%2%)"
+msgstr "Діапазон: %1% (%2%)"
 
 #: src/info/mkvinfo.cpp:1194
 msgid "Seek ID:%1% (%2%)"
-msgstr "ID пошуку:%1% (%2%)"
+msgstr "ID пошуку: %1% (%2%)"
 
 #: src/info/mkvinfo.cpp:1182
 msgid "Seek entry"
-msgstr "Шукати статтю"
+msgstr "Шукати запис"
 
 #: src/info/mkvinfo.cpp:1170
 msgid "Seek head"
@@ -5049,7 +5049,7 @@ msgstr "Шукати заголовок"
 
 #: src/info/mkvinfo.cpp:1166
 msgid "Seek head (subentries will be skipped)"
-msgstr "Шукати заголовок (подстатьі будуть пропущені)"
+msgstr "Шукати заголовок (дочірні записи будуть пропущені)"
 
 #: src/info/mkvinfo.cpp:1208
 msgid "Seek position: %1%"
@@ -5064,20 +5064,20 @@ msgstr "Сегмент"
 
 #: src/info/mkvinfo.cpp:628
 msgid "Segment UID:%1%"
-msgstr "Сегмент UID:%1%"
+msgstr "UID сегмента:%1%"
 
 #: src/mmg/tabs/global.cpp:262
 msgid "Segment UIDs:"
-msgstr "Сегмент UIDs:"
+msgstr "UID сегментів:"
 
 #: src/common/property_element.cpp:103
 #: src/mmg/header_editor/frame.cpp:332
 msgid "Segment filename"
-msgstr "Файл сегмента"
+msgstr "Назва файла сегмента"
 
 #: src/info/mkvinfo.cpp:656
 msgid "Segment filename: %1%"
-msgstr "Файл сегмента: %1%"
+msgstr "Назва файла сегмента: %1%"
 
 #: src/mmg/tabs/global.cpp:296
 msgid "Segment info file:"
@@ -5806,7 +5806,7 @@ msgid ""
 "The demultiplexer for the file '%1%' failed to initialize:\n"
 "%2%\n"
 msgstr ""
-"Дільник для файлу '%1%' Помилка при ініціалізації:\n"
+" Збій ініціалізації демультиплексера для файлу '%1%':\n"
 "%2%\n"
 
 #: src/mmg/tabs/global.cpp:294
