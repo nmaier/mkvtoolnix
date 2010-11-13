@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-09-26 22:43+0200\n"
+"PO-Revision-Date: 2010-11-13 21:27+0300\n"
 "Last-Translator: rusguy6 rusguy6 <rusguy6@gmail.com>\n"
 "Language-Team: Russian <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -639,7 +639,7 @@ msgstr " (свободный размер)"
 
 #: src/info/mkvinfo.cpp:349
 msgid " (h.264 profile: %1% @L%2%.%3%)"
-msgstr ""
+msgstr " (h.264 профиль: %1% @L%2%.%3%)"
 
 #: src/info/mkvinfo.cpp:768
 msgid " (inches)"
@@ -739,7 +739,7 @@ msgstr " неизвестный размер"
 
 #: src/mmg/cli_options_dlg.cpp:110
 msgid "### Development hacks ###"
-msgstr ""
+msgstr "### Работники развития ###"
 
 #: src/mmg/cli_options_dlg.cpp:85
 msgid "### Global output control ###"
@@ -2823,7 +2823,7 @@ msgstr "Dirac"
 
 #: src/mmg/options/mmg.cpp:100
 msgid "Disable header removal compression for audio and video tracks by default"
-msgstr ""
+msgstr "Отключить удаление заголовка сжатия для аудио и видео треков по умолчанию"
 
 #: src/mmg/jobs.cpp:479
 msgid "Disable the selected job(s) and sets their status to 'done'"
@@ -3536,7 +3536,7 @@ msgstr "При выборе mmg будет автоматически устан
 
 #: src/mmg/options/mmg.cpp:101
 msgid "If checked mmg will set the 'compression' drop down box to 'none' for all audio and video tracks by default. The user can still change the compression setting afterwards."
-msgstr ""
+msgstr "При выборе mmg будет установлено 'сжатие' вниз в окне 'нет' для всех аудио и видео треков по умолчанию. Пользователь может изменить настройки сжатия."
 
 #: src/mmg/options/mmg.cpp:95
 msgid "If checked mmg will warn if it thinks that you're using it incorrectly. Such warnings are shown at least once even if you turn this feature off."
@@ -5511,9 +5511,8 @@ msgid "Subtitle track %u"
 msgstr "Субтитры дорожки %u"
 
 #: src/merge/mkvmerge.cpp:357
-#, fuzzy
 msgid "Supported file types:\n"
-msgstr "Элемент типа:\n"
+msgstr "Поддерживаемые типы файлов:\n"
 
 #: src/common/cli_parser.cpp:176
 msgid "Suppress status output."
@@ -5916,9 +5915,8 @@ msgid "The file has been changed by another program since it was read by the hea
 msgstr "Файл был изменен другой программой, так как он был прочитан заголовок редактора. Поэтому вам придется повторно загрузить его. К сожалению, это означает, что все изменения будут потеряны."
 
 #: src/propedit/propedit.h:18
-#, fuzzy
 msgid "The file has not been modified."
-msgstr "Файл не существует."
+msgstr "Файл не был изменен."
 
 #: src/input/r_tta.cpp:64
 msgid "The file header is too short.\n"
@@ -6821,9 +6819,8 @@ msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video st
 msgstr "Неожиданная рамка кадра после единственной полевой структуры. Установите видео поток MPEG2 прежде чем попытаться мультиплексировать.\n"
 
 #: src/info/mkvinfo.cpp:363
-#, fuzzy
 msgid "Unknown"
-msgstr "неизвестный"
+msgstr "Неизвестный"
 
 #: src/output/p_aac.cpp:130
 msgid "Unknown AAC MPEG-2 profile %1%."
@@ -8672,20 +8669,28 @@ msgstr "Да"
 
 #~ msgid "%1% at %2%"
 #~ msgstr "%1% в %2%"
+
 #~ msgid "(Unknown element: %1%)"
 #~ msgstr "(Неизвестный элемент: %1%)"
+
 #~ msgid "DTS (Digital Theater System)"
 #~ msgstr "DTS (Digital Theater System)"
+
 #~ msgid "Dirac elementary stream"
 #~ msgstr "Dirac элементарный поток"
+
 #~ msgid "Do not write those header elements whose values are the same as their default values according to the Matroska specs."
 #~ msgstr "Не пишите заголовок тех элементов, значения которых совпадают с их значениями по умолчанию в соответствии с Matroska критериям."
+
 #~ msgid "FLAC lossless audio"
 #~ msgstr "FLAC аудио без потерь"
+
 #~ msgid "File/segment title"
 #~ msgstr "Файл/сегмент название"
+
 #~ msgid "IVF with VP8"
 #~ msgstr "IVF с VP8"
+
 #~ msgid ""
 #~ "Known file types:\n"
 #~ "  ext   description\n"
@@ -8694,73 +8699,106 @@ msgstr "Да"
 #~ "Известные типы файла:\n"
 #~ "  описание расширения\n"
 #~ "  ----  --------------------------\n"
+
 #~ msgid "MPEG program stream"
 #~ msgstr "MPEG программный поток"
+
 #~ msgid "MPEG-1 layer II audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 layer II audio (CBR и VBR/ABR)"
+
 #~ msgid "MPEG-1 layer III audio (CBR and VBR/ABR)"
 #~ msgstr "MPEG-1 layer III audio (CBR и VBR/ABR)"
+
 #~ msgid "MPEG-1 video elementary stream"
 #~ msgstr "MPEG-1 video элементарный поток"
+
 #~ msgid "MPEG-2 video elementary stream"
 #~ msgstr "MPEG-2 video элементарный поток"
+
 #~ msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|All files|*.*"
 #~ msgstr "Matroska файлы (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|Все файлы|*.*"
+
 #~ msgid "Other global options"
 #~ msgstr "Другие глобальные опции"
+
 #~ msgid "Quicktime/MP4 audio and video"
 #~ msgstr "Quicktime/MP4 Audio и Video"
+
 #~ msgid "RealMedia audio and video"
 #~ msgstr "RealMedia Audio и Video"
+
 #~ msgid "Sets the compression used for VobSub subtitles. If nothing is chosen then the VobSubs will be automatically compressed with zlib. 'none' results is files that are a lot larger."
 #~ msgstr "Устанавливает сжатие, используемое для субтитров VobSub. Если ничего не выбрали, то VobSubs будут автоматически сжимать с zlib. Результаты это файлы, которые много больше."
+
 #~ msgid "TTA lossless audio"
 #~ msgstr "TTA аудио без потерь"
+
 #~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
 #~ msgstr "MPEG-4 часть 2 сжатие работает только с родным MPEG-4. Тем не менее, родной MPEG-4 режим не был выбран с '--engage native_mpeg4'.\n"
+
 #~ msgid "This track uses a Matroska feature called 'Codec state elements'. mkvmerge supports these but this feature has not been turned on with the option '--engage use_codec_state'.\n"
 #~ msgstr "Эта дорожка использует особенность Matroska, названную 'запоминающие элементы Codec'. mkvmerge поддерживает их, но эта особенность не была включена с опцией '--engage use_codec_state'.\n"
+
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "Использование FLAC выходного модуля.\n"
+
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "VC1 видео элементарный поток"
+
 #~ msgid "VobBtn buttons"
 #~ msgstr "VobBtn кнопки"
+
 #~ msgid "WAVE (uncompressed PCM)"
 #~ msgstr "WAVE (несжатый PCM)"
+
 #~ msgid "WAVPACK lossless audio"
 #~ msgstr "WAVPACK аудио без потерь"
+
 #~ msgid "Write raw FLAC files (default: write OggFLAC files)."
 #~ msgstr "Создать исходные файлы FLAC (по умолчанию: написать OggFLAC файлы)."
+
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "аудио/видео/текст субтитров внедренных в OGG"
+
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить ошибки обратного вызова.\n"
+
 #~ msgid "flac_header_extraction: Could not set the metadata callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить метаданных обратного вызова.\n"
+
 #~ msgid "flac_header_extraction: Could not set the read callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить читать обратного вызова.\n"
+
 #~ msgid "flac_header_extraction: Could not set the write callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить написать обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the eof callback.\n"
 #~ msgstr "flac_reader: Не удалось установить конец файла обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the error callback.\n"
 #~ msgstr "flac_reader: Не удалось установить ошибки обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the length callback.\n"
 #~ msgstr "flac_reader: Не удалось установить длину обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the metadata callback.\n"
 #~ msgstr "flac_reader: Не удалось установить метаданных обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the read callback.\n"
 #~ msgstr "flac_reader: Не удалось установить читать обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the seek callback.\n"
 #~ msgstr "flac_reader: Не удалось установить возвратный вызов поиска.\n"
+
 #~ msgid "flac_reader: Could not set the tell callback.\n"
 #~ msgstr "flac_reader: Не удалось установить сказать обратного вызова.\n"
+
 #~ msgid "flac_reader: Could not set the write callback.\n"
 #~ msgstr "flac_reader: Не удалось установить написать обратного вызова.\n"
+
 #~ msgid "general Matroska files"
 #~ msgstr "Общие файлы Matroska"
+
 #~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 #~ msgstr "r_matroska: Кластер не содержат кластера тайм-кода. Файл не работает. Прерывание.\n"
-
