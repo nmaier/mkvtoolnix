@@ -117,6 +117,8 @@ dts_packetizer_c::set_headers() {
   else
     set_audio_channels(m_first_header.audio_channels);
 
+  set_track_default_duration(get_dts_packet_length_in_nanoseconds(&m_first_header));
+
   generic_packetizer_c::set_headers();
 }
 
