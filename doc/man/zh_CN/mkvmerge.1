@@ -865,19 +865,19 @@ AVC/h\&.264
 .PP
 \fB\-\-compression\fR \fITID:n\fR
 .RS 4
-Selects the compression method to be used for the track\&. Note that the player also has to support this method\&. Valid values are \*(Aqnone\*(Aq, \*(Aqzlib\*(Aq, \*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aq, \*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aq and \*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq\&. The values \*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aq and \*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aq are only available if
+选择用于该轨道的压缩方式。注意播放器也得支持该方式。有效的值有 \*(Aqnone（无压缩）\*(Aq、\*(Aqzlib\*(Aq、\*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aq、\*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aq 与 \*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq。值 \*(Aqlzo\*(Aq/\*(Aqlxo1x\*(Aq 与 \*(Aqbz2\*(Aq/\*(Aqbzlib\*(Aq 仅当
 \fBmkvmerge\fR(1)
-has been compiled with support for the
+分别附加相应的
 liblzo(TM)
-and
+和
 bzlib(TM)
-compression libraries, respectively\&.
+压缩库编译时有效。
 .sp
-The compression method \*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq is a special compression method called \*(Aqheader removal\*(Aq that is only available for
+压缩方式 \*(Aqmpeg4_p2\*(Aq/\*(Aqmpeg4p2\*(Aq 是一种称为 \*(Aq去头\*(Aq 的特殊压缩方式，只对
 MPEG4
-part 2 video tracks\&.
+part 2 视频轨可用。
 .sp
-The default for some subtitle tracks is \*(Aqzlib\*(Aq compression\&. This compression method is also the one that most if not all playback applications support\&. Support for other compression methods other than \*(Aqnone\*(Aq is not assured\&.
+部分字幕轨的默认值为 \*(Aqzlib\*(Aq 压缩。此压缩方式也是大部分（如果不是所有）回放应用程序都支持的压缩方式。无法保证对除 \*(Aqnone（无压缩）\*(Aq 以外的其他压缩方式的支持。
 .RE
 .PP
 仅用于视频轨的选项：
@@ -1421,13 +1421,13 @@ $ mkvmerge \-o 含语言代码的\&.mkv \-\-language 2:ger \-\-language 3:dut \-
 默认值
 的段落。
 .PP
-Turn off the compression for an input file\&.
+关闭针对某输入文件的压缩。
 .sp
 .if n \{\
 .RS 4
 .\}
 .nf
-$ mkvmerge \-o no\-compression\&.mkv \-\-compression \-1:none MyMovie\&.avi \-\-compression \-1:none mymovie\&.srt
+$ mkvmerge \-o 无压缩\&.mkv \-\-compression \-1:none 我的影片\&.avi \-\-compression \-1:none 我的影片\&.srt
 .fi
 .if n \{\
 .RE
@@ -1456,9 +1456,9 @@ Track ID 2: audio (A_MPEG/L3)
 .RE
 .\}
 .PP
-Do not confuse the track IDs that are assigned to the tracks that are placed in the output MKV file with the track IDs of the input files\&. Only the input file track IDs are used for options needing these values\&.
+不要混淆输出 MKV 文件时所分派的轨道 ID与输入文件的轨道 ID。只有输入文件的轨道 ID 可用于需要轨道 ID 值的选项。
 .PP
-Also note that each input file has its own set of track IDs\&. Therefore the track IDs for file \*(Aqfile1\&.ext\*(Aq as reported by \*(Aqmkvmerge \-\-identify\*(Aq do not change no matter how many other input files are there or in which position \*(Aqfile1\&.ext\*(Aq is used\&.
+还需注意，每个输入文件有其自己的一组轨道 ID。因此通过 \*(Aqmkvmerge \-\-identify\*(Aq 报告的文件 \*(Aq文件1\&.扩展名\*(Aq 的轨道 ID 不随其他输入文件的数量或 \*(Aq文件1\&.扩展名\*(Aq 所用到的位置变化。
 .PP
 轨道 ID 通常这样分配：
 .sp
@@ -1485,7 +1485,7 @@ AVI
 .\}
 
 MP4
-files: As output from x264, the video track has the ID 1\&.
+文件: 如 x264 所输出的文件，视频轨 ID 为 1。
 .RE
 .sp
 .RS 4
