@@ -108,6 +108,10 @@
      </para>
 
      <para>
+      By default &mkvpropedit; will edit the segment information section.
+     </para>
+
+     <para>
       See the section about <link linkend="mkvpropedit.edit_selectors">edit selectors</link> for a full description of the syntax.
      </para>
     </listitem>
@@ -256,6 +260,10 @@ title=Comments
    linkend="mkvpropedit.description.set">set</link> and <link linkend="mkvpropedit.description.delete">delete</link> actions operate
    on. This stays valid until the next <link linkend="mkvpropedit.description.edit"><option>--edit</option></link> option is found. The
    argument to this option is called the edit selector.
+  </para>
+
+  <para>
+   By default &mkvpropedit; will edit the segment information section.
   </para>
 
   <refsect2 id="mkvpropedit.edit_selectors.segment_info">

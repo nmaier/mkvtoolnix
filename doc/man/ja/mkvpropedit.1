@@ -54,6 +54,10 @@ mkvpropedit \- 再MUXすることなく、既存のMatroska(TM)ファイルの�
 .RS 4
 このオプション以降のadd、set、deleteアクションが適用されるMatroska(TM)ファイルセクション(セグメント情報または特定のトラックのヘッダ)を指定します。このオプションは、複数のエレメントを修正するために、複数回指定することができます。
 .sp
+By default
+\fBmkvpropedit\fR(1)
+will edit the segment information section\&.
+.sp
 文法の完全な説明は、エディットセレクタのセクションを参照してください。
 .RE
 .PP
@@ -139,6 +143,10 @@ title=Comments
 .PP
 
 \fB\-\-edit\fRオプションは、以降のadd、set及びdeleteアクションが適用されるMatroska(TM)ファイルセクション(セグメント情報または特定のトラックヘッダ)を設定します。これは次の\fB\-\-edit\fRオプションが見付かるまでずっと有効です。このオプションへの引数はエディットセレクタと呼ばれます。
+.PP
+By default
+\fBmkvpropedit\fR(1)
+will edit the segment information section\&.
 .SS "セグメント情報"
 .PP
 セグメント情報は次の3つの単語によって選択されます。\*(Aqinfo\*(Aq、\*(Aqsegment_info\*(Aqまたは\*(Aqsegmentinfo\*(Aqです。これはセグメントタイトルやセグメントUIDなどのプロパティを格納しています。
