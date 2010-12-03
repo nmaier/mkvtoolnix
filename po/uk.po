@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-11-26 16:57+0200\n"
+"PO-Revision-Date: 2010-12-03 17:26+0200\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -5850,11 +5850,11 @@ msgstr "Витягнуті значення для ширини і висоти 
 
 #: src/extract/extract_cli_parser.cpp:110
 msgid "The fifth mode tries to extract chapter information and tags and outputs them as a CUE sheet. This is the reverse of using a CUE sheet with mkvmerge's '--chapters' option."
-msgstr "П'ятий режим намагається витягти інформацію голови та теги і виводить їх у якості CUE аркуша. Це зворотній використанням CUE листа з mkvmerge '--chapters' варіант."
+msgstr "За допомогою п'ятого режиму йде спроба витягти інформацію розділів та теги і зберегти їх у формі CUE-списку. Це операція, зворотня використанню CUE-списку з ключем mkvmerge '--chapters'."
 
 #: src/merge/mkvmerge.cpp:1372
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
-msgstr "Файл '%1%' не може бути приєднаний тому що він не існує, або не може бути прочитані.\n"
+msgstr "Файл '%1%' не може бути приєднаний, тому що він не існує, або не може бути прочитаний.\n"
 
 #: src/extract/attachments.cpp:114
 #: src/extract/chapters.cpp:47
@@ -5870,7 +5870,7 @@ msgstr "Файл '%1%' не може бути відкритий для чита
 
 #: src/common/command_line.cpp:45
 msgid "The file '%1%' could not be opened for reading command line arguments.\n"
-msgstr "Файл '%1%' не може бути відкритий для читання аргументів командного рядка.\n"
+msgstr "Файл '%1%' не може бути відкритий для зчитування аргументів командного рядка.\n"
 
 #: src/extract/xtr_tta.cpp:87
 #: src/extract/tracks.cpp:276
@@ -5890,11 +5890,11 @@ msgstr "Файл '%1%' був відкритий для запису.\n"
 
 #: src/merge/mkvmerge.cpp:2115
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
-msgstr "Файл '%1%' має невідомий тип. Будь ласка, подивіться на підтримуваних типів файлів ('mkvmerge --list-types') і зв'язатися з автором Moritz Bunkus <moritz@bunkus.org>, якщо ваш тип файлу підтримується, але не визнаються належним чином.\n"
+msgstr "Файл '%1%' має невідомий тип. Будь ласка, продивіться підтримувані типи файлів ('mkvmerge --list-types') і зв'яжіться з автором Moritz Bunkus <moritz@bunkus.org>, якщо ваш тип файлу підтримується, але не розпізнається належним чином.\n"
 
 #: src/merge/pr_generic.cpp:1359
 msgid "The file '%1%' is a non-supported file type (%2%).\n"
-msgstr "Файл '%1%' не підтримує цей типом файлів (%2%).\n"
+msgstr "Файл '%1%' має непідтримуваний тип (%2%).\n"
 
 #: src/common/xml/element_parser.cpp:142
 msgid "The file '%1%' is empty."
@@ -5908,7 +5908,7 @@ msgstr "Файл '%s' не існує."
 #: src/mmg/tabs/input.cpp:296
 #, c-format
 msgid "The file '%s' is already processed in combination with the file '%s'. It cannot be added a second time."
-msgstr "Файл '%s' вже оброблений у поєднанні з файлом '%s'. Вона не може бути доданий другий раз."
+msgstr "Файл '%s' вже оброблений у поєднанні з файлом '%s'. Він не може бути приєднаний вдруге."
 
 #: src/info/qt_ui.cpp:77
 msgid "The file could not be opened for writing."
@@ -5920,11 +5920,11 @@ msgstr "Файл не існує."
 
 #: src/mmg/mmg_dialog.cpp:388
 msgid "The file does not seem to be a valid mkvmerge GUI settings file."
-msgstr "Файл не здається, дійсний mkvmerge GUI файл настройок."
+msgstr "Здається, що файл не є корректним файлом налаштувань mkvmerge GUI."
 
 #: src/mmg/header_editor/frame.cpp:526
 msgid "The file has been changed by another program since it was read by the header editor. Therefore you have to re-load it. Unfortunately this means that all of your changes will be lost."
-msgstr "Файл був змінений іншою програмою, так як він був прочитаний заголовок редактора. Тому вам доведеться повторно завантажити його. На жаль, це означає, що всі зміни будуть втрачені."
+msgstr "Файл був змінений іншою програмою після того, як він був прочитаний редактором заголовків. Тому вам доведеться повторно завантажити його. На жаль, це означає, що всі зміни будуть втрачені."
 
 #: src/propedit/propedit.h:18
 msgid "The file has not been modified."
@@ -5932,16 +5932,16 @@ msgstr "Файл не був змінений."
 
 #: src/input/r_tta.cpp:64
 msgid "The file header is too short.\n"
-msgstr "Файл заголовка є занадто коротким.\n"
+msgstr "Заголовок файлу є занадто коротким.\n"
 
 #: src/input/r_wavpack.cpp:56
 msgid "The file header was not read correctly.\n"
-msgstr "Файл заголовка не правильно прочитаний.\n"
+msgstr "Заголовок файлу не був правильно прочитаний.\n"
 
 #: src/mmg/tabs/input.cpp:346
 #, c-format
 msgid "The file is an unsupported container format (%s)."
-msgstr "Файл непідтримуваний формат контейнера (%s)."
+msgstr "Файл є непідтримуваним форматом контейнера (%s)."
 
 #: src/propedit/propedit.cpp:87
 msgid "The file is analyzed.\n"
