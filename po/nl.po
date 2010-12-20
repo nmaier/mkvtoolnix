@@ -802,7 +802,7 @@ msgstr ""
 
 #: src/mmg/jobs.cpp:296
 #: src/mmg/jobs.cpp:306
-#: src/mmg/mux_dialog.cpp:248
+#: src/mmg/mux_dialog.cpp:249
 #, c-format
 msgid "%d minute(s) %d second(s)"
 msgstr "%d minute(en) %d second(en)"
@@ -1676,7 +1676,7 @@ msgstr "AVC/h.264 basis stroom"
 msgid "AVI (Audio/Video Interleaved)"
 msgstr "AVI (Audio/Video Interleaved)"
 
-#: src/mmg/mux_dialog.cpp:104
+#: src/mmg/mux_dialog.cpp:105
 msgid "Abort"
 msgstr "Afbreken"
 
@@ -2282,7 +2282,7 @@ msgstr "Kies een invoer bestand om bij te voegen"
 #: src/mmg/mmg_dialog.cpp:410
 #: src/mmg/mmg_dialog.cpp:719
 #: src/mmg/mmg_dialog.cpp:740
-#: src/mmg/mux_dialog.cpp:262
+#: src/mmg/mux_dialog.cpp:263
 #: src/mmg/tabs/chapters.cpp:636
 #: src/mmg/tabs/chapters.cpp:680
 msgid "Choose an output file"
@@ -2476,7 +2476,7 @@ msgid "CorePicture frame %1% not supported.\n"
 msgstr "HoofdPlaatje beeld %1% niet ondersteund.\n"
 
 #: src/mmg/jobs.cpp:183
-#: src/mmg/mux_dialog.cpp:129
+#: src/mmg/mux_dialog.cpp:130
 #: src/mmg/tabs/input.cpp:311
 #, c-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
@@ -3053,7 +3053,7 @@ msgid "Error writing Matroska file"
 msgstr "Fout bij schrijven MATROSKA bestand"
 
 #: src/common/output.cpp:72
-#: src/mmg/mux_dialog.cpp:188
+#: src/mmg/mux_dialog.cpp:189
 msgid "Error:"
 msgstr "Fout:"
 
@@ -3086,11 +3086,11 @@ msgstr ""
 msgid "Error: vorbis_packetizer: Could not extract the stream's parameters from the first packets.\n"
 msgstr "Fout: vorbis_packetizer: Kon de de stroom parameters niet achterhalen uit het eerste pakket.\n"
 
-#: src/mmg/mux_dialog.cpp:94
+#: src/mmg/mux_dialog.cpp:95
 msgid "Errors:"
 msgstr "Fouten:"
 
-#: src/mmg/mux_dialog.cpp:359
+#: src/mmg/mux_dialog.cpp:360
 msgid "Everything went fine."
 msgstr "Alles ging goed"
 
@@ -3217,7 +3217,7 @@ msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n
 msgstr "Bestand bevat minder beelden dan verwacht of is beschadigd na beeld %1%.\n"
 
 #: src/mmg/mmg_dialog.cpp:749
-#: src/mmg/mux_dialog.cpp:130
+#: src/mmg/mux_dialog.cpp:131
 #: src/mmg/tabs/input.cpp:312
 msgid "File creation failed"
 msgstr "Aanmaken bestand mislukt"
@@ -4009,7 +4009,7 @@ msgstr "Laad hoofdstuk bestand (simpel/OGM format of XML format)"
 msgid "Load muxing settings from a file"
 msgstr "Laad samenvoeg instellingen vanuit een bestand"
 
-#: src/mmg/mux_dialog.cpp:262
+#: src/mmg/mux_dialog.cpp:263
 #, c-format
 msgid "Log files (*.txt)|*.txt|%s"
 msgstr "Log bestanden (*.txt)|*.txt|%s"
@@ -4210,7 +4210,7 @@ msgstr "Verplaats geselecteerde ta(a)k(en) omhoog"
 msgid "Muxing application: %1%"
 msgstr "Applicatie samenvoegen: %1%"
 
-#: src/mmg/mux_dialog.cpp:117
+#: src/mmg/mux_dialog.cpp:118
 msgid "Muxing in progress."
 msgstr "Samenvoegen in uitvoering."
 
@@ -4432,7 +4432,7 @@ msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM audio/video bestanden"
 
 #: src/mmg/message_dialog.cpp:31
-#: src/mmg/mux_dialog.cpp:100
+#: src/mmg/mux_dialog.cpp:101
 msgid "Ok"
 msgstr "Ok"
 
@@ -4493,7 +4493,7 @@ msgstr "Open een Matroska bestand"
 msgid "Open an existing Matroska file"
 msgstr "Open bestaand Matroska bestand"
 
-#: src/mmg/mux_dialog.cpp:327
+#: src/mmg/mux_dialog.cpp:328
 msgid "Open folder"
 msgstr "Open map"
 
@@ -4522,7 +4522,7 @@ msgstr "Originele waarde:"
 msgid "Other options"
 msgstr "Overige opties"
 
-#: src/mmg/mux_dialog.cpp:87
+#: src/mmg/mux_dialog.cpp:88
 msgid "Output"
 msgstr "Uitvoer"
 
@@ -4672,7 +4672,7 @@ msgid "Processing job %d/%d"
 msgstr "Uitvoerende taken %d/%d"
 
 #: src/mmg/jobs.cpp:248
-#: src/mmg/mux_dialog.cpp:190
+#: src/mmg/mux_dialog.cpp:191
 msgid "Progress"
 msgstr "Voortgang"
 
@@ -4889,7 +4889,7 @@ msgstr "Herlaad het huidige bestand zonder bewaren"
 
 #: src/mmg/jobs.cpp:71
 #: src/mmg/jobs.cpp:73
-#: src/mmg/mux_dialog.cpp:75
+#: src/mmg/mux_dialog.cpp:76
 msgid "Remaining time:"
 msgstr "Resterende tijd:"
 
@@ -4975,7 +4975,7 @@ msgstr "Bewaar &als"
 msgid "Save information as"
 msgstr "Bewaar informatie als"
 
-#: src/mmg/mux_dialog.cpp:107
+#: src/mmg/mux_dialog.cpp:108
 msgid "Save log"
 msgstr "Bewaar log"
 
@@ -5457,7 +5457,7 @@ msgid "Status"
 msgstr "Status"
 
 #: src/mmg/jobs.cpp:62
-#: src/mmg/mux_dialog.cpp:73
+#: src/mmg/mux_dialog.cpp:74
 msgid "Status and progress"
 msgstr "Status en voortgang"
 
@@ -6448,7 +6448,7 @@ msgstr "Er is geen bestand met ID '%1%'. Het argument voor, bijvoegen-aan, '--ap
 msgid "There is no translation available for '%1%'.\n"
 msgstr "Geen vertaling beschikbaar voor '%1%'.\n"
 
-#: src/mmg/mux_dialog.cpp:361
+#: src/mmg/mux_dialog.cpp:362
 msgid "There were ERRORs."
 msgstr "Er waren FOUTEN."
 
@@ -6457,11 +6457,11 @@ msgstr "Er waren FOUTEN."
 msgid "There were errors in the header values preventing the headers from being saved. The first error has been selected."
 msgstr "Er waren fouten in de kop waardes waardoor deze niet bewaard konden worden. De eerste fout is geselecteerd."
 
-#: src/mmg/mux_dialog.cpp:356
+#: src/mmg/mux_dialog.cpp:357
 msgid "There were warnings"
 msgstr "Er waren waarschuwingen"
 
-#: src/mmg/mux_dialog.cpp:354
+#: src/mmg/mux_dialog.cpp:355
 msgid "There were warnings, or the process was terminated."
 msgstr "Er waren waarchuwingen, of het proces is geëindigd."
 
@@ -7419,7 +7419,7 @@ msgstr "Waarschuw over mogelijk onjuist gebruik van MMG"
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
 msgstr "Waarschuwing in regel %1%: De start tijdcode is kleiner dan de vorige ingave. Alle ingangen van dit bestand worden gesorteerd op hun start tijd.\n"
 
-#: src/mmg/mux_dialog.cpp:186
+#: src/mmg/mux_dialog.cpp:187
 msgid "Warning:"
 msgstr "Waarschuwing:"
 
@@ -7435,7 +7435,7 @@ msgstr "Waarschuwing: Er zijn meer dan één sporen met UID %1%."
 msgid "Warning: There's more than one track with the number %1%."
 msgstr "Waarschuwing: Er is meer dan één spoor met het nummer %1%."
 
-#: src/mmg/mux_dialog.cpp:91
+#: src/mmg/mux_dialog.cpp:92
 msgid "Warnings:"
 msgstr "Waarschuwingen:"
 
@@ -7900,7 +7900,7 @@ msgstr "inflateInit() gefaald. Resultaat: %1%\n"
 #: src/mmg/jobs.cpp:72
 #: src/mmg/jobs.cpp:74
 #: src/mmg/jobs.cpp:162
-#: src/mmg/mux_dialog.cpp:76
+#: src/mmg/mux_dialog.cpp:77
 msgid "is being estimated"
 msgstr "wordt verwacht"
 
@@ -8176,7 +8176,7 @@ msgstr "Mkvmerge"
 msgid "mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]\n"
 msgstr "mkvmerge -o out [globale opties] [opties1] <bestand1> [@optie bestand ...]\n"
 
-#: src/mmg/mux_dialog.cpp:349
+#: src/mmg/mux_dialog.cpp:350
 #, c-format
 msgid "mkvmerge FAILED with a return code of %d. %s"
 msgstr "mkvmerge GEFAALD met terugkoppel code %d. %s"
@@ -8231,13 +8231,13 @@ msgstr ""
 msgid "mkvmerge executable"
 msgstr "Mkvmerge programma"
 
-#: src/mmg/mux_dialog.cpp:351
+#: src/mmg/mux_dialog.cpp:352
 #, c-format
 msgid "mkvmerge finished with a return code of %d. %s"
 msgstr "mkvmerge voltooide met terugkoppel code van %d. %s"
 
 #: src/mmg/jobs.cpp:147
-#: src/mmg/mux_dialog.cpp:304
+#: src/mmg/mux_dialog.cpp:305
 msgid "mkvmerge has finished"
 msgstr "mkvmerge is voltooid"
 
@@ -8246,7 +8246,7 @@ msgid "mkvmerge has not been compiled with FLAC support but handling of this str
 msgstr "mkvmerge is niet gecompileerd met FLAC ondersteuning maar het behandelen van deze stoorm is gevraagd.\n"
 
 #: src/mmg/jobs.cpp:49
-#: src/mmg/mux_dialog.cpp:44
+#: src/mmg/mux_dialog.cpp:45
 msgid "mkvmerge is running"
 msgstr "mkvmerge is uitgevoerd"
 
@@ -8254,7 +8254,7 @@ msgstr "mkvmerge is uitgevoerd"
 msgid "mkvmerge options"
 msgstr "mkvmerge opties"
 
-#: src/mmg/mux_dialog.cpp:88
+#: src/mmg/mux_dialog.cpp:89
 msgid "mkvmerge output:"
 msgstr "mkvmerge uitvoer:"
 
@@ -8580,7 +8580,7 @@ msgstr "usf_lezer: Kon bestand niet openen."
 msgid "usf_reader: Source is not a valid USF file."
 msgstr "usf_lezer: Bron is geen geldig USF bestand."
 
-#: src/common/strings/editing.cpp:266
+#: src/common/strings/editing.cpp:270
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "utf8_strlen(): Ongeldig UTF-8 karakter. Eerste byte: 0x%|1$02x|"
 

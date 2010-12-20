@@ -809,7 +809,7 @@ msgstr ""
 "unter der folgenden Adresse verfügbar:\n"
 "http://www.bunkus.org/videotools/mkvtoolnix/"
 
-#: src/mmg/jobs.cpp:296 src/mmg/jobs.cpp:306 src/mmg/mux_dialog.cpp:248
+#: src/mmg/jobs.cpp:296 src/mmg/jobs.cpp:306 src/mmg/mux_dialog.cpp:249
 #, c-format
 msgid "%d minute(s) %d second(s)"
 msgstr "%d Minute(n) %d Sekunde(n)"
@@ -1654,7 +1654,7 @@ msgstr "AVC/h.264 elementary streams"
 msgid "AVI (Audio/Video Interleaved)"
 msgstr "AVI (Audio/Video Interleaved)"
 
-#: src/mmg/mux_dialog.cpp:104
+#: src/mmg/mux_dialog.cpp:105
 msgid "Abort"
 msgstr "Abbrechen"
 
@@ -2231,7 +2231,7 @@ msgstr "Quelldatei zum Anhängen auswählen"
 
 #: src/mmg/jobs.cpp:409 src/mmg/mmg_dialog.cpp:314 src/mmg/mmg_dialog.cpp:410
 #: src/mmg/mmg_dialog.cpp:719 src/mmg/mmg_dialog.cpp:740
-#: src/mmg/mux_dialog.cpp:262 src/mmg/tabs/chapters.cpp:636
+#: src/mmg/mux_dialog.cpp:263 src/mmg/tabs/chapters.cpp:636
 #: src/mmg/tabs/chapters.cpp:680
 msgid "Choose an output file"
 msgstr "Zieldatei auswählen"
@@ -2418,7 +2418,7 @@ msgstr "Der CorePictureFrame %1% hat eine ungültige Kopfgröße %2%.\n"
 msgid "CorePicture frame %1% not supported.\n"
 msgstr "CorePicture-Frame %1% wird nicht unterstützt.\n"
 
-#: src/mmg/jobs.cpp:183 src/mmg/mux_dialog.cpp:129 src/mmg/tabs/input.cpp:311
+#: src/mmg/jobs.cpp:183 src/mmg/mux_dialog.cpp:130 src/mmg/tabs/input.cpp:311
 #, c-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
 msgstr "Die temporäre Datei für die Kommandozeile für mkvmerge '%s' konnte nicht erstellt werden (Fehlercode %d, %s)."
@@ -2976,7 +2976,7 @@ msgstr "Fehler beim Speichern der Informationen"
 msgid "Error writing Matroska file"
 msgstr "Fehler beim Schreiben der Matroska-Datei"
 
-#: src/common/output.cpp:72 src/mmg/mux_dialog.cpp:188
+#: src/common/output.cpp:72 src/mmg/mux_dialog.cpp:189
 msgid "Error:"
 msgstr "Fehler:"
 
@@ -3008,11 +3008,11 @@ msgstr ""
 msgid "Error: vorbis_packetizer: Could not extract the stream's parameters from the first packets.\n"
 msgstr "Fehler: vorbis_packetizer: Die Streamparameter konnten nicht aus den ersten Paketen extrahiert werden.\n"
 
-#: src/mmg/mux_dialog.cpp:94
+#: src/mmg/mux_dialog.cpp:95
 msgid "Errors:"
 msgstr "Fehler:"
 
-#: src/mmg/mux_dialog.cpp:359
+#: src/mmg/mux_dialog.cpp:360
 msgid "Everything went fine."
 msgstr "Alles lief gut."
 
@@ -3134,7 +3134,7 @@ msgstr "Datei-UID: %1%"
 msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n"
 msgstr "Die Datei enthält weniger Frames als erwartet, oder sie ist nach Frame %1% defekt.\n"
 
-#: src/mmg/mmg_dialog.cpp:749 src/mmg/mux_dialog.cpp:130
+#: src/mmg/mmg_dialog.cpp:749 src/mmg/mux_dialog.cpp:131
 #: src/mmg/tabs/input.cpp:312
 msgid "File creation failed"
 msgstr "Erstellen einer Datei schlug fehl"
@@ -3902,7 +3902,7 @@ msgstr "Kapiteldatei laden (einfaches/OGM-Format oder XML-Format)"
 msgid "Load muxing settings from a file"
 msgstr "Einstellungen aus einer Datei laden"
 
-#: src/mmg/mux_dialog.cpp:262
+#: src/mmg/mux_dialog.cpp:263
 #, c-format
 msgid "Log files (*.txt)|*.txt|%s"
 msgstr "Logdateien (*.txt)|*.txt|%s"
@@ -4099,7 +4099,7 @@ msgstr "Den ausgewählten Job nach oben verschieben"
 msgid "Muxing application: %1%"
 msgstr "Muxeranwendung: %1%"
 
-#: src/mmg/mux_dialog.cpp:117
+#: src/mmg/mux_dialog.cpp:118
 msgid "Muxing in progress."
 msgstr "Muxen läuft."
 
@@ -4313,7 +4313,7 @@ msgstr "Anzahl Kanäle in diesem Track."
 msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM Audio/Video-Dateien"
 
-#: src/mmg/message_dialog.cpp:31 src/mmg/mux_dialog.cpp:100
+#: src/mmg/message_dialog.cpp:31 src/mmg/mux_dialog.cpp:101
 msgid "Ok"
 msgstr "Ok"
 
@@ -4373,7 +4373,7 @@ msgstr "Matroska-Datei öffnen"
 msgid "Open an existing Matroska file"
 msgstr "Eine bestehende Matroska-Datei öffnen"
 
-#: src/mmg/mux_dialog.cpp:327
+#: src/mmg/mux_dialog.cpp:328
 msgid "Open folder"
 msgstr "Ordner öffnen"
 
@@ -4401,7 +4401,7 @@ msgstr "Originalwert:"
 msgid "Other options"
 msgstr "Weitere Optionen"
 
-#: src/mmg/mux_dialog.cpp:87
+#: src/mmg/mux_dialog.cpp:88
 msgid "Output"
 msgstr "Ausgabe"
 
@@ -4546,7 +4546,7 @@ msgstr "Ausfürhung 1000/1000"
 msgid "Processing job %d/%d"
 msgstr "Ausführung von Job %d/%d"
 
-#: src/mmg/jobs.cpp:248 src/mmg/mux_dialog.cpp:190
+#: src/mmg/jobs.cpp:248 src/mmg/mux_dialog.cpp:191
 msgid "Progress"
 msgstr "Fortschritt"
 
@@ -4755,7 +4755,7 @@ msgstr "Referenz virtuell: %1%"
 msgid "Reload the current file without saving"
 msgstr "Die aktuelle Datei neu laden, ohne zu speichern"
 
-#: src/mmg/jobs.cpp:71 src/mmg/jobs.cpp:73 src/mmg/mux_dialog.cpp:75
+#: src/mmg/jobs.cpp:71 src/mmg/jobs.cpp:73 src/mmg/mux_dialog.cpp:76
 msgid "Remaining time:"
 msgstr "Verbleibende Zeit:"
 
@@ -4839,7 +4839,7 @@ msgstr "Speichern &unter"
 msgid "Save information as"
 msgstr "Informationen speichern unter"
 
-#: src/mmg/mux_dialog.cpp:107
+#: src/mmg/mux_dialog.cpp:108
 msgid "Save log"
 msgstr "Log speichern"
 
@@ -5312,7 +5312,7 @@ msgstr "Job mit ID %d (%s) wird am %s gestartet"
 msgid "Status"
 msgstr "Status"
 
-#: src/mmg/jobs.cpp:62 src/mmg/mux_dialog.cpp:73
+#: src/mmg/jobs.cpp:62 src/mmg/mux_dialog.cpp:74
 msgid "Status and progress"
 msgstr "Status und Fortschritt"
 
@@ -6277,7 +6277,7 @@ msgstr "Es gibt keine Datei mit der Nummer '%1%'. Das Argument für '--append-to
 msgid "There is no translation available for '%1%'.\n"
 msgstr "Für '%1%' ist keine Übersetzung verfübar.\n"
 
-#: src/mmg/mux_dialog.cpp:361
+#: src/mmg/mux_dialog.cpp:362
 msgid "There were ERRORs."
 msgstr "Es gab FEHLER."
 
@@ -6285,11 +6285,11 @@ msgstr "Es gab FEHLER."
 msgid "There were errors in the header values preventing the headers from being saved. The first error has been selected."
 msgstr "Es gibt Fehler in den Kopfdaten, sodass sie nicht gespeichert werden können. Der erste fehlerhafte Eintrag wurde ausgewählt."
 
-#: src/mmg/mux_dialog.cpp:356
+#: src/mmg/mux_dialog.cpp:357
 msgid "There were warnings"
 msgstr "Es gab Warnungen"
 
-#: src/mmg/mux_dialog.cpp:354
+#: src/mmg/mux_dialog.cpp:355
 msgid "There were warnings, or the process was terminated."
 msgstr "Es gab Warnungen, oder mkvmerge wurde unerwartet beendet"
 
@@ -7201,7 +7201,7 @@ msgstr "Wegen potenziell falscher Benutzung von mmg warnen"
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
 msgstr "Warnung in Zeile %1%: Der Start-Zeitstempel ist kleiner als der des vorhergehenden Eintrages. Alle Einträge aus dieser Datei werden nach ihrem Start-Zeitstempel sortiert.\n"
 
-#: src/mmg/mux_dialog.cpp:186
+#: src/mmg/mux_dialog.cpp:187
 msgid "Warning:"
 msgstr "Warnung:"
 
@@ -7217,7 +7217,7 @@ msgstr "Warnung: Es gibt mehr als einen Track mit der UID %1%."
 msgid "Warning: There's more than one track with the number %1%."
 msgstr "Warnung: Es gibt mehr als einen Track mit der Nummer %1%."
 
-#: src/mmg/mux_dialog.cpp:91
+#: src/mmg/mux_dialog.cpp:92
 msgid "Warnings:"
 msgstr "Warnungen: "
 
@@ -7658,7 +7658,7 @@ msgid "inflateInit() failed. Result: %1%\n"
 msgstr "inflateInit() schlug fehl. Fehlercode: %1%\n"
 
 #: src/mmg/jobs.cpp:72 src/mmg/jobs.cpp:74 src/mmg/jobs.cpp:162
-#: src/mmg/mux_dialog.cpp:76
+#: src/mmg/mux_dialog.cpp:77
 msgid "is being estimated"
 msgstr "wird abgeschätzt"
 
@@ -7930,7 +7930,7 @@ msgstr "mkvmerge"
 msgid "mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]\n"
 msgstr "mkvmerge -o aus [globale Optionen] [Optionen1] <Datei1> [@Optionsdatei ...]\n"
 
-#: src/mmg/mux_dialog.cpp:349
+#: src/mmg/mux_dialog.cpp:350
 #, c-format
 msgid "mkvmerge FAILED with a return code of %d. %s"
 msgstr "mkvmerge schlug mit einem Rückgabewert von %d fehl. %s"
@@ -7977,12 +7977,12 @@ msgstr ""
 msgid "mkvmerge executable"
 msgstr "mkvmerge-Programmdatei"
 
-#: src/mmg/mux_dialog.cpp:351
+#: src/mmg/mux_dialog.cpp:352
 #, c-format
 msgid "mkvmerge finished with a return code of %d. %s"
 msgstr "mkvmerge schloss den Prozess mit einem Rückgabewert von %d ab. %s"
 
-#: src/mmg/jobs.cpp:147 src/mmg/mux_dialog.cpp:304
+#: src/mmg/jobs.cpp:147 src/mmg/mux_dialog.cpp:305
 msgid "mkvmerge has finished"
 msgstr "mkvmerge ist fertig"
 
@@ -7990,7 +7990,7 @@ msgstr "mkvmerge ist fertig"
 msgid "mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"
 msgstr "mkvmerge wurden ohne FLAC-Unterstützung compiliert, aber dieser FLAC-Stream soll gemuxt werden.\n"
 
-#: src/mmg/jobs.cpp:49 src/mmg/mux_dialog.cpp:44
+#: src/mmg/jobs.cpp:49 src/mmg/mux_dialog.cpp:45
 msgid "mkvmerge is running"
 msgstr "mkvmerge läuft"
 
@@ -7998,7 +7998,7 @@ msgstr "mkvmerge läuft"
 msgid "mkvmerge options"
 msgstr "mkvmerge-Optionen"
 
-#: src/mmg/mux_dialog.cpp:88
+#: src/mmg/mux_dialog.cpp:89
 msgid "mkvmerge output:"
 msgstr "mkvmerge-Zieldatei:"
 
@@ -8306,7 +8306,7 @@ msgstr "usf_reader: Die Quelldatei konnte nicht geöffnet werden."
 msgid "usf_reader: Source is not a valid USF file."
 msgstr "usf_reader: Die Quelldatei ist keine gültige USF-Datei."
 
-#: src/common/strings/editing.cpp:266
+#: src/common/strings/editing.cpp:270
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "utf8_strlen(): Ungültiges UTF-8-Zeichen. Erstes Byte: 0x%|1$02x|"
 

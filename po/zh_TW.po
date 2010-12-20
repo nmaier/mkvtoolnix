@@ -791,7 +791,7 @@ msgstr ""
 
 #: src/mmg/jobs.cpp:296
 #: src/mmg/jobs.cpp:306
-#: src/mmg/mux_dialog.cpp:248
+#: src/mmg/mux_dialog.cpp:249
 #, c-format
 msgid "%d minute(s) %d second(s)"
 msgstr "%d 分鐘 %d 秒"
@@ -1658,7 +1658,7 @@ msgstr "AVC/h.264 基本流"
 msgid "AVI (Audio/Video Interleaved)"
 msgstr "AVI (交錯的音訊/視訊)"
 
-#: src/mmg/mux_dialog.cpp:104
+#: src/mmg/mux_dialog.cpp:105
 msgid "Abort"
 msgstr "中止"
 
@@ -2260,7 +2260,7 @@ msgstr "選擇要添加的檔案"
 #: src/mmg/mmg_dialog.cpp:410
 #: src/mmg/mmg_dialog.cpp:719
 #: src/mmg/mmg_dialog.cpp:740
-#: src/mmg/mux_dialog.cpp:262
+#: src/mmg/mux_dialog.cpp:263
 #: src/mmg/tabs/chapters.cpp:636
 #: src/mmg/tabs/chapters.cpp:680
 msgid "Choose an output file"
@@ -2454,7 +2454,7 @@ msgid "CorePicture frame %1% not supported.\n"
 msgstr "不支援 CorePicture 畫格 %1%。\n"
 
 #: src/mmg/jobs.cpp:183
-#: src/mmg/mux_dialog.cpp:129
+#: src/mmg/mux_dialog.cpp:130
 #: src/mmg/tabs/input.cpp:311
 #, c-format
 msgid "Could not create a temporary file for mkvmerge's command line option called '%s' (error code %d, %s)."
@@ -3031,7 +3031,7 @@ msgid "Error writing Matroska file"
 msgstr "寫入 Matroska 檔時發生錯誤"
 
 #: src/common/output.cpp:72
-#: src/mmg/mux_dialog.cpp:188
+#: src/mmg/mux_dialog.cpp:189
 msgid "Error:"
 msgstr "發生錯誤:"
 
@@ -3064,11 +3064,11 @@ msgstr ""
 msgid "Error: vorbis_packetizer: Could not extract the stream's parameters from the first packets.\n"
 msgstr "發生錯誤: vorbis_packetizer: 無法從第一個套件中提取媒體流參數。\n"
 
-#: src/mmg/mux_dialog.cpp:94
+#: src/mmg/mux_dialog.cpp:95
 msgid "Errors:"
 msgstr "錯誤資訊:"
 
-#: src/mmg/mux_dialog.cpp:359
+#: src/mmg/mux_dialog.cpp:360
 msgid "Everything went fine."
 msgstr "一切正常。"
 
@@ -3195,7 +3195,7 @@ msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n
 msgstr "檔案包含的畫格數比預期的少，或者檔在 %1% 畫格後被破壞。\n"
 
 #: src/mmg/mmg_dialog.cpp:749
-#: src/mmg/mux_dialog.cpp:130
+#: src/mmg/mux_dialog.cpp:131
 #: src/mmg/tabs/input.cpp:312
 msgid "File creation failed"
 msgstr "建立檔案失敗"
@@ -3987,7 +3987,7 @@ msgstr "載入章節檔 (簡單/OGM 格式或 XML 格式)"
 msgid "Load muxing settings from a file"
 msgstr "從檔案載入合成設定"
 
-#: src/mmg/mux_dialog.cpp:262
+#: src/mmg/mux_dialog.cpp:263
 #, c-format
 msgid "Log files (*.txt)|*.txt|%s"
 msgstr "日誌檔 (*.txt)|*.txt|%s"
@@ -4188,7 +4188,7 @@ msgstr "將所選任務上移"
 msgid "Muxing application: %1%"
 msgstr "合成程式: %1%"
 
-#: src/mmg/mux_dialog.cpp:117
+#: src/mmg/mux_dialog.cpp:118
 msgid "Muxing in progress."
 msgstr "合成進行中。"
 
@@ -4410,7 +4410,7 @@ msgid "Ogg/OGM audio/video files"
 msgstr "Ogg/OGM 音訊/視訊檔"
 
 #: src/mmg/message_dialog.cpp:31
-#: src/mmg/mux_dialog.cpp:100
+#: src/mmg/mux_dialog.cpp:101
 msgid "Ok"
 msgstr "確定"
 
@@ -4471,7 +4471,7 @@ msgstr "開啟 Matroska 檔案"
 msgid "Open an existing Matroska file"
 msgstr "開啟現有的 Matroska 檔案"
 
-#: src/mmg/mux_dialog.cpp:327
+#: src/mmg/mux_dialog.cpp:328
 msgid "Open folder"
 msgstr "開啟資料夾"
 
@@ -4500,7 +4500,7 @@ msgstr "原始數值:"
 msgid "Other options"
 msgstr "其他選項"
 
-#: src/mmg/mux_dialog.cpp:87
+#: src/mmg/mux_dialog.cpp:88
 msgid "Output"
 msgstr "輸出"
 
@@ -4647,7 +4647,7 @@ msgid "Processing job %d/%d"
 msgstr "正在處理任務 %d/%d"
 
 #: src/mmg/jobs.cpp:248
-#: src/mmg/mux_dialog.cpp:190
+#: src/mmg/mux_dialog.cpp:191
 msgid "Progress"
 msgstr "進度"
 
@@ -4864,7 +4864,7 @@ msgstr "在不儲存的情況下重新載入目前檔案"
 
 #: src/mmg/jobs.cpp:71
 #: src/mmg/jobs.cpp:73
-#: src/mmg/mux_dialog.cpp:75
+#: src/mmg/mux_dialog.cpp:76
 msgid "Remaining time:"
 msgstr "剩餘時間: "
 
@@ -4949,7 +4949,7 @@ msgstr "另存新檔(&A)"
 msgid "Save information as"
 msgstr "另存資訊"
 
-#: src/mmg/mux_dialog.cpp:107
+#: src/mmg/mux_dialog.cpp:108
 msgid "Save log"
 msgstr "儲存日誌"
 
@@ -5429,7 +5429,7 @@ msgid "Status"
 msgstr "狀態"
 
 #: src/mmg/jobs.cpp:62
-#: src/mmg/mux_dialog.cpp:73
+#: src/mmg/mux_dialog.cpp:74
 msgid "Status and progress"
 msgstr "狀態和進度"
 
@@ -6405,7 +6405,7 @@ msgstr "沒有檔案的 ID 為「%1%」。參數「--append-to」無效。\n"
 msgid "There is no translation available for '%1%'.\n"
 msgstr "尚無「%1%」的翻譯。\n"
 
-#: src/mmg/mux_dialog.cpp:361
+#: src/mmg/mux_dialog.cpp:362
 msgid "There were ERRORs."
 msgstr "有 *錯誤* 發生。"
 
@@ -6414,11 +6414,11 @@ msgstr "有 *錯誤* 發生。"
 msgid "There were errors in the header values preventing the headers from being saved. The first error has been selected."
 msgstr "出現一些影響表頭資訊儲存的表頭值錯誤。第一處錯誤已被選中。"
 
-#: src/mmg/mux_dialog.cpp:356
+#: src/mmg/mux_dialog.cpp:357
 msgid "There were warnings"
 msgstr "有警告資訊"
 
-#: src/mmg/mux_dialog.cpp:354
+#: src/mmg/mux_dialog.cpp:355
 msgid "There were warnings, or the process was terminated."
 msgstr "有警告資訊，或者處理處理程序被中止。"
 
@@ -7369,7 +7369,7 @@ msgstr "對 mmg 可能的錯誤用法發出警告"
 msgid "Warning in line %1%: The start timecode is smaller than that of the previous entry. All entries from this file will be sorted by their start time.\n"
 msgstr "第 %1% 行處警告: 起始時間早於前一條的起始時間。此檔案中的所有項目都將按起始時間重新排列。\n"
 
-#: src/mmg/mux_dialog.cpp:186
+#: src/mmg/mux_dialog.cpp:187
 msgid "Warning:"
 msgstr "警告:"
 
@@ -7385,7 +7385,7 @@ msgstr "警告: UID 為 %1% 的軌道多於一條。"
 msgid "Warning: There's more than one track with the number %1%."
 msgstr "警告: 序號為 %1% 的軌道多於一條。"
 
-#: src/mmg/mux_dialog.cpp:91
+#: src/mmg/mux_dialog.cpp:92
 msgid "Warnings:"
 msgstr "警告:"
 
@@ -7849,7 +7849,7 @@ msgstr "inflateInit() 失敗。結果: %1%\n"
 #: src/mmg/jobs.cpp:72
 #: src/mmg/jobs.cpp:74
 #: src/mmg/jobs.cpp:162
-#: src/mmg/mux_dialog.cpp:76
+#: src/mmg/mux_dialog.cpp:77
 msgid "is being estimated"
 msgstr "正在估計"
 
@@ -8125,7 +8125,7 @@ msgstr "mkvmerge"
 msgid "mkvmerge -o out [global options] [options1] <file1> [@optionsfile ...]\n"
 msgstr "mkvmerge -o out [整體選項] [選項1] <檔案1> [@optionsfile ...]\n"
 
-#: src/mmg/mux_dialog.cpp:349
+#: src/mmg/mux_dialog.cpp:350
 #, c-format
 msgid "mkvmerge FAILED with a return code of %d. %s"
 msgstr "mkvmerge 執行 *失敗* ，返回碼 %d。 %s"
@@ -8180,13 +8180,13 @@ msgstr ""
 msgid "mkvmerge executable"
 msgstr "mkvmerge 可執行檔"
 
-#: src/mmg/mux_dialog.cpp:351
+#: src/mmg/mux_dialog.cpp:352
 #, c-format
 msgid "mkvmerge finished with a return code of %d. %s"
 msgstr "mkvmerge 執行完畢，返回碼 %d。%s"
 
 #: src/mmg/jobs.cpp:147
-#: src/mmg/mux_dialog.cpp:304
+#: src/mmg/mux_dialog.cpp:305
 msgid "mkvmerge has finished"
 msgstr "mkvmerge 已經執行完畢"
 
@@ -8195,7 +8195,7 @@ msgid "mkvmerge has not been compiled with FLAC support but handling of this str
 msgstr "mkvmerge 編譯時未包含 FLAC 支援，但收到了對此類媒體流的處理請求。\n"
 
 #: src/mmg/jobs.cpp:49
-#: src/mmg/mux_dialog.cpp:44
+#: src/mmg/mux_dialog.cpp:45
 msgid "mkvmerge is running"
 msgstr "mkvmerge 正在執行"
 
@@ -8203,7 +8203,7 @@ msgstr "mkvmerge 正在執行"
 msgid "mkvmerge options"
 msgstr "mkvmerge 選項"
 
-#: src/mmg/mux_dialog.cpp:88
+#: src/mmg/mux_dialog.cpp:89
 msgid "mkvmerge output:"
 msgstr "mkvmerge 輸出:"
 
@@ -8528,7 +8528,7 @@ msgstr "usf_reader: 無法開啟來源檔案。"
 msgid "usf_reader: Source is not a valid USF file."
 msgstr "usf_reader: 來來源非有效的 USF 檔。"
 
-#: src/common/strings/editing.cpp:266
+#: src/common/strings/editing.cpp:270
 msgid "utf8_strlen(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "utf8_strlen(): 無效 UTF-8 字元。第一位元組: 0x%|1$02x|"
 
