@@ -113,7 +113,10 @@ Show version information and exit\&.
 \fB@\fRoptions\-file
 .RS 4
 Reads additional command line arguments from the file
-\fIoptions\-file\fR\&. Lines whose first non\-whitespace character is a hash mark (\*(Aq#\*(Aq) are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&. There is no meta character escaping\&.
+\fIoptions\-file\fR\&. Lines whose first non\-whitespace character is a hash mark (\*(Aq#\*(Aq) are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&.
+.sp
+Several chars can be escaped, e\&.g\&. if you need to start a non\-comment line with \*(Aq#\*(Aq\&. The rules are described in
+the section about escaping text\&.
 .sp
 The command line \*(Aq\fBmkvextract tracks source\&.mkv \-\-raw 1:destination\&.raw\fR\*(Aq could be converted into the following option file:
 .sp
@@ -548,6 +551,11 @@ has output at least one warning, but extraction did continue\&. A warning is pre
 \fBmkvextract\fR(1)
 aborts right after outputting the error message\&. Error messages range from wrong command line arguments over read/write errors to broken files\&.
 .RE
+.SH "ESCAPING SPECIAL CHARS IN TEXT"
+.PP
+There are a few places in which special characters in text must or should be escaped\&. The rules for escaping are simple: each character that needs escaping is replaced with a backslash followed by another character\&.
+.PP
+The rules are: \*(Aq \*(Aq becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq itself becomes \*(Aq\e\e\*(Aq\&.
 .SH "SEE ALSO"
 .PP
 

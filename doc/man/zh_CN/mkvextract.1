@@ -104,9 +104,11 @@ Matroska(TM)
 .PP
 \fB@\fR选项文件
 .RS 4
-从文件
-\fI选项文件\fR
-中读取额外的命令行参数。首个非空白字符为井号 (\*(Aq#\*(Aq) 的行将被当作注释对待，在处理过程中将被忽略。各行开头与结尾的空白将被除去。各行必须恰好含有一个选项。没有元字符转义。
+Reads additional command line arguments from the file
+\fIoptions\-file\fR\&. Lines whose first non\-whitespace character is a hash mark (\*(Aq#\*(Aq) are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&.
+.sp
+Several chars can be escaped, e\&.g\&. if you need to start a non\-comment line with \*(Aq#\*(Aq\&. The rules are described in
+the section about escaping text\&.
 .sp
 命令行 \*(Aq\fBmkvextract tracks 源\&.mkv \-\-raw 1:目标\&.raw\fR\*(Aq 可以转换为下面所示选项文件:
 .sp
@@ -543,6 +545,11 @@ OGM
 \fBmkvextract\fR(1)
 在输出错误信息后即中断处理。错误信息可能是错误的命令行参数，也可能是损坏文件的读取/写入错误。
 .RE
+.SH "ESCAPING SPECIAL CHARS IN TEXT"
+.PP
+There are a few places in which special characters in text must or should be escaped\&. The rules for escaping are simple: each character that needs escaping is replaced with a backslash followed by another character\&.
+.PP
+The rules are: \*(Aq \*(Aq becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq itself becomes \*(Aq\e\e\*(Aq\&.
 .SH "参阅"
 .PP
 

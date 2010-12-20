@@ -164,7 +164,12 @@
       <para>
        Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace
        character is a hash mark ('<literal>#</literal>') are treated as comments and ignored. White spaces at the start and end of a line
-       will be stripped. Each line must contain exactly one option.  There is no meta character escaping.
+       will be stripped. Each line must contain exactly one option.
+      </para>
+
+      <para>
+       Several chars can be escaped, e.g. if you need to start a non-comment line with '#'. The rules are described in <link
+       linkend="mkvextract.escaping">the section about escaping text</link>.
       </para>
 
       <para>
@@ -590,6 +595,18 @@ $ mkvextract tags source.mkv --redirect-output tags.xml
     </para>
    </listitem>
   </itemizedlist>
+ </refsect1>
+
+ <refsect1 id="mkvextract.escaping">
+  <title>Escaping special chars in text</title>
+  <para>
+   There are a few places in which special characters in text must or should be escaped. The rules for escaping are simple: each character
+   that needs escaping is replaced with a backslash followed by another character.
+  </para>
+
+  <para>
+   The rules are: ' ' becomes '\s', '&quot;' becomes '\2', ':' becomes '\c', '#' becomes '\h' and '\' itself becomes '\\'.
+  </para>
  </refsect1>
 
  <refsect1 id="mkvextract.seealso">
