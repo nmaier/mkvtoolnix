@@ -1,5 +1,7 @@
 2010-12-20  Moritz Bunkus  <moritz@bunkus.org>
 
+	* build system: Fixed building the Qt version of mkvinfo's GUI.
+
 	* mkvmerge, mmg: bug fix: Option files could not contain options
 	that started with '#' as they were interpreted as comment lines.
 

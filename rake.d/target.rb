@@ -52,13 +52,17 @@ class Target
 
     return self if !@only_if || (options.include?(:if) && !options[:if])
 
+    ext_map = {
+      '.ui' => 'h',
+    }
+
     list           = list.collect { |e| e.respond_to?(:to_a) ? e.to_a : e }.flatten
     file_mode      = (options[:type] || :file) == :file
-    new_sources    = list.collect { |entry| file_mode ? (entry.respond_to?(:to_ia) ? entry.to_a : entry) : FileList["#{entry}/*.c", "#{entry}/*.cpp"].to_a }.flatten
-    new_objects    = new_sources.collect { |file| file.ext('o') }
+    new_sources    = list.collect { |entry| file_mode ? (entry.respond_to?(:to_a) ? entry.to_a : entry) : FileList["#{entry}/*.c", "#{entry}/*.cpp"].to_a }.flatten
+    new_deps       = new_sources.collect { |file| file.ext(ext_map[ file.pathmap('%x') ] || 'o') }
     @sources      += new_sources
-    @objects      += new_objects
-    @dependencies += new_objects
+    @objects      += new_deps.select { |file| /\.o$/.match file }
+    @dependencies += new_deps
     self
   end
 
@@ -115,6 +119,11 @@ class Target
 
   def create
     definition = Proc.new do
+      @sources.select { |name| /\.moc\.cpp$/.match(name) }.each do |name|
+        target = name.ext.ext('h')
+        file name => target, &$moc_compiler
+      end
+
       @aliases.each_with_index do |name, idx|
         desc @desc if (0 == idx) && !@desc.empty?
         task name => @target

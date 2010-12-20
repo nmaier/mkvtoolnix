@@ -180,8 +180,11 @@ rule '.h' => '.ui' do |t|
   runq "     UIC #{t.source}", "#{c(:UIC)} #{t.sources.join(" ")} > #{t.name}"
 end
 
-rule '.moc.cpp' => '.h' do |t|
-  runq "     MOC #{t.source}", "#{c(:MOC)} #{c(:QT_CFLAGS)} #{t.sources.join(" ")} > #{t.name}"
+# Rake does not support rules like '.moc.cpp' => '.h'. Therefore
+# Target creats 'file' entries for all .moc.cpp entries submitted via
+# Target#sources.
+$moc_compiler = lambda do |t|
+  runq "     MOC #{t.prerequisites.first}", "#{c(:MOC)} #{c(:QT_CFLAGS)} #{t.prerequisites.join(" ")} > #{t.name}"
 end
 
 # Tag files
