@@ -314,7 +314,7 @@ tab_input::add_file(const wxString &file_name,
   }
 
   opt_file->Write(wxT("--output-charset\nUTF-8\n--identify-for-mmg\n"));
-  arg_utf8 = wxMB(file_name);
+  arg_utf8 = escape(wxMB(file_name));
   opt_file->Write(arg_utf8.c_str(), arg_utf8.length());
   opt_file->Write(wxT("\n"));
   delete opt_file;
