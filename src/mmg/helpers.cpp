@@ -243,6 +243,8 @@ unescape(const wxString &src) {
           dst += wxT(' ');
         else if (src[next_char] == wxT('c'))
           dst += wxT(':');
+        else if (src[next_char] == wxT('h'))
+          dst += wxT('#');
         else
           dst += src[next_char];
         current_char++;

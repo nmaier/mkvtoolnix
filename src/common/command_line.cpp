@@ -65,7 +65,7 @@ read_args_from_file(std::vector<std::string> &args,
       skip_next = true;
       continue;
     }
-    args.push_back(buffer);
+    args.push_back(unescape(buffer));
   }
 
   delete mm_io;

@@ -36,6 +36,7 @@
 
 #include "common/common_pch.h"
 #include "common/fs_sys_helpers.h"
+#include "common/strings/editing.h"
 #include "mmg/mmg.h"
 #include "mmg/mmg_dialog.h"
 #include "mmg/mux_dialog.h"
@@ -135,7 +136,7 @@ mux_dialog::mux_dialog(wxWindow *parent):
     if ((*arg_list)[i].Length() == 0)
       opt_file->Write(wxT("#EMPTY#"));
     else {
-      arg_utf8 = wxMB((*arg_list)[i]);
+      arg_utf8 = escape(wxMB((*arg_list)[i]));
       opt_file->Write(arg_utf8.c_str(), arg_utf8.length());
     }
     opt_file->Write(wxT("\n"));

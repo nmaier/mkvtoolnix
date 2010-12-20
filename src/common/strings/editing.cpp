@@ -143,6 +143,8 @@ escape(const std::string &source) {
       dst += "\\s";
     else if (*src == ':')
       dst += "\\c";
+    else if (*src == '#')
+      dst += "\\h";
     else
       dst += *src;
   }
@@ -168,6 +170,8 @@ unescape(const std::string &source) {
           dst += ' ';
         else if (*next_char == 'c')
           dst += ':';
+        else if (*next_char == 'h')
+          dst += '#';
         else
           dst += *next_char;
         src++;
