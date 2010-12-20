@@ -997,6 +997,20 @@ Will let
 probe the single file and report its type, the tracks contained in the file and their track IDs\&. If this option is used then the only other option allowed is the filename\&.
 .RE
 .PP
+\fB\-I\fR, \fB\-\-identify\-verbose\fR \fIfile\-name\fR
+.RS 4
+Will let
+\fBmkvmerge\fR(1)
+probe the single file and report its type, the tracks contained in the file and their track IDs\&. If this option is used then the only other option allowed is the filename\&.
+.sp
+This option causes
+\fBmkvmerge\fR(1)
+to output additional information about the container and each track within\&. The extra information is surronded by square brackets\&. It consists of space\-saparated key/value pairs where keys and values are separated by a colon\&.
+.sp
+Each value is escaped according to the rules described in
+the section about escaping special characters in text\&.
+.RE
+.PP
 \fB\-l\fR, \fB\-\-list\-types\fR
 .RS 4
 Lists supported input file types\&.

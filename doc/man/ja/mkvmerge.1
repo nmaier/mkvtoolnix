@@ -648,6 +648,19 @@ Matroska(TM)ファイルは再生時の画像スケールを決定するため�
 \fBmkvmerge\fR(1)に、単一のファイルを探査してその種類と、ファイルに含まれるトラック及びそのトラックIDを表示させます。このオプションを指定した場合、他に指定できるのはファイル名のみです。
 .RE
 .PP
+\fB\-I\fR, \fB\-\-identify\-verbose\fR \fIfile\-name\fR
+.RS 4
+
+\fBmkvmerge\fR(1)に、単一のファイルを探査してその種類と、ファイルに含まれるトラック及びそのトラックIDを表示させます。このオプションを指定した場合、他に指定できるのはファイル名のみです。
+.sp
+This option causes
+\fBmkvmerge\fR(1)
+to output additional information about the container and each track within\&. The extra information is surronded by square brackets\&. It consists of space\-saparated key/value pairs where keys and values are separated by a colon\&.
+.sp
+Each value is escaped according to the rules described in
+the section about escaping special characters in text\&.
+.RE
+.PP
 \fB\-l\fR, \fB\-\-list\-types\fR
 .RS 4
 サポートされている入力ファイルの種類を列挙します。

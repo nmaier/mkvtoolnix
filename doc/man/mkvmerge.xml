@@ -1166,6 +1166,26 @@ $ mkvmerge -o full.mkv =file1.mkv
     </listitem>
    </varlistentry>
 
+   <varlistentry id="mkvmerge.description.identify_verbose">
+    <term><option>-I</option>, <option>--identify-verbose</option> <parameter>file-name</parameter></term>
+    <listitem>
+     <para>
+      Will let &mkvmerge; probe the single file and report its type, the tracks contained in the file and their track IDs. If this option is
+      used then the only other option allowed is the filename.
+     </para>
+
+     <para>
+      This option causes &mkvmerge; to output additional information about the container and each track within. The extra information is
+      surronded by square brackets. It consists of space-saparated key/value pairs where keys and values are separated by a colon.
+     </para>
+
+     <para>
+      Each value is escaped according to the rules described in <link linkend="mkvmerge.escaping">the section about escaping special
+      characters in text</link>.
+     </para>
+    </listitem>
+   </varlistentry>
+
    <varlistentry>
     <term><option>-l</option>, <option>--list-types</option></term>
     <listitem>
