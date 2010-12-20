@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: mkvtoolnix_uk\n"
 "Report-Msgid-Bugs-To: Moritz Bunkus <moritz@bunkus.org>\n"
 "POT-Creation-Date: 2009-02-18 23:52+0100\n"
-"PO-Revision-Date: 2010-12-10 16:51+0200\n"
+"PO-Revision-Date: 2010-12-17 17:01+0200\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian <moritz@bunkus.org>\n"
 "MIME-Version: 1.0\n"
@@ -6421,32 +6421,32 @@ msgstr "Заголовок для всього фільму."
 
 #: src/merge/output_control.cpp:909
 msgid "The track %1% from file no. %2% ('%3%') is to be appended more than once. The argument for '--append-to' was invalid.\n"
-msgstr "Доріжка %1% від файлу номер %2% (%3%) повинна бути додана не раз. Параметр для '--append-to' було неприпустимо.\n"
+msgstr "Доріжка %1% файлу номер %2% (%3%) буде приєднана більше одного разу. Параметр для '--append-to' був некорреткним.\n"
 
 #: src/merge/output_control.cpp:734
 msgid "The track headers could not be rendered correctly. %1%\n"
-msgstr "Заголовки доріжки не можуть бути виконані правильно. %1%\n"
+msgstr "Заголовки доріжки не можуть бути опрацьовані корректно. %1%\n"
 
 #: src/extract/tracks.cpp:90
 msgid "The track number %1% does not have a valid CodecID.\n"
-msgstr "У числа доріжки %1% немає правильного CodecID.\n"
+msgstr "Доріжка %1% не містить правильного CodecID.\n"
 
 #: src/merge/output_control.cpp:955
 msgid "The track number %1% from the file '%2%' can probably not be appended correctly to the track number %3% from the file '%4%': %5% Please make sure that the resulting file plays correctly the whole time. The author of this program will probably not give support for playback issues with the resulting file.\n"
-msgstr "Номер доріжки %1% від файлу '%2%' не може ймовірно додається правильно до номера доріжки %3% від файлу '%4%': %5% Будь ласка впевніться, що отримує файл запускає правильно весь час. Автор цієї програми не буде ймовірно надавати підтримку для проблем відтворення з отримуваного файлом.\n"
+msgstr "Доріжка %1% файлу '%2%' ймовірно не може бути корректно приєднана до доріжки %3% файлу '%4%': %5% Будь ласка, впевніться, що отриманий файл відтворюється корреткно протягом всього часу перегляду. Автор цієї програми ймовірно не буде надавати підтримку при проблемах відтворення отримуваних файлів.\n"
 
 #: src/merge/output_control.cpp:966
 msgid "The track number %1% from the file '%2%' cannot be appended to the track number %3% from the file '%4%'. %5%\n"
-msgstr "Номер доріжки %1% від файлу '%2%' не може бути прикладений до номера доріжки %3% від файлу '%4%'. %5%\n"
+msgstr "Доріжка %1% файлу '%2%' не може бути приєднана до доріжки %3% файлу '%4%'. %5%\n"
 
 #: src/common/property_element.cpp:113
 #: src/mmg/header_editor/frame.cpp:389
 msgid "The track number as used in the Block Header."
-msgstr "Номер доріжки як використовується в заголовку блоку."
+msgstr "Номер доріжки як вказано в заголовку блоку."
 
 #: src/merge/output_control.cpp:964
 msgid "The track parameters do not match."
-msgstr "Параметри доріжки не відповідають."
+msgstr "Параметри доріжок не співпадають."
 
 #: src/merge/pr_generic.h:386
 msgid "The width of the two tracks is different: %1% and %2%"
@@ -6455,61 +6455,61 @@ msgstr "Ширина двох доріжок є різною: %1% i %2%"
 #: src/merge/output_control.cpp:829
 #: src/merge/output_control.cpp:839
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
-msgstr "Немає ніякого файлу з ID '%1%'. Параметр для '--append-to' було неприпустимо.\n"
+msgstr "Немає файлу з ID '%1%'. Аргумент для '--append-to' був некорректним.\n"
 
 #: src/common/command_line.cpp:236
 msgid "There is no translation available for '%1%'.\n"
-msgstr "Немає ніякої трансляції, доступною для '%1%'.\n"
+msgstr "Немає доступного перекладу для '%1%'.\n"
 
 #: src/mmg/mux_dialog.cpp:361
 msgid "There were ERRORs."
-msgstr "Були помилки."
+msgstr "Виникли помилки."
 
 #: src/mmg/header_editor/frame.cpp:540
 #: src/mmg/header_editor/frame.cpp:640
 msgid "There were errors in the header values preventing the headers from being saved. The first error has been selected."
-msgstr "Були помилки в значеннях заголовка, що перешкоджають того заголовках бути збереженими. Перша помилка була обрана."
+msgstr "Були помічені помилки в значеннях заголовка, що перешкоджають його збереженню. Була обрана перша помилка."
 
 #: src/mmg/mux_dialog.cpp:356
 msgid "There were warnings"
-msgstr "Були попередження"
+msgstr "Виникли попередження"
 
 #: src/mmg/mux_dialog.cpp:354
 msgid "There were warnings, or the process was terminated."
-msgstr "Були попередження, або процес був закінчений."
+msgstr "Виникли попередження, або процес був перерваний."
 
 #: src/input/r_avi.cpp:627
 #: src/input/r_real.cpp:326
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
-msgstr "Ця стежка AAC не містить правильні заголовки. Не міг аналізувати інформацію AAC.\n"
+msgstr "Дана доріжка AAC не містить корректних заголовків. Не можливо проаналізувати інформацію AAC.\n"
 
 #: src/input/r_avi.cpp:624
 msgid "This AAC track does not contain valid headers. The extra header size is %1% bytes, expected were 2 or 5 bytes.\n"
-msgstr "Ця стежка AAC не містить правильні заголовки. Додатковий розмір заголовка - байти на %1%, очікуваний були 2 або 5 байтів.\n"
+msgstr "Дана доріжка AAC не містить корректних заголовків. Додатковий розмір заголовка - %1% байт, очікувалось - 2 або 5 байт.\n"
 
 #: src/output/p_ac3.cpp:81
 msgid "This AC3 track contains %1% bytes of non-AC3 data at the beginning. This corresponds to a delay of %2%ms. This delay will be used instead of the non-AC3 data.\n"
-msgstr "Ця стежка AC3 містить байти на %1% даних не-AC3 спочатку. Це відповідає затримці %2% ms. Ця затримка буде використовуватися замість даних не-AC3.\n"
+msgstr "Дана доріжка AAC містить %1% байт не-AC3 даних на початку. Це відповідає затримці %2% мс. Ця затримка буде використовуватися замість не-AC3 даних.\n"
 
 #: src/output/p_ac3.cpp:93
 msgid "This AC3 track contains %1% bytes of non-AC3 data which were skipped. The audio/video synchronization may have been lost.\n"
-msgstr "Ця стежка AC3 містить байти на %1% даних не-AC3, що були пропущені. Звукова/відео синхронізація, можливо, була втрачена.\n"
+msgstr "Дана доріжка AAC містить %1% байт не-AC3 даних, що були пропущені. Синхронізація аудіо і відео можливо була втрачена.\n"
 
 #: src/output/p_avc.cpp:102
 msgid "This AVC/h.264 contains frames that are too big for the current maximum NALU size. You have to re-run mkvmerge and set the maximum NALU size to %1% for this track (command line parameter '--nalu-size-length %2%:%1%').\n"
-msgstr "Цей AVC/h.264 містить кадрів, які є занадто великими для поточного максимального розміру NALU. Ви повинні повторно запустити mkvmerge і встановити максимальний розмір NALU у %1% для цієї доріжки (параметр командного рядка '--nalu-size-length %2%:%1%').\n"
+msgstr "Цей AVC/h.264 містить кадри, які є занадто великими для поточного максимального розміру NALU. Ви повинні повторно запустити mkvmerge і встановити максимальний розмір NALU у %1% для цієї доріжки (параметр командного рядка '--nalu-size-length %2%:%1%').\n"
 
 #: src/output/p_avc.cpp:153
 msgid "This AVC/h.264 track does not start with a key frame. The first %1% frames have been skipped.\n"
-msgstr "Ця стежка AVC/h.264 не починається з ключового кадру. Перші кадри на %1% були пропущені.\n"
+msgstr "Ця доріжка AVC/h.264 не починається з ключового кадру. Перших %1% кадрів було пропущено.\n"
 
 #: src/output/p_mp3.cpp:61
 msgid "This MPEG audio track contains %1% bytes of non-MP3 data at the beginning. This corresponds to a delay of %2%ms. This delay will be used instead of the garbage data.\n"
-msgstr "Ця стежка звукового каналу MPEG містить байти на %1% даних не-MP3 спочатку. Це відповідає затримці %2% ms. Ця затримка буде використовуватися замість даних сміття.\n"
+msgstr "Ця доріжка MPEG аудіо містить %1% байт не-MP3 даних на початку. Це відповідає затримці %2% мс. Ця затримка буде використовуватися замість невірних даних.\n"
 
 #: src/output/p_mp3.cpp:70
 msgid "This MPEG audio track contains %1% bytes of non-MP3 data which were skipped. The audio/video synchronization may have been lost.\n"
-msgstr "Ця стежка звукового каналу MPEG містить байти на %1% даних не-MP3, що були пропущені. Звукова/відео синхронізація, можливо, була втрачена.\n"
+msgstr "Ця доріжка MPEG аудіо містить %1% байт не-MP3 даних, що були пропущені. Синхронізація аудіо і відео можливо була втрачена.\n"
 
 #: src/input/r_ogm.cpp:818
 msgid "This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can be overridden with the '--chapter-charset <charset>' switch.\n"
