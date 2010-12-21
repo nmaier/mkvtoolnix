@@ -1,5 +1,10 @@
 2010-12-21  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvextract: enhancement: mkvextract will exit with an error if
+	the user specifies track IDs that do not exist in the source
+	file. This works in the "tracks" and "timecodes_v2" extraction
+	modes. Fix for bug 583.
+
 	* docs: mkvextract's man page has been updated to match the
 	program's expected command line syntax for the "timecodes_v2"
 	mode. Fix for bug 583.

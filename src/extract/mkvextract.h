@@ -21,6 +21,7 @@
 
 #include <matroska/KaxChapters.h>
 #include <matroska/KaxTags.h>
+#include <matroska/KaxTracks.h>
 
 #include "common/file_types.h"
 #include "common/kax_analyzer.h"
@@ -51,6 +52,8 @@ inline void
 show_error(const boost::format &format) {
   show_error(format.str());
 }
+
+void find_and_verify_track_uids(KaxTracks &tracks, std::vector<track_spec_t> &tspecs);
 
 bool extract_tracks(const std::string &file_name, std::vector<track_spec_t> &tspecs);
 void extract_tags(const std::string &file_name, kax_analyzer_c::parse_mode_e parse_mode);

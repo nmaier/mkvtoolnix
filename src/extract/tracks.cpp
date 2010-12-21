@@ -283,9 +283,10 @@ write_all_cuesheets(KaxChapters &chapters,
   }
 }
 
-static void
-find_track_uids(KaxTracks &tracks,
-                std::vector<track_spec_t> &tspecs) {
+void
+find_and_verify_track_uids(KaxTracks &tracks,
+                           std::vector<track_spec_t> &tspecs) {
+  std::map<int64_t, bool> available_tnums;
   size_t t;
 
   for (t = 0; t < tracks.ListSize(); t++) {
@@ -294,6 +295,7 @@ find_track_uids(KaxTracks &tracks,
       continue;
 
     int64_t track_number = kt_get_number(*track_entry);
+    available_tnums[track_number] = true;
 
     size_t s;
     for (s = 0; tspecs.size() > s; ++s)
@@ -302,6 +304,11 @@ find_track_uids(KaxTracks &tracks,
         break;
       }
   }
+
+  size_t s;
+  for (s = 0; tspecs.size() > s; ++s)
+    if (!available_tnums[ tspecs[s].tid ])
+      mxerror(boost::format(Y("No track with the ID %1% was found in the source file.\n")) % tspecs[s].tid);
 }
 
 bool
@@ -382,7 +389,7 @@ extract_tracks(const std::string &file_name,
         show_element(l1, 1, Y("Segment tracks"));
 
         tracks_found = true;
-        find_track_uids(*dynamic_cast<KaxTracks *>(l1), tspecs);
+        find_and_verify_track_uids(*dynamic_cast<KaxTracks *>(l1), tspecs);
         create_extractors(*dynamic_cast<KaxTracks *>(l1), tspecs);
 
       } else if (EbmlId(*l1) == EBML_ID(KaxCluster)) {

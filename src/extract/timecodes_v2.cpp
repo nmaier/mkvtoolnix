@@ -257,6 +257,7 @@ extract_timecodes(const std::string &file_name,
 
         tracks_found = true;
         l1->Read(*es, EBML_CLASS_CONTEXT(KaxTracks), upper_lvl_el, l2, true);
+        find_and_verify_track_uids(*dynamic_cast<KaxTracks *>(l1), tspecs);
         create_timecode_files(*dynamic_cast<KaxTracks *>(l1), tspecs, version);
 
       } else if (EbmlId(*l1) == EBML_ID(KaxCluster)) {
