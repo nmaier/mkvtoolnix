@@ -1801,7 +1801,7 @@ msgstr "总在最前"
 msgid "An ID corresponding to the codec."
 msgstr "对应编解码器的 ID。"
 
-#: src/extract/attachments.cpp:127
+#: src/extract/attachments.cpp:130
 msgid "An attachment with the ID %1% was not found.\n"
 msgstr "找不到 ID 为 %1% 的附件。\n"
 
@@ -1987,8 +1987,8 @@ msgstr "附加块: %1%"
 msgid "Block duration: %1%.%|2$06d|ms"
 msgstr "块时长: %1%.%|2$06d|ms"
 
-#: src/extract/timecodes_v2.cpp:279
-#: src/extract/tracks.cpp:404
+#: src/extract/timecodes_v2.cpp:283
+#: src/extract/tracks.cpp:414
 #: src/info/mkvinfo.cpp:1402
 msgid "Block group"
 msgstr "块组"
@@ -2063,8 +2063,8 @@ msgstr "无法写入轨道 %1%（CodecID '%2%'）至文件 '%3%'，因为轨道 
 msgid "Category is not NUL terminated"
 msgstr "类别未以 NUL 收尾"
 
-#: src/extract/timecodes_v2.cpp:358
-#: src/extract/tracks.cpp:454
+#: src/extract/timecodes_v2.cpp:362
+#: src/extract/tracks.cpp:464
 #: src/info/mkvinfo.cpp:2019
 msgid "Caught exception"
 msgstr "发生异常"
@@ -2297,8 +2297,8 @@ msgstr "添加任务到任务列表后清空输入文件列表"
 msgid "Close the current file without saving"
 msgstr "在不保存的情况下关闭当前文件"
 
-#: src/extract/timecodes_v2.cpp:260
-#: src/extract/tracks.cpp:386
+#: src/extract/timecodes_v2.cpp:264
+#: src/extract/tracks.cpp:396
 #: src/info/mkvinfo.cpp:1959
 msgid "Cluster"
 msgstr "簇"
@@ -2319,8 +2319,8 @@ msgstr "簇位置: %1%"
 msgid "Cluster previous size: %1%"
 msgstr "前簇长: %1%"
 
-#: src/extract/timecodes_v2.cpp:275
-#: src/extract/tracks.cpp:395
+#: src/extract/timecodes_v2.cpp:279
+#: src/extract/tracks.cpp:405
 #: src/info/mkvinfo.cpp:170
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr "簇时间码: %|1$.3f|s"
@@ -3042,8 +3042,8 @@ msgstr "出错: %1% 解析器失败，对于 '%2%', 行 %3%, 列 %4%: %5%\n"
 msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "出错: 无法打开输入文件 %1% (%2%)。\n"
 
-#: src/extract/timecodes_v2.cpp:181
-#: src/extract/tracks.cpp:329
+#: src/extract/timecodes_v2.cpp:184
+#: src/extract/tracks.cpp:339
 msgid "Error: No EBML head found."
 msgstr "出错: 未发现 EBML 头。"
 
@@ -4331,8 +4331,8 @@ msgstr "未发现元数据块。文件已损坏。\n"
 msgid "No output file name specified, will use attachment name.\n"
 msgstr "未指定输出文件名，将使用附件名。\n"
 
-#: src/extract/timecodes_v2.cpp:195
-#: src/extract/tracks.cpp:344
+#: src/extract/timecodes_v2.cpp:198
+#: src/extract/tracks.cpp:354
 #: src/info/mkvinfo.cpp:1926
 msgid "No segment/level 0 element found."
 msgstr "未发现剪辑/0 层级元素。"
@@ -4348,6 +4348,11 @@ msgstr "未指定轨道 ID，在 '--%1% %2%'。\n"
 #: src/propedit/target.cpp:259
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "未发现与编辑指定 '%1%' 相应的轨道。%2%\n"
+
+#: src/extract/tracks.cpp:311
+#, fuzzy
+msgid "No track with the ID %1% was found in the source file.\n"
+msgstr "找不到 ID 为 %1% 的附件。\n"
 
 #: src/mmg/tabs/input.cpp:615
 msgid "No tracks found"
@@ -4385,6 +4390,9 @@ msgstr "不是有效的 Matroska 文件 (未发现有效的 剪辑/0 层级元�
 msgid "Note"
 msgstr "注意"
 
+#: src/extract/timecodes_v2.cpp:166
+#: src/extract/tracks.cpp:318
+#: src/extract/attachments.cpp:107
 #: src/propedit/options.cpp:30
 msgid "Nothing to do.\n"
 msgstr "无事可做。\n"
@@ -4645,14 +4653,14 @@ msgstr "正在处理任务 %d/%d"
 msgid "Progress"
 msgstr "进度"
 
-#: src/extract/timecodes_v2.cpp:265
-#: src/extract/tracks.cpp:390
+#: src/extract/timecodes_v2.cpp:269
+#: src/extract/tracks.cpp:400
 #: src/merge/output_control.cpp:463
 msgid "Progress: %1%%%%2%"
 msgstr "进度: %1%%%%2%"
 
 #: src/extract/mkvextract.cpp:93
-#: src/extract/timecodes_v2.cpp:355
+#: src/extract/timecodes_v2.cpp:359
 msgid "Progress: 100%\n"
 msgstr "进度: 100%\n"
 
@@ -5007,8 +5015,8 @@ msgstr "定位头 (子项将被跳过)"
 msgid "Seek position: %1%"
 msgstr "定位位: %1%"
 
-#: src/extract/timecodes_v2.cpp:199
-#: src/extract/tracks.cpp:349
+#: src/extract/timecodes_v2.cpp:202
+#: src/extract/tracks.cpp:359
 #: src/info/qt_ui.cpp:177
 #: src/info/wxwidgets_ui.cpp:219
 msgid "Segment"
@@ -5041,8 +5049,8 @@ msgid "Segment info files (*.xml)|*.xml|%s"
 msgstr "剪辑信息文件 (*.xml)|*.xml|%s"
 
 #: src/mmg/header_editor/frame.cpp:322
-#: src/extract/timecodes_v2.cpp:219
-#: src/extract/tracks.cpp:367
+#: src/extract/timecodes_v2.cpp:222
+#: src/extract/tracks.cpp:377
 #: src/propedit/options.cpp:152
 #: src/propedit/propedit_cli_parser.cpp:87
 #: src/propedit/propedit_cli_parser.cpp:160
@@ -5052,8 +5060,8 @@ msgstr "剪辑信息文件 (*.xml)|*.xml|%s"
 msgid "Segment information"
 msgstr "剪辑信息"
 
-#: src/extract/timecodes_v2.cpp:253
-#: src/extract/tracks.cpp:379
+#: src/extract/timecodes_v2.cpp:256
+#: src/extract/tracks.cpp:389
 #: src/info/mkvinfo.cpp:957
 #: src/info/qt_ui.cpp:179
 #: src/info/wxwidgets_ui.cpp:222
@@ -5298,7 +5306,7 @@ msgstr "带符号整数"
 msgid "Silent Track Number: %1%"
 msgstr "静轨号: %1%"
 
-#: src/extract/timecodes_v2.cpp:285
+#: src/extract/timecodes_v2.cpp:289
 msgid "Simple block"
 msgstr "简单块"
 
@@ -5306,7 +5314,7 @@ msgstr "简单块"
 msgid "Simple chapter parser: %1%\n"
 msgstr "简单章节解析器: %1%\n"
 
-#: src/extract/tracks.cpp:408
+#: src/extract/tracks.cpp:418
 msgid "SimpleBlock"
 msgstr "简单块"
 
@@ -5805,15 +5813,15 @@ msgstr "第一个模式将尝试提取章节信息和标签并将其以 CUE 表�
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
 msgstr "文件 '%1%' 无法附加，因为它不存在或不可读。\n"
 
-#: src/extract/attachments.cpp:114
 #: src/extract/chapters.cpp:47
 #: src/extract/cuesheets.cpp:208
 #: src/extract/tags.cpp:47
+#: src/extract/attachments.cpp:117
 msgid "The file '%1%' could not be opened for reading (%2%)."
 msgstr "文件 '%1%' 无法打开以读取 (%2%)。"
 
-#: src/extract/timecodes_v2.cpp:170
-#: src/extract/tracks.cpp:317
+#: src/extract/timecodes_v2.cpp:173
+#: src/extract/tracks.cpp:327
 msgid "The file '%1%' could not be opened for reading (%2%).\n"
 msgstr "文件 '%1%' 无法打开以读取 (%2%)。\n"
 
@@ -5828,8 +5836,8 @@ msgstr "文件 '%1%' 无法打开以读取命令行参数。\n"
 msgid "The file '%1%' could not be opened for writing (%2%).\n"
 msgstr "文件 '%1%' 无法打开以写入 (%2%)。\n"
 
-#: src/extract/attachments.cpp:92
 #: src/extract/xtr_rmff.cpp:40
+#: src/extract/attachments.cpp:92
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "文件 '%1%' 无法打开以写入 (%2%, %3%)。\n"
 
@@ -6556,8 +6564,8 @@ msgstr "时间码提取"
 msgid "Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"
 msgstr "时间码文件 (*.tmc;*.txt)|*.tmc;*.txt|%s"
 
-#: src/extract/timecodes_v2.cpp:228
-#: src/extract/tracks.cpp:372
+#: src/extract/timecodes_v2.cpp:231
+#: src/extract/tracks.cpp:382
 #: src/info/mkvinfo.cpp:596
 #: src/info/mkvinfo.cpp:1129
 msgid "Timecode scale: %1%"
@@ -8106,10 +8114,6 @@ msgstr "mkvextract tracks <inname> [选项] [TID1:out1 [TID2:out2 ...]]"
 msgid "mkvextract.cpp/show_element(): level > 9: %1%"
 msgstr "mkvextract.cpp/show_element(): 层级 > 9: %1%"
 
-#: src/extract/mkvextract.cpp:111
-msgid "mkvextract: Unknown mode!?\n"
-msgstr "mkvextract: 未知模式!?\n"
-
 #: src/mmg/options/mkvmerge.cpp:142
 msgid "mkvmerge"
 msgstr "mkvmerge"
@@ -8915,6 +8919,8 @@ msgstr "是"
 #~ msgstr "locale.cpp/from_utf8(): 无效的转换名号 %1% (数字: %2%)。\n"
 #~ msgid "locale.cpp/to_utf8(): Invalid conversion handle %1% (num: %2%).\n"
 #~ msgstr "locale.cpp/to_utf8(): 无效的转换名号 %1% (数字: %2%)。\n"
+#~ msgid "mkvextract: Unknown mode!?\n"
+#~ msgstr "mkvextract: 未知模式!?\n"
 #~ msgid "mkvmerge GUI v%s ('%s')"
 #~ msgstr "mkvmerge GUI v%s ('%s')"
 #~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"

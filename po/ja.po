@@ -1772,7 +1772,7 @@ msgstr "常に手前に表示"
 msgid "An ID corresponding to the codec."
 msgstr "コーデックに対応するIDです。"
 
-#: src/extract/attachments.cpp:127
+#: src/extract/attachments.cpp:130
 msgid "An attachment with the ID %1% was not found.\n"
 msgstr "ID %1%の添付ファイルが見つかりませんでした。\n"
 
@@ -1948,7 +1948,7 @@ msgstr "BlockAddition：%1%"
 msgid "Block duration: %1%.%|2$06d|ms"
 msgstr "ブロックの持続時間：%1%.%|2$06d|ms"
 
-#: src/extract/timecodes_v2.cpp:279 src/extract/tracks.cpp:404
+#: src/extract/timecodes_v2.cpp:283 src/extract/tracks.cpp:414
 #: src/info/mkvinfo.cpp:1402
 msgid "Block group"
 msgstr "ブロックグループ"
@@ -2017,7 +2017,7 @@ msgstr "CodecID '%5%'のトラック%4%を既に同じファイルに記録し�
 msgid "Category is not NUL terminated"
 msgstr "カテゴリがNULで終わっていません"
 
-#: src/extract/timecodes_v2.cpp:358 src/extract/tracks.cpp:454
+#: src/extract/timecodes_v2.cpp:362 src/extract/tracks.cpp:464
 #: src/info/mkvinfo.cpp:2019
 msgid "Caught exception"
 msgstr "例外をキャッチしました"
@@ -2240,7 +2240,7 @@ msgstr "ジョブをジョブキューに追加したら入力をクリアする
 msgid "Close the current file without saving"
 msgstr "保存しないで現在のファイルを閉じます"
 
-#: src/extract/timecodes_v2.cpp:260 src/extract/tracks.cpp:386
+#: src/extract/timecodes_v2.cpp:264 src/extract/tracks.cpp:396
 #: src/info/mkvinfo.cpp:1959
 msgid "Cluster"
 msgstr "クラスタ"
@@ -2261,7 +2261,7 @@ msgstr "クラスタ位置：%1%"
 msgid "Cluster previous size: %1%"
 msgstr "前クラスタサイズ：%1%"
 
-#: src/extract/timecodes_v2.cpp:275 src/extract/tracks.cpp:395
+#: src/extract/timecodes_v2.cpp:279 src/extract/tracks.cpp:405
 #: src/info/mkvinfo.cpp:170
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr "クラスタのタイムコード：%|1$.3f|s"
@@ -2960,7 +2960,7 @@ msgstr "エラー：%1%パーサが'%2%'、%3%行目、%4%列目のために失�
 msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "エラー：入力ファイル%1%（%2%）を開けませんでした。\n"
 
-#: src/extract/timecodes_v2.cpp:181 src/extract/tracks.cpp:329
+#: src/extract/timecodes_v2.cpp:184 src/extract/tracks.cpp:339
 msgid "Error: No EBML head found."
 msgstr "エラー：EBMLヘッドが見つかりませんでした。"
 
@@ -4213,7 +4213,7 @@ msgstr "メタデータブロックが見つかりませんでした。このフ
 msgid "No output file name specified, will use attachment name.\n"
 msgstr "出力ファイル名が指定されなかったので、添付ファイル名を使用します。\n"
 
-#: src/extract/timecodes_v2.cpp:195 src/extract/tracks.cpp:344
+#: src/extract/timecodes_v2.cpp:198 src/extract/tracks.cpp:354
 #: src/info/mkvinfo.cpp:1926
 msgid "No segment/level 0 element found."
 msgstr "セグメント/レベル0の要素が見つかりませんでした。"
@@ -4229,6 +4229,11 @@ msgstr "'--%1% %2%'でトラックIDが指定されていません。\n"
 #: src/propedit/target.cpp:259
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "editで指定された'%1%'に対応するトラックが見つかりませんでした。%2%\n"
+
+#: src/extract/tracks.cpp:311
+#, fuzzy
+msgid "No track with the ID %1% was found in the source file.\n"
+msgstr "ID %1%の添付ファイルが見つかりませんでした。\n"
 
 #: src/mmg/tabs/input.cpp:615
 msgid "No tracks found"
@@ -4266,7 +4271,8 @@ msgstr "有効なMatroskaファイルではありません（セグメント/レ
 msgid "Note"
 msgstr "注意"
 
-#: src/propedit/options.cpp:30
+#: src/extract/timecodes_v2.cpp:166 src/extract/tracks.cpp:318
+#: src/extract/attachments.cpp:107 src/propedit/options.cpp:30
 msgid "Nothing to do.\n"
 msgstr "何もすることがありません。\n"
 
@@ -4517,12 +4523,12 @@ msgstr "ジョブ%d/%dを処理中"
 msgid "Progress"
 msgstr "進行状況"
 
-#: src/extract/timecodes_v2.cpp:265 src/extract/tracks.cpp:390
+#: src/extract/timecodes_v2.cpp:269 src/extract/tracks.cpp:400
 #: src/merge/output_control.cpp:463
 msgid "Progress: %1%%%%2%"
 msgstr "進行状況: %1%%%%2%"
 
-#: src/extract/mkvextract.cpp:93 src/extract/timecodes_v2.cpp:355
+#: src/extract/mkvextract.cpp:93 src/extract/timecodes_v2.cpp:359
 msgid "Progress: 100%\n"
 msgstr "進行状況: 100%\n"
 
@@ -4870,7 +4876,7 @@ msgstr "シークヘッダ (サブエントリはスキップされます)"
 msgid "Seek position: %1%"
 msgstr "シーク位置：%1%"
 
-#: src/extract/timecodes_v2.cpp:199 src/extract/tracks.cpp:349
+#: src/extract/timecodes_v2.cpp:202 src/extract/tracks.cpp:359
 #: src/info/qt_ui.cpp:177 src/info/wxwidgets_ui.cpp:219
 msgid "Segment"
 msgstr "セグメント"
@@ -4900,15 +4906,15 @@ msgstr "セグメント情報ファイル："
 msgid "Segment info files (*.xml)|*.xml|%s"
 msgstr "セグメント情報ファイル (*.xml)|*.xml|%s"
 
-#: src/mmg/header_editor/frame.cpp:322 src/extract/timecodes_v2.cpp:219
-#: src/extract/tracks.cpp:367 src/propedit/options.cpp:152
+#: src/mmg/header_editor/frame.cpp:322 src/extract/timecodes_v2.cpp:222
+#: src/extract/tracks.cpp:377 src/propedit/options.cpp:152
 #: src/propedit/propedit_cli_parser.cpp:87
 #: src/propedit/propedit_cli_parser.cpp:160 src/info/mkvinfo.cpp:582
 #: src/info/qt_ui.cpp:178 src/info/wxwidgets_ui.cpp:222
 msgid "Segment information"
 msgstr "セグメント情報"
 
-#: src/extract/timecodes_v2.cpp:253 src/extract/tracks.cpp:379
+#: src/extract/timecodes_v2.cpp:256 src/extract/tracks.cpp:389
 #: src/info/mkvinfo.cpp:957 src/info/qt_ui.cpp:179
 #: src/info/wxwidgets_ui.cpp:222
 msgid "Segment tracks"
@@ -5151,7 +5157,7 @@ msgstr "符号付き整数"
 msgid "Silent Track Number: %1%"
 msgstr ""
 
-#: src/extract/timecodes_v2.cpp:285
+#: src/extract/timecodes_v2.cpp:289
 msgid "Simple block"
 msgstr "シンプルブロック"
 
@@ -5159,7 +5165,7 @@ msgstr "シンプルブロック"
 msgid "Simple chapter parser: %1%\n"
 msgstr "シンプルチャプタパーサ：%1%\n"
 
-#: src/extract/tracks.cpp:408
+#: src/extract/tracks.cpp:418
 msgid "SimpleBlock"
 msgstr "シンプルブロック"
 
@@ -5650,12 +5656,12 @@ msgstr "5番目のモードでは、チャプタ情報とタグを抽出しCUE�
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
 msgstr "ファイルが存在していないか読み取れないため、ファイル'%1%'を添付することができません。\n"
 
-#: src/extract/attachments.cpp:114 src/extract/chapters.cpp:47
-#: src/extract/cuesheets.cpp:208 src/extract/tags.cpp:47
+#: src/extract/chapters.cpp:47 src/extract/cuesheets.cpp:208
+#: src/extract/tags.cpp:47 src/extract/attachments.cpp:117
 msgid "The file '%1%' could not be opened for reading (%2%)."
 msgstr "ファイル'%1%'を開いて読み込むことができませんでした（%2%）。"
 
-#: src/extract/timecodes_v2.cpp:170 src/extract/tracks.cpp:317
+#: src/extract/timecodes_v2.cpp:173 src/extract/tracks.cpp:327
 msgid "The file '%1%' could not be opened for reading (%2%).\n"
 msgstr "ファイル'%1%'を開いて読み込むことができませんでした（%2%）。\n"
 
@@ -5668,7 +5674,7 @@ msgstr "ファイル'%1%'を開いてコマンドラインのパラメータを�
 msgid "The file '%1%' could not be opened for writing (%2%).\n"
 msgstr "ファイル'%1%'を開いて書き込むことができませんでした（%2%）。\n"
 
-#: src/extract/attachments.cpp:92 src/extract/xtr_rmff.cpp:40
+#: src/extract/xtr_rmff.cpp:40 src/extract/attachments.cpp:92
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "ファイル'%1%'を開いて書き込むことができませんでした(%2%, %3%)。\n"
 
@@ -6371,7 +6377,7 @@ msgstr "タイムコードの抽出"
 msgid "Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"
 msgstr "タイムコードファイル (*.tmc;*.txt)|*.tmc;*.txt|%s"
 
-#: src/extract/timecodes_v2.cpp:228 src/extract/tracks.cpp:372
+#: src/extract/timecodes_v2.cpp:231 src/extract/tracks.cpp:382
 #: src/info/mkvinfo.cpp:596 src/info/mkvinfo.cpp:1129
 msgid "Timecode scale: %1%"
 msgstr "タイムコードスケール：%1%"
@@ -7828,10 +7834,6 @@ msgstr "mkvextract tracks <入力ファイル名> [オプション] [TID1:出力
 msgid "mkvextract.cpp/show_element(): level > 9: %1%"
 msgstr "mkvextract.cpp/show_element(): (レベル) > 9: %1%"
 
-#: src/extract/mkvextract.cpp:111
-msgid "mkvextract: Unknown mode!?\n"
-msgstr "mkvextract：未知のモード！？\n"
-
 #: src/mmg/options/mkvmerge.cpp:142
 msgid "mkvmerge"
 msgstr "mkvmerge"
@@ -8366,3 +8368,6 @@ msgstr "はい"
 
 #~ msgid "general Matroska files"
 #~ msgstr "通常のMatroskaファイル"
+
+#~ msgid "mkvextract: Unknown mode!?\n"
+#~ msgstr "mkvextract：未知のモード！？\n"

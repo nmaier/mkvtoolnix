@@ -1835,7 +1835,7 @@ msgstr "Завжди поверх інших вікон"
 msgid "An ID corresponding to the codec."
 msgstr "ID відповідно кодека."
 
-#: src/extract/attachments.cpp:127
+#: src/extract/attachments.cpp:130
 msgid "An attachment with the ID %1% was not found.\n"
 msgstr "Вкладення з ID %1% не було знайдено.\n"
 
@@ -2026,8 +2026,8 @@ msgstr "Додатковий блок: %1%"
 msgid "Block duration: %1%.%|2$06d|ms"
 msgstr "Тривалість блоку: %1%.%|2$06d|ms"
 
-#: src/extract/timecodes_v2.cpp:279
-#: src/extract/tracks.cpp:404
+#: src/extract/timecodes_v2.cpp:283
+#: src/extract/tracks.cpp:414
 #: src/info/mkvinfo.cpp:1402
 msgid "Block group"
 msgstr "Група блоків "
@@ -2103,8 +2103,8 @@ msgstr "Неможливо записати доріжку %1% з CodecID '%2%' 
 msgid "Category is not NUL terminated"
 msgstr "Категорія не завершена NUL-символом"
 
-#: src/extract/timecodes_v2.cpp:358
-#: src/extract/tracks.cpp:454
+#: src/extract/timecodes_v2.cpp:362
+#: src/extract/tracks.cpp:464
 #: src/info/mkvinfo.cpp:2019
 msgid "Caught exception"
 msgstr "Зафіксоване виключення"
@@ -2337,8 +2337,8 @@ msgstr "Очистити список вхідних файлів після д�
 msgid "Close the current file without saving"
 msgstr "Закрити поточний файл без збереження"
 
-#: src/extract/timecodes_v2.cpp:260
-#: src/extract/tracks.cpp:386
+#: src/extract/timecodes_v2.cpp:264
+#: src/extract/tracks.cpp:396
 #: src/info/mkvinfo.cpp:1959
 msgid "Cluster"
 msgstr "Кластер"
@@ -2359,8 +2359,8 @@ msgstr "Позиція кластера: %1%"
 msgid "Cluster previous size: %1%"
 msgstr "Розмір попереднього кластера: %1%"
 
-#: src/extract/timecodes_v2.cpp:275
-#: src/extract/tracks.cpp:395
+#: src/extract/timecodes_v2.cpp:279
+#: src/extract/tracks.cpp:405
 #: src/info/mkvinfo.cpp:170
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr "Тайм-код кластера: %|1$.3f|s"
@@ -3085,8 +3085,8 @@ msgstr "Помилка: %1% аналізатор зробив помилку в�
 msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "Помилка: не вдалося відкрити вхідний файл %1% (%2%).\n"
 
-#: src/extract/timecodes_v2.cpp:181
-#: src/extract/tracks.cpp:329
+#: src/extract/timecodes_v2.cpp:184
+#: src/extract/tracks.cpp:339
 msgid "Error: No EBML head found."
 msgstr "Помилка: не знайдено заголовка EBML."
 
@@ -4377,8 +4377,8 @@ msgstr "Не знайдено блоку метаданих. Цей файл п�
 msgid "No output file name specified, will use attachment name.\n"
 msgstr "Не вказано назву результуючого файлу, тому буде використовуватися назва вкладення.\n"
 
-#: src/extract/timecodes_v2.cpp:195
-#: src/extract/tracks.cpp:344
+#: src/extract/timecodes_v2.cpp:198
+#: src/extract/tracks.cpp:354
 #: src/info/mkvinfo.cpp:1926
 msgid "No segment/level 0 element found."
 msgstr "Не знайдено сегменту/елементу рівня 0."
@@ -4394,6 +4394,11 @@ msgstr "Не задано ID доріжки в '--%1% %2%'.\n"
 #: src/propedit/target.cpp:259
 msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "Не знайдено доріжки, що відповідає специфікації, що редагується '%1%'. %2%\n"
+
+#: src/extract/tracks.cpp:311
+#, fuzzy
+msgid "No track with the ID %1% was found in the source file.\n"
+msgstr "Вкладення з ID %1% не було знайдено.\n"
 
 #: src/mmg/tabs/input.cpp:615
 msgid "No tracks found"
@@ -4431,6 +4436,9 @@ msgstr "Некорректний файл Matroska (не знайдено сег
 msgid "Note"
 msgstr "Примітка"
 
+#: src/extract/timecodes_v2.cpp:166
+#: src/extract/tracks.cpp:318
+#: src/extract/attachments.cpp:107
 #: src/propedit/options.cpp:30
 msgid "Nothing to do.\n"
 msgstr "Нічого робити.\n"
@@ -4693,14 +4701,14 @@ msgstr "Обробка завдання %d/%d"
 msgid "Progress"
 msgstr "Прогрес виконання"
 
-#: src/extract/timecodes_v2.cpp:265
-#: src/extract/tracks.cpp:390
+#: src/extract/timecodes_v2.cpp:269
+#: src/extract/tracks.cpp:400
 #: src/merge/output_control.cpp:463
 msgid "Progress: %1%%%%2%"
 msgstr "Прогрес виконання: %1%%%%2%"
 
 #: src/extract/mkvextract.cpp:93
-#: src/extract/timecodes_v2.cpp:355
+#: src/extract/timecodes_v2.cpp:359
 msgid "Progress: 100%\n"
 msgstr "Прогрес виконання: 100%\n"
 
@@ -5055,8 +5063,8 @@ msgstr "Шукати заголовок (дочірні записи будут�
 msgid "Seek position: %1%"
 msgstr "Шукати позицію: %1%"
 
-#: src/extract/timecodes_v2.cpp:199
-#: src/extract/tracks.cpp:349
+#: src/extract/timecodes_v2.cpp:202
+#: src/extract/tracks.cpp:359
 #: src/info/qt_ui.cpp:177
 #: src/info/wxwidgets_ui.cpp:219
 msgid "Segment"
@@ -5089,8 +5097,8 @@ msgid "Segment info files (*.xml)|*.xml|%s"
 msgstr "Файли інформації сегмента (*.xml)|*.xml|%s"
 
 #: src/mmg/header_editor/frame.cpp:322
-#: src/extract/timecodes_v2.cpp:219
-#: src/extract/tracks.cpp:367
+#: src/extract/timecodes_v2.cpp:222
+#: src/extract/tracks.cpp:377
 #: src/propedit/options.cpp:152
 #: src/propedit/propedit_cli_parser.cpp:87
 #: src/propedit/propedit_cli_parser.cpp:160
@@ -5100,8 +5108,8 @@ msgstr "Файли інформації сегмента (*.xml)|*.xml|%s"
 msgid "Segment information"
 msgstr "Інформація сегмента"
 
-#: src/extract/timecodes_v2.cpp:253
-#: src/extract/tracks.cpp:379
+#: src/extract/timecodes_v2.cpp:256
+#: src/extract/tracks.cpp:389
 #: src/info/mkvinfo.cpp:957
 #: src/info/qt_ui.cpp:179
 #: src/info/wxwidgets_ui.cpp:222
@@ -5347,7 +5355,7 @@ msgstr "Ціле число"
 msgid "Silent Track Number: %1%"
 msgstr "Прихований номер доріжки: %1%"
 
-#: src/extract/timecodes_v2.cpp:285
+#: src/extract/timecodes_v2.cpp:289
 msgid "Simple block"
 msgstr "Простий блок"
 
@@ -5355,7 +5363,7 @@ msgstr "Простий блок"
 msgid "Simple chapter parser: %1%\n"
 msgstr "Простий аналізатор розділу: %1%\n"
 
-#: src/extract/tracks.cpp:408
+#: src/extract/tracks.cpp:418
 msgid "SimpleBlock"
 msgstr "ПростийБлок"
 
@@ -5856,15 +5864,15 @@ msgstr "За допомогою п'ятого режиму йде спроба �
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
 msgstr "Файл '%1%' не може бути приєднаний, тому що він не існує, або не може бути прочитаний.\n"
 
-#: src/extract/attachments.cpp:114
 #: src/extract/chapters.cpp:47
 #: src/extract/cuesheets.cpp:208
 #: src/extract/tags.cpp:47
+#: src/extract/attachments.cpp:117
 msgid "The file '%1%' could not be opened for reading (%2%)."
 msgstr "Файл '%1%' не може бути відкритий для читання (%2%)."
 
-#: src/extract/timecodes_v2.cpp:170
-#: src/extract/tracks.cpp:317
+#: src/extract/timecodes_v2.cpp:173
+#: src/extract/tracks.cpp:327
 msgid "The file '%1%' could not be opened for reading (%2%).\n"
 msgstr "Файл '%1%' не може бути відкритий для читання (%2%).\n"
 
@@ -5879,8 +5887,8 @@ msgstr "Файл '%1%' не може бути відкритий для зчит
 msgid "The file '%1%' could not be opened for writing (%2%).\n"
 msgstr "Файл '%1%' не може бути відкритий для запису (%2%).\n"
 
-#: src/extract/attachments.cpp:92
 #: src/extract/xtr_rmff.cpp:40
+#: src/extract/attachments.cpp:92
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "Файл '%1%' не може бути відкритий для запису (%2%, %3%).\n"
 
@@ -6623,8 +6631,8 @@ msgstr "Витяг тайм-коду"
 msgid "Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"
 msgstr "Тайм-код файли (*.tmc;*.txt)|*.tmc;*.txt|%s"
 
-#: src/extract/timecodes_v2.cpp:228
-#: src/extract/tracks.cpp:372
+#: src/extract/timecodes_v2.cpp:231
+#: src/extract/tracks.cpp:382
 #: src/info/mkvinfo.cpp:596
 #: src/info/mkvinfo.cpp:1129
 msgid "Timecode scale: %1%"
@@ -8175,10 +8183,6 @@ msgstr "mkvextract tracks <inname> [опції] [TID1:out1 [TID2:out2 ...]]"
 msgid "mkvextract.cpp/show_element(): level > 9: %1%"
 msgstr "mkvextract.cpp/show_element(): рівень > 9: %1%"
 
-#: src/extract/mkvextract.cpp:111
-msgid "mkvextract: Unknown mode!?\n"
-msgstr "mkvextract: Невідомий режим!?\n"
-
 #: src/mmg/options/mkvmerge.cpp:142
 msgid "mkvmerge"
 msgstr "mkvmerge"
@@ -8770,6 +8774,8 @@ msgstr "Так"
 #~ msgstr "flac_reader: Не вдалося встановити написати зворотного виклику.\n"
 #~ msgid "general Matroska files"
 #~ msgstr "Загальні файли Matroska"
+#~ msgid "mkvextract: Unknown mode!?\n"
+#~ msgstr "mkvextract: Невідомий режим!?\n"
 #~ msgid "r_matroska: Cluster does not contain a cluster timecode. File is broken. Aborting.\n"
 #~ msgstr "r_matroska: Кластер не містять кластеру тайм-коду. Файл не працює. Переривання.\n"
 
