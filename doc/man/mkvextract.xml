@@ -358,13 +358,34 @@ $ mkvextract tracks input.mkv 1:output-two-tracks.rm 2:output-two-tracks.rm
    <title>Timecode extraction mode</title>
 
    <para>
-    Syntax: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional>
+    Syntax: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional>
    </para>
 
    <para>
     The extracted timecodes are written to the console unless the output is redirected (see the section about <link
     linkend="mkvextract.output_redirection">output redirection</link> for details).
    </para>
+
+   <variablelist>
+    <varlistentry>
+     <term><parameter>TID:outname</parameter></term>
+     <listitem>
+      <para>
+       Causes extraction of the timecodes for the track with the ID <parameter>TID</parameter> into the file <parameter>outname</parameter>
+       if such a track exists in the source file. This option can be given multiple times. The track IDs are the same as the ones output by
+       &mkvmerge;'s <option>--identify</option> option.
+      </para>
+
+      <para>
+       Example:
+      </para>
+
+      <screen>
+$ mkvextract timecodes_v2 input.mkv 1:tc-track1.txt 2:tc-track2.txt
+      </screen>
+     </listitem>
+    </varlistentry>
+   </variablelist>
   </refsect2>
  </refsect1>
 
