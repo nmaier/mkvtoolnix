@@ -162,6 +162,9 @@ void
 extract_timecodes(const std::string &file_name,
                   std::vector<track_spec_t> &tspecs,
                   int version) {
+  if (tspecs.empty())
+    mxerror(Y("Nothing to do.\n"));
+
   // open input file
   mm_io_c *in;
   try {

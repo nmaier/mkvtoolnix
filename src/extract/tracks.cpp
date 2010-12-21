@@ -307,6 +307,9 @@ find_track_uids(KaxTracks &tracks,
 bool
 extract_tracks(const std::string &file_name,
                std::vector<track_spec_t> &tspecs) {
+  if (tspecs.empty())
+    mxerror(Y("Nothing to do.\n"));
+
   // open input file
   mm_io_cptr in;
   kax_file_cptr file;

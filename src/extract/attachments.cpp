@@ -103,6 +103,9 @@ void
 extract_attachments(const std::string &file_name,
                     std::vector<track_spec_t> &tracks,
                     kax_analyzer_c::parse_mode_e parse_mode) {
+  if (tracks.empty())
+    mxerror(Y("Nothing to do.\n"));
+
   kax_analyzer_cptr analyzer;
 
   // open input file
