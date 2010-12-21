@@ -39,6 +39,7 @@ enum ogm_stream_type_e {
   OGM_STREAM_TYPE_V_AVC,
   OGM_STREAM_TYPE_V_MSCOMP,
   OGM_STREAM_TYPE_V_THEORA,
+  OGM_STREAM_TYPE_V_VP8,
 };
 
 class ogm_reader_c;

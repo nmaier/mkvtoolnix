@@ -98,6 +98,20 @@ typedef struct PACKED_STRUCTURE {
   } sh;
 
 } stream_header;
+
+struct PACKED_STRUCTURE vp8_ogg_header_t {
+  uint8_t header_id;            // VP8 Ogg header mapping ID 0x4f
+  uint32_t id;                  // VP8 Ogg mapping ID 0x56503830 ("VP80")
+  uint8_t header_type;          // VP8 stream info header type 0x01
+  uint8_t version_major;        // Mapping major version
+  uint8_t version_minor;        // Mapping minor version
+  uint16_t pixel_width;         // Stored frame width
+  uint16_t pixel_height;        // Stored frame height
+  uint8_t par_num[3];           // Pixel aspect ratio numerator
+  uint8_t par_den[3];           // Pixel aspect ratio denominator
+  uint32_t frame_rate_num;      // Frame rate numerator
+  uint32_t frame_rate_den;      // Frame rate denominator
+};
 #if defined(COMP_MSC)
 #pragma pack(pop)
 #endif

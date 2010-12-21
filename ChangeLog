@@ -1,5 +1,8 @@
 2010-12-21  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: new feature: Added support for reading VP8 video from
+	Ogg files. Implements bug 584.
+
 	* mkvextract: enhancement: mkvextract will exit with an error if
 	the user specifies track IDs that do not exist in the source
 	file. This works in the "tracks" and "timecodes_v2" extraction

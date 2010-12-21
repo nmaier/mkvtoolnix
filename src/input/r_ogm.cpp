@@ -31,6 +31,7 @@
 #include "common/endian.h"
 #include "common/hacks.h"
 #include "common/iso639.h"
+#include "common/math.h"
 #include "common/matroska.h"
 #include "common/mpeg4_p2.h"
 #include "common/ogmstreams.h"
@@ -49,6 +50,7 @@
 #include "output/p_theora.h"
 #include "output/p_video.h"
 #include "output/p_vorbis.h"
+#include "output/p_vp8.h"
 
 #define BUFFER_SIZE 4096
 
@@ -211,6 +213,30 @@ public:
   virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
   virtual void process_page(int64_t granulepos);
   virtual bool is_header_packet(ogg_packet &op);
+};
+
+class ogm_v_vp8_demuxer_c: public ogm_demuxer_c {
+public:
+  vp8_ogg_header_t vp8_header;
+  unsigned int pixel_width, pixel_height;
+  int64_t frame_rate_num, frame_rate_den;
+  unsigned int num_header_packets_skipped;
+  int64_t frames_since_granulepos_change;
+
+public:
+  ogm_v_vp8_demuxer_c(ogm_reader_c *p_reader, ogg_packet &op);
+
+  virtual const char *get_type() {
+    return ID_RESULT_TRACK_VIDEO;
+  };
+
+  virtual std::string get_codec() {
+    return "VP8";
+  };
+
+  virtual void initialize();
+  virtual generic_packetizer_c *create_packetizer(track_info_c &ti);
+  virtual void process_page(int64_t granulepos);
 };
 
 class ogm_s_kate_demuxer_c: public ogm_demuxer_c {
@@ -483,7 +509,10 @@ ogm_reader_c::handle_new_stream(ogg_page *og) {
     dmx = new ogm_a_flac_demuxer_c(this, 0x7f == op.packet[0] ? ofm_post_1_1_1 : ofm_pre_1_1_1);
 #endif
 
-  } else if (((*op.packet & PACKET_TYPE_BITS ) == PACKET_TYPE_HEADER) && (op.bytes >= ((int)sizeof(stream_header) + 1))) {
+  } else if ((static_cast<size_t>(op.bytes) >= sizeof(vp8_ogg_header_t)) && (0x4f == op.packet[0]) && (get_uint32_be(&op.packet[1]) == 0x56503830))
+    dmx = new ogm_v_vp8_demuxer_c(this, op);
+
+  else if (((*op.packet & PACKET_TYPE_BITS ) == PACKET_TYPE_HEADER) && (op.bytes >= ((int)sizeof(stream_header) + 1))) {
     // The new stream headers introduced by OggDS (see ogmstreams.h).
 
     stream_header *sth = (stream_header *)(op.packet + 1);
@@ -1357,6 +1386,105 @@ ogm_v_theora_demuxer_c::process_page(int64_t granulepos) {
 bool
 ogm_v_theora_demuxer_c::is_header_packet(ogg_packet &op) {
   return (0 != op.bytes) && (0x80 <= op.packet[0]) && (0x82 >= op.packet[0]);
+}
+
+// -----------------------------------------------------------
+
+ogm_v_vp8_demuxer_c::ogm_v_vp8_demuxer_c(ogm_reader_c *p_reader,
+                                         ogg_packet &op)
+  : ogm_demuxer_c(p_reader)
+  , pixel_width(0)
+  , pixel_height(0)
+  , frame_rate_num(0)
+  , frame_rate_den(0)
+  , num_header_packets_skipped(1)
+  , frames_since_granulepos_change(0)
+{
+  stype              = OGM_STREAM_TYPE_V_VP8;
+  num_header_packets = 2;
+
+  memcpy(&vp8_header, op.packet, sizeof(vp8_ogg_header_t));
+}
+
+void
+ogm_v_vp8_demuxer_c::initialize() {
+  pixel_width          = get_uint16_be(&vp8_header.pixel_width);
+  pixel_height         = get_uint16_be(&vp8_header.pixel_height);
+  unsigned int par_num = get_uint16_be(&vp8_header.par_num);
+  unsigned int par_den = get_uint16_be(&vp8_header.par_den);
+
+  if ((0 != par_num) && (0 != par_den)) {
+    if (((float)pixel_width / (float)pixel_height) < ((float)par_num / (float)par_den)) {
+      display_width  = irnd((float)pixel_width * par_num / par_den);
+      display_height = pixel_height;
+    } else {
+      display_width  = pixel_width;
+      display_height = irnd((float)pixel_height * par_den / par_num);
+    }
+
+  } else {
+    display_width  = pixel_width;
+    display_height = pixel_height;
+  }
+
+  frame_rate_num   = static_cast<uint64_t>(get_uint32_be(&vp8_header.frame_rate_num));
+  frame_rate_den   = static_cast<uint64_t>(get_uint32_be(&vp8_header.frame_rate_den));
+  default_duration = frame_rate_den * 1000000000ull / frame_rate_num;
+}
+
+generic_packetizer_c *
+ogm_v_vp8_demuxer_c::create_packetizer(track_info_c &ti) {
+  vp8_video_packetizer_c *ptzr_obj = new vp8_video_packetizer_c(reader, ti);
+
+  ptzr_obj->set_video_pixel_width(pixel_width);
+  ptzr_obj->set_video_pixel_height(pixel_height);
+  ptzr_obj->set_video_display_width(display_width);
+  ptzr_obj->set_video_display_height(display_height);
+  ptzr_obj->set_track_default_duration(default_duration);
+
+  mxinfo_tid(ti.m_fname, ti.m_id, Y("Using the Vp8 video output module.\n"));
+
+  return ptzr_obj;
+}
+
+void
+ogm_v_vp8_demuxer_c::process_page(int64_t granulepos) {
+  ogg_packet op;
+
+  while (ogg_stream_packetout(&os, &op) == 1) {
+    eos |= op.e_o_s;
+
+    if (num_header_packets_skipped < num_header_packets) {
+      ++num_header_packets_skipped;
+      continue;
+    }
+
+    if ((0 < granulepos) && (granulepos != last_granulepos)) {
+      last_granulepos                = granulepos;
+      frames_since_granulepos_change = 0;
+    }
+
+    // Zero-length frames are 'repeat previous frame' markers and
+    // cannot be I frames.
+    bool is_keyframe  = (0 != op.bytes) && ((op.packet[0] & 0x01) == 0);
+    int64_t pts       = granulepos >> 32;
+    int64_t inv_count = (granulepos >> 30) & 0x03;
+    int64_t distance  = (granulepos >>  3) & 0x07ffffff;
+    int64_t frame_num = pts - inv_count - 1 + frames_since_granulepos_change;
+    int64_t timecode  = (int64_t)(1000000000.0 * frame_num * frame_rate_den / frame_rate_num);
+    int64_t bref      = is_keyframe ? VFT_IFRAME : VFT_PFRAMEAUTOMATIC;
+
+    ++units_processed;
+    ++frames_since_granulepos_change;
+
+    reader->m_reader_packetizers[ptzr]->process(new packet_t(new memory_c(op.packet, op.bytes, false), timecode, default_duration, bref, VFT_NOBFRAME));
+
+    mxverb(3,
+           boost::format("VP8 track %1% size %10% #proc %11% frame# %12% fr_num %2% fr_den %3% granulepos 0x%|4$08x| %|5$08x| pts %6% inv_count %7% distance %8%%9%\n")
+           % track_id % frame_rate_num % frame_rate_den % (granulepos >> 32) % (granulepos & 0xffffffff)
+           % pts % inv_count % distance
+           % (is_keyframe ? " key" : "") % op.bytes % units_processed % frame_num);
+  }
 }
 
 // -----------------------------------------------------------
