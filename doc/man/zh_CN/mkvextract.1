@@ -104,11 +104,11 @@ Matroska(TM)
 .PP
 \fB@\fR选项文件
 .RS 4
-Reads additional command line arguments from the file
-\fIoptions\-file\fR\&. Lines whose first non\-whitespace character is a hash mark (\*(Aq#\*(Aq) are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&.
+从文件
+\fI选项文件\fR
+中读取额外的命令行参数。首个非空白字符为井号 (\*(Aq#\*(Aq) 的行将被当作注释对待，在处理过程中将被忽略。各行开头与结尾的空白将被除去。各行必须恰好仅含一个选项。
 .sp
-Several chars can be escaped, e\&.g\&. if you need to start a non\-comment line with \*(Aq#\*(Aq\&. The rules are described in
-the section about escaping text\&.
+有些字符可以转义，如当您需要使用 \*(Aq#\*(Aq 作为一个不是评论的行的开头。规则在关于转义文本的段落有描述。
 .sp
 命令行 \*(Aq\fBmkvextract tracks 源\&.mkv \-\-raw 1:目标\&.raw\fR\*(Aq 可以转换为下面所示选项文件:
 .sp
@@ -276,15 +276,42 @@ XML
 的章节）。
 .SS "时间码提取模式"
 .PP
-语法:
+Syntax:
 \fBmkvextract\fR
 \fBtimecodes_v2\fR
-\fI源文件名\fR
-[\fI选项\fR]
+\fIsource\-filename\fR
+[\fIoptions\fR]
+\fITID1:dest\-filename1\fR
+[\fITID2:dest\-filename2\fR \&.\&.\&.]
 .PP
 提取出的时间码将被输出到命令行，除非输出被重定向（详情参见关于
 输出重定向
 的章节）。
+.PP
+\fITID:输出文件名\fR
+.RS 4
+Causes extraction of the timecodes for the track with the ID
+\fITID\fR
+into the file
+\fIoutname\fR
+if such a track exists in the source file\&. This option can be given multiple times\&. The track IDs are the same as the ones output by
+\fBmkvmerge\fR(1)\*(Aqs
+\fB\-\-identify\fR
+option\&.
+.sp
+Example:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvextract timecodes_v2 input\&.mkv 1:tc\-track1\&.txt 2:tc\-track2\&.txt
+      
+.fi
+.if n \{\
+.RE
+.\}
+.RE
 .SH "输出重定向"
 .PP
 有些提取模式会使
@@ -545,11 +572,11 @@ OGM
 \fBmkvextract\fR(1)
 在输出错误信息后即中断处理。错误信息可能是错误的命令行参数，也可能是损坏文件的读取/写入错误。
 .RE
-.SH "ESCAPING SPECIAL CHARS IN TEXT"
+.SH "文本中特殊字符的转义"
 .PP
-There are a few places in which special characters in text must or should be escaped\&. The rules for escaping are simple: each character that needs escaping is replaced with a backslash followed by another character\&.
+有时文本中的特殊字符必须或应该转义。转义规则很简单: 用反斜杠后接一字符替换需要转义的各字符。
 .PP
-The rules are: \*(Aq \*(Aq becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq itself becomes \*(Aq\e\e\*(Aq\&.
+规则为: \*(Aq \*(Aq 变为 \*(Aq\es\*(Aq，\*(Aq"\*(Aq 变为 \*(Aq\e2\*(Aq，\*(Aq:\*(Aq 变为 \*(Aq\ec\*(Aq，\*(Aq#\*(Aq 变为 \*(Aq\eh\*(Aq，而 \*(Aq\e\*(Aq 自己则变为 \*(Aq\e\e\*(Aq。
 .SH "参阅"
 .PP
 

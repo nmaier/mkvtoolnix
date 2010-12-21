@@ -150,11 +150,11 @@ Matroska(TM)
 .PP
 \fB@\fR选项文件
 .RS 4
-Reads additional command line arguments from the file
-\fIoptions\-file\fR\&. Lines whose first non\-whitespace character is a hash mark (\*(Aq#\*(Aq) are treated as comments and ignored\&. White spaces at the start and end of a line will be stripped\&. Each line must contain exactly one option\&.
+从文件
+\fI选项文件\fR
+中读取额外的命令行参数。首个非空白字符为井号 (\*(Aq#\*(Aq) 的行将被当作注释对待，在处理过程中将被忽略。各行开头与结尾的空白将被除去。各行必须恰好仅含一个选项。
 .sp
-Several chars can be escaped, e\&.g\&. if you need to start a non\-comment line with \*(Aq#\*(Aq\&. The rules are described in
-the section about escaping text\&.
+有些字符可以转义，如当您需要使用 \*(Aq#\*(Aq 作为一个不是评论的行的开头。规则在关于转义文本的段落有描述。
 .sp
 命令行 \*(Aq\fBmkvpropedit 源\&.mkv \-\-edit track:a2 \-\-set name=注释\fR\*(Aq 可以转换为下述选项文件:
 .sp
@@ -343,11 +343,11 @@ $ mkvpropedit 影片\&.mkv \-\-edit track:s1 \-\-set flag\-default=0 \-\-edit tr
 \fBmkvpropedit\fR(1)
 在输出错误信息后即中断处理。错误信息可能是错误的命令行参数，也可能是损坏文件的读取/写入错误。
 .RE
-.SH "ESCAPING SPECIAL CHARS IN TEXT"
+.SH "文本中特殊字符的转义"
 .PP
-There are a few places in which special characters in text must or should be escaped\&. The rules for escaping are simple: each character that needs escaping is replaced with a backslash followed by another character\&.
+有时文本中的特殊字符必须或应该转义。转义规则很简单: 用反斜杠后接一字符替换需要转义的各字符。
 .PP
-The rules are: \*(Aq \*(Aq becomes \*(Aq\es\*(Aq, \*(Aq"\*(Aq becomes \*(Aq\e2\*(Aq, \*(Aq:\*(Aq becomes \*(Aq\ec\*(Aq, \*(Aq#\*(Aq becomes \*(Aq\eh\*(Aq and \*(Aq\e\*(Aq itself becomes \*(Aq\e\e\*(Aq\&.
+规则为: \*(Aq \*(Aq 变为 \*(Aq\es\*(Aq，\*(Aq"\*(Aq 变为 \*(Aq\e2\*(Aq，\*(Aq:\*(Aq 变为 \*(Aq\ec\*(Aq，\*(Aq#\*(Aq 变为 \*(Aq\eh\*(Aq，而 \*(Aq\e\*(Aq 自己则变为 \*(Aq\e\e\*(Aq。
 .SH "参阅"
 .PP
 
