@@ -108,8 +108,7 @@ main(int argc,
     extract_timecodes(options.m_file_name, options.m_tracks, 2);
 
   else
-    mxerror(Y("mkvextract: Unknown mode!?\n"));
+    usage(2);
 
   return 0;
-
 }
