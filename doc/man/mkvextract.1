@@ -287,10 +287,37 @@ Syntax:
 \fBtimecodes_v2\fR
 \fIsource\-filename\fR
 [\fIoptions\fR]
+\fITID1:dest\-filename1\fR
+[\fITID2:dest\-filename2\fR \&.\&.\&.]
 .PP
 The extracted timecodes are written to the console unless the output is redirected (see the section about
 output redirection
 for details)\&.
+.PP
+\fITID:outname\fR
+.RS 4
+Causes extraction of the timecodes for the track with the ID
+\fITID\fR
+into the file
+\fIoutname\fR
+if such a track exists in the source file\&. This option can be given multiple times\&. The track IDs are the same as the ones output by
+\fBmkvmerge\fR(1)\*(Aqs
+\fB\-\-identify\fR
+option\&.
+.sp
+Example:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+$ mkvextract timecodes_v2 input\&.mkv 1:tc\-track1\&.txt 2:tc\-track2\&.txt
+      
+.fi
+.if n \{\
+.RE
+.\}
+.RE
 .SH "OUTPUT REDIRECTION"
 .PP
 Several extraction modes cause
