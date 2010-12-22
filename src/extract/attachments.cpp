@@ -33,68 +33,92 @@
 
 using namespace libmatroska;
 
+struct attachment_t {
+  std::string name, type;
+  int64_t size, id;
+  KaxFileData *fdata;
+  bool valid;
+
+  attachment_t()
+    : size(-1)
+    , id(-1)
+    , fdata(NULL)
+    , valid(false)
+  {
+  };
+
+  attachment_t &parse(KaxAttached &att);
+  static attachment_t parse_new(KaxAttached &att);
+};
+
+attachment_t
+attachment_t::parse_new(KaxAttached &att) {
+  attachment_t attachment;
+  return attachment.parse(att);
+}
+
+attachment_t &
+attachment_t::parse(KaxAttached &att) {
+  size_t k;
+  for (k = 0; att.ListSize() > k; ++k) {
+    EbmlElement *e = att[k];
+
+    if (EbmlId(*e) == EBML_ID(KaxFileName))
+      name = UTFstring_to_cstrutf8(UTFstring(*static_cast<KaxFileName *>(e)));
+
+    else if (EbmlId(*e) == EBML_ID(KaxMimeType))
+      type = std::string(*static_cast<KaxMimeType *>(e));
+
+    else if (EbmlId(*e) == EBML_ID(KaxFileUID))
+      id = uint32(*static_cast<KaxFileUID *>(e));
+
+    else if (EbmlId(*e) == EBML_ID(KaxFileData)) {
+      fdata = (KaxFileData *)e;
+      size  = fdata->GetSize();
+    }
+  }
+
+  valid = (-1 != id) && (-1 != size) && !type.empty();
+
+  return *this;
+}
+
 static void
 handle_attachments(KaxAttachments *atts,
                    std::vector<track_spec_t> &tracks) {
-  static int64_t attachment_ui_id = 0;
+  int64_t attachment_ui_id = 0;
+  std::map<int64_t, attachment_t> attachments;
 
   size_t i;
   for (i = 0; atts->ListSize() > i; ++i) {
-    KaxAttached  *att = dynamic_cast<KaxAttached *>((*atts)[i]);
+    KaxAttached *att = dynamic_cast<KaxAttached *>((*atts)[i]);
     assert(NULL != att);
 
-    std::string name, type;
-    int64_t size       = -1;
-    int64_t id         = -1;
-    KaxFileData *fdata = NULL;
+    attachment_t attachment = attachment_t::parse_new(*att);
+    if (!attachment.valid)
+      continue;
 
-    size_t k;
-    for (k = 0; att->ListSize() > k; ++k) {
-      EbmlElement *e = (*att)[k];
+    ++attachment_ui_id;
+    attachments[attachment_ui_id] = attachment;
+  }
 
-      if (EbmlId(*e) == EBML_ID(KaxFileName))
-        name = UTFstring_to_cstrutf8(UTFstring(*static_cast<KaxFileName *>(e)));
+  foreach(track_spec_t &track, tracks) {
+    attachment_t attachment = attachments[ track.tid ];
 
-      else if (EbmlId(*e) == EBML_ID(KaxMimeType))
-        type = std::string(*static_cast<KaxMimeType *>(e));
+    if (!attachment.valid)
+      mxerror(boost::format(Y("An attachment with the ID %1% was not found.\n")) % track.tid);
 
-      else if (EbmlId(*e) == EBML_ID(KaxFileUID))
-        id = uint32(*static_cast<KaxFileUID *>(e));
+    // check for output name
+    if (track.out_name.empty())
+      track.out_name = attachment.name;
 
-      else if (EbmlId(*e) == EBML_ID(KaxFileData)) {
-        fdata = (KaxFileData *)e;
-        size  = fdata->GetSize();
-      }
-
-    }
-
-    if ((-1 != id) && (-1 != size) && !type.empty()) {
-      ++attachment_ui_id;
-
-      bool found = false;
-
-      for (k = 0; k < tracks.size(); k++)
-        if (tracks[k].tid == attachment_ui_id) {
-          found = true;
-          break;
-        }
-
-      if (found && !tracks[k].done) {
-        // check for output name
-        if (tracks[k].out_name.empty())
-          tracks[k].out_name = name;
-
-        mxinfo(boost::format(Y("The attachment #%1%, ID %2%, MIME type %3%, size %4%, is written to '%5%'.\n")) % attachment_ui_id % id % type % size % tracks[k].out_name);
-        mm_io_c *out = NULL;
-        try {
-          out = new mm_file_io_c(tracks[k].out_name, MODE_CREATE);
-        } catch (...) {
-          mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%, %3%).\n")) % tracks[k].out_name % errno % strerror(errno));
-        }
-        out->write(fdata->GetBuffer(), fdata->GetSize());
-        delete out;
-        tracks[k].done = true;
-      }
+    mxinfo(boost::format(Y("The attachment #%1%, ID %2%, MIME type %3%, size %4%, is written to '%5%'.\n"))
+           % attachment_ui_id % attachment.id % attachment.type % attachment.size % track.out_name);
+    try {
+      mm_file_io_c out(track.out_name, MODE_CREATE);
+      out.write(attachment.fdata->GetBuffer(), attachment.fdata->GetSize());
+    } catch (...) {
+      mxerror(boost::format(Y("The file '%1%' could not be opened for writing (%2%, %3%).\n")) % track.out_name % errno % strerror(errno));
     }
   }
 }
@@ -123,9 +147,4 @@ extract_attachments(const std::string &file_name,
     handle_attachments(attachments, tracks);
     delete attachments;
   }
-
-  size_t i;
-  for (i = 0; i < tracks.size(); i++)
-    if (!tracks[i].done)
-      mxinfo(boost::format(Y("An attachment with the ID %1% was not found.\n")) % tracks[i].tid);
 }
