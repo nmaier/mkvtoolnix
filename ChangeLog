@@ -1,3 +1,9 @@
+2010-12-22  Moritz Bunkus  <moritz@bunkus.org>
+
+	* mkvmerge: buf fix: Avoid a crash due to invalid memory access if
+	a source file name contains numbers (happens only if mkvtoolnix is
+	built with MS Visual Studio). Fix for bug 585.
+
 2010-12-21  Moritz Bunkus  <moritz@bunkus.org>
 
 	* mkvmerge: new feature: Added support for reading VP8 video from
