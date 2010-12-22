@@ -155,7 +155,7 @@ mpeg_ps_reader_c::init_reader() {
           io->restore_pos();
           pes_packet_length = io->read_uint16_be();
 
-          mxverb(3, boost::format("mpeg_ps: id 0x%|1$02x| len %2% at %3%\n") % stream_id % pes_packet_length % (io->getFilePointer() - 4 - 2));
+          mxverb(3, boost::format("mpeg_ps: id 0x%|1$02x| len %2% at %3%\n") % static_cast<unsigned int>(stream_id) % pes_packet_length % (io->getFilePointer() - 4 - 2));
 
           io->skip(pes_packet_length);
 
