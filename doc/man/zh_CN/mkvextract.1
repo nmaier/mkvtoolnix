@@ -276,13 +276,13 @@ XML
 的章节）。
 .SS "时间码提取模式"
 .PP
-Syntax:
+语法:
 \fBmkvextract\fR
 \fBtimecodes_v2\fR
-\fIsource\-filename\fR
-[\fIoptions\fR]
-\fITID1:dest\-filename1\fR
-[\fITID2:dest\-filename2\fR \&.\&.\&.]
+\fI源文件名\fR
+[\fI选项\fR]
+\fITID1:目标文件名1\fR
+[\fITID2:目标文件名2\fR \&.\&.\&.]
 .PP
 提取出的时间码将被输出到命令行，除非输出被重定向（详情参见关于
 输出重定向
@@ -290,16 +290,16 @@ Syntax:
 .PP
 \fITID:输出文件名\fR
 .RS 4
-Causes extraction of the timecodes for the track with the ID
+如果源文件中存在 ID 为
 \fITID\fR
-into the file
-\fIoutname\fR
-if such a track exists in the source file\&. This option can be given multiple times\&. The track IDs are the same as the ones output by
-\fBmkvmerge\fR(1)\*(Aqs
+的轨道，则将其时间码提取为文件
+\fI输出文件名\fR。本选项可多次给出。轨道 ID 与
+\fBmkvmerge\fR(1)
+的
 \fB\-\-identify\fR
-option\&.
+选项所输出的相同。
 .sp
-Example:
+示例:
 .sp
 .if n \{\
 .RS 4
