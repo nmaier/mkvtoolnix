@@ -195,9 +195,10 @@ mm_multi_file_io_c::open_multi(const std::string &display_file_name,
     return mm_multi_file_io_cptr(new mm_multi_file_io_c(file_names, display_file_name));
   }
 
-  base_name        = downcase(matches[1].str());
   int start_number = 1;
   parse_int(matches[2].str(), start_number);
+
+  base_name = downcase(matches[1].str());
 
   std::vector<path_sorter_t> paths;
   paths.push_back(path_sorter_t(first_file_name, start_number));
