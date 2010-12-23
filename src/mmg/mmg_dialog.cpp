@@ -64,6 +64,28 @@ std::vector<mmg_track_t *> tracks;
 std::map<wxString, wxString> capabilities;
 std::vector<job_t> jobs;
 
+#if defined(HAVE_CURL_EASY_H)
+update_check_thread_c::update_check_thread_c(wxFrame *frame,
+                                             bool interactive)
+  : wxThread(wxTHREAD_DETACHED)
+  , m_frame(frame)
+  , m_interactive(interactive)
+{
+}
+
+void *
+update_check_thread_c::Entry() {
+  mtx_release_version_t release = get_latest_release_version();
+
+  if (release.current_version < release.latest_source)
+    ;                           // notify: new release available
+  else if (m_interactive)
+    ;                           // notify: no new relesae available
+
+  return NULL;
+}
+#endif  // defined(HAVE_CURL_EASY_H)
+
 mmg_dialog::mmg_dialog()
   : wxFrame(NULL, wxID_ANY, wxEmptyString)
 #if defined(SYS_WINDOWS)
@@ -227,6 +249,10 @@ mmg_dialog::create_menus() {
   wxMenu *help_menu = new wxMenu();
   help_menu->Append(ID_M_HELP_HELP);
   help_menu->Append(ID_M_HELP_ABOUT);
+#if defined(HAVE_CURL_EASY_H)
+  help_menu->AppendSeparator();
+  help_menu->Append(ID_M_HELP_CHECK_FOR_UPDATES);
+#endif  // defined(HAVE_CURL_EASY_H)
 
   wxMenuBar *menu_bar = new wxMenuBar();
   menu_bar->Append(file_menu,    wxEmptyString);
@@ -275,6 +301,9 @@ mmg_dialog::translate_ui() {
   set_menu_item_strings(ID_M_WINDOW_CHAPTEREDITOR,     Z("&Chapter editor\tAlt-4"));
   set_menu_item_strings(ID_M_HELP_HELP,                Z("&Help\tF1"),                            Z("Show the guide to mkvmerge GUI"));
   set_menu_item_strings(ID_M_HELP_ABOUT,               Z("&About"),                               Z("Show program information"));
+#if defined(HAVE_CURL_EASY_H)
+  set_menu_item_strings(ID_M_HELP_CHECK_FOR_UPDATES,   Z("&Check for updates"),                   Z("Check online for a new release"));
+#endif  // defined(HAVE_CURL_EASY_H)
 
   set_menu_label(this, 0, Z("&File"));
   set_menu_label(this, 1, Z("&Muxing"));
@@ -1674,10 +1703,28 @@ mmg_dialog::header_editor_frame_closed(header_editor_frame_c *frame) {
 #if defined(HAVE_CURL_EASY_H)
 void
 mmg_dialog::maybe_check_for_updates() {
+  if (!options.check_for_updates)
+    return;
+
+  long last_check   = 0;
+  wxConfigBase *cfg = wxConfigBase::Get();
+  cfg->SetPath(wxT("/GUI/update_check"));
+  cfg->Read(wxT("last_check"), &last_check, 0);
+  if ((last_check + 24 * 60 * 60) <= wxGetLocalTime())
+    check_for_updates(false);
 }
 
 void
 mmg_dialog::on_check_for_updates(wxCommandEvent &evt) {
+  check_for_updates(true);
+}
+
+void
+mmg_dialog::check_for_updates(bool interactive) {
+  wxLogMessage(wxT("about to check... btw int? %d"), (int)interactive);
+  update_check_thread_c *checker = new update_check_thread_c(this, interactive);
+  checker->Create();
+  checker->Run();
 }
 #endif  // defined(HAVE_CURL_EASY_H)
 
@@ -1775,6 +1822,9 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_MUXING_ADD_CLI_OPTIONS,   mmg_dialog::on_add_cli_options)
   EVT_MENU(ID_M_HELP_HELP,                mmg_dialog::on_help)
   EVT_MENU(ID_M_HELP_ABOUT,               mmg_dialog::on_about)
+#if defined(HAVE_CURL_EASY_H)
+  EVT_MENU(ID_M_HELP_CHECK_FOR_UPDATES,   mmg_dialog::on_check_for_updates)
+#endif  // defined(HAVE_CURL_EASY_H)
   EVT_MENU(ID_M_FILE_LOADLAST1,           mmg_dialog::on_file_load_last)
   EVT_MENU(ID_M_FILE_LOADLAST2,           mmg_dialog::on_file_load_last)
   EVT_MENU(ID_M_FILE_LOADLAST3,           mmg_dialog::on_file_load_last)

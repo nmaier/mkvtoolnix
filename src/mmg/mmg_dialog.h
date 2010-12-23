@@ -18,6 +18,9 @@
 
 #include <wx/html/helpctrl.h>
 #include <wx/log.h>
+#if defined(HAVE_CURL_EASY_H)
+# include <wx/thread.h>
+#endif  // defined(HAVE_CURL_EASY_H)
 
 #include "mmg/mmg.h"
 
@@ -71,6 +74,7 @@
 
 #define ID_M_HELP_ABOUT                   65000
 #define ID_M_HELP_HELP                    65001
+#define ID_M_HELP_CHECK_FOR_UPDATES       65002
 
 #define HELP_ID_CONTENTS                      1
 #define HELP_ID_INTRODUCTION              10000
@@ -86,6 +90,19 @@ class tab_global;
 class tab_input;
 class job_dialog;
 class header_editor_frame_c;
+
+#if defined(HAVE_CURL_EASY_H)
+class update_check_thread_c: public wxThread {
+private:
+  wxFrame *m_frame;
+  bool m_interactive;
+
+public:
+  update_check_thread_c(wxFrame *frame, bool interactive);
+
+  virtual void *Entry();
+};
+#endif  // defined(HAVE_CURL_EASY_H)
 
 class mmg_dialog: public wxFrame {
   DECLARE_CLASS(mmg_dialog);
@@ -218,6 +235,12 @@ public:
   void display_help(int id);
 
   wxString suggest_file_name_extension();
+
+#if defined(HAVE_CURL_EASY_H)
+  void maybe_check_for_updates();
+  void on_check_for_updates(wxCommandEvent &evt);
+  void check_for_updates(bool interactive);
+#endif  // defined(HAVE_CURL_EASY_H)
 
 protected:
 #if defined(SYS_WINDOWS)
