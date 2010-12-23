@@ -48,17 +48,20 @@ version_number_t::version_number_t(const std::string &s)
   // 4.4.0
   // 4.4.0.5 build 123
   // 4.4.0-build20101201-123
+  // mkvmerge v4.4.0
+  // * Optional prefix "mkvmerge v"
   // * At least three digits separated by dots
   // * Optional fourth digit separated by a dot
   // * Optional build number that can have two forms:
   //   - " build nnn"
   //   - "-buildYYYYMMDD-nnn" (date is ignored)
-  static boost::regex s_version_number_re("^(\\d+) \\. (\\d+) \\. (\\d+)" // Three digitss separated by dots; $1 - $3
-                                          "(?: \\. (\\d+) )?"             // Optional fourth digit separated by a dot; $4
-                                          "(?:"                           // Optional build number including its prefix
-                                          " (?: \\s* build \\s*"          //   Build number prefix: either " build " or...
-                                          "  |  - build \\d{8} - )"       //   ... "-buildYYYYMMDD-"
-                                          " (\\d+)"                       //   The build number itself; $5
+  static boost::regex s_version_number_re("^ (?: mkv[a-z]+ \\s+ v)?"     // Optional prefix mkv... v
+                                          "(\\d+) \\. (\\d+) \\. (\\d+)" // Three digitss separated by dots; $1 - $3
+                                          "(?: \\. (\\d+) )?"            // Optional fourth digit separated by a dot; $4
+                                          "(?:"                          // Optional build number including its prefix
+                                          " (?: \\s* build \\s*"         //   Build number prefix: either " build " or...
+                                          "  |  - build \\d{8} - )"      //   ... "-buildYYYYMMDD-"
+                                          " (\\d+)"                      //   The build number itself; $5
                                           ")?",
                                           boost::regex::perl | boost::regex::mod_x);
 
@@ -72,6 +75,9 @@ version_number_t::version_number_t(const std::string &s)
       parse_uint(matches[idx].str(), parts[idx - 1]);
 
   valid = true;
+
+  if (debugging_requested("version_check"))
+    mxinfo(boost::format("version check: parse OK; result: %1%\n") % to_string());
 }
 
 version_number_t::version_number_t(const version_number_t &v) {
