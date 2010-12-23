@@ -244,7 +244,7 @@ handle_common_cli_args(std::vector<std::string> &args,
       ++i;
   }
 
-  // Last find the --help and --version arguments.
+  // Last find the --help, --version, --check-for-updates arguments.
   i = 0;
   while (args.size() > i) {
     if ((args[i] == "-V") || (args[i] == "--version")) {
@@ -260,9 +260,20 @@ handle_common_cli_args(std::vector<std::string> &args,
       g_suppress_info = true;
       args.erase(args.begin() + i, args.begin() + i + 1);
 
-    } else if ((args[i] == "-h") || (args[i] == "-?") ||
-             (args[i] == "--help"))
+    } else if ((args[i] == "-h") || (args[i] == "-?") || (args[i] == "--help"))
       usage();
+
+#if defined(HAVE_CURL_EASY_H)
+    else if (args[i] == "--check-for-updates") {
+      mtx_release_version_t rel = get_latest_release_version();
+      if (!rel.latest_source.valid)
+        mxerror(boost::format(Y("The update information could not be retrieved from %1%.\n")) % MTX_VERSION_CHECK_URL);
+
+      mxinfo(boost::format("version_check_url=%1%\nrunning_version=%2%\navailable_version=%3%\n")
+             % MTX_VERSION_CHECK_URL % rel.current_version.to_string() % rel.latest_source.to_string());
+      mxexit(rel.current_version < rel.latest_source ? 1 : 0);
+    }
+#endif  // defined(HAVE_CURL_EASY_H)
 
     else
       ++i;

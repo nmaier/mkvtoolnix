@@ -181,6 +181,7 @@ cli_parser_c::add_common_options() {
   OPT("@file",                          YT("Reads additional command line options from the specified file (see man page)."));
   OPT("h|help",                         YT("Show this help."));
   OPT("V|version",                      YT("Show version information."));
+  OPT("check-for-updates",              YT("Check online for the latest release."));
 }
 
 #undef OPT

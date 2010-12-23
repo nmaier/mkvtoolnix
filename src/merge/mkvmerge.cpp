@@ -247,6 +247,7 @@ set_usage() {
                   "                           the specified file (see man page).\n");
   usage_text += Y("  -h, --help               Show this help.\n");
   usage_text += Y("  -V, --version            Show version information.\n");
+  usage_text += Y("  --check-for-updates      Check online for the latest release.\n");
   usage_text +=   "\n\n";
   usage_text += Y("Please read the man page/the HTML documentation to mkvmerge. It\n"
                   "explains several details in great length which are not obvious from\n"

@@ -232,6 +232,7 @@ set_usage() {
       "                 Redirect all messages to this file.\n"
       "  -h, --help     Show this help.\n"
       "  -V, --version  Show version information.\n");
+  usage_text += Y("  --check-for-updates Check online for the latest release.\n");
 
   version_info = get_version_info("mkvinfo", true);
 }
