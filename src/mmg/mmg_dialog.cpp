@@ -1528,6 +1528,7 @@ mmg_dialog::save_preferences() {
   cfg->Write(wxU("gui_debugging"),                   options.gui_debugging);
   cfg->Write(wxU("set_delay_from_filename"),         options.set_delay_from_filename);
   cfg->Write(wxU("disable_a_v_compression"),         options.disable_a_v_compression);
+  cfg->Write(wxU("check_for_updates"),               options.check_for_updates);
   cfg->Write(wxU("popular_languages"),               join(wxU(" "), options.popular_languages));
 
   cfg->Flush();
@@ -1563,6 +1564,7 @@ mmg_dialog::load_preferences() {
   cfg->Read(wxU("gui_debugging"),                 &options.gui_debugging, false);
   cfg->Read(wxU("set_delay_from_filename"),       &options.set_delay_from_filename, true);
   cfg->Read(wxU("disable_a_v_compression"),       &options.disable_a_v_compression, false);
+  cfg->Read(wxU("check_for_updates"),             &options.check_for_updates, true);
   cfg->Read(wxU("popular_languages"),             &s, wxEmptyString);
 
   options.init_popular_languages(s);
@@ -1668,6 +1670,16 @@ void
 mmg_dialog::header_editor_frame_closed(header_editor_frame_c *frame) {
   header_editor_frames.erase(find(header_editor_frames.begin(), header_editor_frames.end(), frame));
 }
+
+#if defined(HAVE_CURL_EASY_H)
+void
+mmg_dialog::maybe_check_for_updates() {
+}
+
+void
+mmg_dialog::on_check_for_updates(wxCommandEvent &evt) {
+}
+#endif  // defined(HAVE_CURL_EASY_H)
 
 void
 mmg_dialog::query_mkvmerge_capabilities() {

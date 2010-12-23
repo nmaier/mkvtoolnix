@@ -101,6 +101,13 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   cb_disable_header_removal_compression->SetToolTip(TIP("If checked mmg will set the 'compression' drop down box to 'none' for all audio and video tracks by default. "
                                                         "The user can still change the compression setting afterwards."));
 
+#if defined(HAVE_CURL_EASY_H)
+  cb_gui_debugging = new wxCheckBox(this, ID_CB_CHECK_FOR_UPDATES, Z("Check online for updates"));
+  cb_gui_debugging->SetToolTip(TIP("Check online whether or not a new release of MKVToolNix is availble on the home page. "
+                                   "Will only check when mmg starts and at most once a day. "
+                                   "No information is transmitted to the server."));
+#endif  // defined(HAVE_CURL_EASY_H)
+
   cb_gui_debugging = new wxCheckBox(this, ID_CB_GUI_DEBUGGING, Z("Show mmg's debug window"));
   cb_gui_debugging->SetToolTip(TIP("Shows mmg's debug window in which debug messages will appear. "
                                    "This is only useful if you're helping the author debug a problem in mmg."));
@@ -156,6 +163,10 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
 #if defined(HAVE_LIBINTL_H)
   set_combobox_selection(cob_ui_language, select_locale);
 #endif  // HAVE_LIBINTL_H
+
+#if defined(HAVE_CURL_EASY_H)
+  cb_check_for_updates->SetValue(m_options.check_for_updates);
+#endif  // defined(HAVE_CURL_EASY_H)
 
   enable_output_filename_controls(m_options.autoset_output_filename);
 
@@ -227,6 +238,11 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
   siz_all->Add(cb_disable_header_removal_compression, 0, wxLEFT, 5);
   siz_all->AddSpacer(5);
 
+#if defined(HAVE_CURL_EASY_H)
+  siz_all->Add(cb_check_for_updates, 0, wxLEFT, 5);
+  siz_all->AddSpacer(5);
+#endif  // defined(HAVE_CURL_EASY_H)
+
   siz_all->Add(cb_gui_debugging, 0, wxLEFT, 5);
   siz_all->AddSpacer(5);
 
@@ -281,6 +297,9 @@ optdlg_mmg_tab::save_options() {
   m_options.output_directory_mode         = rb_odm_input_file->GetValue() ? ODM_FROM_FIRST_INPUT_FILE
                                           : rb_odm_previous->GetValue()   ? ODM_PREVIOUS
                                           :                                 ODM_FIXED;
+#if defined(HAVE_CURL_EASY_H)
+  m_options.check_for_updates             = cb_check_for_updates->IsChecked();
+#endif  // defined(HAVE_CURL_EASY_H)
 
 #if defined(HAVE_LIBINTL_H)
   std::string new_ui_locale = get_selected_ui_language();

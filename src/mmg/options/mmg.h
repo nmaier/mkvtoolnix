@@ -36,6 +36,7 @@
 #define ID_COB_UI_LANGUAGE              15116
 #define ID_CB_NEW_AFTER_SUCCESSFUL_MUX  15117
 #define ID_CB_DISABLE_HRC               15118
+#define ID_CB_CHECK_FOR_UPDATES         15119
 
 class optdlg_mmg_tab: public optdlg_base_tab {
   DECLARE_CLASS(optdlg_mmg_tab);
@@ -49,6 +50,9 @@ public:
   wxCheckBox *cb_warn_usage, *cb_gui_debugging;
   wxCheckBox *cb_set_delay_from_filename;
   wxCheckBox *cb_disable_header_removal_compression;
+#if defined(HAVE_CURL_EASY_H)
+  wxCheckBox *cb_check_for_updates;
+#endif  // defined(HAVE_CURL_EASY_H)
   wxRadioButton *rb_odm_input_file, *rb_odm_previous, *rb_odm_fixed;
   wxButton *b_browse_output_directory;
 
