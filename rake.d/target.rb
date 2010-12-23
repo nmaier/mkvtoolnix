@@ -91,6 +91,7 @@ class Target
     @libraries += list.collect do |entry|
       case entry
       when nil               then nil
+      when :curl             then c(:CURL_LIBS)
       when :magic            then c(:MAGIC_LIBS)
       when :flac             then c(:FLAC_LIBS)
       when :compression      then [ c(:LZO_LIBS), c(:BZ2_LIBS) ]
