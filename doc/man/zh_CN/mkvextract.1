@@ -102,6 +102,21 @@ Matroska(TM)
 显示版本信息并退出。
 .RE
 .PP
+\fB\-\-check\-for\-updates\fR
+.RS 4
+Checks online for new releases by downloading the URL
+http://mkvtoolnix\-releases\&.bunkus\&.org/latest\-release\&.xml\&. Three lines will be output in
+key=value
+style: the URL from where the information was retrieved (key
+version_check_url), the currently running version (key
+running_version) and the latest release\*(Aqs version (key
+available_version)\&.
+.sp
+Afterwards the program exists with an exit code of 0 if no newer release is available, with 1 if a newer release is available and with 2 if an error occured (e\&.g\&. if the update information could not be retrieved)\&.
+.sp
+This option is only available if the program was built with support for libcurl\&.
+.RE
+.PP
 \fB@\fR选项文件
 .RS 4
 从文件

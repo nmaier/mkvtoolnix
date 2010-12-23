@@ -189,6 +189,27 @@
    </varlistentry>
 
    <varlistentry>
+    <term><option>--check-for-updates</option></term>
+    <listitem>
+     <para>
+      Checks online for new releases by downloading the URL <uri>http://mkvtoolnix-releases.bunkus.org/latest-release.xml</uri>. Three lines
+      will be output in <literal>key=value</literal> style: the URL from where the information was retrieved (key
+      <literal>version_check_url</literal>), the currently running version (key <literal>running_version</literal>) and the latest release's
+      version (key <literal>available_version</literal>).
+     </para>
+
+     <para>
+      Afterwards the program exists with an exit code of 0 if no newer release is available, with 1 if a newer release is available and with
+      2 if an error occured (e.g. if the update information could not be retrieved).
+     </para>
+
+     <para>
+      This option is only available if the program was built with support for libcurl.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
     <term><option>@</option>options-file</term>
     <listitem>
      <para>
