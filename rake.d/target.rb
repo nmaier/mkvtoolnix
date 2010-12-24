@@ -6,6 +6,7 @@ class Target
     @objects      = []
     @libraries    = []
     @dependencies = []
+    @file_deps    = []
     @only_if      = true
     @debug        = {}
     @desc         = nil
@@ -59,10 +60,11 @@ class Target
     list           = list.collect { |e| e.respond_to?(:to_a) ? e.to_a : e }.flatten
     file_mode      = (options[:type] || :file) == :file
     new_sources    = list.collect { |entry| file_mode ? (entry.respond_to?(:to_a) ? entry.to_a : entry) : FileList["#{entry}/*.c", "#{entry}/*.cpp"].to_a }.flatten
-    new_deps       = new_sources.collect { |file| file.ext(ext_map[ file.pathmap('%x') ] || 'o') }
+    new_deps       = new_sources.collect { |file| [ file.ext(ext_map[ file.pathmap('%x') ] || 'o'), file ] }
     @sources      += new_sources
-    @objects      += new_deps.select { |file| /\.o$/.match file }
-    @dependencies += new_deps
+    @objects      += new_deps.collect(&:first).select { |file| /\.o$/.match file }
+    @dependencies += new_deps.collect(&:first)
+    @file_deps    += new_deps
     self
   end
 
@@ -123,6 +125,10 @@ class Target
       @sources.select { |name| /\.moc\.cpp$/.match(name) }.each do |name|
         target = name.ext.ext('h')
         file name => target, &$moc_compiler
+      end
+
+      @file_deps.each do |spec|
+        file spec.first => spec.last
       end
 
       @aliases.each_with_index do |name, idx|
