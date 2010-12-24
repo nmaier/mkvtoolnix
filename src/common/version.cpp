@@ -18,10 +18,10 @@
 #if defined(HAVE_CURL_EASY_H)
 # include <boost/property_tree/ptree.hpp>
 # include <boost/property_tree/xml_parser.hpp>
-# include <curl/curl.h>
-# include <curl/easy.h>
 # include <sstream>
-#endif
+
+# include "common/curl.h"
+#endif  // defined(HAVE_CURL_EASY_H)
 
 #include "common/debugging.h"
 #include "common/strings/formatting.h"
@@ -152,36 +152,14 @@ get_current_version() {
 }
 
 #if defined(HAVE_CURL_EASY_H)
-static size_t
-curl_write_data_cb(void *buffer,
-                   size_t size,
-                   size_t nmemb,
-                   void *user_data) {
-  std::string *s = static_cast<std::string *>(user_data);
-  *s += std::string(static_cast<char *>(buffer), size * nmemb);
-  return size * nmemb;
-}
-
 mtx_release_version_t
 get_latest_release_version() {
-  mtx_release_version_t release;
-  std::string data;
-
   if (debugging_requested("version_check"))
     mxinfo(boost::format("Update check started with URL %1%\n") % MTX_VERSION_CHECK_URL);
 
-  curl_global_init(CURL_GLOBAL_ALL);
-  CURL *handle = curl_easy_init();
-
-  curl_easy_setopt(handle, CURLOPT_VERBOSE,       0);
-  curl_easy_setopt(handle, CURLOPT_NOPROGRESS,    1);
-  curl_easy_setopt(handle, CURLOPT_URL,           MTX_VERSION_CHECK_URL);
-  curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, curl_write_data_cb);
-  curl_easy_setopt(handle, CURLOPT_WRITEDATA,     &data);
-
-  CURLcode result = curl_easy_perform(handle);
-
-  curl_easy_cleanup(handle);
+  mtx_release_version_t release;
+  std::string data;
+  CURLcode result = retrieve_via_curl(MTX_VERSION_CHECK_URL, data);
 
   if (0 != result) {
     if (debugging_requested("version_check"))
