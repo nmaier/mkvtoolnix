@@ -18,8 +18,10 @@
 
 #include <wx/html/helpctrl.h>
 #include <wx/log.h>
+
 #if defined(HAVE_CURL_EASY_H)
 # include <wx/thread.h>
+# include "common/version.h"
 #endif  // defined(HAVE_CURL_EASY_H)
 
 #include "mmg/mmg.h"
@@ -90,16 +92,15 @@ class tab_global;
 class tab_input;
 class job_dialog;
 class header_editor_frame_c;
+class mmg_dialog;
 
 #if defined(HAVE_CURL_EASY_H)
 class update_check_thread_c: public wxThread {
 private:
-  wxFrame *m_frame;
-  bool m_interactive;
+  mmg_dialog *m_mdlg;
 
 public:
-  update_check_thread_c(wxFrame *frame, bool interactive);
-
+  update_check_thread_c(mmg_dialog *mdlg);
   virtual void *Entry();
 };
 #endif  // defined(HAVE_CURL_EASY_H)
@@ -147,6 +148,12 @@ public:
 #if defined(SYS_WINDOWS)
   bool m_taskbar_msg_received;
 #endif
+
+#if defined(HAVE_CURL_EASY_H)
+  bool m_checking_for_updates, m_interactive_update_check;
+  wxMutex m_update_check_mutex;
+  mtx_release_version_t m_release_version;
+#endif  // defined(HAVE_CURL_EASY_H)
 
 public:
   mmg_dialog();
@@ -238,8 +245,11 @@ public:
 
 #if defined(HAVE_CURL_EASY_H)
   void maybe_check_for_updates();
-  void on_check_for_updates(wxCommandEvent &evt);
   void check_for_updates(bool interactive);
+  void set_release_version(mtx_release_version_t &release_version);
+
+  void on_check_for_updates(wxCommandEvent &evt);
+  void on_update_check_state_changed(wxCommandEvent &evt);
 #endif  // defined(HAVE_CURL_EASY_H)
 
 protected:

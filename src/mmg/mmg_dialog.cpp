@@ -65,22 +65,38 @@ std::map<wxString, wxString> capabilities;
 std::vector<job_t> jobs;
 
 #if defined(HAVE_CURL_EASY_H)
-update_check_thread_c::update_check_thread_c(wxFrame *frame,
-                                             bool interactive)
+DECLARE_EVENT_TYPE(wxEVT_MTX_UPDATE_CHECK_STATE_CHANGED, -1);
+DEFINE_EVENT_TYPE(wxEVT_MTX_UPDATE_CHECK_STATE_CHANGED);
+
+#define UPDATE_CHECK_START               1
+#define UPDATE_CHECK_DONE_NO_NEW_RELEASE 2
+#define UPDATE_CHECK_DONE_NEW_RELEASE    3
+#define UPDATE_CHECK_DONE_ERROR          4
+
+update_check_thread_c::update_check_thread_c(mmg_dialog *mdlg)
   : wxThread(wxTHREAD_DETACHED)
-  , m_frame(frame)
-  , m_interactive(interactive)
+  , m_mdlg(mdlg)
 {
 }
 
 void *
 update_check_thread_c::Entry() {
+  wxCommandEvent event(wxEVT_MTX_UPDATE_CHECK_STATE_CHANGED, UPDATE_CHECK_START);
+  wxPostEvent(m_mdlg, event);
+
   mtx_release_version_t release = get_latest_release_version();
 
-  if (release.current_version < release.latest_source)
-    ;                           // notify: new release available
-  else if (m_interactive)
-    ;                           // notify: no new relesae available
+  if (!release.valid)
+    event.SetId(UPDATE_CHECK_DONE_ERROR);
+
+  else if (release.current_version < release.latest_source) {
+    m_mdlg->set_release_version(release);
+    event.SetId(UPDATE_CHECK_DONE_NEW_RELEASE);
+
+  } else
+    event.SetId(UPDATE_CHECK_DONE_NO_NEW_RELEASE);
+
+  wxPostEvent(m_mdlg, event);
 
   return NULL;
 }
@@ -91,6 +107,9 @@ mmg_dialog::mmg_dialog()
 #if defined(SYS_WINDOWS)
   , m_taskbar_msg_received(false)
 #endif
+#if defined(HAVE_CURL_EASY_H)
+  , m_checking_for_updates(false)
+#endif  // defined(HAVE_CURL_EASY_H)
 {
   wxBoxSizer *bs_main;
   wxPanel *panel;
@@ -1720,11 +1739,30 @@ mmg_dialog::on_check_for_updates(wxCommandEvent &evt) {
 }
 
 void
+mmg_dialog::on_update_check_state_changed(wxCommandEvent &evt) {
+  wxLogMessage(wxT("update state changed, now %d"), (int)evt.GetId());
+}
+
+void
 mmg_dialog::check_for_updates(bool interactive) {
+  wxMutexLocker locker(m_update_check_mutex);
+  if (m_checking_for_updates)
+    return;
+
+  m_checking_for_updates     = true;
+  m_interactive_update_check = interactive;
+
   wxLogMessage(wxT("about to check... btw int? %d"), (int)interactive);
-  update_check_thread_c *checker = new update_check_thread_c(this, interactive);
+
+  update_check_thread_c *checker = new update_check_thread_c(this);
   checker->Create();
   checker->Run();
+}
+
+void
+mmg_dialog::set_release_version(mtx_release_version_t &release_version) {
+  wxMutexLocker locker(m_update_check_mutex);
+  m_release_version = release_version;
 }
 #endif  // defined(HAVE_CURL_EASY_H)
 
@@ -1844,4 +1882,7 @@ BEGIN_EVENT_TABLE(mmg_dialog, wxFrame)
   EVT_MENU(ID_M_WINDOW_GLOBAL,            mmg_dialog::on_window_selected)
   EVT_MENU(ID_M_WINDOW_CHAPTEREDITOR,     mmg_dialog::on_window_selected)
   EVT_CLOSE(mmg_dialog::on_close)
+#if defined(HAVE_CURL_EASY_H)
+  EVT_COMMAND(wxID_ANY, wxEVT_MTX_UPDATE_CHECK_STATE_CHANGED, mmg_dialog::on_update_check_state_changed)
+#endif  // defined(HAVE_CURL_EASY_H)
 END_EVENT_TABLE();
