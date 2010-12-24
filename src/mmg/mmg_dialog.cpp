@@ -54,6 +54,9 @@
 #include "mmg/tabs/chapters.h"
 #include "mmg/tabs/global.h"
 #include "mmg/tabs/input.h"
+#if defined(HAVE_CURL_EASY_H)
+# include "mmg/update_checker.h"
+#endif  // defined(HAVE_CURL_EASY_H)
 #include "share/icons/32x32/mkvmergeGUI.xpm"
 
 mmg_dialog *mdlg;
@@ -64,44 +67,6 @@ std::vector<mmg_file_cptr> files;
 std::vector<mmg_track_t *> tracks;
 std::map<wxString, wxString> capabilities;
 std::vector<job_t> jobs;
-
-#if defined(HAVE_CURL_EASY_H)
-DECLARE_EVENT_TYPE(wxEVT_MTX_UPDATE_CHECK_STATE_CHANGED, -1);
-DEFINE_EVENT_TYPE(wxEVT_MTX_UPDATE_CHECK_STATE_CHANGED);
-
-#define UPDATE_CHECK_START               1
-#define UPDATE_CHECK_DONE_NO_NEW_RELEASE 2
-#define UPDATE_CHECK_DONE_NEW_RELEASE    3
-#define UPDATE_CHECK_DONE_ERROR          4
-
-update_check_thread_c::update_check_thread_c(mmg_dialog *mdlg)
-  : wxThread(wxTHREAD_DETACHED)
-  , m_mdlg(mdlg)
-{
-}
-
-void *
-update_check_thread_c::Entry() {
-  wxCommandEvent event(wxEVT_MTX_UPDATE_CHECK_STATE_CHANGED, UPDATE_CHECK_START);
-  wxPostEvent(m_mdlg, event);
-
-  mtx_release_version_t release = get_latest_release_version();
-
-  if (!release.valid)
-    event.SetId(UPDATE_CHECK_DONE_ERROR);
-
-  else if (release.current_version < release.latest_source) {
-    m_mdlg->set_release_version(release);
-    event.SetId(UPDATE_CHECK_DONE_NEW_RELEASE);
-
-  } else
-    event.SetId(UPDATE_CHECK_DONE_NO_NEW_RELEASE);
-
-  wxPostEvent(m_mdlg, event);
-
-  return NULL;
-}
-#endif  // defined(HAVE_CURL_EASY_H)
 
 mmg_dialog::mmg_dialog()
   : wxFrame(NULL, wxID_ANY, wxEmptyString)

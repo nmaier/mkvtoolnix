@@ -94,17 +94,6 @@ class job_dialog;
 class header_editor_frame_c;
 class mmg_dialog;
 
-#if defined(HAVE_CURL_EASY_H)
-class update_check_thread_c: public wxThread {
-private:
-  mmg_dialog *m_mdlg;
-
-public:
-  update_check_thread_c(mmg_dialog *mdlg);
-  virtual void *Entry();
-};
-#endif  // defined(HAVE_CURL_EASY_H)
-
 class mmg_dialog: public wxFrame {
   DECLARE_CLASS(mmg_dialog);
   DECLARE_EVENT_TABLE();
