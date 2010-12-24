@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date: 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-10-31 20:43+0900\n"
+"PO-Revision-Date: 2010-12-24 12:36+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -4231,9 +4231,8 @@ msgid "No track corresponding to the edit specification '%1%' was found. %2%\n"
 msgstr "editで指定された'%1%'に対応するトラックが見つかりませんでした。%2%\n"
 
 #: src/extract/tracks.cpp:311
-#, fuzzy
 msgid "No track with the ID %1% was found in the source file.\n"
-msgstr "ID %1%の添付ファイルが見つかりませんでした。\n"
+msgstr "ソースファイル中にID %1%のトラックが見つかりませんでした。\n"
 
 #: src/mmg/tabs/input.cpp:615
 msgid "No tracks found"
