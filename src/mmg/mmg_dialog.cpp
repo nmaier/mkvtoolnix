@@ -15,6 +15,7 @@
 
 #include <algorithm>
 #include <wx/wx.h>
+#include <wx/aboutdlg.h>
 #include <wx/clipbrd.h>
 #include <wx/config.h>
 #include <wx/datetime.h>
@@ -739,17 +740,16 @@ mmg_dialog::display_help(int id) {
 
 void
 mmg_dialog::on_about(wxCommandEvent &evt) {
-  wxMessageBox(wxString::Format(Z("%s\n\n"
-                                  "This GUI was written by Moritz Bunkus <moritz@bunkus.org>"
-                                  "\nBased on mmg by Florian Wagner <flo.wagner@gmx.de>\n"
-                                  "mkvmerge GUI is licensed under the GPL.\n"
-                                  "http://www.bunkus.org/videotools/mkvtoolnix/\n"
-                                  "\n"
-                                  "Help is available in form of tool tips, from the\n"
-                                  "'Help' menu or by pressing the 'F1' key."),
-                                wxUCS(get_version_info("mkvmerge GUI", true))),
-               Z("About mkvmerge's GUI"),
-               wxOK | wxCENTER | wxICON_INFORMATION);
+  wxAboutDialogInfo info;
+  info.SetName(wxU("mkvmerge GUI"));
+  info.SetVersion(wxU(get_version_info("", false)));
+  info.SetCopyright(wxU("(C) Moritz Bunkus <moritz@bunkus.org>"));
+  info.SetLicense(wxU(Z("MKVToolNix is licensed under the GNU GPL v2")) + wxU("\nhttp://www.gnu.org/licenses/old-licenses/gpl-2.0.html"));
+  info.SetWebSite(wxU("http://www.bunkus.org/videotools/mkvtoolnix/"));
+  info.SetDescription(Z("Help is available in form of tool tips, from the\n"
+                        "'Help' menu or by pressing the 'F1' key."));
+
+  wxAboutBox(info);
 }
 
 void

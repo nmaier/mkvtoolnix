@@ -130,7 +130,10 @@ mtx_release_version_t::mtx_release_version_t()
 std::string
 get_version_info(const std::string &program,
                  bool full) {
-  std::string short_version_info = (boost::format("%1% v%2% ('%3%')") % program % VERSION % VERSIONNAME).str();
+  std::string short_version_info;
+  if (!program.empty())
+    short_version_info += program + " ";
+  short_version_info += (boost::format("v%1% ('%2%')") % VERSION % VERSIONNAME).str();
 #if !defined(HAVE_BUILD_TIMESTAMP)
   return short_version_info;
 #else  // !defined(HAVE_BUILD_TIMESTAMP)
