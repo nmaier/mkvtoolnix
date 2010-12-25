@@ -45,13 +45,11 @@ def process_file file_name
       :missing     => missing }
   end.compact
 
-  if !errors.empty?
-    puts "### File '#{file_name}'"
-    errors.each do |error|
-      puts "Lines #{error[:line_number]} following:"
-      puts "- " + error[:missing].join(' ') if !error[:missing].empty?
-      puts "+ " + error[:added  ].join(' ') if !error[:added  ].empty?
-    end
+  errors.each do |error|
+    messages = []
+    messages << ("- " + error[:missing].join(' ')) if !error[:missing].empty?
+    messages << ("+ " + error[:added  ].join(' ')) if !error[:added  ].empty?
+    puts "#{file_name}:#{error[:line_number]}: error: #{messages.join('; ')}"
   end
 end
 
