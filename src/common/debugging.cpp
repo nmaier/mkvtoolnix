@@ -61,4 +61,9 @@ init_debugging() {
   const char *value = getenv("MKVTOOLNIX_DEBUG");
   if (NULL != value)
     request_debugging(value);
+  else {
+    value = getenv("MTX_DEBUG");
+    if (NULL != value)
+      request_debugging(value);
+  }
 }
