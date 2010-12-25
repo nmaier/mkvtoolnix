@@ -112,6 +112,7 @@ Section "Program files" SEC01
   SetShellVarContext all
 
   SetOutPath "$INSTDIR"
+  File "libcurl-4.dll"
 ;   File "libebml.dll"
   File "libiconv-2.dll"
   File "libintl-8.dll"
@@ -389,6 +390,7 @@ Section Uninstall
   Delete "$INSTDIR\${PRODUCT_NAME}.url"
   Delete "$INSTDIR\uninst.exe"
   Delete "$INSTDIR\libcharset.dll"
+  Delete "$INSTDIR\libcurl-4.dll"
   Delete "$INSTDIR\libebml.dll"
   Delete "$INSTDIR\libiconv-2.dll"
   Delete "$INSTDIR\libintl-8.dll"
