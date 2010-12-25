@@ -75,6 +75,7 @@ mmg_dialog::mmg_dialog()
 #endif
 #if defined(HAVE_CURL_EASY_H)
   , m_checking_for_updates(false)
+  , m_update_check_dlg(NULL)
 #endif  // defined(HAVE_CURL_EASY_H)
 {
   wxBoxSizer *bs_main;
@@ -1706,6 +1707,46 @@ mmg_dialog::on_check_for_updates(wxCommandEvent &evt) {
 void
 mmg_dialog::on_update_check_state_changed(wxCommandEvent &evt) {
   wxLogMessage(wxT("update state changed, now %d"), (int)evt.GetId());
+  int state = evt.GetId();
+
+  if (UPDATE_CHECK_START == state) {
+    if (m_interactive_update_check) {
+      if (NULL != m_update_check_dlg) {
+        wxLogMessage(wxT("m_update_check_dlg != NULL on start"));
+        delete m_update_check_dlg;
+      }
+
+      m_update_check_dlg = new update_check_dlg_c(this);
+      m_update_check_dlg->update_status(Z("Checking for updates online; please wait"));
+      m_update_check_dlg->Show();
+    }
+
+  } else if (UPDATE_CHECK_DONE_DIALOG_DISMISSED == state) {
+    wxMutexLocker locker(m_update_check_mutex);
+    m_checking_for_updates = false;
+
+  } else {
+    wxMutexLocker locker(m_update_check_mutex);
+    bool show = m_interactive_update_check;
+    if (!m_interactive_update_check) {
+    }
+
+    if (show) {
+      if (NULL == m_update_check_dlg) {
+        m_update_check_dlg = new update_check_dlg_c(this);
+        m_update_check_dlg->Show();
+      }
+
+      m_update_check_dlg->update_status(  UPDATE_CHECK_DONE_NO_NEW_RELEASE == state ? Z("You are already running the latest version.")
+                                        : UPDATE_CHECK_DONE_NEW_RELEASE    == state ? Z("There is a new version available online.")
+                                        :                                             Z("There was an error querying the update status."));
+      m_update_check_dlg->update_info(m_release_version);
+
+    } else
+      m_checking_for_updates = false;
+
+    m_update_check_dlg = NULL;
+  }
 }
 
 void

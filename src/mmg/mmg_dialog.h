@@ -21,7 +21,9 @@
 
 #if defined(HAVE_CURL_EASY_H)
 # include <wx/thread.h>
+
 # include "common/version.h"
+# include "mmg/update_checker.h"
 #endif  // defined(HAVE_CURL_EASY_H)
 
 #include "mmg/mmg.h"
@@ -34,6 +36,8 @@
 #define ID_B_STARTMUXING                  10006
 #define ID_B_COPYTOCLIPBOARD              10007
 #define ID_B_ADD_TO_JOBQUEUE              10008
+#define ID_HLC_DOWNLOAD_URL               10009
+#define ID_B_UPDATE_CHECK_CLOSE           10010
 
 #define ID_M_FILE_NEW                     60000
 #define ID_M_FILE_LOAD                    60001
@@ -142,6 +146,7 @@ public:
   bool m_checking_for_updates, m_interactive_update_check;
   wxMutex m_update_check_mutex;
   mtx_release_version_t m_release_version;
+  update_check_dlg_c *m_update_check_dlg;
 #endif  // defined(HAVE_CURL_EASY_H)
 
 public:
