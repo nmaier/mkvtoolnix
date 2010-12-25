@@ -178,6 +178,10 @@ mmg_dialog::mmg_dialog()
 #if defined(SYS_WINDOWS)
   RegisterWindowMessages();
 #endif
+
+#if defined(HAVE_CURL_EASY_H)
+  maybe_check_for_updates();
+#endif  // defined(HAVE_CURL_EASY_H)
 }
 
 mmg_dialog::~mmg_dialog() {
