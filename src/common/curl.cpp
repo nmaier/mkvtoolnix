@@ -15,10 +15,9 @@
 
 #if defined(HAVE_CURL_EASY_H)
 
-# include <curl/curl.h>
-# include <curl/easy.h>
-
 # include "common/curl.h"
+
+# include <curl/easy.h>
 
 static size_t
 curl_write_data_cb(void *buffer,

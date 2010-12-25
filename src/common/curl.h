@@ -18,6 +18,9 @@
 
 # if defined(HAVE_CURL_EASY_H)
 
+#  if defined(SYS_WINDOWS)
+#   include <ws2tcpip.h>
+#  endif  // defined(SYS_WINDOWS)
 #  include <curl/curl.h>
 #  include <string>
 
