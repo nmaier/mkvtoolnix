@@ -7272,6 +7272,7 @@ msgstr "Использование VC1 видео выводного модул�
 
 #: src/input/r_ivf.cpp:87
 #: src/input/r_matroska.cpp:1477
+#: src/input/r_ogm.cpp:1445
 msgid "Using the VP8 video output module.\n"
 msgstr "Использование VP8 видео выводного модуля.\n"
 
@@ -7300,11 +7301,6 @@ msgstr "Использование VobSub читателя субтитров. (
 #: src/input/r_ogm.cpp:1070
 msgid "Using the Vorbis output module.\n"
 msgstr "Использование Vorbis выходного модуля.\n"
-
-#: src/input/r_ogm.cpp:1445
-#, fuzzy
-msgid "Using the Vp8 video output module.\n"
-msgstr "Использование VP8 видео выводного модуля.\n"
 
 #: src/input/r_wav.cpp:546
 msgid "Using the WAV demultiplexer.\n"
@@ -8800,6 +8796,9 @@ msgstr "Да"
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "Использование FLAC выходного модуля.\n"
+#, fuzzy
+#~ msgid "Using the Vp8 video output module.\n"
+#~ msgstr "Использование VP8 видео выводного модуля.\n"
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "VC1 видео элементарный поток"
 #~ msgid "VobBtn buttons"

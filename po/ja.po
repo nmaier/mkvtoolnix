@@ -6985,6 +6985,7 @@ msgid "Using the VC1 video output module.\n"
 msgstr "VC1ビデオ出力モジュールを使用しています。\n"
 
 #: src/input/r_ivf.cpp:87 src/input/r_matroska.cpp:1477
+#: src/input/r_ogm.cpp:1445
 msgid "Using the VP8 video output module.\n"
 msgstr "VP8ビデオ出力モジュールを使用しています。\n"
 
@@ -7012,11 +7013,6 @@ msgstr "VobSub字幕リーダを使用しています（字幕ファイル'%1%'�
 #: src/input/r_ogm.cpp:1070
 msgid "Using the Vorbis output module.\n"
 msgstr "Vorbis出力モジュールを使用しています。\n"
-
-#: src/input/r_ogm.cpp:1445
-#, fuzzy
-msgid "Using the Vp8 video output module.\n"
-msgstr "VP8ビデオ出力モジュールを使用しています。\n"
 
 #: src/input/r_wav.cpp:546
 msgid "Using the WAV demultiplexer.\n"
@@ -8424,6 +8420,10 @@ msgstr "はい"
 
 #~ msgid "TTA lossless audio"
 #~ msgstr "TTAロスレスオーディオ"
+
+#, fuzzy
+#~ msgid "Using the Vp8 video output module.\n"
+#~ msgstr "VP8ビデオ出力モジュールを使用しています。\n"
 
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "VC1ビデオエレメンタリストリーム"

@@ -7217,6 +7217,7 @@ msgstr "使用 VC1 视频输出模块。\n"
 
 #: src/input/r_ivf.cpp:87
 #: src/input/r_matroska.cpp:1477
+#: src/input/r_ogm.cpp:1445
 msgid "Using the VP8 video output module.\n"
 msgstr "使用 VP8 视频输出模块。\n"
 
@@ -7245,11 +7246,6 @@ msgstr "使用 VobSub 字幕读取器 (SUB 文件 '%1%')。\n"
 #: src/input/r_ogm.cpp:1070
 msgid "Using the Vorbis output module.\n"
 msgstr "使用 Vorbis 输出模块。\n"
-
-#: src/input/r_ogm.cpp:1445
-#, fuzzy
-msgid "Using the Vp8 video output module.\n"
-msgstr "使用 VP8 视频输出模块。\n"
 
 #: src/input/r_wav.cpp:546
 msgid "Using the WAV demultiplexer.\n"
@@ -8946,6 +8942,9 @@ msgstr "是"
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "使用 FLAC 输出模块。\n"
+#, fuzzy
+#~ msgid "Using the Vp8 video output module.\n"
+#~ msgstr "使用 VP8 视频输出模块。\n"
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "VC1 视频基本流"
 #~ msgid "VobBtn buttons"

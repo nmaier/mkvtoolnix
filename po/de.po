@@ -7058,6 +7058,7 @@ msgid "Using the VC1 video output module.\n"
 msgstr "Das VC1-Video-Ausgabemodul wird benutzt.\n"
 
 #: src/input/r_ivf.cpp:87 src/input/r_matroska.cpp:1477
+#: src/input/r_ogm.cpp:1445
 msgid "Using the VP8 video output module.\n"
 msgstr "Das VP8-Video-Ausgabemodul wird benutzt.\n"
 
@@ -7085,10 +7086,6 @@ msgstr "Das VobSub-Untertitel-Lesemodul wird benutzt (SUB-Datei '%1%').\n"
 #: src/input/r_ogm.cpp:1070
 msgid "Using the Vorbis output module.\n"
 msgstr "Das Vorbis-Ausgabemodul wird benutzt.\n"
-
-#: src/input/r_ogm.cpp:1445
-msgid "Using the Vp8 video output module.\n"
-msgstr "Das VP8-Video-Ausgabemodul wird benutzt.\n"
 
 #: src/input/r_wav.cpp:546
 msgid "Using the WAV demultiplexer.\n"
@@ -8840,6 +8837,9 @@ msgstr "ja"
 #, fuzzy
 #~ msgid "Using the IVF output module.\n"
 #~ msgstr "Das FLAC-Ausgabemodul wird benutzt.\n"
+
+#~ msgid "Using the Vp8 video output module.\n"
+#~ msgstr "Das VP8-Video-Ausgabemodul wird benutzt.\n"
 
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "VC1 Video elementary stream"

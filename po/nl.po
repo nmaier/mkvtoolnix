@@ -7274,6 +7274,7 @@ msgstr "Gebruikmakend van de VC1 video uitvoer module.\n"
 
 #: src/input/r_ivf.cpp:87
 #: src/input/r_matroska.cpp:1477
+#: src/input/r_ogm.cpp:1445
 msgid "Using the VP8 video output module.\n"
 msgstr "Gebruikmakend van de VP8 video uitvoer module.\n"
 
@@ -7302,11 +7303,6 @@ msgstr "Gebruikmakend van de VobSub ondertitel lezer (SUB bestand '%1%').\n"
 #: src/input/r_ogm.cpp:1070
 msgid "Using the Vorbis output module.\n"
 msgstr "Gebruikmakend van de Vorbis uitvoer module.\n"
-
-#: src/input/r_ogm.cpp:1445
-#, fuzzy
-msgid "Using the Vp8 video output module.\n"
-msgstr "Gebruikmakend van de VP8 video uitvoer module.\n"
 
 #: src/input/r_wav.cpp:546
 msgid "Using the WAV demultiplexer.\n"
@@ -8785,6 +8781,9 @@ msgstr "ja"
 #~ msgstr "TTA verlies vrije audio"
 #~ msgid "The MPEG-4 part 2 compression only works with native MPEG-4. However, native MPEG-4 mode has not been selected with '--engage native_mpeg4'.\n"
 #~ msgstr "Het MPEG-4 part 2 compressie werkt alleen met basis MPEG-4. Hoewel, basis MPEG-4 mode is niet geselecteerd met selected with '--aangaan basis_mpeg4'.\n"
+#, fuzzy
+#~ msgid "Using the Vp8 video output module.\n"
+#~ msgstr "Gebruikmakend van de VP8 video uitvoer module.\n"
 #~ msgid "VC1 video elementary stream"
 #~ msgstr "VC1 video basis stroom"
 #~ msgid "VobBtn buttons"

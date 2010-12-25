@@ -1442,7 +1442,7 @@ ogm_v_vp8_demuxer_c::create_packetizer(track_info_c &ti) {
   ptzr_obj->set_video_display_height(display_height);
   ptzr_obj->set_track_default_duration(default_duration);
 
-  mxinfo_tid(ti.m_fname, ti.m_id, Y("Using the Vp8 video output module.\n"));
+  mxinfo_tid(ti.m_fname, ti.m_id, Y("Using the VP8 video output module.\n"));
 
   return ptzr_obj;
 }
