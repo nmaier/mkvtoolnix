@@ -17,6 +17,7 @@ the mkvtoolnix website for versions and links.
 
 boost
 expat
+libcurl
 libebml
 libmatroska
 libogg
@@ -391,7 +392,23 @@ http://sourceforge.net/projects/mingw/files/ You need both the
     $_' include/bzlib.h
   cp -R . $HOME/mingw
 
-2.3.12. mkvtoolnix itself
+2.3.12. libcurl (optional)
+
+Get the source code from http://curl.haxx.se/latest.cgi?curl=tar.bz2
+
+  cd $HOME/mingw/src
+  wget http://curl.linux-mirror.org/download/curl-7.21.3.tar.bz2
+  tar xjf curl-7.21.3.tar.bz2
+  cd curl-7.21.3
+  ./configure  \
+    --host=i586-mingw32msvc \
+    --prefix=$HOME/mingw \
+    --with-zlib=$HOME/mingw \
+    --enable-ipv6
+  make
+  make install
+
+2.3.13. mkvtoolnix itself
 
 Change back into the mkvtoolnix source code directory and execute the
 following commands:
