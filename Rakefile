@@ -207,6 +207,14 @@ namespace :translations do
     COMMAND
   end
 
+  desc "Verify format strings in translations"
+  task "verify-format-strings" do
+    files = $available_languages[:applications].collect { |language| "po/#{language}.po" }.join(' ')
+    runq 'VERIFY', <<-COMMAND
+      ./src/scripts/verify_format_srings_in_translations.rb #{files}
+    COMMAND
+  end
+
   [ :applications, :manpages, :guides ].each { |type| task type => $translations[type] }
 
   $available_languages[:manpages].each do |language|
