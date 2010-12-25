@@ -594,60 +594,60 @@ msgstr "  US: Unicode 字串\n"
 msgid "  X:  binary in hex\n"
 msgstr "  X:  用十六進位表示二進位檔\n"
 
-#: src/info/mkvinfo.cpp:337
+#: src/info/mkvinfo.cpp:338
 msgid " (FourCC: %1%%2%%3%%4%, 0x%|5$08x|)"
 msgstr " (FourCC: %1%%2%%3%%4%, 0x%|5$08x|)"
 
 #: src/info/mkvinfo.cpp:146
-#: src/info/mkvinfo.cpp:1057
+#: src/info/mkvinfo.cpp:1058
 msgid " (adler: 0x%|1$08x|)"
 msgstr " (adler: 0x%|1$08x|)"
 
-#: src/info/mkvinfo.cpp:787
+#: src/info/mkvinfo.cpp:788
 msgid " (both eyes)"
 msgstr " (雙視角)"
 
-#: src/info/mkvinfo.cpp:767
+#: src/info/mkvinfo.cpp:768
 msgid " (centimeters)"
 msgstr " (公分)"
 
-#: src/info/mkvinfo.cpp:797
+#: src/info/mkvinfo.cpp:798
 msgid " (fixed)"
 msgstr " (固定)"
 
-#: src/info/mkvinfo.cpp:342
+#: src/info/mkvinfo.cpp:343
 msgid " (format tag: 0x%|1$04x|)"
 msgstr " (格式標識: 0x%|1$04x|)"
 
-#: src/info/mkvinfo.cpp:795
+#: src/info/mkvinfo.cpp:796
 msgid " (free resizing)"
 msgstr " (任意調整大小)"
 
-#: src/info/mkvinfo.cpp:349
+#: src/info/mkvinfo.cpp:350
 msgid " (h.264 profile: %1% @L%2%.%3%)"
 msgstr " (h.264 描述檔: %1% @L%2%.%3%)"
 
-#: src/info/mkvinfo.cpp:768
+#: src/info/mkvinfo.cpp:769
 msgid " (inches)"
 msgstr " (英寸)"
 
-#: src/info/mkvinfo.cpp:796
+#: src/info/mkvinfo.cpp:797
 msgid " (keep aspect ratio)"
 msgstr " (保持外觀比例)"
 
-#: src/info/mkvinfo.cpp:786
+#: src/info/mkvinfo.cpp:787
 msgid " (left eye)"
 msgstr " (左視角)"
 
-#: src/info/mkvinfo.cpp:784
+#: src/info/mkvinfo.cpp:785
 msgid " (mono)"
 msgstr " (單視角)"
 
-#: src/info/mkvinfo.cpp:766
+#: src/info/mkvinfo.cpp:767
 msgid " (pixels)"
 msgstr " (像素)"
 
-#: src/info/mkvinfo.cpp:785
+#: src/info/mkvinfo.cpp:786
 msgid " (right eye)"
 msgstr " (右視角)"
 
@@ -731,7 +731,7 @@ msgstr ""
 msgid "### Global output control ###"
 msgstr "### 整體輸出控制 ###"
 
-#: src/common/version.cpp:33
+#: src/common/version.cpp:143
 msgid "%1% built on %2% %3%"
 msgstr "%1% 編譯於 %2% %3%"
 
@@ -751,23 +751,23 @@ msgstr "%1% 畫格, 軌道 %2%, 時間碼 %3% (%4%), 大小 %5%, adler 0x%|6$08x
 msgid "%1%: Error in the Matroska file structure at position %2%. Resyncing to the next level 1 element.\n"
 msgstr "%1%: Matroska 在檔案結構的位置 %2% 裡發生錯誤。重新同步為下一等級 1 元件。\n"
 
-#: src/merge/mkvmerge.cpp:625
+#: src/merge/mkvmerge.cpp:626
 msgid "%1%: divisor is 0 in '%2% %3%'.\n"
 msgstr "%1%: 除數為 0，在「%2% %3%」。\n"
 
-#: src/merge/mkvmerge.cpp:600
+#: src/merge/mkvmerge.cpp:601
 msgid "%1%: invalid track ID in '%2% %3%'.\n"
 msgstr "%1%: 無效的軌道 ID 在「%2% %3%」。\n"
 
-#: src/merge/mkvmerge.cpp:617
+#: src/merge/mkvmerge.cpp:618
 msgid "%1%: missing dividend in '%2% %3%'.\n"
 msgstr "%1%: 在「%2% %3%」中缺少被除數。\n"
 
-#: src/merge/mkvmerge.cpp:620
+#: src/merge/mkvmerge.cpp:621
 msgid "%1%: missing divisor in '%2% %3%'.\n"
 msgstr "%1%: 在「%2% %3%」中缺少除數。\n"
 
-#: src/merge/mkvmerge.cpp:596
+#: src/merge/mkvmerge.cpp:597
 msgid "%1%: missing track ID in '%2% %3%'.\n"
 msgstr "%1%: 缺少軌道 ID，在「%2% %3%」。\n"
 
@@ -795,28 +795,6 @@ msgstr ""
 #, c-format
 msgid "%d minute(s) %d second(s)"
 msgstr "%d 分鐘 %d 秒"
-
-#: src/mmg/mmg_dialog.cpp:694
-#, c-format
-msgid ""
-"%s\n"
-"\n"
-"This GUI was written by Moritz Bunkus <moritz@bunkus.org>\n"
-"Based on mmg by Florian Wagner <flo.wagner@gmx.de>\n"
-"mkvmerge GUI is licensed under the GPL.\n"
-"http://www.bunkus.org/videotools/mkvtoolnix/\n"
-"\n"
-"Help is available in form of tool tips, from the\n"
-"'Help' menu or by pressing the 'F1' key."
-msgstr ""
-"%s\n"
-"\n"
-"這個 GUI 由 Moritz Bunkus <moritz@bunkus.org> 撰寫\n"
-"基於 Florian Wagner <flo.wagner@gmx.de> 的 mmg\n"
-"mkvmerge GUI 以 GPL 授權發佈。\n"
-"http://www.bunkus.org/videotools/mkvtoolnix/\n"
-"\n"
-"可透過工具提示、“説明”功能表或按“F1”鍵取得說明。"
 
 #: src/mmg/tabs/attachments.cpp:401
 #, c-format
@@ -851,7 +829,7 @@ msgstr ""
 msgid "&Abort"
 msgstr "中止(&A)"
 
-#: src/mmg/mmg_dialog.cpp:277
+#: src/mmg/mmg_dialog.cpp:294
 msgid "&About"
 msgstr "關於(&A)"
 
@@ -859,22 +837,31 @@ msgstr "關於(&A)"
 msgid "&About\tF1"
 msgstr "關於(&A)\tF1"
 
-#: src/mmg/mmg_dialog.cpp:263
-#: src/mmg/mmg_dialog.cpp:294
+#: src/mmg/mmg_dialog.cpp:280
+#: src/mmg/mmg_dialog.cpp:314
 msgid "&Add to job queue"
 msgstr "加入到任務佇列(&A)"
 
-#: src/mmg/mmg_dialog.cpp:273
+#: src/mmg/mmg_dialog.cpp:290
 msgid "&Attachments\tAlt-2"
 msgstr "附件選項(&A)\tAlt-2"
 
-#: src/mmg/mmg_dialog.cpp:281
+#: src/mmg/mmg_dialog.cpp:301
 msgid "&Chapter Editor"
 msgstr "章節編輯器(&C)"
 
-#: src/mmg/mmg_dialog.cpp:275
+#: src/mmg/mmg_dialog.cpp:292
 msgid "&Chapter editor\tAlt-4"
 msgstr "章節編輯器(&C)\tAlt-4"
+
+#: src/mmg/mmg_dialog.cpp:296
+msgid "&Check for updates"
+msgstr ""
+
+#: src/mmg/update_checker.cpp:71
+#, fuzzy
+msgid "&Close"
+msgstr "關閉(&C)\tCtrl-W"
 
 #: src/mmg/header_editor/frame.cpp:145
 msgid "&Close\tCtrl-W"
@@ -884,11 +871,11 @@ msgstr "關閉(&C)\tCtrl-W"
 msgid "&Collapse all entries\tCtrl-P"
 msgstr "收起所有項目(&C)\tCtrl-P"
 
-#: src/mmg/mmg_dialog.cpp:260
+#: src/mmg/mmg_dialog.cpp:277
 msgid "&Copy command line to clipboard"
 msgstr "複製命令列至剪貼簿(&C)"
 
-#: src/mmg/mmg_dialog.cpp:293
+#: src/mmg/mmg_dialog.cpp:313
 msgid "&Copy to clipboard"
 msgstr "複製命令列(&C)"
 
@@ -908,56 +895,56 @@ msgstr "展開所有項(&E)\tCtrl-E"
 msgid "&Expand important elements\tCtrl-E"
 msgstr "展開重要分支(&E)\tCtrl-E"
 
-#: src/mmg/mmg_dialog.cpp:279
+#: src/mmg/mmg_dialog.cpp:299
 #: src/mmg/header_editor/frame.cpp:151
 #: src/info/wxwidgets_ui.cpp:137
 msgid "&File"
 msgstr "檔案(&F)"
 
-#: src/mmg/mmg_dialog.cpp:274
+#: src/mmg/mmg_dialog.cpp:291
 msgid "&Global options\tAlt-3"
 msgstr "整體選項(&G)\tAlt-3"
 
-#: src/mmg/mmg_dialog.cpp:256
+#: src/mmg/mmg_dialog.cpp:273
 msgid "&Header editor\tCtrl-E"
 msgstr "表頭編輯器(&H)\tCtrl-E"
 
-#: src/mmg/mmg_dialog.cpp:283
+#: src/mmg/mmg_dialog.cpp:303
 #: src/mmg/header_editor/frame.cpp:153
 #: src/info/wxwidgets_ui.cpp:139
 msgid "&Help"
 msgstr "說明(&H)"
 
-#: src/mmg/mmg_dialog.cpp:276
+#: src/mmg/mmg_dialog.cpp:293
 #: src/mmg/header_editor/frame.cpp:150
 msgid "&Help\tF1"
 msgstr "說明(&H)\tF1"
 
-#: src/mmg/mmg_dialog.cpp:272
+#: src/mmg/mmg_dialog.cpp:289
 msgid "&Input\tAlt-1"
 msgstr "輸入(&I)\tAlt-1"
 
-#: src/mmg/mmg_dialog.cpp:267
+#: src/mmg/mmg_dialog.cpp:284
 msgid "&Load"
 msgstr "載入(&L)"
 
-#: src/mmg/mmg_dialog.cpp:252
+#: src/mmg/mmg_dialog.cpp:269
 msgid "&Load settings\tCtrl-L"
 msgstr "載入設定檔(&L)\tCtrl-L"
 
-#: src/mmg/mmg_dialog.cpp:264
+#: src/mmg/mmg_dialog.cpp:281
 msgid "&Manage jobs\tCtrl-J"
 msgstr "管理任務(&M)\tCtrl-J"
 
-#: src/mmg/mmg_dialog.cpp:280
+#: src/mmg/mmg_dialog.cpp:300
 msgid "&Muxing"
 msgstr "合成(&M)"
 
-#: src/mmg/mmg_dialog.cpp:251
+#: src/mmg/mmg_dialog.cpp:268
 msgid "&New\tCtrl-N"
 msgstr "新增(&N)\tCtrl-N"
 
-#: src/mmg/mmg_dialog.cpp:266
+#: src/mmg/mmg_dialog.cpp:283
 msgid "&New chapters"
 msgstr "新增章節(&N)"
 
@@ -976,7 +963,7 @@ msgstr "開啟(&O)\tCtrl-O"
 msgid "&Options"
 msgstr "選項(&O)"
 
-#: src/mmg/mmg_dialog.cpp:257
+#: src/mmg/mmg_dialog.cpp:274
 #: src/mmg/header_editor/frame.cpp:146
 msgid "&Quit\tCtrl-Q"
 msgstr "離開(&Q)\tCtrl-Q"
@@ -993,8 +980,8 @@ msgstr "重新載入(&R)\tCtrl-R"
 msgid "&Reset"
 msgstr "重置(&R)"
 
+#: src/mmg/mmg_dialog.cpp:285
 #: src/mmg/jobs.cpp:398
-#: src/mmg/mmg_dialog.cpp:268
 msgid "&Save"
 msgstr "儲存(&S)"
 
@@ -1006,7 +993,7 @@ msgstr "儲存(&S)\tCtrl-S"
 msgid "&Save info as text\tCtrl-S"
 msgstr "另存資訊為純文字檔(&S)\tCtrl-S"
 
-#: src/mmg/mmg_dialog.cpp:253
+#: src/mmg/mmg_dialog.cpp:270
 msgid "&Save settings\tCtrl-S"
 msgstr "儲存設定檔(&S)\tCtrl-S"
 
@@ -1022,7 +1009,7 @@ msgstr "上移(&U)"
 msgid "&Validate\tCtrl-T"
 msgstr "檢驗(&V)\tCtrl-T"
 
-#: src/mmg/mmg_dialog.cpp:271
+#: src/mmg/mmg_dialog.cpp:288
 msgid "&Verify"
 msgstr "驗證(&V)"
 
@@ -1030,23 +1017,23 @@ msgstr "驗證(&V)"
 msgid "&View log"
 msgstr "檢視日誌(&V)"
 
-#: src/mmg/mmg_dialog.cpp:282
+#: src/mmg/mmg_dialog.cpp:302
 msgid "&Window"
 msgstr "視窗(&W)"
 
-#: src/merge/mkvmerge.cpp:1572
+#: src/merge/mkvmerge.cpp:1573
 msgid "'%1%' can only be used with a file name. No further options are allowed if this option is used.\n"
 msgstr "「%1%」只能與檔名一同使用。只要使用本選項，就不允許使用其他選項。\n"
 
-#: src/merge/mkvmerge.cpp:462
+#: src/merge/mkvmerge.cpp:463
 msgid "'%1%' does not contain a valid unit ('s', 'ms', 'us' or 'ns') in '%2% %3%'.\n"
 msgstr "「%1%」不包含有效單位 (「s」、「ms」、「us」或「ns」) 在「%2% %3%」中。\n"
 
-#: src/merge/mkvmerge.cpp:996
+#: src/merge/mkvmerge.cpp:997
 msgid "'%1%' is an unsupported argument for --compression. Available compression methods are: %2%\n"
 msgstr "「%1%」是 --compression 不支援的參數。可用的壓縮方式有: %2%\n"
 
-#: src/merge/mkvmerge.cpp:937
+#: src/merge/mkvmerge.cpp:938
 msgid "'%1%' is an unsupported argument for --cues.\n"
 msgstr "「%1%」是 --cues 不支援的參數。\n"
 
@@ -1054,15 +1041,15 @@ msgstr "「%1%」是 --cues 不支援的參數。\n"
 msgid "'%1%' is missing the file name.\n"
 msgstr "「%1%」缺少檔案名。\n"
 
-#: src/merge/mkvmerge.cpp:1409
+#: src/merge/mkvmerge.cpp:1410
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code in '--chapter-language %1%'. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
 msgstr "「--chapter-language %1%」中的「%1%」既不是有效的 ISO639-2 碼，也不是有效的 ISO639-1 碼。詳見「mkvmerge --list-languages」提供的語言清單及各語言的 ISO639-2 碼。\n"
 
-#: src/merge/mkvmerge.cpp:1477
+#: src/merge/mkvmerge.cpp:1478
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code in '--default-language %1%'. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
 msgstr "「--default-language %1%」中的「%1%」既不是有效的 ISO639-2 碼，也不是有效的 ISO639-1 碼。詳見「mkvmerge --list-languages」提供的語言清單及各語言的 ISO639-2 碼。\n"
 
-#: src/merge/mkvmerge.cpp:1032
+#: src/merge/mkvmerge.cpp:1033
 msgid "'%1%' is neither a valid ISO639-2 nor a valid ISO639-1 code. See 'mkvmerge --list-languages' for a list of all languages and their respective ISO639-2 codes.\n"
 msgstr "「%1%」既不是有效的 ISO639-2 碼，也不是有效的 ISO639-1 碼。詳見「mkvmerge --list-languages」提供的所有語言清單及各語言的 ISO639-2 碼。\n"
 
@@ -1075,7 +1062,7 @@ msgstr "第「%1%」行的格式不是 CHAPTERxx=... 。"
 msgid "'%1%' is not a CHAPTERxxNAME=... line."
 msgstr "第「%1%」行的格式不是 CHAPTERxxNAME=... 。"
 
-#: src/merge/mkvmerge.cpp:440
+#: src/merge/mkvmerge.cpp:441
 msgid "'%1%' is not a valid %2% in '%3% %4%'.\n"
 msgstr "「%1%」不是有效的 %2% 在「%3% %4%」中。\n"
 
@@ -1083,11 +1070,11 @@ msgstr "「%1%」不是有效的 %2% 在「%3% %4%」中。\n"
 msgid "'%1%' is not a valid ISO639-2 language code."
 msgstr "「%1%」不是有效的 ISO639-2 語言碼。"
 
-#: src/merge/mkvmerge.cpp:1195
+#: src/merge/mkvmerge.cpp:1196
 msgid "'%1%' is not a valid append mode in '--append-mode %1%'.\n"
 msgstr "「%1%」不是有效的添加模式，在「--append-mode %1%」中。\n"
 
-#: src/merge/mkvmerge.cpp:1266
+#: src/merge/mkvmerge.cpp:1267
 msgid "'%1%' is not a valid block additional max in '--blockadd %2%'.\n"
 msgstr "「%1%」不是有效的附加區塊最大值，在「--blockadd %2%」。\n"
 
@@ -1095,8 +1082,8 @@ msgstr "「%1%」不是有效的附加區塊最大值，在「--blockadd %2%」�
 msgid "'%1%' is not a valid ccTLD country code."
 msgstr "「%1%」不是有效的 ccTLD 國家代碼。"
 
-#: src/merge/mkvmerge.cpp:1131
-#: src/merge/mkvmerge.cpp:1134
+#: src/merge/mkvmerge.cpp:1132
+#: src/merge/mkvmerge.cpp:1135
 msgid "'%1%' is not a valid file ID in '--track-order %2%'.\n"
 msgstr "「%1%」不是有效的檔案 ID，在「--track-order %2%」。\n"
 
@@ -1104,39 +1091,39 @@ msgstr "「%1%」不是有效的檔案 ID，在「--track-order %2%」。\n"
 msgid "'%1%' is not a valid hack.\n"
 msgstr "「%1%」不是有效的小補綴。\n"
 
-#: src/merge/mkvmerge.cpp:1179
+#: src/merge/mkvmerge.cpp:1180
 msgid "'%1%' is not a valid mapping of file and track IDs in '--append-to %2%'.\n"
 msgstr "「%1%」不是有效的檔案 - 軌道 ID 對應，在「--append-to %2%」。\n"
 
-#: src/merge/mkvmerge.cpp:1128
+#: src/merge/mkvmerge.cpp:1129
 msgid "'%1%' is not a valid pair of file ID and track ID in '--track-order %2%'.\n"
 msgstr "「%1%」不是有效的檔案 ID - 軌道 ID 對，在「--track-order %2%」。\n"
 
-#: src/merge/mkvmerge.cpp:1258
+#: src/merge/mkvmerge.cpp:1259
 msgid "'%1%' is not a valid pair of track ID and block additional in '--blockadd %1%'.\n"
 msgstr "「%1%」不是有效的 軌道 ID - 附加區塊 對，在「--blockadd %1%」。\n"
 
-#: src/merge/mkvmerge.cpp:1303
+#: src/merge/mkvmerge.cpp:1304
 msgid "'%1%' is not a valid priority class.\n"
 msgstr "「%1%」不是有效的優先順序類。\n"
 
-#: src/merge/mkvmerge.cpp:1262
+#: src/merge/mkvmerge.cpp:1263
 msgid "'%1%' is not a valid track ID in '--blockadd %2%'.\n"
 msgstr "「%1%」不是有效的軌道 ID，在「--blockadd %2%」。\n"
 
-#: src/merge/mkvmerge.cpp:1213
+#: src/merge/mkvmerge.cpp:1214
 msgid "'%1%' is not a valid track ID in '--default-duration %2%'.\n"
 msgstr "「%1%」不是有效的軌道 ID，在「--default-duration %2%」。\n"
 
-#: src/merge/mkvmerge.cpp:1234
+#: src/merge/mkvmerge.cpp:1235
 msgid "'%1%' is not a valid track ID in '--nalu-size-length %2%'.\n"
 msgstr "「%1%」不是有效的軌道 ID，在「--nalu-size-length %2%」。\n"
 
-#: src/merge/mkvmerge.cpp:1230
+#: src/merge/mkvmerge.cpp:1231
 msgid "'%1%' is not a valid tuple of track ID and NALU size length in '--nalu-size-length %1%'.\n"
 msgstr "「%1%」不是有效的 軌道 ID - NALU 長度大小 組，在「--nalu-size-length %1%」。\n"
 
-#: src/merge/mkvmerge.cpp:1209
+#: src/merge/mkvmerge.cpp:1210
 msgid "'%1%' is not a valid tuple of track ID and default duration in '--default-duration %1%'.\n"
 msgstr "「%1%」不是有效的 軌道 ID - 預設持續時間 組，在「--default-duration %1%」。\n"
 
@@ -1148,36 +1135,36 @@ msgstr "「%1%」僅允許在提取章節時使用。\n"
 msgid "'%1%' is only allowed when extracting tracks.\n"
 msgstr "「%1%」僅允許在提取軌道時使用。\n"
 
-#: src/merge/mkvmerge.cpp:1592
+#: src/merge/mkvmerge.cpp:1593
 msgid "'%1%' lacks a file name.\n"
 msgstr "「%1%」缺少檔名。\n"
 
-#: src/merge/mkvmerge.cpp:1821
-#: src/merge/mkvmerge.cpp:1985
+#: src/merge/mkvmerge.cpp:1822
+#: src/merge/mkvmerge.cpp:1986
 msgid "'%1%' lacks its argument.\n"
 msgstr "「%1%」缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1894
+#: src/merge/mkvmerge.cpp:1895
 msgid "'%1%' lacks the FourCC.\n"
 msgstr "「%1%」缺少 FourCC 值。\n"
 
-#: src/merge/mkvmerge.cpp:1936
+#: src/merge/mkvmerge.cpp:1937
 msgid "'%1%' lacks the delay.\n"
 msgstr "「%1%」缺少延遲持續時間。\n"
 
-#: src/merge/mkvmerge.cpp:1755
+#: src/merge/mkvmerge.cpp:1756
 msgid "'%1%' lacks the file name.\n"
 msgstr "「%1%」缺少附件檔名。\n"
 
-#: src/merge/mkvmerge.cpp:1992
+#: src/merge/mkvmerge.cpp:1993
 msgid "'%1%' lacks the track ID.\n"
 msgstr "「%1%」缺少軌道 ID。\n"
 
-#: src/merge/mkvmerge.cpp:1859
-#: src/merge/mkvmerge.cpp:1866
-#: src/merge/mkvmerge.cpp:1873
-#: src/merge/mkvmerge.cpp:1880
-#: src/merge/mkvmerge.cpp:1887
+#: src/merge/mkvmerge.cpp:1860
+#: src/merge/mkvmerge.cpp:1867
+#: src/merge/mkvmerge.cpp:1874
+#: src/merge/mkvmerge.cpp:1881
+#: src/merge/mkvmerge.cpp:1888
 msgid "'%1%' lacks the track number(s).\n"
 msgstr "「%1%」缺少軌道編號。\n"
 
@@ -1200,67 +1187,67 @@ msgstr "「%1%」: %2%"
 msgid "'%1%': Processing the following files as well: %2%\n"
 msgstr "「%1%」: 正在處理下列檔案: %2%\n"
 
-#: src/merge/mkvmerge.cpp:2044
+#: src/merge/mkvmerge.cpp:2045
 msgid "'--append-mode' lacks its argument.\n"
 msgstr "「--append-mode」缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:2037
+#: src/merge/mkvmerge.cpp:2038
 msgid "'--append-to' lacks its argument.\n"
 msgstr "「--append-to」缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1901
+#: src/merge/mkvmerge.cpp:1902
 msgid "'--aspect-ratio' lacks the aspect ratio.\n"
 msgstr "「--aspect-ratio」缺少外觀比例。\n"
 
-#: src/merge/mkvmerge.cpp:1908
+#: src/merge/mkvmerge.cpp:1909
 msgid "'--aspect-ratio-factor' lacks the aspect ratio factor.\n"
 msgstr "「--aspect-ratio-factor」缺少外觀比例係數。\n"
 
-#: src/merge/mkvmerge.cpp:1726
+#: src/merge/mkvmerge.cpp:1727
 msgid "'--attachment-description' lacks the description.\n"
 msgstr "「--attachment-description」缺少描述。\n"
 
-#: src/merge/mkvmerge.cpp:1735
+#: src/merge/mkvmerge.cpp:1736
 msgid "'--attachment-mime-type' lacks the MIME type.\n"
 msgstr "「--attachment-mime-type」缺少 MIME 類型。\n"
 
-#: src/merge/mkvmerge.cpp:1745
+#: src/merge/mkvmerge.cpp:1746
 msgid "'--attachment-name' lacks the name.\n"
 msgstr "「--attachment-name」缺少名稱。\n"
 
-#: src/merge/mkvmerge.cpp:2006
+#: src/merge/mkvmerge.cpp:2007
 msgid "'--blockadd' lacks its argument.\n"
 msgstr "「--blockadd」缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1780
+#: src/merge/mkvmerge.cpp:1781
 msgid "'--chapter-charset' lacks the charset.\n"
 msgstr "「--chapter-charset」缺少字元集。\n"
 
-#: src/merge/mkvmerge.cpp:1420
+#: src/merge/mkvmerge.cpp:1421
 msgid "'--chapter-charset' may only be given once in '--chapter-charset %1%'.\n"
 msgstr "「--chapter-charset」在「--chapter-charset %1%」中只能給出一次。\n"
 
-#: src/merge/mkvmerge.cpp:1423
+#: src/merge/mkvmerge.cpp:1424
 msgid "'--chapter-charset' must be given before '--chapters' in '--chapter-charset %1%'.\n"
 msgstr "「--chapter-charset」必須在「--chapter-charset %1%」中「--chapters」之前給出。\n"
 
-#: src/merge/mkvmerge.cpp:1773
+#: src/merge/mkvmerge.cpp:1774
 msgid "'--chapter-language' lacks the language.\n"
 msgstr "「--chapter-language」缺少語言。\n"
 
-#: src/merge/mkvmerge.cpp:1402
+#: src/merge/mkvmerge.cpp:1403
 msgid "'--chapter-language' may only be given once in '--chapter-language %1%'.\n"
 msgstr "「--chapter-language」在「--chapter-language %1%」中只能給出一次。\n"
 
-#: src/merge/mkvmerge.cpp:1405
+#: src/merge/mkvmerge.cpp:1406
 msgid "'--chapter-language' must be given before '--chapters' in '--chapter-language %1%'.\n"
 msgstr "「--chapter-language」必須在「--chapter-language %1%」中「--chapters」之前給出。\n"
 
-#: src/merge/mkvmerge.cpp:1797
+#: src/merge/mkvmerge.cpp:1798
 msgid "'--chapters' lacks the file name.\n"
 msgstr "「--chapters」缺少檔名。\n"
 
-#: src/merge/mkvmerge.cpp:1707
+#: src/merge/mkvmerge.cpp:1708
 msgid "'--cluster-length' lacks the length.\n"
 msgstr "「--cluster-length」缺少叢集長度。\n"
 
@@ -1268,143 +1255,143 @@ msgstr "「--cluster-length」缺少叢集長度。\n"
 msgid "'--command-line-charset' is missing its argument.\n"
 msgstr "「--command-line-charset」缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1999
+#: src/merge/mkvmerge.cpp:2000
 msgid "'--compression' lacks its argument.\n"
 msgstr "「--compression」缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1922
+#: src/merge/mkvmerge.cpp:1923
 msgid "'--cropping' lacks the crop parameters.\n"
 msgstr "「--cropping」缺少剪裁參數。\n"
 
-#: src/merge/mkvmerge.cpp:1787
+#: src/merge/mkvmerge.cpp:1788
 msgid "'--cue-chapter-name-format' lacks the format.\n"
 msgstr "「--cue-chapter-name-format」缺少格式。\n"
 
-#: src/merge/mkvmerge.cpp:1790
+#: src/merge/mkvmerge.cpp:1791
 msgid "'--cue-chapter-name-format' must be given before '--chapters'.\n"
 msgstr "「--cue-chapter-name-format」必須在「--chapters」之前給出。\n"
 
-#: src/merge/mkvmerge.cpp:1943
+#: src/merge/mkvmerge.cpp:1944
 msgid "'--cues' lacks its argument.\n"
 msgstr "「--cues」缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:2051
+#: src/merge/mkvmerge.cpp:2052
 msgid "'--default-duration' lacks its argument.\n"
 msgstr "「--default-duration」缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1971
+#: src/merge/mkvmerge.cpp:1972
 msgid "'--default-language' lacks its argument.\n"
 msgstr "「--default-language」缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1950
+#: src/merge/mkvmerge.cpp:1951
 msgid "'--default-track' lacks its argument.\n"
 msgstr "「--default-track」缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1915
+#: src/merge/mkvmerge.cpp:1916
 msgid "'--display-dimensions' lacks the dimensions.\n"
 msgstr "「--display-dimensions」缺少大小。\n"
 
-#: src/merge/mkvmerge.cpp:1602
+#: src/merge/mkvmerge.cpp:1603
 msgid "'--engage' lacks its argument.\n"
 msgstr "「--engage」缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1957
+#: src/merge/mkvmerge.cpp:1958
 msgid "'--forced-track' lacks its argument.\n"
 msgstr "「--forced-track」缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1764
+#: src/merge/mkvmerge.cpp:1765
 msgid "'--global-tags' lacks the file name.\n"
 msgstr "「--global-tags」缺少檔名。\n"
 
-#: src/merge/mkvmerge.cpp:1964
+#: src/merge/mkvmerge.cpp:1965
 msgid "'--language' lacks its argument.\n"
 msgstr "「--language」缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:2132
+#: src/merge/mkvmerge.cpp:2133
 msgid "'--link' is only useful in combination with '--split'.\n"
 msgstr "「--link」只能與「--split」結合使用。\n"
 
-#: src/merge/mkvmerge.cpp:1693
+#: src/merge/mkvmerge.cpp:1694
 msgid "'--link-to-next' lacks the next UID.\n"
 msgstr "「--link-to-next」缺少下一個 UID。\n"
 
-#: src/merge/mkvmerge.cpp:1686
+#: src/merge/mkvmerge.cpp:1687
 msgid "'--link-to-previous' lacks the previous UID.\n"
 msgstr "「--link-to-previous」缺少上一個 UID。\n"
 
-#: src/merge/mkvmerge.cpp:2058
+#: src/merge/mkvmerge.cpp:2059
 msgid "'--nalu-size-length' lacks its argument.\n"
 msgstr "「--nalu-size-length」缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1646
+#: src/merge/mkvmerge.cpp:1647
 msgid "'--priority' lacks its argument.\n"
 msgstr "「--priority」缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1700
+#: src/merge/mkvmerge.cpp:1701
 msgid "'--segment-uid' lacks the segment UID.\n"
 msgstr "「--segment-uid」缺少剪輯 UID。\n"
 
-#: src/merge/mkvmerge.cpp:1806
+#: src/merge/mkvmerge.cpp:1807
 msgid "'--segmentinfo' lacks the file name.\n"
 msgstr "「--segmentinfo」缺少檔名。\n"
 
-#: src/merge/mkvmerge.cpp:1667
+#: src/merge/mkvmerge.cpp:1668
 msgid "'--split' lacks the size.\n"
 msgstr "「--split」缺少大小。\n"
 
-#: src/merge/mkvmerge.cpp:1674
+#: src/merge/mkvmerge.cpp:1675
 msgid "'--split-max-files' lacks the number of files.\n"
 msgstr "「--split-max-files」缺少檔案數量。\n"
 
-#: src/merge/mkvmerge.cpp:1929
+#: src/merge/mkvmerge.cpp:1930
 msgid "'--stereo-mode' lacks its argument.\n"
 msgstr "「--stereo-mode」缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1978
+#: src/merge/mkvmerge.cpp:1979
 msgid "'--sub-charset' lacks its argument.\n"
 msgstr "「--sub-charset」缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1835
+#: src/merge/mkvmerge.cpp:1836
 msgid "'--timecode-scale' lacks its argument.\n"
 msgstr "「--timecode-scale」缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1456
+#: src/merge/mkvmerge.cpp:1457
 msgid "'--timecode-scale' was used more than once.\n"
 msgstr "「--timecode-scale」被使用多於一次。\n"
 
-#: src/merge/mkvmerge.cpp:2020
+#: src/merge/mkvmerge.cpp:2021
 msgid "'--timecodes' lacks its argument.\n"
 msgstr "「--timecodes」缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:1659
+#: src/merge/mkvmerge.cpp:1660
 msgid "'--title' lacks the title.\n"
 msgstr "「--title」缺少標題。\n"
 
-#: src/merge/mkvmerge.cpp:2013
+#: src/merge/mkvmerge.cpp:2014
 msgid "'--track-name' lacks its argument.\n"
 msgstr "「--track-name」缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:2027
+#: src/merge/mkvmerge.cpp:2028
 msgid "'--track-order' lacks its argument.\n"
 msgstr "「--track-order」缺少參數。\n"
 
-#: src/merge/mkvmerge.cpp:2030
+#: src/merge/mkvmerge.cpp:2031
 msgid "'--track-order' may only be given once.\n"
 msgstr "「--track-order」只能給予一次。\n"
 
-#: src/merge/mkvmerge.cpp:2079
+#: src/merge/mkvmerge.cpp:2080
 msgid "'-A' and '-a' used on the same source file.\n"
 msgstr "「-A」和「-a」用於相同的來源檔上。\n"
 
-#: src/merge/mkvmerge.cpp:2088
+#: src/merge/mkvmerge.cpp:2089
 msgid "'-B' and '-b' used on the same source file.\n"
 msgstr "「-B」和「-b」用於相同的來源檔上。\n"
 
-#: src/merge/mkvmerge.cpp:2082
+#: src/merge/mkvmerge.cpp:2083
 msgid "'-D' and '-d' used on the same source file.\n"
 msgstr "「-D」和「-d」用於相同的來源檔上。\n"
 
-#: src/merge/mkvmerge.cpp:2085
+#: src/merge/mkvmerge.cpp:2086
 msgid "'-S' and '-s' used on the same source file.\n"
 msgstr "「-S」和「-s」用於相同的來源檔上。\n"
 
@@ -1524,7 +1511,7 @@ msgstr "...按大小:"
 msgid "...after timecodes:"
 msgstr "...按特定時間碼:"
 
-#: src/info/mkvinfo.cpp:840
+#: src/info/mkvinfo.cpp:841
 msgid "1: all frames"
 msgstr "1: 全部畫格"
 
@@ -1532,7 +1519,7 @@ msgstr "1: 全部畫格"
 msgid "2 bytes"
 msgstr "2 位元組"
 
-#: src/info/mkvinfo.cpp:842
+#: src/info/mkvinfo.cpp:843
 msgid "2: codec private data"
 msgstr "2: 編解碼器專用資料"
 
@@ -1581,7 +1568,7 @@ msgstr "一個人類可讀的字串，描述編解碼器。"
 msgid "A human-readable track name."
 msgstr "一個人類可讀的字串，描述軌道名稱。"
 
-#: src/mmg/mmg_dialog.cpp:1367
+#: src/mmg/mmg_dialog.cpp:1386
 #, c-format
 msgid "A job with the description '%s' already exists. Do you really want to add another one with the same description?"
 msgstr "描述為「%s」的任務已存在。是否加入描述相同的任務?"
@@ -1593,7 +1580,7 @@ msgid ""
 "segment between many others (128 bits)."
 msgstr "隨機生成的在眾多剪輯中識別目前剪輯的唯一 ID (128 位)。"
 
-#: src/info/mkvinfo.cpp:970
+#: src/info/mkvinfo.cpp:971
 msgid "A track"
 msgstr "一個軌道"
 
@@ -1684,10 +1671,6 @@ msgstr "已中止對 %s 的處理"
 msgid "About mkvinfo"
 msgstr "關於 mkvinfo"
 
-#: src/mmg/mmg_dialog.cpp:703
-msgid "About mkvmerge's GUI"
-msgstr "關於 mkvmerge 的 GUI"
-
 #: src/propedit/propedit_cli_parser.cpp:145
 msgid "Actions"
 msgstr "動作"
@@ -1696,7 +1679,7 @@ msgstr "動作"
 msgid "Add"
 msgstr "加入"
 
-#: src/mmg/mmg_dialog.cpp:265
+#: src/mmg/mmg_dialog.cpp:282
 msgid "Add &command line options"
 msgstr "加入命令列選項(&C)"
 
@@ -1728,7 +1711,7 @@ msgstr "加入時間"
 msgid "AdditionalID: %1%"
 msgstr "附加區塊 ID: %1%"
 
-#: src/info/mkvinfo.cpp:1496
+#: src/info/mkvinfo.cpp:1497
 msgid "Additions"
 msgstr "附加"
 
@@ -1736,7 +1719,7 @@ msgstr "附加"
 msgid "Adds a property with the value even if such a property already exists"
 msgstr "以此數值加入屬性，即使這個屬性已經存在"
 
-#: src/mmg/mmg_dialog.cpp:263
+#: src/mmg/mmg_dialog.cpp:280
 msgid "Adds the current settings as a new job entry to the job queue"
 msgstr "將目前設定作為新任務項加入到任務佇列"
 
@@ -1752,7 +1735,7 @@ msgstr "調整時間碼"
 msgid "After loading a file expand the most important elements"
 msgstr "載入檔案後展開最重要的元件"
 
-#: src/info/mkvinfo.cpp:869
+#: src/info/mkvinfo.cpp:870
 msgid "Algorithm: %1% (%2%)"
 msgstr "演算法: %1% (%2%)"
 
@@ -1806,11 +1789,11 @@ msgstr "總在最前面"
 msgid "An ID corresponding to the codec."
 msgstr "對應編解碼器的 ID。"
 
-#: src/extract/attachments.cpp:130
+#: src/extract/attachments.cpp:109
 msgid "An attachment with the ID %1% was not found.\n"
 msgstr "找不到 ID 為 %1% 的附件。\n"
 
-#: src/merge/mkvmerge.cpp:2064
+#: src/merge/mkvmerge.cpp:2065
 msgid "An empty file name is not valid.\n"
 msgstr "空白檔名是無效的。\n"
 
@@ -1846,7 +1829,7 @@ msgstr "分析 MPEG4 位流，將每一畫格置於單獨的 Matroska 塊中，�
 msgid "Another default track for %1% tracks has already been set. The 'default' flag for track %2% of '%3%' will not be set.\n"
 msgstr "軌道 %1% 的另一個預設軌已設定。「%3%」的 %2% 軌道的「預設軌」標記將不被設定。\n"
 
-#: src/mmg/mmg_dialog.cpp:557
+#: src/mmg/mmg_dialog.cpp:577
 msgid "Another muxing job in still in progress. Please wait until it has finished or abort it manually before starting a new one."
 msgstr "另一個合成任務仍在處理中。要啟動一項新任務，請等待上一個任務完成或手動中止它。"
 
@@ -1863,15 +1846,15 @@ msgstr "正在添加合併軌道 %1%（自檔案 %2% (「%3%」)）至軌道 %4%
 msgid "Ask before overwriting things (files, jobs)"
 msgstr "覆寫前詢問（檔案、任務等）"
 
-#: src/merge/mkvmerge.cpp:591
+#: src/merge/mkvmerge.cpp:592
 msgid "Aspect ratio"
 msgstr "外觀比例"
 
-#: src/merge/mkvmerge.cpp:591
+#: src/merge/mkvmerge.cpp:592
 msgid "Aspect ratio factor"
 msgstr "外觀比例係數"
 
-#: src/info/mkvinfo.cpp:793
+#: src/info/mkvinfo.cpp:794
 msgid "Aspect ratio type: %1%%2%"
 msgstr "外觀比例類型: %1%%2%"
 
@@ -1891,7 +1874,7 @@ msgstr "至少需要一個 <EditionEntry> 元件。"
 msgid "Atatchment extraction"
 msgstr "提取附件"
 
-#: src/info/mkvinfo.cpp:1340
+#: src/info/mkvinfo.cpp:1341
 msgid "Attached"
 msgstr "附加的"
 
@@ -1907,9 +1890,9 @@ msgstr "附件 ID %1%: 類型「%2%」, 大小 %3% 位元組"
 msgid "Attachment style:"
 msgstr "附加方式:"
 
-#: src/mmg/mmg_dialog.cpp:286
+#: src/mmg/mmg_dialog.cpp:306
 #: src/mmg/tabs/attachments.cpp:155
-#: src/info/mkvinfo.cpp:1328
+#: src/info/mkvinfo.cpp:1329
 msgid "Attachments"
 msgstr "附件"
 
@@ -1942,11 +1925,11 @@ msgstr "音軌 %u"
 msgid "Auto-set output filename"
 msgstr "自動設定輸出檔名"
 
-#: src/merge/mkvmerge.cpp:323
+#: src/merge/mkvmerge.cpp:324
 msgid "Automatic MIME type recognition for '%1%': %2%\n"
 msgstr "對「%1%」的 MIME 類型的自動識別結果: %2%\n"
 
-#: src/merge/mkvmerge.cpp:1617
+#: src/merge/mkvmerge.cpp:1618
 msgid "Automatically enabling WebM compliance mode due to output file name extension.\n"
 msgstr "由輸出檔的副檔名自動啟用 WebM 遵循模式。\n"
 
@@ -1958,6 +1941,11 @@ msgstr "可用的選項:"
 msgid "Available translations:\n"
 msgstr "可用的翻譯:\n"
 
+#: src/mmg/update_checker.cpp:65
+#, fuzzy
+msgid "Available version:"
+msgstr "可用的選項:"
+
 #: src/common/compression.cpp:213
 #: src/common/compression.cpp:231
 msgid "BZ2_bzCompressInit() failed. Result: %1%\n"
@@ -1967,7 +1955,7 @@ msgstr "BZ2_bzCompressInit() 失敗。結果: %1%\n"
 msgid "Binary (displayed as hex numbers)"
 msgstr "二位元值 (顯示為十六進位數位)"
 
-#: src/info/mkvinfo.cpp:701
+#: src/info/mkvinfo.cpp:702
 msgid "Bit depth: %1%"
 msgstr "位元深度: %1%"
 
@@ -1992,9 +1980,9 @@ msgstr "附加區塊: %1%"
 msgid "Block duration: %1%.%|2$06d|ms"
 msgstr "區塊持續時間: %1%.%|2$06d|ms"
 
-#: src/extract/timecodes_v2.cpp:283
 #: src/extract/tracks.cpp:414
-#: src/info/mkvinfo.cpp:1402
+#: src/extract/timecodes_v2.cpp:283
+#: src/info/mkvinfo.cpp:1403
 msgid "Block group"
 msgstr "區塊群組"
 
@@ -2022,18 +2010,18 @@ msgstr "同時給定了外觀比例與「--display-dimensions」。\n"
 msgid "Both the aspect ratio factor and '--display-dimensions' were given.\n"
 msgstr "同時給定了外觀比例係數與「--display-dimensions」。\n"
 
-#: src/mmg/mmg_dialog.cpp:264
+#: src/mmg/mmg_dialog.cpp:281
 msgid "Brings up the job queue editor"
 msgstr "調出任務佇列編輯器"
 
-#: src/mmg/mmg_dialog.cpp:291
-#: src/mmg/options/mkvmerge.cpp:59
+#: src/mmg/mmg_dialog.cpp:311
 #: src/mmg/options/mmg.cpp:69
+#: src/mmg/options/mkvmerge.cpp:59
+#: src/mmg/tabs/input_general.cpp:188
+#: src/mmg/tabs/input_general.cpp:191
 #: src/mmg/tabs/global.cpp:276
 #: src/mmg/tabs/global.cpp:293
 #: src/mmg/tabs/global.cpp:297
-#: src/mmg/tabs/input_general.cpp:188
-#: src/mmg/tabs/input_general.cpp:191
 msgid "Browse"
 msgstr "瀏覽"
 
@@ -2049,7 +2037,7 @@ msgstr "在來源容器不提供時間碼或畫格率值的情況下，無法將
 msgid "Cannot extract tracks of different kinds to the same file. This was requested for the tracks %1% and %2%.\n"
 msgstr "無法將不同類型的軌道提取至同一檔案。軌道 %1% 和 %2% 被要求這樣提取。\n"
 
-#: src/mmg/mmg_dialog.cpp:558
+#: src/mmg/mmg_dialog.cpp:578
 msgid "Cannot start second muxing job"
 msgstr "不能啟動其他合成任務"
 
@@ -2057,10 +2045,10 @@ msgstr "不能啟動其他合成任務"
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file, and their CodecPrivate data (the USF styles etc) do not match.\n"
 msgstr "無法寫入軌道 %1%（CodecID「%2%」）至檔案「%3%」，因為軌道 %4%（CodecID「%5%」）已被寫入同一檔案，且它們的 CodecPrivate 編解碼器私有資料 (如 USF 樣式) 不相符。\n"
 
+#: src/extract/xtr_textsubs.cpp:308
 #: src/extract/xtr_avi.cpp:46
 #: src/extract/xtr_base.cpp:65
 #: src/extract/xtr_ivf.cpp:53
-#: src/extract/xtr_textsubs.cpp:308
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file.\n"
 msgstr "無法寫入軌道 %1%（CodecID「%2%」）至檔案「%3%」，因為軌道 %4%（CodecID「%5%」）已被寫入同一檔案。\n"
 
@@ -2068,9 +2056,9 @@ msgstr "無法寫入軌道 %1%（CodecID「%2%」）至檔案「%3%」，因為�
 msgid "Category is not NUL terminated"
 msgstr "類別未以 NUL 結尾"
 
-#: src/extract/timecodes_v2.cpp:362
 #: src/extract/tracks.cpp:464
-#: src/info/mkvinfo.cpp:2019
+#: src/extract/timecodes_v2.cpp:362
+#: src/info/mkvinfo.cpp:2020
 msgid "Caught exception"
 msgstr "發生異常"
 
@@ -2094,7 +2082,7 @@ msgstr "「%1%」的變更已執行。設定了一些項目: %2%。\n"
 msgid "Change for '%1%' executed. One entry added.\n"
 msgstr "「%1%」的變更已執行。加入了一個項目。\n"
 
-#: src/mmg/mmg_dialog.cpp:255
+#: src/mmg/mmg_dialog.cpp:272
 msgid "Change mmg's preferences and options"
 msgstr "修改 mmg 的偏好設定和選項"
 
@@ -2102,35 +2090,35 @@ msgstr "修改 mmg 的偏好設定和選項"
 msgid "Changes to this list do not take effect until mmg is restarted."
 msgstr "換成這份清單直到重新啟動 mmg 才生效。"
 
-#: src/info/mkvinfo.cpp:696
+#: src/info/mkvinfo.cpp:697
 msgid "Channel positions: %1%"
 msgstr "聲道位置: %1%"
 
-#: src/info/mkvinfo.cpp:690
+#: src/info/mkvinfo.cpp:691
 msgid "Channels: %1%"
 msgstr "聲道數: %1%"
 
-#: src/mmg/mmg_dialog.cpp:288
+#: src/mmg/mmg_dialog.cpp:308
 msgid "Chapter Editor"
 msgstr "章節編輯器"
 
-#: src/info/mkvinfo.cpp:557
+#: src/info/mkvinfo.cpp:558
 msgid "Chapter Translate"
 msgstr "章節翻譯"
 
-#: src/info/mkvinfo.cpp:570
+#: src/info/mkvinfo.cpp:571
 msgid "Chapter Translate Codec: %1%"
 msgstr "章節翻譯編解碼器: %1%"
 
-#: src/info/mkvinfo.cpp:566
+#: src/info/mkvinfo.cpp:567
 msgid "Chapter Translate Edition UID: %1%"
 msgstr "章節翻譯版本 UID: %1%"
 
-#: src/info/mkvinfo.cpp:574
+#: src/info/mkvinfo.cpp:575
 msgid "Chapter Translate ID: %1%"
 msgstr "章節翻譯 ID: %1%"
 
-#: src/mmg/mmg_dialog.cpp:586
+#: src/mmg/mmg_dialog.cpp:606
 msgid "Chapter editor is not empty"
 msgstr "章節編輯器不是空的"
 
@@ -2188,7 +2176,7 @@ msgstr "章節驗證成功"
 
 #: src/mmg/options/chapters.cpp:130
 #: src/mmg/tabs/global.cpp:273
-#: src/info/mkvinfo.cpp:1809
+#: src/info/mkvinfo.cpp:1810
 msgid "Chapters"
 msgstr "章節"
 
@@ -2222,10 +2210,29 @@ msgstr "章節: %1% 項目"
 msgid "Charset for strings on the command line"
 msgstr "命令列上字串的字元集"
 
-#: src/mmg/tabs/global.cpp:282
 #: src/mmg/tabs/input_format.cpp:249
+#: src/mmg/tabs/global.cpp:282
 msgid "Charset:"
 msgstr "字元集:"
+
+#: src/mmg/mmg_dialog.cpp:296
+#: src/mmg/options/mmg.cpp:105
+#: src/merge/mkvmerge.cpp:250
+#: src/info/mkvinfo.cpp:235
+msgid "Check online for the latest release"
+msgstr ""
+
+#: src/common/cli_parser.cpp:184
+msgid "Check online for the latest release."
+msgstr ""
+
+#: src/mmg/options/mmg.cpp:106
+msgid "Check online whether or not a new release of MKVToolNix is availble on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
+msgstr ""
+
+#: src/mmg/mmg_dialog.cpp:1725
+msgid "Checking for updates online; please wait"
+msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:524
 msgid "Choose a chapter file"
@@ -2243,7 +2250,7 @@ msgstr "選擇時間碼檔"
 msgid "Choose an attachment file"
 msgstr "選擇附件檔"
 
-#: src/mmg/mmg_dialog.cpp:364
+#: src/mmg/mmg_dialog.cpp:384
 msgid "Choose an input file"
 msgstr "選擇輸入檔"
 
@@ -2255,11 +2262,11 @@ msgstr "選擇要加入的檔案"
 msgid "Choose an input file to append"
 msgstr "選擇要添加的檔案"
 
+#: src/mmg/mmg_dialog.cpp:334
+#: src/mmg/mmg_dialog.cpp:430
+#: src/mmg/mmg_dialog.cpp:738
+#: src/mmg/mmg_dialog.cpp:759
 #: src/mmg/jobs.cpp:409
-#: src/mmg/mmg_dialog.cpp:314
-#: src/mmg/mmg_dialog.cpp:410
-#: src/mmg/mmg_dialog.cpp:719
-#: src/mmg/mmg_dialog.cpp:740
 #: src/mmg/mux_dialog.cpp:263
 #: src/mmg/tabs/chapters.cpp:636
 #: src/mmg/tabs/chapters.cpp:680
@@ -2270,7 +2277,7 @@ msgstr "選擇輸出檔"
 msgid "Choose the chapter file"
 msgstr "選擇章節檔"
 
-#: src/mmg/mmg_dialog.cpp:620
+#: src/mmg/mmg_dialog.cpp:640
 msgid "Choose the location of the mkvmerge GUI help files"
 msgstr "選擇 mkvmerge GUI 説明檔的路徑"
 
@@ -2278,7 +2285,7 @@ msgstr "選擇 mkvmerge GUI 説明檔的路徑"
 msgid "Choose the mkvmerge executable"
 msgstr "選擇 mkvmerge 可執行檔"
 
-#: src/mmg/options/mmg.cpp:238
+#: src/mmg/options/mmg.cpp:254
 msgid "Choose the output directory"
 msgstr "選擇輸出目錄"
 
@@ -2302,17 +2309,17 @@ msgstr "任務加入到任務佇列後清空輸入檔清單"
 msgid "Close the current file without saving"
 msgstr "在不儲存的情況下關閉目前檔案"
 
-#: src/extract/timecodes_v2.cpp:264
 #: src/extract/tracks.cpp:396
-#: src/info/mkvinfo.cpp:1959
+#: src/extract/timecodes_v2.cpp:264
+#: src/info/mkvinfo.cpp:1960
 msgid "Cluster"
 msgstr "叢集"
 
-#: src/merge/mkvmerge.cpp:1359
+#: src/merge/mkvmerge.cpp:1360
 msgid "Cluster length '%1%' out of range (0..65535).\n"
 msgstr "叢集長度「%1%」超出範圍 (0..65535)。\n"
 
-#: src/merge/mkvmerge.cpp:1352
+#: src/merge/mkvmerge.cpp:1353
 msgid "Cluster length '%1%' out of range (100..32000).\n"
 msgstr "叢集長度「%1%」超出範圍 (100..32000)。\n"
 
@@ -2324,8 +2331,8 @@ msgstr "叢集位置: %1%"
 msgid "Cluster previous size: %1%"
 msgstr "叢集上一個長度: %1%"
 
-#: src/extract/timecodes_v2.cpp:279
 #: src/extract/tracks.cpp:405
+#: src/extract/timecodes_v2.cpp:279
 #: src/info/mkvinfo.cpp:170
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr "叢集時間碼: %|1$.3f|s"
@@ -2335,19 +2342,19 @@ msgstr "叢集時間碼: %|1$.3f|s"
 msgid "Codec ID"
 msgstr "編解碼器 ID"
 
-#: src/info/mkvinfo.cpp:1047
+#: src/info/mkvinfo.cpp:1048
 msgid "Codec ID: %1%"
 msgstr "編解碼器 ID: %1%"
 
-#: src/info/mkvinfo.cpp:1084
+#: src/info/mkvinfo.cpp:1085
 msgid "Codec decode all: %1%"
 msgstr "編解碼器全部解碼: %1%"
 
-#: src/info/mkvinfo.cpp:1079
+#: src/info/mkvinfo.cpp:1080
 msgid "Codec download URL: %1%"
 msgstr "編解碼器下載 URL: %1%"
 
-#: src/info/mkvinfo.cpp:1075
+#: src/info/mkvinfo.cpp:1076
 msgid "Codec info URL: %1%"
 msgstr "編解碼器資訊 URL: %1%"
 
@@ -2356,11 +2363,11 @@ msgstr "編解碼器資訊 URL: %1%"
 msgid "Codec name"
 msgstr "編解碼器名稱"
 
-#: src/info/mkvinfo.cpp:1066
+#: src/info/mkvinfo.cpp:1067
 msgid "Codec name: %1%"
 msgstr "編解碼器名稱: %1%"
 
-#: src/info/mkvinfo.cpp:1071
+#: src/info/mkvinfo.cpp:1072
 msgid "Codec settings: %1%"
 msgstr "編解碼器設定: %1%"
 
@@ -2368,7 +2375,7 @@ msgstr "編解碼器設定: %1%"
 msgid "Codec state: %1%"
 msgstr "編解碼器狀態: %1%"
 
-#: src/info/mkvinfo.cpp:1062
+#: src/info/mkvinfo.cpp:1063
 msgid "CodecPrivate, length %1%%2%"
 msgstr "編解碼器專有, 長度 %1%%2%"
 
@@ -2376,11 +2383,11 @@ msgstr "編解碼器專有, 長度 %1%%2%"
 msgid "Collapse all entries so that none of their sub-entries will be shown"
 msgstr "收起所有項目，這樣它們的子項目將不被顯示"
 
-#: src/info/mkvinfo.cpp:802
+#: src/info/mkvinfo.cpp:803
 msgid "Colour space: %1%"
 msgstr "色彩空間: %1%"
 
-#: src/mmg/mmg_dialog.cpp:771
+#: src/mmg/mmg_dialog.cpp:790
 msgid "Command line copied to clipboard."
 msgstr "命令列已複製至剪貼簿。"
 
@@ -2388,7 +2395,7 @@ msgstr "命令列已複製至剪貼簿。"
 msgid "Command line options:"
 msgstr "命令列選項:"
 
-#: src/mmg/mmg_dialog.cpp:729
+#: src/mmg/mmg_dialog.cpp:748
 msgid "Command line saved."
 msgstr "命令列已儲存。"
 
@@ -2409,31 +2416,31 @@ msgstr "壓縮失敗: %1%\n"
 msgid "Compression:"
 msgstr "壓縮方式:"
 
-#: src/mmg/mmg_dialog.cpp:359
+#: src/mmg/mmg_dialog.cpp:379
 msgid "Configuration cleared."
 msgstr "設定檔已清空。"
 
-#: src/mmg/mmg_dialog.cpp:404
+#: src/mmg/mmg_dialog.cpp:424
 msgid "Configuration loaded."
 msgstr "設定檔已載入。"
 
-#: src/mmg/mmg_dialog.cpp:439
+#: src/mmg/mmg_dialog.cpp:459
 msgid "Configuration saved."
 msgstr "設定檔已儲存。"
 
-#: src/info/mkvinfo.cpp:859
+#: src/info/mkvinfo.cpp:860
 msgid "Content compression"
 msgstr "內容壓縮"
 
-#: src/info/mkvinfo.cpp:824
+#: src/info/mkvinfo.cpp:825
 msgid "Content encoding"
 msgstr "內容編碼"
 
-#: src/info/mkvinfo.cpp:816
+#: src/info/mkvinfo.cpp:817
 msgid "Content encodings"
 msgstr "內容編碼"
 
-#: src/info/mkvinfo.cpp:886
+#: src/info/mkvinfo.cpp:887
 msgid "Content encryption"
 msgstr "內容加密"
 
@@ -2441,7 +2448,7 @@ msgstr "內容加密"
 msgid "Convert text subtitles to this charset (default: UTF-8)."
 msgstr "將文字字幕轉換成這個字元集 (預設: UTF-8)。"
 
-#: src/mmg/mmg_dialog.cpp:260
+#: src/mmg/mmg_dialog.cpp:277
 msgid "Copy the command line to the clipboard"
 msgstr "複製命令列至剪貼簿"
 
@@ -2465,7 +2472,7 @@ msgstr "無法為 mkvmerge 的命令列選項建立暫存檔案「%s」(錯誤�
 msgid "Could not create the file '%s'."
 msgstr "無法建立檔案「%s」。"
 
-#: src/mmg/mmg_dialog.cpp:749
+#: src/mmg/mmg_dialog.cpp:768
 msgid "Could not create the specified file."
 msgstr "無法建立指定的檔案。"
 
@@ -2475,7 +2482,7 @@ msgstr "無法解碼以 Base64 編碼的資料 - 似乎是不正常的。"
 
 #: src/input/r_matroska.cpp:1832
 #: src/input/r_avi.cpp:351
-#: src/input/r_ogm.cpp:1128
+#: src/input/r_ogm.cpp:1157
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "無法從該 AVC/h.264 軌道提取解碼器特有設定資料 (AVCC)。\n"
 
@@ -2500,7 +2507,7 @@ msgstr "添加時找不到 gptzr。 %1%\n"
 msgid "Could not find the codec configuration data in the first MPEG-4 part 2 video frame. This track cannot be stored in native mode.\n"
 msgstr "在第一個 MPEG-4 part 2 視訊畫格中找不到編解碼器設定資料。該軌不能以原生模式儲存。\n"
 
-#: src/input/r_ogm.cpp:354
+#: src/input/r_ogm.cpp:380
 msgid "Could not find the next Ogg page. This indicates a damaged Ogg/Ogm file. Will try to continue.\n"
 msgstr "找不到 Ogg 的下一頁。這表示 Ogg/Ogm 檔案可能已損壞。將試著繼續。\n"
 
@@ -2523,7 +2530,7 @@ msgstr "無法初始化 iconv 函式庫以供從 UTF-8 至 %1% 的轉換。某�
 msgid "Could not open '%1%' for reading.\n"
 msgstr "無法開啟「%1%」以讀取。\n"
 
-#: src/mmg/mmg_dialog.cpp:773
+#: src/mmg/mmg_dialog.cpp:792
 msgid "Could not open the clipboard."
 msgstr "無法開啟剪貼簿。"
 
@@ -2556,8 +2563,8 @@ msgstr "無法解析章節自「%1%」: %2%\n"
 msgid "Could not read the FLAC header packets.\n"
 msgstr "無法讀取 FLAC 表頭套件。\n"
 
-#: src/common/mm_io.cpp:181
 #: src/common/mm_io_win.cpp:167
+#: src/common/mm_io.cpp:181
 msgid "Could not write to the output file: %1% (%2%)\n"
 msgstr "無法寫入輸出檔: %1% (%2%)\n"
 
@@ -2566,7 +2573,7 @@ msgstr "無法寫入輸出檔: %1% (%2%)\n"
 msgid "Country:"
 msgstr "國家:"
 
-#: src/mmg/mmg_dialog.cpp:262
+#: src/mmg/mmg_dialog.cpp:279
 msgid "Create &option file"
 msgstr "建立選項檔(&O)"
 
@@ -2578,11 +2585,11 @@ msgstr "建立 WebM 遵循檔"
 msgid "Create a WebM compliant file. mkvmerge also turns this on if the output file name's extension is \"webm\". This mode enforces several restrictions. The only allowed codecs are VP8 video and Vorbis audio tracks. Neither chapters nor tags are allowed. The DocType header item is changed to \"webm\"."
 msgstr "建立 WebM 遵循檔。若輸出檔的副檔名是『webm』則 mkvmerge 也會開啟這項。這個模式會強制實行一些限制。編碼器只能是 VP8 視訊和 Vorbis 音軌。也不能使用章節和標籤。此 DocType 表頭項目已變更為『webm』。"
 
-#: src/mmg/mmg_dialog.cpp:266
+#: src/mmg/mmg_dialog.cpp:283
 msgid "Create a new chapter file"
 msgstr "建立一個新的章節檔"
 
-#: src/merge/mkvmerge.cpp:668
+#: src/merge/mkvmerge.cpp:669
 msgid "Cropping parameters: not given in the form <TID>:<left>,<top>,<right>,<bottom> e.g. 0:10,5,10,5 (argument was '%1%').\n"
 msgstr "剪裁參數: 未以 <TID>:<left>,<top>,<right>,<bottom> 的形式給定 例如 0:10,5,10,5 (您的參數為「%1%」)。\n"
 
@@ -2590,15 +2597,15 @@ msgstr "剪裁參數: 未以 <TID>:<left>,<top>,<right>,<bottom> 的形式給定
 msgid "Cropping:"
 msgstr "剪裁:"
 
-#: src/info/mkvinfo.cpp:1271
+#: src/info/mkvinfo.cpp:1272
 msgid "Cue block number: %1%"
 msgstr "Cue 區塊數: %1%"
 
-#: src/info/mkvinfo.cpp:1267
+#: src/info/mkvinfo.cpp:1268
 msgid "Cue cluster position: %1%"
 msgstr "Cue 叢集位置: %1%"
 
-#: src/info/mkvinfo.cpp:1276
+#: src/info/mkvinfo.cpp:1277
 msgid "Cue codec state: %1%"
 msgstr "Cue 編解碼器狀態: %1%"
 
@@ -2606,27 +2613,27 @@ msgstr "Cue 編解碼器狀態: %1%"
 msgid "Cue name format:"
 msgstr "Cue 命名格式:"
 
-#: src/info/mkvinfo.cpp:1242
+#: src/info/mkvinfo.cpp:1243
 msgid "Cue point"
 msgstr "Cue 點"
 
-#: src/info/mkvinfo.cpp:1292
+#: src/info/mkvinfo.cpp:1293
 msgid "Cue ref cluster: %1%"
 msgstr "Cue 參考叢集: %1%"
 
-#: src/info/mkvinfo.cpp:1300
+#: src/info/mkvinfo.cpp:1301
 msgid "Cue ref codec state: %1%"
 msgstr "Cue 參考編解碼器狀態: %1%"
 
-#: src/info/mkvinfo.cpp:1296
+#: src/info/mkvinfo.cpp:1297
 msgid "Cue ref number: %1%"
 msgstr "Cue 參考數: %1%"
 
-#: src/info/mkvinfo.cpp:1288
+#: src/info/mkvinfo.cpp:1289
 msgid "Cue ref time: %|1$.3f|s"
 msgstr "Cue 參考時間: %|1$.3f|s"
 
-#: src/info/mkvinfo.cpp:1279
+#: src/info/mkvinfo.cpp:1280
 msgid "Cue reference"
 msgstr "Cue 參考"
 
@@ -2642,19 +2649,19 @@ msgstr "Cue 表單解析器: 無效的 INDEX 索引數 (已得 %1%, 預期 %2%) 
 msgid "Cue sheet parser: No INDEX entry found for the previous TRACK entry (current line: %1%)\n"
 msgstr "Cue 表單解析器: 未發現上一個 TRACK 軌道的 INDEX 索引 (目前行編號: %1%)\n"
 
-#: src/info/mkvinfo.cpp:1251
+#: src/info/mkvinfo.cpp:1252
 msgid "Cue time: %|1$.3f|s"
 msgstr "Cue 時間: %|1$.3f|s"
 
-#: src/info/mkvinfo.cpp:1254
+#: src/info/mkvinfo.cpp:1255
 msgid "Cue track positions"
 msgstr "Cue 軌道位置"
 
-#: src/info/mkvinfo.cpp:1263
+#: src/info/mkvinfo.cpp:1264
 msgid "Cue track: %1%"
 msgstr "Cue 軌: %1%"
 
-#: src/info/mkvinfo.cpp:1226
+#: src/info/mkvinfo.cpp:1227
 msgid "Cues (subentries will be skipped)"
 msgstr "Cue 表單 (子項目將被跳過)"
 
@@ -2667,7 +2674,7 @@ msgstr "Cue:"
 msgid "Current and past jobs:"
 msgstr "目前和之前的任務:"
 
-#: src/mmg/mmg_dialog.cpp:711
+#: src/mmg/mmg_dialog.cpp:730
 msgid "Current command line"
 msgstr "目前命令列"
 
@@ -2682,6 +2689,11 @@ msgstr "目前任務 ID 1000:"
 
 #: src/mmg/header_editor/value_page.cpp:166
 msgid "Current value:"
+msgstr "目前值:"
+
+#: src/mmg/update_checker.cpp:62
+#, fuzzy
+msgid "Current version:"
 msgstr "目前值:"
 
 #: src/mmg/jobs.cpp:483
@@ -2724,11 +2736,11 @@ msgstr "DTS_Header 問題: 資料不足以讀取表頭\n"
 msgid "Data is not allowed inside <%1%>."
 msgstr "<%1%> 內部不允許有資料。"
 
-#: src/info/mkvinfo.cpp:624
+#: src/info/mkvinfo.cpp:625
 msgid "Date (invalid, value: %1%)"
 msgstr "日期 (無效, 值: %1%)"
 
-#: src/info/mkvinfo.cpp:622
+#: src/info/mkvinfo.cpp:623
 msgid "Date: %1% UTC"
 msgstr "日期: %1% UTC"
 
@@ -2746,11 +2758,11 @@ msgstr "預設"
 msgid "Default duration"
 msgstr "預設持續時間"
 
-#: src/info/mkvinfo.cpp:1102
+#: src/info/mkvinfo.cpp:1103
 msgid "Default duration: %|1$.3f|ms (%|2$.3f| fps for a video track)"
 msgstr "預設持續時間: %|1$.3f|ms (對於視訊軌為 %|2$.3f| fps)"
 
-#: src/info/mkvinfo.cpp:1116
+#: src/info/mkvinfo.cpp:1117
 msgid "Default flag: %1%"
 msgstr "“預設”標記: %1%"
 
@@ -2782,7 +2794,7 @@ msgstr "從任務佇列中刪除所選任務"
 msgid "Description"
 msgstr "描述"
 
-#: src/mmg/mmg_dialog.cpp:1368
+#: src/mmg/mmg_dialog.cpp:1387
 msgid "Description already exists"
 msgstr "描述已存在"
 
@@ -2812,16 +2824,16 @@ msgstr "停用 SimpleBlocks 簡單區塊替代 BlockGroups 區塊群組。"
 msgid "Disables lacing for all tracks. This will increase the file's size, especially if there are many audio tracks. Use only for testing."
 msgstr "停用所有軌道的緊縮。這將增加檔案大小，尤其是有很多音軌時。僅供測試用。"
 
-#: src/merge/mkvmerge.cpp:643
-#: src/merge/mkvmerge.cpp:649
+#: src/merge/mkvmerge.cpp:644
+#: src/merge/mkvmerge.cpp:650
 msgid "Display dimensions: not given in the form <TID>:<width>x<height>, e.g. 1:640x480 (argument was '%1%').\n"
 msgstr "顯示尺寸: 未以 <TID>:<width>x<height> 的形式給定, 例如 1:640x480 (您的參數為「%1%」)。\n"
 
-#: src/info/mkvinfo.cpp:737
+#: src/info/mkvinfo.cpp:738
 msgid "Display height: %1%"
 msgstr "顯示高度: %1%"
 
-#: src/info/mkvinfo.cpp:764
+#: src/info/mkvinfo.cpp:765
 msgid "Display unit: %1%%2%"
 msgstr "顯示單位: %1%%2%"
 
@@ -2833,7 +2845,7 @@ msgstr "顯示用法資訊"
 msgid "Display width/height:"
 msgstr "顯示寬/高:"
 
-#: src/info/mkvinfo.cpp:732
+#: src/info/mkvinfo.cpp:733
 msgid "Display width: %1%"
 msgstr "顯示寬度: %1%"
 
@@ -2845,15 +2857,15 @@ msgstr "不要在變換定位元件中添加章節項目。"
 msgid "Do not write meta seek elements at all."
 msgstr "不要寫入任何變換定位元件。"
 
-#: src/info/mkvinfo.cpp:1873
+#: src/info/mkvinfo.cpp:1874
 msgid "Doc type read version: %1%"
 msgstr "文件檔類型讀取版本: %1%"
 
-#: src/info/mkvinfo.cpp:1870
+#: src/info/mkvinfo.cpp:1871
 msgid "Doc type version: %1%"
 msgstr "文件檔類型版本: %1%"
 
-#: src/info/mkvinfo.cpp:1867
+#: src/info/mkvinfo.cpp:1868
 msgid "Doc type: %1%"
 msgstr "文件檔類型: %1%"
 
@@ -2869,11 +2881,16 @@ msgstr "不寫入變動部份到輸出檔 (只用於除錯)。"
 msgid "Done.\n"
 msgstr "完成。\n"
 
+#: src/mmg/update_checker.cpp:68
+#, fuzzy
+msgid "Download URL:"
+msgstr "編解碼器下載 URL: %1%"
+
 #: src/info/mkvinfo.cpp:160
 msgid "Duration: %|1$.3f|ms"
 msgstr "持續時間: %|1$.3f|ms"
 
-#: src/info/mkvinfo.cpp:601
+#: src/info/mkvinfo.cpp:602
 msgid "Duration: %|1$.3f|s (%2%)"
 msgstr "持續時間: %|1$.3f|s (%2%)"
 
@@ -2881,23 +2898,23 @@ msgstr "持續時間: %|1$.3f|s (%2%)"
 msgid "E&xit\tCtrl-Q"
 msgstr "離開(&X)\tCtrl-Q"
 
-#: src/info/mkvinfo.cpp:1843
+#: src/info/mkvinfo.cpp:1844
 msgid "EBML head"
 msgstr "EBML 表頭"
 
-#: src/info/mkvinfo.cpp:1861
+#: src/info/mkvinfo.cpp:1862
 msgid "EBML maximum ID length: %1%"
 msgstr "EBML 最大 ID 長: %1%"
 
-#: src/info/mkvinfo.cpp:1864
+#: src/info/mkvinfo.cpp:1865
 msgid "EBML maximum size length: %1%"
 msgstr "EBML 最大尺寸長度: %1%"
 
-#: src/info/mkvinfo.cpp:1858
+#: src/info/mkvinfo.cpp:1859
 msgid "EBML read version: %1%"
 msgstr "EBML 讀取版本: %1%"
 
-#: src/info/mkvinfo.cpp:1855
+#: src/info/mkvinfo.cpp:1856
 msgid "EBML version: %1%"
 msgstr "EBML 版本: %1%"
 
@@ -2952,7 +2969,7 @@ msgstr "元件於類別「%1%」(「--edit %2%」):\n"
 msgid "Enable splitting..."
 msgstr "啟用分割..."
 
-#: src/info/mkvinfo.cpp:1036
+#: src/info/mkvinfo.cpp:1037
 msgid "Enabled: %1%"
 msgstr "已啟用: %1%"
 
@@ -2960,11 +2977,11 @@ msgstr "已啟用: %1%"
 msgid "Enables splitting of the output into more than one file. You can split after a given size, after a given amount of time has passed in each file or after a list of timecodes."
 msgstr "啟用分割，將輸出檔分割為多個檔。可以在給定大小、給定每個檔案包含的時間量或一系列時間碼後分割。"
 
-#: src/info/mkvinfo.cpp:896
+#: src/info/mkvinfo.cpp:897
 msgid "Encryption algorithm: %1% (%2%)"
 msgstr "加密演算法: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:908
+#: src/info/mkvinfo.cpp:909
 msgid "Encryption key ID: %1%"
 msgstr "加密鑰匙 ID: %1%"
 
@@ -2998,8 +3015,8 @@ msgid "Error initializing the tables for the chapter, tag and segment info eleme
 msgstr "初始化章節, 標籤及剪輯資訊元件表時發生錯誤: 無法找到除錯名稱為「%1%」的元件。%2%\n"
 
 #: src/mmg/mmg.cpp:225
-#: src/mmg/mmg_dialog.cpp:369
-#: src/mmg/mmg_dialog.cpp:388
+#: src/mmg/mmg_dialog.cpp:389
+#: src/mmg/mmg_dialog.cpp:408
 msgid "Error loading settings"
 msgstr "載入設定發生錯誤"
 
@@ -3015,7 +3032,7 @@ msgstr "在表頭讀取階段解析 MPEG PS 套件時發生錯誤。媒體流似
 msgid "Error parsing the file"
 msgstr "解析檔案時發生錯誤"
 
-#: src/merge/mkvmerge.cpp:485
+#: src/merge/mkvmerge.cpp:486
 msgid "Error parsing the tags in '%1%': some mandatory elements are missing.\n"
 msgstr "解析「%1%」中的標籤發生錯誤: 缺少一些必須的元件。\n"
 
@@ -3043,16 +3060,16 @@ msgstr "發生錯誤: "
 msgid "Error: %1% parser failed for '%2%', line %3%, column %4%: %5%\n"
 msgstr "發生錯誤: %1% 解析器失敗，對於「%2%」, 第 %3% 行, 第 %4% 列: %5%\n"
 
-#: src/info/mkvinfo.cpp:1898
+#: src/info/mkvinfo.cpp:1899
 msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "發生錯誤: 無法開啟輸入檔 %1% (%2%)。\n"
 
-#: src/extract/timecodes_v2.cpp:184
 #: src/extract/tracks.cpp:339
+#: src/extract/timecodes_v2.cpp:184
 msgid "Error: No EBML head found."
 msgstr "發生錯誤: 未發現 EBML 表頭。"
 
-#: src/merge/mkvmerge.cpp:1611
+#: src/merge/mkvmerge.cpp:1612
 msgid ""
 "Error: no output file name was given.\n"
 "\n"
@@ -3147,9 +3164,9 @@ msgstr "畫格率 (fps):"
 msgid "Failed to create the VobSub data file '%1%': %2% (%3%)\n"
 msgstr "建立 VobSub 資料檔案「%1%」失敗: %2% (%3%)\n"
 
-#: src/extract/xtr_base.cpp:73
 #: src/extract/xtr_textsubs.cpp:337
 #: src/extract/xtr_vobsub.cpp:236
+#: src/extract/xtr_base.cpp:73
 msgid "Failed to create the file '%1%': %2% (%3%)\n"
 msgstr "建立檔案失敗「%1%」: %2% (%3%)\n"
 
@@ -3169,11 +3186,11 @@ msgstr "解析軌道 %1% 的 USF 編解碼器專有資料失敗: %2%\n"
 msgid "Failed to parse the USF end tag for track %1%: %2%\n"
 msgstr "解析軌道 %1% 的 USF 終止標記失敗: %2%\n"
 
-#: src/info/mkvinfo.cpp:632
+#: src/info/mkvinfo.cpp:633
 msgid "Family UID:%1%"
 msgstr "家族 UID:%1%"
 
-#: src/merge/mkvmerge.cpp:389
+#: src/merge/mkvmerge.cpp:390
 msgid "File %1% has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "檔案 %1% 類型未知。請查看受支援的檔案類型清單 (「mkvmerge --list-types」)，如果您的檔案類型受支援但沒被正常識別，請聯繫作者 Moritz Bunkus <moritz@bunkus.org>。\n"
 
@@ -3185,7 +3202,7 @@ msgstr "檔案「%1%」: 容器: %2%"
 msgid "File '%1%': unsupported container: %2%\n"
 msgstr "檔案「%1%」: 不支援的容器: %2%\n"
 
-#: src/info/mkvinfo.cpp:1365
+#: src/info/mkvinfo.cpp:1366
 msgid "File UID: %1%"
 msgstr "檔案 UID: %1%"
 
@@ -3194,17 +3211,17 @@ msgstr "檔案 UID: %1%"
 msgid "File contains fewer frames than expected or is corrupt after frame %1%.\n"
 msgstr "檔案包含的畫格數比預期的少，或者檔在 %1% 畫格後被破壞。\n"
 
-#: src/mmg/mmg_dialog.cpp:749
+#: src/mmg/mmg_dialog.cpp:768
 #: src/mmg/mux_dialog.cpp:131
 #: src/mmg/tabs/input.cpp:312
 msgid "File creation failed"
 msgstr "建立檔案失敗"
 
-#: src/info/mkvinfo.cpp:1361
+#: src/info/mkvinfo.cpp:1362
 msgid "File data, size: %1%"
 msgstr "檔案資料, 大小: %1%"
 
-#: src/info/mkvinfo.cpp:1349
+#: src/info/mkvinfo.cpp:1350
 msgid "File description: %1%"
 msgstr "檔案描述: %1%"
 
@@ -3231,7 +3248,7 @@ msgstr "檔案已處理完畢"
 msgid "File modified"
 msgstr "檔案已修改"
 
-#: src/info/mkvinfo.cpp:1353
+#: src/info/mkvinfo.cpp:1354
 msgid "File name: %1%"
 msgstr "檔名: %1%"
 
@@ -3296,7 +3313,7 @@ msgstr "強制 Xiph 式緊縮。"
 msgid "Force the translations for 'code' to be used."
 msgstr "強制使用「code」的翻譯。"
 
-#: src/info/mkvinfo.cpp:1120
+#: src/info/mkvinfo.cpp:1121
 msgid "Forced flag: %1%"
 msgstr "“強制”標記: %1%"
 
@@ -3344,11 +3361,11 @@ msgstr "在第一個 GOP 裡找到一個或多個沒有秒數參考的 B 畫格�
 msgid "FourCC:"
 msgstr "FourCC:"
 
-#: src/merge/mkvmerge.cpp:1104
+#: src/merge/mkvmerge.cpp:1105
 msgid "FourCC: Invalid track ID in '%1% %2%'.\n"
 msgstr "FourCC: 無效的軌道 ID 於「%1% %2%」。\n"
 
-#: src/merge/mkvmerge.cpp:1100
+#: src/merge/mkvmerge.cpp:1101
 msgid "FourCC: Missing track ID in '%1% %2%'.\n"
 msgstr "FourCC: 缺少軌道 ID 於「%1% %2%」。\n"
 
@@ -3356,7 +3373,7 @@ msgstr "FourCC: 缺少軌道 ID 於「%1% %2%」。\n"
 msgid "Frame number: %1%"
 msgstr "畫格數: %1%"
 
-#: src/info/mkvinfo.cpp:806
+#: src/info/mkvinfo.cpp:807
 msgid "Frame rate: %1%"
 msgstr "畫格率: %1%"
 
@@ -3369,7 +3386,7 @@ msgstr "畫格，大小為 %1%%2%%3%"
 msgid "Free-form edit field for user defined options for this track. What you input here is added after all the other options mmg adds so that you could overwrite any of mmg's options for this track. All occurences of the string \"<TID>\" will be replaced by the track's track ID."
 msgstr "無格式限制的文字方塊，供使用者定義此軌的命令列選項。您在這裡輸入的選項將被放在 mmg 添加的所有其他選項之後，這樣您可以覆蓋 mmg 為此軌建立的任何選項。所有出現字串 \"<TID>\" 的地方都會被替換為目前軌道的軌道 ID。"
 
-#: src/info/mkvinfo.cpp:773
+#: src/info/mkvinfo.cpp:774
 msgid "Gamma: %1%"
 msgstr "伽瑪修正: %1%"
 
@@ -3377,7 +3394,7 @@ msgstr "伽瑪修正: %1%"
 msgid "General track options"
 msgstr "軌道一般選項"
 
-#: src/mmg/mmg_dialog.cpp:287
+#: src/mmg/mmg_dialog.cpp:307
 msgid "Global"
 msgstr "整體"
 
@@ -3442,10 +3459,16 @@ msgstr "編碼後的視訊畫格的高度，單位：像素。"
 msgid "Height of the video frames to display."
 msgstr "視訊畫格的顯示高度。"
 
-#: src/mmg/mmg_dialog.cpp:670
-#: src/mmg/mmg_dialog.cpp:676
+#: src/mmg/mmg_dialog.cpp:690
+#: src/mmg/mmg_dialog.cpp:696
 msgid "Help file not found"
 msgstr "找不到說明檔"
+
+#: src/mmg/mmg_dialog.cpp:720
+msgid ""
+"Help is available in form of tool tips, from the\n"
+"'Help' menu or by pressing the 'F1' key."
+msgstr ""
 
 #: src/mmg/cli_options_dlg.cpp:31
 msgid ""
@@ -3541,7 +3564,7 @@ msgstr "匯入的圖片，自 %1%"
 msgid "Impossible to use file '%1%': The file could not be opened for reading.\n"
 msgstr "無法使用檔案「%1%」: 無法開啟要讀取的檔案。\n"
 
-#: src/mmg/mmg_dialog.cpp:1737
+#: src/mmg/mmg_dialog.cpp:1867
 msgid "Incompatible mkvmerge version"
 msgstr "不相容的 mkvmerge 版本"
 
@@ -3557,7 +3580,7 @@ msgstr "不相容的 AAC 音訊套件 (長度: %1% != len_check %2%)\n"
 msgid "Increase verbosity."
 msgstr "增強詳細程度。"
 
-#: src/mmg/mmg_dialog.cpp:285
+#: src/mmg/mmg_dialog.cpp:305
 msgid "Input"
 msgstr "輸入"
 
@@ -3578,11 +3601,11 @@ msgstr "輸入檔:"
 msgid "Input too long: %1% > %2%"
 msgstr "輸入過長: %1% > %2%"
 
-#: src/mmg/options/mmg.cpp:109
+#: src/mmg/options/mmg.cpp:116
 msgid "Interface language:"
 msgstr "介面語言:"
 
-#: src/info/mkvinfo.cpp:777
+#: src/info/mkvinfo.cpp:778
 msgid "Interlaced: %1%"
 msgstr "交錯的: %1%"
 
@@ -3595,7 +3618,7 @@ msgstr "內部錯誤: tracks.cpp SSA #1。 %1%"
 msgid "Internal program error"
 msgstr "內部程式錯誤"
 
-#: src/merge/mkvmerge.cpp:1028
+#: src/merge/mkvmerge.cpp:1029
 msgid "Invalid %1% specified in '--%2% %3%'.\n"
 msgstr "無效的 %1% 指定，在「--%2% %3%」。\n"
 
@@ -3633,15 +3656,15 @@ msgstr "指定無效的附件 ID/檔名，在參數「%1%」中。\n"
 msgid "Invalid binary data format '%1%' specified. Supported are 'Base64', 'ASCII' and 'hex'."
 msgstr "指定了無效的二位元資料「%1%」。僅支援「Base64」, 「ASCII」與「hex」。"
 
-#: src/merge/mkvmerge.cpp:877
+#: src/merge/mkvmerge.cpp:878
 msgid "Invalid boolean option specified in '--default-track %1%'.\n"
 msgstr "無效的布林值選項指定，在「--default-track %1%」中。\n"
 
-#: src/merge/mkvmerge.cpp:903
+#: src/merge/mkvmerge.cpp:904
 msgid "Invalid boolean option specified in '--forced-track %1%'.\n"
 msgstr "無效的布林值選項指定，在「--forced-track %1%」中。\n"
 
-#: src/merge/mkvmerge.cpp:1287
+#: src/merge/mkvmerge.cpp:1288
 msgid "Invalid boolean specified in '--aac-is-sbr %1%'.\n"
 msgstr "無效的布林值指定，在「--aac-is-sbr %1%」中。\n"
 
@@ -3649,11 +3672,11 @@ msgstr "無效的布林值指定，在「--aac-is-sbr %1%」中。\n"
 msgid "Invalid change spec (%3%) in '%1% %2%'.\n"
 msgstr "無效的變更規格 (%3%)，在「%1% %2%」。\n"
 
-#: src/merge/mkvmerge.cpp:958
+#: src/merge/mkvmerge.cpp:959
 msgid "Invalid compression option specified in '--compression %1%'.\n"
 msgstr "無效的壓縮選項指定，在「--compression %1%」中。\n"
 
-#: src/merge/mkvmerge.cpp:951
+#: src/merge/mkvmerge.cpp:952
 msgid "Invalid compression option. No track ID specified in '--compression %1%'.\n"
 msgstr "無效的壓縮選項。未在「--compression %1%」指定軌道 ID。\n"
 
@@ -3661,19 +3684,19 @@ msgstr "無效的壓縮選項。未在「--compression %1%」指定軌道 ID。\
 msgid "Invalid country selected"
 msgstr "無效的國家選擇"
 
-#: src/merge/mkvmerge.cpp:928
+#: src/merge/mkvmerge.cpp:929
 msgid "Invalid cues option specified in '--cues %1%'.\n"
 msgstr "無效的索引選項指定，在「--cues %1%」中。\n"
 
-#: src/merge/mkvmerge.cpp:921
+#: src/merge/mkvmerge.cpp:922
 msgid "Invalid cues option. No track ID specified in '--cues %1%'.\n"
 msgstr "無效的索引選項。未在「--cues %1%」指定軌道 ID。\n"
 
-#: src/mmg/mmg_dialog.cpp:565
+#: src/mmg/mmg_dialog.cpp:585
 msgid "Invalid file name"
 msgstr "無效的檔名"
 
-#: src/merge/mkvmerge.cpp:818
+#: src/merge/mkvmerge.cpp:819
 msgid "Invalid format for '--split' in '--split %1%'.\n"
 msgstr "「--split」格式無效，在「--split %1%」中。\n"
 
@@ -3772,7 +3795,7 @@ msgstr "無效秒數: %1%"
 msgid "Invalid selector in '%1% %2%'.\n"
 msgstr "無效的選擇器，在「%1% %2%」。\n"
 
-#: src/merge/mkvmerge.cpp:772
+#: src/merge/mkvmerge.cpp:773
 msgid "Invalid split size in '--split %1%'.\n"
 msgstr "無效的分割大小「--split %1%」。\n"
 
@@ -3784,80 +3807,80 @@ msgstr "無效的開始或終止時間碼"
 msgid "Invalid start timecode"
 msgstr "無效的開始時間碼"
 
-#: src/merge/mkvmerge.cpp:1052
+#: src/merge/mkvmerge.cpp:1053
 msgid "Invalid sub charset option. No track ID specified in '--sub-charset %1%'.\n"
 msgstr "無效的字幕字元集選項。未在「--sub-charset %1%」指定軌道 ID。\n"
 
-#: src/merge/mkvmerge.cpp:1059
+#: src/merge/mkvmerge.cpp:1060
 msgid "Invalid sub charset specified in '--sub-charset %1%'.\n"
 msgstr "無效的字幕字元集指定，在「--sub-charset %1%」。\n"
 
-#: src/merge/mkvmerge.cpp:543
+#: src/merge/mkvmerge.cpp:544
 msgid "Invalid sync option specified in '%1% %2%'.\n"
 msgstr "無效的同步選項指定，在「%1% %2%」。\n"
 
-#: src/merge/mkvmerge.cpp:566
+#: src/merge/mkvmerge.cpp:567
 msgid "Invalid sync option specified in '%1% %2%'. The divisor is zero.\n"
 msgstr "無效的同步選項指定，在「%1% %2%」。除數為零。\n"
 
-#: src/merge/mkvmerge.cpp:572
+#: src/merge/mkvmerge.cpp:573
 msgid "Invalid sync option specified in '%1% %2%'. The linear sync value may not be equal to or smaller than zero.\n"
 msgstr "無效的同步選項指定，在「%1% %2%」。線性同步值不得等於或小於 0。\n"
 
-#: src/merge/mkvmerge.cpp:535
+#: src/merge/mkvmerge.cpp:536
 msgid "Invalid sync option. No track ID specified in '%1% %2%'.\n"
 msgstr "無效的同步選項。未在「%1% %2%」指定軌道 ID。\n"
 
-#: src/merge/mkvmerge.cpp:1083
+#: src/merge/mkvmerge.cpp:1084
 msgid "Invalid tags file name specified in '%1% %2%'.\n"
 msgstr "無效的標籤檔名指定在「%1% %2%」。\n"
 
-#: src/merge/mkvmerge.cpp:1076
+#: src/merge/mkvmerge.cpp:1077
 msgid "Invalid tags option. No track ID specified in '%1% %2%'.\n"
 msgstr "無效的標籤選項。在「%1% %2%」未指定軌道 ID。\n"
 
-#: src/merge/mkvmerge.cpp:737
+#: src/merge/mkvmerge.cpp:738
 msgid "Invalid time for '--split' in '--split %1%'. Additional error message: %2%\n"
 msgstr "「--split」的時間無效，在「--split %1%」。其他錯誤訊息: %2%\n"
 
-#: src/merge/mkvmerge.cpp:759
+#: src/merge/mkvmerge.cpp:760
 msgid "Invalid time for '--split' in '--split %1%'. Additional error message: %2%.\n"
 msgstr "「--split」的時間無效，在「--split %1%」。其他錯誤訊息: %2%。\n"
 
-#: src/merge/mkvmerge.cpp:512
+#: src/merge/mkvmerge.cpp:513
 msgid "Invalid track ID in '%1% %2%'.\n"
 msgstr "無效軌道 ID，在「%1% %2%」。\n"
 
-#: src/merge/mkvmerge.cpp:539
-#: src/merge/mkvmerge.cpp:1080
+#: src/merge/mkvmerge.cpp:540
+#: src/merge/mkvmerge.cpp:1081
 msgid "Invalid track ID specified in '%1% %2%'.\n"
 msgstr "無效的軌道 ID 指定，在「%1% %2%」。\n"
 
-#: src/merge/mkvmerge.cpp:1024
+#: src/merge/mkvmerge.cpp:1025
 msgid "Invalid track ID specified in '--%1% %2%'.\n"
 msgstr "無效的軌道 ID 指定，在「--%1% %2%」。\n"
 
-#: src/merge/mkvmerge.cpp:1284
+#: src/merge/mkvmerge.cpp:1285
 msgid "Invalid track ID specified in '--aac-is-sbr %1%'.\n"
 msgstr "無效的軌道 ID 指定，在「--aac-is-sbr %1%」。\n"
 
-#: src/merge/mkvmerge.cpp:955
+#: src/merge/mkvmerge.cpp:956
 msgid "Invalid track ID specified in '--compression %1%'.\n"
 msgstr "無效的軌道 ID 指定，在「--compression %1%」。\n"
 
-#: src/merge/mkvmerge.cpp:925
+#: src/merge/mkvmerge.cpp:926
 msgid "Invalid track ID specified in '--cues %1%'.\n"
 msgstr "無效的軌道 ID 指定，在「--cues %1%」。\n"
 
-#: src/merge/mkvmerge.cpp:871
+#: src/merge/mkvmerge.cpp:872
 msgid "Invalid track ID specified in '--default-track %1%'.\n"
 msgstr "無效的軌道 ID 指定，在「--default-track %1%」。\n"
 
-#: src/merge/mkvmerge.cpp:897
+#: src/merge/mkvmerge.cpp:898
 msgid "Invalid track ID specified in '--forced-track %1%'.\n"
 msgstr "無效的軌道 ID 指定，在「--forced-track %1%」。\n"
 
-#: src/merge/mkvmerge.cpp:1056
+#: src/merge/mkvmerge.cpp:1057
 msgid "Invalid track ID specified in '--sub-charset %1%'.\n"
 msgstr "無效的軌道 ID 指定，在「--sub-charset %1%」。\n"
 
@@ -3865,11 +3888,11 @@ msgstr "無效的軌道 ID 指定，在「--sub-charset %1%」。\n"
 msgid "Invalid track ID/file name specification in argument '%1%'.\n"
 msgstr "在參數「%1%」中指定的軌道 ID 或檔名無效。\n"
 
-#: src/mmg/mmg_dialog.cpp:1403
+#: src/mmg/mmg_dialog.cpp:1422
 msgid "Job added to job queue"
 msgstr "任務已添加至任務佇列"
 
-#: src/mmg/mmg_dialog.cpp:1356
+#: src/mmg/mmg_dialog.cpp:1375
 msgid "Job description"
 msgstr "任務描述"
 
@@ -3897,7 +3920,7 @@ msgstr "LZO 壓縮失敗。結果: %1%\n"
 msgid "Lace number: %1%"
 msgstr "緊縮數: %1%"
 
-#: src/info/mkvinfo.cpp:1112
+#: src/info/mkvinfo.cpp:1113
 msgid "Lacing flag: %1%"
 msgstr "“緊縮”標記: %1%"
 
@@ -3915,13 +3938,13 @@ msgid "Language is not NUL terminated"
 msgstr "語言未以 NUL 結尾"
 
 #: src/mmg/options/chapters.cpp:86
-#: src/mmg/tabs/chapters.cpp:349
-#: src/mmg/tabs/global.cpp:278
 #: src/mmg/tabs/input_general.cpp:181
+#: src/mmg/tabs/global.cpp:278
+#: src/mmg/tabs/chapters.cpp:349
 msgid "Language:"
 msgstr "語言:"
 
-#: src/info/mkvinfo.cpp:1124
+#: src/info/mkvinfo.cpp:1125
 msgid "Language: %1%"
 msgstr "語言: %1%"
 
@@ -3937,7 +3960,7 @@ msgstr "在輸出檔的章節中留額外的空格 (EbmlVoid)。"
 msgid "Left eye"
 msgstr "左眼視角"
 
-#: src/mmg/mmg_dialog.cpp:265
+#: src/mmg/mmg_dialog.cpp:282
 msgid "Lets you add arbitrary options to the command line"
 msgstr "允許您向命令列添加任意選項"
 
@@ -3979,11 +4002,11 @@ msgstr "第 %1% 行: 這一行似乎是字幕項目但時間碼為負即使添�
 msgid "List all valid property names and exit"
 msgstr "列出全部有效的屬性名稱並離開"
 
-#: src/mmg/mmg_dialog.cpp:267
+#: src/mmg/mmg_dialog.cpp:284
 msgid "Load a chapter file (simple/OGM format or XML format)"
 msgstr "載入章節檔 (簡單/OGM 格式或 XML 格式)"
 
-#: src/mmg/mmg_dialog.cpp:252
+#: src/mmg/mmg_dialog.cpp:269
 msgid "Load muxing settings from a file"
 msgstr "從檔案載入合成設定"
 
@@ -3996,7 +4019,7 @@ msgstr "日誌檔 (*.txt)|*.txt|%s"
 msgid "Log output:"
 msgstr "日誌輸出:"
 
-#: src/info/mkvinfo.cpp:926
+#: src/info/mkvinfo.cpp:927
 msgid "MD5"
 msgstr "MD5"
 
@@ -4007,6 +4030,10 @@ msgstr "此軌的 MIME 類型。選擇一個預定義的 MIME 類型或自行輸
 #: src/mmg/tabs/attachments.cpp:161
 msgid "MIME type:"
 msgstr "MIME 類型:"
+
+#: src/mmg/mmg_dialog.cpp:718
+msgid "MKVToolNix is licensed under the GNU GPL v2"
+msgstr ""
 
 #: src/common/file_types.cpp:36
 msgid "MP4 audio/video files"
@@ -4047,7 +4074,7 @@ msgstr "不正常的一行? (%1%)\n"
 msgid "Mark this track as 'forced'. Players must play this track."
 msgstr "將此軌標記為「強制」。播放器必須播放此軌。"
 
-#: src/mmg/mmg_dialog.cpp:316
+#: src/mmg/mmg_dialog.cpp:336
 #, c-format
 msgid "Matroska A/V files (*.mka;*.mkv)|*.mkv;*.mka|%s"
 msgstr "Matroska 音訊/視訊檔 (*.mka;*.mkv)|*.mkv;*.mka|%s"
@@ -4070,11 +4097,11 @@ msgstr "Matroska 檔案 (*.mkv;*.mka)|*.mkv;*.mka|%s"
 msgid "Matroska files (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|%s"
 msgstr "Matroska 檔案 (*.mkv;*.mka;*.mks)|*.mkv;*.mka;*.mks|%s"
 
-#: src/info/mkvinfo.cpp:1133
+#: src/info/mkvinfo.cpp:1134
 msgid "Max BlockAddition ID: %1%"
 msgstr "最大附加區塊 ID: %1%"
 
-#: src/info/mkvinfo.cpp:1097
+#: src/info/mkvinfo.cpp:1098
 msgid "MaxCache: %1%"
 msgstr "最大快取: %1%"
 
@@ -4091,11 +4118,11 @@ msgstr "記憶體分配發生錯誤: %1% (%2%)。\n"
 msgid "Memory for a RealAudio/RealVideo frame could not be allocated.\n"
 msgstr "無法為一個 RealAudio/RealVideo 畫格分配記憶體。\n"
 
-#: src/info/mkvinfo.cpp:1357
+#: src/info/mkvinfo.cpp:1358
 msgid "Mime type: %1%"
 msgstr "Mime 類型: %1%"
 
-#: src/info/mkvinfo.cpp:1093
+#: src/info/mkvinfo.cpp:1094
 msgid "MinCache: %1%"
 msgstr "最小快取: %1%"
 
@@ -4124,7 +4151,7 @@ msgstr "缺少檔名"
 msgid "Missing file name after for the option '--edit-headers'."
 msgstr "選項「--edit-headers」後缺少檔名。"
 
-#: src/input/r_ogm.cpp:912
+#: src/input/r_ogm.cpp:941
 msgid "Missing header/comment packets for stream. This file is broken but should be muxed correctly. If not please contact the author Moritz Bunkus <moritz@bunkus.org>.\n"
 msgstr "缺少串流的表頭/註釋封包。檔案已損壞但應該能正常合成。如果確定檔案沒有損壞，請聯繫作者 Moritz Bunkus <moritz@bunkus.org>。\n"
 
@@ -4144,15 +4171,15 @@ msgstr "參數「%1%」缺少輸出檔名。\n"
 msgid "Modification of properties in the section '%1%' was requested, but no corresponding level 1 element was found in the file. %2%\n"
 msgstr "在段落「%1%」中屬性必須修改，但檔案裡未發現符合的等級 1 元件。%2%\n"
 
-#: src/info/mkvinfo.cpp:1504
+#: src/info/mkvinfo.cpp:1505
 msgid "More"
 msgstr "更多"
 
-#: src/merge/mkvmerge.cpp:1738
+#: src/merge/mkvmerge.cpp:1739
 msgid "More than one MIME type was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
 msgstr "單個附件被指定了多於一個 MIME 類型。「%1%」將被廢棄，並用「%2%」代替。\n"
 
-#: src/merge/mkvmerge.cpp:1729
+#: src/merge/mkvmerge.cpp:1730
 msgid "More than one description was given for a single attachment.\n"
 msgstr "單個附件被指定了多於一個描述。\n"
 
@@ -4160,7 +4187,7 @@ msgstr "單個附件被指定了多於一個描述。\n"
 msgid "More than one file name has been given ('%1%' and '%2%').\n"
 msgstr "指定多個檔名 (「%1%」和「%2%」)。\n"
 
-#: src/merge/mkvmerge.cpp:1748
+#: src/merge/mkvmerge.cpp:1749
 msgid "More than one name was given for a single attachment. '%1%' will be discarded and '%2%' used instead.\n"
 msgstr "單個附件被指定了多於一個名稱。「%1%」將被廢棄，並用「%2%」代替。\n"
 
@@ -4184,7 +4211,7 @@ msgstr "將所選任務下移"
 msgid "Move the selected job(s) up"
 msgstr "將所選任務上移"
 
-#: src/info/mkvinfo.cpp:607
+#: src/info/mkvinfo.cpp:608
 msgid "Muxing application: %1%"
 msgstr "合成程式: %1%"
 
@@ -4192,11 +4219,11 @@ msgstr "合成程式: %1%"
 msgid "Muxing in progress."
 msgstr "合成進行中。"
 
-#: src/merge/mkvmerge.cpp:2194
+#: src/merge/mkvmerge.cpp:2195
 msgid "Muxing took %1% seconds.\n"
 msgstr "合成花費 %1% 秒。\n"
 
-#: src/merge/mkvmerge.cpp:2196
+#: src/merge/mkvmerge.cpp:2197
 msgid "Muxing took 1 second.\n"
 msgstr "合成花費 1 秒。\n"
 
@@ -4218,7 +4245,7 @@ msgstr "此軌的名稱，如“導演評論”。"
 msgid "Name:"
 msgstr "名稱:"
 
-#: src/info/mkvinfo.cpp:1041
+#: src/info/mkvinfo.cpp:1042
 msgid "Name: %1%"
 msgstr "名稱: %1%"
 
@@ -4235,11 +4262,11 @@ msgstr "新數值:"
 msgid "Next filename"
 msgstr "下一個檔名"
 
-#: src/info/mkvinfo.cpp:651
+#: src/info/mkvinfo.cpp:652
 msgid "Next filename: %1%"
 msgstr "下一個檔名: %1%"
 
-#: src/info/mkvinfo.cpp:1938
+#: src/info/mkvinfo.cpp:1939
 msgid "Next level 0 element is not a segment but %1%"
 msgstr "下一個 0 層級元件不是剪輯而是 %1%"
 
@@ -4247,7 +4274,7 @@ msgstr "下一個 0 層級元件不是剪輯而是 %1%"
 msgid "Next segment UID:"
 msgstr "下一個剪輯 UID:"
 
-#: src/info/mkvinfo.cpp:647
+#: src/info/mkvinfo.cpp:648
 msgid "Next segment UID:%1%"
 msgstr "下一個剪輯 UID:%1%"
 
@@ -4256,7 +4283,7 @@ msgstr "下一個剪輯 UID:%1%"
 msgid "Next segment's unique ID"
 msgstr "下一個剪輯的唯一 ID"
 
-#: src/merge/mkvmerge.cpp:1018
+#: src/merge/mkvmerge.cpp:1019
 msgid "No %1% specified in '--%2% %3%'.\n"
 msgstr "未指定 %1%，在「--%2% %3%」。\n"
 
@@ -4264,7 +4291,7 @@ msgstr "未指定 %1%，在「--%2% %3%」。\n"
 msgid "No AC3 header found in first frame; track will be skipped.\n"
 msgstr "第一個畫格未發現 AC3 表頭; 此軌將被跳過。\n"
 
-#: src/info/mkvinfo.cpp:1912
+#: src/info/mkvinfo.cpp:1913
 msgid "No EBML head found."
 msgstr "未找到 EBML 表頭。"
 
@@ -4277,7 +4304,7 @@ msgstr "AVC/h.264 軌道的畫格率尚未選擇"
 msgid "No MIME type has been selected for the attachment '%s'."
 msgstr "附件「%s」的 MIME 類型尚未選擇。"
 
-#: src/merge/mkvmerge.cpp:327
+#: src/merge/mkvmerge.cpp:328
 msgid "No MIME type has been set for the attachment '%1%', and it could not be guessed.\n"
 msgstr "附件「%1%」的 MIME 類型尚未設定，且無法猜測。\n"
 
@@ -4325,7 +4352,7 @@ msgstr "在「@」後面沒有找到檔名。"
 msgid "No help available."
 msgstr "無可用的說明。"
 
-#: src/merge/mkvmerge.cpp:2137
+#: src/merge/mkvmerge.cpp:2138
 msgid "No input files were given. No output will be created.\n"
 msgstr "未給定任何輸入檔。將不建立輸出檔。\n"
 
@@ -4337,17 +4364,17 @@ msgstr "未發現中繼資料區塊。檔案已損壞。\n"
 msgid "No output file name specified, will use attachment name.\n"
 msgstr "未指定輸出檔名，將使用附件名。\n"
 
-#: src/extract/timecodes_v2.cpp:198
 #: src/extract/tracks.cpp:354
-#: src/info/mkvinfo.cpp:1926
+#: src/extract/timecodes_v2.cpp:198
+#: src/info/mkvinfo.cpp:1927
 msgid "No segment/level 0 element found."
 msgstr "未發現剪輯/0 層級元件。"
 
-#: src/merge/mkvmerge.cpp:2185
+#: src/merge/mkvmerge.cpp:2186
 msgid "No streams to output were found. Aborting.\n"
 msgstr "未發現待輸出媒體流。終止。\n"
 
-#: src/merge/mkvmerge.cpp:1015
+#: src/merge/mkvmerge.cpp:1016
 msgid "No track ID specified in '--%1% %2%'.\n"
 msgstr "未指定軌道 ID，在「--%1% %2%」。\n"
 
@@ -4396,9 +4423,9 @@ msgstr "不是有效的 Matroska 檔 (未發現有效的 剪輯/0 層級元件)"
 msgid "Note"
 msgstr "備註"
 
-#: src/extract/timecodes_v2.cpp:166
+#: src/extract/attachments.cpp:131
 #: src/extract/tracks.cpp:318
-#: src/extract/attachments.cpp:107
+#: src/extract/timecodes_v2.cpp:166
 #: src/propedit/options.cpp:30
 msgid "Nothing to do.\n"
 msgstr "什麼都不做。\n"
@@ -4426,11 +4453,15 @@ msgstr "確定"
 msgid "One of the chapters does not have a name."
 msgstr "有一個章節沒有名稱。"
 
-#: src/merge/mkvmerge.cpp:1433
+#: src/mmg/update_checker.cpp:57
+msgid "Online check for updates"
+msgstr ""
+
+#: src/merge/mkvmerge.cpp:1434
 msgid "Only one chapter file allowed in '%1% %2%'.\n"
 msgstr "僅允許有一個章節檔，在「%1% %2%」。\n"
 
-#: src/info/mkvinfo.cpp:406
+#: src/info/mkvinfo.cpp:407
 msgid "Only one input file is allowed.\n"
 msgstr "僅允許有一個輸入檔。\n"
 
@@ -4442,11 +4473,11 @@ msgstr "<%2%> 下只允許使用一個 <%1%> 實例。"
 msgid "Only one of <String> and <Binary> may be used beneath <Simple> but not both at the same time."
 msgstr "<Simple> 下只能使用 <String> 與 <Binary> 中的一項，而不能同時使用。"
 
-#: src/merge/mkvmerge.cpp:1595
+#: src/merge/mkvmerge.cpp:1596
 msgid "Only one output file allowed.\n"
 msgstr "僅允許有一個輸出檔。\n"
 
-#: src/merge/mkvmerge.cpp:1445
+#: src/merge/mkvmerge.cpp:1446
 msgid "Only one segment info file allowed in '%1% %2%'.\n"
 msgstr "僅允許有一個剪輯檔，在「%1% %2%」。\n"
 
@@ -4462,7 +4493,7 @@ msgstr "僅附加至第一個檔案"
 msgid "Only v7 and newer VobSub files are supported. If you have an older version then use the VSConv utility from http://sourceforge.net/projects/guliverkli/ to convert these files to v7 files.\n"
 msgstr "只支援 v7 和更高版本的 VobSub 檔。如果您使用的是舊版檔，請使用 VSConv 實用程式（可在 http://sourceforge.net/projects/guliverkli/ 獲取）將這些檔轉換為 v7 檔。\n"
 
-#: src/mmg/mmg_dialog.cpp:255
+#: src/mmg/mmg_dialog.cpp:272
 msgid "Op&tions\tCtrl-P"
 msgstr "選項(&T)\tCtrl-P"
 
@@ -4483,7 +4514,7 @@ msgstr "開啟現有的 Matroska 檔案"
 msgid "Open folder"
 msgstr "開啟資料夾"
 
-#: src/mmg/mmg_dialog.cpp:761
+#: src/mmg/mmg_dialog.cpp:780
 msgid "Option file created."
 msgstr "選項檔已建立。"
 
@@ -4496,7 +4527,7 @@ msgstr "選項"
 msgid "Options meant ONLY for developpers. Do not use them. If something is considered to be an officially supported option then it's NOT in this list!"
 msgstr "*僅* 為開發者設計的選項。不要用它們。凡是被官方支援的東西都 *不在* 這個清單中！"
 
-#: src/info/mkvinfo.cpp:833
+#: src/info/mkvinfo.cpp:834
 msgid "Order: %1%"
 msgstr "編碼指令: %1%"
 
@@ -4512,7 +4543,7 @@ msgstr "其他選項"
 msgid "Output"
 msgstr "輸出"
 
-#: src/mmg/mmg_dialog.cpp:290
+#: src/mmg/mmg_dialog.cpp:310
 msgid "Output filename"
 msgstr "輸出檔名"
 
@@ -4524,7 +4555,7 @@ msgstr "用這個字元集輸出訊息"
 msgid "Output of the selected jobs:"
 msgstr "所選任務的輸出資訊:"
 
-#: src/info/mkvinfo.cpp:685
+#: src/info/mkvinfo.cpp:686
 msgid "Output sampling frequency: %1%"
 msgstr "輸出取樣頻率: %1%"
 
@@ -4532,12 +4563,12 @@ msgstr "輸出取樣頻率: %1%"
 msgid "Output:"
 msgstr "輸出:"
 
-#: src/mmg/mmg_dialog.cpp:530
+#: src/mmg/mmg_dialog.cpp:550
 msgid "Overwrite existing file(s)?"
 msgstr "覆寫已存在的檔案?"
 
-#: src/mmg/mmg_dialog.cpp:511
-#: src/mmg/mmg_dialog.cpp:1350
+#: src/mmg/mmg_dialog.cpp:531
+#: src/mmg/mmg_dialog.cpp:1369
 msgid "Overwrite existing file?"
 msgstr "覆寫已存在的檔案?"
 
@@ -4565,31 +4596,31 @@ msgstr "完整解析檔案並顯示所有元件"
 msgid "Parse the whole file instead of relying on the index."
 msgstr "解析整個檔案而不是依靠索引。"
 
-#: src/info/mkvinfo.cpp:1703
+#: src/info/mkvinfo.cpp:1704
 msgid "Parsing file"
 msgstr "正在解析檔案"
 
-#: src/info/mkvinfo.cpp:757
+#: src/info/mkvinfo.cpp:758
 msgid "Pixel crop bottom: %1%"
 msgstr "底部像素剪裁: %1%"
 
-#: src/info/mkvinfo.cpp:742
+#: src/info/mkvinfo.cpp:743
 msgid "Pixel crop left: %1%"
 msgstr "左邊像素剪裁: %1%"
 
-#: src/info/mkvinfo.cpp:752
+#: src/info/mkvinfo.cpp:753
 msgid "Pixel crop right: %1%"
 msgstr "右邊像素剪裁: %1%"
 
-#: src/info/mkvinfo.cpp:747
+#: src/info/mkvinfo.cpp:748
 msgid "Pixel crop top: %1%"
 msgstr "頂部像素剪裁: %1%"
 
-#: src/info/mkvinfo.cpp:727
+#: src/info/mkvinfo.cpp:728
 msgid "Pixel height: %1%"
 msgstr "像素高度: %1%"
 
-#: src/info/mkvinfo.cpp:722
+#: src/info/mkvinfo.cpp:723
 msgid "Pixel width: %1%"
 msgstr "像素寬度: %1%"
 
@@ -4597,7 +4628,7 @@ msgstr "像素寬度: %1%"
 msgid "Please do not select 'mmg' itself as the 'mkvmerge' executable."
 msgstr "請不要選擇「mmg」自己作為「mkvmerge」可執行檔。"
 
-#: src/mmg/mmg_dialog.cpp:1356
+#: src/mmg/mmg_dialog.cpp:1375
 msgid "Please enter a description for the new job:"
 msgstr "請輸入新任務的描述:"
 
@@ -4610,7 +4641,7 @@ msgstr ""
 "請輸入將應用於下面所有章節（含目前選定項目）\n"
 "的語言和國家值。"
 
-#: src/merge/mkvmerge.cpp:251
+#: src/merge/mkvmerge.cpp:252
 msgid ""
 "Please read the man page/the HTML documentation to mkvmerge. It\n"
 "explains several details in great length which are not obvious from\n"
@@ -4624,7 +4655,7 @@ msgstr ""
 msgid "Previous filename"
 msgstr "上一個檔名"
 
-#: src/info/mkvinfo.cpp:643
+#: src/info/mkvinfo.cpp:644
 msgid "Previous filename: %1%"
 msgstr "上一個檔名: %1%"
 
@@ -4632,7 +4663,7 @@ msgstr "上一個檔名: %1%"
 msgid "Previous segment UID:"
 msgstr "上一個剪輯 UID:"
 
-#: src/info/mkvinfo.cpp:639
+#: src/info/mkvinfo.cpp:640
 msgid "Previous segment UID:%1%"
 msgstr "上一個剪輯 UID:%1%"
 
@@ -4659,14 +4690,14 @@ msgstr "正在處理任務 %d/%d"
 msgid "Progress"
 msgstr "進度"
 
-#: src/extract/timecodes_v2.cpp:269
 #: src/extract/tracks.cpp:400
+#: src/extract/timecodes_v2.cpp:269
 #: src/merge/output_control.cpp:463
 msgid "Progress: %1%%%%2%"
 msgstr "進度: %1%%%%2%"
 
-#: src/extract/mkvextract.cpp:93
 #: src/extract/timecodes_v2.cpp:359
+#: src/extract/mkvextract.cpp:93
 msgid "Progress: 100%\n"
 msgstr "進度: 100%\n"
 
@@ -4678,7 +4709,7 @@ msgstr "進度: 100%%%1%"
 msgid "Progress: [%1%%2%] %3%%%"
 msgstr "進度: [%1%%2%] %3%%%"
 
-#: src/mmg/mmg_dialog.cpp:1680
+#: src/mmg/mmg_dialog.cpp:1810
 msgid "Querying mkvmerge's capabilities"
 msgstr "正向 mkvmerge 查詢處理能力"
 
@@ -4801,7 +4832,7 @@ msgstr "Quicktime/MP4 讀取器: 軌道 ID %1% 有多於一個 FourCC。只使�
 msgid "Quicktime/MP4 reader: Unknown/unsupported FourCC '%|1$.4s|' for track %2%.\n"
 msgstr "Quicktime/MP4 讀取器: 未知/不支援的 FourCC「%|1$.4s|」，軌道 %2%。\n"
 
-#: src/mmg/mmg_dialog.cpp:257
+#: src/mmg/mmg_dialog.cpp:274
 msgid "Quit the application"
 msgstr "離開本程式"
 
@@ -4813,7 +4844,7 @@ msgstr "離開表頭編輯器"
 msgid "Quits mkvinfo"
 msgstr "離開 mkvinfo"
 
-#: src/info/mkvinfo.cpp:916
+#: src/info/mkvinfo.cpp:917
 msgid "RSA"
 msgstr "RSA"
 
@@ -4904,15 +4935,15 @@ msgstr "位置 %1% 重新同步成功。\n"
 msgid "Right eye"
 msgstr "右眼視角"
 
-#: src/mmg/mmg_dialog.cpp:258
+#: src/mmg/mmg_dialog.cpp:275
 msgid "Run mkvmerge and start the muxing process"
 msgstr "執行 mkvmerge 並開始合成處理程序"
 
-#: src/mmg/mmg_dialog.cpp:256
+#: src/mmg/mmg_dialog.cpp:273
 msgid "Run the header field editor"
 msgstr "執行表頭欄位編輯器"
 
-#: src/mmg/mmg_dialog.cpp:259
+#: src/mmg/mmg_dialog.cpp:276
 msgid "S&how the command line"
 msgstr "顯示命令列(&H)"
 
@@ -4920,7 +4951,7 @@ msgstr "顯示命令列(&H)"
 msgid "S&tart selected"
 msgstr "開始所選(&T)"
 
-#: src/info/mkvinfo.cpp:925
+#: src/info/mkvinfo.cpp:926
 msgid "SHA1-160"
 msgstr "SHA1-160"
 
@@ -4932,7 +4963,7 @@ msgstr "SRT 文字字幕"
 msgid "SSA/ASS text subtitles"
 msgstr "SSA/ASS 文字字幕"
 
-#: src/mmg/mmg_dialog.cpp:261
+#: src/mmg/mmg_dialog.cpp:278
 msgid "Sa&ve command line"
 msgstr "儲存命令列(&V)"
 
@@ -4945,11 +4976,11 @@ msgstr "與第一個輸入檔同目錄"
 msgid "Sampling frequency in Hz."
 msgstr "取樣頻率，單位 Hz。"
 
-#: src/info/mkvinfo.cpp:680
+#: src/info/mkvinfo.cpp:681
 msgid "Sampling frequency: %1%"
 msgstr "取樣頻率: %1%"
 
-#: src/mmg/mmg_dialog.cpp:270
+#: src/mmg/mmg_dialog.cpp:287
 msgid "Save &as"
 msgstr "另存新檔(&A)"
 
@@ -4961,27 +4992,27 @@ msgstr "另存資訊"
 msgid "Save log"
 msgstr "儲存日誌"
 
-#: src/mmg/mmg_dialog.cpp:253
+#: src/mmg/mmg_dialog.cpp:270
 msgid "Save muxing settings to a file"
 msgstr "將合成設定值儲存至檔案"
 
-#: src/mmg/mmg_dialog.cpp:261
+#: src/mmg/mmg_dialog.cpp:278
 msgid "Save the command line to a file"
 msgstr "將命令列儲存至檔案"
 
-#: src/mmg/mmg_dialog.cpp:262
+#: src/mmg/mmg_dialog.cpp:279
 msgid "Save the command line to an option file that can be read by mkvmerge"
 msgstr "將命令列儲存為 mkvmerge 可讀的選項檔"
 
-#: src/mmg/mmg_dialog.cpp:268
+#: src/mmg/mmg_dialog.cpp:285
 msgid "Save the current chapters to a XML file"
 msgstr "將目前章節存為 XML 檔"
 
-#: src/mmg/mmg_dialog.cpp:270
+#: src/mmg/mmg_dialog.cpp:287
 msgid "Save the current chapters to a file with another name"
 msgstr "將目前章節以另一名稱儲存"
 
-#: src/mmg/mmg_dialog.cpp:269
+#: src/mmg/mmg_dialog.cpp:286
 msgid "Save the current chapters to an existing Matroska file"
 msgstr "將目前章節存至現有的 Matroska 檔"
 
@@ -4989,7 +5020,7 @@ msgstr "將目前章節存至現有的 Matroska 檔"
 msgid "Save the header values"
 msgstr "儲存表頭欄位值"
 
-#: src/mmg/mmg_dialog.cpp:269
+#: src/mmg/mmg_dialog.cpp:286
 msgid "Save to &Matroska file"
 msgstr "儲存至 &Matroska 檔(&M)"
 
@@ -4997,38 +5028,38 @@ msgstr "儲存至 &Matroska 檔(&M)"
 msgid "Saves the information from the current file to a text file"
 msgstr "從目前檔儲存資訊至純文字檔"
 
-#: src/info/mkvinfo.cpp:847
+#: src/info/mkvinfo.cpp:848
 msgid "Scope: %1% (%2%)"
 msgstr "範圍: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:1194
+#: src/info/mkvinfo.cpp:1195
 msgid "Seek ID:%1% (%2%)"
 msgstr "定位 ID:%1% (%2%)"
 
-#: src/info/mkvinfo.cpp:1182
+#: src/info/mkvinfo.cpp:1183
 msgid "Seek entry"
 msgstr "定位項"
 
-#: src/info/mkvinfo.cpp:1170
+#: src/info/mkvinfo.cpp:1171
 msgid "Seek head"
 msgstr "定位表頭"
 
-#: src/info/mkvinfo.cpp:1166
+#: src/info/mkvinfo.cpp:1167
 msgid "Seek head (subentries will be skipped)"
 msgstr "定位表頭 (子項目將被跳過)"
 
-#: src/info/mkvinfo.cpp:1208
+#: src/info/mkvinfo.cpp:1209
 msgid "Seek position: %1%"
 msgstr "定位位置: %1%"
 
-#: src/extract/timecodes_v2.cpp:202
 #: src/extract/tracks.cpp:359
+#: src/extract/timecodes_v2.cpp:202
 #: src/info/qt_ui.cpp:177
 #: src/info/wxwidgets_ui.cpp:219
 msgid "Segment"
 msgstr "剪輯"
 
-#: src/info/mkvinfo.cpp:628
+#: src/info/mkvinfo.cpp:629
 msgid "Segment UID:%1%"
 msgstr "剪輯 UID:%1%"
 
@@ -5041,7 +5072,7 @@ msgstr "剪輯 UID:"
 msgid "Segment filename"
 msgstr "剪輯檔名"
 
-#: src/info/mkvinfo.cpp:656
+#: src/info/mkvinfo.cpp:657
 msgid "Segment filename: %1%"
 msgstr "剪輯檔名: %1%"
 
@@ -5055,20 +5086,20 @@ msgid "Segment info files (*.xml)|*.xml|%s"
 msgstr "剪輯資訊檔 (*.xml)|*.xml|%s"
 
 #: src/mmg/header_editor/frame.cpp:322
-#: src/extract/timecodes_v2.cpp:222
 #: src/extract/tracks.cpp:377
-#: src/propedit/options.cpp:152
+#: src/extract/timecodes_v2.cpp:222
 #: src/propedit/propedit_cli_parser.cpp:87
 #: src/propedit/propedit_cli_parser.cpp:160
-#: src/info/mkvinfo.cpp:582
+#: src/propedit/options.cpp:152
+#: src/info/mkvinfo.cpp:583
 #: src/info/qt_ui.cpp:178
 #: src/info/wxwidgets_ui.cpp:222
 msgid "Segment information"
 msgstr "剪輯資訊"
 
-#: src/extract/timecodes_v2.cpp:256
 #: src/extract/tracks.cpp:389
-#: src/info/mkvinfo.cpp:957
+#: src/extract/timecodes_v2.cpp:256
+#: src/info/mkvinfo.cpp:958
 #: src/info/qt_ui.cpp:179
 #: src/info/wxwidgets_ui.cpp:222
 msgid "Segment tracks"
@@ -5079,11 +5110,11 @@ msgstr "剪輯軌道"
 msgid "Segment unique ID"
 msgstr "剪輯唯一 ID"
 
-#: src/info/mkvinfo.cpp:1934
+#: src/info/mkvinfo.cpp:1935
 msgid "Segment, size %1%"
 msgstr "剪輯, 大小 %1%"
 
-#: src/info/mkvinfo.cpp:1932
+#: src/info/mkvinfo.cpp:1933
 msgid "Segment, size unknown"
 msgstr "剪輯, 未知大小"
 
@@ -5095,7 +5126,7 @@ msgstr "選擇 Matroska 檔案"
 msgid "Select output file"
 msgstr "選擇輸出檔"
 
-#: src/mmg/mmg_dialog.cpp:254
+#: src/mmg/mmg_dialog.cpp:271
 msgid "Select the file you want to write to"
 msgstr "選擇您要寫入的檔案"
 
@@ -5119,7 +5150,7 @@ msgstr "選擇 mkvmerge 將為哪些區塊建立索引。在幾乎所有情況�
 msgid "Selects the character set a subtitle file or chapter information was written with. Only needed for non-UTF encoded subtitle files or for files with chapter information (e.g. OGM, MP4) for which mkvmerge does not detect the encoding correctly."
 msgstr "選擇字幕檔儲存時使用的字元集。只有 非-UTF 編碼的字幕檔或者含有章節資訊的檔案 (即 OGM、MP4) 需要選擇 (mkvmerge 無法正確偵測編碼)。"
 
-#: src/mmg/mmg_dialog.cpp:254
+#: src/mmg/mmg_dialog.cpp:271
 msgid "Set &output file"
 msgstr "設定輸出檔(&O)"
 
@@ -5226,7 +5257,7 @@ msgstr ""
 msgid "Sets the stereo mode of the video track to this value. If left empty then the track's original stereo mode will be kept or, if it didn't have one, none will be set at all."
 msgstr "選擇此視訊軌的立體視法。如果留空則保留原模式，或者如果原本就沒有，任何模式都不會設定。"
 
-#: src/info/mkvinfo.cpp:879
+#: src/info/mkvinfo.cpp:880
 msgid "Settings: %1%"
 msgstr "設定: %1%"
 
@@ -5258,19 +5289,19 @@ msgstr "顯示“關於”對話窗"
 msgid "Show element si&zes\tCtrl-Z"
 msgstr "顯示元件大小(&Z)\tCtrl-Z"
 
-#: src/mmg/options/mmg.cpp:104
+#: src/mmg/options/mmg.cpp:111
 msgid "Show mmg's debug window"
 msgstr "顯示 mmg 的除錯視窗"
 
-#: src/mmg/mmg_dialog.cpp:277
+#: src/mmg/mmg_dialog.cpp:294
 msgid "Show program information"
 msgstr "顯示程式資訊"
 
-#: src/mmg/mmg_dialog.cpp:259
+#: src/mmg/mmg_dialog.cpp:276
 msgid "Show the command line mmg creates for mkvmerge"
 msgstr "顯示 mmg 為 mkvmerge 建立的命令列"
 
-#: src/mmg/mmg_dialog.cpp:276
+#: src/mmg/mmg_dialog.cpp:293
 msgid "Show the guide to mkvmerge GUI"
 msgstr "顯示 mkvmerge GUI 指南"
 
@@ -5286,23 +5317,23 @@ msgstr "顯示這項說明。"
 msgid "Show version information."
 msgstr "顯示版本資訊。"
 
-#: src/mmg/options/mmg.cpp:105
+#: src/mmg/options/mmg.cpp:112
 msgid "Shows mmg's debug window in which debug messages will appear. This is only useful if you're helping the author debug a problem in mmg."
 msgstr "顯示 mmg 的除錯視窗，在該視窗中會出現除錯訊息。這只當您幫助作者除錯 mmg 的問題時有用。"
 
-#: src/info/mkvinfo.cpp:913
+#: src/info/mkvinfo.cpp:914
 msgid "Signature algorithm: %1% (%2%)"
 msgstr "簽章演算法: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:922
+#: src/info/mkvinfo.cpp:923
 msgid "Signature hash algorithm: %1% (%2%)"
 msgstr "簽章雜湊演算法: %1% (%2%)"
 
-#: src/info/mkvinfo.cpp:931
+#: src/info/mkvinfo.cpp:932
 msgid "Signature key ID: %1%"
 msgstr "簽章鑰匙 ID: %1%"
 
-#: src/info/mkvinfo.cpp:935
+#: src/info/mkvinfo.cpp:936
 msgid "Signature: %1%"
 msgstr "簽章: %1%"
 
@@ -5310,7 +5341,7 @@ msgstr "簽章: %1%"
 msgid "Signed integer"
 msgstr "帶正負號的整數"
 
-#: src/info/mkvinfo.cpp:1392
+#: src/info/mkvinfo.cpp:1393
 msgid "Silent Track Number: %1%"
 msgstr "靜軌號: %1%"
 
@@ -5346,7 +5377,7 @@ msgstr "跳過 %1% 位元組 (未發現有效的 DTS 表頭)。這可能會導�
 msgid "Skipping %1% bytes at the beginning (no valid MP3 header found).\n"
 msgstr "跳過開頭 %1% 位元組 (未發現有效的 MP3 表頭)。\n"
 
-#: src/info/mkvinfo.cpp:1530
+#: src/info/mkvinfo.cpp:1531
 msgid "Slices"
 msgstr "切面"
 
@@ -5394,16 +5425,16 @@ msgstr "已選擇按大小分割，但未給出大小。"
 msgid "Splitting by timecode/duration was selected, but nothing was entered."
 msgstr "已選擇按時間碼/播放持續時間分割，但未輸入任何數值。"
 
-#: src/mmg/mmg_dialog.cpp:528
+#: src/mmg/mmg_dialog.cpp:548
 #, c-format
 msgid "Splitting is active, and at least one of the potential output files '%s%s*%s' already exists. Do you want to overwrite them?"
 msgstr "正在執行分割操作，但至少有一個潛在的輸出檔「%s%s*%s」已存在。是否覆寫？"
 
-#: src/mmg/mmg_dialog.cpp:292
+#: src/mmg/mmg_dialog.cpp:312
 msgid "Sta&rt muxing"
 msgstr "開始合成(&R)"
 
-#: src/mmg/mmg_dialog.cpp:258
+#: src/mmg/mmg_dialog.cpp:275
 msgid "Sta&rt muxing (run mkvmerge)\tCtrl-R"
 msgstr "開始合成(啟動 mkvmerge)(&R)\tCtrl-R"
 
@@ -5415,7 +5446,7 @@ msgstr "啟動狀態為“掛起”的任務"
 msgid "Start the selected job(s) regardless of their status"
 msgstr "啟動選擇的任務（不論其狀態如何）"
 
-#: src/mmg/mmg_dialog.cpp:251
+#: src/mmg/mmg_dialog.cpp:268
 msgid "Start with empty settings"
 msgstr "清空所有設定並重新啟動"
 
@@ -5441,15 +5472,16 @@ msgstr "狀態"
 msgid "Status and progress"
 msgstr "狀態和進度"
 
+#: src/mmg/update_checker.cpp:59
 #: src/mmg/header_editor/value_page.cpp:174
 msgid "Status:"
 msgstr "狀態:"
 
-#: src/merge/mkvmerge.cpp:699
+#: src/merge/mkvmerge.cpp:700
 msgid "Stereo mode parameter: not given in the form <TID>:<n|keyword> where n is a number between 0 and 3 or one of the keywords 'none', 'right', 'left', 'both' (argument was '%1%').\n"
 msgstr "立體視法參數: 未以 <TID>:<n|keyword> 形式給出，其中可以使用 0 至 3 中的一個數字或者「none」, 「right」, 「left」, 「both」中的一個關鍵字 (使用的參數為「%1%」)。\n"
 
-#: src/info/mkvinfo.cpp:782
+#: src/info/mkvinfo.cpp:783
 msgid "Stereo mode: %1%%2%"
 msgstr "立體視法: %1%%2%"
 
@@ -5487,7 +5519,7 @@ msgstr "字幕軌 %1% 缺少持續時間元件。請檢查輸出的 SSA/ASS 檔�
 msgid "Subtitle track %u"
 msgstr "字幕軌 %u"
 
-#: src/merge/mkvmerge.cpp:357
+#: src/merge/mkvmerge.cpp:358
 msgid "Supported file types:\n"
 msgstr "支援的檔案類型:\n"
 
@@ -5517,7 +5549,7 @@ msgstr "標籤檔 (*.xml)|*.xml|%s"
 msgid "Tag files (*.xml;*.txt)|*.xml;*.txt|%s"
 msgstr "標籤檔 (*.xml;*.txt)|*.xml;*.txt|%s"
 
-#: src/info/mkvinfo.cpp:1825
+#: src/info/mkvinfo.cpp:1826
 msgid "Tags"
 msgstr "標籤"
 
@@ -5596,7 +5628,7 @@ msgstr "FPS 為 0.0 且讀取器未提供套件的時間碼。%1%\n"
 msgid "The FPS setting for track nr. %s in file '%s' is invalid."
 msgstr "軌 %s（自檔案「%s」）的 FPS 設定無效。"
 
-#: src/merge/mkvmerge.cpp:1107
+#: src/merge/mkvmerge.cpp:1108
 msgid "The FourCC must be exactly four characters long in '%1% %2%'.\n"
 msgstr "FourCC 值必須為四個字元的長度，在「%1% %2%」。\n"
 
@@ -5605,12 +5637,12 @@ msgstr "FourCC 值必須為四個字元的長度，在「%1% %2%」。\n"
 msgid "The FourCC setting for track nr. %s in file '%s' is not excatly four characters long."
 msgstr "軌道 %s（自檔案「%s」）的 FourCC 設定非四字元長。"
 
-#: src/mmg/mmg_dialog.cpp:1733
+#: src/mmg/mmg_dialog.cpp:1863
 #, c-format
 msgid "The GUI is configured to use the mkvmerge executable from a different version (%s) than the GUI itself (%s). This is not supported but will not be prevented either. You should change the mkvmerge executable in the preferences dialog."
 msgstr "此 GUI 設定成使用 mkvmerge 可執行檔版本 (%s) 不同於 GUI 自己的版本 (%s)。不支援這種情形，但也不會阻止。您應該在偏好設定對話窗裡變更 mkvmerge 可執行檔。"
 
-#: src/input/r_ogm.cpp:1380
+#: src/input/r_ogm.cpp:1508
 msgid "The Kate identifaction header could not be parsed (%1%).\n"
 msgstr "無法解析 Kate 識別表頭 (%1%)。\n"
 
@@ -5633,11 +5665,11 @@ msgstr ""
 "\n"
 "合適的解決方法是先儲存這些章節至 XML 檔，然後使用重新合成檔（包含這些章節）。"
 
-#: src/merge/mkvmerge.cpp:1238
+#: src/merge/mkvmerge.cpp:1239
 msgid "The NALU size length must be a number between 2 and 4 inclusively in '--nalu-size-length %1%'.\n"
 msgstr "NALU 長度大小必須為 2 與 4 之間（含 2 與 4）的數字，在「--nalu-size-length %1%」中。\n"
 
-#: src/input/r_ogm.cpp:1309
+#: src/input/r_ogm.cpp:1338
 msgid "The Theora identifaction header could not be parsed (%1%).\n"
 msgstr "Theora 識別表頭無法解析 (%1%)。\n"
 
@@ -5645,19 +5677,19 @@ msgstr "Theora 識別表頭無法解析 (%1%)。\n"
 msgid "The Vorbis codebooks are different; such tracks cannot be concatenated without reencoding"
 msgstr "Vorbis 碼表不同; 這種軌道不能連接，除非重新編碼"
 
-#: src/merge/mkvmerge.cpp:1501
+#: src/merge/mkvmerge.cpp:1502
 msgid "The argument '%1%' to '%2%' is invalid: '%3%' is not a valid track ID.\n"
 msgstr "「%2%」的「%1%」參數無效:「%3%」不是有效的軌道 ID。\n"
 
-#: src/merge/mkvmerge.cpp:1510
+#: src/merge/mkvmerge.cpp:1511
 msgid "The argument '%1%' to '%2%' is invalid: '%3%' must be either 'all' or 'first'.\n"
 msgstr "「%2%」的「%1%」參數無效:「%3%」必須為「all」或「first」中的一個。\n"
 
-#: src/merge/mkvmerge.cpp:1497
+#: src/merge/mkvmerge.cpp:1498
 msgid "The argument '%1%' to '%2%' is invalid: too many colons in element '%3%'.\n"
 msgstr "「%2%」的「%1%」參數無效: 元件「%3%」的冒號過多。\n"
 
-#: src/merge/mkvmerge.cpp:1460
+#: src/merge/mkvmerge.cpp:1461
 msgid "The argument to '--timecode-scale' must be a number.\n"
 msgstr "「--timecode-scale」的參數必須為數字。\n"
 
@@ -5666,11 +5698,11 @@ msgstr "「--timecode-scale」的參數必須為數字。\n"
 msgid "The aspect ratio setting for track nr. %s in file '%s' is invalid."
 msgstr "軌道編號 %s（檔案「%s」）的外觀比例設定無效。"
 
-#: src/extract/attachments.cpp:87
+#: src/extract/attachments.cpp:115
 msgid "The attachment #%1%, ID %2%, MIME type %3%, size %4%, is written to '%5%'.\n"
 msgstr "附件 #%1%, ID %2%, MIME 類型 %3%, 大小 %4%, 正被寫入「%5%」。\n"
 
-#: src/merge/mkvmerge.cpp:1391
+#: src/merge/mkvmerge.cpp:1392
 msgid "The attachment '%1%' could not be read.\n"
 msgstr "附件「%1%」無法讀取。\n"
 
@@ -5700,7 +5732,7 @@ msgstr "章節「%s」遺失它的語言。"
 msgid "The chapter '%s' is missing the start time."
 msgstr "章節「%s」遺失起始時間。"
 
-#: src/mmg/mmg_dialog.cpp:578
+#: src/mmg/mmg_dialog.cpp:598
 msgid ""
 "The chapter editor has been used and contains data. However, no chapter file has been selected on the global page. In mmg, the chapter editor is independant of the muxing process. The chapters present in the editor will NOT be muxed into the output file. Only the various 'save' functions from the chapter editor menu will cause the chapters to be written to the hard disk.\n"
 "\n"
@@ -5724,8 +5756,8 @@ msgstr "此編解碼器類型「%1%」無法用在 WebM 遵循檔。\n"
 
 #: src/output/p_avc.cpp:203
 #: src/output/p_kate.cpp:113
-#: src/output/p_passthrough.cpp:63
 #: src/output/p_video.cpp:139
+#: src/output/p_passthrough.cpp:63
 #: src/output/p_textsubs.cpp:102
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "編解碼器專有資料不符 (長度: %1% 與 %2%)。"
@@ -5817,19 +5849,19 @@ msgstr "從 MPEG4 layer 2 視訊資料位元流中提取的視訊寬度和高度
 msgid "The fifth mode tries to extract chapter information and tags and outputs them as a CUE sheet. This is the reverse of using a CUE sheet with mkvmerge's '--chapters' option."
 msgstr "第五種模式可試著提取章節資訊和標籤並將這些匯出成一個 CUE 表單。這和用 mkvmerge 的「--chapters」選項使用 CUE 表單相反。"
 
-#: src/merge/mkvmerge.cpp:1372
+#: src/merge/mkvmerge.cpp:1373
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
 msgstr "無法附加檔案「%1%」，因為它不存在或無法讀取。\n"
 
-#: src/extract/chapters.cpp:47
+#: src/extract/attachments.cpp:141
 #: src/extract/cuesheets.cpp:208
 #: src/extract/tags.cpp:47
-#: src/extract/attachments.cpp:117
+#: src/extract/chapters.cpp:47
 msgid "The file '%1%' could not be opened for reading (%2%)."
 msgstr "檔案「%1%」無法開啟以讀取 (%2%)。"
 
-#: src/extract/timecodes_v2.cpp:173
 #: src/extract/tracks.cpp:327
+#: src/extract/timecodes_v2.cpp:173
 msgid "The file '%1%' could not be opened for reading (%2%).\n"
 msgstr "檔案「%1%」無法開啟以讀取 (%2%)。\n"
 
@@ -5837,15 +5869,15 @@ msgstr "檔案「%1%」無法開啟以讀取 (%2%)。\n"
 msgid "The file '%1%' could not be opened for reading command line arguments.\n"
 msgstr "檔案「%1%」無法開啟以讀取命令列參數。\n"
 
-#: src/extract/xtr_tta.cpp:87
 #: src/extract/tracks.cpp:276
+#: src/extract/xtr_tta.cpp:87
 #: src/extract/xtr_avi.cpp:52
 #: src/extract/xtr_wav.cpp:113
 msgid "The file '%1%' could not be opened for writing (%2%).\n"
 msgstr "檔案「%1%」無法開啟以寫入 (%2%)。\n"
 
+#: src/extract/attachments.cpp:121
 #: src/extract/xtr_rmff.cpp:40
-#: src/extract/attachments.cpp:92
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "檔案「%1%」無法開啟以寫入 (%2%, %3%)。\n"
 
@@ -5853,7 +5885,7 @@ msgstr "檔案「%1%」無法開啟以寫入 (%2%, %3%)。\n"
 msgid "The file '%1%' has been opened for writing.\n"
 msgstr "檔案「%1%」已開啟以寫入。\n"
 
-#: src/merge/mkvmerge.cpp:2115
+#: src/merge/mkvmerge.cpp:2116
 msgid "The file '%1%' has unknown type. Please have a look at the supported file types ('mkvmerge --list-types') and contact the author Moritz Bunkus <moritz@bunkus.org> if your file type is supported but not recognized properly.\n"
 msgstr "檔案「%1%」類型未知。請查看支援的檔案類型 (「mkvmerge --list-types」)，若您的檔案類型受支援但被錯誤識別，請聯繫作者 Moritz Bunkus <moritz@bunkus.org>。\n"
 
@@ -5879,11 +5911,11 @@ msgstr "此檔案「%s」已經用檔案「%s」以結合方式處理。它不�
 msgid "The file could not be opened for writing."
 msgstr "檔案無法開啟以寫入。"
 
-#: src/mmg/mmg_dialog.cpp:369
+#: src/mmg/mmg_dialog.cpp:389
 msgid "The file does not exist."
 msgstr "檔案不存在。"
 
-#: src/mmg/mmg_dialog.cpp:388
+#: src/mmg/mmg_dialog.cpp:408
 msgid "The file does not seem to be a valid mkvmerge GUI settings file."
 msgstr "此檔案似乎不是有效的 mkvmerge GUI 設定檔。"
 
@@ -5957,7 +5989,7 @@ msgstr "您試著儲存至的檔案 *不是* Matroska 檔。"
 msgid "The file you tried to save to is a Matroska file. For this to work you have to use the 'Save to Matroska file' menu option."
 msgstr "您試著儲存至的檔案是個 Matroska 檔。要這樣做的話，您應該使用“儲存至 Matroska 檔”功能表項目。"
 
-#: src/merge/mkvmerge.cpp:2104
+#: src/merge/mkvmerge.cpp:2105
 msgid "The first file cannot be appended because there are no files to append to.\n"
 msgstr "第一個檔案不能作為添加檔，因為沒有檔案可供其添加。\n"
 
@@ -5990,7 +6022,7 @@ msgstr "格式不符。"
 msgid "The fourth mode extracts the chapters and converts them to XML. The output is written to the standard output. The output can be used as a source for mkvmerge."
 msgstr "第四種模式可提取章節並將章節轉換成 XML。此輸出會寫入到標準輸出。此輸出可以用來作為 mkvmerge 的來源。"
 
-#: src/merge/mkvmerge.cpp:1466
+#: src/merge/mkvmerge.cpp:1467
 msgid "The given timecode scale factor is outside the valid range (1...10000000 or -1 for 'sample precision even if a video track is present').\n"
 msgstr "給定的時間碼縮放比例超出有效範圍 (1...10000000 或 -1 代表「即使視訊軌已提供時的取樣精確度」)。\n"
 
@@ -6107,11 +6139,11 @@ msgstr ""
 "播放器播放過程中應該快取的最小畫格數。\n"
 "如果設為 0, 將不使用參考偽快取系統。"
 
-#: src/mmg/mmg_dialog.cpp:674
+#: src/mmg/mmg_dialog.cpp:694
 msgid "The mkvmerge GUI help file was not found in the path you've selected. Please try again, or abort by pressing the 'abort' button."
 msgstr "在您選擇的路徑找不到 mkvmerge GUI 説明檔。請重試一次，或者按「取消」按鈕中止。"
 
-#: src/mmg/mmg_dialog.cpp:667
+#: src/mmg/mmg_dialog.cpp:687
 msgid ""
 "The mkvmerge GUI help file was not found. This indicates that it has never before been opened, or that the installation path has since been changed.\n"
 "\n"
@@ -6125,11 +6157,11 @@ msgstr ""
 msgid "The name '%1%' is not a valid property name for the current edit specification in '%2%'.\n"
 msgstr "名稱「%1%」對於目前在「%2%」中的編輯規範不是有效的屬性名稱。\n"
 
-#: src/merge/mkvmerge.cpp:2075
+#: src/merge/mkvmerge.cpp:2076
 msgid "The name of the output file '%1%' and of one of the input files is the same. This would cause mkvmerge to overwrite one of your input files. This is most likely not what you want.\n"
 msgstr "輸出檔「%1%」的名稱與輸入檔之一相同。這將使 mkvmerge 覆寫輸入檔之一。這大概不是您想要的。\n"
 
-#: src/merge/mkvmerge.cpp:1323
+#: src/merge/mkvmerge.cpp:1324
 msgid "The next UID was already given in '%1% %2%'.\n"
 msgstr "下一 UID 已在「%1% %2%」給出。\n"
 
@@ -6173,7 +6205,7 @@ msgid ""
 "on the top of the image."
 msgstr "視訊畫面頂部要移除的像素數目。"
 
-#: src/merge/mkvmerge.cpp:1830
+#: src/merge/mkvmerge.cpp:1831
 msgid "The option '--meta-seek-size' is no longer supported. Please read mkvmerge's documentation, especially the section about the MATROSKA FILE LAYOUT.\n"
 msgstr "選項「--meta-seek-size」不再受支援。請閱讀 mkvmerge 的使用說明，尤其是關於 *Matroska 檔規劃* 的段落。\n"
 
@@ -6185,13 +6217,13 @@ msgstr "各種選項的順序不會影響結果。"
 msgid "The output file '%1%' could not be opened for writing (%2%).\n"
 msgstr "即將輸出的檔案「%1%」無法開啟寫入 (%2%)。\n"
 
-#: src/mmg/mmg_dialog.cpp:511
-#: src/mmg/mmg_dialog.cpp:1347
+#: src/mmg/mmg_dialog.cpp:531
+#: src/mmg/mmg_dialog.cpp:1366
 #, c-format
 msgid "The output file '%s' already exists. Do you want to overwrite it?"
 msgstr "即將輸出的檔案「%s」已存在。是否覆蓋？"
 
-#: src/mmg/mmg_dialog.cpp:565
+#: src/mmg/mmg_dialog.cpp:585
 msgid "The output file name is invalid, e.g. it might contain invalid characters like ':'."
 msgstr "此輸出檔名不正確，可能是包含無效的字元如「:」。"
 
@@ -6203,7 +6235,7 @@ msgstr "全景模式「%1%」無法識別。\n"
 msgid "The picture type '%1%' is not recognized.\n"
 msgstr "圖片類型「%1%」無法識別。\n"
 
-#: src/merge/mkvmerge.cpp:1310
+#: src/merge/mkvmerge.cpp:1311
 msgid "The previous UID was already given in '%1% %2%'.\n"
 msgstr "上一個 UID 已在「%1% %2%」給出。\n"
 
@@ -6274,7 +6306,7 @@ msgstr "第六種模式可尋找軌道所有區塊的時間碼並輸出一個含
 msgid "The size after which a new output file is started. The letters 'G', 'M' and 'K' can be used to indicate giga/mega/kilo bytes respectively. All units are based on 1024 (G = 1024^3, M = 1024^2, K = 1024)."
 msgstr "在此大小後開始新的輸出檔。字母「G」, 「M」和「K」分別可以用來代表十億/百萬/千位元。所有單位換算均基於 1024 (G = 1024^3, M = 1024^2, K = 1024)。"
 
-#: src/merge/mkvmerge.cpp:1385
+#: src/merge/mkvmerge.cpp:1386
 msgid "The size of attachment '%1%' is 0.\n"
 msgstr "附件「%1%」的大小為 0。\n"
 
@@ -6362,7 +6394,7 @@ msgstr ""
 msgid "The timecodes after which a new output file is started. The timecodes refer to the whole stream and not to each individual output file. The timecodes can be given either in the form HH:MM:SS.nnnnnnnnn or as the number of seconds followed by 's'. You may omit the number of hours 'HH'. You can specify up to nine digits for the number of nanoseconds 'nnnnnnnnn' or none at all. If given then you may use up to nine digits after the decimal point. If two or more timecodes are used then you have to separate them with commas. The formats can be mixed, too. Examples: 01:00:00,01:30:00 (after one hour and after one hour and thirty minutes) or 1800s,3000s,00:10:00 (after three, five and ten minutes)."
 msgstr "在這些時間碼後開始建立新的輸出檔。這些時間碼以整個媒體流而不是分割開的各輸出檔為準。時間碼可以以 HH:MM:SS.nnnnnnnnn 的形式或緊跟「s」的秒數給出。小時數「HH」可省略。您可以指定多達九位的毫微秒數「nnnnnnnnn」或者不指定小數點後的數。如果要給出，您可以在小數點後使用多達九位元數位。如果使用的時間碼超過一個，請使用逗號分隔。格式也可以混合使用。示例: 01:00:00,01:30:00 (在一小時後和一個半小時後分割) 或者 1800s,3000s,00:10:00 (在第 3 分鐘，第 5 分鐘和第 10 分鐘後分割)。"
 
-#: src/input/r_ogm.cpp:569
+#: src/input/r_ogm.cpp:598
 msgid "The timecodes for this stream have been reset in the middle of the file. This is not supported. The current packet will be discarded.\n"
 msgstr "此媒體流的時間碼在檔案中途重置。這是不支援的。目前資料包將被廢除。\n"
 
@@ -6400,9 +6432,19 @@ msgstr "區塊表頭使用的軌道編號。"
 msgid "The track parameters do not match."
 msgstr "軌道參數不符。"
 
+#: src/common/command_line.cpp:270
+#, fuzzy
+msgid "The update information could not be retrieved from %1%.\n"
+msgstr "無法解析 Kate 識別表頭 (%1%)。\n"
+
 #: src/merge/pr_generic.h:386
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "兩軌寬度不同: %1% 與 %2%"
+
+#: src/mmg/mmg_dialog.cpp:1758
+#, fuzzy
+msgid "There is a new version available online."
+msgstr "尚無「%1%」的翻譯。\n"
 
 #: src/merge/output_control.cpp:829
 #: src/merge/output_control.cpp:839
@@ -6412,6 +6454,10 @@ msgstr "沒有檔案的 ID 為「%1%」。參數「--append-to」無效。\n"
 #: src/common/command_line.cpp:236
 msgid "There is no translation available for '%1%'.\n"
 msgstr "尚無「%1%」的翻譯。\n"
+
+#: src/mmg/mmg_dialog.cpp:1759
+msgid "There was an error querying the update status."
+msgstr ""
 
 #: src/mmg/mux_dialog.cpp:362
 msgid "There were ERRORs."
@@ -6430,8 +6476,8 @@ msgstr "有警告資訊"
 msgid "There were warnings, or the process was terminated."
 msgstr "有警告資訊，或者處理處理程序被中止。"
 
-#: src/input/r_avi.cpp:627
 #: src/input/r_real.cpp:326
+#: src/input/r_avi.cpp:627
 msgid "This AAC track does not contain valid headers. Could not parse the AAC information.\n"
 msgstr "此 AAC 軌道不含有效的表頭。無法解析 AAC 資訊。\n"
 
@@ -6463,7 +6509,7 @@ msgstr "此 MPEG 音軌的開頭包含 %1% 位元組的 非-MP3 資料。這相�
 msgid "This MPEG audio track contains %1% bytes of non-MP3 data which were skipped. The audio/video synchronization may have been lost.\n"
 msgstr "此 MPEG 音軌包含 %1% 位元組的 非-MP3 資料，已跳過。音/視訊同步可能已喪失。\n"
 
-#: src/input/r_ogm.cpp:818
+#: src/input/r_ogm.cpp:847
 msgid "This Ogg/OGM file contains chapter or title information. Unfortunately the charset used to store this information in the file cannot be identified unambiguously. The program assumes that your system's current charset is appropriate. This can be overridden with the '--chapter-charset <charset>' switch.\n"
 msgstr "此 Ogg/OGM 檔包含章節或標題資訊。不幸的是此檔中存儲這些資訊使用的字元集無法準確識別。程式假定以您系統的目前字元集為準。您可以透過「--chapter-charset <charset>」開關替代該假定值。\n"
 
@@ -6559,7 +6605,7 @@ msgstr "此軌道包含 SBR AAC/HE-AAC/AAC+ 資料。本選項只對 AAC 輸入�
 msgid "This track is not compatible with the WebM mode and cannot be enabled."
 msgstr "此軌道不能和 WebM 模式相容且無法啟用。"
 
-#: src/info/mkvinfo.cpp:1538
+#: src/info/mkvinfo.cpp:1539
 msgid "Time slice"
 msgstr "時間切面"
 
@@ -6572,10 +6618,10 @@ msgstr "提取時間碼"
 msgid "Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"
 msgstr "時間碼檔案 (*.tmc;*.txt)|*.tmc;*.txt|%s"
 
-#: src/extract/timecodes_v2.cpp:231
 #: src/extract/tracks.cpp:382
-#: src/info/mkvinfo.cpp:596
-#: src/info/mkvinfo.cpp:1129
+#: src/extract/timecodes_v2.cpp:231
+#: src/info/mkvinfo.cpp:597
+#: src/info/mkvinfo.cpp:1130
 msgid "Timecode scale: %1%"
 msgstr "時間碼縮放比例: %1%"
 
@@ -6593,7 +6639,7 @@ msgstr "時間碼:"
 msgid "Title"
 msgstr "標題"
 
-#: src/info/mkvinfo.cpp:660
+#: src/info/mkvinfo.cpp:661
 msgid "Title: %1%"
 msgstr "標題: %1%"
 
@@ -6641,14 +6687,14 @@ msgstr "軌道 %1%（CodecID 為「%2%」）缺少 \"每秒多少位元 (bps)\" 
 msgid "Track %1% with the CodecID '%2%' is missing the \"codec private \" element and cannot be extracted.\n"
 msgstr "軌道 %1%（CodecID 為「%2%」）缺少 \"codec private \" 編解碼器專有元件，不能提取。\n"
 
-#: src/extract/xtr_aac.cpp:42
+#: src/extract/xtr_textsubs.cpp:292
 #: src/extract/xtr_avc.cpp:54
+#: src/extract/xtr_vobsub.cpp:65
+#: src/extract/xtr_aac.cpp:42
 #: src/extract/xtr_avi.cpp:37
 #: src/extract/xtr_ogg.cpp:37
 #: src/extract/xtr_ogg.cpp:72
 #: src/extract/xtr_rmff.cpp:31
-#: src/extract/xtr_textsubs.cpp:292
-#: src/extract/xtr_vobsub.cpp:65
 #: src/extract/xtr_wav.cpp:95
 msgid "Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n"
 msgstr "軌道 %1%（CodecID 為「%2%」）缺少 \"codec private\" 編解碼器專有元件，不能提取。\n"
@@ -6657,7 +6703,7 @@ msgstr "軌道 %1%（CodecID 為「%2%」）缺少 \"codec private\" 編解碼�
 msgid "Track %1% with the CodecID '%2%' is missing the \"default duration\" element and cannot be extracted.\n"
 msgstr "軌道 %1%（CodecID 為「%2%」）缺少 \"default duration\" 預設持續時間元件，不能提取。\n"
 
-#: src/info/mkvinfo.cpp:1144
+#: src/info/mkvinfo.cpp:1145
 msgid "Track %1%: %2%, codec ID: %3%%4%%5%%6%\n"
 msgstr "軌道 %1%: %2%, 編解碼器 ID: %3%%4%%5%%6%\n"
 
@@ -6691,7 +6737,7 @@ msgstr "軌道 ID %1%: %2% (%3%)"
 msgid "Track UID"
 msgstr "軌道 UID"
 
-#: src/info/mkvinfo.cpp:1001
+#: src/info/mkvinfo.cpp:1002
 msgid "Track UID: %1%"
 msgstr "軌道 UID: %1%"
 
@@ -6699,9 +6745,9 @@ msgstr "軌道 UID: %1%"
 msgid "Track extraction"
 msgstr "提取軌道"
 
-#: src/propedit/options.cpp:157
 #: src/propedit/propedit_cli_parser.cpp:88
 #: src/propedit/propedit_cli_parser.cpp:163
+#: src/propedit/options.cpp:157
 msgid "Track headers"
 msgstr "軌道表頭"
 
@@ -6718,15 +6764,15 @@ msgstr "軌道編號"
 msgid "Track number %1% has been encrypted and decryption has not yet been implemented.\n"
 msgstr "軌道編號 %1% 已被加密，且尚未實行解密。\n"
 
-#: src/info/mkvinfo.cpp:995
+#: src/info/mkvinfo.cpp:996
 msgid "Track number: %1%"
 msgstr "軌道編號: %1%"
 
-#: src/info/mkvinfo.cpp:1088
+#: src/info/mkvinfo.cpp:1089
 msgid "Track overlay: %1%"
 msgstr "軌道覆蓋: %1%"
 
-#: src/info/mkvinfo.cpp:1026
+#: src/info/mkvinfo.cpp:1027
 msgid "Track type: %1%"
 msgstr "軌道類型: %1%"
 
@@ -6759,7 +6805,7 @@ msgstr ""
 msgid "Type:"
 msgstr "類型:"
 
-#: src/info/mkvinfo.cpp:852
+#: src/info/mkvinfo.cpp:853
 msgid "Type: %1% (%2%)"
 msgstr "類型: %1% (%2%)"
 
@@ -6779,7 +6825,7 @@ msgstr "UTFstring_to_cstrutf8: 無效的寬字元。如果您認為本次判斷�
 msgid "Unexpected picture frame after single field frame. Fix the MPEG2 video stream before attempting to multiplex it.\n"
 msgstr "單圖場畫格之後意外的圖片畫格。在分離前請修復 MPEG2 視訊串流。\n"
 
-#: src/info/mkvinfo.cpp:363
+#: src/info/mkvinfo.cpp:364
 msgid "Unknown"
 msgstr "未知"
 
@@ -6791,7 +6837,7 @@ msgstr "未知的 AAC MPEG-2 profile %1%。"
 msgid "Unknown AAC MPEG-4 object type %1%."
 msgstr "未知的 AAC MPEG-4 物件類型 %1%。"
 
-#: src/input/r_ogm.cpp:519
+#: src/input/r_ogm.cpp:548
 msgid "Unknown audio stream type 0x%|1$04x|. Stream ID %2% will be ignored.\n"
 msgstr "未知音訊流類型 0x%|1$04x|。流 ID %2% 將被忽略。\n"
 
@@ -6803,15 +6849,15 @@ msgstr "未知章節檔案格式於「%1%」。它不含支援的章節格式。
 msgid "Unknown content encoding type %1% for track %2%.\n"
 msgstr "未知內容編碼類型 %1%，用於軌道 %2%。\n"
 
-#: src/merge/mkvmerge.cpp:1328
+#: src/merge/mkvmerge.cpp:1329
 msgid "Unknown format for the next UID in '%1% %2%'.\n"
 msgstr "下一個 UID 格式未知，在「%1% %2%」。\n"
 
-#: src/merge/mkvmerge.cpp:1315
+#: src/merge/mkvmerge.cpp:1316
 msgid "Unknown format for the previous UID in '%1% %2%'.\n"
 msgstr "上一個 UID 格式未知，在「%1% %2%」。\n"
 
-#: src/merge/mkvmerge.cpp:1340
+#: src/merge/mkvmerge.cpp:1341
 msgid "Unknown format for the segment UID '%3%' in '%1% %2%'.\n"
 msgstr "此剪輯 UID「%3%」的格式不明，在「%1% %2%」。\n"
 
@@ -6823,8 +6869,8 @@ msgstr "未知的表頭 0x%|1$02x|%|2$02x|%|3$02x|%|4$02x|\n"
 msgid "Unknown mode '%1%'.\n"
 msgstr "未知的模式「%1%」。\n"
 
-#: src/common/mm_io.cpp:112
 #: src/common/mm_io_win.cpp:69
+#: src/common/mm_io.cpp:112
 msgid "Unknown open mode"
 msgstr "未知的開啟模式"
 
@@ -6938,12 +6984,12 @@ msgstr "使用這個目錄:"
 msgid "User defined options:"
 msgstr "使用者定義選項:"
 
-#: src/merge/mkvmerge.cpp:1242
+#: src/merge/mkvmerge.cpp:1243
 msgid "Using a NALU size length of 3 bytes might result in tracks that won't be decodable with certain AVC/h.264 codecs.\n"
 msgstr "使用 3 位元組的 NALU 長可能會導致某些 AVC/h.264 編解碼器無法解碼該軌道。\n"
 
-#: src/input/r_ac3.cpp:90
 #: src/input/r_matroska.cpp:1552
+#: src/input/r_ac3.cpp:90
 #: src/input/r_mpeg_ps.cpp:1176
 msgid "Using the %1%AC3 output module.\n"
 msgstr "使用 %1%AC3 輸出模組。\n"
@@ -6960,10 +7006,10 @@ msgstr "使用 AAC 分離器。\n"
 msgid "Using the AAC output module (FourCC: %1%).\n"
 msgstr "使用 AAC 輸出模組 (FourCC: %1%)。\n"
 
-#: src/input/r_aac.cpp:116
 #: src/input/r_matroska.cpp:1540
-#: src/input/r_ogm.cpp:965
 #: src/input/r_qtmp4.cpp:1531
+#: src/input/r_ogm.cpp:994
+#: src/input/r_aac.cpp:116
 msgid "Using the AAC output module.\n"
 msgstr "使用 AAC 輸出模組。\n"
 
@@ -6975,10 +7021,10 @@ msgstr "使用 AC3 分離器。\n"
 msgid "Using the AC3 output module (FourCC: %1%).\n"
 msgstr "使用 AC3 輸出模組 (FourCC: %1%)。\n"
 
+#: src/input/r_qtmp4.cpp:1454
 #: src/input/r_wav.cpp:225
 #: src/input/r_avi.cpp:564
-#: src/input/r_ogm.cpp:983
-#: src/input/r_qtmp4.cpp:1454
+#: src/input/r_ogm.cpp:1012
 msgid "Using the AC3 output module.\n"
 msgstr "使用 AC3 輸出模組。\n"
 
@@ -6998,9 +7044,9 @@ msgstr "使用 CorePanorama 字幕讀取器。\n"
 msgid "Using the DTS demultiplexer.\n"
 msgstr "使用 DTS 分離器。\n"
 
-#: src/input/r_wav.cpp:354
 #: src/input/r_dts.cpp:114
 #: src/input/r_matroska.cpp:1572
+#: src/input/r_wav.cpp:354
 #: src/input/r_avi.cpp:680
 #: src/input/r_mpeg_ps.cpp:1181
 msgid "Using the DTS output module.\n"
@@ -7010,8 +7056,8 @@ msgstr "使用 DTS 輸出模組。\n"
 msgid "Using the Dirac demultiplexer.\n"
 msgstr "使用 Dirac 分離器。\n"
 
-#: src/input/r_dirac.cpp:96
 #: src/input/r_matroska.cpp:1473
+#: src/input/r_dirac.cpp:96
 msgid "Using the Dirac video output module.\n"
 msgstr "使用 Dirac 視訊輸出模組。\n"
 
@@ -7019,9 +7065,9 @@ msgstr "使用 Dirac 視訊輸出模組。\n"
 msgid "Using the FLAC demultiplexer.\n"
 msgstr "使用 FLAC 分離器。\n"
 
-#: src/input/r_ogm_flac.cpp:287
 #: src/input/r_flac.cpp:164
 #: src/input/r_matroska.cpp:1594
+#: src/input/r_ogm_flac.cpp:287
 msgid "Using the FLAC output module.\n"
 msgstr "使用 FLAC 輸出模組。\n"
 
@@ -7033,7 +7079,7 @@ msgstr "使用 IVF 分離器。\n"
 msgid "Using the Kate output module.\n"
 msgstr "使用 Kate 輸出模組。\n"
 
-#: src/input/r_ogm.cpp:1392
+#: src/input/r_ogm.cpp:1520
 msgid "Using the Kate subtitle output module.\n"
 msgstr "使用 Kate 字幕輸出模組。\n"
 
@@ -7050,11 +7096,11 @@ msgid "Using the MPEG PS demultiplexer.\n"
 msgstr "使用 MPEG PS 分離器。\n"
 
 #: src/input/r_matroska.cpp:1602
+#: src/input/r_qtmp4.cpp:1537
 #: src/input/r_mp3.cpp:71
 #: src/input/r_avi.cpp:557
+#: src/input/r_ogm.cpp:1030
 #: src/input/r_mpeg_ps.cpp:1171
-#: src/input/r_ogm.cpp:1001
-#: src/input/r_qtmp4.cpp:1537
 msgid "Using the MPEG audio output module.\n"
 msgstr "使用 MPEG 音訊輸出模組。\n"
 
@@ -7063,8 +7109,8 @@ msgstr "使用 MPEG 音訊輸出模組。\n"
 msgid "Using the MPEG-%1% video output module.\n"
 msgstr "使用 MPEG-%1% 視訊輸出模組。\n"
 
-#: src/input/r_avi.cpp:323
 #: src/input/r_mpeg_es.cpp:179
+#: src/input/r_avi.cpp:323
 #: src/input/r_mpeg_ps.cpp:1197
 msgid "Using the MPEG-1/2 video output module.\n"
 msgstr "使用 MPEG-1/2 視訊輸出模組。\n"
@@ -7074,18 +7120,18 @@ msgstr "使用 MPEG-1/2 視訊輸出模組。\n"
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "使用 MPEG-4 part 10 (AVC) 視訊輸出模組。\n"
 
-#: src/input/r_avc.cpp:136
 #: src/input/r_matroska.cpp:1844
+#: src/input/r_avc.cpp:136
 #: src/input/r_avi.cpp:348
+#: src/input/r_ogm.cpp:1154
 #: src/input/r_mpeg_ps.cpp:1210
-#: src/input/r_ogm.cpp:1125
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "使用 MPEG-4 part 10 ES 視訊輸出模組。\n"
 
 #: src/input/r_matroska.cpp:1461
-#: src/input/r_avi.cpp:331
-#: src/input/r_ogm.cpp:1229
 #: src/input/r_qtmp4.cpp:1481
+#: src/input/r_avi.cpp:331
+#: src/input/r_ogm.cpp:1258
 msgid "Using the MPEG-4 part 2 video output module.\n"
 msgstr "使用 MPEG-4 part 2 視訊輸出模組。\n"
 
@@ -7093,15 +7139,15 @@ msgstr "使用 MPEG-4 part 2 視訊輸出模組。\n"
 msgid "Using the Matroska demultiplexer.\n"
 msgstr "使用 Matroska 分離器。\n"
 
-#: src/input/r_ogm.cpp:311
+#: src/input/r_ogm.cpp:337
 msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr "使用 OGG/OGM 分離器。\n"
 
-#: src/input/r_wav.cpp:395
 #: src/input/r_matroska.cpp:1609
-#: src/input/r_avi.cpp:549
-#: src/input/r_ogm.cpp:1020
 #: src/input/r_qtmp4.cpp:1543
+#: src/input/r_wav.cpp:395
+#: src/input/r_avi.cpp:549
+#: src/input/r_ogm.cpp:1049
 msgid "Using the PCM output module.\n"
 msgstr "使用 PCM 輸出模組。\n"
 
@@ -7142,13 +7188,13 @@ msgstr "使用 SSA/ASS 字幕讀取器。\n"
 msgid "Using the TTA demultiplexer.\n"
 msgstr "使用 TTA 分離器。\n"
 
-#: src/input/r_tta.cpp:109
 #: src/input/r_matroska.cpp:1620
+#: src/input/r_tta.cpp:109
 msgid "Using the TTA output module.\n"
 msgstr "使用 TTA 輸出模組。\n"
 
 #: src/input/r_matroska.cpp:1469
-#: src/input/r_ogm.cpp:1322
+#: src/input/r_ogm.cpp:1351
 msgid "Using the Theora video output module.\n"
 msgstr "使用 Theora 視訊輸出模組。\n"
 
@@ -7204,9 +7250,14 @@ msgstr "使用 VobSub 字幕讀取器 (SUB 檔「%1%」)。\n"
 
 #: src/input/r_matroska.cpp:1627
 #: src/input/r_avi.cpp:734
-#: src/input/r_ogm.cpp:1041
+#: src/input/r_ogm.cpp:1070
 msgid "Using the Vorbis output module.\n"
 msgstr "使用 Vorbis 輸出模組。\n"
+
+#: src/input/r_ogm.cpp:1445
+#, fuzzy
+msgid "Using the Vp8 video output module.\n"
+msgstr "使用 VP8 視訊輸出模組。\n"
 
 #: src/input/r_wav.cpp:546
 msgid "Using the WAV demultiplexer.\n"
@@ -7220,8 +7271,8 @@ msgstr "使用附帶了校正檔的 WAVPACK 分離器。\n"
 msgid "Using the WAVPACK demultiplexer.\n"
 msgstr "使用 WAVPACK 分離器。\n"
 
-#: src/input/r_wavpack.cpp:107
 #: src/input/r_matroska.cpp:1650
+#: src/input/r_wavpack.cpp:107
 msgid "Using the WAVPACK output module.\n"
 msgstr "使用 WAVPACK 輸出模組。\n"
 
@@ -7233,12 +7284,12 @@ msgstr "使用一般音訊輸出模組 (FourCC: %|1$.4s|)。\n"
 msgid "Using the passthrough output module for this %1% track.\n"
 msgstr "對軌道 %1% 使用呈遞輸出模組。\n"
 
+#: src/input/r_srt.cpp:60
+#: src/input/r_matroska.cpp:1705
 #: src/input/r_ssa.cpp:71
 #: src/input/r_usf.cpp:259
-#: src/input/r_matroska.cpp:1705
 #: src/input/r_avi.cpp:405
-#: src/input/r_ogm.cpp:1072
-#: src/input/r_srt.cpp:60
+#: src/input/r_ogm.cpp:1101
 msgid "Using the text subtitle output module.\n"
 msgstr "使用文字字幕輸出模組。\n"
 
@@ -7253,7 +7304,7 @@ msgstr "使用視訊輸出模組 (FourCC: %|1$.4s|)。\n"
 
 #: src/input/r_matroska.cpp:1483
 #: src/input/r_avi.cpp:360
-#: src/input/r_ogm.cpp:1234
+#: src/input/r_ogm.cpp:1263
 msgid "Using the video output module.\n"
 msgstr "使用視訊輸出模組。\n"
 
@@ -7269,7 +7320,7 @@ msgstr "有效的小補綴有:\n"
 msgid "Validates the content of all changeable headers"
 msgstr "檢驗所有可改變的表頭內容"
 
-#: src/mmg/mmg_dialog.cpp:271
+#: src/mmg/mmg_dialog.cpp:288
 msgid "Verify the current chapter entries to see if there are any errors"
 msgstr "檢驗目前章節項目有無錯誤"
 
@@ -7340,7 +7391,7 @@ msgstr "視訊像素寬度"
 msgid "Video stereo mode"
 msgstr "視訊立體模式"
 
-#: src/info/mkvinfo.cpp:713
+#: src/info/mkvinfo.cpp:714
 msgid "Video track"
 msgstr "視訊軌"
 
@@ -7385,11 +7436,11 @@ msgstr "警告:"
 msgid "Warning: "
 msgstr "警告: "
 
-#: src/info/mkvinfo.cpp:1003
+#: src/info/mkvinfo.cpp:1004
 msgid "Warning: There's more than one track with the UID %1%."
 msgstr "警告: UID 為 %1% 的軌道多於一條。"
 
-#: src/info/mkvinfo.cpp:997
+#: src/info/mkvinfo.cpp:998
 msgid "Warning: There's more than one track with the number %1%."
 msgstr "警告: 序號為 %1% 的軌道多於一條。"
 
@@ -7427,7 +7478,7 @@ msgstr "以 ID「AID」將附件寫入到「輸出檔名」。"
 msgid "Write track with the ID TID to the file 'out'."
 msgstr "以 ID TID 將軌道寫入到檔案「out」。"
 
-#: src/info/mkvinfo.cpp:611
+#: src/info/mkvinfo.cpp:612
 msgid "Writing application: %1%"
 msgstr "寫入程式: %1%"
 
@@ -7447,7 +7498,7 @@ msgstr "錯誤的 Kate 版本: %1%.%2% > %3%.x"
 msgid "Wrong Theora version: %1%.%2%.%3% != 3.2.x"
 msgstr "錯誤的 Theora 版本: %1%.%2%.%3% != 3.2.x"
 
-#: src/merge/mkvmerge.cpp:1677
+#: src/merge/mkvmerge.cpp:1678
 msgid "Wrong argument to '--split-max-files'.\n"
 msgstr "「--split-max-files」參數錯誤。\n"
 
@@ -7461,8 +7512,8 @@ msgstr "選擇錯誤的檔案"
 msgid "Wrong file selected"
 msgstr "選擇錯誤的檔案"
 
-#: src/common/kate.cpp:46
 #: src/common/theora.cpp:35
+#: src/common/kate.cpp:46
 msgid "Wrong header type: 0x%|1$02x| != 0x%|2$02x|"
 msgstr "錯誤的表頭類型: 0x%|1$02x| != 0x%|2$02x|"
 
@@ -7481,6 +7532,10 @@ msgstr "XML 解析器發生錯誤，於「%2%」的第 %1% 行: %3%。%4%%5%"
 #: src/common/xml/element_writer.cpp:232
 msgid "XML parser error at line %1%: %2%."
 msgstr "XML 解析器發生錯誤，於第 %1% 行: %2%。"
+
+#: src/mmg/mmg_dialog.cpp:1757
+msgid "You are already running the latest version."
+msgstr ""
 
 #: src/mmg/tabs/chapters.cpp:1351
 msgid ""
@@ -7588,7 +7643,7 @@ msgstr "添加"
 
 #: src/input/r_matroska.cpp:90
 #: src/mmg/mmg.cpp:62
-#: src/info/mkvinfo.cpp:1146
+#: src/info/mkvinfo.cpp:1147
 msgid "audio"
 msgstr "音訊"
 
@@ -7612,12 +7667,12 @@ msgstr "avi_reader: 無法讀取來源檔案。"
 msgid "avi_reader: Source is not a valid AVI file."
 msgstr "avi_reader: 來源非有效的 AVI 檔案。"
 
-#: src/info/mkvinfo.cpp:702
+#: src/info/mkvinfo.cpp:703
 msgid "bits per sample: %1%"
 msgstr "每次取樣多少位元: %1%"
 
 #: src/input/r_matroska.cpp:91
-#: src/info/mkvinfo.cpp:1149
+#: src/info/mkvinfo.cpp:1150
 msgid "buttons"
 msgstr "按鈕"
 
@@ -7638,7 +7693,7 @@ msgstr "bzlib_compressor_c::decompress() 未實現\n"
 msgid "cet_index: '%1%' not found\n"
 msgstr "cet_index:「%1%」未找到\n"
 
-#: src/info/mkvinfo.cpp:691
+#: src/info/mkvinfo.cpp:692
 msgid "channels: %1%"
 msgstr "聲道數: %1%"
 
@@ -7650,7 +7705,7 @@ msgstr "完成，正常"
 msgid "completed with warnings"
 msgstr "完成，有警告"
 
-#: src/info/mkvinfo.cpp:854
+#: src/info/mkvinfo.cpp:855
 msgid "compression"
 msgstr "壓縮"
 
@@ -7662,7 +7717,7 @@ msgstr "corepicture_reader: 無法開啟來源檔案。"
 msgid "corepicture_reader: Source is not a valid CorePanorama file."
 msgstr "corepicture_reader: 來源非 CorePanorama 檔案。"
 
-#: src/merge/mkvmerge.cpp:291
+#: src/merge/mkvmerge.cpp:292
 msgid "create_track_number: file_num not found. %1%\n"
 msgstr "create_track_number: file_num 未找到。 %1%\n"
 
@@ -7677,7 +7732,7 @@ msgstr "cstrutf8_to_UTFstring: 遇到了無效的 UTF-8 序列。請聯繫 morit
 msgid "default"
 msgstr "預設"
 
-#: src/info/mkvinfo.cpp:1105
+#: src/info/mkvinfo.cpp:1106
 msgid "default duration: %|1$.3f|ms (%|2$.3f| fps for a video track)"
 msgstr "預設持續時間: %|1$.3f|ms (對於視訊軌為 %|2$.3f|)"
 
@@ -7693,15 +7748,15 @@ msgstr "dirac_es_reader: 無法開啟來源檔案。"
 msgid "disable all"
 msgstr "全部停用"
 
-#: src/info/mkvinfo.cpp:1638
+#: src/info/mkvinfo.cpp:1639
 msgid "discardable, "
 msgstr "可廢棄, "
 
-#: src/info/mkvinfo.cpp:738
+#: src/info/mkvinfo.cpp:739
 msgid "display height: %1%"
 msgstr "顯示高度: %1%"
 
-#: src/info/mkvinfo.cpp:733
+#: src/info/mkvinfo.cpp:734
 msgid "display width: %1%"
 msgstr "顯示寬度: %1%"
 
@@ -7738,7 +7793,7 @@ msgstr "全部啟用"
 msgid "enabled"
 msgstr "啟用"
 
-#: src/info/mkvinfo.cpp:855
+#: src/info/mkvinfo.cpp:856
 msgid "encryption"
 msgstr "加密"
 
@@ -7834,7 +7889,7 @@ msgstr "全部畫格"
 msgid "have an xcptn\n"
 msgstr "出現異常\n"
 
-#: src/info/mkvinfo.cpp:874
+#: src/info/mkvinfo.cpp:875
 msgid "header removal"
 msgstr "移除表頭"
 
@@ -7865,11 +7920,11 @@ msgstr "正在估計"
 msgid "ivf_reader: Could not open the file."
 msgstr "ivf_reader: 無法開啟檔案。"
 
-#: src/info/mkvinfo.cpp:1636
+#: src/info/mkvinfo.cpp:1637
 msgid "key, "
 msgstr "關鍵畫格, "
 
-#: src/info/mkvinfo.cpp:1125
+#: src/info/mkvinfo.cpp:1126
 msgid "language: %1%"
 msgstr "語言: %1%"
 
@@ -8144,12 +8199,12 @@ msgstr "mkvmerge 執行 *失敗* ，返回碼 %d。 %s"
 msgid "mkvmerge GUI error"
 msgstr "mkvmerge GUI 發生錯誤"
 
-#: src/mmg/mmg_dialog.cpp:167
+#: src/mmg/mmg_dialog.cpp:176
 msgid "mkvmerge GUI ready"
 msgstr "mkvmerge GUI 準備就緒"
 
-#: src/mmg/mmg_dialog.cpp:364
-#: src/mmg/mmg_dialog.cpp:410
+#: src/mmg/mmg_dialog.cpp:384
+#: src/mmg/mmg_dialog.cpp:430
 #, c-format
 msgid "mkvmerge GUI settings (*.mmg)|*.mmg|%s"
 msgstr "mkvmerge GUI 設定檔 (*.mmg)|*.mmg|%s"
@@ -8194,7 +8249,7 @@ msgstr "mkvmerge 執行完畢，返回碼 %d。%s"
 msgid "mkvmerge has finished"
 msgstr "mkvmerge 已經執行完畢"
 
-#: src/input/r_ogm.cpp:474
+#: src/input/r_ogm.cpp:500
 msgid "mkvmerge has not been compiled with FLAC support but handling of this stream has been requested.\n"
 msgstr "mkvmerge 編譯時未包含 FLAC 支援，但收到了對此類媒體流的處理請求。\n"
 
@@ -8245,15 +8300,15 @@ msgstr "mm_text_io_c: 目前尚不支援 UTF32_*。\n"
 msgid "mm_text_io_c::read_next_char(): Invalid UTF-8 char. First byte: 0x%|1$02x|"
 msgstr "mm_text_io_c::read_next_char(): 無效 UTF-8 字元。第一位元組: 0x%|1$02x|"
 
-#: src/mmg/options/mmg.cpp:304
+#: src/mmg/options/mmg.cpp:323
 msgid "mmg"
 msgstr "mmg"
 
-#: src/mmg/mmg_dialog.cpp:249
+#: src/mmg/mmg_dialog.cpp:266
 msgid "mmg debug output"
 msgstr "mmg 除錯輸出"
 
-#: src/mmg/options/mmg.cpp:167
+#: src/mmg/options/mmg.cpp:178
 msgid "mmg options"
 msgstr "mmg 選項"
 
@@ -8287,7 +8342,7 @@ msgstr "mpeg_ps_reader: 不該發生 #2。 %1%"
 msgid "no"
 msgstr "否"
 
-#: src/info/mkvinfo.cpp:898
+#: src/info/mkvinfo.cpp:899
 msgid "no encryption"
 msgstr "未加密"
 
@@ -8299,15 +8354,15 @@ msgstr "無錯誤發生"
 msgid "no file loaded"
 msgstr "未載入檔案"
 
-#: src/info/mkvinfo.cpp:915
+#: src/info/mkvinfo.cpp:916
 msgid "no signature algorithm"
 msgstr "未使用簽章演算法"
 
-#: src/info/mkvinfo.cpp:924
+#: src/info/mkvinfo.cpp:925
 msgid "no signature hash algorithm"
 msgstr "未使用簽章雜湊演算法"
 
-#: src/mmg/mmg_dialog.cpp:975
+#: src/mmg/mmg_dialog.cpp:994
 #: src/mmg/tabs/input_extra.cpp:88
 #: src/mmg/tabs/input_extra.cpp:115
 #: src/mmg/tabs/input_extra.cpp:118
@@ -8318,23 +8373,23 @@ msgstr "無"
 msgid "normal"
 msgstr "一般"
 
-#: src/input/r_ogm.cpp:446
+#: src/input/r_ogm.cpp:472
 msgid "ogg_stream_init for stream number %1% failed. Will try to continue and ignore this stream.\n"
 msgstr "ogg_stream_init 對媒體流編號 %1% 失敗。將嘗試繼續並忽略此媒體流。\n"
 
-#: src/input/r_ogm.cpp:358
+#: src/input/r_ogm.cpp:384
 msgid "ogg_sync_buffer failed\n"
 msgstr "ogg_sync_buffer 失敗\n"
 
-#: src/input/r_ogm.cpp:303
+#: src/input/r_ogm.cpp:329
 msgid "ogm_reader: Could not open the source file."
 msgstr "ogm_reader: 無法開啟來源檔案。"
 
-#: src/input/r_ogm.cpp:314
+#: src/input/r_ogm.cpp:340
 msgid "ogm_reader: Could not read all header packets."
 msgstr "ogm_reader: 無法讀取所有表頭套件。"
 
-#: src/input/r_ogm.cpp:306
+#: src/input/r_ogm.cpp:332
 msgid "ogm_reader: Source is not a valid OGG media file."
 msgstr "ogm_reader: 來源非有效的 OGG 媒體檔案。"
 
@@ -8346,7 +8401,7 @@ msgstr "on_entry_selected: display == NULL。不該出現。"
 msgid "only for I frames"
 msgstr "僅 I 畫格"
 
-#: src/info/mkvinfo.cpp:686
+#: src/info/mkvinfo.cpp:687
 msgid "output sampling freq: %1%"
 msgstr "輸出取樣頻率: %1%"
 
@@ -8359,27 +8414,27 @@ msgstr "未處理"
 msgid "pgssup_reader: Could not open the file."
 msgstr "pgssup_reader: 無法開啟檔案。"
 
-#: src/info/mkvinfo.cpp:758
+#: src/info/mkvinfo.cpp:759
 msgid "pixel crop bottom: %1%"
 msgstr "底部像素剪裁: %1%"
 
-#: src/info/mkvinfo.cpp:743
+#: src/info/mkvinfo.cpp:744
 msgid "pixel crop left: %1%"
 msgstr "左邊像素剪裁: %1%"
 
-#: src/info/mkvinfo.cpp:753
+#: src/info/mkvinfo.cpp:754
 msgid "pixel crop right: %1%"
 msgstr "右邊像素剪裁: %1%"
 
-#: src/info/mkvinfo.cpp:748
+#: src/info/mkvinfo.cpp:749
 msgid "pixel crop top: %1%"
 msgstr "頂部像素剪裁: %1%"
 
-#: src/info/mkvinfo.cpp:728
+#: src/info/mkvinfo.cpp:729
 msgid "pixel height: %1%"
 msgstr "像素高度: %1%"
 
-#: src/info/mkvinfo.cpp:723
+#: src/info/mkvinfo.cpp:724
 msgid "pixel width: %1%"
 msgstr "像素寬度: %1%"
 
@@ -8425,11 +8480,11 @@ msgstr "移除"
 msgid "remove all"
 msgstr "移除全部"
 
-#: src/info/mkvinfo.cpp:844
+#: src/info/mkvinfo.cpp:845
 msgid "rest: unknown"
 msgstr "其他: 未知"
 
-#: src/info/mkvinfo.cpp:681
+#: src/info/mkvinfo.cpp:682
 msgid "sampling freq: %1%"
 msgstr "取樣頻率: %1%"
 
@@ -8466,7 +8521,7 @@ msgid "subtitle"
 msgstr "字幕"
 
 #: src/mmg/mmg.cpp:64
-#: src/info/mkvinfo.cpp:1148
+#: src/info/mkvinfo.cpp:1149
 msgid "subtitles"
 msgstr "字幕"
 
@@ -8474,11 +8529,11 @@ msgstr "字幕"
 msgid "tet_index: '%1%' not found\n"
 msgstr "tet_index:「%1%」未發現\n"
 
-#: src/merge/mkvmerge.cpp:2022
+#: src/merge/mkvmerge.cpp:2023
 msgid "timecodes"
 msgstr "時間碼"
 
-#: src/merge/mkvmerge.cpp:2015
+#: src/merge/mkvmerge.cpp:2016
 msgid "track name"
 msgstr "軌道名稱"
 
@@ -8510,13 +8565,13 @@ msgstr "und (未定)"
 #: src/mmg/mmg.cpp:65
 #: src/mmg/header_editor/value_page.cpp:150
 #: src/mmg/tabs/input.cpp:339
-#: src/info/mkvinfo.cpp:846
-#: src/info/mkvinfo.cpp:856
-#: src/info/mkvinfo.cpp:875
-#: src/info/mkvinfo.cpp:904
-#: src/info/mkvinfo.cpp:917
-#: src/info/mkvinfo.cpp:927
-#: src/info/mkvinfo.cpp:1150
+#: src/info/mkvinfo.cpp:847
+#: src/info/mkvinfo.cpp:857
+#: src/info/mkvinfo.cpp:876
+#: src/info/mkvinfo.cpp:905
+#: src/info/mkvinfo.cpp:918
+#: src/info/mkvinfo.cpp:928
+#: src/info/mkvinfo.cpp:1151
 msgid "unknown"
 msgstr "未知"
 
@@ -8546,7 +8601,7 @@ msgstr "verify failed: chapters->CheckMandatory() 為 false。這不該發生。
 
 #: src/input/r_matroska.cpp:92
 #: src/mmg/mmg.cpp:63
-#: src/info/mkvinfo.cpp:1147
+#: src/info/mkvinfo.cpp:1148
 msgid "video"
 msgstr "視訊"
 
@@ -8631,6 +8686,25 @@ msgstr "是"
 #~ msgstr "%1% 於 %2%"
 #~ msgid "%1% frame, track %2%, timecode %3% (%4%), size %5%, adler 0x%|6$08x|\n"
 #~ msgstr "%1% 畫格, 軌道 %2%, 時間碼 %3% (%4%), 大小 %5%, adler 0x%|6$08x|\n"
+#~ msgid ""
+#~ "%s\n"
+#~ "\n"
+#~ "This GUI was written by Moritz Bunkus <moritz@bunkus.org>\n"
+#~ "Based on mmg by Florian Wagner <flo.wagner@gmx.de>\n"
+#~ "mkvmerge GUI is licensed under the GPL.\n"
+#~ "http://www.bunkus.org/videotools/mkvtoolnix/\n"
+#~ "\n"
+#~ "Help is available in form of tool tips, from the\n"
+#~ "'Help' menu or by pressing the 'F1' key."
+#~ msgstr ""
+#~ "%s\n"
+#~ "\n"
+#~ "這個 GUI 由 Moritz Bunkus <moritz@bunkus.org> 撰寫\n"
+#~ "基於 Florian Wagner <flo.wagner@gmx.de> 的 mmg\n"
+#~ "mkvmerge GUI 以 GPL 授權發佈。\n"
+#~ "http://www.bunkus.org/videotools/mkvtoolnix/\n"
+#~ "\n"
+#~ "可透過工具提示、“説明”功能表或按“F1”鍵取得說明。"
 #~ msgid "'%1%' is only allowed for chapter extraction.\n"
 #~ msgstr "'%1%' 僅限提取章節時使用。\n"
 #~ msgid "'--blockadd' is only allowed when extracting tracks.\n"
@@ -8651,6 +8725,8 @@ msgstr "是"
 #~ msgstr "(未知元件: %1%)"
 #~ msgid "A single '+' is not a valid command line option. If you want to append a file use '+' directly followed by the file name, e.g. '+movie_part_2.avi'."
 #~ msgstr "單獨的 '+' 不是有效的命令列選項。如果您希望用 '+' 直接添加檔，請確保檔案名緊跟著它，例如 '+movie_part_2.avi'。"
+#~ msgid "About mkvmerge's GUI"
+#~ msgstr "關於 mkvmerge 的 GUI"
 #~ msgid "Always adds '--engage use_simpleblock' to the command line. That way Matroska's new 'simple blocks' will be used which save a bit of overhead at the cost of not being backwards compatible."
 #~ msgstr "總在命令列中添加 '--engage use_simpleblock'。這樣將使用 Matroska 的新 '簡單區塊'，可以省下一些額外開銷，代價是將無法向下相容。"
 #~ msgid "Always use simple blocks"

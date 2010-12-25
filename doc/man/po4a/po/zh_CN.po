@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: mkvtoolnix-man\n"
-"POT-Creation-Date: 2010-12-21 11:27+0100\n"
+"POT-Creation-Date: 2010-12-25 16:23+0100\n"
 "PO-Revision-Date: 2010-12-21 21:49+0800\n"
 "Last-Translator: Dean Lee <xslidian@gmail.com>\n"
 "Language-Team: chinese simp <xslidian+mkvtoolnix@gmail.com>\n"
@@ -382,31 +382,65 @@ msgstr "显示版本信息并退出。"
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:162
 #: doc/man/mkvinfo.xml:192
-#: doc/man/mkvmerge.xml:1268
+#: doc/man/mkvmerge.xml:1351
 #: doc/man/mkvpropedit.xml:227
-msgid "<option>@</option>options-file"
-msgstr "<option>@</option>选项文件"
+#, fuzzy
+#| msgid "<option>--no-cues</option>"
+msgid "<option>--check-for-updates</option>"
+msgstr "<option>--no-cues</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:165
 #: doc/man/mkvinfo.xml:195
-#: doc/man/mkvmerge.xml:1271
+#: doc/man/mkvmerge.xml:1354
 #: doc/man/mkvpropedit.xml:230
+msgid "Checks online for new releases by downloading the URL <uri>http://mkvtoolnix-releases.bunkus.org/latest-release.xml</uri>. Four lines will be output in <literal>key=value</literal> style: the URL from where the information was retrieved (key <literal>version_check_url</literal>), the currently running version (key <literal>running_version</literal>), the latest release's version (key <literal>available_version</literal>) and the download URL (key <literal>download_url</literal>)."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvextract.xml:172
+#: doc/man/mkvinfo.xml:202
+#: doc/man/mkvmerge.xml:1361
+#: doc/man/mkvpropedit.xml:237
+msgid "Afterwards the program exists with an exit code of 0 if no newer release is available, with 1 if a newer release is available and with 2 if an error occured (e.g. if the update information could not be retrieved)."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvextract.xml:177
+#: doc/man/mkvinfo.xml:207
+#: doc/man/mkvmerge.xml:1366
+#: doc/man/mkvpropedit.xml:242
+msgid "This option is only available if the program was built with support for libcurl."
+msgstr ""
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: doc/man/mkvextract.xml:183
+#: doc/man/mkvinfo.xml:213
+#: doc/man/mkvmerge.xml:1268
+#: doc/man/mkvpropedit.xml:248
+msgid "<option>@</option>options-file"
+msgstr "<option>@</option>选项文件"
+
+#. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: doc/man/mkvextract.xml:186
+#: doc/man/mkvinfo.xml:216
+#: doc/man/mkvmerge.xml:1271
+#: doc/man/mkvpropedit.xml:251
 msgid "Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace character is a hash mark ('<literal>#</literal>') are treated as comments and ignored. White spaces at the start and end of a line will be stripped. Each line must contain exactly one option."
 msgstr "从文件 <parameter>选项文件</parameter> 中读取额外的命令行参数。首个非空白字符为井号 ('<literal>#</literal>') 的行将被当作注释对待，在处理过程中将被忽略。各行开头与结尾的空白将被除去。各行必须恰好仅含一个选项。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:171
+#: doc/man/mkvextract.xml:192
 msgid "Several chars can be escaped, e.g. if you need to start a non-comment line with '#'. The rules are described in <link linkend=\"mkvextract.escaping\">the section about escaping text</link>."
 msgstr "有些字符可以转义，如当您需要使用 '#' 作为一个不是评论的行的开头。规则在<link linkend=\"mkvextract.escaping\">关于转义文本的段落</link>有描述。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:176
+#: doc/man/mkvextract.xml:197
 msgid "The command line '<command>mkvextract tracks source.mkv --raw 1:destination.raw</command>' could be converted into the following option file:"
 msgstr "命令行 '<command>mkvextract tracks 源.mkv --raw 1:目标.raw</command>' 可以转换为下面所示选项文件:"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><programlisting>
-#: doc/man/mkvextract.xml:181
+#: doc/man/mkvextract.xml:202
 #, no-wrap
 msgid ""
 "# Extract a track from source.mkv\n"
@@ -426,88 +460,88 @@ msgstr ""
 "      "
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvextract.xml:194
+#: doc/man/mkvextract.xml:215
 msgid "Track extraction mode"
 msgstr "轨道提取模式"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvextract.xml:197
+#: doc/man/mkvextract.xml:218
 msgid "Syntax: <command>mkvextract</command> <option>tracks</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional>"
 msgstr "语法: <command>mkvextract</command> <option>tracks</option> <parameter>源文件名</parameter> <optional><parameter>选项</parameter></optional> <parameter>TID1:目标文件名1</parameter> <optional><parameter>TID2:目标文件名2</parameter> ...</optional>"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvextract.xml:201
+#: doc/man/mkvextract.xml:222
 msgid "The following command line options are available for each track in the '<literal>tracks</literal>' extraction mode.  They have to appear in front of the track specification (see below) they should be applied to."
 msgstr "以下命令行在 '<literal>tracks</literal>' 轨道提取模式下对各轨道可用。它们应当在所应用到的轨道指令（参阅下文）之前出现。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:207
+#: doc/man/mkvextract.xml:228
 msgid "<option>-c</option> <parameter>character-set</parameter>"
 msgstr "<option>-c</option> <parameter>字符集</parameter>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:210
+#: doc/man/mkvextract.xml:231
 msgid "Sets the character set to convert the next text subtitle track to. Only valid if the next track ID targets a text subtitle track. It defaults to UTF-8."
 msgstr "设定下一个字幕轨应被转换为哪一字符集。仅当后面的轨道 ID 对应文本字幕轨时有效。默认为 UTF-8。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:217
+#: doc/man/mkvextract.xml:238
 msgid "<option>--blockadd</option> <parameter>level</parameter>"
 msgstr "<option>--blockadd</option> <parameter>层级</parameter>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:220
+#: doc/man/mkvextract.xml:241
 msgid "Keep only the BlockAdditions up to this level.  The default is to keep all levels.  This option only affects certain kinds of codecs like WAVPACK4."
 msgstr "只保留低于或等于此层级的 BlockAdditions 附加块。默认保留所有层级。 本选项仅影响特定类别的编解码器，如 WAVPACK4。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:227
+#: doc/man/mkvextract.xml:248
 msgid "<option>--cuesheet</option>"
 msgstr "<option>--cuesheet</option>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:230
+#: doc/man/mkvextract.xml:251
 msgid "Causes &mkvextract; to extract a <abbrev>CUE</abbrev> sheet from the chapter information and tag data for the following track into a file whose name is the track's output name with '<literal>.cue</literal>' appended to it."
 msgstr "让 &mkvextract; 根据下一轨道的标签数据与章节信息提取出 <abbrev>CUE</abbrev> 表单，输出文件名为轨道的输出名后接 '<literal>.cue</literal>' 扩展名。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:237
+#: doc/man/mkvextract.xml:258
 msgid "<option>--raw</option>"
 msgstr "<option>--raw</option>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:240
+#: doc/man/mkvextract.xml:261
 msgid "Extracts the raw data into a file without any container data around it.  Unlike the <link linkend=\"mkvextract.description.tracks.fullraw\"><option>--fullraw</option></link> flag this flag does not cause the contents of the <classname>CodecPrivate</classname> element to be written to the file.  This mode works with all <classname>CodecIDs</classname>, even the ones that &mkvextract; doesn't support otherwise, but the resulting files might not be usable."
 msgstr "将原始数据提取为文件，输出文件的周围没有任何容器数据。 与 <link linkend=\"mkvextract.description.tracks.fullraw\"><option>--fullraw</option></link> 标记不同的是，此标记不会将 <classname>CodecPrivate</classname> 元素的内容写入输出文件。 此模式对所有 <classname>CodecIDs</classname> 有效，即使是 &mkvextract; 不支持处理的，然而生成的文件可能无法使用。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:249
+#: doc/man/mkvextract.xml:270
 msgid "<option>--fullraw</option>"
 msgstr "<option>--fullraw</option>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:252
+#: doc/man/mkvextract.xml:273
 msgid "Extracts the raw data into a file without any container data around it.  The contents of the <classname>CodecPrivate</classname> element will be written to the file first if the track contains such a header element.  This mode works with all <classname>CodecIDs</classname>, even the ones that &mkvextract; doesn't support otherwise, but the resulting files might not be usable."
 msgstr "提取原始数据，输出文件的周围没有任何容器数据。 如果轨道包含 <classname>CodecPrivate</classname> 编解码器私有元素，它的内容将先被写入文件。 此模式对所有 <classname>CodecIDs</classname> 有效，即使是 &mkvextract; 不支持的那些，但是生成的文件可能无法使用。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:261
-#: doc/man/mkvextract.xml:371
+#: doc/man/mkvextract.xml:282
+#: doc/man/mkvextract.xml:392
 msgid "<parameter>TID:outname</parameter>"
 msgstr "<parameter>TID:输出文件名</parameter>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:264
+#: doc/man/mkvextract.xml:285
 msgid "Causes extraction of the track with the ID <parameter>TID</parameter> into the file <parameter>outname</parameter> if such a track exists in the source file. This option can be given multiple times. The track IDs are the same as the ones output by &mkvmerge;'s <option>--identify</option> option."
 msgstr "如果源文件中存在 ID 为 <parameter>TID</parameter> 的轨道，则将其提取为文件 <parameter>输出文件名</parameter>。本选项可多次给出。轨道 ID 与 &mkvmerge; 的 <option>--identify</option> 选项所输出的相同。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:271
+#: doc/man/mkvextract.xml:292
 msgid "Each output name should be used only once. The exception are RealAudio and RealVideo tracks. If you use the same name for different tracks then those tracks will be saved in the same file. Example:"
 msgstr "每个输出文件名只能用一次。但 RealAudio 与 RealVideo 轨道例外。如果您为不同轨道使用了同样的输出文件名，这些轨道将被存入同一个文件中。示例："
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><screen>
-#: doc/man/mkvextract.xml:276
+#: doc/man/mkvextract.xml:297
 #, no-wrap
 msgid ""
 "$ mkvextract tracks input.mkv 1:output-two-tracks.rm 2:output-two-tracks.rm\n"
@@ -517,114 +551,108 @@ msgstr ""
 "      "
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvextract.xml:284
+#: doc/man/mkvextract.xml:305
 msgid "Tags extraction mode"
 msgstr "标签提取模式"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvextract.xml:287
+#: doc/man/mkvextract.xml:308
 msgid "Syntax: <command>mkvextract</command> <option>tags</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional>"
 msgstr "语法: <command>mkvextract</command> <option>tags</option> <parameter>源文件名</parameter> <optional><parameter>选项</parameter></optional>"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvextract.xml:291
+#: doc/man/mkvextract.xml:312
 msgid "The extracted tags are written to the console unless the output is redirected (see the section about <link linkend=\"mkvextract.output_redirection\">output redirection</link> for details)."
 msgstr "提取出的标签将被输出到命令行，除非输出被重定向（详情参见关于 <link linkend=\"mkvextract.output_redirection\">输出重定向</link> 的章节）。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvextract.xml:297
+#: doc/man/mkvextract.xml:318
 msgid "Attachments extraction mode"
 msgstr "附件提取模式"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvextract.xml:300
+#: doc/man/mkvextract.xml:321
 msgid "Syntax: <command>mkvextract</command> <option>attachments</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>AID1:outname1</parameter> <optional><parameter>AID2:outname2</parameter> ...</optional>"
 msgstr "语法: <command>mkvextract</command> <option>attachments</option> <parameter>源文件名</parameter> <optional><parameter>选项</parameter></optional> <parameter>AID1:输出文件名1</parameter> <optional><parameter>AID2:输出文件名2</parameter> ...</optional>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:305
+#: doc/man/mkvextract.xml:326
 msgid "AID:outname"
 msgstr "AID:输出文件名"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:308
+#: doc/man/mkvextract.xml:329
 msgid "Causes extraction of the attachment with the ID <parameter>AID</parameter> into the file <parameter>outname</parameter> if such an attachment exists in the source file.  If the <parameter>outname</parameter> is left empty then the name of the attachment inside the source &matroska; file is used instead.  This option can be given multiple times.  The attachment IDs are the same as the ones output by &mkvmerge;'s <option>--identify</option> option."
 msgstr "如果源文件中存在 ID 为 <parameter>AID</parameter> 的附件，则将其提取为文件 <parameter>输出文件名</parameter>。如果 <parameter>输出文件名</parameter> 处留空，将使用所用 &matroska; 文件中的附件名称。本选项可多次给出。附件 ID 与 &mkvmerge; 的 <option>--identify</option> 选项所输出的相同。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvextract.xml:319
+#: doc/man/mkvextract.xml:340
 msgid "Chapters extraction mode"
 msgstr "章节提取模式"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvextract.xml:322
+#: doc/man/mkvextract.xml:343
 msgid "Syntax: <command>mkvextract</command> <option>chapters</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional>"
 msgstr "语法: <command>mkvextract</command> <option>chapters</option> <parameter>源文件名</parameter> <optional><parameter>选项</parameter></optional>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:327
+#: doc/man/mkvextract.xml:348
 msgid "<option>-s</option>, <option>--simple</option>"
 msgstr "<option>-s</option>, <option>--simple</option>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:330
+#: doc/man/mkvextract.xml:351
 msgid "Exports the chapter information in the simple format used in the <abbrev>OGM</abbrev> tools (CHAPTER01=..., CHAPTER01NAME=...). In this mode some information has to be discarded. Default is to output the chapters in &xml; format."
 msgstr "将章节信息以 <abbrev>OGM</abbrev> tools 所用的简单格式 (CHAPTER01=..., CHAPTER01NAME=...) 导出。此模式下部分信息将被废弃。默认以 &xml; 格式输出章节。"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvextract.xml:339
+#: doc/man/mkvextract.xml:360
 msgid "The extracted chapters are written to the console unless the output is redirected (see the section about <link linkend=\"mkvextract.output_redirection\">output redirection</link> for details)."
 msgstr "提取出的章节将被输出到命令行，除非输出被重定向（详情参见关于 <link linkend=\"mkvextract.output_redirection\">输出重定向</link> 的章节）。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvextract.xml:345
+#: doc/man/mkvextract.xml:366
 msgid "Cue sheet extraction mode"
 msgstr "Cue 表单提取模式"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvextract.xml:348
+#: doc/man/mkvextract.xml:369
 msgid "Syntax: <command>mkvextract</command> <option>cuesheet</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional>"
 msgstr "语法: <command>mkvextract</command> <option>cuesheet</option> <parameter>源文件名</parameter> <optional><parameter>选项</parameter></optional>"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvextract.xml:352
+#: doc/man/mkvextract.xml:373
 msgid "The extracted cue sheet is written to the console unless the output is redirected (see the section about <link linkend=\"mkvextract.output_redirection\">output redirection</link> for details)."
 msgstr "提取出的 cue 表单将被输出到命令行，除非输出被重定向（详情参见关于 <link linkend=\"mkvextract.output_redirection\">输出重定向</link> 的章节）。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvextract.xml:358
+#: doc/man/mkvextract.xml:379
 msgid "Timecode extraction mode"
 msgstr "时间码提取模式"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvextract.xml:361
-#| msgid "Syntax: <command>mkvextract</command> <option>tracks</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional>"
+#: doc/man/mkvextract.xml:382
 msgid "Syntax: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional> <parameter>TID1:dest-filename1</parameter> <optional><parameter>TID2:dest-filename2</parameter> ...</optional>"
 msgstr "语法: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>源文件名</parameter> <optional><parameter>选项</parameter></optional> <parameter>TID1:目标文件名1</parameter> <optional><parameter>TID2:目标文件名2</parameter> ...</optional>"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvextract.xml:365
+#: doc/man/mkvextract.xml:386
 msgid "The extracted timecodes are written to the console unless the output is redirected (see the section about <link linkend=\"mkvextract.output_redirection\">output redirection</link> for details)."
 msgstr "提取出的时间码将被输出到命令行，除非输出被重定向（详情参见关于 <link linkend=\"mkvextract.output_redirection\">输出重定向</link> 的章节）。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:374
-#| msgid "Causes extraction of the track with the ID <parameter>TID</parameter> into the file <parameter>outname</parameter> if such a track exists in the source file. This option can be given multiple times. The track IDs are the same as the ones output by &mkvmerge;'s <option>--identify</option> option."
+#: doc/man/mkvextract.xml:395
 msgid "Causes extraction of the timecodes for the track with the ID <parameter>TID</parameter> into the file <parameter>outname</parameter> if such a track exists in the source file. This option can be given multiple times. The track IDs are the same as the ones output by &mkvmerge;'s <option>--identify</option> option."
 msgstr "如果源文件中存在 ID 为 <parameter>TID</parameter> 的轨道，则将其时间码提取为文件 <parameter>输出文件名</parameter>。本选项可多次给出。轨道 ID 与 &mkvmerge; 的 <option>--identify</option> 选项所输出的相同。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:380
-#| msgid "Example"
+#: doc/man/mkvextract.xml:401
 msgid "Example:"
 msgstr "示例:"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><screen>
-#: doc/man/mkvextract.xml:384
+#: doc/man/mkvextract.xml:405
 #, no-wrap
-#| msgid ""
-#| "$ mkvextract tracks input.mkv 1:output-two-tracks.rm 2:output-two-tracks.rm\n"
-#| "      "
 msgid ""
 "$ mkvextract timecodes_v2 input.mkv 1:tc-track1.txt 2:tc-track2.txt\n"
 "      "
@@ -633,22 +661,22 @@ msgstr ""
 "      "
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:393
+#: doc/man/mkvextract.xml:414
 msgid "Output redirection"
 msgstr "输出重定向"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:396
+#: doc/man/mkvextract.xml:417
 msgid "Several extraction modes cause &mkvextract; to write the extracted data to the console. There are generally two ways of writing this data into a file: one provided by the shell and one provided by &mkvextract; itself."
 msgstr "有些提取模式会使 &mkvextract; 将提取出的数据输出到命令行。通常有两种方法将数据写入文件：一种由 shell 提供，另一种由 &mkvextract; 自身提供。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:401
+#: doc/man/mkvextract.xml:422
 msgid "The shell's builtin redirection mechanism is used by appending '<literal>&gt; output-filename.ext</literal>' to the command line. Example:"
 msgstr "shell 的报告重定向功能可以通过在命令行后追加 '<literal>&gt; 输出文件名.扩展名</literal>' 命令实现。示例："
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvextract.xml:406
+#: doc/man/mkvextract.xml:427
 #, no-wrap
 msgid ""
 "$ mkvextract tags source.mkv &gt; tags.xml\n"
@@ -658,12 +686,12 @@ msgstr ""
 "  "
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:410
+#: doc/man/mkvextract.xml:431
 msgid "&mkvextract;'s own redirection is invoked with the <link linkend=\"mkvextract.description.common.redirect_output\"><option>--redirect-output</option></link> option. Example:"
 msgstr "&mkvextract; 自身的重定向功能可通过 <link linkend=\"mkvextract.description.common.redirect_output\"><option>--redirect-output</option></link> 选项唤出。示例："
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvextract.xml:415
+#: doc/man/mkvextract.xml:436
 #, no-wrap
 msgid ""
 "$ mkvextract tags source.mkv --redirect-output tags.xml\n"
@@ -673,263 +701,263 @@ msgstr ""
 "  "
 
 #. type: Content of: <refentry><refsect1><note><para>
-#: doc/man/mkvextract.xml:420
+#: doc/man/mkvextract.xml:441
 msgid "On Windows you should probably use the <link linkend=\"mkvextract.description.common.redirect_output\"><option>--redirect-output</option></link> option because <command>cmd.exe</command> sometimes interpretes special characters before they're written into the output file resulting in broken output."
 msgstr "在 Windows 平台上您应当使用 <link linkend=\"mkvextract.description.common.redirect_output\"><option>--redirect-output</option></link> 选项，因为 <command>cmd.exe</command> 有时会在写入文件之前对特殊字符进行转义，导致输出文件损坏。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:429
+#: doc/man/mkvextract.xml:450
 msgid "Output file formats"
 msgstr "输出文件格式"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:432
+#: doc/man/mkvextract.xml:453
 msgid "The decision about the output format is based on the track type, not on the extension used for the output file name. The following track types are supported at the moment:"
 msgstr "输出文件的格式取决于轨道的类型，而不是输出文件名的扩展名。目前支持以下轨道类型："
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:438
+#: doc/man/mkvextract.xml:459
 msgid "V_MPEG4/ISO/AVC"
 msgstr "V_MPEG4/ISO/AVC"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:441
+#: doc/man/mkvextract.xml:462
 msgid "<abbrev>H.264</abbrev> / <abbrev>AVC</abbrev> video tracks are written to <abbrev>H.264</abbrev> elementary streams which can be processed further with e.g. <productname>MP4Box</productname> from the <productname>GPAC</productname> package."
 msgstr "<abbrev>H.264</abbrev> / <abbrev>AVC</abbrev> 视频轨将被输出为 <abbrev>H.264</abbrev> 基本流，可以使用如 <productname>GPAC</productname> 工具包中的 <productname>MP4Box</productname> 作进一步处理。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:448
+#: doc/man/mkvextract.xml:469
 msgid "V_MS/VFW/FOURCC"
 msgstr "V_MS/VFW/FOURCC"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:451
+#: doc/man/mkvextract.xml:472
 msgid "Fixed <abbrev>FPS</abbrev> video tracks with this <classname>CodecID</classname> are written to <abbrev>AVI</abbrev> files."
 msgstr "使用此 <classname>CodecID</classname> 且 <abbrev>FPS</abbrev> 恒定的视频轨将被输出为 <abbrev>AVI</abbrev> 文件。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:457
+#: doc/man/mkvextract.xml:478
 msgid "V_REAL/*"
 msgstr "V_REAL/*"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:460
+#: doc/man/mkvextract.xml:481
 msgid "<productname>RealVideo</productname> tracks are written to <productname>RealMedia</productname> files."
 msgstr "<productname>RealVideo</productname> 轨道将被输出为 <productname>RealMedia</productname> 文件。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:466
+#: doc/man/mkvextract.xml:487
 msgid "A_MPEG/L3, A_AC3"
 msgstr "A_MPEG/L3, A_AC3"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:469
+#: doc/man/mkvextract.xml:490
 msgid "These will be extracted to raw <abbrev>MP3</abbrev> and <abbrev>AC3</abbrev> files."
 msgstr "这些将被输出为原始的 <abbrev>MP3</abbrev> 与 <abbrev>AC3</abbrev> 文件。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:475
+#: doc/man/mkvextract.xml:496
 msgid "A_PCM/INT/LIT"
 msgstr "A_PCM/INT/LIT"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:478
+#: doc/man/mkvextract.xml:499
 msgid "Raw <abbrev>PCM</abbrev> data will be written to a <abbrev>WAV</abbrev> file."
 msgstr "原始 <abbrev>PCM</abbrev> 数据将被输出为 <abbrev>WAV</abbrev> 文件。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:484
+#: doc/man/mkvextract.xml:505
 msgid "A_AAC/MPEG2/*, A_AAC/MPEG4/*, A_AAC"
 msgstr "A_AAC/MPEG2/*, A_AAC/MPEG4/*, A_AAC"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:487
+#: doc/man/mkvextract.xml:508
 msgid "All <abbrev>AAC</abbrev> files will be written into an <abbrev>AAC</abbrev> file with <abbrev>ADTS</abbrev> headers before each packet. The <abbrev>ADTS</abbrev> headers will not contain the deprecated emphasis field."
 msgstr "所有 <abbrev>AAC</abbrev> 文件将被输出为 <abbrev>AAC</abbrev> 文件，其中数据包前有 <abbrev>ADTS</abbrev> 头。<abbrev>ADTS</abbrev> 头将不含反增强字段（deprecated emphasis field）。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:494
+#: doc/man/mkvextract.xml:515
 msgid "A_VORBIS"
 msgstr "A_VORBIS"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:497
+#: doc/man/mkvextract.xml:518
 msgid "Vorbis audio will be written into an &oggvorbis; file."
 msgstr "Vorbis 音频将被输出为 &oggvorbis; 文件。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:503
+#: doc/man/mkvextract.xml:524
 msgid "A_REAL/*"
 msgstr "A_REAL/*"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:506
+#: doc/man/mkvextract.xml:527
 msgid "<productname>RealAudio</productname> tracks are written to <productname>RealMedia</productname> files."
 msgstr "<productname>RealAudio</productname> 轨道将被输出为 <productname>RealMedia</productname> 文件。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:512
+#: doc/man/mkvextract.xml:533
 msgid "A_TTA1"
 msgstr "A_TTA1"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:515
+#: doc/man/mkvextract.xml:536
 msgid "<productname>TrueAudio</productname> tracks are written to <abbrev>TTA</abbrev> files. Please note that due to &matroska;'s limited timecode precision the extracted file's header will be different regarding two fields: <varname>data_length</varname> (the total number of samples in the file) and the <abbrev>CRC</abbrev>."
 msgstr "<productname>TrueAudio</productname> 轨道将被输出为 <abbrev>TTA</abbrev> 文件。请注意，由于 &matroska; 时间码的精度限制，解开来的文件的头部有两个字段不同：<varname>data_length</varname> (文件的总采样数) 与 <abbrev>CRC</abbrev>。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:523
+#: doc/man/mkvextract.xml:544
 msgid "S_TEXT/UTF8"
 msgstr "S_TEXT/UTF8"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:526
+#: doc/man/mkvextract.xml:547
 msgid "Simple text subtitles will be written as <abbrev>SRT</abbrev> files."
 msgstr "简单的文本字幕将被输出为 <abbrev>SRT</abbrev> 文件。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:532
+#: doc/man/mkvextract.xml:553
 msgid "S_TEXT/SSA, S_TEXT/ASS"
 msgstr "S_TEXT/SSA, S_TEXT/ASS"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:535
+#: doc/man/mkvextract.xml:556
 msgid "<abbrev>SSA</abbrev> and <abbrev>ASS</abbrev> text subtitles will be written as <abbrev>SSA</abbrev>/<abbrev>ASS</abbrev> files respectively."
 msgstr "<abbrev>SSA</abbrev> 与 <abbrev>ASS</abbrev> 文本字幕将分别被输出为 <abbrev>SSA</abbrev>/<abbrev>ASS</abbrev> 文件。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:542
+#: doc/man/mkvextract.xml:563
 msgid "S_KATE"
 msgstr "S_KATE"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:545
+#: doc/man/mkvextract.xml:566
 msgid "<productname>Kate</productname> streams will be written within an <productname>Ogg</productname> container."
 msgstr "<productname>Kate</productname> 流将以 <productname>Ogg</productname> 为容器输出。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:551
-#: doc/man/mkvmerge.xml:1904
+#: doc/man/mkvextract.xml:572
+#: doc/man/mkvmerge.xml:1925
 msgid "Tags"
 msgstr "标签"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:554
+#: doc/man/mkvextract.xml:575
 msgid "Tags are converted to a &xml; format. This format is the same that &mkvmerge; supports for reading tags."
 msgstr "标签将被转换为 &xml; 格式。此格式与 &mkvmerge; 所支持读取的标签格式相同。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:560
-#: doc/man/mkvmerge.xml:1772
+#: doc/man/mkvextract.xml:581
+#: doc/man/mkvmerge.xml:1793
 msgid "Attachments"
 msgstr "附件"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:563
+#: doc/man/mkvextract.xml:584
 msgid "Attachments are written to they output file as they are. No conversion whatsoever is done."
 msgstr "附件将被以原样输出。不会进行任何转换。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:569
-#: doc/man/mkvmerge.xml:1797
+#: doc/man/mkvextract.xml:590
+#: doc/man/mkvmerge.xml:1818
 msgid "Chapters"
 msgstr "章节"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:572
+#: doc/man/mkvextract.xml:593
 msgid "Chapters are converted to a &xml; format. This format is the same that &mkvmerge; supports for reading chapters. Alternatively a stripped-down version can be output in the simple <abbrev>OGM</abbrev> style format."
 msgstr "章节将被转换为 &xml; 格式。此格式与 &mkvmerge; 所支持读取的章节格式相同。您也可以选择输出精简的简单 <abbrev>OGM</abbrev> 格式。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: doc/man/mkvextract.xml:579
+#: doc/man/mkvextract.xml:600
 msgid "Timecodes"
 msgstr "时间码"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvextract.xml:582
+#: doc/man/mkvextract.xml:603
 msgid "Timecodes are first sorted and then output as a timecode v2 format compliant file ready to be fed to &mkvmerge;.  The extraction to other formats (v1, v3 and v4) is not supported."
 msgstr "时间码会先被排序，然后以 timecode v2 格式文件输出，该文件适用于 &mkvmerge;。不支持提取为其他格式 (v1, v3 或 v4)。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:591
-#: doc/man/mkvinfo.xml:257
-#: doc/man/mkvmerge.xml:2136
-#: doc/man/mkvpropedit.xml:369
+#: doc/man/mkvextract.xml:612
+#: doc/man/mkvinfo.xml:278
+#: doc/man/mkvmerge.xml:2157
+#: doc/man/mkvpropedit.xml:390
 msgid "Exit codes"
 msgstr "退出代码"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:594
+#: doc/man/mkvextract.xml:615
 msgid "&mkvextract; exits with one of three exit codes:"
 msgstr "&mkvextract; 退出时会返回以下三个退出代码中的一个："
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvextract.xml:600
+#: doc/man/mkvextract.xml:621
 msgid "<constant>0</constant> -- This exit codes means that extraction has completed successfully."
 msgstr "<constant>0</constant> -- 此退出代码说明已成功完成提取。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvextract.xml:606
+#: doc/man/mkvextract.xml:627
 msgid "<constant>1</constant> -- In this case &mkvextract; has output at least one warning, but extraction did continue.  A warning is prefixed with the text '<literal>Warning:</literal>'.  Depending on the issues involved the resulting files might be ok or not.  The user is urged to check both the warning and the resulting files."
 msgstr "<constant>1</constant> -- 这种情况下 &mkvextract; 至少输出了一条警告信息，但提取并未因之中止。 警告信息以文字 '<literal>警告:</literal>' 为前缀。根据问题的不同，生成的文件可能是好的，也可能不是。 强烈建议用户检查警告信息以及生成的文件。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvextract.xml:614
+#: doc/man/mkvextract.xml:635
 msgid "<constant>2</constant> -- This exit code is used after an error occurred.  &mkvextract; aborts right after outputting the error message.  Error messages range from wrong command line arguments over read/write errors to broken files."
 msgstr "<constant>2</constant> -- 此退出代码用于错误发生之后。 &mkvextract; 在输出错误信息后即中断处理。错误信息可能是错误的命令行参数，也可能是损坏文件的读取/写入错误。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:622
-#: doc/man/mkvinfo.xml:287
-#: doc/man/mkvmerge.xml:1670
-#: doc/man/mkvpropedit.xml:400
+#: doc/man/mkvextract.xml:643
+#: doc/man/mkvinfo.xml:308
+#: doc/man/mkvmerge.xml:1691
+#: doc/man/mkvpropedit.xml:421
 msgid "Escaping special chars in text"
 msgstr "文本中特殊字符的转义"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:624
-#: doc/man/mkvinfo.xml:289
-#: doc/man/mkvmerge.xml:1672
-#: doc/man/mkvpropedit.xml:402
+#: doc/man/mkvextract.xml:645
+#: doc/man/mkvinfo.xml:310
+#: doc/man/mkvmerge.xml:1693
+#: doc/man/mkvpropedit.xml:423
 msgid "There are a few places in which special characters in text must or should be escaped. The rules for escaping are simple: each character that needs escaping is replaced with a backslash followed by another character."
 msgstr "有时文本中的特殊字符必须或应该转义。转义规则很简单: 用反斜杠后接一字符替换需要转义的各字符。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:629
-#: doc/man/mkvinfo.xml:294
-#: doc/man/mkvmerge.xml:1677
-#: doc/man/mkvpropedit.xml:407
+#: doc/man/mkvextract.xml:650
+#: doc/man/mkvinfo.xml:315
+#: doc/man/mkvmerge.xml:1698
+#: doc/man/mkvpropedit.xml:428
 msgid "The rules are: ' ' becomes '\\s', '&quot;' becomes '\\2', ':' becomes '\\c', '#' becomes '\\h' and '\\' itself becomes '\\\\'."
 msgstr "规则为: ' ' 变为 '\\s'，'&quot;' 变为 '\\2'，':' 变为 '\\c'，'#' 变为 '\\h'，而 '\\' 自己则变为 '\\\\'。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:634
-#: doc/man/mkvinfo.xml:299
-#: doc/man/mkvmerge.xml:2167
-#: doc/man/mkvpropedit.xml:412
+#: doc/man/mkvextract.xml:655
+#: doc/man/mkvinfo.xml:320
+#: doc/man/mkvmerge.xml:2188
+#: doc/man/mkvpropedit.xml:433
 #: doc/man/mmg.xml:90
 msgid "See also"
 msgstr "参阅"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:636
+#: doc/man/mkvextract.xml:657
 msgid "&mkvmerge;, &mkvinfo;, &mkvpropedit;, &mmg;"
 msgstr "&mkvmerge;, &mkvinfo;, &mkvpropedit;, &mmg;"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvextract.xml:641
-#: doc/man/mkvinfo.xml:306
-#: doc/man/mkvmerge.xml:2174
-#: doc/man/mkvpropedit.xml:419
+#: doc/man/mkvextract.xml:662
+#: doc/man/mkvinfo.xml:327
+#: doc/man/mkvmerge.xml:2195
+#: doc/man/mkvpropedit.xml:440
 #: doc/man/mmg.xml:97
 msgid "WWW"
 msgstr "网络"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvextract.xml:643
-#: doc/man/mkvinfo.xml:308
-#: doc/man/mkvmerge.xml:2176
-#: doc/man/mkvpropedit.xml:421
+#: doc/man/mkvextract.xml:664
+#: doc/man/mkvinfo.xml:329
+#: doc/man/mkvmerge.xml:2197
+#: doc/man/mkvpropedit.xml:442
 #: doc/man/mmg.xml:99
 msgid "The latest version can always be found at <ulink url=\"http://www.bunkus.org/videotools/mkvtoolnix/\">the MKVToolNix homepage</ulink>."
 msgstr "最新版本总可以在 <ulink url=\"http://www.bunkus.org/videotools/mkvtoolnix/\">MKVToolNix 主页</ulink> 找到。"
@@ -1030,17 +1058,17 @@ msgid "Be more verbose. See the section about <link linkend=\"mkvinfo.verbosity_
 msgstr "使输出更详尽。请参阅关于 <link linkend=\"mkvinfo.verbosity_levels\">“详细”程度</link> 的段落获取在哪些层级将输出哪些信息的描述。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:201
+#: doc/man/mkvinfo.xml:222
 msgid "Several chars can be escaped, e.g. if you need to start a non-comment line with '#'. The rules are described in <link linkend=\"mkvinfo.escaping\">the section about escaping text</link>."
 msgstr "有些字符可以转义，如当您需要使用 '#' 作为一个不是评论的行的开头。规则在<link linkend=\"mkvinfo.escaping\">关于转义文本的段落</link>有描述。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvinfo.xml:206
+#: doc/man/mkvinfo.xml:227
 msgid "The command line '<command>mkvinfo -v -v input.mkv --redirect-output info.txt</command>' could be converted into the following option file:"
 msgstr "命令行 '<command>mkvinfo -v -v 输入.mkv --redirect-output 信息.txt</command>' 可以转换为下面所示的选项文件:"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><programlisting>
-#: doc/man/mkvinfo.xml:211
+#: doc/man/mkvinfo.xml:232
 #, no-wrap
 msgid ""
 "# Be more verbose\n"
@@ -1064,57 +1092,57 @@ msgstr ""
 "     "
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvinfo.xml:226
+#: doc/man/mkvinfo.xml:247
 msgid "Verbosity levels"
 msgstr "“详细”程度"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:229
+#: doc/man/mkvinfo.xml:250
 msgid "The <link linkend=\"mkvinfo.description.verbose\"><option>-v</option></link> option can be used to increase &mkvinfo;'s verbosity level and print more information about the current file."
 msgstr "<link linkend=\"mkvinfo.description.verbose\"><option>-v</option></link> 选项可以使 &mkvinfo; 增强其“详细”程度并输出关于当前文件的更多信息。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:234
+#: doc/man/mkvinfo.xml:255
 msgid "At level 0 &mkvinfo; will print only the track headers it finds and their types. &mkvinfo; will exit as soon as the headers are parsed completely (more technical: as soon as the first cluster is encountered). In this level the seek head entries and the cues will not be displayed -- even if they're located in front of the track information."
 msgstr "在 level 0 &mkvinfo; 仅输出它发现的轨道头及其类型。头部解析完毕后（更专业地：遇到首个簇时），&mkvinfo; 将退出执行。在此层级，定位头项与 cue 索引不会显示出来——即使它们位于轨道信息之前。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:240
+#: doc/man/mkvinfo.xml:261
 msgid "At level 1 &mkvinfo; will also print all &matroska; elements encountered for the complete file but the seek head entries and the cue entries. If the summary mode is enabled then &mkvinfo; will output the frame position as well."
 msgstr "在 level 1 &mkvinfo; 同样将输出在整个文件中遇到的所有 &matroska; 元素，此外还将输出定位头项与 cue 索引项。如果启用了简要模式，&mkvinfo; 还将输出各帧位置。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:245
+#: doc/man/mkvinfo.xml:266
 msgid "At level 2 &mkvinfo; will also print the seek head entries, the cue entries and the file position at which each &matroska; element can be found at."
 msgstr "在 level 2 &mkvinfo; 同样将输出定位头项与 cue 索引项，以及文件中各 &matroska; 元素被发现的位置。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:250
+#: doc/man/mkvinfo.xml:271
 msgid "At level 3 and above &mkvinfo; will print some information that is not directly connected to a &matroska; element. All other elements only print stuff about the elements that were just found. Level 3 adds meta information to ease debugging (read: it's intended for developers only). All lines written by level 3 are enclosed in square brackets to make filtering them out easy."
 msgstr "在 level 3 及更高层级 &mkvinfo; 将输出一些与 &matroska; 元素不直接相连的信息。对于其他元素，将只输出发现的基本信息。Level 3 增加了元信息以便调试（换句话说：它是为开发人员设计的）。Level 3 输出的所有行都以方括号嵌套以便过滤。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:260
+#: doc/man/mkvinfo.xml:281
 msgid "&mkvinfo; exits with one of three exit codes:"
 msgstr "&mkvinfo; 退出时会返回以下三个退出代码中的一个："
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvinfo.xml:266
+#: doc/man/mkvinfo.xml:287
 msgid "<constant>0</constant> -- This exit codes means that the run has completed successfully."
 msgstr "<constant>0</constant> -- 此退出代码说明已成功完成运行。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvinfo.xml:272
+#: doc/man/mkvinfo.xml:293
 msgid "<constant>1</constant> -- In this case &mkvinfo; has output at least one warning, but the run did continue.  A warning is prefixed with the text '<literal>Warning:</literal>'."
 msgstr "<constant>1</constant> -- 这种情况下 &mkvinfo; 至少输出了一条警告信息，但运行并未因之中止。 警告信息以文字 '<literal>警告:</literal>' 为前缀。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvinfo.xml:279
+#: doc/man/mkvinfo.xml:300
 msgid "<constant>2</constant> -- This exit code is used after an error occurred.  &mkvinfo; aborts right after outputting the error message.  Error messages range from wrong command line arguments over read/write errors to broken files."
 msgstr "<constant>2</constant> -- 此退出代码用于错误发生之后。 &mkvinfo; 在输出错误信息后即中断运行。错误信息可能是错误的命令行参数，也可能是损坏文件的读取/写入错误。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvinfo.xml:301
+#: doc/man/mkvinfo.xml:322
 msgid "&mkvmerge;, &mkvextract;, &mkvpropedit;, &mmg;"
 msgstr "&mkvmerge;, &mkvextract;, &mkvpropedit;, &mmg;"
 
@@ -2289,61 +2317,61 @@ msgid "'<literal>FLAC</literal>' -- reading raw <abbrev>FLAC</abbrev> files and 
 msgstr "'<literal>FLAC</literal>' -- 读取原始 <abbrev>FLAC</abbrev> 文件，以及处理其他容器中的 <abbrev>FLAC</abbrev> 轨道，例如 <productname>Ogg</productname> 或 &matroska; 容器中的。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvmerge.xml:1353
+#: doc/man/mkvmerge.xml:1374
 msgid "Usage"
 msgstr "用法"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1355
+#: doc/man/mkvmerge.xml:1376
 msgid "For each file the user can select which tracks &mkvmerge; should take.  They are all put into the file specified with <option>-o</option>. A list of known (and supported) source formats can be obtained with the <option>-l</option> option."
 msgstr "用户可以选择各文件中 &mkvmerge; 应该使用的轨道。它们都将被封装到 <option>-o</option>所指定的文件中。可通过 <option>-l</option> 选项获取已知（且受支持的）来源格式列表。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvmerge.xml:1361
-#: doc/man/mkvpropedit.xml:345
+#: doc/man/mkvmerge.xml:1382
+#: doc/man/mkvpropedit.xml:366
 msgid "Examples"
 msgstr "示例"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1363
+#: doc/man/mkvmerge.xml:1384
 msgid "Let's assume you have a file called MyMovie.avi and the audio track in a separate file, e.g. '<literal>MyMovie.wav</literal>'. First you want to encode the audio to &oggvorbis;:"
 msgstr "假定您有个名为 我的影片.avi 的文件，以及分开存放的音频轨如 '<literal>我的影片.wav</literal>'。您希望先将音频编码为 &oggvorbis;:"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1367
+#: doc/man/mkvmerge.xml:1388
 #, no-wrap
 msgid "$ oggenc -q4 -oMyMovie.ogg MyMovie.wav"
 msgstr "$ oggenc -q4 -o 我的影片.ogg 我的影片.wav"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1370
+#: doc/man/mkvmerge.xml:1391
 msgid "After a couple of minutes you can join video and audio:"
 msgstr "几分钟后您就可以合并视频和音频了:"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1373
+#: doc/man/mkvmerge.xml:1394
 #, no-wrap
 msgid "$ mkvmerge -o MyMovie-with-sound.mkv MyMovie.avi MyMovie.ogg"
 msgstr "$ mkvmerge -o 我的有声影片.mkv 我的影片.avi 我的影片.ogg"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1376
+#: doc/man/mkvmerge.xml:1397
 msgid "If your <abbrev>AVI</abbrev> already contains an audio track then it will be copied as well (if &mkvmerge; supports the audio format). To avoid that simply do"
 msgstr "如果您的 <abbrev>AVI</abbrev> 文件已经含有一条音频轨，则将同时复制该轨道（只要 &mkvmerge; 支持该音频格式）。要避免此状况，只需要这样"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1380
+#: doc/man/mkvmerge.xml:1401
 #, no-wrap
 msgid "$ mkvmerge -o MyMovie-with-sound.mkv -A MyMovie.avi MyMovie.ogg"
 msgstr "$ mkvmerge -o 我的有声影片.mkv -A 我的影片.avi 我的影片.ogg"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1383
+#: doc/man/mkvmerge.xml:1404
 msgid "After some minutes of consideration you rip another audio track, e.g.  the director's comments or another language to '<literal>MyMovie-add-audio.wav</literal>'.  Encode it again and join it up with the other file:"
 msgstr "又过了几分钟，您又制作了另一条音频轨，如 导演评论或者是另一种语言的配音，您生成的文件名是 '<literal>我影片的另一音轨.wav</literal>'。 再进行一次编码操作，然后将其合并:"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1388
+#: doc/man/mkvmerge.xml:1409
 #, no-wrap
 msgid ""
 "$ oggenc -q4 -oMyMovie-add-audio.ogg MyMovie-add-audio.wav\n"
@@ -2355,195 +2383,195 @@ msgstr ""
 "  "
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1393
+#: doc/man/mkvmerge.xml:1414
 msgid "The same result can be achieved with"
 msgstr "照下面的做法结果相同"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1396
+#: doc/man/mkvmerge.xml:1417
 #, no-wrap
 msgid "$ mkvmerge -o MM-complete.mkv -A MyMovie.avi MyMovie.ogg MyMovie-add-audio.ogg"
 msgstr "$ mkvmerge -o 我的影片-成品.mkv -A 我的影片.avi 我的影片.ogg 我影片的另一音轨.ogg"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1399
+#: doc/man/mkvmerge.xml:1420
 msgid "Now fire up <productname>mplayer</productname> and enjoy. If you have multiple audio tracks (or even video tracks) then you can tell <productname>mplayer</productname> which track to play with the '<option>-vid</option>' and '<option>-aid</option>' options. These are 0-based and do not distinguish between video and audio."
 msgstr "现在开启 <productname>mplayer</productname> 尽情享受吧。如果您有多条音频轨（或者甚至是视频轨），那么您可以通过 '<option>-vid</option>' 与 '<option>-aid</option>' 选项告诉 <productname>mplayer</productname> 应该播放哪些轨道。这些是基础功能，不区分视频与音频。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1405
+#: doc/man/mkvmerge.xml:1426
 msgid "If you need an audio track synchronized you can do that easily. First find out which track ID the Vorbis track has with"
 msgstr "如果您需要同步音频轨，会非常容易。首先找清 Vorbis 轨道的轨道 ID"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1408
+#: doc/man/mkvmerge.xml:1429
 #, no-wrap
 msgid "$ mkvmerge --identify outofsync.ogg"
 msgstr "$ mkvmerge --identify 错开了的.ogg"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1411
+#: doc/man/mkvmerge.xml:1432
 msgid "Now you can use that ID in the following command line:"
 msgstr "现在您可以在下述命令行中使用该 ID:"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1414
+#: doc/man/mkvmerge.xml:1435
 #, no-wrap
 msgid "$ mkvmerge -o goodsync.mkv -A source.avi -y 12345:200 outofsync.ogg"
 msgstr "$ mkvmerge -o 同步了的.mkv -A 源.avi -y 12345:200 错开了的.ogg"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1417
+#: doc/man/mkvmerge.xml:1438
 msgid "This would add 200ms of silence at the beginning of the audio track with the ID <constant>12345</constant> taken from '<literal>outofsync.ogg</literal>'."
 msgstr "这将在 '<literal>错开了的.ogg</literal>' 中 ID 为 <constant>12345</constant> 的音频轨的开头添加 200ms 的静音。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1422
+#: doc/man/mkvmerge.xml:1443
 msgid "Some movies start synced correctly but slowly drift out of sync. For these kind of movies you can specify a delay factor that is applied to all timestamps -- no data is added or removed. So if you make that factor too big or too small you'll get bad results. An example is that an episode I transcoded was <constant>0.2</constant> seconds out of sync at the end of the movie which was <constant>77340</constant> frames long. At <constant>29.97fps</constant> <constant>0.2</constant> seconds correspond to approx. <constant>6</constant> frames. So I did"
 msgstr "有些影片在开头同步正常，但音画同步会慢慢偏离开。对此类影片您可以指定延时系数，该系数将被应用到所有时间戳 -- 不添加或移除任何数据。因此如果您所设定的系数过大或过小会造成很糟糕的结果。例如我转码的一期节目有 <constant>77340</constant> 帧长，在结尾处有 <constant>0.2</constant> 秒的同步偏离。在 <constant>29.97fps</constant> 帧率下大约是每 <constant>6</constant> 帧错开 <constant>0.2</constant> 秒。于是我这样操作"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1429
+#: doc/man/mkvmerge.xml:1450
 #, no-wrap
 msgid "$ mkvmerge -o goodsync.mkv -y 23456:0,77346/77340 outofsync.mkv"
 msgstr "$ mkvmerge -o 同步了的.mkv -y 23456:0,77346/77340 错开了的.mkv"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1432
+#: doc/man/mkvmerge.xml:1453
 msgid "The result was fine."
 msgstr "搞定了。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1436
+#: doc/man/mkvmerge.xml:1457
 msgid "The sync options can also be used for subtitles in the same manner."
 msgstr "同步选项对字幕同样起作用。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1440
+#: doc/man/mkvmerge.xml:1461
 msgid "For text subtitles you can either use some Windows software (like <productname>SubRipper</productname>) or the <productname>subrip</productname> package found in <citerefentry><refentrytitle>transcode</refentrytitle><manvolnum>1</manvolnum></citerefentry>'s sources in the '<literal>contrib/subrip</literal>' directory. The general process is:"
 msgstr "对于文本字幕，您既可以选用一些 Windows 软件（如 <productname>SubRipper</productname>）或 '<literal>contrib/subrip</literal>' 目录  <citerefentry><refentrytitle>transcode</refentrytitle><manvolnum>1</manvolnum></citerefentry> 的源码中的 <productname>subrip</productname> 包。大体过程是这样的:"
 
 #. type: Content of: <refentry><refsect1><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1448
+#: doc/man/mkvmerge.xml:1469
 msgid "extract a raw subtitle stream from the source:"
 msgstr "从源文件中提取原始字幕流:"
 
 #. type: Content of: <refentry><refsect1><orderedlist><listitem><screen>
-#: doc/man/mkvmerge.xml:1449
+#: doc/man/mkvmerge.xml:1470
 #, no-wrap
 msgid "$ tccat -i /path/to/copied/dvd/ -T 1 -L | tcextract -x ps1 -t vob -a 0x20 | subtitle2pgm -o mymovie"
 msgstr "$ tccat -i /path/to/copied/dvd/ -T 1 -L | tcextract -x ps1 -t vob -a 0x20 | subtitle2pgm -o mymovie"
 
 #. type: Content of: <refentry><refsect1><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1453
+#: doc/man/mkvmerge.xml:1474
 msgid "convert the resulting PGM images to text with gocr:"
 msgstr "使用 gocr 将生成的 PGM 图像转为文本:"
 
 #. type: Content of: <refentry><refsect1><orderedlist><listitem><screen>
-#: doc/man/mkvmerge.xml:1454
+#: doc/man/mkvmerge.xml:1475
 #, no-wrap
 msgid "$ pgm2txt mymovie"
 msgstr "$ pgm2txt mymovie"
 
 #. type: Content of: <refentry><refsect1><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1458
+#: doc/man/mkvmerge.xml:1479
 msgid "spell-check the resulting text files:"
 msgstr "对生成的文本文件进行拼写检查:"
 
 #. type: Content of: <refentry><refsect1><orderedlist><listitem><screen>
-#: doc/man/mkvmerge.xml:1459
+#: doc/man/mkvmerge.xml:1480
 #, no-wrap
 msgid "$ ispell -d american *txt"
 msgstr "$ ispell -d american *txt"
 
 #. type: Content of: <refentry><refsect1><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1463
+#: doc/man/mkvmerge.xml:1484
 msgid "convert the text files to a SRT file:"
 msgstr "将文本文件转为 SRT 文件:"
 
 #. type: Content of: <refentry><refsect1><orderedlist><listitem><screen>
-#: doc/man/mkvmerge.xml:1464
+#: doc/man/mkvmerge.xml:1485
 #, no-wrap
 msgid "$ srttool -s -w -i mymovie.srtx -o mymovie.srt"
 msgstr "$ srttool -s -w -i mymovie.srtx -o mymovie.srt"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1469
+#: doc/man/mkvmerge.xml:1490
 msgid "The resulting file can be used as another input file for &mkvmerge;:"
 msgstr "这样生成的文件可用作 &mkvmerge; 的输入文件:"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1472
+#: doc/man/mkvmerge.xml:1493
 #, no-wrap
 msgid "$ mkvmerge -o mymovie.mkv mymovie.avi mymovie.srt"
 msgstr "$ mkvmerge -o mymovie.mkv mymovie.avi mymovie.srt"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1475
+#: doc/man/mkvmerge.xml:1496
 msgid "If you want to specify the language for a given track then this is easily done. First find out the ISO639-2 code for your language. &mkvmerge; can list all of those codes for you:"
 msgstr "如果您希望为指定轨道指定语言，这将很容易完成。首先找到您所需语言的 ISO639-2 代码。&mkvmerge; 会为您列出所有代码:"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1479
+#: doc/man/mkvmerge.xml:1500
 #, no-wrap
 msgid "$ mkvmerge --list-languages"
 msgstr "$ mkvmerge --list-languages"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1482
+#: doc/man/mkvmerge.xml:1503
 msgid "Search the list for the languages you need. Let's assume you have put two audio tracks into a &matroska; file and want to set their language codes and that their track IDs are 2 and 3. This can be done with"
 msgstr "在列表中找到您所需的语言。假定您已在 &matroska; 文件中放入两条音轨，并希望设置它们的语言代码，两条轨道的轨道 ID 为 2 和 3。可以这样操作"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1486
+#: doc/man/mkvmerge.xml:1507
 #, no-wrap
 msgid "$ mkvmerge -o with-lang-codes.mkv --language 2:ger --language 3:dut without-lang-codes.mkv"
 msgstr "$ mkvmerge -o 含语言代码的.mkv --language 2:ger --language 3:dut 无语言代码的.mkv"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1489
+#: doc/man/mkvmerge.xml:1510
 msgid "As you can see you can use the <link linkend=\"mkvmerge.description.language\"><option>--language</option></link> switch multiple times."
 msgstr "如您所见，<link linkend=\"mkvmerge.description.language\"><option>--language</option></link> 开关可多次使用。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1493
+#: doc/man/mkvmerge.xml:1514
 msgid "Maybe you'd also like to have the player use the Dutch language as the default language. You also have extra subtitles, e.g. in English and French, and want to have the player display the French ones by default. This can be done with"
 msgstr "或许您还想让荷兰语作为默认语言。您还有其他语言的字幕，如英语和法语的，并希望让播放器默认显示法语字幕。可以这样操作"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1497
+#: doc/man/mkvmerge.xml:1518
 #, no-wrap
 msgid "$ mkvmerge -o with-lang-codes.mkv --language 2:ger --language 3:dut --default-track 3 without-lang-codes.mkv --language 0:eng english.srt --default-track 0 --language 0:fre french.srt"
 msgstr "$ mkvmerge -o 含语言代码的.mkv --language 2:ger --language 3:dut --default-track 3 无语言代码的.mkv --language 0:eng 英语.srt --default-track 0 --language 0:fre 法语.srt"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1500
+#: doc/man/mkvmerge.xml:1521
 msgid "If you do not see the language or default track flags that you've specified in &mkvinfo;'s output then please read the section about <link linkend=\"mkvmerge.default_values\">default values</link>."
 msgstr "如果您在 &mkvinfo; 的输出信息中没找到您指定的语言或默认轨标记，请参阅关于 <link linkend=\"mkvmerge.default_values\">默认值</link> 的段落。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1505
+#: doc/man/mkvmerge.xml:1526
 msgid "Turn off the compression for an input file."
 msgstr "关闭针对某输入文件的压缩。"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1508
+#: doc/man/mkvmerge.xml:1529
 #, no-wrap
 msgid "$ mkvmerge -o no-compression.mkv --compression -1:none MyMovie.avi --compression -1:none mymovie.srt"
 msgstr "$ mkvmerge -o 无压缩.mkv --compression -1:none 我的影片.avi --compression -1:none 我的影片.srt"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvmerge.xml:1513
+#: doc/man/mkvmerge.xml:1534
 msgid "Track IDs"
 msgstr "轨道 ID"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1516
+#: doc/man/mkvmerge.xml:1537
 msgid "Some of the options for &mkvmerge; need a track ID to specify which track they should be applied to.  Those track IDs are printed by the readers when demuxing the current input file, or if &mkvmerge; is called with the <link linkend=\"mkvmerge.description.identify\"><option>--identify</option></link> option.  An example for such output:"
 msgstr "&mkvmerge; 的一些选项要求提供轨道 ID 以指定应应用到的轨道。 当读取器分离当前输入文件时，或者使用 <link linkend=\"mkvmerge.description.identify\"><option>--identify</option></link> 选项调用 &mkvmerge; 时这些轨道 ID 会被显示出来。此类输出的一个示例："
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1522
+#: doc/man/mkvmerge.xml:1543
 #, no-wrap
 msgid ""
 "$ mkvmerge -i v.mkv\n"
@@ -2559,202 +2587,202 @@ msgstr ""
 "  "
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1529
+#: doc/man/mkvmerge.xml:1550
 msgid "Do not confuse the track IDs that are assigned to the tracks that are placed in the output MKV file with the track IDs of the input files. Only the input file track IDs are used for options needing these values."
 msgstr "不要混淆输出 MKV 文件时所分派的轨道 ID与输入文件的轨道 ID。只有输入文件的轨道 ID 可用于需要轨道 ID 值的选项。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1534
+#: doc/man/mkvmerge.xml:1555
 msgid "Also note that each input file has its own set of track IDs. Therefore the track IDs for file '<filename>file1.ext</filename>' as reported by '<literal>mkvmerge --identify</literal>' do not change no matter how many other input files are there or in which position '<filename>file1.ext</filename>' is used."
 msgstr "还需注意，每个输入文件有其自己的一组轨道 ID。因此通过 '<literal>mkvmerge --identify</literal>' 报告的文件 '<filename>文件1.扩展名</filename>' 的轨道 ID 不随其他输入文件的数量或 '<filename>文件1.扩展名</filename>' 所用到的位置变化。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1540
+#: doc/man/mkvmerge.xml:1561
 msgid "Track IDs are assigned like this:"
 msgstr "轨道 ID 通常这样分配："
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1546
+#: doc/man/mkvmerge.xml:1567
 msgid "<abbrev>AVI</abbrev> files: The video track has the ID 0. The audio tracks get IDs in ascending order starting at 1."
 msgstr "<abbrev>AVI</abbrev> 文件: 视频轨 ID 为 0。音频轨的 ID 由 1 开始升序分配。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1552
+#: doc/man/mkvmerge.xml:1573
 msgid "<abbrev>MP4</abbrev> files: As output from x264, the video track has the ID 1."
 msgstr "<abbrev>MP4</abbrev> 文件: 如 x264 所输出的文件，视频轨 ID 为 1。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1558
+#: doc/man/mkvmerge.xml:1579
 msgid "<abbrev>AAC</abbrev>, <abbrev>AC3</abbrev>, <abbrev>MP3</abbrev>, <abbrev>SRT</abbrev> and <abbrev>WAV</abbrev> files: The one 'track' in that file gets the ID 0."
 msgstr "<abbrev>AAC</abbrev>、<abbrev>AC3</abbrev>、<abbrev>MP3</abbrev>、<abbrev>SRT</abbrev> 与 <abbrev>WAV</abbrev> 文件: 此类文件中唯一的 '轨道' 的 ID 为 0。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1565
+#: doc/man/mkvmerge.xml:1586
 msgid "Ogg/<abbrev>OGM</abbrev> files: The track IDs are assigned in order the tracks are found in the file starting at 0."
 msgstr "Ogg/<abbrev>OGM</abbrev> 文件: 轨道 ID 按在文件中被找到的顺序由 0 开始分配。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1571
+#: doc/man/mkvmerge.xml:1592
 msgid "&matroska; files: The track's ID is the track number as reported by &mkvinfo;. It is <emphasis>not</emphasis> the track UID."
 msgstr "&matroska; 文件: 轨道 ID 与 &mkvinfo; 所报告的相同。注意 <emphasis>不是</emphasis> 轨道 UID。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1577
+#: doc/man/mkvmerge.xml:1598
 msgid "The special track ID '<constant>-1</constant>' is a wild card and applies the given switch to all tracks that are read from an input file."
 msgstr "特殊的轨道 ID '<constant>-1</constant>' 是个百搭号，它将使给定的开关应用到从输入文件中读到的所有轨道。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1582
+#: doc/man/mkvmerge.xml:1603
 msgid "The options that use the track IDs are the ones whose description contains '<literal>TID</literal>'.  The following options use track IDs as well: <option>--atracks</option>, <option>--vtracks</option>, <option>--stracks</option> and <option>--btracks</option>."
 msgstr "使用轨道 ID 的选项的描述中均含有 '<literal>TID</literal>'。此外下列选项也使用轨道 ID: <option>--atracks</option>、<option>--vtracks</option>、<option>--stracks</option> 以及 <option>--btracks</option>。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvmerge.xml:1589
+#: doc/man/mkvmerge.xml:1610
 msgid "Text files and character set conversions"
 msgstr "文本文件与字符集转换"
 
 #. type: Content of: <refentry><refsect1><note><para>
-#: doc/man/mkvmerge.xml:1592
+#: doc/man/mkvmerge.xml:1613
 msgid "This section applies to all programs in MKVToolNix even if it only mentions &mkvmerge;."
 msgstr "此段落可应用到 MKVToolNix 中的所有程序，尽管该段仅提及了 &mkvmerge;。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1597
+#: doc/man/mkvmerge.xml:1618
 msgid "All text in a &matroska; file is encoded in UTF-8. This means that &mkvmerge; has to convert every text file it reads as well as every text given on the command line from one character set into UTF-8. In return this also means that &mkvmerge;'s output has to be converted back to that character set from UTF-8, e.g. if a non-English translation is used with <link linkend=\"mkvmerge.description.ui_language\"><option>--ui-language</option></link> or for text originating from a &matroska; file."
 msgstr "&matroska; 文件中的所有文本均使用 UTF-8 编码。这意味着 &mkvmerge; 需要将读取到的文本文件以及从命令行收到的文本从其他字符集转换为 UTF-8。相反，这意味着 &mkvmerge; 的输出信息同样需要由 UTF-8 转回原来的字符集，例如来自 <link linkend=\"mkvmerge.description.ui_language\"><option>--ui-language</option></link> 所选的非英语界面或来自 &matroska; 文件中的文本。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1604
+#: doc/man/mkvmerge.xml:1625
 msgid "&mkvmerge; does this conversion automatically based on the presence of a <foreignphrase>byte order marker</foreignphrase> (short: <abbrev>BOM</abbrev>) or the system's current locale. How the character set is inferred from the locale depends on the operating system that &mkvmerge; is run on."
 msgstr "&mkvmerge; 根据是否有 <foreignphrase>字节顺序标记</foreignphrase> (英文缩写: <abbrev>BOM</abbrev>) 出现以及系统的当前区域来进行自动转换。如何根据区域推定字符集取决于 &mkvmerge; 所执行在的操作系统。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1610
+#: doc/man/mkvmerge.xml:1631
 msgid "Text files that start with a BOM are already encoded in one representation of UTF. &mkvmerge; supports the following five modes: UTF-8, UTF-16 Little and Big Endian, UTF-32 Little and Big Endian. Text files with a BOM are automatically converted to UTF-8. Any of the parameters that would otherwise set the character set for such a file (e.g. <link linkend=\"mkvmerge.description.sub_charset\"><option>--sub-charset</option></link>) is silently ignored."
 msgstr "以 BOM 开头的文本文件已经使用一种 UTF 模式编码。&mkvmerge; 支持以下五种模式: UTF-8、UTF-16 小端序 及 大端序、UTF-32 小端序 及 大端序。含 BOM 的文本文件将被自动转换为 UTF-8。对此类文件设定字符集的参数 (如 <link linkend=\"mkvmerge.description.sub_charset\"><option>--sub-charset</option></link>) 将被直接忽略，无通知。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1617
+#: doc/man/mkvmerge.xml:1638
 msgid "On Unix-like systems &mkvmerge; uses the <citerefentry><refentrytitle>setlocale</refentrytitle><manvolnum>3</manvolnum></citerefentry> system call which in turn uses the environment variables <varname>LANG</varname>, <varname>LC_ALL</varname> and <varname>LC_CYPE</varname>. The resulting character set is often one of UTF-8 or the ISO-8859-* family and is used for all text file operations and for encoding strings on the command line and for output to the console."
 msgstr "在 类-Unix 系统 &mkvmerge; 将使用 <citerefentry><refentrytitle>setlocale</refentrytitle><manvolnum>3</manvolnum></citerefentry> 系统指令，它将返回环境变量 <varname>LANG</varname>、<varname>LC_ALL</varname> 及 <varname>LC_CYPE</varname>。输出的字符集通常是 UTF-8 或 ISO-8859-* 家族之一，将被用于所有文本文件操作以及编码命令行上的字符串和输出到命令行。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1624
+#: doc/man/mkvmerge.xml:1645
 msgid "On Windows there are actually two different character sets that &mkvmerge; uses due to the way the Windows shell program <command>cmd.exe</command> is implemented. The first character set is determined by a call to the <function>GetCP()</function> system call. This character set is used as the default for text file conversions and for all elements displayed by the <abbrev>GUI</abbrev> programs in the MKVToolNix package. <command>cmd.exe</command> uses another character set which is determined by a call to the <function>GetACP()</function> system call. This is the default character set for all strings read from the command line and for all strings output to the console."
 msgstr "在 Windows 上 &mkvmerge; 实际上使用两种不同的字符集，因为要执行 Windows shell 程序 <command>cmd.exe</command>。第一个字符集由 <function>GetCP()</function> 系统指令决定。此字符集用作文本文件转换和 MKVToolNix 工具包中 <abbrev>GUI</abbrev> 程序所显示的所有元素的默认字符集。<command>cmd.exe</command> 使用另一个字符集，由 <function>GetACP()</function> 系统指令决定。这是命令行读入的所有字符串以及输出到命令行的所有字符串的默认字符集。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1633
+#: doc/man/mkvmerge.xml:1654
 msgid "The following options exist that allow specifying the character sets:"
 msgstr "现有下述选项支持指定字符集:"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1639
+#: doc/man/mkvmerge.xml:1660
 msgid "<link linkend=\"mkvmerge.description.sub_charset\"><option>--sub-charset</option></link> for text subtitle files and for text subtitle tracks stored in container formats for which the character set cannot be determined unambiguously (e.g. Ogg files),"
 msgstr "<link linkend=\"mkvmerge.description.sub_charset\"><option>--sub-charset</option></link> 用于文本字幕文件以及存储于字符集含糊的容器格式（如 Ogg 文件）中的文本字幕轨,"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1646
+#: doc/man/mkvmerge.xml:1667
 msgid "<link linkend=\"mkvmerge.description.chapter_charset\"><option>--chapter-charset</option></link> for chapter text files and for chapters and file titles stored in container formats for which the character set cannot be determined unambiguously (e.g. Ogg files for chapter information, track and file titles etc; MP4 files for chapter information),"
 msgstr "<link linkend=\"mkvmerge.description.chapter_charset\"><option>--chapter-charset</option></link> 用于章节文本文件以及存储于字符集含糊的容器格式（如 Ogg 文件的章节信息，轨道和文件标题等；MP4 文件的章节信息）中的章节和文件标题,"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1654
+#: doc/man/mkvmerge.xml:1675
 msgid "<link linkend=\"mkvmerge.description.command_line_charset\"><option>--command-line-charset</option></link> for all strings on the command line,"
 msgstr "<link linkend=\"mkvmerge.description.command_line_charset\"><option>--command-line-charset</option></link> 用于所有命令行上的字符串,"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1661
+#: doc/man/mkvmerge.xml:1682
 msgid "<link linkend=\"mkvmerge.description.output_charset\"><option>--output-charset</option></link> for all strings written to the console or to a file if the output has been redirected with the <link linkend=\"mkvmerge.description.redirect_output\"><option>--redirect-output</option></link> option."
 msgstr "<link linkend=\"mkvmerge.description.output_charset\"><option>--output-charset</option></link> 用于输出到命令行或文件（当使用 <link linkend=\"mkvmerge.description.redirect_output\"><option>--redirect-output</option></link> 选项重定向输出时）的字符串。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvmerge.xml:1682
+#: doc/man/mkvmerge.xml:1703
 msgid "Subtitles"
 msgstr "Subtitles"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1684
+#: doc/man/mkvmerge.xml:1705
 msgid "There are several text subtitle formats that can be embedded into &matroska;.  At the moment &mkvmerge; supports only text, VobSub and Kate subtitle formats. Text subtitles must be recoded to UTF-8 so that they can be displayed correctly by a player (see the section about <link linkend=\"mkvmerge.text_files_and_charsets\"> text files and character sets</link> for an explanation how &mkvmerge; converts between character sets). Kate subtitles are already encoded in UTF-8 and do not have to be re-encoded."
 msgstr "可在 &matroska; 文件中嵌入多种文本字幕格式目前 &mkvmerge; 支持纯文本、VobSub 以及 Kate 字幕格式。文本字幕将被重新编码为 UTF-8 以确保播放器能准确显示（关于 &mkvmerge; 如何在字符集间进行转换的说明请参见关于 <link linkend=\"mkvmerge.text_files_and_charsets\"> 文本文件与字符集</link> 的段落）。Kate 字幕已经是 UTF-8 编码，因此不会被重新编码。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1691
+#: doc/man/mkvmerge.xml:1712
 msgid "The following subtitle formats are supported at the moment:"
 msgstr "目前支持以下字幕格式:"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1697
+#: doc/man/mkvmerge.xml:1718
 msgid "Subtitle Ripper (SRT) files"
 msgstr "Subtitle Ripper (SRT) 文件"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1703
+#: doc/man/mkvmerge.xml:1724
 msgid "Substation Alpha (SSA) / Advanced Substation Alpha scripts (ASS)"
 msgstr "Substation Alpha (SSA) / 高级 Substation Alpha 脚本 (ASS)"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1709
+#: doc/man/mkvmerge.xml:1730
 msgid "OggKate streams"
 msgstr "OggKate 流"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1715
+#: doc/man/mkvmerge.xml:1736
 msgid "VobSub bitmap subtitle files"
 msgstr "VobSub 位图字幕文件"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvmerge.xml:1722
+#: doc/man/mkvmerge.xml:1743
 msgid "File linking"
 msgstr "文件链接"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1724
+#: doc/man/mkvmerge.xml:1745
 msgid "&matroska; supports file linking which simply says that a specific file is the predecessor or successor of the current file. To be precise, it's not really the files that are linked but the &matroska; segments. As most files will probably only contain one &matroska; segment the following explanations use the term 'file linking' although 'segment linking' would be more appropriate."
 msgstr "&matroska; 支持文件链接，即声明当前文件的前趋与后继文件是哪个文件。严谨地讲，被连接的不是文件而是 &matroska; 剪辑。鉴于大多数文件只含有一个 &matroska; 剪辑，以下说明中将使用术语 '文件链接'，尽管 '剪辑链接' 更为贴切。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1730
+#: doc/man/mkvmerge.xml:1751
 msgid "Each segment is identified by a unique 128 bit wide segment UID. This UID is automatically generated by &mkvmerge;. The linking is done primarily via putting the segment UIDs (short: <abbrev>SID</abbrev>) of the previous/next file into the segment header information. &mkvinfo; prints these <abbrev>SIDs</abbrev> if it finds them."
 msgstr "各剪辑由唯一的 128 位宽的剪辑 UID 确定。此 UID 是由 &mkvmerge; 自动创建的。链接主要通过将前后文件的剪辑 UID (英文缩写: <abbrev>SID</abbrev>) 置于剪辑头部信息中完成。&mkvinfo; 会在找到 <abbrev>SID</abbrev> 时输出它们。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1736
+#: doc/man/mkvmerge.xml:1757
 msgid "If a file is split into several smaller ones and linking is used then the timecodes will not start at 0 again but will continue where the last file has left off. This way the absolute time is kept even if the previous files are not available (e.g. when streaming). If no linking is used then the timecodes should start at 0 for each file. By default &mkvmerge; does not use file linking. If you want that you can turn it on with the <option>--link</option> option. This option is only useful if splitting is activated as well."
 msgstr "如果文件被切割为多段，且启用了链接功能，则文件的时间码不会重新从 0 开始，而是会从上一个文件结束的地方继续计算。这样可以保留绝对时间，即使之前的文件不可用 (如进行流式处理时)。如果未使用链接功能，各文件的时间码应从 0 开始。&mkvmerge; 默认不启用文件链接。如果您希望启用，可以通过 <option>--link</option> 选项打开。此选项仅当同时启用切割功能时有用。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1743
+#: doc/man/mkvmerge.xml:1764
 msgid "Regardless of whether splitting is active or not the user can tell &mkvmerge; to link the produced files to specific <abbrev>SIDs</abbrev>. This is achieved with the options <option>--link-to-previous</option> and <option>--link-to-next</option>.  These options accept a segment <abbrev>SID</abbrev> in the format that &mkvinfo; outputs: 16 hexadecimal numbers between <constant>0x00</constant> and <constant>0xff</constant> prefixed with '<literal>0x</literal>' each, e.g. '<literal>0x41 0xda 0x73 0x66 0xd9 0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3 0x93</literal>'. Alternatively a shorter form can be used: 16 hexadecimal numbers between <constant>0x00</constant> and <constant>0xff</constant> without the '<literal>0x</literal>' prefixes and without the spaces, e.g.  '<literal>41da7366d9cfb21eae78ebb45ecab393</literal>'."
 msgstr "无论是否开启了切割功能，用户都可以让 &mkvmerge; 将生成的文件与指定的 <abbrev>SID</abbrev> 建立链接。可通过 <option>--link-to-previous</option> 与 <option>--link-to-next</option> 选项实现。 这些选项只接受 &mkvinfo; 所输出的 <abbrev>SID</abbrev> 格式: 16 个 <constant>0x00</constant> 与 <constant>0xff</constant> 之间的十六进制数，各数字带有 '<literal>0x</literal>' 前缀，如 '<literal>0x41 0xda 0x73 0x66 0xd9 0xcf 0xb2 0x1e 0xae 0x78 0xeb 0xb4 0x5e 0xca 0xb3 0x93</literal>'。还可以选用另一种较短的格式: 16 个 <constant>0x00</constant> 与<constant>0xff</constant> 之间的十六进制数，无 '<literal>0x</literal>' 前缀，无空格，如 '<literal>41da7366d9cfb21eae78ebb45ecab393</literal>'。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1753
+#: doc/man/mkvmerge.xml:1774
 msgid "If splitting is used then the first file is linked to the <abbrev>SID</abbrev> given with <option>--link-to-previous</option> and the last file is linked to the <abbrev>SID</abbrev> given with <option>--link-to-next</option>. If splitting is not used then the one output file will be linked to both of the two <abbrev>SIDs</abbrev>."
 msgstr "如果启用了切割功能，第一个文件将与通过 <option>--link-to-previous</option> 给定的 <abbrev>SID</abbrev> 建立链接，而最后一个文件将与通过 <option>--link-to-next</option> 给定的 <abbrev>SID</abbrev> 建立链接。如果未启用切割功能，唯一的输出文件将同时与给定的两个 <abbrev>SID</abbrev> 建立链接。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvmerge.xml:1760
+#: doc/man/mkvmerge.xml:1781
 msgid "Default values"
 msgstr "默认值"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1762
+#: doc/man/mkvmerge.xml:1783
 msgid "The &matroska; specification states that some elements have a default value. Usually an element is not written to the file if its value is equal to its default value in order to save space. The elements that the user might miss in &mkvinfo;'s output are the <parameter>language</parameter> and the <parameter>default track flag</parameter> elements.  The default value for the <parameter>language</parameter> is English ('<literal>eng</literal>'), and the default value for the <parameter>default track flag</parameter> is <parameter>true</parameter>. Therefore if you used <option>--language 0:eng</option> for a track then it will not show up in &mkvinfo;'s output."
 msgstr "&matroska; 规范提到，一些元素有其默认值。通常为了节省空间，如果一个元素的值等同于其默认值，它将不被写入文件。用户在 &mkvinfo; 的输出信息中可能发现缺失的元素有 <parameter>语言</parameter> 和 <parameter>默认轨标记</parameter>。 <parameter>语言</parameter> 的默认值是 English ('<literal>eng</literal>')，<parameter>默认轨标记</parameter> 的默认值是 <parameter>true</parameter>。因此如果您对一条轨道应用选项 <option>--language 0:eng</option> ，它将不在 &mkvinfo; 的输出信息中显示。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1774
+#: doc/man/mkvmerge.xml:1795
 msgid "Maybe you also want to keep some photos along with your &matroska; file, or you're using <abbrev>SSA</abbrev> subtitles and need a special <productname>TrueType</productname> font that's really rare. In these cases you can attach those files to the &matroska; file. They will not be just appended to the file but embedded in it. A player can then show those files (the 'photos' case) or use them to render the subtitles (the '<productname>TrueType</productname> fonts' case)."
 msgstr "或许您希望将一些照片与您的 &matroska; 文件一起存放，或者您正在使用 <abbrev>SSA</abbrev> 字幕，需要一个非常稀有的特殊 <productname>TrueType</productname> 字体。这种情况下您可以将这些文件附加到 &matroska; 文件中。它们不会被追加到文件当中，而是被嵌入到文件中。然后播放器就可以显示这些文件 (如 '照片' 一例) 或者用它们来渲染字幕 (如 '<productname>TrueType</productname> 字体' 一例)。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1781
+#: doc/man/mkvmerge.xml:1802
 msgid "Here's an example how to attach a photo and a <productname>TrueType</productname> font to the output file:"
 msgstr "这是关于如何在输出文件中附加照片和 <productname>TrueType</productname> 字体的示例:"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:1785
+#: doc/man/mkvmerge.xml:1806
 #, no-wrap
 msgid ""
 "$ mkvmerge -o output.mkv -A video.avi sound.ogg --attachment-description \"Me and the band behind the stage in a small get-together\" --attachment-mime-type image/jpeg --attach-file me_and_the_band.jpg --attachment-description \"The real rare and unbelievably good looking font\" --attachment-type application/octet-stream --attach-file really_cool_font.ttf\n"
@@ -2764,32 +2792,32 @@ msgstr ""
 "  "
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1789
+#: doc/man/mkvmerge.xml:1810
 msgid "If a &matroska; containing attachments file is used as an input file then &mkvmerge; will copy the attachments into the new file. The selection which attachments are copied and which are not can be changed with the options <link linkend=\"mkvmerge.description.attachments\"><option>--attachments</option></link> and <link linkend=\"mkvmerge.description.no_attachments\"><option>--no-attachments</option></link>."
 msgstr "如果含有附件的 &matroska; 文件被用作输入文件，&mkvmerge; 会将附件复制到新文件中。要复制哪些文件、不复制那些文件的选择可以通过 <link linkend=\"mkvmerge.description.attachments\"><option>--attachments</option></link> 与 <link linkend=\"mkvmerge.description.no_attachments\"><option>--no-attachments</option></link> 选项修改。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1799
+#: doc/man/mkvmerge.xml:1820
 msgid "The &matroska; chapter system is more powerful than the old known system used by <abbrev>OGM</abbrev> files. The full specifications can be found at <ulink url=\"http://www.matroska.org/\">the &matroska; website</ulink>."
 msgstr "&matroska; 章节系统比大家知道的旧系统—— <abbrev>OGM</abbrev> 中所使用的——更为强大。完整的规范可以在 <ulink url=\"http://www.matroska.org/\">&matroska; 网站</ulink> 找到。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:1804
+#: doc/man/mkvmerge.xml:1825
 msgid "&mkvmerge; supports two kinds of chapter files as its input. The first format, called '<foreignphrase>simple chapter format</foreignphrase>', is the same format that the <abbrev>OGM</abbrev> tools expect. The second format is a &xml; based chapter format which supports all of &matroska;'s chapter functionality."
 msgstr "&mkvmerge; 支持输入两种章节文件。第一种格式，叫作 '<foreignphrase>简单章节格式</foreignphrase>'，与 <abbrev>OGM</abbrev> tools 所用的相同。第二种是基于 &xml; 的章节格式，它支持 &matroska; 的所有章节功能。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:1810
+#: doc/man/mkvmerge.xml:1831
 msgid "The simple chapter format"
 msgstr "简单章节格式"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1813
+#: doc/man/mkvmerge.xml:1834
 msgid "This formmat consists of pairs of lines that start with '<literal>CHAPTERxx=</literal>' and '<literal>CHAPTERxxNAME=</literal>' respectively. The first one contains the start timecode while the second one contains the title. Here's an example:"
 msgstr "此格式由成对的相继以 '<literal>CHAPTERxx=</literal>' 与 '<literal>CHAPTERxxNAME=</literal>' 开头的行组成。单数行包含起始时间码，而双数行包含标题。这是一个示例："
 
 #. type: Content of: <refentry><refsect1><refsect2><screen>
-#: doc/man/mkvmerge.xml:1818
+#: doc/man/mkvmerge.xml:1839
 #, no-wrap
 msgid ""
 "CHAPTER01=00:00:00.000\n"
@@ -2809,27 +2837,27 @@ msgstr ""
 "   "
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1827
+#: doc/man/mkvmerge.xml:1848
 msgid "&mkvmerge; will transform every pair or lines into one &matroska; <classname>ChapterAtom</classname>. It does not set any <classname>ChapterTrackNumber</classname> which means that the chapters all apply to all tracks in the file."
 msgstr "&mkvmerge; 将转换每两行为一个 &matroska; <classname>章节单位（ChapterAtom）</classname>。这种情况不会设定任何 <classname>章节轨道号（ChapterTrackNumber）</classname>，也就是说所有章节被应用到文件的所有轨道。"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1832
+#: doc/man/mkvmerge.xml:1853
 msgid "As this is a text file character set conversion may need to be done. See the section about <link linkend=\"mkvmerge.text_files_and_charsets\"> text files and character sets</link> for an explanation how &mkvmerge; converts between character sets."
 msgstr "由于是文本文件，可能需要进行字符集转换。关于 &mkvmerge; 如何在字符集间进行转换的说明请参见关于 <link linkend=\"mkvmerge.text_files_and_charsets\"> 文本文件与字符集</link> 的段落。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:1839
+#: doc/man/mkvmerge.xml:1860
 msgid "The &xml; based chapter format"
 msgstr "基于 &xml; 的章节格式"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1841
+#: doc/man/mkvmerge.xml:1862
 msgid "The &xml; based chapter format looks like this example:"
 msgstr "基于 &xml; 的章节格式看起来与这个示例类似："
 
 #. type: Content of: <refentry><refsect1><refsect2><screen>
-#: doc/man/mkvmerge.xml:1845
+#: doc/man/mkvmerge.xml:1866
 #, no-wrap
 msgid ""
 "&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;\n"
@@ -2881,87 +2909,87 @@ msgstr ""
 "   "
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1870
+#: doc/man/mkvmerge.xml:1891
 msgid "With this format three things are possible that are not possible with the simple chapter format:"
 msgstr "使用此格式可以做到三件简单章节格式做不到的事:"
 
 #. type: Content of: <refentry><refsect1><refsect2><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1874
+#: doc/man/mkvmerge.xml:1895
 msgid "The timestamp for the end of the chapter can be set,"
 msgstr "可以设置章节终止处的时间戳,"
 
 #. type: Content of: <refentry><refsect1><refsect2><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1875
+#: doc/man/mkvmerge.xml:1896
 msgid "chapters can be nested,"
 msgstr "章节可以嵌套,"
 
 #. type: Content of: <refentry><refsect1><refsect2><orderedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1876
+#: doc/man/mkvmerge.xml:1897
 msgid "the language and country can be set."
 msgstr "可以设置语言与国家。"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1880
+#: doc/man/mkvmerge.xml:1901
 msgid "The mkvtoolnix distribution contains some sample files in the <filename>doc</filename> subdirectory which can be used as a basis."
 msgstr "mkvtoolnix 分发包的 <filename>doc</filename> 子目录包含了一些典型示例文件。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:1885
+#: doc/man/mkvmerge.xml:1906
 msgid "General notes"
 msgstr "一般性备注"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1887
+#: doc/man/mkvmerge.xml:1908
 msgid "When splitting files &mkvmerge; will correctly adjust the chapters as well. This means that each file only includes the chapter entries that apply to it, and that the timecodes will be offset to match the new timecodes of each output file."
 msgstr "&mkvmerge; 切割文件时会同时适当调整章节。这意味着每个文件只包含应用到该文件的章节项，时间码也将被调整到与各输出文件相匹配。"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1892
+#: doc/man/mkvmerge.xml:1913
 msgid "&mkvmerge; is able to copy chapters from &matroska; source files unless this is explicitly disabled with the <link linkend=\"mkvmerge.description.no_chapters\"><option>--no-chapters</option></link> option. The chapters from all sources (&matroska; files, Ogg files, <abbrev>MP4</abbrev> files, chapter text files) are usually not merged but end up in separate <classname>ChapterEditions</classname>. Only if chapters are read from several &matroska; or &xml; files that share the same edition UIDs will chapters be merged into a single <classname>ChapterEdition</classname>. If such a merge is desired in other situations as well then the user has to extract the chapters from all sources with &mkvextract; first, merge the &xml; files manually and mux them afterwards."
 msgstr "&mkvmerge; 能够从 &matroska; 源文件中复制章节，除非使用 <link linkend=\"mkvmerge.description.no_chapters\"><option>--no-chapters</option></link> 选项明令禁用。来自各类来源 (&matroska; 文件、Ogg 文件、<abbrev>MP4</abbrev> 文件、章节文本文件) 的章节通常不被合并，而是分成多个 <classname>ChapterEditions（章节版本）</classname>。仅当从多个 &matroska; 或 &xml; 文件读取的章节具有相同的版本 UID 时，章节才会被合并为单个 <classname>ChapterEdition</classname>。如果在其他情况下需要此类合并，用户需要先用 &mkvextract; 从所有来源提取章节，手动合并 &xml; 文件然后再混流。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:1907
+#: doc/man/mkvmerge.xml:1928
 msgid "Introduction"
 msgstr "介绍"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1910
+#: doc/man/mkvmerge.xml:1931
 msgid "&matroska; supports an extensive set of tags that is deprecated and a new, simpler system like it is is used in most other containers: <parameter>KEY=VALUE</parameter>. However, in &matroska; these tags can also be nested, and both the <parameter>KEY</parameter> and the <parameter>VALUE</parameter> are elements of their own. The example file <filename>example-tags-2.xml</filename> shows how to use this new system."
 msgstr "&matroska; 广泛支持废弃标签，还支持一种新式的、类似其他大多数容器使用的较简单的标签系统: <parameter>KEY=VALUE</parameter>。然而，在 &matroska; 中这些标签也可以嵌套，<parameter>KEY</parameter> 与 <parameter>VALUE</parameter> 都是属于它们自身的元素。示例文件 <filename>example-tags-2.xml</filename> 展示了如何使用这个新系统。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:1918
+#: doc/man/mkvmerge.xml:1939
 msgid "Scope of the tags"
 msgstr "标签细述"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1921
+#: doc/man/mkvmerge.xml:1942
 msgid "&matroska; tags do not automatically apply to the complete file. They can, but they also may apply to different parts of the file: to one or more tracks, to one or more chapters, or even to a combination of both. The <ulink url=\"http://matroska.org/technical/specs/index.html\">the &matroska; specification</ulink> gives more details about this fact."
 msgstr "&matroska; 标签不会自动应用到整个文件上。它们可以应用到整个文件，还可以应用到文件的不同部分: 一个或多个轨道, 一个或多个章节, 甚至是两者的组合。<ulink url=\"http://matroska.org/technical/specs/index.html\">&matroska; 规范</ulink> 有这方面的更多详情。"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1927
+#: doc/man/mkvmerge.xml:1948
 msgid "One important fact is that tags are linked to tracks or chapters with the <classname>Targets</classname> &matroska; tag element, and that the UIDs used for this linking are <emphasis>not</emphasis> the track IDs &mkvmerge; uses everywhere. Instead the numbers used are the UIDs which &mkvmerge; calculates automatically (if the track is taken from a file format other than &matroska;) or which are copied from the source file if the track's source file is a &matroska; file. Therefore it is difficult to know which UIDs to use in the tag file before the file is handed over to &mkvmerge;."
 msgstr "重要的一点是标签通过 <classname>Targets</classname> &matroska; 标签元素与轨道或章节相连，而用于此链接的 UID <emphasis>并非</emphasis> &mkvmerge; 常用的轨道 ID。而是 &mkvmerge; 自动计算而来 (当轨道来自非 &matroska; 文件时) 或当轨道源文件是 &matroska; 文件时复制而来的 的 UID。因此在文件被 &mkvmerge; 处理过之前很难知道应该在标签文件中使用哪些 UID。"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1935
+#: doc/man/mkvmerge.xml:1956
 msgid "&mkvmerge; knows two options with which you can add tags to &matroska; files: The <link linkend=\"mkvmerge.description.global_tags\"><option>--global-tags</option></link> and the <link linkend=\"mkvmerge.description.tags\"><option>--tags</option></link> options. The difference is that the former option, <link linkend=\"mkvmerge.description.global_tags\"><option>--global-tags</option></link>, will make the tags apply to the complete file by removing any of those <classname>Targets</classname> elements mentioned above.  The latter option, <link linkend=\"mkvmerge.description.tags\"><option>--tags</option></link>, automatically inserts the UID that &mkvmerge; generates for the tag specified with the <parameter>TID</parameter> part of the <link linkend=\"mkvmerge.description.tags\"><option>--tags</option></link> option."
 msgstr "&mkvmerge; 支持两个为 &matroska; 文件添加标签的选项: <link linkend=\"mkvmerge.description.global_tags\"><option>--global-tags</option></link> 与 <link linkend=\"mkvmerge.description.tags\"><option>--tags</option></link> 选项。不同之处在于前者，<link linkend=\"mkvmerge.description.global_tags\"><option>--global-tags</option></link>，将通过移除上文提到的所有 <classname>Targets</classname> 元素使标签应用到整个文件。 而后者，<link linkend=\"mkvmerge.description.tags\"><option>--tags</option></link>，将使 &mkvmerge; 为通过 <link linkend=\"mkvmerge.description.tags\"><option>--tags</option></link> 选项的 <parameter>TID</parameter> 部分指定的标签自动插入 UID。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:1947
+#: doc/man/mkvmerge.xml:1968
 msgid "Example"
 msgstr "示例"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1949
+#: doc/man/mkvmerge.xml:1970
 msgid "Let's say that you want to add tags to a video track read from an <abbrev>AVI</abbrev>. <command>mkvmerge --identify file.avi</command> tells you that the video track's ID (do not mix this ID with the UID!) is 0. So you create your tag file, leave out all <classname>Targets</classname> elements and call &mkvmerge;:"
 msgstr "假定您希望为从一个 <abbrev>AVI</abbrev> 文件读取的视频轨道添加标签。<command>mkvmerge --identify 文件.avi</command> 告诉您该视频轨道的 ID (不要将此 ID 与 UID 混淆!) 为 0。于是您创建了一个标签文件，省去了所有 <classname>Targets</classname> 元素，然后这样调用 &mkvmerge;:"
 
 #. type: Content of: <refentry><refsect1><refsect2><screen>
-#: doc/man/mkvmerge.xml:1955
+#: doc/man/mkvmerge.xml:1976
 #, no-wrap
 msgid ""
 "$ mkvmerge -o file.mkv --tags 0:tags.xml file.avi\n"
@@ -2971,122 +2999,122 @@ msgstr ""
 "   "
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:1960
+#: doc/man/mkvmerge.xml:1981
 msgid "Tag file format"
 msgstr "标签文件格式"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1962
+#: doc/man/mkvmerge.xml:1983
 msgid "&mkvmerge; supports a &xml; based tag file format. The format is very closely modeled after <ulink url=\"http://matroska.org/technical/specs/index.html\">the &matroska; specification</ulink>. Both the binary and the source distributions of MKVToolNix come with a sample file called <filename>example-tags-2.xml</filename> which simply lists all known tags and which can be used as a basis for real life tag files."
 msgstr "&mkvmerge; 支持基于 &xml; 的标签文件格式。此格式是以 <ulink url=\"http://matroska.org/technical/specs/index.html\">&matroska; 规范</ulink> 为依据严格制定的。MKVToolNix 的程序以及源码分发包都含有名为 <filename>example-tags-2.xml</filename> 的示例文件，该文件已简明地列出了所有已知的可用作实际处理的基本标签。"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1969
+#: doc/man/mkvmerge.xml:1990
 msgid "The basics are:"
 msgstr "基本要点有："
 
 #. type: Content of: <refentry><refsect1><refsect2><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1973
+#: doc/man/mkvmerge.xml:1994
 msgid "The outermost element must be <classname>&lt;Tags&gt;</classname>."
 msgstr "最外层的元素必须为 <classname>&lt;Tags&gt;</classname>。"
 
 #. type: Content of: <refentry><refsect1><refsect2><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1975
+#: doc/man/mkvmerge.xml:1996
 msgid "One logical tag is contained inside one pair of <classname>&lt;Tag&gt;</classname> &xml; tags."
 msgstr "实际意义上的标签放在 <classname>&lt;Tag&gt;</classname> &xml; 标签对中。"
 
 #. type: Content of: <refentry><refsect1><refsect2><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:1977
+#: doc/man/mkvmerge.xml:1998
 msgid "White spaces directly before and after tag contents are ignored."
 msgstr "标签内容前后的空白将被忽略。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:1982
+#: doc/man/mkvmerge.xml:2003
 msgid "Data types"
 msgstr "数据类型"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1984
+#: doc/man/mkvmerge.xml:2005
 msgid "The new &matroska; tagging system only knows two data types, a UTF-8 string and a binary type. The first is used for the tag's name and the <classname>&lt;String&gt;</classname> element while the binary type is used for the <classname>&lt;Binary&gt;</classname> element."
 msgstr "新的 &matroska; 标签系统只识别两种数据类型，UTF-8 字串与二进制类型。前者用于标签名称和 <classname>&lt;String&gt;</classname> 元素，而二进制类型用于 <classname>&lt;Binary&gt;</classname> 元素。"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1989
+#: doc/man/mkvmerge.xml:2010
 msgid "As binary data itself would not fit into a &xml; file &mkvmerge; supports two other methods of storing binary data. If the contents of a &xml; tag starts with '<literal>@</literal>' then the following text is treated as a file name. The corresponding file's content is copied into the &matroska; element."
 msgstr "由于二进制数据自身与 &xml; 文件不相容，&mkvmerge; 支持另两种储存二进制数据的方法。如果 &xml; 标签的内容以 '<literal>@</literal>' 开头，则后续文本将被作为文件名对待。相应文件的内容将被复制到 &matroska; 元素中。"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:1995
+#: doc/man/mkvmerge.xml:2016
 msgid "Otherwise the data is expected to be <foreignphrase>Base64</foreignphrase> encoded. This is an encoding that transforms binary data into a limited set of <abbrev>ASCII</abbrev> characters and is used e.g. in email programs. &mkvextract; will output <foreignphrase>Base64</foreignphrase> encoded data for binary elements."
 msgstr "还有一种可能，即数据经 <foreignphrase>Base64</foreignphrase> 编码。这是将二进制数据转换为一定的 <abbrev>ASCII</abbrev> 字集字符，在电子邮件等程序中有所应用。&mkvextract; 将将二进制元素以 <foreignphrase>Base64</foreignphrase> 编码的数据的形式输出。"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:2001
+#: doc/man/mkvmerge.xml:2022
 msgid "The deprecated tagging system knows some more data types which can be found in the official &matroska; tag specs. As &mkvmerge; does not support this system anymore these types aren't described here."
 msgstr "已被废弃的标签系统可识别更多的数据类型，这在 &matroska; 官方的标签规范中可以找到。由于 &mkvmerge; 不再支持此系统，此处不对这些类型作多余说明。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvmerge.xml:2008
+#: doc/man/mkvmerge.xml:2029
 msgid "&matroska; file layout"
 msgstr "&matroska; 文件规划"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:2010
+#: doc/man/mkvmerge.xml:2031
 msgid "The &matroska; file layout is quite flexible. &mkvmerge; will render a file in a predefined way. The resulting file looks like this:"
 msgstr "&matroska; 文件规划非常灵活。&mkvmerge; 将按预先定义的方式渲染文件。生成的文件是这样的："
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:2014
+#: doc/man/mkvmerge.xml:2035
 msgid "[EBML head] [segment {meta seek #1} [segment information] [track information] {attachments} {chapters} [cluster 1] {cluster 2} ...  {cluster n} {cues} {meta seek #2} {tags}]"
 msgstr "[EBML 头] [剪辑 {元定位 #1} [剪辑信息] [轨道信息] {附件} {章节} [簇 1] {簇 2} ...  {簇 n} {索引} {元定位 #2} {标签}]"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:2019
+#: doc/man/mkvmerge.xml:2040
 msgid "The elements in curly braces are optional and depend on the contents and options used. A couple of notes:"
 msgstr "大括号中的元素是可选的，依所用的内容和选项而定。有两点要注意的："
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:2025
+#: doc/man/mkvmerge.xml:2046
 msgid "meta seek #1 includes only a small number of level 1 elements, and only if they actually exist: attachments, chapters, cues, tags, meta seek #2. Older versions of &mkvmerge; used to put the clusters into this meta seek element as well. Therefore some imprecise guessing was necessary to reserve enough space. It often failed. Now only the clusters are stored in meta seek #2, and meta seek #1 refers to the meta seek element #2."
 msgstr "元定位 #1 只包含很少量的 level 1 元素，且仅当它们存在时才包含：附件、章节、索引、标签以及元定位 #2。较早版本的 &mkvmerge; 亦曾将簇放置在元定位元素中。因此应留给不精确的传言一些空间——真相总会大白。 现在只有簇才被储存在元定位 #2 中，元定位 #1 将引用元定位元素 #2。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:2033
+#: doc/man/mkvmerge.xml:2054
 msgid "Attachment, chapter and tag elements are only present if they were added."
 msgstr "附件、章节和标签元素仅当被添加后才会出现。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:2038
+#: doc/man/mkvmerge.xml:2059
 msgid "The shortest possible Matroska file would look like this:"
 msgstr "允许的最短小的 Matroska 文件是像这样的："
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:2042
+#: doc/man/mkvmerge.xml:2063
 msgid "[EBML head] [segment [segment information] [track information] [cluster 1]]"
 msgstr "[EBML 头] [剪辑 [剪辑信息] [轨道信息] [簇 1]]"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:2046
+#: doc/man/mkvmerge.xml:2067
 msgid "This might be the case for audio-only files."
 msgstr "这也是纯音频文件的样子。"
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvmerge.xml:2051
+#: doc/man/mkvmerge.xml:2072
 msgid "External timecode files"
 msgstr "外部时间码文件"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:2053
+#: doc/man/mkvmerge.xml:2074
 msgid "&mkvmerge; allows the user to chose the timecodes for a specific track himself. This can be used in order to create files with variable frame rate video or include gaps in audio. A frame in this case is the unit that &mkvmerge; creates separately per &matroska; block. For video this is exactly one frame, for audio this is one packet of the specific audio type. E.g. for <abbrev>AC3</abbrev> this would be a packet containing <constant>1536</constant> samples."
 msgstr "&mkvmerge; 允许用户为各轨道选择特定的时间码。这可用来创建包含可变帧率视频或音频中有空隙的文件。这种情况下的帧是 &mkvmerge; 创建各 &matroska; 块的单位。对视频来说恰好是一帧，对音频来说是相应音频类型的一个数据包。例如对 <abbrev>AC3</abbrev> 来说是包含 <constant>1536</constant> 采样的一个数据包。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:2060
+#: doc/man/mkvmerge.xml:2081
 msgid "Timecode files that are used when tracks are appended to each other must only be specified for the first part in a chain of tracks.  For example if you append two files, v1.avi and v2.avi, and want to use timecodes then your command line must look something like this:"
 msgstr "用于轨道追加合并的时间码必须只指定给一系列（同一）轨道的第一部分。例如当您追加合并两个文件，v1.avi 与 v2.avi，且希望使用时间码时，您的命令行必须像这样组织："
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvmerge.xml:2065
+#: doc/man/mkvmerge.xml:2086
 #, no-wrap
 msgid ""
 "mkvmerge ... --timecodes 0:my_timecodes.txt v1.avi +v2.avi\n"
@@ -3096,22 +3124,22 @@ msgstr ""
 "  "
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:2069
+#: doc/man/mkvmerge.xml:2090
 msgid "There are four formats that are recognized by &mkvmerge;. The first line always contains the version number. Empty lines, lines containing only whitespace and lines beginning with '<literal>#</literal>' are ignored."
 msgstr "&mkvmerge; 可识别四种格式的时间码。版本号在时间码文件的第一行内。空行，只含有空格的行，以及以 '<literal>#</literal>' 开头的行在处理时将被忽略。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:2074
+#: doc/man/mkvmerge.xml:2095
 msgid "Timecode file format v1"
 msgstr "时间码文件格式 v1"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:2076
+#: doc/man/mkvmerge.xml:2097
 msgid "This format starts with the version line. The second line declares the default number of frames per second.  All following lines contain three numbers separated by commas: the start frame (<constant>0</constant> is the first frame), the end frame and the number of frames in this range. The <abbrev>FPS</abbrev> is a floating point number with the dot '<literal>.</literal>' as the decimal point. The ranges can contain gaps for which the default <abbrev>FPS</abbrev> is used. An example:"
 msgstr "此格式的第一行是版本声明。第二行则声明默认的帧率。 接下来的各行包含由逗号分隔的三个数字: 起始帧（<constant>0</constant> 代表第一帧）、终止帧以及此范围内的帧率。<abbrev>FPS（帧率）</abbrev> 为浮点数，小数点用 '<literal>.</literal>' 表示。各行定义的范围间可以有间隔，间隔内将使用默认的 <abbrev>FPS</abbrev>。一个示例："
 
 #. type: Content of: <refentry><refsect1><refsect2><screen>
-#: doc/man/mkvmerge.xml:2083
+#: doc/man/mkvmerge.xml:2104
 #, no-wrap
 msgid ""
 "# timecode format v1\n"
@@ -3127,17 +3155,17 @@ msgstr ""
 "   "
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:2091
+#: doc/man/mkvmerge.xml:2112
 msgid "Timecode file format v2"
 msgstr "时间码文件格式 v2"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:2094
+#: doc/man/mkvmerge.xml:2115
 msgid "In this format each line contains a timecode for the corresponding frame.  This timecode must be given in millisecond precision.  It can be a floating point number, but it doesn't have to be.  You <emphasis>have to</emphasis> give at least as many timecode lines as there are frames in the track.  The timecodes in this file must be sorted.  Example for 25fps:"
 msgstr "此格式中每行包含相应帧的时间码。此时间码必须以毫秒为精度。可以使浮点数，但不强求。您指定的时间码行数 <emphasis>必须</emphasis> 不少于对应轨道的帧数。此类文件中的时间码必须经过排序。 以 25fps 为例："
 
 #. type: Content of: <refentry><refsect1><refsect2><screen>
-#: doc/man/mkvmerge.xml:2100
+#: doc/man/mkvmerge.xml:2121
 #, no-wrap
 msgid ""
 "# timecode format v2\n"
@@ -3153,17 +3181,17 @@ msgstr ""
 "   "
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:2108
+#: doc/man/mkvmerge.xml:2129
 msgid "Timecode file format v3"
 msgstr "时间码文件格式 v3"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:2110
+#: doc/man/mkvmerge.xml:2131
 msgid "In this format each line contains a duration in seconds followed by an optional number of frames per second.  Both can be floating point numbers.  If the number of frames per second is not present the default one is used.  For audio you should let the codec calculate the frame timecodes itself.  For that you should be using <constant>0.0</constant> as the number of frames per second.  You can also create gaps in the stream by using the '<literal>gap</literal>' keyword followed by the duration of the gap.  Example for an audio file:"
 msgstr "此格式中各行包含时长（秒数），后接（可选）帧率。 二者均可为浮点数。 如果未提供帧率，则采用默认的帧率。 对于音频，您应当让编解码器自行计算各帧的时间码。 这样您应当使用 <constant>0.0</constant> 作为帧率。 您可以使用 '<literal>gap</literal>' 关键词后接空隙时长在流中创建空隙。 以音频文件为例："
 
 #. type: Content of: <refentry><refsect1><refsect2><screen>
-#: doc/man/mkvmerge.xml:2117
+#: doc/man/mkvmerge.xml:2138
 #, no-wrap
 msgid ""
 "# timecode format v3\n"
@@ -3183,37 +3211,37 @@ msgstr ""
 "   "
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvmerge.xml:2127
+#: doc/man/mkvmerge.xml:2148
 msgid "Timecode file format v4"
 msgstr "时间码文件格式 v4"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvmerge.xml:2129
+#: doc/man/mkvmerge.xml:2150
 msgid "This format is identical to the v2 format.  The only difference is that the timecodes do not have to be sorted.  This format should almost never be used."
 msgstr "此格式与 v2 格式相似。 唯一的不同在于时间码不必经过排序。 通常不应使用此格式。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:2139
+#: doc/man/mkvmerge.xml:2160
 msgid "&mkvmerge; exits with one of three exit codes:"
 msgstr "&mkvmerge; 退出时会返回以下三个退出代码中的一个："
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:2145
+#: doc/man/mkvmerge.xml:2166
 msgid "<constant>0</constant> -- This exit codes means that muxing has completed successfully."
 msgstr "<constant>0</constant> -- 此退出代码说明已成功完成混流。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:2151
+#: doc/man/mkvmerge.xml:2172
 msgid "<constant>1</constant> -- In this case &mkvmerge; has output at least one warning, but muxing did continue.  A warning is prefixed with the text '<literal>Warning:</literal>'.  Depending on the issues involved the resulting file might be ok or not.  The user is urged to check both the warning and the resulting file."
 msgstr "<constant>1</constant> -- 这种情况下 &mkvmerge; 至少输出了一条警告信息，但混流并未因之中止。 警告信息以文字 '<literal>警告:</literal>' 为前缀。根据问题的不同，生成的文件可能是好的，也可能不是。 强烈建议用户检查警告信息以及生成的文件。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvmerge.xml:2159
+#: doc/man/mkvmerge.xml:2180
 msgid "<constant>2</constant> -- This exit code is used after an error occurred.  &mkvmerge; aborts right after outputting the error message.  Error messages range from wrong command line arguments over read/write errors to broken files."
 msgstr "<constant>2</constant> -- 此退出代码用于错误发生之后。 &mkvmerge; 在输出错误信息后即中断处理。错误信息可能是错误的命令行参数，也可能是损坏文件的读取/写入错误。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvmerge.xml:2169
+#: doc/man/mkvmerge.xml:2190
 msgid "&mkvinfo;, &mkvextract;, &mkvpropedit;, &mmg;"
 msgstr "&mkvinfo;, &mkvextract;, &mkvpropedit;, &mmg;"
 
@@ -3279,7 +3307,7 @@ msgstr "设置后续的 <link linkend=\"mkvpropedit.description.add\">添加</li
 
 #. type: Content of: <refentry><refsect1><para>
 #: doc/man/mkvpropedit.xml:111
-#: doc/man/mkvpropedit.xml:271
+#: doc/man/mkvpropedit.xml:292
 msgid "By default &mkvpropedit; will edit the segment information section."
 msgstr "默认情况下，&mkvpropedit; 将编辑剪辑信息区段。"
 
@@ -3324,17 +3352,17 @@ msgid "Writes all messages to the file <parameter>file-name</parameter> instead 
 msgstr "将所有信息写入文件 <parameter>文件名</parameter> 而不是输出到命令行。 尽管该操作可以用输出重定向轻松实现，但在某些情况下还需要靠它：如当终端在写入文件之前重新解释（覆盖输出）时。将优先使用通过 <link linkend=\"mkvpropedit.description.output_charset\"><option>--output-charset</option></link> 设定的字符集。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:236
+#: doc/man/mkvpropedit.xml:257
 msgid "Several chars can be escaped, e.g. if you need to start a non-comment line with '#'. The rules are described in <link linkend=\"mkvpropedit.escaping\">the section about escaping text</link>."
 msgstr "有些字符可以转义，如当您需要使用 '#' 作为一个不是评论的行的开头。规则在<link linkend=\"mkvpropedit.escaping\">关于转义文本的段落</link>有描述。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:241
+#: doc/man/mkvpropedit.xml:262
 msgid "The command line '<command>mkvpropedit source.mkv --edit track:a2 --set name=Comments</command>' could be converted into the following option file:"
 msgstr "命令行 '<command>mkvpropedit 源.mkv --edit track:a2 --set name=注释</command>' 可以转换为下述选项文件:"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><programlisting>
-#: doc/man/mkvpropedit.xml:246
+#: doc/man/mkvpropedit.xml:267
 #, no-wrap
 msgid ""
 "# Modify source.mkv\n"
@@ -3358,92 +3386,92 @@ msgstr ""
 "     "
 
 #. type: Content of: <refentry><refsect1><title>
-#: doc/man/mkvpropedit.xml:261
+#: doc/man/mkvpropedit.xml:282
 msgid "Edit selectors"
 msgstr "编辑选择器"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:263
+#: doc/man/mkvpropedit.xml:284
 msgid "The <link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link> option sets the &matroska; file section (segment information or a certain track's headers) that all following <link linkend=\"mkvpropedit.description.add\">add</link>, <link linkend=\"mkvpropedit.description.set\">set</link> and <link linkend=\"mkvpropedit.description.delete\">delete</link> actions operate on. This stays valid until the next <link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link> option is found. The argument to this option is called the edit selector."
 msgstr "<link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link> 选项设置后续的 <link linkend=\"mkvpropedit.description.add\">添加</link>, <link linkend=\"mkvpropedit.description.set\">设置</link> 或 <link linkend=\"mkvpropedit.description.delete\">删除</link> 操作所影响的 &matroska; 文件区域（剪辑信息或者特定轨道的头部）。在出现另一个 <link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link> 选项之前，此选项将一直有效。此选项的参数就叫做编辑选择器。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvpropedit.xml:275
+#: doc/man/mkvpropedit.xml:296
 msgid "Segment information"
 msgstr "剪辑信息"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvpropedit.xml:277
+#: doc/man/mkvpropedit.xml:298
 msgid "The segment information can be selected with one of these three words: '<literal>info</literal>', '<literal>segment_info</literal>' or '<literal>segmentinfo</literal>'. It contains properties like the segment title or the segment <abbrev>UID</abbrev>."
 msgstr "可以通过这三个词中的任意一个选择剪辑信息: '<literal>info</literal>'、'<literal>segment_info</literal>' 或 '<literal>segmentinfo</literal>'。剪辑信息包含的属性包括剪辑标题、剪辑 <abbrev>UID</abbrev> 等。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvpropedit.xml:283
+#: doc/man/mkvpropedit.xml:304
 msgid "Track headers"
 msgstr "轨道头部"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvpropedit.xml:285
+#: doc/man/mkvpropedit.xml:306
 msgid "Track headers can be selected with a slightly more complex selector. All variations start with '<literal>track:</literal>'. The track header properties include elements like the language code, 'default track' flag or the track's name."
 msgstr "可用于选择轨道头部的选择器稍显复杂：所有以 '<literal>track:</literal>' 开头的变体。轨道头部属性包括如语言代码、'默认轨' 标记、轨道名称等属性。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvpropedit.xml:291
+#: doc/man/mkvpropedit.xml:312
 msgid "<option>track:</option><parameter>n</parameter>"
 msgstr "<option>track:</option><parameter>n</parameter>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:294
+#: doc/man/mkvpropedit.xml:315
 msgid "If the parameter <parameter>n</parameter> is a number then the <parameter>n</parameter>th track will be selected. The track order is the same that &mkvmerge;'s <option>--identify</option> option outputs."
 msgstr "如果参数 <parameter>n</parameter> 为数字，则将选择第 <parameter>n</parameter> 条轨道。轨道顺序与 &mkvmerge; 的 <option>--identify</option> 选项所输出的相同。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvpropedit.xml:301
+#: doc/man/mkvpropedit.xml:322
 msgid "<option>track:</option><parameter>t</parameter><parameter>n</parameter>"
 msgstr "<option>track:</option><parameter>t</parameter><parameter>n</parameter>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:304
+#: doc/man/mkvpropedit.xml:325
 msgid "If the parameter starts with a single character <parameter>t</parameter> followed by a <parameter>n</parameter> then the <parameter>n</parameter>th track of a specific track type will be selected. The track type parameter <parameter>t</parameter> must be one of these four characters: '<literal>a</literal>' for an audio track, '<literal>b</literal>' for a button track, '<literal>s</literal>' for a subtitle track and '<literal>v</literal>' for a video track. The track order is the same that &mkvmerge;'s <option>--identify</option> option outputs."
 msgstr "如果参数以字母 <parameter>t</parameter> 后接 <parameter>n</parameter> 开头，则将选择选定轨道类型中的第 <parameter>n</parameter> 条轨道。轨道类型参数 <parameter>t</parameter> 必须为下述四个字母中的一个: '<literal>a</literal>' 代表音频轨道，'<literal>b</literal>' 代表按钮轨道，'<literal>s</literal>' 代表字幕轨道，'<literal>v</literal>' 代表视频轨道。轨道顺序与 &mkvmerge; 的 <option>--identify</option> 选项所输出的相同。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvpropedit.xml:314
+#: doc/man/mkvpropedit.xml:335
 msgid "<option>track:</option>=<parameter>uid</parameter>"
 msgstr "<option>track:</option>=<parameter>uid</parameter>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:317
+#: doc/man/mkvpropedit.xml:338
 msgid "If the parameter starts with a '<literal>=</literal>' followed by a number <parameter>uid</parameter> then the track whose track <abbrev>UID</abbrev> element equals this <parameter>uid</parameter>. Track <abbrev>UIDs</abbrev> can be obtained with &mkvinfo;."
 msgstr "如果参数以 '<literal>=</literal>' 后接 <parameter>uid</parameter> 开头，则将选择轨道 <abbrev>UID</abbrev> 元素等于此 <parameter>uid</parameter> 的轨道。轨道 <abbrev>UID</abbrev> 可通过 &mkvinfo; 获取。"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><term>
-#: doc/man/mkvpropedit.xml:324
+#: doc/man/mkvpropedit.xml:345
 msgid "<option>track:</option>@<parameter>number</parameter>"
 msgstr "<option>track:</option>@<parameter>数字</parameter>"
 
 #. type: Content of: <refentry><refsect1><refsect2><variablelist><varlistentry><listitem><para>
-#: doc/man/mkvpropedit.xml:327
+#: doc/man/mkvpropedit.xml:348
 msgid "If the parameter starts with a '<literal>@</literal>' followed by a number <parameter>number</parameter> then the track whose track number element equals this <parameter>number</parameter>. Track number can be obtained with &mkvinfo;."
 msgstr "如果参数以 '<literal>@</literal>' 后接 <parameter>数字</parameter> 开头，则选择轨道号元素等于 <parameter>数字</parameter> 的轨道。轨道号可以通过 &mkvinfo; 获取。"
 
 #. type: Content of: <refentry><refsect1><refsect2><title>
-#: doc/man/mkvpropedit.xml:336
+#: doc/man/mkvpropedit.xml:357
 msgid "Notes"
 msgstr "注"
 
 #. type: Content of: <refentry><refsect1><refsect2><para>
-#: doc/man/mkvpropedit.xml:338
+#: doc/man/mkvpropedit.xml:359
 msgid "Due to the nature of the track edit selectors it is possible that several selectors actually match the same track headers. In such cases all actions for those edit selectors will be combined and executed in the order in which they're given on the command line."
 msgstr "由于轨道编辑选择器的特性，一些选择器所匹配的轨道头部可能是相同的。在此情况下，这些编辑选择器的所有操作将被按照在命令行给出的顺序合并运行。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:347
+#: doc/man/mkvpropedit.xml:368
 msgid "The following example edits a file called '<literal>movie.mkv</literal>'. It sets the segment title and modifies the language code of an audio and a subtitle track. Note that this example can be shortened by leaving out the first <link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link> option because editing the segment information element is the default for all options found before the first <link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link> option anyway."
 msgstr "下面的示例将编辑一个名为 '<literal>电影.mkv</literal>' 的文件。示例中将设置剪辑标题并修改一条音频轨和一条字幕轨的语言代码。附注，本示例可以简写，即省去 <link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link> 选项，因为在第一个 <link linkend=\"mkvpropedit.description.edit\"><option>--edit</option></link> 选项之前的所有选项默认编辑的就是剪辑信息元素。"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvpropedit.xml:354
+#: doc/man/mkvpropedit.xml:375
 #, no-wrap
 msgid ""
 "$ mkvpropedit movie.mkv --edit info --set \"title=The movie\" --edit track:a1 --set language=fre --edit track:a2 --set language=ita\n"
@@ -3453,12 +3481,12 @@ msgstr ""
 "  "
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:358
+#: doc/man/mkvpropedit.xml:379
 msgid "The second example removes the 'default track flag' from the first subtitle track and sets it for the second one. Note that &mkvpropedit;, unlike &mkvmerge;, does not set the 'default track flag' of other tracks to '0' if it is set to '1' for a different track automatically."
 msgstr "第二个示例，将 '默认轨标记' 从第一条字幕轨移除并设置到第二条字幕轨上。注意 &mkvpropedit; 与 &mkvmerge; 不同，不会在将另一个轨道的 '默认轨标记'设为 '1' 的时候自动将其他轨道的标记设为 '0'。"
 
 #. type: Content of: <refentry><refsect1><screen>
-#: doc/man/mkvpropedit.xml:364
+#: doc/man/mkvpropedit.xml:385
 #, no-wrap
 msgid ""
 "$ mkvpropedit movie.mkv --edit track:s1 --set flag-default=0 --edit track:s2 --set flag-default=1\n"
@@ -3468,27 +3496,27 @@ msgstr ""
 "  "
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:372
+#: doc/man/mkvpropedit.xml:393
 msgid "&mkvpropedit; exits with one of three exit codes:"
 msgstr "&mkvpropedit; 退出时会返回以下三个退出代码中的一个："
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvpropedit.xml:378
+#: doc/man/mkvpropedit.xml:399
 msgid "<constant>0</constant> -- This exit codes means that the modification has completed successfully."
 msgstr "<constant>0</constant> -- 此退出代码说明已成功完成修改。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvpropedit.xml:384
+#: doc/man/mkvpropedit.xml:405
 msgid "<constant>1</constant> -- In this case &mkvpropedit; has output at least one warning, but the modification did continue.  A warning is prefixed with the text '<literal>Warning:</literal>'.  Depending on the issues involved the resulting files might be ok or not.  The user is urged to check both the warning and the resulting files."
 msgstr "<constant>1</constant> -- 这种情况下 &mkvpropedit; 至少输出了一条警告信息，但修改并未因之中止。 警告信息以文字 '<literal>警告:</literal>' 为前缀。根据问题的不同，生成的文件可能是好的，也可能不是。 强烈建议用户检查警告信息以及生成的文件。"
 
 #. type: Content of: <refentry><refsect1><itemizedlist><listitem><para>
-#: doc/man/mkvpropedit.xml:392
+#: doc/man/mkvpropedit.xml:413
 msgid "<constant>2</constant> -- This exit code is used after an error occurred.  &mkvpropedit; aborts right after outputting the error message.  Error messages range from wrong command line arguments over read/write errors to broken files."
 msgstr "<constant>2</constant> -- 此退出代码用于错误发生之后。 &mkvpropedit; 在输出错误信息后即中断处理。错误信息可能是错误的命令行参数，也可能是损坏文件的读取/写入错误。"
 
 #. type: Content of: <refentry><refsect1><para>
-#: doc/man/mkvpropedit.xml:414
+#: doc/man/mkvpropedit.xml:435
 msgid "&mkvmerge;, &mkvinfo;, &mkvextract;, &mmg;"
 msgstr "&mkvmerge;, &mkvinfo;, &mkvextract;, &mmg;"
 
@@ -3534,22 +3562,17 @@ msgstr "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
 
 #~ msgid "Syntax: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional>"
 #~ msgstr "语法: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>源文件名</parameter> <optional><parameter>选项</parameter></optional>"
-
 #~ msgid "Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace character is a hash mark ('<literal>#</literal>') are treated as comments and ignored. White spaces at the start and end of a line will be stripped. Each line must contain exactly one option.  There is no meta character escaping."
 #~ msgstr "从文件 <parameter>选项文件</parameter> 中读取额外的命令行参数。首个非空白字符为井号 ('<literal>#</literal>') 的行将被当作注释对待，在处理过程中将被忽略。各行开头与结尾的空白将被除去。各行必须恰好含有一个选项。没有元字符转义。"
-
 #~ msgid "<option>--no-ogg</option>"
 #~ msgstr "<option>--no-ogg</option>"
-
 #~ msgid "Only valid for <abbrev>FLAC</abbrev> tracks. Normally <abbrev>FLAC</abbrev> tracks are embedded in an Ogg transport stream. With this switch they are extracted to raw <abbrev>FLAC</abbrev> files instead."
 #~ msgstr "仅对 <abbrev>FLAC</abbrev> 轨道有效。通常 <abbrev>FLAC</abbrev> 轨道是嵌套在 Ogg 传输流（TS）中的。通过本开关，它们可以被提取为原始 <abbrev>FLAC</abbrev> 文件。"
-
 #, fuzzy
 #~ msgid "<option>--webm</option>, <option>--web-media</option>"
 #~ msgstr "<option>-v</option>, <option>--verbose</option>"
-
 #~ msgid "January 2010"
 #~ msgstr "2010 年 1 月"
-
 #~ msgid "December 2009"
 #~ msgstr "2009 年 12 月"
+
