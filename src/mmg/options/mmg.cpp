@@ -102,7 +102,7 @@ optdlg_mmg_tab::optdlg_mmg_tab(wxWindow *parent,
                                                         "The user can still change the compression setting afterwards."));
 
 #if defined(HAVE_CURL_EASY_H)
-  cb_check_for_updates = new wxCheckBox(this, ID_CB_CHECK_FOR_UPDATES, Z("Check online for updates"));
+  cb_check_for_updates = new wxCheckBox(this, ID_CB_CHECK_FOR_UPDATES, Z("Check online for the latest release"));
   cb_check_for_updates->SetToolTip(TIP("Check online whether or not a new release of MKVToolNix is availble on the home page. "
                                        "Will only check when mmg starts and at most once a day. "
                                        "No information is transmitted to the server."));

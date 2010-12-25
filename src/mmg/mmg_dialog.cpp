@@ -293,7 +293,7 @@ mmg_dialog::translate_ui() {
   set_menu_item_strings(ID_M_HELP_HELP,                Z("&Help\tF1"),                            Z("Show the guide to mkvmerge GUI"));
   set_menu_item_strings(ID_M_HELP_ABOUT,               Z("&About"),                               Z("Show program information"));
 #if defined(HAVE_CURL_EASY_H)
-  set_menu_item_strings(ID_M_HELP_CHECK_FOR_UPDATES,   Z("&Check for updates"),                   Z("Check online for a new release"));
+  set_menu_item_strings(ID_M_HELP_CHECK_FOR_UPDATES,   Z("&Check for updates"),                   Z("Check online for the latest release"));
 #endif  // defined(HAVE_CURL_EASY_H)
 
   set_menu_label(this, 0, Z("&File"));
