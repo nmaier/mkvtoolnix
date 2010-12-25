@@ -227,10 +227,10 @@
     <term><option>--check-for-updates</option></term>
     <listitem>
      <para>
-      Checks online for new releases by downloading the URL <uri>http://mkvtoolnix-releases.bunkus.org/latest-release.xml</uri>. Three lines
+      Checks online for new releases by downloading the URL <uri>http://mkvtoolnix-releases.bunkus.org/latest-release.xml</uri>. Four lines
       will be output in <literal>key=value</literal> style: the URL from where the information was retrieved (key
-      <literal>version_check_url</literal>), the currently running version (key <literal>running_version</literal>) and the latest release's
-      version (key <literal>available_version</literal>).
+      <literal>version_check_url</literal>), the currently running version (key <literal>running_version</literal>), the latest release's
+      version (key <literal>available_version</literal>) and the download URL (key <literal>download_url</literal>).
      </para>
 
      <para>
