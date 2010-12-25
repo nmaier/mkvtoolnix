@@ -55,7 +55,7 @@ private:
   void close_dialog();
 };
 
-DECLARE_EVENT_TYPE(wxEVT_MTX_UPDATE_CHECK_STATE_CHANGED, -1);
+extern const wxEventType wxEVT_MTX_UPDATE_CHECK_STATE_CHANGED;
 
 #  define UPDATE_CHECK_START                 1
 #  define UPDATE_CHECK_DONE_NO_NEW_RELEASE   2
