@@ -24,6 +24,7 @@
 #include <wx/fileconf.h>
 #include <wx/listctrl.h>
 #include <wx/notebook.h>
+#include <wx/regex.h>
 #include <wx/statusbr.h>
 #include <wx/statline.h>
 #include <wx/strconv.h>
@@ -1726,9 +1727,21 @@ mmg_dialog::on_update_check_state_changed(wxCommandEvent &evt) {
     m_checking_for_updates = false;
 
   } else {
+    wxConfigBase *cfg = wxConfigBase::Get();
+    cfg->SetPath(wxT("/GUI/update_check"));
+
     wxMutexLocker locker(m_update_check_mutex);
     bool show = m_interactive_update_check;
-    if (!m_interactive_update_check) {
+
+    if (!m_interactive_update_check && (UPDATE_CHECK_DONE_NEW_RELEASE == state)) {
+      bool already_shown;
+      cfg->Read(version_key_for_config(), &already_shown, false);
+      show = !already_shown;
+    }
+
+    if ((UPDATE_CHECK_DONE_NO_NEW_RELEASE == state) || (UPDATE_CHECK_DONE_NEW_RELEASE == state)) {
+      cfg->Write(wxT("last_check"), wxGetLocalTime());
+      cfg->Write(version_key_for_config(), true);
     }
 
     if (show) {
@@ -1746,6 +1759,8 @@ mmg_dialog::on_update_check_state_changed(wxCommandEvent &evt) {
       m_checking_for_updates = false;
 
     m_update_check_dlg = NULL;
+
+    cfg->Flush();
   }
 }
 
@@ -1769,6 +1784,14 @@ void
 mmg_dialog::set_release_version(mtx_release_version_t &release_version) {
   wxMutexLocker locker(m_update_check_mutex);
   m_release_version = release_version;
+}
+
+wxString
+mmg_dialog::version_key_for_config() {
+  wxString version = wxU(m_release_version.latest_source.to_string());
+  wxRegEx re(wxT("[^0-9]"));
+  re.Replace(&version, wxT("_"));
+  return wxString::Format(wxT("version_%s"), version.c_str());
 }
 #endif  // defined(HAVE_CURL_EASY_H)
 

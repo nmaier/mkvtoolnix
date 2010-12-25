@@ -244,6 +244,7 @@ public:
 
   void on_check_for_updates(wxCommandEvent &evt);
   void on_update_check_state_changed(wxCommandEvent &evt);
+  wxString version_key_for_config();
 #endif  // defined(HAVE_CURL_EASY_H)
 
 protected:
