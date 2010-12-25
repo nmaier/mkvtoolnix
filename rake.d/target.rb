@@ -128,7 +128,7 @@ class Target
       end
 
       @file_deps.each do |spec|
-        file spec.first => spec.last
+        file spec.first => spec.last unless spec.first == spec.last
       end
 
       @aliases.each_with_index do |name, idx|
