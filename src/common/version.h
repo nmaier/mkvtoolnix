@@ -35,6 +35,7 @@ struct version_number_t {
 
 struct mtx_release_version_t {
   version_number_t current_version, latest_source, latest_windows_build;
+  std::string source_download_url, windows_build_download_url;
   bool valid;
 
   mtx_release_version_t();

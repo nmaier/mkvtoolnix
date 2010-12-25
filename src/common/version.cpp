@@ -178,11 +178,13 @@ get_latest_release_version() {
     boost::property_tree::ptree pt;
     boost::property_tree::read_xml(data_in, pt);
 
-    release.latest_source        = version_number_t(pt.get("mkvtoolnix-releases.latest.source.version",      std::string("")));
-    release.latest_windows_build = version_number_t(pt.get("mkvtoolnix-releases.latest.windows-pre.version", std::string(""))
-                                                    + " build " +
-                                                    pt.get("mkvtoolnix-releases.latest.windows-pre.build",   std::string("")));
-    release.valid                = release.latest_source.valid;
+    release.latest_source              = version_number_t(pt.get("mkvtoolnix-releases.latest.source.version",      std::string("")));
+    release.latest_windows_build       = version_number_t(pt.get("mkvtoolnix-releases.latest.windows-pre.version", std::string(""))
+                                                          + " build " +
+                                                          pt.get("mkvtoolnix-releases.latest.windows-pre.build",   std::string("")));
+    release.source_download_url        =                  pt.get("mkvtoolnix-releases.latest.source.url",          std::string(""));
+    release.windows_build_download_url =                  pt.get("mkvtoolnix-releases.latest.windows-pre.url",     std::string(""));
+    release.valid                      = release.latest_source.valid;
 
   } catch (boost::property_tree::ptree_error &error) {
     release.valid = false;
