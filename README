@@ -68,6 +68,7 @@ libraries you absolutely need are:
 - zlib ( http://www.zlib.net/ ) -- a compression library
 - Several of Boost's libraries: "format", "RegEx", "filesystem",
   "system", "foreach" ( http://www.boost.org/ )
+- libcurl ( http://curl.haxx.se/ ) for online update checks
 
 You also need the "rake" or "drake" build program or at least the
 programming language Ruby and the "rubygems" package. MKVToolNix comes

@@ -10,7 +10,7 @@ Source: %{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-tmproot
 BuildRequires: libebml-devel >= 1.0.0
 BuildRequires: libmatroska-devel >= 1.0.0
-BuildRequires: gcc-c++ gcc gcc-c++ make flac-devel libogg-devel libvorbis-devel wxGTK-devel >= 2.8 boost-devel file lzo-devel bzip2-devel zlib-devel expat-devel gettext-devel ruby
+BuildRequires: gcc-c++ gcc gcc-c++ make flac-devel libogg-devel libvorbis-devel wxGTK-devel >= 2.8 boost-devel file lzo-devel bzip2-devel zlib-devel expat-devel gettext-devel ruby libcurl-devel
 
 %description
 Matroska video utilities.
