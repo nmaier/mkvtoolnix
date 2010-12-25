@@ -39,12 +39,10 @@ update_check_thread_c::Entry() {
   if (!release.valid)
     event.SetId(UPDATE_CHECK_DONE_ERROR);
 
-  else if (release.current_version < release.latest_source) {
+  else {
     m_mdlg->set_release_version(release);
-    event.SetId(UPDATE_CHECK_DONE_NEW_RELEASE);
-
-  } else
-    event.SetId(UPDATE_CHECK_DONE_NO_NEW_RELEASE);
+    event.SetId(release.current_version < release.latest_source ? UPDATE_CHECK_DONE_NEW_RELEASE : UPDATE_CHECK_DONE_NO_NEW_RELEASE);
+  }
 
   wxPostEvent(m_mdlg, event);
 
