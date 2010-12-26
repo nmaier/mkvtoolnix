@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mkvtoolnix-man\n"
 "POT-Creation-Date: 2010-12-25 16:23+0100\n"
-"PO-Revision-Date: 2010-12-21 21:49+0800\n"
+"PO-Revision-Date: 2010-12-26 16:36+0800\n"
 "Last-Translator: Dean Lee <xslidian@gmail.com>\n"
 "Language-Team: chinese simp <xslidian+mkvtoolnix@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -384,10 +384,9 @@ msgstr "显示版本信息并退出。"
 #: doc/man/mkvinfo.xml:192
 #: doc/man/mkvmerge.xml:1351
 #: doc/man/mkvpropedit.xml:227
-#, fuzzy
 #| msgid "<option>--no-cues</option>"
 msgid "<option>--check-for-updates</option>"
-msgstr "<option>--no-cues</option>"
+msgstr "<option>--check-for-updates</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:165
@@ -395,7 +394,7 @@ msgstr "<option>--no-cues</option>"
 #: doc/man/mkvmerge.xml:1354
 #: doc/man/mkvpropedit.xml:230
 msgid "Checks online for new releases by downloading the URL <uri>http://mkvtoolnix-releases.bunkus.org/latest-release.xml</uri>. Four lines will be output in <literal>key=value</literal> style: the URL from where the information was retrieved (key <literal>version_check_url</literal>), the currently running version (key <literal>running_version</literal>), the latest release's version (key <literal>available_version</literal>) and the download URL (key <literal>download_url</literal>)."
-msgstr ""
+msgstr "联机下载 URL <uri>http://mkvtoolnix-releases.bunkus.org/latest-release.xml</uri> 检查新版本。将以 <literal>键=值</literal> 的样式输出四行: 检索信息的 URL（键 <literal>version_check_url</literal>），当前运行的版本（键 <literal>running_version</literal>），最新版本（键 <literal>available_version</literal>）及其下载 URL（键 <literal>download_url</literal>）。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:172
@@ -403,7 +402,7 @@ msgstr ""
 #: doc/man/mkvmerge.xml:1361
 #: doc/man/mkvpropedit.xml:237
 msgid "Afterwards the program exists with an exit code of 0 if no newer release is available, with 1 if a newer release is available and with 2 if an error occured (e.g. if the update information could not be retrieved)."
-msgstr ""
+msgstr "若无更新版本可用，程序将以退出码 0 退出，若有更新版本可用，退出码为 1，若出现错误（如无法检索更新信息），退出码则为 2。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: doc/man/mkvextract.xml:177
@@ -411,7 +410,7 @@ msgstr ""
 #: doc/man/mkvmerge.xml:1366
 #: doc/man/mkvpropedit.xml:242
 msgid "This option is only available if the program was built with support for libcurl."
-msgstr ""
+msgstr "此选项仅当程序附带 libcurl 支持编译时可用。"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: doc/man/mkvextract.xml:183
@@ -3562,17 +3561,22 @@ msgstr "&mkvmerge;, &mkvextract;, &mkvinfo;, &mkvpropedit;"
 
 #~ msgid "Syntax: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>source-filename</parameter> <optional><parameter>options</parameter></optional>"
 #~ msgstr "语法: <command>mkvextract</command> <option>timecodes_v2</option> <parameter>源文件名</parameter> <optional><parameter>选项</parameter></optional>"
+
 #~ msgid "Reads additional command line arguments from the file <parameter>options-file</parameter>.  Lines whose first non-whitespace character is a hash mark ('<literal>#</literal>') are treated as comments and ignored. White spaces at the start and end of a line will be stripped. Each line must contain exactly one option.  There is no meta character escaping."
 #~ msgstr "从文件 <parameter>选项文件</parameter> 中读取额外的命令行参数。首个非空白字符为井号 ('<literal>#</literal>') 的行将被当作注释对待，在处理过程中将被忽略。各行开头与结尾的空白将被除去。各行必须恰好含有一个选项。没有元字符转义。"
+
 #~ msgid "<option>--no-ogg</option>"
 #~ msgstr "<option>--no-ogg</option>"
+
 #~ msgid "Only valid for <abbrev>FLAC</abbrev> tracks. Normally <abbrev>FLAC</abbrev> tracks are embedded in an Ogg transport stream. With this switch they are extracted to raw <abbrev>FLAC</abbrev> files instead."
 #~ msgstr "仅对 <abbrev>FLAC</abbrev> 轨道有效。通常 <abbrev>FLAC</abbrev> 轨道是嵌套在 Ogg 传输流（TS）中的。通过本开关，它们可以被提取为原始 <abbrev>FLAC</abbrev> 文件。"
+
 #, fuzzy
 #~ msgid "<option>--webm</option>, <option>--web-media</option>"
 #~ msgstr "<option>-v</option>, <option>--verbose</option>"
+
 #~ msgid "January 2010"
 #~ msgstr "2010 年 1 月"
+
 #~ msgid "December 2009"
 #~ msgstr "2009 年 12 月"
-
