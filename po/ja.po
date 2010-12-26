@@ -7441,10 +7441,6 @@ msgstr "corepicture_reader：ソースは有効なCorePanoramaファイルでは
 msgid "create_track_number: file_num not found. %1%\n"
 msgstr "create_track_number：file_numが見つかりませんでした。%1%\n"
 
-#: src/common/ebml.cpp:100 src/common/ebml.cpp:108
-msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
-msgstr "cstrutf8_to_UTFstring：無効なUTF-8文字列の並びに遭遇しました。moritz@bunkus.orgに連絡し、UTF-8パーサを実装するよう要求してください。"
-
 #: src/mmg/tabs/input_extra.cpp:85 src/mmg/tabs/input_extra.cpp:158
 #: src/mmg/tabs/input_general.cpp:106
 msgid "default"
@@ -8435,6 +8431,9 @@ msgstr "はい"
 
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "OGGに埋め込まれたオーディオ・ビデオ・テキスト字幕"
+
+#~ msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
+#~ msgstr "cstrutf8_to_UTFstring：無効なUTF-8文字列の並びに遭遇しました。moritz@bunkus.orgに連絡し、UTF-8パーサを実装するよう要求してください。"
 
 #~ msgid "general Matroska files"
 #~ msgstr "通常のMatroskaファイル"

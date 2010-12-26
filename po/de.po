@@ -7533,10 +7533,6 @@ msgstr "corepicture_reader: Die Quelldatei ist keine gültige CorePanorama-Datei
 msgid "create_track_number: file_num not found. %1%\n"
 msgstr "create_track_number: file_num nicht gefunden. %1%\n"
 
-#: src/common/ebml.cpp:100 src/common/ebml.cpp:108
-msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
-msgstr "cstrutf8_to_UTFstring: Ungültige UTF-8-Sequenz gefunden. Wenden Sie sich bitte an moritz@bunkus.org, und bitten Sie darum, dass er den UTF-8-Parser verbessert."
-
 #: src/mmg/tabs/input_extra.cpp:85 src/mmg/tabs/input_extra.cpp:158
 #: src/mmg/tabs/input_general.cpp:106
 msgid "default"
@@ -8865,6 +8861,9 @@ msgstr "ja"
 
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "Audio/Video/Textuntertitel in Ogg eingebettet"
+
+#~ msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
+#~ msgstr "cstrutf8_to_UTFstring: Ungültige UTF-8-Sequenz gefunden. Wenden Sie sich bitte an moritz@bunkus.org, und bitten Sie darum, dass er den UTF-8-Parser verbessert."
 
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: Die Fehlerrücksprungfunktion konnte nicht gesetzt.\n"

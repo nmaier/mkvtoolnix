@@ -7765,11 +7765,6 @@ msgstr "corepicture_reader: Источник не является допуст�
 msgid "create_track_number: file_num not found. %1%\n"
 msgstr "create_track_number: file_num не найден. %1%\n"
 
-#: src/common/ebml.cpp:100
-#: src/common/ebml.cpp:108
-msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
-msgstr "cstrutf8_to_UTFstring: Неверный UTF-8 последовательности столкнулись. Пожалуйста, moritz@bunkus.org связаться и попросить, чтобы он лучше реализует UTF-8 анализатор."
-
 #: src/mmg/tabs/input_extra.cpp:85
 #: src/mmg/tabs/input_extra.cpp:158
 #: src/mmg/tabs/input_general.cpp:106
@@ -8810,6 +8805,8 @@ msgstr "Да"
 #~ msgstr "Создать исходные файлы FLAC (по умолчанию: написать OggFLAC файлы)."
 #~ msgid "audio/video/text subtitles embedded in OGG"
 #~ msgstr "аудио/видео/текст субтитров внедренных в OGG"
+#~ msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
+#~ msgstr "cstrutf8_to_UTFstring: Неверный UTF-8 последовательности столкнулись. Пожалуйста, moritz@bunkus.org связаться и попросить, чтобы он лучше реализует UTF-8 анализатор."
 #~ msgid "flac_header_extraction: Could not set the error callback.\n"
 #~ msgstr "flac_header_extraction: Не удалось установить ошибки обратного вызова.\n"
 #~ msgid "flac_header_extraction: Could not set the metadata callback.\n"

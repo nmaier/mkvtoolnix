@@ -7792,11 +7792,6 @@ msgstr "corepicture_reader: El archivo de origen no es un CorePanorama válido."
 msgid "create_track_number: file_num not found. %1%\n"
 msgstr "create_track_number: file_num no se encuentra. %1%\n"
 
-#: src/common/ebml.cpp:100
-#: src/common/ebml.cpp:108
-msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
-msgstr "cstrutf8_to_UTFstring: Se ha encontrado una secuencia UTF-8 no válida. Por favor, contacta con moritz@bunkus.org y solicita que se mejore el analizador de UTF-8."
-
 #: src/mmg/tabs/input_extra.cpp:85
 #: src/mmg/tabs/input_extra.cpp:158
 #: src/mmg/tabs/input_general.cpp:106
@@ -8772,6 +8767,8 @@ msgstr "sí"
 #, fuzzy
 #~ msgid "Using the Vp8 video output module.\n"
 #~ msgstr "Usando el módulo de salida VP8.\n"
+#~ msgid "cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."
+#~ msgstr "cstrutf8_to_UTFstring: Se ha encontrado una secuencia UTF-8 no válida. Por favor, contacta con moritz@bunkus.org y solicita que se mejore el analizador de UTF-8."
 #~ msgid "mkvextract: Unknown mode!?\n"
 #~ msgstr "mkvextract: ¿¡Modo desconocido!?\n"
 
