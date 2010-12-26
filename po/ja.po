@@ -6,10 +6,10 @@
 # Katsuhiko Nishimra <kat841@hotmail.com> 2010.
 msgid ""
 msgstr ""
-"Project-Id-Versio#~ n: ja\n"
-"Report-Msgid-Bugs#~ -To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
-"POT-Creation-Date#~ : 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-12-25 21:29+0100\n"
+"Project-Id-Version: ja\n"
+"Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
+"POT-Creation-Date : 2009-02-27 00:38+0900\n"
+"PO-Revision-Date: 2010-12-26 11:26+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -856,12 +856,11 @@ msgstr "チャプタエディタ(&C)\tAlt-4"
 
 #: src/mmg/mmg_dialog.cpp:296
 msgid "&Check for updates"
-msgstr ""
+msgstr "アップデートチェック(&C)"
 
 #: src/mmg/update_checker.cpp:71
-#, fuzzy
 msgid "&Close"
-msgstr "閉じる(&C)\tCtrl-W"
+msgstr "閉じる(&C)"
 
 #: src/mmg/header_editor/frame.cpp:145
 msgid "&Close\tCtrl-W"
@@ -1899,9 +1898,8 @@ msgid "Available translations:\n"
 msgstr "利用可能な翻訳：\n"
 
 #: src/mmg/update_checker.cpp:65
-#, fuzzy
 msgid "Available version:"
-msgstr "利用可能なオプション："
+msgstr "入手可能なバージョン："
 
 #: src/common/compression.cpp:213 src/common/compression.cpp:231
 msgid "BZ2_bzCompressInit() failed. Result: %1%\n"
@@ -2159,19 +2157,19 @@ msgstr "文字セット："
 #: src/mmg/mmg_dialog.cpp:296 src/mmg/options/mmg.cpp:105
 #: src/merge/mkvmerge.cpp:250 src/info/mkvinfo.cpp:235
 msgid "Check online for the latest release"
-msgstr ""
+msgstr "最新のリリースをオンラインでチェックする"
 
 #: src/common/cli_parser.cpp:184
 msgid "Check online for the latest release."
-msgstr ""
+msgstr "最新のリリースをオンラインでチェックします。"
 
 #: src/mmg/options/mmg.cpp:106
 msgid "Check online whether or not a new release of MKVToolNix is availble on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
-msgstr ""
+msgstr "MKVToolNixの新しいリリースがホームページで入手可能かどうか、オンラインで確認します。MKVMerge GUIが起動されたときにのみ、最高で1日に1回確認します。サーバーには何の情報も送信されません。"
 
 #: src/mmg/mmg_dialog.cpp:1725
 msgid "Checking for updates online; please wait"
-msgstr ""
+msgstr "オンラインでアップデートを確認しています；しばらくお待ちください"
 
 #: src/mmg/tabs/chapters.cpp:524
 msgid "Choose a chapter file"
@@ -2613,9 +2611,8 @@ msgid "Current value:"
 msgstr "現在の値："
 
 #: src/mmg/update_checker.cpp:62
-#, fuzzy
 msgid "Current version:"
-msgstr "現在の値："
+msgstr "現在のバージョン："
 
 #: src/mmg/jobs.cpp:483
 msgid "D&elete"
@@ -2799,9 +2796,8 @@ msgid "Done.\n"
 msgstr "完了。\n"
 
 #: src/mmg/update_checker.cpp:68
-#, fuzzy
 msgid "Download URL:"
-msgstr "コーデックダウンロードURL："
+msgstr "ダウンロードURL："
 
 #: src/info/mkvinfo.cpp:160
 msgid "Duration: %|1$.3f|ms"
@@ -3362,6 +3358,8 @@ msgid ""
 "Help is available in form of tool tips, from the\n"
 "'Help' menu or by pressing the 'F1' key."
 msgstr ""
+"ヘルプはツールチップの形で、または'ヘルプ'メニューから、\n"
+"またはF1キーを押すことで利用できます。"
 
 #: src/mmg/cli_options_dlg.cpp:31
 msgid ""
@@ -3914,7 +3912,7 @@ msgstr "MIMEタイプ："
 
 #: src/mmg/mmg_dialog.cpp:718
 msgid "MKVToolNix is licensed under the GNU GPL v2"
-msgstr ""
+msgstr "MKVToolNixはGNU GPL v2でライセンスされています"
 
 #: src/common/file_types.cpp:36
 msgid "MP4 audio/video files"
@@ -4321,7 +4319,7 @@ msgstr "チャプタの1つに名前がありません。"
 
 #: src/mmg/update_checker.cpp:57
 msgid "Online check for updates"
-msgstr ""
+msgstr "オンラインでのアップデートチェック"
 
 #: src/merge/mkvmerge.cpp:1434
 msgid "Only one chapter file allowed in '%1% %2%'.\n"
@@ -6237,18 +6235,16 @@ msgid "The track parameters do not match."
 msgstr "トラックのパラメータが一致しません。"
 
 #: src/common/command_line.cpp:270
-#, fuzzy
 msgid "The update information could not be retrieved from %1%.\n"
-msgstr "カラオケ・テキスト判別ヘッダを解析できませんでした（%1%）。\n"
+msgstr "アップデート情報を %1% から読み出すことができませんでした。\n"
 
 #: src/merge/pr_generic.h:386
 msgid "The width of the two tracks is different: %1% and %2%"
 msgstr "2つのトラック間で横解像度が異なっています：%1%と%2%"
 
 #: src/mmg/mmg_dialog.cpp:1758
-#, fuzzy
 msgid "There is a new version available online."
-msgstr "の翻訳は利用できません。"
+msgstr "新しいバージョンがオンラインで入手可能です。"
 
 #: src/merge/output_control.cpp:829 src/merge/output_control.cpp:839
 msgid "There is no file with the ID '%1%'. The argument for '--append-to' was invalid.\n"
@@ -6260,7 +6256,7 @@ msgstr "'%1%'の翻訳は利用できません。\n"
 
 #: src/mmg/mmg_dialog.cpp:1759
 msgid "There was an error querying the update status."
-msgstr ""
+msgstr "アップデート状況の問い合わせ中にエラーが発生しました。"
 
 #: src/mmg/mux_dialog.cpp:362
 msgid "There were ERRORs."
@@ -7267,7 +7263,7 @@ msgstr "%1%行目でXMLパーサエラーが発生しました：%2%。"
 
 #: src/mmg/mmg_dialog.cpp:1757
 msgid "You are already running the latest version."
-msgstr ""
+msgstr "既に最新のバージョンが実行されています。"
 
 #: src/mmg/tabs/chapters.cpp:1351
 msgid ""
