@@ -1,5 +1,10 @@
 2010-12-26  Moritz Bunkus  <moritz@bunkus.org>
 
+	* mkvmerge: enhancement: If mkvmerge encounters invalid UTF-8
+	strings in Matroska files then those strings will simply be cut
+	short. Before mkvmerge was exiting with an error ("Invalid UTF-8
+	sequence encountered").
+
 	* all: new feature: Added online update checks. The command line
 	tools know a new parameter "--check-for-updates". mmg has a new
 	menu entry ("Help" -> "Check for updates") and checks

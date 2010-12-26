@@ -97,15 +97,15 @@ cstrutf8_to_UTFstring(const std::string &c) {
   for (src = 0; src < slen; dlen++) {
     clen = utf8_byte_length(c[src]);
     if (clen < 0)
-      mxerror(Y("cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."));
+      return u;
     src += clen;
   }
 
   new_string = (wchar_t *)safemalloc((dlen + 1) * sizeof(wchar_t));
   for (src = 0, dst = 0; src < slen; dst++) {
     clen = utf8_byte_length(c[src]);
-    if ((src + clen) > slen)
-      mxerror(Y("cstrutf8_to_UTFstring: Invalid UTF-8 sequence encountered. Please contact moritz@bunkus.org and request that he implements a better UTF-8 parser."));
+    if ((clen < 0) || ((src + clen) > slen))
+      break;
 
     if (clen == 1)
       new_string[dst] = c[src];
