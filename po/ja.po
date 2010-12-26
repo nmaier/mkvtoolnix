@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "POT-Creation-Date : 2009-02-27 00:38+0900\n"
-"PO-Revision-Date: 2010-12-26 11:26+0900\n"
+"PO-Revision-Date: 2010-12-26 12:35+0900\n"
 "Last-Translator: Hiroki Taniura <boiled.sugar@gmail.com>\n"
 "Language-Team: Japanese <boiled.sugar@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -3243,7 +3243,7 @@ msgstr "非クローズドGOPで二つめの参照先がないBフレームが�
 
 #: src/mpegparser/M2VParser.cpp:396
 msgid "Found group of picture with broken link. You may want use smart reencode before attempting to multiplex it.\n"
-msgstr "broken linkフラグのあるGOPが見つかりました。MUXしようとする前にsmart reencodeを使いたいと思うかもしれません。\n"
+msgstr "broken linkフラグのあるGOPが見つかりました。MUXしようとする前にsmart reencodeを使ってください。\n"
 
 #: src/common/xml/element_parser.cpp:131
 msgid "Found no encoded data nor '@file' to read binary data from."
@@ -3251,7 +3251,7 @@ msgstr "エンコードされたデータもしくはバイナリデータを読
 
 #: src/mpegparser/M2VParser.cpp:444
 msgid "Found one or more B frames without second reference in the first GOP. You may want to fix the MPEG2 video stream or use smart reencode before attempting to multiplex it.\n"
-msgstr "最初のGOPで二つめの参照先がないBフレームが1つ以上見つかりました。MUXしようとする前にこのMPEG2ビデオストリームを修復もしくはsmart reencodeを使いたいと思うかもしれません。\n"
+msgstr "最初のGOPで二つめの参照先がないBフレームが1つ以上見つかりました。MUXしようとする前にこのMPEG2ビデオストリームを修復もしくはsmart reencodeを使ってください。\n"
 
 #: src/mmg/tabs/input_format.cpp:227
 msgid "FourCC:"
@@ -5112,7 +5112,7 @@ msgstr "短いAACオーディオパケットです（長さ：%1% < 2）\n"
 
 #: src/mpegparser/M2VParser.cpp:392
 msgid "Shortened GOP detected. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr "短くカットされたGOPが検出されました。ドロップされたフレームがあります。MUXしようとする前にこのMPEG2ビデオストリームを修復したいと思うかもしれません。\n"
+msgstr "短くカットされたGOPが検出されました。ドロップされたフレームがあります。MUXしようとする前にこのMPEG2ビデオストリームを修復してください。\n"
 
 #: src/info/wxwidgets_ui.cpp:127
 msgid "Show &all elements\tCtrl-A"
@@ -7101,7 +7101,7 @@ msgstr "横表示解像度"
 
 #: src/mpegparser/M2VParser.cpp:163
 msgid "Video ended with a shortened group of pictures. Some frames have been dropped. You may want to fix the MPEG2 video stream before attempting to multiplex it.\n"
-msgstr "ビデオが短くカットされたGOPで終わっています。ドロップされたフレームがあります。MUXする前にこのMPEG2ビデオストリームを修復したいと思うかもしれません。\n"
+msgstr "ビデオが短くカットされたGOPで終わっています。ドロップされたフレームがあります。MUXする前にこのMPEG2ビデオストリームを修復してください。\n"
 
 #: src/common/property_element.cpp:137
 msgid "Video interlaced flag"
@@ -7186,7 +7186,7 @@ msgstr "WebMオーディオ/ビデオファイル"
 
 #: src/mmg/options/mmg.cpp:83
 msgid "When a file is added its name is scanned. If it contains the word 'DELAY' followed by a number then this number is automatically put into the 'delay' input field for any audio track found in the file."
-msgstr "ファイルが追加された際にファイル名をスキャンします。もし'DELAY'という単語の後ろに数字が続いていたら、その数字がファイルで見つかった全てのオーディオトラックの'ディレイ'の入力フィールドに自動的に入力されます。"
+msgstr "ファイルが追加された際にファイル名をスキャンします。もし'DELAY'という単語の後ろに数字が続いていたら、そのファイルで見つかった全てのオーディオトラックの'ディレイ'の入力フィールドに、その数字が自動的に入力されます。"
 
 #: src/common/property_element.cpp:138 src/mmg/header_editor/frame.cpp:443
 msgid "Width of the encoded video frames in pixels."
