@@ -858,7 +858,7 @@ msgstr "章節編輯器(&C)\tAlt-4"
 msgid "&Check for updates"
 msgstr ""
 
-#: src/mmg/update_checker.cpp:71
+#: src/mmg/update_checker.cpp:69
 #, fuzzy
 msgid "&Close"
 msgstr "關閉(&C)\tCtrl-W"
@@ -1941,7 +1941,7 @@ msgstr "可用的選項:"
 msgid "Available translations:\n"
 msgstr "可用的翻譯:\n"
 
-#: src/mmg/update_checker.cpp:65
+#: src/mmg/update_checker.cpp:63
 #, fuzzy
 msgid "Available version:"
 msgstr "可用的選項:"
@@ -1980,8 +1980,8 @@ msgstr "附加區塊: %1%"
 msgid "Block duration: %1%.%|2$06d|ms"
 msgstr "區塊持續時間: %1%.%|2$06d|ms"
 
-#: src/extract/tracks.cpp:414
 #: src/extract/timecodes_v2.cpp:283
+#: src/extract/tracks.cpp:414
 #: src/info/mkvinfo.cpp:1403
 msgid "Block group"
 msgstr "區塊群組"
@@ -2015,13 +2015,13 @@ msgid "Brings up the job queue editor"
 msgstr "調出任務佇列編輯器"
 
 #: src/mmg/mmg_dialog.cpp:311
-#: src/mmg/options/mmg.cpp:69
 #: src/mmg/options/mkvmerge.cpp:59
-#: src/mmg/tabs/input_general.cpp:188
-#: src/mmg/tabs/input_general.cpp:191
+#: src/mmg/options/mmg.cpp:69
 #: src/mmg/tabs/global.cpp:276
 #: src/mmg/tabs/global.cpp:293
 #: src/mmg/tabs/global.cpp:297
+#: src/mmg/tabs/input_general.cpp:188
+#: src/mmg/tabs/input_general.cpp:191
 msgid "Browse"
 msgstr "瀏覽"
 
@@ -2045,10 +2045,10 @@ msgstr "不能啟動其他合成任務"
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file, and their CodecPrivate data (the USF styles etc) do not match.\n"
 msgstr "無法寫入軌道 %1%（CodecID「%2%」）至檔案「%3%」，因為軌道 %4%（CodecID「%5%」）已被寫入同一檔案，且它們的 CodecPrivate 編解碼器私有資料 (如 USF 樣式) 不相符。\n"
 
-#: src/extract/xtr_textsubs.cpp:308
 #: src/extract/xtr_avi.cpp:46
 #: src/extract/xtr_base.cpp:65
 #: src/extract/xtr_ivf.cpp:53
+#: src/extract/xtr_textsubs.cpp:308
 msgid "Cannot write track %1% with the CodecID '%2%' to the file '%3%' because track %4% with the CodecID '%5%' is already being written to the same file.\n"
 msgstr "無法寫入軌道 %1%（CodecID「%2%」）至檔案「%3%」，因為軌道 %4%（CodecID「%5%」）已被寫入同一檔案。\n"
 
@@ -2056,8 +2056,8 @@ msgstr "無法寫入軌道 %1%（CodecID「%2%」）至檔案「%3%」，因為�
 msgid "Category is not NUL terminated"
 msgstr "類別未以 NUL 結尾"
 
-#: src/extract/tracks.cpp:464
 #: src/extract/timecodes_v2.cpp:362
+#: src/extract/tracks.cpp:464
 #: src/info/mkvinfo.cpp:2020
 msgid "Caught exception"
 msgstr "發生異常"
@@ -2210,8 +2210,8 @@ msgstr "章節: %1% 項目"
 msgid "Charset for strings on the command line"
 msgstr "命令列上字串的字元集"
 
-#: src/mmg/tabs/input_format.cpp:249
 #: src/mmg/tabs/global.cpp:282
+#: src/mmg/tabs/input_format.cpp:249
 msgid "Charset:"
 msgstr "字元集:"
 
@@ -2227,7 +2227,7 @@ msgid "Check online for the latest release."
 msgstr ""
 
 #: src/mmg/options/mmg.cpp:106
-msgid "Check online whether or not a new release of MKVToolNix is availble on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
+msgid "Check online whether or not a new release of MKVToolNix is available on the home page. Will only check when mmg starts and at most once a day. No information is transmitted to the server."
 msgstr ""
 
 #: src/mmg/mmg_dialog.cpp:1725
@@ -2309,8 +2309,8 @@ msgstr "任務加入到任務佇列後清空輸入檔清單"
 msgid "Close the current file without saving"
 msgstr "在不儲存的情況下關閉目前檔案"
 
-#: src/extract/tracks.cpp:396
 #: src/extract/timecodes_v2.cpp:264
+#: src/extract/tracks.cpp:396
 #: src/info/mkvinfo.cpp:1960
 msgid "Cluster"
 msgstr "叢集"
@@ -2331,8 +2331,8 @@ msgstr "叢集位置: %1%"
 msgid "Cluster previous size: %1%"
 msgstr "叢集上一個長度: %1%"
 
-#: src/extract/tracks.cpp:405
 #: src/extract/timecodes_v2.cpp:279
+#: src/extract/tracks.cpp:405
 #: src/info/mkvinfo.cpp:170
 msgid "Cluster timecode: %|1$.3f|s"
 msgstr "叢集時間碼: %|1$.3f|s"
@@ -2481,8 +2481,8 @@ msgid "Could not decode the Base64 encoded data - it seems to be malformed."
 msgstr "無法解碼以 Base64 編碼的資料 - 似乎是不正常的。"
 
 #: src/input/r_matroska.cpp:1832
-#: src/input/r_avi.cpp:351
 #: src/input/r_ogm.cpp:1157
+#: src/input/r_avi.cpp:351
 msgid "Could not extract the decoder specific config data (AVCC) from this AVC/h.264 track.\n"
 msgstr "無法從該 AVC/h.264 軌道提取解碼器特有設定資料 (AVCC)。\n"
 
@@ -2691,7 +2691,7 @@ msgstr "目前任務 ID 1000:"
 msgid "Current value:"
 msgstr "目前值:"
 
-#: src/mmg/update_checker.cpp:62
+#: src/mmg/update_checker.cpp:60
 #, fuzzy
 msgid "Current version:"
 msgstr "目前值:"
@@ -2881,7 +2881,7 @@ msgstr "不寫入變動部份到輸出檔 (只用於除錯)。"
 msgid "Done.\n"
 msgstr "完成。\n"
 
-#: src/mmg/update_checker.cpp:68
+#: src/mmg/update_checker.cpp:66
 #, fuzzy
 msgid "Download URL:"
 msgstr "編解碼器下載 URL:"
@@ -3064,8 +3064,8 @@ msgstr "發生錯誤: %1% 解析器失敗，對於「%2%」, 第 %3% 行, 第 %4
 msgid "Error: Couldn't open input file %1% (%2%).\n"
 msgstr "發生錯誤: 無法開啟輸入檔 %1% (%2%)。\n"
 
-#: src/extract/tracks.cpp:339
 #: src/extract/timecodes_v2.cpp:184
+#: src/extract/tracks.cpp:339
 msgid "Error: No EBML head found."
 msgstr "發生錯誤: 未發現 EBML 表頭。"
 
@@ -3164,9 +3164,9 @@ msgstr "畫格率 (fps):"
 msgid "Failed to create the VobSub data file '%1%': %2% (%3%)\n"
 msgstr "建立 VobSub 資料檔案「%1%」失敗: %2% (%3%)\n"
 
+#: src/extract/xtr_base.cpp:73
 #: src/extract/xtr_textsubs.cpp:337
 #: src/extract/xtr_vobsub.cpp:236
-#: src/extract/xtr_base.cpp:73
 msgid "Failed to create the file '%1%': %2% (%3%)\n"
 msgstr "建立檔案失敗「%1%」: %2% (%3%)\n"
 
@@ -3938,9 +3938,9 @@ msgid "Language is not NUL terminated"
 msgstr "語言未以 NUL 結尾"
 
 #: src/mmg/options/chapters.cpp:86
-#: src/mmg/tabs/input_general.cpp:181
-#: src/mmg/tabs/global.cpp:278
 #: src/mmg/tabs/chapters.cpp:349
+#: src/mmg/tabs/global.cpp:278
+#: src/mmg/tabs/input_general.cpp:181
 msgid "Language:"
 msgstr "語言:"
 
@@ -4240,8 +4240,8 @@ msgstr "名稱"
 msgid "Name for this track, e.g. \"director's comments\"."
 msgstr "此軌的名稱，如“導演評論”。"
 
-#: src/mmg/tabs/attachments.cpp:158
 #: src/mmg/tabs/chapters.cpp:348
+#: src/mmg/tabs/attachments.cpp:158
 msgid "Name:"
 msgstr "名稱:"
 
@@ -4364,8 +4364,8 @@ msgstr "未發現中繼資料區塊。檔案已損壞。\n"
 msgid "No output file name specified, will use attachment name.\n"
 msgstr "未指定輸出檔名，將使用附件名。\n"
 
-#: src/extract/tracks.cpp:354
 #: src/extract/timecodes_v2.cpp:198
+#: src/extract/tracks.cpp:354
 #: src/info/mkvinfo.cpp:1927
 msgid "No segment/level 0 element found."
 msgstr "未發現剪輯/0 層級元件。"
@@ -4423,9 +4423,9 @@ msgstr "不是有效的 Matroska 檔 (未發現有效的 剪輯/0 層級元件)"
 msgid "Note"
 msgstr "備註"
 
-#: src/extract/attachments.cpp:131
-#: src/extract/tracks.cpp:318
 #: src/extract/timecodes_v2.cpp:166
+#: src/extract/tracks.cpp:318
+#: src/extract/attachments.cpp:131
 #: src/propedit/options.cpp:30
 msgid "Nothing to do.\n"
 msgstr "什麼都不做。\n"
@@ -4453,7 +4453,7 @@ msgstr "確定"
 msgid "One of the chapters does not have a name."
 msgstr "有一個章節沒有名稱。"
 
-#: src/mmg/update_checker.cpp:57
+#: src/mmg/update_checker.cpp:55
 msgid "Online check for updates"
 msgstr ""
 
@@ -4690,8 +4690,8 @@ msgstr "正在處理任務 %d/%d"
 msgid "Progress"
 msgstr "進度"
 
-#: src/extract/tracks.cpp:400
 #: src/extract/timecodes_v2.cpp:269
+#: src/extract/tracks.cpp:400
 #: src/merge/output_control.cpp:463
 msgid "Progress: %1%%%%2%"
 msgstr "進度: %1%%%%2%"
@@ -5052,8 +5052,8 @@ msgstr "定位表頭 (子項目將被跳過)"
 msgid "Seek position: %1%"
 msgstr "定位位置: %1%"
 
-#: src/extract/tracks.cpp:359
 #: src/extract/timecodes_v2.cpp:202
+#: src/extract/tracks.cpp:359
 #: src/info/qt_ui.cpp:177
 #: src/info/wxwidgets_ui.cpp:219
 msgid "Segment"
@@ -5086,22 +5086,22 @@ msgid "Segment info files (*.xml)|*.xml|%s"
 msgstr "剪輯資訊檔 (*.xml)|*.xml|%s"
 
 #: src/mmg/header_editor/frame.cpp:322
-#: src/extract/tracks.cpp:377
 #: src/extract/timecodes_v2.cpp:222
+#: src/extract/tracks.cpp:377
+#: src/propedit/options.cpp:152
 #: src/propedit/propedit_cli_parser.cpp:87
 #: src/propedit/propedit_cli_parser.cpp:160
-#: src/propedit/options.cpp:152
-#: src/info/mkvinfo.cpp:583
 #: src/info/qt_ui.cpp:178
 #: src/info/wxwidgets_ui.cpp:222
+#: src/info/mkvinfo.cpp:583
 msgid "Segment information"
 msgstr "剪輯資訊"
 
-#: src/extract/tracks.cpp:389
 #: src/extract/timecodes_v2.cpp:256
-#: src/info/mkvinfo.cpp:958
+#: src/extract/tracks.cpp:389
 #: src/info/qt_ui.cpp:179
 #: src/info/wxwidgets_ui.cpp:222
+#: src/info/mkvinfo.cpp:958
 msgid "Segment tracks"
 msgstr "剪輯軌道"
 
@@ -5472,7 +5472,7 @@ msgstr "狀態"
 msgid "Status and progress"
 msgstr "狀態和進度"
 
-#: src/mmg/update_checker.cpp:59
+#: src/mmg/update_checker.cpp:57
 #: src/mmg/header_editor/value_page.cpp:174
 msgid "Status:"
 msgstr "狀態:"
@@ -5756,8 +5756,8 @@ msgstr "此編解碼器類型「%1%」無法用在 WebM 遵循檔。\n"
 
 #: src/output/p_avc.cpp:203
 #: src/output/p_kate.cpp:113
-#: src/output/p_video.cpp:139
 #: src/output/p_passthrough.cpp:63
+#: src/output/p_video.cpp:139
 #: src/output/p_textsubs.cpp:102
 msgid "The codec's private data does not match (lengths: %1% and %2%)."
 msgstr "編解碼器專有資料不符 (長度: %1% 與 %2%)。"
@@ -5853,15 +5853,15 @@ msgstr "第五種模式可試著提取章節資訊和標籤並將這些匯出成
 msgid "The file '%1%' cannot be attached because it does not exist or cannot be read.\n"
 msgstr "無法附加檔案「%1%」，因為它不存在或無法讀取。\n"
 
-#: src/extract/attachments.cpp:141
+#: src/extract/chapters.cpp:47
 #: src/extract/cuesheets.cpp:208
 #: src/extract/tags.cpp:47
-#: src/extract/chapters.cpp:47
+#: src/extract/attachments.cpp:141
 msgid "The file '%1%' could not be opened for reading (%2%)."
 msgstr "檔案「%1%」無法開啟以讀取 (%2%)。"
 
-#: src/extract/tracks.cpp:327
 #: src/extract/timecodes_v2.cpp:173
+#: src/extract/tracks.cpp:327
 msgid "The file '%1%' could not be opened for reading (%2%).\n"
 msgstr "檔案「%1%」無法開啟以讀取 (%2%)。\n"
 
@@ -5869,15 +5869,15 @@ msgstr "檔案「%1%」無法開啟以讀取 (%2%)。\n"
 msgid "The file '%1%' could not be opened for reading command line arguments.\n"
 msgstr "檔案「%1%」無法開啟以讀取命令列參數。\n"
 
-#: src/extract/tracks.cpp:276
 #: src/extract/xtr_tta.cpp:87
+#: src/extract/tracks.cpp:276
 #: src/extract/xtr_avi.cpp:52
 #: src/extract/xtr_wav.cpp:113
 msgid "The file '%1%' could not be opened for writing (%2%).\n"
 msgstr "檔案「%1%」無法開啟以寫入 (%2%)。\n"
 
-#: src/extract/attachments.cpp:121
 #: src/extract/xtr_rmff.cpp:40
+#: src/extract/attachments.cpp:121
 msgid "The file '%1%' could not be opened for writing (%2%, %3%).\n"
 msgstr "檔案「%1%」無法開啟以寫入 (%2%, %3%)。\n"
 
@@ -6618,8 +6618,8 @@ msgstr "提取時間碼"
 msgid "Timecode files (*.tmc;*.txt)|*.tmc;*.txt|%s"
 msgstr "時間碼檔案 (*.tmc;*.txt)|*.tmc;*.txt|%s"
 
-#: src/extract/tracks.cpp:382
 #: src/extract/timecodes_v2.cpp:231
+#: src/extract/tracks.cpp:382
 #: src/info/mkvinfo.cpp:597
 #: src/info/mkvinfo.cpp:1130
 msgid "Timecode scale: %1%"
@@ -6687,14 +6687,14 @@ msgstr "軌道 %1%（CodecID 為「%2%」）缺少 \"每秒多少位元 (bps)\" 
 msgid "Track %1% with the CodecID '%2%' is missing the \"codec private \" element and cannot be extracted.\n"
 msgstr "軌道 %1%（CodecID 為「%2%」）缺少 \"codec private \" 編解碼器專有元件，不能提取。\n"
 
-#: src/extract/xtr_textsubs.cpp:292
-#: src/extract/xtr_avc.cpp:54
-#: src/extract/xtr_vobsub.cpp:65
 #: src/extract/xtr_aac.cpp:42
+#: src/extract/xtr_avc.cpp:54
 #: src/extract/xtr_avi.cpp:37
 #: src/extract/xtr_ogg.cpp:37
 #: src/extract/xtr_ogg.cpp:72
 #: src/extract/xtr_rmff.cpp:31
+#: src/extract/xtr_textsubs.cpp:292
+#: src/extract/xtr_vobsub.cpp:65
 #: src/extract/xtr_wav.cpp:95
 msgid "Track %1% with the CodecID '%2%' is missing the \"codec private\" element and cannot be extracted.\n"
 msgstr "軌道 %1%（CodecID 為「%2%」）缺少 \"codec private\" 編解碼器專有元件，不能提取。\n"
@@ -6745,9 +6745,9 @@ msgstr "軌道 UID: %1%"
 msgid "Track extraction"
 msgstr "提取軌道"
 
+#: src/propedit/options.cpp:157
 #: src/propedit/propedit_cli_parser.cpp:88
 #: src/propedit/propedit_cli_parser.cpp:163
-#: src/propedit/options.cpp:157
 msgid "Track headers"
 msgstr "軌道表頭"
 
@@ -7007,9 +7007,9 @@ msgid "Using the AAC output module (FourCC: %1%).\n"
 msgstr "使用 AAC 輸出模組 (FourCC: %1%)。\n"
 
 #: src/input/r_matroska.cpp:1540
-#: src/input/r_qtmp4.cpp:1531
 #: src/input/r_ogm.cpp:994
 #: src/input/r_aac.cpp:116
+#: src/input/r_qtmp4.cpp:1531
 msgid "Using the AAC output module.\n"
 msgstr "使用 AAC 輸出模組。\n"
 
@@ -7021,10 +7021,10 @@ msgstr "使用 AC3 分離器。\n"
 msgid "Using the AC3 output module (FourCC: %1%).\n"
 msgstr "使用 AC3 輸出模組 (FourCC: %1%)。\n"
 
+#: src/input/r_ogm.cpp:1012
+#: src/input/r_avi.cpp:564
 #: src/input/r_qtmp4.cpp:1454
 #: src/input/r_wav.cpp:225
-#: src/input/r_avi.cpp:564
-#: src/input/r_ogm.cpp:1012
 msgid "Using the AC3 output module.\n"
 msgstr "使用 AC3 輸出模組。\n"
 
@@ -7044,10 +7044,10 @@ msgstr "使用 CorePanorama 字幕讀取器。\n"
 msgid "Using the DTS demultiplexer.\n"
 msgstr "使用 DTS 分離器。\n"
 
-#: src/input/r_dts.cpp:114
 #: src/input/r_matroska.cpp:1572
-#: src/input/r_wav.cpp:354
+#: src/input/r_dts.cpp:114
 #: src/input/r_avi.cpp:680
+#: src/input/r_wav.cpp:354
 #: src/input/r_mpeg_ps.cpp:1181
 msgid "Using the DTS output module.\n"
 msgstr "使用 DTS 輸出模組。\n"
@@ -7056,8 +7056,8 @@ msgstr "使用 DTS 輸出模組。\n"
 msgid "Using the Dirac demultiplexer.\n"
 msgstr "使用 Dirac 分離器。\n"
 
-#: src/input/r_matroska.cpp:1473
 #: src/input/r_dirac.cpp:96
+#: src/input/r_matroska.cpp:1473
 msgid "Using the Dirac video output module.\n"
 msgstr "使用 Dirac 視訊輸出模組。\n"
 
@@ -7065,9 +7065,9 @@ msgstr "使用 Dirac 視訊輸出模組。\n"
 msgid "Using the FLAC demultiplexer.\n"
 msgstr "使用 FLAC 分離器。\n"
 
-#: src/input/r_flac.cpp:164
-#: src/input/r_matroska.cpp:1594
 #: src/input/r_ogm_flac.cpp:287
+#: src/input/r_matroska.cpp:1594
+#: src/input/r_flac.cpp:164
 msgid "Using the FLAC output module.\n"
 msgstr "使用 FLAC 輸出模組。\n"
 
@@ -7096,10 +7096,10 @@ msgid "Using the MPEG PS demultiplexer.\n"
 msgstr "使用 MPEG PS 分離器。\n"
 
 #: src/input/r_matroska.cpp:1602
-#: src/input/r_qtmp4.cpp:1537
 #: src/input/r_mp3.cpp:71
-#: src/input/r_avi.cpp:557
 #: src/input/r_ogm.cpp:1030
+#: src/input/r_avi.cpp:557
+#: src/input/r_qtmp4.cpp:1537
 #: src/input/r_mpeg_ps.cpp:1171
 msgid "Using the MPEG audio output module.\n"
 msgstr "使用 MPEG 音訊輸出模組。\n"
@@ -7120,18 +7120,18 @@ msgstr "使用 MPEG-1/2 視訊輸出模組。\n"
 msgid "Using the MPEG-4 part 10 (AVC) video output module.\n"
 msgstr "使用 MPEG-4 part 10 (AVC) 視訊輸出模組。\n"
 
-#: src/input/r_matroska.cpp:1844
 #: src/input/r_avc.cpp:136
-#: src/input/r_avi.cpp:348
+#: src/input/r_matroska.cpp:1844
 #: src/input/r_ogm.cpp:1154
+#: src/input/r_avi.cpp:348
 #: src/input/r_mpeg_ps.cpp:1210
 msgid "Using the MPEG-4 part 10 ES video output module.\n"
 msgstr "使用 MPEG-4 part 10 ES 視訊輸出模組。\n"
 
 #: src/input/r_matroska.cpp:1461
-#: src/input/r_qtmp4.cpp:1481
-#: src/input/r_avi.cpp:331
 #: src/input/r_ogm.cpp:1258
+#: src/input/r_avi.cpp:331
+#: src/input/r_qtmp4.cpp:1481
 msgid "Using the MPEG-4 part 2 video output module.\n"
 msgstr "使用 MPEG-4 part 2 視訊輸出模組。\n"
 
@@ -7144,10 +7144,10 @@ msgid "Using the OGG/OGM demultiplexer.\n"
 msgstr "使用 OGG/OGM 分離器。\n"
 
 #: src/input/r_matroska.cpp:1609
+#: src/input/r_ogm.cpp:1049
+#: src/input/r_avi.cpp:549
 #: src/input/r_qtmp4.cpp:1543
 #: src/input/r_wav.cpp:395
-#: src/input/r_avi.cpp:549
-#: src/input/r_ogm.cpp:1049
 msgid "Using the PCM output module.\n"
 msgstr "使用 PCM 輸出模組。\n"
 
@@ -7188,8 +7188,8 @@ msgstr "使用 SSA/ASS 字幕讀取器。\n"
 msgid "Using the TTA demultiplexer.\n"
 msgstr "使用 TTA 分離器。\n"
 
-#: src/input/r_matroska.cpp:1620
 #: src/input/r_tta.cpp:109
+#: src/input/r_matroska.cpp:1620
 msgid "Using the TTA output module.\n"
 msgstr "使用 TTA 輸出模組。\n"
 
@@ -7223,9 +7223,9 @@ msgstr "使用 VC1 ES 分離器。\n"
 msgid "Using the VC1 video output module.\n"
 msgstr "使用 VC1 視訊輸出模組。\n"
 
-#: src/input/r_ivf.cpp:87
 #: src/input/r_matroska.cpp:1477
 #: src/input/r_ogm.cpp:1445
+#: src/input/r_ivf.cpp:87
 msgid "Using the VP8 video output module.\n"
 msgstr "使用 VP8 視訊輸出模組。\n"
 
@@ -7250,8 +7250,8 @@ msgid "Using the VobSub subtitle reader (SUB file '%1%').\n"
 msgstr "使用 VobSub 字幕讀取器 (SUB 檔「%1%」)。\n"
 
 #: src/input/r_matroska.cpp:1627
-#: src/input/r_avi.cpp:734
 #: src/input/r_ogm.cpp:1070
+#: src/input/r_avi.cpp:734
 msgid "Using the Vorbis output module.\n"
 msgstr "使用 Vorbis 輸出模組。\n"
 
@@ -7280,12 +7280,12 @@ msgstr "使用一般音訊輸出模組 (FourCC: %|1$.4s|)。\n"
 msgid "Using the passthrough output module for this %1% track.\n"
 msgstr "對軌道 %1% 使用呈遞輸出模組。\n"
 
-#: src/input/r_srt.cpp:60
 #: src/input/r_matroska.cpp:1705
-#: src/input/r_ssa.cpp:71
-#: src/input/r_usf.cpp:259
-#: src/input/r_avi.cpp:405
 #: src/input/r_ogm.cpp:1101
+#: src/input/r_srt.cpp:60
+#: src/input/r_ssa.cpp:71
+#: src/input/r_avi.cpp:405
+#: src/input/r_usf.cpp:259
 msgid "Using the text subtitle output module.\n"
 msgstr "使用文字字幕輸出模組。\n"
 
@@ -7299,8 +7299,8 @@ msgid "Using the video output module (FourCC: %|1$.4s|).\n"
 msgstr "使用視訊輸出模組 (FourCC: %|1$.4s|)。\n"
 
 #: src/input/r_matroska.cpp:1483
-#: src/input/r_avi.cpp:360
 #: src/input/r_ogm.cpp:1263
+#: src/input/r_avi.cpp:360
 msgid "Using the video output module.\n"
 msgstr "使用視訊輸出模組。\n"
 
@@ -7508,8 +7508,8 @@ msgstr "選擇錯誤的檔案"
 msgid "Wrong file selected"
 msgstr "選擇錯誤的檔案"
 
-#: src/common/theora.cpp:35
 #: src/common/kate.cpp:46
+#: src/common/theora.cpp:35
 msgid "Wrong header type: 0x%|1$02x| != 0x%|2$02x|"
 msgstr "錯誤的表頭類型: 0x%|1$02x| != 0x%|2$02x|"
 
