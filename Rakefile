@@ -173,6 +173,14 @@ if c?(:XSLTPROC_WORKS)
   rule '.1' => '.xml' do |t|
     runq "XSLTPROC #{t.source}", "#{c(:XSLTPROC)} #{c(:XSLTPROC_FLAGS)} -o #{t.name} #{c(:DOCBOOK_MANPAGES_STYLESHEET)} #{t.sources.join(" ")}"
   end
+
+  $manpages.each do |manpage|
+    file manpage => manpage.ext('xml')
+    $available_languages[:manpages].each do |language|
+      localized_manpage = manpage.gsub(/.*\//, "doc/man/#{language}/")
+      file localized_manpage => localized_manpage.ext('xml')
+    end
+  end
 end
 
 # Qt files
